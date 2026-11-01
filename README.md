@@ -1,15 +1,54 @@
-# Warpblade
+<p align="center">
+  <a href="https://warpblade.sainytk.com"><img src="docs/media/banner.png" alt="Warpblade: Kael stands in the night ruins as lightning strikes beside him" width="100%"></a>
+</p>
 
-A small pixel art action game, and my sandbox for learning how to make good pixel art and effects in code.
+<p align="center">
+  <b>Throw the sword. Become the sword.</b><br>
+  A pixel art action game where every sprite and every spark is drawn by code.
+</p>
 
-Play it at [warpblade.sainytk.com](https://warpblade.sainytk.com).
+<p align="center">
+  <a href="https://warpblade.sainytk.com"><img alt="Play in your browser" src="https://img.shields.io/badge/%E2%96%B6%20PLAY-warpblade.sainytk.com-7fe3ff?style=for-the-badge&labelColor=0c0a18"></a>
+  <a href="LICENSE"><img alt="MIT License" src="https://img.shields.io/badge/LICENSE-MIT-e0ac48?style=for-the-badge&labelColor=0c0a18"></a>
+  <img alt="No image files" src="https://img.shields.io/badge/ASSETS-0%20image%20files-b4a8ff?style=for-the-badge&labelColor=0c0a18">
+</p>
 
-You play Kael, a warp knight of the night ruins.
-He fights with a crystal sword, throws it and appears wherever it lands, and casts fire, ice and lightning.
-Shadow creatures come through rifts in waves.
+---
 
-There are no image files.
-The hero, the enemies, the stage and every effect are drawn pixel by pixel by the code at runtime.
+## The story so far
+
+The old city fell to the night a long time ago.
+Its towers still stand under the moon, and rifts keep opening between them.
+
+Kael is the last warp knight.
+His crystal sword can be thrown, and wherever it lands, he follows.
+
+<p align="center">
+  <img src="docs/media/gameplay.gif" alt="Gameplay: a three-hit combo, a warp strike, then fire, ice and lightning spells against shadow creatures" width="100%">
+</p>
+
+## Features
+
+- **Warp strike.** Throw the sword at a foe and appear beside it mid-swing. The farther you travel, the harder you hit.
+- **Warp crystals.** Hold up and warp to a floating crystal, hang from it and recover MP while the fight goes on below.
+- **Three-hit combo.** Cross cut, rising cut, falling smash, each with hit-stop and screen shake.
+- **Three elements.** A flask of fire that sets the floor burning, a running line of ice spikes that freezes, and lightning that arcs to a second foe.
+- **Phase dodge.** A dash that leaves afterimages, and nothing can touch you while you're in it.
+- **Endless waves.** Floating wisps that lunge and horned husks that swipe, more each wave. They drop orbs that fly back to you as MP and HP.
+- **Plays anywhere.** Keyboard on desktop, on-screen buttons on phones, no install.
+
+<table>
+  <tr>
+    <td><img src="docs/media/shot-fire.png" alt="A fire flask bursts into flame and sparks"></td>
+    <td><img src="docs/media/shot-ice.png" alt="Ice spikes erupt along the floor"></td>
+    <td><img src="docs/media/shot-warp.png" alt="Kael in mid-air after a warp"></td>
+  </tr>
+  <tr>
+    <td align="center">Fire</td>
+    <td align="center">Ice</td>
+    <td align="center">Warp</td>
+  </tr>
+</table>
 
 ## Controls
 
@@ -18,17 +57,16 @@ The hero, the enemies, the stage and every effect are drawn pixel by pixel by th
 | `A` `D` or arrows | Run |
 | `W`, `Up` or `Space` | Jump, press again in the air to double jump |
 | `S` + jump | Drop through a ledge |
-| `J` | Sword combo: cross cut, rising cut, falling smash |
-| `K` | Warp strike (10 MP). Hold `W` to warp to a floating crystal and hang there |
+| `J` | Sword combo |
+| `K` | Warp strike (10 MP). Hold `W` to warp to a crystal |
 | `L` | Cast the selected spell (18 MP) |
 | `Q` | Switch element: fire, ice, bolt |
 | `Shift` | Phase dodge |
 | `M` | Sound on or off |
 
-On touch screens, buttons appear under the stage.
 `Z`, `X`, `C` and `V` also work for slash, warp, cast and switch.
 
-## Run it
+## Run it locally
 
 ```sh
 npm install
@@ -37,9 +75,13 @@ npm run dev
 
 Other commands: `npm run build`, `npm run preview`, `npm run typecheck`, `npm run lint`, `npm run format`.
 
-The stack is TypeScript, Vite and Biome, with no runtime dependencies other than three web fonts.
+The stack is TypeScript, Vite and Biome.
+There are no runtime dependencies besides three web fonts.
 
 ## How the pixels are made
+
+This game is also my sandbox for learning how to make pixel art and effects that look good.
+There are no image files in the game: the hero, the enemies, the stage and every effect are drawn pixel by pixel at runtime.
 
 The stage is 320 by 180 art pixels, scaled up by a whole number so every pixel stays square.
 Each frame is drawn into two buffers, as in Sprite Fusion's effects:
@@ -59,6 +101,8 @@ Kael is drawn from a small skeleton every frame (`src/game/hero/drawHero.ts`).
 Arms and legs are placed by two-bone reach, each body part is outlined where it overlaps the one behind it, and the whole figure gets a dark outline.
 His scarf and ponytail are verlet ropes, so they trail behind him as he runs and warps (`src/game/hero/chain.ts`).
 
+The README images are frames captured straight from the game canvas at 320 by 180 and scaled up with nearest-neighbour, so they show the real pixels.
+
 ## Project layout
 
 ```text
@@ -76,6 +120,7 @@ src/
     spells/        fire, ice, bolt
   scene/           background and the order layers are drawn in
   ui/              HUD, keyboard and touch input, sound button, stage sizing
+docs/media/        README banner, gameplay GIF and screenshots
 ```
 
 ## References
