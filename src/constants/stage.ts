@@ -1,0 +1,28 @@
+import type { Platform, Point } from "../types/world";
+
+/** The stage is 320 x 180 art pixels, scaled up whole. */
+export const W = 320;
+export const H = 180;
+export const N = W * H;
+export const GROUND = 156;
+/** the simulation steps at 120 Hz whatever the display rate */
+export const STEP = 1 / 120;
+export const MAX_FRAME = 0.05;
+
+export const PLATFORMS: readonly Platform[] = [
+  { x0: 36, x1: 112, y: 114 },
+  { x0: 208, x1: 284, y: 114 },
+  { x0: 128, x1: 192, y: 76 },
+];
+/** floating warp crystals Kael can hang from */
+export const ANCHORS: readonly Point[] = [
+  { x: 22, y: 44 },
+  { x: 160, y: 28 },
+  { x: 298, y: 44 },
+];
+export const BRAZIERS: readonly Point[] = [
+  { x: 46, y: 114 },
+  { x: 274, y: 114 },
+];
+export const MOON: Point & { r: number } = { x: 252, y: 38, r: 15 };
+export const SEED = 20261031;

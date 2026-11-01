@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="description" content="Warpblade: a pixel art action game about a warp knight, with every sprite and effect drawn in code." />
+    <meta name="theme-color" content="#0c0a18" />
+    <title>Warpblade</title>
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+  </head>
+  <body>
+    <div class="wrap">
+      <header>
+        <h1>WARPBLADE</h1>
+        <p>Kael, a warp knight of the night ruins. He throws his crystal sword and appears wherever it lands, and he casts fire, ice and lightning.</p>
+      </header>
+
+      <div class="stage" id="stage">
+        <canvas id="game" width="320" height="180" tabindex="0" aria-label="Warpblade game. Use the keyboard or the buttons below to play."></canvas>
+        <div class="hud">
+          <div class="bars">
+            <div class="bar hp"><span>HP</span><div class="track"><div class="fill" id="hpFill"></div></div></div>
+            <div class="bar mp"><span>MP</span><div class="track"><div class="fill" id="mpFill"></div></div></div>
+          </div>
+          <div class="right">
+            <div class="elements">
+              <span class="el fire" id="elFire">FIRE</span>
+              <span class="el ice" id="elIce">ICE</span>
+              <span class="el volt" id="elVolt">BOLT</span>
+            </div>
+            <div class="score" id="score">WAVE 0 &middot; 0 DOWN</div>
+          </div>
+        </div>
+        <div class="banner" id="banner"></div>
+        <button class="sound" id="sound" type="button">SOUND ON</button>
+      </div>
+
+      <div class="touch">
+        <div class="pad">
+          <button data-action="up" type="button">UP</button><button data-action="down" type="button">DOWN</button>
+          <button data-action="left" type="button">LEFT</button><button data-action="right" type="button">RIGHT</button>
+        </div>
+        <div class="acts">
+          <button data-action="jump" type="button">JUMP</button><button data-action="attack" type="button">SLASH</button><button data-action="warp" type="button">WARP</button>
+          <button data-action="dodge" type="button">DODGE</button><button data-action="cast" type="button">CAST</button><button data-action="cycle" type="button">ELEM</button>
+        </div>
+      </div>
+
+      <div class="notes">
+        <section>
+          <h2>Moves</h2>
+          <dl>
+            <dt><kbd>A</kbd> <kbd>D</kbd></dt>
+            <dd>Run. Arrow keys work too.</dd>
+            <dt><kbd>W</kbd> / <kbd>Space</kbd></dt>
+            <dd>Jump, press again in the air for a second jump. Hold <kbd>S</kbd> and jump to drop through a ledge.</dd>
+            <dt><kbd>J</kbd></dt>
+            <dd>Sword combo. Tap up to three times: cross cut, rising cut, falling smash. Each hit gives back a little MP.</dd>
+            <dt><kbd>K</kbd></dt>
+            <dd>Warp strike (10 MP). Kael throws his sword at the nearest foe in front and appears where it lands, hitting harder the farther he travels. Hold <kbd>W</kbd> to warp to a floating crystal and hang there to recover MP quickly.</dd>
+            <dt><kbd>Shift</kbd></dt>
+            <dd>Phase dodge. Kael can't be hit while he dashes.</dd>
+          </dl>
+        </section>
+        <section>
+          <h2>Spells</h2>
+          <dl>
+            <dt><kbd>L</kbd></dt>
+            <dd>Cast the selected spell (18 MP).</dd>
+            <dt><kbd>Q</kbd></dt>
+            <dd>Switch element.</dd>
+            <dt><span class="spell fire">Fire</span></dt>
+            <dd>A flask of flame that bursts on contact and leaves the ground burning.</dd>
+            <dt><span class="spell ice">Ice</span></dt>
+            <dd>A line of crystal spikes runs along the floor and freezes what it touches.</dd>
+            <dt><span class="spell volt">Bolt</span></dt>
+            <dd>Lightning strikes the nearest foe in front and arcs to one more.</dd>
+          </dl>
+        </section>
+      </div>
+
+      <footer>
+        <a href="https://github.com/SainyTK/warpblade" target="_blank" rel="noopener">Source on GitHub</a>, MIT License.
+        Effect techniques adapted from Sprite Fusion's open-source <a href="https://www.spritefusion.com/pixel-art-vfx" target="_blank" rel="noopener">pixel art VFX</a>.
+      </footer>
+    </div>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>
