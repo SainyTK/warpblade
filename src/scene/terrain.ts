@@ -1,0 +1,34 @@
+import { WORLD_COLORS as WC } from "../constants/palette";
+import { GROUND } from "../constants/stage";
+import { bayerAt } from "../engine/frame";
+import type { Color } from "../types/color";
+import { scale } from "../utils/color";
+import { clamp } from "../utils/math";
+
+/** The parts of the night scene that go on forever, as functions of any art pixel, inside the stage or beyond it. */
+
+/** the sky darkens upward in dithered bands */
+export function skyAt(x: number, y: number): Color {
+  const S = WC.sky;
+  const v = clamp(y / 150) * (S.length - 1);
+  const i = Math.floor(v);
+  return S[Math.min(S.length - 1, v - i > bayerAt(x, y) ? i + 1 : i)];
+}
+
+/** the top row of the far ridge in column x */
+export const ridgeTopAt = (x: number): number =>
+  Math.floor(112 + Math.sin(x * 0.021) * 8 + Math.sin(x * 0.057 + 1.3) * 5 + Math.sin(x * 0.13) * 2);
+
+export function ridgeAt(x: number, y: number): Color {
+  return y === ridgeTopAt(x) ? WC.ridgeTop : WC.ridge;
+}
+
+/** stone courses with a lit lip, for any y at or below the ground line */
+export function groundAt(x: number, y: number): Color {
+  const row = y - GROUND;
+  const offset = Math.floor((row - 2) / 7) % 2 ? 8 : 0;
+  let c = row === 0 ? WC.groundLip : row === 1 ? WC.groundEdge : WC.stone;
+  if (row > 1 && ((row - 2) % 7 === 6 || (((x + offset) % 16) + 16) % 16 === 0)) c = WC.mortar;
+  else if (row > 1 && (row - 2) % 7 === 0) c = WC.stoneTop;
+  return row > 9 ? scale(c, 0.8) : c;
+}

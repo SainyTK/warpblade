@@ -37,7 +37,7 @@ His crystal sword can be thrown, and wherever it lands, he follows.
 - **Charged specials.** Kael starts with Crystal Nova. Hold U through four levels; level 4 spends a full MP bar. The tree offers stronger ultimates: a storm of blades, a legion of phantoms, falling stars or a lightning tempest.
 - **Three elements.** A flask of fire that sets the floor burning, a running line of ice spikes that freezes, and lightning that arcs to a second foe.
 - **A 30-wave stage.** Floating wisps and horned husks, a Rift Brute every fifth wave and the Rift Warden at waves 20 and 30.
-- **Plays anywhere.** Keyboard on desktop, on-screen buttons on phones, no install.
+- **Plays anywhere.** The game fills the whole screen at a whole-number pixel scale, with the night scene continued to every edge. Keyboard on desktop, on-screen buttons on phones, no install.
 
 <table>
   <tr>
@@ -65,6 +65,14 @@ His crystal sword can be thrown, and wherever it lands, he follows.
 | `O` | Switch element: fire, ice, bolt |
 | `U` | Hold to charge the special, release to strike |
 | `M` | Sound on or off |
+| `Esc` or `P` | Pause and open the menu |
+| `F` | Fullscreen on or off |
+
+The game opens on a start menu with Start, Controls and Options.
+Pausing adds Resume, Restart run and Quit run, and freezes the game until you resume.
+Move through the menu with the arrow keys or `W` `S`, pick with `J` or `Enter`, and go back with `Esc`; the mouse and touch work too.
+The Controls screen lists every key from the game's key map, and on touch screens the on-screen buttons.
+Options holds sound, volume, screen shake, damage numbers and fullscreen, saved in this browser.
 
 After each wave the skill tree opens.
 Move with the arrow keys, learn with `J` or `Enter`, and close it with `Esc` to keep your points for later.
@@ -87,6 +95,7 @@ This game is also my sandbox for learning how to make pixel art and effects that
 There are no image files in the game: the hero, the enemies, the stage and every effect are drawn pixel by pixel at runtime.
 
 The stage is 320 by 180 art pixels, scaled up by a whole number so every pixel stays square.
+Around the stage, the sky, ridge and stone floor are continued on the same pixel grid and fade into the night, so there is no frame.
 Each frame is drawn into two buffers, as in Sprite Fusion's effects:
 
 - a color buffer for opaque pixels, faded with a 4 by 4 Bayer dither, or truly blended for smoke and mist;
@@ -115,15 +124,17 @@ src/
   constants/       stage layout, palettes, poses and attack keyframes, tuning, key map, waves, Kael's skill tree
   utils/           pure helpers: math, color, seeded random, stats, experience, skill tree rules, wave plan
   engine/          the pixel renderer: frame buffers and painter, particles, lights, sprite canvas
-  services/        Web Audio sound effects, best wave in local storage
+  services/        Web Audio sound effects, saved options and best wave in local storage, the Fullscreen API
+  store/           the player's options
   game/            the simulation
     hero/          poses, drawing, rope physics, combos and moves, dash, warp, ultimate charge, per-step update
     enemies/       wisps, husks, the Rift Brute and the Rift Warden: drawing and behavior
     effects/       slash, impact, floor ring, warp line, rift, thrown sword, shadow orb
     spells/        fire, ice, bolt and the explosion they share
     ultimates/     Thousand Edges, Phantom Legion, Starfall, Tempest
-  scene/           background and the order layers are drawn in
-  ui/              HUD, skill tree window, keyboard and touch input, sound button, stage sizing
+  scene/           background, the backdrop around the stage, and the order layers are drawn in
+  ui/              HUD, skill tree window, keyboard and touch input, stage sizing
+    menu/          start and pause menu: main, Controls and Options screens
 docs/media/        README banner, gameplay GIF and screenshots
 ```
 

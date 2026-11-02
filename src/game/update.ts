@@ -31,6 +31,14 @@ function feedBraziers(): void {
   }
 }
 
+/** the scene alone, with no one in it moving: braziers burn and the light flickers behind the start menu */
+export function updateAmbience(dt: number): void {
+  game.t += dt;
+  feedBraziers();
+  particles.update(dt);
+  lights.update(dt);
+}
+
 /** one simulation step */
 export function update(dt: number): void {
   // after a perfect dodge the world crawls while Kael moves at full speed
