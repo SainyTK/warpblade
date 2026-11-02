@@ -1,10 +1,9 @@
 import { PAL } from "../constants/palette";
-import { LEVEL_UP_RESTORE, MAX_LEVEL, SKILL_POINTS } from "../constants/progression";
+import { LEVEL_UP_RESTORE, MAX_LEVEL } from "../constants/progression";
 import { sfx } from "../services/audio";
 import { PK } from "../types/particle";
-import type { Perk, SkillNode } from "../types/skill";
+import type { Perk, PickOption, SkillNode } from "../types/skill";
 import { comboLimit, xpToNext } from "../utils/progression";
-import { nodeStatus } from "../utils/skillTree";
 import { collectPerks, computeStats, learnedUltimate } from "../utils/stats";
 import { createFloorRing } from "./effects/floorRing";
 import { character, freshProgress, game, hero, lights, particles, progress, rng, showBanner } from "./state";
@@ -50,7 +49,6 @@ export function gainXp(amount: number): void {
   while (progress.level < MAX_LEVEL && progress.xp >= xpToNext(progress.level)) {
     progress.xp -= xpToNext(progress.level);
     progress.level++;
-    progress.points += SKILL_POINTS.perLevel;
     gained++;
   }
   if (progress.level >= MAX_LEVEL) progress.xp = 0;
@@ -64,18 +62,27 @@ export function gainXp(amount: number): void {
   hero.mp = Math.min(progress.stats.mp, hero.mp + progress.stats.mp * LEVEL_UP_RESTORE);
   showBanner(`Level ${progress.level}`, 1.4);
   celebrateLevel();
+  progress.picks += gained;
+  if (game.mode === "play") game.mode = "pick";
 }
 
-/** spend points on one rank of a node; returns whether it was learned */
-export function learnSkill(node: SkillNode): boolean {
-  if (nodeStatus(character, node, progress) !== "learnable") return false;
-  progress.points -= node.cost;
+function learnSkill(node: SkillNode): void {
   progress.ranks = { ...progress.ranks, [node.id]: (progress.ranks[node.id] ?? 0) + 1 };
   const before = progress.stats;
   refreshProgress();
   hero.hp = Math.min(progress.stats.hp, hero.hp + Math.max(0, progress.stats.hp - before.hp));
   hero.mp = Math.min(progress.stats.mp, hero.mp + Math.max(0, progress.stats.mp - before.mp));
-  return true;
+}
+
+/** take one card of a level-up pick; the game plays on once no level up waits for a pick */
+export function choosePick(option: PickOption): void {
+  if (option.type === "skill") learnSkill(option.node);
+  else {
+    hero.hp = progress.stats.hp;
+    hero.mp = progress.stats.mp;
+  }
+  progress.picks = Math.max(0, progress.picks - 1);
+  if (!progress.picks && game.mode === "pick") game.mode = "play";
 }
 
 export function resetProgress(): void {

@@ -37,25 +37,22 @@ export type UltimateId = "crystalNova" | "thousandEdges" | "phantomLegion" | "st
 export type SkillKind = "combo" | "movement" | "enhance" | "passive" | "ultimate" | "fusion";
 /** when a path pays off */
 export type Pace = "early" | "steady" | "late";
+export type BranchId = "blade" | "phantom" | "arcane" | "fusion";
 
 export interface SkillNode {
   id: string;
   name: string;
   kind: SkillKind;
   text: string;
-  /** the lowest hero level that can learn it */
+  /** the lowest hero level that can be offered it */
   level: number;
   ranks: number;
-  /** skill points per rank */
-  cost: number;
   /** open from the start if empty; otherwise at least one of these */
   requires: readonly string[];
   /** fusion nodes also need one of these, from another path */
   crossRequires?: readonly string[];
   /** nodes that share a group exclude each other: learning one locks the rest for the run */
   group?: string;
-  /** column on the path, left to right */
-  tier: number;
   /** added per rank */
   stats?: Partial<Stats>;
   /** multiplies the total per rank: 0.25 is +25% */
@@ -65,14 +62,19 @@ export interface SkillNode {
 }
 
 export interface SkillBranch {
-  id: string;
+  id: BranchId;
   name: string;
   /** when the path pays off; fusion has none */
   pace?: Pace;
-  pros: string;
-  cons: string;
   nodes: readonly SkillNode[];
 }
 
-/** why a node can or cannot be learned right now */
-export type NodeStatus = "maxed" | "learnable" | "excluded" | "needsLevel" | "needsPath" | "needsPoints";
+/** a small reward offered when no skill is left to learn, so a level up always gives something */
+export interface Boon {
+  id: string;
+  name: string;
+  text: string;
+}
+
+/** one card of a level-up pick */
+export type PickOption = { type: "skill"; node: SkillNode; branch: SkillBranch } | { type: "boon"; boon: Boon };
