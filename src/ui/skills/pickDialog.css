@@ -6,7 +6,7 @@
   border: 0;
   background: transparent;
   color: var(--text);
-  font-family: var(--body);
+  font-family: var(--ui);
   overflow: auto;
 }
 .level-up[open] {
@@ -319,6 +319,82 @@
   }
   .pick-text {
     font-size: 12px;
+  }
+}
+
+/* Short screens such as phones held sideways: a row of compact cards, the icon at the left, so all three fit without scrolling. */
+@media (max-height: 520px) and (min-width: 641px) {
+  .level-up {
+    width: min(900px, 100vw - 24px);
+    max-height: 100dvh;
+    padding: 10px max(12px, env(safe-area-inset-right, 0px)) 8px max(12px, env(safe-area-inset-left, 0px));
+  }
+  .level-up[open] {
+    gap: 8px;
+  }
+  .level-up-head h2 {
+    font-size: 22px;
+  }
+  .level-up-sub {
+    margin-top: 2px;
+    font-size: 13px;
+  }
+  .level-up-cards {
+    grid-template-columns: repeat(var(--cols, 3), minmax(0, 280px));
+    gap: 10px;
+  }
+  .pick {
+    grid-template-columns: 44px 1fr;
+    grid-template-rows: auto 1fr;
+    justify-items: start;
+    gap: 6px 10px;
+    min-height: 0;
+    padding: 0 10px 10px;
+    text-align: left;
+    background: linear-gradient(90deg, var(--accent-dark) 0, var(--panel) 96px);
+  }
+  .pick-icon {
+    width: 44px;
+    height: 44px;
+  }
+  .pick-icon img {
+    width: 32px;
+    height: 32px;
+  }
+  .pick-new {
+    right: -6px;
+    bottom: -6px;
+    font-size: 8px;
+    line-height: 11px;
+  }
+  .pick-body {
+    justify-items: start;
+    gap: 2px;
+  }
+  .pick-path {
+    grid-column: 1 / -1;
+    margin: 0 -10px;
+    padding: 2px 0 3px 10px;
+    font-size: 9px;
+  }
+  .pick-name {
+    font-size: 15px;
+  }
+  .pick-meta {
+    justify-content: start;
+  }
+  .pick-kind {
+    font-size: 11px;
+  }
+  .pick-text {
+    font-size: 11px;
+    line-height: 1.35;
+  }
+  .pick-note {
+    font-size: 10px;
+  }
+  .level-up-hint {
+    font-size: 11px;
   }
 }
 

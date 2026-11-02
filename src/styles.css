@@ -83,6 +83,11 @@ body {
   gap: 12px;
   pointer-events: none;
   font-family: var(--ui);
+  text-shadow:
+    1px 0 0 var(--night),
+    -1px 0 0 var(--night),
+    0 1px 0 var(--night),
+    0 -1px 0 var(--night);
 }
 .bars {
   display: grid;
@@ -309,7 +314,7 @@ body[data-hud="outside"] .boss {
   font-family: var(--ui);
 }
 .menu[data-context="title"][data-screen="main"] {
-  background: linear-gradient(rgba(6, 4, 14, 0.15), rgba(6, 4, 14, 0.55) 45%, rgba(6, 4, 14, 0.15));
+  background: radial-gradient(ellipse 46rem 30rem at 50% 45%, rgba(6, 4, 14, 0.82), rgba(6, 4, 14, 0.55) 55%, rgba(6, 4, 14, 0.15));
 }
 .menu-panel {
   width: min(460px, 100%);

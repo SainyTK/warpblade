@@ -12,7 +12,7 @@ export const TOUCH_BUTTONS: readonly TouchButtonSpec[] = [
     action: "attack",
     label: "Attack",
     key: "J",
-    hint: "Sword combo. Push the stick up or down, jump, dash or run for the variants",
+    hint: "Sword combo. Each hit fits where the foes are. Push the stick up or down, jump, dash or run for the variants",
     size: 24,
     angle: 0,
     reach: 0,

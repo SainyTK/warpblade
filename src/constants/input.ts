@@ -26,7 +26,7 @@ export const ACTION_TEXT: Record<InputAction, string> = {
   right: "Walk right. Tap twice and hold to run",
   up: "Jump",
   down: "Hold and jump to drop through a ledge",
-  attack: "Sword combo. Mix with up, down, a jump, a dash or a run",
+  attack: "Sword combo. Each hit fits where the foes are. Mix with up, down, a jump, a dash or a run",
   dash: "Dash. Nothing can touch you while you dash",
   run: "Run toward the side held",
   warp: "Warp strike (10 MP)",
