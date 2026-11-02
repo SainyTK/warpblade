@@ -37,7 +37,7 @@ His crystal sword can be thrown, and wherever it lands, he follows.
 - **Charged specials.** Kael starts with Crystal Nova. Hold U through four levels; level 4 spends a full MP bar. Level ups can offer stronger ultimates: a storm of blades, a legion of phantoms, falling stars or a lightning tempest.
 - **Three elements.** A flask of fire that sets the floor burning, a running line of ice spikes that freezes, and lightning that arcs to a second foe.
 - **A 30-wave stage.** Floating wisps and horned husks, a Rift Brute every fifth wave and the Rift Warden at waves 20 and 30.
-- **Plays anywhere.** The game fills the whole screen at a whole-number pixel scale, with the night scene continued to every edge. Keyboard on desktop, on-screen buttons on phones, no install.
+- **Plays anywhere.** The game fills the whole screen at a whole-number pixel scale, with the night scene continued to every edge. Keyboard on desktop, a pixel touch controller on phones and tablets, no install.
 
 <table>
   <tr>
@@ -68,10 +68,18 @@ His crystal sword can be thrown, and wherever it lands, he follows.
 | `Esc` or `P` | Pause and open the menu |
 | `F` | Fullscreen on or off |
 
+On phones and tablets a touch controller appears, in landscape or portrait, and hides again when you press a key.
+The stick on the left appears wherever your left thumb lands.
+Push it to walk, push it all the way to run, push up to jump and down for the down variants.
+The buttons on the right sit in an arc around a large Attack button: Jump, Dash, Warp, Spell, Element and Special.
+Several fingers work at once, and a thumb can slide from one button to the next.
+Hold Special to charge it: its ring fills one quarter per level, and you strike when you let go.
+Buttons dim while their action lacks MP or waits on a cooldown, and phones that support it give a short vibration on each press.
+
 The game opens on a start menu with Start, Controls and Options.
 Pausing adds Resume, Restart run and Quit run, and freezes the game until you resume.
 Move through the menu with the arrow keys or `W` `S`, pick with `J` or `Enter`, and go back with `Esc`; the mouse and touch work too.
-The Controls screen lists every key from the game's key map, and on touch screens the on-screen buttons.
+The Controls screen lists every key from the game's key map, and on touch screens the stick and buttons as they look on screen.
 Options holds sound, volume, screen shake, damage numbers and fullscreen, saved in this browser.
 
 Each level up pauses the game and offers up to three skills.
@@ -122,10 +130,10 @@ The README images are frames captured straight from the game canvas at 320 by 18
 src/
   main.ts          wires everything and runs the 120 Hz loop
   types/           shared types
-  constants/       stage layout, palettes, poses and attack keyframes, tuning, key map, waves, Kael's skills
+  constants/       stage layout, palettes, poses and attack keyframes, tuning, key map, touch controller layout, waves, Kael's skills
   utils/           pure helpers: math, color, seeded random, stats, experience, level-up picks, wave plan
   engine/          the pixel renderer: frame buffers and painter, particles, lights, sprite canvas
-  services/        Web Audio sound effects, saved options and best wave in local storage, the Fullscreen API
+  services/        Web Audio sound effects, saved options and best wave in local storage, the Fullscreen API, vibration
   store/           the player's options
   game/            the simulation
     hero/          poses, drawing, rope physics, combos and moves, dash, warp, ultimate charge, per-step update
@@ -134,7 +142,7 @@ src/
     spells/        fire, ice, bolt and the explosion they share
     ultimates/     Thousand Edges, Phantom Legion, Starfall, Tempest
   scene/           background, the backdrop around the stage, and the order layers are drawn in
-  ui/              HUD, level-up pick, keyboard and touch input, stage sizing
+  ui/              HUD, level-up pick, menu, keyboard input, touch controller, stage sizing
     menu/          start and pause menu: main, Controls and Options screens
 docs/media/        README banner, gameplay GIF and screenshots
 ```

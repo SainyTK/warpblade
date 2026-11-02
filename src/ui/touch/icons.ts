@@ -70,17 +70,15 @@ const WARP: IconArt = {
 
 const NOVA: IconArt = {
   rows: [
-    ".....W.....",
-    ".....P.....",
-    "..K..P..K..",
-    "....PWP....",
-    "...PWWWP...",
-    "WPPPWWWPPPW",
-    "...PWWWP...",
-    "....PWP....",
-    "..K..P..K..",
-    ".....P.....",
-    ".....W.....",
+    "....W....",
+    ".K..P..K.",
+    "...PWP...",
+    "..PWWWP..",
+    "WPPWWWPPW",
+    "..PWWWP..",
+    "...PWP...",
+    ".K..P..K.",
+    "....W....",
   ],
   colors: { W: WHITE, P: hex("#ff7ae0"), K: hex("#ffc8f2") },
 };

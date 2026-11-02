@@ -295,6 +295,215 @@ body[data-hud="outside"] .boss {
   bottom: auto;
 }
 
+/* Menu: a pixel panel over the frozen game, or the title over the living scene before a run. */
+.menu {
+  position: fixed;
+  inset: 0;
+  z-index: 10;
+  display: grid;
+  grid-template-rows: minmax(0, 1fr);
+  place-items: center;
+  padding: max(16px, env(safe-area-inset-top, 0px)) max(16px, env(safe-area-inset-right, 0px))
+    max(16px, env(safe-area-inset-bottom, 0px)) max(16px, env(safe-area-inset-left, 0px));
+  background: rgba(6, 4, 14, 0.6);
+  font-family: var(--ui);
+}
+.menu[data-context="title"][data-screen="main"] {
+  background: linear-gradient(rgba(6, 4, 14, 0.15), rgba(6, 4, 14, 0.55) 45%, rgba(6, 4, 14, 0.15));
+}
+.menu-panel {
+  width: min(460px, 100%);
+  max-height: 100%;
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr);
+  gap: 16px;
+  padding: 22px 20px 18px;
+  background: var(--menu-bg);
+  border: var(--u) solid var(--line);
+  box-shadow: inset 0 0 0 var(--u) var(--night);
+  clip-path: polygon(
+    var(--u) 0,
+    calc(100% - var(--u)) 0,
+    calc(100% - var(--u)) var(--u),
+    100% var(--u),
+    100% calc(100% - var(--u)),
+    calc(100% - var(--u)) calc(100% - var(--u)),
+    calc(100% - var(--u)) 100%,
+    var(--u) 100%,
+    var(--u) calc(100% - var(--u)),
+    0 calc(100% - var(--u)),
+    0 var(--u),
+    var(--u) var(--u)
+  );
+}
+.menu[data-screen="controls"] .menu-panel {
+  width: min(620px, 100%);
+}
+.menu[data-context="title"][data-screen="main"] .menu-panel {
+  width: min(560px, 100%);
+  background: none;
+  border: 0;
+  box-shadow: none;
+  clip-path: none;
+}
+.menu-head {
+  text-align: center;
+}
+.menu-head h1 {
+  margin: 0;
+  font-family: var(--display);
+  font-weight: 400;
+  font-size: 32px;
+  line-height: 1.1;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--crystal);
+  text-shadow:
+    0 var(--u) 0 #1f4a8a,
+    0 0 18px rgba(127, 227, 255, 0.35);
+}
+.menu[data-context="title"][data-screen="main"] .menu-head h1 {
+  font-size: clamp(40px, 11vw, 72px);
+  text-shadow:
+    0 var(--u) 0 #2f86c4,
+    0 calc(var(--u) * 2) 0 #16224a,
+    0 0 28px rgba(127, 227, 255, 0.45);
+}
+.menu-head p {
+  margin: 6px 0 0;
+  font-size: 15px;
+  color: var(--mist);
+}
+.menu[data-context="title"][data-screen="main"] .menu-head p {
+  margin-top: 12px;
+  font-size: 17px;
+  color: var(--brass);
+  letter-spacing: 0.04em;
+}
+.menu-body {
+  display: grid;
+  grid-template-rows: minmax(0, 1fr);
+  min-height: 0;
+}
+.menu-sub {
+  display: grid;
+  grid-template-rows: minmax(0, 1fr) auto;
+  gap: 12px;
+  min-height: 0;
+}
+.menu-main {
+  display: grid;
+  gap: 20px;
+  justify-items: center;
+}
+.menu-list {
+  display: grid;
+  gap: 4px;
+  width: min(300px, 100%);
+  justify-self: center;
+}
+.menu-list.options {
+  width: 100%;
+}
+.menu-item {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+  min-height: 44px;
+  padding: 0 28px;
+  font-family: var(--display);
+  font-size: 16px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--mist);
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+  outline: none;
+}
+.menu-item::before,
+.menu-item::after {
+  position: absolute;
+  top: 50%;
+  translate: 0 -50%;
+  color: var(--crystal);
+  visibility: hidden;
+}
+.menu-item::before {
+  content: ">";
+  left: 8px;
+}
+.menu-item::after {
+  content: "<";
+  right: 8px;
+}
+.menu-item:focus {
+  color: var(--text);
+  background: rgba(127, 227, 255, 0.1);
+}
+.menu-item:focus::before,
+.menu-item:focus::after {
+  visibility: visible;
+}
+.menu-item[data-armed] {
+  color: var(--hp);
+}
+.menu[data-context="title"][data-screen="main"] .menu-item {
+  font-size: 24px;
+  min-height: 52px;
+}
+.menu-back {
+  justify-self: center;
+  width: min(300px, 100%);
+  margin-top: 4px;
+}
+.menu-foot {
+  margin: 0;
+  font-size: 14px;
+  color: var(--muted);
+  text-align: center;
+}
+.menu-foot a {
+  color: var(--mist);
+}
+.menu-foot a:hover {
+  color: var(--crystal);
+}
+
+/* Options: name on the left, value on the right. */
+.option {
+  justify-content: space-between;
+  text-align: left;
+  font-size: 14px;
+}
+.option::after {
+  content: none;
+}
+.option-value {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--muted);
+}
+.option[data-on="true"] .option-value {
+  color: var(--crystal);
+}
+.level-step {
+  width: 20px;
+  text-align: center;
+  color: var(--mist);
+}
+.meter {
+  display: inline-flex;
+  gap: 3px;
+}
+.meter i {
+  width: 8px;
+  height: 14px;
+  background: var(--line);
+}
 .meter i.on {
   background: var(--crystal);
 }
