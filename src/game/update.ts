@@ -1,7 +1,11 @@
+import { PERFECT } from "../constants/combat";
 import { BRAZIERS } from "../constants/stage";
 import { PF, PK } from "../types/particle";
-import { updateBlazes, updateEnemies } from "./enemies/updateEnemies";
+import { updateBlazes } from "./blazes";
+import { updateEnemies } from "./enemies/updateEnemies";
 import { updateHero } from "./hero/updateHero";
+import { agePresses } from "./input";
+import { updateNumbers } from "./numbers";
 import { updatePickups } from "./pickups";
 import { game, lights, particles, rng } from "./state";
 import { updateWaves } from "./waves";
@@ -29,19 +33,24 @@ function feedBraziers(): void {
 
 /** one simulation step */
 export function update(dt: number): void {
-  game.t += dt;
+  // after a perfect dodge the world crawls while Kael moves at full speed
+  const world = game.slow > 0 ? dt * PERFECT.timeScale : dt;
+  game.slow = Math.max(0, game.slow - dt);
+  game.t += world;
   updateHero(dt);
-  updateEnemies(dt);
+  updateEnemies(world);
   updatePickups(dt);
   updateWaves(dt);
-  game.fx = game.fx.filter((f) => f.update(dt));
+  game.fx = game.fx.filter((f) => f.update(world));
   for (const g of game.ghosts) g.life -= dt;
   game.ghosts = game.ghosts.filter((g) => g.life > 0);
-  updateBlazes(dt);
+  updateBlazes(world);
+  updateNumbers(dt);
   feedBraziers();
-  particles.update(dt);
-  lights.update(dt);
+  particles.update(world);
+  lights.update(world);
   game.shake = Math.max(0, game.shake - dt);
   game.flash = Math.max(0, game.flash - dt);
   game.banner.time = Math.max(0, game.banner.time - dt);
+  agePresses();
 }

@@ -3,10 +3,10 @@ export type InputAction =
   | "right"
   | "up"
   | "down"
-  | "jump"
   | "attack"
   | "warp"
   | "cast"
+  | "ultimate"
   | "cycle"
-  | "dodge"
+  | "dash"
   | "mute";

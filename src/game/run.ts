@@ -1,16 +1,24 @@
-import { MAX_HP, MAX_MP } from "../constants/combat";
 import { GROUND } from "../constants/stage";
-import { saveBest } from "../services/bestScore";
-import { game, hero, showBanner } from "./state";
+import { resetProgress } from "./progress";
+import { game, hero, progress, showBanner } from "./state";
 
-/** after a fall: keep the best score, clear the stage and start again from wave 1 */
+/** after a fall or a cleared stage: Kael starts over at level 1 from wave 1 */
 export function resetRun(): void {
-  game.best = Math.max(game.best, game.kills);
-  saveBest(game.best);
-  Object.assign(game, { enemies: [], wave: 0, kills: 0, waveTimer: 1.5, pickups: [] });
+  resetProgress();
+  Object.assign(game, {
+    mode: "play",
+    enemies: [],
+    wave: 0,
+    kills: 0,
+    lull: "toNext",
+    waveTimer: 1.5,
+    pickups: [],
+    numbers: [],
+    blazes: [],
+  });
   Object.assign(hero, {
-    hp: MAX_HP,
-    mp: MAX_MP,
+    hp: progress.stats.hp,
+    mp: progress.stats.mp,
     x: 70,
     y: GROUND,
     vx: 0,
@@ -20,6 +28,18 @@ export function resetRun(): void {
     sword: null,
     anchor: null,
     ground: true,
+    running: false,
+    move: null,
+    queued: null,
+    chain: 0,
+    link: 0,
+    comboCd: 0,
+    dashes: 1,
+    dashCd: 0,
+    warpCd: 0,
+    charge: 0,
+    chargeLevel: 0,
+    lastHit: null,
   });
   hero.state = "idle";
   hero.st = 0;

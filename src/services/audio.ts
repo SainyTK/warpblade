@@ -99,6 +99,32 @@ class SoundEffects {
   death(): void {
     this.noise(0.4, 600, 80, 0.18, "lowpass");
   }
+  /** a blow stopped by a guard */
+  block(): void {
+    this.tone(1300, 900, 0.07, "square", 0.05);
+    this.noise(0.06, 5000, 3000, 0.07, "highpass");
+  }
+  perfect(): void {
+    this.tone(880, 1760, 0.25, "sine", 0.06);
+  }
+  evade(): void {
+    this.noise(0.12, 2500, 1200, 0.05);
+  }
+  levelUp(): void {
+    this.tone(660, 990, 0.12, "triangle", 0.05);
+    this.tone(990, 1320, 0.25, "triangle", 0.045);
+  }
+  learn(): void {
+    this.tone(520, 1040, 0.18, "triangle", 0.05);
+  }
+  /** a rising note for each ultimate level reached while charging */
+  chargeStep(level: number): void {
+    this.tone(220 * 1.26 ** level, 260 * 1.26 ** level, 0.18, "sawtooth", 0.035);
+  }
+  ultimate(level: number): void {
+    this.noise(0.3 + level * 0.15, 3000, 200, 0.12 + level * 0.04, "lowpass", 0.8);
+    this.tone(500, 1500 + level * 300, 0.2, "triangle", 0.06);
+  }
 }
 
 export const sfx = new SoundEffects();

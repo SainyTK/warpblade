@@ -23,4 +23,12 @@ export class Rng {
   pick<T>(a: readonly T[]): T {
     return a[Math.floor(this.next() * a.length)];
   }
+  /** the items in a random order (Fisher-Yates), in place */
+  shuffle<T>(a: T[]): T[] {
+    for (let i = a.length - 1; i > 0; i--) {
+      const j = Math.floor(this.next() * (i + 1));
+      [a[i], a[j]] = [a[j], a[i]];
+    }
+    return a;
+  }
 }

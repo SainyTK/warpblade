@@ -15,6 +15,7 @@ import { bindTouch } from "./ui/bindTouch";
 import { byId } from "./ui/dom";
 import { fitStage } from "./ui/fitStage";
 import { updateHud } from "./ui/hud";
+import { bindSkillDialog, syncSkillDialog } from "./ui/skills/skillDialog";
 import { bindSoundButton } from "./ui/soundButton";
 
 const canvas = byId<HTMLCanvasElement>("game");
@@ -27,10 +28,11 @@ game.best = loadBest();
 bindKeyboard();
 bindTouch();
 bindSoundButton();
+bindSkillDialog();
 fitStage();
 showBanner(matchMedia("(pointer: coarse)").matches ? "Tap a button to start" : "Press any key", 2.5);
 
-// fixed 120 Hz steps; hit-stop freezes the simulation but frames keep drawing
+// fixed 120 Hz steps; hit-stop freezes the simulation but frames keep drawing; the skill tree pauses everything
 let last = performance.now();
 let acc = 0;
 function frame(now: number): void {
@@ -38,6 +40,7 @@ function frame(now: number): void {
   last = now;
   while (acc >= STEP) {
     acc -= STEP;
+    if (game.mode === "skills") continue;
     if (game.freeze > 0) {
       game.freeze -= STEP;
       game.shake = Math.max(0, game.shake - STEP * 0.5);
@@ -48,6 +51,7 @@ function frame(now: number): void {
   renderScene(background, image.data);
   ctx?.putImageData(image, 0, 0);
   updateHud();
+  syncSkillDialog();
   requestAnimationFrame(frame);
 }
 canvas.focus({ preventScroll: true });

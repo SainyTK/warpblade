@@ -2,28 +2,9 @@
 // (https://www.spritefusion.com/pixel-art-vfx/slash), MIT License, Copyright (c) 2026 Hugo Duprez.
 import { PAL } from "../../constants/palette";
 import { glow, place, px, shade } from "../../engine/frame";
-import type { Ramp } from "../../types/color";
-import type { Effect } from "../../types/effect";
+import type { Effect, SlashShape } from "../../types/effect";
 import { clamp, ease, smooth, TAU } from "../../utils/math";
 
-/** A swing on a tilted ellipse around (cx, cy), from angle a0 to a1, in local pixels facing right. */
-export interface SlashShape {
-  cx: number;
-  cy: number;
-  R: number;
-  /** squash across the swing plane: 1 faces us, small values lie flat */
-  sy: number;
-  rot: number;
-  a0: number;
-  a1: number;
-  /** widest band thickness */
-  W: number;
-  t0?: number;
-  sweep?: number;
-  hold?: number;
-  trail?: number;
-  ramp?: Ramp;
-}
 type Slash = Required<SlashShape>;
 
 function onArc(s: Slash, r: number, a: number): [number, number] {

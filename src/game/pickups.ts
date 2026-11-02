@@ -1,11 +1,10 @@
-import { MAX_HP, MAX_MP } from "../constants/combat";
 import { PAL } from "../constants/palette";
 import { sfx } from "../services/audio";
 import { PK } from "../types/particle";
-import { game, hero, particles } from "./state";
+import { game, hero, particles, progress } from "./state";
 
 const HOMING_DELAY = 0.35;
-const RESTORE = { mp: 7, hp: 12 } as const;
+const RESTORE = { mp: 7, hp: 8 } as const;
 
 /** orbs burst out, slow down, then home in on Kael's chest */
 export function updatePickups(dt: number): void {
@@ -30,8 +29,8 @@ export function updatePickups(dt: number): void {
     o.y += o.vy * dt;
     if (o.t > HOMING_DELAY && d < 8 && hero.state !== "dead") {
       o.done = true;
-      if (o.kind === "mp") hero.mp = Math.min(MAX_MP, hero.mp + RESTORE.mp);
-      else hero.hp = Math.min(MAX_HP, hero.hp + RESTORE.hp);
+      if (o.kind === "mp") hero.mp = Math.min(progress.stats.mp, hero.mp + RESTORE.mp);
+      else hero.hp = Math.min(progress.stats.hp, hero.hp + RESTORE.hp);
       particles.spawn(PK.STAR, o.x, o.y, 0, -10, 0.3, {
         col: o.kind === "mp" ? PAL.crystal[4] : PAL.heal[3],
         size: 2.5,

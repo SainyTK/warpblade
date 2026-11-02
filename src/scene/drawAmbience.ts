@@ -13,8 +13,9 @@ import {
   toScreenX,
   toScreenY,
 } from "../engine/frame";
-import { findWarpTarget } from "../game/hero/actions";
+import { findWarpTarget } from "../game/hero/warp";
 import { isHeld } from "../game/input";
+import { hasPerk } from "../game/progress";
 import { game, hero } from "../game/state";
 import { mix, WHITE } from "../utils/color";
 import { TAU } from "../utils/math";
@@ -45,10 +46,11 @@ export function drawAmbientLight(): void {
   for (let i = 0; i < 6; i++) if (Math.sin(t * 3 + i * 2.1) > 0.85) px((i * 97) % W, (i * 23) % 100, WHITE);
 }
 
-/** the warp crystals bob and glow; the one Kael would warp to gets a ring */
+/** the warp crystals bob and glow; with Crystal Hang, the one Kael would warp to gets a ring */
 export function drawAnchors(): void {
   const I = PAL.crystal;
-  const aiming = isHeld("up") && ["idle", "run", "jump", "fall", "hang"].includes(hero.state);
+  const aiming =
+    hasPerk("hang") && isHeld("up") && ["idle", "walk", "run", "jump", "fall", "hang"].includes(hero.state);
   const target = aiming ? findWarpTarget().anchor : undefined;
   place();
   for (const a of ANCHORS) {

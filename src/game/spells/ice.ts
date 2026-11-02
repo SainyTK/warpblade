@@ -8,13 +8,19 @@ import type { Enemy } from "../../types/enemy";
 import { PK } from "../../types/particle";
 import { scale, WHITE } from "../../utils/color";
 import { clamp, ease } from "../../utils/math";
-import { damageEnemy } from "../combat";
+import { dealDamage } from "../damage";
 import { createImpact } from "../effects/impact";
 import { enemyBox } from "../enemies/enemy";
-import { game, lights, particles, rng } from "../state";
+import { hasPerk } from "../progress";
+import { game, lights, particles, progress, rng } from "../state";
 import { boxHit, shake, surfaceBelow } from "../world";
 
 const HEIGHTS = [14, 18, 22, 22, 18, 14];
+/** Cryomancy runs three spikes further */
+const LONG_HEIGHTS = [14, 18, 22, 24, 24, 22, 20, 17, 14];
+/** damage as a multiple of ability power */
+const POWER = 2.2;
+const FREEZE = { normal: 2.6, cryomancy: 4.2 } as const;
 const STAGGER = 0.055;
 const STAND = 1.0;
 
@@ -41,16 +47,19 @@ function crystal(x: number, base: number, h: number, w: number, lean: number, I:
 }
 
 /** a row of crystal spikes erupting one after another along the floor, freezing what they touch, then shattering */
-export function castIce(x: number, y: number, face: number): Effect {
+export function castIce(x: number, y: number, face: number, power: number): Effect {
   const I = PAL.ice;
+  const cryo = hasPerk("cryomancy");
+  const heights = cryo ? LONG_HEIGHTS : HEIGHTS;
+  const damage = POWER * progress.stats.ap * power;
   const spikes: Spike[] = [];
-  for (let i = 0; i < HEIGHTS.length; i++) {
+  for (let i = 0; i < heights.length; i++) {
     const sx = x + face * (18 + i * 15);
     if (sx < 6 || sx > W - 6) break;
     spikes.push({
       x: sx,
       base: surfaceBelow(sx, y),
-      h: HEIGHTS[i],
+      h: heights[i],
       lean: face * rng.range(0.5, 2.5),
       delay: i * STAGGER,
       on: false,
@@ -126,8 +135,8 @@ export function castIce(x: number, y: number, face: number): Effect {
           for (const e of game.enemies) {
             if (s.hit.has(e) || !boxHit(enemyBox(e), [s.x - 6, s.base - s.h, s.x + 6, s.base])) continue;
             s.hit.add(e);
-            damageEnemy(e, 22, face * 60, -90);
-            e.frozen = 2.6;
+            dealDamage(e, damage, { fromX: s.x - face * 6, kx: face * 60, ky: -90 });
+            e.frozen = cryo ? FREEZE.cryomancy : FREEZE.normal;
             game.fx.push(createImpact(s.x, s.base - s.h * 0.6, face, false, SPARKS.ice));
           }
         if (!s.gone && u > STAND) shatter(s, i);

@@ -3,6 +3,7 @@ import { SKY_FLASH } from "../game/spells/bolt";
 import { game, hero, lights, particles, rng } from "../game/state";
 import { drawEnemies, drawHeroLayer, drawPickups } from "./drawActors";
 import { drawAmbientLight, drawAnchors, drawMist } from "./drawAmbience";
+import { drawNumbers } from "./drawNumbers";
 
 const SHAKE_FULL = 0.25;
 const FLASH_STRENGTH = 70;
@@ -25,5 +26,6 @@ export function renderScene(background: Uint32Array, out: Uint8ClampedArray): vo
   drawPickups();
   drawMist();
   lights.draw();
+  drawNumbers();
   composite(out, game.flash > 0 ? (game.flash / SKY_FLASH) * FLASH_STRENGTH : 0);
 }

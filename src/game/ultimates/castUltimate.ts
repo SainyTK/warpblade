@@ -1,0 +1,32 @@
+import { PAL } from "../../constants/palette";
+import { sfx } from "../../services/audio";
+import type { UltimateId } from "../../types/skill";
+import { WHITE } from "../../utils/color";
+import { createFloorRing } from "../effects/floorRing";
+import { SKY_FLASH } from "../spells/bolt";
+import { game, hero, lights } from "../state";
+import { shake } from "../world";
+import { castCrystalNova } from "./crystalNova";
+import { castPhantomLegion } from "./phantomLegion";
+import { castStarfall } from "./starfall";
+import { castTempest } from "./tempest";
+import { castThousandEdges } from "./thousandEdges";
+
+const ULTIMATES: Record<UltimateId, (level: number) => void> = {
+  crystalNova: castCrystalNova,
+  thousandEdges: castThousandEdges,
+  phantomLegion: castPhantomLegion,
+  starfall: castStarfall,
+  tempest: castTempest,
+};
+
+/** a burst of light from Kael, bigger each level, then the ultimate itself; level 4 lights up the sky */
+export function castUltimate(id: UltimateId, level: number): void {
+  game.fx.push(createFloorRing(hero.x, hero.y, 24 + level * 14, PAL.crystal, 0.5));
+  lights.add(hero.x, hero.y - 18, 50 + level * 25, PAL.crystal[3], 0.9, 0.5);
+  lights.add(hero.x, hero.y - 18, 20, WHITE, 0.9, 0.12);
+  shake(0.2 + level * 0.08, 1.5 + level);
+  if (level >= 4) game.flash = SKY_FLASH * 2;
+  sfx.ultimate(level);
+  ULTIMATES[id](level);
+}

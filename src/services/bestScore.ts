@@ -1,6 +1,6 @@
-const KEY = "warpblade-best";
+const KEY = "warpblade-best-wave";
 
-/** The best kill count, kept in this browser only. */
+/** The furthest wave reached, kept in this browser only. */
 export function loadBest(): number {
   try {
     return Number(localStorage.getItem(KEY)) || 0;
@@ -8,10 +8,10 @@ export function loadBest(): number {
     return 0;
   }
 }
-export function saveBest(best: number): void {
+export function saveBest(wave: number): void {
   try {
-    localStorage.setItem(KEY, String(best));
+    localStorage.setItem(KEY, String(wave));
   } catch {
-    // private windows can refuse storage; the best score then lasts for this visit only
+    // private windows can refuse storage; the best wave then lasts for this visit only
   }
 }

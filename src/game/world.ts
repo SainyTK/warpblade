@@ -14,11 +14,15 @@ export function surfaceBelow(x: number, y: number): number {
 }
 export const boxHit = (a: Box, b: Box): boolean => a[0] < b[2] && a[2] > b[0] && a[1] < b[3] && a[3] > b[1];
 export const heroBox = (): Box => [hero.x - 5, hero.y - 32, hero.x + 5, hero.y];
-/** a box in front of the hero, in pixels from his feet as if he faced right */
+/** a box in front of the hero, in pixels from the feet as if facing right */
 export function boxAhead(x0: number, y0: number, x1: number, y1: number): Box {
   return hero.face > 0
     ? [hero.x + x0, hero.y + y0, hero.x + x1, hero.y + y1]
     : [hero.x - x1, hero.y + y0, hero.x - x0, hero.y + y1];
+}
+/** the same box mirrored behind the hero */
+export function boxBehind(x0: number, y0: number, x1: number, y1: number): Box {
+  return boxAhead(x0, y0, x1, y1).map((v, i) => (i % 2 === 0 ? 2 * hero.x - v : v)) as unknown as Box;
 }
 export function shake(time: number, amp: number): void {
   if (REDUCED_MOTION) return;

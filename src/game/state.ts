@@ -1,37 +1,62 @@
-import { MAX_HP, MAX_MP } from "../constants/combat";
+import { KAEL } from "../constants/characters/kael";
 import { STAND } from "../constants/hero";
+import { SKILL_POINTS } from "../constants/progression";
 import { GROUND, SEED } from "../constants/stage";
 import { Lights } from "../engine/lights";
 import { Particles } from "../engine/particles";
 import type { GameState } from "../types/game";
 import type { Hero } from "../types/hero";
+import type { Progress } from "../types/progress";
+import { comboLimit } from "../utils/progression";
 import { Rng } from "../utils/rng";
+import { computeStats } from "../utils/stats";
 import { Chain } from "./hero/chain";
 
 /** The one owner of everything that changes while playing. */
 export const rng = new Rng(SEED);
 export const particles = new Particles(rng);
 export const lights = new Lights();
+export const character = KAEL;
 
 export const game: GameState = {
+  mode: "play",
   t: 0,
   freeze: 0,
   shake: 0,
   amp: 0,
   flash: 0,
+  slow: 0,
+  stage: 1,
   wave: 0,
+  lull: "toNext",
+  waveTimer: 2,
   kills: 0,
   best: 0,
-  waveTimer: 2,
   enemies: [],
   fx: [],
   ghosts: [],
   pickups: [],
   blazes: [],
+  numbers: [],
   spell: 0,
   swing: 0,
   banner: { text: "", time: 0 },
 };
+
+export function freshProgress(): Progress {
+  const stats = computeStats(character, 1, {});
+  return {
+    level: 1,
+    xp: 0,
+    points: SKILL_POINTS.start,
+    ranks: {},
+    stats,
+    perks: new Set(),
+    ultimate: character.special,
+    comboLimit: comboLimit(1, false),
+  };
+}
+export const progress: Progress = freshProgress();
 
 export const hero: Hero = {
   x: 70,
@@ -43,13 +68,11 @@ export const hero: Hero = {
   state: "idle",
   st: 0,
   runPhase: 0,
-  combo: 0,
-  queued: false,
-  hp: MAX_HP,
-  mp: MAX_MP,
+  running: false,
+  hp: progress.stats.hp,
+  mp: progress.stats.mp,
   inv: 0,
   jumps: 0,
-  dodgeCd: 0,
   drop: 0,
   anchor: null,
   hasSword: true,
@@ -60,11 +83,35 @@ export const hero: Hero = {
   ghostTimer: 0,
   sword: null,
   warpTarget: null,
+  move: null,
+  hitIndex: 0,
+  chain: 0,
+  queued: null,
+  link: 0,
+  comboCd: 0,
+  airHits: 0,
+  whirled: false,
+  dashes: 1,
+  dashCd: 0,
+  airDashed: false,
+  sinceDash: 9,
+  warpCd: 0,
+  spellPower: 1,
+  lastHit: null,
+  charge: 0,
+  chargeLevel: 0,
+  moveHits: 0,
+  perfectUsed: false,
+  riposte: 0,
 };
 export const scarf = new Chain(8, 2.2, 340);
 export const ponytail = new Chain(4, 2, 300);
 
-particles.onLand = (x, y) => game.blazes.push({ x, y, life: 1.6, max: 1.6, tick: 0 });
+/** at most this many fires burn on the floor at once */
+const MAX_BLAZES = 24;
+particles.onLand = (x, y) => {
+  if (game.blazes.length < MAX_BLAZES) game.blazes.push({ x, y, life: 1.6, max: 1.6, tick: 0 });
+};
 
 export function showBanner(text: string, seconds: number): void {
   game.banner = { text, time: seconds };
