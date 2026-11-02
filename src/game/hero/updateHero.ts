@@ -63,7 +63,7 @@ function clockRate(): number {
 export function updateHero(dt: number): void {
   const h = hero;
   const dir = (isHeld("right") ? 1 : 0) - (isHeld("left") ? 1 : 0);
-  const tap = readDoubleTap();
+  const tap = readDoubleTap(dir);
   h.st += dt * clockRate();
   h.inv = Math.max(0, h.inv - dt);
   h.drop = Math.max(0, h.drop - dt);

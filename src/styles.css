@@ -286,45 +286,6 @@ header p {
   outline: 2px solid var(--crystal);
 }
 
-.touch {
-  display: none;
-}
-@media (pointer: coarse) {
-  .touch {
-    display: flex;
-    justify-content: space-between;
-    gap: 12px;
-    user-select: none;
-    -webkit-user-select: none;
-    touch-action: none;
-  }
-  .touch .pad,
-  .touch .acts {
-    display: grid;
-    gap: 8px;
-  }
-  .touch .pad {
-    grid-template-columns: repeat(2, 64px);
-    align-content: end;
-  }
-  .touch .acts {
-    grid-template-columns: repeat(3, 60px);
-  }
-  .touch button {
-    height: 56px;
-    font-family: var(--ui);
-    font-size: 13px;
-    color: var(--text);
-    background: var(--panel);
-    border: 1px solid var(--line);
-    touch-action: none;
-  }
-  .touch button.active {
-    background: var(--line);
-    border-color: var(--crystal);
-  }
-}
-
 .notes {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr));

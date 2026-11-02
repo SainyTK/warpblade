@@ -33,6 +33,9 @@ export function tryDash(dir: number): boolean {
   return true;
 }
 
+/** seconds for one dash charge to come back */
+export const dashRechargeTime = (): number => HERO_MOVE.dashRecharge * (hasPerk("quickstep") ? 0.55 : 1);
+
 /** dash charges come back one at a time */
 export function rechargeDash(dt: number): void {
   const h = hero;
@@ -42,7 +45,7 @@ export function rechargeDash(dt: number): void {
     return;
   }
   h.dashCd += dt;
-  if (h.dashCd < HERO_MOVE.dashRecharge * (hasPerk("quickstep") ? 0.55 : 1)) return;
+  if (h.dashCd < dashRechargeTime()) return;
   h.dashes++;
   h.dashCd = 0;
 }

@@ -16,7 +16,7 @@
       </header>
 
       <div class="stage" id="stage">
-        <canvas id="game" width="320" height="180" tabindex="0" aria-label="Warpblade game. Use the keyboard or the buttons below to play."></canvas>
+        <canvas id="game" width="320" height="180" tabindex="0" aria-label="Warpblade game. Use the keyboard or the on-screen controller to play."></canvas>
         <div class="hud">
           <div class="bars">
             <div class="bar hp"><span>HP</span><div class="track"><div class="fill" id="hpFill"></div></div></div>
@@ -43,16 +43,7 @@
         <button class="sound" id="sound" type="button">SOUND ON</button>
       </div>
 
-      <div class="touch">
-        <div class="pad">
-          <button data-action="up" type="button">JUMP</button><button data-action="down" type="button">DOWN</button>
-          <button data-action="left" type="button">LEFT</button><button data-action="right" type="button">RIGHT</button>
-        </div>
-        <div class="acts">
-          <button data-action="attack" type="button">SLASH</button><button data-action="warp" type="button">WARP</button><button data-action="dash" type="button">DASH</button>
-          <button data-action="cast" type="button">SPELL</button><button data-action="ultimate" type="button">ULT</button><button data-action="cycle" type="button">ELEM</button>
-        </div>
-      </div>
+      <div id="touch" hidden></div>
 
       <dialog class="skills" id="skills" aria-labelledby="skillsTitle">
         <div class="skills-head">

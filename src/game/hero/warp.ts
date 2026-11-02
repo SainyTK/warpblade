@@ -21,7 +21,7 @@ const WARP_SLASH = { cx: 2, cy: -20, R: 24, sy: 0.5, rot: -0.5, a0: -2.6, a1: 0.
 const BLINK_POWER = 1.8;
 
 export const warpCost = (): number => COST.warp * (hasPerk("warpcraft") ? 0.6 : 1);
-const warpCooldown = (): number => WARP.cooldown * (hasPerk("warpcraft") ? 0.6 : 1);
+export const warpCooldown = (): number => WARP.cooldown * (hasPerk("warpcraft") ? 0.6 : 1);
 
 /** with Crystal Hang, holding up aims at a crystal; otherwise the nearest foe in front, otherwise a point ahead */
 export function findWarpTarget(): WarpTarget {

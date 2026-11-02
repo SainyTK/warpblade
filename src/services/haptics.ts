@@ -1,0 +1,8 @@
+/** Short vibrations through navigator.vibrate where the browser has it. Options can turn them off with `enabled`. */
+export const haptics = {
+  enabled: true,
+  pulse(ms: number): void {
+    if (!this.enabled || typeof navigator.vibrate !== "function") return;
+    navigator.vibrate(ms);
+  },
+};

@@ -11,12 +11,12 @@ import { buildBackground } from "./scene/background";
 import { renderScene } from "./scene/renderScene";
 import { loadBest } from "./services/bestScore";
 import { bindKeyboard } from "./ui/bindKeyboard";
-import { bindTouch } from "./ui/bindTouch";
 import { byId } from "./ui/dom";
 import { fitStage } from "./ui/fitStage";
 import { updateHud } from "./ui/hud";
 import { bindSkillDialog, syncSkillDialog } from "./ui/skills/skillDialog";
 import { bindSoundButton } from "./ui/soundButton";
+import { bindTouch, syncTouch } from "./ui/touch/bindTouch";
 
 const canvas = byId<HTMLCanvasElement>("game");
 const ctx = canvas.getContext("2d");
@@ -52,6 +52,7 @@ function frame(now: number): void {
   ctx?.putImageData(image, 0, 0);
   updateHud();
   syncSkillDialog();
+  syncTouch();
   requestAnimationFrame(frame);
 }
 canvas.focus({ preventScroll: true });
