@@ -7,7 +7,7 @@ import { toggleSound } from "./soundButton";
 export function bindKeyboard(): void {
   addEventListener("keydown", (ev) => {
     const action = KEYMAP[ev.code];
-    if (!action || game.mode === "skills") return;
+    if (!action || game.mode === "pick") return;
     ev.preventDefault();
     sfx.start();
     if (ev.repeat) return;

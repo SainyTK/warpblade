@@ -5,7 +5,8 @@ import type { Stats } from "./stats";
 export interface Progress {
   level: number;
   xp: number;
-  points: number;
+  /** level ups still waiting for a pick */
+  picks: number;
   /** learned ranks by node id */
   ranks: Record<string, number>;
   /** derived from level and ranks */

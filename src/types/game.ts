@@ -43,8 +43,8 @@ export interface DamageNumber {
   big: boolean;
   life: number;
 }
-/** play runs the simulation; skills pauses it under the skill tree; clear is the end of the stage */
-export type GameMode = "play" | "skills" | "clear";
+/** play runs the simulation; pick pauses it while Kael chooses a skill after a level up; clear is the end of the stage */
+export type GameMode = "play" | "pick" | "clear";
 
 export interface GameState {
   mode: GameMode;
@@ -59,8 +59,8 @@ export interface GameState {
   slow: number;
   stage: number;
   wave: number;
-  /** fight while a wave is on; once it is clear, count down to the skill tree, then to the next wave */
-  lull: "fight" | "toSkills" | "toNext";
+  /** fight while a wave is on; once it is clear, count down to the next wave */
+  lull: "fight" | "toNext";
   waveTimer: number;
   kills: number;
   /** the furthest wave reached in this browser */

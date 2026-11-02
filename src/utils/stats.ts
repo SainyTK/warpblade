@@ -30,7 +30,7 @@ export function collectPerks(c: CharacterDef, ranks: Readonly<Record<string, num
   return perks;
 }
 
-/** the ultimate learned from the tree, otherwise the character's special */
+/** the ultimate learned from a level-up pick, otherwise the character's special */
 export function learnedUltimate(c: CharacterDef, ranks: Readonly<Record<string, number>>): UltimateId {
   return allNodes(c).find((n) => n.ultimate && ranks[n.id])?.ultimate ?? c.special;
 }

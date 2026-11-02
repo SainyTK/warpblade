@@ -48,7 +48,7 @@ function startWave(): void {
   });
 }
 
-/** fight a wave; when the stage is clear, wait, open the skill tree, wait, then open rifts for the next wave */
+/** fight a wave; once it is clear, wait, then open rifts for the next wave */
 export function updateWaves(dt: number): void {
   if (hero.state === "dead") return;
   if (game.mode === "clear") {
@@ -65,17 +65,11 @@ export function updateWaves(dt: number): void {
       sfx.levelUp();
       return;
     }
-    game.lull = "toSkills";
-    game.waveTimer = WAVE_PAUSE.toSkills;
+    game.lull = "toNext";
+    game.waveTimer = WAVE_PAUSE;
     return;
   }
   game.waveTimer -= dt;
   if (game.waveTimer > 0) return;
-  if (game.lull === "toSkills") {
-    game.lull = "toNext";
-    game.waveTimer = WAVE_PAUSE.toNext;
-    game.mode = "skills";
-    return;
-  }
   startWave();
 }

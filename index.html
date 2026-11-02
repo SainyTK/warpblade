@@ -22,7 +22,7 @@
             <div class="bar hp"><span>HP</span><div class="track"><div class="fill" id="hpFill"></div></div></div>
             <div class="bar mp"><span>MP</span><div class="track"><div class="fill" id="mpFill"></div></div></div>
             <div class="bar xp"><span id="level">LV 1</span><div class="track"><div class="fill" id="xpFill"></div></div></div>
-            <div class="chain-row"><span class="label">COMBO</span><span class="pips" id="chain"></span><span class="points" id="points"></span></div>
+            <div class="chain-row"><span class="label">COMBO</span><span class="pips" id="chain"></span></div>
           </div>
           <div class="right">
             <div class="elements">
@@ -54,29 +54,6 @@
         </div>
       </div>
 
-      <dialog class="skills" id="skills" aria-labelledby="skillsTitle">
-        <div class="skills-head">
-          <div>
-            <h2 id="skillsTitle">Skill tree</h2>
-            <p id="skillsSummary"></p>
-          </div>
-          <button class="primary" id="skillsContinue" type="button">Continue</button>
-        </div>
-        <p class="skills-hint">Paths run left to right. Skills joined by "or" exclude each other for the whole run. Fusion skills need one skill from each of two paths. Unspent points carry over.</p>
-        <div class="tree" id="skillBranches"></div>
-        <div class="detail" id="skillDetail" aria-live="polite">
-          <img class="detail-icon" id="detailIcon" alt="" width="48" height="48" />
-          <div class="detail-text">
-            <h3 id="detailName"></h3>
-            <p class="detail-kind" id="detailKind"></p>
-            <p id="detailText"></p>
-            <p class="detail-path" id="detailPath"></p>
-            <p class="detail-status" id="detailStatus"></p>
-          </div>
-          <button class="primary" id="detailLearn" type="button">Learn</button>
-        </div>
-      </dialog>
-
       <div class="notes">
         <section>
           <h2>Moves</h2>
@@ -94,7 +71,7 @@
             <dt><kbd>K</kbd></dt>
             <dd>Warp strike. Kael throws his sword at the nearest foe in front and appears where it lands, hitting harder the farther he travels.</dd>
             <dt><kbd>U</kbd></dt>
-            <dd>Special. Kael starts with Crystal Nova; the skill tree can replace it with a stronger ultimate. Hold to charge up to four levels, release to strike. Level 4 spends a full MP bar.</dd>
+            <dd>Special. Kael starts with Crystal Nova; a level up can offer a stronger ultimate in its place. Hold to charge up to four levels, release to strike. Level 4 spends a full MP bar.</dd>
           </dl>
         </section>
         <section>
@@ -120,7 +97,7 @@
         </section>
         <section>
           <h2>Stage</h2>
-          <p>Thirty waves. A Rift Brute comes every fifth wave and the Rift Warden at waves 20 and 30. After each wave the skill tree opens: spend your points or keep them for later. Kael gains a skill point every level.</p>
+          <p>Thirty waves. A Rift Brute comes every fifth wave and the Rift Warden at waves 20 and 30. Each level up pauses the fight and offers three skills from the paths Kael can reach: pick one and it is learned at once.</p>
         </section>
       </div>
 
