@@ -1,0 +1,349 @@
+/* Level-up pick: up to three cards over the paused game. A row of tall cards on wide screens, a stack of wide cards on phones. */
+.level-up {
+  width: min(840px, 100vw - 32px);
+  max-height: calc(100dvh - 32px);
+  padding: 20px 20px 16px;
+  border: 0;
+  background: transparent;
+  color: var(--text);
+  font-family: var(--body);
+  overflow: auto;
+}
+.level-up[open] {
+  display: grid;
+  gap: 16px;
+}
+.level-up::backdrop {
+  background: rgba(6, 4, 14, 0.84);
+}
+.level-up-head {
+  text-align: center;
+  animation: pick-drop 240ms steps(4) both;
+}
+.level-up-head h2 {
+  margin: 0;
+  font-family: var(--display);
+  font-weight: 400;
+  font-size: 32px;
+  line-height: 1.1;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--heal);
+  text-shadow:
+    3px 3px 0 #123a2a,
+    0 0 14px rgba(156, 240, 160, 0.35);
+}
+.level-up-sub {
+  margin: 4px 0 0;
+  font-family: var(--ui);
+  font-size: 15px;
+  letter-spacing: 0.04em;
+  color: var(--mist);
+}
+.level-up-cards {
+  display: grid;
+  grid-template-columns: repeat(var(--cols, 3), minmax(0, 236px));
+  justify-content: center;
+  gap: 16px;
+}
+.level-up-cards[data-count="2"] {
+  --cols: 2;
+}
+.level-up-cards[data-count="1"] {
+  --cols: 1;
+}
+.level-up-hint {
+  margin: 0;
+  text-align: center;
+  font-size: 12px;
+  color: var(--muted);
+}
+.level-up-hint.touch-hint {
+  display: none;
+}
+@media (pointer: coarse) {
+  .level-up-hint.keys {
+    display: none;
+  }
+  .level-up-hint.touch-hint {
+    display: block;
+  }
+}
+
+/* One card. --accent is the color of the path it comes from. */
+.pick {
+  --accent: var(--crystal);
+  --accent-dark: #16224a;
+  position: relative;
+  display: grid;
+  grid-template-rows: auto auto 1fr;
+  row-gap: 12px;
+  justify-items: center;
+  align-content: start;
+  min-height: 264px;
+  padding: 0 14px 28px;
+  text-align: center;
+  font: inherit;
+  color: var(--text);
+  background: linear-gradient(180deg, var(--accent-dark) 0, var(--panel) 92px);
+  border: 2px solid var(--line);
+  box-shadow:
+    inset 0 0 0 2px var(--night),
+    4px 4px 0 rgba(0, 0, 0, 0.55);
+  cursor: pointer;
+  animation: pick-rise 260ms steps(5) both;
+  animation-delay: var(--delay, 0ms);
+  transition:
+    transform 90ms steps(2),
+    border-color 90ms steps(2);
+}
+.pick[data-branch="blade"] {
+  --accent: var(--brass);
+  --accent-dark: #3a2a10;
+}
+.pick[data-branch="phantom"] {
+  --accent: var(--volt);
+  --accent-dark: #241a52;
+}
+.pick[data-branch="arcane"] {
+  --accent: var(--crystal);
+  --accent-dark: #102a48;
+}
+.pick[data-branch="fusion"] {
+  --accent: var(--pink);
+  --accent-dark: #3a1438;
+}
+.pick[data-branch="boon"] {
+  --accent: var(--heal);
+  --accent-dark: #123a2a;
+}
+.pick.selected {
+  border-color: var(--accent);
+  transform: translateY(-6px);
+  box-shadow:
+    inset 0 0 0 2px var(--night),
+    4px 10px 0 rgba(0, 0, 0, 0.55),
+    0 0 18px color-mix(in srgb, var(--accent) 35%, transparent);
+}
+.pick:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+.pick-icon {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 72px;
+  height: 72px;
+  background: var(--night);
+  border: 2px solid var(--accent);
+  box-shadow: inset 0 0 0 2px var(--accent-dark);
+}
+.pick-icon img {
+  width: 48px;
+  height: 48px;
+  image-rendering: pixelated;
+}
+.pick-new {
+  position: absolute;
+  right: -10px;
+  bottom: -8px;
+  padding: 0 4px;
+  font-family: var(--display);
+  font-size: 10px;
+  line-height: 14px;
+  color: var(--night);
+  background: var(--heal);
+}
+.pick-body {
+  display: grid;
+  justify-items: center;
+  align-content: start;
+  gap: 6px;
+  width: 100%;
+}
+.pick-path {
+  justify-self: stretch;
+  margin: 0 -14px;
+  padding: 3px 0 4px;
+  font-family: var(--display);
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--night);
+  background: var(--accent);
+}
+.pick-name {
+  font-family: var(--ui);
+  font-weight: 600;
+  font-size: 19px;
+  line-height: 1.15;
+  color: var(--text);
+}
+.pick.selected .pick-name {
+  color: var(--accent);
+}
+.pick[data-kind="ultimate"] .pick-name {
+  color: var(--pink);
+}
+.pick-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 4px 8px;
+}
+.pick-kind {
+  font-family: var(--ui);
+  font-size: 13px;
+  letter-spacing: 0.04em;
+  color: var(--volt);
+}
+.pick-pips {
+  display: inline-flex;
+  gap: 3px;
+}
+.pick-pips i {
+  width: 7px;
+  height: 7px;
+  border: 1px solid var(--key);
+  background: var(--night);
+}
+.pick-pips i.had {
+  background: var(--brass);
+  border-color: var(--brass);
+}
+.pick-pips i.gain {
+  background: var(--heal);
+  border-color: var(--heal);
+  animation: pick-blink 800ms steps(2) infinite;
+}
+.pick-text {
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--mist);
+}
+.pick-note {
+  font-size: 12px;
+  line-height: 1.4;
+  color: var(--brass);
+}
+.pick-key {
+  position: absolute;
+  left: 6px;
+  bottom: 6px;
+  min-width: 18px;
+  font-family: var(--ui);
+  font-size: 11px;
+  line-height: 16px;
+  color: var(--muted);
+  border: 1px solid var(--key);
+  background: var(--night);
+}
+/* Touch: a tap learns at once, so no card is shown as selected. */
+@media (pointer: coarse) {
+  .pick-key {
+    display: none;
+  }
+  .pick.selected {
+    border-color: var(--line);
+    transform: none;
+    box-shadow:
+      inset 0 0 0 2px var(--night),
+      4px 4px 0 rgba(0, 0, 0, 0.55);
+  }
+  .pick.selected:not([data-kind="ultimate"]) .pick-name {
+    color: var(--text);
+  }
+  .pick:focus-visible {
+    outline: none;
+  }
+}
+
+/* Phones: wide cards in a stack, the icon at the left. */
+@media (max-width: 640px) {
+  .level-up {
+    width: 100vw;
+    max-width: 100vw;
+    padding: 16px 16px 12px;
+  }
+  .level-up[open] {
+    gap: 12px;
+  }
+  .level-up-head h2 {
+    font-size: 26px;
+  }
+  .level-up-sub {
+    font-size: 14px;
+  }
+  .level-up-cards {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 12px;
+  }
+  .pick {
+    grid-template-columns: 56px 1fr;
+    grid-template-rows: auto 1fr;
+    justify-items: start;
+    gap: 8px 12px;
+    min-height: 0;
+    padding: 0 12px 12px;
+    text-align: left;
+    background: linear-gradient(90deg, var(--accent-dark) 0, var(--panel) 120px);
+  }
+  .pick-icon {
+    width: 56px;
+    height: 56px;
+  }
+  .pick-icon img {
+    width: 32px;
+    height: 32px;
+  }
+  .pick-new {
+    right: -6px;
+    bottom: -6px;
+  }
+  .pick-body {
+    justify-items: start;
+    gap: 4px;
+  }
+  .pick-path {
+    grid-column: 1 / -1;
+    margin: 0 -12px;
+    padding-left: 12px;
+  }
+  .pick-name {
+    font-size: 17px;
+  }
+  .pick-meta {
+    justify-content: start;
+  }
+  .pick-text {
+    font-size: 12px;
+  }
+}
+
+@keyframes pick-rise {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+}
+@keyframes pick-drop {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+}
+@keyframes pick-blink {
+  50% {
+    background: var(--night);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .level-up-head,
+  .pick,
+  .pick-pips i.gain {
+    animation: none;
+    transition: none;
+  }
+}

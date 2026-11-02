@@ -30,11 +30,11 @@ His crystal sword can be thrown, and wherever it lands, he follows.
 ## Features
 
 - **Warp strike.** Throw the sword at a foe and appear beside it mid-swing. The farther you travel, the harder you hit.
-- **Combos that grow.** Two hits at level 1, six by level 17. Learn launchers, sweeps, air strings, dash and running attacks, and finishers that cut through a foe to its back or bounce it into the sky.
+- **Combos that grow.** Two hits at level 1, six by level 17. Pick up launchers, sweeps, air strings, dash and running attacks, and finishers that cut through a foe to its back or bounce it into the sky.
 - **Positioning pays.** Hits from behind deal 1.5 times the damage and foes in the air take double, with the numbers popping out of every hit.
 - **Fights that need skill.** Husks block blows from the front and strike back, wisps slip away from swings, and missed swings leave you open. Dash through an attack at the last moment for a perfect dodge and slow motion.
-- **A skill tree per run.** Paths run left to right, each skill with its own pixel icon. Blade is strong early, Phantom trades power for mobility and crits, Arcane is weak early and strong late. Fusion skills join two paths: shatter frozen foes, set off burning ones, charge foes by dashing through them, and more. Choices joined by "or" lock each other out.
-- **Charged specials.** Kael starts with Crystal Nova. Hold U through four levels; level 4 spends a full MP bar. The tree offers stronger ultimates: a storm of blades, a legion of phantoms, falling stars or a lightning tempest.
+- **A pick at every level up.** The fight pauses and three cards offer skills Kael can learn now, each with its own pixel icon. Blade is strong early, Phantom trades power for mobility and crits, Arcane is weak early and strong late. Fusion skills join two paths once both are started: shatter frozen foes, set off burning ones, charge foes by dashing through them, and more. Some skills lock out their rivals for the run, and passives come back until every rank is learned.
+- **Charged specials.** Kael starts with Crystal Nova. Hold U through four levels; level 4 spends a full MP bar. Level ups can offer stronger ultimates: a storm of blades, a legion of phantoms, falling stars or a lightning tempest.
 - **Three elements.** A flask of fire that sets the floor burning, a running line of ice spikes that freezes, and lightning that arcs to a second foe.
 - **A 30-wave stage.** Floating wisps and horned husks, a Rift Brute every fifth wave and the Rift Warden at waves 20 and 30.
 - **Plays anywhere.** Keyboard on desktop, on-screen buttons on phones, no install.
@@ -66,8 +66,9 @@ His crystal sword can be thrown, and wherever it lands, he follows.
 | `U` | Hold to charge the special, release to strike |
 | `M` | Sound on or off |
 
-After each wave the skill tree opens.
-Move with the arrow keys, learn with `J` or `Enter`, and close it with `Esc` to keep your points for later.
+Each level up pauses the game and offers up to three skills.
+Choose with `A` `D` or the arrows and learn with `J` or `Enter`, press `1` to `3`, or click or tap a card.
+Several level ups at once give one pick each.
 
 ## Run it locally
 
@@ -112,8 +113,8 @@ The README images are frames captured straight from the game canvas at 320 by 18
 src/
   main.ts          wires everything and runs the 120 Hz loop
   types/           shared types
-  constants/       stage layout, palettes, poses and attack keyframes, tuning, key map, waves, Kael's skill tree
-  utils/           pure helpers: math, color, seeded random, stats, experience, skill tree rules, wave plan
+  constants/       stage layout, palettes, poses and attack keyframes, tuning, key map, waves, Kael's skills
+  utils/           pure helpers: math, color, seeded random, stats, experience, level-up picks, wave plan
   engine/          the pixel renderer: frame buffers and painter, particles, lights, sprite canvas
   services/        Web Audio sound effects, best wave in local storage
   game/            the simulation
@@ -123,7 +124,7 @@ src/
     spells/        fire, ice, bolt and the explosion they share
     ultimates/     Thousand Edges, Phantom Legion, Starfall, Tempest
   scene/           background and the order layers are drawn in
-  ui/              HUD, skill tree window, keyboard and touch input, sound button, stage sizing
+  ui/              HUD, level-up pick, keyboard and touch input, sound button, stage sizing
 docs/media/        README banner, gameplay GIF and screenshots
 ```
 

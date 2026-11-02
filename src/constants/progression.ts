@@ -12,4 +12,5 @@ export const COMBO_BY_LEVEL: readonly (readonly [level: number, hits: number])[]
 export const MAX_COMBO = 6;
 /** part of max HP and MP restored on a level up */
 export const LEVEL_UP_RESTORE = 0.3;
-export const SKILL_POINTS = { start: 1, perLevel: 1 } as const;
+/** skills offered on each level up */
+export const PICK_COUNT = 3;
