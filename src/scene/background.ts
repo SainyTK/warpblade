@@ -2,8 +2,8 @@ import { WORLD_COLORS as WC } from "../constants/palette";
 import { BRAZIERS, GROUND, H, MOON, N, PLATFORMS, W } from "../constants/stage";
 import { bayerAt } from "../engine/frame";
 import { mix, scale } from "../utils/color";
-import { clamp } from "../utils/math";
 import { Rng } from "../utils/rng";
+import { groundAt, ridgeAt, ridgeTopAt, skyAt } from "./terrain";
 
 const TOWERS: readonly (readonly [number, number, number])[] = [
   [14, 22, 70],
@@ -22,13 +22,7 @@ const CRATERS: readonly (readonly [number, number, number])[] = [
 ];
 
 function sky(bg: Uint32Array, r: Rng): void {
-  const S = WC.sky;
-  for (let y = 0; y < H; y++)
-    for (let x = 0; x < W; x++) {
-      const v = clamp(y / 150) * (S.length - 1);
-      const i = Math.floor(v);
-      bg[y * W + x] = S[Math.min(S.length - 1, v - i > bayerAt(x, y) ? i + 1 : i)];
-    }
+  for (let y = 0; y < H; y++) for (let x = 0; x < W; x++) bg[y * W + x] = skyAt(x, y);
   for (let i = 0; i < 90; i++) {
     const x = r.int(0, W - 1);
     const y = r.int(0, 110);
@@ -57,10 +51,7 @@ function moon(bg: Uint32Array): void {
 
 /** a far ridge, then ruined spires rim lit on the moon side, some windows still lit */
 function skyline(bg: Uint32Array, r: Rng): void {
-  for (let x = 0; x < W; x++) {
-    const h = Math.floor(112 + Math.sin(x * 0.021) * 8 + Math.sin(x * 0.057 + 1.3) * 5 + Math.sin(x * 0.13) * 2);
-    for (let y = h; y < GROUND; y++) bg[y * W + x] = y === h ? WC.ridgeTop : WC.ridge;
-  }
+  for (let x = 0; x < W; x++) for (let y = ridgeTopAt(x); y < GROUND; y++) bg[y * W + x] = ridgeAt(x, y);
   for (const [tx, tw, top] of TOWERS) {
     const broken = r.next() > 0.5;
     for (let x = tx; x < tx + tw && x < W; x++) {
@@ -83,16 +74,7 @@ function skyline(bg: Uint32Array, r: Rng): void {
 
 /** stone courses with a lit lip, moss along the top */
 function ground(bg: Uint32Array, r: Rng): void {
-  for (let y = GROUND; y < H; y++)
-    for (let x = 0; x < W; x++) {
-      const row = y - GROUND;
-      const offset = Math.floor((row - 2) / 7) % 2 ? 8 : 0;
-      let c = row === 0 ? WC.groundLip : row === 1 ? WC.groundEdge : WC.stone;
-      if (row > 1 && ((row - 2) % 7 === 6 || (x + offset) % 16 === 0)) c = WC.mortar;
-      else if (row > 1 && (row - 2) % 7 === 0) c = WC.stoneTop;
-      if (row > 9) c = scale(c, 0.8);
-      bg[y * W + x] = c;
-    }
+  for (let y = GROUND; y < H; y++) for (let x = 0; x < W; x++) bg[y * W + x] = groundAt(x, y);
   for (let x = 0; x < W; x++) {
     if (!r.chance(0.18)) continue;
     const h = r.int(1, 3);
