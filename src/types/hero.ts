@@ -14,6 +14,20 @@ export type ClipName =
   | "spin"
   | "plunge"
   | "flip"
+  | "twinFang"
+  | "hopCleave"
+  | "crescent"
+  | "pivot"
+  | "ring"
+  | "downStab"
+  | "chase"
+  | "airCross"
+  | "airFlip"
+  | "airDrill"
+  | "airHammer"
+  | "dashCut"
+  | "phase"
+  | "skyRend"
   | "cast"
   | "throw"
   | "warpStrike";
@@ -80,6 +94,8 @@ export interface Hero {
   warpTarget: WarpTarget | null;
   /** the combo move being played */
   move: MoveId | null;
+  /** the combo move started last */
+  lastMove: MoveId | null;
   /** hits of the current move already dealt */
   hitIndex: number;
   /** moves in the current combo */
@@ -111,4 +127,16 @@ export interface Hero {
   perfectUsed: boolean;
   /** Riposte: time left in which the next sword hit is tripled */
   riposte: number;
+  /** a downward stab was used in this combo */
+  stabbed: boolean;
+  /** Keen timing: time left in which a J press makes the next move a sure crit */
+  keenOpen: number;
+  /** J was pressed before the current blow landed, so this move cannot open Keen timing */
+  keenSpoiled: boolean;
+  /** the queued move was pressed with Keen timing */
+  keenNext: boolean;
+  /** the current move's blows are sure crits */
+  keen: boolean;
+  /** seconds until the next afterimage of the current move */
+  moveGhost: number;
 }

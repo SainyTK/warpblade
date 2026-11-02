@@ -57,4 +57,6 @@ export interface Enemy {
   charged: number;
   /** time before a wisp can slip away from a swing again */
   evadeCd: number;
+  /** a husk rocked by a sword blow stops walking for this long; a wind-up already started goes on */
+  stagger: number;
 }

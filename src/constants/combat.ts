@@ -46,8 +46,8 @@ export const COMBO = {
   link: 0.25,
   /** a queued move starts this long after the last blow of the current one */
   cancel: 0.09,
-  /** air attacks before the third one becomes the spike */
-  airLights: 2,
+  /** a husk struck by the sword stops walking this long, so it does not walk into Kael mid-combo */
+  stagger: 0.35,
 } as const;
 
 export const DAMAGE = {

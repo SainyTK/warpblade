@@ -84,6 +84,7 @@ export const hero: Hero = {
   sword: null,
   warpTarget: null,
   move: null,
+  lastMove: null,
   hitIndex: 0,
   chain: 0,
   queued: null,
@@ -103,6 +104,12 @@ export const hero: Hero = {
   moveHits: 0,
   perfectUsed: false,
   riposte: 0,
+  stabbed: false,
+  keenOpen: 0,
+  keenSpoiled: false,
+  keenNext: false,
+  keen: false,
+  moveGhost: 0,
 };
 export const scarf = new Chain(8, 2.2, 340);
 export const ponytail = new Chain(4, 2, 300);

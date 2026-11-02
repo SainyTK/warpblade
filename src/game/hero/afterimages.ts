@@ -49,3 +49,9 @@ export function dropDashGhost(): void {
     },
   );
 }
+
+/** one fading copy in the current pose, dropped every few frames while a fast move plays */
+export function dropMoveGhost(): void {
+  drawHero(ghostCanvas, hero.pose, heroLook(4));
+  game.ghosts.push({ s: ghostCanvas.snapshot(), x: hero.x, y: hero.y, flip: hero.face < 0, life: 0.16, max: 0.16 });
+}

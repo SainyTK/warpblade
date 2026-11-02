@@ -24,6 +24,10 @@ export interface HitOptions {
   heavy?: boolean;
   /** a sword blow: guards stop it unless it is heavy */
   melee?: boolean;
+  /** a husk stops walking for this long */
+  stagger?: number;
+  /** a Keen blow: always a critical hit */
+  sureCrit?: boolean;
   /** burning and other damage over time: no crits, no numbers in white */
   dot?: boolean;
 }
@@ -104,7 +108,7 @@ export function dealDamage(e: Enemy, base: number, o: HitOptions = {}): HitResul
     tag = "break";
   }
   const back = o.fromX !== undefined && isBehind(e, o.fromX);
-  const crit = !o.dot && rng.chance(progress.stats.crit);
+  const crit = !o.dot && (!!o.sureCrit || rng.chance(progress.stats.crit));
   let dmg = base;
   if (back) {
     dmg *= DAMAGE.back;
@@ -145,6 +149,7 @@ export function dealDamage(e: Enemy, base: number, o: HitOptions = {}): HitResul
     if (hold > 0) e.vy = Math.min(e.vy, ENEMY_AIR.juggle * hold);
   } else if (e.type === "wisp") e.vy += o.ky ?? 0;
   if (o.stun && def.launchable) e.stun = Math.max(e.stun, o.stun);
+  if (o.stagger && e.type === "husk") e.stagger = Math.max(e.stagger, o.stagger);
   if (o.heavy && e.state === "wind" && def.rank === "minion") Object.assign(e, { state: "recover", st: 0 });
   if (e.hp <= 0) killEnemy(e);
   return "hit";

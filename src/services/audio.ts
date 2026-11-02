@@ -56,9 +56,9 @@ class SoundEffects {
   swing(pitch = 1): void {
     this.noise(0.12, 2600 * pitch, 700 * pitch, 0.12);
   }
-  hit(big = false): void {
-    this.tone(big ? 140 : 180, 50, big ? 0.16 : 0.09, "square", 0.08);
-    this.noise(0.08, 1800, 300, 0.12, "lowpass");
+  hit(big = false, pitch = 1): void {
+    this.tone((big ? 140 : 180) * pitch, 50 * pitch, big ? 0.16 : 0.09, "square", 0.08);
+    this.noise(0.08, 1800 * pitch, 300 * pitch, 0.12, "lowpass");
   }
   warp(): void {
     this.tone(500, 1700, 0.12, "sine", 0.07);
