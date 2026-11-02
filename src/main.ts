@@ -12,13 +12,13 @@ import { renderScene } from "./scene/renderScene";
 import { loadBest } from "./services/bestScore";
 import { bindKeyboard } from "./ui/bindKeyboard";
 import { bindPauseButton } from "./ui/bindPauseButton";
-import { bindTouch } from "./ui/bindTouch";
 import { byId } from "./ui/dom";
 import { fitStage } from "./ui/fitStage";
 import { updateHud } from "./ui/hud";
 import { bindMenu } from "./ui/menu/bindMenu";
-import { menuContext, openMenu } from "./ui/menu/menuState";
+import { isMenuOpen, menuContext, openMenu } from "./ui/menu/menuState";
 import { bindPickDialog, syncPickDialog } from "./ui/skills/pickDialog";
+import { bindTouch, syncTouch } from "./ui/touch/bindTouch";
 
 const canvas = byId<HTMLCanvasElement>("game");
 const ctx = canvas.getContext("2d");
@@ -66,6 +66,7 @@ function frame(now: number): void {
   }
   updateHud();
   syncPickDialog();
+  syncTouch(!isMenuOpen() && game.mode === "play");
   requestAnimationFrame(frame);
 }
 requestAnimationFrame(frame);

@@ -280,7 +280,6 @@ body {
   outline: none;
 }
 body:not([data-menu="none"]) .pause,
-body:not([data-menu="none"]) .touch,
 body[data-menu="title"] .hud,
 body[data-menu="title"] .boss,
 body[data-menu="title"] .banner {
@@ -294,58 +293,6 @@ body[data-hud="outside"] .hud {
 body[data-hud="outside"] .boss {
   top: calc(100% + 16px);
   bottom: auto;
-}
-
-/* Touch buttons: the full-screen layout only pins them over the bottom of the screen; their look is unchanged. */
-.touch {
-  display: none;
-}
-@media (pointer: coarse) {
-  .touch {
-    position: fixed;
-    inset: auto 0 0;
-    padding: 0 max(12px, env(safe-area-inset-right, 0px)) max(12px, env(safe-area-inset-bottom, 0px))
-      max(12px, env(safe-area-inset-left, 0px));
-    align-items: flex-end;
-    display: flex;
-    justify-content: space-between;
-    gap: 12px;
-    user-select: none;
-    -webkit-user-select: none;
-    touch-action: none;
-  }
-  .touch .pad,
-  .touch .acts {
-    display: grid;
-    gap: 8px;
-  }
-  .touch .pad {
-    grid-template-columns: repeat(2, 64px);
-    align-content: end;
-  }
-  .touch .acts {
-    grid-template-columns: repeat(3, 60px);
-  }
-  .touch button {
-    height: 56px;
-    font-family: var(--ui);
-    font-size: 13px;
-    color: var(--text);
-    background: var(--panel);
-    border: 1px solid var(--line);
-    touch-action: none;
-  }
-  .touch button.active {
-    background: var(--line);
-    border-color: var(--crystal);
-  }
-}
-
-@media (pointer: coarse) {
-  .pause {
-    width: 36px;
-    height: 36px;
-  }
 }
 
 /* Menu: a pixel panel over the frozen game, or the title over the living scene before a run. */
@@ -621,18 +568,6 @@ body[data-hud="outside"] .boss {
   width: 14px;
   height: 14px;
   fill: currentColor;
-}
-.touch-face {
-  display: inline-grid;
-  place-items: center;
-  min-width: 60px;
-  height: 34px;
-  padding: 0 8px;
-  font-family: var(--ui);
-  font-size: 13px;
-  color: var(--text);
-  background: var(--panel);
-  border: 2px solid var(--key);
 }
 @media (max-height: 520px) {
   .menu {

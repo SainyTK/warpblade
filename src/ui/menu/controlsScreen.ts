@@ -1,7 +1,7 @@
 import { ACTION_TEXT, KEYMAP } from "../../constants/input";
-import type { InputAction } from "../../types/input";
 import type { MenuView } from "../../types/menu";
 import { keysByAction } from "../../utils/keymap";
+import { touchLegend } from "../touch/touchLegend";
 import { backItem } from "./backItem";
 import { keycap } from "./keycap";
 
@@ -31,23 +31,13 @@ function keyboardRows(): [HTMLElement, string][] {
   });
 }
 
-/** read from the on-screen buttons themselves, so the list always matches what the player sees */
-function touchRows(): [HTMLElement, string][] {
-  return [...document.querySelectorAll<HTMLButtonElement>(".touch button[data-action]")].map((button) => {
-    const face = document.createElement("span");
-    face.className = "touch-face";
-    face.textContent = button.textContent;
-    return [face, ACTION_TEXT[button.dataset.action as InputAction]];
-  });
-}
-
 /** every action with its keys from the key map, and on touch screens the on-screen buttons */
 export function controlsScreen(): MenuView {
   const coarse = matchMedia("(any-pointer: coarse)").matches;
   const keyboard = !coarse || matchMedia("(any-pointer: fine)").matches;
   const scroll = document.createElement("div");
   scroll.className = "menu-scroll";
-  if (coarse) scroll.append(section("On-screen buttons", touchRows()));
+  if (coarse) scroll.append(section("Touch", touchLegend()));
   if (keyboard) scroll.append(section("Keyboard", keyboardRows()));
   const content = document.createElement("div");
   content.className = "menu-sub";

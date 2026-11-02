@@ -41,16 +41,7 @@
 
     <button class="pause" id="pauseButton" type="button" aria-label="Pause"><i></i><i></i></button>
 
-    <div class="touch">
-      <div class="pad">
-        <button data-action="up" type="button">JUMP</button><button data-action="down" type="button">DOWN</button>
-        <button data-action="left" type="button">LEFT</button><button data-action="right" type="button">RIGHT</button>
-      </div>
-      <div class="acts">
-        <button data-action="attack" type="button">SLASH</button><button data-action="warp" type="button">WARP</button><button data-action="dash" type="button">DASH</button>
-        <button data-action="cast" type="button">SPELL</button><button data-action="ultimate" type="button">ULT</button><button data-action="cycle" type="button">ELEM</button>
-      </div>
-    </div>
+    <div id="touch" hidden></div>
 
     <div class="menu" id="menu" hidden>
       <div class="menu-panel" role="dialog" aria-modal="true" aria-labelledby="menuTitle">

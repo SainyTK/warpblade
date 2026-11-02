@@ -1,0 +1,83 @@
+/* The touch controller: a layer over the whole screen. Two zones take touches (stick on the left, buttons on the right);
+   the pixel faces only show. --px is CSS pixels per controller art pixel, set from the screen size. */
+.touch {
+  --px: 3;
+  --unit: calc(var(--px) * 1px);
+  position: fixed;
+  inset: 0;
+  z-index: 5;
+  pointer-events: none;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: none;
+}
+.touch-zone {
+  position: absolute;
+  top: 16%;
+  bottom: 0;
+  width: 50%;
+  pointer-events: auto;
+  touch-action: none;
+}
+.touch-zone-stick {
+  left: 0;
+}
+.touch-zone-buttons {
+  right: 0;
+}
+.touch canvas {
+  display: block;
+  width: calc(var(--d) * var(--unit));
+  height: calc(var(--d) * var(--unit));
+  image-rendering: pixelated;
+}
+.touch-button {
+  position: absolute;
+  right: calc(env(safe-area-inset-right, 0px) + var(--cx) * var(--unit));
+  bottom: calc(env(safe-area-inset-bottom, 0px) + var(--cy) * var(--unit));
+  transform: translate(50%, 50%);
+  pointer-events: none;
+}
+.touch-stick {
+  position: absolute;
+  left: calc(env(safe-area-inset-left, 0px) + var(--rest-x) * var(--unit));
+  top: calc(100% - env(safe-area-inset-bottom, 0px) - var(--rest-y) * var(--unit));
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  opacity: 0.45;
+}
+.touch-stick.active {
+  opacity: 1;
+}
+.touch-knob {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  translate: -50% -50%;
+}
+
+/* while the controller shows, the page holds still: no scroll, zoom, selection or long-press menu */
+html.touch-play,
+html.touch-play body {
+  overscroll-behavior: none;
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+}
+html.touch-play .pause {
+  width: 44px;
+  height: 44px;
+}
+
+/* the Controls screen shows the same faces, drawn small */
+.touch-face {
+  display: inline-flex;
+}
+.touch-face canvas {
+  display: block;
+  aspect-ratio: 1;
+  image-rendering: pixelated;
+}
