@@ -1,6 +1,5 @@
 import { KAEL } from "../constants/characters/kael";
 import { STAND } from "../constants/hero";
-import { SKILL_POINTS } from "../constants/progression";
 import { GROUND, SEED } from "../constants/stage";
 import { Lights } from "../engine/lights";
 import { Particles } from "../engine/particles";
@@ -48,7 +47,7 @@ export function freshProgress(): Progress {
   return {
     level: 1,
     xp: 0,
-    points: SKILL_POINTS.start,
+    picks: 0,
     ranks: {},
     stats,
     perks: new Set(),

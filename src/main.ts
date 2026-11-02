@@ -11,13 +11,14 @@ import { buildBackground } from "./scene/background";
 import { renderScene } from "./scene/renderScene";
 import { loadBest } from "./services/bestScore";
 import { bindKeyboard } from "./ui/bindKeyboard";
+import { bindPauseButton } from "./ui/bindPauseButton";
 import { bindTouch } from "./ui/bindTouch";
 import { byId } from "./ui/dom";
 import { fitStage } from "./ui/fitStage";
 import { updateHud } from "./ui/hud";
 import { bindMenu } from "./ui/menu/bindMenu";
 import { menuContext, openMenu } from "./ui/menu/menuState";
-import { bindSkillDialog, syncSkillDialog } from "./ui/skills/skillDialog";
+import { bindPickDialog, syncPickDialog } from "./ui/skills/pickDialog";
 
 const canvas = byId<HTMLCanvasElement>("game");
 const ctx = canvas.getContext("2d");
@@ -29,17 +30,18 @@ game.best = loadBest();
 fitStage();
 bindKeyboard();
 bindTouch();
-bindSkillDialog();
+bindPauseButton();
+bindPickDialog();
 bindMenu();
 openMenu("title");
 
-/** one fixed 120 Hz step: only the scenery moves behind the start menu, hit-stop freezes all but the shake */
+/** one fixed 120 Hz step: only the scenery moves behind the start menu, a level-up pick pauses everything, hit-stop freezes all but the shake */
 function step(): void {
   if (menuContext() === "title") {
     updateAmbience(STEP);
     return;
   }
-  if (game.mode === "skills") return;
+  if (game.mode === "pick") return;
   if (game.freeze > 0) {
     game.freeze -= STEP;
     game.shake = Math.max(0, game.shake - STEP * 0.5);
@@ -63,7 +65,7 @@ function frame(now: number): void {
     ctx?.putImageData(image, 0, 0);
   }
   updateHud();
-  syncSkillDialog();
+  syncPickDialog();
   requestAnimationFrame(frame);
 }
 requestAnimationFrame(frame);

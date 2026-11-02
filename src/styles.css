@@ -160,9 +160,6 @@ body {
   border-color: var(--crystal);
   box-shadow: 0 0 4px var(--crystal);
 }
-.points {
-  color: var(--brass);
-}
 .ult {
   display: flex;
   align-items: center;
@@ -299,7 +296,7 @@ body[data-hud="outside"] .boss {
   bottom: auto;
 }
 
-/* Touch buttons float over the bottom corners of the screen, clear of the safe area. */
+/* Touch buttons: the full-screen layout only pins them over the bottom of the screen; their look is unchanged. */
 .touch {
   display: none;
 }
@@ -307,42 +304,44 @@ body[data-hud="outside"] .boss {
   .touch {
     position: fixed;
     inset: auto 0 0;
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-end;
-    gap: 12px;
     padding: 0 max(12px, env(safe-area-inset-right, 0px)) max(12px, env(safe-area-inset-bottom, 0px))
       max(12px, env(safe-area-inset-left, 0px));
-    pointer-events: none;
+    align-items: flex-end;
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    user-select: none;
+    -webkit-user-select: none;
     touch-action: none;
   }
   .touch .pad,
   .touch .acts {
     display: grid;
     gap: 8px;
-    pointer-events: auto;
   }
   .touch .pad {
-    grid-template-columns: repeat(2, 60px);
+    grid-template-columns: repeat(2, 64px);
+    align-content: end;
   }
   .touch .acts {
-    grid-template-columns: repeat(3, 56px);
+    grid-template-columns: repeat(3, 60px);
   }
   .touch button {
-    height: 52px;
-    padding: 0;
+    height: 56px;
     font-family: var(--ui);
-    font-size: 12px;
-    letter-spacing: 0.04em;
+    font-size: 13px;
     color: var(--text);
-    background: rgba(21, 18, 42, 0.45);
-    border: 2px solid rgba(74, 66, 128, 0.85);
+    background: var(--panel);
+    border: 1px solid var(--line);
     touch-action: none;
   }
   .touch button.active {
-    background: rgba(44, 38, 80, 0.9);
+    background: var(--line);
     border-color: var(--crystal);
   }
+}
+
+@media (pointer: coarse) {
   .pause {
     width: 36px;
     height: 36px;
@@ -694,312 +693,6 @@ body[data-hud="outside"] .boss {
   }
 }
 
-/* Skill tree: a modal over the whole page while the game waits. Columns on wide screens, stacked on phones. */
-.skills {
-  width: min(1100px, 100vw - 24px);
-  max-height: calc(100dvh - 24px);
-  padding: 0;
-  border: 1px solid var(--line);
-  background: var(--night);
-  color: var(--text);
-  font-family: var(--body);
-  overflow: hidden;
-}
-.skills[open] {
-  display: grid;
-  grid-template-rows: auto auto 1fr auto;
-}
-.skills::backdrop {
-  background: rgba(6, 4, 14, 0.78);
-}
-.skills-head {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 16px;
-  padding: 14px 16px 6px;
-}
-.skills-head h2 {
-  margin: 0;
-  color: var(--crystal);
-  font-family: var(--display);
-  font-weight: 400;
-  font-size: 22px;
-  letter-spacing: 0.06em;
-  text-transform: none;
-}
-.skills-head p,
-.skills-hint {
-  margin: 0;
-  color: var(--mist);
-}
-.skills-hint {
-  padding: 0 16px 10px;
-  font-size: 12px;
-  color: var(--muted);
-}
-.skills button {
-  font-family: var(--ui);
-  cursor: pointer;
-}
-.skills .primary {
-  min-height: 44px;
-  padding: 0 18px;
-  font-size: 15px;
-  letter-spacing: 0.06em;
-  background: var(--panel);
-  color: var(--crystal);
-  border: 1px solid var(--crystal);
-}
-.skills .primary:disabled {
-  color: var(--muted);
-  border-color: var(--line);
-  cursor: default;
-}
-.skills .primary:not(:disabled):hover {
-  background: var(--line);
-}
-.tree {
-  --tile: 72px;
-  position: relative;
-  display: grid;
-  grid-template-columns: 84px var(--tile) repeat(var(--tiers), var(--tile));
-  grid-auto-rows: auto;
-  gap: 12px 20px;
-  align-items: center;
-  padding: 6px 16px 14px;
-  overflow: auto;
-  min-height: 0;
-}
-.tree .links {
-  position: absolute;
-  inset: 0 auto auto 0;
-  pointer-events: none;
-  overflow: visible;
-}
-.links path {
-  fill: none;
-  stroke: var(--line);
-  stroke-width: 2;
-}
-.links path.open {
-  stroke: var(--crystal);
-  opacity: 0.55;
-}
-.links path.on {
-  stroke: var(--brass);
-}
-.links path.fusion {
-  stroke-dasharray: 4 3;
-  opacity: 0.18;
-}
-.links path.focus {
-  opacity: 1;
-  stroke-width: 2.5;
-}
-.links path.fusion.focus.off {
-  stroke: var(--mist);
-}
-.lane {
-  position: sticky;
-  left: -16px;
-  z-index: 2;
-  background: var(--night);
-  grid-column: 1;
-  align-self: stretch;
-  display: grid;
-  align-content: center;
-  border-right: 1px solid var(--line);
-  padding-right: 8px;
-}
-.lane h3 {
-  margin: 0;
-  font-family: var(--ui);
-  font-weight: 600;
-  font-size: 15px;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--brass);
-}
-.lane .pace {
-  font-size: 11px;
-  letter-spacing: 0.04em;
-  color: var(--volt);
-}
-.cell {
-  position: relative;
-  z-index: 1;
-  display: grid;
-  gap: 2px;
-  justify-items: center;
-}
-.cell .or {
-  font-size: 11px;
-  line-height: 1;
-  color: var(--muted);
-  min-height: 4px;
-}
-.node {
-  position: relative;
-  z-index: 1;
-  width: var(--tile);
-  min-height: 76px;
-  padding: 5px 3px 4px;
-  display: grid;
-  justify-items: center;
-  align-content: start;
-  gap: 2px;
-  text-align: center;
-  background: var(--night);
-  color: var(--text);
-  border: 1px solid var(--line);
-}
-.node img {
-  width: 32px;
-  height: 32px;
-  image-rendering: pixelated;
-}
-.node .name {
-  font-size: 11px;
-  line-height: 1.15;
-}
-.node .meta {
-  font-size: 10px;
-  color: var(--muted);
-  letter-spacing: 0.02em;
-}
-.node.special {
-  align-self: center;
-  border-color: var(--crystal);
-  box-shadow: 0 0 10px rgba(127, 227, 255, 0.3);
-}
-.node[data-status="learnable"] {
-  border-color: var(--crystal);
-}
-.node[data-status="learnable"] .name {
-  color: var(--crystal);
-}
-.node.learned {
-  background: #1b2a40;
-  border-color: var(--brass);
-}
-.node.learned .meta {
-  color: var(--brass);
-}
-.node[data-status="excluded"] {
-  opacity: 0.3;
-}
-.node[data-status="excluded"] .name {
-  text-decoration: line-through;
-}
-.node[data-status="needsLevel"] img,
-.node[data-status="needsPath"] img,
-.node[data-status="needsPoints"] img {
-  filter: grayscale(0.7) brightness(0.75);
-}
-.node[data-kind="ultimate"] .name {
-  color: var(--pink);
-}
-.node[data-kind="fusion"] {
-  border-style: dashed;
-}
-.node.selected {
-  outline: 2px solid var(--text);
-  outline-offset: 2px;
-}
-.node:focus-visible {
-  outline: 2px solid var(--crystal);
-  outline-offset: 2px;
-}
-.detail {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  padding: 12px 16px 14px;
-  border-top: 1px solid var(--line);
-  background: var(--panel);
-}
-.detail-text {
-  flex: 1;
-  min-width: 0;
-}
-.detail-icon {
-  width: 48px;
-  height: 48px;
-  flex: none;
-  image-rendering: pixelated;
-}
-.detail .detail-path {
-  color: var(--muted);
-  font-size: 12px;
-}
-.detail h3 {
-  margin: 0;
-  font-family: var(--ui);
-  font-weight: 600;
-  font-size: 16px;
-  color: var(--text);
-}
-.detail p {
-  margin: 2px 0 0;
-  color: var(--mist);
-  font-size: 13px;
-}
-.detail .detail-kind {
-  color: var(--volt);
-  font-size: 12px;
-}
-.detail .detail-status {
-  color: var(--brass);
-  font-size: 12px;
-}
-@media (max-width: 760px) {
-  .skills {
-    width: 100vw;
-    max-width: 100vw;
-    max-height: 100dvh;
-    height: 100dvh;
-    border: 0;
-  }
-  .skills-hint,
-  .detail .detail-path {
-    display: none;
-  }
-  .lane h3 {
-    font-size: 11px;
-    letter-spacing: 0.02em;
-  }
-  .skills-head {
-    padding: 10px 12px 8px;
-  }
-  .skills-head h2 {
-    font-size: 18px;
-  }
-  .skills-head p,
-  .detail p {
-    font-size: 12px;
-  }
-  .detail {
-    padding: 8px 12px 10px;
-  }
-  .detail-icon {
-    width: 32px;
-    height: 32px;
-  }
-  .tree {
-    padding: 4px 12px 12px;
-    --tile: 68px;
-    grid-template-columns: 64px var(--tile) repeat(var(--tiers), var(--tile));
-    gap: 10px 18px;
-  }
-  .detail {
-    flex-wrap: wrap;
-    gap: 8px 12px;
-  }
-  .detail .primary {
-    flex: 1 0 100%;
-  }
-}
 @media (max-width: 600px) {
   .hud {
     inset: 6px 8px auto 8px;

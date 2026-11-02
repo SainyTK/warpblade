@@ -12,7 +12,6 @@ const mp = byId("mpFill");
 const xp = byId("xpFill");
 const level = byId("level");
 const chain = byId("chain");
-const points = byId("points");
 const wave = byId("wave");
 const score = byId("score");
 const ultName = byId("ultName");
@@ -38,7 +37,6 @@ export function updateHud(): void {
     progress.stats.mp,
     progress.level,
     progress.xp,
-    progress.points,
     progress.comboLimit,
     hero.chain,
     progress.ultimate,
@@ -59,7 +57,6 @@ export function updateHud(): void {
   xp.style.width = need ? `${(progress.xp / need) * 100}%` : "100%";
   level.textContent = `LV ${progress.level}`;
   chain.innerHTML = pips(progress.comboLimit, (i) => i < hero.chain);
-  points.textContent = progress.points ? `${progress.points} SP` : "";
   elements.forEach((el, i) => {
     el.classList.toggle("on", i === game.spell);
   });

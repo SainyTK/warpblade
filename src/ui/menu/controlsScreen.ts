@@ -1,4 +1,5 @@
-import { ACTION_TEXT, KEYMAP, TOUCH_BUTTONS } from "../../constants/input";
+import { ACTION_TEXT, KEYMAP } from "../../constants/input";
+import type { InputAction } from "../../types/input";
 import type { MenuView } from "../../types/menu";
 import { keysByAction } from "../../utils/keymap";
 import { backItem } from "./backItem";
@@ -30,12 +31,13 @@ function keyboardRows(): [HTMLElement, string][] {
   });
 }
 
+/** read from the on-screen buttons themselves, so the list always matches what the player sees */
 function touchRows(): [HTMLElement, string][] {
-  return TOUCH_BUTTONS.map(({ action, label }) => {
+  return [...document.querySelectorAll<HTMLButtonElement>(".touch button[data-action]")].map((button) => {
     const face = document.createElement("span");
     face.className = "touch-face";
-    face.textContent = label;
-    return [face, ACTION_TEXT[action]];
+    face.textContent = button.textContent;
+    return [face, ACTION_TEXT[button.dataset.action as InputAction]];
   });
 }
 

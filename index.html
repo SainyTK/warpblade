@@ -19,7 +19,7 @@
           <div class="bar hp"><span>HP</span><div class="track"><div class="fill" id="hpFill"></div></div></div>
           <div class="bar mp"><span>MP</span><div class="track"><div class="fill" id="mpFill"></div></div></div>
           <div class="bar xp"><span id="level">LV 1</span><div class="track"><div class="fill" id="xpFill"></div></div></div>
-          <div class="chain-row"><span class="label">COMBO</span><span class="pips" id="chain"></span><span class="points" id="points"></span></div>
+          <div class="chain-row"><span class="label">COMBO</span><span class="pips" id="chain"></span></div>
         </div>
         <div class="right">
           <div class="elements">
@@ -41,9 +41,15 @@
 
     <button class="pause" id="pauseButton" type="button" aria-label="Pause"><i></i><i></i></button>
 
-    <div class="touch" aria-label="On-screen buttons">
-      <div class="pad" id="touchPad"></div>
-      <div class="acts" id="touchActs"></div>
+    <div class="touch">
+      <div class="pad">
+        <button data-action="up" type="button">JUMP</button><button data-action="down" type="button">DOWN</button>
+        <button data-action="left" type="button">LEFT</button><button data-action="right" type="button">RIGHT</button>
+      </div>
+      <div class="acts">
+        <button data-action="attack" type="button">SLASH</button><button data-action="warp" type="button">WARP</button><button data-action="dash" type="button">DASH</button>
+        <button data-action="cast" type="button">SPELL</button><button data-action="ultimate" type="button">ULT</button><button data-action="cycle" type="button">ELEM</button>
+      </div>
     </div>
 
     <div class="menu" id="menu" hidden>
@@ -56,28 +62,6 @@
       </div>
     </div>
 
-  <dialog class="skills" id="skills" aria-labelledby="skillsTitle">
-    <div class="skills-head">
-      <div>
-        <h2 id="skillsTitle">Skill tree</h2>
-        <p id="skillsSummary"></p>
-      </div>
-      <button class="primary" id="skillsContinue" type="button">Continue</button>
-    </div>
-    <p class="skills-hint">Paths run left to right. Skills joined by "or" exclude each other for the whole run. Fusion skills need one skill from each of two paths. Unspent points carry over.</p>
-    <div class="tree" id="skillBranches"></div>
-    <div class="detail" id="skillDetail" aria-live="polite">
-      <img class="detail-icon" id="detailIcon" alt="" width="48" height="48" />
-      <div class="detail-text">
-        <h3 id="detailName"></h3>
-        <p class="detail-kind" id="detailKind"></p>
-        <p id="detailText"></p>
-        <p class="detail-path" id="detailPath"></p>
-        <p class="detail-status" id="detailStatus"></p>
-      </div>
-      <button class="primary" id="detailLearn" type="button">Learn</button>
-    </div>
-  </dialog>
     <script type="module" src="/src/main.ts"></script>
   </body>
 </html>

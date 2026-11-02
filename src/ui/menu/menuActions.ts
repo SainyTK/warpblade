@@ -23,9 +23,9 @@ export function quitRun(): void {
   hero.inv = 0;
   openMenu("title");
 }
-/** freeze the game under the pause menu; the skill tree has its own window and is never paused over */
+/** freeze the game under the pause menu; a level-up pick already holds the game and is never paused over */
 export function pauseGame(): void {
-  if (isMenuOpen() || game.mode === "skills") return;
+  if (isMenuOpen() || game.mode === "pick") return;
   releaseAll();
   openMenu("pause");
 }

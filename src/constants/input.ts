@@ -1,4 +1,4 @@
-import type { InputAction, MenuCommand, TouchButton } from "../types/input";
+import type { InputAction, MenuCommand } from "../types/input";
 
 export const KEYMAP: Record<string, InputAction> = {
   ArrowLeft: "left",
@@ -36,19 +36,6 @@ export const ACTION_TEXT: Record<InputAction, string> = {
   pause: "Pause and open the menu",
   fullscreen: "Fullscreen on or off",
 };
-/** the on-screen buttons, in the order they are laid out */
-export const TOUCH_BUTTONS: readonly TouchButton[] = [
-  { action: "up", label: "JUMP", side: "pad" },
-  { action: "down", label: "DOWN", side: "pad" },
-  { action: "left", label: "LEFT", side: "pad" },
-  { action: "right", label: "RIGHT", side: "pad" },
-  { action: "attack", label: "SLASH", side: "acts" },
-  { action: "warp", label: "WARP", side: "acts" },
-  { action: "dash", label: "DASH", side: "acts" },
-  { action: "cast", label: "SPELL", side: "acts" },
-  { action: "ultimate", label: "ULT", side: "acts" },
-  { action: "cycle", label: "ELEM", side: "acts" },
-];
 /** keys inside the menu */
 export const MENU_KEYMAP: Record<string, MenuCommand> = {
   ArrowUp: "up",

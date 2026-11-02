@@ -8,7 +8,7 @@ import { menuCommand } from "./menu/bindMenu";
 import { pauseGame } from "./menu/menuActions";
 import { isMenuOpen } from "./menu/menuState";
 
-/** M and F work everywhere; the menu gets its own keys while open; the skill tree window handles its keys itself */
+/** M and F work everywhere; the menu gets its own keys while open; the level-up pick handles its keys itself */
 export function bindKeyboard(): void {
   addEventListener("keydown", (ev) => {
     sfx.start();
@@ -31,7 +31,7 @@ export function bindKeyboard(): void {
       menuCommand(command, ev.repeat);
       return;
     }
-    if (!action || game.mode === "skills") return;
+    if (!action || game.mode === "pick") return;
     ev.preventDefault();
     if (ev.repeat) return;
     if (action === "pause") pauseGame();
