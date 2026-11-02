@@ -67,3 +67,17 @@ html.touch-play body {
   -webkit-user-select: none;
   -webkit-touch-callout: none;
 }
+html.touch-play .pause {
+  width: 44px;
+  height: 44px;
+}
+
+/* the Controls screen shows the same faces, drawn small */
+.touch-face {
+  display: inline-flex;
+}
+.touch-face canvas {
+  display: block;
+  aspect-ratio: 1;
+  image-rendering: pixelated;
+}

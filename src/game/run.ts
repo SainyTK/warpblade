@@ -2,8 +2,8 @@ import { GROUND } from "../constants/stage";
 import { resetProgress } from "./progress";
 import { game, hero, progress, showBanner } from "./state";
 
-/** after a fall or a cleared stage: Kael starts over at level 1 from wave 1 */
-export function resetRun(): void {
+/** after a fall, a cleared stage or a restart from the menu: Kael starts over at level 1 from wave 1 */
+export function resetRun(banner = "Rise again"): void {
   resetProgress();
   Object.assign(game, {
     mode: "play",
@@ -15,6 +15,11 @@ export function resetRun(): void {
     pickups: [],
     numbers: [],
     blazes: [],
+    fx: [],
+    ghosts: [],
+    freeze: 0,
+    slow: 0,
+    shake: 0,
   });
   Object.assign(hero, {
     hp: progress.stats.hp,
@@ -43,5 +48,5 @@ export function resetRun(): void {
   });
   hero.state = "idle";
   hero.st = 0;
-  showBanner("Rise again", 1.2);
+  showBanner(banner, banner ? 1.2 : 0);
 }

@@ -2,7 +2,7 @@ import { SpriteCanvas } from "../../engine/sprite";
 import type { Color } from "../../types/color";
 import type { Element } from "../../types/spell";
 import type { SpriteImage } from "../../types/sprite";
-import type { TouchButtonAction } from "../../types/touch";
+import type { StickDirectionSpec, TouchButtonAction } from "../../types/touch";
 import { hex } from "../../utils/color";
 
 /** Button icons as pixel rows, one character per pixel, "." empty; each gets a dark outline. */
@@ -161,14 +161,20 @@ function artFor(action: TouchButtonAction, element: Element): IconArt {
   }
 }
 
+/** arrows for the stick's directions, as the Controls screen shows them */
+const STICK_ARROWS: Record<StickDirectionSpec["direction"], IconArt> = {
+  side: { rows: ["..W...W..", ".WW...WW.", "WWW...WWW", ".WW...WW.", "..W...W.."], colors: { W: WHITE } },
+  "far side": { rows: [".W.W.W.W.", "W.W...W.W", ".W.W.W.W."], colors: { W: hex("#e0ac48") } },
+  up: { rows: ["....W....", "...WWW...", "..WWWWW..", ".WWWWWWW.", "...WWW...", "...WWW..."], colors: { W: WHITE } },
+  down: { rows: ["...WWW...", "...WWW...", ".WWWWWWW.", "..WWWWW..", "...WWW...", "....W...."], colors: { W: WHITE } },
+};
+
 const cache = new Map<string, SpriteImage>();
 
-/** a button's icon with its outline, drawn once per action and element */
-export function touchIcon(action: TouchButtonAction, element: Element): SpriteImage {
-  const key = `${action}:${element}`;
+/** pixel art with its outline, drawn once and kept under `key` */
+function iconFrom(key: string, art: IconArt): SpriteImage {
   const hit = cache.get(key);
   if (hit) return hit;
-  const art = artFor(action, element);
   const w = Math.max(...art.rows.map((r) => r.length));
   const canvas = new SpriteCanvas(w + 2, art.rows.length + 2, 0, 0);
   canvas.begin();
@@ -179,3 +185,11 @@ export function touchIcon(action: TouchButtonAction, element: Element): SpriteIm
   cache.set(key, icon);
   return icon;
 }
+
+/** a button's icon, per action and selected element */
+export const touchIcon = (action: TouchButtonAction, element: Element): SpriteImage =>
+  iconFrom(`${action}:${element}`, artFor(action, element));
+
+/** the arrow for one of the stick's directions */
+export const stickIcon = (direction: StickDirectionSpec["direction"]): SpriteImage =>
+  iconFrom(`stick:${direction}`, STICK_ARROWS[direction]);

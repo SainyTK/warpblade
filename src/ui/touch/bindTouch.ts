@@ -64,11 +64,11 @@ export function bindTouch(): void {
   };
 }
 
-/** show the controller only for touch play during the fight, and keep the button faces in step with the game */
-export function syncTouch(): void {
+/** show the controller for touch play while `fighting` (no menu or pick open), and keep the button faces in step */
+export function syncTouch(fighting: boolean): void {
   if (!bound) return;
   const b = bound;
-  const show = isTouchMode() && game.mode === "play";
+  const show = fighting && isTouchMode();
   if (show !== b.shown) {
     b.shown = show;
     b.ctl.root.hidden = !show;

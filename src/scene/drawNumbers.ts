@@ -1,5 +1,6 @@
 import { drawText } from "../engine/font";
 import { game } from "../game/state";
+import { settings } from "../store/settings";
 import type { CueWord, DamageTag } from "../types/game";
 import { hex } from "../utils/color";
 
@@ -19,9 +20,11 @@ const STYLE: Record<DamageTag | CueWord, { c: number; word: string }> = {
 };
 const FADE = 0.15;
 
-/** damage numbers rise and fade over the foes; crits are drawn double size and special hits carry their word */
+/** damage numbers rise and fade over the foes; crits are drawn double size and special hits carry their word.
+ * With damage numbers off in the options, only the words without a number (EVADE, PERFECT) still show. */
 export function drawNumbers(): void {
   for (const n of game.numbers) {
+    if (n.value && !settings.damageNumbers) continue;
     const s = STYLE[n.tag];
     const a = Math.min(1, n.life / FADE);
     if (!n.value) {

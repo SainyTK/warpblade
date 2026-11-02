@@ -9,94 +9,50 @@
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
   </head>
   <body>
-    <div class="wrap">
-      <header>
-        <h1>WARPBLADE</h1>
-        <p>Kael, a warp knight of the night ruins. He throws his crystal sword and appears wherever it lands, casts fire, ice and lightning, and grows stronger with every wave.</p>
-      </header>
+    <canvas class="backdrop" id="backdrop" aria-hidden="true"></canvas>
+    <div class="safe-area" id="safeArea" aria-hidden="true"></div>
 
-      <div class="stage" id="stage">
-        <canvas id="game" width="320" height="180" tabindex="0" aria-label="Warpblade game. Use the keyboard or the on-screen controller to play."></canvas>
-        <div class="hud">
-          <div class="bars">
-            <div class="bar hp"><span>HP</span><div class="track"><div class="fill" id="hpFill"></div></div></div>
-            <div class="bar mp"><span>MP</span><div class="track"><div class="fill" id="mpFill"></div></div></div>
-            <div class="bar xp"><span id="level">LV 1</span><div class="track"><div class="fill" id="xpFill"></div></div></div>
-            <div class="chain-row"><span class="label">COMBO</span><span class="pips" id="chain"></span></div>
-          </div>
-          <div class="right">
-            <div class="elements">
-              <span class="el fire" id="elFire">FIRE</span>
-              <span class="el ice" id="elIce">ICE</span>
-              <span class="el volt" id="elVolt">BOLT</span>
-            </div>
-            <div class="score" id="wave">STAGE 1 WAVE 0/30</div>
-            <div class="score" id="score">0 DOWN</div>
-            <div class="ult"><span id="ultName"></span><span class="pips" id="ultPips"></span></div>
-          </div>
+    <main class="stage" id="stage">
+      <canvas id="game" width="320" height="180" tabindex="0" aria-label="Warpblade game. Open the menu with Escape or P, or the pause button, to see the controls."></canvas>
+      <div class="hud">
+        <div class="bars">
+          <div class="bar hp"><span>HP</span><div class="track"><div class="fill" id="hpFill"></div></div></div>
+          <div class="bar mp"><span>MP</span><div class="track"><div class="fill" id="mpFill"></div></div></div>
+          <div class="bar xp"><span id="level">LV 1</span><div class="track"><div class="fill" id="xpFill"></div></div></div>
+          <div class="chain-row"><span class="label">COMBO</span><span class="pips" id="chain"></span></div>
         </div>
-        <div class="boss" id="boss" hidden>
-          <span id="bossName"></span>
-          <div class="track"><div class="fill" id="bossFill"></div></div>
+        <div class="right">
+          <div class="elements">
+            <span class="el fire" id="elFire">FIRE</span>
+            <span class="el ice" id="elIce">ICE</span>
+            <span class="el volt" id="elVolt">BOLT</span>
+          </div>
+          <div class="score" id="wave">STAGE 1 WAVE 0/30</div>
+          <div class="score" id="score">0 DOWN</div>
+          <div class="ult"><span id="ultName"></span><span class="pips" id="ultPips"></span></div>
         </div>
-        <div class="banner" id="banner"></div>
-        <button class="sound" id="sound" type="button">SOUND ON</button>
       </div>
-
-      <div id="touch" hidden></div>
-
-      <div class="notes">
-        <section>
-          <h2>Moves</h2>
-          <dl>
-            <dt><kbd>A</kbd> <kbd>D</kbd></dt>
-            <dd>Walk. Tap a side twice and hold to run. Arrow keys work too.</dd>
-            <dt><kbd>W</kbd></dt>
-            <dd>Jump. Hold <kbd>S</kbd> and jump to drop through a ledge.</dd>
-            <dt><kbd>J</kbd></dt>
-            <dd>Sword combo: a light cut, then a heavy finisher. Combos grow to six hits as you level up. Each hit gives back a little MP.</dd>
-            <dt><kbd>W</kbd> then <kbd>J</kbd></dt>
-            <dd>Air attack. In the air, the last hit spikes the foe into the floor.</dd>
-            <dt><kbd>L</kbd></dt>
-            <dd>Dash. Nothing can touch Kael while he dashes, and it cancels an attack. Dash through an attack just as it lands for a perfect dodge: the world slows down and Kael gets MP back.</dd>
-            <dt><kbd>K</kbd></dt>
-            <dd>Warp strike. Kael throws his sword at the nearest foe in front and appears where it lands, hitting harder the farther he travels.</dd>
-            <dt><kbd>U</kbd></dt>
-            <dd>Special. Kael starts with Crystal Nova; a level up can offer a stronger ultimate in its place. Hold to charge up to four levels, release to strike. Level 4 spends a full MP bar.</dd>
-          </dl>
-        </section>
-        <section>
-          <h2>Spells and damage</h2>
-          <dl>
-            <dt><kbd>I</kbd></dt>
-            <dd>Cast the selected spell (18 MP).</dd>
-            <dt><kbd>O</kbd></dt>
-            <dd>Switch element.</dd>
-            <dt><span class="spell fire">Fire</span></dt>
-            <dd>A flask of flame that bursts on contact and leaves the ground burning.</dd>
-            <dt><span class="spell ice">Ice</span></dt>
-            <dd>A line of crystal spikes runs along the floor and freezes what it touches.</dd>
-            <dt><span class="spell volt">Bolt</span></dt>
-            <dd>Lightning strikes the nearest foe in front and arcs to one more.</dd>
-            <dt><span class="tag back">BACK</span></dt>
-            <dd>Hits from behind deal 1.5 times the damage. Foes take a moment to turn around.</dd>
-            <dt><span class="tag air">AIR</span></dt>
-            <dd>Foes knocked into the air take double damage until they land. Each hit holds them up a little less.</dd>
-            <dt><span class="tag block">BLOCK</span></dt>
-            <dd>From wave 3, husks block sword hits from the front while they walk, and strike back after two blocks. Hit them from behind, while they attack, or with a heavy finisher. Wisps slip away from swings; catch them after they lunge. A swing that hits nothing leaves Kael open for longer.</dd>
-          </dl>
-        </section>
-        <section>
-          <h2>Stage</h2>
-          <p>Thirty waves. A Rift Brute comes every fifth wave and the Rift Warden at waves 20 and 30. Each level up pauses the fight and offers three skills from the paths Kael can reach: pick one and it is learned at once.</p>
-        </section>
+      <div class="boss" id="boss" hidden>
+        <span id="bossName"></span>
+        <div class="track"><div class="fill" id="bossFill"></div></div>
       </div>
+      <div class="banner" id="banner"></div>
+    </main>
 
-      <footer>
-        <a href="https://github.com/SainyTK/warpblade" target="_blank" rel="noopener">Source on GitHub</a>, MIT License.
-        Effect techniques adapted from Sprite Fusion's open-source <a href="https://www.spritefusion.com/pixel-art-vfx" target="_blank" rel="noopener">pixel art VFX</a>.
-      </footer>
+    <button class="pause" id="pauseButton" type="button" aria-label="Pause"><i></i><i></i></button>
+
+    <div id="touch" hidden></div>
+
+    <div class="menu" id="menu" hidden>
+      <div class="menu-panel" role="dialog" aria-modal="true" aria-labelledby="menuTitle">
+        <header class="menu-head">
+          <h1 id="menuTitle"></h1>
+          <p id="menuSub"></p>
+        </header>
+        <div class="menu-body" id="menuBody"></div>
+      </div>
     </div>
+
     <script type="module" src="/src/main.ts"></script>
   </body>
 </html>

@@ -1,5 +1,6 @@
-/* Layout: one cabinet column. The stage sits on top at a whole-number pixel scale; moves and spells sit under it.
-   One night-ruins look, dark only. */
+/* Layout: the game fills the screen edge to edge. The stage sits at a whole-number pixel scale (set by fitStage), the
+   backdrop canvas continues the night scene around it, and the HUD, touch buttons and menu float on top.
+   --art is the size of one art pixel in CSS pixels. One night-ruins look, dark only. */
 :root {
   --night: #0c0a18;
   --panel: #15122a;
@@ -22,6 +23,8 @@
   --display: "Silkscreen", ui-monospace, monospace;
   --ui: "Pixelify Sans", ui-monospace, monospace;
   --body: "IBM Plex Mono", ui-monospace, monospace;
+  --menu-bg: rgba(21, 18, 42, 0.94);
+  --u: clamp(2px, var(--art, 2px), 4px);
   color-scheme: dark;
 }
 * {
@@ -32,7 +35,9 @@
 }
 html,
 body {
+  height: 100%;
   margin: 0;
+  overflow: hidden;
   background: var(--night);
   color: var(--text);
 }
@@ -40,55 +45,33 @@ body {
   font-family: var(--body);
   font-size: 14px;
   line-height: 1.55;
-  padding-block: max(24px, env(safe-area-inset-top, 0px)) max(40px, env(safe-area-inset-bottom, 0px));
-  padding-left: max(16px, env(safe-area-inset-left, 0px));
-  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  overscroll-behavior: none;
+  touch-action: manipulation;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-tap-highlight-color: transparent;
 }
-.wrap {
-  max-width: 960px;
-  margin: 0 auto;
-  display: grid;
-  gap: 20px;
+.safe-area {
+  position: fixed;
+  inset: 0;
+  padding: env(safe-area-inset-top, 0px) env(safe-area-inset-right, 0px) env(safe-area-inset-bottom, 0px)
+    env(safe-area-inset-left, 0px);
+  visibility: hidden;
+  pointer-events: none;
 }
-header {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: 8px 24px;
-}
-h1 {
-  font-family: var(--display);
-  font-weight: 400;
-  font-size: clamp(28px, 6vw, 44px);
-  letter-spacing: 0.04em;
-  margin: 0;
-  color: var(--crystal);
-  text-shadow: 0 0 18px rgba(127, 227, 255, 0.35);
-}
-header p {
-  margin: 0;
-  color: var(--mist);
-  max-width: 52ch;
-}
-
+.backdrop,
 .stage {
-  position: relative;
-  justify-self: center;
-  width: 100%;
-  max-width: 100%;
+  position: fixed;
 }
+.backdrop,
 #game {
   display: block;
-  width: 100%;
-  aspect-ratio: 16 / 9;
   image-rendering: pixelated;
-  background: var(--night);
-  border: 2px solid var(--line);
-  outline: none;
 }
-#game:focus-visible {
-  border-color: var(--crystal);
+#game {
+  width: 100%;
+  height: 100%;
+  outline: none;
 }
 
 .hud {
@@ -267,98 +250,173 @@ header p {
 .banner.show {
   opacity: 1;
 }
-.sound {
-  position: absolute;
-  right: 12px;
-  bottom: 10px;
-  font-family: var(--ui);
-  font-size: 12px;
+.pause {
+  position: fixed;
+  z-index: 5;
+  top: max(8px, env(safe-area-inset-top, 0px));
+  left: 50%;
+  translate: -50% 0;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+  padding: 0;
   background: var(--hud-bg);
-  color: var(--mist);
-  border: 1px solid var(--line);
-  padding: 2px 8px;
+  border: 2px solid var(--line);
   cursor: pointer;
+  opacity: 0.7;
 }
-.sound:focus-visible {
-  outline: 2px solid var(--crystal);
+.pause i {
+  width: 4px;
+  height: 12px;
+  background: var(--mist);
+}
+.pause:hover,
+.pause:focus-visible {
+  opacity: 1;
+  border-color: var(--crystal);
+  outline: none;
+}
+body:not([data-menu="none"]) .pause,
+body[data-menu="title"] .hud,
+body[data-menu="title"] .boss,
+body[data-menu="title"] .banner {
+  visibility: hidden;
 }
 
-.notes {
+/* On tall screens such as a phone held upright, the HUD and boss bar move out of the stage into the room around it. */
+body[data-hud="outside"] .hud {
+  inset: auto 4px calc(100% + 16px) 4px;
+}
+body[data-hud="outside"] .boss {
+  top: calc(100% + 16px);
+  bottom: auto;
+}
+
+.meter i.on {
+  background: var(--crystal);
+}
+
+/* Controls: every action with its keycaps, or the on-screen buttons on touch screens. */
+.menu-scroll {
+  min-height: 0;
+  overflow: auto;
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr));
-  gap: 20px 32px;
+  gap: 18px;
+  padding-right: 4px;
+  scrollbar-width: thin;
+  scrollbar-color: var(--line) transparent;
 }
-.notes section {
-  min-width: 0;
-}
-h2 {
-  font-family: var(--ui);
-  font-weight: 600;
-  font-size: 15px;
-  letter-spacing: 0.12em;
+.controls h3 {
+  margin: 0 0 8px;
+  font-family: var(--display);
+  font-weight: 400;
+  font-size: 16px;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--brass);
-  margin: 0 0 8px;
 }
-dl {
+.controls dl {
   margin: 0;
   display: grid;
   grid-template-columns: max-content 1fr;
-  gap: 6px 14px;
+  align-items: center;
+  gap: 8px 16px;
 }
-dt {
-  white-space: nowrap;
+.controls dt {
+  display: flex;
 }
-dd {
+.controls dd {
   margin: 0;
+  font-size: 15px;
+  line-height: 1.3;
   color: var(--mist);
-  min-width: 0;
 }
-kbd {
-  font-family: var(--ui);
-  font-size: 12px;
-  padding: 0 5px;
-  border: 1px solid var(--key);
-  border-bottom-width: 2px;
-  background: var(--panel);
+.caps {
+  display: flex;
+  gap: 6px;
+}
+.cap {
+  display: inline-grid;
+  place-items: center;
+  min-width: 30px;
+  height: 30px;
+  padding: 0 7px;
+  font-family: var(--display);
+  font-size: 16px;
+  line-height: 1;
   color: var(--text);
+  background: var(--panel);
+  border: 2px solid var(--key);
+  border-bottom-width: 5px;
 }
-.spell {
-  font-weight: 500;
-}
-.spell.fire {
-  color: var(--fire);
-}
-.spell.ice {
-  color: var(--ice);
-}
-.spell.volt {
-  color: var(--volt);
-}
-.tag {
-  font-family: var(--ui);
+.cap-wide {
   font-size: 12px;
 }
-.tag.back {
-  color: var(--back);
+.cap .arrow {
+  width: 14px;
+  height: 14px;
+  fill: currentColor;
 }
-.tag.air {
-  color: var(--crystal);
+@media (max-height: 520px) {
+  .menu {
+    padding-block: max(8px, env(safe-area-inset-top, 0px)) max(8px, env(safe-area-inset-bottom, 0px));
+  }
+  .menu-panel {
+    gap: 10px;
+    padding: 14px 16px 10px;
+  }
+  .menu-head h1 {
+    font-size: 24px;
+  }
+  .menu-head p {
+    margin-top: 2px;
+    font-size: 13px;
+  }
+  .menu[data-context="title"][data-screen="main"] .menu-head h1 {
+    font-size: 48px;
+  }
+  .menu[data-context="title"][data-screen="main"] .menu-head p {
+    margin-top: 6px;
+    font-size: 15px;
+  }
+  .menu-main {
+    gap: 10px;
+  }
+  .menu-item,
+  .menu[data-context="title"][data-screen="main"] .menu-item {
+    min-height: 38px;
+    font-size: 16px;
+  }
+  .menu[data-context="title"][data-screen="main"] .menu-item {
+    font-size: 20px;
+  }
 }
-.tag.block {
-  color: var(--mist);
-}
-.notes p {
-  margin: 0;
-  color: var(--mist);
-}
-
-footer {
-  color: var(--muted);
-  font-size: 12px;
-}
-footer a {
-  color: var(--mist);
+@media (max-width: 480px) {
+  .menu-panel {
+    padding: 18px 12px 14px;
+  }
+  .controls dd {
+    font-size: 13px;
+  }
+  .controls dl {
+    gap: 8px 12px;
+  }
+  .option {
+    padding: 0 12px 0 24px;
+    font-size: 12px;
+  }
+  .menu-item::before {
+    left: 6px;
+  }
+  .meter {
+    gap: 2px;
+  }
+  .meter i {
+    width: 6px;
+  }
 }
 
 @media (max-width: 600px) {
@@ -374,7 +432,6 @@ footer a {
   }
   .el,
   .score,
-  .sound,
   .chain-row,
   .ult,
   .boss {
@@ -396,10 +453,6 @@ footer a {
   }
   .el {
     padding: 0 4px;
-  }
-  .sound {
-    right: 8px;
-    bottom: 6px;
   }
 }
 @media (prefers-reduced-motion: reduce) {

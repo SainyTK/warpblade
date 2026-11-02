@@ -1,6 +1,7 @@
 import { beginFrame, composite, setShake } from "../engine/frame";
 import { SKY_FLASH } from "../game/spells/bolt";
 import { game, hero, lights, particles, rng } from "../game/state";
+import { settings } from "../store/settings";
 import { drawEnemies, drawHeroLayer, drawPickups } from "./drawActors";
 import { drawAmbientLight, drawAnchors, drawMist } from "./drawAmbience";
 import { drawNumbers } from "./drawNumbers";
@@ -10,7 +11,7 @@ const FLASH_STRENGTH = 70;
 
 /** draw one frame back to front into RGBA bytes */
 export function renderScene(background: Uint32Array, out: Uint8ClampedArray): void {
-  const s = game.shake > 0 ? game.shake / SHAKE_FULL : 0;
+  const s = game.shake > 0 && settings.shake ? game.shake / SHAKE_FULL : 0;
   setShake(Math.round(rng.range(-game.amp, game.amp) * s), Math.round(rng.range(-game.amp, game.amp) * s));
   if (game.shake <= 0) game.amp = 0;
   beginFrame(background);
