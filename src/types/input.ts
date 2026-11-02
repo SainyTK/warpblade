@@ -9,4 +9,9 @@ export type InputAction =
   | "ultimate"
   | "cycle"
   | "dash"
-  | "mute";
+  | "mute"
+  | "pause"
+  | "fullscreen";
+
+/** what a key does inside the menu */
+export type MenuCommand = "up" | "down" | "left" | "right" | "select" | "back";

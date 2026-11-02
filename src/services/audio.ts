@@ -2,18 +2,30 @@
 class SoundEffects {
   private ctx: AudioContext | null = null;
   private noiseBuffer: AudioBuffer | null = null;
+  private master: GainNode | null = null;
+  private gain = 1;
   enabled = true;
+
+  /** 0 to 1; the curve is squared so each step sounds about as far apart, and 0.9 is the original loudness */
+  setVolume(volume: number): void {
+    this.gain = (volume / 0.9) ** 2;
+    if (this.master) this.master.gain.value = this.gain;
+  }
 
   start(): void {
     if (this.ctx) return;
     try {
       this.ctx = new AudioContext();
+      this.master = this.ctx.createGain();
+      this.master.gain.value = this.gain;
+      this.master.connect(this.ctx.destination);
       const n = this.ctx.sampleRate;
       this.noiseBuffer = this.ctx.createBuffer(1, n, n);
       const d = this.noiseBuffer.getChannelData(0);
       for (let i = 0; i < n; i++) d[i] = Math.random() * 2 - 1;
     } catch {
       this.ctx = null;
+      this.master = null;
     }
   }
   private envelope(g: GainNode, vol: number, dur: number): void {
@@ -24,7 +36,7 @@ class SoundEffects {
     g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
   }
   tone(f0: number, f1: number, dur: number, type: OscillatorType = "sine", vol = 0.1): void {
-    if (!this.ctx || !this.enabled) return;
+    if (!this.ctx || !this.master || !this.enabled) return;
     const o = this.ctx.createOscillator();
     const g = this.ctx.createGain();
     const t = this.ctx.currentTime;
@@ -32,12 +44,12 @@ class SoundEffects {
     o.frequency.setValueAtTime(f0, t);
     o.frequency.exponentialRampToValueAtTime(Math.max(20, f1), t + dur);
     this.envelope(g, vol, dur);
-    o.connect(g).connect(this.ctx.destination);
+    o.connect(g).connect(this.master);
     o.start();
     o.stop(t + dur + 0.02);
   }
   noise(dur: number, f0: number, f1: number, vol = 0.15, type: BiquadFilterType = "bandpass", q = 1.2): void {
-    if (!this.ctx || !this.enabled || !this.noiseBuffer) return;
+    if (!this.ctx || !this.master || !this.enabled || !this.noiseBuffer) return;
     const s = this.ctx.createBufferSource();
     const f = this.ctx.createBiquadFilter();
     const g = this.ctx.createGain();
@@ -48,7 +60,7 @@ class SoundEffects {
     f.frequency.setValueAtTime(f0, t);
     f.frequency.exponentialRampToValueAtTime(Math.max(30, f1), t + dur);
     this.envelope(g, vol, dur);
-    s.connect(f).connect(g).connect(this.ctx.destination);
+    s.connect(f).connect(g).connect(this.master);
     s.start();
     s.stop(t + dur + 0.02);
   }
