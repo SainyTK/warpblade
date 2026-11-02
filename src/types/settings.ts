@@ -5,4 +5,6 @@ export interface Settings {
   volume: number;
   shake: boolean;
   damageNumbers: boolean;
+  /** short vibrations from the touch controller */
+  vibration: boolean;
 }

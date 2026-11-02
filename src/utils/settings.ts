@@ -7,8 +7,14 @@ export function mergeSettings(
   saved: Partial<Record<keyof Settings, unknown>>,
   steps: number,
 ): Settings {
-  const flag = (key: "sound" | "shake" | "damageNumbers"): boolean =>
+  const flag = (key: "sound" | "shake" | "damageNumbers" | "vibration"): boolean =>
     typeof saved[key] === "boolean" ? saved[key] : defaults[key];
   const volume = typeof saved.volume === "number" ? Math.round(clamp(saved.volume, 0, steps)) : defaults.volume;
-  return { sound: flag("sound"), volume, shake: flag("shake"), damageNumbers: flag("damageNumbers") };
+  return {
+    sound: flag("sound"),
+    volume,
+    shake: flag("shake"),
+    damageNumbers: flag("damageNumbers"),
+    vibration: flag("vibration"),
+  };
 }

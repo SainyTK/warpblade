@@ -1,5 +1,6 @@
 import { DEFAULT_SETTINGS, VOLUME_STEPS } from "../constants/settings";
 import { sfx } from "../services/audio";
+import { haptics } from "../services/haptics";
 import { loadSettings, saveSettings } from "../services/settingsStorage";
 import type { Settings } from "../types/settings";
 import { mergeSettings } from "../utils/settings";
@@ -11,6 +12,7 @@ const listeners = new Set<() => void>();
 function apply(): void {
   sfx.enabled = settings.sound;
   sfx.setVolume(settings.volume / VOLUME_STEPS);
+  haptics.enabled = settings.vibration;
 }
 
 export function setSetting<K extends keyof Settings>(key: K, value: Settings[K]): void {

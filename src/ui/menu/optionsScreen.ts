@@ -5,7 +5,7 @@ import type { MenuView } from "../../types/menu";
 import { backItem } from "./backItem";
 import { levelRow, toggleRow } from "./optionRow";
 
-/** sound, volume, screen shake, damage numbers and fullscreen; every change is saved at once */
+/** sound, volume, screen shake, damage numbers, vibration where the device has it, and fullscreen; every change is saved at once */
 export function optionsScreen(): MenuView {
   const list = document.createElement("div");
   list.className = "menu-list options";
@@ -15,6 +15,8 @@ export function optionsScreen(): MenuView {
     toggleRow("Screen shake", settings.shake, (on) => setSetting("shake", on)),
     toggleRow("Damage numbers", settings.damageNumbers, (on) => setSetting("damageNumbers", on)),
   );
+  if (typeof navigator.vibrate === "function")
+    list.append(toggleRow("Vibration", settings.vibration, (on) => setSetting("vibration", on)));
   if (canFullscreen()) list.append(toggleRow("Fullscreen", isFullscreen(), toggleFullscreen));
   list.append(backItem());
   return { title: "Options", subtitle: "Saved in this browser.", content: list };
