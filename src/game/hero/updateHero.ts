@@ -18,7 +18,7 @@ function runState(dt: number): void {
   const h = hero;
   switch (h.state) {
     case "move":
-      runMove();
+      runMove(dt);
       break;
     case "cast":
       runCast();

@@ -1,12 +1,14 @@
-import { FUSION, GUARD, MP_PER_HIT, RIPOSTE } from "../constants/combat";
+import { COMBO, FUSION, GUARD, MP_PER_HIT, RIPOSTE } from "../constants/combat";
 import { sfx } from "../services/audio";
 import type { Enemy } from "../types/enemy";
+import type { HitFeel } from "../types/move";
 import type { Box } from "../types/world";
 import { lerp } from "../utils/math";
 import { dealDamage, isBehind } from "./damage";
 import { createEcho } from "./effects/echo";
 import { createImpact } from "./effects/impact";
 import { enemyBox, enemyCenter } from "./enemies/enemy";
+import { wallBounce } from "./enemies/wallBounce";
 import { hasPerk } from "./progress";
 import { createLightning } from "./spells/bolt";
 import { game, hero, progress } from "./state";
@@ -21,7 +23,15 @@ export interface Blow {
   spike?: boolean;
   stun?: number;
   big?: boolean;
+  /** a foe driven into the stage edge bounces back off it */
+  wall?: boolean;
+  /** a Keen blow: always a critical hit */
+  sureCrit?: boolean;
+  feel?: HitFeel;
 }
+
+const LIGHT_FEEL: HitFeel = { stop: 0.07, shake: [0.12, 1.5], pitch: 1 };
+const BIG_FEEL: HitFeel = { stop: 0.13, shake: [0.2, 2.5], pitch: 1 };
 
 /** Static Step: a charged foe calls lightning down on itself when the sword lands */
 function discharge(e: Enemy): void {
@@ -55,6 +65,8 @@ export function meleeHit(boxes: readonly Box[], blow: Blow): number {
       stun: blow.stun,
       heavy: blow.big || riposte,
       melee: true,
+      sureCrit: blow.sureCrit,
+      stagger: COMBO.stagger,
     });
     hits++;
     hero.lastHit = e;
@@ -62,6 +74,7 @@ export function meleeHit(boxes: readonly Box[], blow: Blow): number {
       blocked++;
       continue;
     }
+    if (blow.wall) wallBounce(e, dir);
     game.fx.push(createImpact(lerp(hero.x + dir * 8, ex, 0.6), ey, dir, !!blow.big || riposte));
     hero.mp = Math.min(progress.stats.mp, hero.mp + MP_PER_HIT * (hasPerk("siphon") ? 3 : 1));
     if (e.charged > 0 && hasPerk("staticStep")) discharge(e);
@@ -72,9 +85,10 @@ export function meleeHit(boxes: readonly Box[], blow: Blow): number {
   if (riposte && hits) hero.riposte = 0;
   if (blocked) hero.vx = -hero.face * GUARD.pushback;
   if (hits > blocked) {
-    hitStop(blow.big || riposte ? 0.13 : 0.07);
-    shake(blow.big ? 0.2 : 0.12, blow.big ? 2.5 : 1.5);
-    sfx.hit(!!blow.big || riposte);
+    const feel = blow.feel ?? (blow.big ? BIG_FEEL : LIGHT_FEEL);
+    hitStop(riposte ? Math.max(feel.stop, BIG_FEEL.stop) : feel.stop);
+    shake(feel.shake[0], feel.shake[1]);
+    sfx.hit(!!blow.big || riposte, feel.pitch);
     if (!hero.ground) hero.vy = Math.min(hero.vy, -40);
   } else if (blocked) hitStop(0.04);
   return hits;

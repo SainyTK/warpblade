@@ -62,5 +62,6 @@ export function makeEnemy(type: EnemyType, x: number, y: number, wave: number, x
     airHits: 0,
     charged: 0,
     evadeCd: 0,
+    stagger: 0,
   };
 }

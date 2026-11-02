@@ -1,8 +1,14 @@
 import type { MoveDef, MoveId } from "../../../types/move";
 import { AIR_MOVES } from "./air";
+import { CHAIN_MOVES } from "./chain";
 import { FINISHER_MOVES } from "./finishers";
-import { GROUND_MOVES } from "./ground";
+import { SITUATIONAL_MOVES } from "./situational";
+import { SKILL_MOVES } from "./skills";
 
-export const MOVES: Record<MoveId, MoveDef> = { ...GROUND_MOVES, ...AIR_MOVES, ...FINISHER_MOVES };
-/** light cuts of the ground string in order; the last hit a combo allows is always the smash */
-export const GROUND_LIGHTS: readonly MoveId[] = ["cut1", "cut2", "cut3", "cut4", "cut5"];
+export const MOVES: Record<MoveId, MoveDef> = {
+  ...CHAIN_MOVES,
+  ...SITUATIONAL_MOVES,
+  ...SKILL_MOVES,
+  ...AIR_MOVES,
+  ...FINISHER_MOVES,
+};

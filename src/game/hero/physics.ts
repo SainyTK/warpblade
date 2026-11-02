@@ -6,6 +6,7 @@ import { hero, progress } from "../state";
 import { dust, surfaceBelow } from "../world";
 import { isFree, leaveHang, setState } from "./actions";
 import { MOVES } from "./moves";
+import { strideAt } from "./moves/advance";
 
 /** casting, warping, charging and most air attacks hang in the air for a moment */
 function floats(): boolean {
@@ -36,7 +37,8 @@ export function moveHero(dt: number, dir: number): void {
     return;
   }
   const speed = (h.running ? M.runSpeed : M.walkSpeed) * progress.stats.move;
-  const moveDriven = st === "move" && !!h.move && !!MOVES[h.move].step;
+  const m = st === "move" && h.move ? MOVES[h.move] : null;
+  const moveDriven = !!m && (!!m.step || strideAt(m, h.st) > 0);
   if (isFree()) {
     h.vx = approach(h.vx, dir * speed, (h.ground ? M.groundAccel : M.airAccel) * dt);
     if (dir) h.face = dir;

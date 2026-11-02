@@ -18,7 +18,8 @@ function pressUp(): boolean {
     startMove("skybreaker");
     return true;
   }
-  const mayLaunch = hasPerk("launcher") && hero.state === "move" && hero.chain < progress.comboLimit;
+  const inCombo = hero.state === "move" || (hero.link > 0 && hero.chain > 0);
+  const mayLaunch = hasPerk("launcher") && inCombo && hero.ground && hero.chain < progress.comboLimit;
   if (mayLaunch && pressAge("up") < LAUNCH_WAIT_STEPS) return false;
   return jump();
 }

@@ -1,0 +1,39 @@
+import type { HitFeel } from "../types/move";
+import { ramp } from "../utils/color";
+
+/** how far around Kael the combo looks for foes, in pixels edge to edge */
+export const REACH = {
+  front: 30,
+  back: 26,
+  /** a foe counts as level with Kael when its box reaches this far above or below his feet */
+  above: 44,
+  below: 6,
+  /** an airborne foe worth chasing: this far above his feet at least, and at most */
+  airAbove: 18,
+  airHigh: 100,
+  airFront: 56,
+} as const;
+
+/** stepping moves stop this close to the foe in front, and go this much further while forward is held */
+export const ADVANCE = { contact: 12, lean: 1.5 } as const;
+
+/** Keen timing: J pressed this soon after a blow lands makes the next move a sure crit */
+export const KEEN = { window: 0.1 } as const;
+/** gold slash for a Keen blow */
+export const KEEN_RAMP = ramp(["#3a1c08", "#7a3a10", "#c46a1a", "#f2a73a", "#ffd76b", "#fff3c0", "#ffffff"]);
+/** the slash of a phantom move, for pivots and passes through a foe */
+export const PHANTOM_RAMP = ramp(["#1a0e2e", "#3a1e66", "#6a3cb0", "#9a6ae8", "#c9a8ff", "#efe2ff", "#ffffff"]);
+/** the slash of a quick stab */
+export const STAB_RAMP = ramp(["#122046", "#2b4fb0", "#5a86f0", "#93b6ff", "#cfe0ff", "#f2f7ff", "#ffffff"]);
+
+/** contact feel presets, light to heaviest; moves tune their own when these do not fit */
+export const FEEL = {
+  tap: { stop: 0.04, shake: [0.06, 1], pitch: 1.3 },
+  light: { stop: 0.06, shake: [0.1, 1.2], pitch: 1.1 },
+  firm: { stop: 0.08, shake: [0.12, 1.6], pitch: 0.95 },
+  heavy: { stop: 0.12, shake: [0.2, 2.5], pitch: 0.8 },
+  crush: { stop: 0.16, shake: [0.26, 3.2], pitch: 0.65 },
+} as const satisfies Record<string, HitFeel>;
+
+/** a heavy blow drives a foe within this many pixels of the stage edge back off the wall and up */
+export const WALL_BOUNCE = { near: 24, launch: -230, back: 90 } as const;

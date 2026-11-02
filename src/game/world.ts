@@ -22,7 +22,8 @@ export function boxAhead(x0: number, y0: number, x1: number, y1: number): Box {
 }
 /** the same box mirrored behind the hero */
 export function boxBehind(x0: number, y0: number, x1: number, y1: number): Box {
-  return boxAhead(x0, y0, x1, y1).map((v, i) => (i % 2 === 0 ? 2 * hero.x - v : v)) as unknown as Box;
+  const [ax0, ay0, ax1, ay1] = boxAhead(x0, y0, x1, y1);
+  return [2 * hero.x - ax1, ay0, 2 * hero.x - ax0, ay1];
 }
 export function shake(time: number, amp: number): void {
   if (REDUCED_MOTION) return;

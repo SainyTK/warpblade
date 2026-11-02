@@ -15,6 +15,7 @@ export function updateStatus(e: Enemy, dt: number): number {
   e.shock = Math.max(0, e.shock - dt);
   e.charged = Math.max(0, e.charged - dt);
   e.evadeCd = Math.max(0, e.evadeCd - dt);
+  e.stagger = Math.max(0, e.stagger - dt);
   const [cx, cy] = enemyCenter(e);
   if (e.burn > 0) {
     e.burn -= dt;

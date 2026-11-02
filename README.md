@@ -30,7 +30,13 @@ His crystal sword can be thrown, and wherever it lands, he follows.
 ## Features
 
 - **Warp strike.** Throw the sword at a foe and appear beside it mid-swing. The farther you travel, the harder you hit.
-- **Combos that grow.** Two hits at level 1, six by level 17. Pick up launchers, sweeps, air strings, dash and running attacks, and finishers that cut through a foe to its back or bounce it into the sky.
+- **Combos that grow.** Two hits at level 1, six by level 17.
+  Every hit is its own move: a step-in cut, a rising backhand, a lunging double stab, a hop into a cleave, a turn that cuts both sides and a falling smash that knocks the foe down.
+  Pick up launchers, sweeps, dash and running attacks, and finishers that cut through a foe to its back or bounce it into the sky.
+- **Combos that read the room.** The next hit follows the fight: Kael turns to cut a foe behind him, spins when foes stand on both sides, stabs a foe lying down, leaps after one in the air, and bounces foes off the edge of the stage.
+  In the air the string is a cross cut, a somersault, a drill of stabs and a hammer fall.
+- **Keen timing.** Press J just after a blow lands and the next one is a sure critical hit with a gold slash.
+  Pressing before the blow lands spoils it, so rhythm beats mashing.
 - **Positioning pays.** Hits from behind deal 1.5 times the damage and foes in the air take double, with the numbers popping out of every hit.
 - **Fights that need skill.** Husks block blows from the front and strike back, wisps slip away from swings, and missed swings leave you open. Dash through an attack at the last moment for a perfect dodge and slow motion.
 - **A pick at every level up.** The fight pauses and three cards offer skills Kael can learn now, each with its own pixel icon. Blade is strong early, Phantom trades power for mobility and crits, Arcane is weak early and strong late. Fusion skills join two paths once both are started: shatter frozen foes, set off burning ones, charge foes by dashing through them, and more. Some skills lock out their rivals for the run, and passives come back until every rank is learned.
@@ -58,7 +64,7 @@ His crystal sword can be thrown, and wherever it lands, he follows.
 | --- | --- |
 | `A` `D` or arrows | Walk. Tap a side twice and hold to run |
 | `W` or `Up` | Jump. Hold `S` and jump to drop through a ledge |
-| `J` | Sword combo. Combine with `W`, `S`, a jump, a dash or a run for the variants you have learned |
+| `J` | Sword combo. Each press is a different hit, picked from where the foes are. Combine with `W`, `S`, a jump, a dash or a run for the variants you have learned |
 | `L` | Dash. Nothing can touch you while you dash |
 | `K` | Warp strike (10 MP) |
 | `I` | Cast the selected spell (18 MP) |
@@ -136,7 +142,9 @@ src/
   scene/           background, the backdrop around the stage, and the order layers are drawn in
   ui/              HUD, level-up pick, keyboard and touch input, stage sizing
     menu/          start and pause menu: main, Controls and Options screens
-docs/media/        README banner, gameplay GIF and screenshots
+docs/
+  combo-design.md  what the combo takes from Grand Chase and what it leaves out
+  media/           README banner, gameplay GIF and screenshots
 ```
 
 ## References
