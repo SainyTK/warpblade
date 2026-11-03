@@ -11,6 +11,17 @@ export interface Pickup {
   kind: "mp" | "hp";
   done?: boolean;
 }
+/** a coin dropped by a foe: it falls and bounces, then flies to Kael */
+export interface Coin {
+  x: number;
+  y: number;
+  vx: number;
+  vy: number;
+  t: number;
+  /** lying on a floor */
+  rest: boolean;
+  done?: boolean;
+}
 /** an afterimage left by a warp or a dash */
 export interface Ghost {
   s: SpriteImage;
@@ -65,6 +76,11 @@ export interface GameState {
   kills: number;
   /** the furthest wave reached in this browser */
   best: number;
+  /** coins picked up this run, banked when it ends */
+  coins: number;
+  coinDrops: Coin[];
+  /** Last Light has been spent this run */
+  revived: boolean;
   enemies: Enemy[];
   fx: Effect[];
   ghosts: Ghost[];

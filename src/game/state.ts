@@ -3,6 +3,7 @@ import { STAND } from "../constants/hero";
 import { GROUND, SEED } from "../constants/stage";
 import { Lights } from "../engine/lights";
 import { Particles } from "../engine/particles";
+import { metaBonus } from "../store/meta";
 import type { GameState } from "../types/game";
 import type { Hero } from "../types/hero";
 import type { Progress } from "../types/progress";
@@ -31,6 +32,9 @@ export const game: GameState = {
   waveTimer: 2,
   kills: 0,
   best: 0,
+  coins: 0,
+  coinDrops: [],
+  revived: false,
   enemies: [],
   fx: [],
   ghosts: [],
@@ -43,7 +47,7 @@ export const game: GameState = {
 };
 
 export function freshProgress(): Progress {
-  const stats = computeStats(character, 1, {});
+  const stats = computeStats(character, 1, {}, metaBonus());
   return {
     level: 1,
     xp: 0,

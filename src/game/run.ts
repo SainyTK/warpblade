@@ -1,9 +1,14 @@
 import { GROUND } from "../constants/stage";
+import { bankCoins } from "./coins";
 import { resetProgress } from "./progress";
-import { game, hero, progress, showBanner } from "./state";
+import { game, hero, ponytail, progress, scarf, showBanner } from "./state";
+
+/** where Kael stands at the start of a run */
+const START_X = 70;
 
 /** after a fall, a cleared stage or a restart from the menu: Kael starts over at level 1 from wave 1 */
 export function resetRun(banner = "Rise again"): void {
+  bankCoins();
   resetProgress();
   Object.assign(game, {
     mode: "play",
@@ -13,6 +18,8 @@ export function resetRun(banner = "Rise again"): void {
     lull: "toNext",
     waveTimer: 1.5,
     pickups: [],
+    coinDrops: [],
+    revived: false,
     numbers: [],
     blazes: [],
     fx: [],
@@ -21,13 +28,16 @@ export function resetRun(banner = "Rise again"): void {
     slow: 0,
     shake: 0,
   });
+  // the scarf and ponytail move with Kael back to the start, so they do not trail across the stage
+  scarf.shift(START_X - hero.x, GROUND - hero.y);
+  ponytail.shift(START_X - hero.x, GROUND - hero.y);
   Object.assign(hero, {
     hp: progress.stats.hp,
     mp: progress.stats.mp,
     stamina: progress.stats.stamina,
     staminaWait: 0,
     staminaFlash: 0,
-    x: 70,
+    x: START_X,
     y: GROUND,
     vx: 0,
     vy: 0,

@@ -122,3 +122,6 @@ export const WORLD_COLORS = {
   footDust: hex("#4e4866"),
   rubble: hex("#5a5478"),
 } as const;
+
+/** coins, dark rim to glint */
+export const COIN_GOLD = ramp(["#5a3a12", "#9a6a1e", "#e0ac48", "#ffd86a", "#fff3c0"]);

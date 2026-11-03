@@ -1,0 +1,22 @@
+import type { RunOutcome, RunResult } from "../types/run";
+import { bankCoins } from "./coins";
+import { resetRun } from "./run";
+import { game, hero } from "./state";
+
+/** The end of the last run, for the result screen. */
+let last: RunResult = { outcome: "fallen", wave: 0, coins: 0 };
+const listeners = new Set<(result: RunResult) => void>();
+
+export const lastRun = (): RunResult => last;
+
+export function onRunEnd(listener: (result: RunResult) => void): void {
+  listeners.add(listener);
+}
+
+/** Kael fell or cleared the stage: bank the coins, set the stage fresh behind the menu and report how far he got */
+export function endRun(outcome: RunOutcome): void {
+  last = { outcome, wave: game.wave, coins: bankCoins() };
+  resetRun("");
+  hero.inv = 0;
+  for (const listener of listeners) listener(last);
+}

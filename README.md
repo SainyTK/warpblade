@@ -51,6 +51,10 @@ His crystal sword can be thrown, and wherever it lands, he follows.
 - **Three elements.** A flask of fire that sets the floor burning, a running line of ice spikes that freezes, and lightning that arcs to a second foe.
   Each element recharges on its own after a cast, bolt fastest and ice slowest, and every cast makes the other two wait a moment too, so switching elements pays but spamming does not.
   The FIRE ICE BOLT tabs dim while an element recharges, a bar along each tab fills back up, and a press too early is refused with a tick and a jolt of the tab, or a blink of the MP bar when MP is short.
+- **Coins and a shop.** Foes drop pixel coins that Kael picks up by touch, and any left behind fly to him after a moment.
+  When a run ends, cleared or lost, its coins go to the bank and a result screen shows the wave reached and the coins earned.
+  The Shop on the start menu sells stats in levels (HP, attack, ability power, MP, crit, move speed, stamina) and four skills bought once: Lodestone, Warp Shock, Head Start and Last Light.
+  Everything bought applies to every run, on top of the level-up picks, and is saved in this browser.
 - **A 30-wave stage.** Floating wisps and horned husks, a Rift Brute every fifth wave and the Rift Warden at waves 20 and 30.
 - **Plays anywhere.** The game fills the whole screen at a whole-number pixel scale, with the night scene continued to every edge. Keyboard on desktop, a pixel touch controller on phones and tablets, no install.
 
@@ -92,7 +96,9 @@ Hold Special to charge it: its ring fills one quarter per level, and you strike 
 Buttons dim while their action lacks MP or stamina or waits on a cooldown, and phones that support it give a short vibration on each press.
 The page holds still under your fingers: double taps, pinches and long presses never zoom, select text or open a menu.
 
-The game opens on a start menu with Start, Controls and Options.
+The game opens on a start menu with Start, Shop, Controls and Options.
+In the Shop, pick an item once to see "Buy?" and again to buy it.
+When a run ends, the start menu opens on its result, with Continue and Shop.
 Pausing adds Resume, Restart run and Quit run, and freezes the game until you resume.
 Move through the menu with the arrow keys or `W` `S`, pick with `J` or `Enter`, and go back with `Esc`; the mouse and touch work too.
 The Controls screen lists every key from the game's key map, and on touch screens the stick and buttons as they look on screen.
@@ -148,11 +154,11 @@ The README images are frames captured straight from the game canvas at 320 by 18
 src/
   main.ts          wires everything and runs the 120 Hz loop
   types/           shared types
-  constants/       stage layout, palettes, poses and attack keyframes, tuning, key map, touch controller layout, waves, Kael's skills
-  utils/           pure helpers: math, color, seeded random, stats, experience, level-up picks, wave plan
+  constants/       stage layout, palettes, poses and attack keyframes, tuning, key map, touch controller layout, waves, Kael's skills, coin drops and the shop items
+  utils/           pure helpers: math, color, seeded random, stats, experience, level-up picks, wave plan, shop prices and save parsing
   engine/          the pixel renderer: frame buffers and painter, particles, lights, sprite canvas
-  services/        Web Audio sound effects, saved options and best wave in local storage, the Fullscreen API, vibration
-  store/           the player's options
+  services/        Web Audio sound effects, saved options, best wave and shop progress in local storage, the Fullscreen API, vibration
+  store/           the player's options, and the coin bank and shop purchases kept between runs
   game/            the simulation
     hero/          poses, drawing, rope physics, combos and moves, dash, warp, ultimate charge, per-step update
     enemies/       wisps, husks, the Rift Brute and the Rift Warden: drawing and behavior
@@ -161,9 +167,11 @@ src/
     ultimates/     Thousand Edges, Phantom Legion, Starfall, Tempest
   scene/           background, the backdrop around the stage, and the order layers are drawn in
   ui/              HUD, level-up pick, menu, keyboard input, touch controller, stage sizing
-    menu/          start and pause menu: main, Controls and Options screens
+    menu/          start and pause menu: main, Shop, run result, Controls and Options screens
+    shop/          one shop row and the shop's styles
 docs/
   combo-design.md  what the combo takes from Grand Chase and what it leaves out
+  meta-progress.md coins, the shop items and the basis for their prices
   media/           README banner, gameplay GIF and screenshots
 ```
 

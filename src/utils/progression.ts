@@ -10,6 +10,13 @@ export const airLimit = (ranks: Readonly<Record<string, number>>): number =>
 export const xpToNext = (level: number): number =>
   level >= MAX_LEVEL ? 0 : XP_CURVE.base + XP_CURVE.step * (level - 1);
 
+/** experience from level 1 up to the start of a level */
+export function xpToReach(level: number): number {
+  let total = 0;
+  for (let l = 1; l < Math.min(level, MAX_LEVEL); l++) total += xpToNext(l);
+  return total;
+}
+
 /** the longest combo at a level, one longer with Flowing Chain */
 export function comboLimit(level: number, flowing: boolean): number {
   let hits = 0;

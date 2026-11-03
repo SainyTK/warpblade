@@ -93,6 +93,10 @@ class SoundEffects {
   pickup(): void {
     this.tone(900, 1500, 0.08, "sine", 0.04);
   }
+  /** a short bright clink for each coin picked up */
+  coin(): void {
+    this.tone(1900, 2600, 0.06, "square", 0.016);
+  }
   hurt(): void {
     this.tone(240, 90, 0.2, "sawtooth", 0.07);
   }

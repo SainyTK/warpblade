@@ -4,6 +4,7 @@ import type { Enemy } from "../types/enemy";
 import { PK } from "../types/particle";
 import { WHITE } from "../utils/color";
 import { TAU } from "../utils/math";
+import { dropCoins } from "./coins";
 import { enemyCenter } from "./enemies/enemy";
 import { gainXp } from "./progress";
 import { game, lights, particles, rng } from "./state";
@@ -59,6 +60,7 @@ export function killEnemy(e: Enemy): void {
     game.pickups.push({ x, y, vx: R.range(-70, 70), vy: R.range(-140, -60), t: 0, kind: "mp" });
   const hearts = big ? 2 : R.chance(e.type === "husk" ? 0.4 : 0.12) ? 1 : 0;
   for (let i = 0; i < hearts; i++) game.pickups.push({ x, y, vx: R.range(-50, 50), vy: -150, t: 0, kind: "hp" });
+  dropCoins(e.type, x, y);
   if (big) shake(0.5, 4);
   sfx.death();
   gainXp(e.xp);

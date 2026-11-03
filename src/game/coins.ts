@@ -1,0 +1,76 @@
+import { COIN_DROP, COIN_MOTION as M } from "../constants/coins";
+import { COIN_GOLD } from "../constants/palette";
+import { LODESTONE_BONUS } from "../constants/shopSkills";
+import { W } from "../constants/stage";
+import { sfx } from "../services/audio";
+import { addCoins, ownsSkill } from "../store/meta";
+import type { EnemyType } from "../types/enemy";
+import type { Coin } from "../types/game";
+import { PK } from "../types/particle";
+import { coinDrop } from "../utils/coins";
+import { clamp } from "../utils/math";
+import { game, hero, particles, rng } from "./state";
+import { surfaceBelow } from "./world";
+
+/** a slain foe's coins burst out of it */
+export function dropCoins(type: EnemyType, x: number, y: number): void {
+  const bonus = ownsSkill("lodestone") ? LODESTONE_BONUS : 0;
+  const n = coinDrop(COIN_DROP[type], bonus, rng.next());
+  for (let i = 0; i < n; i++)
+    game.coinDrops.push({ x, y, vx: rng.range(-60, 60), vy: rng.range(-170, -90), t: 0, rest: false });
+}
+
+function fall(c: Coin, dt: number): void {
+  if (c.rest) return;
+  c.vy += M.gravity * dt;
+  c.x = clamp(c.x + c.vx * dt, 4, W - 4);
+  c.y += c.vy * dt;
+  const floor = surfaceBelow(c.x, c.y - c.vy * dt) - 1;
+  if (c.vy > 0 && c.y >= floor) {
+    c.y = floor;
+    c.vy *= -M.bounce;
+    c.vx *= 0.6;
+    if (Math.abs(c.vy) < 25) Object.assign(c, { vy: 0, vx: 0, rest: true });
+  }
+}
+
+function home(c: Coin, dx: number, dy: number, d: number, dt: number): void {
+  c.rest = false;
+  c.vx += (dx / d) * M.pullAccel * dt;
+  c.vy += (dy / d) * M.pullAccel * dt;
+  const sp = Math.hypot(c.vx, c.vy);
+  if (sp > M.pullSpeed) {
+    c.vx *= M.pullSpeed / sp;
+    c.vy *= M.pullSpeed / sp;
+  }
+  c.x += c.vx * dt;
+  c.y += c.vy * dt;
+}
+
+/** coins fall and bounce, Kael picks them up by touch, and after a moment the rest fly to him */
+export function updateCoins(dt: number): void {
+  const pull = ownsSkill("lodestone") ? M.magnetPull : M.pull;
+  for (const c of game.coinDrops) {
+    c.t += dt;
+    const dx = hero.x - c.x;
+    const dy = hero.y - 18 - c.y;
+    const d = Math.hypot(dx, dy) || 1;
+    if (c.t >= pull && hero.state !== "dead") home(c, dx, dy, d, dt);
+    else fall(c, dt);
+    if (c.t < M.settle || d > M.reach || hero.state === "dead") continue;
+    c.done = true;
+    game.coins++;
+    particles.spawn(PK.STAR, c.x, c.y, 0, -12, 0.3, { col: COIN_GOLD[3], size: 2 });
+    sfx.coin();
+  }
+  game.coinDrops = game.coinDrops.filter((c) => !c.done);
+}
+
+/** add the run's coins to the bank, with any still on the floor, so none is lost when a run ends */
+export function bankCoins(): number {
+  const earned = game.coins + game.coinDrops.length;
+  addCoins(earned);
+  game.coins = 0;
+  game.coinDrops = [];
+  return earned;
+}

@@ -5,6 +5,8 @@ import { mainScreen } from "./mainScreen";
 import { focusEntry } from "./menuNav";
 import { menuContext, menuScreen } from "./menuState";
 import { optionsScreen } from "./optionsScreen";
+import { resultScreen } from "./resultScreen";
+import { shopScreen } from "./shopScreen";
 
 const root = byId("menu");
 const title = byId("menuTitle");
@@ -15,6 +17,8 @@ const SCREENS: Record<MenuScreen, (context: MenuContext) => MenuView> = {
   main: mainScreen,
   controls: controlsScreen,
   options: optionsScreen,
+  shop: shopScreen,
+  result: resultScreen,
 };
 
 let shown: { context: MenuContext | null; screen: MenuScreen } = { context: null, screen: "main" };
@@ -41,7 +45,7 @@ export function renderMenu(): void {
   const from = shown.context === context ? shown.screen : null;
   const view = SCREENS[screen](context);
   title.textContent = view.title;
-  subtitle.textContent = view.subtitle;
+  subtitle.replaceChildren(view.subtitle);
   root.dataset.screen = screen;
   root.dataset.context = context;
   body.replaceChildren(view.content);

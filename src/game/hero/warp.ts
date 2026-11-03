@@ -16,6 +16,7 @@ import { game, hero, ponytail, scarf } from "../state";
 import { boxAhead, surfaceBelow } from "../world";
 import { leaveHang, setState } from "./actions";
 import { leaveAfterimages } from "./afterimages";
+import { warpShock } from "./warpShock";
 
 const WARP_SLASH = { cx: 2, cy: -20, R: 24, sy: 0.5, rot: -0.5, a0: -2.6, a1: 0.8, W: 10, hold: 0.06, trail: 0.24 };
 const BLINK_POWER = 1.8;
@@ -87,6 +88,7 @@ function strikeOnArrival(power: number): void {
   game.swing++;
   game.fx.push(createSlash(hero.x, hero.y, hero.face, WARP_SLASH));
   meleeHit([boxAhead(-6, -40, 30, 2)], { power, kx: 160, ky: -80, big: true });
+  warpShock();
 }
 
 /** Kael appears where his sword landed: beside a foe and striking, hanging from a crystal, or in the air */

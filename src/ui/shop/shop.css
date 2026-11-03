@@ -1,0 +1,191 @@
+/* Shop: one row per item, the icon framed like a level-up card, the price at the right. */
+.menu[data-screen="shop"] .menu-panel {
+  width: min(600px, 100%);
+}
+.shop {
+  gap: 10px;
+}
+.shop-section {
+  display: grid;
+  gap: 2px;
+}
+.shop-section h3 {
+  margin: 0 0 4px;
+  font-family: var(--display);
+  font-weight: 400;
+  font-size: 16px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--brass);
+}
+.shop-item {
+  --accent: var(--crystal);
+  --accent-dark: #102a48;
+  position: relative;
+  display: grid;
+  grid-template-columns: 44px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 12px;
+  min-height: 50px;
+  padding: 3px 12px 3px 28px;
+  text-align: left;
+  font: inherit;
+  color: var(--mist);
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+  outline: none;
+}
+.shop-item[data-kind="skill"] {
+  --accent: var(--pink);
+  --accent-dark: #3a1438;
+}
+.shop-item::before {
+  content: ">";
+  position: absolute;
+  left: 8px;
+  top: 50%;
+  translate: 0 -50%;
+  font-family: var(--display);
+  font-size: 16px;
+  color: var(--crystal);
+  visibility: hidden;
+}
+.shop-item:focus {
+  background: rgba(127, 227, 255, 0.1);
+}
+.shop-item:focus::before {
+  visibility: visible;
+}
+.shop-icon {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  background: var(--night);
+  border: 2px solid var(--accent);
+  box-shadow: inset 0 0 0 2px var(--accent-dark);
+}
+.shop-icon img {
+  width: 32px;
+  height: 32px;
+  image-rendering: pixelated;
+}
+.shop-body {
+  display: grid;
+  gap: 3px;
+}
+.shop-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 2px 10px;
+}
+.shop-name {
+  font-family: var(--ui);
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 1.15;
+  color: var(--text);
+}
+.shop-item:focus .shop-name {
+  color: var(--accent);
+}
+.shop-text {
+  font-size: 12px;
+  line-height: 1.35;
+  color: var(--mist);
+}
+.shop-pips {
+  display: inline-flex;
+  gap: 3px;
+}
+.shop-pips i {
+  width: 7px;
+  height: 7px;
+  border: 1px solid var(--key);
+  background: var(--night);
+}
+.shop-pips i.on {
+  background: var(--brass);
+  border-color: var(--brass);
+}
+.shop-price {
+  justify-self: end;
+  font-size: 14px;
+}
+.shop-price.short {
+  color: var(--muted);
+}
+.shop-price.short .coin-icon {
+  opacity: 0.5;
+}
+.shop-price.done {
+  font-family: var(--display);
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--heal);
+}
+.shop-item[data-armed] .shop-price {
+  color: var(--text);
+}
+.shop-price.deny {
+  animation: shop-deny 240ms steps(1) both;
+}
+@keyframes shop-deny {
+  0% {
+    transform: translateX(2px);
+    color: var(--hp);
+  }
+  33% {
+    transform: translateX(-2px);
+    color: var(--hp);
+  }
+  66% {
+    transform: translateX(1px);
+  }
+}
+@media (max-height: 520px) {
+  .shop {
+    gap: 8px;
+  }
+  .shop-section h3 {
+    margin-bottom: 2px;
+    font-size: 13px;
+  }
+  .shop-item {
+    grid-template-columns: 36px minmax(0, 1fr) auto;
+    gap: 10px;
+    min-height: 44px;
+    padding-block: 3px;
+  }
+  .shop-icon {
+    width: 36px;
+    height: 36px;
+  }
+  .shop-name {
+    font-size: 14px;
+  }
+  .shop-text {
+    font-size: 11px;
+  }
+}
+@media (max-width: 480px) {
+  .shop-item {
+    gap: 10px;
+    padding: 5px 8px 5px 22px;
+  }
+  .shop-item::before {
+    left: 6px;
+  }
+  .shop-text {
+    font-size: 11px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .shop-price.deny {
+    animation: none;
+    color: var(--hp);
+  }
+}
