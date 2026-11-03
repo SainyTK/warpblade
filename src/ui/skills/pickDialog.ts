@@ -1,5 +1,5 @@
 import "./pickDialog.css";
-import { SECOND_WIND } from "../../constants/boons";
+import { BOONS } from "../../constants/boons";
 import { PICK_COUNT } from "../../constants/progression";
 import { clearPresses, releaseAll } from "../../game/input";
 import { choosePick } from "../../game/progress";
@@ -8,10 +8,10 @@ import { sfx } from "../../services/audio";
 import type { PickOption } from "../../types/skill";
 import { rollPicks } from "../../utils/skillPicks";
 import { pickCard } from "./pickCard";
+import { pickTitle } from "./pickTitle";
 
 /** input this soon after the cards appear is ignored, so a J or a tap mashed mid-fight picks nothing by accident */
 const INPUT_LOCK_MS = 450;
-const FALLBACK: PickOption = { type: "boon", boon: SECOND_WIND };
 
 const dialog = document.createElement("dialog");
 dialog.className = "level-up";
@@ -42,11 +42,11 @@ function select(index: number): void {
   });
 }
 
-/** roll fresh options for the next waiting level up and lay them out */
+/** roll fresh options for the oldest waiting pick and lay them out */
 function deal(): void {
-  options = rollPicks(character, progress, rng, PICK_COUNT, FALLBACK);
-  title.textContent = `Level ${progress.level}`;
-  const more = progress.picks - 1;
+  options = rollPicks(character, progress, rng, PICK_COUNT, BOONS);
+  title.textContent = pickTitle(progress.picks[0]);
+  const more = progress.picks.length - 1;
   sub.textContent = more > 0 ? `Choose one. ${more} more pick${more === 1 ? "" : "s"} after this.` : "Choose one.";
   cards.dataset.count = String(options.length);
   cards.replaceChildren(...options.map((o, i) => pickCard(character, o, progress.ranks, i)));
@@ -105,7 +105,7 @@ export function bindPickDialog(): void {
   });
 }
 
-/** open the pick when a level up asks for it */
+/** open the pick when a level up or a cleared wave asks for it */
 export function syncPickDialog(): void {
   if (game.mode !== "pick" || dialog.open) return;
   releaseAll();

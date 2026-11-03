@@ -23,7 +23,7 @@ function rankPips(ranks: number, rank: number): HTMLSpanElement {
   return el;
 }
 
-/** one option of a level-up pick, as a button card */
+/** one option of a pick, as a button card */
 export function pickCard(
   c: CharacterDef,
   option: PickOption,

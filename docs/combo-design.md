@@ -45,4 +45,4 @@ Sources: the Grand Chase Fandom wiki pages for the Knight, Assassin, Thief, Spel
 
 - No grabs or throws, since Kael's identity is the warp and the thrown sword.
 - No loop cancel before the finisher: the combo still has a fixed length from level and skills, which keeps the guard and evade difficulty meaningful.
-- No job classes; the skill choices on level up play that role.
+- No job classes; the skill choices on level ups and cleared waves play that role.

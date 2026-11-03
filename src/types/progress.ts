@@ -1,12 +1,15 @@
 import type { Perk, UltimateId } from "./skill";
 import type { Stats } from "./stats";
 
+/** what earned a pick */
+export type PickReason = { kind: "level"; level: number } | { kind: "wave"; wave: number };
+
 /** One run's growth: it starts over when Kael falls. */
 export interface Progress {
   level: number;
   xp: number;
-  /** level ups still waiting for a pick */
-  picks: number;
+  /** level ups and cleared waves still waiting for a pick, oldest first */
+  picks: PickReason[];
   /** learned ranks by node id */
   ranks: Record<string, number>;
   /** derived from level and ranks */
