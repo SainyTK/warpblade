@@ -305,6 +305,16 @@ const ARCANE: SkillBranch = {
       stats: { ap: 3 },
     },
     {
+      id: "a_sigils",
+      name: "Swift Sigils",
+      kind: "passive",
+      text: "Spells recharge 15% faster per rank.",
+      level: 3,
+      ranks: 3,
+      requires: ["a_font"],
+      scale: { haste: 0.15 },
+    },
+    {
       id: "a_spellblade",
       name: "Spellblade",
       kind: "combo",
@@ -493,7 +503,7 @@ export const KAEL: CharacterDef = {
   id: "kael",
   name: "Kael",
   special: "crystalNova",
-  base: { ad: 10, ap: 10, hp: 100, mp: 100, crit: 0.05, move: 1, aspd: 1 },
+  base: { ad: 10, ap: 10, hp: 100, mp: 100, crit: 0.05, move: 1, aspd: 1, haste: 1 },
   growth: { ad: 0.6, ap: 0.6, hp: 5, mp: 2 },
   branches: [BLADE, PHANTOM, ARCANE, FUSION],
 };

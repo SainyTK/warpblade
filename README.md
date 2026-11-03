@@ -43,6 +43,8 @@ His crystal sword can be thrown, and wherever it lands, he follows.
 - **A pick at every level up.** The fight pauses and three cards offer skills Kael can learn now, each with its own pixel icon. Blade is strong early, Phantom trades power for mobility and crits, Arcane is weak early and strong late. Fusion skills join two paths once both are started: shatter frozen foes, set off burning ones, charge foes by dashing through them, and more. Some skills lock out their rivals for the run, and passives come back until every rank is learned.
 - **Charged specials.** Kael starts with Crystal Nova. Hold U through four levels; level 4 spends a full MP bar. Level ups can offer stronger ultimates: a storm of blades, a legion of phantoms, falling stars or a lightning tempest.
 - **Three elements.** A flask of fire that sets the floor burning, a running line of ice spikes that freezes, and lightning that arcs to a second foe.
+  Each element recharges on its own after a cast, bolt fastest and ice slowest, and every cast makes the other two wait a moment too, so switching elements pays but spamming does not.
+  The FIRE ICE BOLT tabs dim while an element recharges, a bar along each tab fills back up, and a press too early is refused with a tick and a jolt of the tab, or of the MP bar when MP is short.
 - **A 30-wave stage.** Floating wisps and horned husks, a Rift Brute every fifth wave and the Rift Warden at waves 20 and 30.
 - **Plays anywhere.** The game fills the whole screen at a whole-number pixel scale, with the night scene continued to every edge. Keyboard on desktop, a pixel touch controller on phones and tablets, no install.
 
@@ -68,7 +70,7 @@ His crystal sword can be thrown, and wherever it lands, he follows.
 | `J` | Sword combo. Each press is a different hit, picked from where the foes are. Combine with `W`, `S`, a jump, a dash or a run for the variants you have learned |
 | `L` | Dash. Nothing can touch you while you dash |
 | `K` | Warp strike (10 MP) |
-| `I` | Cast the selected spell (18 MP) |
+| `I` | Cast the selected spell (18 MP). Each element then recharges for a few seconds |
 | `O` | Switch element: fire, ice, bolt |
 | `U` | Hold to charge the special, release to strike |
 | `M` | Sound on or off |

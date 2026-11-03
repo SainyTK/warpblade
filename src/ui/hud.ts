@@ -6,6 +6,7 @@ import { canAffordUlt } from "../game/hero/ultimate";
 import { game, hero, progress } from "../game/state";
 import { xpToNext } from "../utils/progression";
 import { byId } from "./dom";
+import { updateSpellTabs } from "./spellTabs";
 
 const hp = byId("hpFill");
 const mp = byId("mpFill");
@@ -20,7 +21,6 @@ const boss = byId("boss");
 const bossName = byId("bossName");
 const bossFill = byId("bossFill");
 const banner = byId("banner");
-const elements = [byId("elFire"), byId("elIce"), byId("elVolt")];
 let last = "";
 
 const pips = (n: number, lit: (i: number) => boolean): string =>
@@ -28,6 +28,7 @@ const pips = (n: number, lit: (i: number) => boolean): string =>
 
 /** sync the HTML overlay with the game, touching the DOM only when something shown has changed */
 export function updateHud(): void {
+  updateSpellTabs();
   const leader = game.enemies.find((e) => e.rank !== "minion");
   const affordable = ULT_LEVELS.filter((_, i) => canAffordUlt(i + 1)).length;
   const key = [
@@ -41,7 +42,6 @@ export function updateHud(): void {
     hero.chain,
     progress.ultimate,
     affordable,
-    game.spell,
     game.wave,
     game.kills,
     game.best,
@@ -57,9 +57,6 @@ export function updateHud(): void {
   xp.style.width = need ? `${(progress.xp / need) * 100}%` : "100%";
   level.textContent = `LV ${progress.level}`;
   chain.innerHTML = pips(progress.comboLimit, (i) => i < hero.chain);
-  elements.forEach((el, i) => {
-    el.classList.toggle("on", i === game.spell);
-  });
   wave.textContent = `STAGE ${game.stage}  WAVE ${game.wave}/${STAGE_WAVES}`;
   score.textContent = `${game.kills} DOWN${game.best ? `  BEST WAVE ${game.best}` : ""}`;
   ultName.textContent = ULT_LABEL[progress.ultimate];

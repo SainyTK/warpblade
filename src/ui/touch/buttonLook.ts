@@ -2,7 +2,7 @@ import { ELEMENTS } from "../../constants/combat";
 import { ELEMENT_COLOR } from "../../constants/palette";
 import { ULT_LEVELS } from "../../constants/ultimate";
 import { dashRechargeTime } from "../../game/hero/dash";
-import { castCost } from "../../game/hero/spell";
+import { castCost, selectedElement, spellRecharge } from "../../game/hero/spell";
 import { canAffordUlt } from "../../game/hero/ultimate";
 import { warpCooldown, warpCost } from "../../game/hero/warp";
 import { game, hero } from "../../game/state";
@@ -34,6 +34,7 @@ export function buttonLook(spec: TouchButtonSpec, pressed: boolean): ButtonLook 
       break;
     case "cast":
       look.ready = hero.mp >= castCost();
+      look.cooldown = spellRecharge(selectedElement());
       break;
     case "ultimate":
       look.affordable = ULT_LEVELS.filter((_, i) => canAffordUlt(i + 1)).length;

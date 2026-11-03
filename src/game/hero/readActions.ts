@@ -8,7 +8,7 @@ import { isFree } from "./actions";
 import { blowsDone, comboOpen, endCombo, pressAttack, startMove } from "./combo";
 import { tryDash } from "./dash";
 import { jump } from "./jump";
-import { castCost, startCast } from "./spell";
+import { canCast, denyCast, startCast } from "./spell";
 import { startCharge } from "./ultimate";
 import { blink, canWarp, startThrow, warpCost } from "./warp";
 
@@ -51,13 +51,12 @@ function pressWarp(): boolean {
   return true;
 }
 
-/** I: Spellblade after two hits, otherwise a normal cast */
+/** I: Spellblade after two hits, otherwise a normal cast. A press while the element recharges or MP is short is refused with a tick. */
 function pressCast(): boolean {
-  const h = hero;
-  if (h.mp < castCost()) return false;
-  if (hasPerk("spellblade") && comboOpen(2)) startCast(true);
-  else if (isFree() || h.state === "hang") startCast(false);
-  else return false;
+  const spellblade = hasPerk("spellblade") && comboOpen(2);
+  if (!spellblade && !isFree() && hero.state !== "hang") return false;
+  if (canCast()) startCast(spellblade);
+  else denyCast();
   return true;
 }
 

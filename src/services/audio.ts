@@ -99,6 +99,10 @@ class SoundEffects {
   cast(): void {
     this.tone(300, 900, 0.25, "triangle", 0.04);
   }
+  /** a spell press refused: still recharging or short of MP */
+  denied(): void {
+    this.tone(180, 150, 0.05, "square", 0.03);
+  }
   dodge(): void {
     this.noise(0.18, 3000, 900, 0.08);
   }

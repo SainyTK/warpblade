@@ -1,7 +1,7 @@
 import { FIRE_RAMP, HERO_COLORS as HC, PAL, WORLD_COLORS as WC } from "../../../constants/palette";
 import type { SpriteCanvas } from "../../../engine/sprite";
 import { hex, WHITE } from "../../../utils/color";
-import { arc, bolt, drop, fill, flame, ring, snowflake, sparkle, sword } from "./parts";
+import { arc, bolt, chevron, drop, fill, flame, ring, snowflake, sparkle, sword } from "./parts";
 
 const MANA = PAL.crystal;
 const PURPLE = hex("#5a3aa0");
@@ -30,6 +30,19 @@ export const ARCANE_ICONS: Record<string, (s: SpriteCanvas) => void> = {
       ])
         s.set(x, y, PAL.volt[4]);
     });
+  },
+  /** an hourglass of mana inside a recharge arrow */
+  a_sigils: (s) => {
+    arc(s, 8, 8, 6.5, -1.2, 3.6, PURPLE, 0.6);
+    chevron(s, 2.6, 3.8, 0.44, -0.9, 2.4, PURPLE);
+    fill(s, () =>
+      s.pixels(
+        ["ttttttt", ".hhhhh.", "..hhh..", "...w...", "...l...", "..lll..", ".lllll.", "ttttttt"],
+        { t: HC.trim, h: MANA[3], l: MANA[2], w: WHITE },
+        5,
+        4,
+      ),
+    );
   },
   a_spellblade: (s) => {
     sword(s, 5, 11, 14, 2);

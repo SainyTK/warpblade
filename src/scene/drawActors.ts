@@ -1,5 +1,4 @@
 import { CLIPS } from "../constants/clips";
-import { ELEMENTS } from "../constants/combat";
 import { ELEMENT_COLOR, ENEMY_COLORS, PAL } from "../constants/palette";
 import { ULT_LEVELS } from "../constants/ultimate";
 import { ellipseRing, glow, glowLine, line, place, px } from "../engine/frame";
@@ -70,7 +69,7 @@ export function drawEnemies(): void {
 
 /** a rune ring turning at the casting hand while the spell gathers */
 function drawCastRing(hand: [number, number]): void {
-  const c = ELEMENT_COLOR[ELEMENTS[game.spell]];
+  const c = ELEMENT_COLOR[hero.castElement];
   const k = clamp(hero.st / CLIPS.cast.hit);
   const [cx, cy] = [hand[0] + 2, hand[1]];
   ellipseRing(cx, cy, 3 + k * 4, (3 + k * 4) * 1.1, c, 0.8);

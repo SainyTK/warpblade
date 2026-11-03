@@ -2,6 +2,7 @@ import type { Projectile } from "./effect";
 import type { Enemy } from "./enemy";
 import type { MoveId } from "./move";
 import type { Pose } from "./pose";
+import type { Element } from "./spell";
 import type { Point } from "./world";
 
 export type ClipName =
@@ -115,6 +116,14 @@ export interface Hero {
   /** seconds since the last dash ended */
   sinceDash: number;
   warpCd: number;
+  /** seconds before each element can be cast again */
+  spellCd: Record<Element, number>;
+  /** the full length of each element's current wait, for the recharge display */
+  spellCdFull: Record<Element, number>;
+  /** the element of the cast under way, fixed when the cast starts */
+  castElement: Element;
+  /** seconds left of the HUD flash after a refused cast */
+  castDenied: number;
   /** the spell is cast at once and stronger: J J I */
   spellPower: number;
   lastHit: Enemy | null;
