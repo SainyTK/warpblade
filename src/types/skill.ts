@@ -16,7 +16,6 @@ export type Perk =
   | "meteorDrop"
   | "dashStrike"
   | "runThrust"
-  | "doubleDash"
   | "quickstep"
   | "warpcraft"
   | "blinkCombo"

@@ -6,10 +6,11 @@ import { hero, progress } from "../state";
 import { settle } from "./actions";
 import { animateHero } from "./animate";
 import { runMove, tickCombo } from "./combo";
-import { rechargeDash, runDash } from "./dash";
+import { runDash } from "./dash";
 import { moveHero } from "./physics";
 import { readActions } from "./readActions";
 import { castSpeed, runCast } from "./spell";
+import { regenStamina } from "./stamina";
 import { readDoubleTap } from "./taps";
 import { runCharge, runUltimate } from "./ultimate";
 import { doWarp, releaseSword } from "./warp";
@@ -69,7 +70,8 @@ export function updateHero(dt: number): void {
   h.drop = Math.max(0, h.drop - dt);
   h.warpCd = Math.max(0, h.warpCd - dt);
   h.riposte = Math.max(0, h.riposte - dt);
-  rechargeDash(dt);
+  h.sinceDash += dt;
+  regenStamina(dt);
   tickCombo(dt);
   if (h.running && dir !== h.face) h.running = false;
   if (h.state !== "dead") {

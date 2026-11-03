@@ -47,6 +47,36 @@ export const PHANTOM_ICONS: Record<string, (s: SpriteCanvas) => void> = {
       s.stroke(1, 9, 4, 9, 0.4, WHITE);
     });
   },
+  p_breath: (s) => {
+    fill(s, () => {
+      for (let x = 1; x <= 9; x++) s.set(x, 4, PAL.heal[3]);
+      for (const [x, y] of [
+        [10, 3],
+        [10, 2],
+        [9, 1],
+        [8, 2],
+      ])
+        s.set(x, y, PAL.heal[3]);
+    });
+    fill(s, () => {
+      for (let x = 4; x <= 12; x++) s.set(x, 7, PAL.heal[4]);
+      for (const [x, y] of [
+        [13, 6],
+        [13, 5],
+        [12, 4],
+        [11, 5],
+      ])
+        s.set(x, y, PAL.heal[4]);
+    });
+    fill(s, () => {
+      for (let y = 10; y <= 14; y++) for (let x = 1; x <= 14; x++) s.set(x, y, WC.slabEdge);
+    });
+    fill(s, () => {
+      for (const x0 of [2, 5, 8, 11])
+        for (let y = 11; y <= 13; y++) for (const x of [x0, x0 + 1]) s.set(x, y, x0 < 11 ? PAL.heal[2] : PAL.heal[1]);
+      s.set(2, 11, PAL.heal[4]);
+    });
+  },
   p_whirl: (s) => {
     arc(s, 8, 8, 6, 0, 4.5, PAL.crystal[3]);
     arc(s, 8, 8, 3.5, 1.5, 6, PAL.crystal[4]);
@@ -100,11 +130,6 @@ export const PHANTOM_ICONS: Record<string, (s: SpriteCanvas) => void> = {
     });
     sword(s, 7, 10, 14, 3);
     ring(s, 4, 5, 2.5, PAL.crystal[3]);
-  },
-  p_ddash: (s) => {
-    chevron(s, 7, 8, 1, 0, 4, PAL.crystal[3]);
-    chevron(s, 10, 8, 1, 0, 4, PAL.crystal[4]);
-    chevron(s, 15, 8, 1, 0, 4, PAL.crystal[5]);
   },
   p_quick: (s) => {
     fill(s, () => {
