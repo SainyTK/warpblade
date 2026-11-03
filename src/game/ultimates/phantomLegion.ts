@@ -1,4 +1,4 @@
-import { CLIPS } from "../../constants/hero";
+import { CLIPS } from "../../constants/clips";
 import { W } from "../../constants/stage";
 import { ULT_LEVELS } from "../../constants/ultimate";
 import { sfx } from "../../services/audio";

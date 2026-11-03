@@ -1,16 +1,18 @@
 import { ADVANCE } from "../../../constants/combo";
-import type { MoveDef } from "../../../types/move";
+import type { MoveDef, Stride } from "../../../types/move";
 import { isHeld } from "../../input";
 import { hero } from "../../state";
 import { nearestGapAhead } from "../situation";
 
-/** the stride speed of a move at this time, or 0 outside its strides */
-export function strideAt(m: MoveDef, time: number): number {
-  return m.strides?.find((s) => time >= s.from && time < s.to)?.speed ?? 0;
+/** the stride of a move at this time, if any */
+export function strideAt(m: MoveDef, time: number): Stride | undefined {
+  return m.strides?.find((s) => time >= s.from && time < s.to);
 }
 
-/** step forward at this speed, further while forward is held, and stop at arm's length from the foe in front */
-export function advance(speed: number): void {
+/** step forward on this stride, further while forward is held, and stop at arm's length from the foe in front
+ *  unless the stride runs through it */
+export function advance(stride: Stride): void {
   const forward = isHeld(hero.face > 0 ? "right" : "left");
-  hero.vx = nearestGapAhead() < ADVANCE.contact ? 0 : hero.face * speed * (forward ? ADVANCE.lean : 1);
+  const blocked = !stride.through && nearestGapAhead() < ADVANCE.contact;
+  hero.vx = blocked ? 0 : hero.face * stride.speed * (forward ? ADVANCE.lean : 1);
 }

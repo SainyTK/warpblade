@@ -38,7 +38,7 @@ export function moveHero(dt: number, dir: number): void {
   }
   const speed = (h.running ? M.runSpeed : M.walkSpeed) * progress.stats.move;
   const m = st === "move" && h.move ? MOVES[h.move] : null;
-  const moveDriven = !!m && (!!m.step || strideAt(m, h.st) > 0);
+  const moveDriven = !!m && (!!m.step || !!strideAt(m, h.st));
   if (isFree()) {
     h.vx = approach(h.vx, dir * speed, (h.ground ? M.groundAccel : M.airAccel) * dt);
     if (dir) h.face = dir;

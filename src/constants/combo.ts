@@ -15,7 +15,7 @@ export const REACH = {
 } as const;
 
 /** stepping moves stop this close to the foe in front, and go this much further while forward is held */
-export const ADVANCE = { contact: 12, lean: 1.5 } as const;
+export const ADVANCE = { contact: 6, lean: 1.5 } as const;
 
 /** Keen timing: J pressed this soon after a blow lands makes the next move a sure crit */
 export const KEEN = { window: 0.1 } as const;

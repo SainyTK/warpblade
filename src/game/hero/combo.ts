@@ -1,6 +1,6 @@
+import { CLIPS } from "../../constants/clips";
 import { COMBO, FUSION } from "../../constants/combat";
 import { KEEN, KEEN_RAMP } from "../../constants/combo";
-import { CLIPS } from "../../constants/hero";
 import { sfx } from "../../services/audio";
 import type { MoveHit, MoveId } from "../../types/move";
 import { chooseMove } from "../../utils/comboChoice";
@@ -115,8 +115,8 @@ function moveBody(dt: number): void {
   if (!h.move) return;
   const m = MOVES[h.move];
   // footwork owns Kael's ground speed: he stands still between strides, so he never slides into the foe
-  const speed = strideAt(m, h.st);
-  if (speed) advance(speed);
+  const stride = strideAt(m, h.st);
+  if (stride) advance(stride);
   else if (m.strides && h.ground) h.vx = 0;
   if (!m.ghosts || h.st >= m.ghosts) return;
   h.moveGhost -= dt;

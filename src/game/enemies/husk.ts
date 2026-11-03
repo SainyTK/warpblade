@@ -53,5 +53,7 @@ export function updateHusk(e: Enemy, dt: number, ts: number): void {
     particles.spawn(PK.EMBER, e.x + rng.range(-6, 6), e.y - rng.range(6, 22), 0, -10, rng.range(0.4, 0.8), {
       sparks: SPARKS.shadow,
     });
-  if (e.state === "walk" && boxHit(enemyBox(e), heroBox())) hurtHero(ENEMY_HITS.huskTouch * e.power, e.x);
+  // a husk reeling from a sword blow does not hurt by touch, so Kael can lunge in close and cut through it
+  if (e.state === "walk" && e.stagger <= 0 && boxHit(enemyBox(e), heroBox()))
+    hurtHero(ENEMY_HITS.huskTouch * e.power, e.x);
 }

@@ -1,5 +1,5 @@
+import { CLIPS } from "../../constants/clips";
 import { MP_REGEN } from "../../constants/combat";
-import { CLIPS } from "../../constants/hero";
 import { isHeld } from "../input";
 import { resetRun } from "../run";
 import { hero, progress } from "../state";
