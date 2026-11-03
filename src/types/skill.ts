@@ -68,12 +68,16 @@ export interface SkillBranch {
   nodes: readonly SkillNode[];
 }
 
-/** a small reward offered when no skill is left to learn, so a level up always gives something */
+/** a small reward offered when too few skills are left to fill the cards, so a pick always gives something */
 export interface Boon {
   id: string;
   name: string;
   text: string;
+  /** fills HP and MP when taken */
+  restore?: boolean;
+  /** added for the rest of the run each time it is taken, counted in the learned ranks under the boon's id */
+  stats?: Partial<Stats>;
 }
 
-/** one card of a level-up pick */
+/** one card of a pick */
 export type PickOption = { type: "skill"; node: SkillNode; branch: SkillBranch } | { type: "boon"; boon: Boon };

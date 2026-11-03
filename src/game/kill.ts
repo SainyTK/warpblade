@@ -4,6 +4,7 @@ import type { Enemy } from "../types/enemy";
 import { PK } from "../types/particle";
 import { WHITE } from "../utils/color";
 import { TAU } from "../utils/math";
+import { endWaveOnLastKill } from "./endWave";
 import { enemyCenter } from "./enemies/enemy";
 import { gainXp } from "./progress";
 import { game, lights, particles, rng } from "./state";
@@ -11,7 +12,7 @@ import { shake } from "./world";
 
 const ORBS = { minion: 2, mini: 10, boss: 18 } as const;
 
-/** a dark burst of smoke and motes, orbs that fly back to Kael, and experience */
+/** a dark burst of smoke and motes, orbs that fly back to Kael, experience, and the wave's end when it was the last foe */
 export function killEnemy(e: Enemy): void {
   const [x, y] = enemyCenter(e);
   const S = PAL.shadow;
@@ -62,4 +63,5 @@ export function killEnemy(e: Enemy): void {
   if (big) shake(0.5, 4);
   sfx.death();
   gainXp(e.xp);
+  endWaveOnLastKill();
 }

@@ -47,7 +47,7 @@ export function freshProgress(): Progress {
   return {
     level: 1,
     xp: 0,
-    picks: 0,
+    picks: [],
     ranks: {},
     stats,
     perks: new Set(),

@@ -2,7 +2,8 @@ import { PAL } from "../constants/palette";
 import { LEVEL_UP_RESTORE, MAX_LEVEL } from "../constants/progression";
 import { sfx } from "../services/audio";
 import { PK } from "../types/particle";
-import type { Perk, PickOption, SkillNode } from "../types/skill";
+import type { PickReason } from "../types/progress";
+import type { Boon, Perk, PickOption } from "../types/skill";
 import { airLimit, comboLimit, xpToNext } from "../utils/progression";
 import { collectPerks, computeStats, learnedUltimate } from "../utils/stats";
 import { createFloorRing } from "./effects/floorRing";
@@ -44,14 +45,13 @@ function celebrateLevel(): void {
 export function gainXp(amount: number): void {
   if (progress.level >= MAX_LEVEL) return;
   progress.xp += amount;
-  let gained = 0;
+  const from = progress.level;
   while (progress.level < MAX_LEVEL && progress.xp >= xpToNext(progress.level)) {
     progress.xp -= xpToNext(progress.level);
     progress.level++;
-    gained++;
   }
   if (progress.level >= MAX_LEVEL) progress.xp = 0;
-  if (!gained) return;
+  if (progress.level === from) return;
   const before = progress.stats;
   refreshProgress();
   hero.hp = Math.min(
@@ -61,12 +61,18 @@ export function gainXp(amount: number): void {
   hero.mp = Math.min(progress.stats.mp, hero.mp + progress.stats.mp * LEVEL_UP_RESTORE);
   showBanner(`Level ${progress.level}`, 1.4);
   celebrateLevel();
-  progress.picks += gained;
+  for (let level = from + 1; level <= progress.level; level++) queuePick({ kind: "level", level });
+}
+
+/** a level up or a cleared wave earned a pick: the game pauses on it, behind any pick already waiting */
+export function queuePick(reason: PickReason): void {
+  progress.picks.push(reason);
   if (game.mode === "play") game.mode = "pick";
 }
 
-function learnSkill(node: SkillNode): void {
-  progress.ranks = { ...progress.ranks, [node.id]: (progress.ranks[node.id] ?? 0) + 1 };
+/** one more rank of a skill or a stat boon; a higher maximum also fills by what it adds */
+function addRank(id: string): void {
+  progress.ranks = { ...progress.ranks, [id]: (progress.ranks[id] ?? 0) + 1 };
   const before = progress.stats;
   refreshProgress();
   hero.hp = Math.min(progress.stats.hp, hero.hp + Math.max(0, progress.stats.hp - before.hp));
@@ -74,15 +80,19 @@ function learnSkill(node: SkillNode): void {
   hero.stamina = Math.min(progress.stats.stamina, hero.stamina + Math.max(0, progress.stats.stamina - before.stamina));
 }
 
-/** take one card of a level-up pick; the game plays on once no level up waits for a pick */
+function takeBoon(boon: Boon): void {
+  if (boon.stats) addRank(boon.id);
+  if (!boon.restore) return;
+  hero.hp = progress.stats.hp;
+  hero.mp = progress.stats.mp;
+}
+
+/** take one card of the oldest waiting pick; the game plays on once no pick waits */
 export function choosePick(option: PickOption): void {
-  if (option.type === "skill") learnSkill(option.node);
-  else {
-    hero.hp = progress.stats.hp;
-    hero.mp = progress.stats.mp;
-  }
-  progress.picks = Math.max(0, progress.picks - 1);
-  if (!progress.picks && game.mode === "pick") game.mode = "play";
+  if (option.type === "skill") addRank(option.node.id);
+  else takeBoon(option.boon);
+  progress.picks.shift();
+  if (!progress.picks.length && game.mode === "pick") game.mode = "play";
 }
 
 export function resetProgress(): void {

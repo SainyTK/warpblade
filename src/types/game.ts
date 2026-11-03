@@ -43,7 +43,7 @@ export interface DamageNumber {
   big: boolean;
   life: number;
 }
-/** play runs the simulation; pick pauses it while Kael chooses a skill after a level up; clear is the end of the stage */
+/** play runs the simulation; pick pauses it while Kael chooses a skill after a level up or a cleared wave; clear is the end of the stage */
 export type GameMode = "play" | "pick" | "clear";
 
 export interface GameState {

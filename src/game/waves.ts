@@ -1,11 +1,12 @@
 import { ENEMIES } from "../constants/enemies";
 import { GROUND, W } from "../constants/stage";
-import { STAGE_WAVES, WAVE_PAUSE } from "../constants/waves";
+import { STAGE_WAVES } from "../constants/waves";
 import { sfx } from "../services/audio";
 import { saveBest } from "../services/bestScore";
 import type { EnemyType } from "../types/enemy";
 import { waveFoes, waveKind } from "../utils/waves";
 import { createRift } from "./effects/rift";
+import { endWave } from "./endWave";
 import { makeEnemy } from "./enemies/enemy";
 import { resetRun } from "./run";
 import { game, hero, rng, showBanner } from "./state";
@@ -65,8 +66,7 @@ export function updateWaves(dt: number): void {
       sfx.levelUp();
       return;
     }
-    game.lull = "toNext";
-    game.waveTimer = WAVE_PAUSE;
+    endWave();
     return;
   }
   game.waveTimer -= dt;

@@ -1,5 +1,5 @@
 import type { CharacterDef } from "../types/character";
-import type { PickOption, SkillNode } from "../types/skill";
+import type { Boon, PickOption, SkillNode } from "../types/skill";
 import type { Rng } from "./rng";
 import { allNodes } from "./stats";
 
@@ -28,13 +28,13 @@ export function isAvailable(c: CharacterDef, node: SkillNode, v: PickView): bool
   return !excluded(c, node, v.ranks);
 }
 
-/** up to `count` different skills Kael can learn now, in a random order; a boon when none is left */
-export function rollPicks(c: CharacterDef, v: PickView, rng: Rng, count: number, fallback: PickOption): PickOption[] {
-  const options: PickOption[] = c.branches.flatMap((branch) =>
+/** `count` cards in a random order: different skills Kael can learn now, then boons when too few skills are left */
+export function rollPicks(c: CharacterDef, v: PickView, rng: Rng, count: number, boons: readonly Boon[]): PickOption[] {
+  const skills: PickOption[] = c.branches.flatMap((branch) =>
     branch.nodes.filter((node) => isAvailable(c, node, v)).map((node) => ({ type: "skill" as const, node, branch })),
   );
-  if (!options.length) return [fallback];
-  return rng.shuffle(options).slice(0, count);
+  const fill: PickOption[] = boons.map((boon) => ({ type: "boon", boon }));
+  return [...rng.shuffle(skills).slice(0, count), ...rng.shuffle(fill)].slice(0, count);
 }
 
 /** names of the nodes this one would lock out */
