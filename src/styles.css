@@ -16,6 +16,7 @@
   --volt: #b4a8ff;
   --hp: #e0405a;
   --heal: #9cf0a0;
+  --stamina: #3fc06a;
   --back: #ff9a4a;
   --pink: #ff7ae0;
   --danger: #b0405a;
@@ -140,6 +141,33 @@ body {
 .bar.mp .fill {
   background: var(--crystal);
   box-shadow: 0 0 6px var(--crystal);
+}
+.bar.st span {
+  color: var(--heal);
+}
+.bar.st .fill {
+  background: var(--stamina);
+  box-shadow: 0 0 6px var(--stamina);
+}
+/* a notch at every dash's share of the bar, set as --dash-share by the HUD */
+.bar.st .track::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    to right,
+    transparent 0 calc(var(--dash-share, 50%) - 1px),
+    var(--night) calc(var(--dash-share, 50%) - 1px) var(--dash-share, 50%)
+  );
+}
+/* a dash the bar could not pay for: the empty track blinks red */
+.bar.st.empty .track {
+  animation: st-empty 120ms steps(1) infinite;
+}
+@keyframes st-empty {
+  50% {
+    border-color: var(--hp);
+  }
 }
 .bar.xp span {
   color: var(--brass);
@@ -690,5 +718,9 @@ body[data-hud="outside"] .boss {
   .bar .fill,
   .banner {
     transition: none;
+  }
+  .bar.st.empty .track {
+    animation: none;
+    border-color: var(--hp);
   }
 }

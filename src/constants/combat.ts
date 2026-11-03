@@ -19,10 +19,26 @@ export const HERO_MOVE = {
   hangJumpRise: 38,
   dashSpeed: 270,
   dashTime: 0.24,
-  /** seconds to get one dash charge back */
-  dashRecharge: 0.6,
   /** a J this soon after a dash is a dash attack */
   dashLink: 0.18,
+} as const;
+
+/** Stamina: every dash spends part of the bar, and it comes back after a short pause, slower while Kael attacks. */
+export const STAMINA = {
+  /** spent by one dash; the base bar holds two */
+  dashCost: 50,
+  /** seconds after a dash ends before stamina starts coming back */
+  delay: 0.5,
+  /** stamina per second while Kael is not attacking */
+  regen: 45,
+  /** stamina per second during attacks, casts, throws and the ultimate */
+  regenBusy: 18,
+  /** a perfect dodge gives back this much */
+  perfectRefund: 25,
+  /** seconds the bar flashes after a dash it could not pay for */
+  emptyFlash: 0.35,
+  /** Quickstep: stamina comes back this many times as fast */
+  quickstep: 1.45,
 } as const;
 
 export const WARP = {
@@ -93,7 +109,7 @@ export const GUARD = {
 /** Wisps slip away from a swing aimed at them while they drift. */
 export const EVADE = { fromWave: 2, base: 0.2, perWave: 0.02, max: 0.6, reach: 50, speed: 230, cooldown: 2.4 } as const;
 
-/** Dashing through an attack in the first moments of the dash: the world slows and Kael gets MP back. */
+/** Dashing through an attack in the first moments of the dash: the world slows and Kael gets MP back (and STAMINA.perfectRefund). */
 export const PERFECT = { window: 0.12, slow: 0.7, timeScale: 0.3, mp: 8 } as const;
 export const RIPOSTE = { time: 1.5, power: 3 } as const;
 
