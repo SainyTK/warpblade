@@ -127,6 +127,8 @@ Other commands: `npm run build`, `npm run preview`, `npm run typecheck`, `npm ru
 The stack is TypeScript, Vite and Biome.
 There are no runtime dependencies besides three web fonts.
 
+To pose Kael, draw effects and hand them to Claude Code agents, run the local [studio](studio/README.md).
+
 ## How the pixels are made
 
 This game is also my sandbox for learning how to make pixel art and effects that look good.
@@ -148,9 +150,11 @@ The rules I took from the references, and where they show up:
 - Give every blow an act. Each attack winds up the opposite way, snaps to a new silhouette on the hit frame, freezes the game for a few hundredths of a second on contact, shakes the screen and follows through (`src/constants/clips/`).
 
 Kael is drawn from a small skeleton every frame (`src/game/hero/drawHero.ts`).
-His torso, coat and head follow the line from hip to neck, so a pose can lean him flat into a lunge or arch him back under a raised blade.
+His spine runs from hip to neck through a chest point that a pose can push forward or back, so he can lean flat into a lunge, arch under a raised blade or hunch into a wind-up.
 A pose can also turn his back to the camera or mirror him to face behind, which is how the spins read as spins.
-Arms and legs are placed by two-bone reach, each body part is outlined where it overlaps the one behind it, and the whole figure gets a dark outline.
+Arms and legs are placed by two-bone reach, each elbow can bend either way, and each boot tilts to point the toes or rock onto the heel.
+Each body part is outlined where it overlaps the one behind it, and the whole figure gets a dark outline.
+Every move, action and state is a keyed clip sampled at 30 frames a second, with a pose keyed on nearly every frame; idle, walk, run, hang, charge and the throw wait loop (`src/constants/clips/`).
 His scarf and ponytail are verlet ropes, so they trail behind him as he runs and warps (`src/game/hero/chain.ts`).
 
 The README images are frames captured straight from the game canvas at 320 by 180 and scaled up with nearest-neighbour, so they show the real pixels.
@@ -176,6 +180,7 @@ src/
   ui/              HUD, level-up pick, menu, keyboard input, touch controller, stage sizing
     menu/          start and pause menu: main, Shop, run result, Controls and Options screens
     shop/          one shop row and the shop's styles
+studio/            a local tool to pose Kael with the game's rig, draw effects and send them to agents (see studio/README.md)
 docs/
   combo-design.md  what the combo takes from Grand Chase and what it leaves out
   meta-progress.md coins, the shop items and the basis for their prices

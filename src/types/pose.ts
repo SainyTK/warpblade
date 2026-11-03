@@ -1,16 +1,21 @@
 export const POSE_KEYS = [
   "hx",
   "hy",
+  "cb",
   "nx",
   "ny",
   "fx",
   "fy",
+  "fe",
   "bx",
   "by",
+  "be",
   "ffx",
   "ffy",
+  "fa",
   "bfx",
   "bfy",
+  "ba",
   "sa",
   "tw",
   "mr",
@@ -19,7 +24,10 @@ export type PoseKey = (typeof POSE_KEYS)[number];
 /**
  * A body pose, facing right, in pixels from the feet: hip (hx, hy), neck (nx, ny), near hand (fx, fy), far hand (bx, by),
  * near foot (ffx, ffy), far foot (bfx, bfy) and the sword angle sa in radians.
- * The torso follows the line from hip to neck, so a neck far ahead of the hip is a body leaning flat into a lunge.
+ * The spine runs from hip to neck through the chest. cb pushes the chest that many pixels toward the front, arching the
+ * back, or toward the back when negative, hunching it. A neck far ahead of the hip is a body leaning flat into a lunge.
+ * fe and be at 1 bend the near and far elbow the other way. fa and ba tilt the near and far foot in radians: positive
+ * points the toes down, negative lifts them onto the heel.
  * tw at 1 turns Kael's back to the camera, mid-spin. mr at 1 draws the whole pose mirrored, facing behind him.
  */
 export type Pose = Record<PoseKey, number>;

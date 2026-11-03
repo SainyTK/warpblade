@@ -19,3 +19,5 @@ export const CLIPS = {
   ...FINISHER_CLIPS,
   ...ACTION_CLIPS,
 } satisfies Record<ClipName, ActionClip>;
+
+export { LOOPING_STATES, STATE_CLIPS } from "./states";
