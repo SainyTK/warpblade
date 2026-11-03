@@ -1,8 +1,8 @@
-import { ELEMENTS } from "../../constants/combat";
+import { ELEMENTS, STAMINA } from "../../constants/combat";
 import { ELEMENT_COLOR } from "../../constants/palette";
 import { ULT_LEVELS } from "../../constants/ultimate";
-import { dashRechargeTime } from "../../game/hero/dash";
 import { castCost } from "../../game/hero/spell";
+import { canPayDash } from "../../game/hero/stamina";
 import { canAffordUlt } from "../../game/hero/ultimate";
 import { warpCooldown, warpCost } from "../../game/hero/warp";
 import { game, hero } from "../../game/state";
@@ -25,8 +25,8 @@ export function buttonLook(spec: TouchButtonSpec, pressed: boolean): ButtonLook 
   const look: ButtonLook = { pressed, ready: true, cooldown: 0, accent, affordable: 0, charge: -1 };
   switch (spec.action) {
     case "dash":
-      look.ready = hero.dashes > 0;
-      look.cooldown = hero.dashes > 0 ? 0 : 1 - hero.dashCd / dashRechargeTime();
+      look.ready = canPayDash();
+      look.cooldown = look.ready ? 0 : 1 - hero.stamina / STAMINA.dashCost;
       break;
     case "warp":
       look.ready = hero.mp >= warpCost();

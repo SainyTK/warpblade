@@ -109,8 +109,12 @@ export interface Hero {
   /** air attacks since leaving the ground */
   airHits: number;
   whirled: boolean;
-  dashes: number;
-  dashCd: number;
+  /** spent by dashes; the maximum is progress.stats.stamina */
+  stamina: number;
+  /** seconds left before stamina starts coming back */
+  staminaWait: number;
+  /** seconds left of the bar's flash after a dash it could not pay for */
+  staminaFlash: number;
   airDashed: boolean;
   /** seconds since the last dash ended */
   sinceDash: number;

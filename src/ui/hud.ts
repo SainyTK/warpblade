@@ -1,3 +1,4 @@
+import { STAMINA } from "../constants/combat";
 import { ENEMIES } from "../constants/enemies";
 import { ULT_LABEL } from "../constants/skillLabels";
 import { ULT_LEVELS } from "../constants/ultimate";
@@ -9,6 +10,8 @@ import { byId } from "./dom";
 
 const hp = byId("hpFill");
 const mp = byId("mpFill");
+const stamina = byId("stFill");
+const staminaBar = byId("stBar");
 const xp = byId("xpFill");
 const level = byId("level");
 const chain = byId("chain");
@@ -35,6 +38,9 @@ export function updateHud(): void {
     Math.round(hero.mp),
     progress.stats.hp,
     progress.stats.mp,
+    Math.round(hero.stamina),
+    progress.stats.stamina,
+    hero.staminaFlash > 0,
     progress.level,
     progress.xp,
     progress.comboLimit,
@@ -53,6 +59,9 @@ export function updateHud(): void {
   last = key;
   hp.style.width = `${(hero.hp / progress.stats.hp) * 100}%`;
   mp.style.width = `${(hero.mp / progress.stats.mp) * 100}%`;
+  stamina.style.width = `${(hero.stamina / progress.stats.stamina) * 100}%`;
+  staminaBar.classList.toggle("empty", hero.staminaFlash > 0);
+  staminaBar.style.setProperty("--dash-share", `${(STAMINA.dashCost / progress.stats.stamina) * 100}%`);
   const need = xpToNext(progress.level);
   xp.style.width = need ? `${(progress.xp / need) * 100}%` : "100%";
   level.textContent = `LV ${progress.level}`;

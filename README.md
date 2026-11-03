@@ -40,6 +40,9 @@ His crystal sword can be thrown, and wherever it lands, he follows.
   Pressing before the blow lands spoils it, so rhythm beats mashing.
 - **Positioning pays.** Hits from behind deal 1.5 times the damage and foes in the air take double, with the numbers popping out of every hit.
 - **Fights that need skill.** Husks block blows from the front and strike back, wisps slip away from swings, and missed swings leave you open. Dash through an attack at the last moment for a perfect dodge and slow motion.
+- **Stamina.** Each dash spends half the green stamina bar, so two dashes in a row leave Kael out of breath until it refills.
+  It comes back after a short pause, slower while he attacks, and a perfect dodge gives some back.
+  Deep Breath adds a third and then a fourth dash, and Quickstep refills the bar faster.
 - **A pick at every level up.** The fight pauses and three cards offer skills Kael can learn now, each with its own pixel icon. Blade is strong early, Phantom trades power for mobility and crits, Arcane is weak early and strong late. Fusion skills join two paths once both are started: shatter frozen foes, set off burning ones, charge foes by dashing through them, and more. Some skills lock out their rivals for the run, and passives come back until every rank is learned.
 - **Charged specials.** Kael starts with Crystal Nova. Hold U through four levels; level 4 spends a full MP bar. Level ups can offer stronger ultimates: a storm of blades, a legion of phantoms, falling stars or a lightning tempest.
 - **Three elements.** A flask of fire that sets the floor burning, a running line of ice spikes that freezes, and lightning that arcs to a second foe.
@@ -66,7 +69,7 @@ His crystal sword can be thrown, and wherever it lands, he follows.
 | `A` `D` or arrows | Walk. Tap a side twice and hold to run |
 | `W` or `Up` | Jump. Hold `S` and jump to drop through a ledge |
 | `J` | Sword combo. Each press is a different hit, picked from where the foes are. Combine with `W`, `S`, a jump, a dash or a run for the variants you have learned |
-| `L` | Dash. Nothing can touch you while you dash |
+| `L` | Dash. Nothing can touch you while you dash, and each dash spends stamina |
 | `K` | Warp strike (10 MP) |
 | `I` | Cast the selected spell (18 MP) |
 | `O` | Switch element: fire, ice, bolt |
@@ -81,7 +84,7 @@ Push it to walk, push it all the way to run, push up to jump and down for the do
 The buttons on the right sit in an arc around a large Attack button: Jump, Dash, Warp, Spell, Element and Special.
 Several fingers work at once, and a thumb can slide from one button to the next.
 Hold Special to charge it: its ring fills one quarter per level, and you strike when you let go.
-Buttons dim while their action lacks MP or waits on a cooldown, and phones that support it give a short vibration on each press.
+Buttons dim while their action lacks MP or stamina or waits on a cooldown, and phones that support it give a short vibration on each press.
 The page holds still under your fingers: double taps, pinches and long presses never zoom, select text or open a menu.
 
 The game opens on a start menu with Start, Controls and Options.

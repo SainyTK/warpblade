@@ -2,14 +2,14 @@ import type { CharacterDef } from "../types/character";
 import type { Perk, SkillNode, UltimateId } from "../types/skill";
 import type { StatKey, Stats } from "../types/stats";
 
-export const STAT_KEYS: readonly StatKey[] = ["ad", "ap", "hp", "mp", "crit", "move", "aspd"];
+export const STAT_KEYS: readonly StatKey[] = ["ad", "ap", "hp", "mp", "stamina", "crit", "move", "aspd"];
 
 export const allNodes = (c: CharacterDef): SkillNode[] => c.branches.flatMap((b) => b.nodes);
 
 /** base plus growth plus flat node bonuses, then each total multiplied by the node percentages */
 export function computeStats(c: CharacterDef, level: number, ranks: Readonly<Record<string, number>>): Stats {
   const flat = { ...c.base };
-  const pct: Stats = { ad: 1, ap: 1, hp: 1, mp: 1, crit: 1, move: 1, aspd: 1 };
+  const pct: Stats = { ad: 1, ap: 1, hp: 1, mp: 1, stamina: 1, crit: 1, move: 1, aspd: 1 };
   for (const k of STAT_KEYS) flat[k] += (c.growth[k] ?? 0) * (level - 1);
   for (const node of allNodes(c)) {
     const r = ranks[node.id] ?? 0;
