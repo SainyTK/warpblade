@@ -8,6 +8,7 @@ import type { Boon, Perk, PickOption } from "../types/skill";
 import { airLimit, comboLimit, xpToNext } from "../utils/progression";
 import { collectPerks, computeStats, learnedUltimate } from "../utils/stats";
 import { createFloorRing } from "./effects/floorRing";
+import { keepElementLearned } from "./hero/spell";
 import { character, freshProgress, game, hero, lights, particles, progress, rng, showBanner } from "./state";
 
 export const hasPerk = (p: Perk): boolean => progress.perks.has(p);
@@ -19,6 +20,7 @@ export function refreshProgress(): void {
   progress.ultimate = learnedUltimate(character, progress.ranks);
   progress.comboLimit = comboLimit(progress.level, progress.perks.has("flowingChain"));
   progress.airLimit = airLimit(progress.ranks);
+  keepElementLearned();
   hero.hp = Math.min(hero.hp, progress.stats.hp);
   hero.mp = Math.min(hero.mp, progress.stats.mp);
   hero.stamina = Math.min(hero.stamina, progress.stats.stamina);

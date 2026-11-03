@@ -1,11 +1,12 @@
 import { ELEMENTS, STAMINA } from "../../constants/combat";
 import { ELEMENT_COLOR } from "../../constants/palette";
 import { ULT_LEVELS } from "../../constants/ultimate";
-import { castCost, selectedElement, spellRecharge } from "../../game/hero/spell";
+import { castCost, knowsElement, selectedElement, spellRecharge } from "../../game/hero/spell";
 import { canPayDash } from "../../game/hero/stamina";
-import { canAffordUlt } from "../../game/hero/ultimate";
+import { canAffordUlt, ultRecharge } from "../../game/hero/ultimate";
 import { warpCooldown, warpCost } from "../../game/hero/warp";
-import { game, hero } from "../../game/state";
+import { hasPerk } from "../../game/progress";
+import { game, hero, progress } from "../../game/state";
 import type { ButtonLook, TouchButtonSpec } from "../../types/touch";
 import { hex } from "../../utils/color";
 
@@ -29,15 +30,16 @@ export function buttonLook(spec: TouchButtonSpec, pressed: boolean): ButtonLook 
       look.cooldown = look.ready ? 0 : 1 - hero.stamina / STAMINA.dashCost;
       break;
     case "warp":
-      look.ready = hero.mp >= warpCost();
+      look.ready = hasPerk("warpStrike") && hero.mp >= warpCost();
       look.cooldown = hero.warpCd / warpCooldown();
       break;
     case "cast":
-      look.ready = hero.mp >= castCost();
+      look.ready = knowsElement(selectedElement()) && hero.mp >= castCost();
       look.cooldown = spellRecharge(selectedElement());
       break;
     case "ultimate":
-      look.affordable = ULT_LEVELS.filter((_, i) => canAffordUlt(i + 1)).length;
+      look.cooldown = ultRecharge();
+      look.affordable = progress.ultimate && !hero.ultCd ? ULT_LEVELS.filter((_, i) => canAffordUlt(i + 1)).length : 0;
       look.ready = look.affordable > 0;
       look.charge = chargeProgress();
       break;

@@ -70,6 +70,7 @@ export function updateHero(dt: number): void {
   h.inv = Math.max(0, h.inv - dt);
   h.drop = Math.max(0, h.drop - dt);
   h.warpCd = Math.max(0, h.warpCd - dt);
+  h.ultCd = Math.max(0, h.ultCd - dt);
   rechargeSpells(dt);
   tickDenied(dt);
   h.riposte = Math.max(0, h.riposte - dt);

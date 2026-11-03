@@ -15,7 +15,8 @@ export interface Progress {
   /** derived from level and ranks */
   stats: Stats;
   perks: ReadonlySet<Perk>;
-  ultimate: UltimateId;
+  /** none until a pick teaches one */
+  ultimate: UltimateId | null;
   comboLimit: number;
   /** air attacks before Kael lands */
   airLimit: number;

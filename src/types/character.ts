@@ -4,7 +4,7 @@ import type { Stats } from "./stats";
 export interface CharacterDef {
   id: string;
   name: string;
-  /** the ultimate Kael has from the start, until a pick gives another */
+  /** the weakest ultimate, learned like any other, and replaced by a stronger one */
   special: UltimateId;
   base: Stats;
   /** added per level after the first */

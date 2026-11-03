@@ -8,6 +8,12 @@ const RED = hex("#e0405a");
 
 /** Phantom path icons: movement, crits and phantoms */
 export const PHANTOM_ICONS: Record<string, (s: SpriteCanvas) => void> = {
+  /** a sword thrown ahead, with Kael's ghost following it */
+  p_warp: (s) => {
+    figure(s, 4, 15, GHOST[3], GHOST[2]);
+    speedLines(s, 5, [4, 8], 4, PAL.crystal[3]);
+    sword(s, 6, 6, 15, 6);
+  },
   p_djump: (s) => {
     chevron(s, 8, 2, 0, -1, 4, PAL.crystal[5]);
     chevron(s, 8, 7, 0, -1, 4, PAL.crystal[3]);

@@ -3,11 +3,12 @@ import { ENEMIES } from "../constants/enemies";
 import { ULT_LABEL } from "../constants/skillLabels";
 import { ULT_LEVELS } from "../constants/ultimate";
 import { STAGE_WAVES } from "../constants/waves";
-import { canAffordUlt } from "../game/hero/ultimate";
+import { canAffordUlt, ultRecharge } from "../game/hero/ultimate";
 import { game, hero, progress } from "../game/state";
 import { xpToNext } from "../utils/progression";
 import { updateCoinCount } from "./coinCount";
 import { byId } from "./dom";
+import { createRechargeTab } from "./rechargeTab";
 import { updateSpellTabs } from "./spellTabs";
 import { updateWarpTab } from "./warpTab";
 
@@ -21,6 +22,9 @@ const level = byId("level");
 const chain = byId("chain");
 const wave = byId("wave");
 const score = byId("score");
+const ultRow = byId("ultName").parentElement as HTMLElement;
+const ultTab = createRechargeTab(ultRow);
+let ultDenied = 0;
 const ultName = byId("ultName");
 const ultPips = byId("ultPips");
 const boss = byId("boss");
@@ -37,8 +41,11 @@ export function updateHud(): void {
   updateSpellTabs();
   updateWarpTab();
   updateCoinCount();
+  ultTab.update(ultRecharge());
+  if (hero.denied.ult > ultDenied) ultTab.jolt();
+  ultDenied = hero.denied.ult;
   const leader = game.enemies.find((e) => e.rank !== "minion");
-  const affordable = ULT_LEVELS.filter((_, i) => canAffordUlt(i + 1)).length;
+  const affordable = hero.ultCd > 0 ? 0 : ULT_LEVELS.filter((_, i) => canAffordUlt(i + 1)).length;
   const key = [
     Math.round(hero.hp),
     Math.round(hero.mp),
@@ -75,7 +82,8 @@ export function updateHud(): void {
   chain.innerHTML = pips(progress.comboLimit, (i) => i < hero.chain);
   wave.textContent = `STAGE ${game.stage}  WAVE ${game.wave}/${STAGE_WAVES}`;
   score.textContent = `${game.kills} DOWN${game.best ? `  BEST WAVE ${game.best}` : ""}`;
-  ultName.textContent = ULT_LABEL[progress.ultimate];
+  ultRow.hidden = !progress.ultimate;
+  ultName.textContent = progress.ultimate ? ULT_LABEL[progress.ultimate] : "";
   ultPips.innerHTML = pips(ULT_LEVELS.length, (i) => i < affordable);
   boss.hidden = !leader;
   if (leader) {

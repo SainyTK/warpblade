@@ -11,13 +11,16 @@ A run is 30 waves, and Kael gets a pick of three cards from two sources.
 
 The numbers below come from adding up the experience of every foe in the wave plan (`src/utils/waves.ts`) against the curve in `src/constants/progression.ts`, assuming every foe dies.
 
-- Kael reaches about level 5 at wave 5, level 16 at wave 19 and level 26 at wave 30.
-- Level ups give about 25 picks in a full run, and wave clears give 29 more, so about 54 in all.
-- The skill tree holds 49 ranks that one run can learn, counting one skill from each group that locks out its rivals.
+- Experience drops as orbs that Kael picks up; the numbers assume he collects all of it, which he does because left orbs fly to him.
+- The curve is twice the first one (base 48, step 26). Kael reaches about level 4 at wave 5, 9 at wave 15, 13 at wave 20 and 18 at wave 30.
+  The first curve reached 5, 13, 18 and 26.
+- Level ups give about 17 picks in a full run, and wave clears give 29 more, so about 46 in all.
+- The skill tree holds 54 ranks that one run can learn, counting one skill from each group that locks out its rivals.
+  Five of them are the abilities Kael no longer starts with: Warp Strike, Fire Flask, Ice Spikes, Lightning and Crystal Nova.
+- Every level gate is still reached: ultimates (levels 11 to 13) between waves 17 and 20, and the six-hit combo (level 17) near wave 28.
 
 With level ups alone a full run learned about half the tree.
-With wave picks it learns all of it near the end.
-In a simulated run that takes a random card each time, cards start running short of skills around wave 26.
+With wave picks it learned all of it near the end; with the slower curve and the five new skills it falls a few ranks short, so boons fill fewer cards.
 
 ## Boons
 
@@ -32,6 +35,8 @@ Vigor and Honing stack and are added after the skills' percentage bonuses, so th
 Each is worth about half a rank of a passive skill: Keen Edge gives 2 attack per rank and Vigor is two levels of HP growth.
 
 ## Difficulty check
+
+The bot runs below predate the balance pass that made levels slower, halved heal and MP drops and made the warp, spells and ultimate learnable; they have not been rerun since.
 
 A bot that only mashes J and takes the first card was run in a headless browser with six bots for seven to eight minutes each.
 

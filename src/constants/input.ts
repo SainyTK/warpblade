@@ -32,7 +32,7 @@ export const ACTION_TEXT: Record<InputAction, string> = {
   warp: "Warp strike (10 MP)",
   cast: "Cast the selected spell (18 MP)",
   cycle: "Switch element: fire, ice, bolt",
-  ultimate: "Hold to charge the special, release to strike",
+  ultimate: "Hold to charge the ultimate, release to strike",
   mute: "Sound on or off",
   pause: "Pause and open the menu",
   fullscreen: "Fullscreen on or off",

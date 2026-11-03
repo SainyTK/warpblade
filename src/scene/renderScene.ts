@@ -6,6 +6,7 @@ import { drawEnemies, drawHeroLayer, drawPickups } from "./drawActors";
 import { drawAmbientLight, drawAnchors, drawMist } from "./drawAmbience";
 import { drawCoins } from "./drawCoins";
 import { drawNumbers } from "./drawNumbers";
+import { drawXpOrbs } from "./drawXpOrbs";
 
 const SHAKE_FULL = 0.25;
 const FLASH_STRENGTH = 70;
@@ -27,6 +28,7 @@ export function renderScene(background: Uint32Array, out: Uint8ClampedArray): vo
   particles.draw("front");
   drawPickups();
   drawCoins();
+  drawXpOrbs();
   drawMist();
   lights.draw();
   drawNumbers();
