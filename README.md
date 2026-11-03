@@ -49,7 +49,7 @@ His crystal sword can be thrown, and wherever it lands, he follows.
   It comes back after a short pause, slower while he attacks, and a perfect dodge gives some back.
   Deep Breath adds a third and then a fourth dash, and Quickstep refills the bar faster.
 - **Skill points spent between waves.** Every level up gives a skill point, and when a wave is cleared the fight pauses and three cards offer skills Kael can learn now, each with its own pixel icon. Blade is strong early, Phantom trades power for mobility and crits, Arcane is weak early and strong late. Fusion skills join two paths once both are started: shatter frozen foes, set off burning ones, charge foes by dashing through them, and more. Some skills lock out their rivals for the run, and passives come back until every rank is learned.
-  Late in a run, when too few skills are left, boons fill the empty cards: Second Wind, Vigor and Honing.
+  If too few skills are left to fill the cards, Second Wind fills the rest and restores all HP and MP.
 - **Charged ultimates.** Crystal Nova, the weakest, can be learned from level 3; stronger ones replace it: a storm of blades, a legion of phantoms, falling stars or a lightning tempest.
   Hold U through four levels; level 4 spends a full MP bar. After a strike the ultimate recharges for 20 seconds, the longest wait of any ability, and its row on the HUD dims with a bar filling under it.
 - **Experience to pick up.** Slain foes drop lime orbs of experience that bounce on the floor. Walk over them to collect them; any left behind fly to Kael after 4 seconds.
@@ -179,7 +179,7 @@ src/
 docs/
   combo-design.md  what the combo takes from Grand Chase and what it leaves out
   meta-progress.md coins, the shop items and the basis for their prices
-  pick-pacing.md   when picks come, how long the skill pool lasts and the boons after it
+  pick-pacing.md   when picks come, how long the skill pool lasts and Second Wind after it
   media/           README banner, gameplay GIF and screenshots
 ```
 
