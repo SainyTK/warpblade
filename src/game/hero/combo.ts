@@ -14,6 +14,7 @@ import { game, hero, progress } from "../state";
 import { boxAhead, boxBehind } from "../world";
 import { isFree, leaveHang, setState, settle } from "./actions";
 import { dropMoveGhost } from "./afterimages";
+import { lift } from "./lift";
 import { MOVES } from "./moves";
 import { advance, strideAt } from "./moves/advance";
 import { foeOnlyBehind, readSituation } from "./situation";
@@ -58,6 +59,7 @@ export function startMove(id: MoveId): void {
   });
   Object.assign(h, { keen: h.keenNext, keenNext: false, keenSpoiled: false, keenOpen: 0 });
   setState("move");
+  if (m.lift) lift(m.lift, false);
   m.enter?.();
   if (m.hits.length) {
     wispsEvade();

@@ -8,7 +8,7 @@ import { isFree, leaveHang, setState } from "./actions";
 import { MOVES } from "./moves";
 import { strideAt } from "./moves/advance";
 
-/** casting, warping, charging and most air attacks hang in the air for a moment */
+/** casting, warping, charging and most air attacks hang in the air for a moment once Kael stops rising */
 function floats(): boolean {
   const st = hero.state;
   if (st === "move") return !!hero.move && !MOVES[hero.move].falls;
@@ -20,7 +20,7 @@ function floats(): boolean {
 function land(): void {
   const h = hero;
   if (!h.ground && h.vy > 220) dust(h.x, h.y, 5);
-  Object.assign(h, { vy: 0, ground: true, jumps: 0, airHits: 0, airDashed: false, whirled: false });
+  Object.assign(h, { vy: 0, ground: true, jumps: 0, airHits: 0, airDashed: false, whirled: false, cutShort: true });
 }
 
 /** walk, or run after a double tap; gravity; floors and ledges */
@@ -43,7 +43,8 @@ export function moveHero(dt: number, dir: number): void {
     h.vx = approach(h.vx, dir * speed, (h.ground ? M.groundAccel : M.airAccel) * dt);
     if (dir) h.face = dir;
   } else if (st !== "dash" && !moveDriven) h.vx = approach(h.vx, 0, (h.ground ? 800 : 300) * dt);
-  const hang = floats() && !h.ground;
+  // a rise keeps full gravity, so nothing done mid-jump carries Kael above the jump's own height
+  const hang = floats() && !h.ground && h.vy >= 0;
   const g = st === "dash" ? 0 : hang ? 0.3 : 1;
   h.vy = Math.min(M.maxFall, h.vy + M.gravity * g * dt);
   if (hang && h.vy > 60) h.vy = 60;

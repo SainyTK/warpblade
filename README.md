@@ -35,7 +35,8 @@ His crystal sword can be thrown, and wherever it lands, he follows.
   Each one moves Kael's whole body and carries him after the foe: he rises onto one leg, lunges with his body almost flat, tucks his knees in a hop, spins with his back to you through the foe, and unwinds from a turned wind-up into a stance so low his hips nearly touch the floor.
   Pick up launchers, sweeps, dash and running attacks, and finishers that cut through a foe to its back or bounce it into the sky.
 - **Combos that read the room.** The next hit follows the fight: Kael turns to cut a foe behind him, spins when foes stand on both sides, stabs a foe lying down, leaps after one in the air, and bounces foes off the edge of the stage.
-  In the air the string is a cross cut, a somersault, a drill of stabs and a hammer fall.
+  A jump attack is a short air string: a cross cut, a somersault and a hammer fall that spikes the foe, with a drill of stabs added after a double jump.
+  Once the hammer falls, Kael has no air attack left until he lands.
 - **Keen timing.** Press J just after a blow lands and the next one is a sure critical hit with a gold slash.
   Pressing before the blow lands spoils it, so rhythm beats mashing.
 - **Positioning pays.** Hits from behind deal 1.5 times the damage and foes in the air take double, with the numbers popping out of every hit.
@@ -64,7 +65,7 @@ His crystal sword can be thrown, and wherever it lands, he follows.
 | Key | Action |
 | --- | --- |
 | `A` `D` or arrows | Walk. Tap a side twice and hold to run |
-| `W` or `Up` | Jump. Hold `S` and jump to drop through a ledge |
+| `W` or `Up` | Jump, higher the longer you hold it. Hold `S` and jump to drop through a ledge |
 | `J` | Sword combo. Each press is a different hit, picked from where the foes are. Combine with `W`, `S`, a jump, a dash or a run for the variants you have learned |
 | `L` | Dash. Nothing can touch you while you dash |
 | `K` | Warp strike (10 MP) |

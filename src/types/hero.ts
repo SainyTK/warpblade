@@ -86,6 +86,8 @@ export interface Hero {
   hasSword: boolean;
   hitDone: boolean;
   cutShort: boolean;
+  /** the highest point Kael may rise to before he lands again, set by his last jump or a lift from the floor */
+  liftTop: number;
   pose: Pose;
   /** where the near hand ended up in the last drawn frame, local pixels */
   hand: [number, number];

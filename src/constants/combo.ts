@@ -17,6 +17,9 @@ export const REACH = {
 /** stepping moves stop this close to the foe in front, and go this much further while forward is held */
 export const ADVANCE = { contact: 6, lean: 1.5 } as const;
 
+/** air attacks Kael may make before he lands; a double jump adds one */
+export const AIR_STRING = { hits: 3, doubleJumpBonus: 1 } as const;
+
 /** Keen timing: J pressed this soon after a blow lands makes the next move a sure crit */
 export const KEEN = { window: 0.1 } as const;
 /** gold slash for a Keen blow */

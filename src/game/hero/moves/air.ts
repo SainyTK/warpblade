@@ -2,6 +2,7 @@ import { ENEMY_AIR } from "../../../constants/combat";
 import { FEEL, STAB_RAMP } from "../../../constants/combo";
 import { PAL } from "../../../constants/palette";
 import type { MoveDef } from "../../../types/move";
+import { airHitLimit } from "../../../utils/comboChoice";
 import { createFloorRing } from "../../effects/floorRing";
 import { createSlash } from "../../effects/slash";
 import { meleeHit } from "../../meleeHit";
@@ -76,9 +77,7 @@ export const AIR_MOVES = {
         feel: { ...FEEL.light, pitch: 1.3 },
       },
     ],
-    enter: () => {
-      hero.vy = -140;
-    },
+    lift: 18,
   },
   airDrill: {
     id: "airDrill",
@@ -122,6 +121,10 @@ export const AIR_MOVES = {
       },
     ],
     afterHit: gravityPull,
+    // the hammer ends the air string: no air attack is left until Kael lands
+    enter: () => {
+      hero.airHits = airHitLimit(true);
+    },
     // a small rise under the raised blade, then a dive after the foe it spikes
     step: (t) => {
       if (hero.ground) return;
@@ -168,9 +171,9 @@ export const AIR_MOVES = {
         feel: FEEL.light,
       },
     ],
+    lift: 14,
     enter: () => {
       hero.whirled = true;
-      hero.vy = -90;
     },
   },
   meteor: {
@@ -182,8 +185,8 @@ export const AIR_MOVES = {
     untilLanding: true,
     falls: true,
     pitch: 0.6,
+    lift: 6,
     enter: () => {
-      hero.vy = -60;
       hero.vx = hero.face * 30;
     },
     step: (t) => {

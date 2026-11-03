@@ -17,3 +17,5 @@ export const ease = {
     return 1 + (c + 1) * (t - 1) ** 3 + c * (t - 1) ** 2;
   },
 };
+/** the upward speed that rises this many pixels before gravity stops it */
+export const riseSpeed = (rise: number, gravity: number): number => Math.sqrt(2 * gravity * rise);
