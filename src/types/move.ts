@@ -94,6 +94,8 @@ export interface MoveDef {
   /** fading copies of Kael trail behind him until this time into the move */
   ghosts?: number;
   strides?: readonly Stride[];
+  /** lifts Kael this many pixels as it starts, never on top of a rise he already has */
+  lift?: number;
   enter?: () => void;
   /** drives Kael's motion itself for the whole move */
   step?: (time: number) => void;

@@ -79,10 +79,7 @@ export const FINISHER_MOVES = {
         feel: FEEL.heavy,
       },
     ],
-    enter: () => {
-      hero.ground = false;
-      hero.vy = -230;
-    },
+    lift: 29,
     step: (t) => {
       if (t > 0.05) hero.vx = -hero.face * 170;
     },
@@ -107,10 +104,7 @@ export const FINISHER_MOVES = {
         feel: FEEL.crush,
       },
     ],
-    enter: () => {
-      hero.ground = false;
-      hero.vy = -200;
-    },
+    lift: 22,
     afterHit: () => {
       game.fx.push(createSlash(hero.x, hero.y, hero.face, { ...UPPERCUT, R: 20, W: 5, t0: 0.02 }));
     },

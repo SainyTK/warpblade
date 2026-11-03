@@ -85,10 +85,7 @@ export const SITUATIONAL_MOVES = {
         feel: FEEL.light,
       },
     ],
-    enter: () => {
-      hero.ground = false;
-      hero.vy = -320;
-    },
+    lift: 57,
     strides: [{ from: 0, to: 0.12, speed: 170 }],
   },
 } satisfies Record<string, MoveDef>;
