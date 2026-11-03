@@ -32,6 +32,7 @@ His crystal sword can be thrown, and wherever it lands, he follows.
 - **Warp strike.** Throw the sword at a foe and appear beside it mid-swing. The farther you travel, the harder you hit.
 - **Combos that grow.** Two hits at level 1, six by level 17.
   Every hit is its own move: a step-in cut, a rising backhand, a lunging double stab, a hop into a cleave, a turn that cuts both sides and a falling smash that knocks the foe down.
+  Each one moves Kael's whole body and carries him after the foe: he rises onto one leg, lunges with his body almost flat, tucks his knees in a hop, spins with his back to you through the foe, and unwinds from a turned wind-up into a stance so low his hips nearly touch the floor.
   Pick up launchers, sweeps, dash and running attacks, and finishers that cut through a foe to its back or bounce it into the sky.
 - **Combos that read the room.** The next hit follows the fight: Kael turns to cut a foe behind him, spins when foes stand on both sides, stabs a foe lying down, leaps after one in the air, and bounces foes off the edge of the stage.
   In the air the string is a cross cut, a somersault, a drill of stabs and a hammer fall.
@@ -123,9 +124,11 @@ The rules I took from the references, and where they show up:
 - Put light everywhere. Hits, spells and pickups add lights that flare and fall away with life squared (`src/engine/lights.ts`).
 - Use real motion. Sparks stretch with speed and bounce, smoke swells and thins, fire cools down its ramp into smoke, shards tumble and settle (`src/engine/particles.ts`).
 - Choreograph in phases: gather, release with a white flash, spread, linger, fade. The lightning bolt marks its target before it strikes, and the ice spikes erupt one after another, stand, then shatter.
-- Give every blow an act. Each attack winds up the opposite way, snaps to a new silhouette on the hit frame, freezes the game for a few hundredths of a second on contact, shakes the screen and follows through (`src/constants/hero.ts`).
+- Give every blow an act. Each attack winds up the opposite way, snaps to a new silhouette on the hit frame, freezes the game for a few hundredths of a second on contact, shakes the screen and follows through (`src/constants/clips/`).
 
 Kael is drawn from a small skeleton every frame (`src/game/hero/drawHero.ts`).
+His torso, coat and head follow the line from hip to neck, so a pose can lean him flat into a lunge or arch him back under a raised blade.
+A pose can also turn his back to the camera or mirror him to face behind, which is how the spins read as spins.
 Arms and legs are placed by two-bone reach, each body part is outlined where it overlaps the one behind it, and the whole figure gets a dark outline.
 His scarf and ponytail are verlet ropes, so they trail behind him as he runs and warps (`src/game/hero/chain.ts`).
 

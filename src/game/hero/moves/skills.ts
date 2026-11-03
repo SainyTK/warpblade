@@ -24,7 +24,7 @@ export const SKILL_MOVES = {
         feel: FEEL.firm,
       },
     ],
-    strides: [{ from: 0.04, to: 0.12, speed: 80 }],
+    strides: [{ from: 0.03, to: 0.14, speed: 300 }],
     afterHit: () => dust(hero.x + hero.face * 16, hero.y, 5, hero.face),
   },
   launcher: {
@@ -46,6 +46,7 @@ export const SKILL_MOVES = {
       },
     ],
     cancel: 0.05,
+    strides: [{ from: 0, to: 0.07, speed: 140 }],
   },
   thrust: {
     id: "thrust",

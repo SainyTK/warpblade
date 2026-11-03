@@ -1,5 +1,5 @@
+import { CLIPS } from "../constants/clips";
 import { ELEMENTS } from "../constants/combat";
-import { CLIPS } from "../constants/hero";
 import { ELEMENT_COLOR, ENEMY_COLORS, PAL } from "../constants/palette";
 import { ULT_LEVELS } from "../constants/ultimate";
 import { ellipseRing, glow, glowLine, line, place, px } from "../engine/frame";
@@ -15,6 +15,7 @@ import { game, hero } from "../game/state";
 import type { Enemy } from "../types/enemy";
 import { hex, WHITE } from "../utils/color";
 import { clamp, TAU } from "../utils/math";
+import { bladeAngle } from "../utils/poseFrame";
 
 const heroCanvas = new SpriteCanvas(80, 76, 40, 62);
 const HP_BAR_EMPTY = hex("#120a1e");
@@ -125,8 +126,9 @@ export function drawHeroLayer(): void {
   place(h.x, h.y, h.face < 0);
   if (h.hasSword) {
     const [hx, hy] = h.hand;
-    const ca = Math.cos(h.pose.sa);
-    const sn = Math.sin(h.pose.sa);
+    const angle = bladeAngle(h.pose);
+    const ca = Math.cos(angle);
+    const sn = Math.sin(angle);
     const k = h.state === "move" || h.state === "warpStrike" || h.state === "charge" ? 0.3 : 0.12;
     glowLine(hx + ca * 3, hy + sn * 3, hx + ca * 16, hy + sn * 16, 6, PAL.crystal[3], k);
   }

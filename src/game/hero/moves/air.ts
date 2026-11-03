@@ -13,6 +13,9 @@ import { STAB } from "./slashes";
 const WHIRL = { cx: 0, cy: -18, R: 25, sy: 0.85, rot: 0, a0: -1.6, a1: 1.5, W: 7 };
 const DRILL = { ...STAB, R: 20, W: 4, ramp: STAB_RAMP };
 const METEOR_REACH = 46;
+/** the hammer fall dives from this time into the move, at this speed */
+const HAMMER_DIVE = 0.16;
+const HAMMER_DIVE_SPEED = 300;
 
 /** the plunge lands: a ring of crystal, dust, and everything near the floor bounced up */
 function meteorLanding(): void {
@@ -54,6 +57,7 @@ export const AIR_MOVES = {
         feel: FEEL.light,
       },
     ],
+    strides: [{ from: 0.02, to: 0.1, speed: 150 }],
   },
   airSomersault: {
     id: "airSomersault",
@@ -73,7 +77,7 @@ export const AIR_MOVES = {
       },
     ],
     enter: () => {
-      hero.vy = -80;
+      hero.vy = -140;
     },
   },
   airDrill: {
@@ -95,6 +99,7 @@ export const AIR_MOVES = {
         feel: { ...FEEL.light, pitch: 1.5 },
       },
     ],
+    strides: [{ from: 0, to: 0.2, speed: 130 }],
   },
   airSpike: {
     id: "airSpike",
@@ -102,6 +107,7 @@ export const AIR_MOVES = {
     name: "Hammer fall",
     clip: "airHammer",
     pitch: 0.75,
+    falls: true,
     hits: [
       {
         at: 0.16,
@@ -116,6 +122,11 @@ export const AIR_MOVES = {
       },
     ],
     afterHit: gravityPull,
+    // a small rise under the raised blade, then a dive after the foe it spikes
+    step: (t) => {
+      if (hero.ground) return;
+      hero.vy = t < HAMMER_DIVE ? Math.min(hero.vy, -20) : HAMMER_DIVE_SPEED;
+    },
   },
   whirl: {
     id: "whirl",

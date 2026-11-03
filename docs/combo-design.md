@@ -18,13 +18,18 @@ Sources: the Grand Chase Fandom wiki pages for the Knight, Assassin, Thief, Spel
 ## What Warpblade takes from it
 
 - Every hit of the six-hit ground string has its own pose, footwork, slash shape and reaction, so the string reads as a routine: step cut, rising backhand, twin thrust, hop cleave, crescent turn and a falling smash that knocks down.
+- The reference changes the whole body on every hit, so each of Kael's hits has its own silhouette at a glance: hip height from a deep crouch to airborne, the torso leaning far ahead or back, wide leg spreads, the back turned in spins, and the arms overhead.
+- Each blow is keyed as an anticipation the opposite way, a snap to the strike pose on the hit frame, a hold of about a tenth of a second, then the follow-through.
+- Lunges and slides carry Kael 15 to 40 pixels per hit and the blows push the foe back about as far, so he travels with the foe across the stage.
 - The last hit a combo allows is always the knockdown smash, at every combo length, so short combos at level 1 still end with a payoff.
 - The situation picks the next blow, and the rule a player expects is the one the game uses.
 - A foe only behind Kael gets a turning cut that pivots to face it.
 - Foes on both sides get a ring cut that hits both.
 - A foe lying down in front gets a downward stab, once per combo, which keeps it down without stretching the stun.
 - A foe in the air in front of Kael gets a rising chase cut that takes him up after it, and the string goes on as an air string.
-- Holding toward the foe pushes each step further; without it, every step stops at arm's length, so Kael does not walk through the foe or drift off it.
+- Holding toward the foe pushes each step further; without it, every step stops at arm's length, so Kael does not drift off the foe.
+- The crescent turn is the exception: its spin carries him on through the foe, and the second cut lands on its back.
+- A husk reeling from a sword blow does not hurt by touch, so these lunges can close right in.
 - A heavy blow that drives a foe into the edge of the stage bounces it back off the wall and into the air.
 - The skill variants stay on their inputs: Up for the launcher, Down for the sweep, running for the thrust, right after a dash for the dash strike, and Down in the air for the meteor drop.
 - The Critical and Double timing idea becomes Keen timing: a J pressed in the short moment after a blow lands makes the next blow a sure critical hit.

@@ -65,8 +65,8 @@ export const CHAIN_MOVES = {
     name: "Step cut",
     clip: "atk1",
     pitch: 1,
-    hits: [{ at: 0.09, box: [-2, -38, 30, -2], power: 1.1, kx: 70, ky: -20, slash: CROSS, feel: FEEL.light }],
-    strides: [{ from: 0, to: 0.1, speed: 95 }],
+    hits: [{ at: 0.09, box: [-2, -38, 30, -2], power: 1.1, kx: 170, ky: -20, slash: CROSS, feel: FEEL.light }],
+    strides: [{ from: 0.03, to: 0.14, speed: 270 }],
   },
   risingBackhand: {
     id: "risingBackhand",
@@ -79,13 +79,13 @@ export const CHAIN_MOVES = {
         at: 0.09,
         box: [-4, -46, 26, -2],
         power: 1.1,
-        kx: 40,
+        kx: 90,
         ky: -70,
         slash: RISING,
         feel: { ...FEEL.light, pitch: 1.25 },
       },
     ],
-    strides: [{ from: 0, to: 0.06, speed: 40 }],
+    strides: [{ from: 0.03, to: 0.12, speed: 150 }],
   },
   twinFang: {
     id: "twinFang",
@@ -95,20 +95,20 @@ export const CHAIN_MOVES = {
     pitch: 1.4,
     ghosts: 0.12,
     hits: [
-      { at: 0.07, box: [0, -26, 36, -12], power: 0.7, kx: 30, ky: 0, slash: STAB, feel: FEEL.tap },
+      { at: 0.07, box: [0, -26, 36, -12], power: 0.7, kx: 110, ky: 0, slash: STAB, feel: FEEL.tap },
       {
         at: 0.15,
         box: [0, -24, 38, -8],
         power: 0.8,
-        kx: 130,
+        kx: 220,
         ky: -20,
         slash: { ...STAB, cy: -14, R: 24 },
         feel: { ...FEEL.light, pitch: 1.4 },
       },
     ],
     strides: [
-      { from: 0, to: 0.07, speed: 150 },
-      { from: 0.1, to: 0.15, speed: 60 },
+      { from: 0, to: 0.08, speed: 380 },
+      { from: 0.1, to: 0.18, speed: 260 },
     ],
   },
   hopCleave: {
@@ -132,9 +132,9 @@ export const CHAIN_MOVES = {
     ],
     enter: () => {
       hero.ground = false;
-      hero.vy = -170;
+      hero.vy = -200;
     },
-    strides: [{ from: 0, to: 0.2, speed: 55 }],
+    strides: [{ from: 0, to: 0.24, speed: 110 }],
     afterHit: cleaveImpact,
   },
   crescentTurn: {
@@ -144,7 +144,7 @@ export const CHAIN_MOVES = {
     clip: "crescent",
     pitch: 1.05,
     hits: [
-      { at: 0.07, box: [-4, -38, 30, -2], power: 0.9, kx: 80, ky: -30, slash: FLAT_FRONT, feel: FEEL.light },
+      { at: 0.07, box: [-4, -38, 30, -2], power: 0.9, kx: 40, ky: -30, slash: FLAT_FRONT, feel: FEEL.light },
       {
         at: 0.17,
         box: [-4, -38, 30, -2],
@@ -156,7 +156,8 @@ export const CHAIN_MOVES = {
         feel: { ...FEEL.light, pitch: 0.95 },
       },
     ],
-    strides: [{ from: 0.08, to: 0.18, speed: 70 }],
+    // the turn carries Kael on through the foe, so the second cut lands on its back
+    strides: [{ from: 0.08, to: 0.16, speed: 360, through: true }],
   },
   smash: {
     id: "smash",
@@ -190,7 +191,7 @@ export const CHAIN_MOVES = {
         feel: FEEL.crush,
       },
     ],
-    strides: [{ from: 0.1, to: 0.17, speed: 150 }],
+    strides: [{ from: 0.08, to: 0.18, speed: 330 }],
     afterHit: smashImpact,
   },
 } satisfies Record<string, MoveDef>;

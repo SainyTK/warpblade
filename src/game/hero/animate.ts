@@ -1,6 +1,7 @@
 import { HERO_MOVE as M } from "../../constants/combat";
 import { WORLD_COLORS } from "../../constants/palette";
 import { PK } from "../../types/particle";
+import { alongSpine, drawnPoint, headCenter } from "../../utils/poseFrame";
 import { game, hero, particles, ponytail, scarf } from "../state";
 import { isFree, setState } from "./actions";
 import { heroPose } from "./pose";
@@ -31,6 +32,9 @@ export function animateHero(dt: number): void {
   // the scarf hangs off the neck and the ponytail off the back of the head, blown back by a breeze and by speed
   const p = h.pose;
   const wind = -h.face * (22 + Math.sin(game.t * 3.1) * 18) - h.vx * 1.4;
-  scarf.step(h.x + h.face * (p.nx - 2), h.y + p.ny + 0.5, dt, wind);
-  ponytail.step(h.x + h.face * (p.nx - 4.5), h.y + p.ny - 6, dt, wind * 0.6);
+  const [kx, ky] = drawnPoint(p, ...alongSpine(p, [p.nx, p.ny], -2, 0.5));
+  const [hx, hy] = headCenter(p);
+  const [tx, ty] = drawnPoint(p, hx - 4.5, hy - 1);
+  scarf.step(h.x + h.face * kx, h.y + ky, dt, wind);
+  ponytail.step(h.x + h.face * tx, h.y + ty, dt, wind * 0.6);
 }

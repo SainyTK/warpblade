@@ -66,6 +66,8 @@ export interface Stride {
   from: number;
   to: number;
   speed: number;
+  /** runs on through the foe in front to its back; other strides stop at arm's length */
+  through?: boolean;
 }
 
 export interface MoveDef {

@@ -1,12 +1,13 @@
-import { CLIPS, POSES, STAND } from "../../constants/hero";
+import { CLIPS } from "../../constants/clips";
+import { ANIM_FPS, POSES, STAND } from "../../constants/hero";
 import type { Hero } from "../../types/hero";
 import { POSE_KEYS, type Pose, type PoseKeyframe } from "../../types/pose";
 import { ease, lerp, TAU } from "../../utils/math";
 import { MOVES } from "./moves";
 
-/** sample keyframes at 30 fps steps, so limbs move in pixel-art beats */
+/** sample keyframes in whole animation frames, so limbs move in pixel-art beats */
 export function sampleKeys(keys: readonly PoseKeyframe[], time: number): Pose {
-  const t = Math.floor(time * 30) / 30;
+  const t = Math.floor(time * ANIM_FPS) / ANIM_FPS;
   if (t <= keys[0][0]) return keys[0][1];
   for (let i = 0; i < keys.length - 1; i++) {
     const [t0, p0] = keys[i];

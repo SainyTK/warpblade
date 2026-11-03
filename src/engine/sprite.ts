@@ -105,6 +105,17 @@ export class SpriteCanvas implements SpriteImage {
           d[i] = c;
       }
   }
+  /** flip the drawn sprite left to right about local x = 0, the same way a flipped blit does */
+  mirror(): void {
+    const { w, h, d, layer, ox } = this;
+    layer.set(d);
+    d.fill(0);
+    for (let y = 0; y < h; y++)
+      for (let x = 0; x < w; x++) {
+        const mx = 2 * ox - x;
+        if (mx >= 0 && mx < w) d[y * w + mx] = layer[y * w + x];
+      }
+  }
   snapshot(): SpriteImage {
     return { w: this.w, h: this.h, ox: this.ox, oy: this.oy, d: this.d.slice() };
   }

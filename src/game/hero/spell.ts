@@ -1,5 +1,5 @@
+import { CLIPS } from "../../constants/clips";
 import { COST, ELEMENTS } from "../../constants/combat";
-import { CLIPS } from "../../constants/hero";
 import { ELEMENT_COLOR } from "../../constants/palette";
 import { sfx } from "../../services/audio";
 import { PK } from "../../types/particle";
