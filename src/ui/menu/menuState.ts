@@ -12,9 +12,9 @@ export const menuContext = (): MenuContext | null => state.context;
 export const menuScreen = (): MenuScreen => state.screen;
 export const isMenuOpen = (): boolean => state.context !== null;
 
-export function openMenu(context: MenuContext): void {
+export function openMenu(context: MenuContext, screen: MenuScreen = "main"): void {
   state.context = context;
-  state.screen = "main";
+  state.screen = screen;
   changed();
 }
 export function showScreen(screen: MenuScreen): void {

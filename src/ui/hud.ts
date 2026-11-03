@@ -6,6 +6,7 @@ import { STAGE_WAVES } from "../constants/waves";
 import { canAffordUlt } from "../game/hero/ultimate";
 import { game, hero, progress } from "../game/state";
 import { xpToNext } from "../utils/progression";
+import { updateCoinCount } from "./coinCount";
 import { byId } from "./dom";
 import { updateSpellTabs } from "./spellTabs";
 import { updateWarpTab } from "./warpTab";
@@ -35,6 +36,7 @@ const pips = (n: number, lit: (i: number) => boolean): string =>
 export function updateHud(): void {
   updateSpellTabs();
   updateWarpTab();
+  updateCoinCount();
   const leader = game.enemies.find((e) => e.rank !== "minion");
   const affordable = ULT_LEVELS.filter((_, i) => canAffordUlt(i + 1)).length;
   const key = [

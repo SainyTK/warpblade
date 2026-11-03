@@ -2,6 +2,7 @@ import { PERFECT } from "../constants/combat";
 import { BRAZIERS } from "../constants/stage";
 import { PF, PK } from "../types/particle";
 import { updateBlazes } from "./blazes";
+import { updateCoins } from "./coins";
 import { updateEnemies } from "./enemies/updateEnemies";
 import { updateHero } from "./hero/updateHero";
 import { agePresses } from "./input";
@@ -48,6 +49,7 @@ export function update(dt: number): void {
   updateHero(dt);
   updateEnemies(world);
   updatePickups(dt);
+  updateCoins(dt);
   updateWaves(dt);
   game.fx = game.fx.filter((f) => f.update(world));
   for (const g of game.ghosts) g.life -= dt;

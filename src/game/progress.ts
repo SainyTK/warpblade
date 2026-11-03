@@ -1,6 +1,7 @@
 import { PAL } from "../constants/palette";
 import { LEVEL_UP_RESTORE, MAX_LEVEL } from "../constants/progression";
 import { sfx } from "../services/audio";
+import { metaBonus } from "../store/meta";
 import { PK } from "../types/particle";
 import type { Perk, PickOption, SkillNode } from "../types/skill";
 import { airLimit, comboLimit, xpToNext } from "../utils/progression";
@@ -12,7 +13,7 @@ export const hasPerk = (p: Perk): boolean => progress.perks.has(p);
 
 /** recompute everything derived from the level and the learned ranks, keeping HP and MP inside the new maxima */
 export function refreshProgress(): void {
-  progress.stats = computeStats(character, progress.level, progress.ranks);
+  progress.stats = computeStats(character, progress.level, progress.ranks, metaBonus());
   progress.perks = collectPerks(character, progress.ranks);
   progress.ultimate = learnedUltimate(character, progress.ranks);
   progress.comboLimit = comboLimit(progress.level, progress.perks.has("flowingChain"));

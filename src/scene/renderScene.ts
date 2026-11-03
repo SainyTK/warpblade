@@ -4,6 +4,7 @@ import { game, hero, lights, particles, rng } from "../game/state";
 import { settings } from "../store/settings";
 import { drawEnemies, drawHeroLayer, drawPickups } from "./drawActors";
 import { drawAmbientLight, drawAnchors, drawMist } from "./drawAmbience";
+import { drawCoins } from "./drawCoins";
 import { drawNumbers } from "./drawNumbers";
 
 const SHAKE_FULL = 0.25;
@@ -25,6 +26,7 @@ export function renderScene(background: Uint32Array, out: Uint8ClampedArray): vo
   hero.sword?.draw();
   particles.draw("front");
   drawPickups();
+  drawCoins();
   drawMist();
   lights.draw();
   drawNumbers();

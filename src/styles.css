@@ -349,6 +349,30 @@ body {
   letter-spacing: 0.08em;
   font-variant-numeric: tabular-nums;
 }
+/* Coins: a 6 by 6 pixel coin at twice its size beside every amount. */
+.coin-icon {
+  width: 12px;
+  height: 12px;
+  image-rendering: pixelated;
+  flex: none;
+}
+.coins,
+.bank,
+.shop-price {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--display);
+  color: var(--brass);
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+.score.coin-count {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  color: var(--brass);
+}
 .banner {
   position: absolute;
   inset: 38% 0 auto 0;
@@ -588,6 +612,33 @@ body[data-hud="outside"] .boss {
 }
 .menu-foot a:hover {
   color: var(--crystal);
+}
+
+/* Result of a run: what it earned and the bank, above Continue and Shop. */
+.result {
+  display: grid;
+  gap: 8px;
+  width: min(300px, 100%);
+  margin: 0;
+}
+.result div {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.result dt {
+  font-size: 15px;
+  color: var(--mist);
+}
+.result dd {
+  margin: 0;
+}
+.result .coins {
+  font-size: 16px;
+}
+.menu-head .bank {
+  justify-content: center;
+  font-size: 16px;
 }
 
 /* Options: name on the left, value on the right. */

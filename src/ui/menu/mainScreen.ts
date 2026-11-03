@@ -1,13 +1,13 @@
 import { STAGE_WAVES } from "../../constants/waves";
 import { game, progress } from "../../game/state";
-import type { MenuContext, MenuView } from "../../types/menu";
-import { leaveMenu, quitRun, restartRun } from "./menuActions";
+import type { MenuContext, MenuScreen, MenuView } from "../../types/menu";
+import { leaveMenu, quitRun, restartRun, startGame } from "./menuActions";
 import { menuItem } from "./menuItem";
 import { showScreen } from "./menuState";
 
 const REPO = "https://github.com/SainyTK/warpblade";
 
-function screenItem(label: string, screen: "controls" | "options"): HTMLButtonElement {
+function screenItem(label: string, screen: MenuScreen): HTMLButtonElement {
   const item = menuItem(label, () => showScreen(screen));
   item.dataset.opens = screen;
   return item;
@@ -26,13 +26,18 @@ function titleFooter(): HTMLElement {
   return footer;
 }
 
-/** Start, Controls and Options before a run; Resume, Restart run and Quit join them on pause */
+/** Start, Shop, Controls and Options before a run; on pause, Resume, Restart run, Controls, Options and Quit run */
 export function mainScreen(context: MenuContext): MenuView {
   const list = document.createElement("nav");
   list.className = "menu-list";
   list.setAttribute("aria-label", context === "title" ? "Start menu" : "Pause menu");
   if (context === "title") {
-    list.append(menuItem("Start", leaveMenu), screenItem("Controls", "controls"), screenItem("Options", "options"));
+    list.append(
+      menuItem("Start", startGame),
+      screenItem("Shop", "shop"),
+      screenItem("Controls", "controls"),
+      screenItem("Options", "options"),
+    );
     const content = document.createElement("div");
     content.className = "menu-main";
     content.append(list, titleFooter());

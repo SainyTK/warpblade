@@ -1,7 +1,7 @@
 import { CLIPS } from "../../constants/clips";
 import { MP_REGEN } from "../../constants/combat";
 import { isHeld } from "../input";
-import { resetRun } from "../run";
+import { endRun } from "../runEnd";
 import { hero, progress } from "../state";
 import { settle } from "./actions";
 import { animateHero } from "./animate";
@@ -49,7 +49,7 @@ function runState(dt: number): void {
       if (h.st >= 0.32) settle();
       break;
     case "dead":
-      if (h.st >= 2.4) resetRun();
+      if (h.st >= 2.4) endRun("fallen");
       break;
     default:
   }

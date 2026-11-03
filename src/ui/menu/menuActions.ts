@@ -1,5 +1,6 @@
 import { clearPresses, releaseAll } from "../../game/input";
 import { resetRun } from "../../game/run";
+import { startRun } from "../../game/startRun";
 import { game, hero } from "../../game/state";
 import { byId } from "../dom";
 import { closeMenu, isMenuOpen, openMenu } from "./menuState";
@@ -13,8 +14,13 @@ export function leaveMenu(): void {
   closeMenu();
   canvas.focus({ preventScroll: true });
 }
+/** a new run from the start menu, with everything bought in the shop */
+export function startGame(): void {
+  startRun("");
+  leaveMenu();
+}
 export function restartRun(): void {
-  resetRun("Run restarted");
+  startRun("Run restarted");
   leaveMenu();
 }
 /** end the run and go back to the start menu, with Kael standing fresh behind it */

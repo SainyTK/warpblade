@@ -7,7 +7,7 @@ import type { EnemyType } from "../types/enemy";
 import { waveFoes, waveKind } from "../utils/waves";
 import { createRift } from "./effects/rift";
 import { makeEnemy } from "./enemies/enemy";
-import { resetRun } from "./run";
+import { endRun } from "./runEnd";
 import { game, hero, rng, showBanner } from "./state";
 
 /** rift height and spawn height by foe */
@@ -53,7 +53,7 @@ export function updateWaves(dt: number): void {
   if (hero.state === "dead") return;
   if (game.mode === "clear") {
     game.waveTimer -= dt;
-    if (game.waveTimer <= 0) resetRun();
+    if (game.waveTimer <= 0) endRun("clear");
     return;
   }
   if (game.enemies.length > 0 || game.fx.some((f) => f.rift)) return;
