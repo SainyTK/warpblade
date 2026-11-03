@@ -138,6 +138,15 @@ const PHANTOM: SkillBranch = {
       perk: "doubleJump",
     },
     {
+      id: "p_skyDance",
+      name: "Sky Dance",
+      kind: "combo",
+      text: "One more attack per jump per rank. The second rank ends it with a stomp that drops you to the floor and knocks nearby foes down.",
+      level: 2,
+      ranks: 2,
+      requires: [],
+    },
+    {
       id: "p_airdash",
       name: "Jump Dash",
       kind: "movement",

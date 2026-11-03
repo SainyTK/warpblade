@@ -13,6 +13,15 @@ export const PHANTOM_ICONS: Record<string, (s: SpriteCanvas) => void> = {
     chevron(s, 8, 7, 0, -1, 4, PAL.crystal[3]);
     fill(s, () => s.stroke(3, 14, 13, 14, 0.5, WC.slabEdge));
   },
+  p_skyDance: (s) => {
+    arc(s, 8, 6, 5, -2.5, 3.5, PAL.crystal[3]);
+    sword(s, 5, 9, 11, 3);
+    fill(s, () => {
+      s.stroke(2, 14, 14, 14, 0.5, WC.slabEdge);
+      s.stroke(4, 12, 5, 13, 0.35, PAL.crystal[4]);
+      s.stroke(12, 12, 11, 13, 0.35, PAL.crystal[4]);
+    });
+  },
   p_airdash: (s) => {
     fill(s, () => s.stroke(1, 14, 15, 14, 0.5, WC.slabEdge));
     fill(s, () => {

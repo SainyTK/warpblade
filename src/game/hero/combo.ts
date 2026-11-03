@@ -59,6 +59,8 @@ export function startMove(id: MoveId): void {
   });
   Object.assign(h, { keen: h.keenNext, keenNext: false, keenSpoiled: false, keenOpen: 0 });
   setState("move");
+  // a move without footwork of its own plants Kael where he stands
+  if (h.ground && !m.strides && !m.step) h.vx = 0;
   if (m.lift) lift(m.lift, false);
   m.enter?.();
   if (m.hits.length) {

@@ -53,8 +53,6 @@ export function findWarpTarget(): WarpTarget {
   return target ?? { x: clamp(hero.x + hero.face * WARP.fallback, 12, W - 12), y: hero.y - 18 };
 }
 
-export const canWarp = (): boolean => hero.warpCd <= 0 && hero.mp >= warpCost();
-
 export function startThrow(): void {
   hero.mp -= warpCost();
   hero.warpCd = warpCooldown();
@@ -140,6 +138,7 @@ export function blink(): boolean {
   const e = blinkTarget();
   if (!e) return false;
   hero.mp -= warpCost() / 2;
+  hero.warpCd = warpCooldown();
   const box = enemyBox(e);
   const side = Math.sign(e.x - hero.x) || hero.face;
   const nx = clamp(side > 0 ? box[2] + 9 : box[0] - 9, 8, W - 8);

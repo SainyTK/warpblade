@@ -20,26 +20,25 @@ Sources: the Grand Chase Fandom wiki pages for the Knight, Assassin, Thief, Spel
 - Every hit of the six-hit ground string has its own pose, footwork, slash shape and reaction, so the string reads as a routine: step cut, rising backhand, twin thrust, hop cleave, crescent turn and a falling smash that knocks down.
 - The reference changes the whole body on every hit, so each of Kael's hits has its own silhouette at a glance: hip height from a deep crouch to airborne, the torso leaning far ahead or back, wide leg spreads, the back turned in spins, and the arms overhead.
 - Each blow is keyed as an anticipation the opposite way, a snap to the strike pose on the hit frame, a hold of about a tenth of a second, then the follow-through.
-- Lunges and slides carry Kael 15 to 40 pixels per hit and the blows push the foe back about as far, so he travels with the foe across the stage.
+- Kael's feet stay planted for every hit of the string, and the blows push the foe back only a few pixels, so it stays in reach for the next one.
+- Only moves that end or open with travel move him: the smash that ends every combo, Phase Finish and the back flip, the dash strike and the running thrust.
 - The last hit a combo allows is always the knockdown smash, at every combo length, so short combos at level 1 still end with a payoff.
 - The situation picks the next blow, and the rule a player expects is the one the game uses.
 - A foe only behind Kael gets a turning cut that pivots to face it.
 - Foes on both sides get a ring cut that hits both.
 - A foe lying down in front gets a downward stab, once per combo, which keeps it down without stretching the stun.
 - A foe in the air in front of Kael gets a rising chase cut that takes him up after it, and the string goes on as an air string.
-- Holding toward the foe pushes each step further; without it, every step stops at arm's length, so Kael does not drift off the foe.
-- The crescent turn is the exception: its spin carries him on through the foe, and the second cut lands on its back.
-- A husk reeling from a sword blow does not hurt by touch, so these lunges can close right in.
+- A husk reeling from a sword blow does not hurt by touch, so a foe pushed into Kael does not hurt him.
 - A heavy blow that drives a foe into the edge of the stage bounces it back off the wall and into the air.
 - The skill variants stay on their inputs: Up for the launcher, Down for the sweep, running for the thrust, right after a dash for the dash strike, and Down in the air for the meteor drop.
 - The Critical and Double timing idea becomes Keen timing: a J pressed in the short moment after a blow lands makes the next blow a sure critical hit.
 - Mashing spoils Keen timing, because any J pressed before the current blow has landed cancels it, so rhythm pays and mashing does not.
-- A jump attack is a short air string, much shorter than the ground string: three hits per time in the air, a cross cut, a somersault cut and a hammer fall that spikes the foe.
-- A double jump adds one hit, the three-stab drill, before the hammer.
-- The hammer always ends the air string, and Kael has no air attack left until he lands.
-- The launcher route still pays: the chase cut takes Kael up after the launched foe, and the air string that follows has the same three hits.
+- Air attacks share no shape with the ground string: a wheel slash that circles his whole body while he rolls in a ball, a scissor cut that lays him back with one leg kicked high and sweeps the blade under his feet, and a stomp that drops him feet first with his arms thrown up.
+- Kael starts with one air attack per jump. The skill Sky Dance adds the scissor cut at its first rank and the stomp at its second, so three is the most, and a double jump adds none.
+- The stomp spikes what is under him on the way down and knocks foes on both sides off their feet when he lands.
+- The launcher route still pays: the chase cut takes Kael straight up after the launched foe, and the air string that follows has the same limit.
 - Nothing done in the air carries Kael above his jump: attacks, casts and the special charge keep full gravity while he rises and only hang once he starts to fall.
-- Moves that lift Kael on their own, like the somersault, rise by their own height but never past the top of his last jump, and a lift never adds to a rise he already has.
+- Moves that lift Kael on their own, like the chase cut, rise by their own height but never past the top of his last jump, and a lift never adds to a rise he already has.
 - Hit feel is set per hit: hitstop, screen shake, sound pitch, slash shape and color, afterimages on the fast footwork, and how early the next press may cancel the follow-through.
 
 ## What Warpblade leaves out

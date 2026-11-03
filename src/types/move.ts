@@ -18,10 +18,9 @@ export type MoveId =
   | "launcher"
   | "thrust"
   | "dashStrike"
-  | "airCross"
-  | "airSomersault"
-  | "airDrill"
-  | "airSpike"
+  | "airWheel"
+  | "airScissor"
+  | "airStomp"
   | "whirl"
   | "meteor"
   | "phaseCut"
@@ -61,13 +60,11 @@ export interface MoveHit {
   feel?: HitFeel;
 }
 
-/** Footwork: from one time to another the move walks Kael forward at this speed. */
+/** Footwork for a finisher: from one time to another the move walks Kael forward at this speed. */
 export interface Stride {
   from: number;
   to: number;
   speed: number;
-  /** runs on through the foe in front to its back; other strides stop at arm's length */
-  through?: boolean;
 }
 
 export interface MoveDef {
@@ -93,6 +90,7 @@ export interface MoveDef {
   pitch?: number;
   /** fading copies of Kael trail behind him until this time into the move */
   ghosts?: number;
+  /** only finishers and dash or running attacks travel; every other move keeps Kael on the spot */
   strides?: readonly Stride[];
   /** lifts Kael this many pixels as it starts, never on top of a rise he already has */
   lift?: number;
@@ -117,8 +115,9 @@ export interface Situation {
   dashing: boolean;
   /** a hang on a crystal */
   hanging: boolean;
-  /** air attacks since leaving the ground */
+  /** air attacks since leaving the ground, and how many Kael may make before he lands */
   airHits: number;
+  airLimit: number;
   doubleJumped: boolean;
   whirled: boolean;
   /** a foe within reach behind, and none in front */

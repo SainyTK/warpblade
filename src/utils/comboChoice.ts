@@ -1,22 +1,15 @@
-import { AIR_STRING } from "../constants/combo";
 import type { MoveId, Situation } from "../types/move";
 
 /** the ground string in order; the last hit a combo allows is always the smash */
 export const GROUND_CHAIN: readonly MoveId[] = ["stepCut", "risingBackhand", "twinFang", "hopCleave", "crescentTurn"];
-/** the air string in order; the last air hit Kael has left, or the last hit the combo allows, is the spike */
-export const AIR_CHAIN: readonly MoveId[] = ["airCross", "airSomersault", "airDrill"];
-
-/** air attacks Kael may make before he lands */
-export const airHitLimit = (doubleJumped: boolean): number =>
-  AIR_STRING.hits + (doubleJumped ? AIR_STRING.doubleJumpBonus : 0);
+/** the air string in order: a wheel, a scissor cut, then the stomp that takes Kael down to the floor */
+export const AIR_CHAIN: readonly MoveId[] = ["airWheel", "airScissor", "airStomp"];
 
 /** the next air hit, or null once the air string is spent until Kael lands */
 function airMove(s: Situation): MoveId | null {
-  const left = airHitLimit(s.doubleJumped) - s.airHits;
-  if (left <= 0) return null;
+  if (s.airHits >= s.airLimit) return null;
   if (s.down && s.perks.has("meteorDrop")) return "meteor";
   if (s.doubleJumped && !s.whirled && s.perks.has("whirlwind")) return "whirl";
-  if (left === 1 || s.next === s.limit) return "airSpike";
   return AIR_CHAIN[Math.min(s.airHits, AIR_CHAIN.length - 1)];
 }
 

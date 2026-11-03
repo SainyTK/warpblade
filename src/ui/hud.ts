@@ -8,9 +8,11 @@ import { game, hero, progress } from "../game/state";
 import { xpToNext } from "../utils/progression";
 import { byId } from "./dom";
 import { updateSpellTabs } from "./spellTabs";
+import { updateWarpTab } from "./warpTab";
 
 const hp = byId("hpFill");
 const mp = byId("mpFill");
+const mpBar = byId("mpBar");
 const stamina = byId("stFill");
 const staminaBar = byId("stBar");
 const xp = byId("xpFill");
@@ -32,6 +34,7 @@ const pips = (n: number, lit: (i: number) => boolean): string =>
 /** sync the HTML overlay with the game, touching the DOM only when something shown has changed */
 export function updateHud(): void {
   updateSpellTabs();
+  updateWarpTab();
   const leader = game.enemies.find((e) => e.rank !== "minion");
   const affordable = ULT_LEVELS.filter((_, i) => canAffordUlt(i + 1)).length;
   const key = [
@@ -39,6 +42,7 @@ export function updateHud(): void {
     Math.round(hero.mp),
     progress.stats.hp,
     progress.stats.mp,
+    hero.denied.mp > 0,
     Math.round(hero.stamina),
     progress.stats.stamina,
     hero.staminaFlash > 0,
@@ -59,6 +63,7 @@ export function updateHud(): void {
   last = key;
   hp.style.width = `${(hero.hp / progress.stats.hp) * 100}%`;
   mp.style.width = `${(hero.mp / progress.stats.mp) * 100}%`;
+  mpBar.classList.toggle("empty", hero.denied.mp > 0);
   stamina.style.width = `${(hero.stamina / progress.stats.stamina) * 100}%`;
   staminaBar.classList.toggle("empty", hero.staminaFlash > 0);
   staminaBar.style.setProperty("--dash-share", `${(STAMINA.dashCost / progress.stats.stamina) * 100}%`);

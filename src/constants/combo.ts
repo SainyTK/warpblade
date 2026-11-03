@@ -14,11 +14,11 @@ export const REACH = {
   airFront: 56,
 } as const;
 
-/** stepping moves stop this close to the foe in front, and go this much further while forward is held */
+/** travelling moves stop this close to the foe in front, and go this much further while forward is held */
 export const ADVANCE = { contact: 6, lean: 1.5 } as const;
 
-/** air attacks Kael may make before he lands; a double jump adds one */
-export const AIR_STRING = { hits: 3, doubleJumpBonus: 1 } as const;
+/** air attacks Kael may make before he lands: one, plus one per rank of the skill named here */
+export const AIR_STRING = { hits: 1, skill: "p_skyDance" } as const;
 
 /** Keen timing: J pressed this soon after a blow lands makes the next move a sure crit */
 export const KEEN = { window: 0.1 } as const;

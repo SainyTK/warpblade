@@ -3,7 +3,7 @@ import { LEVEL_UP_RESTORE, MAX_LEVEL } from "../constants/progression";
 import { sfx } from "../services/audio";
 import { PK } from "../types/particle";
 import type { Perk, PickOption, SkillNode } from "../types/skill";
-import { comboLimit, xpToNext } from "../utils/progression";
+import { airLimit, comboLimit, xpToNext } from "../utils/progression";
 import { collectPerks, computeStats, learnedUltimate } from "../utils/stats";
 import { createFloorRing } from "./effects/floorRing";
 import { character, freshProgress, game, hero, lights, particles, progress, rng, showBanner } from "./state";
@@ -16,6 +16,7 @@ export function refreshProgress(): void {
   progress.perks = collectPerks(character, progress.ranks);
   progress.ultimate = learnedUltimate(character, progress.ranks);
   progress.comboLimit = comboLimit(progress.level, progress.perks.has("flowingChain"));
+  progress.airLimit = airLimit(progress.ranks);
   hero.hp = Math.min(hero.hp, progress.stats.hp);
   hero.mp = Math.min(hero.mp, progress.stats.mp);
   hero.stamina = Math.min(hero.stamina, progress.stats.stamina);

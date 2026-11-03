@@ -1,5 +1,10 @@
+import { AIR_STRING } from "../constants/combo";
 import { COMBO_BY_LEVEL, MAX_COMBO, MAX_LEVEL, XP_CURVE } from "../constants/progression";
 import { AGGRESSION, STAGE_WAVES, WAVE_SCALE } from "../constants/waves";
+
+/** air attacks Kael may make before he lands, from his ranks of the air string skill */
+export const airLimit = (ranks: Readonly<Record<string, number>>): number =>
+  AIR_STRING.hits + (ranks[AIR_STRING.skill] ?? 0);
 
 /** experience needed to go from this level to the next; 0 at the cap */
 export const xpToNext = (level: number): number =>

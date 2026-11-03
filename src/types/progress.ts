@@ -14,4 +14,6 @@ export interface Progress {
   perks: ReadonlySet<Perk>;
   ultimate: UltimateId;
   comboLimit: number;
+  /** air attacks before Kael lands */
+  airLimit: number;
 }

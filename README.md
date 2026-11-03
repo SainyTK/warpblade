@@ -30,13 +30,15 @@ His crystal sword can be thrown, and wherever it lands, he follows.
 ## Features
 
 - **Warp strike.** Throw the sword at a foe and appear beside it mid-swing. The farther you travel, the harder you hit.
+  The warp recharges in 2 seconds, far faster than any spell, and the WARP tab beside the element tabs fills back up while it does.
 - **Combos that grow.** Two hits at level 1, six by level 17.
   Every hit is its own move: a step-in cut, a rising backhand, a lunging double stab, a hop into a cleave, a turn that cuts both sides and a falling smash that knocks the foe down.
-  Each one moves Kael's whole body and carries him after the foe: he rises onto one leg, lunges with his body almost flat, tucks his knees in a hop, spins with his back to you through the foe, and unwinds from a turned wind-up into a stance so low his hips nearly touch the floor.
+  Each one moves Kael's whole body while his feet stay planted: he rises onto one leg, lunges with his body almost flat, tucks his knees in a hop, spins with his back to you, and unwinds from a turned wind-up into a stance so low his hips nearly touch the floor.
+  Only the last hit of a combo, the finishers, and dash and running attacks carry him forward.
   Pick up launchers, sweeps, dash and running attacks, and finishers that cut through a foe to its back or bounce it into the sky.
 - **Combos that read the room.** The next hit follows the fight: Kael turns to cut a foe behind him, spins when foes stand on both sides, stabs a foe lying down, leaps after one in the air, and bounces foes off the edge of the stage.
-  A jump attack is a short air string: a cross cut, a somersault and a hammer fall that spikes the foe, with a drill of stabs added after a double jump.
-  Once the hammer falls, Kael has no air attack left until he lands.
+  Air attacks are their own moves: a wheel slash that circles Kael's whole body, a scissor cut that lays him back and sweeps the blade under his feet, and a stomp that drops him feet first and knocks nearby foes down.
+  Kael starts with one attack per jump; the two ranks of Sky Dance add the scissor cut and then the stomp.
 - **Keen timing.** Press J just after a blow lands and the next one is a sure critical hit with a gold slash.
   Pressing before the blow lands spoils it, so rhythm beats mashing.
 - **Positioning pays.** Hits from behind deal 1.5 times the damage and foes in the air take double, with the numbers popping out of every hit.

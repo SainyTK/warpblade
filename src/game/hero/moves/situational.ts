@@ -23,8 +23,7 @@ export const SITUATIONAL_MOVES = {
     name: "Turning cut",
     clip: "pivot",
     pitch: 1.05,
-    hits: [{ at: 0.08, box: [-4, -40, 30, -2], power: 1.2, kx: 150, ky: -30, slash: PHANTOM_SWEEP, feel: FEEL.firm }],
-    strides: [{ from: 0.02, to: 0.09, speed: 220 }],
+    hits: [{ at: 0.08, box: [-4, -40, 30, -2], power: 1.2, kx: 60, ky: -30, slash: PHANTOM_SWEEP, feel: FEEL.firm }],
   },
   ringCut: {
     id: "ringCut",
@@ -32,12 +31,12 @@ export const SITUATIONAL_MOVES = {
     clip: "ring",
     pitch: 0.95,
     hits: [
-      { at: 0.06, box: [-4, -30, 30, 2], power: 0.8, kx: 110, ky: -20, around: true, slash: RING, feel: FEEL.light },
+      { at: 0.06, box: [-4, -30, 30, 2], power: 0.8, kx: 40, ky: -20, around: true, slash: RING, feel: FEEL.light },
       {
         at: 0.15,
         box: [-4, -30, 30, 2],
         power: 0.8,
-        kx: 150,
+        kx: 60,
         ky: -30,
         around: true,
         slash: { ...RING, cy: -14, R: 26, a0: 3.1, a1: -3.1, ramp: PHANTOM_RAMP },
@@ -64,7 +63,6 @@ export const SITUATIONAL_MOVES = {
     enter: () => {
       hero.stabbed = true;
     },
-    strides: [{ from: 0, to: 0.1, speed: 130 }],
     afterHit: pinImpact,
   },
   chaseCut: {
@@ -86,6 +84,5 @@ export const SITUATIONAL_MOVES = {
       },
     ],
     lift: 57,
-    strides: [{ from: 0, to: 0.12, speed: 170 }],
   },
 } satisfies Record<string, MoveDef>;

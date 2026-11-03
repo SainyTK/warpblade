@@ -1,22 +1,18 @@
 import { ENEMY_AIR } from "../../../constants/combat";
-import { FEEL, STAB_RAMP } from "../../../constants/combo";
-import { PAL } from "../../../constants/palette";
+import { FEEL, PHANTOM_RAMP } from "../../../constants/combo";
+import { frame } from "../../../constants/hero";
+import { PAL, WORLD_COLORS } from "../../../constants/palette";
 import type { MoveDef } from "../../../types/move";
-import { airHitLimit } from "../../../utils/comboChoice";
+import { PK } from "../../../types/particle";
 import { createFloorRing } from "../../effects/floorRing";
 import { createSlash } from "../../effects/slash";
 import { meleeHit } from "../../meleeHit";
-import { game, hero } from "../../state";
+import { game, hero, particles, rng } from "../../state";
 import { boxAhead, dust, shake } from "../../world";
 import { gravityPull } from "../gravityWell";
-import { STAB } from "./slashes";
 
 const WHIRL = { cx: 0, cy: -18, R: 25, sy: 0.85, rot: 0, a0: -1.6, a1: 1.5, W: 7 };
-const DRILL = { ...STAB, R: 20, W: 4, ramp: STAB_RAMP };
 const METEOR_REACH = 46;
-/** the hammer fall dives from this time into the move, at this speed */
-const HAMMER_DIVE = 0.16;
-const HAMMER_DIVE_SPEED = 300;
 
 /** the plunge lands: a ring of crystal, dust, and everything near the floor bounced up */
 function meteorLanding(): void {
@@ -39,97 +35,107 @@ function meteorLanding(): void {
   gravityPull();
 }
 
-/** the air string: a cross cut, a somersault cut that lifts Kael, a drill of three stabs, then the hammer that spikes */
+/** the stomp drops at this speed once its tuck is over, and its landing hits this far to each side */
+const STOMP = { tuck: 0.08, dive: 520, reach: 40 } as const;
+
+/** the stomp lands: a wide ring, dust and rubble to both sides, and every foe near the floor knocked off its feet */
+function stompLanding(): void {
+  game.swing++;
+  game.fx.push(createFloorRing(hero.x, hero.y, STOMP.reach, PAL.crystal, 0.4));
+  dust(hero.x - 6, hero.y, 7, -1);
+  dust(hero.x + 6, hero.y, 7, 1);
+  for (let i = 0; i < 8; i++) {
+    const side = i % 2 ? 1 : -1;
+    particles.spawn(
+      PK.SHARD,
+      hero.x,
+      hero.y - 1,
+      side * rng.range(30, 130),
+      rng.range(-170, -60),
+      rng.range(0.4, 0.8),
+      {
+        col: WORLD_COLORS.rubble,
+        size: rng.range(1.5, 3),
+      },
+    );
+  }
+  shake(0.24, 3);
+  meleeHit([boxAhead(-STOMP.reach, -22, STOMP.reach, 4)], {
+    power: 2.2,
+    kx: 120,
+    ky: -60,
+    stun: 0.8,
+    big: true,
+    feel: FEEL.crush,
+  });
+}
+
+/** the air string: a wheel, a scissor cut that pops the foe up, then the stomp that takes Kael down to the floor */
 export const AIR_MOVES = {
-  airCross: {
-    id: "airCross",
+  airWheel: {
+    id: "airWheel",
     turns: true,
-    name: "Air cross",
-    clip: "airCross",
-    pitch: 1.1,
+    name: "Wheel slash",
+    clip: "airWheel",
+    pitch: 1.2,
     hits: [
       {
-        at: 0.08,
-        box: [-4, -40, 30, 6],
-        power: 1.1,
-        kx: 50,
-        ky: -20,
-        slash: { cx: 4, cy: -22, R: 22, sy: 0.5, rot: -0.2, a0: -2.4, a1: 0.8, W: 8 },
+        at: frame(2),
+        box: [-6, -44, 28, 10],
+        power: 1.2,
+        kx: 30,
+        ky: -40,
+        // the blade comes round the whole body: from high behind, over the head, down in front and under the feet
+        slash: { cx: 1, cy: -19, R: 19, sy: 1, rot: 0, a0: -2.5, a1: 3.5, W: 6, sweep: 0.12, hold: 0.03, trail: 0.22 },
         feel: FEEL.light,
       },
     ],
-    strides: [{ from: 0.02, to: 0.1, speed: 150 }],
   },
-  airSomersault: {
-    id: "airSomersault",
+  airScissor: {
+    id: "airScissor",
     turns: true,
-    name: "Somersault cut",
-    clip: "airFlip",
-    pitch: 1.25,
+    name: "Scissor cut",
+    clip: "airScissor",
+    pitch: 1.35,
     hits: [
       {
-        at: 0.1,
-        box: [-8, -48, 28, 4],
-        power: 1.1,
-        kx: 30,
-        ky: -40,
-        slash: { cx: 2, cy: -21, R: 20, sy: 0.95, rot: 0, a0: 2.6, a1: 5.9, W: 7, sweep: 0.07 },
-        feel: { ...FEEL.light, pitch: 1.3 },
+        at: frame(2),
+        box: [-8, -36, 30, 14],
+        power: 1.3,
+        kx: 40,
+        ky: -120,
+        // from low behind, under his feet, and up in front
+        slash: { cx: 3, cy: -14, R: 21, sy: 0.75, rot: 0, a0: 2.7, a1: -0.9, W: 8, ramp: PHANTOM_RAMP },
+        feel: { ...FEEL.firm, pitch: 1.2 },
       },
     ],
-    lift: 18,
   },
-  airDrill: {
-    id: "airDrill",
+  airStomp: {
+    id: "airStomp",
     turns: true,
-    name: "Drill stabs",
-    clip: "airDrill",
-    pitch: 1.5,
-    hits: [
-      { at: 0.06, box: [0, -26, 36, -8], power: 0.5, kx: 20, ky: 0, slash: DRILL, feel: FEEL.tap },
-      { at: 0.12, box: [0, -24, 36, -6], power: 0.5, kx: 20, ky: 0, slash: { ...DRILL, cy: -15 }, feel: FEEL.tap },
-      {
-        at: 0.18,
-        box: [0, -26, 38, -6],
-        power: 0.6,
-        kx: 60,
-        ky: 0,
-        slash: { ...DRILL, cy: -17, R: 24, W: 5 },
-        feel: { ...FEEL.light, pitch: 1.5 },
-      },
-    ],
-    strides: [{ from: 0, to: 0.2, speed: 130 }],
-  },
-  airSpike: {
-    id: "airSpike",
-    turns: true,
-    name: "Hammer fall",
-    clip: "airHammer",
-    pitch: 0.75,
+    name: "Sky stomp",
+    clip: "airStomp",
+    pitch: 0.7,
     falls: true,
+    untilLanding: true,
+    // on the way down the feet spike anything under him into the floor
     hits: [
       {
-        at: 0.16,
-        box: [-4, -40, 36, 8],
-        power: 2,
-        kx: 90,
+        at: STOMP.tuck,
+        box: [-12, -24, 16, 14],
+        power: 1.2,
+        kx: 20,
         ky: ENEMY_AIR.spike,
         spike: true,
-        big: true,
-        slash: { cx: 8, cy: -18, R: 24, sy: 0.85, rot: 0.2, a0: -2.0, a1: 1.4, W: 11, hold: 0.06, trail: 0.26 },
-        feel: FEEL.heavy,
+        feel: FEEL.firm,
       },
     ],
     afterHit: gravityPull,
-    // the hammer ends the air string: no air attack is left until Kael lands
-    enter: () => {
-      hero.airHits = airHitLimit(true);
-    },
-    // a small rise under the raised blade, then a dive after the foe it spikes
     step: (t) => {
-      if (hero.ground) return;
-      hero.vy = t < HAMMER_DIVE ? Math.min(hero.vy, -20) : HAMMER_DIVE_SPEED;
+      hero.vx = 0;
+      hero.vy = t < STOMP.tuck ? Math.min(hero.vy, -30) : STOMP.dive;
     },
+    land: stompLanding,
   },
   whirl: {
     id: "whirl",

@@ -7,5 +7,3 @@ import type { Element } from "../types/spell";
 export const SPELL_COOLDOWN: Readonly<Record<Element, number>> = { fire: 7, ice: 8, volt: 5.5 };
 /** after any cast the other elements wait at least this long, so switching elements cannot chain spells back to back */
 export const SPELL_SHARED_COOLDOWN = 3;
-/** how long the HUD flashes after a cast is refused */
-export const CAST_DENY_FLASH = 0.25;

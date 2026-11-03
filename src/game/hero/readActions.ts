@@ -7,10 +7,11 @@ import { game, hero, progress } from "../state";
 import { isFree } from "./actions";
 import { blowsDone, comboOpen, endCombo, pressAttack, startMove } from "./combo";
 import { tryDash } from "./dash";
+import { deny } from "./deny";
 import { jump } from "./jump";
-import { castCost, denyCast, isRecharging, startCast } from "./spell";
+import { castCost, isRecharging, startCast } from "./spell";
 import { startCharge } from "./ultimate";
-import { blink, canWarp, startThrow, warpCost } from "./warp";
+import { blink, startThrow, warpCost } from "./warp";
 
 /** Up: Skybreaker after the third hit, otherwise a jump; with Launcher, a moment's wait in case J follows */
 function pressUp(): boolean {
@@ -36,15 +37,24 @@ function doubleTap(dir: number): void {
   }
 }
 
-/** K: Blink Combo after two hits, otherwise a warp throw */
+/** K: Blink Combo after two hits, otherwise a warp throw. Both share the warp's recharge.
+ *  A press while the warp recharges is refused with a tick at once, whatever Kael is doing; so is one short of MP when he could warp. */
 function pressWarp(): boolean {
   const h = hero;
+  if (h.warpCd > 0) {
+    deny("warp");
+    return true;
+  }
   if (hasPerk("blinkCombo") && comboOpen(2) && h.mp >= warpCost() / 2) {
     h.move = null;
     endCombo(true);
     if (blink()) return true;
   }
-  if (!canWarp() || !(isFree() || h.state === "hang" || blowsDone())) return false;
+  if (!(isFree() || h.state === "hang" || blowsDone())) return false;
+  if (h.mp < warpCost()) {
+    deny("mp");
+    return true;
+  }
   h.move = null;
   endCombo(false);
   startThrow();
@@ -55,9 +65,9 @@ function pressWarp(): boolean {
  *  A press while the element recharges is refused with a tick at once, whatever Kael is doing; so is one short of MP when he could cast. */
 function pressCast(): boolean {
   const spellblade = hasPerk("spellblade") && comboOpen(2);
-  if (isRecharging()) denyCast();
+  if (isRecharging()) deny("cast");
   else if (!spellblade && !isFree() && hero.state !== "hang") return false;
-  else if (hero.mp < castCost()) denyCast();
+  else if (hero.mp < castCost()) deny("mp");
   else startCast(spellblade);
   return true;
 }

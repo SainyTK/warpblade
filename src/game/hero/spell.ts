@@ -1,7 +1,7 @@
 import { CLIPS } from "../../constants/clips";
 import { COST, ELEMENTS } from "../../constants/combat";
 import { ELEMENT_COLOR } from "../../constants/palette";
-import { CAST_DENY_FLASH, SPELL_COOLDOWN, SPELL_SHARED_COOLDOWN } from "../../constants/spells";
+import { SPELL_COOLDOWN, SPELL_SHARED_COOLDOWN } from "../../constants/spells";
 import { sfx } from "../../services/audio";
 import { PK } from "../../types/particle";
 import type { Element } from "../../types/spell";
@@ -35,13 +35,6 @@ export const isRecharging = (): boolean => hero.spellCd[selectedElement()] > 0;
 export function rechargeSpells(dt: number): void {
   const cd = hero.spellCd;
   for (const element of ELEMENTS) cd[element] = Math.max(0, cd[element] - dt);
-  hero.castDenied = Math.max(0, hero.castDenied - dt);
-}
-
-/** a press while the spell recharges or MP is short: no cast, a dull tick and a HUD flash */
-export function denyCast(): void {
-  hero.castDenied = CAST_DENY_FLASH;
-  sfx.denied();
 }
 
 /** I: start a cast; with Spellblade in an open combo it leaves the hand at once and hits harder */

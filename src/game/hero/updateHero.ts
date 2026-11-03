@@ -7,6 +7,7 @@ import { settle } from "./actions";
 import { animateHero } from "./animate";
 import { runMove, tickCombo } from "./combo";
 import { runDash } from "./dash";
+import { tickDenied } from "./deny";
 import { moveHero } from "./physics";
 import { readActions } from "./readActions";
 import { castSpeed, rechargeSpells, runCast } from "./spell";
@@ -70,6 +71,7 @@ export function updateHero(dt: number): void {
   h.drop = Math.max(0, h.drop - dt);
   h.warpCd = Math.max(0, h.warpCd - dt);
   rechargeSpells(dt);
+  tickDenied(dt);
   h.riposte = Math.max(0, h.riposte - dt);
   h.sinceDash += dt;
   regenStamina(dt);

@@ -79,6 +79,7 @@ export function readSituation(): Situation {
     dashing: h.state === "dash" || h.sinceDash < HERO_MOVE.dashLink,
     hanging: h.state === "hang",
     airHits: h.airHits,
+    airLimit: progress.airLimit,
     doubleJumped: h.jumps >= 2,
     whirled: h.whirled,
     foeBehindOnly: behind && !ahead,

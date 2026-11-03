@@ -45,7 +45,7 @@ export function resetRun(banner = "Rise again"): void {
     warpCd: 0,
     spellCd: { fire: 0, ice: 0, volt: 0 },
     spellCdFull: { fire: 1, ice: 1, volt: 1 },
-    castDenied: 0,
+    denied: { cast: 0, warp: 0, mp: 0 },
     charge: 0,
     chargeLevel: 0,
     lastHit: null,

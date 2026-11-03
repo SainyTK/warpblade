@@ -41,13 +41,17 @@ export const STAMINA = {
   quickstep: 1.45,
 } as const;
 
+/** how long the HUD flashes after a press is refused */
+export const DENY_FLASH = 0.25;
+
 export const WARP = {
   speed: 560,
   maxFlight: 0.6,
   reach: 180,
   anchorReach: 220,
   fallback: 110,
-  cooldown: 1,
+  /** seconds before Kael can warp again, far shorter than any spell's */
+  cooldown: 2,
   /** warp strike damage as a multiple of attack damage, plus a bonus for distance travelled */
   power: 2.2,
   powerPerPixel: 0.014,

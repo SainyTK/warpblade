@@ -6,7 +6,7 @@ import { Particles } from "../engine/particles";
 import type { GameState } from "../types/game";
 import type { Hero } from "../types/hero";
 import type { Progress } from "../types/progress";
-import { comboLimit } from "../utils/progression";
+import { airLimit, comboLimit } from "../utils/progression";
 import { Rng } from "../utils/rng";
 import { computeStats } from "../utils/stats";
 import { Chain } from "./hero/chain";
@@ -53,6 +53,7 @@ export function freshProgress(): Progress {
     perks: new Set(),
     ultimate: character.special,
     comboLimit: comboLimit(1, false),
+    airLimit: airLimit({}),
   };
 }
 export const progress: Progress = freshProgress();
@@ -101,7 +102,7 @@ export const hero: Hero = {
   spellCd: { fire: 0, ice: 0, volt: 0 },
   spellCdFull: { fire: 1, ice: 1, volt: 1 },
   castElement: "fire",
-  castDenied: 0,
+  denied: { cast: 0, warp: 0, mp: 0 },
   spellPower: 1,
   lastHit: null,
   charge: 0,

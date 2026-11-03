@@ -5,6 +5,9 @@ import type { Pose } from "./pose";
 import type { Element } from "./spell";
 import type { Point } from "./world";
 
+/** why a press was refused: the selected spell or the warp is still recharging, or MP is short */
+export type DenyReason = "cast" | "warp" | "mp";
+
 export type ClipName =
   | "atk1"
   | "atk2"
@@ -22,10 +25,9 @@ export type ClipName =
   | "ring"
   | "downStab"
   | "chase"
-  | "airCross"
-  | "airFlip"
-  | "airDrill"
-  | "airHammer"
+  | "airWheel"
+  | "airScissor"
+  | "airStomp"
   | "dashCut"
   | "phase"
   | "skyRend"
@@ -128,8 +130,8 @@ export interface Hero {
   spellCdFull: Record<Element, number>;
   /** the element of the cast under way, fixed when the cast starts */
   castElement: Element;
-  /** seconds left of the HUD flash after a refused cast */
-  castDenied: number;
+  /** seconds left of the HUD flash after a refused press: a spell or the warp still recharging, or MP short */
+  denied: Record<DenyReason, number>;
   /** the spell is cast at once and stronger: J J I */
   spellPower: number;
   lastHit: Enemy | null;
