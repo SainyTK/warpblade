@@ -9,7 +9,7 @@ import { runMove, tickCombo } from "./combo";
 import { runDash } from "./dash";
 import { moveHero } from "./physics";
 import { readActions } from "./readActions";
-import { castSpeed, runCast } from "./spell";
+import { castSpeed, rechargeSpells, runCast } from "./spell";
 import { regenStamina } from "./stamina";
 import { readDoubleTap } from "./taps";
 import { runCharge, runUltimate } from "./ultimate";
@@ -69,6 +69,7 @@ export function updateHero(dt: number): void {
   h.inv = Math.max(0, h.inv - dt);
   h.drop = Math.max(0, h.drop - dt);
   h.warpCd = Math.max(0, h.warpCd - dt);
+  rechargeSpells(dt);
   h.riposte = Math.max(0, h.riposte - dt);
   h.sinceDash += dt;
   regenStamina(dt);

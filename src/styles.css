@@ -161,10 +161,11 @@ body {
   );
 }
 /* a dash the bar could not pay for: the empty track blinks red */
-.bar.st.empty .track {
-  animation: st-empty 120ms steps(1) infinite;
+/* a bar too empty for what was pressed blinks its border */
+.bar.empty .track {
+  animation: bar-empty 120ms steps(1) infinite;
 }
-@keyframes st-empty {
+@keyframes bar-empty {
   50% {
     border-color: var(--hp);
   }
@@ -273,6 +274,62 @@ body {
 .el.on.volt {
   color: var(--volt);
   border-color: var(--volt);
+}
+/* Spell cooldowns: a recharging element tab dims and a pixel bar along its bottom fills as it recharges (--charged, 0 to 1).
+   The tab blinks when it is ready again, and jolts when a cast is refused while it recharges. */
+.el {
+  position: relative;
+  --tint: var(--mist);
+}
+.el.fire {
+  --tint: var(--fire);
+}
+.el.ice {
+  --tint: var(--ice);
+}
+.el.volt {
+  --tint: var(--volt);
+}
+.el.wait {
+  color: var(--line);
+}
+.el.on.wait {
+  color: var(--muted);
+}
+.el.wait::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  height: 2px;
+  width: calc(var(--charged, 0) * 100%);
+  background: var(--tint);
+}
+.el.ready {
+  animation: el-ready 360ms steps(1) both;
+}
+.el.deny {
+  animation: el-deny 240ms steps(1) both;
+}
+@keyframes el-ready {
+  0%,
+  50% {
+    color: var(--text);
+    border-color: var(--tint);
+  }
+}
+@keyframes el-deny {
+  0% {
+    transform: translateX(2px);
+    border-color: var(--hp);
+  }
+  33% {
+    transform: translateX(-2px);
+    border-color: var(--hp);
+  }
+  66% {
+    transform: translateX(1px);
+  }
 }
 .score {
   white-space: pre;
@@ -719,7 +776,11 @@ body[data-hud="outside"] .boss {
   .banner {
     transition: none;
   }
-  .bar.st.empty .track {
+  .el.deny {
+    animation: none;
+    border-color: var(--hp);
+  }
+  .bar.empty .track {
     animation: none;
     border-color: var(--hp);
   }
