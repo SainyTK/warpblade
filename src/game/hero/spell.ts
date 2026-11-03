@@ -1,7 +1,7 @@
 import { CLIPS } from "../../constants/clips";
 import { COST, ELEMENTS } from "../../constants/combat";
 import { ELEMENT_COLOR } from "../../constants/palette";
-import { SPELL_COOLDOWN, SPELL_SHARED_COOLDOWN } from "../../constants/spells";
+import { SPELL_COOLDOWN, SPELL_PERK, SPELL_SHARED_COOLDOWN } from "../../constants/spells";
 import { sfx } from "../../services/audio";
 import { PK } from "../../types/particle";
 import type { Element } from "../../types/spell";
@@ -27,6 +27,26 @@ const spellWait = (element: Element, cast: Element): number =>
   (element === cast ? SPELL_COOLDOWN[element] : SPELL_SHARED_COOLDOWN) / progress.stats.haste;
 /** share of the current wait an element still has to recharge, 0 when ready */
 export const spellRecharge = (element: Element): number => hero.spellCd[element] / hero.spellCdFull[element];
+/** the elements Kael has learned, in tab order */
+export const learnedElements = (): Element[] => ELEMENTS.filter((e) => hasPerk(SPELL_PERK[e]));
+export const knowsElement = (e: Element): boolean => hasPerk(SPELL_PERK[e]);
+
+/** move the selection to the next learned element; with none learned it stays where it is */
+export function selectNextElement(): boolean {
+  for (let step = 1; step <= ELEMENTS.length; step++) {
+    const i = (game.spell + step) % ELEMENTS.length;
+    if (!knowsElement(ELEMENTS[i])) continue;
+    const moved = i !== game.spell;
+    game.spell = i;
+    return moved;
+  }
+  return false;
+}
+
+/** keep the selection on a learned element, so the first spell learned is the one selected */
+export function keepElementLearned(): void {
+  if (!knowsElement(ELEMENTS[game.spell])) selectNextElement();
+}
 /** the selected element */
 export const selectedElement = (): Element => ELEMENTS[game.spell];
 /** the selected element is still recharging */

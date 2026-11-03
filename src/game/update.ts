@@ -10,6 +10,7 @@ import { updateNumbers } from "./numbers";
 import { updatePickups } from "./pickups";
 import { game, lights, particles, rng } from "./state";
 import { updateWaves } from "./waves";
+import { updateXpOrbs } from "./xpOrbs";
 
 function feedBraziers(): void {
   for (const b of BRAZIERS) {
@@ -50,6 +51,7 @@ export function update(dt: number): void {
   updateEnemies(world);
   updatePickups(dt);
   updateCoins(dt);
+  updateXpOrbs(dt);
   updateWaves(dt);
   game.fx = game.fx.filter((f) => f.update(world));
   for (const g of game.ghosts) g.life -= dt;

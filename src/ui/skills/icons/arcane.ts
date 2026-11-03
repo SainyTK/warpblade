@@ -1,13 +1,62 @@
 import { FIRE_RAMP, HERO_COLORS as HC, PAL, WORLD_COLORS as WC } from "../../../constants/palette";
 import type { SpriteCanvas } from "../../../engine/sprite";
 import { hex, WHITE } from "../../../utils/color";
-import { arc, bolt, chevron, drop, fill, flame, ring, snowflake, sparkle, sword } from "./parts";
+import { arc, bolt, chevron, drop, fill, flame, gem, ring, snowflake, sparkle, sword } from "./parts";
 
 const MANA = PAL.crystal;
 const PURPLE = hex("#5a3aa0");
 
 /** Arcane path icons: mana, runes and the elements */
 export const ARCANE_ICONS: Record<string, (s: SpriteCanvas) => void> = {
+  /** a flask with a flame curling out of its neck */
+  a_flame: (s) => {
+    drop(s, 8, 11, 4, FIRE_RAMP[3], FIRE_RAMP[1]);
+    fill(s, () => s.stroke(8, 3, 8, 6, 1, HC.trim));
+    flame(s, 11, 6, 5);
+  },
+  /** a row of ice spikes rising out of the floor */
+  a_frost_spikes: (s) => {
+    fill(s, () => {
+      for (const [x, h] of [
+        [3, 6],
+        [8, 11],
+        [13, 8],
+      ])
+        s.poly(
+          [
+            [x - 2, 14],
+            [x + 2, 14],
+            [x, 14 - h],
+          ],
+          PAL.ice[3],
+        );
+    });
+    fill(s, () => {
+      s.stroke(1, 14.5, 15, 14.5, 0.7, PAL.ice[2]);
+      s.set(8, 5, WHITE);
+    });
+  },
+  /** a bolt striking a foe and arcing to a second one */
+  a_bolt: (s) => {
+    bolt(s, [
+      [7, 1],
+      [4, 7],
+      [7, 7],
+      [5, 12],
+    ]);
+    fill(s, () => {
+      s.dot(5, 13, 1.6, PAL.volt[2]);
+      s.dot(13, 12, 1.6, PAL.volt[2]);
+    });
+    arc(s, 9, 13, 4, 3.5, 5.9, PAL.volt[4], 0.45);
+  },
+  /** a crystal at the heart of a bursting ring */
+  a_nova: (s) => {
+    ring(s, 8, 8, 6.5, MANA[3]);
+    gem(s, 8, 8, 5, 8);
+    sparkle(s, 3, 3, 2, MANA[4]);
+    sparkle(s, 13, 13, 2, MANA[4]);
+  },
   a_font: (s) => {
     fill(s, () => {
       s.stroke(8, 2, 8, 5, 1, WC.slabLip);

@@ -20,11 +20,19 @@ function excluded(c: CharacterDef, node: SkillNode, ranks: PickView["ranks"]): b
   return allNodes(c).some((n) => n !== node && n.group === node.group && learned(ranks, n.id));
 }
 
+/** the special is not offered once any ultimate is learned, and no ultimate once a stronger one is */
+function supersededUltimate(c: CharacterDef, node: SkillNode, ranks: PickView["ranks"]): boolean {
+  const others = allNodes(c).filter((n) => n !== node && n.ultimate && learned(ranks, n.id));
+  return node.ultimate === c.special ? others.length > 0 : others.some((n) => n.ultimate !== c.special);
+}
+
 /** a node can be offered when its level and paths are reached, nothing locks it out, and it has a rank left */
 export function isAvailable(c: CharacterDef, node: SkillNode, v: PickView): boolean {
   if ((v.ranks[node.id] ?? 0) >= node.ranks) return false;
   if (v.level < node.level) return false;
   if (!anyLearned(node.requires, v.ranks) || !anyLearned(node.crossRequires ?? [], v.ranks)) return false;
+  if (!(node.needs ?? []).every((id) => learned(v.ranks, id))) return false;
+  if (node.ultimate && supersededUltimate(c, node, v.ranks)) return false;
   return !excluded(c, node, v.ranks);
 }
 

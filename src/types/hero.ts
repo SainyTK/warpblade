@@ -6,7 +6,7 @@ import type { Element } from "./spell";
 import type { Point } from "./world";
 
 /** why a press was refused: the selected spell or the warp is still recharging, or MP is short */
-export type DenyReason = "cast" | "warp" | "mp";
+export type DenyReason = "cast" | "warp" | "mp" | "ult";
 
 export type ClipName =
   | "atk1"
@@ -124,6 +124,8 @@ export interface Hero {
   /** seconds since the last dash ended */
   sinceDash: number;
   warpCd: number;
+  /** seconds before the ultimate can be charged again */
+  ultCd: number;
   /** seconds before each element can be cast again */
   spellCd: Record<Element, number>;
   /** the full length of each element's current wait, for the recharge display */

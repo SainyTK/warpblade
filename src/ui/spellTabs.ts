@@ -1,10 +1,10 @@
 import { ELEMENTS } from "../constants/combat";
-import { spellRecharge } from "../game/hero/spell";
+import { knowsElement, spellRecharge } from "../game/hero/spell";
 import { game, hero } from "../game/state";
 import { byId } from "./dom";
 import { createRechargeTab } from "./rechargeTab";
 
-/** The FIRE ICE BOLT tabs: the selected element, each element's recharge, and the jolt of a refused cast. */
+/** The FIRE ICE BOLT tabs, each shown once its spell is learned: the selected element, each element's recharge, and the jolt of a refused cast. */
 const elements = [byId("elFire"), byId("elIce"), byId("elVolt")];
 const tabs = elements.map(createRechargeTab);
 let lastSelected = -1;
@@ -19,6 +19,8 @@ export function updateSpellTabs(): void {
     });
   }
   tabs.forEach((tab, i) => {
+    const known = knowsElement(ELEMENTS[i]);
+    if (elements[i].hidden === known) elements[i].hidden = !known;
     tab.update(spellRecharge(ELEMENTS[i]));
   });
   if (hero.denied.cast > lastDenied) tabs[game.spell].jolt();

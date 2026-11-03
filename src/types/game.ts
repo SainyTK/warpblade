@@ -22,6 +22,19 @@ export interface Coin {
   rest: boolean;
   done?: boolean;
 }
+/** experience dropped by a slain foe: it falls and bounces like a coin, Kael picks it up by touch, and any left fly to him later */
+export interface XpOrb {
+  x: number;
+  y: number;
+  vx: number;
+  vy: number;
+  t: number;
+  /** experience it gives */
+  value: number;
+  /** lying on a floor */
+  rest: boolean;
+  done?: boolean;
+}
 /** an afterimage left by a warp or a dash */
 export interface Ghost {
   s: SpriteImage;
@@ -79,6 +92,7 @@ export interface GameState {
   /** coins picked up this run, banked when it ends */
   coins: number;
   coinDrops: Coin[];
+  xpOrbs: XpOrb[];
   /** Last Light has been spent this run */
   revived: boolean;
   enemies: Enemy[];

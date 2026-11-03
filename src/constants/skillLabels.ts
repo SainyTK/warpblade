@@ -3,6 +3,7 @@ import type { Pace, SkillKind, UltimateId } from "../types/skill";
 export const KIND_LABEL: Record<SkillKind, string> = {
   combo: "Combo",
   movement: "Movement",
+  spell: "Spell",
   enhance: "Enhancement",
   passive: "Passive",
   ultimate: "Ultimate",

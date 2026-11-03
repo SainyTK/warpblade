@@ -35,7 +35,8 @@ export function collectPerks(c: CharacterDef, ranks: Readonly<Record<string, num
   return perks;
 }
 
-/** the ultimate learned from a pick, otherwise the character's special */
-export function learnedUltimate(c: CharacterDef, ranks: Readonly<Record<string, number>>): UltimateId {
-  return allNodes(c).find((n) => n.ultimate && ranks[n.id])?.ultimate ?? c.special;
+/** the strongest ultimate learned from a pick: any other before the character's special; none until one is learned */
+export function learnedUltimate(c: CharacterDef, ranks: Readonly<Record<string, number>>): UltimateId | null {
+  const learned = allNodes(c).filter((n) => n.ultimate && ranks[n.id]);
+  return (learned.find((n) => n.ultimate !== c.special) ?? learned[0])?.ultimate ?? null;
 }
