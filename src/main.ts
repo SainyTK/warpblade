@@ -37,16 +37,24 @@ bindPickDialog();
 bindMenu();
 openMenu("title");
 
-/** one fixed 120 Hz step: only the scenery moves behind the start menu, a level-up pick pauses everything, hit-stop freezes all but the shake */
+/** let a screen shake run out while everything else stands still */
+function settleShake(rate: number): void {
+  game.shake = Math.max(0, game.shake - STEP * rate);
+}
+
+/** one fixed 120 Hz step: only the scenery moves behind the start menu, a skill pick and hit-stop freeze all but the shake */
 function step(): void {
   if (menuContext() === "title") {
     updateAmbience(STEP);
     return;
   }
-  if (game.mode === "pick") return;
+  if (game.mode === "pick") {
+    settleShake(1);
+    return;
+  }
   if (game.freeze > 0) {
     game.freeze -= STEP;
-    game.shake = Math.max(0, game.shake - STEP * 0.5);
+    settleShake(0.5);
     return;
   }
   update(STEP);

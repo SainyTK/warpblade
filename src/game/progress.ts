@@ -3,8 +3,7 @@ import { LEVEL_UP_RESTORE, MAX_LEVEL } from "../constants/progression";
 import { sfx } from "../services/audio";
 import { metaBonus } from "../store/meta";
 import { PK } from "../types/particle";
-import type { PickReason } from "../types/progress";
-import type { Boon, Perk, PickOption } from "../types/skill";
+import type { Perk, PickOption } from "../types/skill";
 import { airLimit, comboLimit, xpToNext } from "../utils/progression";
 import { collectPerks, computeStats, learnedUltimate } from "../utils/stats";
 import { createFloorRing } from "./effects/floorRing";
@@ -64,16 +63,15 @@ export function gainXp(amount: number): void {
   hero.mp = Math.min(progress.stats.mp, hero.mp + progress.stats.mp * LEVEL_UP_RESTORE);
   showBanner(`Level ${progress.level}`, 1.4);
   celebrateLevel();
-  for (let level = from + 1; level <= progress.level; level++) queuePick({ kind: "level", level });
+  progress.picks += progress.level - from;
 }
 
-/** a level up or a cleared wave earned a pick: the game pauses on it, behind any pick already waiting */
-export function queuePick(reason: PickReason): void {
-  progress.picks.push(reason);
-  if (game.mode === "play") game.mode = "pick";
+/** a cleared wave: the game pauses on a pick for every skill point waiting, if any */
+export function openPicks(): void {
+  if (progress.picks > 0 && game.mode === "play") game.mode = "pick";
 }
 
-/** one more rank of a skill or a stat boon; a higher maximum also fills by what it adds */
+/** one more rank of a skill; a higher maximum also fills by what it adds */
 function addRank(id: string): void {
   progress.ranks = { ...progress.ranks, [id]: (progress.ranks[id] ?? 0) + 1 };
   const before = progress.stats;
@@ -83,19 +81,18 @@ function addRank(id: string): void {
   hero.stamina = Math.min(progress.stats.stamina, hero.stamina + Math.max(0, progress.stats.stamina - before.stamina));
 }
 
-function takeBoon(boon: Boon): void {
-  if (boon.stats) addRank(boon.id);
-  if (!boon.restore) return;
+/** Second Wind: HP and MP filled */
+function takeBoon(): void {
   hero.hp = progress.stats.hp;
   hero.mp = progress.stats.mp;
 }
 
-/** take one card of the oldest waiting pick; the game plays on once no pick waits */
+/** spend one skill point on a card; the game plays on once none is left */
 export function choosePick(option: PickOption): void {
   if (option.type === "skill") addRank(option.node.id);
-  else takeBoon(option.boon);
-  progress.picks.shift();
-  if (!progress.picks.length && game.mode === "pick") game.mode = "play";
+  else takeBoon();
+  progress.picks = Math.max(0, progress.picks - 1);
+  if (!progress.picks && game.mode === "pick") game.mode = "play";
 }
 
 export function resetProgress(): void {
