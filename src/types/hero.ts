@@ -51,6 +51,8 @@ export type HeroState =
   | "hurt"
   | "dead"
   | "hang";
+/** the states posed by their own keyed clip; the rest play an action clip */
+export type StateClipName = Exclude<HeroState, "move" | "cast" | "throw" | "warpStrike">;
 
 /** Where a warp goes: an enemy, a floating crystal, or a point in the air. */
 export interface WarpTarget {

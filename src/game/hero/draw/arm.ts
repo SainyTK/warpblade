@@ -5,9 +5,9 @@ import type { Color } from "../../../types/color";
 import { lerp } from "../../../utils/math";
 import { reach, type Vec } from "./reach";
 
-/** where an arm from this shoulder ends up reaching for this hand */
-export const armReach = (shoulder: Vec, hand: Vec): [Vec, Vec] =>
-  reach(shoulder[0], shoulder[1], hand[0], hand[1], BODY.upperArm, BODY.foreArm, 1);
+/** where an arm from this shoulder ends up reaching for this hand, the elbow bent the usual way or flipped */
+export const armReach = (shoulder: Readonly<Vec>, hand: Readonly<Vec>, flipped: boolean): [Vec, Vec] =>
+  reach(shoulder[0], shoulder[1], hand[0], hand[1], BODY.upperArm, BODY.foreArm, flipped ? -1 : 1);
 
 /** a sleeve from the shoulder through the elbow to a gloved hand; the cuff trim marks the arm in front */
 export function drawArm(
