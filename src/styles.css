@@ -214,6 +214,28 @@ body {
   letter-spacing: 0.06em;
   color: var(--mist);
 }
+.ult {
+  position: relative;
+}
+/* the ultimate recharges for longer than anything else: the row dims with a bar filling under it */
+.ult.wait {
+  color: var(--line);
+}
+.ult.wait::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -3px;
+  height: 2px;
+  width: calc(var(--charged, 0) * 100%);
+  background: var(--pink);
+}
+.ult.ready {
+  animation: el-ready 360ms steps(1) both;
+}
+.ult.deny {
+  animation: el-deny 240ms steps(1) both;
+}
 .ult .pips i.on {
   background: var(--pink);
   border-color: var(--pink);
@@ -290,7 +312,7 @@ body {
 .el.volt {
   --tint: var(--volt);
 }
-/* the warp is always at hand, so its tab is lit whenever it is ready */
+/* the warp is lit whenever it is ready; it and each spell tab stay hidden until a pick teaches them */
 .el.warp {
   --tint: var(--crystal);
   margin-right: 6px;

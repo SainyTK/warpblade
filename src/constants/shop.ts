@@ -67,7 +67,7 @@ export const SHOP_ITEMS: readonly ShopItem[] = [
     kind: "skill",
     id: "headStart",
     name: "Head Start",
-    text: "Start every run at level 3, with both of its picks.",
+    text: "Start every run at level 3, with two skill points.",
     price: 200,
   },
   {

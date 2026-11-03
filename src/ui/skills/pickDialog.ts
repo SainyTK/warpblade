@@ -8,7 +8,6 @@ import { sfx } from "../../services/audio";
 import type { PickOption } from "../../types/skill";
 import { rollPicks } from "../../utils/skillPicks";
 import { pickCard } from "./pickCard";
-import { pickTitle } from "./pickTitle";
 
 /** input this soon after the cards appear is ignored, so a J or a tap mashed mid-fight picks nothing by accident */
 const INPUT_LOCK_MS = 450;
@@ -45,8 +44,8 @@ function select(index: number): void {
 /** roll fresh options for the oldest waiting pick and lay them out */
 function deal(): void {
   options = rollPicks(character, progress, rng, PICK_COUNT, BOONS);
-  title.textContent = pickTitle(progress.picks[0]);
-  const more = progress.picks.length - 1;
+  title.textContent = `Wave ${game.wave} clear`;
+  const more = progress.picks - 1;
   sub.textContent = more > 0 ? `Choose one. ${more} more pick${more === 1 ? "" : "s"} after this.` : "Choose one.";
   cards.dataset.count = String(options.length);
   cards.replaceChildren(...options.map((o, i) => pickCard(character, o, progress.ranks, i)));
@@ -105,7 +104,7 @@ export function bindPickDialog(): void {
   });
 }
 
-/** open the pick when a level up or a cleared wave asks for it */
+/** open the pick when a cleared wave finds skill points waiting */
 export function syncPickDialog(): void {
   if (game.mode !== "pick" || dialog.open) return;
   releaseAll();

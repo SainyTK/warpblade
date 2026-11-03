@@ -1,4 +1,3 @@
-import { BOONS } from "../constants/boons";
 import type { CharacterDef } from "../types/character";
 import type { Perk, SkillNode, UltimateId } from "../types/skill";
 import type { StatKey, Stats } from "../types/stats";
@@ -7,7 +6,7 @@ export const STAT_KEYS: readonly StatKey[] = ["ad", "ap", "hp", "mp", "stamina",
 
 export const allNodes = (c: CharacterDef): SkillNode[] => c.branches.flatMap((b) => b.nodes);
 
-/** base plus growth plus flat node and shop bonuses, each total multiplied by the node percentages, then the boons on top */
+/** base plus growth plus flat node and shop bonuses, each total multiplied by the node percentages */
 export function computeStats(
   c: CharacterDef,
   level: number,
@@ -27,10 +26,6 @@ export function computeStats(
   }
   const out = { ...flat };
   for (const k of STAT_KEYS) out[k] = flat[k] * pct[k];
-  for (const boon of BOONS) {
-    const r = ranks[boon.id] ?? 0;
-    for (const k of STAT_KEYS) out[k] += (boon.stats?.[k] ?? 0) * r;
-  }
   return out;
 }
 
@@ -40,7 +35,8 @@ export function collectPerks(c: CharacterDef, ranks: Readonly<Record<string, num
   return perks;
 }
 
-/** the ultimate learned from a pick, otherwise the character's special */
-export function learnedUltimate(c: CharacterDef, ranks: Readonly<Record<string, number>>): UltimateId {
-  return allNodes(c).find((n) => n.ultimate && ranks[n.id])?.ultimate ?? c.special;
+/** the strongest ultimate learned from a pick: any other before the character's special; none until one is learned */
+export function learnedUltimate(c: CharacterDef, ranks: Readonly<Record<string, number>>): UltimateId | null {
+  const learned = allNodes(c).filter((n) => n.ultimate && ranks[n.id]);
+  return (learned.find((n) => n.ultimate !== c.special) ?? learned[0])?.ultimate ?? null;
 }

@@ -8,5 +8,7 @@ export const ULT_LEVELS = [
 ] as const;
 /** how far each level reaches: in front at 1 and 2, both sides at 3, the whole screen at 4 */
 export const ULT_REACH = [80, 130, 170, Number.POSITIVE_INFINITY] as const;
+/** seconds before an ultimate can be charged again: the longest wait of any ability, well past the slowest spell */
+export const ULT_COOLDOWN = 20;
 /** how long Kael is locked in the ultimate and cannot be hurt */
 export const ULT_LOCK = 0.7;

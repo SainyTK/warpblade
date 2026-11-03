@@ -31,9 +31,13 @@ export type Perk =
   | "phantomEdge"
   | "manaBlade"
   | "gravityWell"
-  | "riposte";
+  | "riposte"
+  | "warpStrike"
+  | "fireSpell"
+  | "iceSpell"
+  | "voltSpell";
 export type UltimateId = "crystalNova" | "thousandEdges" | "phantomLegion" | "starfall" | "tempest";
-export type SkillKind = "combo" | "movement" | "enhance" | "passive" | "ultimate" | "fusion";
+export type SkillKind = "combo" | "movement" | "spell" | "enhance" | "passive" | "ultimate" | "fusion";
 /** when a path pays off */
 export type Pace = "early" | "steady" | "late";
 export type BranchId = "blade" | "phantom" | "arcane" | "fusion";
@@ -50,6 +54,8 @@ export interface SkillNode {
   requires: readonly string[];
   /** fusion nodes also need one of these, from another path */
   crossRequires?: readonly string[];
+  /** every one of these must be learned too: the ability this node improves */
+  needs?: readonly string[];
   /** nodes that share a group exclude each other: learning one locks the rest for the run */
   group?: string;
   /** added per rank */
@@ -73,10 +79,6 @@ export interface Boon {
   id: string;
   name: string;
   text: string;
-  /** fills HP and MP when taken */
-  restore?: boolean;
-  /** added for the rest of the run each time it is taken, counted in the learned ranks under the boon's id */
-  stats?: Partial<Stats>;
 }
 
 /** one card of a pick */

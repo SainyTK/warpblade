@@ -1,15 +1,14 @@
-import { ELEMENTS } from "../../constants/combat";
 import { LAUNCH_WAIT_STEPS } from "../../constants/input";
 import { sfx } from "../../services/audio";
 import { pressAge, take, use } from "../input";
 import { hasPerk } from "../progress";
-import { game, hero, progress } from "../state";
+import { hero, progress } from "../state";
 import { isFree } from "./actions";
 import { blowsDone, comboOpen, endCombo, pressAttack, startMove } from "./combo";
 import { tryDash } from "./dash";
 import { deny } from "./deny";
 import { jump } from "./jump";
-import { castCost, isRecharging, startCast } from "./spell";
+import { castCost, isRecharging, learnedElements, selectNextElement, startCast } from "./spell";
 import { startCharge } from "./ultimate";
 import { blink, startThrow, warpCost } from "./warp";
 
@@ -41,6 +40,8 @@ function doubleTap(dir: number): void {
  *  A press while the warp recharges is refused with a tick at once, whatever Kael is doing; so is one short of MP when he could warp. */
 function pressWarp(): boolean {
   const h = hero;
+  // the warp is learned from a pick; until then K does nothing
+  if (!hasPerk("warpStrike")) return true;
   if (h.warpCd > 0) {
     deny("warp");
     return true;
@@ -64,6 +65,8 @@ function pressWarp(): boolean {
 /** I: Spellblade after two hits, otherwise a normal cast.
  *  A press while the element recharges is refused with a tick at once, whatever Kael is doing; so is one short of MP when he could cast. */
 function pressCast(): boolean {
+  // spells are learned from picks; until one is, I does nothing
+  if (!learnedElements().length) return true;
   const spellblade = hasPerk("spellblade") && comboOpen(2);
   if (isRecharging()) deny("cast");
   else if (!spellblade && !isFree() && hero.state !== "hang") return false;
@@ -82,8 +85,5 @@ export function readActions(dir: number, tap: number): void {
   use("warp", pressWarp);
   use("cast", pressCast);
   use("ultimate", startCharge);
-  if (take("cycle")) {
-    game.spell = (game.spell + 1) % ELEMENTS.length;
-    sfx.pickup();
-  }
+  if (take("cycle") && selectNextElement()) sfx.pickup();
 }

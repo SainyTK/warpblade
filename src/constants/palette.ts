@@ -125,3 +125,5 @@ export const WORLD_COLORS = {
 
 /** coins, dark rim to glint */
 export const COIN_GOLD = ramp(["#5a3a12", "#9a6a1e", "#e0ac48", "#ffd86a", "#fff3c0"]);
+/** experience orbs: lime, apart from the gold coins and the green heal orbs */
+export const XP_GLOW = ramp(["#2e4a0e", "#5f8f18", "#a6e03a", "#d6ff6e", "#f6ffd0"]);

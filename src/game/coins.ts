@@ -20,28 +20,32 @@ export function dropCoins(type: EnemyType, x: number, y: number): void {
     game.coinDrops.push({ x, y, vx: rng.range(-60, 60), vy: rng.range(-170, -90), t: 0, rest: false });
 }
 
-function fall(c: Coin, dt: number): void {
+/** what falls, bounces and flies to Kael: coins and experience orbs */
+type Loose = Pick<Coin, "x" | "y" | "vx" | "vy" | "rest">;
+type Motion = Readonly<Record<"gravity" | "bounce" | "pullAccel" | "pullSpeed", number>>;
+
+export function fall(c: Loose, dt: number, m: Motion = M): void {
   if (c.rest) return;
-  c.vy += M.gravity * dt;
+  c.vy += m.gravity * dt;
   c.x = clamp(c.x + c.vx * dt, 4, W - 4);
   c.y += c.vy * dt;
   const floor = surfaceBelow(c.x, c.y - c.vy * dt) - 1;
   if (c.vy > 0 && c.y >= floor) {
     c.y = floor;
-    c.vy *= -M.bounce;
+    c.vy *= -m.bounce;
     c.vx *= 0.6;
     if (Math.abs(c.vy) < 25) Object.assign(c, { vy: 0, vx: 0, rest: true });
   }
 }
 
-function home(c: Coin, dx: number, dy: number, d: number, dt: number): void {
+export function home(c: Loose, dx: number, dy: number, d: number, dt: number, m: Motion = M): void {
   c.rest = false;
-  c.vx += (dx / d) * M.pullAccel * dt;
-  c.vy += (dy / d) * M.pullAccel * dt;
+  c.vx += (dx / d) * m.pullAccel * dt;
+  c.vy += (dy / d) * m.pullAccel * dt;
   const sp = Math.hypot(c.vx, c.vy);
-  if (sp > M.pullSpeed) {
-    c.vx *= M.pullSpeed / sp;
-    c.vy *= M.pullSpeed / sp;
+  if (sp > m.pullSpeed) {
+    c.vx *= m.pullSpeed / sp;
+    c.vy *= m.pullSpeed / sp;
   }
   c.x += c.vx * dt;
   c.y += c.vy * dt;

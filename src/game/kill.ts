@@ -7,13 +7,16 @@ import { TAU } from "../utils/math";
 import { dropCoins } from "./coins";
 import { endWaveOnLastKill } from "./endWave";
 import { enemyCenter } from "./enemies/enemy";
-import { gainXp } from "./progress";
 import { game, lights, particles, rng } from "./state";
 import { shake } from "./world";
+import { dropXp } from "./xpOrbs";
 
-const ORBS = { minion: 2, mini: 10, boss: 18 } as const;
+/** MP orbs by rank; half the first numbers, so MP comes back mostly from sword hits */
+const ORBS = { minion: 1, mini: 5, boss: 9 } as const;
+/** heart drops: half the first numbers and chances */
+const HEARTS = { big: 1, husk: 0.2, other: 0.06 } as const;
 
-/** a dark burst of smoke and motes, orbs that fly back to Kael, experience, and the wave's end when it was the last foe */
+/** a dark burst of smoke and motes, orbs that fly back to Kael, experience orbs to pick up, and the wave's end when it was the last foe */
 export function killEnemy(e: Enemy): void {
   const [x, y] = enemyCenter(e);
   const S = PAL.shadow;
@@ -56,14 +59,14 @@ export function killEnemy(e: Enemy): void {
         size: R.range(0.5, 2.5),
       },
     );
-  const orbs = e.type === "husk" ? 4 : ORBS[e.rank];
+  const orbs = e.type === "husk" ? 2 : ORBS[e.rank];
   for (let i = 0; i < orbs; i++)
     game.pickups.push({ x, y, vx: R.range(-70, 70), vy: R.range(-140, -60), t: 0, kind: "mp" });
-  const hearts = big ? 2 : R.chance(e.type === "husk" ? 0.4 : 0.12) ? 1 : 0;
+  const hearts = big ? HEARTS.big : R.chance(e.type === "husk" ? HEARTS.husk : HEARTS.other) ? 1 : 0;
   for (let i = 0; i < hearts; i++) game.pickups.push({ x, y, vx: R.range(-50, 50), vy: -150, t: 0, kind: "hp" });
   dropCoins(e.type, x, y);
   if (big) shake(0.5, 4);
   sfx.death();
-  gainXp(e.xp);
+  dropXp(e.xp, x, y);
   endWaveOnLastKill();
 }

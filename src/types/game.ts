@@ -22,6 +22,19 @@ export interface Coin {
   rest: boolean;
   done?: boolean;
 }
+/** experience dropped by a slain foe: it falls and bounces like a coin, Kael picks it up by touch, and any left fly to him later */
+export interface XpOrb {
+  x: number;
+  y: number;
+  vx: number;
+  vy: number;
+  t: number;
+  /** experience it gives */
+  value: number;
+  /** lying on a floor */
+  rest: boolean;
+  done?: boolean;
+}
 /** an afterimage left by a warp or a dash */
 export interface Ghost {
   s: SpriteImage;
@@ -54,7 +67,7 @@ export interface DamageNumber {
   big: boolean;
   life: number;
 }
-/** play runs the simulation; pick pauses it while Kael chooses a skill after a level up or a cleared wave; clear is the end of the stage */
+/** play runs the simulation; pick pauses it while Kael chooses a skill when a wave is cleared with skill points waiting; clear is the end of the stage */
 export type GameMode = "play" | "pick" | "clear";
 
 export interface GameState {
@@ -79,6 +92,7 @@ export interface GameState {
   /** coins picked up this run, banked when it ends */
   coins: number;
   coinDrops: Coin[];
+  xpOrbs: XpOrb[];
   /** Last Light has been spent this run */
   revived: boolean;
   enemies: Enemy[];
