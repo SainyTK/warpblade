@@ -8,7 +8,7 @@ import { isFree } from "./actions";
 import { blowsDone, comboOpen, endCombo, pressAttack, startMove } from "./combo";
 import { tryDash } from "./dash";
 import { jump } from "./jump";
-import { canCast, denyCast, startCast } from "./spell";
+import { castCost, denyCast, isRecharging, startCast } from "./spell";
 import { startCharge } from "./ultimate";
 import { blink, canWarp, startThrow, warpCost } from "./warp";
 
@@ -51,12 +51,14 @@ function pressWarp(): boolean {
   return true;
 }
 
-/** I: Spellblade after two hits, otherwise a normal cast. A press while the element recharges or MP is short is refused with a tick. */
+/** I: Spellblade after two hits, otherwise a normal cast.
+ *  A press while the element recharges is refused with a tick at once, whatever Kael is doing; so is one short of MP when he could cast. */
 function pressCast(): boolean {
   const spellblade = hasPerk("spellblade") && comboOpen(2);
-  if (!spellblade && !isFree() && hero.state !== "hang") return false;
-  if (canCast()) startCast(spellblade);
-  else denyCast();
+  if (isRecharging()) denyCast();
+  else if (!spellblade && !isFree() && hero.state !== "hang") return false;
+  else if (hero.mp < castCost()) denyCast();
+  else startCast(spellblade);
   return true;
 }
 

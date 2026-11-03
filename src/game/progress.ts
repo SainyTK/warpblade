@@ -18,10 +18,8 @@ export function refreshProgress(): void {
   progress.comboLimit = comboLimit(progress.level, progress.perks.has("flowingChain"));
   hero.hp = Math.min(hero.hp, progress.stats.hp);
   hero.mp = Math.min(hero.mp, progress.stats.mp);
-  hero.dashes = Math.min(hero.dashes, maxDashes());
+  hero.stamina = Math.min(hero.stamina, progress.stats.stamina);
 }
-
-export const maxDashes = (): number => (hasPerk("doubleDash") ? 2 : 1);
 
 function celebrateLevel(): void {
   game.fx.push(createFloorRing(hero.x, hero.y, 34, PAL.heal, 0.6));
@@ -72,6 +70,7 @@ function learnSkill(node: SkillNode): void {
   refreshProgress();
   hero.hp = Math.min(progress.stats.hp, hero.hp + Math.max(0, progress.stats.hp - before.hp));
   hero.mp = Math.min(progress.stats.mp, hero.mp + Math.max(0, progress.stats.mp - before.mp));
+  hero.stamina = Math.min(progress.stats.stamina, hero.stamina + Math.max(0, progress.stats.stamina - before.stamina));
 }
 
 /** take one card of a level-up pick; the game plays on once no level up waits for a pick */

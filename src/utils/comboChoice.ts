@@ -1,15 +1,23 @@
+import { AIR_STRING } from "../constants/combo";
 import type { MoveId, Situation } from "../types/move";
 
 /** the ground string in order; the last hit a combo allows is always the smash */
 export const GROUND_CHAIN: readonly MoveId[] = ["stepCut", "risingBackhand", "twinFang", "hopCleave", "crescentTurn"];
-/** the air string in order; the last hit a combo allows, or the one after these, is the spike */
+/** the air string in order; the last air hit Kael has left, or the last hit the combo allows, is the spike */
 export const AIR_CHAIN: readonly MoveId[] = ["airCross", "airSomersault", "airDrill"];
 
-function airMove(s: Situation): MoveId {
+/** air attacks Kael may make before he lands */
+export const airHitLimit = (doubleJumped: boolean): number =>
+  AIR_STRING.hits + (doubleJumped ? AIR_STRING.doubleJumpBonus : 0);
+
+/** the next air hit, or null once the air string is spent until Kael lands */
+function airMove(s: Situation): MoveId | null {
+  const left = airHitLimit(s.doubleJumped) - s.airHits;
+  if (left <= 0) return null;
   if (s.down && s.perks.has("meteorDrop")) return "meteor";
   if (s.doubleJumped && !s.whirled && s.perks.has("whirlwind")) return "whirl";
-  if (s.next === s.limit || s.airHits >= AIR_CHAIN.length) return "airSpike";
-  return AIR_CHAIN[s.airHits];
+  if (left === 1 || s.next === s.limit) return "airSpike";
+  return AIR_CHAIN[Math.min(s.airHits, AIR_CHAIN.length - 1)];
 }
 
 /** what the foes around Kael ask for, when no held key asks for something else */
@@ -23,9 +31,9 @@ function situational(s: Situation): MoveId | null {
 
 /**
  * The move J starts now. Held keys and skills come first (they are the player asking for something),
- * then the situation, then the next hit of the plain string.
+ * then the situation, then the next hit of the plain string. Null when the air string is spent.
  */
-export function chooseMove(s: Situation): MoveId {
+export function chooseMove(s: Situation): MoveId | null {
   if (!s.ground && !s.hanging) return airMove(s);
   if (s.hanging) return AIR_CHAIN[0];
   if (s.dashing && s.perks.has("dashStrike")) return "dashStrike";

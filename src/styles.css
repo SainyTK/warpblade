@@ -16,6 +16,7 @@
   --volt: #b4a8ff;
   --hp: #e0405a;
   --heal: #9cf0a0;
+  --stamina: #3fc06a;
   --back: #ff9a4a;
   --pink: #ff7ae0;
   --danger: #b0405a;
@@ -141,6 +142,34 @@ body {
   background: var(--crystal);
   box-shadow: 0 0 6px var(--crystal);
 }
+.bar.st span {
+  color: var(--heal);
+}
+.bar.st .fill {
+  background: var(--stamina);
+  box-shadow: 0 0 6px var(--stamina);
+}
+/* a notch at every dash's share of the bar, set as --dash-share by the HUD */
+.bar.st .track::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    to right,
+    transparent 0 calc(var(--dash-share, 50%) - 1px),
+    var(--night) calc(var(--dash-share, 50%) - 1px) var(--dash-share, 50%)
+  );
+}
+/* a dash the bar could not pay for: the empty track blinks red */
+/* a bar too empty for what was pressed blinks its border */
+.bar.empty .track {
+  animation: bar-empty 120ms steps(1) infinite;
+}
+@keyframes bar-empty {
+  50% {
+    border-color: var(--hp);
+  }
+}
 .bar.xp span {
   color: var(--brass);
   white-space: nowrap;
@@ -247,7 +276,7 @@ body {
   border-color: var(--volt);
 }
 /* Spell cooldowns: a recharging element tab dims and a pixel bar along its bottom fills as it recharges (--charged, 0 to 1).
-   The tab blinks when it is ready again, and jolts when a cast is refused. */
+   The tab blinks when it is ready again, and jolts when a cast is refused while it recharges. */
 .el {
   position: relative;
   --tint: var(--mist);
@@ -282,9 +311,6 @@ body {
 .el.deny {
   animation: el-deny 240ms steps(1) both;
 }
-.bar.mp.deny .track {
-  animation: mp-deny 240ms steps(1) both;
-}
 @keyframes el-ready {
   0%,
   50% {
@@ -295,20 +321,14 @@ body {
 @keyframes el-deny {
   0% {
     transform: translateX(2px);
-    border-color: var(--text);
+    border-color: var(--hp);
   }
   33% {
     transform: translateX(-2px);
-    border-color: var(--text);
+    border-color: var(--hp);
   }
   66% {
     transform: translateX(1px);
-  }
-}
-@keyframes mp-deny {
-  0%,
-  66% {
-    border-color: var(--text);
   }
 }
 .score {
@@ -758,6 +778,10 @@ body[data-hud="outside"] .boss {
   }
   .el.deny {
     animation: none;
-    border-color: var(--text);
+    border-color: var(--hp);
+  }
+  .bar.empty .track {
+    animation: none;
+    border-color: var(--hp);
   }
 }

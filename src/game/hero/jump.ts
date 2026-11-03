@@ -10,6 +10,7 @@ import { game, hero, particles, rng } from "../state";
 import { dust } from "../world";
 import { isFree, leaveHang, setState } from "./actions";
 import { blowsDone, endMove } from "./combo";
+import { lift } from "./lift";
 
 function doubleJumpBurst(): void {
   const h = hero;
@@ -26,7 +27,7 @@ export function jump(): boolean {
   const h = hero;
   if (h.state === "hang") {
     leaveHang();
-    h.vy = -M.hangJump;
+    lift(M.hangJumpRise, true);
     h.jumps = 1;
     setState("jump");
     return true;
@@ -40,13 +41,15 @@ export function jump(): boolean {
     return true;
   }
   if (h.ground) {
-    Object.assign(h, { vy: -M.jump, ground: false, jumps: 1, cutShort: false });
+    lift(M.jumpRise, true);
+    h.jumps = 1;
     setState("jump");
     dust(h.x, h.y, 4);
     return true;
   }
   if (h.jumps >= 2 || !hasPerk("doubleJump")) return false;
-  Object.assign(h, { vy: -M.doubleJump, jumps: 2, cutShort: false });
+  lift(M.doubleJumpRise, true);
+  h.jumps = 2;
   setState("jump");
   doubleJumpBurst();
   return true;

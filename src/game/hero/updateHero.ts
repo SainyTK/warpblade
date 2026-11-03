@@ -6,10 +6,11 @@ import { hero, progress } from "../state";
 import { settle } from "./actions";
 import { animateHero } from "./animate";
 import { runMove, tickCombo } from "./combo";
-import { rechargeDash, runDash } from "./dash";
+import { runDash } from "./dash";
 import { moveHero } from "./physics";
 import { readActions } from "./readActions";
 import { castSpeed, rechargeSpells, runCast } from "./spell";
+import { regenStamina } from "./stamina";
 import { readDoubleTap } from "./taps";
 import { runCharge, runUltimate } from "./ultimate";
 import { doWarp, releaseSword } from "./warp";
@@ -70,14 +71,16 @@ export function updateHero(dt: number): void {
   h.warpCd = Math.max(0, h.warpCd - dt);
   rechargeSpells(dt);
   h.riposte = Math.max(0, h.riposte - dt);
-  rechargeDash(dt);
+  h.sinceDash += dt;
+  regenStamina(dt);
   tickCombo(dt);
   if (h.running && dir !== h.face) h.running = false;
   if (h.state !== "dead") {
     h.mp = Math.min(progress.stats.mp, h.mp + (h.state === "hang" ? MP_REGEN.hanging : MP_REGEN.normal) * dt);
     readActions(dir, tap);
   }
-  if (!isHeld("up") && h.vy < -120 && !h.cutShort && h.state === "jump") {
+  // letting go of Up cuts a jump's rise short, also when an attack or a cast started on the way up
+  if (!isHeld("up") && h.vy < -120 && !h.cutShort) {
     h.vy *= 0.55;
     h.cutShort = true;
   }

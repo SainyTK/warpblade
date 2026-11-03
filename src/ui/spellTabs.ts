@@ -12,6 +12,9 @@ const lastCharge = tabs.map(() => CHARGE_STEPS);
 let lastSelected = -1;
 /** the deny flash time last seen; a rise means a new refused press */
 let lastDenied = 0;
+/** the last refused press was for MP, so the MP bar blinks while the flash lasts */
+let mpShort = false;
+let mpBlinking = false;
 
 /** recharged share of an element in whole steps, CHARGE_STEPS when ready */
 const chargeSteps = (i: number): number => CHARGE_STEPS - Math.ceil(spellRecharge(ELEMENTS[i]) * CHARGE_STEPS);
@@ -23,7 +26,7 @@ function replay(el: HTMLElement, name: string): void {
   el.classList.add(name);
 }
 
-/** dim recharging tabs and fill their bars, blink a tab when it is ready, and jolt the tab or MP bar that refused a cast;
+/** dim recharging tabs and fill their bars, blink a tab when it is ready, jolt a recharging tab that refused a cast and blink the MP bar when MP was short;
  *  the DOM is touched only when something shown changes */
 export function updateSpellTabs(): void {
   if (game.spell !== lastSelected) {
@@ -41,9 +44,13 @@ export function updateSpellTabs(): void {
     if (ready) replay(tab, "ready");
     lastCharge[i] = charge;
   });
-  const denied = hero.castDenied > lastDenied;
+  if (hero.castDenied > lastDenied) {
+    mpShort = hero.spellCd[selectedElement()] <= 0;
+    if (!mpShort) replay(tabs[game.spell], "deny");
+  }
   lastDenied = hero.castDenied;
-  if (!denied) return;
-  if (hero.spellCd[selectedElement()] > 0) replay(tabs[game.spell], "deny");
-  else replay(mpBar, "deny");
+  const blink = mpShort && hero.castDenied > 0;
+  if (blink === mpBlinking) return;
+  mpBlinking = blink;
+  mpBar.classList.toggle("empty", blink);
 }

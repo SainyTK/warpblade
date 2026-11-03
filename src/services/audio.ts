@@ -106,6 +106,10 @@ class SoundEffects {
   dodge(): void {
     this.noise(0.18, 3000, 900, 0.08);
   }
+  /** a quiet, dull puff when a dash has no stamina to spend */
+  tired(): void {
+    this.noise(0.1, 500, 250, 0.05, "lowpass");
+  }
   doubleJump(): void {
     this.tone(600, 1100, 0.1, "sine", 0.04);
   }

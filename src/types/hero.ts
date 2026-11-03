@@ -87,6 +87,8 @@ export interface Hero {
   hasSword: boolean;
   hitDone: boolean;
   cutShort: boolean;
+  /** the highest point Kael may rise to before he lands again, set by his last jump or a lift from the floor */
+  liftTop: number;
   pose: Pose;
   /** where the near hand ended up in the last drawn frame, local pixels */
   hand: [number, number];
@@ -110,8 +112,12 @@ export interface Hero {
   /** air attacks since leaving the ground */
   airHits: number;
   whirled: boolean;
-  dashes: number;
-  dashCd: number;
+  /** spent by dashes; the maximum is progress.stats.stamina */
+  stamina: number;
+  /** seconds left before stamina starts coming back */
+  staminaWait: number;
+  /** seconds left of the bar's flash after a dash it could not pay for */
+  staminaFlash: number;
   airDashed: boolean;
   /** seconds since the last dash ended */
   sinceDash: number;

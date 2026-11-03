@@ -29,8 +29,8 @@ const spellWait = (element: Element, cast: Element): number =>
 export const spellRecharge = (element: Element): number => hero.spellCd[element] / hero.spellCdFull[element];
 /** the selected element */
 export const selectedElement = (): Element => ELEMENTS[game.spell];
-/** the selected element has recharged and the MP is there */
-export const canCast = (): boolean => hero.spellCd[selectedElement()] <= 0 && hero.mp >= castCost();
+/** the selected element is still recharging */
+export const isRecharging = (): boolean => hero.spellCd[selectedElement()] > 0;
 
 export function rechargeSpells(dt: number): void {
   const cd = hero.spellCd;

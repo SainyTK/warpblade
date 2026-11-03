@@ -34,7 +34,12 @@ Sources: the Grand Chase Fandom wiki pages for the Knight, Assassin, Thief, Spel
 - The skill variants stay on their inputs: Up for the launcher, Down for the sweep, running for the thrust, right after a dash for the dash strike, and Down in the air for the meteor drop.
 - The Critical and Double timing idea becomes Keen timing: a J pressed in the short moment after a blow lands makes the next blow a sure critical hit.
 - Mashing spoils Keen timing, because any J pressed before the current blow has landed cancels it, so rhythm pays and mashing does not.
-- The air string is four distinct hits: a cross cut, a somersault cut that lifts Kael, a three-stab drill and a hammer fall that spikes the foe.
+- A jump attack is a short air string, much shorter than the ground string: three hits per time in the air, a cross cut, a somersault cut and a hammer fall that spikes the foe.
+- A double jump adds one hit, the three-stab drill, before the hammer.
+- The hammer always ends the air string, and Kael has no air attack left until he lands.
+- The launcher route still pays: the chase cut takes Kael up after the launched foe, and the air string that follows has the same three hits.
+- Nothing done in the air carries Kael above his jump: attacks, casts and the special charge keep full gravity while he rises and only hang once he starts to fall.
+- Moves that lift Kael on their own, like the somersault, rise by their own height but never past the top of his last jump, and a lift never adds to a rise he already has.
 - Hit feel is set per hit: hitstop, screen shake, sound pitch, slash shape and color, afterimages on the fast footwork, and how early the next press may cancel the follow-through.
 
 ## What Warpblade leaves out

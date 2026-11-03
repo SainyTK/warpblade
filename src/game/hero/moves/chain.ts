@@ -130,10 +130,7 @@ export const CHAIN_MOVES = {
         feel: FEEL.firm,
       },
     ],
-    enter: () => {
-      hero.ground = false;
-      hero.vy = -200;
-    },
+    lift: 22,
     strides: [{ from: 0, to: 0.24, speed: 110 }],
     afterHit: cleaveImpact,
   },

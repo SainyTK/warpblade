@@ -32,7 +32,7 @@ export const TOUCH_BUTTONS: readonly TouchButtonSpec[] = [
     action: "dash",
     label: "Dash",
     key: "L",
-    hint: "Dash. Nothing can touch you while you dash",
+    hint: "Dash. Nothing can touch you while you dash, and each dash spends stamina",
     size: 17,
     angle: 150,
     reach: 30,

@@ -24,6 +24,9 @@ export function resetRun(banner = "Rise again"): void {
   Object.assign(hero, {
     hp: progress.stats.hp,
     mp: progress.stats.mp,
+    stamina: progress.stats.stamina,
+    staminaWait: 0,
+    staminaFlash: 0,
     x: 70,
     y: GROUND,
     vx: 0,
@@ -39,8 +42,6 @@ export function resetRun(banner = "Rise again"): void {
     chain: 0,
     link: 0,
     comboCd: 0,
-    dashes: 1,
-    dashCd: 0,
     warpCd: 0,
     spellCd: { fire: 0, ice: 0, volt: 0 },
     spellCdFull: { fire: 1, ice: 1, volt: 1 },
