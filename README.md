@@ -81,6 +81,7 @@ The buttons on the right sit in an arc around a large Attack button: Jump, Dash,
 Several fingers work at once, and a thumb can slide from one button to the next.
 Hold Special to charge it: its ring fills one quarter per level, and you strike when you let go.
 Buttons dim while their action lacks MP or waits on a cooldown, and phones that support it give a short vibration on each press.
+The page holds still under your fingers: double taps, pinches and long presses never zoom, select text or open a menu.
 
 The game opens on a start menu with Start, Controls and Options.
 Pausing adds Resume, Restart run and Quit run, and freezes the game until you resume.

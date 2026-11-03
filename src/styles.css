@@ -38,18 +38,30 @@ body {
   height: 100%;
   margin: 0;
   overflow: hidden;
+  overscroll-behavior: none;
+  touch-action: none;
   background: var(--night);
   color: var(--text);
+}
+/* a game, not a document: touches never zoom, pan, select, drag or open the long-press callout. touch-action
+   reaches every element through its ancestors up to the nearest scroller, so the two scrolling lists opt back into panning. */
+html,
+body,
+body * {
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+  -webkit-user-drag: none;
+  -webkit-tap-highlight-color: transparent;
+}
+.menu-scroll,
+.level-up {
+  touch-action: pan-y;
 }
 body {
   font-family: var(--body);
   font-size: 14px;
   line-height: 1.55;
-  overscroll-behavior: none;
-  touch-action: manipulation;
-  user-select: none;
-  -webkit-user-select: none;
-  -webkit-tap-highlight-color: transparent;
 }
 .safe-area {
   position: fixed;

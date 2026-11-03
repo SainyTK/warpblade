@@ -18,6 +18,12 @@ export function optionsScreen(): MenuView {
   if (typeof navigator.vibrate === "function")
     list.append(toggleRow("Vibration", settings.vibration, (on) => setSetting("vibration", on)));
   if (canFullscreen()) list.append(toggleRow("Fullscreen", isFullscreen(), toggleFullscreen));
-  list.append(backItem());
-  return { title: "Options", subtitle: "Saved in this browser.", content: list };
+  // on a short screen the rows scroll inside the panel and Back stays in reach below them
+  const scroll = document.createElement("div");
+  scroll.className = "menu-scroll";
+  scroll.append(list);
+  const content = document.createElement("div");
+  content.className = "menu-sub";
+  content.append(scroll, backItem());
+  return { title: "Options", subtitle: "Saved in this browser.", content };
 }

@@ -17,6 +17,7 @@ import { fitStage } from "./ui/fitStage";
 import { updateHud } from "./ui/hud";
 import { bindMenu } from "./ui/menu/bindMenu";
 import { isMenuOpen, menuContext, openMenu } from "./ui/menu/menuState";
+import { preventZoom } from "./ui/preventZoom";
 import { bindPickDialog, syncPickDialog } from "./ui/skills/pickDialog";
 import { bindTouch, syncTouch } from "./ui/touch/bindTouch";
 
@@ -27,6 +28,7 @@ const image = ctx.createImageData(W, H);
 const background = buildBackground();
 
 game.best = loadBest();
+preventZoom();
 fitStage();
 bindKeyboard();
 bindTouch();

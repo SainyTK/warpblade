@@ -47,8 +47,6 @@ export function bindTouch(): void {
   addEventListener("resize", resize);
   const resetStick = bindStick(ctl, () => unit);
   const buttons = bindButtons(ctl);
-  ctl.root.addEventListener("contextmenu", (ev) => ev.preventDefault());
-  document.addEventListener("gesturestart", (ev) => ev.preventDefault());
   watchTouchMode();
   bound = {
     ctl,
