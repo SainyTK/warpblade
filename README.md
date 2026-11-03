@@ -46,7 +46,7 @@ His crystal sword can be thrown, and wherever it lands, he follows.
 - **Stamina.** Each dash spends half the green stamina bar, so two dashes in a row leave Kael out of breath until it refills.
   It comes back after a short pause, slower while he attacks, and a perfect dodge gives some back.
   Deep Breath adds a third and then a fourth dash, and Quickstep refills the bar faster.
-- **A pick at every level up and every cleared wave.** The fight pauses and three cards offer skills Kael can learn now, each with its own pixel icon. Blade is strong early, Phantom trades power for mobility and crits, Arcane is weak early and strong late. Fusion skills join two paths once both are started: shatter frozen foes, set off burning ones, charge foes by dashing through them, and more. Some skills lock out their rivals for the run, and passives come back until every rank is learned.
+- **Skill points spent between waves.** Every level up gives a skill point, and when a wave is cleared the fight pauses and three cards offer skills Kael can learn now, each with its own pixel icon. Blade is strong early, Phantom trades power for mobility and crits, Arcane is weak early and strong late. Fusion skills join two paths once both are started: shatter frozen foes, set off burning ones, charge foes by dashing through them, and more. Some skills lock out their rivals for the run, and passives come back until every rank is learned.
   Late in a run, when too few skills are left, boons fill the empty cards: Second Wind, Vigor and Honing.
 - **Charged specials.** Kael starts with Crystal Nova. Hold U through four levels; level 4 spends a full MP bar. Level ups can offer stronger ultimates: a storm of blades, a legion of phantoms, falling stars or a lightning tempest.
 - **Three elements.** A flask of fire that sets the floor burning, a running line of ice spikes that freezes, and lightning that arcs to a second foe.
@@ -105,10 +105,10 @@ Move through the menu with the arrow keys or `W` `S`, pick with `J` or `Enter`, 
 The Controls screen lists every key from the game's key map, and on touch screens the stick and buttons as they look on screen.
 Options holds sound, volume, screen shake, damage numbers, vibration on devices that can vibrate, and fullscreen, saved in this browser.
 
-Each level up pauses the game and offers three skills, and so does the fall of each wave's last foe.
+Each level up gives a skill point.
+When a wave's last foe falls with points waiting, the game pauses and offers three skills for each point.
 Choose with `A` `D` or the arrows and learn with `J` or `Enter`, press `1` to `3`, or click or tap a card.
-Several level ups at once give one pick each, and a level up on a wave's last kill comes first, then the wave's pick.
-The last wave of the stage gives no pick, since the stage ends there.
+Points left when the last wave of the stage falls are not spent, since the stage ends there.
 
 ## Run it locally
 

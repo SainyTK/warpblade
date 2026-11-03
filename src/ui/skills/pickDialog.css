@@ -1,4 +1,4 @@
-/* Skill pick after a level up or a cleared wave: up to three cards over the paused game. A row of tall cards on wide screens, a stack of wide cards on phones. */
+/* Skill pick when a wave is cleared with skill points waiting: up to three cards over the paused game. A row of tall cards on wide screens, a stack of wide cards on phones. */
 .level-up {
   width: min(840px, 100vw - 32px);
   max-height: calc(100dvh - 32px);

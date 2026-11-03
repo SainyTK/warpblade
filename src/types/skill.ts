@@ -73,10 +73,6 @@ export interface Boon {
   id: string;
   name: string;
   text: string;
-  /** fills HP and MP when taken */
-  restore?: boolean;
-  /** added for the rest of the run each time it is taken, counted in the learned ranks under the boon's id */
-  stats?: Partial<Stats>;
 }
 
 /** one card of a pick */
