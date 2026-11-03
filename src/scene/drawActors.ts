@@ -3,10 +3,8 @@ import { ELEMENT_COLOR, ENEMY_COLORS, PAL } from "../constants/palette";
 import { ULT_LEVELS } from "../constants/ultimate";
 import { ellipseRing, glow, glowLine, line, place, px } from "../engine/frame";
 import { blit, SpriteCanvas } from "../engine/sprite";
-import { drawHusk } from "../game/enemies/drawHusk";
-import { drawWarden } from "../game/enemies/drawWarden";
-import { drawWisp } from "../game/enemies/drawWisp";
 import { enemyBox, enemyCenter } from "../game/enemies/enemy";
+import { kindOf } from "../game/enemies/kinds";
 import { drawHero } from "../game/hero/drawHero";
 import { heroLook } from "../game/hero/look";
 import { canAffordUlt } from "../game/hero/ultimate";
@@ -21,12 +19,6 @@ const HP_BAR_EMPTY = hex("#120a1e");
 const STUN_STAR = hex("#ffe26b");
 /** ring colors for ultimate levels 1 to 4 */
 const LEVEL_COLORS = [PAL.crystal[3], PAL.crystal[4], hex("#ffe26b"), hex("#ff7ae0")];
-
-function sprite(e: Enemy) {
-  if (e.type === "wisp") return drawWisp(e, game.t);
-  if (e.type === "warden") return drawWarden(e, game.t);
-  return drawHusk(e, game.t);
-}
 
 /** a small HP bar over minions; bosses use the bar at the bottom of the screen */
 function drawMinionBar(e: Enemy): void {
@@ -51,17 +43,18 @@ function drawStun(e: Enemy): void {
 
 export function drawEnemies(): void {
   for (const e of game.enemies) {
-    const s = sprite(e);
-    const winding = e.state === "wind" || e.state === "volley" || (e.state === "leap" && e.vy === 0);
+    const kind = kindOf(e.type);
+    const s = kind.draw(e, game.t);
+    const winding =
+      e.state === "wind" || e.state === "volley" || e.state === "charge" || (e.state === "leap" && e.vy === 0);
     const tremble = winding ? (Math.floor(game.t * 30) % 2 ? 1 : -1) : 0;
     const tint = e.flash > 0 ? WHITE : e.frozen > 0 ? PAL.ice[4] : 0;
     const tintAmount = e.flash > 0 ? 1 : e.frozen > 0 ? 0.5 : 0;
     blit(s, e.x + tremble, e.y, e.face < 0, { tint, tintAmount });
     place();
     const [cx, cy] = enemyCenter(e);
-    const size = e.type === "wisp" ? 16 : e.type === "husk" ? 22 : 40;
-    glow(cx, cy, size, PAL.shadow[3], winding ? 0.5 : 0.22);
-    if (winding) glow(cx + e.face * 3, cy - (e.type === "wisp" ? 1 : 6), 8, ENEMY_COLORS.eyeGlow, 0.6);
+    glow(cx, cy, kind.glow.radius, kind.glow.color, winding ? 0.5 : 0.22);
+    if (winding) glow(cx + e.face * 3, cy + kind.glow.eyeY, 8, ENEMY_COLORS.eyeGlow, 0.6);
     drawMinionBar(e);
     drawStun(e);
   }

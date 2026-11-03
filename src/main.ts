@@ -7,7 +7,6 @@ import "./styles.css";
 import { H, MAX_FRAME, STEP, W } from "./constants/stage";
 import { game } from "./game/state";
 import { update, updateAmbience } from "./game/update";
-import { buildBackground } from "./scene/background";
 import { renderScene } from "./scene/renderScene";
 import { loadBest } from "./services/bestScore";
 import { bindKeyboard } from "./ui/bindKeyboard";
@@ -25,7 +24,6 @@ const canvas = byId<HTMLCanvasElement>("game");
 const ctx = canvas.getContext("2d");
 if (!ctx) throw new Error("This browser cannot draw to a 2D canvas.");
 const image = ctx.createImageData(W, H);
-const background = buildBackground();
 
 game.best = loadBest();
 preventZoom();
@@ -71,7 +69,7 @@ function frame(now: number): void {
     step();
   }
   if (menuContext() !== "pause") {
-    renderScene(background, image.data);
+    renderScene(image.data);
     ctx?.putImageData(image, 0, 0);
   }
   updateHud();

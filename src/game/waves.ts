@@ -1,23 +1,16 @@
 import { ENEMIES } from "../constants/enemies";
-import { GROUND, W } from "../constants/stage";
+import { W } from "../constants/stage";
 import { STAGE_WAVES } from "../constants/waves";
 import { sfx } from "../services/audio";
 import { saveBest } from "../services/bestScore";
-import type { EnemyType } from "../types/enemy";
+import { eraOf } from "../utils/eras";
 import { waveFoes, waveKind } from "../utils/waves";
 import { createRift } from "./effects/rift";
 import { endWave } from "./endWave";
 import { makeEnemy } from "./enemies/enemy";
+import { kindOf } from "./enemies/kinds";
 import { endRun } from "./runEnd";
 import { game, hero, rng, showBanner } from "./state";
-
-/** rift height and spawn height by foe */
-const RIFT: Record<EnemyType, { height: number; y: () => number; riftY: (y: number) => number }> = {
-  wisp: { height: 11, y: () => rng.range(40, 100), riftY: (y) => y },
-  husk: { height: 16, y: () => GROUND, riftY: () => GROUND - 14 },
-  brute: { height: 26, y: () => GROUND, riftY: () => GROUND - 22 },
-  warden: { height: 30, y: () => 60, riftY: (y) => y },
-};
 
 function spawnX(): number {
   const x = rng.range(30, W - 30);
@@ -34,9 +27,17 @@ function startWave(): void {
   const kind = waveKind(game.wave);
   const foes = waveFoes(game.wave);
   const leader = ENEMIES[foes[0]].name;
-  showBanner(kind === "normal" ? `Wave ${game.wave}` : `Wave ${game.wave}: ${leader}`, kind === "normal" ? 1.4 : 2.2);
+  const era = eraOf(game.wave);
+  // a new era announces itself, unless a boss wave has its own name to show
+  const title =
+    kind !== "normal"
+      ? `Wave ${game.wave}: ${leader}`
+      : era.first === game.wave && game.wave > 1
+        ? `Wave ${game.wave}: ${era.name}`
+        : `Wave ${game.wave}`;
+  showBanner(title, kind === "normal" && title === `Wave ${game.wave}` ? 1.4 : 2.2);
   foes.forEach((type, i) => {
-    const r = RIFT[type];
+    const r = kindOf(type).rift;
     const x = type === "warden" ? (hero.x < W / 2 ? W - 70 : 70) : spawnX();
     const y = r.y();
     game.fx.push(

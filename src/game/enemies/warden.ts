@@ -4,6 +4,7 @@ import { GROUND, W } from "../../constants/stage";
 import { sfx } from "../../services/audio";
 import type { Enemy } from "../../types/enemy";
 import { PK } from "../../types/particle";
+import { eraOf } from "../../utils/eras";
 import { approach, clamp } from "../../utils/math";
 import { createRift } from "../effects/rift";
 import { createShadowOrb } from "../effects/shadowOrb";
@@ -35,11 +36,13 @@ function fireVolley(e: Enemy): void {
 }
 
 function summon(): void {
-  const minions = game.enemies.filter((m) => m.type === "wisp").length;
+  // the warden calls the flyers of the era it fights in
+  const flyer = eraOf(game.wave).flyer;
+  const minions = game.enemies.filter((m) => m.type === flyer).length;
   for (let i = 0; i < Math.min(2, MAX_SUMMONS - minions); i++) {
     const x = clamp(hero.x + (i ? 70 : -70), 20, W - 20);
     const y = rng.range(50, 90);
-    game.fx.push(createRift(x, y, 11, i * 0.2, () => game.enemies.push(makeEnemy("wisp", x, y, game.wave, 0.25))));
+    game.fx.push(createRift(x, y, 11, i * 0.2, () => game.enemies.push(makeEnemy(flyer, x, y, game.wave, 0.25))));
   }
 }
 

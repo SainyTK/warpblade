@@ -9,7 +9,7 @@ import { dealDamage } from "../damage";
 import { createImpact } from "../effects/impact";
 import { createSlash } from "../effects/slash";
 import { createWarpLine } from "../effects/warpLine";
-import { enemyBox, enemyCenter } from "../enemies/enemy";
+import { enemyBox, enemyCenter, walks } from "../enemies/enemy";
 import { ghostCanvas } from "../hero/afterimages";
 import { drawHero } from "../hero/drawHero";
 import { heroLook } from "../hero/look";
@@ -47,7 +47,7 @@ export function castPhantomLegion(level: number): void {
       foe,
       at: i * 0.07,
       x,
-      y: foe.type === "husk" || foe.type === "brute" ? foe.y : enemyCenter(foe)[1] + 18,
+      y: walks(foe) ? foe.y : enemyCenter(foe)[1] + 18,
       face: -behind,
       shown: false,
       strikes: 0,

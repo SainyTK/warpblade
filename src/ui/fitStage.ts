@@ -1,5 +1,6 @@
 import { H, W } from "../constants/stage";
 import { paintBackdrop } from "../scene/backdrop";
+import { onSceneChange } from "../scene/scenery";
 import type { Insets } from "../types/layout";
 import { stageLayout } from "../utils/stageLayout";
 import { byId } from "./dom";
@@ -68,6 +69,11 @@ export function fitStage(): void {
       },
       { once: true },
     );
+  // a new era repaints the world around the stage in its own colors
+  onSceneChange(() => {
+    painted = "";
+    fit();
+  });
   addEventListener("resize", fit);
   document.addEventListener("fullscreenchange", fit);
   watchDensity();

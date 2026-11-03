@@ -8,7 +8,7 @@ import { clamp } from "../../utils/math";
 import { createFloorRing } from "../effects/floorRing";
 import { createSlash } from "../effects/slash";
 import { createThrownSword } from "../effects/thrownSword";
-import { enemyBox, enemyCenter } from "../enemies/enemy";
+import { enemyBox, enemyCenter, walks } from "../enemies/enemy";
 import { isHeld } from "../input";
 import { meleeHit } from "../meleeHit";
 import { hasPerk } from "../progress";
@@ -102,7 +102,7 @@ export function doWarp(target: WarpTarget): void {
     const [ex, ey] = enemyCenter(enemy);
     hero.face = Math.sign(ex - ox) || hero.face;
     nx = ex - hero.face * 13;
-    ny = enemy.type === "wisp" || enemy.type === "warden" ? ey + 18 : enemy.y;
+    ny = walks(enemy) ? enemy.y : ey + 18;
   } else if (target.anchor) {
     nx = target.anchor.x - hero.face * 2;
     ny = target.anchor.y + 38;
@@ -144,7 +144,7 @@ export function blink(): boolean {
   const box = enemyBox(e);
   const side = Math.sign(e.x - hero.x) || hero.face;
   const nx = clamp(side > 0 ? box[2] + 9 : box[0] - 9, 8, W - 8);
-  const ny = e.type === "wisp" || e.type === "warden" ? Math.min(GROUND, e.y + 18) : e.y;
+  const ny = walks(e) ? e.y : Math.min(GROUND, e.y + 18);
   arrive(nx, ny);
   hero.face = -side;
   strikeOnArrival(BLINK_POWER);
