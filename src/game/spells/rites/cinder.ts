@@ -45,9 +45,10 @@ function createCinder(x: number, y: number): Effect {
       for (let dx = -A.halfWidth; dx <= A.halfWidth; dx++) {
         const f = flicker(x + dx, beat);
         px(x + dx, y, RITE_RAMP[f > 0.6 ? 4 : f > 0.25 ? 3 : 2], k);
-        if (f > 0.8) px(x + dx, y - 1, RITE_RAMP[f > 0.93 ? 5 : 3], k);
+        if (f > 0.7) px(x + dx, y - 1, RITE_RAMP[f > 0.9 ? 5 : 4], k);
+        if (f > 0.9) px(x + dx, y - 2, RITE_RAMP[4], k);
       }
-      glow(x, y - 1, 10, RITE_RAMP[3], 0.22 * k);
+      glow(x, y - 2, 10, RITE_RAMP[4], 0.3 * k);
     },
     draw() {},
   };

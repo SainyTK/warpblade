@@ -12,7 +12,7 @@ let lungePath: [number, number][] = [];
 function lay(x: number, y: number): void {
   if (Math.abs(x - lastX) < ASHEN_WAKE.spacing) return;
   lastX = x;
-  layCinder(x, surfaceBelow(x, y - 2));
+  layCinder(x, surfaceBelow(x, y));
 }
 
 /** Ashen Wake: vaults, dives and full lunges leave burning ground behind her */

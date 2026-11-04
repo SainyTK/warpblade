@@ -45,6 +45,14 @@ export function updateAmbience(dt: number): void {
   lights.update(dt);
 }
 
+/** run every effect; effects spawned during the pass (a flask's floor ring, an ember from a brazier) join the list after it */
+function updateEffects(dt: number): void {
+  const running = game.fx;
+  game.fx = [];
+  const kept = running.filter((f) => f.update(dt));
+  game.fx = kept.concat(game.fx);
+}
+
 /** one simulation step */
 export function update(dt: number): void {
   // after a perfect dodge the world crawls while Kael moves at full speed
@@ -58,7 +66,7 @@ export function update(dt: number): void {
   updateCoins(dt);
   updateXpOrbs(dt);
   updateWaves(dt);
-  game.fx = game.fx.filter((f) => f.update(world));
+  updateEffects(world);
   for (const g of game.ghosts) g.life -= dt;
   game.ghosts = game.ghosts.filter((g) => g.life > 0);
   updateBlazes(world);

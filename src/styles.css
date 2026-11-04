@@ -165,6 +165,10 @@ body {
     var(--night) calc(var(--dash-share, 50%) - 1px) var(--dash-share, 50%)
   );
 }
+/* Ysra has no dash, so her stamina bar has no dash notches */
+.bar.st.no-dash .track::after {
+  content: none;
+}
 /* Ysra's Heat: a mark at half once Searing Edge is learned, a hotter fill above it, a blaze when full, white heat in Overheat */
 .bar.ht span {
   color: var(--ember-hot);

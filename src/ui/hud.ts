@@ -4,7 +4,7 @@ import { ULT_LABEL } from "../constants/skillLabels";
 import { ULT_LEVELS } from "../constants/ultimate";
 import { STAGE_WAVES } from "../constants/waves";
 import { canAffordUlt, ultRecharge } from "../game/hero/ultimate";
-import { game, hero, progress } from "../game/state";
+import { character, game, hero, progress } from "../game/state";
 import { xpToNext } from "../utils/progression";
 import { updateCoinCount } from "./coinCount";
 import { byId } from "./dom";
@@ -80,6 +80,7 @@ export function updateHud(): void {
   stamina.style.width = `${(hero.stamina / progress.stats.stamina) * 100}%`;
   staminaBar.classList.toggle("empty", hero.staminaFlash > 0);
   staminaBar.style.setProperty("--dash-share", `${(STAMINA.dashCost / progress.stats.stamina) * 100}%`);
+  staminaBar.classList.toggle("no-dash", character.kit !== "kael");
   const need = xpToNext(progress.level);
   xp.style.width = need ? `${(progress.xp / need) * 100}%` : "100%";
   level.textContent = `LV ${progress.level}`;

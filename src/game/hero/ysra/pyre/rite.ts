@@ -1,7 +1,7 @@
 import { PYRE_STATE_CLIPS } from "../../../../constants/clips/ysra/pyre";
 import { DENY_FLASH } from "../../../../constants/combat";
 import { RITE_RAMP, RITE_SPARKS } from "../../../../constants/ysra/emberLook";
-import { FLAME_PILLAR as P } from "../../../../constants/ysra/rites";
+import { BRAZIER, FLAME_PILLAR as P } from "../../../../constants/ysra/rites";
 import { sfx } from "../../../../services/audio";
 import { PK } from "../../../../types/particle";
 import type { RiteDef, RiteId } from "../../../../types/ysra/pyre";
@@ -36,7 +36,7 @@ function pillarSpot(): number {
 
 /** a rite at this spot; Hot Iron calls the pillar without a cast */
 export function letLoose(id: RiteId, x: number): void {
-  const floor = surfaceBelow(x, hero.y - 2);
+  const floor = surfaceBelow(x, hero.y);
   if (id === "flare") game.fx.push(castFlare(x, floor));
   else if (id === "flamePillar") game.fx.push(castFlamePillar(x, floor));
   else game.fx.push(plantBrazier(x, floor));
@@ -46,7 +46,7 @@ export function letLoose(id: RiteId, x: number): void {
 function igniteOverheat(): void {
   startOverheat();
   game.fx.push(createFloorRing(hero.x, hero.y, 44, [...RITE_RAMP].reverse(), 0.6, 0.3));
-  lights.add(hero.x, hero.y - 16, 90, RITE_RAMP[4], 1.2, 0.8);
+  lights.add(hero.x, hero.y - 16, 60, RITE_RAMP[4], 0.7, 0.6);
   for (let i = 0; i < 30; i++)
     particles.spawn(PK.SPARK, hero.x, hero.y - 16, rng.range(-200, 200), -rng.range(80, 320), rng.range(0.3, 0.7), {
       sparks: RITE_SPARKS,
@@ -58,7 +58,8 @@ function igniteOverheat(): void {
 /** she plants the glaive and the rite bursts out */
 function release(): void {
   if (calling === "overheat") return igniteOverheat();
-  const x = calling === "flamePillar" ? pillarSpot() : calling === "brazier" ? hero.x + hero.face * 12 : hero.x;
+  const x =
+    calling === "flamePillar" ? pillarSpot() : calling === "brazier" ? hero.x + hero.face * BRAZIER.ahead : hero.x;
   letLoose(calling, x);
   healFromRite();
 }

@@ -3,6 +3,7 @@ import { FLAME_PILLAR as P } from "../../../constants/ysra/rites";
 import { ellipseRing, glow, glowLine, place, px } from "../../../engine/frame";
 import type { Effect } from "../../../types/effect";
 import { PF, PK } from "../../../types/particle";
+import type { Box } from "../../../types/world";
 import { WHITE } from "../../../utils/color";
 import { TAU } from "../../../utils/math";
 import { dealDamage } from "../../damage";
@@ -26,10 +27,10 @@ function columnColor(d: number, young: boolean): number {
 }
 
 function erupt(x: number, floor: number): void {
-  const area = [x - P.halfWidth - 3, floor - P.height, x + P.halfWidth + 3, floor] as const;
+  const area: Box = [x - P.halfWidth - 3, floor - P.height, x + P.halfWidth + 3, floor];
   let hits = 0;
   for (const e of game.enemies) {
-    if (e.hp <= 0 || !boxHit([...area], enemyBox(e))) continue;
+    if (e.hp <= 0 || !boxHit(area, enemyBox(e))) continue;
     dealDamage(e, progress.stats.ap * P.power, { fromX: x, launch: P.launch, ky: -200, heavy: true });
     e.burn = Math.max(e.burn, P.burn);
     hits++;
@@ -48,7 +49,7 @@ function erupt(x: number, floor: number): void {
     );
   dust(x, floor, 10);
   game.fx.push(createFloorRing(x, floor, 22, [...RITE_RAMP].reverse(), 0.35, 0.3));
-  lights.add(x, floor - 30, 70, RITE_RAMP[4], 1, 0.6);
+  lights.add(x, floor - 30, 50, RITE_RAMP[4], 0.7, 0.5);
   shake(0.25, 3);
   if (hits) hitStop(0.07);
   riteSound(P.pitch);
@@ -89,7 +90,7 @@ export function castFlamePillar(x: number, floor: number): Effect {
       const h = (3 + ((i * 7 + Math.floor(t * 30)) % 5)) * thin;
       for (let d = 0; d < h; d++) px(tx, top - d, d < h * 0.5 ? RITE_RAMP[4] : RITE_RAMP[5]);
     }
-    glowLine(x, floor, x, top, 14 * thin + 2, RITE_RAMP[4], 0.5 * thin);
+    glowLine(x, floor, x, top, 12 * thin + 2, RITE_RAMP[4], 0.3 * thin);
   };
   return {
     update(dt) {

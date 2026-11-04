@@ -28,7 +28,7 @@ export const FLAME_PILLAR = {
 
 /** Brazier: planted ahead of her, it spits an ember at the nearest foe within `seek` every `every` seconds */
 export const BRAZIER = {
-  ahead: 12,
+  ahead: 16,
   life: 8,
   every: 0.7,
   seek: 150,
