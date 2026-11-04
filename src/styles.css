@@ -1023,8 +1023,12 @@ body[data-hud="outside"] .boss {
     display: none;
   }
 }
-/* a phone on its side: the portrait beside the name, and tighter rows, so both cards fit above Back */
-@media (max-height: 520px) {
+/* a short screen: the portrait beside the name, and tighter rows, so both cards fit above Back */
+@media (max-height: 680px) {
+  .hero-portrait {
+    width: 64px;
+    height: 56px;
+  }
   .menu[data-screen="hero"] .menu-panel {
     width: min(660px, 100%);
   }
@@ -1046,7 +1050,8 @@ body[data-hud="outside"] .boss {
     align-self: start;
   }
   .hero-stats,
-  .hero-traits {
+  .hero-traits,
+  .hero-blurb {
     grid-column: 1 / -1;
   }
   .hero-stats {

@@ -1,13 +1,13 @@
 import type { Pose } from "../../../types/pose";
+import { grip } from "../../../utils/glaiveGrip";
 import { pose } from "../../hero";
 
 /**
  * A pose with both hands on the glaive: the far hand rides the haft this many pixels from the near hand, behind it
  * toward the butt when positive, ahead of it toward the blade when negative.
  */
-export function held(o: Partial<Pose>, grip = 5): Pose {
-  const p = pose(o);
-  return { ...p, bx: p.fx - Math.cos(p.sa) * grip, by: p.fy - Math.sin(p.sa) * grip };
+export function held(o: Partial<Pose>, d = 5): Pose {
+  return grip(pose(o), d);
 }
 
 /** her guard between blows: a low, wide-set stance with the glaive angled down ahead, both hands on the haft */

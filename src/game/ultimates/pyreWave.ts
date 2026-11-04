@@ -1,4 +1,3 @@
-import { FIRE_RAMP } from "../../constants/palette";
 import { W } from "../../constants/stage";
 import { ULT_LEVELS } from "../../constants/ultimate";
 import { glow, place } from "../../engine/frame";
@@ -10,6 +9,7 @@ import { ease } from "../../utils/math";
 import { dealDamage } from "../damage";
 import { createImpact } from "../effects/impact";
 import { enemyBox, enemyCenter } from "../enemies/enemy";
+import { skin } from "../hero/skin";
 import { game, hero, lights, particles, progress, rng } from "../state";
 import { surfaceBelow } from "../world";
 
@@ -58,7 +58,7 @@ export function castPyreWave(level: number): void {
           if (lastFire > 4 && lastFire < W - 4)
             game.blazes.push({ x: lastFire, y: floor, life: 2.4, max: 2.4, tick: 0 });
         }
-        lights.add(fx, floor - tall / 2, 30, FIRE_RAMP[3], 0.35, 0.08);
+        lights.add(fx, floor - tall / 2, 30, skin.ramp[3], 0.35, 0.08);
       }
       const lo = Math.min(x0, fx);
       const hi = Math.max(x0, fx);
@@ -84,9 +84,9 @@ export function castPyreWave(level: number): void {
       place();
       const fx = front();
       const k = 1 - Math.max(0, (t - ROLL) / 0.3);
-      glow(fx, floor - tall / 2, tall * 0.8, FIRE_RAMP[2], 0.55 * k);
+      glow(fx, floor - tall / 2, tall * 0.8, skin.ramp[2], 0.55 * k);
       glow(fx, floor - 4, 14, WHITE, 0.25 * k);
-      glow((x0 + fx) / 2, floor - 6, Math.abs(fx - x0) / 2 + 10, FIRE_RAMP[1], 0.18 * k);
+      glow((x0 + fx) / 2, floor - 6, Math.abs(fx - x0) / 2 + 10, skin.ramp[1], 0.18 * k);
     },
   };
   game.fx.push(effect);

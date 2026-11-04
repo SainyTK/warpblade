@@ -1,6 +1,7 @@
 import { STAMINA } from "../../constants/combat";
 import { TOUCH_TEXT } from "../../constants/touch";
 import { ULT_LEVELS } from "../../constants/ultimate";
+import { VAULT } from "../../constants/ysra/stance";
 import { castCost, knowsElement, selectedElement, spellRecharge } from "../../game/hero/spell";
 import { canPayDash } from "../../game/hero/stamina";
 import { canAffordUlt, ultRecharge } from "../../game/hero/ultimate";
@@ -50,6 +51,7 @@ function ysraLook(spec: TouchButtonSpec, look: ButtonLook): void {
       break;
     case "warp":
       look.ready = hero.warpCd <= 0;
+      look.cooldown = hero.warpCd / VAULT.cooldown;
       break;
     case "cast": {
       const rite = selectedRite();
