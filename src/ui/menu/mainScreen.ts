@@ -1,7 +1,8 @@
 import { STAGE_WAVES } from "../../constants/waves";
-import { game, progress } from "../../game/state";
+import { applySkin } from "../../game/hero/skin";
+import { character, game, progress } from "../../game/state";
 import type { MenuContext, MenuScreen, MenuView } from "../../types/menu";
-import { leaveMenu, quitRun, restartRun, startGame } from "./menuActions";
+import { leaveMenu, quitRun, restartRun } from "./menuActions";
 import { menuItem } from "./menuItem";
 import { showScreen } from "./menuState";
 
@@ -32,8 +33,10 @@ export function mainScreen(context: MenuContext): MenuView {
   list.className = "menu-list";
   list.setAttribute("aria-label", context === "title" ? "Start menu" : "Pause menu");
   if (context === "title") {
+    // a hero only looked at on the hero screen goes back to the one chosen
+    applySkin(character.skin);
     list.append(
-      menuItem("Start", startGame),
+      screenItem("Start", "hero"),
       screenItem("Shop", "shop"),
       screenItem("Controls", "controls"),
       screenItem("Options", "options"),

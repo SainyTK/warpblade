@@ -1,5 +1,4 @@
 import { POSES } from "../../constants/hero";
-import { PAL } from "../../constants/palette";
 import { SpriteCanvas } from "../../engine/sprite";
 import { PK } from "../../types/particle";
 import { lerp, TAU } from "../../utils/math";
@@ -7,6 +6,7 @@ import { createWarpLine } from "../effects/warpLine";
 import { game, hero, lights, particles, rng } from "../state";
 import { drawHero } from "./drawHero";
 import { heroLook } from "./look";
+import { skin } from "./skin";
 
 /** afterimages are drawn into their own canvas, then copied */
 export const ghostCanvas = new SpriteCanvas(80, 76, 40, 62);
@@ -25,11 +25,11 @@ export function leaveAfterimages(ox: number, oy: number, nx: number, ny: number)
     const a = rng.range(0, TAU);
     const sp = rng.range(30, 120);
     particles.spawn(PK.MOTE, ox, oy - 18, Math.cos(a) * sp, Math.sin(a) * sp, rng.range(0.2, 0.45), {
-      col: rng.pick(PAL.crystal.slice(3)),
+      col: rng.pick(skin.ramp.slice(3)),
       size: 0.6,
     });
   }
-  lights.add(nx, ny - 18, 44, PAL.crystal[4], 0.9, 0.25);
+  lights.add(nx, ny - 18, 44, skin.ramp[4], 0.9, 0.25);
 }
 
 /** one fading copy in the dash pose, dropped every few frames while dashing */
@@ -44,7 +44,7 @@ export function dropDashGhost(): void {
     rng.range(-20, 20),
     rng.range(0.2, 0.4),
     {
-      col: PAL.crystal[rng.int(3, 5)],
+      col: skin.ramp[rng.int(3, 5)],
       size: 0.6,
     },
   );

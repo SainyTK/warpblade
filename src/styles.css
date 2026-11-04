@@ -869,3 +869,99 @@ body[data-hud="outside"] .boss {
     border-color: var(--hp);
   }
 }
+
+/* Hero screen: one card per hero, side by side, after Start. */
+.hero-cards {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  width: min(620px, 100%);
+}
+.hero-card {
+  display: grid;
+  justify-items: center;
+  align-content: start;
+  gap: 6px;
+  padding: 12px 14px 14px;
+  font: inherit;
+  color: var(--mist);
+  text-align: center;
+  background: rgba(12, 10, 24, 0.55);
+  border: 2px solid rgba(180, 168, 255, 0.18);
+  cursor: pointer;
+  outline: none;
+}
+.hero-card:focus {
+  color: var(--text);
+  background: rgba(127, 227, 255, 0.08);
+  border-color: var(--crystal);
+}
+.hero-card[data-hero="ysra"]:focus {
+  background: rgba(255, 154, 58, 0.08);
+  border-color: var(--fire);
+}
+.hero-portrait {
+  width: 128px;
+  height: 112px;
+  image-rendering: pixelated;
+}
+.hero-name {
+  font-family: var(--display);
+  font-size: 22px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.hero-title {
+  font-size: 13px;
+  color: var(--muted);
+}
+.hero-stats {
+  display: grid;
+  gap: 3px;
+  width: 100%;
+  margin: 4px 0 0;
+}
+.hero-stats div {
+  display: grid;
+  grid-template-columns: 56px 1fr;
+  align-items: center;
+  gap: 8px;
+}
+.hero-stats dt {
+  font-size: 12px;
+  text-align: left;
+}
+.hero-bar {
+  height: 6px;
+  margin: 0;
+  background: #120a1e;
+}
+.hero-bar span {
+  display: block;
+  height: 100%;
+  background: var(--crystal);
+}
+.hero-card[data-hero="ysra"] .hero-bar span {
+  background: var(--fire);
+}
+.hero-traits,
+.hero-blurb {
+  margin: 0;
+  font-size: 12px;
+  line-height: 1.45;
+}
+.hero-traits {
+  color: var(--text);
+}
+.hero-blurb {
+  color: var(--muted);
+}
+@media (max-width: 600px), (max-height: 520px) {
+  .hero-portrait {
+    width: 64px;
+    height: 56px;
+  }
+  .hero-blurb {
+    display: none;
+  }
+}

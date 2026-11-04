@@ -1,7 +1,8 @@
 import type { CharacterDef } from "../../types/character";
 import type { SkillBranch } from "../../types/skill";
+import { KAEL_COLORS, PAL } from "../palette";
 
-const ULT_CHARGE =
+export const ULT_CHARGE =
   "Hold U to charge up to four levels, release to strike. Higher levels cost more MP; level 4 spends a full bar.";
 
 const BLADE: SkillBranch = {
@@ -563,12 +564,49 @@ const FUSION: SkillBranch = {
   ],
 };
 
+/** Kael's head, facing right, three-quarters: swept silver hair, bangs over the brow, face on the right. */
+const HEAD = [
+  "..dhhhh...",
+  ".dhHHHHh..",
+  "dhHHHHHHh.",
+  "dhHHhHHHHh",
+  "dhhHHhHhHh",
+  "ddhhsShshs",
+  "ddhssSssEs",
+  ".dhsssssss",
+  ".d..sSsss.",
+  "....sSSs..",
+] as const;
+/** the back of Kael's head, for a spin: all hair, with the nape of the neck under it */
+const HEAD_BACK = [
+  "..dhhhh...",
+  ".dhHHhhh..",
+  "dhHHhhhhd.",
+  "dhHhhdhhhd",
+  "dhhhdhhdhd",
+  "ddhhdhhddd",
+  "ddhdhhdhdd",
+  ".ddhhdhdd.",
+  "..ddhhdd..",
+  "...dSSd...",
+] as const;
 /** Kael, the warp knight: the first character. */
 export const KAEL: CharacterDef = {
   id: "kael",
   name: "Kael",
+  title: "The last warp knight",
+  blurb: "Throws his crystal sword and appears where it lands. Balanced, quick, and learns every ability from picks.",
   special: "crystalNova",
   base: { ad: 10, ap: 10, hp: 100, mp: 100, stamina: 100, crit: 0.05, move: 1, aspd: 1, haste: 1 },
   growth: { ad: 0.6, ap: 0.6, hp: 5, mp: 2 },
   branches: [BLADE, PHANTOM, ARCANE, FUSION],
+  skin: {
+    colors: KAEL_COLORS,
+    head: HEAD,
+    headBack: HEAD_BACK,
+    weapon: "sword",
+    reach: 17,
+    ramp: PAL.crystal,
+    glow: PAL.crystal[3],
+  },
 };

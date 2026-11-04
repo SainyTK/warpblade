@@ -1,14 +1,15 @@
-import { HEAD, HEAD_BACK, HEAD_MAP } from "../../../constants/hero";
 import { HERO_COLORS as HC } from "../../../constants/palette";
 import type { SpriteCanvas } from "../../../engine/sprite";
 import type { Pose } from "../../../types/pose";
 import { atNeck, headCenter } from "../../../utils/poseFrame";
+import { skin } from "../skin";
 
 /** the head on top of the spine, face or back of the head, then the scarf wrapped at the neck */
 export function drawHead(s: SpriteCanvas, p: Pose, back: boolean): void {
   const [cx, cy] = headCenter(p);
+  const map = { d: HC.hairDark, h: HC.hair, H: HC.hairLight, s: HC.skin, S: HC.skinShade, E: HC.eye, r: HC.scarfLight };
   s.begin();
-  s.pixels(back ? HEAD_BACK : HEAD, HEAD_MAP, Math.round(cx) - 5, Math.round(cy) - 5);
+  s.pixels(back ? skin.headBack : skin.head, map, Math.round(cx) - 5, Math.round(cy) - 5);
   s.commit();
   const a = atNeck(p, -2.6, 0.4);
   const b = atNeck(p, 2.4, 0.4);

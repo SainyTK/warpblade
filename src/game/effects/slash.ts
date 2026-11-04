@@ -1,9 +1,9 @@
 // The crescent, its dotted trace and the light riding its head are adapted from Sprite Fusion's open-source slash
 // (https://www.spritefusion.com/pixel-art-vfx/slash), MIT License, Copyright (c) 2026 Hugo Duprez.
-import { PAL } from "../../constants/palette";
 import { glow, place, px, shade } from "../../engine/frame";
 import type { Effect, SlashShape } from "../../types/effect";
 import { clamp, ease, smooth, TAU } from "../../utils/math";
+import { skin } from "../hero/skin";
 
 type Slash = Required<SlashShape>;
 
@@ -52,7 +52,7 @@ function crescent(s: Slash, tailAngle: number, L: number, width: number, age: nu
 
 /** the edge whips out over `sweep`, holds, then the tail follows over `trail`, leaving a dotted trace */
 export function createSlash(x: number, y: number, face: number, shape: SlashShape): Effect {
-  const s: Slash = { t0: 0, sweep: 0.05, hold: 0.05, trail: 0.2, ramp: PAL.crystal, ...shape };
+  const s: Slash = { t0: 0, sweep: 0.05, hold: 0.05, trail: 0.2, ramp: skin.ramp, ...shape };
   const life = s.t0 + s.sweep + s.hold + s.trail + 0.25;
   let t = 0;
   return {

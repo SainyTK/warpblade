@@ -1,7 +1,7 @@
 import { ENEMY_AIR } from "../../../constants/combat";
 import { FEEL, PHANTOM_RAMP } from "../../../constants/combo";
 import { frame } from "../../../constants/hero";
-import { PAL, WORLD_COLORS } from "../../../constants/palette";
+import { WORLD_COLORS } from "../../../constants/palette";
 import type { MoveDef } from "../../../types/move";
 import { PK } from "../../../types/particle";
 import { createFloorRing } from "../../effects/floorRing";
@@ -10,6 +10,7 @@ import { meleeHit } from "../../meleeHit";
 import { game, hero, particles, rng } from "../../state";
 import { boxAhead, dust, shake } from "../../world";
 import { gravityPull } from "../gravityWell";
+import { skin } from "../skin";
 
 const WHIRL = { cx: 0, cy: -18, R: 25, sy: 0.85, rot: 0, a0: -1.6, a1: 1.5, W: 7 };
 const METEOR_REACH = 46;
@@ -17,7 +18,7 @@ const METEOR_REACH = 46;
 /** the plunge lands: a ring of crystal, dust, and everything near the floor bounced up */
 function meteorLanding(): void {
   game.swing++;
-  game.fx.push(createFloorRing(hero.x, hero.y, METEOR_REACH, PAL.crystal, 0.45));
+  game.fx.push(createFloorRing(hero.x, hero.y, METEOR_REACH, skin.ramp, 0.45));
   game.fx.push(
     createSlash(hero.x, hero.y, hero.face, { cx: 0, cy: -4, R: 30, sy: 0.25, rot: 0, a0: 3.1, a1: 0, W: 7 }),
   );
@@ -41,7 +42,7 @@ const STOMP = { tuck: 0.08, dive: 520, reach: 40 } as const;
 /** the stomp lands: a wide ring, dust and rubble to both sides, and every foe near the floor knocked off its feet */
 function stompLanding(): void {
   game.swing++;
-  game.fx.push(createFloorRing(hero.x, hero.y, STOMP.reach, PAL.crystal, 0.4));
+  game.fx.push(createFloorRing(hero.x, hero.y, STOMP.reach, skin.ramp, 0.4));
   dust(hero.x - 6, hero.y, 7, -1);
   dust(hero.x + 6, hero.y, 7, 1);
   for (let i = 0; i < 8; i++) {

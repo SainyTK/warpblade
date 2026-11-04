@@ -9,6 +9,7 @@ import { drawWisp } from "../game/enemies/drawWisp";
 import { enemyBox, enemyCenter } from "../game/enemies/enemy";
 import { drawHero } from "../game/hero/drawHero";
 import { heroLook } from "../game/hero/look";
+import { skin } from "../game/hero/skin";
 import { canAffordUlt } from "../game/hero/ultimate";
 import { game, hero } from "../game/state";
 import type { Enemy } from "../types/enemy";
@@ -111,9 +112,9 @@ export function drawHeroLayer(): void {
   const h = hero;
   for (const g of game.ghosts) {
     const k = g.life / g.max;
-    blit(g.s, g.x, g.y, g.flip, { alpha: k * 0.6, tint: PAL.crystal[3], tintAmount: 0.65, soft: true });
+    blit(g.s, g.x, g.y, g.flip, { alpha: k * 0.6, tint: skin.glow, tintAmount: 0.65, soft: true });
     place();
-    glow(g.x, g.y - 18, 14, PAL.crystal[3], 0.12 * k);
+    glow(g.x, g.y - 18, 14, skin.glow, 0.12 * k);
   }
   if (h.state === "charge") drawChargeRing();
   const flare = clamp((Math.abs(h.vx) / 115) * 3, 0, 3) + (h.ground ? 0 : 1.5);
@@ -129,7 +130,7 @@ export function drawHeroLayer(): void {
     const ca = Math.cos(angle);
     const sn = Math.sin(angle);
     const k = h.state === "move" || h.state === "warpStrike" || h.state === "charge" ? 0.3 : 0.12;
-    glowLine(hx + ca * 3, hy + sn * 3, hx + ca * 16, hy + sn * 16, 6, PAL.crystal[3], k);
+    glowLine(hx + ca * 3, hy + sn * 3, hx + ca * (skin.reach - 1), hy + sn * (skin.reach - 1), 6, skin.glow, k);
   }
   if (h.state === "cast" && h.st < CLIPS.cast.hit + 0.05) drawCastRing(h.hand);
 }

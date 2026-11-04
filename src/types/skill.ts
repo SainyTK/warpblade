@@ -36,7 +36,7 @@ export type Perk =
   | "fireSpell"
   | "iceSpell"
   | "voltSpell";
-export type UltimateId = "crystalNova" | "thousandEdges" | "phantomLegion" | "starfall" | "tempest";
+export type UltimateId = "crystalNova" | "pyreWave" | "thousandEdges" | "phantomLegion" | "starfall" | "tempest";
 export type SkillKind = "combo" | "movement" | "spell" | "enhance" | "passive" | "ultimate" | "fusion";
 /** when a path pays off */
 export type Pace = "early" | "steady" | "late";

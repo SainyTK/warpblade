@@ -1,10 +1,10 @@
 import { PERFECT, RIPOSTE, STAMINA } from "../../constants/combat";
-import { PAL } from "../../constants/palette";
 import { sfx } from "../../services/audio";
 import { cue } from "../cue";
 import { createFloorRing } from "../effects/floorRing";
 import { hasPerk } from "../progress";
 import { game, hero, lights, progress } from "../state";
+import { skin } from "./skin";
 import { refundStamina } from "./stamina";
 
 /** an attack met Kael in the first moments of a dash: slow motion, a little MP and stamina, and with Riposte a primed counter */
@@ -17,7 +17,7 @@ export function perfectDodge(): void {
   refundStamina(STAMINA.perfectRefund);
   if (hasPerk("riposte")) h.riposte = RIPOSTE.time;
   cue(h.x, h.y - 36, "perfect");
-  game.fx.push(createFloorRing(h.x, h.y, 28, PAL.crystal, 0.4));
-  lights.add(h.x, h.y - 18, 50, PAL.crystal[4], 0.7, 0.4);
+  game.fx.push(createFloorRing(h.x, h.y, 28, skin.ramp, 0.4));
+  lights.add(h.x, h.y - 18, 50, skin.ramp[4], 0.7, 0.4);
   sfx.perfect();
 }
