@@ -1,4 +1,4 @@
-import { FIRE_RAMP, HERO_COLORS as HC, PAL } from "../../../constants/palette";
+import { FIRE_RAMP, KAEL_COLORS as HC, PAL } from "../../../constants/palette";
 import type { SpriteCanvas } from "../../../engine/sprite";
 import type { Color } from "../../../types/color";
 import { WHITE } from "../../../utils/color";

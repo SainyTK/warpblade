@@ -4,19 +4,29 @@ import { GROUND, SEED } from "../constants/stage";
 import { Lights } from "../engine/lights";
 import { Particles } from "../engine/particles";
 import { metaBonus } from "../store/meta";
+import type { CharacterDef } from "../types/character";
 import type { GameState } from "../types/game";
 import type { Hero } from "../types/hero";
 import type { Progress } from "../types/progress";
 import { airLimit, comboLimit } from "../utils/progression";
 import { Rng } from "../utils/rng";
-import { computeStats } from "../utils/stats";
+import { collectPerks, computeStats } from "../utils/stats";
 import { Chain } from "./hero/chain";
+import { applySkin } from "./hero/skin";
 
 /** The one owner of everything that changes while playing. */
 export const rng = new Rng(SEED);
 export const particles = new Particles(rng);
 export const lights = new Lights();
-export const character = KAEL;
+/** the hero being played; chosen on the hero screen before a run, and fixed for the run */
+export let character: CharacterDef = KAEL;
+applySkin(KAEL.skin);
+
+/** play as this hero from the next run on: their look now, their stats and skills when the run starts */
+export function setCharacter(c: CharacterDef): void {
+  character = c;
+  applySkin(c.skin);
+}
 
 export const game: GameState = {
   mode: "play",
@@ -48,14 +58,15 @@ export const game: GameState = {
 };
 
 export function freshProgress(): Progress {
-  const stats = computeStats(character, 1, {}, metaBonus());
+  const ranks = { ...character.startRanks };
+  const stats = computeStats(character, 1, ranks, metaBonus());
   return {
     level: 1,
     xp: 0,
     picks: 0,
-    ranks: {},
+    ranks,
     stats,
-    perks: new Set(),
+    perks: collectPerks(character, ranks),
     ultimate: null,
     comboLimit: comboLimit(1, false),
     airLimit: airLimit({}),

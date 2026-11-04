@@ -7,6 +7,7 @@ import { enemyBox, enemyCenter } from "../game/enemies/enemy";
 import { kindOf } from "../game/enemies/kinds";
 import { drawHero } from "../game/hero/drawHero";
 import { heroLook } from "../game/hero/look";
+import { skin } from "../game/hero/skin";
 import { canAffordUlt } from "../game/hero/ultimate";
 import { game, hero } from "../game/state";
 import type { Enemy } from "../types/enemy";
@@ -17,8 +18,9 @@ import { bladeAngle } from "../utils/poseFrame";
 const heroCanvas = new SpriteCanvas(80, 76, 40, 62);
 const HP_BAR_EMPTY = hex("#120a1e");
 const STUN_STAR = hex("#ffe26b");
-/** ring colors for ultimate levels 1 to 4 */
-const LEVEL_COLORS = [PAL.crystal[3], PAL.crystal[4], hex("#ffe26b"), hex("#ff7ae0")];
+/** ring colors for ultimate levels 3 and 4; levels 1 and 2 take the hero's own light */
+const HIGH_LEVEL_COLORS = [hex("#ffe26b"), hex("#ff7ae0")];
+const levelColor = (i: number) => (i < 2 ? skin.ramp[3 + i] : HIGH_LEVEL_COLORS[i - 2]);
 
 /** a small HP bar over minions; bosses use the bar at the bottom of the screen */
 function drawMinionBar(e: Enemy): void {
@@ -79,9 +81,9 @@ function drawChargeRing(): void {
   const level = hero.chargeLevel;
   for (let i = 0; i < level; i++) {
     const r = 10 + i * 6 + Math.sin(game.t * 8 + i) * 0.8;
-    ellipseRing(hero.x, hero.y, r, r * 0.28, LEVEL_COLORS[i], 0.9);
+    ellipseRing(hero.x, hero.y, r, r * 0.28, levelColor(i), 0.9);
   }
-  const c = LEVEL_COLORS[level - 1];
+  const c = levelColor(level - 1);
   glow(hero.x, hero.y - 18, 18 + level * 8, c, 0.25 + level * 0.08);
   for (let i = 0; i < 8; i++) {
     const g = game.t * 3 + (i * TAU) / 8;
@@ -93,8 +95,8 @@ function drawChargeRing(): void {
     const y = hero.y - 40;
     const lit = i < level;
     const open = canAffordUlt(i + 1);
-    px(x, y, lit ? LEVEL_COLORS[i] : open ? PAL.shadow[3] : HP_BAR_EMPTY);
-    px(x + 1, y, lit ? LEVEL_COLORS[i] : open ? PAL.shadow[3] : HP_BAR_EMPTY);
+    px(x, y, lit ? levelColor(i) : open ? PAL.shadow[3] : HP_BAR_EMPTY);
+    px(x + 1, y, lit ? levelColor(i) : open ? PAL.shadow[3] : HP_BAR_EMPTY);
     px(x, y + 1, lit ? WHITE : open ? PAL.shadow[2] : HP_BAR_EMPTY);
     px(x + 1, y + 1, lit ? WHITE : open ? PAL.shadow[2] : HP_BAR_EMPTY);
   }
@@ -104,9 +106,9 @@ export function drawHeroLayer(): void {
   const h = hero;
   for (const g of game.ghosts) {
     const k = g.life / g.max;
-    blit(g.s, g.x, g.y, g.flip, { alpha: k * 0.6, tint: PAL.crystal[3], tintAmount: 0.65, soft: true });
+    blit(g.s, g.x, g.y, g.flip, { alpha: k * 0.6, tint: skin.glow, tintAmount: 0.65, soft: true });
     place();
-    glow(g.x, g.y - 18, 14, PAL.crystal[3], 0.12 * k);
+    glow(g.x, g.y - 18, 14, skin.glow, 0.12 * k);
   }
   if (h.state === "charge") drawChargeRing();
   const flare = clamp((Math.abs(h.vx) / 115) * 3, 0, 3) + (h.ground ? 0 : 1.5);
@@ -122,7 +124,7 @@ export function drawHeroLayer(): void {
     const ca = Math.cos(angle);
     const sn = Math.sin(angle);
     const k = h.state === "move" || h.state === "warpStrike" || h.state === "charge" ? 0.3 : 0.12;
-    glowLine(hx + ca * 3, hy + sn * 3, hx + ca * 16, hy + sn * 16, 6, PAL.crystal[3], k);
+    glowLine(hx + ca * 3, hy + sn * 3, hx + ca * (skin.reach - 1), hy + sn * (skin.reach - 1), 6, skin.glow, k);
   }
   if (h.state === "cast" && h.st < CLIPS.cast.hit + 0.05) drawCastRing(h.hand);
 }

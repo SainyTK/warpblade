@@ -1,4 +1,4 @@
-import { FIRE_RAMP, HERO_COLORS as HC, PAL, WORLD_COLORS as WC } from "../../../constants/palette";
+import { FIRE_RAMP, KAEL_COLORS as HC, PAL, WORLD_COLORS as WC } from "../../../constants/palette";
 import type { SpriteCanvas } from "../../../engine/sprite";
 import { hex, WHITE } from "../../../utils/color";
 import { arc, bolt, chevron, drop, fill, flame, gem, ring, snowflake, sparkle, sword } from "./parts";
@@ -56,6 +56,13 @@ export const ARCANE_ICONS: Record<string, (s: SpriteCanvas) => void> = {
     gem(s, 8, 8, 5, 8);
     sparkle(s, 3, 3, 2, MANA[4]);
     sparkle(s, 13, 13, 2, MANA[4]);
+  },
+  /** a flame at the heart of a rolling ring of fire */
+  a_pyre: (s) => {
+    ring(s, 8, 8, 6.5, FIRE_RAMP[3]);
+    flame(s, 8, 13, 9);
+    sparkle(s, 3, 3, 2, FIRE_RAMP[5]);
+    sparkle(s, 13, 13, 2, FIRE_RAMP[4]);
   },
   a_font: (s) => {
     fill(s, () => {

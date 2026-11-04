@@ -1,4 +1,4 @@
-import { FIRE_RAMP, COIN_GOLD as G, HERO_COLORS as HC, PAL, WORLD_COLORS as WC } from "../../../constants/palette";
+import { FIRE_RAMP, COIN_GOLD as G, KAEL_COLORS as HC, PAL, WORLD_COLORS as WC } from "../../../constants/palette";
 import type { SpriteCanvas } from "../../../engine/sprite";
 import { hex, WHITE } from "../../../utils/color";
 import { TAU } from "../../../utils/math";

@@ -1,4 +1,3 @@
-import { PAL } from "../../constants/palette";
 import { GROUND, W } from "../../constants/stage";
 import { ULT_LEVELS } from "../../constants/ultimate";
 import { sfx } from "../../services/audio";
@@ -92,7 +91,6 @@ export function castThousandEdges(level: number): void {
             a0: -2.9,
             a1: 0.25,
             W: 14,
-            ramp: PAL.crystal,
           }),
         );
         hitStop(0.12);

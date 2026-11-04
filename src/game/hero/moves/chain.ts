@@ -1,11 +1,12 @@
 import { FEEL } from "../../../constants/combo";
-import { PAL, WORLD_COLORS } from "../../../constants/palette";
+import { WORLD_COLORS } from "../../../constants/palette";
 import type { MoveDef } from "../../../types/move";
 import { PK } from "../../../types/particle";
 import { createFloorRing } from "../../effects/floorRing";
 import { createSlash } from "../../effects/slash";
 import { game, hero, particles, rng } from "../../state";
 import { dust, shake } from "../../world";
+import { skin } from "../skin";
 import { CLEAVE, CROSS, FLAT_BACK, FLAT_FRONT, RISING, STAB } from "./slashes";
 
 /** the smash lands: a second crescent, and on the floor a ring, dust and rubble */
@@ -24,12 +25,12 @@ function smashImpact(): void {
       sweep: 0.06,
       hold: 0.03,
       trail: 0.2,
-      ramp: PAL.crystal.slice(0, 6),
+      ramp: skin.ramp.slice(0, 6),
     }),
   );
   if (!hero.ground) return;
   const gx = hero.x + hero.face * 22;
-  game.fx.push(createFloorRing(gx, hero.y, 30, PAL.crystal, 0.35));
+  game.fx.push(createFloorRing(gx, hero.y, 30, skin.ramp, 0.35));
   dust(gx, hero.y, 7, hero.face);
   for (let i = 0; i < 6; i++)
     particles.spawn(
@@ -50,7 +51,7 @@ function smashImpact(): void {
 /** the hop cleave comes down: a small ring and dust where the blade meets the floor */
 function cleaveImpact(): void {
   const gx = hero.x + hero.face * 18;
-  game.fx.push(createFloorRing(gx, hero.y, 18, PAL.crystal, 0.25));
+  game.fx.push(createFloorRing(gx, hero.y, 18, skin.ramp, 0.25));
   dust(gx, hero.y, 4, hero.face);
 }
 
