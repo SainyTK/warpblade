@@ -7,7 +7,7 @@ import { BOON_ICONS } from "./boon";
 import { FUSION_ICONS } from "./fusion";
 import { PHANTOM_ICONS } from "./phantom";
 import { SHOP_ICONS } from "./shop";
-import { YSRA_ICONS } from "./ysra";
+import { YSRA_ICONS } from "./ysra/index";
 
 const SIZE = 16;
 const OUTLINE = hex("#0a0612");
