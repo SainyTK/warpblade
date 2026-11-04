@@ -10,6 +10,7 @@ import { counterReady } from "../stance/stance";
 import { pickGlaive } from "./choose";
 import { resetHeft, runHeft, tickHeft, watchHeft } from "./heft";
 import { haftReach } from "./reach";
+import { noteFloor } from "./takeoff";
 
 /** J: the next glaive blow. A fresh string's hip thrust is watched, so J held through it becomes a heft. */
 export function pressGlaive(): boolean {
@@ -31,6 +32,7 @@ export const GLAIVE_PART: YsraPart = {
   tick: () => {
     // Long Haft draws the glaive longer, as far as its blows reach
     skin.reach = YSRA_SKIN.reach + haftReach();
+    noteFloor();
     tickHeft();
   },
   runState: runHeft,

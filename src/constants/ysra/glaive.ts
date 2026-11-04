@@ -60,7 +60,7 @@ export const SKYHOOK_GRACE = 0.14;
 /** air sweeps before she lands: one, and one more with High Reaper */
 export const AIR_SWEEPS = { base: 1, reaper: 1 } as const;
 /** High Reaper: air sweeps throw the foe up at this speed and lift her this many pixels with it */
-export const REAPER = { launch: -250, lift: 16 } as const;
+export const REAPER = { launch: -170, lift: 22 } as const;
 
 /** contact feel of the glaive, from the quick poke to the impale; heavier and lower than Kael's */
 export const GLAIVE_FEEL = {
@@ -75,7 +75,7 @@ export const GLAIVE_FEEL = {
 } as const satisfies Record<string, HitFeel>;
 
 /** Skyhook: she rises this many pixels after the foe as the hook lands */
-export const SKYHOOK_RISE = 26;
+export const SKYHOOK_RISE = 30;
 
 /** Warpath's running impale: she keeps this speed for this long into it, then digs in */
 export const WARPATH_RUN = { speed: 170, time: 0.26, brake: 0.85 } as const;

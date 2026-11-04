@@ -145,5 +145,5 @@ export function stepLunge(t: number): void {
   if (!lunge.railed && isFull() && hasPerk("railLance") && t >= travelEnd + LUNGE.railDelay) rail();
 }
 
-/** the tip burst lands when the travel ends */
-export const LUNGE_BURST_AT = travelEnd;
+/** the tip burst lands once the travel has ended; the combo engine deals blows a moment early, so it waits that out */
+export const LUNGE_BURST_AT = travelEnd + 0.03;

@@ -8,6 +8,7 @@ import { emitYsra } from "../../events";
 import { spendCounter } from "../../stance/stance";
 import { glaiveHit } from "../reach";
 import { G_COUNTER, G_LASH, G_RUN, G_SKYHOOK, G_WINDMILL_BACK, G_WINDMILL_FRONT } from "../slashes";
+import { backToFloor } from "../takeoff";
 
 /** one pass of the windmill: front passes on the first and third, back on the second and fourth */
 const windmillPass = (n: number) =>
@@ -36,16 +37,13 @@ export const VARIANT_BLOWS = {
         power: 1.3,
         kx: -30,
         ky: 0,
-        launch: -330,
+        launch: -250,
         big: true,
         slash: G_SKYHOOK,
         feel: GLAIVE_FEEL.sweep,
       }),
     ],
-    // a Skyhook that took over a jump just begun is not an air blow: the air sweep is still hers
-    enter: () => {
-      if (!hero.ground) hero.airHits = Math.max(0, hero.airHits - 1);
-    },
+    enter: backToFloor,
     // she rises with the hook, after the foe
     afterHit: () => lift(SKYHOOK_RISE, false),
   },
