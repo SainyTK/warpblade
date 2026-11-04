@@ -936,7 +936,7 @@ body[data-hud="outside"] .boss {
 .hero-bar {
   height: 6px;
   margin: 0;
-  background: #120a1e;
+  background: var(--line);
 }
 .hero-bar span {
   display: block;
@@ -965,5 +965,39 @@ body[data-hud="outside"] .boss {
   }
   .hero-blurb {
     display: none;
+  }
+}
+/* a phone on its side: the portrait beside the name, and tighter rows, so both cards fit above Back */
+@media (max-height: 520px) {
+  .menu[data-screen="hero"] .menu-panel {
+    width: min(660px, 100%);
+  }
+  .hero-card {
+    grid-template-columns: 64px 1fr;
+    column-gap: 10px;
+    row-gap: 4px;
+    justify-items: start;
+    padding: 8px 12px 10px;
+    text-align: left;
+  }
+  .hero-portrait {
+    grid-row: span 2;
+  }
+  .hero-name {
+    align-self: end;
+  }
+  .hero-title {
+    align-self: start;
+  }
+  .hero-stats,
+  .hero-traits {
+    grid-column: 1 / -1;
+  }
+  .hero-stats {
+    gap: 1px;
+    margin: 0;
+  }
+  .hero-stats dt {
+    line-height: 1.3;
   }
 }
