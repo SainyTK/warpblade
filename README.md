@@ -62,8 +62,15 @@ His crystal sword can be thrown, and wherever it lands, he follows.
   The Shop on the start menu sells stats in levels (HP, attack, ability power, MP, crit, move speed, stamina) and four skills bought once: Lodestone, Warp Shock, Head Start and Last Light.
   Everything bought applies to every run, on top of the level-up picks, and is saved in this browser.
 - **Two heroes.** Start opens the hero screen. Kael throws his crystal sword and appears where it lands; he is balanced and learns every ability from picks.
-  Ysra, the ember lancer, is a flame-temple guard who woke when the braziers lit again. She fights with a long glaive of forge-fire, is tougher, stronger and slower than Kael with less MP, starts every run with the fire spell, and her special is Pyre Wave: a wall of flame that rolls ahead of her, burns every foe it passes and leaves the floor on fire.
-  Both share the same moves on the same rig. The hero behind the menu changes as you look through the cards, and the choice is saved in this browser.
+  Ysra, the ember lancer, is a flame-temple guard who woke when the braziers lit again.
+  She shares Kael's rig and plays nothing like him: tougher and slower, with one heavy jump and no dash.
+  Her glaive string pokes far and pierces every foe in the line, holding `J` winds a lunge, and up or down with `J` hooks a foe up or drags it in.
+  `K` pole-vaults over foes on the floor and dives glaive first in the air, and holding `L` braces against blows from the front, with a parry for a press just in time.
+  Her blows build Heat, a second bar that pays for fire rites on `I`; MP only pays for her ultimate.
+  She starts every run with the whole glaive kit and the Flare rite, and her picks change and extend those moves.
+  Her special is Pyre Wave, a wall of flame rolling ahead of her.
+  Her three ultimates are Sunspear, a burning spear thrown the length of the stage through every foe in its line; Phoenix Dive, a crash from the sky onto the thickest crowd; and Volcanic Rift, a crack in the floor that erupts in pillars of fire.
+  The hero behind the menu changes as you look through the cards, and the choice is saved in this browser.
 - **A 30-wave stage in five eras.** The sky and the foes change as the waves go on, and the scene dissolves into the next era between waves.
   Waves 1 to 5 are a sunlit day with Thornbacks, Glimmer Moths and the Oakheart.
   Waves 6 to 10 bring clouds and rain with Mire Toads, Storm Kites and the Bog Hulk.
