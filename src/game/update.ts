@@ -58,7 +58,11 @@ export function update(dt: number): void {
   updateCoins(dt);
   updateXpOrbs(dt);
   updateWaves(dt);
-  game.fx = game.fx.filter((f) => f.update(world));
+  // effects started by another effect's update join the list after it, and update from the next step
+  const running = game.fx;
+  game.fx = [];
+  const kept = running.filter((f) => f.update(world));
+  game.fx = kept.concat(game.fx);
   for (const g of game.ghosts) g.life -= dt;
   game.ghosts = game.ghosts.filter((g) => g.life > 0);
   updateBlazes(world);
