@@ -1,12 +1,12 @@
-import { PAL } from "../../constants/palette";
 import { glowLine, line, place } from "../../engine/frame";
 import type { Effect } from "../../types/effect";
 import { PK } from "../../types/particle";
 import { WHITE } from "../../utils/color";
 import { ease, lerp } from "../../utils/math";
+import { skin } from "../hero/skin";
 import { particles, rng } from "../state";
 
-/** the line of light left where Kael warped, collapsing toward where he arrived */
+/** the line of light left where the hero warped, collapsing toward where he arrived */
 export function createWarpLine(x0: number, y0: number, x1: number, y1: number): Effect {
   const life = 0.32;
   for (let i = 0; i < 18; i++) {
@@ -19,7 +19,7 @@ export function createWarpLine(x0: number, y0: number, x1: number, y1: number): 
       rng.range(-40, 10),
       rng.range(0.25, 0.55),
       {
-        col: rng.pick(PAL.crystal.slice(3)),
+        col: rng.pick(skin.ramp.slice(3)),
         size: 0.7,
       },
     );
@@ -41,11 +41,11 @@ export function createWarpLine(x0: number, y0: number, x1: number, y1: number): 
         sy,
         x1,
         y1,
-        (v) => (v > 0.8 ? WHITE : PAL.crystal[4]),
+        (v) => (v > 0.8 ? WHITE : skin.ramp[4]),
         (v) => k * (0.4 + 0.6 * v),
       );
-      line(sx, sy + 1, x1, y1 + 1, PAL.crystal[2], k * 0.6);
-      glowLine(sx, sy, x1, y1, 7, PAL.crystal[3], 0.4 * k);
+      line(sx, sy + 1, x1, y1 + 1, skin.ramp[2], k * 0.6);
+      glowLine(sx, sy, x1, y1, 7, skin.ramp[3], 0.4 * k);
     },
   };
 }

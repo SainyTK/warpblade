@@ -1,6 +1,6 @@
 import type { CharacterDef } from "../../types/character";
 import type { SkillBranch } from "../../types/skill";
-import { KAEL_COLORS, PAL } from "../palette";
+import { KAEL_COLORS, PAL, SPARKS } from "../palette";
 
 export const ULT_CHARGE =
   "Hold U to charge up to four levels, release to strike. Higher levels cost more MP; level 4 spends a full bar.";
@@ -608,5 +608,6 @@ export const KAEL: CharacterDef = {
     reach: 17,
     ramp: PAL.crystal,
     glow: PAL.crystal[3],
+    sparks: SPARKS.crystal,
   },
 };

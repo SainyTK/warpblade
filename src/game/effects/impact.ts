@@ -1,14 +1,14 @@
-import { SPARKS } from "../../constants/palette";
 import { circle, line, place } from "../../engine/frame";
 import type { Ramp } from "../../types/color";
 import type { Effect } from "../../types/effect";
 import { PK } from "../../types/particle";
 import { WHITE } from "../../utils/color";
 import { ease, TAU } from "../../utils/math";
+import { skin } from "../hero/skin";
 import { lights, particles, rng } from "../state";
 
-/** a hit: a star of spikes, a white core, sparks thrown forward and a light that flares and dies */
-export function createImpact(x: number, y: number, dir: number, big: boolean, sparks: Ramp = SPARKS.crystal): Effect {
+/** a hit: a star of spikes, a white core, sparks thrown forward and a light that flares and dies; the hero's own sparks unless given */
+export function createImpact(x: number, y: number, dir: number, big: boolean, sparks: Ramp = skin.sparks): Effect {
   const R = rng;
   const count = big ? 7 : 5;
   const spikes = Array.from({ length: count }, (_, i) => ({

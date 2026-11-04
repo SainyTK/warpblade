@@ -20,8 +20,9 @@ import { bladeAngle } from "../utils/poseFrame";
 const heroCanvas = new SpriteCanvas(80, 76, 40, 62);
 const HP_BAR_EMPTY = hex("#120a1e");
 const STUN_STAR = hex("#ffe26b");
-/** ring colors for ultimate levels 1 to 4 */
-const LEVEL_COLORS = [PAL.crystal[3], PAL.crystal[4], hex("#ffe26b"), hex("#ff7ae0")];
+/** ring colors for ultimate levels 3 and 4; levels 1 and 2 take the hero's own light */
+const HIGH_LEVEL_COLORS = [hex("#ffe26b"), hex("#ff7ae0")];
+const levelColor = (i: number) => (i < 2 ? skin.ramp[3 + i] : HIGH_LEVEL_COLORS[i - 2]);
 
 function sprite(e: Enemy) {
   if (e.type === "wisp") return drawWisp(e, game.t);
@@ -87,9 +88,9 @@ function drawChargeRing(): void {
   const level = hero.chargeLevel;
   for (let i = 0; i < level; i++) {
     const r = 10 + i * 6 + Math.sin(game.t * 8 + i) * 0.8;
-    ellipseRing(hero.x, hero.y, r, r * 0.28, LEVEL_COLORS[i], 0.9);
+    ellipseRing(hero.x, hero.y, r, r * 0.28, levelColor(i), 0.9);
   }
-  const c = LEVEL_COLORS[level - 1];
+  const c = levelColor(level - 1);
   glow(hero.x, hero.y - 18, 18 + level * 8, c, 0.25 + level * 0.08);
   for (let i = 0; i < 8; i++) {
     const g = game.t * 3 + (i * TAU) / 8;
@@ -101,8 +102,8 @@ function drawChargeRing(): void {
     const y = hero.y - 40;
     const lit = i < level;
     const open = canAffordUlt(i + 1);
-    px(x, y, lit ? LEVEL_COLORS[i] : open ? PAL.shadow[3] : HP_BAR_EMPTY);
-    px(x + 1, y, lit ? LEVEL_COLORS[i] : open ? PAL.shadow[3] : HP_BAR_EMPTY);
+    px(x, y, lit ? levelColor(i) : open ? PAL.shadow[3] : HP_BAR_EMPTY);
+    px(x + 1, y, lit ? levelColor(i) : open ? PAL.shadow[3] : HP_BAR_EMPTY);
     px(x, y + 1, lit ? WHITE : open ? PAL.shadow[2] : HP_BAR_EMPTY);
     px(x + 1, y + 1, lit ? WHITE : open ? PAL.shadow[2] : HP_BAR_EMPTY);
   }

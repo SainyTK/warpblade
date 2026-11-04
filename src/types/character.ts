@@ -15,6 +15,8 @@ export interface HeroSkin {
   /** slashes, floor rings, afterimages and sparks, dark to bright, seven steps */
   ramp: Ramp;
   glow: Color;
+  /** the sparks thrown where a blow lands, white to dark, four steps */
+  sparks: Ramp;
 }
 
 export interface CharacterDef {

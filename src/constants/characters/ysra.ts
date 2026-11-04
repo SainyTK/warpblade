@@ -1,7 +1,7 @@
 import type { CharacterDef } from "../../types/character";
 import type { SkillBranch, SkillNode } from "../../types/skill";
 import { hex, ramp } from "../../utils/color";
-import type { HeroColors } from "../palette";
+import { type HeroColors, SPARKS } from "../palette";
 import { KAEL, ULT_CHARGE } from "./kael";
 
 /** Ysra: dark skin, black braid with an ember streak, crimson coat with bronze trim, an orange sash and a glaive of forge-fire */
@@ -96,5 +96,6 @@ export const YSRA: CharacterDef = {
     reach: 23,
     ramp: EMBER,
     glow: EMBER[3],
+    sparks: SPARKS.hot,
   },
 };

@@ -10,6 +10,7 @@ const look = (s: HeroSkin): Look => ({
   reach: s.reach,
   ramp: s.ramp,
   glow: s.glow,
+  sparks: s.sparks,
 });
 
 /** the look of the hero being drawn, Kael's until another is chosen; the draw code reads this and HERO_COLORS every frame */
