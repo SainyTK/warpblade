@@ -12,6 +12,9 @@
   --crystal: #7fe3ff;
   --brass: #e0ac48;
   --fire: #ff8a2a;
+  --ember: #ec7228;
+  --ember-hot: #ffae48;
+  --ember-white: #ffe08a;
   --ice: #8fd3f2;
   --volt: #b4a8ff;
   --hp: #e0405a;
@@ -162,6 +165,46 @@ body {
     var(--night) calc(var(--dash-share, 50%) - 1px) var(--dash-share, 50%)
   );
 }
+/* Ysra has no dash, so her stamina bar has no dash notches */
+.bar.st.no-dash .track::after {
+  content: none;
+}
+/* Ysra's Heat: a mark at half once Searing Edge is learned, a hotter fill above it, a blaze when full, white heat in Overheat */
+.bar.ht span {
+  color: var(--ember-hot);
+}
+.bar.ht .fill {
+  background: var(--ember);
+  box-shadow: 0 0 6px var(--ember);
+}
+.bar.ht.searing .fill {
+  background: var(--ember-hot);
+  box-shadow: 0 0 8px var(--ember-hot);
+}
+.bar.ht.edge .track::after {
+  content: "";
+  position: absolute;
+  left: calc(50% - 1px);
+  top: -3px;
+  bottom: -3px;
+  width: 2px;
+  background: var(--text);
+}
+.bar.ht.full .fill,
+.bar.ht.overheat .fill {
+  animation: heat-blaze 240ms steps(1) infinite;
+}
+.bar.ht.overheat .fill {
+  background: var(--ember-white);
+}
+@keyframes heat-blaze {
+  50% {
+    background: var(--ember-white);
+    box-shadow:
+      0 0 10px var(--ember-hot),
+      0 -2px 6px var(--ember);
+  }
+}
 /* a dash the bar could not pay for: the empty track blinks red */
 /* a bar too empty for what was pressed blinks its border */
 .bar.empty .track {
@@ -298,6 +341,15 @@ body {
 .el.on.volt {
   color: var(--volt);
   border-color: var(--volt);
+}
+/* Ysra's rite tabs take the place of the element tabs; each rite's colour comes in as --tint */
+.rite-tabs {
+  display: flex;
+  gap: 4px;
+}
+.el.on.rite {
+  color: var(--tint);
+  border-color: var(--tint);
 }
 /* Spell and warp cooldowns: a recharging tab dims and a pixel bar along its bottom fills as it recharges (--charged, 0 to 1).
    The tab blinks when it is ready again, and jolts when a press is refused while it recharges. */
@@ -865,6 +917,10 @@ body[data-hud="outside"] .boss {
   .el.deny {
     animation: none;
     border-color: var(--hp);
+  }
+  .bar.ht.full .fill,
+  .bar.ht.overheat .fill {
+    animation: none;
   }
   .bar.empty .track {
     animation: none;

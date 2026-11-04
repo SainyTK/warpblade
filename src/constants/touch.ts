@@ -1,4 +1,6 @@
-import type { StickDirectionSpec, TouchButtonSpec } from "../types/touch";
+import type { KitId } from "../types/kit";
+import type { StickDirectionSpec, TouchButtonAction, TouchButtonSpec, TouchButtonText } from "../types/touch";
+import { RITE_NAMES } from "./input";
 
 /**
  * The touch controller layout, the one source the controller and the Controls screen both read.
@@ -8,77 +10,62 @@ export const TOUCH_SCALE = { min: 3, max: 4, shortSidePerPixel: 120 } as const;
 
 /** Action buttons on the right, in a thumb arc around the attack button. */
 export const TOUCH_BUTTONS: readonly TouchButtonSpec[] = [
-  {
-    action: "attack",
-    label: "Attack",
-    key: "J",
-    hint: "Sword combo. Each hit fits where the foes are. Push the stick up or down, jump, dash or run for the variants",
-    size: 24,
-    angle: 0,
-    reach: 0,
-    accent: "#7fe3ff",
-  },
-  {
-    action: "up",
-    label: "Jump",
-    key: "W",
-    hint: "Jump. Hold the stick down to drop through a ledge",
-    size: 17,
-    angle: 190,
-    reach: 30,
-    accent: "#e8e6f6",
-  },
-  {
-    action: "dash",
-    label: "Dash",
-    key: "L",
-    hint: "Dash. Nothing can touch you while you dash, and each dash spends stamina",
-    size: 17,
-    angle: 150,
-    reach: 30,
-    accent: "#b4a8ff",
-  },
-  {
-    action: "warp",
-    label: "Warp",
-    key: "K",
-    hint: "Warp strike (10 MP)",
-    size: 17,
-    angle: 110,
-    reach: 30,
-    accent: "#a8ecff",
-  },
-  {
-    action: "cast",
-    label: "Spell",
-    key: "I",
-    hint: "Cast the selected spell (18 MP)",
-    size: 17,
-    angle: 70,
-    reach: 30,
-    accent: null,
-  },
-  {
-    action: "ultimate",
-    label: "Special",
-    key: "U",
-    hint: "Hold to charge, the ring fills one quarter per level. Let go to strike",
-    size: 19,
-    angle: 129,
-    reach: 54,
-    accent: "#ff7ae0",
-  },
-  {
-    action: "cycle",
-    label: "Element",
-    key: "O",
-    hint: "Switch element: fire, ice, bolt",
-    size: 15,
-    angle: 80,
-    reach: 54,
-    accent: null,
-  },
+  { action: "attack", key: "J", size: 24, angle: 0, reach: 0 },
+  { action: "up", key: "W", size: 17, angle: 190, reach: 30 },
+  { action: "dash", key: "L", size: 17, angle: 150, reach: 30 },
+  { action: "warp", key: "K", size: 17, angle: 110, reach: 30 },
+  { action: "cast", key: "I", size: 17, angle: 70, reach: 30 },
+  { action: "ultimate", key: "U", size: 19, angle: 129, reach: 54 },
+  { action: "cycle", key: "O", size: 15, angle: 80, reach: 54 },
 ];
+
+const SPECIAL: TouchButtonText = {
+  label: "Special",
+  hint: "Hold to charge, the ring fills one quarter per level. Let go to strike",
+  accent: "#ff7ae0",
+};
+
+/** what each button is called and does for each hero */
+export const TOUCH_TEXT: Record<KitId, Record<TouchButtonAction, TouchButtonText>> = {
+  kael: {
+    attack: {
+      label: "Attack",
+      hint: "Sword combo. Each hit fits where the foes are. Push the stick up or down, jump, dash or run for the variants",
+      accent: "#7fe3ff",
+    },
+    up: { label: "Jump", hint: "Jump. Hold the stick down to drop through a ledge", accent: "#e8e6f6" },
+    dash: {
+      label: "Dash",
+      hint: "Dash. Nothing can touch you while you dash, and each dash spends stamina",
+      accent: "#b4a8ff",
+    },
+    warp: { label: "Warp", hint: "Warp strike (10 MP)", accent: "#a8ecff" },
+    cast: { label: "Spell", hint: "Cast the selected spell (18 MP)", accent: null },
+    ultimate: SPECIAL,
+    cycle: { label: "Element", hint: "Switch element: fire, ice, bolt", accent: null },
+  },
+  ysra: {
+    attack: {
+      label: "Attack",
+      hint: "Glaive string that pierces the whole line. Hold to wind a lunge, let go to lunge. Push the stick up for a skyhook, down for a ground lash",
+      accent: "#ffae48",
+    },
+    up: {
+      label: "Jump",
+      hint: "One heavy jump, no double jump. Hold the stick down to drop through a ledge",
+      accent: "#e8e6f6",
+    },
+    dash: {
+      label: "Guard",
+      hint: "Hold to brace and block blows from the front. Tap just before a blow to parry. With the stick pushed behind you, step back",
+      accent: "#d08a3c",
+    },
+    warp: { label: "Vault", hint: "Pole vault over foes. In the air, dive glaive first", accent: "#ec7228" },
+    cast: { label: "Rite", hint: "Call the selected rite, paid with Heat", accent: null },
+    ultimate: SPECIAL,
+    cycle: { label: "Next rite", hint: `Switch rite: ${RITE_NAMES}`, accent: null },
+  },
+};
 
 /** where the attack button's center sits, art pixels in from the bottom right corner of the safe area */
 export const CLUSTER_ANCHOR = { right: 22, bottom: 20 } as const;
@@ -100,13 +87,21 @@ export const STICK = {
   steep: 0.7,
 } as const;
 
-/** The stick's directions as the Controls screen lists them. */
-export const STICK_DIRECTIONS: readonly StickDirectionSpec[] = [
-  { direction: "side", label: "Walk" },
-  { direction: "far side", label: "Run" },
-  { direction: "up", label: "Jump, and the up variants of attacks" },
-  { direction: "down", label: "Down variants. With Jump, drop through a ledge" },
-];
+/** The stick's directions as the Controls screen lists them, for each hero. */
+export const STICK_DIRECTIONS: Record<KitId, readonly StickDirectionSpec[]> = {
+  kael: [
+    { direction: "side", label: "Walk" },
+    { direction: "far side", label: "Run" },
+    { direction: "up", label: "Jump, and the up variants of attacks" },
+    { direction: "down", label: "Down variants. With Jump, drop through a ledge" },
+  ],
+  ysra: [
+    { direction: "side", label: "Walk" },
+    { direction: "far side", label: "Charge, once Warpath is learned" },
+    { direction: "up", label: "Jump. With Attack, a skyhook" },
+    { direction: "down", label: "With Attack, a ground lash. With Jump, drop through a ledge" },
+  ],
+};
 
 /** the top part of the screen takes no touches, so the HUD and any buttons there stay reachable */
 export const TOUCH_ZONE_TOP = 0.16;

@@ -1,14 +1,17 @@
-import { ELEMENTS, STAMINA } from "../../constants/combat";
-import { ELEMENT_COLOR } from "../../constants/palette";
+import { STAMINA } from "../../constants/combat";
+import { TOUCH_TEXT } from "../../constants/touch";
 import { ULT_LEVELS } from "../../constants/ultimate";
 import { castCost, knowsElement, selectedElement, spellRecharge } from "../../game/hero/spell";
 import { canPayDash } from "../../game/hero/stamina";
 import { canAffordUlt, ultRecharge } from "../../game/hero/ultimate";
 import { warpCooldown, warpCost } from "../../game/hero/warp";
+import { heat, overheatLeft, overheatReady } from "../../game/hero/ysra/pyre/heat";
+import { riteCost, selectedRite } from "../../game/hero/ysra/pyre/riteChoice";
 import { hasPerk } from "../../game/progress";
-import { game, hero, progress } from "../../game/state";
+import { character, hero, progress } from "../../game/state";
 import type { ButtonLook, TouchButtonSpec } from "../../types/touch";
 import { hex } from "../../utils/color";
+import { selectionTint, touchSelection } from "./selection";
 
 /** charge progress across the four levels, 0 to 4: whole levels reached plus the way to the next one the MP pays for */
 function chargeProgress(): number {
@@ -20,10 +23,8 @@ function chargeProgress(): number {
   return level + Math.min(1, (hero.charge - from) / (next.at - from));
 }
 
-/** how a button should look now, read from the game state */
-export function buttonLook(spec: TouchButtonSpec, pressed: boolean): ButtonLook {
-  const accent = spec.accent ? hex(spec.accent) : ELEMENT_COLOR[ELEMENTS[game.spell]];
-  const look: ButtonLook = { pressed, ready: true, cooldown: 0, accent, affordable: 0, charge: -1 };
+/** Kael's dash, warp and spell */
+function kaelLook(spec: TouchButtonSpec, look: ButtonLook): void {
   switch (spec.action) {
     case "dash":
       look.ready = canPayDash();
@@ -37,13 +38,41 @@ export function buttonLook(spec: TouchButtonSpec, pressed: boolean): ButtonLook 
       look.ready = knowsElement(selectedElement()) && hero.mp >= castCost();
       look.cooldown = spellRecharge(selectedElement());
       break;
-    case "ultimate":
-      look.cooldown = ultRecharge();
-      look.affordable = progress.ultimate && !hero.ultCd ? ULT_LEVELS.filter((_, i) => canAffordUlt(i + 1)).length : 0;
-      look.ready = look.affordable > 0;
-      look.charge = chargeProgress();
-      break;
     default:
   }
+}
+
+/** Ysra's guard needs stamina, her vault waits out its recharge, and the rite fills as Heat comes to cover it */
+function ysraLook(spec: TouchButtonSpec, look: ButtonLook): void {
+  switch (spec.action) {
+    case "dash":
+      look.ready = hero.stamina > 0;
+      break;
+    case "warp":
+      look.ready = hero.warpCd <= 0;
+      break;
+    case "cast": {
+      const rite = selectedRite();
+      if (overheatReady()) break;
+      look.ready = !!rite && overheatLeft() <= 0 && heat() >= riteCost(rite);
+      look.cooldown = rite ? Math.max(0, 1 - heat() / riteCost(rite)) : 1;
+      break;
+    }
+    default:
+  }
+}
+
+/** how a button should look now, read from the game state */
+export function buttonLook(spec: TouchButtonSpec, pressed: boolean): ButtonLook {
+  const text = TOUCH_TEXT[character.kit][spec.action];
+  const accent = text.accent ? hex(text.accent) : selectionTint(touchSelection());
+  const look: ButtonLook = { pressed, ready: true, cooldown: 0, accent, affordable: 0, charge: -1 };
+  if (spec.action === "ultimate") {
+    look.cooldown = ultRecharge();
+    look.affordable = progress.ultimate && !hero.ultCd ? ULT_LEVELS.filter((_, i) => canAffordUlt(i + 1)).length : 0;
+    look.ready = look.affordable > 0;
+    look.charge = chargeProgress();
+  } else if (character.kit === "ysra") ysraLook(spec, look);
+  else kaelLook(spec, look);
   return look;
 }

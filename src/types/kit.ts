@@ -24,6 +24,8 @@ export interface HeroKit {
   afterStrike(id: MoveId, hits: number): void;
   /** a blow is about to land on the hero: true when the kit took it (a block or a parry) */
   absorbHurt(dmg: number, fromX: number): boolean;
+  /** combo moves play this much faster on top of attack speed; Kael's kit leaves it out */
+  attackRate?(): number;
   /** damage taken is multiplied by this */
   hurtScale(): number;
   /** the kit drives the hero's horizontal speed itself this frame (vaults, dives, charges) */

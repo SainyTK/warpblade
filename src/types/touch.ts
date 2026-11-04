@@ -3,21 +3,25 @@ import type { InputAction } from "./input";
 /** The actions that have a button on the touch controller. */
 export type TouchButtonAction = Extract<InputAction, "attack" | "up" | "dash" | "warp" | "cast" | "cycle" | "ultimate">;
 
-/** One action button: what it does, how it is named, and where it sits around the attack button. */
+/** One action button: what it does and where it sits around the attack button. */
 export interface TouchButtonSpec {
   action: TouchButtonAction;
-  label: string;
   /** the matching keyboard key */
   key: string;
-  /** what the button does on a touch screen, for the Controls screen */
-  hint: string;
   /** diameter in controller art pixels */
   size: number;
   /** direction from the attack button's center, degrees counterclockwise from the right */
   angle: number;
   /** distance from the attack button's center, controller art pixels */
   reach: number;
-  /** rim color, or null for the selected element's color */
+}
+
+/** How one hero's button is named and drawn. */
+export interface TouchButtonText {
+  label: string;
+  /** what the button does on a touch screen, for the Controls screen */
+  hint: string;
+  /** rim color, or null for the color of the selected element or rite */
   accent: string | null;
 }
 

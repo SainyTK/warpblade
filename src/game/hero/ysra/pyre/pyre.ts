@@ -1,16 +1,38 @@
+import { OVERHEAT } from "../../../../constants/ysra/heat";
+import { clearBrazier } from "../../../spells/rites/brazier";
 import type { YsraPart } from "../part";
+import { listenAshenWake, resetAshenWake } from "./ashenWake";
+import { listenFusions } from "./fusion";
+import { burnGlaive } from "./glaiveFire";
+import { overheatLeft, resetHeat, tickHeat } from "./heat";
+import { runRite } from "./rite";
+import { resetRiteChoice, selectNextRite } from "./riteChoice";
+import { listenStrikes } from "./strikeHeat";
 
-/** I: call the selected rite with Heat. Placeholder: does nothing. */
-export function pressRite(): boolean {
-  return true;
-}
-/** O: select the next learned rite. Placeholder. */
+export { heat } from "./heat";
+export { pressRite } from "./rite";
+
+listenStrikes();
+listenAshenWake();
+listenFusions();
+
+/** O: select the next learned rite */
 export function cycleRite(): boolean {
-  return false;
-}
-/** Heat, 0 to HEAT.max */
-export function heat(): number {
-  return 0;
+  return selectNextRite();
 }
 
-export const PYRE_PART: YsraPart = {};
+/** Heat and the rites it pays for: Heat ticks and drains, the rite pose plays, Overheat speeds the glaive */
+export const PYRE_PART: YsraPart = {
+  tick: (dt) => {
+    tickHeat(dt);
+    burnGlaive();
+  },
+  runState: () => runRite(),
+  attackRate: () => (overheatLeft() > 0 ? OVERHEAT.attackRate : 1),
+  reset: () => {
+    resetHeat();
+    resetRiteChoice();
+    resetAshenWake();
+    clearBrazier();
+  },
+};
