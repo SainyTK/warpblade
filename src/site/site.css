@@ -1,0 +1,410 @@
+/* The site pages beside the game (patch notes, feedback): ordinary scrolling documents in the game's palette and
+   fonts. The tokens come from tokens.css; the game's own no-scroll, no-select rules stay in styles.css. */
+html {
+  scroll-padding-top: 88px;
+  -webkit-text-size-adjust: 100%;
+}
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: var(--night);
+  color: var(--text);
+  font-family: var(--body);
+  font-size: 15px;
+  line-height: 1.65;
+}
+h1,
+h2,
+h3 {
+  margin: 0;
+  font-weight: 400;
+  line-height: 1.2;
+  text-wrap: balance;
+}
+p {
+  margin: 0;
+}
+a {
+  color: var(--crystal);
+  text-underline-offset: 3px;
+}
+a:hover {
+  color: var(--text);
+}
+img,
+video {
+  display: block;
+  max-width: 100%;
+}
+button,
+input,
+textarea,
+select {
+  font: inherit;
+  color: inherit;
+}
+/* one solid focus ring for every control */
+:focus-visible {
+  outline: 2px solid var(--crystal);
+  outline-offset: 2px;
+}
+:focus:not(:focus-visible) {
+  outline: none;
+}
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* Shell: the header, the page column and the page title. */
+.site-container {
+  width: min(1120px, 100% - 32px);
+  margin-inline: auto;
+}
+.skip-link {
+  position: absolute;
+  top: 8px;
+  left: 16px;
+  z-index: 20;
+  padding: 8px 12px;
+  background: var(--panel);
+  border: 2px solid var(--crystal);
+  font-family: var(--ui);
+  translate: 0 -200%;
+}
+.skip-link:focus {
+  translate: 0 0;
+}
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: var(--night);
+  border-bottom: 2px solid var(--line);
+  box-shadow: 0 2px 0 rgba(0, 0, 0, 0.4);
+}
+.site-header-inner {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  min-height: 60px;
+}
+.site-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--display);
+  font-size: 18px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: var(--crystal);
+  text-shadow: 0 2px 0 #1f4a8a;
+}
+.site-brand-icon {
+  image-rendering: pixelated;
+}
+.site-nav {
+  display: flex;
+  gap: 4px;
+  margin-right: auto;
+}
+.site-nav-link {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 0 12px;
+  font-family: var(--ui);
+  font-size: 16px;
+  color: var(--mist);
+  text-decoration: none;
+  border-bottom: 2px solid transparent;
+}
+.site-nav-link:hover {
+  color: var(--text);
+}
+.site-nav-link[aria-current="page"] {
+  color: var(--text);
+  border-bottom-color: var(--crystal);
+}
+.site-main {
+  display: grid;
+  gap: 24px;
+  padding: 32px 0 80px;
+}
+.site-main:focus {
+  outline: none;
+}
+.page-title {
+  font-family: var(--display);
+  font-size: 32px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--crystal);
+  text-shadow:
+    0 2px 0 #1f4a8a,
+    0 0 18px rgba(127, 227, 255, 0.3);
+}
+
+/* Controls: square pixel buttons that press down a pixel. */
+.button {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  min-height: 40px;
+  padding: 0 16px;
+  font-family: var(--display);
+  font-size: 13px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: var(--text);
+  background: var(--raised);
+  border: 2px solid var(--key);
+  box-shadow: 0 2px 0 var(--line);
+  cursor: pointer;
+  transition:
+    translate 80ms ease-out,
+    box-shadow 80ms ease-out,
+    background-color 120ms ease-out;
+}
+.button:hover {
+  color: var(--text);
+  border-color: var(--mist);
+}
+.button:active:not(:disabled) {
+  translate: 0 2px;
+  box-shadow: 0 0 0 var(--line);
+}
+.button:disabled {
+  cursor: default;
+  color: var(--muted);
+  border-color: var(--line);
+}
+.button-play,
+.button-primary {
+  color: var(--night);
+  background: var(--brass);
+  border-color: #f4d084;
+  box-shadow: 0 2px 0 #7a5a1c;
+}
+.button-play:hover,
+.button-primary:hover {
+  color: var(--night);
+  background: #ecbe62;
+  border-color: #fbe2a8;
+}
+.button-primary:disabled {
+  color: var(--night);
+  background: #8a6c34;
+  border-color: #8a6c34;
+}
+.chip {
+  display: inline-flex;
+  align-items: center;
+  min-height: 22px;
+  padding: 0 7px;
+  font-family: var(--ui);
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  color: var(--accent, var(--mist));
+  border: 2px solid currentColor;
+  background: color-mix(in srgb, var(--accent, var(--mist)) 12%, transparent);
+}
+a.chip {
+  text-decoration: none;
+}
+a.chip:hover {
+  background: color-mix(in srgb, var(--accent, var(--mist)) 24%, transparent);
+}
+
+/* Fields: labels above, square inputs with a pixel border. */
+.field-label {
+  font-family: var(--ui);
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+}
+.field-optional {
+  margin-left: 6px;
+  font-weight: 400;
+  color: var(--muted);
+}
+.input,
+.select {
+  width: 100%;
+  min-height: 44px;
+  padding: 10px 12px;
+  background: var(--night);
+  border: 2px solid var(--key);
+  border-radius: 0;
+}
+.input::placeholder {
+  color: var(--muted);
+}
+.input:hover,
+.select:hover {
+  border-color: var(--mist);
+}
+.input:focus-visible,
+.select:focus-visible {
+  outline-offset: 0;
+  border-color: var(--crystal);
+}
+.input[aria-invalid="true"] {
+  border-color: var(--hp);
+}
+.select {
+  appearance: none;
+  padding-right: 40px;
+  font-family: var(--ui);
+  font-size: 16px;
+  /* a pixel chevron in --crystal */
+  background:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 7 4' shape-rendering='crispEdges' fill='%237fe3ff'%3E%3Cpath d='M0 0h7v1H6v1H5v1H4v1H3V3H2V2H1V1H0z'/%3E%3C/svg%3E")
+    right 14px center / 14px 8px no-repeat var(--night);
+}
+
+/* Surfaces: a panel with its corners cut one pixel step, like the game's menu. */
+.panel {
+  --n: 2px;
+  background: var(--panel);
+  border: 2px solid var(--line);
+  clip-path: polygon(
+    var(--n) 0,
+    calc(100% - var(--n)) 0,
+    100% var(--n),
+    100% calc(100% - var(--n)),
+    calc(100% - var(--n)) 100%,
+    var(--n) 100%,
+    0 calc(100% - var(--n)),
+    0 var(--n)
+  );
+}
+.section-title {
+  font-family: var(--display);
+  font-size: 20px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--accent, var(--crystal));
+}
+.state-box {
+  display: grid;
+  justify-items: start;
+  gap: 12px;
+  padding: 20px;
+  background: var(--panel);
+  border: 2px dashed var(--line);
+}
+.state-text {
+  font-family: var(--ui);
+  font-size: 16px;
+  color: var(--mist);
+}
+.state-error {
+  border-color: color-mix(in srgb, var(--hp) 50%, var(--line));
+}
+
+/* Loading: shapes of the content with a slow sweep, shown only after a short wait. */
+.skeleton {
+  background: linear-gradient(90deg, var(--raised) 0%, #26214a 50%, var(--raised) 100%) 0 0 / 300% 100%;
+  animation: shimmer 1.6s linear infinite;
+}
+@keyframes shimmer {
+  from {
+    background-position: 100% 0;
+  }
+  to {
+    background-position: 0 0;
+  }
+}
+
+/* Media: a box reserved from the file's size with a muted fill; the file fades in once it arrives. */
+.media-box {
+  position: relative;
+  margin: 0;
+  overflow: hidden;
+  background: var(--raised);
+  border: 2px solid var(--line);
+}
+.media-box > img,
+.media-box > video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  image-rendering: pixelated;
+  opacity: 0;
+  transition: opacity 240ms ease-out;
+}
+.media-box[data-loaded] > img,
+.media-box[data-loaded] > video {
+  opacity: 1;
+}
+.media-box[data-failed] {
+  display: grid;
+  place-items: center;
+  padding: 16px;
+  font-family: var(--ui);
+  color: var(--muted);
+  text-align: center;
+}
+.media-play {
+  position: absolute;
+  inset: 50% auto auto 50%;
+  translate: -50% -50%;
+}
+.media-box[data-playing] .media-play {
+  opacity: 0;
+}
+.media-box[data-playing] .media-play:focus-visible {
+  opacity: 1;
+}
+
+@media (max-width: 640px) {
+  html {
+    scroll-padding-top: 120px;
+  }
+  .site-header-inner {
+    flex-wrap: wrap;
+    gap: 0 12px;
+    min-height: 0;
+    padding-top: 8px;
+  }
+  .site-brand {
+    margin-right: auto;
+    font-size: 16px;
+  }
+  .site-nav {
+    order: 3;
+    width: 100%;
+    margin: 0 0 0 -12px;
+  }
+  .site-nav-link {
+    min-height: 40px;
+  }
+  .site-main {
+    gap: 20px;
+    padding-top: 24px;
+  }
+  .page-title {
+    font-size: 26px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .skeleton {
+    animation: none;
+  }
+  .button {
+    transition: none;
+  }
+}

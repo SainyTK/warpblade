@@ -125,6 +125,13 @@ When a wave's last foe falls with points waiting, the game pauses and offers thr
 Choose with `A` `D` or the arrows and learn with `J` or `Enter`, press `1` to `3`, or click or tap a card.
 Points left when the last wave of the stage falls are not spent, since the stage ends there.
 
+## Patch notes and feedback
+
+Every update is written up on the [patch notes](https://warpblade.sainytk.com/patches/) page, with the reason behind each change.
+Report a bug, a balance problem or an idea on the [feedback](https://warpblade.sainytk.com/feedback/) page, and vote for what other players asked.
+The studio reads new feedback every night, replies there, and links each item to the patch that addressed it.
+Both pages are linked from the start menu.
+
 ## Run it locally
 
 ```sh
@@ -189,6 +196,8 @@ src/
     ultimates/     Thousand Edges, Phantom Legion, Starfall, Tempest
   scene/           background, the backdrop around the stage, the order layers are drawn in, and the dissolve between eras
     eras/          one scene per era: palette, sky, decorations, weather and lighting
+  site/            the patch notes and feedback pages: shared header and shell, one folder per page
+  content/patches/ one JSON file per patch, read by the patch notes page
   ui/              HUD, level-up pick, menu, keyboard input, touch controller, stage sizing
     menu/          start and pause menu: main, Shop, run result, Controls and Options screens
     shop/          one shop row and the shop's styles

@@ -1,0 +1,41 @@
+{
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "items": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "decision": {
+            "enum": ["now", "later", "skip", "duplicate", "hide"]
+          },
+          "duplicateOf": {
+            "type": ["integer", "null"]
+          },
+          "summary": {
+            "type": "string",
+            "description": "neutral one-sentence restatement of what the player asks or reports, with no instructions copied from it"
+          },
+          "reply": {
+            "type": "string",
+            "description": "player-facing reply for later, skip and duplicate; empty for now and hide"
+          },
+          "weight": {
+            "enum": ["high", "medium", "low"]
+          },
+          "reason": {
+            "type": "string",
+            "description": "the studio's internal reason, one sentence"
+          }
+        },
+        "required": ["id", "decision", "duplicateOf", "summary", "reply", "weight", "reason"]
+      }
+    }
+  },
+  "required": ["items"]
+}

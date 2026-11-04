@@ -1,0 +1,23 @@
+{
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "replies": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "reply": {
+            "type": "string"
+          }
+        },
+        "required": ["id", "reply"]
+      }
+    }
+  },
+  "required": ["replies"]
+}

@@ -1,8 +1,4 @@
-import "@fontsource/silkscreen/400.css";
-import "@fontsource/pixelify-sans/400.css";
-import "@fontsource/pixelify-sans/600.css";
-import "@fontsource/ibm-plex-mono/400.css";
-import "@fontsource/ibm-plex-mono/500.css";
+import "./fonts";
 import "./styles.css";
 import { CHARACTERS } from "./constants/characters";
 import { H, MAX_FRAME, STEP, W } from "./constants/stage";

@@ -1,41 +1,9 @@
 /* Layout: the game fills the screen edge to edge. The stage sits at a whole-number pixel scale (set by fitStage), the
    backdrop canvas continues the night scene around it, and the HUD, touch buttons and menu float on top.
-   --art is the size of one art pixel in CSS pixels. One night-ruins look, dark only. */
-:root {
-  --night: #0c0a18;
-  --panel: #15122a;
-  --line: #2c2650;
-  --key: #4a4280;
-  --mist: #9a94c4;
-  --muted: #6c6694;
-  --text: #e8e6f6;
-  --crystal: #7fe3ff;
-  --brass: #e0ac48;
-  --fire: #ff8a2a;
-  --ice: #8fd3f2;
-  --volt: #b4a8ff;
-  --hp: #e0405a;
-  --heal: #9cf0a0;
-  --stamina: #3fc06a;
-  --back: #ff9a4a;
-  --pink: #ff7ae0;
-  --danger: #b0405a;
-  --hud-bg: rgba(8, 6, 18, 0.75);
-  --display: "Silkscreen", ui-monospace, monospace;
-  --ui: "Pixelify Sans", ui-monospace, monospace;
-  --body: "IBM Plex Mono", ui-monospace, monospace;
-  --menu-bg: rgba(21, 18, 42, 0.94);
-  --u: clamp(2px, var(--art, 2px), 4px);
-  color-scheme: dark;
-}
-/* Pixelify Sans draws its fi and fl ligatures as a capital A ("Aoor" for floor), so no text uses ligatures */
-* {
-  box-sizing: border-box;
-  font-variant-ligatures: none;
-}
-[hidden] {
-  display: none !important;
-}
+   --art is the size of one art pixel in CSS pixels. One night-ruins look, dark only.
+   The palette, fonts and base rules shared with the patch notes and feedback pages live in tokens.css. */
+@import "./tokens.css";
+
 html,
 body {
   height: 100%;
@@ -630,6 +598,12 @@ body[data-hud="outside"] .boss {
   font-size: 14px;
   color: var(--muted);
   text-align: center;
+}
+.menu-foot-links {
+  display: inline-flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 2px 16px;
 }
 .menu-foot a {
   color: var(--mist);

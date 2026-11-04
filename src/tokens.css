@@ -1,0 +1,38 @@
+/* Design tokens and base rules shared by the game and the site pages (patch notes, feedback). Dark only. */
+:root {
+  --night: #0c0a18;
+  --panel: #15122a;
+  /* a card on a panel: dark surfaces lift by getting lighter */
+  --raised: #1d1938;
+  --line: #2c2650;
+  --key: #4a4280;
+  --mist: #9a94c4;
+  --muted: #6c6694;
+  --text: #e8e6f6;
+  --crystal: #7fe3ff;
+  --brass: #e0ac48;
+  --fire: #ff8a2a;
+  --ice: #8fd3f2;
+  --volt: #b4a8ff;
+  --hp: #e0405a;
+  --heal: #9cf0a0;
+  --stamina: #3fc06a;
+  --back: #ff9a4a;
+  --pink: #ff7ae0;
+  --danger: #b0405a;
+  --hud-bg: rgba(8, 6, 18, 0.75);
+  --display: "Silkscreen", ui-monospace, monospace;
+  --ui: "Pixelify Sans", ui-monospace, monospace;
+  --body: "IBM Plex Mono", ui-monospace, monospace;
+  --menu-bg: rgba(21, 18, 42, 0.94);
+  --u: clamp(2px, var(--art, 2px), 4px);
+  color-scheme: dark;
+}
+/* Pixelify Sans draws its fi and fl ligatures as a capital A ("Aoor" for floor), so no text uses ligatures */
+* {
+  box-sizing: border-box;
+  font-variant-ligatures: none;
+}
+[hidden] {
+  display: none !important;
+}
