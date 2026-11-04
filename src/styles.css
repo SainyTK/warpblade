@@ -28,8 +28,10 @@
   --u: clamp(2px, var(--art, 2px), 4px);
   color-scheme: dark;
 }
+/* Pixelify Sans draws its fi and fl ligatures as a capital A ("Aoor" for floor), so no text uses ligatures */
 * {
   box-sizing: border-box;
+  font-variant-ligatures: none;
 }
 [hidden] {
   display: none !important;
