@@ -28,8 +28,8 @@ let shown: { context: MenuContext | null; screen: MenuScreen } = { context: null
 export const menuBody = (): HTMLElement => body;
 
 /**
- * Draw the menu for the current state. On a new screen the first entry takes focus, or, coming back to the main
- * screen, the entry that opened the last one; redrawing the same screen keeps the focused entry.
+ * Draw the menu for the current state. On a new screen the entry the screen names takes focus, else the first one, or,
+ * coming back to the main screen, the entry that opened the last one; redrawing the same screen keeps the focused entry.
  */
 export function renderMenu(): void {
   const context = menuContext();
@@ -54,5 +54,5 @@ export function renderMenu(): void {
   shown = { context, screen };
   const list = entries();
   const back = list.find((el) => el.dataset.opens === from);
-  focusEntry(keep >= 0 ? list[keep] : (back ?? list[0]));
+  focusEntry(keep >= 0 ? list[keep] : (back ?? view.focus ?? list[0]));
 }

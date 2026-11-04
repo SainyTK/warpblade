@@ -8,4 +8,6 @@ export interface MenuView {
   /** a line of text, or an element such as an amount of coins */
   subtitle: string | HTMLElement;
   content: HTMLElement;
+  /** the entry that takes focus when the screen opens, if not the first */
+  focus?: HTMLElement;
 }

@@ -1,7 +1,7 @@
 import { CHARACTERS } from "../../constants/characters";
 import { ULT_LABEL } from "../../constants/skillLabels";
 import { applySkin } from "../../game/hero/skin";
-import { setCharacter } from "../../game/state";
+import { character, setCharacter } from "../../game/state";
 import { saveHeroChoice } from "../../services/heroChoice";
 import type { CharacterDef } from "../../types/character";
 import type { MenuView } from "../../types/menu";
@@ -72,7 +72,7 @@ function card(c: CharacterDef): HTMLButtonElement {
   return button;
 }
 
-/** after Start: pick the hero for this run */
+/** after Start: pick the hero for this run, starting at the one chosen last */
 export function heroScreen(): MenuView {
   const cards = CHARACTERS.map(card);
   cards.forEach((c, i) => {
@@ -82,5 +82,6 @@ export function heroScreen(): MenuView {
   row.append(...cards);
   const content = el("div", "menu-main");
   content.append(row, backItem());
-  return { title: "Choose a hero", subtitle: "A D or arrows to look, J or Enter to begin", content };
+  const focus = cards[CHARACTERS.indexOf(character)];
+  return { title: "Choose a hero", subtitle: "A D or arrows to look, J or Enter to begin", content, focus };
 }
