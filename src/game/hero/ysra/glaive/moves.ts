@@ -1,12 +1,14 @@
 import type { MoveDef } from "../../../../types/move";
 import type { GlaiveMoveId } from "../../../../types/ysra/glaive";
+import { AIR_BLOWS } from "./blows/air";
+import { HELD_BLOWS } from "./blows/held";
+import { STRING_BLOWS } from "./blows/string";
+import { VARIANT_BLOWS } from "./blows/variants";
 
-/** the glaive string. Placeholder: one long thrust until the real string lands. */
+/** every glaive blow, for the shared combo engine */
 export const GLAIVE_MOVES: Record<GlaiveMoveId, MoveDef> = {
-  glaiveThrust: {
-    id: "glaiveThrust",
-    name: "Glaive thrust",
-    clip: "yThrust",
-    hits: [{ at: 0.12, box: [0, -30, 40, -6], power: 1.3, kx: 70, ky: -20 }],
-  },
+  ...STRING_BLOWS,
+  ...VARIANT_BLOWS,
+  ...HELD_BLOWS,
+  ...AIR_BLOWS,
 };

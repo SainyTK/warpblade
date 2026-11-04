@@ -8,7 +8,7 @@ import type { CharacterDef } from "../types/character";
 import type { GameState } from "../types/game";
 import type { Hero } from "../types/hero";
 import type { Progress } from "../types/progress";
-import { airLimit, comboLimit } from "../utils/progression";
+import { airLimit, stringLimit } from "../utils/progression";
 import { Rng } from "../utils/rng";
 import { collectPerks, computeStats } from "../utils/stats";
 import { Chain } from "./hero/chain";
@@ -60,15 +60,16 @@ export const game: GameState = {
 export function freshProgress(): Progress {
   const ranks = { ...character.startRanks };
   const stats = computeStats(character, 1, ranks, metaBonus());
+  const perks = collectPerks(character, ranks);
   return {
     level: 1,
     xp: 0,
     picks: 0,
     ranks,
     stats,
-    perks: collectPerks(character, ranks),
+    perks,
     ultimate: null,
-    comboLimit: comboLimit(1, false),
+    comboLimit: stringLimit(character.kit, 1, perks),
     airLimit: airLimit({}),
   };
 }

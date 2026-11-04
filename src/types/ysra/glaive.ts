@@ -1,3 +1,33 @@
-/** the glaive string, its held lunge and its directional and air variants */
-export type GlaiveMoveId = "glaiveThrust";
-export type GlaiveClipName = "yThrust";
+/** the glaive string, its held lunge and its directional, counter, running and air variants */
+export type GlaiveMoveId =
+  | "hipThrust"
+  | "reverseSweep"
+  | "overheadCleave"
+  | "twirl"
+  | "haftRam"
+  | "impale"
+  | "heftPoke"
+  | "heftLunge"
+  | "skyhook"
+  | "groundLash"
+  | "windmill"
+  | "counterThrust"
+  | "runningImpale"
+  | "airReap"
+  | "airReapRise";
+export type GlaiveClipName =
+  | "yHipThrust"
+  | "yReverseSweep"
+  | "yCleave"
+  | "yTwirl"
+  | "yHaftRam"
+  | "yImpale"
+  | "yPoke"
+  | "yLunge"
+  | "ySkyhook"
+  | "yLash"
+  | "yWindmill"
+  | "yCounter"
+  | "yRunImpale"
+  | "yAirReap"
+  | "yAirReapRise";

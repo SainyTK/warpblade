@@ -4,7 +4,7 @@ import { sfx } from "../services/audio";
 import { metaBonus } from "../store/meta";
 import { PK } from "../types/particle";
 import type { Perk, PickOption } from "../types/skill";
-import { airLimit, comboLimit, xpToNext } from "../utils/progression";
+import { airLimit, stringLimit, xpToNext } from "../utils/progression";
 import { collectPerks, computeStats, learnedUltimate } from "../utils/stats";
 import { createFloorRing } from "./effects/floorRing";
 import { keepElementLearned } from "./hero/spell";
@@ -17,7 +17,7 @@ export function refreshProgress(): void {
   progress.stats = computeStats(character, progress.level, progress.ranks, metaBonus());
   progress.perks = collectPerks(character, progress.ranks);
   progress.ultimate = learnedUltimate(character, progress.ranks);
-  progress.comboLimit = comboLimit(progress.level, progress.perks.has("flowingChain"));
+  progress.comboLimit = stringLimit(character.kit, progress.level, progress.perks);
   progress.airLimit = airLimit(progress.ranks);
   keepElementLearned();
   hero.hp = Math.min(hero.hp, progress.stats.hp);
