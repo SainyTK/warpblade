@@ -55,9 +55,9 @@ function runState(dt: number): void {
   }
 }
 
-/** how fast the current action's clock runs: attack speed for moves, Quick Cast for spells */
+/** how fast the current action's clock runs: attack speed (and the kit's own boost) for moves, Quick Cast for spells */
 function clockRate(): number {
-  if (hero.state === "move") return progress.stats.aspd;
+  if (hero.state === "move") return progress.stats.aspd * (kit().attackRate?.() ?? 1);
   if (hero.state === "cast") return castSpeed();
   return 1;
 }

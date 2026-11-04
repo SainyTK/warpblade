@@ -1,12 +1,12 @@
-import { ELEMENTS } from "../../constants/combat";
-import { STICK_DIRECTIONS, TOUCH_BUTTONS } from "../../constants/touch";
-import { game } from "../../game/state";
+import { STICK_DIRECTIONS, TOUCH_BUTTONS, TOUCH_TEXT } from "../../constants/touch";
+import { character } from "../../game/state";
 import type { ButtonLook } from "../../types/touch";
 import { hex } from "../../utils/color";
 import { buttonLook } from "./buttonLook";
 import { drawButtonFace } from "./drawButtonFace";
 import { stickIcon, touchIcon } from "./icons";
 import { PixelCanvas } from "./pixelCanvas";
+import { touchSelection } from "./selection";
 
 /** every face in the legend: its size in controller art pixels, and CSS pixels per art pixel */
 const LEGEND_SIZE = 17;
@@ -30,18 +30,19 @@ function face(draw: (canvas: PixelCanvas) => void): HTMLElement {
   return box;
 }
 
-/** each stick direction and each button with what it does, drawn as on screen, for the Controls screen */
+/** each stick direction and each button with what it does for the chosen hero, drawn as on screen, for the Controls screen */
 export function touchLegend(): [HTMLElement, string][] {
-  const element = ELEMENTS[game.spell];
-  const stick = STICK_DIRECTIONS.map((d): [HTMLElement, string] => [
+  const selection = touchSelection();
+  const texts = TOUCH_TEXT[character.kit];
+  const stick = STICK_DIRECTIONS[character.kit].map((d): [HTMLElement, string] => [
     face((c) => drawButtonFace(c, STICK_LOOK, stickIcon(d.direction), false)),
     `Stick ${d.direction}: ${d.label}`,
   ]);
   const buttons = TOUCH_BUTTONS.map((spec): [HTMLElement, string] => {
     const look = { ...buttonLook(spec, false), ready: true, cooldown: 0, affordable: 4, charge: -1 };
     return [
-      face((c) => drawButtonFace(c, look, touchIcon(spec.action, element), spec.action === "ultimate")),
-      `${spec.label}: ${spec.hint}`,
+      face((c) => drawButtonFace(c, look, touchIcon(spec.action, selection), spec.action === "ultimate")),
+      `${texts[spec.action].label}: ${texts[spec.action].hint}`,
     ];
   });
   return [...stick, ...buttons];

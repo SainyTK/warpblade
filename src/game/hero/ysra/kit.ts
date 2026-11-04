@@ -35,6 +35,7 @@ export const YSRA_KIT: HeroKit = {
   pose: ysraPose,
   afterStrike: (id, hits) => emitYsra("strike", { source: id, hits }),
   absorbHurt: (dmg, fromX) => PARTS.some((p) => p.absorbHurt?.(dmg, fromX) ?? false),
+  attackRate: () => PARTS.reduce((r, p) => r * (p.attackRate?.() ?? 1), 1),
   hurtScale: () => PARTS.reduce((s, p) => s * (p.hurtScale?.() ?? 1), 1),
   drivesMotion: () => PARTS.some((p) => p.drivesMotion?.() ?? false),
   gravityScale: () => {

@@ -1,4 +1,5 @@
 import { ACTION_TEXT, KEYMAP } from "../../constants/input";
+import { character } from "../../game/state";
 import type { MenuView } from "../../types/menu";
 import { keysByAction } from "../../utils/keymap";
 import { touchLegend } from "../touch/touchLegend";
@@ -27,11 +28,11 @@ function keyboardRows(): [HTMLElement, string][] {
     const caps = document.createElement("span");
     caps.className = "caps";
     caps.append(...codes.map(keycap));
-    return [caps, ACTION_TEXT[action]];
+    return [caps, ACTION_TEXT[character.kit][action]];
   });
 }
 
-/** every action with its keys from the key map, and on touch screens the on-screen buttons */
+/** every action with its keys from the key map, and on touch screens the on-screen buttons, as the chosen hero plays them */
 export function controlsScreen(): MenuView {
   const coarse = matchMedia("(any-pointer: coarse)").matches;
   const keyboard = !coarse || matchMedia("(any-pointer: fine)").matches;

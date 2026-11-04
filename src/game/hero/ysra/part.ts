@@ -6,6 +6,8 @@ export interface YsraPart {
   drivesMotion?(): boolean;
   /** gravity multiplier this part wants now, or null to leave it */
   gravity?(): number | null;
+  /** attack speed multiplier this part applies */
+  attackRate?(): number;
   /** damage multiplier this part applies */
   hurtScale?(): number;
   /** true when this part took the blow */

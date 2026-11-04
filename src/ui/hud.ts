@@ -8,7 +8,9 @@ import { game, hero, progress } from "../game/state";
 import { xpToNext } from "../utils/progression";
 import { updateCoinCount } from "./coinCount";
 import { byId } from "./dom";
+import { updateHeatBar } from "./heatBar";
 import { createRechargeTab } from "./rechargeTab";
+import { updateRiteTabs } from "./riteTabs";
 import { updateSpellTabs } from "./spellTabs";
 import { updateWarpTab } from "./warpTab";
 
@@ -39,6 +41,8 @@ const pips = (n: number, lit: (i: number) => boolean): string =>
 /** sync the HTML overlay with the game, touching the DOM only when something shown has changed */
 export function updateHud(): void {
   updateSpellTabs();
+  updateRiteTabs();
+  updateHeatBar();
   updateWarpTab();
   updateCoinCount();
   ultTab.update(ultRecharge());
