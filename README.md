@@ -61,8 +61,14 @@ His crystal sword can be thrown, and wherever it lands, he follows.
   When a run ends, cleared or lost, its coins go to the bank and a result screen shows the wave reached and the coins earned.
   The Shop on the start menu sells stats in levels (HP, attack, ability power, MP, crit, move speed, stamina) and four skills bought once: Lodestone, Warp Shock, Head Start and Last Light.
   Everything bought applies to every run, on top of the level-up picks, and is saved in this browser.
-- **A 30-wave stage.** Floating wisps and horned husks, a Rift Brute every fifth wave and the Rift Warden at waves 20 and 30.
-- **Plays anywhere.** The game fills the whole screen at a whole-number pixel scale, with the night scene continued to every edge. Keyboard on desktop, a pixel touch controller on phones and tablets, no install.
+- **A 30-wave stage in five eras.** The sky and the foes change as the waves go on, and the scene dissolves into the next era between waves.
+  Waves 1 to 5 are a sunlit day with Thornbacks, Glimmer Moths and the Oakheart.
+  Waves 6 to 10 bring clouds and rain with Mire Toads, Storm Kites and the Bog Hulk.
+  Waves 11 to 15 are night with horned husks, floating wisps and the Rift Brute.
+  Waves 16 to 20 turn the night magical, with Rune Golems and Prism Sprites taking over from the night's foes.
+  Waves 21 to 30 are the darkest, with Void Stalkers, Abyss Eyes and the Abyss Maw.
+  Waves 5, 10, 15 and 25 bring the era's mini boss, and the Rift Warden waits at waves 20 and 30.
+- **Plays anywhere.** The game fills the whole screen at a whole-number pixel scale, with the scene continued to every edge. Keyboard on desktop, a pixel touch controller on phones and tablets, no install.
 
 <table>
   <tr>
@@ -135,7 +141,7 @@ This game is also my sandbox for learning how to make pixel art and effects that
 There are no image files in the game: the hero, the enemies, the stage and every effect are drawn pixel by pixel at runtime.
 
 The stage is 320 by 180 art pixels, scaled up by a whole number so every pixel stays square.
-Around the stage, the sky, ridge and stone floor are continued on the same pixel grid and fade into the night, so there is no frame.
+Around the stage, the sky, ridge and stone floor are continued on the same pixel grid and fade out at the edges, so there is no frame.
 Each frame is drawn into two buffers, as in Sprite Fusion's effects:
 
 - a color buffer for opaque pixels, faded with a 4 by 4 Bayer dither, or truly blended for smoke and mist;
@@ -172,11 +178,13 @@ src/
   store/           the player's options, and the coin bank and shop purchases kept between runs
   game/            the simulation
     hero/          poses, drawing, rope physics, combos and moves, dash, warp, ultimate charge, per-step update
-    enemies/       wisps, husks, the Rift Brute and the Rift Warden: drawing and behavior
+    enemies/       every foe's drawing and behavior, one folder per era (day, rain, twilight, abyss; the night foes sit at the top level)
+      kinds/       one kind per foe type, the registry the game looks foes up in
     effects/       slash, impact, floor ring, warp line, rift, thrown sword, shadow orb
     spells/        fire, ice, bolt and the explosion they share
     ultimates/     Thousand Edges, Phantom Legion, Starfall, Tempest
-  scene/           background, the backdrop around the stage, and the order layers are drawn in
+  scene/           background, the backdrop around the stage, the order layers are drawn in, and the dissolve between eras
+    eras/          one scene per era: palette, sky, decorations, weather and lighting
   ui/              HUD, level-up pick, menu, keyboard input, touch controller, stage sizing
     menu/          start and pause menu: main, Shop, run result, Controls and Options screens
     shop/          one shop row and the shop's styles

@@ -16,6 +16,8 @@ import { createMudGlob } from "./mudGlob";
 /** how far the tongue reaches, and the seconds it takes to shoot out and pull back */
 export const TONGUE = { reach: 38, out: 0.1, back: 0.26 } as const;
 const HOP_GRAVITY = 700;
+/** seconds the throat swells before a lash or a spit, before wave scaling */
+export const MIRE_WINDUP = { lash: 0.55, spit: 0.7 } as const;
 
 /** the tongue's length this moment of a lash */
 export function tongueLength(e: Enemy): number {
@@ -55,13 +57,13 @@ export function updateMire(e: Enemy, dt: number, ts: number): void {
     }
   } else if (e.state === "wind") {
     e.vx = approach(e.vx, 0, 400 * dt);
-    if (e.st >= (e.n ? 0.7 : 0.55) * scale.windup) {
+    if (e.st >= (e.n ? MIRE_WINDUP.spit : MIRE_WINDUP.lash) * scale.windup) {
       if (e.n) {
         const lead = clamp(hero.x + hero.vx * 0.3, e.x - 160, e.x + 160);
         game.fx.push(
           createMudGlob(
             e.x + e.face * 8,
-            e.y - 7,
+            e.y - 9,
             lead,
             0.75,
             RAIN_HITS.mireGlob * e.power,
@@ -74,8 +76,8 @@ export function updateMire(e: Enemy, dt: number, ts: number): void {
     }
   } else if (e.state === "lunge") {
     const L = tongueLength(e);
-    const tip = e.x + e.face * (6 + L);
-    const box = [Math.min(e.x, tip) - 1, e.y - 11, Math.max(e.x, tip) + 1, e.y - 5] as const;
+    const tip = e.x + e.face * (10 + L);
+    const box = [Math.min(e.x, tip) - 1, e.y - 9, Math.max(e.x, tip) + 1, e.y - 3] as const;
     if (!e.ax && e.st < TONGUE.out + 0.04 && boxHit(box, heroBox())) {
       e.ax = 1;
       hurtHero(RAIN_HITS.mireTongue * e.power, e.x);

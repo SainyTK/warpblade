@@ -45,9 +45,8 @@ export const RAIN_HITS = {
   mireGlob: 12,
   mirePuddle: 6,
   mireTouch: 8,
-  kiteStrike: 14,
+  kiteStrike: 12,
   hulkSlam: 22,
   hulkWave: 18,
-  hulkFlop: 26,
   hulkGlob: 14,
 } as const;

@@ -5,9 +5,9 @@ import { hex, ramp } from "../../../utils/color";
 /** The creatures of the abyss: ink-black bodies, crimson rim light from the black sun, hot yellow-white eyes. */
 export const AC = {
   outline: hex("#020104"),
-  bodyDark: hex("#0e0812"),
-  body: hex("#1c1024"),
-  bodyLight: hex("#2e1a3a"),
+  bodyDark: hex("#170c1e"),
+  body: hex("#2a1636"),
+  bodyLight: hex("#45284f"),
   rim: hex("#e0507a"),
   rimSoft: hex("#8a2a52"),
   eye: hex("#ffe27a"),
@@ -32,6 +32,7 @@ export const VOID_SPARKS: readonly Color[] = [hex("#ffe4ec"), hex("#ff8aa8"), he
 export const ABYSS_HITS = {
   stalkerClaw: 15,
   stalkerRise: 17,
+  stalkerTouch: 8,
   eyeBeam: 11,
   mawBite: 22,
   mawOrb: 12,
