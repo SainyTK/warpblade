@@ -4,6 +4,7 @@ import { PK } from "../../types/particle";
 import { scarfAnchor, tailAnchor } from "../../utils/poseFrame";
 import { game, hero, particles, ponytail, scarf } from "../state";
 import { isFree, setState } from "./actions";
+import { kit } from "./kits";
 import { heroPose } from "./pose";
 
 /** pick the free state from the motion, step the stride, pose the body and swing the scarf and ponytail */
@@ -17,7 +18,9 @@ export function animateHero(dt: number): void {
   if (h.state === "run" || h.state === "walk") {
     const prev = h.runPhase;
     const pace = h.state === "run" ? 1.9 : 2.4;
-    h.runPhase = (h.runPhase + dt * (Math.abs(h.vx) / M.runSpeed) * pace) % 1;
+    const cycle = kit().stride?.(h.state === "run");
+    const rate = cycle ? Math.abs(h.vx) / cycle : (Math.abs(h.vx) / M.runSpeed) * pace;
+    h.runPhase = (h.runPhase + dt * rate) % 1;
     if (h.state === "run" && ((prev < 0.5 && h.runPhase >= 0.5) || h.runPhase < prev))
       particles.spawn(PK.DUST, h.x - h.face * 3, h.y - 1, -h.face * 15, -6, 0.35, {
         col: WORLD_COLORS.footDust,
