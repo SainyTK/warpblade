@@ -23,6 +23,7 @@ A held state (a brace, a charge) loops a middle segment of its clip and plays it
 ## Weight before and after travel
 
 Travel starts with a load: a plant, a dip or a wind-up of at least two frames that moves the body against the travel.
+A blow shows its wind-up for at least one calm frame between the hand-over and the hit frame; Ysra holds four to six.
 Travel ends with a recovery: the knees take the landing, the hips sink and rise back into the stand the next clip starts from.
 A landing is never a cut from the fall pose to the standing pose.
 The harder the fall, the deeper the landing, and a landing in a stride is a dip of the hips without stopping the feet.
@@ -62,4 +63,4 @@ Kael's pose layer is `src/game/hero/kael/`: his kit's `pose` wraps the shared cl
 `handover.ts` crosses every change of clip or facing, with lengths in `HANDOVER_FRAMES` and `TURN_FRAMES` (`src/constants/kael/motion.ts`).
 `hangSwing.ts` swings the body in under a crystal he warps to, dying away into the hang's sway.
 His walk and run clips were rebuilt from a gait model, and the kit's `stride` hook samples them by ground covered.
-His blows keep their hit times, so the string plays and balances as before; they cross from the last pose in the two frames before the hit.
+His blows cross from the last pose in their first two frames, and `windup.ts` runs a blow's clock at 0.65 until its first hit, so the wind-up holds a beat before the snap (0.065 s of clip to the strike now take 0.1 s).

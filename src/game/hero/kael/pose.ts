@@ -8,6 +8,7 @@ import { hangSwing } from "./hangSwing";
 import { jumpClock } from "./jumpClock";
 import { landingPose, watchLanding } from "./landing";
 import { motion } from "./motion";
+import { windupCross } from "./windup";
 
 /**
  * Kael's pose: his clips, with the jump's clock following the rise, the knees taking each landing, the body swinging in under a crystal it caught, and every change of
@@ -22,7 +23,7 @@ export function kaelPose(h: Hero, t: number): Pose {
   m.st = h.st;
   const landed = watchLanding(h, t);
   const base = h.state === "jump" ? sampleKeys(STATE_CLIPS.jump.keys, jumpClock(h, fresh, dt)) : clipPose(h, t);
-  watchHandover(h, t, restarted, landed ? 1 : undefined);
+  watchHandover(h, t, restarted, landed ? 1 : h.state === "move" ? windupCross(h) : undefined);
   const p = handOver(hangSwing(h, landingPose(h, base, t)), t);
   m.last = p;
   return p;

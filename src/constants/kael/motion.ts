@@ -2,11 +2,10 @@ import type { HeroState } from "../../types/hero";
 import { frame } from "../hero";
 
 /**
- * Animation frames Kael's pose takes to cross from wherever it was into a new clip, at even steps. Blows take two, up to their hit frame, so
- * the wind-up still reads before the hit frame; hits taken and warp arrivals cut at once, since the cut is the read.
+ * Animation frames Kael's pose takes to cross from wherever it was into a new clip, at even steps. Blows take theirs
+ * from `WINDUP`; hits taken and warp arrivals cut at once, since the cut is the read.
  */
 export const HANDOVER_FRAMES: Partial<Record<HeroState, number>> = {
-  move: 2,
   jump: 2,
   dash: 2,
   hurt: 0,
@@ -45,7 +44,8 @@ export const LANDING = { from: 120, full: 380, dip: 2.5, dipFrames: 4, clipEnd: 
 export const HANG_SWING = { amplitude: 3, period: 0.7, settle: 0.45 } as const;
 
 /**
- * A blow's clock runs at this share of speed until its first hit, so the wind-up holds a beat before the snap:
- * 0.065 s of clip to the strike take 0.1 s, about one animation frame more.
+ * A blow whose first hit comes sooner than `short` runs its clock at `rate` until that hit, so the wind-up holds a beat
+ * before the snap: the string's 0.09 s hits take 0.065 s of clip to the strike, now 0.1 s. A blow may cross in from
+ * the last pose over the frames before its hit, from `minCross` up to `maxCross`.
  */
-export const WINDUP_RATE = 0.65;
+export const WINDUP = { short: frame(3), rate: 0.65, minCross: 2, maxCross: 4 } as const;
