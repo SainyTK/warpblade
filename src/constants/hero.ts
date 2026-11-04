@@ -1,40 +1,4 @@
 import type { Pose } from "../types/pose";
-import { HERO_COLORS as HC } from "./palette";
-
-/** Kael's head, facing right, three-quarters: swept silver hair, bangs over the brow, face on the right. */
-export const HEAD = [
-  "..dhhhh...",
-  ".dhHHHHh..",
-  "dhHHHHHHh.",
-  "dhHHhHHHHh",
-  "dhhHHhHhHh",
-  "ddhhsShshs",
-  "ddhssSssEs",
-  ".dhsssssss",
-  ".d..sSsss.",
-  "....sSSs..",
-] as const;
-/** the back of Kael's head, for a spin: all hair, with the nape of the neck under it */
-export const HEAD_BACK = [
-  "..dhhhh...",
-  ".dhHHhhh..",
-  "dhHHhhhhd.",
-  "dhHhhdhhhd",
-  "dhhhdhhdhd",
-  "ddhhdhhddd",
-  "ddhdhhdhdd",
-  ".ddhhdhdd.",
-  "..ddhhdd..",
-  "...dSSd...",
-] as const;
-export const HEAD_MAP: Record<string, number> = {
-  d: HC.hairDark,
-  h: HC.hair,
-  H: HC.hairLight,
-  s: HC.skin,
-  S: HC.skinShade,
-  E: HC.eye,
-};
 
 /** poses are sampled at this rate, so limbs move in pixel-art beats; keyframe times are whole frames of it */
 export const ANIM_FPS = 30;

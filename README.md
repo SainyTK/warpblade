@@ -61,6 +61,9 @@ His crystal sword can be thrown, and wherever it lands, he follows.
   When a run ends, cleared or lost, its coins go to the bank and a result screen shows the wave reached and the coins earned.
   The Shop on the start menu sells stats in levels (HP, attack, ability power, MP, crit, move speed, stamina) and four skills bought once: Lodestone, Warp Shock, Head Start and Last Light.
   Everything bought applies to every run, on top of the level-up picks, and is saved in this browser.
+- **Two heroes.** Start opens the hero screen. Kael throws his crystal sword and appears where it lands; he is balanced and learns every ability from picks.
+  Ysra, the ember lancer, is a flame-temple guard who woke when the braziers lit again. She fights with a long glaive of forge-fire, is tougher, stronger and slower than Kael with less MP, starts every run with the fire spell, and her special is Pyre Wave: a wall of flame that rolls ahead of her, burns every foe it passes and leaves the floor on fire.
+  Both share the same moves on the same rig. The hero behind the menu changes as you look through the cards, and the choice is saved in this browser.
 - **A 30-wave stage.** Floating wisps and horned husks, a Rift Brute every fifth wave and the Rift Warden at waves 20 and 30.
 - **Plays anywhere.** The game fills the whole screen at a whole-number pixel scale, with the night scene continued to every edge. Keyboard on desktop, a pixel touch controller on phones and tablets, no install.
 
@@ -103,6 +106,7 @@ Buttons dim while their action lacks MP or stamina or waits on a cooldown, and p
 The page holds still under your fingers: double taps, pinches and long presses never zoom, select text or open a menu.
 
 The game opens on a start menu with Start, Shop, Controls and Options.
+Start opens the hero screen: pick Kael or Ysra with `A` `D` or the arrows and begin with `J` or `Enter`.
 In the Shop, pick an item once to see "Buy?" and again to buy it.
 When a run ends, the start menu opens on its result, with Continue and Shop.
 Pausing adds Resume, Restart run and Quit run, and freezes the game until you resume.

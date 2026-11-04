@@ -1,4 +1,4 @@
-import { ENEMY_COLORS as EC, HERO_COLORS as HC, PAL } from "../../../constants/palette";
+import { ENEMY_COLORS as EC, KAEL_COLORS as HC, PAL } from "../../../constants/palette";
 import type { SpriteCanvas } from "../../../engine/sprite";
 import { hex } from "../../../utils/color";
 import { arrow, crescent, fill, sparkle, speedLines, sword } from "./parts";

@@ -12,6 +12,7 @@ export const KIND_LABEL: Record<SkillKind, string> = {
 export const PACE_LABEL: Record<Pace, string> = { early: "Strong early", steady: "Steady", late: "Strong late" };
 export const ULT_LABEL: Record<UltimateId, string> = {
   crystalNova: "CRYSTAL NOVA",
+  pyreWave: "PYRE WAVE",
   thousandEdges: "THOUSAND EDGES",
   phantomLegion: "PHANTOM LEGION",
   starfall: "STARFALL",

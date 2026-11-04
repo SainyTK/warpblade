@@ -1,5 +1,4 @@
 import { HERO_MOVE as M } from "../../constants/combat";
-import { PAL } from "../../constants/palette";
 import { GROUND } from "../../constants/stage";
 import { sfx } from "../../services/audio";
 import { PK } from "../../types/particle";
@@ -11,13 +10,14 @@ import { dust } from "../world";
 import { isFree, leaveHang, setState } from "./actions";
 import { blowsDone, endMove } from "./combo";
 import { lift } from "./lift";
+import { skin } from "./skin";
 
 function doubleJumpBurst(): void {
   const h = hero;
-  game.fx.push(createFloorRing(h.x, h.y, 14, PAL.crystal, 0.3, 0.3));
+  game.fx.push(createFloorRing(h.x, h.y, 14, skin.ramp, 0.3, 0.3));
   for (let i = 0; i < 8; i++)
     particles.spawn(PK.FLAKE, h.x + rng.range(-6, 6), h.y, rng.range(-40, 40), rng.range(10, 50), rng.range(0.3, 0.6), {
-      col: PAL.crystal[rng.int(4, 6)],
+      col: skin.ramp[rng.int(4, 6)],
     });
   sfx.doubleJump();
 }

@@ -1,9 +1,9 @@
 import { FEEL, PHANTOM_RAMP } from "../../../constants/combo";
-import { PAL } from "../../../constants/palette";
 import type { MoveDef } from "../../../types/move";
 import { createFloorRing } from "../../effects/floorRing";
 import { game, hero } from "../../state";
 import { dust } from "../../world";
+import { skin } from "../skin";
 import { PHANTOM_SWEEP, STAB, UPPERCUT } from "./slashes";
 
 const RING = { cx: 0, cy: -11, R: 30, sy: 0.22, rot: 0, a0: -3.1, a1: 3.1, W: 6, sweep: 0.08 };
@@ -11,7 +11,7 @@ const RING = { cx: 0, cy: -11, R: 30, sy: 0.22, rot: 0, a0: -3.1, a1: 3.1, W: 6,
 /** the stab pins the foe: a small ring and dust where the point meets it */
 function pinImpact(): void {
   const gx = hero.x + hero.face * 16;
-  game.fx.push(createFloorRing(gx, hero.y, 12, PAL.crystal, 0.2));
+  game.fx.push(createFloorRing(gx, hero.y, 12, skin.ramp, 0.2));
   dust(gx, hero.y, 3);
 }
 

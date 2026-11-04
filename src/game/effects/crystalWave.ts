@@ -1,4 +1,4 @@
-import { PAL } from "../../constants/palette";
+import { PAL, SPARKS } from "../../constants/palette";
 import { W } from "../../constants/stage";
 import { glow, line, place, px } from "../../engine/frame";
 import type { Effect } from "../../types/effect";
@@ -26,7 +26,7 @@ export function createCrystalWave(x: number, y: number, face: number, damage: nu
         if (struck.has(e) || e.hp <= 0 || !boxHit([o.x - 3, y - HALF, o.x + 3, y + HALF], enemyBox(e))) continue;
         struck.add(e);
         dealDamage(e, damage, { fromX: o.x - face * 8, kx: face * 60 });
-        game.fx.push(createImpact(o.x, y, face, false));
+        game.fx.push(createImpact(o.x, y, face, false, SPARKS.crystal));
       }
       return o.t < LIFE && o.x > -10 && o.x < W + 10;
     },

@@ -42,7 +42,7 @@ export const ELEMENT_COLOR: Record<Element, Color> = {
 };
 
 /** Kael: silver hair, teal coat with brass trim, red scarf, crystal sword */
-export const HERO_COLORS = {
+export const KAEL_COLORS = {
   outline: hex("#120d1c"),
   skin: hex("#f0c8a0"),
   skinShade: hex("#c98f72"),
@@ -67,6 +67,9 @@ export const HERO_COLORS = {
   bladeBack: hex("#2f86c4"),
   hilt: hex("#3a2630"),
 } as const;
+export type HeroColors = Record<keyof typeof KAEL_COLORS, Color>;
+/** the colours of the hero being played: Kael's until another is chosen (see game/hero/skin.ts) */
+export const HERO_COLORS: HeroColors = { ...KAEL_COLORS };
 
 export const ENEMY_COLORS = {
   outline: hex("#0a0612"),

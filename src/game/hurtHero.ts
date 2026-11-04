@@ -6,7 +6,7 @@ import { heroGuarded } from "./hero/guard";
 import { perfectDodge } from "./hero/perfectDodge";
 import { lastLight } from "./lastLight";
 import { hasPerk } from "./progress";
-import { game, hero, showBanner } from "./state";
+import { character, game, hero, showBanner } from "./state";
 import { hitStop, shake } from "./world";
 
 export function hurtHero(dmg: number, fromX: number): void {
@@ -27,5 +27,5 @@ export function hurtHero(dmg: number, fromX: number): void {
   hitStop(0.08);
   shake(0.25, 2.5);
   sfx.hurt();
-  if (hero.hp <= 0) showBanner("Kael has fallen", 2);
+  if (hero.hp <= 0) showBanner(`${character.name} has fallen`, 2);
 }
