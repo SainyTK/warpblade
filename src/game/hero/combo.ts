@@ -3,7 +3,6 @@ import { COMBO, FUSION } from "../../constants/combat";
 import { KEEN, KEEN_RAMP } from "../../constants/combo";
 import { sfx } from "../../services/audio";
 import type { MoveHit, MoveId } from "../../types/move";
-import { chooseMove } from "../../utils/comboChoice";
 import { createCrystalWave } from "../effects/crystalWave";
 import { createSlash } from "../effects/slash";
 import { wispsEvade } from "../enemies/evade";
@@ -14,6 +13,7 @@ import { game, hero, progress } from "../state";
 import { boxAhead, boxBehind } from "../world";
 import { isFree, leaveHang, setState, settle } from "./actions";
 import { dropMoveGhost } from "./afterimages";
+import { kit } from "./kits";
 import { lift } from "./lift";
 import { MOVES } from "./moves";
 import { advance, strideAt } from "./moves/advance";
@@ -27,7 +27,7 @@ export function pickMove(): MoveId | null {
   const h = hero;
   if (h.chain === 0 && h.comboCd > 0) return null;
   if (h.chain + 1 > progress.comboLimit) return null;
-  return chooseMove(readSituation());
+  return kit().chooseMove(readSituation());
 }
 
 const endsChain = (id: MoveId): boolean => !!MOVES[id].finisher || hero.chain >= progress.comboLimit;
@@ -141,6 +141,7 @@ export function runMove(dt: number): void {
     const hits = strike(m.hits[h.hitIndex]);
     h.hitIndex++;
     m.afterHit?.(hits);
+    kit().afterStrike(id, hits);
     // the last blow landed clean: a J pressed in the next moment is Keen
     if (h.hitIndex === m.hits.length && hits > 0 && !h.keenSpoiled) h.keenOpen = KEEN.window;
   }

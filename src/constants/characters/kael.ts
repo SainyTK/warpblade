@@ -593,6 +593,7 @@ const HEAD_BACK = [
 /** Kael, the warp knight: the first character. */
 export const KAEL: CharacterDef = {
   id: "kael",
+  kit: "kael",
   name: "Kael",
   title: "The last warp knight",
   blurb: "Throws his crystal sword and appears where it lands. Balanced, quick, and learns every ability from picks.",

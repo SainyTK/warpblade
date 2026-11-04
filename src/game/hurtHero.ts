@@ -1,20 +1,21 @@
-import { DAMAGE, HURT_INVULN } from "../constants/combat";
+import { HURT_INVULN } from "../constants/combat";
 import { SPARKS } from "../constants/palette";
 import { sfx } from "../services/audio";
 import { createImpact } from "./effects/impact";
 import { heroGuarded } from "./hero/guard";
+import { kit } from "./hero/kits";
 import { perfectDodge } from "./hero/perfectDodge";
 import { lastLight } from "./lastLight";
-import { hasPerk } from "./progress";
 import { character, game, hero, showBanner } from "./state";
 import { hitStop, shake } from "./world";
 
 export function hurtHero(dmg: number, fromX: number): void {
+  if (kit().absorbHurt(dmg, fromX)) return;
   if (heroGuarded()) {
     perfectDodge();
     return;
   }
-  const taken = Math.round(dmg * (hasPerk("ironWill") ? DAMAGE.ironWill : 1));
+  const taken = Math.round(dmg * kit().hurtScale());
   hero.hp = Math.max(0, hero.hp - taken);
   hero.inv = HURT_INVULN;
   lastLight();

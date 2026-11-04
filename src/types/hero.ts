@@ -4,11 +4,13 @@ import type { MoveId } from "./move";
 import type { Pose } from "./pose";
 import type { Element } from "./spell";
 import type { Point } from "./world";
+import type { YsraClipName, YsraState } from "./ysra";
 
 /** why a press was refused: the selected spell or the warp is still recharging, or MP is short */
 export type DenyReason = "cast" | "warp" | "mp" | "ult";
 
-export type ClipName =
+/** Kael's action clips */
+export type KaelClipName =
   | "atk1"
   | "atk2"
   | "atk3"
@@ -34,6 +36,7 @@ export type ClipName =
   | "cast"
   | "throw"
   | "warpStrike";
+export type ClipName = KaelClipName | YsraClipName;
 export type HeroState =
   | "move"
   | "cast"
@@ -50,9 +53,10 @@ export type HeroState =
   | "dash"
   | "hurt"
   | "dead"
-  | "hang";
+  | "hang"
+  | YsraState;
 /** the states posed by their own keyed clip; the rest play an action clip */
-export type StateClipName = Exclude<HeroState, "move" | "cast" | "throw" | "warpStrike">;
+export type StateClipName = Exclude<HeroState, "move" | "cast" | "throw" | "warpStrike" | YsraState>;
 
 /** Where a warp goes: an enemy, a floating crystal, or a point in the air. */
 export interface WarpTarget {

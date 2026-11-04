@@ -1,7 +1,8 @@
 import type { Stats } from "./stats";
+import type { YsraPerk } from "./ysra";
 
-/** Abilities a skill node switches on. */
-export type Perk =
+/** Kael's abilities */
+export type KaelPerk =
   | "flowingChain"
   | "launcher"
   | "sweep"
@@ -36,11 +37,22 @@ export type Perk =
   | "fireSpell"
   | "iceSpell"
   | "voltSpell";
-export type UltimateId = "crystalNova" | "pyreWave" | "thousandEdges" | "phantomLegion" | "starfall" | "tempest";
+/** Abilities a skill node switches on. */
+export type Perk = KaelPerk | YsraPerk;
+export type UltimateId =
+  | "crystalNova"
+  | "pyreWave"
+  | "thousandEdges"
+  | "phantomLegion"
+  | "starfall"
+  | "tempest"
+  | "sunspear"
+  | "phoenixDive"
+  | "volcanicRift";
 export type SkillKind = "combo" | "movement" | "spell" | "enhance" | "passive" | "ultimate" | "fusion";
 /** when a path pays off */
 export type Pace = "early" | "steady" | "late";
-export type BranchId = "blade" | "phantom" | "arcane" | "fusion";
+export type BranchId = "blade" | "phantom" | "arcane" | "lance" | "bastion" | "pyre" | "fusion";
 
 export interface SkillNode {
   id: string;

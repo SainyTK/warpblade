@@ -109,6 +109,18 @@
   --accent: var(--crystal);
   --accent-dark: #102a48;
 }
+.pick[data-branch="lance"] {
+  --accent: var(--brass);
+  --accent-dark: #3a2a10;
+}
+.pick[data-branch="bastion"] {
+  --accent: #e0703a;
+  --accent-dark: #3a1a10;
+}
+.pick[data-branch="pyre"] {
+  --accent: #ff4a3a;
+  --accent-dark: #3a0e12;
+}
 .pick[data-branch="fusion"] {
   --accent: var(--pink);
   --accent-dark: #3a1438;
