@@ -17,11 +17,13 @@ const STYLE: Record<DamageTag | CueWord, { c: number; word: string }> = {
   shatter: { c: hex("#cbf1ff"), word: "SHATTER" },
   evade: { c: hex("#b673e8"), word: "EVADE" },
   perfect: { c: hex("#a8ecff"), word: "PERFECT" },
+  parry: { c: hex("#ffd27a"), word: "PARRY" },
+  broken: { c: hex("#ff6a5a"), word: "GUARD BROKEN" },
 };
 const FADE = 0.15;
 
 /** damage numbers rise and fade over the foes; crits are drawn double size and special hits carry their word.
- * With damage numbers off in the options, only the words without a number (EVADE, PERFECT) still show. */
+ * With damage numbers off in the options, only the words without a number (EVADE, PERFECT, PARRY) still show. */
 export function drawNumbers(): void {
   for (const n of game.numbers) {
     if (n.value && !settings.damageNumbers) continue;

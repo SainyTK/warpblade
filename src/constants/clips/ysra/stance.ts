@@ -1,19 +1,21 @@
 import type { HeroState } from "../../../types/hero";
 import type { ActionClip } from "../../../types/pose";
 import type { StanceClipName } from "../../../types/ysra/stance";
-import { FINISHER_CLIPS } from "../finishers";
-import { HELD_CLIPS } from "../held";
-import { LOCOMOTION_CLIPS } from "../locomotion";
+import { STANCE_FEET_CLIPS } from "./stanceFeet";
+import { STANCE_GUARD_CLIPS } from "./stanceGuard";
+import { STANCE_HELD_CLIPS } from "./stanceHeld";
+import { STANCE_TRAVEL_CLIPS } from "./stanceTravel";
 
-/** blows out of Ysra's vault, dive, guard and charge. Placeholder: borrows Kael's clips until her own land. */
+/** blows out of Ysra's vault, dive, guard and charge */
 export const STANCE_CLIPS = {
-  yVaultCrash: FINISHER_CLIPS.skyRend,
+  yVaultCrash: STANCE_TRAVEL_CLIPS.yVaultCrash,
 } satisfies Record<StanceClipName, ActionClip>;
 
-/** Ysra's own look on her feet and in the air, and her vault, dive, guard and backstep. Placeholders for now. */
+/** Ysra's own look on her feet and in the air, her vault, dive, guard and backstep, and her ultimate's wind-up and release */
 export const STANCE_STATE_CLIPS: Partial<Record<HeroState, ActionClip>> = {
-  vault: LOCOMOTION_CLIPS.jump,
-  dive: LOCOMOTION_CLIPS.fall,
-  brace: HELD_CLIPS.charge,
-  backstep: LOCOMOTION_CLIPS.dash,
+  ...STANCE_FEET_CLIPS,
+  ...STANCE_GUARD_CLIPS,
+  ...STANCE_HELD_CLIPS,
+  vault: STANCE_TRAVEL_CLIPS.vault,
+  dive: STANCE_TRAVEL_CLIPS.dive,
 };
