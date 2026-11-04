@@ -79,3 +79,10 @@ export const SKYHOOK_RISE = 30;
 
 /** Warpath's running impale: she keeps this speed for this long into it, then digs in */
 export const WARPATH_RUN = { speed: 170, time: 0.26, brake: 0.85 } as const;
+
+/**
+ * Sky thrust: a foe counts as overhead when its box sits wholly above her chest, reaches down below the top of the
+ * thrust, and is no further ahead than the thrust reaches; a foe whose box comes down below her chest this close in
+ * front keeps the plain string. Pixels from her feet, edge to edge ahead.
+ */
+export const OVERHEAD = { chest: 26, top: 72, front: 34, level: 40 } as const;

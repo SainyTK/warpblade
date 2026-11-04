@@ -30,6 +30,8 @@ export const G_RAM: SlashShape = {
   sweep: 0.03,
   trail: 0.12,
 };
+/** the sky thrust: a long stab slanting steeply up ahead */
+export const G_SKY: SlashShape = { ...G_THRUST, cx: 10, cy: -30, R: 30, rot: -1.1, W: 5 };
 export const G_IMPALE: SlashShape = {
   cx: 14,
   cy: -14,

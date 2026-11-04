@@ -7,7 +7,7 @@ import { dust } from "../../../../world";
 import { skin } from "../../../skin";
 import { pinStruck } from "../pin";
 import { glaiveHit } from "../reach";
-import { G_CLEAVE, G_IMPALE, G_RAM, G_SWEEP, G_THRUST, G_TWIRL_BACK, G_TWIRL_FRONT } from "../slashes";
+import { G_CLEAVE, G_IMPALE, G_RAM, G_SKY, G_SWEEP, G_THRUST, G_TWIRL_BACK, G_TWIRL_FRONT } from "../slashes";
 
 /** where the cleave and the impale bite the floor, ahead of her feet */
 function bite(at: number, n: number): void {
@@ -81,7 +81,7 @@ export const STRING_BLOWS = {
     hits: [
       glaiveHit({
         at: frame(5),
-        box: [0, -38, 36, 0],
+        box: [0, -44, 36, 0],
         power: 0.85,
         kx: 80,
         ky: -20,
@@ -90,7 +90,7 @@ export const STRING_BLOWS = {
       }),
       glaiveHit({
         at: frame(9),
-        box: [-36, -38, 0, 0],
+        box: [-36, -44, 0, 0],
         power: 0.85,
         kx: 80,
         ky: -20,
@@ -113,6 +113,23 @@ export const STRING_BLOWS = {
         ky: -20,
         stun: 0.4,
         slash: G_RAM,
+        feel: GLAIVE_FEEL.thrust,
+      }),
+    ],
+  },
+  skyThrust: {
+    id: "skyThrust",
+    name: "Sky thrust",
+    clip: "ySkyThrust",
+    pitch: 0.95,
+    hits: [
+      glaiveHit({
+        at: frame(5),
+        box: [0, -72, 34, -26],
+        power: 1.2,
+        kx: 60,
+        ky: -40,
+        slash: G_SKY,
         feel: GLAIVE_FEEL.thrust,
       }),
     ],

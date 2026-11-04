@@ -9,6 +9,7 @@ import type { YsraPart } from "../part";
 import { counterReady } from "../stance/stance";
 import { pickGlaive } from "./choose";
 import { resetHeft, runHeft, tickHeft, watchHeft } from "./heft";
+import { foeOverhead } from "./overhead";
 import { haftReach } from "./reach";
 import { noteFloor } from "./takeoff";
 
@@ -25,6 +26,7 @@ export function chooseGlaive(s: Situation): MoveId | null {
   return pickGlaive(s, {
     counter: counterReady(),
     rising: hero.state === "jump" && hero.st < SKYHOOK_GRACE,
+    overhead: hero.ground && foeOverhead(),
   });
 }
 

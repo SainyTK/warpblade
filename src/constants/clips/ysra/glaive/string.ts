@@ -437,6 +437,90 @@ export const GLAIVE_STRING_CLIPS = {
       [0.46, GLAIVE_READY],
     ],
   },
+  /** a foe hovering over her: she sinks with the haft drawn down past her hip, the point low, then drives it up from
+   *  a planted stance at a steep slant, both arms long and the whole body stretched up behind it, and holds the line */
+  ySkyThrust: {
+    dur: 0.48,
+    hit: frame(5),
+    keys: [
+      [0, GLAIVE_READY],
+      [
+        frame(1),
+        held({ hx: -1, hy: -12, cb: -0.5, nx: -1.5, ny: -21.5, fx: 2, fy: -14, sa: -0.3, ffx: 6, bfx: -6, ba: 0.2 }),
+      ],
+      [
+        frame(2),
+        held({ hx: -1.5, hy: -10.5, cb: -1, nx: -2.5, ny: -20, fx: -1, fy: -12, sa: -0.6, ffx: 7, bfx: -7, ba: 0.3 }),
+      ],
+      [
+        frame(3),
+        held({
+          hx: -2,
+          hy: -10,
+          cb: -1,
+          nx: -3.5,
+          ny: -19.5,
+          fx: -2.5,
+          fy: -11,
+          sa: -0.72,
+          ffx: 7.5,
+          fa: -0.2,
+          bfx: -7.5,
+          ba: 0.4,
+        }),
+      ],
+      [
+        frame(4),
+        held({
+          hx: -2,
+          hy: -9.5,
+          cb: -1.5,
+          nx: -3.5,
+          ny: -19,
+          fx: -3,
+          fy: -10.5,
+          sa: -0.76,
+          ffx: 7.5,
+          fa: -0.2,
+          bfx: -7.5,
+          ba: 0.4,
+        }),
+      ],
+      [
+        frame(5),
+        held({ hx: 1, hy: -15, cb: 1.5, nx: 2.5, ny: -25.5, fx: 8.5, fy: -32, sa: -1.1, ffx: 6, bfx: -8, ba: 0.6 }, 6),
+        "snap",
+      ],
+      [
+        frame(6),
+        held(
+          { hx: 1, hy: -15.5, cb: 1.5, nx: 2.5, ny: -26, fx: 8.5, fy: -32.5, sa: -1.12, ffx: 6, bfx: -8, ba: 0.65 },
+          6,
+        ),
+      ],
+      [
+        frame(8),
+        held(
+          { hx: 1, hy: -15.5, cb: 1.5, nx: 2.5, ny: -26, fx: 8.5, fy: -32.5, sa: -1.12, ffx: 6, bfx: -8, ba: 0.65 },
+          6,
+        ),
+      ],
+      [
+        frame(9),
+        held({ hx: 0.5, hy: -15, cb: 1, nx: 2, ny: -25, fx: 8, fy: -30, sa: -1, ffx: 6, bfx: -7.5, ba: 0.5 }, 6),
+      ],
+      [
+        frame(10),
+        held(
+          { hx: 0.5, hy: -14.5, cb: 0.5, nx: 1.5, ny: -24.5, fx: 7.5, fy: -26, sa: -0.7, ffx: 6, bfx: -7, ba: 0.35 },
+          6,
+        ),
+      ],
+      [frame(11), held({ hx: 0, hy: -14, nx: 1, ny: -24, fx: 7, fy: -21, sa: -0.3, ffx: 5.5, bfx: -6, ba: 0.2 })],
+      [frame(12), held({ hx: 0, hy: -13.5, nx: 1, ny: -23.5, fx: 6.5, fy: -17.5, sa: 0.1, ffx: 5, bfx: -5.5 })],
+      [0.48, GLAIVE_READY],
+    ],
+  },
   /** the string's last blow: a skip forward with the glaive raised overhead point down, then driven down at an angle
    *  through the foe into the floor, held there with her weight on it, and wrenched out */
   yImpale: {
