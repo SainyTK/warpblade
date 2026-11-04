@@ -7,6 +7,7 @@ import type { DamageTag } from "../types/game";
 import { createImpact } from "./effects/impact";
 import { launchEnemy } from "./enemies/airborne";
 import { enemyBox, enemyCenter } from "./enemies/enemy";
+import { kindOf } from "./enemies/kinds";
 import { killEnemy } from "./kill";
 import { hasPerk } from "./progress";
 import { explode } from "./spells/explosion";
@@ -59,12 +60,12 @@ function popNumber(e: Enemy, value: number, tag: DamageTag, big: boolean): void 
   });
 }
 
-/** husks from wave 3 and brutes hold up a guard while they walk, facing the blow */
+/** guarding kinds (husks from wave 3, brutes) hold up a guard while they walk, facing the blow */
 function guards(e: Enemy, o: HitOptions): boolean {
   if (!o.melee || o.fromX === undefined) return false;
-  if (e.type !== "husk" && e.type !== "brute") return false;
-  if (e.type === "husk" && game.wave < GUARD.fromWave) return false;
-  return e.state === "walk" && !e.air && e.stun <= 0 && e.frozen <= 0 && e.shock <= 0 && !isBehind(e, o.fromX);
+  const kind = kindOf(e.type);
+  if (kind.guardFrom === undefined || game.wave < kind.guardFrom) return false;
+  return e.state === kind.rest && !e.air && e.stun <= 0 && e.frozen <= 0 && e.shock <= 0 && !isBehind(e, o.fromX);
 }
 
 /** a blocked blow: a little chip damage, sparks, and on the second in a row a fast counter */
@@ -147,9 +148,9 @@ export function dealDamage(e: Enemy, base: number, o: HitOptions = {}): HitResul
     e.airHits++;
     const hold = Math.max(0, 1 - e.airHits / JUGGLE_LIMIT);
     if (hold > 0) e.vy = Math.min(e.vy, ENEMY_AIR.juggle * hold);
-  } else if (e.type === "wisp") e.vy += o.ky ?? 0;
+  } else if (kindOf(e.type).flies && e.rank === "minion") e.vy += o.ky ?? 0;
   if (o.stun && def.launchable) e.stun = Math.max(e.stun, o.stun);
-  if (o.stagger && e.type === "husk") e.stagger = Math.max(e.stagger, o.stagger);
+  if (o.stagger && kindOf(e.type).staggers) e.stagger = Math.max(e.stagger, o.stagger);
   if (o.heavy && e.state === "wind" && def.rank === "minion") Object.assign(e, { state: "recover", st: 0 });
   if (e.hp <= 0) killEnemy(e);
   return "hit";

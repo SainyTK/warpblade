@@ -1,4 +1,20 @@
-export type EnemyType = "wisp" | "husk" | "brute" | "warden";
+/** night foes, the bosses, and the foes of each era: day, rain, twilight and abyss */
+export type EnemyType =
+  | "wisp"
+  | "husk"
+  | "brute"
+  | "warden"
+  | "thornback"
+  | "moth"
+  | "oakheart"
+  | "mire"
+  | "stormkite"
+  | "boghulk"
+  | "golem"
+  | "sprite"
+  | "stalker"
+  | "eye"
+  | "maw";
 export type EnemyState =
   | "drift"
   | "walk"
@@ -9,7 +25,14 @@ export type EnemyState =
   | "leap"
   | "volley"
   | "summon"
-  | "dive";
+  | "dive"
+  /** free states for era foes to use as they like */
+  | "charge"
+  | "hop"
+  | "shoot"
+  | "blink"
+  | "burrow"
+  | "beam";
 /** minions come in waves, a mini boss every fifth wave, bosses at waves 20 and 30 */
 export type EnemyRank = "minion" | "mini" | "boss";
 
@@ -59,4 +82,8 @@ export interface Enemy {
   evadeCd: number;
   /** a husk rocked by a sword blow stops walking for this long; a wind-up already started goes on */
   stagger: number;
+  /** free scratch values for a foe's own behavior: a target, a timer, a charge count */
+  ax: number;
+  ay: number;
+  n: number;
 }

@@ -8,7 +8,6 @@ import { CHARACTERS } from "./constants/characters";
 import { H, MAX_FRAME, STEP, W } from "./constants/stage";
 import { game, setCharacter } from "./game/state";
 import { update, updateAmbience } from "./game/update";
-import { buildBackground } from "./scene/background";
 import { renderScene } from "./scene/renderScene";
 import { loadBest } from "./services/bestScore";
 import { loadHeroChoice } from "./services/heroChoice";
@@ -27,7 +26,6 @@ const canvas = byId<HTMLCanvasElement>("game");
 const ctx = canvas.getContext("2d");
 if (!ctx) throw new Error("This browser cannot draw to a 2D canvas.");
 const image = ctx.createImageData(W, H);
-const background = buildBackground();
 
 game.best = loadBest();
 setCharacter(CHARACTERS.find((c) => c.id === loadHeroChoice()) ?? CHARACTERS[0]);
@@ -74,7 +72,7 @@ function frame(now: number): void {
     step();
   }
   if (menuContext() !== "pause") {
-    renderScene(background, image.data);
+    renderScene(image.data);
     ctx?.putImageData(image, 0, 0);
   }
   updateHud();

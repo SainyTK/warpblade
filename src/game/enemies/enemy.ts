@@ -4,44 +4,31 @@ import type { Enemy, EnemyType } from "../../types/enemy";
 import type { Box } from "../../types/world";
 import { waveScale } from "../../utils/progression";
 import { rng } from "../state";
+import { kindOf } from "./kinds";
 
-export function enemyBox(e: Enemy): Box {
-  switch (e.type) {
-    case "wisp":
-      return [e.x - 7, e.y - 7, e.x + 7, e.y + 7];
-    case "husk":
-      return [e.x - 8, e.y - 26, e.x + 8, e.y];
-    case "brute":
-      return [e.x - 13, e.y - 40, e.x + 13, e.y];
-    case "warden":
-      return [e.x - 17, e.y - 18, e.x + 17, e.y + 16];
-  }
-}
-export function enemyCenter(e: Enemy): [number, number] {
-  if (e.type === "husk") return [e.x, e.y - 13];
-  if (e.type === "brute") return [e.x, e.y - 20];
-  return [e.x, e.y];
-}
+export const enemyBox = (e: Enemy): Box => kindOf(e.type).box(e);
+export const enemyCenter = (e: Enemy): [number, number] => kindOf(e.type).center(e);
 /** whether the foe stands on the floor rather than floating */
-export const walks = (e: Enemy): boolean => e.type === "husk" || e.type === "brute";
+export const walks = (e: Enemy): boolean => !kindOf(e.type).flies;
 
 /** a foe scaled to the wave it comes in */
 export function makeEnemy(type: EnemyType, x: number, y: number, wave: number, xpShare = 1): Enemy {
   const def = ENEMIES[type];
+  const kind = kindOf(type);
   const scale = waveScale(wave);
   const hp = Math.round(def.hp * scale.hp);
   return {
     type,
     rank: def.rank,
     x,
-    y: type === "husk" || type === "brute" ? GROUND : y,
+    y: kind.flies ? y : GROUND,
     vx: 0,
     vy: 0,
     hp,
     max: hp,
-    state: type === "husk" || type === "brute" ? "walk" : "drift",
+    state: kind.rest,
     st: 0,
-    cd: type === "wisp" ? rng.range(0.6, 1.6) : 1,
+    cd: kind.firstCooldown(),
     face: -1,
     turn: 0,
     flash: 0,
@@ -63,5 +50,8 @@ export function makeEnemy(type: EnemyType, x: number, y: number, wave: number, x
     charged: 0,
     evadeCd: 0,
     stagger: 0,
+    ax: 0,
+    ay: 0,
+    n: 0,
   };
 }

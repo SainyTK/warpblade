@@ -1,5 +1,5 @@
 import { PAL, WORLD_COLORS as WC } from "../constants/palette";
-import { ANCHORS, BRAZIERS, GROUND, H, MOON, W } from "../constants/stage";
+import { ANCHORS, BRAZIERS, GROUND, H, W } from "../constants/stage";
 import {
   color,
   ellipseRing,
@@ -19,8 +19,9 @@ import { hasPerk } from "../game/progress";
 import { game, hero } from "../game/state";
 import { mix, WHITE } from "../utils/color";
 import { TAU } from "../utils/math";
+import { paletteAt } from "./eras/sceneDef";
+import { scene } from "./scenery";
 
-const FIREFLIES = Array.from({ length: 12 }, (_, i) => ({ x: (i * 53) % W, y: 120 + ((i * 17) % 30), p: i * 1.7 }));
 const MIST = Array.from({ length: 7 }, (_, i) => ({
   x: i * 52,
   y: GROUND - 2 + (i % 3) * 3,
@@ -28,22 +29,35 @@ const MIST = Array.from({ length: 7 }, (_, i) => ({
   v: 4 + (i % 4),
 }));
 
-/** moon glow, flickering braziers, fireflies and twinkling stars */
+/** the era's own light (sun, moon, fireflies, aurora) and the flickering braziers */
 export function drawAmbientLight(): void {
   const t = game.t;
+  const { def, k } = scene();
   place();
-  glow(MOON.x, MOON.y, 60, WC.moonGlow, 0.22);
-  for (const b of BRAZIERS)
-    glow(b.x, b.y - 8, 40 + Math.sin(t * 13 + b.x) * 2, WC.brazierGlow, 0.32 + Math.sin(t * 9 + b.x) * 0.04);
-  for (const f of FIREFLIES) {
-    const x = f.x + Math.sin(t * 0.6 + f.p) * 14;
-    const y = f.y + Math.sin(t * 0.9 + f.p * 2) * 6;
-    const b = Math.max(0, Math.sin(t * 1.8 + f.p * 3));
-    if (b <= 0.15) continue;
-    px(x, y, b > 0.7 ? WC.fireflyHot : WC.firefly);
-    glow(x, y, 7, WC.fireflyGlow, 0.3 * b);
-  }
-  for (let i = 0; i < 6; i++) if (Math.sin(t * 3 + i * 2.1) > 0.85) px((i * 97) % W, (i * 23) % 100, WHITE);
+  if (def.braziers > 0)
+    for (const b of BRAZIERS)
+      glow(
+        b.x,
+        b.y - 8,
+        40 + Math.sin(t * 13 + b.x) * 2,
+        WC.brazierGlow,
+        (0.32 + Math.sin(t * 9 + b.x) * 0.04) * def.braziers,
+      );
+  def.ambient?.(t, k);
+}
+
+/** the era's weather in front of the fight: rain, petals, motes, ash */
+export function drawWeather(): void {
+  const { def, k } = scene();
+  if (!def.weather) return;
+  place();
+  def.weather(game.t, k);
+}
+
+/** the era's lightning, as a whole-screen flash from 0 to 1 */
+export function sceneFlash(): number {
+  const { def, k } = scene();
+  return def.flash?.(game.t, k) ?? 0;
 }
 
 /** the warp crystals bob and glow; with Crystal Hang, the one Kael would warp to gets a ring */
@@ -82,6 +96,9 @@ export function drawAnchors(): void {
 
 /** faint wide banks of mist drifting along the floor, in front of everything */
 export function drawMist(): void {
+  const { def, k } = scene();
+  if (def.mist <= 0) return;
+  const tint = paletteAt(def, k).mist;
   place();
   for (const m of MIST) {
     const x = ((m.x + game.t * m.v) % (W + 60)) - 30;
@@ -92,7 +109,7 @@ export function drawMist(): void {
       const sy = Math.floor(toScreenY(ly));
       if (sx < 0 || sy < 0 || sx >= W || sy >= H) return;
       const i = sy * W + sx;
-      color[i] = mix(color[i], WC.mist, 0.09 * (1 - d) * (1 - d));
+      color[i] = mix(color[i], tint, 0.09 * def.mist * (1 - d) * (1 - d));
     });
   }
 }

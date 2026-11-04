@@ -1,5 +1,6 @@
 import { PERFECT } from "../constants/combat";
 import { BRAZIERS } from "../constants/stage";
+import { scene, updateScenery } from "../scene/scenery";
 import { PF, PK } from "../types/particle";
 import { updateBlazes } from "./blazes";
 import { updateCoins } from "./coins";
@@ -13,8 +14,10 @@ import { updateWaves } from "./waves";
 import { updateXpOrbs } from "./xpOrbs";
 
 function feedBraziers(): void {
+  const heat = scene().def.braziers;
+  if (heat <= 0) return;
   for (const b of BRAZIERS) {
-    if (rng.chance(0.6))
+    if (rng.chance(0.6 * heat))
       particles.spawn(
         PK.FIRE,
         b.x + rng.range(-2, 2),
@@ -36,6 +39,7 @@ function feedBraziers(): void {
 /** the scene alone, with no one in it moving: braziers burn and the light flickers behind the start menu */
 export function updateAmbience(dt: number): void {
   game.t += dt;
+  updateScenery(dt);
   feedBraziers();
   particles.update(dt);
   lights.update(dt);
@@ -47,6 +51,7 @@ export function update(dt: number): void {
   const world = game.slow > 0 ? dt * PERFECT.timeScale : dt;
   game.slow = Math.max(0, game.slow - dt);
   game.t += world;
+  updateScenery(dt);
   updateHero(dt);
   updateEnemies(world);
   updatePickups(dt);
