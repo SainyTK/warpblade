@@ -63,4 +63,5 @@ Kael's pose layer is `src/game/hero/kael/`: his kit's `pose` wraps the shared cl
 `handover.ts` crosses every change of clip or facing, with lengths in `HANDOVER_FRAMES` and `TURN_FRAMES` (`src/constants/kael/motion.ts`).
 `hangSwing.ts` swings the body in under a crystal he warps to, dying away into the hang's sway.
 His walk and run clips were rebuilt from a gait model, and the kit's `stride` hook samples them by ground covered.
-His blows cross from the last pose in their first two frames, and `windup.ts` runs a blow's clock at 0.65 until its first hit, so the wind-up holds a beat before the snap (0.065 s of clip to the strike now take 0.1 s).
+His blows cross from the last pose over the frames before their first hit (2 to 4, `WINDUP`).
+`windup.ts` runs the clock of a blow whose first hit comes before 0.1 s at 0.65 until that hit, so the wind-up holds a beat before the snap (the string's 0.065 s of clip to the strike now take 0.1 s).
