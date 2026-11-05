@@ -27,7 +27,7 @@ export function recipeNotes(c: CharacterDef, node: SkillNode, ranks: Readonly<Re
       const spell = nodeById(c, evolution.evolves ?? "")?.name ?? "";
       if (node.id === evolution.evolves) {
         const partners = (evolution.mastered ?? []).map((id) => nodeById(c, id)?.name ?? "").join(" and ");
-        return `With ${partners} at full rank, ${spell} evolves into ${evolution.name}.`;
+        return `With ${partners} at full rank, ${spell} can evolve into ${evolution.name}.`;
       }
       return `${node.name} at full rank evolves ${spell} into ${evolution.name}.`;
     });
