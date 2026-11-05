@@ -1,6 +1,6 @@
 import { RES } from "../constants/stage";
 import type { Color } from "../types/color";
-import type { SpriteImage } from "../types/sprite";
+import type { SpriteBox, SpriteImage } from "../types/sprite";
 import { mix, scale } from "../utils/color";
 import { blendImage, putImage, shakeOffset } from "./frame";
 
@@ -18,6 +18,8 @@ export class SpriteCanvas implements SpriteImage {
   private y0 = 0;
   private x1: number;
   private y1: number;
+  /** where the finished image has pixels, so clearing, outlining, mirroring and blitting skip the empty rest */
+  readonly box: SpriteBox;
   constructor(
     readonly w: number,
     readonly h: number,
@@ -29,16 +31,23 @@ export class SpriteCanvas implements SpriteImage {
     this.layer = new Uint32Array(w * h);
     this.x1 = w - 1;
     this.y1 = h - 1;
-  }
-  /** the whole layer counts as drawn in, after a pass that used it as scratch */
-  private touchAll(): void {
-    this.x0 = 0;
-    this.y0 = 0;
-    this.x1 = this.w - 1;
-    this.y1 = this.h - 1;
+    this.box = { x0: 0, y0: 0, x1: w - 1, y1: h - 1 };
   }
   clear(): void {
-    this.d.fill(0);
+    const { w, d, box } = this;
+    if (box.x1 >= box.x0) for (let y = box.y0; y <= box.y1; y++) d.fill(0, y * w + box.x0, y * w + box.x1 + 1);
+    box.x0 = this.w;
+    box.y0 = this.h;
+    box.x1 = -1;
+    box.y1 = -1;
+  }
+  /** grow the image's box to take in this one, clamped to the canvas */
+  private grow(x0: number, y0: number, x1: number, y1: number): void {
+    const { box } = this;
+    box.x0 = Math.max(0, Math.min(box.x0, x0));
+    box.y0 = Math.max(0, Math.min(box.y0, y0));
+    box.x1 = Math.min(this.w - 1, Math.max(box.x1, x1));
+    box.y1 = Math.min(this.h - 1, Math.max(box.y1, y1));
   }
   begin(): void {
     const { w, layer, x0, x1 } = this;
@@ -75,7 +84,7 @@ export class SpriteCanvas implements SpriteImage {
       }
   }
   stroke(x0: number, y0: number, x1: number, y1: number, r: number, c: Color): void {
-    const n = Math.max(1, Math.ceil(Math.hypot(x1 - x0, y1 - y0) * 2 * this.res));
+    const n = Math.max(1, Math.ceil(Math.hypot(x1 - x0, y1 - y0) * this.res));
     for (let i = 0; i <= n; i++) {
       const u = i / n;
       this.dot(x0 + (x1 - x0) * u, y0 + (y1 - y0) * u, r, c);
@@ -101,6 +110,34 @@ export class SpriteCanvas implements SpriteImage {
       xs.sort((m, n) => m - n);
       for (let k = 0; k + 1 < xs.length; k += 2)
         for (let x = Math.ceil(xs[k] - 0.5); x <= Math.floor(xs[k + 1] - 0.5); x++) this.put(x, y, c);
+    }
+  }
+  /** a box of w by h art pixels filled image pixel by image pixel, its top left corner at this local point */
+  block(x: number, y: number, c: Color, w = 1, h = w): void {
+    const x0 = Math.floor(this.imageX(x));
+    const y0 = Math.floor(this.imageY(y));
+    const nx = Math.round(w * this.res);
+    const ny = Math.round(h * this.res);
+    for (let j = 0; j < ny; j++) for (let i = 0; i < nx; i++) this.put(x0 + i, y0 + j, c);
+  }
+  /** a line one image pixel wide between two local points: seams, cracks, veins and fine light */
+  hairline(x0: number, y0: number, x1: number, y1: number, c: Color): void {
+    const n = Math.max(1, Math.ceil(Math.max(Math.abs(x1 - x0), Math.abs(y1 - y0)) * this.res));
+    for (let i = 0; i <= n; i++) this.set(x0 + ((x1 - x0) * i) / n, y0 + ((y1 - y0) * i) / n, c);
+  }
+  /**
+   * a horn, claw, limb or tendril from (x0, y0) to (x1, y1), narrowing from radius r0 at the base to r1 at the tip;
+   * bend pushes the middle to the left of the line's direction, so the shape curves
+   */
+  taper(x0: number, y0: number, x1: number, y1: number, r0: number, r1: number, c: Color, bend = 0): void {
+    const len = Math.hypot(x1 - x0, y1 - y0);
+    const nx = len > 0 ? (y1 - y0) / len : 0;
+    const ny = len > 0 ? -(x1 - x0) / len : 0;
+    const n = Math.max(1, Math.ceil(len * this.res));
+    for (let i = 0; i <= n; i++) {
+      const u = i / n;
+      const push = bend * 4 * u * (1 - u);
+      this.dot(x0 + (x1 - x0) * u + nx * push, y0 + (y1 - y0) * u + ny * push, r0 + (r1 - r0) * u, c);
     }
   }
   /** pixel rows in image pixels, one character per pixel, "." is empty, the top left corner at this local point */
@@ -157,40 +194,57 @@ export class SpriteCanvas implements SpriteImage {
         const i = y * w + x;
         if (layer[i]) d[i] = layer[i];
       }
+    this.grow(this.x0, this.y0, this.x1, this.y1);
   }
   outline(c: Color): void {
-    const { w, h, d, layer } = this;
-    layer.set(d);
-    this.touchAll();
-    for (let y = 0; y < h; y++)
-      for (let x = 0; x < w; x++) {
+    const { w, h, d, box } = this;
+    if (box.x1 < box.x0) return;
+    const ring: number[] = [];
+    for (let y = Math.max(0, box.y0 - 1); y <= Math.min(h - 1, box.y1 + 1); y++)
+      for (let x = Math.max(0, box.x0 - 1); x <= Math.min(w - 1, box.x1 + 1); x++) {
         const i = y * w + x;
-        if (layer[i]) continue;
-        if (
-          (x > 0 && layer[i - 1]) ||
-          (x < w - 1 && layer[i + 1]) ||
-          (y > 0 && layer[i - w]) ||
-          (y < h - 1 && layer[i + w])
-        )
-          d[i] = c;
+        if (d[i]) continue;
+        if ((x > 0 && d[i - 1]) || (x < w - 1 && d[i + 1]) || (y > 0 && d[i - w]) || (y < h - 1 && d[i + w]))
+          ring.push(i);
       }
+    for (const i of ring) d[i] = c;
+    this.grow(box.x0 - 1, box.y0 - 1, box.x1 + 1, box.y1 + 1);
   }
   /** flip the drawn sprite left to right about local x = 0, the same way a flipped blit does */
   mirror(): void {
-    const { w, h, d, layer, ox } = this;
-    layer.set(d);
-    this.touchAll();
-    d.fill(0);
-    for (let y = 0; y < h; y++)
-      for (let x = 0; x < w; x++) {
+    const { w, d, layer, ox, box } = this;
+    if (box.x1 < box.x0) return;
+    const { x0, y0, x1, y1 } = box;
+    // the layer holds the image while it is flipped back into d, and is cleared at the next begin
+    this.begin();
+    for (let y = y0; y <= y1; y++) {
+      layer.set(d.subarray(y * w + x0, y * w + x1 + 1), y * w + x0);
+      d.fill(0, y * w + x0, y * w + x1 + 1);
+    }
+    this.x0 = x0;
+    this.y0 = y0;
+    this.x1 = x1;
+    this.y1 = y1;
+    box.x0 = w;
+    box.x1 = -1;
+    for (let y = y0; y <= y1; y++)
+      for (let x = x0; x <= x1; x++) {
         const mx = 2 * ox - x;
         if (mx >= 0 && mx < w) d[y * w + mx] = layer[y * w + x];
       }
+    this.grow(2 * ox - x1, y0, 2 * ox - x0, y1);
   }
   snapshot(): SpriteImage {
-    return { w: this.w, h: this.h, ox: this.ox, oy: this.oy, res: this.res, d: this.d.slice() };
+    return { w: this.w, h: this.h, ox: this.ox, oy: this.oy, res: this.res, d: this.d.slice(), box: { ...this.box } };
   }
 }
+
+/**
+ * a canvas at the frame's full detail, sized in art pixels with its feet at (ox, oy): heroes and foes are drawn on these,
+ * so one art pixel holds RES by RES image pixels for edges, lights and glints
+ */
+export const detailCanvas = (w: number, h: number, ox: number, oy: number): SpriteCanvas =>
+  new SpriteCanvas(w * RES, h * RES, ox * RES, oy * RES, RES);
 
 export interface BlitOptions {
   alpha?: number;
@@ -210,8 +264,9 @@ export function blit(s: SpriteImage, x: number, y: number, flip: boolean, o: Bli
   const step = RES / k;
   const bx = Math.floor((x + shx) * step) * k;
   const by = Math.floor((y + shy) * step) * k;
-  for (let j = 0; j < s.h; j++)
-    for (let i = 0; i < s.w; i++) {
+  const box = s.box ?? { x0: 0, y0: 0, x1: s.w - 1, y1: s.h - 1 };
+  for (let j = box.y0; j <= box.y1; j++)
+    for (let i = box.x0; i <= box.x1; i++) {
       const c = s.d[j * s.w + i];
       if (!c) continue;
       const ix = flip ? bx + (s.ox - i) * k : bx + (i - s.ox) * k;

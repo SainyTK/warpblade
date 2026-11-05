@@ -1,13 +1,16 @@
-import { SpriteCanvas } from "../../../engine/sprite";
+import { detailCanvas, type SpriteCanvas } from "../../../engine/sprite";
 import type { Enemy } from "../../../types/enemy";
 import { mix, WHITE } from "../../../utils/color";
+import { grain } from "../../../utils/grain";
 import { clamp } from "../../../utils/math";
+import { pointInPolygon } from "../../../utils/pointInPolygon";
 import { waveScale } from "../../../utils/progression";
 import { game } from "../../state";
 import { DAY_COLORS as DC } from "./colors";
 import { OAK_TIMES } from "./oakheart";
+import { glowEye } from "./paint";
 
-const canvas = new SpriteCanvas(76, 62, 38, 54);
+const canvas = detailCanvas(76, 62, 38, 54);
 type Pt = readonly [number, number];
 const B = DC.bark;
 const L = DC.leaf;
@@ -37,6 +40,41 @@ const ACORNS: readonly Pt[] = [
   [-12, -28],
   [-2, -27],
   [12, -29],
+];
+/** bark grooves running down the trunk: x, top, bottom */
+const GROOVES: readonly (readonly [number, number, number])[] = [
+  [-6, -26, -6],
+  [-3, -22, -15],
+  [5, -24, -17],
+  [-7, -12, -4],
+  [7, -14, -5],
+  [-1, -8, -4],
+];
+/** moss clinging to its shoulders and roots: x, y, radius */
+const MOSS: readonly (readonly [number, number, number])[] = [
+  [-7.5, -27.5, 1.6],
+  [-5, -28, 1.1],
+  [-9.2, -25.5, 1],
+  [-8.8, -4.2, 1],
+  [-7.6, -3.2, 0.7],
+  [8.6, -21, 0.9],
+];
+/** rift veins spreading from the heart: points from the knothole outward */
+const VEINS: readonly (readonly Pt[])[] = [
+  [
+    [-1, -14],
+    [-3, -16],
+    [-3.5, -18.5],
+  ],
+  [
+    [5.5, -11.5],
+    [7, -9.5],
+    [6.5, -7],
+  ],
+  [
+    [0.5, -10],
+    [-0.5, -8],
+  ],
 ];
 
 /** where its two hands are for each move: back hand, front hand */
@@ -83,32 +121,73 @@ function hands(e: Enemy, step: number): [Pt, Pt] {
 /** how hot the heart and eyes burn: a slow pulse, rising through any wind-up */
 function heatOf(e: Enemy, t: number): number {
   const w = waveScale(game.wave).windup;
-  if (e.state === "wind") return clamp(e.st / (OAK_TIMES.sweep * w));
-  if (e.state === "charge") return clamp(e.st / (OAK_TIMES.root * w));
-  if (e.state === "volley") return clamp(e.st / (OAK_TIMES.volley * w));
-  if (e.state === "swipe" || e.state === "burrow" || e.state === "shoot") return 1;
+  if (e.state === "wind") {
+    return clamp(e.st / (OAK_TIMES.sweep * w));
+  }
+  if (e.state === "charge") {
+    return clamp(e.st / (OAK_TIMES.root * w));
+  }
+  if (e.state === "volley") {
+    return clamp(e.st / (OAK_TIMES.volley * w));
+  }
+  if (e.state === "swipe" || e.state === "burrow" || e.state === "shoot") {
+    return 1;
+  }
   return 0.25 + Math.sin(t * 2 + e.seed) * 0.15;
 }
 
+/** a branch arm from the shoulder to a hand of twig fingers, lit on top; the far arm a shade darker */
 function arm(s: SpriteCanvas, sx: number, sy: number, hand: Pt, lit: boolean): void {
   const [hx, hy] = hand;
   const mx = (sx + hx) / 2 + (hy < sy - 6 ? -2 : 1);
   const my = (sy + hy) / 2 + 1;
-  s.stroke(sx, sy, mx, my, 2.6, lit ? B[2] : B[1]);
-  s.stroke(mx, my, hx, hy, 2, lit ? B[2] : B[1]);
-  // twig fingers spread from the hand
+  const bark = lit ? B[2] : B[1];
   const ax = Math.sign(hx - mx) || 1;
   const ay = Math.sign(hy - my) || 1;
-  s.stroke(hx, hy, hx + ax * 3, hy - 2, 0.6, B[1]);
-  s.stroke(hx, hy, hx + ax * 3, hy + ay * 2, 0.6, B[1]);
-  s.stroke(hx, hy, hx + ax, hy + ay * 3, 0.6, B[1]);
+  s.begin();
+  s.stroke(sx, sy, mx, my, 2.6, bark);
+  s.stroke(mx, my, hx, hy, 2, bark);
+  s.stroke(hx, hy, hx + ax * 3, hy - 2, 0.6, bark);
+  s.stroke(hx, hy, hx + ax * 3, hy + ay * 2, 0.6, bark);
+  s.stroke(hx, hy, hx + ax, hy + ay * 3, 0.6, bark);
+  s.shadeEdges(bark, lit ? B[3] : B[2], lit ? B[1] : B[0], 2);
+  // grain along the branch, and a knot at the elbow
+  const grainLine = (x0: number, y0: number, x1: number, y1: number, off: number) => {
+    for (let k = 0.2; k < 0.8; k += 0.05) {
+      s.set(x0 + (x1 - x0) * k, y0 + (y1 - y0) * k + off, lit ? B[1] : B[0]);
+    }
+  };
+  grainLine(sx, sy, mx, my, 0.6);
+  grainLine(mx, my, hx, hy, 0.4);
+  s.block(mx - 0.5, my - 0.5, B[0]);
+  s.set(mx - 0.5, my - 1, lit ? B[4] : B[3]);
   if (lit) {
-    s.stroke(mx, my - 1.5, hx, hy - 1.5, 0.5, B[3]);
-    s.set(sx + 1, sy - 2, B[4]);
+    s.set(sx, sy - 2, DC.barkGlint);
+    s.set(sx + 0.5, sy - 2, DC.barkGlint);
   }
+  s.commit();
 }
 
-/** an old oak walking on its roots: a bark body lit from the right, a leafy crown with acorns, a violet heart crack and eyes */
+/** a root leg from the trunk to a foot of roots splayed on the ground */
+function root(s: SpriteCanvas, x0: number, x1: number, step: number, lit: boolean): void {
+  const bark = lit ? B[2] : B[1];
+  s.begin();
+  s.stroke(x0, -8, x1 + step, 0, lit ? 3.2 : 3, bark);
+  s.stroke(x1 + step, 0, x1 + step + (lit ? 6 : -5), 0, 1, bark);
+  if (lit) {
+    s.stroke(x1 - 1 + step, 0, x1 - 4 + step, 0, 1, bark);
+  }
+  s.shadeEdges(bark, lit ? B[3] : B[2], lit ? B[1] : B[0], 2);
+  for (const k of [0.3, 0.65]) {
+    s.set(x0 + (x1 + step - x0) * k, -8 + 8 * k, B[0]);
+  }
+  if (lit) {
+    s.stroke(x1 + step, -6, x1 + 1 + step, -1, 0.3, B[3]);
+  }
+  s.commit();
+}
+
+/** an old oak walking on its roots: a bark body lit from the top left, a leafy crown with acorns, a violet heart and eyes */
 export function drawOakheart(e: Enemy, t: number): SpriteCanvas {
   const s = canvas;
   const time = t + e.seed;
@@ -118,97 +197,126 @@ export function drawOakheart(e: Enemy, t: number): SpriteCanvas {
   const shiver = e.state === "volley" ? (Math.floor(time * 24) % 2 ? 1 : -1) : 0;
   const [backHand, frontHand] = hands(e, step);
   const glowCol = heat > 0.75 ? DC.crackHot : mix(DC.crack, DC.crackHot, heat);
+  const hot = heat > 0.5;
   s.clear();
   // the far root leg and the far branch arm, in shadow
-  s.begin();
-  s.stroke(-4, -8, -6 - step, 0, 3, B[1]);
-  s.stroke(-6 - step, 0, -11 - step, 0, 1, B[1]);
+  root(s, -4, -6, -step, false);
   arm(s, -8, -20 + drop, backHand, false);
-  s.commit();
-  // the trunk
+  // the trunk: bark lit down its left side, deep grooves with lit ridges, moss on the shoulders and roots
+  const trunk = TRUNK.map(([x, y]) => [x, y + drop] as const);
   s.begin();
-  s.poly(
-    TRUNK.map(([x, y]) => [x, y + drop] as const),
-    B[2],
-  );
-  s.poly(
-    [
-      [4, -27 + drop],
-      [8, -27 + drop],
-      [10, -22 + drop],
-      [8, -12 + drop],
-      [10, -4 + drop],
-      [6, -4 + drop],
-      [6, -14 + drop],
-    ],
-    B[3],
-  );
-  for (let y = -26; y <= -5; y++) s.set(y > -22 && y < -12 ? 9 : 10, y + drop, B[4]);
-  // bark grooves
-  for (const [x, y0, y1] of [
-    [-6, -26, -6],
-    [-3, -22, -14],
-    [5, -24, -18],
-    [-7, -12, -4],
-  ])
-    for (let y = y0; y <= y1; y++) s.set(x + (Math.floor(y / 4) % 2), y + drop, B[1]);
-  // moss on its shoulders and roots
-  for (const [x, y] of [
-    [-8, -27],
-    [-7, -27],
-    [-9, -26],
-    [-6, -28],
-    [-9, -4],
-    [-8, -3],
-  ])
-    s.set(x, y + drop, DC.moss);
-  // the face: a heavy brow over two sunken, lit eyes
-  s.stroke(0, -24 + drop, 9, -23 + drop, 0.8, B[1]);
-  s.set(1, -25 + drop, B[4]);
-  for (const x of [1, 5]) {
-    s.set(x, -22 + drop, DC.outline);
-    s.set(x + 1, -22 + drop, DC.outline);
-    s.set(x, -22 + drop, heat > 0.5 ? WHITE : DC.eye);
-    s.set(x + 1, -22 + drop, heat > 0.5 ? DC.crackHot : DC.crack);
-  }
-  // the knothole in its chest, and the violet heart that burns in it before each blow
-  s.dot(2, -13 + drop, 3.2, B[0]);
-  s.dot(2.5, -12.5 + drop, 2.1, glowCol);
-  s.dot(2.5, -12.5 + drop, 1, heat > 0.6 ? WHITE : DC.crackHot);
-  for (let a = -2.6; a < -0.6; a += 0.35) s.set(2 + Math.cos(a) * 3.6, -13 + drop + Math.sin(a) * 3.6, B[4]);
-  s.commit();
-  // the leafy crown, shaking before it throws
-  s.begin();
-  const cy = drop + (e.state === "charge" ? -1 : 0);
-  for (const [x, y, r] of CROWN) s.dot(x + shiver, y + cy, r, L[1]);
-  for (const [x, y, r] of CROWN) s.dot(x + shiver + 1, y + cy - 1, r - 2, L[2]);
-  for (const [x, y, r] of CROWN) {
-    s.dot(x + shiver + 2, y + cy - 2, r - 3.6, L[3]);
-    s.set(x + shiver + 2, y + cy - r + 1, L[4]);
-  }
-  for (const [x, y] of [
-    [-14, -30],
-    [-3, -32],
-    [8, -34],
-    [-8, -38],
-    [3, -28],
-  ])
-    s.set(x + shiver, y + cy, L[0]);
-  if (e.state !== "shoot")
-    for (const [x, y] of ACORNS) {
-      s.set(x + shiver, y + cy, DC.acornCap);
-      s.set(x + shiver, y + cy + 1, DC.acorn);
-      s.set(x + shiver + 1, y + cy + 1, DC.acornLit);
+  s.poly(trunk, B[2]);
+  s.shadeEdges(B[2], B[3], B[1], 4);
+  for (const [x, y0, y1] of GROOVES)
+    for (let y = y0; y <= y1; y += 0.5) {
+      const gx = x + Math.sin(y * 0.7 + x) * 0.6;
+      if (!pointInPolygon(TRUNK, gx, y)) {
+        continue;
+      }
+      s.set(gx, y + drop, B[0]);
+      s.set(gx + 0.5, y + drop, B[1]);
+      s.set(gx - 0.5, y + drop, B[3]);
     }
+  for (let y = -27; y <= -4; y += 1)
+    for (let x = -8; x <= 9; x += 1) {
+      const g = grain(x, y);
+      if (g > 0.08 || !pointInPolygon(TRUNK, x, y)) {
+        continue;
+      }
+      s.set(x, y + drop, B[1]);
+      s.set(x, y + 0.5 + drop, B[1]);
+    }
+  s.set(-8.5, -26 + drop, DC.barkGlint);
+  s.set(-8.5, -25.5 + drop, DC.barkGlint);
   s.commit();
-  // the near root leg and the near arm, lit
   s.begin();
-  s.stroke(4, -8, 5 + step, 0, 3.2, B[2]);
-  s.stroke(5 + step, -6, 6 + step, -1, 0.6, B[3]);
-  s.stroke(5 + step, 0, 11 + step, 0, 1, B[2]);
-  s.stroke(4 + step, 0, 1 + step, 0, 1, B[2]);
-  arm(s, 9, -19 + drop, frontHand, true);
+  for (const [x, y, r] of MOSS) {
+    s.dot(x, y + drop, r, DC.moss);
+  }
+  s.shadeEdges(DC.moss, DC.mossLit, DC.mossDark);
   s.commit();
+  // the face: a heavy brow over two sunken eyes with hot cores
+  s.begin();
+  s.stroke(0, -24 + drop, 9, -23 + drop, 0.8, B[1]);
+  s.stroke(0.5, -24.6 + drop, 8.5, -23.8 + drop, 0.25, B[3]);
+  s.set(0.5, -25 + drop, B[4]);
+  s.commit();
+  s.begin();
+  for (const x of [1, 5]) {
+    s.stroke(x + 0.2, -21.6 + drop, x + 1.8, -21.6 + drop, 0.75, B[0]);
+    glowEye(s, x, -22 + drop, hot ? DC.crackHot : DC.eye, WHITE);
+    s.block(x + 1, -22 + drop, hot ? DC.crackHot : DC.crack);
+    if (!hot) {
+      s.set(x + 1.5, -21.5 + drop, DC.crackDeep);
+    }
+  }
+  s.commit();
+  // the knothole in its chest, lit on its rim, and the violet heart that burns in it before each blow
+  s.begin();
+  s.dot(2, -13 + drop, 3.6, B[3]);
+  s.shadeEdges(B[3], B[4], B[1], 2);
+  s.dot(2.2, -12.8 + drop, 2.9, DC.barkDeep);
+  s.dot(2.5, -12.5 + drop, 2.1, glowCol);
+  s.dot(2.5, -12.5 + drop, 1.3, hot ? DC.crackHot : DC.crack);
+  s.block(2, -13 + drop, heat > 0.6 ? WHITE : DC.crackHot);
+  s.set(2, -13 + drop, WHITE);
+  s.commit();
+  s.begin();
+  for (const vein of VEINS)
+    for (let i = 1; i < vein.length; i++) {
+      const [x0, y0] = vein[i - 1];
+      const [x1, y1] = vein[i];
+      s.stroke(x0, y0 + drop, x1, y1 + drop, 0.25, hot ? DC.crackHot : DC.crack);
+    }
+  s.commit(false);
+  // the leafy crown, clump by clump, shaking before it throws
+  const cy = drop + (e.state === "charge" ? -1 : 0);
+  s.begin();
+  for (const [x, y, r] of CROWN) {
+    s.dot(x + shiver + 0.5, y + cy + 0.5, r + 0.5, DC.leafDeep);
+  }
+  s.commit();
+  for (const [x, y, r] of CROWN) {
+    const lx = x + shiver;
+    const ly = y + cy;
+    s.begin();
+    s.dot(lx, ly, r, L[2]);
+    for (let a = 0; a < 6.2; a += 0.8)
+      s.dot(lx + Math.cos(a + x) * r * 0.95, ly + Math.sin(a + x) * r * 0.95, 1.2, L[2]);
+    s.shadeEdges(L[2], L[3], L[1], 3);
+    s.dot(lx - r * 0.3, ly - r * 0.3, r * 0.45, L[3]);
+    for (let j = -r; j <= r; j += 1)
+      for (let i = -r; i <= r; i += 1) {
+        const g = grain(x + i, y + j);
+        if (i * i + j * j > (r - 0.5) * (r - 0.5) || g < 0.68) {
+          continue;
+        }
+        const sunlit = i + j < -r * 0.4;
+        const leafCol = sunlit ? (g > 0.85 ? L[4] : L[2]) : L[1];
+        s.set(lx + i, ly + j, leafCol);
+        s.set(lx + i + 0.5, ly + j - 0.5, leafCol);
+        s.set(lx + i + 0.5, ly + j, leafCol);
+      }
+    s.commit();
+  }
+  if (e.state !== "shoot") {
+    s.begin();
+    for (const [x, y] of ACORNS) {
+      const ax = x + shiver;
+      const ay = y + cy;
+      s.dot(ax + 0.5, ay + 1.6, 1.1, DC.acorn);
+      s.shadeEdges(DC.acorn, DC.acornLit, DC.acornShade);
+      s.set(ax + 0.5, ay + 3, DC.acornShade);
+      s.stroke(ax - 0.4, ay + 0.4, ax + 1.4, ay + 0.4, 0.6, DC.acornCap);
+      s.set(ax - 0.5, ay, DC.acornCapLit);
+      s.set(ax, ay, DC.acornCapLit);
+      s.set(ax + 0.5, ay - 0.5, DC.acornCap);
+    }
+    s.commit();
+  }
+  // the near root leg and the near arm, lit
+  root(s, 4, 5, step, true);
+  arm(s, 9, -19 + drop, frontHand, true);
   s.outline(DC.outline);
   return s;
 }

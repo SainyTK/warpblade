@@ -31,6 +31,27 @@ export const RAIN_FOES = {
   puddle: hex("#2e2a22"),
   puddleLip: hex("#7a6a50"),
   water: hex("#b4c4d8"),
+  /** the detail tones: the deepest shade and the wet glint of each material, and the hot cores of the glows */
+  toadDeep: hex("#121c17"),
+  toadGlint: hex("#e2f2bc"),
+  toadSpot: hex("#2a4030"),
+  bellyLight: hex("#b8ae7c"),
+  bellyDark: hex("#5c5638"),
+  sacDeep: hex("#8a5a56"),
+  tongueDark: hex("#8c3050"),
+  wartHot: hex("#dcb8ff"),
+  kiteDeep: hex("#0f1120"),
+  kiteGlint: hex("#eef2ff"),
+  veinDeep: hex("#5e3292"),
+  veinHot: hex("#ecd2ff"),
+  mudDeep: hex("#130e0b"),
+  mudGlint: hex("#cdbd96"),
+  mossLight: hex("#6c8c46"),
+  mossDeep: hex("#22341e"),
+  reedDark: hex("#343f1a"),
+  cattail: hex("#4e3220"),
+  cattailLight: hex("#835a36"),
+  globDeep: hex("#2a2018"),
 };
 
 /** the kite's hostile lightning, violet against Kael's blue-white bolt */
