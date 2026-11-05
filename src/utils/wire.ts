@@ -6,7 +6,8 @@ const DEPTH = 5;
 export function toWire(value: unknown, depth = 0): unknown {
   if (typeof value === "number" && !Number.isFinite(value)) return { $num: String(value) };
   if (value === null || typeof value !== "object") return typeof value === "function" ? undefined : value;
-  if (depth > DEPTH) return undefined;
+  // pixel data and other binary views would swell a message past what a data channel carries
+  if (depth > DEPTH || ArrayBuffer.isView(value)) return undefined;
   if (value instanceof Set) return { $set: [...value].map((v) => toWire(v, depth + 1)) };
   if (value instanceof Map) return { $map: [...value].map(([k, v]) => [k, toWire(v, depth + 1)]) };
   if (Array.isArray(value)) return value.map((v) => toWire(v, depth + 1));
