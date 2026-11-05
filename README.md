@@ -73,7 +73,8 @@ His crystal sword can be thrown, and wherever it lands, he follows.
   Ysra, the ember lancer, is a flame-temple guard who woke when the braziers lit again.
   She shares Kael's rig and plays nothing like him: tougher and slower, with one heavy jump and no dash.
   Her glaive string pokes far and pierces every foe in the line, holding `J` winds a lunge, and up or down with `J` hooks a foe up or drags it in.
-  `K` pole-vaults over foes on the floor and dives glaive first in the air, and holding `L` braces against blows from the front, with a parry for a press just in time.
+  `K` pole-vaults over foes on the floor, also straight out of a brace or a backstep, and dives glaive first in the air.
+  Holding `L` braces against blows from the front, with a parry for a press just in time that gives stamina back.
   Her blows build Heat, a second bar that pays for fire rites on `I`; MP only pays for her ultimate.
   She starts every run with the whole glaive kit and the Flare rite, and her picks change and extend those moves.
   Her special is Pyre Wave, a wall of flame rolling ahead of her.

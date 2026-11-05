@@ -17,8 +17,12 @@ export const VAULT = {
   /** pixels from the press to the landing on flat floor */
   travel: 70,
   gravity: 1.35,
-  /** seconds between vaults, shown on the HUD tab */
-  cooldown: 1.2,
+  /** seconds between vaults, shown on the HUD tab; a little longer than a vault on flat floor takes, so vaults chain */
+  cooldown: 0.95,
+  /** nothing touches her from the plant until this many seconds past the top of the arc */
+  guardPastPeak: frame(3),
+  /** the pose shown last crosses into the vault's first keys over this many frames, before the plant's stab */
+  entryFrames: 2,
   /** Skyline: the second vault, thrown off the haft in the air, rises this much */
   airPeak: 24,
   /** the landing crouch after the flight, before she is free again */
@@ -78,15 +82,17 @@ export const BRACE = {
   bulwarkPush: 0.15,
   /** after a block or parry, more blows from the front in this long are taken without cost */
   shieldTime: 0.22,
+  /** stamina a parry gives back */
+  parryRefund: 25,
 } as const;
 
 /** L with a side held away: a low hop back that nothing touches at first */
 export const BACKSTEP = {
-  distance: 30,
+  distance: 36,
   /** pixels of the hop */
   hop: 5,
-  cost: 25,
-  guard: 0.12,
+  cost: 20,
+  guard: 0.15,
   /** a side held away that turned her this recently still counts as away */
   turnGrace: 0.15,
   /** the skid after the hop lands */

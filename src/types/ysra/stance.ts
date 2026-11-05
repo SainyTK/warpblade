@@ -1,4 +1,5 @@
 import type { Enemy } from "../enemy";
+import type { Pose } from "../pose";
 
 /** blows thrown out of Ysra's vault, dive, guard and charge */
 export type StanceMoveId = "vaultCrash";
@@ -10,6 +11,10 @@ export interface StanceMemory {
   launched: boolean;
   /** the vault or dive has landed and she is in the landing crouch */
   landed: boolean;
+  /** K was pressed in a backstep's hop: she vaults as soon as her feet touch the floor */
+  vaultNext: boolean;
+  /** the pose a starting vault crosses from, until its crossing frames have passed */
+  entry: Pose | null;
   /** vaults thrown since she last stood on the floor */
   airVaults: number;
   /** a dive was already used in this airtime */
