@@ -9,14 +9,14 @@ Every rule below is meant to make her play differently from Kael from the first 
 
 | Key | Kael | Ysra |
 | --- | --- | --- |
-| A / D | Walk, double tap to run | Walk, slower and planted. Double tap charges only with Warpath |
+| A / D | Walk, double tap to run | Walk, a steady stride with no run. Double tap charges only with Warpath |
 | W | Jump, double jump with a pick | One heavy jump, lower than Kael's. No double jump ever |
 | J | Sword string picked by the situation | Glaive string: long pokes that pierce every foe in the line |
 | Hold J | Nothing | Heft: wind a lunge while standing still, release to lunge forward through the line |
 | Up + J | Launcher (pick) | Skyhook: a rising hook that lifts the foe (from the start) |
 | Down + J | Low sweep (pick) | Ground lash: a low sweep that hooks foes and drags them in (from the start) |
 | J in the air | Air string | One wide air sweep, then nothing until she lands |
-| K | Warp throw (pick, MP) | Pole vault on the floor: plants the glaive and arcs over foes. In the air: dive, glaive first, down at an angle |
+| K | Warp throw (pick, MP) | Pole vault on the floor: plants the glaive and arcs over foes, also straight out of a brace or a backstep. In the air: dive, glaive first, down at an angle |
 | L | Dash, untouchable, stamina | Hold to brace: blocks blows from the front, each block costs stamina. A press just before a blow is a parry. L with a side held away is a short backstep |
 | I | Cast the selected element (MP) | Call the selected rite, paid with Heat |
 | O | Switch element | Switch rite |
@@ -38,14 +38,34 @@ Kael starts with almost nothing and learns abilities; Ysra starts with a full to
 
 ## Numbers to start from
 
-- Jump rise about 46 px (Kael 61). Walk speed through her 0.93 move stat.
+- Jump rise about 46 px (Kael 61). Walk speed through her 1.1 move stat: 74.8 px/s (Kael walks 68 and runs 125).
 - Glaive string blows reach about 40 px ahead, hit every foe in the box, and plant her feet. Wind-ups are longer than Kael's and the hits heavier.
 - Heft: 0.6 s to a full wind; release under 0.2 s is a quick poke; a full lunge travels about 60 px, pierces all, and is untouchable for its first 0.15 s.
-- Vault: about 70 px forward, peak about 40 px, untouchable from the plant to the peak. 1.2 s recharge shown in the HUD tab where Kael's warp recharge sits.
+- Vault: about 70 px forward, peak about 40 px, untouchable from the plant until 0.1 s past the peak. 0.95 s recharge shown in the HUD tab where Kael's warp recharge sits, just longer than a vault takes, so vaults chain.
+- The vault starts out of a brace (K while L is held) and out of a backstep (K in the hop vaults on landing, K in the skid vaults at once), toward a held side. Backstep then K with the side away held is her escape: a hop back, a turn and a vault away.
+- Every vault crosses from the pose shown last into the plant over two frames, before the stab.
 - Dive: once per airtime, about 45 degrees down, impact burst around the landing point.
-- Brace: blocks blows from the front for 12 stamina each (Firm Stance cuts that). A blow in the first 0.12 s of a press is a parry: no cost, the attacker staggered 1 s, a short slow motion, and with Counter Thrust the next J is the counter.
-- Backstep: about 30 px back, low hop, 25 stamina, untouchable for 0.12 s.
-- Flare 30 Heat, Flame Pillar 40, Brazier 50.
+- Brace: blocks blows from the front for 12 stamina each (Firm Stance cuts that). A blow in the first 0.12 s of a press is a parry: no cost, 25 stamina back, the attacker staggered 1 s, a short slow motion, and with Counter Thrust the next J is the counter.
+- Backstep: 36 px back in the hop (about 53 px with the skid), low hop, 20 stamina, untouchable for 0.15 s.
+- Flare 30 Heat, Flame Pillar 40, Brazier 50. Flare also heals 5% of her max HP, her one heal without a pick.
+
+## Mobility and survival pass (feedback #9)
+
+Players found her too slow and short of ways to survive next to Kael.
+The pass keeps her without a run, a dash or a double jump, and leans on her walk, vault, backstep, parry and Heat.
+Measured in the real game with real key presses, foes cleared, at 120 Hz steps sampled every 16 ms:
+
+| Measure | Ysra before | Ysra after | Kael |
+| --- | --- | --- | --- |
+| Walk speed | 62.7 px/s | 74.2 px/s | 67.4 walk, 124.0 run |
+| Cross the stage (x 10 to 300) | 4.62 s | 3.92 s | 2.48 s running |
+| Escape in 1 s (best of her kit) | 108.5 px | 104.9 px | 167.6 to 187.6 px |
+| Escape in 2 s | 164.1 px | 176.0 px | 235.1 to 242.0 px |
+| Untouchable in one vault | 0.416 s | 0.512 s | dash 0.240 s |
+| Untouchable in one backstep | 0.128 s | 0.144 s | |
+
+A longer vault (86 px) was tried and dropped: the skilled bot vaults toward foes, overshot them and fell earlier.
+Her escape covers less ground than Kael's dash and run, and she is untouchable for longer while she does it.
 
 ## Skill tree
 
