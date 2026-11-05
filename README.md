@@ -165,11 +165,13 @@ This game is also my sandbox for learning how to make pixel art and effects that
 There are no image files in the game: the hero, the enemies, the stage and every effect are drawn pixel by pixel at runtime.
 
 The stage is 320 by 180 art pixels, scaled up by a whole number so every pixel stays square.
+The frame itself is drawn at twice that, 640 by 360, so the heroes and the effects can carry detail half an art pixel fine.
+The stage, the foes and the text keep whole art pixels.
 Around the stage, the sky, ridge and stone floor are continued on the same pixel grid and fade out at the edges, so there is no frame.
 Each frame is drawn into two buffers, as in Sprite Fusion's effects:
 
 - a color buffer for opaque pixels, faded with a 4 by 4 Bayer dither, or truly blended for smoke and mist;
-- a light buffer for additive glow, composited on top.
+- a light buffer for additive glow, kept per art pixel and composited on top.
 
 The rules I took from the references, and where they show up:
 
@@ -183,11 +185,13 @@ Kael is drawn from a small skeleton every frame (`src/game/hero/drawHero.ts`).
 His spine runs from hip to neck through a chest point that a pose can push forward or back, so he can lean flat into a lunge, arch under a raised blade or hunch into a wind-up.
 A pose can also turn his back to the camera or mirror him to face behind, which is how the spins read as spins.
 Arms and legs are placed by two-bone reach, each elbow can bend either way, and each boot tilts to point the toes or rock onto the heel.
+The heroes are drawn at the frame's finer grid: each part is lit from the top left with a light edge and a shadow edge, plate armour carries a glint, and the head is a 24 by 22 pixel portrait with a lit eye.
+Both heroes share this rig and differ by their colours, head art and weapon (`src/constants/characters/`).
 Each body part is outlined where it overlaps the one behind it, and the whole figure gets a dark outline.
 Every move, action and state is a keyed clip sampled at 30 frames a second, with a pose keyed on nearly every frame; idle, walk, run, hang, charge and the throw wait loop (`src/constants/clips/`).
 His scarf and ponytail are verlet ropes, so they trail behind him as he runs and warps (`src/game/hero/chain.ts`).
 
-The README images are frames captured straight from the game canvas at 320 by 180 and scaled up with nearest-neighbour, so they show the real pixels.
+The README images were captured from the game canvas when it was 320 by 180 and scaled up with nearest-neighbour, so they show the earlier, coarser heroes.
 
 ## Project layout
 

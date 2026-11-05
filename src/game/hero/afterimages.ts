@@ -1,15 +1,15 @@
 import { POSES } from "../../constants/hero";
-import { SpriteCanvas } from "../../engine/sprite";
 import { PK } from "../../types/particle";
 import { lerp, TAU } from "../../utils/math";
 import { createWarpLine } from "../effects/warpLine";
 import { game, hero, lights, particles, rng } from "../state";
 import { drawHero } from "./drawHero";
+import { heroCanvas } from "./heroCanvas";
 import { heroLook } from "./look";
 import { skin } from "./skin";
 
 /** afterimages are drawn into their own canvas, then copied */
-export const ghostCanvas = new SpriteCanvas(80, 76, 40, 62);
+export const ghostCanvas = heroCanvas(80, 76, 40, 62);
 
 /** a line of fading copies of Kael from where he was to where he is going, and a streak of light between */
 export function leaveAfterimages(ox: number, oy: number, nx: number, ny: number): void {

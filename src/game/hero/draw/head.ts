@@ -4,21 +4,36 @@ import type { Pose } from "../../../types/pose";
 import { atNeck, headCenter } from "../../../utils/poseFrame";
 import { skin } from "../skin";
 
-/** the head on top of the spine, face or back of the head, then the scarf wrapped at the neck */
+/** the head on top of the spine, face or back of the head placed to the image pixel, then the scarf and its knot */
 export function drawHead(s: SpriteCanvas, p: Pose, back: boolean): void {
   const [cx, cy] = headCenter(p);
-  const map = { d: HC.hairDark, h: HC.hair, H: HC.hairLight, s: HC.skin, S: HC.skinShade, E: HC.eye, r: HC.scarfLight };
+  const snap = (v: number) => Math.round(v * s.res) / s.res;
+  const map = {
+    D: HC.hairDeep,
+    d: HC.hairDark,
+    h: HC.hair,
+    H: HC.hairLight,
+    W: HC.hairGlint,
+    r: HC.scarfLight,
+    L: HC.skinLight,
+    s: HC.skin,
+    S: HC.skinShade,
+    m: HC.skinDeep,
+    w: HC.eyeWhite,
+    I: HC.iris,
+    P: HC.pupil,
+  };
   s.begin();
-  s.pixels(back ? skin.headBack : skin.head, map, Math.round(cx) - 5, Math.round(cy) - 5);
+  s.pixels(back ? skin.headBack : skin.head, map, snap(cx) - 7, snap(cy) - 6);
   s.commit();
-  const a = atNeck(p, -2.6, 0.4);
-  const b = atNeck(p, 2.4, 0.4);
+  const [a, b] = [atNeck(p, -2.7, 0.4), atNeck(p, 2.5, 0.4)];
   s.begin();
-  s.stroke(a[0], a[1], b[0], b[1], 0.9, HC.scarf);
-  if (!back) {
-    const knot = atNeck(p, 0, -0.6);
-    s.set(knot[0], knot[1], HC.scarfLight);
-    s.set(knot[0] + 1, knot[1], HC.scarfLight);
-  }
+  s.stroke(a[0], a[1], b[0], b[1], 1, HC.scarf);
+  s.shadeEdges(HC.scarf, HC.scarfLight, HC.scarfDark);
+  s.commit();
+  if (back) return;
+  const knot = atNeck(p, 0.4, -0.4);
+  s.begin();
+  s.dot(knot[0], knot[1], 0.75, HC.scarfLight);
   s.commit();
 }

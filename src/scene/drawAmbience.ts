@@ -1,23 +1,11 @@
 import { PAL, WORLD_COLORS as WC } from "../constants/palette";
-import { ANCHORS, BRAZIERS, GROUND, H, W } from "../constants/stage";
-import {
-  color,
-  ellipseRing,
-  glow,
-  line,
-  place,
-  polygon,
-  px,
-  shade,
-  sparkle,
-  toScreenX,
-  toScreenY,
-} from "../engine/frame";
+import { ANCHORS, BRAZIERS, GROUND, W } from "../constants/stage";
+import { ellipseRing, glow, line, place, polygon, px, shade, sparkle, toScreenX } from "../engine/frame";
 import { findWarpTarget } from "../game/hero/warp";
 import { isHeld } from "../game/input";
 import { hasPerk } from "../game/progress";
 import { game, hero } from "../game/state";
-import { mix, WHITE } from "../utils/color";
+import { WHITE } from "../utils/color";
 import { TAU } from "../utils/math";
 import { paletteAt } from "./eras/sceneDef";
 import { scene } from "./scenery";
@@ -102,14 +90,18 @@ export function drawMist(): void {
   place();
   for (const m of MIST) {
     const x = ((m.x + game.t * m.v) % (W + 60)) - 30;
-    shade(x - m.r * 2, m.y - m.r * 0.5, x + m.r * 2, m.y + m.r * 0.5, (lx, ly) => {
-      const d = Math.hypot((lx - x) / (m.r * 2), (ly - m.y) / (m.r * 0.5));
-      if (d >= 1) return;
-      const sx = Math.floor(toScreenX(lx));
-      const sy = Math.floor(toScreenY(ly));
-      if (sx < 0 || sy < 0 || sx >= W || sy >= H) return;
-      const i = sy * W + sx;
-      color[i] = mix(color[i], tint, 0.09 * def.mist * (1 - d) * (1 - d));
-    });
+    shade(
+      x - m.r * 2,
+      m.y - m.r * 0.5,
+      x + m.r * 2,
+      m.y + m.r * 0.5,
+      (lx, ly, out) => {
+        const d = Math.hypot((lx - x) / (m.r * 2), (ly - m.y) / (m.r * 0.5));
+        if (d >= 1) return;
+        out.c = tint;
+        out.a = 0.09 * def.mist * (1 - d) * (1 - d);
+      },
+      { soft: true, coarse: true },
+    );
   }
 }
