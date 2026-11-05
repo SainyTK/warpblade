@@ -19,3 +19,6 @@ export const ease = {
 };
 /** the upward speed that rises this many pixels before gravity stops it */
 export const riseSpeed = (rise: number, gravity: number): number => Math.sqrt(2 * gravity * rise);
+/** the vertical speed that covers `dy` pixels (down is positive) in `flight` seconds under gravity */
+export const lobSpeed = (dy: number, flight: number, gravity: number): number =>
+  (dy - 0.5 * gravity * flight * flight) / flight;

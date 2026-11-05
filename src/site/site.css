@@ -1,5 +1,7 @@
 /* The site pages beside the game (patch notes): ordinary scrolling documents in the game's palette and
    fonts. The tokens come from tokens.css; the game's own no-scroll, no-select rules stay in styles.css. */
+@import "../fonts.css";
+@import "../tokens.css";
 html {
   scroll-padding-top: 88px;
   -webkit-text-size-adjust: 100%;

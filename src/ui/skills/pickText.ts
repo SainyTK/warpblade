@@ -1,7 +1,7 @@
 import { KIND_LABEL, PACE_LABEL } from "../../constants/skillLabels";
 import type { CharacterDef } from "../../types/character";
 import type { SkillBranch, SkillNode } from "../../types/skill";
-import { rivalNames } from "../../utils/skillPicks";
+import { evolutionsOf, nodeById, rivalNames } from "../../utils/skillPicks";
 
 /** the path a card comes from, with when it pays off */
 export const branchLine = (branch: SkillBranch): string =>
@@ -17,4 +17,18 @@ export function rankLine(node: SkillNode, rank: number): string {
 export function lockNote(c: CharacterDef, node: SkillNode, rank: number): string {
   const rivals = rivalNames(c, node);
   return rivals.length && !rank ? `Locks out ${rivals.join(" and ")} for this run.` : "";
+}
+
+/** how a spell or its partner passive leads to an evolution not learned yet, one sentence for each */
+export function recipeNotes(c: CharacterDef, node: SkillNode, ranks: Readonly<Record<string, number>>): string[] {
+  return evolutionsOf(c, node)
+    .filter((evolution) => !ranks[evolution.id] && evolution.evolves)
+    .map((evolution) => {
+      const spell = nodeById(c, evolution.evolves ?? "")?.name ?? "";
+      if (node.id === evolution.evolves) {
+        const partners = (evolution.mastered ?? []).map((id) => nodeById(c, id)?.name ?? "").join(" and ");
+        return `With ${partners} at full rank, ${spell} can evolve into ${evolution.name}.`;
+      }
+      return `${node.name} at full rank evolves ${spell} into ${evolution.name}.`;
+    });
 }

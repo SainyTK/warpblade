@@ -3,7 +3,7 @@ import type { UltimateId } from "../../types/skill";
 import { WHITE } from "../../utils/color";
 import { createFloorRing } from "../effects/floorRing";
 import { skin } from "../hero/skin";
-import { SKY_FLASH } from "../spells/bolt";
+import { SKY_FLASH } from "../spells/lightning";
 import { game, hero, lights } from "../state";
 import { shake } from "../world";
 import { castCrystalNova } from "./crystalNova";

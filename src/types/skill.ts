@@ -36,7 +36,10 @@ export type KaelPerk =
   | "warpStrike"
   | "fireSpell"
   | "iceSpell"
-  | "voltSpell";
+  | "voltSpell"
+  | "sunflask"
+  | "glacierBloom"
+  | "thunderhead";
 /** Abilities a skill node switches on. */
 export type Perk = KaelPerk | YsraPerk;
 export type UltimateId =
@@ -49,10 +52,10 @@ export type UltimateId =
   | "sunspear"
   | "phoenixDive"
   | "volcanicRift";
-export type SkillKind = "combo" | "movement" | "spell" | "enhance" | "passive" | "ultimate" | "fusion";
+export type SkillKind = "combo" | "movement" | "spell" | "enhance" | "passive" | "ultimate" | "fusion" | "evolution";
 /** when a path pays off */
 export type Pace = "early" | "steady" | "late";
-export type BranchId = "blade" | "phantom" | "arcane" | "lance" | "bastion" | "pyre" | "fusion";
+export type BranchId = "blade" | "phantom" | "arcane" | "lance" | "bastion" | "pyre" | "fusion" | "evolution";
 
 export interface SkillNode {
   id: string;
@@ -68,6 +71,10 @@ export interface SkillNode {
   crossRequires?: readonly string[];
   /** every one of these must be learned too: the ability this node improves */
   needs?: readonly string[];
+  /** an evolution: the spell node it evolves, which must be learned */
+  evolves?: string;
+  /** an evolution: nodes that must be at their full rank */
+  mastered?: readonly string[];
   /** nodes that share a group exclude each other: learning one locks the rest for the run */
   group?: string;
   /** added per rank */

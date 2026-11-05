@@ -2,6 +2,7 @@
    backdrop canvas continues the night scene around it, and the HUD, touch buttons and menu float on top.
    --art is the size of one art pixel in CSS pixels. One night-ruins look, dark only.
    The palette, fonts and base rules shared with the patch notes page live in tokens.css. */
+@import "./fonts.css";
 @import "./tokens.css";
 
 html,
@@ -266,6 +267,11 @@ body {
 .el.on.volt {
   color: var(--volt);
   border-color: var(--volt);
+}
+/* an evolved spell: a gold top edge, selected or not; the tab text is unchanged */
+.el.evolved,
+.el.on.evolved {
+  border-top-color: var(--gold);
 }
 /* Spell and warp cooldowns: a recharging tab dims and a pixel bar along its bottom fills as it recharges (--charged, 0 to 1).
    The tab blinks when it is ready again, and jolts when a press is refused while it recharges. */

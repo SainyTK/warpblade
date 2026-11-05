@@ -19,6 +19,9 @@ export const COIN_DROP: Record<EnemyType, number> = {
   maw: 9,
 };
 
+/** every foe drops this share more than its base; Lodestone's bonus adds to it */
+export const COIN_BONUS = 0.25;
+
 /** how dropped coins move: they pop out, fall and bounce, lie still, then fly to Kael */
 export const COIN_MOTION = {
   gravity: 520,

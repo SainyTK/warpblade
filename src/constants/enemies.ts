@@ -15,7 +15,7 @@ export const ENEMIES: Record<EnemyType, EnemyDef> = {
   wisp: { rank: "minion", hp: 34, xp: 8, weight: 0, launchable: true, name: "Wisp" },
   husk: { rank: "minion", hp: 72, xp: 14, weight: 0.5, launchable: true, name: "Husk" },
   brute: { rank: "mini", hp: 420, xp: 70, weight: 0.85, launchable: false, name: "Rift Brute" },
-  warden: { rank: "boss", hp: 900, xp: 220, weight: 0.95, launchable: false, name: "Rift Warden" },
+  warden: { rank: "boss", hp: 720, xp: 220, weight: 0.95, launchable: false, name: "Rift Warden" },
   // day, waves 1 to 5
   thornback: { rank: "minion", hp: 64, xp: 13, weight: 0.45, launchable: true, name: "Thornback" },
   moth: { rank: "minion", hp: 30, xp: 8, weight: 0, launchable: true, name: "Glimmer Moth" },

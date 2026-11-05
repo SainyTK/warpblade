@@ -1,6 +1,6 @@
 import { LAUNCH_WAIT_STEPS } from "../../constants/input";
 import { sfx } from "../../services/audio";
-import { pressAge, take, use } from "../input";
+import { isHeld, pressAge, take, use } from "../input";
 import { hasPerk } from "../progress";
 import { hero, progress } from "../state";
 import { isFree } from "./actions";
@@ -12,7 +12,7 @@ import { castCost, isRecharging, learnedElements, selectNextElement, startCast }
 import { startCharge } from "./ultimate";
 import { blink, startThrow, warpCost } from "./warp";
 
-/** Up: Skybreaker after the third hit, otherwise a jump; with Launcher, a moment's wait in case J follows */
+/** Up: Skybreaker after the third hit, otherwise a jump; with Launcher, it waits a moment for J, and as long as Up is held */
 function pressUp(): boolean {
   if (hasPerk("skybreaker") && comboOpen(3)) {
     startMove("skybreaker");
@@ -20,7 +20,7 @@ function pressUp(): boolean {
   }
   const inCombo = hero.state === "move" || (hero.link > 0 && hero.chain > 0);
   const mayLaunch = hasPerk("launcher") && inCombo && hero.ground && hero.chain < progress.comboLimit;
-  if (mayLaunch && pressAge("up") < LAUNCH_WAIT_STEPS) return false;
+  if (mayLaunch && (pressAge("up") < LAUNCH_WAIT_STEPS || isHeld("up"))) return false;
   return jump();
 }
 

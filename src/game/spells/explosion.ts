@@ -1,6 +1,7 @@
 import { FIRE_RAMP } from "../../constants/palette";
 import { GROUND } from "../../constants/stage";
 import { sfx } from "../../services/audio";
+import type { Blast } from "../../types/effect";
 import { PF, PK } from "../../types/particle";
 import { hex, WHITE } from "../../utils/color";
 import { TAU } from "../../utils/math";
@@ -11,9 +12,13 @@ import { enemyCenter } from "../enemies/enemy";
 import { game, lights, particles, rng } from "../state";
 import { dust, hitStop, shake } from "../world";
 
-/** A white core, rolling flame that cools into smoke, sparks, burning chunks that set the floor alight.
- *  Foes inside the radius take up to `damage`, less toward the edge, and burn for `burn` seconds. `brands` chunks fly off and set the floor alight. */
-export function explode(x: number, y: number, radius: number, damage: number, burn: number, brands = 4): void {
+/** the shake and hit-stop of a full-size burst */
+const FULL = { brands: 4, shake: 0.28, amp: 3, hitStop: 0.06 } as const;
+
+/** A white core, rolling flame that cools into smoke, sparks, burning chunks that set the floor alight. */
+export function explode(x: number, y: number, blast: Blast): void {
+  const { radius, damage, burn } = blast;
+  const brands = blast.brands ?? FULL.brands;
   const R = rng;
   const k = radius / 42;
   lights.add(x, y - 6, 80 * k, hex("#ff8a2a"), 1, 0.6);
@@ -57,7 +62,7 @@ export function explode(x: number, y: number, radius: number, damage: number, bu
     dealDamage(e, damage * (1 - d / (radius * 2)), { fromX: x, kx: Math.sign(ex - x) * 200, ky: -120, heavy: true });
     e.burn = burn;
   }
-  hitStop(0.06);
-  shake(0.28, 3);
+  hitStop(blast.hitStop ?? FULL.hitStop);
+  shake(blast.shake ?? FULL.shake, blast.amp ?? FULL.amp);
   sfx.boom();
 }

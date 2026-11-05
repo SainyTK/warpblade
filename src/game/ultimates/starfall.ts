@@ -49,7 +49,7 @@ function createMeteor(x: number, floor: number, delay: number, damage: number): 
           },
         );
       if (o.y < floor) return true;
-      explode(x, floor, RADIUS, damage, BURN, 1);
+      explode(x, floor, { radius: RADIUS, damage, burn: BURN, brands: 1 });
       return false;
     },
     draw() {

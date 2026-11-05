@@ -1,4 +1,4 @@
-import { INPUT_BUFFER_STEPS } from "../constants/input";
+import { INPUT_BUFFER_STEPS, KEPT_DURING_MOVE } from "../constants/input";
 import type { InputAction } from "../types/input";
 
 /** Which actions are held, and which were pressed recently: a press stays usable for a few steps until something uses it. */
@@ -19,10 +19,11 @@ export function releaseAll(): void {
 export function clearPresses(): void {
   pressed.clear();
 }
-/** called once per simulation step: unused presses expire after the buffer */
-export function agePresses(): void {
+/** called once per simulation step: unused presses expire after the buffer, except the kept ones while a move plays */
+export function agePresses(moving: boolean): void {
   for (const [a, age] of pressed) {
-    if (age >= INPUT_BUFFER_STEPS) pressed.delete(a);
+    const kept = moving && KEPT_DURING_MOVE.includes(a);
+    if (age >= INPUT_BUFFER_STEPS && !kept) pressed.delete(a);
     else pressed.set(a, age + 1);
   }
 }

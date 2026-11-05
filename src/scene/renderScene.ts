@@ -1,5 +1,5 @@
 import { beginFrame, composite, setShake } from "../engine/frame";
-import { SKY_FLASH } from "../game/spells/bolt";
+import { SKY_FLASH } from "../game/spells/lightning";
 import { game, hero, lights, particles, rng } from "../game/state";
 import { settings } from "../store/settings";
 import { drawEnemies, drawHeroLayer, drawPickups } from "./drawActors";

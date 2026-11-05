@@ -50,6 +50,12 @@ His crystal sword can be thrown, and wherever it lands, he follows.
   Deep Breath adds a third and then a fourth dash, and Quickstep refills the bar faster.
 - **Skill points spent between waves.** Every level up gives a skill point, and when a wave is cleared the fight pauses and three cards offer skills Kael can learn now, each with its own pixel icon. Blade is strong early, Phantom trades power for mobility and crits, Arcane is weak early and strong late. Fusion skills join two paths once both are started: shatter frozen foes, set off burning ones, charge foes by dashing through them, and more. Some skills lock out their rivals for the run, and passives come back until every rank is learned.
   If too few skills are left to fill the cards, Second Wind fills the rest and restores all HP and MP.
+- **Evolutions.** A learned skill with its partner passive at full rank evolves from level 6: the next wave pick offers the evolution as a gold first card.
+  Fire Flask with Mana Font becomes Sunflask, whose burst throws three smaller flasks that fly at nearby foes and burst on them.
+  Ice Spikes with Swift Sigils becomes Glacier Bloom, with a second line of spikes behind Kael and a crown spire that bursts into freezing shards.
+  Lightning with Arcane Power becomes Thunderhead, a storm cloud that calls three more bolts on foes beneath it.
+  Ysra's Flame Pillar with Kindling becomes Pyre Colonnade, a hotter pillar with two more bursting up on either side a moment later.
+  The cards of a skill and its partner say what they evolve into, and an evolved skill's HUD tab gets a gold top edge.
 - **Charged ultimates.** Crystal Nova, the weakest, can be learned from level 3; stronger ones replace it: a storm of blades, a legion of phantoms, falling stars or a lightning tempest.
   Hold U through four levels; level 4 spends a full MP bar. After a strike the ultimate recharges for 20 seconds, the longest wait of any ability, and its row on the HUD dims with a bar filling under it.
 - **Experience to pick up.** Slain foes drop lime orbs of experience that bounce on the floor. Walk over them to collect them; any left behind fly to Kael after 4 seconds.

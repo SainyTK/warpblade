@@ -1,0 +1,311 @@
+{
+  "version": "0.2.0",
+  "kind": "big",
+  "date": "2026-11-05",
+  "title": "Evolutions",
+  "tagline": "Raise a skill's partner passive to full rank and the skill evolves at the next wave pick. Kael's three spells and Ysra's Flame Pillar each have an evolved form.",
+  "intro": "This is our first patch, and it is about giving every run something to build toward. From level 6, a skill whose partner passive is at full rank can evolve, and the next wave pick deals its evolution as a gold card. Kael's Fire Flask, Ice Spikes and Lightning each get one, and Ysra's Flame Pillar becomes Pyre Colonnade. The price is real: points spent on a spell or rite line are points you do not spend on your combo, movement or an ultimate. Along with it, a jump pressed during an attack now works, the page no longer flashes unstyled on load, the Rift Warden has less HP and every foe drops more coins.",
+  "highlights": [
+    {
+      "title": "Evolutions",
+      "text": "From level 6, a learned skill with its partner passive at full rank evolves. The next wave pick deals the evolution as a gold first card, and the cards of the skill and its partner tell you the recipe while you work toward it.",
+      "media": {
+        "kind": "image",
+        "file": "evolution-pick.png",
+        "alt": "The Wave 2 Clear pick for Kael: the first card is the gold Sunflask evolution card, beside an Arcane Power card whose yellow note says Arcane Power at full rank evolves Lightning into Thunderhead, and a Keen Edge card.",
+        "width": 1280,
+        "height": 720
+      }
+    },
+    {
+      "title": "Sunflask",
+      "text": "Kael's Fire Flask with Mana Font at full rank becomes Sunflask. The flask is bigger, and its burst throws three smaller flasks that fly at the nearest foes and burst on them.",
+      "media": {
+        "kind": "video",
+        "file": "sunflask.mp4",
+        "poster": "sunflask.png",
+        "alt": "Kael stands on the left facing two thornbacks and two moths, throws a large fire flask that bursts in a gold blast among the moths, and three smaller flasks lob out of the blast and burst on the thornbacks, leaving fire on the floor.",
+        "width": 640,
+        "height": 360
+      }
+    },
+    {
+      "title": "Glacier Bloom",
+      "text": "Kael's Ice Spikes with Swift Sigils at full rank becomes Glacier Bloom. A second line of spikes erupts behind him, and the last spike ahead grows into a crown spire that bursts into freezing shards.",
+      "media": {
+        "kind": "video",
+        "file": "glacier-bloom.mp4",
+        "poster": "glacier-bloom.png",
+        "alt": "Kael casts ice between thornbacks on either side: a line of ice spikes erupts in front of him and a second line behind him, and a tall crown spire at the end of the front line stands a moment longer, then bursts into shards.",
+        "width": 640,
+        "height": 360
+      }
+    },
+    {
+      "title": "Thunderhead",
+      "text": "Kael's Lightning with Arcane Power at full rank becomes Thunderhead. A storm cloud gathers over the strike, drifts after the nearest foe and calls three more bolts onto foes beneath it.",
+      "media": {
+        "kind": "video",
+        "file": "thunderhead.mp4",
+        "poster": "thunderhead.png",
+        "alt": "Kael calls lightning down on a moth in front of him, a dark storm cloud forms over the strike below the HUD and drifts after the thornbacks, three more bolts drop from its glowing underside onto the foes beneath it, and the cloud fades.",
+        "width": 640,
+        "height": 360
+      }
+    },
+    {
+      "title": "Pyre Colonnade",
+      "text": "Ysra's Flame Pillar with Kindling at full rank becomes Pyre Colonnade. A ringed sigil marks the cast, the main pillar burns hotter, and two smaller pillars burst up on either side a beat later.",
+      "media": {
+        "kind": "video",
+        "file": "pyre-colonnade.mp4",
+        "poster": "pyre-colonnade.png",
+        "alt": "Ysra raises her glaive in the rite pose facing a spread group of thornbacks and moths; a ringed sigil glows on the floor with a smaller sigil on each side, the main fire pillar bursts up, and a beat later two flank pillars erupt and throw the foes into the air.",
+        "width": 640,
+        "height": 360
+      }
+    }
+  ],
+  "sections": [
+    {
+      "id": "heroes",
+      "entries": [
+        {
+          "name": "Kael",
+          "tag": "new",
+          "summary": "Each of Kael's three spells now has an evolved form to build toward.",
+          "context": "We want a spell build to have something to chase. Each spell now pairs with one Arcane passive, and maxing that passive unlocks the evolution. Against a single foe up close, Sunflask and Glacier Bloom hit about as hard as the base spells; their gain shows on groups, and a coming small patch will even out all four evolutions.",
+          "changes": [
+            {
+              "kind": "note",
+              "text": "New: Sunflask, from Fire Flask with Mana Font 3/3. The burst throws three child flasks at the nearest foes within reach, each with 0.6 times the radius and half the damage of the main burst, and the same burn."
+            },
+            {
+              "kind": "note",
+              "text": "New: Glacier Bloom, from Ice Spikes with Swift Sigils 3/3. Four spikes erupt behind Kael as well, and the last spike ahead becomes a crown spire that bursts for 1.2 times ability power and freezes nearby foes for 1.5 seconds."
+            },
+            {
+              "kind": "note",
+              "text": "New: Thunderhead, from Lightning with Arcane Power 4/4. A storm cloud calls three more bolts 0.8, 1.6 and 2.4 seconds after the strike, each dealing 1.5 times ability power and arcing to one more foe for 1 times."
+            },
+            {
+              "kind": "stat",
+              "label": "Fire spell damage per cast, one foe / group of three (our tests)",
+              "before": "8.0 / 11.9 times ability power",
+              "after": "8.0 / 33.5 times ability power (Sunflask)"
+            },
+            {
+              "kind": "stat",
+              "label": "Ice spell damage per cast, one foe / group of three (our tests)",
+              "before": "11.0 / 19.8 times ability power",
+              "after": "12.8 / 22.8 times ability power (Glacier Bloom)"
+            },
+            {
+              "kind": "stat",
+              "label": "Lightning damage per cast, one foe / group of three (our tests)",
+              "before": "4.0 / 6.0 times ability power",
+              "after": "8.5 / 13.4 times ability power (Thunderhead)"
+            },
+            {
+              "kind": "note",
+              "text": "Cooldowns and MP costs stay the same after evolving: fire 7 seconds, ice 8 seconds, lightning 5.5 seconds, 18 MP (13.5 with Quick Cast). Pyromancy, Cryomancy and Stormcalling still apply to the evolved spells."
+            }
+          ]
+        },
+        {
+          "name": "Ysra",
+          "tag": "new",
+          "summary": "Ysra's Flame Pillar can now evolve into Pyre Colonnade, three pillars from one rite.",
+          "context": "Ysra has rites where Kael has spells, so her evolution builds on the rite line. Kindling is that line's own passive, and players who lean on Flame Pillar already tend to max it, so the recipe follows how she is played.",
+          "changes": [
+            {
+              "kind": "note",
+              "text": "New: Pyre Colonnade, from Flame Pillar with Kindling 3/3."
+            },
+            {
+              "kind": "stat",
+              "label": "Main pillar damage",
+              "before": "5.5 times ability power",
+              "after": "6.6 times ability power"
+            },
+            {
+              "kind": "stat",
+              "label": "Flank pillars, 0.12 seconds after the main one",
+              "before": "None",
+              "after": "Two, each 3.85 times ability power and 64 pixels tall (the main pillar is 84)"
+            },
+            {
+              "kind": "stat",
+              "label": "Damage per cast, one foe / group of three (our tests)",
+              "before": "6.9 / 6.9 times ability power",
+              "after": "8.1 / 13.4 times ability power"
+            },
+            {
+              "kind": "note",
+              "text": "The Heat cost stays 40 (28 with Hearthfire), and Hearthfire still heals once per cast. Hot Iron's free pillar stays a single Flame Pillar."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "foes",
+      "entries": [
+        {
+          "name": "Rift Warden",
+          "tag": "nerf",
+          "summary": "The Rift Warden at waves 20 and 30 has a fifth less HP.",
+          "context": "At wave 20 the Warden has by far the largest HP pool in the stage, and our test runs fell long before they could wear it down. We cut its HP and left its attacks as they are, so we can see what this one change does before we touch anything else.",
+          "changes": [
+            {
+              "kind": "stat",
+              "label": "Base HP",
+              "before": "900",
+              "after": "720"
+            },
+            {
+              "kind": "stat",
+              "label": "HP at wave 20",
+              "before": "2439",
+              "after": "1951"
+            },
+            {
+              "kind": "stat",
+              "label": "HP at wave 30",
+              "before": "3249",
+              "after": "2599"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "systems",
+      "entries": [
+        {
+          "name": "Evolutions",
+          "tag": "new",
+          "summary": "Max the right passive, reach level 6, and a skill evolves at the next wave pick.",
+          "context": "We want every run to tell a build story with a payoff at the end. Evolutions reward a focused build, and the points they cost are points you do not spend elsewhere.",
+          "changes": [
+            {
+              "kind": "note",
+              "text": "An evolution is offered once its skill is learned, its partner passive is at full rank and the hero is level 6 or higher. Level 6 usually arrives around wave 9."
+            },
+            {
+              "kind": "note",
+              "text": "A ready evolution always takes the first card of the pick, in gold. A pick shows at most one; a second ready evolution comes at the next pick."
+            },
+            {
+              "kind": "note",
+              "text": "While an evolution is not learned yet, the cards of its skill and its partner carry a gold note with the recipe."
+            },
+            {
+              "kind": "note",
+              "text": "Taking an evolution flashes the hero gold, shows its name as a banner, and gives the skill's HUD tab (FIRE, ICE, BOLT or PILLAR) a gold top edge."
+            },
+            {
+              "kind": "note",
+              "text": "Evolutions last for the run and reset with it. Picks that come before any evolution is ready are dealt the same way as before."
+            }
+          ],
+          "media": {
+            "kind": "image",
+            "file": "evolution-sunflask.png",
+            "alt": "Right after Kael takes Sunflask: a gold ring spreads across the floor around him, he glows, the word SUNFLASK shows above the stage, and the FIRE tab at the top right has a gold top edge.",
+            "width": 1280,
+            "height": 720
+          }
+        },
+        {
+          "name": "Coins",
+          "tag": "buff",
+          "summary": "Every foe drops a quarter more coins, so shop upgrades come sooner.",
+          "context": "Our test runs banked 12 to 20 coins, while first shop levels cost 20 to 30, so most runs bought one level at most. Shop prices stay the same.",
+          "changes": [
+            {
+              "kind": "stat",
+              "label": "Coins dropped by every foe",
+              "before": "Base drop",
+              "after": "Base drop +25%"
+            },
+            {
+              "kind": "stat",
+              "label": "With Lodestone",
+              "before": "Base drop +25%",
+              "after": "Base drop +50%"
+            },
+            {
+              "kind": "stat",
+              "label": "Coins from clearing waves 1 to 10, on average",
+              "before": "72",
+              "after": "90"
+            },
+            {
+              "kind": "note",
+              "text": "A fraction of a coin left over is a chance at one more coin."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "bugfixes",
+      "entries": [
+        {
+          "name": "Flash of unstyled page on load",
+          "tag": "fix",
+          "summary": "The game and the patch notes page now open straight onto the game's dark background, with no raw page showing first.",
+          "context": "The styles and fonts loaded after the page had already drawn, so every load showed a moment of unstyled text and buttons. They now load before anything is drawn.",
+          "changes": [
+            {
+              "kind": "stat",
+              "label": "First thing drawn on load",
+              "before": "Unstyled page text and buttons",
+              "after": "The game's dark background"
+            },
+            {
+              "kind": "note",
+              "text": "The fonts start loading with the page, so text appears in the game's own fonts sooner."
+            }
+          ],
+          "feedback": [4]
+        },
+        {
+          "name": "Jump pressed during an attack",
+          "tag": "fix",
+          "summary": "A jump pressed while a blow is playing now jumps you out of it once the blow lands, for Kael and Ysra, on keyboard and touch.",
+          "context": "The game kept a jump press for only 0.15 seconds, and a blow could not be left that early, so a jump pressed just after J was lost. A jump press made during a move now waits until the move can be left.",
+          "changes": [
+            {
+              "kind": "stat",
+              "label": "Kael leaves the ground after J then Up 30 to 120 ms later, keyboard",
+              "before": "12 of 20",
+              "after": "20 of 20"
+            },
+            {
+              "kind": "stat",
+              "label": "Same test on the touch controller",
+              "before": "9 of 20",
+              "after": "20 of 20"
+            },
+            {
+              "kind": "note",
+              "text": "Kael with Rising Launcher: hold Up during a ground combo and press J for the launcher. A tapped Up jumps out of the blow."
+            },
+            {
+              "kind": "note",
+              "text": "Ysra: Up held with J during her string still gives the Skyhook."
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "feedback": [
+    {
+      "id": 4,
+      "summary": "Reloading the game briefly showed unstyled page content before the styled page appeared."
+    }
+  ]
+}

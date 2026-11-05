@@ -8,6 +8,7 @@ export const KIND_LABEL: Record<SkillKind, string> = {
   passive: "Passive",
   ultimate: "Ultimate",
   fusion: "Fusion",
+  evolution: "Evolution",
 };
 export const PACE_LABEL: Record<Pace, string> = { early: "Strong early", steady: "Steady", late: "Strong late" };
 export const ULT_LABEL: Record<UltimateId, string> = {

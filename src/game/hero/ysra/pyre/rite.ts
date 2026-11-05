@@ -6,9 +6,11 @@ import { sfx } from "../../../../services/audio";
 import { PK } from "../../../../types/particle";
 import type { RiteDef, RiteId } from "../../../../types/ysra/pyre";
 import { createFloorRing } from "../../../effects/floorRing";
+import { hasPerk } from "../../../progress";
 import { plantBrazier } from "../../../spells/rites/brazier";
 import { castFlamePillar } from "../../../spells/rites/flamePillar";
 import { castFlare } from "../../../spells/rites/flare";
+import { castPyreColonnade } from "../../../spells/rites/pyreColonnade";
 import { game, hero, lights, particles, rng } from "../../../state";
 import { surfaceBelow } from "../../../world";
 import { isFree, setState, settle } from "../../actions";
@@ -55,12 +57,13 @@ function igniteOverheat(): void {
   sfx.noise(0.6, 600, 3000, 0.16, "bandpass", 0.9);
 }
 
-/** she plants the glaive and the rite bursts out */
+/** she plants the glaive and the rite bursts out; an evolved Flame Pillar bursts as Pyre Colonnade */
 function release(): void {
   if (calling === "overheat") return igniteOverheat();
   const x =
     calling === "flamePillar" ? pillarSpot() : calling === "brazier" ? hero.x + hero.face * BRAZIER.ahead : hero.x;
-  letLoose(calling, x);
+  if (calling === "flamePillar" && hasPerk("pyreColonnade")) castPyreColonnade(x, hero.y);
+  else letLoose(calling, x);
   healFromRite();
 }
 

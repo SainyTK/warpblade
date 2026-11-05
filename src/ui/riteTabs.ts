@@ -1,11 +1,13 @@
+import { EVOLVED_RITE } from "../constants/evolutions";
 import { RITES } from "../constants/ysra/rites";
 import { heat, heatFlash } from "../game/hero/ysra/pyre/heat";
 import { knowsRite, riteCost, selectedRite } from "../game/hero/ysra/pyre/riteChoice";
+import { hasPerk } from "../game/progress";
 import { character } from "../game/state";
 import { byId } from "./dom";
 import { createRechargeTab } from "./rechargeTab";
 
-/** Ysra's rite tabs in place of the element tabs: the selected rite, and a bar that fills as Heat comes to cover each */
+/** Ysra's rite tabs in place of the element tabs: the selected rite, a bar that fills as Heat comes to cover each, and a gold top edge once a rite evolves */
 const box = byId("riteTabs");
 const tabs = RITES.map((rite) => {
   const el = document.createElement("span");
@@ -27,6 +29,8 @@ export function updateRiteTabs(): void {
     const known = knowsRite(rite);
     if (el.hidden === known) el.hidden = !known;
     el.classList.toggle("on", rite === selected);
+    const perk = EVOLVED_RITE[rite.id];
+    el.classList.toggle("evolved", !!perk && hasPerk(perk));
     tab.update(Math.max(0, 1 - heat() / riteCost(rite)));
   }
   const flash = heatFlash();
