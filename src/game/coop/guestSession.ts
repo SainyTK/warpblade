@@ -172,7 +172,8 @@ export class GuestSession {
     updateHud();
     syncPickDialog();
     syncTouch(!isMenuOpen() && game.mode === "play" && !this.hud?.down);
-    syncCoopStatus(true);
+    // the line sits where the pause menu opens, so it waits under the menu
+    syncCoopStatus(!isMenuOpen());
   }
 
   /** this player's hero and the shared game as the host last told it, for the HUD and the cards */

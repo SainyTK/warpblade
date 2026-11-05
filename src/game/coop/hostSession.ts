@@ -208,7 +208,8 @@ export class HostSession {
     updateHud();
     syncPickDialog();
     syncTouch(!isMenuOpen() && game.mode === "play" && hero.state !== "dead");
-    syncCoopStatus(true);
+    // the line sits where the pause menu opens, so it waits under the menu
+    syncCoopStatus(!isMenuOpen());
     if (now - this.lastHud < 1000 / HUD_RATE) return;
     this.lastHud = now;
     for (const seat of run.seats) this.sendHud(run, seat);
