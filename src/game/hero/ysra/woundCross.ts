@@ -4,9 +4,12 @@ import type { Hero } from "../../../types/hero";
 import type { WoundCross } from "../../../types/lowHealth";
 import type { Pose } from "../../../types/pose";
 import { blendPose } from "../../../utils/poseBlend";
+import { objectMemory, rememberPerSeat } from "../../seatMemory";
 
 /** the one owner of Ysra's cross into and out of her wounded idle */
 const cross: WoundCross = { state: "idle", from: null, since: 0, frames: 0 };
+// each co-op player's Ysra crosses from her own last pose; only the host poses heroes
+rememberPerSeat(objectMemory(cross, true));
 
 /**
  * Ysra's clips start and end on her stand, so they meet without a jump; her wounded idle does not. While she is

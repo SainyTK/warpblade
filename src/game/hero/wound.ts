@@ -5,10 +5,13 @@ import type { Pose } from "../../types/pose";
 import { dangerTarget } from "../../utils/danger";
 import { approach, smooth } from "../../utils/math";
 import { blendPose } from "../../utils/poseBlend";
+import { objectMemory, rememberPerSeat } from "../seatMemory";
 import { hero, progress } from "../state";
 
 /** the one owner of how far the hero's idle has sunk into the wounded stance */
 const wound: WoundState = { weight: 0, frame: Number.NaN };
+// each co-op player's hero sinks into the stance by their own HP; only the host poses heroes
+rememberPerSeat(objectMemory(wound, true));
 
 /**
  * How far the idle has sunk into the wounded stance at game time t, 0 to 1. It moves once per animation frame, an
