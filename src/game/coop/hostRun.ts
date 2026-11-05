@@ -16,7 +16,7 @@ import { choosePick, gainXp } from "../progress";
 import { resetRun } from "../run";
 import { seatMemories } from "../seatMemory";
 import { game, hero, ponytail, progress, scarf, setCharacter } from "../state";
-import { drawTag } from "./drawTag";
+import { drawTag, stackTags, type TagSpot, tagSpot } from "./drawTag";
 import { freshSaved, type Seat } from "./seat";
 
 /** where each player starts, by place in the room */
@@ -243,7 +243,9 @@ export class HostRun implements CoopHooks {
 
   drawOverlay(): void {
     if (this.seats.length < 2) return;
-    this.eachHero(() => drawTag(this.current.slot, this.current.down || hero.state === "dead"));
+    const spots: TagSpot[] = [];
+    this.eachHero(() => spots.push(tagSpot(this.current.slot)));
+    for (const spot of stackTags(spots)) drawTag(spot);
   }
 
   scaleFoes(foes: readonly EnemyType[]): EnemyType[] {

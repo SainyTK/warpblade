@@ -245,14 +245,14 @@ export class HostSession {
   close(reason = ""): void {
     if (this.closed) return;
     this.closed = true;
-    this.run?.finish("fallen");
+    resetRoom(reason);
+    this.run?.finish("left");
     window.clearInterval(this.pinger);
     removeEventListener("pagehide", this.onPageHide);
     for (const peer of this.guests.keys()) this.link?.send(peer, { t: "closed" });
     const link = this.link;
     // give the goodbyes a moment to leave before the connections close
     window.setTimeout(() => link?.close(), 300);
-    resetRoom(reason);
     if (reason) openMenu("title", "coop");
   }
 

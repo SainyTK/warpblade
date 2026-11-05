@@ -41,7 +41,7 @@
 .coop-players {
   display: grid;
   gap: 4px;
-  width: min(300px, 100%);
+  width: min(320px, 100%);
   margin: 0;
   padding: 0;
   list-style: none;
@@ -84,7 +84,14 @@
   opacity: 0;
   pointer-events: none;
 }
+.coop-lobby .menu-item {
+  white-space: nowrap;
+}
 @media (max-height: 520px) {
+  /* phones held sideways: players on the left, actions on the right */
+  .menu-panel:has(.coop-lobby) {
+    width: min(640px, 100%);
+  }
   .coop-lobby {
     grid-template-columns: auto auto;
     align-items: start;

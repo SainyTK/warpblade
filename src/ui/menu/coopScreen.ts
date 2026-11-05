@@ -98,7 +98,7 @@ function heroRow(): HTMLButtonElement {
   row.type = "button";
   row.dataset.nav = "";
   const value = el("span", "option-value", `< ${character.name} >`);
-  row.append(el("span", "option-name", "Your hero"), value);
+  row.append(el("span", "option-name", "Hero"), value);
   const step = (by: number): void => {
     const i = CHARACTERS.indexOf(character);
     const next = CHARACTERS[(i + by + CHARACTERS.length) % CHARACTERS.length];

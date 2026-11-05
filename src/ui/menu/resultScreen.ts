@@ -3,9 +3,12 @@ import { lastRun } from "../../game/runEnd";
 import { inRoom } from "../../store/coop";
 import { bank } from "../../store/meta";
 import type { MenuView } from "../../types/menu";
+import type { RunOutcome } from "../../types/run";
 import { coinAmount } from "../coinIcon";
 import { menuItem } from "./menuItem";
 import { showScreen } from "./menuState";
+
+const RESULT_TITLES: Record<RunOutcome, string> = { clear: "Stage clear", fallen: "Fallen", left: "Room closed" };
 
 function line(label: string, value: HTMLElement): HTMLElement {
   const row = document.createElement("div");
@@ -36,7 +39,7 @@ export function resultScreen(): MenuView {
   content.className = "menu-main";
   content.append(summary, list);
   return {
-    title: run.outcome === "clear" ? "Stage clear" : "Fallen",
+    title: RESULT_TITLES[run.outcome],
     subtitle: `Wave ${run.wave} of ${STAGE_WAVES}`,
     content,
   };

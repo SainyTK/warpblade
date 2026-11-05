@@ -1,5 +1,6 @@
 import { CHARACTERS } from "../../constants/characters";
 import { PING_MS, QUIET_LIMIT_MS } from "../../constants/coop";
+import { STAND } from "../../constants/hero";
 import { VOLUME_STEPS } from "../../constants/settings";
 import { GAME_VERSION } from "../../constants/sitePages";
 import { type GuestLink, joinRoom } from "../../services/coop/guestLink";
@@ -88,7 +89,7 @@ export class GuestSession {
         updateRoom({ phase: "lobby" });
         break;
       case "closed":
-        this.close("The host left, so the room has closed.");
+        this.close("The host left, so the room has closed. Coins you picked up are in your bank.");
         break;
     }
   }
@@ -181,6 +182,7 @@ export class GuestSession {
     game.coinDrops = [];
     game.enemies = [];
     hero.state = "idle";
+    hero.pose = STAND;
     setCharacter(CHARACTERS.find((c) => c.id === loadHeroChoice()) ?? character);
     resetRun("");
     hero.inv = 0;
@@ -191,13 +193,10 @@ export class GuestSession {
   close(reason = ""): void {
     if (this.closed) return;
     this.closed = true;
-    const wasPlaying = this.playing;
-    const coins = game.coins;
-    this.endRun(coins);
+    this.endRun(game.coins);
     window.clearInterval(this.pinger);
     this.link?.close();
-    const kept = wasPlaying && reason ? ` You keep the ${coins} coin${coins === 1 ? "" : "s"} you picked up.` : "";
-    resetRoom(reason + kept);
+    resetRoom(reason);
     if (reason) openMenu("title", "coop");
   }
 }
