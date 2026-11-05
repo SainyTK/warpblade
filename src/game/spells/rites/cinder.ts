@@ -5,6 +5,7 @@ import type { Effect } from "../../../types/effect";
 import { PK } from "../../../types/particle";
 import { clamp } from "../../../utils/math";
 import { dealDamage } from "../../damage";
+import { ignite } from "../../enemies/burn";
 import { enemyBox } from "../../enemies/enemy";
 import { game, particles, progress, rng } from "../../state";
 import { boxHit } from "../../world";
@@ -27,7 +28,7 @@ function createCinder(x: number, y: number): Effect {
         for (const e of game.enemies)
           if (e.hp > 0 && boxHit(enemyBox(e), [x - A.halfWidth, y - 12, x + A.halfWidth, y])) {
             dealDamage(e, progress.stats.ap * A.power, { dot: true });
-            e.burn = Math.max(e.burn, A.burn);
+            ignite(e, A.burn);
           }
       }
       if (rng.chance(0.08))

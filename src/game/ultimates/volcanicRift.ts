@@ -10,6 +10,7 @@ import { emberBurst } from "../effects/emberBurst";
 import { createEruption } from "../effects/eruption";
 import { createFloorCrack, type FloorCrack } from "../effects/floorCrack";
 import { createImpact } from "../effects/impact";
+import { ignite } from "../enemies/burn";
 import { enemyBox, enemyCenter } from "../enemies/enemy";
 import { game, hero, lights, progress, rng } from "../state";
 import { boxHit, shake, surfaceBelow } from "../world";
@@ -53,7 +54,7 @@ export function castVolcanicRift(level: number): void {
       struck.add(e);
       const [cx, cy] = enemyCenter(e);
       dealDamage(e, damage, { fromX: (bx0 + bx1) / 2, kx: 0, launch: -230, heavy: true });
-      e.burn = Math.max(e.burn, BURN);
+      ignite(e, BURN);
       game.fx.push(createImpact(cx, cy, Math.sign(cx - x0) || 1, true));
     }
   };

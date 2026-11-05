@@ -56,6 +56,8 @@ export interface Enemy {
   frozen: number;
   burn: number;
   burnTick: number;
+  /** in a co-op room, a mark for the hero who set it burning; null in solo play */
+  burner: object | null;
   shock: number;
   /** knocked down or tripped: cannot act */
   stun: number;

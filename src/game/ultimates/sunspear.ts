@@ -8,6 +8,7 @@ import { createBurningSpear, type SpearFlight } from "../effects/burningSpear";
 import { emberBurst } from "../effects/emberBurst";
 import { createGlint } from "../effects/flash";
 import { createImpact } from "../effects/impact";
+import { ignite } from "../enemies/burn";
 import { enemyCenter } from "../enemies/enemy";
 import { game, hero, lights, progress, rng } from "../state";
 import { hitStop, shake, surfaceBelow } from "../world";
@@ -37,7 +38,7 @@ function spearCast(level: number) {
     struck.add(e);
     const [cx, cy] = enemyCenter(e);
     dealDamage(e, damage, { fromX, kx: dir * 120, ky: -70, launch: launch ? -160 : undefined, heavy: true });
-    e.burn = Math.max(e.burn, BURN);
+    ignite(e, BURN);
     game.fx.push(createImpact(cx, cy, dir, true));
     sfx.hit(true, 0.8);
   };

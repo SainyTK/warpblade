@@ -8,6 +8,7 @@ import { TAU } from "../../utils/math";
 import { dealDamage } from "../damage";
 import { createBlastCore } from "../effects/flash";
 import { createFloorRing } from "../effects/floorRing";
+import { markBurner } from "../enemies/burn";
 import { enemyCenter } from "../enemies/enemy";
 import { game, lights, particles, rng } from "../state";
 import { dust, hitStop, shake } from "../world";
@@ -61,6 +62,7 @@ export function explode(x: number, y: number, blast: Blast): void {
     if (d >= radius) continue;
     dealDamage(e, damage * (1 - d / (radius * 2)), { fromX: x, kx: Math.sign(ex - x) * 200, ky: -120, heavy: true });
     e.burn = burn;
+    markBurner(e);
   }
   hitStop(blast.hitStop ?? FULL.hitStop);
   shake(blast.shake ?? FULL.shake, blast.amp ?? FULL.amp);

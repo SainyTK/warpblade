@@ -3,6 +3,7 @@ import type { Enemy } from "../../types/enemy";
 import { PK } from "../../types/particle";
 import { dealDamage } from "../damage";
 import { particles, progress, rng } from "../state";
+import { actAsBurner } from "./burn";
 import { enemyCenter } from "./enemy";
 
 /** burn ticks this fraction of ability power */
@@ -38,6 +39,7 @@ export function updateStatus(e: Enemy, dt: number): number {
     e.burnTick -= dt;
     if (e.burnTick <= 0) {
       e.burnTick = 0.4;
+      actAsBurner(e);
       dealDamage(e, progress.stats.ap * BURN_POWER, { dot: true });
     }
   }

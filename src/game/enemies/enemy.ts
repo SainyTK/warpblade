@@ -35,6 +35,7 @@ export function makeEnemy(type: EnemyType, x: number, y: number, wave: number, x
     frozen: 0,
     burn: 0,
     burnTick: 0,
+    burner: null,
     shock: 0,
     stun: 0,
     air: false,

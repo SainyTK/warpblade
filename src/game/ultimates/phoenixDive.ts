@@ -10,6 +10,7 @@ import { dealDamage } from "../damage";
 import { emberBurst } from "../effects/emberBurst";
 import { createImpact } from "../effects/impact";
 import { drawPhoenix } from "../effects/phoenix";
+import { ignite } from "../enemies/burn";
 import { enemyCenter } from "../enemies/enemy";
 import { game, hero, lights, particles, progress, rng } from "../state";
 import { hitStop, shake } from "../world";
@@ -66,7 +67,7 @@ export function castPhoenixDive(level: number): void {
       if (Math.hypot(cx - spot.x, (cy - spot.floor + 10) * 1.4) > RADIUS) continue;
       const dir = Math.sign(cx - spot.x) || side;
       dealDamage(e, damage, { fromX: spot.x, kx: dir * 150, launch: -190, heavy: true });
-      e.burn = Math.max(e.burn, BURN);
+      ignite(e, BURN);
       game.fx.push(createImpact(cx, cy, dir, true));
     }
     for (let x = spot.x - FLOOD; x <= spot.x + FLOOD; x += FLOOD_STEP)

@@ -8,6 +8,7 @@ import { WHITE } from "../../utils/color";
 import { ease } from "../../utils/math";
 import { dealDamage } from "../damage";
 import { createImpact } from "../effects/impact";
+import { ignite } from "../enemies/burn";
 import { enemyBox, enemyCenter } from "../enemies/enemy";
 import { skin } from "../hero/skin";
 import { game, hero, lights, particles, progress, rng } from "../state";
@@ -75,7 +76,7 @@ export function castPyreWave(level: number): void {
           launch: level >= 3 ? -150 : undefined,
           heavy: true,
         });
-        e.burn = Math.max(e.burn, BURN);
+        ignite(e, BURN);
         game.fx.push(createImpact(cx, cy, dir, level >= 3));
       }
       return t < ROLL + 0.3;

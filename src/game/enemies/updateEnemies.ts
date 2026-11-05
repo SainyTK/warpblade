@@ -21,6 +21,8 @@ export function updateEnemies(dt: number): void {
     room?.nearest(e.x, e.y);
     const ts = updateStatus(e, dt);
     if (e.hp <= 0) continue;
+    // a burn tick acts for the hero who lit the foe; the foe itself goes for the nearest
+    room?.nearest(e.x, e.y);
     const sdt = dt * ts;
     if (updateAirborne(e, sdt) || updateStunned(e, sdt)) continue;
     e.st += sdt;
