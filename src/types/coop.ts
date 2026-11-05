@@ -38,7 +38,9 @@ export type GuestMessage =
   | { t: "hero"; hero: string }
   | { t: "key"; a: InputAction; d: boolean }
   | { t: "pick"; pick: PickWire }
-  | { t: "ping" };
+  | { t: "ping" }
+  /** the guest is leaving, so the host need not wait for the link to go quiet */
+  | { t: "bye" };
 
 /** host to guest */
 export type HostMessage =

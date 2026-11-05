@@ -58,7 +58,10 @@ export class GuestSession {
     this.lastHeard = performance.now();
     this.link.send({ t: "hello", hero: character.id, owned: ownedItems(), version: GAME_VERSION });
     this.pinger = window.setInterval(() => this.ping(), PING_MS);
+    addEventListener("pagehide", this.onPageHide);
   }
+
+  private readonly onPageHide = (): void => this.close();
 
   private ping(): void {
     this.link?.send({ t: "ping" });
@@ -205,7 +208,11 @@ export class GuestSession {
     this.closed = true;
     this.endRun(game.coins);
     window.clearInterval(this.pinger);
-    this.link?.close();
+    removeEventListener("pagehide", this.onPageHide);
+    const link = this.link;
+    // say goodbye so the host lets this place go at once, and give it a moment to leave before the link closes
+    link?.send({ t: "bye" });
+    window.setTimeout(() => link?.close(), 300);
     resetRoom(reason);
     if (reason) openMenu("title", "coop");
   }

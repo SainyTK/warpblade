@@ -122,6 +122,7 @@ export class HostSession {
     if (guest) guest.lastSeen = performance.now();
     if (msg.t === "hello") return this.welcome(peer, msg.hero, msg.owned, msg.version);
     if (!guest) return;
+    if (msg.t === "bye") return this.link?.drop(peer);
     if (msg.t === "hero" && !this.run) {
       guest.hero = heroById(msg.hero).id;
       this.publishLobby();
