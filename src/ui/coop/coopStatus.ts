@@ -1,7 +1,6 @@
 import "./coopStatus.css";
 import { SEAT_COLORS } from "../../constants/coop";
 import { roomView } from "../../store/coop";
-import { byId } from "../dom";
 
 const line = document.createElement("div");
 line.className = "coop-status";
@@ -29,9 +28,9 @@ function message(now: number): string {
   return room.note && now - room.noteAt < NOTE_MS ? room.note : "";
 }
 
-/** called every frame of a room's run; shown only while one plays */
+/** called every frame of a room's run; shown only while one plays and no menu covers the top of the screen */
 export function syncCoopStatus(playing: boolean): void {
-  if (!line.isConnected) byId("stage").append(line);
+  if (!line.isConnected) document.body.append(line);
   const room = roomView();
   const now = performance.now();
   const next = playing ? `${room.you}|${message(now)}` : "";
