@@ -6,7 +6,7 @@ import { GAME_VERSION } from "../../constants/sitePages";
 import { MAX_FRAME } from "../../constants/stage";
 import { type GuestLink, joinRoom } from "../../services/coop/guestLink";
 import { loadHeroChoice } from "../../services/heroChoice";
-import { resetRoom, roomView, updateRoom } from "../../store/coop";
+import { postNote, resetRoom, roomView, updateRoom } from "../../store/coop";
 import { addCoins, ownedItems } from "../../store/meta";
 import { settings } from "../../store/settings";
 import type { GuestHud, HostMessage } from "../../types/coop";
@@ -19,6 +19,7 @@ import { leaveMenu } from "../../ui/menu/menuActions";
 import { isMenuOpen, openMenu } from "../../ui/menu/menuState";
 import { setPickSource, syncPickDialog } from "../../ui/skills/pickDialog";
 import { syncTouch } from "../../ui/touch/bindTouch";
+import { leftNote } from "../../utils/roomNotes";
 import { fromWire } from "../../utils/wire";
 import { setFrameDriver } from "../frameDriver";
 import { releaseAll, watchInput } from "../input";
@@ -84,6 +85,9 @@ export class GuestSession {
         break;
       case "lobby":
         updateRoom({ seats: msg.seats });
+        break;
+      case "left":
+        postNote(leftNote(msg.slot));
         break;
       case "start":
         this.startRun();

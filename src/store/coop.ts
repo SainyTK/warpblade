@@ -12,6 +12,8 @@ export interface RoomView {
   error: string;
   /** a passing line, such as a player leaving */
   note: string;
+  /** when the note was posted, so the same line posted again shows again */
+  noteAt: number;
   /** this player's hero is down until the wave is cleared */
   downed: boolean;
   /** the places of players still choosing skill cards */
@@ -26,6 +28,7 @@ const IDLE: RoomView = {
   seats: [],
   error: "",
   note: "",
+  noteAt: 0,
   downed: false,
   choosing: [],
 };
@@ -41,6 +44,11 @@ export const inRoom = (): boolean => room.phase === "connecting" || room.phase =
 export function updateRoom(patch: Partial<RoomView>): void {
   Object.assign(room, patch);
   for (const listener of listeners) listener();
+}
+
+/** a passing line for the status line and the lobby */
+export function postNote(note: string): void {
+  updateRoom({ note, noteAt: performance.now() });
 }
 
 /** back to no room, keeping a reason to show when there is one */

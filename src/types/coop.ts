@@ -50,4 +50,6 @@ export type HostMessage =
   | { t: "start" }
   | { t: "hud"; hud: GuestHud }
   | { t: "end"; outcome: RunOutcome; wave: number; coins: number }
+  /** the player in this place left the room */
+  | { t: "left"; slot: number }
   | { t: "closed" };

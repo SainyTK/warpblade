@@ -13,8 +13,6 @@ line.hidden = true;
 
 /** how long a passing note, such as a player leaving, stays up */
 const NOTE_MS = 4000;
-let note = "";
-let noteSince = 0;
 let shown = "";
 
 const names = (slots: number[]): string => {
@@ -28,11 +26,7 @@ function message(now: number): string {
   if (room.downed) return "Down until the wave is cleared";
   const others = room.choosing.filter((s) => s !== room.you);
   if (others.length && !room.choosing.includes(room.you)) return `Waiting for ${names(others)} to pick`;
-  if (room.note !== note) {
-    note = room.note;
-    noteSince = now;
-  }
-  return note && now - noteSince < NOTE_MS ? note : "";
+  return room.note && now - room.noteAt < NOTE_MS ? room.note : "";
 }
 
 /** called every frame of a room's run; shown only while one plays */
