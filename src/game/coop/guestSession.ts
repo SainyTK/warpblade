@@ -75,6 +75,8 @@ export class GuestSession {
   }
 
   private receive(msg: HostMessage): void {
+    // the link lingers a moment after leaving so the goodbye can go out; what arrives then is for a room that is gone
+    if (this.closed) return;
     this.lastHeard = performance.now();
     switch (msg.t) {
       case "welcome":

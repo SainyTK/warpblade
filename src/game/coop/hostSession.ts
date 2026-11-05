@@ -119,6 +119,8 @@ export class HostSession {
   }
 
   private receive(peer: string, msg: GuestMessage): void {
+    // the links linger a moment after the room closes so the goodbyes can go out; what arrives then is for a room that is gone
+    if (this.closed) return;
     const guest = this.guests.get(peer);
     if (guest) guest.lastSeen = performance.now();
     if (msg.t === "hello") return this.welcome(peer, msg.hero, msg.owned, msg.version);
@@ -150,7 +152,7 @@ export class HostSession {
   /** a guest left or dropped */
   private drop(peer: string): void {
     const guest = this.guests.get(peer);
-    if (!guest) return;
+    if (!guest || this.closed) return;
     this.guests.delete(peer);
     postNote(leftNote(guest.slot));
     for (const other of this.guests.keys()) this.link?.send(other, { t: "left", slot: guest.slot });
