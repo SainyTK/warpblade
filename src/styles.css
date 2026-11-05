@@ -57,6 +57,15 @@ body {
   height: 100%;
   outline: none;
 }
+/* the low health glow reaches past the stage to the screen edge, over the game and under the HUD */
+.danger-glow {
+  position: absolute;
+  pointer-events: none;
+  image-rendering: pixelated;
+}
+.danger-glow[hidden] {
+  display: none;
+}
 
 .hud {
   position: absolute;

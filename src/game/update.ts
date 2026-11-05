@@ -8,6 +8,7 @@ import { updateEnemies } from "./enemies/updateEnemies";
 import { celebrateEvolutions } from "./evolve";
 import { updateHero } from "./hero/updateHero";
 import { agePresses } from "./input";
+import { updateDanger } from "./lowHealth";
 import { updateNumbers } from "./numbers";
 import { updatePickups } from "./pickups";
 import { game, hero, lights, particles, rng } from "./state";
@@ -63,6 +64,7 @@ export function update(dt: number): void {
   celebrateEvolutions();
   updateScenery(dt);
   updateHero(dt);
+  updateDanger(dt);
   updateEnemies(world);
   updatePickups(dt);
   updateCoins(dt);
