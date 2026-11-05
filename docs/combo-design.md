@@ -9,7 +9,7 @@ Sources: the Grand Chase Fandom wiki pages for the Knight, Assassin, Thief, Spel
 
 - Each press of the attack key in the basic five-hit string is its own animation: the Knight swings three times, stabs twice, then ends with a slash that knocks the foe down.
 - The last hit of the basic string always ends in a knockdown or a launch, so a string has a clear end.
-- Inputs inside the string branch it: Up during the first hits turns the next blow into a launcher, and the following press leaps after the foe to finish it in the air.
+- Inputs inside the string branch it: Up held during the first hits turns the next J into a launcher (a tapped Up still jumps out of the follow-through), and the following press leaps after the foe to finish it in the air.
 - Timing matters as much as direction: the same dash input pressed in the middle of the string gives a "Critical" downward cut, and pressed after the last hit gives a "Double" attack.
 - Dash attacks are short strings of their own (a slash, then up, then down), and some chain back into Critical or Double.
 - Air attacks are separate from ground attacks, and Down in the air drops fast to the floor.

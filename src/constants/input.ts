@@ -78,5 +78,7 @@ export const MENU_KEYMAP: Record<string, MenuCommand> = {
 export const DOUBLE_TAP = 0.25;
 /** a press is kept this many simulation steps (120 a second) until it can be used: about 0.15 seconds */
 export const INPUT_BUFFER_STEPS = 18;
-/** during an attack, Up waits this many steps for a J before it jump-cancels, so Up + J reads as the launcher */
+/** presses that wait out a whole move: a jump pressed while a blow winds up or strikes jumps out of its follow-through */
+export const KEPT_DURING_MOVE: readonly InputAction[] = ["up"];
+/** during a ground combo with Launcher, Up waits for a J this many steps after the press, and for as long as Up is held, before it jump-cancels; so Up + J reads as the launcher and a tapped Up still jumps */
 export const LAUNCH_WAIT_STEPS = 8;

@@ -9,7 +9,7 @@ import { updateHero } from "./hero/updateHero";
 import { agePresses } from "./input";
 import { updateNumbers } from "./numbers";
 import { updatePickups } from "./pickups";
-import { game, lights, particles, rng } from "./state";
+import { game, hero, lights, particles, rng } from "./state";
 import { updateWaves } from "./waves";
 import { updateXpOrbs } from "./xpOrbs";
 
@@ -77,5 +77,5 @@ export function update(dt: number): void {
   game.shake = Math.max(0, game.shake - dt);
   game.flash = Math.max(0, game.flash - dt);
   game.banner.time = Math.max(0, game.banner.time - dt);
-  agePresses();
+  agePresses(hero.state === "move");
 }
