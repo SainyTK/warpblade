@@ -36,3 +36,13 @@ export function blendPose(a: Pose, b: Pose, u: number): Pose {
   }
   return o;
 }
+
+/** pose p moved by part u of the difference from pose a to pose b, joint by joint; flags stay p's */
+export function shiftPose(p: Pose, a: Pose, b: Pose, u: number): Pose {
+  const o = { ...p };
+  for (const k of POSE_KEYS) {
+    if (FLAGS.has(k)) continue;
+    o[k] = p[k] + (b[k] - a[k]) * u;
+  }
+  return o;
+}
