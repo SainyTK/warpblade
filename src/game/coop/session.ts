@@ -16,7 +16,9 @@ export async function hostRoom(): Promise<void> {
   try {
     await session.open();
   } catch (err) {
-    if (host === session) host = null;
+    // a room given up on, by Cancel or by hosting or joining another, fails quietly: the room shown now is another
+    if (host !== session) return;
+    host = null;
     session.close();
     resetRoom(reason(err));
   }
@@ -29,7 +31,9 @@ export async function joinRoomByCode(code: string): Promise<void> {
   try {
     await session.join(code);
   } catch (err) {
-    if (guest === session) guest = null;
+    // a room given up on, by Cancel or by hosting or joining another, fails quietly: the room shown now is another
+    if (guest !== session) return;
+    guest = null;
     session.close();
     resetRoom(reason(err));
   }

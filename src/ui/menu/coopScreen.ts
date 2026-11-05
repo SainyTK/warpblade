@@ -6,7 +6,7 @@ import { copyText } from "../../services/clipboard";
 import { saveHeroChoice } from "../../services/heroChoice";
 import { roomView } from "../../store/coop";
 import type { MenuView } from "../../types/menu";
-import { readRoomCode } from "../../utils/roomCode";
+import { readRoomCode, typedRoomCode } from "../../utils/roomCode";
 import { backItem } from "./backItem";
 import { hostRoom, inviteLink, joinRoom, leaveRoom, roomHeroChanged, startRoomRun } from "./coopActions";
 import { menuItem } from "./menuItem";
@@ -22,18 +22,20 @@ function el<K extends keyof HTMLElementTagNameMap>(tag: K, className: string, te
   return node;
 }
 
-/** the code box and its Join button; Enter in the box joins too */
-function joinRow(): HTMLElement {
+/** the code box and its Join button; Enter in the box joins too. A code that cannot be one shows in the screen's error line */
+function joinRow(error: HTMLElement): HTMLElement {
   const row = el("div", "coop-join");
   const input = el("input", "coop-code");
   input.dataset.nav = "";
   input.placeholder = "Room code";
-  input.maxLength = 5;
   input.autocomplete = "off";
   input.spellcheck = false;
   input.setAttribute("autocapitalize", "characters");
   input.setAttribute("aria-label", "Room code");
-  const error = el("p", "coop-error");
+  // a code typed or pasted with spaces, dashes or in lower case still fits the box
+  input.addEventListener("input", () => {
+    input.value = typedRoomCode(input.value);
+  });
   const join = (): void => {
     const code = readRoomCode(input.value);
     if (code) joinRoom(code);
@@ -50,7 +52,7 @@ function joinRow(): HTMLElement {
   const button = menuItem("Join", join);
   row.append(input, button);
   const box = el("div", "menu-list");
-  box.append(row, error);
+  box.append(row);
   return box;
 }
 
@@ -58,11 +60,12 @@ function joinRow(): HTMLElement {
 function doorScreen(): MenuView {
   const room = roomView();
   const content = el("div", "menu-main");
-  if (room.error) content.append(el("p", "coop-error", room.error));
+  const error = el("p", "coop-error", room.error);
+  error.setAttribute("role", "alert");
   const list = el("nav", "menu-list");
   list.setAttribute("aria-label", "Co-op");
   list.append(menuItem("Host a room", hostRoom));
-  content.append(list, joinRow(), backItem());
+  content.append(error, list, joinRow(error), backItem());
   return { title: "Co-op", subtitle: `Up to ${MAX_PLAYERS} players in one run`, content };
 }
 

@@ -55,11 +55,12 @@ Experience is shared: an orb picked up by anyone gives its experience to every h
 Each player still has their own skill points and cards, rolled from their own hero's tree.
 When a wave is cleared with points waiting, the game pauses for everyone while those players choose.
 A player with nothing to choose reads "Waiting for P2 to pick".
+Anyone may still open the pause menu, for instance to leave the room; open cards step aside under the menu and come back the same.
 A guest's choice travels to the host as a skill id, and the host checks that the hero can still learn it before applying it.
 
 ## Coins and the shop
 
-Each player's hero plays with what that player bought in their own shop, since the guest sends its shop levels when it joins.
+Each player's hero plays with what that player bought in their own shop, since the guest sends its shop levels when it joins and again after each purchase, such as from the result screen between runs.
 Coins a hero picks up are theirs, and coins left on the floor at the end are split evenly.
 When the run ends, every player banks their own coins in their own browser and sees the result screen, then goes back to the room for another run.
 
@@ -73,7 +74,12 @@ The numbers live in `COOP_SCALING` in `src/constants/coop.ts`.
 
 A guest who leaves, or whose tab closes, disappears from the field; the others read "P3 left the room" and play on.
 Each side sends a heartbeat every 1.5 seconds and counts the other gone after six quiet seconds.
-When the host leaves from the pause menu or closes the tab, the run ends for everyone, every guest banks their coins and reads "The host left, so the room has closed."
+A guest who leaves or closes the tab also says goodbye, so the others read the note at once.
+A host whose tab is hidden draws no frames but keeps the heartbeat going, and its guests read "Waiting for the host" until it comes back.
+A player who leaves mid-run from the pause menu banks their coins and sees the run's result under the title "Left the room".
+When the host leaves from the pause menu or closes the tab, the run ends for everyone, every guest banks their coins and reads "The host left, so the room has closed. Coins you picked up are in your bank."
+In the lobby the same message has no line about coins.
+A guest whose host goes quiet for six seconds reads "Lost the connection to the host." instead.
 The pause menu in a room has Resume, Controls, Options and Leave room, and the game keeps running under it since the others are still fighting.
 
 ## Failure messages
@@ -107,4 +113,4 @@ The pause menu in a room has Resume, Controls, Options and Leave room, and the g
 - Players are named P1 to P4; picking a name is left for later.
 - The foe scaling is a first guess: scripted bots with four players fall early on the day era's flying moths, and it needs tuning from real four-player games.
 - The host's hero choice must be made in the lobby before Start; heroes cannot change during a run.
-- Phones pause background tabs, so a phone host who switches apps stalls the room for everyone.
+- A host who switches to another tab or app stalls the room for everyone until they come back. A phone may stop the heartbeat of a background tab altogether, and then the guests are let go after six seconds.

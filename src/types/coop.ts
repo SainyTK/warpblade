@@ -36,9 +36,13 @@ export interface GuestHud {
 export type GuestMessage =
   | { t: "hello"; hero: string; owned: Record<string, number>; version: string }
   | { t: "hero"; hero: string }
+  /** the guest bought something in its shop while in the room */
+  | { t: "shop"; owned: Record<string, number> }
   | { t: "key"; a: InputAction; d: boolean }
   | { t: "pick"; pick: PickWire }
-  | { t: "ping" };
+  | { t: "ping" }
+  /** the guest is leaving, so the host need not wait for the link to go quiet */
+  | { t: "bye" };
 
 /** host to guest */
 export type HostMessage =
@@ -48,4 +52,6 @@ export type HostMessage =
   | { t: "start" }
   | { t: "hud"; hud: GuestHud }
   | { t: "end"; outcome: RunOutcome; wave: number; coins: number }
+  /** the player in this place left the room */
+  | { t: "left"; slot: number }
   | { t: "closed" };

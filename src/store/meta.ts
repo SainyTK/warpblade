@@ -46,6 +46,8 @@ export function buy(item: ShopItem): boolean {
   return true;
 }
 
-export function onMetaChange(listener: () => void): void {
+/** listen for coins and purchases; returns how to stop listening */
+export function onMetaChange(listener: () => void): () => void {
   listeners.add(listener);
+  return () => listeners.delete(listener);
 }

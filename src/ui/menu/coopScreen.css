@@ -6,6 +6,10 @@
   font-size: 14px;
   line-height: 1.4;
   color: var(--hp);
+  text-wrap: balance;
+}
+.coop-error:empty {
+  display: none;
 }
 .coop-join {
   display: flex;

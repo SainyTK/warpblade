@@ -1,7 +1,8 @@
-/* A room's line under the pause button: this player's tag, and why they wait when they do. */
+/* A room's line under the pause button: this player's tag, and why they wait when they do. It follows the button, which sits at the top of the window even when the stage does not, as in a tall window. */
 .coop-status {
-  position: absolute;
-  top: 44px;
+  position: fixed;
+  z-index: 5;
+  top: calc(max(8px, env(safe-area-inset-top, 0px)) + 36px);
   left: 50%;
   translate: -50% 0;
   display: flex;
@@ -34,7 +35,7 @@
 }
 @media (max-height: 520px) {
   .coop-status {
-    top: 40px;
+    top: calc(max(8px, env(safe-area-inset-top, 0px)) + 32px);
     flex-direction: column;
     gap: 2px;
     max-width: 22vw;
