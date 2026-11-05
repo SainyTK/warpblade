@@ -4,7 +4,7 @@ import { runNight } from "./run.ts";
 import type { RunOptions } from "./types.ts";
 import { studioToday } from "./utils/dates.ts";
 
-const USAGE = `Usage: npm run studio -- run --workdir <checkout> --runs-dir <folder> [--mode dry|live] [--kind auto|big|small] [--date YYYY-MM-DD] [--feedback github|<file.json>]`;
+const USAGE = `Usage: npm run studio -- run --workdir <checkout> --runs-dir <folder> [--mode dry|live] [--kind auto|big|small] [--date YYYY-MM-DD] [--feedback github|<file.json>] [--resume [--base-sha <commit>]]`;
 
 function options(): RunOptions {
   const { values, positionals } = parseArgs({
@@ -16,6 +16,8 @@ function options(): RunOptions {
       kind: { type: "string", default: "auto" },
       date: { type: "string" },
       feedback: { type: "string", default: "github" },
+      resume: { type: "boolean", default: false },
+      "base-sha": { type: "string" },
     },
   });
   if (positionals[0] !== "run" || !values.workdir || !values["runs-dir"]) throw new Error(USAGE);
@@ -28,6 +30,8 @@ function options(): RunOptions {
     workdir: resolve(values.workdir),
     runsDir: resolve(values["runs-dir"]),
     feedback: values.feedback === "github" ? "github" : resolve(values.feedback),
+    resume: values.resume,
+    baseSha: values["base-sha"] ?? null,
   };
 }
 

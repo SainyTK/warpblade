@@ -1,5 +1,5 @@
 import { access } from "node:fs/promises";
-import { join } from "node:path";
+import { basename, join } from "node:path";
 import { promptFor } from "../prompts.ts";
 import { writeJson } from "../services/files.ts";
 import { headSha } from "../services/git.ts";
@@ -31,7 +31,13 @@ export async function captureMedia(night: Night, plan: Plan): Promise<MediaItem[
   });
   const { output } = await callRole<{ items: MediaItem[] }>(night, { role: "media", prompt });
   await guardStep(night, since, (p) => p.startsWith(folder), "media");
-  for (const item of output.items) {
+  // agents sometimes answer with the repo path; the patch file wants the bare file name
+  const items = output.items.map((item) => ({
+    ...item,
+    file: basename(item.file),
+    poster: item.poster ? basename(item.poster) : null,
+  }));
+  for (const item of items) {
     const wanted = [
       join(ctx.workdir, folder, item.file),
       ...(item.poster ? [join(ctx.workdir, folder, item.poster)] : []),
@@ -41,6 +47,6 @@ export async function captureMedia(night: Night, plan: Plan): Promise<MediaItem[
     }
   }
   await commitLeftovers(night, `Add the clips and stills for Patch ${ctx.version}`);
-  await writeJson(files.media, output.items);
-  return output.items;
+  await writeJson(files.media, items);
+  return items;
 }

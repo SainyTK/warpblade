@@ -1,4 +1,4 @@
-import { mkdir, readdir } from "node:fs/promises";
+import { access, mkdir, readdir, rename } from "node:fs/promises";
 import { join } from "node:path";
 import type { Patch } from "../../../src/types/patch.ts";
 import { compareVersions } from "../../../src/utils/compareVersions.ts";
@@ -36,6 +36,12 @@ export async function prepare(options: RunOptions): Promise<Night | null> {
   const version = nextVersion(current, kind);
   const runDir = join(options.runsDir, `${options.date}-${version}-${options.mode}`);
   const files = runFiles(runDir);
+  // a fresh run of a night that ran before keeps the earlier attempt beside it, never mixed in
+  const earlier = await access(runDir).then(
+    () => true,
+    () => false,
+  );
+  if (earlier) await rename(runDir, `${runDir}-attempt-${Date.now()}`);
   await mkdir(join(runDir, "logs"), { recursive: true });
   await mkdir(files.baseline, { recursive: true });
   await mkdir(files.scratch, { recursive: true });

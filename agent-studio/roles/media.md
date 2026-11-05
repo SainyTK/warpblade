@@ -13,4 +13,4 @@ For each shot:
 - Copy the final files into `public/patches/<version>/` with short kebab-case names (`ysra-sunspear.mp4`, `ysra-sunspear.png`). Put the GIFs in the run folder's `release-assets/`, not in the repo.
 
 Do not edit any other repo files.
-Your final answer lists each media item with its kind, file, poster, the GIF path, alt text (what the clip shows, for a player who cannot see it) and pixel size.
+Your final answer lists each media item with its kind, its bare file name and poster file name (`sunflask.mp4`, not a path), the GIF path, alt text (what the clip shows, for a player who cannot see it) and pixel size.

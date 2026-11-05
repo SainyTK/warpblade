@@ -22,6 +22,10 @@ export interface RunOptions {
   runsDir: string;
   /** "github", or a JSON file of feedback issues for a dry run */
   feedback: string;
+  /** continue this night's run from its last finished step, on the patch branch as checked out */
+  resume: boolean;
+  /** on a resume, the commit the patch is measured from, when the branch was moved onto a new base */
+  baseSha: string | null;
 }
 
 /** everything a night's run knows before agents start; saved as context.json in the run folder */
