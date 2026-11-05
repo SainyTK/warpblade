@@ -7,7 +7,10 @@ import type { Stats } from "./stats";
 /** how a hero looks on the shared rig: colours, head rows, weapon and the light of their blows */
 export interface HeroSkin {
   colors: HeroColors;
-  /** 10 by 10 pixel rows facing right, and the back of the head for a spin; d h H hair, s S skin, E eye, r streak */
+  /**
+   * 24 by 22 image pixel rows facing right, and the back of the head for a spin: D d h H W hair deep to glint,
+   * L s S m skin light to deep, w I P eye white, iris and pupil, r a streak in the scarf's light colour
+   */
   head: readonly string[];
   headBack: readonly string[];
   weapon: "sword" | "glaive";

@@ -1,9 +1,14 @@
 import type { Platform, Point } from "../types/world";
 
-/** The stage is 320 x 180 art pixels, scaled up whole. */
+/** The stage is 320 x 180 art pixels, scaled up whole. Game positions are in art pixels. */
 export const W = 320;
 export const H = 180;
 export const N = W * H;
+/** The frame is drawn at RES image pixels per art pixel, so sprites and effects can carry half-pixel detail. */
+export const RES = 2;
+export const FW = W * RES;
+export const FH = H * RES;
+export const FN = FW * FH;
 export const GROUND = 156;
 /** the simulation steps at 120 Hz whatever the display rate */
 export const STEP = 1 / 120;

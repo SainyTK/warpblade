@@ -1,5 +1,5 @@
 import { CHARACTERS } from "./constants/characters";
-import { H, MAX_FRAME, STEP, W } from "./constants/stage";
+import { FH, FW, MAX_FRAME, STEP } from "./constants/stage";
 import { game, setCharacter } from "./game/state";
 import { update, updateAmbience } from "./game/update";
 import { renderScene } from "./scene/renderScene";
@@ -20,7 +20,9 @@ import { bindTouch, syncTouch } from "./ui/touch/bindTouch";
 const canvas = byId<HTMLCanvasElement>("game");
 const ctx = canvas.getContext("2d");
 if (!ctx) throw new Error("This browser cannot draw to a 2D canvas.");
-const image = ctx.createImageData(W, H);
+canvas.width = FW;
+canvas.height = FH;
+const image = ctx.createImageData(FW, FH);
 
 game.best = loadBest();
 setCharacter(CHARACTERS.find((c) => c.id === loadHeroChoice()) ?? CHARACTERS[0]);

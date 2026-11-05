@@ -4,5 +4,7 @@ export interface SpriteImage {
   h: number;
   ox: number;
   oy: number;
+  /** image pixels per art pixel: 1 for classic sprites, 2 for detailed ones */
+  res: number;
   d: Uint32Array;
 }

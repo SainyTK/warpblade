@@ -1,7 +1,6 @@
 import { HERO_COLORS as HC } from "../../constants/palette";
 import type { SpriteCanvas } from "../../engine/sprite";
 import type { Pose } from "../../types/pose";
-import { scale } from "../../utils/color";
 import { atHip, farShoulder, isElbowFlipped, isMirrored, isTurned, nearShoulder } from "../../utils/poseFrame";
 import { armReach, drawArm } from "./draw/arm";
 import { drawCoatTails } from "./draw/coatTails";
@@ -38,16 +37,16 @@ export function drawHero(s: SpriteCanvas, p: Pose, look: HeroLook): Vec {
   const [farElbow, farHand] = armReach(far, [p.bx, p.by], isElbowFlipped(p.be));
   const swordArm = () => {
     if (look.sword) drawSword(s, hand, p.sa);
-    drawArm(s, near, elbow, hand, back ? HC.coatDark : HC.coat, back ? scale(HC.glove, 0.8) : HC.glove, !back);
+    drawArm(s, near, elbow, hand, !back);
   };
   if (back) swordArm();
-  else drawArm(s, far, farElbow, farHand, HC.coatDark, scale(HC.glove, 0.8), false);
+  else drawArm(s, far, farElbow, farHand, false);
   drawLeg(s, atHip(p, -1.5, 0), [p.bfx, p.bfy], p.ba, true);
   drawCoatTails(s, p, look.flare);
   drawLeg(s, atHip(p, 1.5, 0), [p.ffx, p.ffy], p.fa, false);
   drawTorso(s, p, back);
   drawHead(s, p, back);
-  if (back) drawArm(s, far, farElbow, farHand, HC.coat, HC.glove, true);
+  if (back) drawArm(s, far, farElbow, farHand, true);
   else swordArm();
   s.outline(HC.outline);
   if (!mirrored) return hand;

@@ -7,7 +7,7 @@ import { type Particle, type ParticleKind, PF, PK } from "../types/particle";
 import { mix, rampAt, scale, WHITE } from "../utils/color";
 import { clamp, TAU } from "../utils/math";
 import type { Rng } from "../utils/rng";
-import { circle, disc, glow, line, place, px, sparkle } from "./frame";
+import { circle, disc, fleck, glow, hairline, line, place, px, sparkle } from "./frame";
 
 const GRAVITY = 950;
 const MAX_PARTICLES = 1800;
@@ -212,28 +212,30 @@ export class Particles {
         const S = q.sparks;
         const head = k > 0.6 ? S[0] : k > 0.3 ? S[1] : S[2];
         const len = Math.min(9, 1 + sp * 0.022);
-        line(x - ux * len, y - uy * len, x - ux * len * 0.4, y - uy * len * 0.4, k > 0.5 ? head : S[S.length - 1]);
+        // a fine tail behind a full head with a white-hot point
+        hairline(x - ux * len, y - uy * len, x - ux * len * 0.4, y - uy * len * 0.4, k > 0.5 ? head : S[S.length - 1]);
         line(x - ux * len * 0.45, y - uy * len * 0.45, x, y, head);
+        if (k > 0.5) fleck(x + 0.25, y + 0.25, WHITE);
         glow(x, y, 3, head, 0.45 * k);
         break;
       }
       case PK.MOTE: {
         const len = Math.min(16, 0.5 + sp * 0.026) * q.size;
         const a = k < 0.35 ? k / 0.35 : 1;
-        line(x - ux * len, y - uy * len, x - ux * len * 0.35, y - uy * len * 0.35, scale(q.col, 0.55), a);
-        line(x - ux * len * 0.4, y - uy * len * 0.4, x, y, q.col, a);
+        hairline(x - ux * len, y - uy * len, x - ux * len * 0.35, y - uy * len * 0.35, scale(q.col, 0.55), a);
+        if (q.size < 1) hairline(x - ux * len * 0.4, y - uy * len * 0.4, x, y, q.col, a);
+        else line(x - ux * len * 0.4, y - uy * len * 0.4, x, y, q.col, a);
         glow(x, y, 2.5 + q.size, q.col, 0.4 * k);
         break;
       }
       case PK.STREAK: {
         const L = clamp(sp / 30, 1, 7);
-        for (let d = L; d >= 0; d -= 0.5)
-          px(
-            x - ux * d,
-            y - uy * d,
-            d < 1 ? WHITE : d < L * 0.5 ? q.col : scale(q.col, 0.6),
-            d < L * 0.5 ? 1 : 1.2 - d / L,
-          );
+        // a full art pixel near the head, thinning to a single image pixel down the tail
+        for (let d = L; d >= 0; d -= 0.25) {
+          const c = d < 1 ? WHITE : d < L * 0.5 ? q.col : scale(q.col, 0.6);
+          if (d < L * 0.5) px(x - ux * d, y - uy * d, c);
+          else fleck(x - ux * d + 0.25, y - uy * d + 0.25, c, 1.2 - d / L);
+        }
         glow(x, y, 4, q.col, 0.4);
         break;
       }
@@ -303,7 +305,8 @@ export class Particles {
         const cy = Math.sin(q.a) * q.size * 0.5;
         const a = k < 0.3 ? k / 0.3 : 1;
         line(x - cx, y - cy, x + cx, y + cy, q.col, a);
-        if (k > 0.5) px(x + cx, y + cy, WHITE, a);
+        hairline(x - cx * 0.6, y - cy * 0.6 - 0.25, x + cx * 0.6, y + cy * 0.6 - 0.25, scale(q.col, 1.35), a);
+        if (k > 0.5) fleck(x + cx + 0.25, y + cy + 0.25, WHITE, a);
         glow(x, y, 3, q.col, 0.2 * k);
         break;
       }
@@ -311,7 +314,7 @@ export class Particles {
         // STAR: a twinkling cross
         const tw = 0.6 + 0.4 * Math.sin(this.t * (8 + (q.seed % 5)) + q.seed);
         if (q.size < 1) {
-          if (tw * k > 0.25) px(x, y, tw > 0.8 ? WHITE : q.col);
+          if (tw * k > 0.25) fleck(x + 0.25, y + 0.25, tw > 0.8 ? WHITE : q.col);
           glow(x, y, 3, q.col, 0.4 * k * tw);
           break;
         }

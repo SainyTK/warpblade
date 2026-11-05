@@ -2,10 +2,11 @@ import { CLIPS } from "../constants/clips";
 import { ELEMENT_COLOR, ENEMY_COLORS, PAL } from "../constants/palette";
 import { ULT_LEVELS } from "../constants/ultimate";
 import { ellipseRing, glow, glowLine, line, place, px } from "../engine/frame";
-import { blit, SpriteCanvas } from "../engine/sprite";
+import { blit } from "../engine/sprite";
 import { enemyBox, enemyCenter } from "../game/enemies/enemy";
 import { kindOf } from "../game/enemies/kinds";
 import { drawHero } from "../game/hero/drawHero";
+import { heroCanvas } from "../game/hero/heroCanvas";
 import { heroLook } from "../game/hero/look";
 import { skin } from "../game/hero/skin";
 import { canAffordUlt } from "../game/hero/ultimate";
@@ -15,7 +16,7 @@ import { hex, WHITE } from "../utils/color";
 import { clamp, TAU } from "../utils/math";
 import { bladeAngle } from "../utils/poseFrame";
 
-const heroCanvas = new SpriteCanvas(80, 76, 40, 62);
+const heroSprite = heroCanvas(80, 76, 40, 62);
 const HP_BAR_EMPTY = hex("#120a1e");
 const STUN_STAR = hex("#ffe26b");
 /** ring colors for ultimate levels 3 and 4; levels 1 and 2 take the hero's own light */
@@ -112,10 +113,10 @@ export function drawHeroLayer(): void {
   }
   if (h.state === "charge") drawChargeRing();
   const flare = clamp((Math.abs(h.vx) / 115) * 3, 0, 3) + (h.ground ? 0 : 1.5);
-  h.hand = drawHero(heroCanvas, h.pose, heroLook(flare));
+  h.hand = drawHero(heroSprite, h.pose, heroLook(flare));
   const blink = h.inv > 0 && h.state !== "warpStrike" && h.state !== "ultimate" && Math.floor(game.t * 20) % 2 === 0;
   const struck = h.state === "hurt" && h.st < 0.06;
-  blit(heroCanvas, h.x, h.y, h.face < 0, { alpha: blink ? 0.45 : 1, tint: WHITE, tintAmount: struck ? 1 : 0 });
+  blit(heroSprite, h.x, h.y, h.face < 0, { alpha: blink ? 0.45 : 1, tint: WHITE, tintAmount: struck ? 1 : 0 });
   // the crystal blade gives off a faint light, brighter mid-swing
   place(h.x, h.y, h.face < 0);
   if (h.hasSword) {
