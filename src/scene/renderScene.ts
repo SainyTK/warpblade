@@ -28,6 +28,7 @@ export function renderScene(out: Uint8ClampedArray): void {
   }
   particles.draw("back");
   drawEnemies();
+  room?.drawUnderlay();
   eachHero(drawHeroLayer);
   for (const f of game.fx) {
     room?.owner(f);

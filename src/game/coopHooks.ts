@@ -22,6 +22,8 @@ export interface CoopHooks {
   endRun(outcome: RunOutcome): void;
   /** foes of a wave for this many players */
   scaleFoes(foes: readonly EnemyType[]): EnemyType[];
+  /** draw what only a room shows under the heroes, such as the ring in each player's colour */
+  drawUnderlay(): void;
   /** draw what only a room shows over the scene, such as the players' tags */
   drawOverlay(): void;
   /** a foe's HP for this many players */

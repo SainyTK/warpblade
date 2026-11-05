@@ -16,6 +16,7 @@ import { choosePick, gainXp } from "../progress";
 import { resetRun } from "../run";
 import { seatMemories } from "../seatMemory";
 import { game, hero, ponytail, progress, scarf, setCharacter } from "../state";
+import { drawMark } from "./drawMark";
 import { drawTag, stackTags, type TagSpot, tagSpot } from "./drawTag";
 import { freshSaved, type Seat } from "./seat";
 
@@ -239,6 +240,11 @@ export class HostRun implements CoopHooks {
     this.enter(this.home);
     wearOwned(null);
     setCoopHooks(null);
+  }
+
+  drawUnderlay(): void {
+    if (this.seats.length < 2) return;
+    this.eachHero(() => drawMark(this.current.slot));
   }
 
   drawOverlay(): void {
