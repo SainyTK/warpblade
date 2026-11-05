@@ -147,7 +147,15 @@ rememberPerSeat(objectMemory(progress));
 rememberPerSeat(objectMemory(scarf, true));
 rememberPerSeat(objectMemory(ponytail, true));
 rememberPerSeat({
-  save: () => ({ coins: game.coins, revived: game.revived, ghosts: game.ghosts, spell: game.spell }),
+  save: () => ({ coins: game.coins, revived: game.revived, spell: game.spell }),
+  load(saved) {
+    Object.assign(game, saved);
+  },
+});
+// afterimages hold whole sprite images: only the host draws them, and a guest's HUD never reads them
+rememberPerSeat({
+  hostOnly: true,
+  save: () => ({ ghosts: game.ghosts }),
   load(saved) {
     Object.assign(game, saved);
   },
