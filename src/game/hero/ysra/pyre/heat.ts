@@ -1,9 +1,11 @@
 import { HEAT, OVERHEAT, SEARING } from "../../../../constants/ysra/heat";
 import { hasPerk } from "../../../progress";
+import { objectMemory, rememberPerSeat } from "../../../seatMemory";
 import { hero, progress } from "../../../state";
 
 /** Heat and Overheat: the one owner of both */
 const state = { heat: 0, sinceBlow: 0, overheat: 0, flash: 0 };
+rememberPerSeat(objectMemory(state));
 
 /** Heat, 0 to HEAT.max */
 export const heat = (): number => state.heat;

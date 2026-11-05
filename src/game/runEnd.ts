@@ -1,5 +1,6 @@
 import type { RunOutcome, RunResult } from "../types/run";
 import { bankCoins } from "./coins";
+import { coop } from "./coopHooks";
 import { resetRun } from "./run";
 import { game, hero } from "./state";
 
@@ -15,6 +16,8 @@ export function onRunEnd(listener: (result: RunResult) => void): void {
 
 /** Kael fell or cleared the stage: bank the coins, set the stage fresh behind the menu and report how far he got */
 export function endRun(outcome: RunOutcome): void {
+  const room = coop();
+  if (room) return room.endRun(outcome);
   last = { outcome, wave: game.wave, coins: bankCoins() };
   resetRun("");
   hero.inv = 0;

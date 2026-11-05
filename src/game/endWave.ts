@@ -1,4 +1,5 @@
 import { STAGE_WAVES, WAVE_PAUSE } from "../constants/waves";
+import { coop } from "./coopHooks";
 import { openPicks } from "./progress";
 import { game, hero } from "./state";
 
@@ -6,7 +7,9 @@ import { game, hero } from "./state";
 export function endWave(): void {
   game.lull = "toNext";
   game.waveTimer = WAVE_PAUSE;
-  openPicks();
+  const room = coop();
+  if (room) room.waveCleared();
+  else openPicks();
 }
 
 /**

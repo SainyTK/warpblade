@@ -4,6 +4,7 @@ import { scene, updateScenery } from "../scene/scenery";
 import { PF, PK } from "../types/particle";
 import { updateBlazes } from "./blazes";
 import { updateCoins } from "./coins";
+import { coop, eachHero } from "./coopHooks";
 import { updateEnemies } from "./enemies/updateEnemies";
 import { celebrateEvolutions } from "./evolve";
 import { updateHero } from "./hero/updateHero";
@@ -50,8 +51,18 @@ export function updateAmbience(dt: number): void {
 function updateEffects(dt: number): void {
   const running = game.fx;
   game.fx = [];
-  const kept = running.filter((f) => f.update(dt));
+  const room = coop();
+  const kept = running.filter((f) => {
+    room?.owner(f);
+    return f.update(dt);
+  });
   game.fx = kept.concat(game.fx);
+}
+
+/** afterimages fade */
+function ageGhosts(dt: number): void {
+  for (const g of game.ghosts) g.life -= dt;
+  game.ghosts = game.ghosts.filter((g) => g.life > 0);
 }
 
 /** one simulation step */
@@ -60,17 +71,17 @@ export function update(dt: number): void {
   const world = game.slow > 0 ? dt * PERFECT.timeScale : dt;
   game.slow = Math.max(0, game.slow - dt);
   game.t += world;
-  celebrateEvolutions();
+  eachHero(celebrateEvolutions);
   updateScenery(dt);
-  updateHero(dt);
+  eachHero(() => updateHero(dt));
   updateEnemies(world);
   updatePickups(dt);
   updateCoins(dt);
   updateXpOrbs(dt);
+  coop()?.anyStanding();
   updateWaves(dt);
   updateEffects(world);
-  for (const g of game.ghosts) g.life -= dt;
-  game.ghosts = game.ghosts.filter((g) => g.life > 0);
+  eachHero(() => ageGhosts(dt));
   updateBlazes(world);
   updateNumbers(dt);
   feedBraziers();
@@ -79,5 +90,5 @@ export function update(dt: number): void {
   game.shake = Math.max(0, game.shake - dt);
   game.flash = Math.max(0, game.flash - dt);
   game.banner.time = Math.max(0, game.banner.time - dt);
-  agePresses(hero.state === "move");
+  eachHero(() => agePresses(hero.state === "move"));
 }

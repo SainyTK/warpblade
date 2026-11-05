@@ -4,6 +4,7 @@ import type { MoveDef } from "../../../types/move";
 import { clamp, lerp } from "../../../utils/math";
 import { createSlash } from "../../effects/slash";
 import { enemyCenter } from "../../enemies/enemy";
+import { objectMemory, rememberPerSeat } from "../../seatMemory";
 import { game, hero } from "../../state";
 import { leaveAfterimages } from "../afterimages";
 import { THRUST_SLASH, UPPERCUT } from "./slashes";
@@ -11,6 +12,7 @@ import { THRUST_SLASH, UPPERCUT } from "./slashes";
 const PHASE_REACH = 80;
 /** the phase cut runs from here to there in its first frames */
 const phase = { from: 0, to: 0, turned: false };
+rememberPerSeat(objectMemory(phase));
 
 function phaseEnter(): void {
   const ahead = game.enemies

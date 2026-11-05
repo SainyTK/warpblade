@@ -3,6 +3,7 @@ import { XP_ORB_MOTION as M, XP_ORB } from "../constants/progression";
 import { sfx } from "../services/audio";
 import { PK } from "../types/particle";
 import { fall, home } from "./coins";
+import { coop } from "./coopHooks";
 import { gainXp } from "./progress";
 import { game, hero, particles, rng } from "./state";
 
@@ -18,7 +19,9 @@ export function dropXp(amount: number, x: number, y: number): void {
 /** orbs fall and bounce, Kael picks them up by touch, and after a while the rest fly to him */
 export function updateXpOrbs(dt: number): void {
   let gained = 0;
+  const room = coop();
   for (const o of game.xpOrbs) {
+    room?.nearest(o.x, o.y);
     o.t += dt;
     const dx = hero.x - o.x;
     const dy = hero.y - 18 - o.y;
@@ -33,5 +36,6 @@ export function updateXpOrbs(dt: number): void {
   if (!gained) return;
   game.xpOrbs = game.xpOrbs.filter((o) => !o.done);
   sfx.pickup();
-  gainXp(gained);
+  if (room) room.shareXp(gained);
+  else gainXp(gained);
 }

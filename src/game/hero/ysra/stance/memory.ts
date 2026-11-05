@@ -1,4 +1,5 @@
 import type { StanceMemory } from "../../../../types/ysra/stance";
+import { objectMemory, rememberPerSeat } from "../../../seatMemory";
 
 /** the one owner of what Ysra's stance part remembers */
 export const stance: StanceMemory = {
@@ -31,3 +32,4 @@ export function resetStance(): void {
   });
   stance.shouldered.clear();
 }
+rememberPerSeat(objectMemory(stance));

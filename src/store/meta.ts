@@ -8,6 +8,8 @@ import { metaStats, nextPrice } from "../utils/shop";
 /** The one owner of progress kept between runs: the coin bank and what the shop sold. Every change is saved here. */
 const meta: MetaSave = parseMeta(loadMeta(), SHOP_ITEMS);
 const listeners = new Set<() => void>();
+/** in a co-op room the host plays every hero, each with what its own player bought; null is this browser's own */
+let worn: Record<string, number> | null = null;
 
 function changed(): void {
   saveMeta(meta);
@@ -15,10 +17,18 @@ function changed(): void {
 }
 
 export const bank = (): number => meta.coins;
-export const ownedLevel = (id: string): number => meta.owned[id] ?? 0;
+export const ownedLevel = (id: string): number => (worn ?? meta.owned)[id] ?? 0;
 export const ownsSkill = (id: SkillId): boolean => ownedLevel(id) > 0;
 /** the stat bonus every run starts with */
-export const metaBonus = (): Partial<Stats> => metaStats(SHOP_ITEMS, meta.owned);
+export const metaBonus = (): Partial<Stats> => metaStats(SHOP_ITEMS, worn ?? meta.owned);
+/** what this browser bought, for a co-op host to play its hero with */
+export const ownedItems = (): Record<string, number> => ({ ...meta.owned });
+
+/** play with another player's purchases until called again with null */
+export function wearOwned(owned: Record<string, number> | null): void {
+  worn = owned;
+}
+export const wornOwned = (): Record<string, number> | null => worn;
 
 export function addCoins(amount: number): void {
   if (amount <= 0) return;

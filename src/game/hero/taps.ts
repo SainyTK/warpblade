@@ -1,8 +1,10 @@
 import { DOUBLE_TAP } from "../../constants/input";
 import { take } from "../input";
+import { objectMemory, rememberPerSeat } from "../seatMemory";
 import { game } from "../state";
 
 const last = { dir: 0, t: Number.NEGATIVE_INFINITY };
+rememberPerSeat(objectMemory(last));
 
 /** the side tapped twice in a row this step, or 0; a run press counts as a double tap toward the held side `dir` */
 export function readDoubleTap(dir: number): number {

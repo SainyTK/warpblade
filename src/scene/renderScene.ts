@@ -1,4 +1,5 @@
 import { beginFrame, composite, setShake } from "../engine/frame";
+import { coop, eachHero } from "../game/coopHooks";
 import { SKY_FLASH } from "../game/spells/lightning";
 import { game, hero, lights, particles, rng } from "../game/state";
 import { settings } from "../store/settings";
@@ -19,13 +20,20 @@ export function renderScene(out: Uint8ClampedArray): void {
   if (game.shake <= 0) game.amp = 0;
   beginFrame(sceneBackground());
   drawAmbientLight();
-  drawAnchors();
-  for (const f of game.fx) f.drawBack?.();
+  eachHero(drawAnchors);
+  const room = coop();
+  for (const f of game.fx) {
+    room?.owner(f);
+    f.drawBack?.();
+  }
   particles.draw("back");
   drawEnemies();
-  drawHeroLayer();
-  for (const f of game.fx) f.draw();
-  hero.sword?.draw();
+  eachHero(drawHeroLayer);
+  for (const f of game.fx) {
+    room?.owner(f);
+    f.draw();
+  }
+  eachHero(() => hero.sword?.draw());
   particles.draw("front");
   drawPickups();
   drawCoins();

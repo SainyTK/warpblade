@@ -7,6 +7,7 @@ import { PF, PK } from "../../../types/particle";
 import { WHITE } from "../../../utils/color";
 import { clamp } from "../../../utils/math";
 import { enemyCenter } from "../../enemies/enemy";
+import { objectMemory, rememberPerSeat } from "../../seatMemory";
 import { game, particles, rng } from "../../state";
 import { dust } from "../../world";
 import { createEmberShot } from "./emberShot";
@@ -25,7 +26,8 @@ interface Brazier {
   kick: number;
 }
 /** the brazier standing now; a new one puts the old one out */
-let standing: Brazier | null = null;
+const placed: { standing: Brazier | null } = { standing: null };
+rememberPerSeat(objectMemory(placed));
 
 function nearestFoe(b: Brazier): Enemy | null {
   let best: Enemy | null = null;
@@ -76,9 +78,9 @@ function drawBrazier(b: Brazier, flame: number): void {
 
 /** Brazier: an iron bowl of fire planted on the floor that spits embers at the nearest foe, one brazier at a time */
 export function plantBrazier(x: number, floor: number): Effect {
-  if (standing) standing.t = Math.max(standing.t, BRAZIER.life);
+  if (placed.standing) placed.standing.t = Math.max(placed.standing.t, BRAZIER.life);
   const b: Brazier = { x, y: floor, t: 0, cd: 0.3, kick: 0 };
-  standing = b;
+  placed.standing = b;
   dust(x, floor, 6);
   riteSound(BRAZIER.pitch);
   return {
@@ -99,7 +101,7 @@ export function plantBrazier(x: number, floor: number): Effect {
           flag: lit ? 0 : PF.SMOKES,
         });
       const over = b.t >= BRAZIER.life + FADE;
-      if (over && standing === b) standing = null;
+      if (over && placed.standing === b) placed.standing = null;
       return !over;
     },
     draw: () => drawBrazier(b, clamp((BRAZIER.life + FADE - b.t) / FADE)),
@@ -108,5 +110,5 @@ export function plantBrazier(x: number, floor: number): Effect {
 
 /** a fresh run: no brazier stands */
 export function clearBrazier(): void {
-  standing = null;
+  placed.standing = null;
 }

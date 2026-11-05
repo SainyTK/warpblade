@@ -3,6 +3,7 @@ class SoundEffects {
   private ctx: AudioContext | null = null;
   private noiseBuffer: AudioBuffer | null = null;
   private master: GainNode | null = null;
+  private tap: MediaStreamAudioDestinationNode | null = null;
   private gain = 1;
   enabled = true;
 
@@ -27,6 +28,15 @@ class SoundEffects {
       this.ctx = null;
       this.master = null;
     }
+  }
+  /** the game's sound as a stream, for a co-op host to send to guests; null before the sound has started */
+  outputStream(): MediaStream | null {
+    if (!this.ctx || !this.master) return null;
+    if (!this.tap) {
+      this.tap = this.ctx.createMediaStreamDestination();
+      this.master.connect(this.tap);
+    }
+    return this.tap.stream;
   }
   private envelope(g: GainNode, vol: number, dur: number): void {
     if (!this.ctx) return;
