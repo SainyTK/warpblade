@@ -2,7 +2,7 @@ import type { Patch } from "../../../src/types/patch.ts";
 import { writeJson, writeText } from "../services/files.ts";
 import { commitAll, git } from "../services/git.ts";
 import { run } from "../services/shell.ts";
-import type { Night, TriageItem, WriterReply } from "../types.ts";
+import type { FeedbackIssue, Night, TriageItem, WriterReply } from "../types.ts";
 import { feedbackChanges } from "../utils/feedbackOutcome.ts";
 import { releaseNotes, releaseTitle } from "../utils/releaseNotes.ts";
 import { failed, runChecks } from "./checks.ts";
@@ -13,6 +13,7 @@ export async function finalize(
   night: Night,
   patch: Patch,
   triage: TriageItem[],
+  issues: FeedbackIssue[],
   replies: WriterReply[],
 ): Promise<void> {
   const { ctx, files } = night;
@@ -26,5 +27,5 @@ export async function finalize(
   const stat = await git(ctx.workdir, "diff", "--shortstat", `${ctx.baseSha}..HEAD`);
   await writeText(files.prBody, `${notes}\n---\n\nBuilt by the agent studio. ${stat}.\n`);
   const addressed = patch.feedback.map((f) => f.id);
-  await writeJson(files.feedbackChanges, feedbackChanges(triage, addressed, replies, ctx.version));
+  await writeJson(files.feedbackChanges, feedbackChanges(triage, issues, addressed, replies, ctx.version));
 }

@@ -1,17 +1,7 @@
 {
   "$schema": "./node_modules/@biomejs/biome/configuration_schema.json",
   "files": {
-    "includes": [
-      "src/**",
-      "index.html",
-      "patches/index.html",
-      "feedback/index.html",
-      "*.json",
-      "*.ts",
-      "!!agent-studio",
-      "!!feedback-api",
-      "!!studio"
-    ]
+    "includes": ["src/**", "index.html", "patches/index.html", "*.json", "*.ts", "!!agent-studio", "!!studio"]
   },
   "formatter": { "indentStyle": "space", "indentWidth": 2, "lineWidth": 120 },
   "linter": { "enabled": true, "rules": { "preset": "none" } },

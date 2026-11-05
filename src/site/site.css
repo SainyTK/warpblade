@@ -1,4 +1,4 @@
-/* The site pages beside the game (patch notes, feedback): ordinary scrolling documents in the game's palette and
+/* The site pages beside the game (patch notes): ordinary scrolling documents in the game's palette and
    fonts. The tokens come from tokens.css; the game's own no-scroll, no-select rules stay in styles.css. */
 html {
   scroll-padding-top: 88px;
@@ -310,24 +310,6 @@ a.chip:hover {
   font-size: 16px;
   color: var(--mist);
 }
-.state-error {
-  border-color: color-mix(in srgb, var(--hp) 50%, var(--line));
-}
-
-/* Loading: shapes of the content with a slow sweep, shown only after a short wait. */
-.skeleton {
-  background: linear-gradient(90deg, var(--raised) 0%, #26214a 50%, var(--raised) 100%) 0 0 / 300% 100%;
-  animation: shimmer 1.6s linear infinite;
-}
-@keyframes shimmer {
-  from {
-    background-position: 100% 0;
-  }
-  to {
-    background-position: 0 0;
-  }
-}
-
 /* Media: a box reserved from the file's size with a muted fill; the file fades in once it arrives. */
 .media-box {
   position: relative;
@@ -401,9 +383,6 @@ a.chip:hover {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .skeleton {
-    animation: none;
-  }
   .button {
     transition: none;
   }

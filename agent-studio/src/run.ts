@@ -23,7 +23,7 @@ async function night(n: Night, options: RunOptions): Promise<string> {
   await buildAndVerify(n);
   await captureMedia(n, plan);
   const { patch, replies } = await writeNotes(n, decisions);
-  await finalize(n, patch, decisions, replies);
+  await finalize(n, patch, decisions, feedback, replies);
   if (n.ctx.mode === "dry") return "dry run finished; nothing was pushed, released or sent";
   await publish(n, patch);
   return `released Patch ${patch.version}`;

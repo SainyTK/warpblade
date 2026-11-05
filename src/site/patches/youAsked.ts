@@ -1,6 +1,6 @@
+import { feedbackIssueUrl } from "../../constants/feedback";
 import type { PatchFeedbackItem } from "../../types/patch";
 import { el, link, setAccent } from "../dom";
-import { feedbackHref } from "./feedbackLinks";
 
 export const YOU_ASKED_ID = "you-asked";
 export const YOU_ASKED_TITLE = "You asked";
@@ -13,7 +13,7 @@ export function youAsked(items: readonly PatchFeedbackItem[]): HTMLElement {
   const list = el("ul", "you-asked-list");
   for (const item of items) {
     const row = el("li");
-    row.append(link(feedbackHref(item.id), `#${item.id}`, "you-asked-id"), el("span", undefined, item.summary));
+    row.append(link(feedbackIssueUrl(item.id), `#${item.id}`, "you-asked-id"), el("span", undefined, item.summary));
     list.append(row);
   }
   section.append(el("h2", "section-title", YOU_ASKED_TITLE), list);

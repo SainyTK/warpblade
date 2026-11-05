@@ -10,9 +10,14 @@ export function el<K extends keyof HTMLElementTagNameMap>(
   return node;
 }
 
+/** a link; one to another site (GitHub) opens in a new tab */
 export function link(href: string, text: string, className?: string): HTMLAnchorElement {
   const anchor = el("a", className, text);
   anchor.href = href;
+  if (href.startsWith("http")) {
+    anchor.target = "_blank";
+    anchor.rel = "noopener";
+  }
   return anchor;
 }
 

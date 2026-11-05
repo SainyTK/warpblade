@@ -1,19 +1,18 @@
 import { readdir } from "node:fs/promises";
 import { join } from "node:path";
-import type { Feedback } from "../../../src/types/feedback.ts";
 import type { Patch } from "../../../src/types/patch.ts";
 import { readJson, readText, writeText } from "../services/files.ts";
 import { git } from "../services/git.ts";
-import type { DevReport, MediaItem, Night, Plan, QaReport, TriageItem } from "../types.ts";
+import type { DevReport, FeedbackIssue, MediaItem, Night, Plan, QaReport, TriageItem } from "../types.ts";
 import type { FeedbackChange } from "../utils/feedbackOutcome.ts";
 
 const optional = <T>(path: string) => readJson<T>(path).catch(() => null);
 
 const cell = (text: string) => text.replaceAll("|", "/").replaceAll("\n", " ");
 
-function triageTable(items: TriageItem[], raw: Feedback[]): string[] {
+function triageTable(items: TriageItem[], raw: FeedbackIssue[]): string[] {
   if (!items.length) return ["No open feedback tonight."];
-  const message = new Map(raw.map((f) => [f.id, f.message]));
+  const message = new Map(raw.map((f) => [f.id, `${f.title}: ${f.body}`]));
   const rows = items.map(
     (t) =>
       `| #${t.id} | ${cell(message.get(t.id) ?? "")} | ${t.decision} | ${t.weight} | ${cell(t.reason)} | ${cell(t.reply)} |`,
@@ -66,7 +65,7 @@ export async function writeReview(night: Night, outcome: string): Promise<void> 
   const { files, ctx } = night;
   const plan = await optional<Plan>(files.plan);
   const triage = (await optional<TriageItem[]>(files.triage)) ?? [];
-  const raw = (await optional<Feedback[]>(files.feedback)) ?? [];
+  const raw = (await optional<FeedbackIssue[]>(files.feedback)) ?? [];
   const dev = await optional<DevReport>(files.develop);
   const qa = await lastQa(ctx.runDir);
   const media = (await optional<MediaItem[]>(files.media)) ?? [];
@@ -114,7 +113,7 @@ export async function writeReview(night: Night, outcome: string): Promise<void> 
     "## Feedback changes",
     "",
     ...(changes.length
-      ? changes.map((c) => `- #${c.id}: ${c.update.status}${c.update.reply ? `, reply: ${c.update.reply}` : ""}`)
+      ? changes.map((c) => `- #${c.id}: ${c.action}${c.reply ? `, comment: ${c.reply}` : ""}`)
       : ["None."]),
     "",
     "## Files changed",

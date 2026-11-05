@@ -20,7 +20,7 @@ export interface RunOptions {
   /** the checkout the studio builds in, already at the base commit */
   workdir: string;
   runsDir: string;
-  /** "api", or a JSON file of feedback items for a dry run */
+  /** "github", or a JSON file of feedback issues for a dry run */
   feedback: string;
 }
 
@@ -36,6 +36,18 @@ export interface RunContext {
   baseSha: string;
   lastTag: string | null;
   previousVersions: string[];
+}
+
+/** an open game-feedback issue, with only what triage reads; its author never reaches an agent */
+export interface FeedbackIssue {
+  id: number;
+  title: string;
+  body: string;
+  /** thumbs-up reactions */
+  votes: number;
+  /** already labelled planned on an earlier night */
+  planned: boolean;
+  createdAt: string;
 }
 
 export interface TriageItem {

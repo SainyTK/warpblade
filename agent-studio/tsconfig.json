@@ -19,7 +19,6 @@
     "src",
     "playtest",
     "../src/types/patch.ts",
-    "../src/types/feedback.ts",
     "../src/constants/feedback.ts",
     "../src/constants/patchSections.ts",
     "../src/utils/compareVersions.ts"

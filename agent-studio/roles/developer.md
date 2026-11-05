@@ -10,7 +10,7 @@ Reuse the engine's drawing, palettes, lights, particles, clips and hero kit seam
 Rules:
 
 - Build the plan. If something in it cannot work, choose the closest version that serves the same goal, and record the deviation.
-- Do not edit anything under `agent-studio/` or `feedback-api/`, or deployment settings. Do not touch `src/content/patches/` or `public/patches/`; the writer and media agents own those.
+- Do not edit anything under `agent-studio/` or `.github/`, or deployment settings. Do not touch `src/content/patches/` or `public/patches/`; the writer and media agents own those.
 - Keep saves compatible. Never rename or clear a local storage key; migrate when a shape changes.
 - Every new input works on the keyboard and the touch controller and appears on the Controls screen.
 - Update the README feature list and any doc in `docs/` your change makes untrue.

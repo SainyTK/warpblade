@@ -128,9 +128,9 @@ Points left when the last wave of the stage falls are not spent, since the stage
 ## Patch notes and feedback
 
 Every update is written up on the [patch notes](https://warpblade.sainytk.com/patches/) page, with the reason behind each change.
-Report a bug, a balance problem or an idea on the [feedback](https://warpblade.sainytk.com/feedback/) page, and vote for what other players asked.
-The studio reads new feedback every night, replies there, and links each item to the patch that addressed it.
-Both pages are linked from the start menu.
+Report a bug, a balance problem or an idea through the [game feedback form](https://github.com/SainyTK/warpblade/issues/new?template=game-feedback.yml) on GitHub, and give a thumbs up to [what other players asked](https://github.com/SainyTK/warpblade/issues?q=label%3Agame-feedback).
+The studio reads new feedback every night, replies on the issue, and closes it when a patch addresses it, or explains why it will not.
+Both are linked from the start menu.
 
 ## Run it locally
 
@@ -196,7 +196,7 @@ src/
     ultimates/     Thousand Edges, Phantom Legion, Starfall, Tempest
   scene/           background, the backdrop around the stage, the order layers are drawn in, and the dissolve between eras
     eras/          one scene per era: palette, sky, decorations, weather and lighting
-  site/            the patch notes and feedback pages: shared header and shell, one folder per page
+  site/            the patch notes page and its shared header and shell
   content/patches/ one JSON file per patch, read by the patch notes page
   ui/              HUD, level-up pick, menu, keyboard input, touch controller, stage sizing
     menu/          start and pause menu: main, Shop, run result, Controls and Options screens

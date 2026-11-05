@@ -2,10 +2,11 @@ import { readdir } from "node:fs/promises";
 import { join } from "node:path";
 import type { Patch } from "../../../src/types/patch.ts";
 import { MAIN_BRANCH } from "../constants.ts";
-import { updateFeedback } from "../services/feedbackApi.ts";
+
 import { readJson, writeJson } from "../services/files.ts";
 import { git } from "../services/git.ts";
 import { createRelease, mergePatch } from "../services/github.ts";
+import { applyFeedback, ensureLabels } from "../services/githubIssues.ts";
 import type { Night } from "../types.ts";
 import type { FeedbackChange } from "../utils/feedbackOutcome.ts";
 import { releaseTitle } from "../utils/releaseNotes.ts";
@@ -48,8 +49,9 @@ export async function publish(night: Night, patch: Patch): Promise<void> {
   });
   const changes = await readJson<FeedbackChange[]>(files.feedbackChanges);
   const feedbackErrors: string[] = [];
+  await ensureLabels(ctx.workdir);
   for (const change of changes) {
-    await updateFeedback(change.id, change.update).catch((error: unknown) =>
+    await applyFeedback(ctx.workdir, change).catch((error: unknown) =>
       feedbackErrors.push(`#${change.id}: ${String(error)}`),
     );
   }

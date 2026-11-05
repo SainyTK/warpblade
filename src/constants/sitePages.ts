@@ -1,3 +1,5 @@
+import { FEEDBACK_FORM_URL } from "./feedback";
+
 /** The pages beside the game, linked from the site header and the start menu footer. */
 export type SitePageId = "patches" | "feedback";
 
@@ -9,7 +11,7 @@ export interface SitePage {
 
 export const SITE_PAGES: readonly SitePage[] = [
   { id: "patches", label: "Patch notes", href: "/patches/" },
-  { id: "feedback", label: "Feedback", href: "/feedback/" },
+  { id: "feedback", label: "Feedback", href: FEEDBACK_FORM_URL },
 ];
 
 export const GAME_HREF = "/";

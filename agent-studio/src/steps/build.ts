@@ -9,7 +9,6 @@ import { commitLeftovers, discardChanges, guardStep, isProtected } from "./guard
 const DEVELOPER_OWNS = (path: string) =>
   !isProtected(path) &&
   !path.startsWith("agent-studio/") &&
-  !path.startsWith("feedback-api/") &&
   !path.startsWith("src/content/patches/") &&
   !path.startsWith("public/patches/");
 

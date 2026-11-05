@@ -13,13 +13,6 @@ export const BRANCH_PREFIX = "studio/patch-";
 export const CLAUDE_BIN = process.env.STUDIO_CLAUDE ?? join(homedir(), ".local/bin/claude-pool");
 export const MODEL = process.env.STUDIO_MODEL ?? "claude-opus-5-5";
 
-export const FEEDBACK_API_URL =
-  process.env.STUDIO_FEEDBACK_API ?? "https://warpblade-feedback.my-worker-signal.workers.dev";
-export const FEEDBACK_TOKEN_FILE =
-  process.env.STUDIO_FEEDBACK_TOKEN_FILE ?? join(homedir(), ".config/warpblade/feedback-admin-token");
-/** feedback statuses the studio reads each night */
-export const FEEDBACK_OPEN_STATUSES = ["new", "planned"] as const;
-
 /** a failed QA gets this many rounds of fixes before the night is called off */
 export const MAX_FIX_ROUNDS = 2;
 /** bot runs per hero for the baseline difficulty report */
@@ -36,7 +29,6 @@ export const PROTECTED_PATHS = [
   "agent-studio/package-lock.json",
   "agent-studio/biome.json",
   "agent-studio/tsconfig.json",
-  "feedback-api/",
   "vercel.json",
   ".github/",
 ];
@@ -52,6 +44,13 @@ export const ROLES: Record<Role, RoleConfig> = {
 };
 /** a small patch gives the developer less time */
 export const SMALL_PATCH_DEVELOPER_MINUTES = 120;
+
+/** the label on feedback issues the studio means to do */
+export const PLANNED_LABEL = "planned";
+/** the most feedback issues read in one night */
+export const FEEDBACK_LIMIT = 200;
+/** longer issue bodies are cut before triage reads them */
+export const FEEDBACK_BODY_MAX = 4000;
 
 /** what players see on feedback the studio means to do but did not ship tonight */
 export const PLANNED_REPLY = "The studio plans to work on this in an upcoming patch.";
