@@ -41,7 +41,13 @@ export const roomView = (): Readonly<RoomView> => room;
 /** in a room, or getting into one */
 export const inRoom = (): boolean => room.phase === "connecting" || room.phase === "lobby" || room.phase === "playing";
 
+/**
+ * Change the room and tell the interface, but only when something changed: the host sends the same player list every
+ * heartbeat, and redrawing the lobby for it would undo a pending "Leave? Press again" or a "Link copied"
+ */
 export function updateRoom(patch: Partial<RoomView>): void {
+  const keys = Object.keys(patch) as (keyof RoomView)[];
+  if (keys.every((key) => JSON.stringify(room[key]) === JSON.stringify(patch[key]))) return;
   Object.assign(room, patch);
   for (const listener of listeners) listener();
 }
