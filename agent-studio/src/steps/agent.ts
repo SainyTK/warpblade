@@ -28,7 +28,10 @@ export async function callRole<T>(night: Night, call: RoleCall): Promise<{ outpu
     addDirs: [night.ctx.runDir],
     resume: call.resume,
   });
-  night.costs[label] = (night.costs[label] ?? 0) + result.costUsd;
-  console.log(`[studio] ${label} finished ($${result.costUsd.toFixed(2)})`);
+  const before = call.resume ? (night.sessionTotals[call.resume] ?? 0) : 0;
+  const spent = Math.max(0, result.costUsd - before);
+  if (result.sessionId) night.sessionTotals[result.sessionId] = result.costUsd;
+  night.costs[label] = (night.costs[label] ?? 0) + spent;
+  console.log(`[studio] ${label} finished ($${spent.toFixed(2)})`);
   return { output: result.output, sessionId: result.sessionId };
 }

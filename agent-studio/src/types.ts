@@ -124,4 +124,6 @@ export interface Night {
   ctx: RunContext;
   files: import("./runFiles.ts").RunFiles;
   costs: Record<string, number>;
+  /** what each agent session has cost so far: a resumed session reports its whole total, not the new spend */
+  sessionTotals: Record<string, number>;
 }

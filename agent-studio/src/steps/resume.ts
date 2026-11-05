@@ -26,7 +26,7 @@ export async function reopen(options: RunOptions): Promise<Night> {
   console.log(`[studio] resuming ${ctx.kind} patch ${ctx.version} for ${ctx.date} on ${ctx.branch}`);
   // the earlier attempts' agent costs carry over, so the review shows what the whole night cost
   const earlier = await finished<{ costs: Record<string, number> }>(files.summary);
-  return { ctx, files, costs: earlier?.costs ?? {} };
+  return { ctx, files, costs: earlier?.costs ?? {}, sessionTotals: {} };
 }
 
 /** the last QA round, when it passed */
