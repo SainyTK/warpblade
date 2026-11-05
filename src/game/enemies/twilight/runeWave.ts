@@ -3,6 +3,7 @@ import { glow, line, place, px } from "../../../engine/frame";
 import type { Effect } from "../../../types/effect";
 import { PK } from "../../../types/particle";
 import { WHITE } from "../../../utils/color";
+import { eachStanding, heroSlot } from "../../coopHooks";
 import { hurtHero } from "../../hurtHero";
 import { particles, rng } from "../../state";
 import { boxHit, heroBox } from "../../world";
@@ -20,15 +21,16 @@ const GLYPHS: readonly (readonly string[])[] = [
 
 /** a wave of runes running along the floor from a golem's slam: low enough to jump, it hits once */
 export function createRuneWave(x0: number, dir: number, damage: number): Effect {
-  const w = { x: x0, t: 0, hit: false };
+  const w = { x: x0, t: 0, struck: new Set<number>() };
   return {
     update(dt) {
       w.t += dt;
       w.x += dir * SPEED * dt;
-      if (!w.hit && boxHit([w.x - 4, GROUND - 7, w.x + 4, GROUND + 2], heroBox())) {
-        w.hit = true;
+      eachStanding(() => {
+        if (w.struck.has(heroSlot()) || !boxHit([w.x - 4, GROUND - 7, w.x + 4, GROUND + 2], heroBox())) return;
+        w.struck.add(heroSlot());
         hurtHero(damage, w.x - dir * 10);
-      }
+      });
       if (rng.chance(0.45))
         particles.spawn(PK.EMBER, w.x + rng.range(-2, 2), GROUND - rng.range(1, 6), dir * 10, -rng.range(14, 30), 0.5, {
           sparks: RUNE_SPARKS,

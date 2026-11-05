@@ -5,6 +5,7 @@ import type { Enemy } from "../../../types/enemy";
 import { PK } from "../../../types/particle";
 import { approach, clamp } from "../../../utils/math";
 import { waveScale } from "../../../utils/progression";
+import { eachStanding } from "../../coopHooks";
 import { hurtHero } from "../../hurtHero";
 import { game, hero, particles, rng } from "../../state";
 import { boxHit, dust, heroBox } from "../../world";
@@ -78,10 +79,12 @@ export function updateMire(e: Enemy, dt: number, ts: number): void {
     const L = tongueLength(e);
     const tip = e.x + e.face * (10 + L);
     const box = [Math.min(e.x, tip) - 1, e.y - 9, Math.max(e.x, tip) + 1, e.y - 3] as const;
-    if (!e.ax && e.st < TONGUE.out + 0.04 && boxHit(box, heroBox())) {
-      e.ax = 1;
-      hurtHero(RAIN_HITS.mireTongue * e.power, e.x);
-    }
+    eachStanding(() => {
+      if (!e.ax && e.st < TONGUE.out + 0.04 && boxHit(box, heroBox())) {
+        e.ax = 1;
+        hurtHero(RAIN_HITS.mireTongue * e.power, e.x);
+      }
+    });
     if (e.st >= TONGUE.back) Object.assign(e, { state: "recover", st: 0 });
   } else if (e.state === "shoot") {
     if (e.st >= 0.25) Object.assign(e, { state: "recover", st: 0 });
@@ -93,6 +96,8 @@ export function updateMire(e: Enemy, dt: number, ts: number): void {
     particles.spawn(PK.EMBER, e.x + rng.range(-6, 6), e.y - rng.range(4, 12), 0, -8, rng.range(0.3, 0.6), {
       sparks: SPARKS.shadow,
     });
-  if ((e.state === "walk" || e.state === "hop") && e.stagger <= 0 && boxHit(enemyBox(e), heroBox()))
-    hurtHero(RAIN_HITS.mireTouch * e.power, e.x);
+  eachStanding(() => {
+    if ((e.state === "walk" || e.state === "hop") && e.stagger <= 0 && boxHit(enemyBox(e), heroBox()))
+      hurtHero(RAIN_HITS.mireTouch * e.power, e.x);
+  });
 }

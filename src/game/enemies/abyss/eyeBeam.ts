@@ -4,6 +4,7 @@ import type { Effect } from "../../../types/effect";
 import type { Enemy } from "../../../types/enemy";
 import { PK } from "../../../types/particle";
 import { clamp } from "../../../utils/math";
+import { eachStanding, heroSlot } from "../../coopHooks";
 import { hurtHero } from "../../hurtHero";
 import { game, particles, rng } from "../../state";
 import { heroBox } from "../../world";
@@ -38,7 +39,7 @@ function rayHitsHero(x0: number, y0: number, x1: number, y1: number): boolean {
  * brightens for the last moment: that line is where the beam will burn, once, along it to the floor.
  */
 export function createEyeBeam(e: Enemy, damage: number): Effect {
-  let hit = false;
+  const hit = new Set<number>();
   let t = 0;
   return {
     update(dt) {
@@ -46,10 +47,11 @@ export function createEyeBeam(e: Enemy, damage: number): Effect {
       if (e.state !== "beam") return true;
       t += dt;
       const [x1, y1] = rayEnd(e.x, e.y, Math.cos(e.ay), Math.sin(e.ay));
-      if (!hit && t <= BEAM.hurts && rayHitsHero(e.x, e.y, x1, y1)) {
-        hit = true;
+      eachStanding(() => {
+        if (hit.has(heroSlot()) || t > BEAM.hurts || !rayHitsHero(e.x, e.y, x1, y1)) return;
+        hit.add(heroSlot());
         hurtHero(damage, e.x);
-      }
+      });
       if (rng.chance(0.8))
         particles.spawn(PK.SPARK, x1, Math.min(y1, GROUND - 1), rng.range(-60, 60), rng.range(-90, -20), 0.2, {
           sparks: VOID_SPARKS,

@@ -6,6 +6,7 @@ import type { Enemy } from "../../types/enemy";
 import { PK } from "../../types/particle";
 import { approach, clamp } from "../../utils/math";
 import { waveScale } from "../../utils/progression";
+import { eachStanding } from "../coopHooks";
 import { createFloorRing } from "../effects/floorRing";
 import { createSlash } from "../effects/slash";
 import { hurtHero } from "../hurtHero";
@@ -35,8 +36,10 @@ function slam(e: Enemy): void {
     );
   shake(0.35, 3.5);
   sfx.boom();
-  if (hero.ground && Math.abs(hero.x - e.x) < SLAM_REACH && hero.y > GROUND - 4)
-    hurtHero(ENEMY_HITS.bruteSlam * e.power, e.x);
+  eachStanding(() => {
+    if (hero.ground && Math.abs(hero.x - e.x) < SLAM_REACH && hero.y > GROUND - 4)
+      hurtHero(ENEMY_HITS.bruteSlam * e.power, e.x);
+  });
 }
 
 /** The Rift Brute: a giant husk. It swipes when Kael is close and leaps to slam the floor when he keeps away. Jump the slam. */
@@ -68,7 +71,9 @@ export function updateBrute(e: Enemy, dt: number, ts: number): void {
         }),
       );
       const reach = e.face > 0 ? ([e.x, e.y - 46, e.x + 42, e.y] as const) : ([e.x - 42, e.y - 46, e.x, e.y] as const);
-      if (boxHit(reach, heroBox())) hurtHero(ENEMY_HITS.bruteSwipe * e.power, e.x);
+      eachStanding(() => {
+        if (boxHit(reach, heroBox())) hurtHero(ENEMY_HITS.bruteSwipe * e.power, e.x);
+      });
       sfx.swing(0.4);
     }
   } else if (e.state === "swipe") {

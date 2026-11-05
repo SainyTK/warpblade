@@ -6,6 +6,7 @@ import { PK } from "../../../types/particle";
 import { WHITE } from "../../../utils/color";
 import { clamp } from "../../../utils/math";
 import { Rng } from "../../../utils/rng";
+import { eachStanding, heroSlot } from "../../coopHooks";
 import { hurtHero } from "../../hurtHero";
 import { game, particles, rng } from "../../state";
 import { boxHit, heroBox } from "../../world";
@@ -47,7 +48,7 @@ export function createStormMark(e: Enemy, windup: number): Effect {
 /** a violet bolt from the kite straight down to the floor; it hurts Kael once if he stands in its strip */
 export function createStormBolt(x: number, y: number, damage: number): Effect {
   let t = 0;
-  let bit = false;
+  const bit = new Set<number>();
   const R = new Rng(Math.floor(x * 31 + y * 7 + rng.next() * 1000));
   const pts: [number, number][] = [[x, y]];
   for (let py = y + 6; py < GROUND; py += 6) pts.push([x + R.range(-3, 3), py]);
@@ -59,10 +60,11 @@ export function createStormBolt(x: number, y: number, damage: number): Effect {
   return {
     update(dt) {
       t += dt;
-      if (!bit && t < LIVE && boxHit([x - BOLT_HALF, y, x + BOLT_HALF, GROUND], heroBox())) {
-        bit = true;
+      eachStanding(() => {
+        if (bit.has(heroSlot()) || t >= LIVE || !boxHit([x - BOLT_HALF, y, x + BOLT_HALF, GROUND], heroBox())) return;
+        bit.add(heroSlot());
         hurtHero(damage, x);
-      }
+      });
       return t < LIFE;
     },
     draw() {

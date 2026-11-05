@@ -2,6 +2,7 @@ import { GROUND } from "../../../constants/stage";
 import { glow, line, place, polygon, px } from "../../../engine/frame";
 import type { Effect } from "../../../types/effect";
 import { PK } from "../../../types/particle";
+import { eachStanding, heroSlot } from "../../coopHooks";
 import { hurtHero } from "../../hurtHero";
 import { particles, rng } from "../../state";
 import { boxHit, dust, heroBox, shake } from "../../world";
@@ -11,7 +12,8 @@ import { DAY_SPARKS, DAY_COLORS as DC } from "./colors";
 const ROOT = { rise: 0.08, stand: 0.32, sink: 0.25, height: 22, half: 4 } as const;
 /** one Oakheart root attack: every root it raises shares this, so the line of roots can hurt Kael once */
 export interface RootStrike {
-  hit: boolean;
+  /** the heroes the roots have struck, by place in the room, so each is struck once */
+  struck: Set<number>;
 }
 
 /** a root under the floor at x: a violet crack runs open for `mark` seconds, then a pointed root bursts up, stands, sinks */
@@ -44,14 +46,16 @@ export function createRootSpike(x: number, mark: number, dmg: number, strike: Ro
           });
       }
       const h = height();
-      if (
-        !strike.hit &&
-        t - mark < ROOT.rise + ROOT.stand &&
-        boxHit([x - ROOT.half, GROUND - h, x + ROOT.half, GROUND], heroBox())
-      ) {
-        strike.hit = true;
+      eachStanding(() => {
+        if (
+          strike.struck.has(heroSlot()) ||
+          t - mark >= ROOT.rise + ROOT.stand ||
+          !boxHit([x - ROOT.half, GROUND - h, x + ROOT.half, GROUND], heroBox())
+        )
+          return;
+        strike.struck.add(heroSlot());
         hurtHero(dmg, x);
-      }
+      });
       return t < mark + ROOT.rise + ROOT.stand + ROOT.sink;
     },
     draw() {

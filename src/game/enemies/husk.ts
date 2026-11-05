@@ -6,6 +6,7 @@ import type { Enemy } from "../../types/enemy";
 import { PK } from "../../types/particle";
 import { approach, clamp } from "../../utils/math";
 import { waveScale } from "../../utils/progression";
+import { eachStanding } from "../coopHooks";
 import { createSlash } from "../effects/slash";
 import { hurtHero } from "../hurtHero";
 import { game, hero, particles, rng } from "../state";
@@ -39,7 +40,9 @@ export function updateHusk(e: Enemy, dt: number, ts: number): void {
         }),
       );
       const reach = e.face > 0 ? ([e.x, e.y - 30, e.x + 28, e.y] as const) : ([e.x - 28, e.y - 30, e.x, e.y] as const);
-      if (boxHit(reach, heroBox())) hurtHero(ENEMY_HITS.huskSwipe * e.power, e.x);
+      eachStanding(() => {
+        if (boxHit(reach, heroBox())) hurtHero(ENEMY_HITS.huskSwipe * e.power, e.x);
+      });
       sfx.swing(0.5);
     }
   } else if (e.state === "swipe") {
@@ -54,6 +57,8 @@ export function updateHusk(e: Enemy, dt: number, ts: number): void {
       sparks: SPARKS.shadow,
     });
   // a husk reeling from a sword blow does not hurt by touch, so Kael can lunge in close and cut through it
-  if (e.state === "walk" && e.stagger <= 0 && boxHit(enemyBox(e), heroBox()))
-    hurtHero(ENEMY_HITS.huskTouch * e.power, e.x);
+  eachStanding(() => {
+    if (e.state === "walk" && e.stagger <= 0 && boxHit(enemyBox(e), heroBox()))
+      hurtHero(ENEMY_HITS.huskTouch * e.power, e.x);
+  });
 }

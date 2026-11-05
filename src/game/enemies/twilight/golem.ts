@@ -4,6 +4,7 @@ import type { Enemy } from "../../../types/enemy";
 import { PK } from "../../../types/particle";
 import { approach, clamp } from "../../../utils/math";
 import { waveScale } from "../../../utils/progression";
+import { eachStanding } from "../../coopHooks";
 import { createFloorRing } from "../../effects/floorRing";
 import { createImpact } from "../../effects/impact";
 import { hurtHero } from "../../hurtHero";
@@ -53,7 +54,9 @@ export function updateGolem(e: Enemy, dt: number, ts: number): void {
       Object.assign(e, { state: "swipe", st: 0, vx: e.face * 60 });
       game.fx.push(createImpact(e.x + e.face * 17, e.y - 11, e.face, false, RUNE_SPARKS));
       const reach = e.face > 0 ? ([e.x, e.y - 24, e.x + 27, e.y] as const) : ([e.x - 27, e.y - 24, e.x, e.y] as const);
-      if (boxHit(reach, heroBox())) hurtHero(GOLEM_HITS.punch * e.power, e.x);
+      eachStanding(() => {
+        if (boxHit(reach, heroBox())) hurtHero(GOLEM_HITS.punch * e.power, e.x);
+      });
       sfx.swing(0.35);
     }
   } else if (e.state === "swipe") {
@@ -74,5 +77,8 @@ export function updateGolem(e: Enemy, dt: number, ts: number): void {
     particles.spawn(PK.EMBER, e.x + rng.range(-7, 7), e.y - rng.range(6, 18), 0, -8, rng.range(0.4, 0.8), {
       sparks: RUNE_SPARKS,
     });
-  if (e.state === "walk" && e.stagger <= 0 && boxHit(enemyBox(e), heroBox())) hurtHero(GOLEM_HITS.touch * e.power, e.x);
+  eachStanding(() => {
+    if (e.state === "walk" && e.stagger <= 0 && boxHit(enemyBox(e), heroBox()))
+      hurtHero(GOLEM_HITS.touch * e.power, e.x);
+  });
 }

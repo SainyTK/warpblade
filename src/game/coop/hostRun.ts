@@ -135,6 +135,20 @@ export class HostRun implements CoopHooks {
     this.enter(this.home);
   }
 
+  eachStanding(run: () => void): void {
+    const from = this.current;
+    for (const seat of this.seats) {
+      if (!this.spot(seat).standing) continue;
+      this.enter(seat);
+      run();
+    }
+    this.enter(from);
+  }
+
+  slot(): number {
+    return this.current.slot;
+  }
+
   shareXp(amount: number): void {
     const from = this.current;
     for (const seat of this.seats) {

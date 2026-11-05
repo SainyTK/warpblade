@@ -4,6 +4,7 @@ import type { Color } from "../../../types/color";
 import type { Effect } from "../../../types/effect";
 import { PK } from "../../../types/particle";
 import { scale, WHITE } from "../../../utils/color";
+import { eachStanding } from "../../coopHooks";
 import { hurtHero } from "../../hurtHero";
 import { particles, rng } from "../../state";
 import { boxHit, heroBox } from "../../world";
@@ -28,8 +29,13 @@ export function createPrismShard(x: number, y: number, vx: number, vy: number, d
       o.y += vy * dt;
       if (rng.chance(0.35))
         particles.spawn(PK.MOTE, o.x, o.y, -vx * 0.1, -vy * 0.1, rng.range(0.15, 0.3), { col: hue, size: 0.5 });
-      if (boxHit([o.x - 2, o.y - 2, o.x + 2, o.y + 2], heroBox())) {
+      let struck = false;
+      eachStanding(() => {
+        if (struck || !boxHit([o.x - 2, o.y - 2, o.x + 2, o.y + 2], heroBox())) return;
+        struck = true;
         hurtHero(damage, o.x);
+      });
+      if (struck) {
         burst(5);
         return false;
       }

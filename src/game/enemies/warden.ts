@@ -6,6 +6,7 @@ import type { Enemy } from "../../types/enemy";
 import { PK } from "../../types/particle";
 import { eraOf } from "../../utils/eras";
 import { approach, clamp } from "../../utils/math";
+import { eachStanding } from "../coopHooks";
 import { createRift } from "../effects/rift";
 import { createShadowOrb } from "../effects/shadowOrb";
 import { hurtHero } from "../hurtHero";
@@ -80,7 +81,9 @@ export function updateWarden(e: Enemy, dt: number, ts: number): void {
       sfx.lunge();
     }
   } else if (e.state === "dive") {
-    if (boxHit(enemyBox(e), heroBox())) hurtHero(ENEMY_HITS.wardenDive * e.power, e.x);
+    eachStanding(() => {
+      if (boxHit(enemyBox(e), heroBox())) hurtHero(ENEMY_HITS.wardenDive * e.power, e.x);
+    });
     if (e.st >= 0.55) Object.assign(e, { state: "recover", st: 0 });
   } else if (e.st >= 0.8) Object.assign(e, { state: "drift", st: 0, cd: rng.range(1.2, 2.2) * fast, side: -e.side });
   if (e.state !== "dive") {

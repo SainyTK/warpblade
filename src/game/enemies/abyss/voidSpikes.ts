@@ -4,6 +4,7 @@ import { sfx } from "../../../services/audio";
 import type { Effect } from "../../../types/effect";
 import { PK } from "../../../types/particle";
 import { clamp } from "../../../utils/math";
+import { eachStanding, heroSlot } from "../../coopHooks";
 import { hurtHero } from "../../hurtHero";
 import { particles, rng } from "../../state";
 import { boxHit, heroBox } from "../../world";
@@ -23,7 +24,7 @@ export function createVoidSpikes(x0: number, dir: number, count: number, damage:
   const xs = Array.from({ length: count }, (_, i) => x0 + dir * i * GAP).filter((x) => x > 4 && x < W - 4);
   const life = (xs.length - 1) * DELAY + SPIKE.warn + SPIKE.up + SPIKE.hold + SPIKE.down;
   let t = 0;
-  let hit = false;
+  const hit = new Set<number>();
   /** the spike's height from 0 to 1 at its own time u, which is negative before its crack opens */
   const rise = (u: number): number => {
     const v = u - SPIKE.warn;
@@ -47,15 +48,17 @@ export function createVoidSpikes(x0: number, dir: number, count: number, damage:
           if (i % 2 === 0) sfx.swing(0.3);
         }
         const h = rise(u) * HEIGHT;
-        if (
-          !hit &&
-          h > 4 &&
-          u < SPIKE.warn + SPIKE.up + SPIKE.hold &&
-          boxHit([x - 4, GROUND - h, x + 4, GROUND], heroBox())
-        ) {
-          hit = true;
+        eachStanding(() => {
+          if (
+            hit.has(heroSlot()) ||
+            h <= 4 ||
+            u >= SPIKE.warn + SPIKE.up + SPIKE.hold ||
+            !boxHit([x - 4, GROUND - h, x + 4, GROUND], heroBox())
+          )
+            return;
+          hit.add(heroSlot());
           hurtHero(damage, x - dir * 8);
-        }
+        });
       });
       return t < life;
     },

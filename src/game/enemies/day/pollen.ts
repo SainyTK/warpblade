@@ -3,6 +3,7 @@ import { glow, place, px } from "../../../engine/frame";
 import type { Effect } from "../../../types/effect";
 import { PK } from "../../../types/particle";
 import { TAU } from "../../../utils/math";
+import { eachStanding } from "../../coopHooks";
 import { hurtHero } from "../../hurtHero";
 import { particles, rng } from "../../state";
 import { boxHit, heroBox } from "../../world";
@@ -29,8 +30,13 @@ export function createPollen(x: number, y: number, vx: number, damage: number): 
           col: rng.chance(0.5) ? P[2] : DC.pollenPink,
           size: 0.5,
         });
-      if (boxHit([o.x - 4, o.y - 4, o.x + 4, o.y + 4], heroBox())) {
+      let struck = false;
+      eachStanding(() => {
+        if (struck || !boxHit([o.x - 4, o.y - 4, o.x + 4, o.y + 4], heroBox())) return;
+        struck = true;
         hurtHero(damage, o.x);
+      });
+      if (struck) {
         for (let i = 0; i < 8; i++) {
           const a = rng.range(0, TAU);
           particles.spawn(PK.SPARK, o.x, o.y, Math.cos(a) * 50, Math.sin(a) * 50, rng.range(0.2, 0.4), {

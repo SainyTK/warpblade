@@ -2,6 +2,7 @@ import { GROUND, W } from "../../../constants/stage";
 import { glow, line, place, px } from "../../../engine/frame";
 import type { Effect } from "../../../types/effect";
 import { PK } from "../../../types/particle";
+import { eachStanding, heroSlot } from "../../coopHooks";
 import { hurtHero } from "../../hurtHero";
 import { particles, rng } from "../../state";
 import { boxHit, heroBox } from "../../world";
@@ -13,17 +14,18 @@ const HEIGHT = 9;
 /** a crest of mud that rolls along the floor from x in direction dir after a delay; jump it, or it hurts once */
 export function createMudWave(x: number, dir: number, damage: number, delay = 0): Effect {
   const o = { x, t: -delay };
-  let bit = false;
+  const bit = new Set<number>();
   return {
     update(dt) {
       o.t += dt;
       if (o.t < 0) return true;
       o.x += dir * SPEED * dt;
       const h = HEIGHT * Math.min(1, o.t * 6);
-      if (!bit && boxHit([o.x - 4, GROUND - h, o.x + 4, GROUND], heroBox())) {
-        bit = true;
+      eachStanding(() => {
+        if (bit.has(heroSlot()) || !boxHit([o.x - 4, GROUND - h, o.x + 4, GROUND], heroBox())) return;
+        bit.add(heroSlot());
         hurtHero(damage, o.x - dir * 10);
-      }
+      });
       if (rng.chance(0.5))
         particles.spawn(PK.SPARK, o.x + dir * 2, GROUND - h, dir * rng.range(10, 50), -rng.range(30, 90), 0.3, {
           sparks: MUD_SPARKS,

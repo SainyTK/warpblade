@@ -4,6 +4,7 @@ import type { Enemy } from "../../../types/enemy";
 import { PK } from "../../../types/particle";
 import { approach, clamp } from "../../../utils/math";
 import { waveScale } from "../../../utils/progression";
+import { eachStanding } from "../../coopHooks";
 import { createSlash } from "../../effects/slash";
 import { hurtHero } from "../../hurtHero";
 import { game, hero, particles, rng } from "../../state";
@@ -11,7 +12,7 @@ import { boxHit, dust, heroBox, shake, surfaceBelow } from "../../world";
 import { facesHero, turnToHero } from "../facing";
 import { createAcorn } from "./acorn";
 import { DAY_SPARKS, DAY_COLORS as DC } from "./colors";
-import { createRootSpike } from "./rootSpike";
+import { createRootSpike, type RootStrike } from "./rootSpike";
 
 /** Oakheart blows before wave scaling */
 export const OAK_HITS = { sweep: 22, root: 20, acorn: 12 } as const;
@@ -35,7 +36,9 @@ function sweep(e: Enemy): void {
     }),
   );
   const reach = e.face > 0 ? ([e.x, e.y - 42, e.x + 44, e.y] as const) : ([e.x - 44, e.y - 42, e.x, e.y] as const);
-  if (boxHit(reach, heroBox())) hurtHero(OAK_HITS.sweep * e.power, e.x);
+  eachStanding(() => {
+    if (boxHit(reach, heroBox())) hurtHero(OAK_HITS.sweep * e.power, e.x);
+  });
   for (let i = 0; i < 6; i++)
     particles.spawn(
       PK.SHARD,
@@ -54,7 +57,7 @@ function sweep(e: Enemy): void {
 
 /** a line of roots that breaks the floor from its feet toward where Kael stood, a little past him; enraged it reaches farther */
 function plantRoots(e: Enemy, enraged: boolean): void {
-  const strike = { hit: false };
+  const strike: RootStrike = { struck: new Set() };
   const dir = Math.sign(e.ax - e.x) || e.face;
   const span = Math.abs(e.ax - e.x) + (enraged ? 40 : 20);
   const mark = 0.4 * waveScale(game.wave).windup;

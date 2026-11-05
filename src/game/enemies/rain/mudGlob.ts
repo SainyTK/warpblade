@@ -3,6 +3,7 @@ import { circle, ellipseRing, glow, line, place, px } from "../../../engine/fram
 import type { Effect } from "../../../types/effect";
 import { PK } from "../../../types/particle";
 import { clamp } from "../../../utils/math";
+import { eachStanding, heroSlot } from "../../coopHooks";
 import { hurtHero } from "../../hurtHero";
 import { game, hero, particles, rng } from "../../state";
 import { boxHit, dust, heroBox } from "../../world";
@@ -15,18 +16,19 @@ const PUDDLE_HALF = 10;
 /** a brief sludge puddle where a glob splats: touching it on foot hurts once and drags at Kael's feet */
 export function createMudPuddle(x: number, damage: number): Effect {
   let t = 0;
-  let bit = false;
+  const bit = new Set<number>();
   return {
     update(dt) {
       t += dt;
-      const on = hero.ground && Math.abs(hero.x - x) < PUDDLE_HALF && hero.y > GROUND - 3;
-      if (on && t > 0.15) {
+      eachStanding(() => {
+        const on = hero.ground && Math.abs(hero.x - x) < PUDDLE_HALF && hero.y > GROUND - 3;
+        if (!on || t <= 0.15) return;
         hero.vx -= hero.vx * 8 * dt;
-        if (!bit && hero.inv <= 0) {
-          bit = true;
+        if (!bit.has(heroSlot()) && hero.inv <= 0) {
+          bit.add(heroSlot());
           hurtHero(damage, x);
         }
-      }
+      });
       if (rng.chance(dt * 3))
         particles.spawn(PK.DUST, x + rng.range(-6, 6), GROUND - 1, 0, -rng.range(3, 8), 0.5, {
           col: C.mudLight,
@@ -73,10 +75,13 @@ export function createMudGlob(
       o.y += o.vy * dt;
       if (rng.chance(0.3))
         particles.spawn(PK.SPARK, o.x, o.y, -o.vx * 0.1, 0, rng.range(0.1, 0.25), { sparks: MUD_SPARKS });
-      if (boxHit([o.x - 3, o.y - 3, o.x + 3, o.y + 3], heroBox())) {
+      let struck = false;
+      eachStanding(() => {
+        if (struck || !boxHit([o.x - 3, o.y - 3, o.x + 3, o.y + 3], heroBox())) return;
+        struck = true;
         hurtHero(damage, o.x);
-        return false;
-      }
+      });
+      if (struck) return false;
       if (o.y >= GROUND - 1) {
         dust(o.x, GROUND, 4);
         for (let i = 0; i < 6; i++)

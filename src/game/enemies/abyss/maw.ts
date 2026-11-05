@@ -4,6 +4,7 @@ import type { Enemy } from "../../../types/enemy";
 import { PK } from "../../../types/particle";
 import { approach, clamp, TAU } from "../../../utils/math";
 import { waveScale } from "../../../utils/progression";
+import { eachStanding } from "../../coopHooks";
 import { createFloorRing } from "../../effects/floorRing";
 import { createImpact } from "../../effects/impact";
 import { hurtHero } from "../../hurtHero";
@@ -28,7 +29,9 @@ function bite(e: Enemy): void {
 function chomp(e: Enemy): void {
   game.fx.push(createImpact(e.x + e.face * 24, e.y - 16, e.face, true, VOID_SPARKS));
   const reach = e.face > 0 ? ([e.x, e.y - 34, e.x + 40, e.y] as const) : ([e.x - 40, e.y - 34, e.x, e.y] as const);
-  if (boxHit(reach, heroBox())) hurtHero(ABYSS_HITS.mawBite * e.power, e.x);
+  eachStanding(() => {
+    if (boxHit(reach, heroBox())) hurtHero(ABYSS_HITS.mawBite * e.power, e.x);
+  });
   shake(0.12, 2);
   sfx.swing(0.3);
 }

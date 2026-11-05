@@ -2,6 +2,7 @@ import { GROUND, W } from "../../../constants/stage";
 import { circle, glow, place, px } from "../../../engine/frame";
 import type { Effect } from "../../../types/effect";
 import { PK } from "../../../types/particle";
+import { eachStanding } from "../../coopHooks";
 import { createFloorRing } from "../../effects/floorRing";
 import { hurtHero } from "../../hurtHero";
 import { game, particles, rng } from "../../state";
@@ -28,8 +29,13 @@ export function createVoidOrb(x: number, y: number, vx: number, vy: number, dama
       o.y += o.vy * dt;
       if (rng.chance(0.5))
         particles.spawn(PK.EMBER, o.x, o.y, -vx * 0.1, -o.vy * 0.1, rng.range(0.2, 0.4), { sparks: VOID_SPARKS });
-      if (boxHit([o.x - 3, o.y - 3, o.x + 3, o.y + 3], heroBox())) {
+      let struck = false;
+      eachStanding(() => {
+        if (struck || !boxHit([o.x - 3, o.y - 3, o.x + 3, o.y + 3], heroBox())) return;
+        struck = true;
         hurtHero(damage, o.x);
+      });
+      if (struck) {
         burst();
         return false;
       }

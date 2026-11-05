@@ -4,6 +4,7 @@ import type { Enemy } from "../../../types/enemy";
 import { PK } from "../../../types/particle";
 import { approach, clamp } from "../../../utils/math";
 import { waveScale } from "../../../utils/progression";
+import { eachStanding } from "../../coopHooks";
 import { hurtHero } from "../../hurtHero";
 import { game, hero, particles, rng } from "../../state";
 import { boxHit, dust, heroBox, shake } from "../../world";
@@ -35,10 +36,12 @@ export function updateThornback(e: Enemy, dt: number, ts: number): void {
   } else if (e.state === "lunge") {
     e.vx = e.face * CHARGE.speed;
     if (rng.chance(0.5 * ts)) dust(e.x - e.face * 8, GROUND, 1, -e.face);
-    if (e.n === 0 && boxHit(enemyBox(e), heroBox())) {
-      e.n = 1;
-      hurtHero(THORN_HITS.charge * e.power, e.x - e.face * 10);
-    }
+    eachStanding(() => {
+      if (e.n === 0 && boxHit(enemyBox(e), heroBox())) {
+        e.n = 1;
+        hurtHero(THORN_HITS.charge * e.power, e.x - e.face * 10);
+      }
+    });
     const wall = (e.face < 0 && e.x <= 12) || (e.face > 0 && e.x >= W - 12);
     if (wall || Math.abs(e.x - e.ax) >= CHARGE.reach) {
       Object.assign(e, { state: "recover", st: 0, vx: wall ? -e.face * 40 : e.vx * 0.5 });
@@ -69,5 +72,8 @@ export function updateThornback(e: Enemy, dt: number, ts: number): void {
     particles.spawn(PK.EMBER, e.x + rng.range(-6, 6), e.y - rng.range(6, 14), 0, -10, rng.range(0.4, 0.8), {
       sparks: DAY_SPARKS.rift,
     });
-  if (e.state === "walk" && e.stagger <= 0 && boxHit(enemyBox(e), heroBox())) hurtHero(THORN_HITS.touch * e.power, e.x);
+  eachStanding(() => {
+    if (e.state === "walk" && e.stagger <= 0 && boxHit(enemyBox(e), heroBox()))
+      hurtHero(THORN_HITS.touch * e.power, e.x);
+  });
 }

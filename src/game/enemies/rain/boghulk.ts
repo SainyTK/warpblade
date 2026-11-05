@@ -5,6 +5,7 @@ import type { Enemy } from "../../../types/enemy";
 import { PK } from "../../../types/particle";
 import { approach, clamp } from "../../../utils/math";
 import { waveScale } from "../../../utils/progression";
+import { eachStanding } from "../../coopHooks";
 import { createFloorRing } from "../../effects/floorRing";
 import { hurtHero } from "../../hurtHero";
 import { game, hero, particles, rng } from "../../state";
@@ -33,7 +34,9 @@ function slam(e: Enemy): void {
   sfx.boom();
   const reach =
     e.face > 0 ? ([e.x, e.y - 40, e.x + SLAM_REACH, e.y] as const) : ([e.x - SLAM_REACH, e.y - 40, e.x, e.y] as const);
-  if (boxHit(reach, heroBox())) hurtHero(RAIN_HITS.hulkSlam * e.power, e.x);
+  eachStanding(() => {
+    if (boxHit(reach, heroBox())) hurtHero(RAIN_HITS.hulkSlam * e.power, e.x);
+  });
 }
 
 function lob(e: Enemy): void {

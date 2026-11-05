@@ -4,6 +4,7 @@ import type { Enemy } from "../../../types/enemy";
 import { PK } from "../../../types/particle";
 import { approach, clamp } from "../../../utils/math";
 import { waveScale } from "../../../utils/progression";
+import { eachStanding } from "../../coopHooks";
 import { createFloorRing } from "../../effects/floorRing";
 import { createSlash } from "../../effects/slash";
 import { hurtHero } from "../../hurtHero";
@@ -31,7 +32,9 @@ function claw(e: Enemy): void {
     createSlash(e.x, e.y, e.face, { cx: 5, cy: -12, R: 14, sy: 0.6, rot: 0.15, a0: -2.1, a1: 1.1, W: 6, ramp: VOID }),
   );
   const reach = e.face > 0 ? ([e.x, e.y - 26, e.x + 26, e.y] as const) : ([e.x - 26, e.y - 26, e.x, e.y] as const);
-  if (boxHit(reach, heroBox())) hurtHero(ABYSS_HITS.stalkerClaw * e.power, e.x);
+  eachStanding(() => {
+    if (boxHit(reach, heroBox())) hurtHero(ABYSS_HITS.stalkerClaw * e.power, e.x);
+  });
   sfx.swing(0.6);
 }
 
@@ -44,7 +47,9 @@ function rise(e: Enemy): void {
     particles.spawn(PK.SPARK, e.x + rng.range(-6, 6), GROUND - 1, rng.range(-50, 50), rng.range(-170, -80), 0.3, {
       sparks: VOID_SPARKS,
     });
-  if (boxHit([e.x - 10, e.y - 30, e.x + 10, e.y], heroBox())) hurtHero(ABYSS_HITS.stalkerRise * e.power, e.x);
+  eachStanding(() => {
+    if (boxHit([e.x - 10, e.y - 30, e.x + 10, e.y], heroBox())) hurtHero(ABYSS_HITS.stalkerRise * e.power, e.x);
+  });
   sfx.lunge();
 }
 
@@ -99,6 +104,8 @@ export function updateStalker(e: Enemy, dt: number, ts: number): void {
     particles.spawn(PK.EMBER, e.x + rng.range(-6, 6), e.y - rng.range(6, 18), 0, -10, rng.range(0.4, 0.8), {
       sparks: VOID_SPARKS,
     });
-  if (e.state === "walk" && e.stagger <= 0 && boxHit(enemyBox(e), heroBox()))
-    hurtHero(ABYSS_HITS.stalkerTouch * e.power, e.x);
+  eachStanding(() => {
+    if (e.state === "walk" && e.stagger <= 0 && boxHit(enemyBox(e), heroBox()))
+      hurtHero(ABYSS_HITS.stalkerTouch * e.power, e.x);
+  });
 }

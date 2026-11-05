@@ -4,6 +4,7 @@ import { sfx } from "../../../services/audio";
 import type { Effect } from "../../../types/effect";
 import { PK } from "../../../types/particle";
 import { TAU } from "../../../utils/math";
+import { eachStanding } from "../../coopHooks";
 import { hurtHero } from "../../hurtHero";
 import { hero, particles, rng } from "../../state";
 import { boxHit, heroBox } from "../../world";
@@ -38,14 +39,22 @@ export function createAcorn(x: number, y: number, tx: number, ty: number, flight
       vy += GRAVITY * dt;
       o.y += vy * dt;
       o.spin += dt * 12;
-      if (boxHit([o.x - 2, o.y - 2, o.x + 2, o.y + 2], heroBox())) {
+      let struck = false;
+      eachStanding(() => {
+        if (struck || !boxHit([o.x - 2, o.y - 2, o.x + 2, o.y + 2], heroBox())) return;
+        struck = true;
         hurtHero(dmg, o.x);
+      });
+      if (struck) {
         burst();
         return false;
       }
       if (o.t >= flight || o.y >= ty) {
         o.y = ty;
-        if (Math.abs(hero.x - tx) < SPLASH.reach && hero.y <= ty + 1 && hero.y > ty - SPLASH.height) hurtHero(dmg, tx);
+        eachStanding(() => {
+          if (Math.abs(hero.x - tx) < SPLASH.reach && hero.y <= ty + 1 && hero.y > ty - SPLASH.height)
+            hurtHero(dmg, tx);
+        });
         burst();
         return false;
       }

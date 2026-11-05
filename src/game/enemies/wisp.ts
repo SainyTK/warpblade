@@ -6,6 +6,7 @@ import type { Enemy } from "../../types/enemy";
 import { PK } from "../../types/particle";
 import { approach, clamp } from "../../utils/math";
 import { waveScale } from "../../utils/progression";
+import { eachStanding } from "../coopHooks";
 import { hurtHero } from "../hurtHero";
 import { game, hero, particles, rng } from "../state";
 import { boxHit, heroBox } from "../world";
@@ -34,7 +35,9 @@ export function updateWisp(e: Enemy, dt: number, ts: number): void {
       sfx.lunge();
     }
   } else if (e.state === "lunge") {
-    if (boxHit(enemyBox(e), heroBox())) hurtHero(ENEMY_HITS.wispLunge * e.power, e.x);
+    eachStanding(() => {
+      if (boxHit(enemyBox(e), heroBox())) hurtHero(ENEMY_HITS.wispLunge * e.power, e.x);
+    });
     if (e.st >= 0.35) Object.assign(e, { state: "recover", st: 0 });
   } else if (e.st >= 0.7)
     Object.assign(e, {

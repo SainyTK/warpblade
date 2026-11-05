@@ -4,6 +4,7 @@ import { circle, glow, place, px } from "../../engine/frame";
 import type { Effect } from "../../types/effect";
 import { PK } from "../../types/particle";
 import { WHITE } from "../../utils/color";
+import { eachStanding } from "../coopHooks";
 import { hurtHero } from "../hurtHero";
 import { game, particles, rng } from "../state";
 import { boxHit, heroBox } from "../world";
@@ -20,10 +21,13 @@ export function createShadowOrb(x: number, y: number, vx: number, vy: number, da
       o.y += vy * dt;
       if (rng.chance(0.5))
         particles.spawn(PK.EMBER, o.x, o.y, -vx * 0.1, -vy * 0.1, rng.range(0.2, 0.4), { sparks: SPARKS.shadow });
-      if (boxHit([o.x - 3, o.y - 3, o.x + 3, o.y + 3], heroBox())) {
+      let struck = false;
+      eachStanding(() => {
+        if (struck || !boxHit([o.x - 3, o.y - 3, o.x + 3, o.y + 3], heroBox())) return;
+        struck = true;
         hurtHero(damage, o.x);
-        return false;
-      }
+      });
+      if (struck) return false;
       if (o.y >= GROUND - 2 || o.x < -6 || o.x > W + 6 || o.t > 4) {
         if (o.y >= GROUND - 2) game.fx.push(createImpact(o.x, GROUND - 3, 1, false, SPARKS.shadow));
         return false;

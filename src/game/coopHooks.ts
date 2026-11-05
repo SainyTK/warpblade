@@ -14,6 +14,10 @@ export interface CoopHooks {
   owner(effect: object): void;
   /** call once for every hero, each one swapped in, and come back to this browser's hero */
   eachHero(draw: () => void): void;
+  /** call once for every standing hero, each one swapped in, and come back to the hero in play */
+  eachStanding(run: () => void): void;
+  /** the place in the room of the hero in play */
+  slot(): number;
   /** experience picked up by anyone goes to everyone */
   shareXp(amount: number): void;
   /** a wave was cleared */
@@ -43,3 +47,12 @@ export function eachHero(run: () => void): void {
   if (hooks) hooks.eachHero(run);
   else run();
 }
+
+/** a foe's blow or hazard: tested once in solo play, and against every standing hero in a co-op room */
+export function eachStanding(run: () => void): void {
+  if (hooks) hooks.eachStanding(run);
+  else run();
+}
+
+/** which hero is in play, for a hazard that strikes each hero once: always 0 in solo play */
+export const heroSlot = (): number => hooks?.slot() ?? 0;
