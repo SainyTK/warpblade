@@ -3,6 +3,7 @@ import { paintBackdrop } from "../scene/backdrop";
 import { onSceneChange } from "../scene/scenery";
 import type { Insets } from "../types/layout";
 import { stageLayout } from "../utils/stageLayout";
+import { sizeDangerGlow } from "./dangerGlow";
 import { byId } from "./dom";
 
 const stage = byId("stage");
@@ -49,6 +50,13 @@ export function fitStage(): void {
       height: px(scale * rows, dpr),
     });
     document.documentElement.style.setProperty("--art", px(scale, dpr));
+    sizeDangerGlow(
+      cols,
+      rows,
+      (layout.backdropX - layout.stageX) / dpr,
+      (layout.backdropY - layout.stageY) / dpr,
+      scale / dpr,
+    );
     document.body.dataset.hud = layout.stageY / dpr >= HUD_ROOM ? "outside" : "inside";
     const key = [cols, rows, layout.artLeft, layout.artTop].join();
     if (!ctx || key === painted) return;

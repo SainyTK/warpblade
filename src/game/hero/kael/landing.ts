@@ -1,10 +1,10 @@
 import { SETTLE_CLIPS } from "../../../constants/clips/settle";
-import { ANIM_FPS } from "../../../constants/hero";
+import { ANIM_FPS, STAND } from "../../../constants/hero";
 import { LANDING } from "../../../constants/kael/motion";
 import type { Hero } from "../../../types/hero";
 import type { Pose } from "../../../types/pose";
 import { clamp } from "../../../utils/math";
-import { blendPose } from "../../../utils/poseBlend";
+import { blendPose, shiftPose } from "../../../utils/poseBlend";
 import { sampleKeys } from "../../../utils/sampleKeys";
 import { motion } from "./motion";
 
@@ -29,7 +29,12 @@ export function landingPose(h: Hero, p: Pose, t: number): Pose {
   const m = motion;
   const u = t - m.landAt;
   if (u >= LANDING.clipEnd) return p;
-  if (h.state === "idle") return blendPose(p, sampleKeys(SETTLE_CLIPS.land.keys, u), m.landDepth);
+  if (h.state === "idle") {
+    // the clip rises into the stand; it is steered on the way up into the idle's own pose, a wounded one too, so it meets it
+    const rise = Math.floor(u * ANIM_FPS) / ANIM_FPS / LANDING.clipEnd;
+    const land = shiftPose(sampleKeys(SETTLE_CLIPS.land.keys, u), STAND, p, rise);
+    return blendPose(p, land, m.landDepth);
+  }
   if (h.state !== "walk" && h.state !== "run") {
     m.landAt = Number.NEGATIVE_INFINITY;
     return p;

@@ -7,6 +7,7 @@ import { loadBest } from "./services/bestScore";
 import { loadHeroChoice } from "./services/heroChoice";
 import { bindKeyboard } from "./ui/bindKeyboard";
 import { bindPauseButton } from "./ui/bindPauseButton";
+import { drawDangerGlow } from "./ui/dangerGlow";
 import { byId } from "./ui/dom";
 import { fitStage } from "./ui/fitStage";
 import { updateHud } from "./ui/hud";
@@ -68,6 +69,7 @@ function frame(now: number): void {
   if (menuContext() !== "pause") {
     renderScene(image.data);
     ctx?.putImageData(image, 0, 0);
+    drawDangerGlow(menuContext() !== "title");
   }
   updateHud();
   syncPickDialog();

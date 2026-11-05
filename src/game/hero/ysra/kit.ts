@@ -9,6 +9,7 @@ import type { YsraPart } from "./part";
 import { ysraPose } from "./pose";
 import { cycleRite, PYRE_PART, pressRite } from "./pyre/pyre";
 import { doubleTapStance, pressGuard, pressJump, pressVault, STANCE_PART } from "./stance/stance";
+import { resetWoundCross } from "./woundCross";
 
 /** J with Up held during a string blow: the Skyhook comes next and spends the Up press, so a kept Up does not jump her out of the blow first */
 function pressSkyhook(): boolean {
@@ -56,5 +57,6 @@ export const YSRA_KIT: HeroKit = {
   },
   reset: () => {
     for (const p of PARTS) p.reset?.();
+    resetWoundCross();
   },
 };

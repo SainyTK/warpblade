@@ -44,6 +44,8 @@ His crystal sword can be thrown, and wherever it lands, he follows.
 - **Keen timing.** Press J just after a blow lands and the next one is a sure critical hit with a gold slash.
   Pressing before the blow lands spoils it, so rhythm beats mashing.
 - **Positioning pays.** Hits from behind deal 1.5 times the damage and foes in the air take double, with the numbers popping out of every hit.
+- **Low health warning.** At a quarter of HP or less, a faint red light glows in from the edges of the screen, and under a tenth it grows wider and beats like a heart. It fades in and out as HP drops or comes back.
+  A hurt hero stands wounded when idle: Kael hunches over his sword planted in the floor, and Ysra lets her glaive sag onto the floor ahead, both short of breath.
 - **Fights that need skill.** Husks block blows from the front and strike back, wisps slip away from swings, and missed swings leave you open. Dash through an attack at the last moment for a perfect dodge and slow motion.
 - **Stamina.** Each dash spends half the green stamina bar, so two dashes in a row leave Kael out of breath until it refills.
   It comes back after a short pause, slower while he attacks, and a perfect dodge gives some back.
