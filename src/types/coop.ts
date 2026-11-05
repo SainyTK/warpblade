@@ -36,6 +36,8 @@ export interface GuestHud {
 export type GuestMessage =
   | { t: "hello"; hero: string; owned: Record<string, number>; version: string }
   | { t: "hero"; hero: string }
+  /** the guest bought something in its shop while in the room */
+  | { t: "shop"; owned: Record<string, number> }
   | { t: "key"; a: InputAction; d: boolean }
   | { t: "pick"; pick: PickWire }
   | { t: "ping" }

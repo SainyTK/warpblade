@@ -135,6 +135,11 @@ export class HostSession {
       this.publishLobby();
       return;
     }
+    // the next run wears what was bought; a run under way keeps what it started with
+    if (msg.t === "shop" && !this.run) {
+      guest.owned = msg.owned;
+      return;
+    }
     const seat = this.run?.seatOf(peer);
     if (!this.run || !seat) return;
     if (msg.t === "key") this.run.applyKey(seat, () => (msg.d ? press(msg.a) : release(msg.a)));

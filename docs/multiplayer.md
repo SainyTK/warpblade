@@ -60,7 +60,7 @@ A guest's choice travels to the host as a skill id, and the host checks that the
 
 ## Coins and the shop
 
-Each player's hero plays with what that player bought in their own shop, since the guest sends its shop levels when it joins.
+Each player's hero plays with what that player bought in their own shop, since the guest sends its shop levels when it joins and again after each purchase, such as from the result screen between runs.
 Coins a hero picks up are theirs, and coins left on the floor at the end are split evenly.
 When the run ends, every player banks their own coins in their own browser and sees the result screen, then goes back to the room for another run.
 
