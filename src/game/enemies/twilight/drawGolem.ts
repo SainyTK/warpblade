@@ -1,30 +1,76 @@
-import { SpriteCanvas } from "../../../engine/sprite";
+import { detailCanvas, type SpriteCanvas } from "../../../engine/sprite";
+import type { Color } from "../../../types/color";
 import type { Enemy } from "../../../types/enemy";
 import { mix, WHITE } from "../../../utils/color";
 import { clamp } from "../../../utils/math";
 import { waveScale } from "../../../utils/progression";
 import { game } from "../../state";
+import { clipPoly } from "./clipPoly";
 import { TWILIGHT_COLORS as TC } from "./colors";
+import { glint, hairline } from "./marks";
 
-const canvas = new SpriteCanvas(56, 50, 28, 45);
+const canvas = detailCanvas(56, 50, 28, 45);
 type Pt = readonly [number, number];
-/** rune marks cut into the chest, as pixel offsets */
-const CHEST_RUNES: readonly Pt[] = [
-  [-3, -15],
-  [-3, -14],
-  [-3, -13],
-  [-2, -12],
-  [-1, -13],
-  [-1, -14],
-  [-1, -15],
-  [1, -11],
-  [2, -11],
-  [3, -11],
-  [2, -10],
-  [2, -9],
-  [-6, -9],
-  [-5, -8],
-  [-6, -7],
+
+/** the boulder body's outline, feet at y = 0 */
+const BODY: readonly Pt[] = [
+  [-10, -6],
+  [-11, -14],
+  [-7, -20],
+  [3, -21],
+  [9, -17],
+  [10, -8],
+  [7, -3],
+  [-7, -3],
+];
+/** the seams the body is chiselled along: under the shoulder slab, over the base, and the vertical joints */
+const SEAM = { slab: -16.5, base: -6, chest: 4.5, foot: -1 } as const;
+/** the body cut into stone blocks, top course first so each lower block's lit bevel sits under a dark joint */
+const BLOCKS: readonly (readonly Pt[])[] = (() => {
+  const below = (p: readonly Pt[], y: number) => clipPoly(p, 1, y, true);
+  const above = (p: readonly Pt[], y: number) => clipPoly(p, 1, y, false);
+  const left = (p: readonly Pt[], x: number) => clipPoly(p, 0, x, true);
+  const right = (p: readonly Pt[], x: number) => clipPoly(p, 0, x, false);
+  const middle = below(above(BODY, SEAM.slab), SEAM.base);
+  const base = above(BODY, SEAM.base);
+  return [
+    below(BODY, SEAM.slab),
+    left(middle, SEAM.chest),
+    right(middle, SEAM.chest),
+    left(base, SEAM.foot),
+    right(base, SEAM.foot),
+  ];
+})();
+/** rune glyphs cut into the chest block, each a stroke path */
+const CHEST_RUNES: readonly (readonly Pt[])[] = [
+  [
+    [-3.5, -14.5],
+    [-3.5, -12.5],
+    [-2, -11],
+    [-0.5, -12.5],
+    [-0.5, -14.5],
+  ],
+  [
+    [0.5, -9.5],
+    [3.5, -9.5],
+  ],
+  [
+    [2, -9.5],
+    [2, -7.5],
+  ],
+  [
+    [-6.5, -10],
+    [-5, -8.5],
+    [-6.5, -7],
+  ],
+];
+/** clumps of moss draped over the shoulder slab, as centre and size */
+const MOSS: readonly (readonly [number, number, number])[] = [
+  [-6.6, -20, 1.3],
+  [-5, -20.4, 1],
+  [-3.8, -20, 0.7],
+  [-1.6, -20.8, 1.2],
+  [0.2, -20.9, 0.9],
 ];
 
 /** how bright the runes burn: a slow pulse at rest, flaring up through a wind-up */
@@ -36,7 +82,48 @@ function runeHeat(e: Enemy, t: number): number {
   return 0.2 + Math.sin(t * 2.2 + e.seed) * 0.12;
 }
 
-/** a squat stone construct, moss on its shoulders, runes in its chest that blaze before it punches or slams */
+/** a heavy stone limb lit from the top left, in shadow on the far side of the body */
+function limb(s: SpriteCanvas, a: Pt, b: Pt, r: number, far: boolean): void {
+  const base = far ? TC.stoneDark : TC.stone;
+  s.begin();
+  s.stroke(a[0], a[1], b[0], b[1], r, base);
+  s.shadeEdges(base, far ? TC.stone : TC.stoneLight, far ? TC.stoneDeep : TC.stoneDark, far ? 1 : 2);
+  s.commit();
+}
+
+/** a blocky stone fist, its curled fingers jointed toward the front, with a rune on its back that burns with the golem's heat */
+function fist(s: SpriteCanvas, [x, y]: Pt, r: number, far: boolean, rune: Color): void {
+  const base = far ? TC.stoneDark : TC.stoneLight;
+  const joint = far ? TC.stoneDeep : TC.stone;
+  const h = r * 0.92;
+  const c = r * 0.3;
+  s.begin();
+  s.poly(
+    [
+      [x - h + c, y - h],
+      [x + h - c, y - h],
+      [x + h, y - h + c],
+      [x + h, y + h - c],
+      [x + h - c, y + h],
+      [x - h + c, y + h],
+      [x - h, y + h - c],
+      [x - h, y - h + c],
+    ],
+    base,
+  );
+  s.shadeEdges(base, far ? TC.stone : TC.stoneRim, joint, 2);
+  hairline(s, x + h * 0.25, y - h * 0.3, x + h - 0.5, y - h * 0.3, joint);
+  hairline(s, x + h * 0.25, y + h * 0.3, x + h - 0.5, y + h * 0.3, joint);
+  hairline(s, x + h * 0.25, y - h * 0.3, x + h * 0.25, y + h * 0.7, joint);
+  if (!far) {
+    glint(s, x - h + c, y - h + 0.5, TC.stoneGlint);
+    glint(s, x - h * 0.5, y - 0.5, rune);
+    s.set(x - h * 0.5 + 1, y + 0.5, rune);
+  }
+  s.commit();
+}
+
+/** a squat stone construct of chiselled blocks, moss on its shoulders, runes in its chest that blaze before it punches or slams */
 export function drawGolem(e: Enemy, t: number): SpriteCanvas {
   const s = canvas;
   const g = runeHeat(e, t);
@@ -45,6 +132,8 @@ export function drawGolem(e: Enemy, t: number): SpriteCanvas {
   const raised = e.state === "charge";
   const drop = slammed ? 2 : raised ? -1 : step;
   const rune = g > 0.8 ? TC.runeHot : g > 0.4 ? TC.rune : mix(TC.runeDim, TC.rune, g * 2);
+  const groove = mix(TC.stoneDeep, TC.runeDim, clamp(g * 1.4));
+  const sunk = (pts: readonly Pt[]): Pt[] => pts.map(([x, y]) => [x, y + drop]);
   const backFist: Pt = raised ? [-3, -31] : slammed ? [-1, -2] : [-9, -7 + step];
   const frontFist: Pt =
     e.state === "wind"
@@ -57,83 +146,96 @@ export function drawGolem(e: Enemy, t: number): SpriteCanvas {
             ? [11, -2]
             : [10, -6];
   s.clear();
-  // back arm and leg, in shadow
+  // back leg and arm, in shadow
+  limb(s, [-4, -5], [-6 - step, 0], 2.6, true);
+  limb(s, [-5, -16 + drop], backFist, 2.4, true);
+  fist(s, backFist, 3.2, true, rune);
+  // the front leg
+  limb(s, [3, -5], [4 + step, 0], 2.8, false);
+  // the boulder body, block by block
+  for (const block of BLOCKS) {
+    s.begin();
+    s.poly(sunk(block), TC.stone);
+    s.shadeEdges(TC.stone, TC.stoneLight, TC.stoneDark, 2);
+    s.commit();
+  }
+  // a cool rim light down the far side and a crack in the side block, then the joints glowing as the runes heat up
   s.begin();
-  s.stroke(-4, -5, -6 - step, 0, 2.6, TC.stoneDark);
-  s.stroke(-5, -16 + drop, backFist[0], backFist[1], 2.4, TC.stoneDark);
-  s.dot(backFist[0], backFist[1], 3.2, TC.stoneDark);
+  for (let y = -16; y <= -9; y += 0.5) s.set(9 + (y + 17) / 9 - 0.5, y + drop, TC.stoneRim);
+  hairline(s, -6, -21 + drop, 2.5, -21 + drop, TC.stoneRim);
+  hairline(s, 6.5, -14 + drop, 7.5, -12 + drop, TC.stoneDeep);
+  hairline(s, 7.5, -12 + drop, 6.5, -10 + drop, TC.stoneDeep);
+  hairline(s, 7, -14 + drop, 8, -12 + drop, TC.stoneLight);
+  glint(s, -8.5, -14 + drop, TC.stoneRim);
+  if (g > 0.3) {
+    const seam = mix(TC.stoneDeep, rune, clamp((g - 0.3) * 1.4));
+    hairline(s, -8, SEAM.slab - 0.5 + drop, 4, SEAM.slab - 0.5 + drop, seam);
+    hairline(s, SEAM.chest - 0.5, SEAM.slab + drop, SEAM.chest - 0.5, SEAM.base - 1 + drop, seam);
+  }
+  s.commit(false);
+  // the runes cut into the chest: a dark groove with a line of light along it
+  s.begin();
+  for (const path of CHEST_RUNES)
+    for (let i = 1; i < path.length; i++)
+      s.stroke(path[i - 1][0], path[i - 1][1] + drop, path[i][0], path[i][1] + drop, 0.5, groove);
+  for (const path of CHEST_RUNES)
+    for (let i = 1; i < path.length; i++)
+      hairline(s, path[i - 1][0], path[i - 1][1] + drop, path[i][0], path[i][1] + drop, rune);
+  s.commit(false);
+  // the moss over its shoulders, glowing faintly at the tips
+  s.begin();
+  for (const [x, y, r] of MOSS) s.dot(x, y + drop, r, TC.moss);
+  s.shadeEdges(TC.moss, TC.mossTip, TC.mossDark, 1);
   s.commit();
-  // the boulder body
+  // the head, sunk into the shoulders, a brow over one slit eye with a white hot core
   s.begin();
-  s.stroke(3, -5, 4 + step, 0, 2.8, TC.stone);
-  s.set(4 + step, -1, TC.stoneLight);
-  const body: Pt[] = [
-    [-10, -6],
-    [-11, -14],
-    [-7, -20],
-    [3, -21],
-    [9, -17],
-    [10, -8],
-    [7, -3],
-    [-7, -3],
-  ];
   s.poly(
-    body.map(([x, y]) => [x, y + drop] as const),
+    sunk([
+      [1, -26],
+      [7, -26],
+      [8, -20],
+      [1, -19],
+    ]),
+    TC.stoneLight,
+  );
+  s.shadeEdges(TC.stoneLight, TC.stoneRim, TC.stone, 2);
+  glint(s, 2, -25.5 + drop, TC.stoneGlint);
+  hairline(s, 3.5, -24 + drop, 8, -24 + drop, TC.stone);
+  s.poly(
+    sunk([
+      [4.5, -23.5],
+      [8, -23.5],
+      [8, -22],
+      [4.5, -22],
+    ]),
+    TC.stoneDeep,
+  );
+  const eye = g > 0.5 ? WHITE : TC.eye;
+  hairline(s, 5, -23 + drop, 7, -23 + drop, eye);
+  hairline(s, 5, -22.5 + drop, 7, -22.5 + drop, eye);
+  glint(s, 6, -23 + drop, WHITE);
+  hairline(s, 7.5, -23 + drop, 7.5, -22.5 + drop, rune);
+  hairline(s, 5, -21.5 + drop, 7, -21.5 + drop, TC.stone);
+  s.commit();
+  // the front arm, the chiselled block over its shoulder and its great fist
+  limb(s, [5, -16 + drop], frontFist, 2.6, false);
+  s.begin();
+  s.poly(
+    sunk([
+      [3, -18.5],
+      [6.5, -19],
+      [8, -16.5],
+      [7.5, -13.5],
+      [4, -13],
+      [2.5, -15.5],
+    ]),
     TC.stone,
   );
-  s.poly(
-    [
-      [-9, -14 + drop],
-      [-6, -19 + drop],
-      [3, -20 + drop],
-      [8, -16 + drop],
-      [3, -15 + drop],
-      [-5, -13 + drop],
-    ],
-    TC.stoneLight,
-  );
-  for (let x = -6; x <= 3; x++) s.set(x, -21 + drop, TC.stoneRim);
-  for (let y = -16; y <= -9; y++) s.set(9, y + drop, TC.stoneRim);
-  s.set(-4, -7 + drop, TC.stoneDark);
-  s.set(5, -6 + drop, TC.stoneDark);
-  s.set(6, -6 + drop, TC.stoneDark);
-  for (const [x, y] of CHEST_RUNES) s.set(x, y + drop, rune);
-  // the moss over its shoulders, glowing faintly
-  for (const [x, h] of [
-    [-7, 1],
-    [-6, 2],
-    [-5, 1],
-    [-2, 1],
-    [-1, 2],
-    [0, 1],
-  ])
-    for (let k = 0; k < h; k++) s.set(x, -21 - k + drop, k === h - 1 ? TC.mossTip : TC.moss);
+  s.shadeEdges(TC.stone, TC.stoneLight, TC.stoneDark, 2);
+  glint(s, 3.5, -18 + drop, TC.stoneRim);
+  hairline(s, 3, -15.5 + drop, 7.5, -15.5 + drop, TC.stoneDark);
   s.commit();
-  // the head, sunk into the shoulders, with one slit eye
-  s.begin();
-  s.poly(
-    [
-      [1, -26 + drop],
-      [7, -26 + drop],
-      [8, -20 + drop],
-      [1, -19 + drop],
-    ],
-    TC.stoneLight,
-  );
-  for (let x = 2; x <= 6; x++) s.set(x, -26 + drop, TC.stoneRim);
-  s.set(5, -23 + drop, g > 0.5 ? WHITE : TC.eye);
-  s.set(6, -23 + drop, g > 0.5 ? WHITE : TC.eye);
-  s.set(7, -23 + drop, rune);
-  s.commit();
-  // the front arm and its great fist
-  s.begin();
-  s.stroke(5, -16 + drop, frontFist[0], frontFist[1], 2.6, TC.stone);
-  s.dot(frontFist[0], frontFist[1], 3.6, TC.stoneLight);
-  s.set(frontFist[0] + 1, frontFist[1] - 2, TC.stoneRim);
-  s.set(frontFist[0] + 2, frontFist[1] - 1, TC.stoneRim);
-  s.set(frontFist[0], frontFist[1], rune);
-  s.set(frontFist[0] + 1, frontFist[1] + 1, rune);
-  s.commit();
+  fist(s, frontFist, 3.6, false, rune);
   s.outline(TC.outline);
   return s;
 }
