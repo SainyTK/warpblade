@@ -192,6 +192,13 @@ export class SpriteCanvas implements SpriteImage {
   }
 }
 
+/**
+ * a canvas at the frame's full detail, sized in art pixels with its feet at (ox, oy): heroes and foes are drawn on these,
+ * so one art pixel holds RES by RES image pixels for edges, lights and glints
+ */
+export const detailCanvas = (w: number, h: number, ox: number, oy: number): SpriteCanvas =>
+  new SpriteCanvas(w * RES, h * RES, ox * RES, oy * RES, RES);
+
 export interface BlitOptions {
   alpha?: number;
   tint?: Color;
