@@ -11,7 +11,7 @@ export const PYRE: SkillBranch = {
       id: "r_flare",
       name: "Flare",
       kind: "spell",
-      text: "A rite. Press I to spend 30 Heat on a burst of fire around you that throws foes back. Glaive blows build Heat.",
+      text: "A rite. Press I to spend 30 Heat on a burst of fire around you that throws foes back and heals you 5% of your max HP. Glaive blows build Heat.",
       level: 1,
       ranks: 1,
       requires: [],

@@ -64,7 +64,7 @@ function release(): void {
     calling === "flamePillar" ? pillarSpot() : calling === "brazier" ? hero.x + hero.face * BRAZIER.ahead : hero.x;
   if (calling === "flamePillar" && hasPerk("pyreColonnade")) castPyreColonnade(x, hero.y);
   else letLoose(calling, x);
-  healFromRite();
+  healFromRite(calling);
 }
 
 /** a rite can start on the floor, standing or out of a string blow that has landed */

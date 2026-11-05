@@ -7,8 +7,9 @@ export const RITES: readonly RiteDef[] = [
   { id: "brazier", name: "Brazier", tab: "BRAZIER", perk: "brazier", cost: 50, tint: "#e0a050" },
 ];
 
-/** Flare: a ring of fire around her feet that throws foes back. Damage is a multiple of ability power. */
-export const FLARE = { radius: 38, power: 4, kx: 230, ky: -150, burn: 1.5, pitch: 0.8 } as const;
+/** Flare: a ring of fire around her feet that throws foes back and heals her this share of max HP. Damage is a multiple
+ *  of ability power. */
+export const FLARE = { radius: 38, power: 4, kx: 230, ky: -150, burn: 1.5, pitch: 0.8, heal: 0.05 } as const;
 
 /** Flame Pillar: a pillar under the nearest foe ahead, found within `seek` pixels, or `fallback` ahead of her */
 export const FLAME_PILLAR = {
