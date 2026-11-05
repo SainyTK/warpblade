@@ -1,0 +1,41 @@
+{
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "items": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "subject": {
+            "type": "string"
+          },
+          "kind": {
+            "enum": ["video", "image"]
+          },
+          "file": {
+            "type": "string"
+          },
+          "poster": {
+            "type": ["string", "null"]
+          },
+          "gif": {
+            "type": ["string", "null"]
+          },
+          "alt": {
+            "type": "string"
+          },
+          "width": {
+            "type": "integer"
+          },
+          "height": {
+            "type": "integer"
+          }
+        },
+        "required": ["subject", "kind", "file", "poster", "gif", "alt", "width", "height"]
+      }
+    }
+  },
+  "required": ["items"]
+}

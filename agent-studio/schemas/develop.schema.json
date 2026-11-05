@@ -1,0 +1,95 @@
+{
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "summary": {
+      "type": "string"
+    },
+    "delivered": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "item": {
+            "type": "string"
+          },
+          "files": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "notes": {
+            "type": "string"
+          }
+        },
+        "required": ["item", "files", "notes"]
+      }
+    },
+    "notDelivered": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "item": {
+            "type": "string"
+          },
+          "why": {
+            "type": "string"
+          }
+        },
+        "required": ["item", "why"]
+      }
+    },
+    "balance": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "label": {
+            "type": "string"
+          },
+          "before": {
+            "type": "string"
+          },
+          "after": {
+            "type": "string"
+          }
+        },
+        "required": ["label", "before", "after"]
+      }
+    },
+    "checks": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "typecheck": {
+          "type": "boolean"
+        },
+        "lint": {
+          "type": "boolean"
+        },
+        "build": {
+          "type": "boolean"
+        },
+        "smoke": {
+          "type": "boolean"
+        }
+      },
+      "required": ["typecheck", "lint", "build", "smoke"]
+    },
+    "playtest": {
+      "type": "string"
+    },
+    "knownIssues": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  },
+  "required": ["summary", "delivered", "notDelivered", "balance", "checks", "playtest", "knownIssues"]
+}

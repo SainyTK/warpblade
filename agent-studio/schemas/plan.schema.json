@@ -1,0 +1,144 @@
+{
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "kind": {
+      "enum": ["big", "small"]
+    },
+    "title": {
+      "type": "string"
+    },
+    "theme": {
+      "type": "string"
+    },
+    "headline": {
+      "anyOf": [
+        {
+          "type": "null"
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "category": {
+              "enum": [
+                "new-hero",
+                "new-stage",
+                "new-system",
+                "hero-rework",
+                "animation-rework",
+                "effect-rework",
+                "new-skills",
+                "new-boss",
+                "new-foes"
+              ]
+            },
+            "name": {
+              "type": "string"
+            },
+            "pitch": {
+              "type": "string"
+            },
+            "design": {
+              "type": "string",
+              "description": "full design spec in Markdown: moves, numbers, art direction, controls, touch, how it fits the run"
+            },
+            "acceptance": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "reference": {
+              "enum": ["grand-chase", "vampire-survivors", "both", "none"]
+            },
+            "pillars": {
+              "type": "array",
+              "items": {
+                "type": "integer"
+              }
+            },
+            "feedback": {
+              "type": "array",
+              "items": {
+                "type": "integer"
+              }
+            }
+          },
+          "required": ["category", "name", "pitch", "design", "acceptance", "reference", "pillars", "feedback"]
+        }
+      ]
+    },
+    "changes": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "type": {
+            "enum": ["bugfix", "balance", "buff", "nerf", "item", "skill", "polish"]
+          },
+          "target": {
+            "type": "string"
+          },
+          "change": {
+            "type": "string"
+          },
+          "reason": {
+            "type": "string"
+          },
+          "evidence": {
+            "type": "string"
+          },
+          "feedback": {
+            "type": "array",
+            "items": {
+              "type": "integer"
+            }
+          }
+        },
+        "required": ["type", "target", "change", "reason", "evidence", "feedback"]
+      }
+    },
+    "considered": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "idea": {
+            "type": "string"
+          },
+          "whyNot": {
+            "type": "string"
+          }
+        },
+        "required": ["idea", "whyNot"]
+      }
+    },
+    "media": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "subject": {
+            "type": "string"
+          },
+          "shot": {
+            "type": "string"
+          }
+        },
+        "required": ["subject", "shot"]
+      }
+    },
+    "roadmapNotes": {
+      "type": "string"
+    },
+    "memo": {
+      "type": "string",
+      "description": "the decision memo in Markdown"
+    }
+  },
+  "required": ["kind", "title", "theme", "headline", "changes", "considered", "media", "roadmapNotes", "memo"]
+}

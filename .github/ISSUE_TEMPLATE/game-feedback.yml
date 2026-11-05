@@ -1,0 +1,31 @@
+name: Game feedback
+description: Report a bug, a balance problem or an idea for Warpblade. The studio reads new feedback every night.
+title: "[Feedback] "
+labels: ["game-feedback"]
+body:
+  - type: dropdown
+    id: kind
+    attributes:
+      label: Kind
+      options:
+        - Bug
+        - Balance
+        - Idea
+        - Other
+    validations:
+      required: true
+  - type: textarea
+    id: feedback
+    attributes:
+      label: Feedback
+      description: What happened or what you would like. For a bug, say what you pressed, which hero, and on which wave.
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: Game version
+      description: Shown at the bottom of the start menu, for example v0.2.0.
+  - type: markdown
+    attributes:
+      value: Add a thumbs up to someone else's feedback instead of opening the same thing again. The studio replies here and closes the issue when it ships, or explains why it will not.
