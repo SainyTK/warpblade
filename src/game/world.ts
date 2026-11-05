@@ -1,7 +1,9 @@
 import { WORLD_COLORS } from "../constants/palette";
 import { GROUND, PLATFORMS } from "../constants/stage";
+import type { Enemy } from "../types/enemy";
 import { PK } from "../types/particle";
 import type { Box } from "../types/world";
+import { heroSlot } from "./coopHooks";
 import { game, hero, particles, rng } from "./state";
 
 const REDUCED_MOTION = matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -34,6 +36,12 @@ export function shake(time: number, amp: number): void {
 export function newSwing(): number {
   hero.swing = ++game.swing;
   return hero.swing;
+}
+/** the swing of the hero in play has already struck this foe; each hero of a co-op room keeps their own */
+export const struckThisSwing = (e: Enemy): boolean => (e.swings[heroSlot()] ?? -1) === hero.swing;
+/** the swing of the hero in play has struck this foe */
+export function markStruck(e: Enemy): void {
+  e.swings[heroSlot()] = hero.swing;
 }
 export function hitStop(time: number): void {
   game.freeze = Math.max(game.freeze, time);

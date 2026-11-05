@@ -65,8 +65,9 @@ export interface Enemy {
   air: boolean;
   airTime: number;
   seed: number;
-  /** the last sword swing that hit it, so one swing hits once */
-  swing: number;
+  /** the last sword swing of each hero that hit it, by place in a co-op room (0 in solo play), so one swing hits once
+   *  and two heroes swinging at once do not undo each other */
+  swings: number[];
   /** which side of the hero a wisp circles to */
   side: number;
   /** scales its damage with the wave */

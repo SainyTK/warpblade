@@ -41,7 +41,7 @@ export function makeEnemy(type: EnemyType, x: number, y: number, wave: number, x
     air: false,
     airTime: 0,
     seed: rng.range(0, 9),
-    swing: -1,
+    swings: [],
     side: rng.chance(0.5) ? 1 : -1,
     power: scale.damage,
     xp: Math.round(def.xp * scale.xp * xpShare),

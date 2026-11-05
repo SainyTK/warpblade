@@ -12,7 +12,7 @@ import { wallBounce } from "./enemies/wallBounce";
 import { hasPerk } from "./progress";
 import { createLightning } from "./spells/lightning";
 import { game, hero, progress } from "./state";
-import { boxHit, hitStop, shake } from "./world";
+import { boxHit, hitStop, markStruck, shake, struckThisSwing } from "./world";
 
 export interface Blow {
   /** damage as a multiple of attack damage */
@@ -51,8 +51,8 @@ export function meleeHit(boxes: readonly Box[], blow: Blow): number {
   const riposte = hero.riposte > 0;
   const power = blow.power * (riposte ? RIPOSTE.power : 1);
   for (const e of game.enemies) {
-    if (e.hp <= 0 || e.swing === hero.swing || !boxes.some((b) => boxHit(b, enemyBox(e)))) continue;
-    e.swing = hero.swing;
+    if (e.hp <= 0 || struckThisSwing(e) || !boxes.some((b) => boxHit(b, enemyBox(e)))) continue;
+    markStruck(e);
     const dir = Math.sign(e.x - hero.x) || hero.face;
     const [ex, ey] = enemyCenter(e);
     const fromBehind = isBehind(e, hero.x);

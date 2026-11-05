@@ -2,12 +2,13 @@ import { OVERHEAT, SEARING } from "../../../../constants/ysra/heat";
 import type { Enemy } from "../../../../types/enemy";
 import { enemyCenter } from "../../../enemies/enemy";
 import { burstEmbers } from "../../../spells/rites/emberBurst";
-import { game, hero, progress } from "../../../state";
+import { game, progress } from "../../../state";
+import { struckThisSwing } from "../../../world";
 import { onYsra } from "../events";
 import { gainHeat, heatForStrike, overheatLeft, searing } from "./heat";
 
 /** the foes the last blow struck: meleeHit marks each with the swing that hit it */
-const struckFoes = (): Enemy[] => game.enemies.filter((e) => e.hp > 0 && e.swing === hero.swing);
+const struckFoes = (): Enemy[] => game.enemies.filter((e) => e.hp > 0 && struckThisSwing(e));
 
 /** Searing Edge sets each struck foe alight; Overheat bursts in flame on each */
 function burnStruck(): void {
