@@ -1,6 +1,7 @@
 import { HURT_INVULN } from "../constants/combat";
 import { SPARKS } from "../constants/palette";
 import { sfx } from "../services/audio";
+import { coop, heroSlot } from "./coopHooks";
 import { createImpact } from "./effects/impact";
 import { heroGuarded } from "./hero/guard";
 import { kit } from "./hero/kits";
@@ -28,5 +29,6 @@ export function hurtHero(dmg: number, fromX: number): void {
   hitStop(0.08);
   shake(0.25, 2.5);
   sfx.hurt();
-  if (hero.hp <= 0) showBanner(`${character.name} has fallen`, 2);
+  // in a room two players can play the same hero, so the banner names the player
+  if (hero.hp <= 0) showBanner(`${coop() ? `P${heroSlot() + 1}` : character.name} has fallen`, 2);
 }
