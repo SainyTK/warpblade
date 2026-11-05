@@ -22,8 +22,8 @@ function el<K extends keyof HTMLElementTagNameMap>(tag: K, className: string, te
   return node;
 }
 
-/** the code box and its Join button; Enter in the box joins too */
-function joinRow(): HTMLElement {
+/** the code box and its Join button; Enter in the box joins too. A code that cannot be one shows in the screen's error line */
+function joinRow(error: HTMLElement): HTMLElement {
   const row = el("div", "coop-join");
   const input = el("input", "coop-code");
   input.dataset.nav = "";
@@ -36,7 +36,6 @@ function joinRow(): HTMLElement {
   input.addEventListener("input", () => {
     input.value = typedRoomCode(input.value);
   });
-  const error = el("p", "coop-error");
   const join = (): void => {
     const code = readRoomCode(input.value);
     if (code) joinRoom(code);
@@ -53,7 +52,7 @@ function joinRow(): HTMLElement {
   const button = menuItem("Join", join);
   row.append(input, button);
   const box = el("div", "menu-list");
-  box.append(row, error);
+  box.append(row);
   return box;
 }
 
@@ -61,11 +60,12 @@ function joinRow(): HTMLElement {
 function doorScreen(): MenuView {
   const room = roomView();
   const content = el("div", "menu-main");
-  if (room.error) content.append(el("p", "coop-error", room.error));
+  const error = el("p", "coop-error", room.error);
+  error.setAttribute("role", "alert");
   const list = el("nav", "menu-list");
   list.setAttribute("aria-label", "Co-op");
   list.append(menuItem("Host a room", hostRoom));
-  content.append(list, joinRow(), backItem());
+  content.append(error, list, joinRow(error), backItem());
   return { title: "Co-op", subtitle: `Up to ${MAX_PLAYERS} players in one run`, content };
 }
 
