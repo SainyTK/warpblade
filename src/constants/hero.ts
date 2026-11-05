@@ -8,6 +8,9 @@ export const frame = (n: number): number => n / ANIM_FPS;
 /** limb lengths in pixels */
 export const BODY = { upperArm: 5.5, foreArm: 5.5, thigh: 7.5, shin: 7, bladeLength: 17 } as const;
 
+/** where a hero stands when a run starts, in art pixels */
+export const HERO_START_X = 70;
+
 export const STAND: Pose = {
   hx: 0,
   hy: -14,

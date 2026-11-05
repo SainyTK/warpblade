@@ -1,13 +1,11 @@
+import { HERO_START_X } from "../constants/hero";
 import { GROUND } from "../constants/stage";
 import { bankCoins } from "./coins";
 import { kit } from "./hero/kits";
 import { resetWound } from "./hero/wound";
 import { resetDanger } from "./lowHealth";
 import { resetProgress } from "./progress";
-import { game, hero, ponytail, progress, scarf, showBanner } from "./state";
-
-/** where Kael stands at the start of a run */
-const START_X = 70;
+import { freshHero, game, hero, ponytail, progress, scarf, showBanner } from "./state";
 
 /** after a fall, a cleared stage or a restart from the menu: Kael starts over at level 1 from wave 1 */
 export function resetRun(banner = "Rise again"): void {
@@ -33,40 +31,10 @@ export function resetRun(banner = "Rise again"): void {
     shake: 0,
   });
   // the scarf and ponytail move with Kael back to the start, so they do not trail across the stage
-  scarf.shift(START_X - hero.x, GROUND - hero.y);
-  ponytail.shift(START_X - hero.x, GROUND - hero.y);
-  Object.assign(hero, {
-    hp: progress.stats.hp,
-    mp: progress.stats.mp,
-    stamina: progress.stats.stamina,
-    staminaWait: 0,
-    staminaFlash: 0,
-    x: START_X,
-    y: GROUND,
-    vx: 0,
-    vy: 0,
-    inv: 1.5,
-    hasSword: true,
-    sword: null,
-    anchor: null,
-    ground: true,
-    running: false,
-    move: null,
-    queued: null,
-    chain: 0,
-    link: 0,
-    comboCd: 0,
-    warpCd: 0,
-    ultCd: 0,
-    spellCd: { fire: 0, ice: 0, volt: 0 },
-    spellCdFull: { fire: 1, ice: 1, volt: 1 },
-    denied: { cast: 0, warp: 0, mp: 0, ult: 0 },
-    charge: 0,
-    chargeLevel: 0,
-    lastHit: null,
-  });
-  hero.state = "idle";
-  hero.st = 0;
+  scarf.shift(HERO_START_X - hero.x, GROUND - hero.y);
+  ponytail.shift(HERO_START_X - hero.x, GROUND - hero.y);
+  // every field starts fresh, so nothing from the last run carries over; the hero stays untouchable a moment
+  Object.assign(hero, freshHero(progress.stats), { face: hero.face, inv: 1.5 });
   kit().reset();
   resetWound();
   resetDanger();
