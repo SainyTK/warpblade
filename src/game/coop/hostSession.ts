@@ -95,11 +95,14 @@ export class HostSession {
     for (const peer of this.guests.keys()) this.link?.send(peer, { t: "lobby", seats });
   }
 
-  /** the lobby list doubles as a heartbeat; guests gone quiet are let go */
+  /**
+   * The lobby list doubles as a heartbeat, during a run too: a host whose tab is hidden draws no frames and sends no
+   * HUD, and the guests should wait for it rather than count it gone. Guests gone quiet are let go.
+   */
   private ping(): void {
     const now = performance.now();
     for (const [peer, g] of this.guests) if (now - g.lastSeen > QUIET_LIMIT_MS) this.link?.drop(peer);
-    if (!this.run) this.publishLobby();
+    this.publishLobby();
   }
 
   /** the host changed hero in the lobby */

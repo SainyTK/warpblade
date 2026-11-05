@@ -73,6 +73,8 @@ The numbers live in `COOP_SCALING` in `src/constants/coop.ts`.
 
 A guest who leaves, or whose tab closes, disappears from the field; the others read "P3 left the room" and play on.
 Each side sends a heartbeat every 1.5 seconds and counts the other gone after six quiet seconds.
+A guest who leaves or closes the tab also says goodbye, so the others read the note at once.
+A host whose tab is hidden draws no frames but keeps the heartbeat going, and its guests read "Waiting for the host" until it comes back.
 When the host leaves from the pause menu or closes the tab, the run ends for everyone, every guest banks their coins and reads "The host left, so the room has closed."
 The pause menu in a room has Resume, Controls, Options and Leave room, and the game keeps running under it since the others are still fighting.
 
@@ -107,4 +109,4 @@ The pause menu in a room has Resume, Controls, Options and Leave room, and the g
 - Players are named P1 to P4; picking a name is left for later.
 - The foe scaling is a first guess: scripted bots with four players fall early on the day era's flying moths, and it needs tuning from real four-player games.
 - The host's hero choice must be made in the lobby before Start; heroes cannot change during a run.
-- Phones pause background tabs, so a phone host who switches apps stalls the room for everyone.
+- A host who switches to another tab or app stalls the room for everyone until they come back. A phone may stop the heartbeat of a background tab altogether, and then the guests are let go after six seconds.

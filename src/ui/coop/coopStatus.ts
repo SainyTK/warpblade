@@ -19,9 +19,10 @@ const names = (slots: number[]): string => {
   return tags.length > 1 ? `${tags.slice(0, -1).join(", ")} and ${tags.at(-1)}` : (tags[0] ?? "");
 };
 
-/** what this player should know right now: down, waiting on others' cards, or a passing note */
+/** what this player should know right now: the host gone quiet, down, waiting on others' cards, or a passing note */
 function message(now: number): string {
   const room = roomView();
+  if (room.hostAway) return "Waiting for the host";
   if (room.downed) return "Down until the wave is cleared";
   const others = room.choosing.filter((s) => s !== room.you);
   if (others.length && !room.choosing.includes(room.you)) return `Waiting for ${names(others)} to pick`;

@@ -1,5 +1,5 @@
 import { CHARACTERS } from "../../constants/characters";
-import { PING_MS, QUIET_LIMIT_MS } from "../../constants/coop";
+import { HOST_AWAY_MS, PING_MS, QUIET_LIMIT_MS } from "../../constants/coop";
 import { STAND } from "../../constants/hero";
 import { VOLUME_STEPS } from "../../constants/settings";
 import { GAME_VERSION } from "../../constants/sitePages";
@@ -38,6 +38,8 @@ const COINS_KEPT = "Coins you picked up are in your bank.";
 export class GuestSession {
   private link: GuestLink | null = null;
   private hud: GuestHud | null = null;
+  /** when the last HUD came */
+  private hudAt = 0;
   /** a card was sent and the host has not yet answered with fewer picks */
   private sentPicks = -1;
   private video: HTMLVideoElement | null = null;
@@ -102,6 +104,7 @@ export class GuestSession {
         break;
       case "hud":
         this.hud = msg.hud;
+        this.hudAt = performance.now();
         break;
       case "end":
         this.endRun(msg.coins);
@@ -119,6 +122,7 @@ export class GuestSession {
   private startRun(): void {
     this.playing = true;
     this.hud = null;
+    this.hudAt = performance.now();
     this.sentPicks = -1;
     watchInput((a, d) => this.link?.send({ t: "key", a, d }));
     setPickSource({
@@ -167,6 +171,8 @@ export class GuestSession {
       video.volume = settings.volume / VOLUME_STEPS;
     }
     if (this.hud) this.applyHud(this.hud);
+    const hostAway = now - this.hudAt > HOST_AWAY_MS;
+    if (roomView().hostAway !== hostAway) updateRoom({ hostAway });
     updateDanger(dt);
     drawDangerGlow(true);
     updateHud();
@@ -200,7 +206,7 @@ export class GuestSession {
     addCoins(coins);
     setFrameDriver(null);
     syncCoopStatus(false);
-    updateRoom({ downed: false, choosing: [] });
+    updateRoom({ downed: false, choosing: [], hostAway: false });
     setPickSource(null);
     watchInput(null);
     releaseAll();

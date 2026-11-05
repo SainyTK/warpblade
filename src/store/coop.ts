@@ -18,6 +18,8 @@ export interface RoomView {
   downed: boolean;
   /** the places of players still choosing skill cards */
   choosing: number[];
+  /** a guest has had no picture news from the host for a while, as when the host's tab is hidden */
+  hostAway: boolean;
 }
 
 const IDLE: RoomView = {
@@ -31,6 +33,7 @@ const IDLE: RoomView = {
   noteAt: 0,
   downed: false,
   choosing: [],
+  hostAway: false,
 };
 
 /** The one owner of the room's state as the interface sees it. The network session writes it, the menu reads it. */
