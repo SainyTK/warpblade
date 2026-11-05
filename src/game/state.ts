@@ -146,7 +146,7 @@ rememberPerSeat(objectMemory(progress));
 rememberPerSeat(objectMemory(scarf, true));
 rememberPerSeat(objectMemory(ponytail, true));
 rememberPerSeat({
-  save: () => ({ coins: game.coins, revived: game.revived, ghosts: game.ghosts }),
+  save: () => ({ coins: game.coins, revived: game.revived, ghosts: game.ghosts, spell: game.spell }),
   load(saved) {
     Object.assign(game, saved);
   },
