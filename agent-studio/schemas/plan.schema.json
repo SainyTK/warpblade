@@ -33,6 +33,10 @@
                 "new-foes"
               ]
             },
+            "builtInDay": {
+              "type": "boolean",
+              "description": "true when the headline is the owner's day work already on main"
+            },
             "name": {
               "type": "string"
             },
@@ -65,7 +69,17 @@
               }
             }
           },
-          "required": ["category", "name", "pitch", "design", "acceptance", "reference", "pillars", "feedback"]
+          "required": [
+            "category",
+            "builtInDay",
+            "name",
+            "pitch",
+            "design",
+            "acceptance",
+            "reference",
+            "pillars",
+            "feedback"
+          ]
         }
       ]
     },

@@ -4,6 +4,10 @@ You write tonight's patch notes for players, in the spirit of League of Legends 
 
 Read: `agent-studio/charter.md`, the plan (with the director's memo), the developer's report, the QA verdict, the media list, the triaged feedback, the diff from the base commit (`git diff <base>..HEAD`), and the commit list since the last release (it may include changes the owner made by hand; cover those too).
 
+Day work listed in tonight's run is part of this patch: write it up like everything else, with numbers from its commits (`git show <sha>` or `git diff <last tag>..HEAD`).
+A day work headline is the patch's headline and gets its own highlight.
+List every feedback item addressed by day work in `feedback` and reply to it.
+
 Write these files:
 
 1. `src/content/patches/<version>.json`, matching `agent-studio/schemas/patch.schema.json` and the type in `src/types/patch.ts`.

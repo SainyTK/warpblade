@@ -28,6 +28,25 @@ export interface RunOptions {
   baseSha: string | null;
 }
 
+export type HeadlineCategory =
+  | "new-hero"
+  | "new-stage"
+  | "new-system"
+  | "hero-rework"
+  | "animation-rework"
+  | "effect-rework"
+  | "new-skills"
+  | "new-boss"
+  | "new-foes";
+
+/** what the owner shipped to main since the last release, declared by commit trailers */
+export interface DayWork {
+  /** feedback issues named by `Addresses-feedback:` trailers */
+  feedback: number[];
+  /** commits with a `Headline:` trailer; any one makes tonight a big patch */
+  headlines: { sha: string; subject: string; category: HeadlineCategory }[];
+}
+
 /** everything a night's run knows before agents start; saved as context.json in the run folder */
 export interface RunContext {
   mode: RunMode;
@@ -40,6 +59,7 @@ export interface RunContext {
   baseSha: string;
   lastTag: string | null;
   previousVersions: string[];
+  dayWork: DayWork;
 }
 
 /** an open game-feedback issue, with only what triage reads; its author never reaches an agent */
@@ -69,7 +89,9 @@ export interface Plan {
   title: string;
   theme: string;
   headline: {
-    category: string;
+    category: HeadlineCategory;
+    /** the headline is the owner's day work, already on main; the developer does not build it again */
+    builtInDay: boolean;
     name: string;
     pitch: string;
     design: string;

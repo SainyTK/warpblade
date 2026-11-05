@@ -9,7 +9,8 @@ The owner's Mac starts the studio at 00:00 Bangkok time.
 A launcher refreshes a dedicated worktree at `origin/main`, so the pipeline always runs the code on `main`, and runs `npm run studio -- run` in it.
 A night goes through these steps, each one an agent with its own instructions in `roles/`:
 
-1. Prepare: pick the patch type (big when three or more days have passed since the last big patch, otherwise small), the next version, and a `studio/patch-<version>` branch.
+1. Prepare: pick the patch type (big when three or more days have passed since the last big patch or the day work has a headline, otherwise small), the next version, and a `studio/patch-<version>` branch.
+   Commits on `main` since the last release are the owner's day work and ship in this patch. Their trailers say what they deliver: `Addresses-feedback: #N` closes that feedback item with this patch, and `Headline: <category>` makes the night a big patch with that work as its headline.
 2. Baseline: typecheck, lint, build, the playtest smoke check and bot runs on the base version, including runs that start at wave 20 (the dev server reads `?wave=` and `?level=`).
 3. Triage: an agent with no tools reads the open `game-feedback` GitHub issues as data and decides now, later, skip, duplicate or hide for each item, with a reply.
 4. Direct: the director reads the charter, the roadmap, the feedback, the baseline and the code, and writes the plan and a decision memo.

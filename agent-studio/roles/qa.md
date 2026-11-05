@@ -16,6 +16,8 @@ Check, and record evidence for each:
 7. The art of new or changed visuals meets the charter's finish (outline, ramps, light, anticipation, follow-through) at the game's real scale.
 8. The README and docs match the change.
 
+When tonight's run lists day work, it ships in this patch too: check it the same way, from the commits since the last release (`git log <last tag>..HEAD`), even though the developer did not build it tonight.
+
 Judge whether each change is good, not only whether it matches the plan.
 Play it the way a player would, in ordinary fights.
 A change that does not deliver its purpose there is a major issue even when it matches the plan: an attack that rarely hits what it aims at, an effect that is hard to see, a buff that changes nothing a player would notice, a fix that brings a new annoyance.

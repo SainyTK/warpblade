@@ -4,6 +4,7 @@ import { runFiles } from "../runFiles.ts";
 import { readJson } from "../services/files.ts";
 import { git } from "../services/git.ts";
 import type { Night, QaReport, RunContext, RunOptions } from "../types.ts";
+import { NO_DAY_WORK } from "../utils/dayWork.ts";
 
 /** a step's saved output, or null when the step has not finished */
 export const finished = <T>(path: string): Promise<T | null> => readJson<T>(path).catch(() => null);
@@ -21,7 +22,13 @@ export async function reopen(options: RunOptions): Promise<Night> {
   const runDir = await runFolder(options);
   const files = runFiles(runDir);
   const saved = await readJson<RunContext>(files.context);
-  const ctx: RunContext = { ...saved, workdir: options.workdir, baseSha: options.baseSha ?? saved.baseSha };
+  const ctx: RunContext = {
+    ...saved,
+    // runs saved before day work was tracked have no dayWork
+    dayWork: saved.dayWork ?? NO_DAY_WORK,
+    workdir: options.workdir,
+    baseSha: options.baseSha ?? saved.baseSha,
+  };
   await git(ctx.workdir, "checkout", "-B", ctx.branch);
   console.log(`[studio] resuming ${ctx.kind} patch ${ctx.version} for ${ctx.date} on ${ctx.branch}`);
   // the earlier attempts' agent costs carry over, so the review shows what the whole night cost

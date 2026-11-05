@@ -1,3 +1,5 @@
+import type { DayWork } from "../types.ts";
+import { DAY_WORK_FORMAT, parseDayWork } from "../utils/dayWork.ts";
 import { run } from "./shell.ts";
 
 export function git(cwd: string, ...args: string[]): Promise<string> {
@@ -29,3 +31,8 @@ export const commitAll = async (cwd: string, message: string) => {
   await git(cwd, "add", "-A");
   await git(cwd, "commit", "-m", message);
 };
+
+/** the day work declared by commit trailers in a range such as `v0.2.0..HEAD` */
+export async function dayWorkIn(cwd: string, range: string): Promise<DayWork> {
+  return parseDayWork(await git(cwd, "log", "--no-merges", `--format=${DAY_WORK_FORMAT}`, range));
+}

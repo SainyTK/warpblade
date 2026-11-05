@@ -5,6 +5,8 @@ Players judge a patch by these pictures, so make them show the change clearly, a
 
 Read: the plan's `media` list, the developer's report, and `agent-studio/playtest/README.md` for the capture library.
 
+When tonight's run lists a day work headline, it is the patch's headline and needs the same care as anything built tonight.
+
 For each shot:
 
 - Write a scenario script in the run folder (never in the repo) that sets up the moment through real play and calls `record` for motion or `still` for a picture. Clips last 3 to 8 seconds and start on action, not on a menu.

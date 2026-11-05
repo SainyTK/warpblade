@@ -5,7 +5,7 @@ import { compareVersions } from "../../../src/utils/compareVersions.ts";
 import { BRANCH_PREFIX } from "../constants.ts";
 import { runFiles } from "../runFiles.ts";
 import { readJson, writeJson, writeText } from "../services/files.ts";
-import { dirtyFiles, git, headSha, lastTag } from "../services/git.ts";
+import { dayWorkIn, dirtyFiles, git, headSha, lastTag } from "../services/git.ts";
 import type { Night, RunOptions } from "../types.ts";
 import { nextVersion, patchKindFor, type ShippedPatch } from "../utils/cadence.ts";
 
@@ -30,7 +30,11 @@ export async function prepare(options: RunOptions): Promise<Night | null> {
     console.log(`[studio] a patch for ${options.date} already exists; nothing to do`);
     return null;
   }
-  const kind = options.kind === "auto" ? patchKindFor(options.date, shipped) : options.kind;
+  const tag = await lastTag(workdir);
+  const range = tag ? `${tag}..HEAD` : "-30";
+  const dayWork = await dayWorkIn(workdir, range);
+  const kind =
+    options.kind === "auto" ? patchKindFor(options.date, shipped, dayWork.headlines.length > 0) : options.kind;
   const pkg = await readJson<{ version: string }>(join(workdir, "package.json"));
   const current = shipped.at(-1)?.version ?? pkg.version;
   const version = nextVersion(current, kind);
@@ -49,8 +53,6 @@ export async function prepare(options: RunOptions): Promise<Night | null> {
   const baseSha = await headSha(workdir);
   const branch = `${BRANCH_PREFIX}${version}`;
   await git(workdir, "checkout", "-B", branch);
-  const tag = await lastTag(workdir);
-  const range = tag ? `${tag}..HEAD` : "-30";
   await writeText(
     files.commits,
     `${await git(workdir, "log", "--no-merges", "--format=%h %ad %s", "--date=short", range)}\n`,
@@ -66,8 +68,13 @@ export async function prepare(options: RunOptions): Promise<Night | null> {
     baseSha,
     lastTag: tag,
     previousVersions: shipped.map((p) => p.version),
+    dayWork,
   };
   await writeJson(files.context, ctx);
   console.log(`[studio] ${options.mode} run: ${kind} patch ${version} for ${options.date} on ${branch}`);
+  if (dayWork.headlines.length || dayWork.feedback.length)
+    console.log(
+      `[studio] day work on main: ${dayWork.headlines.length} headline commit(s), feedback ${dayWork.feedback.map((id) => `#${id}`).join(", ") || "none"}`,
+    );
   return { ctx, files, costs: {}, sessionTotals: {} };
 }

@@ -40,6 +40,11 @@ async function patchProblems(night: Night, patch: Patch, triage: TriageItem[]): 
   for (const item of patch.feedback) {
     if (!known.has(item.id)) problems.push(`feedback #${item.id} was not in tonight's feedback`);
   }
+  const listed = new Set(patch.feedback.map((f) => f.id));
+  for (const id of ctx.dayWork.feedback) {
+    if (known.has(id) && !listed.has(id))
+      problems.push(`feedback #${id} was addressed by day work but is not in feedback`);
+  }
   return problems;
 }
 

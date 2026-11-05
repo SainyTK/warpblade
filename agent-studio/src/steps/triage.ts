@@ -19,7 +19,14 @@ export async function triage(night: Night, items: FeedbackIssue[]): Promise<Tria
   }
   const data = JSON.stringify(items, null, 2);
   const charter = await readText(`${night.ctx.workdir}/agent-studio/charter.md`);
+  const done = night.ctx.dayWork.feedback.filter((id) => items.some((f) => f.id === id));
   const extra = [
+    ...(done.length
+      ? [
+          `The owner already addressed items ${done.map((id) => `#${id}`).join(", ")} on main today; decide \`now\` for them.`,
+          "",
+        ]
+      : []),
     "The charter is reproduced here because you have no tools.",
     "",
     "<charter>",

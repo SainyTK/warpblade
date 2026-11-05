@@ -48,6 +48,11 @@ The studio runs every night at 00:00 Bangkok time and ships at most one patch pe
 A big patch ships when three or more days have passed since the last big patch; every other night ships a small patch.
 The first patch the studio ships is a big patch.
 
+The owner may also work on the game during the day and merge to `main`.
+That day work ships in the night's patch and the patch notes cover it with everything the studio built that night.
+A commit marks what it delivers with Git trailers: `Addresses-feedback: #N` for a feedback item, and `Headline: <category>` when it is headline content (`new-hero`, `new-stage`, `new-system`, `hero-rework`, `animation-rework`, `effect-rework`, `new-skills`, `new-boss` or `new-foes`).
+A day with a headline turns that night's patch into a big patch with the day work as its headline, whatever the three-day count says.
+
 A big patch has one headline from this list, plus any small changes it needs:
 
 - a new hero
