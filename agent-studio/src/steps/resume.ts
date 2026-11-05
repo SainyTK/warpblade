@@ -24,7 +24,9 @@ export async function reopen(options: RunOptions): Promise<Night> {
   const ctx: RunContext = { ...saved, workdir: options.workdir, baseSha: options.baseSha ?? saved.baseSha };
   await git(ctx.workdir, "checkout", "-B", ctx.branch);
   console.log(`[studio] resuming ${ctx.kind} patch ${ctx.version} for ${ctx.date} on ${ctx.branch}`);
-  return { ctx, files, costs: {} };
+  // the earlier attempts' agent costs carry over, so the review shows what the whole night cost
+  const earlier = await finished<{ costs: Record<string, number> }>(files.summary);
+  return { ctx, files, costs: earlier?.costs ?? {} };
 }
 
 /** the last QA round, when it passed */
