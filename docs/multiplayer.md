@@ -104,6 +104,8 @@ The pause menu in a room has Resume, Controls, Options and Leave room, and the g
 - Guests see the host's frame through a video codec, which softens fine pixels on a slow link. Sending the scene as data, as the reference does, needs effects that can be described as data first.
 - A player cannot join a run already under way, and a guest who drops cannot rejoin the same run.
 - Banners such as Level 5 are shared by the room and show for everyone.
+- Hit-stop freezes the whole room, so a hit by any player pauses every hero for a moment.
+  Mash bots spend 10% of play frozen alone and 25% with four Kaels; freezing only the striking hero and the foes it hit would need a step that runs heroes apart from the world.
 - Players are named P1 to P4; picking a name is left for later.
 - The foe scaling is a first guess that still needs tuning from real games with people.
   Mash bots (walk to the nearest foe, press J, take the first card) in a room fall at wave 4 with one Kael and wave 5 with one Ysra, as in solo play.
