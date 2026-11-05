@@ -54,8 +54,9 @@ export class HostSession {
   /** open a room under a fresh code and wait in the lobby */
   async open(): Promise<void> {
     updateRoom({ phase: "connecting", role: "host", error: "", note: "" });
-    for (let i = 0; i < CODE_TRIES && !this.link; i++) {
-      const code = makeRoomCode(Math.random);
+    let code = "";
+    for (let i = 0; i < CODE_TRIES && !this.link && !this.closed; i++) {
+      code = makeRoomCode(Math.random);
       try {
         this.link = await openRoom(code, {
           join: () => undefined,
@@ -63,18 +64,18 @@ export class HostSession {
           leave: (peer) => this.drop(peer),
           lost: (reason) => this.close(reason),
         });
-        updateRoom({ code });
       } catch (err) {
         if (err instanceof RoomTaken) continue;
         throw err;
       }
     }
-    if (!this.link) throw new Error("Could not find a free room code. Try again.");
+    // a room cancelled while it opened writes nothing: the room shown by now may be another one
     if (this.closed) {
-      this.link.close();
+      this.link?.close();
       return;
     }
-    updateRoom({ phase: "lobby", you: 0 });
+    if (!this.link) throw new Error("Could not find a free room code. Try again.");
+    updateRoom({ phase: "lobby", code, you: 0 });
     this.publishLobby();
     this.pinger = window.setInterval(() => this.ping(), PING_MS);
     addEventListener("pagehide", this.onPageHide);
