@@ -1,11 +1,18 @@
 import type { Perk } from "../types/skill";
 import type { Element } from "../types/spell";
+import type { PillarShape, RiteId } from "../types/ysra/pyre";
+import { FLAME_PILLAR } from "./ysra/rites";
 
 /** the perk of each element's evolved form */
 export const EVOLVED_PERK: Readonly<Record<Element, Perk>> = {
   fire: "sunflask",
   ice: "glacierBloom",
   volt: "thunderhead",
+};
+
+/** the perk of each of Ysra's rites that has an evolved form */
+export const EVOLVED_RITE: Readonly<Partial<Record<RiteId, Perk>>> = {
+  flamePillar: "pyreColonnade",
 };
 
 /** the gold flash when an evolution is learned and play resumes */
@@ -96,4 +103,27 @@ export const THUNDERHEAD = {
   shock: 0.6,
   glow: 0.6,
   fade: 0.4,
+} as const;
+
+/** Pyre Colonnade: a hotter Flame Pillar under a ringed sigil, then two smaller pillars a beat later on either side */
+export const PYRE_COLONNADE = {
+  main: { ...FLAME_PILLAR, power: 6.6, ring: true } satisfies PillarShape,
+  flank: {
+    ...FLAME_PILLAR,
+    power: 3.85,
+    height: 64,
+    halfWidth: 7,
+    launch: 260,
+    /** bursts 0.12 seconds after the main pillar */
+    warn: 0.34,
+    stand: 0.4,
+    sigil: 0.7,
+    shake: 0.12,
+    amp: 2,
+    hitStop: 0.04,
+  } satisfies PillarShape,
+  /** each flank stands this far to either side of the main pillar */
+  offset: 30,
+  /** a flank is skipped when it would stand closer than this to a stage edge */
+  margin: 8,
 } as const;

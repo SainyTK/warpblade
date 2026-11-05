@@ -31,4 +31,5 @@ export type YsraPerk =
   | "hearthfire"
   | "moltenGuard"
   | "hotIron"
-  | "skyline";
+  | "skyline"
+  | "pyreColonnade";

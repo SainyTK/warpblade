@@ -24,6 +24,12 @@ export const FLAME_PILLAR = {
   launch: 330,
   burn: 2,
   pitch: 1.2,
+  /** the sigil at its base size, with no outer ring */
+  sigil: 1,
+  ring: false,
+  shake: 0.25,
+  amp: 3,
+  hitStop: 0.07,
 } as const;
 
 /** Brazier: planted ahead of her, it spits an ember at the nearest foe within `seek` every `every` seconds */
