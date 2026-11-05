@@ -221,7 +221,9 @@ export class GuestSession {
   close(reason = "", banked = this.playing): void {
     if (this.closed) return;
     this.closed = true;
-    this.endRun(game.coins);
+    const result = { outcome: "left" as const, wave: game.wave, coins: game.coins };
+    const playing = this.playing;
+    this.endRun(result.coins);
     window.clearInterval(this.pinger);
     removeEventListener("pagehide", this.onPageHide);
     const link = this.link;
@@ -230,5 +232,7 @@ export class GuestSession {
     window.setTimeout(() => link?.close(), 300);
     resetRoom(reason && banked ? `${reason} ${COINS_KEPT}` : reason);
     if (reason) openMenu("title", "coop");
+    // leaving mid-run from the pause menu shows what the run earned, as it does for a host who leaves
+    else if (playing) reportRun(result);
   }
 }

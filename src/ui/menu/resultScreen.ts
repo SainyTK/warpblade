@@ -8,7 +8,7 @@ import { coinAmount } from "../coinIcon";
 import { menuItem } from "./menuItem";
 import { showScreen } from "./menuState";
 
-const RESULT_TITLES: Record<RunOutcome, string> = { clear: "Stage clear", fallen: "Fallen", left: "Room closed" };
+const RESULT_TITLES: Record<RunOutcome, string> = { clear: "Stage clear", fallen: "Fallen", left: "Left the room" };
 
 function line(label: string, value: HTMLElement): HTMLElement {
   const row = document.createElement("div");
