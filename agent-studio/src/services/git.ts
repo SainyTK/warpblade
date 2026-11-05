@@ -19,11 +19,10 @@ export async function changedFiles(cwd: string, from: string): Promise<string[]>
 
 /** files changed in the working tree but not committed, including untracked ones */
 export async function dirtyFiles(cwd: string): Promise<string[]> {
-  const out = await git(cwd, "status", "--porcelain", "--untracked-files=all");
-  return out
-    .split("\n")
-    .filter(Boolean)
-    .map((line) => line.slice(3));
+  // plain path lists: `git status --porcelain` lines start with a space that trimming output would eat
+  const tracked = await git(cwd, "diff", "--name-only", "HEAD");
+  const untracked = await git(cwd, "ls-files", "--others", "--exclude-standard");
+  return [...new Set([...tracked.split("\n"), ...untracked.split("\n")].filter(Boolean))];
 }
 
 export const commitAll = async (cwd: string, message: string) => {
