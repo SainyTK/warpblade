@@ -5,7 +5,7 @@ import { clamp } from "../../../utils/math";
 import { waveScale } from "../../../utils/progression";
 import { game } from "../../state";
 import { RAIN_FOES as C } from "./colors";
-import { block, glint } from "./detail";
+import { glint } from "./detail";
 import { MIRE_WINDUP, tongueLength } from "./mire";
 
 const canvas = detailCanvas(80, 36, 26, 32);
@@ -48,7 +48,7 @@ export function drawMire(e: Enemy, t: number): SpriteCanvas {
     s.stroke(x0 * K, y0 * K, x1 * K, y1 * K, r * K, c);
   const set = (x: number, y: number, c: number) => s.set(x * K, y * K, c);
   const shine = (x: number, y: number, c: number) => glint(s, x * K, y * K, c);
-  const pip = (x: number, y: number, c: number) => block(s, x * K, y * K, c);
+  const pip = (x: number, y: number, c: number) => s.block(x * K, y * K, c);
   s.clear();
   // far legs, in shadow
   s.begin();

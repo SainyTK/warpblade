@@ -4,7 +4,7 @@ import type { Enemy } from "../../../types/enemy";
 import { clamp } from "../../../utils/math";
 import { hero } from "../../state";
 import { AC, rimLight, VOID } from "./colors";
-import { block, fang, rimBand, taper } from "./paint";
+import { fang, rimBand } from "./paint";
 
 const canvas = detailCanvas(40, 40, 20, 20);
 /** spines around the shell, as angles from straight ahead */
@@ -76,7 +76,7 @@ function drawEyeball(
     }
   if (!showVeins) return;
   // the wet specular glints: one art pixel high on the iris and a fleck below it
-  block(s, ix - 1.5, iy - 1.5, 1, 1, AC.eyeHot);
+  s.block(ix - 1.5, iy - 1.5, AC.eyeHot, 1, 1);
   s.set(ix + 1, iy + 0.5, AC.scleraLight);
   s.set(ex - rx * 0.55, ey - ry * 0.35, AC.eyeHot);
 }
@@ -100,13 +100,13 @@ export function drawEye(e: Enemy, t: number): SpriteCanvas {
   for (let k = 0; k < 4; k++) {
     const ox = -3 + k * 2;
     const w = Math.sin(time * 5 + k * 1.7) * 2;
-    taper(s, [ox, 4 + bob], [ox - 2 + w * 0.5, 9 + bob], 0.95, 0.75, AC.bodyDark);
-    taper(s, [ox - 2 + w * 0.5, 9 + bob], [ox - 4 + w, 13 + k + bob], 0.75, 0.45, AC.bodyDark);
+    s.taper(ox, 4 + bob, ox - 2 + w * 0.5, 9 + bob, 0.95, 0.75, AC.bodyDark);
+    s.taper(ox - 2 + w * 0.5, 9 + bob, ox - 4 + w, 13 + k + bob, 0.75, 0.45, AC.bodyDark);
   }
   s.shadeEdges(AC.bodyDark, AC.body, AC.bodyDeep);
   for (let k = 0; k < 4; k++) {
     const w = Math.sin(time * 5 + k * 1.7) * 2;
-    block(s, -3 + k * 2 - 4 + w, 13 + k + bob, 1, 1, AC.rimSoft);
+    s.block(-3 + k * 2 - 4 + w, 13 + k + bob, AC.rimSoft, 1, 1);
     s.set(-3 + k * 2 - 4 + w, 13 + k + bob, AC.rim);
   }
   s.commit(false);
@@ -114,14 +114,7 @@ export function drawEye(e: Enemy, t: number): SpriteCanvas {
   s.begin();
   for (const a of SPINES) {
     const len = Math.abs(a) > 2.6 ? 12.5 : 10.5;
-    taper(
-      s,
-      [Math.cos(a) * 5, Math.sin(a) * 5 + bob],
-      [Math.cos(a) * len, Math.sin(a) * len + bob],
-      1.3,
-      0.35,
-      AC.plate,
-    );
+    s.taper(Math.cos(a) * 5, Math.sin(a) * 5 + bob, Math.cos(a) * len, Math.sin(a) * len + bob, 1.3, 0.35, AC.plate);
   }
   s.shadeEdges(AC.plate, AC.plateLight, AC.plateDark);
   s.commit();
@@ -135,7 +128,7 @@ export function drawEye(e: Enemy, t: number): SpriteCanvas {
   s.dot(-2.5, -2.5 + bob, 4.4, AC.plate);
   s.shadeEdges(AC.plate, AC.plateLight, AC.plateDark, 2);
   s.stroke(-5.5, -0.5 + bob, -1.5, -5 + bob, 0.25, AC.plateDark);
-  block(s, -4.5, -5 + bob, 1, 0.5, AC.plateGlint);
+  s.block(-4.5, -5 + bob, AC.plateGlint, 1, 0.5);
   s.commit();
   // the eye itself, set into the front of the shell
   s.begin();

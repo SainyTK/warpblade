@@ -2,11 +2,13 @@ import { detailCanvas, type SpriteCanvas } from "../../../engine/sprite";
 import type { Color } from "../../../types/color";
 import type { Enemy } from "../../../types/enemy";
 import { scale, WHITE } from "../../../utils/color";
+import { grain } from "../../../utils/grain";
 import { clamp } from "../../../utils/math";
+import { pointInPolygon } from "../../../utils/pointInPolygon";
 import { waveScale } from "../../../utils/progression";
 import { game } from "../../state";
 import { DAY_COLORS as DC } from "./colors";
-import { block, glowEye, grain, inside } from "./paint";
+import { glowEye } from "./paint";
 
 const canvas = detailCanvas(40, 38, 20, 20);
 type Pt = readonly [number, number];
@@ -69,7 +71,7 @@ function dust(s: SpriteCanvas, w: Wing, shape: readonly Pt[], tip: number): void
   const fore = shape === FORE;
   for (let u = 1; u < tip + 1; u += 0.5)
     for (let v = -5; v <= 3.5; v += 0.5) {
-      if (!inside(shape, u, v)) {
+      if (!pointInPolygon(shape, u, v)) {
         continue;
       }
       const g = grain(u * 2 + (fore ? 0 : 40), v * 2);
@@ -153,7 +155,7 @@ function feeler(s: SpriteCanvas, x0: number, y0: number, x1: number, y1: number)
     s.set(x - 0.5, y, B[2]);
     s.set(x + 0.5, y + 0.5, B[2]);
   }
-  block(s, x1 - 0.5, y1 - 0.5, W[3]);
+  s.block(x1 - 0.5, y1 - 0.5, W[3]);
   s.set(x1 - 0.5, y1 - 0.5, W[4]);
 }
 
@@ -178,7 +180,7 @@ export function drawMoth(e: Enemy, t: number): SpriteCanvas {
   for (const x of [-3.4, -5, -6.6]) {
     s.stroke(x + 0.4, -0.2 + bob, x - 0.2, 3.6 + bob, 0.25, B[0]);
   }
-  block(s, -8.5, 2.5 + bob, B[2]);
+  s.block(-8.5, 2.5 + bob, B[2]);
   s.stroke(0, 2.5 + bob, -0.5, 4 + bob, 0.25, B[0]);
   s.stroke(2, 2.5 + bob, 2.6, 4 + bob, 0.25, B[0]);
   s.commit();
@@ -194,8 +196,8 @@ export function drawMoth(e: Enemy, t: number): SpriteCanvas {
     [1, 1.5],
   ])
     s.set(x, y + bob, DC.mothFurLit);
-  block(s, 2.5, -2.5 + bob, DC.pollen[2]);
-  block(s, 1.5, -3 + bob, DC.pollen[1]);
+  s.block(2.5, -2.5 + bob, DC.pollen[2]);
+  s.block(1.5, -3 + bob, DC.pollen[1]);
   s.set(1.5, -3 + bob, DC.pollen[3]);
   s.set(2.5, -2.5 + bob, DC.pollen[3]);
   s.commit();

@@ -1,12 +1,14 @@
 import { detailCanvas, type SpriteCanvas } from "../../../engine/sprite";
 import type { Enemy } from "../../../types/enemy";
 import { mix, WHITE } from "../../../utils/color";
+import { grain } from "../../../utils/grain";
 import { clamp } from "../../../utils/math";
+import { pointInPolygon } from "../../../utils/pointInPolygon";
 import { waveScale } from "../../../utils/progression";
 import { game } from "../../state";
 import { DAY_COLORS as DC } from "./colors";
 import { OAK_TIMES } from "./oakheart";
-import { block, glowEye, grain, inside } from "./paint";
+import { glowEye } from "./paint";
 
 const canvas = detailCanvas(76, 62, 38, 54);
 type Pt = readonly [number, number];
@@ -157,7 +159,7 @@ function arm(s: SpriteCanvas, sx: number, sy: number, hand: Pt, lit: boolean): v
   };
   grainLine(sx, sy, mx, my, 0.6);
   grainLine(mx, my, hx, hy, 0.4);
-  block(s, mx - 0.5, my - 0.5, B[0]);
+  s.block(mx - 0.5, my - 0.5, B[0]);
   s.set(mx - 0.5, my - 1, lit ? B[4] : B[3]);
   if (lit) {
     s.set(sx, sy - 2, DC.barkGlint);
@@ -208,7 +210,7 @@ export function drawOakheart(e: Enemy, t: number): SpriteCanvas {
   for (const [x, y0, y1] of GROOVES)
     for (let y = y0; y <= y1; y += 0.5) {
       const gx = x + Math.sin(y * 0.7 + x) * 0.6;
-      if (!inside(TRUNK, gx, y)) {
+      if (!pointInPolygon(TRUNK, gx, y)) {
         continue;
       }
       s.set(gx, y + drop, B[0]);
@@ -218,7 +220,7 @@ export function drawOakheart(e: Enemy, t: number): SpriteCanvas {
   for (let y = -27; y <= -4; y += 1)
     for (let x = -8; x <= 9; x += 1) {
       const g = grain(x, y);
-      if (g > 0.08 || !inside(TRUNK, x, y)) {
+      if (g > 0.08 || !pointInPolygon(TRUNK, x, y)) {
         continue;
       }
       s.set(x, y + drop, B[1]);
@@ -243,7 +245,7 @@ export function drawOakheart(e: Enemy, t: number): SpriteCanvas {
   for (const x of [1, 5]) {
     s.stroke(x + 0.2, -21.6 + drop, x + 1.8, -21.6 + drop, 0.75, B[0]);
     glowEye(s, x, -22 + drop, hot ? DC.crackHot : DC.eye, WHITE);
-    block(s, x + 1, -22 + drop, hot ? DC.crackHot : DC.crack);
+    s.block(x + 1, -22 + drop, hot ? DC.crackHot : DC.crack);
     if (!hot) {
       s.set(x + 1.5, -21.5 + drop, DC.crackDeep);
     }
@@ -256,7 +258,7 @@ export function drawOakheart(e: Enemy, t: number): SpriteCanvas {
   s.dot(2.2, -12.8 + drop, 2.9, DC.barkDeep);
   s.dot(2.5, -12.5 + drop, 2.1, glowCol);
   s.dot(2.5, -12.5 + drop, 1.3, hot ? DC.crackHot : DC.crack);
-  block(s, 2, -13 + drop, heat > 0.6 ? WHITE : DC.crackHot);
+  s.block(2, -13 + drop, heat > 0.6 ? WHITE : DC.crackHot);
   s.set(2, -13 + drop, WHITE);
   s.commit();
   s.begin();

@@ -3,7 +3,6 @@ import { detailCanvas, type SpriteCanvas } from "../../engine/sprite";
 import type { Enemy } from "../../types/enemy";
 import { WHITE } from "../../utils/color";
 import { litOrb, type OrbTones } from "./litOrb";
-import { taper } from "./taper";
 
 const huskCanvas = detailCanvas(48, 48, 24, 42);
 const bruteCanvas = detailCanvas(80, 76, 40, 70);
@@ -75,7 +74,7 @@ export function drawHusk(e: Enemy, t: number): SpriteCanvas {
   const limb = (x0: number, y0: number, x1: number, y1: number, r0: number, r1: number, c: number) => {
     const [a, b] = P(x0, y0);
     const [c0, d] = P(x1, y1);
-    taper(s, a, b, c0, d, r0 * k, r1 * k, c);
+    s.taper(a, b, c0, d, r0 * k, r1 * k, c);
   };
   const orb = (x: number, y: number, r: number) => {
     const [a, b] = P(x, y);

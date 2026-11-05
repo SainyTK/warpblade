@@ -6,7 +6,7 @@ import { waveScale } from "../../../utils/progression";
 import { game } from "../../state";
 import { HULK_WINDUP } from "./boghulk";
 import { RAIN_FOES as C } from "./colors";
-import { block, glint, hairline } from "./detail";
+import { glint } from "./detail";
 
 const canvas = detailCanvas(100, 66, 50, 60);
 
@@ -145,7 +145,7 @@ export function drawBoghulk(e: Enemy, t: number): SpriteCanvas {
   s.stroke(-1, -24 + sink, far[0], far[1], 3.2, C.mudDark);
   s.dot(far[0], far[1], 4.2, C.mudDark);
   s.shadeEdges(C.mudDark, C.mud, C.mudDeep, 2);
-  for (let j = -1; j <= 1; j++) hairline(s, far[0] + 2, far[1] + j * 1.6, far[0] + 3.4, far[1] + j * 1.6, C.mudDeep);
+  for (let j = -1; j <= 1; j++) s.hairline(far[0] + 2, far[1] + j * 1.6, far[0] + 3.4, far[1] + j * 1.6, C.mudDeep);
   s.commit();
   // the body: a heavy mound leaning forward, lit from the top left, in deep shadow underneath
   s.begin();
@@ -167,7 +167,7 @@ export function drawBoghulk(e: Enemy, t: number): SpriteCanvas {
     s.dot(x + 0.15, y + sink + 0.15, r, mix(C.mud, C.mudDark, 0.5));
     s.set(x - 0.4, y + sink - 0.4, C.mudGlint);
   }
-  for (const [x0, y0, x1, y1] of STREAKS) hairline(s, x0, y0 + sink, x1, y1 + sink, C.mudRim);
+  for (const [x0, y0, x1, y1] of STREAKS) s.hairline(x0, y0 + sink, x1, y1 + sink, C.mudRim);
   // a mossy hood over the back, its fringe hanging in strands, its edge lit by the storm
   for (let a = -3; a < -0.8; a += 0.12) s.dot(-4 + Math.cos(a) * 11, -19 + sink + Math.sin(a) * 11.5, 1.7, C.moss);
   s.shadeEdges(C.moss, C.mossLight, C.mossDeep);
@@ -183,7 +183,7 @@ export function drawBoghulk(e: Enemy, t: number): SpriteCanvas {
   // the rift motes glow in turn, all at once while it gathers, each with a hot core
   for (const [x, y] of MOTES) {
     const lit = Math.sin(time * 2.5 + x * 0.7) > -0.2 || hot;
-    block(s, x, y + sink, lit ? C.wart : mix(C.wart, C.mud, 0.5));
+    s.block(x, y + sink, lit ? C.wart : mix(C.wart, C.mud, 0.5));
     if (lit) s.set(x, y + sink, C.wartHot);
   }
   // near leg, a heavy stump with toes of packed mud
@@ -192,7 +192,7 @@ export function drawBoghulk(e: Enemy, t: number): SpriteCanvas {
   s.shadeEdges(C.mud, C.mudLight, C.mudDark, 2);
   s.shadeEdges(C.mudLight, C.mudRim, C.mudDark);
   glint(s, 2.5, -7 + sink, C.mudGlint);
-  for (const x of [4, 6.5]) hairline(s, x + step, -1, x + step, 0.4, C.mudDark);
+  for (const x of [4, 6.5]) s.hairline(x + step, -1, x + step, 0.4, C.mudDark);
   s.commit();
   // near arm: a thick limb ending in a fist of packed mud, glossy on its knuckles
   s.begin();
@@ -205,7 +205,7 @@ export function drawBoghulk(e: Enemy, t: number): SpriteCanvas {
   s.dot(near[0] - 1.6, near[1] - 2.2, 1.2, mix(C.mudLight, C.mudRim, 0.5));
   glint(s, near[0] - 2.5, near[1] - 3, WHITE);
   for (let j = -1; j <= 1; j++) {
-    hairline(s, near[0] + 1.8, near[1] + j * 1.6, near[0] + 3.6, near[1] + j * 1.6, C.mudDeep);
+    s.hairline(near[0] + 1.8, near[1] + j * 1.6, near[0] + 3.6, near[1] + j * 1.6, C.mudDeep);
     glint(s, near[0] + 2.2, near[1] + j * 1.6 - 0.6, C.mudRim);
   }
   glint(s, near[0] - 1.5, near[1] - 4.2, C.mudRim);
@@ -218,8 +218,8 @@ export function drawBoghulk(e: Enemy, t: number): SpriteCanvas {
     s.shadeEdges(C.glob, C.globLight, C.globDeep);
     s.dot(near[0] - 1, near[1] - 7, 1.2 + u * 0.6, C.globLight);
     glint(s, near[0] - 1.8, near[1] - 7.8 - u * 0.4, C.mudGlint);
-    block(s, near[0] + 1, near[1] - 5, C.wart);
-    block(s, near[0] - 2, near[1] - 4.5, C.wart);
+    s.block(near[0] + 1, near[1] - 5, C.wart);
+    s.block(near[0] - 2, near[1] - 4.5, C.wart);
     s.set(near[0] + 1, near[1] - 5, C.wartHot);
     s.commit();
   }
@@ -231,7 +231,7 @@ export function drawBoghulk(e: Enemy, t: number): SpriteCanvas {
   s.dot(9, hy - 2, 3.4, C.mudLight);
   s.stroke(7, hy - 3, 14.5, hy - 2, 1.1, C.mudLight);
   s.shadeEdges(C.mudLight, C.mudRim, C.mudLight);
-  hairline(s, 8.5, hy - 1.4, 15, hy - 0.6, C.mudDeep);
+  s.hairline(8.5, hy - 1.4, 15, hy - 0.6, C.mudDeep);
   for (let a = -2.6; a < -0.5; a += 0.08) s.set(10 + Math.cos(a) * 5.4, hy + Math.sin(a) * 5.4, C.mudRim);
   glint(s, 7.5, hy - 3.6, C.mudGlint);
   glint(s, 11, hy - 3.2, C.mudGlint);
@@ -242,12 +242,12 @@ export function drawBoghulk(e: Enemy, t: number): SpriteCanvas {
     [14, hy],
   ]) {
     s.dot(x + 0.25, y + 0.25, 0.9, hot ? mix(C.kiteVein, C.wartHot, u) : C.kiteVein);
-    block(s, x - 0.25, y - 0.25, eye);
+    s.block(x - 0.25, y - 0.25, eye);
     s.set(x - 0.25, y - 0.25, WHITE);
   }
   // the slack mouth, a lit lower lip, and mud drooling from it
   s.stroke(10, hy + 3.5, 15, hy + 2.5, 0.8, C.outline);
-  hairline(s, 10.5, hy + 4.4, 14.6, hy + 3.4, C.mudLight);
+  s.hairline(10.5, hy + 4.4, 14.6, hy + 3.4, C.mudLight);
   const drool = (time * 2) % 1;
   s.stroke(12, hy + 4, 12, hy + 4.5 + drool * 2, 0.3, C.mudLight);
   s.dot(12, hy + 5 + drool * 2, 0.45, C.mudLight);

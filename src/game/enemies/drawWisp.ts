@@ -3,7 +3,6 @@ import { detailCanvas, type SpriteCanvas } from "../../engine/sprite";
 import type { Enemy } from "../../types/enemy";
 import { WHITE } from "../../utils/color";
 import { litOrb } from "./litOrb";
-import { taper } from "./taper";
 
 const canvas = detailCanvas(36, 36, 18, 18);
 
@@ -28,10 +27,10 @@ export function drawWisp(e: Enemy, t: number): SpriteCanvas {
     const wave = Math.sin(time * 6 + k * 2);
     return { x0: ox, y0: 2, x1: ox - 3 + wave * 2, y1: 8 + k * 1.5, r: 1.9 - k * 0.3, bend: wave * 1.2 };
   });
-  for (const v of tendrils) taper(s, v.x0, v.y0, v.x1, v.y1, v.r, 0.7, EC.bodyDark, v.bend);
+  for (const v of tendrils) s.taper(v.x0, v.y0, v.x1, v.y1, v.r, 0.7, EC.bodyDark, v.bend);
   s.shadeEdges(EC.bodyDark, EC.body, EC.bodyDeep);
   // a paler strand of vapour down each tendril
-  for (const v of tendrils) taper(s, v.x0 - 0.4, v.y0 + 1, v.x1 - 0.2, v.y1 - 1, 0.35, 0.2, EC.bodyLight, v.bend);
+  for (const v of tendrils) s.taper(v.x0 - 0.4, v.y0 + 1, v.x1 - 0.2, v.y1 - 1, 0.35, 0.2, EC.bodyLight, v.bend);
   s.commit(false);
   s.begin();
   litOrb(s, 0, 0, 5.3, {

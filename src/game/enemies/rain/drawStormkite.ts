@@ -6,7 +6,7 @@ import { clamp } from "../../../utils/math";
 import { waveScale } from "../../../utils/progression";
 import { game } from "../../state";
 import { RAIN_FOES as C, STORM_VOLT as V } from "./colors";
-import { block, glint, hairline } from "./detail";
+import { glint } from "./detail";
 import { KITE_WINDUP } from "./stormkite";
 
 const canvas = detailCanvas(44, 48, 22, 16);
@@ -64,7 +64,7 @@ export function drawStormkite(e: Enemy, t: number): SpriteCanvas {
   for (const [x, y] of bows) {
     s.stroke(x - 1.8, y - 1, x + 1.8, y + 1, 0.8, C.kiteVein);
     s.shadeEdges(C.kiteVein, C.veinHot, C.veinDeep);
-    block(s, x - 0.5, y - 0.5, C.kiteRim);
+    s.block(x - 0.5, y - 0.5, C.kiteRim);
   }
   s.commit();
   // the diamond: four facets of hide around the cross, the upper left one catching the light, the lower right in shade
@@ -77,10 +77,10 @@ export function drawStormkite(e: Enemy, t: number): SpriteCanvas {
   s.shadeEdges(C.kite, C.kiteLight, C.kiteDark, 2);
   s.shadeEdges(C.kiteDark, C.kite, C.kiteDeep);
   // the hide sags between the spars: a soft fold of shade down each facet
-  hairline(s, ...along(top, back, 0.5), ...along(hub, back, 0.35), C.kite);
-  hairline(s, ...along(top, front, 0.5), ...along(hub, front, 0.35), C.kiteDark);
-  hairline(s, ...along(back, bottom, 0.5), ...along(hub, bottom, 0.4), C.kiteDark);
-  hairline(s, ...along(front, bottom, 0.5), ...along(hub, bottom, 0.45), C.kiteDeep);
+  s.hairline(...along(top, back, 0.5), ...along(hub, back, 0.35), C.kite);
+  s.hairline(...along(top, front, 0.5), ...along(hub, front, 0.35), C.kiteDark);
+  s.hairline(...along(back, bottom, 0.5), ...along(hub, bottom, 0.4), C.kiteDark);
+  s.hairline(...along(front, bottom, 0.5), ...along(hub, bottom, 0.45), C.kiteDeep);
   // the spars, white hot in flickers as the charge gathers, and the side veins crackling off them
   const vein = wind ? mix(C.kiteVein, WHITE, charge * (Math.sin(t * 60) > 0 ? 1 : 0.5)) : C.kiteVein;
   const spars: [Point, Point][] = [
@@ -94,8 +94,8 @@ export function drawStormkite(e: Enemy, t: number): SpriteCanvas {
     const [x0, y0] = along(spars[k][0], spars[k][1], u);
     const lit = wind ? Math.sin(t * 45 + i * 1.7) > -0.3 : i === spark;
     const c: Color = wind ? (lit ? C.veinHot : C.kiteVein) : lit ? C.kiteVein : C.veinDeep;
-    hairline(s, x0, y0, x0 + ax, y0 + ay, c);
-    hairline(s, x0 + ax, y0 + ay, x0 + ax + bx, y0 + ay + by, c);
+    s.hairline(x0, y0, x0 + ax, y0 + ay, c);
+    s.hairline(x0 + ax, y0 + ay, x0 + ax + bx, y0 + ay + by, c);
   });
   for (const [end] of spars) s.stroke(hub[0], hub[1], ...along(hub, end, 0.86), 0.4, vein);
   // storm light glinting off the upper edges and the top tip
@@ -118,14 +118,14 @@ export function drawStormkite(e: Enemy, t: number): SpriteCanvas {
       const [ax, ay] = along(left ? back : front, bottom, u);
       const c = charge > 0.6 ? WHITE : V[3];
       const side = left ? -1 : 1;
-      hairline(s, ax, ay + 0.5, ax + side * 0.8, ay + 1.4, c);
-      hairline(s, ax + side * 0.8, ay + 1.4, ax + side * 0.3, ay + 2.2, c);
+      s.hairline(ax, ay + 0.5, ax + side * 0.8, ay + 1.4, c);
+      s.hairline(ax + side * 0.8, ay + 1.4, ax + side * 0.3, ay + 2.2, c);
     }
     if (charge > 0.3) {
       const r = 0.6 + charge;
       s.dot(bottom[0], bottom[1] + 1.5, r, V[3]);
       s.shadeEdges(V[3], V[4], V[2]);
-      block(s, bottom[0] - 0.5, bottom[1] + 1, WHITE);
+      s.block(bottom[0] - 0.5, bottom[1] + 1, WHITE);
     }
     s.commit(false);
   }

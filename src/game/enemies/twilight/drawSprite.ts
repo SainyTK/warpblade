@@ -4,7 +4,6 @@ import type { Enemy } from "../../../types/enemy";
 import { mix, WHITE } from "../../../utils/color";
 import { clamp } from "../../../utils/math";
 import { PRISM, TWILIGHT_COLORS as TC } from "./colors";
-import { glint, hairline } from "./marks";
 import { BLINK } from "./sprite";
 
 const canvas = detailCanvas(36, 36, 18, 18);
@@ -59,11 +58,11 @@ export function drawSprite(e: Enemy, t: number): SpriteCanvas {
   const line = (a: Pt, b: Pt, c: Color) => {
     const [x0, y0] = P(a[0], a[1]);
     const [x1, y1] = P(b[0], b[1]);
-    hairline(s, x0, y0, x1, y1, c);
+    s.hairline(x0, y0, x1, y1, c);
   };
   const spot = (x: number, y: number, c: Color) => {
     const [a, b] = P(x, y);
-    glint(s, a, b, c);
+    s.block(a, b, c);
   };
   const hue = Math.floor(time * 5);
   /** one wing: a lit membrane swelling between tip and tail, with a paler inner facet, a vein to its tip and a glint there; far wings sit in shade */

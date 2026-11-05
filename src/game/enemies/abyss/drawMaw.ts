@@ -3,7 +3,7 @@ import type { Enemy } from "../../../types/enemy";
 import { mix } from "../../../utils/color";
 import { AC, rimLight, VOID } from "./colors";
 import { mawPose, turn } from "./mawPose";
-import { block, fang, glowEye, type Pt, rimBand, taper } from "./paint";
+import { fang, glowEye, type Pt, rimBand } from "./paint";
 
 const canvas = detailCanvas(104, 84, 52, 76);
 const HINGE: Pt = [3, -19];
@@ -61,17 +61,17 @@ export function drawMaw(e: Enemy, t: number): SpriteCanvas {
   s.clear();
   // far limbs, in shadow
   s.begin();
-  taper(s, B(-14, -10), [-19 - step, -4], 2.8, 2.4, AC.bodyDark);
-  taper(s, [-19 - step, -4], [-16 - step, 0], 2.4, 2, AC.bodyDark);
-  taper(s, B(1, -15), B(7, -8), 2.8, 2.4, AC.bodyDark);
-  taper(s, B(7, -8), [9 + step, 0], 2.4, 2, AC.bodyDark);
+  s.taper(...B(-14, -10), -19 - step, -4, 2.8, 2.4, AC.bodyDark);
+  s.taper(-19 - step, -4, -16 - step, 0, 2.4, 2, AC.bodyDark);
+  s.taper(...B(1, -15), ...B(7, -8), 2.8, 2.4, AC.bodyDark);
+  s.taper(...B(7, -8), 9 + step, 0, 2.4, 2, AC.bodyDark);
   s.shadeEdges(AC.bodyDark, AC.body, AC.bodyDeep);
   claws(9 + step, 0, 2, AC.clawDeep);
   s.shadeEdges(AC.clawDeep, AC.clawDark, AC.bodyDeep);
   s.commit();
   // the spines along the hump, thinning to points
   s.begin();
-  for (const [x, y, back] of SPINES) taper(s, B(x, y), B(x - back, y - 5.5), 1.3, 0.35, AC.plate);
+  for (const [x, y, back] of SPINES) s.taper(...B(x, y), ...B(x - back, y - 5.5), 1.3, 0.35, AC.plate);
   s.shadeEdges(AC.plate, AC.plateLight, AC.plateDark);
   s.commit();
   // the hump, lit from the top left with a deep shadow under its belly
@@ -86,7 +86,7 @@ export function drawMaw(e: Enemy, t: number): SpriteCanvas {
     s.begin();
     s.dot(...B(x, y), r, AC.plate);
     s.shadeEdges(AC.plate, AC.plateLight, AC.plateDark, 2);
-    block(s, ...B(x - r * 0.45, y - r * 0.7), 1, 0.5, AC.plateGlint);
+    s.block(...B(x - r * 0.45, y - r * 0.7), AC.plateGlint, 1, 0.5);
     s.commit();
   }
   // a crack of void light down the flank, burning brighter with the gullet
@@ -97,7 +97,7 @@ export function drawMaw(e: Enemy, t: number): SpriteCanvas {
   s.commit(false);
   // the near hind leg
   s.begin();
-  taper(s, B(-14, -10), [-14 + step, 0], 3.3, 2.8, AC.body);
+  s.taper(...B(-14, -10), -14 + step, 0, 3.3, 2.8, AC.body);
   s.shadeEdges(AC.body, AC.sheen, AC.bodyDark, 2);
   claws(-14 + step, 0, 2, AC.claw);
   s.shadeEdges(AC.claw, AC.clawLight, AC.clawDark);
@@ -111,7 +111,7 @@ export function drawMaw(e: Enemy, t: number): SpriteCanvas {
   if (p.gape > 0.25) {
     s.dot(...B(9, -18), 2.5 + p.heat * 2, mix(AC.gulletHot, VOID[4], p.heat));
     s.dot(...B(8.6, -18.2), 1 + p.heat * 1.2, p.heat > 0.6 ? VOID[5] : AC.gulletHot);
-    block(s, ...B(7.5, -18.7), 1, 1, AC.eyeHot);
+    s.block(...B(7.5, -18.7), AC.eyeHot, 1, 1);
   }
   s.commit(false);
   // the lower jaw with its upturned fangs
@@ -119,7 +119,7 @@ export function drawMaw(e: Enemy, t: number): SpriteCanvas {
   s.poly([lower(1, -18), lower(24, -15), lower(22, -10), lower(7, -6), lower(0, -10)], AC.body);
   s.shadeEdges(AC.body, AC.sheen, AC.bodyDark, 2);
   s.poly([lower(6, -8), lower(21, -11), lower(22, -10), lower(7, -6)], AC.bodyDeep);
-  taper(s, lower(5, lowerEdge(5) + 0.3), lower(19, lowerEdge(19) + 0.3), 1, 0.7, mix(AC.gullet, AC.rimSoft, 0.4));
+  s.taper(...lower(5, lowerEdge(5) + 0.3), ...lower(19, lowerEdge(19) + 0.3), 1, 0.7, mix(AC.gullet, AC.rimSoft, 0.4));
   for (let x = 7; x <= 22; x += 3) {
     const y = lowerEdge(x);
     fang(s, lower(x + 0.5, y + 0.6), lower(x + 0.8, y - (x % 2 ? 2.8 : 2)), 1.8, AC.tooth);
@@ -132,13 +132,13 @@ export function drawMaw(e: Enemy, t: number): SpriteCanvas {
   s.shadeEdges(AC.body, AC.sheen, AC.bodyDark, 2);
   for (let x = 7; x <= 24; x += 3) fang(s, upper(x + 0.5, -19.8), upper(x + 0.8, x % 2 ? -16.4 : -17.2), 1.8, AC.tooth);
   s.shadeEdges(AC.tooth, AC.toothLight, AC.toothDark);
-  block(s, ...upper(23, -22), 1, 0.5, AC.bodyDeep);
+  s.block(...upper(23, -22), AC.bodyDeep, 1, 0.5);
   s.commit();
   // the brow plate over the jaw, its eye sockets and the cluster of burning eyes
   s.begin();
   s.poly([upper(0, -29), upper(13, -29), upper(20, -26), upper(4, -25)], AC.plate);
   s.shadeEdges(AC.plate, AC.plateLight, AC.plateDark);
-  block(s, ...upper(2, -29), 1.5, 0.5, AC.plateGlint);
+  s.block(...upper(2, -29), AC.plateGlint, 1.5, 0.5);
   s.commit();
   s.begin();
   const hot = e.state === "wind" || e.state === "charge" || e.state === "volley";
@@ -152,8 +152,8 @@ export function drawMaw(e: Enemy, t: number): SpriteCanvas {
   s.begin();
   const [hx, hy] = e.state === "volley" ? B(...p.hand) : p.hand;
   const elbow = B(10, -9);
-  taper(s, B(5, -15), elbow, 3.3, 2.9, AC.body);
-  taper(s, elbow, [hx, hy - 2], 2.9, 2.5, AC.body);
+  s.taper(...B(5, -15), ...elbow, 3.3, 2.9, AC.body);
+  s.taper(...elbow, hx, hy - 2, 2.9, 2.5, AC.body);
   s.shadeEdges(AC.body, AC.sheen, AC.bodyDark, 2);
   s.commit();
   s.begin();
@@ -161,7 +161,7 @@ export function drawMaw(e: Enemy, t: number): SpriteCanvas {
   s.shadeEdges(AC.plate, AC.plateLight, AC.plateDark);
   s.commit();
   s.begin();
-  for (let j = -1; j <= 1; j++) taper(s, [hx + 1, hy - 2], [hx + 5.5, hy - 1.5 + j * 1.8], 0.8, 0.3, AC.claw);
+  for (let j = -1; j <= 1; j++) s.taper(hx + 1, hy - 2, hx + 5.5, hy - 1.5 + j * 1.8, 0.8, 0.3, AC.claw);
   s.shadeEdges(AC.claw, AC.clawLight, AC.clawDark);
   s.commit();
   rimBand(s, AC.rim);

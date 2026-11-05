@@ -3,7 +3,7 @@ import type { Enemy } from "../../../types/enemy";
 import { clamp } from "../../../utils/math";
 import { AC, clipBelow, rimLight } from "./colors";
 import { drawStalkerPool } from "./drawStalkerPool";
-import { fang, glowEye, type Pt, rimBand, taper } from "./paint";
+import { fang, glowEye, type Pt, rimBand } from "./paint";
 import { RISE, SINK } from "./stalker";
 
 const canvas = detailCanvas(64, 54, 32, 46);
@@ -47,8 +47,8 @@ export function drawStalker(e: Enemy, t: number): SpriteCanvas {
       const knee = P(...b);
       const [fx, fy] = rear ? P(...c) : [c[0], c[1] + sink];
       const foot: Pt = [fx, Math.min(fy, sink)];
-      taper(s, P(...a), knee, r * 1.3, r, col);
-      taper(s, knee, foot, r, r * 0.7, col);
+      s.taper(...P(...a), ...knee, r * 1.3, r, col);
+      s.taper(...knee, ...foot, r, r * 0.7, col);
       fang(s, [foot[0], foot[1] - 0.4], [foot[0] + 1.6, foot[1] + 0.2], 0.9, col);
     };
     const elbow: Pt = e.state === "hop" ? [6, -21] : wind ? [1, -20] : e.state === "swipe" ? [11, -12] : [8, -8 - step];
@@ -64,8 +64,8 @@ export function drawStalker(e: Enemy, t: number): SpriteCanvas {
     const sway = Math.sin(time * 4) * 2;
     const tailMid = P(-14, -16 + sway * 0.5);
     const tailEnd = P(-19, -13 + sway);
-    taper(s, P(-9, -12 + hunch), tailMid, 1.5, 1.1, AC.body);
-    taper(s, tailMid, tailEnd, 1.1, 0.7, AC.body);
+    s.taper(...P(-9, -12 + hunch), ...tailMid, 1.5, 1.1, AC.body);
+    s.taper(...tailMid, ...tailEnd, 1.1, 0.7, AC.body);
     s.shadeEdges(AC.body, AC.sheen, AC.bodyDark);
     fang(s, tailEnd, P(-21.5, -8.5 + sway), 1.6, AC.rimSoft);
     s.shadeEdges(AC.rimSoft, AC.rim, AC.gullet);
@@ -74,7 +74,7 @@ export function drawStalker(e: Enemy, t: number): SpriteCanvas {
     s.begin();
     for (const x of [-8, -5, -2, 1]) {
       const h = x === -5 || x === -2 ? 5 : 3;
-      taper(s, P(x, -14.5 + hunch), P(x - 2, -15.5 - h + hunch), 0.9, 0.3, AC.plate);
+      s.taper(...P(x, -14.5 + hunch), ...P(x - 2, -15.5 - h + hunch), 0.9, 0.3, AC.plate);
     }
     s.shadeEdges(AC.plate, AC.plateLight, AC.plateDark);
     s.commit();
@@ -123,13 +123,13 @@ export function drawStalker(e: Enemy, t: number): SpriteCanvas {
     s.commit(false);
     // the scythe foreleg and its long pale blade, its cutting edge catching the light
     s.begin();
-    taper(s, P(3, -12 + hunch), P(...elbow), 2, 1.5, AC.body);
+    s.taper(...P(3, -12 + hunch), ...P(...elbow), 2, 1.5, AC.body);
     s.shadeEdges(AC.body, AC.sheen, AC.bodyDark);
     s.commit();
     s.begin();
     const [ex, ey] = P(...elbow);
     const [tx, ty] = P(...tip);
-    taper(s, [ex, ey], [tx, ty], 1.3, 0.4, AC.claw);
+    s.taper(ex, ey, tx, ty, 1.3, 0.4, AC.claw);
     s.shadeEdges(AC.claw, AC.clawLight, AC.clawDark);
     s.dot(ex, ey, 1.1, AC.plateDark);
     s.dot(tx, ty, 0.55, wind ? AC.eyeHot : AC.clawLight);

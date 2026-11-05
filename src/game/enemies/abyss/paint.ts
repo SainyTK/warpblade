@@ -1,31 +1,8 @@
 import type { SpriteCanvas } from "../../../engine/sprite";
 import type { Color } from "../../../types/color";
 import { mix } from "../../../utils/color";
-import { lerp } from "../../../utils/math";
 
 export type Pt = readonly [number, number];
-
-/** a box of whole art pixels' worth of image pixels, its top left corner at this local point */
-export function block(s: SpriteCanvas, x: number, y: number, w: number, h: number, c: Color): void {
-  s.poly(
-    [
-      [x, y],
-      [x + w, y],
-      [x + w, y + h],
-      [x, y + h],
-    ],
-    c,
-  );
-}
-
-/** a limb or spine that thins from r0 at a to r1 at b */
-export function taper(s: SpriteCanvas, a: Pt, b: Pt, r0: number, r1: number, c: Color): void {
-  const n = Math.max(1, Math.ceil(Math.hypot(b[0] - a[0], b[1] - a[1]) * 2 * s.res));
-  for (let i = 0; i <= n; i++) {
-    const u = i / n;
-    s.dot(lerp(a[0], b[0], u), lerp(a[1], b[1], u), lerp(r0, r1, u), c);
-  }
-}
 
 /** a fang or claw tip: a triangle from a base of this width, centred on base, to a point */
 export function fang(s: SpriteCanvas, base: Pt, tip: Pt, width: number, c: Color): void {
@@ -40,8 +17,8 @@ export function fang(s: SpriteCanvas, base: Pt, tip: Pt, width: number, c: Color
  * specular light in its top left corner
  */
 export function glowEye(s: SpriteCanvas, x: number, y: number, hot: Color, dim: Color, spec: Color): void {
-  block(s, x - 0.5, y - 0.5, 1, 0.5, hot);
-  block(s, x - 0.5, y, 1, 0.5, dim);
+  s.block(x - 0.5, y - 0.5, hot, 1, 0.5);
+  s.block(x - 0.5, y, dim, 1, 0.5);
   s.set(x - 0.5, y - 0.5, spec);
 }
 

@@ -103,6 +103,34 @@ export class SpriteCanvas implements SpriteImage {
         for (let x = Math.ceil(xs[k] - 0.5); x <= Math.floor(xs[k + 1] - 0.5); x++) this.put(x, y, c);
     }
   }
+  /** a box of w by h art pixels filled image pixel by image pixel, its top left corner at this local point */
+  block(x: number, y: number, c: Color, w = 1, h = w): void {
+    const x0 = Math.floor(this.imageX(x));
+    const y0 = Math.floor(this.imageY(y));
+    const nx = Math.round(w * this.res);
+    const ny = Math.round(h * this.res);
+    for (let j = 0; j < ny; j++) for (let i = 0; i < nx; i++) this.put(x0 + i, y0 + j, c);
+  }
+  /** a line one image pixel wide between two local points: seams, cracks, veins and fine light */
+  hairline(x0: number, y0: number, x1: number, y1: number, c: Color): void {
+    const n = Math.max(1, Math.ceil(Math.max(Math.abs(x1 - x0), Math.abs(y1 - y0)) * this.res));
+    for (let i = 0; i <= n; i++) this.set(x0 + ((x1 - x0) * i) / n, y0 + ((y1 - y0) * i) / n, c);
+  }
+  /**
+   * a horn, claw, limb or tendril from (x0, y0) to (x1, y1), narrowing from radius r0 at the base to r1 at the tip;
+   * bend pushes the middle to the left of the line's direction, so the shape curves
+   */
+  taper(x0: number, y0: number, x1: number, y1: number, r0: number, r1: number, c: Color, bend = 0): void {
+    const len = Math.hypot(x1 - x0, y1 - y0);
+    const nx = len > 0 ? (y1 - y0) / len : 0;
+    const ny = len > 0 ? -(x1 - x0) / len : 0;
+    const n = Math.max(1, Math.ceil(len * 2 * this.res));
+    for (let i = 0; i <= n; i++) {
+      const u = i / n;
+      const push = bend * 4 * u * (1 - u);
+      this.dot(x0 + (x1 - x0) * u + nx * push, y0 + (y1 - y0) * u + ny * push, r0 + (r1 - r0) * u, c);
+    }
+  }
   /** pixel rows in image pixels, one character per pixel, "." is empty, the top left corner at this local point */
   pixels(rows: readonly string[], map: Record<string, Color>, x: number, y: number): void {
     const x0 = Math.floor(this.imageX(x));

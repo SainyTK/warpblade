@@ -3,7 +3,6 @@ import { detailCanvas, type SpriteCanvas } from "../../engine/sprite";
 import type { Enemy } from "../../types/enemy";
 import { WHITE } from "../../utils/color";
 import { litOrb } from "./litOrb";
-import { taper } from "./taper";
 
 const canvas = detailCanvas(76, 76, 38, 34);
 
@@ -55,26 +54,26 @@ export function drawWarden(e: Enemy, t: number): SpriteCanvas {
     const ox = (i - 2) * 4;
     const wave = Math.sin(time * 4 + i * 1.7);
     const r = 2.6 - Math.abs(i - 2) * 0.4;
-    taper(s, ox, 10, ox - 4 + wave * 4, 24 + (i % 2) * 5, r, r * 0.6, EC.bodyDark, wave * 2);
+    s.taper(ox, 10, ox - 4 + wave * 4, 24 + (i % 2) * 5, r, r * 0.6, EC.bodyDark, wave * 2);
   }
   s.shadeEdges(EC.bodyDark, EC.body, EC.bodyDeep, 2);
   s.commit(false);
   const armY = raised ? -16 : 6;
   s.begin();
-  for (const side of [-1, 1]) taper(s, side * 10, -2, side * 20, armY, 2.4, 1.8, EC.body);
+  for (const side of [-1, 1]) s.taper(side * 10, -2, side * 20, armY, 2.4, 1.8, EC.body);
   s.shadeEdges(EC.body, EC.bodyLight, EC.bodyDark, 2);
   s.commit();
   s.begin();
   for (const side of [-1, 1])
     for (let j = -1; j <= 1; j++)
-      taper(s, side * 20, armY, side * 24.5, armY + j * 2 + (raised ? -2 : 2), 0.85, 0.25, EC.claw);
+      s.taper(side * 20, armY, side * 24.5, armY + j * 2 + (raised ? -2 : 2), 0.85, 0.25, EC.claw);
   s.shadeEdges(EC.claw, EC.clawGlint, EC.clawDark);
   s.commit();
   // the crown: three horns, rooted under the body
   s.begin();
-  taper(s, -6, -9, -10, -22, 1.7, 0.55, EC.claw, -0.8);
-  taper(s, 0, -11, 0, -25, 1.8, 0.6, EC.claw);
-  taper(s, 6, -9, 10, -22, 1.7, 0.55, EC.claw, 0.8);
+  s.taper(-6, -9, -10, -22, 1.7, 0.55, EC.claw, -0.8);
+  s.taper(0, -11, 0, -25, 1.8, 0.6, EC.claw);
+  s.taper(6, -9, 10, -22, 1.7, 0.55, EC.claw, 0.8);
   s.shadeEdges(EC.claw, EC.clawGlint, EC.clawDark, 2);
   s.commit();
   s.begin();

@@ -1,8 +1,9 @@
 import { detailCanvas, type SpriteCanvas } from "../../../engine/sprite";
 import type { Enemy } from "../../../types/enemy";
 import { WHITE } from "../../../utils/color";
+import { grain } from "../../../utils/grain";
 import { DAY_COLORS as DC } from "./colors";
-import { block, glowEye, grain } from "./paint";
+import { glowEye } from "./paint";
 
 const canvas = detailCanvas(54, 38, 27, 34);
 const H = DC.hide;
@@ -159,7 +160,7 @@ export function drawThornback(e: Enemy, t: number): SpriteCanvas {
   }
   s.shadeEdges(B[1], B[2], B[0]);
   for (const [x, y] of LEAVES) {
-    block(s, x - 0.5, y - 0.5 + by, B[3], 1.5);
+    s.block(x - 0.5, y - 0.5 + by, B[3], 1.5);
     s.set(x - 0.5, y - 0.5 + by, DC.brambleLit);
     s.set(x, y - 0.5 + by, DC.brambleLit);
     s.set(x + 0.5, y + 0.5 + by, B[2]);
@@ -217,7 +218,7 @@ export function drawThornback(e: Enemy, t: number): SpriteCanvas {
   s.stroke(10, -10.4 + hy, 12.5, -10 + hy, 0.5, H[1]);
   s.set(10, -10.5 + hy, DC.hideLit);
   s.set(10.5, -10.5 + hy, DC.hideLit);
-  block(s, 10.5, -9.5 + hy, H[0], 1.5);
+  s.block(10.5, -9.5 + hy, H[0], 1.5);
   const fierce = winding || charging;
   glowEye(s, 11, -9 + hy, fierce ? DC.crackHot : DC.crack, fierce ? WHITE : DC.eye);
   if (winding) {

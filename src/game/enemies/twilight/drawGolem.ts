@@ -1,13 +1,12 @@
 import { detailCanvas, type SpriteCanvas } from "../../../engine/sprite";
 import type { Color } from "../../../types/color";
 import type { Enemy } from "../../../types/enemy";
+import { clipPoly } from "../../../utils/clipPoly";
 import { mix, WHITE } from "../../../utils/color";
 import { clamp } from "../../../utils/math";
 import { waveScale } from "../../../utils/progression";
 import { game } from "../../state";
-import { clipPoly } from "./clipPoly";
 import { TWILIGHT_COLORS as TC } from "./colors";
-import { glint, hairline } from "./marks";
 
 const canvas = detailCanvas(56, 50, 28, 45);
 type Pt = readonly [number, number];
@@ -112,12 +111,12 @@ function fist(s: SpriteCanvas, [x, y]: Pt, r: number, far: boolean, rune: Color)
     base,
   );
   s.shadeEdges(base, far ? TC.stone : TC.stoneRim, joint, 2);
-  hairline(s, x + h * 0.25, y - h * 0.3, x + h - 0.5, y - h * 0.3, joint);
-  hairline(s, x + h * 0.25, y + h * 0.3, x + h - 0.5, y + h * 0.3, joint);
-  hairline(s, x + h * 0.25, y - h * 0.3, x + h * 0.25, y + h * 0.7, joint);
+  s.hairline(x + h * 0.25, y - h * 0.3, x + h - 0.5, y - h * 0.3, joint);
+  s.hairline(x + h * 0.25, y + h * 0.3, x + h - 0.5, y + h * 0.3, joint);
+  s.hairline(x + h * 0.25, y - h * 0.3, x + h * 0.25, y + h * 0.7, joint);
   if (!far) {
-    glint(s, x - h + c, y - h + 0.5, TC.stoneGlint);
-    glint(s, x - h * 0.5, y - 0.5, rune);
+    s.block(x - h + c, y - h + 0.5, TC.stoneGlint);
+    s.block(x - h * 0.5, y - 0.5, rune);
     s.set(x - h * 0.5 + 1, y + 0.5, rune);
   }
   s.commit();
@@ -162,15 +161,15 @@ export function drawGolem(e: Enemy, t: number): SpriteCanvas {
   // a cool rim light down the far side and a crack in the side block, then the joints glowing as the runes heat up
   s.begin();
   for (let y = -16; y <= -9; y += 0.5) s.set(9 + (y + 17) / 9 - 0.5, y + drop, TC.stoneRim);
-  hairline(s, -6, -21 + drop, 2.5, -21 + drop, TC.stoneRim);
-  hairline(s, 6.5, -14 + drop, 7.5, -12 + drop, TC.stoneDeep);
-  hairline(s, 7.5, -12 + drop, 6.5, -10 + drop, TC.stoneDeep);
-  hairline(s, 7, -14 + drop, 8, -12 + drop, TC.stoneLight);
-  glint(s, -8.5, -14 + drop, TC.stoneRim);
+  s.hairline(-6, -21 + drop, 2.5, -21 + drop, TC.stoneRim);
+  s.hairline(6.5, -14 + drop, 7.5, -12 + drop, TC.stoneDeep);
+  s.hairline(7.5, -12 + drop, 6.5, -10 + drop, TC.stoneDeep);
+  s.hairline(7, -14 + drop, 8, -12 + drop, TC.stoneLight);
+  s.block(-8.5, -14 + drop, TC.stoneRim);
   if (g > 0.3) {
     const seam = mix(TC.stoneDeep, rune, clamp((g - 0.3) * 1.4));
-    hairline(s, -8, SEAM.slab - 0.5 + drop, 4, SEAM.slab - 0.5 + drop, seam);
-    hairline(s, SEAM.chest - 0.5, SEAM.slab + drop, SEAM.chest - 0.5, SEAM.base - 1 + drop, seam);
+    s.hairline(-8, SEAM.slab - 0.5 + drop, 4, SEAM.slab - 0.5 + drop, seam);
+    s.hairline(SEAM.chest - 0.5, SEAM.slab + drop, SEAM.chest - 0.5, SEAM.base - 1 + drop, seam);
   }
   s.commit(false);
   // the runes cut into the chest: a dark groove with a line of light along it
@@ -180,7 +179,7 @@ export function drawGolem(e: Enemy, t: number): SpriteCanvas {
       s.stroke(path[i - 1][0], path[i - 1][1] + drop, path[i][0], path[i][1] + drop, 0.5, groove);
   for (const path of CHEST_RUNES)
     for (let i = 1; i < path.length; i++)
-      hairline(s, path[i - 1][0], path[i - 1][1] + drop, path[i][0], path[i][1] + drop, rune);
+      s.hairline(path[i - 1][0], path[i - 1][1] + drop, path[i][0], path[i][1] + drop, rune);
   s.commit(false);
   // the moss over its shoulders, glowing faintly at the tips
   s.begin();
@@ -199,8 +198,8 @@ export function drawGolem(e: Enemy, t: number): SpriteCanvas {
     TC.stoneLight,
   );
   s.shadeEdges(TC.stoneLight, TC.stoneRim, TC.stone, 2);
-  glint(s, 2, -25.5 + drop, TC.stoneGlint);
-  hairline(s, 3.5, -24 + drop, 8, -24 + drop, TC.stone);
+  s.block(2, -25.5 + drop, TC.stoneGlint);
+  s.hairline(3.5, -24 + drop, 8, -24 + drop, TC.stone);
   s.poly(
     sunk([
       [4.5, -23.5],
@@ -211,11 +210,11 @@ export function drawGolem(e: Enemy, t: number): SpriteCanvas {
     TC.stoneDeep,
   );
   const eye = g > 0.5 ? WHITE : TC.eye;
-  hairline(s, 5, -23 + drop, 7, -23 + drop, eye);
-  hairline(s, 5, -22.5 + drop, 7, -22.5 + drop, eye);
-  glint(s, 6, -23 + drop, WHITE);
-  hairline(s, 7.5, -23 + drop, 7.5, -22.5 + drop, rune);
-  hairline(s, 5, -21.5 + drop, 7, -21.5 + drop, TC.stone);
+  s.hairline(5, -23 + drop, 7, -23 + drop, eye);
+  s.hairline(5, -22.5 + drop, 7, -22.5 + drop, eye);
+  s.block(6, -23 + drop, WHITE);
+  s.hairline(7.5, -23 + drop, 7.5, -22.5 + drop, rune);
+  s.hairline(5, -21.5 + drop, 7, -21.5 + drop, TC.stone);
   s.commit();
   // the front arm, the chiselled block over its shoulder and its great fist
   limb(s, [5, -16 + drop], frontFist, 2.6, false);
@@ -232,8 +231,8 @@ export function drawGolem(e: Enemy, t: number): SpriteCanvas {
     TC.stone,
   );
   s.shadeEdges(TC.stone, TC.stoneLight, TC.stoneDark, 2);
-  glint(s, 3.5, -18 + drop, TC.stoneRim);
-  hairline(s, 3, -15.5 + drop, 7.5, -15.5 + drop, TC.stoneDark);
+  s.block(3.5, -18 + drop, TC.stoneRim);
+  s.hairline(3, -15.5 + drop, 7.5, -15.5 + drop, TC.stoneDark);
   s.commit();
   fist(s, frontFist, 3.6, false, rune);
   s.outline(TC.outline);
