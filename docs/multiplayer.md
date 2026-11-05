@@ -110,6 +110,7 @@ The pause menu in a room has Resume, Controls, Options and Leave room, and the g
 - Players are named P1 to P4; picking a name is left for later.
 - The foe scaling is a first guess that still needs tuning from real games with people.
   Mash bots (walk to the nearest foe, press J, take the first card) in a room fall at wave 4 with one Kael and wave 5 with one Ysra, as in solo play.
-  Two Kaels reach waves 5 to 7, four Kaels waves 8 to 10, two Ysras waves 10 to 13, two Kaels with two Ysras waves 15 to 16 and four Ysras waves 17 to 18, so a room of weak players is not overwhelmed; rising at each wave clear carries a team further than any one hero.
+  Two Kaels reach waves 5 to 6, two Ysras waves 6 to 7, four Kaels waves 5 to 7, two Kaels with two Ysras waves 5 to 10 and four Ysras wave 10, three runs each.
+  A room of weak players is not overwhelmed by the day era: most four-player runs that end early fall to the wave 5 mini boss, the wave a lone Ysra bot also falls on.
 - The host's hero choice must be made in the lobby before Start; heroes cannot change during a run.
 - Phones pause background tabs, so a phone host who switches apps stalls the room for everyone.
