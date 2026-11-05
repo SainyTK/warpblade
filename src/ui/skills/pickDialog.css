@@ -125,6 +125,25 @@
   --accent: var(--pink);
   --accent-dark: #3a1438;
 }
+/* An evolution: the coin gold ramp, a pale inner rim and a two-frame shimmer on the icon frame. */
+.pick[data-branch="evolution"] {
+  --accent: var(--gold);
+  --accent-dark: var(--gold-dark);
+}
+.pick[data-branch="evolution"],
+.pick[data-branch="evolution"].selected {
+  border-color: var(--gold);
+}
+.pick[data-branch="evolution"]::after {
+  content: "";
+  position: absolute;
+  inset: 2px;
+  border: 1px solid var(--gold-glint);
+  pointer-events: none;
+}
+.pick[data-branch="evolution"] .pick-icon {
+  animation: evolve-shimmer 800ms steps(1) infinite;
+}
 .pick[data-branch="boon"] {
   --accent: var(--heal);
   --accent-dark: #123a2a;
@@ -239,6 +258,9 @@
   font-size: 12px;
   line-height: 1.4;
   color: var(--brass);
+}
+.pick-note.pick-recipe {
+  color: var(--gold);
 }
 .pick-key {
   position: absolute;
@@ -422,6 +444,12 @@
     transform: translateY(-10px);
   }
 }
+@keyframes evolve-shimmer {
+  50% {
+    border-color: var(--gold-glint);
+    box-shadow: inset 0 0 0 2px var(--brass);
+  }
+}
 @keyframes pick-blink {
   50% {
     background: var(--night);
@@ -430,6 +458,7 @@
 @media (prefers-reduced-motion: reduce) {
   .level-up-head,
   .pick,
+  .pick[data-branch="evolution"] .pick-icon,
   .pick-pips i.gain {
     animation: none;
     transition: none;

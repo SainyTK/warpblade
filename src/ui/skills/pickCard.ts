@@ -2,7 +2,7 @@ import { BOON_KIND } from "../../constants/skillLabels";
 import type { CharacterDef } from "../../types/character";
 import type { PickOption } from "../../types/skill";
 import { iconUrl } from "./icons/iconImage";
-import { branchLine, lockNote, rankLine } from "./pickText";
+import { branchLine, lockNote, rankLine, recipeNotes } from "./pickText";
 
 function span(cls: string, text: string): HTMLSpanElement {
   const el = document.createElement("span");
@@ -62,6 +62,7 @@ export function pickCard(
   body.append(span("pick-name", node.name), meta, span("pick-text", node.text));
   const note = lockNote(c, node, rank);
   if (note) body.append(span("pick-note", note));
+  for (const recipe of recipeNotes(c, node, ranks)) body.append(span("pick-note pick-recipe", recipe));
   if (!rank) frame.append(span("pick-new", "NEW"));
   b.append(span("pick-path", branchLine(branch)), frame, body, key);
   return b;

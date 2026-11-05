@@ -564,6 +564,50 @@ const FUSION: SkillBranch = {
   ],
 };
 
+/** a spell learned, its partner passive at full rank and level 6 offer the spell's evolved form as the first card of a pick */
+const EVOLUTION: SkillBranch = {
+  id: "evolution",
+  name: "Evolution",
+  nodes: [
+    {
+      id: "e_sunflask",
+      name: "Sunflask",
+      kind: "evolution",
+      text: "Fire Flask evolves. The flask bursts, then three smaller flasks fly at nearby foes and burst on them.",
+      level: 6,
+      ranks: 1,
+      requires: [],
+      evolves: "a_flame",
+      mastered: ["a_font"],
+      perk: "sunflask",
+    },
+    {
+      id: "e_glacier",
+      name: "Glacier Bloom",
+      kind: "evolution",
+      text: "Ice Spikes evolve. A second line of spikes runs behind you, and the last spike ahead grows into a great spire that bursts into freezing shards.",
+      level: 6,
+      ranks: 1,
+      requires: [],
+      evolves: "a_frost_spikes",
+      mastered: ["a_sigils"],
+      perk: "glacierBloom",
+    },
+    {
+      id: "e_thunderhead",
+      name: "Thunderhead",
+      kind: "evolution",
+      text: "Lightning evolves. A storm cloud stays over the strike and calls down three more bolts on foes beneath it.",
+      level: 6,
+      ranks: 1,
+      requires: [],
+      evolves: "a_bolt",
+      mastered: ["a_power"],
+      perk: "thunderhead",
+    },
+  ],
+};
+
 /** Kael's head, facing right, three-quarters: swept silver hair, bangs over the brow, face on the right. */
 const HEAD = [
   "..dhhhh...",
@@ -600,7 +644,7 @@ export const KAEL: CharacterDef = {
   special: "crystalNova",
   base: { ad: 10, ap: 10, hp: 100, mp: 100, stamina: 100, crit: 0.05, move: 1, aspd: 1, haste: 1 },
   growth: { ad: 0.6, ap: 0.6, hp: 5, mp: 2 },
-  branches: [BLADE, PHANTOM, ARCANE, FUSION],
+  branches: [BLADE, PHANTOM, ARCANE, FUSION, EVOLUTION],
   skin: {
     colors: KAEL_COLORS,
     head: HEAD,

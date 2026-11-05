@@ -1,5 +1,5 @@
 import { ULT_LEVELS } from "../../constants/ultimate";
-import { createLightning } from "../spells/bolt";
+import { createLightning } from "../spells/lightning";
 import { game, progress, rng } from "../state";
 import { surfaceBelow } from "../world";
 import { ultSpan, ultTargets } from "./targets";

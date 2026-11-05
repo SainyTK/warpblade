@@ -5,6 +5,7 @@ import { PF, PK } from "../types/particle";
 import { updateBlazes } from "./blazes";
 import { updateCoins } from "./coins";
 import { updateEnemies } from "./enemies/updateEnemies";
+import { celebrateEvolutions } from "./evolve";
 import { updateHero } from "./hero/updateHero";
 import { agePresses } from "./input";
 import { updateNumbers } from "./numbers";
@@ -59,6 +60,7 @@ export function update(dt: number): void {
   const world = game.slow > 0 ? dt * PERFECT.timeScale : dt;
   game.slow = Math.max(0, game.slow - dt);
   game.t += world;
+  celebrateEvolutions();
   updateScenery(dt);
   updateHero(dt);
   updateEnemies(world);

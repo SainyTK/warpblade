@@ -144,7 +144,12 @@ export function dealDamage(e: Enemy, base: number, o: HitOptions = {}): HitResul
     if (burning && hasPerk("ignition")) {
       e.burn = 0;
       const [cx, cy] = enemyCenter(e);
-      explode(cx, cy, FUSION.ignitionRadius, progress.stats.ap * FUSION.ignition, 2, 0);
+      explode(cx, cy, {
+        radius: FUSION.ignitionRadius,
+        damage: progress.stats.ap * FUSION.ignition,
+        burn: 2,
+        brands: 0,
+      });
     }
   } else if (e.air && !o.dot) {
     e.airHits++;

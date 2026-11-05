@@ -34,3 +34,22 @@ export interface SlashShape {
   trail?: number;
   ramp?: Ramp;
 }
+/** One fire burst: foes inside the radius take up to `damage`, less toward the edge, and burn for `burn` seconds.
+ *  `brands` burning chunks fly off and set the floor alight. Smaller bursts shake and stop the game less. */
+export interface Blast {
+  radius: number;
+  damage: number;
+  burn: number;
+  brands?: number;
+  shake?: number;
+  amp?: number;
+  hitStop?: number;
+}
+/** a thrown flask in flight */
+export interface Flask {
+  x: number;
+  y: number;
+  vx: number;
+  vy: number;
+  t: number;
+}

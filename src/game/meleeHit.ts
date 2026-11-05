@@ -10,7 +10,7 @@ import { createImpact } from "./effects/impact";
 import { enemyBox, enemyCenter } from "./enemies/enemy";
 import { wallBounce } from "./enemies/wallBounce";
 import { hasPerk } from "./progress";
-import { createLightning } from "./spells/bolt";
+import { createLightning } from "./spells/lightning";
 import { game, hero, progress } from "./state";
 import { boxHit, hitStop, shake } from "./world";
 

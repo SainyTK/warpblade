@@ -10,3 +10,5 @@ export const SPELL_COOLDOWN: Readonly<Record<Element, number>> = { fire: 7, ice:
 export const SPELL_PERK: Readonly<Record<Element, Perk>> = { fire: "fireSpell", ice: "iceSpell", volt: "voltSpell" };
 /** after any cast the other elements wait at least this long, so switching elements cannot chain spells back to back */
 export const SPELL_SHARED_COOLDOWN = 3;
+/** the fire flask's throw: speed out of the hand, facing right, and the gravity on it and on Sunflask's child flasks */
+export const FLASK_THROW = { vx: 210, vy: -140, gravity: 520 } as const;

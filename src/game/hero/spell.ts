@@ -1,10 +1,12 @@
 import { CLIPS } from "../../constants/clips";
 import { COST, ELEMENTS } from "../../constants/combat";
+import { SUNFLASK } from "../../constants/evolutions";
 import { ELEMENT_COLOR } from "../../constants/palette";
 import { SPELL_COOLDOWN, SPELL_PERK, SPELL_SHARED_COOLDOWN } from "../../constants/spells";
 import { sfx } from "../../services/audio";
 import { PK } from "../../types/particle";
 import type { Element } from "../../types/spell";
+import { WHITE } from "../../utils/color";
 import { TAU } from "../../utils/math";
 import { createGlint } from "../effects/flash";
 import { hasPerk } from "../progress";
@@ -105,6 +107,8 @@ export function runCast(): void {
   h.hitDone = true;
   lights.add(hx, hy, 30, c, 0.8, 0.2);
   game.fx.push(createGlint(hx, hy, c));
+  // Sunflask: a second glint in white, larger, over the fire one
+  if (element === "fire" && hasPerk("sunflask")) game.fx.push(createGlint(hx, hy, WHITE, SUNFLASK.glintGrow));
   const power = h.spellPower;
   game.fx.push(
     element === "fire"

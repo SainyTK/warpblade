@@ -4,6 +4,7 @@ import { spriteUrl } from "../../spriteUrl";
 import { ARCANE_ICONS } from "./arcane";
 import { BLADE_ICONS } from "./blade";
 import { BOON_ICONS } from "./boon";
+import { EVOLUTION_ICONS } from "./evolution";
 import { FUSION_ICONS } from "./fusion";
 import { PHANTOM_ICONS } from "./phantom";
 import { SHOP_ICONS } from "./shop";
@@ -17,6 +18,7 @@ const ICONS: Record<string, (s: SpriteCanvas) => void> = {
   ...PHANTOM_ICONS,
   ...ARCANE_ICONS,
   ...FUSION_ICONS,
+  ...EVOLUTION_ICONS,
   ...BOON_ICONS,
   ...SHOP_ICONS,
   ...YSRA_ICONS,

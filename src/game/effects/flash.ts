@@ -3,8 +3,8 @@ import type { Color } from "../../types/color";
 import type { Effect } from "../../types/effect";
 import { WHITE } from "../../utils/color";
 
-/** a short glint, for a spell leaving the hand */
-export function createGlint(x: number, y: number, c: Color): Effect {
+/** a short glint, for a spell leaving the hand; `grow` makes its arms longer */
+export function createGlint(x: number, y: number, c: Color, grow = 0): Effect {
   let t = 0;
   return {
     update(dt) {
@@ -13,7 +13,7 @@ export function createGlint(x: number, y: number, c: Color): Effect {
     },
     draw() {
       place();
-      sparkle(x, y, 7 * (1 - t / 0.12) + 1, WHITE, c, 0.6);
+      sparkle(x, y, 7 * (1 - t / 0.12) + 1 + grow, WHITE, c, 0.6);
     },
   };
 }
