@@ -27,7 +27,7 @@ export const STREAM = { width: 640, height: 360, fps: 30, maxBitrate: 2_500_000 
 
 /** more players meet more foes, and tougher ones: each player past the first adds these shares */
 export const COOP_SCALING = {
-  count: 0.5,
+  count: 0.4,
   hp: { minion: 0.25, mini: 0.5, boss: 0.6 },
 } as const;
 

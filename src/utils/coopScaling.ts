@@ -1,7 +1,7 @@
 import { COOP_SCALING } from "../constants/coop";
 import type { EnemyRank } from "../types/enemy";
 
-/** a wave's foes for this many players: the list grows by half per extra player, repeating its minions */
+/** a wave's foes for this many players: each extra player adds COOP_SCALING.count more minions, repeating the wave's own */
 export function scaleFoeList<T>(foes: readonly T[], players: number, isMinion: (foe: T) => boolean): T[] {
   const minions = foes.filter(isMinion);
   const extra = Math.round(minions.length * COOP_SCALING.count * Math.max(0, players - 1));

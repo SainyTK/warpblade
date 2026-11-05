@@ -25,10 +25,9 @@ const names = (slots: number[]): string => {
 /** what this player should know right now: down, waiting on others' cards, or a passing note */
 function message(now: number): string {
   const room = roomView();
-  if (room.downed) return "You are down. You rise when the wave is cleared.";
+  if (room.downed) return "Down until the wave is cleared";
   const others = room.choosing.filter((s) => s !== room.you);
-  if (others.length && !room.choosing.includes(room.you))
-    return `Waiting for ${names(others)} to choose ${others.length > 1 ? "their" : "a"} skill`;
+  if (others.length && !room.choosing.includes(room.you)) return `Waiting for ${names(others)} to pick`;
   if (room.note !== note) {
     note = room.note;
     noteSince = now;

@@ -44,7 +44,7 @@ The cost is video softness on a slow link and about one round trip plus a video 
 ## Players who fall
 
 A hero whose HP runs out lies down and is skipped by foes, coins and orbs.
-Their status line reads "You are down. You rise when the wave is cleared."
+Their status line reads "Down until the wave is cleared".
 When the wave is cleared, every downed hero stands up with half their HP.
 The run ends only when every hero is down at once, or when wave 30 is cleared.
 Last Light still saves each player once per run if they bought it.
@@ -54,7 +54,7 @@ Last Light still saves each player once per run if they bought it.
 Experience is shared: an orb picked up by anyone gives its experience to every hero, so the room levels together.
 Each player still has their own skill points and cards, rolled from their own hero's tree.
 When a wave is cleared with points waiting, the game pauses for everyone while those players choose.
-A player with nothing to choose reads "Waiting for P2 to choose a skill".
+A player with nothing to choose reads "Waiting for P2 to pick".
 A guest's choice travels to the host as a skill id, and the host checks that the hero can still learn it before applying it.
 
 ## Coins and the shop
@@ -65,7 +65,7 @@ When the run ends, every player banks their own coins in their own browser and s
 
 ## More players, more foes
 
-Each player past the first adds half again as many minions to every wave.
+Each player past the first adds 40% more minions to every wave.
 Each player past the first also adds a quarter to every minion's HP, half to a mini boss's and three fifths to a boss's.
 The numbers live in `COOP_SCALING` in `src/constants/coop.ts`.
 
@@ -105,5 +105,6 @@ The pause menu in a room has Resume, Controls, Options and Leave room, and the g
 - A player cannot join a run already under way, and a guest who drops cannot rejoin the same run.
 - Banners such as Level 5 are shared by the room and show for everyone.
 - Players are named P1 to P4; picking a name is left for later.
+- The foe scaling is a first guess: scripted bots with four players fall early on the day era's flying moths, and it needs tuning from real four-player games.
 - The host's hero choice must be made in the lobby before Start; heroes cannot change during a run.
 - Phones pause background tabs, so a phone host who switches apps stalls the room for everyone.

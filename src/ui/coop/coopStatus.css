@@ -7,7 +7,9 @@
   display: flex;
   align-items: center;
   gap: 8px;
-  max-width: 70%;
+  width: max-content;
+  max-width: 34vw;
+  text-align: center;
   pointer-events: none;
   font-family: var(--ui);
   font-size: 14px;
@@ -33,6 +35,10 @@
 @media (max-height: 520px) {
   .coop-status {
     top: 40px;
+    flex-direction: column;
+    gap: 2px;
+    max-width: 22vw;
     font-size: 12px;
+    line-height: 1.2;
   }
 }
