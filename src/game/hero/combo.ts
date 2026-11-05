@@ -10,7 +10,7 @@ import { pressAge, take } from "../input";
 import { meleeHit } from "../meleeHit";
 import { hasPerk } from "../progress";
 import { game, hero, progress } from "../state";
-import { boxAhead, boxBehind } from "../world";
+import { boxAhead, boxBehind, newSwing } from "../world";
 import { isFree, leaveHang, setState, settle } from "./actions";
 import { dropMoveGhost } from "./afterimages";
 import { kit } from "./kits";
@@ -92,7 +92,7 @@ export function endMove(): void {
 }
 
 function strike(hit: MoveHit): number {
-  game.swing++;
+  newSwing();
   const slash = hit.slash && hero.keen ? { ...hit.slash, ramp: KEEN_RAMP } : hit.slash;
   if (slash) game.fx.push(createSlash(hero.x, hero.y, hero.face, slash));
   const [x0, y0, x1, y1] = hit.box;

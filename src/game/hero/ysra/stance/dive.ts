@@ -2,8 +2,8 @@ import { FEEL } from "../../../../constants/combo";
 import { DIVE, DIVE_TIMES } from "../../../../constants/ysra/stance";
 import { sfx } from "../../../../services/audio";
 import { meleeHit } from "../../../meleeHit";
-import { game, hero } from "../../../state";
-import { boxAhead } from "../../../world";
+import { hero } from "../../../state";
+import { boxAhead, newSwing } from "../../../world";
 import { setState, settle } from "../../actions";
 import { emitYsra } from "../events";
 import { cutMove } from "./cut";
@@ -24,7 +24,7 @@ export function startDive(): boolean {
   h.vy = Math.min(h.vy, 0);
   h.cutShort = true;
   // one swing for the whole drop, so the point strikes each foe once
-  game.swing++;
+  newSwing();
   setState("dive");
   sfx.swing(0.6);
   return true;

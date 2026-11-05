@@ -30,6 +30,11 @@ export function shake(time: number, amp: number): void {
   game.shake = Math.max(game.shake, time);
   game.amp = Math.max(game.amp, amp);
 }
+/** the hero starts a new swing: foes it already struck can be struck again */
+export function newSwing(): number {
+  hero.swing = ++game.swing;
+  return hero.swing;
+}
 export function hitStop(time: number): void {
   game.freeze = Math.max(game.freeze, time);
 }
