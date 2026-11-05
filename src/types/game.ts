@@ -103,6 +103,7 @@ export interface GameState {
   numbers: DamageNumber[];
   /** the element Kael casts with I, an index into ELEMENTS; each co-op player keeps their own */
   spell: number;
+  /** the last swing number handed out, to any hero */
   swing: number;
   banner: { text: string; time: number };
 }

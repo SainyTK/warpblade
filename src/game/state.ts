@@ -135,6 +135,7 @@ export const hero: Hero = {
   keenNext: false,
   keen: false,
   moveGhost: 0,
+  swing: 0,
 };
 export const scarf = new Chain(8, 2.2, 340);
 export const ponytail = new Chain(4, 2, 300);

@@ -51,8 +51,8 @@ export function meleeHit(boxes: readonly Box[], blow: Blow): number {
   const riposte = hero.riposte > 0;
   const power = blow.power * (riposte ? RIPOSTE.power : 1);
   for (const e of game.enemies) {
-    if (e.hp <= 0 || e.swing === game.swing || !boxes.some((b) => boxHit(b, enemyBox(e)))) continue;
-    e.swing = game.swing;
+    if (e.hp <= 0 || e.swing === hero.swing || !boxes.some((b) => boxHit(b, enemyBox(e)))) continue;
+    e.swing = hero.swing;
     const dir = Math.sign(e.x - hero.x) || hero.face;
     const [ex, ey] = enemyCenter(e);
     const fromBehind = isBehind(e, hero.x);

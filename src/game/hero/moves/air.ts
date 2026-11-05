@@ -8,7 +8,7 @@ import { createFloorRing } from "../../effects/floorRing";
 import { createSlash } from "../../effects/slash";
 import { meleeHit } from "../../meleeHit";
 import { game, hero, particles, rng } from "../../state";
-import { boxAhead, dust, shake } from "../../world";
+import { boxAhead, dust, newSwing, shake } from "../../world";
 import { gravityPull } from "../gravityWell";
 import { skin } from "../skin";
 
@@ -17,7 +17,7 @@ const METEOR_REACH = 46;
 
 /** the plunge lands: a ring of crystal, dust, and everything near the floor bounced up */
 function meteorLanding(): void {
-  game.swing++;
+  newSwing();
   game.fx.push(createFloorRing(hero.x, hero.y, METEOR_REACH, skin.ramp, 0.45));
   game.fx.push(
     createSlash(hero.x, hero.y, hero.face, { cx: 0, cy: -4, R: 30, sy: 0.25, rot: 0, a0: 3.1, a1: 0, W: 7 }),
@@ -41,7 +41,7 @@ const STOMP = { tuck: 0.08, dive: 520, reach: 40 } as const;
 
 /** the stomp lands: a wide ring, dust and rubble to both sides, and every foe near the floor knocked off its feet */
 function stompLanding(): void {
-  game.swing++;
+  newSwing();
   game.fx.push(createFloorRing(hero.x, hero.y, STOMP.reach, skin.ramp, 0.4));
   dust(hero.x - 6, hero.y, 7, -1);
   dust(hero.x + 6, hero.y, 7, 1);
