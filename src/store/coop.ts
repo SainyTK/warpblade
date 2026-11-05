@@ -18,7 +18,7 @@ export interface RoomView {
   downed: boolean;
   /** the places of players still choosing skill cards */
   choosing: number[];
-  /** a guest has had no picture news from the host for a while, as when the host's tab is hidden */
+  /** a guest has no picture from the host yet, or no news from it for a while, as when the host's tab is hidden */
   hostAway: boolean;
 }
 

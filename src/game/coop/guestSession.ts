@@ -1,5 +1,5 @@
 import { CHARACTERS } from "../../constants/characters";
-import { HOST_AWAY_MS, PING_MS, QUIET_LIMIT_MS } from "../../constants/coop";
+import { HOST_AWAY_MS, PING_MS, QUIET_LIMIT_MS, WAITING_FILL } from "../../constants/coop";
 import { STAND } from "../../constants/hero";
 import { VOLUME_STEPS } from "../../constants/settings";
 import { GAME_VERSION } from "../../constants/sitePages";
@@ -13,7 +13,7 @@ import type { GuestHud, HostMessage } from "../../types/coop";
 import type { Enemy } from "../../types/enemy";
 import { syncCoopStatus } from "../../ui/coop/coopStatus";
 import { drawDangerGlow } from "../../ui/dangerGlow";
-import { paintImage } from "../../ui/gameCanvas";
+import { paintFill, paintImage } from "../../ui/gameCanvas";
 import { updateHud } from "../../ui/hud";
 import { leaveMenu } from "../../ui/menu/menuActions";
 import { isMenuOpen, openMenu } from "../../ui/menu/menuState";
@@ -169,13 +169,16 @@ export class GuestSession {
     const dt = Math.min(MAX_FRAME, (now - this.lastFrame) / 1000);
     this.lastFrame = now;
     const video = this.video;
-    if (video && video.readyState >= 2) {
+    const pictured = video !== null && video.readyState >= 2;
+    if (pictured) {
       paintImage(video);
       if (!video.muted || !settings.sound) video.muted = !settings.sound;
       video.volume = settings.volume / VOLUME_STEPS;
     }
+    // until the host's picture arrives the canvas would still hold this browser's own solo scene, with one hero in it
+    else paintFill(WAITING_FILL);
     if (this.hud) this.applyHud(this.hud);
-    const hostAway = now - this.hudAt > HOST_AWAY_MS;
+    const hostAway = !pictured || now - this.hudAt > HOST_AWAY_MS;
     if (roomView().hostAway !== hostAway) updateRoom({ hostAway });
     updateDanger(dt);
     drawDangerGlow(true);

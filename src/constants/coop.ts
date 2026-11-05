@@ -23,6 +23,8 @@ export const PING_MS = 1500;
 export const QUIET_LIMIT_MS = 6000;
 /** a guest with no HUD from the host for this long tells its player the host is away */
 export const HOST_AWAY_MS = 1000;
+/** what a guest's game canvas shows until the host's picture arrives: the interface's night colour */
+export const WAITING_FILL = "#0c0a18";
 
 /** the picture the host streams: twice the art size, so the video's half-size colour samples land on whole art pixels */
 export const STREAM = { width: 640, height: 360, fps: 30, maxBitrate: 2_500_000 } as const;

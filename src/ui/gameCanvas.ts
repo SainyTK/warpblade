@@ -16,6 +16,13 @@ export function paintScene(): void {
   ctx?.putImageData(image, 0, 0);
 }
 
+/** cover the whole canvas in one colour */
+export function paintFill(color: string): void {
+  if (!ctx) return;
+  ctx.fillStyle = color;
+  ctx.fillRect(0, 0, FW, FH);
+}
+
 /** draw a picture from elsewhere, such as a co-op host's stream, over the whole canvas without smoothing */
 export function paintImage(source: CanvasImageSource): void {
   if (!ctx) return;
