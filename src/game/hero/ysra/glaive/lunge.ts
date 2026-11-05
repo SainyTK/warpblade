@@ -10,6 +10,7 @@ import { createSlash } from "../../../effects/slash";
 import { enemyCenter } from "../../../enemies/enemy";
 import { meleeHit } from "../../../meleeHit";
 import { hasPerk } from "../../../progress";
+import { objectMemory, rememberPerSeat } from "../../../seatMemory";
 import { game, hero, progress } from "../../../state";
 import { boxAhead, dust, hitStop, shake } from "../../../world";
 import { emitYsra } from "../events";
@@ -28,6 +29,7 @@ const lunge = {
   ended: false,
   railed: false,
 };
+rememberPerSeat(objectMemory(lunge));
 
 const isFull = (): boolean => lunge.charge >= 1;
 const power = (): number => lerp(LUNGE.power[0], LUNGE.power[1], lunge.charge);

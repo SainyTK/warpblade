@@ -9,6 +9,7 @@ import type { Coin } from "../types/game";
 import { PK } from "../types/particle";
 import { coinDrop } from "../utils/coins";
 import { clamp } from "../utils/math";
+import { coop } from "./coopHooks";
 import { game, hero, particles, rng } from "./state";
 import { surfaceBelow } from "./world";
 
@@ -53,8 +54,10 @@ export function home(c: Loose, dx: number, dy: number, d: number, dt: number, m:
 
 /** coins fall and bounce, Kael picks them up by touch, and after a moment the rest fly to him */
 export function updateCoins(dt: number): void {
-  const pull = ownsSkill("lodestone") ? M.magnetPull : M.pull;
+  const room = coop();
   for (const c of game.coinDrops) {
+    room?.nearest(c.x, c.y);
+    const pull = ownsSkill("lodestone") ? M.magnetPull : M.pull;
     c.t += dt;
     const dx = hero.x - c.x;
     const dy = hero.y - 18 - c.y;

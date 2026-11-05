@@ -1,0 +1,107 @@
+/* Co-op: host or join a room, then the lobby with its players. */
+.coop-error {
+  margin: 0;
+  max-width: 340px;
+  text-align: center;
+  font-size: 14px;
+  line-height: 1.4;
+  color: var(--hp);
+}
+.coop-join {
+  display: flex;
+  gap: 8px;
+  width: min(300px, 100%);
+}
+.coop-code {
+  flex: 1;
+  min-width: 0;
+  min-height: 44px;
+  padding: 0 12px;
+  font-family: var(--display);
+  font-size: 18px;
+  letter-spacing: 0.3em;
+  text-align: center;
+  text-transform: uppercase;
+  color: var(--text);
+  background: var(--night);
+  border: var(--u) solid var(--line);
+  border-radius: 0;
+  outline: none;
+}
+.coop-code::placeholder {
+  color: var(--muted);
+  letter-spacing: 0.08em;
+}
+.coop-code:focus {
+  border-color: var(--crystal);
+}
+.coop-join .menu-item {
+  padding: 0 16px;
+}
+.coop-players {
+  display: grid;
+  gap: 4px;
+  width: min(320px, 100%);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.coop-player {
+  display: grid;
+  grid-template-columns: 36px 1fr auto;
+  align-items: center;
+  gap: 10px;
+  min-height: 32px;
+  padding: 0 10px;
+  font-size: 15px;
+  color: var(--text);
+  background: var(--raised);
+  border-left: var(--u) solid var(--seat);
+}
+.coop-player b {
+  font-family: var(--display);
+  font-weight: 400;
+  color: var(--seat);
+}
+.coop-player small {
+  font-size: 13px;
+  color: var(--muted);
+}
+.coop-player.empty {
+  color: var(--muted);
+  background: none;
+  border-left-color: var(--line);
+}
+.coop-wait {
+  margin: 0;
+  font-size: 14px;
+  color: var(--mist);
+}
+.coop-stream {
+  position: fixed;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  pointer-events: none;
+}
+.coop-lobby .menu-item {
+  white-space: nowrap;
+}
+@media (max-height: 520px) {
+  /* phones held sideways: players on the left, actions on the right */
+  .menu-panel:has(.coop-lobby) {
+    width: min(640px, 100%);
+  }
+  .coop-lobby {
+    grid-template-columns: auto auto;
+    align-items: start;
+    gap: 10px 20px;
+  }
+  .coop-player {
+    min-height: 28px;
+    font-size: 14px;
+  }
+  .coop-code {
+    min-height: 38px;
+  }
+}

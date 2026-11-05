@@ -13,6 +13,7 @@ import { Rng } from "../utils/rng";
 import { collectPerks, computeStats } from "../utils/stats";
 import { Chain } from "./hero/chain";
 import { applySkin } from "./hero/skin";
+import { objectMemory, rememberPerSeat } from "./seatMemory";
 
 /** The one owner of everything that changes while playing. */
 export const rng = new Rng(SEED);
@@ -137,6 +138,19 @@ export const hero: Hero = {
 };
 export const scarf = new Chain(8, 2.2, 340);
 export const ponytail = new Chain(4, 2, 300);
+
+/** what each player of a co-op room keeps for themselves; the drawn hand is copied since drawing hands back a shared pair */
+const heroMemory = objectMemory(hero);
+rememberPerSeat({ save: () => ({ ...hero, hand: [...hero.hand] }), load: heroMemory.load });
+rememberPerSeat(objectMemory(progress));
+rememberPerSeat(objectMemory(scarf, true));
+rememberPerSeat(objectMemory(ponytail, true));
+rememberPerSeat({
+  save: () => ({ coins: game.coins, revived: game.revived, ghosts: game.ghosts }),
+  load(saved) {
+    Object.assign(game, saved);
+  },
+});
 
 /** at most this many fires burn on the floor at once */
 const MAX_BLAZES = 24;

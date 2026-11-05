@@ -4,17 +4,19 @@ import { sfx } from "../services/audio";
 import { PK } from "../types/particle";
 import type { SkillNode } from "../types/skill";
 import { createFloorRing } from "./effects/floorRing";
+import { objectMemory, rememberPerSeat } from "./seatMemory";
 import { game, hero, lights, particles, rng, showBanner } from "./state";
 
 /** evolutions learned in the pick still open, celebrated once play resumes */
-let waiting: SkillNode[] = [];
+const pending: { waiting: SkillNode[] } = { waiting: [] };
+rememberPerSeat(objectMemory(pending));
 
 export function queueEvolution(node: SkillNode): void {
-  waiting.push(node);
+  pending.waiting.push(node);
 }
 
 export function forgetEvolutions(): void {
-  waiting = [];
+  pending.waiting = [];
 }
 
 /** the hero flashes gold: a floor ring, a light, rising stars and the evolution's name */
@@ -40,7 +42,7 @@ function celebrate(node: SkillNode): void {
 
 /** called each step of play: celebrate what the last pick evolved */
 export function celebrateEvolutions(): void {
-  if (!waiting.length) return;
-  for (const node of waiting) celebrate(node);
-  waiting = [];
+  if (!pending.waiting.length) return;
+  for (const node of pending.waiting) celebrate(node);
+  pending.waiting = [];
 }

@@ -7,6 +7,7 @@ import { PK } from "../../../../types/particle";
 import type { RiteDef, RiteId } from "../../../../types/ysra/pyre";
 import { createFloorRing } from "../../../effects/floorRing";
 import { hasPerk } from "../../../progress";
+import { objectMemory, rememberPerSeat } from "../../../seatMemory";
 import { plantBrazier } from "../../../spells/rites/brazier";
 import { castFlamePillar } from "../../../spells/rites/flamePillar";
 import { castFlare } from "../../../spells/rites/flare";
@@ -21,7 +22,8 @@ import { riteCost, selectedRite } from "./riteChoice";
 
 const CLIP = PYRE_STATE_CLIPS.rite;
 /** what the rite under way lets loose when the glaive is planted: a rite, or Overheat */
-let calling: RiteId | "overheat" = "flare";
+const rite: { calling: RiteId | "overheat" } = { calling: "flare" };
+rememberPerSeat(objectMemory(rite));
 
 /** the nearest foe ahead within reach, or a spot just ahead when there is none */
 function pillarSpot(): number {
@@ -59,6 +61,7 @@ function igniteOverheat(): void {
 
 /** she plants the glaive and the rite bursts out; an evolved Flame Pillar bursts as Pyre Colonnade */
 function release(): void {
+  const calling = rite.calling;
   if (calling === "overheat") return igniteOverheat();
   const x =
     calling === "flamePillar" ? pillarSpot() : calling === "brazier" ? hero.x + hero.face * BRAZIER.ahead : hero.x;
@@ -71,7 +74,7 @@ function release(): void {
 const canCall = (): boolean => hero.ground && (isFree() || (hero.state === "move" && blowsDone()));
 
 function begin(what: RiteId | "overheat"): void {
-  calling = what;
+  rite.calling = what;
   if (hero.state === "move") {
     hero.move = null;
     endCombo(true);
@@ -87,16 +90,16 @@ export function pressRite(): boolean {
     begin("overheat");
     return true;
   }
-  const rite: RiteDef | null = selectedRite();
-  if (!rite) return true;
-  const cost = riteCost(rite);
+  const chosen: RiteDef | null = selectedRite();
+  if (!chosen) return true;
+  const cost = riteCost(chosen);
   if (overheatLeft() > 0 || heat() < cost) {
     flashHeat(DENY_FLASH);
     sfx.denied();
     return true;
   }
   spendHeat(cost);
-  begin(rite.id);
+  begin(chosen.id);
   return true;
 }
 

@@ -1,4 +1,5 @@
 import type { Enemy } from "../../types/enemy";
+import { coop } from "../coopHooks";
 import { game } from "../state";
 import { updateAirborne } from "./airborne";
 import { kindOf } from "./kinds";
@@ -15,7 +16,9 @@ function updateStunned(e: Enemy, dt: number): boolean {
 }
 
 export function updateEnemies(dt: number): void {
+  const room = coop();
   for (const e of game.enemies) {
+    room?.nearest(e.x, e.y);
     const ts = updateStatus(e, dt);
     if (e.hp <= 0) continue;
     const sdt = dt * ts;

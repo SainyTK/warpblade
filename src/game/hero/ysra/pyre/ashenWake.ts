@@ -1,17 +1,18 @@
 import { ASHEN_WAKE } from "../../../../constants/ysra/rites";
 import { hasPerk } from "../../../progress";
+import { objectMemory, rememberPerSeat } from "../../../seatMemory";
 import { clearCinders, layCinder } from "../../../spells/rites/cinder";
 import { surfaceBelow } from "../../../world";
 import { onYsra } from "../events";
 
-/** where the last patch was laid, so patches fall every ASHEN_WAKE.spacing pixels of travel */
-let lastX = Number.NaN;
-/** a lunge's path waits for its end: only a full lunge leaves fire */
-let lungePath: [number, number][] = [];
+/** lastX: where the last patch was laid, so patches fall every ASHEN_WAKE.spacing pixels of travel;
+ *  lungePath: a lunge's path waits for its end, since only a full lunge leaves fire */
+const wake: { lastX: number; lungePath: [number, number][] } = { lastX: Number.NaN, lungePath: [] };
+rememberPerSeat(objectMemory(wake));
 
 function lay(x: number, y: number): void {
-  if (Math.abs(x - lastX) < ASHEN_WAKE.spacing) return;
-  lastX = x;
+  if (Math.abs(x - wake.lastX) < ASHEN_WAKE.spacing) return;
+  wake.lastX = x;
   layCinder(x, surfaceBelow(x, y));
 }
 
@@ -19,28 +20,28 @@ function lay(x: number, y: number): void {
 export function listenAshenWake(): void {
   onYsra("travel", ({ x, y, from }) => {
     if (!hasPerk("ashenWake") || from === "charge") return;
-    if (from === "lunge") lungePath.push([x, y]);
+    if (from === "lunge") wake.lungePath.push([x, y]);
     else lay(x, y);
   });
   onYsra("land", ({ x, y }) => {
     if (!hasPerk("ashenWake")) return;
-    lastX = Number.NaN;
+    wake.lastX = Number.NaN;
     lay(x, y);
-    lastX = Number.NaN;
+    wake.lastX = Number.NaN;
   });
   onYsra("lungeEnd", ({ x, y, full }) => {
-    const path = lungePath;
-    lungePath = [];
-    lastX = Number.NaN;
+    const path = wake.lungePath;
+    wake.lungePath = [];
+    wake.lastX = Number.NaN;
     if (!full || !hasPerk("ashenWake")) return;
     for (const [px, py] of path) lay(px, py);
     lay(x, y);
-    lastX = Number.NaN;
+    wake.lastX = Number.NaN;
   });
 }
 
 export function resetAshenWake(): void {
-  lastX = Number.NaN;
-  lungePath = [];
+  wake.lastX = Number.NaN;
+  wake.lungePath = [];
   clearCinders();
 }

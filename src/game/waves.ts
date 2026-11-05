@@ -5,6 +5,7 @@ import { sfx } from "../services/audio";
 import { saveBest } from "../services/bestScore";
 import { eraOf } from "../utils/eras";
 import { waveFoes, waveKind } from "../utils/waves";
+import { coop } from "./coopHooks";
 import { createRift } from "./effects/rift";
 import { endWave } from "./endWave";
 import { makeEnemy } from "./enemies/enemy";
@@ -25,7 +26,8 @@ function startWave(): void {
     saveBest(game.best);
   }
   const kind = waveKind(game.wave);
-  const foes = waveFoes(game.wave);
+  const room = coop();
+  const foes = room ? room.scaleFoes(waveFoes(game.wave)) : waveFoes(game.wave);
   const leader = ENEMIES[foes[0]].name;
   const era = eraOf(game.wave);
   // a new era announces itself, unless a boss wave has its own name to show
@@ -43,6 +45,7 @@ function startWave(): void {
     game.fx.push(
       createRift(x, r.riftY(y), r.height, i * 0.25, () => {
         const e = makeEnemy(type, x, y, game.wave);
+        if (room) e.hp = e.max = room.scaleFoeHp(e.rank, e.max);
         if (type === "warden" && game.wave === STAGE_WAVES) e.phase = 2;
         game.enemies.push(e);
       }),

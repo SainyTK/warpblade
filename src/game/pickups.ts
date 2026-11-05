@@ -1,6 +1,7 @@
 import { PAL } from "../constants/palette";
 import { sfx } from "../services/audio";
 import { PK } from "../types/particle";
+import { coop } from "./coopHooks";
 import { game, hero, particles, progress } from "./state";
 
 const HOMING_DELAY = 0.35;
@@ -8,7 +9,9 @@ const RESTORE = { mp: 7, hp: 8 } as const;
 
 /** orbs burst out, slow down, then home in on Kael's chest */
 export function updatePickups(dt: number): void {
+  const room = coop();
   for (const o of game.pickups) {
+    room?.nearest(o.x, o.y);
     o.t += dt;
     const dx = hero.x - o.x;
     const dy = hero.y - 18 - o.y;

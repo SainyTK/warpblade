@@ -2,6 +2,7 @@ import { HEFT } from "../../../../constants/ysra/glaive";
 import { sfx } from "../../../../services/audio";
 import { clamp } from "../../../../utils/math";
 import { isHeld } from "../../../input";
+import { objectMemory, rememberPerSeat } from "../../../seatMemory";
 import { game, hero, progress } from "../../../state";
 import { setState } from "../../actions";
 import { startMove } from "../../combo";
@@ -10,6 +11,7 @@ import { setLungeCharge } from "./lunge";
 
 /** the held draw: charge seconds so far, scaled by Deep Heft; whether the hip thrust under way may still become one */
 const heft = { charge: 0, watching: false, full: false };
+rememberPerSeat(objectMemory(heft));
 
 /** the heft's last stretch quivers on a loop this long once the wind is full */
 const QUIVER = 0.3;

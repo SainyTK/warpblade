@@ -27,6 +27,20 @@ const title = dialog.querySelector("h2") as HTMLElement;
 const sub = dialog.querySelector(".level-up-sub") as HTMLElement;
 const cards = dialog.querySelector(".level-up-cards") as HTMLElement;
 
+/** where the cards come from and where a choice goes: solo play learns it at once, a co-op room may send it to the host */
+export interface PickSource {
+  /** this player has a card to choose now */
+  waiting(): boolean;
+  choose(option: PickOption): void;
+}
+const SOLO: PickSource = { waiting: () => game.mode === "pick", choose: choosePick };
+let source: PickSource = SOLO;
+
+/** a co-op room takes the cards over until called with null */
+export function setPickSource(next: PickSource | null): void {
+  source = next ?? SOLO;
+}
+
 let options: PickOption[] = [];
 let selected = 0;
 let shownAt = 0;
@@ -62,9 +76,9 @@ function close(): void {
 function take(index: number): void {
   const option = options[index];
   if (!option || locked()) return;
-  choosePick(option);
+  source.choose(option);
   sfx.learn();
-  if (game.mode === "pick") deal();
+  if (source.waiting()) deal();
   else close();
 }
 
@@ -106,7 +120,8 @@ export function bindPickDialog(): void {
 
 /** open the pick when a cleared wave finds skill points waiting */
 export function syncPickDialog(): void {
-  if (game.mode !== "pick" || dialog.open) return;
+  if (dialog.open && source !== SOLO && !source.waiting()) close();
+  if (!source.waiting() || dialog.open) return;
   releaseAll();
   dialog.showModal();
   deal();

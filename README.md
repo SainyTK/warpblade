@@ -87,6 +87,12 @@ His crystal sword can be thrown, and wherever it lands, he follows.
   Waves 16 to 20 turn the night magical, with Rune Golems and Prism Sprites taking over from the night's foes.
   Waves 21 to 30 are the darkest, with Void Stalkers, Abyss Eyes and the Abyss Maw.
   Waves 5, 10, 15 and 25 bring the era's mini boss, and the Rift Warden waits at waves 20 and 30.
+- **Co-op for up to four.** Co-op on the start menu hosts a room in your browser, and friends join with its five-letter code or an invite link.
+  Each player picks Kael or Ysra, the same hero twice is fine, and a P1 to P4 tag in the player's colour floats over each hero.
+  Waves bring more and tougher foes for each extra player.
+  Experience is shared, but every player chooses their own skill cards when a wave is cleared and banks their own coins.
+  A fallen player is down until the wave is cleared, then rises with half HP; the run ends when everyone is down at once.
+  The host's browser runs the game and streams it to the others over WebRTC; [docs/multiplayer.md](docs/multiplayer.md) has the design and its limits.
 - **Plays anywhere.** The game fills the whole screen at a whole-number pixel scale, with the scene continued to every edge. Keyboard on desktop, a pixel touch controller on phones and tablets, no install.
 
 <table>
@@ -158,7 +164,7 @@ npm run dev
 Other commands: `npm run build`, `npm run preview`, `npm run typecheck`, `npm run lint`, `npm run format`.
 
 The stack is TypeScript, Vite and Biome.
-There are no runtime dependencies besides three web fonts.
+The only runtime dependencies are three web fonts and [PeerJS](https://peerjs.com), which loads only when a player opens Co-op.
 
 To pose Kael, draw effects and hand them to Claude Code agents, run the local [studio](studio/README.md).
 
@@ -205,9 +211,11 @@ src/
   constants/       stage layout, palettes, poses and attack keyframes, tuning, key map, touch controller layout, waves, Kael's skills, coin drops and the shop items
   utils/           pure helpers: math, color, seeded random, stats, experience, level-up picks, wave plan, shop prices and save parsing
   engine/          the pixel renderer: frame buffers and painter, particles, lights, sprite canvas
-  services/        Web Audio sound effects, saved options, best wave and shop progress in local storage, the Fullscreen API, vibration
-  store/           the player's options, and the coin bank and shop purchases kept between runs
+  services/        Web Audio sound effects, saved options, best wave and shop progress in local storage, the Fullscreen API, vibration, the clipboard
+    coop/          the PeerJS links of a co-op room's host and guests, and the game stream
+  store/           the player's options, the coin bank and shop purchases kept between runs, and the co-op room as the menu sees it
   game/            the simulation
+    coop/          a co-op room: the host's run with every player's hero, the host and guest sessions, player tags
     hero/          poses, drawing, rope physics, combos and moves, dash, warp, ultimate charge, per-step update
     enemies/       every foe's drawing and behavior, one folder per era (day, rain, twilight, abyss; the night foes sit at the top level)
       kinds/       one kind per foe type, the registry the game looks foes up in
@@ -219,13 +227,15 @@ src/
   site/            the patch notes page and its shared header and shell
   content/patches/ one JSON file per patch, read by the patch notes page
   ui/              HUD, level-up pick, menu, keyboard input, touch controller, stage sizing
-    menu/          start and pause menu: main, Shop, run result, Controls and Options screens
+    menu/          start and pause menu: main, Shop, Co-op and its lobby, run result, Controls and Options screens
+    coop/          the co-op line under the pause button
     shop/          one shop row and the shop's styles
 studio/            a local tool to pose Kael with the game's rig, draw effects and send them to agents (see studio/README.md)
 docs/
   combo-design.md  what the combo takes from Grand Chase and what it leaves out
   meta-progress.md coins, the shop items and the basis for their prices
   pick-pacing.md   when picks come, how long the skill pool lasts and Second Wind after it
+  multiplayer.md   co-op rooms: who runs the game, what crosses the network, downs, picks, coins and what is left for later
   media/           README banner, gameplay GIF and screenshots
 ```
 

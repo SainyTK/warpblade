@@ -1,5 +1,6 @@
 import { onRunEnd } from "../../game/runEnd";
 import { onFullscreenChange } from "../../services/fullscreen";
+import { onRoomChange } from "../../store/coop";
 import { onMetaChange } from "../../store/meta";
 import { onSettingsChange } from "../../store/settings";
 import type { MenuCommand } from "../../types/input";
@@ -27,6 +28,7 @@ export function bindMenu(): void {
   onSettingsChange(redrawOn("options"));
   onFullscreenChange(redrawOn("options"));
   onMetaChange(redrawOn("shop"));
+  onRoomChange(redrawOn("coop"));
   // a run that ends, cleared or lost, comes back to the start menu with its result
   onRunEnd(() => openMenu("title", "result"));
   // the mouse moves the selection the way the keys do, so there is only ever one highlighted entry

@@ -1,6 +1,7 @@
 import type { MenuContext, MenuScreen, MenuView } from "../../types/menu";
 import { byId } from "../dom";
 import { controlsScreen } from "./controlsScreen";
+import { coopScreen } from "./coopScreen";
 import { heroScreen } from "./heroScreen";
 import { mainScreen } from "./mainScreen";
 import { focusEntry } from "./menuNav";
@@ -21,6 +22,7 @@ const SCREENS: Record<MenuScreen, (context: MenuContext) => MenuView> = {
   shop: shopScreen,
   result: resultScreen,
   hero: heroScreen,
+  coop: coopScreen,
 };
 
 let shown: { context: MenuContext | null; screen: MenuScreen } = { context: null, screen: "main" };
