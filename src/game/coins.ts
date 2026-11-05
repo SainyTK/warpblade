@@ -1,4 +1,4 @@
-import { COIN_DROP, COIN_MOTION as M } from "../constants/coins";
+import { COIN_BONUS, COIN_DROP, COIN_MOTION as M } from "../constants/coins";
 import { COIN_GOLD } from "../constants/palette";
 import { LODESTONE_BONUS } from "../constants/shopSkills";
 import { W } from "../constants/stage";
@@ -14,7 +14,7 @@ import { surfaceBelow } from "./world";
 
 /** a slain foe's coins burst out of it */
 export function dropCoins(type: EnemyType, x: number, y: number): void {
-  const bonus = ownsSkill("lodestone") ? LODESTONE_BONUS : 0;
+  const bonus = COIN_BONUS + (ownsSkill("lodestone") ? LODESTONE_BONUS : 0);
   const n = coinDrop(COIN_DROP[type], bonus, rng.next());
   for (let i = 0; i < n; i++)
     game.coinDrops.push({ x, y, vx: rng.range(-60, 60), vy: rng.range(-170, -90), t: 0, rest: false });
