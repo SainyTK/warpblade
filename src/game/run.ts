@@ -1,6 +1,7 @@
 import { GROUND } from "../constants/stage";
 import { bankCoins } from "./coins";
 import { kit } from "./hero/kits";
+import { resetWound } from "./hero/wound";
 import { resetDanger } from "./lowHealth";
 import { resetProgress } from "./progress";
 import { game, hero, ponytail, progress, scarf, showBanner } from "./state";
@@ -67,6 +68,7 @@ export function resetRun(banner = "Rise again"): void {
   hero.state = "idle";
   hero.st = 0;
   kit().reset();
+  resetWound();
   resetDanger();
   showBanner(banner, banner ? 1.2 : 0);
 }
