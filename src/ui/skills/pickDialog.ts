@@ -36,9 +36,11 @@ export interface PickSource {
 const SOLO: PickSource = { waiting: () => game.mode === "pick", choose: choosePick };
 let source: PickSource = SOLO;
 
-/** a co-op room takes the cards over until called with null */
+/** a co-op room takes the cards over until called with null; cards dealt for the old source are put away */
 export function setPickSource(next: PickSource | null): void {
   source = next ?? SOLO;
+  dealtFor = "";
+  if (dialog.open) close();
 }
 
 let options: PickOption[] = [];
