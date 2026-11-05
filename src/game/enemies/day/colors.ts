@@ -22,6 +22,28 @@ export const DAY_COLORS = {
   acornLit: hex("#e8b870"),
   pollen: ramp(["#c87a2a", "#f2c25a", "#ffe890", "#fff8e0"]),
   pollenPink: hex("#ffb0d8"),
+  /** the detailed foes' extra tones: deepest shadows, lit rims and glints per material */
+  hideDeep: hex("#160c08"),
+  hideLit: hex("#a87a50"),
+  hideGlint: hex("#d0a678"),
+  snout: hex("#8a5a46"),
+  snoutLit: hex("#b48068"),
+  hoof: hex("#2a1d1a"),
+  hoofLit: hex("#5a4a44"),
+  brambleLit: hex("#a4d060"),
+  thornShade: hex("#8c7c5a"),
+  tuskShade: hex("#b4a482"),
+  crackDeep: hex("#5a2490"),
+  mothFurLit: hex("#b898b0"),
+  wingDeep: hex("#2a1624"),
+  wingScale: hex("#ffe2a0"),
+  barkDeep: hex("#140c07"),
+  barkGlint: hex("#c8a472"),
+  leafDeep: hex("#123216"),
+  mossDark: hex("#3a6a24"),
+  mossLit: hex("#90c850"),
+  acornCapLit: hex("#7e5832"),
+  acornShade: hex("#8a5a2c"),
 } as const;
 
 /** sparks for the day foes' rift embers and bursts, bright to dim */
