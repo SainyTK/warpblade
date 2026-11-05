@@ -5,6 +5,7 @@ import { findWarpTarget } from "../game/hero/warp";
 import { isHeld } from "../game/input";
 import { hasPerk } from "../game/progress";
 import { game, hero } from "../game/state";
+import type { Point } from "../types/world";
 import { WHITE } from "../utils/color";
 import { TAU } from "../utils/math";
 import { paletteAt } from "./eras/sceneDef";
@@ -48,15 +49,15 @@ export function sceneFlash(): number {
   return def.flash?.(game.t, k) ?? 0;
 }
 
-/** the warp crystals bob and glow; with Crystal Hang, the one Kael would warp to gets a ring */
+/** where a warp crystal hangs now, as it bobs */
+const anchorY = (a: Point): number => a.y + Math.sin(game.t * 1.6 + a.x) * 1.5;
+
+/** the warp crystals bob and glow, drawn once whoever is playing */
 export function drawAnchors(): void {
   const I = PAL.crystal;
-  const aiming =
-    hasPerk("hang") && isHeld("up") && ["idle", "walk", "run", "jump", "fall", "hang"].includes(hero.state);
-  const target = aiming ? findWarpTarget().anchor : undefined;
   place();
   for (const a of ANCHORS) {
-    const y = a.y + Math.sin(game.t * 1.6 + a.x) * 1.5;
+    const y = anchorY(a);
     const cx = toScreenX(a.x);
     polygon(
       [
@@ -75,11 +76,20 @@ export function drawAnchors(): void {
       const g = o + (k * TAU) / 3;
       px(a.x + Math.cos(g) * 9, y + Math.sin(g) * 3, I[4], Math.sin(g) > 0 ? 1 : 0.4);
     }
-    if (target === a) {
-      ellipseRing(a.x, y, 10, 10, I[5], 0.7);
-      sparkle(a.x, y - 11, 3, WHITE, I[4], 0.3);
-    }
   }
+}
+
+/** with Crystal Hang, the crystal the hero in play would warp to gets a ring */
+export function drawWarpAim(): void {
+  const aiming =
+    hasPerk("hang") && isHeld("up") && ["idle", "walk", "run", "jump", "fall", "hang"].includes(hero.state);
+  const target = aiming ? findWarpTarget().anchor : undefined;
+  if (!target) return;
+  const I = PAL.crystal;
+  const y = anchorY(target);
+  place();
+  ellipseRing(target.x, y, 10, 10, I[5], 0.7);
+  sparkle(target.x, y - 11, 3, WHITE, I[4], 0.3);
 }
 
 /** faint wide banks of mist drifting along the floor, in front of everything */
