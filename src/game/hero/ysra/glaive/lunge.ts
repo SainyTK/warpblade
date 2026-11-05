@@ -12,7 +12,7 @@ import { meleeHit } from "../../../meleeHit";
 import { hasPerk } from "../../../progress";
 import { objectMemory, rememberPerSeat } from "../../../seatMemory";
 import { game, hero, progress } from "../../../state";
-import { boxAhead, dust, hitStop, shake } from "../../../world";
+import { boxAhead, dust, hitStop, newSwing, shake } from "../../../world";
 import { emitYsra } from "../events";
 import { createLungeTrail } from "./effects/lungeTrail";
 import { haftReach } from "./reach";
@@ -47,7 +47,7 @@ export function startLunge(): void {
   Object.assign(lunge, {
     dist: LUNGE.travel * reach + ranks * LUNGE.travelPerRank * lunge.charge,
     from: hero.x,
-    swing: ++game.swing,
+    swing: newSwing(),
     hits: 0,
     carried: null,
     ended: false,
@@ -59,8 +59,8 @@ export function startLunge(): void {
 
 /** every foe the blade passes through is struck once, all on the lunge's one swing */
 function pierce(): void {
-  const keep = game.swing;
-  game.swing = lunge.swing;
+  const keep = hero.swing;
+  hero.swing = lunge.swing;
   const [x0, y0, y1] = LUNGE.box;
   const hits = meleeHit([boxAhead(x0, y0, LUNGE.tip + haftReach(), y1)], {
     power: power(),
@@ -70,7 +70,7 @@ function pierce(): void {
     big: isFull(),
     feel: GLAIVE_FEEL.lunge,
   });
-  game.swing = keep;
+  hero.swing = keep;
   lunge.hits += hits;
   const first = hero.lastHit;
   if (hits && isFull() && !lunge.carried && first && hasPerk("skewer") && carriable(first)) lunge.carried = first;
@@ -125,7 +125,7 @@ function rail(): void {
   lunge.railed = true;
   const ends = [lunge.from, h.x + h.face * (LUNGE.tip + haftReach())];
   const box: Box = [Math.min(...ends), h.y + LUNGE.box[1], Math.max(...ends), h.y + LUNGE.box[2]];
-  game.swing++;
+  newSwing();
   const hits = meleeHit([box], { power: power() * LUNGE.railPower, kx: 30, ky: -20, feel: GLAIVE_FEEL.lunge });
   game.fx.push(createLungeTrail(lunge.from, ends[1], h.y - 15, true));
   emitYsra("strike", { source: "railLance", hits });

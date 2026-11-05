@@ -135,6 +135,7 @@ export const hero: Hero = {
   keenNext: false,
   keen: false,
   moveGhost: 0,
+  swing: 0,
 };
 export const scarf = new Chain(8, 2.2, 340);
 export const ponytail = new Chain(4, 2, 300);
@@ -146,7 +147,15 @@ rememberPerSeat(objectMemory(progress));
 rememberPerSeat(objectMemory(scarf, true));
 rememberPerSeat(objectMemory(ponytail, true));
 rememberPerSeat({
-  save: () => ({ coins: game.coins, revived: game.revived, ghosts: game.ghosts }),
+  save: () => ({ coins: game.coins, revived: game.revived, spell: game.spell }),
+  load(saved) {
+    Object.assign(game, saved);
+  },
+});
+// afterimages hold whole sprite images: only the host draws them, and a guest's HUD never reads them
+rememberPerSeat({
+  hostOnly: true,
+  save: () => ({ ghosts: game.ghosts }),
   load(saved) {
     Object.assign(game, saved);
   },

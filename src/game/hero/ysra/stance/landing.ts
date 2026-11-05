@@ -8,7 +8,7 @@ import { createShockwave } from "../../../effects/shockwave";
 import { type Blow, meleeHit } from "../../../meleeHit";
 import { hasPerk } from "../../../progress";
 import { game, hero, particles, progress, rng } from "../../../state";
-import { dust, shake } from "../../../world";
+import { dust, newSwing, shake } from "../../../world";
 import { skin } from "../../skin";
 import { warpShock } from "../../warpShock";
 import { emitYsra } from "../events";
@@ -70,7 +70,7 @@ export function impactBurst(from: LandFrom, reach: number): void {
 
 /** the dive's point goes into the floor: the burst, and every foe in the box struck */
 export function diveImpact(box: Box, blow: Blow): void {
-  game.swing++;
+  newSwing();
   impactBurst("dive", (box[2] - box[0]) / 2);
   const hits = meleeHit([box], blow);
   if (!hits) sfx.hit(true, 0.5);

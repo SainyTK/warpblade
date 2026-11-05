@@ -13,7 +13,7 @@ import { isHeld } from "../input";
 import { meleeHit } from "../meleeHit";
 import { hasPerk } from "../progress";
 import { game, hero, ponytail, scarf } from "../state";
-import { boxAhead, surfaceBelow } from "../world";
+import { boxAhead, newSwing, surfaceBelow } from "../world";
 import { leaveHang, setState } from "./actions";
 import { leaveAfterimages } from "./afterimages";
 import { warpShock } from "./warpShock";
@@ -85,7 +85,7 @@ function arrive(nx: number, ny: number): void {
 function strikeOnArrival(power: number): void {
   setState("warpStrike");
   hero.inv = Math.max(hero.inv, 0.3);
-  game.swing++;
+  newSwing();
   game.fx.push(createSlash(hero.x, hero.y, hero.face, WARP_SLASH));
   meleeHit([boxAhead(-6, -40, 30, 2)], { power, kx: 160, ky: -80, big: true });
   warpShock();

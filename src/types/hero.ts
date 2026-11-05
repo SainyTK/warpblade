@@ -164,4 +164,6 @@ export interface Hero {
   keen: boolean;
   /** seconds until the next afterimage of the current move */
   moveGhost: number;
+  /** the swing this hero's blows belong to, so one swing hits a foe once; another hero's swing has its own */
+  swing: number;
 }
