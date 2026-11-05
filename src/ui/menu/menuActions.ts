@@ -2,6 +2,7 @@ import { clearPresses, releaseAll } from "../../game/input";
 import { resetRun } from "../../game/run";
 import { startRun } from "../../game/startRun";
 import { game, hero } from "../../game/state";
+import { inRoom } from "../../store/coop";
 import { byId } from "../dom";
 import { closeMenu, isMenuOpen, openMenu } from "./menuState";
 
@@ -29,9 +30,12 @@ export function quitRun(): void {
   hero.inv = 0;
   openMenu("title");
 }
-/** freeze the game under the pause menu; a level-up pick already holds the game and is never paused over */
+/**
+ * freeze the game under the pause menu; in solo play a level-up pick already holds the game and is never paused over.
+ * A room plays on under the menu, and its players may still pause while anyone picks, to leave the room
+ */
 export function pauseGame(): void {
-  if (isMenuOpen() || game.mode === "pick") return;
+  if (isMenuOpen() || (game.mode === "pick" && !inRoom())) return;
   releaseAll();
   openMenu("pause");
 }

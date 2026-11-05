@@ -5,7 +5,7 @@ import { MAX_FRAME, STEP } from "../../constants/stage";
 import { sfx } from "../../services/audio";
 import { captureGame, type GameStream, tuneVideoSender } from "../../services/coop/gameStream";
 import { type HostLink, openRoom, RoomTaken } from "../../services/coop/hostLink";
-import { resetRoom, roomView, updateRoom } from "../../store/coop";
+import { postNote, resetRoom, roomView, updateRoom } from "../../store/coop";
 import type { GuestMessage, SeatInfo } from "../../types/coop";
 import type { RunOutcome } from "../../types/run";
 import { syncCoopStatus } from "../../ui/coop/coopStatus";
@@ -17,6 +17,7 @@ import { isMenuOpen, openMenu } from "../../ui/menu/menuState";
 import { setPickSource, syncPickDialog } from "../../ui/skills/pickDialog";
 import { syncTouch } from "../../ui/touch/bindTouch";
 import { makeRoomCode } from "../../utils/roomCode";
+import { leftNote } from "../../utils/roomNotes";
 import { setFrameDriver } from "../frameDriver";
 import { press, release } from "../input";
 import { reportRun } from "../runEnd";
@@ -53,8 +54,9 @@ export class HostSession {
   /** open a room under a fresh code and wait in the lobby */
   async open(): Promise<void> {
     updateRoom({ phase: "connecting", role: "host", error: "", note: "" });
-    for (let i = 0; i < CODE_TRIES && !this.link; i++) {
-      const code = makeRoomCode(Math.random);
+    let code = "";
+    for (let i = 0; i < CODE_TRIES && !this.link && !this.closed; i++) {
+      code = makeRoomCode(Math.random);
       try {
         this.link = await openRoom(code, {
           join: () => undefined,
@@ -62,18 +64,18 @@ export class HostSession {
           leave: (peer) => this.drop(peer),
           lost: (reason) => this.close(reason),
         });
-        updateRoom({ code });
       } catch (err) {
         if (err instanceof RoomTaken) continue;
         throw err;
       }
     }
-    if (!this.link) throw new Error("Could not find a free room code. Try again.");
+    // a room cancelled while it opened writes nothing: the room shown by now may be another one
     if (this.closed) {
-      this.link.close();
+      this.link?.close();
       return;
     }
-    updateRoom({ phase: "lobby", you: 0 });
+    if (!this.link) throw new Error("Could not find a free room code. Try again.");
+    updateRoom({ phase: "lobby", code, you: 0 });
     this.publishLobby();
     this.pinger = window.setInterval(() => this.ping(), PING_MS);
     addEventListener("pagehide", this.onPageHide);
@@ -94,11 +96,14 @@ export class HostSession {
     for (const peer of this.guests.keys()) this.link?.send(peer, { t: "lobby", seats });
   }
 
-  /** the lobby list doubles as a heartbeat; guests gone quiet are let go */
+  /**
+   * The lobby list doubles as a heartbeat, during a run too: a host whose tab is hidden draws no frames and sends no
+   * HUD, and the guests should wait for it rather than count it gone. Guests gone quiet are let go.
+   */
   private ping(): void {
     const now = performance.now();
     for (const [peer, g] of this.guests) if (now - g.lastSeen > QUIET_LIMIT_MS) this.link?.drop(peer);
-    if (!this.run) this.publishLobby();
+    this.publishLobby();
   }
 
   /** the host changed hero in the lobby */
@@ -118,13 +123,21 @@ export class HostSession {
   }
 
   private receive(peer: string, msg: GuestMessage): void {
+    // the links linger a moment after the room closes so the goodbyes can go out; what arrives then is for a room that is gone
+    if (this.closed) return;
     const guest = this.guests.get(peer);
     if (guest) guest.lastSeen = performance.now();
     if (msg.t === "hello") return this.welcome(peer, msg.hero, msg.owned, msg.version);
     if (!guest) return;
+    if (msg.t === "bye") return this.link?.drop(peer);
     if (msg.t === "hero" && !this.run) {
       guest.hero = heroById(msg.hero).id;
       this.publishLobby();
+      return;
+    }
+    // the next run wears what was bought; a run under way keeps what it started with
+    if (msg.t === "shop" && !this.run) {
+      guest.owned = msg.owned;
       return;
     }
     const seat = this.run?.seatOf(peer);
@@ -142,15 +155,18 @@ export class HostSession {
     if (slot < 0) return this.refuse(peer, `That room is full: ${MAX_PLAYERS} players already.`);
     this.guests.set(peer, { slot, hero: heroById(hero).id, owned, lastSeen: performance.now() });
     this.link?.send(peer, { t: "welcome", slot });
+    // someone joining makes a note about someone leaving old news
+    updateRoom({ note: "" });
     this.publishLobby();
   }
 
   /** a guest left or dropped */
   private drop(peer: string): void {
     const guest = this.guests.get(peer);
-    if (!guest) return;
+    if (!guest || this.closed) return;
     this.guests.delete(peer);
-    updateRoom({ note: `P${guest.slot + 1} left the room` });
+    postNote(leftNote(guest.slot));
+    for (const other of this.guests.keys()) this.link?.send(other, { t: "left", slot: guest.slot });
     const seat = this.run?.seatOf(peer);
     if (this.run && seat) this.run.removeSeat(seat);
     this.publishLobby();
@@ -172,7 +188,8 @@ export class HostSession {
       if (call) tuneVideoSender(call.peerConnection);
     }
     setPickSource({
-      waiting: () => game.mode === "pick" && progress.picks > 0,
+      // the cards step aside while the pause menu is open, since the room plays on under it
+      waiting: () => game.mode === "pick" && progress.picks > 0 && !isMenuOpen(),
       choose: (option) => this.run?.chooseHome(option),
     });
     this.last = performance.now();
@@ -200,7 +217,8 @@ export class HostSession {
     updateHud();
     syncPickDialog();
     syncTouch(!isMenuOpen() && game.mode === "play" && hero.state !== "dead");
-    syncCoopStatus(true);
+    // the line sits where the pause menu opens, so it waits under the menu
+    syncCoopStatus(!isMenuOpen());
     if (now - this.lastHud < 1000 / HUD_RATE) return;
     this.lastHud = now;
     for (const seat of run.seats) this.sendHud(run, seat);

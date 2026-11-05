@@ -99,6 +99,22 @@ export const ENEMY_COLORS = {
   eyeGlow: hex("#ff7ae0"),
   crack: hex("#b673e8"),
   claw: hex("#d8c0f8"),
+  /** the deepest shadow of the shadow flesh, under each volume */
+  bodyDeep: hex("#0e0818"),
+  /** the white specular glint on lit shadow flesh */
+  bodyGlint: hex("#d9bdfa"),
+  clawDeep: hex("#5a4a80"),
+  clawDark: hex("#9a84c4"),
+  clawGlint: hex("#fbf6ff"),
+  /** the hot centre of a glowing eye */
+  eyeCore: hex("#fff6ff"),
+  crackDeep: hex("#5e2c8e"),
+  crackHot: hex("#f0d8ff"),
+  /** the Rift Warden's pale mask, lit to shaded */
+  maskLight: hex("#fbeeff"),
+  mask: hex("#ecc8ff"),
+  maskShade: hex("#b898dc"),
+  maskDeep: hex("#6e5498"),
 } as const;
 
 export const WORLD_COLORS = {

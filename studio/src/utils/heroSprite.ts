@@ -1,11 +1,11 @@
 import { drawHero } from '@game/game/hero/drawHero';
-import { heroCanvas } from '@game/game/hero/heroCanvas';
+import { detailCanvas } from '@game/engine/sprite';
 import type { Pose } from '@game/types/pose';
 import type { SpriteImage } from '@game/types/sprite';
 import type { Point } from '@/types/studio';
 
 /** The game's hero canvas size and feet position (scene/drawActors.ts). */
-const canvas = heroCanvas(80, 76, 40, 62);
+const canvas = detailCanvas(80, 76, 40, 62);
 /** which of an art pixel's image pixels stand for it, first filled one wins: the lower right keeps outlines thin */
 const SAMPLES: readonly [number, number][] = [
   [1, 1],

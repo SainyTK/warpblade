@@ -36,11 +36,16 @@ export function bindKeyboard(): void {
       menuCommand(command, ev.repeat);
       return;
     }
-    if (!action || game.mode === "pick") return;
+    if (!action) return;
+    if (action === "pause") {
+      ev.preventDefault();
+      if (!ev.repeat) pauseGame();
+      return;
+    }
+    if (game.mode === "pick") return;
     ev.preventDefault();
     if (ev.repeat) return;
-    if (action === "pause") pauseGame();
-    else press(action);
+    press(action);
   });
   // a button activated by keyboard would click again on Space's key up
   addEventListener("keyup", (ev) => {

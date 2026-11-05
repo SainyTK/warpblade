@@ -1,7 +1,7 @@
 import { YSRA_STATE_CLIPS } from "../../constants/clips/ysra";
 import { STAND } from "../../constants/hero";
+import { detailCanvas } from "../../engine/sprite";
 import { drawHero } from "../../game/hero/drawHero";
-import { heroCanvas } from "../../game/hero/heroCanvas";
 import { applySkin } from "../../game/hero/skin";
 import { character } from "../../game/state";
 import type { CharacterDef } from "../../types/character";
@@ -9,7 +9,7 @@ import type { Pose } from "../../types/pose";
 import { sampleKeys } from "../../utils/sampleKeys";
 import { spriteUrl } from "../spriteUrl";
 
-const canvas = heroCanvas(64, 56, 30, 50);
+const canvas = detailCanvas(64, 56, 30, 50);
 const cache = new Map<string, string>();
 
 /** the hero at rest: the first frame of their own idle clip, or the shared standing pose */

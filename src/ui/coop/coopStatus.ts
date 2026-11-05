@@ -1,7 +1,6 @@
 import "./coopStatus.css";
 import { SEAT_COLORS } from "../../constants/coop";
 import { roomView } from "../../store/coop";
-import { byId } from "../dom";
 
 const line = document.createElement("div");
 line.className = "coop-status";
@@ -13,8 +12,6 @@ line.hidden = true;
 
 /** how long a passing note, such as a player leaving, stays up */
 const NOTE_MS = 4000;
-let note = "";
-let noteSince = 0;
 let shown = "";
 
 const names = (slots: number[]): string => {
@@ -22,22 +19,19 @@ const names = (slots: number[]): string => {
   return tags.length > 1 ? `${tags.slice(0, -1).join(", ")} and ${tags.at(-1)}` : (tags[0] ?? "");
 };
 
-/** what this player should know right now: down, waiting on others' cards, or a passing note */
+/** what this player should know right now: the host gone quiet, down, waiting on others' cards, or a passing note */
 function message(now: number): string {
   const room = roomView();
+  if (room.hostAway) return "Waiting for the host";
   if (room.downed) return "Down until the wave is cleared";
   const others = room.choosing.filter((s) => s !== room.you);
   if (others.length && !room.choosing.includes(room.you)) return `Waiting for ${names(others)} to pick`;
-  if (room.note !== note) {
-    note = room.note;
-    noteSince = now;
-  }
-  return note && now - noteSince < NOTE_MS ? note : "";
+  return room.note && now - room.noteAt < NOTE_MS ? room.note : "";
 }
 
-/** called every frame of a room's run; shown only while one plays */
+/** called every frame of a room's run; shown only while one plays and no menu covers the top of the screen */
 export function syncCoopStatus(playing: boolean): void {
-  if (!line.isConnected) byId("stage").append(line);
+  if (!line.isConnected) document.body.append(line);
   const room = roomView();
   const now = performance.now();
   const next = playing ? `${room.you}|${message(now)}` : "";
