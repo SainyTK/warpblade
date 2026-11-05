@@ -5,7 +5,9 @@ import { hex } from "../../utils/color";
 import { hero } from "../state";
 
 /** how far over the hero's feet the tag floats, standing and lying down */
-const LIFT = { up: 50, down: 20 } as const;
+const LIFT = { up: 50, down: 38 } as const;
+/** a downed player's tag goes grey; fading it would dither the thin letters away */
+const DOWN_INK = hex("#8a84b0");
 /** tags closer than this side to side stack upward instead of overlapping */
 const CROWD = { width: 14, step: 9 } as const;
 
@@ -34,13 +36,12 @@ export function stackTags(spots: TagSpot[]): TagSpot[] {
   return placed;
 }
 
-/** a player's place: P1 to P4 in their colour over a small pointer, dimmed while down */
+/** a player's place: P1 to P4 in their colour over a small pointer, grey while down */
 export function drawTag({ slot, x, y, down }: TagSpot): void {
-  const c = hex(SEAT_COLORS[slot]);
+  const c = down ? DOWN_INK : hex(SEAT_COLORS[slot]);
   const shade = hex(SEAT_SHADES[slot]);
-  const a = down ? 0.45 : 1;
   place();
-  drawText(`P${slot + 1}`, x, y, c, shade, 1, a);
-  for (let i = -1; i <= 1; i++) px(x + i, y + 7, c, a);
-  px(x, y + 8, c, a);
+  drawText(`P${slot + 1}`, x, y, c, shade);
+  for (let i = -1; i <= 1; i++) px(x + i, y + 7, c);
+  px(x, y + 8, c);
 }
