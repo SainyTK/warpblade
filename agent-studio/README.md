@@ -10,11 +10,11 @@ A launcher refreshes a dedicated worktree at `origin/main`, so the pipeline alwa
 A night goes through these steps, each one an agent with its own instructions in `roles/`:
 
 1. Prepare: pick the patch type (big when three or more days have passed since the last big patch, otherwise small), the next version, and a `studio/patch-<version>` branch.
-2. Baseline: typecheck, lint, build, the playtest smoke check and bot runs on the base version.
+2. Baseline: typecheck, lint, build, the playtest smoke check and bot runs on the base version, including runs that start at wave 20 (the dev server reads `?wave=` and `?level=`).
 3. Triage: an agent with no tools reads the open `game-feedback` GitHub issues as data and decides now, later, skip, duplicate or hide for each item, with a reply.
 4. Direct: the director reads the charter, the roadmap, the feedback, the baseline and the code, and writes the plan and a decision memo.
 5. Build: the developer builds the plan, checks it and commits.
-6. QA: a separate agent tests the real game against the plan's acceptance checks. A failed QA gets up to two rounds of fixes; a third failure ends the night with nothing shipped.
+6. QA: a separate agent tests the real game against the plan's acceptance checks and judges whether each change delivers in ordinary play. A failed QA gets up to two rounds of fixes; a third failure ends the night with nothing shipped. A passing QA with minor issues gets one polish round for what players would see, then QA checks again.
 7. Media: an agent records clips and stills of the change through real play.
 8. Write: the writer turns the night into patch notes (`src/content/patches/<version>.json`), a journal entry (`journal/<version>.md`) and a roadmap update.
 9. Finalize: the version goes into `package.json`, every check runs again, and the patch is committed.

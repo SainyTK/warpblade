@@ -16,6 +16,13 @@ Check, and record evidence for each:
 7. The art of new or changed visuals meets the charter's finish (outline, ramps, light, anticipation, follow-through) at the game's real scale.
 8. The README and docs match the change.
 
+Judge whether each change is good, not only whether it matches the plan.
+Play it the way a player would, in ordinary fights.
+A change that does not deliver its purpose there is a major issue even when it matches the plan: an attack that rarely hits what it aims at, an effect that is hard to see, a buff that changes nothing a player would notice, a fix that brings a new annoyance.
+Say what you saw and what would make it deliver.
+
+For anything that happens late in a run, start the bots or your scenarios there with `--start-wave N --start-level L` instead of judging from arithmetic.
+
 Do not fix anything and do not edit repo files; you may only write inside the run folder.
 Fail the patch for any blocker or major issue: a crash or page error, a broken control, a missing planned item, a save that loses progress, a build or lint failure, or visuals clearly below the existing finish.
 Minor issues do not fail the patch; list them.

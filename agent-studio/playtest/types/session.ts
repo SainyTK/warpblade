@@ -5,16 +5,23 @@ export interface Viewport {
   width: number;
   height: number;
 }
+/** begin the run at a later wave with the hero already levelled (dev server only; the game reads ?wave= and ?level=) */
+export interface RunStart {
+  wave: number;
+  level: number;
+}
 export interface OpenGameOptions {
   /** the game repository to serve; defaults to the repository the harness lives in */
   root?: string;
   /** start a run with this hero through the menu; leave out to stay on the start menu */
   hero?: string;
   viewport?: Viewport;
+  start?: RunStart;
 }
 export interface SessionOptions {
   hero?: string;
   viewport?: Viewport;
+  start?: RunStart;
 }
 export interface StillResult {
   path: string;

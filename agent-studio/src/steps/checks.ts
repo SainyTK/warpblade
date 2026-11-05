@@ -59,6 +59,9 @@ export async function baseline(night: Night): Promise<void> {
     ];
     await npm(night, studioDir(night), args, 40);
   }
+  const late = join(night.files.baseline, "bot-skilled-wave20.json");
+  const lateArgs = ["run", "playtest", "--", "bot", "--hero", "all", "--policy", "skilled", "--out", late];
+  await npm(night, studioDir(night), [...lateArgs, "--start-wave", "20", "--start-level", "14"], 40);
   const smoke = join(night.files.baseline, "smoke.json");
   await npm(night, studioDir(night), ["run", "playtest", "--", "smoke", "--hero", "all", "--out", smoke], 15);
 }

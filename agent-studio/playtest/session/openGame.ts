@@ -6,7 +6,7 @@ import { launchHarness } from "./harness";
 export async function openGame(options: OpenGameOptions = {}): Promise<Session> {
   const harness = await launchHarness(options.root ?? DEFAULT_ROOT);
   try {
-    const session = await harness.newSession({ hero: options.hero, viewport: options.viewport });
+    const session = await harness.newSession({ hero: options.hero, viewport: options.viewport, start: options.start });
     return { ...session, close: () => harness.close() };
   } catch (error) {
     await harness.close();

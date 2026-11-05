@@ -18,6 +18,7 @@ How to decide:
 - For a big patch, choose exactly one headline from the charter's list. Check the recent patches and do not repeat the last big patch's headline category unless players ask for it. Prefer roadmap items, but a better idea or strong feedback can replace them; say why.
 - Scope the headline so one developer agent can build it to the charter's quality bar in about three hours and test it. Cut extras into `roadmapNotes`.
 - Write the headline's `design` as a full spec the developer can build without asking: what the player sees and does, controls on keyboard and touch, numbers (damage, cooldowns, HP, MP, timings), the animation beats (anticipation, strike, follow-through) and effect colours from the existing palettes, how it fits a run and the meta progression, and what must stay unchanged. Give `acceptance` as checks a tester can verify in the browser.
+- The baseline includes bot runs that start at wave 20, so the Rift Warden and late waves have measured numbers too.
 - For a small patch, pick two to eight changes, each with evidence: a bug you can point to in code or a report, a bot number, or feedback IDs. Balance moves follow the charter's limits.
 - Every feedback item triaged `now` either goes into the plan with its ID or is listed in `considered` with why not.
 - Bugs in commits since the last release, or in the baseline playtest, come first.

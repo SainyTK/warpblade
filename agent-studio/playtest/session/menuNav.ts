@@ -46,7 +46,9 @@ export async function startRunThroughMenu(session: Session, heroId: string): Pro
   await focusEntry(session, (focus) => focus.hero === heroId, KEYS.right);
   await session.tap(KEYS.select);
   await session.waitFor(
-    (state) => state.menu.context === null && state.mode === "play" && state.hero.id === heroId,
+    // a run begun at a later wave opens its level-up picks at once
+    (state) =>
+      state.menu.context === null && (state.mode === "play" || state.mode === "pick") && state.hero.id === heroId,
     START_TIMEOUT_MS,
     `a run with ${heroId}`,
   );

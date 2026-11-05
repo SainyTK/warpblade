@@ -30,7 +30,7 @@ export async function scenario(flags: ScenarioFlags): Promise<ScenarioReport> {
   const file = resolve(flags.file);
   const play = await loadScenario(file);
   const viewport = flags.viewport ? parseViewport(flags.viewport) : undefined;
-  const session = await openGame({ root: flags.root, hero: flags.hero, viewport });
+  const session = await openGame({ root: flags.root, hero: flags.hero, viewport, start: flags.start });
   let result: unknown = null;
   let error: string | undefined;
   try {

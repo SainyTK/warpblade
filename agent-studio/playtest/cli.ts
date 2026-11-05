@@ -10,8 +10,8 @@ import type { Report } from "./types/report";
 
 const USAGE = `Usage: npm run playtest -- <command> [flags]
   smoke    [--hero <id>|all]
-  bot      [--hero <id>|all] [--runs N] [--policy mash|skilled] [--max-minutes M]
-  scenario <file.ts> [--hero <id>] [--viewport WxH]
+  bot      [--hero <id>|all] [--runs N] [--policy mash|skilled] [--max-minutes M] [--start-wave N [--start-level L]]
+  scenario <file.ts> [--hero <id>] [--viewport WxH] [--start-wave N [--start-level L]]
 Every command takes --root <game repo> and --out <report.json>.`;
 
 const { positionals, values } = parseArgs({
@@ -24,6 +24,8 @@ const { positionals, values } = parseArgs({
     policy: { type: "string", default: "mash" },
     "max-minutes": { type: "string", default: String(DEFAULT_MAX_MINUTES) },
     viewport: { type: "string" },
+    "start-wave": { type: "string" },
+    "start-level": { type: "string" },
   },
 });
 
@@ -34,6 +36,14 @@ const positiveNumber = (text: string, flag: string): number => {
   }
   return value;
 };
+
+/** --start-wave and --start-level as a run start, or none */
+function runStart() {
+  if (!values["start-wave"]) return undefined;
+  const wave = Math.floor(positiveNumber(values["start-wave"], "start-wave"));
+  const level = values["start-level"] ? Math.floor(positiveNumber(values["start-level"], "start-level")) : 1;
+  return { wave, level };
+}
 
 function runCommand(): Promise<Report> {
   const [command, file] = positionals;
@@ -48,10 +58,11 @@ function runCommand(): Promise<Report> {
       runs: Math.floor(positiveNumber(values.runs, "runs")),
       policy: values.policy,
       maxMinutes: positiveNumber(values["max-minutes"], "max-minutes"),
+      start: runStart(),
     });
   }
   if (command === "scenario" && file) {
-    return scenario({ ...common, file, hero: values.hero, viewport: values.viewport });
+    return scenario({ ...common, file, hero: values.hero, viewport: values.viewport, start: runStart() });
   }
   throw new Error(USAGE);
 }

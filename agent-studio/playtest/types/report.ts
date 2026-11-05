@@ -47,6 +47,8 @@ export interface BotMeans {
 export interface BotReport extends ReportBase {
   command: "bot";
   policy: string;
+  /** the wave and level the runs began at, when not wave 1 */
+  start: { wave: number; level: number } | null;
   runs: BotRun[];
   means: BotMeans[];
   determinism: string;

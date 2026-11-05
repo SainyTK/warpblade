@@ -12,15 +12,24 @@ const DEVELOPER_OWNS = (path: string) =>
   !path.startsWith("src/content/patches/") &&
   !path.startsWith("public/patches/");
 
+/** what the developer is asked to do with QA's issues: fix blockers and majors, or polish the minor ones */
+type Pass = "build" | "fix" | "polish";
+
+const FOLLOW_UP: Record<Exclude<Pass, "build">, string> = {
+  fix: "QA failed the patch. Fix every blocker and major issue below, check again, commit, and answer with an updated report.",
+  polish:
+    "QA passed the patch with the minor issues below. Fix the ones a player would see (text, labels, small visual or feel problems) " +
+    "when the fix is small and safe, leave the rest and say why in notDelivered, check again, commit, and answer with an updated report.",
+};
+
 async function develop(
   night: Night,
   resume: string | null,
+  pass: Pass,
   issues: QaReport | null,
 ): Promise<{ report: DevReport; session: string | null }> {
   const { files, ctx } = night;
-  const extra = issues
-    ? `QA failed the patch. Fix every blocker and major issue below, check again, commit, and answer with an updated report.\n\n${JSON.stringify(issues.issues, null, 2)}`
-    : "";
+  const extra = pass === "build" || !issues ? "" : `${FOLLOW_UP[pass]}\n\n${JSON.stringify(issues.issues, null, 2)}`;
   const prompt = resume
     ? extra
     : await promptFor(
@@ -29,7 +38,7 @@ async function develop(
         { "The plan": files.plan, "Baseline playtest reports": files.baseline, "Scratch folder": files.scratch },
         extra,
       );
-  const label = issues ? "developer-fix" : "developer";
+  const label = pass === "build" ? "developer" : `developer-${pass}`;
   const { output, sessionId } = await callRole<DevReport>(night, { role: "developer", prompt, label, resume });
   await commitLeftovers(night, "Commit the rest of the developer's work");
   await guardStep(night, ctx.baseSha, DEVELOPER_OWNS, "developer");
@@ -61,14 +70,24 @@ async function qa(night: Night, round: number): Promise<QaReport> {
 
 const blocking = (report: QaReport) => report.issues.some((i) => i.severity !== "minor") || report.verdict === "fail";
 
-/** build the plan, then let QA check it, with up to MAX_FIX_ROUNDS rounds of fixes */
+/** build the plan, then let QA check it: up to MAX_FIX_ROUNDS rounds of fixes for blocking issues,
+    and one polish round for the minor issues of a passing patch, each followed by another QA round */
 export async function buildAndVerify(night: Night): Promise<{ dev: DevReport; qa: QaReport }> {
-  let { report, session } = await develop(night, null, null);
+  let { report, session } = await develop(night, null, "build", null);
+  let fixes = 0;
+  let polished = false;
   for (let round = 0; ; round++) {
     const verdict = await qa(night, round);
-    if (!blocking(verdict)) return { dev: report, qa: verdict };
-    if (round >= MAX_FIX_ROUNDS)
+    if (!blocking(verdict)) {
+      if (polished || !verdict.issues.length) return { dev: report, qa: verdict };
+      polished = true;
+      ({ report, session } = await develop(night, session, "polish", verdict));
+      continue;
+    }
+    if (fixes >= MAX_FIX_ROUNDS) {
       throw new Error(`QA failed the patch after ${MAX_FIX_ROUNDS} rounds of fixes; see ${night.files.qa(round)}`);
-    ({ report, session } = await develop(night, session, verdict));
+    }
+    fixes++;
+    ({ report, session } = await develop(night, session, "fix", verdict));
   }
 }

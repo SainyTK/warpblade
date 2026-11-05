@@ -38,7 +38,7 @@ export async function bot(flags: BotFlags): Promise<BotReport> {
     await probe.close();
     for (const hero of heroes) {
       for (let index = 0; index < flags.runs; index++) {
-        const session = await harness.newSession();
+        const session = await harness.newSession({ start: flags.start });
         const run = await playRun(session, hero, policy, flags.maxMinutes);
         console.error(`${hero} ${policy.name} run ${index + 1}: wave ${run.wave}, ${run.ending}, ${run.wallSeconds} s`);
         runs.push(run);
@@ -52,6 +52,7 @@ export async function bot(flags: BotFlags): Promise<BotReport> {
   const heroes = [...new Set(runs.map((run) => run.hero))];
   return {
     command: "bot",
+    start: flags.start ?? null,
     ok: pageErrors.length === 0,
     root: flags.root,
     startedAt,
