@@ -7,6 +7,8 @@ export interface SeatMemory {
   save(): unknown;
   /** put a saved copy back into the live state */
   load(saved: unknown): void;
+  /** kept to the host: a guest's HUD never reads it, and loading it would clobber the guest's own (input, ropes) */
+  hostOnly?: boolean;
 }
 
 const memories: SeatMemory[] = [];
@@ -18,8 +20,9 @@ export function rememberPerSeat(memory: SeatMemory): void {
 export const seatMemories = (): readonly SeatMemory[] => memories;
 
 /** a plain object whose own fields are swapped whole; nested objects are shared until the owner replaces them */
-export function objectMemory<T extends object>(live: T): SeatMemory {
+export function objectMemory<T extends object>(live: T, hostOnly = false): SeatMemory {
   return {
+    hostOnly,
     save: () => ({ ...live }),
     load(saved) {
       const from = saved as Record<string, unknown>;

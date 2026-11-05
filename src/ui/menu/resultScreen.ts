@@ -1,5 +1,6 @@
 import { STAGE_WAVES } from "../../constants/waves";
 import { lastRun } from "../../game/runEnd";
+import { inRoom } from "../../store/coop";
 import { bank } from "../../store/meta";
 import type { MenuView } from "../../types/menu";
 import { coinAmount } from "../coinIcon";
@@ -28,7 +29,7 @@ export function resultScreen(): MenuView {
   const shop = menuItem("Shop", () => showScreen("shop"));
   shop.dataset.opens = "shop";
   list.append(
-    menuItem("Continue", () => showScreen("main")),
+    inRoom() ? menuItem("Back to the room", () => showScreen("coop")) : menuItem("Continue", () => showScreen("main")),
     shop,
   );
   const content = document.createElement("div");

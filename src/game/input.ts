@@ -9,6 +9,7 @@ const pressed = new Map<InputAction, number>();
 let watcher: ((action: InputAction, down: boolean) => void) | null = null;
 
 rememberPerSeat({
+  hostOnly: true,
   save: () => ({ held: new Set(held), pressed: new Map(pressed) }),
   load(saved) {
     const from = saved as { held: Set<InputAction>; pressed: Map<InputAction, number> };

@@ -3,7 +3,9 @@ import { GAME_VERSION, SITE_PAGES } from "../../constants/sitePages";
 import { STAGE_WAVES } from "../../constants/waves";
 import { applySkin } from "../../game/hero/skin";
 import { character, game, progress } from "../../game/state";
+import { inRoom, roomView } from "../../store/coop";
 import type { MenuContext, MenuScreen, MenuView } from "../../types/menu";
+import { leaveRoom } from "./coopActions";
 import { leaveMenu, quitRun, restartRun } from "./menuActions";
 import { menuItem } from "./menuItem";
 import { showScreen } from "./menuState";
@@ -49,16 +51,28 @@ export function mainScreen(context: MenuContext): MenuView {
   if (context === "title") {
     // a hero only looked at on the hero screen goes back to the one chosen
     applySkin(character.skin);
-    list.append(
-      screenItem("Start", "hero"),
-      screenItem("Shop", "shop"),
-      screenItem("Controls", "controls"),
-      screenItem("Options", "options"),
-    );
+    // while in a room, its lobby takes the place of a solo start
+    if (inRoom()) list.append(screenItem(`Room ${roomView().code}`, "coop"));
+    else list.append(screenItem("Start", "hero"), screenItem("Co-op", "coop"));
+    list.append(screenItem("Shop", "shop"), screenItem("Controls", "controls"), screenItem("Options", "options"));
     const content = document.createElement("div");
     content.className = "menu-main";
     content.append(list, titleFooter());
     return { title: "Warpblade", subtitle: "Throw the sword. Become the sword.", content };
+  }
+  if (inRoom()) {
+    // a room plays on under this menu
+    list.append(
+      menuItem("Resume", leaveMenu),
+      screenItem("Controls", "controls"),
+      screenItem("Options", "options"),
+      menuItem("Leave room", leaveRoom, "Leave? Press again"),
+    );
+    return {
+      title: `Room ${roomView().code}`,
+      subtitle: `Wave ${game.wave} of ${STAGE_WAVES}, level ${progress.level}`,
+      content: list,
+    };
   }
   list.append(
     menuItem("Resume", leaveMenu),

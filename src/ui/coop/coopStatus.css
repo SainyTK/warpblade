@@ -1,0 +1,38 @@
+/* A room's line under the pause button: this player's tag, and why they wait when they do. */
+.coop-status {
+  position: absolute;
+  top: 44px;
+  left: 50%;
+  translate: -50% 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  max-width: 70%;
+  pointer-events: none;
+  font-family: var(--ui);
+  font-size: 14px;
+  color: var(--text);
+  text-shadow:
+    1px 0 0 var(--night),
+    -1px 0 0 var(--night),
+    0 1px 0 var(--night),
+    0 -1px 0 var(--night);
+}
+.coop-status b {
+  padding: 1px 6px;
+  font-family: var(--display);
+  font-weight: 400;
+  font-size: 13px;
+  color: var(--night);
+  text-shadow: none;
+  background: var(--seat);
+}
+.coop-status span:empty {
+  display: none;
+}
+@media (max-height: 520px) {
+  .coop-status {
+    top: 40px;
+    font-size: 12px;
+  }
+}

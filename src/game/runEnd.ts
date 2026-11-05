@@ -18,8 +18,14 @@ export function onRunEnd(listener: (result: RunResult) => void): void {
 export function endRun(outcome: RunOutcome): void {
   const room = coop();
   if (room) return room.endRun(outcome);
-  last = { outcome, wave: game.wave, coins: bankCoins() };
+  const result = { outcome, wave: game.wave, coins: bankCoins() };
   resetRun("");
   hero.inv = 0;
+  reportRun(result);
+}
+
+/** show a finished run's result; a co-op room reports its own runs here */
+export function reportRun(result: RunResult): void {
+  last = result;
   for (const listener of listeners) listener(last);
 }

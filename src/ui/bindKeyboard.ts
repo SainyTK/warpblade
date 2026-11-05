@@ -8,10 +8,15 @@ import { menuCommand } from "./menu/bindMenu";
 import { pauseGame } from "./menu/menuActions";
 import { isMenuOpen } from "./menu/menuState";
 
+/** keys that leave a text box for the menu */
+const TYPING_EXITS = ["Enter", "Escape", "ArrowUp", "ArrowDown"];
+
 /** M and F work everywhere; the menu gets its own keys while open; the level-up pick handles its keys itself */
 export function bindKeyboard(): void {
   addEventListener("keydown", (ev) => {
     sfx.start();
+    // typing in a box, such as a room code, types; only Enter, Escape and the arrows still move through the menu
+    if (ev.target instanceof HTMLInputElement && !TYPING_EXITS.includes(ev.code)) return;
     const action = KEYMAP[ev.code];
     if (action === "mute" || action === "fullscreen") {
       ev.preventDefault();

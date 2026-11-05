@@ -1,4 +1,4 @@
-import type { EnemyRank } from "../types/enemy";
+import type { EnemyRank, EnemyType } from "../types/enemy";
 import type { RunOutcome } from "../types/run";
 
 /**
@@ -21,7 +21,9 @@ export interface CoopHooks {
   /** a hero fell for good or the stage was cleared; the room decides when the run is over */
   endRun(outcome: RunOutcome): void;
   /** foes of a wave for this many players */
-  scaleFoes<T>(foes: readonly T[]): T[];
+  scaleFoes(foes: readonly EnemyType[]): EnemyType[];
+  /** draw what only a room shows over the scene, such as the players' tags */
+  drawOverlay(): void;
   /** a foe's HP for this many players */
   scaleFoeHp(rank: EnemyRank, hp: number): number;
 }

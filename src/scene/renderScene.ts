@@ -42,6 +42,7 @@ export function renderScene(out: Uint8ClampedArray): void {
   drawMist();
   lights.draw();
   drawNumbers();
+  room?.drawOverlay();
   const bolt = game.flash > 0 ? game.flash / SKY_FLASH : 0;
   composite(out, Math.min(1, bolt + sceneFlash()) * FLASH_STRENGTH);
 }

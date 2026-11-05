@@ -143,8 +143,8 @@ export const ponytail = new Chain(4, 2, 300);
 const heroMemory = objectMemory(hero);
 rememberPerSeat({ save: () => ({ ...hero, hand: [...hero.hand] }), load: heroMemory.load });
 rememberPerSeat(objectMemory(progress));
-rememberPerSeat(objectMemory(scarf));
-rememberPerSeat(objectMemory(ponytail));
+rememberPerSeat(objectMemory(scarf, true));
+rememberPerSeat(objectMemory(ponytail, true));
 rememberPerSeat({
   save: () => ({ coins: game.coins, revived: game.revived, ghosts: game.ghosts }),
   load(saved) {
