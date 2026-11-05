@@ -1,6 +1,7 @@
 import { sfx } from "../../../services/audio";
 import type { HeroKit } from "../../../types/kit";
-import { take, use } from "../../input";
+import { isHeld, take, use } from "../../input";
+import { hero } from "../../state";
 import { startCharge } from "../ultimate";
 import { emitYsra } from "./events";
 import { chooseGlaive, GLAIVE_PART, pressGlaive } from "./glaive/glaive";
@@ -8,6 +9,13 @@ import type { YsraPart } from "./part";
 import { ysraPose } from "./pose";
 import { cycleRite, PYRE_PART, pressRite } from "./pyre/pyre";
 import { doubleTapStance, pressGuard, pressJump, pressVault, STANCE_PART } from "./stance/stance";
+
+/** J with Up held during a string blow: the Skyhook comes next and spends the Up press, so a kept Up does not jump her out of the blow first */
+function pressSkyhook(): boolean {
+  if (!pressGlaive()) return false;
+  take("up");
+  return true;
+}
 
 /** the glaive string (J), the vault and guard (K, L, Up, taps), Heat and rites (I, O) */
 const PARTS: readonly YsraPart[] = [GLAIVE_PART, STANCE_PART, PYRE_PART];
@@ -22,6 +30,7 @@ export const YSRA_KIT: HeroKit = {
   },
   readActions: (dir, tap) => {
     use("dash", () => pressGuard(dir));
+    if (hero.state === "move" && isHeld("up")) use("attack", pressSkyhook);
     use("up", pressJump);
     if (tap) doubleTapStance(tap);
     use("attack", pressGlaive);
