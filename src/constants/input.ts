@@ -53,7 +53,7 @@ export const ACTION_TEXT: Record<KitId, Record<InputAction, string>> = {
       "Glaive string that pierces the whole line. Hold to wind a lunge, let go to lunge. With up a skyhook, with down a ground lash",
     dash: "Hold to brace and block blows from the front. Press just before a blow to parry. With the side behind you held, step back",
     run: "Charge toward the side held, once Warpath is learned",
-    warp: "Pole vault over foes. In the air, dive glaive first",
+    warp: "Pole vault over foes, also out of a brace or a backstep. In the air, dive glaive first",
     cast: "Call the selected rite, paid with Heat",
     cycle: `Switch rite: ${RITE_NAMES}`,
   },

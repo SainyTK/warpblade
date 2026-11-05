@@ -21,6 +21,8 @@ export const VAULT = {
   cooldown: 0.95,
   /** nothing touches her from the plant until this many seconds past the top of the arc */
   guardPastPeak: frame(3),
+  /** the pose shown last crosses into the vault's first keys over this many frames, before the plant's stab */
+  entryFrames: 2,
   /** Skyline: the second vault, thrown off the haft in the air, rises this much */
   airPeak: 24,
   /** the landing crouch after the flight, before she is free again */

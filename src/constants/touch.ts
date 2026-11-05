@@ -60,7 +60,11 @@ export const TOUCH_TEXT: Record<KitId, Record<TouchButtonAction, TouchButtonText
       hint: "Hold to brace and block blows from the front. Tap just before a blow to parry. With the stick pushed behind you, step back",
       accent: "#d08a3c",
     },
-    warp: { label: "Vault", hint: "Pole vault over foes. In the air, dive glaive first", accent: "#ec7228" },
+    warp: {
+      label: "Vault",
+      hint: "Pole vault over foes, also out of a brace or a backstep. In the air, dive glaive first",
+      accent: "#ec7228",
+    },
     cast: { label: "Rite", hint: "Call the selected rite, paid with Heat", accent: null },
     ultimate: SPECIAL,
     cycle: { label: "Next rite", hint: `Switch rite: ${RITE_NAMES}`, accent: null },

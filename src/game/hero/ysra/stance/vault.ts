@@ -11,6 +11,7 @@ import { emitYsra } from "../events";
 import { cutMove } from "./cut";
 import { vaultLanding } from "./landing";
 import { stance } from "./memory";
+import { entryPose } from "./vaultEntry";
 
 /** the vault is in the air and has not landed */
 export const vaultFlying = (): boolean => hero.state === "vault" && stance.launched && !stance.landed;
@@ -21,7 +22,8 @@ export const vaultGuarded = (): boolean =>
   !stance.landed &&
   (!stance.launched || (!hero.ground && hero.vy < HERO_MOVE.gravity * VAULT.gravity * VAULT.guardPastPeak));
 
-/** K on the floor: plant the glaive ahead, toward a held side; a press while it recharges is refused with a tick */
+/** K on the floor: plant the glaive ahead, toward a held side; a press while it recharges is refused with a tick.
+ *  The pose she showed last crosses into the plant. */
 export function startVault(): boolean {
   const h = hero;
   if (h.warpCd > 0) {
@@ -30,6 +32,7 @@ export function startVault(): boolean {
   }
   cutMove();
   const side = (isHeld("right") ? 1 : 0) - (isHeld("left") ? 1 : 0);
+  stance.entry = entryPose(h.pose, side !== 0 && side !== h.face);
   if (side) h.face = side;
   h.running = false;
   h.vx = 0;

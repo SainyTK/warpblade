@@ -8,6 +8,7 @@ import { setState, settle } from "../../actions";
 import { refuseDash } from "../../stamina";
 import { cutMove } from "./cut";
 import { stance } from "./memory";
+import { startVault } from "./vault";
 
 /** nothing touches her in the first moment of the hop */
 export const backstepGuarded = (): boolean => hero.state === "backstep" && hero.st < BACKSTEP.guard;
@@ -27,13 +28,15 @@ export function startBackstep(): boolean {
   h.ground = false;
   h.cutShort = true;
   stance.landed = false;
+  stance.vaultNext = false;
   setState("backstep");
   dust(h.x, h.y, 3, h.face);
   sfx.dodge();
   return true;
 }
 
-/** the hop carries her back at one speed; on landing she skids to a stop on the floor's own friction */
+/** the hop carries her back at one speed; on landing she skids to a stop on the floor's own friction, or vaults when K
+ *  was pressed in the hop */
 export function runBackstep(): void {
   const h = hero;
   if (stance.landed) {
@@ -48,4 +51,7 @@ export function runBackstep(): void {
   stance.landed = true;
   h.st = BACKSTEP_TIMES.land;
   dust(h.x, h.y, 4, h.face);
+  if (!stance.vaultNext) return;
+  stance.vaultNext = false;
+  startVault();
 }

@@ -15,7 +15,8 @@ import { startCharge, tickWarpath } from "./warpath";
 
 export { pressJump } from "./jump";
 
-/** K: the pole vault on the floor; in the air, Skyline's second vault out of a vault, otherwise the dive */
+/** K: the pole vault on the floor, also out of a brace or a backstep; in the air, Skyline's second vault out of a vault,
+ *  otherwise the dive. K in a backstep's hop vaults the moment she lands. */
 export function pressVault(): boolean {
   const h = hero;
   if (vaultFlying()) {
@@ -23,7 +24,11 @@ export function pressVault(): boolean {
     else return startDive();
     return true;
   }
-  if (!canCut()) return false;
+  if (h.state === "backstep" && !stance.landed) {
+    stance.vaultNext = true;
+    return true;
+  }
+  if (!canCut() && h.state !== "brace" && h.state !== "backstep") return false;
   return h.ground ? startVault() : startDive();
 }
 

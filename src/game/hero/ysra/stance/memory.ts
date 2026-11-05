@@ -4,6 +4,8 @@ import type { StanceMemory } from "../../../../types/ysra/stance";
 export const stance: StanceMemory = {
   launched: false,
   landed: false,
+  vaultNext: false,
+  entry: null,
   airVaults: 0,
   dived: false,
   face: 1,
@@ -20,6 +22,8 @@ export function resetStance(): void {
   Object.assign(stance, {
     launched: false,
     landed: false,
+    vaultNext: false,
+    entry: null,
     airVaults: 0,
     dived: false,
     face: 1,
