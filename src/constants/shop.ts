@@ -60,7 +60,7 @@ export const SHOP_ITEMS: readonly ShopItem[] = [
     kind: "skill",
     id: "warpShock",
     name: "Warp Shock",
-    text: "Warp strikes send a shockwave through foes close by.",
+    text: "Warp strikes and vault landings send a shockwave through foes close by.",
     price: 150,
   },
   {

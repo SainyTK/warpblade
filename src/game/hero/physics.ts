@@ -5,6 +5,7 @@ import { take } from "../input";
 import { hero, progress } from "../state";
 import { dust, surfaceBelow } from "../world";
 import { isFree, leaveHang, setState } from "./actions";
+import { kit } from "./kits";
 import { MOVES } from "./moves";
 import { strideAt } from "./moves/advance";
 
@@ -38,14 +39,14 @@ export function moveHero(dt: number, dir: number): void {
   }
   const speed = (h.running ? M.runSpeed : M.walkSpeed) * progress.stats.move;
   const m = st === "move" && h.move ? MOVES[h.move] : null;
-  const moveDriven = !!m && (!!m.step || !!strideAt(m, h.st));
+  const moveDriven = (!!m && (!!m.step || !!strideAt(m, h.st))) || kit().drivesMotion();
   if (isFree()) {
     h.vx = approach(h.vx, dir * speed, (h.ground ? M.groundAccel : M.airAccel) * dt);
     if (dir) h.face = dir;
   } else if (st !== "dash" && !moveDriven) h.vx = approach(h.vx, 0, (h.ground ? 800 : 300) * dt);
   // a rise keeps full gravity, so nothing done mid-jump carries Kael above the jump's own height
   const hang = floats() && !h.ground && h.vy >= 0;
-  const g = st === "dash" ? 0 : hang ? 0.3 : 1;
+  const g = (st === "dash" ? 0 : hang ? 0.3 : 1) * kit().gravityScale();
   h.vy = Math.min(M.maxFall, h.vy + M.gravity * g * dt);
   if (hang && h.vy > 60) h.vy = 60;
   if (st === "dash") h.vy = 0;

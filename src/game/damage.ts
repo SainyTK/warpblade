@@ -1,6 +1,7 @@
 import { DAMAGE, ENEMY_AIR, FUSION, GUARD, JUGGLE_LIMIT } from "../constants/combat";
 import { ENEMIES } from "../constants/enemies";
 import { SPARKS } from "../constants/palette";
+import { PIN } from "../constants/ysra/glaive";
 import { sfx } from "../services/audio";
 import type { Enemy } from "../types/enemy";
 import type { DamageTag } from "../types/game";
@@ -123,6 +124,7 @@ export function dealDamage(e: Enemy, base: number, o: HitOptions = {}): HitResul
     dmg *= DAMAGE.crit;
     tag = "crit";
   }
+  if (e.pinned > 0) dmg *= PIN.taken;
   const shattering = hasPerk("shatter") && o.melee && o.heavy && e.frozen > 0;
   if (shattering) {
     dmg *= 2;

@@ -2,8 +2,10 @@ import type { SlashShape } from "./effect";
 import type { ClipName } from "./hero";
 import type { Perk } from "./skill";
 import type { Box } from "./world";
+import type { YsraMoveId } from "./ysra";
 
-export type MoveId =
+/** Kael's combo moves */
+export type KaelMoveId =
   | "stepCut"
   | "risingBackhand"
   | "twinFang"
@@ -26,6 +28,7 @@ export type MoveId =
   | "phaseCut"
   | "backflip"
   | "skybreaker";
+export type MoveId = KaelMoveId | YsraMoveId;
 
 /** How a blow feels: hitstop and shake on contact, and the pitch of its hit sound. */
 export interface HitFeel {

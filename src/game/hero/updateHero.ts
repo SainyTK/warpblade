@@ -8,8 +8,8 @@ import { animateHero } from "./animate";
 import { runMove, tickCombo } from "./combo";
 import { runDash } from "./dash";
 import { tickDenied } from "./deny";
+import { kit } from "./kits";
 import { moveHero } from "./physics";
-import { readActions } from "./readActions";
 import { castSpeed, rechargeSpells, runCast } from "./spell";
 import { regenStamina } from "./stamina";
 import { readDoubleTap } from "./taps";
@@ -55,9 +55,9 @@ function runState(dt: number): void {
   }
 }
 
-/** how fast the current action's clock runs: attack speed for moves, Quick Cast for spells */
+/** how fast the current action's clock runs: attack speed (and the kit's own boost) for moves, Quick Cast for spells */
 function clockRate(): number {
-  if (hero.state === "move") return progress.stats.aspd;
+  if (hero.state === "move") return progress.stats.aspd * (kit().attackRate?.() ?? 1);
   if (hero.state === "cast") return castSpeed();
   return 1;
 }
@@ -77,17 +77,18 @@ export function updateHero(dt: number): void {
   h.sinceDash += dt;
   regenStamina(dt);
   tickCombo(dt);
+  kit().tick(dt);
   if (h.running && dir !== h.face) h.running = false;
   if (h.state !== "dead") {
     h.mp = Math.min(progress.stats.mp, h.mp + (h.state === "hang" ? MP_REGEN.hanging : MP_REGEN.normal) * dt);
-    readActions(dir, tap);
+    kit().readActions(dir, tap);
   }
   // letting go of Up cuts a jump's rise short, also when an attack or a cast started on the way up
   if (!isHeld("up") && h.vy < -120 && !h.cutShort) {
     h.vy *= 0.55;
     h.cutShort = true;
   }
-  runState(dt);
+  if (!kit().runState(dt)) runState(dt);
   moveHero(dt, dir);
   animateHero(dt);
 }

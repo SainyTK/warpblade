@@ -1,4 +1,6 @@
 import type { InputAction, MenuCommand } from "../types/input";
+import type { KitId } from "../types/kit";
+import { RITES } from "./ysra/rites";
 
 export const KEYMAP: Record<string, InputAction> = {
   ArrowLeft: "left",
@@ -20,8 +22,8 @@ export const KEYMAP: Record<string, InputAction> = {
   KeyP: "pause",
   KeyF: "fullscreen",
 };
-/** what each action does, as the Controls screen tells it */
-export const ACTION_TEXT: Record<InputAction, string> = {
+/** what each of Kael's actions does, as the Controls screen tells it */
+const KAEL_ACTION_TEXT: Record<InputAction, string> = {
   left: "Walk left. Tap twice and hold to run",
   right: "Walk right. Tap twice and hold to run",
   up: "Jump",
@@ -36,6 +38,25 @@ export const ACTION_TEXT: Record<InputAction, string> = {
   mute: "Sound on or off",
   pause: "Pause and open the menu",
   fullscreen: "Fullscreen on or off",
+};
+/** the rites O cycles through, as the controls name them */
+export const RITE_NAMES = RITES.map((r) => r.name).join(", ");
+/** what each action does for each hero, as the Controls screen tells it; Ysra differs where her kit does */
+export const ACTION_TEXT: Record<KitId, Record<InputAction, string>> = {
+  kael: KAEL_ACTION_TEXT,
+  ysra: {
+    ...KAEL_ACTION_TEXT,
+    left: "Walk left. With Warpath, tap twice and hold to charge",
+    right: "Walk right. With Warpath, tap twice and hold to charge",
+    up: "Jump. One heavy jump, no double jump",
+    attack:
+      "Glaive string that pierces the whole line. Hold to wind a lunge, let go to lunge. With up a skyhook, with down a ground lash",
+    dash: "Hold to brace and block blows from the front. Press just before a blow to parry. With the side behind you held, step back",
+    run: "Charge toward the side held, once Warpath is learned",
+    warp: "Pole vault over foes. In the air, dive glaive first",
+    cast: "Call the selected rite, paid with Heat",
+    cycle: `Switch rite: ${RITE_NAMES}`,
+  },
 };
 /** keys inside the menu */
 export const MENU_KEYMAP: Record<string, MenuCommand> = {

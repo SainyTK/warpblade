@@ -8,10 +8,13 @@ import { game, hero, lights } from "../state";
 import { shake } from "../world";
 import { castCrystalNova } from "./crystalNova";
 import { castPhantomLegion } from "./phantomLegion";
+import { castPhoenixDive } from "./phoenixDive";
 import { castPyreWave } from "./pyreWave";
 import { castStarfall } from "./starfall";
+import { castSunspear } from "./sunspear";
 import { castTempest } from "./tempest";
 import { castThousandEdges } from "./thousandEdges";
+import { castVolcanicRift } from "./volcanicRift";
 
 const ULTIMATES: Record<UltimateId, (level: number) => void> = {
   crystalNova: castCrystalNova,
@@ -20,9 +23,12 @@ const ULTIMATES: Record<UltimateId, (level: number) => void> = {
   phantomLegion: castPhantomLegion,
   starfall: castStarfall,
   tempest: castTempest,
+  sunspear: castSunspear,
+  phoenixDive: castPhoenixDive,
+  volcanicRift: castVolcanicRift,
 };
 
-/** a burst of light from Kael, bigger each level, then the ultimate itself; level 4 lights up the sky */
+/** a burst of light from the hero, bigger each level, then the ultimate itself; level 4 lights up the sky */
 export function castUltimate(id: UltimateId, level: number): void {
   game.fx.push(createFloorRing(hero.x, hero.y, 24 + level * 14, skin.ramp, 0.5));
   lights.add(hero.x, hero.y - 18, 50 + level * 25, skin.ramp[3], 0.9, 0.5);

@@ -1,6 +1,9 @@
 import { AIR_STRING } from "../constants/combo";
 import { COMBO_BY_LEVEL, MAX_COMBO, MAX_LEVEL, XP_CURVE } from "../constants/progression";
 import { AGGRESSION, STAGE_WAVES, WAVE_SCALE } from "../constants/waves";
+import { GLAIVE_STRING_BONUS } from "../constants/ysra/glaive";
+import type { KitId } from "../types/kit";
+import type { Perk } from "../types/skill";
 
 /** air attacks Kael may make before he lands, from his ranks of the air string skill */
 export const airLimit = (ranks: Readonly<Record<string, number>>): number =>
@@ -22,6 +25,12 @@ export function comboLimit(level: number, flowing: boolean): number {
   let hits = 0;
   for (const [from, n] of COMBO_BY_LEVEL) if (level >= from) hits = n;
   return Math.min(MAX_COMBO, hits + (flowing ? 1 : 0));
+}
+
+/** the longest string of the hero being played: Kael's combo, or Ysra's glaive string, one blow longer at every level */
+export function stringLimit(kit: KitId, level: number, perks: ReadonlySet<Perk>): number {
+  if (kit === "ysra") return comboLimit(level, perks.has("longString")) + GLAIVE_STRING_BONUS;
+  return comboLimit(level, perks.has("flowingChain"));
 }
 
 /** how much a wave scales foe HP, foe damage, experience, and how much shorter foes' pauses and wind-ups get */

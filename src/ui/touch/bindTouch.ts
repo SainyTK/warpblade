@@ -1,7 +1,6 @@
 import "./touch.css";
-import { ELEMENTS } from "../../constants/combat";
 import { HAPTIC_MS, TOUCH_SCALE } from "../../constants/touch";
-import { game, hero } from "../../game/state";
+import { hero } from "../../game/state";
 import { haptics } from "../../services/haptics";
 import type { TouchButtonAction } from "../../types/touch";
 import { byId } from "../dom";
@@ -12,6 +11,7 @@ import { buttonLook } from "./buttonLook";
 import type { TouchController } from "./controller";
 import { drawButtonFace } from "./drawButtonFace";
 import { touchIcon } from "./icons";
+import { selectionKey, touchSelection } from "./selection";
 import { dropAll } from "./touchInput";
 import { isTouchMode, watchTouchMode } from "./touchMode";
 
@@ -78,13 +78,13 @@ export function syncTouch(fighting: boolean): void {
   if (level > b.chargeLevel) haptics.pulse(HAPTIC_MS.chargeLevel);
   b.chargeLevel = level;
   const pressed = b.pressed();
-  const element = ELEMENTS[game.spell];
+  const selection = touchSelection();
   b.ctl.buttons.forEach((button, i) => {
     const look = buttonLook(button.spec, pressed.has(button.spec.action));
     look.cooldown = Math.ceil(look.cooldown * COOLDOWN_STEPS) / COOLDOWN_STEPS;
-    const key = `${element}|${Object.values(look).join("|")}`;
+    const key = `${selectionKey(selection)}|${Object.values(look).join("|")}`;
     if (key === b.faces[i]) return;
     b.faces[i] = key;
-    drawButtonFace(button.face, look, touchIcon(button.spec.action, element), button.spec.action === "ultimate");
+    drawButtonFace(button.face, look, touchIcon(button.spec.action, selection), button.spec.action === "ultimate");
   });
 }

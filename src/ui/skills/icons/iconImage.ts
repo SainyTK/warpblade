@@ -7,6 +7,7 @@ import { BOON_ICONS } from "./boon";
 import { FUSION_ICONS } from "./fusion";
 import { PHANTOM_ICONS } from "./phantom";
 import { SHOP_ICONS } from "./shop";
+import { YSRA_ICONS } from "./ysra/index";
 
 const SIZE = 16;
 const OUTLINE = hex("#0a0612");
@@ -18,6 +19,7 @@ const ICONS: Record<string, (s: SpriteCanvas) => void> = {
   ...FUSION_ICONS,
   ...BOON_ICONS,
   ...SHOP_ICONS,
+  ...YSRA_ICONS,
 };
 const canvas = new SpriteCanvas(SIZE, SIZE, 0, 0);
 const cache = new Map<string, string>();

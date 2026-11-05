@@ -1,5 +1,6 @@
 import type { HeroColors } from "../constants/palette";
 import type { Color, Ramp } from "./color";
+import type { KitId } from "./kit";
 import type { SkillBranch, UltimateId } from "./skill";
 import type { Stats } from "./stats";
 
@@ -21,6 +22,8 @@ export interface HeroSkin {
 
 export interface CharacterDef {
   id: string;
+  /** whose controls, moves and states this hero plays with */
+  kit: KitId;
   name: string;
   /** shown under the name on the hero screen */
   title: string;

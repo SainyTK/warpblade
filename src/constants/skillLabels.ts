@@ -17,6 +17,9 @@ export const ULT_LABEL: Record<UltimateId, string> = {
   phantomLegion: "PHANTOM LEGION",
   starfall: "STARFALL",
   tempest: "TEMPEST",
+  sunspear: "SUNSPEAR",
+  phoenixDive: "PHOENIX DIVE",
+  volcanicRift: "VOLCANIC RIFT",
 };
 /** the kind line of a boon card */
 export const BOON_KIND = "Boon";

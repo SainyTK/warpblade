@@ -59,11 +59,12 @@ export function readSnapshot(page: Page): Promise<GameSnapshot> {
         tabs: [...document.querySelectorAll<HTMLElement>(selectors.hudTab)].map((tab) => ({
           id: tab.id,
           label: tab.textContent ?? "",
-          visible: !tab.hidden,
+          // a tab inside a hidden group (another hero's rites) is not on screen either
+          visible: tab.checkVisibility(),
           ready: !tab.classList.contains("wait"),
           selected: tab.classList.contains("on"),
         })),
-        ultVisible: Boolean(ult && !ult.hidden),
+        ultVisible: Boolean(ult?.checkVisibility()),
         ultPips: document.querySelectorAll(selectors.ultPip).length,
       },
       menu: {
