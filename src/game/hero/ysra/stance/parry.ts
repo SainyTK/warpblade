@@ -10,6 +10,7 @@ import { hasPerk } from "../../../progress";
 import { game, hero, lights } from "../../../state";
 import { hitStop } from "../../../world";
 import { skin } from "../../skin";
+import { refundStamina } from "../../stamina";
 import { emitYsra } from "../events";
 import { stance } from "./memory";
 
@@ -43,11 +44,13 @@ function knockAside(fromX: number): void {
   if (hasPerk("emberParry")) e.burn = Math.max(e.burn, BRACE.emberBurn);
 }
 
-/** a blow met in the parry window: no cost, the attacker knocked aside, a beat of slow motion, and Counter Thrust primed */
+/** a blow met in the parry window: no cost, stamina back, the attacker knocked aside, a beat of slow motion, and Counter
+ *  Thrust primed */
 export function parry(fromX: number): void {
   const h = hero;
   knockAside(fromX);
   stance.shield = BRACE.shieldTime;
+  refundStamina(BRACE.parryRefund);
   if (hasPerk("counterThrust")) stance.counter = BRACE.counterTime;
   h.st = BRACE_TIMES.parry;
   game.slow = BRACE.parrySlow;

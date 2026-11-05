@@ -80,15 +80,17 @@ export const BRACE = {
   bulwarkPush: 0.15,
   /** after a block or parry, more blows from the front in this long are taken without cost */
   shieldTime: 0.22,
+  /** stamina a parry gives back */
+  parryRefund: 25,
 } as const;
 
 /** L with a side held away: a low hop back that nothing touches at first */
 export const BACKSTEP = {
-  distance: 30,
+  distance: 36,
   /** pixels of the hop */
   hop: 5,
-  cost: 25,
-  guard: 0.12,
+  cost: 20,
+  guard: 0.15,
   /** a side held away that turned her this recently still counts as away */
   turnGrace: 0.15,
   /** the skid after the hop lands */
