@@ -30,6 +30,10 @@ import { seatMemories } from "../seatMemory";
 import { character, game, hero, progress, setCharacter } from "../state";
 import { writePick } from "./readPick";
 
+const HOST_LEFT = "The host left, so the room has closed.";
+/** added to the reason a room closed when it closed during a run, whose coins this player keeps */
+const COINS_KEPT = "Coins you picked up are in your bank.";
+
 /** A seat in a room hosted elsewhere: keys go to the host, the host's picture and HUD come back. */
 export class GuestSession {
   private link: GuestLink | null = null;
@@ -99,11 +103,13 @@ export class GuestSession {
         break;
       case "end":
         this.endRun(msg.coins);
+        // the host left mid-run: the room is gone, so there is no room to go back to
+        if (msg.outcome === "left") return this.close(HOST_LEFT, true);
         reportRun({ outcome: msg.outcome, wave: msg.wave, coins: msg.coins });
         updateRoom({ phase: "lobby" });
         break;
       case "closed":
-        this.close("The host left, so the room has closed. Coins you picked up are in your bank.");
+        this.close(HOST_LEFT);
         break;
     }
   }
@@ -209,8 +215,8 @@ export class GuestSession {
     game.mode = "play";
   }
 
-  /** leave, or be told the room is gone: coins picked up so far are kept */
-  close(reason = ""): void {
+  /** leave, or be told the room is gone: coins picked up so far are kept, and the reason says so */
+  close(reason = "", banked = this.playing): void {
     if (this.closed) return;
     this.closed = true;
     this.endRun(game.coins);
@@ -220,7 +226,7 @@ export class GuestSession {
     // say goodbye so the host lets this place go at once, and give it a moment to leave before the link closes
     link?.send({ t: "bye" });
     window.setTimeout(() => link?.close(), 300);
-    resetRoom(reason);
+    resetRoom(reason && banked ? `${reason} ${COINS_KEPT}` : reason);
     if (reason) openMenu("title", "coop");
   }
 }
