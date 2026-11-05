@@ -6,7 +6,7 @@ import { copyText } from "../../services/clipboard";
 import { saveHeroChoice } from "../../services/heroChoice";
 import { roomView } from "../../store/coop";
 import type { MenuView } from "../../types/menu";
-import { readRoomCode } from "../../utils/roomCode";
+import { readRoomCode, typedRoomCode } from "../../utils/roomCode";
 import { backItem } from "./backItem";
 import { hostRoom, inviteLink, joinRoom, leaveRoom, roomHeroChanged, startRoomRun } from "./coopActions";
 import { menuItem } from "./menuItem";
@@ -28,11 +28,14 @@ function joinRow(): HTMLElement {
   const input = el("input", "coop-code");
   input.dataset.nav = "";
   input.placeholder = "Room code";
-  input.maxLength = 5;
   input.autocomplete = "off";
   input.spellcheck = false;
   input.setAttribute("autocapitalize", "characters");
   input.setAttribute("aria-label", "Room code");
+  // a code typed or pasted with spaces, dashes or in lower case still fits the box
+  input.addEventListener("input", () => {
+    input.value = typedRoomCode(input.value);
+  });
   const error = el("p", "coop-error");
   const join = (): void => {
     const code = readRoomCode(input.value);
