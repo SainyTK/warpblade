@@ -2,6 +2,7 @@
    backdrop canvas continues the night scene around it, and the HUD, touch buttons and menu float on top.
    --art is the size of one art pixel in CSS pixels. One night-ruins look, dark only.
    The palette, fonts and base rules shared with the patch notes page live in tokens.css. */
+@import "./fonts.css";
 @import "./tokens.css";
 
 html,

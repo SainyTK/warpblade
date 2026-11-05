@@ -1,4 +1,3 @@
-import "./patches.css";
 import { SITE_PAGES } from "../../constants/sitePages";
 import type { Patch } from "../../types/patch";
 import { el } from "../dom";

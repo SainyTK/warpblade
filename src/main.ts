@@ -1,5 +1,3 @@
-import "./fonts";
-import "./styles.css";
 import { CHARACTERS } from "./constants/characters";
 import { H, MAX_FRAME, STEP, W } from "./constants/stage";
 import { game, setCharacter } from "./game/state";

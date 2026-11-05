@@ -1,5 +1,3 @@
-import "../../fonts";
-import "../../tokens.css";
 import { SITE_PAGES, type SitePageId } from "../../constants/sitePages";
 import { el, link } from "../dom";
 import { siteHeader } from "./siteHeader";
