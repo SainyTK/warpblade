@@ -146,6 +146,8 @@ export class HostSession {
     if (slot < 0) return this.refuse(peer, `That room is full: ${MAX_PLAYERS} players already.`);
     this.guests.set(peer, { slot, hero: heroById(hero).id, owned, lastSeen: performance.now() });
     this.link?.send(peer, { t: "welcome", slot });
+    // someone joining makes a note about someone leaving old news
+    updateRoom({ note: "" });
     this.publishLobby();
   }
 

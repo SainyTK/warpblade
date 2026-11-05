@@ -90,7 +90,9 @@ export class GuestSession {
         this.close(msg.reason);
         break;
       case "lobby":
-        updateRoom({ seats: msg.seats });
+        // someone joining makes a note about someone leaving old news
+        if (msg.seats.length > roomView().seats.length) updateRoom({ seats: msg.seats, note: "" });
+        else updateRoom({ seats: msg.seats });
         break;
       case "left":
         postNote(leftNote(msg.slot));
