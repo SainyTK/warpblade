@@ -69,5 +69,5 @@ export async function prepare(options: RunOptions): Promise<Night | null> {
   };
   await writeJson(files.context, ctx);
   console.log(`[studio] ${options.mode} run: ${kind} patch ${version} for ${options.date} on ${branch}`);
-  return { ctx, files, costs: {} };
+  return { ctx, files, costs: {}, sessionTotals: {} };
 }
