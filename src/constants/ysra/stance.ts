@@ -17,8 +17,10 @@ export const VAULT = {
   /** pixels from the press to the landing on flat floor */
   travel: 70,
   gravity: 1.35,
-  /** seconds between vaults, shown on the HUD tab */
-  cooldown: 1.2,
+  /** seconds between vaults, shown on the HUD tab; a little longer than a vault on flat floor takes, so vaults chain */
+  cooldown: 0.95,
+  /** nothing touches her from the plant until this many seconds past the top of the arc */
+  guardPastPeak: frame(3),
   /** Skyline: the second vault, thrown off the haft in the air, rises this much */
   airPeak: 24,
   /** the landing crouch after the flight, before she is free again */

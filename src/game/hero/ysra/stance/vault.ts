@@ -15,8 +15,11 @@ import { stance } from "./memory";
 /** the vault is in the air and has not landed */
 export const vaultFlying = (): boolean => hero.state === "vault" && stance.launched && !stance.landed;
 
-/** nothing touches her from the plant until the top of the arc */
-export const vaultGuarded = (): boolean => hero.state === "vault" && (!stance.launched || hero.vy < 0);
+/** nothing touches her from the plant until a moment past the top of the arc: the fall speed gravity builds in that moment */
+export const vaultGuarded = (): boolean =>
+  hero.state === "vault" &&
+  !stance.landed &&
+  (!stance.launched || (!hero.ground && hero.vy < HERO_MOVE.gravity * VAULT.gravity * VAULT.guardPastPeak));
 
 /** K on the floor: plant the glaive ahead, toward a held side; a press while it recharges is refused with a tick */
 export function startVault(): boolean {

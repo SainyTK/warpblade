@@ -15,7 +15,7 @@ export const YSRA: CharacterDef = {
   blurb:
     "A flame-temple guard with a long glaive. She vaults over foes, braces against their blows and builds Heat with every hit to spend on fire rites. Slower and tougher than Kael.",
   special: "pyreWave",
-  base: { ad: 13, ap: 7, hp: 130, mp: 80, stamina: 110, crit: 0.03, move: 0.93, aspd: 0.92, haste: 1 },
+  base: { ad: 13, ap: 7, hp: 130, mp: 80, stamina: 110, crit: 0.03, move: 1.1, aspd: 0.92, haste: 1 },
   growth: { ad: 0.8, ap: 0.4, hp: 7, mp: 1.5 },
   branches: [LANCE, BASTION, PYRE, FUSION, EVOLUTION],
   startRanks: { r_flare: 1 },
