@@ -81,7 +81,8 @@ export const GLACIER_BLOOM = {
 
 /** Thunderhead: a storm cloud over the strike that calls three more bolts */
 export const THUNDERHEAD = {
-  y: 22,
+  /** the cloud's centre, low enough to clear the HUD bars and text along the top of the stage */
+  y: 40,
   /** kept this far inside the stage edges */
   margin: 24,
   grow: 0.25,

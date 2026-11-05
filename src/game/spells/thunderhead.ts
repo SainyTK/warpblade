@@ -4,6 +4,7 @@ import { W } from "../../constants/stage";
 import { circle, glow, place } from "../../engine/frame";
 import type { Effect } from "../../types/effect";
 import type { Enemy } from "../../types/enemy";
+import { WHITE } from "../../utils/color";
 import { clamp, ease } from "../../utils/math";
 import { enemyCenter } from "../enemies/enemy";
 import { game } from "../state";
@@ -18,8 +19,8 @@ const PUFF: readonly (readonly [number, number, number])[] = [
   [10, 0.5, 4],
   [14.5, 2, 3],
 ];
-/** the underside sits this far under the puff's centre */
-const UNDERSIDE = T.height / 2;
+/** the lit underside, where the bolts leave the cloud, sits this far under the puff's centre */
+const UNDERSIDE = T.height / 2 + 2;
 
 const live = (): Enemy[] => game.enemies.filter((e) => e.hp > 0);
 
@@ -87,8 +88,11 @@ export function createThunderhead(x: number, ap: number): Effect {
       const a = 1 - clamp((t - last) / T.fade);
       const warned = T.strikes.some((s) => t >= s - T.warn && t < s);
       const under = warned ? V[4] : V[3];
+      const lip = warned ? WHITE : V[4];
       for (const [dx, dy, r] of PUFF) circle(cloud.x + dx * k, cloud.y + (dy - 1) * k, r * k, V[1], a);
-      for (const [dx, dy, r] of PUFF) circle(cloud.x + dx * k, cloud.y + (dy + 1.5) * k, r * k, under, a);
+      for (const [dx, dy, r] of PUFF) circle(cloud.x + dx * k, cloud.y + (dy + 2.5) * k, r * k, under, a);
+      // a bright lip along the lit underside, so the cloud reads as lit from below by its own bolts
+      for (const [dx, dy, r] of PUFF) circle(cloud.x + dx * k, cloud.y + (dy + 3) * k, r * 0.6 * k, lip, a);
       for (const [dx, dy, r] of PUFF) circle(cloud.x + dx * k, cloud.y + dy * k, r * k, V[0], a);
       glow(cloud.x, cloud.y + 2, T.light * k, V[2], flicker(t) * a * (warned ? 1.6 : 1));
     },
