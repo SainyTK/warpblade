@@ -101,6 +101,7 @@ export interface GameState {
   pickups: Pickup[];
   blazes: Blaze[];
   numbers: DamageNumber[];
+  /** the element Kael casts with I, an index into ELEMENTS; each co-op player keeps their own */
   spell: number;
   swing: number;
   banner: { text: string; time: number };
