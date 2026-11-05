@@ -44,6 +44,10 @@ export function setPickSource(next: PickSource | null): void {
 let options: PickOption[] = [];
 let selected = 0;
 let shownAt = 0;
+/** the pick the cards on the table were dealt for, so cards put away under a room's pause menu come back the same */
+let dealtFor = "";
+
+const pickKey = (): string => `${game.wave}:${progress.level}:${progress.picks}`;
 
 const locked = (): boolean => performance.now() - shownAt < INPUT_LOCK_MS;
 
@@ -63,6 +67,7 @@ function deal(): void {
   sub.textContent = more > 0 ? `Choose one. ${more} more pick${more === 1 ? "" : "s"} after this.` : "Choose one.";
   cards.dataset.count = String(options.length);
   cards.replaceChildren(...options.map((o, i) => pickCard(character, o, progress.ranks, i)));
+  dealtFor = pickKey();
   shownAt = performance.now();
   select(0);
 }
@@ -76,6 +81,7 @@ function close(): void {
 function take(index: number): void {
   const option = options[index];
   if (!option || locked()) return;
+  dealtFor = "";
   source.choose(option);
   sfx.learn();
   if (source.waiting()) deal();
@@ -124,5 +130,7 @@ export function syncPickDialog(): void {
   if (!source.waiting() || dialog.open) return;
   releaseAll();
   dialog.showModal();
-  deal();
+  if (dealtFor !== pickKey()) return deal();
+  shownAt = performance.now();
+  select(selected);
 }

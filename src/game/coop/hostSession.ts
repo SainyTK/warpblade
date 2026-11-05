@@ -175,7 +175,8 @@ export class HostSession {
       if (call) tuneVideoSender(call.peerConnection);
     }
     setPickSource({
-      waiting: () => game.mode === "pick" && progress.picks > 0,
+      // the cards step aside while the pause menu is open, since the room plays on under it
+      waiting: () => game.mode === "pick" && progress.picks > 0 && !isMenuOpen(),
       choose: (option) => this.run?.chooseHome(option),
     });
     this.last = performance.now();

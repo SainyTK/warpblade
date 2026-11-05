@@ -112,7 +112,8 @@ export class GuestSession {
     this.sentPicks = -1;
     watchInput((a, d) => this.link?.send({ t: "key", a, d }));
     setPickSource({
-      waiting: () => game.mode === "pick" && progress.picks > 0 && this.sentPicks < 0,
+      // the cards step aside while the pause menu is open, since the room plays on under it
+      waiting: () => game.mode === "pick" && progress.picks > 0 && this.sentPicks < 0 && !isMenuOpen(),
       choose: (option) => {
         this.sentPicks = progress.picks;
         this.link?.send({ t: "pick", pick: writePick(option) });
