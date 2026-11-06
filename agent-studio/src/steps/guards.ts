@@ -9,15 +9,11 @@ export function outside(paths: string[], allowed: (path: string) => boolean): st
 
 export const isProtected = (path: string) => PROTECTED_PATHS.some((p) => path === p || path.startsWith(p));
 
-/** refuse a patch that changes owner-only files or adds a runtime dependency */
+/** refuse a patch that changes owner-only files */
 export async function guardPatch(night: Night): Promise<void> {
   const { workdir, baseSha } = night.ctx;
   const touched = (await changedFiles(workdir, baseSha)).filter(isProtected);
   if (touched.length) throw new Error(`The patch changes owner-only files: ${touched.join(", ")}`);
-  const before = JSON.parse(await git(workdir, "show", `${baseSha}:package.json`)) as { dependencies?: object };
-  const after = JSON.parse(await git(workdir, "show", "HEAD:package.json")) as { dependencies?: object };
-  const added = Object.keys(after.dependencies ?? {}).filter((d) => !(d in (before.dependencies ?? {})));
-  if (added.length) throw new Error(`The patch adds runtime dependencies: ${added.join(", ")}`);
 }
 
 /** commit what an agent left uncommitted, so every step starts from a clean tree */

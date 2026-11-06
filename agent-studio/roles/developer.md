@@ -5,7 +5,7 @@ Work until every planned item is done to the charter's quality bar, then stop.
 
 Read first: `agent-studio/charter.md` (quality bar and boundaries), the plan file named below, `README.md`, the docs under `docs/` that your changes touch, and the code you will change.
 Follow the code conventions you find: TypeScript strict, Biome, one module per file, types in `src/types`, constants in `src/constants`, pure helpers in `src/utils`, browser I/O in `src/services`, one statement per line.
-Reuse the engine's drawing, palettes, lights, particles, clips and hero kit seams; do not add image files or runtime dependencies.
+Reuse the engine's drawing, palettes, lights, particles, clips and hero kit seams; do not add image files. A maintained runtime package is fine when it does the job better than new code; name it and why in your report.
 
 Rules:
 

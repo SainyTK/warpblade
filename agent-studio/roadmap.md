@@ -26,8 +26,6 @@ Order inside a list is priority order.
 
 Note for the owner: a playtest option to grant perks and set ranks at the start of a run would let bots measure evolutions directly.
 
-Note for the owner: the charter says no new runtime dependencies in the game, and co-op adds PeerJS (loaded only when a player hosts or joins a room) and relies on the public PeerJS broker. A self-hosted PeerServer and a TURN relay are open items in `docs/multiplayer.md`. Please confirm the charter exception or move those items onto the roadmap.
-
 ## Shipped
 
 - 0.3.0 Side by Side: co-op rooms for up to four players (feedback 10), the low HP glow and wounded idle (feedback 8), Ysra's mobility and survival pass (feedback 9), detailed heroes and foes at 640 by 360, and a fresh hero at the start of every run.

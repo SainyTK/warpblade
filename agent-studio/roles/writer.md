@@ -18,7 +18,7 @@ Write these files:
    - `sections`: only the sections that have entries. Each entry has a one-line `summary` of what it means for the player, a `context` with the studio's reason, and `changes` with exact before and after values taken from the diff, never guessed. Mark feedback IDs on the entries they answer.
    - `feedback`: every feedback item this patch addressed, with a neutral summary.
    - Use only media files that exist in `public/patches/<version>/`.
-2. `agent-studio/journal/<version>.md`: the director's memo, then a short "What shipped" list and the QA verdict summary. One sentence per line.
+2. `agent-studio/journal/<version>.md`: the director's memo, then a short "What shipped" list, each runtime dependency the developer report says was added and why, and the QA verdict summary. One sentence per line.
 3. `agent-studio/roadmap.md`: apply the plan's `roadmapNotes` and move shipped items to Shipped with the version.
 
 Style for everything players read: plain, warm, direct English.

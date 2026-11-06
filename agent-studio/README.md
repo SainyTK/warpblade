@@ -21,7 +21,7 @@ A night goes through these steps, each one an agent with its own instructions in
 9. Finalize: the version goes into `package.json`, every check runs again, and the patch is committed.
 10. Publish (live runs only): the branch merges into `main` through a pull request, which deploys the site, then a `v<version>` tag, a GitHub release with the patch notes and GIFs, and a studio comment on each feedback issue: closed when addressed, skipped or a duplicate, labelled `planned` when it is for later.
 
-The pipeline checks each step's work in code: owner-only files untouched, no new runtime dependencies, each agent only writing the files it owns, and the patch notes valid against `schemas/patch.schema.json` with every media file present.
+The pipeline checks each step's work in code: owner-only files untouched, each agent only writing the files it owns, and the patch notes valid against `schemas/patch.schema.json` with every media file present.
 A dry run does every step except Publish and leaves a `review.md` with every decision of the night.
 
 ## Files
