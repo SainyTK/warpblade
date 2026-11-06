@@ -1,8 +1,9 @@
 import type { RunOutcome, RunResult } from "../types/run";
 import { bankCoins } from "./coins";
 import { coop } from "./coopHooks";
+import { feat } from "./feat";
 import { resetRun } from "./run";
-import { game, hero } from "./state";
+import { character, game, hero } from "./state";
 
 /** The end of the last run, for the result screen. */
 let last: RunResult = { outcome: "fallen", wave: 0, coins: 0 };
@@ -18,6 +19,7 @@ export function onRunEnd(listener: (result: RunResult) => void): void {
 export function endRun(outcome: RunOutcome): void {
   const room = coop();
   if (room) return room.endRun(outcome);
+  feat({ kind: "runEnd", outcome, wave: game.wave, hero: character.id });
   const result = { outcome, wave: game.wave, coins: bankCoins() };
   resetRun("");
   hero.inv = 0;

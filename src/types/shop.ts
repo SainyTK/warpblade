@@ -1,3 +1,4 @@
+import type { TrackedStats } from "./achievement";
 import type { StatKey } from "./stats";
 
 /** a passive stat bought in levels, each level adding the same amount */
@@ -27,8 +28,13 @@ export interface ShopSkill {
 
 export type ShopItem = StatUpgrade | ShopSkill;
 
-/** what the player keeps between runs: the coin bank and the level of every item bought */
+/** what the player keeps between runs: the coin bank, the level of every item bought, heroes and achievements */
 export interface MetaSave {
   coins: number;
   owned: Record<string, number>;
+  /** heroes unlocked with coins; free heroes are never listed */
+  heroes: string[];
+  /** achievements earned, by id */
+  achievements: string[];
+  tracked: TrackedStats;
 }

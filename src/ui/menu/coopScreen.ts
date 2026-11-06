@@ -5,6 +5,7 @@ import { character, setCharacter } from "../../game/state";
 import { copyText } from "../../services/clipboard";
 import { saveHeroChoice } from "../../services/heroChoice";
 import { roomView } from "../../store/coop";
+import { heroUnlocked } from "../../store/meta";
 import type { MenuView } from "../../types/menu";
 import { readRoomCode, typedRoomCode } from "../../utils/roomCode";
 import { backItem } from "./backItem";
@@ -95,7 +96,7 @@ function playerList(): HTMLElement {
   return list;
 }
 
-/** this player's hero for the run: Left and Right or a press step through the heroes */
+/** this player's hero for the run: Left and Right or a press step through the heroes this player has unlocked */
 function heroRow(): HTMLButtonElement {
   const row = el("button", "menu-item option");
   row.type = "button";
@@ -103,8 +104,9 @@ function heroRow(): HTMLButtonElement {
   const value = el("span", "option-value", `< ${character.name} >`);
   row.append(el("span", "option-name", "Hero"), value);
   const step = (by: number): void => {
-    const i = CHARACTERS.indexOf(character);
-    const next = CHARACTERS[(i + by + CHARACTERS.length) % CHARACTERS.length];
+    const open = CHARACTERS.filter((c) => heroUnlocked(c.id));
+    const i = open.indexOf(character);
+    const next = open[(i + by + open.length) % open.length];
     setCharacter(next);
     saveHeroChoice(next.id);
     roomHeroChanged(next.id);

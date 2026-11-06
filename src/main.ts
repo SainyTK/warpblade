@@ -5,6 +5,8 @@ import { game, setCharacter } from "./game/state";
 import { stepGame } from "./game/step";
 import { loadBest } from "./services/bestScore";
 import { loadHeroChoice } from "./services/heroChoice";
+import { heroUnlocked } from "./store/meta";
+import { bindAchievementToasts } from "./ui/achievements/achievementToast";
 import { bindKeyboard } from "./ui/bindKeyboard";
 import { bindPauseButton } from "./ui/bindPauseButton";
 import { drawDangerGlow } from "./ui/dangerGlow";
@@ -19,7 +21,7 @@ import { bindPickDialog, syncPickDialog } from "./ui/skills/pickDialog";
 import { bindTouch, syncTouch } from "./ui/touch/bindTouch";
 
 game.best = loadBest();
-setCharacter(CHARACTERS.find((c) => c.id === loadHeroChoice()) ?? CHARACTERS[0]);
+setCharacter(CHARACTERS.find((c) => c.id === loadHeroChoice() && heroUnlocked(c.id)) ?? CHARACTERS[0]);
 preventZoom();
 fitStage();
 bindKeyboard();
@@ -27,6 +29,7 @@ bindTouch();
 bindPauseButton();
 bindPickDialog();
 bindMenu();
+bindAchievementToasts();
 openMenu("title");
 joinFromInvite();
 

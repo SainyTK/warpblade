@@ -8,6 +8,7 @@ import { dropCoins } from "./coins";
 import { endWaveOnLastKill } from "./endWave";
 import { enemyCenter } from "./enemies/enemy";
 import { kindOf } from "./enemies/kinds";
+import { feat } from "./feat";
 import { game, lights, particles, rng } from "./state";
 import { shake } from "./world";
 import { dropXp } from "./xpOrbs";
@@ -24,6 +25,7 @@ export function killEnemy(e: Enemy): void {
   const R = rng;
   const big = e.rank !== "minion";
   game.kills++;
+  feat({ kind: "kill", rank: e.rank });
   lights.add(x, y, big ? 110 : 56, S[4], 0.9, big ? 0.9 : 0.5);
   lights.add(x, y, 18, WHITE, 0.8, 0.1);
   for (let i = 0; i < (big ? 48 : 16); i++) {

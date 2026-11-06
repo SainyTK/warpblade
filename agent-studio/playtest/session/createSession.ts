@@ -2,7 +2,7 @@ import type { Browser } from "playwright-core";
 import { autopilot } from "../bots/autopilot";
 import { skilledPolicy } from "../bots/skilled";
 import { DEFAULT_VIEWPORT, FRAME_GRID_SHIM, NAME_SHIM } from "../constants/browser";
-import { CLOCK_START_MS, FRAME_MS } from "../constants/game";
+import { CLOCK_START_MS, FRAME_MS, PLAYTEST_STORAGE } from "../constants/game";
 import { readHeroes } from "../services/pageHeroes";
 import { readSnapshot } from "../services/pageSnapshot";
 import type { Session, SessionOptions } from "../types/session";
@@ -28,6 +28,7 @@ const LOAD_TIMEOUT_MS = 30_000;
 export async function createSession(browser: Browser, url: string, options: SessionOptions = {}): Promise<Session> {
   const context = await browser.newContext({ viewport: options.viewport ?? DEFAULT_VIEWPORT, deviceScaleFactor: 1 });
   await context.addInitScript(NAME_SHIM);
+  await context.addInitScript(({ key, value }) => localStorage.setItem(key, value), PLAYTEST_STORAGE);
   const page = await context.newPage();
   const errors: string[] = [];
   page.on("pageerror", (error) => errors.push(`page error: ${error.message}`));

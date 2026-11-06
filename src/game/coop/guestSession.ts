@@ -6,8 +6,9 @@ import { GAME_VERSION } from "../../constants/sitePages";
 import { MAX_FRAME } from "../../constants/stage";
 import { type GuestLink, joinRoom } from "../../services/coop/guestLink";
 import { loadHeroChoice } from "../../services/heroChoice";
+import { recordFeat } from "../../store/achievements";
 import { postNote, resetRoom, roomView, updateRoom } from "../../store/coop";
-import { addCoins, onMetaChange, ownedItems } from "../../store/meta";
+import { addCoins, heroUnlocked, onMetaChange, ownedItems } from "../../store/meta";
 import { settings } from "../../store/settings";
 import type { GuestHud, HostMessage } from "../../types/coop";
 import type { Enemy } from "../../types/enemy";
@@ -211,6 +212,7 @@ export class GuestSession {
     if (!this.playing) return;
     this.playing = false;
     addCoins(coins);
+    recordFeat({ kind: "banked", coins });
     setFrameDriver(null);
     syncCoopStatus(false);
     updateRoom({ downed: false, choosing: [], hostAway: false });
@@ -225,7 +227,7 @@ export class GuestSession {
     game.enemies = [];
     hero.state = "idle";
     hero.pose = STAND;
-    setCharacter(CHARACTERS.find((c) => c.id === loadHeroChoice()) ?? character);
+    setCharacter(CHARACTERS.find((c) => c.id === loadHeroChoice() && heroUnlocked(c.id)) ?? character);
     resetRun("");
     hero.inv = 0;
     game.mode = "play";
