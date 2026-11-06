@@ -145,6 +145,8 @@ function lobbyScreen(): MenuView {
     subtitle: `${players} of ${MAX_PLAYERS} players`,
     content,
     focus: host && players > 1 ? (actions.children[1] as HTMLElement) : undefined,
+    // a host joined by a first guest is ready to start: Start run takes focus then, and only then
+    state: host && players > 1 ? "ready" : "waiting",
   };
 }
 

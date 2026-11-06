@@ -1,6 +1,7 @@
 import Peer, { type DataConnection } from "peerjs";
-import { JOIN_TIMEOUT_MS, ROOM_PREFIX } from "../../constants/coop";
+import { JOIN_TIMEOUT_MS, ROOM_PREFIX, STREAM } from "../../constants/coop";
 import type { GuestMessage, HostMessage } from "../../types/coop";
+import { withStartBitrate } from "../../utils/startBitrate";
 import { peerErrorText } from "./peerErrors";
 
 export interface GuestEvents {
@@ -59,7 +60,7 @@ export function joinRoom(code: string, events: GuestEvents): Promise<GuestLink> 
     });
     peer.on("call", (call) => {
       call.on("stream", (media) => events.stream(media));
-      call.answer();
+      call.answer(undefined, { sdpTransform: (sdp: string) => withStartBitrate(sdp, STREAM.startKbps) });
     });
     peer.on("error", (err) => {
       if (joined && err.type !== "webrtc" && err.type !== "peer-unavailable") return;

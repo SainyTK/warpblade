@@ -17,7 +17,9 @@
   width: min(300px, 100%);
 }
 .coop-code {
+  /* no width of its own: an input's default of about 20 characters would stretch the menu past a phone's width */
   flex: 1;
+  width: 0;
   min-width: 0;
   min-height: 44px;
   padding: 0 12px;

@@ -10,7 +10,7 @@ The owner asked for this in issue #10 and pointed at [chocobo-racing-threejs](ht
 That game's online rooms run in the creator's tab, guests connect to it over WebRTC, and a small signaling server introduces them.
 Warpblade does the same, with one change: it uses [PeerJS](https://peerjs.com) and the free public PeerJS broker for the introduction.
 That keeps the game a static site on Vercel with no server of ours, at the cost of relying on a third-party broker (see Known limits).
-PeerJS is the game's only runtime dependency besides the fonts, and it loads only when a player opens Co-op.
+PeerJS is the game's only runtime dependency besides the fonts, and it loads only when a player hosts or joins a room.
 
 ## The host runs the game
 
@@ -35,6 +35,9 @@ Solo play sets no hooks, so every one of those call sites behaves as before, and
 A guest sends every key press and release to the host over a reliable WebRTC data channel, and the host feeds it into that player's input buffer.
 The host streams its game picture and sound to each guest as a WebRTC video call, drawn at 640 by 360 so each art pixel is a 2 by 2 block and the video's colour samples land on whole art pixels.
 The guest draws each video frame onto its own game canvas without smoothing.
+The video opens at 2 Mbit/s (`STREAM.startKbps` in `src/constants/coop.ts`), so the first seconds of a run are sharp.
+WebRTC would otherwise start near 300 kbit/s and ramp up.
+Only Chromium-based browsers read that start hint; in Safari and Firefox a guest's first seconds can still look soft.
 Fifteen times a second the host also sends each guest the per-player memory of their own hero, and the guest loads it into its own game state, so its HUD, touch controller and skill cards run on the game's own code.
 
 This differs from the reference, which sends the whole race state and interpolates it on every client.

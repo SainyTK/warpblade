@@ -12,6 +12,8 @@ line.hidden = true;
 
 /** how long a passing note, such as a player leaving, stays up */
 const NOTE_MS = 4000;
+/** the least space kept between the line and the HUD under it */
+const HUD_GAP = 8;
 let shown = "";
 
 const names = (slots: number[]): string => {
@@ -29,12 +31,25 @@ function message(now: number): string {
   return room.note && now - room.noteAt < NOTE_MS ? room.note : "";
 }
 
+/**
+ * One row across the window when the HUD sits above the stage with room under the line, as on a phone held upright;
+ * otherwise a narrow line between the HUD bars
+ */
+function fitLine(): void {
+  line.classList.remove("wide");
+  if (document.body.dataset.hud !== "outside") return;
+  line.classList.add("wide");
+  const hud = document.querySelector(".hud")?.getBoundingClientRect();
+  if (hud && line.getBoundingClientRect().bottom + HUD_GAP > hud.top) line.classList.remove("wide");
+}
+
 /** called every frame of a room's run; shown only while one plays and no menu covers the top of the screen */
 export function syncCoopStatus(playing: boolean): void {
   if (!line.isConnected) document.body.append(line);
   const room = roomView();
   const now = performance.now();
-  const next = playing ? `${room.you}|${message(now)}` : "";
+  const layout = `${window.innerWidth}x${window.innerHeight}|${document.body.dataset.hud}`;
+  const next = playing ? `${room.you}|${message(now)}|${layout}` : "";
   if (next === shown) return;
   shown = next;
   line.hidden = !playing;
@@ -42,4 +57,5 @@ export function syncCoopStatus(playing: boolean): void {
   tag.textContent = `P${room.you + 1}`;
   line.style.setProperty("--seat", SEAT_COLORS[room.you]);
   text.textContent = message(now);
+  fitLine();
 }

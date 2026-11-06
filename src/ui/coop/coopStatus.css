@@ -1,4 +1,4 @@
-/* A room's line under the pause button: this player's tag, and why they wait when they do. It follows the button, which sits at the top of the window even when the stage does not, as in a tall window. */
+/* A room's line under the pause button: this player's tag, and why they wait when they do. It follows the button, which sits at the top of the window even when the stage does not, as in a tall window. Beside the HUD bars it keeps narrow; coopStatus.ts widens it when the HUD sits lower. */
 .coop-status {
   position: fixed;
   z-index: 5;
@@ -42,4 +42,10 @@
     font-size: 12px;
     line-height: 1.2;
   }
+}
+/* a phone held upright: the HUD sits above the stage, so the line takes one row across the window */
+.coop-status.wide {
+  flex-direction: row;
+  gap: 8px;
+  max-width: calc(100vw - 16px);
 }
