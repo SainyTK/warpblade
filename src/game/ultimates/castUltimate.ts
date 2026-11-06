@@ -6,7 +6,9 @@ import { skin } from "../hero/skin";
 import { SKY_FLASH } from "../spells/lightning";
 import { game, hero, lights } from "../state";
 import { shake } from "../world";
+import { castBoltStorm } from "./boltStorm";
 import { castCrystalNova } from "./crystalNova";
+import { castDeadeye } from "./deadeye";
 import { castPhantomLegion } from "./phantomLegion";
 import { castPhoenixDive } from "./phoenixDive";
 import { castPyreWave } from "./pyreWave";
@@ -26,6 +28,8 @@ const ULTIMATES: Record<UltimateId, (level: number) => void> = {
   sunspear: castSunspear,
   phoenixDive: castPhoenixDive,
   volcanicRift: castVolcanicRift,
+  boltStorm: castBoltStorm,
+  deadeye: castDeadeye,
 };
 
 /** a burst of light from the hero, bigger each level, then the ultimate itself; level 4 lights up the sky */

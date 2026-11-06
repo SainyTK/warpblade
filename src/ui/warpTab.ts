@@ -1,4 +1,6 @@
+import { SNARE } from "../constants/sable/snare";
 import { VAULT } from "../constants/ysra/stance";
+import { sable } from "../game/hero/sable/memory";
 import { warpCooldown } from "../game/hero/warp";
 import { hasPerk } from "../game/progress";
 import { character, hero } from "../game/state";
@@ -6,7 +8,7 @@ import { byId } from "./dom";
 import { createRechargeTab } from "./rechargeTab";
 
 /**
- * The K tab: Kael's warp once Warp Strike is learned, Ysra's vault from the start. It shows the recharge,
+ * The K tab: Kael's warp once Warp Strike is learned, Ysra's vault from the start, Sable's snare (on I) from the start. It shows the recharge,
  * and jolts when a press is refused while it recharges.
  */
 const el = byId("warpTab");
@@ -15,12 +17,18 @@ const tab = createRechargeTab(el);
 let lastDenied = 0;
 
 export function updateWarpTab(): void {
-  const vault = character.kit === "ysra";
-  const label = vault ? "VAULT" : "WARP";
+  const kit = character.kit;
+  const vault = kit === "ysra";
+  const snare = kit === "sable";
+  const label = snare ? "SNARE" : vault ? "VAULT" : "WARP";
   if (el.textContent !== label) el.textContent = label;
-  const known = vault || hasPerk("warpStrike");
+  const known = vault || snare || hasPerk("warpStrike");
   if (el.hidden === known) el.hidden = !known;
-  tab.update(Math.min(1, hero.warpCd / (vault ? VAULT.cooldown : warpCooldown())));
-  if (hero.denied.warp > lastDenied) tab.jolt();
-  lastDenied = hero.denied.warp;
+  const recharge = snare
+    ? sable.snareCd / (hasPerk("twinSnare") ? SNARE.twinCooldown : SNARE.cooldown)
+    : hero.warpCd / (vault ? VAULT.cooldown : warpCooldown());
+  tab.update(Math.min(1, recharge));
+  const denied = snare ? hero.denied.cast : hero.denied.warp;
+  if (denied > lastDenied) tab.jolt();
+  lastDenied = denied;
 }

@@ -2,6 +2,7 @@ import type { Projectile } from "./effect";
 import type { Enemy } from "./enemy";
 import type { MoveId } from "./move";
 import type { Pose } from "./pose";
+import type { SableState } from "./sable";
 import type { Element } from "./spell";
 import type { Point } from "./world";
 import type { YsraClipName, YsraState } from "./ysra";
@@ -54,9 +55,10 @@ export type HeroState =
   | "hurt"
   | "dead"
   | "hang"
-  | YsraState;
+  | YsraState
+  | SableState;
 /** the states posed by their own keyed clip; the rest play an action clip */
-export type StateClipName = Exclude<HeroState, "move" | "cast" | "throw" | "warpStrike" | YsraState>;
+export type StateClipName = Exclude<HeroState, "move" | "cast" | "throw" | "warpStrike" | YsraState | SableState>;
 
 /** Where a warp goes: an enemy, a floating crystal, or a point in the air. */
 export interface WarpTarget {

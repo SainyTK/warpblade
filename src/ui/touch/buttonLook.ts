@@ -1,7 +1,11 @@
 import { STAMINA } from "../../constants/combat";
+import { HOP, SLIDE } from "../../constants/sable/moves";
+import { SNARE } from "../../constants/sable/snare";
 import { TOUCH_TEXT } from "../../constants/touch";
 import { ULT_LEVELS } from "../../constants/ultimate";
 import { VAULT } from "../../constants/ysra/stance";
+import { sable } from "../../game/hero/sable/memory";
+import { reloadShare } from "../../game/hero/sable/reload";
 import { castCost, knowsElement, selectedElement, spellRecharge } from "../../game/hero/spell";
 import { canPayDash } from "../../game/hero/stamina";
 import { canAffordUlt, ultRecharge } from "../../game/hero/ultimate";
@@ -43,6 +47,24 @@ function kaelLook(spec: TouchButtonSpec, look: ButtonLook): void {
   }
 }
 
+/** Sable's hop and slide need stamina, the snare MP and its recharge, the reload fills while she cranks */
+function sableLook(spec: TouchButtonSpec, look: ButtonLook): void {
+  switch (spec.action) {
+    case "dash":
+      look.ready = hero.stamina >= SLIDE.cost;
+      look.cooldown = look.ready ? 0 : 1 - hero.stamina / HOP.cost;
+      break;
+    case "cast":
+      look.ready = sable.snareCd <= 0 && hero.mp >= SNARE.mp;
+      look.cooldown = sable.snareCd / (hasPerk("twinSnare") ? SNARE.twinCooldown : SNARE.cooldown);
+      break;
+    case "cycle":
+      look.cooldown = sable.reload ? 1 - reloadShare() : 0;
+      break;
+    default:
+  }
+}
+
 /** Ysra's guard needs stamina, her vault waits out its recharge, and the rite fills as Heat comes to cover it */
 function ysraLook(spec: TouchButtonSpec, look: ButtonLook): void {
   switch (spec.action) {
@@ -74,7 +96,8 @@ export function buttonLook(spec: TouchButtonSpec, pressed: boolean): ButtonLook 
     look.affordable = progress.ultimate && !hero.ultCd ? ULT_LEVELS.filter((_, i) => canAffordUlt(i + 1)).length : 0;
     look.ready = look.affordable > 0;
     look.charge = chargeProgress();
-  } else if (character.kit === "ysra") ysraLook(spec, look);
+  } else if (character.kit === "sable") sableLook(spec, look);
+  else if (character.kit === "ysra") ysraLook(spec, look);
   else kaelLook(spec, look);
   return look;
 }

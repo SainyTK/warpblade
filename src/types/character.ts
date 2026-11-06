@@ -13,7 +13,7 @@ export interface HeroSkin {
    */
   head: readonly string[];
   headBack: readonly string[];
-  weapon: "sword" | "glaive";
+  weapon: "sword" | "glaive" | "crossbow";
   /** from the hand to the tip, in pixels */
   reach: number;
   /** slashes, floor rings, afterimages and sparks, dark to bright, seven steps */

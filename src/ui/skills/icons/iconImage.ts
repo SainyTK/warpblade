@@ -7,6 +7,7 @@ import { BOON_ICONS } from "./boon";
 import { EVOLUTION_ICONS } from "./evolution";
 import { FUSION_ICONS } from "./fusion";
 import { PHANTOM_ICONS } from "./phantom";
+import { SABLE_ICONS } from "./sable/index";
 import { SHOP_ICONS } from "./shop";
 import { YSRA_ICONS } from "./ysra/index";
 
@@ -22,6 +23,7 @@ const ICONS: Record<string, (s: SpriteCanvas) => void> = {
   ...BOON_ICONS,
   ...SHOP_ICONS,
   ...YSRA_ICONS,
+  ...SABLE_ICONS,
 };
 const canvas = new SpriteCanvas(SIZE, SIZE, 0, 0);
 const cache = new Map<string, string>();

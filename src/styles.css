@@ -150,6 +150,61 @@ body {
     border-color: var(--hp);
   }
 }
+/* Sable's quiver: one notch per bolt; while she reloads the track shows the crank's progress and the bright window */
+.bar.qv span {
+  color: var(--jade);
+}
+.bar.qv .fill {
+  background: var(--jade);
+  box-shadow: 0 0 6px var(--jade);
+}
+.bar.qv .track::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    to right,
+    transparent 0 calc(var(--bolt-share, 12.5%) - 1px),
+    var(--night) calc(var(--bolt-share, 12.5%) - 1px) var(--bolt-share, 12.5%)
+  );
+}
+.bar.qv .window,
+.bar.qv .needle {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  display: none;
+}
+.bar.qv.reloading .fill {
+  background: var(--line);
+  box-shadow: none;
+}
+.bar.qv.reloading .track::after {
+  display: none;
+}
+.bar.qv.reloading .window {
+  display: block;
+  background: var(--jade-bright);
+  opacity: 0.55;
+}
+.bar.qv.reloading .needle {
+  display: block;
+  width: 2px;
+  margin-left: -1px;
+  background: #fff;
+}
+.bar.qv.jammed .window {
+  background: var(--hp);
+  opacity: 0.35;
+}
+.bar.qv.primed .fill {
+  background: var(--jade-bright);
+  box-shadow: 0 0 8px var(--jade-bright);
+}
+.bar.qv.perfect .track {
+  border-color: var(--jade-bright);
+  box-shadow: 0 0 8px var(--jade-bright);
+}
 .bar.xp span {
   color: var(--brass);
   white-space: nowrap;
@@ -891,6 +946,10 @@ body[data-hud="outside"] .boss {
   background: rgba(255, 154, 58, 0.08);
   border-color: var(--fire);
 }
+.hero-card[data-hero="sable"]:focus {
+  background: rgba(110, 224, 160, 0.08);
+  border-color: var(--jade);
+}
 .hero-portrait {
   width: 128px;
   height: 112px;
@@ -934,6 +993,9 @@ body[data-hud="outside"] .boss {
 }
 .hero-card[data-hero="ysra"] .hero-bar span {
   background: var(--fire);
+}
+.hero-card[data-hero="sable"] .hero-bar span {
+  background: var(--jade);
 }
 .hero-traits,
 .hero-blurb {

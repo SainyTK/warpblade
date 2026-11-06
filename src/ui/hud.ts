@@ -9,6 +9,7 @@ import { xpToNext } from "../utils/progression";
 import { updateCoinCount } from "./coinCount";
 import { byId } from "./dom";
 import { updateHeatBar } from "./heatBar";
+import { updateQuiverBar } from "./quiverBar";
 import { createRechargeTab } from "./rechargeTab";
 import { updateRiteTabs } from "./riteTabs";
 import { updateSpellTabs } from "./spellTabs";
@@ -43,6 +44,7 @@ export function updateHud(): void {
   updateSpellTabs();
   updateRiteTabs();
   updateHeatBar();
+  updateQuiverBar();
   updateWarpTab();
   updateCoinCount();
   ultTab.update(ultRecharge());

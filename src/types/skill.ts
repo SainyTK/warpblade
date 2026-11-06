@@ -1,3 +1,4 @@
+import type { SablePerk } from "./sable";
 import type { Stats } from "./stats";
 import type { YsraPerk } from "./ysra";
 
@@ -41,7 +42,7 @@ export type KaelPerk =
   | "glacierBloom"
   | "thunderhead";
 /** Abilities a skill node switches on. */
-export type Perk = KaelPerk | YsraPerk;
+export type Perk = KaelPerk | YsraPerk | SablePerk;
 export type UltimateId =
   | "crystalNova"
   | "pyreWave"
@@ -51,11 +52,24 @@ export type UltimateId =
   | "tempest"
   | "sunspear"
   | "phoenixDive"
-  | "volcanicRift";
+  | "volcanicRift"
+  | "boltStorm"
+  | "deadeye";
 export type SkillKind = "combo" | "movement" | "spell" | "enhance" | "passive" | "ultimate" | "fusion" | "evolution";
 /** when a path pays off */
 export type Pace = "early" | "steady" | "late";
-export type BranchId = "blade" | "phantom" | "arcane" | "lance" | "bastion" | "pyre" | "fusion" | "evolution";
+export type BranchId =
+  | "blade"
+  | "phantom"
+  | "arcane"
+  | "lance"
+  | "bastion"
+  | "pyre"
+  | "marksman"
+  | "skirmish"
+  | "trapper"
+  | "fusion"
+  | "evolution";
 
 export interface SkillNode {
   id: string;
