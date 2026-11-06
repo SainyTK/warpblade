@@ -25,13 +25,14 @@ const SCREENS: Record<MenuScreen, (context: MenuContext) => MenuView> = {
   coop: coopScreen,
 };
 
-let shown: { context: MenuContext | null; screen: MenuScreen } = { context: null, screen: "main" };
+let shown: { context: MenuContext | null; screen: MenuScreen; state?: string } = { context: null, screen: "main" };
 
 export const menuBody = (): HTMLElement => body;
 
 /**
  * Draw the menu for the current state. On a new screen the entry the screen names takes focus, else the first one, or,
- * coming back to the main screen, the entry that opened the last one; redrawing the same screen keeps the focused entry.
+ * coming back to the main screen, the entry that opened the last one; redrawing the same screen keeps the focused entry,
+ * unless the screen says its state changed.
  */
 export function renderMenu(): void {
   const context = menuContext();
@@ -45,15 +46,16 @@ export function renderMenu(): void {
   }
   const entries = () => [...body.querySelectorAll<HTMLElement>("[data-nav]")];
   const same = shown.context === context && shown.screen === screen;
-  const keep = same ? entries().indexOf(document.activeElement as HTMLElement) : -1;
   const from = shown.context === context ? shown.screen : null;
+  const focused = entries().indexOf(document.activeElement as HTMLElement);
   const view = SCREENS[screen](context);
+  const keep = same && view.state === shown.state ? focused : -1;
   title.textContent = view.title;
   subtitle.replaceChildren(view.subtitle);
   root.dataset.screen = screen;
   root.dataset.context = context;
   body.replaceChildren(view.content);
-  shown = { context, screen };
+  shown = { context, screen, state: view.state };
   const list = entries();
   const back = list.find((el) => el.dataset.opens === from);
   focusEntry(keep >= 0 ? list[keep] : (back ?? view.focus ?? list[0]));

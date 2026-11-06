@@ -10,4 +10,6 @@ export interface MenuView {
   content: HTMLElement;
   /** the entry that takes focus when the screen opens, if not the first */
   focus?: HTMLElement;
+  /** what the screen is showing, such as a lobby with others in it; a redraw that changes it focuses as a new screen */
+  state?: string;
 }
