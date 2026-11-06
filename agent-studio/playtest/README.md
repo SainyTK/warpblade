@@ -133,8 +133,8 @@ A session has:
 - `advance(ms)`: let game time pass.
 - `press(key, ms)`, `hold(keys, ms)`, `tap(key)`, `keyDown(key)` and `keyUp(key)`: real key input, with key codes such as `KeyJ` and `Escape`; `KEYS` names them by action.
 - `waitFor(predicate, timeoutMs, label)`: advance until the predicate holds on a snapshot, or throw after that much game time.
-- `startRun(heroId)`: from any menu or mid-run, quit to the start menu if needed, then Start and the hero's card.
-  The hero screen is navigated by reading which card has focus.
+- `startRun(heroId)`: from any menu or mid-run, quit to the start menu if needed, then Start and the hero on the hero screen.
+  The hero screen is navigated by stepping right until its hero panel shows the hero (`data-hero`).
 - `choosePick(index)`: answer the open skill pick through the dialog's keys.
 - `jumpToWave(n)`: play on with the skilled bot until wave `n` starts.
   It throws if the hero falls first, which gets likely past wave 8 or so with the current bot.

@@ -20,8 +20,9 @@ A run that reaches wave 8 to 10 banks about 60 to 80 coins and a full clear abou
 Sable takes a few good runs, or one run past wave 20 with the achievement coins earned on the way.
 The ninth hero costs about seven full clears.
 
-On the hero screen a locked hero shows as a black silhouette with a padlock and the price, and the bank shows under the title.
-The first press asks "Unlock? Press again", the second one buys.
+The hero screen shows a roster of every hero over one panel for the hero in focus; Left and Right, or a tap on a tile, move through them.
+A locked hero shows as a black silhouette with a padlock, its panel shows the price, and the bank shows under the title.
+The first press asks "Unlock? Press again", the second one buys and makes the hero the choice.
 A press the bank cannot pay for shakes the price.
 A locked hero never starts a run.
 In a co-op lobby, Left and Right step only through the heroes this player has unlocked.

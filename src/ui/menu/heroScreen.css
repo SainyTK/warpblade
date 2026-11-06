@@ -1,0 +1,252 @@
+/* Hero screen: a roster of every hero over one panel for the hero in focus. Each hero brings its colour as --accent. */
+.menu[data-screen="hero"] .menu-panel {
+  width: min(720px, 100%);
+}
+.hero-screen {
+  width: 100%;
+}
+.hero-roster {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 6px;
+}
+.hero-tile {
+  position: relative;
+  width: 52px;
+  height: 52px;
+  padding: 0;
+  overflow: hidden;
+  background: rgba(12, 10, 24, 0.55);
+  border: 2px solid rgba(180, 168, 255, 0.18);
+  cursor: pointer;
+  outline: none;
+}
+/* the head and shoulders of the full portrait, at its own size */
+.hero-face {
+  position: absolute;
+  left: -37px;
+  top: -20px;
+  width: 128px;
+  height: 112px;
+  max-width: none;
+  image-rendering: pixelated;
+}
+.hero-tile[aria-current] {
+  background: color-mix(in srgb, var(--accent) 14%, rgba(12, 10, 24, 0.55));
+  border-color: var(--accent);
+}
+.hero-tile[data-locked] .hero-face {
+  filter: brightness(0);
+  opacity: 0.8;
+}
+.hero-tile .lock-icon {
+  position: absolute;
+  right: 3px;
+  bottom: 3px;
+  width: 14px;
+  height: 16px;
+  image-rendering: pixelated;
+}
+.hero-panel {
+  display: grid;
+  width: 100%;
+  padding: 14px 18px;
+  font: inherit;
+  color: var(--mist);
+  text-align: left;
+  background: rgba(12, 10, 24, 0.55);
+  border: 2px solid rgba(180, 168, 255, 0.18);
+  cursor: pointer;
+  outline: none;
+}
+.hero-panel:focus {
+  color: var(--text);
+  background: color-mix(in srgb, var(--accent) 8%, rgba(12, 10, 24, 0.55));
+  border-color: var(--accent);
+}
+/* every hero's page sits in the same cell, so the panel keeps the height of the tallest one while the player looks */
+.hero-page {
+  grid-area: 1 / 1;
+  display: grid;
+  grid-template-columns: 200px minmax(0, 1fr);
+  grid-template-areas:
+    "portrait name"
+    "portrait title"
+    "portrait stats"
+    "portrait traits"
+    "portrait blurb"
+    "portrait lock";
+  grid-template-rows: repeat(5, auto) 1fr;
+  align-content: start;
+  column-gap: 20px;
+  row-gap: 6px;
+}
+.hero-page:not([data-shown]) {
+  visibility: hidden;
+}
+/* at twice its size on a wide screen, with the empty edges of the image trimmed */
+.hero-portrait {
+  grid-area: portrait;
+  align-self: center;
+  justify-self: center;
+  width: 256px;
+  height: 224px;
+  margin: -16px -28px;
+  image-rendering: pixelated;
+}
+.hero-page[data-locked] .hero-portrait {
+  filter: brightness(0);
+  opacity: 0.8;
+}
+.hero-name {
+  grid-area: name;
+  font-family: var(--display);
+  font-size: 22px;
+  line-height: 1.2;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.hero-page[data-locked] .hero-name {
+  color: var(--mist);
+}
+.hero-title {
+  grid-area: title;
+  font-size: 13px;
+  color: var(--muted);
+}
+.hero-stats {
+  grid-area: stats;
+  display: grid;
+  gap: 3px;
+  width: 100%;
+  margin: 2px 0;
+}
+.hero-stats div {
+  display: grid;
+  grid-template-columns: 56px 1fr;
+  align-items: center;
+  gap: 8px;
+}
+.hero-stats dt {
+  font-size: 12px;
+}
+.hero-bar {
+  display: grid;
+  height: 6px;
+  margin: 0;
+  background: var(--line);
+}
+.hero-bar span,
+.hero-bar i {
+  grid-area: 1 / 1;
+  height: 100%;
+  background: var(--accent);
+}
+/* what the shop adds, lighter, behind the hero's own part of the bar */
+.hero-bar i {
+  background: var(--text);
+  opacity: 0.55;
+}
+.hero-traits,
+.hero-blurb {
+  margin: 0;
+  font-size: 12px;
+  line-height: 1.45;
+}
+.hero-traits {
+  grid-area: traits;
+  color: var(--text);
+}
+.hero-blurb {
+  grid-area: blurb;
+  color: var(--muted);
+}
+.hero-lock {
+  grid-area: lock;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--display);
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text);
+}
+.hero-lock .lock-icon {
+  width: 14px;
+  height: 16px;
+  image-rendering: pixelated;
+}
+.hero-lock .coins {
+  font-size: 14px;
+  letter-spacing: 0;
+}
+.hero-lock .coins.short {
+  color: var(--muted);
+}
+.hero-lock .coins.short .coin-icon {
+  opacity: 0.5;
+}
+.hero-panel[data-armed] .hero-lock {
+  color: var(--hp);
+}
+.hero-lock.deny {
+  animation: shop-deny 240ms steps(1) both;
+}
+/* a phone held upright: one column, centred */
+@media (max-width: 600px) and (min-height: 521px) {
+  .hero-panel {
+    padding: 12px 14px;
+    text-align: center;
+  }
+  .hero-page {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-areas: "portrait" "name" "title" "stats" "traits" "blurb" "lock";
+    grid-template-rows: repeat(6, auto) 1fr;
+    justify-items: center;
+  }
+  .hero-portrait {
+    width: 128px;
+    height: 112px;
+    margin: 0;
+  }
+  .hero-stats dt {
+    text-align: left;
+  }
+  .hero-lock {
+    align-self: start;
+  }
+}
+/* a phone on its side: the stats move beside the name and the blurb gives way, so the panel fits above Back */
+@media (max-height: 520px) {
+  .menu[data-screen="hero"] .menu-panel {
+    width: min(720px, 100%);
+  }
+  .hero-panel {
+    padding: 10px 14px;
+  }
+  .hero-page {
+    grid-template-columns: 128px minmax(0, 1fr) minmax(0, 1fr);
+    grid-template-areas:
+      "portrait name stats"
+      "portrait title stats"
+      "portrait traits stats"
+      "portrait lock stats";
+    grid-template-rows: auto auto auto 1fr;
+    column-gap: 16px;
+    row-gap: 4px;
+  }
+  .hero-portrait {
+    width: 128px;
+    height: 112px;
+    margin: 0;
+  }
+  .hero-stats {
+    align-self: center;
+    margin: 0;
+  }
+  .hero-blurb {
+    display: none;
+  }
+}

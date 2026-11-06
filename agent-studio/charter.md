@@ -84,6 +84,7 @@ Every new hero must:
 - Bring at least one achievement of its own (`src/constants/achievements.ts`, `docs/achievements.md`).
 - Get a real benefit from every shop item (`docs/meta-progress.md`).
 - Have its own skill tree, special and ultimates, code-drawn skill icons, its own look on the shared rig, and movement to `docs/motion-standard.md`.
+- Have its own menu colour, `accent` in its `CharacterDef`, which the hero screen uses for its tile, frame and stat bars; the hero screen needs no CSS per hero.
 - Work with the keyboard, the touch controller and the Controls screen, and in co-op (per-seat memory, `docs/multiplayer.md`).
 - Pass the playtest smoke check, with a mash bot death wave within two waves of the other heroes.
 - Have a design note in `docs/<hero>-design.md` that lists every hero already in the game and says how this one differs from each.
