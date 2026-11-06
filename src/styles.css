@@ -923,17 +923,24 @@ body[data-hud="outside"] .boss {
   text-align: left;
 }
 .hero-bar {
+  display: grid;
   height: 6px;
   margin: 0;
   background: var(--line);
 }
-.hero-bar span {
-  display: block;
+.hero-bar span,
+.hero-bar i {
+  grid-area: 1 / 1;
   height: 100%;
   background: var(--crystal);
 }
 .hero-card[data-hero="ysra"] .hero-bar span {
   background: var(--fire);
+}
+/* what the shop adds, lighter, behind the hero's own part of the bar */
+.hero-bar i {
+  background: var(--text);
+  opacity: 0.55;
 }
 .hero-traits,
 .hero-blurb {

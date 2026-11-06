@@ -10,13 +10,13 @@ Bought upgrades apply at the start of every run, on top of the level-up picks.
 Every slain foe drops coins: a wisp 1, a husk 2, a Rift Brute 8 and the Rift Warden 25 (`COIN_DROP` in `src/constants/coins.ts`).
 Since 0.2.0 every foe drops a quarter more on top of that (`COIN_BONUS`), and a fraction left over is a chance at one more coin.
 Lodestone's quarter adds to it, so an owner of Lodestone gets half again the base drop.
-Coins pop out of the foe, fall and bounce on the floor or a ledge, and Kael picks them up by touch.
-After 1.6 seconds any coin still lying around flies to him, so none is lost to a far corner.
+Coins pop out of the foe, fall and bounce on the floor or a ledge, and the hero picks them up by touch.
+After 1.6 seconds any coin still lying around flies to the hero, so none is lost to a far corner.
 When a run ends, coins still in flight are banked too.
 
 ## Run end
 
-When Kael falls or the stage is cleared, the run's coins are banked and the start menu opens on a result screen with the wave reached, the coins earned and the bank.
+When the hero falls or the stage is cleared, the run's coins are banked and the start menu opens on a result screen with the wave reached, the coins earned and the bank.
 Continue goes to the start menu, Shop goes straight to the shop.
 Start always begins a fresh run with everything bought so far.
 Restart run from the pause menu still starts over at once, and it banks the coins of the run it ends.
@@ -40,9 +40,32 @@ Each level costs 1.6 times the one before, rounded to 5 (`nextPrice` in `src/uti
 Skills are bought once and none of them is offered on level up:
 
 - Lodestone (60): coins fly to the hero after 0.3 seconds, and foes drop another quarter of their base (a fraction left over is a chance at one more coin).
-- Warp Shock (150): every warp strike of Kael's, including Blink Combo's, and every vault landing of Ysra's sends a ring out from the hero that hits each foe within 40 art pixels for 0.8 times attack damage and stuns it briefly.
+- Aftershock (150, saved under the id `warpShock`): every travel move the hero ends sends a ring out from the hero that hits each foe within 40 art pixels for 0.8 times attack damage and stuns it briefly.
+  For Kael that is every dash and every warp, Blink Combo's included; for Ysra every vault, dive and backstep.
 - Head Start (200): runs start at level 3 with two skill points, spent when wave 1 is cleared.
 - Last Light (300): the first fatal blow of a run leaves the hero standing with half their HP.
+
+## Every shop item helps every hero
+
+The shop is shared by every hero.
+One bank and one set of bought levels serve whichever hero starts the run, and no item names a hero or a hero's own move.
+The hero screen shows each hero's level 1 stats with what the shop adds as a lighter part of each bar.
+
+A new hero's kit keeps these promises, so every item works for it on day one:
+
+- Damage comes from `progress.stats.ad` (Honed Edge, Aftershock) and abilities scale with `progress.stats.ap` (Arcana).
+  Every blow goes through `dealDamage`, which rolls `progress.stats.crit` (Precision).
+- The kit spends MP on the shared ultimate and may spend more of it on its own abilities (Wellspring).
+  A hero with a resource of its own, such as Ysra's Heat, still charges the ultimate from MP.
+- The kit spends stamina on its defence or travel, such as a dash, a block or a backstep (Endurance).
+- Walking uses `progress.stats.move` through the shared physics; a move the kit drives itself scales with it where it makes sense (Light Boots).
+- Blows on the hero go through `hurtHero`, so Vitality's HP and Last Light apply.
+- The kit calls `travelEnded()` from `src/game/hero/travelEnd.ts` when each of its travel moves ends: a dash, a warp, a leap, a landing out of the air (Aftershock).
+  Shop skills that answer a hero's movement hook in there, never into one kit's code.
+- Coins, levels and Head Start live in shared code and need nothing from the kit.
+
+A new item follows the same rule: it changes a shared stat or hooks into a shared event, and its text says what it does without naming a hero.
+Item ids are saved, so a renamed item keeps its id.
 
 ## Pricing basis
 

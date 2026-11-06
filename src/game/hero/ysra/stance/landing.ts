@@ -10,7 +10,7 @@ import { hasPerk } from "../../../progress";
 import { game, hero, particles, progress, rng } from "../../../state";
 import { dust, newSwing, shake } from "../../../world";
 import { skin } from "../../skin";
-import { warpShock } from "../../warpShock";
+import { travelEnded } from "../../travelEnd";
 import { emitYsra } from "../events";
 
 /** where she came down from, for the land event */
@@ -42,10 +42,10 @@ function chips(n: number): void {
   }
 }
 
-/** she came down out of a vault or a dive: the land event, Earthshaker, and Warp Shock off a vault */
+/** she came down out of a vault or a dive: the land event, Earthshaker, and the end of a travel move */
 function landed(from: LandFrom): void {
   emitYsra("land", { x: hero.x, y: hero.y, from });
-  if (from === "vault") warpShock();
+  travelEnded();
   quake();
 }
 

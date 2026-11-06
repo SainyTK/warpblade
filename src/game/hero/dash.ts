@@ -8,6 +8,7 @@ import { isFree, leaveHang, setState, settle } from "./actions";
 import { dropDashGhost } from "./afterimages";
 import { endCombo } from "./combo";
 import { canPayDash, refuseDash, spendDashStamina } from "./stamina";
+import { travelEnded } from "./travelEnd";
 
 /** L: a short dash that nothing can touch, paid with stamina. On the ground only, until Jump Dash. It cancels attacks and casts. */
 export function tryDash(dir: number): boolean {
@@ -57,4 +58,5 @@ export function runDash(dt: number): void {
   h.vx *= 0.4;
   h.sinceDash = 0;
   settle();
+  travelEnded();
 }
