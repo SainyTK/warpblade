@@ -83,7 +83,6 @@ function land(blow: FistBlow): void {
     feel: f.stop ? { stop: f.stop, shake: f.shake ?? [0.12, 1.5], pitch: 0.75 } : undefined,
   });
   if (hits) gainGrit(GRIT.fist * hits);
-  if (blow === "haymaker") hero.vx = hero.face * 40;
 }
 
 /** the knuckle rush: a punch every few hundredths of a second, each its own swing */
@@ -102,6 +101,8 @@ export function runFist(dt: number): void {
   const h = hero;
   h.st += dt * (progress.stats.aspd - 1);
   const blow = currentBlow();
+  const f = FISTS[blow];
+  if (h.st >= f.stepAt && h.st - dt * progress.stats.aspd < f.stepAt + 1e-6) h.vx = h.face * f.step;
   if (blow === "knuckles") runKnuckles();
   else if (!hulda.struck && h.st >= FISTS[blow].hit) {
     hulda.struck = true;

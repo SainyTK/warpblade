@@ -10,6 +10,9 @@ export interface FistSpec {
   box: readonly [number, number, number, number];
   /** the arc a big blow leaves behind, in her ramp */
   arc?: SlashShape;
+  /** she steps in this fast (pixels a second, slowing on the floor) this long into the blow, to keep a foe in reach */
+  step: number;
+  stepAt: number;
   /** damage as a multiple of attack damage */
   power: number;
   kx: number;
@@ -34,13 +37,16 @@ const RISING = [0, -44, 14, -6] as const;
 
 /** the string from the start, then what Uppercut and Knuckle Rush add after the haymaker */
 export const FISTS: Record<FistBlow, FistSpec> = {
-  jab: { dur: frame(8), hit: frame(3), box: STRAIGHT, power: 0.55, kx: 40, ky: -10, stagger: 0.3 },
-  cross: { dur: frame(9), hit: frame(3), box: STRAIGHT, power: 0.65, kx: 60, ky: -10 },
-  hook: { dur: frame(11), hit: frame(5), box: STRAIGHT, power: 0.85, kx: 90, ky: -20, stagger: 0.6 },
+  jab: { dur: frame(8), hit: frame(3), box: STRAIGHT, step: 40, stepAt: 0, power: 0.55, kx: 40, ky: -10, stagger: 0.3 },
+  cross: { dur: frame(9), hit: frame(3), box: STRAIGHT, step: 50, stepAt: 0, power: 0.65, kx: 60, ky: -10 },
+  hook: { dur: frame(11), hit: frame(5), box: STRAIGHT, step: 50, stepAt: 0, power: 0.85, kx: 90, ky: -20, stagger: 0.6 },
   haymaker: {
     dur: frame(16),
     hit: frame(8),
     box: OVERHAND,
+    /** the lunge that carries the overhand into a foe the string has pushed back */
+    step: 130,
+    stepAt: frame(7),
     arc: { cx: 3, cy: -24, R: 17, sy: 0.85, rot: 0, a0: -2.5, a1: 0.45, W: 6, sweep: 0.04, trail: 0.16 },
     power: 1.4,
     kx: 240,
@@ -54,6 +60,8 @@ export const FISTS: Record<FistBlow, FistSpec> = {
     dur: frame(14),
     hit: frame(6),
     box: RISING,
+    step: 60,
+    stepAt: 0,
     arc: { cx: 5, cy: -22, R: 17, sy: 0.75, rot: 0.3, a0: 1.5, a1: -1.6, W: 6, sweep: 0.04, trail: 0.16 },
     power: 1.2,
     kx: 40,
@@ -62,7 +70,7 @@ export const FISTS: Record<FistBlow, FistSpec> = {
     heavy: true,
   },
   /** one of the knuckle rush's punches; `KNUCKLES` sets how many and how fast */
-  knuckles: { dur: frame(3), hit: frame(1), box: STRAIGHT, power: 0.35, kx: 30, ky: -5, stagger: 0.3 },
+  knuckles: { dur: frame(3), hit: frame(1), box: STRAIGHT, step: 30, stepAt: 0, power: 0.35, kx: 30, ky: -5, stagger: 0.3 },
 };
 
 /** the string's order from the start */
