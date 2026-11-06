@@ -10,22 +10,38 @@ const RUST = hex("#ff5f6d");
 const RUST_DARK = hex("#c43848");
 const PALE = hex("#ffc2b8");
 
-/** an iron gauntlet's fist side on, knuckle studs leading, the wrist wrapped */
+/** an iron gauntlet's fist side on: the wrapped wrist, finger bands, and white studs on the knuckles leading */
 const FIST: IconArt = {
-  rows: ["...IIIII..", "..IIIIIIW.", "WWIIIIIIIW", "WWIDDDIIW.", "WWIIIIII..", "...IIII..."],
-  colors: { I: IRON, D: IRON_DARK, W: WRAP },
+  rows: [
+    "....DIIIIID..",
+    "...DIIIIIIIDG",
+    "WWWDIIDIIDIIG",
+    "WWWDIIDIIDIIG",
+    "WWWDIIIIIIIIG",
+    "WWWDDIIIIIIDG",
+    "....DDDDDDDD.",
+  ],
+  colors: { I: IRON, D: IRON_DARK, W: WRAP, G: ICON_WHITE },
 };
 
-/** a shoulder lowered behind speed lines */
+/** a shoulder plate lowered into the charge, speed lines trailing behind it */
 const RUSH: IconArt = {
-  rows: ["....RRRR.", "RR.RRRRRR", "...RRRRRR", "RRR.RRRR.", "....DDD..", "RR..DDD.."],
-  colors: { R: RUST, D: RUST_DARK },
+  rows: [
+    "......PPPP..",
+    "....PPRRRRP.",
+    "LLL.PRRRRRRP",
+    "...PRRRRRRRP",
+    "LLLL.RRRRRRP",
+    ".....DDDDDD.",
+    "LL...DDDDD..",
+  ],
+  colors: { P: PALE, R: RUST, D: RUST_DARK, L: ICON_WHITE },
 };
 
-/** two open hands closing round a body */
+/** two gauntlets closing on a foe from either side, fingers curled in */
 const GRAB: IconArt = {
-  rows: ["II.....II", "II.....II", ".II.F.II.", "..IIFII..", "...FFF...", "...F.F..."],
-  colors: { I: IRON, F: PALE },
+  rows: ["IIII....IIII", "IDDI.FF.IDDI", "IIII.FF.IIII", ".II.FFFF.II.", "..I.FFFF.I..", ".....FF....."],
+  colors: { I: IRON, D: IRON_DARK, F: RUST },
 };
 
 /** rings rolling out from an open mouth */
