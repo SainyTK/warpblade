@@ -9,6 +9,7 @@ import { createEcho } from "./effects/echo";
 import { createImpact } from "./effects/impact";
 import { enemyBox, enemyCenter } from "./enemies/enemy";
 import { wallBounce } from "./enemies/wallBounce";
+import { feat } from "./feat";
 import { hasPerk } from "./progress";
 import { createLightning } from "./spells/lightning";
 import { game, hero, progress } from "./state";
@@ -90,6 +91,7 @@ export function meleeHit(boxes: readonly Box[], blow: Blow): number {
     shake(feel.shake[0], feel.shake[1]);
     sfx.hit(!!blow.big || riposte, feel.pitch);
     if (!hero.ground) hero.vy = Math.min(hero.vy, -40);
+    feat({ kind: "comboHit", moves: hero.chain });
   } else if (blocked) hitStop(0.04);
   return hits;
 }

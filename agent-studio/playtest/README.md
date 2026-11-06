@@ -20,6 +20,7 @@ Chromium comes from Playwright's install at `~/Library/Caches/ms-playwright/chro
 Set `PLAYTEST_CHROMIUM` to use another Chromium or Chrome executable.
 
 Every session is a fresh browser context, so storage starts empty: no shop upgrades, no saved hero choice and no best wave.
+Each session also sets `warpblade-playtest` in local storage before the game loads; the dev build then unlocks every hero, including those that cost coins, and tracks no achievements.
 Time in the page runs on Playwright's fake clock and moves only when the harness advances it.
 The game therefore steps the same way on every machine, and it usually runs three to four times faster than real time.
 `performance.now()` is rounded to the 16 ms frame grid so the game's 120 Hz steps line up with frames the same way in every session.

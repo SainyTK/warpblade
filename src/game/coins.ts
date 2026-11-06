@@ -10,6 +10,7 @@ import { PK } from "../types/particle";
 import { coinDrop } from "../utils/coins";
 import { clamp } from "../utils/math";
 import { coop } from "./coopHooks";
+import { feat } from "./feat";
 import { game, hero, particles, rng } from "./state";
 import { surfaceBelow } from "./world";
 
@@ -77,6 +78,7 @@ export function updateCoins(dt: number): void {
 export function bankCoins(): number {
   const earned = game.coins + game.coinDrops.length;
   addCoins(earned);
+  feat({ kind: "banked", coins: earned });
   game.coins = 0;
   game.coinDrops = [];
   return earned;

@@ -89,3 +89,4 @@ Meta progress is saved in local storage under `warpblade-meta-v1` (`src/services
 The version is part of the key, so a future change of shape starts from a fresh save.
 `parseMeta` in `src/utils/metaSave.ts` keeps only known items within their level limits and a whole, positive coin count; anything missing, corrupt or not JSON starts fresh.
 `src/store/meta.ts` is the one owner of the bank and the bought levels, and saves on every change.
+The same save holds the heroes unlocked with coins, the achievements earned and the stats they track (see `docs/achievements.md`); a save from before those fields loads with none of them.

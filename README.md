@@ -69,6 +69,10 @@ His crystal sword can be thrown, and wherever it lands, he follows.
   When a run ends, cleared or lost, its coins go to the bank and a result screen shows the wave reached and the coins earned.
   The Shop on the start menu sells stats in levels (HP, attack, ability power, MP, crit, move speed, stamina) and four skills bought once: Lodestone, Warp Shock, Head Start and Last Light.
   Everything bought applies to every run, on top of the level-up picks, and is saved in this browser.
+- **Achievements and hero unlocks.** Twenty achievements track goals across runs: waves reached, a clear of wave 10 with each hero, foes slain, long combos, perfect dodges, evolutions, coins banked and the Rift Warden.
+  Most pay coins, a few stay hidden as ??? until an earlier one is earned, and a small banner slides down when one is earned without stopping play.
+  The Achievements page on the start menu shows what each one asks, with a progress bar for those that count up, and the result screen names those a run earned.
+  Kael and Ysra are free; every newer hero is unlocked with coins on the hero screen, each one costing more than the last (see [docs/achievements.md](docs/achievements.md)).
 - **Two heroes.** Start opens the hero screen. Kael throws his crystal sword and appears where it lands; he is balanced and learns every ability from picks.
   Ysra, the ember lancer, is a flame-temple guard who woke when the braziers lit again.
   She shares Kael's rig and plays nothing like him: tougher and slower, with one heavy jump and no dash.
@@ -133,9 +137,9 @@ Hold Special to charge it: its ring fills one quarter per level, and you strike 
 Buttons dim while their action lacks MP or stamina or waits on a cooldown, and phones that support it give a short vibration on each press.
 The page holds still under your fingers: double taps, pinches and long presses never zoom, select text or open a menu.
 
-The game opens on a start menu with Start, Shop, Controls and Options.
+The game opens on a start menu with Start, Co-op, Shop, Achievements, Controls and Options.
 Start opens the hero screen: pick Kael, Ysra or Sable with `A` `D` or the arrows and begin with `J` or `Enter`.
-In the Shop, pick an item once to see "Buy?" and again to buy it.
+In the Shop, pick an item once to see "Buy?" and again to buy it; a locked hero on the hero screen asks the same way before it is unlocked.
 When a run ends, the start menu opens on its result, with Continue and Shop.
 Pausing adds Resume, Restart run and Quit run, and freezes the game until you resume.
 Move through the menu with the arrow keys or `W` `S`, pick with `J` or `Enter`, and go back with `Esc`; the mouse and touch work too.
@@ -213,7 +217,7 @@ src/
   engine/          the pixel renderer: frame buffers and painter, particles, lights, sprite canvas
   services/        Web Audio sound effects, saved options, best wave and shop progress in local storage, the Fullscreen API, vibration, the clipboard
     coop/          the PeerJS links of a co-op room's host and guests, and the game stream
-  store/           the player's options, the coin bank and shop purchases kept between runs, and the co-op room as the menu sees it
+  store/           the player's options, the coin bank, shop purchases, unlocked heroes and achievements kept between runs, achievement tracking, and the co-op room as the menu sees it
   game/            the simulation
     coop/          a co-op room: the host's run with every player's hero, the host and guest sessions, player tags
     hero/          poses, drawing, rope physics, combos and moves, dash, warp, ultimate charge, per-step update
@@ -227,13 +231,15 @@ src/
   site/            the patch notes page and its shared header and shell
   content/patches/ one JSON file per patch, read by the patch notes page
   ui/              HUD, level-up pick, menu, keyboard input, touch controller, stage sizing
-    menu/          start and pause menu: main, Shop, Co-op and its lobby, run result, Controls and Options screens
+    menu/          start and pause menu: main, Shop, Achievements, Co-op and its lobby, run result, Controls and Options screens
+    achievements/  an achievement row, its trophy, the earned banner and their styles
     coop/          the co-op line under the pause button
     shop/          one shop row and the shop's styles
 studio/            a local tool to pose Kael with the game's rig, draw effects and send them to agents (see studio/README.md)
 docs/
   combo-design.md  what the combo takes from Grand Chase and what it leaves out
   meta-progress.md coins, the shop items and the basis for their prices
+  achievements.md  the achievements, how they are tracked, hero unlock prices and how a new hero adds its own
   pick-pacing.md   when picks come, how long the skill pool lasts and Second Wind after it
   multiplayer.md   co-op rooms: who runs the game, what crosses the network, downs, picks, coins and what is left for later
   media/           README banner, gameplay GIF and screenshots

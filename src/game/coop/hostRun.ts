@@ -3,6 +3,7 @@ import { ENEMIES } from "../../constants/enemies";
 import { HEAD_START_LEVEL } from "../../constants/shopSkills";
 import { GROUND } from "../../constants/stage";
 import { track } from "../../services/analytics";
+import { recordFeat } from "../../store/achievements";
 import { addCoins, ownsSkill, wearOwned } from "../../store/meta";
 import type { CharacterDef } from "../../types/character";
 import type { GuestHud, PickWire } from "../../types/coop";
@@ -246,6 +247,7 @@ export class HostRun implements CoopHooks {
     game.coinDrops = [];
     this.close();
     addCoins(coins.get(this.home) ?? 0);
+    recordFeat({ kind: "banked", coins: coins.get(this.home) ?? 0 });
     resetRun("");
     hero.inv = 0;
     this.events.ended(outcome, wave, coins);

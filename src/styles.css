@@ -836,7 +836,9 @@ body[data-hud="outside"] .boss {
     min-height: 38px;
     font-size: 16px;
   }
+  /* six entries and the footer fit a phone on its side */
   .menu[data-context="title"][data-screen="main"] .menu-item {
+    min-height: 34px;
     font-size: 20px;
   }
 }
@@ -919,9 +921,17 @@ body[data-hud="outside"] .boss {
 /* Hero screen: one card per hero, side by side, after Start. */
 .hero-cards {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-auto-flow: column;
+  grid-auto-columns: minmax(0, 1fr);
   gap: 12px;
   width: min(620px, 100%);
+}
+/* a third hero widens the panel so every card stays in one row */
+.menu[data-screen="hero"] .menu-panel:has(.hero-card:nth-child(3)) {
+  width: min(720px, 100%);
+}
+.menu[data-screen="hero"] .hero-cards:has(.hero-card:nth-child(3)) {
+  width: 100%;
 }
 .hero-card {
   display: grid;
@@ -999,6 +1009,44 @@ body[data-hud="outside"] .boss {
 .hero-card[data-hero="sable"] .hero-bar span {
   background: var(--jade);
 }
+.hero-card[data-locked] .hero-portrait {
+  filter: brightness(0);
+  opacity: 0.8;
+}
+.hero-card[data-locked] .hero-name {
+  color: var(--mist);
+}
+.hero-lock {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--display);
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text);
+}
+.hero-lock .lock-icon {
+  width: 14px;
+  height: 16px;
+  image-rendering: pixelated;
+}
+.hero-lock .coins {
+  font-size: 14px;
+  letter-spacing: 0;
+}
+.hero-lock .coins.short {
+  color: var(--muted);
+}
+.hero-lock .coins.short .coin-icon {
+  opacity: 0.5;
+}
+.hero-card[data-armed] .hero-lock {
+  color: var(--hp);
+}
+.hero-lock.deny {
+  animation: shop-deny 240ms steps(1) both;
+}
 /* what the shop adds, lighter, behind the hero's own part of the bar */
 .hero-bar i {
   background: var(--text);
@@ -1025,6 +1073,42 @@ body[data-hud="outside"] .boss {
     display: none;
   }
 }
+/* a phone held upright with three heroes or more: the cards stack, each with the portrait beside the name */
+@media (max-width: 600px) and (min-height: 521px) {
+  .hero-cards:has(.hero-card:nth-child(3)) {
+    grid-auto-flow: row;
+  }
+  .hero-cards:has(.hero-card:nth-child(3)) .hero-card {
+    grid-template-columns: 64px 1fr;
+    column-gap: 10px;
+    row-gap: 4px;
+    justify-items: start;
+    padding: 8px 12px 10px;
+    text-align: left;
+  }
+  .hero-cards:has(.hero-card:nth-child(3)) .hero-portrait {
+    grid-row: span 2;
+  }
+  .hero-cards:has(.hero-card:nth-child(3)) .hero-name {
+    align-self: end;
+  }
+  .hero-cards:has(.hero-card:nth-child(3)) .hero-title {
+    align-self: start;
+  }
+  .hero-cards:has(.hero-card:nth-child(3)) :is(.hero-stats, .hero-traits, .hero-lock) {
+    grid-column: 1 / -1;
+  }
+  .hero-cards:has(.hero-card:nth-child(3)) .hero-stats {
+    gap: 1px;
+    margin: 0;
+  }
+  .hero-cards:has(.hero-card:nth-child(3)) .hero-stats dt {
+    line-height: 1.3;
+  }
+  .menu[data-screen="hero"] .menu-main:has(.hero-card:nth-child(3)) {
+    gap: 10px;
+  }
+}
 /* a phone on its side: the portrait beside the name, and tighter rows, so both cards fit above Back */
 @media (max-height: 520px) {
   .menu[data-screen="hero"] .menu-panel {
@@ -1048,7 +1132,8 @@ body[data-hud="outside"] .boss {
     align-self: start;
   }
   .hero-stats,
-  .hero-traits {
+  .hero-traits,
+  .hero-lock {
     grid-column: 1 / -1;
   }
   .hero-stats {

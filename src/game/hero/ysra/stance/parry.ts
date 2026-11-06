@@ -6,6 +6,7 @@ import { cue } from "../../../cue";
 import { createFloorRing } from "../../../effects/floorRing";
 import { createImpact } from "../../../effects/impact";
 import { enemyCenter } from "../../../enemies/enemy";
+import { feat } from "../../../feat";
 import { hasPerk } from "../../../progress";
 import { game, hero, lights } from "../../../state";
 import { hitStop } from "../../../world";
@@ -49,6 +50,7 @@ function knockAside(fromX: number): void {
 export function parry(fromX: number): void {
   const h = hero;
   knockAside(fromX);
+  feat({ kind: "perfect" });
   stance.shield = BRACE.shieldTime;
   refundStamina(BRACE.parryRefund);
   if (hasPerk("counterThrust")) stance.counter = BRACE.counterTime;

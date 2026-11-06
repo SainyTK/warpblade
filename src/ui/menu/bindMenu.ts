@@ -28,6 +28,8 @@ export function bindMenu(): void {
   onSettingsChange(redrawOn("options"));
   onFullscreenChange(redrawOn("options"));
   onMetaChange(redrawOn("shop"));
+  onMetaChange(redrawOn("hero"));
+  onMetaChange(redrawOn("achievements"));
   onRoomChange(redrawOn("coop"));
   // a run that ends, cleared or lost, comes back to the start menu with its result
   onRunEnd(() => openMenu("title", "result"));

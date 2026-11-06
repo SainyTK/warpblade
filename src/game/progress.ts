@@ -8,6 +8,7 @@ import { airLimit, stringLimit, xpToNext } from "../utils/progression";
 import { collectPerks, computeStats, learnedUltimate } from "../utils/stats";
 import { createFloorRing } from "./effects/floorRing";
 import { forgetEvolutions, queueEvolution } from "./evolve";
+import { feat } from "./feat";
 import { keepElementLearned } from "./hero/spell";
 import { character, freshProgress, game, hero, lights, particles, progress, rng, showBanner } from "./state";
 
@@ -90,8 +91,10 @@ function takeBoon(): void {
 
 /** spend one skill point on a card; the game plays on once none is left */
 export function choosePick(option: PickOption): void {
-  if (option.type === "skill") addRank(option.node.id);
-  else takeBoon();
+  if (option.type === "skill") {
+    addRank(option.node.id);
+    feat({ kind: "learned", skill: option.node.kind });
+  } else takeBoon();
   if (option.type === "skill" && option.node.kind === "evolution") queueEvolution(option.node);
   progress.picks = Math.max(0, progress.picks - 1);
   if (!progress.picks && game.mode === "pick") game.mode = "play";
