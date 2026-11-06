@@ -2,6 +2,7 @@ import { DOWN_DELAY, RISE_HP } from "../../constants/coop";
 import { ENEMIES } from "../../constants/enemies";
 import { HEAD_START_LEVEL } from "../../constants/shopSkills";
 import { GROUND } from "../../constants/stage";
+import { track } from "../../services/analytics";
 import { addCoins, ownsSkill, wearOwned } from "../../store/meta";
 import type { CharacterDef } from "../../types/character";
 import type { GuestHud, PickWire } from "../../types/coop";
@@ -63,6 +64,7 @@ export class HostRun implements CoopHooks {
       this.startSeat(seat);
     }
     this.enter(this.home);
+    track("run_start", { hero: this.home.character.id, coop: true, players: this.seats.length });
   }
 
   /** a fresh hero at their own spot, with Head Start if their shop has it */

@@ -6,12 +6,13 @@ Order inside a list is priority order.
 
 ## Next big patches
 
+- Hero sprint (charter): one new hero every night until the game has ten. Each one plays completely differently from the rest. (Grand Chase, pillar 2)
+
 - Evolutions round two: Ysra's Flare and Brazier, Kael's Warp Strike, a blade or glaive combo evolution, and ultimate evolutions, using the same evolves and mastered fields. (Vampire Survivors, pillar 3)
 - New system: class advancement. Each hero unlocks a second job after clearing the stage once, changing part of the combo, the special and the look. (Grand Chase, pillars 2 and 4)
 - Co-op round two: player names, rejoining a run, a guest joining between waves, hit-stop that freezes only the striking hero and its foes, and client-side prediction for the guest's own hero. (pillars 1 and 4, feedback 10)
-- New system: achievements and unlocks. Goals such as "clear wave 15 with Ysra" unlock shop items, a hero or a stage, with a collection screen. The collection records evolutions found and shows their recipes once found. (Vampire Survivors, pillar 4)
+- Achievements round two: a collection screen that records evolutions found and shows their recipes once found, and achievements that unlock shop items or a stage. (Vampire Survivors, pillar 4)
 - New stage: a second stage with its own eras, platforms and hazards, unlocked by clearing the first. (Grand Chase dungeons, pillar 4)
-- New hero: a third hero with ranged play and its own resource, unlocked through an achievement. (Grand Chase, pillar 2)
 - New boss: a mid-stage boss with readable phases for wave 15, replacing a mini boss. (Grand Chase, pillar 1)
 - Run modifiers: curses chosen before a run that make foes stronger for more coins. (Vampire Survivors, pillar 4)
 
