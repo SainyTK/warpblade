@@ -53,7 +53,7 @@ export const SHOP_ITEMS: readonly ShopItem[] = [
     kind: "skill",
     id: "lodestone",
     name: "Lodestone",
-    text: "Coins fly to Kael at once, and foes drop a quarter more.",
+    text: "Coins fly to your hero at once, and foes drop a quarter more.",
     price: 60,
   },
   {
@@ -74,7 +74,7 @@ export const SHOP_ITEMS: readonly ShopItem[] = [
     kind: "skill",
     id: "lastLight",
     name: "Last Light",
-    text: "Once per run, a fatal blow leaves Kael standing with half his HP.",
+    text: "Once per run, a fatal blow leaves your hero standing with half their HP.",
     price: 300,
   },
 ];

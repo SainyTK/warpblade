@@ -39,10 +39,10 @@ Each level costs 1.6 times the one before, rounded to 5 (`nextPrice` in `src/uti
 
 Skills are bought once and none of them is offered on level up:
 
-- Lodestone (60): coins fly to Kael after 0.3 seconds, and foes drop another quarter of their base (a fraction left over is a chance at one more coin).
-- Warp Shock (150): every warp strike, including Blink Combo's, sends a ring out from Kael that hits each foe within 40 art pixels for 0.8 times attack damage and stuns it briefly.
+- Lodestone (60): coins fly to the hero after 0.3 seconds, and foes drop another quarter of their base (a fraction left over is a chance at one more coin).
+- Warp Shock (150): every warp strike of Kael's, including Blink Combo's, and every vault landing of Ysra's sends a ring out from the hero that hits each foe within 40 art pixels for 0.8 times attack damage and stuns it briefly.
 - Head Start (200): runs start at level 3 with two skill points, spent when wave 1 is cleared.
-- Last Light (300): the first fatal blow of a run leaves Kael standing with half his HP.
+- Last Light (300): the first fatal blow of a run leaves the hero standing with half their HP.
 
 ## Pricing basis
 
