@@ -10,7 +10,7 @@ The owner asked for this in issue #10 and pointed at [chocobo-racing-threejs](ht
 That game's online rooms run in the creator's tab, guests connect to it over WebRTC, and a small signaling server introduces them.
 Warpblade does the same, with one change: it uses [PeerJS](https://peerjs.com) and the free public PeerJS broker for the introduction.
 That keeps the game a static site on Vercel with no server of ours, at the cost of relying on a third-party broker (see Known limits).
-PeerJS is the game's only runtime dependency besides the fonts, and it loads only when a player opens Co-op.
+PeerJS is the game's only runtime dependency besides the fonts, and it loads only when a player hosts or joins a room.
 
 ## The host runs the game
 

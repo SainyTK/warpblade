@@ -164,7 +164,7 @@ npm run dev
 Other commands: `npm run build`, `npm run preview`, `npm run typecheck`, `npm run lint`, `npm run format`.
 
 The stack is TypeScript, Vite and Biome.
-The only runtime dependencies are three web fonts and [PeerJS](https://peerjs.com), which loads only when a player opens Co-op.
+The only runtime dependencies are three web fonts and [PeerJS](https://peerjs.com), which loads only when a player hosts or joins a room.
 
 To pose Kael, draw effects and hand them to Claude Code agents, run the local [studio](studio/README.md).
 
