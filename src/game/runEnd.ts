@@ -1,8 +1,9 @@
+import { track } from "../services/analytics";
 import type { RunOutcome, RunResult } from "../types/run";
 import { bankCoins } from "./coins";
 import { coop } from "./coopHooks";
 import { resetRun } from "./run";
-import { game, hero } from "./state";
+import { character, game, hero } from "./state";
 
 /** The end of the last run, for the result screen. */
 let last: RunResult = { outcome: "fallen", wave: 0, coins: 0 };
@@ -27,5 +28,6 @@ export function endRun(outcome: RunOutcome): void {
 /** show a finished run's result; a co-op room reports its own runs here */
 export function reportRun(result: RunResult): void {
   last = result;
+  track("run_end", { hero: character.id, outcome: result.outcome, wave: result.wave, coins: result.coins });
   for (const listener of listeners) listener(last);
 }
