@@ -60,7 +60,7 @@ His crystal sword can be thrown, and wherever it lands, he follows.
   The cards of a skill and its partner say what they evolve into, and an evolved skill's HUD tab gets a gold top edge.
 - **Charged ultimates.** Crystal Nova, the weakest, can be learned from level 3; stronger ones replace it: a storm of blades, a legion of phantoms, falling stars or a lightning tempest.
   Hold U through four levels; level 4 spends a full MP bar. After a strike the ultimate recharges for 20 seconds, the longest wait of any ability, and its row on the HUD dims with a bar filling under it.
-- **Experience to pick up.** Slain foes drop lime orbs of experience that bounce on the floor. Walk over them to collect them; any left behind fly to Kael after 4 seconds.
+- **Experience to pick up.** Slain foes drop lime orbs of experience that bounce on the floor. Walk over them to collect them; any left behind fly to the hero after 4 seconds, or in a room to the nearest standing hero.
   Levels take twice the experience they used to, so a full run ends around level 18. Heal and MP orbs drop half as often, so sword hits are the main way to refill MP.
 - **Three elements.** Each is its own pick: a flask of fire that sets the floor burning, a running line of ice spikes that freezes, and lightning that arcs to a second foe.
   Each element recharges on its own after a cast, bolt fastest and ice slowest, and every cast makes the other two wait a moment too, so switching elements pays but spamming does not.
