@@ -1,6 +1,8 @@
 import { ENEMIES } from "../../../constants/enemies";
 import { HOLD } from "../../../constants/hulda/grab";
 import type { Enemy } from "../../../types/enemy";
+import { clamp } from "../../../utils/math";
+import { enemyBox } from "../../enemies/enemy";
 import { kindOf } from "../../enemies/kinds";
 import { hasPerk } from "../../progress";
 import { hero } from "../../state";
@@ -16,10 +18,21 @@ export const canHold = (e: Enemy): boolean => e.hp > 0 && ENEMIES[e.type].launch
 /** seconds a hold lasts, longer with Iron Grip */
 export const holdTime = (): number => (hasPerk("ironGrip") ? HOLD.gripTime : HOLD.time);
 
-/** put the held foe where her hands are, frozen in place so its own update leaves it there */
+/** half the width of a foe's body, so a big foe is held at arm's length and a small one close */
+function halfWidth(e: Enemy): number {
+  const [x0, , x1] = enemyBox(e);
+  return (x1 - x0) / 2;
+}
+
+/**
+ * Put the held foe where her hands are, frozen in place so its own update leaves it there. `ahead` is how far its near
+ * side sits from her hands' reach; a negative value swings it behind her.
+ */
 export function pin(e: Enemy, ahead: number = HOLD.ahead, lift = 0): void {
   const flies = kindOf(e.type).flies;
-  e.x = hero.x + hero.face * ahead;
+  const body = Math.max(0, halfWidth(e) - HOLD.grip);
+  // the body offset scales with `ahead`, so a foe swung over her head crosses smoothly to the other side
+  e.x = hero.x + hero.face * (ahead + clamp(ahead / HOLD.ahead, -1, 1) * body);
   e.y = hero.y + (flies ? HOLD.flierY : HOLD.walkerY) - lift;
   e.vx = 0;
   e.vy = 0;

@@ -28,7 +28,7 @@ export function createBellowRing(x: number, y: number, caught: readonly Enemy[],
       for (let i = 0; i < 3; i++) {
         const u = (t - i * BELLOW.ringGap) / BELLOW.ringTime;
         if (u <= 0 || u >= 1) continue;
-        const r = BELLOW.reach * ease.outCubic(u);
+        const r = BELLOW.reach * ease.outQuad(u);
         const k = 1 - u;
         ellipseRing(x, y, r, r * 0.7, ramp[Math.min(6, 3 + Math.round(k * 2))], k);
         ellipseRing(x, y, r - 1, (r - 1) * 0.7, ramp[2], k * 0.5);

@@ -13,8 +13,9 @@ export const CRUSH = { dur: frame(12), hit: frame(6), power: 1.3, stop: 0.06 } a
 
 /** a held foe: where it sits, how long she keeps it and the knees she can drive into it */
 export const HOLD = {
-  /** pixels ahead of her the foe sits */
+  /** pixels ahead of her a small foe's centre sits; a bigger foe sits further out by the half width past `grip` */
   ahead: 10,
+  grip: 4,
   /** a walker's feet sit this far above hers, a flier's centre this far */
   walkerY: -6,
   flierY: -20,

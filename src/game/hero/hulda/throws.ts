@@ -127,7 +127,7 @@ function hurl(e: Enemy): void {
 function runForward(e: Enemy): void {
   const f = THROWS.forward;
   if (hero.st < f.release) {
-    pin(e, HOLD.ahead - (hero.st / f.release) * 12, (hero.st / f.release) * 4);
+    pin(e, HOLD.ahead - (hero.st / f.release) * 5, (hero.st / f.release) * 5);
     return;
   }
   if (hulda.struck) return;

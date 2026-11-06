@@ -4,7 +4,7 @@ export const GRIT = {
   plate: 25,
   start: 25,
   /** Grit earned from each source */
-  fist: 3,
+  fist: 4,
   grab: 10,
   knee: 5,
   throw: 15,

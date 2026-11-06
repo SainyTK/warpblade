@@ -15,5 +15,5 @@ export const BELLOW = {
   stun: 0.5,
   /** the three rings: how long each takes to reach its size, and the gap between them */
   ringTime: 0.3,
-  ringGap: 0.06,
+  ringGap: 0.09,
 } as const;

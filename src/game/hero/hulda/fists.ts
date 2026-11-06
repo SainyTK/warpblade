@@ -1,13 +1,15 @@
-import { FIST_BOX, FISTS, HAMMER, KNUCKLES, STRING, STRING_LINK } from "../../../constants/hulda/fists";
+import { FISTS, HAMMER, KNUCKLES, STRING, STRING_LINK } from "../../../constants/hulda/fists";
 import { GRIT } from "../../../constants/hulda/grit";
 import { sfx } from "../../../services/audio";
 import type { FistBlow } from "../../../types/hulda";
+import { createSlash } from "../../effects/slash";
 import { isHeld } from "../../input";
 import { meleeHit } from "../../meleeHit";
 import { hasPerk } from "../../progress";
-import { hero, progress } from "../../state";
+import { game, hero, progress } from "../../state";
 import { boxAhead, newSwing } from "../../world";
 import { isFree, setState, settle } from "../actions";
+import { skin } from "../skin";
 import { gainGrit } from "./grit";
 import { hulda } from "./memory";
 
@@ -69,7 +71,8 @@ export function pressFist(): boolean {
 /** a blow lands on every foe in the box ahead; each foe struck gives Grit */
 function land(blow: FistBlow): void {
   const f = FISTS[blow];
-  const [x0, y0, x1, y1] = FIST_BOX;
+  const [x0, y0, x1, y1] = f.box;
+  if (f.arc) game.fx.push(createSlash(hero.x, hero.y, hero.face, { ...f.arc, ramp: skin.ramp }));
   const hits = meleeHit([boxAhead(x0, y0, x1, y1)], {
     power: f.power,
     kx: f.kx,
