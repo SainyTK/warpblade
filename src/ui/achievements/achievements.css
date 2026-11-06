@@ -1,0 +1,202 @@
+/* Achievements: shop rows with a trophy, gold once earned; the goal and its progress until then. */
+.menu[data-screen="achievements"] .menu-panel {
+  width: min(600px, 100%);
+}
+.shop-item.ach-item {
+  --accent: var(--brass);
+  --accent-dark: var(--gold-dark);
+  cursor: default;
+}
+.shop-item.ach-item[data-state="open"],
+.shop-item.ach-item[data-state="hidden"] {
+  --accent: var(--key);
+  --accent-dark: var(--line);
+}
+.ach-item[data-state="open"] .shop-name,
+.ach-item[data-state="hidden"] .shop-name {
+  color: var(--mist);
+}
+.ach-item[data-state="open"]:focus .shop-name,
+.ach-item[data-state="hidden"]:focus .shop-name {
+  color: var(--text);
+}
+.ach-item[data-state="earned"]:focus .shop-name {
+  color: var(--gold);
+}
+.ach-item .medal {
+  width: 27px;
+  height: 27px;
+  image-rendering: pixelated;
+}
+.ach-unknown {
+  font-family: var(--display);
+  font-size: 20px;
+  line-height: 1;
+  color: var(--muted);
+}
+.ach-progress {
+  display: grid;
+  grid-template-columns: minmax(0, 160px) auto;
+  align-items: center;
+  gap: 8px;
+  margin-top: 2px;
+}
+.ach-progress .hero-bar span {
+  display: block;
+  height: 100%;
+  background: var(--brass);
+}
+.ach-count {
+  font-size: 11px;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
+@media (max-height: 520px) {
+  .ach-item .medal {
+    width: 18px;
+    height: 18px;
+  }
+  .ach-unknown {
+    font-size: 16px;
+  }
+}
+
+/* The banner that slides down when an achievement is earned; it never stops play. */
+.ach-toast {
+  position: fixed;
+  z-index: 20;
+  top: max(46px, calc(env(safe-area-inset-top, 0px) + 46px));
+  left: 50%;
+  translate: -50% 0;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 10px;
+  max-width: calc(100vw - 24px);
+  padding: 6px 12px 6px 8px;
+  background: var(--menu-bg);
+  border: 2px solid var(--brass);
+  box-shadow:
+    inset 0 0 0 2px var(--gold-dark),
+    0 var(--u) 0 rgba(0, 0, 0, 0.5);
+  pointer-events: none;
+  animation: ach-toast var(--toast-ms, 3200ms) steps(1) both;
+}
+.ach-toast .medal {
+  width: 27px;
+  height: 27px;
+  image-rendering: pixelated;
+}
+.ach-toast-text {
+  display: grid;
+  min-width: 0;
+}
+.ach-toast-text small {
+  font-family: var(--display);
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--brass);
+}
+.ach-toast-text b {
+  overflow: hidden;
+  font-family: var(--ui);
+  font-weight: 600;
+  font-size: 15px;
+  line-height: 1.2;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  color: var(--text);
+}
+.ach-toast .coins {
+  font-size: 14px;
+  color: var(--gold);
+}
+/* a phone on its side: small enough to sit between the bars and the wave count */
+@media (max-height: 520px) {
+  .ach-toast {
+    gap: 6px;
+    padding: 3px 8px 3px 5px;
+  }
+  .ach-toast .medal {
+    width: 18px;
+    height: 18px;
+  }
+  .ach-toast-text small {
+    font-size: 8px;
+  }
+  .ach-toast-text b {
+    font-size: 12px;
+  }
+  .ach-toast .coins {
+    gap: 4px;
+    font-size: 11px;
+  }
+}
+@keyframes ach-toast {
+  0% {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  3% {
+    opacity: 1;
+    transform: translateY(-4px);
+  }
+  6% {
+    transform: none;
+  }
+  94% {
+    opacity: 1;
+    transform: none;
+  }
+  97% {
+    opacity: 1;
+    transform: translateY(-4px);
+  }
+  100% {
+    opacity: 0;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .ach-toast {
+    animation: none;
+  }
+}
+
+/* Result of a run: the achievements it earned, under the coins. */
+.result-ach {
+  display: grid;
+  gap: 4px;
+  width: min(300px, 100%);
+  margin: 0;
+  padding: 8px 0 0;
+  list-style: none;
+  border-top: 2px solid var(--line);
+}
+.result-ach li {
+  display: grid;
+  grid-template-columns: 18px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--ui);
+  font-weight: 600;
+  font-size: 14px;
+  color: var(--text);
+}
+.result-ach .medal {
+  width: 18px;
+  height: 18px;
+  image-rendering: pixelated;
+}
+.result-ach .coins {
+  font-size: 14px;
+  color: var(--gold);
+}
+.result-ach li.result-ach-more {
+  display: block;
+  font-family: var(--body);
+  font-weight: 400;
+  font-size: 12px;
+  color: var(--mist);
+  text-align: center;
+}

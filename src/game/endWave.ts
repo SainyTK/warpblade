@@ -1,12 +1,14 @@
 import { STAGE_WAVES, WAVE_PAUSE } from "../constants/waves";
 import { coop } from "./coopHooks";
+import { feat } from "./feat";
 import { openPicks } from "./progress";
-import { game, hero } from "./state";
+import { character, game, hero } from "./state";
 
 /** a cleared wave spends any skill points waiting, then the pause before the next wave's rifts */
 export function endWave(): void {
   game.lull = "toNext";
   game.waveTimer = WAVE_PAUSE;
+  feat({ kind: "waveCleared", wave: game.wave, hero: character.id });
   const room = coop();
   if (room) room.waveCleared();
   else openPicks();

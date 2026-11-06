@@ -43,7 +43,7 @@ function titleFooter(): HTMLElement {
   return footer;
 }
 
-/** Start, Shop, Controls and Options before a run; on pause, Resume, Restart run, Controls, Options and Quit run */
+/** Start, Co-op, Shop, Achievements, Controls and Options before a run; on pause, Resume, Restart run, Controls, Options and Quit run */
 export function mainScreen(context: MenuContext): MenuView {
   const list = document.createElement("nav");
   list.className = "menu-list";
@@ -54,7 +54,12 @@ export function mainScreen(context: MenuContext): MenuView {
     // while in a room, its lobby takes the place of a solo start
     if (inRoom()) list.append(screenItem(`Room ${roomView().code}`, "coop"));
     else list.append(screenItem("Start", "hero"), screenItem("Co-op", "coop"));
-    list.append(screenItem("Shop", "shop"), screenItem("Controls", "controls"), screenItem("Options", "options"));
+    list.append(
+      screenItem("Shop", "shop"),
+      screenItem("Achievements", "achievements"),
+      screenItem("Controls", "controls"),
+      screenItem("Options", "options"),
+    );
     const content = document.createElement("div");
     content.className = "menu-main";
     content.append(list, titleFooter());

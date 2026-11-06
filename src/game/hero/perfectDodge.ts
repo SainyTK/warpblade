@@ -2,6 +2,7 @@ import { PERFECT, RIPOSTE, STAMINA } from "../../constants/combat";
 import { sfx } from "../../services/audio";
 import { cue } from "../cue";
 import { createFloorRing } from "../effects/floorRing";
+import { feat } from "../feat";
 import { hasPerk } from "../progress";
 import { game, hero, lights, progress } from "../state";
 import { skin } from "./skin";
@@ -12,6 +13,7 @@ export function perfectDodge(): void {
   const h = hero;
   if (h.state !== "dash" || h.st > PERFECT.window || h.perfectUsed) return;
   h.perfectUsed = true;
+  feat({ kind: "perfect" });
   game.slow = PERFECT.slow;
   h.mp = Math.min(progress.stats.mp, h.mp + PERFECT.mp);
   refundStamina(STAMINA.perfectRefund);

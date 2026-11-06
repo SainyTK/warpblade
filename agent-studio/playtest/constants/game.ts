@@ -21,6 +21,11 @@ export const SELECTORS = {
 } as const;
 /** pages other agents may add next to the game; the smoke test loads each one that exists */
 export const EXTRA_PAGES = ["/patches/", "/feedback/"] as const;
+/**
+ * Set in local storage before the game loads. The dev build then unlocks every hero, so bots can play heroes that
+ * cost coins, and tracks no achievements, so bot runs leave no stats or rewards behind (src/services/playtestStart.ts).
+ */
+export const PLAYTEST_STORAGE = { key: "warpblade-playtest", value: "1" } as const;
 /** fake clock start, so every session begins at the same time */
 export const CLOCK_START_MS = 1_800_000_000_000;
 /** one display frame of the fake clock */

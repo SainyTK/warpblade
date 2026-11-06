@@ -10,6 +10,7 @@ import { createRift } from "./effects/rift";
 import { endWave } from "./endWave";
 import { makeEnemy } from "./enemies/enemy";
 import { kindOf } from "./enemies/kinds";
+import { feat } from "./feat";
 import { endRun } from "./runEnd";
 import { game, hero, rng, showBanner } from "./state";
 
@@ -21,6 +22,7 @@ function spawnX(): number {
 function startWave(): void {
   game.wave++;
   game.lull = "fight";
+  feat({ kind: "waveReached", wave: game.wave });
   if (game.wave > game.best) {
     game.best = game.wave;
     saveBest(game.best);

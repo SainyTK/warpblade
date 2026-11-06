@@ -2,14 +2,17 @@ import { CHARACTERS } from "../../constants/characters";
 import { ULT_LABEL } from "../../constants/skillLabels";
 import { applySkin } from "../../game/hero/skin";
 import { character, setCharacter } from "../../game/state";
+import { sfx } from "../../services/audio";
 import { saveHeroChoice } from "../../services/heroChoice";
-import { metaBonus } from "../../store/meta";
+import { bank, buyHero, heroPrice, heroUnlocked, metaBonus } from "../../store/meta";
 import type { CharacterDef } from "../../types/character";
 import type { MenuView } from "../../types/menu";
 import type { Stats } from "../../types/stats";
 import { allNodes, computeStats } from "../../utils/stats";
+import { coinAmount } from "../coinIcon";
 import { backItem } from "./backItem";
 import { heroPortrait } from "./heroPortrait";
+import { lockIcon } from "./lockIcon";
 import { startGame } from "./menuActions";
 import { focusEntry, onAdjust } from "./menuNav";
 
@@ -61,6 +64,56 @@ function traits(c: CharacterDef): HTMLElement {
   return box;
 }
 
+/** how long a refused press shakes the price */
+const DENY_MS = 400;
+
+/** the padlock and the price of a locked hero, or the question in its place once a press asked */
+function lockLine(price: number, armed: boolean): HTMLElement {
+  const line = el("span", "hero-lock");
+  if (armed) line.append(lockIcon(), "Unlock? Press again");
+  else {
+    const tag = coinAmount(price);
+    if (price > bank()) tag.classList.add("short");
+    line.append(lockIcon(), tag);
+  }
+  return line;
+}
+
+/**
+ * A locked hero's press: the first one asks again, the second one unlocks with coins, and a press the bank cannot pay
+ * for is refused with a shake. The run never starts with a locked hero.
+ */
+function bindUnlock(button: HTMLButtonElement, c: CharacterDef, price: number): void {
+  let line = lockLine(price, false);
+  button.append(line);
+  const show = (armed: boolean): void => {
+    const next = lockLine(price, armed);
+    line.replaceWith(next);
+    line = next;
+  };
+  button.addEventListener("click", () => {
+    if (price > bank()) {
+      sfx.denied();
+      line.classList.remove("deny");
+      void line.offsetWidth;
+      line.classList.add("deny");
+      setTimeout(() => line.classList.remove("deny"), DENY_MS);
+      return;
+    }
+    if (button.dataset.armed === undefined) {
+      button.dataset.armed = "";
+      show(true);
+      return;
+    }
+    if (buyHero(c.id)) sfx.learn();
+  });
+  button.addEventListener("blur", () => {
+    if (button.dataset.armed === undefined) return;
+    delete button.dataset.armed;
+    show(false);
+  });
+}
+
 function card(c: CharacterDef): HTMLButtonElement {
   const button = el("button", "hero-card");
   button.type = "button";
@@ -73,6 +126,13 @@ function card(c: CharacterDef): HTMLButtonElement {
   button.append(el("span", "hero-blurb", c.blurb));
   // the hero behind the menu changes to the one in focus
   button.addEventListener("focus", () => applySkin(c.skin));
+  const price = heroPrice(c.id);
+  if (price !== null && !heroUnlocked(c.id)) {
+    button.dataset.locked = "";
+    img.alt = `${c.name}, locked`;
+    bindUnlock(button, c, price);
+    return button;
+  }
   button.addEventListener("click", () => {
     setCharacter(c);
     saveHeroChoice(c.id);
@@ -92,5 +152,8 @@ export function heroScreen(): MenuView {
   const content = el("div", "menu-main");
   content.append(row, backItem());
   const focus = cards[CHARACTERS.indexOf(character)];
-  return { title: "Choose a hero", subtitle: "A D or arrows to look, J or Enter to begin", content, focus };
+  // with a hero still to unlock, the bank takes the place of the keys
+  const locked = CHARACTERS.some((c) => !heroUnlocked(c.id));
+  const subtitle = locked ? coinAmount(bank(), "bank") : "A D or arrows to look, J or Enter to begin";
+  return { title: "Choose a hero", subtitle, content, focus };
 }
