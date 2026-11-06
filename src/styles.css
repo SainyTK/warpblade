@@ -140,6 +140,10 @@ body {
     var(--night) calc(var(--dash-share, 50%) - 1px) var(--dash-share, 50%)
   );
 }
+/* heroes without a dash have no dash notches on their stamina bar */
+.bar.st.no-dash .track::after {
+  content: none;
+}
 /* a dash the bar could not pay for: the empty track blinks red */
 /* a bar too empty for what was pressed blinks its border */
 .bar.empty .track {
@@ -191,7 +195,7 @@ body {
   color: var(--rust);
 }
 .bar.gr .fill {
-  background: var(--iron-dark);
+  background: var(--iron-dim);
 }
 .bar.gr .plates {
   position: absolute;
@@ -399,6 +403,15 @@ body {
 .el.evolved,
 .el.on.evolved {
   border-top-color: var(--gold);
+}
+/* Ysra's rite tabs take the place of the element tabs; each rite's colour comes in as --tint */
+.rite-tabs {
+  display: flex;
+  gap: 4px;
+}
+.el.on.rite {
+  color: var(--tint);
+  border-color: var(--tint);
 }
 /* Spell and warp cooldowns: a recharging tab dims and a pixel bar along its bottom fills as it recharges (--charged, 0 to 1).
    The tab blinks when it is ready again, and jolts when a press is refused while it recharges. */
