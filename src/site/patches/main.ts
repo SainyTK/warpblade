@@ -1,4 +1,5 @@
 import { SITE_PAGES } from "../../constants/sitePages";
+import { startAnalytics } from "../../services/analytics";
 import type { Patch } from "../../types/patch";
 import { el } from "../dom";
 import { emptyState } from "../shell/emptyState";
@@ -15,6 +16,7 @@ function patchFromHash(latest: Patch): Patch {
 }
 
 function start(): void {
+  startAnalytics();
   const main = mountPage("patches");
   const latest = PATCHES[0];
   if (!latest) {

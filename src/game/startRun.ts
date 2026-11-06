@@ -1,17 +1,19 @@
 import { HEAD_START_LEVEL } from "../constants/shopSkills";
 import { STAGE_WAVES } from "../constants/waves";
+import { track } from "../services/analytics";
 import { readPlaytestStart } from "../services/playtestStart";
 import { startRunAchievements } from "../store/achievements";
 import { ownsSkill } from "../store/meta";
 import { xpToReach } from "../utils/progression";
 import { gainXp, openPicks } from "./progress";
 import { resetRun } from "./run";
-import { game, progress } from "./state";
+import { character, game, progress } from "./state";
 
 /** a fresh run with everything bought in the shop: stats come in through the progress, Head Start's levels here */
 export function startRun(banner: string): void {
   resetRun(banner);
   startRunAchievements();
+  track("run_start", { hero: character.id, coop: false });
   if (ownsSkill("headStart")) gainXp(xpToReach(HEAD_START_LEVEL));
   const playtest = readPlaytestStart();
   if (!playtest) return;

@@ -23,6 +23,7 @@ How to decide:
 - Every feedback item triaged `now` either goes into the plan with its ID or is listed in `considered` with why not.
 - Bugs in commits since the last release, or in the baseline playtest, come first.
 - `media` lists the shots the media agent should capture for the patch notes: for a big patch at least one per headline element, for a small patch only where a picture helps (a visual fix, a reworked effect).
+- Hero sprint: when the run context has `heroSprint`, follow the charter's Hero sprint section. The headline is a new hero the developer builds tonight (`new-hero`, `builtInDay` false), even when the day work has a headline; that day work ships beside it and needs no plan entry. Read every hero's kit and design note first, pick a play style no hero has, and say in `design` how it differs from each. Scope the hero so it ships complete: a full kit, tree and look done well beats more skills half done.
 - Day work: when tonight's run lists day work, the owner already built it on main and it ships tonight. Do not plan it again.
   When the day work has a headline, that is tonight's headline: set `builtInDay` to true, use the day work's category, describe what was built in `design` from the commits and code, and write `acceptance` checks so QA can verify it in the browser. Add only small changes of your own, and none when the day work already fills the patch.
   Otherwise set `builtInDay` to false. Day work counts toward a small patch's two to eight changes.

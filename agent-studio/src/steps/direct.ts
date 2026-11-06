@@ -19,7 +19,10 @@ export async function direct(night: Night): Promise<Plan> {
   if (ctx.kind === "big" && !output.headline) throw new Error("The director planned a big patch without a headline");
   if (ctx.kind === "small" && output.headline) throw new Error("The director planned new content in a small patch");
   const dayHeadlines = ctx.dayWork.headlines.map((h) => h.category);
-  if (output.headline && dayHeadlines.length) {
+  if (ctx.heroSprint) {
+    if (output.headline?.category !== "new-hero" || output.headline.builtInDay)
+      throw new Error("The hero sprint is on, so tonight's headline must be a new hero the studio builds tonight");
+  } else if (output.headline && dayHeadlines.length) {
     if (!output.headline.builtInDay)
       throw new Error("Tonight's headline is the owner's day work, but the director planned a new one to build");
     if (!dayHeadlines.includes(output.headline.category))

@@ -3,6 +3,7 @@ import { MAX_FRAME, STEP } from "./constants/stage";
 import { frameDriver } from "./game/frameDriver";
 import { game, setCharacter } from "./game/state";
 import { stepGame } from "./game/step";
+import { startAnalytics } from "./services/analytics";
 import { loadBest } from "./services/bestScore";
 import { loadHeroChoice } from "./services/heroChoice";
 import { heroUnlocked } from "./store/meta";
@@ -20,6 +21,7 @@ import { preventZoom } from "./ui/preventZoom";
 import { bindPickDialog, syncPickDialog } from "./ui/skills/pickDialog";
 import { bindTouch, syncTouch } from "./ui/touch/bindTouch";
 
+startAnalytics();
 game.best = loadBest();
 setCharacter(CHARACTERS.find((c) => c.id === loadHeroChoice() && heroUnlocked(c.id)) ?? CHARACTERS[0]);
 preventZoom();
