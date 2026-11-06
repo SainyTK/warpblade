@@ -34,5 +34,6 @@ export const commitAll = async (cwd: string, message: string) => {
 
 /** the day work declared by commit trailers in a range such as `v0.2.0..HEAD` */
 export async function dayWorkIn(cwd: string, range: string): Promise<DayWork> {
-  return parseDayWork(await git(cwd, "log", "--no-merges", `--format=${DAY_WORK_FORMAT}`, range));
+  // merges count too: a worktree branch merged into main carries its trailers on the merge commit
+  return parseDayWork(await git(cwd, "log", `--format=${DAY_WORK_FORMAT}`, range));
 }
