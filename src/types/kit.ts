@@ -3,7 +3,7 @@ import type { MoveId, Situation } from "./move";
 import type { Pose } from "./pose";
 
 /** which hero's controls, moves and states drive the shared rig */
-export type KitId = "kael" | "ysra" | "sable";
+export type KitId = "kael" | "ysra" | "sable" | "hulda";
 
 /**
  * How one hero plays. The shared loop (updateHero, the combo engine, physics, hurt) calls into the kit of the hero
@@ -35,6 +35,11 @@ export interface HeroKit {
   stride?(running: boolean): number;
   /** damage taken is multiplied by this */
   hurtScale(): number;
+  /**
+   * A blow has taken its HP and the hero still stands: true when the kit's armour takes the blow instead of the hurt
+   * state, so the knockback, the flinch and the combo reset are skipped. Left out, every blow hurts as usual.
+   */
+  steadfast?(): boolean;
   /** the kit drives the hero's horizontal speed itself this frame (vaults, dives, charges) */
   drivesMotion(): boolean;
   /** gravity multiplier for the kit's own states; 1 for shared behaviour */

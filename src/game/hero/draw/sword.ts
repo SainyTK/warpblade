@@ -93,8 +93,10 @@ function drawGlaive(s: SpriteCanvas, at: Along): void {
   });
 }
 
-/** the hero's weapon in the hand at this angle */
+/** the hero's weapon in the hand at this angle; a fist fighter has none to draw here */
 export function drawSword(s: SpriteCanvas, hand: Vec, angle: number): void {
+  // gauntlets are drawn on both fists with the arms
+  if (skin.weapon === "gauntlets") return;
   const ca = Math.cos(angle);
   const sn = Math.sin(angle);
   const at: Along = (d, w) => [hand[0] + ca * d - sn * w, hand[1] + sn * d + ca * w];

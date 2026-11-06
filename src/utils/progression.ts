@@ -1,4 +1,5 @@
 import { AIR_STRING } from "../constants/combo";
+import { STRING } from "../constants/hulda/fists";
 import { COMBO_BY_LEVEL, MAX_COMBO, MAX_LEVEL, XP_CURVE } from "../constants/progression";
 import { AGGRESSION, STAGE_WAVES, WAVE_SCALE } from "../constants/waves";
 import { GLAIVE_STRING_BONUS } from "../constants/ysra/glaive";
@@ -27,9 +28,11 @@ export function comboLimit(level: number, flowing: boolean): number {
   return Math.min(MAX_COMBO, hits + (flowing ? 1 : 0));
 }
 
-/** the longest string of the hero being played: Kael's combo, or Ysra's glaive string, one blow longer at every level */
+/** the longest string of the hero being played: Kael's combo, Ysra's glaive string, one blow longer at every level, or
+ *  Hulda's fist string, one blow longer with Uppercut */
 export function stringLimit(kit: KitId, level: number, perks: ReadonlySet<Perk>): number {
   if (kit === "ysra") return comboLimit(level, perks.has("longString")) + GLAIVE_STRING_BONUS;
+  if (kit === "hulda") return STRING.length + (perks.has("uppercut") ? 1 : 0);
   return comboLimit(level, perks.has("flowingChain"));
 }
 

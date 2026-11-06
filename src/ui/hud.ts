@@ -8,6 +8,7 @@ import { character, game, hero, progress } from "../game/state";
 import { xpToNext } from "../utils/progression";
 import { updateCoinCount } from "./coinCount";
 import { byId } from "./dom";
+import { updateGritBar } from "./gritBar";
 import { updateHeatBar } from "./heatBar";
 import { updateQuiverBar } from "./quiverBar";
 import { createRechargeTab } from "./rechargeTab";
@@ -44,6 +45,7 @@ export function updateHud(): void {
   updateSpellTabs();
   updateRiteTabs();
   updateHeatBar();
+  updateGritBar();
   updateQuiverBar();
   updateWarpTab();
   updateCoinCount();

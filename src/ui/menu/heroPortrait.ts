@@ -1,3 +1,4 @@
+import { HULDA_IDLE } from "../../constants/clips/hulda/stance";
 import { SABLE_IDLE } from "../../constants/clips/sable/moves";
 import { YSRA_STATE_CLIPS } from "../../constants/clips/ysra";
 import { STAND } from "../../constants/hero";
@@ -6,16 +7,23 @@ import { drawHero } from "../../game/hero/drawHero";
 import { applySkin } from "../../game/hero/skin";
 import { character } from "../../game/state";
 import type { CharacterDef } from "../../types/character";
-import type { Pose } from "../../types/pose";
+import type { KitId } from "../../types/kit";
+import type { ActionClip, Pose } from "../../types/pose";
 import { sampleKeys } from "../../utils/sampleKeys";
 import { spriteUrl } from "../spriteUrl";
 
 const canvas = detailCanvas(64, 56, 30, 50);
+/** each hero's own idle clip; a hero left out stands in the shared pose */
+const IDLES: Partial<Record<KitId, ActionClip>> = {
+  ysra: YSRA_STATE_CLIPS.idle,
+  sable: SABLE_IDLE,
+  hulda: HULDA_IDLE,
+};
 const cache = new Map<string, string>();
 
 /** the hero at rest: the first frame of their own idle clip, or the shared standing pose */
 function restPose(c: CharacterDef): Pose {
-  const idle = c.kit === "ysra" ? YSRA_STATE_CLIPS.idle : c.kit === "sable" ? SABLE_IDLE : undefined;
+  const idle = IDLES[c.kit];
   return idle ? sampleKeys(idle.keys, 0) : STAND;
 }
 

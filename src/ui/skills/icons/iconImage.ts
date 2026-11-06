@@ -6,6 +6,7 @@ import { BLADE_ICONS } from "./blade";
 import { BOON_ICONS } from "./boon";
 import { EVOLUTION_ICONS } from "./evolution";
 import { FUSION_ICONS } from "./fusion";
+import { HULDA_ICONS } from "./hulda/index";
 import { PHANTOM_ICONS } from "./phantom";
 import { SABLE_ICONS } from "./sable/index";
 import { SHOP_ICONS } from "./shop";
@@ -24,6 +25,7 @@ const ICONS: Record<string, (s: SpriteCanvas) => void> = {
   ...SHOP_ICONS,
   ...YSRA_ICONS,
   ...SABLE_ICONS,
+  ...HULDA_ICONS,
 };
 const canvas = new SpriteCanvas(SIZE, SIZE, 0, 0);
 const cache = new Map<string, string>();

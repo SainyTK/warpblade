@@ -67,6 +67,19 @@ export const ACTION_TEXT: Record<KitId, Record<InputAction, string>> = {
     cast: "Set a snare at your feet (20 MP)",
     cycle: "Reload. Press again in the bright window for a perfect reload and primed bolts",
   },
+  hulda: {
+    ...KAEL_ACTION_TEXT,
+    left: "Walk left. No run",
+    right: "Walk right. No run",
+    up: "Jump. One low, heavy jump. While holding a foe, toss it up with grab",
+    down: "With jump, drop through a ledge. While holding a foe with Giant Swing, swing it with grab",
+    attack: "Fist string: jab, cross, body hook, haymaker. In the air, a hammer fist. While holding a foe, a knee",
+    dash: "Bull Rush: an armoured shoulder charge that spends stamina",
+    run: "Walk toward the side held",
+    warp: "Grab a foe ahead; big foes are crushed. While holding, throw: forward, or suplex with the side behind held. In the air, Skyfall Grab",
+    cast: "Bellow: drag nearby foes in and stun minions (20 MP)",
+    cycle: "Taunt: slap your chest twice for Grit",
+  },
 };
 /** keys inside the menu */
 export const MENU_KEYMAP: Record<string, MenuCommand> = {
