@@ -69,6 +69,27 @@ export const TOUCH_TEXT: Record<KitId, Record<TouchButtonAction, TouchButtonText
     ultimate: SPECIAL,
     cycle: { label: "Next rite", hint: `Switch rite: ${RITE_NAMES}`, accent: null },
   },
+  sable: {
+    attack: {
+      label: "Shoot",
+      hint: "Shoot a bolt. Hold to keep shooting. Push the stick up or down while you hold it to aim",
+      accent: "#6ee0a0",
+    },
+    up: { label: "Jump", hint: "One light jump. Hold the stick down to drop through a ledge", accent: "#e8e6f6" },
+    dash: {
+      label: "Hop",
+      hint: "Hop back and shoot at the top. With the stick pushed ahead, slide forward under blows. Both spend stamina",
+      accent: "#3fc06a",
+    },
+    warp: { label: "Kick", hint: "Kick foes away from you", accent: "#ccb88c" },
+    cast: { label: "Snare", hint: "Set a snare at your feet (20 MP)", accent: "#e88a4c" },
+    ultimate: SPECIAL,
+    cycle: {
+      label: "Reload",
+      hint: "Reload. Tap again in the bright window for a perfect reload and primed bolts",
+      accent: "#c4ffd8",
+    },
+  },
 };
 
 /** where the attack button's center sits, art pixels in from the bottom right corner of the safe area */
@@ -104,6 +125,12 @@ export const STICK_DIRECTIONS: Record<KitId, readonly StickDirectionSpec[]> = {
     { direction: "far side", label: "Charge, once Warpath is learned" },
     { direction: "up", label: "Jump. With Attack, a skyhook" },
     { direction: "down", label: "With Attack, a ground lash. With Jump, drop through a ledge" },
+  ],
+  sable: [
+    { direction: "side", label: "Walk" },
+    { direction: "far side", label: "Run" },
+    { direction: "up", label: "Jump. While shooting, aim up" },
+    { direction: "down", label: "While shooting, aim low. With Jump, drop through a ledge" },
   ],
 };
 

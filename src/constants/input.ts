@@ -57,6 +57,16 @@ export const ACTION_TEXT: Record<KitId, Record<InputAction, string>> = {
     cast: "Call the selected rite, paid with Heat",
     cycle: `Switch rite: ${RITE_NAMES}`,
   },
+  sable: {
+    ...KAEL_ACTION_TEXT,
+    up: "Jump. One light jump. With attack held, aim up",
+    down: "With attack held, kneel and shoot low, or shoot down in the air. With jump, drop through a ledge",
+    attack: "Shoot a bolt. Hold to keep shooting. Hold up or down to aim. An empty quiver reloads",
+    dash: "Hop back and shoot at the top of the hop. With the side ahead held, slide forward under blows. Both spend stamina",
+    warp: "Kick foes away from you",
+    cast: "Set a snare at your feet (20 MP)",
+    cycle: "Reload. Press again in the bright window for a perfect reload and primed bolts",
+  },
 };
 /** keys inside the menu */
 export const MENU_KEYMAP: Record<string, MenuCommand> = {

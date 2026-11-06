@@ -1,3 +1,4 @@
+import { SABLE_IDLE } from "../../constants/clips/sable/moves";
 import { YSRA_STATE_CLIPS } from "../../constants/clips/ysra";
 import { STAND } from "../../constants/hero";
 import { detailCanvas } from "../../engine/sprite";
@@ -14,7 +15,7 @@ const cache = new Map<string, string>();
 
 /** the hero at rest: the first frame of their own idle clip, or the shared standing pose */
 function restPose(c: CharacterDef): Pose {
-  const idle = c.kit === "ysra" ? YSRA_STATE_CLIPS.idle : undefined;
+  const idle = c.kit === "ysra" ? YSRA_STATE_CLIPS.idle : c.kit === "sable" ? SABLE_IDLE : undefined;
   return idle ? sampleKeys(idle.keys, 0) : STAND;
 }
 
