@@ -26,8 +26,11 @@ export const HOST_AWAY_MS = 1000;
 /** what a guest's game canvas shows until the host's picture arrives: the interface's night colour */
 export const WAITING_FILL = "#0c0a18";
 
-/** the picture the host streams: twice the art size, so the video's half-size colour samples land on whole art pixels */
-export const STREAM = { width: 640, height: 360, fps: 30, maxBitrate: 2_500_000 } as const;
+/**
+ * the picture the host streams: twice the art size, so the video's half-size colour samples land on whole art pixels.
+ * It opens at startKbps so the first seconds of a run are not soft while the link's estimate ramps up.
+ */
+export const STREAM = { width: 640, height: 360, fps: 30, maxBitrate: 2_500_000, startKbps: 2000 } as const;
 
 /** more players meet more foes, and tougher ones: each player past the first adds these shares */
 export const COOP_SCALING = {

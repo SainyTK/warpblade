@@ -1,6 +1,7 @@
 import Peer, { type DataConnection, type MediaConnection } from "peerjs";
-import { ROOM_PREFIX } from "../../constants/coop";
+import { ROOM_PREFIX, STREAM } from "../../constants/coop";
 import type { GuestMessage, HostMessage } from "../../types/coop";
+import { withStartBitrate } from "../../utils/startBitrate";
 import { peerErrorText } from "./peerErrors";
 
 export interface HostEvents {
@@ -46,7 +47,7 @@ export function openRoom(code: string, events: HostEvents): Promise<HostLink> {
       },
       stream(id, media) {
         calls.get(id)?.close();
-        const call = peer.call(id, media);
+        const call = peer.call(id, media, { sdpTransform: (sdp: string) => withStartBitrate(sdp, STREAM.startKbps) });
         if (!call) return null;
         calls.set(id, call);
         return call;
