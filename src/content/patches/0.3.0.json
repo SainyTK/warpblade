@@ -1,0 +1,330 @@
+{
+  "version": "0.3.0",
+  "kind": "big",
+  "date": "2026-11-06",
+  "title": "Side by Side",
+  "tagline": "Host a room and fight the 30-wave run with up to three friends, each with their own hero, picks and coins. Ysra moves faster and has more ways to stay alive, and the screen now warns you when your HP runs low.",
+  "intro": "You asked to play Warpblade with friends, and this patch makes that possible. One player hosts a room from the start menu, up to three friends join with a five-letter code or an invite link, and everyone fights the same run with their own hero. Experience is shared so the room levels together, while picks, shop upgrades and coins stay your own. Two more of your requests ride along: a red glow at the screen edge when your HP runs low, and a mobility and survival pass for Ysra. The whole frame is now drawn at 640 by 360, with more detailed heroes and every era's foes redrawn.",
+  "highlights": [
+    {
+      "title": "Co-op rooms",
+      "text": "Co-op on the start menu opens a room in your browser. Share its five-letter code or the invite link, and up to four players gather in the lobby, each picking Kael or Ysra. The same hero twice is fine. The host starts the run when everyone is ready.",
+      "media": {
+        "kind": "image",
+        "file": "coop-lobby.png",
+        "alt": "The host's room screen for room KTD3D, 2 of 4 players: P1 Kael marked host and you in gold, P2 Ysra in cyan, P3 and P4 Open. Below are the Hero row set to Kael, Start run (focused), Copy invite link and Leave room, over the sunlit ruins with Kael standing on the left.",
+        "width": 1280,
+        "height": 720
+      }
+    },
+    {
+      "title": "One run, up to four heroes",
+      "text": "Every hero stands on a ring in their player's colour with a P1 to P4 tag above them, so two players on the same hero can tell which one is theirs. Foes chase the nearest standing hero, and waves bring more and tougher foes for each extra player.",
+      "media": {
+        "kind": "video",
+        "file": "coop-run.mp4",
+        "poster": "coop-run.png",
+        "alt": "Four players fight wave 4 together across the sunlit ruins: two Kaels and two Ysras, each with a P1 to P4 tag and a ring under their feet in their own colour (gold, cyan, pink, green). They cut down charging thornbacks and swing up at glimmer moths as new foes come out of the rifts.",
+        "width": 640,
+        "height": 360
+      }
+    },
+    {
+      "title": "Down until the wave is cleared",
+      "text": "A hero at 0 HP kneels with a grey tag while the others fight on. When the wave is cleared, every downed hero stands up with half their HP. The run ends only when every hero is down at once, or when wave 30 is cleared.",
+      "media": {
+        "kind": "video",
+        "file": "coop-downed.mp4",
+        "poster": "coop-downed.png",
+        "alt": "Ysra's own screen after she is downed: she kneels on the floor with her glaive planted and a grey P2 tag over her head, the screen edge glows red, and the line under the pause button reads 'P2 Down until the wave is cleared'. Kael, tagged P1 in gold, fights the glimmer moths on his own.",
+        "width": 1280,
+        "height": 720
+      }
+    },
+    {
+      "title": "A status line that fits your phone",
+      "text": "One line under the pause button shows your tag in your colour and, when you wait, why: waiting for the host, down until the wave is cleared, or waiting for another player to pick. On a phone held upright it takes a single row above the HUD bars.",
+      "media": {
+        "kind": "image",
+        "file": "coop-status-phone.png",
+        "alt": "A guest's screen on an upright phone during a skill pick. Under the pause button, a cyan P2 tag and the words 'Waiting for P1 to pick' fit on one row above the HP, MP, stamina and Heat bars. The four heroes wait in the stage below.",
+        "width": 375,
+        "height": 667
+      }
+    }
+  ],
+  "sections": [
+    {
+      "id": "heroes",
+      "entries": [
+        {
+          "name": "Ysra",
+          "tag": "buff",
+          "summary": "Ysra walks faster, vaults more often and from more places, and has more moments where nothing can touch her.",
+          "context": "Players told us Ysra felt slow and short of ways to survive next to Kael. She still has no run, dash or double jump, so this pass makes her own tools better: her walk, vault, backstep, parry and Flare. Her escape still covers less ground than Kael's dash and run, and she stays untouchable for longer while she makes it.",
+          "changes": [
+            {
+              "kind": "stat",
+              "label": "Move stat",
+              "before": "0.93",
+              "after": "1.1"
+            },
+            {
+              "kind": "stat",
+              "label": "Walk speed (measured in game; Kael walks 67.4)",
+              "before": "62.7 pixels per second",
+              "after": "74.2 pixels per second"
+            },
+            {
+              "kind": "stat",
+              "label": "Time to cross the stage (measured in game)",
+              "before": "4.62 seconds",
+              "after": "3.92 seconds"
+            },
+            {
+              "kind": "stat",
+              "label": "Vault recharge",
+              "before": "1.2 seconds",
+              "after": "0.95 seconds"
+            },
+            {
+              "kind": "stat",
+              "label": "Vault untouchable time",
+              "before": "From the plant to the top of the arc (0.416 seconds measured)",
+              "after": "From the plant to 0.1 seconds past the top (0.512 seconds measured)"
+            },
+            {
+              "kind": "note",
+              "text": "The vault now starts straight out of a brace (K while L is held) and out of a backstep (K in the hop vaults on landing, K in the skid vaults at once), toward a held side. Backstep, then K with the side away held, is her escape: a hop back, a turn and a vault away."
+            },
+            {
+              "kind": "stat",
+              "label": "Backstep distance (hop)",
+              "before": "30 pixels",
+              "after": "36 pixels"
+            },
+            {
+              "kind": "stat",
+              "label": "Backstep stamina cost",
+              "before": "25",
+              "after": "20"
+            },
+            {
+              "kind": "stat",
+              "label": "Backstep untouchable time",
+              "before": "0.12 seconds",
+              "after": "0.15 seconds"
+            },
+            {
+              "kind": "stat",
+              "label": "Stamina a parry gives back",
+              "before": "None",
+              "after": "25"
+            },
+            {
+              "kind": "stat",
+              "label": "Flare heal",
+              "before": "None",
+              "after": "5% of her max HP"
+            },
+            {
+              "kind": "note",
+              "text": "Every vault now crosses from her last pose into the plant over two frames, so a vault out of a brace or backstep reads cleanly."
+            }
+          ],
+          "media": {
+            "kind": "video",
+            "file": "ysra-vault.mp4",
+            "poster": "ysra-vault.png",
+            "alt": "Ysra braces with her glaive held upright as a thornback walks toward her. When it charges, she vaults straight out of the brace, plants the glaive and arcs over it as it rushes past beneath her. She lands, turns to face it, hops back in a backstep and vaults away from it across the ruins.",
+            "width": 640,
+            "height": 360
+          },
+          "feedback": [9]
+        }
+      ]
+    },
+    {
+      "id": "systems",
+      "entries": [
+        {
+          "name": "Co-op rooms",
+          "tag": "new",
+          "summary": "Up to four players can now fight the same 30-wave run together, each with their own hero, picks, shop upgrades and coins.",
+          "context": "Players asked for a way to play the run together. The host's browser runs the one game with every hero in it, and each guest plays through a live picture of it with their own HUD, touch controller and skill cards. The foe scaling is our first estimate, and we will tune it once rooms of real players report back.",
+          "changes": [
+            {
+              "kind": "note",
+              "text": "Co-op on the start menu: Host a room, or type a room code and press Join. Codes have 5 letters and digits, with no 0, O, 1 or I, and spaces, dashes and lower case are fine. An invite link joins straight away."
+            },
+            {
+              "kind": "note",
+              "text": "Players are P1 to P4 in gold, cyan, pink and green. Each picks Kael or Ysra in the lobby, and only the host can start the run."
+            },
+            {
+              "kind": "note",
+              "text": "Experience is shared: any orb levels the whole room, and orbs left on the floor fly to the nearest standing hero. Skill points and cards are each player's own."
+            },
+            {
+              "kind": "note",
+              "text": "When a wave is cleared with picks waiting, the game pauses for everyone. Players with nothing to choose read who they are waiting for."
+            },
+            {
+              "kind": "note",
+              "text": "A hero at 0 HP lies down for 2.4 seconds, then counts as down: foes, coins and orbs pass them by. At wave clear every downed hero stands with 50% HP. Last Light still saves each player who bought it once per run."
+            },
+            {
+              "kind": "note",
+              "text": "Each player past the first adds 40% more minions to every wave, 25% more HP to every minion, 50% to a mini boss and 60% to a boss."
+            },
+            {
+              "kind": "note",
+              "text": "Coins a hero picks up are theirs, and coins left on the floor at the end are split evenly. Each hero plays with their own player's shop levels, and every player banks coins in their own browser."
+            },
+            {
+              "kind": "note",
+              "text": "A foe's blow, shot or hazard strikes every standing hero it reaches. Burns, flasks and ultimates credit the hero who made them, each hero has their own swing, and each Kael keeps his own selected element."
+            },
+            {
+              "kind": "note",
+              "text": "The pause menu in a room has Resume, Controls, Options and Leave room, and the run keeps going under it. A guest who leaves mid-run banks their coins. If the host leaves, the room closes and every guest banks what they picked up."
+            },
+            {
+              "kind": "note",
+              "text": "Guests see a 640 by 360 picture at 30 frames per second. It opens at 2 Mbit/s so the first seconds are sharp; Safari and Firefox ignore that hint, so guests there may see a soft picture for the first few seconds."
+            },
+            {
+              "kind": "note",
+              "text": "Co-op adds no new controls: keyboard and touch work for every player as in solo play. Solo runs load no network code."
+            }
+          ],
+          "feedback": [10]
+        },
+        {
+          "name": "Low health warning",
+          "tag": "new",
+          "summary": "A red glow at the screen edge now warns you when your HP runs low, and your hero shows it in their stance.",
+          "context": "A player pointed out that it was easy to miss how close you were to falling in the middle of a fight. The glow sits at the edge of the screen so it never covers the action, and it grows more urgent as HP drops.",
+          "changes": [
+            {
+              "kind": "stat",
+              "label": "Below 25% HP",
+              "before": "No warning",
+              "after": "A faint red band 18 pixels deep, breathing every 1.8 seconds"
+            },
+            {
+              "kind": "stat",
+              "label": "Below 10% HP",
+              "before": "No warning",
+              "after": "A brighter band 28 pixels deep, beating every 0.85 seconds"
+            },
+            {
+              "kind": "note",
+              "text": "The glow takes 0.45 seconds to cross between levels as HP falls or comes back, and fades out after a heal."
+            },
+            {
+              "kind": "note",
+              "text": "At low HP both heroes sink into a wounded idle over 12 frames: Kael hunches over his sword planted in the floor, and Ysra lets her glaive sag onto the floor ahead. They straighten up again after a heal."
+            }
+          ],
+          "media": {
+            "kind": "video",
+            "file": "low-hp-warning.mp4",
+            "poster": "low-hp-warning.png",
+            "alt": "Kael stands his ground alone in wave 1 as glimmer moths shoot him. A hit drops him to 19% HP: a faint red glow starts breathing slowly at the screen edge and he sinks into a hunched, wounded idle. Another hit drops him to 10% and the glow turns wider and brighter, beating like a heart.",
+            "width": 640,
+            "height": 360
+          },
+          "feedback": [8]
+        }
+      ]
+    },
+    {
+      "id": "art",
+      "entries": [
+        {
+          "name": "Detailed heroes and foes",
+          "tag": "rework",
+          "summary": "Heroes, effects and every era's foes are drawn with twice the detail.",
+          "context": "The stage stays 320 by 180 art pixels, and the frame is now drawn at twice that size. Heroes and effects can now carry detail half an art pixel fine, and every pixel still stays square.",
+          "changes": [
+            {
+              "kind": "stat",
+              "label": "Frame drawn at",
+              "before": "320 by 180",
+              "after": "640 by 360"
+            },
+            {
+              "kind": "note",
+              "text": "Redrawn at full detail: the day, rain, night and abyss foes, and the twilight Rune Golem and Prism Sprite."
+            },
+            {
+              "kind": "note",
+              "text": "Kael's landing now flows into the idle pose that follows it."
+            }
+          ],
+          "media": {
+            "kind": "image",
+            "file": "twilight-wave.png",
+            "alt": "Wave 18 of the twilight era under a ringed moon: Ysra leaps with her glaive raised beside a rune golem, while a horned husk, two more golems, a crystal prism sprite and a night wisp close in among glowing rifts and broken pillars.",
+            "width": 1280,
+            "height": 720
+          }
+        }
+      ]
+    },
+    {
+      "id": "bugfixes",
+      "entries": [
+        {
+          "name": "A fresh hero every run",
+          "tag": "fix",
+          "summary": "Every run now starts with a fresh hero, at the start point and in the first step of the combo.",
+          "context": "Starting a new run straight after the last one could carry over that run's combo step, swing and dash timer, so the first press of a run did something unexpected.",
+          "changes": [
+            {
+              "kind": "stat",
+              "label": "Combo step, swing and dash timer at the start of a run",
+              "before": "Carried over from the last run",
+              "after": "Reset"
+            }
+          ]
+        },
+        {
+          "name": "Shop texts for Ysra players",
+          "tag": "fix",
+          "summary": "Lodestone and Last Light now describe your hero, so they read right when you play Ysra.",
+          "context": "Ysra can use both skills, and their shop texts still named Kael.",
+          "changes": [
+            {
+              "kind": "stat",
+              "label": "Lodestone",
+              "before": "Coins fly to Kael at once, and foes drop a quarter more.",
+              "after": "Coins fly to your hero at once, and foes drop a quarter more."
+            },
+            {
+              "kind": "stat",
+              "label": "Last Light",
+              "before": "Once per run, a fatal blow leaves Kael standing with half his HP.",
+              "after": "Once per run, a fatal blow leaves your hero standing with half their HP."
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "feedback": [
+    {
+      "id": 8,
+      "summary": "A player suggested a red screen-edge glow when HP drops below 25 percent, stronger below 10 percent, and a strained idle stance for the hero at low HP."
+    },
+    {
+      "id": 9,
+      "summary": "A player reported that Ysra moves slowly and has few ways to survive, which makes her much harder to play than Kael, and asked for the heroes to be balanced."
+    },
+    {
+      "id": 10,
+      "summary": "A player asked for a multiplayer mode for up to four players, where one player hosts a room and the others join it."
+    }
+  ]
+}
