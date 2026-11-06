@@ -10,7 +10,7 @@ export interface FistSpec {
   box: readonly [number, number, number, number];
   /** the arc a big blow leaves behind, in her ramp */
   arc?: SlashShape;
-  /** she steps in this fast (pixels a second, slowing on the floor) this long into the blow, to keep a foe in reach */
+  /** she steps in this fast (pixels a second, slowing on the floor) this long into the blow; 0 keeps her planted */
   step: number;
   stepAt: number;
   /** damage as a multiple of attack damage */
@@ -37,9 +37,9 @@ const RISING = [0, -44, 14, -6] as const;
 
 /** the string from the start, then what Uppercut and Knuckle Rush add after the haymaker */
 export const FISTS: Record<FistBlow, FistSpec> = {
-  jab: { dur: frame(8), hit: frame(3), box: STRAIGHT, step: 40, stepAt: 0, power: 0.55, kx: 40, ky: -10, stagger: 0.3 },
-  cross: { dur: frame(9), hit: frame(3), box: STRAIGHT, step: 50, stepAt: 0, power: 0.65, kx: 60, ky: -10 },
-  hook: { dur: frame(11), hit: frame(5), box: STRAIGHT, step: 50, stepAt: 0, power: 0.85, kx: 90, ky: -20, stagger: 0.6 },
+  jab: { dur: frame(8), hit: frame(3), box: STRAIGHT, step: 0, stepAt: 0, power: 0.55, kx: 40, ky: -10, stagger: 0.3 },
+  cross: { dur: frame(9), hit: frame(3), box: STRAIGHT, step: 0, stepAt: 0, power: 0.65, kx: 60, ky: -10 },
+  hook: { dur: frame(11), hit: frame(5), box: STRAIGHT, step: 0, stepAt: 0, power: 0.85, kx: 90, ky: -20, stagger: 0.6 },
   haymaker: {
     dur: frame(16),
     hit: frame(8),

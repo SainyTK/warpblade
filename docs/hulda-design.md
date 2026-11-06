@@ -113,11 +113,13 @@ Mash bot (walk to the nearest foe, mash J, take the first card), one determinist
 | Kael | 4 | 10 |
 | Ysra | 5 | 14 |
 | Sable | 5 | 15 |
-| Hulda | 3 | 9 |
+| Hulda | 4 | 10 |
 
 The first build fell on wave 1 with no kills: the day's Glimmer Moths hover 35 to 50 px over the floor, out of reach of a 22 px fist, and the mash bot never jumps or grabs.
 The haymaker and the uppercut now follow the fist up over her head (their boxes reach 42 and 44 px up), which took her to wave 3 with 6 kills.
-Raising Grit per landed J blow from 3 to 4, the plan's first lever, took her to wave 3 with 9 kills and 82 seconds survived, within two waves of every other hero.
+Raising Grit per landed J blow from 3 to 4, the plan's first lever, took her to wave 3 with 9 kills.
+The haymaker's lunge, a step in on its seventh frame that carries the overhand into a foe the string pushed back, took her to wave 4 with 10 kills, level with Kael.
+A small step in on every blow was tried and dropped: it walked her under the moths and she fell on wave 2.
 
 Skilled bot, the same way:
 
@@ -126,7 +128,7 @@ Skilled bot, the same way:
 | Kael | 5 | 15 |
 | Ysra | 7 | 24 |
 | Sable | 5 | 15 |
-| Hulda | SKILLED_WAVE | SKILLED_KILLS |
+| Hulda | 4 | 11 |
 
 The bots never grab, throw, rush on purpose, Bellow or taunt, so they show her floor; a player who grabs fliers out of the air and throws foes into each other does far better.
 
