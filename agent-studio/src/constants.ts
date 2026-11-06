@@ -5,6 +5,10 @@ import type { Role, RoleConfig } from "./types.ts";
 export const TIMEZONE = "Asia/Bangkok";
 /** a big patch ships when this many days have passed since the last one */
 export const BIG_PATCH_EVERY_DAYS = 3;
+/** the hero sprint: until the game has this many heroes, every night is a big patch that adds one (charter) */
+export const HERO_ROSTER_TARGET = 10;
+/** the hero list the sprint counts, relative to the checkout */
+export const ROSTER_FILE = "src/constants/characters/index.ts";
 export const REPO_SLUG = "SainyTK/warpblade";
 export const SITE_URL = "https://warpblade.sainytk.com";
 export const MAIN_BRANCH = "main";
