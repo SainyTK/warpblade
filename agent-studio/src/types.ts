@@ -60,6 +60,14 @@ export interface RunContext {
   lastTag: string | null;
   previousVersions: string[];
   dayWork: DayWork;
+  /** set while the hero sprint runs: tonight's headline is a new hero, whatever the day work brings */
+  heroSprint: HeroSprint | null;
+}
+
+/** how far the hero sprint has come before tonight */
+export interface HeroSprint {
+  heroes: number;
+  target: number;
 }
 
 /** an open game-feedback issue, with only what triage reads; its author never reaches an agent */

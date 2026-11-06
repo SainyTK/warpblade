@@ -2,10 +2,11 @@ import { access, mkdir, readdir, rename } from "node:fs/promises";
 import { join } from "node:path";
 import type { Patch } from "../../../src/types/patch.ts";
 import { compareVersions } from "../../../src/utils/compareVersions.ts";
-import { BRANCH_PREFIX } from "../constants.ts";
+import { BRANCH_PREFIX, HERO_ROSTER_TARGET } from "../constants.ts";
 import { runFiles } from "../runFiles.ts";
 import { readJson, writeJson, writeText } from "../services/files.ts";
 import { dayWorkIn, dirtyFiles, git, headSha, lastTag } from "../services/git.ts";
+import { heroCount } from "../services/roster.ts";
 import type { Night, RunOptions } from "../types.ts";
 import { nextVersion, patchKindFor, type ShippedPatch } from "../utils/cadence.ts";
 
@@ -33,8 +34,12 @@ export async function prepare(options: RunOptions): Promise<Night | null> {
   const tag = await lastTag(workdir);
   const range = tag ? `${tag}..HEAD` : "-30";
   const dayWork = await dayWorkIn(workdir, range);
+  const heroes = await heroCount(workdir);
+  const heroSprint = heroes < HERO_ROSTER_TARGET ? { heroes, target: HERO_ROSTER_TARGET } : null;
   const kind =
-    options.kind === "auto" ? patchKindFor(options.date, shipped, dayWork.headlines.length > 0) : options.kind;
+    options.kind === "auto"
+      ? patchKindFor(options.date, shipped, dayWork.headlines.length > 0, heroSprint !== null)
+      : options.kind;
   const pkg = await readJson<{ version: string }>(join(workdir, "package.json"));
   const current = shipped.at(-1)?.version ?? pkg.version;
   const version = nextVersion(current, kind);
@@ -69,9 +74,12 @@ export async function prepare(options: RunOptions): Promise<Night | null> {
     lastTag: tag,
     previousVersions: shipped.map((p) => p.version),
     dayWork,
+    heroSprint: kind === "big" ? heroSprint : null,
   };
   await writeJson(files.context, ctx);
   console.log(`[studio] ${options.mode} run: ${kind} patch ${version} for ${options.date} on ${branch}`);
+  if (heroSprint && kind === "big")
+    console.log(`[studio] hero sprint: ${heroSprint.heroes} of ${heroSprint.target} heroes, tonight adds one`);
   if (dayWork.headlines.length || dayWork.feedback.length)
     console.log(
       `[studio] day work on main: ${dayWork.headlines.length} headline commit(s), feedback ${dayWork.feedback.map((id) => `#${id}`).join(", ") || "none"}`,
