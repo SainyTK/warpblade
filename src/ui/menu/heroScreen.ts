@@ -3,21 +3,23 @@ import { ULT_LABEL } from "../../constants/skillLabels";
 import { applySkin } from "../../game/hero/skin";
 import { character, setCharacter } from "../../game/state";
 import { saveHeroChoice } from "../../services/heroChoice";
+import { metaBonus } from "../../store/meta";
 import type { CharacterDef } from "../../types/character";
 import type { MenuView } from "../../types/menu";
-import { allNodes } from "../../utils/stats";
+import type { Stats } from "../../types/stats";
+import { allNodes, computeStats } from "../../utils/stats";
 import { backItem } from "./backItem";
 import { heroPortrait } from "./heroPortrait";
 import { startGame } from "./menuActions";
 import { focusEntry, onAdjust } from "./menuNav";
 
-/** each stat as a share of this, for the bars */
-const STAT_BARS: readonly { label: string; value: (c: CharacterDef) => number; full: number }[] = [
-  { label: "HP", value: (c) => c.base.hp, full: 140 },
-  { label: "Attack", value: (c) => c.base.ad, full: 14 },
-  { label: "Magic", value: (c) => c.base.ap, full: 14 },
-  { label: "MP", value: (c) => c.base.mp, full: 110 },
-  { label: "Speed", value: (c) => c.base.move * c.base.aspd, full: 1.05 },
+/** each stat as a share of this, for the bars; full is about the strongest hero with every shop level bought */
+const STAT_BARS: readonly { label: string; value: (s: Stats) => number; full: number }[] = [
+  { label: "HP", value: (s) => s.hp, full: 180 },
+  { label: "Attack", value: (s) => s.ad, full: 18 },
+  { label: "Magic", value: (s) => s.ap, full: 15 },
+  { label: "MP", value: (s) => s.mp, full: 150 },
+  { label: "Speed", value: (s) => s.move * s.aspd, full: 1.15 },
 ];
 
 const titleCase = (s: string): string => s.toLowerCase().replace(/\b\w/g, (m) => m.toUpperCase());
@@ -29,14 +31,21 @@ function el<K extends keyof HTMLElementTagNameMap>(tag: K, className: string, te
   return node;
 }
 
+const share = (value: number, full: number): string => `${Math.round(Math.min(1, value / full) * 100)}%`;
+
+/** the hero's own stats at level 1, and in a lighter part what the shop adds, which every hero gets alike */
 function statBars(c: CharacterDef): HTMLElement {
   const list = el("dl", "hero-stats");
+  const own = computeStats(c, 1, c.startRanks ?? {});
+  const bought = computeStats(c, 1, c.startRanks ?? {}, metaBonus());
   for (const s of STAT_BARS) {
     const row = el("div", "");
     const bar = el("dd", "hero-bar");
     const fill = el("span", "");
-    fill.style.width = `${Math.round(Math.min(1, s.value(c) / s.full) * 100)}%`;
-    bar.append(fill);
+    fill.style.width = share(s.value(own), s.full);
+    const extra = el("i", "");
+    extra.style.width = share(s.value(bought), s.full);
+    bar.append(extra, fill);
     row.append(el("dt", "", s.label), bar);
     list.append(row);
   }

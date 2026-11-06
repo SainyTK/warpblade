@@ -6,6 +6,7 @@ import { hero } from "../../../state";
 import { dust } from "../../../world";
 import { setState, settle } from "../../actions";
 import { refuseDash } from "../../stamina";
+import { travelEnded } from "../../travelEnd";
 import { cutMove } from "./cut";
 import { stance } from "./memory";
 import { startVault } from "./vault";
@@ -51,6 +52,7 @@ export function runBackstep(): void {
   stance.landed = true;
   h.st = BACKSTEP_TIMES.land;
   dust(h.x, h.y, 4, h.face);
+  travelEnded();
   if (!stance.vaultNext) return;
   stance.vaultNext = false;
   startVault();
