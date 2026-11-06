@@ -8,10 +8,15 @@ export interface ShippedPatch {
   date: string;
 }
 
-/** big when no patch has shipped yet, the day's work on main has a headline,
-    or the last big one is BIG_PATCH_EVERY_DAYS or more days old */
-export function patchKindFor(date: string, shipped: ShippedPatch[], dayHeadline: boolean): PatchKind {
-  if (dayHeadline) return "big";
+/** big during the hero sprint, when no patch has shipped yet, when the day's work on main has a headline,
+    or when the last big one is BIG_PATCH_EVERY_DAYS or more days old */
+export function patchKindFor(
+  date: string,
+  shipped: ShippedPatch[],
+  dayHeadline: boolean,
+  heroSprint: boolean,
+): PatchKind {
+  if (heroSprint || dayHeadline) return "big";
   const lastBig = shipped.filter((p) => p.kind === "big").sort((a, b) => b.date.localeCompare(a.date))[0];
   if (!lastBig) return "big";
   return daysBetween(lastBig.date, date) >= BIG_PATCH_EVERY_DAYS ? "big" : "small";

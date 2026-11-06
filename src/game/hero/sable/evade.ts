@@ -10,6 +10,7 @@ import { game, hero, progress } from "../../state";
 import { boxHit, dust, heroBox, markStruck, newSwing, struckThisSwing } from "../../world";
 import { isFree, setState, settle } from "../actions";
 import { refuseDash } from "../stamina";
+import { travelEnded } from "../travelEnd";
 import { muzzle } from "./aim";
 import { looseBolt } from "./loose";
 import { sable } from "./memory";
@@ -82,7 +83,7 @@ export function runHop(): void {
     return;
   }
   if (!sable.hopShot && h.st >= HOP.shot) hopShot();
-  h.vx = -h.face * HOP.speed;
+  h.vx = -h.face * HOP.speed * progress.stats.move;
   if (!h.ground) {
     h.st = Math.min(h.st, HOP.air);
     return;
@@ -90,6 +91,7 @@ export function runHop(): void {
   sable.landed = true;
   h.st = HOP.land;
   dust(h.x, h.y, 4, h.face);
+  travelEnded();
 }
 
 /** Slide Kick: foes she slides through are tripped */
@@ -105,10 +107,14 @@ function trip(): void {
 export function runSlide(): void {
   const h = hero;
   if (h.st < SLIDE.time) {
-    h.vx = h.face * SLIDE.speed;
+    h.vx = h.face * SLIDE.speed * progress.stats.move;
     if (Math.floor(h.st * 30) % 3 === 0) dust(h.x - h.face * 4, h.y, 1, -h.face);
     if (hasPerk("slideKick")) trip();
     return;
+  }
+  if (!sable.landed) {
+    sable.landed = true;
+    travelEnded();
   }
   if (h.st >= SLIDE.time + SLIDE.recover) settle();
 }

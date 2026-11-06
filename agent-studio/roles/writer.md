@@ -6,6 +6,7 @@ Read: `agent-studio/charter.md`, the plan (with the director's memo), the develo
 
 Day work listed in tonight's run is part of this patch: write it up like everything else, with numbers from its commits (`git show <sha>` or `git diff <last tag>..HEAD`).
 A day work headline is the patch's headline and gets its own highlight.
+During the hero sprint the new hero is the headline, and each day work headline still gets its own highlight.
 List every feedback item addressed by day work in `feedback` and reply to it.
 
 Write these files:

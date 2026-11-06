@@ -9,6 +9,7 @@ Reuse the engine's drawing, palettes, lights, particles, clips and hero kit seam
 
 Rules:
 
+- A new hero during the hero sprint must meet every point in the charter's Hero sprint section: locked with its price, its own achievement, shop items that help it, co-op, touch and the Controls screen, the motion standard, and a design note. Build the kit as its own folder like `src/game/hero/ysra/` and `src/game/hero/sable/`; do not bend another hero's kit to fit it.
 - When the plan's headline has `builtInDay` set, the owner already built it on main: do not rebuild or redesign it. Build the plan's other changes, and touch the headline only to fix what QA reports.
 - Build the plan. If something in it cannot work, choose the closest version that serves the same goal, and record the deviation.
 - Do not edit anything under `agent-studio/` or `.github/`, or deployment settings. Do not touch `src/content/patches/` or `public/patches/`; the writer and media agents own those.

@@ -8,6 +8,11 @@ export type KitId = "kael" | "ysra" | "sable";
 /**
  * How one hero plays. The shared loop (updateHero, the combo engine, physics, hurt) calls into the kit of the hero
  * being played, so each hero owns its own presses, combo choices, states and poses.
+ *
+ * Every shop item helps every hero, so a kit also keeps these promises (see docs/meta-progress.md): it calls
+ * `travelEnded()` (src/game/hero/travelEnd.ts) when each of its travel moves ends, deals its damage from
+ * `progress.stats.ad` and `progress.stats.ap`, spends stamina on its defence or travel and MP on the shared ultimate,
+ * walks at `progress.stats.move` and lets blows reach `hurtHero`, where Last Light answers a fatal one.
  */
 export interface HeroKit {
   /** timers of the kit's own state, every frame before presses are read */
