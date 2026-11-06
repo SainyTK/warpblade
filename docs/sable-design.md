@@ -59,7 +59,7 @@ Mash bot (walk to the nearest foe, mash J, take the first card), one determinist
 | --- | --- | --- |
 | Kael | 4 | 10 |
 | Ysra | 5 | 14 |
-| Sable | 5 | see the report |
+| Sable | 5 | 15 |
 
 The mash bot never reloads by hand, hops or kicks, so it shows her floor; a player who spaces and times reloads does better.
 
