@@ -69,11 +69,11 @@ His crystal sword can be thrown, and wherever it lands, he follows.
   When a run ends, cleared or lost, its coins go to the bank and a result screen shows the wave reached and the coins earned.
   The Shop on the start menu sells stats in levels (HP, attack, ability power, MP, crit, move speed, stamina) and four skills bought once: Lodestone, Warp Shock, Head Start and Last Light.
   Everything bought applies to every run, on top of the level-up picks, and is saved in this browser.
-- **Achievements and hero unlocks.** Twenty achievements track goals across runs: waves reached, a clear of wave 10 with each hero, foes slain, long combos, perfect dodges, evolutions, coins banked and the Rift Warden.
+- **Achievements and hero unlocks.** Twenty-two achievements track goals across runs: waves reached, a clear of wave 10 with each hero, foes slain, long combos, perfect dodges, evolutions, coins banked and the Rift Warden.
   Most pay coins, a few stay hidden as ??? until an earlier one is earned, and a small banner slides down when one is earned without stopping play.
   The Achievements page on the start menu shows what each one asks, with a progress bar for those that count up, and the result screen names those a run earned.
   Kael and Ysra are free; every newer hero is unlocked with coins on the hero screen, each one costing more than the last (see [docs/achievements.md](docs/achievements.md)).
-- **Two heroes.** Start opens the hero screen. Kael throws his crystal sword and appears where it lands; he is balanced and learns every ability from picks.
+- **Four heroes.** Start opens the hero screen, a roster of hero tiles over one panel for the hero in focus. Kael throws his crystal sword and appears where it lands; he is balanced and learns every ability from picks.
   Ysra, the ember lancer, is a flame-temple guard who woke when the braziers lit again.
   She shares Kael's rig and plays nothing like him: tougher and slower, with one heavy jump and no dash.
   Her glaive string pokes far and pierces every foe in the line, holding `J` winds a lunge, and up or down with `J` hooks a foe up or drags it in.
@@ -83,6 +83,15 @@ His crystal sword can be thrown, and wherever it lands, he follows.
   She starts every run with the whole glaive kit and the Flare rite, and her picks change and extend those moves.
   Her special is Pyre Wave, a wall of flame rolling ahead of her.
   Her three ultimates are Sunspear, a burning spear thrown the length of the stage through every foe in its line; Phoenix Dive, a crash from the sky onto the thickest crowd; and Volcanic Rift, a crack in the floor that erupts in pillars of fire.
+  Sable, the hooded hunter, fights at range with a repeating crossbow: `J` shoots and aims with up or down, the quiver runs dry and reloads on `O`, with a perfect reload for a press in the bright window.
+  `K` kicks foes away, `L` hops back and shoots or slides forward under blows, and `I` sets snares for MP (see [docs/sable-design.md](docs/sable-design.md)).
+  Hulda, the iron grappler, fights bare-handed in iron gauntlets with the shortest reach of all and no dodge.
+  `J` throws a four-blow string of jab, cross, body hook and an overhand haymaker, a hammer fist in the air, and a knee while she holds a foe.
+  `K` grabs the foe ahead and holds it while she walks, then throws it: forward into the others, a suplex into the floor behind her with the side behind held, or straight up with Up.
+  Bigger foes are crushed in both hands instead, and in the air `K` is Skyfall Grab, which catches a flier and drives it into the floor.
+  `L` is an armoured Bull Rush, `I` a Bellow that drags foes in for MP, and `O` a taunt.
+  Her blows, grabs and throws fill Grit, four iron plates under stamina; a blow on a full plate breaks it for half the damage and never stops her (see [docs/hulda-design.md](docs/hulda-design.md)).
+  Sable and Hulda start locked and are bought with coins.
   The hero behind the menu changes as you look through the cards, and the choice is saved in this browser.
 - **A 30-wave stage in five eras.** The sky and the foes change as the waves go on, and the scene dissolves into the next era between waves.
   Waves 1 to 5 are a sunlit day with Thornbacks, Glimmer Moths and the Oakheart.
@@ -138,7 +147,7 @@ Buttons dim while their action lacks MP or stamina or waits on a cooldown, and p
 The page holds still under your fingers: double taps, pinches and long presses never zoom, select text or open a menu.
 
 The game opens on a start menu with Start, Co-op, Shop, Achievements, Controls and Options.
-Start opens the hero screen: pick Kael, Ysra or Sable with `A` `D` or the arrows and begin with `J` or `Enter`.
+Start opens the hero screen: pick Kael, Ysra, Sable or Hulda with `A` `D` or the arrows and begin with `J` or `Enter`.
 In the Shop, pick an item once to see "Buy?" and again to buy it; a locked hero on the hero screen asks the same way before it is unlocked.
 When a run ends, the start menu opens on its result, with Continue and Shop.
 Pausing adds Resume, Restart run and Quit run, and freezes the game until you resume.
@@ -240,6 +249,10 @@ docs/
   combo-design.md  what the combo takes from Grand Chase and what it leaves out
   meta-progress.md coins, the shop items and the basis for their prices
   achievements.md  the achievements, how they are tracked, hero unlock prices and how a new hero adds its own
+  ysra-design.md   Ysra's kit, Heat and rites, and how she differs from Kael
+  sable-design.md  Sable's kit, the quiver and reload, and her balance check
+  hulda-design.md  Hulda's kit, Grit and plates, grabs and throws, and her balance check
+  motion-standard.md the rules every hero's animation follows
   pick-pacing.md   when picks come, how long the skill pool lasts and Second Wind after it
   multiplayer.md   co-op rooms: who runs the game, what crosses the network, downs, picks, coins and what is left for later
   media/           README banner, gameplay GIF and screenshots

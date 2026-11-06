@@ -8,18 +8,27 @@ import { seg } from "../ysra/parts";
 type S = SpriteCanvas;
 export const HC = HULDA_SKIN.colors;
 
-/** an iron gauntlet's fist, knuckles to the right, centred at (x, y), r across */
-export function fist(s: S, x: number, y: number, r = 2.6): void {
+/** an iron gauntlet's fist, knuckles toward `dir` (1 right, -1 left), centred at (x, y), r across */
+export function fist(s: S, x: number, y: number, r = 3.6, dir = 1): void {
   fill(s, () => {
-    seg(s, x - r - 2, y, x - r, y, HC.glove);
-    s.set(x - r - 2, y - 1, HC.gloveLight);
+    s.poly(
+      [
+        [x - dir * (r + 3), y - r * 0.55],
+        [x - dir * r, y - r * 0.55],
+        [x - dir * r, y + r * 0.55],
+        [x - dir * (r + 3), y + r * 0.55],
+      ],
+      HC.glove,
+    );
+    seg(s, x - dir * (r + 3), y - r * 0.55, x - dir * r, y - r * 0.55, HC.gloveLight);
   });
   fill(s, () => {
     s.dot(x, y, r, HC.steel);
-    s.set(x - 1, y - r + 1, HC.steelLight);
+    s.dot(x - 1, y - 1, r * 0.55, HC.steelLight);
   });
   fill(s, () => {
-    for (let i = -1; i <= 1; i++) s.set(x + r, y + i * Math.max(1, r * 0.5), WHITE);
+    seg(s, x - dir * r * 0.2, y - r * 0.6, x - dir * r * 0.2, y + r * 0.6, HC.steelDark);
+    for (const k of [-0.55, 0, 0.55]) s.set(x + dir * (r - 0.5), y + k * r, WHITE);
   });
 }
 
@@ -36,6 +45,7 @@ export function plate(s: S, x: number, y: number, w: number, h: number, broken =
       HC.steel,
     );
     seg(s, x + 1, y, x + w - 1, y, HC.steelGlint);
+    seg(s, x + 2, y + h, x + w - 2, y + h, HC.steelDark);
   });
   if (!broken) return;
   fill(s, () => {
@@ -44,8 +54,11 @@ export function plate(s: S, x: number, y: number, w: number, h: number, broken =
   });
 }
 
-/** a small foe body, curled, for throws */
-export function body(s: S, x: number, y: number, r = 2.5): void {
+/** a foe's body, curled, for throws */
+export function body(s: S, x: number, y: number, r = 3.2): void {
   fill(s, () => s.dot(x, y, r, RUST[2]));
-  fill(s, () => s.set(x + 1, y - 1, RUST[5]));
+  fill(s, () => {
+    s.set(x - 1, y - r + 1, RUST[4]);
+    s.set(x + r * 0.4, y - r * 0.2, RUST[6]);
+  });
 }
