@@ -2,7 +2,7 @@
 
 Up to four players fight the same 30-wave run together, each with their own hero.
 One player hosts a room from the start menu, and the room runs in that player's browser tab.
-The others join with the room's five-letter code or an invite link, pick Kael or Ysra (the same hero more than once is fine) and wait in the lobby until the host starts the run.
+The others join with the room's five-letter code or an invite link, pick a hero (the same hero more than once is fine) and wait in the lobby until the host starts the run.
 
 ## Where it comes from
 

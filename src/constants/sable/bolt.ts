@@ -43,6 +43,12 @@ export const MUZZLE = {
   air: { x: 11, y: -14 },
 } as const;
 
+/**
+ * A bolt bends toward the foe nearest the aim: within `cone` radians of it at range, widening to `closeCone` for a foe
+ * `close` pixels away or nearer, so a flier right over her can still be shot.
+ */
+export const AIM_ASSIST = { cone: 0.4, closeCone: 1.35, close: 70 } as const;
+
 /** the angle of each aim in radians, positive down */
 export const AIM_ANGLE = { level: 0, up: -0.5, low: 0, air: 0.62 } as const;
 

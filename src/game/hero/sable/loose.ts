@@ -47,6 +47,22 @@ export function looseBolt(b: Loose): void {
   const dir = Math.cos(b.angle) >= 0 ? 1 : -1;
   let through = pierceOf();
   const ricochet = hasPerk("ricochet");
+  const pass = (ax: number, ay: number, bx: number, by: number): boolean => {
+    for (const e of foesOnSegment(ax, ay, bx, by, struck)) {
+      struck.add(e);
+      const killed = strike(e, b.share, b.primed, dir);
+      sfx.hit(b.primed, 1.3);
+      if (b.primed) {
+        hitStop(0.03);
+        shake(0.08, 1);
+      }
+      if (killed && ricochet) continue;
+      if (through-- <= 0) return true;
+    }
+    return false;
+  };
+  // a foe pressed up against her, between her chest and the muzzle, is struck at once
+  if (pass(hero.x, b.y, b.x, b.y)) return;
   game.fx.push(
     createCrossbowBolt({
       x: b.x,
@@ -55,20 +71,7 @@ export function looseBolt(b: Loose): void {
       ramp: skin.ramp,
       primed: b.primed,
       bounces: ricochet ? 1 : 0,
-      pass(ax, ay, bx, by) {
-        for (const e of foesOnSegment(ax, ay, bx, by, struck)) {
-          struck.add(e);
-          const killed = strike(e, b.share, b.primed, dir);
-          sfx.hit(b.primed, 1.3);
-          if (b.primed) {
-            hitStop(0.03);
-            shake(0.08, 1);
-          }
-          if (killed && ricochet) continue;
-          if (through-- <= 0) return true;
-        }
-        return false;
-      },
+      pass,
     }),
   );
 }

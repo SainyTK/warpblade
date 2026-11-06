@@ -88,7 +88,7 @@ His crystal sword can be thrown, and wherever it lands, he follows.
   Waves 21 to 30 are the darkest, with Void Stalkers, Abyss Eyes and the Abyss Maw.
   Waves 5, 10, 15 and 25 bring the era's mini boss, and the Rift Warden waits at waves 20 and 30.
 - **Co-op for up to four.** Co-op on the start menu hosts a room in your browser, and friends join with its five-letter code or an invite link.
-  Each player picks Kael or Ysra, the same hero twice is fine, and a P1 to P4 tag in the player's colour floats over each hero.
+  Each player picks a hero, the same hero twice is fine, and a P1 to P4 tag in the player's colour floats over each hero.
   Waves bring more and tougher foes for each extra player.
   Experience is shared, but every player chooses their own skill cards when a wave is cleared and banks their own coins.
   A fallen player is down until the wave is cleared, then rises with half HP; the run ends when everyone is down at once.
@@ -134,7 +134,7 @@ Buttons dim while their action lacks MP or stamina or waits on a cooldown, and p
 The page holds still under your fingers: double taps, pinches and long presses never zoom, select text or open a menu.
 
 The game opens on a start menu with Start, Shop, Controls and Options.
-Start opens the hero screen: pick Kael or Ysra with `A` `D` or the arrows and begin with `J` or `Enter`.
+Start opens the hero screen: pick Kael, Ysra or Sable with `A` `D` or the arrows and begin with `J` or `Enter`.
 In the Shop, pick an item once to see "Buy?" and again to buy it.
 When a run ends, the start menu opens on its result, with Continue and Shop.
 Pausing adds Resume, Restart run and Quit run, and freezes the game until you resume.
@@ -195,7 +195,7 @@ His spine runs from hip to neck through a chest point that a pose can push forwa
 A pose can also turn his back to the camera or mirror him to face behind, which is how the spins read as spins.
 Arms and legs are placed by two-bone reach, each elbow can bend either way, and each boot tilts to point the toes or rock onto the heel.
 The heroes are drawn at the frame's finer grid: each part is lit from the top left with a light edge and a shadow edge, plate armour carries a glint, and the head is a 24 by 22 pixel portrait with a lit eye.
-Both heroes share this rig and differ by their colours, head art and weapon (`src/constants/characters/`).
+Every hero shares this rig and differs by their colours, head art and weapon (`src/constants/characters/`).
 Each body part is outlined where it overlaps the one behind it, and the whole figure gets a dark outline.
 Every move, action and state is a keyed clip sampled at 30 frames a second, with a pose keyed on nearly every frame; idle, walk, run, hang, charge and the throw wait loop (`src/constants/clips/`).
 His scarf and ponytail are verlet ropes, so they trail behind him as he runs and warps (`src/game/hero/chain.ts`).
