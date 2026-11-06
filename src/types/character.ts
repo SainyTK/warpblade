@@ -31,6 +31,8 @@ export interface CharacterDef {
   /** shown under the name on the hero screen */
   title: string;
   blurb: string;
+  /** the hero's colour in the menus, as a CSS colour: the frame and the stat bars on the hero screen */
+  accent: string;
   /** the weakest ultimate, learned like any other, and replaced by a stronger one */
   special: UltimateId;
   base: Stats;

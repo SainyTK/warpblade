@@ -8,6 +8,7 @@ import { roomView } from "../../store/coop";
 import { heroUnlocked } from "../../store/meta";
 import type { MenuView } from "../../types/menu";
 import { readRoomCode, typedRoomCode } from "../../utils/roomCode";
+import { el } from "../dom";
 import { backItem } from "./backItem";
 import { hostRoom, inviteLink, joinRoom, leaveRoom, roomHeroChanged, startRoomRun } from "./coopActions";
 import { menuItem } from "./menuItem";
@@ -15,13 +16,6 @@ import { onAdjust } from "./menuNav";
 import { showScreen } from "./menuState";
 
 const heroName = (id: string): string => CHARACTERS.find((c) => c.id === id)?.name ?? id;
-
-function el<K extends keyof HTMLElementTagNameMap>(tag: K, className: string, text = ""): HTMLElementTagNameMap[K] {
-  const node = document.createElement(tag);
-  node.className = className;
-  if (text) node.textContent = text;
-  return node;
-}
 
 /** the code box and its Join button; Enter in the box joins too. A code that cannot be one shows in the screen's error line */
 function joinRow(error: HTMLElement): HTMLElement {
