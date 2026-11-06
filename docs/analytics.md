@@ -3,9 +3,9 @@
 The live site sends page views and two game events to Google Analytics 4.
 The code is `src/services/analytics.ts`.
 
-It loads only in a production build with `VITE_GA_MEASUREMENT_ID` set to the GA4 measurement ID (`G-...`).
-The ID lives in the Vercel project's environment variables, so dev servers, playtest bots and forks send nothing.
-After setting or changing the ID, redeploy so the build picks it up.
+The GA4 account is "Warpblade" on the owner's personal Google account, with the property warpblade.sainytk.com (Thailand time) and the web stream "Warpblade web".
+The measurement ID and the one host that reports are in `src/constants/analytics.ts`.
+Only pages served from warpblade.sainytk.com load gtag.js, so dev servers, previews, playtest bots and forks send nothing.
 
 Both pages (the game and the patch notes) record a page view.
 The game also sends:
