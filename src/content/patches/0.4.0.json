@@ -1,0 +1,455 @@
+{
+  "version": "0.4.0",
+  "kind": "big",
+  "date": "2026-11-07",
+  "title": "Iron Grip",
+  "tagline": "Two new heroes join the fight: Hulda, the iron grappler who grabs foes and throws them into each other, and Sable, the hooded hunter with a repeating crossbow. Achievements now pay coins, and coins unlock the new heroes.",
+  "intro": "This patch starts our hero sprint: from today, every night adds a new hero until Warpblade has ten. Sable, a ranged hunter who wins by keeping her distance, arrives from the day's work, and the studio built Hulda tonight, a wrestler who walks into danger and fights with her hands. The four heroes now move, defend and attack in four different ways. To give every run a next goal, 22 achievements track what you do across runs and pay coins, and Sable and Hulda start locked until you buy them with those coins. Your coins, shop levels and options carry over as they were.",
+  "highlights": [
+    {
+      "title": "Hulda, the iron grappler",
+      "text": "Hulda fights bare-handed in iron gauntlets with the shortest reach in the game and no dodge. K grabs the foe ahead and holds it while J drives knees into it, then K throws it: forward into the others, a suplex into the floor behind her with the side behind held, or straight up with Up held. Bigger foes are crushed in both hands. She costs 400 coins on the hero screen.",
+      "media": {
+        "kind": "video",
+        "file": "hulda-suplex.mp4",
+        "poster": "hulda-suplex.png",
+        "alt": "In the sunlit ruins of wave 3, Hulda walks up to a thornback, grabs it, drives two knees into it, then heaves it over her head and slams it into the floor behind her, and a red ring spreads across the ground.",
+        "width": 640,
+        "height": 360
+      }
+    },
+    {
+      "title": "Armour plates",
+      "text": "Hulda's GR bar holds four iron plates of Grit. Landing blows, grabbing, throwing, Bellow and the taunt fill it. A blow on a full plate breaks that plate for half the damage, and she carries on with whatever she was doing.",
+      "media": {
+        "kind": "video",
+        "file": "hulda-armour.mp4",
+        "poster": "hulda-armour.png",
+        "alt": "With three plates on her GR bar, Hulda walks into two thornbacks and keeps punching. Each blow she takes throws off grey plate shards with a BLOCK label while she stays on her feet, and the GR bar at top left drops one plate at a time.",
+        "width": 1280,
+        "height": 720
+      }
+    },
+    {
+      "title": "Sable, the hooded hunter",
+      "text": "Sable fights at range with a repeating crossbow. Hold J to keep shooting, aim with up or down, and reload on O; a second press in the bright window is a perfect reload that primes the next bolts. K kicks foes away, L hops back and shoots or slides forward under blows, and I sets snares. She costs 300 coins on the hero screen.",
+      "media": {
+        "kind": "video",
+        "file": "sable-reload-hop.mp4",
+        "poster": "sable-reload-hop.png",
+        "alt": "Sable, the hooded crossbow hunter, holds the trigger and fires a string of bolts into a thornback, times her reload for a perfect flash, keeps firing, and hops back shooting as the thornback lunges at her.",
+        "width": 640,
+        "height": 360
+      }
+    },
+    {
+      "title": "Achievements and hero unlocks",
+      "text": "Achievements on the start menu lists 22 goals in five groups: Waves, Heroes, Foes, Skill and Coins. Most pay coins when you earn them, and a small banner tells you without stopping play. Kael and Ysra are free, and every newer hero is bought with coins on the hero screen.",
+      "media": {
+        "kind": "image",
+        "file": "achievements.png",
+        "alt": "The Achievements page showing 7 of 22 earned. The Waves group shows progress bars, and the Heroes group lists Kael's, Ysra's, Sable's and Hulda's Trials, each asking to clear wave 10 with that hero for a 40 coin reward. Kael's Trial is earned with a gold trophy.",
+        "width": 1280,
+        "height": 720
+      }
+    }
+  ],
+  "sections": [
+    {
+      "id": "heroes",
+      "entries": [
+        {
+          "name": "Hulda",
+          "tag": "new",
+          "summary": "A slow, heavy wrestler who grabs foes, throws them into each other and takes blows on armour plates.",
+          "context": "Every hero so far escapes blows: Kael warps and dashes, Ysra blocks and vaults, Sable hops away and shoots. Hulda walks toward danger and is never untouchable, and grabbing and throwing gives the game a shape of attack it did not have.",
+          "changes": [
+            {
+              "kind": "stat",
+              "label": "Price on the hero screen",
+              "before": "Not in the game",
+              "after": "400 coins"
+            },
+            {
+              "kind": "note",
+              "text": "Base stats: 120 HP, 12 attack, 6 ability power, 70 MP, 120 stamina, 4% crit, move 0.9. Kael has 100 HP and move 1, Ysra 130 HP and move 1.1."
+            },
+            {
+              "kind": "note",
+              "text": "A and D walk, with no run. W is one low, heavy jump of 44 pixels, with no double jump."
+            },
+            {
+              "kind": "note",
+              "text": "J is a four-blow string: Jab (0.55x attack), Cross (0.65x), Body Hook (0.85x) and an overhand Haymaker (1.4x, breaks guards, stuns 0.5 seconds). The Haymaker lunges in and is armoured from its second frame until it lands. In the air, J is one Hammer Fist (0.9x) that spikes a foe into the floor."
+            },
+            {
+              "kind": "note",
+              "text": "Her fists reach 16 pixels ahead, the shortest reach in the game. The Haymaker swings up over her head, so it can catch a flier hovering above her."
+            },
+            {
+              "kind": "note",
+              "text": "L is Bull Rush: 25 stamina, 0.32 seconds at 200 pixels per second, and every foe she runs into takes 0.6x attack and a 0.4 second stun. Blows on her during the rush deal half and never knock her back."
+            },
+            {
+              "kind": "note",
+              "text": "I is Bellow, learned from the start: 20 MP, 4 second recharge shown on the HUD tab. Every foe within 80 pixels takes 0.6x ability power and is dragged 36 pixels toward her, minions reel 0.5 seconds, and flying minions are dragged up to 48 pixels down to her hands and reel 0.9 seconds."
+            },
+            {
+              "kind": "note",
+              "text": "O is a taunt: 0.7 seconds rooted, two chest slaps worth 12 Grit each, 3 seconds before the next. A blow with no plate to take it cancels the taunt."
+            },
+            {
+              "kind": "note",
+              "text": "Her special is Quake Drop from level 3: she slams both fists into the floor and a crack runs out to the charge level's reach, striking every foe on the floor and throwing minions up."
+            },
+            {
+              "kind": "note",
+              "text": "Skill tree: Brawl (Heavy Hands, Uppercut, Quake Drop, Knuckle Rush, Titan Throw), Iron (Thick Hide, Bull Horns, Iron Plates, Second Wind), Hold (Bellow, Iron Grip, Giant Swing, Wrecking Throw) and Fusion (Rush Grab, Aftershock Suplex)."
+            },
+            {
+              "kind": "note",
+              "text": "On the touch controller her buttons read Punch, Jump, Grab, Rush, Bellow, Taunt and Special. While she holds a foe, pushing the stick behind her picks the suplex and pushing it up picks the toss. The Controls screen lists every one of her keys."
+            },
+            {
+              "kind": "note",
+              "text": "She plays in co-op rooms like every hero. A foe in one Hulda's hands cannot be grabbed by another, and a Hulda who falls or leaves lets go at once."
+            }
+          ],
+          "media": {
+            "kind": "image",
+            "file": "hulda-touch-phone.png",
+            "alt": "A run on an upright phone with Hulda in the sunlit ruins. The HP, MP, ST and GR bars are at the top, and below the stage are the move stick and Hulda's round buttons for punch, jump, grab, rush, bellow, taunt and special.",
+            "width": 750,
+            "height": 1334
+          }
+        },
+        {
+          "name": "Hulda: grabs and throws",
+          "tag": "new",
+          "summary": "K catches the foe ahead, and a second K throws it the way you hold.",
+          "context": "The grab beats a husk's guard, which light blows cannot, and a thrown foe turns into a weapon against the rest of the wave. Minis and bosses are too big to hold, so she crushes them instead.",
+          "changes": [
+            {
+              "kind": "note",
+              "text": "Grab: catches the nearest foe 0 to 18 pixels ahead, walker or flier, guarding or not. A minion is held for 1.4 seconds (2.2 with Iron Grip), and she walks at half speed and cannot jump, rush or Bellow while she holds it."
+            },
+            {
+              "kind": "note",
+              "text": "Crush: K on a Rift Brute, Oakheart, Bog Hulk, Abyss Maw or the Rift Warden squeezes it for 1.3x attack and breaks its guard or wind-up. These foes are never held."
+            },
+            {
+              "kind": "note",
+              "text": "J while holding: up to three knees per hold, 0.5x attack each (0.75x with Iron Grip)."
+            },
+            {
+              "kind": "note",
+              "text": "Forward throw (K, or K with the side ahead): 1.2x attack, then the foe flies ahead and hits every other foe it touches for 1.0x attack with a 0.6 second stun, and takes 0.6x more when it lands."
+            },
+            {
+              "kind": "note",
+              "text": "Suplex (K with the side behind): 2.2x attack, breaks guards, stuns 1.2 seconds, and a 30 pixel ring hits every other foe for 0.8x attack."
+            },
+            {
+              "kind": "note",
+              "text": "Sky Toss (K with Up): 0.8x attack and a launch straight up, ready for her string and Hammer Fist."
+            },
+            {
+              "kind": "note",
+              "text": "When the hold runs out she throws the foe forward on her own. A blow that breaks no plate makes her drop it."
+            }
+          ],
+          "media": {
+            "kind": "video",
+            "file": "hulda-forward-throw.mp4",
+            "poster": "hulda-forward-throw.png",
+            "alt": "Hulda grabs a thornback, knees it once and hurls it forward. The flying body smashes through two glimmer moths, each knocked back with a damage number, before the thornback crashes to the floor.",
+            "width": 640,
+            "height": 360
+          }
+        },
+        {
+          "name": "Hulda: Grit and armour plates",
+          "tag": "new",
+          "summary": "Her GR bar fills as she fights, and each full plate turns one blow into half damage with no knockback.",
+          "context": "Hulda has no dodge and no block, so her defence comes from staying in the fight. The plates reward grabbing and throwing, and a careless Hulda with an empty bar is knocked about like any hero.",
+          "changes": [
+            {
+              "kind": "note",
+              "text": "Grit runs from 0 to 100 in four plates of 25. A run starts with one full plate."
+            },
+            {
+              "kind": "note",
+              "text": "Grit gained: 4 for each foe a J blow lands on, 10 for a grab, 5 for a knee, 15 for a throw or Skyfall slam that lands, 10 for Bellow, 12 for each taunt slap, and 10 for each blow taken without a plate."
+            },
+            {
+              "kind": "note",
+              "text": "After 4 seconds with no blow landed or taken, Grit drains at 4 a second."
+            },
+            {
+              "kind": "note",
+              "text": "A blow on a full plate deals 50% of its damage (40% with Iron Plates), breaks the plate and leaves her safe for 0.8 seconds. She keeps her action and is not knocked back."
+            },
+            {
+              "kind": "note",
+              "text": "Last Light answers a fatal blow first, so a plate never cuts its 2 seconds of safety short."
+            }
+          ]
+        },
+        {
+          "name": "Hulda: Skyfall Grab",
+          "tag": "new",
+          "summary": "K in the air catches a flier and drives it into the floor.",
+          "context": "With the shortest reach in the game, Hulda needs her own answer to foes that hover. Skyfall Grab is one, and Bellow dragging fliers down to her hands is the other.",
+          "changes": [
+            {
+              "kind": "note",
+              "text": "Once per jump. On a minion it catches, she rides it down at 300 pixels per second and slams it for 2.0x attack, and a 34 pixel ring hits other foes for 0.8x attack with a 1 second stun."
+            },
+            {
+              "kind": "note",
+              "text": "Hold W for the full jump height to reach a hovering moth. For a flier out of reach, Bellow and then a grab is the surer catch."
+            },
+            {
+              "kind": "note",
+              "text": "A miss lands with a short recovery. Both landings count as a travel move for Aftershock."
+            }
+          ],
+          "media": {
+            "kind": "video",
+            "file": "hulda-skyfall-grab.mp4",
+            "poster": "hulda-skyfall-grab.png",
+            "alt": "Hulda jumps under a hovering glimmer moth, catches it in mid-air and drives it straight down into the floor in a bright flash with a dust ring.",
+            "width": 640,
+            "height": 360
+          }
+        },
+        {
+          "name": "Hulda: Bellow and Bull Rush",
+          "tag": "new",
+          "summary": "Bellow pulls a spread-out group to her, and Bull Rush ploughs through it.",
+          "context": "Sable keeps foes away. Hulda wants them close, so her two moves on I and L bring her and the foes together.",
+          "changes": [
+            {
+              "kind": "note",
+              "text": "Bellow sends three crimson rings out to 80 pixels and drags foes 36 pixels toward her over 0.25 seconds."
+            },
+            {
+              "kind": "note",
+              "text": "With Bull Horns, the rush lifts the first foe onto her shoulder and slams it down at the end for 1.2x attack. With Rush Grab, a rush that hits a minion takes it into her hands."
+            }
+          ],
+          "media": {
+            "kind": "video",
+            "file": "hulda-bellow-rush.mp4",
+            "poster": "hulda-bellow-rush.png",
+            "alt": "Hulda bellows and crimson rings spread out from her, dragging two glimmer moths down into her hands. She then charges forward in a Bull Rush that ploughs through both moths and carries them along.",
+            "width": 640,
+            "height": 360
+          }
+        },
+        {
+          "name": "Hulda: Titan Throw",
+          "tag": "new",
+          "summary": "Her ultimate pulls every minion in reach into one heap and hurls it across the stage.",
+          "context": "Late waves fill the screen with minions, and Titan Throw turns the whole crowd into one thrown body. It is learned from level 8 and replaces Quake Drop.",
+          "changes": [
+            {
+              "kind": "note",
+              "text": "Crimson tethers pull every minion in reach into her arms over 0.25 seconds, she spins once and throws the heap. It hits each foe in its path for 0.6x the charge level's power and bursts where it lands for the full power on every foe in the heap."
+            },
+            {
+              "kind": "note",
+              "text": "Minis and bosses are never pulled. They take the burst when it reaches them. At charge level 4 it pulls from the whole screen."
+            }
+          ],
+          "media": {
+            "kind": "video",
+            "file": "hulda-titan-throw.mp4",
+            "poster": "hulda-titan-throw.png",
+            "alt": "At night in wave 12, Hulda's crimson tethers lash out and yank seven husks and wisps into one heap in her arms. She spins and hurls the heap across the stage, where it bursts in a violet blast for 260 damage and wipes them all out.",
+            "width": 640,
+            "height": 360
+          }
+        },
+        {
+          "name": "Sable",
+          "tag": "new",
+          "summary": "A fast, fragile crossbow hunter who wins by keeping foes at range and timing her reloads.",
+          "context": "Kael and Ysra both fight up close. Sable gives the game a hero who manages ammo and distance, with a kick, a hop and snares to keep foes off her.",
+          "changes": [
+            {
+              "kind": "stat",
+              "label": "Price on the hero screen",
+              "before": "Not in the game",
+              "after": "300 coins"
+            },
+            {
+              "kind": "note",
+              "text": "Base stats: 85 HP, 11 attack, 8 ability power, 90 MP, 110 stamina, 8% crit, move 1.12."
+            },
+            {
+              "kind": "note",
+              "text": "J shoots a bolt for 0.95x attack, one every 0.24 seconds while held. W aims about 29 degrees up, S kneels for a low shot or slants down in the air. Bolts fly 250 pixels and bend a little toward the foe nearest the aim."
+            },
+            {
+              "kind": "note",
+              "text": "The quiver holds 8 bolts and shows as the QV bar. A reload takes 1.05 seconds. A second O in the bright window (42% to 62% of the way) is a perfect reload: the quiver fills at once and the next 4 bolts deal 35% more. A second O outside the window jams it for 0.45 seconds more."
+            },
+            {
+              "kind": "note",
+              "text": "K is a front kick: 0.55x attack, a strong push and a 0.5 second stun."
+            },
+            {
+              "kind": "note",
+              "text": "L hops back: 22 stamina, untouchable for 0.22 seconds, and a free bolt at 80% at the top. With the side ahead held, L is a slide: 18 stamina, 0.3 seconds, untouchable for 0.28 seconds."
+            },
+            {
+              "kind": "note",
+              "text": "I sets a snare at her feet: 20 MP, 3.5 second recharge, two on the floor at once, 2.6x ability power and a 1.6 second hold on the foe that walks in."
+            },
+            {
+              "kind": "note",
+              "text": "Her special is Bolt Storm, a rain of bolts on every foe in reach. Her ultimate Deadeye is one heavy bolt the length of the stage through every foe in its line."
+            },
+            {
+              "kind": "note",
+              "text": "Skill tree: Marksman, Skirmish, Trapper and Fusion. On the touch controller her buttons read Shoot, Jump, Hop, Kick, Snare, Reload and Special."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "systems",
+      "entries": [
+        {
+          "name": "Achievements",
+          "tag": "new",
+          "summary": "22 goals across runs, most of them paying coins when you earn them.",
+          "context": "Coins were the only thing a run left behind. Achievements give you a goal for the next run and feed more coins into the shop and the hero unlocks.",
+          "changes": [
+            {
+              "kind": "stat",
+              "label": "Achievements",
+              "before": "None",
+              "after": "22, worth 1,470 coins together"
+            },
+            {
+              "kind": "note",
+              "text": "Groups: Waves (reach wave 5, 10, 15 and 20, and clear all 30), Heroes (a trial for each hero: clear wave 10 with them, 40 coins), Foes, Skill and Coins."
+            },
+            {
+              "kind": "note",
+              "text": "A few stay hidden as ??? until an earlier one is earned. The page shows each goal, a progress bar for those that count up, and the coins each one pays."
+            },
+            {
+              "kind": "note",
+              "text": "A banner slides down when you earn one, and play goes on under it. The result screen names up to three earned in the run."
+            },
+            {
+              "kind": "note",
+              "text": "Solo runs count toward play goals. A co-op run counts the coins it banks."
+            }
+          ]
+        },
+        {
+          "name": "Hero unlocks and the hero screen",
+          "tag": "new",
+          "summary": "Sable and Hulda start locked and are bought with coins on a hero screen built for up to ten heroes.",
+          "context": "The roster grows by one hero a night from now on, so each new hero gets a price and the hero screen needed room for all of them.",
+          "changes": [
+            {
+              "kind": "stat",
+              "label": "Heroes",
+              "before": "2",
+              "after": "4"
+            },
+            {
+              "kind": "note",
+              "text": "Kael and Ysra are free. Each newer hero costs more than the last: Sable 300 coins, Hulda 400."
+            },
+            {
+              "kind": "note",
+              "text": "The hero screen is a roster of hero tiles over one panel for the hero in focus. Left and Right, or a tap on a tile, move through them."
+            },
+            {
+              "kind": "note",
+              "text": "A locked hero shows as a silhouette with a padlock and its price. The first press asks to unlock, the second buys. A press you cannot pay for shakes the price."
+            },
+            {
+              "kind": "note",
+              "text": "Each hero's stat bars show their level 1 stats, with what your shop levels add as a lighter part of each bar."
+            },
+            {
+              "kind": "note",
+              "text": "In a co-op lobby, Left and Right step only through the heroes you have unlocked."
+            },
+            {
+              "kind": "note",
+              "text": "Saves from earlier versions load with their coins, shop levels and options, no heroes bought and nothing earned yet."
+            }
+          ],
+          "media": {
+            "kind": "image",
+            "file": "hero-screen.png",
+            "alt": "The Choose a Hero screen on a new save. Kael and Ysra are open, Sable and Hulda show padlocks, and Hulda's card is selected in a crimson frame with her stat bars, her special Quake Drop, her description and her price of 400 coins.",
+            "width": 1280,
+            "height": 720
+          }
+        },
+        {
+          "name": "Play statistics",
+          "tag": "new",
+          "summary": "The live site now counts page views and runs with Google Analytics.",
+          "context": "Knowing which heroes people play and how far runs go helps us choose what to work on next.",
+          "changes": [
+            {
+              "kind": "note",
+              "text": "Only warpblade.sainytk.com reports. Each run start sends the hero, whether it is a co-op run and how many players are in the room, and each run end sends the hero, the outcome, the wave reached and the coins earned."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "items",
+      "entries": [
+        {
+          "name": "Aftershock (was Warp Shock)",
+          "tag": "buff",
+          "summary": "The shop's shockwave skill now answers every hero's travel moves.",
+          "context": "The shop is shared by every hero, so every item should help whoever you pick. Warp Shock only answered Kael's warps and Ysra's vaults, and its name pointed at Kael. If you bought it, you keep it.",
+          "changes": [
+            {
+              "kind": "stat",
+              "label": "Shop text",
+              "before": "Warp strikes and vault landings send a shockwave through foes close by.",
+              "after": "Each dash or leap your hero lands sends a shockwave through foes close by."
+            },
+            {
+              "kind": "stat",
+              "label": "Kael",
+              "before": "Warp strikes",
+              "after": "Every dash and every warp"
+            },
+            {
+              "kind": "stat",
+              "label": "Ysra",
+              "before": "Vault landings",
+              "after": "Every vault, dive and backstep"
+            },
+            {
+              "kind": "note",
+              "text": "Sable: every hop and slide. Hulda: every Bull Rush and every Skyfall Grab landing."
+            },
+            {
+              "kind": "note",
+              "text": "The ring is unchanged: 0.8x attack to each foe within 40 pixels, and a short stun."
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "feedback": []
+}
