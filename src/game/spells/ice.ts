@@ -107,7 +107,7 @@ function burstSpire(s: Spike, power: number): void {
   for (const e of game.enemies) {
     const [ex, ey] = enemyCenter(e);
     if (e.hp <= 0 || Math.hypot(ex - s.x, ey - cy) > b.reach) continue;
-    dealDamage(e, damage, { fromX: s.x, kx: Math.sign(ex - s.x) * 80, ky: -60 });
+    dealDamage(e, damage, { fromX: s.x, kx: Math.sign(ex - s.x) * 80, ky: -60, source: "abilities" });
     e.frozen = Math.max(e.frozen, b.freeze);
   }
   shake(b.shake, b.amp);
@@ -199,7 +199,7 @@ export function castIce(x: number, y: number, face: number, power: number): Effe
           for (const e of game.enemies) {
             if (s.hit.has(e) || !boxHit(enemyBox(e), [s.x - reach, s.base - s.h, s.x + reach, s.base])) continue;
             s.hit.add(e);
-            dealDamage(e, damage, { fromX: s.x - s.dir * 6, kx: s.dir * 60, ky: -90 });
+            dealDamage(e, damage, { fromX: s.x - s.dir * 6, kx: s.dir * 60, ky: -90, source: "abilities" });
             e.frozen = cryo ? FREEZE.cryomancy : FREEZE.normal;
             game.fx.push(createImpact(s.x, s.base - s.h * 0.6, s.dir, false, SPARKS.ice));
           }

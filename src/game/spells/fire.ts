@@ -34,6 +34,7 @@ export function castFire(x: number, y: number, face: number, power: number): Eff
     radius: RADIUS * (pyro ? 1.5 : 1),
     damage: POWER * progress.stats.ap * power,
     burn: BURN * (pyro ? 1.8 : 1),
+    source: "abilities",
   };
   return {
     update(dt) {

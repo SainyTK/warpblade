@@ -66,6 +66,10 @@ export interface DamageNumber {
   /** seconds since it popped */
   age: number;
   big: boolean;
+  /** a relic's hit, drawn smaller and dimmer than the hero's own */
+  quiet: boolean;
+  /** the foe it pops over, so later hits on it merge in; none for a word */
+  foe: Enemy | null;
   life: number;
 }
 /** play runs the simulation; pick pauses it while Kael chooses a skill when a wave is cleared with skill points waiting; clear is the end of the stage */

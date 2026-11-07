@@ -1,5 +1,5 @@
 import type { InputAction } from "./input";
-import type { RunOutcome } from "./run";
+import type { RunOutcome, RunReport } from "./run";
 
 export type CoopRole = "host" | "guest";
 
@@ -51,7 +51,7 @@ export type HostMessage =
   | { t: "lobby"; seats: SeatInfo[] }
   | { t: "start" }
   | { t: "hud"; hud: GuestHud }
-  | { t: "end"; outcome: RunOutcome; wave: number; coins: number }
+  | { t: "end"; outcome: RunOutcome; wave: number; coins: number; report: RunReport }
   /** the player in this place left the room */
   | { t: "left"; slot: number }
   | { t: "closed" };

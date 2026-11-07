@@ -40,7 +40,14 @@ function discharge(e: Enemy): void {
   const [cx, cy] = enemyCenter(e);
   const ap = progress.stats.ap;
   game.fx.push(
-    createLightning(e, [cx, cy], { damage: ap * FUSION.staticStrike, arcDamage: ap, arcs: 1, shock: 0.6, glow: 0.6 }),
+    createLightning(e, [cx, cy], {
+      damage: ap * FUSION.staticStrike,
+      arcDamage: ap,
+      arcs: 1,
+      shock: 0.6,
+      glow: 0.6,
+      source: "attacks",
+    }),
   );
 }
 

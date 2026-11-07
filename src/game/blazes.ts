@@ -29,7 +29,7 @@ export function updateBlazes(dt: number): void {
     b.tick = 0.3;
     for (const e of game.enemies)
       if (boxHit(enemyBox(e), [b.x - 7, b.y - 14, b.x + 7, b.y])) {
-        dealDamage(e, progress.stats.ap * BLAZE_POWER, { dot: true });
+        dealDamage(e, progress.stats.ap * BLAZE_POWER, { dot: true, source: "abilities" });
         e.burn = Math.max(e.burn, 1);
       }
   }

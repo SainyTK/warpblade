@@ -1,0 +1,177 @@
+/* End of run: time, level and foes, then every damage source with a bar, then the coins and achievements. */
+.menu[data-screen="result"] .menu-panel {
+  width: min(560px, 100%);
+}
+.result-body {
+  justify-items: center;
+  gap: 14px;
+}
+.run-facts {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+  width: 100%;
+  margin: 0;
+}
+.run-facts div {
+  display: grid;
+  justify-items: center;
+  align-content: space-between;
+  gap: 2px;
+  padding: 6px 4px 8px;
+  background: var(--raised);
+  border: 2px solid var(--line);
+}
+.run-facts dt {
+  font-family: var(--display);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--mist);
+  text-align: center;
+}
+.run-facts dd {
+  margin: 0;
+  font-family: var(--ui);
+  font-weight: 600;
+  font-size: 22px;
+  line-height: 1.1;
+  color: var(--text);
+}
+
+.sources {
+  width: 100%;
+  border-collapse: collapse;
+  font-variant-numeric: tabular-nums;
+}
+.sources caption {
+  margin-bottom: 6px;
+  font-family: var(--display);
+  font-size: 14px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--brass);
+  text-align: left;
+}
+.sources thead th {
+  padding: 0 0 4px;
+  font-family: var(--display);
+  font-weight: 400;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+  text-align: right;
+}
+.sources thead th.source {
+  text-align: left;
+}
+.sources tbody tr {
+  border-top: 2px solid var(--line);
+}
+.sources td {
+  padding: 0 0 0 12px;
+  font-family: var(--ui);
+  font-weight: 600;
+  font-size: 16px;
+  color: var(--text);
+  text-align: right;
+  white-space: nowrap;
+}
+.sources td.top {
+  color: var(--gold);
+}
+th.source {
+  padding: 5px 0;
+  text-align: left;
+  font-weight: 400;
+}
+.source-cell {
+  display: grid;
+  grid-template-columns: 36px minmax(0, 1fr);
+  align-items: center;
+  gap: 10px;
+}
+.source-icon {
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  background: var(--night);
+  border: 2px solid var(--key);
+}
+.source-icon img {
+  width: 32px;
+  height: 32px;
+  image-rendering: pixelated;
+}
+.source-body {
+  display: grid;
+  gap: 5px;
+  min-width: 0;
+}
+.source-head {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  min-width: 0;
+}
+.source-name {
+  overflow: hidden;
+  font-family: var(--ui);
+  font-weight: 600;
+  font-size: 15px;
+  line-height: 1.15;
+  color: var(--text);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.source-level {
+  flex: none;
+  font-family: var(--display);
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--mist);
+}
+.source-level.evolved {
+  color: var(--pink);
+}
+.source-bar {
+  height: 6px;
+  background: var(--night);
+  box-shadow: inset 0 0 0 1px var(--line);
+}
+.source-bar::before {
+  content: "";
+  display: block;
+  width: calc(var(--share) * 100%);
+  min-width: 2px;
+  height: 100%;
+  background: var(--crystal);
+}
+.sources tr[data-top] .source-bar::before {
+  background: var(--gold);
+}
+
+@media (max-width: 480px) {
+  .run-facts dd {
+    font-size: 18px;
+  }
+  .sources td {
+    padding-left: 8px;
+    font-size: 14px;
+  }
+  .source-cell {
+    grid-template-columns: 28px minmax(0, 1fr);
+    gap: 8px;
+  }
+  .source-icon {
+    width: 28px;
+    height: 28px;
+  }
+  .source-icon img {
+    width: 24px;
+    height: 24px;
+  }
+}

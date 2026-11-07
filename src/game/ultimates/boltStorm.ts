@@ -60,7 +60,14 @@ export function castBoltStorm(level: number): void {
           for (const e of foesOnSegment(ax, ay, bx, by, struck)) {
             struck.add(e);
             const [cx, cy] = enemyCenter(e);
-            dealDamage(e, damage, { fromX: cx - slant * 10, kx: 0, ky: -40, stun: 0.4, heavy: true });
+            dealDamage(e, damage, {
+              fromX: cx - slant * 10,
+              kx: 0,
+              ky: -40,
+              stun: 0.4,
+              heavy: true,
+              source: "ultimate",
+            });
             game.fx.push(createImpact(cx, cy, Math.sign(slant) || 1, true));
             sfx.hit(true, 1.2);
             shake(0.06, 1);

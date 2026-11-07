@@ -62,6 +62,7 @@ export function createThunderhead(x: number, ap: number): Effect {
         glow: T.glow,
         fromY: bottom,
         skyFlash: false,
+        source: "abilities",
       }),
     );
   };

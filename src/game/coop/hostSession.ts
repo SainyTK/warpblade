@@ -7,7 +7,7 @@ import { captureGame, type GameStream, tuneVideoSender } from "../../services/co
 import { type HostLink, openRoom, RoomTaken } from "../../services/coop/hostLink";
 import { postNote, resetRoom, roomView, updateRoom } from "../../store/coop";
 import type { GuestMessage, SeatInfo } from "../../types/coop";
-import type { RunOutcome } from "../../types/run";
+import type { RunOutcome, RunReport } from "../../types/run";
 import { syncCoopStatus } from "../../ui/coop/coopStatus";
 import { drawDangerGlow } from "../../ui/dangerGlow";
 import { gameCanvas, paintScene } from "../../ui/gameCanvas";
@@ -180,7 +180,9 @@ export class HostSession {
     for (const [peer, g] of this.guests)
       starts.push({ slot: g.slot, peer, character: heroById(g.hero), owned: g.owned });
     starts.sort((a, b) => a.slot - b.slot);
-    this.run = new HostRun(starts, { ended: (outcome, wave, coins) => this.ended(outcome, wave, coins) });
+    this.run = new HostRun(starts, {
+      ended: (outcome, wave, coins, reports) => this.ended(outcome, wave, coins, reports),
+    });
     this.stream = captureGame(sfx.outputStream());
     for (const peer of this.guests.keys()) {
       link.send(peer, { t: "start" });
@@ -238,14 +240,16 @@ export class HostSession {
   }
 
   /** the run is over: each guest banks their own coins, and everyone goes back to the lobby */
-  private ended(outcome: RunOutcome, wave: number, coins: Map<Seat, number>): void {
+  private ended(outcome: RunOutcome, wave: number, coins: Map<Seat, number>, reports: Map<Seat, RunReport>): void {
     const run = this.run;
     this.run = null;
     this.stopRun();
-    for (const [seat, earned] of coins)
-      if (seat.peer) this.link?.send(seat.peer, { t: "end", outcome, wave, coins: earned });
+    for (const [seat, earned] of coins) {
+      const report = reports.get(seat);
+      if (seat.peer && report) this.link?.send(seat.peer, { t: "end", outcome, wave, coins: earned, report });
+    }
     const home = run?.seats.find((s) => !s.peer);
-    reportRun({ outcome, wave, coins: (home && coins.get(home)) ?? 0 });
+    reportRun({ outcome, wave, coins: (home && coins.get(home)) ?? 0, report: home && reports.get(home) });
     if (!this.closed) {
       updateRoom({ phase: "lobby" });
       this.publishLobby();

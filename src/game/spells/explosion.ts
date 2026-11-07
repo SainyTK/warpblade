@@ -60,7 +60,13 @@ export function explode(x: number, y: number, blast: Blast): void {
     const [ex, ey] = enemyCenter(e);
     const d = Math.hypot(ex - x, ey - y);
     if (d >= radius) continue;
-    dealDamage(e, damage * (1 - d / (radius * 2)), { fromX: x, kx: Math.sign(ex - x) * 200, ky: -120, heavy: true });
+    dealDamage(e, damage * (1 - d / (radius * 2)), {
+      fromX: x,
+      kx: Math.sign(ex - x) * 200,
+      ky: -120,
+      heavy: true,
+      source: blast.source,
+    });
     e.burn = burn;
     markBurner(e);
   }
