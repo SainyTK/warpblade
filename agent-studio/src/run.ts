@@ -25,7 +25,8 @@ async function night(n: Night, options: RunOptions): Promise<string> {
   const feedback = (await saved<FeedbackIssue[]>(files.feedback)) ?? (await loadFeedback(n, options.feedback));
   const decisions = (await saved<TriageItem[]>(files.triage)) ?? (await triage(n, feedback));
   const plan = (await saved<Plan>(files.plan)) ?? (await direct(n));
-  if (!(await saved<DevReport>(files.develop)) || !(options.resume && (await passedQa(n)))) await buildAndVerify(n);
+  const built = await saved<DevReport>(files.develop);
+  if (!(built && (await passedQa(n)))) await buildAndVerify(n, built);
   if (!(await saved<MediaItem[]>(files.media))) await captureMedia(n, plan);
   const { patch, replies } = await writeNotes(n, decisions);
   await finalize(n, patch, decisions, feedback, replies);
