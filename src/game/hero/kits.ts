@@ -1,5 +1,6 @@
 import type { HeroKit } from "../../types/kit";
 import { character } from "../state";
+import { HULDA_KIT } from "./hulda/kit";
 import { KAEL_KIT } from "./kael/kit";
 import { SABLE_KIT } from "./sable/kit";
 import { YSRA_KIT } from "./ysra/kit";
@@ -11,6 +12,8 @@ export function kit(): HeroKit {
       return YSRA_KIT;
     case "sable":
       return SABLE_KIT;
+    case "hulda":
+      return HULDA_KIT;
     default:
       return KAEL_KIT;
   }

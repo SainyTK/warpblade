@@ -63,9 +63,12 @@ export function onAchievement(listener: (a: Achievement) => void): () => void {
 
 // buying in the shop or unlocking a hero can meet a goal too
 let checking = false;
-onMetaChange(() => {
+function checkOnce(): void {
   if (checking || isPlaytestSession()) return;
   checking = true;
   check();
   checking = false;
-});
+}
+onMetaChange(checkOnce);
+// a save from an older version can already meet goals it never earned
+checkOnce();

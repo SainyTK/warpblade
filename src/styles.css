@@ -140,6 +140,10 @@ body {
     var(--night) calc(var(--dash-share, 50%) - 1px) var(--dash-share, 50%)
   );
 }
+/* heroes without a dash have no dash notches on their stamina bar */
+.bar.st.no-dash .track::after {
+  content: none;
+}
 /* a dash the bar could not pay for: the empty track blinks red */
 /* a bar too empty for what was pressed blinks its border */
 .bar.empty .track {
@@ -149,6 +153,69 @@ body {
   50% {
     border-color: var(--hp);
   }
+}
+/* Ysra's Heat: a mark at half once Searing Edge is learned, a hotter fill above it, a blaze when full, white heat in Overheat */
+.bar.ht span {
+  color: var(--ember-hot);
+}
+.bar.ht .fill {
+  background: var(--ember);
+  box-shadow: 0 0 6px var(--ember);
+}
+.bar.ht.searing .fill {
+  background: var(--ember-hot);
+  box-shadow: 0 0 8px var(--ember-hot);
+}
+.bar.ht.edge .track::after {
+  content: "";
+  position: absolute;
+  left: calc(50% - 1px);
+  top: -3px;
+  bottom: -3px;
+  width: 2px;
+  background: var(--text);
+}
+.bar.ht.full .fill,
+.bar.ht.overheat .fill {
+  animation: heat-blaze 240ms steps(1) infinite;
+}
+.bar.ht.overheat .fill {
+  background: var(--ember-white);
+}
+@keyframes heat-blaze {
+  50% {
+    background: var(--ember-white);
+    box-shadow:
+      0 0 10px var(--ember-hot),
+      0 -2px 6px var(--ember);
+  }
+}
+/* Hulda's Grit: four iron plates; full plates are bright steel with a lit top edge, the plate filling is a dim fill */
+.bar.gr span {
+  color: var(--rust);
+}
+.bar.gr .fill {
+  background: var(--iron-dim);
+}
+.bar.gr .plates {
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 0;
+  background: var(--iron);
+  box-shadow:
+    inset 0 1px 0 var(--iron-glint),
+    0 0 6px var(--rust);
+}
+.bar.gr .track::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(to right, transparent 0 calc(25% - 1px), var(--night) calc(25% - 1px) 25%);
+}
+/* a plate just broke: the track flashes rust */
+.bar.gr.broke .track {
+  border-color: var(--rust);
+  box-shadow: 0 0 8px var(--rust);
 }
 /* Sable's quiver: one notch per bolt; while she reloads the track shows the crank's progress and the bright window */
 .bar.qv span {
@@ -336,6 +403,15 @@ body {
 .el.evolved,
 .el.on.evolved {
   border-top-color: var(--gold);
+}
+/* Ysra's rite tabs take the place of the element tabs; each rite's colour comes in as --tint */
+.rite-tabs {
+  display: flex;
+  gap: 4px;
+}
+.el.on.rite {
+  color: var(--tint);
+  border-color: var(--tint);
 }
 /* Spell and warp cooldowns: a recharging tab dims and a pixel bar along its bottom fills as it recharges (--charged, 0 to 1).
    The tab blinks when it is ready again, and jolts when a press is refused while it recharges. */

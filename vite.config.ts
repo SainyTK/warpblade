@@ -6,6 +6,9 @@ export default defineConfig({
   define: { __APP_VERSION__: JSON.stringify(pkg.version) },
   build: {
     target: "es2022",
+    // every hero's kit, art and icons are needed before the first frame (the hero screen draws them all), so the game is
+    // one chunk; past this size, load each hero's kit when it is chosen
+    chunkSizeWarningLimit: 700,
     rolldownOptions: {
       input: {
         game: "index.html",

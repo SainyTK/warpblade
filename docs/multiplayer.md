@@ -28,6 +28,8 @@ The shared game code asks a small set of hooks which hero to act on (`src/game/c
 - the step runs each hero's update, afterimages and input ageing once per hero;
 - the scene draws each hero, their anchors and thrown sword, a ring in the player's colour on the floor under each one so two of the same hero can be told apart, and a P1 to P4 tag in the same colour over each one, stacked when heroes stand together.
 
+A foe in Hulda's hands belongs to the hero holding it: a second Hulda cannot grab it, and the hold lapses a tenth of a second after its holder stops refreshing it, so a Hulda who falls or leaves the room lets go at once (`src/game/hero/hulda/claims.ts`).
+
 Solo play sets no hooks, so every one of those call sites behaves as before, and no network code is loaded or run.
 
 ## Guests send keys and watch a stream

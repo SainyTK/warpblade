@@ -61,6 +61,7 @@ export const ACHIEVEMENTS: readonly Achievement[] = [
   heroTrial("kael", "Kael"),
   heroTrial("ysra", "Ysra"),
   heroTrial("sable", "Sable"),
+  heroTrial("hulda", "Hulda"),
   {
     id: "kills-100",
     name: "Culling",

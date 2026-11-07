@@ -11,13 +11,14 @@ A hero that is not in the table is free.
 
 Each new hero gets the next price: the n-th hero added to the table costs 300 x 1.35^(n - 1), rounded to the nearest 50.
 
-| Hero | 1st (Sable) | 2nd | 3rd | 4th | 5th | 6th | 7th | 8th | 9th |
+| Hero | 1st (Sable) | 2nd (Hulda) | 3rd | 4th | 5th | 6th | 7th | 8th | 9th |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | Price | 300 | 400 | 550 | 750 | 1000 | 1350 | 1800 | 2450 | 3300 |
 
 The basis is the coin table in `docs/meta-progress.md`.
 A run that reaches wave 8 to 10 banks about 60 to 80 coins and a full clear about 440.
 Sable takes a few good runs, or one run past wave 20 with the achievement coins earned on the way.
+Hulda, at 400, takes a few more.
 The ninth hero costs about seven full clears.
 
 The hero screen shows a roster of every hero over one panel for the hero in focus; Left and Right, or a tap on a tile, move through them.
@@ -78,6 +79,7 @@ A save from before them loads with its coins and shop levels, no heroes bought a
 | Heroes | Kael's Trial | Clear wave 10 with Kael | 40 | |
 | Heroes | Ysra's Trial | Clear wave 10 with Ysra | 40 | |
 | Heroes | Sable's Trial | Clear wave 10 with Sable | 40 | |
+| Heroes | Hulda's Trial | Clear wave 10 with Hulda | 40 | |
 | Foes | Culling | Slay 100 foes | 20 | |
 | Foes | Thinning the Night | Slay 1,000 foes | 80 | |
 | Foes | Endless Blade | Slay 5,000 foes | 200 | Thinning the Night |
@@ -92,8 +94,8 @@ A save from before them loads with its coins and shop levels, no heroes bought a
 | Coins | Outfitted | Buy 10 levels or skills in the Shop | 30 | |
 | Coins | New Blood | Unlock a hero with coins | 50 | |
 
-Sable's Trial counts only once Sable is in `CHARACTERS`; until then the page lists 20.
-All of them together pay 1,450 coins.
+A hero's trial counts only once the hero is in `CHARACTERS`.
+The page lists 22 achievements, and all of them together pay 1,470 coins.
 
 ## Adding a hero
 

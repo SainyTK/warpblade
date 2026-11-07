@@ -90,6 +90,27 @@ export const TOUCH_TEXT: Record<KitId, Record<TouchButtonAction, TouchButtonText
       accent: "#c4ffd8",
     },
   },
+  hulda: {
+    attack: {
+      label: "Punch",
+      hint: "Fist string: jab, cross, body hook, haymaker. In the air, a hammer fist. While holding a foe, a knee",
+      accent: "#ff5f6d",
+    },
+    up: {
+      label: "Jump",
+      hint: "One low, heavy jump. Hold the stick down to drop through a ledge",
+      accent: "#e8e6f6",
+    },
+    dash: { label: "Rush", hint: "Bull Rush: an armoured shoulder charge that spends stamina", accent: "#c43848" },
+    warp: {
+      label: "Grab",
+      hint: "Grab a foe ahead; big foes are crushed. While holding, throw it: push the stick behind you to suplex, up to toss it up. In the air, Skyfall Grab",
+      accent: "#b4bcc4",
+    },
+    cast: { label: "Bellow", hint: "Drag nearby foes in and stun minions (20 MP)", accent: "#ffc2b8" },
+    ultimate: SPECIAL,
+    cycle: { label: "Taunt", hint: "Slap your chest twice for Grit", accent: "#e0ac48" },
+  },
 };
 
 /** where the attack button's center sits, art pixels in from the bottom right corner of the safe area */
@@ -131,6 +152,12 @@ export const STICK_DIRECTIONS: Record<KitId, readonly StickDirectionSpec[]> = {
     { direction: "far side", label: "Run" },
     { direction: "up", label: "Jump. While shooting, aim up" },
     { direction: "down", label: "While shooting, aim low. With Jump, drop through a ledge" },
+  ],
+  hulda: [
+    { direction: "side", label: "Walk. While holding a foe, behind you picks the suplex" },
+    { direction: "far side", label: "Walk, she never runs" },
+    { direction: "up", label: "Jump. While holding a foe, Grab tosses it up" },
+    { direction: "down", label: "With Jump, drop through a ledge. While holding, Grab swings with Giant Swing" },
   ],
 };
 

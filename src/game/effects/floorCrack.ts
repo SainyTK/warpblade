@@ -1,5 +1,6 @@
 import { EMBER } from "../../constants/characters/ysra/look";
 import { glowLine, place, px } from "../../engine/frame";
+import type { Ramp } from "../../types/color";
 import type { Effect } from "../../types/effect";
 import { clamp } from "../../utils/math";
 import { rng } from "../state";
@@ -13,8 +14,9 @@ export interface FloorCrack extends Effect {
   front(): number;
 }
 
-/** a glowing crack in the floor at y, running from x0 toward x1 at this speed, zigzagging a few pixels deep */
-export function createFloorCrack(x0: number, x1: number, y: number, speed: number): FloorCrack {
+/** a glowing crack in the floor at y, running from x0 toward x1 at this speed, zigzagging a few pixels deep, lit in a
+ *  ramp of seven steps (Ysra's ember unless given) */
+export function createFloorCrack(x0: number, x1: number, y: number, speed: number, glowRamp: Ramp = EMBER): FloorCrack {
   const dir = Math.sign(x1 - x0) || 1;
   const len = Math.abs(x1 - x0);
   // how deep the crack sits at each pixel along it, and a short fork off it here and there
@@ -43,18 +45,18 @@ export function createFloorCrack(x0: number, x1: number, y: number, speed: numbe
     drawBack() {
       place();
       const cool = clamp((after - GLOW) / COOL);
-      const hot = cool > 0 ? EMBER[Math.round(4 - cool * 4)] : EMBER[5];
+      const hot = cool > 0 ? glowRamp[Math.round(4 - cool * 4)] : glowRamp[5];
       for (let i = 0; i <= ran; i++) {
         // the last few pixels of a running crack burn white
-        const c = ran < len && ran - i < 4 ? EMBER[6] : hot;
+        const c = ran < len && ran - i < 4 ? glowRamp[6] : hot;
         px(x0 + dir * i, y + depth[i], c, 1 - cool * 0.5);
-        px(x0 + dir * i, y + depth[i] + 1, EMBER[2], 1 - cool);
+        px(x0 + dir * i, y + depth[i] + 1, glowRamp[2], 1 - cool);
       }
       for (const f of forks) {
         if (f.at > ran) continue;
         for (let j = 1; j <= f.dy; j++) px(x0 + dir * (f.at + (j % 2)), y + depth[f.at] + j, hot, 1 - cool * 0.6);
       }
-      glowLine(x0, y + 1, x0 + dir * ran, y + 1, 6, EMBER[3], 0.45 * (1 - cool));
+      glowLine(x0, y + 1, x0 + dir * ran, y + 1, 6, glowRamp[3], 0.45 * (1 - cool));
     },
     draw() {},
   };

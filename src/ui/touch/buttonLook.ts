@@ -1,9 +1,13 @@
 import { STAMINA } from "../../constants/combat";
+import { BELLOW } from "../../constants/hulda/bellow";
+import { RUSH } from "../../constants/hulda/rush";
+import { TAUNT } from "../../constants/hulda/taunt";
 import { HOP, SLIDE } from "../../constants/sable/moves";
 import { SNARE } from "../../constants/sable/snare";
 import { TOUCH_TEXT } from "../../constants/touch";
 import { ULT_LEVELS } from "../../constants/ultimate";
 import { VAULT } from "../../constants/ysra/stance";
+import { hulda } from "../../game/hero/hulda/memory";
 import { sable } from "../../game/hero/sable/memory";
 import { reloadShare } from "../../game/hero/sable/reload";
 import { castCost, knowsElement, selectedElement, spellRecharge } from "../../game/hero/spell";
@@ -65,6 +69,25 @@ function sableLook(spec: TouchButtonSpec, look: ButtonLook): void {
   }
 }
 
+/** Hulda's rush needs stamina and its short recharge, Bellow MP and its recharge, the taunt its own wait */
+function huldaLook(spec: TouchButtonSpec, look: ButtonLook): void {
+  switch (spec.action) {
+    case "dash":
+      look.ready = hero.stamina >= RUSH.cost && hulda.rushCd <= 0;
+      look.cooldown = hero.stamina >= RUSH.cost ? hulda.rushCd / RUSH.cooldown : 1 - hero.stamina / RUSH.cost;
+      break;
+    case "cast":
+      look.ready = hulda.bellowCd <= 0 && hero.mp >= BELLOW.mp;
+      look.cooldown = hulda.bellowCd / BELLOW.cooldown;
+      break;
+    case "cycle":
+      look.ready = hulda.tauntCd <= 0;
+      look.cooldown = hulda.tauntCd / TAUNT.cooldown;
+      break;
+    default:
+  }
+}
+
 /** Ysra's guard needs stamina, her vault waits out its recharge, and the rite fills as Heat comes to cover it */
 function ysraLook(spec: TouchButtonSpec, look: ButtonLook): void {
   switch (spec.action) {
@@ -97,6 +120,7 @@ export function buttonLook(spec: TouchButtonSpec, pressed: boolean): ButtonLook 
     look.ready = look.affordable > 0;
     look.charge = chargeProgress();
   } else if (character.kit === "sable") sableLook(spec, look);
+  else if (character.kit === "hulda") huldaLook(spec, look);
   else if (character.kit === "ysra") ysraLook(spec, look);
   else kaelLook(spec, look);
   return look;
