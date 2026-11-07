@@ -12,7 +12,7 @@ export const MAX_LEVEL = 99;
 export const HERO_LEVEL_POWER = 1.025;
 /** card weights: a skill not held yet, the next level of a held skill, and how many times a held charm counts; a new
  *  charm weighs its own `weight`. Tuned with the growth simulation in docs/growth-design.md */
-export const CARD_WEIGHT = { newSkill: 100, skillLevel: 20, ownedCharm: 1 } as const;
+export const CARD_WEIGHT = { newSkill: 100, skillLevel: 6, ownedCharm: 1 } as const;
 export const PICK_COUNT = 3;
 /** a run's rerolls, skips and banishes before the shop adds more */
 export const PICK_TOOLS = { rerolls: 2, skips: 2, banishes: 1 } as const;

@@ -123,7 +123,7 @@ export const ACHIEVEMENTS: readonly Achievement[] = [
   {
     id: "ultimate",
     name: "Final Art",
-    text: "Learn an ultimate.",
+    text: "Take an ultimate skill.",
     group: "Skill",
     goal: { kind: "count", stat: "ultimates", need: 1 },
     reward: 30,

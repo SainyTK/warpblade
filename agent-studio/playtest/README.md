@@ -79,7 +79,7 @@ Both policies close a chest screen with J once its input lock has passed.
 - it casts with I when the selected HUD spell tab is ready, and cycles with O to a ready one;
 - it uses any other ready HUD tab with its key, such as WARP on K, on a foe at a distance;
 - it jumps over a foe on the ground that faces the hero, to strike its back;
-- it picks cards by kind in this order: relic, charm, ultimate, spell, passive, enhance, combo, fusion, movement, then boons.
+- it raises a held skill already at level 5 or more, so it heads for an evolution; otherwise it takes a new skill by kind in this order: ultimate, attack, summon, spell, dot, movement, passive; then the highest skill level, then a charm, then a boon.
 
 The bot reads only the hero's position, HP and MP, the foes' positions, states and facing, and the HUD.
 Tab readiness comes from the HUD, so a new hero whose tabs or keys differ still gets used sensibly.

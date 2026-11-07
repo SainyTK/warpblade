@@ -83,7 +83,7 @@ Every new hero must:
 - Start locked and cost coins to unlock, more than the hero before it. The price goes in `src/constants/heroUnlocks.ts` by the rule written there.
 - Bring at least one achievement of its own (`src/constants/achievements.ts`, `docs/achievements.md`).
 - Get a real benefit from every shop item (`docs/meta-progress.md`).
-- Have its own skill tree, special and ultimates, code-drawn skill icons, its own look on the shared rig, and movement to `docs/motion-standard.md`.
+- Have its own 20 skills with eight levels and an evolution each (`docs/skill-design.md`), special and ultimates, code-drawn skill icons, its own look on the shared rig, and movement to `docs/motion-standard.md`.
 - Have its own menu colour, `accent` in its `CharacterDef`, which the hero screen uses for its tile, frame and stat bars; the hero screen needs no CSS per hero.
 - Work with the keyboard, the touch controller and the Controls screen, and in co-op (per-seat memory, `docs/multiplayer.md`).
 - Pass the playtest smoke check, with a mash bot death wave within two waves of the other heroes.
