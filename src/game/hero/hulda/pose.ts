@@ -35,6 +35,28 @@ function holdPose(h: Hero): Pose {
   return holding(sampleKeys(clip.keys, h.runPhase * clip.dur));
 }
 
+/**
+ * The Giant Swing's spin from the hips up; while Cyclone walks her, the legs stride the walk clip by the ground covered
+ * so the feet hold the floor. A mirrored spin key mirrors the legs back, so they always stride the way she goes.
+ */
+function walkingSpin(h: Hero): Pose {
+  const spin = sampleKeys(THROW_CLIPS.swing.keys, swingClipTime(h.st));
+  if (Math.abs(h.vx) < 5 || !h.ground) return spin;
+  const clip = STATE_CLIPS.walk;
+  const walk = sampleKeys(clip.keys, h.runPhase * clip.dur);
+  const side = spin.mr ? -1 : 1;
+  return {
+    ...spin,
+    hy: walk.hy,
+    ffx: walk.ffx * side,
+    ffy: walk.ffy,
+    fa: walk.fa,
+    bfx: walk.bfx * side,
+    bfy: walk.bfy,
+    ba: walk.ba,
+  };
+}
+
 /** her clip for a state: her own for her actions and her idle, Kael's shared ones with her fists up otherwise */
 function statePose(h: Hero, t: number, fresh: boolean, dt: number, wound: number): Pose {
   switch (h.state) {
@@ -50,7 +72,8 @@ function statePose(h: Hero, t: number, fresh: boolean, dt: number, wound: number
     case "hold":
       return holdPose(h);
     case "toss":
-      return sampleKeys(THROW_CLIPS[hulda.throwKind].keys, hulda.throwKind === "swing" ? swingClipTime(h.st) : h.st);
+      if (hulda.throwKind === "swing") return walkingSpin(h);
+      return sampleKeys(THROW_CLIPS[hulda.throwKind].keys, h.st);
     case "rush":
       return sampleKeys(HULDA_CLIPS.rush.keys, rushClipTime(h.st));
     case "bellow":

@@ -34,6 +34,19 @@ function burstShare(): number {
   return Math.max(KILL_BURST.least, Math.min(1, KILL_BURST.full / recent));
 }
 
+/** the kill light given out lately, fading over time, and the game time it was last counted at */
+let lit = 0;
+let litAt = 0;
+
+/** the share of a burst's light of strength `k` that still fits under the cap, counted as given */
+function lightShare(k: number): number {
+  lit = lit * 0.5 ** ((game.t - litAt) / KILL_BURST.halfLife);
+  litAt = game.t;
+  const given = Math.min(k, Math.max(0, KILL_BURST.light - lit));
+  lit += given;
+  return given / k;
+}
+
 /** elites, mini bosses and the Warden of any wave but the last leave a chest */
 const leavesChest = (e: Enemy): boolean =>
   e.elite || e.rank === "mini" || (e.rank === "boss" && game.wave < STAGE_WAVES);
@@ -53,8 +66,10 @@ export function killEnemy(e: Enemy, source?: SourceId): void {
   game.kills++;
   feat({ kind: "kill", rank: e.rank, source });
   if (source) emitSkillEvent({ type: "kill", foe: e, source });
-  lights.add(x, y, big ? 110 : 56 * Math.sqrt(share), S[4], 0.9, big ? 0.9 : 0.5);
-  if (share === 1) lights.add(x, y, 18, WHITE, 0.8, 0.1);
+  const glow = big ? 0.9 : 0.5;
+  const shine = lightShare(glow);
+  if (shine > 0) lights.add(x, y, big ? 110 : 56 * Math.sqrt(share), S[4], glow * shine, big ? 0.9 : 0.5);
+  if (share === 1 && shine > 0) lights.add(x, y, 18, WHITE, 0.8 * shine, 0.1);
   for (let i = 0; i < (big ? 48 : many(16)); i++) {
     const a = R.range(0, TAU);
     const sp = R.range(40, big ? 260 : 160);
