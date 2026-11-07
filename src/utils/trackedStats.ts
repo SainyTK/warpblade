@@ -48,7 +48,10 @@ export function parseTracked(raw: unknown): TrackedStats {
   const heroWave: Record<string, number> = {};
   if (isRecord(saved.heroWave))
     for (const [hero, wave] of Object.entries(saved.heroWave)) if (count(wave)) heroWave[hero] = count(wave);
-  return { counts: counts(COUNT_STATS, saved.counts), best: counts(BEST_STATS, saved.best), heroWave, run: emptyRun() };
+  const best = counts(BEST_STATS, saved.best);
+  // a save from before the highest wave cleared was kept has it in the waves cleared with each hero
+  best.cleared = Math.max(best.cleared, ...Object.values(heroWave));
+  return { counts: counts(COUNT_STATS, saved.counts), best, heroWave, run: emptyRun() };
 }
 
 const raise = (now: number, to: number): number => Math.max(now, to);

@@ -1,0 +1,99 @@
+/* Codex: shop rows for every relic, evolution, charm and slot; found ones lit, the rest dark silhouettes or ???. */
+.menu[data-screen="codex"] .menu-panel {
+  width: min(600px, 100%);
+}
+.shop-item.codex-item {
+  cursor: default;
+}
+.shop-item.codex-item[data-state="locked"],
+.shop-item.codex-item[data-state="secret"] {
+  --accent: var(--key);
+  --accent-dark: var(--line);
+}
+.codex-item[data-state="locked"] .shop-icon,
+.codex-item[data-state="secret"] .shop-icon {
+  background: var(--raised);
+}
+.codex-item[data-state="locked"] .shop-icon img {
+  filter: brightness(0);
+  opacity: 0.85;
+}
+.codex-item[data-state="locked"] .shop-name,
+.codex-item[data-state="secret"] .shop-name {
+  color: var(--muted);
+}
+.codex-item[data-state="locked"]:focus .shop-name,
+.codex-item[data-state="secret"]:focus .shop-name {
+  color: var(--mist);
+}
+.codex-item[data-state="locked"] .shop-text {
+  font-style: italic;
+}
+/* an evolution sits under its relic, one step in and in the evolution's green */
+.shop-item.codex-item[data-evolution] {
+  --accent: var(--jade);
+  --accent-dark: #123a2a;
+  margin-left: 28px;
+}
+.shop-item.codex-item[data-evolution][data-state="locked"],
+.shop-item.codex-item[data-evolution][data-state="secret"] {
+  --accent: var(--key);
+  --accent-dark: var(--line);
+}
+.codex-recipe {
+  font-family: var(--display);
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--jade);
+}
+@media (max-width: 480px) {
+  .shop-item.codex-item[data-evolution] {
+    margin-left: 16px;
+  }
+}
+@media (max-height: 520px) {
+  .codex-recipe {
+    font-size: 9px;
+  }
+}
+
+/* The banner for something found: the achievement banner in crystal, with the found thing's icon in place of the trophy. */
+.ach-toast.found-toast {
+  grid-template-columns: auto minmax(0, 1fr);
+  border-color: var(--crystal);
+  box-shadow:
+    inset 0 0 0 2px #102a48,
+    0 var(--u) 0 rgba(0, 0, 0, 0.5);
+}
+.found-toast .ach-toast-text small {
+  color: var(--crystal);
+}
+.found-icon {
+  width: 32px;
+  height: 32px;
+  image-rendering: pixelated;
+}
+@media (max-height: 520px) {
+  .found-icon {
+    width: 16px;
+    height: 16px;
+  }
+}
+
+/* Result of a run: what it found, in the achievements' list style under them. */
+.result-ach.result-found li {
+  grid-template-columns: 16px minmax(0, 1fr) auto;
+}
+.result-found img {
+  width: 16px;
+  height: 16px;
+  image-rendering: pixelated;
+}
+.result-found small {
+  font-family: var(--display);
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--crystal);
+}

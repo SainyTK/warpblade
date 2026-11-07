@@ -4,11 +4,13 @@ import "../achievements/achievements.css";
 import { runAchievements } from "../../store/achievements";
 import { inRoom } from "../../store/coop";
 import { bank } from "../../store/meta";
+import { unlockedThisRun } from "../../store/unlocks";
 import type { Achievement } from "../../types/achievement";
 import type { MenuView } from "../../types/menu";
 import type { RunOutcome } from "../../types/run";
 import { medalIcon } from "../achievements/medalIcon";
 import { coinAmount } from "../coinIcon";
+import { foundList } from "../unlocks/foundList";
 import { menuItem } from "./menuItem";
 import { showScreen } from "./menuState";
 
@@ -68,6 +70,8 @@ export function resultScreen(): MenuView {
   const earned = inRoom() ? [] : runAchievements();
   content.append(summary);
   if (earned.length) content.append(earnedList(earned));
+  const found = inRoom() ? [] : unlockedThisRun();
+  if (found.length) content.append(foundList(found));
   content.append(list);
   return {
     title: RESULT_TITLES[run.outcome],
