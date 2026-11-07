@@ -1,4 +1,5 @@
 import type { CharacterDef } from "../../../types/character";
+import { legacySkills } from "../legacySkills";
 import { BRAWL } from "./brawl";
 import { FUSION } from "./fusion";
 import { HOLD } from "./hold";
@@ -17,7 +18,7 @@ export const HULDA: CharacterDef = {
   special: "quakeDrop",
   base: { ad: 12, ap: 6, hp: 120, mp: 70, stamina: 120, crit: 0.04, move: 0.9, aspd: 1, haste: 1 },
   growth: { ad: 0, ap: 0, hp: 1.3, mp: 0.2 },
-  branches: [BRAWL, IRON, HOLD, FUSION],
-  startRanks: { t_bellow: 1 },
+  skills: legacySkills([...BRAWL, ...IRON, ...HOLD, ...FUSION]),
+  comboHits: 4,
   skin: HULDA_SKIN,
 };

@@ -1,14 +1,18 @@
-/** In-run growth: slots, experience, hero level power, cards, Flow and chests. Design: docs/growth-design.md */
-export const RELIC_SLOTS = 5;
+/** In-run growth: slots, experience, hero level power, cards, Flow and chests. Design: docs/growth-design.md and
+ *  docs/skill-design.md */
+export const SKILL_SLOTS = 8;
 export const CHARM_SLOTS = 5;
-export const RELIC_MAX_LEVEL = 8;
+export const SKILL_MAX_LEVEL = 8;
+/** a skill at its top level evolves once its partner is held at this level or higher */
+export const EVOLVE_PARTNER_LEVEL = 4;
 /** experience for the next level: base + step x (level - 1) */
 export const XP_CURVE = { base: 15, step: 10 } as const;
 export const MAX_LEVEL = 99;
 /** attack damage and ability power multiply by this every level */
 export const HERO_LEVEL_POWER = 1.025;
-/** card weights: owned relics and charms count `owned` times; every available skill shares `skills` */
-export const CARD_WEIGHT = { relic: 100, skills: 300, owned: 3 } as const;
+/** card weights: a skill not held yet, the next level of a held skill, and how many times a held charm counts; a new
+ *  charm weighs its own `weight`. Tuned with the growth simulation in docs/growth-design.md */
+export const CARD_WEIGHT = { newSkill: 100, skillLevel: 20, ownedCharm: 1 } as const;
 export const PICK_COUNT = 3;
 /** a run's rerolls, skips and banishes before the shop adds more */
 export const PICK_TOOLS = { rerolls: 2, skips: 2, banishes: 1 } as const;

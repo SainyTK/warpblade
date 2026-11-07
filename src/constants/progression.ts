@@ -16,14 +16,5 @@ export const XP_ORB_MOTION = {
   pullAccel: 900,
   pullSpeed: 220,
 } as const;
-/** the longest combo by level: two hits at the start, six at most */
-export const COMBO_BY_LEVEL: readonly (readonly [level: number, hits: number])[] = [
-  [1, 2],
-  [11, 3],
-  [21, 4],
-  [38, 5],
-  [65, 6],
-];
-export const MAX_COMBO = 6;
 /** part of max HP and MP restored on a level up: a little, since a full run gains about 80 levels */
 export const LEVEL_UP_RESTORE = 0.08;

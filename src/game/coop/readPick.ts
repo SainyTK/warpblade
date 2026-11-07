@@ -21,8 +21,7 @@ export function readAnswer(c: CharacterDef, answer: PickAnswer<PickWire>): PickA
 }
 
 /** a card as it crosses the network */
-const writeCard = (card: Card): PickWire =>
-  card.type === "skill" ? { type: "skill", id: card.node.id } : { type: card.type, id: card.id };
+const writeCard = (card: Card): PickWire => ({ type: card.type, id: card.id });
 
 export function writeAnswer(answer: PickAnswer<Card>): PickAnswer<PickWire> {
   if (answer.t !== "take" && answer.t !== "banish") return answer;

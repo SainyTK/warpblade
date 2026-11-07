@@ -8,6 +8,7 @@ import type { RiteDef, RiteId } from "../../../../types/ysra/pyre";
 import { createFloorRing } from "../../../effects/floorRing";
 import { hasPerk } from "../../../progress";
 import { objectMemory, rememberPerSeat } from "../../../seatMemory";
+import { emitSkillEvent } from "../../../skills/events";
 import { plantBrazier } from "../../../spells/rites/brazier";
 import { castFlamePillar } from "../../../spells/rites/flamePillar";
 import { castFlare } from "../../../spells/rites/flare";
@@ -68,6 +69,7 @@ function release(): void {
   if (calling === "flamePillar" && hasPerk("pyreColonnade")) castPyreColonnade(x, hero.y);
   else letLoose(calling, x);
   healFromRite(calling);
+  emitSkillEvent({ type: "cast", ability: calling });
 }
 
 /** a rite can start on the floor, standing or out of a string blow that has landed */

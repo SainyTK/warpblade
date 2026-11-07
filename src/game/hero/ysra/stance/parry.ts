@@ -10,6 +10,7 @@ import { createImpact } from "../../../effects/impact";
 import { enemyCenter } from "../../../enemies/enemy";
 import { feat } from "../../../feat";
 import { hasPerk } from "../../../progress";
+import { emitSkillEvent } from "../../../skills/events";
 import { game, hero, lights } from "../../../state";
 import { hitStop } from "../../../world";
 import { skin } from "../../skin";
@@ -68,4 +69,5 @@ export function parry(fromX: number): void {
   sfx.block();
   sfx.perfect();
   emitYsra("parry", { fromX });
+  emitSkillEvent({ type: "parry", fromX });
 }

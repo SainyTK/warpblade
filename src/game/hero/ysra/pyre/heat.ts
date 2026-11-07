@@ -2,6 +2,7 @@ import { HEAT, OVERHEAT, SEARING } from "../../../../constants/ysra/heat";
 import { rechargeStep } from "../../../build/recharge";
 import { hasPerk } from "../../../progress";
 import { objectMemory, rememberPerSeat } from "../../../seatMemory";
+import { skillValues } from "../../../skills/query";
 import { hero, progress } from "../../../state";
 
 /** Heat and Overheat: the one owner of both */
@@ -21,7 +22,7 @@ export const searing = (): boolean => hasPerk("searingEdge") && (state.overheat 
 
 /** Kindling adds a share per rank; Unbroken doubles gains below a third of HP; Haste, which recharges rites, adds to it */
 function gainScale(): number {
-  const kindling = 1 + (progress.ranks.r_kindle ?? 0) * HEAT.kindlingPerRank;
+  const kindling = 1 + (skillValues("r_kindle").rank ?? 0) * HEAT.kindlingPerRank;
   const low = hasPerk("unbroken") && hero.hp < progress.stats.hp * HEAT.unbrokenBelow;
   return kindling * (low ? HEAT.unbrokenScale : 1) * rechargeStep(1);
 }

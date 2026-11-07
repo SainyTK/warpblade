@@ -11,7 +11,6 @@ export type YsraState = "heft" | "vault" | "dive" | "brace" | "backstep" | "rite
 export type YsraPerk =
   | "skewer"
   | "railLance"
-  | "longString"
   | "windmill"
   | "impale"
   | "highReaper"

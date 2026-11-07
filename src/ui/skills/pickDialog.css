@@ -87,7 +87,7 @@
   background: var(--night);
 }
 
-/* The build so far: relic slots and charm slots, filled and free. */
+/* The build so far: skill slots and charm slots, filled and free. */
 .level-up-build {
   display: flex;
   flex-wrap: wrap;
@@ -179,60 +179,38 @@
     transform 90ms steps(2),
     border-color 90ms steps(2);
 }
-.pick[data-branch="blade"] {
+/* A skill card takes the colour of its kind; charms jade, boons green. */
+.pick[data-branch="attack"] {
   --accent: var(--brass);
   --accent-dark: #3a2a10;
 }
-.pick[data-branch="phantom"] {
+.pick[data-branch="movement"] {
   --accent: var(--volt);
   --accent-dark: #241a52;
 }
-.pick[data-branch="arcane"] {
+.pick[data-branch="spell"] {
   --accent: var(--crystal);
   --accent-dark: #102a48;
 }
-.pick[data-branch="lance"] {
-  --accent: var(--brass);
-  --accent-dark: #3a2a10;
+.pick[data-branch="dot"] {
+  --accent: var(--fire);
+  --accent-dark: #3a1a0c;
 }
-.pick[data-branch="bastion"] {
-  --accent: #e0703a;
-  --accent-dark: #3a1a10;
+.pick[data-branch="summon"] {
+  --accent: #b8e05a;
+  --accent-dark: #26340e;
 }
-.pick[data-branch="pyre"] {
-  --accent: #ff4a3a;
-  --accent-dark: #3a0e12;
+.pick[data-branch="passive"] {
+  --accent: var(--iron);
+  --accent-dark: #262a36;
 }
-.pick[data-branch="fusion"] {
+.pick[data-branch="ultimate"] {
   --accent: var(--pink);
   --accent-dark: #3a1438;
-}
-/* An evolution: the coin gold ramp, a pale inner rim and a two-frame shimmer on the icon frame. */
-.pick[data-branch="evolution"] {
-  --accent: var(--gold);
-  --accent-dark: var(--gold-dark);
-}
-.pick[data-branch="evolution"],
-.pick[data-branch="evolution"].selected {
-  border-color: var(--gold);
-}
-.pick[data-branch="evolution"]::after {
-  content: "";
-  position: absolute;
-  inset: 2px;
-  border: 1px solid var(--gold-glint);
-  pointer-events: none;
-}
-.pick[data-branch="evolution"] .pick-icon {
-  animation: evolve-shimmer 800ms steps(1) infinite;
 }
 .pick[data-branch="boon"] {
   --accent: var(--heal);
   --accent-dark: #123a2a;
-}
-.pick[data-branch="relic"] {
-  --accent: var(--ember-hot);
-  --accent-dark: #3c1e0c;
 }
 .pick[data-branch="charm"] {
   --accent: var(--jade);
@@ -548,12 +526,6 @@
     transform: translateY(-10px);
   }
 }
-@keyframes evolve-shimmer {
-  50% {
-    border-color: var(--gold-glint);
-    box-shadow: inset 0 0 0 2px var(--brass);
-  }
-}
 @keyframes pick-blink {
   50% {
     background: var(--night);
@@ -562,7 +534,6 @@
 @media (prefers-reduced-motion: reduce) {
   .level-up-head,
   .pick,
-  .pick[data-branch="evolution"] .pick-icon,
   .pick-pips i.gain {
     animation: none;
     transition: none;

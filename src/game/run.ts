@@ -8,7 +8,7 @@ import { kit } from "./hero/kits";
 import { resetWound } from "./hero/wound";
 import { resetDanger } from "./lowHealth";
 import { resetProgress } from "./progress";
-import { forgetRelics } from "./relics";
+import { forgetSkills } from "./skills/runtime";
 import { freshHero, game, hero, ponytail, progress, scarf, showBanner } from "./state";
 
 /** after a fall, a cleared stage or a restart from the menu: Kael starts over at level 1 from wave 1 */
@@ -16,7 +16,7 @@ export function resetRun(banner = "Rise again"): void {
   bankCoins();
   resetProgress();
   resetLedger();
-  forgetRelics();
+  forgetSkills();
   clearChests();
   Object.assign(game, {
     mode: "play",

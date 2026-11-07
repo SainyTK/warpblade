@@ -8,6 +8,7 @@ import { heroGuarded } from "./hero/guard";
 import { kit } from "./hero/kits";
 import { perfectDodge } from "./hero/perfectDodge";
 import { lastLight } from "./lastLight";
+import { emitSkillEvent } from "./skills/events";
 import { character, game, hero, showBanner } from "./state";
 import { hitStop, shake } from "./world";
 
@@ -19,7 +20,10 @@ export function hurtHero(dmg: number, fromX: number): void {
   }
   const taken = Math.round(dmg * kit().hurtScale());
   hero.hp = Math.max(0, hero.hp - taken);
-  if (taken > 0) hurtFlow();
+  if (taken > 0) {
+    hurtFlow();
+    emitSkillEvent({ type: "hurt", damage: taken, fromX });
+  }
   hero.inv = HURT_INVULN;
   lastLight();
   // armour the kit wears takes the blow: the HP is gone, but no knockback, no hurt state and no lost combo

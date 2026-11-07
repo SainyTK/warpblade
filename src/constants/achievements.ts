@@ -131,7 +131,7 @@ export const ACHIEVEMENTS: readonly Achievement[] = [
   {
     id: "evolution",
     name: "Evolved",
-    text: "Learn an evolution.",
+    text: "Evolve a skill.",
     group: "Skill",
     goal: { kind: "count", stat: "evolutions", need: 1 },
     reward: 50,

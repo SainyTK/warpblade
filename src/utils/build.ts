@@ -1,12 +1,12 @@
 import { CHARM_STEP, CHARMS } from "../constants/charms";
-import { FLOW, PICK_TOOLS, RELIC_MAX_LEVEL } from "../constants/growth";
-import { RELICS } from "../constants/relics";
-import type { Build, BuildStats, CharmId, PickToolKey, RelicId, RelicLevel } from "../types/build";
+import { FLOW, PICK_TOOLS, SKILL_MAX_LEVEL, SKILL_SLOTS } from "../constants/growth";
+import type { Build, BuildStats, CharmId, PickToolKey } from "../types/build";
+import type { CharacterDef } from "../types/character";
 
 /** a build with nothing in it, and the run's pick tools with what the shop adds */
 export function freshBuild(extra: Partial<Record<PickToolKey, number>> = {}): Build {
   return {
-    relics: {},
+    skills: {},
     charms: {},
     evolved: [],
     banished: [],
@@ -15,7 +15,6 @@ export function freshBuild(extra: Partial<Record<PickToolKey, number>> = {}): Bu
     banishes: PICK_TOOLS.banishes + (extra.banishes ?? 0),
     flow: 0,
     flowIdle: 0,
-    heroHits: 0,
     chest: [],
   };
 }
@@ -40,46 +39,37 @@ export function buildStats(b: Build): BuildStats {
   };
 }
 
-/** a relic's numbers at a level (or evolved), with the build's charms applied; damage stays raw, since Might applies to every hit */
-export function relicStats(
-  id: RelicId,
-  level: number,
-  evolved: boolean,
-  s: BuildStats,
-): Required<Omit<RelicLevel, "text">> {
-  const def = RELICS[id];
-  const row = evolved ? def.evolution.stats : def.levels[Math.max(0, Math.min(def.levels.length, level) - 1)];
-  return {
-    damage: row.damage,
-    cooldown: (row.cooldown ?? 0) * s.cooldown,
-    amount: (row.amount ?? 1) + s.amount,
-    pierce: row.pierce ?? 1,
-    area: (row.area ?? 1) * s.area,
-    duration: (row.duration ?? 0) * s.duration,
-    speed: (row.speed ?? 1) * s.speed,
-  };
+/** the charm stats a skill's own numbers take: Multitude adds to amounts, the others multiply */
+export type CharmedStat = "amount" | "area" | "duration" | "speed" | "cooldown";
+
+/** a skill's number with the build's charms applied: `amount` adds Multitude, the rest multiply */
+export function charmed(stat: CharmedStat, value: number, s: BuildStats): number {
+  if (stat === "amount") return value + s.amount;
+  return value * s[stat];
 }
 
 /** Flow's damage multiplier at this many stacks */
 export const flowMultiplier = (stacks: number): number => 1 + FLOW.perStack * stacks;
 
-/** the relics, charms and evolutions a build starts with */
-export type StartBuild = Pick<Build, "relics" | "charms" | "evolved">;
+/** the skills, charms and evolutions a build starts with */
+export type StartBuild = Pick<Build, "skills" | "charms" | "evolved">;
 
-const isRelic = (id: string): id is RelicId => id in RELICS;
 const isCharm = (id: string): id is CharmId => id in CHARMS;
 
-/** a build written as `wisp:8,might:5,evolve:wisp`: relics and charms at their levels (kept inside each one's range),
- *  and relics taken in their evolved form; unknown names are skipped */
-export function parseStartBuild(text: string): StartBuild {
-  const out: StartBuild = { relics: {}, charms: {}, evolved: [] };
+/** a build written as `<skill id>:8,evolve:<skill id>,might:5`: the hero's skills and charms at their levels (kept
+ *  inside each one's range, at most `SKILL_SLOTS` skills), and skills taken at their top level in their evolved form;
+ *  unknown names are skipped */
+export function parseStartBuild(text: string, c: CharacterDef): StartBuild {
+  const out: StartBuild = { skills: {}, charms: {}, evolved: [] };
+  const isSkill = (id: string): boolean => c.skills.some((s) => s.id === id);
+  const room = (id: string): boolean => id in out.skills || Object.keys(out.skills).length < SKILL_SLOTS;
   for (const part of text.split(",")) {
     const [id, value = ""] = part.trim().split(":");
     const level = Math.max(1, Math.floor(Number(value)) || 1);
-    if (id === "evolve" && isRelic(value)) {
-      out.relics[value] = RELIC_MAX_LEVEL;
+    if (id === "evolve" && isSkill(value) && room(value)) {
+      out.skills[value] = SKILL_MAX_LEVEL;
       if (!out.evolved.includes(value)) out.evolved.push(value);
-    } else if (isRelic(id)) out.relics[id] = Math.min(RELIC_MAX_LEVEL, level);
+    } else if (isSkill(id) && room(id)) out.skills[id] = Math.min(SKILL_MAX_LEVEL, level);
     else if (isCharm(id)) out.charms[id] = Math.min(CHARMS[id].maxLevel, level);
   }
   return out;
