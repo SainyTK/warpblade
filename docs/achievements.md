@@ -95,7 +95,7 @@ A save from before them loads with its coins and shop levels, no heroes bought a
 | Coins | New Blood | Unlock a hero with coins | 50 | |
 
 A hero's trial counts only once the hero is in `CHARACTERS`.
-Since waves stream their quota of foes (`docs/growth-design.md`), a full clear slays about 640 foes where it slew about 180, so the two larger kill goals went up from 1,000 and 5,000 to 3,000 and 15,000 to stay about as far off in runs.
+Since waves stream their quota of foes (`docs/growth-design.md`), a full clear slays about 620 foes where it slew about 190, so the two larger kill goals went up from 1,000 and 5,000 to 3,000 and 15,000 to stay about as far off in runs.
 They keep their ids, `kills-1000` and `kills-5000`, so saves that earned them keep them.
 The page lists 22 achievements, and all of them together pay 1,470 coins.
 
