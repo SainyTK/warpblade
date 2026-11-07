@@ -93,7 +93,7 @@ export const TOUCH_TEXT: Record<KitId, Record<TouchButtonAction, TouchButtonText
   hulda: {
     attack: {
       label: "Punch",
-      hint: "Fist string: jab, cross, body hook, haymaker. In the air, a hammer fist. While holding a foe, a knee",
+      hint: "Fist string: jab, body hook, haymaker. In the air, a hammer fist. While holding a foe, a knee",
       accent: "#ff5f6d",
     },
     up: {
@@ -104,12 +104,12 @@ export const TOUCH_TEXT: Record<KitId, Record<TouchButtonAction, TouchButtonText
     dash: { label: "Rush", hint: "Bull Rush: an armoured shoulder charge that spends stamina", accent: "#c43848" },
     warp: {
       label: "Grab",
-      hint: "Grab a foe ahead; big foes are crushed. While holding, throw it: push the stick behind you to suplex, up to toss it up. In the air, Skyfall Grab",
+      hint: "Grab a foe ahead; big foes are crushed. While holding, throw it: into the crowd ahead, or a suplex behind. In the air, Skyfall Grab",
       accent: "#b4bcc4",
     },
-    cast: { label: "Bellow", hint: "Drag nearby foes in and stun minions (20 MP)", accent: "#ffc2b8" },
+    cast: { label: "Ability", hint: "Use the selected ability: Bellow, the taunt or a spell skill", accent: "#ffc2b8" },
     ultimate: SPECIAL,
-    cycle: { label: "Taunt", hint: "Slap your chest twice for Grit", accent: "#e0ac48" },
+    cycle: { label: "Switch", hint: "Turn to the next ability", accent: "#e0ac48" },
   },
 };
 
@@ -154,10 +154,10 @@ export const STICK_DIRECTIONS: Record<KitId, readonly StickDirectionSpec[]> = {
     { direction: "down", label: "While shooting, aim low. With Jump, drop through a ledge" },
   ],
   hulda: [
-    { direction: "side", label: "Walk. While holding a foe, behind you picks the suplex" },
+    { direction: "side", label: "Walk" },
     { direction: "far side", label: "Walk, she never runs" },
-    { direction: "up", label: "Jump. While holding a foe, Grab tosses it up" },
-    { direction: "down", label: "With Jump, drop through a ledge. While holding, Grab swings with Giant Swing" },
+    { direction: "up", label: "Jump" },
+    { direction: "down", label: "With Jump, drop through a ledge" },
   ],
 };
 

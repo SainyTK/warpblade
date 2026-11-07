@@ -9,5 +9,5 @@ export const HERO_SOURCE_ICONS: Readonly<Record<string, Readonly<Record<HeroSour
   kael: { attacks: "b_edge", abilities: "a_flame", ultimate: "b_ult" },
   ysra: { attacks: "l_haft", abilities: "r_flare", ultimate: "l_ult" },
   sable: { attacks: "m_draw", abilities: "t_snare", ultimate: "m_ult" },
-  hulda: { attacks: "b_hands", abilities: "t_bellow", ultimate: "b_titan" },
+  hulda: { attacks: "h_fists", abilities: "h_bellow", ultimate: "h_quake" },
 };

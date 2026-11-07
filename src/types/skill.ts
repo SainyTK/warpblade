@@ -1,4 +1,3 @@
-import type { HuldaPerk } from "./hulda";
 import type { SablePerk } from "./sable";
 import type { Stats } from "./stats";
 import type { YsraPerk } from "./ysra";
@@ -42,7 +41,7 @@ export type KaelPerk =
   | "glacierBloom"
   | "thunderhead";
 /** Abilities a skill node switches on. */
-export type Perk = KaelPerk | YsraPerk | SablePerk | HuldaPerk;
+export type Perk = KaelPerk | YsraPerk | SablePerk;
 export type UltimateId =
   | "crystalNova"
   | "pyreWave"
@@ -56,7 +55,8 @@ export type UltimateId =
   | "boltStorm"
   | "deadeye"
   | "quakeDrop"
-  | "titanThrow";
+  | "titanThrow"
+  | "unbroken";
 /** what a skill is, for its card colour and the contract's least counts per hero (docs/skill-design.md) */
 export type SkillKind = "attack" | "movement" | "spell" | "dot" | "summon" | "passive" | "ultimate";
 /** how hard a skill is to pull off: the harder, the more it deals */

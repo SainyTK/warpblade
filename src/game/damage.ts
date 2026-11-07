@@ -17,6 +17,7 @@ import { launchEnemy } from "./enemies/airborne";
 import { enemyCenter } from "./enemies/enemy";
 import { kindOf } from "./enemies/kinds";
 import { markMultiplier } from "./enemies/skillStatus";
+import { kit } from "./hero/kits";
 import { killEnemy } from "./kill";
 import { popNumber } from "./numbers";
 import { hasPerk } from "./progress";
@@ -125,6 +126,7 @@ export function dealDamage(e: Enemy, base: number, o: HitOptions = {}): HitResul
   }
   if (e.pinned > 0) dmg *= PIN.taken;
   dmg *= markMultiplier(e);
+  dmg *= kit().damageScale?.() ?? 1;
   const shattering = hasPerk("shatter") && o.melee && o.heavy && e.frozen > 0;
   if (shattering) {
     dmg *= 2;

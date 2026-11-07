@@ -6,7 +6,8 @@ import type { Effect } from "../../types/effect";
 import type { Enemy } from "../../types/enemy";
 import { dealDamage } from "../damage";
 import { enemyBox, enemyCenter } from "../enemies/enemy";
-import { hasPerk } from "../progress";
+import { emitSkillEvent } from "../skills/events";
+import { skillLevel, skillValues } from "../skills/query";
 import { game, lights, progress } from "../state";
 import { boxHit, dust, hitStop, shake } from "../world";
 import { createFloorRing } from "./floorRing";
@@ -32,19 +33,21 @@ export function createThrownBody(body: Enemy, dir: number, ramp: Ramp): Effect {
     body.stun = Math.max(body.stun, THROWN.landStun);
     dust(cx, body.y, 6);
     shake(0.1, 1.5);
-    if (!hasPerk("wreckingThrow")) return;
+    emitSkillEvent({ type: "throw", foe: body, x: cx, y: body.y, slam: false });
+    if (!skillLevel("h_wreckingThrow")) return;
+    const v = skillValues("h_wreckingThrow");
     for (const e of game.enemies) {
       if (e === body || e.hp <= 0) continue;
       const [ex, ey] = enemyCenter(e);
-      if (Math.hypot(ex - cx, ey - cy) > THROWN.wreckRing) continue;
-      dealDamage(e, progress.stats.ad * THROWN.wreckPower, {
+      if (Math.hypot(ex - cx, ey - cy) > v.burst) continue;
+      dealDamage(e, progress.stats.ad * v.burstPower, {
         fromX: cx,
         kx: Math.sign(ex - cx) * 120,
         stun: 0.5,
         heavy: true,
       });
     }
-    game.fx.push(createFloorRing(cx, body.y, THROWN.wreckRing, ramp, 0.35));
+    game.fx.push(createFloorRing(cx, body.y, v.burst, ramp, 0.35));
     game.fx.push(createImpact(cx, cy, dir, true));
     sfx.boom();
   };

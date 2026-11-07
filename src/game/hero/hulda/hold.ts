@@ -4,7 +4,7 @@ import type { Enemy } from "../../../types/enemy";
 import { clamp } from "../../../utils/math";
 import { enemyBox } from "../../enemies/enemy";
 import { kindOf } from "../../enemies/kinds";
-import { hasPerk } from "../../progress";
+import { skillLevel, skillValues } from "../../skills/query";
 import { hero } from "../../state";
 import { claim, isClaimed, unclaim } from "./claims";
 import { hulda } from "./memory";
@@ -15,8 +15,8 @@ const HOLDING = new Set(["hold", "knee", "toss"]);
 /** a foe she can take into her hands: a live minion nobody else holds */
 export const canHold = (e: Enemy): boolean => e.hp > 0 && ENEMIES[e.type].launchable && !isClaimed(e);
 
-/** seconds a hold lasts, longer with Iron Grip */
-export const holdTime = (): number => (hasPerk("ironGrip") ? HOLD.gripTime : HOLD.time);
+/** seconds a hold lasts, longer with Crushing Grip */
+export const holdTime = (): number => (skillLevel("h_fracture") ? skillValues("h_fracture").hold : HOLD.time);
 
 /** half the width of a foe's body, so a big foe is held at arm's length and a small one close */
 function halfWidth(e: Enemy): number {

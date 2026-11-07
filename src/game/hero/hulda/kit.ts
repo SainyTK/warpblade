@@ -5,10 +5,12 @@ import { take, use } from "../../input";
 import { hero } from "../../state";
 import { resetMotion } from "../kael/motion";
 import { startCharge } from "../ultimate";
+import { nextAbility, pressAbility, resetAbilities } from "./abilities";
 import { steadfast } from "./armour";
-import { pressBellow, runBellow } from "./bellow";
+import { runBellow } from "./bellow";
 import { clearClaims } from "./claims";
 import { pressFist, runAirFist, runFist } from "./fists";
+import { huldaDamageScale, tickFury } from "./fury";
 import { pressGrab, runCrush, runGrab } from "./grab";
 import { gritScale, tickGrit } from "./grit";
 import { drop, watchGrip } from "./hold";
@@ -17,14 +19,18 @@ import { hulda, resetHulda } from "./memory";
 import { huldaPose } from "./pose";
 import { dropCarried, pressRush, runRush, rushDrives } from "./rush";
 import { pressSkyfall, runSkyfall, skyfallDrives } from "./skyfall";
-import { pressTaunt, runTaunt } from "./taunt";
+import { runTaunt } from "./taunt";
 import { pressKnee, pressThrow, runHold, runKnee, runToss } from "./throws";
 
 function tick(dt: number): void {
   tickGrit(dt);
+  tickFury(dt);
   const recharge = rechargeStep(dt);
   hulda.bellowCd = Math.max(0, hulda.bellowCd - recharge);
   hulda.tauntCd = Math.max(0, hulda.tauntCd - recharge);
+  hulda.chainCd = Math.max(0, hulda.chainCd - recharge);
+  hulda.stompCd = Math.max(0, hulda.stompCd - recharge);
+  hulda.wallCd = Math.max(0, hulda.wallCd - recharge);
   hulda.rushCd = Math.max(0, hulda.rushCd - recharge);
   if (hero.state !== "fist") hulda.link = Math.max(0, hulda.link - dt);
   if (hero.state !== "fist" && hulda.link <= 0) hero.chain = 0;
@@ -33,7 +39,7 @@ function tick(dt: number): void {
     hulda.airGrabbed = false;
   }
   watchGrip();
-  if (hulda.carried && (hero.state !== "rush" || hero.hp <= 0)) dropCarried();
+  if (hulda.carried.length && (hero.state !== "rush" || hero.hp <= 0)) dropCarried();
 }
 
 function runState(dt: number): boolean {
@@ -76,36 +82,41 @@ function runState(dt: number): boolean {
   }
 }
 
-/** while a foe is in her hands, J knees it, K throws it the way the keys ask, and Up only picks the throw */
-function readHolding(dir: number): void {
+/** while a foe is in her hands, J knees it and K throws it, the throw picked by where the foes stand; Up does nothing */
+function readHolding(): void {
   take("up");
   use("attack", pressKnee);
-  use("warp", () => pressThrow(dir));
+  use("warp", pressThrow);
 }
 
 /**
- * Hulda: bare fists and iron gauntlets. A short four-blow string, grabs that hold minions and crush bigger foes, throws
- * by direction, an armoured Bull Rush, Bellow and a taunt, and Grit plates that take blows for her. She never dodges.
+ * Hulda: bare fists and iron gauntlets. A short three-blow string, grabs that hold minions and crush bigger foes, throws
+ * that pick themselves by where the foes stand, an armoured Bull Rush, Bellow, the taunt and her spell skills on I (O
+ * turns through them), and Grit plates that take blows for her. She never dodges.
  */
 export const HULDA_KIT: HeroKit = {
   tick,
-  readActions: (dir) => {
-    if (hulda.held && (hero.state === "hold" || hero.state === "knee")) return readHolding(dir);
+  readActions: () => {
+    if (hulda.held && (hero.state === "hold" || hero.state === "knee")) return readHolding();
     use("dash", pressRush);
     use("up", pressJump);
     use("attack", pressFist);
     use("warp", () => (hero.ground ? pressGrab() : pressSkyfall()));
-    use("cast", pressBellow);
-    use("cycle", pressTaunt);
+    use("cast", pressAbility);
+    use("cycle", nextAbility);
     use("ultimate", startCharge);
   },
   chooseMove: () => null,
   runState,
   pose: huldaPose,
   afterStrike: () => {},
-  absorbHurt: () => false,
+  absorbHurt: (_dmg, fromX) => {
+    hulda.hitFrom = fromX;
+    return false;
+  },
   stride: () => HULDA_STRIDE,
   hurtScale: gritScale,
+  damageScale: huldaDamageScale,
   steadfast,
   drivesMotion: () =>
     rushDrives() || skyfallDrives() || ((hero.state === "hold" || hero.state === "knee") && hero.ground),
@@ -115,6 +126,7 @@ export const HULDA_KIT: HeroKit = {
     dropCarried();
     clearClaims();
     resetHulda();
+    resetAbilities();
     resetMotion();
   },
 };

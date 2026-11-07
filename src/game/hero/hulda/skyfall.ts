@@ -4,7 +4,8 @@ import { sfx } from "../../../services/audio";
 import { dealDamage } from "../../damage";
 import { createImpact } from "../../effects/impact";
 import { kindOf } from "../../enemies/kinds";
-import { hasPerk } from "../../progress";
+import { emitSkillEvent } from "../../skills/events";
+import { skillValues } from "../../skills/query";
 import { game, hero, progress } from "../../state";
 import { dust } from "../../world";
 import { isFree, setState, settle } from "../actions";
@@ -48,7 +49,7 @@ function slam(): void {
   h.lastHit = e;
   gainGrit(GRIT.throw);
   game.fx.push(createImpact(e.x, h.y - 6, h.face, true));
-  const aftershock = hasPerk("aftershockSuplex");
+  const aftershock = skillValues("h_wreckingThrow").aftershock === 1;
   slamRing({
     x: e.x,
     floor: h.y,
@@ -60,6 +61,7 @@ function slam(): void {
     stop: SKYFALL.stop,
     shake: SKYFALL.shake,
   });
+  emitSkillEvent({ type: "throw", foe: e, x: e.x, y: h.y, slam: true });
 }
 
 /** the lunge catches a foe for a few frames; caught, she rides it down fast; either way the landing settles her */

@@ -2,12 +2,10 @@ import { STATE_CLIPS } from "../../../constants/clips";
 import { FIST_CLIPS, HAMMER_CLIP } from "../../../constants/clips/hulda/fists";
 import { GRAPPLE_CLIPS, THROW_CLIPS } from "../../../constants/clips/hulda/grapple";
 import { HULDA_CLIPS } from "../../../constants/clips/hulda/moves";
-import { CHARGE_POSE, GUARD, HOLD_POSE, HULDA_IDLE } from "../../../constants/clips/hulda/stance";
+import { CHARGE_POSE, HOLD_POSE, HULDA_IDLE } from "../../../constants/clips/hulda/stance";
 import { KAEL_WOUNDED_IDLE } from "../../../constants/clips/wounded";
-import { FISTS } from "../../../constants/hulda/fists";
 import type { Hero } from "../../../types/hero";
 import type { Pose } from "../../../types/pose";
-import { blendPose } from "../../../utils/poseBlend";
 import { sampleKeys } from "../../../utils/sampleKeys";
 import { progress } from "../../state";
 import { clipPose } from "../clipPose";
@@ -17,17 +15,8 @@ import { landingPose, watchLanding } from "../kael/landing";
 import { motion } from "../kael/motion";
 import { woundedIdle, woundWeight } from "../wound";
 import { carry, holding } from "./carry";
-import { blowLength, currentBlow } from "./fists";
+import { currentBlow } from "./fists";
 import { hulda } from "./memory";
-
-/** the knuckle rush loops its two punches while they last, then settles to the guard */
-function knucklesPose(st: number): Pose {
-  const clip = FIST_CLIPS.knuckles;
-  const end = blowLength() - FISTS.knuckles.dur;
-  if (st < end) return sampleKeys(clip.keys, st % clip.dur);
-  const last = sampleKeys(clip.keys, end % clip.dur);
-  return blendPose(last, GUARD, Math.min(1, (st - end) / FISTS.knuckles.dur));
-}
 
 /** walking with a foe in her hands strides on; standing, she holds it at her hands */
 function holdPose(h: Hero): Pose {
@@ -40,7 +29,6 @@ function holdPose(h: Hero): Pose {
 function statePose(h: Hero, t: number, fresh: boolean, dt: number, wound: number): Pose {
   switch (h.state) {
     case "fist":
-      if (currentBlow() === "knuckles") return knucklesPose(h.st);
       return sampleKeys(FIST_CLIPS[currentBlow()].keys, h.st);
     case "airFist":
       return sampleKeys(HAMMER_CLIP.keys, h.st);

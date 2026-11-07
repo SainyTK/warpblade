@@ -12,26 +12,22 @@ export type HuldaState =
   | "skyfall"
   | "rush"
   | "bellow"
-  | "taunt";
+  | "taunt"
+  | "chain"
+  | "stomp"
+  | "brace";
 
-/** the passives and abilities of Hulda's skill tree */
-export type HuldaPerk =
-  | "uppercut"
-  | "knuckleRush"
-  | "bullHorns"
-  | "ironPlates"
-  | "secondWind"
-  | "ironGrip"
-  | "giantSwing"
-  | "wreckingThrow"
-  | "rushGrab"
-  | "aftershockSuplex";
+/** the blows of her fist string, in order */
+export type FistBlow = "jab" | "hook" | "haymaker";
 
-/** the blows of her fist string, in order; the uppercut and the knuckle rush come after the haymaker once learned */
-export type FistBlow = "jab" | "cross" | "hook" | "haymaker" | "uppercut" | "knuckles";
+/** how a held foe leaves her hands: ahead, over her head into the floor behind, or swung round her */
+export type ThrowKind = "forward" | "suplex" | "swing";
 
-/** how a held foe leaves her hands: ahead, over her head into the floor behind, straight up, or swung round her */
-export type ThrowKind = "forward" | "suplex" | "up" | "swing";
+/** the abilities on I, in the order O turns through them: her two from the start and her three spell skills */
+export type HuldaAbility = "bellow" | "taunt" | "h_ironChain" | "h_tremorStomp" | "h_ironWall";
+
+/** how her armour took a blow: a plate broke, or the rush, the haymaker's wind-up or Iron Wall's brace took it */
+export type ArmourKind = "plate" | "rush" | "windup" | "brace";
 
 /** what Hulda's kit remembers between frames, one copy per player */
 export interface HuldaMemory {
@@ -57,14 +53,15 @@ export interface HuldaMemory {
   link: number;
   /** J was pressed during a blow: the next one follows when it ends */
   queued: boolean;
-  /** the current blow's punches left, for the knuckle rush */
-  punches: number;
   /** the current action already struck, caught or set off its moment */
   struck: boolean;
   throwKind: ThrowKind;
-  /** seconds until Bellow and the taunt can be used again */
+  /** seconds until each ability on I can be used again */
   bellowCd: number;
   tauntCd: number;
+  chainCd: number;
+  stompCd: number;
+  wallCd: number;
   /** one hammer fist and one Skyfall Grab in each airtime */
   airFisted: boolean;
   airGrabbed: boolean;
@@ -72,8 +69,20 @@ export interface HuldaMemory {
   landed: boolean;
   /** seconds until the next Bull Rush */
   rushCd: number;
-  /** the foe Bull Horns carries on her shoulder */
-  carried: Enemy | null;
+  /** the foes Bull Horns carries on her shoulder; replaced whole, never pushed to, so co-op seats keep their own */
+  carried: readonly Enemy[];
+  /** foes the rush under way has struck, for the dash event; replaced whole */
+  passed: readonly Enemy[];
+  /** Fury: her damage is up by this share while `furyT` runs */
+  fury: number;
+  furyT: number;
+  /** where the last blow on her came from, for the armour's answer */
+  hitFrom: number;
+  /** seconds since a plate last healed her (Iron Hide) */
+  healWait: number;
+  /** Unbroken: seconds of iron left and its damage share */
+  ironT: number;
+  iron: number;
 }
 
 declare module "./skillBehavior" {
@@ -81,5 +90,11 @@ declare module "./skillBehavior" {
   interface SkillEvents {
     /** a foe caught in her hands, or crushed when too big to hold */
     grab: { foe: Enemy };
+    /** a foe she threw or slammed landed; `slam` for a suplex, a Skyfall or a Bull Horns slam */
+    throw: { foe: Enemy; x: number; y: number; slam: boolean };
+    /** her armour took a blow; `counter` when she took it on purpose (rush, wind-up, brace), her parry */
+    armour: { kind: ArmourKind; fromX: number; counter: boolean };
+    /** an Iron Counter grab or a loaded Iron Wall release */
+    counter: { foe: Enemy | null };
   }
 }

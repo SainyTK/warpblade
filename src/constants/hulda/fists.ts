@@ -29,23 +29,21 @@ export interface FistSpec {
 /** straight blows reach this box ahead of her feet at head height: the shortest reach in the game */
 const STRAIGHT = [2, -22, 16, -8] as const;
 /**
- * The overhand haymaker and the uppercut travel up through the space over her head, so their boxes reach as high as the
+ * The overhand haymaker travels up through the space over her head, so their boxes reach as high as the
  * fist goes; this is how her string touches a flier hovering over her, still no further ahead than her jab.
  */
 const OVERHAND = [0, -42, 18, -8] as const;
-const RISING = [0, -44, 14, -6] as const;
 
-/** the string from the start, then what Uppercut and Knuckle Rush add after the haymaker */
+/** the string's three blows */
 export const FISTS: Record<FistBlow, FistSpec> = {
-  jab: { dur: frame(8), hit: frame(3), box: STRAIGHT, step: 0, stepAt: 0, power: 0.55, kx: 40, ky: -10, stagger: 0.3 },
-  cross: { dur: frame(9), hit: frame(3), box: STRAIGHT, step: 0, stepAt: 0, power: 0.65, kx: 60, ky: -10 },
+  jab: { dur: frame(8), hit: frame(3), box: STRAIGHT, step: 0, stepAt: 0, power: 0.6, kx: 40, ky: -10, stagger: 0.3 },
   hook: {
     dur: frame(11),
     hit: frame(5),
     box: STRAIGHT,
     step: 0,
     stepAt: 0,
-    power: 0.85,
+    power: 0.9,
     kx: 90,
     ky: -20,
     stagger: 0.6,
@@ -58,7 +56,7 @@ export const FISTS: Record<FistBlow, FistSpec> = {
     step: 130,
     stepAt: frame(7),
     arc: { cx: 3, cy: -24, R: 17, sy: 0.85, rot: 0, a0: -2.5, a1: 0.45, W: 6, sweep: 0.04, trail: 0.16 },
-    power: 1.4,
+    power: 1.5,
     kx: 240,
     ky: -60,
     stun: 0.5,
@@ -66,38 +64,10 @@ export const FISTS: Record<FistBlow, FistSpec> = {
     stop: 0.07,
     shake: [0.18, 2],
   },
-  uppercut: {
-    dur: frame(14),
-    hit: frame(6),
-    box: RISING,
-    step: 60,
-    stepAt: 0,
-    arc: { cx: 5, cy: -22, R: 17, sy: 0.75, rot: 0.3, a0: 1.5, a1: -1.6, W: 6, sweep: 0.04, trail: 0.16 },
-    power: 1.2,
-    kx: 40,
-    ky: 0,
-    launch: -300,
-    heavy: true,
-  },
-  /** one of the knuckle rush's punches; `KNUCKLES` sets how many and how fast */
-  knuckles: {
-    dur: frame(3),
-    hit: frame(1),
-    box: STRAIGHT,
-    step: 30,
-    stepAt: 0,
-    power: 0.35,
-    kx: 30,
-    ky: -5,
-    stagger: 0.3,
-  },
 };
 
 /** the string's order from the start */
-export const STRING: readonly FistBlow[] = ["jab", "cross", "hook", "haymaker"];
-
-/** Knuckle Rush: J held as the haymaker ends throws this many punches, this many seconds apart */
-export const KNUCKLES = { count: 6, every: 0.08 } as const;
+export const STRING: readonly FistBlow[] = ["jab", "hook", "haymaker"];
 
 /** the haymaker's wind-up is armoured from this point until its hit */
 export const HAYMAKER_ARMOUR = frame(2);

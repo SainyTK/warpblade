@@ -203,38 +203,6 @@ export const THROW_CLIPS: Record<ThrowKind, ActionClip> = {
       [frame(14), GUARD],
     ],
   },
-  /** a dip under the foe, then she heaves it straight up with both arms */
-  up: {
-    dur: THROWS.up.dur,
-    hit: THROWS.up.release,
-    keys: [
-      [0, HOLD_POSE],
-      [frame(2), g({ hy: -11, ny: -21, nx: 1, fx: 8, fy: -14, bx: 7, by: -15, be: 0, ffx: 6, bfx: -6 })],
-      [frame(4), g({ hy: -10.5, ny: -20.5, nx: 1, fx: 8, fy: -13, bx: 7, by: -14, be: 0, ffx: 6, bfx: -6 })],
-      [
-        frame(5),
-        g({
-          hy: -15,
-          ny: -25.5,
-          nx: 2,
-          cb: 0.5,
-          fx: 7,
-          fy: -32,
-          bx: 6,
-          by: -32,
-          be: 0,
-          ffx: 5,
-          ffy: 0,
-          fa: -0.3,
-          bfx: -5,
-          ba: -0.3,
-        }),
-        "snap",
-      ],
-      [frame(7), g({ hy: -15, ny: -25.5, nx: 2, cb: 0.5, fx: 7, fy: -31, bx: 6, by: -31, be: 0, ffx: 5, bfx: -5 })],
-      [frame(10), GUARD],
-    ],
-  },
   /** arms out at the held foe while she spins round twice, then the forward release */
   swing: {
     dur: THROWS.swing.dur,

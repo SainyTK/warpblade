@@ -1,5 +1,5 @@
 import { HERO_MOVE } from "../../../constants/combat";
-import { AFTERSHOCK_SUPLEX, HOLD, KNEE, THROWS } from "../../../constants/hulda/grab";
+import { AFTERSHOCK_SUPLEX, HOLD, KNEE, THROW_PICK, THROWS } from "../../../constants/hulda/grab";
 import { GRIT } from "../../../constants/hulda/grit";
 import { HULDA_STRIDE } from "../../../constants/hulda/motion";
 import { sfx } from "../../../services/audio";
@@ -11,7 +11,8 @@ import { createThrownBody } from "../../effects/thrownBody";
 import { enemyCenter } from "../../enemies/enemy";
 import { kindOf } from "../../enemies/kinds";
 import { isHeld } from "../../input";
-import { hasPerk } from "../../progress";
+import { emitSkillEvent } from "../../skills/events";
+import { skillLevel, skillValues } from "../../skills/query";
 import { game, hero, progress } from "../../state";
 import { hitStop, markStruck, newSwing, shake, struckThisSwing } from "../../world";
 import { setState, settle } from "../actions";
@@ -22,12 +23,32 @@ import { holdTime, pin } from "./hold";
 import { hulda } from "./memory";
 import { slamRing } from "./slam";
 
-/** the throw the held keys ask for: Up tosses it up, Down swings it with Giant Swing, the side behind suplexes */
-function throwFor(dir: number): ThrowKind {
-  if (isHeld("up")) return "up";
-  if (isHeld("down") && hasPerk("giantSwing")) return "swing";
-  if (dir && dir === -hero.face) return "suplex";
-  return "forward";
+const SWING = "h_giantSwing";
+
+/** foes standing, other than the held one, whose middle is within `ahead` pixels in front of her or `behind` behind */
+function foesAround(held: Enemy, ahead: number, behind: number): { front: number; back: number; near: number } {
+  let front = 0;
+  let back = 0;
+  let near = 0;
+  for (const e of game.enemies) {
+    if (e === held || e.hp <= 0) continue;
+    const dx = (enemyCenter(e)[0] - hero.x) * hero.face;
+    if (dx >= 0 && dx <= ahead) front++;
+    if (dx < 0 && -dx <= behind) back++;
+    if (Math.abs(dx) <= THROW_PICK.swing) near++;
+  }
+  return { front, back, near };
+}
+
+/**
+ * The throw picks itself from where the foes stand: a Giant Swing when they crowd her and she has it, a forward throw
+ * when foes stand ahead and fewer behind, otherwise a suplex, which is also the hardest throw on a lone foe.
+ */
+function throwFor(held: Enemy): ThrowKind {
+  const { front, back, near } = foesAround(held, THROW_PICK.ahead, THROW_PICK.behind);
+  if (skillLevel(SWING) && near >= skillValues(SWING).foes) return "swing";
+  if (front > 0 && front > back) return "forward";
+  return "suplex";
 }
 
 function startThrow(kind: ThrowKind): void {
@@ -39,10 +60,10 @@ function startThrow(kind: ThrowKind): void {
   sfx.swing(kind === "suplex" ? 0.6 : 0.8);
 }
 
-/** K while holding: throw the foe the way the keys ask */
-export function pressThrow(dir: number): boolean {
+/** K while holding: the throw the crowd asks for */
+export function pressThrow(): boolean {
   if (!hulda.held || (hero.state !== "hold" && hero.state !== "knee")) return false;
-  startThrow(throwFor(dir));
+  startThrow(throwFor(hulda.held));
   return true;
 }
 
@@ -66,7 +87,7 @@ export function runHold(dt: number): void {
   h.vx = h.ground ? dir * HERO_MOVE.walkSpeed * HOLD.walk * progress.stats.move : h.vx;
   h.runPhase = (h.runPhase + (dt * Math.abs(h.vx)) / HULDA_STRIDE) % 1;
   pin(e);
-  if (h.state === "hold" && hulda.holdT >= holdTime()) startThrow("forward");
+  if (h.state === "hold" && hulda.holdT >= holdTime()) startThrow(throwFor(e));
 }
 
 /** the knee lands on its frame, then she is back to holding */
@@ -79,7 +100,7 @@ export function runKnee(dt: number): void {
   pin(e, HOLD.ahead - 1, h.st < KNEE.hit ? 1 : 3);
   if (!hulda.struck && h.st >= KNEE.hit) {
     hulda.struck = true;
-    const power = hasPerk("ironGrip") ? KNEE.gripPower : KNEE.power;
+    const power = skillLevel("h_fracture") ? skillValues("h_fracture").knee : KNEE.power;
     const [cx, cy] = enemyCenter(e);
     dealDamage(e, progress.stats.ad * power, { fromX: h.x, kx: 0, melee: true, heavy: true });
     h.lastHit = e;
@@ -154,7 +175,7 @@ function runSuplex(e: Enemy): void {
   hulda.struck = true;
   const body = release();
   if (!body) return;
-  const aftershock = hasPerk("aftershockSuplex");
+  const aftershock = skillValues("h_wreckingThrow").aftershock === 1;
   body.x = hero.x - hero.face * s.behind;
   body.y = kindOf(body.type).flies ? hero.y - 8 : hero.y;
   body.vx = 0;
@@ -174,40 +195,25 @@ function runSuplex(e: Enemy): void {
     stop: s.stop,
     shake: s.shake,
   });
-}
-
-/** the sky toss: heaved straight up for the string and the hammer fist to catch */
-function runUp(e: Enemy): void {
-  const u = THROWS.up;
-  if (hero.st < u.release) {
-    pin(e, HOLD.ahead - 2, (hero.st / u.release) * 10);
-    return;
-  }
-  if (hulda.struck) return;
-  hulda.struck = true;
-  const body = release();
-  if (!body) return;
-  dealDamage(body, progress.stats.ad * u.power, { fromX: hero.x, kx: 0, launch: u.launch, heavy: true });
-  hero.lastHit = body;
-  gainGrit(GRIT.throw);
-  sfx.swing(1.4);
+  emitSkillEvent({ type: "throw", foe: body, x: body.x, y: hero.y, slam: true });
 }
 
 /** Giant Swing: the foe whirls round her twice, striking every foe near each turn, then flies ahead */
 function runSwing(e: Enemy, dt: number): void {
   const g = THROWS.swing;
+  const v = skillValues(SWING);
   const st = hero.st;
   if (st < g.release) {
     const u = st / g.release;
-    const a = u * Math.PI * 2 * g.turns;
+    const a = u * Math.PI * 2 * v.turns;
     // each turn is a new swing, so a foe near her is struck once per turn
-    if (Math.floor(u * g.turns) !== Math.floor(((st - dt) / g.release) * g.turns)) newSwing();
+    if (Math.floor(u * v.turns) !== Math.floor(((st - dt) / g.release) * v.turns)) newSwing();
     pin(e, Math.cos(a) * 16, 6);
     for (const o of game.enemies) {
       if (o === e || o.hp <= 0 || struckThisSwing(o)) continue;
-      if (Math.abs(enemyCenter(o)[0] - e.x) > g.reach / 2 || Math.abs(o.x - hero.x) > g.reach) continue;
+      if (Math.abs(enemyCenter(o)[0] - e.x) > v.reach / 2 || Math.abs(o.x - hero.x) > v.reach) continue;
       markStruck(o);
-      dealDamage(o, progress.stats.ad * g.power, {
+      dealDamage(o, progress.stats.ad * v.power, {
         fromX: hero.x,
         kx: Math.sign(o.x - hero.x) * 160,
         stun: 0.4,
@@ -230,7 +236,6 @@ export function runToss(dt: number): void {
   if (e) {
     if (kind === "forward") runForward(e);
     else if (kind === "suplex") runSuplex(e);
-    else if (kind === "up") runUp(e);
     else runSwing(e, dt);
   }
   if (hero.st >= THROWS[kind].dur) settle();

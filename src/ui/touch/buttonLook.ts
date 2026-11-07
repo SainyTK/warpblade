@@ -1,12 +1,11 @@
 import { STAMINA } from "../../constants/combat";
-import { BELLOW } from "../../constants/hulda/bellow";
 import { RUSH } from "../../constants/hulda/rush";
-import { TAUNT } from "../../constants/hulda/taunt";
 import { HOP, SLIDE } from "../../constants/sable/moves";
 import { SNARE } from "../../constants/sable/snare";
 import { TOUCH_TEXT } from "../../constants/touch";
 import { ULT_LEVELS } from "../../constants/ultimate";
 import { VAULT } from "../../constants/ysra/stance";
+import { abilityMp, abilityRecharge, selectedAbility } from "../../game/hero/hulda/abilities";
 import { hulda } from "../../game/hero/hulda/memory";
 import { sable } from "../../game/hero/sable/memory";
 import { reloadShare } from "../../game/hero/sable/reload";
@@ -69,21 +68,19 @@ function sableLook(spec: TouchButtonSpec, look: ButtonLook): void {
   }
 }
 
-/** Hulda's rush needs stamina and its short recharge, Bellow MP and its recharge, the taunt its own wait */
+/** Hulda's rush needs stamina and its short recharge; I shows the selected ability's MP and recharge */
 function huldaLook(spec: TouchButtonSpec, look: ButtonLook): void {
   switch (spec.action) {
     case "dash":
       look.ready = hero.stamina >= RUSH.cost && hulda.rushCd <= 0;
       look.cooldown = hero.stamina >= RUSH.cost ? hulda.rushCd / RUSH.cooldown : 1 - hero.stamina / RUSH.cost;
       break;
-    case "cast":
-      look.ready = hulda.bellowCd <= 0 && hero.mp >= BELLOW.mp;
-      look.cooldown = hulda.bellowCd / BELLOW.cooldown;
+    case "cast": {
+      const id = selectedAbility();
+      look.cooldown = abilityRecharge(id);
+      look.ready = look.cooldown <= 0 && hero.mp >= abilityMp(id);
       break;
-    case "cycle":
-      look.ready = hulda.tauntCd <= 0;
-      look.cooldown = hulda.tauntCd / TAUNT.cooldown;
-      break;
+    }
     default:
   }
 }

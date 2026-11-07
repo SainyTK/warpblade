@@ -16,7 +16,6 @@ export const RUSH = {
   stun: 0.4,
   /** the box her shoulder sweeps, from her feet */
   box: [0, -26, 12, 0] as const,
-  /** Bull Horns: the first foe rides her shoulder and is slammed down at the end */
-  hornsPower: 1.2,
+  /** Bull Horns: foes on her shoulder are slammed down this stunned */
   hornsStun: 0.8,
 } as const;
