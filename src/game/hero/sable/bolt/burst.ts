@@ -15,8 +15,6 @@ export interface Burst {
   radius: number;
   /** damage as a multiple of attack damage */
   power: number;
-  /** foes left out (the one the bolt already struck) */
-  skip?: Enemy;
   /** thrown up this hard, pixels a second */
   launch?: number;
   source?: SourceId;
@@ -26,7 +24,7 @@ export interface Burst {
 export function burst(b: Burst): Enemy[] {
   const hit: Enemy[] = [];
   for (const e of game.enemies) {
-    if (e.hp <= 0 || e === b.skip) continue;
+    if (e.hp <= 0) continue;
     const [cx, cy] = enemyCenter(e);
     if (Math.hypot(cx - b.x, (cy - b.y) * 1.4) > b.radius) continue;
     hit.push(e);

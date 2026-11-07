@@ -29,7 +29,8 @@ function strike(e: Enemy, b: Shot, f: Flight): boolean {
   const lit = b.prime !== null;
   const breach = b.closing && !b.plain ? skillValues("s_breach") : {};
   const push = b.closing ? STRING.closingPush * (breach.push ?? 1) : 1;
-  const stagger = Math.max(b.closing ? STRING.closingStagger : BOLT.stagger, skillValues("s_pierce").stagger ?? 0);
+  const passStagger = b.plain ? 0 : (skillValues("s_pierce").stagger ?? 0);
+  const stagger = Math.max(b.closing ? STRING.closingStagger : BOLT.stagger, passStagger);
   const [cx, cy] = enemyCenter(e);
   dealDamage(e, progress.stats.ad * basePower(b) * (1 + bonusSum(b, f.passed, f.flown)), {
     fromX: b.x - f.dir * 10,

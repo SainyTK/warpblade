@@ -35,7 +35,7 @@ function heavyBoot(foes: readonly Enemy[]): void {
   if (v.bodies) for (const e of foes) game.fx.push(createFlyingFoe(e, hero.face, v.bodies));
   if (v.shock) {
     const [cx, cy] = enemyCenter(foes[0]);
-    burst({ x: cx, y: cy, radius: v.radius, power: v.shock, skip: foes[0] });
+    burst({ x: cx, y: cy, radius: v.radius, power: v.shock });
   }
   if (v.refill && foes.length >= v.refill) loadBolts(quiverSize());
 }

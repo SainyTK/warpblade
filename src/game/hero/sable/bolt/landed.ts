@@ -55,7 +55,7 @@ function ricochet(e: Enemy, b: Shot): void {
 function breach(e: Enemy, dir: number): void {
   const v = skillValues("s_breach");
   const [cx, cy] = enemyCenter(e);
-  if (v.burst) burst({ x: cx, y: cy, radius: v.radius, power: v.burst, skip: e });
+  if (v.burst) burst({ x: cx, y: cy, radius: v.radius, power: v.burst });
   if (v.bodies) game.fx.push(createFlyingFoe(e, dir, v.bodies));
   const slammed = dir > 0 ? e.x > W - EDGE : e.x < EDGE;
   if (v.pin && (slammed || v.pierceAll)) {
@@ -70,7 +70,7 @@ function cadence(e: Enemy): void {
   const v = skillValues("s_rhythm");
   if (!v.burst) return;
   const [cx, cy] = enemyCenter(e);
-  burst({ x: cx, y: cy, radius: v.radius, power: v.burst, skip: e });
+  burst({ x: cx, y: cy, radius: v.radius, power: v.burst });
 }
 
 /** Longshot: a far hit marks the foe, a far kill puts the bolt back, Horizon Shot splits far hits */

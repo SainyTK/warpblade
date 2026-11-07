@@ -142,7 +142,7 @@ export const NET_SPELL: SableSpell = {
   room: () => true,
   release() {
     const n = skillValues("s_net").nets;
-    const m = muzzle("level");
+    const m = muzzle("low");
     for (let i = 0; i < n; i++) throwNet(m.x, m.y, m.angle + (i - (n - 1) / 2) * 0.22);
     sfx.swing(1.1);
   },
