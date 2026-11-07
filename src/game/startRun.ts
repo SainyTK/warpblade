@@ -4,6 +4,7 @@ import { track } from "../services/analytics";
 import { readPlaytestStart } from "../services/playtestStart";
 import { startRunAchievements } from "../store/achievements";
 import { ownsSkill } from "../store/meta";
+import { startRunUnlocks } from "../store/unlocks";
 import { xpToReach } from "../utils/progression";
 import { gainXp, openPicks } from "./progress";
 import { resetRun } from "./run";
@@ -13,6 +14,7 @@ import { character, game, progress } from "./state";
 export function startRun(banner: string): void {
   resetRun(banner);
   startRunAchievements();
+  startRunUnlocks();
   track("run_start", { hero: character.id, coop: false });
   if (ownsSkill("headStart")) gainXp(xpToReach(HEAD_START_LEVEL));
   const playtest = readPlaytestStart();

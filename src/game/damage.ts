@@ -14,6 +14,7 @@ import { createImpact } from "./effects/impact";
 import { launchEnemy } from "./enemies/airborne";
 import { enemyBox, enemyCenter } from "./enemies/enemy";
 import { kindOf } from "./enemies/kinds";
+import { feat } from "./feat";
 import { killEnemy } from "./kill";
 import { hasPerk } from "./progress";
 import { explode } from "./spells/explosion";
@@ -150,6 +151,7 @@ export function dealDamage(e: Enemy, base: number, o: HitOptions = {}): HitResul
   if (!o.dot && HERO_SOURCES.has(source)) {
     progress.build.heroHits++;
     addFlow(FLOW.perHit);
+    if (back) feat({ kind: "backAttack" });
   }
   e.flash = 0.1;
   e.guardHits = 0;
@@ -178,6 +180,6 @@ export function dealDamage(e: Enemy, base: number, o: HitOptions = {}): HitResul
   if (o.stun && def.launchable) e.stun = Math.max(e.stun, o.stun);
   if (o.stagger && kindOf(e.type).staggers) e.stagger = Math.max(e.stagger, o.stagger);
   if (o.heavy && e.state === "wind" && def.rank === "minion") Object.assign(e, { state: "recover", st: 0 });
-  if (e.hp <= 0) killEnemy(e);
+  if (e.hp <= 0) killEnemy(e, source);
   return "hit";
 }

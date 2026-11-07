@@ -1,6 +1,8 @@
 import { ACHIEVEMENTS } from "../constants/achievements";
 import { HERO_PRICES } from "../constants/heroUnlocks";
+import { RELIC_IDS } from "../constants/relics";
 import { SHOP_ITEMS } from "../constants/shop";
+import { UNLOCKS } from "../constants/unlocks";
 import { loadBest } from "../services/bestScore";
 import { loadMeta, saveMeta } from "../services/metaStorage";
 import { isPlaytestSession } from "../services/playtestStart";
@@ -14,6 +16,8 @@ import { metaStats, nextPrice } from "../utils/shop";
 const meta: MetaSave = parseMeta(loadMeta(), SHOP_ITEMS, {
   heroes: Object.keys(HERO_PRICES),
   achievements: ACHIEVEMENTS.map((a) => a.id),
+  unlocks: UNLOCKS.map((u) => u.id),
+  relics: RELIC_IDS,
 });
 // a save from before achievements kept its best wave under its own key: count it toward the wave goals
 meta.tracked.best.wave = Math.max(meta.tracked.best.wave, loadBest());
@@ -84,6 +88,17 @@ export function saveAchievements(tracked: TrackedStats, earned: readonly string[
   meta.tracked = tracked;
   meta.achievements.push(...earned.filter((id) => !meta.achievements.includes(id)));
   meta.coins += Math.max(0, reward);
+  changed();
+}
+
+/** the relics, charms and slots found, and the relics whose recipe is known, as last saved */
+export const savedUnlocks = (): readonly string[] => meta.unlocks;
+export const savedRecipes = (): readonly string[] => meta.recipes;
+
+/** keep newly found unlocks and newly learned recipes */
+export function saveUnlocks(found: readonly string[], recipes: readonly string[]): void {
+  meta.unlocks.push(...found.filter((id) => !meta.unlocks.includes(id)));
+  meta.recipes.push(...recipes.filter((id) => !meta.recipes.includes(id)));
   changed();
 }
 
