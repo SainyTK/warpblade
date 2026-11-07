@@ -1,6 +1,7 @@
 import { ACHIEVEMENTS } from "../constants/achievements";
 import { HERO_PRICES } from "../constants/heroUnlocks";
 import { SHOP_ITEMS } from "../constants/shop";
+import { loadBest } from "../services/bestScore";
 import { loadMeta, saveMeta } from "../services/metaStorage";
 import { isPlaytestSession } from "../services/playtestStart";
 import type { TrackedStats } from "../types/achievement";
@@ -14,6 +15,8 @@ const meta: MetaSave = parseMeta(loadMeta(), SHOP_ITEMS, {
   heroes: Object.keys(HERO_PRICES),
   achievements: ACHIEVEMENTS.map((a) => a.id),
 });
+// a save from before achievements kept its best wave under its own key: count it toward the wave goals
+meta.tracked.best.wave = Math.max(meta.tracked.best.wave, loadBest());
 const listeners = new Set<() => void>();
 /** in a co-op room the host plays every hero, each with what its own player bought; null is this browser's own */
 let worn: Record<string, number> | null = null;
