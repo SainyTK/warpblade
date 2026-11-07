@@ -27,6 +27,8 @@ const fresh = (): HuldaMemory => ({
   rushCd: 0,
   carried: [],
   passed: [],
+  rushStop: 0,
+  rushJoin: 0,
   rushAgain: false,
   counterThrow: 1,
   execute: false,

@@ -13,6 +13,7 @@ import { game, hero, progress } from "../../state";
 import { boxAhead, boxHit, dust, hitStop, markStruck, newSwing, shake, struckThisSwing } from "../../world";
 import { isFree, setState, settle } from "../actions";
 import { dropMoveGhost } from "../afterimages";
+import { foeOnlyBehind } from "../situation";
 import { skin } from "../skin";
 import { refuseDash } from "../stamina";
 import { travelEnded } from "../travelEnd";
@@ -21,7 +22,7 @@ import { inRecovery } from "./fists";
 import { throwPower } from "./fracture";
 import { canHold, pin } from "./hold";
 import { hulda } from "./memory";
-import { rushEnd } from "./rushClock";
+import { rushEnd, stopCharge } from "./rushClock";
 import { slamRing } from "./slam";
 
 const HORNS = "h_bullHorns";
@@ -31,12 +32,14 @@ const GHOST_EVERY = 3 / 30;
 /** stamina a rush costs: Stampede's, or the rush's own */
 export const rushCost = (): number => (skillLevel(STAMPEDE) ? skillValues(STAMPEDE).cost : RUSH.cost);
 
-/** drop the shoulder and go */
-function startRush(): void {
+/** drop the shoulder and go, the way she is pushed if any */
+function startRush(dir: number): void {
   const h = hero;
+  if (dir) h.face = dir;
   hulda.landed = false;
   hulda.carried = [];
   hulda.passed = [];
+  hulda.rushStop = 0;
   h.running = false;
   h.moveGhost = 0;
   h.st = 0;
@@ -47,14 +50,14 @@ function startRush(): void {
 }
 
 /**
- * L on the floor: drop the shoulder and charge, paid with stamina; also out of a blow that landed. With Stampede at
- * level 6, L in the skid charges again once for free.
+ * L on the floor: drop the shoulder and charge the way she is pushed, paid with stamina; also out of a blow that
+ * landed. With Stampede at level 6, L in the skid charges again once for free.
  */
-export function pressRush(): boolean {
+export function pressRush(dir: number): boolean {
   const h = hero;
   if (h.state === "rush" && hulda.landed && hulda.rushAgain) {
     hulda.rushAgain = false;
-    startRush();
+    startRush(dir);
     return true;
   }
   if ((!isFree() && !inRecovery()) || !h.ground || hulda.rushCd > 0) return false;
@@ -65,7 +68,7 @@ export function pressRush(): boolean {
   h.stamina -= rushCost();
   h.staminaWait = 0.6;
   hulda.rushAgain = skillLevel(STAMPEDE) > 0 && skillValues(STAMPEDE).again > 0;
-  startRush();
+  startRush(dir);
   return true;
 }
 
@@ -192,7 +195,23 @@ function layTrail(): void {
   );
 }
 
-/** the load digs in, the charge runs through foes at one speed, then she skids to a stop */
+/** a foe her shoulder ran into stays on the floor beside her, not on her shoulder */
+const ranInto = (): boolean => hulda.passed.some((e) => !hulda.carried.includes(e));
+
+/** a live foe her shoulder has not met yet stands within `RUSH.ahead` of it, at the shoulder's height */
+function foeAhead(): boolean {
+  const [, y0, x1, y1] = RUSH.box;
+  const zone = boxAhead(x1, y0, x1 + RUSH.ahead, y1);
+  return game.enemies.some(
+    (e) => e.hp > 0 && !struckThisSwing(e) && !hulda.carried.includes(e) && boxHit(zone, enemyBox(e)),
+  );
+}
+
+/**
+ * The load digs in, the charge runs through foes at one speed, then she skids to a stop. Once she has run into a foe
+ * and none waits ahead, the charge stops at its next stride, so the skid leaves her just past the foe; she wheels round
+ * to it as she settles.
+ */
 export function runRush(dt: number): void {
   const h = hero;
   const end = rushEnd();
@@ -217,6 +236,7 @@ export function runRush(dt: number): void {
       if (e.hp <= 0 || hulda.carried.includes(e) || struckThisSwing(e) || !boxHit(box, enemyBox(e))) continue;
       meet(e);
     }
+    if (ranInto() && !foeAhead()) stopCharge(h.st);
     return;
   }
   if (!hulda.landed) {
@@ -227,5 +247,7 @@ export function runRush(dt: number): void {
     travelEnded();
     emitSkillEvent({ type: "dash", dir: h.face, foes: hulda.passed });
   }
-  if (h.st >= end + RUSH.recover) settle();
+  if (h.st < end + RUSH.recover) return;
+  if (hulda.passed.length && foeOnlyBehind()) h.face = -h.face;
+  settle();
 }

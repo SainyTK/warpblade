@@ -114,12 +114,12 @@ function readHolding(): void {
  */
 export const HULDA_KIT: HeroKit = {
   tick,
-  readActions: () => {
+  readActions: (dir) => {
     if (hulda.held && (hero.state === "hold" || hero.state === "knee")) return readHolding();
-    use("dash", pressRush);
+    use("dash", () => pressRush(dir));
     use("up", pressJump);
-    use("attack", pressFist);
-    use("warp", () => (hero.ground ? pressGrab() : pressSkyfall()));
+    use("attack", () => pressFist(dir));
+    use("warp", () => (hero.ground ? pressGrab(dir) : pressSkyfall()));
     use("cast", pressAbility);
     use("cycle", nextAbility);
     use("ultimate", startCharge);
