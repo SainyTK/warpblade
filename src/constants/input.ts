@@ -61,7 +61,8 @@ export const ACTION_TEXT: Record<KitId, Record<InputAction, string>> = {
     ...KAEL_ACTION_TEXT,
     up: "Jump. One light jump, also out of a shot",
     down: "With jump, drop through a ledge",
-    attack: "Shoot a string of three bolts at the foe ahead, the last a closing bolt. Hold to keep shooting. An empty quiver reloads",
+    attack:
+      "Shoot a string of three bolts at the foe ahead, the last a closing bolt. Hold to keep shooting. An empty quiver reloads",
     dash: "Hop back and shoot at the top of the hop. Walking or running ahead, slide forward under blows. Both spend stamina",
     warp: "Kick foes away from you",
     cast: "Cast the selected spell: a snare at your feet (20 MP) at first. The next ready spell is selected after each cast",
