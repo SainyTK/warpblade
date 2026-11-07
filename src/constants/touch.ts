@@ -82,7 +82,7 @@ export const TOUCH_TEXT: Record<KitId, Record<TouchButtonAction, TouchButtonText
       accent: "#3fc06a",
     },
     warp: { label: "Kick", hint: "Kick foes away from you", accent: "#ccb88c" },
-    cast: { label: "Snare", hint: "Set a snare at your feet (20 MP)", accent: "#e88a4c" },
+    cast: { label: "Spell", hint: "Cast the selected spell, a snare at first", accent: "#e88a4c" },
     ultimate: SPECIAL,
     cycle: {
       label: "Reload",
@@ -150,8 +150,8 @@ export const STICK_DIRECTIONS: Record<KitId, readonly StickDirectionSpec[]> = {
   sable: [
     { direction: "side", label: "Walk" },
     { direction: "far side", label: "Run" },
-    { direction: "up", label: "Jump. While shooting, aim up" },
-    { direction: "down", label: "While shooting, aim low. With Jump, drop through a ledge" },
+    { direction: "up", label: "Jump" },
+    { direction: "down", label: "With Jump, drop through a ledge" },
   ],
   hulda: [
     { direction: "side", label: "Walk" },

@@ -1,6 +1,5 @@
-import { SNARE } from "../constants/sable/snare";
 import { VAULT } from "../constants/ysra/stance";
-import { sable } from "../game/hero/sable/memory";
+import { selectedSpell } from "../game/hero/sable/spells/cast";
 import { warpCooldown } from "../game/hero/warp";
 import { hasPerk } from "../game/progress";
 import { character, hero } from "../game/state";
@@ -23,8 +22,8 @@ function tabState(): { label: string; known: boolean; recharge: number; denied: 
     case "ysra":
       return { label: "VAULT", known: true, recharge: hero.warpCd / VAULT.cooldown, denied: hero.denied.warp };
     case "sable": {
-      const full = hasPerk("twinSnare") ? SNARE.twinCooldown : SNARE.cooldown;
-      return { label: "SNARE", known: true, recharge: sable.snareCd / full, denied: hero.denied.cast };
+      const { spell } = selectedSpell();
+      return { label: spell.label, known: true, recharge: spell.left() / spell.cooldown(), denied: hero.denied.cast };
     }
     case "hulda":
       return { label: "", known: false, recharge: 0, denied: 0 };

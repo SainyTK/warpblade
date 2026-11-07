@@ -28,6 +28,8 @@ export interface BoltFlight {
   heavy?: boolean;
   /** the stretch it flew this frame; true stops it there */
   pass(ax: number, ay: number, bx: number, by: number): boolean;
+  /** it bounced off the stage edge; true burns it primed from then on */
+  edge?(): boolean;
 }
 
 /** how far behind the head the fading trail reaches */
@@ -55,7 +57,10 @@ export function createCrossbowBolt(f: BoltFlight): Effect {
   const bounce = (floor: boolean) => {
     f.bounces--;
     if (floor) uy = -Math.abs(uy) || -0.35;
-    else ux = -ux;
+    else {
+      ux = -ux;
+      if (f.edge?.()) f.primed = true;
+    }
     spark(4);
     lights.add(x, y, 14, f.ramp[4], 0.6, 0.12);
   };
