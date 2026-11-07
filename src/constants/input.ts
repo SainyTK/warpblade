@@ -59,12 +59,12 @@ export const ACTION_TEXT: Record<KitId, Record<InputAction, string>> = {
   },
   sable: {
     ...KAEL_ACTION_TEXT,
-    up: "Jump. One light jump. With attack held, aim up",
-    down: "With attack held, kneel and shoot low, or shoot down in the air. With jump, drop through a ledge",
-    attack: "Shoot a bolt. Hold to keep shooting. Hold up or down to aim. An empty quiver reloads",
-    dash: "Hop back and shoot at the top of the hop. With the side ahead held, slide forward under blows. Both spend stamina",
+    up: "Jump. One light jump, also out of a shot",
+    down: "With jump, drop through a ledge",
+    attack: "Shoot a string of three bolts at the foe ahead, the last a closing bolt. Hold to keep shooting. An empty quiver reloads",
+    dash: "Hop back and shoot at the top of the hop. Walking or running ahead, slide forward under blows. Both spend stamina",
     warp: "Kick foes away from you",
-    cast: "Set a snare at your feet (20 MP)",
+    cast: "Cast the selected spell: a snare at your feet (20 MP) at first. The next ready spell is selected after each cast",
     cycle: "Reload. Press again in the bright window for a perfect reload and primed bolts",
   },
   hulda: {

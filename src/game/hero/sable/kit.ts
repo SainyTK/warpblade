@@ -1,27 +1,48 @@
 import { STRIDE } from "../../../constants/kael/motion";
-import { BOLT } from "../../../constants/sable/bolt";
+import { MUZZLE } from "../../../constants/sable/bolt";
 import type { HeroKit } from "../../../types/kit";
 import { rechargeStep } from "../../build/recharge";
-import { isHeld, take, use } from "../../input";
+import { use } from "../../input";
+import { skillValues } from "../../skills/query";
 import { hero } from "../../state";
 import { resetMotion } from "../kael/motion";
 import { startCharge } from "../ultimate";
-import { evadeDrives, evadeGuarded, pressEvade, runHop, runSlide } from "./evade";
+import { evadeAbsorbs, evadeDrives, pressEvade, runHop, runSlide } from "./evade";
 import { doubleTapRun, pressJump } from "./jump";
 import { pressKick, runKick } from "./kick";
+import { looseBolt } from "./loose";
 import { resetSable, sable } from "./memory";
 import { sablePose } from "./pose";
+import { quiverSize } from "./quiver";
 import { pressReload, startReload, tickReload } from "./reload";
-import { pressShoot, runShoot } from "./shoot";
-import { pressSnare, runSnare } from "./snare";
+import { hovering, pressShoot, runShoot } from "./shoot";
+import { pressCast, resetSpells, runCast, tickSpells } from "./spells/cast";
 
-/** Up and Down aim while J is held or a shot is out, so a held Up angles the shot instead of jumping */
-const aiming = (): boolean => isHeld("attack") || hero.state === "shoot";
+/** Skyhunter's hover keeps her up with this share of gravity */
+const HOVER_GRAVITY = 0.12;
+
+/** Featherdraw: landing after air shots looses a bolt each way low along the floor */
+function landingVolley(power: number): void {
+  const y = hero.y + MUZZLE.low.y;
+  for (const angle of [0, Math.PI]) looseBolt({ x: hero.x, y, angle, share: 1, power, prime: null, plain: true });
+}
+
+/** the air string, the air jumps and hops and the hover come back on landing */
+function land(): void {
+  const v = skillValues("s_featherdraw");
+  if (sable.airShots > 0 && v.landing) landingVolley(v.landing);
+  Object.assign(sable, { airShots: 0, airJumps: 0, airHops: 0, hover: v.hover ?? 0 });
+}
 
 function tick(dt: number): void {
   tickReload(dt);
-  sable.snareCd = Math.max(0, sable.snareCd - rechargeStep(dt));
-  if (hero.ground) sable.airHopped = false;
+  tickSpells(rechargeStep(dt));
+  sable.cock = Math.max(0, sable.cock - dt);
+  sable.haste = Math.max(0, sable.haste - dt);
+  sable.shade = Math.max(0, sable.shade - dt);
+  sable.sincePerfect += dt;
+  if (hovering()) sable.hover = Math.max(0, sable.hover - dt);
+  if (hero.ground) land();
   if (sable.ammo <= 0 && !sable.reload && hero.state !== "shoot") startReload();
 }
 
@@ -40,27 +61,31 @@ function runState(dt: number): boolean {
       runSlide();
       return true;
     case "snare":
-      runSnare();
+      runCast();
       return true;
     default:
       return false;
   }
 }
 
+/** blows do not throw her: Clockwork Cadence while primed bolts remain, Twin Shadows while a shade stands */
+const steadfast = (): boolean =>
+  (sable.primed > 0 && !!skillValues("s_rhythm").steadfast) || (sable.shade > 0 && !!skillValues("s_shade").steadfast);
+
 /**
- * Sable: a repeating crossbow with a quiver and a timed reload, a kick that makes space, a hop back that shoots and a
- * slide under blows, and snares paid with MP. She fights at range and wins by keeping it.
+ * Sable: a repeating crossbow that looses three-bolt strings from a quiver with a timed reload, a kick that makes space,
+ * a hop back that shoots and a slide under blows, and spells on I paid with MP. She fights at range and wins by keeping
+ * it. The bolts aim themselves at the foe ahead, so Up and Down only jump and drop.
  */
 export const SABLE_KIT: HeroKit = {
   tick,
   readActions: (dir, tap) => {
     use("dash", () => pressEvade(dir));
-    if (aiming()) take("up");
-    else use("up", pressJump);
+    use("up", pressJump);
     if (tap) doubleTapRun(tap);
     use("attack", pressShoot);
     use("warp", pressKick);
-    use("cast", pressSnare);
+    use("cast", pressCast);
     use("cycle", pressReload);
     use("ultimate", startCharge);
   },
@@ -68,13 +93,15 @@ export const SABLE_KIT: HeroKit = {
   runState,
   pose: sablePose,
   afterStrike: () => {},
-  absorbHurt: () => evadeGuarded(),
+  absorbHurt: () => evadeAbsorbs(),
   stride: (running) => (running ? STRIDE.run : STRIDE.walk),
   hurtScale: () => 1,
+  steadfast,
   drivesMotion: evadeDrives,
-  gravityScale: () => 1,
+  gravityScale: () => (hovering() ? HOVER_GRAVITY : 1),
   reset: () => {
-    resetSable(BOLT.quiver);
+    resetSable(quiverSize());
+    resetSpells();
     resetMotion();
   },
 };

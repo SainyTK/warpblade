@@ -8,6 +8,6 @@ export const HERO_SOURCES: ReadonlySet<SourceId> = new Set<SourceId>(["attacks",
 export const HERO_SOURCE_ICONS: Readonly<Record<string, Readonly<Record<HeroSource, string>>>> = {
   kael: { attacks: "b_edge", abilities: "a_flame", ultimate: "b_ult" },
   ysra: { attacks: "l_haft", abilities: "r_flare", ultimate: "l_ult" },
-  sable: { attacks: "m_draw", abilities: "t_snare", ultimate: "m_ult" },
+  sable: { attacks: "sable_bolts", abilities: "sable_snare", ultimate: "sable_storm" },
   hulda: { attacks: "b_hands", abilities: "t_bellow", ultimate: "b_titan" },
 };

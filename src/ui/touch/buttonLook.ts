@@ -3,13 +3,13 @@ import { BELLOW } from "../../constants/hulda/bellow";
 import { RUSH } from "../../constants/hulda/rush";
 import { TAUNT } from "../../constants/hulda/taunt";
 import { HOP, SLIDE } from "../../constants/sable/moves";
-import { SNARE } from "../../constants/sable/snare";
 import { TOUCH_TEXT } from "../../constants/touch";
 import { ULT_LEVELS } from "../../constants/ultimate";
 import { VAULT } from "../../constants/ysra/stance";
 import { hulda } from "../../game/hero/hulda/memory";
 import { sable } from "../../game/hero/sable/memory";
 import { reloadShare } from "../../game/hero/sable/reload";
+import { selectedSpell } from "../../game/hero/sable/spells/cast";
 import { castCost, knowsElement, selectedElement, spellRecharge } from "../../game/hero/spell";
 import { canPayDash } from "../../game/hero/stamina";
 import { canAffordUlt, ultRecharge } from "../../game/hero/ultimate";
@@ -58,10 +58,12 @@ function sableLook(spec: TouchButtonSpec, look: ButtonLook): void {
       look.ready = hero.stamina >= SLIDE.cost;
       look.cooldown = look.ready ? 0 : 1 - hero.stamina / HOP.cost;
       break;
-    case "cast":
-      look.ready = sable.snareCd <= 0 && hero.mp >= SNARE.mp;
-      look.cooldown = sable.snareCd / (hasPerk("twinSnare") ? SNARE.twinCooldown : SNARE.cooldown);
+    case "cast": {
+      const { spell } = selectedSpell();
+      look.ready = spell.left() <= 0 && hero.mp >= spell.mp();
+      look.cooldown = spell.left() / spell.cooldown();
       break;
+    }
     case "cycle":
       look.cooldown = sable.reload ? 1 - reloadShare() : 0;
       break;

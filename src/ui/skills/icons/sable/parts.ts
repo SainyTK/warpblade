@@ -71,3 +71,80 @@ export function boot(s: S, x: number, y: number): void {
     seg(s, x + 7, y - 2, x + 7, y + 1, SC.trim);
   });
 }
+
+const WOOD = hex("#7a4e2c");
+const BAND = hex("#5a6468");
+const ROPE = hex("#c8b48a");
+const FEATHER = hex("#8a5a34");
+const FUR = hex("#6a5a4a");
+const STRAW = hex("#d8b860");
+
+/** a powder keg standing on its end, its foot at (x, y) */
+export function keg(s: S, x: number, y: number): void {
+  fill(s, () => {
+    s.poly(
+      [
+        [x - 3, y],
+        [x + 3, y],
+        [x + 4, y - 3],
+        [x + 3, y - 7],
+        [x - 3, y - 7],
+        [x - 4, y - 3],
+      ],
+      WOOD,
+    );
+  });
+  fill(s, () => {
+    seg(s, x - 4, y - 2, x + 4, y - 2, BAND);
+    seg(s, x - 4, y - 5, x + 4, y - 5, BAND);
+  });
+}
+
+/** a net cast over a span, from x0 to x1 with its foot at y */
+export function net(s: S, x0: number, x1: number, y: number, h: number): void {
+  fill(s, () => {
+    for (let i = 0; i <= 3; i++)
+      seg(s, x0 + ((x1 - x0) * i) / 3, y, x0 + 2 + ((x1 - x0 - 4) * (3 - i)) / 3, y - h, ROPE);
+    seg(s, x0 + 1, y - h / 2, x1 - 1, y - h / 2, ROPE);
+  });
+}
+
+/** a hawk with its wings spread, at (x, y) */
+export function hawk(s: S, x: number, y: number): void {
+  fill(s, () => {
+    seg(s, x - 5, y - 2, x, y, FEATHER);
+    seg(s, x + 5, y - 2, x, y, FEATHER);
+    seg(s, x, y - 1, x, y + 2, SC.trimLight);
+  });
+}
+
+/** a hound side on, facing right, its feet at (x, y) */
+export function hound(s: S, x: number, y: number): void {
+  fill(s, () => {
+    seg(s, x - 5, y - 4, x + 2, y - 4, FUR);
+    seg(s, x + 2, y - 5, x + 5, y - 6, FUR);
+    seg(s, x - 4, y - 4, x - 5, y, FUR);
+    seg(s, x + 1, y - 4, x + 2, y, FUR);
+    seg(s, x - 5, y - 4, x - 7, y - 6, FUR);
+  });
+}
+
+/** a straw decoy in a pine hood, its foot at (x, y) */
+export function decoy(s: S, x: number, y: number): void {
+  fill(s, () => {
+    seg(s, x, y, x, y - 10, STRAW);
+    seg(s, x - 4, y - 7, x + 4, y - 7, STRAW);
+  });
+  fill(s, () =>
+    s.poly(
+      [
+        [x - 3, y - 3],
+        [x + 3, y - 3],
+        [x + 2, y - 9],
+        [x, y - 12],
+        [x - 2, y - 9],
+      ],
+      SC.coat,
+    ),
+  );
+}

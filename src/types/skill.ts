@@ -1,5 +1,4 @@
 import type { HuldaPerk } from "./hulda";
-import type { SablePerk } from "./sable";
 import type { Stats } from "./stats";
 import type { YsraPerk } from "./ysra";
 
@@ -42,7 +41,7 @@ export type KaelPerk =
   | "glacierBloom"
   | "thunderhead";
 /** Abilities a skill node switches on. */
-export type Perk = KaelPerk | YsraPerk | SablePerk | HuldaPerk;
+export type Perk = KaelPerk | YsraPerk | HuldaPerk;
 export type UltimateId =
   | "crystalNova"
   | "pyreWave"
@@ -62,7 +61,7 @@ export type SkillKind = "attack" | "movement" | "spell" | "dot" | "summon" | "pa
 /** how hard a skill is to pull off: the harder, the more it deals */
 export type SkillRisk = "easy" | "timed" | "precise";
 /** the button a skill attaches to, or `auto` for one that runs on its own */
-export type SkillButton = "J" | "K" | "L" | "I" | "U" | "jump" | "auto";
+export type SkillButton = "J" | "K" | "L" | "I" | "O" | "U" | "jump" | "auto";
 
 /** one level of a skill, or its evolution: the card line and what the skill's code reads */
 export interface SkillLevel {
