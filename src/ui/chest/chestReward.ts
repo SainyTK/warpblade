@@ -1,29 +1,32 @@
 import { BOONS } from "../../constants/boons";
 import { CHARMS } from "../../constants/charms";
-import { RELIC_MAX_LEVEL } from "../../constants/growth";
-import { RELICS } from "../../constants/relics";
+import { SKILL_MAX_LEVEL } from "../../constants/growth";
+import { character } from "../../game/state";
 import type { ChestReward } from "../../types/build";
+import { skillOf } from "../../utils/skills";
 import { el } from "../dom";
-import { iconUrl } from "../skills/icons/iconImage";
+import { iconUrl, skillIcon } from "../skills/icons/iconImage";
 
 /** the icon, name and what changed for one reward */
 function rewardFace(r: ChestReward): { kind: string; icon: string; name: string; line: string } {
   if (r.type === "evolve") {
-    const evo = RELICS[r.id].evolution;
+    const def = skillOf(character, r.id);
     return {
       kind: "evolve",
-      icon: `relic_${r.id}_evo`,
-      name: evo.name,
-      line: `${RELICS[r.id].name} evolved. ${evo.text}`,
+      icon: skillIcon(r.id, true),
+      name: def?.evolution.name ?? r.id,
+      line: `${def?.name ?? r.id} evolved. ${def?.evolution.text ?? ""}`,
     };
   }
-  if (r.type === "relic")
+  if (r.type === "skill") {
+    const def = skillOf(character, r.id);
     return {
-      kind: "relic",
-      icon: `relic_${r.id}`,
-      name: RELICS[r.id].name,
-      line: `Level ${r.level} of ${RELIC_MAX_LEVEL}. ${RELICS[r.id].levels[r.level - 1].text}`,
+      kind: "skill",
+      icon: skillIcon(r.id, false),
+      name: def?.name ?? r.id,
+      line: `Level ${r.level} of ${SKILL_MAX_LEVEL}. ${def?.levels[r.level - 1].text ?? ""}`,
     };
+  }
   if (r.type === "charm") {
     const def = CHARMS[r.id];
     return {

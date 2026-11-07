@@ -10,7 +10,7 @@ function el<K extends keyof HTMLElementTagNameMap>(tag: K, cls = "", text = ""):
   return node;
 }
 
-/** a relic's level, or Evolved; the hero's own sources have none */
+/** a skill's level, or Evolved; the hero's own sources have none */
 function levelTag(s: SourceResult): HTMLElement | null {
   if (s.evolved) return el("span", "source-level evolved", "Evolved");
   return s.level ? el("span", "source-level", `Lv ${s.level}`) : null;

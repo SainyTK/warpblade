@@ -53,6 +53,8 @@ export interface PickCard {
   kind: string;
   branch: string;
   name: string;
+  /** the level the card reaches (a new skill or charm is 1); 0 for a boon */
+  level: number;
   selected: boolean;
 }
 export interface RunResultSnapshot {

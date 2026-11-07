@@ -9,6 +9,8 @@ export interface Viewport {
 export interface RunStart {
   wave: number;
   level: number;
+  /** skills, charms and evolutions held from the start, as the game's `?build=` reads them: `k_familiar:8,evolve:a_flame,might:5` */
+  build?: string;
 }
 export interface OpenGameOptions {
   /** the game repository to serve; defaults to the repository the harness lives in */

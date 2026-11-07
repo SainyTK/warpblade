@@ -17,7 +17,7 @@ import { warpCooldown, warpCost } from "../../game/hero/warp";
 import { heat, overheatLeft, overheatReady } from "../../game/hero/ysra/pyre/heat";
 import { riteCost, selectedRite } from "../../game/hero/ysra/pyre/riteChoice";
 import { hasPerk } from "../../game/progress";
-import { character, hero, progress } from "../../game/state";
+import { character, hero } from "../../game/state";
 import type { ButtonLook, TouchButtonSpec } from "../../types/touch";
 import { hex } from "../../utils/color";
 import { selectionTint, touchSelection } from "./selection";
@@ -116,7 +116,7 @@ export function buttonLook(spec: TouchButtonSpec, pressed: boolean): ButtonLook 
   const look: ButtonLook = { pressed, ready: true, cooldown: 0, accent, affordable: 0, charge: -1 };
   if (spec.action === "ultimate") {
     look.cooldown = ultRecharge();
-    look.affordable = progress.ultimate && !hero.ultCd ? ULT_LEVELS.filter((_, i) => canAffordUlt(i + 1)).length : 0;
+    look.affordable = !hero.ultCd ? ULT_LEVELS.filter((_, i) => canAffordUlt(i + 1)).length : 0;
     look.ready = look.affordable > 0;
     look.charge = chargeProgress();
   } else if (character.kit === "sable") sableLook(spec, look);

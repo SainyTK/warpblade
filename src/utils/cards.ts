@@ -1,24 +1,18 @@
 import { CHARMS } from "../constants/charms";
-import { CARD_WEIGHT, PICK_COUNT, RELIC_MAX_LEVEL } from "../constants/growth";
-import { RELIC_IDS } from "../constants/relics";
-import type { Build, Card, CharmId, RelicId } from "../types/build";
+import { CARD_WEIGHT, PICK_COUNT, SKILL_MAX_LEVEL, SKILL_SLOTS } from "../constants/growth";
+import type { Build, Card, CharmId } from "../types/build";
 import type { CharacterDef } from "../types/character";
 import type { Boon } from "../types/skill";
 import type { Rng } from "./rng";
-import { isAvailable } from "./skillPicks";
 
-/** what the player has unlocked across runs: the relics and charms that may be dealt, and the slots they have */
+/** what the player has unlocked across runs: the charms that may be dealt and the charm slots they have */
 export interface CardUnlocks {
-  relic(id: RelicId): boolean;
   charm(id: CharmId): boolean;
-  relicSlots: number;
   charmSlots: number;
 }
 
-/** what a deal reads from the hero's progress and the player's unlocks */
+/** what a deal reads from the hero's build and the player's unlocks */
 export interface CardView {
-  level: number;
-  ranks: Readonly<Record<string, number>>;
   build: Build;
   unlocks: CardUnlocks;
 }
@@ -31,50 +25,51 @@ interface Weighted {
 
 export const CHARM_IDS = Object.keys(CHARMS) as CharmId[];
 
-/** what a card offers, the same for every level of it: `relic:wisp`, `charm:might`, `skill:<node id>`, `boon:<id>` */
-export function cardKey(card: Card): string {
-  if (card.type === "skill") return `skill:${card.node.id}`;
-  return `${card.type}:${card.id}`;
-}
+/** what a card offers, the same for every level of it: `skill:<id>`, `charm:might`, `boon:<id>` */
+export const cardKey = (card: Card): string => `${card.type}:${card.id}`;
 
-const relicCount = (b: Build): number => Object.keys(b.relics).length;
+const skillCount = (b: Build): number => Object.keys(b.skills).length;
 const charmCount = (b: Build): number => Object.keys(b.charms).length;
 
-/** a hero skill evolution is ready and takes the first card */
-const isSkillEvolution = (card: Card): boolean => card.type === "skill" && card.node.kind === "evolution";
+/** an ultimate skill held already: no other is dealt */
+const holdsUltimate = (c: CharacterDef, b: Build): boolean =>
+  c.skills.some((s) => s.kind === "ultimate" && b.skills[s.id]);
 
-/** relics and charms that can be dealt: a new unlocked one while a slot is free, an owned one below its top level */
-function buildCards(b: Build, u: CardUnlocks): Weighted[] {
+/**
+ * Skills that can be dealt: a new one while a slot is free (no second ultimate), weighing `CARD_WEIGHT.newSkill`, and
+ * the next level of a held one below the top, weighing `CARD_WEIGHT.skillLevel`. Evolved skills are done.
+ */
+function skillCards(c: CharacterDef, b: Build): Weighted[] {
   const out: Weighted[] = [];
-  for (const id of RELIC_IDS) {
-    const level = b.relics[id] ?? 0;
-    if (level >= RELIC_MAX_LEVEL || (!level && (!u.relic(id) || relicCount(b) >= u.relicSlots))) continue;
-    out.push({
-      card: { type: "relic", id, level: level + 1 },
-      weight: CARD_WEIGHT.relic * (level ? CARD_WEIGHT.owned : 1),
-    });
-  }
-  for (const id of CHARM_IDS) {
-    const level = b.charms[id] ?? 0;
-    const def = CHARMS[id];
-    if (level >= def.maxLevel || (!level && (!u.charm(id) || charmCount(b) >= u.charmSlots))) continue;
-    out.push({ card: { type: "charm", id, level: level + 1 }, weight: def.weight * (level ? CARD_WEIGHT.owned : 1) });
+  const full = skillCount(b) >= SKILL_SLOTS;
+  const ultimate = holdsUltimate(c, b);
+  for (const s of c.skills) {
+    const level = b.skills[s.id] ?? 0;
+    if (level >= SKILL_MAX_LEVEL || (!level && (full || (s.kind === "ultimate" && ultimate)))) continue;
+    const weight = level ? CARD_WEIGHT.skillLevel : CARD_WEIGHT.newSkill;
+    out.push({ card: { type: "skill", id: s.id, level: level + 1 }, weight });
   }
   return out;
 }
 
-/** skills the hero can learn now; together they weigh `CARD_WEIGHT.skills` */
-function skillCards(c: CharacterDef, v: CardView): Card[] {
-  return c.branches.flatMap((branch) =>
-    branch.nodes.filter((node) => isAvailable(c, node, v)).map((node): Card => ({ type: "skill", node })),
-  );
+/** charms that can be dealt: a new unlocked one while a slot is free, a held one below its top level */
+function charmCards(b: Build, u: CardUnlocks): Weighted[] {
+  const out: Weighted[] = [];
+  for (const id of CHARM_IDS) {
+    const level = b.charms[id] ?? 0;
+    const def = CHARMS[id];
+    if (level >= def.maxLevel || (!level && (!u.charm(id) || charmCount(b) >= u.charmSlots))) continue;
+    const weight = def.weight * (level ? CARD_WEIGHT.ownedCharm : 1);
+    out.push({ card: { type: "charm", id, level: level + 1 }, weight });
+  }
+  return out;
 }
 
-/** every card that may be dealt now, banished ones left out */
+/** every skill or charm card that may be dealt now, banished ones left out */
 export function availableCards(c: CharacterDef, v: CardView): Card[] {
-  return [...buildCards(v.build, v.unlocks).map((w) => w.card), ...skillCards(c, v)].filter(
-    (card) => !v.build.banished.includes(cardKey(card)),
-  );
+  return [...skillCards(c, v.build), ...charmCards(v.build, v.unlocks)]
+    .map((w) => w.card)
+    .filter((card) => !v.build.banished.includes(cardKey(card)));
 }
 
 /** draw up to `count` cards by weight, without repeats */
@@ -99,9 +94,8 @@ function drawWeighted(pool: Weighted[], count: number, rng: Rng): Card[] {
 export const cardCount = (luck: number, rng: Rng): number => PICK_COUNT + (rng.chance(1 - 1 / luck) ? 1 : 0);
 
 /**
- * Deal `count` cards by weight: a relic 100, a charm its own weight, owned relics and charms three times that, and all
- * the skills on offer sharing 300. A ready skill evolution takes the first card and no other evolution is dealt with
- * it. Cards whose keys are in `without` are left out (a reroll leaves out the cards shown); boons fill what is left.
+ * Deal `count` cards by weight from the hero's skills and the charms (see `skillCards` and `charmCards`). Cards whose
+ * keys are banished or in `without` are left out (a reroll leaves out the cards shown); boons fill what is left.
  */
 export function dealCards(
   c: CharacterDef,
@@ -111,18 +105,11 @@ export function dealCards(
   boons: readonly Boon[],
   without: readonly string[] = [],
 ): Card[] {
-  const open = (card: Card): boolean => {
-    const key = cardKey(card);
+  const open = (w: Weighted): boolean => {
+    const key = cardKey(w.card);
     return !v.build.banished.includes(key) && !without.includes(key);
   };
-  const skills = skillCards(c, v).filter(open);
-  const evolutions = skills.filter(isSkillEvolution);
-  const first = evolutions.length ? [rng.pick(evolutions)] : [];
-  const rest = skills.filter((card) => !isSkillEvolution(card));
-  const pool: Weighted[] = [
-    ...buildCards(v.build, v.unlocks).filter((w) => open(w.card)),
-    ...rest.map((card) => ({ card, weight: CARD_WEIGHT.skills / rest.length })),
-  ];
+  const pool = [...skillCards(c, v.build), ...charmCards(v.build, v.unlocks)].filter(open);
   const fill = boons.map((boon): Card => ({ type: "boon", id: boon.id }));
-  return [...first, ...drawWeighted(pool, count - first.length, rng), ...fill].slice(0, count);
+  return [...drawWeighted(pool, count, rng), ...fill].slice(0, count);
 }

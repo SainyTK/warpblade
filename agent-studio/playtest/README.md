@@ -79,7 +79,7 @@ Both policies close a chest screen with J once its input lock has passed.
 - it casts with I when the selected HUD spell tab is ready, and cycles with O to a ready one;
 - it uses any other ready HUD tab with its key, such as WARP on K, on a foe at a distance;
 - it jumps over a foe on the ground that faces the hero, to strike its back;
-- it picks cards by kind in this order: relic, charm, ultimate, spell, passive, enhance, combo, fusion, movement, then boons.
+- it raises a held skill already at level 5 or more, so it heads for an evolution; otherwise it takes a new skill by kind in this order: ultimate, attack, summon, spell, dot, movement, passive; then the highest skill level, then a charm, then a boon.
 
 The bot reads only the hero's position, HP and MP, the foes' positions, states and facing, and the HUD.
 Tab readiness comes from the HUD, so a new hero whose tabs or keys differ still gets used sensibly.
@@ -121,7 +121,8 @@ import { openGame } from "<path to agent-studio>/playtest/index.ts";
 const session = await openGame({ hero: "ysra" });
 ```
 
-`openGame({ root, hero, viewport })` starts a dev server and a browser, loads the game and, with `hero`, starts a run through the menu.
+`openGame({ root, hero, viewport, start })` starts a dev server and a browser, loads the game and, with `hero`, starts a run through the menu.
+`start: { wave, level, build }` opens the run at a later wave and level with skills, charms and evolutions already held (the game's dev-only `?wave=`, `?level=` and `?build=`, see `docs/skill-design.md`), for example `{ wave: 8, level: 30, build: "k_familiar:8,b_edge:4" }`.
 The default viewport is 1280 x 720, where the stage is exactly 4 device pixels per art pixel.
 `close()` stops everything.
 `launchHarness(root)` gives one server and browser for many sessions, through `newSession({ hero, viewport })`.

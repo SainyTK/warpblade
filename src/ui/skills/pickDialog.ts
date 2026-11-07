@@ -25,7 +25,7 @@ dialog.innerHTML = `
     <h2 id="levelUpTitle"></h2>
     <p class="level-up-sub"></p>
   </div>
-  <div class="level-up-build" aria-label="Your relics and charms"></div>
+  <div class="level-up-build" aria-label="Your skills and charms"></div>
   <div class="level-up-cards" role="group" aria-label="Cards to choose from"></div>
   <p class="level-up-hint keys"><kbd>A</kbd> <kbd>D</kbd> to choose, <kbd>J</kbd> to take</p>
   <p class="level-up-hint touch-hint">Tap a card to take it</p>
@@ -94,9 +94,7 @@ function deal(without: readonly string[] = []): void {
   const more = progress.picks - 1;
   sub.textContent = more > 0 ? `Choose one. ${more} more pick${more === 1 ? "" : "s"} after this.` : "Choose one.";
   cards.dataset.count = String(dealt.length);
-  cards.replaceChildren(
-    ...dealt.map((card, i) => pickCard(cardFace(character, card, progress.ranks, progress.build), i)),
-  );
+  cards.replaceChildren(...dealt.map((card, i) => pickCard(cardFace(character, card, progress.build), i)));
   dealtFor = pickKey();
   shownAt = performance.now();
   shownBuild = "";

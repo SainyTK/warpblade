@@ -1,6 +1,7 @@
 import { ULT_COOLDOWN, ULT_LEVELS, ULT_LOCK } from "../../constants/ultimate";
 import { sfx } from "../../services/audio";
 import { isHeld } from "../input";
+import { emitSkillEvent } from "../skills/events";
 import { hero, progress } from "../state";
 import { castUltimate } from "../ultimates/castUltimate";
 import { isFree, leaveHang, setState, settle } from "./actions";
@@ -16,11 +17,10 @@ export function canAffordUlt(level: number): boolean {
 /** share of the ultimate's cooldown still to run, 0 when ready */
 export const ultRecharge = (): number => hero.ultCd / ULT_COOLDOWN;
 
-/** U pressed: start gathering power if an ultimate is learned, it has recharged, and the first level is paid for.
- *  Until one is learned U does nothing; a press while it recharges is refused with a tick. */
+/** U pressed: start gathering power if the ultimate has recharged and the first level is paid for; a press while it
+ *  recharges is refused with a tick. */
 export function startCharge(): boolean {
   const h = hero;
-  if (!progress.ultimate) return true;
   if (h.ultCd > 0) {
     deny("ult");
     return true;
@@ -47,7 +47,8 @@ function release(): void {
   h.charge = 0;
   h.chargeLevel = 0;
   h.ultCd = ULT_COOLDOWN;
-  if (progress.ultimate) castUltimate(progress.ultimate, level);
+  castUltimate(progress.ultimate, level);
+  emitSkillEvent({ type: "ultimate", level });
 }
 
 /** hold U to climb the levels the MP bar can pay for, release to strike */

@@ -1,16 +1,13 @@
 import type { Goal } from "./achievement";
-import type { CharmId, RelicId } from "./build";
+import type { CharmId } from "./build";
 
-/** what an unlock opens: a relic or a charm to be dealt, or one more relic or charm slot */
-export type UnlockTarget =
-  | { type: "relic"; id: RelicId }
-  | { type: "charm"; id: CharmId }
-  | { type: "slot"; slot: "relic" | "charm"; number: SlotNumber };
+/** what an unlock opens: a charm to be dealt, or one more charm slot */
+export type UnlockTarget = { type: "charm"; id: CharmId } | { type: "slot"; number: SlotNumber };
 
 /** the slots past the three a new player starts with */
 export type SlotNumber = 4 | 5;
 
-/** a relic, charm or slot that is found across runs when its goal is met */
+/** a charm or slot that is found across runs when its goal is met */
 export interface Unlock {
   id: string;
   target: UnlockTarget;
@@ -21,5 +18,5 @@ export interface Unlock {
   secret?: boolean;
 }
 
-/** something found in a run: an unlock, or the recipe of an evolution made for the first time */
-export type Discovery = { type: "unlock"; unlock: Unlock } | { type: "recipe"; relic: RelicId };
+/** something found in a run: an unlock, or the recipe of a skill evolution made for the first time */
+export type Discovery = { type: "unlock"; unlock: Unlock } | { type: "recipe"; skill: string };

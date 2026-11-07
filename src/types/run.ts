@@ -10,7 +10,7 @@ export interface SourceResult {
   damage: number;
   /** seconds the hero held the source */
   seconds: number;
-  /** a relic's level at the end of the run; hero sources have none */
+  /** a skill's level at the end of the run; the hero's own sources have none */
   level?: number;
   evolved?: boolean;
 }
@@ -23,7 +23,7 @@ export interface RunReport {
   seconds: number;
   level: number;
   kills: number;
-  ultimate: UltimateId | null;
+  ultimate: UltimateId;
   sources: SourceResult[];
 }
 

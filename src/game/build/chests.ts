@@ -1,7 +1,6 @@
 import { CHEST_COLORS, CHEST_ROWS } from "../../constants/chest";
 import { CHEST_MOTION as M } from "../../constants/growth";
 import { COIN_GOLD } from "../../constants/palette";
-import { RELICS } from "../../constants/relics";
 import { GROUND, W } from "../../constants/stage";
 import { glow, place, px, sparkle } from "../../engine/frame";
 import { sfx } from "../../services/audio";
@@ -10,12 +9,13 @@ import { PK } from "../../types/particle";
 import { buildStats } from "../../utils/build";
 import { rollChest } from "../../utils/chests";
 import { clamp } from "../../utils/math";
+import { skillOf } from "../../utils/skills";
 import { eachStanding } from "../coopHooks";
 import { queueEvolution } from "../evolve";
 import { feat } from "../feat";
 import { refreshGrowing } from "../progress";
-import { game, hero, lights, particles, progress, rng } from "../state";
-import { evolveRelic, raiseCharm, raiseRelic } from "./raise";
+import { character, game, hero, lights, particles, progress, rng } from "../state";
+import { evolveSkill, raiseCharm, raiseSkill } from "./raise";
 
 /** Chests: dropped by elites, mini bosses and the wave 20 boss; touching one opens it for the hero who touched it. */
 interface Chest {
@@ -51,9 +51,9 @@ export function clearChests(): void {
 function grant(rewards: readonly ChestReward[]): void {
   for (const r of rewards) {
     if (r.type === "evolve") {
-      evolveRelic(r.id);
-      queueEvolution(RELICS[r.id].evolution.name);
-    } else if (r.type === "relic") raiseRelic(r.id);
+      evolveSkill(r.id);
+      queueEvolution(skillOf(character, r.id)?.evolution.name ?? "");
+    } else if (r.type === "skill") raiseSkill(r.id);
     else if (r.type === "charm") raiseCharm(r.id);
   }
   refreshGrowing();
@@ -66,10 +66,10 @@ function grant(rewards: readonly ChestReward[]): void {
 /** the hero in play opens a chest: a burst of gold, the rewards are theirs, and the game waits on the chest screen */
 function open(c: Chest): void {
   c.opened = true;
-  const rewards = rollChest(progress.build, game.wave, buildStats(progress.build).luck, rng);
+  const rewards = rollChest(character, progress.build, game.wave, buildStats(progress.build).luck, rng);
   grant(rewards);
   progress.build.chest = rewards;
-  feat({ kind: "chestOpened", upgrades: rewards.filter((r) => r.type === "relic" || r.type === "charm").length });
+  feat({ kind: "chestOpened", upgrades: rewards.filter((r) => r.type === "skill" || r.type === "charm").length });
   lights.add(c.x, c.y - 6, 70, COIN_GOLD[3], 1, 0.5);
   for (let i = 0; i < 16; i++)
     particles.spawn(

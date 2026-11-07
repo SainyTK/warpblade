@@ -11,6 +11,7 @@ import { enemyCenter } from "../../../enemies/enemy";
 import { meleeHit } from "../../../meleeHit";
 import { hasPerk } from "../../../progress";
 import { objectMemory, rememberPerSeat } from "../../../seatMemory";
+import { skillValues } from "../../../skills/query";
 import { game, hero, progress } from "../../../state";
 import { boxAhead, dust, hitStop, newSwing, shake } from "../../../world";
 import { emitYsra } from "../events";
@@ -42,7 +43,7 @@ export function setLungeCharge(charge: number): void {
 
 /** the lunge starts: its length from the charge and Deep Heft, one swing for the whole line */
 export function startLunge(): void {
-  const ranks = progress.ranks[HEFT.skill] ?? 0;
+  const ranks = skillValues(HEFT.skill).rank ?? 0;
   const reach = LUNGE.least + (1 - LUNGE.least) * lunge.charge;
   Object.assign(lunge, {
     dist: LUNGE.travel * reach + ranks * LUNGE.travelPerRank * lunge.charge,

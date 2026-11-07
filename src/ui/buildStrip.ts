@@ -2,7 +2,7 @@ import { progress } from "../game/state";
 import { byId } from "./dom";
 import { buildKey, heldSlots } from "./skills/buildSlots";
 
-/** the relics and charms the hero holds, as small icons with their levels under the bars */
+/** the skills and charms the hero holds, as small icons with their levels under the bars */
 const strip = byId("buildStrip");
 let last = "";
 
