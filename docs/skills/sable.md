@@ -520,6 +520,14 @@ Level 1 is level 8 divided by 6 to 12, dots and summons by up to 25; evolutions 
 Damage over time against attack skills of the same level, on their intended target: Venom Tips 0.2, 0.9, 3.5 and 5.5 A at levels 1, 4, 7 and 8; Lodged Bolts 0.1, 1.3, 3.5 and 7.5 A; Barbed Jaws 0.15, 0.6, 4.5 and 11 P.
 They stay under the attack skills at 1 to 4 and pass them at 7 and 8.
 
+### Checked in play
+
+Each skill was played in headless Chromium at levels 1, 4 and 8 and evolved, from wave 4 with hero level 1, for 10 s each, with a driver that shoots, kicks, slides, hops at foes winding up, casts and charges the ultimate; stills and logs are kept out of the repository.
+Skills that deal their own hits show under their own name on the end of run screen and grew level by level, for example over 10 s: Hunting Hawk 45, 63, 900 and 1487; Venom Tips 47, 50, 576 and 1113; Straw Decoy 18, 185, 211 and 226; Shade Archer 780 at level 8 over 14 timed hops.
+Skills carried by her presses raised her attacks or abilities over the base run's 375 attacks: Breaching Bolt 383, 1506, 3046 and 2658; Scattershot 1076, 1537 and 1542; Perfect Rhythm 1928 at level 8 and 3096 evolved; Net Bolt 140 abilities at level 1 and 843 at level 8.
+Deadeye at level 8 dealt 308 per cast against 116 for Bolt Storm in the same spot.
+The mash bot still falls on wave 5 (18 kills, 14 before); the skilled bot falls on wave 5 too (14 kills, 17 before, with a different set of cards).
+
 ## Example builds
 
 Volley, easy and timed, kills crowds from range.
