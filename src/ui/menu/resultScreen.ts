@@ -1,6 +1,7 @@
 import { STAGE_WAVES } from "../../constants/waves";
 import { lastRun } from "../../game/runEnd";
 import "../achievements/achievements.css";
+import "../results/results.css";
 import { runAchievements } from "../../store/achievements";
 import { inRoom } from "../../store/coop";
 import { bank } from "../../store/meta";
@@ -9,6 +10,8 @@ import type { MenuView } from "../../types/menu";
 import type { RunOutcome } from "../../types/run";
 import { medalIcon } from "../achievements/medalIcon";
 import { coinAmount } from "../coinIcon";
+import { runFacts } from "../results/runFacts";
+import { sourceTable } from "../results/sourceTable";
 import { menuItem } from "./menuItem";
 import { showScreen } from "./menuState";
 
@@ -48,7 +51,7 @@ function earnedList(list: readonly Achievement[]): HTMLElement {
   return box;
 }
 
-/** how the last run ended and what it earned, then on to the start menu or the shop */
+/** how the last run ended: time, level and foes, the damage of every source, what it earned; then on to the start menu or the shop */
 export function resultScreen(): MenuView {
   const run = lastRun();
   const summary = document.createElement("dl");
@@ -63,12 +66,16 @@ export function resultScreen(): MenuView {
     inRoom() ? menuItem("Back to the room", () => showScreen("coop")) : menuItem("Continue", () => showScreen("main")),
     shop,
   );
-  const content = document.createElement("div");
-  content.className = "menu-main";
+  const scroll = document.createElement("div");
+  scroll.className = "menu-scroll result-body";
   const earned = inRoom() ? [] : runAchievements();
-  content.append(summary);
-  if (earned.length) content.append(earnedList(earned));
-  content.append(list);
+  if (run.report) scroll.append(runFacts(run.report));
+  if (run.report?.sources.length) scroll.append(sourceTable(run.report));
+  scroll.append(summary);
+  if (earned.length) scroll.append(earnedList(earned));
+  const content = document.createElement("div");
+  content.className = "menu-sub";
+  content.append(scroll, list);
   return {
     title: RESULT_TITLES[run.outcome],
     subtitle: `Wave ${run.wave} of ${STAGE_WAVES}`,

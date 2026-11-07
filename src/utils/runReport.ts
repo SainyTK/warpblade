@@ -18,7 +18,7 @@ export function topDpsSource(sources: readonly SourceResult[]): SourceResult | u
 /** the units a shortened number steps through, a thousand apart */
 const UNITS = ["", "k", "M", "B"] as const;
 
-/** a large number shortened: 950, 12.4k, 1.2M */
+/** a number shortened: 0.4, 950, 12.4k, 1.2M; below 10 it keeps one decimal, so a slow source does not read as 0 */
 export function shortNumber(n: number): string {
   let scaled = n;
   let unit = 0;
@@ -26,7 +26,7 @@ export function shortNumber(n: number): string {
     scaled /= 1000;
     unit++;
   }
-  if (unit === 0) return String(Math.round(n));
+  if (unit === 0) return n < 10 ? n.toFixed(1).replace(/\.0$/, "") : String(Math.round(n));
   const digits = scaled < 99.95 ? scaled.toFixed(1).replace(/\.0$/, "") : String(Math.round(scaled));
   return `${digits}${UNITS[unit]}`;
 }
