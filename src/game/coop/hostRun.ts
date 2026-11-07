@@ -8,7 +8,7 @@ import { addCoins, ownsSkill, wearOwned } from "../../store/meta";
 import type { CharacterDef } from "../../types/character";
 import type { GuestHud, PickWire } from "../../types/coop";
 import type { EnemyRank, EnemyType } from "../../types/enemy";
-import type { RunOutcome } from "../../types/run";
+import type { RunOutcome, RunReport } from "../../types/run";
 import type { PickOption } from "../../types/skill";
 import { scaleFoeHealth, scaleFoeList } from "../../utils/coopScaling";
 import { xpToReach } from "../../utils/progression";
@@ -16,6 +16,7 @@ import { toWire } from "../../utils/wire";
 import { type CoopHooks, setCoopHooks } from "../coopHooks";
 import { choosePick, gainXp } from "../progress";
 import { resetRun } from "../run";
+import { runReport } from "../runReport";
 import { seatMemories } from "../seatMemory";
 import { game, hero, ponytail, progress, scarf, setCharacter } from "../state";
 import { drawMark } from "./drawMark";
@@ -27,8 +28,8 @@ const START_XS = [70, 110, 50, 130];
 
 /** what a co-op run tells the room it runs in */
 export interface RunEvents {
-  /** the run is over: each seat's coins, and the wave reached */
-  ended(outcome: RunOutcome, wave: number, coins: Map<Seat, number>): void;
+  /** the run is over: each seat's coins and report, and the wave reached */
+  ended(outcome: RunOutcome, wave: number, coins: Map<Seat, number>, reports: Map<Seat, RunReport>): void;
 }
 
 /** the player a co-op seat starts as */
@@ -237,8 +238,10 @@ export class HostRun implements CoopHooks {
     const wave = game.wave;
     const loose = game.coinDrops.length;
     const coins = new Map<Seat, number>();
+    const reports = new Map<Seat, RunReport>();
     this.seats.forEach((seat, i) => {
       this.enter(seat);
+      reports.set(seat, runReport());
       const share = Math.floor(loose / this.seats.length) + (i < loose % this.seats.length ? 1 : 0);
       coins.set(seat, game.coins + share);
       game.coins = 0;
@@ -250,7 +253,7 @@ export class HostRun implements CoopHooks {
     recordFeat({ kind: "banked", coins: coins.get(this.home) ?? 0 });
     resetRun("");
     hero.inv = 0;
-    this.events.ended(outcome, wave, coins);
+    this.events.ended(outcome, wave, coins, reports);
   }
 
   /** stop acting on other heroes: the host's own is left in play */

@@ -115,7 +115,7 @@ export class GuestSession {
         this.endRun(msg.coins);
         // the host left mid-run: the room is gone, so there is no room to go back to
         if (msg.outcome === "left") return this.close(HOST_LEFT, true);
-        reportRun({ outcome: msg.outcome, wave: msg.wave, coins: msg.coins });
+        reportRun({ outcome: msg.outcome, wave: msg.wave, coins: msg.coins, report: msg.report });
         updateRoom({ phase: "lobby" });
         break;
       case "closed":
