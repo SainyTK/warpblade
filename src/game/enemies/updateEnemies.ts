@@ -3,6 +3,7 @@ import { coop } from "../coopHooks";
 import { game } from "../state";
 import { updateAirborne } from "./airborne";
 import { kindOf } from "./kinds";
+import { separateFoes } from "./separate";
 import { updateStatus } from "./status";
 
 /** a tripped or landed foe lies still and slides to a stop */
@@ -30,4 +31,5 @@ export function updateEnemies(dt: number): void {
     kindOf(e.type).update(e, sdt, ts);
   }
   game.enemies = game.enemies.filter((e) => e.hp > 0);
+  separateFoes(dt);
 }

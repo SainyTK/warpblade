@@ -1,22 +1,77 @@
 import { ENEMIES } from "../constants/enemies";
 import { W } from "../constants/stage";
-import { STAGE_WAVES } from "../constants/waves";
+import { ELITE, OPENING_STAGGER, REFILL_DELAY, SPAWN, STAGE_WAVES } from "../constants/waves";
 import { sfx } from "../services/audio";
 import { saveBest } from "../services/bestScore";
+import type { EnemyType } from "../types/enemy";
+import type { Point } from "../types/world";
 import { eraOf } from "../utils/eras";
-import { waveFoes, waveKind } from "../utils/waves";
-import { coop } from "./coopHooks";
+import { pickSpawn } from "../utils/spawnPoint";
+import { aliveCap, streamLeft, wavePlan } from "../utils/waves";
+import { coop, eachStanding } from "./coopHooks";
 import { createRift } from "./effects/rift";
-import { endWave } from "./endWave";
+import { endWave, fightOver } from "./endWave";
 import { makeEnemy } from "./enemies/enemy";
 import { kindOf } from "./enemies/kinds";
 import { feat } from "./feat";
 import { endRun } from "./runEnd";
 import { game, hero, rng, showBanner } from "./state";
 
-function spawnX(): number {
-  const x = rng.range(30, W - 30);
-  return Math.abs(x - hero.x) < 60 ? ((x + 160) % (W - 60)) + 30 : x;
+/** rifts opened and not yet let through their foe, so the next one keeps away from them too */
+let opening: Point[] = [];
+
+/** a place for a rift away from every standing hero and spread from the foes and rifts already there */
+function spawnPoint(type: EnemyType): Point {
+  const r = kindOf(type).rift;
+  const flies = kindOf(type).flies;
+  const heroes: number[] = [];
+  eachStanding(() => heroes.push(hero.x));
+  const taken = [
+    ...game.enemies.filter((e) => e.hp > 0 && kindOf(e.type).flies === flies).map((e) => ({ x: e.x, y: e.y })),
+    ...opening,
+  ];
+  const candidates = Array.from({ length: SPAWN.tries }, () => ({
+    x: rng.range(SPAWN.margin, W - SPAWN.margin),
+    y: r.y(),
+  }));
+  return pickSpawn(candidates, heroes, taken, SPAWN.heroGap);
+}
+
+/** open a rift that lets one foe through after `delay`; an elite comes tougher, worth more, and glinting gold */
+function openRift(type: EnemyType, delay: number, elite = false): void {
+  const r = kindOf(type).rift;
+  const at = type === "warden" ? { x: hero.x < W / 2 ? W - 70 : 70, y: r.y() } : spawnPoint(type);
+  opening.push(at);
+  const room = coop();
+  game.fx.push(
+    createRift(at.x, r.riftY(at.y), r.height, delay, () => {
+      opening = opening.filter((p) => p !== at);
+      const e = makeEnemy(type, at.x, at.y, game.wave);
+      if (elite) Object.assign(e, { elite, max: e.max * ELITE.hp, xp: Math.round(e.xp * ELITE.xp) });
+      e.hp = e.max = room ? room.scaleFoeHp(e.rank, e.max) : e.max;
+      if (type === "warden" && game.wave === STAGE_WAVES) e.phase = 2;
+      game.enemies.push(e);
+    }),
+  );
+}
+
+/** the next foe of the stream comes through a rift */
+function sendNext(delay: number): void {
+  const s = game.stream;
+  openRift(s.foes[s.sent], delay, s.sent === s.elite);
+  s.sent++;
+}
+
+/** places freed by fallen foes fill again, each a moment after it frees, until the stream has all come through */
+function updateStream(dt: number): void {
+  const s = game.stream;
+  const standing = game.enemies.filter((e) => e.hp > 0).length + game.fx.filter((f) => f.rift).length;
+  const free = Math.min(s.cap - standing - s.refills.length, streamLeft(s) - s.refills.length);
+  for (let i = 0; i < free; i++) s.refills.push(REFILL_DELAY);
+  for (let i = 0; i < s.refills.length; i++) s.refills[i] -= dt;
+  const due = s.refills.filter((t) => t <= 0).length;
+  s.refills = s.refills.filter((t) => t > 0);
+  for (let i = 0; i < due; i++) sendNext(0);
 }
 
 function startWave(): void {
@@ -27,35 +82,27 @@ function startWave(): void {
     game.best = game.wave;
     saveBest(game.best);
   }
-  const kind = waveKind(game.wave);
+  const plan = wavePlan(game.wave);
   const room = coop();
-  const foes = room ? room.scaleFoes(waveFoes(game.wave)) : waveFoes(game.wave);
-  const leader = ENEMIES[foes[0]].name;
+  const foes = room ? room.scaleFoes(plan.stream) : plan.stream;
+  const share = plan.stream.length ? foes.length / plan.stream.length : 1;
+  game.stream = { foes, sent: 0, elite: plan.elite, cap: aliveCap(game.wave, share), refills: [] };
+  opening = [];
   const era = eraOf(game.wave);
   // a new era announces itself, unless a boss wave has its own name to show
-  const title =
-    kind !== "normal"
-      ? `Wave ${game.wave}: ${leader}`
-      : era.first === game.wave && game.wave > 1
-        ? `Wave ${game.wave}: ${era.name}`
-        : `Wave ${game.wave}`;
-  showBanner(title, kind === "normal" && title === `Wave ${game.wave}` ? 1.4 : 2.2);
-  foes.forEach((type, i) => {
-    const r = kindOf(type).rift;
-    const x = type === "warden" ? (hero.x < W / 2 ? W - 70 : 70) : spawnX();
-    const y = r.y();
-    game.fx.push(
-      createRift(x, r.riftY(y), r.height, i * 0.25, () => {
-        const e = makeEnemy(type, x, y, game.wave);
-        if (room) e.hp = e.max = room.scaleFoeHp(e.rank, e.max);
-        if (type === "warden" && game.wave === STAGE_WAVES) e.phase = 2;
-        game.enemies.push(e);
-      }),
-    );
-  });
+  const title = plan.leader
+    ? `Wave ${game.wave}: ${ENEMIES[plan.leader].name}`
+    : era.first === game.wave && game.wave > 1
+      ? `Wave ${game.wave}: ${era.name}`
+      : `Wave ${game.wave}`;
+  showBanner(title, title === `Wave ${game.wave}` ? 1.4 : 2.2);
+  // the leader comes first, then as many of the stream as there are places, a beat apart
+  if (plan.leader) openRift(plan.leader, 0);
+  const first = Math.min(game.stream.cap - (plan.leader ? 1 : 0), foes.length);
+  for (let i = 0; i < first; i++) sendNext((i + (plan.leader ? 1 : 0)) * OPENING_STAGGER);
 }
 
-/** fight a wave; once it is clear, wait, then open rifts for the next wave */
+/** fight a wave as it streams in; once it is clear, wait, then open rifts for the next wave */
 export function updateWaves(dt: number): void {
   if (hero.state === "dead") return;
   if (game.mode === "clear") {
@@ -63,7 +110,8 @@ export function updateWaves(dt: number): void {
     if (game.waveTimer <= 0) endRun("clear");
     return;
   }
-  if (game.enemies.length > 0 || game.fx.some((f) => f.rift)) return;
+  if (game.lull === "fight") updateStream(dt);
+  if (!fightOver()) return;
   if (game.lull === "fight") {
     if (game.wave >= STAGE_WAVES) {
       game.mode = "clear";

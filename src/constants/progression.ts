@@ -1,5 +1,8 @@
-/** a slain foe's experience drops as orbs of about this much each, at most this many */
-export const XP_ORB = { share: 6, most: 12 } as const;
+/**
+ * experience orbs: about `share` experience each at wave 1, more each wave as foes give more, so a kill drops as many
+ * orbs late as early, at most `most`; with `crowd` orbs lying about, kills drop fewer and past it they add to the nearest
+ */
+export const XP_ORB = { share: 6, most: 12, crowd: 60 } as const;
 /** how experience orbs move: they pop out, fall and bounce, then fly to Kael if he has not walked over them */
 export const XP_ORB_MOTION = {
   gravity: 480,

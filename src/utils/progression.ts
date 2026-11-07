@@ -37,13 +37,16 @@ export function stringLimit(kit: KitId, level: number, perks: ReadonlySet<Perk>)
   return comboLimit(level, perks.has("flowingChain"));
 }
 
-/** how much a wave scales foe HP, foe damage, experience, and how much shorter foes' pauses and wind-ups get */
+/**
+ * how much a wave scales foe HP and experience (compounding), foe damage (linear), and how much shorter foes' pauses and
+ * wind-ups get
+ */
 export function waveScale(wave: number): { hp: number; damage: number; xp: number; cooldown: number; windup: number } {
   const n = Math.max(0, Math.min(STAGE_WAVES, wave) - 1);
   return {
-    hp: 1 + WAVE_SCALE.hp * n,
+    hp: WAVE_SCALE.hp ** n,
     damage: 1 + WAVE_SCALE.damage * n,
-    xp: 1 + WAVE_SCALE.xp * n,
+    xp: WAVE_SCALE.xp ** n,
     cooldown: Math.max(AGGRESSION.cooldownFloor, 1 - AGGRESSION.cooldown * n),
     windup: Math.max(AGGRESSION.windupFloor, 1 - AGGRESSION.windup * n),
   };

@@ -1,5 +1,5 @@
 import { CLIPS } from "../constants/clips";
-import { ELEMENT_COLOR, ENEMY_COLORS, PAL } from "../constants/palette";
+import { COIN_GOLD, ELEMENT_COLOR, ENEMY_COLORS, PAL } from "../constants/palette";
 import { ULT_LEVELS } from "../constants/ultimate";
 import { ellipseRing, glow, glowLine, line, place, px } from "../engine/frame";
 import { blit, detailCanvas } from "../engine/sprite";
@@ -14,6 +14,7 @@ import type { Enemy } from "../types/enemy";
 import { hex, WHITE } from "../utils/color";
 import { clamp, TAU } from "../utils/math";
 import { bladeAngle } from "../utils/poseFrame";
+import { drawEliteGlow, drawEliteRing } from "./drawElite";
 
 const heroSprite = detailCanvas(80, 76, 40, 62);
 const HP_BAR_EMPTY = hex("#120a1e");
@@ -22,14 +23,15 @@ const STUN_STAR = hex("#ffe26b");
 const HIGH_LEVEL_COLORS = [hex("#ffe26b"), hex("#ff7ae0")];
 const levelColor = (i: number) => (i < 2 ? skin.ramp[3 + i] : HIGH_LEVEL_COLORS[i - 2]);
 
-/** a small HP bar over minions; bosses use the bar at the bottom of the screen */
+/** a small HP bar over minions, gold for an elite; bosses use the bar at the bottom of the screen */
 function drawMinionBar(e: Enemy): void {
   if (e.rank !== "minion" || e.hp >= e.max) return;
   const [cx] = enemyCenter(e);
   const bx = Math.round(cx - 7);
   const by = Math.round(enemyBox(e)[1] - 4);
   const filled = Math.round(14 * (e.hp / e.max));
-  for (let i = 0; i < 14; i++) px(bx + i, by, i < filled ? PAL.shadow[4] : HP_BAR_EMPTY);
+  const fill = e.elite ? COIN_GOLD[3] : PAL.shadow[4];
+  for (let i = 0; i < 14; i++) px(bx + i, by, i < filled ? fill : HP_BAR_EMPTY);
 }
 
 /** two stars circling over a tripped or downed foe */
@@ -52,10 +54,12 @@ export function drawEnemies(): void {
     const tremble = winding ? (Math.floor(game.t * 30) % 2 ? 1 : -1) : 0;
     const tint = e.flash > 0 ? WHITE : e.frozen > 0 ? PAL.ice[4] : e.chill > 0 ? PAL.ice[3] : 0;
     const tintAmount = e.flash > 0 ? 1 : e.frozen > 0 ? 0.5 : e.chill > 0 ? 0.3 : 0;
+    if (e.elite) drawEliteRing(e, s, e.x + tremble);
     blit(s, e.x + tremble, e.y, e.face < 0, { tint, tintAmount });
     place();
     const [cx, cy] = enemyCenter(e);
     glow(cx, cy, kind.glow.radius, kind.glow.color, winding ? 0.5 : 0.22);
+    if (e.elite) drawEliteGlow(e);
     if (winding) glow(cx + e.face * 3, cy + kind.glow.eyeY, 8, ENEMY_COLORS.eyeGlow, 0.6);
     drawMinionBar(e);
     drawStun(e);

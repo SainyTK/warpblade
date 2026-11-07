@@ -103,10 +103,12 @@ Relic hits are not melee (guards do not stop them) and do not build Flow.
 
 - Still 30 waves in the same five eras with the same foes, mini bosses at 5, 10, 15 and 25 and the Warden at 20 and 30.
 - A wave has a quota of foes, `round(4 x 1.1^(wave - 1))` (4 at wave 1, 63 at wave 30), that stream in through rifts. At most `min(3 + ceil(0.6 x wave), 22)` stand at once; a new rift opens 0.35 s after a place frees. The wave ends when the quota is dead.
-- Mini boss waves bring the mini boss with a stream of flyers; boss waves bring the Warden with a stream of half the quota.
+- Mini boss waves bring the mini boss with a stream of flyers (the quota less one); boss waves bring the Warden with a stream of half the quota.
+- Rifts open away from every hero and spread from the foes and rifts already there. Minions standing their ground ease apart so a crowd stays readable.
 - Foe HP grows by x1.125 per wave (about x30 at wave 30); mini bosses have x3 and the Warden x6 on top. Experience grows by x1.07 per wave. Damage keeps its slow linear growth.
-- From wave 3, waves divisible by 3 that are not boss waves bring one elite: a normal foe of the era with x5 HP and a gold glint, which drops a chest.
+- From wave 3, waves divisible by 3 that are not boss waves bring one elite halfway through the stream: a normal foe of the era with x5 HP, x3 experience, x2 coins and a gold ring with a glint, which drops a chest.
 - Coins per run stay about where they are today (`docs/meta-progress.md`), so drops per foe shrink as foes multiply.
+- Experience orbs grow with the wave, so a kill drops as many orbs late as early; with many orbs about, kills drop fewer, and past 60 they join the nearest orb. Kill bursts of light and particles shrink when many foes fall at once.
 
 ## End of run screen
 

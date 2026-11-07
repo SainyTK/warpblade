@@ -72,7 +72,7 @@ When the run ends, every player banks their own coins in their own browser and s
 
 ## More players, more foes
 
-Each player past the first adds 40% more minions to every wave.
+Each player past the first adds 40% more minions to every wave's stream, and lets as many more stand at once (up to 30, `ALIVE_CAP.coopMost` in `src/constants/waves.ts`).
 Each player past the first also adds a quarter to every minion's HP, half to a mini boss's and three fifths to a boss's.
 The numbers live in `COOP_SCALING` in `src/constants/coop.ts`.
 
