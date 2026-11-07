@@ -16,7 +16,7 @@ import { createImpact } from "./effects/impact";
 import { launchEnemy } from "./enemies/airborne";
 import { enemyCenter } from "./enemies/enemy";
 import { kindOf } from "./enemies/kinds";
-import { markMultiplier } from "./enemies/skillStatus";
+import { markBonus } from "./enemies/skillStatus";
 import { kit } from "./hero/kits";
 import { killEnemy } from "./kill";
 import { popNumber } from "./numbers";
@@ -135,8 +135,7 @@ export function dealDamage(e: Enemy, base: number, o: HitOptions = {}): HitResul
     tag = "crit";
   }
   if (isHeroSource(source) && !o.dot) dmg *= 1 + hitBonus(e, { back, keen: !!o.sureCrit, melee: !!o.melee });
-  const taken = takenBonus(e);
-  dmg *= taken > 0 ? 1 + Math.min(DAMAGE.takenCap, taken + (e.mark > 0 ? e.markBonus : 0)) : markMultiplier(e);
+  dmg *= 1 + Math.min(DAMAGE.takenCap, takenBonus(e) + markBonus(e));
   dmg *= kit().damageScale?.() ?? 1;
   const shatterShards = o.melee && o.heavy && e.frozen > 0 ? (skillValues("k_frost").shatter ?? 0) : 0;
   const shattering = shatterShards > 0;

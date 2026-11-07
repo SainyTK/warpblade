@@ -545,7 +545,7 @@ Evolves Clockwork Cadence, Twin Shadows and Heartseeker; Siege Bolt and Thunder 
 ## Contract points
 
 All seven points of the design were accepted into `docs/skill-design.md`.
-Two remain for the framework:
+The framework has since met both remaining ones:
 
-- `markFoe` keeps the stronger of two marks; the balance rule G3 asks that damage-taken bonuses add and cap at +100%. Sable's marks (Longshot, Net Bolt, Siege Bolt, Tangle Slide, Deadeye) all go through `markFoe`, so the change lands in one place.
+- `markFoe` takes a source, and marks of different sources add under the +100% cap (rule G3). Sable's marks (Longshot, Net Bolt, Siege Bolt, Tangle Slide, Deadeye) each mark under their own skill id.
 - `SkillButton` gained `O`, for Perfect Rhythm.

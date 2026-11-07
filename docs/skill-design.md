@@ -229,7 +229,7 @@ A skill effect carried by the hero's own press (a bigger J blow, a burst on the 
 
 - `addStacks(foe, skillId, { stacks, max, damage, every, duration })`: stacking damage over time (poison, bleed, burn, lodged bolts). Each tick deals `damage x stacks` with the skill id as source; a new stack refreshes the duration.
 - `stacksOf(foe, skillId)` and `consumeStacks(foe, skillId)` (returns the count and clears them) for detonations and consuming strikes.
-- `markFoe(foe, seconds, bonus)`: the foe takes `bonus` more damage from every source while marked (0.2 is +20%); the stronger mark wins.
+- `markFoe(foe, source, seconds, bonus)`: the foe takes `bonus` more damage from every source while marked (0.2 is +20%). Marks of different sources add, together with the kit's own damage-taken bonuses, capped at +100% (`DAMAGE.takenCap`); a source's new mark refreshes its own.
 - The older statuses stay: `ignite` (`src/game/enemies/burn.ts`), `chill`, `frozen`, `shock`, `stun`.
 
 ### Per-seat memory rules

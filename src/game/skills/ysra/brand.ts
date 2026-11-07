@@ -38,7 +38,7 @@ function brand(e: Enemy, stacks: number): void {
     every: TICK,
     duration: v.duration,
   });
-  if (v.taken) markFoe(e, v.duration, v.taken);
+  if (v.taken) markFoe(e, ID, v.duration, v.taken);
   if (fresh) game.fx.push(createBrandMark(e));
 }
 

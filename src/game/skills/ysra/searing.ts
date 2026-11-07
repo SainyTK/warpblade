@@ -31,7 +31,7 @@ function burstAtMax(m: SearingMemory, e: Enemy): void {
 function sear(m: SearingMemory, e: Enemy, stacks: number): void {
   const v = skillValues(ID);
   scorch(e, stacks);
-  if (v.flare && scorchOf(e) >= v.max) markFoe(e, 1, v.flare);
+  if (v.flare && scorchOf(e) >= v.max) markFoe(e, ID, 1, v.flare);
   burstAtMax(m, e);
 }
 

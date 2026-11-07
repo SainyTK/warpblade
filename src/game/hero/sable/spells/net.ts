@@ -56,7 +56,7 @@ function openNet(x: number, y: number): void {
       heavy: true,
       source: "abilities",
     });
-    if (v.mark) markFoe(e, v.hold, v.mark);
+    if (v.mark) markFoe(e, "s_net", v.hold, v.mark);
   }
   lights.add(x, y - 6, v.width + 8, ROPE, 0.6, 0.2);
   sfx.block();

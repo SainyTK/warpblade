@@ -15,7 +15,7 @@ const ROPE = hex("#b8a274");
 export function tangle(e: Enemy, seconds: number): void {
   let t = 0;
   let hangY = 0;
-  markFoe(e, seconds + CATCH, TAKEN);
+  markFoe(e, "s_slideKick", seconds + CATCH, TAKEN);
   game.fx.push({
     update(dt) {
       t += dt;

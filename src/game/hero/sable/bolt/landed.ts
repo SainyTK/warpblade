@@ -60,7 +60,7 @@ function breach(e: Enemy, dir: number): void {
   const slammed = dir > 0 ? e.x > W - EDGE : e.x < EDGE;
   if (v.pin && (slammed || v.pierceAll)) {
     e.pinned = Math.max(e.pinned, v.pin);
-    if (v.mark) markFoe(e, v.pin, v.mark);
+    if (v.mark) markFoe(e, "s_breach", v.pin, v.mark);
     if (slammed) dealDamage(e, progress.stats.ad * v.pinPower, { fromX: e.x - dir * 10, heavy: true });
   }
 }
@@ -76,7 +76,7 @@ function cadence(e: Enemy): void {
 /** Longshot: a far hit marks the foe, a far kill puts the bolt back, Horizon Shot splits far hits */
 function longshot(e: Enemy, b: Shot, killed: boolean): void {
   const v = skillValues("s_longshot");
-  if (v.mark) markFoe(e, v.markTime, v.mark);
+  if (v.mark) markFoe(e, "s_longshot", v.markTime, v.mark);
   if (killed && v.refund) sable.ammo = Math.min(quiverSize(), sable.ammo + 1);
   if (!v.split || b.offshoot) return;
   const [x, y] = enemyCenter(e);

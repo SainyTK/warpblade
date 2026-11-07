@@ -104,7 +104,7 @@ function slam(m: FistMemory, f: Fist, evolved: boolean): void {
         dealDamage(o, progress.stats.ad * v.power * 0.5, { source: ID, fromX: f.x, kx: Math.sign(ox - f.x) * 80 });
       if (v.pin) {
         o.stun = Math.max(o.stun, v.pin);
-        markFoe(o, v.pin, v.mark);
+        markFoe(o, ID, v.pin, v.mark);
       }
     }
     game.fx.push(createFloorRing(f.x, floor, radius, SPIRIT, 0.45));

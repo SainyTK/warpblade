@@ -72,7 +72,7 @@ export function castDeadeye(level: number): void {
     struck.add(e);
     const [cx, cy] = enemyCenter(e);
     dealDamage(e, damage, { fromX: hero.x, kx: dir * 160, ky: -50, stun: 0.6, heavy: true, source: "ultimate" });
-    if (v.mark) markFoe(e, v.markTime, v.mark);
+    if (v.mark) markFoe(e, "s_deadeye", v.markTime, v.mark);
     if (v.pin) e.pinned = Math.max(e.pinned, v.pin);
     game.fx.push(createImpact(cx, cy, dir, true));
     lights.add(cx, cy, 30, skin.ramp[5], 0.9, 0.2);

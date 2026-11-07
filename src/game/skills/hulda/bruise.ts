@@ -32,7 +32,7 @@ function bruise(e: Enemy, stacks: number): void {
     every: BRUISE.every,
     duration,
   });
-  if (v.mark) markFoe(e, duration, v.mark);
+  if (v.mark) markFoe(e, ID, duration, v.mark);
 }
 
 /** a foe passing bruises on may not if it took them from a spread or a shatter a moment ago */
