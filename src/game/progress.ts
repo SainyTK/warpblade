@@ -1,11 +1,17 @@
+import { MAX_LEVEL } from "../constants/growth";
 import { PAL } from "../constants/palette";
-import { LEVEL_UP_RESTORE, MAX_LEVEL } from "../constants/progression";
+import { LEVEL_UP_RESTORE } from "../constants/progression";
 import { sfx } from "../services/audio";
 import { metaBonus } from "../store/meta";
+import type { Card } from "../types/build";
 import { PK } from "../types/particle";
-import type { Perk, PickOption } from "../types/skill";
+import type { PickAnswer } from "../types/pick";
+import type { Perk } from "../types/skill";
+import { buildStats } from "../utils/build";
+import { cardKey } from "../utils/cards";
 import { airLimit, stringLimit, xpToNext } from "../utils/progression";
 import { collectPerks, computeStats, learnedUltimate } from "../utils/stats";
+import { raiseCharm, raiseRelic } from "./build/raise";
 import { createFloorRing } from "./effects/floorRing";
 import { forgetEvolutions, queueEvolution } from "./evolve";
 import { feat } from "./feat";
@@ -16,7 +22,7 @@ export const hasPerk = (p: Perk): boolean => progress.perks.has(p);
 
 /** recompute everything derived from the level and the learned ranks, keeping HP and MP inside the new maxima */
 export function refreshProgress(): void {
-  progress.stats = computeStats(character, progress.level, progress.ranks, metaBonus());
+  progress.stats = computeStats(character, progress.level, progress.ranks, metaBonus(), buildStats(progress.build));
   progress.perks = collectPerks(character, progress.ranks);
   progress.ultimate = learnedUltimate(character, progress.ranks);
   progress.comboLimit = stringLimit(character.kit, progress.level, progress.perks);
@@ -57,15 +63,18 @@ export function gainXp(amount: number): void {
   if (progress.level >= MAX_LEVEL) progress.xp = 0;
   if (progress.level === from) return;
   const before = progress.stats;
+  const restore = LEVEL_UP_RESTORE * (progress.level - from);
   refreshProgress();
-  hero.hp = Math.min(
-    progress.stats.hp,
-    hero.hp + (progress.stats.hp - before.hp) + progress.stats.hp * LEVEL_UP_RESTORE,
-  );
-  hero.mp = Math.min(progress.stats.mp, hero.mp + progress.stats.mp * LEVEL_UP_RESTORE);
+  hero.hp = Math.min(progress.stats.hp, hero.hp + (progress.stats.hp - before.hp) + progress.stats.hp * restore);
+  hero.mp = Math.min(progress.stats.mp, hero.mp + progress.stats.mp * restore);
   showBanner(`Level ${progress.level}`, 1.4);
   celebrateLevel();
   progress.picks += progress.level - from;
+}
+
+/** experience from play: Insight adds to it */
+export function earnXp(amount: number): void {
+  gainXp(amount * buildStats(progress.build).growth);
 }
 
 /** a cleared wave: the game pauses on a pick for every skill point waiting, if any */
@@ -73,9 +82,14 @@ export function openPicks(): void {
   if (progress.picks > 0 && game.mode === "play") game.mode = "pick";
 }
 
-/** one more rank of a skill; a higher maximum also fills by what it adds */
+/** one more rank of a skill */
 function addRank(id: string): void {
   progress.ranks = { ...progress.ranks, [id]: (progress.ranks[id] ?? 0) + 1 };
+  refreshGrowing();
+}
+
+/** recompute after something grew: a higher maximum also fills by what it adds */
+export function refreshGrowing(): void {
   const before = progress.stats;
   refreshProgress();
   hero.hp = Math.min(progress.stats.hp, hero.hp + Math.max(0, progress.stats.hp - before.hp));
@@ -89,15 +103,54 @@ function takeBoon(): void {
   hero.mp = progress.stats.mp;
 }
 
-/** spend one skill point on a card; the game plays on once none is left */
-export function choosePick(option: PickOption): void {
-  if (option.type === "skill") {
-    addRank(option.node.id);
-    feat({ kind: "learned", skill: option.node.kind });
-  } else takeBoon();
-  if (option.type === "skill" && option.node.kind === "evolution") queueEvolution(option.node);
+/** one skill point is spent; the game plays on once none is left */
+function spendPick(): void {
   progress.picks = Math.max(0, progress.picks - 1);
   if (!progress.picks && game.mode === "pick") game.mode = "play";
+}
+
+/** spend one skill point on a card */
+function choosePick(card: Card): void {
+  if (card.type === "skill") {
+    addRank(card.node.id);
+    feat({ kind: "learned", skill: card.node.kind });
+    if (card.node.kind === "evolution") queueEvolution(card.node.name);
+  } else if (card.type === "boon") takeBoon();
+  else {
+    if (card.type === "relic") raiseRelic(card.id);
+    else raiseCharm(card.id);
+    refreshGrowing();
+  }
+  spendPick();
+}
+
+/** Skip: the point is spent for nothing */
+function skipPick(): void {
+  if (progress.build.skips <= 0) return;
+  progress.build.skips--;
+  spendPick();
+}
+
+/** Banish: the card's relic, charm or skill is never dealt again this run */
+function banishCard(card: Card): void {
+  if (progress.build.banishes <= 0 || card.type === "boon") return;
+  progress.build.banishes--;
+  progress.build.banished = [...progress.build.banished, cardKey(card)];
+}
+
+/** the chest screen was seen: its rewards are put away and play goes on */
+export function seeChest(): void {
+  progress.build.chest = [];
+  if (game.mode === "chest") game.mode = "play";
+}
+
+/** a player's answer to the cards; a reroll or banish only spends the tool, and the cards are dealt again by the dialog */
+export function answerPick(answer: PickAnswer<Card>): void {
+  if (progress.picks <= 0) return;
+  if (answer.t === "take") choosePick(answer.card);
+  else if (answer.t === "skip") skipPick();
+  else if (answer.t === "banish") banishCard(answer.card);
+  else if (progress.build.rerolls > 0) progress.build.rerolls--;
 }
 
 export function resetProgress(): void {

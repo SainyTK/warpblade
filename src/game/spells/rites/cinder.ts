@@ -27,7 +27,7 @@ function createCinder(x: number, y: number): Effect {
         tick = A.tick;
         for (const e of game.enemies)
           if (e.hp > 0 && boxHit(enemyBox(e), [x - A.halfWidth, y - 12, x + A.halfWidth, y])) {
-            dealDamage(e, progress.stats.ap * A.power, { dot: true });
+            dealDamage(e, progress.stats.ap * A.power, { dot: true, source: "abilities" });
             ignite(e, A.burn);
           }
       }

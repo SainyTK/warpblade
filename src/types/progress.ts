@@ -1,3 +1,4 @@
+import type { Build } from "./build";
 import type { Perk, UltimateId } from "./skill";
 import type { Stats } from "./stats";
 
@@ -17,4 +18,6 @@ export interface Progress {
   comboLimit: number;
   /** air attacks before Kael lands */
   airLimit: number;
+  /** relics, charms, Flow and the pick tools of this run */
+  build: Build;
 }

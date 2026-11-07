@@ -1,4 +1,5 @@
-import { SPARKS } from "../../constants/palette";
+import { PAL, SPARKS } from "../../constants/palette";
+import { CHILL_PACE } from "../../constants/relics/bell";
 import type { Enemy } from "../../types/enemy";
 import { PK } from "../../types/particle";
 import { dealDamage } from "../damage";
@@ -9,10 +10,11 @@ import { enemyCenter } from "./enemy";
 /** burn ticks this fraction of ability power */
 const BURN_POWER = 0.2;
 
-/** burning, shocked and frozen foes; returns the time scale the foe moves at */
+/** burning, shocked, frozen and chilled foes; returns the time scale the foe moves at */
 export function updateStatus(e: Enemy, dt: number): number {
   e.flash = Math.max(0, e.flash - dt);
   e.frozen = Math.max(0, e.frozen - dt);
+  e.chill = Math.max(0, e.chill - dt);
   e.shock = Math.max(0, e.shock - dt);
   e.charged = Math.max(0, e.charged - dt);
   e.evadeCd = Math.max(0, e.evadeCd - dt);
@@ -40,7 +42,7 @@ export function updateStatus(e: Enemy, dt: number): number {
     if (e.burnTick <= 0) {
       e.burnTick = 0.4;
       actAsBurner(e);
-      dealDamage(e, progress.stats.ap * BURN_POWER, { dot: true });
+      dealDamage(e, progress.stats.ap * BURN_POWER, { dot: true, source: "abilities" });
     }
   }
   if (e.shock > 0 && rng.chance(0.25))
@@ -55,5 +57,9 @@ export function updateStatus(e: Enemy, dt: number): number {
         sparks: SPARKS.volt,
       },
     );
-  return e.shock > 0 ? 0 : e.frozen > 0 ? 0.3 : 1;
+  if (e.chill > 0 && rng.chance(0.08))
+    particles.spawn(PK.FLAKE, cx + rng.range(-6, 6), cy + rng.range(-8, 4), 0, 10, rng.range(0.4, 0.7), {
+      col: PAL.ice[4],
+    });
+  return e.shock > 0 ? 0 : e.frozen > 0 ? 0.3 : e.chill > 0 ? CHILL_PACE : 1;
 }

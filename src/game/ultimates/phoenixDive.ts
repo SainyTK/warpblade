@@ -66,7 +66,7 @@ export function castPhoenixDive(level: number): void {
       const [cx, cy] = enemyCenter(e);
       if (Math.hypot(cx - spot.x, (cy - spot.floor + 10) * 1.4) > RADIUS) continue;
       const dir = Math.sign(cx - spot.x) || side;
-      dealDamage(e, damage, { fromX: spot.x, kx: dir * 150, launch: -190, heavy: true });
+      dealDamage(e, damage, { fromX: spot.x, kx: dir * 150, launch: -190, heavy: true, source: "ultimate" });
       ignite(e, BURN);
       game.fx.push(createImpact(cx, cy, dir, true));
     }

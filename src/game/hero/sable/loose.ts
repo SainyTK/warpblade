@@ -1,5 +1,6 @@
 import { BOLT } from "../../../constants/sable/bolt";
 import { sfx } from "../../../services/audio";
+import type { SourceId } from "../../../types/build";
 import type { Enemy } from "../../../types/enemy";
 import { dealDamage } from "../../damage";
 import { createCrossbowBolt } from "../../effects/crossbowBolt";
@@ -19,13 +20,16 @@ export interface Loose {
   /** share of a normal bolt's damage */
   share: number;
   primed: boolean;
+  /** what loosed it, for the end of run screen; her own shots when not given */
+  source?: SourceId;
 }
 
 /** foes one bolt passes through before it stops: Piercing Bolts adds one per rank */
 const pierceOf = (): number => BOLT.pierce + rankOf("m_pierce");
 
 /** a bolt strikes a foe: damage from attack damage (crits come with it), a small push away from Sable and a spark */
-function strike(e: Enemy, share: number, primed: boolean, dir: number): boolean {
+function strike(e: Enemy, b: Loose, dir: number): boolean {
+  const { share, primed } = b;
   const [cx, cy] = enemyCenter(e);
   const power = BOLT.power * share * (primed ? BOLT.primedScale : 1);
   dealDamage(e, progress.stats.ad * power, {
@@ -34,6 +38,7 @@ function strike(e: Enemy, share: number, primed: boolean, dir: number): boolean 
     ky: BOLT.ky,
     heavy: primed,
     stagger: BOLT.stagger,
+    source: b.source,
   });
   hero.lastHit = e;
   game.fx.push(createImpact(cx - dir * 3, cy, dir, primed));
@@ -50,7 +55,7 @@ export function looseBolt(b: Loose): void {
   const pass = (ax: number, ay: number, bx: number, by: number): boolean => {
     for (const e of foesOnSegment(ax, ay, bx, by, struck)) {
       struck.add(e);
-      const killed = strike(e, b.share, b.primed, dir);
+      const killed = strike(e, b, dir);
       sfx.hit(b.primed, 1.3);
       if (b.primed) {
         hitStop(0.03);

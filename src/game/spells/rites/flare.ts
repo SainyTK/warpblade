@@ -25,7 +25,13 @@ function strikeRing(x: number, y: number): number {
   for (const e of game.enemies) {
     if (e.hp <= 0 || !boxHit(ring, enemyBox(e))) continue;
     const dir = Math.sign(e.x - x) || 1;
-    dealDamage(e, progress.stats.ap * FLARE.power, { fromX: x, kx: dir * FLARE.kx, ky: FLARE.ky, heavy: true });
+    dealDamage(e, progress.stats.ap * FLARE.power, {
+      fromX: x,
+      kx: dir * FLARE.kx,
+      ky: FLARE.ky,
+      heavy: true,
+      source: "abilities",
+    });
     e.burn = Math.max(e.burn, FLARE.burn);
     hits++;
   }

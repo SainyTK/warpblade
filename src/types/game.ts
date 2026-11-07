@@ -1,6 +1,7 @@
 import type { Effect } from "./effect";
 import type { Enemy } from "./enemy";
 import type { SpriteImage } from "./sprite";
+import type { WaveStream } from "./wave";
 
 export interface Pickup {
   x: number;
@@ -65,10 +66,15 @@ export interface DamageNumber {
   /** seconds since it popped */
   age: number;
   big: boolean;
+  /** a relic's hit, drawn smaller and dimmer than the hero's own */
+  quiet: boolean;
+  /** the foe it pops over, so later hits on it merge in; none for a word */
+  foe: Enemy | null;
   life: number;
 }
-/** play runs the simulation; pick pauses it while Kael chooses a skill when a wave is cleared with skill points waiting; clear is the end of the stage */
-export type GameMode = "play" | "pick" | "clear";
+/** play runs the simulation; pick pauses it while Kael chooses a skill when a wave is cleared with skill points waiting;
+ *  chest pauses it while an opened chest shows what it gave; clear is the end of the stage */
+export type GameMode = "play" | "pick" | "chest" | "clear";
 
 export interface GameState {
   mode: GameMode;
@@ -86,6 +92,7 @@ export interface GameState {
   /** fight while a wave is on; once it is clear, count down to the next wave */
   lull: "fight" | "toNext";
   waveTimer: number;
+  stream: WaveStream;
   kills: number;
   /** the furthest wave reached in this browser */
   best: number;

@@ -17,7 +17,7 @@ export const YSRA: CharacterDef = {
   accent: "#ff8a2a",
   special: "pyreWave",
   base: { ad: 13, ap: 7, hp: 130, mp: 80, stamina: 110, crit: 0.03, move: 1.1, aspd: 0.92, haste: 1 },
-  growth: { ad: 0.8, ap: 0.4, hp: 7, mp: 1.5 },
+  growth: { ad: 0, ap: 0, hp: 1.5, mp: 0.35 },
   branches: [LANCE, BASTION, PYRE, FUSION, EVOLUTION],
   startRanks: { r_flare: 1 },
   skin: YSRA_SKIN,

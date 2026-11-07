@@ -8,6 +8,8 @@ Bought upgrades apply at the start of every run, on top of the level-up picks.
 ## Coins
 
 Every slain foe drops coins: a wisp 1, a husk 2, a Rift Brute 8 and the Rift Warden 25 (`COIN_DROP` in `src/constants/coins.ts`).
+Since waves stream a growing quota of foes, a minion drops only its share: a normal wave pays the coins of as many minions as a wave brought before (3, one more every third wave, 9 at most, `COIN_PAID_FOES`), spread over its whole quota (`coinShare` in `src/utils/coins.ts`).
+Mini bosses and the Warden drop their full count, and an elite drops twice its base (`ELITE.coins`).
 Since 0.2.0 every foe drops a quarter more on top of that (`COIN_BONUS`), and a fraction left over is a chance at one more coin.
 Lodestone's quarter adds to it, so an owner of Lodestone gets half again the base drop.
 Coins pop out of the foe, fall and bounce on the floor or a ledge, and the hero picks them up by touch.
@@ -37,12 +39,21 @@ Stats are bought in levels, each level adding the same flat amount, before the i
 
 Each level costs 1.6 times the one before, rounded to 5 (`nextPrice` in `src/utils/shop.ts`), so a 20-coin stat goes 20, 30, 50, 80, 130.
 
+Pick tools are bought in levels too, three each, priced the same way: each level adds one to what every run starts with (2 rerolls, 2 skips and 1 banish before the shop, `PICK_TOOLS` in `src/constants/growth.ts`).
+
+| Item | Per level | Levels | First price |
+| --- | --- | --- | --- |
+| Reroll | One more reroll | 3 | 30 |
+| Skip | One more skip | 3 | 25 |
+| Banish | One more banish | 3 | 35 |
+
 Skills are bought once and none of them is offered on level up:
 
 - Lodestone (60): coins fly to the hero after 0.3 seconds, and foes drop another quarter of their base (a fraction left over is a chance at one more coin).
 - Aftershock (150, saved under the id `warpShock`): every travel move the hero ends sends a ring out from the hero that hits each foe within 40 art pixels for 0.8 times attack damage and stuns it briefly.
   For Kael that is every dash and every warp, Blink Combo's included; for Ysra every vault, dive and backstep; for Sable every hop and slide; for Hulda every Bull Rush and every Skyfall Grab landing.
 - Head Start (200): runs start at level 3 with two skill points, spent when wave 1 is cleared.
+  A full run reaches about level 84, so level 3 is what wave 1 alone gives; the two picks are the whole head start.
 - Last Light (300): the first fatal blow of a run leaves the hero standing with half their HP.
 
 ## Every shop item helps every hero
@@ -62,7 +73,7 @@ A new hero's kit keeps these promises, so every item works for it on day one:
 - Blows on the hero go through `hurtHero`, so Vitality's HP and Last Light apply.
 - The kit calls `travelEnded()` from `src/game/hero/travelEnd.ts` when each of its travel moves ends: a dash, a warp, a leap, a landing out of the air (Aftershock).
   Shop skills that answer a hero's movement hook in there, never into one kit's code.
-- Coins, levels and Head Start live in shared code and need nothing from the kit.
+- Coins, levels, Head Start and the pick tools live in shared code and need nothing from the kit.
 
 A new item follows the same rule: it changes a shared stat or hooks into a shared event, and its text says what it does without naming a hero.
 Item ids are saved, so a renamed item keeps its id.
@@ -76,6 +87,11 @@ Clearing waves 1 to N earns this many coins in total, before the 0.2.0 bonus and
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | Base coins | 18 | 28 | 44 | 52 | 72 | 126 | 178 | 203 | 354 |
 | With the bonus | 22 | 35 | 55 | 65 | 90 | 158 | 222 | 254 | 442 |
+| Streamed waves, base | 19 | 30 | 47 | 55 | 78 | 136 | 189 | 220 | 385 |
+| Streamed waves, with the bonus | 24 | 38 | 59 | 69 | 98 | 170 | 236 | 276 | 481 |
+
+The streamed rows count the Warden's base drop but not the flyers it calls.
+They run about 5 to 9% above the old ones, from the elites' doubled drop and the mini boss waves' longer flyer streams, so the prices below still hold.
 
 Before 0.2.0 the playtest bots banked 12 to 20 coins on runs that fell at waves 4 and 5, since they miss some kills.
 Such a run bought one first level at most, which was too slow.

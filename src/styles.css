@@ -190,6 +190,58 @@ body {
       0 -2px 6px var(--ember);
   }
 }
+/* Flow: gold stacks with the damage multiplier after the bar; the bar glows when full */
+.bar.fl {
+  grid-template-columns: 22px 1fr 30px;
+}
+.bar.fl span,
+.bar.fl b {
+  color: var(--gold);
+}
+.bar.fl b {
+  font-weight: 400;
+  text-align: right;
+}
+.bar.fl.idle b {
+  color: var(--muted);
+}
+.bar.fl .fill {
+  background: var(--gold);
+  box-shadow: 0 0 6px var(--gold);
+}
+.bar.fl.full .fill {
+  background: var(--gold-glint);
+  box-shadow: 0 0 10px var(--gold);
+}
+/* the relics and charms held: small slots under the bars */
+.build-strip {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 6px;
+  margin-top: 2px;
+}
+.build-strip .build-row {
+  gap: 2px;
+}
+.build-strip .build-slot {
+  width: 18px;
+  height: 18px;
+  border-width: 1px;
+  box-shadow: none;
+}
+.build-strip .build-slot img {
+  width: 16px;
+  height: 16px;
+}
+.build-strip .build-slot b {
+  right: -3px;
+  bottom: -3px;
+  min-width: 8px;
+  padding: 0 1px;
+  font-size: 7px;
+  line-height: 8px;
+  text-shadow: none;
+}
 /* Hulda's Grit: four iron plates; full plates are bright steel with a lit top edge, the plate filling is a dim fill */
 .bar.gr span {
   color: var(--rust);
@@ -963,6 +1015,9 @@ body[data-hud="outside"] .boss {
   }
   .bar.xp {
     grid-template-columns: 30px 1fr;
+  }
+  .bar.fl {
+    grid-template-columns: 16px 1fr 24px;
   }
   #score,
   .chain-row .label {

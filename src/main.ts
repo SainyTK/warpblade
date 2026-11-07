@@ -10,6 +10,7 @@ import { heroUnlocked } from "./store/meta";
 import { bindAchievementToasts } from "./ui/achievements/achievementToast";
 import { bindKeyboard } from "./ui/bindKeyboard";
 import { bindPauseButton } from "./ui/bindPauseButton";
+import { bindChestDialog, syncChestDialog } from "./ui/chest/chestDialog";
 import { drawDangerGlow } from "./ui/dangerGlow";
 import { fitStage } from "./ui/fitStage";
 import { paintScene } from "./ui/gameCanvas";
@@ -20,6 +21,7 @@ import { isMenuOpen, menuContext, openMenu } from "./ui/menu/menuState";
 import { preventZoom } from "./ui/preventZoom";
 import { bindPickDialog, syncPickDialog } from "./ui/skills/pickDialog";
 import { bindTouch, syncTouch } from "./ui/touch/bindTouch";
+import { bindDiscoveryToasts } from "./ui/unlocks/discoveryToast";
 
 startAnalytics();
 game.best = loadBest();
@@ -30,8 +32,10 @@ bindKeyboard();
 bindTouch();
 bindPauseButton();
 bindPickDialog();
+bindChestDialog();
 bindMenu();
 bindAchievementToasts();
+bindDiscoveryToasts();
 openMenu("title");
 joinFromInvite();
 
@@ -51,6 +55,7 @@ function soloFrame(now: number): void {
   }
   updateHud();
   syncPickDialog();
+  syncChestDialog();
   syncTouch(!isMenuOpen() && game.mode === "play");
 }
 

@@ -1,15 +1,23 @@
 import { DAMAGE, ENEMY_AIR, FUSION, GUARD, JUGGLE_LIMIT } from "../constants/combat";
+import { HERO_SOURCES } from "../constants/damageSources";
 import { ENEMIES } from "../constants/enemies";
+import { FLOW } from "../constants/growth";
 import { SPARKS } from "../constants/palette";
 import { PIN } from "../constants/ysra/glaive";
 import { sfx } from "../services/audio";
+import type { SourceId } from "../types/build";
 import type { Enemy } from "../types/enemy";
 import type { DamageTag } from "../types/game";
+import { buildStats } from "../utils/build";
+import { addFlow, flowDamage } from "./build/flow";
+import { recordDamage } from "./damageLedger";
 import { createImpact } from "./effects/impact";
 import { launchEnemy } from "./enemies/airborne";
-import { enemyBox, enemyCenter } from "./enemies/enemy";
+import { enemyCenter } from "./enemies/enemy";
 import { kindOf } from "./enemies/kinds";
+import { feat } from "./feat";
 import { killEnemy } from "./kill";
+import { popNumber } from "./numbers";
 import { hasPerk } from "./progress";
 import { explode } from "./spells/explosion";
 import { game, progress, rng } from "./state";
@@ -32,33 +40,19 @@ export interface HitOptions {
   sureCrit?: boolean;
   /** burning and other damage over time: no crits, no numbers in white */
   dot?: boolean;
+  /** what dealt the hit, for the end of run screen; the hero's own blows when not given */
+  source?: SourceId;
 }
 /** what a blow did: landed, or stopped by a guard */
 export type HitResult = "hit" | "blocked";
+
+/** Might and Flow multiply every hit, whatever its source */
+const buildDamage = (): number => buildStats(progress.build).might * flowDamage();
 
 /** a foe struck from the side it is not facing */
 export function isBehind(e: Enemy, fromX: number): boolean {
   const side = Math.sign(fromX - e.x);
   return side !== 0 && side !== e.face;
-}
-
-/** numbers that pop over the same foe at nearly the same time stack upward instead of overlapping */
-const STACK = { near: 12, fresh: 0.25, step: 9 } as const;
-
-function popNumber(e: Enemy, value: number, tag: DamageTag, big: boolean): void {
-  const box = enemyBox(e);
-  const x = (box[0] + box[2]) / 2 + rng.range(-4, 4);
-  const crowd = game.numbers.filter((n) => Math.abs(n.x - x) < STACK.near && n.age < STACK.fresh).length;
-  game.numbers.push({
-    x,
-    y: box[1] - 2 - crowd * STACK.step,
-    age: 0,
-    vy: big ? -60 : -45,
-    value,
-    tag,
-    big,
-    life: big ? 0.9 : 0.7,
-  });
 }
 
 /** guarding kinds (husks from wave 3, brutes) hold up a guard while they walk, facing the blow */
@@ -70,10 +64,11 @@ function guards(e: Enemy, o: HitOptions): boolean {
 }
 
 /** a blocked blow: a little chip damage, sparks, and on the second in a row a fast counter */
-function block(e: Enemy, base: number): HitResult {
+function block(e: Enemy, base: number, source: SourceId): HitResult {
   const value = Math.max(1, Math.round(base * GUARD.chip));
   e.hp -= value;
-  popNumber(e, value, "block", false);
+  recordDamage(source, value);
+  popNumber(e, value, "block", false, !HERO_SOURCES.has(source));
   const [cx, cy] = enemyCenter(e);
   game.fx.push(createImpact(cx + e.face * 6, cy - 4, -e.face, false, SPARKS.hot));
   sfx.block();
@@ -84,15 +79,15 @@ function block(e: Enemy, base: number): HitResult {
   return "blocked";
 }
 
-/** Shatter: the ice breaks into shards that cut every foe near the frozen one */
-function shatter(e: Enemy): void {
+/** Shatter: the ice breaks into shards that cut every foe near the frozen one; the shards count for the blow that broke it */
+function shatter(e: Enemy, source: SourceId): void {
   e.frozen = 0;
   const [cx, cy] = enemyCenter(e);
   for (const other of game.enemies) {
     if (other === e || other.hp <= 0) continue;
     const [ox, oy] = enemyCenter(other);
     if (Math.hypot(ox - cx, oy - cy) < FUSION.shatterReach)
-      dealDamage(other, progress.stats.ad * FUSION.shatterShards, { fromX: cx, kx: Math.sign(ox - cx) * 80 });
+      dealDamage(other, progress.stats.ad * FUSION.shatterShards, { fromX: cx, kx: Math.sign(ox - cx) * 80, source });
   }
   game.fx.push(createImpact(cx, cy, 1, true, SPARKS.ice));
   sfx.shatter();
@@ -102,9 +97,10 @@ function shatter(e: Enemy): void {
 export function dealDamage(e: Enemy, base: number, o: HitOptions = {}): HitResult {
   if (e.hp <= 0) return "hit";
   const def = ENEMIES[e.type];
+  const source = o.source ?? "attacks";
   let tag: DamageTag = o.dot ? "burn" : "normal";
   if (guards(e, o)) {
-    if (!o.heavy) return block(e, base);
+    if (!o.heavy) return block(e, base, source);
     e.stun = Math.max(e.stun, def.launchable ? GUARD.breakStun : GUARD.breakStun * 0.6);
     e.guardHits = 0;
     tag = "break";
@@ -130,12 +126,21 @@ export function dealDamage(e: Enemy, base: number, o: HitOptions = {}): HitResul
     dmg *= 2;
     tag = "shatter";
   }
+  dmg *= buildDamage();
   const value = Math.max(1, Math.round(dmg));
   e.hp -= value;
+  recordDamage(source, value);
+  if (!o.dot && HERO_SOURCES.has(source)) {
+    progress.build.heroHits++;
+    addFlow(FLOW.perHit);
+    if (back) feat({ kind: "backAttack" });
+  }
   e.flash = 0.1;
   e.guardHits = 0;
-  popNumber(e, value, tag, crit || shattering || (back && e.air));
-  if (shattering) shatter(e);
+  // a relic's hit is quiet and never drawn big, so a crowd of them does not drown out the hero's own
+  const quiet = !HERO_SOURCES.has(source);
+  popNumber(e, value, tag, !quiet && (crit || shattering || (back && e.air)), quiet);
+  if (shattering) shatter(e, source);
   e.vx += (o.kx ?? 0) * (1 - def.weight);
   if (o.spike && e.air) e.vy = ENEMY_AIR.spike;
   else if (o.launch && def.launchable) {
@@ -149,6 +154,7 @@ export function dealDamage(e: Enemy, base: number, o: HitOptions = {}): HitResul
         damage: progress.stats.ap * FUSION.ignition,
         burn: 2,
         brands: 0,
+        source,
       });
     }
   } else if (e.air && !o.dot) {
@@ -159,6 +165,6 @@ export function dealDamage(e: Enemy, base: number, o: HitOptions = {}): HitResul
   if (o.stun && def.launchable) e.stun = Math.max(e.stun, o.stun);
   if (o.stagger && kindOf(e.type).staggers) e.stagger = Math.max(e.stagger, o.stagger);
   if (o.heavy && e.state === "wind" && def.rank === "minion") Object.assign(e, { state: "recover", st: 0 });
-  if (e.hp <= 0) killEnemy(e);
+  if (e.hp <= 0) killEnemy(e, source);
   return "hit";
 }

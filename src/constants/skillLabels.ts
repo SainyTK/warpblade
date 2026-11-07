@@ -28,3 +28,5 @@ export const ULT_LABEL: Record<UltimateId, string> = {
 };
 /** the kind line of a boon card */
 export const BOON_KIND = "Boon";
+/** the path line of relic and charm cards */
+export const CARD_KIND = { relic: "Relic", charm: "Charm" } as const;

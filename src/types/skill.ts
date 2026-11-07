@@ -119,6 +119,3 @@ export interface Boon {
   name: string;
   text: string;
 }
-
-/** one card of a pick */
-export type PickOption = { type: "skill"; node: SkillNode; branch: SkillBranch } | { type: "boon"; boon: Boon };

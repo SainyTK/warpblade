@@ -24,5 +24,6 @@ export function castBolt(x: number, y: number, face: number, power: number): Eff
     arcDamage: POWER.arc * ap,
     arcs: hasPerk("stormcalling") ? 4 : 1,
     shock: 1,
+    source: "abilities",
   });
 }

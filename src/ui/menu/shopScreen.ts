@@ -16,7 +16,7 @@ function section(heading: string, items: readonly ShopItem[]): HTMLElement {
   return box;
 }
 
-/** stats bought in levels and skills bought once, kept for every run; the bank is under the title */
+/** stats and pick tools bought in levels and skills bought once, kept for every run; the bank is under the title */
 export function shopScreen(): MenuView {
   const scroll = document.createElement("div");
   scroll.className = "menu-scroll shop";
@@ -24,6 +24,10 @@ export function shopScreen(): MenuView {
     section(
       "Stats",
       SHOP_ITEMS.filter((i) => i.kind === "stat"),
+    ),
+    section(
+      "Picks",
+      SHOP_ITEMS.filter((i) => i.kind === "tool"),
     ),
     section(
       "Skills",

@@ -1,5 +1,6 @@
 import { HULDA_STRIDE } from "../../../constants/hulda/motion";
 import type { HeroKit } from "../../../types/kit";
+import { rechargeStep } from "../../build/recharge";
 import { take, use } from "../../input";
 import { hero } from "../../state";
 import { resetMotion } from "../kael/motion";
@@ -21,9 +22,10 @@ import { pressKnee, pressThrow, runHold, runKnee, runToss } from "./throws";
 
 function tick(dt: number): void {
   tickGrit(dt);
-  hulda.bellowCd = Math.max(0, hulda.bellowCd - dt);
-  hulda.tauntCd = Math.max(0, hulda.tauntCd - dt);
-  hulda.rushCd = Math.max(0, hulda.rushCd - dt);
+  const recharge = rechargeStep(dt);
+  hulda.bellowCd = Math.max(0, hulda.bellowCd - recharge);
+  hulda.tauntCd = Math.max(0, hulda.tauntCd - recharge);
+  hulda.rushCd = Math.max(0, hulda.rushCd - recharge);
   if (hero.state !== "fist") hulda.link = Math.max(0, hulda.link - dt);
   if (hero.state !== "fist" && hulda.link <= 0) hero.chain = 0;
   if (hero.ground && hero.state !== "skyfall") {

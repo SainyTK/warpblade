@@ -1,6 +1,6 @@
 /* Skill pick when a wave is cleared with skill points waiting: up to three cards over the paused game. A row of tall cards on wide screens, a stack of wide cards on phones. */
 .level-up {
-  width: min(840px, 100vw - 32px);
+  width: min(1000px, 100vw - 32px);
   max-height: calc(100dvh - 32px);
   padding: 20px 20px 16px;
   border: 0;
@@ -46,6 +46,9 @@
   justify-content: center;
   gap: 16px;
 }
+.level-up-cards[data-count="4"] {
+  --cols: 4;
+}
 .level-up-cards[data-count="2"] {
   --cols: 2;
 }
@@ -58,8 +61,87 @@
   font-size: 12px;
   color: var(--muted);
 }
-.level-up-hint.touch-hint {
+.level-up-hint.touch-hint,
+.level-up-hint.banish-hint {
   display: none;
+}
+.level-up.banishing .level-up-hint.keys,
+.level-up.banishing .level-up-hint.touch-hint {
+  display: none;
+}
+.level-up.banishing .level-up-hint.banish-hint {
+  display: block;
+  color: var(--rust);
+}
+.level-up-hint kbd,
+.pick-tool kbd {
+  display: inline-block;
+  min-width: 18px;
+  padding: 0 3px;
+  font-family: var(--ui);
+  font-size: 11px;
+  line-height: 16px;
+  text-align: center;
+  color: var(--mist);
+  border: 1px solid var(--key);
+  background: var(--night);
+}
+
+/* The build so far: relic slots and charm slots, filled and free. */
+.level-up-build {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px 20px;
+  animation: pick-drop 240ms steps(4) both;
+}
+
+/* Reroll, Skip and Banish, with what is left of each. */
+.pick-tools {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+}
+.pick-tool {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 34px;
+  padding: 4px 12px 4px 8px;
+  font: inherit;
+  font-size: 14px;
+  color: var(--text);
+  background: var(--panel);
+  border: 2px solid var(--line);
+  box-shadow:
+    inset 0 0 0 2px var(--night),
+    3px 3px 0 rgba(0, 0, 0, 0.55);
+  cursor: pointer;
+  transition: border-color 90ms steps(2);
+}
+.pick-tool:hover:not(:disabled),
+.pick-tool:focus-visible {
+  border-color: var(--mist);
+  outline: none;
+}
+.pick-tool:disabled {
+  color: var(--muted);
+  cursor: default;
+  opacity: 0.5;
+}
+.pick-tool-count {
+  font-family: var(--display);
+  font-weight: 400;
+  font-size: 12px;
+  color: var(--gold);
+}
+.pick-tool:disabled .pick-tool-count {
+  color: var(--muted);
+}
+.pick-tool.active {
+  color: var(--rust);
+  border-color: var(--rust);
 }
 @media (pointer: coarse) {
   .level-up-hint.keys {
@@ -147,6 +229,23 @@
 .pick[data-branch="boon"] {
   --accent: var(--heal);
   --accent-dark: #123a2a;
+}
+.pick[data-branch="relic"] {
+  --accent: var(--ember-hot);
+  --accent-dark: #3c1e0c;
+}
+.pick[data-branch="charm"] {
+  --accent: var(--jade);
+  --accent-dark: #0e3424;
+}
+/* Banishing: every card turns rust red, and Second Wind, which cannot be banished, steps back. */
+.level-up.banishing .pick {
+  --accent: var(--rust);
+  --accent-dark: #3c0e18;
+}
+.level-up.banishing .pick[data-branch="boon"] {
+  opacity: 0.4;
+  pointer-events: none;
 }
 .pick.selected {
   border-color: var(--accent);
@@ -262,6 +361,9 @@
 .pick-note.pick-recipe {
   color: var(--gold);
 }
+.pick-note.pick-partner {
+  color: var(--muted);
+}
 .pick-key {
   position: absolute;
   left: 6px;
@@ -274,9 +376,11 @@
   border: 1px solid var(--key);
   background: var(--night);
 }
-/* Touch: a tap learns at once, so no card is shown as selected. */
+/* Touch: a tap learns at once, so no card is shown as selected, and no key is shown. */
 @media (pointer: coarse) {
-  .pick-key {
+  .pick-key,
+  .pick-tool kbd,
+  .banish-hint .keys {
     display: none;
   }
   .pick.selected {

@@ -1,4 +1,5 @@
 import type { TrackedStats } from "./achievement";
+import type { PickToolKey } from "./build";
 import type { StatKey } from "./stats";
 
 /** a passive stat bought in levels, each level adding the same amount */
@@ -15,6 +16,18 @@ export interface StatUpgrade {
   price: number;
 }
 
+/** a pick tool the run starts with more of: rerolls, skips or banishes */
+export interface ToolUpgrade {
+  kind: "tool";
+  id: string;
+  name: string;
+  text: string;
+  tool: PickToolKey;
+  levels: number;
+  /** price of the first level; later levels cost more */
+  price: number;
+}
+
 export type SkillId = "lastLight" | "headStart" | "lodestone" | "warpShock";
 
 /** a skill bought once and kept for every run; none of them is offered on level up */
@@ -26,7 +39,7 @@ export interface ShopSkill {
   price: number;
 }
 
-export type ShopItem = StatUpgrade | ShopSkill;
+export type ShopItem = StatUpgrade | ToolUpgrade | ShopSkill;
 
 /** what the player keeps between runs: the coin bank, the level of every item bought, heroes and achievements */
 export interface MetaSave {
@@ -37,4 +50,8 @@ export interface MetaSave {
   /** achievements earned, by id */
   achievements: string[];
   tracked: TrackedStats;
+  /** relics, charms and slots found, by unlock id */
+  unlocks: string[];
+  /** relics whose evolution the player has made, so its recipe shows */
+  recipes: string[];
 }

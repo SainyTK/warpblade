@@ -78,7 +78,7 @@ export function castPhantomLegion(level: number): void {
           const [ex, ey] = enemyCenter(p.foe);
           game.fx.push(createSlash(p.x, p.y, p.face, { ...PHANTOM_SLASH, rot: PHANTOM_SLASH.rot + p.strikes * 0.5 }));
           game.fx.push(createImpact(ex, ey, p.face, p.strikes === STRIKES));
-          dealDamage(p.foe, damage, { fromX: p.x, kx: p.face * 40, ky: -30, heavy: true });
+          dealDamage(p.foe, damage, { fromX: p.x, kx: p.face * 40, ky: -30, heavy: true, source: "ultimate" });
           sfx.hit(p.strikes === STRIKES);
         }
       }

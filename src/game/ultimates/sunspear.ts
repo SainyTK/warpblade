@@ -37,7 +37,14 @@ function spearCast(level: number) {
   const strike = (e: Enemy, fromX: number, dir: number, launch: boolean) => {
     struck.add(e);
     const [cx, cy] = enemyCenter(e);
-    dealDamage(e, damage, { fromX, kx: dir * 120, ky: -70, launch: launch ? -160 : undefined, heavy: true });
+    dealDamage(e, damage, {
+      fromX,
+      kx: dir * 120,
+      ky: -70,
+      launch: launch ? -160 : undefined,
+      heavy: true,
+      source: "ultimate",
+    });
     ignite(e, BURN);
     game.fx.push(createImpact(cx, cy, dir, true));
     sfx.hit(true, 0.8);

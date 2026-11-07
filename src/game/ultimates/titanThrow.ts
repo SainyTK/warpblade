@@ -65,12 +65,12 @@ export function castTitanThrow(level: number): void {
     for (const p of alive()) {
       unclaim(p.e);
       p.e.y = p.e.y > floor ? floor : p.e.y;
-      dealDamage(p.e, power, { fromX: hx - face * 10, kx: face * 80, launch: -200, heavy: true });
+      dealDamage(p.e, power, { fromX: hx - face * 10, kx: face * 80, launch: -200, heavy: true, source: "ultimate" });
     }
     for (const e of game.enemies) {
       if (struck.has(e) || e.hp <= 0) continue;
       if (Math.abs(enemyCenter(e)[0] - hx) > TITAN.burst) continue;
-      dealDamage(e, power, { fromX: hx, kx: Math.sign(e.x - hx) * 120, heavy: true });
+      dealDamage(e, power, { fromX: hx, kx: Math.sign(e.x - hx) * 120, heavy: true, source: "ultimate" });
       if (!ENEMIES[e.type].launchable) e.stun = Math.max(e.stun, 0.6);
     }
     game.fx.push(createFloorRing(hx, floor, TITAN.burst * 1.4, ramp, 0.5));
@@ -113,7 +113,13 @@ export function castTitanThrow(level: number): void {
       for (const e of game.enemies) {
         if (struck.has(e) || e.hp <= 0 || !boxHit([...zone], enemyBox(e))) continue;
         struck.add(e);
-        dealDamage(e, power * TITAN.pathShare, { fromX: hx - face * 10, kx: face * 160, stun: 0.6, heavy: true });
+        dealDamage(e, power * TITAN.pathShare, {
+          fromX: hx - face * 10,
+          kx: face * 160,
+          stun: 0.6,
+          heavy: true,
+          source: "ultimate",
+        });
         game.fx.push(createImpact(enemyCenter(e)[0], enemyCenter(e)[1], face, true));
         sfx.hit(true, 0.8);
       }

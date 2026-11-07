@@ -1,5 +1,7 @@
 import { beginFrame, composite, setShake } from "../engine/frame";
+import { drawChests } from "../game/build/chests";
 import { coop, eachHero } from "../game/coopHooks";
+import { drawRelics, drawRelicsBack } from "../game/relics";
 import { SKY_FLASH } from "../game/spells/lightning";
 import { game, hero, lights, particles, rng } from "../game/state";
 import { settings } from "../store/settings";
@@ -28,6 +30,8 @@ export function renderScene(out: Uint8ClampedArray): void {
     f.drawBack?.();
   }
   particles.draw("back");
+  drawRelicsBack();
+  drawChests();
   drawEnemies();
   room?.drawUnderlay();
   eachHero(drawHeroLayer);
@@ -35,6 +39,7 @@ export function renderScene(out: Uint8ClampedArray): void {
     room?.owner(f);
     f.draw();
   }
+  drawRelics();
   eachHero(() => hero.sword?.draw());
   particles.draw("front");
   drawPickups();

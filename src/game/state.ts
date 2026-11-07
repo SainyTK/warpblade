@@ -3,14 +3,16 @@ import { HERO_START_X, STAND } from "../constants/hero";
 import { GROUND, SEED } from "../constants/stage";
 import { Lights } from "../engine/lights";
 import { Particles } from "../engine/particles";
-import { metaBonus } from "../store/meta";
+import { metaBonus, metaToolBonus } from "../store/meta";
 import type { CharacterDef } from "../types/character";
 import type { GameState } from "../types/game";
 import type { Hero } from "../types/hero";
 import type { Progress } from "../types/progress";
+import { freshBuild } from "../utils/build";
 import { airLimit, stringLimit } from "../utils/progression";
 import { Rng } from "../utils/rng";
 import { collectPerks, computeStats } from "../utils/stats";
+import { emptyStream } from "../utils/waves";
 import { Chain } from "./hero/chain";
 import { applySkin } from "./hero/skin";
 import { objectMemory, rememberPerSeat } from "./seatMemory";
@@ -41,6 +43,7 @@ export const game: GameState = {
   wave: 0,
   lull: "toNext",
   waveTimer: 2,
+  stream: emptyStream(),
   kills: 0,
   best: 0,
   coins: 0,
@@ -72,6 +75,7 @@ export function freshProgress(): Progress {
     ultimate: null,
     comboLimit: stringLimit(character.kit, 1, perks),
     airLimit: airLimit({}),
+    build: freshBuild(metaToolBonus()),
   };
 }
 export const progress: Progress = freshProgress();

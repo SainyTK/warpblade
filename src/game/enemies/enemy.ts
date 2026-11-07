@@ -1,5 +1,6 @@
 import { ENEMIES } from "../../constants/enemies";
 import { GROUND } from "../../constants/stage";
+import { RANK_HP } from "../../constants/waves";
 import type { Enemy, EnemyType } from "../../types/enemy";
 import type { Box } from "../../types/world";
 import { waveScale } from "../../utils/progression";
@@ -11,12 +12,12 @@ export const enemyCenter = (e: Enemy): [number, number] => kindOf(e.type).center
 /** whether the foe stands on the floor rather than floating */
 export const walks = (e: Enemy): boolean => !kindOf(e.type).flies;
 
-/** a foe scaled to the wave it comes in */
+/** a foe scaled to the wave it comes in, mini bosses and the Warden tougher still by their rank */
 export function makeEnemy(type: EnemyType, x: number, y: number, wave: number, xpShare = 1): Enemy {
   const def = ENEMIES[type];
   const kind = kindOf(type);
   const scale = waveScale(wave);
-  const hp = Math.round(def.hp * scale.hp);
+  const hp = Math.round(def.hp * scale.hp * RANK_HP[def.rank]);
   return {
     type,
     rank: def.rank,
@@ -46,6 +47,8 @@ export function makeEnemy(type: EnemyType, x: number, y: number, wave: number, x
     power: scale.damage,
     xp: Math.round(def.xp * scale.xp * xpShare),
     phase: 1,
+    elite: false,
+    chill: 0,
     guardHits: 0,
     airHits: 0,
     charged: 0,

@@ -279,3 +279,36 @@ export function blit(s: SpriteImage, x: number, y: number, flip: boolean, o: Bli
         }
     }
 }
+
+/**
+ * paint the image pixels within `width` of a sprite drawn at (x, y), placed the way blit places it, that the sprite
+ * leaves empty: a ring around its silhouette. `col` picks each pixel's colour from its image position.
+ */
+export function blitRing(
+  s: SpriteImage,
+  x: number,
+  y: number,
+  flip: boolean,
+  width: number,
+  col: (ix: number, iy: number) => Color,
+): void {
+  const [shx, shy] = shakeOffset();
+  const k = Math.max(1, Math.round(RES / s.res));
+  const step = RES / k;
+  const bx = Math.floor((x + shx) * step) * k;
+  const by = Math.floor((y + shy) * step) * k;
+  const box = s.box ?? { x0: 0, y0: 0, x1: s.w - 1, y1: s.h - 1 };
+  const filled = (i: number, j: number): boolean => i >= 0 && j >= 0 && i < s.w && j < s.h && s.d[j * s.w + i] !== 0;
+  const near = (i: number, j: number): boolean => {
+    for (let v = -width; v <= width; v++)
+      for (let u = Math.abs(v) - width; u <= width - Math.abs(v); u++) if (filled(i + u, j + v)) return true;
+    return false;
+  };
+  for (let j = box.y0 - width; j <= box.y1 + width; j++)
+    for (let i = box.x0 - width; i <= box.x1 + width; i++) {
+      if (filled(i, j) || !near(i, j)) continue;
+      const ix = flip ? bx + (s.ox - i) * k : bx + (i - s.ox) * k;
+      const iy = by + (j - s.oy) * k;
+      for (let v = 0; v < k; v++) for (let u = 0; u < k; u++) putImage(ix + u, iy + v, col(ix + u, iy + v));
+    }
+}

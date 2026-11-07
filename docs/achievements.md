@@ -30,6 +30,8 @@ In a co-op lobby, Left and Right step only through the heroes this player has un
 
 A hero can be in the price table before it is in `CHARACTERS`; it shows up locked the moment it is added there.
 
+Relics, charms and slots found across runs are a separate system with no coins; see `docs/unlocks.md`.
+
 ## Tracking
 
 `src/store/achievements.ts` is the one owner of tracking.
@@ -45,6 +47,8 @@ The game reports what happens through `feat()` in `src/game/feat.ts`, called whe
 | A perfect dodge or a parry | `perfectDodge` and Ysra's `parry` |
 | A skill learned on a pick, with its kind | `choosePick` in `src/game/progress.ts` |
 | Coins banked | `bankCoins` in `src/game/coins.ts`, and the co-op host and guest at run end |
+
+The same feats, and a few more, also feed the unlocks (`docs/unlocks.md`).
 
 Shop levels and heroes bought are read from the meta save, so buying in the shop or unlocking a hero is checked as soon as it happens.
 
@@ -81,8 +85,8 @@ A save from before them loads with its coins and shop levels, no heroes bought a
 | Heroes | Sable's Trial | Clear wave 10 with Sable | 40 | |
 | Heroes | Hulda's Trial | Clear wave 10 with Hulda | 40 | |
 | Foes | Culling | Slay 100 foes | 20 | |
-| Foes | Thinning the Night | Slay 1,000 foes | 80 | |
-| Foes | Endless Blade | Slay 5,000 foes | 200 | Thinning the Night |
+| Foes | Thinning the Night | Slay 3,000 foes | 80 | |
+| Foes | Endless Blade | Slay 15,000 foes | 200 | Thinning the Night |
 | Foes | Giant Slayer | Slay 10 mini bosses | 40 | |
 | Foes | Warden's End | Slay the Rift Warden | 100 | Deep Rift |
 | Skill | Flowing Steel | Land the fifth move of a combo | 40 | |
@@ -95,6 +99,8 @@ A save from before them loads with its coins and shop levels, no heroes bought a
 | Coins | New Blood | Unlock a hero with coins | 50 | |
 
 A hero's trial counts only once the hero is in `CHARACTERS`.
+Since waves stream their quota of foes (`docs/growth-design.md`), a full clear slays about 620 foes where it slew about 190, so the two larger kill goals went up from 1,000 and 5,000 to 3,000 and 15,000 to stay about as far off in runs.
+They keep their ids, `kills-1000` and `kills-5000`, so saves that earned them keep them.
 The page lists 22 achievements, and all of them together pay 1,470 coins.
 
 ## Adding a hero

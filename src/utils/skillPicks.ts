@@ -1,6 +1,5 @@
 import type { CharacterDef } from "../types/character";
-import type { Boon, PickOption, SkillNode } from "../types/skill";
-import type { Rng } from "./rng";
+import type { SkillBranch, SkillNode } from "../types/skill";
 import { allNodes } from "./stats";
 
 interface PickView {
@@ -46,22 +45,6 @@ export function isAvailable(c: CharacterDef, node: SkillNode, v: PickView): bool
   return !excluded(c, node, v.ranks);
 }
 
-const isEvolution = (o: PickOption): boolean => o.type === "skill" && o.node.kind === "evolution";
-
-/** `count` cards in a random order: different skills Kael can learn now, then boons when too few skills are left.
- *  When an evolution is ready, one of them always takes the first card and no other evolution is dealt with it. */
-export function rollPicks(c: CharacterDef, v: PickView, rng: Rng, count: number, boons: readonly Boon[]): PickOption[] {
-  const skills: PickOption[] = c.branches.flatMap((branch) =>
-    branch.nodes.filter((node) => isAvailable(c, node, v)).map((node) => ({ type: "skill" as const, node, branch })),
-  );
-  const fill: PickOption[] = boons.map((boon) => ({ type: "boon", boon }));
-  const evolutions = skills.filter(isEvolution);
-  if (!evolutions.length) return [...rng.shuffle(skills).slice(0, count), ...rng.shuffle(fill)].slice(0, count);
-  const first = rng.pick(evolutions);
-  const rest = skills.filter((o) => !isEvolution(o));
-  return [first, ...rng.shuffle(rest).slice(0, count - 1), ...rng.shuffle(fill)].slice(0, count);
-}
-
 /** the evolutions a node is part of, as their spell or their partner passive */
 export function evolutionsOf(c: CharacterDef, node: SkillNode): SkillNode[] {
   return allNodes(c).filter((n) => n.evolves === node.id || n.mastered?.includes(node.id));
@@ -70,6 +53,11 @@ export function evolutionsOf(c: CharacterDef, node: SkillNode): SkillNode[] {
 /** the node with this id */
 export function nodeById(c: CharacterDef, id: string): SkillNode | undefined {
   return allNodes(c).find((n) => n.id === id);
+}
+
+/** the path a node belongs to */
+export function branchOf(c: CharacterDef, node: SkillNode): SkillBranch {
+  return c.branches.find((b) => b.nodes.includes(node)) ?? c.branches[0];
 }
 
 /** names of the nodes this one would lock out */

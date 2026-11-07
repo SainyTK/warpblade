@@ -43,7 +43,7 @@ export function castCrystalNova(level: number): void {
         if (Math.hypot(cx - x, (cy - y) * 1.6) > r) continue;
         struck.add(e);
         const dir = Math.sign(cx - x) || hero.face;
-        dealDamage(e, damage, { fromX: x, kx: dir * 140, launch: -170, heavy: true });
+        dealDamage(e, damage, { fromX: x, kx: dir * 140, launch: -170, heavy: true, source: "ultimate" });
         game.fx.push(createImpact(cx, cy, dir, level >= 3));
       }
       return t < GROW + 0.25;

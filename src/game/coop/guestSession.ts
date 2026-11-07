@@ -12,6 +12,7 @@ import { addCoins, heroUnlocked, onMetaChange, ownedItems } from "../../store/me
 import { settings } from "../../store/settings";
 import type { GuestHud, HostMessage } from "../../types/coop";
 import type { Enemy } from "../../types/enemy";
+import { setChestSource, syncChestDialog } from "../../ui/chest/chestDialog";
 import { syncCoopStatus } from "../../ui/coop/coopStatus";
 import { drawDangerGlow } from "../../ui/dangerGlow";
 import { paintFill, paintImage } from "../../ui/gameCanvas";
@@ -25,11 +26,12 @@ import { fromWire } from "../../utils/wire";
 import { setFrameDriver } from "../frameDriver";
 import { releaseAll, watchInput } from "../input";
 import { updateDanger } from "../lowHealth";
+import { answerPick } from "../progress";
 import { resetRun } from "../run";
 import { reportRun } from "../runEnd";
 import { seatMemories } from "../seatMemory";
 import { character, game, hero, progress, setCharacter } from "../state";
-import { writePick } from "./readPick";
+import { writeAnswer } from "./readPick";
 
 const HOST_LEFT = "The host left, so the room has closed.";
 /** added to the reason a room closed when it closed during a run, whose coins this player keeps */
@@ -43,6 +45,8 @@ export class GuestSession {
   private hudAt = 0;
   /** a card was sent and the host has not yet answered with fewer picks */
   private sentPicks = -1;
+  /** "chest seen" was sent and the host has not yet put the chest away */
+  private sentChest = false;
   private video: HTMLVideoElement | null = null;
   private pinger = 0;
   private lastHeard = 0;
@@ -115,7 +119,7 @@ export class GuestSession {
         this.endRun(msg.coins);
         // the host left mid-run: the room is gone, so there is no room to go back to
         if (msg.outcome === "left") return this.close(HOST_LEFT, true);
-        reportRun({ outcome: msg.outcome, wave: msg.wave, coins: msg.coins });
+        reportRun({ outcome: msg.outcome, wave: msg.wave, coins: msg.coins, report: msg.report });
         updateRoom({ phase: "lobby" });
         break;
       case "closed":
@@ -129,13 +133,24 @@ export class GuestSession {
     this.hud = null;
     this.hudAt = performance.now();
     this.sentPicks = -1;
+    this.sentChest = false;
     watchInput((a, d) => this.link?.send({ t: "key", a, d }));
     setPickSource({
       // the cards step aside while the pause menu is open, since the room plays on under it
       waiting: () => game.mode === "pick" && progress.picks > 0 && this.sentPicks < 0 && !isMenuOpen(),
-      choose: (option) => {
-        this.sentPicks = progress.picks;
-        this.link?.send({ t: "pick", pick: writePick(option) });
+      answer: (answer) => {
+        // a take or a skip waits for the host to spend the point; a reroll or banish is spent here too, so the cards
+        // are dealt again at once with the right counts until the host's next HUD agrees
+        if (answer.t === "take" || answer.t === "skip") this.sentPicks = progress.picks;
+        else answerPick(answer);
+        this.link?.send({ t: "pick", answer: writeAnswer(answer) });
+      },
+    });
+    setChestSource({
+      waiting: () => game.mode === "chest" && progress.build.chest.length > 0 && !this.sentChest && !isMenuOpen(),
+      seen: () => {
+        this.sentChest = true;
+        this.link?.send({ t: "chestSeen" });
       },
     });
     this.lastFrame = performance.now();
@@ -185,6 +200,7 @@ export class GuestSession {
     drawDangerGlow(true);
     updateHud();
     syncPickDialog();
+    syncChestDialog();
     syncTouch(!isMenuOpen() && game.mode === "play" && !this.hud?.down);
     // the line sits where the pause menu opens, so it waits under the menu
     syncCoopStatus(!isMenuOpen());
@@ -202,6 +218,7 @@ export class GuestSession {
     game.banner = hud.banner;
     game.enemies = hud.leader ? [hud.leader as Enemy] : [];
     if (this.sentPicks >= 0 && (progress.picks !== this.sentPicks || game.mode !== "pick")) this.sentPicks = -1;
+    if (this.sentChest && (!progress.build.chest.length || game.mode !== "chest")) this.sentChest = false;
     const room = roomView();
     if (room.downed !== hud.down || room.choosing.join() !== hud.choosing.join())
       updateRoom({ downed: hud.down, choosing: hud.choosing });
@@ -217,6 +234,7 @@ export class GuestSession {
     syncCoopStatus(false);
     updateRoom({ downed: false, choosing: [], hostAway: false });
     setPickSource(null);
+    setChestSource(null);
     watchInput(null);
     releaseAll();
     this.video?.remove();

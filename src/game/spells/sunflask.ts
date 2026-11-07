@@ -78,6 +78,7 @@ export function launchChildFlasks(x: number, y: number, face: number, main: Blas
     shake: c.shake,
     amp: c.amp,
     hitStop: c.hitStop,
+    source: main.source,
   };
   const t = SUNFLASK.flight;
   const fromY = y - 4;

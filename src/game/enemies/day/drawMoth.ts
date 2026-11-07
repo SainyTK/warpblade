@@ -66,22 +66,33 @@ function vein(s: SpriteCanvas, w: Wing, u0: number, v0: number, u1: number, v1: 
   }
 }
 
+/** the scales of one wing shape in its own (u, v) space, dark near the root and pale on the membrane; they never change */
+function scalesOf(shape: readonly Pt[], tip: number): readonly (readonly [number, number, Color])[] {
+  const fore = shape === FORE;
+  const out: [number, number, Color][] = [];
+  for (let u = 1; u < tip + 1; u += 0.5)
+    for (let v = -5; v <= 3.5; v += 0.5) {
+      if (!pointInPolygon(shape, u, v)) continue;
+      const g = grain(u * 2 + (fore ? 0 : 40), v * 2);
+      if (u < tip * 0.5 && g < 0.5 - u / tip) out.push([u, v, W[1]]);
+      else if (u > tip * 0.4 && g > 0.95) out.push([u, v, DC.wingScale]);
+    }
+  return out;
+}
+const SCALES = new Map<readonly Pt[], readonly (readonly [number, number, Color])[]>();
+
 /** the near wings' texture: the root fades out in scattered dark scales, the membrane carries pale ones, veins fan out */
 function dust(s: SpriteCanvas, w: Wing, shape: readonly Pt[], tip: number): void {
   const fore = shape === FORE;
-  for (let u = 1; u < tip + 1; u += 0.5)
-    for (let v = -5; v <= 3.5; v += 0.5) {
-      if (!pointInPolygon(shape, u, v)) {
-        continue;
-      }
-      const g = grain(u * 2 + (fore ? 0 : 40), v * 2);
-      const [x, y] = at(w, u, v);
-      if (u < tip * 0.5 && g < 0.5 - u / tip) {
-        s.set(x, y, W[1]);
-      } else if (u > tip * 0.4 && g > 0.95) {
-        s.set(x, y, DC.wingScale);
-      }
-    }
+  let scales = SCALES.get(shape);
+  if (!scales) {
+    scales = scalesOf(shape, tip);
+    SCALES.set(shape, scales);
+  }
+  for (const [u, v, c] of scales) {
+    const [x, y] = at(w, u, v);
+    s.set(x, y, c);
+  }
   for (const [u, v] of fore ? FORE_VEINS : HIND_VEINS) {
     vein(s, w, 0.8, 0, u, v, W[1]);
   }

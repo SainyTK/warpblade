@@ -1,16 +1,34 @@
 import { PAL } from "../constants/palette";
 import { XP_ORB_MOTION as M, XP_ORB } from "../constants/progression";
 import { sfx } from "../services/audio";
+import type { XpOrb } from "../types/game";
 import { PK } from "../types/particle";
+import { waveScale } from "../utils/progression";
 import { fall, home } from "./coins";
 import { coop } from "./coopHooks";
-import { gainXp } from "./progress";
+import { earnXp } from "./progress";
 import { game, hero, particles, rng } from "./state";
 
-/** a slain foe's experience bursts out of it as orbs, about XP_ORB.share each */
+/** the orb lying nearest a point */
+function nearestOrb(x: number, y: number): XpOrb {
+  let best = game.xpOrbs[0];
+  for (const o of game.xpOrbs) if (Math.hypot(o.x - x, o.y - y) < Math.hypot(best.x - x, best.y - y)) best = o;
+  return best;
+}
+
+/**
+ * a slain foe's experience bursts out of it as orbs, as many for a kill late in the run as early; with many orbs about,
+ * fewer, and with a crowd of them it joins the nearest one
+ */
 export function dropXp(amount: number, x: number, y: number): void {
   if (amount <= 0) return;
-  const n = Math.max(1, Math.min(XP_ORB.most, Math.round(amount / XP_ORB.share)));
+  const lying = game.xpOrbs.length;
+  if (lying >= XP_ORB.crowd) {
+    nearestOrb(x, y).value += amount;
+    return;
+  }
+  const most = Math.max(1, Math.round(XP_ORB.most * (1 - lying / XP_ORB.crowd)));
+  const n = Math.max(1, Math.min(most, Math.round(amount / (XP_ORB.share * waveScale(game.wave).xp))));
   const each = amount / n;
   for (let i = 0; i < n; i++)
     game.xpOrbs.push({ x, y, vx: rng.range(-70, 70), vy: rng.range(-180, -90), t: 0, value: each, rest: false });
@@ -37,5 +55,5 @@ export function updateXpOrbs(dt: number): void {
   game.xpOrbs = game.xpOrbs.filter((o) => !o.done);
   sfx.pickup();
   if (room) room.shareXp(gained);
-  else gainXp(gained);
+  else earnXp(gained);
 }

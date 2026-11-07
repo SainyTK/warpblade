@@ -76,7 +76,7 @@ export function castThousandEdges(level: number): void {
         const [ex, ey] = enemyCenter(c.foe);
         slashAt(ex + rng.range(-4, 4), ey + rng.range(-4, 4), true);
         game.fx.push(createImpact(ex, ey, rng.chance(0.5) ? 1 : -1, false));
-        dealDamage(c.foe, damage, { fromX: hero.x, kx: 0, ky: -20, heavy: true });
+        dealDamage(c.foe, damage, { fromX: hero.x, kx: 0, ky: -20, heavy: true, source: "ultimate" });
         sfx.hit(false);
       }
       if (!finale && t >= dur) {

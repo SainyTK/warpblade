@@ -1,0 +1,179 @@
+/* An opened chest: what it gave, one row per reward over the paused game. An evolution gets the gold shimmer of skill evolutions. */
+.chest-screen {
+  width: min(460px, 100vw - 32px);
+  max-height: calc(100dvh - 32px);
+  padding: 20px;
+  border: 0;
+  background: transparent;
+  color: var(--text);
+  font-family: var(--ui);
+  overflow: auto;
+  outline: none;
+  cursor: pointer;
+}
+.chest-screen[open] {
+  display: grid;
+  gap: 14px;
+}
+.chest-screen::backdrop {
+  background: rgba(6, 4, 14, 0.8);
+}
+.chest-screen h2 {
+  margin: 0;
+  text-align: center;
+  font-family: var(--display);
+  font-weight: 400;
+  font-size: 30px;
+  line-height: 1.1;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--gold);
+  text-shadow:
+    3px 3px 0 var(--gold-dark),
+    0 0 14px rgba(255, 216, 106, 0.35);
+  animation: chest-drop 240ms steps(4) both;
+}
+.chest-rewards {
+  display: grid;
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.chest-reward {
+  --accent: var(--ember-hot);
+  --accent-dark: #3c1e0c;
+  display: grid;
+  grid-template-columns: 56px 1fr;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 12px 8px 8px;
+  background: linear-gradient(90deg, var(--accent-dark) 0, var(--panel) 120px);
+  border: 2px solid var(--accent);
+  box-shadow:
+    inset 0 0 0 2px var(--night),
+    4px 4px 0 rgba(0, 0, 0, 0.55);
+  animation: chest-rise 260ms steps(5) both;
+  animation-delay: var(--delay, 0ms);
+}
+.chest-reward[data-kind="charm"] {
+  --accent: var(--jade);
+  --accent-dark: #0e3424;
+}
+.chest-reward[data-kind="heal"] {
+  --accent: var(--heal);
+  --accent-dark: #123a2a;
+}
+.chest-reward[data-kind="evolve"] {
+  --accent: var(--gold);
+  --accent-dark: var(--gold-dark);
+  position: relative;
+}
+.chest-reward[data-kind="evolve"]::after {
+  content: "";
+  position: absolute;
+  inset: 2px;
+  border: 1px solid var(--gold-glint);
+  pointer-events: none;
+}
+.chest-reward[data-kind="evolve"] .chest-icon {
+  animation: chest-shimmer 800ms steps(1) infinite;
+}
+.chest-icon {
+  display: grid;
+  place-items: center;
+  width: 56px;
+  height: 56px;
+  background: var(--night);
+  border: 2px solid var(--accent);
+  box-shadow: inset 0 0 0 2px var(--accent-dark);
+}
+.chest-icon img {
+  width: 32px;
+  height: 32px;
+  image-rendering: pixelated;
+}
+.chest-body {
+  display: grid;
+  gap: 4px;
+}
+.chest-name {
+  font-weight: 600;
+  font-size: 18px;
+  line-height: 1.15;
+  color: var(--accent);
+}
+.chest-line {
+  font-size: 13px;
+  line-height: 1.4;
+  color: var(--mist);
+}
+.chest-hint {
+  margin: 0;
+  text-align: center;
+  font-size: 12px;
+  color: var(--muted);
+}
+.chest-hint kbd {
+  display: inline-block;
+  min-width: 18px;
+  padding: 0 3px;
+  font-family: var(--ui);
+  font-size: 11px;
+  line-height: 16px;
+  text-align: center;
+  color: var(--mist);
+  border: 1px solid var(--key);
+  background: var(--night);
+}
+.chest-hint.touch-hint {
+  display: none;
+}
+@media (pointer: coarse) {
+  .chest-hint.keys {
+    display: none;
+  }
+  .chest-hint.touch-hint {
+    display: block;
+  }
+}
+@media (max-width: 640px) {
+  .chest-screen {
+    padding: 16px;
+  }
+  .chest-screen h2 {
+    font-size: 24px;
+  }
+  .chest-reward {
+    grid-template-columns: 48px 1fr;
+  }
+  .chest-icon {
+    width: 48px;
+    height: 48px;
+  }
+}
+@keyframes chest-drop {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+}
+@keyframes chest-rise {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+}
+@keyframes chest-shimmer {
+  50% {
+    border-color: var(--gold-glint);
+    box-shadow: inset 0 0 0 2px var(--brass);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .chest-screen h2,
+  .chest-reward,
+  .chest-reward[data-kind="evolve"] .chest-icon {
+    animation: none;
+  }
+}

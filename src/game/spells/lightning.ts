@@ -2,6 +2,7 @@ import { PAL, SPARKS } from "../../constants/palette";
 import { GROUND } from "../../constants/stage";
 import { ellipseRing, glow, glowLine, line, place } from "../../engine/frame";
 import { sfx } from "../../services/audio";
+import type { SourceId } from "../../types/build";
 import type { Effect } from "../../types/effect";
 import type { Enemy } from "../../types/enemy";
 import { PK } from "../../types/particle";
@@ -13,7 +14,7 @@ import { enemyCenter } from "../enemies/enemy";
 import { game, lights, particles, rng } from "../state";
 import { hitStop, shake, surfaceBelow } from "../world";
 
-type Path = [number, number][];
+export type Path = [number, number][];
 /** seconds from the crackling mark to the strike */
 export const STRIKE = 0.18;
 const LIFE = 0.34;
@@ -34,10 +35,12 @@ export interface LightningOptions {
   fromY?: number;
   /** false keeps the whole sky from flashing, for follow-up strikes */
   skyFlash?: boolean;
+  /** what called it, for the end of run screen */
+  source: SourceId;
 }
 
 /** a jagged line by midpoint displacement */
-function boltPath(x0: number, y0: number, x1: number, y1: number, displacement: number, depth: number): Path {
+export function boltPath(x0: number, y0: number, x1: number, y1: number, displacement: number, depth: number): Path {
   let pts: Path = [
     [x0, y0],
     [x1, y1],
@@ -58,7 +61,7 @@ function boltPath(x0: number, y0: number, x1: number, y1: number, displacement: 
   return pts;
 }
 
-function strokeBolt(pts: Path, thick: boolean, k: number): void {
+export function strokeBolt(pts: Path, thick: boolean, k: number): void {
   const V = PAL.volt;
   for (let i = 1; i < pts.length; i++) {
     const [ax, ay] = pts[i - 1];
@@ -136,7 +139,7 @@ export function createLightning(target: Enemy | null, point: readonly [number, n
       );
     game.fx.push(createFloorRing(tx, ground, 36, V, 0.4));
     if (target && target.hp > 0) {
-      dealDamage(target, o.damage, { kx: 0, ky: -60, heavy: true });
+      dealDamage(target, o.damage, { kx: 0, ky: -60, heavy: true, source: o.source });
       target.shock = Math.max(target.shock, o.shock);
       const near = game.enemies
         .filter((e) => e !== target && e.hp > 0)
@@ -147,7 +150,7 @@ export function createLightning(target: Enemy | null, point: readonly [number, n
       for (const { e } of near) {
         const [cx, cy] = enemyCenter(e);
         arcs.push({ x: cx, y: cy, pts: [] });
-        dealDamage(e, o.arcDamage, { ky: -40 });
+        dealDamage(e, o.arcDamage, { ky: -40, source: o.source });
         e.shock = Math.max(e.shock, o.shock * 0.8);
       }
     }

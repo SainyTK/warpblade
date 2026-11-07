@@ -166,4 +166,75 @@ export const SHOP_ICONS: Record<string, (s: SpriteCanvas) => void> = {
     flame(s, 8, 8, 6);
     sparkle(s, 13, 4, 2, PAL.heal[4]);
   },
+  rerolls: (s) => {
+    fill(s, () =>
+      s.pixels(
+        [
+          "....llllll..",
+          "..llhhhhhhl.l",
+          ".lhh.....lhll",
+          ".lh.....lhhhl",
+          "lh.......llll",
+          "lh..........",
+          "...........dc",
+          "...........dc",
+          "cccc.......dc",
+          "cddd......dc.",
+          "c.ddc....dcc.",
+          "...ccddddcc..",
+          ".....cccc....",
+        ],
+        { l: PAL.crystal[2], h: PAL.crystal[4], c: PAL.crystal[1], d: PAL.crystal[3] },
+        2,
+        2,
+      ),
+    );
+  },
+  skips: (s) => {
+    fill(s, () =>
+      s.pixels(
+        [
+          "h.....h.....",
+          "hv....hv....",
+          "hvv...hvv...",
+          "hvvv..hvvv..",
+          "hvvvv.hvvvv.",
+          "hvvvvvhvvvvv",
+          "hvvvd.hvvvd.",
+          "hvvd..hvvd..",
+          "hvd...hvd...",
+          "hd....hd....",
+          "d.....d.....",
+        ],
+        { h: PAL.volt[4], v: PAL.volt[3], d: PAL.volt[2] },
+        3,
+        3,
+      ),
+    );
+  },
+  banishes: (s) => {
+    fill(s, () =>
+      s.pixels(
+        [
+          "....rrrrrr....",
+          "..rrhhhhhhrr..",
+          ".rhh......rrr.",
+          ".rh......rrrr.",
+          "rh......rrr.rr",
+          "rh.....rrr..rr",
+          "rh....rrr...rr",
+          "rr...rrr....rd",
+          "rr..rrr.....rd",
+          "rr.rrr......rd",
+          ".rrrr......rd.",
+          ".rrr......rdd.",
+          "..rrddddddd...",
+          "....dddddd....",
+        ],
+        { r: BLOOD.h, h: BLOOD.l, d: BLOOD.d },
+        1,
+        1,
+      ),
+    );
+  },
 };

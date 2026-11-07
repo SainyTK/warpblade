@@ -1,3 +1,4 @@
+import type { SourceId } from "./build";
 import type { Ramp } from "./color";
 
 /** A live effect: update returns false once it has finished. drawBack draws what sits behind the characters. */
@@ -44,6 +45,8 @@ export interface Blast {
   shake?: number;
   amp?: number;
   hitStop?: number;
+  /** what threw it, for the end of run screen */
+  source: SourceId;
 }
 /** a thrown flask in flight */
 export interface Flask {

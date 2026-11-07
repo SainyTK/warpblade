@@ -1,4 +1,5 @@
 import { HEAT, OVERHEAT, SEARING } from "../../../../constants/ysra/heat";
+import { rechargeStep } from "../../../build/recharge";
 import { hasPerk } from "../../../progress";
 import { objectMemory, rememberPerSeat } from "../../../seatMemory";
 import { hero, progress } from "../../../state";
@@ -18,11 +19,11 @@ export const heatFlash = (): number => state.flash;
 /** Searing Edge burns: above half Heat, or while Overheat lasts */
 export const searing = (): boolean => hasPerk("searingEdge") && (state.overheat > 0 || heatShare() >= SEARING.from);
 
-/** Kindling adds a share per rank; Unbroken doubles gains below a third of HP */
+/** Kindling adds a share per rank; Unbroken doubles gains below a third of HP; Haste, which recharges rites, adds to it */
 function gainScale(): number {
   const kindling = 1 + (progress.ranks.r_kindle ?? 0) * HEAT.kindlingPerRank;
   const low = hasPerk("unbroken") && hero.hp < progress.stats.hp * HEAT.unbrokenBelow;
-  return kindling * (low ? HEAT.unbrokenScale : 1);
+  return kindling * (low ? HEAT.unbrokenScale : 1) * rechargeStep(1);
 }
 
 /** Heat for each foe a blow struck, heavier for lunges, vault crashes, dive impacts and counters */

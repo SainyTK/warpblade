@@ -13,6 +13,6 @@ The game also sends:
 | Event | When | Parameters |
 | --- | --- | --- |
 | `run_start` | a solo run or a co-op room's run starts | `hero`, `coop`, `players` (co-op only) |
-| `run_end` | a run ends, solo or co-op | `hero`, `outcome` (`fallen`, `clear`, `left`), `wave`, `coins` |
+| `run_end` | a run ends, solo or co-op | `hero`, `outcome` (`fallen`, `clear`, `left`), `wave`, `coins`, and unless a guest left mid-run: `level` reached, `kills` (foes defeated), `top` (the source that did the most damage: `attacks`, `abilities`, `ultimate`, a relic id, or `none`) |
 
 New events go through `track()` in the same service, with a row added here.

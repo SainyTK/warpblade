@@ -1,4 +1,4 @@
-import { BOT_TICK_MS } from "../constants/bot";
+import { BOT_TICK_MS, CHEST_WAIT_MS } from "../constants/bot";
 import { KEYS } from "../constants/keys";
 import type { BotMemory, Policy } from "../types/bot";
 import type { Session } from "../types/session";
@@ -47,6 +47,12 @@ export async function autopilot(session: Session, policy: Policy, options: Autop
     if (state.menu.context === "pause") {
       await driver.releaseAll();
       await session.tap(KEYS.pause);
+      continue;
+    }
+    if (state.mode === "chest") {
+      await driver.releaseAll();
+      await session.advance(CHEST_WAIT_MS);
+      await session.tap(KEYS.attack);
       continue;
     }
     if (state.pick.length > 0) {

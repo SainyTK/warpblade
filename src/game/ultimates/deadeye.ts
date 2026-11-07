@@ -26,7 +26,7 @@ export function castDeadeye(level: number): void {
   const hit = (e: Enemy, dir: number) => {
     struck.add(e);
     const [cx, cy] = enemyCenter(e);
-    dealDamage(e, damage, { fromX: hero.x, kx: dir * 160, ky: -50, stun: 0.6, heavy: true });
+    dealDamage(e, damage, { fromX: hero.x, kx: dir * 160, ky: -50, stun: 0.6, heavy: true, source: "ultimate" });
     game.fx.push(createImpact(cx, cy, dir, true));
     lights.add(cx, cy, 30, skin.ramp[5], 0.9, 0.2);
     sfx.hit(true, 0.9);

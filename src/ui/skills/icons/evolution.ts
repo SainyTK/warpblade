@@ -6,7 +6,7 @@ import { bolt, drop, fill, flame } from "./parts";
 import { floor, seg } from "./ysra/parts";
 
 /** the gold four-point star in the top right corner that marks an evolved spell, with a white centre */
-function evolvedStar(s: SpriteCanvas): void {
+export function evolvedStar(s: SpriteCanvas): void {
   fill(s, () => s.pixels(["..g..", "..g..", "ggwgg", "..g..", "..g.."], { g: COIN_GOLD[3], w: WHITE }, 10, 1));
 }
 
