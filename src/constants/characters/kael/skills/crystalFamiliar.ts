@@ -10,7 +10,7 @@ const LEVELS = levelRows([
     values: { chance: 0.4, life: 6, every: 1, power: 0.8, pierce: 1, most: 1, cooldown: 1 },
   },
   { text: "Chance 40% to 70%.", values: { chance: 0.7 } },
-  { text: "New: a cast fires a volley of 3 from a familiar out.", values: { volley: 3 } },
+  { text: "New: a cast fires a volley of 2 from each familiar out.", values: { volley: 2 } },
   { text: "New: shards pierce a foe.", values: { pierce: 2 } },
   { text: "Familiars stay 10 s and fire faster.", values: { life: 10, every: 0.7 } },
   { text: "New: two familiars at once.", values: { most: 2 } },

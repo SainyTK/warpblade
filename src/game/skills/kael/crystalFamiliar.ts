@@ -138,11 +138,13 @@ const newFamiliar = (left: number): Familiar => ({
   phase: rng.range(0, TAU),
 });
 
-/** a cast: maybe call a familiar, or with one out fire a volley */
+/** a cast: maybe call a familiar, and from level 3 the familiars out fire a volley */
 function answerCast(m: FamiliarMemory, evolved: boolean): void {
   const v = skillValues(ID);
+  // Crystal Choir's familiars are always out and fire on their own beat: a cast adds no volley
+  if (evolved) return;
   if (v.volley) for (const f of m.familiars) for (let i = 0; i < v.volley; i++) fire(m, f);
-  if (evolved || m.cd > 0 || !rng.chance(v.chance)) return;
+  if (m.cd > 0 || !rng.chance(v.chance)) return;
   m.cd = withCharms("cooldown", v.cooldown);
   const life = withCharms("duration", v.life);
   if (m.familiars.length < withCharms("amount", v.most)) m.familiars.push(newFamiliar(life));
