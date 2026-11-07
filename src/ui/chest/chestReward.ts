@@ -22,11 +22,16 @@ function rewardFace(r: ChestReward): { kind: string; icon: string; name: string;
       kind: "relic",
       icon: `relic_${r.id}`,
       name: RELICS[r.id].name,
-      line: `Level ${r.level} of ${RELIC_MAX_LEVEL}`,
+      line: `Level ${r.level} of ${RELIC_MAX_LEVEL}. ${RELICS[r.id].levels[r.level - 1].text}`,
     };
   if (r.type === "charm") {
     const def = CHARMS[r.id];
-    return { kind: "charm", icon: `charm_${r.id}`, name: def.name, line: `Level ${r.level} of ${def.maxLevel}` };
+    return {
+      kind: "charm",
+      icon: `charm_${r.id}`,
+      name: def.name,
+      line: `Level ${r.level} of ${def.maxLevel}. ${def.text}`,
+    };
   }
   const wind = BOONS[0];
   return { kind: "heal", icon: wind.id, name: "Full heal", line: "Nothing left to raise: HP and MP filled." };
