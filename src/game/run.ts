@@ -1,5 +1,6 @@
 import { HERO_START_X } from "../constants/hero";
 import { GROUND } from "../constants/stage";
+import { emptyStream } from "../utils/waves";
 import { bankCoins } from "./coins";
 import { kit } from "./hero/kits";
 import { resetWound } from "./hero/wound";
@@ -18,6 +19,7 @@ export function resetRun(banner = "Rise again"): void {
     kills: 0,
     lull: "toNext",
     waveTimer: 1.5,
+    stream: emptyStream(),
     pickups: [],
     coinDrops: [],
     xpOrbs: [],

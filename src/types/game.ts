@@ -1,6 +1,7 @@
 import type { Effect } from "./effect";
 import type { Enemy } from "./enemy";
 import type { SpriteImage } from "./sprite";
+import type { WaveStream } from "./wave";
 
 export interface Pickup {
   x: number;
@@ -86,6 +87,7 @@ export interface GameState {
   /** fight while a wave is on; once it is clear, count down to the next wave */
   lull: "fight" | "toNext";
   waveTimer: number;
+  stream: WaveStream;
   kills: number;
   /** the furthest wave reached in this browser */
   best: number;

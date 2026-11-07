@@ -12,6 +12,7 @@ import { freshBuild } from "../utils/build";
 import { airLimit, stringLimit } from "../utils/progression";
 import { Rng } from "../utils/rng";
 import { collectPerks, computeStats } from "../utils/stats";
+import { emptyStream } from "../utils/waves";
 import { Chain } from "./hero/chain";
 import { applySkin } from "./hero/skin";
 import { objectMemory, rememberPerSeat } from "./seatMemory";
@@ -42,6 +43,7 @@ export const game: GameState = {
   wave: 0,
   lull: "toNext",
   waveTimer: 2,
+  stream: emptyStream(),
   kills: 0,
   best: 0,
   coins: 0,
