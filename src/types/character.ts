@@ -21,6 +21,8 @@ export interface HeroSkin {
   glow: Color;
   /** the sparks thrown where a blow lands, white to dark, four steps */
   sparks: Ramp;
+  /** one heavy braid in the hair colours hangs where the scarf and ponytail would */
+  braid?: boolean;
 }
 
 export interface CharacterDef {

@@ -3,6 +3,7 @@ import type { SpriteCanvas } from "../../engine/sprite";
 import type { Pose } from "../../types/pose";
 import { atHip, farShoulder, isElbowFlipped, isMirrored, isTurned, nearShoulder } from "../../utils/poseFrame";
 import { armReach, drawArm } from "./draw/arm";
+import { drawBraid } from "./draw/braid";
 import { drawCoatTails } from "./draw/coatTails";
 import { drawHead } from "./draw/head";
 import { drawLeg } from "./draw/leg";
@@ -10,6 +11,7 @@ import type { Vec } from "./draw/reach";
 import { drawSword } from "./draw/sword";
 import { drawTorso } from "./draw/torso";
 import { drawTrails } from "./draw/trails";
+import { skin } from "./skin";
 
 export interface HeroLook {
   /** scarf and ponytail points, local pixels from the feet */
@@ -30,7 +32,9 @@ export function drawHero(s: SpriteCanvas, p: Pose, look: HeroLook): Vec {
   const mirrored = isMirrored(p);
   const flip = (q: Vec): Vec => [-q[0], q[1]];
   s.clear();
-  drawTrails(s, mirrored ? look.tail.map(flip) : look.tail, mirrored ? look.scarf.map(flip) : look.scarf);
+  const rope = mirrored ? look.scarf.map(flip) : look.scarf;
+  // a braided hero wears one braid over her back along the scarf's rope, and neither scarf nor ponytail
+  if (!skin.braid) drawTrails(s, mirrored ? look.tail.map(flip) : look.tail, rope);
   const near = nearShoulder(p);
   const far = farShoulder(p);
   const [elbow, hand] = armReach(near, [p.fx, p.fy], isElbowFlipped(p.fe));
@@ -45,6 +49,7 @@ export function drawHero(s: SpriteCanvas, p: Pose, look: HeroLook): Vec {
   drawCoatTails(s, p, look.flare);
   drawLeg(s, atHip(p, 1.5, 0), [p.ffx, p.ffy], p.fa, false);
   drawTorso(s, p, back);
+  if (skin.braid) drawBraid(s, rope);
   drawHead(s, p, back);
   if (back) drawArm(s, far, farElbow, farHand, true);
   else swordArm();

@@ -119,4 +119,5 @@ export const HULDA_SKIN: HeroSkin = {
   ramp: RUST,
   glow: RUST[3],
   sparks: RUST_SPARKS,
+  braid: true,
 };
