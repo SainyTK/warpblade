@@ -489,45 +489,36 @@ Built: `src/game/ultimates/deadeye.ts` reads the skill's values: power, cooldown
 
 ## Balance
 
-Added damage per second over the base kit (28 on one foe), on one foe and on a crowd of 6.
-Sable's level 8 budget on the intended target, from the contract's ratios: easy about 45 one / 110 crowd, timed about 72 / 175, precise about 115 to 135 / 275 to 330.
-Spells and the ultimate share about one 20 MP cast every 8 s, so each spell's figure assumes it gets that MP.
+Figures follow the shared play model of the balance review (7 November 2026): bolts landed 0.98 a second, closing bolts 0.33, hop 0.35, slide 0.2, kick 0.3, a quarter of the time in the air, about 0.1 casts a second for each spell, a perfect reload 0.077 a second and a perfect dodge 0.14 (0.2 with Shade Archer's wider window).
+Each figure is the damage per second a skill adds on its intended target, in multiples of her attack (A) or ability power (P).
+Bands at level 8: easy 3.8 A, timed 6.1 A, precise 9.5 to 11.5 A; movement 0.8 of those; spells 5.3, 8.4 and 13 to 16 P; dots 1.1 to 1.4 times the attack band of their risk.
+Level 1 is level 8 divided by 6 to 12, dots and summons by up to 25; evolutions about 2 times (easy), 2.2 times (timed) or 3 times (precise).
 
-| Skill | Risk | Target | L1 one / crowd | L8 one / crowd | Evolved one / crowd | Budget | Assumption |
-| --- | --- | --- | --- | --- | --- | --- | --- |
-| Piercing Bolts | easy | crowd | 0 / 17 | 0 / 125 | 0 / 260 | ok | 1.6 foes per bolt at L1, 4.5 at L8 |
-| Scattershot | easy | crowd | 2 / 10 | 16 / 80 | 30 / 220 | a bit under | 75% of side bolts find a foe |
-| Ricochet | timed | crowd | 0 / 16 | 8 / 165 | 15 / 340 | ok | 80% of bounces find a foe |
-| Breaching Bolt | timed | one | 7 / 9 | 65 / 110 | 140 / 260 | ok | 0.8 closing bolts a second |
-| Longshot | timed | one at range | 6 / 6 | 60 / 70 | 130 / 220 | ok with the mark | 70% of bolts fly past half range |
-| Perfect Rhythm | precise | one | 9 / 9 | 114 / 150 | 280 / 400 | ok | perfect on 80% of quivers |
-| Heavy Boot | timed | one that closes in | 5 / 8 | 70 / 110 | 110 / 240 | ok | 0.4 kicks a second, 0.6 at L8 |
-| Hop Volley | timed | crowd | 5 / 14 | 55 / 140 | 120 / 300 | 20% under | 0.4 hops a second, 0.5 at L8 |
-| Slide Kick | timed | crowd | 2 / 10 | 50 / 120 | 100 / 260 | 30% under | 0.3 slides a second, 3 foes per slide |
-| Featherdraw | easy | crowd | 6 / 8 | 40 / 100 | 80 / 220 | ok | 30% of time in the air |
-| Net Bolt | timed | crowd | 1 / 7 | 15 / 60, plus 19% on everything | 30 / 200 | ok at a mid build | 2 nets cover 5 foes; 30% uptime |
-| Straw Decoy | easy | crowd | 3 / 8 | 40 / 125 | 50 / 200 | ok | one cast per 8 s at 20 MP |
-| Powder Keg | precise | crowd | 4 / 21 | 70 / 285 | 100 / 520 | ok | shot primed, 4 foes per blast, MP refund |
-| Venom Tips | easy dot | one | 3.5 / 3.5 | 66 / 150 | 120 / 350 | dot rule ok | stacks held at the cap |
-| Barbed Jaws | timed dot | crowd | 1 / 2 | 67 / 180 | 120 / 380 | dot rule ok | a bite every 4 s with re-arm |
-| Lodged Bolts | timed dot | one | 3 / 3 | 85 / 110 | 170 / 300 | dot rule ok | lodged count held at the cap, a kick every 3 s |
-| Hunting Hawk | easy summon | one | 3 / 3 | 45 / 55 | 95 / 150 | ok | two hawks up 70% of the time |
-| Snare Hound | timed summon | one | 3 / 4 | 65 / 90 | 120 / 220 | ok | hounds up 80% of the time |
-| Shade Archer | precise summon | one | 4 / 4 | 115 / 280 | 260 / 550 | ok | a perfect dodge every 6 s once the window widens |
-| Deadeye | precise ultimate | line | 1 / 5 | 38 / 190 | 90 / 400 | under (see contract points) | charge level 3, a cast every 10 s |
+| Skill | Risk, target | L1 | L8 | Evolved | Band |
+| --- | --- | --- | --- | --- | --- |
+| Piercing Bolts | easy, crowd | 0.6 | 4.2 | 9 | 3.8 |
+| Scattershot | easy, crowd | 0.4 | 3.6 | 8 | 3.8 |
+| Ricochet | timed, crowd | 0.6 | 6.2 | 12.7 | 6.1 |
+| Breaching Bolt | timed, one | 0.5 | 4.6 (7.5 on a crowd) | 11 | 6.1 |
+| Longshot | timed, one at range | 0.3 | 5 with the mark | 10 | 6.1 |
+| Perfect Rhythm | precise, one | 1 | 10.7 | 25 | 9.5 to 11.5 |
+| Heavy Boot | timed, one that closes in | 0.6 | 5.2 | 11 | 6.1 |
+| Hop Volley | timed movement, crowd | 0.5 | 3.9 | 9 | 4.9 |
+| Slide Kick | timed movement, crowd | 0.35 | 4.2 | 8.6 | 4.9 |
+| Featherdraw | easy movement, crowd | 0.3 | 3.7 | 8 | 3.1 |
+| Net Bolt | timed spell, crowd | 0.5 P | 6 P and +60% taken | 14 P | 8.4 P |
+| Straw Decoy | easy spell, crowd | 0.8 P | 6.5 P | 9 P | 5.3 P |
+| Powder Keg | timed spell, crowd | 1.2 P | 10 P | 20 P | 8.4 P |
+| Venom Tips | easy dot, one | 0.2 | 5.5 | 11 | 4.2 to 5.3 |
+| Barbed Jaws | timed dot, crowd | 0.15 P | 11 P | 24 P | 9.2 to 11.8 P |
+| Lodged Bolts | timed dot, one | 0.1 | 7.5 | 15 | 6.7 to 8.5 |
+| Hunting Hawk | easy summon, one | 0.15 | 4.2 | 9 | 3.8 |
+| Snare Hound | timed summon, one | 0.2 | 5 | 11 | 6.1 |
+| Shade Archer | precise summon, one | 0.4 | 9 (pierce 2 on a crowd: 20) | 24 | 9.5 to 11.5 |
+| Deadeye | precise ultimate, per cast | 1.2 times Bolt Storm | 6 times (4 times power, both ways at charge 3, splits) | 15 times (seeks every foe at every charge, a perfect reload triples it) | 6 and 15 times |
 
-Damage over time check, against attack skills of the same level:
-
-| Level | Venom (one) | Barbed (crowd) | Lodged (one) | Attack skills at that level |
-| --- | --- | --- | --- | --- |
-| 1 | 3.5 | 2 | 3 | 6 to 17 |
-| 4 | 8 | 20 | 13 | 25 to 60 |
-| 7 | 40 | 120 | 45 | 40 to 140 |
-| 8 | 66 | 180 | 85 | 45 to 165 |
-
-They stay under at 1 to 4 and pass the attack skills at 7 and 8.
-
-Level 8 over level 1 runs about 7 to 12 for attack, movement and spell skills, and 15 to 25 for dots and summons.
+Damage over time against attack skills of the same level, on their intended target: Venom Tips 0.2, 0.9, 3.5 and 5.5 A at levels 1, 4, 7 and 8; Lodged Bolts 0.1, 1.3, 3.5 and 7.5 A; Barbed Jaws 0.15, 0.6, 4.5 and 11 P.
+They stay under the attack skills at 1 to 4 and pass them at 7 and 8.
 
 ## Example builds
 
@@ -545,10 +536,8 @@ Evolves Clockwork Cadence, Twin Shadows and Heartseeker; Siege Bolt and Thunder 
 
 ## Contract points
 
-- O is Sable's reload, so her I rotation cannot switch on O. Proposed: her rotation advances on its own to the next ready spell after each cast.
-- Heavy Boot and Perfect Rhythm change K and O, which are her attack buttons; the contract's `attack` kind speaks only of J. Proposed: `attack` covers the hero's own attack presses.
-- The shared perfect dodge only fires in Kael's `dash` state; the perfect dodge event needs a kit-reported form for the hop and slide.
-- The 6 to 10 times rule fights the dot rule: a dot below attack skills at level 1 and above them at level 8 lands at 15 to 25 times. Summons whose levels raise chance, count and stay together land there too. Proposed: about 6 to 12, dots and summons up to 25.
-- An ultimate on a 16 to 20 s cooldown, sharing MP with spells, cannot reach a per-second budget. Proposed: budget ultimate skills per cast against the base special (level 8 about 6 times the base special, evolved about 15 times).
-- Movement skills land 20 to 30% under the timed line on raw damage because their uses are limited by stamina and space. Proposed: accept movement at about 0.8 of its risk's budget.
-- A shared stacking status (poison, bleed, lodged count) and a shared mark (damage taken up) would serve every hero; Sable needs both.
+All seven points of the design were accepted into `docs/skill-design.md`.
+Two remain for the framework:
+
+- `markFoe` keeps the stronger of two marks; the balance rule G3 asks that damage-taken bonuses add and cap at +100%. Sable's marks (Longshot, Net Bolt, Siege Bolt, Tangle Slide, Deadeye) all go through `markFoe`, so the change lands in one place.
+- `SkillButton` gained `O`, for Perfect Rhythm.

@@ -20,6 +20,8 @@ import { ultTargets } from "./targets";
 /** the bolt flies at her eye line */
 const EYE = 18;
 const SPEED = 900;
+/** the heavy bolt's wake strikes foes from a little above her eye line down to her shins, so short foes are hit too */
+const REACH = [-4, 2, 8, 13] as const;
 /** a kill splits the bolt this far up and down, in radians */
 const SPLIT = 0.5;
 /** a perfect reload this recent counts as just before the cast */
@@ -46,8 +48,7 @@ function heavyBolt(
       speed: SPEED,
       range: W,
       pass(ax, ay, bx, by) {
-        for (const e of foesOnSegment(ax, ay - 3, bx, by - 3, struck)) hit(e, dir);
-        for (const e of foesOnSegment(ax, ay + 3, bx, by + 3, struck)) hit(e, dir);
+        for (const dy of REACH) for (const e of foesOnSegment(ax, ay + dy, bx, by + dy, struck)) hit(e, dir);
         return false;
       },
     }),
