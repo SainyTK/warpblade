@@ -5,6 +5,7 @@ import { BOON_ICONS } from "./boon";
 import { CHARM_ICONS } from "./charms";
 import { HULDA_ICONS } from "./hulda/index";
 import { KAEL_SKILL_ICONS } from "./kael/index";
+import { ORRIN_ICONS } from "./orrin/index";
 import { SABLE_ICONS } from "./sable/index";
 import { SHOP_ICONS } from "./shop";
 import { YSRA_ICONS } from "./ysra/index";
@@ -18,6 +19,7 @@ const ICONS: Record<string, (s: SpriteCanvas) => void> = {
   ...YSRA_ICONS,
   ...SABLE_ICONS,
   ...HULDA_ICONS,
+  ...ORRIN_ICONS,
   ...CHARM_ICONS,
   ...KAEL_SKILL_ICONS,
 };

@@ -15,7 +15,15 @@ export type CountStat =
   | "chests"
   | "flowFulls";
 /** the best a player has ever done; the `run` ones are the most in one run */
-export type BestStat = "wave" | "combo" | "skillLevel" | "chestUpgrades" | "runPerfects" | "runSkillKills";
+export type BestStat =
+  | "wave"
+  | "combo"
+  | "skillLevel"
+  | "chestUpgrades"
+  | "runPerfects"
+  | "runSkillKills"
+  /** the most foes Orrin's swing kicks defeated in one swing, from latch to letting go */
+  | "swingKills";
 
 /** what the run in play has counted so far, for the goals met within one run */
 export interface RunTally {
@@ -84,4 +92,5 @@ export type Feat =
   | { kind: "skillLevel"; skill: string; level: number }
   | { kind: "evolved"; skill: string }
   | { kind: "chestOpened"; upgrades: number }
-  | { kind: "flowFull" };
+  | { kind: "flowFull" }
+  | { kind: "swingKills"; kills: number };
