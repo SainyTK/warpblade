@@ -175,7 +175,7 @@ Attack, precise, a parry then J. The parry opens a counter that hits very hard a
 | 7 | power 35, riposte 1, riposteTime 3 | Counters empower your next blows. |
 | 8 | power 70 | Counter damage doubled. |
 
-Evolution, Sun Piercer (with `y_brand`): the counter is a burning thrust across the whole stage for 90 AD (always a crit), and for 4 s after it every glaive blow is a crit.
+Evolution, Sun Piercer (with `y_brand`): the counter is a burning thrust across the whole stage for 60 AD (always a crit), and for 4 s after it every glaive blow is a crit.
 Built in `glaive/counter.ts` (power, reach, sure crit, stun, stamina refill, Riposte and crits in `ysra/buffs.ts`) and `stance/parry.ts`, `stance/brace.ts` (window and block cost). Riposte adds into the one blow bonus sum (G4).
 
 ### `y_skyhook` Skyhook

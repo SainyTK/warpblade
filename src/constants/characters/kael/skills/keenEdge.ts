@@ -12,7 +12,7 @@ const LEVELS = levelRows([
   { text: "Keen damage +200% to +500%.", values: { bonus: 5 } },
   { text: "New: each Keen blow in a row adds +25% to the next, up to +100%.", values: { streak: 0.25, streakCap: 1 } },
   { text: "New: a Keen 4th hit is a hop cleave that knocks down.", values: { cleave: 3 } },
-  { text: "Keen damage +500% to +2000%; the wave hits far harder.", values: { bonus: 20, wave: 20 } },
+  { text: "Keen damage +500% to +2000%; the wave hits far harder.", values: { bonus: 20, wave: 10 } },
 ]);
 
 export const KEEN_EDGE: SkillDef = {

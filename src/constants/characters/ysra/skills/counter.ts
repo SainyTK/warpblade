@@ -31,6 +31,6 @@ export const COUNTER: SkillDef = {
     partner: "y_brand",
     name: "Sun Piercer",
     text: "The counter is a burning thrust across the whole stage, and for 4 seconds after it every blow is a critical hit.",
-    row: evolved(levels, "A thrust across the stage; then every blow crits.", { power: 90, beam: 1, critTime: 4 }),
+    row: evolved(levels, "A thrust across the stage; then every blow crits.", { power: 60, beam: 1, critTime: 4 }),
   },
 };

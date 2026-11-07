@@ -116,7 +116,7 @@ Attack, precise, J. Press J in the beat after a blow lands: the Keen blow hits f
 | 5 | Keen damage +200% to +500%. | bonus 5 |
 | 6 | New: each Keen blow in a row adds +25% to the next, up to +100%. | streak 0.25, streakCap 1 |
 | 7 | New: a Keen 4th hit is a hop cleave that knocks down. | cleave 3 |
-| 8 | Keen damage +500% to +2000%; the wave hits far harder. | bonus 20, wave 20 |
+| 8 | Keen damage +500% to +2000%; the wave hits far harder. | bonus 20, wave 10 |
 
 Evolution **Peerless Edge** (partner `k_phase`): Every third Keen blow ends in a gold cross cut, and for 3 seconds every blow is Keen.
 Evolved values added: cross 60, crossArea 15, crossReach 50, crossEvery 3, free 3.
