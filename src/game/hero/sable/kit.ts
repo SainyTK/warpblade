@@ -1,6 +1,7 @@
 import { STRIDE } from "../../../constants/kael/motion";
 import { BOLT } from "../../../constants/sable/bolt";
 import type { HeroKit } from "../../../types/kit";
+import { rechargeStep } from "../../build/recharge";
 import { isHeld, take, use } from "../../input";
 import { hero } from "../../state";
 import { resetMotion } from "../kael/motion";
@@ -19,7 +20,7 @@ const aiming = (): boolean => isHeld("attack") || hero.state === "shoot";
 
 function tick(dt: number): void {
   tickReload(dt);
-  sable.snareCd = Math.max(0, sable.snareCd - dt);
+  sable.snareCd = Math.max(0, sable.snareCd - rechargeStep(dt));
   if (hero.ground) sable.airHopped = false;
   if (sable.ammo <= 0 && !sable.reload && hero.state !== "shoot") startReload();
 }
