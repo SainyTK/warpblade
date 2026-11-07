@@ -28,6 +28,8 @@ export const ULT_RANGE = 110;
 export const ULT_HOLD_MS = 600;
 /** the skilled bot takes the first card of the earliest kind here */
 export const PICK_PRIORITY = [
+  "relic",
+  "charm",
   "ultimate",
   "spell",
   "passive",
@@ -37,6 +39,8 @@ export const PICK_PRIORITY = [
   "movement",
   "boon",
 ] as const;
+/** a chest screen ignores input for a moment after it opens; the bot waits this long before it presses J */
+export const CHEST_WAIT_MS = 600;
 /** a pick ignores input for a moment after it opens; try again this often, this many times */
 export const PICK_RETRY_MS = 100;
 export const PICK_RETRIES = 30;

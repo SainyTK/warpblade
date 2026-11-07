@@ -68,6 +68,7 @@ An autopilot plays whole runs with real keys, one decision every 50 ms of game t
 Each run starts from the start menu in a fresh session.
 
 `mash` walks to the nearest foe and mashes J, and takes the first card of every skill pick.
+Both policies close a chest screen with J once its input lock has passed.
 
 `skilled` adds a few general rules that work for any hero:
 
@@ -78,7 +79,7 @@ Each run starts from the start menu in a fresh session.
 - it casts with I when the selected HUD spell tab is ready, and cycles with O to a ready one;
 - it uses any other ready HUD tab with its key, such as WARP on K, on a foe at a distance;
 - it jumps over a foe on the ground that faces the hero, to strike its back;
-- it picks cards by kind in this order: ultimate, spell, passive, enhance, combo, fusion, movement, then boons.
+- it picks cards by kind in this order: relic, charm, ultimate, spell, passive, enhance, combo, fusion, movement, then boons.
 
 The bot reads only the hero's position, HP and MP, the foes' positions, states and facing, and the HUD.
 Tab readiness comes from the HUD, so a new hero whose tabs or keys differ still gets used sensibly.
