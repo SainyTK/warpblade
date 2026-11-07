@@ -139,11 +139,13 @@ const RING_DOTS: readonly (readonly [number, number])[] = [
 ];
 const RING_KEYS = ["A", "B", "C", "D", "E"] as const;
 
-/** the switch button: a dot per ability round a ring, in its own colour, the selected one with a white core */
-function abilityRing(selected: number): IconArt {
+/** the switch button: a dot per ability Kael holds round a ring, in its own colour, the selected one with a white core */
+function abilityRing(selected: KaelAbility, known: readonly KaelAbility[]): IconArt {
   const rows = Array.from({ length: 9 }, () => Array<string>(9).fill("."));
-  RING_DOTS.forEach(([x, y], i) => {
-    rows[y][x] = i === selected ? "W" : RING_KEYS[i];
+  KAEL_ABILITIES.forEach((a, i) => {
+    if (!known.includes(a)) return;
+    const [x, y] = RING_DOTS[i];
+    rows[y][x] = a === selected ? "W" : RING_KEYS[i];
   });
   const colors: Record<string, Color> = { W: ICON_WHITE };
   KAEL_ABILITIES.forEach((a, i) => {
@@ -152,8 +154,8 @@ function abilityRing(selected: number): IconArt {
   return { rows: rows.map((r) => r.join("")), colors };
 }
 
-/** Kael's button art, per action and selected ability */
-export function kaelArt(action: TouchButtonAction, ability: KaelAbility): IconArt {
+/** Kael's button art, per action, selected ability and the abilities he holds */
+export function kaelArt(action: TouchButtonAction, ability: KaelAbility, known: readonly KaelAbility[]): IconArt {
   switch (action) {
     case "attack":
       return SWORD;
@@ -166,7 +168,7 @@ export function kaelArt(action: TouchButtonAction, ability: KaelAbility): IconAr
     case "cast":
       return SPELLS[ability];
     case "cycle":
-      return abilityRing(KAEL_ABILITIES.indexOf(ability));
+      return abilityRing(ability, known);
     case "ultimate":
       return NOVA;
   }

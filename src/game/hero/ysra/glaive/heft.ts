@@ -19,7 +19,8 @@ const QUIVER = 0.3;
 
 /** how far the wind has come, 0 to 1 */
 const share = (): number => clamp(heft.charge / HEFT.full);
-const rate = (): number => 1 + (skillValues(HEFT.skill).rank ?? 0) * HEFT.ratePerRank;
+/** Deep Heft winds the heft faster */
+const rate = (): number => skillValues("y_heft").windRate ?? 1;
 
 /** the string's opening hip thrust was just started by a fresh J: if J stays held it becomes a heft */
 export function watchHeft(): void {

@@ -11,20 +11,20 @@ She is the most fragile of the three and wins by keeping foes at range.
 | Key | Sable |
 | --- | --- |
 | A / D | Walk, double tap to run |
-| W | One light jump, no double jump. With J held, aim up |
-| S | With J held, kneel and shoot low on the floor, or shoot down at a slant in the air |
-| J | Shoot a bolt. Hold to keep shooting. An empty quiver starts the reload |
+| W | One light jump, no double jump, also out of a shot |
+| S | With W, drop through a ledge |
+| J | Shoot a string of three bolts at the foe ahead, the last a closing bolt. Hold to keep shooting. An empty quiver starts the reload |
 | K | Kick: a front kick that throws foes away, on the floor or in the air |
-| L | Hop back, still facing the foe, and shoot a free bolt at the top of the hop. With the side ahead held on the floor, slide forward under blows |
-| I | Set a snare at her feet (20 MP) |
+| L | Hop back, still facing the foe, and shoot a free bolt at the top of the hop. From a walk or run toward the side she faces, slide forward under blows |
+| I | Cast the selected spell: a snare at her feet (20 MP) from the start, and her spell skills. After each cast the next ready spell is selected |
 | O | Reload. Press again in the bright window for a perfect reload |
 | U | Ultimate (shared charge and MP rules) |
 
-On the touch controller the same buttons read Shoot, Jump, Hop, Kick, Snare, Reload and Special, and the stick's up and down aim while Shoot is held.
+On the touch controller the same buttons read Shoot, Jump, Hop, Kick, Spell, Reload and Special.
 
 ## The quiver and the reload
 
-The quiver holds 8 bolts (Deep Quiver adds 3 per rank) and is shown as the QV bar, one notch per bolt, where the combo pips sit for the others.
+The quiver holds 9 bolts, three strings (Perfect Rhythm adds 3), and is shown as the QV bar, one notch per bolt, where the combo pips sit for the others.
 A reload takes 1.05 s divided by attack speed, and she keeps walking, jumping and kicking while she cranks it.
 The reload starts on O, on J with an empty quiver, or by itself when the quiver runs dry.
 While she reloads the bar shows the crank's progress with a bright window from 42% to 62% of the way.
@@ -33,11 +33,14 @@ A second O outside the window jams the crank and adds 0.45 s.
 Only O times the reload, so mashing J never jams it.
 MP pays for snares and the ultimate; bolts cost nothing but time.
 
-## Aim
+## The string and the aim
 
+A string is three bolts; the third is a closing bolt that deals 1.3 times attack damage, pushes twice as far and staggers longer, then the crossbow cocks for 0.18 s.
+A shot pressed after she has settled starts a new string.
+In the air she looses two bolts per airtime, the second a closing bolt; Featherdraw raises it to three.
 Bolts fly at 430 px/s for 250 px and stop in the first foe they hit unless they pierce.
-Up angles the shot about 29 degrees up, Down kneels for a low flat shot on the floor or slants it about 35 degrees down in the air.
-Each shot bends toward the foe nearest the aim within 0.4 rad, so the aim chooses between a flier and a walker and does not have to be exact.
+Up and Down do not aim: each shot picks the nearest foe ahead, from steeply above to a little below, and takes the stance that fits it (up, level, kneeling low, or slanted down in the air).
+Each shot bends toward the foe nearest the stance's aim within 0.6 rad.
 The cone widens to 1.35 rad for a foe 70 px away or nearer, so a flier hovering over her can still be shot.
 Without that widening the mash bot stood under the wave 1 moths and fell on wave 1 with 2 kills.
 A foe pressed up against her is struck between her chest and the muzzle.
@@ -48,6 +51,7 @@ A foe pressed up against her is struck between her chest and the muzzle.
 - A bolt deals 0.95 times attack damage; one shot every 0.24 s at attack speed 1.
 - Kick: hit on frame 4 of 11, a box 2 to 20 px ahead, 0.55 times attack damage, a strong push, a 0.5 s stun. In the air a landed kick springs her up and back.
 - Hop: 22 stamina, a 16 px rise, back at 150 px/s times move, untouchable for 0.22 s, a free bolt at 80% on frame 5. Once on the floor and once in the air.
+  A blow met in its first 0.12 s is a perfect dodge (the shared reward through `rewardPerfectDodge`), and the same for the slide.
 - Slide: 18 stamina, 0.3 s at 210 px/s times move, untouchable for 0.28 s.
 - Snare: 20 MP, 3.5 s recharge, two on the floor at once, 2.6 times ability power and a 1.6 s hold when a foe walks in.
 
@@ -71,17 +75,11 @@ Attack speed shortens the time between shots and the reload.
 Her hop and her slide each call `travelEnded()` when they end, so Aftershock answers both.
 Blows on her go through `hurtHero`; only the opening of the hop and the slide turns them away.
 
-## Skill tree
+## Skills
 
-The tree lives in `src/constants/characters/sable/`: Marksman (early), Skirmish (steady), Trapper (late) and Fusion.
-
-- Marksman: Heavy Draw (attack +1 per rank), Piercing Bolts (one more foe per rank), Deep Quiver, Bolt Storm (her special from level 3), Ricochet (a bounce off the floor or edge, and a bolt flies on through a kill), Scattershot (a fan of three for one bolt), and Deadeye (the ultimate that replaces Bolt Storm).
-- Skirmish: Fleet Foot (move and stamina), Hop Volley (three bolts from the hop), Heavy Boot (a harder kick that bounces foes off the edge), Slide Kick (the slide trips foes).
-- Trapper: Snare (learned from the start), Perfect Rhythm (a wider window and more primed bolts), Barbed Snare, Twin Snare, Hunter's Focus (a perfect reload gives back stamina and MP).
-- Fusion: Boot and Bolt (a landed kick loads 2 bolts), Tripwire Volley (a sprung snare shoots at every foe near it).
-
-Bolt Storm shoots one bolt into the sky, and a rain of bolts falls on every foe in reach and the floor around them.
-Deadeye is one heavy bolt the length of the stage through every foe at her eye line, one each way at level 3, and a bolt at every foe on the screen at level 4.
+Her 20 skills, their levels, evolutions and numbers are in `docs/skills/sable.md`; the data is in `src/constants/characters/sable/skills/`.
+Bolt Storm is her base special: it shoots one bolt into the sky, and a rain of bolts falls on every foe in reach and the floor around them.
+Deadeye, the ultimate skill, replaces it with one heavy bolt the length of the stage through every foe at her eye line.
 
 ## Look and motion
 
@@ -94,16 +92,16 @@ While she reloads on the move the crossbow tips up and the far hand turns the cr
 
 ## Code layout
 
-- `src/game/hero/sable/`: the kit (`kit.ts`), memory registered per seat (`memory.ts`), shots and aim, the bolt flight and its hits (`loose.ts`), the quiver and reload, the kick, the hop and slide (`evade.ts`), the snare, her jump, the pose and the carry layer.
+- `src/game/hero/sable/`: the kit (`kit.ts`), memory registered per seat (`memory.ts`), shots and aim, the bolt flight and its hits (`loose.ts`, with the skills' bonuses and hit effects in `bolt/`), the quiver and reload, the kick, the hop and slide (`evade.ts`), the spells on I (`spells/`: the rotation, snare, net, decoy and keg), her jump, the pose and the carry layer.
+- `src/game/skills/sable/`: the skills that act on their own: Venom Tips, Barbed Jaws, Lodged Bolts, Hunting Hawk, Snare Hound and Shade Archer.
 - `src/game/effects/crossbowBolt.ts` and `src/game/effects/snareTrap.ts`: the bolt and the snare as effects.
 - `src/game/ultimates/boltStorm.ts` and `deadeye.ts`.
-- `src/ui/quiverBar.ts`: the QV bar; the K tab shows the snare's recharge for her.
+- `src/ui/quiverBar.ts`: the QV bar; the K tab shows the selected spell and its recharge for her.
 - Icons in `src/ui/skills/icons/sable/` and touch buttons in `src/ui/touch/icons/sableArt.ts`.
 
 ## Later
 
 - A grapple or a decoy as a second travel or defence move.
-- An Evolution branch, as Kael and Ysra have.
 - Her own walk and run clips built from a gait model; today they are Kael's legs with her hands on the crossbow.
-- Showing the aim assist's chosen angle on the crossbow itself; today the bolt bends and the crossbow keeps the stance's angle.
+- Showing the chosen angle on the crossbow itself; today the bolt bends and the crossbow keeps the stance's angle.
 - A ponytail free look: the hood still trails the shared scarf rope, which reads as a cape tail when she hops back.

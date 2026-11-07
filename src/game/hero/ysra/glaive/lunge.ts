@@ -1,5 +1,5 @@
 import { ENEMIES } from "../../../../constants/enemies";
-import { GLAIVE_FEEL, HEFT, LUNGE } from "../../../../constants/ysra/glaive";
+import { GLAIVE_FEEL, LUNGE } from "../../../../constants/ysra/glaive";
 import { sfx } from "../../../../services/audio";
 import type { Enemy } from "../../../../types/enemy";
 import type { Box } from "../../../../types/world";
@@ -9,9 +9,9 @@ import { createImpact } from "../../../effects/impact";
 import { createSlash } from "../../../effects/slash";
 import { enemyCenter } from "../../../enemies/enemy";
 import { meleeHit } from "../../../meleeHit";
-import { hasPerk } from "../../../progress";
 import { objectMemory, rememberPerSeat } from "../../../seatMemory";
 import { skillValues } from "../../../skills/query";
+import { burstEmbers } from "../../../spells/rites/emberBurst";
 import { game, hero, progress } from "../../../state";
 import { boxAhead, dust, hitStop, newSwing, shake } from "../../../world";
 import { emitYsra } from "../events";
@@ -28,12 +28,14 @@ const lunge = {
   hits: 0,
   carried: null as Enemy | null,
   ended: false,
-  railed: false,
+  rails: 0,
 };
 rememberPerSeat(objectMemory(lunge));
 
 const isFull = (): boolean => lunge.charge >= 1;
-const power = (): number => lerp(LUNGE.power[0], LUNGE.power[1], lunge.charge);
+/** Deep Heft's numbers; empty when not held */
+const heftValues = () => skillValues("y_heft");
+const power = (): number => lerp(LUNGE.power[0], heftValues().power ?? LUNGE.power[1], lunge.charge);
 const travelEnd = LUNGE.start + LUNGE.time;
 
 /** the heft released with this part of a full wind beyond the poke, 0 to 1 */
@@ -43,16 +45,15 @@ export function setLungeCharge(charge: number): void {
 
 /** the lunge starts: its length from the charge and Deep Heft, one swing for the whole line */
 export function startLunge(): void {
-  const ranks = skillValues(HEFT.skill).rank ?? 0;
   const reach = LUNGE.least + (1 - LUNGE.least) * lunge.charge;
   Object.assign(lunge, {
-    dist: LUNGE.travel * reach + ranks * LUNGE.travelPerRank * lunge.charge,
+    dist: (heftValues().travel ?? LUNGE.travel) * reach,
     from: hero.x,
     swing: newSwing(),
     hits: 0,
     carried: null,
     ended: false,
-    railed: false,
+    rails: 0,
   });
   game.fx.push(createSlash(hero.x, hero.y, hero.face, { ...G_COUNTER, R: 30 + haftReach(), W: isFull() ? 8 : 5 }));
   sfx.lunge();
@@ -74,7 +75,7 @@ function pierce(): void {
   hero.swing = keep;
   lunge.hits += hits;
   const first = hero.lastHit;
-  if (hits && isFull() && !lunge.carried && first && hasPerk("skewer") && carriable(first)) lunge.carried = first;
+  if (hits && isFull() && !lunge.carried && first && !!heftValues().skewer && carriable(first)) lunge.carried = first;
 }
 
 const carriable = (e: Enemy): boolean => e.rank === "minion" && ENEMIES[e.type].launchable && e.hp > 0;
@@ -91,7 +92,7 @@ function carry(): void {
 function slam(e: Enemy): void {
   if (e.hp <= 0) return;
   const [cx, cy] = enemyCenter(e);
-  dealDamage(e, progress.stats.ad * power() * LUNGE.slam.power, {
+  dealDamage(e, progress.stats.ad * power() * (heftValues().skewer ?? 0), {
     fromX: hero.x,
     kx: hero.face * 20,
     stun: LUNGE.slam.stun,
@@ -118,17 +119,28 @@ function finish(): void {
   emitYsra("strike", { source: "heftLunge", hits: lunge.hits });
   if (lunge.carried) slam(lunge.carried);
   lunge.carried = null;
+  const tip = heftValues().tip ?? 0;
+  if (tip > 0) burstEmbers(h.x + h.face * (LUNGE.tip + haftReach()), h.y - 15, progress.stats.ad * tip, TIP_BURST, 1);
 }
 
-/** Rail Lance: a moment after a full lunge stops, the whole line it ran is struck again */
+/** pixels around the point the tip burst reaches */
+const TIP_BURST = 24;
+
+/** the rail: a moment after a full lunge stops, the whole line it ran is struck again; Rail Lance runs it back too */
 function rail(): void {
   const h = hero;
-  lunge.railed = true;
+  lunge.rails++;
   const ends = [lunge.from, h.x + h.face * (LUNGE.tip + haftReach())];
   const box: Box = [Math.min(...ends), h.y + LUNGE.box[1], Math.max(...ends), h.y + LUNGE.box[2]];
   newSwing();
-  const hits = meleeHit([box], { power: power() * LUNGE.railPower, kx: 30, ky: -20, feel: GLAIVE_FEEL.lunge });
-  game.fx.push(createLungeTrail(lunge.from, ends[1], h.y - 15, true));
+  const back = lunge.rails > 1;
+  const hits = meleeHit([box], {
+    power: power() * (heftValues().rail ?? 0),
+    kx: back ? -30 : 30,
+    ky: -20,
+    feel: GLAIVE_FEEL.lunge,
+  });
+  game.fx.push(createLungeTrail(back ? ends[1] : lunge.from, back ? lunge.from : ends[1], h.y - 15, true));
   emitYsra("strike", { source: "railLance", hits });
 }
 
@@ -137,6 +149,8 @@ export function stepLunge(t: number): void {
   const h = hero;
   if (t >= LUNGE.start && t < travelEnd) {
     h.vx = (h.face * lunge.dist * progress.stats.aspd) / LUNGE.time;
+    // Deep Heft: nothing touches her for the whole travel
+    if (heftValues().guardAll) h.inv = Math.max(h.inv, 0.05);
     pierce();
     carry();
     emitYsra("travel", { x: h.x, y: h.y, from: "lunge" });
@@ -145,7 +159,9 @@ export function stepLunge(t: number): void {
   h.vx = 0;
   if (t < travelEnd) return;
   if (!lunge.ended) finish();
-  if (!lunge.railed && isFull() && hasPerk("railLance") && t >= travelEnd + LUNGE.railDelay) rail();
+  if (!isFull() || !heftValues().rail) return;
+  const rails = heftValues().back ? 2 : 1;
+  if (lunge.rails < rails && t >= travelEnd + LUNGE.railDelay * (1 + lunge.rails * 2)) rail();
 }
 
 /** the tip burst lands once the travel has ended; the combo engine deals blows a moment early, so it waits that out */

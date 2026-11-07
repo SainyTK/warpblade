@@ -20,7 +20,6 @@ export const HOLD = {
   walkerY: -6,
   flierY: -20,
   time: 1.4,
-  gripTime: 2.2,
   /** she walks at this share of her speed while she holds a foe */
   walk: 0.5,
   /** the stun kept on the held foe, so it never acts in her hands */
@@ -32,7 +31,11 @@ export const HOLD = {
 } as const;
 
 /** J while holding: a knee into the held foe */
-export const KNEE = { dur: frame(8), hit: frame(3), max: 3, power: 0.5, gripPower: 0.75 } as const;
+export const KNEE = { dur: frame(8), hit: frame(3), max: 3, power: 0.5 } as const;
+
+/** how the throw picks itself: foes within `ahead` in front against those within `behind`; `swing` is how near counts for
+ *  Giant Swing */
+export const THROW_PICK = { ahead: 100, behind: 40, swing: 40 } as const;
 
 /** K while holding, and how each throw lands */
 export const THROWS = {
@@ -50,9 +53,22 @@ export const THROWS = {
     stop: 0.1,
     shake: [0.3, 3] as const,
   },
-  up: { dur: frame(10), release: frame(5), power: 0.8, launch: -320 },
-  /** Giant Swing: two turns round her, a hit on every foe near each turn, then a forward throw */
-  swing: { dur: frame(24), turns: 2, reach: 26, power: 0.9, release: frame(20) },
+  /**
+   * Giant Swing: turns round her (the skill's count, power and reach), each `turn` long so two or three stay readable, a
+   * hit on every foe near each (Cyclone: every `beat`), then the forward release over `settle`; the clip's spin runs from
+   * `loop` to its release key and repeats for turns past two. Level 7's release knocks down foes within `knock`.
+   */
+  swing: {
+    dur: frame(24),
+    release: frame(20),
+    turn: frame(10),
+    loop: frame(2),
+    settle: frame(4),
+    beat: 0.25,
+    kx: 160,
+    knock: 30,
+    knockStun: 0.8,
+  },
 } as const;
 
 /** a body thrown forward: it flies this long, strikes each foe it touches once, and lands hard */
@@ -64,9 +80,15 @@ export const THROWN = {
   stop: 0.04,
   landPower: 0.6,
   landStun: 0.8,
-  /** Wrecking Throw: the body bursts on landing */
-  wreckRing: 24,
-  wreckPower: 1.0,
+  /** Wrecking Throw: a struck foe flung on flies this fast; a bounce throws the body up this fast */
+  flingVx: 240,
+  flingVy: -90,
+  bounceVx: 110,
+  bounceVy: -150,
+  /** Human Cannonball: the body flies level this fast until it is this near a wall, or this long at most */
+  cannonVx: 340,
+  wall: 8,
+  cannonLife: 2,
 } as const;
 
 /** K in the air: a lunge down with both hands, a ride to the floor and a slam */
@@ -85,5 +107,5 @@ export const SKYFALL = {
   slamRecover: frame(10),
 } as const;
 
-/** Aftershock Suplex: the suplex and Skyfall rings grow by this share and throw minions up */
+/** Wrecking Throw level 4: the suplex and Skyfall rings grow by this share and throw minions up */
 export const AFTERSHOCK_SUPLEX = { ring: 1.5, launch: -220 } as const;

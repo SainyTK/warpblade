@@ -3,7 +3,6 @@ import { HERO_SOURCES } from "../constants/damageSources";
 import { ENEMIES } from "../constants/enemies";
 import { FLOW } from "../constants/growth";
 import { SPARKS } from "../constants/palette";
-import { PIN } from "../constants/ysra/glaive";
 import { sfx } from "../services/audio";
 import type { SourceId } from "../types/build";
 import type { Enemy } from "../types/enemy";
@@ -18,6 +17,7 @@ import { launchEnemy } from "./enemies/airborne";
 import { enemyCenter } from "./enemies/enemy";
 import { kindOf } from "./enemies/kinds";
 import { markMultiplier } from "./enemies/skillStatus";
+import { kit } from "./hero/kits";
 import { killEnemy } from "./kill";
 import { popNumber } from "./numbers";
 import { emitSkillEvent } from "./skills/events";
@@ -134,10 +134,10 @@ export function dealDamage(e: Enemy, base: number, o: HitOptions = {}): HitResul
     dmg *= DAMAGE.crit;
     tag = "crit";
   }
-  if (e.pinned > 0) dmg *= PIN.taken;
   if (isHeroSource(source) && !o.dot) dmg *= 1 + hitBonus(e, { back, keen: !!o.sureCrit, melee: !!o.melee });
   const taken = takenBonus(e);
   dmg *= taken > 0 ? 1 + Math.min(DAMAGE.takenCap, taken + (e.mark > 0 ? e.markBonus : 0)) : markMultiplier(e);
+  dmg *= kit().damageScale?.() ?? 1;
   const shatterShards = o.melee && o.heavy && e.frozen > 0 ? (skillValues("k_frost").shatter ?? 0) : 0;
   const shattering = shatterShards > 0;
   if (shattering) {

@@ -1,7 +1,5 @@
-import type { YsraPerk } from "./index";
-
 /** Ysra's fire rites, called with I and paid with Heat */
-export type RiteId = "flare" | "flamePillar" | "brazier";
+export type RiteId = "flare" | "cinderLash" | "flamePillar" | "brazier" | "overheat";
 
 /** the shape of one Flame Pillar: its base values, or an evolved or flanking pillar's */
 export interface PillarShape {
@@ -21,6 +19,10 @@ export interface PillarShape {
   shake: number;
   amp: number;
   hitStop: number;
+  /** the standing column burns foes in it for this multiple of ability power every quarter second */
+  column?: number;
+  /** the sigil draws foes this many pixels away toward it before the burst */
+  pull?: number;
 }
 
 /** a rite as the HUD, the controls and the cast read it */
@@ -30,9 +32,9 @@ export interface RiteDef {
   name: string;
   /** the word on the HUD tab */
   tab: string;
-  /** the skill that teaches it */
-  perk: YsraPerk;
-  /** Heat it spends before Hearthfire */
+  /** the skill that teaches it; none for a rite of her base kit */
+  skill?: string;
+  /** Heat it spends before its skill's level and Kindling change it; Overheat's is the least it needs */
   cost: number;
   /** the rite's colour on its tab and its touch button */
   tint: string;

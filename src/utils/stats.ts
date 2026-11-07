@@ -1,7 +1,7 @@
 import { HERO_LEVEL_POWER } from "../constants/growth";
 import type { Build, BuildStats } from "../types/build";
 import type { CharacterDef } from "../types/character";
-import type { Perk, SkillLevel, UltimateId } from "../types/skill";
+import type { SkillLevel, UltimateId } from "../types/skill";
 import type { StatKey, Stats } from "../types/stats";
 
 export const STAT_KEYS: readonly StatKey[] = ["ad", "ap", "hp", "mp", "stamina", "crit", "move", "aspd", "haste"];
@@ -34,17 +34,6 @@ export function computeStats(
   out.crit += build.crit;
   out.move *= build.move;
   return out;
-}
-
-/** the kit perks the build's skills switch on, and those their evolved forms add */
-export function collectPerks(c: CharacterDef, b: Build): Set<Perk> {
-  const perks = new Set<Perk>();
-  for (const skill of c.skills) {
-    if (!b.skills[skill.id]) continue;
-    if (skill.perk) perks.add(skill.perk);
-    if (skill.evolution.perk && b.evolved.includes(skill.id)) perks.add(skill.evolution.perk);
-  }
-  return perks;
 }
 
 /** the ultimate on U: the held ultimate skill's, or the hero's special */

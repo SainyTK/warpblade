@@ -89,7 +89,6 @@ export function readSituation(): Situation {
     previous: h.chain > 0 ? h.lastMove : null,
     stabbed: h.stabbed,
     keen: h.keenNext,
-    perks: progress.perks,
     skills: progress.build.skills,
   };
 }

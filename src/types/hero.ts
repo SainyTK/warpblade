@@ -135,6 +135,8 @@ export interface Hero {
   warpCd: number;
   /** seconds before the ultimate can be charged again */
   ultCd: number;
+  /** the full length of the ultimate's current wait, for the recharge display: an ultimate skill may set its own */
+  ultFull: number;
   /** seconds before each of Kael's abilities can be cast again */
   spellCd: Record<KaelAbility, number>;
   /** the full length of each element's current wait, for the recharge display */

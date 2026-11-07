@@ -10,14 +10,9 @@ export const KICK = {
   kx: 250,
   ky: -60,
   stun: 0.5,
-  /** Heavy Boot */
-  heavyPower: 1.1,
-  heavyStun: 1.4,
   /** a kick that lands in the air springs her up and back off the foe */
   airSpring: 34,
   airPush: 70,
-  /** Boot and Bolt: bolts a landed kick loads */
-  reloadBolts: 2,
 } as const;
 
 /** L: a hop back that looses a bolt at the top, still facing the foe */
@@ -46,9 +41,6 @@ export const SLIDE = {
   guard: 0.28,
   /** the rise out of the slide */
   recover: frame(6),
-  /** Slide Kick: foes she slides through are tripped this long */
-  trip: 0.9,
-  tripPower: 0.4,
 } as const;
 
 /** her jump, a little lower than Kael's and with no double jump */

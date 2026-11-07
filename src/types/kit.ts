@@ -42,6 +42,8 @@ export interface HeroKit {
   stride?(running: boolean): number;
   /** damage taken is multiplied by this */
   hurtScale(): number;
+  /** every hit the hero deals, from any source, is multiplied by this (a buff of the kit's own); left out, 1 */
+  damageScale?(): number;
   /**
    * A blow has taken its HP and the hero still stands: true when the kit's armour takes the blow instead of the hurt
    * state, so the knockback, the flinch and the combo reset are skipped. Left out, every blow hurts as usual.

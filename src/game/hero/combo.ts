@@ -87,7 +87,7 @@ function strike(id: MoveId, raw: MoveHit): number {
   if (slash) game.fx.push(createSlash(hero.x, hero.y, hero.face, slash));
   const [x0, y0, x1, y1] = hit.box;
   const boxes = hit.around ? [boxAhead(x0, y0, x1, y1), boxBehind(x0, y0, x1, y1)] : [boxAhead(x0, y0, x1, y1)];
-  return meleeHit(boxes, { ...hit, sureCrit: hero.keen });
+  return meleeHit(boxes, { ...hit, sureCrit: hero.keen || !!hit.crit });
 }
 
 /** every blow of the current move is out and its follow-through has started, so it can be cancelled;

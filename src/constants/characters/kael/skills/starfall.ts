@@ -5,13 +5,13 @@ import { ULT_CHARGE } from "../../../ultimate";
 /** values: `power` times the charge level's power, `floor` seconds the floor burns where meteors land, `stun`,
  *  `launch` meteors throw foes up, `late` meteors that fall on the densest group after, `recharge` */
 const LEVELS = levelRows([
-  { text: "U becomes Starfall: meteors on the foes in reach.", values: { power: 0.9, recharge: 20, charge: 1 } },
+  { text: "U becomes Starfall: meteors on the foes in reach.", values: { power: 0.9, cooldown: 20, charge: 1 } },
   { text: "New: the floor burns where meteors land.", values: { floor: 3 } },
   { text: "Power +45%.", values: { power: 1.3 } },
   { text: "New: meteors stun foes.", values: { stun: 0.8 } },
   { text: "New: meteors throw foes up.", values: { launch: 1 } },
   { text: "New: 3 more meteors fall on the densest group.", values: { late: 3 } },
-  { text: "Recharge 20 to 15 s.", values: { recharge: 15 } },
+  { text: "Recharge 20 to 15 s.", values: { cooldown: 15 } },
   { text: "Power 1.3 to 3x; the floor burns longer.", values: { power: 3, floor: 5 } },
 ]);
 

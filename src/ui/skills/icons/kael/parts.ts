@@ -1,12 +1,7 @@
-import { COIN_GOLD, PAL } from "../../../../constants/palette";
+import { PAL } from "../../../../constants/palette";
 import type { SpriteCanvas } from "../../../../engine/sprite";
 import { WHITE } from "../../../../utils/color";
 import { fill } from "../parts";
-
-/** the gold four-point star in the top right corner that marks an evolved skill, with a white centre */
-export function evolvedStar(s: SpriteCanvas): void {
-  fill(s, () => s.pixels(["..g..", "..g..", "ggwgg", "..g..", "..g.."], { g: COIN_GOLD[3], w: WHITE }, 10, 1));
-}
 
 /** an ice spike rising from the floor at x */
 export function spike(s: SpriteCanvas, x: number, h: number, w: number): void {

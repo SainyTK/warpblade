@@ -1,10 +1,6 @@
 import type { CharacterDef } from "../../../types/character";
-import { legacySkills } from "../legacySkills";
-import { BASTION } from "./bastion";
-import { FUSION } from "./fusion";
-import { LANCE } from "./lance";
 import { YSRA_SKIN } from "./look";
-import { PYRE } from "./pyre";
+import { YSRA_SKILLS } from "./skills/index";
 
 /** Ysra, the ember lancer: the second character, built to play nothing like Kael */
 export const YSRA: CharacterDef = {
@@ -18,7 +14,7 @@ export const YSRA: CharacterDef = {
   special: "pyreWave",
   base: { ad: 13, ap: 7, hp: 130, mp: 80, stamina: 110, crit: 0.03, move: 1.1, aspd: 0.92, haste: 1 },
   growth: { ad: 0, ap: 0, hp: 1.5, mp: 0.35 },
-  skills: legacySkills([...LANCE, ...BASTION, ...PYRE, ...FUSION]),
+  skills: YSRA_SKILLS,
   comboHits: 3,
   skin: YSRA_SKIN,
 };

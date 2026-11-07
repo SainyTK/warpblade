@@ -1,6 +1,5 @@
 import type { SlashShape } from "./effect";
 import type { ClipName } from "./hero";
-import type { Perk } from "./skill";
 import type { Box } from "./world";
 import type { YsraMoveId } from "./ysra";
 
@@ -55,6 +54,8 @@ export interface MoveHit {
   around?: boolean;
   /** a foe driven into the stage edge bounces back off it into the air */
   wall?: boolean;
+  /** always a critical hit, as a Keen blow is */
+  crit?: boolean;
   slash?: SlashShape;
   feel?: HitFeel;
 }
@@ -132,7 +133,6 @@ export interface Situation {
   stabbed: boolean;
   /** the J press was Keen: the move it starts is a sure crit */
   keen: boolean;
-  perks: ReadonlySet<Perk>;
   /** the hero's skills and their levels */
   skills: Readonly<Record<string, number>>;
 }

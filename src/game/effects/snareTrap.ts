@@ -12,6 +12,8 @@ export interface SnareSet {
   reach: number;
   life: number;
   ramp: Ramp;
+  /** times the jaws open again after biting */
+  rearm?: number;
   /** a foe walked into the jaws */
   spring(e: Enemy): void;
   /** the snare is gone, sprung or fallen apart */
@@ -27,6 +29,7 @@ const IRON = hex("#2a3236");
 export function createSnareTrap(s: SnareSet): Effect {
   let t = 0;
   let shut = -1;
+  let rearm = s.rearm ?? 0;
   const finish = () => {
     s.gone();
     return false;
@@ -36,7 +39,13 @@ export function createSnareTrap(s: SnareSet): Effect {
       t += dt;
       if (shut >= 0) {
         shut += dt;
-        return shut < SHUT || finish();
+        if (shut < SHUT) return true;
+        if (rearm <= 0) return finish();
+        rearm--;
+        shut = -1;
+        t = 0;
+        lights.add(s.x, s.y - 2, 14, s.ramp[4], 0.6, 0.2);
+        return true;
       }
       if (t > s.life) return finish();
       if (Math.floor(t * 4) !== Math.floor((t - dt) * 4)) lights.add(s.x, s.y - 2, 8, s.ramp[4], 0.3, 0.25);

@@ -47,7 +47,7 @@ export const TOUCH_TEXT: Record<KitId, Record<TouchButtonAction, TouchButtonText
   ysra: {
     attack: {
       label: "Attack",
-      hint: "Glaive string that pierces the whole line. Hold to wind a lunge, let go to lunge. Push the stick up for a skyhook, down for a ground lash",
+      hint: "Glaive string of three blows that pierce the whole line. Hold to wind a lunge, let go to lunge. In a vault, crash down",
       accent: "#ffae48",
     },
     up: {
@@ -82,7 +82,7 @@ export const TOUCH_TEXT: Record<KitId, Record<TouchButtonAction, TouchButtonText
       accent: "#3fc06a",
     },
     warp: { label: "Kick", hint: "Kick foes away from you", accent: "#ccb88c" },
-    cast: { label: "Snare", hint: "Set a snare at your feet (20 MP)", accent: "#e88a4c" },
+    cast: { label: "Spell", hint: "Cast the selected spell, a snare at first", accent: "#e88a4c" },
     ultimate: SPECIAL,
     cycle: {
       label: "Reload",
@@ -93,7 +93,7 @@ export const TOUCH_TEXT: Record<KitId, Record<TouchButtonAction, TouchButtonText
   hulda: {
     attack: {
       label: "Punch",
-      hint: "Fist string: jab, cross, body hook, haymaker. In the air, a hammer fist. While holding a foe, a knee",
+      hint: "Fist string: jab, body hook, haymaker. In the air, a hammer fist. While holding a foe, a knee",
       accent: "#ff5f6d",
     },
     up: {
@@ -104,12 +104,12 @@ export const TOUCH_TEXT: Record<KitId, Record<TouchButtonAction, TouchButtonText
     dash: { label: "Rush", hint: "Bull Rush: an armoured shoulder charge that spends stamina", accent: "#c43848" },
     warp: {
       label: "Grab",
-      hint: "Grab a foe ahead; big foes are crushed. While holding, throw it: push the stick behind you to suplex, up to toss it up. In the air, Skyfall Grab",
+      hint: "Grab a foe ahead; big foes are crushed. While holding, throw it: into the crowd ahead, or a suplex behind. In the air, Skyfall Grab",
       accent: "#b4bcc4",
     },
-    cast: { label: "Bellow", hint: "Drag nearby foes in and stun minions (20 MP)", accent: "#ffc2b8" },
+    cast: { label: "Ability", hint: "Use the selected ability: Bellow, the taunt or a spell skill", accent: "#ffc2b8" },
     ultimate: SPECIAL,
-    cycle: { label: "Taunt", hint: "Slap your chest twice for Grit", accent: "#e0ac48" },
+    cycle: { label: "Switch", hint: "Turn to the next ability", accent: "#e0ac48" },
   },
 };
 
@@ -144,20 +144,20 @@ export const STICK_DIRECTIONS: Record<KitId, readonly StickDirectionSpec[]> = {
   ysra: [
     { direction: "side", label: "Walk" },
     { direction: "far side", label: "Charge, once Warpath is learned" },
-    { direction: "up", label: "Jump. With Attack, a skyhook" },
-    { direction: "down", label: "With Attack, a ground lash. With Jump, drop through a ledge" },
+    { direction: "up", label: "Jump" },
+    { direction: "down", label: "With Jump, drop through a ledge" },
   ],
   sable: [
     { direction: "side", label: "Walk" },
     { direction: "far side", label: "Run" },
-    { direction: "up", label: "Jump. While shooting, aim up" },
-    { direction: "down", label: "While shooting, aim low. With Jump, drop through a ledge" },
+    { direction: "up", label: "Jump" },
+    { direction: "down", label: "With Jump, drop through a ledge" },
   ],
   hulda: [
-    { direction: "side", label: "Walk. While holding a foe, behind you picks the suplex" },
+    { direction: "side", label: "Walk" },
     { direction: "far side", label: "Walk, she never runs" },
-    { direction: "up", label: "Jump. While holding a foe, Grab tosses it up" },
-    { direction: "down", label: "With Jump, drop through a ledge. While holding, Grab swings with Giant Swing" },
+    { direction: "up", label: "Jump" },
+    { direction: "down", label: "With Jump, drop through a ledge" },
   ],
 };
 

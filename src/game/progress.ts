@@ -6,25 +6,21 @@ import { metaBonus } from "../store/meta";
 import type { Card } from "../types/build";
 import { PK } from "../types/particle";
 import type { PickAnswer } from "../types/pick";
-import type { Perk } from "../types/skill";
 import { buildStats } from "../utils/build";
 import { cardKey } from "../utils/cards";
 import { xpToNext } from "../utils/progression";
 import { heldRows } from "../utils/skills";
-import { collectPerks, computeStats, heldUltimate } from "../utils/stats";
+import { computeStats, heldUltimate } from "../utils/stats";
 import { raiseCharm, raiseSkill } from "./build/raise";
 import { createFloorRing } from "./effects/floorRing";
 import { forgetEvolutions } from "./evolve";
 import { airLimit } from "./skills/airLimit";
 import { character, freshProgress, game, hero, lights, particles, progress, rng, showBanner } from "./state";
 
-export const hasPerk = (p: Perk): boolean => progress.perks.has(p);
-
 /** recompute everything derived from the level and the build, keeping HP and MP inside the new maxima */
 export function refreshProgress(): void {
   const build = progress.build;
   progress.stats = computeStats(character, progress.level, heldRows(character, build), metaBonus(), buildStats(build));
-  progress.perks = collectPerks(character, build);
   progress.ultimate = heldUltimate(character, build);
   progress.comboLimit = character.comboHits;
   progress.airLimit = airLimit();

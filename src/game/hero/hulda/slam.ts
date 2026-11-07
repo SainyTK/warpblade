@@ -8,12 +8,15 @@ import { enemyCenter } from "../../enemies/enemy";
 import { game, lights, progress } from "../../state";
 import { dust, hitStop, shake } from "../../world";
 import { skin } from "../skin";
+import { spreadFracture, throwPower } from "./fracture";
 
 export interface Slam {
   x: number;
   floor: number;
-  /** the foe driven into the floor, spared by its own ring */
+  /** the foe driven into the floor, spared by its own ring; a fractured one passes its Fracture to foes the ring strikes */
   body: Enemy | null;
+  /** other foes the ring spares, such as foes slammed down with the body */
+  skip?: readonly Enemy[];
   radius: number;
   /** each other foe in the ring takes this share of attack damage and lies stunned this long */
   power: number;
@@ -28,18 +31,19 @@ export interface Slam {
 export function slamRing(s: Slam): number {
   let hits = 0;
   for (const e of game.enemies) {
-    if (e === s.body || e.hp <= 0) continue;
+    if (e === s.body || e.hp <= 0 || s.skip?.includes(e)) continue;
     const [cx, cy] = enemyCenter(e);
     if (Math.abs(cx - s.x) > s.radius || cy < s.floor - 40) continue;
     hits++;
     const minion = ENEMIES[e.type].launchable;
-    dealDamage(e, progress.stats.ad * s.power, {
+    dealDamage(e, progress.stats.ad * throwPower(e, s.power), {
       fromX: s.x,
       kx: Math.sign(cx - s.x) * 60,
       stun: s.stun,
       launch: minion ? s.launch : undefined,
       heavy: true,
     });
+    if (s.body) spreadFracture(s.body, e);
     game.fx.push(createImpact(cx, cy, Math.sign(cx - s.x) || 1, false));
   }
   game.fx.push(createFloorRing(s.x, s.floor, s.radius, skin.ramp, 0.4));

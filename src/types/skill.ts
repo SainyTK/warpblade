@@ -1,10 +1,5 @@
-import type { HuldaPerk } from "./hulda";
-import type { SablePerk } from "./sable";
 import type { Stats } from "./stats";
-import type { YsraPerk } from "./ysra";
 
-/** Abilities a skill node switches on. */
-export type Perk = YsraPerk | SablePerk | HuldaPerk;
 export type UltimateId =
   | "crystalNova"
   | "pyreWave"
@@ -13,18 +8,18 @@ export type UltimateId =
   | "starfall"
   | "tempest"
   | "sunspear"
-  | "phoenixDive"
   | "volcanicRift"
   | "boltStorm"
   | "deadeye"
   | "quakeDrop"
-  | "titanThrow";
+  | "titanThrow"
+  | "unbroken";
 /** what a skill is, for its card colour and the contract's least counts per hero (docs/skill-design.md) */
 export type SkillKind = "attack" | "movement" | "spell" | "dot" | "summon" | "passive" | "ultimate";
 /** how hard a skill is to pull off: the harder, the more it deals */
 export type SkillRisk = "easy" | "timed" | "precise";
 /** the button a skill attaches to, or `auto` for one that runs on its own */
-export type SkillButton = "J" | "K" | "L" | "I" | "U" | "jump" | "auto";
+export type SkillButton = "J" | "K" | "L" | "I" | "O" | "U" | "jump" | "auto";
 
 /** one level of a skill, or its evolution: the card line and what the skill's code reads */
 export interface SkillLevel {
@@ -46,8 +41,6 @@ export interface SkillEvolution {
   text: string;
   /** replaces the level 8 row */
   row: SkillLevel;
-  /** temporary until the hero's skills are designed: a kit perk the evolved form switches on */
-  perk?: Perk;
 }
 
 /** one of a hero's 20 skills. Design: docs/skill-design.md */
@@ -63,8 +56,6 @@ export interface SkillDef {
   /** levels 1 to 8, index 0 is level 1 */
   levels: readonly SkillLevel[];
   evolution: SkillEvolution;
-  /** temporary until the hero's skills are designed: a kit perk the skill switches on at any level */
-  perk?: Perk;
   /** an ultimate skill: the ultimate it puts on U in place of the hero's special */
   ultimate?: UltimateId;
 }

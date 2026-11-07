@@ -2,6 +2,7 @@ import { KAEL } from "../constants/characters/kael";
 import { AIR_STRING } from "../constants/combo";
 import { HERO_START_X, STAND } from "../constants/hero";
 import { GROUND, SEED } from "../constants/stage";
+import { ULT_COOLDOWN } from "../constants/ultimate";
 import { Lights } from "../engine/lights";
 import { Particles } from "../engine/particles";
 import { metaBonus, metaToolBonus } from "../store/meta";
@@ -67,7 +68,6 @@ export function freshProgress(): Progress {
     xp: 0,
     picks: 0,
     stats: computeStats(character, 1, [], metaBonus()),
-    perks: new Set(),
     ultimate: character.special,
     comboLimit: character.comboHits,
     airLimit: AIR_STRING.hits,
@@ -120,6 +120,7 @@ export function freshHero(stats: Progress["stats"]): Hero {
     sinceDash: 9,
     warpCd: 0,
     ultCd: 0,
+    ultFull: ULT_COOLDOWN,
     spellCd: { lance: 0, burst: 0, fire: 0, ice: 0, volt: 0 },
     spellCdFull: { lance: 1, burst: 1, fire: 1, ice: 1, volt: 1 },
     castAbility: "lance",

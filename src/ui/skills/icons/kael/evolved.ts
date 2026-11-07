@@ -2,8 +2,23 @@ import { KEEN_RAMP } from "../../../../constants/combo";
 import { FIRE_RAMP, KAEL_COLORS as HC, PAL } from "../../../../constants/palette";
 import type { SpriteCanvas } from "../../../../engine/sprite";
 import { WHITE } from "../../../../utils/color";
-import { arc, arrow, bolt, crescent, drop, figure, fill, flame, gem, ring, sparkle, speedLines, sword } from "../parts";
-import { cloud, evolvedStar, foeBody, ground, spike } from "./parts";
+import {
+  arc,
+  arrow,
+  bolt,
+  crescent,
+  drop,
+  evolvedStar,
+  figure,
+  fill,
+  flame,
+  gem,
+  ring,
+  sparkle,
+  speedLines,
+  sword,
+} from "../parts";
+import { cloud, foeBody, ground, spike } from "./parts";
 
 const GHOST = PAL.shadow;
 const C = PAL.crystal;

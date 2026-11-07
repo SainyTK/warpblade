@@ -1,4 +1,4 @@
-/** the glaive string, its held lunge and its directional, counter, running and air variants */
+/** the glaive string, its held lunge and its situational, counter, running and air variants */
 export type GlaiveMoveId =
   | "hipThrust"
   | "reverseSweep"
@@ -7,13 +7,16 @@ export type GlaiveMoveId =
   | "haftRam"
   | "skyThrust"
   | "impale"
+  | "impaleTwist"
   | "heftPoke"
   | "heftLunge"
   | "skyhook"
   | "groundLash"
   | "windmill"
+  | "windmillFull"
   | "counterThrust"
   | "runningImpale"
+  | "railLunge"
   | "airReap"
   | "airReapRise";
 export type GlaiveClipName =

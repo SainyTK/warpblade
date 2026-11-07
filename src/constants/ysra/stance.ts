@@ -60,10 +60,9 @@ export const CRASH = {
 
 /** the brace and its parry */
 export const BRACE = {
-  /** stamina per blocked blow; Firm Stance takes this share off per rank */
+  /** stamina per blocked blow */
   blockCost: 12,
-  firmCut: 0.3,
-  /** a blow in this long after the press is a parry; Ember Parry doubles it */
+  /** a blow in this long after the press is a parry; Counter Thrust widens it */
   parryWindow: 0.12,
   /** the attacker reels this long; bosses half as long */
   parryStun: 1,
@@ -71,15 +70,12 @@ export const BRACE = {
   parrySlow: 0.35,
   /** Counter Thrust: J is the counter for this long after a parry */
   counterTime: 0.8,
-  /** Ember Parry sets the attacker on fire for this many seconds */
-  emberBurn: 3,
   /** a blow from within this many pixels behind her middle still counts as the front */
   frontSlack: 2,
   /** the parry knocks aside a foe within this many pixels of where the blow came from */
   attackerReach: 40,
-  /** pushed back this fast by a block; Bulwark keeps this share of it */
+  /** pushed back this fast by a block */
   pushback: 110,
-  bulwarkPush: 0.15,
   /** after a block or parry, more blows from the front in this long are taken without cost */
   shieldTime: 0.22,
   /** stamina a parry gives back */
@@ -101,29 +97,22 @@ export const BACKSTEP = {
 
 /** Warpath: the charge shoulders foes it runs into */
 export const WARPATH = {
-  power: 0.35,
   kx: 220,
-  /** small foes are bumped up off their feet as well as aside */
+  /** small foes are bumped up off their feet as well as aside, once Warpath throws them */
   launch: -150,
   stagger: 0.5,
   /** the same foe is not shouldered again for this long */
   again: 0.6,
   /** ahead of her feet, the box the shoulder hits */
   box: [0, -26, 12, 0] as const,
+  /** Juggernaut: carried foes ride this far ahead of her feet, this far apart */
+  carry: 26,
+  stack: 7,
 } as const;
 
-/** Earthshaker: the shockwave that runs along the floor both ways from a vault or dive landing */
-export const QUAKE = {
-  speed: 230,
-  range: 96,
-  power: 0.7,
-  stun: 0.5,
-  /** pixels above the floor the wave hits */
-  height: 14,
-} as const;
-
-/** Unbroken: below this share of her HP she takes this much of the damage */
-export const UNBROKEN = { below: 1 / 3, scale: 0.7 } as const;
+/** the shockwave that runs along the floor both ways from a vault or dive landing (Vault Strike): its pixels per
+ *  second, and how high above the floor it hits */
+export const QUAKE = { speed: 230, height: 14 } as const;
 
 /** seconds from leaving the floor to coming back to it, for a rise of this many pixels under this share of gravity */
 const airtime = (rise: number, gravity: number): number => 2 * Math.sqrt((2 * rise) / (HERO_MOVE.gravity * gravity));

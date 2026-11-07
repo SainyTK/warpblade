@@ -21,11 +21,11 @@ function ultimateValues(): Readonly<Record<string, number>> {
   return skill ? skillValues(skill.id) : {};
 }
 
-/** seconds before the ultimate can be charged again: the held ultimate skill's own, or the shared wait */
-const ultCooldown = (): number => ultimateValues().recharge ?? ULT_COOLDOWN;
+/** seconds before the ultimate can be charged again: the held ultimate skill's `cooldown`, or the shared wait */
+const ultCooldown = (): number => ultimateValues().cooldown ?? ULT_COOLDOWN;
 
 /** share of the ultimate's cooldown still to run, 0 when ready */
-export const ultRecharge = (): number => hero.ultCd / ultCooldown();
+export const ultRecharge = (): number => hero.ultCd / hero.ultFull;
 
 /** U pressed: start gathering power if the ultimate has recharged and the first level is paid for; a press while it
  *  recharges is refused with a tick. */
@@ -58,6 +58,8 @@ function release(): void {
   h.chargeLevel = 0;
   h.ultCd = ultCooldown();
   castUltimate(progress.ultimate, level);
+  // the cast may set its own wait (an ultimate skill's cooldown); the display measures whichever it is
+  h.ultFull = Math.max(h.ultCd, 0.01);
   emitSkillEvent({ type: "ultimate", level });
 }
 
