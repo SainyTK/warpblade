@@ -74,7 +74,7 @@ Texts on the nodes are the promise to the player; the code must do what they say
 Pyre Wave is her special from level 3, as before; Sunspear, Phoenix Dive and Volcanic Rift replace it.
 
 Her Evolution branch (`evolution.ts`) holds Pyre Colonnade, the evolved Flame Pillar.
-It is offered from level 6 once Flame Pillar is learned and Kindling is at 3/3, as the gold first card of a wave pick.
+It is offered from level 13 once Flame Pillar is learned and Kindling is at 3/3, as the gold first card of a wave pick.
 The cast keeps the rite's Heat cost (40, or 28 with Hearthfire), its clip and its targeting.
 A ringed sigil glows under the target with two smaller sigils 30 px either side.
 The main pillar bursts at 6.6 times ability power (base 5.5), and the two flank pillars burst 0.12 s later at 3.85 times, 64 px high, with a lighter shake.
