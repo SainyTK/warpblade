@@ -15,7 +15,6 @@ import { collectPerks, computeStats, heldUltimate } from "../utils/stats";
 import { raiseCharm, raiseSkill } from "./build/raise";
 import { createFloorRing } from "./effects/floorRing";
 import { forgetEvolutions } from "./evolve";
-import { keepElementLearned } from "./hero/spell";
 import { airLimit } from "./skills/airLimit";
 import { character, freshProgress, game, hero, lights, particles, progress, rng, showBanner } from "./state";
 
@@ -29,7 +28,6 @@ export function refreshProgress(): void {
   progress.ultimate = heldUltimate(character, build);
   progress.comboLimit = character.comboHits;
   progress.airLimit = airLimit();
-  keepElementLearned();
   hero.hp = Math.min(hero.hp, progress.stats.hp);
   hero.mp = Math.min(hero.mp, progress.stats.mp);
   hero.stamina = Math.min(hero.stamina, progress.stats.stamina);

@@ -42,7 +42,7 @@ export const TOUCH_TEXT: Record<KitId, Record<TouchButtonAction, TouchButtonText
     warp: { label: "Warp", hint: "Warp strike (10 MP)", accent: "#a8ecff" },
     cast: { label: "Spell", hint: "Cast the selected spell (18 MP)", accent: null },
     ultimate: SPECIAL,
-    cycle: { label: "Element", hint: "Switch element: fire, ice, bolt", accent: null },
+    cycle: { label: "Ability", hint: "Switch ability: lance, burst and the spells you learn", accent: null },
   },
   ysra: {
     attack: {

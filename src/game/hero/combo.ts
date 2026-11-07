@@ -1,14 +1,12 @@
 import { CLIPS } from "../../constants/clips";
-import { COMBO, FUSION } from "../../constants/combat";
+import { COMBO } from "../../constants/combat";
 import { KEEN, KEEN_RAMP } from "../../constants/combo";
 import { sfx } from "../../services/audio";
 import type { MoveHit, MoveId } from "../../types/move";
-import { createCrystalWave } from "../effects/crystalWave";
 import { createSlash } from "../effects/slash";
 import { wispsEvade } from "../enemies/evade";
-import { pressAge, take } from "../input";
+import { pressAge } from "../input";
 import { meleeHit } from "../meleeHit";
-import { hasPerk } from "../progress";
 import { game, hero, progress } from "../state";
 import { boxAhead, boxBehind, newSwing } from "../world";
 import { isFree, leaveHang, setState, settle } from "./actions";
@@ -32,13 +30,6 @@ export function pickMove(): MoveId | null {
 
 const endsChain = (id: MoveId): boolean => !!MOVES[id].finisher || hero.chain >= progress.comboLimit;
 
-/** Mana Blade: with MP above three quarters, a swing also sends a crystal wave */
-function manaWave(): void {
-  if (!hasPerk("manaBlade") || hero.mp < progress.stats.mp * FUSION.manaWaveFrom) return;
-  hero.mp -= FUSION.manaWaveCost;
-  game.fx.push(createCrystalWave(hero.x + hero.face * 10, hero.y - 18, hero.face, progress.stats.ad * FUSION.manaWave));
-}
-
 export function startMove(id: MoveId): void {
   const h = hero;
   const m = MOVES[id];
@@ -57,16 +48,14 @@ export function startMove(id: MoveId): void {
     moveHits: 0,
     moveGhost: 0,
   });
-  Object.assign(h, { keen: h.keenNext, keenNext: false, keenSpoiled: false, keenOpen: 0 });
+  const keen = h.keenNext || !!kit().alwaysKeen?.();
+  Object.assign(h, { keen, keenNext: false, keenSpoiled: false, keenOpen: 0 });
   setState("move");
   // a move without footwork of its own plants Kael where he stands
   if (h.ground && !m.strides && !m.step) h.vx = 0;
   if (m.lift) lift(m.lift, false);
   m.enter?.();
-  if (m.hits.length) {
-    wispsEvade();
-    manaWave();
-  }
+  if (m.hits.length) wispsEvade();
   sfx.swing(m.pitch ?? 1);
   if (h.keen) sfx.chime(2);
 }
@@ -91,7 +80,8 @@ export function endMove(): void {
   settle();
 }
 
-function strike(hit: MoveHit): number {
+function strike(id: MoveId, raw: MoveHit): number {
+  const hit = kit().shapeHit?.(id, raw) ?? raw;
   newSwing();
   const slash = hit.slash && hero.keen ? { ...hit.slash, ramp: KEEN_RAMP } : hit.slash;
   if (slash) game.fx.push(createSlash(hero.x, hero.y, hero.face, slash));
@@ -138,12 +128,12 @@ export function runMove(dt: number): void {
   m.step?.(h.st);
   moveBody(dt);
   while (h.hitIndex < m.hits.length && h.st >= m.hits[h.hitIndex].at - 0.025) {
-    const hits = strike(m.hits[h.hitIndex]);
+    const hits = strike(id, m.hits[h.hitIndex]);
     h.hitIndex++;
     m.afterHit?.(hits);
     kit().afterStrike(id, hits);
     // the last blow landed clean: a J pressed in the next moment is Keen
-    if (h.hitIndex === m.hits.length && hits > 0 && !h.keenSpoiled) h.keenOpen = KEEN.window;
+    if (h.hitIndex === m.hits.length && hits > 0 && !h.keenSpoiled) h.keenOpen = kit().keenWindow?.() ?? KEEN.window;
   }
   // a hop finishes its landing before the next move
   if (h.queued && blowsDone() && !endsChain(id) && (!m.hop || h.ground)) {
@@ -179,8 +169,6 @@ export function pressAttack(): boolean {
   judgeTiming();
   const id = pickMove();
   if (!id) return false;
-  // the Up that aimed the launcher is spent on it, not on a jump
-  if (id === "launcher") take("up");
   if (hero.state === "move") {
     hero.queued = id;
     return true;

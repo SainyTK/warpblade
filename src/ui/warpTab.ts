@@ -3,14 +3,14 @@ import { SNARE } from "../constants/sable/snare";
 import { VAULT } from "../constants/ysra/stance";
 import { hulda } from "../game/hero/hulda/memory";
 import { sable } from "../game/hero/sable/memory";
-import { warpCooldown } from "../game/hero/warp";
+import { warpRecharge } from "../game/hero/warp";
 import { hasPerk } from "../game/progress";
 import { character, hero } from "../game/state";
 import { byId } from "./dom";
 import { createRechargeTab } from "./rechargeTab";
 
 /**
- * The K tab: Kael's warp once Warp Strike is learned, Ysra's vault from the start, Sable's snare and Hulda's Bellow (both
+ * The K tab: Kael's warp from the start, Ysra's vault from the start, Sable's snare and Hulda's Bellow (both
  * on I) from the start. It shows the recharge,
  * and jolts when a press is refused while it recharges.
  */
@@ -31,12 +31,7 @@ function tabState(): { label: string; known: boolean; recharge: number; denied: 
     case "hulda":
       return { label: "BELLOW", known: true, recharge: hulda.bellowCd / BELLOW.cooldown, denied: hero.denied.cast };
     default:
-      return {
-        label: "WARP",
-        known: hasPerk("warpStrike"),
-        recharge: hero.warpCd / warpCooldown(),
-        denied: hero.denied.warp,
-      };
+      return { label: "WARP", known: true, recharge: warpRecharge(), denied: hero.denied.warp };
   }
 }
 

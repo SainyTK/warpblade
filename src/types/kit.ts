@@ -1,5 +1,5 @@
 import type { Hero } from "./hero";
-import type { MoveId, Situation } from "./move";
+import type { MoveHit, MoveId, Situation } from "./move";
 import type { Pose } from "./pose";
 
 /** which hero's controls, moves and states drive the shared rig */
@@ -27,6 +27,13 @@ export interface HeroKit {
   pose(h: Hero, t: number): Pose | null;
   /** after a combo move's blow, with how many foes it hit */
   afterStrike(id: MoveId, hits: number): void;
+  /** a combo move's blow as the kit's skills shape it (power, reach, guard break); left out, the move's own */
+  shapeHit?(id: MoveId, hit: MoveHit): MoveHit;
+  /** seconds after a blow lands that a J press is Keen; left out, `KEEN.window` */
+  keenWindow?(): number;
+  /** every move starts Keen right now, whatever the timing */
+  alwaysKeen?(): boolean;
+
   /** a blow is about to land on the hero: true when the kit took it (a block or a parry) */
   absorbHurt(dmg: number, fromX: number): boolean;
   /** combo moves play this much faster on top of attack speed, right now */

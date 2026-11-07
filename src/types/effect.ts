@@ -45,6 +45,8 @@ export interface Blast {
   shake?: number;
   amp?: number;
   hitStop?: number;
+  /** seconds a foe it hits lies knocked down */
+  stun?: number;
   /** what threw it, for the end of run screen */
   source: SourceId;
 }

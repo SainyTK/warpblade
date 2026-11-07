@@ -4,7 +4,7 @@ import type { HuldaState } from "./hulda";
 import type { MoveId } from "./move";
 import type { Pose } from "./pose";
 import type { SableState } from "./sable";
-import type { Element } from "./spell";
+import type { KaelAbility } from "./spell";
 import type { Point } from "./world";
 import type { YsraClipName, YsraState } from "./ysra";
 
@@ -16,12 +16,9 @@ export type KaelClipName =
   | "atk1"
   | "atk2"
   | "atk3"
-  | "thrust"
   | "sweep"
-  | "uppercut"
   | "spin"
   | "plunge"
-  | "flip"
   | "twinFang"
   | "hopCleave"
   | "crescent"
@@ -32,7 +29,6 @@ export type KaelClipName =
   | "airWheel"
   | "airScissor"
   | "airStomp"
-  | "dashCut"
   | "phase"
   | "skyRend"
   | "cast"
@@ -139,15 +135,15 @@ export interface Hero {
   warpCd: number;
   /** seconds before the ultimate can be charged again */
   ultCd: number;
-  /** seconds before each element can be cast again */
-  spellCd: Record<Element, number>;
+  /** seconds before each of Kael's abilities can be cast again */
+  spellCd: Record<KaelAbility, number>;
   /** the full length of each element's current wait, for the recharge display */
-  spellCdFull: Record<Element, number>;
-  /** the element of the cast under way, fixed when the cast starts */
-  castElement: Element;
+  spellCdFull: Record<KaelAbility, number>;
+  /** the ability of the cast under way, fixed when the cast starts */
+  castAbility: KaelAbility;
   /** seconds left of the HUD flash after a refused press: a spell or the warp still recharging, or MP short */
   denied: Record<DenyReason, number>;
-  /** the spell is cast at once and stronger: J J I */
+  /** the spell is cast at once and stronger: Spellblade, I during a combo */
   spellPower: number;
   lastHit: Enemy | null;
   /** seconds the ultimate key has been held */
@@ -157,8 +153,10 @@ export interface Hero {
   moveHits: number;
   /** this dash already earned a perfect dodge */
   perfectUsed: boolean;
-  /** Riposte: time left in which the next sword hit is tripled */
+  /** Riposte (Mirror Knight): time left in which the next sword blows hit harder */
   riposte: number;
+  /** Riposte: sword blows left that it covers */
+  riposteBlows: number;
   /** a downward stab was used in this combo */
   stabbed: boolean;
   /** Keen timing: time left in which a J press makes the next move a sure crit */

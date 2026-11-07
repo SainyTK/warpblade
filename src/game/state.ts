@@ -56,7 +56,6 @@ export const game: GameState = {
   pickups: [],
   blazes: [],
   numbers: [],
-  spell: 0,
   swing: 0,
   banner: { text: "", time: 0 },
 };
@@ -121,9 +120,9 @@ export function freshHero(stats: Progress["stats"]): Hero {
     sinceDash: 9,
     warpCd: 0,
     ultCd: 0,
-    spellCd: { fire: 0, ice: 0, volt: 0 },
-    spellCdFull: { fire: 1, ice: 1, volt: 1 },
-    castElement: "fire",
+    spellCd: { lance: 0, burst: 0, fire: 0, ice: 0, volt: 0 },
+    spellCdFull: { lance: 1, burst: 1, fire: 1, ice: 1, volt: 1 },
+    castAbility: "lance",
     denied: { cast: 0, warp: 0, mp: 0, ult: 0 },
     spellPower: 1,
     lastHit: null,
@@ -132,6 +131,7 @@ export function freshHero(stats: Progress["stats"]): Hero {
     moveHits: 0,
     perfectUsed: false,
     riposte: 0,
+    riposteBlows: 0,
     stabbed: false,
     keenOpen: 0,
     keenSpoiled: false,
@@ -152,7 +152,7 @@ rememberPerSeat(objectMemory(progress));
 rememberPerSeat(objectMemory(scarf, true));
 rememberPerSeat(objectMemory(ponytail, true));
 rememberPerSeat({
-  save: () => ({ coins: game.coins, revived: game.revived, spell: game.spell }),
+  save: () => ({ coins: game.coins, revived: game.revived }),
   load(saved) {
     Object.assign(game, saved);
   },

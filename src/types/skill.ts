@@ -3,46 +3,8 @@ import type { SablePerk } from "./sable";
 import type { Stats } from "./stats";
 import type { YsraPerk } from "./ysra";
 
-/** Kael's abilities */
-export type KaelPerk =
-  | "launcher"
-  | "sweep"
-  | "phaseFinish"
-  | "skybreaker"
-  | "berserker"
-  | "ironWill"
-  | "doubleJump"
-  | "airDash"
-  | "hang"
-  | "whirlwind"
-  | "meteorDrop"
-  | "dashStrike"
-  | "runThrust"
-  | "quickstep"
-  | "warpcraft"
-  | "blinkCombo"
-  | "spellblade"
-  | "siphon"
-  | "quickCast"
-  | "pyromancy"
-  | "cryomancy"
-  | "stormcalling"
-  | "staticStep"
-  | "shatter"
-  | "ignition"
-  | "phantomEdge"
-  | "manaBlade"
-  | "gravityWell"
-  | "riposte"
-  | "warpStrike"
-  | "fireSpell"
-  | "iceSpell"
-  | "voltSpell"
-  | "sunflask"
-  | "glacierBloom"
-  | "thunderhead";
 /** Abilities a skill node switches on. */
-export type Perk = KaelPerk | YsraPerk | SablePerk | HuldaPerk;
+export type Perk = YsraPerk | SablePerk | HuldaPerk;
 export type UltimateId =
   | "crystalNova"
   | "pyreWave"

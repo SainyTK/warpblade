@@ -1,32 +1,46 @@
-import { ELEMENTS } from "../constants/combat";
-import { EVOLVED_PERK } from "../constants/evolutions";
-import { knowsElement, spellRecharge } from "../game/hero/spell";
-import { hasPerk } from "../game/progress";
-import { game, hero } from "../game/state";
+import { KAEL_ABILITIES } from "../constants/spells";
+import { abilityEvolved, knowsAbility, selectedAbility, spellRecharge } from "../game/hero/spell";
+import { character, hero } from "../game/state";
+import type { KaelAbility } from "../types/spell";
 import { byId } from "./dom";
 import { createRechargeTab } from "./rechargeTab";
 
-/** The FIRE ICE BOLT tabs, each shown once its spell is learned: the selected element, each element's recharge, a gold top edge once it evolves, and the jolt of a refused cast. */
-const elements = [byId("elFire"), byId("elIce"), byId("elVolt")];
-const tabs = elements.map(createRechargeTab);
-let lastSelected = -1;
+/** each ability's tab: its label and the colour it lights in when selected */
+const TAB: Readonly<Record<KaelAbility, { label: string; tint: string }>> = {
+  lance: { label: "LANCE", tint: "var(--crystal)" },
+  burst: { label: "BURST", tint: "var(--mist)" },
+  fire: { label: "FIRE", tint: "var(--fire)" },
+  ice: { label: "ICE", tint: "var(--ice)" },
+  volt: { label: "BOLT", tint: "var(--volt)" },
+};
+
+/** Kael's ability tabs: one per ability he has, the selected one lit, each one's recharge, a gold top edge once an
+ *  element evolves, and the jolt of a refused cast */
+const box = byId("abilityTabs");
+const tabs = KAEL_ABILITIES.map((ability) => {
+  const el = document.createElement("span");
+  el.className = "el ability";
+  el.textContent = TAB[ability].label;
+  el.style.setProperty("--tint", TAB[ability].tint);
+  box.append(el);
+  return { ability, el, tab: createRechargeTab(el) };
+});
 /** the deny flash time last seen; a rise means a new refused press */
 let lastDenied = 0;
 
 export function updateSpellTabs(): void {
-  if (game.spell !== lastSelected) {
-    lastSelected = game.spell;
-    elements.forEach((el, i) => {
-      el.classList.toggle("on", i === game.spell);
-    });
+  const shown = character.kit === "kael";
+  if (box.hidden === shown) box.hidden = !shown;
+  if (!shown) return;
+  const selected = selectedAbility();
+  for (const { ability, el, tab } of tabs) {
+    const known = knowsAbility(ability);
+    if (el.hidden === known) el.hidden = !known;
+    el.classList.toggle("on", ability === selected);
+    const evolved = abilityEvolved(ability);
+    if (el.classList.contains("evolved") !== evolved) el.classList.toggle("evolved", evolved);
+    tab.update(spellRecharge(ability));
   }
-  tabs.forEach((tab, i) => {
-    const known = knowsElement(ELEMENTS[i]);
-    if (elements[i].hidden === known) elements[i].hidden = !known;
-    const evolved = hasPerk(EVOLVED_PERK[ELEMENTS[i]]);
-    if (elements[i].classList.contains("evolved") !== evolved) elements[i].classList.toggle("evolved", evolved);
-    tab.update(spellRecharge(ELEMENTS[i]));
-  });
-  if (hero.denied.cast > lastDenied) tabs[game.spell].jolt();
+  if (hero.denied.cast > lastDenied) tabs.find((t) => t.ability === selected)?.tab.jolt();
   lastDenied = hero.denied.cast;
 }

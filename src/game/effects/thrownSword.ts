@@ -9,8 +9,13 @@ import { enemyCenter } from "../enemies/enemy";
 import { skin } from "../hero/skin";
 import { particles, rng } from "../state";
 
-/** the crystal sword flying point first, homing on a moving target */
-export function createThrownSword(x: number, y: number, target: WarpTarget): Projectile {
+/** the crystal sword flying point first, homing on a moving target; `onMove` hears each step of its flight */
+export function createThrownSword(
+  x: number,
+  y: number,
+  target: WarpTarget,
+  onMove?: (ax: number, ay: number, bx: number, by: number) => void,
+): Projectile {
   const trail: [number, number][] = [];
   const aim = (): [number, number] => (target.enemy ? enemyCenter(target.enemy) : [target.x, target.y]);
   let [tx, ty] = aim();
@@ -42,14 +47,16 @@ export function createThrownSword(x: number, y: number, target: WarpTarget): Pro
             size: 0.5,
           },
         );
+      const [ax, ay] = [s.x, s.y];
       if (d <= WARP.speed * dt || t > WARP.maxFlight) {
         s.x = tx;
         s.y = ty;
         s.done = true;
-        return;
+      } else {
+        s.x += (dx / d) * WARP.speed * dt;
+        s.y += (dy / d) * WARP.speed * dt;
       }
-      s.x += (dx / d) * WARP.speed * dt;
-      s.y += (dy / d) * WARP.speed * dt;
+      onMove?.(ax, ay, s.x, s.y);
     },
     draw() {
       place();

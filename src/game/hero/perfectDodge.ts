@@ -1,12 +1,12 @@
-import { PERFECT, RIPOSTE, STAMINA } from "../../constants/combat";
+import { PERFECT, STAMINA } from "../../constants/combat";
 import { FLOW } from "../../constants/growth";
 import { sfx } from "../../services/audio";
 import { addFlow } from "../build/flow";
 import { cue } from "../cue";
 import { createFloorRing } from "../effects/floorRing";
 import { feat } from "../feat";
-import { hasPerk } from "../progress";
 import { emitSkillEvent } from "../skills/events";
+import { skillValues, withCharms } from "../skills/query";
 import { game, hero, lights, progress } from "../state";
 import { skin } from "./skin";
 import { refundStamina } from "./stamina";
@@ -27,13 +27,17 @@ export function rewardPerfectDodge(): void {
   emitSkillEvent({ type: "perfectDodge", at: h.x });
 }
 
-/** an attack met Kael in the first moments of a dash: the shared reward, and with Riposte a primed counter */
+/** an attack met Kael in the first moments of a dash: the shared reward, and with Mirror Knight's Riposte a primed counter */
 export function perfectDodge(): void {
   const h = hero;
   if (h.state !== "dash" || h.st > PERFECT.window || h.perfectUsed) return;
   h.perfectUsed = true;
   rewardPerfectDodge();
-  if (hasPerk("riposte")) h.riposte = RIPOSTE.time;
+  const mirror = skillValues("k_mirror");
+  if (mirror.riposte) {
+    h.riposte = withCharms("duration", mirror.ripTime);
+    h.riposteBlows = mirror.ripBlows;
+  }
   game.fx.push(createFloorRing(h.x, h.y, 28, skin.ramp, 0.4));
   lights.add(h.x, h.y - 18, 50, skin.ramp[4], 0.7, 0.4);
   sfx.perfect();

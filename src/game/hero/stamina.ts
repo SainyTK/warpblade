@@ -1,17 +1,20 @@
 import { STAMINA } from "../../constants/combat";
 import { sfx } from "../../services/audio";
 import type { HeroState } from "../../types/hero";
-import { hasPerk } from "../progress";
+import { skillValues } from "../skills/query";
 import { hero, progress } from "../state";
 
 /** states in which stamina comes back at the slower attacking rate */
 const BUSY: ReadonlySet<HeroState> = new Set<HeroState>(["move", "cast", "throw", "warpStrike", "charge", "ultimate"]);
 
-export const canPayDash = (): boolean => hero.stamina >= STAMINA.dashCost;
+/** stamina one dash costs; Phantom Rush halves it */
+const dashCost = (): number => STAMINA.dashCost * (skillValues("k_passing").staminaCost ?? 1);
+
+export const canPayDash = (): boolean => hero.stamina >= dashCost();
 
 /** pay for one dash; the bar waits a moment before it refills */
 export function spendDashStamina(): void {
-  hero.stamina = Math.max(0, hero.stamina - STAMINA.dashCost);
+  hero.stamina = Math.max(0, hero.stamina - dashCost());
   hero.staminaWait = STAMINA.delay;
 }
 
@@ -35,6 +38,6 @@ export function regenStamina(dt: number): void {
     h.staminaWait -= dt;
     return;
   }
-  const rate = (BUSY.has(h.state) ? STAMINA.regenBusy : STAMINA.regen) * (hasPerk("quickstep") ? STAMINA.quickstep : 1);
+  const rate = BUSY.has(h.state) ? STAMINA.regenBusy : STAMINA.regen;
   refundStamina(rate * dt);
 }

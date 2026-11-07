@@ -17,16 +17,12 @@ export type KaelMoveId =
   | "downStab"
   | "chaseCut"
   | "sweep"
-  | "launcher"
-  | "thrust"
-  | "dashStrike"
   | "airWheel"
   | "airScissor"
   | "airStomp"
   | "whirl"
   | "meteor"
   | "phaseCut"
-  | "backflip"
   | "skybreaker";
 export type MoveId = KaelMoveId | YsraMoveId;
 
@@ -134,5 +130,9 @@ export interface Situation {
   previous: MoveId | null;
   /** a downward stab was already used in this combo */
   stabbed: boolean;
+  /** the J press was Keen: the move it starts is a sure crit */
+  keen: boolean;
   perks: ReadonlySet<Perk>;
+  /** the hero's skills and their levels */
+  skills: Readonly<Record<string, number>>;
 }

@@ -12,3 +12,6 @@ export const ULT_REACH = [80, 130, 170, Number.POSITIVE_INFINITY] as const;
 export const ULT_COOLDOWN = 20;
 /** how long Kael is locked in the ultimate and cannot be hurt */
 export const ULT_LOCK = 0.7;
+/** the charge rule every ultimate shares, for their cards */
+export const ULT_CHARGE =
+  "Hold U to charge up to four levels, release to strike. Higher levels cost more MP; level 4 spends a full bar.";

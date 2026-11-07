@@ -1,6 +1,7 @@
 import { PAL, SPARKS } from "../../constants/palette";
 import { W } from "../../constants/stage";
 import { glow, line, place, px } from "../../engine/frame";
+import type { SourceId } from "../../types/build";
 import type { Effect } from "../../types/effect";
 import type { Enemy } from "../../types/enemy";
 import { WHITE } from "../../utils/color";
@@ -14,8 +15,9 @@ const SPEED = 250;
 const LIFE = 0.6;
 const HALF = 9;
 
-/** Mana Blade: a crescent of crystal that flies forward and cuts each foe once; it is not a sword blow, so guards do not stop it */
-export function createCrystalWave(x: number, y: number, face: number, damage: number): Effect {
+/** a crescent of crystal that flies forward and cuts each foe once (Crystal Lance, Keen Edge's wave); it is not a sword
+ *  blow, so guards do not stop it */
+export function createCrystalWave(x: number, y: number, face: number, damage: number, source?: SourceId): Effect {
   const o = { x, t: 0 };
   const struck = new Set<Enemy>();
   return {
@@ -25,7 +27,7 @@ export function createCrystalWave(x: number, y: number, face: number, damage: nu
       for (const e of game.enemies) {
         if (struck.has(e) || e.hp <= 0 || !boxHit([o.x - 3, y - HALF, o.x + 3, y + HALF], enemyBox(e))) continue;
         struck.add(e);
-        dealDamage(e, damage, { fromX: o.x - face * 8, kx: face * 60 });
+        dealDamage(e, damage, { fromX: o.x - face * 8, kx: face * 60, source });
         game.fx.push(createImpact(o.x, y, face, false, SPARKS.crystal));
       }
       return o.t < LIFE && o.x > -10 && o.x < W + 10;

@@ -1,5 +1,5 @@
 import type { Color, Ramp } from "../types/color";
-import type { Element } from "../types/spell";
+import type { KaelAbility } from "../types/spell";
 import { hex, ramp, WHITE } from "../utils/color";
 
 /** effect ramps, dark to bright */
@@ -35,7 +35,10 @@ export const FIRE_RAMP = ramp([
 ]);
 export const SMOKE_RAMP = ramp(["#6e6478", "#544c60", "#3d3648", "#2a2532", "#1a171e"]);
 
-export const ELEMENT_COLOR: Record<Element, Color> = {
+/** the colour of each of Kael's abilities: the glow at his hand, the HUD tab and the touch button rim */
+export const ABILITY_COLOR: Record<KaelAbility, Color> = {
+  lance: hex("#7fe3ff"),
+  burst: hex("#d8f4ff"),
   fire: hex("#ff8a2a"),
   ice: hex("#8fd3f2"),
   volt: hex("#a9a0ff"),

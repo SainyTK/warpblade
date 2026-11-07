@@ -65,6 +65,7 @@ export function explode(x: number, y: number, blast: Blast): void {
       kx: Math.sign(ex - x) * 200,
       ky: -120,
       heavy: true,
+      stun: blast.stun,
       source: blast.source,
     });
     e.burn = burn;

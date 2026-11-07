@@ -17,7 +17,6 @@ export function updateStatus(e: Enemy, dt: number): number {
   e.frozen = Math.max(0, e.frozen - dt);
   e.chill = Math.max(0, e.chill - dt);
   e.shock = Math.max(0, e.shock - dt);
-  e.charged = Math.max(0, e.charged - dt);
   e.evadeCd = Math.max(0, e.evadeCd - dt);
   e.stagger = Math.max(0, e.stagger - dt);
   e.pinned = Math.max(0, e.pinned - dt);

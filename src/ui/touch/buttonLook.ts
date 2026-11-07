@@ -10,10 +10,10 @@ import { VAULT } from "../../constants/ysra/stance";
 import { hulda } from "../../game/hero/hulda/memory";
 import { sable } from "../../game/hero/sable/memory";
 import { reloadShare } from "../../game/hero/sable/reload";
-import { castCost, knowsElement, selectedElement, spellRecharge } from "../../game/hero/spell";
+import { castCost, selectedAbility, spellRecharge } from "../../game/hero/spell";
 import { canPayDash } from "../../game/hero/stamina";
 import { canAffordUlt, ultRecharge } from "../../game/hero/ultimate";
-import { warpCooldown, warpCost } from "../../game/hero/warp";
+import { warpCost, warpReady, warpRecharge } from "../../game/hero/warp";
 import { heat, overheatLeft, overheatReady } from "../../game/hero/ysra/pyre/heat";
 import { riteCost, selectedRite } from "../../game/hero/ysra/pyre/riteChoice";
 import { hasPerk } from "../../game/progress";
@@ -40,12 +40,12 @@ function kaelLook(spec: TouchButtonSpec, look: ButtonLook): void {
       look.cooldown = look.ready ? 0 : 1 - hero.stamina / STAMINA.dashCost;
       break;
     case "warp":
-      look.ready = hasPerk("warpStrike") && hero.mp >= warpCost();
-      look.cooldown = hero.warpCd / warpCooldown();
+      look.ready = warpReady() && hero.mp >= warpCost();
+      look.cooldown = warpRecharge();
       break;
     case "cast":
-      look.ready = knowsElement(selectedElement()) && hero.mp >= castCost();
-      look.cooldown = spellRecharge(selectedElement());
+      look.ready = hero.mp >= castCost();
+      look.cooldown = spellRecharge(selectedAbility());
       break;
     default:
   }

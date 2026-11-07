@@ -1,3 +1,6 @@
+// the heroes' kits load first: Ysra's kit reads its parts as it loads, and the combo engine those parts use reaches
+// back to the kits, so a part reached first by another path would not be ready yet
+import "./game/hero/kits";
 import { CHARACTERS } from "./constants/characters";
 import { MAX_FRAME, STEP } from "./constants/stage";
 import { frameDriver } from "./game/frameDriver";

@@ -2,7 +2,8 @@ import { ULT_COOLDOWN, ULT_LEVELS, ULT_LOCK } from "../../constants/ultimate";
 import { sfx } from "../../services/audio";
 import { isHeld } from "../input";
 import { emitSkillEvent } from "../skills/events";
-import { hero, progress } from "../state";
+import { skillLevel, skillValues } from "../skills/query";
+import { character, hero, progress } from "../state";
 import { castUltimate } from "../ultimates/castUltimate";
 import { isFree, leaveHang, setState, settle } from "./actions";
 import { endCombo } from "./combo";
@@ -14,8 +15,17 @@ export function canAffordUlt(level: number): boolean {
   return Number.isFinite(cost) ? hero.mp >= cost : hero.mp >= progress.stats.mp - 0.5;
 }
 
+/** the numbers of the held ultimate skill, empty with the hero's special */
+function ultimateValues(): Readonly<Record<string, number>> {
+  const skill = character.skills.find((s) => s.ultimate === progress.ultimate && skillLevel(s.id));
+  return skill ? skillValues(skill.id) : {};
+}
+
+/** seconds before the ultimate can be charged again: the held ultimate skill's own, or the shared wait */
+const ultCooldown = (): number => ultimateValues().recharge ?? ULT_COOLDOWN;
+
 /** share of the ultimate's cooldown still to run, 0 when ready */
-export const ultRecharge = (): number => hero.ultCd / ULT_COOLDOWN;
+export const ultRecharge = (): number => hero.ultCd / ultCooldown();
 
 /** U pressed: start gathering power if the ultimate has recharged and the first level is paid for; a press while it
  *  recharges is refused with a tick. */
@@ -46,7 +56,7 @@ function release(): void {
   h.inv = Math.max(h.inv, ULT_LOCK);
   h.charge = 0;
   h.chargeLevel = 0;
-  h.ultCd = ULT_COOLDOWN;
+  h.ultCd = ultCooldown();
   castUltimate(progress.ultimate, level);
   emitSkillEvent({ type: "ultimate", level });
 }
@@ -55,7 +65,7 @@ function release(): void {
 export function runCharge(dt: number): void {
   const h = hero;
   if (!isHeld("ultimate")) return release();
-  h.charge += dt;
+  h.charge += dt * (ultimateValues().charge ?? 1);
   let level = 1;
   for (let i = 1; i < ULT_LEVELS.length; i++) if (h.charge >= ULT_LEVELS[i].at && canAffordUlt(i + 1)) level = i + 1;
   if (level > h.chargeLevel) sfx.chargeStep(level);

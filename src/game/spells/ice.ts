@@ -12,16 +12,15 @@ import { clamp, ease, TAU } from "../../utils/math";
 import { dealDamage } from "../damage";
 import { createImpact } from "../effects/impact";
 import { enemyBox, enemyCenter } from "../enemies/enemy";
-import { hasPerk } from "../progress";
+import { skillEvolved, skillValues, withCharms } from "../skills/query";
 import { game, lights, particles, progress, rng } from "../state";
 import { boxHit, shake, surfaceBelow } from "../world";
 
-const HEIGHTS = [14, 18, 22, 22, 18, 14];
-/** Cryomancy runs three spikes further */
-const LONG_HEIGHTS = [14, 18, 22, 24, 24, 22, 20, 17, 14];
-/** damage as a multiple of ability power */
-const POWER = 2.2;
-const FREEZE = { normal: 2.6, cryomancy: 4.2 } as const;
+const SKILL = "k_frost";
+/** spikes rise from LOW at the ends of the line to LOW + RISE in its middle */
+const SPIKE = { low: 14, rise: 10 } as const;
+/** foes this close to a spike they were not caught by are chilled, with Ice Spikes' chill */
+const CHILL_REACH = 30;
 const STAGGER = 0.055;
 const STAND = 1.0;
 /** where the first spike rises from the hero, and the gap between spikes */
@@ -42,6 +41,8 @@ interface Spike {
   spire: boolean;
   on: boolean;
   gone: boolean;
+  /** foes beside it have been chilled */
+  chilled: boolean;
   hit: Set<Enemy>;
 }
 
@@ -73,6 +74,7 @@ function spikeLine(x: number, y: number, dir: number, heights: readonly number[]
       spire: false,
       on: false,
       gone: false,
+      chilled: false,
       hit: new Set(),
     });
   }
@@ -87,6 +89,10 @@ function drawSpire(s: Spike, h: number, I: Ramp): void {
   crystal(s.x, s.base, h, SPIRE.width, s.lean, I, 1);
   glow(s.x, s.base - h * 0.5, 30, I[3], 0.4);
 }
+
+/** a line of `n` spike heights, tallest in the middle */
+const heightsOf = (n: number): number[] =>
+  Array.from({ length: n }, (_, i) => SPIKE.low + Math.round(SPIKE.rise * Math.sin((Math.PI * (i + 0.5)) / n)));
 
 /** the spire shatters into freezing shards: a white flash, shards in a full circle, and foes near its middle hit and frozen */
 function burstSpire(s: Spike, power: number): void {
@@ -103,7 +109,7 @@ function burstSpire(s: Spike, power: number): void {
       size: rng.range(2, 4),
     });
   }
-  const damage = b.power * progress.stats.ap * power;
+  const damage = (skillValues(SKILL).spire ?? b.power) * progress.stats.ap * power;
   for (const e of game.enemies) {
     const [ex, ey] = enemyCenter(e);
     if (e.hp <= 0 || Math.hypot(ex - s.x, ey - cy) > b.reach) continue;
@@ -114,14 +120,23 @@ function burstSpire(s: Spike, power: number): void {
   sfx.shatter();
 }
 
+/** foes near a spike that it did not catch are slowed */
+function chillBeside(s: Spike, seconds: number): void {
+  s.chilled = true;
+  for (const e of game.enemies) {
+    if (e.hp <= 0 || s.hit.has(e) || Math.abs(enemyCenter(e)[0] - s.x) > CHILL_REACH) continue;
+    e.chill = Math.max(e.chill, seconds);
+  }
+}
+
 /** a row of crystal spikes erupting one after another along the floor, freezing what they touch, then shattering */
 export function castIce(x: number, y: number, face: number, power: number): Effect {
   const I = PAL.ice;
-  const cryo = hasPerk("cryomancy");
-  const heights = cryo ? LONG_HEIGHTS : HEIGHTS;
-  const damage = POWER * progress.stats.ap * power;
-  const bloom = hasPerk("glacierBloom");
-  const spikes = spikeLine(x, y, face, heights);
+  const v = skillValues(SKILL);
+  const bloom = skillEvolved(SKILL);
+  const damage = v.power * progress.stats.ap * power * (bloom ? v.bloomPower : 1);
+  const freeze = withCharms("duration", v.freeze);
+  const spikes = spikeLine(x, y, face, heightsOf(Math.round(withCharms("amount", v.spikes))));
   if (bloom) {
     const crown = spikes[spikes.length - 1];
     if (crown) Object.assign(crown, { spire: true, h: SPIRE.height, stand: STAND + SPIRE.stand });
@@ -200,9 +215,10 @@ export function castIce(x: number, y: number, face: number, power: number): Effe
             if (s.hit.has(e) || !boxHit(enemyBox(e), [s.x - reach, s.base - s.h, s.x + reach, s.base])) continue;
             s.hit.add(e);
             dealDamage(e, damage, { fromX: s.x - s.dir * 6, kx: s.dir * 60, ky: -90, source: "abilities" });
-            e.frozen = cryo ? FREEZE.cryomancy : FREEZE.normal;
+            e.frozen = Math.max(e.frozen, freeze);
             game.fx.push(createImpact(s.x, s.base - s.h * 0.6, s.dir, false, SPARKS.ice));
           }
+        if (v.chill && !s.chilled && u >= 0.1) chillBeside(s, withCharms("duration", v.chill));
         if (!s.gone && u > s.stand) shatter(s, i);
       });
       return t < end;

@@ -88,8 +88,6 @@ export interface Enemy {
   guardHits: number;
   /** hits taken while airborne: each holds it up less */
   airHits: number;
-  /** Static Step's mark: the next sword hit sends lightning from it */
-  charged: number;
   /** time before a wisp can slip away from a swing again */
   evadeCd: number;
   /** a husk rocked by a sword blow stops walking for this long; a wind-up already started goes on */

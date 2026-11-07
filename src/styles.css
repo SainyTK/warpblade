@@ -439,28 +439,18 @@ body {
   background: var(--hud-bg);
   letter-spacing: 0.06em;
 }
-.el.on.fire {
-  color: var(--fire);
-  border-color: var(--fire);
-}
-.el.on.ice {
-  color: var(--ice);
-  border-color: var(--ice);
-}
-.el.on.volt {
-  color: var(--volt);
-  border-color: var(--volt);
-}
 /* an evolved spell: a gold top edge, selected or not; the tab text is unchanged */
 .el.evolved,
 .el.on.evolved {
   border-top-color: var(--gold);
 }
-/* Ysra's rite tabs take the place of the element tabs; each rite's colour comes in as --tint */
+/* Kael's ability tabs and Ysra's rite tabs; each one's colour comes in as --tint */
+.ability-tabs,
 .rite-tabs {
   display: flex;
   gap: 4px;
 }
+.el.on.ability,
 .el.on.rite {
   color: var(--tint);
   border-color: var(--tint);
@@ -470,15 +460,6 @@ body {
 .el {
   position: relative;
   --tint: var(--mist);
-}
-.el.fire {
-  --tint: var(--fire);
-}
-.el.ice {
-  --tint: var(--ice);
-}
-.el.volt {
-  --tint: var(--volt);
 }
 /* the warp is lit whenever it is ready; it and each spell tab stay hidden until a pick teaches them */
 .el.warp {
