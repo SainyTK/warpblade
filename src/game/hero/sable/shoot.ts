@@ -104,7 +104,7 @@ function fire(): void {
   if (air) {
     if (!hovering()) sable.airShots++;
     const hang = skillValues("s_featherdraw").hang ?? 0;
-    if (hang) hero.vy = Math.min(hero.vy, -hang * 160);
+    if (hang && !hovering()) hero.vy = Math.min(hero.vy, -hang * 160);
     else hero.vx -= hero.face * 25;
     if (closing) emitSkillEvent({ type: "airString", x: hero.x, y: hero.y });
   } else sable.string = closing ? 0 : sable.string + 1;

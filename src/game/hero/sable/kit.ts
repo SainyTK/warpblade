@@ -18,8 +18,9 @@ import { pressReload, startReload, tickReload } from "./reload";
 import { hovering, pressShoot, runShoot } from "./shoot";
 import { pressCast, resetSpells, runCast, tickSpells } from "./spells/cast";
 
-/** Skyhunter's hover keeps her up with this share of gravity */
-const HOVER_GRAVITY = 0.12;
+/** Skyhunter's hover: almost no gravity, and her rise or fall dies away this much each step at 120 steps a second */
+const HOVER_GRAVITY = 0.05;
+const HOVER_DAMP = 0.9;
 
 /** Featherdraw: landing after air shots looses a bolt each way low along the floor */
 function landingVolley(power: number): void {
@@ -41,7 +42,10 @@ function tick(dt: number): void {
   sable.haste = Math.max(0, sable.haste - dt);
   sable.shade = Math.max(0, sable.shade - dt);
   sable.sincePerfect += dt;
-  if (hovering()) sable.hover = Math.max(0, sable.hover - dt);
+  if (hovering()) {
+    sable.hover = Math.max(0, sable.hover - dt);
+    hero.vy *= HOVER_DAMP ** (dt * 120);
+  }
   if (hero.ground) land();
   if (sable.ammo <= 0 && !sable.reload && hero.state !== "shoot") startReload();
 }
