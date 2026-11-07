@@ -12,6 +12,7 @@ import { addCoins, heroUnlocked, onMetaChange, ownedItems } from "../../store/me
 import { settings } from "../../store/settings";
 import type { GuestHud, HostMessage } from "../../types/coop";
 import type { Enemy } from "../../types/enemy";
+import { setChestSource, syncChestDialog } from "../../ui/chest/chestDialog";
 import { syncCoopStatus } from "../../ui/coop/coopStatus";
 import { drawDangerGlow } from "../../ui/dangerGlow";
 import { paintFill, paintImage } from "../../ui/gameCanvas";
@@ -44,6 +45,8 @@ export class GuestSession {
   private hudAt = 0;
   /** a card was sent and the host has not yet answered with fewer picks */
   private sentPicks = -1;
+  /** "chest seen" was sent and the host has not yet put the chest away */
+  private sentChest = false;
   private video: HTMLVideoElement | null = null;
   private pinger = 0;
   private lastHeard = 0;
@@ -130,6 +133,7 @@ export class GuestSession {
     this.hud = null;
     this.hudAt = performance.now();
     this.sentPicks = -1;
+    this.sentChest = false;
     watchInput((a, d) => this.link?.send({ t: "key", a, d }));
     setPickSource({
       // the cards step aside while the pause menu is open, since the room plays on under it
@@ -140,6 +144,13 @@ export class GuestSession {
         if (answer.t === "take" || answer.t === "skip") this.sentPicks = progress.picks;
         else answerPick(answer);
         this.link?.send({ t: "pick", answer: writeAnswer(answer) });
+      },
+    });
+    setChestSource({
+      waiting: () => game.mode === "chest" && progress.build.chest.length > 0 && !this.sentChest && !isMenuOpen(),
+      seen: () => {
+        this.sentChest = true;
+        this.link?.send({ t: "chestSeen" });
       },
     });
     this.lastFrame = performance.now();
@@ -189,6 +200,7 @@ export class GuestSession {
     drawDangerGlow(true);
     updateHud();
     syncPickDialog();
+    syncChestDialog();
     syncTouch(!isMenuOpen() && game.mode === "play" && !this.hud?.down);
     // the line sits where the pause menu opens, so it waits under the menu
     syncCoopStatus(!isMenuOpen());
@@ -206,6 +218,7 @@ export class GuestSession {
     game.banner = hud.banner;
     game.enemies = hud.leader ? [hud.leader as Enemy] : [];
     if (this.sentPicks >= 0 && (progress.picks !== this.sentPicks || game.mode !== "pick")) this.sentPicks = -1;
+    if (this.sentChest && (!progress.build.chest.length || game.mode !== "chest")) this.sentChest = false;
     const room = roomView();
     if (room.downed !== hud.down || room.choosing.join() !== hud.choosing.join())
       updateRoom({ downed: hud.down, choosing: hud.choosing });
@@ -221,6 +234,7 @@ export class GuestSession {
     syncCoopStatus(false);
     updateRoom({ downed: false, choosing: [], hostAway: false });
     setPickSource(null);
+    setChestSource(null);
     watchInput(null);
     releaseAll();
     this.video?.remove();

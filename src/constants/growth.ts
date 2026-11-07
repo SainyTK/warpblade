@@ -26,3 +26,15 @@ export const FLOW = {
 } as const;
 /** chests: evolutions only from this wave, and the chance of 3 or 5 upgrades before luck */
 export const CHEST = { evolveFromWave: 8, three: 0.1, five: 0.03 } as const;
+/** a dropped chest: it pops up, falls and bounces once, then waits on the floor to be touched */
+export const CHEST_MOTION = {
+  pop: 120,
+  gravity: 520,
+  bounce: 0.3,
+  /** seconds before a chest can be opened, so it is seen first */
+  settle: 0.4,
+  /** how close a hero's feet must come, in art pixels */
+  reach: 11,
+  /** seconds between glints */
+  glint: 1.4,
+} as const;

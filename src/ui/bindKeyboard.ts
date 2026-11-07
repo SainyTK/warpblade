@@ -42,7 +42,7 @@ export function bindKeyboard(): void {
       if (!ev.repeat) pauseGame();
       return;
     }
-    if (game.mode === "pick") return;
+    if (game.mode === "pick" || game.mode === "chest") return;
     ev.preventDefault();
     if (ev.repeat) return;
     press(action);

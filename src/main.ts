@@ -10,6 +10,7 @@ import { heroUnlocked } from "./store/meta";
 import { bindAchievementToasts } from "./ui/achievements/achievementToast";
 import { bindKeyboard } from "./ui/bindKeyboard";
 import { bindPauseButton } from "./ui/bindPauseButton";
+import { bindChestDialog, syncChestDialog } from "./ui/chest/chestDialog";
 import { drawDangerGlow } from "./ui/dangerGlow";
 import { fitStage } from "./ui/fitStage";
 import { paintScene } from "./ui/gameCanvas";
@@ -30,6 +31,7 @@ bindKeyboard();
 bindTouch();
 bindPauseButton();
 bindPickDialog();
+bindChestDialog();
 bindMenu();
 bindAchievementToasts();
 openMenu("title");
@@ -51,6 +53,7 @@ function soloFrame(now: number): void {
   }
   updateHud();
   syncPickDialog();
+  syncChestDialog();
   syncTouch(!isMenuOpen() && game.mode === "play");
 }
 

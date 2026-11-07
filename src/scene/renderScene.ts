@@ -1,4 +1,5 @@
 import { beginFrame, composite, setShake } from "../engine/frame";
+import { drawChests } from "../game/build/chests";
 import { coop, eachHero } from "../game/coopHooks";
 import { drawRelics, drawRelicsBack } from "../game/relics";
 import { SKY_FLASH } from "../game/spells/lightning";
@@ -30,6 +31,7 @@ export function renderScene(out: Uint8ClampedArray): void {
   }
   particles.draw("back");
   drawRelicsBack();
+  drawChests();
   drawEnemies();
   room?.drawUnderlay();
   eachHero(drawHeroLayer);

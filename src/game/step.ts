@@ -8,13 +8,13 @@ function settleShake(rate: number): void {
   game.shake = Math.max(0, game.shake - STEP * rate);
 }
 
-/** one fixed 120 Hz step: only the scenery moves behind the start menu, a skill pick and hit-stop freeze all but the shake */
+/** one fixed 120 Hz step: only the scenery moves behind the start menu, a skill pick, an opened chest and hit-stop freeze all but the shake */
 export function stepGame(): void {
   if (menuContext() === "title") {
     updateAmbience(STEP);
     return;
   }
-  if (game.mode === "pick") {
+  if (game.mode === "pick" || game.mode === "chest") {
     settleShake(1);
     return;
   }

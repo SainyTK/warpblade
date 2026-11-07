@@ -179,10 +179,36 @@ export class HostRun implements CoopHooks {
     hero.state = "idle";
   }
 
-  /** the game waits on the skill cards while anyone has points to spend */
+  /** the game waits while anyone looks at an opened chest, then on the skill cards while anyone has points to spend */
   refreshPicks(): void {
     if (game.mode === "clear") return;
-    game.mode = this.choosing().length ? "pick" : "play";
+    game.mode = this.anyChest() ? "chest" : this.choosing().length ? "pick" : "play";
+  }
+
+  /** someone has an opened chest still on their screen */
+  private anyChest(): boolean {
+    const from = this.current;
+    let open = false;
+    for (const seat of this.seats) {
+      this.enter(seat);
+      open ||= progress.build.chest.length > 0;
+    }
+    this.enter(from);
+    return open;
+  }
+
+  /** the host has seen their chest: the dialog already acts on the host's seat */
+  chestSeenHome(): void {
+    progress.build.chest = [];
+    this.refreshPicks();
+  }
+
+  /** a guest has seen their chest */
+  chestSeenFor(seat: Seat): void {
+    this.enter(seat);
+    progress.build.chest = [];
+    this.enter(this.home);
+    this.refreshPicks();
   }
 
   /** the slots of players with picks waiting, once a wave is cleared */

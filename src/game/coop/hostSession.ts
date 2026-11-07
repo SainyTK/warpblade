@@ -8,6 +8,7 @@ import { type HostLink, openRoom, RoomTaken } from "../../services/coop/hostLink
 import { postNote, resetRoom, roomView, updateRoom } from "../../store/coop";
 import type { GuestMessage, SeatInfo } from "../../types/coop";
 import type { RunOutcome } from "../../types/run";
+import { setChestSource, syncChestDialog } from "../../ui/chest/chestDialog";
 import { syncCoopStatus } from "../../ui/coop/coopStatus";
 import { drawDangerGlow } from "../../ui/dangerGlow";
 import { gameCanvas, paintScene } from "../../ui/gameCanvas";
@@ -144,6 +145,7 @@ export class HostSession {
     if (!this.run || !seat) return;
     if (msg.t === "key") this.run.applyKey(seat, () => (msg.d ? press(msg.a) : release(msg.a)));
     else if (msg.t === "pick") this.run.answerFor(seat, msg.answer, readAnswer);
+    else if (msg.t === "chestSeen") this.run.chestSeenFor(seat);
   }
 
   private welcome(peer: string, hero: string, owned: Record<string, number>, version: string): void {
@@ -192,6 +194,10 @@ export class HostSession {
       waiting: () => game.mode === "pick" && progress.picks > 0 && !isMenuOpen(),
       answer: (answer) => this.run?.answerHome(answer),
     });
+    setChestSource({
+      waiting: () => game.mode === "chest" && progress.build.chest.length > 0 && !isMenuOpen(),
+      seen: () => this.run?.chestSeenHome(),
+    });
     this.last = performance.now();
     this.acc = 0;
     setFrameDriver((now) => this.frame(now));
@@ -216,6 +222,7 @@ export class HostSession {
     drawDangerGlow(true);
     updateHud();
     syncPickDialog();
+    syncChestDialog();
     syncTouch(!isMenuOpen() && game.mode === "play" && hero.state !== "dead");
     // the line sits where the pause menu opens, so it waits under the menu
     syncCoopStatus(!isMenuOpen());
@@ -257,6 +264,7 @@ export class HostSession {
     syncCoopStatus(false);
     updateRoom({ downed: false, choosing: [] });
     setPickSource(null);
+    setChestSource(null);
     this.stream?.stop();
     this.stream = null;
   }

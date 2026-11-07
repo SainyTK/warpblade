@@ -1,5 +1,6 @@
 import { HERO_START_X } from "../constants/hero";
 import { GROUND } from "../constants/stage";
+import { clearChests } from "./build/chests";
 import { bankCoins } from "./coins";
 import { kit } from "./hero/kits";
 import { resetWound } from "./hero/wound";
@@ -11,6 +12,7 @@ import { freshHero, game, hero, ponytail, progress, scarf, showBanner } from "./
 export function resetRun(banner = "Rise again"): void {
   bankCoins();
   resetProgress();
+  clearChests();
   Object.assign(game, {
     mode: "play",
     enemies: [],

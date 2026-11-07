@@ -117,6 +117,8 @@ export interface Build {
   heroHits: number;
   /** runtime memory of each relic held */
   memory: Partial<Record<RelicId, RelicMemory>>;
+  /** what the last chest opened gave, while its screen is still up; empty otherwise */
+  chest: ChestReward[];
 }
 
 /** one card of a pick */

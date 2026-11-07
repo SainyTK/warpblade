@@ -17,6 +17,7 @@ export function freshBuild(): Build {
     flowIdle: 0,
     heroHits: 0,
     memory: {},
+    chest: [],
   };
 }
 

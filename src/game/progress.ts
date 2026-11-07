@@ -114,7 +114,7 @@ function choosePick(card: Card): void {
   if (card.type === "skill") {
     addRank(card.node.id);
     feat({ kind: "learned", skill: card.node.kind });
-    if (card.node.kind === "evolution") queueEvolution(card.node);
+    if (card.node.kind === "evolution") queueEvolution(card.node.name);
   } else if (card.type === "boon") takeBoon();
   else {
     if (card.type === "relic") raiseRelic(card.id);
@@ -136,6 +136,12 @@ function banishCard(card: Card): void {
   if (progress.build.banishes <= 0 || card.type === "boon") return;
   progress.build.banishes--;
   progress.build.banished = [...progress.build.banished, cardKey(card)];
+}
+
+/** the chest screen was seen: its rewards are put away and play goes on */
+export function seeChest(): void {
+  progress.build.chest = [];
+  if (game.mode === "chest") game.mode = "play";
 }
 
 /** a player's answer to the cards; a reroll or banish only spends the tool, and the cards are dealt again by the dialog */
