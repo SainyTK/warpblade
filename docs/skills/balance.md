@@ -308,3 +308,77 @@ Skilled bot, same jobs as above, plus a wave 1 start with the build's eight skil
 The brawler now clears wave 15 in about the time Kael's duelist takes (57 s), where Kael's storm, both Ysra builds and Sable's cadence fall; from wave 8 both builds are still two to three times slower than Kael and Sable.
 The bot never grabs or throws on purpose, so these remain her floor.
 
+
+## Round 3: precise payoffs and unmeasured skills (8 November 2026)
+
+The open points from round 2: precise skills spilled onto crowds (Keen Edge 545, Perfect Rhythm 604, Iron Counter 483, Sun Piercer about 1,244), Ember Brand, Perfect Rhythm and Iron Counter sat under their band on one foe, many skills had never been driven, and two ultimates were extrapolated.
+
+### Precise payoff
+
+A precise skill's payoff now lands on the foe the hard move was aimed at: at most `PRECISE_TARGETS` (1) foe per pull-off, the first its move, wave or bolt reaches, nearest first.
+Every other foe takes the plain move.
+The rule and its code are in `docs/skill-design.md`, "Precise payoff".
+
+- Keen Edge: the Keen bonus and the crystal wave share the Keen move's payoff; the wave passes other foes by.
+- Counter Thrust: the counter's power lands on the first foe in its line; the rest of the line (the whole stage for Sun Piercer) takes the plain 3.75 AD thrust.
+- Perfect Rhythm: a primed bolt's prime lands on the first foe it strikes and a foe it passes through takes the plain prime; the volley flies at the nearest foe.
+- Iron Counter already struck only the caught foe; its crowd figure came from counters landing more often in a crowd, so only its number moved.
+
+### Room changes
+
+- The scripted player treats Hulda's Taunt tab as never ready (the fault round 3 of Hulda's contact work found); Hulda was measured after merging that work.
+- Drives: a skill the scripted player never used is measured by playing the move it attaches to at the model's rate, the same way in the skill's run and in the base run, with the hero placed through the game's own state before real keys.
+  Kael: a warp strike every 4 s (Rift Wound), a four-hit string every 5.5 s (Skybreaker).
+  Ysra: her own Heat spent on the skill's rite whenever it pays (Brazier, Overheat), on any rite (Kindling), a flyer moved over her and J every 3 s (Skyhook), a three-blow string every 3.4 s (Impale), a full heft lunge every 4 s (Deep Heft), a walk into the charge and J every 5 s (Warpath).
+  Sable: a snare bite every 5 s (Barbed Jaws), a string from 150 px every 3 s (Longshot), a keg rolled at the foe and shot every 6 s (Powder Keg).
+  Hulda: a grab, three knees and the throw every 3.3 s (Wrecking Throw, Giant Swing, Crushing Grip, Spirit Bear), a jump and Skyfall Grab every 5 s (Skyfall Breaker).
+- A third target, "late": the lone foe at 12 times its HP (four times the room's elite), the HP against hero damage that level 8 skills meet around wave 20.
+  The room's elite dies to one big hit and the next one walks in, so it caps damage over time and overstates bursts, which count their overkill.
+
+### Changes and measurements
+
+Raw added damage a second in the room at the model's trigger rates; level 8 unless marked.
+Before is main at ef383d3, after is this round; one or two runs per figure for driven skills, two to five for precise ones (a single precise run swings by 30 to 50%).
+
+| Skill | Change | Before crowd / one | After crowd / one |
+| --- | --- | --- | --- |
+| `k_keen` | payoff rule | 514 / 146 | 277 / 176 |
+| `k_keen` evolved | payoff rule | 433 / 132 | 467 / 229 |
+| `s_rhythm` | payoff rule, volley at one foe; primed bonus 8 to 9 | 564 / 60 | 209 / 144 |
+| `s_rhythm` evolved | payoff rule; bonus 8 to 9 | 839 / 137 | about 420 to 460 / 180 to 270 |
+| `y_counter` | payoff rule; L8 70 to 45 AD | 404 / 326 | 245 / 154 (late 213) |
+| `y_counter` evolved | payoff rule; Sun Piercer 60 to 120 AD | 781 / 214 | 440 / 389 (late 498) |
+| `h_counterGrab` | L8 110 to 70 (Hulda's contact fix merged) | 389 / 154 | 261 / 100 (141 at 0.1 counters a second) |
+| `h_counterGrab` evolved | unchanged | 608 / 203 | 864 / 604 |
+| `y_brand` | L8 10 to 25 AP a stack a second | 89 / 21 (late 78) | 172 / 85 (late 180) |
+| `k_rift` | L8 2.4 to 8 AD a layer a second | 6 / 28 | 6 / 47 |
+| `s_keg` | L8 blast 8 to 20; Powder Effigy 12 | 16 / -8, evolved 142 / 28 | 102 / 43, evolved 176 / 30 |
+| `s_longshot` | far bonus 2.5 to 8 (L8 and Horizon Shot) | 27 / 31, evolved 60 / 51 | evolved 107 / 123 |
+| `y_brazier` | L8 ember 1 to 1.8 AP | 8 / -2, evolved 76 / 5 | 92 / 24, evolved 160 / 14 |
+| `y_overheat` | L8 burst 3 to 5 AD | 54 / 4 | 96 / 15 |
+| `y_skyhook` | L8 hook and slam 9 to 14 AD | 31 / 16 | 69 / 20 |
+| `y_impale` | L8 14 to 20 AD, Pillory 16 to 24 | 67 / 20, evolved 75 / 27 | 92 / 98, evolved 92 / 25 |
+| `y_heft` | L8 lunge 6 to 10 AD | 19 / 40 | 44 / 5 |
+
+Measured without a change: Skybreaker 10 / 25 crowd and one with the four-hit string (raising launch and crash to 9 and 7 moved nothing measurable, so it went back); Barbed Jaws 113 / 18 and evolved 93 / 10; Kindling about 0 (a Heat economy, no damage of its own); Warpath -12 / -23 and evolved 59 / 9.
+Hulda after her contact fix, with the grab drive: Wrecking Throw 19 / -1, Giant Swing 9 / -1, Crushing Grip 19 / 16, Spirit Bear 61 / 13 (evolved 174 / 55), Skyfall Breaker 230 / 281 (level 1 5 / 23, evolved 707 / 730).
+
+Ultimates per cast at charge level 3 against Crystal Nova's per cast:
+
+| Ultimate | Before | After |
+| --- | --- | --- |
+| Starfall L8 | 5.1x at 12 | 5.6x and 6.6x at 14 |
+| Starfall evolved | 12.8x | 14.2x |
+| Phantom Legion L8 | 4.6x at 16 | 5.8x and 5.9x at 21 |
+| Phantom Army | 5.4x at 4.5 | 10.3x and 12.1x at 9, 6.8x and 7.1x at 11 |
+
+### Still off after round 3
+
+- Perfect Rhythm reads about 144 on one foe: each primed bolt is its own pull-off, so a crowd finds a fresh foe for every bolt while a lone foe dies to the first and the next walks in; raising the bonus lifts the crowd figure as fast.
+- Iron Counter's one-foe figure follows how often a counter grab lands on a lone foe (0.07 a second against 0.1 injected); at the injected rate it reads 141.
+- Keen Edge evolved (Peerless Edge) sits near level 8 on one foe (229 against 176); the cross cut and free Keen add little in the room.
+- Phantom Army is noisy, 7 to 12 times Crystal Nova at 9 and 11; 15 is not reached.
+- Hulda's grab and throw skills (Wrecking Throw, Giant Swing, Crushing Grip) barely move the room: a wave 2 husk dies to the knees before the throw. Skyfall Breaker is over its band (281 on one foe, evolved 730). These rows were left to Hulda's own pass.
+- Sky Dance was not measured: in the room the air string ends after one whiff on ground foes, so the stomp never comes.
+- Warpath and Deep Heft on one foe still read near zero; the charge and the lunge carry her past the lone foe.
+- Rift Wound and Ember Brand on one foe are capped by the room's elite dying; the late target is the better read for damage over time.
