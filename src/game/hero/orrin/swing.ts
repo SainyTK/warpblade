@@ -16,7 +16,7 @@ import { game, hero, progress } from "../../state";
 import { boxHit, heroBox, hitStop, shake, surfaceBelow } from "../../world";
 import { setState } from "../actions";
 import { travelEnded } from "../travelEnd";
-import { bleed, frictionBurn } from "./blowSkills";
+import { bleed, burnSwept } from "./blowSkills";
 import { orrin, orrinHost } from "./memory";
 import { reelSnap } from "./reelSnap";
 
@@ -136,15 +136,19 @@ function runReel(dt: number): void {
   if (snap.power && faster >= orrin.reelBase * snap.at) reelSnap();
 }
 
+/** a swing kick's share of attack damage at this speed: Pendulum Kick and, on a burning foe, Friction Burn add to it */
+export function kickPower(e: Enemy, speed: number): number {
+  const power = Math.min(SWING.kickCap, (SWING.kick * speed) / SWING.kickPer) * (1 + (skillValues(KICK).power ?? 0));
+  return power * (e.burn > 0 ? 1 + (skillValues("o_friction").kick ?? 0) : 1);
+}
+
 /** the kick of his body on a foe he swings through, harder the faster he goes */
 function swingKick(e: Enemy, speed: number): void {
   const v = skillValues(KICK);
-  const power = Math.min(SWING.kickCap, (SWING.kick * speed) / SWING.kickPer) * (1 + (v.power ?? 0));
-  const burning = e.burn > 0 ? 1 + (skillValues("o_friction").kick ?? 0) : 1;
   const ux = hero.vx / (speed || 1);
   const uy = hero.vy / (speed || 1);
   const launchable = ENEMIES[e.type].launchable;
-  dealDamage(e, progress.stats.ad * power * burning, {
+  dealDamage(e, progress.stats.ad * kickPower(e, speed), {
     fromX: hero.x - ux * 10,
     kx: ux * 160,
     ky: uy * 80,
@@ -159,7 +163,7 @@ function swingKick(e: Enemy, speed: number): void {
   shake(0.1, 1.6);
   sfx.hit(true, 1.1);
   if (skillValues("o_barbs").kick) bleed(e, 1);
-  frictionBurn(e);
+  burnSwept(e);
   orrin.kicks++;
   emitSkillEvent({ type: "swingKick", foe: e, speed });
 }

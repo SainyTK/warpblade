@@ -47,7 +47,7 @@ export function bleed(e: Enemy, stacks: number): void {
 }
 
 /** the chain's own burn on a swept foe, over the shared burning */
-export function frictionBurn(e: Enemy): void {
+export function burnSwept(e: Enemy): void {
   const v = skillValues(FRICTION);
   if (!skillLevel(FRICTION)) return;
   ignite(e, withCharms("duration", v.burn));
@@ -68,7 +68,7 @@ function perfectShock(e: Enemy, reach: number, power: number): void {
     if (o === e || o.hp <= 0) continue;
     const [ox, oy] = enemyCenter(o);
     if (Math.sign(ox - cx) !== dir || Math.abs(ox - cx) > reach + 8 || Math.abs(oy - cy) > 18) continue;
-    dealDamage(o, progress.stats.ad * power, { fromX: cx, kx: dir * 80 });
+    dealDamage(o, progress.stats.ad * power, { fromX: cx, kx: dir * 80, source: "o_sweetspot" });
   }
 }
 
@@ -80,7 +80,7 @@ function knockInto(e: Enemy, power: number): void {
     if (o === e || o.hp <= 0) continue;
     const [ox, oy] = enemyCenter(o);
     if (Math.sign(ox - cx) !== dir || Math.abs(ox - cx) > 16 || Math.abs(oy - cy) > 14) continue;
-    dealDamage(o, progress.stats.ad * power, { fromX: cx, kx: dir * 60 });
+    dealDamage(o, progress.stats.ad * power, { fromX: cx, kx: dir * 60, source: "o_ironweight" });
   }
 }
 
@@ -91,7 +91,7 @@ function splash(e: Enemy, power: number): void {
     if (o === e || o.hp <= 0) continue;
     const [ox, oy] = enemyCenter(o);
     if (Math.abs(ox - cx) > 16 || oy < cy - 4 || oy > cy + 40) continue;
-    dealDamage(o, progress.stats.ad * power, { fromX: cx, ky: -40 });
+    dealDamage(o, progress.stats.ad * power, { fromX: cx, ky: -40, source: "o_skylash" });
   }
 }
 
@@ -108,7 +108,7 @@ export function afterChainHit(e: Enemy, tip: boolean, s: ChainStrike): void {
       if (n) dealDamage(e, progress.stats.ad * barbs.flay * n, { fromX: hero.x, source: BARBS });
     } else bleed(e, tip ? barbs.tipStacks : barbs.stacks);
   }
-  if (s.blow === "circle") frictionBurn(e);
+  if (s.blow === "circle") burnSwept(e);
   const weight = skillValues("o_ironweight");
   if (weight.knock && s.blow !== "hanging") knockInto(e, weight.knock);
   const sky = skillValues("o_skylash");

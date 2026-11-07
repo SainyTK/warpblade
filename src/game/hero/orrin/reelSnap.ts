@@ -35,6 +35,7 @@ export function reelSnap(): void {
       stun: v.stun || undefined,
       melee: true,
       heavy: true,
+      source: SNAP,
     });
   }
   game.fx.push(createFloorRing(x, y, radius, skin.ramp, 0.3, 1));

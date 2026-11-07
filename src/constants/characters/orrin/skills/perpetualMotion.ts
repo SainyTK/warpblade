@@ -1,6 +1,6 @@
 import type { SkillDef } from "../../../../types/skill";
 
-/** Perpetual Motion. Design: docs/skills/orrin.md. Values: drain: Momentum drains at this share of its usual rate; bonus: Momentum's bonus at full; walk: Momentum a second while walking on the floor; start: Momentum a run starts with; hurt: Momentum a blow costs; endless: 1 Momentum never drains while a Brass Kite is out (evolution) */
+/** Perpetual Motion. Design: docs/skills/orrin.md. Values: drain: Momentum drains at this share of its usual rate; bonus: Momentum's bonus at full; walk: Momentum a second while walking on the floor; start: Momentum never falls below this; hurt: Momentum a blow costs; endless: 1 Momentum never drains while a Brass Kite is out (evolution) */
 export const PERPETUAL_MOTION: SkillDef = {
   id: "o_perpetual",
   name: "Perpetual Motion",
@@ -22,7 +22,7 @@ export const PERPETUAL_MOTION: SkillDef = {
       values: { drain: 0.5, bonus: 0.5, walk: 5, start: 0, hurt: 30, endless: 0 },
     },
     {
-      text: "Runs start at 30 Momentum.",
+      text: "Momentum never falls below 30.",
       values: { drain: 0.5, bonus: 0.5, walk: 5, start: 30, hurt: 30, endless: 0 },
     },
     {

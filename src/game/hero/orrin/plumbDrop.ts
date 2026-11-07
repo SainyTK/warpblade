@@ -61,6 +61,7 @@ export function plumbLand(head: boolean): void {
       heavy: true,
       melee: true,
       sureCrit: head,
+      source: PLUMB,
     });
     if (v.root) e.pinned = Math.max(e.pinned, withCharms("duration", v.root));
   }

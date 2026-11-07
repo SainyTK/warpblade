@@ -65,7 +65,9 @@ function tick(dt: number): void {
   orrin.backlineCd = Math.max(0, orrin.backlineCd - dt);
   orrin.sinceRelease += dt;
   orrin.boostLeft = Math.max(0, orrin.boostLeft - dt);
-  if (orrin.boostLeft <= 0) orrin.flingBoost = 0;
+  // Undertow's boost rides on a hook thrown in its window until that swing lets go
+  const hooked = h.state === "hookThrow" || h.state === "swing";
+  if (orrin.boostLeft <= 0 && !hooked) orrin.flingBoost = 0;
   if (h.state !== "lash") orrin.link = Math.max(0, orrin.link - dt);
   if (h.state !== "lash" && orrin.link <= 0) h.chain = 0;
   if (h.state === "hurt" || h.state === "dead") {

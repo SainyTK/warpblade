@@ -5,7 +5,6 @@ import type { Enemy } from "../../../types/enemy";
 import { dealDamage } from "../../damage";
 import { createImpact } from "../../effects/impact";
 import { enemyCenter } from "../../enemies/enemy";
-import { addStacks } from "../../enemies/skillStatus";
 import { emitSkillEvent } from "../../skills/events";
 import { skillValues, withCharms } from "../../skills/query";
 import { game, hero, progress } from "../../state";
@@ -13,6 +12,7 @@ import { dust, hitStop, shake, surfaceBelow } from "../../world";
 import { setState, settle } from "../actions";
 import { canCast } from "./castCheck";
 import { orrin, orrinHost } from "./memory";
+import { RUST_ID, rustFoe } from "./rust";
 
 /** the nearest foe ahead within reach, or null */
 function foeAhead(): Enemy | null {
@@ -44,19 +44,6 @@ export function pressPin(): boolean {
   return true;
 }
 
-/** Rust Bite at level 4 rusts the pinned foe */
-function rust(e: Enemy): void {
-  const v = skillValues("o_rust");
-  if (!v.pin) return;
-  addStacks(e, "o_rust", {
-    stacks: 1,
-    max: 1,
-    damage: progress.stats.ad * v.damage * 0.5,
-    every: 0.5,
-    duration: withCharms("duration", v.life),
-  });
-}
-
 /** the hook drives down on its frame, nailing the foe to the floor with the chain drawn from the spike to it */
 function drive(): void {
   const e = orrinHost.pinned;
@@ -75,7 +62,7 @@ function drive(): void {
   const root = withCharms("duration", minion ? ANCHOR_PIN.root : ANCHOR_PIN.bigRoot);
   dealDamage(e, progress.stats.ap * ANCHOR_PIN.power, { fromX: hero.x, kx: 0, heavy: true, source: "abilities" });
   e.pinned = Math.max(e.pinned, root);
-  rust(e);
+  if (skillValues(RUST_ID).pin) rustFoe(e);
   orrin.pinAt = { x: e.x, y: surfaceBelow(e.x, e.y - 4) };
   orrin.pinLeft = root;
   game.fx.push(createImpact(cx, cy, hero.face, true));

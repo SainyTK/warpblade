@@ -36,7 +36,13 @@ export function createBrassCrescent(x: number, y: number, dir: number, spec: Cre
       for (const e of game.enemies) {
         if (e.hp <= 0 || struck.includes(e) || !touches(e, o.x, o.y, 3)) continue;
         struck.push(e);
-        dealDamage(e, progress.stats.ad * spec.power, { fromX: o.x - dir * 6, kx: dir * 50, ky: 20, melee: false });
+        dealDamage(e, progress.stats.ad * spec.power, {
+          fromX: o.x - dir * 6,
+          kx: dir * 50,
+          ky: 20,
+          melee: false,
+          source: "o_skylash",
+        });
         if (!spec.pierce) return false;
       }
       return o.flown < spec.range;

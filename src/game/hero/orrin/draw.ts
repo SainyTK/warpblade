@@ -2,7 +2,7 @@ import { WHIRLWALL } from "../../../constants/orrin/abilities";
 import { BACKLINE } from "../../../constants/orrin/backline";
 import { HOOK } from "../../../constants/orrin/hook";
 import { CHAIN_BLOWS, type ChainBlowSpec, HANGING_ARC, SHOULDER_Y } from "../../../constants/orrin/string";
-import { HERO_COLORS as HC, PAL } from "../../../constants/palette";
+import { FIRE_RAMP, HERO_COLORS as HC, PAL } from "../../../constants/palette";
 import { ellipseRing, glow, glowLine, line, place, px } from "../../../engine/frame";
 import type { Point } from "../../../types/world";
 import { WHITE } from "../../../utils/color";
@@ -10,7 +10,7 @@ import { clamp, lerp, TAU } from "../../../utils/math";
 import { drawLinks } from "../../effects/orrin/chainLinks";
 import { enemyCenter } from "../../enemies/enemy";
 import { objectMemory, rememberPerSeat } from "../../seatMemory";
-import { skillEvolved } from "../../skills/query";
+import { skillEvolved, skillValues } from "../../skills/query";
 import { game, hero } from "../../state";
 import { Chain } from "../chain";
 import { backlinePoint } from "./backline";
@@ -54,10 +54,30 @@ function drawHook(at: Point, ux: number, uy: number): void {
   px(at.x + ux * 1, at.y + uy * 1, WHITE);
 }
 
+/** Friction Burn at level 7: at full Momentum the chain burns along its length */
+const ablaze = (): boolean => fullMomentum() && (skillValues("o_friction").trail ?? 0) > 0;
+
+/** flames licking up off a stretch of chain, flickering from white hot to embers, every third link */
+function flameAlong(from: Point, to: Point): void {
+  const d = Math.hypot(to.x - from.x, to.y - from.y);
+  const n = Math.floor(d / 3);
+  for (let i = 1; i <= n; i++) {
+    const u = i / n;
+    const x = from.x + (to.x - from.x) * u;
+    const y = from.y + (to.y - from.y) * u;
+    const f = Math.sin(game.t * 30 + i * 2.3);
+    if (f < -0.2) continue;
+    const tall = f > 0.6 ? 2 : 1;
+    for (let k = 1; k <= tall; k++) px(x, y - k, FIRE_RAMP[Math.min(FIRE_RAMP.length - 1, 2 + k * 2 + (i % 2))], 0.9);
+  }
+  glowLine(from.x, from.y, to.x, to.y, 5, FIRE_RAMP[4], 0.2);
+}
+
 /** a chain from one point to another, taut, ending in the hook; glowing brass at full Momentum */
 function taut(from: Point, to: Point, hook = true): void {
   drawLinks(from.x, from.y, to.x, to.y, fullMomentum() ? PAL.brass[4] : undefined);
   if (fullMomentum()) glowLine(from.x, from.y, to.x, to.y, 4, PAL.brass[3], 0.25);
+  if (ablaze()) flameAlong(from, to);
   if (!hook) return;
   const d = Math.hypot(to.x - from.x, to.y - from.y) || 1;
   drawHook(to, (to.x - from.x) / d, (to.y - from.y) / d);
@@ -72,6 +92,7 @@ function curved(from: Point, ctrl: Point, to: Point): void {
     const x = (1 - u) * (1 - u) * from.x + 2 * (1 - u) * u * ctrl.x + u * u * to.x;
     const y = (1 - u) * (1 - u) * from.y + 2 * (1 - u) * u * ctrl.y + u * u * to.y;
     drawLinks(prev.x, prev.y, x, y, fullMomentum() ? PAL.brass[4] : undefined);
+    if (ablaze()) flameAlong(prev, { x, y });
     prev = { x, y };
   }
   const d = Math.hypot(to.x - ctrl.x, to.y - ctrl.y) || 1;

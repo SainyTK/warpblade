@@ -25,7 +25,7 @@ export function createTripLine(x0: number, x1: number, y: number, stun: number, 
         const [bx0, , bx1, by1] = enemyBox(e);
         if (bx1 < lo || bx0 > hi || Math.abs(by1 - y) > 3) continue;
         struck.add(e);
-        dealDamage(e, progress.stats.ad * power, { fromX: e.x - e.face * 4, stun, ky: -30 });
+        dealDamage(e, progress.stats.ad * power, { fromX: e.x - e.face * 4, stun, ky: -30, source: "o_undertow" });
         e.stun = Math.max(e.stun, stun);
       }
       return t < LIFE;

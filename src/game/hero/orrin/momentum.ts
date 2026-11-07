@@ -14,11 +14,8 @@ export function gainMomentum(amount: number): void {
 /** a blow that hurt him knocks Momentum out of him; Perpetual Motion softens it */
 export function loseMomentumToHurt(): void {
   const cost = skillLevel(PERPETUAL) ? skillValues(PERPETUAL).hurt : M.hurt;
-  orrin.momentum = Math.max(0, orrin.momentum - cost);
+  orrin.momentum = Math.max(skillValues(PERPETUAL).start ?? 0, orrin.momentum - cost);
 }
-
-/** Momentum a fresh run starts with: Perpetual Motion's start, or none */
-export const startingMomentum = (): number => skillValues(PERPETUAL).start ?? 0;
 
 /**
  * Each step: speed in the air fills the bar, standing on the floor without a tip hit drains it after a grace, and
@@ -26,6 +23,8 @@ export const startingMomentum = (): number => skillValues(PERPETUAL).start ?? 0;
  */
 export function tickMomentum(dt: number): void {
   const v = skillValues(PERPETUAL);
+  // Perpetual Motion from level 4: the bar never falls below its floor
+  if (v.start) orrin.momentum = Math.max(orrin.momentum, v.start);
   const speed = Math.hypot(hero.vx, hero.vy);
   if (!hero.ground) {
     orrin.grounded = 0;
@@ -35,7 +34,7 @@ export function tickMomentum(dt: number): void {
   orrin.grounded += dt;
   if (v.walk && Math.abs(hero.vx) > 15) gainMomentum(v.walk * dt);
   if (orrin.grounded < M.grace || (v.endless && orrin.kites > 0)) return;
-  orrin.momentum = Math.max(0, orrin.momentum - M.drain * (v.drain ?? 1) * dt);
+  orrin.momentum = Math.max(v.start ?? 0, orrin.momentum - M.drain * (v.drain ?? 1) * dt);
 }
 
 /** a tip hit fills the bar and holds the drain off */
