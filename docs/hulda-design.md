@@ -49,7 +49,7 @@ A run starts with 25 Grit, one plate.
 Grit comes from her blows (4 for each foe a J blow lands on), a grab (10), a knee (5), a throw or Skyfall slam (15), Bellow (10), each taunt slap (12), and each blow she takes without spending a plate (10).
 It drains 4 a second once 4 seconds pass with no blow landed or taken.
 
-A blow on her with a full plate deals half its damage (40% with Iron Plates), breaks one plate with steel shards from her shoulder, and leaves her doing whatever she was doing, safe for 0.35 s.
+A blow on her with a full plate deals half its damage (40% with Iron Plates), breaks one plate with steel shards from her shoulder, and leaves her doing whatever she was doing, safe for 0.8 s, as long as after any hurt.
 With no full plate, a blow hurts her as it hurts any hero: the knockback, the hurt state and a dropped foe.
 During the Bull Rush every blow deals half and never flinches her, and spends no plate.
 The haymaker's wind-up is armoured from its second frame until it lands.

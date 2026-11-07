@@ -18,8 +18,11 @@ export const GRIT = {
   /** a plate halves a blow; Iron Plates cuts it to this share */
   plated: 0.5,
   ironPlated: 0.4,
-  /** seconds she is safe after a plate breaks, and the hit-stop of the break */
-  safe: 0.35,
+  /**
+   * seconds she is safe after a plate or her armour takes a blow, and the hit-stop of the break; as long as a hurt's,
+   * since a moth sheds its pollen in pairs and a shorter window lets the second puff through
+   */
+  safe: 0.8,
   stop: 0.05,
   /** Second Wind: each broken plate heals this share of max HP */
   secondWind: 0.03,
