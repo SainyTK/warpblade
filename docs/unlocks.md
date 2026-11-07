@@ -47,7 +47,7 @@ Persistence comes early on purpose: it is Orbit Shards' partner, so Shard Halo i
 Runs into the rain era bring Echo Blade, Storm Rod and Reach, and a run that travels light to wave 12 brings Ember Aura, whose partner Vigor is in the starting set.
 Chests from wave 3 on bring the fourth charm slot and, with luck, Fortune.
 The first evolution opens Frost Bell; a relic at level 8 opens Multitude for Warp Daggers.
-Thorn Trail (1,500 relic kills, about two to three full runs of relic kills), the fifth relic slot (wave 20) and the fifth charm slot (a stage clear) take many hours.
+Thorn Trail (1,500 relic kills; a full run has about 650 foes, so several long runs), the fifth relic slot (wave 20) and the fifth charm slot (a stage clear) take many hours.
 
 When each evolution becomes possible:
 
