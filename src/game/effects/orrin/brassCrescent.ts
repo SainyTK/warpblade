@@ -6,8 +6,7 @@ import { PK } from "../../../types/particle";
 import { WHITE } from "../../../utils/color";
 import { dealDamage } from "../../damage";
 import { touches } from "../../skills/targets";
-import { particles, progress, rng } from "../../state";
-import { game } from "../../state";
+import { game, particles, progress, rng } from "../../state";
 
 const SPEED = 240;
 

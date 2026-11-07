@@ -1,12 +1,12 @@
-import { GRAND_PENDULUM as G } from "../../../constants/orrin/special";
 import { HOOK } from "../../../constants/orrin/hook";
+import { GRAND_PENDULUM as G } from "../../../constants/orrin/special";
+import { PAL } from "../../../constants/palette";
 import { sfx } from "../../../services/audio";
 import type { Point } from "../../../types/world";
 import { enemyBox } from "../../enemies/enemy";
 import { game, hero, lights } from "../../state";
 import { boxHit, heroBox, surfaceBelow } from "../../world";
 import { setState, settle } from "../actions";
-import { PAL } from "../../../constants/palette";
 import { orrin, orrinHost } from "./memory";
 import { crashRing, ultHit } from "./ultStrike";
 

@@ -75,6 +75,8 @@ export interface OrrinMemory {
   latchT: number;
   /** where the yank lifts him to, and how fast it goes */
   yankTo: Point | null;
+  /** a ledge pull: a platform too low to swing under hauls him up to stand here on it */
+  climbTo: Point | null;
   /** an air bite's tear closes when this runs out */
   biteLeft: number;
   /** the speed when the reel started, which caps how fast reeling can make him */

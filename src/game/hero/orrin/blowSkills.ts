@@ -98,7 +98,7 @@ function splash(e: Enemy, power: number): void {
 /** what the skills do once a chain blow has landed on a foe */
 export function afterChainHit(e: Enemy, tip: boolean, s: ChainStrike): void {
   const sweet = skillValues("o_sweetspot");
-  if (tip && sweet.mark) markFoe(e, withCharms("duration", sweet.markTime), sweet.mark);
+  if (tip && sweet.mark) markFoe(e, "o_sweetspot", withCharms("duration", sweet.markTime), sweet.mark);
   if (tip && sweet.refund) refundStamina(sweet.refund);
   if (tip && sweet.perfect && orrin.momentum >= 50) perfectShock(e, sweet.shock, sweet.shockPower);
   const barbs = skillValues(BARBS);

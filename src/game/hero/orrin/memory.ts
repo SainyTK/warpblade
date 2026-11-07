@@ -20,6 +20,7 @@ const fresh = (): OrrinMemory => ({
   length: 0,
   latchT: 0,
   yankTo: null,
+  climbTo: null,
   biteLeft: 0,
   reelBase: 0,
   reeling: false,

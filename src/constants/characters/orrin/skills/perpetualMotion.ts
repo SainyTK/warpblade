@@ -9,19 +9,46 @@ export const PERPETUAL_MOTION: SkillDef = {
   button: "auto",
   text: "Momentum lasts longer and does more.",
   levels: [
-    { text: "Momentum drains half as fast.", values: { drain: 0.5, bonus: 0.4, walk: 0, start: 0, hurt: 30, endless: 0 } },
-    { text: "Momentum's bonus reaches +50%.", values: { drain: 0.5, bonus: 0.5, walk: 0, start: 0, hurt: 30, endless: 0 } },
-    { text: "Walking gives 5 Momentum a second.", values: { drain: 0.5, bonus: 0.5, walk: 5, start: 0, hurt: 30, endless: 0 } },
-    { text: "Runs start at 30 Momentum.", values: { drain: 0.5, bonus: 0.5, walk: 5, start: 30, hurt: 30, endless: 0 } },
-    { text: "A blow costs only 15 Momentum.", values: { drain: 0.5, bonus: 0.5, walk: 5, start: 30, hurt: 15, endless: 0 } },
-    { text: "Momentum drains a third as fast.", values: { drain: 0.35, bonus: 0.5, walk: 5, start: 30, hurt: 15, endless: 0 } },
-    { text: "Momentum's bonus reaches +60%.", values: { drain: 0.35, bonus: 0.6, walk: 5, start: 30, hurt: 15, endless: 0 } },
-    { text: "Momentum drains a quarter as fast.", values: { drain: 0.25, bonus: 0.6, walk: 5, start: 30, hurt: 15, endless: 0 } },
+    {
+      text: "Momentum drains half as fast.",
+      values: { drain: 0.5, bonus: 0.4, walk: 0, start: 0, hurt: 30, endless: 0 },
+    },
+    {
+      text: "Momentum's bonus reaches +50%.",
+      values: { drain: 0.5, bonus: 0.5, walk: 0, start: 0, hurt: 30, endless: 0 },
+    },
+    {
+      text: "Walking gives 5 Momentum a second.",
+      values: { drain: 0.5, bonus: 0.5, walk: 5, start: 0, hurt: 30, endless: 0 },
+    },
+    {
+      text: "Runs start at 30 Momentum.",
+      values: { drain: 0.5, bonus: 0.5, walk: 5, start: 30, hurt: 30, endless: 0 },
+    },
+    {
+      text: "A blow costs only 15 Momentum.",
+      values: { drain: 0.5, bonus: 0.5, walk: 5, start: 30, hurt: 15, endless: 0 },
+    },
+    {
+      text: "Momentum drains a third as fast.",
+      values: { drain: 0.35, bonus: 0.5, walk: 5, start: 30, hurt: 15, endless: 0 },
+    },
+    {
+      text: "Momentum's bonus reaches +60%.",
+      values: { drain: 0.35, bonus: 0.6, walk: 5, start: 30, hurt: 15, endless: 0 },
+    },
+    {
+      text: "Momentum drains a quarter as fast.",
+      values: { drain: 0.25, bonus: 0.6, walk: 5, start: 30, hurt: 15, endless: 0 },
+    },
   ],
   evolution: {
     partner: "o_kite",
     name: "Endless Motion",
     text: "Momentum never drains while a Brass Kite is out.",
-    row: { text: "No drain while a kite is out.", values: { drain: 0.25, bonus: 0.6, walk: 5, start: 30, hurt: 15, endless: 1 } },
+    row: {
+      text: "No drain while a kite is out.",
+      values: { drain: 0.25, bonus: 0.6, walk: 5, start: 30, hurt: 15, endless: 1 },
+    },
   },
 };

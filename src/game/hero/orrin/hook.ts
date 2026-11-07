@@ -1,6 +1,6 @@
 import { HOOK } from "../../../constants/orrin/hook";
 import { SPARKS } from "../../../constants/palette";
-import { ANCHORS, PLATFORMS } from "../../../constants/stage";
+import { ANCHORS, PLATFORMS, W } from "../../../constants/stage";
 import { sfx } from "../../../services/audio";
 import type { Enemy } from "../../../types/enemy";
 import type { LatchKind } from "../../../types/orrin";
@@ -14,12 +14,15 @@ import { game, hero, particles, rng } from "../../state";
 import { isFree, setState } from "../actions";
 import { refuseDash } from "../stamina";
 import { giveArcBack } from "./airArc";
+import { startClimb } from "./climb";
 import { orrin, orrinHost } from "./memory";
 import { inRecovery } from "./string";
-import { startSwing } from "./swing";
+import { startSwing, swingRoom } from "./swing";
 import { startZip } from "./zip";
 
 const PUMP = "o_pump";
+/** the hook bites the air this close to the stage's edges */
+const EDGE = 4;
 
 /** stamina a hook costs: Pendulum Pump trims it */
 export const hookCost = (): number => HOOK.cost - (skillValues(PUMP).cost ?? 0);
@@ -81,6 +84,7 @@ function latch(kind: LatchKind, at: Point, foe: Enemy | null): void {
   giveArcBack(false);
   if (kind === "anchor" || kind === "platform") orrin.hooks = Math.min(hooksPerAir(), orrin.hooks + 1);
   if (foe) return startZip(foe, at);
+  if (kind === "platform" && swingRoom(at) < HOOK.minLength) return startClimb(at);
   startSwing(kind, at);
 }
 
@@ -115,6 +119,8 @@ export function runHookThrow(dt: number): void {
     const y = from.y + f.dy * f.flown;
     const hit = meets(x, y);
     if (hit) return latch(hit.kind, hit.at, hit.foe);
+    // the stage's edge stops the hook: it bites the air there
+    if (x <= EDGE || x >= W - EDGE || y <= EDGE) return latch("air", { x, y }, null);
   }
   orrin.flight = { ...f, from };
   if (f.flown >= f.range) latch("air", { x: from.x + f.dx * f.range, y: from.y + f.dy * f.range }, null);

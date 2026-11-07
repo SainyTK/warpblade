@@ -22,8 +22,43 @@ export const ROLL_CLIP: ActionClip = {
   hit: 0,
   keys: [
     [0, o({ ...TUCK, hy: -15, ny: -24, fx: 3, fy: -30, sa: -1.6, bx: 6, by: -21 })],
-    [frame(2), o({ ...TUCK, hy: -17, ny: -20, nx: 6, cb: 1.5, fx: 7, fy: -15, bx: 4, by: -14, ffx: -3, ffy: -12, bfx: -5, bfy: -9 })],
-    [frame(4), o({ ...TUCK, hy: -16, ny: -21, nx: -3, cb: 1, tw: 1, fx: 2, fy: -14, bx: 3, by: -13, ffx: 3, ffy: -9, bfx: 0, bfy: -6 })],
+    [
+      frame(2),
+      o({
+        ...TUCK,
+        hy: -17,
+        ny: -20,
+        nx: 6,
+        cb: 1.5,
+        fx: 7,
+        fy: -15,
+        bx: 4,
+        by: -14,
+        ffx: -3,
+        ffy: -12,
+        bfx: -5,
+        bfy: -9,
+      }),
+    ],
+    [
+      frame(4),
+      o({
+        ...TUCK,
+        hy: -16,
+        ny: -21,
+        nx: -3,
+        cb: 1,
+        tw: 1,
+        fx: 2,
+        fy: -14,
+        bx: 3,
+        by: -13,
+        ffx: 3,
+        ffy: -9,
+        bfx: 0,
+        bfy: -6,
+      }),
+    ],
     [frame(6), o({ ffx: 3, ffy: -1, bfx: -4, bfy: -3, fx: 8, fy: -19, sa: 0.9, bx: -6, by: -21, nx: 2 })],
   ],
 };
@@ -104,7 +139,20 @@ export const PIN_CLIP: ActionClip = {
 };
 
 /** the kick at the end of a zip */
-export const ZIP_KICK: Pose = o({ ...TUCK, nx: -1, cb: -1, ffx: 9, ffy: -10, fa: 0.2, bfx: -3, bfy: -5, fx: -2, fy: -20, bx: 3, by: -26 });
+export const ZIP_KICK: Pose = o({
+  ...TUCK,
+  nx: -1,
+  cb: -1,
+  ffx: 9,
+  ffy: -10,
+  fa: 0.2,
+  bfx: -3,
+  bfy: -5,
+  fx: -2,
+  fy: -20,
+  bx: 3,
+  by: -26,
+});
 
 /** under the ultimate's tear, hanging from the chain */
 export const ULT_HANG: Pose = HANG;

@@ -6,10 +6,10 @@ import { PK } from "../../../types/particle";
 import { TAU } from "../../../utils/math";
 import { eachStanding } from "../../coopHooks";
 import { hurtHero } from "../../hurtHero";
+import { shotWarded } from "../../shotWards";
 import { hero, particles, rng } from "../../state";
 import { boxHit, heroBox } from "../../world";
 import { DAY_SPARKS, DAY_COLORS as DC } from "./colors";
-import { shotWarded } from "../../shotWards";
 
 const GRAVITY = 420;
 const SPLASH = { reach: 10, height: 14 } as const;

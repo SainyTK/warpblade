@@ -1,6 +1,7 @@
 import { HERO_MOVE } from "../../../constants/combat";
 import { ENEMIES } from "../../../constants/enemies";
 import { HOOK, REEL, SWING } from "../../../constants/orrin/hook";
+import { W } from "../../../constants/stage";
 import { sfx } from "../../../services/audio";
 import type { Enemy } from "../../../types/enemy";
 import type { LatchKind } from "../../../types/orrin";
@@ -20,16 +21,20 @@ import { orrin, orrinHost } from "./memory";
 import { reelSnap } from "./reelSnap";
 
 const PUMP = "o_pump";
+/** the shared mover keeps him this far inside the stage's sides */
+const WALL = 8;
 const KICK = "o_pendulumkick";
 
 /** the hand the chain hangs from while he swings, world pixels */
 export const swingHand = (): Point => ({ x: hero.x, y: hero.y - HOOK.grip });
 
+/** the longest chain from this latch whose arc still clears the floor under him */
+export const swingRoom = (at: Point): number => surfaceBelow(hero.x, hero.y) - HOOK.grip - HOOK.clearance - at.y;
+
 /** how long the chain may be from this latch: never past the hook's range, and short enough that the bottom of the
  *  arc clears the floor under the latch */
 function chainLength(at: Point, from: Point): number {
-  const floor = surfaceBelow(at.x, at.y + 2);
-  const most = floor - HOOK.grip - HOOK.clearance - at.y;
+  const most = swingRoom(at);
   const reach = Math.hypot(from.x - at.x, from.y - at.y);
   const length = Math.min(reach, HOOK.range + (skillValues(PUMP).range ?? 0), most);
   return Math.max(Math.min(HOOK.minLength, most), Math.max(10, length));
@@ -58,6 +63,9 @@ export function startSwing(kind: LatchKind, at: Point): void {
       x: at.x + ((hand.x - at.x) / d) * orrin.length,
       y: at.y + ((hand.y - at.y) / d) * orrin.length + HOOK.grip,
     };
+    // the yank lifts him on this very step, so the floor never takes him back before it starts
+    h.vx = (orrin.yankTo.x - h.x) / SWING.yankTime;
+    h.vy = (orrin.yankTo.y - h.y) / SWING.yankTime;
   } else orrin.yankTo = null;
   h.ground = false;
   setState("swing");
@@ -190,6 +198,11 @@ function pendulum(dt: number, dir: number): void {
   let rx = hand.x - at.x;
   let ry = hand.y - at.y;
   let d = Math.hypot(rx, ry) || 1;
+  // swinging into the stage's side stops the swing there, and he falls back along the arc
+  if ((h.x <= WALL && h.vx < 0) || (h.x >= W - WALL && h.vx > 0)) {
+    h.vx = 0;
+    h.vy = Math.max(0, h.vy);
+  }
   // speed along the chain is taken out: the chain is taut
   const radial = (h.vx * rx + h.vy * ry) / d;
   if (radial > 0) {
@@ -257,6 +270,7 @@ export function endSwingOnFloor(): void {
   orrin.latch = null;
   orrin.latchAt = null;
   orrin.yankTo = null;
+  orrin.climbTo = null;
   orrin.biteLeft = 0;
   orrin.reeling = false;
 }

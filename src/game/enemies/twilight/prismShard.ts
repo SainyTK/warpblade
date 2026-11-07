@@ -6,10 +6,10 @@ import { PK } from "../../../types/particle";
 import { scale, WHITE } from "../../../utils/color";
 import { eachStanding } from "../../coopHooks";
 import { hurtHero } from "../../hurtHero";
+import { shotWarded } from "../../shotWards";
 import { particles, rng } from "../../state";
 import { boxHit, heroBox } from "../../world";
 import { PRISM_SPARKS } from "./colors";
-import { shotWarded } from "../../shotWards";
 
 /** a sliver of prism crystal shot by a Prism Sprite; it shatters on Kael, the floor or the edge of the stage */
 export function createPrismShard(x: number, y: number, vx: number, vy: number, damage: number, hue: Color): Effect {

@@ -1,6 +1,13 @@
 import { STATE_CLIPS } from "../../../constants/clips";
 import { CHAIN_CLIPS, HANGING_CLIP } from "../../../constants/clips/orrin/chain";
-import { BACKLINE_POSE, HOOK_CLIP, PIN_CLIP, ROLL_CLIP, WHIRL_CLIP, ZIP_POSE } from "../../../constants/clips/orrin/moves";
+import {
+  BACKLINE_POSE,
+  HOOK_CLIP,
+  PIN_CLIP,
+  ROLL_CLIP,
+  WHIRL_CLIP,
+  ZIP_POSE,
+} from "../../../constants/clips/orrin/moves";
 import { CHARGE_POSE, HANG, ORRIN_IDLE, TUCK } from "../../../constants/clips/orrin/stance";
 import { KAEL_WOUNDED_IDLE } from "../../../constants/clips/wounded";
 import { CHAIN_BLOWS } from "../../../constants/orrin/string";

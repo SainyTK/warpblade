@@ -84,7 +84,8 @@ export function createTether(foes: readonly Enemy[], spec: TetherSpec): Effect {
         const [ax, ay] = enemyCenter(chained[i - 1]);
         const [bx, by] = enemyCenter(chained[i]);
         drawLinks(ax, ay, bx, by, PAL.brass[4], fade);
-        if (rng.chance(0.05)) particles.spawn(PK.MOTE, (ax + bx) / 2, (ay + by) / 2, 0, -10, 0.4, { col: PAL.brass[4] });
+        if (rng.chance(0.05))
+          particles.spawn(PK.MOTE, (ax + bx) / 2, (ay + by) / 2, 0, -10, 0.4, { col: PAL.brass[4] });
       }
       for (const e of chained) {
         const [cx, cy] = enemyCenter(e);

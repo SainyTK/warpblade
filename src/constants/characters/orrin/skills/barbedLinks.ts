@@ -9,19 +9,46 @@ export const BARBED_LINKS: SkillDef = {
   button: "J",
   text: "Chain hits leave bleeding cuts.",
   levels: [
-    { text: "Chain hits add a bleed stack.", values: { stacks: 1, tipStacks: 1, max: 6, damage: 0.12, life: 3, kick: 0, bonus: 0, flay: 0 } },
-    { text: "Tip hits add 2 stacks.", values: { stacks: 1, tipStacks: 2, max: 6, damage: 0.12, life: 3, kick: 0, bonus: 0, flay: 0 } },
-    { text: "Up to 10 stacks.", values: { stacks: 1, tipStacks: 2, max: 10, damage: 0.12, life: 3, kick: 0, bonus: 0, flay: 0 } },
-    { text: "Swing kicks add stacks.", values: { stacks: 1, tipStacks: 2, max: 10, damage: 0.12, life: 3, kick: 1, bonus: 0, flay: 0 } },
-    { text: "Bleeds hurt more.", values: { stacks: 1, tipStacks: 2, max: 10, damage: 0.18, life: 3, kick: 1, bonus: 0, flay: 0 } },
-    { text: "Bleeding foes take 10% more from the chain.", values: { stacks: 1, tipStacks: 2, max: 10, damage: 0.18, life: 3, kick: 1, bonus: 0.1, flay: 0 } },
-    { text: "Bleeds hurt more.", values: { stacks: 1, tipStacks: 2, max: 10, damage: 0.24, life: 3, kick: 1, bonus: 0.1, flay: 0 } },
-    { text: "Bleeds hurt far more.", values: { stacks: 1, tipStacks: 2, max: 10, damage: 0.3, life: 3, kick: 1, bonus: 0.1, flay: 0 } },
+    {
+      text: "Chain hits add a bleed stack.",
+      values: { stacks: 1, tipStacks: 1, max: 6, damage: 0.12, life: 3, kick: 0, bonus: 0, flay: 0 },
+    },
+    {
+      text: "Tip hits add 2 stacks.",
+      values: { stacks: 1, tipStacks: 2, max: 6, damage: 0.12, life: 3, kick: 0, bonus: 0, flay: 0 },
+    },
+    {
+      text: "Up to 10 stacks.",
+      values: { stacks: 1, tipStacks: 2, max: 10, damage: 0.12, life: 3, kick: 0, bonus: 0, flay: 0 },
+    },
+    {
+      text: "Swing kicks add stacks.",
+      values: { stacks: 1, tipStacks: 2, max: 10, damage: 0.12, life: 3, kick: 1, bonus: 0, flay: 0 },
+    },
+    {
+      text: "Bleeds hurt more.",
+      values: { stacks: 1, tipStacks: 2, max: 10, damage: 0.18, life: 3, kick: 1, bonus: 0, flay: 0 },
+    },
+    {
+      text: "Bleeding foes take 10% more from the chain.",
+      values: { stacks: 1, tipStacks: 2, max: 10, damage: 0.18, life: 3, kick: 1, bonus: 0.1, flay: 0 },
+    },
+    {
+      text: "Bleeds hurt more.",
+      values: { stacks: 1, tipStacks: 2, max: 10, damage: 0.24, life: 3, kick: 1, bonus: 0.1, flay: 0 },
+    },
+    {
+      text: "Bleeds hurt far more.",
+      values: { stacks: 1, tipStacks: 2, max: 10, damage: 0.3, life: 3, kick: 1, bonus: 0.1, flay: 0 },
+    },
   ],
   evolution: {
     partner: "o_chainfence",
     name: "Flay",
     text: "A Full Circle tip consumes the stacks for 1.2x each.",
-    row: { text: "Full Circle tips flay every stack.", values: { stacks: 1, tipStacks: 2, max: 10, damage: 0.3, life: 3, kick: 1, bonus: 0.1, flay: 1.2 } },
+    row: {
+      text: "Full Circle tips flay every stack.",
+      values: { stacks: 1, tipStacks: 2, max: 10, damage: 0.3, life: 3, kick: 1, bonus: 0.1, flay: 1.2 },
+    },
   },
 };

@@ -7,8 +7,8 @@ import { game, hero, progress } from "../../state";
 import { newSwing } from "../../world";
 import { skin } from "../skin";
 import { type ChainStrike, sweepChain, tipPoint } from "./chainHit";
-import { fullMomentum } from "./momentum";
 import { orrin } from "./memory";
+import { fullMomentum } from "./momentum";
 import { blowReach } from "./reach";
 
 const SKY = "o_skylash";

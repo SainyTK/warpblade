@@ -1,18 +1,18 @@
-import { HERO_COLORS as HC, PAL } from "../../../constants/palette";
-import { BACKLINE } from "../../../constants/orrin/backline";
 import { WHIRLWALL } from "../../../constants/orrin/abilities";
+import { BACKLINE } from "../../../constants/orrin/backline";
 import { HOOK } from "../../../constants/orrin/hook";
-import { CHAIN_BLOWS, HANGING_ARC, SHOULDER_Y, type ChainBlowSpec } from "../../../constants/orrin/string";
+import { CHAIN_BLOWS, type ChainBlowSpec, HANGING_ARC, SHOULDER_Y } from "../../../constants/orrin/string";
+import { HERO_COLORS as HC, PAL } from "../../../constants/palette";
 import { ellipseRing, glow, glowLine, line, place, px } from "../../../engine/frame";
 import type { Point } from "../../../types/world";
 import { WHITE } from "../../../utils/color";
 import { clamp, lerp, TAU } from "../../../utils/math";
 import { drawLinks } from "../../effects/orrin/chainLinks";
 import { enemyCenter } from "../../enemies/enemy";
+import { objectMemory, rememberPerSeat } from "../../seatMemory";
 import { skillEvolved } from "../../skills/query";
 import { game, hero } from "../../state";
 import { Chain } from "../chain";
-import { objectMemory, rememberPerSeat } from "../../seatMemory";
 import { backlinePoint } from "./backline";
 import { hookHead } from "./hook";
 import { orrin, orrinHost } from "./memory";
@@ -36,7 +36,9 @@ function drawHook(at: Point, ux: number, uy: number): void {
   const B = PAL.brass;
   if (skillEvolved("o_ironweight")) {
     for (let a = 0; a < TAU; a += TAU / 8) px(at.x + Math.cos(a) * 4, at.y + Math.sin(a) * 4, HC.steelLight);
-    for (let r = 0; r <= 3; r++) for (let a = 0; a < TAU; a += 0.6) px(at.x + Math.cos(a) * r, at.y + Math.sin(a) * r, r > 2 ? HC.steelDeep : HC.steelDark);
+    for (let r = 0; r <= 3; r++)
+      for (let a = 0; a < TAU; a += 0.6)
+        px(at.x + Math.cos(a) * r, at.y + Math.sin(a) * r, r > 2 ? HC.steelDeep : HC.steelDark);
     px(at.x - 1, at.y - 1, HC.steelGlint);
     return;
   }
@@ -81,7 +83,12 @@ function curved(from: Point, ctrl: Point, to: Point): void {
  * The chain during a blow: wound back and trailing before the hit frame, snapped out to the sweep's angle at full reach
  * while it strikes (bending behind the hand as it lags), and falling back into the loop after.
  */
-function blowChain(spec: ChainBlowSpec, blow: "lash" | "knee" | "rising" | "circle" | "hanging", st: number, dur: number): void {
+function blowChain(
+  spec: ChainBlowSpec,
+  blow: "lash" | "knee" | "rising" | "circle" | "hanging",
+  st: number,
+  dur: number,
+): void {
   const hand = handAt();
   const [ox, oy] = [hero.x, hero.y - SHOULDER_Y];
   const reach = blowReach(spec, blow);
@@ -96,7 +103,10 @@ function blowChain(spec: ChainBlowSpec, blow: "lash" | "knee" | "rising" | "circ
     const turns = blow === "circle" ? Math.max(1, (dur - spec.dur) / Math.max(span, 1e-3) + 1) : 1;
     const f = span > 0 ? clamp((st - spec.hit) / span, 0, turns) : 1;
     angle = spec.a0 + (spec.a1 - spec.a0) * (f % 1 || (f >= 1 ? 1 : 0));
-    r = st > spec.hit + span * turns + 1 / 30 ? lerp(reach, 10, clamp((st - spec.hit - span * turns) / (dur - spec.hit - span * turns))) : reach;
+    r =
+      st > spec.hit + span * turns + 1 / 30
+        ? lerp(reach, 10, clamp((st - spec.hit - span * turns) / (dur - spec.hit - span * turns)))
+        : reach;
   } else {
     const k = clamp((st - spec.hitEnd) / Math.max(1e-3, dur - spec.hitEnd));
     angle = spec.a1 + k * 0.8;
@@ -199,10 +209,12 @@ export function drawOrrin(): void {
     case "pendulum":
     case "maelstrom": {
       const at = h.state === "swing" ? orrin.latchAt : orrin.ultAt;
-      if (at && (h.state === "swing" || h.st >= 0.2)) return taut(hand, at, h.state === "swing" && orrin.latch !== "air");
+      if (at && (h.state === "swing" || h.st >= 0.2))
+        return taut(hand, at, h.state === "swing" && orrin.latch !== "air");
       return restLoop();
     }
     case "zip": {
+      if (orrin.climbTo && orrin.latchAt) return taut(hand, orrin.latchAt);
       const foe = orrinHost.zipFoe;
       if (!foe) return restLoop();
       const [cx, cy] = enemyCenter(foe);

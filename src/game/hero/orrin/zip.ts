@@ -12,8 +12,9 @@ import { hitStop, shake } from "../../world";
 import { setState } from "../actions";
 import { travelEnded } from "../travelEnd";
 import { giveArcBack } from "./airArc";
-import { gainMomentum } from "./momentum";
+import { runClimb } from "./climb";
 import { orrin, orrinHost } from "./memory";
+import { gainMomentum } from "./momentum";
 
 const GAFF = "o_gaff";
 
@@ -86,6 +87,7 @@ function touchesRing(e: Enemy, x: number, y: number, r: number): boolean {
 
 /** the haul: straight at the foe at the zip's speed; on arrival the kick, then a bounce up and back, still in the air */
 export function runZip(): void {
+  if (orrin.climbTo) return runClimb();
   const h = hero;
   const foe = orrinHost.zipFoe;
   if (!foe || foe.hp <= 0 || h.st > ZIP.most) return endZip(false);

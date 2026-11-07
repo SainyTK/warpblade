@@ -104,7 +104,9 @@ export function runMaelstrom(dt: number): void {
       if (e.hp > 0 && Math.abs(cx - at.x) < rx * 0.5) ultHit(e, v.burst, at.x);
     }
     for (let i = 0; i < 16; i++)
-      particles.spawn(PK.SPARK, at.x, GROUND - 16, rng.range(-240, 240), rng.range(-240, 40), 0.4, { sparks: SPARKS.brass });
+      particles.spawn(PK.SPARK, at.x, GROUND - 16, rng.range(-240, 240), rng.range(-240, 40), 0.4, {
+        sparks: SPARKS.brass,
+      });
   }
   orrin.ultAt = null;
   settle();

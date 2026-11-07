@@ -1,6 +1,7 @@
 import { HERO_COLORS as HC, PAL } from "../../../constants/palette";
 import { GROUND } from "../../../constants/stage";
 import { glow, line, place, px } from "../../../engine/frame";
+import { sfx } from "../../../services/audio";
 import type { Effect } from "../../../types/effect";
 import { WHITE } from "../../../utils/color";
 import { dealDamage } from "../../damage";
@@ -8,7 +9,6 @@ import { createFloorRing } from "../../effects/floorRing";
 import { enemyCenter } from "../../enemies/enemy";
 import { game, progress } from "../../state";
 import { dust, shake } from "../../world";
-import { sfx } from "../../../services/audio";
 
 /** what one anchor does where it lands */
 export interface AnchorSpec {
@@ -34,7 +34,8 @@ export function createAnchorDrop(x: number, floor: number, spec: AnchorSpec, lan
       if (t >= 0 && !down && spec.pull)
         for (const e of game.enemies) {
           const [cx] = enemyCenter(e);
-          if (e.hp > 0 && Math.abs(cx - x) < spec.ring + spec.pull) e.x += Math.sign(x - cx) * Math.min(spec.pull, Math.abs(x - cx)) * dt * 3;
+          if (e.hp > 0 && Math.abs(cx - x) < spec.ring + spec.pull)
+            e.x += Math.sign(x - cx) * Math.min(spec.pull, Math.abs(x - cx)) * dt * 3;
         }
       if (!down && t >= FALL) {
         down = true;

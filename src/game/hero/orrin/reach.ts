@@ -26,7 +26,10 @@ export function bearing(e: Enemy): FoeBearing {
   const ny = clamp(oy, y0, y1) - oy;
   const cx = (x0 + x1) / 2 - ox;
   const cy = (y0 + y1) / 2 - oy;
-  const far = Math.hypot(Math.max(Math.abs(x0 - ox), Math.abs(x1 - ox)), Math.max(Math.abs(y0 - oy), Math.abs(y1 - oy)));
+  const far = Math.hypot(
+    Math.max(Math.abs(x0 - ox), Math.abs(x1 - ox)),
+    Math.max(Math.abs(y0 - oy), Math.abs(y1 - oy)),
+  );
   return { angle: Math.atan2(cy, cx * hero.face), near: Math.hypot(nx, ny), far };
 }
 

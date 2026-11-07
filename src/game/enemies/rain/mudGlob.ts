@@ -5,10 +5,10 @@ import { PK } from "../../../types/particle";
 import { clamp } from "../../../utils/math";
 import { eachStanding, heroSlot } from "../../coopHooks";
 import { hurtHero } from "../../hurtHero";
+import { shotWarded } from "../../shotWards";
 import { game, hero, particles, rng } from "../../state";
 import { boxHit, dust, heroBox } from "../../world";
 import { RAIN_FOES as C, MUD_SPARKS } from "./colors";
-import { shotWarded } from "../../shotWards";
 
 const GRAVITY = 520;
 const PUDDLE_LIFE = 2.4;

@@ -3,7 +3,7 @@ import type { SpriteCanvas } from "../../../../engine/sprite";
 import { WHITE } from "../../../../utils/color";
 import { TAU } from "../../../../utils/math";
 import { crack, shards } from "../hulda/parts";
-import { arc, arrow, chevron, crescent, drop, fill, flame, sparkle, speedLines } from "../parts";
+import { arc, arrow, crescent, drop, fill, flame, sparkle, speedLines } from "../parts";
 import { floor, foe, seg } from "../ysra/parts";
 import {
   anchor,

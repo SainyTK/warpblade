@@ -10,7 +10,13 @@ import { pressTether } from "./spells/tether";
 import { pressWhirl } from "./whirlwall";
 
 /** his abilities on I in the order O turns through them: Whirlwall and Anchor Pin from the start, then his spell skills */
-export const ABILITIES: readonly OrrinAbility[] = ["whirlwall", "anchorPin", "o_chainfence", "o_tether", "o_anchorfall"];
+export const ABILITIES: readonly OrrinAbility[] = [
+  "whirlwall",
+  "anchorPin",
+  "o_chainfence",
+  "o_tether",
+  "o_anchorfall",
+];
 
 /** an ability he has now: his own two always, a spell skill once held */
 const known = (id: OrrinAbility): boolean => id === "whirlwall" || id === "anchorPin" || skillLevel(id) > 0;

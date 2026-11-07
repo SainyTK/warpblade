@@ -85,7 +85,14 @@ export function createChainFence(cx: number, floor: number, spec: FenceSpec): Ef
         const u1 = (k + 1) / 8;
         const y0 = floor - KNEE + Math.sin(Math.PI * u0) * sag;
         const y1 = floor - KNEE + Math.sin(Math.PI * u1) * sag;
-        drawLinks(o.x - half + spec.length * u0, y0, o.x - half + spec.length * u1, y1, spec.razor ? B[4] : undefined, fade);
+        drawLinks(
+          o.x - half + spec.length * u0,
+          y0,
+          o.x - half + spec.length * u1,
+          y1,
+          spec.razor ? B[4] : undefined,
+          fade,
+        );
       }
     },
     draw() {},

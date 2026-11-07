@@ -1,12 +1,12 @@
-import { MOMENTUM } from "../../../constants/orrin/momentum";
 import { SWING } from "../../../constants/orrin/hook";
+import { MOMENTUM } from "../../../constants/orrin/momentum";
 import { sfx } from "../../../services/audio";
 import { hero } from "../../state";
 import { heroGuarded } from "../guard";
 import { rewardPerfectDodge } from "../perfectDodge";
 import { backlineSlip } from "./backline";
-import { gainMomentum, loseMomentumToHurt } from "./momentum";
 import { orrin } from "./memory";
+import { gainMomentum, loseMomentumToHurt } from "./momentum";
 
 /** a blow meets him just after he let go of a fast swing, or early in an Undertow Backline */
 const inSlip = (): boolean =>

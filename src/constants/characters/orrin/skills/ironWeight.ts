@@ -10,18 +10,30 @@ export const IRON_WEIGHT: SkillDef = {
   text: "A heavier hook: the string hits harder and Full Circle grows.",
   levels: [
     { text: "The string deals 15% more.", values: { power: 0.15, radius: 0, lift: 0, turns: 1, knock: 0, ball: 0 } },
-    { text: "+20%, Full Circle reaches 6 px further.", values: { power: 0.2, radius: 6, lift: 0, turns: 1, knock: 0, ball: 0 } },
+    {
+      text: "+20%, Full Circle reaches 6 px further.",
+      values: { power: 0.2, radius: 6, lift: 0, turns: 1, knock: 0, ball: 0 },
+    },
     { text: "Rising Arc launches higher.", values: { power: 0.2, radius: 6, lift: 0.4, turns: 1, knock: 0, ball: 0 } },
     { text: "The string deals 30% more.", values: { power: 0.3, radius: 6, lift: 0.4, turns: 1, knock: 0, ball: 0 } },
-    { text: "Full Circle turns twice, the second at half.", values: { power: 0.3, radius: 6, lift: 0.4, turns: 2, knock: 0, ball: 0 } },
+    {
+      text: "Full Circle turns twice, the second at half.",
+      values: { power: 0.3, radius: 6, lift: 0.4, turns: 2, knock: 0, ball: 0 },
+    },
     { text: "The string deals 40% more.", values: { power: 0.4, radius: 6, lift: 0.4, turns: 2, knock: 0, ball: 0 } },
-    { text: "Foes knocked into others hit them.", values: { power: 0.4, radius: 6, lift: 0.4, turns: 2, knock: 0.5, ball: 0 } },
+    {
+      text: "Foes knocked into others hit them.",
+      values: { power: 0.4, radius: 6, lift: 0.4, turns: 2, knock: 0.5, ball: 0 },
+    },
     { text: "The string deals 60% more.", values: { power: 0.6, radius: 6, lift: 0.4, turns: 2, knock: 0.5, ball: 0 } },
   ],
   evolution: {
     partner: "o_reelsnap",
     name: "Wrecking Ball",
     text: "The hook becomes a spiked iron ball, and Full Circle turns three times at radius 72.",
-    row: { text: "A spiked ball: three turns at radius 72.", values: { power: 0.6, radius: 14, lift: 0.4, turns: 3, knock: 0.5, ball: 1 } },
+    row: {
+      text: "A spiked ball: three turns at radius 72.",
+      values: { power: 0.6, radius: 14, lift: 0.4, turns: 3, knock: 0.5, ball: 1 },
+    },
   },
 };

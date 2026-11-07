@@ -6,10 +6,10 @@ import { PK } from "../../types/particle";
 import { WHITE } from "../../utils/color";
 import { eachStanding } from "../coopHooks";
 import { hurtHero } from "../hurtHero";
+import { shotWarded } from "../shotWards";
 import { game, particles, rng } from "../state";
 import { boxHit, heroBox } from "../world";
 import { createImpact } from "./impact";
-import { shotWarded } from "../shotWards";
 
 /** a slow orb of shadow fired by the Rift Warden; it bursts on Kael, the floor or the edge of the stage */
 export function createShadowOrb(x: number, y: number, vx: number, vy: number, damage: number): Effect {

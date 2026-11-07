@@ -5,10 +5,10 @@ import { PK } from "../../../types/particle";
 import { eachStanding } from "../../coopHooks";
 import { createFloorRing } from "../../effects/floorRing";
 import { hurtHero } from "../../hurtHero";
+import { shotWarded } from "../../shotWards";
 import { game, particles, rng } from "../../state";
 import { boxHit, heroBox } from "../../world";
 import { VOID, VOID_SPARKS } from "./colors";
-import { shotWarded } from "../../shotWards";
 
 export const ORB_GRAVITY = 240;
 

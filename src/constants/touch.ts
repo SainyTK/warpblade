@@ -132,7 +132,11 @@ export const TOUCH_TEXT: Record<KitId, Record<TouchButtonAction, TouchButtonText
       hint: "Hold to swing from a crystal, a platform or the air, lift to let go. On a foe, zip to it. Stick up aims steeper, down in the air aims low",
       accent: "#b8c0cc",
     },
-    cast: { label: "Ability", hint: "Use the selected ability: Whirlwall, Anchor Pin or a spell skill", accent: "#ffe08a" },
+    cast: {
+      label: "Ability",
+      hint: "Use the selected ability: Whirlwall, Anchor Pin or a spell skill",
+      accent: "#ffe08a",
+    },
     ultimate: SPECIAL,
     cycle: { label: "Switch", hint: "Turn to the next ability", accent: "#e0ac48" },
   },
@@ -188,7 +192,10 @@ export const STICK_DIRECTIONS: Record<KitId, readonly StickDirectionSpec[]> = {
     { direction: "side", label: "Walk. While swinging, pump the swing" },
     { direction: "far side", label: "Walk, he never runs" },
     { direction: "up", label: "Jump. With Hook, aim steeper" },
-    { direction: "down", label: "With Jump, drop through a ledge. With Hook in the air, aim low. While swinging, Plumb Drop" },
+    {
+      direction: "down",
+      label: "With Jump, drop through a ledge. With Hook in the air, aim low. While swinging, Plumb Drop",
+    },
   ],
 };
 

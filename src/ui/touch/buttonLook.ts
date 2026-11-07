@@ -9,9 +9,9 @@ import { abilityMp, abilityRecharge, selectedAbility } from "../../game/hero/hul
 import { hulda } from "../../game/hero/hulda/memory";
 import { rushCost } from "../../game/hero/hulda/rush";
 import {
+  selectedAbility as orrinAbility,
   abilityMp as orrinMp,
   abilityRecharge as orrinRecharge,
-  selectedAbility as orrinAbility,
 } from "../../game/hero/orrin/abilities";
 import { hookCost } from "../../game/hero/orrin/hook";
 import { orrin } from "../../game/hero/orrin/memory";

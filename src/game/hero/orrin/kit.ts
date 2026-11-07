@@ -14,10 +14,10 @@ import { pressBackline, runBackline } from "./backline";
 import { drawOrrin, drawOrrinBack, stepChainLoop } from "./draw";
 import { runFly } from "./fly";
 import { hooksPerAir, pressHook, runHookThrow } from "./hook";
+import { pressJump } from "./jump";
 import { runMaelstrom } from "./maelstrom";
 import { orrin, resetOrrin } from "./memory";
 import { momentumScale, tickMomentum } from "./momentum";
-import { pressJump } from "./jump";
 import { runPendulum } from "./pendulum";
 import { plumbHead, plumbLand, pressPlumb } from "./plumbDrop";
 import { orrinPose } from "./pose";
@@ -42,6 +42,7 @@ function watchFloor(): void {
   orrin.hooks = hooksPerAir();
   orrin.airArcs = arcsPerAir();
   if (h.state === "swing") {
+    if (orrin.yankTo) return;
     endSwingOnFloor();
     settle();
   } else if (h.state === "fly") {

@@ -7,8 +7,8 @@ import { skillLevel, skillValues, withCharms } from "../../skills/query";
 import { game, hero, progress } from "../../state";
 import { dust, hitStop, shake } from "../../world";
 import { skin } from "../skin";
-import { momentumShare } from "./momentum";
 import { orrin } from "./memory";
+import { momentumShare } from "./momentum";
 import { letGo } from "./swing";
 
 const PLUMB = "o_plumbdrop";
