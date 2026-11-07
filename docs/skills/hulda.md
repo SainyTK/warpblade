@@ -37,11 +37,11 @@ Skyfall Breaker level 6 is the one skill that gives a second Skyfall after a cat
 
 | Key | Base kit |
 | --- | --- |
-| J | Fist string: jab 0.6x, body hook 0.9x, haymaker 1.5x (armoured wind-up, stun 0.5 s). In the air one hammer fist 0.9x that spikes. While holding a foe, a knee 0.5x (up to 3). |
+| J | Fist string: jab 1.2x, body hook 1.8x (breaks guards), haymaker 3.2x (armoured wind-up, stun 0.5 s); short pushes so she stays in reach. In the air one hammer fist 0.9x that spikes. While holding a foe, a knee 0.5x (up to 3). |
 | K | Grab: holds a minion, crushes a mini or boss for 1.3x. While holding, the throw, picked by the situation (below). In the air, Skyfall Grab (catch, ride, slam 2.0x, ring 0.8x). |
 | L | Bull Rush: armoured shoulder charge, 0.6x and stun 0.4 s to each foe, 25 stamina. Still allowed out of a landed blow's recovery. |
 | Up | One low jump. Down with Up drops through a ledge. |
-| I | The ability in the rotation: Bellow (20 MP, 0.6x AP, pulls foes in, drags fliers down) or Taunt (free, 3 s cooldown, 24 Grit over two slaps). |
+| I | The ability in the rotation: Bellow (20 MP, 3x AP, pulls foes in, drags fliers down) or Taunt (free, 3 s cooldown, 24 Grit over two slaps). |
 | O | Switches the I rotation. With no skill it switches between Bellow and Taunt. |
 | U | Quake Drop. |
 
@@ -53,7 +53,7 @@ The hold still runs out into a throw on its own.
 Base DPS (string only): 1.8 AD/s on one foe, 3.6 AD/s on a crowd.
 Grab and throw cycles add about 1.1 AD/s on one foe (3.7x every 3.3 s).
 
-The string drops the cross; jab and hook go up a little so the shorter string deals about the same per second as the old four blows (3.0x in 1.17 s against 3.45x in 1.47 s).
+The string drops the cross. Balance round 2 (`docs/skills/balance.md`) doubled the blows to 6.2x a string, made the hook break guards and shortened the pushes, so her base kit stands near the others'.
 
 ## What goes away and where it went
 

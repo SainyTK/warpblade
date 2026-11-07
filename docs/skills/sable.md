@@ -14,7 +14,7 @@ Every button does something from the first second.
 | J | The string: three bolts, the third a closing bolt. Tap or hold. |
 | K | Kick: front kick, 0.55A, strong push, 0.5 s stun. A landed air kick springs her up and back. |
 | L | Hop back with a free bolt at 0.8 (once on the floor, once in the air). From a walk or run toward the facing side, a slide instead. |
-| I | Snare at her feet: 20 MP, 3.5 s recharge, two on the floor, 2.6P and a 1.6 s hold. |
+| I | Snare at her feet: 20 MP, 3.5 s recharge, two on the floor, 6P and a 1.6 s hold. |
 | O | Reload; a second O in the bright window is a perfect reload (full quiver, next 4 bolts primed at +35%). Perfect Rhythm builds on it. |
 | U | Bolt Storm, the base special, with the shared charge levels. |
 | Up | One light jump, also out of a shot. Down and Up drops through a ledge. |
@@ -23,7 +23,7 @@ Every button does something from the first second.
 
 String length is 3.
 A held or tapped J looses bolt, bolt, closing bolt.
-The closing bolt deals 1.3A (a normal bolt is 0.95A), pushes twice as far and staggers 0.35 s, so the foe ends the string out at range again.
+The closing bolt deals 1.8A (a normal bolt is 0.95A), passes through one foe, pushes twice as far and staggers 0.35 s, so the foe ends the string out at range again.
 After the closing bolt the crossbow cocks for 0.18 s before the next string.
 A string pressed after she has settled starts again from the first bolt.
 The quiver holds 9 bolts (was 8), three full strings.
