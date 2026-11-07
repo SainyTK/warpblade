@@ -13,9 +13,9 @@ import { shake } from "../world";
  * and her damage is up by the skill's share. What happens while it lasts is the skill's behavior
  * (src/game/skills/hulda/unbroken.ts). Design: docs/skills/hulda.md
  *
- * Per cast against Quake Drop at charge level 3 (7x on each foe it reaches): at level 8, eight seconds of +100% on her
- * own damage (about 2 AD/s base, so about 16x on the foe she fights) plus haymaker quakes at 2x and the closing Quake
- * Drop, about 6 times; Iron Titan's ten seconds and stride quakes, about 14 times.
+ * Per cast against Quake Drop at charge level 3 (7x on each foe it reaches), measured on a crowd: at level 8, eight
+ * seconds in which every landed blow quakes the floor for 9x, all of it doubled, about 6 times; Iron Titan's twelve
+ * seconds of 20x quakes, about 16 times. Most of it is the quakes: doubling her own blows alone is under 1 time.
  */
 export function castUnbroken(level: number): void {
   const v = skillValues("h_unbroken");

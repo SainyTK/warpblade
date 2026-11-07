@@ -1,6 +1,6 @@
 import type { SkillDef } from "../../../../types/skill";
 
-/** Unbroken. Design: docs/skills/hulda.md. Values: time: seconds at charge level 1; perLevel: seconds each further level adds; bonus: share more damage; quake: attack damage of a haymaker's quake (0 none); fill: 1 fills Grit at the start; finale: 1 ends in a level 1 Quake Drop; fullHold: 1 holds at full speed and throws harder; throwBonus; knock: 1 foes that strike you fall; steps: attack damage of the evolved stride quakes; bigGrab: 1 grabs hold minis and bosses */
+/** Unbroken. Design: docs/skills/hulda.md. Values: time: seconds at charge level 1; perLevel: seconds each further level adds; bonus: share more damage; quake: attack damage of the quake each landed blow sends in iron (0 none); fill: 1 fills Grit at the start; finale: 1 ends in a level 1 Quake Drop; fullHold: 1 holds at full speed and throws harder; throwBonus; knock: 1 foes that strike you fall; steps: attack damage of the evolved stride quakes; bigGrab: 1 grabs hold minis and bosses */
 export const UNBROKEN: SkillDef = {
   id: "h_unbroken",
   name: "Unbroken",
@@ -43,7 +43,7 @@ export const UNBROKEN: SkillDef = {
       },
     },
     {
-      text: "Haymakers quake the floor.",
+      text: "Blows quake the floor.",
       values: {
         time: 4,
         perLevel: 1,
@@ -128,7 +128,7 @@ export const UNBROKEN: SkillDef = {
         time: 6,
         perLevel: 1,
         bonus: 1,
-        quake: 2,
+        quake: 9,
         fill: 1,
         finale: 1,
         fullHold: 1,
@@ -149,7 +149,7 @@ export const UNBROKEN: SkillDef = {
         time: 10,
         perLevel: 1,
         bonus: 1,
-        quake: 2,
+        quake: 20,
         fill: 1,
         finale: 1,
         fullHold: 1,
