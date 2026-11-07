@@ -10,6 +10,7 @@ import { character } from "../../game/state";
 import type { CharacterDef } from "../../types/character";
 import type { KitId } from "../../types/kit";
 import type { ActionClip, Pose } from "../../types/pose";
+import { sashAnchor } from "../../utils/poseFrame";
 import { sampleKeys } from "../../utils/sampleKeys";
 import { spriteUrl } from "../spriteUrl";
 
@@ -34,10 +35,14 @@ export function heroPortrait(c: CharacterDef): string {
   const hit = cache.get(c.id);
   if (hit) return hit;
   applySkin(c.skin);
-  // scarf and hair at rest, hanging back from the neck and the head
-  const scarf = Array.from({ length: 8 }, (_, i): [number, number] => [-1 - i * 1.9, -23 + i * 1.1]);
+  // scarf and hair at rest, hanging back from the neck (a sash from the belt) and the head
+  const pose = restPose(c);
+  const [kx, ky] = sashAnchor(pose);
+  const scarf = c.skin.sash
+    ? Array.from({ length: 8 }, (_, i): [number, number] => [kx - i * 1.7, ky + i * 1.6])
+    : Array.from({ length: 8 }, (_, i): [number, number] => [-1 - i * 1.9, -23 + i * 1.1]);
   const tail = Array.from({ length: 4 }, (_, i): [number, number] => [-4 - i * 1.6, -27 + i * 1.8]);
-  drawHero(canvas, restPose(c), { scarf, tail, flare: 0, sword: true });
+  drawHero(canvas, pose, { scarf, tail, flare: 0, sword: true });
   applySkin(character.skin);
   const url = spriteUrl(canvas);
   cache.set(c.id, url);
