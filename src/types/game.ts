@@ -66,7 +66,7 @@ export interface DamageNumber {
   /** seconds since it popped */
   age: number;
   big: boolean;
-  /** a relic's hit, drawn smaller and dimmer than the hero's own */
+  /** a hit a skill dealt on its own, drawn smaller and dimmer than the hero's own */
   quiet: boolean;
   /** the foe it pops over, so later hits on it merge in; none for a word */
   foe: Enemy | null;

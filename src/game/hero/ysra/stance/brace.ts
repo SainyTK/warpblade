@@ -6,7 +6,8 @@ import { cue } from "../../../cue";
 import { createImpact } from "../../../effects/impact";
 import { isHeld } from "../../../input";
 import { hasPerk } from "../../../progress";
-import { game, hero, progress } from "../../../state";
+import { skillValues } from "../../../skills/query";
+import { game, hero } from "../../../state";
 import { hitStop, shake } from "../../../world";
 import { setState, settle } from "../../actions";
 import { refuseDash } from "../../stamina";
@@ -43,7 +44,7 @@ export function runBrace(dt: number): void {
 
 /** stamina one block costs: Firm Stance takes a share off per rank */
 function blockCost(): number {
-  const ranks = progress.ranks.s_stance ?? 0;
+  const ranks = skillValues("s_stance").rank ?? 0;
   return BRACE.blockCost * Math.max(0, 1 - BRACE.firmCut * ranks);
 }
 

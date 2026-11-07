@@ -75,3 +75,11 @@ export interface HuldaMemory {
   /** the foe Bull Horns carries on her shoulder */
   carried: Enemy | null;
 }
+
+declare module "./skillBehavior" {
+  /** Hulda's own skill events */
+  interface SkillEvents {
+    /** a foe caught in her hands, or crushed when too big to hold */
+    grab: { foe: Enemy };
+  }
+}

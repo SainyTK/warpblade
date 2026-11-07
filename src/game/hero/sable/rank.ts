@@ -1,4 +1,4 @@
-import { progress } from "../../state";
+import { skillValues } from "../../skills/query";
 
-/** ranks learned of one of Sable's skill nodes */
-export const rankOf = (id: string): number => progress.ranks[id] ?? 0;
+/** the rank a skill stands for, until the hero's skills are designed: its old tree rank, read from the skill's level */
+export const rankOf = (id: string): number => skillValues(id).rank ?? 0;

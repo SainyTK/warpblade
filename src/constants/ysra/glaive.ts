@@ -1,8 +1,5 @@
 import type { HitFeel, MoveId } from "../../types/move";
 
-/** Ysra's string is one blow longer than Kael's at every level: three blows at level 1 */
-export const GLAIVE_STRING_BONUS = 1;
-
 /** the plain ground string in order; past its end it keeps trading the sweep and the cleave, and the last blow a
  *  string allows is always the impale */
 export const GLAIVE_STRING: readonly MoveId[] = ["hipThrust", "reverseSweep", "overheadCleave", "twirl"];

@@ -5,6 +5,7 @@ import { dealDamage } from "../../damage";
 import { createSnareTrap } from "../../effects/snareTrap";
 import { enemyCenter } from "../../enemies/enemy";
 import { hasPerk } from "../../progress";
+import { emitSkillEvent } from "../../skills/events";
 import { game, hero, progress } from "../../state";
 import { shake } from "../../world";
 import { isFree, setState, settle } from "../actions";
@@ -12,14 +13,13 @@ import { deny } from "../deny";
 import { skin } from "../skin";
 import { looseBolt } from "./loose";
 import { sable } from "./memory";
-import { rankOf } from "./rank";
 
 const maxSnares = (): number => (hasPerk("twinSnare") ? SNARE.twinMax : SNARE.max);
 
 /** I: kneel and set a snare at her feet, paid with MP; on the floor only */
 export function pressSnare(): boolean {
   const h = hero;
-  if (!rankOf("t_snare") || !isFree() || !h.ground) return false;
+  if (!isFree() || !h.ground) return false;
   if (sable.snareCd > 0 || sable.snares >= maxSnares()) {
     deny("cast");
     return true;
@@ -31,6 +31,7 @@ export function pressSnare(): boolean {
   h.mp -= SNARE.mp;
   sable.snareCd = hasPerk("twinSnare") ? SNARE.twinCooldown : SNARE.cooldown;
   setState("snare");
+  emitSkillEvent({ type: "cast", ability: "snare" });
   return true;
 }
 

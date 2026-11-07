@@ -5,6 +5,7 @@ import { readPlaytestStart } from "../services/playtestStart";
 import { startRunAchievements } from "../store/achievements";
 import { ownsSkill } from "../store/meta";
 import { startRunUnlocks } from "../store/unlocks";
+import { parseStartBuild } from "../utils/build";
 import { xpToReach } from "../utils/progression";
 import { gainXp, openPicks, refreshGrowing } from "./progress";
 import { resetRun } from "./run";
@@ -23,7 +24,7 @@ export function startRun(banner: string): void {
   game.wave = Math.min(playtest.wave, STAGE_WAVES) - 1;
   if (playtest.level > progress.level) gainXp(xpToReach(playtest.level) - xpToReach(progress.level));
   if (playtest.build) {
-    Object.assign(progress.build, playtest.build);
+    Object.assign(progress.build, parseStartBuild(playtest.build, character));
     refreshGrowing();
   }
   openPicks();

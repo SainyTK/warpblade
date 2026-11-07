@@ -75,8 +75,13 @@ export interface Enemy {
   xp: number;
   /** an elite: more HP, a gold glint, and a chest when it falls */
   elite: boolean;
-  /** seconds left slowed by cold (Frost Bell) */
+  /** seconds left slowed by a skill's cold */
   chill: number;
+  /** stacking damage over time from skills (poison, bleed, burn, lodged bolts), one entry per skill id */
+  stacks: SkillStacks[];
+  /** seconds left marked by a skill, and the share of extra damage it takes from every source while marked */
+  mark: number;
+  markBonus: number;
   /** boss phase: 1, or 2 once it is enraged */
   phase: number;
   /** frontal blows blocked in a row; the second one sets off a counter */
@@ -95,4 +100,21 @@ export interface Enemy {
   ax: number;
   ay: number;
   n: number;
+}
+
+/** one skill's stacks on a foe: each stack deals `damage` every `every` seconds until `left` runs out */
+export interface SkillStacks {
+  /** the skill's id: the ticks' damage source */
+  source: string;
+  stacks: number;
+  max: number;
+  /** damage of one stack's tick, before Might, Flow and a mark */
+  damage: number;
+  every: number;
+  /** seconds until the next tick */
+  next: number;
+  /** seconds left; each new stack refreshes it */
+  left: number;
+  /** in a co-op room, a mark for the hero who laid the stacks; null in solo play */
+  owner: object | null;
 }

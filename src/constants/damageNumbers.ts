@@ -16,7 +16,7 @@ export const DAMAGE_NUMBERS = {
   /** rise speed, plain and big */
   rise: -45,
   bigRise: -60,
-  /** relic numbers rise slower, so the hero's own hits read first */
+  /** numbers of a skill's own hits rise slower, so the hero's own hits read first */
   quietRise: -32,
   /** from this value on a number is drawn in thousands, as 123K */
   thousandsFrom: 100_000,

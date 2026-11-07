@@ -1,7 +1,10 @@
 import { FUSION, HERO_MOVE } from "../../constants/combat";
 import { sfx } from "../../services/audio";
+import type { Enemy } from "../../types/enemy";
 import { enemyBox } from "../enemies/enemy";
 import { hasPerk } from "../progress";
+import { objectMemory, rememberPerSeat } from "../seatMemory";
+import { emitSkillEvent } from "../skills/events";
 import { game, hero, progress } from "../state";
 import { boxHit, heroBox } from "../world";
 import { isFree, leaveHang, setState, settle } from "./actions";
@@ -36,25 +39,34 @@ export function tryDash(dir: number): boolean {
     perfectUsed: false,
   });
   sfx.dodge();
+  passed.foes = [];
   return true;
 }
 
-/** Static Step: foes Kael dashes through are charged */
-function chargeFoes(): void {
-  if (!hasPerk("staticStep")) return;
+/** the foes the dash in progress has passed through, for the skills' `dash` event when it ends */
+const passed: { foes: Enemy[] } = { foes: [] };
+rememberPerSeat(objectMemory(passed, true));
+
+/** note the foes the dash passes through; with Static Step they are charged */
+function passThrough(): void {
   const box = heroBox();
-  for (const e of game.enemies) if (e.charged <= 0 && boxHit(box, enemyBox(e))) e.charged = FUSION.staticMark;
+  for (const e of game.enemies) {
+    if (e.hp <= 0 || !boxHit(box, enemyBox(e))) continue;
+    if (!passed.foes.includes(e)) passed.foes = [...passed.foes, e];
+    if (e.charged <= 0 && hasPerk("staticStep")) e.charged = FUSION.staticMark;
+  }
 }
 
 export function runDash(dt: number): void {
   const h = hero;
-  chargeFoes();
+  passThrough();
   h.ghostTimer -= dt;
   if (h.ghostTimer <= 0) {
     h.ghostTimer = 0.045;
     dropDashGhost();
   }
   if (h.st < HERO_MOVE.dashTime) return;
+  emitSkillEvent({ type: "dash", dir: h.face, foes: passed.foes });
   h.vx *= 0.4;
   h.sinceDash = 0;
   settle();

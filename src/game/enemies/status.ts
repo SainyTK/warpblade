@@ -1,16 +1,17 @@
+import { CHILL_PACE } from "../../constants/combat";
 import { PAL, SPARKS } from "../../constants/palette";
-import { CHILL_PACE } from "../../constants/relics/bell";
 import type { Enemy } from "../../types/enemy";
 import { PK } from "../../types/particle";
 import { dealDamage } from "../damage";
 import { particles, progress, rng } from "../state";
 import { actAsBurner } from "./burn";
 import { enemyCenter } from "./enemy";
+import { updateSkillStatus } from "./skillStatus";
 
 /** burn ticks this fraction of ability power */
 const BURN_POWER = 0.2;
 
-/** burning, shocked, frozen and chilled foes; returns the time scale the foe moves at */
+/** burning, shocked, frozen and chilled foes, skill stacks and marks; returns the time scale the foe moves at */
 export function updateStatus(e: Enemy, dt: number): number {
   e.flash = Math.max(0, e.flash - dt);
   e.frozen = Math.max(0, e.frozen - dt);
@@ -20,6 +21,7 @@ export function updateStatus(e: Enemy, dt: number): number {
   e.evadeCd = Math.max(0, e.evadeCd - dt);
   e.stagger = Math.max(0, e.stagger - dt);
   e.pinned = Math.max(0, e.pinned - dt);
+  updateSkillStatus(e, dt);
   // a pinned foe stays where the glaive holds it
   if (e.pinned > 0) e.vx = 0;
   const [cx, cy] = enemyCenter(e);

@@ -22,7 +22,7 @@ const INK: Record<DamageTag | CueWord, number> = {
   parry: hex("#ffd27a"),
   broken: hex("#ff6a5a"),
 };
-/** a relic's numbers in duller inks of the same hues, drawn solid so they stay crisp */
+/** numbers of a skill's own hits in duller inks of the same hues, drawn solid so they stay crisp */
 const QUIET: Partial<Record<DamageTag | CueWord, number>> = {
   normal: hex("#a29cc4"),
   crit: hex("#c9a74e"),
@@ -31,7 +31,7 @@ const QUIET: Partial<Record<DamageTag | CueWord, number>> = {
 const FADE = 0.15;
 
 /** damage numbers rise and fade over the foes; crits are drawn double size and special hits carry their word.
- * A relic's numbers are duller and carry no word, so the hero's own hits read first.
+ * Numbers of a skill's own hits are duller and carry no word, so the hero's own hits read first.
  * With damage numbers off in the options, only the words without a number (EVADE, PERFECT, PARRY) still show. */
 export function drawNumbers(): void {
   for (const n of game.numbers) {

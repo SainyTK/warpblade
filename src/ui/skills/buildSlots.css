@@ -1,4 +1,4 @@
-/* Held relics and charms in their slots: the pick screen's row and the HUD's strip share these. */
+/* Held skills and charms in their slots: the pick screen's row and the HUD's strip share these. */
 .build-row {
   display: inline-flex;
   gap: 4px;

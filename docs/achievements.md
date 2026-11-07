@@ -30,7 +30,7 @@ In a co-op lobby, Left and Right step only through the heroes this player has un
 
 A hero can be in the price table before it is in `CHARACTERS`; it shows up locked the moment it is added there.
 
-Relics, charms and slots found across runs are a separate system with no coins; see `docs/unlocks.md`.
+Charms, charm slots and evolution recipes found across runs are a separate system with no coins; see `docs/unlocks.md`.
 
 ## Tracking
 
@@ -44,8 +44,8 @@ The game reports what happens through `feat()` in `src/game/feat.ts`, called whe
 | A wave cleared, with the hero | `endWave` in `src/game/endWave.ts` |
 | A run ended, cleared or fallen | `endRun` in `src/game/runEnd.ts` |
 | A blow landed, with the moves in the combo so far | `meleeHit` in `src/game/meleeHit.ts` |
-| A perfect dodge or a parry | `perfectDodge` and Ysra's `parry` |
-| A skill learned on a pick, with its kind | `choosePick` in `src/game/progress.ts` |
+| A perfect dodge or a parry | `rewardPerfectDodge` in `src/game/hero/perfectDodge.ts` and Ysra's `parry` |
+| An ultimate skill taken, a skill's new level, a skill evolved | `raiseSkill` and `evolveSkill` in `src/game/build/raise.ts` |
 | Coins banked | `bankCoins` in `src/game/coins.ts`, and the co-op host and guest at run end |
 
 The same feats, and a few more, also feed the unlocks (`docs/unlocks.md`).
@@ -91,8 +91,8 @@ A save from before them loads with its coins and shop levels, no heroes bought a
 | Foes | Warden's End | Slay the Rift Warden | 100 | Deep Rift |
 | Skill | Flowing Steel | Land the fifth move of a combo | 40 | |
 | Skill | Untouchable | Make 25 perfect dodges or parries | 40 | |
-| Skill | Final Art | Learn an ultimate | 30 | |
-| Skill | Evolved | Learn an evolution | 50 | |
+| Skill | Final Art | Take an ultimate skill | 30 | |
+| Skill | Evolved | Evolve a skill | 50 | |
 | Coins | Coin Purse | Bank 500 coins from runs | 25 | |
 | Coins | Treasury | Bank 3,000 coins from runs | 100 | Coin Purse |
 | Coins | Outfitted | Buy 10 levels or skills in the Shop | 30 | |
