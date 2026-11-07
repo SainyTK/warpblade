@@ -25,11 +25,12 @@ import { fromWire } from "../../utils/wire";
 import { setFrameDriver } from "../frameDriver";
 import { releaseAll, watchInput } from "../input";
 import { updateDanger } from "../lowHealth";
+import { answerPick } from "../progress";
 import { resetRun } from "../run";
 import { reportRun } from "../runEnd";
 import { seatMemories } from "../seatMemory";
 import { character, game, hero, progress, setCharacter } from "../state";
-import { writePick } from "./readPick";
+import { writeAnswer } from "./readPick";
 
 const HOST_LEFT = "The host left, so the room has closed.";
 /** added to the reason a room closed when it closed during a run, whose coins this player keeps */
@@ -133,9 +134,12 @@ export class GuestSession {
     setPickSource({
       // the cards step aside while the pause menu is open, since the room plays on under it
       waiting: () => game.mode === "pick" && progress.picks > 0 && this.sentPicks < 0 && !isMenuOpen(),
-      choose: (option) => {
-        this.sentPicks = progress.picks;
-        this.link?.send({ t: "pick", pick: writePick(option) });
+      answer: (answer) => {
+        // a take or a skip waits for the host to spend the point; a reroll or banish is spent here too, so the cards
+        // are dealt again at once with the right counts until the host's next HUD agrees
+        if (answer.t === "take" || answer.t === "skip") this.sentPicks = progress.picks;
+        else answerPick(answer);
+        this.link?.send({ t: "pick", answer: writeAnswer(answer) });
       },
     });
     this.lastFrame = performance.now();

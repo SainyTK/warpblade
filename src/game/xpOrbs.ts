@@ -4,7 +4,7 @@ import { sfx } from "../services/audio";
 import { PK } from "../types/particle";
 import { fall, home } from "./coins";
 import { coop } from "./coopHooks";
-import { gainXp } from "./progress";
+import { earnXp } from "./progress";
 import { game, hero, particles, rng } from "./state";
 
 /** a slain foe's experience bursts out of it as orbs, about XP_ORB.share each */
@@ -37,5 +37,5 @@ export function updateXpOrbs(dt: number): void {
   game.xpOrbs = game.xpOrbs.filter((o) => !o.done);
   sfx.pickup();
   if (room) room.shareXp(gained);
-  else gainXp(gained);
+  else earnXp(gained);
 }

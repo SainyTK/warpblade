@@ -1,7 +1,7 @@
-import { CHARM_STEP } from "../constants/charms";
-import { FLOW, PICK_TOOLS } from "../constants/growth";
+import { CHARM_STEP, CHARMS } from "../constants/charms";
+import { FLOW, PICK_TOOLS, RELIC_MAX_LEVEL } from "../constants/growth";
 import { RELICS } from "../constants/relics";
-import type { Build, BuildStats, RelicId, RelicLevel } from "../types/build";
+import type { Build, BuildStats, CharmId, RelicId, RelicLevel } from "../types/build";
 
 /** a build with nothing in it, and the run's pick tools */
 export function freshBuild(): Build {
@@ -62,3 +62,25 @@ export function relicStats(
 
 /** Flow's damage multiplier at this many stacks */
 export const flowMultiplier = (stacks: number): number => 1 + FLOW.perStack * stacks;
+
+/** the relics, charms and evolutions a build starts with */
+export type StartBuild = Pick<Build, "relics" | "charms" | "evolved">;
+
+const isRelic = (id: string): id is RelicId => id in RELICS;
+const isCharm = (id: string): id is CharmId => id in CHARMS;
+
+/** a build written as `wisp:8,might:5,evolve:wisp`: relics and charms at their levels (kept inside each one's range),
+ *  and relics taken in their evolved form; unknown names are skipped */
+export function parseStartBuild(text: string): StartBuild {
+  const out: StartBuild = { relics: {}, charms: {}, evolved: [] };
+  for (const part of text.split(",")) {
+    const [id, value = ""] = part.trim().split(":");
+    const level = Math.max(1, Math.floor(Number(value)) || 1);
+    if (id === "evolve" && isRelic(value)) {
+      out.relics[value] = RELIC_MAX_LEVEL;
+      if (!out.evolved.includes(value)) out.evolved.push(value);
+    } else if (isRelic(id)) out.relics[id] = Math.min(RELIC_MAX_LEVEL, level);
+    else if (isCharm(id)) out.charms[id] = Math.min(CHARMS[id].maxLevel, level);
+  }
+  return out;
+}

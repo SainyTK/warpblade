@@ -1,3 +1,4 @@
+import type { RelicId } from "./build";
 import type { EnemyRank } from "./enemy";
 import type { RunOutcome } from "./run";
 import type { SkillKind } from "./skill";
@@ -69,4 +70,8 @@ export type Feat =
   | { kind: "comboHit"; moves: number }
   | { kind: "perfect" }
   | { kind: "learned"; skill: SkillKind }
-  | { kind: "banked"; coins: number };
+  | { kind: "banked"; coins: number }
+  | { kind: "relicLevel"; relic: RelicId; level: number }
+  | { kind: "evolved"; relic: RelicId }
+  | { kind: "chestOpened"; upgrades: number }
+  | { kind: "flowFull" };

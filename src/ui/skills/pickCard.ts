@@ -1,69 +1,42 @@
-import { BOON_KIND } from "../../constants/skillLabels";
-import type { CharacterDef } from "../../types/character";
-import type { PickOption } from "../../types/skill";
+import { el } from "../dom";
+import type { CardFace } from "./cardFace";
 import { iconUrl } from "./icons/iconImage";
-import { branchLine, lockNote, rankLine, recipeNotes } from "./pickText";
 
-function span(cls: string, text: string): HTMLSpanElement {
-  const el = document.createElement("span");
-  el.className = cls;
-  el.textContent = text;
-  return el;
+/** level or rank pips: those held, the one this card adds, and the ones still to come */
+function levelPips(total: number, had: number): HTMLSpanElement {
+  const pips = el("span", "pick-pips");
+  for (let i = 0; i < total; i++) pips.append(el("i", i < had ? "had" : i === had ? "gain" : ""));
+  return pips;
 }
 
-/** rank pips: learned ranks, the one this pick adds, and the ones still to come */
-function rankPips(ranks: number, rank: number): HTMLSpanElement {
-  const el = span("pick-pips", "");
-  for (let i = 0; i < ranks; i++) {
-    const pip = document.createElement("i");
-    if (i < rank) pip.className = "had";
-    else if (i === rank) pip.className = "gain";
-    el.append(pip);
-  }
-  return el;
-}
-
-/** one option of a pick, as a button card */
-export function pickCard(
-  c: CharacterDef,
-  option: PickOption,
-  ranks: Readonly<Record<string, number>>,
-  index: number,
-): HTMLButtonElement {
-  const b = document.createElement("button");
+/** one card of a pick, as a button */
+export function pickCard(face: CardFace, index: number): HTMLButtonElement {
+  const b = el("button", "pick");
   b.type = "button";
-  b.className = "pick";
   b.dataset.index = String(index);
+  b.dataset.branch = face.branch;
+  if (face.kind) b.dataset.kind = face.kind;
   b.style.setProperty("--delay", `${index * 70}ms`);
-  const icon = document.createElement("img");
+  const icon = el("img", "");
   icon.alt = "";
   icon.width = 16;
   icon.height = 16;
-  const frame = span("pick-icon", "");
+  icon.src = iconUrl(face.icon);
+  const frame = el("span", "pick-icon");
   frame.append(icon);
-  const body = span("pick-body", "");
-  const key = span("pick-key", String(index + 1));
-  key.setAttribute("aria-hidden", "true");
-  if (option.type === "boon") {
-    b.dataset.branch = "boon";
-    icon.src = iconUrl(option.boon.id);
-    body.append(span("pick-name", option.boon.name), span("pick-text", option.boon.text));
-    b.append(span("pick-path", BOON_KIND), frame, body, key);
-    return b;
+  if (face.isNew) frame.append(el("span", "pick-new", "NEW"));
+  const body = el("span", "pick-body");
+  body.append(el("span", "pick-name", face.name));
+  if (face.line || face.pips) {
+    const meta = el("span", "pick-meta");
+    if (face.line) meta.append(el("span", "pick-kind", face.line));
+    if (face.pips) meta.append(levelPips(face.pips.total, face.pips.had));
+    body.append(meta);
   }
-  const { node, branch } = option;
-  const rank = ranks[node.id] ?? 0;
-  b.dataset.branch = branch.id;
-  b.dataset.kind = node.kind;
-  icon.src = iconUrl(node.id);
-  const meta = span("pick-meta", "");
-  meta.append(span("pick-kind", rankLine(node, rank)));
-  if (node.ranks > 1) meta.append(rankPips(node.ranks, rank));
-  body.append(span("pick-name", node.name), meta, span("pick-text", node.text));
-  const note = lockNote(c, node, rank);
-  if (note) body.append(span("pick-note", note));
-  for (const recipe of recipeNotes(c, node, ranks)) body.append(span("pick-note pick-recipe", recipe));
-  if (!rank) frame.append(span("pick-new", "NEW"));
-  b.append(span("pick-path", branchLine(branch)), frame, body, key);
+  body.append(el("span", "pick-text", face.text));
+  for (const note of face.notes) body.append(el("span", `pick-note pick-${note.tone}`, note.text));
+  const key = el("span", "pick-key", String(index + 1));
+  key.setAttribute("aria-hidden", "true");
+  b.append(el("span", "pick-path", face.path), frame, body, key);
   return b;
 }
