@@ -198,3 +198,53 @@ They agree with the room's base kits, which put Kael and Ysra at about 2.5 times
 - Several timed skills read under band partly because the room cannot drive them (see the list above); they need a scripted check of their own before their numbers move.
 - Phantom Legion and Starfall reach about 1 to 2 times Crystal Nova over the window; Unbroken was not measured.
 - Base kits differ by about 2.5 times in the room (Kael 146 and Ysra 120 against Sable 60 and Hulda 54 on a crowd).
+
+## Round 2 (8 November 2026)
+
+The orchestrator's decisions on the open points: raise Hulda's and Sable's base kits, bring every precise skill to its band on one foe at the model's trigger rates, bring the three weak ultimates to about 6 times the base special per cast, and drive the unmeasured skills.
+The room gained two modes: ultimates cast through the game's `castUltimate` at charge level 3 every 10 s (per-cast figures), and Ysra's Heat kept full for her rites.
+The scripted player no longer spends Hulda's I on Taunt, which the bot used to cast every 3 s.
+
+### Changes
+
+| Skill or kit | Change | Measured after (raw per second, or per cast) |
+| --- | --- | --- |
+| Hulda base | jab 0.6 to 1.4, hook 0.9 to 2.2 and breaks guards, haymaker 1.5 to 4.5, pushes 40/90/240 to 30/60/70; Bellow 0.6 to 4 AP | crowd 54 to about 60, one foe 12 to about 15 (measured at the step before the last raise) |
+| Sable base | closing bolt 1.3A to 1.8A and passes through one foe; snare 2.6P to 6P | crowd 60 to 85, one foe 53 to 63 |
+| `k_keen` | L8 Keen bonus 10 to 20, wave 10 kept | one foe 91 to 227, crowd 545 |
+| `k_mirror` | L8 knight strike 50 to 70 | one foe 198, crowd 407 at 0.29 dodges a second (about 200 at the model's rate) |
+| `y_counter` | L7 20 to 35, L8 25 to 70 AD; Sun Piercer 45 to 60 | one foe 61 to 162; evolved crowd 1,244 at 90 before the trim to 60 |
+| `y_hawk` | L7 5 to 9, L8 6 to 15 AD; Sunflock 8 to 12 | crowd 467; the lone-foe parries did not fire in the room (0.03 a second), so one foe reads 66 |
+| `y_brand` | L8 10 AP a second a stack, a parry lays 4 | one foe 25, crowd 69: still under |
+| `h_counterGrab` | L8 65 to 110, evolved 90 to 160 | one foe 143, crowd 483 |
+| `h_ancestorFist` | L8 55 to 100, Hand of the Mountain 150 to 250 | one foe 146, crowd 368; evolved 482 and 1,210 |
+| `s_rhythm` | L8 primed bonus 6 to 8 | crowd 604 at 10; one foe 51 |
+| `s_shade` | L7 1.5 to 3, L8 and evolved 2 to 8 | one foe 18 to 193, crowd 404 |
+| `k_legion` | L8 power 2 to 16; Phantom Army 4.5 | per cast 0.7 to 5.9 times Crystal Nova; Phantom Army 36 times at 11, cut to 4.5 (about 15) |
+| `k_starfall` | L8 power 3 to 12 | per cast 2.3 times at 3, 3.8 at 8; 12 is set from those two points |
+
+Ancestor's Fist and Iron Wall: in the room, armoured counters beyond the injected ones came at about 0.06 to 0.08 a second (0.2 to 0.23 in all on a crowd with 0.15 injected), well under the 0.2 that would call for a rush-start window, so no window was added.
+
+### Still off after round 2
+
+- Hulda's base kit stays near 60 on a crowd and 15 on one foe in the room, against about 80 and 35 asked; doubling her blows barely moved it, because the scripted player and the bot lose contact with a lone foe (rush, grab and knockback carry her past it).
+  A human check of her lone-foe play should come before more numbers.
+- Base kits on the average of one foe and crowd: Kael 85, Ysra 77, Sable 74, Hulda about 37.
+- Ember Brand, Perfect Rhythm on one foe and Iron Counter on one foe stay under their band; Keen Edge, Counter Thrust, Sun Hawk and Iron Counter spill far over the precise crowd cap of about 300.
+- Unbroken shows no gain in the room (its damage buff did not show over the noise); Titan Throw reads 4.8 to 5.7 times Quake Drop per cast and Deadeye 4.1 to 7.4 times Bolt Storm.
+- The Heat top-up did not get Brazier, Overheat or Kindling cast by the scripted player (they read 0); together with Giant Swing, Crushing Grip, Wrecking Throw, Spirit Bear, Skyhook, Impale, Deep Heft, Warpath, Rift Wound, Skybreaker, Sky Dance, Barbed Jaws, Longshot and Powder Keg they still need a scripted check that drives their own functions.
+
+### Cross-hero bot runs, round 2
+
+| Hero | Build | From wave 8 | From wave 15 |
+| --- | --- | --- | --- |
+| Kael | duelist | 30 s, cleared | 57 s, cleared |
+| Kael | storm | 32 s, cleared | fell at 52 s |
+| Ysra | temple guard | 46 s, cleared | fell at 30 s |
+| Ysra | wildfire | fell at 46 s | fell at 37 s |
+| Sable | volley | 22 s, cleared | 47 s, cleared |
+| Sable | cadence | fell at 33 s | fell at 36 s |
+| Hulda | brawler | fell at 72 s | fell at 60 s |
+| Hulda | iron wall | 71 s, cleared | fell at 93 s |
+
+These ran while the last numbers of the round were still moving (Hulda's first job ran on the middle step of her base raise); they are no closer to the 15% target than round 1.
