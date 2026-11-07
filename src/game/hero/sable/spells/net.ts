@@ -27,12 +27,17 @@ interface OpenNet extends Effect {
   boltStruck(): void;
 }
 
-const nets = new WeakSet<Effect>();
+/** the open nets on the stage; kept apart from `game.fx`, which is emptied while effects update */
+const nets = new Set<OpenNet>();
 
 /** the open net holding this foe, if any */
 export function netHolding(e: Enemy): OpenNet | undefined {
-  return game.fx.find((fx): fx is OpenNet => nets.has(fx) && (fx as OpenNet).holds(e));
+  for (const n of nets) if (n.holds(e)) return n;
+  return undefined;
 }
+
+/** a new run: no nets */
+export const clearNets = (): void => nets.clear();
 
 /** the net opens where it came down: every foe under it is bitten, held and marked; the middle drags them together */
 function openNet(x: number, y: number): void {
@@ -72,7 +77,9 @@ function openNet(x: number, y: number): void {
     update(dt) {
       t += dt;
       if (v.drag) for (const e of held) if (e.hp > 0 && !e.air) e.x += (x - e.x) * Math.min(1, 3 * dt);
-      return t < v.hold;
+      if (t < v.hold) return true;
+      nets.delete(net);
+      return false;
     },
     draw() {
       place();

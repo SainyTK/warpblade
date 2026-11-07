@@ -8,8 +8,8 @@ import { isFree, setState, settle } from "../../actions";
 import { deny } from "../../deny";
 import { sable } from "../memory";
 import { DECOY_SPELL } from "./decoy";
-import { KEG_SPELL } from "./keg";
-import { NET_SPELL } from "./net";
+import { clearKegs, KEG_SPELL } from "./keg";
+import { clearNets, NET_SPELL } from "./net";
 import { SNARE_SPELL } from "./snare";
 import type { SableSpell } from "./spell";
 
@@ -87,4 +87,9 @@ export function runCast(): void {
   if (h.st >= SNARE.dur) settle();
 }
 
-export const resetSpells = (): void => rotation.reset();
+/** a new run: the rotation back to the snare, no kegs or nets left over */
+export function resetSpells(): void {
+  rotation.reset();
+  clearKegs();
+  clearNets();
+}

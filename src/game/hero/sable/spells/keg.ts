@@ -28,6 +28,8 @@ const ROLL = { far: 60, time: 0.5 } as const;
 const KICKED = { far: 150, speed: 260 } as const;
 /** the blast of a keg left to fizzle, as a share of a full one */
 const FIZZLE = 0.25;
+/** how high above the floor a passing bolt still sets a keg off, pixels */
+const SHOT_REACH = 26;
 /** a blast sets off another keg this near, a moment later */
 const CHAIN = { reach: 50, delay: 0.15 } as const;
 
@@ -39,13 +41,19 @@ interface Keg extends Effect {
   kick(dir: number): void;
 }
 
-const kegs = new WeakSet<Effect>();
-const liveKegs = (): Keg[] => game.fx.filter((fx): fx is Keg => kegs.has(fx));
+/** the kegs on the stage; kept apart from `game.fx`, which is emptied while effects update */
+const kegs = new Set<Keg>();
+const liveKegs = (): Keg[] => [...kegs];
+
+/** a new run: no kegs */
+export const clearKegs = (): void => kegs.clear();
 
 /** a bolt flying through a keg sets it off, harder when the bolt is primed (Powder Keg) */
 export function kegsOnSegment(ax: number, ay: number, bx: number, by: number, b: Shot): void {
   for (const k of liveKegs()) {
-    const [x0, y0, x1, y1] = k.box();
+    // a bolt at her chest height passing over the keg still sets it off: the fuse stands tall and catches it
+    const [x0, , x1, y1] = k.box();
+    const y0 = y1 - SHOT_REACH;
     const n = Math.max(1, Math.ceil(Math.hypot(bx - ax, by - ay) / 2));
     for (let i = 0; i <= n; i++) {
       const x = ax + ((bx - ax) * i) / n;
@@ -57,6 +65,19 @@ export function kegsOnSegment(ax: number, ay: number, bx: number, by: number, b:
       break;
     }
   }
+}
+
+/** a waiting keg ahead of her, in range, with a foe in its blast: her shots go for it; null when there is none */
+export function kegInSights(range: number): readonly [number, number] | null {
+  const radius = skillValues("s_keg").radius ?? 0;
+  for (const k of liveKegs()) {
+    const [x0, , x1, y1] = k.box();
+    const x = (x0 + x1) / 2;
+    const ahead = (x - hero.x) * hero.face;
+    if (ahead <= 0 || ahead > range) continue;
+    if (game.enemies.some((e) => e.hp > 0 && Math.abs(enemyCenter(e)[0] - x) < radius)) return [x, y1 - 5];
+  }
+  return null;
 }
 
 /** her kick sends a keg it reaches flying (Powder Keg level 7) */
@@ -123,6 +144,7 @@ function rollKeg(x0: number, y: number, dir: number, from: number, far: number):
       if (fuse >= 0) {
         fuse -= dt;
         if (fuse > 0) return true;
+        kegs.delete(keg);
         blast(x, ky, mul);
         return false;
       }

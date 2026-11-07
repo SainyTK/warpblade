@@ -42,7 +42,7 @@ export const PIERCING_BOLTS: SkillDef = {
     text: "Every bolt passes through every foe and crosses the whole stage at double speed, growing with each foe it passes.",
     row: {
       text: "Bolts cross the stage through every foe.",
-      values: { pierce: 99, perFoe: 0.18, range: 640, closingAll: 1, stagger: 0.3, speed: 860, rail: 1 },
+      values: { pierce: 99, perFoe: 0.18, range: 640, closingAll: 1, stagger: 0.3, speed: 860 },
     },
   },
 };

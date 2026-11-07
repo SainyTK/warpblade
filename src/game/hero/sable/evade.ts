@@ -14,12 +14,15 @@ import { rewardPerfectDodge } from "../perfectDodge";
 import { skin } from "../skin";
 import { refuseDash } from "../stamina";
 import { travelEnded } from "../travelEnd";
-import { muzzle } from "./aim";
+import { assisted, muzzle } from "./aim";
 import { scatterCaltrops } from "./effects/caltrops";
 import { tangle } from "./effects/tangle";
 import { looseBolt } from "./loose";
 import { sable } from "./memory";
 import { chargeBolts, loadBolts } from "./quiver";
+
+/** how far a seeking hop bolt bends toward a foe, in radians */
+const HOP_SEEK = 0.7;
 
 /** nothing touches her early in a hop or a slide */
 export function evadeGuarded(): boolean {
@@ -96,7 +99,9 @@ function hopShot(): void {
   const ring = !!v.ring;
   for (let i = 0; i < n; i++) {
     const off = ring ? (i / n) * Math.PI * 2 : (i - (n - 1) / 2) * 0.18;
-    const angle = ring ? off : m.angle + off * hero.face;
+    const aim = ring ? off : m.angle + off * hero.face;
+    // Hop Volley level 3: each bolt bends toward the foe nearest its line, so the fan does not sail over short foes
+    const angle = v.seek ? assisted(m.y, aim, hero.x, HOP_SEEK) : aim;
     looseBolt({ ...m, angle, share: 1, prime: v.bolts ? "charged" : null, hop: true });
   }
   emitSkillEvent({ type: "hop", x: hero.x, y: m.y, face: hero.face });

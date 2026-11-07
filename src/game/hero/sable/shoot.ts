@@ -13,6 +13,7 @@ import { looseBolt } from "./loose";
 import { sable } from "./memory";
 import { drawBolt, flashQuiver } from "./quiver";
 import { startReload } from "./reload";
+import { kegInSights } from "./spells/keg";
 
 /** a perfect reload's quickened shots (Perfect Rhythm) */
 const haste = (): number => (sable.haste > 0 ? (skillValues("s_rhythm").haste ?? 0) : 0);
@@ -109,6 +110,9 @@ function fire(): void {
   } else sable.string = closing ? 0 : sable.string + 1;
   if (closing) sable.cock = STRING.cock;
   const m = muzzle(sable.aim);
+  // Powder Keg: with a foe at a keg ahead, the shot goes for the keg
+  const keg = kegInSights(BOLT.range);
+  if (keg) m.angle = Math.atan2(keg[1] - m.y, keg[0] - m.x);
   muzzleFlash(m.x, m.y, m.angle, drawn.prime !== null);
   const shot: Shot = { ...m, share: 1, prime: drawn.prime, closing, air };
   looseBolt(shot);
