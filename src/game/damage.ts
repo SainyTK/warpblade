@@ -13,9 +13,10 @@ import { addFlow, flowDamage } from "./build/flow";
 import { recordDamage } from "./damageLedger";
 import { createImpact } from "./effects/impact";
 import { launchEnemy } from "./enemies/airborne";
-import { enemyBox, enemyCenter } from "./enemies/enemy";
+import { enemyCenter } from "./enemies/enemy";
 import { kindOf } from "./enemies/kinds";
 import { killEnemy } from "./kill";
+import { popNumber } from "./numbers";
 import { hasPerk } from "./progress";
 import { explode } from "./spells/explosion";
 import { game, progress, rng } from "./state";
@@ -53,25 +54,6 @@ export function isBehind(e: Enemy, fromX: number): boolean {
   return side !== 0 && side !== e.face;
 }
 
-/** numbers that pop over the same foe at nearly the same time stack upward instead of overlapping */
-const STACK = { near: 12, fresh: 0.25, step: 9 } as const;
-
-function popNumber(e: Enemy, value: number, tag: DamageTag, big: boolean): void {
-  const box = enemyBox(e);
-  const x = (box[0] + box[2]) / 2 + rng.range(-4, 4);
-  const crowd = game.numbers.filter((n) => Math.abs(n.x - x) < STACK.near && n.age < STACK.fresh).length;
-  game.numbers.push({
-    x,
-    y: box[1] - 2 - crowd * STACK.step,
-    age: 0,
-    vy: big ? -60 : -45,
-    value,
-    tag,
-    big,
-    life: big ? 0.9 : 0.7,
-  });
-}
-
 /** guarding kinds (husks from wave 3, brutes) hold up a guard while they walk, facing the blow */
 function guards(e: Enemy, o: HitOptions): boolean {
   if (!o.melee || o.fromX === undefined) return false;
@@ -85,7 +67,7 @@ function block(e: Enemy, base: number, source: SourceId): HitResult {
   const value = Math.max(1, Math.round(base * GUARD.chip));
   e.hp -= value;
   recordDamage(source, value);
-  popNumber(e, value, "block", false);
+  popNumber(e, value, "block", false, !HERO_SOURCES.has(source));
   const [cx, cy] = enemyCenter(e);
   game.fx.push(createImpact(cx + e.face * 6, cy - 4, -e.face, false, SPARKS.hot));
   sfx.block();
@@ -153,7 +135,9 @@ export function dealDamage(e: Enemy, base: number, o: HitOptions = {}): HitResul
   }
   e.flash = 0.1;
   e.guardHits = 0;
-  popNumber(e, value, tag, crit || shattering || (back && e.air));
+  // a relic's hit is quiet and never drawn big, so a crowd of them does not drown out the hero's own
+  const quiet = !HERO_SOURCES.has(source);
+  popNumber(e, value, tag, !quiet && (crit || shattering || (back && e.air)), quiet);
   if (shattering) shatter(e, source);
   e.vx += (o.kx ?? 0) * (1 - def.weight);
   if (o.spike && e.air) e.vy = ENEMY_AIR.spike;
