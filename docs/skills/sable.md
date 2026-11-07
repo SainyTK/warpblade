@@ -204,7 +204,7 @@ The perfect reload pays far more.
 | 5 | stamina 25, mp 10 | A perfect reload restores stamina and MP. |
 | 6 | bonus 3.5, primed 8 | Primed bolts hit much harder, and eight are primed. |
 | 7 | volley 3 | A perfect reload fires three primed bolts at once. |
-| 8 | bonus 6, volley 4, sureCrit 1, haste 0.25, hasteTime 3 | Primed bolts always crit, and a perfect reload quickens your shots. |
+| 8 | bonus 10, volley 4, sureCrit 1, haste 0.25, hasteTime 3 | Primed bolts always crit, and a perfect reload quickens your shots. |
 
 Evolution Clockwork Cadence (with `s_breach`): a perfect reload primes the whole quiver, every primed closing bolt bursts (4A in 60 px), and blows do not throw her while primed bolts remain.
 Built: `quiver.ts` (`primedBolts`, `reloadWindow`, `quiverSize`) and `perfect()` in `reload.ts` (stamina, MP, volley, haste); Clockwork Cadence's burst in `bolt/landed.ts` and its steadfast in the kit.
@@ -438,8 +438,8 @@ A shade of Sable stays where the blow missed and shoots.
 | 4 | power 1.5 | The shade hits harder. |
 | 5 | window 0.2 | Perfect dodges are easier. |
 | 6 | pierce 2 | The shade's bolts pass through two foes. |
-| 7 | prime 1 | While a shade stands your bolts are primed. |
-| 8 | power 2, stay 6 | The shade stays longer and hits harder. |
+| 7 | power 3, prime 1 | While a shade stands your bolts are primed. |
+| 8 | power 8, stay 6 | The shade stays longer and hits far harder. |
 
 Evolution Twin Shadows (with `s_hopVolley`): two shades, each copying her hop volley at its base damage; while one stands blows do not throw her, and a perfect dodge refills the quiver.
 Built: `skills/sable/shadeArcher.ts` draws her shooting pose once with `drawHero` into `ghostCanvas` and blits it tinted; its bolts are plain; Twin Shadows answers the `hop` event.

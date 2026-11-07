@@ -117,7 +117,7 @@ export const IRON_COUNTER: SkillDef = {
     {
       text: "Huge counter, more Fury, full plates.",
       values: {
-        power: 65,
+        power: 110,
         afterBreak: 1,
         big: 1.5,
         fury: 0.5,
@@ -137,7 +137,7 @@ export const IRON_COUNTER: SkillDef = {
     row: {
       text: "Hold big foes for a suplex; unbreakable Fury.",
       values: {
-        power: 90,
+        power: 160,
         afterBreak: 1,
         big: 1.5,
         fury: 0.8,

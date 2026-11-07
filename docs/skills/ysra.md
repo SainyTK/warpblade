@@ -172,10 +172,10 @@ Attack, precise, a parry then J. The parry opens a counter that hits very hard a
 | 4 | power 13 | Counter damage +20%. |
 | 5 | power 15, line 70 | The counter runs through the line. |
 | 6 | power 17, window 0.24, refill 1 | Wider parry window; counters refill stamina. |
-| 7 | power 20, riposte 1, riposteTime 3 | Counters empower your next blows. |
-| 8 | power 25 | Counter damage +25%. |
+| 7 | power 35, riposte 1, riposteTime 3 | Counters empower your next blows. |
+| 8 | power 70 | Counter damage doubled. |
 
-Evolution, Sun Piercer (with `y_brand`): the counter is a burning thrust across the whole stage for 45 AD (always a crit), and for 4 s after it every glaive blow is a crit.
+Evolution, Sun Piercer (with `y_brand`): the counter is a burning thrust across the whole stage for 90 AD (always a crit), and for 4 s after it every glaive blow is a crit.
 Built in `glaive/counter.ts` (power, reach, sure crit, stun, stamina refill, Riposte and crits in `ysra/buffs.ts`) and `stance/parry.ts`, `stance/brace.ts` (window and block cost). Riposte adds into the one blow bonus sum (G4).
 
 ### `y_skyhook` Skyhook
@@ -353,7 +353,7 @@ Dot, precise, a parry. The parried foe is branded, and every blow on it feeds th
 | 5 | perSecond 1.8, block 1 | Blocks brand too. |
 | 6 | perSecond 2.3, spread 30 | The brand spreads on a parry. |
 | 7 | perSecond 3, max 8 | Hotter brand, more stacks. |
-| 8 | perSecond 4, taken 0.2 | Branded foes take more from you. |
+| 8 | perSecond 10, taken 0.2, parry 4 | Branded foes take more from you; a parry brands deeper. |
 
 Evolution, Pyre Mark (with `y_impale`): an impale or counter on a branded foe spends the brand: its stacks times 12 AP at once in 40 px, which brands every foe it reaches with 2 stacks (those cannot be set off for 0.5 s).
 Built in `src/game/skills/ysra/brand.ts` and `brandMark.ts`; a parry lays 2 stacks.
@@ -406,10 +406,10 @@ Summon, precise, automatic on a parry. A bird of fire answers the parry and keep
 | 4 | power 3.5 | Dives hit harder. |
 | 5 | power 4, block 0.25 | Blocks may call the hawk too. |
 | 6 | chance 1, power 4.5, burn 2 | Every parry calls a burning hawk. |
-| 7 | power 5, burst 24 | Dives burst. |
-| 8 | every 0.8, power 6, most 2 | Two hawks, faster dives. |
+| 7 | power 9, burst 24 | Dives burst. |
+| 8 | every 0.8, power 15, most 2 | Two hawks, faster dives. |
 
-Evolution, Sunflock (with `y_counter`): a parry calls five hawks that dive the attacker together for 8 AD each and then hunt for 6 s; while two or more fly she takes 20% less damage.
+Evolution, Sunflock (with `y_counter`): a parry calls five hawks that dive the attacker together for 12 AD each and then hunt for 6 s; while two or more fly she takes 20% less damage.
 Built in `src/game/skills/ysra/hawk.ts` with `drawPhoenix` at a third of its size; the guard is read by the kit through `buffs.guard`. Every call keeps the 3 s cooldown.
 
 ### `y_kindling` Kindling

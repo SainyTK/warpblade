@@ -116,7 +116,7 @@ Attack, precise, J. Press J in the beat after a blow lands: the Keen blow hits f
 | 5 | Keen damage +200% to +500%. | bonus 5 |
 | 6 | New: each Keen blow in a row adds +25% to the next, up to +100%. | streak 0.25, streakCap 1 |
 | 7 | New: a Keen 4th hit is a hop cleave that knocks down. | cleave 3 |
-| 8 | Keen damage +500% to +1000%; the wave hits far harder. | bonus 10, wave 10 |
+| 8 | Keen damage +500% to +2000%; the wave hits far harder. | bonus 20, wave 20 |
 
 Evolution **Peerless Edge** (partner `k_phase`): Every third Keen blow ends in a gold cross cut, and for 3 seconds every blow is Keen.
 Evolved values added: cross 60, crossArea 15, crossReach 50, crossEvery 3, free 3.
@@ -420,7 +420,7 @@ Summon, precise, auto. A perfect dodge calls a mirror knight that warp-strikes t
 | 5 | New: the knight stuns what it strikes; Riposte covers 2 blows. | ripTime 2.5, ripBlows 2, stun 0.8 |
 | 6 | New: the knight stays and copies your blows. | stay 4, copy 0.5 |
 | 7 | Knight strike 12 to 30; copies at 80%. | strike 30, copy 0.8 |
-| 8 | Knight strike 30 to 50; Riposte quadruple; stays 6 s. | strike 50, riposte 4, stay 6, copy 1 |
+| 8 | Knight strike 30 to 70; Riposte quadruple; stays 6 s. | strike 70, riposte 4, stay 6, copy 1 |
 
 Evolution **Perfect Reflection** (partner `k_keen`): A perfect dodge stops time while Kael and the knight strike the attacker and every foe near.
 Evolved values added: stay 8, reflect 150, reflectArea 15, reflectReach 120.

@@ -161,9 +161,9 @@ attack, precise, K. A grab that catches a foe winding up a blow (`wind` or `char
 | 5 | A counter gives Fury +25% | A counter gives Fury. |
 | 6 | 6x; the throw after a counter deals double | Counter 6x, its throw doubled. |
 | 7 | A counter roars: other foes within 50 px reel 0.8 s | A counter makes foes nearby reel. |
-| 8 | 65x, Fury +50%, refills every plate | Huge counter, more Fury, full plates. |
+| 8 | 110x, Fury +50%, refills every plate | Huge counter, more Fury, full plates. |
 
-Evolution: **Executioner's Grip** (partner `h_ironWall`). Every counter deals 90x, and a counter on a mini or boss holds it for 1 s and suplexes it for 120x. Fury +80%, and while it lasts no blow breaks a plate.
+Evolution: **Executioner's Grip** (partner `h_ironWall`). Every counter deals 160x, and a counter on a mini or boss holds it for 1 s and suplexes it for 120x. Fury +80%, and while it lasts no blow breaks a plate.
 
 Build: `pressGrab`/`runGrab` in `hero/hulda/grab.ts` read the foe's state at the catch; crush from `runCrush`; new `fury.ts`; emits `counter`. Pose: the grab clip with a two-frame hit-stop flash; the evolution's big-foe hold needs a heavy hold pose (the suplex lift clip at arm's length).
 
@@ -446,9 +446,9 @@ summon, precise, auto (on an armoured counter, own cooldown). A giant spectral g
 | 5 | The slam rings 24 px at half its damage | The slam strikes foes near. |
 | 6 | 100%; it gives Fury +25% | Every armoured counter calls it, with Fury. |
 | 7 | A second fist slams the nearest other foe 0.3 s later | A second fist. |
-| 8 | 55x | The fist hits far harder. |
+| 8 | 100x | The fist hits far harder. |
 
-Evolution: **Hand of the Mountain** (partner `h_skyfall`). The fist is twice the size, slams for 150x, and pins every foe within 40 px for 1.5 s, taking 50% more from her.
+Evolution: **Hand of the Mountain** (partner `h_skyfall`). The fist is twice the size, slams for 250x, and pins every foe within 40 px for 1.5 s, taking 50% more from her.
 
 Build: new `skills/hulda/ancestorFist.ts`; drawn by scaling `hero/draw/gauntlets.ts` with a pale ramp; slam with `slamRing`; throw with `hurl()`.
 

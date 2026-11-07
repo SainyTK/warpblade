@@ -22,8 +22,8 @@ const LEVELS = levelRows([
   { text: "New: the knight stays and copies your blows.", values: { stay: 4, copy: 0.5 } },
   { text: "Knight strike 12 to 30; copies at 80%.", values: { strike: 30, copy: 0.8 } },
   {
-    text: "Knight strike 30 to 50; Riposte quadruple; stays 6 s.",
-    values: { strike: 50, riposte: 4, copy: 1, stay: 6 },
+    text: "Knight strike 30 to 70; Riposte quadruple; stays 6 s.",
+    values: { strike: 70, riposte: 4, copy: 1, stay: 6 },
   },
 ]);
 
