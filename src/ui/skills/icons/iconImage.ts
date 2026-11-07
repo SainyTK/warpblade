@@ -4,10 +4,12 @@ import { spriteUrl } from "../../spriteUrl";
 import { ARCANE_ICONS } from "./arcane";
 import { BLADE_ICONS } from "./blade";
 import { BOON_ICONS } from "./boon";
+import { CHARM_ICONS } from "./charms";
 import { EVOLUTION_ICONS } from "./evolution";
 import { FUSION_ICONS } from "./fusion";
 import { HULDA_ICONS } from "./hulda/index";
 import { PHANTOM_ICONS } from "./phantom";
+import { RELIC_ICONS } from "./relics/index";
 import { SABLE_ICONS } from "./sable/index";
 import { SHOP_ICONS } from "./shop";
 import { YSRA_ICONS } from "./ysra/index";
@@ -26,6 +28,8 @@ const ICONS: Record<string, (s: SpriteCanvas) => void> = {
   ...YSRA_ICONS,
   ...SABLE_ICONS,
   ...HULDA_ICONS,
+  ...RELIC_ICONS,
+  ...CHARM_ICONS,
 };
 const canvas = new SpriteCanvas(SIZE, SIZE, 0, 0);
 const cache = new Map<string, string>();
