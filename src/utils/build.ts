@@ -16,7 +16,6 @@ export function freshBuild(extra: Partial<Record<PickToolKey, number>> = {}): Bu
     flow: 0,
     flowIdle: 0,
     heroHits: 0,
-    memory: {},
     chest: [],
   };
 }

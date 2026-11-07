@@ -118,8 +118,6 @@ export interface Build {
   flowIdle: number;
   /** hits the hero's own blows, abilities and ultimate have landed this run; Echo Blade counts them */
   heroHits: number;
-  /** runtime memory of each relic held */
-  memory: Partial<Record<RelicId, RelicMemory>>;
   /** what the last chest opened gave, while its screen is still up; empty otherwise */
   chest: ChestReward[];
 }
