@@ -12,6 +12,7 @@ import { enemyBox, enemyCenter, walks } from "../enemies/enemy";
 import { isHeld } from "../input";
 import { meleeHit } from "../meleeHit";
 import { hasPerk } from "../progress";
+import { emitSkillEvent } from "../skills/events";
 import { game, hero, ponytail, scarf } from "../state";
 import { boxAhead, newSwing, surfaceBelow } from "../world";
 import { leaveHang, setState } from "./actions";
@@ -71,7 +72,7 @@ export function releaseSword(): void {
   setState("throwWait");
 }
 
-function arrive(nx: number, ny: number): void {
+function arrive(nx: number, ny: number, foe: Enemy | null): void {
   const ox = hero.x;
   const oy = hero.y;
   leaveAfterimages(ox, oy, nx, ny);
@@ -81,6 +82,7 @@ function arrive(nx: number, ny: number): void {
   hero.ground = Math.abs(ny - surfaceBelow(nx, ny - 1)) < 0.5;
   sfx.warp();
   travelEnded();
+  emitSkillEvent({ type: "warp", x: nx, y: ny, foe });
 }
 
 function strikeOnArrival(power: number): void {
@@ -112,7 +114,7 @@ export function doWarp(target: WarpTarget): void {
   }
   nx = clamp(nx, 8, W - 8);
   ny = Math.min(ny, GROUND);
-  arrive(nx, ny);
+  arrive(nx, ny, enemy);
   if (target.anchor) {
     hero.anchor = target.anchor;
     hero.ground = false;
@@ -145,7 +147,7 @@ export function blink(): boolean {
   const side = Math.sign(e.x - hero.x) || hero.face;
   const nx = clamp(side > 0 ? box[2] + 9 : box[0] - 9, 8, W - 8);
   const ny = walks(e) ? e.y : Math.min(GROUND, e.y + 18);
-  arrive(nx, ny);
+  arrive(nx, ny, e);
   hero.face = -side;
   strikeOnArrival(BLINK_POWER);
   return true;

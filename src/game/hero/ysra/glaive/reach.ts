@@ -1,10 +1,10 @@
 import { HAFT_REACH } from "../../../../constants/ysra/glaive";
 import type { MoveHit } from "../../../../types/move";
 import type { Box } from "../../../../types/world";
-import { progress } from "../../../state";
+import { skillValues } from "../../../skills/query";
 
 /** Long Haft: how many pixels further every glaive blow reaches */
-export const haftReach = (): number => (progress.ranks[HAFT_REACH.skill] ?? 0) * HAFT_REACH.perRank;
+export const haftReach = (): number => (skillValues(HAFT_REACH.skill).rank ?? 0) * HAFT_REACH.perRank;
 
 /** a box pushed out at its far end: forward for a blow ahead, backward for a blow behind */
 function longer(box: Box, extra: number): Box {

@@ -1,4 +1,5 @@
 import { KAEL } from "../constants/characters/kael";
+import { AIR_STRING } from "../constants/combo";
 import { HERO_START_X, STAND } from "../constants/hero";
 import { GROUND, SEED } from "../constants/stage";
 import { Lights } from "../engine/lights";
@@ -9,9 +10,8 @@ import type { GameState } from "../types/game";
 import type { Hero } from "../types/hero";
 import type { Progress } from "../types/progress";
 import { freshBuild } from "../utils/build";
-import { airLimit, stringLimit } from "../utils/progression";
 import { Rng } from "../utils/rng";
-import { collectPerks, computeStats } from "../utils/stats";
+import { computeStats } from "../utils/stats";
 import { emptyStream } from "../utils/waves";
 import { Chain } from "./hero/chain";
 import { applySkin } from "./hero/skin";
@@ -61,20 +61,17 @@ export const game: GameState = {
   banner: { text: "", time: 0 },
 };
 
+/** a run's start: level 1, no skill held, the hero's special on U */
 export function freshProgress(): Progress {
-  const ranks = { ...character.startRanks };
-  const stats = computeStats(character, 1, ranks, metaBonus());
-  const perks = collectPerks(character, ranks);
   return {
     level: 1,
     xp: 0,
     picks: 0,
-    ranks,
-    stats,
-    perks,
-    ultimate: null,
-    comboLimit: stringLimit(character.kit, 1, perks),
-    airLimit: airLimit({}),
+    stats: computeStats(character, 1, [], metaBonus()),
+    perks: new Set(),
+    ultimate: character.special,
+    comboLimit: character.comboHits,
+    airLimit: AIR_STRING.hits,
     build: freshBuild(metaToolBonus()),
   };
 }

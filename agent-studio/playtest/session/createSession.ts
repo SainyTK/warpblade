@@ -41,7 +41,8 @@ export async function createSession(browser: Browser, url: string, options: Sess
   await page.clock.pauseAt(CLOCK_START_MS + 1000);
   // after the clock is installed, so it rounds the fake performance.now()
   await page.addInitScript(FRAME_GRID_SHIM);
-  const start = options.start ? `?wave=${options.start.wave}&level=${options.start.level}` : "";
+  const build = options.start?.build ? `&build=${encodeURIComponent(options.start.build)}` : "";
+  const start = options.start ? `?wave=${options.start.wave}&level=${options.start.level}${build}` : "";
   await page.goto(`${url}${start}`, { waitUntil: "load", timeout: LOAD_TIMEOUT_MS });
   await page.evaluate(() => document.fonts.ready.then(() => undefined));
   const slot: GrabberSlot = { current: null };

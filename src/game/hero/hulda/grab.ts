@@ -6,6 +6,7 @@ import type { Enemy } from "../../../types/enemy";
 import { dealDamage } from "../../damage";
 import { createImpact } from "../../effects/impact";
 import { enemyBox, enemyCenter } from "../../enemies/enemy";
+import { emitSkillEvent } from "../../skills/events";
 import { game, hero, progress } from "../../state";
 import { boxAhead, boxHit, hitStop, shake } from "../../world";
 import { isFree, setState, settle } from "../actions";
@@ -44,6 +45,7 @@ export function pressGrab(): boolean {
 function catchFoe(e: Enemy): void {
   hulda.struck = true;
   gainGrit(GRIT.grab);
+  emitSkillEvent({ type: "grab", foe: e });
   if (ENEMIES[e.type].launchable) {
     take(e);
     setState("hold");

@@ -40,7 +40,8 @@ Numbers here are starting values; balance changes them in the constants files an
 - With no skill, every button the hero uses does something. The hero designer chooses the base kit and writes it in `docs/skills/<hero>.md`.
 - A skill either attaches to one of those buttons (`button` in its data) or runs on its own (`auto`). No skill adds a new key combination.
 - Several skills on J, K, L or jump stack: each adds its effect to the same press.
-- Ability skills on I join a rotation that O switches through, the way Kael's elements work today.
+- Ability skills on I join the kit's ability rotation, the way Kael's elements work today: the hero's base abilities plus the spell skills held, up to about five entries.
+  The rotation is per kit (`createRotation` in `src/game/skills/rotation.ts`): the kit decides which button turns it (O for most; Sable reloads on O and turns hers her own way) and what an ability costs (MP, Heat or nothing).
 - The special ultimate is in the base kit. Ultimate skills upgrade or replace it. A build holds at most one ultimate skill; once one is owned the others are no longer dealt.
 
 ## The 20 skills
@@ -49,9 +50,9 @@ Each hero has exactly 20 skills, at least this many of each kind:
 
 | Kind | Least | What it is |
 | --- | --- | --- |
-| `attack` | 4 | Changes J blows: damage, speed, on-hit effects, a situational move. |
+| `attack` | 4 | Changes the hero's own attack presses (J, and K or O when the kit attacks with them): damage, speed, on-hit effects, a situational move. |
 | `movement` | 3 | Changes dash, warp, jump or the hero's travel moves; hits on the move. |
-| `spell` | 3 | An MP ability on I (or the hero's ability button). |
+| `spell` | 3 | An ability on I (or the hero's ability button), paid with MP, the kit's own resource, or nothing. |
 | `dot` | 3 | Damage over time: burns, bleeds, poisons, curses. Weak early, a real attack once levelled and evolved. |
 | `summon` | 3 | A chance on a trigger (blow landed, ability cast, perfect dodge, parry, kill) to call a supporter that strikes on its own. |
 | `passive` | 0 | A lasting change: stats, Flow, sustain. |
@@ -64,7 +65,9 @@ The rest are the designer's choice.
 - Level 1 to level 8 must feel almost completely different.
   At least four of a skill's seven level ups add a new property (another projectile, pierce, a status, a new shape, a second trigger, a follow-up hit); the others are large number steps.
 - The card says what the next level changes in one short line.
-- Level 8 is about 6 to 10 times level 1 on its intended target.
+- Level 8 is about 6 to 12 times level 1 on its intended target; `dot` and `summon` skills may go up to 25 times.
+- Ultimates are budgeted per cast against the base special, not per second: level 8 about 6 times the special, evolved about 15 times.
+- A skill's `values` may name the stat it scales with (attack damage or ability power), for example `power` as a multiple of `progress.stats.ad` or `spellPower` of `progress.stats.ap`.
 
 ### Risk and reward
 
@@ -75,6 +78,8 @@ Every skill has a `risk`:
 - `precise`: needs a parry, a perfect dodge, a Keen press, a back attack or a hard read. Highest damage, and special buffs when pulled off.
 
 Damage budget at level 8, on its intended target, measured per second of ordinary play: `timed` about 1.6 times `easy`, `precise` about 2.5 to 3 times `easy`.
+Damage buffs a `precise` skill grants when pulled off count toward its budget.
+`movement` skills may sit at about 0.8 of their risk band's budget.
 Evolutions keep the trade: an `easy` evolution grows area and reliability, a `precise` evolution grows damage a lot or adds a strong buff when pulled off.
 
 ### Damage over time
@@ -103,8 +108,9 @@ A summon never fires more than its own internal cooldown allows, so attack speed
   The weights are tuned with the growth model so that, over a full run:
   - a player who takes the best card each time and uses no tools evolves 1 to 2 skills (median);
   - a player who steers with skips, banishes and rerolls evolves 3 (median), and 4 or more in under 10% of runs.
-- Once all 8 slots are full, new skills are no longer dealt; the card pool is the owned skills, charms and Second Wind.
-- Reroll, skip and banish work as before. The run's starting amounts may change in tuning.
+- Once all 8 slots are full, new skills are no longer dealt; the card pool is the owned skills and charms, and Second Wind fills any card the pool cannot.
+- Reroll, skip and banish work as before.
+- Tuned (`CARD_WEIGHT` in `src/constants/growth.ts`): a new skill 100, the next level of a held skill 6, a charm its own weight (50 to 90); starting tools unchanged at 2 rerolls, 2 skips, 1 banish. Method and results: `docs/growth-design.md`, "Skill cards and evolutions".
 
 ## Chests
 
@@ -119,12 +125,125 @@ A summon never fires more than its own internal cooldown allows, so attack speed
 
 ## Code
 
-- `src/types/skill.ts`: `SkillDef`, `SkillLevel`, `SkillKind`, `SkillRisk`, `SkillButton`.
+- `src/types/skill.ts`: `SkillDef`, `SkillLevel`, `SkillEvolution`, `SkillKind`, `SkillRisk`, `SkillButton`.
+- `src/types/skillBehavior.ts`: `SkillBehavior`, `SkillEvents`, `SkillMemory`, `SkillState`.
 - `CharacterDef.skills` (20) replaces `branches` and `startRanks`; `CharacterDef.comboHits` is new.
 - Skill data: `src/constants/characters/<hero>/skills/<skill>.ts`, one file per skill, and `skills/index.ts` listing all 20.
-- Skill code that runs on its own: `src/game/skills/<hero>/<skill>.ts` implementing `SkillBehavior`, registered in `src/game/skills/<hero>/index.ts`.
+- Skill code that runs on its own or answers events: `src/game/skills/<hero>/<skill>.ts` implementing `SkillBehavior`, registered in `src/game/skills/<hero>/index.ts`.
 - Kit code reads a skill through `skillLevel(id)`, `skillEvolved(id)` and `skillValues(id)` (the level's or the evolution's row) from `src/game/skills/query.ts`.
-- Events a skill can listen to (`src/game/skills/events.ts`): blow landed, ability cast, dash, warp, jump, perfect dodge, parry, kill, hurt, ultimate. The shared loop emits the common ones; a kit emits its own (parry, grab) through the same function.
-- Runtime memory per skill per hero lives in `progress.build.memory[id]`, so co-op seats keep their own. Large or binary state is host-only.
-- Icons: every skill and every evolution has a code-drawn icon under `src/ui/skills/icons/<hero>/`.
-- Dev start builds: `?build=<skill id>:8,evolve:<skill id>,might:5`.
+- Events (`src/game/skills/events.ts`): blow landed, ability cast, dash, warp, jump, perfect dodge, parry, kill, hurt, ultimate. The shared loop emits the common ones; a kit emits its parry and its own events through the same function.
+- Runtime memory per skill per hero is kept by the skill runtime (`src/game/skills/runtime.ts`), one copy per co-op seat, host-only.
+  Changed from the first draft, which put it in `progress.build.memory`: `progress` is sent to each guest fifteen times a second, and skill memory holds foes and projectiles.
+  State a guest's HUD must show (stacks, a charge) belongs in the kit's own seat memory (`rememberPerSeat(objectMemory(...))`).
+- Icons: every skill and every evolution has a code-drawn icon under `src/ui/skills/icons/<hero>/`; the evolution's is `<id>_evo`.
+- Dev start builds: `?wave=8&build=<skill id>:8,evolve:<skill id>,might:5`.
+
+Until the hero designs land, each hero's old tree nodes are temporary skills (`src/constants/characters/legacySkills.ts`): eight rows that repeat the old ranks (`values.rank`), the old perk on `perk`, a placeholder partner, and Kael's and Ysra's old evolutions folded in.
+The hero designers replace these lists wholesale and delete `legacySkills.ts` with the last of them.
+
+## How to add a skill
+
+Crystal Familiar (`k_familiar`, in Kael's temporary list) is the reference summon: data in `src/constants/characters/kael/skills/crystalFamiliar.ts`, code in `src/game/skills/kael/crystalFamiliar.ts`, icons in `src/ui/skills/icons/kael/index.ts`.
+
+### Data
+
+Write a `SkillDef` in `src/constants/characters/<hero>/skills/<skill>.ts` and list it in that hero's `skills/index.ts`, which `CharacterDef.skills` reads.
+`id` is unique across every hero (prefix it with the hero's letter), since recipes and damage sources are kept by id.
+`levels` has eight rows; each row is the skill's whole state at that level, not an addition to the row before.
+A row's `text` is the card line for reaching that level; `stats` and `scale` are stats the hero has while at that level; `values` are the numbers the skill's code reads.
+`evolution.row` replaces the level 8 row once evolved, and `evolution.partner` is another skill of the same hero.
+Kit perks: a skill whose effect lives in kit code can keep using `perk` and `hasPerk` until the kit reads `skillLevel` and `skillValues` directly; prefer the query.
+
+### Reading a skill in kit code
+
+```ts
+import { skillEvolved, skillLevel, skillValues, withCharms } from "../../skills/query";
+
+const v = skillValues("k_sweep"); // {} when not held
+if (skillLevel("k_sweep")) radius = withCharms("area", v.radius);
+```
+
+`withCharms(stat, value)` applies the charms to a skill's own number: `amount` adds Multitude, `area`, `duration`, `speed` and `cooldown` multiply by Reach, Persistence, Swiftness and Haste.
+Might and Flow apply to every hit in `dealDamage`; do not multiply by them yourself.
+
+### Code that runs on its own
+
+```ts
+export const crystalFamiliar: SkillBehavior = {
+  create: () => ({ cd: 0, shards: [] }),
+  update(memory, { level, evolved }, dt) { /* every step while the hero stands */ },
+  draw(memory, state) { /* in front of the hero */ },
+  drawBack(memory, state) { /* behind the hero and foes */ },
+  on: { blow(memory, event, state) { /* event.foe, event.damage, event.move, event.finisher, ... */ } },
+};
+```
+
+Register it in `src/game/skills/<hero>/index.ts` under its skill id.
+The runtime calls it once per hero who holds the skill, with that hero swapped in (`hero`, `progress`, `character` are theirs), and makes its memory with `create()` the first time.
+Memory starts fresh each run.
+Call `place()` before drawing in world space, as other effects do.
+Targeting helpers: `nearestFoe`, `foesOnScreen`, `distance2` and `touches` in `src/game/skills/targets.ts`.
+
+### Events
+
+| Event | Payload | Emitted by |
+| --- | --- | --- |
+| `blow` | `foe`, `damage`, `source` (`attacks`, `abilities`, `ultimate`), `move` (the combo move or null), `finisher`, `melee`, `back`, `crit`, `airborne`, `keen` | `dealDamage`, for every hit of the hero's own that is not damage over time |
+| `cast` | `ability` (the kit's id: Kael's element, Ysra's rite, `snare`, `bellow`) | Kael's `startCast`, Ysra's rite release, Sable's snare, Hulda's bellow |
+| `dash` | `dir`, `foes` passed through | Kael's dash when it ends |
+| `warp` | `x`, `y`, `foe` it was aimed at or null | Kael's warp and blink arrival |
+| `jump` | `air` | Kael's jump and double jump |
+| `perfectDodge` | `at` (the hero's x) | `rewardPerfectDodge` |
+| `parry` | `fromX` | Ysra's brace parry |
+| `grab` | `foe` | Hulda's grab (declared in `src/types/hulda.ts`) |
+| `kill` | `foe`, `source` | `killEnemy`, when the killing hit has a source |
+| `hurt` | `damage`, `fromX` | `hurtHero`, when HP is lost |
+| `ultimate` | `level` | the shared ultimate release |
+
+Emit with `emitSkillEvent({ type: "dash", dir, foes })` from `src/game/skills/events.ts`.
+A kit adds its own events without editing the shared file, by augmenting `SkillEvents` from its own types file, as Hulda's grab does:
+
+```ts
+declare module "./skillBehavior" {
+  interface SkillEvents {
+    throw: { foe: Enemy; into: Enemy | null };
+  }
+}
+```
+
+A kit whose evade meets a blow at the right moment calls `rewardPerfectDodge()` (`src/game/hero/perfectDodge.ts`): it gives the feat, the Flow stacks, the slow motion, MP and stamina, the PERFECT cue and the `perfectDodge` event.
+Each kit that has its own dash, warp-like travel, jump or ability emits the matching event itself; only Kael's and the shared ones are wired now.
+
+### Dealing damage
+
+```ts
+dealDamage(foe, progress.stats.ad * v.power, { source: "k_familiar", fromX: x, kx: 50 });
+```
+
+A hit the skill deals on its own passes its skill id as `source`: it counts on the end of run screen under the skill's name and level, kills count toward skill-kill goals, its number is drawn quiet, and it builds no Flow.
+A skill effect carried by the hero's own press (a bigger J blow, a burst on the dash) keeps the press's source (`attacks`, `abilities`, `ultimate`, or no source for `attacks`) and builds Flow.
+
+### Statuses every hero can use
+
+`src/game/enemies/skillStatus.ts`:
+
+- `addStacks(foe, skillId, { stacks, max, damage, every, duration })`: stacking damage over time (poison, bleed, burn, lodged bolts). Each tick deals `damage x stacks` with the skill id as source; a new stack refreshes the duration.
+- `stacksOf(foe, skillId)` and `consumeStacks(foe, skillId)` (returns the count and clears them) for detonations and consuming strikes.
+- `markFoe(foe, seconds, bonus)`: the foe takes `bonus` more damage from every source while marked (0.2 is +20%); the stronger mark wins.
+- The older statuses stay: `ignite` (`src/game/enemies/burn.ts`), `chill`, `frozen`, `shock`, `stun`.
+
+### Per-seat memory rules
+
+- The runtime's skill memory is host-only and per seat: safe for foes, projectiles and summons.
+- Kit state a guest's HUD or touch buttons read (stacks, a charge, a selected ability) goes in the kit's seat memory: a plain object registered with `rememberPerSeat(objectMemory(obj))`, or `objectMemory(obj, true)` when the guest never reads it.
+- Never keep per-hero state in a module variable without registering it; a co-op room would share it between heroes.
+
+### Icons
+
+Add `<id>` and `<id>_evo` drawers to `src/ui/skills/icons/<hero>/index.ts` and spread that record into `ICONS` in `src/ui/skills/icons/iconImage.ts`.
+`skillIcon(id, evolved)` picks the evolved art when it is drawn.
+
+### Checking
+
+`npm run dev`, then `?wave=8&level=30&build=<id>:8,<partner>:4` opens a run at wave 8 with the skill ready: the first chest evolves it.
+`?build=evolve:<id>` starts with it evolved.

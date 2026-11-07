@@ -9,18 +9,20 @@ import type { SourceId } from "../types/build";
 import type { Enemy } from "../types/enemy";
 import type { DamageTag } from "../types/game";
 import { buildStats } from "../utils/build";
+import { isHeroSource } from "../utils/sources";
 import { addFlow, flowDamage } from "./build/flow";
 import { recordDamage } from "./damageLedger";
 import { createImpact } from "./effects/impact";
 import { launchEnemy } from "./enemies/airborne";
 import { enemyCenter } from "./enemies/enemy";
 import { kindOf } from "./enemies/kinds";
-import { feat } from "./feat";
+import { markMultiplier } from "./enemies/skillStatus";
 import { killEnemy } from "./kill";
 import { popNumber } from "./numbers";
 import { hasPerk } from "./progress";
+import { emitSkillEvent } from "./skills/events";
 import { explode } from "./spells/explosion";
-import { game, progress, rng } from "./state";
+import { game, hero, progress, rng } from "./state";
 
 export interface HitOptions {
   /** where the blow comes from, for back attacks and guards */
@@ -40,7 +42,8 @@ export interface HitOptions {
   sureCrit?: boolean;
   /** burning and other damage over time: no crits, no numbers in white */
   dot?: boolean;
-  /** what dealt the hit, for the end of run screen; the hero's own blows when not given */
+  /** what dealt the hit, for the end of run screen: the hero's own blows when not given, a skill's id for a hit the
+   *  skill deals on its own (it builds no Flow) */
   source?: SourceId;
 }
 /** what a blow did: landed, or stopped by a guard */
@@ -121,6 +124,7 @@ export function dealDamage(e: Enemy, base: number, o: HitOptions = {}): HitResul
     tag = "crit";
   }
   if (e.pinned > 0) dmg *= PIN.taken;
+  dmg *= markMultiplier(e);
   const shattering = hasPerk("shatter") && o.melee && o.heavy && e.frozen > 0;
   if (shattering) {
     dmg *= 2;
@@ -130,15 +134,12 @@ export function dealDamage(e: Enemy, base: number, o: HitOptions = {}): HitResul
   const value = Math.max(1, Math.round(dmg));
   e.hp -= value;
   recordDamage(source, value);
-  if (!o.dot && HERO_SOURCES.has(source)) {
-    progress.build.heroHits++;
-    addFlow(FLOW.perHit);
-    if (back) feat({ kind: "backAttack" });
-  }
+  const fromHero = isHeroSource(source);
+  if (!o.dot && fromHero) addFlow(FLOW.perHit);
   e.flash = 0.1;
   e.guardHits = 0;
-  // a relic's hit is quiet and never drawn big, so a crowd of them does not drown out the hero's own
-  const quiet = !HERO_SOURCES.has(source);
+  // a skill's own hit is quiet and never drawn big, so a crowd of them does not drown out the hero's own
+  const quiet = !fromHero;
   popNumber(e, value, tag, !quiet && (crit || shattering || (back && e.air)), quiet);
   if (shattering) shatter(e, source);
   e.vx += (o.kx ?? 0) * (1 - def.weight);
@@ -165,6 +166,21 @@ export function dealDamage(e: Enemy, base: number, o: HitOptions = {}): HitResul
   if (o.stun && def.launchable) e.stun = Math.max(e.stun, o.stun);
   if (o.stagger && kindOf(e.type).staggers) e.stagger = Math.max(e.stagger, o.stagger);
   if (o.heavy && e.state === "wind" && def.rank === "minion") Object.assign(e, { state: "recover", st: 0 });
+  if (!o.dot && isHeroSource(source)) {
+    emitSkillEvent({
+      type: "blow",
+      foe: e,
+      damage: value,
+      source,
+      move: source === "attacks" ? hero.move : null,
+      finisher: source === "attacks" && hero.chain >= progress.comboLimit,
+      melee: !!o.melee,
+      back,
+      crit,
+      airborne: e.air,
+      keen: !!o.sureCrit,
+    });
+  }
   if (e.hp <= 0) killEnemy(e, source);
   return "hit";
 }

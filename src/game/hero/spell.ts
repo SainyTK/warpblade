@@ -10,6 +10,7 @@ import { WHITE } from "../../utils/color";
 import { TAU } from "../../utils/math";
 import { createGlint } from "../effects/flash";
 import { hasPerk } from "../progress";
+import { emitSkillEvent } from "../skills/events";
 import { castBolt } from "../spells/bolt";
 import { castFire } from "../spells/fire";
 import { castIce } from "../spells/ice";
@@ -79,6 +80,7 @@ export function startCast(spellblade: boolean): void {
     h.st = CLIPS.cast.hit;
   }
   sfx.cast();
+  emitSkillEvent({ type: "cast", ability: h.castElement });
 }
 
 /** while casting: streaks gather at the hand, then the spell leaves it */

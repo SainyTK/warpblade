@@ -28,7 +28,7 @@ export function entryOf(
 }
 
 /**
- * One entry of the Codex, laid out like a shop row. An evolution sits under its relic, indented. Arrows and the gamepad
+ * One entry of the Codex, laid out like a shop row. An evolution sits under its skill, indented. Arrows and the gamepad
  * move through the rows.
  */
 export function codexRow(entry: CodexEntry, evolution = false): HTMLElement {

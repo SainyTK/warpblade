@@ -11,7 +11,7 @@ interface Tally {
 
 /**
  * Every hit of one hero this run, by source, for the end of run screen. Each co-op seat keeps its own.
- * A relic counts as held from its first hit, which comes within one of its cooldowns of being taken.
+ * A skill's own hits count as held from the first of them.
  */
 const ledger: { start: number; sources: Partial<Record<SourceId, Tally>> } = { start: 0, sources: {} };
 rememberPerSeat(objectMemory(ledger));
