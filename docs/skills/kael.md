@@ -344,7 +344,7 @@ Dot, timed, auto. Warp strikes open rift wounds that drain the foe; each warp de
 | 5 | New: each new layer also opens on the nearest foe. | spread 1 |
 | 6 | Up to 5 layers; each drains far more. | per 1.2, max 5 |
 | 7 | New: each layer makes the foe take +6% damage. | taken 0.06 |
-| 8 | Each layer drains 1.2 to 2.4 a second. | per 2.4 |
+| 8 | Each layer drains 1.2 to 8 a second. | per 8 |
 
 Evolution **Rift Collapse** (partner `k_warpcraft`): A foe at full layers collapses: the wound's damage at once, doubled, and the rift pulls foes in and wounds them.
 Evolved values added: collapse 2, pull 60, give 3.
@@ -458,10 +458,10 @@ Ultimate, easy, U. Phantoms of Kael appear behind foes and cut them, in place of
 | 5 | New: struck foes cannot turn for 2 s. | lock 2 |
 | 6 | Recharge 20 to 15 s. | recharge 15 |
 | 7 | New: a phantom whose foe falls moves to the next. | hop 1 |
-| 8 | Power 0.8 to 16x. | power 16 |
+| 8 | Power 0.8 to 21x. | power 21 |
 
 Evolution **Phantom Army** (partner `k_echo`): The legion stays 5 seconds, each phantom cutting again and again and moving on when its foe falls.
-Evolved values added: army 5, armyEvery 0.5, power 4.5.
+Evolved values added: army 5, armyEvery 0.5, power 11.
 Code: `ultimates/phantomLegion.ts`.
 
 #### `k_starfall` Starfall
@@ -477,7 +477,7 @@ Ultimate, timed, U. Meteors rain on the foes in reach and set the floor alight, 
 | 5 | New: meteors throw foes up. | launch 1 |
 | 6 | New: 3 more meteors fall on the densest group. | late 3 |
 | 7 | Recharge 20 to 15 s. | recharge 15 |
-| 8 | Power 1.3 to 12x; the floor burns longer. | power 12, floor 5 |
+| 8 | Power 1.3 to 14x; the floor burns longer. | power 14, floor 5 |
 
 Evolution **Cataclysm** (partner `k_flame`): Meteors keep falling for 4 seconds on foes near Kael, each landing as a Fire Flask burst.
 Evolved values added: rain 4, rainEvery 0.25.
@@ -514,7 +514,7 @@ Changes made from the review (all "must" items and the useful "suggest" items):
 | `k_volt` | Two more new properties (stun, a bolt behind); level 8 strike 7 AP, arcs 2.5 AP. |
 | `k_flame` | One more new property (the burst knocks down). |
 | `k_splinters` | Level 8 0.22 AD per splinter a second; Shatterstorm 0.5 AD per splinter within 70 px; one more new property (crits lodge 2). |
-| `k_rift` | Level 8 2.4 AD per layer a second; one more new property (slow); Rift Collapse's layers cannot spread or collapse again within a second. |
+| `k_rift` | Level 8 2.4 AD per layer a second (8 since balance round 3); one more new property (slow); Rift Collapse's layers cannot spread or collapse again within a second. |
 | `k_static` | Overload strikes at most 8 foes, at most every 1.5 s; one more new property (a charged foe that dies arcs); lightning 2 AP from level 6. |
 | `k_echo` | Copies follow G2; level 8 repeat 220%; one more new property (its blows break wind-ups). |
 | `k_familiar` | Rebuilt from the framework's reference summon (which was far too strong): a cast trigger, AP shards, 1 s cooldown, volleys of 2; Crystal Choir fires every 0.8 s, arcs to 1 foe and adds no volleys. |

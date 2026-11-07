@@ -119,7 +119,7 @@ Attack, timed, J held. The held lunge winds faster and learns to carry, rail and
 | 5 | rail 0.5 | The line is struck again after the lunge. |
 | 6 | windRate 1.6, guardAll 1 | Winds faster; nothing touches you in the lunge. |
 | 7 | tip 1.5 | The lunge bursts at its tip. |
-| 8 | power 6 | Lunge damage +20%. |
+| 8 | power 10 | Lunge damage much higher. |
 
 Evolution, Rail Lance (with `y_warpath`): a full lunge travels 140 px and the rail runs out and back at 0.6 times; J while Warpath charges releases a full lunge at once (`railLunge`).
 Built in `glaive/heft.ts` and `glaive/lunge.ts` (wind rate, travel, Skewer, rail, return rail, untouchable travel, tip burst through `burstEmbers`); reach in `glaive/reach.ts`.
@@ -137,9 +137,9 @@ Attack, timed, the string's last blow. The finisher pins foes, and pinned foes t
 | 5 | power 8.5, burst 2 | Pinned foes burst when they fall. |
 | 6 | power 10, pin 2, taken 0.7 | Pins last longer and hurt more. |
 | 7 | power 12, twist 0.5 | The impale strikes twice. |
-| 8 | power 14, taken 1 | Impale damage up; pinned foes take double. |
+| 8 | power 20, taken 1 | Impale damage up; pinned foes take double. |
 
-Evolution, Pillory (with `y_skyhook`): the impale drives a row of burning stakes 80 px ahead; every foe in the row is struck at half the impale and pinned 3 s, the impale deals 16 AD, and pinned foes burst for 4 AD when they die. The pin bonus stays capped at +100% (G3).
+Evolution, Pillory (with `y_skyhook`): the impale drives a row of burning stakes 80 px ahead; every foe in the row is struck at half the impale and pinned 3 s, the impale deals 24 AD, and pinned foes burst for 4 AD when they die. The pin bonus stays capped at +100% (G3).
 Built in `glaive/blows/string.ts` (impale and `impaleTwist` from the row), `ysra/pin.ts` (pin through `markFoe`, so it sums under the cap), `glaive/stakes.ts` with `glaive/effects/stakes.ts`, and the death burst in `src/game/skills/ysra/impale.ts` (a burst kill never bursts again).
 
 ### `y_windmill` Windmill
@@ -173,9 +173,9 @@ Attack, precise, a parry then J. The parry opens a counter that hits very hard a
 | 5 | power 15, line 70 | The counter runs through the line. |
 | 6 | power 17, window 0.24, refill 1 | Wider parry window; counters refill stamina. |
 | 7 | power 35, riposte 1, riposteTime 3 | Counters empower your next blows. |
-| 8 | power 70 | Counter damage doubled. |
+| 8 | power 45 | Counter damage up. |
 
-Evolution, Sun Piercer (with `y_brand`): the counter is a burning thrust across the whole stage for 60 AD (always a crit), and for 4 s after it every glaive blow is a crit.
+Evolution, Sun Piercer (with `y_brand`): the counter is a burning thrust across the whole stage for 120 AD on the foe it was aimed at and the plain counter thrust on the rest of the line (always a crit), and for 4 s after it every glaive blow is a crit.
 Built in `glaive/counter.ts` (power, reach, sure crit, stun, stamina refill, Riposte and crits in `ysra/buffs.ts`) and `stance/parry.ts`, `stance/brace.ts` (window and block cost). Riposte adds into the one blow bonus sum (G4).
 
 ### `y_skyhook` Skyhook
@@ -191,7 +191,7 @@ Attack, timed, J when a foe hovers overhead. Her answer to flyers: hook them dow
 | 5 | power 5, slam 4, ground 4 | Hooked flyers cannot fly for a while. |
 | 6 | power 6, slam 5 | Hook damage +20%. |
 | 7 | power 7.5, slam 6.5, reach 70, rise 20 | Reaches higher and lifts you with it. |
-| 8 | power 9, slam 9 | Hook and slam much harder. |
+| 8 | power 14, slam 14 | Hook and slam much harder. |
 
 Evolution, Heaven's Hook (with `y_vault`): every flyer within 100 px is hauled into a heap at her feet and slammed for 12 AD, and the vault recharges at once.
 Built in `glaive/hook.ts`: struck flyers are dragged down at spike speed along a burning hook line (each foe once), slam on landing (the slam strikes the foe and the walkers it lands on, never the other heaped flyers), and stay pinned (grounded) for the level's seconds. No new enemy field: grounding uses the pin.
@@ -281,7 +281,7 @@ Spell, easy, I (rite). A planted turret that spits embers on its own.
 | 5 | ember 0.8, shots 2 | Two embers each shot. |
 | 6 | every 0.5, ember 0.85 | Shoots faster. |
 | 7 | ember 0.9, burst 6 | The brazier bursts at the end. |
-| 8 | ember 1, burn 2.5 | Hotter embers that burn longer. |
+| 8 | ember 1.8, burn 2.5 | Far hotter embers that burn longer. |
 
 Evolution, Forge Altar (with `y_salamander`): an altar that stands 15 s, fires three embers a shot, and lets out a salamander every 3 s through the kit's `altar` event (with or without Salamander held at that moment, it uses Salamander's current level).
 Built in `spells/rites/brazier.ts` and `emberShot.ts` from a spec (life, rate, shots, pierce, aura, burst, altar); its hits count as `y_brazier`.
@@ -299,7 +299,7 @@ Spell, timed, I (rite, needs 60 Heat, spends all of it). Bank Heat, then burn it
 | 5 | nova 8 | Overheat ends in a nova. |
 | 6 | reach 16 | Your blows reach further. |
 | 7 | perKill 0.5 | Kills extend Overheat. |
-| 8 | rate 1.6, burst 3 | Much faster and hotter. |
+| 8 | rate 1.6, burst 5 | Much faster and hotter. |
 
 Evolution, Sunheart (with `y_searing`): Overheat holds while blows keep landing (1.5 s grace), each burst adds 2 Scorch stacks, and the end nova is 20 AP.
 Built in `pyre/heat.ts` (length from Heat spent, feed, hold, kills), `pyre/strikeHeat.ts` (bursts), `pyre/pyre.ts` (attack speed, reach, nova) and `src/game/skills/ysra/overheat.ts` (kills).
@@ -353,7 +353,7 @@ Dot, precise, a parry. The parried foe is branded, and every blow on it feeds th
 | 5 | perSecond 1.8, block 1 | Blocks brand too. |
 | 6 | perSecond 2.3, spread 30 | The brand spreads on a parry. |
 | 7 | perSecond 3, max 8 | Hotter brand, more stacks. |
-| 8 | perSecond 10, taken 0.2, parry 4 | Branded foes take more from you; a parry brands deeper. |
+| 8 | perSecond 25, taken 0.2, parry 4 | Branded foes take more from you; a parry brands deeper. |
 
 Evolution, Pyre Mark (with `y_impale`): an impale or counter on a branded foe spends the brand: its stacks times 12 AP at once in 40 px, which brands every foe it reaches with 2 stacks (those cannot be set off for 0.5 s).
 Built in `src/game/skills/ysra/brand.ts` and `brandMark.ts`; a parry lays 2 stacks.

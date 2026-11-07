@@ -161,7 +161,7 @@ attack, precise, K. A grab that catches a foe winding up a blow (`wind` or `char
 | 5 | A counter gives Fury +25% | A counter gives Fury. |
 | 6 | 6x; the throw after a counter deals double | Counter 6x, its throw doubled. |
 | 7 | A counter roars: other foes within 50 px reel 0.8 s | A counter makes foes nearby reel. |
-| 8 | 110x, Fury +50%, refills every plate | Huge counter, more Fury, full plates. |
+| 8 | 70x, Fury +50%, refills every plate | Huge counter, more Fury, full plates. |
 
 Evolution: **Executioner's Grip** (partner `h_ironWall`). Every counter deals 160x, and a counter on a mini or boss holds it for 1 s and suplexes it for 120x. Fury +80%, and while it lasts no blow breaks a plate.
 
