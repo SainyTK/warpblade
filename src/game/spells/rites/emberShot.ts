@@ -34,7 +34,11 @@ export function createEmberShot(x: number, y: number, tx: number, ty: number): E
         particles.spawn(PK.EMBER, o.x, o.y, -o.vx * 0.1, -o.vy * 0.1, rng.range(0.2, 0.4), { sparks: RITE_SPARKS });
       const hit = game.enemies.find((e) => e.hp > 0 && boxHit(enemyBox(e), [o.x - 2, o.y - 2, o.x + 2, o.y + 2]));
       if (hit) {
-        dealDamage(hit, progress.stats.ap * BRAZIER.power, { fromX: o.x - Math.sign(o.vx), kx: Math.sign(o.vx) * 50 });
+        dealDamage(hit, progress.stats.ap * BRAZIER.power, {
+          fromX: o.x - Math.sign(o.vx),
+          kx: Math.sign(o.vx) * 50,
+          source: "abilities",
+        });
         hit.burn = Math.max(hit.burn, BRAZIER.burn);
         sparkle(o.x, o.y, 8);
         crackle(1.2);

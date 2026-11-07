@@ -40,7 +40,7 @@ export function updateStatus(e: Enemy, dt: number): number {
     if (e.burnTick <= 0) {
       e.burnTick = 0.4;
       actAsBurner(e);
-      dealDamage(e, progress.stats.ap * BURN_POWER, { dot: true });
+      dealDamage(e, progress.stats.ap * BURN_POWER, { dot: true, source: "abilities" });
     }
   }
   if (e.shock > 0 && rng.chance(0.25))

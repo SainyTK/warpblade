@@ -31,6 +31,7 @@ export function castTempest(level: number): void {
         shock: 1.2,
         delay: i * (SPAN / strikes.length),
         glow,
+        source: "ultimate",
       }),
     );
   });

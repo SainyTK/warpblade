@@ -47,6 +47,7 @@ export function castQuakeDrop(level: number): void {
           kx: 0,
           launch: minion ? QUAKE.launch : undefined,
           heavy: true,
+          source: "ultimate",
         });
         // the stun of a blow only holds minions; the quake makes bigger foes reel too
         if (!minion) e.stun = Math.max(e.stun, QUAKE.bigStun);

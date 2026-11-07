@@ -32,7 +32,13 @@ function erupt(x: number, floor: number, shape: PillarShape): void {
   let hits = 0;
   for (const e of game.enemies) {
     if (e.hp <= 0 || !boxHit(area, enemyBox(e))) continue;
-    dealDamage(e, progress.stats.ap * shape.power, { fromX: x, launch: shape.launch, ky: -200, heavy: true });
+    dealDamage(e, progress.stats.ap * shape.power, {
+      fromX: x,
+      launch: shape.launch,
+      ky: -200,
+      heavy: true,
+      source: "abilities",
+    });
     e.burn = Math.max(e.burn, P.burn);
     hits++;
   }

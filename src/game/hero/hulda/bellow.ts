@@ -44,7 +44,7 @@ function roar(): void {
     const [cx, cy] = enemyCenter(e);
     if (Math.hypot(cx - h.x, cy - (h.y - 18)) > BELLOW.reach) continue;
     const stun = kindOf(e.type).flies ? BELLOW.flierStun : BELLOW.stun;
-    dealDamage(e, progress.stats.ap * BELLOW.power, { fromX: h.x, kx: 0, stun });
+    dealDamage(e, progress.stats.ap * BELLOW.power, { fromX: h.x, kx: 0, stun, source: "abilities" });
     caught.push(e);
   }
   gainGrit(GRIT.bellow);

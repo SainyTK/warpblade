@@ -53,7 +53,7 @@ export function castVolcanicRift(level: number): void {
       if (struck.has(e) || e.hp <= 0 || !boxHit(enemyBox(e), [bx0, by0, bx1, by1])) continue;
       struck.add(e);
       const [cx, cy] = enemyCenter(e);
-      dealDamage(e, damage, { fromX: (bx0 + bx1) / 2, kx: 0, launch: -230, heavy: true });
+      dealDamage(e, damage, { fromX: (bx0 + bx1) / 2, kx: 0, launch: -230, heavy: true, source: "ultimate" });
       ignite(e, BURN);
       game.fx.push(createImpact(cx, cy, Math.sign(cx - x0) || 1, true));
     }

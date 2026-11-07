@@ -75,6 +75,7 @@ export function castPyreWave(level: number): void {
           ky: -90,
           launch: level >= 3 ? -150 : undefined,
           heavy: true,
+          source: "ultimate",
         });
         ignite(e, BURN);
         game.fx.push(createImpact(cx, cy, dir, level >= 3));

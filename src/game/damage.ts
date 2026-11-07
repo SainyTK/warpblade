@@ -1,4 +1,5 @@
 import { DAMAGE, ENEMY_AIR, FUSION, GUARD, JUGGLE_LIMIT } from "../constants/combat";
+import { HERO_SOURCES } from "../constants/damageSources";
 import { ENEMIES } from "../constants/enemies";
 import { FLOW } from "../constants/growth";
 import { SPARKS } from "../constants/palette";
@@ -43,8 +44,6 @@ export interface HitOptions {
 /** what a blow did: landed, or stopped by a guard */
 export type HitResult = "hit" | "blocked";
 
-/** the hero's own sources: their hits build Flow */
-const HERO_SOURCES: ReadonlySet<SourceId> = new Set<SourceId>(["attacks", "abilities", "ultimate"]);
 /** Might and Flow multiply every hit, whatever its source */
 const buildDamage = (): number => buildStats(progress.build).might * flowDamage();
 
@@ -82,9 +81,10 @@ function guards(e: Enemy, o: HitOptions): boolean {
 }
 
 /** a blocked blow: a little chip damage, sparks, and on the second in a row a fast counter */
-function block(e: Enemy, base: number): HitResult {
+function block(e: Enemy, base: number, source: SourceId): HitResult {
   const value = Math.max(1, Math.round(base * GUARD.chip));
   e.hp -= value;
+  recordDamage(source, value);
   popNumber(e, value, "block", false);
   const [cx, cy] = enemyCenter(e);
   game.fx.push(createImpact(cx + e.face * 6, cy - 4, -e.face, false, SPARKS.hot));
@@ -96,15 +96,15 @@ function block(e: Enemy, base: number): HitResult {
   return "blocked";
 }
 
-/** Shatter: the ice breaks into shards that cut every foe near the frozen one */
-function shatter(e: Enemy): void {
+/** Shatter: the ice breaks into shards that cut every foe near the frozen one; the shards count for the blow that broke it */
+function shatter(e: Enemy, source: SourceId): void {
   e.frozen = 0;
   const [cx, cy] = enemyCenter(e);
   for (const other of game.enemies) {
     if (other === e || other.hp <= 0) continue;
     const [ox, oy] = enemyCenter(other);
     if (Math.hypot(ox - cx, oy - cy) < FUSION.shatterReach)
-      dealDamage(other, progress.stats.ad * FUSION.shatterShards, { fromX: cx, kx: Math.sign(ox - cx) * 80 });
+      dealDamage(other, progress.stats.ad * FUSION.shatterShards, { fromX: cx, kx: Math.sign(ox - cx) * 80, source });
   }
   game.fx.push(createImpact(cx, cy, 1, true, SPARKS.ice));
   sfx.shatter();
@@ -114,9 +114,10 @@ function shatter(e: Enemy): void {
 export function dealDamage(e: Enemy, base: number, o: HitOptions = {}): HitResult {
   if (e.hp <= 0) return "hit";
   const def = ENEMIES[e.type];
+  const source = o.source ?? "attacks";
   let tag: DamageTag = o.dot ? "burn" : "normal";
   if (guards(e, o)) {
-    if (!o.heavy) return block(e, base);
+    if (!o.heavy) return block(e, base, source);
     e.stun = Math.max(e.stun, def.launchable ? GUARD.breakStun : GUARD.breakStun * 0.6);
     e.guardHits = 0;
     tag = "break";
@@ -145,7 +146,6 @@ export function dealDamage(e: Enemy, base: number, o: HitOptions = {}): HitResul
   dmg *= buildDamage();
   const value = Math.max(1, Math.round(dmg));
   e.hp -= value;
-  const source = o.source ?? "attacks";
   recordDamage(source, value);
   if (!o.dot && HERO_SOURCES.has(source)) {
     progress.build.heroHits++;
@@ -154,7 +154,7 @@ export function dealDamage(e: Enemy, base: number, o: HitOptions = {}): HitResul
   e.flash = 0.1;
   e.guardHits = 0;
   popNumber(e, value, tag, crit || shattering || (back && e.air));
-  if (shattering) shatter(e);
+  if (shattering) shatter(e, source);
   e.vx += (o.kx ?? 0) * (1 - def.weight);
   if (o.spike && e.air) e.vy = ENEMY_AIR.spike;
   else if (o.launch && def.launchable) {
@@ -168,6 +168,7 @@ export function dealDamage(e: Enemy, base: number, o: HitOptions = {}): HitResul
         damage: progress.stats.ap * FUSION.ignition,
         burn: 2,
         brands: 0,
+        source,
       });
     }
   } else if (e.air && !o.dot) {

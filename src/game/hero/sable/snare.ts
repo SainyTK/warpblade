@@ -40,7 +40,14 @@ function volley(x: number, y: number): void {
     if (e.hp <= 0) continue;
     const [cx, cy] = enemyCenter(e);
     if (Math.abs(cx - x) > SNARE.volleyRange) continue;
-    looseBolt({ x, y: y - 6, angle: Math.atan2(cy - (y - 6), cx - x), share: SNARE.volleyPower, primed: false });
+    looseBolt({
+      x,
+      y: y - 6,
+      angle: Math.atan2(cy - (y - 6), cx - x),
+      share: SNARE.volleyPower,
+      primed: false,
+      source: "abilities",
+    });
   }
 }
 
@@ -53,6 +60,7 @@ function spring(e: Enemy, x: number, y: number): void {
     ky: 0,
     stun: barbed ? SNARE.barbedHold : SNARE.hold,
     heavy: true,
+    source: "abilities",
   });
   e.vx = 0;
   shake(0.12, 1.5);
