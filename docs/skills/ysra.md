@@ -203,7 +203,7 @@ Movement, timed, K then J in flight. The vault crash grows, the air opens up, an
 | Lv | Numbers | Card |
 | --- | --- | --- |
 | 1 | crash 2.4, reach 44, sweeps 1, quake 0, quakeRange 0, quakeStun 0, airVault 0, cooldown 0.95, launch 0, ring 0 | The vault crash hits harder and wider. |
-| 2 | crash 2.6, sweeps 2 | Air string +1, and sweeps can follow a vault. |
+| 2 | crash 2.6, sweeps 2 | Air string +1: two air sweeps before you land. |
 | 3 | crash 2.8, quake 0.5, quakeRange 96 | Landings send a shockwave along the floor. |
 | 4 | crash 3, quake 0.6 | Crash damage +7%, a stronger wave. |
 | 5 | crash 3.2, airVault 1 | Vault again in the air. |
@@ -212,7 +212,7 @@ Movement, timed, K then J in flight. The vault crash grows, the air opens up, an
 | 8 | crash 4, ring 1 | The crash burns. |
 
 Evolution, Skyfall (with `y_ashen`): the crash comes down as a burning meteor, 8 AD in 60 px, the shockwave crosses the whole floor, the floor cracks both ways and the crater burns for 3 s.
-Built in `stance/moves.ts` (crash power, width, launch, ring), `stance/stance.ts` (crash in the base kit, second sweep, air vault), `stance/landing.ts` (shockwave) and `stance/skyfall.ts`.
+Built in `stance/moves.ts` (crash power, width, launch, ring), `stance/stance.ts` (the crash on J through the whole flight, air vault), `glaive/blows/air.ts` (second sweep), `stance/landing.ts` (shockwave) and `stance/skyfall.ts`.
 
 ### `y_dive` Falling Star
 
