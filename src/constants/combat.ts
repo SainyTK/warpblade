@@ -137,3 +137,6 @@ export const FUSION = {
   manaWaveFrom: 0.75,
   gravityReach: 60,
 } as const;
+
+/** chilled foes (a skill's cold) move at this share of their speed */
+export const CHILL_PACE = 0.5;

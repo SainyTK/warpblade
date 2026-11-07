@@ -1,4 +1,4 @@
-/* Codex: shop rows for every relic, evolution, charm and slot; found ones lit, the rest dark silhouettes or ???. */
+/* Codex: shop rows for every skill, evolution, charm and slot; found ones lit, the rest dark silhouettes or ???. */
 .menu[data-screen="codex"] .menu-panel {
   width: min(600px, 100%);
 }
@@ -29,7 +29,7 @@
 .codex-item[data-state="locked"] .shop-text {
   font-style: italic;
 }
-/* an evolution sits under its relic, one step in and in the evolution's green */
+/* an evolution sits under its skill, one step in and in the evolution's green */
 .shop-item.codex-item[data-evolution] {
   --accent: var(--jade);
   --accent-dark: #123a2a;

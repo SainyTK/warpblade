@@ -1,6 +1,7 @@
 import {
   DODGE_GAP_MS,
   HIGH_FOE,
+  NEAR_EVOLUTION_LEVEL,
   PICK_PRIORITY,
   SPELL_RANGE,
   STRIKE_REACH,
@@ -76,12 +77,17 @@ export const skilledPolicy: Policy = {
   name: "skilled",
   decide,
   choosePick(cards) {
+    const levels = cards.filter((c) => c.branch !== "charm" && c.branch !== "boon" && c.level > 1);
+    const highest = [...levels].sort((a, b) => b.level - a.level)[0];
+    if (highest && highest.level > NEAR_EVOLUTION_LEVEL) {
+      return highest.index;
+    }
     for (const kind of PICK_PRIORITY) {
-      const card = cards.find((c) => c.kind === kind);
+      const card = cards.find((c) => c.kind === kind && c.level === 1);
       if (card) {
         return card.index;
       }
     }
-    return 0;
+    return (highest ?? cards.find((c) => c.branch === "charm") ?? cards[0]).index;
   },
 };

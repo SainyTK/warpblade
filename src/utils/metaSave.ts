@@ -19,12 +19,12 @@ const emptyMeta = (): MetaSave => ({
 const knownIds = (raw: unknown, known: readonly string[]): string[] =>
   Array.isArray(raw) ? known.filter((id) => raw.includes(id)) : [];
 
-/** the ids parseMeta keeps from a save: heroes that can be bought, and the achievements, unlocks and relics the game has */
+/** the ids parseMeta keeps from a save: heroes that can be bought, and the achievements, unlocks and skills the game has */
 export interface KnownIds {
   heroes: readonly string[];
   achievements: readonly string[];
   unlocks: readonly string[];
-  relics: readonly string[];
+  skills: readonly string[];
 }
 
 /**
@@ -46,6 +46,6 @@ export function parseMeta(raw: unknown, items: readonly ShopItem[], known: Known
     achievements: knownIds(raw.achievements, known.achievements),
     tracked: parseTracked(raw.tracked),
     unlocks: knownIds(raw.unlocks, known.unlocks),
-    recipes: knownIds(raw.recipes, known.relics),
+    recipes: knownIds(raw.recipes, known.skills),
   };
 }

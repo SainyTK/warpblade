@@ -1,4 +1,5 @@
 import type { CharacterDef } from "../../../types/character";
+import { legacySkills } from "../legacySkills";
 import { FUSION } from "./fusion";
 import { SABLE_SKIN } from "./look";
 import { MARKSMAN } from "./marksman";
@@ -17,7 +18,7 @@ export const SABLE: CharacterDef = {
   special: "boltStorm",
   base: { ad: 11, ap: 8, hp: 85, mp: 90, stamina: 110, crit: 0.08, move: 1.12, aspd: 1, haste: 1 },
   growth: { ad: 0, ap: 0, hp: 0.9, mp: 0.35 },
-  branches: [MARKSMAN, SKIRMISH, TRAPPER, FUSION],
-  startRanks: { t_snare: 1 },
+  skills: legacySkills([...MARKSMAN, ...SKIRMISH, ...TRAPPER, ...FUSION]),
+  comboHits: 3,
   skin: SABLE_SKIN,
 };

@@ -1,6 +1,5 @@
 import { ACHIEVEMENTS } from "../constants/achievements";
 import { HERO_PRICES } from "../constants/heroUnlocks";
-import { RELIC_IDS } from "../constants/relics";
 import { SHOP_ITEMS } from "../constants/shop";
 import { UNLOCKS } from "../constants/unlocks";
 import { loadBest } from "../services/bestScore";
@@ -12,13 +11,14 @@ import type { MetaSave, ShopItem, SkillId } from "../types/shop";
 import type { Stats } from "../types/stats";
 import { parseMeta } from "../utils/metaSave";
 import { metaStats, metaTools, nextPrice } from "../utils/shop";
+import { ALL_SKILLS } from "../utils/skills";
 
 /** The one owner of progress kept between runs: the coin bank and what the shop sold. Every change is saved here. */
 const meta: MetaSave = parseMeta(loadMeta(), SHOP_ITEMS, {
   heroes: Object.keys(HERO_PRICES),
   achievements: ACHIEVEMENTS.map((a) => a.id),
   unlocks: UNLOCKS.map((u) => u.id),
-  relics: RELIC_IDS,
+  skills: ALL_SKILLS.map((s) => s.id),
 });
 // a save from before achievements kept its best wave under its own key: count it toward the wave goals
 meta.tracked.best.wave = Math.max(meta.tracked.best.wave, loadBest());
@@ -94,7 +94,7 @@ export function saveAchievements(tracked: TrackedStats, earned: readonly string[
   changed();
 }
 
-/** the relics, charms and slots found, and the relics whose recipe is known, as last saved */
+/** the charms and slots found, and the skills whose recipe is known, as last saved */
 export const savedUnlocks = (): readonly string[] => meta.unlocks;
 export const savedRecipes = (): readonly string[] => meta.recipes;
 

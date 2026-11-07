@@ -213,7 +213,7 @@ body {
   background: var(--gold-glint);
   box-shadow: 0 0 10px var(--gold);
 }
-/* the relics and charms held: small slots under the bars */
+/* the skills and charms held: small slots under the bars */
 .build-strip {
   display: flex;
   flex-wrap: wrap;

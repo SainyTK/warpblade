@@ -8,8 +8,8 @@ import { CHARM_ICONS } from "./charms";
 import { EVOLUTION_ICONS } from "./evolution";
 import { FUSION_ICONS } from "./fusion";
 import { HULDA_ICONS } from "./hulda/index";
+import { KAEL_SKILL_ICONS } from "./kael/index";
 import { PHANTOM_ICONS } from "./phantom";
-import { RELIC_ICONS } from "./relics/index";
 import { SABLE_ICONS } from "./sable/index";
 import { SHOP_ICONS } from "./shop";
 import { YSRA_ICONS } from "./ysra/index";
@@ -28,8 +28,8 @@ const ICONS: Record<string, (s: SpriteCanvas) => void> = {
   ...YSRA_ICONS,
   ...SABLE_ICONS,
   ...HULDA_ICONS,
-  ...RELIC_ICONS,
   ...CHARM_ICONS,
+  ...KAEL_SKILL_ICONS,
 };
 const canvas = new SpriteCanvas(SIZE, SIZE, 0, 0);
 const cache = new Map<string, string>();
@@ -47,3 +47,6 @@ export function iconUrl(id: string): string {
   cache.set(id, url);
   return url;
 }
+
+/** a skill's icon id: its evolved form's own (`<id>_evo`) when evolved and drawn, otherwise the skill's */
+export const skillIcon = (id: string, evolved: boolean): string => (evolved && `${id}_evo` in ICONS ? `${id}_evo` : id);

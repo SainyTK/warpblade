@@ -1,7 +1,7 @@
 import type { HeroColors } from "../constants/palette";
 import type { Color, Ramp } from "./color";
 import type { KitId } from "./kit";
-import type { SkillBranch, UltimateId } from "./skill";
+import type { SkillDef, UltimateId } from "./skill";
 import type { Stats } from "./stats";
 
 /** how a hero looks on the shared rig: colours, head rows, weapon and the light of their blows */
@@ -35,13 +35,14 @@ export interface CharacterDef {
   blurb: string;
   /** the hero's colour in the menus, as a CSS colour: the frame and the stat bars on the hero screen */
   accent: string;
-  /** the weakest ultimate, learned like any other, and replaced by a stronger one */
+  /** the ultimate on U from the start of a run; an ultimate skill upgrades or replaces it */
   special: UltimateId;
   base: Stats;
   /** added per level after the first */
   growth: Partial<Stats>;
-  branches: readonly SkillBranch[];
-  /** skills already learned when a run starts */
-  startRanks?: Readonly<Record<string, number>>;
+  /** the hero's 20 skills (docs/skill-design.md) */
+  skills: readonly SkillDef[];
+  /** blows in the ground string for the whole run */
+  comboHits: number;
   skin: HeroSkin;
 }

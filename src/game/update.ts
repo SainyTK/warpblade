@@ -15,7 +15,7 @@ import { agePresses } from "./input";
 import { updateDanger } from "./lowHealth";
 import { updateNumbers } from "./numbers";
 import { updatePickups } from "./pickups";
-import { updateRelics } from "./relics";
+import { updateSkills } from "./skills/runtime";
 import { game, hero, lights, particles, rng } from "./state";
 import { updateWaves } from "./waves";
 import { updateXpOrbs } from "./xpOrbs";
@@ -84,7 +84,7 @@ export function update(dt: number): void {
     updateFlow(dt);
     regenVigor(dt);
   });
-  updateRelics(world);
+  updateSkills(world);
   updateEnemies(world);
   updatePickups(dt);
   updateChests(dt);
