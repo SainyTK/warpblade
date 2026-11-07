@@ -1,18 +1,18 @@
 import { CHARM_STEP, CHARMS } from "../constants/charms";
 import { FLOW, PICK_TOOLS, RELIC_MAX_LEVEL } from "../constants/growth";
 import { RELICS } from "../constants/relics";
-import type { Build, BuildStats, CharmId, RelicId, RelicLevel } from "../types/build";
+import type { Build, BuildStats, CharmId, PickToolKey, RelicId, RelicLevel } from "../types/build";
 
-/** a build with nothing in it, and the run's pick tools */
-export function freshBuild(): Build {
+/** a build with nothing in it, and the run's pick tools with what the shop adds */
+export function freshBuild(extra: Partial<Record<PickToolKey, number>> = {}): Build {
   return {
     relics: {},
     charms: {},
     evolved: [],
     banished: [],
-    rerolls: PICK_TOOLS.rerolls,
-    skips: PICK_TOOLS.skips,
-    banishes: PICK_TOOLS.banishes,
+    rerolls: PICK_TOOLS.rerolls + (extra.rerolls ?? 0),
+    skips: PICK_TOOLS.skips + (extra.skips ?? 0),
+    banishes: PICK_TOOLS.banishes + (extra.banishes ?? 0),
     flow: 0,
     flowIdle: 0,
     heroHits: 0,

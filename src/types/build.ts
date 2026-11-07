@@ -100,6 +100,9 @@ export interface RelicBehavior {
   drawBack?(memory: RelicMemory, level: number, evolved: boolean): void;
 }
 
+/** the pick tools a run counts: what is left of each */
+export type PickToolKey = "rerolls" | "skips" | "banishes";
+
 /** one hero's relics and charms in a run */
 export interface Build {
   relics: Partial<Record<RelicId, number>>;

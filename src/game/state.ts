@@ -3,7 +3,7 @@ import { HERO_START_X, STAND } from "../constants/hero";
 import { GROUND, SEED } from "../constants/stage";
 import { Lights } from "../engine/lights";
 import { Particles } from "../engine/particles";
-import { metaBonus } from "../store/meta";
+import { metaBonus, metaToolBonus } from "../store/meta";
 import type { CharacterDef } from "../types/character";
 import type { GameState } from "../types/game";
 import type { Hero } from "../types/hero";
@@ -73,7 +73,7 @@ export function freshProgress(): Progress {
     ultimate: null,
     comboLimit: stringLimit(character.kit, 1, perks),
     airLimit: airLimit({}),
-    build: freshBuild(),
+    build: freshBuild(metaToolBonus()),
   };
 }
 export const progress: Progress = freshProgress();

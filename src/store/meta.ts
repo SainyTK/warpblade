@@ -5,10 +5,11 @@ import { loadBest } from "../services/bestScore";
 import { loadMeta, saveMeta } from "../services/metaStorage";
 import { isPlaytestSession } from "../services/playtestStart";
 import type { TrackedStats } from "../types/achievement";
+import type { PickToolKey } from "../types/build";
 import type { MetaSave, ShopItem, SkillId } from "../types/shop";
 import type { Stats } from "../types/stats";
 import { parseMeta } from "../utils/metaSave";
-import { metaStats, nextPrice } from "../utils/shop";
+import { metaStats, metaTools, nextPrice } from "../utils/shop";
 
 /** The one owner of progress kept between runs: the coin bank and what the shop sold. Every change is saved here. */
 const meta: MetaSave = parseMeta(loadMeta(), SHOP_ITEMS, {
@@ -31,6 +32,8 @@ export const ownedLevel = (id: string): number => (worn ?? meta.owned)[id] ?? 0;
 export const ownsSkill = (id: SkillId): boolean => ownedLevel(id) > 0;
 /** the stat bonus every run starts with */
 export const metaBonus = (): Partial<Stats> => metaStats(SHOP_ITEMS, worn ?? meta.owned);
+/** the extra pick tools every run starts with */
+export const metaToolBonus = (): Partial<Record<PickToolKey, number>> => metaTools(SHOP_ITEMS, worn ?? meta.owned);
 /** what this browser bought, for a co-op host to play its hero with */
 export const ownedItems = (): Record<string, number> => ({ ...meta.owned });
 
