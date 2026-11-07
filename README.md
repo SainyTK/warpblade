@@ -69,11 +69,11 @@ His crystal sword can be thrown, and wherever it lands, he follows.
   When a run ends, cleared or lost, its coins go to the bank and a result screen shows the wave reached and the coins earned.
   The Shop on the start menu sells stats in levels (HP, attack, ability power, MP, crit, move speed, stamina) and four skills bought once: Lodestone, Warp Shock, Head Start and Last Light.
   Everything bought applies to every run, on top of the level-up picks, and is saved in this browser.
-- **Achievements and hero unlocks.** Twenty-two achievements track goals across runs: waves reached, a clear of wave 10 with each hero, foes slain, long combos, perfect dodges, evolutions, coins banked and the Rift Warden.
+- **Achievements and hero unlocks.** Twenty-four achievements track goals across runs: waves reached, a clear of wave 10 with each hero, foes slain, long combos, perfect dodges, evolutions, three foes felled by Orrin's swing kicks in one swing, coins banked and the Rift Warden.
   Most pay coins, a few stay hidden as ??? until an earlier one is earned, and a small banner slides down when one is earned without stopping play.
   The Achievements page on the start menu shows what each one asks, with a progress bar for those that count up, and the result screen names those a run earned.
   Kael and Ysra are free; every newer hero is unlocked with coins on the hero screen, each one costing more than the last (see [docs/achievements.md](docs/achievements.md)).
-- **Four heroes.** Start opens the hero screen, a roster of hero tiles over one panel for the hero in focus. Kael throws his crystal sword and appears where it lands; he is balanced and learns every ability from picks.
+- **Five heroes.** Start opens the hero screen, a roster of hero tiles over one panel for the hero in focus. Kael throws his crystal sword and appears where it lands; he is balanced and learns every ability from picks.
   Ysra, the ember lancer, is a flame-temple guard who woke when the braziers lit again.
   She shares Kael's rig and plays nothing like him: tougher and slower, with one heavy jump and no dash.
   Her glaive string pokes far and pierces every foe in the line, holding `J` winds a lunge, and up or down with `J` hooks a foe up or drags it in.
@@ -91,7 +91,13 @@ His crystal sword can be thrown, and wherever it lands, he follows.
   Bigger foes are crushed in both hands instead, and in the air `K` is Skyfall Grab, which catches a flier and drives it into the floor.
   `L` is an armoured Bull Rush, `I` a Bellow that drags foes in, and fliers down to her hands, for MP, and `O` a taunt.
   Her blows, grabs and throws fill Grit, four iron plates under stamina; a blow on a full plate breaks it for half the damage and never stops her (see [docs/hulda-design.md](docs/hulda-design.md)).
-  Sable and Hulda start locked and are bought with coins.
+  Orrin, the chain dancer, fights at the length of a brass hook on a steel chain and never runs, dashes or blocks.
+  `J` lashes a three-blow string of Lash, Rising Arc and Full Circle that hits hardest in the last 18 px of the chain, with a knee for a foe right against him and a Hanging Arc in the air.
+  `K` throws the hook: into a warp crystal, under a high platform or into the air itself, where a small rift tear holds it for 1.2 s, and he swings under it as a pendulum while `K` is held.
+  `A` and `D` pump the swing, `L` reels the chain in to swing faster, and letting go of `K` flings him along the arc; a hook on a foe zips him to it for a flying kick, and a hook on a platform too low to swing under pulls him up onto it.
+  On the floor `L` is Backline, a yank backwards, and `I` spins Whirlwall, a chain ring that breaks foe shots, or hurls Anchor Pin to root a foe, for MP.
+  Speed in the air fills Momentum, a bar under stamina that makes every blow hit up to 40% harder, and it drains when he stands still (see [docs/orrin-design.md](docs/orrin-design.md)).
+  Sable, Hulda and Orrin start locked and are bought with coins.
   The hero behind the menu changes as you look through the cards, and the choice is saved in this browser.
 - **A 30-wave stage in five eras.** The sky and the foes change as the waves go on, and the scene dissolves into the next era between waves.
   Waves 1 to 5 are a sunlit day with Thornbacks, Glimmer Moths and the Oakheart.
@@ -147,7 +153,7 @@ Buttons dim while their action lacks MP or stamina or waits on a cooldown, and p
 The page holds still under your fingers: double taps, pinches and long presses never zoom, select text or open a menu.
 
 The game opens on a start menu with Start, Co-op, Shop, Achievements, Controls and Options.
-Start opens the hero screen: pick Kael, Ysra, Sable or Hulda with `A` `D` or the arrows and begin with `J` or `Enter`.
+Start opens the hero screen: pick Kael, Ysra, Sable, Hulda or Orrin with `A` `D` or the arrows and begin with `J` or `Enter`.
 In the Shop, pick an item once to see "Buy?" and again to buy it; a locked hero on the hero screen asks the same way before it is unlocked.
 When a run ends, the start menu opens on its result, with Continue and Shop.
 Pausing adds Resume, Restart run and Quit run, and freezes the game until you resume.
@@ -252,6 +258,7 @@ docs/
   ysra-design.md   Ysra's kit, Heat and rites, and how she differs from Kael
   sable-design.md  Sable's kit, the quiver and reload, and her balance check
   hulda-design.md  Hulda's kit, Grit and plates, grabs and throws, and her balance check
+  orrin-design.md  Orrin's kit, the hook and the pendulum swing, Momentum, and his balance check
   motion-standard.md the rules every hero's animation follows
   pick-pacing.md   when picks come, how long the skill pool lasts and Second Wind after it
   multiplayer.md   co-op rooms: who runs the game, what crosses the network, downs, picks, coins and what is left for later
