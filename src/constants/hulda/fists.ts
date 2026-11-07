@@ -39,7 +39,17 @@ const RISING = [0, -44, 14, -6] as const;
 export const FISTS: Record<FistBlow, FistSpec> = {
   jab: { dur: frame(8), hit: frame(3), box: STRAIGHT, step: 0, stepAt: 0, power: 0.55, kx: 40, ky: -10, stagger: 0.3 },
   cross: { dur: frame(9), hit: frame(3), box: STRAIGHT, step: 0, stepAt: 0, power: 0.65, kx: 60, ky: -10 },
-  hook: { dur: frame(11), hit: frame(5), box: STRAIGHT, step: 0, stepAt: 0, power: 0.85, kx: 90, ky: -20, stagger: 0.6 },
+  hook: {
+    dur: frame(11),
+    hit: frame(5),
+    box: STRAIGHT,
+    step: 0,
+    stepAt: 0,
+    power: 0.85,
+    kx: 90,
+    ky: -20,
+    stagger: 0.6,
+  },
   haymaker: {
     dur: frame(16),
     hit: frame(8),
@@ -70,7 +80,17 @@ export const FISTS: Record<FistBlow, FistSpec> = {
     heavy: true,
   },
   /** one of the knuckle rush's punches; `KNUCKLES` sets how many and how fast */
-  knuckles: { dur: frame(3), hit: frame(1), box: STRAIGHT, step: 30, stepAt: 0, power: 0.35, kx: 30, ky: -5, stagger: 0.3 },
+  knuckles: {
+    dur: frame(3),
+    hit: frame(1),
+    box: STRAIGHT,
+    step: 30,
+    stepAt: 0,
+    power: 0.35,
+    kx: 30,
+    ky: -5,
+    stagger: 0.3,
+  },
 };
 
 /** the string's order from the start */
