@@ -396,7 +396,7 @@ Summon, easy, auto. Casting may call a crystal familiar that fires homing shards
 | --- | --- | --- |
 | 1 | A cast may call a crystal familiar that fires shards. | chance 0.4, life 6, every 1, power 0.8, pierce 1, most 1, cooldown 1 |
 | 2 | Chance 40% to 70%. | chance 0.7 |
-| 3 | New: a cast fires a volley of 3 from a familiar out. | volley 3 |
+| 3 | New: a cast fires a volley of 2 from each familiar out. | volley 2 |
 | 4 | New: shards pierce a foe. | pierce 2 |
 | 5 | Familiars stay 10 s and fire faster. | life 10, every 0.7 |
 | 6 | New: two familiars at once. | most 2 |
@@ -517,7 +517,7 @@ Changes made from the review (all "must" items and the useful "suggest" items):
 | `k_rift` | Level 8 2.4 AD per layer a second; one more new property (slow); Rift Collapse's layers cannot spread or collapse again within a second. |
 | `k_static` | Overload strikes at most 8 foes, at most every 1.5 s; one more new property (a charged foe that dies arcs); lightning 2 AP from level 6. |
 | `k_echo` | Copies follow G2; level 8 repeat 220%; one more new property (its blows break wind-ups). |
-| `k_familiar` | Rebuilt from the framework's reference summon (which was far too strong): a cast trigger, AP shards, 1 s cooldown; Crystal Choir fires every 0.8 s and arcs to 1 foe. |
+| `k_familiar` | Rebuilt from the framework's reference summon (which was far too strong): a cast trigger, AP shards, 1 s cooldown, volleys of 2; Crystal Choir fires every 0.8 s, arcs to 1 foe and adds no volleys. |
 | `k_mirror` | Strike 6 AD at level 1, 50 AD at level 8; one knight at a time, a new perfect dodge refreshes it; 1 s cooldown; Perfect Reflection 150 AD to the attacker and 40 AD within 120 px; one more new property (the knight stuns). |
 | `k_edges` | Level 8 power 2.5 times. |
 | `k_legion` | Level 8 power 2 times; one more new property (the last cut launches). |
