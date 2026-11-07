@@ -376,9 +376,11 @@
   border: 1px solid var(--key);
   background: var(--night);
 }
-/* Touch: a tap learns at once, so no card is shown as selected. */
+/* Touch: a tap learns at once, so no card is shown as selected, and no key is shown. */
 @media (pointer: coarse) {
-  .pick-key {
+  .pick-key,
+  .pick-tool kbd,
+  .banish-hint .keys {
     display: none;
   }
   .pick.selected {

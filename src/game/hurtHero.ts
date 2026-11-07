@@ -1,6 +1,7 @@
 import { HURT_INVULN } from "../constants/combat";
 import { SPARKS } from "../constants/palette";
 import { sfx } from "../services/audio";
+import { hurtFlow } from "./build/flow";
 import { coop, heroSlot } from "./coopHooks";
 import { createImpact } from "./effects/impact";
 import { heroGuarded } from "./hero/guard";
@@ -18,6 +19,7 @@ export function hurtHero(dmg: number, fromX: number): void {
   }
   const taken = Math.round(dmg * kit().hurtScale());
   hero.hp = Math.max(0, hero.hp - taken);
+  if (taken > 0) hurtFlow();
   hero.inv = HURT_INVULN;
   lastLight();
   // armour the kit wears takes the blow: the HP is gone, but no knockback, no hurt state and no lost combo

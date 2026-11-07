@@ -6,7 +6,7 @@ import type { Build, CharmId, RelicId } from "../../types/build";
 import { el } from "../dom";
 import { iconUrl } from "./icons/iconImage";
 
-/** one held relic or charm: its icon and level, gold once evolved */
+/** one held relic or charm: its icon and level; an evolved relic shows its evolved icon in gold instead of a level */
 function slot(kind: "relic" | "charm", icon: string, label: string, level: number, evolved: boolean): HTMLElement {
   const box = el("span", "build-slot");
   box.dataset.kind = kind;
@@ -17,7 +17,8 @@ function slot(kind: "relic" | "charm", icon: string, label: string, level: numbe
   img.width = 16;
   img.height = 16;
   img.src = iconUrl(icon);
-  box.append(img, el("b", "", evolved ? "EVO" : String(level)));
+  box.append(img);
+  if (!evolved) box.append(el("b", "", String(level)));
   return box;
 }
 
@@ -36,8 +37,8 @@ function row(kind: "relic" | "charm", held: HTMLElement[], slots: number): HTMLE
   return line;
 }
 
-/** the relics and charms a build holds, in the slots the player has unlocked, filled and free */
-export function buildSlots(build: Build): HTMLElement[] {
+/** the relics and the charms a build holds, one slot each */
+function held(build: Build): { relics: HTMLElement[]; charms: HTMLElement[] } {
   const relics = (Object.entries(build.relics) as [RelicId, number][]).map(([id, level]) => {
     const evolved = build.evolved.includes(id);
     const def = RELICS[id];
@@ -47,7 +48,19 @@ export function buildSlots(build: Build): HTMLElement[] {
   const charms = (Object.entries(build.charms) as [CharmId, number][]).map(([id, level]) =>
     slot("charm", `charm_${id}`, `${CHARMS[id].name}, level ${level}`, level, false),
   );
+  return { relics, charms };
+}
+
+/** the relics and charms a build holds, in the slots the player has unlocked, filled and free */
+export function buildSlots(build: Build): HTMLElement[] {
+  const { relics, charms } = held(build);
   return [row("relic", relics, relicSlots()), row("charm", charms, charmSlots())];
+}
+
+/** only the relics and charms held, a row each, for the HUD */
+export function heldSlots(build: Build): HTMLElement[] {
+  const { relics, charms } = held(build);
+  return [row("relic", relics, 0), row("charm", charms, 0)].filter((line) => line.childElementCount);
 }
 
 /** a key that changes whenever the slots would show something else */

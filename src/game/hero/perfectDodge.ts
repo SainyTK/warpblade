@@ -1,5 +1,7 @@
 import { PERFECT, RIPOSTE, STAMINA } from "../../constants/combat";
+import { FLOW } from "../../constants/growth";
 import { sfx } from "../../services/audio";
+import { addFlow } from "../build/flow";
 import { cue } from "../cue";
 import { createFloorRing } from "../effects/floorRing";
 import { feat } from "../feat";
@@ -14,6 +16,7 @@ export function perfectDodge(): void {
   if (h.state !== "dash" || h.st > PERFECT.window || h.perfectUsed) return;
   h.perfectUsed = true;
   feat({ kind: "perfect" });
+  addFlow(FLOW.perfectDodge);
   game.slow = PERFECT.slow;
   h.mp = Math.min(progress.stats.mp, h.mp + PERFECT.mp);
   refundStamina(STAMINA.perfectRefund);
