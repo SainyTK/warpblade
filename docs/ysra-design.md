@@ -9,17 +9,16 @@ Every rule below is meant to make her play differently from Kael from the first 
 
 | Key | Kael | Ysra |
 | --- | --- | --- |
-| A / D | Walk, double tap to run | Walk, a steady stride with no run. Double tap charges only with Warpath |
+| A / D | Walk, double tap to run | Walk, a steady stride with no run. With Warpath, walking on breaks into a charge (the run key charges at once) |
 | W | Jump, double jump with a pick | One heavy jump, lower than Kael's. No double jump ever |
-| J | Sword string picked by the situation | Glaive string: long pokes that pierce every foe in the line |
+| J | Sword string picked by the situation | Glaive string of three blows that pierce every foe in the line; the middle blow is picked by the foes around her |
 | Hold J | Nothing | Heft: wind a lunge while standing still, release to lunge forward through the line |
-| Up + J | Launcher (pick) | Skyhook: a rising hook that lifts the foe (from the start) |
-| Down + J | Low sweep (pick) | Ground lash: a low sweep that hooks foes and drags them in (from the start) |
-| J in the air | Air string | One wide air sweep, then nothing until she lands |
+| J in the air | Air string | One wide air sweep (two with Vault Strike), then nothing until she lands |
+| J in a vault | | The vault crash, glaive driven down where she lands |
 | K | Warp throw (pick, MP) | Pole vault on the floor: plants the glaive and arcs over foes, also straight out of a brace or a backstep. In the air: dive, glaive first, down at an angle |
 | L | Dash, untouchable, stamina | Hold to brace: blocks blows from the front, each block costs stamina. A press just before a blow is a parry. L with a side held away is a short backstep |
 | I | Cast the selected element (MP) | Call the selected rite, paid with Heat |
-| O | Switch element | Switch rite |
+| O | Switch element | Switch rite: Flare and Cinder Lash from the start, more with skills |
 | U | Ultimate | Ultimate (shared charge and MP rules) |
 
 ## Heat
@@ -32,9 +31,9 @@ MP only pays for her ultimate.
 
 ## Starting kit
 
-At level 1 she has the full glaive string (three blows, growing with level like Kael's combo limit), Heft lunge, Skyhook, Ground lash, the air sweep, the vault, the dive, the brace, the parry, the backstep and the Flare rite.
-Her picks change and extend these.
-Kael starts with almost nothing and learns abilities; Ysra starts with a full toolkit and learns how to bend it.
+She starts with the whole base kit in `docs/skills/ysra.md`: the three-blow glaive string, the heft lunge, the air sweep, the vault and its crash, the dive, the brace, the parry, the backstep, and two rites, Flare and Cinder Lash.
+No blow needs a direction held: the string picks the twirl, the haft ram, the sky thrust, the overhead cleave or the ground lash from the foes around her.
+Her 20 skills change and extend these.
 
 ## Numbers to start from
 
@@ -45,9 +44,9 @@ Kael starts with almost nothing and learns abilities; Ysra starts with a full to
 - The vault starts out of a brace (K while L is held) and out of a backstep (K in the hop vaults on landing, K in the skid vaults at once), toward a held side. Backstep then K with the side away held is her escape: a hop back, a turn and a vault away.
 - Every vault crosses from the pose shown last into the plant over two frames, before the stab.
 - Dive: once per airtime, about 45 degrees down, impact burst around the landing point.
-- Brace: blocks blows from the front for 12 stamina each (Firm Stance cuts that). A blow in the first 0.12 s of a press is a parry: no cost, 25 stamina back, the attacker staggered 1 s, a short slow motion, and with Counter Thrust the next J is the counter.
+- Brace: blocks blows from the front for 12 stamina each (Counter Thrust cuts that). A blow in the first 0.12 s of a press is a parry: no cost, 25 stamina back, the attacker staggered 1 s, a short slow motion, and with Counter Thrust the next J is the counter.
 - Backstep: 36 px back in the hop (about 53 px with the skid), low hop, 20 stamina, untouchable for 0.15 s.
-- Flare 30 Heat, Flame Pillar 40, Brazier 50. Flare also heals 5% of her max HP, her one heal without a pick.
+- Flare 30 Heat, Cinder Lash 25 (3 times ability power along 70 px ahead, dragging the nearest foe 30 px in). Flare also heals 5% of her max HP, her one heal without a skill.
 
 ## Mobility and survival pass (feedback #9)
 
@@ -67,27 +66,18 @@ Measured in the real game with real key presses, foes cleared, at 120 Hz steps s
 A longer vault (86 px) was tried and dropped: the skilled bot vaults toward foes, overshot them and fell earlier.
 Her escape covers less ground than Kael's dash and run, and she is untouchable for longer while she does it.
 
-## Skill tree
+## Skills
 
-The tree data lives in `src/constants/characters/ysra/`: Lance (early), Bastion (steady), Pyre (late) and Fusion.
-Texts on the nodes are the promise to the player; the code must do what they say.
-Pyre Wave is her special from level 3, as before; Sunspear, Phoenix Dive and Volcanic Rift replace it.
-
-Her Evolution branch (`evolution.ts`) holds Pyre Colonnade, the evolved Flame Pillar.
-It is offered from level 13 once Flame Pillar is learned and Kindling is at 3/3, as the gold first card of a wave pick.
-The cast keeps the rite's Heat cost (40, or 28 with Hearthfire), its clip and its targeting.
-A ringed sigil glows under the target with two smaller sigils 30 px either side.
-The main pillar bursts at 6.6 times ability power (base 5.5), and the two flank pillars burst 0.12 s later at 3.85 times, 64 px high, with a lighter shake.
-A cast deals 6.6 times ability power to a lone foe and up to 14.3 times across a crowd.
-Hearthfire still heals once per cast, and Hot Iron's free pillar stays a single base pillar.
-The numbers live in `PYRE_COLONNADE` in `src/constants/evolutions.ts`; every pillar is drawn by `castFlamePillar` with its own shape.
+Her 20 skills, their levels, evolutions and balance are in `docs/skills/ysra.md`; their data is in `src/constants/characters/ysra/skills/`.
 
 ## Code layout
 
 - `src/types/kit.ts`: the HeroKit interface. The shared loop calls `kit()` from `src/game/hero/kits.ts`.
 - `src/game/hero/ysra/kit.ts`: Ysra's kit, composed of three parts. Each part owns its files:
-  - Glaive (`ysra/glaive/`, `types/ysra/glaive.ts`, `constants/clips/ysra/glaive.ts`, tree `lance.ts`).
-  - Stance (`ysra/stance/`, `types/ysra/stance.ts`, `constants/clips/ysra/stance.ts`, tree `bastion.ts`): jump, vault, dive, brace, parry, backstep, Warpath, and her free-state look (idle, walk, run, jump, fall, hurt).
-  - Pyre (`ysra/pyre/`, `constants/clips/ysra/pyre.ts`, tree `pyre.ts`): Heat, rites, and the HUD and control texts for Ysra.
+  - Glaive (`ysra/glaive/`, `types/ysra/glaive.ts`, `constants/clips/ysra/glaive.ts`): the string, heft, lunge, counter, hook and windmill.
+  - Stance (`ysra/stance/`, `types/ysra/stance.ts`, `constants/clips/ysra/stance.ts`): jump, vault, dive, brace, parry, backstep, Warpath, and her free-state look (idle, walk, run, jump, fall, hurt).
+  - Pyre (`ysra/pyre/`, `constants/clips/ysra/pyre.ts`): Heat, rites, and Ashen Wake's fire.
+- Kit-level helpers every part may use: `buffs.ts` (Riposte, crits, glow, the full-bar bonus, Overheat's reach, Sunflock's guard) and `pin.ts`.
 - `src/game/hero/ysra/events.ts`: parts talk through events (`strike`, `block`, `parry`, `lungeEnd`, `land`, `travel`) so no part imports another, except `counterReady` and `spendCounter` from the stance part.
-- Ultimates in `src/game/ultimates/`, icons in `src/ui/skills/icons/ysra.ts`.
+- Skills read their level through `skillValues`; skill code that acts on its own (summons, Scorch, Brand, the death burst, Fire Wheel) is in `src/game/skills/ysra/`, and her kit emits `block`, `spin`, `altar` and `land` as skill events (`src/types/ysra/index.ts`).
+- Ultimates in `src/game/ultimates/`, icons in `src/ui/skills/icons/ysra/`.
