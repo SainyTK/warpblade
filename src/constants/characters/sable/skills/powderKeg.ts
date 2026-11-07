@@ -129,12 +129,12 @@ export const POWDER_KEG: SkillDef = {
       },
     },
     {
-      text: "A primed blast hits harder and gives back MP.",
+      text: "A far bigger blast; a primed one gives back MP.",
       values: {
         mp: 30,
         cooldown: 6,
         wait: 6,
-        blast: 8,
+        blast: 20,
         radius: 35,
         primedMul: 1.6,
         launch: 180,
@@ -156,7 +156,7 @@ export const POWDER_KEG: SkillDef = {
         mp: 30,
         cooldown: 6,
         wait: 6,
-        blast: 8,
+        blast: 12,
         radius: 70,
         primedMul: 1.6,
         launch: 180,

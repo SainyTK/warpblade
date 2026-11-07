@@ -15,7 +15,7 @@ const levels = grow({ power: 1.2, stun: 0, cone: 0, slam: 0, ground: 0, reach: 0
   ["Hooked flyers cannot fly for a while.", { power: 5, slam: 4, ground: 4 }],
   ["Hook damage +20%.", { power: 6, slam: 5 }],
   ["Reaches higher and lifts you with it.", { power: 7.5, slam: 6.5, reach: 70, rise: 20 }],
-  ["Hook and slam much harder.", { power: 9, slam: 9 }],
+  ["Hook and slam much harder.", { power: 14, slam: 14 }],
 ]);
 
 /** Skyhook: her answer to flyers; the sky thrust hooks them down where the glaive reaches */

@@ -12,7 +12,7 @@ const LEVELS = levelRows([
   { text: "New: each new layer also opens on the nearest foe.", values: { spread: 1 } },
   { text: "Up to 5 layers; each drains far more.", values: { max: 5, per: 1.2 } },
   { text: "New: each layer makes the foe take +6% damage.", values: { taken: 0.06 } },
-  { text: "Each layer drains 1.2 to 2.4 a second.", values: { per: 2.4 } },
+  { text: "Each layer drains 1.2 to 8 a second.", values: { per: 8 } },
 ]);
 
 export const RIFT_WOUND: SkillDef = {

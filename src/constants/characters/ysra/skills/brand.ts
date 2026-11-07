@@ -15,7 +15,7 @@ const levels = grow({ duration: 4, perSecond: 0.8, max: 4, parry: 2, slow: 0, bl
   ["Blocks brand too.", { perSecond: 1.8, block: 1 }],
   ["The brand spreads on a parry.", { perSecond: 2.3, spread: 30 }],
   ["Hotter brand, more stacks.", { perSecond: 3, max: 8 }],
-  ["Branded foes take more from you; a parry brands deeper.", { perSecond: 10, taken: 0.2, parry: 4 }],
+  ["Branded foes take more from you; a parry brands deeper.", { perSecond: 25, taken: 0.2, parry: 4 }],
 ]);
 
 /** Ember Brand: a parried foe is branded, and every blow on it feeds the brand */

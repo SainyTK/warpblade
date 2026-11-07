@@ -145,7 +145,7 @@ export const PERFECT_RHYTHM: SkillDef = {
     {
       text: "Primed bolts always crit, and a perfect reload quickens your shots.",
       values: {
-        bonus: 8,
+        bonus: 9,
         primed: 8,
         window: 0.04,
         pierce: 1,
@@ -169,7 +169,7 @@ export const PERFECT_RHYTHM: SkillDef = {
     row: {
       text: "A perfect reload primes the whole quiver.",
       values: {
-        bonus: 8,
+        bonus: 9,
         primed: 99,
         window: 0.04,
         pierce: 1,

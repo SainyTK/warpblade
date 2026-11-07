@@ -15,7 +15,7 @@ const levels = grow({ least: 60, time: 6, rate: 1.2, burst: 0.9, radius: 16, fee
   ["Overheat ends in a nova.", { nova: 8 }],
   ["Your blows reach further.", { reach: 16 }],
   ["Kills extend Overheat.", { perKill: 0.5 }],
-  ["Much faster and hotter.", { rate: 1.6, burst: 3 }],
+  ["Much faster and hotter.", { rate: 1.6, burst: 5 }],
 ]);
 
 /** Overheat: bank Heat, then burn it in a short frenzy */

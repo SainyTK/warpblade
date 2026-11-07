@@ -12,7 +12,7 @@ const LEVELS = levelRows([
   { text: "New: meteors throw foes up.", values: { launch: 1 } },
   { text: "New: 3 more meteors fall on the densest group.", values: { late: 3 } },
   { text: "Recharge 20 to 15 s.", values: { cooldown: 15 } },
-  { text: "Power 1.3 to 12x; the floor burns longer.", values: { power: 12, floor: 5 } },
+  { text: "Power 1.3 to 14x; the floor burns longer.", values: { power: 14, floor: 5 } },
 ]);
 
 export const STARFALL: SkillDef = {
