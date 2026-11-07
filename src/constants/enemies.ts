@@ -44,5 +44,5 @@ export const ENEMY_HITS = {
   wardenDive: 22,
 } as const;
 
-/** resting minions closer than `gap` art pixels part at up to `speed` pixels a second, kept `wall` pixels from the edges */
-export const SEPARATION = { gap: 14, speed: 40, wall: 8 } as const;
+/** minions standing their ground closer than `gap` art pixels part at up to `speed` pixels a second, kept `wall` pixels from the edges */
+export const SEPARATION = { gap: 20, speed: 60, wall: 8 } as const;

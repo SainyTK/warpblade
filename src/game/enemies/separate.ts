@@ -5,18 +5,18 @@ import { clamp } from "../../utils/math";
 import { game } from "../state";
 import { kindOf } from "./kinds";
 
-/** a minion free to be nudged: in its rest state, on its feet or wings, not held by any status */
+/** a minion free to be nudged: resting, winding up or recovering, on its feet or wings, not held by any status */
 const nudgeable = (e: Enemy): boolean =>
   e.rank === "minion" &&
   e.hp > 0 &&
-  e.state === kindOf(e.type).rest &&
+  (e.state === kindOf(e.type).rest || e.state === "wind" || e.state === "recover") &&
   !e.air &&
   e.stun <= 0 &&
   e.pinned <= 0 &&
   e.frozen <= 0;
 
 /**
- * Resting minions that crowd one spot ease apart, walkers along the floor and flyers in the air, so a crowd stays
+ * Minions standing their ground that crowd one spot ease apart, walkers along the floor and flyers in the air, so a crowd stays
  * readable as single foes. Sorted by x, each one only meets the few close enough to touch.
  */
 export function separateFoes(dt: number): void {
