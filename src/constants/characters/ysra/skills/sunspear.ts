@@ -32,6 +32,6 @@ export const SUNSPEAR: SkillDef = {
     partner: "y_heft",
     name: "Solar Lance",
     text: "Three spears in a fan each way, every one ending in a pillar of fire; about fifteen times Pyre Wave a cast.",
-    row: evolved(levels, "A fan of spears and pillars.", { power: 6, cooldown: 10, fan: 3, pillars: 1 }),
+    row: evolved(levels, "A fan of spears and pillars.", { power: 4, cooldown: 10, fan: 3, pillars: 1 }),
   },
 };

@@ -22,7 +22,7 @@ const TRAIL_STEP = 12;
 const LEAP = { reach: 50, rise: 260, gravity: 700 } as const;
 /** the burst when it ends, and the Magma Drake's walk behind her and its breath */
 const BURST_RADIUS = 30;
-const DRAKE = { behind: 18, every: 1, flame: 0.35 } as const;
+const DRAKE = { behind: 30, every: 1, flame: 0.35 } as const;
 
 interface Salamander {
   x: number;

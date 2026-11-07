@@ -2,7 +2,6 @@ import { BACKSTEP, VAULT } from "../../../../constants/ysra/stance";
 import { pressAge, take } from "../../../input";
 import { skillValues } from "../../../skills/query";
 import { hero } from "../../../state";
-import { setState } from "../../actions";
 import { startMove } from "../../combo";
 import type { YsraPart } from "../part";
 import { backstepGuarded, runBackstep, startBackstep } from "./backstep";
@@ -63,16 +62,9 @@ export function spendCounter(): void {
   stance.counter = 0;
 }
 
-/**
- * J in a vault's flight is the crash. With Vault Strike's second air sweep, while she still rises the vault lets go so
- * the glaive's air sweep takes the press.
- */
+/** J in a vault's flight is the crash, at any point of the flight */
 function vaultStrike(): void {
   if (!vaultFlying() || pressAge("attack") < 0) return;
-  if ((skillValues("y_vault").sweeps ?? 1) >= 2 && hero.vy < 0) {
-    setState("fall");
-    return;
-  }
   take("attack");
   stance.landed = false;
   startMove("vaultCrash");

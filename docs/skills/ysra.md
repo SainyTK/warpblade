@@ -445,7 +445,7 @@ Ultimate, timed, U (replaces Pyre Wave). A thrown spear down a line; aim it.
 | 7 | rain 1 | Spears rain down. |
 | 8 | power 3.2, cooldown 12 | Much harder, back sooner. |
 
-Evolution, Solar Lance (with `y_heft`): three spears in a fan each way at 6 times the charge's power, each ending in a Flame Pillar, cooldown 10 s; at charge 3 about 42 AD a foe from the spear plus the pillar, about 9 times Pyre Wave on one foe and well past 15 times on a crowd.
+Evolution, Solar Lance (with `y_heft`): three spears in a fan each way at 4 times the charge's power, each ending in a Flame Pillar, cooldown 10 s; at charge 3 about 28 AD a foe from the spear plus the pillar, about 6 times Pyre Wave on one foe and about 15 times on a crowd (measured: one cast about 25 times Pyre Wave's in a wave 6 crowd before this trim).
 Built in `ultimates/sunspear.ts`; the cast sets the hero's ultimate cooldown from the row.
 
 ### `y_rift` Volcanic Rift

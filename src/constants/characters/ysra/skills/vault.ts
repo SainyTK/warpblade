@@ -22,7 +22,7 @@ const levels = grow(
   },
   [
     ["The vault crash hits harder and wider.", { crash: 2.4, reach: 44 }],
-    ["Air string +1, and sweeps can follow a vault.", { crash: 2.6, sweeps: 2 }],
+    ["Air string +1: two air sweeps before you land.", { crash: 2.6, sweeps: 2 }],
     ["Landings send a shockwave along the floor.", { crash: 2.8, quake: 0.5, quakeRange: 96 }],
     ["Crash damage +7%, a stronger wave.", { crash: 3, quake: 0.6 }],
     ["Vault again in the air.", { crash: 3.2, airVault: 1 }],

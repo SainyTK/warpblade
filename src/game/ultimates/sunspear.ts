@@ -102,8 +102,7 @@ function spearCast(level: number, v: Readonly<Record<string, number>>) {
         const floor = surfaceBelow(x, y - 4);
         emberBurst(x, y, BURST, floor);
         if (loud) burnLine(x0, x, y);
-        if (loud && v.pillars)
-          game.fx.push(castFlamePillar(x, floor, { ...FLAME_PILLAR, power: v.power * 2 }, "ultimate"));
+        if (loud && v.pillars) game.fx.push(castFlamePillar(x, floor, { ...FLAME_PILLAR, power: v.power }, "ultimate"));
         for (const e of game.enemies) {
           if (struck.has(e) || e.hp <= 0) continue;
           const [cx, cy] = enemyCenter(e);
