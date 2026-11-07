@@ -217,15 +217,15 @@ body {
 .build-strip {
   display: flex;
   flex-wrap: wrap;
-  gap: 4px 8px;
+  gap: 4px 6px;
   margin-top: 2px;
 }
 .build-strip .build-row {
-  gap: 3px;
+  gap: 2px;
 }
 .build-strip .build-slot {
-  width: 20px;
-  height: 20px;
+  width: 18px;
+  height: 18px;
   border-width: 1px;
   box-shadow: none;
 }
