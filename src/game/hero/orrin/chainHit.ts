@@ -45,6 +45,7 @@ export function strikeFoe(e: Enemy, tip: boolean, s: ChainStrike): HitResult {
     stun: spec.stun,
     heavy: tip && !!spec.breaks,
     melee: true,
+    curls: tip,
     sureCrit: tip && !!s.tipCrit,
     stagger: spec.stagger ?? COMBO.stagger,
   });

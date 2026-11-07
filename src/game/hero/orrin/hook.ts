@@ -10,8 +10,8 @@ import { isHeld } from "../../input";
 import { emitSkillEvent } from "../../skills/events";
 import { skillValues } from "../../skills/query";
 import { touches } from "../../skills/targets";
-import { game, hero, particles, rng } from "../../state";
-import { isFree, setState } from "../actions";
+import { game, hero, particles, progress, rng } from "../../state";
+import { isFree, setState, settle } from "../actions";
 import { refuseDash } from "../stamina";
 import { giveArcBack } from "./airArc";
 import { startClimb } from "./climb";
@@ -21,6 +21,8 @@ import { startSwing, swingRoom } from "./swing";
 import { startZip } from "./zip";
 
 const PUMP = "o_pump";
+/** the fastest he falls while a hook flies from the air */
+const AIR_THROW_FALL = 60;
 /** the hook bites the air this close to the stage's edges */
 const EDGE = 4;
 
@@ -99,9 +101,21 @@ function meets(x: number, y: number): { kind: LatchKind; at: Point; foe: Enemy |
   return null;
 }
 
+/** the hook hit the stage's edge too close to swing from: the chain comes back, and the throw costs nothing */
+function fallShort(): void {
+  const h = hero;
+  orrin.flight = null;
+  h.stamina = Math.min(progress.stats.stamina, h.stamina + hookCost());
+  if (!h.ground) orrin.hooks = Math.min(hooksPerAir(), orrin.hooks + 1);
+  sfx.clink();
+  settle();
+}
+
 /** the throw: two frames of wind-up, then the hook flies out link by link until it meets something or its range */
 export function runHookThrow(dt: number): void {
   const h = hero;
+  // in the air the throw hangs him: a fall is slowed to a drift while the hook flies
+  if (!h.ground && h.vy > AIR_THROW_FALL) h.vy = AIR_THROW_FALL;
   if (h.st < HOOK.windup) return;
   if (!orrin.flight) {
     const from = throwHand();
@@ -120,8 +134,9 @@ export function runHookThrow(dt: number): void {
     const y = f.from.y + f.dy * flown;
     const hit = meets(x, y);
     if (hit) return latch(hit.kind, hit.at, hit.foe);
-    // the stage's edge stops the hook: it bites the air there
-    if (x <= EDGE || x >= W - EDGE || y <= EDGE) return latch("air", { x, y }, null);
+    // the stage's edge stops the hook: it bites the air there, or falls short when that leaves too short a chain
+    if (x <= EDGE || x >= W - EDGE || y <= EDGE)
+      return flown < HOOK.minLength ? fallShort() : latch("air", { x, y }, null);
   }
   // replaced whole, never changed in place, so each co-op seat keeps its own
   orrin.flight = { ...f, flown };

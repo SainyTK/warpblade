@@ -27,6 +27,9 @@ import { dropChain, endSwingOnFloor, letGo, runSwing } from "./swing";
 import { endWhirl, runWhirl } from "./whirlwall";
 import { runZip } from "./zip";
 
+/** gravity while a hook flies from the air */
+const AIR_THROW_GRAVITY = 0.3;
+
 /** the side held now */
 const heldSide = (): number => (isHeld("right") ? 1 : 0) - (isHeld("left") ? 1 : 0);
 
@@ -157,7 +160,12 @@ export const ORRIN_KIT: HeroKit = {
   hurtScale: () => 1,
   damageScale: momentumScale,
   drivesMotion: () => DRIVEN.has(hero.state) || (hero.state === "hookThrow" && !hero.ground),
-  gravityScale: () => (WEIGHTLESS.has(hero.state) ? 0 : 1),
+  gravityScale: () => {
+    if (WEIGHTLESS.has(hero.state)) return 0;
+    // a hook thrown in the air hangs him for the moment it flies, so a second bite can catch before he lands
+    if (hero.state === "hookThrow" && !hero.ground) return AIR_THROW_GRAVITY;
+    return 1;
+  },
   drawBack: drawOrrinBack,
   draw: drawOrrin,
   reset: () => {

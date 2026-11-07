@@ -75,8 +75,8 @@ The inner part of the chain deals the inner damage.
 Each blow carries on within 0.35 s of the last.
 Base rate: tip-and-inner mix at about 70 percent landed is about 2.0 AD/s on one foe and 4 AD/s on a crowd of six, before Momentum.
 For comparison, Hulda does 1.8 and 3.6.
-Light blows are blocked by guarding husks as for every hero.
-Full Circle breaks a guard on a tip hit.
+Inner hits are blocked by guarding foes as for every hero.
+A tip hit curls round the guard and lands, and Full Circle's tip also breaks the guard.
 
 Animation beats:
 - Lash: the arm draws back for 3 frames with the chain trailing behind him. On frame 5 the chain snaps straight and a 3-frame brass smear follows the tip. For 4 frames the chain falls back into a loop at the forearm.
@@ -324,6 +324,13 @@ Changes made while building, each for the same goal as the design:
 - Undertow's harder fling lasts until he lets go of the swing that follows the Backline.
 - Full Swing counts foes his swing kicks defeat between one latch and letting go, as the best-of-run stat `swingKills`.
 - Every skill's own hits carry its id as the damage source, so the end-of-run screen lists them by name.
+- Tip hits curl round a guard (`curls` in the shared hit options).
+  Walking thornbacks and husks hold their guard toward him, so without this his Lash tips at 46 to 64 px landed as blocks in ordinary fights.
+  Inner hits are still blocked, so spacing keeps its point.
+- A hook thrown in the air hangs him while it flies (gravity 0.3, falling at most 60 px/s), so a second air bite can catch before he lands.
+- A hook that reaches the stage's edge less than 24 px from his hand falls short: no swing, and its stamina and air hook come back.
+- Anchor Pin holds every foe where it is pinned: the shared foe step keeps a pinned foe's place whatever its own step asks for, and a pinned thornback cannot start or keep a charge.
+- The sash is drawn as a short strip of cloth from the belt that tapers, folds and splits at the end, and it takes half the scarf's breeze.
 
 ## Balance check
 

@@ -39,6 +39,7 @@ export function animateHero(dt: number): void {
   const wind = -h.face * (22 + Math.sin(game.t * 3.1) * 18) - h.vx * 1.4;
   const [kx, ky] = skin.sash ? sashAnchor(p) : scarfAnchor(p);
   const [tx, ty] = tailAnchor(p);
-  scarf.step(h.x + h.face * kx, h.y + ky, dt, wind);
+  // a sash at the belt hangs heavier than a scarf at the neck: it takes half the breeze
+  scarf.step(h.x + h.face * kx, h.y + ky, dt, skin.sash ? wind * 0.5 : wind);
   ponytail.step(h.x + h.face * tx, h.y + ty, dt, wind * 0.6);
 }
