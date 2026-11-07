@@ -13,7 +13,7 @@ import { enemyCenter } from "../enemies/enemy";
 import { game, lights, particles, rng } from "../state";
 import { hitStop, shake, surfaceBelow } from "../world";
 
-type Path = [number, number][];
+export type Path = [number, number][];
 /** seconds from the crackling mark to the strike */
 export const STRIKE = 0.18;
 const LIFE = 0.34;
@@ -37,7 +37,7 @@ export interface LightningOptions {
 }
 
 /** a jagged line by midpoint displacement */
-function boltPath(x0: number, y0: number, x1: number, y1: number, displacement: number, depth: number): Path {
+export function boltPath(x0: number, y0: number, x1: number, y1: number, displacement: number, depth: number): Path {
   let pts: Path = [
     [x0, y0],
     [x1, y1],
@@ -58,7 +58,7 @@ function boltPath(x0: number, y0: number, x1: number, y1: number, displacement: 
   return pts;
 }
 
-function strokeBolt(pts: Path, thick: boolean, k: number): void {
+export function strokeBolt(pts: Path, thick: boolean, k: number): void {
   const V = PAL.volt;
   for (let i = 1; i < pts.length; i++) {
     const [ax, ay] = pts[i - 1];
