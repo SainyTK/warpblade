@@ -18,7 +18,7 @@ function breakPlate(): void {
   hulda.quiet = 0;
   hulda.safe = GRIT.safe;
   hulda.flinch = GRIT.flinch;
-  hero.inv = GRIT.safe;
+  hero.inv = Math.max(hero.inv, GRIT.safe);
   game.fx.push(createPlateShards(hero.x - hero.face * 2, hero.y - 22, hero.face));
   hitStop(GRIT.stop);
   sfx.block();
@@ -32,7 +32,7 @@ function breakPlate(): void {
 export function steadfast(): boolean {
   if (rushing() || windingUp()) {
     gainGrit(GRIT.hurt);
-    hero.inv = GRIT.safe;
+    hero.inv = Math.max(hero.inv, GRIT.safe);
     hitStop(GRIT.stop);
     sfx.block();
     return true;
