@@ -6,11 +6,14 @@ import type { Enemy } from "../../../types/enemy";
 import { PF, PK } from "../../../types/particle";
 import { WHITE } from "../../../utils/color";
 import { clamp } from "../../../utils/math";
+import { dealDamage } from "../../damage";
 import { enemyCenter } from "../../enemies/enemy";
 import { objectMemory, rememberPerSeat } from "../../seatMemory";
-import { game, particles, rng } from "../../state";
+import { emitSkillEvent } from "../../skills/events";
+import { game, particles, progress, rng } from "../../state";
 import { dust } from "../../world";
-import { createEmberShot } from "./emberShot";
+import { burstEmbers } from "./emberBurst";
+import { createEmberShot, type EmberSpec } from "./emberShot";
 import { crackle, riteSound } from "./riteSound";
 
 /** seconds the flame takes to die down at the end */
@@ -18,37 +21,59 @@ const FADE = 0.5;
 /** seconds the bowl flares after it spits */
 const KICK = 0.14;
 
+/** a brazier's level: seconds it stands, seconds between shots, embers a shot, each ember's strength, its aura's power
+ *  (0 none), its burst when it burns out (0 none), and Forge Altar's seconds between salamanders (0 none) */
+export interface BrazierSpec {
+  life: number;
+  every: number;
+  shots: number;
+  ember: EmberSpec;
+  aura: number;
+  burst: number;
+  altar: number;
+}
+
 interface Brazier {
   x: number;
   y: number;
   t: number;
   cd: number;
   kick: number;
+  aura: number;
+  altar: number;
+  spec: BrazierSpec;
 }
 /** the brazier standing now; a new one puts the old one out */
 const placed: { standing: Brazier | null } = { standing: null };
 rememberPerSeat(objectMemory(placed));
 
-function nearestFoe(b: Brazier): Enemy | null {
-  let best: Enemy | null = null;
-  let bestD: number = BRAZIER.seek;
-  for (const e of game.enemies) {
-    if (e.hp <= 0) continue;
+/** the foes within reach of the bowl, nearest first */
+function foesNear(b: Brazier): Enemy[] {
+  const near = (e: Enemy) => {
     const [ex, ey] = enemyCenter(e);
-    const d = Math.hypot(ex - b.x, ey - b.y);
-    if (d < bestD) {
-      best = e;
-      bestD = d;
-    }
-  }
-  return best;
+    return Math.hypot(ex - b.x, ey - b.y);
+  };
+  return game.enemies.filter((e) => e.hp > 0 && near(e) < BRAZIER.seek).sort((a, c) => near(a) - near(c));
 }
 
-function spit(b: Brazier, e: Enemy): void {
-  const [ex, ey] = enemyCenter(e);
-  game.fx.push(createEmberShot(b.x, b.y - 13, ex, ey));
+/** one shot: an ember at each of the nearest foes, as many as the level spits at once */
+function spit(b: Brazier): boolean {
+  const foes = foesNear(b);
+  if (!foes.length) return false;
+  for (let i = 0; i < b.spec.shots; i++) {
+    const [ex, ey] = enemyCenter(foes[i % foes.length]);
+    game.fx.push(createEmberShot(b.x + (i - (b.spec.shots - 1) / 2) * 2, b.y - 13, ex, ey, b.spec.ember));
+  }
   b.kick = KICK;
   crackle(0.9);
+  return true;
+}
+
+/** the bowl burns the foes standing at it */
+function scorchNear(b: Brazier): void {
+  for (const e of game.enemies)
+    if (e.hp > 0 && Math.abs(e.x - b.x) < BRAZIER.aura && Math.abs(enemyCenter(e)[1] - b.y) < 20)
+      dealDamage(e, progress.stats.ap * b.spec.aura, { dot: true, source: b.spec.ember.source });
 }
 
 /** iron legs and bowl, coals, and flame that leaps when it spits */
@@ -76,10 +101,19 @@ function drawBrazier(b: Brazier, flame: number): void {
   glow(x, y - 14, 22, RITE_RAMP[4], 0.45 * flame * leap);
 }
 
-/** Brazier: an iron bowl of fire planted on the floor that spits embers at the nearest foe, one brazier at a time */
-export function plantBrazier(x: number, floor: number): Effect {
-  if (placed.standing) placed.standing.t = Math.max(placed.standing.t, BRAZIER.life);
-  const b: Brazier = { x, y: floor, t: 0, cd: 0.3, kick: 0 };
+/** it burns out: Brazier's burst throws fire around the bowl */
+function burnOut(b: Brazier): void {
+  if (b.spec.burst)
+    burstEmbers(b.x, b.y - 10, progress.stats.ap * b.spec.burst, BRAZIER.burstRadius, 2, b.spec.ember.source);
+}
+
+/**
+ * Brazier: an iron bowl of fire planted on the floor that spits embers at the nearest foes, one brazier at a time; as
+ * Forge Altar it lets out a salamander every few seconds through the `altar` skill event.
+ */
+export function plantBrazier(x: number, floor: number, spec: BrazierSpec): Effect {
+  if (placed.standing) placed.standing.t = Math.max(placed.standing.t, placed.standing.spec.life);
+  const b: Brazier = { x, y: floor, t: 0, cd: 0.3, kick: 0, aura: 0, altar: spec.altar, spec };
   placed.standing = b;
   dust(x, floor, 6);
   riteSound(BRAZIER.pitch);
@@ -88,23 +122,31 @@ export function plantBrazier(x: number, floor: number): Effect {
       b.t += dt;
       b.kick = Math.max(0, b.kick - dt);
       b.cd -= dt;
-      const lit = b.t < BRAZIER.life;
-      if (lit && b.cd <= 0) {
-        const foe = nearestFoe(b);
-        if (foe) spit(b, foe);
-        b.cd = foe ? BRAZIER.every : 0.1;
+      const life = spec.life;
+      const lit = b.t < life;
+      if (lit && b.cd <= 0) b.cd = spit(b) ? spec.every : 0.1;
+      b.aura -= dt;
+      if (lit && spec.aura && b.aura <= 0) {
+        b.aura = BRAZIER.auraTick;
+        scorchNear(b);
       }
+      b.altar -= dt;
+      if (lit && spec.altar && b.altar <= 0) {
+        b.altar = spec.altar;
+        emitSkillEvent({ type: "altar", x: b.x, y: b.y });
+      }
+      if (!lit && b.t - dt < life) burnOut(b);
       if (rng.chance(lit ? 0.35 : 0.15))
         particles.spawn(PK.FIRE, b.x + rng.range(-2, 2), b.y - 14, rng.range(-4, 4), -rng.range(10, 24), 0.3, {
           col: 0,
           size: rng.range(0.8, 1.4),
           flag: lit ? 0 : PF.SMOKES,
         });
-      const over = b.t >= BRAZIER.life + FADE;
+      const over = b.t >= life + FADE;
       if (over && placed.standing === b) placed.standing = null;
       return !over;
     },
-    draw: () => drawBrazier(b, clamp((BRAZIER.life + FADE - b.t) / FADE)),
+    draw: () => drawBrazier(b, clamp((spec.life + FADE - b.t) / FADE)),
   };
 }
 

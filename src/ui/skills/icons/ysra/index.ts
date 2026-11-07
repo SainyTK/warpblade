@@ -1,13 +1,17 @@
 import type { SpriteCanvas } from "../../../../engine/sprite";
-import { BASTION_ICONS } from "./bastion";
-import { YSRA_FUSION_ICONS } from "./fusion";
-import { LANCE_ICONS } from "./lance";
-import { PYRE_ICONS } from "./pyre";
+import { BURN_ICONS } from "./burns";
+import { GLAIVE_ICONS } from "./glaive";
+import { RITE_ICONS } from "./rites";
+import { STANCE_ICONS } from "./stance";
+import { SUMMON_ICONS } from "./summons";
+import { ULTIMATE_ICONS } from "./ultimates";
 
-/** Ysra's skill icons: glaives, ember flames, the brace and the vault */
+/** Ysra's skill icons and their evolved forms (`<id>_evo`): glaives, ember flames, pillars, shades and beasts of fire */
 export const YSRA_ICONS: Record<string, (s: SpriteCanvas) => void> = {
-  ...LANCE_ICONS,
-  ...BASTION_ICONS,
-  ...PYRE_ICONS,
-  ...YSRA_FUSION_ICONS,
+  ...GLAIVE_ICONS,
+  ...STANCE_ICONS,
+  ...RITE_ICONS,
+  ...BURN_ICONS,
+  ...SUMMON_ICONS,
+  ...ULTIMATE_ICONS,
 };

@@ -1,8 +1,8 @@
-import { glow, line, place, px } from "../../../../../engine/frame";
-import type { Effect } from "../../../../../types/effect";
-import type { Enemy } from "../../../../../types/enemy";
-import { enemyBox } from "../../../../enemies/enemy";
-import { skin } from "../../../skin";
+import { glow, line, place, px } from "../../../engine/frame";
+import type { Effect } from "../../../types/effect";
+import type { Enemy } from "../../../types/enemy";
+import { enemyBox } from "../../enemies/enemy";
+import { skin } from "../skin";
 
 /** Impale's mark: a burning stake of glaive-light driven slanting through a pinned foe into the floor, guttering out
  *  as the pin wears off */

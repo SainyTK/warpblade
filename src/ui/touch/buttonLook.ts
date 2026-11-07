@@ -14,7 +14,7 @@ import { castCost, knowsElement, selectedElement, spellRecharge } from "../../ga
 import { canPayDash } from "../../game/hero/stamina";
 import { canAffordUlt, ultRecharge } from "../../game/hero/ultimate";
 import { warpCooldown, warpCost } from "../../game/hero/warp";
-import { heat, overheatLeft, overheatReady } from "../../game/hero/ysra/pyre/heat";
+import { heat, overheatLeft } from "../../game/hero/ysra/pyre/heat";
 import { riteCost, selectedRite } from "../../game/hero/ysra/pyre/riteChoice";
 import { hasPerk } from "../../game/progress";
 import { character, hero } from "../../game/state";
@@ -100,7 +100,6 @@ function ysraLook(spec: TouchButtonSpec, look: ButtonLook): void {
       break;
     case "cast": {
       const rite = selectedRite();
-      if (overheatReady()) break;
       look.ready = !!rite && overheatLeft() <= 0 && heat() >= riteCost(rite);
       look.cooldown = rite ? Math.max(0, 1 - heat() / riteCost(rite)) : 1;
       break;

@@ -3,7 +3,6 @@ import { HERO_SOURCES } from "../constants/damageSources";
 import { ENEMIES } from "../constants/enemies";
 import { FLOW } from "../constants/growth";
 import { SPARKS } from "../constants/palette";
-import { PIN } from "../constants/ysra/glaive";
 import { sfx } from "../services/audio";
 import type { SourceId } from "../types/build";
 import type { Enemy } from "../types/enemy";
@@ -124,7 +123,6 @@ export function dealDamage(e: Enemy, base: number, o: HitOptions = {}): HitResul
     dmg *= DAMAGE.crit;
     tag = "crit";
   }
-  if (e.pinned > 0) dmg *= PIN.taken;
   dmg *= markMultiplier(e);
   dmg *= kit().damageScale?.() ?? 1;
   const shattering = hasPerk("shatter") && o.melee && o.heavy && e.frozen > 0;

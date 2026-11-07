@@ -8,14 +8,16 @@ export const stance: StanceMemory = {
   vaultNext: false,
   entry: null,
   airVaults: 0,
-  dived: false,
+  dives: 0,
   face: 1,
   faceBefore: 1,
   turned: Number.POSITIVE_INFINITY,
   braced: 0,
   counter: 0,
   shield: 0,
+  walked: 0,
   shouldered: new Map(),
+  carried: [],
 };
 
 /** a fresh run: nothing planted, primed or shouldered */
@@ -26,13 +28,15 @@ export function resetStance(): void {
     vaultNext: false,
     entry: null,
     airVaults: 0,
-    dived: false,
+    dives: 0,
     face: 1,
     faceBefore: 1,
     turned: Number.POSITIVE_INFINITY,
     braced: 0,
     counter: 0,
     shield: 0,
+    walked: 0,
+    carried: [],
   });
   stance.shouldered.clear();
 }

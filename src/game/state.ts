@@ -2,6 +2,7 @@ import { KAEL } from "../constants/characters/kael";
 import { AIR_STRING } from "../constants/combo";
 import { HERO_START_X, STAND } from "../constants/hero";
 import { GROUND, SEED } from "../constants/stage";
+import { ULT_COOLDOWN } from "../constants/ultimate";
 import { Lights } from "../engine/lights";
 import { Particles } from "../engine/particles";
 import { metaBonus, metaToolBonus } from "../store/meta";
@@ -121,6 +122,7 @@ export function freshHero(stats: Progress["stats"]): Hero {
     sinceDash: 9,
     warpCd: 0,
     ultCd: 0,
+    ultFull: ULT_COOLDOWN,
     spellCd: { fire: 0, ice: 0, volt: 0 },
     spellCdFull: { fire: 1, ice: 1, volt: 1 },
     castElement: "fire",

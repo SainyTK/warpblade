@@ -47,7 +47,7 @@ export const TOUCH_TEXT: Record<KitId, Record<TouchButtonAction, TouchButtonText
   ysra: {
     attack: {
       label: "Attack",
-      hint: "Glaive string that pierces the whole line. Hold to wind a lunge, let go to lunge. Push the stick up for a skyhook, down for a ground lash",
+      hint: "Glaive string of three blows that pierce the whole line. Hold to wind a lunge, let go to lunge. In a vault, crash down",
       accent: "#ffae48",
     },
     up: {
@@ -144,8 +144,8 @@ export const STICK_DIRECTIONS: Record<KitId, readonly StickDirectionSpec[]> = {
   ysra: [
     { direction: "side", label: "Walk" },
     { direction: "far side", label: "Charge, once Warpath is learned" },
-    { direction: "up", label: "Jump. With Attack, a skyhook" },
-    { direction: "down", label: "With Attack, a ground lash. With Jump, drop through a ledge" },
+    { direction: "up", label: "Jump" },
+    { direction: "down", label: "With Jump, drop through a ledge" },
   ],
   sable: [
     { direction: "side", label: "Walk" },

@@ -1,5 +1,4 @@
 import type { Stats } from "./stats";
-import type { YsraPerk } from "./ysra";
 
 /** Kael's abilities */
 export type KaelPerk =
@@ -40,7 +39,7 @@ export type KaelPerk =
   | "glacierBloom"
   | "thunderhead";
 /** Abilities a skill node switches on. */
-export type Perk = KaelPerk | YsraPerk;
+export type Perk = KaelPerk;
 export type UltimateId =
   | "crystalNova"
   | "pyreWave"
@@ -49,7 +48,6 @@ export type UltimateId =
   | "starfall"
   | "tempest"
   | "sunspear"
-  | "phoenixDive"
   | "volcanicRift"
   | "boltStorm"
   | "deadeye"

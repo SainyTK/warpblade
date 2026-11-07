@@ -4,7 +4,7 @@ import { ELEMENTS } from "../../constants/combat";
 import { ELEMENT_COLOR } from "../../constants/palette";
 import { RITES } from "../../constants/ysra/rites";
 import { knownAbilities, selectedAbility } from "../../game/hero/hulda/abilities";
-import { selectedRite } from "../../game/hero/ysra/pyre/riteChoice";
+import { knowsRite, selectedRite } from "../../game/hero/ysra/pyre/riteChoice";
 import { character, game } from "../../game/state";
 import type { Color } from "../../types/color";
 import type { HuldaAbility } from "../../types/hulda";
@@ -16,14 +16,21 @@ import { hex } from "../../utils/color";
  *  those she knows, or nothing to select for Sable */
 export type TouchSelection =
   | { kit: "kael"; element: Element }
-  | { kit: "ysra"; rite: RiteId }
+  | { kit: "ysra"; rite: RiteId; known: string }
   | { kit: "sable" }
   | { kit: "hulda"; ability: HuldaAbility; known: readonly HuldaAbility[] };
 
 export function touchSelection(): TouchSelection {
   if (character.kit === "sable") return { kit: "sable" };
   if (character.kit === "hulda") return { kit: "hulda", ability: selectedAbility(), known: knownAbilities() };
-  if (character.kit === "ysra") return { kit: "ysra", rite: (selectedRite() ?? RITES[0]).id };
+  if (character.kit === "ysra")
+    return {
+      kit: "ysra",
+      rite: (selectedRite() ?? RITES[0]).id,
+      known: RITES.filter(knowsRite)
+        .map((r) => r.id)
+        .join(),
+    };
   return { kit: "kael", element: ELEMENTS[game.spell] };
 }
 
@@ -31,7 +38,7 @@ export function touchSelection(): TouchSelection {
 export function selectionKey(s: TouchSelection): string {
   if (s.kit === "sable") return s.kit;
   if (s.kit === "hulda") return `hulda:${s.ability}:${s.known.join()}`;
-  return s.kit === "ysra" ? `ysra:${s.rite}` : `kael:${s.element}`;
+  return s.kit === "ysra" ? `ysra:${s.rite}:${s.known}` : `kael:${s.element}`;
 }
 
 /** the rim colour of buttons without an accent of their own */
