@@ -71,9 +71,10 @@ async function qa(night: Night, round: number): Promise<QaReport> {
 const blocking = (report: QaReport) => report.issues.some((i) => i.severity !== "minor") || report.verdict === "fail";
 
 /** build the plan, then let QA check it: up to MAX_FIX_ROUNDS rounds of fixes for blocking issues,
-    and one polish round for the minor issues of a passing patch, each followed by another QA round */
-export async function buildAndVerify(night: Night): Promise<{ dev: DevReport; qa: QaReport }> {
-  let { report, session } = await develop(night, null, "build", null);
+    and one polish round for the minor issues of a passing patch, each followed by another QA round.
+    A resumed night with the developer's report saved starts at QA; its fix rounds start a new developer session */
+export async function buildAndVerify(night: Night, built: DevReport | null): Promise<{ dev: DevReport; qa: QaReport }> {
+  let { report, session } = built ? { report: built, session: null } : await develop(night, null, "build", null);
   let fixes = 0;
   let polished = false;
   for (let round = 0; ; round++) {

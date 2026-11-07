@@ -1,5 +1,5 @@
 import { spawn } from "node:child_process";
-import { createWriteStream } from "node:fs";
+import { createWriteStream, existsSync, statSync } from "node:fs";
 import { readFile } from "node:fs/promises";
 import { CLAUDE_BIN, MODEL } from "../constants.ts";
 import type { AgentResult, RoleConfig } from "../types.ts";
@@ -39,24 +39,34 @@ interface ResultEvent {
   total_cost_usd?: number;
 }
 
-/** the final result event of a stream-json log */
-async function readResult(logPath: string): Promise<ResultEvent | null> {
-  const lines = (await readFile(logPath, "utf8")).split("\n");
-  for (const line of lines.reverse()) {
+/** the result events this call wrote to a stream-json log, from the byte where it started */
+async function readResults(logPath: string, from: number): Promise<ResultEvent[]> {
+  const results: ResultEvent[] = [];
+  for (const line of (await readFile(logPath)).subarray(from).toString("utf8").split("\n")) {
     if (!line.startsWith("{")) continue;
     try {
       const event = JSON.parse(line) as { type?: string };
-      if (event.type === "result") return event as ResultEvent;
+      if (event.type === "result") results.push(event as ResultEvent);
     } catch {
       // a partial line from a killed run
     }
   }
-  return null;
+  return results;
+}
+
+/** a session can wake up after its answer and end on a plain-text reply,
+    so the answer is the latest structured one and the cost is the session's last total */
+function answerOf(results: ResultEvent[]): { answer: ResultEvent; costUsd: number } | null {
+  const answer = results.findLast((r) => !r.is_error && r.structured_output !== undefined);
+  if (!answer) return null;
+  return { answer, costUsd: results.at(-1)?.total_cost_usd ?? answer.total_cost_usd ?? 0 };
 }
 
 /** run one headless Claude Code agent to its structured answer, or throw */
 export function runAgent<T>(call: AgentCall): Promise<AgentResult<T>> {
   return new Promise((resolve, reject) => {
+    // the log is appended to, so only what this call writes is read back
+    const from = existsSync(call.logPath) ? statSync(call.logPath).size : 0;
     const log = createWriteStream(call.logPath, { flags: "a" });
     const child = spawn(CLAUDE_BIN, argsFor(call), {
       cwd: call.cwd,
@@ -76,15 +86,15 @@ export function runAgent<T>(call: AgentCall): Promise<AgentResult<T>> {
       clearTimeout(timer);
       // read the log only after every byte has reached the file
       await new Promise<void>((done) => log.end(done));
-      const result = await readResult(call.logPath);
-      if (!result || result.is_error || result.structured_output === undefined) {
+      const found = answerOf(await readResults(call.logPath, from));
+      if (!found) {
         reject(new Error(`${call.name} ended without a structured answer (exit ${code}); see ${call.logPath}`));
         return;
       }
       resolve({
-        sessionId: result.session_id ?? null,
-        output: result.structured_output as T,
-        costUsd: result.total_cost_usd ?? 0,
+        sessionId: found.answer.session_id ?? null,
+        output: found.answer.structured_output as T,
+        costUsd: found.costUsd,
       });
     });
   });
