@@ -111,19 +111,21 @@ export function runHookThrow(dt: number): void {
   }
   const f = orrin.flight;
   const end = Math.min(f.range, f.flown + HOOK.speed * dt);
-  // the hook flies from where it left the hand, which keeps up with him as he falls
-  const from = throwHand();
-  while (f.flown < end) {
-    f.flown = Math.min(end, f.flown + 3);
-    const x = from.x + f.dx * f.flown;
-    const y = from.y + f.dy * f.flown;
+  // the hook flies along a fixed line in the world from where it left the hand, so a throw on the rise or the fall
+  // goes where it was aimed; the chain is drawn from the hand to the head
+  let flown = f.flown;
+  while (flown < end) {
+    flown = Math.min(end, flown + 3);
+    const x = f.from.x + f.dx * flown;
+    const y = f.from.y + f.dy * flown;
     const hit = meets(x, y);
     if (hit) return latch(hit.kind, hit.at, hit.foe);
     // the stage's edge stops the hook: it bites the air there
     if (x <= EDGE || x >= W - EDGE || y <= EDGE) return latch("air", { x, y }, null);
   }
-  orrin.flight = { ...f, from };
-  if (f.flown >= f.range) latch("air", { x: from.x + f.dx * f.range, y: from.y + f.dy * f.range }, null);
+  // replaced whole, never changed in place, so each co-op seat keeps its own
+  orrin.flight = { ...f, flown };
+  if (flown >= f.range) latch("air", { x: f.from.x + f.dx * f.range, y: f.from.y + f.dy * f.range }, null);
 }
 
 /** the hook head right now while it flies, world pixels, for drawing */

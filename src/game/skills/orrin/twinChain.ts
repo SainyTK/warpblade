@@ -11,7 +11,7 @@ import { createSlash } from "../../effects/slash";
 import { enemyBox, enemyCenter } from "../../enemies/enemy";
 import { orrin } from "../../hero/orrin/memory";
 import { gainMomentum } from "../../hero/orrin/momentum";
-import { inSpan } from "../../hero/orrin/reach";
+import { bearingFrom, inSpan } from "../../hero/orrin/reach";
 import { game, hero, progress } from "../../state";
 import { boxHit, hitStop, shake } from "../../world";
 import { skillValues, withCharms } from "../query";
@@ -73,21 +73,6 @@ const BEAT_TIME: Record<Beat, number> = {
   fade: BEAT.fade,
 };
 
-/** a foe's bearing from a shade's shoulder: the angle as the shade faces, and its body's near and far edge */
-function bearingFrom(s: Shade, e: Enemy): { angle: number; near: number; far: number } {
-  const ox = s.x;
-  const oy = s.y - SHOULDER_Y;
-  const [x0, y0, x1, y1] = enemyBox(e);
-  const nx = clamp(ox, x0, x1) - ox;
-  const ny = clamp(oy, y0, y1) - oy;
-  const far = Math.hypot(
-    Math.max(Math.abs(x0 - ox), Math.abs(x1 - ox)),
-    Math.max(Math.abs(y0 - oy), Math.abs(y1 - oy)),
-  );
-  const [cx, cy] = enemyCenter(e);
-  return { angle: Math.atan2(cy - oy, (cx - ox) * s.face), near: Math.hypot(nx, ny), far };
-}
-
 /** one foe met by the shade's chain, at the tip or closer in */
 function strikeFoe(s: Shade, e: Enemy, spec: ChainBlowSpec, tip: boolean, scale: number): void {
   const v = skillValues(ID);
@@ -111,8 +96,8 @@ function sweep(s: Shade, spec: ChainBlowSpec, s0: number, s1: number): void {
   let tips = 0;
   for (const e of game.enemies) {
     if (e.hp <= 0 || s.struck.includes(e)) continue;
-    const b = bearingFrom(s, e);
-    if (b.near > reach || b.far < spec.inner || !inSpan(b.angle, s0, s1)) continue;
+    const b = bearingFrom(s.x, s.y - SHOULDER_Y, s.face, e);
+    if (b.near > reach || b.far < spec.inner || !inSpan(b, s0, s1)) continue;
     s.struck.push(e);
     const tip = b.near >= reach - TIP_BAND;
     if (tip) tips++;

@@ -20,6 +20,8 @@ export function castGrandPendulum(level: number): void {
   const cy = Math.min(h.y - G.height - HOOK.grip, floor - 2 - HOOK.grip - G.radius);
   orrin.ultAt = { x: h.x, y: Math.max(12, cy) };
   orrin.ultLevel = level;
+  // the arc's bottom clears the floor under him; he passes through the platforms on the way, as his swing does
+  orrin.ultRadius = Math.min(G.radius, Math.max(30, floor - 2 - HOOK.grip - orrin.ultAt.y));
   orrinHost.passed = [];
   setState("pendulum");
 }
@@ -34,7 +36,7 @@ function swingAngle(u: number): number {
 
 /** where his feet are at a swing angle, round the tear */
 function onArc(at: Point, angle: number): Point {
-  const r = Math.min(G.radius, Math.max(30, surfaceBelow(at.x, at.y) - 2 - HOOK.grip - at.y));
+  const r = orrin.ultRadius;
   return { x: at.x + Math.sin(angle) * r * hero.face, y: at.y + Math.cos(angle) * r + HOOK.grip };
 }
 
@@ -76,6 +78,8 @@ export function runPendulum(dt: number): void {
       sfx.swing(0.7);
       lights.add(at.x, at.y, 60, PAL.volt[3], 0.7, 0.3);
     }
+    // the passes sweep through the low platforms instead of landing on them
+    h.drop = Math.max(h.drop, 0.05);
     const to = onArc(at, swingAngle(u + dt));
     h.vx = (to.x - h.x) / dt;
     h.vy = (to.y - h.y) / dt;

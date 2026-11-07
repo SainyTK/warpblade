@@ -8,7 +8,9 @@ import type { LatchKind } from "../../../types/orrin";
 import type { Point } from "../../../types/world";
 import { dealDamage } from "../../damage";
 import { createImpact } from "../../effects/impact";
+import { tearClose } from "../../effects/orrin/tearClose";
 import { enemyBox, enemyCenter } from "../../enemies/enemy";
+import { feat } from "../../feat";
 import { isHeld } from "../../input";
 import { emitSkillEvent } from "../../skills/events";
 import { skillValues, withCharms } from "../../skills/query";
@@ -54,7 +56,7 @@ export function startSwing(kind: LatchKind, at: Point): void {
   orrin.biteLeft = kind === "air" ? biteTime() : 0;
   orrin.reeling = false;
   orrin.reelBase = 0;
-  orrin.kicks = 0;
+  orrin.kickKills = 0;
   orrinHost.kicked = [];
   const gap = Math.hypot(hand.x - at.x, hand.y - at.y);
   if (h.ground || gap > orrin.length + 1) {
@@ -164,7 +166,10 @@ function swingKick(e: Enemy, speed: number): void {
   sfx.hit(true, 1.1);
   if (skillValues("o_barbs").kick) bleed(e, 1);
   burnSwept(e);
-  orrin.kicks++;
+  if (e.hp <= 0) {
+    orrin.kickKills++;
+    feat({ kind: "swingKills", kills: orrin.kickKills });
+  }
   emitSkillEvent({ type: "swingKick", foe: e, speed });
 }
 
@@ -242,6 +247,7 @@ function pendulum(dt: number, dir: number): void {
 export function letGo(hop: boolean): void {
   const h = hero;
   const at = orrin.latchAt;
+  if (at && orrin.latch === "air") tearClose(at);
   const speed = Math.hypot(h.vx, h.vy);
   const forward = !!at && Math.sign(h.x - at.x) === Math.sign(h.vx);
   const fling = h.vy < 0 && forward && speed > 60;
@@ -260,7 +266,6 @@ export function letGo(hop: boolean): void {
   orrin.sinceRelease = 0;
   orrin.releaseSpeed = Math.hypot(h.vx, h.vy);
   orrin.flung = orrin.releaseSpeed > SWING.kickFrom;
-  orrin.bestKicks = Math.max(orrin.bestKicks, orrin.kicks);
   h.perfectUsed = false;
   setState("fly");
   emitSkillEvent({ type: "release", speed: orrin.releaseSpeed, fling });
@@ -270,7 +275,7 @@ export function letGo(hop: boolean): void {
 
 /** the swing ends on the floor: a landing, with no fling */
 export function endSwingOnFloor(): void {
-  orrin.bestKicks = Math.max(orrin.bestKicks, orrin.kicks);
+  if (orrin.latchAt && orrin.latch === "air") tearClose(orrin.latchAt);
   orrin.latch = null;
   orrin.latchAt = null;
   orrin.yankTo = null;

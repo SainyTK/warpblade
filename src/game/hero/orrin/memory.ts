@@ -28,8 +28,7 @@ const fresh = (): OrrinMemory => ({
   sinceRelease: 9,
   releaseSpeed: 0,
   flung: false,
-  kicks: 0,
-  bestKicks: 0,
+  kickKills: 0,
   flingBoost: 0,
   boostLeft: 0,
   plumb: false,
@@ -46,6 +45,7 @@ const fresh = (): OrrinMemory => ({
   pinLeft: 0,
   ultAt: null,
   ultLevel: 0,
+  ultRadius: 0,
   kites: 0,
 });
 

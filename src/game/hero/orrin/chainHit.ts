@@ -75,7 +75,7 @@ export function sweepChain(s: ChainStrike, s0: number, s1: number): number {
   for (const e of game.enemies) {
     if (e.hp <= 0 || struckThisSwing(e)) continue;
     const b = bearing(e);
-    if (b.near > reach || b.far < s.spec.inner || !inSpan(b.angle, s0, s1)) continue;
+    if (b.near > reach || b.far < s.spec.inner || !inSpan(b, s0, s1)) continue;
     markStruck(e);
     const tip = b.near >= reach - band && s.blow !== "knee";
     hits++;

@@ -149,18 +149,31 @@ function restLoop(): void {
   drawHook(b, (b.x - a.x) / d, (b.y - a.y) / d);
 }
 
-/** a rift tear the hook bit into: a 6 px slit of volt light with sparks, flickering before it snaps shut */
-function tear(at: Point, left: number, total: number): void {
+/**
+ * A rift tear the hook bit into: a 6 px lens of volt light, a dark indigo rim round a pale core, with two sparks
+ * drifting off its ends. It opens over a few frames and flickers in its last moments before it snaps shut.
+ */
+function tear(at: Point, held: number, left: number): void {
   const V = PAL.volt;
-  const warn = left < total - HOOK.biteWarn;
-  if (warn && Math.floor(game.t * 20) % 2 === 0) return;
-  const open = clamp(Math.min(total - left, left) / 0.08);
-  const h = 3 * open;
-  line(at.x, at.y - h, at.x, at.y + h, V[3]);
-  px(at.x, at.y, WHITE);
-  px(at.x - 1, at.y - h * 0.5, V[2]);
-  px(at.x + 1, at.y + h * 0.5, V[2]);
-  glow(at.x, at.y, 12, V[2], 0.4 * open);
+  if (left < HOOK.bite - HOOK.biteWarn && Math.floor(game.t * 20) % 2 === 0) return;
+  const open = clamp(Math.min(held, left) / 0.08);
+  const h = Math.round(3 * open);
+  glow(at.x, at.y, 14, V[2], 0.45 * open);
+  for (let dy = -h; dy <= h; dy++) {
+    const wide = Math.abs(dy) < h - 1;
+    px(at.x - (wide ? 2 : 1), at.y + dy, V[0]);
+    px(at.x + (wide ? 2 : 1), at.y + dy, V[0]);
+    if (wide) {
+      px(at.x - 1, at.y + dy, V[2]);
+      px(at.x + 1, at.y + dy, V[1]);
+    }
+    px(at.x, at.y + dy, Math.abs(dy) <= 1 ? WHITE : V[3]);
+  }
+  px(at.x, at.y - h - 1, V[0]);
+  px(at.x, at.y + h + 1, V[0]);
+  const drift = (game.t * 6) % 3;
+  px(at.x + 2 + drift, at.y - h - drift * 0.5, V[4], 1 - drift / 3);
+  px(at.x - 2 - drift, at.y + h + drift * 0.5, V[3], 1 - drift / 3);
 }
 
 /** the big tear over an ultimate */
@@ -202,7 +215,7 @@ export function stepChainLoop(dt: number): void {
 /** behind him and the foes: the tears and the pin's chain */
 export function drawOrrinBack(): void {
   place();
-  if (orrin.latch === "air" && orrin.latchAt) tear(orrin.latchAt, orrin.biteLeft, Math.max(orrin.biteLeft, HOOK.bite));
+  if (orrin.latch === "air" && orrin.latchAt) tear(orrin.latchAt, orrin.latchT, orrin.biteLeft);
   if (orrin.ultAt && (hero.state === "pendulum" || hero.state === "maelstrom")) ultTear(orrin.ultAt);
   const pinned = orrinHost.pinned;
   if (orrin.pinAt && pinned && pinned.hp > 0) {

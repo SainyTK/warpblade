@@ -89,9 +89,8 @@ export interface OrrinMemory {
   releaseSpeed: number;
   /** the flight out of a release is a fling (it calls travelEnded on landing) */
   flung: boolean;
-  /** swing kicks landed in the swing under way, and the most in one swing this run */
-  kicks: number;
-  bestKicks: number;
+  /** foes his swing kicks have defeated in the swing under way, from latch to letting go (Full Swing) */
+  kickKills: number;
   /** Undertow: a hook just after a Backline flings harder by this share, for `boostLeft` seconds */
   flingBoost: number;
   boostLeft: number;
@@ -117,6 +116,8 @@ export interface OrrinMemory {
   /** the side a Grand Pendulum or Maelstrom swings round, and its centre */
   ultAt: Point | null;
   ultLevel: number;
+  /** Grand Pendulum's chain length, set at the cast from the floor under him */
+  ultRadius: number;
   /** Brass Kites out now, set by the kite skill, for Endless Motion */
   kites: number;
 }
