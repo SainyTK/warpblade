@@ -18,7 +18,7 @@ Every skill is on a single button press or runs on its own; nothing asks for a d
 | J (situation) | The string still reads the foes: turning cut (foe only behind), ring cut (foes on both sides), pinning stab (foe down, once a combo), chase cut (foe in the air ahead, starts the air string). The 4th hit is always the smash. |
 | J (Keen) | J pressed in the 0.1 s after a blow lands makes the next blow a sure crit, drawn gold. Mashing spoils it. |
 | J (air) | Air string of 2 per jump: wheel slash (1.2 AD), scissor cut (1.3 AD, pops the foe up). |
-| K | Warp Strike: throw the sword at the nearest foe ahead and appear beside it striking, 2.2 AD plus 0.014 AD per pixel travelled (up to +2.8). 10 MP, 2 s recharge. |
+| K | Warp Strike: throw the sword at the nearest foe ahead and appear beside it striking, 1.8 AD plus 0.014 AD per pixel travelled (up to +2.8). 10 MP, 2 s recharge. |
 | K with Up held | Crystal Hang: warp to a floating crystal and hang there to recover MP fast (14 MP/s). Unchanged from today. |
 | L | Dash: 0.24 s, untouchable, ground only, two per stamina bar. A perfect dodge in its first 0.12 s slows the world and gives 8 MP, 25 stamina and 5 Flow. |
 | I | Cast the selected ability. Two base abilities: Crystal Lance and Crystal Burst. |
@@ -38,7 +38,7 @@ The ability rotation is Lance, Burst, then each spell skill in the order learned
 
 - `comboHits: 4`. The string is step cut, rising backhand, twin fang, smash; hop cleave and crescent turn leave the plain string and come back as skill moves (Keen Edge, Reaping Sweep).
 - Combo length never changes. Skills change hit 1 (Reaping Sweep), hit 3 (Phase Cut), hit 4 (Skybreaker, Keen Edge) or add effects to every hit.
-- When two skills claim the same hit, the later one in this order wins: Reaping Sweep (hit 1), Phase Cut (hit 3), Keen Edge's hop cleave (hit 4 when Keen), Skybreaker (hit 4). The situational moves still take priority over all of them, as today.
+- When two skills claim the same hit: Phase Cut wins hit 3 over the crescent turn, and a Keen 4th hit is the hop cleave (Keen Edge level 7) over Skybreaker's launch. The situational moves still take priority over all of them, as today.
 - Air string limit: 2 per jump in the base kit (wheel, scissor), 3 with Sky Dance (adds the stomp). A double jump adds no air hits.
 
 ## What leaves today's kit
@@ -81,7 +81,7 @@ The ability rotation is Lance, Burst, then each spell skill in the order learned
 | `k_reap` | Reaping Sweep | attack | easy | J | `k_splinters` | Crystal Harvest |
 | `k_phase` | Phase Cut | attack | timed | J | `k_blink` | Phantom Passage |
 | `k_warpcraft` | Warpcraft | movement | timed | K | `k_passing` | Rift Walker |
-| `k_blink` | Blink Step | movement | precise | K | `k_echo` | Shadow Step |
+| `k_blink` | Blink Step | movement | timed | K | `k_echo` | Shadow Step |
 | `k_passing` | Passing Cut | movement | timed | L | `k_skydance` | Phantom Rush |
 | `k_skydance` | Sky Dance | movement | timed | Up | `k_reap` | Comet Dance |
 | `k_flame` | Fire Flask | spell | easy | I | `k_familiar` | Sunflask |
@@ -97,464 +97,434 @@ The ability rotation is Lance, Burst, then each spell skill in the order learned
 | `k_legion` | Phantom Legion | ultimate | easy | U | `k_echo` | Phantom Army |
 | `k_starfall` | Starfall | ultimate | timed | U | `k_flame` | Cataclysm |
 
-Counts: attack 4, movement 4, spell 3, dot 3, summon 3, ultimate 3. Risk: easy 6, timed 10, precise 4.
+Counts: attack 4, movement 4, spell 3, dot 3, summon 3, ultimate 3. Risk: easy 6, timed 11, precise 3.
+The Values column shows only the numbers a level changes; the data rows (`src/constants/characters/kael/skills/`) carry the whole state.
 
 "New" in a card line marks a level that adds a property; the rest are number steps.
 Damage source: hits of Kael's own press (string blows, warp, blink, dash cuts, casts, ultimates) count as `attacks`, `abilities` or `ultimate` and build Flow; ticks, summons and anything that strikes on its own use the skill id and build no Flow.
 
-### Attack
-
 #### `k_keen` Keen Edge
 
-Attack, precise, J. Keen blows (J in the beat after a blow lands) hit harder and gain effects; rhythm over mashing.
+Attack, precise, J. Press J in the beat after a blow lands: the Keen blow hits far harder.
 
-| Lv | Card line |
-| --- | --- |
-| 1 | Keen blows deal +50% damage. |
-| 2 | Keen window 0.10 to 0.14 s. |
-| 3 | New: a Keen blow breaks guards and staggers for 0.4 s. |
-| 4 | New: a Keen blow sends a crystal wave forward, 0.8 AD, passing guards. |
-| 5 | Keen damage +50% to +120%. |
-| 6 | New: Keen streak: each Keen blow in a row adds +20% to the next, up to +80%. |
-| 7 | New: a Keen 4th hit is the hop cleave: 3 AD overhead, knocks down, 30 px floor ring. |
-| 8 | Keen damage +120% to +250%; wave 0.8 to 3 AD. |
+| Lv | Card line | Values |
+| --- | --- | --- |
+| 1 | Keen blows deal +200% damage. | bonus 2, window 0.1 |
+| 2 | Keen window 0.10 to 0.14 s. | window 0.14 |
+| 3 | New: a Keen blow breaks guards. | guardBreak 1 |
+| 4 | New: a Keen blow sends a crystal wave forward. | wave 1.5 |
+| 5 | Keen damage +200% to +500%. | bonus 5 |
+| 6 | New: each Keen blow in a row adds +25% to the next, up to +100%. | streak 0.25, streakCap 1 |
+| 7 | New: a Keen 4th hit is a hop cleave that knocks down. | cleave 3 |
+| 8 | Keen damage +500% to +1000%; the wave hits far harder. | bonus 10, wave 10 |
 
-Evolution **Peerless Edge** (partner `k_phase`): four Keen blows in one string end in a gold cross cut, 14 AD to the foe ahead and 5 AD within 50 px, and for the next 3 s every blow is Keen with no timing.
-
-Build: `KEEN.window` and the Keen multiplier read `skillValues("k_keen")` in `combo.ts` (`judgeTiming`, `strike`); guard break sets `big` on the blow; the wave is `createCrystalWave`; the hop cleave is `CHAIN_MOVES.hopCleave` picked as the 4th hit in `comboChoice.ts`; the cross cut is a new slash shape in `KEEN_RAMP`. `combo.ts` is shared with Ysra, so every hook is a skill query, which is 0 for her.
+Evolution **Peerless Edge** (partner `k_phase`): Every third Keen blow ends in a gold cross cut, and for 3 seconds every blow is Keen.
+Evolved values added: cross 60, crossArea 15, crossReach 50, crossEvery 3, free 3.
+Code: `hero/kael/keen.ts` (window, wave, streak, Peerless Edge), `hero/kael/bonus.ts` (Keen bonus), `hero/kael/shapeHit.ts` (guard break, hop cleave), `utils/comboChoice.ts`.
 
 #### `k_skyward` Skybreaker
 
-Attack, timed, J (4th hit). The finisher launches instead of knocking down, so a string can turn into an air string; the base chase cut follows.
+Attack, timed, J. The last hit of the combo launches foes into the air instead of knocking them down.
 
-| Lv | Card line |
-| --- | --- |
-| 1 | New: the 4th hit is Skybreaker: 1.6 AD, launches the foe high. |
-| 2 | New: the launch takes every foe in a tall box ahead, 40 px. |
-| 3 | Launch 1.6 to 2.4 AD. |
-| 4 | New: launched foes take +30% damage until they land (on top of the 2x air rule). |
-| 5 | New: launched foes crash down: 1.2 AD to foes within 30 px of where each lands. |
-| 6 | New: the launch also cuts behind Kael. |
-| 7 | Air bonus +30% to +60%; crash 1.2 to 2 AD. |
-| 8 | Launch 2.4 to 3.5 AD; crash reach 30 to 45 px. |
+| Lv | Card line | Values |
+| --- | --- | --- |
+| 1 | The 4th hit launches the foe high. | launch 1.6, crashReach 30 |
+| 2 | New: the launch takes every foe in a tall box ahead. | wide 1 |
+| 3 | Launch power 1.6 to 2.4. | launch 2.4 |
+| 4 | New: launched foes take +30% damage until they land. | airBonus 0.3 |
+| 5 | New: launched foes crash down on foes near them. | crash 1.2 |
+| 6 | New: the launch also cuts behind Kael. | behind 1 |
+| 7 | Launched foes take +60%; the crash hits harder. | airBonus 0.6, crash 2 |
+| 8 | Launch and crash far stronger and wider. | launch 5, crashReach 45, crash 3.5 |
 
-Evolution **Heavenfall** (partner `k_skydance`): at the top of each launch a crystal phantom spikes the foe back down, 6 AD, and a 60 px shockwave rings out where it lands.
-
-Build: `FINISHER_MOVES.skybreaker` as hit 4 in `comboChoice.ts`; the crash is a new landing hook on airborne foes (`enemies/airborne.ts`) with `createFloorRing`; the phantom reuses the ghost snapshot from `ultimates/phantomLegion.ts`.
+Evolution **Heavenfall** (partner `k_skydance`): At the top of each launch a crystal phantom spikes the foe back down into a shockwave.
+Evolved values added: spike 15, shockReach 60.
+Code: `utils/comboChoice.ts` (4th hit), `hero/kael/shapeHit.ts` (power, box), `hero/kael/bonus.ts` (airborne taken), `skills/kael/skybreaker.ts` (crash, Heavenfall).
 
 #### `k_reap` Reaping Sweep
 
-Attack, easy, J (1st hit). The opener is a low sweep that trips foes and drags them into the string.
+Attack, easy, J. The combo opens with a low sweep that trips foes and drags them into the string.
 
-| Lv | Card line |
-| --- | --- |
-| 1 | New: the 1st hit is the low sweep: 1 AD, trips for 0.9 s, drags foes 20 px toward Kael. |
-| 2 | New: the sweep reaches behind Kael too. |
-| 3 | Reach 34 to 50 px; drag 20 to 40 px. |
-| 4 | New: tripped foes take +25% from the rest of the string. |
-| 5 | New: the 3rd hit becomes the crescent turn, cutting front and back. |
-| 6 | New: the sweep pulls flyers within reach down to the floor. |
-| 7 | Sweep 1 to 2 AD; trip bonus +25% to +40%. |
-| 8 | Reach 50 to 70 px; drag 40 to 60 px. |
+| Lv | Card line | Values |
+| --- | --- | --- |
+| 1 | The 1st hit is a low sweep that trips foes and drags them in. | power 1, reach 34, drag 20 |
+| 2 | New: the sweep reaches behind Kael too. | behind 1 |
+| 3 | Reach 34 to 50 px; drags twice as far. | reach 50, drag 40 |
+| 4 | New: tripped foes take +25% damage. | trip 0.25 |
+| 5 | New: the 3rd hit is a crescent turn, front and back. | crescent 1 |
+| 6 | New: the sweep pulls flying foes down to the floor. | flyers 1 |
+| 7 | Sweep power 1 to 2; tripped foes take +40%. | power 2, trip 0.4 |
+| 8 | Reach 50 to 70 px; drags them to Kael's feet. | reach 70, drag 60 |
 
-Evolution **Crystal Harvest** (partner `k_splinters`): the sweep sends a crystal tide 120 px each way along the floor that drags every foe it touches to Kael's feet and lodges 3 splinters in each (full splinter rules even at low splinter levels).
-
-Build: `SKILL_MOVES.sweep` as hit 1 (with `around` from level 2); `CHAIN_MOVES.crescentTurn` as hit 3; the flyer pull reuses `gravityWell.ts`; the tide is a new floor effect drawn like the ice spike line in the crystal palette.
+Evolution **Crystal Harvest** (partner `k_splinters`): The sweep sends a crystal tide along the floor both ways that drags every foe it touches to Kael and lodges splinters.
+Evolved values added: tide 120, tideSplinters 3.
+Code: `utils/comboChoice.ts` (1st and 3rd hit), `hero/kael/shapeHit.ts` (power, reach, drag), `hero/kael/reap.ts` (flyers, Crystal Harvest tide), `hero/kael/bonus.ts` (tripped taken).
 
 #### `k_phase` Phase Cut
 
-Attack, timed, J (3rd hit). The 3rd hit passes through the foe and turns, so the finisher lands from behind.
+Attack, timed, J. The third hit cuts through the foe and turns, so the finisher lands on its back.
 
-| Lv | Card line |
-| --- | --- |
-| 1 | New: the 3rd hit is the phase cut: 1.8 AD, passes through to the foe's back and turns; the 4th hit lands as a back attack. |
-| 2 | New: Kael cannot be hurt during the pass, and it slips past guards. |
-| 3 | Phase cut 1.8 to 3 AD. |
-| 4 | New: every foe passed through is cut, up to 80 px. |
-| 5 | New: after a phase, back attacks deal +40% more for 1.5 s. |
-| 6 | Reach 80 to 120 px. |
-| 7 | New: the pass leaves an afterimage that repeats the phase cut 0.3 s later at 60%. |
-| 8 | Phase cut 3 to 6 AD; back bonus +40% to +100% for 2 s. |
+| Lv | Card line | Values |
+| --- | --- | --- |
+| 1 | The 3rd hit passes through the foe, so the 4th lands from behind. | power 3.5, reach 80 |
+| 2 | New: Kael cannot be hurt in the pass, and it breaks guards. | guard 1 |
+| 3 | Phase cut power 3.5 to 5. | power 5 |
+| 4 | New: every foe passed through is cut. | line 1 |
+| 5 | New: back attacks deal +40% for 1.5 s after a phase. | back 0.4, backTime 1.5 |
+| 6 | Reach 80 to 120 px. | reach 120 |
+| 7 | New: an afterimage repeats the phase cut. | echo 0.6 |
+| 8 | Phase cut power 5 to 12; back attacks +150% for 2 s. | power 12, back 1.5, backTime 2 |
 
-Evolution **Phantom Passage** (partner `k_blink`): the phase cut runs through every foe within 160 px ahead, cutting each from behind at full power, and the finisher strikes all of them from their backs at once.
-
-Build: `FINISHER_MOVES.phaseCut` without its `finisher` flag as hit 3 (`phaseEnter`, `phaseStep`); the guard window is `MoveDef.guard`; the afterimage repeat is `createEcho`.
-
-### Movement
+Evolution **Phantom Passage** (partner `k_blink`): The phase cut runs through every foe within 160 px ahead, and the finisher strikes them all from behind.
+Evolved values added: reach 160, passage 1.
+Code: `hero/moves/finishers.ts` (pass, guard, Phantom Passage), `hero/kael/shapeHit.ts`, `hero/kael/afterStrike.ts` (back bonus window, afterimage), `hero/kael/bonus.ts`.
 
 #### `k_warpcraft` Warpcraft
 
-Movement, timed, K. Warp Strike gets cheaper, faster and longer, and the arrival hits like the running thrust.
+Movement, timed, K. Warp Strike costs less, recharges faster and reaches further, and its arrival hits like a thrust.
 
-| Lv | Card line |
-| --- | --- |
-| 1 | Warp costs 10 to 6 MP and recharges in 2 to 1.5 s. |
-| 2 | New: the arrival is a lunging thrust that drives the foe far and bounces it off walls. |
-| 3 | Distance bonus 0.014 to 0.025 AD per px, cap +2.8 to +5 AD. |
-| 4 | New: the thrown sword cuts every foe on its path, 1 AD. |
-| 5 | New: two warp charges. |
-| 6 | Recharge 1.5 to 1.1 s. |
-| 7 | New: the arrival also cuts behind Kael. |
-| 8 | Warp strike 2.2 to 5 AD; path cut 1 to 2.5 AD. |
+| Lv | Card line | Values |
+| --- | --- | --- |
+| 1 | Warp costs 6 MP and recharges in 1.5 s. | cost 6, recharge 1.5, charges 1 |
+| 2 | New: the arrival is a lunging thrust that drives foes off. | thrust 1 |
+| 3 | The longer the warp, the harder it hits. | perPx 0.025, cap 5 |
+| 4 | New: the thrown sword cuts every foe on its way. | path 1 |
+| 5 | New: two warp charges. | charges 2 |
+| 6 | Recharge 1.5 to 1.1 s. | recharge 1.1 |
+| 7 | New: the arrival also cuts behind Kael. | behind 1 |
+| 8 | Warp strike 1.8 to 7; the sword's cut hits harder. | path 2.5, strike 7 |
 
-Evolution **Rift Walker** (partner `k_passing`): once every 4 s, after an arrival the sword leaps on to up to 3 more foes in reach and Kael warps to each in turn, striking each at full distance power, for no extra MP.
-
-Build: `warpCost` and `warpCooldown` in `warp.ts` read `skillValues`; the path cut is a new box check in `effects/thrownSword.ts`; the thrust uses `SKILL_MOVES.thrust`'s blow and step; charges are a count in the skill's memory.
+Evolution **Rift Walker** (partner `k_passing`): Once every 4 seconds, after an arrival the sword leaps on to 3 more foes and Kael warps to each in turn.
+Evolved values added: chain 3, chainEvery 4.
+Code: `hero/warp.ts` (cost, recharge, charges, thrust, path cut, behind, Rift Walker chain).
 
 #### `k_blink` Blink Step
 
-Movement, precise, K during a combo. K mid-combo steps through to the foe's back and strikes, and the string goes on from there.
+Movement, timed, K. Press K during a combo to step through to the foe's back and strike.
 
-| Lv | Card line |
-| --- | --- |
-| 1 | New: K after a hit of a combo blinks behind the last foe hit and strikes, 1.8 AD, for half the warp's MP. |
-| 2 | New: the combo goes on after the blink (it takes no hit from the string). |
-| 3 | Blink strike 1.8 to 2.8 AD. |
-| 4 | New: a blink pressed in the Keen beat is a sure crit. |
-| 5 | New: the foe Kael blinks behind cannot turn for 1.2 s. |
-| 6 | New: the blink has its own 1.2 s recharge, apart from the warp. |
-| 7 | New: an afterimage left where Kael stood cuts once, 1.2 AD. |
-| 8 | Blink strike 2.8 to 4.5 AD; no-turn time 1.2 to 2 s. |
+| Lv | Card line | Values |
+| --- | --- | --- |
+| 1 | K during a combo blinks behind the foe and strikes. | power 1.8 |
+| 2 | New: the combo goes on after the blink. | keep 1 |
+| 3 | Blink strike power 1.8 to 2.8. | power 2.8 |
+| 4 | New: a blink in the Keen beat is a sure crit. | keen 1 |
+| 5 | New: the foe cannot turn for 1.2 s. | lock 1.2 |
+| 6 | New: the blink has its own 1.2 s recharge. | recharge 1.2 |
+| 7 | New: an afterimage cuts where Kael stood. | after 1.2 |
+| 8 | Blink strike power 2.8 to 7; the foe cannot turn for 2 s. | power 7, lock 2 |
 
-Evolution **Shadow Step** (partner `k_echo`): each blink leaves a phantom on the near side that cuts with Kael, so the foe is struck from both sides at once, and a blink that kills is refunded.
-
-Build: `blink()` in `warp.ts`; `pressWarp` in `readActions.ts` checks `comboOpen(1)` and stops ending the combo from level 2; the no-turn time is a new foe field read where `TURN_DELAY` is applied.
+Evolution **Shadow Step** (partner `k_echo`): A phantom cuts from the near side as Kael blinks, and a blink that kills is free.
+Evolved values added: shadow 1.
+Code: `hero/readActions.ts` (K in a combo), `hero/warp.ts` `blink()` (strike, lock, afterimage, Shadow Step).
 
 #### `k_passing` Passing Cut
 
-Movement, timed, L. The dash cuts every foe it passes through, with no J needed.
+Movement, timed, L. The dash cuts every foe it passes through.
 
-| Lv | Card line |
-| --- | --- |
-| 1 | New: foes the dash passes through are cut, 0.8 AD each. |
-| 2 | Max stamina +50: one more dash per bar. |
-| 3 | Cut 0.8 to 1.4 AD. |
-| 4 | New: the dash ends with a rising cut on the nearest foe ahead, 1 AD, popping it up. |
-| 5 | New: each foe cut gives back 10 stamina. |
-| 6 | New: a perfect dodge through a foe cuts it for triple. |
-| 7 | Dash length +30%. |
-| 8 | Cut 1.4 to 4 AD; rising cut 1 to 2 AD. |
+| Lv | Card line | Values |
+| --- | --- | --- |
+| 1 | The dash cuts every foe it passes through. | cut 0.8 |
+| 2 | Max stamina +50: one more dash. | ; stamina +50 |
+| 3 | Dash cut power 0.8 to 1.4. | cut 1.4 |
+| 4 | New: the dash ends with a rising cut. | rising 1 |
+| 5 | New: each foe cut gives back stamina. | refund 10 |
+| 6 | New: a perfect dodge cuts for triple. | perfect 3 |
+| 7 | New: foes cut are slowed for 1.5 s. | chill 1.5 |
+| 8 | Dash cut power 1.4 to 4; rising cut 1 to 2. | cut 4, rising 2 |
 
-Evolution **Phantom Rush** (partner `k_skydance`): every dash leaves a line of crystal phantoms along its path that cut again 0.25 s later (3 AD), and dashes cost half the stamina.
-
-Build: a once-per-foe box check in `runDash` (the pattern of today's `chargeFoes`); the rising cut is `dashStrike`'s second blow, struck from `travelEnded`; stamina numbers through `stamina.ts`. `dash.ts` is Kael's; other heroes have their own L.
+Evolution **Phantom Rush** (partner `k_skydance`): Crystal phantoms along the dash's path cut again a moment later, and dashes cost half the stamina.
+Evolved values added: rush 3, staminaCost 0.5.
+Code: `hero/kael/passingCut.ts` (cuts, rising cut, refund, chill, Phantom Rush), `hero/stamina.ts` (half cost).
 
 #### `k_skydance` Sky Dance
 
-Movement, timed, Up. The air game: a third air hit, an air dash, and a stomp that grows into the meteor drop.
+Movement, timed, jump. One more attack in the air, ending in a stomp, and later an air dash.
 
-| Lv | Card line |
-| --- | --- |
-| 1 | New: air string 2 to 3 hits; the 3rd is the sky stomp, 2.2 AD, knocking down both sides. |
-| 2 | New: jump dash: L in the air, once per jump. |
-| 3 | New: after a double jump the first air hit is the whirlwind, cutting both sides and keeping foes up. |
-| 4 | Air hits +30%. |
-| 5 | New: the stomp drags every airborne foe within 60 px down with Kael. |
-| 6 | New: the stomp lands as the meteor drop: 46 px ring that bounces foes up for a fresh launch. |
-| 7 | Stomp reach 40 to 60 px; air hits +30% to +60%. |
-| 8 | Stomp 2.2 to 4 AD. |
+| Lv | Card line | Values |
+| --- | --- | --- |
+| 1 | One more air hit: a stomp that knocks foes down. | air 1, stomp 2.2, stompReach 40 |
+| 2 | New: L in the air dashes, once per jump. | airDash 1 |
+| 3 | New: after a double jump, the first air hit spins both ways. | whirl 1 |
+| 4 | Air hits +30%. | airBonus 0.3 |
+| 5 | New: the stomp drags airborne foes down with Kael. | gravity 1 |
+| 6 | New: the stomp bounces foes up for a fresh launch. | meteor 1 |
+| 7 | Stomp reach 40 to 60 px; air hits +60%. | stompReach 60, airBonus 0.6 |
+| 8 | Stomp power 2.2 to 6. | stomp 6 |
 
-Evolution **Comet Dance** (partner `k_reap`): every air hit drops a crystal shard on the foe below (1.5 AD), and the stomp is a comet: 90 px ring, 8 AD, drawing foes in to its centre.
-
-Build: `AIR_STRING.skill` becomes `k_skydance` (`airLimit` from `skillLevel`); air dash is the air branch of `tryDash`; whirl and meteor moves already exist in `moves/air.ts`; the drag is `gravityWell.ts`.
-
-### Spell
+Evolution **Comet Dance** (partner `k_reap`): Air hits drop crystal shards on the foe below, and the stomp lands as a comet that draws foes in.
+Evolved values added: shard 1.5, comet 8, cometReach 90.
+Code: `skills/airLimit.ts` (air string), `hero/dash.ts` (air dash), `utils/comboChoice.ts` (whirl, meteor), `hero/moves/air.ts` (stomp, comet), `hero/gravityWell.ts`, `skills/kael/skyDance.ts` (Comet Dance shards).
 
 #### `k_flame` Fire Flask
 
-Spell, easy, I. A flask that bursts and sets foes burning.
+Spell, easy, I. Learn the fire spell: a flask that bursts and sets foes burning.
 
-| Lv | Card line |
-| --- | --- |
-| 1 | New: learn Fire Flask: 1.6 AP burst, 34 px, burns 1.5 s. 18 MP, 10 s. |
-| 2 | Burst 1.6 to 2.4 AP. |
-| 3 | New: the burst leaves burning floor for 2 s. |
-| 4 | Recharge 10 to 7 s; burn 1.5 to 3 s. |
-| 5 | New: a burning foe that is launched or knocked down explodes, 2 AP within 34 px. |
-| 6 | Radius 34 to 50 px. |
-| 7 | New: two flasks in a short spread. |
-| 8 | Burst 2.4 to 4 AP; burn 3 to 4 s. |
+| Lv | Card line | Values |
+| --- | --- | --- |
+| 1 | I throws a flask that bursts and sets foes burning. | power 1.6, radius 34, burn 1.5, recharge 10, flasks 1 |
+| 2 | New: the burst knocks foes down. | stun 0.5 |
+| 3 | New: the burst leaves the floor burning. | floor 2 |
+| 4 | Burst power 1.6 to 2.4; recharge 10 to 7 s. | power 2.4, burn 3, recharge 7 |
+| 5 | New: a burning foe thrown up or down explodes. | ignite 2 |
+| 6 | Burst radius 34 to 50 px. | radius 50 |
+| 7 | New: two flasks at once. | flasks 2 |
+| 8 | Burst power 2.4 to 4; burns longer. | power 4, burn 4 |
 
-Evolution **Sunflask** (partner `k_familiar`): today's Sunflask: a white flask whose burst throws three child flasks at nearby foes, each 50% of the burst.
-
-Build: `spells/fire.ts`, `explosion.ts`, `sunflask.ts` with numbers from `skillValues`; Ignition code from today's fusion.
+Evolution **Sunflask** (partner `k_familiar`): The flask bursts, then three smaller flasks fly at nearby foes and burst on them.
+Evolved values added: children 3.
+Code: `spells/fire.ts`, `spells/floorFire.ts`, `spells/sunflask.ts`, `game/damage.ts` (ignition).
 
 #### `k_frost` Ice Spikes
 
-Spell, timed, I. A running line of spikes that freezes; it pays when the crowd is lined up.
+Spell, timed, I. Learn the ice spell: a running line of spikes that freezes foes.
 
-| Lv | Card line |
-| --- | --- |
-| 1 | New: learn Ice Spikes: 4 spikes ahead, 1.6 AP each foe, freezes 0.8 s. 18 MP, 9 s. |
-| 2 | Spikes 4 to 6. |
-| 3 | Damage 1.6 to 2.4 AP; freeze 0.8 to 1.4 s. |
-| 4 | New: a heavy blow on a frozen foe shatters it: double damage, and shards cut foes within 42 px for 0.8 AD. |
-| 5 | Recharge 9 to 6.5 s. |
-| 6 | New: frozen foes take +25% from everything. |
-| 7 | New: a frozen foe that dies bursts, 1 AP within 36 px, freezing those foes 0.6 s. |
-| 8 | Damage 2.4 to 4 AP; shards 0.8 to 2 AD. |
+| Lv | Card line | Values |
+| --- | --- | --- |
+| 1 | I sends a running line of ice spikes that freezes foes. | power 1.6, spikes 4, freeze 0.8, recharge 9 |
+| 2 | Spikes 4 to 6. | spikes 6 |
+| 3 | Spike power 1.6 to 2.4; freezes longer. | power 2.4, freeze 1.4 |
+| 4 | New: a heavy blow on a frozen foe shatters it. | shatter 0.8 |
+| 5 | New: foes beside the line are slowed; recharge 6.5 s. | recharge 6.5, chill 2 |
+| 6 | New: frozen foes take +25% damage. | frozenBonus 0.25 |
+| 7 | New: a frozen foe that dies bursts and freezes others. | burst 1 |
+| 8 | Spike power 2.4 to 7; shards far stronger. | power 7, shatter 3.5 |
 
-Evolution **Glacier Bloom** (partner `k_reap`): today's Glacier Bloom (a second line behind Kael and a crown spire), with the spire's burst at 3 AP and every spike at 1.5x.
-
-Build: `spells/ice.ts`; Shatter moves from `damage.ts`'s perk check to a skill query.
+Evolution **Glacier Bloom** (partner `k_reap`): A second line runs behind Kael, and the last spike grows into a spire that bursts into freezing shards.
+Evolved values added: bloom 1, spire 3, bloomPower 1.5.
+Code: `spells/ice.ts`, `game/damage.ts` (shatter), `skills/kael/iceSpikes.ts` (death burst), `hero/kael/bonus.ts` (frozen taken).
 
 #### `k_volt` Lightning
 
-Spell, easy, I. A bolt strikes the nearest foe ahead and arcs on.
+Spell, easy, I. Learn the lightning spell: a bolt on a foe ahead that arcs on.
 
-| Lv | Card line |
-| --- | --- |
-| 1 | New: learn Lightning: 2.5 AP on a foe ahead, arcs to 1 more for 1.2 AP, shocks 0.6 s. 18 MP, 6 s. |
-| 2 | Arcs 1 to 2. |
-| 3 | Strike 2.5 to 3.5 AP. |
-| 4 | New: shocked foes take +20% from sword blows. |
-| 5 | Arcs 2 to 4. |
-| 6 | New: the bolt strikes twice, 0.3 s apart. |
-| 7 | Recharge 6 to 4 s. |
-| 8 | Strike 3.5 to 5 AP; arcs 1.2 to 1.5 AP. |
+| Lv | Card line | Values |
+| --- | --- | --- |
+| 1 | I strikes a foe ahead with a bolt that arcs to another. | power 2.5, arcs 1, arcPower 1.2, recharge 6 |
+| 2 | New: the struck foe is stunned. | stun 0.5 |
+| 3 | Strike power 2.5 to 3.5; arcs to 2. | power 3.5, arcs 2 |
+| 4 | New: shocked foes take +20% damage. | swordBonus 0.2 |
+| 5 | Arcs to 4; recharge 6 to 4.5 s. | arcs 4, recharge 4.5 |
+| 6 | New: the bolt strikes twice. | twice 1 |
+| 7 | New: a second bolt strikes the nearest foe behind Kael. | behind 1 |
+| 8 | Strike power 3.5 to 7; arcs hit harder. | power 7, arcPower 2.5 |
 
-Evolution **Thunderhead** (partner `k_static`): today's storm cloud over the strike, now with 5 follow-up bolts that each arc to 2 foes (Tempest's idea folded in).
-
-Build: `spells/bolt.ts`, `lightning.ts`, `thunderhead.ts`.
-
-### Damage over time
+Evolution **Thunderhead** (partner `k_static`): A storm cloud stays over the strike and calls down five more bolts that each arc to two foes.
+Evolved values added: cloud 5, cloudArcs 2.
+Code: `spells/bolt.ts`, `spells/thunderhead.ts`, `hero/kael/bonus.ts` (shocked taken).
 
 #### `k_splinters` Crystal Splinters
 
-Dot, easy, runs on its own (sword blows). Blows lodge crystal splinters that bleed; weak early, a crowd shredder late.
+Dot, easy, auto. Sword blows lodge crystal splinters that bleed. Weak at first, a crowd shredder late.
 
-| Lv | Card line |
-| --- | --- |
-| 1 | New: each sword blow lodges a splinter (3 per foe, 3 s): 0.05 AD per splinter per second. |
-| 2 | Splinters per foe 3 to 5. |
-| 3 | Per splinter 0.05 to 0.1 AD/s. |
-| 4 | New: the 4th hit lodges 3 at once. |
-| 5 | New: a foe full of splinters passes one to each foe within 30 px every second. |
-| 6 | Splinters per foe 5 to 8; per splinter 0.1 to 0.2 AD/s. |
-| 7 | New: a foe that dies with splinters fires them at foes within 40 px, 0.5 AD each. |
-| 8 | Per splinter 0.2 to 0.35 AD/s; lasting 3 to 5 s. |
+| Lv | Card line | Values |
+| --- | --- | --- |
+| 1 | Sword blows lodge crystal splinters that bleed the foe. | per 0.05, max 3, life 3, finisher 1, crit 1 |
+| 2 | A foe holds 3 to 5 splinters. | max 5 |
+| 3 | Splinters bleed twice as fast. | per 0.1 |
+| 4 | New: the 4th hit lodges 3 at once. | finisher 3 |
+| 5 | New: a foe full of splinters passes them to foes beside it. | spread 1 |
+| 6 | New: a crit lodges 2; a foe holds 8. | max 8, crit 2 |
+| 7 | New: a foe that dies fires its splinters at foes near it. | burst 0.5 |
+| 8 | Splinters bleed harder and last 5 s. | per 0.22, life 5 |
 
-Evolution **Shatterstorm** (partner `k_keen`): the 4th hit and every Keen blow shatter the splinters in the foes they hit: 1.2 AD per splinter to that foe and to every foe within 40 px; splinters then grow back from the next blows.
-
-Build: new `src/game/skills/kael/splinters.ts` listening to blow landed; splinter count and timer per foe in the skill's memory keyed by foe; small crystal shards drawn on the foe; ticks through `dealDamage(..., { dot: true, source: "k_splinters" })`.
+Evolution **Shatterstorm** (partner `k_keen`): The 4th hit and every Keen blow shatter the splinters in the foes they hit, cutting every foe around.
+Evolved values added: shatter 0.5, shatterReach 70.
+Code: `skills/kael/crystalSplinters.ts` on the shared stacks (`addStacks`).
 
 #### `k_rift` Rift Wound
 
-Dot, timed, runs on its own (warp arrival). The warp strike opens a rift in the foe; each warp deepens it.
+Dot, timed, auto. Warp strikes open rift wounds that drain the foe; each warp deepens them.
 
-| Lv | Card line |
-| --- | --- |
-| 1 | New: a warp strike opens a rift wound: 0.2 AD/s per layer for 4 s, up to 3 layers. |
-| 2 | Wound lasts 4 to 6 s. |
-| 3 | New: the 4th hit of a string adds a layer to the foe it hits. |
-| 4 | Per layer 0.2 to 0.5 AD/s. |
-| 5 | New: each new layer also lands on the nearest other foe within 40 px. |
-| 6 | Layers 3 to 5; per layer 0.5 to 1.2 AD/s. |
-| 7 | New: each layer makes the foe take +6% from everything Kael deals. |
-| 8 | Per layer 1.2 to 1.6 AD/s. |
+| Lv | Card line | Values |
+| --- | --- | --- |
+| 1 | A warp strike opens a rift wound that drains the foe. | per 0.2, max 3, life 4 |
+| 2 | New: wounded foes are slowed; the wound lasts 6 s. | life 6, slow 1 |
+| 3 | New: the 4th hit of a string adds a layer. | finisher 1 |
+| 4 | Each layer drains 0.2 to 0.5 a second. | per 0.5 |
+| 5 | New: each new layer also opens on the nearest foe. | spread 1 |
+| 6 | Up to 5 layers; each drains far more. | per 1.2, max 5 |
+| 7 | New: each layer makes the foe take +6% damage. | taken 0.06 |
+| 8 | Each layer drains 1.2 to 2.4 a second. | per 2.4 |
 
-Evolution **Rift Collapse** (partner `k_warpcraft`): a foe at full layers collapses: it takes the wound's remaining damage at once, doubled, then the rift pulls foes within 60 px together and gives each 3 layers.
-
-Build: new `src/game/skills/kael/rift.ts` listening to warp and blow landed; reuses `effects/rift.ts` for the drawing and `gravityWell.ts` for the pull.
+Evolution **Rift Collapse** (partner `k_warpcraft`): A foe at full layers collapses: the wound's damage at once, doubled, and the rift pulls foes in and wounds them.
+Evolved values added: collapse 2, pull 60, give 3.
+Code: `skills/kael/riftWound.ts` on the shared stacks; `hero/kael/bonus.ts` (taken per layer).
 
 #### `k_static` Static Charge
 
-Dot, timed, runs on its own (dash through foes). Foes Kael dashes through are charged and crackle; his sword sets them off.
+Dot, timed, auto. Dash through foes to charge them; they crackle, and your sword sets them off.
 
-| Lv | Card line |
-| --- | --- |
-| 1 | New: foes the dash passes through are charged for 3 s: 0.2 AP/s. |
-| 2 | Charge 3 to 5 s. |
-| 3 | New: a sword blow on a charged foe calls lightning on it, 1.5 AP, arcing to 1 more for 1 AP (once per 2 s per foe). |
-| 4 | Tick 0.2 to 0.5 AP/s. |
-| 5 | New: the charge jumps to any foe touching a charged one, once a second. |
-| 6 | Tick 0.5 to 0.8 AP/s; lightning 1.5 to 2.5 AP. |
-| 7 | New: a perfect dodge charges every foe within 60 px. |
-| 8 | Tick 0.8 to 1.2 AP/s; arcs 1 to 3. |
+| Lv | Card line | Values |
+| --- | --- | --- |
+| 1 | Foes the dash passes through are charged and crackle. | tick 0.2, life 3 |
+| 2 | Charge lasts 3 to 5 s. | life 5 |
+| 3 | New: a sword blow on a charged foe calls lightning. | bolt 1.5, arc 1, arcs 1 |
+| 4 | Charged foes crackle 0.2 to 0.5 a second. | tick 0.5 |
+| 5 | New: the charge jumps to foes touching a charged one. | contagion 1 |
+| 6 | New: a charged foe that dies arcs to foes near it. | bolt 2, death 1 |
+| 7 | New: a perfect dodge charges every foe near. | perfect 1 |
+| 8 | Charged foes crackle harder; lightning arcs to 3. | tick 1.2, arcs 3 |
 
-Evolution **Overload** (partner `k_passing`): charge no longer runs out, and each dash strikes every charged foe on screen with lightning, 3 AP each, arcing to 2 more (at most once per 1.5 s).
-
-Build: today's `e.charged`, `discharge()` in `meleeHit.ts` and `createLightning` move into `src/game/skills/kael/static.ts`, listening to dash, perfect dodge and blow landed. The lightning from a sword blow counts as `attacks`; ticks use `k_static`.
-
-### Summon
+Evolution **Overload** (partner `k_passing`): Charge never runs out, and each dash strikes up to 8 charged foes with lightning.
+Evolved values added: overload 3, overloadArcs 2, most 8, every 1.5.
+Code: `skills/kael/staticCharge.ts` on the shared stacks.
 
 #### `k_echo` Phantom Edge
 
-Summon, precise, back blow. A blow from behind calls a phantom of Kael that repeats it (today's Phantom Edge and the Echo Blade relic).
+Summon, precise, auto. A sword blow from behind may call a phantom of Kael that repeats the blow.
 
-| Lv | Card line |
-| --- | --- |
-| 1 | New: a sword blow from behind has a 50% chance to call a phantom that repeats it 0.3 s later. At most once per 0.4 s. |
-| 2 | Chance 50% to 75%. |
-| 3 | New: the phantom stays 2 s and repeats every blow Kael lands on that foe. |
-| 4 | Repeat power 100% to 130%. |
-| 5 | New: the phantom's blows count as back attacks (1.5x). |
-| 6 | Chance 75% to 100%; stays 2 to 3 s. |
-| 7 | New: up to 2 phantoms at once. |
-| 8 | Repeat power 130% to 180%. |
+| Lv | Card line | Values |
+| --- | --- | --- |
+| 1 | A blow from behind may call a phantom that repeats it. | chance 0.5, repeat 1, most 1, cooldown 0.4 |
+| 2 | Chance 50% to 75%. | chance 0.75 |
+| 3 | New: the phantom stays and repeats every blow on that foe. | stay 2 |
+| 4 | Phantom blows 100% to 130%. | repeat 1.3 |
+| 5 | New: the phantom's blows land from behind. | back 1 |
+| 6 | New: the phantom's blows break wind-ups; always called. | chance 1, stay 3, heavy 1 |
+| 7 | New: up to 2 phantoms at once. | most 2 |
+| 8 | Phantom blows 130% to 220%. | repeat 2.2 |
 
-Evolution **Phantom Host** (partner `k_mirror`): up to 4 phantoms gather behind Kael's target and repeat every blow without needing a back blow; when the foe dies they move to the next one.
-
-Build: `effects/echo.ts`; the phantom is drawn from the ghost snapshot in `phantomLegion.ts`; the "blow landed" event needs a back-attack flag.
+Evolution **Phantom Host** (partner `k_mirror`): Phantoms come to any sword blow, no back blow needed, and stay on their foe repeating every blow.
+Evolved values added: host 1.
+Code: `skills/kael/phantomEdge.ts`, `effects/echo.ts`, `hero/phantom.ts`.
 
 #### `k_familiar` Crystal Familiar
 
-Summon, easy, ability cast. A cast may call a crystal familiar that fires homing shards (the Seeker Wisp relic, themed to Kael).
+Summon, easy, auto. Casting may call a crystal familiar that fires homing shards.
 
-| Lv | Card line |
-| --- | --- |
-| 1 | New: each cast has a 40% chance to call a familiar for 6 s that fires a shard at the nearest foe every 1 s, 0.8 AP. At most once per 1 s. |
-| 2 | Chance 40% to 70%. |
-| 3 | Shard 0.8 to 1.1 AP. |
-| 4 | New: shards pierce one foe. |
-| 5 | Stays 6 to 10 s; fires every 1 to 0.7 s. |
-| 6 | New: two familiars at once. |
-| 7 | New: the familiar takes the element just cast: fire shards burn 1 s, ice shards chill, lightning shards arc to one more. |
-| 8 | Shard 1.1 to 1.4 AP; fires every 0.7 to 0.6 s. |
+| Lv | Card line | Values |
+| --- | --- | --- |
+| 1 | A cast may call a crystal familiar that fires shards. | chance 0.4, life 6, every 1, power 0.8, pierce 1, most 1, cooldown 1 |
+| 2 | Chance 40% to 70%. | chance 0.7 |
+| 3 | New: a cast fires a volley of 3 from a familiar out. | volley 3 |
+| 4 | New: shards pierce a foe. | pierce 2 |
+| 5 | Familiars stay 10 s and fire faster. | life 10, every 0.7 |
+| 6 | New: two familiars at once. | most 2 |
+| 7 | New: shards take the element just cast. | element 1 |
+| 8 | Shard power 0.8 to 1.4; fire faster. | every 0.6, power 1.4 |
 
-Evolution **Crystal Choir** (partner `k_volt`): three familiars, always out, firing every 0.35 s, and every shard arcs to 2 foes.
-
-Build: port `relics/wisp.ts` into `src/game/skills/kael/familiar.ts` (the relic code is being removed); listens to ability cast, which Spellblade and base abilities also emit.
+Evolution **Crystal Choir** (partner `k_volt`): Three familiars, always out, and every shard arcs to another foe.
+Evolved values added: every 0.8, most 3, choir 1.
+Code: `skills/kael/crystalFamiliar.ts` (rebuilt: cast trigger, AP shards).
 
 #### `k_mirror` Mirror Knight
 
-Summon, precise, perfect dodge. A perfect dodge calls a mirror knight that warp-strikes; Riposte comes back here.
+Summon, precise, auto. A perfect dodge calls a mirror knight that warp-strikes the nearest foe.
 
-| Lv | Card line |
-| --- | --- |
-| 1 | New: a perfect dodge calls a mirror knight that warp-strikes the nearest foe, 4 AD. |
-| 2 | New: Riposte: Kael's next sword blow within 1.5 s deals triple and breaks guards. |
-| 3 | Mirror strike 4 to 7 AD. |
-| 4 | New: the knight warps on to strike up to 3 foes. |
-| 5 | Riposte lasts 1.5 to 2.5 s and covers 2 blows. |
-| 6 | New: the knight stays 4 s and fights beside Kael, copying his blows at 50%. |
-| 7 | Mirror strike 7 to 11 AD; copies at 50% to 80%. |
-| 8 | Mirror strike 11 to 15 AD; Riposte triple to quadruple; copies at 100% for 6 s. |
+| Lv | Card line | Values |
+| --- | --- | --- |
+| 1 | A perfect dodge calls a mirror knight that warp-strikes a foe. | strike 6, targets 1, cooldown 1 |
+| 2 | New: Riposte: the next blow after a perfect dodge deals triple. | riposte 3, ripTime 1.5, ripBlows 1 |
+| 3 | Knight strike 6 to 12. | strike 12 |
+| 4 | New: the knight warps through up to 3 foes. | targets 3 |
+| 5 | New: the knight stuns what it strikes; Riposte covers 2 blows. | ripTime 2.5, ripBlows 2, stun 0.8 |
+| 6 | New: the knight stays and copies your blows. | stay 4, copy 0.5 |
+| 7 | Knight strike 12 to 30; copies at 80%. | strike 30, copy 0.8 |
+| 8 | Knight strike 30 to 50; Riposte quadruple; stays 6 s. | strike 50, riposte 4, stay 6, copy 1 |
 
-Evolution **Perfect Reflection** (partner `k_keen`): a perfect dodge stops time around Kael for 0.6 s while he and the knight strike every foe within 120 px, 20 AD each; the knight then stays 8 s.
-
-Build: `perfectDodge.ts` emits the perfect dodge event; Riposte uses `hero.riposte` and `RIPOSTE`; the knight is a ghost figure (`ghostCanvas`) moving with `createWarpLine`.
-
-### Ultimate
-
-All three replace Crystal Nova on U and keep the four charge levels (`ULT_LEVELS`), with their power scaled by the skill's level row.
+Evolution **Perfect Reflection** (partner `k_keen`): A perfect dodge stops time while Kael and the knight strike the attacker and every foe near.
+Evolved values added: stay 8, reflect 150, reflectArea 40, reflectReach 120.
+Code: `skills/kael/mirrorKnight.ts`; Riposte in `hero/perfectDodge.ts`, `meleeHit.ts` and `hero/kael/bonus.ts`.
 
 #### `k_edges` Thousand Edges
 
-Ultimate, timed, U. A storm of blades ahead; huge on whatever is in front.
+Ultimate, timed, U. A storm of blades in front of you in place of Crystal Nova. Grows with attack damage. Hold U to charge up to four levels, release to strike. Higher levels cost more MP; level 4 spends a full bar.
 
-| Lv | Card line |
-| --- | --- |
-| 1 | New: U becomes Thousand Edges: blades ahead, both sides at charge 3, the screen at 4. 1.0x level power. |
-| 2 | Recharge 20 to 17 s. |
-| 3 | New: the storm pulls foes toward its centre. |
-| 4 | Power 1.0x to 1.4x. |
-| 5 | New: charge level 2 already reaches both sides. |
-| 6 | New: the storm lasts 0.6 s longer and hits 3 more times. |
-| 7 | Recharge 17 to 13 s; charging 30% faster. |
-| 8 | New: a great sword falls last, 50% of the level power again to all in reach; power 1.4x to 2x. |
+| Lv | Card line | Values |
+| --- | --- | --- |
+| 1 | U becomes Thousand Edges: a storm of blades ahead. | power 1, recharge 20, charge 1 |
+| 2 | Recharge 20 to 17 s. | recharge 17 |
+| 3 | New: the storm pulls foes to its centre. | pull 1 |
+| 4 | Power +40%. | power 1.4 |
+| 5 | New: charge level 2 already reaches both sides. | both 1 |
+| 6 | New: the storm lasts longer and cuts more. | longer 1 |
+| 7 | Recharge 17 to 13 s; charges 30% faster. | recharge 13, charge 1.3 |
+| 8 | New: a great sword falls last; power x2.5. | power 2.5, greatsword 0.5 |
 
-Evolution **Endless Edges** (partner `k_keen`): the storm follows Kael for 4 s while he keeps fighting, and every Keen blow in that time adds a volley.
-
-Build: `ultimates/thousandEdges.ts`.
+Evolution **Endless Edges** (partner `k_keen`): The storm follows Kael for 4 seconds while he fights, and every Keen blow adds a volley.
+Evolved values added: follow 4.
+Code: `ultimates/thousandEdges.ts`; recharge and charge speed in `hero/ultimate.ts`.
 
 #### `k_legion` Phantom Legion
 
-Ultimate, easy, U. Phantoms appear behind foes and cut them from their blind side.
+Ultimate, easy, U. Phantoms of Kael appear behind foes and cut them, in place of Crystal Nova. Grows with attack damage. Hold U to charge up to four levels, release to strike. Higher levels cost more MP; level 4 spends a full bar.
 
-| Lv | Card line |
-| --- | --- |
-| 1 | New: U becomes Phantom Legion: a phantom behind each of 2, 4, 8 or all foes by charge, 3 cuts each, 0.6x level power. |
-| 2 | One more phantom at each charge level. |
-| 3 | New: each phantom repeats its cuts once at half power. |
-| 4 | Power 0.6x to 0.8x. |
-| 5 | New: struck foes cannot turn for 2 s. |
-| 6 | Recharge 20 to 15 s. |
-| 7 | New: a foe a phantom kills sends that phantom on to the nearest foe. |
-| 8 | Power 0.8x to 1.0x. |
+| Lv | Card line | Values |
+| --- | --- | --- |
+| 1 | U becomes Phantom Legion: phantoms cut foes from behind. | power 0.6, recharge 20, charge 1 |
+| 2 | One more phantom at each charge level. | extra 1 |
+| 3 | New: each phantom repeats its cuts at half power. | repeat 0.5 |
+| 4 | New: the last cut launches; power +33%. | power 0.8, launch 1 |
+| 5 | New: struck foes cannot turn for 2 s. | lock 2 |
+| 6 | Recharge 20 to 15 s. | recharge 15 |
+| 7 | New: a phantom whose foe falls moves to the next. | hop 1 |
+| 8 | Power 0.8 to 2x. | power 2 |
 
-Evolution **Phantom Army** (partner `k_echo`): the legion stays 5 s, each phantom cutting every 0.5 s and moving to a new foe when its own falls.
-
-Build: `ultimates/phantomLegion.ts`.
+Evolution **Phantom Army** (partner `k_echo`): The legion stays 5 seconds, each phantom cutting again and again and moving on when its foe falls.
+Evolved values added: army 5, armyEvery 0.5.
+Code: `ultimates/phantomLegion.ts`.
 
 #### `k_starfall` Starfall
 
-Ultimate, timed, U, grows with AP. Meteors on the foes in reach; best into a packed group.
+Ultimate, timed, U. Meteors rain on the foes in reach and set the floor alight, in place of Crystal Nova. Grows with ability power. Hold U to charge up to four levels, release to strike. Higher levels cost more MP; level 4 spends a full bar.
 
-| Lv | Card line |
-| --- | --- |
-| 1 | New: U becomes Starfall: meteors on foes in reach, 0.9x level power on AP. |
-| 2 | New: burning floor where meteors land, 3 s. |
-| 3 | Power 0.9x to 1.3x. |
-| 4 | New: meteors stun for 0.8 s. |
-| 5 | Reach of each charge level +40 px. |
-| 6 | New: 3 more meteors fall on the densest group 0.5 s later. |
-| 7 | Recharge 20 to 15 s. |
-| 8 | Power 1.3x to 2x; floor burn 3 to 5 s. |
+| Lv | Card line | Values |
+| --- | --- | --- |
+| 1 | U becomes Starfall: meteors on the foes in reach. | power 0.9, recharge 20, charge 1 |
+| 2 | New: the floor burns where meteors land. | floor 3 |
+| 3 | Power +45%. | power 1.3 |
+| 4 | New: meteors stun foes. | stun 0.8 |
+| 5 | New: meteors throw foes up. | launch 1 |
+| 6 | New: 3 more meteors fall on the densest group. | late 3 |
+| 7 | Recharge 20 to 15 s. | recharge 15 |
+| 8 | Power 1.3 to 3x; the floor burns longer. | power 3, floor 5 |
 
-Evolution **Cataclysm** (partner `k_flame`): meteors keep falling for 4 s on foes near Kael, and each lands as a Fire Flask burst at the flask's level.
-
-Build: `ultimates/starfall.ts`, `densestSpot.ts`.
+Evolution **Cataclysm** (partner `k_flame`): Meteors keep falling for 4 seconds on foes near Kael, each landing as a Fire Flask burst.
+Evolved values added: rain 4, rainEvery 0.25.
+Code: `ultimates/starfall.ts`, `spells/floorFire.ts`.
 
 ## Balance
 
-### Assumptions
+The first draft counted far more triggers than an ordinary player makes.
+The numbers in the data follow the shared play model of the balance review of 7 November 2026 (all four heroes, one model) and its rules for every hero:
 
-All numbers at hero level 1 (AD 10, AP 10), no charms, no Flow, 5% base crit ignored except where a skill uses crits.
-Rates of ordinary play, taken from the clips and constants:
+- G1: hits a skill deals on its own (summons, copies, ticks, bursts, shards) use the skill id as source and never call blow or cast events, so no summon calls another.
+- G2: copies (Phantom Edge, Mirror Knight, Shadow Step) repeat the move's own power (`skills/kael/copyPower.ts`) with only the base back, air and crit rules.
+- G3: damage-taken bonuses (airborne, tripped, frozen, shocked, rift layers) and a mark add into one sum capped at +100% (`DAMAGE.takenCap`).
+- G4: bonuses on Kael's own hits (Keen, Phase Cut's back bonus, Sky Dance's air bonus, Riposte) add into one sum; only crit, back and air multiply.
+- G5: anything spread by a death or a spread (splinters, rift layers, static charge, frozen bursts) cannot pass on again for 0.5 s (`skills/kael/spreadLock.ts`).
+- G6: every summon has its cooldown in its data (Phantom Edge 0.4 s, Crystal Familiar 1 s, Mirror Knight 1 s).
 
-- The 4-hit string takes about 1.25 s (step cut and backhand 0.23 s each with the wind-up slow, twin fang 0.28 s, smash 0.5 s) plus 0.5 s combo cooldown. With dodging and walking back in, one string every 2.5 s: 0.4 strings/s, 2 blows/s, 5.9 AD per string, about 24 DPS on one foe.
-- A string blow hits 2.5 foes of a crowd of 6 on average; a ring or burst hits 4; a line hits 3.
-- MP comes in at about 6 per second (2 regen, 2 per blow landed), which caps warps and casts. A warp lands every 4 s (base), a cast every 5 to 6 s.
-- Dashes 0.5/s, through a foe 0.3/s. A skilled player lands 1.2 Keen blows/s and a perfect dodge every 3 s from mid waves on; precise numbers assume that player.
-- Ultimates are averaged over their recharge at charge level 3.
-- Base kit: about 36 DPS on one foe (string 24, warp 9, Lance 3) and about 95 on a crowd (string 59, warp 15, Lance 9, Burst 5, Nova 6).
+Model rates for Kael (ordinary player): 0.43 strings started a second, 1.27 blows landed, 0.18 last hits, 0.22 Keen blows (0.29 with the wider window), a perfect dodge every 7 s, warp 0.25 a second (0.45 with Warpcraft), a dash through foes 0.25 a second, about 0.12 casts a second per spell.
+Base Warp Strike is 1.8 AD (orchestrator decision), so the base kit sits near the other heroes.
 
-Budget anchor: an easy skill at level 8 adds about 50 DPS on its intended target (twice the base string on one foe).
-So timed is about 80 and precise about 125 to 150.
-Each number below is the DPS the skill adds on top of the base kit.
+Bands at level 8 in AD (or AP) per second on the intended target: easy 4.2, timed 6.7, precise 10.5 to 12.6; movement skills 0.8 of their band; dots 1.1 to 1.4 times the attack band of their risk.
+Ultimates are measured per cast against Crystal Nova at charge 3 (5.25 AD a foe): level 8 about 6 times, evolved about 15 times.
 
-### Damage per second
+Changes made from the review (all "must" items and the useful "suggest" items):
 
-| Skill | Risk | Intended | L1 one | L1 crowd | L8 one | L8 crowd | Evolved one | Evolved crowd | Basis |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| `k_keen` | precise | one | 13 | 20 | 125 | 230 | 310 | 480 | 1.2 Keen blows/s at 2.1 AD; L8 adds streak, 3 AD wave, hop cleave; evo cross cut every string and always Keen 3 s of 2.5. |
-| `k_skyward` | timed | crowd | 10 | 14 | 50 | 85 | 110 | 200 | 0.4 launches/s; launch plus chase and 2 air hits at 2x; L8 crash on 3 foes; evo 6 AD spike x2 air plus ring. |
-| `k_reap` | easy | crowd | 3 | 7 | 22 | 50 | 45 | 110 | 0.4 sweeps/s; pulls one more foe into each blow; evo tide drags the whole crowd. |
-| `k_phase` | timed | one | 7 | 10 | 75 | 110 | 150 | 300 | 0.4 phases/s; back smash 1.5x then +100%; afterimage; next string's first blows still from behind. |
-| `k_warpcraft` | timed | one | 4 | 6 | 66 | 110 | 90 | 200 | 0.75 warps/s at L8 (charges, 1.1 s, 6 MP); 7.5 AD strike plus 2.5 AD path cut. |
-| `k_blink` | precise | one | 11 | 13 | 115 | 140 | 290 | 360 | 2 blinks per string at L8, 6.75 AD from behind, Keen crit; no-turn keeps 3 blows back. |
-| `k_passing` | timed | crowd | 2 | 5 | 30 | 80 | 70 | 180 | 0.5 dashes through foes/s; 4 AD on 3 foes plus rising cut at L8; evo phantoms cut again and 0.8 dashes/s. |
-| `k_skydance` | timed | crowd | 6 | 12 | 40 | 80 | 100 | 200 | one jump string per 2.5 s at L8 (air dash); 3 air hits plus 4 AD stomp on 2.5 foes. |
-| `k_flame` | easy | crowd | 2.5 | 7 | 18 | 55 | 35 | 120 | one cast per recharge; burst plus burn on 3 foes (L1) and 4.5 foes with 2 flasks (L8). |
-| `k_frost` | timed | crowd | 2 | 6 | 12 | 65 | 30 | 150 | line catches 3 to 4; shatter on the smash; +25% while frozen. Slightly under budget, paid in crowd control. |
-| `k_volt` | easy | crowd | 4 | 6 | 25 | 55 | 50 | 110 | strike plus arcs, twice per cast at L8, every 4 s. |
-| `k_splinters` | easy | crowd | 1.5 | 3 | 30 | 70 | 70 | 220 | 2 blows/s keep foes full; 8 x 0.35 AD/s per foe at L8 on 2.5 foes; evo 8 x 1.2 AD shatter every string. |
-| `k_rift` | timed | one | 2 | 3 | 95 | 150 | 220 | 350 | layers from warps and finishers, 5 held on an elite or boss at L8; +30% taken. |
-| `k_static` | timed | crowd | 1 | 3 | 25 | 95 | 60 | 220 | 4 charged foes at L8 at 8 AP/s tick plus 2.5 AP lightning per 2 s each. |
-| `k_echo` | precise | one | 9 | 12 | 130 | 170 | 330 | 420 | 1 back blow/s (with Phase Cut or Blink Step); L8 two phantoms repeat every blow at 180% from behind. |
-| `k_familiar` | easy | one | 4 | 5 | 47 | 60 | 110 | 150 | full uptime from L5; two familiars at 1.4 AP every 0.6 s at L8. |
-| `k_mirror` | precise | one | 13 | 20 | 127 | 200 | 350 | 600 | 1 perfect dodge per 3 s: 15 AD strike, 2 quadruple blows, 6 s of copied string. |
-| `k_edges` | timed | crowd | 4 | 14 | 16 | 90 | 40 | 180 | 7 AD per foe per cast at 1x, 13 s recharge and 2.5x content at L8. |
-| `k_legion` | easy | crowd | 3 | 15 | 10 | 63 | 30 | 130 | all 6 foes reached at charge 3; cuts from behind; 15 s recharge at L8. |
-| `k_starfall` | timed | crowd | 4 | 12 | 16 | 85 | 40 | 180 | as Thousand Edges on AP. |
+| Skill | Change |
+| --- | --- |
+| `k_keen` | Keen +200% / +500% / +1000% at levels 1, 5, 8; wave 1.5 to 10 AD; streak cap +100%; evolution every third Keen blow (counted across strings), cross cut 60 AD. |
+| `k_skyward` | Level 8 launch 5 AD, crash 3.5 AD; Heavenfall spike 15 AD. |
+| `k_phase` | Phase cut 3.5 AD at level 1, 12 AD at level 8; back bonus +150%. |
+| `k_blink` | Retagged timed; level 8 strike 7 AD. |
+| `k_warpcraft` | Level 8 strike 7 AD; Rift Walker's chained arrivals do not call the warp event, so they count as one arrival for Rift Wound. |
+| `k_frost` | Level 8 spikes 7 AP, shards 3.5 AD; one more new property (chill beside the line). |
+| `k_volt` | Two more new properties (stun, a bolt behind); level 8 strike 7 AP, arcs 2.5 AP. |
+| `k_flame` | One more new property (the burst knocks down). |
+| `k_splinters` | Level 8 0.22 AD per splinter a second; Shatterstorm 0.5 AD per splinter within 70 px; one more new property (crits lodge 2). |
+| `k_rift` | Level 8 2.4 AD per layer a second; one more new property (slow); Rift Collapse's layers cannot spread or collapse again within a second. |
+| `k_static` | Overload strikes at most 8 foes, at most every 1.5 s; one more new property (a charged foe that dies arcs); lightning 2 AP from level 6. |
+| `k_echo` | Copies follow G2; level 8 repeat 220%; one more new property (its blows break wind-ups). |
+| `k_familiar` | Rebuilt from the framework's reference summon (which was far too strong): a cast trigger, AP shards, 1 s cooldown; Crystal Choir fires every 0.8 s and arcs to 1 foe. |
+| `k_mirror` | Strike 6 AD at level 1, 50 AD at level 8; one knight at a time, a new perfect dodge refreshes it; 1 s cooldown; Perfect Reflection 150 AD to the attacker and 40 AD within 120 px; one more new property (the knight stuns). |
+| `k_edges` | Level 8 power 2.5 times. |
+| `k_legion` | Level 8 power 2 times; one more new property (the last cut launches). |
+| `k_starfall` | Level 8 power 3 times; one more new property (meteors throw foes up). |
 
-### Budget check
-
-- Easy, L8 on intended: 50 (Reaping Sweep), 55 (Fire Flask, Lightning), 47 (Familiar), 63 (Legion). On target.
-- Timed, L8 on intended: 75 to 90 for most; Warpcraft (66) and Ice Spikes (65) sit a little low because they also carry mobility and freezing.
-- Precise, L8 on intended: 115 to 130, which is 2.3 to 2.6 times easy. On the low edge of the 2.5 to 3 band; the evolutions (290 to 350) restore the gap.
-- Level 8 against level 1 on the intended target: 6x to 10x for the attacks, movement and summons; the spells reach 7x to 11x, the dots 20x to 50x, which is the point of a dot.
-- Dots against the attack skill of the same risk on the same target:
-
-| Level | Splinters (easy, crowd) | Reaping Sweep | Rift Wound (timed, one) | Phase Cut | Static Charge (timed, crowd) | Skybreaker |
-| --- | --- | --- | --- | --- | --- | --- |
-| 1 | 3 | 7 | 2 | 7 | 3 | 14 |
-| 4 | 12 | 26 | 15 | 35 | 25 | 40 |
-| 7 | 50 | 44 | 75 | 65 | 75 | 70 |
-| 8 | 70 | 50 | 95 | 75 | 95 | 85 |
-
-Below at 1 to 4, above at 7 and 8, as the contract asks.
+Every dot stays below the attack skill of its risk on the same target at levels 1 to 4 and passes it at 7 and 8 under the model (Splinters against Reaping Sweep, Rift Wound against Phase Cut, Static Charge against Skybreaker).
+These are hand estimates within about 25 percent; the growth simulation and bot runs tune them further.
 
 ## Example builds
 
@@ -572,9 +542,19 @@ Dash through the crowd to charge it, cast into it, let the familiars and the sto
 Evolve Skybreaker (Sky Dance), Crystal Splinters (Keen Edge), Rift Wound (Warpcraft).
 Sweep pulls foes in, the 4th hit launches them, the air string and stomp bring them down full of splinters; the warp keeps the wounds open. Splinters and Rift make the early waves slow and the late waves fast.
 
-## Notes for the build
+## Built differently from the first draft
 
-- Kael's skill code reads only `skillLevel`, `skillEvolved` and `skillValues` with `k_` ids, which are 0 for the other heroes. Shared files (`combo.ts`, `meleeHit.ts`, `damage.ts`) gain skill queries in place of perk checks and keep their defaults, so Ysra, Sable and Hulda play the same.
-- Kael-only files (`comboChoice.ts`, `readActions.ts`, `warp.ts`, `dash.ts`, `jump.ts`, `spell.ts`) carry the button changes.
-- No new moves are needed; every move used already has a clip (`sweep`, `hopCleave`, `crescent`, `phase`, `skyRend`, `thrust`, `dashCut`, `airStomp`, `spin`, `plunge`). New effects: the gold cross cut, the crystal tide, the comet ring, splinter and rift marks on foes, the mirror knight and the familiar.
-- Events the kit needs from `src/game/skills/events.ts`: blow landed with the move id, finisher flag, Keen flag and back-attack flag; warp arrival with the foe; dash with the foes passed through; perfect dodge; ability cast with the element.
+- Phantom Host keeps two phantoms (not four): with phantoms called by any blow, four would multiply every blow by about nine.
+- Passing Cut level 7 slows the foes it cuts, in place of a longer dash, so the dash's distance and the motion standard stay as they are.
+- Blink Step keeps the combo going by holding its link window open over the arrival; the next J goes on with the string.
+- Crystal Splinters and the other dots tick through the shared stacks (`addStacks`), so the end of run screen lists them by name.
+- The back flip is gone; its job (get out and push a foe off) is the plain dash and Crystal Burst.
+
+## Code map
+
+- Data: `src/constants/characters/kael/skills/` (one file per skill, rows built with `utils/skillRows.ts`).
+- Kit hooks into the shared loop, all optional and left out by the other heroes: `HeroKit.shapeHit`, `keenWindow`, `alwaysKeen` (in `combo.ts`), and `registerDamageHooks` (`game/damageHooks.ts`, read in `dealDamage`).
+- Kael's kit state for his skills: `src/game/hero/kael/state.ts` (Keen streak, warp charges, blink recharge, phase window, storm).
+- Behaviors on their own: `src/game/skills/kael/`.
+- Abilities on I: `src/game/hero/spell.ts` on `createRotation` (Lance, Burst, then the element spells held).
+- Icons: `src/ui/skills/icons/kael/` (every skill, every evolution, and Kael's three damage sources).
