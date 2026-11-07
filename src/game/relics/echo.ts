@@ -164,7 +164,7 @@ function drawCrescent(c: Crescent): void {
   const R = skin.ramp;
   const going = Math.sign(c.vx) || c.dir;
   const fade = c.phantom ? 1 : 1 - clamp((c.t - ECHO_FLIGHT.life * 0.7) / (ECHO_FLIGHT.life * 0.3));
-  const wake = c.phantom ? [10, 20, 30] : [6, 12];
+  const wake = c.phantom ? [10, 22] : [6, 12];
   wake.forEach((back, i) => arc(c, c.x - going * back, c.phantom ? PAL.shadow : R, R[3], fade * (0.45 - i * 0.12)));
   if (c.phantom) arc(c, c.x - going * 2, PAL.shadow, PAL.shadow[5], fade * 0.9);
   arc(c, c.x, R, WHITE, fade * 0.9);

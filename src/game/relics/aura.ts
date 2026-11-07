@@ -73,16 +73,18 @@ export const aura: RelicBehavior = {
     const r = AURA_REACH.radius * s.area;
     m.since += dt;
     m.healed += dt;
-    if (evolved) {
-      m.heal = Math.min(progress.stats.hp * SUN_HEART_HEAL.cap, m.heal + progress.stats.hp * SUN_HEART_HEAL.cap * dt);
-      healFromKills(m, r);
-    }
     m.wait -= dt;
-    if (m.wait > 0 || hero.state === "dead") return;
-    m.wait = s.cooldown;
-    m.since = 0;
-    burn(s.damage, r, evolved);
-    lights.add(hero.x, hero.y - 6, r * 1.4, evolved ? FIRE_RAMP[2] : FIRE_RAMP[4], evolved ? 0.35 : 0.22, FLARE);
+    if (hero.state === "dead") return;
+    if (m.wait <= 0) {
+      m.wait = s.cooldown;
+      m.since = 0;
+      burn(s.damage, r, evolved);
+      lights.add(hero.x, hero.y - 6, r * 1.4, evolved ? FIRE_RAMP[2] : FIRE_RAMP[4], evolved ? 0.35 : 0.22, FLARE);
+    }
+    if (!evolved) return;
+    // foes felled this step, by the burn just now or by anything else, are still in the list until the foes' update
+    m.heal = Math.min(progress.stats.hp * SUN_HEART_HEAL.cap, m.heal + progress.stats.hp * SUN_HEART_HEAL.cap * dt);
+    healFromKills(m, r);
   },
   drawBack(memory, level, evolved) {
     drawRing(memory as AuraMemory, radiusOf(level, evolved), evolved, -1);

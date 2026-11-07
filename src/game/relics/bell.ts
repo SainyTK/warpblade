@@ -6,7 +6,7 @@ import type { RelicBehavior, RelicMemory } from "../../types/build";
 import type { Enemy } from "../../types/enemy";
 import { PK } from "../../types/particle";
 import { buildStats, relicStats } from "../../utils/build";
-import { WHITE } from "../../utils/color";
+import { hex, WHITE } from "../../utils/color";
 import { clamp, ease, TAU } from "../../utils/math";
 import { ovalReachesBox } from "../../utils/ovalReach";
 import { dealDamage } from "../damage";
@@ -128,22 +128,35 @@ function drawRing(o: Ring): void {
   glow(o.x, o.y, r * 0.5, C[3], 0.2 * k * (1 - u));
 }
 
-/** BELL rows: 0 empty, 1 rim, 2 body, 3 shine, 4 clapper */
-const BELL = ["00110", "01321", "01221", "12221", "11111", "00400"] as const;
+/** BELL rows: 0 empty, 1 rim, 2 body, 3 shine, 4 clapper; a dark outline is drawn around them */
+const BELL = ["0001000", "0011100", "0132210", "0132210", "0122210", "1222221", "1111111", "0004000"] as const;
+const BELL_OUTLINE = hex("#0a0612");
 
-/** the small bell over the hero's head swings as it rings, and fades */
+/** the small bell over the hero's head swings from its top as it rings, and fades */
 function drawBell(t: number, evolved: boolean): void {
   const k = 1 - t / BELL_RING.bellShow;
-  const swing = Math.round(Math.sin(t * 22) * 2 * k);
-  const x = hero.x - 2;
-  const y = hero.y - BELL_RING.bellRise - (1 - k) * 3;
+  const swing = Math.sin(t * 22) * 2.5 * k;
+  const x = Math.round(hero.x) - 3;
+  const y = Math.round(hero.y - BELL_RING.bellRise - (1 - k) * 3);
   const C = evolved ? PAL.crystal : PAL.ice;
   const colors = [0, C[2], C[4], WHITE, C[1]];
-  BELL.forEach((row, j) => {
-    for (let i = 0; i < row.length; i++) {
-      const v = Number(row[i]);
-      if (v) px(x + i + Math.round(swing * (j / BELL.length)), y + j, colors[v], Math.min(1, k * 2));
-    }
-  });
-  glow(x + 2, y + 3, 10, C[3], 0.35 * k);
+  const a = Math.min(1, k * 2.5);
+  const at = (i: number, j: number): number => x + i + Math.round(swing * (j / BELL.length));
+  for (const pass of [0, 1])
+    BELL.forEach((row, j) => {
+      for (let i = 0; i < row.length; i++) {
+        const v = Number(row[i]);
+        if (!v) continue;
+        if (pass === 1) px(at(i, j), y + j, colors[v], a);
+        else for (const [dx, dy] of OUTLINE_STEPS) px(at(i, j) + dx, y + j + dy, BELL_OUTLINE, a);
+      }
+    });
+  glow(x + 3, y + 4, 12, C[3], 0.35 * k);
 }
+
+const OUTLINE_STEPS = [
+  [1, 0],
+  [-1, 0],
+  [0, 1],
+  [0, -1],
+] as const;

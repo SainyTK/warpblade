@@ -40,7 +40,7 @@ export const BELL_RING = {
   /** height of the hero's middle above their feet */
   middle: 14,
   /** where the small bell hangs over the hero's head while it rings, and how long it shows */
-  bellRise: 40,
+  bellRise: 50,
   bellShow: 0.7,
 } as const;
 
