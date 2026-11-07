@@ -3,7 +3,7 @@ import { CHARACTERS } from "../constants/characters";
 import { isPlaytestSession } from "../services/playtestStart";
 import type { Achievement, Feat, GoalSource, TrackedStats } from "../types/achievement";
 import { availableAchievements, newlyMet } from "../utils/achievements";
-import { applyFeat } from "../utils/trackedStats";
+import { applyFeat, emptyRun } from "../utils/trackedStats";
 import { heroesBought, onMetaChange, saveAchievements, savedAchievements, savedTracked, shopLevels } from "./meta";
 
 /**
@@ -15,6 +15,7 @@ let earned = new Set(savedAchievements());
 /** earned since the last run began, for the result screen */
 let sinceRunStart: Achievement[] = [];
 const listeners = new Set<(a: Achievement) => void>();
+const featListeners = new Set<() => void>();
 
 /** the achievements the game has now: one for a hero only once that hero is in */
 export const allAchievements = (): readonly Achievement[] =>
@@ -48,11 +49,19 @@ export function recordFeat(feat: Feat): void {
   stats = applyFeat(stats, feat);
   const ends = feat.kind === "waveCleared" || feat.kind === "runEnd" || feat.kind === "banked";
   if (!check() && ends) saveAchievements(stats);
+  for (const listener of featListeners) listener();
 }
 
-/** a new run begins: the result screen lists only what this run earns */
+/** a new run begins: the result screen lists only what this run earns, and the run's own counts start over */
 export function startRunAchievements(): void {
   sinceRunStart = [];
+  stats = { ...stats, run: emptyRun() };
+}
+
+/** listen for every feat counted, after the stats have taken it in; the unlocks check their goals here */
+export function onFeat(listener: () => void): () => void {
+  featListeners.add(listener);
+  return () => featListeners.delete(listener);
 }
 
 /** listen for each achievement as it is earned */

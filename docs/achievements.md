@@ -30,6 +30,8 @@ In a co-op lobby, Left and Right step only through the heroes this player has un
 
 A hero can be in the price table before it is in `CHARACTERS`; it shows up locked the moment it is added there.
 
+Relics, charms and slots found across runs are a separate system with no coins; see `docs/unlocks.md`.
+
 ## Tracking
 
 `src/store/achievements.ts` is the one owner of tracking.
@@ -45,6 +47,8 @@ The game reports what happens through `feat()` in `src/game/feat.ts`, called whe
 | A perfect dodge or a parry | `perfectDodge` and Ysra's `parry` |
 | A skill learned on a pick, with its kind | `choosePick` in `src/game/progress.ts` |
 | Coins banked | `bankCoins` in `src/game/coins.ts`, and the co-op host and guest at run end |
+
+The same feats, and a few more, also feed the unlocks (`docs/unlocks.md`).
 
 Shop levels and heroes bought are read from the meta save, so buying in the shop or unlocking a hero is checked as soon as it happens.
 

@@ -20,6 +20,7 @@ import { isMenuOpen, menuContext, openMenu } from "./ui/menu/menuState";
 import { preventZoom } from "./ui/preventZoom";
 import { bindPickDialog, syncPickDialog } from "./ui/skills/pickDialog";
 import { bindTouch, syncTouch } from "./ui/touch/bindTouch";
+import { bindDiscoveryToasts } from "./ui/unlocks/discoveryToast";
 
 startAnalytics();
 game.best = loadBest();
@@ -32,6 +33,7 @@ bindPauseButton();
 bindPickDialog();
 bindMenu();
 bindAchievementToasts();
+bindDiscoveryToasts();
 openMenu("title");
 joinFromInvite();
 

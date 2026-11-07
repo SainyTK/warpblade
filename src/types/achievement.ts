@@ -1,3 +1,4 @@
+import type { RelicId, SourceId } from "./build";
 import type { EnemyRank } from "./enemy";
 import type { RunOutcome } from "./run";
 import type { SkillKind } from "./skill";
@@ -11,16 +12,42 @@ export type CountStat =
   | "perfects"
   | "evolutions"
   | "ultimates"
-  | "coinsBanked";
-/** the best a player has ever done */
-export type BestStat = "wave" | "combo";
+  | "coinsBanked"
+  | "relicKills"
+  | "relicEvolutions"
+  | "chests"
+  | "flowFulls";
+/** the best a player has ever done; the `run` ones are the most in one run */
+export type BestStat =
+  | "wave"
+  | "combo"
+  | "cleared"
+  | "relicLevel"
+  | "chestUpgrades"
+  | "lightWave"
+  | "runBackAttacks"
+  | "runPerfects"
+  | "runBlows"
+  | "runRelicKills";
 
-/** what the game keeps track of across runs for the achievements */
+/** what the run in play has counted so far, for the goals met within one run */
+export interface RunTally {
+  backAttacks: number;
+  perfects: number;
+  blows: number;
+  relicKills: number;
+  /** the relics the hero has taken this run */
+  relics: RelicId[];
+}
+
+/** what the game keeps track of across runs for the achievements and unlocks */
 export interface TrackedStats {
   counts: Record<CountStat, number>;
   best: Record<BestStat, number>;
   /** the highest wave cleared with each hero, by hero id */
   heroWave: Record<string, number>;
+  /** the run in play; a save never brings it back */
+  run: RunTally;
 }
 
 /** what a goal is read from: the tracked stats and what the meta save shows */
@@ -60,13 +87,18 @@ export interface GoalProgress {
   need: number;
 }
 
-/** something that happened in play that an achievement may count */
+/** something that happened in play that an achievement or an unlock may count */
 export type Feat =
-  | { kind: "kill"; rank: EnemyRank }
+  | { kind: "kill"; rank: EnemyRank; source?: SourceId }
   | { kind: "waveReached"; wave: number }
   | { kind: "waveCleared"; wave: number; hero: string }
   | { kind: "runEnd"; outcome: RunOutcome; wave: number; hero: string }
   | { kind: "comboHit"; moves: number }
   | { kind: "perfect" }
   | { kind: "learned"; skill: SkillKind }
-  | { kind: "banked"; coins: number };
+  | { kind: "banked"; coins: number }
+  | { kind: "backAttack" }
+  | { kind: "relicLevel"; relic: RelicId; level: number }
+  | { kind: "evolved"; relic: RelicId }
+  | { kind: "chestOpened"; upgrades: number }
+  | { kind: "flowFull" };

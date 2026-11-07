@@ -1,5 +1,6 @@
 import { PAL } from "../constants/palette";
 import { sfx } from "../services/audio";
+import type { SourceId } from "../types/build";
 import type { Enemy } from "../types/enemy";
 import { PK } from "../types/particle";
 import { WHITE } from "../utils/color";
@@ -19,13 +20,13 @@ const ORBS = { minion: 1, mini: 5, boss: 9 } as const;
 const HEARTS = { big: 1, other: 0.06 } as const;
 
 /** a dark burst of smoke and motes, orbs that fly back to Kael, experience orbs to pick up, and the wave's end when it was the last foe */
-export function killEnemy(e: Enemy): void {
+export function killEnemy(e: Enemy, source?: SourceId): void {
   const [x, y] = enemyCenter(e);
   const S = PAL.shadow;
   const R = rng;
   const big = e.rank !== "minion";
   game.kills++;
-  feat({ kind: "kill", rank: e.rank });
+  feat({ kind: "kill", rank: e.rank, source });
   lights.add(x, y, big ? 110 : 56, S[4], 0.9, big ? 0.9 : 0.5);
   lights.add(x, y, 18, WHITE, 0.8, 0.1);
   for (let i = 0; i < (big ? 48 : 16); i++) {

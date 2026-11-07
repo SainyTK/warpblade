@@ -1,7 +1,7 @@
-import type { Achievement, GoalProgress, GoalSource } from "../types/achievement";
+import type { Achievement, Goal, GoalProgress, GoalSource } from "../types/achievement";
 
-/** how far a goal has come, the count capped at what it needs */
-export function goalProgress(a: Achievement, src: GoalSource): GoalProgress {
+/** how far the goal of an achievement or an unlock has come, the count capped at what it needs */
+export function goalProgress(a: { goal: Goal }, src: GoalSource): GoalProgress {
   const g = a.goal;
   const have =
     g.kind === "count"
@@ -16,7 +16,7 @@ export function goalProgress(a: Achievement, src: GoalSource): GoalProgress {
   return { have: Math.min(have, g.need), need: g.need };
 }
 
-export const isMet = (a: Achievement, src: GoalSource): boolean => {
+export const isMet = (a: { goal: Goal }, src: GoalSource): boolean => {
   const p = goalProgress(a, src);
   return p.have >= p.need;
 };
