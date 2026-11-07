@@ -402,14 +402,15 @@ Summon, precise, automatic on a parry. A bird of fire answers the parry and keep
 | --- | --- | --- |
 | 1 | chance 0.6, cooldown 3, dives 3, life 0, every 0.5, power 2.5, block 0, burn 0, burst 0, most 1 | A parry may call a sun hawk. |
 | 2 | chance 0.8 | The hawk answers more often. |
-| 3 | dives 0, life 6, every 1, power 3 | The hawk stays and hunts. |
+| 3 | dives 0, life 6, every 1, power 3 | The hawk stays and keeps diving its foe. |
 | 4 | power 3.5 | Dives hit harder. |
 | 5 | power 4, block 0.25 | Blocks may call the hawk too. |
 | 6 | chance 1, power 4.5, burn 2 | Every parry calls a burning hawk. |
 | 7 | power 9, burst 24 | Dives burst. |
-| 8 | every 0.8, power 15, most 2 | Two hawks, faster dives. |
+| 8 | every 0.8, power 42, most 2 | Two hawks, far harder dives. |
 
-Evolution, Sunflock (with `y_counter`): a parry calls five hawks that dive the attacker together for 12 AD each and then hunt for 6 s; while two or more fly she takes 20% less damage.
+Evolution, Sunflock (with `y_counter`): a parry calls five hawks that dive the attacker together for 90 AD each for 6 s; while two or more fly she takes 20% less damage.
+A call is one precise payoff (balance round 3): its hawks dive only the foe the parry met (or, with no attacker in reach, the first foe they strike) and fly off once it falls; the dive burst stays the skill's own small area.
 Built in `src/game/skills/ysra/hawk.ts` with `drawPhoenix` at a third of its size; the guard is read by the kit through `buffs.guard`. Every call keeps the 3 s cooldown.
 
 ### `y_kindling` Kindling

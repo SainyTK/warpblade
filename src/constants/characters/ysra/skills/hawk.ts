@@ -13,12 +13,12 @@ const levels = grow(
   [
     ["A parry may call a sun hawk.", {}],
     ["The hawk answers more often.", { chance: 0.8 }],
-    ["The hawk stays and hunts.", { power: 3, dives: 0, life: 6, every: 1 }],
+    ["The hawk stays and keeps diving its foe.", { power: 3, dives: 0, life: 6, every: 1 }],
     ["Dives hit harder.", { power: 3.5 }],
     ["Blocks may call the hawk too.", { power: 4, block: 0.25 }],
     ["Every parry calls a burning hawk.", { power: 4.5, chance: 1, burn: 2 }],
     ["Dives burst.", { power: 9, burst: 24 }],
-    ["Two hawks, faster dives.", { power: 15, every: 0.8, most: 2 }],
+    ["Two hawks, far harder dives.", { power: 42, every: 0.8, most: 2 }],
   ],
 );
 
@@ -29,12 +29,12 @@ export const SUN_HAWK: SkillDef = {
   kind: "summon",
   risk: "precise",
   button: "auto",
-  text: "A parry may call a sun hawk that dives on the attacker and then on the foes nearest it.",
+  text: "A parry may call a sun hawk that keeps diving the attacker until it falls.",
   levels,
   evolution: {
     partner: "y_counter",
     name: "Sunflock",
     text: "A parry calls five hawks that dive the attacker together, and while two or more fly you take 20% less damage.",
-    row: evolved(levels, "A flock answers every parry.", { power: 12, flock: 5, most: 5, guard: 0.2 }),
+    row: evolved(levels, "A flock answers every parry.", { power: 90, flock: 5, most: 5, guard: 0.2 }),
   },
 };

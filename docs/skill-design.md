@@ -85,18 +85,18 @@ Evolutions keep the trade: an `easy` evolution grows area and reliability, a `pr
 ### Precise payoff
 
 A `precise` skill hits very hard on the foe the hard move was aimed at, and only on that foe.
-Its payoff is the damage the skill adds to one pull-off: Keen Edge's bonus and crystal wave on a Keen move, Counter Thrust's power on the counter, Perfect Rhythm's prime on a perfect reload's bolts, Iron Counter's catch.
+Its payoff is the damage the skill adds to one pull-off: Keen Edge's bonus, crystal wave and Peerless Edge's cross cut on a Keen move, Counter Thrust's power on the counter, Perfect Rhythm's prime on a perfect reload's bolts, Iron Counter's catch, Skyfall Breaker's slam and pounds on the caught foe, and the dives of the hawks a parry calls (Sun Hawk), which fly off once their foe falls.
 
 - The payoff lands on at most `PRECISE_TARGETS` foes per pull-off (1, in `src/constants/growth.ts`): the first the move, wave or bolt reaches, nearest to the hero first.
 - Every other foe the same blow, wave or bolt reaches takes it as the plain move would: the rest of a counter's line takes the plain counter thrust, a foe a primed bolt passes through takes the plain prime, and a Keen wave passes it by.
 - A move's blows and what they send out share one payoff, so a Keen move and its wave pay off on the same foe; Perfect Rhythm's volley flies at the nearest foe for the same reason.
-- An area the card names as the skill's own (a burst, a ring, a spread, Peerless Edge's cross cut) has its own, smaller number and counts toward the crowd cap; buffs a pull-off grants (Fury, Riposte, crits) count toward the budget as before.
+- An area the card names as the skill's own (a burst, a ring, a spread) has its own, smaller number and counts toward the crowd cap; buffs a pull-off grants (Fury, Riposte, crits) count toward the budget as before.
 
 The result in the measuring room (`docs/skills/balance.md`): one foe in the precise band, a crowd at most about 300 a second at level 8 and about 900 evolved.
 
 Code: `payoffLands(payoff, foe)` in `src/game/skills/payoff.ts` says whether a pull-off's payoff lands on a foe and keeps the foe it lands on.
 A combo move's payoff is `movePayoff()`, fresh with each move; a precise blow sets `plain` on its `MoveHit` (or its `GlaiveTune`) to the power every foe past the payoff takes, and `meleeHit` strikes foes nearest first.
-A projectile carries its own payoff (`Shot.payoff`, the last argument of `createCrystalWave`).
+A projectile or a summon carries its own payoff (`Shot.payoff`, the last argument of `createCrystalWave`, each of Sun Hawk's hawks).
 
 ### Damage over time
 

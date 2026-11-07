@@ -10,6 +10,7 @@ import { enemyCenter } from "../../enemies/enemy";
 import { buffs } from "../../hero/ysra/buffs";
 import { burstEmbers } from "../../spells/rites/emberBurst";
 import { game, hero, particles, progress, rng } from "../../state";
+import { createPayoff, type Payoff, payoffLands } from "../payoff";
 import { skillEvolved, skillValues, withCharms } from "../query";
 import { nearestFoe } from "../targets";
 import { attackerAt, memoryAs } from "./memory";
@@ -35,6 +36,8 @@ interface Hawk {
   dives: number;
   life: number;
   wait: number;
+  /** the parry's payoff: Sun Hawk is precise, so it hunts the foe the parry met and flies off once that foe falls */
+  payoff: Payoff;
 }
 
 interface HawkMemory {
@@ -43,18 +46,19 @@ interface HawkMemory {
 }
 
 /** a hawk swoops down out of the sky over her toward its first prey */
-function call(m: HawkMemory, prey: Enemy | null, from = hero.x): void {
+function call(m: HawkMemory, prey: Enemy | null, from = hero.x, payoff: Payoff = createPayoff()): void {
   const v = skillValues(ID);
   const most = v.most ?? 1;
   if (m.hawks.length >= most) m.hawks.shift();
   const life = v.life ? withCharms("duration", v.life) : 0;
-  m.hawks.push({ x: from, y: hero.y - CIRCLE - 20, vx: 0, vy: 0, prey, dives: v.dives, life, wait: 0 });
+  m.hawks.push({ x: from, y: hero.y - CIRCLE - 20, vx: 0, vy: 0, prey, dives: v.dives, life, wait: 0, payoff });
 }
 
 /** the dive lands: the blow, a burn, a burst, sparks */
 function strike(h: Hawk, e: Enemy): void {
   const v = skillValues(ID);
   const [cx, cy] = enemyCenter(e);
+  payoffLands(h.payoff, e);
   dealDamage(e, progress.stats.ad * v.power, { fromX: h.x, kx: Math.sign(h.vx) * 60, source: ID });
   if (v.burn) ignite(e, v.burn);
   if (v.burst) burstEmbers(cx, cy, progress.stats.ad * v.power * 0.5, v.burst, 1, ID);
@@ -96,18 +100,22 @@ function fly(h: Hawk, dt: number): boolean {
   toward(h, hero.x + Math.sin(game.t * 2) * 20, hero.y - CIRCLE, dt);
   const done = h.life ? h.life <= 0 : h.dives <= 0;
   if (done) return false;
-  if (h.wait <= 0) h.prey = nearestFoe(h.x, h.y);
-  return true;
+  if (h.wait > 0) return true;
+  // its foe is the one the payoff landed on; with none yet (a parry with no attacker in reach) the nearest
+  if (!h.payoff.size) h.prey = nearestFoe(h.x, h.y);
+  else h.prey = [...h.payoff].find((e) => e.hp > 0) ?? null;
+  return h.prey !== null || !h.payoff.size;
 }
 
-/** Sunflock: a parry calls five hawks that dive the attacker together, then hunt */
+/** Sunflock: a parry calls five hawks that dive the attacker together until it falls */
 function flock(m: HawkMemory, prey: Enemy | null): void {
   const v = skillValues(ID);
-  for (let i = 0; i < v.flock; i++) call(m, prey, hero.x + (i - (v.flock - 1) / 2) * FLOCK_SPREAD * 0.4);
+  const payoff = createPayoff();
+  for (let i = 0; i < v.flock; i++) call(m, prey, hero.x + (i - (v.flock - 1) / 2) * FLOCK_SPREAD * 0.4, payoff);
 }
 
-/** Sun Hawk: a parry (and from its level 5 a block) may call a hawk of fire that dives the attacker, then the foes
- *  nearest it; evolved, a flock that also shields her while two or more fly */
+/** Sun Hawk: a parry (and from its level 5 a block) may call a hawk of fire that dives the attacker until it falls (a
+ *  precise payoff: one foe a call); evolved, a flock that also shields her while two or more fly */
 export const sunHawk: SkillBehavior = {
   create: () => ({ cd: 0, hawks: [] }),
   update(memory, _state, dt) {

@@ -261,6 +261,8 @@ movement, precise, K in the air. Catching a foe from the air is a hard read; it 
 
 Evolution: **Comet Grab** (partner `h_counterGrab`). K on the floor with no foe in reach leaps her into a Skyfall. The slam is 40x, and a catch gives Fury +60% and a full plate.
 
+Data since balance round 3: level 8 slam 46x, Comet Grab 65x. The slam and pounds strike only the caught foe, which is the precise payoff; dragged foes take only the ring, the skill's own area.
+
 Build: `hero/hulda/skyfall.ts`; the ride needs a new pose (kneeling on the foe's back, both fists overhead, reusing the hammer fist keys) and a `ride` state.
 
 ### h_ironHide: Iron Hide

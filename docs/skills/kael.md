@@ -119,7 +119,7 @@ Attack, precise, J. Press J in the beat after a blow lands: the Keen blow hits f
 | 8 | Keen damage +500% to +2000%; the wave hits far harder. | bonus 20, wave 10 |
 
 Evolution **Peerless Edge** (partner `k_phase`): Every third Keen blow ends in a gold cross cut, and for 3 seconds every blow is Keen.
-Evolved values added: cross 60, crossArea 15, crossReach 50, crossEvery 3, free 3.
+Evolved values added: cross 330, crossEvery 3, free 3. The cross cut strikes only the foe the Keen move paid off on (precise payoff, balance round 3); it had a 15 AD ring in 50 px before.
 Code: `hero/kael/keen.ts` (window, wave, streak, Peerless Edge), `hero/kael/bonus.ts` (Keen bonus), `hero/kael/shapeHit.ts` (guard break, hop cleave), `utils/comboChoice.ts`.
 
 #### `k_skyward` Skybreaker
@@ -505,7 +505,7 @@ Changes made from the review (all "must" items and the useful "suggest" items):
 
 | Skill | Change |
 | --- | --- |
-| `k_keen` | Keen +200% / +500% / +1000% at levels 1, 5, 8; wave 1.5 to 10 AD; streak cap +100%; evolution every third Keen blow (counted across strings), cross cut 60 AD. |
+| `k_keen` | Keen +200% / +500% / +1000% at levels 1, 5, 8; wave 1.5 to 10 AD; streak cap +100%; evolution every third Keen blow (counted across strings), cross cut 60 AD (330 AD on one foe since balance round 3). |
 | `k_skyward` | Level 8 launch 5 AD, crash 3.5 AD; Heavenfall spike 15 AD. |
 | `k_phase` | Phase cut 3.5 AD at level 1, 12 AD at level 8; back bonus +150%. |
 | `k_blink` | Retagged timed; level 8 strike 7 AD. |

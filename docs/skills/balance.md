@@ -372,13 +372,32 @@ Ultimates per cast at charge level 3 against Crystal Nova's per cast:
 | Phantom Legion L8 | 4.6x at 16 | 5.8x and 5.9x at 21 |
 | Phantom Army | 5.4x at 4.5 | 10.3x and 12.1x at 9, 6.8x and 7.1x at 11 |
 
+### Sun Hawk, Skyfall Breaker and Peerless Edge
+
+A short follow-up put the last precise skills on the rule and measured them on the late target (three or four runs) and the crowd (two runs), at the model's trigger rates (parries 0.2 a second, a Skyfall catch every 5 s).
+
+- Sun Hawk: a call's hawks dive only the foe the parry met and fly off once it falls (before, they hunted the nearest foes for 6 s).
+- Peerless Edge: the cross cut strikes only the foe the Keen move paid off on; its 15 AD ring in 50 px is gone.
+- Skyfall Breaker already struck only the caught foe with its slam and pounds; dragged foes take only the ring, its own area.
+
+| Skill | Change | Before crowd / one | After crowd / late |
+| --- | --- | --- | --- |
+| `y_hawk` | rule; L8 dive 15 to 42 AD | 467 / 66 (round 2) | 289 / 181 |
+| `y_hawk` evolved | rule; Sunflock 12 to 90 AD | about 1,000 (round 1) | 544 / 378 |
+| `h_skyfall` | L8 slam 45 to 46 | 230 / 281 | about 200 / 170 to 250 |
+| `h_skyfall` evolved | Comet Grab 120 to 65 | 707 / 730 | 506 / 444 |
+| `k_keen` evolved | cross cut 60 AD with a ring to 330 AD on one foe | 467 / 229 (late 292 at 250) | 314 / 378 |
+
+Keen Edge level 8 reads 208 on the late target (three runs), so Peerless Edge is 1.8 times it there; at 600 AD it read 834 late but 692 on a crowd, since each cross cut on a husk counts its whole overkill, so 330 is the compromise with the crowd figure near 300.
+Skyfall Breaker's runs at 45 and 48 spread from 128 to 297 on the late target; 46 sits in the middle.
+
 ### Still off after round 3
 
 - Perfect Rhythm reads about 144 on one foe: each primed bolt is its own pull-off, so a crowd finds a fresh foe for every bolt while a lone foe dies to the first and the next walks in; raising the bonus lifts the crowd figure as fast.
 - Iron Counter's one-foe figure follows how often a counter grab lands on a lone foe (0.07 a second against 0.1 injected); at the injected rate it reads 141.
-- Keen Edge evolved (Peerless Edge) sits near level 8 on one foe (229 against 176); the cross cut and free Keen add little in the room.
+- Peerless Edge is 1.8 times level 8 on the late target, a little under the 2 to 3 asked, held there by the crowd figure.
 - Phantom Army is noisy, 7 to 12 times Crystal Nova at 9 and 11; 15 is not reached.
-- Hulda's grab and throw skills (Wrecking Throw, Giant Swing, Crushing Grip) barely move the room: a wave 2 husk dies to the knees before the throw. Skyfall Breaker is over its band (281 on one foe, evolved 730). These rows were left to Hulda's own pass.
+- Hulda's grab and throw skills (Wrecking Throw, Giant Swing, Crushing Grip) barely move the room: a wave 2 husk dies to the knees before the throw. These rows were left to Hulda's own pass.
 - Sky Dance was not measured: in the room the air string ends after one whiff on ground foes, so the stomp never comes.
 - Warpath and Deep Heft on one foe still read near zero; the charge and the lunge carry her past the lone foe.
 - Rift Wound and Ember Brand on one foe are capped by the room's elite dying; the late target is the better read for damage over time.

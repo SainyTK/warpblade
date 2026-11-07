@@ -131,7 +131,7 @@ export const SKYFALL_BREAKER: SkillDef = {
     {
       text: "A crushing slam, three pounds.",
       values: {
-        slam: 45,
+        slam: 46,
         lunge: 1.3,
         ride: 1,
         pounds: 3,
@@ -153,7 +153,7 @@ export const SKYFALL_BREAKER: SkillDef = {
     row: {
       text: "Leap into Skyfall; enormous slam, Fury and a plate.",
       values: {
-        slam: 120,
+        slam: 65,
         lunge: 1.3,
         ride: 1,
         pounds: 3,

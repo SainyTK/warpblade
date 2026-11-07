@@ -28,9 +28,7 @@ export const KEEN_EDGE: SkillDef = {
     name: "Peerless Edge",
     text: "Every third Keen blow ends in a gold cross cut, and for 3 seconds every blow is Keen.",
     row: evolvedRow(LEVELS[7], "Every third Keen blow: a gold cross cut, then 3 s of Keen.", {
-      cross: 60,
-      crossArea: 15,
-      crossReach: 50,
+      cross: 330,
       crossEvery: 3,
       free: 3,
     }),
