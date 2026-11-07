@@ -19,6 +19,12 @@ export const COIN_DROP: Record<EnemyType, number> = {
   maw: 9,
 };
 
+/**
+ * a normal wave pays its minions the coins of this many foes, base + one every `every` waves, at most `most` (the foes
+ * a wave brought before waves streamed), shared over its whole quota; mini bosses, the Warden and elites are not shared
+ */
+export const COIN_PAID_FOES = { base: 3, every: 3, most: 9 } as const;
+
 /** every foe drops this share more than its base; Lodestone's bonus adds to it */
 export const COIN_BONUS = 0.25;
 

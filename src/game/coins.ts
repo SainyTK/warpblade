@@ -2,22 +2,30 @@ import { COIN_BONUS, COIN_DROP, COIN_MOTION as M } from "../constants/coins";
 import { COIN_GOLD } from "../constants/palette";
 import { LODESTONE_BONUS } from "../constants/shopSkills";
 import { W } from "../constants/stage";
+import { ELITE } from "../constants/waves";
 import { sfx } from "../services/audio";
 import { addCoins, ownsSkill } from "../store/meta";
-import type { EnemyType } from "../types/enemy";
+import type { Enemy } from "../types/enemy";
 import type { Coin } from "../types/game";
 import { PK } from "../types/particle";
-import { coinDrop } from "../utils/coins";
+import { coinDrop, coinShare } from "../utils/coins";
 import { clamp } from "../utils/math";
 import { coop } from "./coopHooks";
 import { feat } from "./feat";
 import { game, hero, particles, rng } from "./state";
 import { surfaceBelow } from "./world";
 
+/** what a foe's coins come to before the bonus: a minion's share of the wave's coins, an elite's multiple, a boss's all */
+function coinBase(e: Enemy): number {
+  const base = COIN_DROP[e.type];
+  if (e.elite) return base * ELITE.coins;
+  return e.rank === "minion" ? base * coinShare(game.wave) : base;
+}
+
 /** a slain foe's coins burst out of it */
-export function dropCoins(type: EnemyType, x: number, y: number): void {
+export function dropCoins(e: Enemy, x: number, y: number): void {
   const bonus = COIN_BONUS + (ownsSkill("lodestone") ? LODESTONE_BONUS : 0);
-  const n = coinDrop(COIN_DROP[type], bonus, rng.next());
+  const n = coinDrop(coinBase(e), bonus, rng.next());
   for (let i = 0; i < n; i++)
     game.coinDrops.push({ x, y, vx: rng.range(-60, 60), vy: rng.range(-170, -90), t: 0, rest: false });
 }
