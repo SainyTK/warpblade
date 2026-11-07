@@ -343,9 +343,10 @@ The other four heroes fall on the same waves as in the baseline runs on the base
 | Ysra | 5 | 18 | 5 | 16 |
 | Sable | 5 | 18 | 5 | 14 |
 | Hulda | 3 | 7 | 5 | 18 |
-| Orrin | 4 | 13 | 4 | 11 |
+| Orrin | 5 | 18 | 5 | 18 |
 
-Orrin's mash death wave sits inside the others' range, and his skilled one is one wave short of theirs.
+Orrin falls on the same wave as most of the others with both bots.
+Before his tips curled round guards he fell on wave 4 with both (13 and 11 kills).
 The skilled bot never hooks or swings: it reads the HUD tabs, and Orrin's tabs are his two abilities, so K is never pressed for travel.
 It plays him as a walker who lashes and spins Whirlwall, which leaves out his Momentum and his swing kicks.
 At wave 8 and level 30, the skilled bot defeated 12 foes in 60 s with Orrin and 13 with Hulda.
