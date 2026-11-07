@@ -119,6 +119,14 @@ Relic hits are not melee (guards do not stop them) and do not build Flow.
 - The result screen lists each source with its level (or Evolved), a bar, total damage and damage per second over the time held, plus time, level reached and foes defeated.
 - Sources are named after the hero: "Kael's attacks", "Kael's abilities", "Ultimate", and the relic names.
 
+## Discovery
+
+Owner request on 7 November 2026: not everything is there on day one, and the game keeps much of it a mystery, like Vampire Survivors.
+A new player starts with two relics (Seeker Wisp, Orbit Shards), four charms (Might, Haste, Vigor, Insight), three relic slots and three charm slots.
+Every other relic, charm and slot unlocks when a goal is met; the Codex in the main menu shows locked ones as silhouettes with a short cryptic hint, and a few as "???".
+Evolution recipes stay hidden ("Evolves with ???") until the player has made that evolution once.
+The goals, their exact rules and the pacing are in `docs/unlocks.md`.
+
 ## Ownership while building
 
 - Core (build state, cards and pick screen, charms, hero growth, Flow, chests, shop): `src/game/build/`, `src/utils/build.ts`, `src/ui/skills/`, `src/ui/chest/`, HUD.
