@@ -27,8 +27,8 @@ export function createStormStrike(
     branches = arcs.map(([ax, ay]) => boltPath(x, y, ax, ay, 8, 3));
   };
   build();
-  lights.add(x, y, evolved ? 46 : 34, V[3], evolved ? 0.5 : 0.38, 0.3);
-  lights.add(x, ground, 26, V[2], 0.4, 0.4);
+  lights.add(x, y, evolved ? 38 : 30, V[3], evolved ? 0.36 : 0.3, 0.25);
+  lights.add(x, ground, 22, V[2], 0.3, 0.35);
   for (const [ax, ay] of arcs) lights.add(ax, ay, 20, V[3], 0.4, 0.25);
   for (let i = 0; i < (evolved ? 10 : 7); i++) {
     const a = rng.range(Math.PI, Math.PI * 2);
