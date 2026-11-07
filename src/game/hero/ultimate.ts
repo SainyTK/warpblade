@@ -15,7 +15,7 @@ export function canAffordUlt(level: number): boolean {
 }
 
 /** share of the ultimate's cooldown still to run, 0 when ready */
-export const ultRecharge = (): number => hero.ultCd / ULT_COOLDOWN;
+export const ultRecharge = (): number => hero.ultCd / hero.ultFull;
 
 /** U pressed: start gathering power if the ultimate has recharged and the first level is paid for; a press while it
  *  recharges is refused with a tick. */
@@ -48,6 +48,8 @@ function release(): void {
   h.chargeLevel = 0;
   h.ultCd = ULT_COOLDOWN;
   castUltimate(progress.ultimate, level);
+  // the cast may set its own wait (an ultimate skill's cooldown); the display measures whichever it is
+  h.ultFull = Math.max(h.ultCd, 0.01);
   emitSkillEvent({ type: "ultimate", level });
 }
 

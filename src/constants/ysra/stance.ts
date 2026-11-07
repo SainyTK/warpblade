@@ -106,8 +106,8 @@ export const WARPATH = {
   /** ahead of her feet, the box the shoulder hits */
   box: [0, -26, 12, 0] as const,
   /** Juggernaut: carried foes ride this far ahead of her feet, this far apart */
-  carry: 14,
-  stack: 5,
+  carry: 26,
+  stack: 7,
 } as const;
 
 /** the shockwave that runs along the floor both ways from a vault or dive landing (Vault Strike): its pixels per

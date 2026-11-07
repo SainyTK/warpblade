@@ -27,13 +27,17 @@ const HEAP_AHEAD = 16;
 
 const hook = () => skillValues("y_skyhook");
 
-/** the hooked foe hits the floor: the slam on it and the foes it lands on, then it stays grounded */
+/** foes on their way down on the hook, so each is dragged once */
+const dragging = new WeakSet<Enemy>();
+
+/** the hooked foe hits the floor: the slam on it and the foes on the floor it lands on (not the other flyers of a heap,
+ *  which take their own), then it stays grounded */
 function slam(e: Enemy, power: number): void {
   const v = hook();
   if (power > 0) {
     const [cx, cy] = enemyCenter(e);
     for (const o of game.enemies) {
-      if (o.hp <= 0 || (o !== e && Math.abs(o.x - e.x) > SLAM_REACH)) continue;
+      if (o.hp <= 0 || (o !== e && (kindOf(o.type).flies || Math.abs(o.x - e.x) > SLAM_REACH))) continue;
       dealDamage(o, progress.stats.ad * power, { fromX: hero.x, kx: Math.sign(o.x - e.x) * 60, heavy: true });
     }
     game.fx.push(createImpact(cx, cy, hero.face, true));
@@ -54,6 +58,7 @@ function createDrag(e: Enemy, power: number): Effect {
       if (e.hp <= 0) return false;
       if (e.vy > 0) fell = true;
       if ((fell && e.vy <= 0) || !e.air || t > 1) {
+        dragging.delete(e);
         slam(e, power);
         return false;
       }
@@ -71,8 +76,10 @@ function createDrag(e: Enemy, power: number): Effect {
 
 /** drag a foe out of the air toward the floor, stunned; one that cannot be thrown is only stunned */
 function drag(e: Enemy, power: number): void {
+  if (dragging.has(e)) return;
   e.stun = Math.max(e.stun, hook().stun ?? 0);
   if (!ENEMIES[e.type].launchable) return;
+  dragging.add(e);
   Object.assign(e, { air: true, airTime: 0, vx: 0, vy: ENEMY_AIR.spike * DRAG, state: "recover", st: 0 });
   game.fx.push(createDrag(e, power));
 }

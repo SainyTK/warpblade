@@ -194,7 +194,7 @@ Attack, timed, J when a foe hovers overhead. Her answer to flyers: hook them dow
 | 8 | power 9, slam 9 | Hook and slam much harder. |
 
 Evolution, Heaven's Hook (with `y_vault`): every flyer within 100 px is hauled into a heap at her feet and slammed for 12 AD, and the vault recharges at once.
-Built in `glaive/hook.ts`: struck flyers are dragged down at spike speed along a burning hook line, slam on landing, and stay pinned (grounded) for the level's seconds. No new enemy field: grounding uses the pin.
+Built in `glaive/hook.ts`: struck flyers are dragged down at spike speed along a burning hook line (each foe once), slam on landing (the slam strikes the foe and the walkers it lands on, never the other heaped flyers), and stay pinned (grounded) for the level's seconds. No new enemy field: grounding uses the pin.
 
 ### `y_vault` Vault Strike
 
@@ -556,6 +556,7 @@ She never stops travelling: vault over, crash, dive, land on her own burning tra
 - `choose.ts`: drop the `s.up`, `s.down`, `rising` and `windmill` branches; add the far-foe read for the ground lash and the skill checks for windmill, skyhook, counter and running impale.
 - `CharacterDef.comboHits: 3` replaces `stringLimit` and `GLAIVE_STRING_BONUS`.
 - `vaultStrike()` runs the crash without a skill.
+- The hip thrust and reverse sweep push foes back less (110 to 40, 140 to 60), so the impale lands from closer in; measured on a lone walking husk, thornback and mire, the impale landed 10 of 10 strings either way, with the foe 10 to 15 px ahead after the change against 13 to 19 px before.
 - Perks and ranks read by the kit (`hasPerk`, `progress.ranks`) move to `skillLevel`, `skillEvolved` and `skillValues`.
 - Scorch and Brand need a stacking status per foe, ticked by the skill and dealing damage with the skill's id as source.
 - Every skill and evolution gets a code-drawn icon under `src/ui/skills/icons/ysra/`.
