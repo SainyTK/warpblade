@@ -26,4 +26,4 @@ export const COMBO_BY_LEVEL: readonly (readonly [level: number, hits: number])[]
 ];
 export const MAX_COMBO = 6;
 /** part of max HP and MP restored on a level up: a little, since a full run gains about 80 levels */
-export const LEVEL_UP_RESTORE = 0.05;
+export const LEVEL_UP_RESTORE = 0.08;
