@@ -29,18 +29,14 @@ His crystal sword can be thrown, and wherever it lands, he follows.
 
 ## Features
 
-- **Earn every ability.** Kael starts a run with his sword, his jump and his dash, and nothing else.
-  The warp, each of the three spells and the ultimate are skills learned from picks, and each one's HUD tab appears once it is learned.
-- **Warp strike.** Learned with Warp Strike. Throw the sword at a foe and appear beside it mid-swing. The farther you travel, the harder you hit.
-  The warp recharges in 2 seconds, far faster than any spell, and the WARP tab beside the element tabs fills back up while it does.
-- **Combos that grow.** Two hits at level 1, six by level 17.
-  Every hit is its own move: a step-in cut, a rising backhand, a lunging double stab, a hop into a cleave, a turn that cuts both sides and a falling smash that knocks the foe down.
-  Each one moves Kael's whole body while his feet stay planted: he rises onto one leg, lunges with his body almost flat, tucks his knees in a hop, spins with his back to you, and unwinds from a turned wind-up into a stance so low his hips nearly touch the floor.
-  Only the last hit of a combo, the finishers, and dash and running attacks carry him forward.
-  Pick up launchers, sweeps, dash and running attacks, and finishers that cut through a foe to its back or bounce it into the sky.
+- **A full kit from the first second.** Every hero starts a run with every button already doing something.
+  Kael has his four-hit sword string, a double jump, a dash, Warp Strike on `K` (throw the sword at a foe and appear beside it mid-swing, harder the farther he travels, 10 MP), and two crystal abilities on `I`, Crystal Lance and Crystal Burst.
+- **Fixed combo strings.** Each hero's ground string has a fixed length for the whole run: four hits for Kael and three for Ysra, Sable, Hulda and Orrin.
+  Kael's string is a step-in cut, a rising backhand, a twin-fang double stab and a falling smash that knocks the foe down, and each one moves his whole body while his feet stay planted.
+  Skills change what the hits do, never how many there are.
 - **Combos that read the room.** The next hit follows the fight: Kael turns to cut a foe behind him, spins when foes stand on both sides, stabs a foe lying down, leaps after one in the air, and bounces foes off the edge of the stage.
   Air attacks are their own moves: a wheel slash that circles Kael's whole body, a scissor cut that lays him back and sweeps the blade under his feet, and a stomp that drops him feet first and knocks nearby foes down.
-  Kael starts with one attack per jump; the two ranks of Sky Dance add the scissor cut and then the stomp.
+  Kael has two air attacks per jump, the wheel slash and the scissor cut; the Sky Dance skill adds the stomp.
 - **Keen timing.** Press J just after a blow lands and the next one is a sure critical hit with a gold slash.
   Pressing before the blow lands spoils it, so rhythm beats mashing.
 - **Positioning pays.** Hits from behind deal 1.5 times the damage and foes in the air take double, with the numbers popping out of every hit.
@@ -49,26 +45,32 @@ His crystal sword can be thrown, and wherever it lands, he follows.
 - **Fights that need skill.** Husks block blows from the front and strike back, wisps slip away from swings, and missed swings leave you open. Dash through an attack at the last moment for a perfect dodge and slow motion.
 - **Stamina.** Each dash spends half the green stamina bar, so two dashes in a row leave Kael out of breath until it refills.
   It comes back after a short pause, slower while he attacks, and a perfect dodge gives some back.
-  Deep Breath adds a third and then a fourth dash, and Quickstep refills the bar faster.
-- **Skill points spent between waves.** Every level up gives a skill point, and when a wave is cleared the fight pauses and three cards offer skills Kael can learn now, each with its own pixel icon. Blade is strong early, Phantom trades power for mobility and crits, Arcane is weak early and strong late. Fusion skills join two paths once both are started: shatter frozen foes, set off burning ones, charge foes by dashing through them, and more. Some skills lock out their rivals for the run, and passives come back until every rank is learned.
-  If too few skills are left to fill the cards, Second Wind fills the rest and restores all HP and MP.
-- **Evolutions.** A learned skill with its partner passive at full rank evolves from level 6: the next wave pick offers the evolution as a gold first card.
-  Fire Flask with Mana Font becomes Sunflask, whose burst throws three smaller flasks that fly at nearby foes and burst on them.
-  Ice Spikes with Swift Sigils becomes Glacier Bloom, with a second line of spikes behind Kael and a crown spire that bursts into freezing shards.
-  Lightning with Arcane Power becomes Thunderhead, a storm cloud that calls three more bolts on foes beneath it.
-  Ysra's Flame Pillar with Kindling becomes Pyre Colonnade, a hotter pillar with two more bursting up on either side a moment later.
-  The cards of a skill and its partner say what they evolve into, and an evolved skill's HUD tab gets a gold top edge.
-- **Charged ultimates.** Crystal Nova, the weakest, can be learned from level 3; stronger ones replace it: a storm of blades, a legion of phantoms, falling stars or a lightning tempest.
-  Hold U through four levels; level 4 spends a full MP bar. After a strike the ultimate recharges for 20 seconds, the longest wait of any ability, and its row on the HUD dims with a bar filling under it.
+- **Hero skills.** Every hero has 20 skills of their own, each with eight levels and an evolution: attacks, movement, spells, damage over time, summons and ultimates, and for some heroes a passive.
+  Every level up gives a point, and when a wave's last foe falls the fight pauses on a pick of three cards for each point, four with luck.
+  A card offers a new skill, the next level of a held skill, or a charm, each with its own pixel icon.
+  A build holds up to 8 skills and 3 charms at first, and every run starts with 2 rerolls, 2 skips and 1 banish to steer the cards.
+  If too few cards are left, Second Wind fills the rest and restores all HP and MP.
+- **Charms.** Charms multiply one stat for every source at once: Might for damage, Haste for cooldowns, Vigor for HP, Insight for experience, and more that are found over many runs.
+- **Chests and evolutions.** Elites with a gold ring, mini bosses and the wave 20 Warden drop chests; touching one opens it.
+  A chest raises held skills and charms, sometimes three or five at once, and from wave 8 it evolves a skill at level 8 whose partner skill is held at level 4 or more.
+  Kael's Fire Flask evolves with Crystal Familiar into Sunflask, and Orrin's Sweet Spot with Perpetual Motion into Perfect Arc.
+  A card says "Evolves with ???" until the player has made that evolution once.
+- **Flow.** Every hit of the hero's own adds a stack of Flow, up to 25, each one +4% damage on every source, so a full bar doubles it; a perfect dodge adds five, and getting hurt halves it.
+- **Charged ultimates.** Every hero has a special on `U` from the start: Crystal Nova for Kael, Pyre Wave for Ysra, Bolt Storm for Sable, Quake Drop for Hulda and Grand Pendulum for Orrin.
+  Hold U through four levels; level 4 spends a full MP bar. After a strike the ultimate recharges for 20 seconds, and its row on the HUD dims with a bar filling under it.
+  An ultimate skill upgrades or replaces the special, and a build holds at most one.
 - **Experience to pick up.** Slain foes drop lime orbs of experience that bounce on the floor. Walk over them to collect them; any left behind fly to the hero after 4 seconds, or in a room to the nearest standing hero.
-  Levels take twice the experience they used to, so a full run ends around level 18. Heal and MP orbs drop half as often, so sword hits are the main way to refill MP.
-- **Three elements.** Each is its own pick: a flask of fire that sets the floor burning, a running line of ice spikes that freezes, and lightning that arcs to a second foe.
-  Each element recharges on its own after a cast, bolt fastest and ice slowest, and every cast makes the other two wait a moment too, so switching elements pays but spamming does not.
-  The FIRE ICE BOLT tabs dim while an element recharges, a bar along each tab fills back up, and a press too early is refused with a tick and a jolt of the tab, or a blink of the MP bar when MP is short.
+  Attack and ability power grow 2.5% with every level, compounding, and a full run reaches about level 84.
+- **Streaming waves.** Each wave has a quota of foes, from 3 at wave 1 to 62 at wave 30, that stream in through rifts until the quota is spent.
+  From wave 3 every third wave brings an elite halfway through: a tougher foe of the era with a gold ring that drops a chest.
+- **Damage by source.** The result screen lists every source of damage with its level, total damage and damage per second: the hero's attacks, abilities and ultimate, and each skill that strikes on its own.
+- **The Codex.** The Codex on the start menu lists every hero's skills and evolutions and every charm, with the ones still locked shown as silhouettes with a short hint, and a few as ???.
+- **Abilities on `I`.** Each hero turns through their abilities with `O`: their base ones and every spell skill they hold, such as Kael's Fire Flask that sets the floor burning, his Ice Spikes that freeze and his Lightning that arcs to a second foe.
+  The HUD tabs dim while an ability recharges, a bar along each tab fills back up, and a press too early is refused with a tick and a jolt of the tab, or a blink of the MP bar when MP is short.
 - **Coins and a shop.** Foes drop pixel coins that Kael picks up by touch, and any left behind fly to him after a moment.
   When a run ends, cleared or lost, its coins go to the bank and a result screen shows the wave reached and the coins earned.
-  The Shop on the start menu sells stats in levels (HP, attack, ability power, MP, crit, move speed, stamina) and four skills bought once: Lodestone, Warp Shock, Head Start and Last Light.
-  Everything bought applies to every run, on top of the level-up picks, and is saved in this browser.
+  The Shop on the start menu sells stats in levels (HP, attack, ability power, MP, crit, move speed, stamina), more rerolls, skips and banishes for the cards, and four skills bought once: Lodestone, Aftershock, Head Start and Last Light.
+  Everything bought applies to every run and every hero, on top of the level-up picks, and is saved in this browser.
 - **Achievements and hero unlocks.** Twenty-four achievements track goals across runs: waves reached, a clear of wave 10 with each hero, foes slain, long combos, perfect dodges, evolutions, three foes felled by Orrin's swing kicks in one swing, coins banked and the Rift Warden.
   Most pay coins, a few stay hidden as ??? until an earlier one is earned, and a small banner slides down when one is earned without stopping play.
   The Achievements page on the start menu shows what each one asks, with a progress bar for those that count up, and the result screen names those a run earned.
@@ -86,7 +88,7 @@ His crystal sword can be thrown, and wherever it lands, he follows.
   Sable, the hooded hunter, fights at range with a repeating crossbow: `J` shoots and aims with up or down, the quiver runs dry and reloads on `O`, with a perfect reload for a press in the bright window.
   `K` kicks foes away, `L` hops back and shoots or slides forward under blows, and `I` sets snares for MP (see [docs/sable-design.md](docs/sable-design.md)).
   Hulda, the iron grappler, fights bare-handed in iron gauntlets with the shortest reach of all and no dodge.
-  `J` throws a four-blow string of jab, cross, body hook and an overhand haymaker, a hammer fist in the air, and a knee while she holds a foe.
+  `J` throws a three-blow string of jab, body hook and an overhand haymaker, a hammer fist in the air, and a knee while she holds a foe.
   `K` grabs the foe ahead and holds it while she walks, then throws it: forward into the others, a suplex into the floor behind her with the side behind held, or straight up with Up.
   Bigger foes are crushed in both hands instead, and in the air `K` is Skyfall Grab, which catches a flier and drives it into the floor.
   `L` is an armoured Bull Rush, `I` a Bellow that drags foes in, and fliers down to her hands, for MP, and `O` a taunt.
@@ -129,16 +131,18 @@ His crystal sword can be thrown, and wherever it lands, he follows.
 
 ## Controls
 
+The keys below are Kael's; every hero uses the same keys for their own actions, and the Controls screen lists each hero's.
+
 | Key | Action |
 | --- | --- |
 | `A` `D` or arrows | Walk. Tap a side twice and hold to run |
 | `W` or `Up` | Jump, higher the longer you hold it. Hold `S` and jump to drop through a ledge |
-| `J` | Sword combo. Each press is a different hit, picked from where the foes are. Combine with `W`, `S`, a jump, a dash or a run for the variants you have learned |
+| `J` | Sword combo of four hits. Each press is a different hit, picked from where the foes are |
 | `L` | Dash. Nothing can touch you while you dash, and each dash spends stamina |
-| `K` | Warp strike (10 MP, once learned) |
-| `I` | Cast the selected spell (18 MP). Each element then recharges for a few seconds |
-| `O` | Switch element: fire, ice, bolt |
-| `U` | Hold to charge the ultimate, release to strike (once learned) |
+| `K` | Warp strike (10 MP). Hold `W` to warp to a crystal |
+| `I` | Cast the selected ability: Crystal Lance, Crystal Burst or a spell skill. Each then recharges for a few seconds |
+| `O` | Switch to the next ability |
+| `U` | Hold to charge the ultimate, release to strike |
 | `M` | Sound on or off |
 | `Esc` or `P` | Pause and open the menu |
 | `F` | Fullscreen on or off |
@@ -146,13 +150,13 @@ His crystal sword can be thrown, and wherever it lands, he follows.
 On phones and tablets a touch controller appears, in landscape or portrait, and hides again when you press a key.
 The stick on the left appears wherever your left thumb lands.
 Push it to walk, push it all the way to run, push up to jump and down for the down variants.
-The buttons on the right sit in an arc around a large Attack button: Jump, Dash, Warp, Spell, Element and Special.
+The buttons on the right sit in an arc around a large Attack button: for Kael Jump, Dash, Warp, Spell, Ability and Special, and each hero's own actions for the others.
 Several fingers work at once, and a thumb can slide from one button to the next.
 Hold Special to charge it: its ring fills one quarter per level, and you strike when you let go.
 Buttons dim while their action lacks MP or stamina or waits on a cooldown, and phones that support it give a short vibration on each press.
 The page holds still under your fingers: double taps, pinches and long presses never zoom, select text or open a menu.
 
-The game opens on a start menu with Start, Co-op, Shop, Achievements, Controls and Options.
+The game opens on a start menu with Start, Co-op, Shop, Achievements, Codex, Controls and Options.
 Start opens the hero screen: pick Kael, Ysra, Sable, Hulda or Orrin with `A` `D` or the arrows and begin with `J` or `Enter`.
 In the Shop, pick an item once to see "Buy?" and again to buy it; a locked hero on the hero screen asks the same way before it is unlocked.
 When a run ends, the start menu opens on its result, with Continue and Shop.
@@ -162,7 +166,7 @@ The Controls screen lists every key from the game's key map, and on touch screen
 Options holds sound, volume, screen shake, damage numbers, vibration on devices that can vibrate, and fullscreen, saved in this browser.
 
 Each level up gives a skill point.
-When a wave's last foe falls with points waiting, the game pauses and offers three skills for each point.
+When a wave's last foe falls with points waiting, the game pauses and offers three cards for each point.
 Choose with `A` `D` or the arrows and learn with `J` or `Enter`, press `1` to `3`, or click or tap a card.
 Points left when the last wave of the stage falls are not spent, since the stage ends there.
 
