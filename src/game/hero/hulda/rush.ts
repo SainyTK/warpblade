@@ -5,6 +5,7 @@ import { sfx } from "../../../services/audio";
 import type { Enemy } from "../../../types/enemy";
 import { dealDamage } from "../../damage";
 import { createImpact } from "../../effects/impact";
+import { createTrailPiece } from "../../effects/stampedeTrail";
 import { enemyBox, enemyCenter } from "../../enemies/enemy";
 import { emitSkillEvent } from "../../skills/events";
 import { skillLevel, skillValues } from "../../skills/query";
@@ -12,51 +13,79 @@ import { game, hero, progress } from "../../state";
 import { boxAhead, boxHit, dust, hitStop, markStruck, newSwing, shake, struckThisSwing } from "../../world";
 import { isFree, setState, settle } from "../actions";
 import { dropMoveGhost } from "../afterimages";
+import { skin } from "../skin";
 import { refuseDash } from "../stamina";
 import { travelEnded } from "../travelEnd";
-import { unclaim } from "./claims";
+import { isClaimed, unclaim } from "./claims";
 import { inRecovery } from "./fists";
+import { throwPower } from "./fracture";
 import { canHold, pin } from "./hold";
 import { hulda } from "./memory";
+import { rushEnd } from "./rushClock";
+import { slamRing } from "./slam";
 
-const runEnd = RUSH.load + RUSH.time;
 const HORNS = "h_bullHorns";
+const STAMPEDE = "h_stampede";
 const GHOST_EVERY = 3 / 30;
 
-/** L on the floor: drop the shoulder and charge, paid with stamina; also out of a blow that landed */
-export function pressRush(): boolean {
+/** stamina a rush costs: Stampede's, or the rush's own */
+export const rushCost = (): number => (skillLevel(STAMPEDE) ? skillValues(STAMPEDE).cost : RUSH.cost);
+
+/** drop the shoulder and go */
+function startRush(): void {
   const h = hero;
-  if ((!isFree() && !inRecovery()) || !h.ground || hulda.rushCd > 0) return false;
-  if (h.stamina < RUSH.cost) {
-    refuseDash();
-    return true;
-  }
-  h.stamina -= RUSH.cost;
-  h.staminaWait = 0.6;
   hulda.landed = false;
   hulda.carried = [];
   hulda.passed = [];
   h.running = false;
   h.moveGhost = 0;
+  h.st = 0;
   newSwing();
   setState("rush");
   dust(h.x, h.y, 3, -h.face);
   sfx.dodge();
+}
+
+/**
+ * L on the floor: drop the shoulder and charge, paid with stamina; also out of a blow that landed. With Stampede at
+ * level 6, L in the skid charges again once for free.
+ */
+export function pressRush(): boolean {
+  const h = hero;
+  if (h.state === "rush" && hulda.landed && hulda.rushAgain) {
+    hulda.rushAgain = false;
+    startRush();
+    return true;
+  }
+  if ((!isFree() && !inRecovery()) || !h.ground || hulda.rushCd > 0) return false;
+  if (h.stamina < rushCost()) {
+    refuseDash();
+    return true;
+  }
+  h.stamina -= rushCost();
+  h.staminaWait = 0.6;
+  hulda.rushAgain = skillLevel(STAMPEDE) > 0 && skillValues(STAMPEDE).again > 0;
+  startRush();
   return true;
 }
 
-/** Bull Horns lifts a foe it meets onto her shoulder while there is room */
+/** Bull Horns lifts a minion it meets onto her shoulder while there is room, and from level 6 shoves big foes along */
 function lift(e: Enemy): void {
-  if (!skillLevel(HORNS) || hulda.carried.length >= skillValues(HORNS).carry || !canHold(e) || e.hp <= 0) return;
+  if (!skillLevel(HORNS) || e.hp <= 0) return;
+  const v = skillValues(HORNS);
+  if (hulda.carried.length >= v.carry) return;
+  const big = !ENEMIES[e.type].launchable;
+  if (big ? !v.shove || isClaimed(e) : !canHold(e)) return;
   hulda.carried = [...hulda.carried, e];
 }
 
-/** a foe the shoulder meets: a heavy blow that knocks it aside, and Bull Horns may lift it */
+/** a foe the shoulder meets: a heavy blow that knocks it aside or drags it along, and Bull Horns may lift it */
 function meet(e: Enemy): void {
   markStruck(e);
   hulda.passed = [...hulda.passed, e];
   const [cx, cy] = enemyCenter(e);
-  dealDamage(e, progress.stats.ad * RUSH.power, {
+  const s = skillLevel(STAMPEDE) ? skillValues(STAMPEDE) : null;
+  dealDamage(e, progress.stats.ad * (s ? s.shoulder : RUSH.power), {
     fromX: hero.x,
     kx: hero.face * RUSH.kx,
     ky: -40,
@@ -64,6 +93,7 @@ function meet(e: Enemy): void {
     heavy: true,
     melee: true,
   });
+  if (s?.drag) e.x += hero.face * s.drag;
   hero.lastHit = e;
   game.fx.push(createImpact(cx - hero.face * 3, cy, hero.face, true));
   hitStop(0.03);
@@ -72,21 +102,60 @@ function meet(e: Enemy): void {
   lift(e);
 }
 
-/** Bull Horns: the foes on her shoulder are slammed down in front of her */
+/** the foes on her shoulder ride with her; big foes she shoves stay on the floor ahead of her shoulder */
+function carryAlong(): void {
+  hulda.carried.forEach((e, i) => {
+    if (ENEMIES[e.type].launchable) {
+      pin(e, 4 - (i % 3) * 2, 14 + (i % 3) * 7);
+      return;
+    }
+    pin(e, RUSH.box[2]);
+    e.y = hero.y;
+  });
+}
+
+/**
+ * Bull Horns: the foes on her shoulder are slammed down in front of her, and from level 4 the slam rings out, throwing
+ * minions up from level 7; Juggernaut's ring is a crater.
+ */
 function slamCarried(): void {
   const carried = hulda.carried;
   hulda.carried = [];
   if (!carried.length) return;
   const v = skillValues(HORNS);
+  const x = hero.x + hero.face * 10;
   for (const e of carried) {
     unclaim(e);
     if (e.hp <= 0) continue;
-    e.x = hero.x + hero.face * 10;
-    e.y = ENEMIES[e.type].launchable && e.y < hero.y - 12 ? hero.y : e.y;
-    dealDamage(e, progress.stats.ad * v.slam, { fromX: hero.x, kx: 0, stun: RUSH.hornsStun, heavy: true });
-    game.fx.push(createImpact(e.x, hero.y - 6, hero.face, true));
+    const minion = ENEMIES[e.type].launchable;
+    e.x = x;
+    if (minion && e.y < hero.y - 12) e.y = hero.y;
+    dealDamage(e, progress.stats.ad * throwPower(e, v.slam), {
+      fromX: hero.x,
+      kx: 0,
+      stun: RUSH.hornsStun,
+      launch: v.launch && minion ? RUSH.hornsLaunch : undefined,
+      heavy: true,
+    });
+    game.fx.push(createImpact(x, hero.y - 6, hero.face, true));
+    emitSkillEvent({ type: "throw", foe: e, x, y: hero.y, slam: true });
   }
-  dust(hero.x + hero.face * 10, hero.y, 6);
+  if (v.ring > 0) {
+    slamRing({
+      x,
+      floor: hero.y,
+      body: null,
+      skip: carried,
+      radius: v.ring,
+      power: v.crater > 0 ? v.crater : v.ringPower,
+      stun: RUSH.hornsStun,
+      launch: v.launch ? RUSH.hornsLaunch : undefined,
+      stop: 0.06,
+      shake: v.crater > 0 ? [0.3, 3.5] : [0.18, 2.5],
+    });
+    return;
+  }
+  dust(x, hero.y, 6);
   hitStop(0.06);
   shake(0.18, 2.5);
   sfx.boom();
@@ -98,18 +167,40 @@ export function dropCarried(): void {
   hulda.carried = [];
   for (const e of carried) {
     unclaim(e);
+    if (ENEMIES[e.type].launchable) e.y = Math.max(e.y, hero.y - 12);
     e.stun = Math.max(e.stun, HOLD.dropStun);
   }
+}
+
+/** Stampede lays a piece of cracked trail behind her each stride of the charge */
+function layTrail(): void {
+  if (!skillLevel(STAMPEDE)) return;
+  const v = skillValues(STAMPEDE);
+  game.fx.push(
+    createTrailPiece(
+      {
+        x: hero.x - hero.face * 4,
+        y: hero.y,
+        w: RUSH.speed * progress.stats.move * GHOST_EVERY,
+        damage: progress.stats.ad * v.trail,
+        twice: v.twice > 0,
+        launch: v.launch > 0,
+        stay: v.stay,
+      },
+      skin.ramp,
+    ),
+  );
 }
 
 /** the load digs in, the charge runs through foes at one speed, then she skids to a stop */
 export function runRush(dt: number): void {
   const h = hero;
+  const end = rushEnd();
   if (h.st < RUSH.load) {
     h.vx = -h.face * 30;
     return;
   }
-  if (h.st < runEnd) {
+  if (h.st < end) {
     h.vx = h.face * RUSH.speed * progress.stats.move;
     h.moveGhost -= dt;
     if (h.moveGhost <= 0) {
@@ -117,10 +208,9 @@ export function runRush(dt: number): void {
       h.moveGhost = GHOST_EVERY;
       dropMoveGhost();
       dust(h.x - h.face * 5, h.y, 1, -h.face);
+      layTrail();
     }
-    hulda.carried.forEach((e, i) => {
-      pin(e, 4 - i * 2, 14 + i * 7);
-    });
+    carryAlong();
     const [x0, y0, x1, y1] = RUSH.box;
     const box = boxAhead(x0, y0, x1, y1);
     for (const e of game.enemies) {
@@ -137,8 +227,5 @@ export function runRush(dt: number): void {
     travelEnded();
     emitSkillEvent({ type: "dash", dir: h.face, foes: hulda.passed });
   }
-  if (h.st >= runEnd + RUSH.recover) settle();
+  if (h.st >= end + RUSH.recover) settle();
 }
-
-/** the load and the charge drive her own speed; the skid slows under the floor's own friction */
-export const rushDrives = (): boolean => hero.state === "rush" && hero.st < runEnd;

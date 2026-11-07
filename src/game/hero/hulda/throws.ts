@@ -14,14 +14,18 @@ import { isHeld } from "../../input";
 import { emitSkillEvent } from "../../skills/events";
 import { skillLevel, skillValues } from "../../skills/query";
 import { game, hero, progress } from "../../state";
-import { hitStop, markStruck, newSwing, shake, struckThisSwing } from "../../world";
+import { hitStop, newSwing, shake } from "../../world";
 import { setState, settle } from "../actions";
 import { skin } from "../skin";
 import { unclaim } from "./claims";
+import { executing, spendCounterThrow, spendSuplex } from "./counter";
+import { fracture, snapFractures, throwPower } from "./fracture";
 import { gainGrit } from "./grit";
 import { holdTime, pin } from "./hold";
+import { holdWalk } from "./iron";
 import { hulda } from "./memory";
 import { slamRing } from "./slam";
+import { spin, swingLength, swingRelease } from "./swing";
 
 const SWING = "h_giantSwing";
 
@@ -45,6 +49,7 @@ function foesAround(held: Enemy, ahead: number, behind: number): { front: number
  * when foes stand ahead and fewer behind, otherwise a suplex, which is also the hardest throw on a lone foe.
  */
 function throwFor(held: Enemy): ThrowKind {
+  if (executing()) return "suplex";
   const { front, back, near } = foesAround(held, THROW_PICK.ahead, THROW_PICK.behind);
   if (skillLevel(SWING) && near >= skillValues(SWING).foes) return "swing";
   if (front > 0 && front > back) return "forward";
@@ -84,7 +89,7 @@ export function runHold(dt: number): void {
   if (!e) return settle();
   hulda.holdT += dt;
   const dir = (isHeld("right") ? 1 : 0) - (isHeld("left") ? 1 : 0);
-  h.vx = h.ground ? dir * HERO_MOVE.walkSpeed * HOLD.walk * progress.stats.move : h.vx;
+  h.vx = h.ground ? dir * HERO_MOVE.walkSpeed * holdWalk() * progress.stats.move : h.vx;
   h.runPhase = (h.runPhase + (dt * Math.abs(h.vx)) / HULDA_STRIDE) % 1;
   pin(e);
   if (h.state === "hold" && hulda.holdT >= holdTime()) startThrow(throwFor(e));
@@ -114,18 +119,25 @@ export function runKnee(dt: number): void {
   if (h.st >= KNEE.dur) setState("hold");
 }
 
-/** the foe leaves her hands; the hold is over */
+/** the foe leaves her hands; the hold is over. Crushing Grip snaps full fractures (evolved) and leaves a fresh one */
 function release(): Enemy | null {
   const e = hulda.held;
   hulda.held = null;
-  if (e) unclaim(e);
-  return e && e.hp > 0 ? e : null;
+  if (!e) return null;
+  unclaim(e);
+  snapFractures(e);
+  fracture(e);
+  return e.hp > 0 ? e : null;
 }
 
 /** the foe flies ahead as a body that strikes whatever it meets */
 function hurl(e: Enemy): void {
   const f = THROWS.forward;
-  dealDamage(e, progress.stats.ad * f.power, { fromX: hero.x, kx: 0, heavy: true });
+  dealDamage(e, progress.stats.ad * throwPower(e, f.power) * spendCounterThrow(), {
+    fromX: hero.x,
+    kx: 0,
+    heavy: true,
+  });
   hero.lastHit = e;
   gainGrit(GRIT.throw);
   if (e.hp <= 0) return;
@@ -180,7 +192,12 @@ function runSuplex(e: Enemy): void {
   body.y = kindOf(body.type).flies ? hero.y - 8 : hero.y;
   body.vx = 0;
   body.vy = 0;
-  dealDamage(body, progress.stats.ad * s.power, { fromX: hero.x, kx: 0, stun: s.stun, heavy: true });
+  dealDamage(body, progress.stats.ad * throwPower(body, spendSuplex(s.power)), {
+    fromX: hero.x,
+    kx: 0,
+    stun: s.stun,
+    heavy: true,
+  });
   hero.lastHit = body;
   gainGrit(GRIT.throw);
   game.fx.push(createImpact(body.x, hero.y - 6, -hero.face, true));
@@ -195,36 +212,30 @@ function runSuplex(e: Enemy): void {
     stop: s.stop,
     shake: s.shake,
   });
-  emitSkillEvent({ type: "throw", foe: body, x: body.x, y: hero.y, slam: true });
+  emitSkillEvent({ type: "throw", foe: body, x: body.x, y: hero.y, slam: false });
 }
 
-/** Giant Swing: the foe whirls round her twice, striking every foe near each turn, then flies ahead */
+/** Giant Swing: the spin, then the foe flies ahead; from level 7 the release knocks down the foes round her */
 function runSwing(e: Enemy, dt: number): void {
-  const g = THROWS.swing;
-  const v = skillValues(SWING);
-  const st = hero.st;
-  if (st < g.release) {
-    const u = st / g.release;
-    const a = u * Math.PI * 2 * v.turns;
-    // each turn is a new swing, so a foe near her is struck once per turn
-    if (Math.floor(u * v.turns) !== Math.floor(((st - dt) / g.release) * v.turns)) newSwing();
-    pin(e, Math.cos(a) * 16, 6);
-    for (const o of game.enemies) {
-      if (o === e || o.hp <= 0 || struckThisSwing(o)) continue;
-      if (Math.abs(enemyCenter(o)[0] - e.x) > v.reach / 2 || Math.abs(o.x - hero.x) > v.reach) continue;
-      markStruck(o);
-      dealDamage(o, progress.stats.ad * v.power, {
-        fromX: hero.x,
-        kx: Math.sign(o.x - hero.x) * 160,
-        stun: 0.4,
-        heavy: true,
-      });
-      sfx.hit(false, 0.8);
-    }
+  if (hero.st < swingRelease()) {
+    spin(e, dt);
     return;
   }
   if (hulda.struck) return;
   hulda.struck = true;
+  const v = skillValues(SWING);
+  if (v.release > 0) {
+    slamRing({
+      x: hero.x,
+      floor: hero.y,
+      body: e,
+      radius: THROWS.swing.knock,
+      power: v.release,
+      stun: THROWS.swing.knockStun,
+      stop: 0.05,
+      shake: [0.15, 2],
+    });
+  }
   const body = release();
   if (body) hurl(body);
 }
@@ -238,5 +249,5 @@ export function runToss(dt: number): void {
     else if (kind === "suplex") runSuplex(e);
     else runSwing(e, dt);
   }
-  if (hero.st >= THROWS[kind].dur) settle();
+  if (hero.st >= (kind === "swing" ? swingLength() : THROWS[kind].dur)) settle();
 }

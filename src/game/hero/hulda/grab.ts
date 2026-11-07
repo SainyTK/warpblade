@@ -10,9 +10,13 @@ import { emitSkillEvent } from "../../skills/events";
 import { game, hero, progress } from "../../state";
 import { boxAhead, boxHit, hitStop, shake } from "../../world";
 import { isFree, setState, settle } from "../actions";
+import { counterGrab, executing } from "./counter";
+import { crushFractures, fracture } from "./fracture";
 import { gainGrit } from "./grit";
 import { canHold, take } from "./hold";
+import { ironBigGrab } from "./iron";
 import { hulda } from "./memory";
+import { cometLeap } from "./skyfall";
 
 /** the nearest live foe whose box meets this one, held by nobody */
 export function nearestIn(box: readonly [number, number, number, number], ok: (e: Enemy) => boolean): Enemy | null {
@@ -34,6 +38,7 @@ export function nearestIn(box: readonly [number, number, number, number], ok: (e
 /** K on the floor: both hands reach out */
 export function pressGrab(): boolean {
   if (!isFree() || !hero.ground) return false;
+  if (cometLeap()) return true;
   hulda.struck = false;
   hero.vx = 0;
   setState("grab");
@@ -41,12 +46,19 @@ export function pressGrab(): boolean {
   return true;
 }
 
-/** a minion is taken into her hands; a foe too big to hold is crushed instead */
+/** a minion is taken into her hands, a foe too big to hold is crushed instead; Iron Counter answers a grab into a
+ *  wind-up first */
 function catchFoe(e: Enemy): void {
   hulda.struck = true;
   gainGrit(GRIT.grab);
   emitSkillEvent({ type: "grab", foe: e });
-  if (ENEMIES[e.type].launchable) {
+  counterGrab(e);
+  if (e.hp <= 0) {
+    hero.vx = 0;
+    setState("crush");
+    return;
+  }
+  if (ENEMIES[e.type].launchable || executing() || ironBigGrab()) {
     take(e);
     setState("hold");
     sfx.tone(160, 110, 0.08, "square", 0.06);
@@ -80,6 +92,7 @@ export function runCrush(): void {
     if (e && e.hp > 0) {
       const [cx, cy] = enemyCenter(e);
       dealDamage(e, progress.stats.ad * CRUSH.power, { fromX: h.x, kx: 0, heavy: true, melee: true });
+      fracture(e, crushFractures());
       h.lastHit = e;
       game.fx.push(createImpact(cx - h.face * 4, cy, h.face, true));
       hitStop(CRUSH.stop);

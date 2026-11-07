@@ -12,6 +12,7 @@ export function gainFury(share: number, seconds: number = FURY.time): void {
 export function tickFury(dt: number): void {
   hulda.furyT = Math.max(0, hulda.furyT - dt);
   if (hulda.furyT <= 0) hulda.fury = 0;
+  hulda.unbreakT = Math.max(0, hulda.unbreakT - dt);
   hulda.ironT = Math.max(0, hulda.ironT - dt);
   if (hulda.ironT <= 0) hulda.iron = 0;
 }

@@ -10,6 +10,7 @@ import { hitStop } from "../../world";
 import { inHaymaker } from "./fists";
 import { inIron } from "./fury";
 import { gainGrit, plates, rushing } from "./grit";
+import { braceTime, braceTook } from "./ironWall";
 import { hulda } from "./memory";
 
 /** the haymaker is winding up: armoured from its second frame until the blow lands */
@@ -17,7 +18,7 @@ const windingUp = (): boolean => inHaymaker() && hero.st >= HAYMAKER_ARMOUR && h
 
 /** what takes a blow she meant to take, or null: the rush, the haymaker's wind-up, Iron Wall's brace */
 function counterArmour(): ArmourKind | null {
-  if (hero.state === "brace") return "brace";
+  if (hero.state === "brace" && hero.st < braceTime()) return "brace";
   if (rushing()) return "rush";
   if (windingUp()) return "windup";
   return null;
@@ -51,6 +52,7 @@ function shrug(kind: ArmourKind | null): void {
   hero.inv = Math.max(hero.inv, GRIT.safe);
   hitStop(GRIT.stop);
   sfx.block();
+  if (kind === "brace") braceTook();
   if (kind) emitSkillEvent({ type: "armour", kind, fromX: hulda.hitFrom, counter: true });
 }
 
@@ -61,7 +63,7 @@ function shrug(kind: ArmourKind | null): void {
  */
 export function steadfast(): boolean {
   const kind = counterArmour();
-  if (kind || inIron()) {
+  if (kind || inIron() || hulda.unbreakT > 0) {
     shrug(kind);
     return true;
   }

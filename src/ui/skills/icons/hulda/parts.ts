@@ -1,10 +1,11 @@
 import { HULDA_SKIN, RUST } from "../../../../constants/characters/hulda/look";
 import type { SpriteCanvas } from "../../../../engine/sprite";
+import type { Color } from "../../../../types/color";
 import { WHITE } from "../../../../utils/color";
 import { fill } from "../parts";
 import { seg } from "../ysra/parts";
 
-/** Small drawing parts for Hulda's 16 x 16 icons: gauntlet fists, plates and a held body. */
+/** Small drawing parts for Hulda's 16 x 16 icons: gauntlet fists, plates, a held body, cracks, shields and a bear. */
 type S = SpriteCanvas;
 export const HC = HULDA_SKIN.colors;
 
@@ -60,5 +61,50 @@ export function body(s: S, x: number, y: number, r = 3.2): void {
   fill(s, () => {
     s.set(x - 1, y - r + 1, RUST[4]);
     s.set(x + r * 0.4, y - r * 0.2, RUST[6]);
+  });
+}
+
+/** a cracked floor along row y from x0 to x1, its seam lit in two colours */
+export function crack(s: S, y: number, c: Color, light: Color, x0 = 0, x1 = 15): void {
+  fill(s, () => {
+    for (let x = x0; x <= x1; x++) s.set(x, y + (x % 3 === 0 ? 1 : 0), x % 2 ? c : light);
+  });
+}
+
+/** a round shield seen face on, rim in `rim`, a boss in the middle */
+export function shield(s: S, x: number, y: number, r: number, rim: Color): void {
+  fill(s, () => {
+    s.dot(x, y, r, rim);
+    s.dot(x, y, r - 1, HC.steel);
+  });
+  fill(s, () => {
+    s.dot(x, y, 0.9, HC.steelLight);
+    s.set(x - r * 0.4, y - r * 0.4, WHITE);
+  });
+}
+
+/** small flecks flung out round a point */
+export function shards(s: S, x: number, y: number, r: number, c: Color): void {
+  fill(s, () => {
+    for (let i = 0; i < 7; i++) {
+      const a = (i / 7) * Math.PI * 2 + 0.4;
+      const k = i % 2 ? r : r * 0.65;
+      s.stroke(x + Math.cos(a) * k * 0.5, y + Math.sin(a) * k * 0.5, x + Math.cos(a) * k, y + Math.sin(a) * k, 0.45, c);
+    }
+  });
+}
+
+/** a spirit bear's head: round ears, a snout and two eyes */
+export function bear(s: S, x: number, y: number, c: Color, eye: Color = RUST[2]): void {
+  fill(s, () => {
+    s.dot(x - 2.6, y - 3, 1.4, c);
+    s.dot(x + 2.6, y - 3, 1.4, c);
+    s.dot(x, y, 3.6, c);
+  });
+  fill(s, () => {
+    s.dot(x, y + 1.6, 1.4, RUST[6]);
+    s.set(x, y + 1, RUST[1]);
+    s.set(x - 1.4, y - 1, eye);
+    s.set(x + 1.4, y - 1, eye);
   });
 }

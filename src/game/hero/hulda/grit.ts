@@ -37,9 +37,10 @@ export function tickGrit(dt: number): void {
 /** the Bull Rush is under way, load to skid */
 export const rushing = (): boolean => hero.state === "rush" && !hulda.landed;
 
-/** the share of a blow that reaches her HP: cut under a full plate (more with Iron Hide) or in a rush */
+/** the share of a blow that reaches her HP: cut under a full plate (more with Iron Hide) or in a rush, whichever cuts
+ *  more; Juggernaut's rush lets none through */
 export function gritScale(): number {
-  if (plates() > 0) return skillLevel(HIDE) ? skillValues(HIDE).cut : GRIT.plated;
-  if (rushing()) return skillLevel("h_bullHorns") ? skillValues("h_bullHorns").armour : RUSH.armour;
-  return 1;
+  const plated = plates() > 0 ? (skillLevel(HIDE) ? skillValues(HIDE).cut : GRIT.plated) : 1;
+  if (!rushing()) return plated;
+  return Math.min(plated, skillLevel("h_bullHorns") ? skillValues("h_bullHorns").armour : RUSH.armour);
 }

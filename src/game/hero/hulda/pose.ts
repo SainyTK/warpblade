@@ -5,7 +5,8 @@ import { HULDA_CLIPS } from "../../../constants/clips/hulda/moves";
 import { CHARGE_POSE, HOLD_POSE, HULDA_IDLE } from "../../../constants/clips/hulda/stance";
 import { KAEL_WOUNDED_IDLE } from "../../../constants/clips/wounded";
 import type { Hero } from "../../../types/hero";
-import type { Pose } from "../../../types/pose";
+import type { ActionClip, Pose } from "../../../types/pose";
+import type { UltimateId } from "../../../types/skill";
 import { sampleKeys } from "../../../utils/sampleKeys";
 import { progress } from "../../state";
 import { clipPose } from "../clipPose";
@@ -17,6 +18,15 @@ import { woundedIdle, woundWeight } from "../wound";
 import { carry, holding } from "./carry";
 import { currentBlow } from "./fists";
 import { hulda } from "./memory";
+import { rushClipTime } from "./rushClock";
+import { spellPose } from "./spellPose";
+import { swingClipTime } from "./swing";
+
+/** her clip for each ultimate she can hold: the heave of Titan Throw, the chest slams that turn her to iron */
+const ULTIMATE_CLIPS: Partial<Record<UltimateId, ActionClip>> = {
+  titanThrow: HULDA_CLIPS.titan,
+  unbroken: HULDA_CLIPS.taunt,
+};
 
 /** walking with a foe in her hands strides on; standing, she holds it at her hands */
 function holdPose(h: Hero): Pose {
@@ -40,17 +50,23 @@ function statePose(h: Hero, t: number, fresh: boolean, dt: number, wound: number
     case "hold":
       return holdPose(h);
     case "toss":
-      return sampleKeys(THROW_CLIPS[hulda.throwKind].keys, h.st);
+      return sampleKeys(THROW_CLIPS[hulda.throwKind].keys, hulda.throwKind === "swing" ? swingClipTime(h.st) : h.st);
     case "rush":
+      return sampleKeys(HULDA_CLIPS.rush.keys, rushClipTime(h.st));
     case "bellow":
     case "taunt":
       return sampleKeys(HULDA_CLIPS[h.state].keys, h.st);
+    case "chain":
+    case "stomp":
+    case "brace":
+    case "ride":
+      return spellPose(h);
     case "charge": {
       const tremble = h.chargeLevel >= 3 && Math.floor(t * 30) % 2 ? 0.5 : 0;
       return { ...CHARGE_POSE, nx: CHARGE_POSE.nx + tremble };
     }
     case "ultimate":
-      return sampleKeys((progress.ultimate === "titanThrow" ? HULDA_CLIPS.titan : HULDA_CLIPS.quake).keys, h.st);
+      return sampleKeys(ULTIMATE_CLIPS[progress.ultimate]?.keys ?? HULDA_CLIPS.quake.keys, h.st);
     case "idle": {
       const wounded = carry(sampleKeys(KAEL_WOUNDED_IDLE.keys, h.st % KAEL_WOUNDED_IDLE.dur));
       return woundedIdle(sampleKeys(HULDA_IDLE.keys, h.st % HULDA_IDLE.dur), wounded, wound);

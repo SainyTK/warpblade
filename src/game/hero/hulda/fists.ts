@@ -8,7 +8,9 @@ import { boxAhead, newSwing } from "../../world";
 import { isFree, setState, settle } from "../actions";
 import { skin } from "../skin";
 import { fistGrit, gainGrit } from "./grit";
+import { afterHaymaker, haymakerBoost } from "./haymaker";
 import { hulda } from "./memory";
+import { sendWaves } from "./waves";
 
 const HAYMAKER = STRING.indexOf("haymaker");
 
@@ -48,21 +50,29 @@ export function pressFist(): boolean {
   return true;
 }
 
-/** a blow lands on every foe in the box ahead; each foe struck gives Grit */
+/**
+ * A blow lands on every foe in the box ahead; each foe struck gives Grit. Knuckle Wave pushes its waves on, and on the
+ * haymaker Wrecking Haymaker adds its power, stun, launch and spike, then its crack and knock-down.
+ */
 function land(blow: FistBlow): void {
   const f = FISTS[blow];
   const [x0, y0, x1, y1] = f.box;
+  const boost = blow === "haymaker" ? haymakerBoost() : null;
   if (f.arc) game.fx.push(createSlash(hero.x, hero.y, hero.face, { ...f.arc, ramp: skin.ramp }));
+  hero.lastHit = null;
   const hits = meleeHit([boxAhead(x0, y0, x1, y1)], {
-    power: f.power,
+    power: f.power + (boost?.power ?? 0),
     kx: f.kx,
     ky: f.ky,
-    stun: f.stun,
-    launch: f.launch,
+    stun: boost?.stun ?? f.stun,
+    launch: boost?.launch ?? f.launch,
+    spike: boost?.spike,
     big: f.heavy,
     feel: f.stop ? { stop: f.stop, shake: f.shake ?? [0.12, 1.5], pitch: 0.75 } : undefined,
   });
   if (hits) gainGrit(fistGrit() * hits);
+  sendWaves(blow);
+  if (blow === "haymaker") afterHaymaker(hits ? hero.lastHit : null);
 }
 
 /** the blow lands on its frame; when it ends, a queued press carries the string on */

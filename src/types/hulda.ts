@@ -15,7 +15,8 @@ export type HuldaState =
   | "taunt"
   | "chain"
   | "stomp"
-  | "brace";
+  | "brace"
+  | "ride";
 
 /** the blows of her fist string, in order */
 export type FistBlow = "jab" | "hook" | "haymaker";
@@ -73,6 +74,13 @@ export interface HuldaMemory {
   carried: readonly Enemy[];
   /** foes the rush under way has struck, for the dash event; replaced whole */
   passed: readonly Enemy[];
+  /** Stampede: L in the skid may start one free rush */
+  rushAgain: boolean;
+  /** Iron Counter: the next throw's damage multiple, whether the held big foe is the evolved grip's, and seconds left
+   *  in which no plate breaks */
+  counterThrow: number;
+  execute: boolean;
+  unbreakT: number;
   /** Fury: her damage is up by this share while `furyT` runs */
   fury: number;
   furyT: number;
@@ -80,6 +88,17 @@ export interface HuldaMemory {
   hitFrom: number;
   /** seconds since a plate last healed her (Iron Hide) */
   healWait: number;
+  /** Iron Chain: a chain cast is still out or dragging foes home, so she stays in the haul */
+  chainBusy: boolean;
+  /** Iron Wall: blows taken in the brace under way */
+  braced: number;
+  /** Skyfall Breaker: the big foe she rides and the pounds left, the foes her dive drags down, the bounce after a catch
+   *  already spent this airtime, and a Comet Grab leap under way */
+  ridden: Enemy | null;
+  pounds: number;
+  dove: readonly Enemy[];
+  bounced: boolean;
+  comet: boolean;
   /** Unbroken: seconds of iron left and its damage share */
   ironT: number;
   iron: number;
@@ -90,7 +109,7 @@ declare module "./skillBehavior" {
   interface SkillEvents {
     /** a foe caught in her hands, or crushed when too big to hold */
     grab: { foe: Enemy };
-    /** a foe she threw or slammed landed; `slam` for a suplex, a Skyfall or a Bull Horns slam */
+    /** a foe she threw or slammed landed; `slam` for a Skyfall or a Bull Horns slam (a suplex is a throw) */
     throw: { foe: Enemy; x: number; y: number; slam: boolean };
     /** her armour took a blow; `counter` when she took it on purpose (rush, wind-up, brace), her parry */
     armour: { kind: ArmourKind; fromX: number; counter: boolean };

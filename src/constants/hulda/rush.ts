@@ -9,6 +9,8 @@ export const RUSH = {
   speed: 200,
   recover: frame(6),
   cooldown: 0.4,
+  /** the rush clip's stride, from `stride[0]` after the load to `stride[1]`, loops while a skill makes the rush longer */
+  stride: [frame(2), frame(8)] as const,
   /** blows on her during the rush deal this share and never flinch her */
   armour: 0.5,
   power: 0.6,
@@ -16,6 +18,7 @@ export const RUSH = {
   stun: 0.4,
   /** the box her shoulder sweeps, from her feet */
   box: [0, -26, 12, 0] as const,
-  /** Bull Horns: foes on her shoulder are slammed down this stunned */
+  /** Bull Horns: foes on her shoulder are slammed down this stunned, and from level 7 minions are thrown up this fast */
   hornsStun: 0.8,
+  hornsLaunch: -220,
 } as const;

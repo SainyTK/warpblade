@@ -53,8 +53,22 @@ export const THROWS = {
     stop: 0.1,
     shake: [0.3, 3] as const,
   },
-  /** Giant Swing: turns round her (the skill's count, power and reach), a hit on every foe near each, then a forward throw */
-  swing: { dur: frame(24), release: frame(20) },
+  /**
+   * Giant Swing: turns round her (the skill's count, power and reach), each `turn` long so two or three stay readable, a
+   * hit on every foe near each (Cyclone: every `beat`), then the forward release over `settle`; the clip's spin runs from
+   * `loop` to its release key and repeats for turns past two. Level 7's release knocks down foes within `knock`.
+   */
+  swing: {
+    dur: frame(24),
+    release: frame(20),
+    turn: frame(10),
+    loop: frame(2),
+    settle: frame(4),
+    beat: 0.25,
+    kx: 160,
+    knock: 30,
+    knockStun: 0.8,
+  },
 } as const;
 
 /** a body thrown forward: it flies this long, strikes each foe it touches once, and lands hard */
@@ -66,6 +80,15 @@ export const THROWN = {
   stop: 0.04,
   landPower: 0.6,
   landStun: 0.8,
+  /** Wrecking Throw: a struck foe flung on flies this fast; a bounce throws the body up this fast */
+  flingVx: 240,
+  flingVy: -90,
+  bounceVx: 110,
+  bounceVy: -150,
+  /** Human Cannonball: the body flies level this fast until it is this near a wall, or this long at most */
+  cannonVx: 340,
+  wall: 8,
+  cannonLife: 2,
 } as const;
 
 /** K in the air: a lunge down with both hands, a ride to the floor and a slam */

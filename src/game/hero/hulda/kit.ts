@@ -14,13 +14,18 @@ import { huldaDamageScale, tickFury } from "./fury";
 import { pressGrab, runCrush, runGrab } from "./grab";
 import { gritScale, tickGrit } from "./grit";
 import { drop, watchGrip } from "./hold";
+import { runChain } from "./ironChain";
+import { runBrace } from "./ironWall";
 import { pressJump } from "./jump";
 import { hulda, resetHulda } from "./memory";
 import { huldaPose } from "./pose";
-import { dropCarried, pressRush, runRush, rushDrives } from "./rush";
-import { pressSkyfall, runSkyfall, skyfallDrives } from "./skyfall";
+import { dropCarried, pressRush, runRush } from "./rush";
+import { rushDrives } from "./rushClock";
+import { rustGuard } from "./rustGuard";
+import { pressSkyfall, ridesFoe, runRide, runSkyfall, skyfallDrives } from "./skyfall";
 import { runTaunt } from "./taunt";
 import { pressKnee, pressThrow, runHold, runKnee, runToss } from "./throws";
+import { runStomp } from "./tremorStomp";
 
 function tick(dt: number): void {
   tickGrit(dt);
@@ -37,6 +42,7 @@ function tick(dt: number): void {
   if (hero.ground && hero.state !== "skyfall") {
     hulda.airFisted = false;
     hulda.airGrabbed = false;
+    hulda.bounced = false;
   }
   watchGrip();
   if (hulda.carried.length && (hero.state !== "rush" || hero.hp <= 0)) dropCarried();
@@ -77,6 +83,18 @@ function runState(dt: number): boolean {
     case "taunt":
       runTaunt(dt);
       return true;
+    case "chain":
+      runChain();
+      return true;
+    case "stomp":
+      runStomp();
+      return true;
+    case "brace":
+      runBrace();
+      return true;
+    case "ride":
+      runRide(dt);
+      return true;
     default:
       return false;
   }
@@ -115,12 +133,12 @@ export const HULDA_KIT: HeroKit = {
     return false;
   },
   stride: () => HULDA_STRIDE,
-  hurtScale: gritScale,
+  hurtScale: () => gritScale() * rustGuard(),
   damageScale: huldaDamageScale,
   steadfast,
   drivesMotion: () =>
-    rushDrives() || skyfallDrives() || ((hero.state === "hold" || hero.state === "knee") && hero.ground),
-  gravityScale: () => 1,
+    rushDrives() || skyfallDrives() || ridesFoe() || ((hero.state === "hold" || hero.state === "knee") && hero.ground),
+  gravityScale: () => (ridesFoe() ? 0 : 1),
   reset: () => {
     drop();
     dropCarried();

@@ -1,6 +1,6 @@
 import type { SkillDef } from "../../../../types/skill";
 
-/** Iron Hide. Design: docs/skills/hulda.md. Values: start: Grit a run starts with; cut: share of a blow a plate lets through; heal: share of max HP a broken plate heals, at most once each 2 s; plates: most plates; drain: share of the Grit drain; fist: Grit a landed J blow gives; knock: 1 a broken plate knocks down foes near; regrow: seconds a plate takes to regrow near foes (evolution); rust: Rust stacks a break throws */
+/** Iron Hide. Design: docs/skills/hulda.md. Values: start: Grit she is filled to when she takes it; cut: share of a blow a plate lets through; heal: share of max HP a broken plate heals, at most once each 2 s; plates: most plates; drain: share of the Grit drain; fist: Grit a landed J blow gives; knock: 1 a broken plate knocks down foes near; regrow: seconds a plate takes to regrow near foes (evolution); rust: Rust stacks a break throws */
 export const IRON_HIDE: SkillDef = {
   id: "h_ironHide",
   name: "Iron Hide",

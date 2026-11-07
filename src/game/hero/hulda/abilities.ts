@@ -4,8 +4,11 @@ import type { HuldaAbility } from "../../../types/hulda";
 import { skillLevel, skillValues } from "../../skills/query";
 import { createRotation } from "../../skills/rotation";
 import { pressBellow } from "./bellow";
+import { pressChain } from "./ironChain";
+import { pressBrace } from "./ironWall";
 import { hulda } from "./memory";
 import { pressTaunt } from "./taunt";
+import { pressStomp } from "./tremorStomp";
 
 /** her abilities on I in the order O turns through them: Bellow and the taunt from the start, then her spell skills */
 export const ABILITIES: readonly HuldaAbility[] = ["bellow", "taunt", "h_ironChain", "h_tremorStomp", "h_ironWall"];
@@ -62,6 +65,12 @@ export function pressAbility(): boolean {
   switch (selectedAbility()) {
     case "taunt":
       return pressTaunt();
+    case "h_ironChain":
+      return pressChain();
+    case "h_tremorStomp":
+      return pressStomp();
+    case "h_ironWall":
+      return pressBrace();
     default:
       return pressBellow();
   }

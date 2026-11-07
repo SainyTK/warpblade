@@ -1,6 +1,6 @@
 import type { SkillDef } from "../../../../types/skill";
 
-/** Shield-Sister. Design: docs/skills/hulda.md. Values: chance; cooldown: least seconds between calls; power: attack damage a pass deals each foe; length: pixels of a charge; back: 1 charges back again; stun: seconds her bash stuns (0 none); stay: seconds she stays, charging each second (0 one charge); count: sisters a call; wall: 1 the evolved sisters charge from both sides every half second */
+/** Shield-Sister. Design: docs/skills/hulda.md. Values: chance; cooldown: least seconds between calls; power: attack damage a pass deals each foe; length: pixels of a charge; back: 1 charges back again; stun: seconds her bash stuns (0 none); stay: seconds she stays, charging each second (0 one charge); count: sisters a call; wall: 1 the evolved sisters charge in from both sides; every: seconds between them */
 export const SHIELD_SISTER: SkillDef = {
   id: "h_shieldSister",
   name: "Shield-Sister",
@@ -48,7 +48,18 @@ export const SHIELD_SISTER: SkillDef = {
     text: "Four sisters stay for good, charging across the floor from both sides every half second.",
     row: {
       text: "Four sisters charge from both sides.",
-      values: { chance: 0.3, cooldown: 1.8, power: 0.8, length: 120, back: 1, stun: 0.6, stay: 1, count: 4, wall: 1 },
+      values: {
+        chance: 0.3,
+        cooldown: 1.8,
+        power: 0.8,
+        length: 120,
+        back: 1,
+        stun: 0.6,
+        stay: 1,
+        count: 4,
+        wall: 1,
+        every: 0.5,
+      },
     },
   },
 };
