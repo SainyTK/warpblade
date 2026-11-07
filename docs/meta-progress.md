@@ -8,6 +8,8 @@ Bought upgrades apply at the start of every run, on top of the level-up picks.
 ## Coins
 
 Every slain foe drops coins: a wisp 1, a husk 2, a Rift Brute 8 and the Rift Warden 25 (`COIN_DROP` in `src/constants/coins.ts`).
+Since waves stream a growing quota of foes, a minion drops only its share: a normal wave pays the coins of as many minions as a wave brought before (3, one more every third wave, 9 at most, `COIN_PAID_FOES`), spread over its whole quota (`coinShare` in `src/utils/coins.ts`).
+Mini bosses and the Warden drop their full count, and an elite drops twice its base (`ELITE.coins`).
 Since 0.2.0 every foe drops a quarter more on top of that (`COIN_BONUS`), and a fraction left over is a chance at one more coin.
 Lodestone's quarter adds to it, so an owner of Lodestone gets half again the base drop.
 Coins pop out of the foe, fall and bounce on the floor or a ledge, and the hero picks them up by touch.
@@ -76,6 +78,11 @@ Clearing waves 1 to N earns this many coins in total, before the 0.2.0 bonus and
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | Base coins | 18 | 28 | 44 | 52 | 72 | 126 | 178 | 203 | 354 |
 | With the bonus | 22 | 35 | 55 | 65 | 90 | 158 | 222 | 254 | 442 |
+| Streamed waves, base | 19 | 30 | 47 | 55 | 78 | 136 | 189 | 220 | 385 |
+| Streamed waves, with the bonus | 24 | 38 | 59 | 69 | 98 | 170 | 236 | 276 | 481 |
+
+The streamed rows count the Warden's base drop but not the flyers it calls.
+They run about 5 to 9% above the old ones, from the elites' doubled drop and the mini boss waves' longer flyer streams, so the prices below still hold.
 
 Before 0.2.0 the playtest bots banked 12 to 20 coins on runs that fell at waves 4 and 5, since they miss some kills.
 Such a run bought one first level at most, which was too slow.
