@@ -56,6 +56,8 @@ export interface MoveHit {
   wall?: boolean;
   /** always a critical hit, as a Keen blow is */
   crit?: boolean;
+  /** a precise blow: `power` lands on the foe the move's payoff reaches, every other foe takes this */
+  plain?: number;
   slash?: SlashShape;
   feel?: HitFeel;
 }

@@ -7,6 +7,7 @@ import { createSlash } from "../effects/slash";
 import { wispsEvade } from "../enemies/evade";
 import { pressAge } from "../input";
 import { meleeHit } from "../meleeHit";
+import { startMovePayoff } from "../skills/payoff";
 import { game, hero, progress } from "../state";
 import { boxAhead, boxBehind, newSwing } from "../world";
 import { isFree, leaveHang, setState, settle } from "./actions";
@@ -48,6 +49,7 @@ export function startMove(id: MoveId): void {
     moveHits: 0,
     moveGhost: 0,
   });
+  startMovePayoff();
   const keen = h.keenNext || !!kit().alwaysKeen?.();
   Object.assign(h, { keen, keenNext: false, keenSpoiled: false, keenOpen: 0 });
   setState("move");

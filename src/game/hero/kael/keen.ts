@@ -6,6 +6,7 @@ import { createCrystalWave } from "../../effects/crystalWave";
 import { createImpact } from "../../effects/impact";
 import { createSlash } from "../../effects/slash";
 import { enemyCenter } from "../../enemies/enemy";
+import { movePayoff } from "../../skills/payoff";
 import { skillEvolved, skillValues, withCharms } from "../../skills/query";
 import { game, hero, lights, progress } from "../../state";
 import { hitStop, shake } from "../../world";
@@ -77,7 +78,16 @@ export function afterKeenMove(hits: number): void {
   if (kael.stormLeft > 0) kael.stormVolleys++;
   const v = skillValues(SKILL);
   if (v.wave)
-    game.fx.push(createCrystalWave(hero.x + hero.face * 10, hero.y - 18, hero.face, progress.stats.ad * v.wave));
+    game.fx.push(
+      createCrystalWave(
+        hero.x + hero.face * 10,
+        hero.y - 18,
+        hero.face,
+        progress.stats.ad * v.wave,
+        undefined,
+        movePayoff(),
+      ),
+    );
   if (!skillEvolved(SKILL) || kael.freeKeen > 0) return;
   kael.keenCount++;
   if (kael.keenCount >= v.crossEvery) crossCut();

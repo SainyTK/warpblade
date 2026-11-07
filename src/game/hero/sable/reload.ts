@@ -1,8 +1,8 @@
 import { RELOAD } from "../../../constants/sable/reload";
 import { sfx } from "../../../services/audio";
-import type { Enemy } from "../../../types/enemy";
 import { PK } from "../../../types/particle";
 import { enemyCenter } from "../../enemies/enemy";
+import { createPayoff } from "../../skills/payoff";
 import { skillValues } from "../../skills/query";
 import { nearestFoe } from "../../skills/targets";
 import { hero, lights, particles, progress, rng } from "../../state";
@@ -48,17 +48,15 @@ function perfect(): void {
   if (v.volley) volley(v.volley);
 }
 
-/** Perfect Rhythm: a perfect reload looses primed bolts at once, one at each of the nearest foes */
+/** Perfect Rhythm: a perfect reload looses primed bolts at once at the nearest foe, a precise payoff on one foe */
 function volley(count: number): void {
   const m = muzzle("level");
-  const taken: Enemy[] = [];
-  for (let i = 0; i < count; i++) {
-    const e = nearestFoe(hero.x, m.y, taken) ?? taken[i % Math.max(1, taken.length)];
-    if (!e) return;
-    taken.push(e);
-    const [cx, cy] = enemyCenter(e);
-    looseBolt({ ...m, angle: Math.atan2(cy - m.y, cx - m.x), share: 1, prime: "reload" });
-  }
+  const e = nearestFoe(hero.x, m.y);
+  if (!e) return;
+  const [cx, cy] = enemyCenter(e);
+  const payoff = createPayoff();
+  for (let i = 0; i < count; i++)
+    looseBolt({ ...m, angle: Math.atan2(cy - m.y, cx - m.x), share: 1, prime: "reload", payoff });
 }
 
 /** O: start the reload, or the timing press inside one: in the bright window a perfect reload, outside it a jam */

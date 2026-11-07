@@ -2,6 +2,7 @@ import type { Enemy } from "../../../types/enemy";
 import type { MoveId } from "../../../types/move";
 import type { OwnHit } from "../../damageHooks";
 import { stacksOf } from "../../enemies/skillStatus";
+import { movePayoff, payoffLands } from "../../skills/payoff";
 import { skillValues } from "../../skills/query";
 import { hero } from "../../state";
 import { kael } from "./state";
@@ -18,12 +19,13 @@ function keenBonus(): number {
 }
 
 /**
- * Extra damage one of Kael's own hits deals from his skills, added together: a Keen blow (Keen Edge), a back attack
- * after a phase (Phase Cut), an air hit (Sky Dance), a sword blow in Riposte (Mirror Knight).
+ * Extra damage one of Kael's own hits deals from his skills, added together: a Keen blow (Keen Edge, a precise payoff:
+ * only on the foe the Keen move reached first), a back attack after a phase (Phase Cut), an air hit (Sky Dance), a sword
+ * blow in Riposte (Mirror Knight).
  */
-export function hitBonus(_e: Enemy, hit: OwnHit): number {
+export function hitBonus(e: Enemy, hit: OwnHit): number {
   let bonus = 0;
-  if (hit.keen) bonus += keenBonus();
+  if (hit.keen && payoffLands(movePayoff(), e)) bonus += keenBonus();
   if (hit.back && kael.phaseBack > 0) bonus += skillValues("k_phase").back ?? 0;
   if (hero.move && AIR_MOVES.has(hero.move)) bonus += skillValues("k_skydance").airBonus ?? 0;
   if (hit.melee && hero.riposte > 0) bonus += (skillValues("k_mirror").riposte ?? 1) - 1;
