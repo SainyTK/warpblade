@@ -16,12 +16,12 @@ import { boxHit } from "../world";
 const HUMP = [5, 4, 4, 3, 2, 2, 1] as const;
 
 /**
- * Earthshaker: two fronts run out along the floor from where she landed, one each way. Each lifts a hump of floor,
+ * Vault Strike's shockwave: two fronts run out along the floor from where she landed, one each way. Each lifts a hump of floor,
  * leaves a glowing crack behind it and throws up chips of stone, and trips every foe on the floor it passes once.
  */
-export function createShockwave(x: number, y: number, damage: number, ramp: Ramp): Effect {
+export function createShockwave(x: number, y: number, damage: number, ramp: Ramp, range: number, stun: number): Effect {
   const struck = new Set<Enemy>();
-  const life = QUAKE.range / QUAKE.speed;
+  const life = range / QUAKE.speed;
   let t = 0;
   const front = (side: number) => x + side * QUAKE.speed * t;
   const hit = (side: number) => {
@@ -30,7 +30,7 @@ export function createShockwave(x: number, y: number, damage: number, ramp: Ramp
       if (struck.has(e) || e.hp <= 0 || e.air || !boxHit([fx - 4, y - QUAKE.height, fx + 4, y + 1], enemyBox(e)))
         continue;
       struck.add(e);
-      dealDamage(e, damage, { fromX: x, kx: side * 50, stun: QUAKE.stun, heavy: true });
+      dealDamage(e, damage, { fromX: x, kx: side * 50, stun, heavy: true });
     }
   };
   const chips = (side: number) => {

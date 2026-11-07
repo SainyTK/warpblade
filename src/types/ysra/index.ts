@@ -7,29 +7,17 @@ export type YsraMoveId = GlaiveMoveId | StanceMoveId;
 export type YsraClipName = GlaiveClipName | StanceClipName;
 /** states only Ysra enters; her kit runs and poses them */
 export type YsraState = "heft" | "vault" | "dive" | "brace" | "backstep" | "rite";
-/** the passives and abilities of Ysra's skill tree */
-export type YsraPerk =
-  | "skewer"
-  | "railLance"
-  | "longString"
-  | "windmill"
-  | "impale"
-  | "highReaper"
-  | "emberParry"
-  | "counterThrust"
-  | "vaultStrike"
-  | "warpath"
-  | "earthshaker"
-  | "bulwark"
-  | "unbroken"
-  | "flare"
-  | "flamePillar"
-  | "brazier"
-  | "searingEdge"
-  | "ashenWake"
-  | "overheat"
-  | "hearthfire"
-  | "moltenGuard"
-  | "hotIron"
-  | "skyline"
-  | "pyreColonnade";
+
+declare module "../skillBehavior" {
+  /** Ysra's own skill events */
+  interface SkillEvents {
+    /** her brace stopped a blow from the front, outside the parry window */
+    block: { fromX: number };
+    /** a windmill finished its passes where she stands */
+    spin: { x: number; y: number };
+    /** Forge Altar lets a salamander out where it stands */
+    altar: { x: number; y: number };
+    /** she landed out of a vault or a dive */
+    land: { x: number; y: number; from: "vault" | "dive" };
+  }
+}

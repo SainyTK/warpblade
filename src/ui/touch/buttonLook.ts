@@ -1,23 +1,22 @@
 import { STAMINA } from "../../constants/combat";
-import { BELLOW } from "../../constants/hulda/bellow";
 import { RUSH } from "../../constants/hulda/rush";
-import { TAUNT } from "../../constants/hulda/taunt";
 import { HOP, SLIDE } from "../../constants/sable/moves";
-import { SNARE } from "../../constants/sable/snare";
 import { TOUCH_TEXT } from "../../constants/touch";
 import { ULT_LEVELS } from "../../constants/ultimate";
 import { VAULT } from "../../constants/ysra/stance";
+import { abilityMp, abilityRecharge, selectedAbility } from "../../game/hero/hulda/abilities";
 import { hulda } from "../../game/hero/hulda/memory";
+import { rushCost } from "../../game/hero/hulda/rush";
 import { sable } from "../../game/hero/sable/memory";
 import { reloadShare } from "../../game/hero/sable/reload";
-import { castCost, knowsElement, selectedElement, spellRecharge } from "../../game/hero/spell";
+import { selectedSpell } from "../../game/hero/sable/spells/cast";
+import { castCost, selectedAbility as kaelAbility, spellRecharge } from "../../game/hero/spell";
 import { canPayDash } from "../../game/hero/stamina";
 import { canAffordUlt, ultRecharge } from "../../game/hero/ultimate";
-import { warpCooldown, warpCost } from "../../game/hero/warp";
-import { heat, overheatLeft, overheatReady } from "../../game/hero/ysra/pyre/heat";
+import { warpCost, warpReady, warpRecharge } from "../../game/hero/warp";
+import { heat, overheatLeft } from "../../game/hero/ysra/pyre/heat";
 import { riteCost, selectedRite } from "../../game/hero/ysra/pyre/riteChoice";
-import { hasPerk } from "../../game/progress";
-import { character, hero, progress } from "../../game/state";
+import { character, hero } from "../../game/state";
 import type { ButtonLook, TouchButtonSpec } from "../../types/touch";
 import { hex } from "../../utils/color";
 import { selectionTint, touchSelection } from "./selection";
@@ -40,12 +39,12 @@ function kaelLook(spec: TouchButtonSpec, look: ButtonLook): void {
       look.cooldown = look.ready ? 0 : 1 - hero.stamina / STAMINA.dashCost;
       break;
     case "warp":
-      look.ready = hasPerk("warpStrike") && hero.mp >= warpCost();
-      look.cooldown = hero.warpCd / warpCooldown();
+      look.ready = warpReady() && hero.mp >= warpCost();
+      look.cooldown = warpRecharge();
       break;
     case "cast":
-      look.ready = knowsElement(selectedElement()) && hero.mp >= castCost();
-      look.cooldown = spellRecharge(selectedElement());
+      look.ready = hero.mp >= castCost();
+      look.cooldown = spellRecharge(kaelAbility());
       break;
     default:
   }
@@ -58,10 +57,12 @@ function sableLook(spec: TouchButtonSpec, look: ButtonLook): void {
       look.ready = hero.stamina >= SLIDE.cost;
       look.cooldown = look.ready ? 0 : 1 - hero.stamina / HOP.cost;
       break;
-    case "cast":
-      look.ready = sable.snareCd <= 0 && hero.mp >= SNARE.mp;
-      look.cooldown = sable.snareCd / (hasPerk("twinSnare") ? SNARE.twinCooldown : SNARE.cooldown);
+    case "cast": {
+      const { spell } = selectedSpell();
+      look.ready = spell.left() <= 0 && hero.mp >= spell.mp();
+      look.cooldown = spell.left() / spell.cooldown();
       break;
+    }
     case "cycle":
       look.cooldown = sable.reload ? 1 - reloadShare() : 0;
       break;
@@ -69,21 +70,19 @@ function sableLook(spec: TouchButtonSpec, look: ButtonLook): void {
   }
 }
 
-/** Hulda's rush needs stamina and its short recharge, Bellow MP and its recharge, the taunt its own wait */
+/** Hulda's rush needs stamina and its short recharge; I shows the selected ability's MP and recharge */
 function huldaLook(spec: TouchButtonSpec, look: ButtonLook): void {
   switch (spec.action) {
     case "dash":
-      look.ready = hero.stamina >= RUSH.cost && hulda.rushCd <= 0;
-      look.cooldown = hero.stamina >= RUSH.cost ? hulda.rushCd / RUSH.cooldown : 1 - hero.stamina / RUSH.cost;
+      look.ready = hero.stamina >= rushCost() && hulda.rushCd <= 0;
+      look.cooldown = hero.stamina >= rushCost() ? hulda.rushCd / RUSH.cooldown : 1 - hero.stamina / rushCost();
       break;
-    case "cast":
-      look.ready = hulda.bellowCd <= 0 && hero.mp >= BELLOW.mp;
-      look.cooldown = hulda.bellowCd / BELLOW.cooldown;
+    case "cast": {
+      const id = selectedAbility();
+      look.cooldown = abilityRecharge(id);
+      look.ready = look.cooldown <= 0 && hero.mp >= abilityMp(id);
       break;
-    case "cycle":
-      look.ready = hulda.tauntCd <= 0;
-      look.cooldown = hulda.tauntCd / TAUNT.cooldown;
-      break;
+    }
     default:
   }
 }
@@ -100,7 +99,6 @@ function ysraLook(spec: TouchButtonSpec, look: ButtonLook): void {
       break;
     case "cast": {
       const rite = selectedRite();
-      if (overheatReady()) break;
       look.ready = !!rite && overheatLeft() <= 0 && heat() >= riteCost(rite);
       look.cooldown = rite ? Math.max(0, 1 - heat() / riteCost(rite)) : 1;
       break;
@@ -116,7 +114,7 @@ export function buttonLook(spec: TouchButtonSpec, pressed: boolean): ButtonLook 
   const look: ButtonLook = { pressed, ready: true, cooldown: 0, accent, affordable: 0, charge: -1 };
   if (spec.action === "ultimate") {
     look.cooldown = ultRecharge();
-    look.affordable = progress.ultimate && !hero.ultCd ? ULT_LEVELS.filter((_, i) => canAffordUlt(i + 1)).length : 0;
+    look.affordable = !hero.ultCd ? ULT_LEVELS.filter((_, i) => canAffordUlt(i + 1)).length : 0;
     look.ready = look.affordable > 0;
     look.charge = chargeProgress();
   } else if (character.kit === "sable") sableLook(spec, look);

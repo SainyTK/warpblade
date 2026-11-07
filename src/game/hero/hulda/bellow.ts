@@ -6,6 +6,7 @@ import { dealDamage } from "../../damage";
 import { createBellowRing } from "../../effects/bellowRing";
 import { enemyCenter } from "../../enemies/enemy";
 import { kindOf } from "../../enemies/kinds";
+import { emitSkillEvent } from "../../skills/events";
 import { game, hero, lights, progress } from "../../state";
 import { shake } from "../../world";
 import { isFree, setState, settle } from "../actions";
@@ -13,12 +14,11 @@ import { deny } from "../deny";
 import { skin } from "../skin";
 import { gainGrit } from "./grit";
 import { hulda } from "./memory";
-import { rankOf } from "./rank";
 
 /** I: a roar that drags foes in, paid with MP; on the floor, learned from the start */
 export function pressBellow(): boolean {
   const h = hero;
-  if (!rankOf("t_bellow") || !isFree() || !h.ground) return false;
+  if (!isFree() || !h.ground) return false;
   if (hulda.bellowCd > 0) {
     deny("cast");
     return true;
@@ -32,6 +32,7 @@ export function pressBellow(): boolean {
   h.vx = 0;
   setState("bellow");
   sfx.tone(90, 70, 0.12, "sawtooth", 0.04);
+  emitSkillEvent({ type: "cast", ability: "bellow" });
   return true;
 }
 

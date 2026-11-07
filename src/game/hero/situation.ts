@@ -88,6 +88,7 @@ export function readSituation(): Situation {
     foeAirborne: h.ground && airborneAhead(),
     previous: h.chain > 0 ? h.lastMove : null,
     stabbed: h.stabbed,
-    perks: progress.perks,
+    keen: h.keenNext,
+    skills: progress.build.skills,
   };
 }

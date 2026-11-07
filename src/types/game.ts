@@ -66,7 +66,7 @@ export interface DamageNumber {
   /** seconds since it popped */
   age: number;
   big: boolean;
-  /** a relic's hit, drawn smaller and dimmer than the hero's own */
+  /** a hit a skill dealt on its own, drawn smaller and dimmer than the hero's own */
   quiet: boolean;
   /** the foe it pops over, so later hits on it merge in; none for a word */
   foe: Enemy | null;
@@ -108,8 +108,6 @@ export interface GameState {
   pickups: Pickup[];
   blazes: Blaze[];
   numbers: DamageNumber[];
-  /** the element Kael casts with I, an index into ELEMENTS; each co-op player keeps their own */
-  spell: number;
   /** the last swing number handed out, to any hero */
   swing: number;
   banner: { text: string; time: number };

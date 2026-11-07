@@ -1,14 +1,28 @@
-import type { Perk } from "../types/skill";
-import type { Element } from "../types/spell";
+import type { Element, KaelAbility } from "../types/spell";
 
-/**
- * Seconds before an element can be cast again, each element on its own clock.
- * Ice freezes a whole line of foes, fire burns an area and the floor, bolt hits one foe and arcs to one more.
- */
-export const SPELL_COOLDOWN: Readonly<Record<Element, number>> = { fire: 7, ice: 8, volt: 5.5 };
-/** the skill that teaches each element; Kael starts with none */
-export const SPELL_PERK: Readonly<Record<Element, Perk>> = { fire: "fireSpell", ice: "iceSpell", volt: "voltSpell" };
-/** after any cast the other elements wait at least this long, so switching elements cannot chain spells back to back */
+/** Kael's abilities on I in the order O turns through them: the two base abilities, then the element spells */
+export const KAEL_ABILITIES: readonly KaelAbility[] = ["lance", "burst", "fire", "ice", "volt"];
+/** the skill that teaches each element */
+export const ELEMENT_SKILL: Readonly<Record<Element, string>> = { fire: "k_flame", ice: "k_frost", volt: "k_volt" };
+/** MP each ability costs */
+export const ABILITY_COST: Readonly<Record<KaelAbility, number>> = {
+  lance: 12,
+  burst: 15,
+  fire: 18,
+  ice: 18,
+  volt: 18,
+};
+/** seconds before a base ability can be cast again; the element spells take theirs from their skill's level */
+export const BASE_RECHARGE = { lance: 4, burst: 6 } as const;
+/** after any cast the other abilities wait at least this long, so switching cannot chain casts back to back */
 export const SPELL_SHARED_COOLDOWN = 3;
+/** Spellblade: I during a combo, after this many hits, casts at once and this much harder */
+export const SPELLBLADE = { after: 2, power: 1.5 } as const;
+/** Crystal Lance: a crystal crescent that flies ahead and cuts each foe in its line once, passing guards */
+export const LANCE = { power: 2.5 } as const;
+/** Crystal Burst: a ring of crystal around Kael that pushes foes away */
+export const BURST = { power: 1.5, reach: 40, push: 260 } as const;
 /** the fire flask's throw: speed out of the hand, facing right, and the gravity on it and on Sunflask's child flasks */
 export const FLASK_THROW = { vx: 210, vy: -140, gravity: 520 } as const;
+/** a second flask flies this much slower, so the two land apart */
+export const SECOND_FLASK = 0.72;

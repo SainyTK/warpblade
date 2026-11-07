@@ -1,7 +1,4 @@
-import type { Element } from "../types/spell";
-
-export const COST = { warp: 10, cast: 18 } as const;
-export const ELEMENTS: readonly Element[] = ["fire", "ice", "volt"];
+export const COST = { warp: 10 } as const;
 /** MP per second, standing and hanging from a crystal */
 export const MP_REGEN = { normal: 2, hanging: 14 } as const;
 export const MP_PER_HIT = 2;
@@ -37,8 +34,6 @@ export const STAMINA = {
   perfectRefund: 25,
   /** seconds the bar flashes after a dash it could not pay for */
   emptyFlash: 0.35,
-  /** Quickstep: stamina comes back this many times as fast */
-  quickstep: 1.45,
 } as const;
 
 /** how long the HUD flashes after a press is refused */
@@ -53,7 +48,7 @@ export const WARP = {
   /** seconds before Kael can warp again, far shorter than any spell's */
   cooldown: 2,
   /** warp strike damage as a multiple of attack damage, plus a bonus for distance travelled */
-  power: 2.2,
+  power: 1.8,
   powerPerPixel: 0.014,
   maxDistanceBonus: 2.8,
 } as const;
@@ -75,8 +70,8 @@ export const DAMAGE = {
   crit: 1.75,
   back: 1.5,
   air: 2,
-  /** damage taken with Iron Will */
-  ironWill: 0.85,
+  /** the most extra damage a foe can take from marks and the like together: +100% */
+  takenCap: 1,
 } as const;
 
 /** how hard a falling foe is pulled down, and how its juggle is kept up */
@@ -115,25 +110,23 @@ export const EVADE = { fromWave: 2, base: 0.2, perWave: 0.02, max: 0.6, reach: 5
 
 /** Dashing through an attack in the first moments of the dash: the world slows and Kael gets MP back (and STAMINA.perfectRefund). */
 export const PERFECT = { window: 0.12, slow: 0.7, timeScale: 0.3, mp: 8 } as const;
-export const RIPOSTE = { time: 1.5, power: 3 } as const;
 
 /** after this many hits in the air a foe is no longer held up */
 export const JUGGLE_LIMIT = 6;
 /** Kael cannot be hurt again for this long after a hit */
 export const HURT_INVULN = 0.8;
 
-/** fusion tuning: damage as multiples of attack damage (ad) or ability power (ap) */
-export const FUSION = {
-  staticStrike: 1.5,
-  staticMark: 2,
-  shatterShards: 0.8,
-  shatterReach: 42,
-  ignition: 2.2,
-  ignitionRadius: 34,
-  echo: 0.5,
-  echoDelay: 0.3,
-  manaWave: 0.8,
-  manaWaveCost: 3,
-  manaWaveFrom: 0.75,
-  gravityReach: 60,
-} as const;
+/** Blink Step costs this share of the warp's MP */
+export const BLINK_COST = 0.5;
+
+/** Ice Spikes' shatter cuts foes this close to the frozen one */
+export const SHATTER_REACH = 42;
+/** Fire Flask's ignition burns foes this close to the thrown foe */
+export const IGNITION_RADIUS = 34;
+
+/** chilled foes (a skill's cold) move at this share of their speed */
+export const CHILL_PACE = 0.5;
+/** a phantom's repeat of a blow lands this long after it */
+export const ECHO_DELAY = 0.3;
+/** a stomp drags airborne foes this close down with Kael */
+export const GRAVITY_REACH = 60;

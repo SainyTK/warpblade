@@ -1,16 +1,15 @@
-import type { Pace, SkillKind, UltimateId } from "../types/skill";
+import type { SkillKind, SkillRisk, UltimateId } from "../types/skill";
 
 export const KIND_LABEL: Record<SkillKind, string> = {
-  combo: "Combo",
+  attack: "Attack",
   movement: "Movement",
   spell: "Spell",
-  enhance: "Enhancement",
+  dot: "Over time",
+  summon: "Summon",
   passive: "Passive",
   ultimate: "Ultimate",
-  fusion: "Fusion",
-  evolution: "Evolution",
 };
-export const PACE_LABEL: Record<Pace, string> = { early: "Strong early", steady: "Steady", late: "Strong late" };
+export const RISK_LABEL: Record<SkillRisk, string> = { easy: "Easy", timed: "Timed", precise: "Precise" };
 export const ULT_LABEL: Record<UltimateId, string> = {
   crystalNova: "CRYSTAL NOVA",
   pyreWave: "PYRE WAVE",
@@ -19,14 +18,14 @@ export const ULT_LABEL: Record<UltimateId, string> = {
   starfall: "STARFALL",
   tempest: "TEMPEST",
   sunspear: "SUNSPEAR",
-  phoenixDive: "PHOENIX DIVE",
   volcanicRift: "VOLCANIC RIFT",
   boltStorm: "BOLT STORM",
   deadeye: "DEADEYE",
   quakeDrop: "QUAKE DROP",
   titanThrow: "TITAN THROW",
+  unbroken: "UNBROKEN",
 };
 /** the kind line of a boon card */
 export const BOON_KIND = "Boon";
-/** the path line of relic and charm cards */
-export const CARD_KIND = { relic: "Relic", charm: "Charm" } as const;
+/** the path line of charm cards */
+export const CHARM_KIND = "Charm";

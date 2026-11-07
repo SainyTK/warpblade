@@ -1,4 +1,4 @@
-import { FIRE_RAMP, KAEL_COLORS as HC, PAL } from "../../../constants/palette";
+import { COIN_GOLD, FIRE_RAMP, KAEL_COLORS as HC, PAL } from "../../../constants/palette";
 import type { SpriteCanvas } from "../../../engine/sprite";
 import type { Color } from "../../../types/color";
 import { WHITE } from "../../../utils/color";
@@ -196,4 +196,9 @@ export function speedLines(s: S, x: number, ys: readonly number[], len: number, 
 
 export function fill(s: S, draw: () => void): void {
   layer(s, draw);
+}
+
+/** the gold four-point star in the top right corner that marks an evolved skill, with a white centre */
+export function evolvedStar(s: SpriteCanvas): void {
+  fill(s, () => s.pixels(["..g..", "..g..", "ggwgg", "..g..", "..g.."], { g: COIN_GOLD[3], w: WHITE }, 10, 1));
 }

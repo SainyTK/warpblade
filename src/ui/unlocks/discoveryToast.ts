@@ -21,7 +21,7 @@ function toast(d: Discovery): HTMLElement {
   return box;
 }
 
-/** the achievement banner, in crystal, for every relic, charm, slot or recipe found, in play or in the menu */
+/** the achievement banner, in crystal, for every charm, slot or recipe found, in play or in the menu */
 export function bindDiscoveryToasts(): void {
   onDiscovery((d) => showToast(toast(d)));
 }

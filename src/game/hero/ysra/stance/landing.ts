@@ -1,25 +1,35 @@
+import { ENEMIES } from "../../../../constants/enemies";
 import { WORLD_COLORS } from "../../../../constants/palette";
-import { QUAKE } from "../../../../constants/ysra/stance";
+import { FLARE } from "../../../../constants/ysra/rites";
 import { sfx } from "../../../../services/audio";
 import { PK } from "../../../../types/particle";
 import type { Box } from "../../../../types/world";
 import { createFloorRing } from "../../../effects/floorRing";
 import { createShockwave } from "../../../effects/shockwave";
 import { type Blow, meleeHit } from "../../../meleeHit";
-import { hasPerk } from "../../../progress";
+import { emitSkillEvent } from "../../../skills/events";
+import { skillEvolved, skillValues } from "../../../skills/query";
+import { castFlare } from "../../../spells/rites/flare";
 import { game, hero, particles, progress, rng } from "../../../state";
 import { dust, newSwing, shake } from "../../../world";
 import { skin } from "../../skin";
 import { travelEnded } from "../../travelEnd";
 import { emitYsra } from "../events";
+import { phoenixCrash } from "./phoenixCrash";
 
 /** where she came down from, for the land event */
 type LandFrom = "vault" | "dive";
 
-/** Earthshaker: a landing out of a vault or a dive sends a shockwave along the floor both ways */
+/** speed foes are drawn toward the impact at */
+const PULL_SPEED = 160;
+/** Falling Star's ring of fire reaches this far around the impact */
+const DIVE_RING = 36;
+
+/** Vault Strike: a landing out of a vault or a dive sends a shockwave along the floor both ways */
 function quake(): void {
-  if (!hasPerk("earthshaker")) return;
-  game.fx.push(createShockwave(hero.x, hero.y, progress.stats.ad * QUAKE.power, skin.ramp));
+  const v = skillValues("y_vault");
+  if (!v.quake) return;
+  game.fx.push(createShockwave(hero.x, hero.y, progress.stats.ad * v.quake, skin.ramp, v.quakeRange, v.quakeStun ?? 0));
   shake(0.3, 3);
 }
 
@@ -42,9 +52,10 @@ function chips(n: number): void {
   }
 }
 
-/** she came down out of a vault or a dive: the land event, Earthshaker, and the end of a travel move */
+/** she came down out of a vault or a dive: the land events, the shockwave, and the end of a travel move */
 function landed(from: LandFrom): void {
   emitYsra("land", { x: hero.x, y: hero.y, from });
+  emitSkillEvent({ type: "land", x: hero.x, y: hero.y, from });
   travelEnded();
   quake();
 }
@@ -75,4 +86,19 @@ export function diveImpact(box: Box, blow: Blow): void {
   const hits = meleeHit([box], blow);
   if (!hits) sfx.hit(true, 0.5);
   emitYsra("strike", { source: "dive", hits });
+}
+
+/** Falling Star: the foes near the point are drawn in just before it strikes */
+export function pullToImpact(reach: number): void {
+  for (const e of game.enemies) {
+    const d = e.x - hero.x;
+    if (e.hp <= 0 || Math.abs(d) > reach || Math.abs(e.y - hero.y) > 40) continue;
+    e.vx = -Math.sign(d) * PULL_SPEED * (1 - ENEMIES[e.type].weight);
+  }
+}
+
+/** Falling Star's ring of fire around the impact; evolved, the phoenix crashes there and floods the floor */
+export function diveRing(v: Readonly<Record<string, number>>): void {
+  if (skillEvolved("y_dive")) phoenixCrash(hero.x, hero.y, v.reach, v.flood);
+  if (v.ring) game.fx.push(castFlare(hero.x, hero.y, { ...FLARE, radius: DIVE_RING, power: v.ring }, "attacks"));
 }

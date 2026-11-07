@@ -4,7 +4,7 @@ import { sfx } from "../../services/audio";
 import { PK } from "../../types/particle";
 import { createFloorRing } from "../effects/floorRing";
 import { isHeld } from "../input";
-import { hasPerk } from "../progress";
+import { emitSkillEvent } from "../skills/events";
 import { game, hero, particles, rng } from "../state";
 import { dust } from "../world";
 import { isFree, leaveHang, setState } from "./actions";
@@ -22,7 +22,7 @@ function doubleJumpBurst(): void {
   sfx.doubleJump();
 }
 
-/** Up: jump (also out of an attack's follow-through), jump off a crystal, drop through a ledge with Down held, or jump again in the air with Double Jump */
+/** Up: jump (also out of an attack's follow-through), jump off a crystal, drop through a ledge with Down held, or jump again in the air */
 export function jump(): boolean {
   const h = hero;
   if (h.state === "hang") {
@@ -45,12 +45,14 @@ export function jump(): boolean {
     h.jumps = 1;
     setState("jump");
     dust(h.x, h.y, 4);
+    emitSkillEvent({ type: "jump", air: false });
     return true;
   }
-  if (h.jumps >= 2 || !hasPerk("doubleJump")) return false;
+  if (h.jumps >= 2) return false;
   lift(M.doubleJumpRise, true);
   h.jumps = 2;
   setState("jump");
   doubleJumpBurst();
+  emitSkillEvent({ type: "jump", air: true });
   return true;
 }

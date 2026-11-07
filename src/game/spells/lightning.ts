@@ -27,6 +27,8 @@ export interface LightningOptions {
   /** how many more foes it arcs to */
   arcs: number;
   shock: number;
+  /** seconds the struck foe lies stunned */
+  stun?: number;
   /** seconds before it strikes */
   delay?: number;
   /** how bright its light is, so a storm of strikes does not wash out the screen */
@@ -139,7 +141,7 @@ export function createLightning(target: Enemy | null, point: readonly [number, n
       );
     game.fx.push(createFloorRing(tx, ground, 36, V, 0.4));
     if (target && target.hp > 0) {
-      dealDamage(target, o.damage, { kx: 0, ky: -60, heavy: true, source: o.source });
+      dealDamage(target, o.damage, { kx: 0, ky: -60, heavy: true, stun: o.stun, source: o.source });
       target.shock = Math.max(target.shock, o.shock);
       const near = game.enemies
         .filter((e) => e !== target && e.hp > 0)

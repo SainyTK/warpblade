@@ -41,11 +41,12 @@ function nearestFoe(x: number, reach = Number.POSITIVE_INFINITY): Enemy | null {
 const flicker = (t: number): number =>
   T.flicker[0] + ((T.flicker[1] - T.flicker[0]) * ((Math.floor(t * 12) * 3) % 4)) / 3;
 
-/** Thunderhead: a storm cloud gathers over the strike, drifts toward foes and calls three more bolts down on them, then fades.
- *  `ap` is the ability power of the cast, with Spellblade's boost if it had one. */
-export function createThunderhead(x: number, ap: number): Effect {
+/** Thunderhead: a storm cloud gathers over the strike, drifts toward foes and calls `bolts` more bolts down on them, each
+ *  arcing to `arcs` foes, then fades. `ap` is the ability power of the cast, with Spellblade's boost if it had one. */
+export function createThunderhead(x: number, ap: number, bolts: number, arcs: number): Effect {
   const V = PAL.volt;
-  const last = T.strikes[T.strikes.length - 1];
+  const strikes = Array.from({ length: bolts }, (_, i) => T.gap * (i + 1));
+  const last = strikes[strikes.length - 1] ?? 0;
   const cloud = { x: clamp(x, T.margin, W - T.margin), y: T.y };
   // seconds since the main strike: the cloud gathers once it lands
   let t = -STRIKE;
@@ -57,7 +58,7 @@ export function createThunderhead(x: number, ap: number): Effect {
       createLightning(target, [cloud.x, surfaceBelow(cloud.x, bottom)], {
         damage: T.power * ap,
         arcDamage: T.arcPower * ap,
-        arcs: T.arcs,
+        arcs,
         shock: T.shock,
         glow: T.glow,
         fromY: bottom,
@@ -76,7 +77,7 @@ export function createThunderhead(x: number, ap: number): Effect {
         cloud.x = clamp(cloud.x + Math.sign(dx) * Math.min(Math.abs(dx), T.drift * dt), T.margin, W - T.margin);
       }
       // each bolt is called a crackle early, so it lands on its beat
-      if (called < T.strikes.length && t >= T.strikes[called] - STRIKE) {
+      if (called < strikes.length && t >= strikes[called] - STRIKE) {
         called++;
         callBolt();
       }
@@ -87,7 +88,7 @@ export function createThunderhead(x: number, ap: number): Effect {
       place();
       const k = ease.outCubic(clamp(t / T.grow));
       const a = 1 - clamp((t - last) / T.fade);
-      const warned = T.strikes.some((s) => t >= s - T.warn && t < s);
+      const warned = strikes.some((s) => t >= s - T.warn && t < s);
       const under = warned ? V[4] : V[3];
       const lip = warned ? WHITE : V[4];
       for (const [dx, dy, r] of PUFF) circle(cloud.x + dx * k, cloud.y + (dy - 1) * k, r * k, V[1], a);

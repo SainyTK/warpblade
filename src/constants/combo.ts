@@ -17,7 +17,7 @@ export const REACH = {
 /** travelling moves stop this close to the foe in front, and go this much further while forward is held */
 export const ADVANCE = { contact: 6, lean: 1.5 } as const;
 
-/** air attacks Kael may make before he lands: one, plus one per rank of the skill named here */
+/** air attacks Kael may make before he lands: one, plus one per rank of the skill named here (temporary, until his skills are designed) */
 export const AIR_STRING = { hits: 1, skill: "p_skyDance" } as const;
 
 /** Keen timing: J pressed this soon after a blow lands makes the next move a sure crit */

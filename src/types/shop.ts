@@ -50,8 +50,8 @@ export interface MetaSave {
   /** achievements earned, by id */
   achievements: string[];
   tracked: TrackedStats;
-  /** relics, charms and slots found, by unlock id */
+  /** charms and slots found, by unlock id */
   unlocks: string[];
-  /** relics whose evolution the player has made, so its recipe shows */
+  /** skills whose evolution the player has made, so its partner shows */
   recipes: string[];
 }

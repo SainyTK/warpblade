@@ -1,55 +1,54 @@
-import { LAUNCH_WAIT_STEPS } from "../../constants/input";
+import { CLIPS } from "../../constants/clips";
+import { BLINK_COST, COMBO } from "../../constants/combat";
+import { SPELLBLADE } from "../../constants/spells";
 import { sfx } from "../../services/audio";
-import { isHeld, pressAge, take, use } from "../input";
-import { hasPerk } from "../progress";
-import { hero, progress } from "../state";
+import { take, use } from "../input";
+import { skillLevel } from "../skills/query";
+import { hero } from "../state";
 import { isFree } from "./actions";
-import { blowsDone, comboOpen, endCombo, pressAttack, startMove } from "./combo";
+import { blowsDone, comboOpen, endCombo, pressAttack } from "./combo";
 import { tryDash } from "./dash";
 import { deny } from "./deny";
 import { jump } from "./jump";
-import { castCost, isRecharging, learnedElements, selectNextElement, startCast } from "./spell";
+import { kael } from "./kael/state";
+import { castCost, isRecharging, selectNextAbility, startCast } from "./spell";
 import { startCharge } from "./ultimate";
-import { blink, startThrow, warpCost } from "./warp";
+import { blink, startThrow, warpCost, warpReady } from "./warp";
 
-/** Up: Skybreaker after the third hit, otherwise a jump; with Launcher, it waits a moment for J, and as long as Up is held */
-function pressUp(): boolean {
-  if (hasPerk("skybreaker") && comboOpen(3)) {
-    startMove("skybreaker");
-    return true;
-  }
-  const inCombo = hero.state === "move" || (hero.link > 0 && hero.chain > 0);
-  const mayLaunch = hasPerk("launcher") && inCombo && hero.ground && hero.chain < progress.comboLimit;
-  if (mayLaunch && (pressAge("up") < LAUNCH_WAIT_STEPS || isHeld("up"))) return false;
-  return jump();
-}
-
-/** a double tap: Phase Finish after the third hit, otherwise start running */
+/** a double tap starts a run */
 function doubleTap(dir: number): void {
-  if (hasPerk("phaseFinish") && comboOpen(3)) {
-    startMove(dir === hero.face ? "phaseCut" : "backflip");
-    return;
-  }
-  if (isFree() && hero.ground) {
-    hero.running = true;
-    hero.face = dir;
-  }
+  if (!isFree() || !hero.ground) return;
+  hero.running = true;
+  hero.face = dir;
 }
 
-/** K: Blink Combo after two hits, otherwise a warp throw. Both share the warp's recharge.
- *  A press while the warp recharges is refused with a tick at once, whatever Kael is doing; so is one short of MP when he could warp. */
+/** Blink Step can step through now: after a hit of an open combo, its own recharge or a warp charge ready, MP for it */
+function mayBlink(): boolean {
+  if (!skillLevel("k_blink") || !comboOpen(1)) return false;
+  if (hero.mp < warpCost() * BLINK_COST) return false;
+  return kael.blinkCd <= 0 && (skillLevel("k_blink") >= 6 || warpReady());
+}
+
+/** K: Blink Step during a combo, otherwise a warp throw. A press while the warp recharges is refused with a tick at
+ *  once, whatever Kael is doing; so is one short of MP when he could warp. */
 function pressWarp(): boolean {
   const h = hero;
-  // the warp is learned from a pick; until then K does nothing
-  if (!hasPerk("warpStrike")) return true;
-  if (h.warpCd > 0) {
+  if (mayBlink()) {
+    const keen = h.keenOpen > 0 || h.keenNext;
+    // from Blink Step's second level the combo goes on from the foe's back; before it, the blink ends it
+    const keep = skillLevel("k_blink") >= 2;
+    h.move = null;
+    h.queued = null;
+    if (!keep) endCombo(true);
+    if (blink(keen)) {
+      if (keep) h.link = CLIPS.warpStrike.dur + COMBO.link;
+      return true;
+    }
+    if (keep) endCombo(true);
+  }
+  if (!warpReady()) {
     deny("warp");
     return true;
-  }
-  if (hasPerk("blinkCombo") && comboOpen(2) && h.mp >= warpCost() / 2) {
-    h.move = null;
-    endCombo(true);
-    if (blink()) return true;
   }
   if (!(isFree() || h.state === "hang" || blowsDone())) return false;
   if (h.mp < warpCost()) {
@@ -62,12 +61,10 @@ function pressWarp(): boolean {
   return true;
 }
 
-/** I: Spellblade after two hits, otherwise a normal cast.
- *  A press while the element recharges is refused with a tick at once, whatever Kael is doing; so is one short of MP when he could cast. */
+/** I: Spellblade after the second hit of a combo, otherwise a normal cast.
+ *  A press while the ability recharges is refused with a tick at once, whatever Kael is doing; so is one short of MP. */
 function pressCast(): boolean {
-  // spells are learned from picks; until one is, I does nothing
-  if (!learnedElements().length) return true;
-  const spellblade = hasPerk("spellblade") && comboOpen(2);
+  const spellblade = comboOpen(SPELLBLADE.after);
   if (isRecharging()) deny("cast");
   else if (!spellblade && !isFree() && hero.state !== "hang") return false;
   else if (hero.mp < castCost()) deny("mp");
@@ -75,15 +72,15 @@ function pressCast(): boolean {
   return true;
 }
 
-/** use waiting presses in a fixed order: dash first so it can cancel, then up, taps, attack, warp, spell, ultimate.
+/** use waiting presses in a fixed order: dash first so it can cancel, then up, taps, attack, warp, cast, ultimate.
  *  A press that cannot act yet stays buffered for a moment. */
 export function readActions(dir: number, tap: number): void {
   use("dash", () => tryDash(dir));
-  use("up", pressUp);
+  use("up", jump);
   if (tap) doubleTap(tap);
   use("attack", pressAttack);
   use("warp", pressWarp);
   use("cast", pressCast);
   use("ultimate", startCharge);
-  if (take("cycle") && selectNextElement()) sfx.pickup();
+  if (take("cycle") && selectNextAbility()) sfx.pickup();
 }

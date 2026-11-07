@@ -7,17 +7,18 @@ type Pt = [number, number];
 const FEATHERS = 5;
 
 /** a bird of forge-fire at (x, y) flying along (ux, uy): wings curved back and beating, a bright head, three long tail
- *  plumes; open from 0 (wings folded) to 1 (spread), beat is the flap's phase */
-export function drawPhoenix(x: number, y: number, ux: number, uy: number, open: number, beat: number): void {
+ *  plumes; open from 0 (wings folded) to 1 (spread), beat is the flap's phase, scale its size (1 the phoenix, less a
+ *  sun hawk) */
+export function drawPhoenix(x: number, y: number, ux: number, uy: number, open: number, beat: number, scale = 1): void {
   place();
   const nx = -uy;
   const ny = ux;
   // a point `along` the flight and `across` it, and the same pushed out from the middle for the dark rim
   const at = (along: number, across: number, grow = 1): Pt => [
-    x + (ux * along + nx * across) * grow,
-    y + (uy * along + ny * across) * grow,
+    x + (ux * along + nx * across) * grow * scale,
+    y + (uy * along + ny * across) * grow * scale,
   ];
-  glow(x, y, 40, EMBER[3], 0.4);
+  glow(x, y, 40 * scale, EMBER[3], 0.4);
   // the tail: three plumes swaying behind
   for (const s of [-1, 0, 1]) {
     const sway = Math.sin(beat * 0.5 + s * 1.3) * 2.5;
@@ -36,7 +37,7 @@ export function drawPhoenix(x: number, y: number, ux: number, uy: number, open: 
     plume(2, 1.05);
     plume(1.6, 1);
     line(...at(-9, s * 1.5), ...at(-6 - len * 0.6, s * 6 + sway * 0.6), EMBER[5]);
-    circle(...at(-8 - len, s * 9 + sway), 1.6, EMBER[4]);
+    circle(...at(-8 - len, s * 9 + sway), 1.6 * scale, EMBER[4]);
   }
   // the wings: a curved leading edge out to the tip, a scalloped trailing edge of feathers back to the body
   const flap = Math.sin(beat);
@@ -74,8 +75,8 @@ export function drawPhoenix(x: number, y: number, ux: number, uy: number, open: 
   // the body: a bright teardrop, the head on its point, a white beak
   polygon([at(-10, 0, 1.08), at(0, 3.6, 1.08), at(6, 0, 1.08), at(0, -3.6, 1.08)], EMBER[1]);
   polygon([at(-10, 0), at(0, 3.2), at(6, 0), at(0, -3.2)], EMBER[4]);
-  circle(...at(6, 0), 2.6, EMBER[5]);
+  circle(...at(6, 0), 2.6 * scale, EMBER[5]);
   line(...at(-6, 0), ...at(5, 0), EMBER[6]);
   line(...at(8, 0), ...at(10, 0), WHITE);
-  glow(...at(5, 0), 10, EMBER[5], 0.5);
+  glow(...at(5, 0), 10 * scale, EMBER[5], 0.5);
 }

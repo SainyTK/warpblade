@@ -1,7 +1,6 @@
-import type { RelicId, SourceId } from "./build";
+import type { SourceId } from "./build";
 import type { EnemyRank } from "./enemy";
 import type { RunOutcome } from "./run";
-import type { SkillKind } from "./skill";
 
 /** lifetime totals the achievements count up */
 export type CountStat =
@@ -13,31 +12,16 @@ export type CountStat =
   | "evolutions"
   | "ultimates"
   | "coinsBanked"
-  | "relicKills"
-  | "relicEvolutions"
   | "chests"
   | "flowFulls";
 /** the best a player has ever done; the `run` ones are the most in one run */
-export type BestStat =
-  | "wave"
-  | "combo"
-  | "cleared"
-  | "relicLevel"
-  | "chestUpgrades"
-  | "lightWave"
-  | "runBackAttacks"
-  | "runPerfects"
-  | "runBlows"
-  | "runRelicKills";
+export type BestStat = "wave" | "combo" | "skillLevel" | "chestUpgrades" | "runPerfects" | "runSkillKills";
 
 /** what the run in play has counted so far, for the goals met within one run */
 export interface RunTally {
-  backAttacks: number;
   perfects: number;
-  blows: number;
-  relicKills: number;
-  /** the relics the hero has taken this run */
-  relics: RelicId[];
+  /** kills by a skill's own hits */
+  skillKills: number;
 }
 
 /** what the game keeps track of across runs for the achievements and unlocks */
@@ -95,10 +79,9 @@ export type Feat =
   | { kind: "runEnd"; outcome: RunOutcome; wave: number; hero: string }
   | { kind: "comboHit"; moves: number }
   | { kind: "perfect" }
-  | { kind: "learned"; skill: SkillKind }
+  | { kind: "ultimateLearned" }
   | { kind: "banked"; coins: number }
-  | { kind: "backAttack" }
-  | { kind: "relicLevel"; relic: RelicId; level: number }
-  | { kind: "evolved"; relic: RelicId }
+  | { kind: "skillLevel"; skill: string; level: number }
+  | { kind: "evolved"; skill: string }
   | { kind: "chestOpened"; upgrades: number }
   | { kind: "flowFull" };

@@ -2,7 +2,7 @@ import { ULT_LABEL } from "../../constants/skillLabels";
 import { heroPrice, heroUnlocked, metaBonus } from "../../store/meta";
 import type { CharacterDef } from "../../types/character";
 import type { Stats } from "../../types/stats";
-import { allNodes, computeStats } from "../../utils/stats";
+import { computeStats } from "../../utils/stats";
 import { el } from "../dom";
 import { type HeroLock, heroLock } from "./heroLock";
 import { heroPortrait } from "./heroPortrait";
@@ -23,8 +23,8 @@ const share = (value: number, full: number): string => `${Math.round(Math.min(1,
 /** the hero's own stats at level 1, and in a lighter part what the shop adds, which every hero gets alike */
 function statBars(c: CharacterDef): HTMLElement {
   const list = el("dl", "hero-stats");
-  const own = computeStats(c, 1, c.startRanks ?? {});
-  const bought = computeStats(c, 1, c.startRanks ?? {}, metaBonus());
+  const own = computeStats(c, 1);
+  const bought = computeStats(c, 1, [], metaBonus());
   for (const s of STAT_BARS) {
     const row = el("div", "");
     const bar = el("dd", "hero-bar");
@@ -39,12 +39,10 @@ function statBars(c: CharacterDef): HTMLElement {
   return list;
 }
 
-/** what the hero brings to a run besides stats: their special, and any skill known from the start */
+/** what the hero brings to a run besides stats: their special */
 function traits(c: CharacterDef): HTMLElement {
   const box = el("p", "hero-traits");
   box.append(`Special: ${titleCase(ULT_LABEL[c.special])}`);
-  const known = allNodes(c).filter((n) => c.startRanks?.[n.id]);
-  if (known.length) box.append(el("br", ""), `Starts with: ${known.map((n) => n.name).join(", ")}`);
   return box;
 }
 

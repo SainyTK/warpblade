@@ -1,6 +1,5 @@
 import type { SlashShape } from "./effect";
 import type { ClipName } from "./hero";
-import type { Perk } from "./skill";
 import type { Box } from "./world";
 import type { YsraMoveId } from "./ysra";
 
@@ -17,16 +16,12 @@ export type KaelMoveId =
   | "downStab"
   | "chaseCut"
   | "sweep"
-  | "launcher"
-  | "thrust"
-  | "dashStrike"
   | "airWheel"
   | "airScissor"
   | "airStomp"
   | "whirl"
   | "meteor"
   | "phaseCut"
-  | "backflip"
   | "skybreaker";
 export type MoveId = KaelMoveId | YsraMoveId;
 
@@ -59,6 +54,8 @@ export interface MoveHit {
   around?: boolean;
   /** a foe driven into the stage edge bounces back off it into the air */
   wall?: boolean;
+  /** always a critical hit, as a Keen blow is */
+  crit?: boolean;
   slash?: SlashShape;
   feel?: HitFeel;
 }
@@ -134,5 +131,8 @@ export interface Situation {
   previous: MoveId | null;
   /** a downward stab was already used in this combo */
   stabbed: boolean;
-  perks: ReadonlySet<Perk>;
+  /** the J press was Keen: the move it starts is a sure crit */
+  keen: boolean;
+  /** the hero's skills and their levels */
+  skills: Readonly<Record<string, number>>;
 }

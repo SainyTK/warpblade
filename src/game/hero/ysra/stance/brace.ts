@@ -5,8 +5,9 @@ import { sfx } from "../../../../services/audio";
 import { cue } from "../../../cue";
 import { createImpact } from "../../../effects/impact";
 import { isHeld } from "../../../input";
-import { hasPerk } from "../../../progress";
-import { game, hero, progress } from "../../../state";
+import { emitSkillEvent } from "../../../skills/events";
+import { skillValues } from "../../../skills/query";
+import { game, hero } from "../../../state";
 import { hitStop, shake } from "../../../world";
 import { setState, settle } from "../../actions";
 import { refuseDash } from "../../stamina";
@@ -41,11 +42,8 @@ export function runBrace(dt: number): void {
   else if ((h.st >= t.blockEnd && h.st < t.parry) || h.st >= t.parryEnd) h.st = t.loopFrom;
 }
 
-/** stamina one block costs: Firm Stance takes a share off per rank */
-function blockCost(): number {
-  const ranks = progress.ranks.s_stance ?? 0;
-  return BRACE.blockCost * Math.max(0, 1 - BRACE.firmCut * ranks);
-}
+/** stamina one block costs: Counter Thrust takes a share off */
+const blockCost = (): number => BRACE.blockCost * (1 - (skillValues("y_counter").firm ?? 0));
 
 /** out of stamina the blow breaks through: the bar flashes, and the blow lands as if she stood open */
 function guardBreak(): boolean {
@@ -56,7 +54,7 @@ function guardBreak(): boolean {
   return false;
 }
 
-/** a blow stopped on the haft: stamina spent, a jolt back (Bulwark nearly holds her still), sparks off the glaive */
+/** a blow stopped on the haft: stamina spent, a jolt back, sparks off the glaive */
 function block(fromX: number): boolean {
   const h = hero;
   const cost = blockCost();
@@ -64,13 +62,14 @@ function block(fromX: number): boolean {
   h.stamina -= cost;
   h.staminaWait = STAMINA.delay;
   stance.shield = BRACE.shieldTime;
-  h.vx = -h.face * BRACE.pushback * (hasPerk("bulwark") ? BRACE.bulwarkPush : 1);
+  h.vx = -h.face * BRACE.pushback;
   h.st = BRACE_TIMES.block;
   game.fx.push(createImpact(h.x + h.face * 9, h.y - 19, -h.face, false, SPARKS.hot));
   hitStop(0.05);
   shake(0.1, 1.2);
   sfx.block();
   emitYsra("block", { fromX });
+  emitSkillEvent({ type: "block", fromX });
   return true;
 }
 

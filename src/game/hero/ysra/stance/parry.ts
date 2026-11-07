@@ -9,7 +9,8 @@ import { createFloorRing } from "../../../effects/floorRing";
 import { createImpact } from "../../../effects/impact";
 import { enemyCenter } from "../../../enemies/enemy";
 import { feat } from "../../../feat";
-import { hasPerk } from "../../../progress";
+import { emitSkillEvent } from "../../../skills/events";
+import { skillLevel, skillValues } from "../../../skills/query";
 import { game, hero, lights } from "../../../state";
 import { hitStop } from "../../../world";
 import { skin } from "../../skin";
@@ -17,8 +18,8 @@ import { refundStamina } from "../../stamina";
 import { emitYsra } from "../events";
 import { stance } from "./memory";
 
-/** the parry window from the press; Ember Parry doubles it */
-export const parryWindow = (): number => BRACE.parryWindow * (hasPerk("emberParry") ? 2 : 1);
+/** the parry window from the press; Counter Thrust widens it */
+export const parryWindow = (): number => skillValues("y_counter").window ?? BRACE.parryWindow;
 
 /** the living foe nearest where the blow came from, close enough to have thrown it */
 function attackerAt(fromX: number): Enemy | null {
@@ -35,7 +36,7 @@ function attackerAt(fromX: number): Enemy | null {
   return best;
 }
 
-/** the attacker reels (bosses for half as long), and with Ember Parry catches fire */
+/** the attacker reels (bosses for half as long) */
 function knockAside(fromX: number): void {
   const e = attackerAt(fromX);
   if (!e) return;
@@ -44,7 +45,6 @@ function knockAside(fromX: number): void {
   e.stagger = Math.max(e.stagger, stun);
   e.vx = hero.face * 60;
   e.flash = 0.1;
-  if (hasPerk("emberParry")) e.burn = Math.max(e.burn, BRACE.emberBurn);
 }
 
 /** a blow met in the parry window: no cost, stamina back, the attacker knocked aside, a beat of slow motion, and Counter
@@ -56,7 +56,7 @@ export function parry(fromX: number): void {
   addFlow(FLOW.perfectDodge);
   stance.shield = BRACE.shieldTime;
   refundStamina(BRACE.parryRefund);
-  if (hasPerk("counterThrust")) stance.counter = BRACE.counterTime;
+  if (skillLevel("y_counter")) stance.counter = BRACE.counterTime;
   h.st = BRACE_TIMES.parry;
   game.slow = BRACE.parrySlow;
   const fx = h.x + h.face * 10;
@@ -68,4 +68,5 @@ export function parry(fromX: number): void {
   sfx.block();
   sfx.perfect();
   emitYsra("parry", { fromX });
+  emitSkillEvent({ type: "parry", fromX });
 }

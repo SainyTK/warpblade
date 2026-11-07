@@ -1,8 +1,7 @@
-import { EVOLVED_RITE } from "../constants/evolutions";
 import { RITES } from "../constants/ysra/rites";
 import { heat, heatFlash } from "../game/hero/ysra/pyre/heat";
 import { knowsRite, riteCost, selectedRite } from "../game/hero/ysra/pyre/riteChoice";
-import { hasPerk } from "../game/progress";
+import { skillEvolved } from "../game/skills/query";
 import { character } from "../game/state";
 import { byId } from "./dom";
 import { createRechargeTab } from "./rechargeTab";
@@ -29,8 +28,7 @@ export function updateRiteTabs(): void {
     const known = knowsRite(rite);
     if (el.hidden === known) el.hidden = !known;
     el.classList.toggle("on", rite === selected);
-    const perk = EVOLVED_RITE[rite.id];
-    el.classList.toggle("evolved", !!perk && hasPerk(perk));
+    el.classList.toggle("evolved", !!rite.skill && skillEvolved(rite.skill));
     tab.update(Math.max(0, 1 - heat() / riteCost(rite)));
   }
   const flash = heatFlash();

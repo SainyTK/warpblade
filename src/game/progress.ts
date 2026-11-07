@@ -6,28 +6,24 @@ import { metaBonus } from "../store/meta";
 import type { Card } from "../types/build";
 import { PK } from "../types/particle";
 import type { PickAnswer } from "../types/pick";
-import type { Perk } from "../types/skill";
 import { buildStats } from "../utils/build";
 import { cardKey } from "../utils/cards";
-import { airLimit, stringLimit, xpToNext } from "../utils/progression";
-import { collectPerks, computeStats, learnedUltimate } from "../utils/stats";
-import { raiseCharm, raiseRelic } from "./build/raise";
+import { xpToNext } from "../utils/progression";
+import { heldRows } from "../utils/skills";
+import { computeStats, heldUltimate } from "../utils/stats";
+import { raiseCharm, raiseSkill } from "./build/raise";
 import { createFloorRing } from "./effects/floorRing";
-import { forgetEvolutions, queueEvolution } from "./evolve";
-import { feat } from "./feat";
-import { keepElementLearned } from "./hero/spell";
+import { forgetEvolutions } from "./evolve";
+import { airLimit } from "./skills/airLimit";
 import { character, freshProgress, game, hero, lights, particles, progress, rng, showBanner } from "./state";
 
-export const hasPerk = (p: Perk): boolean => progress.perks.has(p);
-
-/** recompute everything derived from the level and the learned ranks, keeping HP and MP inside the new maxima */
+/** recompute everything derived from the level and the build, keeping HP and MP inside the new maxima */
 export function refreshProgress(): void {
-  progress.stats = computeStats(character, progress.level, progress.ranks, metaBonus(), buildStats(progress.build));
-  progress.perks = collectPerks(character, progress.ranks);
-  progress.ultimate = learnedUltimate(character, progress.ranks);
-  progress.comboLimit = stringLimit(character.kit, progress.level, progress.perks);
-  progress.airLimit = airLimit(progress.ranks);
-  keepElementLearned();
+  const build = progress.build;
+  progress.stats = computeStats(character, progress.level, heldRows(character, build), metaBonus(), buildStats(build));
+  progress.ultimate = heldUltimate(character, build);
+  progress.comboLimit = character.comboHits;
+  progress.airLimit = airLimit();
   hero.hp = Math.min(hero.hp, progress.stats.hp);
   hero.mp = Math.min(hero.mp, progress.stats.mp);
   hero.stamina = Math.min(hero.stamina, progress.stats.stamina);
@@ -77,15 +73,9 @@ export function earnXp(amount: number): void {
   gainXp(amount * buildStats(progress.build).growth);
 }
 
-/** a cleared wave: the game pauses on a pick for every skill point waiting, if any */
+/** a cleared wave: the game pauses on a pick for every point waiting, if any */
 export function openPicks(): void {
   if (progress.picks > 0 && game.mode === "play") game.mode = "pick";
-}
-
-/** one more rank of a skill */
-function addRank(id: string): void {
-  progress.ranks = { ...progress.ranks, [id]: (progress.ranks[id] ?? 0) + 1 };
-  refreshGrowing();
 }
 
 /** recompute after something grew: a higher maximum also fills by what it adds */
@@ -103,21 +93,17 @@ function takeBoon(): void {
   hero.mp = progress.stats.mp;
 }
 
-/** one skill point is spent; the game plays on once none is left */
+/** one point is spent; the game plays on once none is left */
 function spendPick(): void {
   progress.picks = Math.max(0, progress.picks - 1);
   if (!progress.picks && game.mode === "pick") game.mode = "play";
 }
 
-/** spend one skill point on a card */
+/** spend one point on a card */
 function choosePick(card: Card): void {
-  if (card.type === "skill") {
-    addRank(card.node.id);
-    feat({ kind: "learned", skill: card.node.kind });
-    if (card.node.kind === "evolution") queueEvolution(card.node.name);
-  } else if (card.type === "boon") takeBoon();
+  if (card.type === "boon") takeBoon();
   else {
-    if (card.type === "relic") raiseRelic(card.id);
+    if (card.type === "skill") raiseSkill(card.id);
     else raiseCharm(card.id);
     refreshGrowing();
   }
@@ -131,7 +117,7 @@ function skipPick(): void {
   spendPick();
 }
 
-/** Banish: the card's relic, charm or skill is never dealt again this run */
+/** Banish: the card's skill or charm is never dealt again this run */
 function banishCard(card: Card): void {
   if (progress.build.banishes <= 0 || card.type === "boon") return;
   progress.build.banishes--;

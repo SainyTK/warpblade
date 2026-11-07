@@ -1,6 +1,7 @@
 import { RITE_RAMP, RITE_SPARKS } from "../../../constants/ysra/emberLook";
 import { FLAME_PILLAR as P } from "../../../constants/ysra/rites";
 import { ellipseRing, glow, glowLine, place, px } from "../../../engine/frame";
+import type { SourceId } from "../../../types/build";
 import type { Effect } from "../../../types/effect";
 import { PF, PK } from "../../../types/particle";
 import type { Box } from "../../../types/world";
@@ -27,8 +28,20 @@ function columnColor(d: number, young: boolean): number {
   return RITE_RAMP[2];
 }
 
-function erupt(x: number, floor: number, shape: PillarShape): void {
-  const area: Box = [x - shape.halfWidth - 3, floor - shape.height, x + shape.halfWidth + 3, floor];
+/** seconds between the burning column's ticks */
+const COLUMN_TICK = 0.25;
+/** how fast the sigil draws foes toward it */
+const PULL_SPEED = 90;
+
+const areaOf = (x: number, floor: number, shape: PillarShape): Box => [
+  x - shape.halfWidth - 3,
+  floor - shape.height,
+  x + shape.halfWidth + 3,
+  floor,
+];
+
+function erupt(x: number, floor: number, shape: PillarShape, source: SourceId): void {
+  const area = areaOf(x, floor, shape);
   let hits = 0;
   for (const e of game.enemies) {
     if (e.hp <= 0 || !boxHit(area, enemyBox(e))) continue;
@@ -37,7 +50,7 @@ function erupt(x: number, floor: number, shape: PillarShape): void {
       launch: shape.launch,
       ky: -200,
       heavy: true,
-      source: "abilities",
+      source,
     });
     e.burn = Math.max(e.burn, P.burn);
     hits++;
@@ -62,11 +75,36 @@ function erupt(x: number, floor: number, shape: PillarShape): void {
   riteSound(P.pitch);
 }
 
-/** Flame Pillar: a sigil glows on the floor, then a column of fire bursts out of it and throws the foes on it up.
- *  `shape` sets its size and strength; the base pillar is the default, so Pyre Colonnade's pillars share this one function. */
-export function castFlamePillar(x: number, floor: number, shape: PillarShape = P): Effect {
+/** the standing column burns the foes falling through it */
+function burnColumn(x: number, floor: number, shape: PillarShape, source: SourceId): void {
+  const area = areaOf(x, floor, shape);
+  for (const e of game.enemies)
+    if (e.hp > 0 && boxHit(area, enemyBox(e)))
+      dealDamage(e, progress.stats.ap * (shape.column ?? 0), { dot: true, source });
+}
+
+/** the glowing sigil draws the foes near it in */
+function drawIn(x: number, reach: number): void {
+  for (const e of game.enemies) {
+    const d = e.x - x;
+    if (e.hp > 0 && Math.abs(d) < reach && Math.abs(d) > 2) e.vx = -Math.sign(d) * PULL_SPEED;
+  }
+}
+
+/**
+ * Flame Pillar: a sigil glows on the floor, then a column of fire bursts out of it and throws the foes on it up.
+ * `shape` sets its size and strength; the base pillar is the default, so Pyre Colonnade's pillars and a skill's
+ * eruptions share this one function. `source` is what its hits count for.
+ */
+export function castFlamePillar(
+  x: number,
+  floor: number,
+  shape: PillarShape = P,
+  source: SourceId = "abilities",
+): Effect {
   let t = 0;
   let out = false;
+  let tick = 0;
   const sigil = () => {
     place();
     const u = t / shape.warn;
@@ -104,9 +142,15 @@ export function castFlamePillar(x: number, floor: number, shape: PillarShape = P
   return {
     update(dt) {
       t += dt;
+      if (!out && shape.pull) drawIn(x, shape.pull);
       if (!out && t >= shape.warn) {
         out = true;
-        erupt(x, floor, shape);
+        erupt(x, floor, shape, source);
+      }
+      tick -= dt;
+      if (out && shape.column && tick <= 0 && t < shape.warn + shape.stand) {
+        tick = COLUMN_TICK;
+        burnColumn(x, floor, shape, source);
       }
       if (out && t < shape.warn + shape.stand && rng.chance(0.7))
         particles.spawn(

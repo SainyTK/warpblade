@@ -1,5 +1,6 @@
 import { RITE_RAMP, RITE_SPARKS } from "../../../constants/ysra/emberLook";
 import { glow, line, place, px } from "../../../engine/frame";
+import type { SourceId } from "../../../types/build";
 import type { Effect } from "../../../types/effect";
 import { PK } from "../../../types/particle";
 import { WHITE } from "../../../utils/color";
@@ -12,13 +13,21 @@ import { crackle } from "./riteSound";
 const LIFE = 0.18;
 const RAYS = 8;
 
-/** a small burst of flame on a struck foe: rays of fire, sparks, and a hit on every foe within the radius */
-export function burstEmbers(x: number, y: number, damage: number, radius: number, burn: number): void {
+/** a small burst of flame on a struck foe: rays of fire, sparks, and a hit on every foe within the radius, counted for
+ *  the hero's blows or a skill's own source */
+export function burstEmbers(
+  x: number,
+  y: number,
+  damage: number,
+  radius: number,
+  burn: number,
+  source: SourceId = "attacks",
+): void {
   for (const e of game.enemies) {
     if (e.hp <= 0) continue;
     const [ex, ey] = enemyCenter(e);
     if (Math.hypot(ex - x, ey - y) > radius) continue;
-    dealDamage(e, damage, { dot: true });
+    dealDamage(e, damage, { dot: true, source });
     e.burn = Math.max(e.burn, burn);
   }
   for (let i = 0; i < 6; i++)

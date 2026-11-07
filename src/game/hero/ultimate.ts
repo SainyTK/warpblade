@@ -1,7 +1,9 @@
 import { ULT_COOLDOWN, ULT_LEVELS, ULT_LOCK } from "../../constants/ultimate";
 import { sfx } from "../../services/audio";
 import { isHeld } from "../input";
-import { hero, progress } from "../state";
+import { emitSkillEvent } from "../skills/events";
+import { skillLevel, skillValues } from "../skills/query";
+import { character, hero, progress } from "../state";
 import { castUltimate } from "../ultimates/castUltimate";
 import { isFree, leaveHang, setState, settle } from "./actions";
 import { endCombo } from "./combo";
@@ -13,14 +15,22 @@ export function canAffordUlt(level: number): boolean {
   return Number.isFinite(cost) ? hero.mp >= cost : hero.mp >= progress.stats.mp - 0.5;
 }
 
-/** share of the ultimate's cooldown still to run, 0 when ready */
-export const ultRecharge = (): number => hero.ultCd / ULT_COOLDOWN;
+/** the numbers of the held ultimate skill, empty with the hero's special */
+function ultimateValues(): Readonly<Record<string, number>> {
+  const skill = character.skills.find((s) => s.ultimate === progress.ultimate && skillLevel(s.id));
+  return skill ? skillValues(skill.id) : {};
+}
 
-/** U pressed: start gathering power if an ultimate is learned, it has recharged, and the first level is paid for.
- *  Until one is learned U does nothing; a press while it recharges is refused with a tick. */
+/** seconds before the ultimate can be charged again: the held ultimate skill's `cooldown`, or the shared wait */
+const ultCooldown = (): number => ultimateValues().cooldown ?? ULT_COOLDOWN;
+
+/** share of the ultimate's cooldown still to run, 0 when ready */
+export const ultRecharge = (): number => hero.ultCd / hero.ultFull;
+
+/** U pressed: start gathering power if the ultimate has recharged and the first level is paid for; a press while it
+ *  recharges is refused with a tick. */
 export function startCharge(): boolean {
   const h = hero;
-  if (!progress.ultimate) return true;
   if (h.ultCd > 0) {
     deny("ult");
     return true;
@@ -46,15 +56,18 @@ function release(): void {
   h.inv = Math.max(h.inv, ULT_LOCK);
   h.charge = 0;
   h.chargeLevel = 0;
-  h.ultCd = ULT_COOLDOWN;
-  if (progress.ultimate) castUltimate(progress.ultimate, level);
+  h.ultCd = ultCooldown();
+  castUltimate(progress.ultimate, level);
+  // the cast may set its own wait (an ultimate skill's cooldown); the display measures whichever it is
+  h.ultFull = Math.max(h.ultCd, 0.01);
+  emitSkillEvent({ type: "ultimate", level });
 }
 
 /** hold U to climb the levels the MP bar can pay for, release to strike */
 export function runCharge(dt: number): void {
   const h = hero;
   if (!isHeld("ultimate")) return release();
-  h.charge += dt;
+  h.charge += dt * (ultimateValues().charge ?? 1);
   let level = 1;
   for (let i = 1; i < ULT_LEVELS.length; i++) if (h.charge >= ULT_LEVELS[i].at && canAffordUlt(i + 1)) level = i + 1;
   if (level > h.chargeLevel) sfx.chargeStep(level);

@@ -2,12 +2,11 @@ import { STATE_CLIPS } from "../../../constants/clips";
 import { FIST_CLIPS, HAMMER_CLIP } from "../../../constants/clips/hulda/fists";
 import { GRAPPLE_CLIPS, THROW_CLIPS } from "../../../constants/clips/hulda/grapple";
 import { HULDA_CLIPS } from "../../../constants/clips/hulda/moves";
-import { CHARGE_POSE, GUARD, HOLD_POSE, HULDA_IDLE } from "../../../constants/clips/hulda/stance";
+import { CHARGE_POSE, HOLD_POSE, HULDA_IDLE } from "../../../constants/clips/hulda/stance";
 import { KAEL_WOUNDED_IDLE } from "../../../constants/clips/wounded";
-import { FISTS } from "../../../constants/hulda/fists";
 import type { Hero } from "../../../types/hero";
-import type { Pose } from "../../../types/pose";
-import { blendPose } from "../../../utils/poseBlend";
+import type { ActionClip, Pose } from "../../../types/pose";
+import type { UltimateId } from "../../../types/skill";
 import { sampleKeys } from "../../../utils/sampleKeys";
 import { progress } from "../../state";
 import { clipPose } from "../clipPose";
@@ -17,17 +16,17 @@ import { landingPose, watchLanding } from "../kael/landing";
 import { motion } from "../kael/motion";
 import { woundedIdle, woundWeight } from "../wound";
 import { carry, holding } from "./carry";
-import { blowLength, currentBlow } from "./fists";
+import { currentBlow } from "./fists";
 import { hulda } from "./memory";
+import { rushClipTime } from "./rushClock";
+import { spellPose } from "./spellPose";
+import { swingClipTime } from "./swing";
 
-/** the knuckle rush loops its two punches while they last, then settles to the guard */
-function knucklesPose(st: number): Pose {
-  const clip = FIST_CLIPS.knuckles;
-  const end = blowLength() - FISTS.knuckles.dur;
-  if (st < end) return sampleKeys(clip.keys, st % clip.dur);
-  const last = sampleKeys(clip.keys, end % clip.dur);
-  return blendPose(last, GUARD, Math.min(1, (st - end) / FISTS.knuckles.dur));
-}
+/** her clip for each ultimate she can hold: the heave of Titan Throw, the chest slams that turn her to iron */
+const ULTIMATE_CLIPS: Partial<Record<UltimateId, ActionClip>> = {
+  titanThrow: HULDA_CLIPS.titan,
+  unbroken: HULDA_CLIPS.taunt,
+};
 
 /** walking with a foe in her hands strides on; standing, she holds it at her hands */
 function holdPose(h: Hero): Pose {
@@ -36,11 +35,32 @@ function holdPose(h: Hero): Pose {
   return holding(sampleKeys(clip.keys, h.runPhase * clip.dur));
 }
 
+/**
+ * The Giant Swing's spin from the hips up; while Cyclone walks her, the legs stride the walk clip by the ground covered
+ * so the feet hold the floor. A mirrored spin key mirrors the legs back, so they always stride the way she goes.
+ */
+function walkingSpin(h: Hero): Pose {
+  const spin = sampleKeys(THROW_CLIPS.swing.keys, swingClipTime(h.st));
+  if (Math.abs(h.vx) < 5 || !h.ground) return spin;
+  const clip = STATE_CLIPS.walk;
+  const walk = sampleKeys(clip.keys, h.runPhase * clip.dur);
+  const side = spin.mr ? -1 : 1;
+  return {
+    ...spin,
+    hy: walk.hy,
+    ffx: walk.ffx * side,
+    ffy: walk.ffy,
+    fa: walk.fa,
+    bfx: walk.bfx * side,
+    bfy: walk.bfy,
+    ba: walk.ba,
+  };
+}
+
 /** her clip for a state: her own for her actions and her idle, Kael's shared ones with her fists up otherwise */
 function statePose(h: Hero, t: number, fresh: boolean, dt: number, wound: number): Pose {
   switch (h.state) {
     case "fist":
-      if (currentBlow() === "knuckles") return knucklesPose(h.st);
       return sampleKeys(FIST_CLIPS[currentBlow()].keys, h.st);
     case "airFist":
       return sampleKeys(HAMMER_CLIP.keys, h.st);
@@ -52,17 +72,24 @@ function statePose(h: Hero, t: number, fresh: boolean, dt: number, wound: number
     case "hold":
       return holdPose(h);
     case "toss":
+      if (hulda.throwKind === "swing") return walkingSpin(h);
       return sampleKeys(THROW_CLIPS[hulda.throwKind].keys, h.st);
     case "rush":
+      return sampleKeys(HULDA_CLIPS.rush.keys, rushClipTime(h.st));
     case "bellow":
     case "taunt":
       return sampleKeys(HULDA_CLIPS[h.state].keys, h.st);
+    case "chain":
+    case "stomp":
+    case "brace":
+    case "ride":
+      return spellPose(h);
     case "charge": {
       const tremble = h.chargeLevel >= 3 && Math.floor(t * 30) % 2 ? 0.5 : 0;
       return { ...CHARGE_POSE, nx: CHARGE_POSE.nx + tremble };
     }
     case "ultimate":
-      return sampleKeys((progress.ultimate === "titanThrow" ? HULDA_CLIPS.titan : HULDA_CLIPS.quake).keys, h.st);
+      return sampleKeys(ULTIMATE_CLIPS[progress.ultimate]?.keys ?? HULDA_CLIPS.quake.keys, h.st);
     case "idle": {
       const wounded = carry(sampleKeys(KAEL_WOUNDED_IDLE.keys, h.st % KAEL_WOUNDED_IDLE.dur));
       return woundedIdle(sampleKeys(HULDA_IDLE.keys, h.st % HULDA_IDLE.dur), wounded, wound);

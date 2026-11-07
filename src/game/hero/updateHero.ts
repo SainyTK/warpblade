@@ -11,7 +11,7 @@ import { runDash } from "./dash";
 import { tickDenied } from "./deny";
 import { kit } from "./kits";
 import { moveHero } from "./physics";
-import { castSpeed, rechargeSpells, runCast } from "./spell";
+import { rechargeSpells, runCast } from "./spell";
 import { regenStamina } from "./stamina";
 import { readDoubleTap } from "./taps";
 import { runCharge, runUltimate } from "./ultimate";
@@ -56,10 +56,9 @@ function runState(dt: number): void {
   }
 }
 
-/** how fast the current action's clock runs: attack speed (and the kit's own boost) for moves, Quick Cast for spells */
+/** how fast the current action's clock runs: attack speed (and the kit's own boost) for moves */
 function clockRate(): number {
   if (hero.state === "move") return progress.stats.aspd * (kit().attackRate?.() ?? 1);
-  if (hero.state === "cast") return castSpeed();
   return 1;
 }
 

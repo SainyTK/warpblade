@@ -1,8 +1,9 @@
 import { RITES } from "../../../constants/ysra/rites";
+import { knowsRite } from "../../../game/hero/ysra/pyre/riteChoice";
 import type { TouchButtonAction } from "../../../types/touch";
 import type { RiteId } from "../../../types/ysra/pyre";
 import { hex } from "../../../utils/color";
-import { ICON_WHITE, type IconArt, ringArt } from "./iconArt";
+import { ICON_WHITE, type IconArt } from "./iconArt";
 import { JUMP, NOVA } from "./sharedArt";
 
 const HOT = hex("#ffe08a");
@@ -67,6 +68,21 @@ const RITE_ART: Record<RiteId, IconArt> = {
     ],
     colors: { Y: HOT, O: FLAME, W: ICON_WHITE },
   },
+  /** a whip of fire lashing low along the floor */
+  cinderLash: {
+    rows: [
+      ".........",
+      "........Y",
+      ".......YO",
+      "..WW..YO.",
+      ".W..OYO..",
+      "W...OO...",
+      "W........",
+      "DDDDDDDDD",
+      ".........",
+    ],
+    colors: { Y: HOT, O: FLAME, W: ICON_WHITE, D: DEEP },
+  },
   /** a column of fire out of the floor */
   flamePillar: {
     rows: [
@@ -97,9 +113,34 @@ const RITE_ART: Record<RiteId, IconArt> = {
     ],
     colors: { Y: HOT, O: FLAME, W: ICON_WHITE, B: BRONZE, I: hex("#5e4440") },
   },
+  /** a white-hot heart of fire with flames leaping off it */
+  overheat: {
+    rows: [
+      ".Y..Y..Y.",
+      "..O.O.O..",
+      ".OOYYYOO.",
+      "OOYWWWYOO",
+      ".OYWWWYO.",
+      "..OYWYO..",
+      "...OYO...",
+      "....O....",
+      ".........",
+    ],
+    colors: { Y: HOT, O: FLAME, W: ICON_WHITE },
+  },
 };
 
-const RITE_TINTS: [number, number, number] = [hex(RITES[0].tint), hex(RITES[1].tint), hex(RITES[2].tint)];
+/** O: a pip for each of her rites in tab order, lit in its tint when she has it, the selected one white */
+function cycleArt(selected: RiteId): IconArt {
+  const pips = RITES.map((r, i) => (r.id === selected ? "W" : knowsRite(r) ? String.fromCharCode(65 + i) : "D"));
+  const row = pips.join(".");
+  const blank = ".".repeat(row.length);
+  const colors: Record<string, number> = { W: ICON_WHITE, D: DEEP };
+  RITES.forEach((r, i) => {
+    colors[String.fromCharCode(65 + i)] = hex(r.tint);
+  });
+  return { rows: [blank, row, blank], colors };
+}
 
 /** Ysra's button art, per action and selected rite */
 export function ysraArt(action: TouchButtonAction, rite: RiteId): IconArt {
@@ -115,10 +156,7 @@ export function ysraArt(action: TouchButtonAction, rite: RiteId): IconArt {
     case "cast":
       return RITE_ART[rite];
     case "cycle":
-      return ringArt(
-        RITES.findIndex((r) => r.id === rite),
-        RITE_TINTS,
-      );
+      return cycleArt(rite);
     case "ultimate":
       return NOVA;
   }

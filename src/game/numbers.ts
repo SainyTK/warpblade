@@ -21,7 +21,7 @@ function makeRoom(): void {
 
 /**
  * A hit's number over the foe. Hits of one kind on the same foe within a moment add into one number, so a stream of
- * small hits reads as one growing figure, and crits stay apart from plain hits. Quiet numbers are for relics: smaller, slower and dimmer than the hero's own.
+ * small hits reads as one growing figure, and crits stay apart from plain hits. Quiet numbers are for a skill's own hits: smaller, slower and dimmer than the hero's own.
  */
 export function popNumber(e: Enemy, value: number, tag: DamageTag, big: boolean, quiet: boolean): void {
   const into = game.numbers.find((n) => mergeable(n, e, tag, big, quiet));

@@ -10,9 +10,14 @@ export const TITAN = {
   /** the heap flies at this speed, this high, and bursts where it lands */
   speed: 260,
   lift: -150,
-  /** foes in the heap's path take this share of the level's power */
-  pathShare: 0.6,
   burst: 34,
+  /** Mountain Hurl: two turns over this long at this radius strike foes this near, then the heap flies flat this fast */
+  swing: frame(20),
+  swingRadius: 18,
+  swingReach: 60,
+  hurl: 320,
+  /** the scattered heap's bodies fly out this fast */
+  scatter: 200,
   /** where the heap sits in her arms, from her feet */
   heap: { x: 8, y: -26 },
 } as const;

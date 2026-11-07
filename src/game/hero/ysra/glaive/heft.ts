@@ -3,7 +3,8 @@ import { sfx } from "../../../../services/audio";
 import { clamp } from "../../../../utils/math";
 import { isHeld } from "../../../input";
 import { objectMemory, rememberPerSeat } from "../../../seatMemory";
-import { game, hero, progress } from "../../../state";
+import { skillValues } from "../../../skills/query";
+import { game, hero } from "../../../state";
 import { setState } from "../../actions";
 import { startMove } from "../../combo";
 import { createHeftGlow } from "./effects/heftGlow";
@@ -18,7 +19,8 @@ const QUIVER = 0.3;
 
 /** how far the wind has come, 0 to 1 */
 const share = (): number => clamp(heft.charge / HEFT.full);
-const rate = (): number => 1 + (progress.ranks[HEFT.skill] ?? 0) * HEFT.ratePerRank;
+/** Deep Heft winds the heft faster */
+const rate = (): number => skillValues("y_heft").windRate ?? 1;
 
 /** the string's opening hip thrust was just started by a fresh J: if J stays held it becomes a heft */
 export function watchHeft(): void {

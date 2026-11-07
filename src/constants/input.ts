@@ -26,14 +26,14 @@ export const KEYMAP: Record<string, InputAction> = {
 const KAEL_ACTION_TEXT: Record<InputAction, string> = {
   left: "Walk left. Tap twice and hold to run",
   right: "Walk right. Tap twice and hold to run",
-  up: "Jump",
+  up: "Jump. Press again in the air to jump again",
   down: "Hold and jump to drop through a ledge",
-  attack: "Sword combo. Each hit fits where the foes are. Mix with up, down, a jump, a dash or a run",
+  attack: "Sword combo of four hits. Each hit fits where the foes are. Press again just as a blow lands for a Keen hit",
   dash: "Dash. Nothing can touch you while you dash, and each dash spends stamina",
   run: "Run toward the side held",
-  warp: "Warp strike (10 MP)",
-  cast: "Cast the selected spell (18 MP)",
-  cycle: "Switch element: fire, ice, bolt",
+  warp: "Warp strike (10 MP). Hold up to warp to a crystal",
+  cast: "Cast the selected ability. During a combo it leaves the hand at once",
+  cycle: "Switch ability: lance, burst and the spells you learn",
   ultimate: "Hold to charge the ultimate, release to strike",
   mute: "Sound on or off",
   pause: "Pause and open the menu",
@@ -46,25 +46,26 @@ export const ACTION_TEXT: Record<KitId, Record<InputAction, string>> = {
   kael: KAEL_ACTION_TEXT,
   ysra: {
     ...KAEL_ACTION_TEXT,
-    left: "Walk left. With Warpath, tap twice and hold to charge",
-    right: "Walk right. With Warpath, tap twice and hold to charge",
+    left: "Walk left. With Warpath, keep walking to charge",
+    right: "Walk right. With Warpath, keep walking to charge",
     up: "Jump. One heavy jump, no double jump",
     attack:
-      "Glaive string that pierces the whole line. Hold to wind a lunge, let go to lunge. With up a skyhook, with down a ground lash",
+      "Glaive string of three blows that pierce the whole line, picked by the foes around you. Hold to wind a lunge, let go to lunge. In a vault, crash down",
     dash: "Hold to brace and block blows from the front. Press just before a blow to parry. With the side behind you held, step back",
-    run: "Charge toward the side held, once Warpath is learned",
+    run: "Charge toward the side held at once, once Warpath is learned",
     warp: "Pole vault over foes, also out of a brace or a backstep. In the air, dive glaive first",
     cast: "Call the selected rite, paid with Heat",
     cycle: `Switch rite: ${RITE_NAMES}`,
   },
   sable: {
     ...KAEL_ACTION_TEXT,
-    up: "Jump. One light jump. With attack held, aim up",
-    down: "With attack held, kneel and shoot low, or shoot down in the air. With jump, drop through a ledge",
-    attack: "Shoot a bolt. Hold to keep shooting. Hold up or down to aim. An empty quiver reloads",
-    dash: "Hop back and shoot at the top of the hop. With the side ahead held, slide forward under blows. Both spend stamina",
+    up: "Jump. One light jump, also out of a shot",
+    down: "With jump, drop through a ledge",
+    attack:
+      "Shoot a string of three bolts at the foe ahead, the last a closing bolt. Hold to keep shooting. An empty quiver reloads",
+    dash: "Hop back and shoot at the top of the hop. Walking or running ahead, slide forward under blows. Both spend stamina",
     warp: "Kick foes away from you",
-    cast: "Set a snare at your feet (20 MP)",
+    cast: "Cast the selected spell: a snare at your feet (20 MP) at first. The next ready spell is selected after each cast",
     cycle: "Reload. Press again in the bright window for a perfect reload and primed bolts",
   },
   hulda: {
@@ -103,5 +104,3 @@ export const DOUBLE_TAP = 0.25;
 export const INPUT_BUFFER_STEPS = 18;
 /** presses that wait out a whole move: a jump pressed while a blow winds up or strikes jumps out of its follow-through */
 export const KEPT_DURING_MOVE: readonly InputAction[] = ["up"];
-/** during a ground combo with Launcher, Up waits for a J this many steps after the press, and for as long as Up is held, before it jump-cancels; so Up + J reads as the launcher and a tapped Up still jumps */
-export const LAUNCH_WAIT_STEPS = 8;

@@ -1,16 +1,18 @@
 import { CHARMS } from "../../constants/charms";
-import { RELIC_MAX_LEVEL } from "../../constants/growth";
+import { SKILL_MAX_LEVEL } from "../../constants/growth";
 import { learnRecipe } from "../../store/unlocks";
-import type { CharmId, RelicId } from "../../types/build";
+import type { CharmId } from "../../types/build";
+import { skillOf } from "../../utils/skills";
 import { feat } from "../feat";
-import { progress } from "../state";
+import { character, progress } from "../state";
 
-/** a relic is taken at level 1 or goes up a level, up to its top */
-export function raiseRelic(id: RelicId): void {
-  const relics = progress.build.relics;
-  const level = Math.min(RELIC_MAX_LEVEL, (relics[id] ?? 0) + 1);
-  relics[id] = level;
-  feat({ kind: "relicLevel", relic: id, level });
+/** a skill is taken at level 1 or goes up a level, up to its top */
+export function raiseSkill(id: string): void {
+  const skills = progress.build.skills;
+  const level = Math.min(SKILL_MAX_LEVEL, (skills[id] ?? 0) + 1);
+  skills[id] = level;
+  feat({ kind: "skillLevel", skill: id, level });
+  if (level === 1 && skillOf(character, id)?.kind === "ultimate") feat({ kind: "ultimateLearned" });
 }
 
 /** a charm is taken at level 1 or goes up a level, up to its top */
@@ -19,10 +21,10 @@ export function raiseCharm(id: CharmId): void {
   charms[id] = Math.min(CHARMS[id].maxLevel, (charms[id] ?? 0) + 1);
 }
 
-/** a relic takes its evolved form for the rest of the run, and its recipe is known from then on */
-export function evolveRelic(id: RelicId): void {
+/** a skill takes its evolved form for the rest of the run, and its partner is known from then on */
+export function evolveSkill(id: string): void {
   if (progress.build.evolved.includes(id)) return;
   progress.build.evolved = [...progress.build.evolved, id];
   learnRecipe(id);
-  feat({ kind: "evolved", relic: id });
+  feat({ kind: "evolved", skill: id });
 }

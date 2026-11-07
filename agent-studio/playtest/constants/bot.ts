@@ -26,19 +26,10 @@ export const SPELL_RANGE = 110;
 export const ULT_RANGE = 110;
 /** how long the skilled bot holds U to charge the ultimate */
 export const ULT_HOLD_MS = 600;
-/** the skilled bot takes the first card of the earliest kind here */
-export const PICK_PRIORITY = [
-  "relic",
-  "charm",
-  "ultimate",
-  "spell",
-  "passive",
-  "enhance",
-  "combo",
-  "fusion",
-  "movement",
-  "boon",
-] as const;
+/** the skilled bot raises a held skill that has reached this level, so it heads for an evolution */
+export const NEAR_EVOLUTION_LEVEL = 5;
+/** otherwise it takes a new skill by kind in this order, then the highest skill level, then a charm, then a boon */
+export const PICK_PRIORITY = ["ultimate", "attack", "summon", "spell", "dot", "movement", "passive"] as const;
 /** a chest screen ignores input for a moment after it opens; the bot waits this long before it presses J */
 export const CHEST_WAIT_MS = 600;
 /** a pick ignores input for a moment after it opens; try again this often, this many times */

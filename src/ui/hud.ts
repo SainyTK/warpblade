@@ -12,6 +12,7 @@ import { byId } from "./dom";
 import { updateFlowBar } from "./flowBar";
 import { updateGritBar } from "./gritBar";
 import { updateHeatBar } from "./heatBar";
+import { updateHuldaTabs } from "./huldaTabs";
 import { updateQuiverBar } from "./quiverBar";
 import { createRechargeTab } from "./rechargeTab";
 import { updateRiteTabs } from "./riteTabs";
@@ -46,6 +47,7 @@ const pips = (n: number, lit: (i: number) => boolean): string =>
 export function updateHud(): void {
   updateSpellTabs();
   updateRiteTabs();
+  updateHuldaTabs();
   updateHeatBar();
   updateGritBar();
   updateQuiverBar();
@@ -95,8 +97,7 @@ export function updateHud(): void {
   chain.innerHTML = pips(progress.comboLimit, (i) => i < hero.chain);
   wave.textContent = `STAGE ${game.stage}  WAVE ${game.wave}/${STAGE_WAVES}`;
   score.textContent = `${game.kills} DOWN${game.best ? `  BEST WAVE ${game.best}` : ""}`;
-  ultRow.hidden = !progress.ultimate;
-  ultName.textContent = progress.ultimate ? ULT_LABEL[progress.ultimate] : "";
+  ultName.textContent = ULT_LABEL[progress.ultimate];
   ultPips.innerHTML = pips(ULT_LEVELS.length, (i) => i < affordable);
   boss.hidden = !leader;
   if (leader) {

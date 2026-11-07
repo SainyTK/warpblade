@@ -3,8 +3,7 @@ import { ANCHORS, BRAZIERS, GROUND, W } from "../constants/stage";
 import { ellipseRing, glow, line, place, polygon, px, shade, sparkle, toScreenX } from "../engine/frame";
 import { findWarpTarget } from "../game/hero/warp";
 import { isHeld } from "../game/input";
-import { hasPerk } from "../game/progress";
-import { game, hero } from "../game/state";
+import { character, game, hero } from "../game/state";
 import type { Point } from "../types/world";
 import { WHITE } from "../utils/color";
 import { TAU } from "../utils/math";
@@ -79,10 +78,10 @@ export function drawAnchors(): void {
   }
 }
 
-/** with Crystal Hang, the crystal the hero in play would warp to gets a ring */
+/** while Kael holds Up, the crystal he would warp to gets a ring */
 export function drawWarpAim(): void {
   const aiming =
-    hasPerk("hang") && isHeld("up") && ["idle", "walk", "run", "jump", "fall", "hang"].includes(hero.state);
+    character.kit === "kael" && isHeld("up") && ["idle", "walk", "run", "jump", "fall", "hang"].includes(hero.state);
   const target = aiming ? findWarpTarget().anchor : undefined;
   if (!target) return;
   const I = PAL.crystal;

@@ -1,23 +1,21 @@
 import type { Build } from "./build";
-import type { Perk, UltimateId } from "./skill";
+import type { UltimateId } from "./skill";
 import type { Stats } from "./stats";
 
-/** One run's growth: it starts over when Kael falls. */
+/** One run's growth: it starts over when the hero falls. */
 export interface Progress {
   level: number;
   xp: number;
-  /** skill points from level ups, spent in the picks that open when a wave is cleared */
+  /** points from level ups, spent in the picks that open when a wave is cleared */
   picks: number;
-  /** learned ranks by node id */
-  ranks: Record<string, number>;
-  /** derived from level and ranks */
+  /** derived from the level and the build's skills and charms */
   stats: Stats;
-  perks: ReadonlySet<Perk>;
-  /** none until a pick teaches one */
-  ultimate: UltimateId | null;
+  /** the hero's special, or the ultimate an ultimate skill puts on U */
+  ultimate: UltimateId;
+  /** the ground string's length, fixed per hero */
   comboLimit: number;
-  /** air attacks before Kael lands */
+  /** air attacks before the hero lands */
   airLimit: number;
-  /** relics, charms, Flow and the pick tools of this run */
+  /** skills, charms, Flow and the pick tools of this run */
   build: Build;
 }

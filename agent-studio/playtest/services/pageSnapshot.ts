@@ -84,6 +84,7 @@ export function readSnapshot(page: Page): Promise<GameSnapshot> {
         kind: card.dataset.kind ?? card.dataset.branch ?? "",
         branch: card.dataset.branch ?? "",
         name: card.querySelector(".pick-name")?.textContent ?? "",
+        level: card.querySelectorAll(".pick-pips i.had, .pick-pips i.gain").length,
         selected: card.classList.contains("selected"),
       })),
       lastRun: runEnd.lastRun(),

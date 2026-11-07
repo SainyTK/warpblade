@@ -1,22 +1,29 @@
 import { ENEMIES } from "../../../constants/enemies";
+import { COUNTER } from "../../../constants/hulda/counter";
 import { HOLD } from "../../../constants/hulda/grab";
 import type { Enemy } from "../../../types/enemy";
 import { clamp } from "../../../utils/math";
 import { enemyBox } from "../../enemies/enemy";
 import { kindOf } from "../../enemies/kinds";
-import { hasPerk } from "../../progress";
+import { skillLevel, skillValues } from "../../skills/query";
 import { hero } from "../../state";
 import { claim, isClaimed, unclaim } from "./claims";
+import { fracture } from "./fracture";
+import { ironBigGrab } from "./iron";
 import { hulda } from "./memory";
 
 /** states in which a foe stays in her hands */
 const HOLDING = new Set(["hold", "knee", "toss"]);
 
 /** a foe she can take into her hands: a live minion nobody else holds */
-export const canHold = (e: Enemy): boolean => e.hp > 0 && ENEMIES[e.type].launchable && !isClaimed(e);
+export const canHold = (e: Enemy): boolean =>
+  e.hp > 0 && (ENEMIES[e.type].launchable || ironBigGrab()) && !isClaimed(e);
 
-/** seconds a hold lasts, longer with Iron Grip */
-export const holdTime = (): number => (hasPerk("ironGrip") ? HOLD.gripTime : HOLD.time);
+/** seconds a hold lasts: longer with Crushing Grip, Executioner's Grip's own on its big foe */
+export function holdTime(): number {
+  if (hulda.execute) return COUNTER.hold;
+  return skillLevel("h_fracture") ? skillValues("h_fracture").hold : HOLD.time;
+}
 
 /** half the width of a foe's body, so a big foe is held at arm's length and a small one close */
 function halfWidth(e: Enemy): number {
@@ -49,13 +56,14 @@ export function take(e: Enemy): void {
   pin(e);
 }
 
-/** let go of the held foe where it is, stunned this long */
+/** let go of the held foe where it is, stunned this long; Crushing Grip leaves it fractured */
 export function drop(stun: number = HOLD.dropStun): void {
   const e = hulda.held;
   hulda.held = null;
   if (!e) return;
   unclaim(e);
   if (e.hp <= 0) return;
+  fracture(e);
   e.stun = Math.max(e.stun, stun);
   // a walker held up at her hands drops back onto the floor
   if (!kindOf(e.type).flies) e.y = hero.y;
