@@ -228,10 +228,10 @@ Ancestor's Fist and Iron Wall: in the room, armoured counters beyond the injecte
 ### Still off after round 2
 
 - Hulda's base kit stays near 60 on a crowd and 15 on one foe in the room, against about 80 and 35 asked; doubling her blows barely moved it, because the scripted player and the bot lose contact with a lone foe (rush, grab and knockback carry her past it).
-  A human check of her lone-foe play should come before more numbers.
+  Settled in round 3 below.
 - Base kits on the average of one foe and crowd: Kael 85, Ysra 77, Sable 74, Hulda about 37.
 - Ember Brand, Perfect Rhythm on one foe and Iron Counter on one foe stay under their band; Keen Edge, Counter Thrust, Sun Hawk and Iron Counter spill far over the precise crowd cap of about 300.
-- Unbroken shows no gain in the room (its damage buff did not show over the noise); Titan Throw reads 4.8 to 5.7 times Quake Drop per cast and Deadeye 4.1 to 7.4 times Bolt Storm.
+- Unbroken shows no gain in the room (its damage buff did not show over the noise; settled in round 3); Titan Throw reads 4.8 to 5.7 times Quake Drop per cast and Deadeye 4.1 to 7.4 times Bolt Storm.
 - The Heat top-up did not get Brazier, Overheat or Kindling cast by the scripted player (they read 0); together with Giant Swing, Crushing Grip, Wrecking Throw, Spirit Bear, Skyhook, Impale, Deep Heft, Warpath, Rift Wound, Skybreaker, Sky Dance, Barbed Jaws, Longshot and Powder Keg they still need a scripted check that drives their own functions.
 
 ### Cross-hero bot runs, round 2
@@ -248,3 +248,63 @@ Ancestor's Fist and Iron Wall: in the room, armoured counters beyond the injecte
 | Hulda | iron wall | 71 s, cleared | fell at 93 s |
 
 These ran while the last numbers of the round were still moving (Hulda's first job ran on the middle step of her base raise); they are no closer to the 15% target than round 1.
+
+## Round 3: Hulda's contact and Unbroken (8 November 2026)
+
+### Cause
+
+A player-style test drove Hulda with real keys against one walking husk (three times its HP) and measured the gap after every blow, rush and grab.
+Her string keeps contact on its own: each jab, hook and haymaker landed 4 to 13 px from the foe, about 80 raw a second at the round 2 numbers.
+Contact broke on the rush: it ran 21 to 31 px past the foe and left her back to it, and with the foe behind her it charged the way she faced, 110 px away.
+Her string and grab never turned to a foe behind her, so the jab after a rush or a suplex swung at air.
+The suplex leaves a lone foe 14 px behind her, which the turn now covers; the knockback of her blows was never the problem.
+
+The room's scripted player had a fault of its own for Hulda: when Bellow was recharging and Taunt was selected, it answered the policy's I with O on every tick, so for about 40% of the lone-foe minute it only switched tabs and threw no punch.
+It now treats the Taunt tab as not ready, so the policy punches instead; the other heroes' routines are unchanged.
+This explains why raising her blows 2.3 times barely moved the room's figure.
+
+### Changes
+
+- Bull Rush charges the way she is pushed when L is pressed; once she has run into a foe and none waits within 24 px ahead, the charge stops at its next stride key and she wheels round to the foe as she settles; its shove is 60 (from 180).
+- The first blow of a string and the grab face the held direction, or turn to a foe within reach only behind her.
+- Blows 1.4/2.2/4.5 to 0.9/1.3/2.8 (8.1x to 5.0x a string).
+- Unbroken: in iron every landed blow quakes the floor 40 px each way (one each 0.2 s; was the haymaker only); level 8 quake 2 to 9, Iron Titan 2 to 20.
+
+### Measured
+
+Base kit, total raw a second over all sources, room as above; "one" averages six seeds after the change and three before.
+
+| Kit and player | One foe | Crowd | Average |
+| --- | --- | --- | --- |
+| Round 2 kit, round 2 player | 23 | 83 | 53 |
+| Round 2 kit, fixed player | 28 | 99 | 64 |
+| Contact fix, round 2 blows, fixed player | 50 | 111 | 80 |
+| Contact fix, round 3 blows, fixed player | 47 | 92 | 69 |
+
+The one-foe figure sits above the 35 asked and the crowd figure near the 80 asked; a lone foe in the room dies about every 5 s and the walk to the next one caps the one-foe figure, so lower blows move it little and cost the crowd figure more.
+Kael reads 42 on one foe and Sable 63, so 47 is inside the other heroes' range.
+
+Unbroken per cast at charge level 3 against Quake Drop's per cast (Quake Drop about 760 on the crowd over four runs), counting all the damage it adds over the base kit, not only its own source:
+
+| Unbroken | Crowd before | Crowd after | One foe after |
+| --- | --- | --- | --- |
+| Level 8 | 0.2x | 6.4x | 5.0x |
+| Iron Titan | 0.4x | 15.8x | 11.5x |
+
+Before, it was a damage buff on a base kit that barely landed in the room, plus quakes on haymakers, which the bot seldom finished; counted in full it reached 0.2 times Quake Drop.
+Doubling her own damage for eight seconds is worth under one Quake Drop on a crowd, so the quakes carry the cast.
+
+### Bot runs, round 3
+
+Skilled bot, same jobs as above, plus a wave 1 start with the build's eight skills at level 1; game seconds to clear two waves, or the second it fell.
+
+| Hulda build | From wave 1 | From wave 8 | From wave 15 |
+| --- | --- | --- | --- |
+| brawler, round 2 kit | 44 s, cleared | 69 s, cleared | fell at 61 s |
+| brawler, round 3 | 62 s, cleared | 62 s, cleared | 66 s, cleared |
+| iron wall, round 2 kit | 45 s, cleared | 59 s, cleared | fell at 67 s |
+| iron wall, round 3 | 32 s, cleared | 57 s, cleared | fell at 76 s |
+
+The brawler now clears wave 15 in about the time Kael's duelist takes (57 s), where Kael's storm, both Ysra builds and Sable's cadence fall; from wave 8 both builds are still two to three times slower than Kael and Sable.
+The bot never grabs or throws on purpose, so these remain her floor.
+
