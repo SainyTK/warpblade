@@ -5,16 +5,17 @@ import { GROUND } from "../../constants/stage";
 import { track } from "../../services/analytics";
 import { recordFeat } from "../../store/achievements";
 import { addCoins, ownsSkill, wearOwned } from "../../store/meta";
+import type { Card } from "../../types/build";
 import type { CharacterDef } from "../../types/character";
 import type { GuestHud, PickWire } from "../../types/coop";
 import type { EnemyRank, EnemyType } from "../../types/enemy";
+import type { PickAnswer } from "../../types/pick";
 import type { RunOutcome, RunReport } from "../../types/run";
-import type { PickOption } from "../../types/skill";
 import { scaleFoeHealth, scaleFoeList } from "../../utils/coopScaling";
 import { xpToReach } from "../../utils/progression";
 import { toWire } from "../../utils/wire";
 import { type CoopHooks, setCoopHooks } from "../coopHooks";
-import { choosePick, gainXp } from "../progress";
+import { answerPick, earnXp, gainXp } from "../progress";
 import { resetRun } from "../run";
 import { runReport } from "../runReport";
 import { seatMemories } from "../seatMemory";
@@ -157,7 +158,7 @@ export class HostRun implements CoopHooks {
     const from = this.current;
     for (const seat of this.seats) {
       this.enter(seat);
-      gainXp(amount);
+      earnXp(amount);
     }
     this.enter(from);
   }
@@ -179,10 +180,36 @@ export class HostRun implements CoopHooks {
     hero.state = "idle";
   }
 
-  /** the game waits on the skill cards while anyone has points to spend */
+  /** the game waits while anyone looks at an opened chest, then on the skill cards while anyone has points to spend */
   refreshPicks(): void {
     if (game.mode === "clear") return;
-    game.mode = this.choosing().length ? "pick" : "play";
+    game.mode = this.anyChest() ? "chest" : this.choosing().length ? "pick" : "play";
+  }
+
+  /** someone has an opened chest still on their screen */
+  private anyChest(): boolean {
+    const from = this.current;
+    let open = false;
+    for (const seat of this.seats) {
+      this.enter(seat);
+      open ||= progress.build.chest.length > 0;
+    }
+    this.enter(from);
+    return open;
+  }
+
+  /** the host has seen their chest: the dialog already acts on the host's seat */
+  chestSeenHome(): void {
+    progress.build.chest = [];
+    this.refreshPicks();
+  }
+
+  /** a guest has seen their chest */
+  chestSeenFor(seat: Seat): void {
+    this.enter(seat);
+    progress.build.chest = [];
+    this.enter(this.home);
+    this.refreshPicks();
   }
 
   /** the slots of players with picks waiting, once a wave is cleared */
@@ -197,18 +224,22 @@ export class HostRun implements CoopHooks {
     return game.lull === "toNext" ? slots : [];
   }
 
-  /** the host's own card: the dialog already acts on the host's seat */
-  chooseHome(option: PickOption): void {
-    choosePick(option);
+  /** the host's own answer to the cards: the dialog already acts on the host's seat */
+  answerHome(answer: PickAnswer<Card>): void {
+    answerPick(answer);
     this.refreshPicks();
   }
 
-  /** a guest's card, by id; refused quietly when it is not theirs to take */
-  chooseFor(seat: Seat, pick: PickWire, read: (c: CharacterDef, pick: PickWire) => PickOption | null): void {
+  /** a guest's answer, by card ids; refused quietly when it is not theirs to give */
+  answerFor(
+    seat: Seat,
+    wire: PickAnswer<PickWire>,
+    read: (c: CharacterDef, answer: PickAnswer<PickWire>) => PickAnswer<Card> | null,
+  ): void {
     if (game.mode !== "pick") return;
     this.enter(seat);
-    const option = progress.picks > 0 ? read(seat.character, pick) : null;
-    if (option) choosePick(option);
+    const answer = progress.picks > 0 ? read(seat.character, wire) : null;
+    if (answer) answerPick(answer);
     this.enter(this.home);
     this.refreshPicks();
   }

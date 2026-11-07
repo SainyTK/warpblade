@@ -1,4 +1,7 @@
+import type { Card } from "./build";
+import type { GameMode } from "./game";
 import type { InputAction } from "./input";
+import type { PickAnswer } from "./pick";
 import type { RunOutcome, RunReport } from "./run";
 
 export type CoopRole = "host" | "guest";
@@ -14,14 +17,17 @@ export interface SeatInfo {
   hero: string;
 }
 
-/** a skill card chosen by a guest, by id so it crosses the network */
-export type PickWire = { type: "skill"; id: string } | { type: "boon"; id: string };
+/** a card a guest answered, by kind and id so it crosses the network */
+export interface PickWire {
+  type: Card["type"];
+  id: string;
+}
 
 /** what a guest's HUD needs from the host, sent several times a second */
 export interface GuestHud {
   /** the per-player memories the HUD reads, in the order both sides registered them */
   bags: unknown[];
-  mode: "play" | "pick" | "clear";
+  mode: GameMode;
   wave: number;
   kills: number;
   banner: { text: string; time: number };
@@ -39,7 +45,9 @@ export type GuestMessage =
   /** the guest bought something in its shop while in the room */
   | { t: "shop"; owned: Record<string, number> }
   | { t: "key"; a: InputAction; d: boolean }
-  | { t: "pick"; pick: PickWire }
+  | { t: "pick"; answer: PickAnswer<PickWire> }
+  /** the guest has seen what their chest gave */
+  | { t: "chestSeen" }
   | { t: "ping" }
   /** the guest is leaving, so the host need not wait for the link to go quiet */
   | { t: "bye" };

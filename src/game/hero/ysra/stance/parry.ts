@@ -1,7 +1,9 @@
+import { FLOW } from "../../../../constants/growth";
 import { SPARKS } from "../../../../constants/palette";
 import { BRACE, BRACE_TIMES } from "../../../../constants/ysra/stance";
 import { sfx } from "../../../../services/audio";
 import type { Enemy } from "../../../../types/enemy";
+import { addFlow } from "../../../build/flow";
 import { cue } from "../../../cue";
 import { createFloorRing } from "../../../effects/floorRing";
 import { createImpact } from "../../../effects/impact";
@@ -51,6 +53,7 @@ export function parry(fromX: number): void {
   const h = hero;
   knockAside(fromX);
   feat({ kind: "perfect" });
+  addFlow(FLOW.perfectDodge);
   stance.shield = BRACE.shieldTime;
   refundStamina(BRACE.parryRefund);
   if (hasPerk("counterThrust")) stance.counter = BRACE.counterTime;

@@ -70,6 +70,9 @@ Relic hits are not melee (guards do not stop them) and do not build Flow.
 ## Hero growth
 
 - Attack damage and ability power grow by `HERO_LEVEL_POWER` (x1.025) per level, compounding, instead of a flat amount. The heroes' `growth.ad` and `growth.ap` are 0; HP, MP keep their flat growth.
+- HP and MP growth per level are about a fifth of what they were, so about 84 levels end near the old totals of 19 levels.
+- A level up restores 5% of HP and MP (`LEVEL_UP_RESTORE`), so a level heals a little.
+- Level gates (skill node levels, combo lengths, the skill evolutions' level) moved so each arrives at about the same wave as before.
 - Skill nodes that added flat attack damage or ability power add a percentage instead (Keen Edge: +10% attack damage per rank).
 - Shop stats stay flat.
 

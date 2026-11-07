@@ -1,5 +1,6 @@
 import { CLIPS } from "../../constants/clips";
 import { MP_REGEN } from "../../constants/combat";
+import { rechargeStep } from "../build/recharge";
 import { isHeld } from "../input";
 import { endRun } from "../runEnd";
 import { hero, progress } from "../state";
@@ -69,9 +70,10 @@ export function updateHero(dt: number): void {
   h.st += dt * clockRate();
   h.inv = Math.max(0, h.inv - dt);
   h.drop = Math.max(0, h.drop - dt);
-  h.warpCd = Math.max(0, h.warpCd - dt);
-  h.ultCd = Math.max(0, h.ultCd - dt);
-  rechargeSpells(dt);
+  const recharge = rechargeStep(dt);
+  h.warpCd = Math.max(0, h.warpCd - recharge);
+  h.ultCd = Math.max(0, h.ultCd - recharge);
+  rechargeSpells(recharge);
   tickDenied(dt);
   h.riposte = Math.max(0, h.riposte - dt);
   h.sinceDash += dt;

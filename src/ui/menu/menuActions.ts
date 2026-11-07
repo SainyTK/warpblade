@@ -31,11 +31,11 @@ export function quitRun(): void {
   openMenu("title");
 }
 /**
- * freeze the game under the pause menu; in solo play a level-up pick already holds the game and is never paused over.
+ * freeze the game under the pause menu; in solo play a level-up pick or an opened chest already holds the game and is never paused over.
  * A room plays on under the menu, and its players may still pause while anyone picks, to leave the room
  */
 export function pauseGame(): void {
-  if (isMenuOpen() || (game.mode === "pick" && !inRoom())) return;
+  if (isMenuOpen() || ((game.mode === "pick" || game.mode === "chest") && !inRoom())) return;
   releaseAll();
   openMenu("pause");
 }

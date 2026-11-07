@@ -1,4 +1,132 @@
-/** Chests: dropped by elites, mini bosses and the wave 20 boss; touching one opens it. Core owns this file. */
-export function dropChest(_x: number, _y: number): void {
-  // core: spawn a chest pickup here
+import { CHEST_COLORS, CHEST_ROWS } from "../../constants/chest";
+import { CHEST_MOTION as M } from "../../constants/growth";
+import { COIN_GOLD } from "../../constants/palette";
+import { RELICS } from "../../constants/relics";
+import { GROUND, W } from "../../constants/stage";
+import { glow, place, px, sparkle } from "../../engine/frame";
+import { sfx } from "../../services/audio";
+import type { ChestReward } from "../../types/build";
+import { PK } from "../../types/particle";
+import { buildStats } from "../../utils/build";
+import { rollChest } from "../../utils/chests";
+import { clamp } from "../../utils/math";
+import { eachStanding } from "../coopHooks";
+import { queueEvolution } from "../evolve";
+import { feat } from "../feat";
+import { refreshGrowing } from "../progress";
+import { game, hero, lights, particles, progress, rng } from "../state";
+import { evolveRelic, raiseCharm, raiseRelic } from "./raise";
+
+/** Chests: dropped by elites, mini bosses and the wave 20 boss; touching one opens it for the hero who touched it. */
+interface Chest {
+  x: number;
+  y: number;
+  vy: number;
+  /** seconds since it dropped */
+  t: number;
+  bounced: boolean;
+  opened: boolean;
+}
+
+/** the chests on the field; the field is shared, so a room keeps one list */
+let chests: Chest[] = [];
+const HALF_W = Math.floor(CHEST_ROWS[0].length / 2);
+
+export function dropChest(x: number, y: number): void {
+  chests.push({
+    x: clamp(Math.round(x), HALF_W + 4, W - HALF_W - 4),
+    y,
+    vy: -M.pop,
+    t: 0,
+    bounced: false,
+    opened: false,
+  });
+}
+
+export function clearChests(): void {
+  chests = [];
+}
+
+/** give the hero in play what a chest holds */
+function grant(rewards: readonly ChestReward[]): void {
+  for (const r of rewards) {
+    if (r.type === "evolve") {
+      evolveRelic(r.id);
+      queueEvolution(RELICS[r.id].evolution.name);
+    } else if (r.type === "relic") raiseRelic(r.id);
+    else if (r.type === "charm") raiseCharm(r.id);
+  }
+  refreshGrowing();
+  if (rewards.some((r) => r.type === "heal")) {
+    hero.hp = progress.stats.hp;
+    hero.mp = progress.stats.mp;
+  }
+}
+
+/** the hero in play opens a chest: a burst of gold, the rewards are theirs, and the game waits on the chest screen */
+function open(c: Chest): void {
+  c.opened = true;
+  const rewards = rollChest(progress.build, game.wave, buildStats(progress.build).luck, rng);
+  grant(rewards);
+  progress.build.chest = rewards;
+  feat({ kind: "chestOpened", upgrades: rewards.filter((r) => r.type === "relic" || r.type === "charm").length });
+  lights.add(c.x, c.y - 6, 70, COIN_GOLD[3], 1, 0.5);
+  for (let i = 0; i < 16; i++)
+    particles.spawn(
+      PK.STAR,
+      c.x + rng.range(-6, 6),
+      c.y - rng.range(2, 9),
+      rng.range(-30, 30),
+      -rng.range(30, 80),
+      rng.range(0.4, 0.8),
+      {
+        col: rng.pick([COIN_GOLD[3], COIN_GOLD[4]]),
+        size: rng.range(1, 2.5),
+      },
+    );
+  sfx.levelUp();
+  game.mode = "chest";
+}
+
+/** a standing hero whose feet reach the chest */
+const touches = (c: Chest): boolean =>
+  hero.state !== "dead" && Math.abs(hero.x - c.x) <= M.reach && Math.abs(hero.y - c.y) <= M.reach * 2;
+
+/** chests fall and bounce once onto the floor; the first standing hero to touch a settled one opens it */
+export function updateChests(dt: number): void {
+  for (const c of chests) {
+    c.t += dt;
+    if (c.y < GROUND || c.vy < 0) {
+      c.vy += M.gravity * dt;
+      c.y += c.vy * dt;
+      if (c.y >= GROUND) {
+        c.y = GROUND;
+        c.vy = c.bounced ? 0 : -c.vy * M.bounce;
+        c.bounced = true;
+      }
+    }
+    if (c.t < M.settle || c.opened || game.mode !== "play") continue;
+    eachStanding(() => {
+      if (!c.opened && game.mode === "play" && touches(c)) open(c);
+    });
+  }
+  chests = chests.filter((c) => !c.opened);
+}
+
+/** a wooden chest with gold bands and a lock, a soft gold glow under it and a glint that runs now and then */
+export function drawChests(): void {
+  place();
+  for (const c of chests) {
+    const left = Math.round(c.x) - HALF_W;
+    const top = Math.round(c.y) - CHEST_ROWS.length;
+    glow(c.x, c.y - 4, 14, COIN_GOLD[3], 0.35);
+    CHEST_ROWS.forEach((row, j) => {
+      for (let i = 0; i < row.length; i++) {
+        const key = row[i] as keyof typeof CHEST_COLORS;
+        if (key in CHEST_COLORS) px(left + i, top + j, CHEST_COLORS[key]);
+      }
+    });
+    const phase = (c.t % M.glint) / M.glint;
+    if (phase < 0.18) sparkle(left + 2 + Math.round(phase * 50), top + 3, 2, COIN_GOLD[4], COIN_GOLD[3], 0.8);
+  }
 }

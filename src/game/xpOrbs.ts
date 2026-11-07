@@ -6,7 +6,7 @@ import { PK } from "../types/particle";
 import { waveScale } from "../utils/progression";
 import { fall, home } from "./coins";
 import { coop } from "./coopHooks";
-import { gainXp } from "./progress";
+import { earnXp } from "./progress";
 import { game, hero, particles, rng } from "./state";
 
 /** the orb lying nearest a point */
@@ -55,5 +55,5 @@ export function updateXpOrbs(dt: number): void {
   game.xpOrbs = game.xpOrbs.filter((o) => !o.done);
   sfx.pickup();
   if (room) room.shareXp(gained);
-  else gainXp(gained);
+  else earnXp(gained);
 }

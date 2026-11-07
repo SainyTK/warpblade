@@ -3,7 +3,9 @@ import { BRAZIERS } from "../constants/stage";
 import { scene, updateScenery } from "../scene/scenery";
 import { PF, PK } from "../types/particle";
 import { updateBlazes } from "./blazes";
+import { updateChests } from "./build/chests";
 import { updateFlow } from "./build/flow";
+import { regenVigor } from "./build/vigor";
 import { updateCoins } from "./coins";
 import { coop, eachHero } from "./coopHooks";
 import { updateEnemies } from "./enemies/updateEnemies";
@@ -78,10 +80,14 @@ export function update(dt: number): void {
   updateScenery(dt);
   eachHero(() => updateHero(dt));
   updateDanger(dt);
-  eachHero(() => updateFlow(dt));
+  eachHero(() => {
+    updateFlow(dt);
+    regenVigor(dt);
+  });
   updateRelics(world);
   updateEnemies(world);
   updatePickups(dt);
+  updateChests(dt);
   updateCoins(dt);
   updateXpOrbs(dt);
   coop()?.anyStanding();

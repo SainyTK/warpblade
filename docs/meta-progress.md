@@ -39,12 +39,21 @@ Stats are bought in levels, each level adding the same flat amount, before the i
 
 Each level costs 1.6 times the one before, rounded to 5 (`nextPrice` in `src/utils/shop.ts`), so a 20-coin stat goes 20, 30, 50, 80, 130.
 
+Pick tools are bought in levels too, three each, priced the same way: each level adds one to what every run starts with (2 rerolls, 2 skips and 1 banish before the shop, `PICK_TOOLS` in `src/constants/growth.ts`).
+
+| Item | Per level | Levels | First price |
+| --- | --- | --- | --- |
+| Reroll | One more reroll | 3 | 30 |
+| Skip | One more skip | 3 | 25 |
+| Banish | One more banish | 3 | 35 |
+
 Skills are bought once and none of them is offered on level up:
 
 - Lodestone (60): coins fly to the hero after 0.3 seconds, and foes drop another quarter of their base (a fraction left over is a chance at one more coin).
 - Aftershock (150, saved under the id `warpShock`): every travel move the hero ends sends a ring out from the hero that hits each foe within 40 art pixels for 0.8 times attack damage and stuns it briefly.
   For Kael that is every dash and every warp, Blink Combo's included; for Ysra every vault, dive and backstep; for Sable every hop and slide; for Hulda every Bull Rush and every Skyfall Grab landing.
 - Head Start (200): runs start at level 3 with two skill points, spent when wave 1 is cleared.
+  A full run reaches about level 84, so level 3 is what wave 1 alone gives; the two picks are the whole head start.
 - Last Light (300): the first fatal blow of a run leaves the hero standing with half their HP.
 
 ## Every shop item helps every hero
@@ -64,7 +73,7 @@ A new hero's kit keeps these promises, so every item works for it on day one:
 - Blows on the hero go through `hurtHero`, so Vitality's HP and Last Light apply.
 - The kit calls `travelEnded()` from `src/game/hero/travelEnd.ts` when each of its travel moves ends: a dash, a warp, a leap, a landing out of the air (Aftershock).
   Shop skills that answer a hero's movement hook in there, never into one kit's code.
-- Coins, levels and Head Start live in shared code and need nothing from the kit.
+- Coins, levels, Head Start and the pick tools live in shared code and need nothing from the kit.
 
 A new item follows the same rule: it changes a shared stat or hooks into a shared event, and its text says what it does without naming a hero.
 Item ids are saved, so a renamed item keeps its id.
