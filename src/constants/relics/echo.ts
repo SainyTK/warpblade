@@ -27,3 +27,21 @@ export const ECHO: RelicDef = {
     },
   },
 };
+
+/** the crescent's flight; `area` scales its size, `speed` its pace */
+export const ECHO_FLIGHT = {
+  /** art pixels per second */
+  speed: 230,
+  /** seconds a crescent flies; Phantom Arc's turn back halfway through a longer flight */
+  life: 0.55,
+  phantomLife: 1.1,
+  /** radius of the crescent at area 1 */
+  radius: 9,
+  /** height above the hero's feet it flies at */
+  height: 15,
+  /** vertical gap between crescents sent together */
+  stack: 7,
+  /** seconds between crescents when several hits are owed at once, and how many may wait */
+  gap: 0.08,
+  queue: 3,
+} as const;
