@@ -11,7 +11,7 @@ import type { Report } from "./types/report";
 const USAGE = `Usage: npm run playtest -- <command> [flags]
   smoke    [--hero <id>|all]
   bot      [--hero <id>|all] [--runs N] [--policy mash|skilled] [--max-minutes M] [--start-wave N [--start-level L]]
-  scenario <file.ts> [--hero <id>] [--viewport WxH] [--start-wave N [--start-level L]]
+  scenario <file.ts> [--hero <id>] [--viewport WxH] [--max-minutes M] [--start-wave N [--start-level L]]
 Every command takes --root <game repo> and --out <report.json>.`;
 
 const { positionals, values } = parseArgs({
@@ -62,7 +62,14 @@ function runCommand(): Promise<Report> {
     });
   }
   if (command === "scenario" && file) {
-    return scenario({ ...common, file, hero: values.hero, viewport: values.viewport, start: runStart() });
+    return scenario({
+      ...common,
+      file,
+      hero: values.hero,
+      viewport: values.viewport,
+      start: runStart(),
+      maxMinutes: positiveNumber(values["max-minutes"], "max-minutes"),
+    });
   }
   throw new Error(USAGE);
 }

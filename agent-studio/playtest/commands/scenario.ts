@@ -6,6 +6,7 @@ import type { ScenarioReport } from "../types/report";
 import type { Session } from "../types/session";
 import { secondsSince } from "../utils/elapsed";
 import { parseViewport } from "../utils/viewport";
+import { withWallLimit } from "../utils/wallLimit";
 
 type Scenario = (session: Session) => Promise<unknown>;
 
@@ -34,7 +35,7 @@ export async function scenario(flags: ScenarioFlags): Promise<ScenarioReport> {
   let result: unknown = null;
   let error: string | undefined;
   try {
-    result = await play(session);
+    result = await withWallLimit(play(session), flags.maxMinutes, file);
   } catch (caught) {
     error = caught instanceof Error ? (caught.stack ?? caught.message) : String(caught);
   }

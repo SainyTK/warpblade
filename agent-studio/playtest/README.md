@@ -102,12 +102,13 @@ A change to the game's code, including changes other agents save while a command
 ### scenario
 
 ```sh
-npm run -s playtest -- scenario <file.ts> [--hero <id>] [--viewport WxH] [--root <dir>] [--out <file>]
+npm run -s playtest -- scenario <file.ts> [--hero <id>] [--viewport WxH] [--max-minutes M] [--root <dir>] [--out <file>]
 ```
 
 Runs a script whose default export is `async (session) => {...}` against a fresh session.
 With `--hero`, the run has already started through the menu when the script begins; without it, the game waits on the start menu.
 Whatever the script returns lands in the report's `result`.
+A script still running after `--max-minutes` of wall time (30 by default) fails with an error, since a game stuck in an endless loop freezes the page and would otherwise hang the run.
 Report fields: `command`, `ok`, `root`, `startedAt`, `wallSeconds`, `pageErrors`, `file`, `result` and `error`.
 
 Scripts can live anywhere, for example in a temp folder.

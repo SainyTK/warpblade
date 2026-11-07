@@ -19,4 +19,6 @@ export interface ScenarioFlags extends CommonFlags {
   hero?: string;
   viewport?: string;
   start?: RunStart;
+  /** wall-clock minutes before the script is given up as frozen */
+  maxMinutes: number;
 }
