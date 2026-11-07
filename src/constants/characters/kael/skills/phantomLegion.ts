@@ -13,7 +13,7 @@ const LEVELS = levelRows([
   { text: "New: struck foes cannot turn for 2 s.", values: { lock: 2 } },
   { text: "Recharge 20 to 15 s.", values: { cooldown: 15 } },
   { text: "New: a phantom whose foe falls moves to the next.", values: { hop: 1 } },
-  { text: "Power 0.8 to 2x.", values: { power: 2 } },
+  { text: "Power 0.8 to 16x.", values: { power: 16 } },
 ]);
 
 export const PHANTOM_LEGION: SkillDef = {
@@ -29,6 +29,6 @@ export const PHANTOM_LEGION: SkillDef = {
     partner: "k_echo",
     name: "Phantom Army",
     text: "The legion stays 5 seconds, each phantom cutting again and again and moving on when its foe falls.",
-    row: evolvedRow(LEVELS[7], "The legion stays 5 s.", { army: 5, armyEvery: 0.5 }),
+    row: evolvedRow(LEVELS[7], "The legion stays 5 s.", { army: 5, armyEvery: 0.5, power: 4.5 }),
   },
 };

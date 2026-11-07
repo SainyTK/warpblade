@@ -458,10 +458,10 @@ Ultimate, easy, U. Phantoms of Kael appear behind foes and cut them, in place of
 | 5 | New: struck foes cannot turn for 2 s. | lock 2 |
 | 6 | Recharge 20 to 15 s. | recharge 15 |
 | 7 | New: a phantom whose foe falls moves to the next. | hop 1 |
-| 8 | Power 0.8 to 2x. | power 2 |
+| 8 | Power 0.8 to 16x. | power 16 |
 
 Evolution **Phantom Army** (partner `k_echo`): The legion stays 5 seconds, each phantom cutting again and again and moving on when its foe falls.
-Evolved values added: army 5, armyEvery 0.5.
+Evolved values added: army 5, armyEvery 0.5, power 4.5.
 Code: `ultimates/phantomLegion.ts`.
 
 #### `k_starfall` Starfall
@@ -477,7 +477,7 @@ Ultimate, timed, U. Meteors rain on the foes in reach and set the floor alight, 
 | 5 | New: meteors throw foes up. | launch 1 |
 | 6 | New: 3 more meteors fall on the densest group. | late 3 |
 | 7 | Recharge 20 to 15 s. | recharge 15 |
-| 8 | Power 1.3 to 3x; the floor burns longer. | power 3, floor 5 |
+| 8 | Power 1.3 to 12x; the floor burns longer. | power 12, floor 5 |
 
 Evolution **Cataclysm** (partner `k_flame`): Meteors keep falling for 4 seconds on foes near Kael, each landing as a Fire Flask burst.
 Evolved values added: rain 4, rainEvery 0.25.
