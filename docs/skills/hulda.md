@@ -560,3 +560,16 @@ Points where Hulda's design needs the contract or the framework to move; not cha
 - Precise budgets per second need rare, very large hits (12x to 30x AD) or a buff like Fury to reach 2.5 to 3 times easy. Confirm buffs count toward the budget; without them her precise skills sit near 2 times.
 - Bull Rush out of a landed blow's recovery stays: L starts the same rush it always does and ends the string. Confirm the owner does not count this as an extended combo input.
 - The base throw now picks itself (forward or suplex by where foes stand), which removes all directional input from the hold. This is a base kit change in the kit code, done in the build phase.
+
+## As built
+
+The skill data in `src/constants/characters/hulda/skills/` is the source of truth for numbers; the tables above are the first design.
+Changes made while building:
+
+- Balance review must-changes are in the data: Wrecking Haymaker L8 +10x (crack 3x, knock-down 2x); Iron Counter L1 8x and L8 45x, Executioner's Grip 120x; Skyfall Breaker L1 8x and L8 45x with 6x pounds, Comet Grab 120x; Iron Wall L1 7x and L8 50x a blow, Unbreakable Wall 130x with at most 3 fists a brace on Ancestor's Fist's cooldown; Ancestor's Fist L8 55x and Hand of the Mountain 150x; Bull Horns L8 slam 3.5x and ring 1.5x; Stampede L8 shoulder 0.8x and trail 0.6x; Crushing Grip L8 2.5x a second a stack for 8 s; Rust Shards L8 0.3x; Shield-Sister L8 0.8x a pass; Giant Swing gained a level 2 property (swung foes reel).
+- Suggestions taken: Wrecking Throw L8 path 3.5x and burst 4x; Titan Throw L8 burst 3x; Unbroken L8 +100%. Per-cast totals against Quake Drop are in the ultimates' code comments.
+- Loops closed: flung bodies fling no further and emit no `throw` event; a broken plate heals at most once in 2 s whatever refills it; summons and ticks pass their skill id as source, so they emit no events.
+- Iron Hide's start Grit fills when the skill is taken, so a card taken mid-run still gives the plates.
+- Rust Shards' weaken softens blows on her while a rusted foe stands within 40 px of her.
+- Executioner's Grip's suplex skips the counter's throw doubling, so it stays at 120x.
+- Unbroken's start pose is the taunt's chest slap.
