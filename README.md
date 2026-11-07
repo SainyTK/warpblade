@@ -89,7 +89,7 @@ His crystal sword can be thrown, and wherever it lands, he follows.
   `J` throws a four-blow string of jab, cross, body hook and an overhand haymaker, a hammer fist in the air, and a knee while she holds a foe.
   `K` grabs the foe ahead and holds it while she walks, then throws it: forward into the others, a suplex into the floor behind her with the side behind held, or straight up with Up.
   Bigger foes are crushed in both hands instead, and in the air `K` is Skyfall Grab, which catches a flier and drives it into the floor.
-  `L` is an armoured Bull Rush, `I` a Bellow that drags foes in for MP, and `O` a taunt.
+  `L` is an armoured Bull Rush, `I` a Bellow that drags foes in, and fliers down to her hands, for MP, and `O` a taunt.
   Her blows, grabs and throws fill Grit, four iron plates under stamina; a blow on a full plate breaks it for half the damage and never stops her (see [docs/hulda-design.md](docs/hulda-design.md)).
   Sable and Hulda start locked and are bought with coins.
   The hero behind the menu changes as you look through the cards, and the choice is saved in this browser.

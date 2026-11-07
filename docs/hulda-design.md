@@ -102,6 +102,7 @@ Bull Rush: floor only, 25 stamina, a two-frame load, 0.32 s at 200 px/s times mo
 Every foe she runs into takes 0.6x, a 180 knockback and a 0.4 s stun once per rush, and a guard breaks.
 Bellow: 20 MP, 4 s recharge on the HUD tab where Sable shows her snare's.
 Every foe within 80 px takes 0.6x ability power, minions reel 0.5 s, and all of them are dragged 36 px toward her over 0.25 s, under three expanding crimson rings.
+Flying minions are also dragged up to 48 px down to her hands and reel 0.9 s, so Bellow then a grab catches a flier that hovers out of reach.
 Taunt: 0.7 s rooted, two chest slaps worth 12 Grit each, 3 s before the next.
 
 ## Balance check

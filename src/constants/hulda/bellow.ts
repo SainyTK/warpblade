@@ -10,9 +10,14 @@ export const BELLOW = {
   /** pixels each foe is dragged toward her, over this many seconds */
   pull: 36,
   pullTime: 0.25,
+  /** a flying minion is also dragged down, up to this many pixels, toward this height above her feet: her hands */
+  drop: 48,
+  dropTo: -14,
   /** damage as a multiple of ability power */
   power: 0.6,
   stun: 0.5,
+  /** a flier she drags down reels longer, so she can step in and grab it */
+  flierStun: 0.9,
   /** the three rings: how long each takes to reach its size, and the gap between them */
   ringTime: 0.3,
   ringGap: 0.09,

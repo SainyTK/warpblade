@@ -5,6 +5,7 @@ import type { Enemy } from "../../../types/enemy";
 import { dealDamage } from "../../damage";
 import { createBellowRing } from "../../effects/bellowRing";
 import { enemyCenter } from "../../enemies/enemy";
+import { kindOf } from "../../enemies/kinds";
 import { game, hero, lights, progress } from "../../state";
 import { shake } from "../../world";
 import { isFree, setState, settle } from "../actions";
@@ -34,7 +35,7 @@ export function pressBellow(): boolean {
   return true;
 }
 
-/** every foe in reach takes ability power damage, minions reel, and all of them are dragged toward her */
+/** every foe in reach takes ability power damage, minions reel, and all of them are dragged toward her, fliers down */
 function roar(): void {
   const h = hero;
   const caught: Enemy[] = [];
@@ -42,11 +43,12 @@ function roar(): void {
     if (e.hp <= 0) continue;
     const [cx, cy] = enemyCenter(e);
     if (Math.hypot(cx - h.x, cy - (h.y - 18)) > BELLOW.reach) continue;
-    dealDamage(e, progress.stats.ap * BELLOW.power, { fromX: h.x, kx: 0, stun: BELLOW.stun });
+    const stun = kindOf(e.type).flies ? BELLOW.flierStun : BELLOW.stun;
+    dealDamage(e, progress.stats.ap * BELLOW.power, { fromX: h.x, kx: 0, stun });
     caught.push(e);
   }
   gainGrit(GRIT.bellow);
-  game.fx.push(createBellowRing(h.x + h.face * 4, h.y - 22, caught, h.x, skin.ramp));
+  game.fx.push(createBellowRing(h.x + h.face * 4, h.y - 22, caught, [h.x, h.y], skin.ramp));
   lights.add(h.x, h.y - 20, 50, skin.ramp[4], 0.7, 0.3);
   shake(0.15, 1.5);
   sfx.tone(140, 55, 0.35, "sawtooth", 0.08);
