@@ -95,6 +95,9 @@ export function headCenter(p: Pose): Vec {
 /** where the scarf is tied on, as drawn */
 export const scarfAnchor = (p: Pose): Vec => drawnPoint(p, ...atNeck(p, -2, 0.5));
 
+/** where a sash leaves the belt at the back of the hip, as drawn */
+export const sashAnchor = (p: Pose): Vec => drawnPoint(p, ...atHip(p, -2.5, -1.5));
+
 /** where the ponytail leaves the back of the head, as drawn */
 export function tailAnchor(p: Pose): Vec {
   const [hx, hy] = headCenter(p);

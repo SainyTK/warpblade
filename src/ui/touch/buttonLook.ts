@@ -1,5 +1,6 @@
 import { STAMINA } from "../../constants/combat";
 import { RUSH } from "../../constants/hulda/rush";
+import { BACKLINE } from "../../constants/orrin/backline";
 import { HOP, SLIDE } from "../../constants/sable/moves";
 import { TOUCH_TEXT } from "../../constants/touch";
 import { ULT_LEVELS } from "../../constants/ultimate";
@@ -7,6 +8,13 @@ import { VAULT } from "../../constants/ysra/stance";
 import { abilityMp, abilityRecharge, selectedAbility } from "../../game/hero/hulda/abilities";
 import { hulda } from "../../game/hero/hulda/memory";
 import { rushCost } from "../../game/hero/hulda/rush";
+import {
+  abilityMp as orrinMp,
+  abilityRecharge as orrinRecharge,
+  selectedAbility as orrinAbility,
+} from "../../game/hero/orrin/abilities";
+import { hookCost } from "../../game/hero/orrin/hook";
+import { orrin } from "../../game/hero/orrin/memory";
 import { sable } from "../../game/hero/sable/memory";
 import { reloadShare } from "../../game/hero/sable/reload";
 import { selectedSpell } from "../../game/hero/sable/spells/cast";
@@ -87,6 +95,30 @@ function huldaLook(spec: TouchButtonSpec, look: ButtonLook): void {
   }
 }
 
+/** Orrin's hook needs stamina and, in the air, a hook left; the reel and Backline need stamina; I shows the selected
+ *  ability's MP and recharge */
+function orrinLook(spec: TouchButtonSpec, look: ButtonLook): void {
+  switch (spec.action) {
+    case "dash": {
+      const swinging = hero.state === "swing";
+      look.ready = swinging ? hero.stamina > 0 : hero.stamina >= BACKLINE.cost && orrin.backlineCd <= 0;
+      look.cooldown = look.ready ? 0 : swinging ? 1 : 1 - Math.min(1, hero.stamina / BACKLINE.cost);
+      break;
+    }
+    case "warp":
+      look.ready = hero.stamina >= hookCost() && (hero.ground || orrin.hooks > 0);
+      look.cooldown = hero.stamina >= hookCost() ? 0 : 1 - hero.stamina / hookCost();
+      break;
+    case "cast": {
+      const id = orrinAbility();
+      look.cooldown = orrinRecharge(id);
+      look.ready = look.cooldown <= 0 && hero.mp >= orrinMp(id);
+      break;
+    }
+    default:
+  }
+}
+
 /** Ysra's guard needs stamina, her vault waits out its recharge, and the rite fills as Heat comes to cover it */
 function ysraLook(spec: TouchButtonSpec, look: ButtonLook): void {
   switch (spec.action) {
@@ -119,6 +151,7 @@ export function buttonLook(spec: TouchButtonSpec, pressed: boolean): ButtonLook 
     look.charge = chargeProgress();
   } else if (character.kit === "sable") sableLook(spec, look);
   else if (character.kit === "hulda") huldaLook(spec, look);
+  else if (character.kit === "orrin") orrinLook(spec, look);
   else if (character.kit === "ysra") ysraLook(spec, look);
   else kaelLook(spec, look);
   return look;

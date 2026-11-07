@@ -8,6 +8,7 @@ import { hurtHero } from "../../hurtHero";
 import { particles, rng } from "../../state";
 import { boxHit, heroBox } from "../../world";
 import { DAY_SPARKS, DAY_COLORS as DC } from "./colors";
+import { shotWarded } from "../../shotWards";
 
 const FALL = 34;
 const FADE = 0.5;
@@ -25,6 +26,8 @@ export function createPollen(x: number, y: number, vx: number, damage: number): 
       }
       o.x += (vx * Math.max(0, 1 - o.t) + Math.sin(o.t * 3 + o.seed) * 10) * dt;
       o.y += FALL * Math.min(1, 0.4 + o.t) * dt;
+      // a ward (Whirlwall) breaks the shot
+      if (shotWarded(o.x, o.y)) return false;
       if (rng.chance(0.15))
         particles.spawn(PK.MOTE, o.x + rng.range(-3, 3), o.y, rng.range(-6, 6), rng.range(4, 12), rng.range(0.3, 0.6), {
           col: rng.chance(0.5) ? P[2] : DC.pollenPink,

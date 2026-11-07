@@ -3,6 +3,7 @@ import { HERO_COLORS as HC } from "../../../constants/palette";
 import type { SpriteCanvas } from "../../../engine/sprite";
 import { lerp } from "../../../utils/math";
 import { skin } from "../skin";
+import { drawChainCoil } from "./chainCoil";
 import { drawGauntlet } from "./gauntlets";
 import { reach, type Vec } from "./reach";
 
@@ -17,6 +18,7 @@ const along = (a: Vec, b: Vec, u: number): Vec => [lerp(a[0], b[0], u), lerp(a[1
  * the arm behind the body is a shade darker.
  */
 export function drawArm(s: SpriteCanvas, shoulder: Vec, elbow: Vec, hand: Vec, front: boolean): void {
+  if (skin.bareArms) return drawBareArm(s, shoulder, elbow, hand, front);
   const sleeve = front ? HC.coat : HC.coatDark;
   s.begin();
   s.stroke(shoulder[0], shoulder[1], elbow[0], elbow[1], 1.25, sleeve);
@@ -45,5 +47,29 @@ export function drawArm(s: SpriteCanvas, shoulder: Vec, elbow: Vec, hand: Vec, f
   s.dot(shoulder[0], shoulder[1] - 0.2, 1.5, HC.steel);
   s.shadeEdges(HC.steel, HC.steelLight, HC.steelDark, 2);
   s.set(shoulder[0] - 0.7, shoulder[1] - 1, HC.steelGlint);
+  s.commit();
+}
+
+/**
+ * A bare arm for a hero in a sleeveless vest: skin from the shoulder down, lit in front and a shade darker behind, a
+ * wrapped wrist, and a bare fist. The far forearm of a chain fighter carries the chain's coils.
+ */
+function drawBareArm(s: SpriteCanvas, shoulder: Vec, elbow: Vec, hand: Vec, front: boolean): void {
+  const flesh = front ? HC.skin : HC.skinShade;
+  s.begin();
+  s.stroke(shoulder[0], shoulder[1], elbow[0], elbow[1], 1.15, flesh);
+  s.stroke(elbow[0], elbow[1], hand[0], hand[1], 1.0, flesh);
+  s.shadeEdges(flesh, front ? HC.skinLight : HC.skin, front ? HC.skinShade : HC.skinDeep);
+  s.commit();
+  const [w0, w1] = [along(elbow, hand, 0.62), along(elbow, hand, 0.9)];
+  const wrap = front ? HC.glove : HC.trimDark;
+  s.begin();
+  s.stroke(w0[0], w0[1], w1[0], w1[1], 1.1, wrap);
+  s.shadeEdges(wrap, front ? HC.gloveLight : HC.glove, HC.hilt);
+  s.commit();
+  if (skin.weapon === "chain" && !front) drawChainCoil(s, elbow, hand);
+  s.begin();
+  s.dot(hand[0], hand[1], 1.1, flesh);
+  s.shadeEdges(flesh, front ? HC.skinLight : HC.skin, HC.skinDeep);
   s.commit();
 }

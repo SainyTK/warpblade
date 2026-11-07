@@ -8,6 +8,7 @@ import { hurtHero } from "../../hurtHero";
 import { game, hero, particles, rng } from "../../state";
 import { boxHit, dust, heroBox } from "../../world";
 import { RAIN_FOES as C, MUD_SPARKS } from "./colors";
+import { shotWarded } from "../../shotWards";
 
 const GRAVITY = 520;
 const PUDDLE_LIFE = 2.4;
@@ -73,6 +74,8 @@ export function createMudGlob(
       o.vy += GRAVITY * dt;
       o.x += o.vx * dt;
       o.y += o.vy * dt;
+      // a ward (Whirlwall) breaks the shot
+      if (shotWarded(o.x, o.y)) return false;
       if (rng.chance(0.3))
         particles.spawn(PK.SPARK, o.x, o.y, -o.vx * 0.1, 0, rng.range(0.1, 0.25), { sparks: MUD_SPARKS });
       let struck = false;

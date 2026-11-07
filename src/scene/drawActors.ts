@@ -6,6 +6,7 @@ import { blit, detailCanvas } from "../engine/sprite";
 import { enemyBox, enemyCenter } from "../game/enemies/enemy";
 import { kindOf } from "../game/enemies/kinds";
 import { drawHero } from "../game/hero/drawHero";
+import { kit } from "../game/hero/kits";
 import { heroLook } from "../game/hero/look";
 import { skin } from "../game/hero/skin";
 import { canAffordUlt } from "../game/hero/ultimate";
@@ -115,6 +116,7 @@ export function drawHeroLayer(): void {
     glow(g.x, g.y - 18, 14, skin.glow, 0.12 * k);
   }
   if (h.state === "charge") drawChargeRing();
+  kit().drawBack?.();
   const flare = clamp((Math.abs(h.vx) / 115) * 3, 0, 3) + (h.ground ? 0 : 1.5);
   h.hand = drawHero(heroSprite, h.pose, heroLook(flare));
   const blink = h.inv > 0 && h.state !== "warpStrike" && h.state !== "ultimate" && Math.floor(game.t * 20) % 2 === 0;
@@ -131,6 +133,7 @@ export function drawHeroLayer(): void {
     glowLine(hx + ca * 3, hy + sn * 3, hx + ca * (skin.reach - 1), hy + sn * (skin.reach - 1), 6, skin.glow, k);
   }
   if (h.state === "cast" && h.st < CLIPS.cast.hit + 0.05) drawCastRing(h.hand);
+  kit().draw?.();
 }
 
 export function drawPickups(): void {

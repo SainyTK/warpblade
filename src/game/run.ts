@@ -10,6 +10,7 @@ import { resetDanger } from "./lowHealth";
 import { resetProgress } from "./progress";
 import { forgetSkills } from "./skills/runtime";
 import { freshHero, game, hero, ponytail, progress, scarf, showBanner } from "./state";
+import { clearWards } from "./shotWards";
 
 /** after a fall, a cleared stage or a restart from the menu: Kael starts over at level 1 from wave 1 */
 export function resetRun(banner = "Rise again"): void {
@@ -18,6 +19,7 @@ export function resetRun(banner = "Rise again"): void {
   resetLedger();
   forgetSkills();
   clearChests();
+  clearWards();
   Object.assign(game, {
     mode: "play",
     enemies: [],

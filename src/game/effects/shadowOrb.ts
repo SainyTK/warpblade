@@ -9,6 +9,7 @@ import { hurtHero } from "../hurtHero";
 import { game, particles, rng } from "../state";
 import { boxHit, heroBox } from "../world";
 import { createImpact } from "./impact";
+import { shotWarded } from "../shotWards";
 
 /** a slow orb of shadow fired by the Rift Warden; it bursts on Kael, the floor or the edge of the stage */
 export function createShadowOrb(x: number, y: number, vx: number, vy: number, damage: number): Effect {
@@ -19,6 +20,8 @@ export function createShadowOrb(x: number, y: number, vx: number, vy: number, da
       o.t += dt;
       o.x += vx * dt;
       o.y += vy * dt;
+      // a ward (Whirlwall) breaks the shot
+      if (shotWarded(o.x, o.y)) return false;
       if (rng.chance(0.5))
         particles.spawn(PK.EMBER, o.x, o.y, -vx * 0.1, -vy * 0.1, rng.range(0.2, 0.4), { sparks: SPARKS.shadow });
       let struck = false;

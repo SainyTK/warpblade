@@ -9,6 +9,7 @@ import { hurtHero } from "../../hurtHero";
 import { hero, particles, rng } from "../../state";
 import { boxHit, heroBox } from "../../world";
 import { DAY_SPARKS, DAY_COLORS as DC } from "./colors";
+import { shotWarded } from "../../shotWards";
 
 const GRAVITY = 420;
 const SPLASH = { reach: 10, height: 14 } as const;
@@ -39,6 +40,8 @@ export function createAcorn(x: number, y: number, tx: number, ty: number, flight
       vy += GRAVITY * dt;
       o.y += vy * dt;
       o.spin += dt * 12;
+      // a ward (Whirlwall) breaks the shot
+      if (shotWarded(o.x, o.y)) return false;
       let struck = false;
       eachStanding(() => {
         if (struck || !boxHit([o.x - 2, o.y - 2, o.x + 2, o.y + 2], heroBox())) return;

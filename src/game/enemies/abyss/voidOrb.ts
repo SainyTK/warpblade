@@ -8,6 +8,7 @@ import { hurtHero } from "../../hurtHero";
 import { game, particles, rng } from "../../state";
 import { boxHit, heroBox } from "../../world";
 import { VOID, VOID_SPARKS } from "./colors";
+import { shotWarded } from "../../shotWards";
 
 export const ORB_GRAVITY = 240;
 
@@ -27,6 +28,8 @@ export function createVoidOrb(x: number, y: number, vx: number, vy: number, dama
       o.vy += ORB_GRAVITY * dt;
       o.x += vx * dt;
       o.y += o.vy * dt;
+      // a ward (Whirlwall) breaks the shot
+      if (shotWarded(o.x, o.y)) return false;
       if (rng.chance(0.5))
         particles.spawn(PK.EMBER, o.x, o.y, -vx * 0.1, -o.vy * 0.1, rng.range(0.2, 0.4), { sparks: VOID_SPARKS });
       let struck = false;

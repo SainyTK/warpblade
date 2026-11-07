@@ -9,6 +9,7 @@ import { hurtHero } from "../../hurtHero";
 import { particles, rng } from "../../state";
 import { boxHit, heroBox } from "../../world";
 import { PRISM_SPARKS } from "./colors";
+import { shotWarded } from "../../shotWards";
 
 /** a sliver of prism crystal shot by a Prism Sprite; it shatters on Kael, the floor or the edge of the stage */
 export function createPrismShard(x: number, y: number, vx: number, vy: number, damage: number, hue: Color): Effect {
@@ -27,6 +28,8 @@ export function createPrismShard(x: number, y: number, vx: number, vy: number, d
       o.t += dt;
       o.x += vx * dt;
       o.y += vy * dt;
+      // a ward (Whirlwall) breaks the shot
+      if (shotWarded(o.x, o.y)) return false;
       if (rng.chance(0.35))
         particles.spawn(PK.MOTE, o.x, o.y, -vx * 0.1, -vy * 0.1, rng.range(0.15, 0.3), { col: hue, size: 0.5 });
       let struck = false;

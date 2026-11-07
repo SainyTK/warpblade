@@ -10,4 +10,5 @@ export const HERO_SOURCE_ICONS: Readonly<Record<string, Readonly<Record<HeroSour
   ysra: { attacks: "y_heft", abilities: "r_flare", ultimate: "y_sunspear" },
   sable: { attacks: "sable_bolts", abilities: "sable_snare", ultimate: "sable_storm" },
   hulda: { attacks: "h_fists", abilities: "h_bellow", ultimate: "h_quake" },
+  orrin: { attacks: "o_chain", abilities: "o_whirl", ultimate: "o_pendulum" },
 };

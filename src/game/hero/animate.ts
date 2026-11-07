@@ -1,11 +1,12 @@
 import { HERO_MOVE as M } from "../../constants/combat";
 import { WORLD_COLORS } from "../../constants/palette";
 import { PK } from "../../types/particle";
-import { scarfAnchor, tailAnchor } from "../../utils/poseFrame";
+import { sashAnchor, scarfAnchor, tailAnchor } from "../../utils/poseFrame";
 import { game, hero, particles, ponytail, scarf } from "../state";
 import { isFree, setState } from "./actions";
 import { kit } from "./kits";
 import { heroPose } from "./pose";
+import { skin } from "./skin";
 
 /** pick the free state from the motion, step the stride, pose the body and swing the scarf and ponytail */
 export function animateHero(dt: number): void {
@@ -32,10 +33,11 @@ export function animateHero(dt: number): void {
     h.y = h.anchor.y + 38;
   }
   h.pose = heroPose(h, game.t);
-  // the scarf hangs off the neck and the ponytail off the back of the head, blown back by a breeze and by speed
+  // the scarf hangs off the neck (a sash off the belt) and the ponytail off the back of the head, blown back by a breeze
+  // and by speed
   const p = h.pose;
   const wind = -h.face * (22 + Math.sin(game.t * 3.1) * 18) - h.vx * 1.4;
-  const [kx, ky] = scarfAnchor(p);
+  const [kx, ky] = skin.sash ? sashAnchor(p) : scarfAnchor(p);
   const [tx, ty] = tailAnchor(p);
   scarf.step(h.x + h.face * kx, h.y + ky, dt, wind);
   ponytail.step(h.x + h.face * tx, h.y + ty, dt, wind * 0.6);
