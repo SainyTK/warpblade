@@ -212,22 +212,36 @@ export function stepChainLoop(dt: number): void {
   loop.step(hand.x, hand.y, dt, -hero.vx * 1.2);
 }
 
-/** behind him and the foes: the tears and the pin's chain */
+/** behind him and the foes: the tears */
 export function drawOrrinBack(): void {
   place();
   if (orrin.latch === "air" && orrin.latchAt) tear(orrin.latchAt, orrin.latchT, orrin.biteLeft);
   if (orrin.ultAt && (hero.state === "pendulum" || hero.state === "maelstrom")) ultTear(orrin.ultAt);
+}
+
+/**
+ * Anchor Pin, in front of the foes so their bodies never hide it: a steel stake with a brass cap driven into the floor
+ * just in front of the foe, and a run of glinting links from it to the foe's side.
+ */
+function drawPin(): void {
   const pinned = orrinHost.pinned;
-  if (orrin.pinAt && pinned && pinned.hp > 0) {
-    const [cx, cy] = enemyCenter(pinned);
-    drawLinks(orrin.pinAt.x, orrin.pinAt.y - 1, cx, cy);
-    px(orrin.pinAt.x, orrin.pinAt.y - 1, PAL.brass[4]);
-  }
+  const at = orrin.pinAt;
+  if (!at || !pinned || pinned.hp <= 0) return;
+  const [cx, cy] = enemyCenter(pinned);
+  const side = Math.sign(cx - at.x) || 1;
+  drawLinks(at.x, at.y - 3, cx - side * 3, cy + 2, PAL.brass[4]);
+  for (let k = 1; k <= 4; k++) px(at.x, at.y - k, k === 1 ? HC.steelDark : HC.steelLight);
+  px(at.x - 1, at.y - 4, PAL.brass[2]);
+  px(at.x, at.y - 5, PAL.brass[4]);
+  px(at.x + 1, at.y - 4, PAL.brass[2]);
+  px(at.x - 1, at.y, HC.steelDeep);
+  px(at.x + 1, at.y, HC.steelDeep);
 }
 
 /** in front of him: the chain from his hand, in whatever shape the state gives it */
 export function drawOrrin(): void {
   place();
+  drawPin();
   const h = hero;
   const hand = handAt();
   if (orrin.arc >= 0) return blowChain(HANGING_ARC, "hanging", orrin.arc, HANGING_ARC.dur);

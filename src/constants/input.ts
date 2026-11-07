@@ -74,7 +74,7 @@ export const ACTION_TEXT: Record<KitId, Record<InputAction, string>> = {
     right: "Walk right. No run",
     up: "Jump. One low, heavy jump. Held as you throw, toss the foe straight up",
     down: "With jump, drop through a ledge. Held as you throw, Giant Swing once learned",
-    attack: "Fist string: jab, cross, body hook, haymaker. In the air, a hammer fist. While holding a foe, a knee",
+    attack: "Fist string: jab, body hook, haymaker. In the air, a hammer fist. While holding a foe, a knee",
     dash: "Bull Rush: an armoured shoulder charge that spends stamina",
     run: "Walk toward the side held",
     warp: "Grab a foe ahead; big foes are crushed. While holding, throw: forward, or suplex with the side behind held. In the air, Skyfall Grab",

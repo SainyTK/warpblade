@@ -75,16 +75,16 @@ His crystal sword can be thrown, and wherever it lands, he follows.
   Most pay coins, a few stay hidden as ??? until an earlier one is earned, and a small banner slides down when one is earned without stopping play.
   The Achievements page on the start menu shows what each one asks, with a progress bar for those that count up, and the result screen names those a run earned.
   Kael and Ysra are free; every newer hero is unlocked with coins on the hero screen, each one costing more than the last (see [docs/achievements.md](docs/achievements.md)).
-- **Five heroes.** Start opens the hero screen, a roster of hero tiles over one panel for the hero in focus. Kael throws his crystal sword and appears where it lands; he is balanced and learns every ability from picks.
+- **Five heroes.** Start opens the hero screen, a roster of hero tiles over one panel for the hero in focus. Kael throws his crystal sword and appears where it lands; he is balanced, starts with Warp Strike, Crystal Lance and Crystal Burst, and adds his spells and ultimates from picks.
   Ysra, the ember lancer, is a flame-temple guard who woke when the braziers lit again.
   She shares Kael's rig and plays nothing like him: tougher and slower, with one heavy jump and no dash.
   Her glaive string pokes far and pierces every foe in the line, holding `J` winds a lunge, and up or down with `J` hooks a foe up or drags it in.
   `K` pole-vaults over foes on the floor, also straight out of a brace or a backstep, and dives glaive first in the air.
   Holding `L` braces against blows from the front, with a parry for a press just in time that gives stamina back.
   Her blows build Heat, a second bar that pays for fire rites on `I`; MP only pays for her ultimate.
-  She starts every run with the whole glaive kit and the Flare rite, and her picks change and extend those moves.
+  She starts every run with the whole glaive kit and the Flare and Cinder Lash rites, and her picks change and extend those moves.
   Her special is Pyre Wave, a wall of flame rolling ahead of her.
-  Her three ultimates are Sunspear, a burning spear thrown the length of the stage through every foe in its line; Phoenix Dive, a crash from the sky onto the thickest crowd; and Volcanic Rift, a crack in the floor that erupts in pillars of fire.
+  Her two ultimates are Sunspear, a burning spear thrown the length of the stage through every foe in its line, and Volcanic Rift, a crack in the floor that erupts in pillars of fire.
   Sable, the hooded hunter, fights at range with a repeating crossbow: `J` shoots and aims with up or down, the quiver runs dry and reloads on `O`, with a perfect reload for a press in the bright window.
   `K` kicks foes away, `L` hops back and shoots or slides forward under blows, and `I` sets snares for MP (see [docs/sable-design.md](docs/sable-design.md)).
   Hulda, the iron grappler, fights bare-handed in iron gauntlets with the shortest reach of all and no dodge.

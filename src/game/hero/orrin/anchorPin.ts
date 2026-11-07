@@ -4,7 +4,7 @@ import { sfx } from "../../../services/audio";
 import type { Enemy } from "../../../types/enemy";
 import { dealDamage } from "../../damage";
 import { createImpact } from "../../effects/impact";
-import { enemyCenter } from "../../enemies/enemy";
+import { enemyBox, enemyCenter } from "../../enemies/enemy";
 import { emitSkillEvent } from "../../skills/events";
 import { skillValues, withCharms } from "../../skills/query";
 import { game, hero, progress } from "../../state";
@@ -14,12 +14,16 @@ import { canCast } from "./castCheck";
 import { orrin, orrinHost } from "./memory";
 import { RUST_ID, rustFoe } from "./rust";
 
+/** pixels in front of the foe's body the stake goes in */
+const PIN_GAP = 4;
+
 /** the nearest foe ahead within reach, or null */
 function foeAhead(): Enemy | null {
   let best: Enemy | null = null;
   let bestD: number = ANCHOR_PIN.reach;
   for (const e of game.enemies) {
-    if (e.hp <= 0) continue;
+    // the pin nails a foe to the floor: one in the air is not a target
+    if (e.hp <= 0 || e.air || Math.abs(e.y - surfaceBelow(e.x, e.y - 4)) > 1) continue;
     const d = (e.x - hero.x) * hero.face;
     if (d < -4 || d > bestD || Math.abs(enemyCenter(e)[1] - (hero.y - 16)) > 50) continue;
     best = e;
@@ -63,7 +67,10 @@ function drive(): void {
   dealDamage(e, progress.stats.ap * ANCHOR_PIN.power, { fromX: hero.x, kx: 0, heavy: true, source: "abilities" });
   e.pinned = Math.max(e.pinned, root);
   if (skillValues(RUST_ID).pin) rustFoe(e);
-  orrin.pinAt = { x: e.x, y: surfaceBelow(e.x, e.y - 4) };
+  // the stake goes in just in front of the foe's near side, where the foe's body cannot hide it
+  const [x0, , x1] = enemyBox(e);
+  const near = hero.face > 0 ? x0 - PIN_GAP : x1 + PIN_GAP;
+  orrin.pinAt = { x: near, y: surfaceBelow(near, e.y - 4) };
   orrin.pinLeft = root;
   game.fx.push(createImpact(cx, cy, hero.face, true));
   hitStop(0.06);
