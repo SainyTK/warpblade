@@ -42,7 +42,7 @@ export const HUNTING_HAWK: SkillDef = {
       values: {
         chance: 0.18,
         cooldown: 1.5,
-        power: 2.8,
+        power: 1.6,
         stay: 6,
         every: 1.2,
         hawks: 2,
@@ -61,7 +61,7 @@ export const HUNTING_HAWK: SkillDef = {
       values: {
         chance: 1,
         cooldown: 1.5,
-        power: 2.8,
+        power: 1.6,
         stay: 999,
         every: 1.2,
         hawks: 4,

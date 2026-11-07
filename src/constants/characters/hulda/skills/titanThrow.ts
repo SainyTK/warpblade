@@ -40,7 +40,7 @@ export const TITAN_THROW: SkillDef = {
     },
     {
       text: "Burst far harder.",
-      values: { reach: 120, fliers: 1, big: 1, burst: 3, path: 1, bounce: 1, cooldown: 16, scatter: 1, swing: 0 },
+      values: { reach: 120, fliers: 1, big: 1, burst: 5, path: 1.5, bounce: 1, cooldown: 16, scatter: 1, swing: 0 },
     },
   ],
   evolution: {
@@ -49,7 +49,7 @@ export const TITAN_THROW: SkillDef = {
     text: "You swing the heap round twice first, striking everything near, then hurl it wall to wall.",
     row: {
       text: "Swing the heap, then hurl it wall to wall.",
-      values: { reach: 160, fliers: 1, big: 1, burst: 4, path: 1, bounce: 1, cooldown: 16, scatter: 1, swing: 1 },
+      values: { reach: 160, fliers: 1, big: 1, burst: 9, path: 1.5, bounce: 1, cooldown: 16, scatter: 1, swing: 1 },
     },
   },
 };

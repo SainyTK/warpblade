@@ -29,8 +29,8 @@ export const SCATTERSHOT: SkillDef = {
       values: { sides: 4, every: 2, share: 0.7, bend: 1, pierce: 1, airSides: 0 },
     },
     {
-      text: "Every bolt fans out into five, harder.",
-      values: { sides: 4, every: 4, share: 0.85, bend: 1, pierce: 1, airSides: 0 },
+      text: "Every bolt fans out into five.",
+      values: { sides: 4, every: 4, share: 0.7, bend: 1, pierce: 1, airSides: 0 },
     },
   ],
   evolution: {
@@ -39,7 +39,7 @@ export const SCATTERSHOT: SkillDef = {
     text: "In the air every bolt bursts into a hail of seven slanting down; on the floor every bolt fans into five.",
     row: {
       text: "Air bolts burst into a hail.",
-      values: { sides: 4, every: 4, share: 0.85, bend: 1, pierce: 1, airSides: 6 },
+      values: { sides: 4, every: 4, share: 0.7, bend: 1, pierce: 1, airSides: 6 },
     },
   },
 };

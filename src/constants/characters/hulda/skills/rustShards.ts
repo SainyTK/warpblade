@@ -39,7 +39,7 @@ export const RUST_SHARDS: SkillDef = {
     },
     {
       text: "Rust far stronger.",
-      values: { radius: 50, damage: 0.3, duration: 6, max: 5, any: 1, weaken: 0.15, onBlow: 1, reckoning: 0 },
+      values: { radius: 50, damage: 0.6, duration: 6, max: 5, any: 1, weaken: 0.15, onBlow: 1, reckoning: 0 },
     },
   ],
   evolution: {
@@ -48,7 +48,7 @@ export const RUST_SHARDS: SkillDef = {
     text: "Every counter and every broken plate consumes the rust on foes near for heavy damage, then sprays fresh shards.",
     row: {
       text: "Counters and breaks consume rust.",
-      values: { radius: 50, damage: 0.3, duration: 6, max: 5, any: 1, weaken: 0.15, onBlow: 1, reckoning: 4 },
+      values: { radius: 50, damage: 0.6, duration: 6, max: 5, any: 1, weaken: 0.15, onBlow: 1, reckoning: 4 },
     },
   },
 };

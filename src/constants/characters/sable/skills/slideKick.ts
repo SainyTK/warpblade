@@ -39,7 +39,7 @@ export const SLIDE_KICK: SkillDef = {
     },
     {
       text: "Tripped foes take much more and fly higher.",
-      values: { power: 6, trip: 0.9, launch: 220, time: 0.4, cost: 12, turn: 1, charged: 3, refund: 3, tangle: 0 },
+      values: { power: 3.5, trip: 0.9, launch: 220, time: 0.4, cost: 12, turn: 1, charged: 3, refund: 3, tangle: 0 },
     },
   ],
   evolution: {
@@ -48,7 +48,7 @@ export const SLIDE_KICK: SkillDef = {
     text: "Foes the slide throws hang tangled in a net in the air, taking 25% more.",
     row: {
       text: "Thrown foes hang tangled in the air.",
-      values: { power: 6, trip: 0.9, launch: 220, time: 0.4, cost: 12, turn: 1, charged: 3, refund: 3, tangle: 1.5 },
+      values: { power: 3.5, trip: 0.9, launch: 220, time: 0.4, cost: 12, turn: 1, charged: 3, refund: 3, tangle: 1.5 },
     },
   },
 };

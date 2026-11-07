@@ -32,8 +32,8 @@ export const KNUCKLE_WAVE: SkillDef = {
     },
     { text: "Waves stagger.", values: { power: 0.8, reach: 50, blows: 3, pierce: 1, stagger: 0.3, both: 0, ring: 0 } },
     {
-      text: "Wave damage +60%, longer reach.",
-      values: { power: 1.3, reach: 60, blows: 3, pierce: 1, stagger: 0.3, both: 0, ring: 0 },
+      text: "Wave damage doubled, longer reach.",
+      values: { power: 2.6, reach: 60, blows: 3, pierce: 1, stagger: 0.3, both: 0, ring: 0 },
     },
   ],
   evolution: {
@@ -42,7 +42,7 @@ export const KNUCKLE_WAVE: SkillDef = {
     text: "Every wave runs far both ways and bursts in a ring where it ends.",
     row: {
       text: "Waves run both ways and burst.",
-      values: { power: 1.3, reach: 120, blows: 3, pierce: 1, stagger: 0.3, both: 1, ring: 30 },
+      values: { power: 1.8, reach: 120, blows: 3, pierce: 1, stagger: 0.3, both: 1, ring: 30 },
     },
   },
 };

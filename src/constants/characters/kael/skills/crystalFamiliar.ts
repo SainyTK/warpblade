@@ -7,7 +7,7 @@ import { evolvedRow, levelRows } from "../../../../utils/skillRows";
 const LEVELS = levelRows([
   {
     text: "A cast may call a crystal familiar that fires shards.",
-    values: { chance: 0.4, life: 6, every: 1, power: 0.8, pierce: 1, most: 1, cooldown: 1 },
+    values: { chance: 0.4, life: 6, every: 1, power: 0.3, pierce: 1, most: 1, cooldown: 1 },
   },
   { text: "Chance 40% to 70%.", values: { chance: 0.7 } },
   { text: "New: a cast fires a volley of 2 from each familiar out.", values: { volley: 2 } },
@@ -15,7 +15,7 @@ const LEVELS = levelRows([
   { text: "Familiars stay 10 s and fire faster.", values: { life: 10, every: 0.7 } },
   { text: "New: two familiars at once.", values: { most: 2 } },
   { text: "New: shards take the element just cast.", values: { element: 1 } },
-  { text: "Shard power 0.8 to 1.4; fire faster.", values: { power: 1.4, every: 0.6 } },
+  { text: "Shard power 0.3 to 0.5; fire faster.", values: { power: 0.5, every: 0.6 } },
 ]);
 
 export const CRYSTAL_FAMILIAR: SkillDef = {

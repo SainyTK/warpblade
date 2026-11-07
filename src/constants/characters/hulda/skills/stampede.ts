@@ -117,14 +117,14 @@ export const STAMPEDE: SkillDef = {
     {
       text: "Shoulder and trail hit harder.",
       values: {
-        trail: 0.6,
+        trail: 1.2,
         cost: 15,
         twice: 1,
         reach: 1.4,
         drag: 20,
         again: 1,
         launch: 1,
-        shoulder: 0.8,
+        shoulder: 1.5,
         stay: 0,
         sisters: 0,
       },
@@ -137,14 +137,14 @@ export const STAMPEDE: SkillDef = {
     row: {
       text: "The trail stays; sisters charge beside you.",
       values: {
-        trail: 0.6,
+        trail: 1.2,
         cost: 15,
         twice: 1,
         reach: 1.4,
         drag: 20,
         again: 1,
         launch: 1,
-        shoulder: 0.8,
+        shoulder: 1.5,
         stay: 3,
         sisters: 2,
       },
