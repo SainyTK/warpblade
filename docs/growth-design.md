@@ -105,7 +105,7 @@ Relic hits are not melee (guards do not stop them) and do not build Flow.
 `src/constants/waves.ts` and `src/utils/waves.ts`.
 
 - Still 30 waves in the same five eras with the same foes, mini bosses at 5, 10, 15 and 25 and the Warden at 20 and 30.
-- A wave has a quota of foes, `round(4 x 1.1^(wave - 1))` (4 at wave 1, 63 at wave 30), that stream in through rifts. At most `min(2 + ceil(0.6 x wave), 22)` stand at once; a new rift opens 0.35 s after a place frees. The wave ends when the quota is dead.
+- A wave has a quota of foes, `round(3 x 1.11^(wave - 1))` (3 at wave 1, 62 at wave 30), that stream in through rifts. At most `min(2 + ceil(0.6 x wave), 22)` stand at once; a new rift opens 0.35 s after a place frees. The wave ends when the quota is dead.
 - Mini boss waves bring the mini boss with a stream of flyers (the quota less one); boss waves bring the Warden with a stream of half the quota.
 - Rifts open away from every hero and spread from the foes and rifts already there. Minions standing their ground ease apart so a crowd stays readable.
 - Foe HP grows by x1.125 per wave (about x30 at wave 30); mini bosses have x3 and the Warden x6 on top. Experience grows by x1.07 per wave. Damage keeps its slow linear growth.

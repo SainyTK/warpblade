@@ -5,7 +5,7 @@ export const BOSS_WAVES: readonly number[] = [20, 30];
 export const WAVE_PAUSE = 2;
 
 /** foes a wave brings in all: base x growth^(wave - 1), rounded; 4 at wave 1, 63 at wave 30 */
-export const WAVE_QUOTA = { base: 4, growth: 1.1 } as const;
+export const WAVE_QUOTA = { base: 3, growth: 1.11 } as const;
 /** a boss wave streams this share of its quota besides the Warden */
 export const BOSS_STREAM_SHARE = 0.5;
 /** foes standing at once: base + ceil(perWave x wave), at most `most`; a co-op room's longer stream raises it to `coopMost` */
