@@ -16,7 +16,7 @@ export const HULDA: CharacterDef = {
   accent: "#ff5f6d",
   special: "quakeDrop",
   base: { ad: 12, ap: 6, hp: 120, mp: 70, stamina: 120, crit: 0.04, move: 0.9, aspd: 1, haste: 1 },
-  growth: { ad: 0.8, ap: 0.3, hp: 6, mp: 1 },
+  growth: { ad: 0, ap: 0, hp: 1.3, mp: 0.2 },
   branches: [BRAWL, IRON, HOLD, FUSION],
   startRanks: { t_bellow: 1 },
   skin: HULDA_SKIN,
