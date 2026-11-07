@@ -17,6 +17,7 @@ import { canHold, take } from "./hold";
 import { ironBigGrab } from "./iron";
 import { hulda } from "./memory";
 import { cometLeap } from "./skyfall";
+import { faceFor } from "./turn";
 
 /** the nearest live foe whose box meets this one, held by nobody */
 export function nearestIn(box: readonly [number, number, number, number], ok: (e: Enemy) => boolean): Enemy | null {
@@ -35,10 +36,11 @@ export function nearestIn(box: readonly [number, number, number, number], ok: (e
   return best;
 }
 
-/** K on the floor: both hands reach out */
-export function pressGrab(): boolean {
+/** K on the floor: both hands reach out, the way she is pushed */
+export function pressGrab(dir: number): boolean {
   if (!isFree() || !hero.ground) return false;
   if (cometLeap()) return true;
+  faceFor(dir);
   hulda.struck = false;
   hero.vx = 0;
   setState("grab");

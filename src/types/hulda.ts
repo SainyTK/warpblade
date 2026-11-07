@@ -74,6 +74,12 @@ export interface HuldaMemory {
   carried: readonly Enemy[];
   /** foes the rush under way has struck, for the dash event; replaced whole */
   passed: readonly Enemy[];
+  /**
+   * Seconds into the rush its charge ends when it stops early past a lone foe, and the clip time from which the clip's
+   * own last stride carries on into the skid; 0 while the charge runs its full length
+   */
+  rushStop: number;
+  rushJoin: number;
   /** Stampede: L in the skid may start one free rush */
   rushAgain: boolean;
   /** Iron Counter: the next throw's damage multiple, whether the held big foe is the evolved grip's, and seconds left

@@ -10,6 +10,7 @@ import { skin } from "../skin";
 import { fistGrit, gainGrit } from "./grit";
 import { afterHaymaker, haymakerBoost } from "./haymaker";
 import { hulda } from "./memory";
+import { faceFor } from "./turn";
 import { sendWaves } from "./waves";
 
 const HAYMAKER = STRING.indexOf("haymaker");
@@ -29,8 +30,9 @@ function startBlow(index: number): void {
   sfx.swing(index === HAYMAKER ? 0.75 : 1.1);
 }
 
-/** J on the floor: the next blow of the string, or queue it during a blow; in the air one hammer fist */
-export function pressFist(): boolean {
+/** J on the floor: the next blow of the string, facing the way she is pushed, or queue it during a blow; in the air
+ *  one hammer fist */
+export function pressFist(dir: number): boolean {
   const h = hero;
   if (h.state === "fist") {
     hulda.queued = true;
@@ -46,6 +48,7 @@ export function pressFist(): boolean {
     sfx.swing(0.9);
     return true;
   }
+  faceFor(dir);
   startBlow(hulda.link > 0 ? hulda.blow : 0);
   return true;
 }
