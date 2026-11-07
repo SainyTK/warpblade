@@ -123,9 +123,9 @@ export const DEADEYE: SkillDef = {
       },
     },
     {
-      text: "Deadeye hits far harder, and kills bring it back sooner.",
+      text: "Deadeye hits harder, and kills bring it back sooner.",
       values: {
-        power: 1.5,
+        power: 2,
         cooldown: 16,
         mark: 0.3,
         markTime: 4,

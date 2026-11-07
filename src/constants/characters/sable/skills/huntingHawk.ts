@@ -38,7 +38,7 @@ export const HUNTING_HAWK: SkillDef = {
       values: { chance: 0.18, cooldown: 1.5, power: 2, stay: 4, every: 1.2, hawks: 2, launch: 140, carry: 2, venom: 0 },
     },
     {
-      text: "The hawks hunt longer and harder.",
+      text: "The hawks hunt longer.",
       values: {
         chance: 0.18,
         cooldown: 1.5,

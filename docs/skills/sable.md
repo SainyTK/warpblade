@@ -131,7 +131,7 @@ The string fans out.
 | 5 | share 0.7 | Side bolts hit harder. |
 | 6 | bend 1 | Side bolts bend toward foes. |
 | 7 | pierce 1 | Side bolts pass through a foe. |
-| 8 | every 4, share 0.85 | Every bolt fans out into five, harder. |
+| 8 | every 4 | Every bolt fans out into five. |
 
 Side bolts take nothing from the quiver.
 Evolution Hailfall (with `s_featherdraw`): in the air every bolt bursts into 7 slanting down; on the floor every bolt fans into 5.
@@ -199,7 +199,7 @@ The perfect reload pays far more.
 | --- | --- | --- |
 | 1 | bonus 2, primed 5 | Primed bolts hit three times as hard, and one more is primed. |
 | 2 | window 0.04 | A wider perfect window. |
-| 3 | pierce 2 | Primed bolts pass through two foes. |
+| 3 | pierce 1 | Primed bolts pass through a foe. |
 | 4 | quiver 3 | The quiver holds 3 more bolts. |
 | 5 | stamina 25, mp 10 | A perfect reload restores stamina and MP. |
 | 6 | bonus 3.5, primed 8 | Primed bolts hit much harder, and eight are primed. |
@@ -238,7 +238,7 @@ The hop back looses a primed fan.
 | 3 | seek 1 | Hop bolts seek foes. |
 | 4 | airHops 2 | Hop once more in the air. |
 | 5 | bolts 5 | The hop looses five bolts. |
-| 6 | pierce 2 | Hop bolts pass through two foes. |
+| 6 | pierce 1 | Hop bolts pass through a foe. |
 | 7 | caltrops 1 | Landing from a hop scatters caltrops. |
 | 8 | slow 0.3, slowTime 1, carry 1.3 | Hop bolts slow foes, and the hop carries farther. |
 
@@ -258,7 +258,7 @@ The slide trips foes into the air and she rises facing them.
 | 5 | power 2.5 | The slide hits harder. |
 | 6 | charged 3 | Your next 3 bolts after a slide are primed. |
 | 7 | refund 3 | A slide through a crowd refunds itself and loads bolts. |
-| 8 | power 6, launch 220 | Tripped foes take much more and fly higher. |
+| 8 | power 3.5, launch 220 | Tripped foes take much more and fly higher. |
 
 Evolution Tangle Slide (with `s_net`): foes the slide throws hang tangled in a net at the top of their rise for 1.5 s, taking 25% more.
 Built: `trip()` and `rise()` in `evade.ts`; the turn to face the foes uses the kit's hand-over; Tangle Slide in `effects/tangle.ts` holds the thrown foe at the top of its rise and marks it.
@@ -403,7 +403,7 @@ A hawk dives on the foe she hits.
 | 5 | launch 140 | The hawk throws foes into the air. |
 | 6 | hawks 2 | Two hawks hunt at once. |
 | 7 | carry 2 | The hawk carries foes up and drops them. |
-| 8 | power 2.8, stay 6 | The hawks hunt longer and harder. |
+| 8 | power 1.6, stay 6 | The hawks hunt longer. |
 
 Evolution Shrike Flock (with `s_venom`): four hawks that never leave, each dive adding 3 poison stacks.
 Built: `skills/sable/huntingHawk.ts`, its own small flock with a perch over her shoulder; Shrike Flock lays Venom Tips' stacks with Venom's numbers.
@@ -457,7 +457,7 @@ Replaces Bolt Storm with one heavy bolt through a line.
 | 5 | split 1 | A kill splits the bolt toward fliers and the floor. |
 | 6 | perfect 2 | A perfect reload just before Deadeye doubles it. |
 | 7 | pin 1.5 | Deadeye pins the foes it strikes. |
-| 8 | power 4, refund 2.5, refundCap 8 | Deadeye hits far harder, and kills bring it back sooner. |
+| 8 | power 2, refund 2.5, refundCap 8 | Deadeye hits harder, and kills bring it back sooner. |
 
 Evolution Heartseeker (with `s_rhythm`): every charge level fires both ways and sends a seeking bolt at every foe on screen; a perfect reload just before triples it.
 Built: `src/game/ultimates/deadeye.ts` reads the skill's values: power, cooldown, mark, pin, split, the perfect reload window and the kill refund.

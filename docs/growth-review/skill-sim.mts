@@ -17,6 +17,7 @@ const { ENEMIES } = await import(`${R}/src/constants/enemies`);
 const { ELITE } = await import(`${R}/src/constants/waves`);
 const { BOONS } = await import(`${R}/src/constants/boons`);
 const { CHARMS } = await import(`${R}/src/constants/charms`);
+const { CHARACTERS } = await import(`${R}/src/constants/characters`);
 
 const WAVES = 30;
 // levels after each wave, collecting all experience
@@ -34,8 +35,11 @@ const levelAfter: number[] = [];
 }
 const chestWave = (w: number) => hasElite(w) || waveKind(w) === "mini" || (waveKind(w) === "boss" && w < WAVES);
 
-// a synthetic hero: 20 skills, two of them ultimates; partners either mutual pairs or a random derangement
+// a synthetic hero: 20 skills, two of them ultimates; partners either mutual pairs or a random derangement; or a real
+// hero's own 20 skills and partners
 function hero(structure: string, rng: any) {
+  const real = CHARACTERS.find((c: any) => c.id === structure);
+  if (real) return real;
   const ids = Array.from({ length: 20 }, (_, i) => `s${i}`);
   let partner: string[];
   if (structure === "pairs") partner = ids.map((_, i) => ids[i ^ 1]);
@@ -109,7 +113,7 @@ function run(seed: number, policy: Policy, structure: string) {
 
 const N = 2000;
 const out: any = { levels: [levelAfter[0], levelAfter[9], levelAfter[19], levelAfter[28]], weights: { ...W }, tools };
-for (const structure of ["pairs", "derangement"]) {
+for (const structure of ["pairs", "derangement", ...CHARACTERS.map((c: any) => c.id)]) {
   for (const [name, p] of [["greedy", greedy], ["steering", steer]] as const) {
     const ev = Array.from({ length: N }, (_, i) => run(1000 + i, p, structure));
     const counts = ev.map((r) => r.evolved).sort((a, b) => a - b);
