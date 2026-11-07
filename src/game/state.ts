@@ -8,6 +8,7 @@ import type { CharacterDef } from "../types/character";
 import type { GameState } from "../types/game";
 import type { Hero } from "../types/hero";
 import type { Progress } from "../types/progress";
+import { freshBuild } from "../utils/build";
 import { airLimit, stringLimit } from "../utils/progression";
 import { Rng } from "../utils/rng";
 import { collectPerks, computeStats } from "../utils/stats";
@@ -72,6 +73,7 @@ export function freshProgress(): Progress {
     ultimate: null,
     comboLimit: stringLimit(character.kit, 1, perks),
     airLimit: airLimit({}),
+    build: freshBuild(),
   };
 }
 export const progress: Progress = freshProgress();

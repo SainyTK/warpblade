@@ -1,10 +1,15 @@
 import { DAMAGE, ENEMY_AIR, FUSION, GUARD, JUGGLE_LIMIT } from "../constants/combat";
 import { ENEMIES } from "../constants/enemies";
+import { FLOW } from "../constants/growth";
 import { SPARKS } from "../constants/palette";
 import { PIN } from "../constants/ysra/glaive";
 import { sfx } from "../services/audio";
+import type { SourceId } from "../types/build";
 import type { Enemy } from "../types/enemy";
 import type { DamageTag } from "../types/game";
+import { buildStats } from "../utils/build";
+import { addFlow, flowDamage } from "./build/flow";
+import { recordDamage } from "./damageLedger";
 import { createImpact } from "./effects/impact";
 import { launchEnemy } from "./enemies/airborne";
 import { enemyBox, enemyCenter } from "./enemies/enemy";
@@ -32,9 +37,16 @@ export interface HitOptions {
   sureCrit?: boolean;
   /** burning and other damage over time: no crits, no numbers in white */
   dot?: boolean;
+  /** what dealt the hit, for the end of run screen; the hero's own blows when not given */
+  source?: SourceId;
 }
 /** what a blow did: landed, or stopped by a guard */
 export type HitResult = "hit" | "blocked";
+
+/** the hero's own sources: their hits build Flow */
+const HERO_SOURCES: ReadonlySet<SourceId> = new Set<SourceId>(["attacks", "abilities", "ultimate"]);
+/** Might and Flow multiply every hit, whatever its source */
+const buildDamage = (): number => buildStats(progress.build).might * flowDamage();
 
 /** a foe struck from the side it is not facing */
 export function isBehind(e: Enemy, fromX: number): boolean {
@@ -130,8 +142,15 @@ export function dealDamage(e: Enemy, base: number, o: HitOptions = {}): HitResul
     dmg *= 2;
     tag = "shatter";
   }
+  dmg *= buildDamage();
   const value = Math.max(1, Math.round(dmg));
   e.hp -= value;
+  const source = o.source ?? "attacks";
+  recordDamage(source, value);
+  if (!o.dot && HERO_SOURCES.has(source)) {
+    progress.build.heroHits++;
+    addFlow(FLOW.perHit);
+  }
   e.flash = 0.1;
   e.guardHits = 0;
   popNumber(e, value, tag, crit || shattering || (back && e.air));

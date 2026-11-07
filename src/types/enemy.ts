@@ -73,6 +73,10 @@ export interface Enemy {
   /** scales its damage with the wave */
   power: number;
   xp: number;
+  /** an elite: more HP, a gold glint, and a chest when it falls */
+  elite: boolean;
+  /** seconds left slowed by cold (Frost Bell) */
+  chill: number;
   /** boss phase: 1, or 2 once it is enraged */
   phase: number;
   /** frontal blows blocked in a row; the second one sets off a counter */

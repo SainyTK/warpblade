@@ -1,5 +1,6 @@
+import { MAX_LEVEL } from "../constants/growth";
 import { PAL } from "../constants/palette";
-import { LEVEL_UP_RESTORE, MAX_LEVEL } from "../constants/progression";
+import { LEVEL_UP_RESTORE } from "../constants/progression";
 import { sfx } from "../services/audio";
 import { metaBonus } from "../store/meta";
 import { PK } from "../types/particle";

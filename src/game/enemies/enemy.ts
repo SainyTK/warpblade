@@ -46,6 +46,8 @@ export function makeEnemy(type: EnemyType, x: number, y: number, wave: number, x
     power: scale.damage,
     xp: Math.round(def.xp * scale.xp * xpShare),
     phase: 1,
+    elite: false,
+    chill: 0,
     guardHits: 0,
     airHits: 0,
     charged: 0,

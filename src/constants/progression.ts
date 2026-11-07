@@ -1,6 +1,3 @@
-export const MAX_LEVEL = 30;
-/** experience for the next level: base + step x (level - 1); twice the first curve, so a full run ends near level 18 instead of 26 */
-export const XP_CURVE = { base: 48, step: 26 } as const;
 /** a slain foe's experience drops as orbs of about this much each, at most this many */
 export const XP_ORB = { share: 6, most: 12 } as const;
 /** how experience orbs move: they pop out, fall and bounce, then fly to Kael if he has not walked over them */
@@ -27,5 +24,3 @@ export const COMBO_BY_LEVEL: readonly (readonly [level: number, hits: number])[]
 export const MAX_COMBO = 6;
 /** part of max HP and MP restored on a level up */
 export const LEVEL_UP_RESTORE = 0.3;
-/** skills offered on each level up */
-export const PICK_COUNT = 3;

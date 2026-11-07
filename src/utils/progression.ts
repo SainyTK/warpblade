@@ -1,6 +1,7 @@
 import { AIR_STRING } from "../constants/combo";
+import { MAX_LEVEL, XP_CURVE } from "../constants/growth";
 import { STRING } from "../constants/hulda/fists";
-import { COMBO_BY_LEVEL, MAX_COMBO, MAX_LEVEL, XP_CURVE } from "../constants/progression";
+import { COMBO_BY_LEVEL, MAX_COMBO } from "../constants/progression";
 import { AGGRESSION, STAGE_WAVES, WAVE_SCALE } from "../constants/waves";
 import { GLAIVE_STRING_BONUS } from "../constants/ysra/glaive";
 import type { KitId } from "../types/kit";

@@ -1,6 +1,6 @@
 import "./pickDialog.css";
 import { BOONS } from "../../constants/boons";
-import { PICK_COUNT } from "../../constants/progression";
+import { PICK_COUNT } from "../../constants/growth";
 import { clearPresses, releaseAll } from "../../game/input";
 import { choosePick } from "../../game/progress";
 import { character, game, progress, rng } from "../../game/state";
