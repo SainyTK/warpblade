@@ -10,7 +10,6 @@ import { castBoltStorm } from "./boltStorm";
 import { castCrystalNova } from "./crystalNova";
 import { castDeadeye } from "./deadeye";
 import { castPhantomLegion } from "./phantomLegion";
-import { castPhoenixDive } from "./phoenixDive";
 import { castPyreWave } from "./pyreWave";
 import { castQuakeDrop } from "./quakeDrop";
 import { castStarfall } from "./starfall";
@@ -28,7 +27,6 @@ const ULTIMATES: Record<UltimateId, (level: number) => void> = {
   starfall: castStarfall,
   tempest: castTempest,
   sunspear: castSunspear,
-  phoenixDive: castPhoenixDive,
   volcanicRift: castVolcanicRift,
   boltStorm: castBoltStorm,
   deadeye: castDeadeye,

@@ -59,6 +59,8 @@ export interface MoveHit {
   around?: boolean;
   /** a foe driven into the stage edge bounces back off it into the air */
   wall?: boolean;
+  /** always a critical hit, as a Keen blow is */
+  crit?: boolean;
   slash?: SlashShape;
   feel?: HitFeel;
 }

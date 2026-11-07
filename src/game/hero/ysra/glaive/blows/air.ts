@@ -1,26 +1,29 @@
 import { frame } from "../../../../../constants/hero";
 import { GLAIVE_FEEL, REAPER } from "../../../../../constants/ysra/glaive";
 import type { MoveDef, MoveHit } from "../../../../../types/move";
-import { hasPerk } from "../../../../progress";
+import { skillValues } from "../../../../skills/query";
 import { lift } from "../../../lift";
 import { glaiveHit } from "../reach";
 import { G_AIR_REAP, G_AIR_RISE } from "../slashes";
 
-/** High Reaper: an air sweep throws the foe up with her */
+/** two air sweeps before she lands (Vault Strike): each throws the foe up with her */
+const reaps = (): boolean => (skillValues("y_vault").sweeps ?? 1) >= 2;
+
+/** an air sweep that throws the foe up with her once she may sweep twice */
 function reaping(hit: MoveHit): MoveHit {
   const base = glaiveHit(hit);
   return Object.defineProperty(base, "launch", {
-    get: () => (hasPerk("highReaper") ? REAPER.launch : undefined),
+    get: () => (reaps() ? REAPER.launch : undefined),
     enumerable: true,
   });
 }
 
-/** High Reaper lifts her up after the foe as the sweep lands */
+/** a sweep that throws the foe up lifts her up after it */
 const rise = (): void => {
-  if (hasPerk("highReaper")) lift(REAPER.lift, false);
+  if (reaps()) lift(REAPER.lift, false);
 };
 
-/** her air game: one wide sweep before she lands, two with High Reaper; she drops with the weight of the glaive */
+/** her air game: one wide sweep before she lands, two with Vault Strike; she drops with the weight of the glaive */
 export const AIR_BLOWS = {
   airReap: {
     id: "airReap",

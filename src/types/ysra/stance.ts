@@ -17,8 +17,8 @@ export interface StanceMemory {
   entry: Pose | null;
   /** vaults thrown since she last stood on the floor */
   airVaults: number;
-  /** a dive was already used in this airtime */
-  dived: boolean;
+  /** dives used in this airtime */
+  dives: number;
   /** where she faced at the last tick, where she faced before her last turn, and seconds since that turn:
    *  a side held away that turned her just before L still counts as away */
   face: number;
@@ -30,6 +30,10 @@ export interface StanceMemory {
   counter: number;
   /** seconds left in which more blows from the front cost nothing */
   shield: number;
+  /** seconds she has walked one way without stopping, toward Warpath's charge */
+  walked: number;
   /** foes the Warpath charge shouldered lately, and how long before it may again */
   shouldered: Map<Enemy, number>;
+  /** Juggernaut: the small foes the charge carries on the glaive */
+  carried: Enemy[];
 }

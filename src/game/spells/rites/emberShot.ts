@@ -1,10 +1,13 @@
 import { RITE_RAMP, RITE_SPARKS } from "../../../constants/ysra/emberLook";
 import { BRAZIER } from "../../../constants/ysra/rites";
 import { circle, glow, place, px } from "../../../engine/frame";
+import type { SourceId } from "../../../types/build";
 import type { Effect } from "../../../types/effect";
+import type { Enemy } from "../../../types/enemy";
 import { PK } from "../../../types/particle";
 import { WHITE } from "../../../utils/color";
 import { dealDamage } from "../../damage";
+import { ignite } from "../../enemies/burn";
 import { enemyBox } from "../../enemies/enemy";
 import { game, particles, progress, rng } from "../../state";
 import { boxHit, surfaceBelow } from "../../world";
@@ -20,10 +23,21 @@ function sparkle(x: number, y: number, n: number): void {
     });
 }
 
-/** an ember spat by the brazier: it arcs to where its foe stood and burns the first foe it touches */
-export function createEmberShot(x: number, y: number, tx: number, ty: number): Effect {
+/** an ember's strength: its ability power multiple, seconds it sets its foe burning, foes it passes through, and the
+ *  source its hits count for */
+export interface EmberSpec {
+  power: number;
+  burn: number;
+  pierce: number;
+  source: SourceId;
+}
+
+/** an ember spat by the brazier: it arcs to where its foe stood and burns the first foe it touches, then flies on
+ *  through as many more as it pierces */
+export function createEmberShot(x: number, y: number, tx: number, ty: number, spec: EmberSpec): Effect {
   const T = BRAZIER.flight;
   const o = { x, y, vx: (tx - x) / T, vy: (ty - y) / T - 0.5 * BRAZIER.gravity * T, t: 0 };
+  const struck: Enemy[] = [];
   return {
     update(dt) {
       o.t += dt;
@@ -32,17 +46,20 @@ export function createEmberShot(x: number, y: number, tx: number, ty: number): E
       o.y += o.vy * dt;
       if (rng.chance(0.6))
         particles.spawn(PK.EMBER, o.x, o.y, -o.vx * 0.1, -o.vy * 0.1, rng.range(0.2, 0.4), { sparks: RITE_SPARKS });
-      const hit = game.enemies.find((e) => e.hp > 0 && boxHit(enemyBox(e), [o.x - 2, o.y - 2, o.x + 2, o.y + 2]));
+      const hit = game.enemies.find(
+        (e) => e.hp > 0 && !struck.includes(e) && boxHit(enemyBox(e), [o.x - 2, o.y - 2, o.x + 2, o.y + 2]),
+      );
       if (hit) {
-        dealDamage(hit, progress.stats.ap * BRAZIER.power, {
+        dealDamage(hit, progress.stats.ap * spec.power, {
           fromX: o.x - Math.sign(o.vx),
           kx: Math.sign(o.vx) * 50,
-          source: "abilities",
+          source: spec.source,
         });
-        hit.burn = Math.max(hit.burn, BRAZIER.burn);
+        ignite(hit, spec.burn);
         sparkle(o.x, o.y, 8);
         crackle(1.2);
-        return false;
+        struck.push(hit);
+        if (struck.length > spec.pierce) return false;
       }
       if (o.vy > 0 && o.y >= surfaceBelow(o.x, o.y - o.vy * dt - 1)) {
         sparkle(o.x, o.y, 4);

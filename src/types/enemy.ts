@@ -94,7 +94,7 @@ export interface Enemy {
   evadeCd: number;
   /** a husk rocked by a sword blow stops walking for this long; a wind-up already started goes on */
   stagger: number;
-  /** Ysra's Impale: pinned to the floor for this long, taking more damage */
+  /** pinned to the floor for this long (Ysra's Impale and hook): held still; the damage it takes more is a mark */
   pinned: number;
   /** free scratch values for a foe's own behavior: a target, a timer, a charge count */
   ax: number;

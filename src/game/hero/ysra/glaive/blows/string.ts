@@ -2,18 +2,62 @@ import { frame } from "../../../../../constants/hero";
 import { GLAIVE_FEEL } from "../../../../../constants/ysra/glaive";
 import type { MoveDef } from "../../../../../types/move";
 import { createFloorRing } from "../../../../effects/floorRing";
+import { skillValues } from "../../../../skills/query";
 import { game, hero } from "../../../../state";
 import { dust } from "../../../../world";
 import { skin } from "../../../skin";
-import { pinStruck } from "../pin";
+import { pinStruck } from "../../pin";
 import { glaiveHit } from "../reach";
 import { G_CLEAVE, G_IMPALE, G_RAM, G_SKY, G_SWEEP, G_THRUST, G_TWIRL_BACK, G_TWIRL_FRONT } from "../slashes";
+import { driveStakes } from "../stakes";
 
 /** where the cleave and the impale bite the floor, ahead of her feet */
 function bite(at: number, n: number): void {
   const x = hero.x + hero.face * at;
   dust(x, hero.y, n, hero.face);
   game.fx.push(createFloorRing(x, hero.y, 12, skin.ramp, 0.3));
+}
+
+/** Impale's numbers: its power, and how far past the tip it bursts */
+const impale = () => skillValues("y_impale");
+
+/** the impale's blow: power and reach from Impale when held */
+const impaleHit = (at: number, share: () => number) =>
+  glaiveHit(
+    {
+      at,
+      box: [6, -32, 40, 2],
+      power: 2.3,
+      kx: 40,
+      ky: 0,
+      stun: 0.6,
+      big: true,
+      slash: G_IMPALE,
+      feel: GLAIVE_FEEL.impale,
+    },
+    { power: () => (impale().power ?? 2.3) * share(), reach: () => impale().past ?? 0 },
+  );
+
+/** the string's last blow, driven through the foe into the floor; with Impale's twist it wrenches in a second time */
+function impaleMove(id: "impale" | "impaleTwist"): MoveDef {
+  return {
+    id,
+    name: "Impale",
+    clip: "yImpale",
+    pitch: 0.55,
+    finisher: true,
+    strides: [{ from: frame(3), to: frame(8), speed: 85 }],
+    hits:
+      id === "impale"
+        ? [impaleHit(frame(9), () => 1)]
+        : [impaleHit(frame(9), () => 1), impaleHit(frame(13), () => impale().twist ?? 0)],
+    afterHit: () => {
+      if (hero.hitIndex > 1) return;
+      bite(28, 8);
+      pinStruck();
+      driveStakes();
+    },
+  };
 }
 
 /** the plain glaive string and its situational blows; every blow keeps her feet set except the impale's skip */
@@ -134,29 +178,6 @@ export const STRING_BLOWS = {
       }),
     ],
   },
-  impale: {
-    id: "impale",
-    name: "Impale",
-    clip: "yImpale",
-    pitch: 0.55,
-    finisher: true,
-    strides: [{ from: frame(3), to: frame(8), speed: 85 }],
-    hits: [
-      glaiveHit({
-        at: frame(9),
-        box: [6, -32, 40, 2],
-        power: 2.3,
-        kx: 40,
-        ky: 0,
-        stun: 0.6,
-        big: true,
-        slash: G_IMPALE,
-        feel: GLAIVE_FEEL.impale,
-      }),
-    ],
-    afterHit: () => {
-      bite(28, 8);
-      pinStruck();
-    },
-  },
+  impale: impaleMove("impale"),
+  impaleTwist: impaleMove("impaleTwist"),
 } satisfies Record<string, MoveDef>;

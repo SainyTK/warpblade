@@ -18,7 +18,6 @@ export const ULT_LABEL: Record<UltimateId, string> = {
   starfall: "STARFALL",
   tempest: "TEMPEST",
   sunspear: "SUNSPEAR",
-  phoenixDive: "PHOENIX DIVE",
   volcanicRift: "VOLCANIC RIFT",
   boltStorm: "BOLT STORM",
   deadeye: "DEADEYE",

@@ -46,13 +46,13 @@ export const ACTION_TEXT: Record<KitId, Record<InputAction, string>> = {
   kael: KAEL_ACTION_TEXT,
   ysra: {
     ...KAEL_ACTION_TEXT,
-    left: "Walk left. With Warpath, tap twice and hold to charge",
-    right: "Walk right. With Warpath, tap twice and hold to charge",
+    left: "Walk left. With Warpath, keep walking to charge",
+    right: "Walk right. With Warpath, keep walking to charge",
     up: "Jump. One heavy jump, no double jump",
     attack:
-      "Glaive string that pierces the whole line. Hold to wind a lunge, let go to lunge. With up a skyhook, with down a ground lash",
+      "Glaive string of three blows that pierce the whole line, picked by the foes around you. Hold to wind a lunge, let go to lunge. In a vault, crash down",
     dash: "Hold to brace and block blows from the front. Press just before a blow to parry. With the side behind you held, step back",
-    run: "Charge toward the side held, once Warpath is learned",
+    run: "Charge toward the side held at once, once Warpath is learned",
     warp: "Pole vault over foes, also out of a brace or a backstep. In the air, dive glaive first",
     cast: "Call the selected rite, paid with Heat",
     cycle: `Switch rite: ${RITE_NAMES}`,

@@ -1,6 +1,6 @@
 /**
- * What happens in Ysra's kit, for the parts that react to another part's action: Heat from glaive blows, fire left by a
- * vault, a free pillar after a lunge. Each part emits its own events and listens to the others, so no part imports another.
+ * What happens in Ysra's kit, for the parts that react to another part's action: Heat from glaive blows and her guard,
+ * fire left by her travel. Each part emits its own events and listens to the others, so no part imports another.
  */
 export interface YsraEvents {
   /** a blow of hers landed or missed: a combo move, a vault crash, a dive impact, a counter */

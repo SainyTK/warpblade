@@ -1,9 +1,7 @@
 import { COIN_GOLD, FIRE_RAMP, KAEL_COLORS as HC, PAL } from "../../../constants/palette";
-import { RITE_RAMP } from "../../../constants/ysra/emberLook";
 import type { SpriteCanvas } from "../../../engine/sprite";
 import { WHITE } from "../../../utils/color";
 import { bolt, drop, fill, flame } from "./parts";
-import { floor, seg } from "./ysra/parts";
 
 /** the gold four-point star in the top right corner that marks an evolved spell, with a white centre */
 export function evolvedStar(s: SpriteCanvas): void {
@@ -30,35 +28,6 @@ function spike(s: SpriteCanvas, x: number, h: number, w: number): void {
       PAL.ice[2],
     );
     s.set(x, 14 - h + 1, WHITE);
-  });
-}
-
-/** a flame column standing on the floor at x: the Flame Pillar icon's outer and inner shapes, scaled to height h */
-function column(s: SpriteCanvas, x: number, h: number, w: number): void {
-  fill(s, () =>
-    s.poly(
-      [
-        [x - w, 15],
-        [x + w, 15],
-        [x + w * 0.7, 15 - h * 0.75],
-        [x, 15 - h],
-        [x - w * 0.7, 15 - h * 0.75],
-      ],
-      RITE_RAMP[3],
-    ),
-  );
-  fill(s, () => {
-    s.poly(
-      [
-        [x - w * 0.5, 15],
-        [x + w * 0.5, 15],
-        [x + w * 0.35, 15 - h * 0.65],
-        [x, 15 - h * 0.85],
-        [x - w * 0.35, 15 - h * 0.65],
-      ],
-      RITE_RAMP[5],
-    );
-    seg(s, x, 14, x, 15 - h * 0.45, WHITE);
   });
 }
 
@@ -97,14 +66,6 @@ export const EVOLUTION_ICONS: Record<string, (s: SpriteCanvas) => void> = {
       [9, 13.5],
       [6, 16],
     ]);
-    evolvedStar(s);
-  },
-  /** three flame columns on the floor, the middle one tallest */
-  e_pyre: (s) => {
-    floor(s, 0, 16, 15, RITE_RAMP[2]);
-    column(s, 3, 8, 2);
-    column(s, 13, 8, 2);
-    column(s, 8, 13, 3);
     evolvedStar(s);
   },
 };

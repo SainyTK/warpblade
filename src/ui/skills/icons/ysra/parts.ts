@@ -1,11 +1,11 @@
 import { EMBER, YSRA_SKIN } from "../../../../constants/characters/ysra/look";
-import { ENEMY_COLORS as EC } from "../../../../constants/palette";
+import { ENEMY_COLORS as EC, PAL } from "../../../../constants/palette";
 import type { SpriteCanvas } from "../../../../engine/sprite";
 import type { Color } from "../../../../types/color";
 import { WHITE } from "../../../../utils/color";
 import { fill } from "../parts";
 
-/** Small drawing parts for Ysra's 16 x 16 icons: her glaive, ember flames, foes, the brace and the vault. */
+/** Small drawing parts for Ysra's 16 x 16 icons: her glaive, ember flames, foes, pillars, shades and the vault. */
 type S = SpriteCanvas;
 export const YC = YSRA_SKIN.colors;
 
@@ -15,10 +15,45 @@ export function seg(s: S, x0: number, y0: number, x1: number, y1: number, c: Col
   for (let i = 0; i <= n; i++) s.set(Math.round(x0 + ((x1 - x0) * i) / n), Math.round(y0 + ((y1 - y0) * i) / n), c);
 }
 
+/** the colours of a glaive: haft, butt cap, blade back, blade and edge */
+interface GlaiveColors {
+  haft: Color;
+  butt: Color;
+  back: Color;
+  blade: Color;
+  edge: Color;
+}
+
+/** her own glaive of forge-fire */
+const FORGE: GlaiveColors = {
+  haft: YC.bootLight,
+  butt: YC.trim,
+  back: YC.bladeBack,
+  blade: YC.blade,
+  edge: YC.bladeEdge,
+};
+/** a shade's glaive, pale and cold */
+export const SPECTRAL: GlaiveColors = {
+  haft: PAL.ice[1],
+  butt: PAL.ice[2],
+  back: PAL.ice[2],
+  blade: PAL.ice[3],
+  edge: PAL.ice[5],
+};
+
 /** a glaive from the butt at (x0, y0) to the blade's point at (x1, y1): a thin haft with a bronze butt cap, then a
  *  single-edged blade of forge-fire that swells to one side and sweeps back to a hooked point, as in the game;
  *  flip puts the edge on the other side */
-export function glaive(s: S, x0: number, y0: number, x1: number, y1: number, flip = false, blade = 6): void {
+export function glaive(
+  s: S,
+  x0: number,
+  y0: number,
+  x1: number,
+  y1: number,
+  flip = false,
+  blade = 6,
+  c: GlaiveColors = FORGE,
+): void {
   const L = Math.hypot(x1 - x0, y1 - y0) || 1;
   const ux = (x1 - x0) / L;
   const uy = (y1 - y0) / L;
@@ -28,8 +63,8 @@ export function glaive(s: S, x0: number, y0: number, x1: number, y1: number, fli
   const bx = x1 - ux * blade;
   const by = y1 - uy * blade;
   fill(s, () => {
-    seg(s, x0, y0, bx, by, YC.bootLight);
-    s.set(Math.round(x0), Math.round(y0), YC.trim);
+    seg(s, x0, y0, bx, by, c.haft);
+    s.set(Math.round(x0), Math.round(y0), c.butt);
   });
   fill(s, () => {
     for (let d = 0; d <= blade; d += 0.25) {
@@ -37,9 +72,9 @@ export function glaive(s: S, x0: number, y0: number, x1: number, y1: number, fli
       const bulge = Math.sin(Math.PI * Math.min(1, u * 1.1)) * 2.4;
       const x = bx + ux * d;
       const y = by + uy * d;
-      s.set(Math.round(x), Math.round(y), YC.bladeBack);
-      for (let w = 0.7; w < bulge; w += 0.5) s.set(Math.round(x + nx * w), Math.round(y + ny * w), YC.blade);
-      if (bulge > 0.9) s.set(Math.round(x + nx * bulge), Math.round(y + ny * bulge), YC.bladeEdge);
+      s.set(Math.round(x), Math.round(y), c.back);
+      for (let w = 0.7; w < bulge; w += 0.5) s.set(Math.round(x + nx * w), Math.round(y + ny * w), c.blade);
+      if (bulge > 0.9) s.set(Math.round(x + nx * bulge), Math.round(y + ny * bulge), c.edge);
     }
     s.set(Math.round(x1), Math.round(y1), WHITE);
   });
@@ -138,12 +173,68 @@ export function vaultArc(s: S, x0: number, x1: number, y: number, rise: number, 
   });
 }
 
-/** the brace: a thick bronze arc of guard in front of (x, y), with a hot inner edge */
-export function brace(s: S, x: number, y: number, r: number): void {
+/** a column of flame standing on the floor at y = 15 under x, h tall and 2w wide, with a white-hot core */
+export function pillar(s: S, x: number, h: number, w: number): void {
+  fill(s, () =>
+    s.poly(
+      [
+        [x - w, 15],
+        [x + w, 15],
+        [x + w * 0.7, 15 - h * 0.75],
+        [x, 15 - h],
+        [x - w * 0.7, 15 - h * 0.75],
+      ],
+      EMBER[3],
+    ),
+  );
   fill(s, () => {
-    for (let a = -1.1; a <= 1.1; a += 0.06) s.dot(x + Math.cos(a) * r, y + Math.sin(a) * r, 0.9, YC.trim);
+    s.poly(
+      [
+        [x - w * 0.5, 15],
+        [x + w * 0.5, 15],
+        [x + w * 0.35, 15 - h * 0.67],
+        [x, 15 - h * 0.83],
+        [x - w * 0.35, 15 - h * 0.67],
+      ],
+      EMBER[5],
+    );
+    seg(s, x, 14, x, 15 - h * 0.42, WHITE);
+  });
+}
+
+/** a shade: a pale hooded temple guard, its feet at (x, y) */
+export function shade(s: S, x: number, y: number): void {
+  fill(s, () => {
+    s.poly(
+      [
+        [x - 2.5, y],
+        [x + 2.5, y],
+        [x + 1.5, y - 5.5],
+        [x - 1.5, y - 5.5],
+      ],
+      PAL.ice[2],
+    );
+    s.dot(x, y - 7, 1.6, PAL.ice[3]);
+    s.set(x + 0.6, y - 7, PAL.ice[5]);
+    s.set(x - 1, y - 4, PAL.ice[3]);
+  });
+}
+
+/** a brand: a glowing ember rune, a diamond in a ring, centred on (x, y) */
+export function brand(s: S, x: number, y: number, r: number): void {
+  fill(s, () => {
+    for (let a = 0; a < Math.PI * 2; a += 0.15) s.set(x + Math.cos(a) * r, y + Math.sin(a) * r, EMBER[4]);
   });
   fill(s, () => {
-    for (let a = -0.9; a <= 0.9; a += 0.08) s.set(x + Math.cos(a) * (r - 1.3), y + Math.sin(a) * (r - 1.3), EMBER[5]);
+    s.poly(
+      [
+        [x + 0.5, y - r + 1.5],
+        [x + r - 1, y + 0.5],
+        [x + 0.5, y + r - 0.5],
+        [x - r + 2, y + 0.5],
+      ],
+      EMBER[5],
+    );
+    s.set(x, y, WHITE);
   });
 }

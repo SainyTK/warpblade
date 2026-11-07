@@ -1,7 +1,7 @@
-import { BACKSTEP, UNBROKEN, VAULT } from "../../../../constants/ysra/stance";
+import { BACKSTEP, VAULT } from "../../../../constants/ysra/stance";
 import { pressAge, take } from "../../../input";
-import { hasPerk } from "../../../progress";
-import { hero, progress } from "../../../state";
+import { skillValues } from "../../../skills/query";
+import { hero } from "../../../state";
 import { setState } from "../../actions";
 import { startMove } from "../../combo";
 import type { YsraPart } from "../part";
@@ -11,16 +11,17 @@ import { canCut } from "./cut";
 import { runDive, startDive } from "./dive";
 import { resetStance, stance } from "./memory";
 import { airVault, runVault, startVault, vaultFlying, vaultGuarded } from "./vault";
-import { startCharge, tickWarpath } from "./warpath";
+import { chargeTakes, tickWarpath } from "./warpath";
 
 export { pressJump } from "./jump";
+export { chargeNow } from "./warpath";
 
-/** K: the pole vault on the floor, also out of a brace or a backstep; in the air, Skyline's second vault out of a vault,
- *  otherwise the dive. K in a backstep's hop vaults the moment she lands. */
+/** K: the pole vault on the floor, also out of a brace or a backstep; in the air, Vault Strike's second vault out of a
+ *  vault, otherwise the dive. K in a backstep's hop vaults the moment she lands. */
 export function pressVault(): boolean {
   const h = hero;
   if (vaultFlying()) {
-    if (hasPerk("skyline") && stance.airVaults === 0) airVault();
+    if (skillValues("y_vault").airVault && stance.airVaults === 0) airVault();
     else return startDive();
     return true;
   }
@@ -56,11 +57,6 @@ function watchFacing(dt: number): void {
   stance.turned = 0;
 }
 
-/** a double tap toward a side: the Warpath charge */
-export function doubleTapStance(dir: number): void {
-  startCharge(dir);
-}
-
 /** a parry opened a counter: the next J is the counter thrust */
 export const counterReady = (): boolean => stance.counter > 0;
 export function spendCounter(): void {
@@ -68,16 +64,15 @@ export function spendCounter(): void {
 }
 
 /**
- * J in a vault's flight: with Skyline, while she still rises the vault lets go so the glaive's air sweep takes the press;
- * otherwise Vault Strike turns it into the crash.
+ * J in a vault's flight is the crash. With Vault Strike's second air sweep, while she still rises the vault lets go so
+ * the glaive's air sweep takes the press.
  */
 function vaultStrike(): void {
   if (!vaultFlying() || pressAge("attack") < 0) return;
-  if (hasPerk("skyline") && hero.vy < 0) {
+  if ((skillValues("y_vault").sweeps ?? 1) >= 2 && hero.vy < 0) {
     setState("fall");
     return;
   }
-  if (!hasPerk("vaultStrike")) return;
   take("attack");
   stance.landed = false;
   startMove("vaultCrash");
@@ -90,7 +85,7 @@ export const STANCE_PART: YsraPart = {
     stance.shield = Math.max(0, stance.shield - dt);
     if (hero.ground) {
       stance.airVaults = 0;
-      stance.dived = false;
+      stance.dives = 0;
     }
     vaultStrike();
     tickWarpath(dt);
@@ -122,8 +117,6 @@ export const STANCE_PART: YsraPart = {
     if (vaultFlying()) return VAULT.gravity;
     return null;
   },
-  // Unbroken's Heat side belongs to the pyre part
-  hurtScale: () => (hasPerk("unbroken") && hero.hp < progress.stats.hp * UNBROKEN.below ? UNBROKEN.scale : 1),
-  absorbHurt: (_dmg, fromX) => vaultGuarded() || backstepGuarded() || braceTakes(fromX),
+  absorbHurt: (_dmg, fromX) => vaultGuarded() || backstepGuarded() || braceTakes(fromX) || chargeTakes(fromX),
   reset: resetStance,
 };
