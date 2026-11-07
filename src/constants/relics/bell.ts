@@ -28,3 +28,24 @@ export const BELL: RelicDef = {
     },
   },
 };
+
+/** the ring's size and speed; `area` scales the radius */
+export const BELL_RING = {
+  /** radius the ring runs out to at area 1, in art pixels */
+  radius: 48,
+  /** the ring is this tall for its width, centred on the hero's middle */
+  tall: 0.7,
+  /** seconds the ring takes to run out */
+  spread: 0.45,
+  /** height of the hero's middle above their feet */
+  middle: 14,
+  /** where the small bell hangs over the hero's head while it rings, and how long it shows */
+  bellRise: 50,
+  bellShow: 0.7,
+} as const;
+
+/** Glacier Toll: seconds between its two rings, how long the first ring chills, and the share of the freeze mini bosses and bosses take */
+export const GLACIER_TOLL = { echo: 0.45, chill: 2.5, bossFreezeShare: 0.5 } as const;
+
+/** chilled foes move at this share of their speed */
+export const CHILL_PACE = 0.5;

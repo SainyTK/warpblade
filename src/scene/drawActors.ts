@@ -50,8 +50,8 @@ export function drawEnemies(): void {
     const winding =
       e.state === "wind" || e.state === "volley" || e.state === "charge" || (e.state === "leap" && e.vy === 0);
     const tremble = winding ? (Math.floor(game.t * 30) % 2 ? 1 : -1) : 0;
-    const tint = e.flash > 0 ? WHITE : e.frozen > 0 ? PAL.ice[4] : 0;
-    const tintAmount = e.flash > 0 ? 1 : e.frozen > 0 ? 0.5 : 0;
+    const tint = e.flash > 0 ? WHITE : e.frozen > 0 ? PAL.ice[4] : e.chill > 0 ? PAL.ice[3] : 0;
+    const tintAmount = e.flash > 0 ? 1 : e.frozen > 0 ? 0.5 : e.chill > 0 ? 0.3 : 0;
     blit(s, e.x + tremble, e.y, e.face < 0, { tint, tintAmount });
     place();
     const [cx, cy] = enemyCenter(e);
