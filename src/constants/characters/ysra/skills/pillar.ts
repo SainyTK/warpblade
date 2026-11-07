@@ -13,8 +13,8 @@ const levels = grow({ cost: 40, power: 5.5, pull: 0, width: 1, column: 0, heal: 
   ["Pillar damage +35%.", { power: 11 }],
   ["The pillar keeps burning.", { power: 13, column: 2 }],
   ["Cheaper, and it heals you.", { cost: 26, power: 15, heal: 0.03 }],
-  ["Two pillars.", { power: 18, count: 2 }],
-  ["Pillar damage +20%.", { power: 22 }],
+  ["Two pillars.", { power: 11, count: 2 }],
+  ["Pillar damage +10%.", { power: 12 }],
 ]);
 
 /** Flame Pillar: a rite that bursts a pillar under the foe ahead; aim matters */
@@ -30,6 +30,6 @@ export const FLAME_PILLAR_SKILL: SkillDef = {
     partner: "y_kindling",
     name: "Pyre Colonnade",
     text: "Each pillar burns hotter, and two more burst up on either side of it a moment later.",
-    row: evolved(levels, "Pillars burst in threes.", { power: 26, colonnade: 1 }),
+    row: evolved(levels, "Pillars burst in threes.", { power: 14, colonnade: 1 }),
   },
 };

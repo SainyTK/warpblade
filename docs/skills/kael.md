@@ -394,14 +394,14 @@ Summon, easy, auto. Casting may call a crystal familiar that fires homing shards
 
 | Lv | Card line | Values |
 | --- | --- | --- |
-| 1 | A cast may call a crystal familiar that fires shards. | chance 0.4, life 6, every 1, power 0.8, pierce 1, most 1, cooldown 1 |
+| 1 | A cast may call a crystal familiar that fires shards. | chance 0.4, life 6, every 1, power 0.3, pierce 1, most 1, cooldown 1 |
 | 2 | Chance 40% to 70%. | chance 0.7 |
 | 3 | New: a cast fires a volley of 2 from each familiar out. | volley 2 |
 | 4 | New: shards pierce a foe. | pierce 2 |
 | 5 | Familiars stay 10 s and fire faster. | life 10, every 0.7 |
 | 6 | New: two familiars at once. | most 2 |
 | 7 | New: shards take the element just cast. | element 1 |
-| 8 | Shard power 0.8 to 1.4; fire faster. | every 0.6, power 1.4 |
+| 8 | Shard power 0.3 to 0.5; fire faster. | every 0.6, power 0.5 |
 
 Evolution **Crystal Choir** (partner `k_volt`): Three familiars, always out, and every shard arcs to another foe.
 Evolved values added: every 0.8, most 3, choir 1.
@@ -416,14 +416,14 @@ Summon, precise, auto. A perfect dodge calls a mirror knight that warp-strikes t
 | 1 | A perfect dodge calls a mirror knight that warp-strikes a foe. | strike 6, targets 1, cooldown 1 |
 | 2 | New: Riposte: the next blow after a perfect dodge deals triple. | riposte 3, ripTime 1.5, ripBlows 1 |
 | 3 | Knight strike 6 to 12. | strike 12 |
-| 4 | New: the knight warps through up to 3 foes. | targets 3 |
+| 4 | New: the knight warps through up to 2 foes. | targets 2 |
 | 5 | New: the knight stuns what it strikes; Riposte covers 2 blows. | ripTime 2.5, ripBlows 2, stun 0.8 |
 | 6 | New: the knight stays and copies your blows. | stay 4, copy 0.5 |
 | 7 | Knight strike 12 to 30; copies at 80%. | strike 30, copy 0.8 |
 | 8 | Knight strike 30 to 50; Riposte quadruple; stays 6 s. | strike 50, riposte 4, stay 6, copy 1 |
 
 Evolution **Perfect Reflection** (partner `k_keen`): A perfect dodge stops time while Kael and the knight strike the attacker and every foe near.
-Evolved values added: stay 8, reflect 150, reflectArea 40, reflectReach 120.
+Evolved values added: stay 8, reflect 150, reflectArea 15, reflectReach 120.
 Code: `skills/kael/mirrorKnight.ts`; Riposte in `hero/perfectDodge.ts`, `meleeHit.ts` and `hero/kael/bonus.ts`.
 
 #### `k_edges` Thousand Edges

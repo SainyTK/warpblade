@@ -39,7 +39,7 @@ export const BRUISING_KNUCKLES: SkillDef = {
     },
     {
       text: "Up to 12 bruises, far stronger.",
-      values: { max: 12, damage: 0.3, duration: 5, haymaker: 3, grapple: 2, spread: 1, mark: 0.1, shatter: 0 },
+      values: { max: 12, damage: 0.5, duration: 5, haymaker: 3, grapple: 2, spread: 1, mark: 0.1, shatter: 0 },
     },
   ],
   evolution: {
@@ -48,7 +48,7 @@ export const BRUISING_KNUCKLES: SkillDef = {
     text: "A haymaker, slam or throw on a bruised foe shatters every bruise at once and passes half to foes near.",
     row: {
       text: "Heavy blows shatter bruises.",
-      values: { max: 12, damage: 0.3, duration: 5, haymaker: 3, grapple: 2, spread: 1, mark: 0.1, shatter: 2 },
+      values: { max: 12, damage: 0.5, duration: 5, haymaker: 3, grapple: 2, spread: 1, mark: 0.1, shatter: 2 },
     },
   },
 };

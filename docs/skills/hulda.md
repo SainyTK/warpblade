@@ -123,9 +123,9 @@ attack, easy, J. Blows push a pressure wave ahead that reaches past her short fi
 | 5 | 50 px, 0.8x | Waves reach further and hit harder. |
 | 6 | The jab sends a wave too | Every blow sends a wave. |
 | 7 | Waves stagger 0.3 s | Waves stagger. |
-| 8 | 60 px, 1.3x | Wave damage +60%, longer reach. |
+| 8 | 60 px, 2.6x | Wave damage doubled, longer reach. |
 
-Evolution: **Thunder Knuckles** (partner `h_bruise`). Every wave runs 120 px both ways and bursts in a 30 px ring at its end, at the same 1.3x. An easy evolution: area and reliability.
+Evolution: **Thunder Knuckles** (partner `h_bruise`). Every wave runs 120 px both ways and bursts in a 30 px ring at its end, at 1.8x. An easy evolution: area and reliability.
 
 Build: new `effects/knuckleWave.ts` from `effects/echo.ts` (crescent flight, rust ramp); fired from `land()` in `hero/hulda/fists.ts` on a skill check. Source `attacks` (it rides her press).
 
@@ -161,9 +161,9 @@ attack, precise, K. A grab that catches a foe winding up a blow (`wind` or `char
 | 5 | A counter gives Fury +25% | A counter gives Fury. |
 | 6 | 6x; the throw after a counter deals double | Counter 6x, its throw doubled. |
 | 7 | A counter roars: other foes within 50 px reel 0.8 s | A counter makes foes nearby reel. |
-| 8 | 12x, Fury +50%, refills every plate | Counter 12x, Fury +50%, full plates. |
+| 8 | 65x, Fury +50%, refills every plate | Huge counter, more Fury, full plates. |
 
-Evolution: **Executioner's Grip** (partner `h_ironWall`). A counter on a mini or boss holds it for 1 s and suplexes it for 30x. Fury +80%, and while it lasts no blow breaks a plate.
+Evolution: **Executioner's Grip** (partner `h_ironWall`). Every counter deals 90x, and a counter on a mini or boss holds it for 1 s and suplexes it for 120x. Fury +80%, and while it lasts no blow breaks a plate.
 
 Build: `pressGrab`/`runGrab` in `hero/hulda/grab.ts` read the foe's state at the catch; crush from `runCrush`; new `fury.ts`; emits `counter`. Pose: the grab clip with a two-frame hit-stop flash; the evolution's big-foe hold needs a heavy hold pose (the suplex lift clip at arm's length).
 
@@ -325,16 +325,16 @@ spell, precise, I (10 MP, 4 s). She braces 0.6 s; blows taken in the brace break
 
 | Lv | Change | Card |
 | --- | --- | --- |
-| 1 | Release 30 px ahead: 3x if a blow was taken, else 0.5x | Brace and answer a blow for 3x. |
-| 2 | 5x | Release damage up. |
+| 1 | Release 30 px ahead: 7x if a blow was taken, else 0.5x | Brace and answer a blow. |
+| 2 | 8x | Release damage up. |
 | 3 | A blow taken refills a plate | A blow in the brace gives a plate. |
 | 4 | The release is a ring round her | The release strikes both sides. |
-| 5 | Brace 0.8 s, 8x | Longer brace, harder release. |
+| 5 | Brace 0.8 s, 10x | Longer brace, harder release. |
 | 6 | Each blow taken adds to the release, up to 3 | Every blow taken adds to the release. |
 | 7 | A loaded release gives Fury +30% | A loaded release gives Fury. |
-| 8 | 24x per blow | Release 24x a blow. |
+| 8 | 12x per blow | A shattering release. |
 
-Evolution: **Unbreakable Wall** (partner `h_ancestorFist`). Brace 1.2 s, every blow taken calls an Ancestor's Fist on its attacker at once, the release is 40x per blow, and Fury +60%.
+Evolution: **Unbreakable Wall** (partner `h_ancestorFist`). Brace 1.2 s, every blow taken calls an Ancestor's Fist on its attacker at once, the release is 15x per blow, and Fury +60%.
 
 Build: new `skills/hulda/ironWall.ts`; `steadfast()` in `armour.ts` gets a brace branch; release with `effects/shockwave.ts`. Pose: a new brace clip (wide stance, gauntlets crossed) that loops while held, plus the release punch from the haymaker's hit keys.
 
@@ -351,7 +351,7 @@ dot, easy, J. Studs on her knuckles leave bruises that keep hurting.
 | 5 | Up to 8 stacks, 5 s | More bruises, lasting longer. |
 | 6 | A foe that dies bruised passes half its stacks to foes within 30 px | Bruises spread on a kill. |
 | 7 | 0.22x a second; bruised foes take 10% more from blows | Bruised foes take more. |
-| 8 | Up to 12, 0.3x a second | Up to 12 bruises, far stronger. |
+| 8 | Up to 12, 0.5x a second | Up to 12 bruises, far stronger. |
 
 Evolution: **Shatter** (partner `h_haymaker`). A haymaker, slam or throw on a bruised foe shatters every stack at once for 2x each and gives half the stacks to foes within 40 px.
 
@@ -389,7 +389,7 @@ dot, easy, auto. Blows on her armour spray rust that eats the attacker.
 | 5 | Rusted foes deal 15% less damage | Rusted foes hit softer. |
 | 6 | Her J blows on a rusted foe add a stack | Blows spread rust. |
 | 7 | 50 px, 6 s, up to 5 stacks | More rust, wider spray. |
-| 8 | 0.5x a second a stack | Rust far stronger. |
+| 8 | 0.6x a second a stack | Rust far stronger. |
 
 Evolution: **Rust Reckoning** (partner `h_ironHide`). Every `counter` and every broken plate consumes all Rust on foes within 60 px for 4x per stack, then sprays fresh shards.
 
@@ -443,12 +443,12 @@ summon, precise, auto (on an armoured counter, own cooldown). A giant spectral g
 | 2 | 10x | The fist hits harder. |
 | 3 | The fist grabs the attacker and throws it at the nearest crowd | The fist throws the attacker. |
 | 4 | 75%, 2 s cooldown | More often. |
-| 5 | The slam rings 40 px at half its damage | The slam strikes foes near. |
+| 5 | The slam rings 24 px at half its damage | The slam strikes foes near. |
 | 6 | 100%; it gives Fury +25% | Every armoured counter calls it, with Fury. |
 | 7 | A second fist slams the nearest other foe 0.3 s later | A second fist. |
-| 8 | 30x | The fist hits three times as hard. |
+| 8 | 55x | The fist hits far harder. |
 
-Evolution: **Hand of the Mountain** (partner `h_skyfall`). The fist is twice the size, slams for 50x, and pins every foe within 40 px for 1.5 s, taking 50% more from her.
+Evolution: **Hand of the Mountain** (partner `h_skyfall`). The fist is twice the size, slams for 150x, and pins every foe within 40 px for 1.5 s, taking 50% more from her.
 
 Build: new `skills/hulda/ancestorFist.ts`; drawn by scaling `hero/draw/gauntlets.ts` with a pale ramp; slam with `slamRing`; throw with `hurl()`.
 
@@ -465,9 +465,9 @@ ultimate, easy, U. Replaces Quake Drop: tethers pull minions into a heap she hur
 | 5 | The heap bounces once and bursts again | The heap bursts twice. |
 | 6 | Cooldown 20 to 16 s | Faster recharge. |
 | 7 | The heap scatters into bodies that each strike foes they meet for 1.0x | The heap scatters. |
-| 8 | Burst 2x, path 1.0x | Burst doubled. |
+| 8 | Burst 5x, path 1.5x | Burst far harder. |
 
-Evolution: **Mountain Hurl** (partner `h_giantSwing`). She swings the heap round twice first, striking everything within 60 px each turn for 1.0x, then hurls it wall to wall.
+Evolution: **Mountain Hurl** (partner `h_giantSwing`). She swings the heap round twice first, striking everything within 60 px each turn for 1.0x, then hurls it wall to wall; burst 9x, path 1.5x.
 
 Build: `ultimates/titanThrow.ts` and `TITAN` constants; the swing reuses the Giant Swing keys with the heap pinned.
 

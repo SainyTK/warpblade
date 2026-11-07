@@ -14,7 +14,7 @@ const LEVELS = levelRows([
     values: { riposte: 3, ripTime: 1.5, ripBlows: 1 },
   },
   { text: "Knight strike 6 to 12.", values: { strike: 12 } },
-  { text: "New: the knight warps through up to 3 foes.", values: { targets: 3 } },
+  { text: "New: the knight warps through up to 2 foes.", values: { targets: 2 } },
   {
     text: "New: the knight stuns what it strikes; Riposte covers 2 blows.",
     values: { stun: 0.8, ripTime: 2.5, ripBlows: 2 },
@@ -41,7 +41,7 @@ export const MIRROR_KNIGHT: SkillDef = {
     text: "A perfect dodge stops time while Kael and the knight strike the attacker and every foe near.",
     row: evolvedRow(LEVELS[7], "Time stops; the attacker and all near are struck.", {
       reflect: 150,
-      reflectArea: 40,
+      reflectArea: 15,
       reflectReach: 120,
       stay: 8,
     }),

@@ -79,9 +79,8 @@ export interface Enemy {
   chill: number;
   /** stacking damage over time from skills (poison, bleed, burn, lodged bolts), one entry per skill id */
   stacks: SkillStacks[];
-  /** seconds left marked by a skill, and the share of extra damage it takes from every source while marked */
-  mark: number;
-  markBonus: number;
+  /** skill marks, one per source: each adds its share of extra damage from every source while it lasts */
+  marks: FoeMark[];
   /** boss phase: 1, or 2 once it is enraged */
   phase: number;
   /** frontal blows blocked in a row; the second one sets off a counter */
@@ -101,6 +100,13 @@ export interface Enemy {
 }
 
 /** one skill's stacks on a foe: each stack deals `damage` every `every` seconds until `left` runs out */
+/** one skill's mark on a foe: seconds left, and the share of extra damage it adds (0.2 is +20%) */
+export interface FoeMark {
+  source: string;
+  left: number;
+  bonus: number;
+}
+
 export interface SkillStacks {
   /** the skill's id: the ticks' damage source */
   source: string;

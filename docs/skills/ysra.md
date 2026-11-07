@@ -175,7 +175,7 @@ Attack, precise, a parry then J. The parry opens a counter that hits very hard a
 | 7 | power 20, riposte 1, riposteTime 3 | Counters empower your next blows. |
 | 8 | power 25 | Counter damage +25%. |
 
-Evolution, Sun Piercer (with `y_brand`): the counter is a burning thrust across the whole stage for 60 AD (always a crit), and for 4 s after it every glaive blow is a crit.
+Evolution, Sun Piercer (with `y_brand`): the counter is a burning thrust across the whole stage for 45 AD (always a crit), and for 4 s after it every glaive blow is a crit.
 Built in `glaive/counter.ts` (power, reach, sure crit, stun, stamina refill, Riposte and crits in `ysra/buffs.ts`) and `stance/parry.ts`, `stance/brace.ts` (window and block cost). Riposte adds into the one blow bonus sum (G4).
 
 ### `y_skyhook` Skyhook
@@ -262,10 +262,10 @@ Spell, timed, I (rite). A pillar under the foe ahead; aim matters.
 | 4 | power 11 | Pillar damage +35%. |
 | 5 | power 13, column 2 | The pillar keeps burning. |
 | 6 | cost 26, power 15, heal 0.03 | Cheaper, and it heals you. |
-| 7 | power 18, count 2 | Two pillars. |
-| 8 | power 22 | Pillar damage +20%. |
+| 7 | power 11, count 2 | Two pillars. |
+| 8 | power 12 | Pillar damage +10%. |
 
-Evolution, Pyre Colonnade (with `y_kindling`): pillars burst at 26 AP under a ringed sigil, and two flank pillars burst 30 px either side 0.12 s later at 0.7 times.
+Evolution, Pyre Colonnade (with `y_kindling`): pillars burst at 14 AP under a ringed sigil, and two flank pillars burst 30 px either side 0.12 s later at 0.7 times.
 Built in `pyre/release.ts` and `spells/rites/flamePillar.ts` (power, width, sigil pull, burning column, source); `pyreColonnade.ts` is folded into `release.ts`.
 
 ### `y_brazier` Brazier
@@ -409,7 +409,7 @@ Summon, precise, automatic on a parry. A bird of fire answers the parry and keep
 | 7 | power 5, burst 24 | Dives burst. |
 | 8 | every 0.8, power 6, most 2 | Two hawks, faster dives. |
 
-Evolution, Sunflock (with `y_counter`): a parry calls five hawks that dive the attacker together for 10 AD each and then hunt for 6 s; while two or more fly she takes 20% less damage.
+Evolution, Sunflock (with `y_counter`): a parry calls five hawks that dive the attacker together for 8 AD each and then hunt for 6 s; while two or more fly she takes 20% less damage.
 Built in `src/game/skills/ysra/hawk.ts` with `drawPhoenix` at a third of its size; the guard is read by the kit through `buffs.guard`. Every call keeps the 3 s cooldown.
 
 ### `y_kindling` Kindling

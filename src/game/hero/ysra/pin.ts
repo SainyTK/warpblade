@@ -21,7 +21,7 @@ export function pinFoe(e: Enemy, pin: Pin): void {
   e.pinned = Math.max(e.pinned, pin.time);
   e.vx = 0;
   if (ENEMIES[e.type].launchable) e.stun = Math.max(e.stun, pin.time);
-  if (pin.taken > 0) markFoe(e, pin.time, pin.taken);
+  if (pin.taken > 0) markFoe(e, "pin", pin.time, pin.taken);
   if (pin.burn > 0) ignite(e, pin.burn);
   if (fresh) game.fx.push(createPinMark(e));
 }

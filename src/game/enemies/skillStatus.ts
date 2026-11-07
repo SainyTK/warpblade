@@ -55,19 +55,28 @@ export function consumeStacks(e: Enemy, source: string): number {
   return n;
 }
 
-/** mark a foe: for `seconds` it takes `bonus` more damage from every source (0.2 is +20%); the stronger mark wins */
-export function markFoe(e: Enemy, seconds: number, bonus: number): void {
-  e.mark = Math.max(e.mark, seconds);
-  e.markBonus = Math.max(e.markBonus, bonus);
+/** mark a foe: for `seconds` it takes `bonus` more damage from every source (0.2 is +20%). Marks of different sources
+ *  add together (the sum is capped where damage is dealt); a source's new mark replaces its own when it is longer or
+ *  stronger */
+export function markFoe(e: Enemy, source: string, seconds: number, bonus: number): void {
+  const own = e.marks.find((m) => m.source === source);
+  if (!own) {
+    e.marks.push({ source, left: seconds, bonus });
+    return;
+  }
+  own.left = Math.max(own.left, seconds);
+  own.bonus = Math.max(own.bonus, bonus);
 }
 
-/** the damage multiplier a foe's mark gives */
-export const markMultiplier = (e: Enemy): number => (e.mark > 0 ? 1 + e.markBonus : 1);
+/** the extra damage share all of a foe's marks add together, before the cap */
+export const markBonus = (e: Enemy): number => e.marks.reduce((sum, m) => sum + m.bonus, 0);
 
 /** stacks tick and run out, and the mark fades; each tick deals its stacks' damage with the skill's id as source */
 export function updateSkillStatus(e: Enemy, dt: number): void {
-  e.mark = Math.max(0, e.mark - dt);
-  if (e.mark <= 0) e.markBonus = 0;
+  if (e.marks.length) {
+    for (const m of e.marks) m.left -= dt;
+    e.marks = e.marks.filter((m) => m.left > 0);
+  }
   if (!e.stacks.length) return;
   for (const s of e.stacks) {
     s.left -= dt;

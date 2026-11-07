@@ -35,6 +35,6 @@ export const SUN_HAWK: SkillDef = {
     partner: "y_counter",
     name: "Sunflock",
     text: "A parry calls five hawks that dive the attacker together, and while two or more fly you take 20% less damage.",
-    row: evolved(levels, "A flock answers every parry.", { power: 10, flock: 5, most: 5, guard: 0.2 }),
+    row: evolved(levels, "A flock answers every parry.", { power: 8, flock: 5, most: 5, guard: 0.2 }),
   },
 };
