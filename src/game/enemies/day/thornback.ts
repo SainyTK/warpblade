@@ -28,11 +28,16 @@ export function updateThornback(e: Enemy, dt: number, ts: number): void {
     e.vx = approach(e.vx, 0, 400 * dt);
     // pawing: a kick of dust behind it every few beats
     if (Math.floor(e.st * 6) !== Math.floor((e.st - dt) * 6)) dust(e.x - e.face * 6, GROUND, 2, -e.face);
+    // a pinned thornback keeps pawing: it cannot charge until the pin lets go
+    if (e.pinned > 0) e.st = Math.min(e.st, CHARGE.wind * waveScale(game.wave).windup * 0.9);
     if (e.st >= CHARGE.wind * waveScale(game.wave).windup) {
       Object.assign(e, { state: "lunge", st: 0, ax: e.x, n: 0, vx: e.face * CHARGE.speed });
       sfx.lunge();
       dust(e.x, GROUND, 5, -e.face);
     }
+  } else if (e.state === "lunge" && e.pinned > 0) {
+    // pinned mid-charge: the charge is spent where it stands
+    Object.assign(e, { state: "recover", st: 0, vx: 0 });
   } else if (e.state === "lunge") {
     e.vx = e.face * CHARGE.speed;
     if (rng.chance(0.5 * ts)) dust(e.x - e.face * 8, GROUND, 1, -e.face);
