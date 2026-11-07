@@ -173,7 +173,23 @@ The in-game bot does not steer, so full in-game runs were not used for this.
 
 ## Cross-hero fairness
 
-FAIRNESS_PLACEHOLDER
+The skilled bot (`agent-studio/playtest`, `skilled` policy) played each hero's two example builds from the design docs, started at wave 8 (hero level 10, all eight skills at level 3) and wave 15 (level 20, all at level 5), for two waves or until it fell, in one 3-minute game limit.
+Game seconds to clear the two waves, or the second it fell:
+
+| Hero | Build | From wave 8 | From wave 15 |
+| --- | --- | --- | --- |
+| Kael | duelist (precise) | 30 s, cleared | 57 s, cleared |
+| Kael | storm (crowd) | 32 s, cleared | fell at 52 s |
+| Ysra | temple guard (precise) | 46 s, cleared | fell at 30 s |
+| Ysra | wildfire (crowd) | fell at 46 s | fell at 37 s |
+| Sable | volley (crowd) | 22 s, cleared | 44 s, cleared |
+| Sable | cadence (precise) | fell at 42 s | fell at 33 s |
+| Hulda | brawler (crowd) | 122 s, cleared | fell at 63 s |
+| Hulda | iron wall (precise) | 87 s, cleared | fell at 63 s |
+
+The best build of each hero is far from the 15% the target asks: Kael and Sable clear both stages fast, Ysra clears only wave 8, and Hulda clears wave 8 three to four times slower and falls from wave 15.
+One run per build, and the bot uses only J, a reactive L, the HUD tabs and U, so it never plays Sable's kick and reload or Hulda's grabs, and these figures say as much about the bot as about the heroes.
+They agree with the room's base kits, which put Kael and Ysra at about 2.5 times Sable and Hulda on a crowd.
 
 ## Still off
 
