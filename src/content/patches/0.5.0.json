@@ -1,0 +1,706 @@
+{
+  "version": "0.5.0",
+  "kind": "big",
+  "date": "2026-11-08",
+  "title": "Long Chain",
+  "tagline": "Orrin, the chain dancer, swings across the stage on a hooked chain. Every hero now grows through 20 skills of their own, and runs bring streaming waves, charms, chests, Flow, a damage report and the Codex.",
+  "intro": "This patch changes how a run grows, and it adds a fifth hero to grow with. The skill tree is gone: every hero now has 20 skills of their own, each with eight levels and an evolution, and the right pair of skills turns a run into a build. Waves now stream in through rifts and grow much larger, charms and chests push a build further, and the end of a run shows which source did the damage. Orrin is the second hero of our hero sprint, and the first who travels by physics: he hooks a crystal, a platform or the air itself, swings, and lets go to fly. Your coins, shop levels, unlocked heroes and options carry over as they were.",
+  "highlights": [
+    {
+      "title": "Orrin, the chain dancer",
+      "text": "Orrin fights at the length of a brass hook on a steel chain, with no run, no dash and no block. K throws the hook into a warp crystal, under a high platform or into the air, and he swings under it for as long as you hold K. A and D pump the swing, L reels the chain in to swing faster, and letting go of K flings him across the stage. He costs 550 coins on the hero screen.",
+      "media": {
+        "kind": "video",
+        "file": "orrin-swing-fling.mp4",
+        "poster": "orrin-swing-fling.png",
+        "alt": "In wave 3, Orrin jumps off a ledge and hooks the warp crystal above the middle of the stage. He swings in wide arcs under it and kicks a glimmer moth on the way up. Then he lets go and flies across to the right side of the stage while the MO bar at the top left fills.",
+        "width": 640,
+        "height": 360
+      }
+    },
+    {
+      "title": "Air bites and Momentum",
+      "text": "With nothing to hook, the chain bites the air and opens a small rift tear that holds him for 1.2 seconds, twice per jump. Flying fast fills Momentum, his MO bar, and a full bar makes every blow he lands hit 40% harder. It drains when he stands still, so Orrin plays best in the air.",
+      "media": {
+        "kind": "video",
+        "file": "orrin-air-bite.mp4",
+        "poster": "orrin-air-bite.png",
+        "alt": "On open floor, Orrin throws his hook into empty air. It bites a small indigo rift tear and he swings from it, then lashes a brass Hanging Arc down onto a thornback. He lets go, hooks the air a second time and swings off, hitting a moth for a critical hit.",
+        "width": 640,
+        "height": 360
+      }
+    },
+    {
+      "title": "Hero skills",
+      "text": "Every hero now has 20 skills of their own: attacks, movement, spells, damage over time, summons and ultimates. Each skill has eight levels and evolves with a partner skill into something much stronger. Level ups bank points, and when a wave's last foe falls you pick from three cards for each point, with rerolls, skips and banishes to steer the build.",
+      "media": {
+        "kind": "image",
+        "file": "hero-skill-pick.png",
+        "alt": "The Wave 1 Clear pick with three new Kael skill cards: Reaping Sweep, Crystal Splinters and Starfall. Each has its icon, an eight-step level line and a line saying its evolution evolves with ???, with Reroll, Skip and Banish below.",
+        "width": 1280,
+        "height": 720
+      }
+    },
+    {
+      "title": "Streaming waves, elites and chests",
+      "text": "Foes now pour in through rifts until the wave's quota is spent, from 3 at wave 1 to 62 at wave 30. From wave 3, every third wave brings an elite with a gold ring halfway through. Elites, mini bosses and the Rift Warden drop chests that raise your skills and charms, and from wave 8 a chest can evolve a skill.",
+      "media": {
+        "kind": "video",
+        "file": "elite-chest.mp4",
+        "poster": "elite-chest.png",
+        "alt": "In wave 3, Orrin fights thornbacks as new foes arrive through purple rifts. He finishes a gold-ringed elite moth, which drops a chest, then walks onto the chest and the Chest screen opens with Chain Fence level 2.",
+        "width": 640,
+        "height": 360
+      }
+    }
+  ],
+  "sections": [
+    {
+      "id": "heroes",
+      "entries": [
+        {
+          "name": "Orrin",
+          "tag": "new",
+          "summary": "A quick, light chain fighter who swings through the air and hits hardest at the tip of his chain.",
+          "context": "Kael warps, Ysra vaults, Sable hops and Hulda charges, and none of them keeps speed through the air. Orrin travels on a real pendulum and grows stronger while he keeps moving, so he plays unlike anyone in the roster.",
+          "changes": [
+            {
+              "kind": "stat",
+              "label": "Price on the hero screen",
+              "before": "Not in the game",
+              "after": "550 coins"
+            },
+            {
+              "kind": "note",
+              "text": "Base stats: 95 HP, 11 attack, 8 ability power, 85 MP, 130 stamina, 6% crit, move 1.05."
+            },
+            {
+              "kind": "note",
+              "text": "A and D walk, with no run. W is one light jump of 52 pixels, with no double jump."
+            },
+            {
+              "kind": "note",
+              "text": "J is the chain string, K the hook, L the reel or Backline, I the selected ability, O switches ability and U is the special."
+            },
+            {
+              "kind": "note",
+              "text": "On the touch controller his buttons read Lash, Jump, Hook, Reel, Ability, Switch and Special. Holding Hook keeps the swing, and lifting your finger lets go. The Controls screen lists every one of his keys."
+            },
+            {
+              "kind": "note",
+              "text": "Two achievements of his own: Orrin's Trial (clear wave 10 with him, 40 coins) and Full Swing (defeat 3 foes with swing kicks in one swing, 60 coins)."
+            },
+            {
+              "kind": "note",
+              "text": "He plays in co-op rooms like every hero. Two Orrins can hook the same foe or crystal, and an Orrin who falls or leaves lets go at once."
+            }
+          ],
+          "media": {
+            "kind": "image",
+            "file": "orrin-touch-phone.png",
+            "alt": "An upright phone screen of a run in wave 2. Orrin swings from an air hook over the ruins, with the touch stick at the bottom left and round buttons for Lash, Jump, Hook, Reel, Ability, Switch and Special at the bottom right.",
+            "width": 750,
+            "height": 1334
+          }
+        },
+        {
+          "name": "Orrin: the hook and the swing",
+          "tag": "new",
+          "summary": "K hooks a crystal, a platform, the air or a foe, and how you hold and release it decides where he goes.",
+          "context": "His travel follows real physics, so a good swing carries its speed into the next one. The air bite means he can always swing, even on open floor.",
+          "changes": [
+            {
+              "kind": "note",
+              "text": "The hook costs 18 stamina, flies at 420 pixels a second and reaches 84 pixels. It aims 40 degrees up, 75 degrees with W held in the air, and 30 degrees down with S held in the air."
+            },
+            {
+              "kind": "note",
+              "text": "On a warp crystal or a high platform he swings for as long as K is held. On empty air the hook opens a rift tear that holds for 1.2 seconds, flickers at 0.9, then snaps shut. He gets 2 air hooks per jump, and crystals and platforms give the hook back."
+            },
+            {
+              "kind": "note",
+              "text": "A and D pump the swing up to 300 pixels a second. Letting go keeps his speed, and letting go on the forward upswing adds 15%. W lets go with an extra hop."
+            },
+            {
+              "kind": "note",
+              "text": "Holding L while swinging reels the chain in at 160 pixels a second for 10 stamina a second, and the swing speeds up as the chain shortens, up to 1.6 times."
+            },
+            {
+              "kind": "note",
+              "text": "Swing kick: faster than 140 pixels a second, his body hits each foe he passes for 0.7x attack scaled by speed, up to 1.2x, once per foe per swing."
+            },
+            {
+              "kind": "note",
+              "text": "Hook a foe and the chain pulls him to it at 360 pixels a second for a flying kick (1.0x attack), then he bounces up and back, still in the air."
+            },
+            {
+              "kind": "note",
+              "text": "A hook on a low platform with no room to swing pulls him up onto it."
+            },
+            {
+              "kind": "note",
+              "text": "Slip: a blow that would land within 0.12 seconds after he lets go at speed misses, and counts as a perfect dodge."
+            },
+            {
+              "kind": "note",
+              "text": "On the floor, L is Backline: 16 stamina, the hook bites the floor behind him and yanks him 48 pixels back."
+            }
+          ],
+          "media": {
+            "kind": "video",
+            "file": "orrin-hook-kick.mp4",
+            "poster": "orrin-hook-kick.png",
+            "alt": "In a night wave, Orrin jumps and hooks a gold-ringed elite wisp. The chain pulls him to it and he kicks it for 32, bounces up and back, then throws a second hook into the air and swings away.",
+            "width": 640,
+            "height": 360
+          }
+        },
+        {
+          "name": "Orrin: the chain string",
+          "tag": "new",
+          "summary": "Three sweeping blows that hit hardest in the last 18 pixels of the chain, so he wants foes at the chain's length.",
+          "context": "Ysra pokes in a line and Hulda punches up close. Orrin's blows are arcs and full circles with a sweet spot at the tip, which makes spacing his main skill on the floor.",
+          "changes": [
+            {
+              "kind": "note",
+              "text": "Lash: a flat arc out to 64 pixels, 1.1x attack at the tip and 0.55x closer in."
+            },
+            {
+              "kind": "note",
+              "text": "Rising Arc: an arc from below the front up over his head, radius 56, 1.2x at the tip. A tip hit lifts a minion, and it catches fliers above him."
+            },
+            {
+              "kind": "note",
+              "text": "Full Circle: a ring of radius 58 all round him, 1.5x at the tip, a 0.4 second stun, and a tip hit breaks a guard."
+            },
+            {
+              "kind": "note",
+              "text": "Chain Knee: with a foe right against him, the first blow is a knee (0.7x) that pushes it out into tip range."
+            },
+            {
+              "kind": "note",
+              "text": "Hanging Arc: in the air or mid-swing, J sweeps down ahead of him (1.0x at the tip), once per jump and again after each new hook."
+            },
+            {
+              "kind": "note",
+              "text": "Tip hits flash brass and curl round a foe's guard. Hits closer in are blocked like any hero's."
+            }
+          ],
+          "media": {
+            "kind": "video",
+            "file": "orrin-chain-string.mp4",
+            "poster": "orrin-chain-string.png",
+            "alt": "Orrin knees a thornback that is too close, pushing it out to chain range. A Rising Arc follows and its tip crits for 48, and a Full Circle sweeps a brass ring all round him. Then he lashes at the moths above.",
+            "width": 640,
+            "height": 360
+          }
+        },
+        {
+          "name": "Orrin: Momentum",
+          "tag": "new",
+          "summary": "His MO bar fills while he flies fast and makes every hit stronger, and it drains when he stands still.",
+          "context": "Momentum rewards the swing itself. No button spends it, so the only way to keep it is to keep moving.",
+          "changes": [
+            {
+              "kind": "note",
+              "text": "Fills by 40 a second in the air faster than 140 pixels a second, 5 for each tip hit and 20 for each Slip."
+            },
+            {
+              "kind": "note",
+              "text": "Drains by 12 a second after 1.5 seconds on the floor without a tip hit, and by 30 for each blow that hurts him."
+            },
+            {
+              "kind": "note",
+              "text": "Every hit he deals is up to 40% stronger at full Momentum. From 50, his blows reach 8 pixels further, and at 100 the chain glows brass."
+            }
+          ]
+        },
+        {
+          "name": "Orrin: Whirlwall and Anchor Pin",
+          "tag": "new",
+          "summary": "Two abilities on I from the start: a spinning chain that breaks foe shots, and a hook that nails a foe to the floor.",
+          "context": "Orrin has no block, so Whirlwall is his answer to orbs, pollen and spit. Anchor Pin holds one foe in place at the chain's length.",
+          "changes": [
+            {
+              "kind": "note",
+              "text": "Whirlwall: 20 MP, 5 second recharge. He spins the chain overhead for 1.2 seconds in a ring of radius 46, hitting every foe in it for 0.35x ability power six times and pushing it out. Every foe shot that touches the ring breaks."
+            },
+            {
+              "kind": "note",
+              "text": "Anchor Pin: 24 MP, 6 second recharge. The hook drives down through the nearest foe on the floor within 90 pixels for 2.0x ability power and roots it for 1.8 seconds, or 0.6 seconds on a mini boss or boss. With no foe in reach it strikes the floor and costs half."
+            },
+            {
+              "kind": "note",
+              "text": "O switches between them and any spell skills he picks up."
+            },
+            {
+              "kind": "note",
+              "text": "Known issue: a moth flying level with a platform can still be pinned to the platform's edge."
+            }
+          ],
+          "media": {
+            "kind": "video",
+            "file": "orrin-whirlwall.mp4",
+            "poster": "orrin-whirlwall.png",
+            "alt": "Orrin spins his chain overhead in a wide ring. Glimmer moth pollen bursts into puffs where it meets the ring, and the moths around him take hits and are pushed out.",
+            "width": 640,
+            "height": 360
+          }
+        },
+        {
+          "name": "Orrin: Grand Pendulum",
+          "tag": "new",
+          "summary": "His special swings two wide passes under a rift tear, then crashes down in a brass ring.",
+          "context": "A special should feel like his whole kit at once, so it is one huge swing that ends in a crash.",
+          "changes": [
+            {
+              "kind": "note",
+              "text": "A rift tear opens 70 pixels above him and he swings two passes of radius 90 across and back over 1.2 seconds, hitting each foe he passes for half the charge level's power on each pass. The crash deals the level's full power within its reach."
+            },
+            {
+              "kind": "note",
+              "text": "His ultimate skill, Maelstrom, replaces it with full vertical circles round a rift tear, and evolves into Eye of the Maelstrom."
+            }
+          ],
+          "media": {
+            "kind": "video",
+            "file": "orrin-grand-pendulum.mp4",
+            "poster": "orrin-grand-pendulum.png",
+            "alt": "In a rainy wave 8 with Mire Toads and Storm Kites around him, Orrin charges his special. A rift tear opens overhead, he swings two wide passes under it hitting the kites, then crashes down in a brass and blue ring that crits for 295.",
+            "width": 640,
+            "height": 360
+          }
+        },
+        {
+          "name": "Orrin: 20 skills",
+          "tag": "new",
+          "summary": "His own skills build on the swing, the tip, Momentum and the chain itself.",
+          "context": "Every hero gets 20 skills of their own in this patch, and Orrin arrives with his complete set and their evolutions.",
+          "changes": [
+            {
+              "kind": "note",
+              "text": "Attacks: Sweet Spot, Iron Weight, Sky Lash, Pendulum Kick and Gaff."
+            },
+            {
+              "kind": "note",
+              "text": "Movement: Pendulum Pump, Reel Snap, Undertow and Plumb Drop."
+            },
+            {
+              "kind": "note",
+              "text": "Spells on I: Chain Fence, Tether and Anchor Fall."
+            },
+            {
+              "kind": "note",
+              "text": "Damage over time: Barbed Links, Rust Bite and Friction Burn."
+            },
+            {
+              "kind": "note",
+              "text": "Summons: Brass Kite, Rift Bell and Twin Chain."
+            },
+            {
+              "kind": "note",
+              "text": "Passive: Perpetual Motion. Ultimate: Maelstrom."
+            },
+            {
+              "kind": "note",
+              "text": "For example, Sweet Spot at level 8 with Perpetual Motion at level 4 evolves into Perfect Arc: at 50 Momentum or more every tip hit deals double and sends a shock through the foes behind it."
+            }
+          ],
+          "media": {
+            "kind": "image",
+            "file": "orrin-perfect-arc.png",
+            "alt": "The chest screen titled Evolution over a dimmed rainy stage. A gold card shows the Perfect Arc icon and says Sweet Spot evolved: at 50 Momentum or more every tip hit deals double and sends a shock through the foes behind it.",
+            "width": 1280,
+            "height": 720
+          }
+        },
+        {
+          "name": "Kael",
+          "tag": "rework",
+          "summary": "Kael starts every run with his whole kit, and his skills change what his moves do.",
+          "context": "With 20 skills per hero, the base kit no longer has to be earned piece by piece. Starting complete lets every run begin as a real fight.",
+          "changes": [
+            {
+              "kind": "stat",
+              "label": "Sword string",
+              "before": "2 hits at level 1, 6 by level 17",
+              "after": "4 hits for the whole run"
+            },
+            {
+              "kind": "stat",
+              "label": "Air attacks per jump",
+              "before": "1, with 2 more from Sky Dance",
+              "after": "2, with the stomp from Sky Dance"
+            },
+            {
+              "kind": "stat",
+              "label": "Warp Strike",
+              "before": "Learned from a pick",
+              "after": "On K from the start, 10 MP"
+            },
+            {
+              "kind": "stat",
+              "label": "Abilities on I at the start",
+              "before": "None; fire, ice and bolt learned from picks",
+              "after": "Crystal Lance and Crystal Burst"
+            },
+            {
+              "kind": "note",
+              "text": "Fire Flask, Ice Spikes and Lightning are now spell skills he can pick up. O switches between every ability he holds."
+            },
+            {
+              "kind": "note",
+              "text": "Crystal Nova is now his special on U from the start, and his ultimate skills upgrade or replace it."
+            }
+          ]
+        },
+        {
+          "name": "Ysra",
+          "tag": "rework",
+          "summary": "Ysra starts with a second rite, and her skills reshape her glaive, vault and Heat.",
+          "context": "Her kit moved onto her own 20 skills like every hero's. Phoenix Dive moved to an evolution, where its size fits better.",
+          "changes": [
+            {
+              "kind": "stat",
+              "label": "Rites at the start",
+              "before": "Flare",
+              "after": "Flare and Cinder Lash"
+            },
+            {
+              "kind": "stat",
+              "label": "Ultimates",
+              "before": "Sunspear, Phoenix Dive and Volcanic Rift",
+              "after": "Sunspear and Volcanic Rift"
+            },
+            {
+              "kind": "note",
+              "text": "Phoenix Dive is now the evolution of her Falling Star dive skill."
+            },
+            {
+              "kind": "note",
+              "text": "In a vault, J crashes down at any point of the flight."
+            }
+          ]
+        },
+        {
+          "name": "Sable",
+          "tag": "rework",
+          "summary": "Sable's J now fires a string of three bolts at the foe ahead, and her spells take turns on I.",
+          "context": "Every hero's ground string now has a fixed length, and hers became a three-bolt string. Her skills add spells, kegs, nets and summons around it.",
+          "changes": [
+            {
+              "kind": "note",
+              "text": "J shoots a string of three bolts at the foe ahead, the last one a closing bolt. Holding J keeps shooting, and an empty quiver reloads."
+            },
+            {
+              "kind": "note",
+              "text": "I casts the selected spell, a snare at first, and the next ready spell is selected after each cast."
+            },
+            {
+              "kind": "note",
+              "text": "A blow dodged during her hop or slide counts as a perfect dodge."
+            }
+          ]
+        },
+        {
+          "name": "Hulda",
+          "tag": "rework",
+          "summary": "Hulda's fist string is now three blows: jab, body hook and haymaker.",
+          "context": "Every hero's ground string now has a fixed length. Her skills, such as Iron Hide, now carry the growth her skill tree used to give.",
+          "changes": [
+            {
+              "kind": "stat",
+              "label": "Fist string",
+              "before": "4 blows: jab, cross, body hook, haymaker",
+              "after": "3 blows: jab, body hook, haymaker"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "systems",
+      "entries": [
+        {
+          "name": "Hero skills",
+          "tag": "rework",
+          "summary": "Each hero's skill tree is replaced by 20 skills of their own, each with eight levels and an evolution.",
+          "context": "A skill tree gave every run the same few paths. Twenty skills with partners and evolutions give each run its own build story, with real trade-offs in what you take.",
+          "changes": [
+            {
+              "kind": "stat",
+              "label": "Skills per hero",
+              "before": "A skill tree with ranks",
+              "after": "20 skills, levels 1 to 8"
+            },
+            {
+              "kind": "stat",
+              "label": "Evolutions",
+              "before": "A skill with its partner passive at full rank, from level 6, offered on a gold card",
+              "after": "A skill at level 8 with its partner at level 4 or more, evolved by a chest from wave 8"
+            },
+            {
+              "kind": "note",
+              "text": "Every level up banks a point. When a wave's last foe falls you pick from 3 cards for each point, 4 with luck. A card offers a new skill, the next level of a held skill, or a charm."
+            },
+            {
+              "kind": "note",
+              "text": "A build holds 8 skills and at most one ultimate skill. Every run starts with 2 rerolls, 2 skips and 1 banish."
+            },
+            {
+              "kind": "note",
+              "text": "A card says Evolves with ??? until you have made that evolution once."
+            },
+            {
+              "kind": "note",
+              "text": "Every hero has a special on U from the start: Crystal Nova, Pyre Wave, Bolt Storm, Quake Drop and Grand Pendulum."
+            }
+          ]
+        },
+        {
+          "name": "Charms",
+          "tag": "new",
+          "summary": "Charms raise one stat for every source at once, such as Might for damage and Haste for cooldowns.",
+          "context": "Skills grow one part of a hero. Charms grow the whole build, so a pick between a skill level and a charm is a real choice.",
+          "changes": [
+            {
+              "kind": "note",
+              "text": "Might +10% damage, Haste shorter cooldowns and recharges, Vigor +15% max HP and slow healing, Insight +8% experience, each per level, up to 5 levels."
+            },
+            {
+              "kind": "note",
+              "text": "Six more charms are found over many runs: Multitude, Reach, Persistence, Swiftness, Fortune and Resonance."
+            },
+            {
+              "kind": "stat",
+              "label": "Charm slots",
+              "before": "None",
+              "after": "3 at the start, up to 5 once found"
+            }
+          ]
+        },
+        {
+          "name": "Streaming waves and elites",
+          "tag": "rework",
+          "summary": "Waves stream in through rifts and grow much larger as the run goes on, with an elite every third wave.",
+          "context": "Late waves should fill the screen, and the hero should be strong enough by then to meet them. Streaming keeps the crowd readable while the numbers climb.",
+          "changes": [
+            {
+              "kind": "note",
+              "text": "Each wave has a quota of foes, from 3 at wave 1 to 62 at wave 30, that stream in through rifts until it is spent."
+            },
+            {
+              "kind": "stat",
+              "label": "Foes in a full clear",
+              "before": "About 190",
+              "after": "About 620"
+            },
+            {
+              "kind": "note",
+              "text": "Only part of the quota stands at once, up to 22 late in a run. A new rift opens shortly after a foe falls."
+            },
+            {
+              "kind": "note",
+              "text": "Foe HP grows 12.5% each wave, about 30 times by wave 30, and experience 7% each wave."
+            },
+            {
+              "kind": "note",
+              "text": "From wave 3, every third wave that is not a boss wave brings an elite halfway through: a foe of the era with a gold ring, 3 times the HP and experience, double coins, and a chest."
+            },
+            {
+              "kind": "note",
+              "text": "Coins per run stay about where they were, spread over the larger waves."
+            }
+          ]
+        },
+        {
+          "name": "Chests",
+          "tag": "new",
+          "summary": "Elites, mini bosses and the Rift Warden drop a chest that raises your skills and charms.",
+          "context": "Chests turn the big fights into rewards for the build, and they are where evolutions happen.",
+          "changes": [
+            {
+              "kind": "note",
+              "text": "Touch a chest to open it. It raises one held skill or charm, sometimes 3 or 5 at once, and the chest screen says what each raised level does."
+            },
+            {
+              "kind": "note",
+              "text": "From wave 8, a chest evolves a skill that is ready instead."
+            }
+          ]
+        },
+        {
+          "name": "Levels and hero growth",
+          "tag": "rework",
+          "summary": "Runs now reach far higher levels, and attack and ability power grow by a share each level.",
+          "context": "Many more picks per run give a build room to grow. Compounding power keeps the hero ahead of the growing waves.",
+          "changes": [
+            {
+              "kind": "stat",
+              "label": "Level at the end of a full run",
+              "before": "About 18",
+              "after": "About 84"
+            },
+            {
+              "kind": "stat",
+              "label": "Attack and ability power per level",
+              "before": "A flat amount",
+              "after": "+2.5%, compounding"
+            },
+            {
+              "kind": "note",
+              "text": "A level up restores 8% of HP and MP."
+            }
+          ]
+        },
+        {
+          "name": "Flow",
+          "tag": "new",
+          "summary": "Every hit you land with your own blows and abilities builds Flow, which makes everything hit harder.",
+          "context": "Builds now do much of the damage. Flow keeps your own play at the centre of every run.",
+          "changes": [
+            {
+              "kind": "note",
+              "text": "Each hit adds a stack, up to 25, and each stack is +4% damage on every source, so a full bar doubles it. A perfect dodge adds 5."
+            },
+            {
+              "kind": "note",
+              "text": "Stacks drain 2.5 seconds after your last hit, and getting hurt halves them. The HUD shows the bar."
+            }
+          ]
+        },
+        {
+          "name": "Damage by source",
+          "tag": "new",
+          "summary": "The end of run screen shows how much damage each source dealt, with time, level and foes defeated.",
+          "context": "With skills, summons and burns all striking at once, you should be able to see what carried the run.",
+          "changes": [
+            {
+              "kind": "note",
+              "text": "Sources are the hero's attacks, abilities and ultimate, and each skill that strikes on its own, each with its level, total damage and damage per second."
+            }
+          ],
+          "media": {
+            "kind": "image",
+            "file": "run-end.png",
+            "alt": "Kael's Fallen screen after wave 5: time 0:38, level 10, 12 foes defeated. A Damage by Source table lists Kael's attacks, Kael's abilities and Phantom Edge level 1 with damage and DPS, then coins earned, the bank and the Into the Rift achievement.",
+            "width": 1280,
+            "height": 720
+          }
+        },
+        {
+          "name": "The Codex and discovery",
+          "tag": "new",
+          "summary": "The Codex on the start menu records every hero's skills, evolutions and charms, and the ones you have yet to find.",
+          "context": "A collection to fill gives every run a next goal. Some of it stays a mystery until you find it in play.",
+          "changes": [
+            {
+              "kind": "note",
+              "text": "A new save starts with Might, Haste, Vigor and Insight and 3 charm slots. The other charms and charm slots open when hidden goals are met."
+            },
+            {
+              "kind": "note",
+              "text": "Locked entries show a silhouette and a short hint, and a few show only ???. An evolution's partner stays hidden until you have made it once."
+            },
+            {
+              "kind": "note",
+              "text": "A banner shows each find during a run, and the end of run screen lists what the run found."
+            }
+          ],
+          "media": {
+            "kind": "image",
+            "file": "codex.png",
+            "alt": "The Codex page with 4 of 112 found. Kael's skills Keen Edge, Skybreaker, Reaping Sweep and Phase Cut are listed by name, and under each its evolution is still hidden as ??? Evolves with ???.",
+            "width": 1280,
+            "height": 720
+          }
+        },
+        {
+          "name": "Achievements",
+          "tag": "adjusted",
+          "summary": "Two new achievements for Orrin, and the two larger kill goals grew to fit the larger waves.",
+          "context": "A full clear now defeats about three times as many foes, so the kill goals were raised to stay about as far off in runs. Saves that already earned them keep them.",
+          "changes": [
+            {
+              "kind": "stat",
+              "label": "Achievements",
+              "before": "22, worth 1,470 coins",
+              "after": "24, worth 1,570 coins"
+            },
+            {
+              "kind": "stat",
+              "label": "Thinning the Night",
+              "before": "Slay 1,000 foes",
+              "after": "Slay 3,000 foes"
+            },
+            {
+              "kind": "stat",
+              "label": "Endless Blade",
+              "before": "Slay 5,000 foes",
+              "after": "Slay 15,000 foes"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "items",
+      "entries": [
+        {
+          "name": "Reroll, Skip and Banish",
+          "tag": "new",
+          "summary": "The shop sells more of each pick tool, so every run can steer its cards further.",
+          "context": "Steering a build toward an evolution is half the fun of the new skills, and the shop now helps with it.",
+          "changes": [
+            {
+              "kind": "note",
+              "text": "Reroll (30 coins a level), Skip (25) and Banish (35), three levels each. Each level adds one of that tool to every run."
+            }
+          ]
+        },
+        {
+          "name": "Aftershock",
+          "tag": "adjusted",
+          "summary": "Aftershock now answers Orrin's travel moves too.",
+          "context": "Every shop item should help every hero.",
+          "changes": [
+            {
+              "kind": "note",
+              "text": "For Orrin: every release of a swing, every landing out of a fling, every zip to a foe, every ledge pull and every Backline."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "art",
+      "entries": [
+        {
+          "name": "Damage numbers and crowds",
+          "tag": "adjusted",
+          "summary": "Big waves stay readable: numbers merge, light is capped, and resting foes ease apart.",
+          "context": "Streaming waves put many more foes and hits on screen at once.",
+          "changes": [
+            {
+              "kind": "note",
+              "text": "Damage numbers on the same foe merge, only so many show at once, and a new number stacks above any fresh one it would overlap."
+            },
+            {
+              "kind": "note",
+              "text": "The light from many kills at once is capped, so it never washes out the screen."
+            },
+            {
+              "kind": "note",
+              "text": "Minions standing their ground, winding up or recovering ease apart."
+            },
+            {
+              "kind": "note",
+              "text": "Elites wear a gold ring edged in dark, with a sweeping glint and a gold HP bar."
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "feedback": []
+}
