@@ -8,6 +8,7 @@ import { kit } from "./hero/kits";
 import { resetWound } from "./hero/wound";
 import { resetDanger } from "./lowHealth";
 import { resetProgress } from "./progress";
+import { clearWards } from "./shotWards";
 import { forgetSkills } from "./skills/runtime";
 import { freshHero, game, hero, ponytail, progress, scarf, showBanner } from "./state";
 
@@ -18,6 +19,7 @@ export function resetRun(banner = "Rise again"): void {
   resetLedger();
   forgetSkills();
   clearChests();
+  clearWards();
   Object.assign(game, {
     mode: "play",
     enemies: [],

@@ -28,7 +28,13 @@ export function updateEnemies(dt: number): void {
     if (updateAirborne(e, sdt) || updateStunned(e, sdt)) continue;
     e.st += sdt;
     e.cd -= sdt;
+    const heldAt = e.x;
     kindOf(e.type).update(e, sdt, ts);
+    // a pinned foe stays where it is held, whatever its own step asked for: no walk, charge or lunge carries it off
+    if (e.pinned > 0) {
+      e.x = heldAt;
+      e.vx = 0;
+    }
   }
   game.enemies = game.enemies.filter((e) => e.hp > 0);
   separateFoes(dt);

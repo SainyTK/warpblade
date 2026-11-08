@@ -5,6 +5,7 @@ import { rememberPerSeat } from "../seatMemory";
 import { character, progress } from "../state";
 import { HULDA_SKILLS } from "./hulda/index";
 import { KAEL_SKILLS } from "./kael/index";
+import { ORRIN_SKILLS } from "./orrin/index";
 import { SABLE_SKILLS } from "./sable/index";
 import { YSRA_SKILLS } from "./ysra/index";
 
@@ -13,6 +14,7 @@ const BEHAVIORS: Readonly<Record<KitId, Readonly<Record<string, SkillBehavior>>>
   ysra: YSRA_SKILLS,
   sable: SABLE_SKILLS,
   hulda: HULDA_SKILLS,
+  orrin: ORRIN_SKILLS,
 };
 
 /** each held skill's live state for the hero in play: projectiles, summons, timers, foes in reach. Kept to the host,

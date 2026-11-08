@@ -37,6 +37,8 @@ export interface HitOptions {
   heavy?: boolean;
   /** a sword blow: guards stop it unless it is heavy */
   melee?: boolean;
+  /** comes round a guard (the head of Orrin's chain at its tip): guards never stop it */
+  curls?: boolean;
   /** a husk stops walking for this long */
   stagger?: number;
   /** a Keen blow: always a critical hit */
@@ -61,7 +63,7 @@ export function isBehind(e: Enemy, fromX: number): boolean {
 
 /** guarding kinds (husks from wave 3, brutes) hold up a guard while they walk, facing the blow */
 function guards(e: Enemy, o: HitOptions): boolean {
-  if (!o.melee || o.fromX === undefined) return false;
+  if (!o.melee || o.curls || o.fromX === undefined) return false;
   const kind = kindOf(e.type);
   if (kind.guardFrom === undefined || game.wave < kind.guardFrom) return false;
   return e.state === kind.rest && !e.air && e.stun <= 0 && e.frozen <= 0 && e.shock <= 0 && !isBehind(e, o.fromX);

@@ -141,6 +141,15 @@ class SoundEffects {
   perfect(): void {
     this.tone(880, 1760, 0.25, "sine", 0.06);
   }
+  /** a hook biting: a metal clink with a short rattle of links behind it */
+  clink(): void {
+    this.tone(2100, 1600, 0.05, "square", 0.035);
+    this.noise(0.14, 4200, 1800, 0.06, "highpass");
+  }
+  /** links paying out or reeling in */
+  rattle(): void {
+    this.noise(0.09, 3600, 2400, 0.04, "bandpass", 3);
+  }
   evade(): void {
     this.noise(0.12, 2500, 1200, 0.05);
   }

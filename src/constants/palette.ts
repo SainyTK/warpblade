@@ -9,6 +9,8 @@ export const PAL = {
   volt: ramp(["#2a1660", "#4b3bc4", "#6f8bff", "#a9c8ff", "#e2efff"]),
   shadow: ramp(["#120a1e", "#2a1640", "#4a2470", "#7a3cb0", "#b673e8", "#ecc8ff"]),
   heal: ramp(["#123a2a", "#1f7a4a", "#3fc06a", "#9cf0a0", "#e8ffe0"]),
+  /** Orrin's brass: the chain's tip flashes, its glow at full Momentum and the MO bar */
+  brass: ramp(["#3a2410", "#7a4e1a", "#c08a2e", "#e8b04a", "#ffe08a", "#fff6d0"]),
 } as const;
 
 /** spark colors, head to tail */
@@ -19,6 +21,7 @@ export const SPARKS = {
   shadow: [hex("#ecc8ff"), hex("#b673e8"), hex("#7a3cb0"), hex("#4a2470")],
   ice: [WHITE, hex("#cbf1ff"), hex("#8fd3f2"), hex("#4f9bd4")],
   blood: [WHITE, hex("#ffd0d8"), hex("#e0405a"), hex("#7e1530")],
+  brass: [WHITE, hex("#fff6d0"), hex("#ffe08a"), hex("#c08a2e")],
 } satisfies Record<string, Ramp>;
 
 /** white hot to smouldering, and fresh smoke to thin */

@@ -111,6 +111,35 @@ export const TOUCH_TEXT: Record<KitId, Record<TouchButtonAction, TouchButtonText
     ultimate: SPECIAL,
     cycle: { label: "Switch", hint: "Turn to the next ability", accent: "#e0ac48" },
   },
+  orrin: {
+    attack: {
+      label: "Lash",
+      hint: "Chain string: Lash, Rising Arc, Full Circle, hardest at the tip. In the air, a Hanging Arc",
+      accent: "#e8b04a",
+    },
+    up: {
+      label: "Jump",
+      hint: "One light jump. While swinging, let go with a hop. Hold the stick down to drop through a ledge",
+      accent: "#e8e6f6",
+    },
+    dash: {
+      label: "Reel",
+      hint: "While swinging, hold to reel the chain in. On the floor, Backline: yank yourself back",
+      accent: "#c08a2e",
+    },
+    warp: {
+      label: "Hook",
+      hint: "Hold to swing from a crystal, a platform or the air, lift to let go. On a foe, zip to it. Stick up aims steeper, down in the air aims low",
+      accent: "#b8c0cc",
+    },
+    cast: {
+      label: "Ability",
+      hint: "Use the selected ability: Whirlwall, Anchor Pin or a spell skill",
+      accent: "#ffe08a",
+    },
+    ultimate: SPECIAL,
+    cycle: { label: "Switch", hint: "Turn to the next ability", accent: "#e0ac48" },
+  },
 };
 
 /** where the attack button's center sits, art pixels in from the bottom right corner of the safe area */
@@ -158,6 +187,15 @@ export const STICK_DIRECTIONS: Record<KitId, readonly StickDirectionSpec[]> = {
     { direction: "far side", label: "Walk, she never runs" },
     { direction: "up", label: "Jump" },
     { direction: "down", label: "With Jump, drop through a ledge" },
+  ],
+  orrin: [
+    { direction: "side", label: "Walk. While swinging, pump the swing" },
+    { direction: "far side", label: "Walk, he never runs" },
+    { direction: "up", label: "Jump. With Hook, aim steeper" },
+    {
+      direction: "down",
+      label: "With Jump, drop through a ledge. With Hook in the air, aim low. While swinging, Plumb Drop",
+    },
   ],
 };
 

@@ -2,6 +2,7 @@ import { HERO_COLORS as HC } from "../../../constants/palette";
 import type { SpriteCanvas } from "../../../engine/sprite";
 import { WHITE } from "../../../utils/color";
 import { skin } from "../skin";
+import { drawChainGrip } from "./chainGrip";
 import { drawCrossbow } from "./crossbow";
 import type { Vec } from "./reach";
 
@@ -95,8 +96,9 @@ function drawGlaive(s: SpriteCanvas, at: Along): void {
 
 /** the hero's weapon in the hand at this angle; a fist fighter has none to draw here */
 export function drawSword(s: SpriteCanvas, hand: Vec, angle: number): void {
-  // gauntlets are drawn on both fists with the arms
+  // gauntlets are drawn on both fists with the arms, and a chain's links are drawn in the world from the hand
   if (skin.weapon === "gauntlets") return;
+  if (skin.weapon === "chain") return drawChainGrip(s, hand, angle);
   const ca = Math.cos(angle);
   const sn = Math.sin(angle);
   const at: Along = (d, w) => [hand[0] + ca * d - sn * w, hand[1] + sn * d + ca * w];

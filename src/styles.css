@@ -273,6 +273,19 @@ body {
   border-color: var(--rust);
   box-shadow: 0 0 8px var(--rust);
 }
+/* Orrin's Momentum: a brass fill, its top edge glinting once the bar is full */
+.bar.mo span {
+  color: var(--chain-brass);
+}
+.bar.mo .fill {
+  background: var(--chain-brass-dim);
+}
+.bar.mo.full .fill {
+  background: var(--chain-brass);
+  box-shadow:
+    inset 0 1px 0 var(--chain-brass-glint),
+    0 0 6px var(--chain-brass);
+}
 /* Sable's quiver: one notch per bolt; while she reloads the track shows the crank's progress and the bright window */
 .bar.qv span {
   color: var(--jade);

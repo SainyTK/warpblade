@@ -62,6 +62,7 @@ export const ACHIEVEMENTS: readonly Achievement[] = [
   heroTrial("ysra", "Ysra"),
   heroTrial("sable", "Sable"),
   heroTrial("hulda", "Hulda"),
+  heroTrial("orrin", "Orrin"),
   {
     id: "kills-100",
     name: "Culling",
@@ -135,6 +136,14 @@ export const ACHIEVEMENTS: readonly Achievement[] = [
     group: "Skill",
     goal: { kind: "count", stat: "evolutions", need: 1 },
     reward: 50,
+  },
+  {
+    id: "full-swing",
+    name: "Full Swing",
+    text: "As Orrin, defeat 3 foes with swing kicks in one swing.",
+    group: "Skill",
+    goal: { kind: "best", stat: "swingKills", need: 3 },
+    reward: 60,
   },
   {
     id: "banked-500",

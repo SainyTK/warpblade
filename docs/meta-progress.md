@@ -51,7 +51,7 @@ Skills are bought once and none of them is offered on level up:
 
 - Lodestone (60): coins fly to the hero after 0.3 seconds, and foes drop another quarter of their base (a fraction left over is a chance at one more coin).
 - Aftershock (150, saved under the id `warpShock`): every travel move the hero ends sends a ring out from the hero that hits each foe within 40 art pixels for 0.8 times attack damage and stuns it briefly.
-  For Kael that is every dash and every warp, Blink Combo's included; for Ysra every vault, dive and backstep; for Sable every hop and slide; for Hulda every Bull Rush and every Skyfall Grab landing.
+  For Kael that is every dash and every warp, Blink Combo's included; for Ysra every vault, dive and backstep; for Sable every hop and slide; for Hulda every Bull Rush and every Skyfall Grab landing; for Orrin every release of a swing, every landing out of a fling, every zip, every ledge pull and every Backline.
 - Head Start (200): runs start at level 3 with two skill points, spent when wave 1 is cleared.
   A full run reaches about level 84, so level 3 is what wave 1 alone gives; the two picks are the whole head start.
 - Last Light (300): the first fatal blow of a run leaves the hero standing with half their HP.

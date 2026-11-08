@@ -13,7 +13,7 @@ export interface HeroSkin {
    */
   head: readonly string[];
   headBack: readonly string[];
-  weapon: "sword" | "glaive" | "crossbow" | "gauntlets";
+  weapon: "sword" | "glaive" | "crossbow" | "gauntlets" | "chain";
   /** from the hand to the tip, in pixels */
   reach: number;
   /** slashes, floor rings, afterimages and sparks, dark to bright, seven steps */
@@ -23,6 +23,10 @@ export interface HeroSkin {
   sparks: Ramp;
   /** one heavy braid in the hair colours hangs where the scarf and ponytail would */
   braid?: boolean;
+  /** bare arms in the skin colours with wrapped wrists, in place of coat sleeves and bracers */
+  bareArms?: boolean;
+  /** the scarf's rope hangs from the belt as a sash, in place of the neck */
+  sash?: boolean;
 }
 
 export interface CharacterDef {
