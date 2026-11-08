@@ -14,7 +14,7 @@ const levels = grow({ power: 2.3, pin: 0, taken: 0, ignite: 0, past: 0, burst: 0
   ["Pinned foes burst when they fall.", { power: 8.5, burst: 2 }],
   ["Pins last longer and hurt more.", { power: 10, pin: 2, taken: 0.7 }],
   ["The impale strikes twice.", { power: 12, twist: 0.5 }],
-  ["Impale damage up; pinned foes take double.", { power: 14, taken: 1 }],
+  ["Impale damage up; pinned foes take double.", { power: 20, taken: 1 }],
 ]);
 
 /** Impale: the string's last blow pins foes, and pinned foes take more from everything */
@@ -30,6 +30,6 @@ export const IMPALE: SkillDef = {
     partner: "y_skyhook",
     name: "Pillory",
     text: "The impale drives a row of burning stakes ahead: every foe in it is pinned 3 seconds, and pinned foes burst harder when they fall.",
-    row: evolved(levels, "A row of burning stakes.", { power: 16, pin: 3, burst: 4, stakes: 80 }),
+    row: evolved(levels, "A row of burning stakes.", { power: 24, pin: 3, burst: 4, stakes: 80 }),
   },
 };

@@ -19,6 +19,8 @@ export interface GlaiveTune {
   reach?: () => number;
   /** always a critical hit */
   crit?: () => boolean;
+  /** a precise blow: the power every foe past the payoff's takes (docs/skill-design.md) */
+  plain?: () => number;
 }
 
 /**
@@ -38,6 +40,9 @@ export function glaiveHit(hit: MoveHit, tune: GlaiveTune = {}): MoveHit {
     },
     get power() {
       return power() * (1 + blowBonus());
+    },
+    get plain() {
+      return tune.plain && tune.plain() * (1 + blowBonus());
     },
     get crit() {
       return !!hit.crit || !!tune.crit?.() || buffs.crits > 0;

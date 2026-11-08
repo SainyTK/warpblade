@@ -33,9 +33,11 @@ export const BOLT = {
 /** the string: bolts in a row before the crossbow cocks again, the last one a closing bolt */
 export const STRING = {
   /** the closing bolt's damage as a multiple of attack damage, its push multiple and its stagger */
-  closingPower: 1.3,
+  closingPower: 1.8,
   closingPush: 2,
   closingStagger: 0.35,
+  /** foes the closing bolt passes through before it stops */
+  closingPierce: 1,
   /** seconds the crossbow cocks after a closing bolt */
   cock: 0.18,
   /** bolts in one airtime with no skill, the last a closing bolt */

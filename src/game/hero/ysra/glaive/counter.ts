@@ -9,9 +9,14 @@ import type { GlaiveTune } from "./reach";
 
 const counter = () => skillValues("y_counter");
 
-/** the counter's power, its reach down the line (the whole stage once evolved), and its sure crit */
+/** the counter thrust's power without the skill's payoff */
+const PLAIN = 3.75;
+
+/** the counter's power, its reach down the line (the whole stage once evolved), and its sure crit; a precise payoff,
+ *  so the rest of the line takes the plain thrust */
 export const counterTune: GlaiveTune = {
-  power: () => counter().power ?? 3.75,
+  power: () => counter().power ?? PLAIN,
+  plain: () => PLAIN,
   reach: () => (counter().beam ? W : (counter().line ?? 0)),
   crit: () => !!counter().crit,
 };

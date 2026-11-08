@@ -102,7 +102,7 @@ export const SHADE_ARCHER: SkillDef = {
     {
       text: "While a shade stands your bolts are primed.",
       values: {
-        power: 1.5,
+        power: 3,
         cooldown: 3,
         stay: 3,
         window: 0.2,
@@ -115,9 +115,9 @@ export const SHADE_ARCHER: SkillDef = {
       },
     },
     {
-      text: "The shade stays longer and hits harder.",
+      text: "The shade stays longer and hits far harder.",
       values: {
-        power: 2,
+        power: 8,
         cooldown: 3,
         stay: 6,
         window: 0.2,
@@ -137,7 +137,7 @@ export const SHADE_ARCHER: SkillDef = {
     row: {
       text: "Two shades; perfect dodges refill the quiver.",
       values: {
-        power: 2,
+        power: 8,
         cooldown: 3,
         stay: 6,
         window: 0.2,

@@ -1,5 +1,6 @@
 import type { SourceId } from "../../../../types/build";
 import type { Enemy } from "../../../../types/enemy";
+import type { Payoff } from "../../../skills/payoff";
 import type { Prime } from "../quiver";
 
 /** what kind of bolt is flying, so the skills know which of their bonuses it carries */
@@ -34,4 +35,7 @@ export interface Shot {
   pierce?: number;
   /** what loosed it, for the end of run screen; her own shots when not given */
   source?: SourceId;
+  /** the foes a perfect reload's prime has paid off on, shared by the whole family of bolts: Perfect Rhythm is a
+   *  precise skill, so its prime lands on the first foe struck and the rest take the plain prime */
+  payoff?: Payoff;
 }

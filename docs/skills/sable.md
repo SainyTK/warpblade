@@ -14,7 +14,7 @@ Every button does something from the first second.
 | J | The string: three bolts, the third a closing bolt. Tap or hold. |
 | K | Kick: front kick, 0.55A, strong push, 0.5 s stun. A landed air kick springs her up and back. |
 | L | Hop back with a free bolt at 0.8 (once on the floor, once in the air). From a walk or run toward the facing side, a slide instead. |
-| I | Snare at her feet: 20 MP, 3.5 s recharge, two on the floor, 2.6P and a 1.6 s hold. |
+| I | Snare at her feet: 20 MP, 3.5 s recharge, two on the floor, 6P and a 1.6 s hold. |
 | O | Reload; a second O in the bright window is a perfect reload (full quiver, next 4 bolts primed at +35%). Perfect Rhythm builds on it. |
 | U | Bolt Storm, the base special, with the shared charge levels. |
 | Up | One light jump, also out of a shot. Down and Up drops through a ledge. |
@@ -23,7 +23,7 @@ Every button does something from the first second.
 
 String length is 3.
 A held or tapped J looses bolt, bolt, closing bolt.
-The closing bolt deals 1.3A (a normal bolt is 0.95A), pushes twice as far and staggers 0.35 s, so the foe ends the string out at range again.
+The closing bolt deals 1.8A (a normal bolt is 0.95A), passes through one foe, pushes twice as far and staggers 0.35 s, so the foe ends the string out at range again.
 After the closing bolt the crossbow cocks for 0.18 s before the next string.
 A string pressed after she has settled starts again from the first bolt.
 The quiver holds 9 bolts (was 8), three full strings.
@@ -186,7 +186,7 @@ Bolts hit harder the farther they fly, so keeping range pays.
 | 5 | mark 0.15, markTime 3 | Far hits mark the foe. |
 | 6 | bonus 1.2 | Far hits are much stronger. |
 | 7 | refund 1 | A far kill puts the bolt back in the quiver. |
-| 8 | bonus 2.5, mark 0.3, sweet 1 | Far hits are far stronger, and the end of the flight always crits. |
+| 8 | bonus 8, mark 0.3, sweet 1 | Far hits are far stronger, and the end of the flight always crits. |
 
 Evolution Horizon Shot (with `s_ricochet`): range doubles, every far hit crits and splits into two bolts that seek the nearest foes.
 Built: the bolt counts the pixels it has flown; `isFar`, `sureCrit` in `bolt/power.ts`; the mark is the shared `markFoe`; Horizon Shot's splits are offshoots that never split again.
@@ -204,7 +204,7 @@ The perfect reload pays far more.
 | 5 | stamina 25, mp 10 | A perfect reload restores stamina and MP. |
 | 6 | bonus 3.5, primed 8 | Primed bolts hit much harder, and eight are primed. |
 | 7 | volley 3 | A perfect reload fires three primed bolts at once. |
-| 8 | bonus 6, volley 4, sureCrit 1, haste 0.25, hasteTime 3 | Primed bolts always crit, and a perfect reload quickens your shots. |
+| 8 | bonus 9, volley 4, sureCrit 1, haste 0.25, hasteTime 3 | Primed bolts always crit, and a perfect reload quickens your shots. |
 
 Evolution Clockwork Cadence (with `s_breach`): a perfect reload primes the whole quiver, every primed closing bolt bursts (4A in 60 px), and blows do not throw her while primed bolts remain.
 Built: `quiver.ts` (`primedBolts`, `reloadWindow`, `quiverSize`) and `perfect()` in `reload.ts` (stamina, MP, volley, haste); Clockwork Cadence's burst in `bolt/landed.ts` and its steadfast in the kit.
@@ -330,9 +330,9 @@ Roll a keg ahead, then shoot it as foes reach it. A primed bolt makes it far str
 | 5 | pitch 3 | The blast leaves burning pitch. |
 | 6 | kegs 2 | Roll two kegs; one sets off the other. |
 | 7 | kick 1 | Kick a keg to send it flying. |
-| 8 | blast 8, primedMul 1.6, mpBack 15 | A primed blast hits harder and gives back MP. |
+| 8 | blast 20, primedMul 1.6, mpBack 15 | A far bigger blast; a primed one gives back MP. |
 
-Evolution Powder Effigy (with `s_decoy`): the keg wears a decoy cloak, foes crowd it, and the blast covers twice the area.
+Evolution Powder Effigy (with `s_decoy`): the keg wears a decoy cloak, foes crowd it, and the blast covers twice the area (blast 12).
 Built: `spells/keg.ts`; bolts test kegs along their flight (`kegsOnSegment`), the kick sends them flying (`kickKegs`), blasts set off kegs near them, pitch is the shared `ignite`.
 
 ### s_venom Venom Tips (dot, easy, J)
@@ -438,8 +438,8 @@ A shade of Sable stays where the blow missed and shoots.
 | 4 | power 1.5 | The shade hits harder. |
 | 5 | window 0.2 | Perfect dodges are easier. |
 | 6 | pierce 2 | The shade's bolts pass through two foes. |
-| 7 | prime 1 | While a shade stands your bolts are primed. |
-| 8 | power 2, stay 6 | The shade stays longer and hits harder. |
+| 7 | power 3, prime 1 | While a shade stands your bolts are primed. |
+| 8 | power 8, stay 6 | The shade stays longer and hits far harder. |
 
 Evolution Twin Shadows (with `s_hopVolley`): two shades, each copying her hop volley at its base damage; while one stands blows do not throw her, and a perfect dodge refills the quiver.
 Built: `skills/sable/shadeArcher.ts` draws her shooting pose once with `drawHero` into `ghostCanvas` and blits it tinted; its bolts are plain; Twin Shadows answers the `hop` event.

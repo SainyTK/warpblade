@@ -6,6 +6,7 @@ import { createCrystalWave } from "../../effects/crystalWave";
 import { createImpact } from "../../effects/impact";
 import { createSlash } from "../../effects/slash";
 import { enemyCenter } from "../../enemies/enemy";
+import { movePayoff } from "../../skills/payoff";
 import { skillEvolved, skillValues, withCharms } from "../../skills/query";
 import { game, hero, lights, progress } from "../../state";
 import { hitStop, shake } from "../../world";
@@ -34,28 +35,20 @@ export const keenWindow = (): number => skillValues(SKILL).window ?? KEEN.window
 /** Peerless Edge's free Keen: every move is Keen for a while */
 export const alwaysKeen = (): boolean => kael.freeKeen > 0;
 
-/** Peerless Edge: a gold cross cut on the foe ahead and the foes around it, then free Keen */
+/** Peerless Edge: a gold cross cut on the foe the Keen move paid off on (a precise payoff: that foe only), then free
+ *  Keen */
 function crossCut(): void {
   const v = skillValues(SKILL);
-  const foe = hero.lastHit && hero.lastHit.hp > 0 ? hero.lastHit : null;
+  const foe = [...movePayoff()].find((e) => e.hp > 0) ?? null;
   const [x, y] = foe ? enemyCenter(foe) : [hero.x + hero.face * 20, hero.y - 20];
   game.fx.push(createSlash(x, y, hero.face, CROSS_A));
   game.fx.push(createSlash(x, y, -hero.face, CROSS_B));
   lights.add(x, y, 70, KEEN_RAMP[4], 1, 0.4);
   lights.add(x, y, 20, WHITE, 0.9, 0.12);
-  const reach = withCharms("area", v.crossReach);
-  for (const e of game.enemies) {
-    if (e.hp <= 0) continue;
-    const [ex, ey] = enemyCenter(e);
-    if (e !== foe && Math.hypot(ex - x, ey - y) > reach) continue;
-    dealDamage(e, progress.stats.ad * (e === foe ? v.cross : v.crossArea), {
-      fromX: hero.x,
-      kx: Math.sign(ex - hero.x) * 120,
-      ky: -80,
-      heavy: true,
-      melee: true,
-    });
-    game.fx.push(createImpact(ex, ey, Math.sign(ex - hero.x) || 1, true));
+  if (foe) {
+    const dir = Math.sign(x - hero.x) || 1;
+    dealDamage(foe, progress.stats.ad * v.cross, { fromX: hero.x, kx: dir * 120, ky: -80, heavy: true, melee: true });
+    game.fx.push(createImpact(x, y, dir, true));
   }
   hitStop(0.14);
   shake(0.35, 4);
@@ -77,7 +70,16 @@ export function afterKeenMove(hits: number): void {
   if (kael.stormLeft > 0) kael.stormVolleys++;
   const v = skillValues(SKILL);
   if (v.wave)
-    game.fx.push(createCrystalWave(hero.x + hero.face * 10, hero.y - 18, hero.face, progress.stats.ad * v.wave));
+    game.fx.push(
+      createCrystalWave(
+        hero.x + hero.face * 10,
+        hero.y - 18,
+        hero.face,
+        progress.stats.ad * v.wave,
+        undefined,
+        movePayoff(),
+      ),
+    );
   if (!skillEvolved(SKILL) || kael.freeKeen > 0) return;
   kael.keenCount++;
   if (kael.keenCount >= v.crossEvery) crossCut();

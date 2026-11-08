@@ -39,7 +39,7 @@ export const ANCESTORS_FIST: SkillDef = {
     },
     {
       text: "The fist hits far harder.",
-      values: { chance: 1, cooldown: 2, power: 55, throw: 1, ring: 24, fury: 0.25, second: 1, pin: 0, mark: 0 },
+      values: { chance: 1, cooldown: 2, power: 100, throw: 1, ring: 24, fury: 0.25, second: 1, pin: 0, mark: 0 },
     },
   ],
   evolution: {
@@ -48,7 +48,7 @@ export const ANCESTORS_FIST: SkillDef = {
     text: "A fist twice the size slams for immense damage and pins every foe near, who take far more from you.",
     row: {
       text: "A huge fist pins foes near.",
-      values: { chance: 1, cooldown: 2, power: 150, throw: 1, ring: 24, fury: 0.25, second: 1, pin: 1.5, mark: 0.5 },
+      values: { chance: 1, cooldown: 2, power: 250, throw: 1, ring: 24, fury: 0.25, second: 1, pin: 1.5, mark: 0.5 },
     },
   },
 };

@@ -23,12 +23,12 @@ import { skillValues } from "../query";
 import { nearestFoe } from "../targets";
 
 const ID = "h_unbroken";
-/** a haymaker's quake runs this far each way; a stride's quake reaches this far */
+/** a blow's quake runs this far each way; a stride's quake reaches this far */
 const QUAKE_REACH = 40;
 const STEP_REACH = 30;
 /** a foe that strikes her in iron is knocked down this long, if it stands this near the blow's side */
 const KNOCK = { stun: 0.8, near: 40 } as const;
-/** seconds between two haymaker quakes, so one blow on several foes cracks the floor once */
+/** seconds between two blow quakes, so one blow on several foes cracks the floor once */
 const QUAKE_GAP = 0.2;
 
 const sheen = detailCanvas(80, 76, 40, 62);
@@ -95,7 +95,7 @@ function drawIron(): void {
 }
 
 /**
- * Unbroken in play: while iron lasts, haymakers quake the floor, foes that strike her are knocked down and, as Iron
+ * Unbroken in play: while iron lasts, every blow she lands quakes the floor, foes that strike her are knocked down and, as Iron
  * Titan, every footfall quakes; when the iron ends it can finish in a level 1 Quake Drop. The form itself is cast in
  * src/game/ultimates/unbroken.ts.
  */
@@ -116,7 +116,7 @@ export const unbroken: SkillBehavior = {
     blow(memory, event) {
       const m = memoryOf(memory);
       const v = skillValues(ID);
-      if (!inIron() || !v.quake || !event.finisher || m.quakeCd > 0) return;
+      if (!inIron() || !v.quake || event.source !== "attacks" || m.quakeCd > 0) return;
       m.quakeCd = QUAKE_GAP;
       quake(enemyCenter(event.foe)[0], QUAKE_REACH, v.quake);
     },

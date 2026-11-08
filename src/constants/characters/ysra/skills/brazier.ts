@@ -17,7 +17,7 @@ const levels = grow(
     ["Two embers each shot.", { ember: 0.8, shots: 2 }],
     ["Shoots faster.", { every: 0.5, ember: 0.85 }],
     ["The brazier bursts at the end.", { ember: 0.9, burst: 6 }],
-    ["Hotter embers that burn longer.", { ember: 1, burn: 2.5 }],
+    ["Far hotter embers that burn longer.", { ember: 1.8, burn: 2.5 }],
   ],
 );
 

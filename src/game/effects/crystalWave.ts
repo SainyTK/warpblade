@@ -7,6 +7,7 @@ import type { Enemy } from "../../types/enemy";
 import { WHITE } from "../../utils/color";
 import { dealDamage } from "../damage";
 import { enemyBox } from "../enemies/enemy";
+import { type Payoff, payoffLands } from "../skills/payoff";
 import { game } from "../state";
 import { boxHit } from "../world";
 import { createImpact } from "./impact";
@@ -16,8 +17,16 @@ const LIFE = 0.6;
 const HALF = 9;
 
 /** a crescent of crystal that flies forward and cuts each foe once (Crystal Lance, Keen Edge's wave); it is not a sword
- *  blow, so guards do not stop it */
-export function createCrystalWave(x: number, y: number, face: number, damage: number, source?: SourceId): Effect {
+ *  blow, so guards do not stop it. A precise skill's wave carries its pull-off's payoff and cuts only the foes it lands
+ *  on, passing the others by */
+export function createCrystalWave(
+  x: number,
+  y: number,
+  face: number,
+  damage: number,
+  source?: SourceId,
+  payoff?: Payoff,
+): Effect {
   const o = { x, t: 0 };
   const struck = new Set<Enemy>();
   return {
@@ -27,6 +36,7 @@ export function createCrystalWave(x: number, y: number, face: number, damage: nu
       for (const e of game.enemies) {
         if (struck.has(e) || e.hp <= 0 || !boxHit([o.x - 3, y - HALF, o.x + 3, y + HALF], enemyBox(e))) continue;
         struck.add(e);
+        if (payoff && !payoffLands(payoff, e)) continue;
         dealDamage(e, damage, { fromX: o.x - face * 8, kx: face * 60, source });
         game.fx.push(createImpact(o.x, y, face, false, SPARKS.crystal));
       }

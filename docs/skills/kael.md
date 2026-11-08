@@ -116,10 +116,10 @@ Attack, precise, J. Press J in the beat after a blow lands: the Keen blow hits f
 | 5 | Keen damage +200% to +500%. | bonus 5 |
 | 6 | New: each Keen blow in a row adds +25% to the next, up to +100%. | streak 0.25, streakCap 1 |
 | 7 | New: a Keen 4th hit is a hop cleave that knocks down. | cleave 3 |
-| 8 | Keen damage +500% to +1000%; the wave hits far harder. | bonus 10, wave 10 |
+| 8 | Keen damage +500% to +2000%; the wave hits far harder. | bonus 20, wave 10 |
 
 Evolution **Peerless Edge** (partner `k_phase`): Every third Keen blow ends in a gold cross cut, and for 3 seconds every blow is Keen.
-Evolved values added: cross 60, crossArea 15, crossReach 50, crossEvery 3, free 3.
+Evolved values added: cross 330, crossEvery 3, free 3. The cross cut strikes only the foe the Keen move paid off on (precise payoff, balance round 3); it had a 15 AD ring in 50 px before.
 Code: `hero/kael/keen.ts` (window, wave, streak, Peerless Edge), `hero/kael/bonus.ts` (Keen bonus), `hero/kael/shapeHit.ts` (guard break, hop cleave), `utils/comboChoice.ts`.
 
 #### `k_skyward` Skybreaker
@@ -344,7 +344,7 @@ Dot, timed, auto. Warp strikes open rift wounds that drain the foe; each warp de
 | 5 | New: each new layer also opens on the nearest foe. | spread 1 |
 | 6 | Up to 5 layers; each drains far more. | per 1.2, max 5 |
 | 7 | New: each layer makes the foe take +6% damage. | taken 0.06 |
-| 8 | Each layer drains 1.2 to 2.4 a second. | per 2.4 |
+| 8 | Each layer drains 1.2 to 8 a second. | per 8 |
 
 Evolution **Rift Collapse** (partner `k_warpcraft`): A foe at full layers collapses: the wound's damage at once, doubled, and the rift pulls foes in and wounds them.
 Evolved values added: collapse 2, pull 60, give 3.
@@ -420,7 +420,7 @@ Summon, precise, auto. A perfect dodge calls a mirror knight that warp-strikes t
 | 5 | New: the knight stuns what it strikes; Riposte covers 2 blows. | ripTime 2.5, ripBlows 2, stun 0.8 |
 | 6 | New: the knight stays and copies your blows. | stay 4, copy 0.5 |
 | 7 | Knight strike 12 to 30; copies at 80%. | strike 30, copy 0.8 |
-| 8 | Knight strike 30 to 50; Riposte quadruple; stays 6 s. | strike 50, riposte 4, stay 6, copy 1 |
+| 8 | Knight strike 30 to 70; Riposte quadruple; stays 6 s. | strike 70, riposte 4, stay 6, copy 1 |
 
 Evolution **Perfect Reflection** (partner `k_keen`): A perfect dodge stops time while Kael and the knight strike the attacker and every foe near.
 Evolved values added: stay 8, reflect 150, reflectArea 15, reflectReach 120.
@@ -458,10 +458,10 @@ Ultimate, easy, U. Phantoms of Kael appear behind foes and cut them, in place of
 | 5 | New: struck foes cannot turn for 2 s. | lock 2 |
 | 6 | Recharge 20 to 15 s. | recharge 15 |
 | 7 | New: a phantom whose foe falls moves to the next. | hop 1 |
-| 8 | Power 0.8 to 2x. | power 2 |
+| 8 | Power 0.8 to 21x. | power 21 |
 
 Evolution **Phantom Army** (partner `k_echo`): The legion stays 5 seconds, each phantom cutting again and again and moving on when its foe falls.
-Evolved values added: army 5, armyEvery 0.5.
+Evolved values added: army 5, armyEvery 0.5, power 11.
 Code: `ultimates/phantomLegion.ts`.
 
 #### `k_starfall` Starfall
@@ -477,7 +477,7 @@ Ultimate, timed, U. Meteors rain on the foes in reach and set the floor alight, 
 | 5 | New: meteors throw foes up. | launch 1 |
 | 6 | New: 3 more meteors fall on the densest group. | late 3 |
 | 7 | Recharge 20 to 15 s. | recharge 15 |
-| 8 | Power 1.3 to 3x; the floor burns longer. | power 3, floor 5 |
+| 8 | Power 1.3 to 14x; the floor burns longer. | power 14, floor 5 |
 
 Evolution **Cataclysm** (partner `k_flame`): Meteors keep falling for 4 seconds on foes near Kael, each landing as a Fire Flask burst.
 Evolved values added: rain 4, rainEvery 0.25.
@@ -505,7 +505,7 @@ Changes made from the review (all "must" items and the useful "suggest" items):
 
 | Skill | Change |
 | --- | --- |
-| `k_keen` | Keen +200% / +500% / +1000% at levels 1, 5, 8; wave 1.5 to 10 AD; streak cap +100%; evolution every third Keen blow (counted across strings), cross cut 60 AD. |
+| `k_keen` | Keen +200% / +500% / +1000% at levels 1, 5, 8; wave 1.5 to 10 AD; streak cap +100%; evolution every third Keen blow (counted across strings), cross cut 60 AD (330 AD on one foe since balance round 3). |
 | `k_skyward` | Level 8 launch 5 AD, crash 3.5 AD; Heavenfall spike 15 AD. |
 | `k_phase` | Phase cut 3.5 AD at level 1, 12 AD at level 8; back bonus +150%. |
 | `k_blink` | Retagged timed; level 8 strike 7 AD. |
@@ -514,7 +514,7 @@ Changes made from the review (all "must" items and the useful "suggest" items):
 | `k_volt` | Two more new properties (stun, a bolt behind); level 8 strike 7 AP, arcs 2.5 AP. |
 | `k_flame` | One more new property (the burst knocks down). |
 | `k_splinters` | Level 8 0.22 AD per splinter a second; Shatterstorm 0.5 AD per splinter within 70 px; one more new property (crits lodge 2). |
-| `k_rift` | Level 8 2.4 AD per layer a second; one more new property (slow); Rift Collapse's layers cannot spread or collapse again within a second. |
+| `k_rift` | Level 8 2.4 AD per layer a second (8 since balance round 3); one more new property (slow); Rift Collapse's layers cannot spread or collapse again within a second. |
 | `k_static` | Overload strikes at most 8 foes, at most every 1.5 s; one more new property (a charged foe that dies arcs); lightning 2 AP from level 6. |
 | `k_echo` | Copies follow G2; level 8 repeat 220%; one more new property (its blows break wind-ups). |
 | `k_familiar` | Rebuilt from the framework's reference summon (which was far too strong): a cast trigger, AP shards, 1 s cooldown, volleys of 2; Crystal Choir fires every 0.8 s, arcs to 1 foe and adds no volleys. |

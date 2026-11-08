@@ -9,7 +9,7 @@ export const SNARE = {
   /** half the width of the jaws, pixels */
   reach: 9,
   /** damage as a multiple of ability power */
-  power: 2.6,
+  power: 6,
   /** foes caught are held this long */
   hold: 1.6,
   /** a snare left unsprung falls apart after this long */

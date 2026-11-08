@@ -5,6 +5,8 @@ export const CHARM_SLOTS = 5;
 export const SKILL_MAX_LEVEL = 8;
 /** a skill at its top level evolves once its partner is held at this level or higher */
 export const EVOLVE_PARTNER_LEVEL = 4;
+/** foes one pull-off of a precise skill pays off on: the foe the hard move was aimed at (docs/skill-design.md) */
+export const PRECISE_TARGETS = 1;
 /** experience for the next level: base + step x (level - 1) */
 export const XP_CURVE = { base: 15, step: 10 } as const;
 export const MAX_LEVEL = 99;

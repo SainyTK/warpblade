@@ -12,7 +12,7 @@ const LEVELS = levelRows([
   { text: "Keen damage +200% to +500%.", values: { bonus: 5 } },
   { text: "New: each Keen blow in a row adds +25% to the next, up to +100%.", values: { streak: 0.25, streakCap: 1 } },
   { text: "New: a Keen 4th hit is a hop cleave that knocks down.", values: { cleave: 3 } },
-  { text: "Keen damage +500% to +1000%; the wave hits far harder.", values: { bonus: 10, wave: 10 } },
+  { text: "Keen damage +500% to +2000%; the wave hits far harder.", values: { bonus: 20, wave: 10 } },
 ]);
 
 export const KEEN_EDGE: SkillDef = {
@@ -28,9 +28,7 @@ export const KEEN_EDGE: SkillDef = {
     name: "Peerless Edge",
     text: "Every third Keen blow ends in a gold cross cut, and for 3 seconds every blow is Keen.",
     row: evolvedRow(LEVELS[7], "Every third Keen blow: a gold cross cut, then 3 s of Keen.", {
-      cross: 60,
-      crossArea: 15,
-      crossReach: 50,
+      cross: 330,
       crossEvery: 3,
       free: 3,
     }),

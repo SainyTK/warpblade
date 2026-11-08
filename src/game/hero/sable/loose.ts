@@ -5,6 +5,7 @@ import { dealDamage } from "../../damage";
 import { createCrossbowBolt } from "../../effects/crossbowBolt";
 import { createImpact } from "../../effects/impact";
 import { enemyCenter } from "../../enemies/enemy";
+import { createPayoff, payoffLands } from "../../skills/payoff";
 import { skillValues } from "../../skills/query";
 import { game, hero, lights, progress } from "../../state";
 import { foesOnSegment } from "../../ultimates/segmentHits";
@@ -23,9 +24,15 @@ interface Flight {
   range: number;
 }
 
+/** a perfect reload's bolt as it strikes this foe: Perfect Rhythm's prime on the foe its payoff lands on, the plain
+ *  prime of a charged bolt on any other */
+const paidOff = (e: Enemy, b: Shot): Shot =>
+  b.prime === "reload" && b.payoff && !payoffLands(b.payoff, e) ? { ...b, prime: "charged" } : b;
+
 /** a bolt strikes a foe: damage from attack damage with every skill bonus added into one sum, a push away from where it
  *  was loosed and a spark; true when the foe fell */
-function strike(e: Enemy, b: Shot, f: Flight): boolean {
+function strike(e: Enemy, shot: Shot, f: Flight): boolean {
+  const b = paidOff(e, shot);
   const lit = b.prime !== null;
   const breach = b.closing && !b.plain ? skillValues("s_breach") : {};
   const push = b.closing ? STRING.closingPush * (breach.push ?? 1) : 1;
@@ -57,7 +64,7 @@ function strike(e: Enemy, b: Shot, f: Flight): boolean {
  *  through a kill with Ricochet */
 export function looseBolt(b: Shot): void {
   const struck = b.struck ?? new Set<Enemy>();
-  const family = { ...b, struck };
+  const family = { ...b, struck, payoff: b.payoff ?? createPayoff() };
   const dir = Math.cos(b.angle) >= 0 ? 1 : -1;
   const range = rangeOf(b);
   const ricochet = b.plain ? {} : skillValues("s_ricochet");

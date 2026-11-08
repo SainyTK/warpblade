@@ -14,7 +14,7 @@ export const BELLOW = {
   drop: 48,
   dropTo: -14,
   /** damage as a multiple of ability power */
-  power: 0.6,
+  power: 4,
   stun: 0.5,
   /** a flier she drags down reels longer, so she can step in and grab it */
   flierStun: 0.9,

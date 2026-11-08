@@ -39,7 +39,7 @@ export const LONGSHOT: SkillDef = {
     },
     {
       text: "Far hits are far stronger, and the end of the flight always crits.",
-      values: { far: 120, bonus: 2.5, crit: 0.2, range: 320, mark: 0.3, markTime: 3, refund: 1, sweet: 1, split: 0 },
+      values: { far: 120, bonus: 8, crit: 0.2, range: 320, mark: 0.3, markTime: 3, refund: 1, sweet: 1, split: 0 },
     },
   ],
   evolution: {
@@ -48,7 +48,7 @@ export const LONGSHOT: SkillDef = {
     text: "Bolts fly twice as far, every far hit crits and splits into two bolts that seek other foes.",
     row: {
       text: "Far hits crit and split.",
-      values: { far: 120, bonus: 2.5, crit: 1, range: 640, mark: 0.3, markTime: 3, refund: 1, sweet: 1, split: 2 },
+      values: { far: 120, bonus: 8, crit: 1, range: 640, mark: 0.3, markTime: 3, refund: 1, sweet: 1, split: 2 },
     },
   },
 };

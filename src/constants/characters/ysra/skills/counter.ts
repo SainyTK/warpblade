@@ -14,8 +14,8 @@ const levels = grow({ power: 3.75, window: 0.12, firm: 0, crit: 0, stun: 1.1, li
   ["Counter damage +20%.", { power: 13 }],
   ["The counter runs through the line.", { power: 15, line: 70 }],
   ["Wider parry window; counters refill stamina.", { power: 17, window: 0.24, refill: 1 }],
-  ["Counters empower your next blows.", { power: 20, riposte: 1, riposteTime: 3 }],
-  ["Counter damage +25%.", { power: 25 }],
+  ["Counters empower your next blows.", { power: 35, riposte: 1, riposteTime: 3 }],
+  ["Counter damage up.", { power: 45 }],
 ]);
 
 /** Counter Thrust: the parry opens a counter that hits very hard and turns into a buff */
@@ -31,6 +31,6 @@ export const COUNTER: SkillDef = {
     partner: "y_brand",
     name: "Sun Piercer",
     text: "The counter is a burning thrust across the whole stage, and for 4 seconds after it every blow is a critical hit.",
-    row: evolved(levels, "A thrust across the stage; then every blow crits.", { power: 45, beam: 1, critTime: 4 }),
+    row: evolved(levels, "A thrust across the stage; then every blow crits.", { power: 120, beam: 1, critTime: 4 }),
   },
 };

@@ -37,11 +37,11 @@ Skyfall Breaker level 6 is the one skill that gives a second Skyfall after a cat
 
 | Key | Base kit |
 | --- | --- |
-| J | Fist string: jab 0.6x, body hook 0.9x, haymaker 1.5x (armoured wind-up, stun 0.5 s). In the air one hammer fist 0.9x that spikes. While holding a foe, a knee 0.5x (up to 3). |
+| J | Fist string: jab 0.9x, body hook 1.3x (breaks guards), haymaker 2.8x (armoured wind-up, stun 0.5 s); short pushes so she stays in reach; the first blow faces the held direction or turns to a foe only behind her. In the air one hammer fist 0.9x that spikes. While holding a foe, a knee 0.5x (up to 3). |
 | K | Grab: holds a minion, crushes a mini or boss for 1.3x. While holding, the throw, picked by the situation (below). In the air, Skyfall Grab (catch, ride, slam 2.0x, ring 0.8x). |
-| L | Bull Rush: armoured shoulder charge, 0.6x and stun 0.4 s to each foe, 25 stamina. Still allowed out of a landed blow's recovery. |
+| L | Bull Rush: armoured shoulder charge the way she is pushed, 0.6x, a short shove and stun 0.4 s to each foe, 25 stamina. Once she has run into a foe and none waits ahead, it stops at the next stride and she wheels round to the foe, so a lone foe stays in reach. Still allowed out of a landed blow's recovery. |
 | Up | One low jump. Down with Up drops through a ledge. |
-| I | The ability in the rotation: Bellow (20 MP, 0.6x AP, pulls foes in, drags fliers down) or Taunt (free, 3 s cooldown, 24 Grit over two slaps). |
+| I | The ability in the rotation: Bellow (20 MP, 4x AP, pulls foes in, drags fliers down) or Taunt (free, 3 s cooldown, 24 Grit over two slaps). |
 | O | Switches the I rotation. With no skill it switches between Bellow and Taunt. |
 | U | Quake Drop. |
 
@@ -53,7 +53,8 @@ The hold still runs out into a throw on its own.
 Base DPS (string only): 1.8 AD/s on one foe, 3.6 AD/s on a crowd.
 Grab and throw cycles add about 1.1 AD/s on one foe (3.7x every 3.3 s).
 
-The string drops the cross; jab and hook go up a little so the shorter string deals about the same per second as the old four blows (3.0x in 1.17 s against 3.45x in 1.47 s).
+The string drops the cross. Balance round 2 (`docs/skills/balance.md`) made the hook break guards and shortened the pushes.
+Its raise of the blows to 8.1x a string made up for contact the room's player lost; once the rush stopped carrying her past a lone foe they came back to 5.0x a string (round 3 in the balance file).
 
 ## What goes away and where it went
 
@@ -161,9 +162,9 @@ attack, precise, K. A grab that catches a foe winding up a blow (`wind` or `char
 | 5 | A counter gives Fury +25% | A counter gives Fury. |
 | 6 | 6x; the throw after a counter deals double | Counter 6x, its throw doubled. |
 | 7 | A counter roars: other foes within 50 px reel 0.8 s | A counter makes foes nearby reel. |
-| 8 | 65x, Fury +50%, refills every plate | Huge counter, more Fury, full plates. |
+| 8 | 70x, Fury +50%, refills every plate | Huge counter, more Fury, full plates. |
 
-Evolution: **Executioner's Grip** (partner `h_ironWall`). Every counter deals 90x, and a counter on a mini or boss holds it for 1 s and suplexes it for 120x. Fury +80%, and while it lasts no blow breaks a plate.
+Evolution: **Executioner's Grip** (partner `h_ironWall`). Every counter deals 160x, and a counter on a mini or boss holds it for 1 s and suplexes it for 120x. Fury +80%, and while it lasts no blow breaks a plate.
 
 Build: `pressGrab`/`runGrab` in `hero/hulda/grab.ts` read the foe's state at the catch; crush from `runCrush`; new `fury.ts`; emits `counter`. Pose: the grab clip with a two-frame hit-stop flash; the evolution's big-foe hold needs a heavy hold pose (the suplex lift clip at arm's length).
 
@@ -259,6 +260,8 @@ movement, precise, K in the air. Catching a foe from the air is a hard read; it 
 | 8 | Slam 20x, pounds 3x and three of them | Slam 20x, three pounds. |
 
 Evolution: **Comet Grab** (partner `h_counterGrab`). K on the floor with no foe in reach leaps her into a Skyfall. The slam is 40x, and a catch gives Fury +60% and a full plate.
+
+Data since balance round 3: level 8 slam 46x, Comet Grab 65x. The slam and pounds strike only the caught foe, which is the precise payoff; dragged foes take only the ring, the skill's own area.
 
 Build: `hero/hulda/skyfall.ts`; the ride needs a new pose (kneeling on the foe's back, both fists overhead, reusing the hammer fist keys) and a `ride` state.
 
@@ -446,9 +449,9 @@ summon, precise, auto (on an armoured counter, own cooldown). A giant spectral g
 | 5 | The slam rings 24 px at half its damage | The slam strikes foes near. |
 | 6 | 100%; it gives Fury +25% | Every armoured counter calls it, with Fury. |
 | 7 | A second fist slams the nearest other foe 0.3 s later | A second fist. |
-| 8 | 55x | The fist hits far harder. |
+| 8 | 100x | The fist hits far harder. |
 
-Evolution: **Hand of the Mountain** (partner `h_skyfall`). The fist is twice the size, slams for 150x, and pins every foe within 40 px for 1.5 s, taking 50% more from her.
+Evolution: **Hand of the Mountain** (partner `h_skyfall`). The fist is twice the size, slams for 250x, and pins every foe within 40 px for 1.5 s, taking 50% more from her.
 
 Build: new `skills/hulda/ancestorFist.ts`; drawn by scaling `hero/draw/gauntlets.ts` with a pale ramp; slam with `slamRing`; throw with `hurl()`.
 
@@ -479,14 +482,14 @@ ultimate, timed, U. Replaces Quake Drop: an iron form for a few seconds; the cha
 | --- | --- | --- |
 | 1 | 4 s (+1 s a charge level): no blow breaks a plate or flinches her; her damage +20% | Turn to iron for a few seconds. |
 | 2 | +35% | More damage in iron. |
-| 3 | Every haymaker quakes the floor 40 px each way, 1.0x | Haymakers quake the floor. |
+| 3 | Every blow she lands quakes the floor 40 px each way, 1.0x (one quake each 0.2 s) | Blows quake the floor. |
 | 4 | Fills Grit at the start and ends in a level 1 Quake Drop | Start full, end with a quake. |
 | 5 | 6 s, +50% | Longer and stronger. |
 | 6 | Full walk speed while holding; throws +50% | Hold and throw at full strength. |
 | 7 | Foes that strike her are knocked down 0.8 s | Foes that hit you fall. |
-| 8 | +80%, quakes 2x | Far stronger iron. |
+| 8 | +100%, quakes 9x | Far stronger iron. |
 
-Evolution: **Iron Titan** (partner `h_ironHide`). 10 s; every step she takes quakes the floor 30 px for 0.6x, and her grab holds minis and bosses.
+Evolution: **Iron Titan** (partner `h_ironHide`). 10 s; her blows quake for 20x, every step she takes quakes the floor 30 px for 0.6x, and her grab holds minis and bosses.
 
 Build: new `ultimates/unbroken.ts`; armour through `steadfast()`; quakes from `effects/quakeLine.ts`; a steel tint over her skin ramp and lit plates on the pauldron. No new clip apart from a chest-slam start (the taunt slap held).
 

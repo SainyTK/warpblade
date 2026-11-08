@@ -54,7 +54,7 @@ export function pierceOf(b: Shot): number {
   if (b.plain) return b.pierce ?? 0;
   const all = 99;
   if (b.closing && (skillValues("s_pierce").closingAll || skillValues("s_breach").pierceAll)) return all;
-  let n = BOLT.pierce + (skillValues("s_pierce").pierce ?? 0);
+  let n = BOLT.pierce + (b.closing ? STRING.closingPierce : 0) + (skillValues("s_pierce").pierce ?? 0);
   if (b.prime === "reload") n += skillValues("s_rhythm").pierce ?? 0;
   if (b.air) n += skillValues("s_featherdraw").pierce ?? 0;
   if (b.side) n += skillValues("s_scatter").pierce ?? 0;

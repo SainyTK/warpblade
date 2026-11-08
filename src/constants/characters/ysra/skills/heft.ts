@@ -15,7 +15,7 @@ const levels = grow({ windRate: 1, power: 3, travel: 60, reach: 0, skewer: 0, ra
   ["The line is struck again after the lunge.", { rail: 0.5 }],
   ["Winds faster; nothing touches you in the lunge.", { windRate: 1.6, guardAll: 1 }],
   ["The lunge bursts at its tip.", { tip: 1.5 }],
-  ["Lunge damage +20%.", { power: 6 }],
+  ["Lunge damage much higher.", { power: 10 }],
 ]);
 
 /** Deep Heft: the held lunge winds faster and learns to carry, rail and burst */

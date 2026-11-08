@@ -64,14 +64,16 @@ Three blows (`comboHits: 3`), J by J, each carried on within 0.35 s of the last.
 
 | Blow | Frames | Hit on | Damage | Knockback | Extra |
 | --- | --- | --- | --- | --- | --- |
-| Jab | 8 | 3 | 0.6x | 40 | stagger 0.3 s |
-| Body Hook | 11 | 5 | 0.9x | 90 | stagger 0.6 s |
-| Haymaker | 16 | 8 | 1.5x | 240 | heavy, stun 0.5 s, hit-stop 0.07 s |
+| Jab | 8 | 3 | 0.9x | 30 | stagger 0.3 s |
+| Body Hook | 11 | 5 | 1.3x | 60 | breaks a guard, stagger 0.6 s |
+| Haymaker | 16 | 8 | 2.8x | 70 | heavy, stun 0.5 s, hit-stop 0.07 s |
 
 Jab and hook reach a box 2 to 16 px ahead at head height, the shortest reach in the game.
 The haymaker is an overhand: the arm cocks back past her head, holds four calm frames and comes down over it, so its box reaches 42 px up, as far as the fist travels, and no further ahead than the jab.
 Light blows are blocked by guarding husks as for every hero; the haymaker breaks a guard, and the grab beats one.
 In the air, J is one hammer fist per airtime that spikes a foe into the floor.
+The first blow of a string faces the held direction; with none held, she turns to a foe within reach only behind her, as Kael's turning moves do.
+The grab starts the same way, so a foe left behind her by a suplex or the rush is in front of her fists again.
 
 ## The grab and the throws
 
@@ -98,7 +100,18 @@ A whiff lands with a short recovery, and both landings call `travelEnded()`.
 ## Bull Rush, Bellow and the taunt
 
 Bull Rush: floor only, 25 stamina, a two-frame load, 0.32 s at 200 px/s times move speed, a six-frame skid, 0.4 s before the next.
-Every foe she runs into takes 0.6x, a 180 knockback and a 0.4 s stun once per rush, and a guard breaks.
+She charges the way she is pushed when L is pressed, so L toward a foe behind her turns her first.
+Every foe she runs into takes 0.6x, a short 60 shove and a 0.4 s stun once per rush, and a guard breaks.
+Once she has run into a foe (one she did not lift onto her shoulder) and no other foe stands within 24 px ahead of her shoulder, the charge stops at its next stride key and the clip's own last stride and skid play from the same pose (`stopCharge` in `rushClock.ts`).
+She skids out 10 to 20 px past the foe and, as she settles, wheels round to it when it is the only foe in reach.
+Through a packed crowd she still runs the whole charge.
+
+### Keeping contact with a lone foe (8 November 2026)
+
+A player-style test (real keys, a walking husk with three times its HP, every gap measured) showed the string itself keeps contact: each jab, hook and haymaker landed 4 to 13 px from the foe and a human-paced string dealt about 80 a second.
+What broke contact was the rush: it ran 21 to 31 px past the foe and left her back to it, so the next jab whiffed; pressed with the foe behind her it charged the way she faced, 110 px away from it.
+Neither the string nor the grab turned to a foe behind her, so the jab after a suplex or a rush also swung at air.
+After the fix the same test ends each rush 10 to 19 px past the foe, facing it, and the jab lands.
 Bellow: 20 MP, 4 s recharge on the HUD tab where Sable shows her snare's.
 Every foe within 80 px takes 0.6x ability power, minions reel 0.5 s, and all of them are dragged 36 px toward her over 0.25 s, under three expanding crimson rings.
 Flying minions are also dragged up to 48 px down to her hands and reel 0.9 s, so Bellow then a grab catches a flier that hovers out of reach.
@@ -156,6 +169,8 @@ Each foe standing on the floor in reach takes the level's power once; minions ar
 Titan Throw: crimson tethers yank every minion in reach into a heap over her head, she spins once and hurls the heap ahead as one body.
 It strikes every foe in its path for 0.6x the level's power and bursts where it lands for the full power on each foe in the heap.
 Minis and bosses are never pulled; they take the burst when it reaches them.
+Unbroken: an iron form for a few seconds (more per charge level) in which no blow breaks a plate or flinches her and her damage is up; from level 3 every blow she lands sends a quake 40 px each way along the floor (one each 0.2 s).
+Most of its value is these quakes: doubling her own blows for eight seconds alone is under one Quake Drop.
 
 ## Look and motion
 
