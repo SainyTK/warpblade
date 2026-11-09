@@ -4,6 +4,7 @@ import { game } from "../state";
 import { fieldPace } from "../timeFields";
 import { updateAirborne } from "./airborne";
 import { enemyCenter } from "./enemy";
+import { applyHolds } from "./holds";
 import { kindOf } from "./kinds";
 import { separateFoes } from "./separate";
 import { updateStatus } from "./status";
@@ -37,6 +38,8 @@ export function updateEnemies(dt: number): void {
     e.cd -= sdt;
     const heldAt = e.x;
     kindOf(e.type).update(e, sdt, ts);
+    // a body standing in its way on the floor (a Wick) stops or slows it
+    applyHolds(e, heldAt, sdt);
     // a pinned foe stays where it is held, whatever its own step asked for: no walk, charge or lunge carries it off
     if (e.pinned > 0) {
       e.x = heldAt;

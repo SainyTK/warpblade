@@ -5,6 +5,7 @@ import { KAEL_KIT } from "./kael/kit";
 import { MIREL_KIT } from "./mirel/kit";
 import { ORRIN_KIT } from "./orrin/kit";
 import { SABLE_KIT } from "./sable/kit";
+import { WENNA_KIT } from "./wenna/kit";
 import { YSRA_KIT } from "./ysra/kit";
 
 /** the kit of the hero being played; looked up on each call so module load order never matters */
@@ -29,6 +30,8 @@ function kitOf(id: KitId): HeroKit {
       return ORRIN_KIT;
     case "mirel":
       return MIREL_KIT;
+    case "wenna":
+      return WENNA_KIT;
     default:
       return KAEL_KIT;
   }

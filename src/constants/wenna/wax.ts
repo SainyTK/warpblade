@@ -13,13 +13,16 @@ export const WAX_DRIP = {
   elite: 20,
   mini: 40,
   boss: 40,
-  /** a drip flies to her when she is this near */
+  /** a drip flies to her when she is this near; Lodestone pulls from twice as far */
   pull: 80,
+  lodestonePull: 160,
   /** it lies on the floor this long, blinking for the last seconds */
   life: 6,
   blink: 1.5,
-  /** flight speed toward her */
+  /** flight speed toward her, gravity while it falls, and how near her chest it is taken */
   speed: 170,
+  gravity: 420,
+  reach: 8,
 } as const;
 
 /** K: lighting a Wick */

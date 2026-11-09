@@ -1,3 +1,4 @@
+import type { Enemy } from "./enemy";
 import type { Hero } from "./hero";
 import type { MoveHit, MoveId, Situation } from "./move";
 import type { Pose } from "./pose";
@@ -59,6 +60,8 @@ export interface HeroKit {
   drawBack?(): void;
   /** drawn in the world over the hero, for parts of the kit that reach past the sprite (a chain and its hook) */
   draw?(): void;
+  /** a foe fell to a hit of this hero's (any source of theirs), with the hero swapped in: a kit's own drops or counts */
+  onKill?(e: Enemy): void;
   /** a fresh run */
   reset(): void;
 }

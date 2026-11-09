@@ -45,6 +45,8 @@ export const WICK = {
   guard: 0.3,
   /** seconds it gutters sideways after a hurt */
   hurt: 0.1,
-  /** a Wick nobody tends for this long melts (its owner fell or left the room) */
-  untended: 0.2,
+  /** a Wick nobody has tended for this long is let go: it holds no foe and is not drawn (its owner fell or left) */
+  untended: 0.25,
+  /** gravity on a hopping or falling Wick */
+  gravity: 600,
 } as const;

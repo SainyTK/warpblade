@@ -52,15 +52,22 @@ export interface Wick {
   hurt: number;
   /** seconds before it can intercept another blow aimed at her */
   guard: number;
+  /** seconds a foe has pressed against it since it last burned it, and seconds before a heavy foe can push it again */
+  held: number;
+  shoved: number;
+  /** dropping through the platform it stood on */
+  dropping: boolean;
   /** seconds left in Beckon's ring round her, with its place in the ring */
   ring: number;
   slot: number;
+  /** seconds left standing as a Great Wick (Thousand Candles): drawn giant, its bites three times as hard */
+  great: number;
   /** bites made, for every third bite of Bright Fangs */
   bites: number;
   /** a Wick lit past the cap (a twin, Great Wick's melt): it does not count toward the cap */
   extra: boolean;
-  /** seconds since its owner last tended it; a Wick nobody tends melts (its owner fell or left) */
-  untended: number;
+  /** the game time its owner last tended it; a Wick nobody tends is let go (its owner fell or left the room) */
+  tended: number;
   /** melting: seconds into the melt, -1 while it stands */
   melt: number;
   /** the foe it goes after, or null */
@@ -115,6 +122,8 @@ export interface WennaMemory {
   ultLevel: number;
   /** foes her Wicks defeated this run, for Many Hands */
   wickKills: number;
+  /** the wave whose start she has seen, for the free Wick at the start of each wave */
+  waveSeen: number;
 }
 
 /** what the host alone keeps for Wenna: foes her kit holds on to, which never go to a guest */
@@ -123,6 +132,32 @@ export interface WennaHostMemory {
   quarries: { foe: Enemy; left: number }[];
   /** the Wick the swap under way trades places with */
   swapWick: Wick | null;
+  /** places where her Wicks bite faster for a while (Wax Pool, Bonfire, the effigy) */
+  zones: BiteZone[];
+}
+
+/** a drop of wax a fallen foe left for the Wenna whose blow or Wick felled it */
+export interface Drip {
+  owner: number;
+  x: number;
+  y: number;
+  vx: number;
+  vy: number;
+  wax: number;
+  /** seconds since it fell, and whether it flies to her now */
+  t: number;
+  flying: boolean;
+}
+
+/** a stretch of floor where her Wicks bite faster, for `left` more seconds */
+export interface BiteZone {
+  x: number;
+  y: number;
+  /** half its width */
+  half: number;
+  /** bites come this many times as fast */
+  rate: number;
+  left: number;
 }
 
 declare module "./skillBehavior" {

@@ -30,11 +30,13 @@ const fresh = (): WennaMemory => ({
   freeWick: false,
   ultLevel: 0,
   wickKills: 0,
+  waveSeen: 0,
 });
 
 const freshHost = (): WennaHostMemory => ({
   quarries: [],
   swapWick: null,
+  zones: [],
 });
 
 /** the one owner of what Wenna's kit remembers; the guest's HUD reads Wax, the Wick count and the abilities from it */

@@ -8,6 +8,7 @@ import { drawCoatTails } from "./draw/coatTails";
 import { drawHead } from "./draw/head";
 import { drawLeg } from "./draw/leg";
 import type { Vec } from "./draw/reach";
+import { drawSatchel } from "./draw/satchel";
 import { drawSword } from "./draw/sword";
 import { drawTorso } from "./draw/torso";
 import { drawTrails } from "./draw/trails";
@@ -49,6 +50,7 @@ export function drawHero(s: SpriteCanvas, p: Pose, look: HeroLook): Vec {
   drawCoatTails(s, p, look.flare);
   drawLeg(s, atHip(p, 1.5, 0), [p.ffx, p.ffy], p.fa, false);
   drawTorso(s, p, back);
+  if (skin.satchel && !back) drawSatchel(s, p);
   if (skin.braid) drawBraid(s, rope);
   drawHead(s, p, back);
   if (back) drawArm(s, far, farElbow, farHand, true);

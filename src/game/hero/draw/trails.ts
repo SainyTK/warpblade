@@ -6,6 +6,9 @@ import type { Vec } from "./reach";
 /** a sash uses the first points of the scarf's rope: a short tail of cloth, not a scarf's long streamer */
 const SASH_POINTS = 6;
 
+/** a hood's point hangs along the first points of the ponytail's rope */
+const HOOD_POINTS = 3;
+
 /** the sash: a strip of cloth that tapers from the belt, with small folds across it and a split end */
 function drawSash(s: SpriteCanvas, rope: readonly Vec[]): void {
   const n = Math.min(rope.length, SASH_POINTS);
@@ -49,8 +52,21 @@ function drawBun(s: SpriteCanvas, tail: readonly Vec[]): void {
   s.commit(false);
 }
 
+/** a hood's point: the cowl gathered at the back of the head, tapering down the first stretch of the ponytail's rope */
+function drawHoodPoint(s: SpriteCanvas, tail: readonly Vec[]): void {
+  const n = Math.min(tail.length, HOOD_POINTS);
+  s.begin();
+  for (let i = 1; i < n; i++) {
+    const [a, b] = [tail[i - 1], tail[i]];
+    s.stroke(a[0], a[1] + 0.8, b[0], b[1] + 0.8, 1.5 - i * 0.45, HC.coatDark);
+  }
+  s.shadeEdges(HC.coatDark, HC.coat, HC.coatDeep, 2);
+  s.commit(false);
+}
+
 /** the ponytail in lit strands, then the scarf with a light top edge and a shadowed underside, behind everything else */
 export function drawTrails(s: SpriteCanvas, tail: readonly Vec[], scarf: readonly Vec[]): void {
+  if (skin.hood) return drawHoodPoint(s, tail);
   if (skin.bun) return drawBun(s, tail);
   s.begin();
   for (let i = 1; i < tail.length; i++) {

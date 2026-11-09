@@ -9,11 +9,12 @@ export interface HeroSkin {
   colors: HeroColors;
   /**
    * 24 by 22 image pixel rows facing right, and the back of the head for a spin: D d h H W hair deep to glint,
-   * L s S m skin light to deep, w I P eye white, iris and pupil, r a streak in the scarf's light colour
+   * L s S m skin light to deep, w I P eye white, iris and pupil, r a streak in the scarf's light colour,
+   * K k c C a hood in the coat colours deep to light, v V its lining in the scarf colours
    */
   head: readonly string[];
   headBack: readonly string[];
-  weapon: "sword" | "glaive" | "crossbow" | "gauntlets" | "chain" | "staff";
+  weapon: "sword" | "glaive" | "crossbow" | "gauntlets" | "chain" | "staff" | "lampPole";
   /** from the hand to the tip, in pixels */
   reach: number;
   /** slashes, floor rings, afterimages and sparks, dark to bright, seven steps */
@@ -29,6 +30,14 @@ export interface HeroSkin {
   sash?: boolean;
   /** the hair is gathered in a low bun held by two pins in the trim colours, with no ponytail and no scarf streamer */
   bun?: boolean;
+  /** a hood drawn in the head rows covers the hair: its point hangs from the back of the head, with no ponytail or scarf */
+  hood?: boolean;
+  /** the coat tails hang long as a cloak, lined in the scarf colours, with drips of the trim colour along the hem */
+  cloak?: boolean;
+  /** a leather satchel at the front of the hip in the glove colours, three candle tips in the trim colours showing */
+  satchel?: boolean;
+  /** cloth bands wound round the shins over the boots */
+  wraps?: boolean;
 }
 
 export interface CharacterDef {

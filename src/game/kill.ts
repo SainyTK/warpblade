@@ -13,6 +13,7 @@ import { endWaveOnLastKill } from "./endWave";
 import { enemyCenter } from "./enemies/enemy";
 import { kindOf } from "./enemies/kinds";
 import { feat } from "./feat";
+import { kit } from "./hero/kits";
 import { emitSkillEvent } from "./skills/events";
 import { game, lights, particles, rng } from "./state";
 import { shake } from "./world";
@@ -66,6 +67,7 @@ export function killEnemy(e: Enemy, source?: SourceId): void {
   game.kills++;
   feat({ kind: "kill", rank: e.rank, source });
   if (source) emitSkillEvent({ type: "kill", foe: e, source });
+  if (source) kit().onKill?.(e);
   const glow = big ? 0.9 : 0.5;
   const shine = lightShare(glow);
   if (shine > 0) lights.add(x, y, big ? 110 : 56 * Math.sqrt(share), S[4], glow * shine, big ? 0.9 : 0.5);

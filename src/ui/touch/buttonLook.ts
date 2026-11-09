@@ -5,6 +5,7 @@ import { BACKLINE } from "../../constants/orrin/backline";
 import { HOP, SLIDE } from "../../constants/sable/moves";
 import { TOUCH_TEXT } from "../../constants/touch";
 import { ULT_LEVELS } from "../../constants/ultimate";
+import { SWAP } from "../../constants/wenna/swap";
 import { VAULT } from "../../constants/ysra/stance";
 import { abilityMp, abilityRecharge, selectedAbility } from "../../game/hero/hulda/abilities";
 import { hulda } from "../../game/hero/hulda/memory";
@@ -31,6 +32,15 @@ import { castCost, selectedAbility as kaelAbility, spellRecharge } from "../../g
 import { canPayDash } from "../../game/hero/stamina";
 import { canAffordUlt, ultRecharge } from "../../game/hero/ultimate";
 import { warpCost, warpReady, warpRecharge } from "../../game/hero/warp";
+import {
+  selectedAbility as wennaAbility,
+  abilityMp as wennaMp,
+  abilityRecharge as wennaRecharge,
+} from "../../game/hero/wenna/abilities";
+import { lightCost } from "../../game/hero/wenna/light";
+import { wenna } from "../../game/hero/wenna/memory";
+import { swapTarget } from "../../game/hero/wenna/swap";
+import { hasWax } from "../../game/hero/wenna/wax";
 import { heat, overheatLeft } from "../../game/hero/ysra/pyre/heat";
 import { riteCost, selectedRite } from "../../game/hero/ysra/pyre/riteChoice";
 import { character, hero } from "../../game/state";
@@ -151,6 +161,29 @@ function mirelLook(spec: TouchButtonSpec, look: ButtonLook): void {
   }
 }
 
+/** Wenna's Light needs Wax, her Swap a charge, stamina and a Wick in reach; I shows the selected ability's MP and recharge */
+function wennaLook(spec: TouchButtonSpec, look: ButtonLook): void {
+  switch (spec.action) {
+    case "warp": {
+      const cost = lightCost();
+      look.ready = hasWax(cost);
+      look.cooldown = look.ready ? 0 : Math.max(0, 1 - wenna.wax / Math.max(1, cost));
+      break;
+    }
+    case "dash":
+      look.ready = wenna.swapCharges > 0 && hero.stamina >= SWAP.stamina && !!swapTarget();
+      look.cooldown = wenna.swapCharges > 0 ? 0 : Math.min(1, wenna.swapCd / SWAP.cooldown);
+      break;
+    case "cast": {
+      const id = wennaAbility();
+      look.cooldown = wennaRecharge(id);
+      look.ready = look.cooldown <= 0 && hero.mp >= wennaMp(id);
+      break;
+    }
+    default:
+  }
+}
+
 /** Ysra's guard needs stamina, her vault waits out its recharge, and the rite fills as Heat comes to cover it */
 function ysraLook(spec: TouchButtonSpec, look: ButtonLook): void {
   switch (spec.action) {
@@ -185,6 +218,7 @@ export function buttonLook(spec: TouchButtonSpec, pressed: boolean): ButtonLook 
   else if (character.kit === "hulda") huldaLook(spec, look);
   else if (character.kit === "orrin") orrinLook(spec, look);
   else if (character.kit === "mirel") mirelLook(spec, look);
+  else if (character.kit === "wenna") wennaLook(spec, look);
   else if (character.kit === "ysra") ysraLook(spec, look);
   else kaelLook(spec, look);
   return look;
