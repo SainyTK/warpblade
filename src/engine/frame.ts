@@ -116,11 +116,12 @@ export function circle(x: number, y: number, r: number, c: Color, a = 1): void {
       if (dx * dx + dy * dy <= b.ir * b.ir) putImage(ix, iy, c, a);
     }
 }
-/** translucent disc for smoke, mist and vapour */
-export function disc(x: number, y: number, r: number, c: Color, a: number): void {
+/** translucent disc for smoke, mist and vapour; nothing is drawn below `floor` (a world y), so a floor in front hides it */
+export function disc(x: number, y: number, r: number, c: Color, a: number, floor = Number.POSITIVE_INFINITY): void {
   if (a <= 0.01) return;
   const b = imageBox(x, y, r);
-  for (let iy = b.y0; iy <= b.y1; iy++)
+  const last = Number.isFinite(floor) ? Math.min(b.y1, Math.floor(toScreenY(floor) * RES) - 1) : b.y1;
+  for (let iy = b.y0; iy <= last; iy++)
     for (let ix = b.x0; ix <= b.x1; ix++) {
       const d = Math.hypot(ix + 0.5 - b.cx, iy + 0.5 - b.cy) / RES;
       if (d <= r) blendImage(ix, iy, c, a * Math.min(1, (r - d) * 0.8 + 0.35));

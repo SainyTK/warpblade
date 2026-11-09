@@ -110,8 +110,9 @@ export function runClockCast(): void {
     mirelHost.clockFoe = null;
     if (!e || e.hp <= 0) fizzle();
     else {
-      stopFoe(e, stopFor(e), STOPPED_CLOCK.returns);
+      // the cast's own hit lands before the stop, so only what comes after is stored
       dealDamage(e, progress.stats.ap * STOPPED_CLOCK.power, { fromX: h.x, source: "abilities" });
+      stopFoe(e, stopFor(e), STOPPED_CLOCK.returns);
       game.fx.push(createClockFace(e));
       const [cx, cy] = enemyCenter(e);
       lights.add(cx, cy, 34, PAL.hour[4], 0.9, 0.25);

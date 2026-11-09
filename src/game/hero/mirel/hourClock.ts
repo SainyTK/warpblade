@@ -1,8 +1,9 @@
 import { HOUR } from "../../../constants/mirel/special";
 import { PAL, SAND, WORLD_COLORS } from "../../../constants/palette";
 import { ULT_LEVELS } from "../../../constants/ultimate";
-import { circle, glow, line, place, px } from "../../../engine/frame";
+import { circle, disc, glow, place, px } from "../../../engine/frame";
 import { sfx } from "../../../services/audio";
+import type { Color } from "../../../types/color";
 import type { Effect } from "../../../types/effect";
 import type { Enemy } from "../../../types/enemy";
 import { PK } from "../../../types/particle";
@@ -62,7 +63,7 @@ function toll(spec: HourSpec, foes: readonly Enemy[]): void {
   }
   const drawn = Math.min(spec.reach, DRAWN);
   game.fx.push(createFloorRing(spec.x, spec.floor, drawn, PAL.hour, 0.5));
-  lights.add(spec.x, spec.y, drawn, PAL.hour[4], 0.9, 0.4);
+  lights.add(spec.x, spec.y, drawn * 0.6, PAL.hour[4], 0.7, 0.3);
   dust(spec.x, spec.floor, 12);
   for (let i = 0; i < 24; i++) {
     const a = rng.range(0, TAU);
@@ -116,31 +117,29 @@ export function createHourClock(spec: HourSpec): Effect {
       const rr = r * open;
       const flash = t < 2 / 30 || (tolled && t - spec.stop < 1 / 30);
       const ring = flash ? WHITE : PAL.hour[3];
+      // the floor stands in front of the clock's lower part
+      const dot = (x: number, y: number, c: Color, a: number): void => {
+        if (y < spec.floor) px(x, y, c, a);
+      };
+      const ray = (a: number, from: number, to: number, c: Color): void => {
+        for (let k = from; k <= to; k += 0.7) dot(spec.x + Math.cos(a) * k, spec.y + Math.sin(a) * k, c, fade);
+      };
       const steps = Math.max(48, Math.round(TAU * rr));
       for (let i = 0; i < steps; i++) {
         const a = (i / steps) * TAU;
-        px(spec.x + Math.cos(a) * rr, spec.y + Math.sin(a) * rr, ring, 0.9 * fade);
-        px(spec.x + Math.cos(a) * (rr - 3), spec.y + Math.sin(a) * (rr - 3), PAL.hour[2], 0.5 * fade);
+        dot(spec.x + Math.cos(a) * rr, spec.y + Math.sin(a) * rr, ring, 0.9 * fade);
+        dot(spec.x + Math.cos(a) * (rr - 3), spec.y + Math.sin(a) * (rr - 3), PAL.hour[2], 0.5 * fade);
       }
       for (let i = 0; i < 12; i++) {
         const a = -Math.PI / 2 + (i / 12) * TAU;
-        const inner = i % 3 ? rr - 6 : rr - 9;
-        line(
-          spec.x + Math.cos(a) * inner,
-          spec.y + Math.sin(a) * inner,
-          spec.x + Math.cos(a) * (rr - 3),
-          spec.y + Math.sin(a) * (rr - 3),
-          i % 3 ? PAL.hour[4] : PAL.hour[5],
-          fade,
-        );
+        ray(a, i % 3 ? rr - 6 : rr - 9, rr - 3, i % 3 ? PAL.hour[4] : PAL.hour[5]);
       }
       const u = Math.min(1, t / spec.stop);
-      const long = -Math.PI / 2 + u * TAU;
-      const short = -Math.PI / 2 + u * Math.PI;
-      line(spec.x, spec.y, spec.x + Math.cos(long) * (rr - 8), spec.y + Math.sin(long) * (rr - 8), PAL.hour[5], fade);
-      line(spec.x, spec.y, spec.x + Math.cos(short) * rr * 0.5, spec.y + Math.sin(short) * rr * 0.5, PAL.hour[4], fade);
+      ray(-Math.PI / 2 + u * TAU, 0, rr - 8, PAL.hour[5]);
+      ray(-Math.PI / 2 + u * Math.PI, 0, rr * 0.5, PAL.hour[4]);
       circle(spec.x, spec.y, 2, PAL.hour[5], fade);
-      glow(spec.x, spec.y, rr, PAL.hour[3], (flash ? 0.45 : 0.16) * fade);
+      disc(spec.x, spec.y, rr, PAL.hour[2], (flash ? 0.25 : 0.08) * fade, spec.floor);
+      glow(spec.x, spec.y, rr * 0.5, PAL.hour[3], (flash ? 0.3 : 0.1) * fade);
     },
   };
 }

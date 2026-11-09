@@ -1,7 +1,7 @@
 import { STILLFIELD } from "../../../constants/mirel/field";
 import { PAL, SAND } from "../../../constants/palette";
 import { GROUND } from "../../../constants/stage";
-import { glow, line, place, px } from "../../../engine/frame";
+import { disc, glow, place, px } from "../../../engine/frame";
 import type { Color } from "../../../types/color";
 import type { Effect } from "../../../types/effect";
 import type { StillfieldView } from "../../../types/mirel";
@@ -55,21 +55,12 @@ function fieldPx(x: number, y: number, c: Color, a: number): void {
   if (y < GROUND) px(x, y, c, a);
 }
 
-/** the faint fill, row by row down to the floor */
-function fill(f: StillfieldView, r: number): void {
-  const bottom = Math.min(f.y + r, GROUND - 1);
-  for (let y = Math.ceil(f.y - r); y <= bottom; y++) {
-    const half = Math.sqrt(Math.max(0, r * r - (y - f.y) ** 2));
-    for (let x = Math.ceil(f.x - half); x <= f.x + half; x++) px(x, y, PAL.hour[2], 0.15);
-  }
-}
-
 /** the clock ring: twelve ticks, a faint fill, a second hand going round and sand hanging still inside; the floor in
  *  front hides what is below it */
 function drawRing(f: StillfieldView, r: number, age: number, white: boolean): void {
   place();
   const ring = white ? WHITE : PAL.hour[3];
-  fill(f, r);
+  disc(f.x, f.y, r, PAL.hour[2], 0.15, GROUND);
   const steps = Math.max(24, Math.round(TAU * r));
   for (let i = 0; i < steps; i++) {
     const a = (i / steps) * TAU;
@@ -82,7 +73,7 @@ function drawRing(f: StillfieldView, r: number, age: number, white: boolean): vo
     fieldPx(f.x + Math.cos(a) * (r - 3), f.y + Math.sin(a) * (r - 3), c, 0.6);
   }
   const hand = -Math.PI / 2 + (age / SWEEP) * TAU;
-  line(f.x, f.y, f.x + Math.cos(hand) * (r - 4), f.y + Math.sin(hand) * (r - 4), PAL.hour[4], 0.6);
+  for (let k = 0; k <= r - 4; k++) fieldPx(f.x + Math.cos(hand) * k, f.y + Math.sin(hand) * k, PAL.hour[4], 0.6);
   px(f.x, f.y, PAL.hour[5]);
   for (let i = 0; i < MOTES; i++) {
     const [mx, my] = motePlace(f.id, i);
