@@ -51,6 +51,10 @@ export const WICK = {
   guardReach: 20,
   /** a blow from this near her middle came from above, and a Wick on either side may take it */
   fromAbove: 4,
+  /** a Wick takes a blow for her from this far below her feet up to this far above them (a guard leaping over her
+   *  meets a falling shot) */
+  guardBelow: 16,
+  guardAbove: 40,
   guard: 0.3,
   /** seconds it gutters sideways after a hurt */
   hurt: 0.1,

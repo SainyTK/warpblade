@@ -12,7 +12,8 @@ function shield(fromX: number): Wick | null {
   for (const w of liveWicks()) {
     if (!isUp(w) || w.guard > 0) continue;
     const dx = w.x - hero.x;
-    if (Math.abs(dx) > WICK.guardReach || Math.abs(w.y - hero.y) > 16) continue;
+    const dy = w.y - hero.y;
+    if (Math.abs(dx) > WICK.guardReach || dy > WICK.guardBelow || dy < -WICK.guardAbove) continue;
     if (side !== 0 && Math.sign(dx) !== side && Math.abs(dx) > 2) continue;
     if (!best || Math.abs(dx) < Math.abs(best.x - hero.x)) best = w;
   }

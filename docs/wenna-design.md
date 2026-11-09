@@ -56,6 +56,8 @@ A Wick is a wax figure about 12 px tall with a violet flame for a head.
 - Target: the Quarry if she has one and a Wick can reach it, else the nearest foe within 140 px of the Wick, else it stands guard 12 to 24 px in front of her, on the side of her nearest foe.
   With two or more Wicks out, the one nearest her is her guard: it only goes after ground foes within 40 px of her.
   A flier hovering over its post, too high for a bite from the floor (its body up to 56 px above the guard's feet), gets a straight leap and a bite, and the guard lands back on its post.
+  A Wick takes a blow for her from 16 px below her feet to 40 px above them, so a guard mid-leap over her still meets a falling shot.
+  Without that, the leaps let acorns past and the mash bot fell back to wave 3 with 7 kills.
 - Walk: 55 px/s, scaled by her move stat. A Wick walks on the floor or platform it stands on and hops up to a platform or floor up to 50 px above toward its target, or drops down to any lower one. With no route it goes back to her.
 - Hold: a ground foe of rank minion that walks into a Wick stops at the Wick's front edge. While held, the foe burns the Wick for the foe's own contact damage once a second. Elites, mini bosses and the Rift Warden push through: the Wick is knocked back 20 px and takes double that contact damage. Fliers pass over Wicks.
 - Intercept: through `absorbHurt(dmg, fromX)`. When a blow or shot is about to land on her and a Wick stands within 20 px of her on the `fromX` side, the Wick takes the full damage after her `hurtScale` and she takes nothing (return true). A shot that lands from straight above (its `fromX` within 4 px of her) may be taken by a Wick on either side. The nearest such Wick takes it. One Wick intercepts at most once each 0.3 s so a fast flurry still reaches her through a single Wick.
@@ -222,6 +224,7 @@ The other six heroes fall on the same waves with the same kills as the 0.6.0 bas
 | Wenna, two free Wicks at wave start | none | 3 | 9 | 4 |
 | Wenna, after the QA fixes (Wicks guard in front of her) | none | 3 | 8 | 3 |
 | Wenna, after the second QA round (her guard Wick holds its post against fliers) | none | 5 | 15 | 5 |
+| Wenna, after the third QA round (the guard leaps at fliers and still takes blows in the air) | none | 5 | 14 | 5 |
 
 The mash bot only walks and presses J, so it never lights a Wick and fights with her lamp, the weakest blow in the roster, plus the free Wicks.
 Her first runs fell one wave before Kael and Hulda, within the two-wave rule.
