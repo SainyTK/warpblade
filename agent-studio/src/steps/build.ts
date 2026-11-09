@@ -72,11 +72,14 @@ const blocking = (report: QaReport) => report.issues.some((i) => i.severity !== 
 
 /** build the plan, then let QA check it: up to MAX_FIX_ROUNDS rounds of fixes for blocking issues,
     and one polish round for the minor issues of a passing patch, each followed by another QA round.
+    QA after the polish round is a fresh look, so a blocking issue it finds gets one more fix round even when
+    the others are used up (owner decision, 9 November 2026).
     A resumed night with the developer's report saved starts at QA; its fix rounds start a new developer session */
 export async function buildAndVerify(night: Night, built: DevReport | null): Promise<{ dev: DevReport; qa: QaReport }> {
   let { report, session } = built ? { report: built, session: null } : await develop(night, null, "build", null);
   let fixes = 0;
   let polished = false;
+  let fixedAfterPolish = false;
   for (let round = 0; ; round++) {
     const verdict = await qa(night, round);
     if (!blocking(verdict)) {
@@ -85,9 +88,11 @@ export async function buildAndVerify(night: Night, built: DevReport | null): Pro
       ({ report, session } = await develop(night, session, "polish", verdict));
       continue;
     }
-    if (fixes >= MAX_FIX_ROUNDS) {
-      throw new Error(`QA failed the patch after ${MAX_FIX_ROUNDS} rounds of fixes; see ${night.files.qa(round)}`);
+    const lateRound = polished && !fixedAfterPolish;
+    if (fixes >= MAX_FIX_ROUNDS && !lateRound) {
+      throw new Error(`QA failed the patch after ${fixes} rounds of fixes; see ${night.files.qa(round)}`);
     }
+    if (polished) fixedAfterPolish = true;
     fixes++;
     ({ report, session } = await develop(night, session, "fix", verdict));
   }
