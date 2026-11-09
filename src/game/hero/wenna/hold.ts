@@ -29,7 +29,7 @@ function burn(w: Wick, e: Enemy, heavy: boolean, dt: number): void {
 
 /**
  * A ground minion that walks into a Wick stops at the Wick's front edge, and a charge into it ends there. Elites, mini
- * bosses and the Warden push through: the Wick is shoved back and burned twice as hard. Fliers pass over.
+ * bosses and the Warden push through: the Wick is shoved back, and their burn is twice a minion's. Fliers pass over.
  */
 function holdFoe(e: Enemy, before: number, dt: number): void {
   if (passes(e)) return;
@@ -48,7 +48,6 @@ function holdFoe(e: Enemy, before: number, dt: number): void {
       if (w.shoved > 0) continue;
       w.shoved = 0.5;
       w.x = clamp(w.x - side * WICK.pushBack, 6, W - 6);
-      hurtWick(w, WICK.holdBurn * e.power * 2);
       continue;
     }
     if (side * d >= gap) continue;

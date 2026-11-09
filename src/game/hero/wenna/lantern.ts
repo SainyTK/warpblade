@@ -110,14 +110,15 @@ function brightness(h: Hero): number {
   return 0;
 }
 
-/** the chain from the hook down to the lantern's ring, three iron links */
+/** the chain from the hook down to the lantern's ring: dark iron links with no gap, however far a swing stretches it */
 function drawChain(from: Point, to: Point): void {
-  for (let k = 0; k < LANTERN.chain; k++) {
-    const u = (k + 0.5) / LANTERN.chain;
+  const steps = Math.max(LANTERN.chain, Math.ceil(Math.hypot(to.x - from.x, to.y - from.y)));
+  for (let k = 0; k < steps; k++) {
+    const u = (k + 0.5) / steps;
     px(
       Math.round(lerp(from.x, to.x, u) - 0.5),
       Math.round(lerp(from.y, to.y, u) - 0.5),
-      k % 2 ? HC.bladeBack : HC.blade,
+      k % 2 ? HC.bladeDeep : HC.bladeBack,
     );
   }
 }

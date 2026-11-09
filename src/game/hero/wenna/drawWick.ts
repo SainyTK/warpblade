@@ -196,6 +196,52 @@ function greatFlame(cx: number, base: number, size: number, f: number): void {
   glow(cx, base - tall * 0.4, 14 + 18 * size, V[3], 0.28 * size);
 }
 
+/** the wax across the giant's body, lit from the top left: a glint band, the body, the shade and the deep edge */
+function greatTone(across: number, base: boolean): Color {
+  // one step darker than a small Wick, so the ramp still reads under the ultimate's own light
+  const step = across < 0.2 ? 2 : across < 0.7 ? 1 : 0;
+  return WAX[Math.max(0, step - (base ? 1 : 0))];
+}
+
+/** a tapering limb of wax from one point to another */
+function limb(shape: LitShape, x0: number, y0: number, x1: number, y1: number, r0: number, r1: number): void {
+  const d = Math.hypot(x1 - x0, y1 - y0) || 1;
+  for (let s = 0; s <= d; s += 0.5) {
+    const u = s / d;
+    const r = lerp(r0, r1, u);
+    const cx = lerp(x0, x1, u);
+    const cy = lerp(y0, y1, u);
+    for (let oy = -r; oy <= r; oy++)
+      for (let ox = -r; ox <= r; ox++)
+        if (ox * ox + oy * oy <= r * r) shape.lit(cx + ox, cy + oy, WAX[1], WAX[2], WAX[0]);
+  }
+}
+
+/** a violet arc trailing the fist along the path it just swept, brightest at its leading edge */
+function smear(reach: (t: number) => readonly [number, number, number, number], k: number): void {
+  const trail = 0.45;
+  for (let i = 0; i <= 18; i++) {
+    const back = (i / 18) * trail;
+    const t = k - back;
+    if (t < 0) break;
+    const [, , x, y] = reach(t);
+    const fade = 1 - back / trail;
+    const c = i < 3 ? V[5] : i < 8 ? V[4] : V[3];
+    px(Math.round(x), Math.round(y), c, 0.9 * fade);
+    px(Math.round(x), Math.round(y) - 1, V[3], 0.5 * fade);
+    px(Math.round(x), Math.round(y) + 1, V[2], 0.4 * fade);
+  }
+}
+
+/** the flame lights the giant's crown and its lit shoulder violet */
+function flameLight(ix: number, topY: number, rows: number, size: number): void {
+  const reach = Math.min(rows, 7);
+  for (let r = 0; r < reach; r++) {
+    const k = (1 - r / reach) * 0.4 * size;
+    for (let u = -GREAT.shoulder + 1; u <= 0; u++) px(ix + u, topY + r, V[4], k * (1 + u / GREAT.shoulder));
+  }
+}
+
 /**
  * The Great Wick, about 48 px tall, its feet at (x, y): a giant wax figure with drips down its lit side, two dark eyes
  * and a roaring violet flame, rising out of a spreading pool (`rise` 0 to 1), swinging one great arm from up behind its
@@ -216,14 +262,17 @@ export function drawGreatWick(x: number, y: number, rise: number, swing: number,
   const shape = new LitShape();
   for (let row = 0; row < rows; row++) {
     const up = row / rows;
-    const shoulders = row > rows - 4 ? (row - (rows - 4)) * 1.4 : 0;
-    const hw = Math.round(lerp(GREAT.foot, GREAT.shoulder, up) - shoulders + spread * (1 - up));
+    // a heavy foot, a slight waist, rounded shoulders
+    const top = Math.max(0, row - (rows - 5));
+    const hw = lerp(GREAT.foot, GREAT.shoulder, Math.sqrt(up)) - top * top * 0.3 + spread * (1 - up);
     const yy = iy - 1 - row + sink;
-    const base = row < 3;
-    for (let u = -hw; u <= hw - 1; u++)
-      shape.lit(ix + u, yy, base ? WAX[1] : WAX[2], base ? WAX[2] : WAX[3], base ? WAX[0] : WAX[1]);
+    for (let u = Math.floor(-hw); u <= Math.ceil(hw); u++) {
+      if (Math.abs(u + 0.5) > hw) continue;
+      shape.lit(ix + u, yy, greatTone((u + 0.5 + hw) / (2 * hw), row < 3), WAX[2], WAX[0]);
+    }
   }
   const topY = iy - rows + sink;
+  let fist: [number, number] | null = null;
   if (melted < 0.4) {
     // drips run down its lit side and a darker one down its shaded side
     const drips: readonly (readonly [number, number, Color])[] = [
@@ -236,38 +285,33 @@ export function drawGreatWick(x: number, y: number, rise: number, swing: number,
       shape.set(at(u), topY + 6, INK);
       shape.set(at(u), topY + 7, INK);
     }
-    // the great arm from its leading shoulder, the stub of the other at its back
+    // the great arm from its leading shoulder, bent at the elbow, the forearm trailing then whipping through
     const k = smooth(0, 1, swing);
-    const a = lerp(ARM_FROM, ARM_TO, k) + melted * 1.2;
     const sx = at(GREAT.shoulder - 2);
     const sy = topY + 10;
     const len = GREAT.arm * (1 - melted);
-    const dx = Math.cos(a) * f;
-    const dy = Math.sin(a);
-    for (let d = 0; d <= len; d += 0.5) {
-      const r = lerp(2.5, 1.6, d / len);
-      for (let oy = -r; oy <= r; oy++)
-        for (let ox = -r; ox <= r; ox++)
-          if (ox * ox + oy * oy <= r * r) shape.lit(sx + dx * d + ox, sy + dy * d + oy, WAX[2], WAX[3], WAX[1]);
-    }
-    const fx = sx + dx * len;
-    const fy = sy + dy * len;
+    const reach = (t: number): [number, number, number, number] => {
+      const a = lerp(ARM_FROM, ARM_TO, t) + melted * 1.2;
+      const fore = a + lerp(-0.9, 0.25, t);
+      const ex = sx + Math.cos(a) * f * len * 0.55;
+      const ey = sy + Math.sin(a) * len * 0.55;
+      return [ex, ey, ex + Math.cos(fore) * f * len * 0.5, ey + Math.sin(fore) * len * 0.5];
+    };
+    const [ex, ey, fx, fy] = reach(k);
+    limb(shape, sx, sy, ex, ey, 2.8, 2.2);
+    limb(shape, ex, ey, fx, fy, 2.2, 1.8);
     for (let oy = -GREAT.fist; oy <= GREAT.fist; oy++)
       for (let ox = -GREAT.fist; ox <= GREAT.fist; ox++)
         if (ox * ox + oy * oy <= GREAT.fist * GREAT.fist + 1) shape.lit(fx + ox, fy + oy, WAX[2], WAX[3], WAX[1]);
     for (let oy = -2; oy <= 2; oy++) shape.lit(at(-GREAT.shoulder - 1), sy + oy, WAX[2], WAX[3], WAX[1]);
-    if (k > 0.1 && k < 0.9) {
-      // a faint smear along the path the fist just swept
-      for (let back = 1; back <= 6; back++) {
-        const b = lerp(ARM_FROM, ARM_TO, Math.max(0, k - back * 0.04));
-        px(sx + Math.cos(b) * f * len, sy + Math.sin(b) * len, V[3 + (back < 3 ? 1 : 0)], 0.7 - back * 0.1);
-      }
-      glow(fx, fy, 12, V[3], 0.35);
-    }
+    if (k > 0.04 && k < 0.99) fist = [fx, fy];
+    if (fist) smear(reach, k);
   }
   if (risen < 1 || melted > 0) pool(ix, iy, GREAT.foot + 5 + Math.round(risen * 4 + melted * 8));
   shape.draw(INK, risen < 1 ? iy - 1 : Number.POSITIVE_INFINITY);
   const flameSize = clamp(1 - melted * 1.7) * (risen < 1 ? clamp(risen * 1.5) : 1);
   if (flameSize > 0.05) greatFlame(at(0), topY - 1, flameSize, f);
+  if (flameSize > 0.05) flameLight(ix, topY, rows, flameSize);
+  if (fist) glow(fist[0], fist[1], 8, V[3], 0.22);
   if (melted > 0.3) smokeCurl(at(0), topY - 2, (melted - 0.3) / 0.7, 6, 2.2);
 }

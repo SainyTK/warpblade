@@ -17,6 +17,7 @@ import { refuseDash } from "../stamina";
 import { travelEnded } from "../travelEnd";
 import { wenna, wennaHost } from "./memory";
 import { inRecovery } from "./string";
+import { leaveSwapLook } from "./swapLook";
 import { cappedWicks, isUp, liveWicks, spawnWick, wickCap } from "./wicks";
 
 const STEP = "w_swap";
@@ -92,6 +93,7 @@ export function pressSwap(): boolean {
   wennaHost.swapWick = w;
   Object.assign(h, { vx: 0, vy: 0, move: null, queued: null, running: false });
   setState("swap");
+  leaveSwapLook(w);
   puff(h.x, h.y);
   puff(w.x, w.y);
   sfx.warp();

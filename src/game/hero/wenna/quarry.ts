@@ -53,7 +53,13 @@ export function clearQuarries(): void {
   wennaHost.quarries = [];
 }
 
-/** a small ring of violet lamplight over each Quarry's head, pulsing */
+/** the ring's radius across, how flat it lies, and how far over the foe's head it hangs */
+const RING = { radius: 6, flat: 0.45, over: 13 } as const;
+
+/**
+ * A ring of violet lamplight over each Quarry's head, turning and pulsing, with a dark rim so it reads against the sky,
+ * and a small lamp-violet marker pointing down at the foe.
+ */
 export function drawQuarries(): void {
   if (!game.enemies.length) return;
   place();
@@ -61,14 +67,30 @@ export function drawQuarries(): void {
   for (const e of quarries()) {
     const box = enemyBox(e);
     const x = Math.round((box[0] + box[2]) / 2);
-    const y = Math.round(box[1]) - 5;
+    const y = Math.round(box[1]) - RING.over;
     const pulse = 0.5 + 0.5 * Math.sin(t * 8);
-    const r = 3 + pulse * 0.6;
-    for (let i = 0; i < 12; i++) {
-      const a = (i / 12) * Math.PI * 2 + t * 2;
-      const c = i % 3 === 0 ? PAL.wick[5] : PAL.wick[3];
-      px(Math.round(x + Math.cos(a) * r), Math.round(y + Math.sin(a) * r * 0.45), c, 0.85);
+    const r = RING.radius + pulse * 0.6;
+    const dots = 20;
+    for (let i = 0; i < dots; i++) {
+      const a = (i / dots) * Math.PI * 2 + t * 2;
+      const dx = Math.round(Math.cos(a) * r);
+      const dy = Math.round(Math.sin(a) * r * RING.flat);
+      px(x + dx, y + dy + 1, PAL.wick[0], 0.8);
     }
-    glow(x, y, 7, PAL.wick[4], 0.25 + pulse * 0.15);
+    for (let i = 0; i < dots; i++) {
+      const a = (i / dots) * Math.PI * 2 + t * 2;
+      const c = i % 5 === 0 ? PAL.wick[5] : PAL.wick[3];
+      px(x + Math.round(Math.cos(a) * r), y + Math.round(Math.sin(a) * r * RING.flat), c);
+    }
+    // a small chevron under the ring, pointing at the foe
+    for (const [dx, dy] of [
+      [-1, 3],
+      [0, 4],
+      [1, 3],
+    ] as const) {
+      px(x + dx, y + dy + 1, PAL.wick[0], 0.8);
+      px(x + dx, y + dy, PAL.wick[4]);
+    }
+    glow(x, y, 9, PAL.wick[4], 0.25 + pulse * 0.15);
   }
 }

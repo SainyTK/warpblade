@@ -34,13 +34,15 @@ const floorAt = (x: number, y: number): number => surfaceBelow(x, y - 1);
 const platformAt = (x: number, y: number): (typeof PLATFORMS)[number] | null =>
   PLATFORMS.find((p) => p.y === y && x >= p.x0 - 30 && x <= p.x1 + 30) ?? null;
 
-/** the foe a Wick goes after: a Quarry it can reach, else the nearest foe near it, else none */
-function chooseTarget(w: Wick): Enemy | null {
-  for (const q of quarries()) if (reachable(q)) return q;
+/** the foe a Wick goes after: a Quarry it can reach, else the nearest foe near it, else none; her guard Wick only
+ *  takes foes near her */
+function chooseTarget(w: Wick, guard: boolean): Enemy | null {
+  const near = (e: Enemy): boolean => !guard || Math.abs(enemyCenter(e)[0] - hero.x) <= WICK.guardHold;
+  for (const q of quarries()) if (reachable(q) && near(q)) return q;
   let best: Enemy | null = null;
   let bestD: number = WICK.seek;
   for (const e of foesOnScreen()) {
-    if (!reachable(e)) continue;
+    if (!reachable(e) || !near(e)) continue;
     const [cx, cy] = enemyCenter(e);
     const d = Math.hypot(cx - w.x, cy - w.y + 6);
     if (d < bestD) {
@@ -65,13 +67,28 @@ function inBite(w: Wick, e: Enemy): boolean {
 /** where she stands: the floor under her feet */
 const heroFloor = (): number => (hero.ground ? hero.y : floorAt(hero.x, hero.y));
 
-/** where an idle Wick stands: behind her, spread out; with Procession's `beside` on both sides of her */
-function heelSpot(w: Wick, index: number): number {
+/** the side her nearest foe stands on, or the way she faces with none on screen */
+function threatSide(): number {
+  let best = 0;
+  let bestD = Number.POSITIVE_INFINITY;
+  for (const e of foesOnScreen()) {
+    const d = Math.abs(enemyCenter(e)[0] - hero.x);
+    if (d < bestD) {
+      best = Math.sign(enemyCenter(e)[0] - hero.x);
+      bestD = d;
+    }
+  }
+  return best || hero.face;
+}
+
+/** where an idle Wick stands guard: in front of her toward the nearest foe, spread between the near and far marks;
+ *  with Procession's `beside` every other one guards her back */
+function guardSpot(w: Wick, index: number): number {
   const beside = !!skillValues("w_procession").beside;
-  const step = (WICK.heelFar - WICK.heelNear) / 3;
-  const back = WICK.heelNear + Math.min(3, index) * step;
-  const side = beside && index % 2 === 1 ? 1 : -1;
-  return hero.x + hero.face * side * back + (w.id % 2) * 2;
+  const step = (WICK.guardFar - WICK.guardNear) / 2;
+  const out = WICK.guardNear + (index % 3) * step + (w.id % 2) * 2;
+  const side = beside && index % 2 === 1 ? -1 : 1;
+  return hero.x + threatSide() * side * out;
 }
 
 /** Beckon's ring: places on both sides of her, near ones first */
@@ -212,7 +229,7 @@ function tryBite(w: Wick): void {
 function goal(w: Wick, index: number): [number, number] {
   if (w.ring > 0) return [ringSpot(w.slot), heroFloor()];
   const t = w.target;
-  if (!t) return [heelSpot(w, index), heroFloor()];
+  if (!t) return [guardSpot(w, index), heroFloor()];
   const box = enemyBox(t);
   const cx = (box[0] + box[2]) / 2;
   const side = Math.sign(w.x - cx) || -hero.face;
@@ -231,7 +248,7 @@ function burnRate(): number {
 }
 
 /** one step of one of her Wicks: its timers, its end, its target, its walk and its bite */
-function stepWick(w: Wick, index: number, dt: number): void {
+function stepWick(w: Wick, index: number, guard: boolean, dt: number): void {
   w.tended = game.t;
   w.t += dt;
   w.lunge = Math.max(0, w.lunge - dt);
@@ -249,20 +266,24 @@ function stepWick(w: Wick, index: number, dt: number): void {
   if (w.life <= 0) return endWick(w, "life");
   if (!isUp(w)) return;
   w.bite = Math.max(0, w.bite - dt);
-  if (!w.target || w.target.hp <= 0 || !reachable(w.target) || !isQuarry(w.target)) w.target = chooseTarget(w);
+  if (guard || !w.target || w.target.hp <= 0 || !reachable(w.target) || !isQuarry(w.target))
+    w.target = chooseTarget(w, guard);
   const [gx, gy] = goal(w, index);
   if (w.leap <= 0) steer(w, gx, gy, dt);
   move(w, dt);
   tryBite(w);
 }
 
-/** every Wick of hers takes its step; a Wick nobody tends any more (its owner fell) is let go */
+/** every Wick of hers takes its step, the one nearest her as her guard; a Wick nobody tends any more (its owner fell)
+ *  is let go */
 export function stepWicks(dt: number): void {
   const mine = ownWicks();
+  const up = mine.filter((w) => w.melt < 0 && isUp(w));
+  const guard = up.length >= 2 ? up.reduce((a, b) => (Math.abs(b.x - hero.x) < Math.abs(a.x - hero.x) ? b : a)) : null;
   let index = 0;
   for (const w of mine) {
     if (game.t - w.tended > WICK.untended) endWick(w, "gone");
-    stepWick(w, w.target ? 0 : index++, dt);
+    stepWick(w, w.target ? 0 : index++, w === guard, dt);
   }
 }
 

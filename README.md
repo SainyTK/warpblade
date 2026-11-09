@@ -111,7 +111,7 @@ His crystal sword can be thrown, and wherever it lands, he follows.
   `K` lights a Wick for Wax: a wax figure with a violet flame for a head that walks to the nearest foe and bites it, stops ground minions that walk into it, and takes blows aimed at her from its side.
   `J` swings a three-blow lamp string of Tap, Swing and Flare, with Lamp Drop in the air; the foe it hits becomes her Quarry, every Wick turns on it and bites faster, and the Flare's cone of flame calls every Wick near it to bite at once.
   `L` trades places with the Wick farthest ahead, which arrives in a flare, and `I` bursts the nearest Wick with Kindle or calls every Wick to a ring round her with Beckon, for MP.
-  Wax, a bar under stamina, trickles in and drips from the foes she and her Wicks fell, flying to her when she is near; every wave opens with a free Wick at her side (see [docs/wenna-design.md](docs/wenna-design.md)).
+  Wax, a bar under stamina, trickles in and drips from the foes she and her Wicks fell, flying to her when she is near; every wave opens with two free Wicks at her side (see [docs/wenna-design.md](docs/wenna-design.md)).
   Sable, Hulda, Orrin, Mirel and Wenna start locked and are bought with coins.
   The hero behind the menu changes as you look through the cards, and the choice is saved in this browser.
 - **A 30-wave stage in five eras.** The sky and the foes change as the waves go on, and the scene dissolves into the next era between waves.

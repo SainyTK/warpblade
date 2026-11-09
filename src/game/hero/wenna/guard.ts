@@ -6,7 +6,8 @@ import { hurtWick, isUp, liveWicks } from "./wicks";
 
 /** her Wick that stands between her and a blow from this side, nearest her first, or null */
 function shield(fromX: number): Wick | null {
-  const side = Math.sign(fromX - hero.x);
+  // a shot dropping from straight above has no side: a Wick on either side may take it
+  const side = Math.abs(fromX - hero.x) <= WICK.fromAbove ? 0 : Math.sign(fromX - hero.x);
   let best: Wick | null = null;
   for (const w of liveWicks()) {
     if (!isUp(w) || w.guard > 0) continue;

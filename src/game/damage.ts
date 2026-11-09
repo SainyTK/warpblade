@@ -92,7 +92,7 @@ function block(e: Enemy, base: number, source: SourceId): HitResult {
   e.guardHits++;
   if (e.guardHits >= GUARD.counterAfter)
     Object.assign(e, { state: "wind", st: GUARD.counterWind, guardHits: 0, cd: 0 });
-  if (e.hp <= 0) killEnemy(e);
+  if (e.hp <= 0) killEnemy(e, source);
   return "blocked";
 }
 

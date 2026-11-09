@@ -26,9 +26,11 @@ export const WICK = {
   lunge: 0.18,
   /** a Wick goes after foes this near when she has no Quarry it can reach */
   seek: 140,
-  /** with no foe, it stands this far behind her */
-  heelNear: 16,
-  heelFar: 40,
+  /** with no foe of its own, it stands guard this far in front of her, toward the nearest foe, where blows come from */
+  guardNear: 12,
+  guardFar: 24,
+  /** with two or more out, the Wick nearest her stays her guard: it only goes after foes this near her */
+  guardHold: 40,
   /** walking speed before her move stat */
   walk: 55,
   /** it hops up to a floor this far above toward its target */
@@ -44,6 +46,8 @@ export const WICK = {
   pushBack: 20,
   /** it intercepts a blow aimed at her from a foe on its side when it stands this near her, once each `guard` seconds */
   guardReach: 20,
+  /** a blow from this near her middle came from above, and a Wick on either side may take it */
+  fromAbove: 4,
   guard: 0.3,
   /** seconds it gutters sideways after a hurt */
   hurt: 0.1,
