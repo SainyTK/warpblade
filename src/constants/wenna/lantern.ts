@@ -34,7 +34,7 @@ export const LANTERN = {
   /** how bright it roars while Great Wick or Thousand Candles goes up */
   roar: 0.85,
   /** the light it throws the moment the Flare opens: radius, strength and seconds */
-  flash: { r: 40, k: 0.7, life: 0.2 },
+  flash: { r: 28, k: 0.4, life: 0.18 },
   /** frames the shutter stays open after the Flare's hit frame before it starts to close */
   open: 4,
 } as const;

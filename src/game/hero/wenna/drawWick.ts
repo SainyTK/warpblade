@@ -193,7 +193,7 @@ function greatFlame(cx: number, base: number, size: number, f: number): void {
       px(cx + u, y, c);
     }
   }
-  glow(cx, base - tall * 0.4, 18 + 26 * size, V[3], 0.5 * size);
+  glow(cx, base - tall * 0.4, 14 + 18 * size, V[3], 0.28 * size);
 }
 
 /**

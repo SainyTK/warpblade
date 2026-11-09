@@ -24,7 +24,7 @@ export function createFlameCone(c: FlameConeSpec): Effect {
   let t = 0;
   const R = PAL.wick;
   const n = R.length;
-  lights.add(c.x + c.face * c.far * 0.5, c.y, c.far * 0.9, R[4], 0.8 * c.power, LIFE + 0.1);
+  lights.add(c.x + c.face * c.far * 0.5, c.y, c.far * 0.7, R[3], 0.3 * c.power, LIFE + 0.1);
   for (let i = 0; i < Math.round(10 * c.power); i++) {
     const a = rng.range(-c.half, c.half);
     const sp = rng.range(60, 160);
@@ -52,11 +52,11 @@ export function createFlameCone(c: FlameConeSpec): Effect {
         if (a > edge) return;
         // white at the root, violet toward the rim and the far end, cooling with age
         const q = Math.max(a / edge, d / c.far);
-        const ci = clamp(Math.round(q * 3 + u * 2.4), 0, n - 1);
+        const ci = clamp(Math.round(1 + q * 3 + u * 2), 1, n - 1);
         out.c = R[n - 1 - ci];
         out.a = clamp((1 - q * 0.7) * fade * 1.4, 0, 1) * c.power;
       });
-      glow(c.x + c.face * reach * 0.4, c.y, reach * 0.6, R[3], 0.35 * fade * c.power);
+      glow(c.x + c.face * reach * 0.4, c.y, reach * 0.5, R[3], 0.16 * fade * c.power);
     },
   };
 }

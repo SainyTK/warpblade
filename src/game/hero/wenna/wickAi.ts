@@ -75,7 +75,7 @@ function heelSpot(w: Wick, index: number): number {
 }
 
 /** Beckon's ring: places on both sides of her, near ones first */
-function ringSpot(slot: number): number {
+export function ringSpot(slot: number): number {
   const side = slot % 2 === 0 ? 1 : -1;
   return hero.x + side * (BECKON.radius - 6 + Math.floor(slot / 2) * 9);
 }
@@ -143,8 +143,36 @@ function steer(w: Wick, goalX: number, goalY: number, dt: number): void {
   w.face = Math.sign(dx);
 }
 
+/** a leap flies a fixed arc and lands on its spot, whatever floors it passes */
+function flyLeap(w: Wick, dt: number): void {
+  const to = w.leapTo;
+  w.leap -= dt;
+  w.vy += WICK.gravity * dt;
+  w.x += w.vx * dt;
+  w.y += w.vy * dt;
+  if (w.leap > 0 || !to) return;
+  w.x = to.x;
+  w.y = to.y;
+  w.vx = 0;
+  w.vy = 0;
+  w.ground = true;
+  w.leapTo = null;
+}
+
+/** start a leap in an arc to a spot on a floor, landing after `seconds` */
+export function leapTo(w: Wick, x: number, y: number, seconds: number): void {
+  w.leap = seconds;
+  w.leapTo = { x, y };
+  w.vx = (x - w.x) / seconds;
+  w.vy = (y - w.y - 0.5 * WICK.gravity * seconds * seconds) / seconds;
+  w.ground = false;
+  w.dropping = false;
+  if (Math.abs(x - w.x) > 1) w.face = Math.sign(x - w.x);
+}
+
 /** a Wick in the air falls and lands on the first floor under it; on a floor it walks off an edge */
 function move(w: Wick, dt: number): void {
+  if (w.leap > 0) return flyLeap(w, dt);
   const x0 = w.x;
   w.x = clamp(w.x + w.vx * dt, 6, W - 6);
   if (w.ground) {
@@ -188,8 +216,11 @@ function goal(w: Wick, index: number): [number, number] {
   const box = enemyBox(t);
   const cx = (box[0] + box[2]) / 2;
   const side = Math.sign(w.x - cx) || -hero.face;
-  const stand = (box[2] - box[0]) / 2 + WICK.half + 2 + (w.id % 3) * 3;
-  return [cx + side * stand, floorOf(t)];
+  const stand = (box[2] - box[0]) / 2 + WICK.half + (w.id % 3) * 3;
+  const floor = floorOf(t);
+  // already this close on the foe's floor: it holds its ground, never backs off from a foe pressing into it
+  if (Math.abs(w.y - floor) < 2 && Math.abs(w.x - cx) <= stand) return [w.x, floor];
+  return [cx + side * stand, floor];
 }
 
 /** how fast a Wick burns down: Procession slows it while she walks, Eternal Flame stops it */
@@ -220,7 +251,7 @@ function stepWick(w: Wick, index: number, dt: number): void {
   w.bite = Math.max(0, w.bite - dt);
   if (!w.target || w.target.hp <= 0 || !reachable(w.target) || !isQuarry(w.target)) w.target = chooseTarget(w);
   const [gx, gy] = goal(w, index);
-  steer(w, gx, gy, dt);
+  if (w.leap <= 0) steer(w, gx, gy, dt);
   move(w, dt);
   tryBite(w);
 }

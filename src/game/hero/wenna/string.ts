@@ -138,7 +138,7 @@ function repeatFlare(s: LampStrike): void {
 function strikeNow(): void {
   const s = currentStrike();
   smear(s);
-  if (s.blow === "flare") lights.add(hero.x + hero.face * 14, hero.y - SHOULDER_Y, 44, PAL.wick[4], 0.9, 0.2);
+  if (s.blow === "flare") lights.add(hero.x + hero.face * 14, hero.y - SHOULDER_Y, 36, PAL.wick[3], 0.4, 0.2);
   const wasQuarry = new Set(game.enemies.filter(isQuarry));
   const kills = new Set<Enemy>();
   const foes = strikeShape(s, struckThisSwing, markStruck);

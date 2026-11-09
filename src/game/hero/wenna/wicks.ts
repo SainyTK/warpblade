@@ -80,6 +80,8 @@ export function spawnWick(x: number, y: number, cause: WickCause, o: LightOption
     held: 0,
     shoved: 0,
     dropping: false,
+    leap: 0,
+    leapTo: null,
     ring: 0,
     slot: 0,
     great: 0,

@@ -57,6 +57,9 @@ export interface Wick {
   shoved: number;
   /** dropping through the platform it stood on */
   dropping: boolean;
+  /** a leap under way to a spot (Beckon): seconds of flight left, and where it lands */
+  leap: number;
+  leapTo: { x: number; y: number } | null;
   /** seconds left in Beckon's ring round her, with its place in the ring */
   ring: number;
   slot: number;

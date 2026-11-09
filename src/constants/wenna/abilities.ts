@@ -24,6 +24,8 @@ export const BECKON = {
   hold: 2,
   hurt: 0.5,
   radius: 18,
+  /** seconds each Wick's hop to its place in the ring takes */
+  leap: 0.4,
   dur: 10 / 30,
 } as const;
 

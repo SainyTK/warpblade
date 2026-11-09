@@ -58,7 +58,7 @@ function splash(x: number, y: number, reach: number): void {
     particles.spawn(PK.SPARK, x, y - 20, rng.range(-160, 160), -rng.range(40, 180), rng.range(0.3, 0.7), {
       col: rng.pick([PAL.wick[4], PAL.wick[5], WAX[3]]),
     });
-  lights.add(x, y - 20, 90, PAL.wick[4], 1, 0.4);
+  lights.add(x, y - 20, 70, PAL.wick[3], 0.4, 0.35);
 }
 
 /**
@@ -172,7 +172,7 @@ export function castThousandCandles(level: number): void {
         lights.add(w.x, w.y - 12, 40, PAL.wick[4], 0.9, 0.3);
       }
       if (v.leave) meltInto(x, hero.y, Math.round(v.leave), GREAT_WICK.wickLife);
-      lights.add(x, hero.y - 20, 160, PAL.wick[4], 1, 0.5);
+      lights.add(x, hero.y - 20, 120, PAL.wick[3], 0.45, 0.4);
       shake(0.4, 5);
       hitStop(0.08);
       sfx.boom();

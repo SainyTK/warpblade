@@ -53,9 +53,9 @@ function holdFoe(e: Enemy, before: number, dt: number): void {
     }
     if (side * d >= gap) continue;
     e.x = w.x + side * gap - off;
-    if (Math.sign(e.vx) === -side) e.vx = 0;
     // a charge spends itself on the Wick, as on a pin
-    if (e.state === "lunge" && Math.abs(e.vx) > 60) Object.assign(e, { state: "recover", st: 0, vx: 0 });
+    if (e.state === "lunge" && Math.abs(e.vx) > 60) Object.assign(e, { state: "recover", st: 0 });
+    if (Math.sign(e.vx) === -side) e.vx = 0;
   }
 }
 

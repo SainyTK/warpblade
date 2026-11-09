@@ -21,7 +21,7 @@ const DRIPS: readonly (readonly [number, number])[] = [
  * violet shows behind her as she walks and leaps.
  */
 export function drawCloakLining(s: SpriteCanvas, at: AtHip, flare: number, hem: number): void {
-  const wide = 1.1 + flare * 0.55;
+  const wide = 0.6 + flare * 0.6;
   s.begin();
   s.poly(
     [
