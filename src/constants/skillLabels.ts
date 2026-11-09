@@ -28,6 +28,8 @@ export const ULT_LABEL: Record<UltimateId, string> = {
   maelstrom: "MAELSTROM",
   hourOfStillness: "HOUR OF STILLNESS",
   eternalNoon: "ETERNAL NOON",
+  greatWick: "GREAT WICK",
+  thousandCandles: "THOUSAND CANDLES",
 };
 /** the kind line of a boon card */
 export const BOON_KIND = "Boon";

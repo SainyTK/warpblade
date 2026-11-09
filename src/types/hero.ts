@@ -7,6 +7,7 @@ import type { OrrinState } from "./orrin";
 import type { Pose } from "./pose";
 import type { SableState } from "./sable";
 import type { KaelAbility } from "./spell";
+import type { WennaState } from "./wenna";
 import type { Point } from "./world";
 import type { YsraClipName, YsraState } from "./ysra";
 
@@ -58,11 +59,12 @@ export type HeroState =
   | SableState
   | HuldaState
   | OrrinState
-  | MirelState;
+  | MirelState
+  | WennaState;
 /** the states posed by their own keyed clip; the rest play an action clip */
 export type StateClipName = Exclude<
   HeroState,
-  "move" | "cast" | "throw" | "warpStrike" | YsraState | SableState | HuldaState | OrrinState | MirelState
+  "move" | "cast" | "throw" | "warpStrike" | YsraState | SableState | HuldaState | OrrinState | MirelState | WennaState
 >;
 
 /** Where a warp goes: an enemy, a floating crystal, or a point in the air. */

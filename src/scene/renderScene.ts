@@ -1,6 +1,7 @@
 import { beginFrame, composite, setShake } from "../engine/frame";
 import { drawChests } from "../game/build/chests";
 import { coop, eachHero } from "../game/coopHooks";
+import { shownKit } from "../game/hero/kits";
 import { drawSkills, drawSkillsBack } from "../game/skills/runtime";
 import { SKY_FLASH } from "../game/spells/lightning";
 import { game, hero, lights, particles, rng } from "../game/state";
@@ -49,6 +50,7 @@ export function renderScene(out: Uint8ClampedArray): void {
   drawMist();
   lights.draw();
   drawNumbers();
+  eachHero(() => shownKit().drawOver?.());
   room?.drawOverlay();
   const bolt = game.flash > 0 ? game.flash / SKY_FLASH : 0;
   composite(out, Math.min(1, bolt + sceneFlash()) * FLASH_STRENGTH);

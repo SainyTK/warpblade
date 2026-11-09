@@ -4,7 +4,7 @@ import type { Pose } from "../../../types/pose";
 import { atNeck, headCenter } from "../../../utils/poseFrame";
 import { skin } from "../skin";
 
-/** the head on top of the spine, face or back of the head placed to the image pixel, then the scarf and its knot */
+/** the head on top of the spine, face or back of the head (or a hood) placed to the image pixel, then the scarf and its knot */
 export function drawHead(s: SpriteCanvas, p: Pose, back: boolean): void {
   const [cx, cy] = headCenter(p);
   const snap = (v: number) => Math.round(v * s.res) / s.res;
@@ -22,6 +22,12 @@ export function drawHead(s: SpriteCanvas, p: Pose, back: boolean): void {
     w: HC.eyeWhite,
     I: HC.iris,
     P: HC.pupil,
+    K: HC.coatDeep,
+    k: HC.coatDark,
+    c: HC.coat,
+    C: HC.coatLight,
+    v: HC.scarf,
+    V: HC.scarfDark,
   };
   s.begin();
   s.pixels(back ? skin.headBack : skin.head, map, snap(cx) - 7, snap(cy) - 6);

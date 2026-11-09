@@ -30,7 +30,7 @@ Numbers here are starting values; balance changes them in the constants files an
 
 ## Combo
 
-- `CharacterDef.comboHits` fixes the length of the ground string for the whole run: Kael 4, Ysra 3, Sable, Hulda, Orrin and Mirel chosen by their designers (2 to 4).
+- `CharacterDef.comboHits` fixes the length of the ground string for the whole run: Kael 4, Ysra 3, Sable, Hulda, Orrin, Mirel and Wenna chosen by their designers (2 to 4).
 - Attack skills change the string's damage, speed and on-hit effects, never its length.
 - The air string limit is fixed per hero or raised by one movement skill; the hero designer chooses.
 
@@ -137,6 +137,7 @@ A summon never fires more than its own internal cooldown allows, so attack speed
 
 - Hits of the hero's own presses (J, K, L, I, U, jump), and the skill effects those presses carry, count for `attacks`, `abilities` or `ultimate` and build Flow.
 - A skill that deals its own hits (a summon, a projectile it launches on its own, damage over time, an aura) uses its skill id as the source and does not build Flow.
+- A hero whose base kit fights through summons (Wenna's Wicks) counts their hits for `abilities` and passes `noFlow` to `dealDamage`, so a crowd of summons cannot fill Flow.
 - The end of run screen lists each skill source by its name, with its level or Evolved.
 
 ## Code
@@ -214,6 +215,7 @@ Targeting helpers: `nearestFoe`, `foesOnScreen`, `distance2` and `touches` in `s
 | `grab` | `foe` | Hulda's grab (declared in `src/types/hulda.ts`) |
 | `latch`, `release`, `tip`, `swingKick` | `kind` and `foe`; `speed` and `fling`; `foe` and `blow`; `foe` and `speed` | Orrin's hook, letting go of a swing, a chain hit at the tip and a swing kick (declared in `src/types/orrin.ts`) |
 | `echo`, `field`, `rewind`, `toll`, `restart` | `foe` and `blow`; `open`, `foes`, `x`, `y` and `radius`; `healed`, `from` and `to`; `foes`; `foe` | Mirel's echo striking a foe, her Stillfield opening or closing, a Rewind ending and a Toll landing, and the shared stop status when a foe she stopped restarts (declared in `src/types/mirel.ts`) |
+| `wick`, `swap`, `quarry`, `kindle`, `bite` | `x`, `y`, `lit`, `cause` and `wick`; `from`, `to` and `wick`; `foe`; `x`, `y` and `foes`; `foe`, `wick` and `damage` | Wenna's Wick lit or ended, a Swap arriving, a foe becoming her Quarry, a Wick bursting under Kindle and a Wick's bite (declared in `src/types/wenna.ts`) |
 | `kill` | `foe`, `source` | `killEnemy`, when the killing hit has a source |
 | `hurt` | `damage`, `fromX` | `hurtHero`, when HP is lost |
 | `ultimate` | `level` | the shared ultimate release |

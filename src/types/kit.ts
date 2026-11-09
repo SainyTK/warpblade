@@ -1,9 +1,10 @@
+import type { Enemy } from "./enemy";
 import type { Hero } from "./hero";
 import type { MoveHit, MoveId, Situation } from "./move";
 import type { Pose } from "./pose";
 
 /** which hero's controls, moves and states drive the shared rig */
-export type KitId = "kael" | "ysra" | "sable" | "hulda" | "orrin" | "mirel";
+export type KitId = "kael" | "ysra" | "sable" | "hulda" | "orrin" | "mirel" | "wenna";
 
 /**
  * How one hero plays. The shared loop (updateHero, the combo engine, physics, hurt) calls into the kit of the hero
@@ -59,6 +60,12 @@ export interface HeroKit {
   drawBack?(): void;
   /** drawn in the world over the hero, for parts of the kit that reach past the sprite (a chain and its hook) */
   draw?(): void;
+  /** drawn over the whole scene after the damage numbers, for markers that must stay readable (Wenna's Quarry ring) */
+  drawOver?(): void;
+  /** how visible the hero's sprite is right now, 0 to 1 (gone mid-Swap); left out, 1 */
+  heroAlpha?(): number;
+  /** a foe fell to a hit of this hero's (any source of theirs), with the hero swapped in: a kit's own drops or counts */
+  onKill?(e: Enemy): void;
   /** a fresh run */
   reset(): void;
 }

@@ -8,6 +8,7 @@ import { KAEL_SKILLS } from "./kael/index";
 import { MIREL_SKILLS } from "./mirel/index";
 import { ORRIN_SKILLS } from "./orrin/index";
 import { SABLE_SKILLS } from "./sable/index";
+import { WENNA_SKILLS } from "./wenna/index";
 import { YSRA_SKILLS } from "./ysra/index";
 
 const BEHAVIORS: Readonly<Record<KitId, Readonly<Record<string, SkillBehavior>>>> = {
@@ -17,6 +18,7 @@ const BEHAVIORS: Readonly<Record<KitId, Readonly<Record<string, SkillBehavior>>>
   hulda: HULDA_SKILLS,
   orrin: ORRIN_SKILLS,
   mirel: MIREL_SKILLS,
+  wenna: WENNA_SKILLS,
 };
 
 /** each held skill's live state for the hero in play: projectiles, summons, timers, foes in reach. Kept to the host,

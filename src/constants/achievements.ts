@@ -64,6 +64,7 @@ export const ACHIEVEMENTS: readonly Achievement[] = [
   heroTrial("hulda", "Hulda"),
   heroTrial("orrin", "Orrin"),
   heroTrial("mirel", "Mirel"),
+  heroTrial("wenna", "Wenna"),
   {
     id: "kills-100",
     name: "Culling",
@@ -152,6 +153,14 @@ export const ACHIEVEMENTS: readonly Achievement[] = [
     text: "As Mirel, defeat 5 foes inside one Stillfield.",
     group: "Skill",
     goal: { kind: "best", stat: "fieldKills", need: 5 },
+    reward: 60,
+  },
+  {
+    id: "many-hands",
+    name: "Many Hands",
+    text: "As Wenna, let your Wicks defeat 40 foes in one run.",
+    group: "Skill",
+    goal: { kind: "best", stat: "wickKills", need: 40 },
     reward: 60,
   },
   {

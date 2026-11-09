@@ -22,6 +22,8 @@ import { updateRiteTabs } from "./riteTabs";
 import { updateSandBar } from "./sandBar";
 import { updateSpellTabs } from "./spellTabs";
 import { updateWarpTab } from "./warpTab";
+import { updateWaxBar } from "./waxBar";
+import { updateWennaTabs } from "./wennaTabs";
 
 const hp = byId("hpFill");
 const mp = byId("mpFill");
@@ -54,11 +56,13 @@ export function updateHud(): void {
   updateHuldaTabs();
   updateOrrinTabs();
   updateMirelTabs();
+  updateWennaTabs();
   updateHeatBar();
   updateGritBar();
   updateQuiverBar();
   updateMomentumBar();
   updateSandBar();
+  updateWaxBar();
   updateFlowBar();
   updateBuildStrip();
   updateWarpTab();

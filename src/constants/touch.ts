@@ -169,6 +169,31 @@ export const TOUCH_TEXT: Record<KitId, Record<TouchButtonAction, TouchButtonText
     ultimate: SPECIAL,
     cycle: { label: "Switch", hint: "Turn to the next ability", accent: "#e8d6a0" },
   },
+  wenna: {
+    attack: {
+      label: "Lamp",
+      hint: "Lamp string: Tap, Swing, Flare. The foe it hits becomes the Quarry every Wick turns on. In the air, Lamp Drop",
+      accent: "#b48cff",
+    },
+    up: { label: "Jump", hint: "One jump. Hold the stick down to drop through a ledge", accent: "#e8e6f6" },
+    dash: {
+      label: "Swap",
+      hint: "Trade places with the Wick farthest ahead, which arrives in a flare (stamina)",
+      accent: "#a46ae0",
+    },
+    warp: {
+      label: "Light",
+      hint: "Light a Wick ahead (25 Wax). Stick down lights it at your feet. With four out, relight the weakest",
+      accent: "#e8dcc4",
+    },
+    cast: {
+      label: "Ability",
+      hint: "Use the selected ability: Kindle, Beckon or a spell skill",
+      accent: "#f8eeff",
+    },
+    ultimate: SPECIAL,
+    cycle: { label: "Switch", hint: "Turn to the next ability", accent: "#d8b4ff" },
+  },
 };
 
 /** where the attack button's center sits, art pixels in from the bottom right corner of the safe area */
@@ -231,6 +256,12 @@ export const STICK_DIRECTIONS: Record<KitId, readonly StickDirectionSpec[]> = {
     { direction: "far side", label: "Walk, she never runs" },
     { direction: "up", label: "Jump, hold to hover. With Still, open the field above you" },
     { direction: "down", label: "With Jump, drop through a ledge. With Still, open the field on you" },
+  ],
+  wenna: [
+    { direction: "side", label: "Walk" },
+    { direction: "far side", label: "Walk, she never runs" },
+    { direction: "up", label: "Jump" },
+    { direction: "down", label: "With Jump, drop through a ledge. With Light, light the Wick at your feet" },
   ],
 };
 

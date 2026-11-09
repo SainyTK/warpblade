@@ -109,6 +109,20 @@ export const ACTION_TEXT: Record<KitId, Record<InputAction, string>> = {
     cast: "Use the selected ability: Stopped Clock, Second Hand or a spell skill (MP)",
     cycle: "Switch to the next ability",
   },
+  wenna: {
+    ...KAEL_ACTION_TEXT,
+    left: "Walk left. No run",
+    right: "Walk right. No run",
+    up: "Jump. One jump, no double jump",
+    down: "With jump, drop through a ledge. Held as you press K, light the Wick at your feet",
+    attack:
+      "Lamp string: Tap, Swing, Flare. The foe it hits becomes your Quarry and every Wick turns on it. In the air, Lamp Drop",
+    dash: "Swap places with the Wick farthest ahead (stamina). The Wick arrives in a flare",
+    run: "Walk toward the side held",
+    warp: "Light a Wick from your lamp (25 Wax). With four out, relight the weakest",
+    cast: "Use the selected ability: Kindle, Beckon or a spell skill (MP)",
+    cycle: "Switch to the next ability",
+  },
 };
 /** keys inside the menu */
 export const MENU_KEYMAP: Record<string, MenuCommand> = {

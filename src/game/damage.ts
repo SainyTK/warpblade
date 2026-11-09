@@ -45,6 +45,8 @@ export interface HitOptions {
   sureCrit?: boolean;
   /** burning and other damage over time: no crits, no numbers in white */
   dot?: boolean;
+  /** a hit that builds no Flow though it counts for the hero's own source (Wenna's Wick bites) */
+  noFlow?: boolean;
   /** what dealt the hit, for the end of run screen: the hero's own blows when not given, a skill's id for a hit the
    *  skill deals on its own (it builds no Flow) */
   source?: SourceId;
@@ -90,7 +92,7 @@ function block(e: Enemy, base: number, source: SourceId): HitResult {
   e.guardHits++;
   if (e.guardHits >= GUARD.counterAfter)
     Object.assign(e, { state: "wind", st: GUARD.counterWind, guardHits: 0, cd: 0 });
-  if (e.hp <= 0) killEnemy(e);
+  if (e.hp <= 0) killEnemy(e, source);
   return "blocked";
 }
 
@@ -161,7 +163,7 @@ export function dealDamage(e: Enemy, base: number, o: HitOptions = {}): HitResul
   // a foe stopped in time stores what it takes, to land again in part when it restarts
   if (e.stopped > 0) e.stopStore += value;
   const fromHero = isHeroSource(source);
-  if (!o.dot && fromHero) addFlow(FLOW.perHit);
+  if (!o.dot && fromHero && !o.noFlow) addFlow(FLOW.perHit);
   e.flash = 0.1;
   e.guardHits = 0;
   // a skill's own hit is quiet and never drawn big, so a crowd of them does not drown out the hero's own

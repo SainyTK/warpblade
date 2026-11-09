@@ -1,0 +1,388 @@
+{
+  "version": "0.7.0",
+  "kind": "big",
+  "date": "2026-11-10",
+  "title": "Lamplight",
+  "tagline": "Wenna, the lamplighter, fights through the wax figures her lamp lights. Her Wicks hold foes in place, take blows meant for her and bite whatever her lamp last struck.",
+  "intro": "Wenna is the fourth hero of our hero sprint, and the first who wins through bodies other than her own. Alone she is the weakest hero in the roster: a short lamp, a slow walk, one jump, no run and no block. Her strength is the Wicks she lights from that lamp, small candle figures that stop minions in their tracks, step in front of blows and swarm the foe she marks. She pays for them in Wax, which drips from fallen foes, so every fight is about where she stands, where her Wicks stand and when to spend them. Your coins, shop levels, unlocked heroes and options carry over as they were.",
+  "highlights": [
+    {
+      "title": "Wenna, the lamplighter",
+      "text": "Press K and a drop of violet flame leaves her lamp, and a Wick rises from the wax where it lands. Wicks walk to the nearest foe and bite it, and a ground minion that walks into one stops right there. She can keep four at once, and every wave opens with two at her side. She costs 1000 coins on the hero screen.",
+      "media": {
+        "kind": "video",
+        "file": "wenna-wicks-hold.mp4",
+        "poster": "wenna-wicks-hold.png",
+        "alt": "Wave 3 in the sunlit ruins. Wenna lights two more Wicks from her lamp. They rise from violet wax pools, walk forward and stop two charging thornbacks at their front edge, biting them while the thornbacks wear down their small health pips.",
+        "width": 640,
+        "height": 360
+      }
+    },
+    {
+      "title": "Quarry and Flare",
+      "text": "The last foe her lamp hits becomes her Quarry and wears a violet ring. Every Wick that can reach it turns on it and bites faster. Her third blow opens the lamp's shutter in a cone of flame, and every Wick near the foe it hits bites at once.",
+      "media": {
+        "kind": "video",
+        "file": "wenna-quarry-flare.mp4",
+        "poster": "wenna-quarry-flare.png",
+        "alt": "Wenna jabs a thornback with her lamp pole and a violet Quarry ring appears over its head. Her four Wicks walk in on it from both sides. She follows with a swing, then opens the lamp's shutter in a violet flame cone, and the thornback falls in a puff of smoke.",
+        "width": 640,
+        "height": 360
+      }
+    },
+    {
+      "title": "Swap",
+      "text": "L trades her place with the Wick farthest ahead. She escapes, and the Wick arrives where she stood in a flare that knocks foes back. A blow that would have landed as she leaves counts as a perfect dodge.",
+      "media": {
+        "kind": "video",
+        "file": "wenna-swap.mp4",
+        "poster": "wenna-swap.png",
+        "alt": "At night, two wisps pin Wenna against the left wall. She vanishes in a violet puff and a thin flame thread crosses the stage as she trades places with a Wick in the middle of the stage. The Wick appears at the wall, flares and knocks the wisps back, and the game shows PERFECT for the dodge.",
+        "width": 640,
+        "height": 360
+      }
+    },
+    {
+      "title": "Great Wick",
+      "text": "Her special plants the lamp in a pool of wax and raises a giant Wick, which swings one arm across the stage and then melts into one to four new Wicks, depending on the charge level.",
+      "media": {
+        "kind": "video",
+        "file": "wenna-great-wick.mp4",
+        "poster": "wenna-great-wick.png",
+        "alt": "Wave 11 at night, with horned husks and wisps closing in. Wenna holds the special, a wax pool spreads around her lamp and a giant Wick rises from it. It swings one arm across the stage, hitting every foe in a white flash with a screen shake, then melts down into three new small Wicks at her side.",
+        "width": 640,
+        "height": 360
+      }
+    }
+  ],
+  "sections": [
+    {
+      "id": "heroes",
+      "entries": [
+        {
+          "name": "Wenna",
+          "tag": "new",
+          "summary": "A summoner who is weak alone and strong behind her Wicks, the candle figures she lights from her lamp.",
+          "context": "Kael warps, Ysra blocks, Sable shoots from afar, Hulda walks through blows behind armour, Orrin swings at speed and Mirel slows time. Every one of them fights with their own body or weapon. Wenna fights through bodies spread across the stage, and her defence stands outside her and can die.",
+          "changes": [
+            {
+              "kind": "stat",
+              "label": "Price on the hero screen",
+              "before": "Not in the game",
+              "after": "1000 coins"
+            },
+            {
+              "kind": "note",
+              "text": "Base stats: 92 HP, 6 attack, 11 ability power, 100 MP, 100 stamina, 5% crit, move 0.9. Her attack is the lowest in the roster on purpose."
+            },
+            {
+              "kind": "note",
+              "text": "A and D walk, with no run. W is one jump of 48 pixels, with no double jump."
+            },
+            {
+              "kind": "note",
+              "text": "Two achievements of her own: Wenna's Trial (clear wave 10 with her, 40 coins) and Many Hands (let your Wicks defeat 40 foes in one run, 60 coins)."
+            },
+            {
+              "kind": "note",
+              "text": "She plays in co-op rooms like every hero. Each Wenna has her own Wicks and WX bar, and any Wenna's Wicks hold foes for every hero in the room. A Wick takes blows only for the Wenna who lit it."
+            }
+          ],
+          "media": {
+            "kind": "image",
+            "file": "wenna-hero-screen.png",
+            "alt": "The Choose a Hero screen. Wenna's tile is the seventh of seven and is selected with a violet frame. Her panel shows a dark silhouette with a hooked lamp, the title The lamplighter, her stat bars, Special: Great Wick, her blurb, and a padlock with a price of 1000 coins.",
+            "width": 1280,
+            "height": 720
+          }
+        },
+        {
+          "name": "Wenna: Wicks",
+          "tag": "new",
+          "summary": "K lights a Wick that walks into the fight, holds minions in place, bites, and takes blows aimed at her.",
+          "context": "Wenna cannot block, parry or wear armour. Her Wicks stand between her and the fight instead, so keeping them lit and in the right place is how she stays alive.",
+          "changes": [
+            {
+              "kind": "note",
+              "text": "Lighting a Wick costs 25 Wax. It lands 20 pixels ahead, or at her feet with S held, and rises from a wax pool. With four out, K relights the weakest one to full for 10 Wax."
+            },
+            {
+              "kind": "note",
+              "text": "A Wick has 30% of her max HP and lives 18 seconds. Its flame and body shrink over the last 6 seconds, so you can see how long it has left."
+            },
+            {
+              "kind": "note",
+              "text": "It bites every 0.8 seconds for 0.4x ability power. It goes for her Quarry first, then the nearest foe within 140 pixels. With nothing to fight, it stands guard just in front of her."
+            },
+            {
+              "kind": "note",
+              "text": "With two or more out, the Wick nearest her stays as her guard and only goes after foes within 40 pixels of her. It leaps straight up to bite a flier hovering over it."
+            },
+            {
+              "kind": "note",
+              "text": "Hold: a ground minion that walks into a Wick stops at its front edge and burns it once a second. Elites, mini bosses and the Rift Warden push through and knock the Wick back 20 pixels. Fliers pass over."
+            },
+            {
+              "kind": "note",
+              "text": "Guard: a blow or shot about to land on her from a side where a Wick stands within 20 pixels of her lands on the Wick instead. Each Wick can do this once every 0.3 seconds, so a fast flurry still gets through a single Wick."
+            },
+            {
+              "kind": "note",
+              "text": "If she has no Wick when a wave starts, two light for free at her side."
+            },
+            {
+              "kind": "note",
+              "text": "Wick bites build no Flow, so a crowd of Wicks cannot fill the Flow bar for her."
+            }
+          ],
+          "media": {
+            "kind": "video",
+            "file": "wenna-intercept.mp4",
+            "poster": "wenna-intercept.png",
+            "alt": "Wenna stands just behind a row of Wicks. A thornback paws the ground and charges at her, slams into the Wick at her feet and stops there. The Wick flashes and loses health while her HP bar at the top left stays the same for the whole clip.",
+            "width": 640,
+            "height": 360
+          }
+        },
+        {
+          "name": "Wenna: Wax",
+          "tag": "new",
+          "summary": "Her WX bar pays for Wicks, and it fills mostly from the foes she and her Wicks bring down.",
+          "context": "Mirel's Sand refills while she waits. Wenna's Wax is earned by kills and has to be collected, so she gains the most by staying close to the fight.",
+          "changes": [
+            {
+              "kind": "note",
+              "text": "Wax holds 100, a run starts at 60, and it trickles in at 3 a second, always."
+            },
+            {
+              "kind": "note",
+              "text": "A foe felled by her, her Wicks or her skills drips 10 Wax for a minion, 20 for an elite and 40 for a mini boss or the Rift Warden."
+            },
+            {
+              "kind": "note",
+              "text": "A drip flies to her when she is within 80 pixels, or 160 with Lodestone. Otherwise it lies on the floor for 6 seconds and blinks before it goes."
+            },
+            {
+              "kind": "note",
+              "text": "The WX bar sits under stamina and shows how many Wicks she has out next to it."
+            }
+          ]
+        },
+        {
+          "name": "Wenna: the lamp string and the Quarry",
+          "tag": "new",
+          "summary": "Three short lamp blows whose main job is to tell her Wicks which foe to swarm.",
+          "context": "Her own blows are light. The foe she hits becomes the Quarry, and that is where her real damage goes.",
+          "changes": [
+            {
+              "kind": "note",
+              "text": "Tap: a straight jab of the lamp pole out to 30 pixels, 0.8x attack, a 0.25 second stagger."
+            },
+            {
+              "kind": "note",
+              "text": "Swing: an arc of radius 30 from low ahead up to level, 0.9x attack."
+            },
+            {
+              "kind": "note",
+              "text": "Flare: she opens the lamp's shutter in a violet cone 12 to 46 pixels ahead, 0.6x attack plus 0.6x ability power. Every Wick within 100 pixels of the first foe it hits bites that foe at once."
+            },
+            {
+              "kind": "note",
+              "text": "Lamp Drop: in the air, J swings down ahead of her for 0.8x attack, once per jump."
+            },
+            {
+              "kind": "note",
+              "text": "Quarry: the last foe her lamp hits is marked with a violet ring for 4 seconds. Wicks that can reach it go for it and bite it every 0.55 seconds instead of 0.8."
+            },
+            {
+              "kind": "note",
+              "text": "Known issue: the Flare's cone starts at her chest, a little behind the lantern."
+            }
+          ]
+        },
+        {
+          "name": "Wenna: Swap, Kindle and Beckon",
+          "tag": "new",
+          "summary": "Trade places with a Wick to escape, burst one as a bomb, or call them all back around her.",
+          "context": "Each of these spends a Wick's position or its life. Her one escape needs a Wick at the far end, and it leaves that Wick in the danger she left.",
+          "changes": [
+            {
+              "kind": "note",
+              "text": "Swap on L: trade places with the Wick farthest ahead within 160 pixels, or the nearest one if none is ahead. It costs 15 stamina, with 1 second before the next."
+            },
+            {
+              "kind": "note",
+              "text": "She cannot be hit from the press until 0.15 seconds after she arrives. A blow that would have reached her in the first 0.1 seconds counts as a perfect dodge. The Wick arrives in a flare that deals 0.6x ability power to foes within 24 pixels and knocks them back."
+            },
+            {
+              "kind": "note",
+              "text": "Kindle on I: 16 MP, 3 second recharge. The Wick nearest her within 120 pixels swells and bursts for 2.0x ability power to every foe within 36 pixels, knocking them out and up. She gets 12 Wax back."
+            },
+            {
+              "kind": "note",
+              "text": "Beckon on I: 12 MP, 6 second recharge. Every Wick within 200 pixels hops into a ring around her for 2 seconds and takes 50% less damage there, biting any foe that comes close."
+            },
+            {
+              "kind": "note",
+              "text": "O switches between Kindle, Beckon and any spell skills she picks up."
+            }
+          ],
+          "media": {
+            "kind": "video",
+            "file": "wenna-kindle.mp4",
+            "poster": "wenna-kindle.png",
+            "alt": "A thornback charges into the Wicks in front of Wenna. She casts Kindle and the Wick at the front swells and bursts in a bright blast with a scorch ring. One thornback dies and the other is knocked into the air.",
+            "width": 640,
+            "height": 360
+          }
+        },
+        {
+          "name": "Wenna: Great Wick",
+          "tag": "new",
+          "summary": "Her special raises a giant Wick for one great swing, then leaves new Wicks behind.",
+          "context": "Her special is her kit at full size: a body that hits, then turns into more bodies.",
+          "changes": [
+            {
+              "kind": "note",
+              "text": "After a 0.3 second wind-up, a giant Wick 48 pixels tall rises and swings one arm across the charge level's reach, hitting every foe in it for the level's power and knocking them up."
+            },
+            {
+              "kind": "note",
+              "text": "It then melts into 1, 2, 3 or 4 new Wicks by charge level. They may go up to 2 past her limit and live 8 seconds."
+            },
+            {
+              "kind": "note",
+              "text": "Her ultimate skill, Thousand Candles, replaces it. It evolves into Night of Lamps."
+            }
+          ]
+        },
+        {
+          "name": "Wenna: 20 skills",
+          "tag": "new",
+          "summary": "Her own skills build on Wicks, the Quarry, Swap and Wax.",
+          "context": "Every hero has 20 skills of their own, and Wenna arrives with her complete set, their evolutions and their icons in the cards and the Codex.",
+          "changes": [
+            {
+              "kind": "note",
+              "text": "Attacks: Hunting Call, Bright Fangs, Open Shutter, Pack Lunge, Guttering and Chain Kindle."
+            },
+            {
+              "kind": "note",
+              "text": "Movement: Changeling Step, Wick Hop and Procession."
+            },
+            {
+              "kind": "note",
+              "text": "Spells on I: Lamp Volley, Wax Pool and Wax Effigy."
+            },
+            {
+              "kind": "note",
+              "text": "Damage over time: Singe, Hot Wax and Smoulder."
+            },
+            {
+              "kind": "note",
+              "text": "Summons: Lampflies, Twin Wick and Remembrance."
+            },
+            {
+              "kind": "note",
+              "text": "Passive: Deep Tallow. Ultimate: Thousand Candles."
+            },
+            {
+              "kind": "note",
+              "text": "For example, Hunting Call at level 8 with Deep Tallow at level 4 evolves into Pack Law: every foe she hits becomes a Quarry, her Wicks split between them, and bites on Quarries deal 100% more."
+            }
+          ],
+          "media": {
+            "kind": "image",
+            "file": "wenna-evolution.png",
+            "alt": "The chest screen at wave 10 in the rain, with the gold EVOLUTION heading over a card for Pack Law: Hunting Call evolved. Every foe she hits becomes a Quarry, the Wicks split between them, and bites on Quarries deal 100% more.",
+            "width": 1280,
+            "height": 720
+          }
+        },
+        {
+          "name": "Wenna: controls",
+          "tag": "new",
+          "summary": "Her keys are on the Controls screen, and she has her own buttons on the touch controller.",
+          "context": "Every hero plays the same on a keyboard and on a phone.",
+          "changes": [
+            {
+              "kind": "note",
+              "text": "J is the lamp string, K lights a Wick, L is Swap, I the selected ability, O switches ability and U is the special."
+            },
+            {
+              "kind": "note",
+              "text": "On the touch controller her buttons read Lamp, Jump, Light, Swap, Ability, Switch and Special. Holding the stick down while pressing Light lights the Wick at her feet."
+            }
+          ],
+          "media": {
+            "kind": "image",
+            "file": "wenna-touch-phone.png",
+            "alt": "An upright phone screen during a wave 3 run as Wenna. Her two Wicks fight a moth and a thornback near her. The stick is at the bottom left. Her seven buttons are at the bottom right: Lamp, Jump, Light, Swap, Ability, Switch and Special, each with a violet lamp-themed icon.",
+            "width": 780,
+            "height": 1688
+          }
+        }
+      ]
+    },
+    {
+      "id": "systems",
+      "entries": [
+        {
+          "name": "Achievements",
+          "tag": "adjusted",
+          "summary": "Two new achievements for Wenna.",
+          "context": "Every new hero brings goals of their own, and Many Hands rewards fighting through her Wicks.",
+          "changes": [
+            {
+              "kind": "stat",
+              "label": "Achievements",
+              "before": "26, worth 1,670 coins",
+              "after": "28, worth 1,770 coins"
+            },
+            {
+              "kind": "note",
+              "text": "Many Hands counts foes felled by Wick bites, Kindle, Guttering's bursts, Pack Lunge and the Wicks Great Wick melts into. Her own lamp does not count."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "items",
+      "entries": [
+        {
+          "name": "Aftershock",
+          "tag": "adjusted",
+          "summary": "Aftershock now answers Wenna's Swap too.",
+          "context": "Every shop item should help every hero.",
+          "changes": [
+            {
+              "kind": "note",
+              "text": "For Wenna: every Swap arrival."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "bugfixes",
+      "entries": [
+        {
+          "name": "Kills through a guard",
+          "tag": "fix",
+          "summary": "A foe that falls to the damage that gets through its guard now counts as felled by the blow that struck it.",
+          "context": "We found this while building Wenna, whose Wax drips from kills. The kill had no source, so skills that react to a kill never saw it.",
+          "changes": [
+            {
+              "kind": "stat",
+              "label": "A foe felled through its guard",
+              "before": "A kill with no source, missed by every on-kill effect",
+              "after": "A kill by the blow's source, like any other kill"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "feedback": []
+}

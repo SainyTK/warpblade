@@ -13,10 +13,15 @@ export const PAL = {
   brass: ramp(["#3a2410", "#7a4e1a", "#c08a2e", "#e8b04a", "#ffe08a", "#fff6d0"]),
   /** Mirel's clock teal: her echoes, the Stillfield, Rewind and the SD bar's edge */
   hour: ramp(["#0c1e24", "#163e44", "#24706c", "#3fb0a0", "#8ae6cf", "#e6fff6"]),
+  /** Wenna's lamp violet: Wick flames, the Flare, Swap, Kindle, the Quarry ring and the WX bar's edge */
+  wick: ramp(["#1a0f2e", "#3a1f5c", "#6a3aa0", "#a46ae0", "#d8b4ff", "#f8eeff"]),
 } as const;
 
 /** Mirel's falling sand, light and shade: the hourglass at her belt, the SD bar and the motes of her time magic */
 export const SAND = { light: hex("#e8d6a0"), shade: hex("#a8885a") } as const;
+
+/** Wenna's candle wax, deep to glint: Wick bodies, wax drips and the WX bar's fill */
+export const WAX = ramp(["#5a4a3a", "#a8947a", "#e8dcc4", "#fff8e8"]);
 
 /** spark colors, head to tail */
 export const SPARKS = {
@@ -28,6 +33,7 @@ export const SPARKS = {
   blood: [WHITE, hex("#ffd0d8"), hex("#e0405a"), hex("#7e1530")],
   brass: [WHITE, hex("#fff6d0"), hex("#ffe08a"), hex("#c08a2e")],
   hour: [WHITE, hex("#e6fff6"), hex("#8ae6cf"), hex("#3fb0a0")],
+  wick: [hex("#f8eeff"), hex("#d8b4ff"), hex("#a46ae0"), hex("#6a3aa0")],
 } satisfies Record<string, Ramp>;
 
 /** white hot to smouldering, and fresh smoke to thin */
