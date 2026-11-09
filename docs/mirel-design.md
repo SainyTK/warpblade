@@ -284,6 +284,8 @@ Changes made while building, each for the same goal as the design:
 - Up is also her jump, so a field aimed up from the floor lifts her first.
   Within a jump of the floor the field is measured from the floor she left, 48 px above it, so it lands where she aimed it.
 - A foe stopped in time cannot raise its guard, so every blow on it lands and is stored.
+- The menus show the chosen hero before any frame of play poses them, so choosing a hero now stands them in the first frame of their own idle (`restPose` in `src/utils/restPose.ts`, shared with the hero screen portrait).
+  The shared standing pose held her staff head-down with its ring in the floor behind the title screen.
 
 ## Balance check
 
