@@ -1,4 +1,5 @@
 import { HULDA_IDLE } from "../../constants/clips/hulda/stance";
+import { MIREL_IDLE } from "../../constants/clips/mirel/stance";
 import { ORRIN_IDLE } from "../../constants/clips/orrin/stance";
 import { SABLE_IDLE } from "../../constants/clips/sable/moves";
 import { YSRA_STATE_CLIPS } from "../../constants/clips/ysra";
@@ -21,6 +22,7 @@ const IDLES: Partial<Record<KitId, ActionClip>> = {
   sable: SABLE_IDLE,
   hulda: HULDA_IDLE,
   orrin: ORRIN_IDLE,
+  mirel: MIREL_IDLE,
 };
 const cache = new Map<string, string>();
 

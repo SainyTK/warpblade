@@ -5,6 +5,7 @@ import { skin } from "../skin";
 import { drawChainGrip } from "./chainGrip";
 import { drawCrossbow } from "./crossbow";
 import type { Vec } from "./reach";
+import { drawStaff } from "./staff";
 
 /** a point d along the weapon from the hand and w across it, toward the edge */
 type Along = (d: number, w: number) => [number, number];
@@ -102,7 +103,8 @@ export function drawSword(s: SpriteCanvas, hand: Vec, angle: number): void {
   const ca = Math.cos(angle);
   const sn = Math.sin(angle);
   const at: Along = (d, w) => [hand[0] + ca * d - sn * w, hand[1] + sn * d + ca * w];
-  if (skin.weapon === "crossbow") drawCrossbow(s, at);
+  if (skin.weapon === "staff") drawStaff(s, at, angle);
+  else if (skin.weapon === "crossbow") drawCrossbow(s, at);
   else if (skin.weapon === "glaive") drawGlaive(s, at);
   else drawBlade(s, at);
 }

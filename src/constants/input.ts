@@ -95,6 +95,20 @@ export const ACTION_TEXT: Record<KitId, Record<InputAction, string>> = {
     cast: "Use the selected ability: Whirlwall, Anchor Pin or a spell skill (MP)",
     cycle: "Switch to the next ability",
   },
+  mirel: {
+    ...KAEL_ACTION_TEXT,
+    left: "Walk left. No run",
+    right: "Walk right. No run",
+    up: "Jump. One jump, no double jump. Hold past the top of the jump to hover, spending stamina",
+    down: "With jump, drop through a ledge. Held as you press K, open the Stillfield on yourself",
+    attack:
+      "Staff string: Tick, Tock, Toll. Every blow strikes again half a second later as an echo. In the air, Pendant Strike",
+    dash: "Rewind: go back along your path and get back part of the HP you lost (40 Sand)",
+    run: "Walk toward the side held",
+    warp: "Hold to keep the Stillfield open ahead, where foes and their shots crawl; let go to snap it shut (Sand). Hold up to open it above you",
+    cast: "Use the selected ability: Stopped Clock, Second Hand or a spell skill (MP)",
+    cycle: "Switch to the next ability",
+  },
 };
 /** keys inside the menu */
 export const MENU_KEYMAP: Record<string, MenuCommand> = {

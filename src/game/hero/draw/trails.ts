@@ -30,8 +30,28 @@ function drawSash(s: SpriteCanvas, rope: readonly Vec[]): void {
   s.commit(false);
 }
 
+/** a low bun at the nape where the ponytail starts, with two pins through it like the hands of a clock */
+function drawBun(s: SpriteCanvas, tail: readonly Vec[]): void {
+  if (tail.length < 2) return;
+  const [a, b] = [tail[0], tail[1]];
+  const dx = b[0] - a[0];
+  const dy = b[1] - a[1];
+  const d = Math.hypot(dx, dy) || 1;
+  const [cx, cy] = [a[0] + (dx / d) * 0.9, a[1] + (dy / d) * 0.9 + 0.6];
+  s.begin();
+  s.dot(cx, cy, 1.45, HC.hairDark);
+  s.shadeEdges(HC.hairDark, HC.hair, HC.hairDeep, 2);
+  s.commit(false);
+  s.begin();
+  s.stroke(cx - 1.6, cy - 1.4, cx + 0.8, cy + 0.6, 0.3, HC.trim);
+  s.stroke(cx - 1.8, cy + 0.2, cx + 1, cy - 0.2, 0.3, HC.trimDark);
+  s.set(cx - 1.6, cy - 1.4, HC.trimLight);
+  s.commit(false);
+}
+
 /** the ponytail in lit strands, then the scarf with a light top edge and a shadowed underside, behind everything else */
 export function drawTrails(s: SpriteCanvas, tail: readonly Vec[], scarf: readonly Vec[]): void {
+  if (skin.bun) return drawBun(s, tail);
   s.begin();
   for (let i = 1; i < tail.length; i++) {
     const [a, b] = [tail[i - 1], tail[i]];

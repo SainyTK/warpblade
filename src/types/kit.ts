@@ -3,7 +3,7 @@ import type { MoveHit, MoveId, Situation } from "./move";
 import type { Pose } from "./pose";
 
 /** which hero's controls, moves and states drive the shared rig */
-export type KitId = "kael" | "ysra" | "sable" | "hulda" | "orrin";
+export type KitId = "kael" | "ysra" | "sable" | "hulda" | "orrin" | "mirel";
 
 /**
  * How one hero plays. The shared loop (updateHero, the combo engine, physics, hurt) calls into the kit of the hero
@@ -38,6 +38,8 @@ export interface HeroKit {
   absorbHurt(dmg: number, fromX: number): boolean;
   /** combo moves play this much faster on top of attack speed, right now */
   attackRate?(): number;
+  /** the walk speed right now, given the shared one: a kit's own drift or boost; left out, the shared speed */
+  walkSpeed?(speed: number): number;
   /** ground covered by one full stride of the walk or run clip, in pixels; left out, the stride keeps the old pace */
   stride?(running: boolean): number;
   /** damage taken is multiplied by this */

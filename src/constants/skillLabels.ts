@@ -26,6 +26,8 @@ export const ULT_LABEL: Record<UltimateId, string> = {
   unbroken: "UNBROKEN",
   grandPendulum: "GRAND PENDULUM",
   maelstrom: "MAELSTROM",
+  hourOfStillness: "HOUR OF STILLNESS",
+  eternalNoon: "ETERNAL NOON",
 };
 /** the kind line of a boon card */
 export const BOON_KIND = "Boon";

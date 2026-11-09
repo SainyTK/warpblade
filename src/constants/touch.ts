@@ -140,6 +140,35 @@ export const TOUCH_TEXT: Record<KitId, Record<TouchButtonAction, TouchButtonText
     ultimate: SPECIAL,
     cycle: { label: "Switch", hint: "Turn to the next ability", accent: "#e0ac48" },
   },
+  mirel: {
+    attack: {
+      label: "Staff",
+      hint: "Staff string: Tick, Tock, Toll, each echoing half a second later. In the air, Pendant Strike",
+      accent: "#6fe0c8",
+    },
+    up: {
+      label: "Jump",
+      hint: "One jump. Hold past the top to hover. Hold the stick down to drop through a ledge",
+      accent: "#e8e6f6",
+    },
+    dash: {
+      label: "Rewind",
+      hint: "Go back along your path and get back part of the HP you lost (40 Sand)",
+      accent: "#3fb0a0",
+    },
+    warp: {
+      label: "Still",
+      hint: "Hold to keep the Stillfield open, lift to snap it shut (Sand). Stick up opens it above you, down on you",
+      accent: "#8ae6cf",
+    },
+    cast: {
+      label: "Ability",
+      hint: "Use the selected ability: Stopped Clock, Second Hand or a spell skill",
+      accent: "#e6fff6",
+    },
+    ultimate: SPECIAL,
+    cycle: { label: "Switch", hint: "Turn to the next ability", accent: "#e8d6a0" },
+  },
 };
 
 /** where the attack button's center sits, art pixels in from the bottom right corner of the safe area */
@@ -196,6 +225,12 @@ export const STICK_DIRECTIONS: Record<KitId, readonly StickDirectionSpec[]> = {
       direction: "down",
       label: "With Jump, drop through a ledge. With Hook in the air, aim low. While swinging, Plumb Drop",
     },
+  ],
+  mirel: [
+    { direction: "side", label: "Walk. While hovering, drift" },
+    { direction: "far side", label: "Walk, she never runs" },
+    { direction: "up", label: "Jump, hold to hover. With Still, open the field above you" },
+    { direction: "down", label: "With Jump, drop through a ledge. With Still, open the field on you" },
   ],
 };
 

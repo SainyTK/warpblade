@@ -13,11 +13,13 @@ import { updateFlowBar } from "./flowBar";
 import { updateGritBar } from "./gritBar";
 import { updateHeatBar } from "./heatBar";
 import { updateHuldaTabs } from "./huldaTabs";
+import { updateMirelTabs } from "./mirelTabs";
 import { updateMomentumBar } from "./momentumBar";
 import { updateOrrinTabs } from "./orrinTabs";
 import { updateQuiverBar } from "./quiverBar";
 import { createRechargeTab } from "./rechargeTab";
 import { updateRiteTabs } from "./riteTabs";
+import { updateSandBar } from "./sandBar";
 import { updateSpellTabs } from "./spellTabs";
 import { updateWarpTab } from "./warpTab";
 
@@ -51,10 +53,12 @@ export function updateHud(): void {
   updateRiteTabs();
   updateHuldaTabs();
   updateOrrinTabs();
+  updateMirelTabs();
   updateHeatBar();
   updateGritBar();
   updateQuiverBar();
   updateMomentumBar();
+  updateSandBar();
   updateFlowBar();
   updateBuildStrip();
   updateWarpTab();
