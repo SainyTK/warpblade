@@ -5,6 +5,7 @@ import type { Enemy } from "../../../types/enemy";
 import { dealDamage } from "../../damage";
 import { createImpact } from "../../effects/impact";
 import { enemyBox, enemyCenter } from "../../enemies/enemy";
+import { kindOf } from "../../enemies/kinds";
 import { emitSkillEvent } from "../../skills/events";
 import { skillValues, withCharms } from "../../skills/query";
 import { game, hero, progress } from "../../state";
@@ -22,8 +23,9 @@ function foeAhead(): Enemy | null {
   let best: Enemy | null = null;
   let bestD: number = ANCHOR_PIN.reach;
   for (const e of game.enemies) {
-    // the pin nails a foe to the floor: one in the air is not a target
-    if (e.hp <= 0 || e.air || Math.abs(e.y - surfaceBelow(e.x, e.y - 4)) > 1) continue;
+    // the pin nails a foe to the floor: one in the air, or a kind that flies, is not a target, even level with a ledge
+    if (e.hp <= 0 || e.air || kindOf(e.type).flies) continue;
+    if (Math.abs(e.y - surfaceBelow(e.x, e.y - 4)) > 1) continue;
     const d = (e.x - hero.x) * hero.face;
     if (d < -4 || d > bestD || Math.abs(enemyCenter(e)[1] - (hero.y - 16)) > 50) continue;
     best = e;
