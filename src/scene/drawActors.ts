@@ -11,6 +11,7 @@ import { heroLook } from "../game/hero/look";
 import { skin } from "../game/hero/skin";
 import { canAffordUlt } from "../game/hero/ultimate";
 import { game, hero } from "../game/state";
+import { fieldPace } from "../game/timeFields";
 import type { Enemy } from "../types/enemy";
 import { hex, WHITE } from "../utils/color";
 import { clamp, TAU } from "../utils/math";
@@ -20,6 +21,8 @@ import { drawEliteGlow, drawEliteRing } from "./drawElite";
 const heroSprite = detailCanvas(80, 76, 40, 62);
 const HP_BAR_EMPTY = hex("#120a1e");
 const STUN_STAR = hex("#ffe26b");
+/** a foe stopped in time */
+const STOPPED_TINT = hex("#7aa0a0");
 /** ring colors for ultimate levels 3 and 4; levels 1 and 2 take the hero's own light */
 const HIGH_LEVEL_COLORS = [hex("#ffe26b"), hex("#ff7ae0")];
 const levelColor = (i: number) => (i < 2 ? skin.ramp[3 + i] : HIGH_LEVEL_COLORS[i - 2]);
@@ -33,6 +36,13 @@ function drawMinionBar(e: Enemy): void {
   const filled = Math.round(14 * (e.hp / e.max));
   const fill = e.elite ? COIN_GOLD[3] : PAL.shadow[4];
   for (let i = 0; i < 14; i++) px(bx + i, by, i < filled ? fill : HP_BAR_EMPTY);
+}
+
+/** a foe stopped in time is grey-teal; one inside a field that slows it is rimmed in teal */
+function timeTint(e: Enemy): { tint: number; amount: number } {
+  if (e.stopped > 0) return { tint: STOPPED_TINT, amount: 0.55 };
+  const [cx, cy] = enemyCenter(e);
+  return fieldPace(cx, cy, e.rank) < 1 ? { tint: PAL.hour[4], amount: 0.25 } : { tint: 0, amount: 0 };
 }
 
 /** two stars circling over a tripped or downed foe */
@@ -53,8 +63,10 @@ export function drawEnemies(): void {
     const winding =
       e.state === "wind" || e.state === "volley" || e.state === "charge" || (e.state === "leap" && e.vy === 0);
     const tremble = winding ? (Math.floor(game.t * 30) % 2 ? 1 : -1) : 0;
-    const tint = e.flash > 0 ? WHITE : e.frozen > 0 ? PAL.ice[4] : e.chill > 0 ? PAL.ice[3] : 0;
-    const tintAmount = e.flash > 0 ? 1 : e.frozen > 0 ? 0.5 : e.chill > 0 ? 0.3 : 0;
+    const time = timeTint(e);
+    const tint =
+      e.flash > 0 ? WHITE : e.frozen > 0 ? PAL.ice[4] : time.amount ? time.tint : e.chill > 0 ? PAL.ice[3] : 0;
+    const tintAmount = e.flash > 0 ? 1 : e.frozen > 0 ? 0.5 : time.amount ? time.amount : e.chill > 0 ? 0.3 : 0;
     if (e.elite) drawEliteRing(e, s, e.x + tremble);
     blit(s, e.x + tremble, e.y, e.face < 0, { tint, tintAmount });
     place();

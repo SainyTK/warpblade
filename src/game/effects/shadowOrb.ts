@@ -8,6 +8,7 @@ import { eachStanding } from "../coopHooks";
 import { hurtHero } from "../hurtHero";
 import { shotWarded } from "../shotWards";
 import { game, particles, rng } from "../state";
+import { fieldPace } from "../timeFields";
 import { boxHit, heroBox } from "../world";
 import { createImpact } from "./impact";
 
@@ -16,7 +17,9 @@ export function createShadowOrb(x: number, y: number, vx: number, vy: number, da
   const o = { x, y, t: 0 };
   const S = PAL.shadow;
   return {
-    update(dt) {
+    update(step) {
+      // a Stillfield slows the shot where it flies
+      const dt = step * fieldPace(o.x, o.y);
       o.t += dt;
       o.x += vx * dt;
       o.y += vy * dt;

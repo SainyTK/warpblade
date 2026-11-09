@@ -149,6 +149,8 @@ export function dealDamage(e: Enemy, base: number, o: HitOptions = {}): HitResul
   const value = Math.max(1, Math.round(dmg));
   e.hp -= value;
   recordDamage(source, value);
+  // a foe stopped in time stores what it takes, to land again in part when it restarts
+  if (e.stopped > 0) e.stopStore += value;
   const fromHero = isHeroSource(source);
   if (!o.dot && fromHero) addFlow(FLOW.perHit);
   e.flash = 0.1;

@@ -93,6 +93,11 @@ export interface Enemy {
   stagger: number;
   /** pinned to the floor for this long (Ysra's Impale and hook): held still; the damage it takes more is a mark */
   pinned: number;
+  /** stopped in time for this long (Mirel's Stopped Clock and Hour of Stillness): it does not move, act or fall */
+  stopped: number;
+  /** damage it took while stopped, and the share of it that lands again as one hit when it restarts (0 for none) */
+  stopStore: number;
+  stopShare: number;
   /** free scratch values for a foe's own behavior: a target, a timer, a charge count */
   ax: number;
   ay: number;

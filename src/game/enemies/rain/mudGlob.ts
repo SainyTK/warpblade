@@ -7,6 +7,7 @@ import { eachStanding, heroSlot } from "../../coopHooks";
 import { hurtHero } from "../../hurtHero";
 import { shotWarded } from "../../shotWards";
 import { game, hero, particles, rng } from "../../state";
+import { fieldPace } from "../../timeFields";
 import { boxHit, dust, heroBox } from "../../world";
 import { RAIN_FOES as C, MUD_SPARKS } from "./colors";
 
@@ -70,7 +71,9 @@ export function createMudGlob(
     vy: (GROUND - y - 0.5 * GRAVITY * flight * flight) / flight,
   };
   return {
-    update(dt) {
+    update(step) {
+      // a Stillfield slows the shot where it flies
+      const dt = step * fieldPace(o.x, o.y);
       o.vy += GRAVITY * dt;
       o.x += o.vx * dt;
       o.y += o.vy * dt;

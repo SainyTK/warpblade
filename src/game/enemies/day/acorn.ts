@@ -8,6 +8,7 @@ import { eachStanding } from "../../coopHooks";
 import { hurtHero } from "../../hurtHero";
 import { shotWarded } from "../../shotWards";
 import { hero, particles, rng } from "../../state";
+import { fieldPace } from "../../timeFields";
 import { boxHit, heroBox } from "../../world";
 import { DAY_SPARKS, DAY_COLORS as DC } from "./colors";
 
@@ -34,7 +35,9 @@ export function createAcorn(x: number, y: number, tx: number, ty: number, flight
     sfx.block();
   };
   return {
-    update(dt) {
+    update(step) {
+      // a Stillfield slows the shot where it flies
+      const dt = step * fieldPace(o.x, o.y);
       o.t += dt;
       o.x += vx * dt;
       vy += GRAVITY * dt;
