@@ -1,0 +1,375 @@
+{
+  "version": "0.6.0",
+  "kind": "big",
+  "date": "2026-11-09",
+  "title": "Borrowed Time",
+  "tagline": "Mirel, the hour keeper, bends time with a clock-ringed staff: every blow strikes twice, foes crawl inside her Stillfield, and Rewind walks her back out of a mistake. Orrin's Anchor Pin no longer catches moths on a ledge.",
+  "intro": "Mirel is the third hero of our hero sprint, and the first who changes how fast the fight moves. She has the lowest HP in the roster, no run, no dash and no block, so she wins by setting the clock in her favour. Every staff blow repeats half a second later as an echo, her Stillfield slows foes and their shots to a crawl, and Rewind takes back part of a hit she already took. She spends Sand on all of it, and Sand refills only while she waits, so her rhythm is set up, strike, and let the hourglass fill. Beside her, Orrin's Anchor Pin fix closes the known issue we listed last patch. Your coins, shop levels, unlocked heroes and options carry over as they were.",
+  "highlights": [
+    {
+      "title": "Mirel, the hour keeper",
+      "text": "Hold K and a Stillfield opens ahead of Mirel, a teal clock ring where foes act at a fifth of their pace and their shots nearly stop. Let go and it snaps shut, hitting every foe inside and pushing them out. The field spends Sand, her SD bar, which refills while no field stands. She costs 750 coins on the hero screen.",
+      "media": {
+        "kind": "video",
+        "file": "mirel-stillfield.mp4",
+        "poster": "mirel-stillfield.png",
+        "alt": "In wave 3, Mirel holds K and a teal clock ring opens ahead of her over two thornbacks and two glimmer moths, which slow to a crawl inside it. She steps in and strikes the thornback as it winds up, her Toll lands with big numbers and both thornbacks fall inside the ring. She lets go and the ring snaps shut with a white flash, throwing the moths out. The SD bar at the top left drains to about half while the ring stands, then starts to refill.",
+        "width": 640,
+        "height": 360
+      }
+    },
+    {
+      "title": "Echoes",
+      "text": "Every blow of her staff string strikes again half a second later as a pale teal ghost, at the same spot and half the power. The echo stays where the blow landed, so a foe that walks into it gets hit. On a foe inside her Stillfield or stopped by her clock, the echo hits at full power.",
+      "media": {
+        "kind": "video",
+        "file": "mirel-echo-string.mp4",
+        "poster": "mirel-echo-string.png",
+        "alt": "Mirel pins a thornback against the left wall and plays Tick, Tock and Toll, for 13, 10 and 9. A moth knocks her up and away, but a pale teal ghost of each blow stays behind and strikes the same spot again half a second later, landing smaller numbers of 10, 5 and 5 on the thornback.",
+        "width": 640,
+        "height": 360
+      }
+    },
+    {
+      "title": "Rewind",
+      "text": "L plays the last 1.2 seconds of her path backwards in a quarter of a second, and she cannot be hit on the way. At the end she gets back 40% of the HP she lost on that path. A blow that would have landed just as she rewinds counts as a perfect dodge.",
+      "media": {
+        "kind": "video",
+        "file": "mirel-rewind.mp4",
+        "poster": "mirel-rewind.png",
+        "alt": "Mirel walks right toward a thornback and takes its blow. She presses L and slides back along the path she walked, leaving a trail of teal afterimages, and a sand ring flashes at her feet where she stops. The HP bar at the top left climbs back part way. She then hops up onto a ledge and strikes a moth.",
+        "width": 640,
+        "height": 360
+      }
+    }
+  ],
+  "sections": [
+    {
+      "id": "heroes",
+      "entries": [
+        {
+          "name": "Mirel",
+          "tag": "new",
+          "summary": "A fragile, patient time mage who slows foes, strikes twice with every blow and rewinds out of trouble.",
+          "context": "Kael warps, Ysra blocks, Sable shoots from afar, Hulda walks through blows behind armour and Orrin swings at speed. Mirel does none of these: she changes how fast foes act, and she is strongest next to a still crowd.",
+          "changes": [
+            {
+              "kind": "stat",
+              "label": "Price on the hero screen",
+              "before": "Not in the game",
+              "after": "750 coins"
+            },
+            {
+              "kind": "note",
+              "text": "Base stats: 88 HP, 9 attack, 12 ability power, 110 MP, 100 stamina, 5% crit, move 0.95."
+            },
+            {
+              "kind": "note",
+              "text": "A and D walk, with no run. W is one jump of 50 pixels, with no double jump."
+            },
+            {
+              "kind": "note",
+              "text": "J is the staff string, K the Stillfield, L Rewind, I the selected ability, O switches ability and U is the special."
+            },
+            {
+              "kind": "note",
+              "text": "On the touch controller her buttons read Staff, Jump, Still, Rewind, Ability, Switch and Special. Holding Still keeps the field open and holding Jump hovers. The Controls screen lists every one of her keys."
+            },
+            {
+              "kind": "note",
+              "text": "Two achievements of her own: Mirel's Trial (clear wave 10 with her, 40 coins) and Hold the Hour (defeat 5 foes inside one Stillfield, 60 coins)."
+            },
+            {
+              "kind": "note",
+              "text": "She plays in co-op rooms like every hero. Each Mirel holds her own field, and her fields and stops slow foes for every hero in the room."
+            }
+          ],
+          "media": {
+            "kind": "image",
+            "file": "mirel-hero-screen.png",
+            "alt": "The Choose a Hero screen with Mirel's tile selected in a teal frame, sixth of six. She shows as a dark silhouette with her clock-ring staff beside her name, The hour keeper, five teal stat bars, her special Hour of Stillness and her blurb, with a padlock and a 750 coin price under them. The coin count at the top reads 750.",
+            "width": 1280,
+            "height": 720
+          }
+        },
+        {
+          "name": "Mirel: the staff string and echoes",
+          "tag": "new",
+          "summary": "Three short staff blows, each followed half a second later by an echo at the same spot.",
+          "context": "Her staff is short, so the echo is what gives her reach in time. She can strike a spot and let a foe walk into the second hit.",
+          "changes": [
+            {
+              "kind": "note",
+              "text": "Tick: a straight jab out to 38 pixels, 0.9x attack, a short stagger."
+            },
+            {
+              "kind": "note",
+              "text": "Tock: an arc from level ahead up over her head, radius 34, 1.0x attack. It lifts a minion and catches fliers above her."
+            },
+            {
+              "kind": "note",
+              "text": "Toll: she plants the staff and the clock ring rings in a circle of radius 30 just ahead of her, 1.3x attack and a 0.3 second stun. Each Toll that hits gives back 3 Sand."
+            },
+            {
+              "kind": "note",
+              "text": "Pendant Strike: in the air, J swings down ahead of her for 0.8x attack, once per jump."
+            },
+            {
+              "kind": "note",
+              "text": "Echo: 0.5 seconds after each blow, the same shape strikes again at 0.5x its power and half its knockback, once per foe. On a foe in her Stillfield or stopped by her clock, it hits at 1.0x. Echoes build Flow and can crit."
+            }
+          ]
+        },
+        {
+          "name": "Mirel: the Stillfield and Sand",
+          "tag": "new",
+          "summary": "Hold K to open a clock ring where foes and their shots crawl, and let go to snap it shut.",
+          "context": "Mirel cannot block, so the Stillfield is her defence and her setup at once. Foes inside are easy to hit, and her echoes hit them at full power.",
+          "changes": [
+            {
+              "kind": "note",
+              "text": "The field is a circle of radius 44 centred 56 pixels ahead of her. With W held it opens 48 pixels above her, and with S held it opens on her."
+            },
+            {
+              "kind": "note",
+              "text": "It costs 25 Sand to open and 18 Sand a second while K is held. It stands at least 0.6 seconds and at most 4, with 1.2 seconds before the next."
+            },
+            {
+              "kind": "note",
+              "text": "Inside, minions and elites act at 0.2 of their pace, mini bosses at 0.4 and the Rift Warden at 0.6. Foe shots inside fly at 0.1 of their speed."
+            },
+            {
+              "kind": "note",
+              "text": "The snap as it closes hits every foe inside for 0.5x ability power, pushes it 30 pixels out, and staggers minions."
+            },
+            {
+              "kind": "note",
+              "text": "Sand, her SD bar, holds 100 and starts full. It refills 12 a second, except while a field stands and for 0.6 seconds after any spend."
+            },
+            {
+              "kind": "note",
+              "text": "Known issue: W is also her jump, so aiming the field up from the floor lifts her. The field still opens where she aimed it, 48 pixels above the floor she left."
+            }
+          ],
+          "media": {
+            "kind": "image",
+            "file": "mirel-touch-phone.png",
+            "alt": "An upright phone screen of a run in wave 2. Mirel holds the Still button and a faint teal ring stands ahead of her over a slowed thornback. The touch stick sits at the bottom left, with round buttons for Staff, Jump, Still, Rewind, Ability, Switch and Special at the bottom right.",
+            "width": 750,
+            "height": 1334
+          }
+        },
+        {
+          "name": "Mirel: Rewind and the hover",
+          "tag": "new",
+          "summary": "L undoes part of a hit by walking her back along her path, and holding W at the top of a jump hangs her in the air.",
+          "context": "Her escapes are about time and patience. Rewind turns a mistake into a second try, and the hover lets her wait above a crowd for the right moment to strike down.",
+          "changes": [
+            {
+              "kind": "note",
+              "text": "Rewind costs 40 Sand, with 0.8 seconds before the next. It plays back the last 1.2 seconds of her path in 0.25 seconds, untouchable, and gives back 40% of the HP she lost in that time."
+            },
+            {
+              "kind": "note",
+              "text": "A blow that would reach her in the first 0.12 seconds of a Rewind counts as a perfect dodge. She can also Rewind out of the flinch after a hit."
+            },
+            {
+              "kind": "note",
+              "text": "Hover: holding W once she starts to fall hangs her for up to 1.5 seconds per jump, sinking at most 18 pixels a second and drifting 60 pixels a second with A or D. It costs 18 stamina a second, and Pendant Strike does not end it."
+            }
+          ],
+          "media": {
+            "kind": "video",
+            "file": "mirel-hover-strike.mp4",
+            "poster": "mirel-hover-strike.png",
+            "alt": "Mirel jumps and hangs at the top of the jump, her staff held forward and sand trickling from her feet. She drifts slowly over two thornbacks, then swings her staff down in a teal arc onto the one ahead for a critical hit of 19, and a pale ghost of the strike follows.",
+            "width": 640,
+            "height": 360
+          }
+        },
+        {
+          "name": "Mirel: Stopped Clock and Second Hand",
+          "tag": "new",
+          "summary": "Two abilities on I from the start: one stops a foe dead in time, the other pierces a line of foes.",
+          "context": "Stopped Clock gives her one foe to work on at her own pace, and pays back part of the work when time starts again. Second Hand is her one ranged tool, short and slow by design.",
+          "changes": [
+            {
+              "kind": "note",
+              "text": "Stopped Clock: 22 MP, 7 second recharge. The nearest foe ahead within 110 pixels takes 1.0x ability power and stops for 2 seconds, 0.8 on a mini boss and 0.5 on the Rift Warden. With no foe in reach it fizzles and costs half."
+            },
+            {
+              "kind": "note",
+              "text": "It aims at a foe level with her first, so a flier above her does not take the stop meant for the foe she faces."
+            },
+            {
+              "kind": "note",
+              "text": "A stopped foe cannot guard. When it restarts, 40% of the damage it took while stopped lands again as one hit."
+            },
+            {
+              "kind": "note",
+              "text": "Second Hand: 14 MP, 2.5 second recharge. A clock hand flies 150 pixels ahead, pierces up to 3 foes for 1.1x ability power each and chills them for 1 second."
+            },
+            {
+              "kind": "note",
+              "text": "O switches between them and any spell skills she picks up."
+            }
+          ],
+          "media": {
+            "kind": "video",
+            "file": "mirel-stopped-clock.mp4",
+            "poster": "mirel-stopped-clock.png",
+            "alt": "Mirel casts Stopped Clock on a thornback by the left wall: a teal clock face appears over it, it turns grey and freezes, and the cast hits for 18. She strikes it twice while it stands still, then it restarts with a burst that hits for 28 and defeats it.",
+            "width": 640,
+            "height": 360
+          }
+        },
+        {
+          "name": "Mirel: Hour of Stillness",
+          "tag": "new",
+          "summary": "Her special opens a clock face around her that stops every foe inside, then tolls for a large hit.",
+          "context": "Her special is her whole kit at full size: stop the crowd, hit it while it stands still, and collect at the toll.",
+          "changes": [
+            {
+              "kind": "note",
+              "text": "After a 0.2 second wind-up, every foe inside the clock face stops for 1.2 seconds and every foe shot inside freezes. At level 4 it covers the whole stage."
+            },
+            {
+              "kind": "note",
+              "text": "The toll deals the charge level's full power plus 30% of the damage each foe took while stopped, with that stored part capped at twice the level's power."
+            },
+            {
+              "kind": "note",
+              "text": "Her ultimate skill, Eternal Noon, replaces it and stops every foe on screen. It evolves into Endless Noon."
+            }
+          ],
+          "media": {
+            "kind": "video",
+            "file": "mirel-hour-of-stillness.mp4",
+            "poster": "mirel-hour-of-stillness.png",
+            "alt": "In wave 5, with an Oakheart and four glimmer moths close by, Mirel charges her special with a glowing ring at her feet. A huge clock face opens around her, the foes inside turn grey and stop, and two clock hands sweep across them. The toll lands with a white flash and numbers from 84 to 97, and all four moths fall.",
+            "width": 640,
+            "height": 360
+          }
+        },
+        {
+          "name": "Mirel: 20 skills",
+          "tag": "new",
+          "summary": "Her own skills build on echoes, the Stillfield, Rewind and Sand.",
+          "context": "Every hero has 20 skills of their own, and Mirel arrives with her complete set and their evolutions.",
+          "changes": [
+            {
+              "kind": "note",
+              "text": "Attacks: Long Echo, Great Toll, Still Point, Falling Hour and Backswing."
+            },
+            {
+              "kind": "note",
+              "text": "Movement: Suspended, Long Rewind, Quickened and Steady Pace."
+            },
+            {
+              "kind": "note",
+              "text": "Spells on I: Sundial, Foretell and Hour Hand."
+            },
+            {
+              "kind": "note",
+              "text": "Damage over time: Wither, Grinding Sand and Entropy."
+            },
+            {
+              "kind": "note",
+              "text": "Summons: Past Self, Clockwork Wren and Orrery."
+            },
+            {
+              "kind": "note",
+              "text": "Passive: Patience. Ultimate: Eternal Noon."
+            },
+            {
+              "kind": "note",
+              "text": "For example, Long Echo at level 8 with Patience at level 4 evolves into Choir of Hours: every blow echoes three times, and the last echo hits at full power."
+            }
+          ],
+          "media": {
+            "kind": "image",
+            "file": "mirel-evolution.png",
+            "alt": "The chest screen over a dimmed, rainy wave 10. A gold EVOLUTION title sits above a card for Choir of Hours: Long Echo evolved, every blow echoes three times, and the last echo hits at full power.",
+            "width": 1280,
+            "height": 720
+          }
+        }
+      ]
+    },
+    {
+      "id": "systems",
+      "entries": [
+        {
+          "name": "Achievements",
+          "tag": "adjusted",
+          "summary": "Two new achievements for Mirel.",
+          "context": "Every new hero brings goals of their own, and Hold the Hour rewards using the Stillfield well.",
+          "changes": [
+            {
+              "kind": "stat",
+              "label": "Achievements",
+              "before": "24, worth 1,570 coins",
+              "after": "26, worth 1,670 coins"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "items",
+      "entries": [
+        {
+          "name": "Aftershock",
+          "tag": "adjusted",
+          "summary": "Aftershock now answers Mirel's travel moves too.",
+          "context": "Every shop item should help every hero.",
+          "changes": [
+            {
+              "kind": "note",
+              "text": "For Mirel: the end of every Rewind and every landing out of a hover."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "art",
+      "entries": [
+        {
+          "name": "Heroes in the menus",
+          "tag": "adjusted",
+          "summary": "The hero standing behind the start menu and the hero screen now stands in their own rest pose.",
+          "context": "The shared standing pose held Mirel's staff head down, with its clock ring sunk into the floor. Each hero now stands in the first frame of their own idle, the same pose as their hero screen portrait.",
+          "changes": [
+            {
+              "kind": "stat",
+              "label": "Hero behind the menus",
+              "before": "The shared standing pose, or the pose of the last hero shown",
+              "after": "The first frame of that hero's own idle"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "bugfixes",
+      "entries": [
+        {
+          "name": "Orrin: Anchor Pin",
+          "tag": "fix",
+          "summary": "Anchor Pin no longer pins a moth flying level with a platform to the platform's edge.",
+          "context": "We listed this as a known issue in 0.5.0. The pin is meant to nail a foe to the floor, so it now skips every kind of foe that flies.",
+          "changes": [
+            {
+              "kind": "stat",
+              "label": "Targets",
+              "before": "Foes standing on a floor, and a flier level with a ledge",
+              "after": "Foes standing on a floor; foes that fly are never pinned"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "feedback": []
+}
