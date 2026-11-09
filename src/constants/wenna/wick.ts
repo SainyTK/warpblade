@@ -1,0 +1,50 @@
+/** A Wick, the wax figure her lamp lights: its body, life, bite, walk, hold and guard. */
+export const WICK = {
+  /** share of her max HP a Wick has */
+  hpShare: 0.3,
+  /** seconds a Wick lives, and the last seconds over which its flame and body shrink */
+  life: 18,
+  shrink: 6,
+  /** Wicks per Wenna at base */
+  cap: 4,
+  /** seconds a Wick takes to rise out of its pool; it cannot be hit and does not bite meanwhile */
+  rise: 0.35,
+  /** seconds a Wick takes to melt into a puddle */
+  melt: 0.4,
+  /** seconds between bites, and on her Quarry */
+  biteEvery: 0.8,
+  quarryBiteEvery: 0.55,
+  /** a bite reaches a foe this far ahead of the Wick and this far above its feet (a small hop) */
+  biteReach: 24,
+  biteRise: 30,
+  /** ability power of one bite, and its knockback */
+  bitePower: 0.4,
+  biteKnock: 20,
+  /** seconds of the lean and flame lunge of a bite */
+  lunge: 0.18,
+  /** a Wick goes after foes this near when she has no Quarry it can reach */
+  seek: 140,
+  /** with no foe, it stands this far behind her */
+  heelNear: 16,
+  heelFar: 40,
+  /** walking speed before her move stat */
+  walk: 55,
+  /** it hops up to a floor this far above toward its target */
+  hopUp: 50,
+  /** half the width of its body, the edge a held foe stops at */
+  half: 4,
+  /** its height */
+  height: 12,
+  /** a held foe burns it for this much, before the wave's scaling, once a second; heavier foes push it this far and
+   *  burn it twice as hard */
+  holdBurn: 7,
+  holdEvery: 1,
+  pushBack: 20,
+  /** it intercepts a blow aimed at her from a foe on its side when it stands this near her, once each `guard` seconds */
+  guardReach: 20,
+  guard: 0.3,
+  /** seconds it gutters sideways after a hurt */
+  hurt: 0.1,
+  /** a Wick nobody tends for this long melts (its owner fell or left the room) */
+  untended: 0.2,
+} as const;
