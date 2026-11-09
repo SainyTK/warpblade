@@ -425,7 +425,7 @@ Evolution: **Timeless** (partner `m_pastself`). Sand keeps refilling while a Sti
 
 ultimate, timed, U. Replaces Hour of Stillness: every foe on screen stops, and the damage it takes while stopped returns.
 
-Values: stop: seconds every foe on screen stops; returns: share of the damage a foe took while stopped that lands again when it restarts; power: share of the level's power each foe takes at the toll; echoes: 1 her echoes on stopped foes hit at full; stun: seconds the toll stuns; endless: 1 the stored damage has no cap (evolution)
+Values: stop: seconds every foe on screen stops; returns: share of the damage a foe took while stopped that lands again when it restarts; power: share of the level's power each foe takes at the toll; echoes: 1 her echoes on stopped foes hit twice as hard; stun: seconds the toll stuns; endless: 1 the stored damage has no cap (evolution)
 
 | Lv | Change | Card |
 | --- | --- | --- |
@@ -433,7 +433,7 @@ Values: stop: seconds every foe on screen stops; returns: share of the damage a 
 | 2 | stop 1.6 to 2 | Foes stop for 2.0 s. |
 | 3 | returns 0.4 to 0.6 | 60% of stored damage returns. |
 | 4 | power 0.8 to 1.6 | The toll deals 1.6x. |
-| 5 | echoes 0 to 1 | Echoes on stopped foes hit at full. |
+| 5 | echoes 0 to 1 | Echoes on stopped foes hit twice as hard. |
 | 6 | stop 2 to 2.6 | Foes stop for 2.6 s. |
 | 7 | stun 0 to 1 | The toll stuns for 1 s. |
 | 8 | power 1.6 to 4 | The toll deals 4x. |

@@ -1,14 +1,16 @@
 import { ENEMIES } from "../../../constants/enemies";
 import { SHOULDER_Y, STAFF_BLOWS } from "../../../constants/mirel/string";
+import { SAND } from "../../../constants/palette";
 import type { Enemy } from "../../../types/enemy";
 import type { StaffBlow } from "../../../types/mirel";
+import { PK } from "../../../types/particle";
 import { dealDamage } from "../../damage";
 import { launchEnemy } from "../../enemies/airborne";
 import { enemyCenter } from "../../enemies/enemy";
-import { addStacks, markFoe } from "../../enemies/skillStatus";
+import { addStacks, consumeStacks, markFoe, stacksOf } from "../../enemies/skillStatus";
 import { emitSkillEvent } from "../../skills/events";
 import { skillValues, withCharms } from "../../skills/query";
-import { game, hero, progress } from "../../state";
+import { game, hero, particles, progress, rng } from "../../state";
 import { mirel, mirelHost } from "./memory";
 import { gainSand } from "./sand";
 import type { StaffStrike } from "./strike";
@@ -76,6 +78,27 @@ function wither(e: Enemy, s: StaffStrike): void {
     duration: withCharms("duration", v.life),
   });
   if (v.slow) e.chill = Math.max(e.chill, 0.5);
+  if (v.dust && stacksOf(e, "m_wither") >= v.max) crumble(e, v.dust);
+}
+
+/** Dust to Dust: a foe at the most Age crumbles, its stacks spent in one blow of sand */
+function crumble(e: Enemy, dust: number): void {
+  const n = consumeStacks(e, "m_wither");
+  const [cx, cy] = enemyCenter(e);
+  dealDamage(e, progress.stats.ad * dust * n, { fromX: cx, source: "m_wither" });
+  for (let i = 0; i < 12; i++)
+    particles.spawn(
+      PK.DUST,
+      cx + rng.range(-5, 5),
+      cy + rng.range(-6, 6),
+      rng.range(-30, 30),
+      rng.range(-40, 10),
+      rng.range(0.4, 0.8),
+      {
+        col: rng.chance(0.5) ? SAND.light : SAND.shade,
+        size: rng.range(1, 2),
+      },
+    );
 }
 
 /** Long Echo: an echo pulls the foe it hits toward where the blow struck */
@@ -89,7 +112,7 @@ function pull(e: Enemy, s: StaffStrike): void {
 
 /** Backswing on the foe it lands on: a heal, a stagger, and Undone's replay of the rewound blows */
 function backswing(e: Enemy, s: StaffStrike): void {
-  if (s.echo || !backswingOpen()) return;
+  if (s.echo || s.source || !backswingOpen()) return;
   const v = skillValues("m_backswing");
   if (v.heal) hero.hp = Math.min(progress.stats.hp, hero.hp + progress.stats.hp * v.heal);
   if (v.stagger) e.stagger = Math.max(e.stagger, v.stagger);
@@ -107,7 +130,7 @@ export function afterStaffHit(e: Enemy, s: StaffStrike, dealt: number, stored: n
   pull(e, s);
   backswing(e, s);
   if (s.blow === "toll" && !s.echo && skillValues("m_toll").launch && ENEMIES[e.type].launchable) launchEnemy(e, -150);
-  if (!s.echo && dealt > 0) {
+  if (!s.echo && !s.source && dealt > 0) {
     const now = game.t;
     mirelHost.landed = [...mirelHost.landed.filter((l) => now - l.t < LANDED_KEEP), { damage: dealt, t: now }];
   }

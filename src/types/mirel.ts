@@ -124,6 +124,8 @@ export interface MirelHostMemory {
 declare module "./skillBehavior" {
   /** Mirel's own skill events */
   interface SkillEvents {
+    /** a foe she stopped in time restarts (Entropy) */
+    restart: { foe: Enemy };
     /** a Toll landed on these foes (Clockwork Wren) */
     toll: { foes: readonly Enemy[] };
     /** an echo of one of her blows struck a foe */

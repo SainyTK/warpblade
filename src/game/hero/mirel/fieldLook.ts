@@ -1,6 +1,8 @@
 import { STILLFIELD } from "../../../constants/mirel/field";
 import { PAL, SAND } from "../../../constants/palette";
-import { disc, glow, line, place, px } from "../../../engine/frame";
+import { GROUND } from "../../../constants/stage";
+import { glow, line, place, px } from "../../../engine/frame";
+import type { Color } from "../../../types/color";
 import type { Effect } from "../../../types/effect";
 import type { StillfieldView } from "../../../types/mirel";
 import { PK } from "../../../types/particle";
@@ -48,20 +50,36 @@ function burst(f: StillfieldView): void {
   lights.add(f.x, f.y, f.radius + 10, PAL.hour[4], 0.9, 0.15);
 }
 
-/** the clock ring: twelve ticks, a faint fill, a second hand going round and sand hanging still inside */
+/** a pixel of the field, hidden where the floor stands in front of it */
+function fieldPx(x: number, y: number, c: Color, a: number): void {
+  if (y < GROUND) px(x, y, c, a);
+}
+
+/** the faint fill, row by row down to the floor */
+function fill(f: StillfieldView, r: number): void {
+  const bottom = Math.min(f.y + r, GROUND - 1);
+  for (let y = Math.ceil(f.y - r); y <= bottom; y++) {
+    const half = Math.sqrt(Math.max(0, r * r - (y - f.y) ** 2));
+    for (let x = Math.ceil(f.x - half); x <= f.x + half; x++) px(x, y, PAL.hour[2], 0.15);
+  }
+}
+
+/** the clock ring: twelve ticks, a faint fill, a second hand going round and sand hanging still inside; the floor in
+ *  front hides what is below it */
 function drawRing(f: StillfieldView, r: number, age: number, white: boolean): void {
   place();
   const ring = white ? WHITE : PAL.hour[3];
-  disc(f.x, f.y, r, PAL.hour[2], 0.15);
+  fill(f, r);
   const steps = Math.max(24, Math.round(TAU * r));
   for (let i = 0; i < steps; i++) {
     const a = (i / steps) * TAU;
-    px(f.x + Math.cos(a) * r, f.y + Math.sin(a) * r, ring, 0.9);
+    fieldPx(f.x + Math.cos(a) * r, f.y + Math.sin(a) * r, ring, 0.9);
   }
   for (let i = 0; i < 12; i++) {
     const a = -Math.PI / 2 + (i / 12) * TAU;
     const c = i === 0 ? PAL.hour[5] : PAL.hour[4];
-    px(f.x + Math.cos(a) * (r - 2), f.y + Math.sin(a) * (r - 2), c, 0.9);
+    fieldPx(f.x + Math.cos(a) * (r - 2), f.y + Math.sin(a) * (r - 2), c, 0.9);
+    fieldPx(f.x + Math.cos(a) * (r - 3), f.y + Math.sin(a) * (r - 3), c, 0.6);
   }
   const hand = -Math.PI / 2 + (age / SWEEP) * TAU;
   line(f.x, f.y, f.x + Math.cos(hand) * (r - 4), f.y + Math.sin(hand) * (r - 4), PAL.hour[4], 0.6);
@@ -69,7 +87,7 @@ function drawRing(f: StillfieldView, r: number, age: number, white: boolean): vo
   for (let i = 0; i < MOTES; i++) {
     const [mx, my] = motePlace(f.id, i);
     const drift = Math.sin(age * 0.6 + i) * 0.6;
-    px(f.x + mx * r, f.y + my * r + drift, i % 3 ? SAND.light : SAND.shade, 0.8);
+    fieldPx(f.x + mx * r, f.y + my * r + drift, i % 3 ? SAND.light : SAND.shade, 0.8);
   }
   glow(f.x, f.y, r * 0.8, PAL.hour[3], white ? 0.4 : 0.14);
 }

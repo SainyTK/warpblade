@@ -1,6 +1,6 @@
 import type { SkillDef } from "../../../../types/skill";
 
-/** Eternal Noon. Design: docs/skills/mirel.md. Values: stop: seconds every foe on screen stops; returns: share of the damage a foe took while stopped that lands again when it restarts; power: share of the level's power each foe takes at the toll; echoes: 1 her echoes on stopped foes hit at full; stun: seconds the toll stuns; endless: 1 the stored damage has no cap (evolution) */
+/** Eternal Noon. Design: docs/skills/mirel.md. Values: stop: seconds every foe on screen stops; returns: share of the damage a foe took while stopped that lands again when it restarts; power: share of the level's power each foe takes at the toll; echoes: 1 her echoes on stopped foes hit twice as hard; stun: seconds the toll stuns; endless: 1 the stored damage has no cap (evolution) */
 export const ETERNAL_NOON: SkillDef = {
   id: "m_noon",
   name: "Eternal Noon",
@@ -21,7 +21,7 @@ export const ETERNAL_NOON: SkillDef = {
     },
     { text: "The toll deals 1.6x.", values: { stop: 2, returns: 0.6, power: 1.6, echoes: 0, stun: 0, endless: 0 } },
     {
-      text: "Echoes on stopped foes hit at full.",
+      text: "Echoes on stopped foes hit twice as hard.",
       values: { stop: 2, returns: 0.6, power: 1.6, echoes: 1, stun: 0, endless: 0 },
     },
     { text: "Foes stop for 2.6 s.", values: { stop: 2.6, returns: 0.6, power: 1.6, echoes: 1, stun: 0, endless: 0 } },

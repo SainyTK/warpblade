@@ -4,6 +4,7 @@ import type { Enemy } from "../../types/enemy";
 import { dealDamage } from "../damage";
 import { createFloorRing } from "../effects/floorRing";
 import { createImpact } from "../effects/impact";
+import { emitSkillEvent } from "../skills/events";
 import { game, lights } from "../state";
 import { enemyCenter } from "./enemy";
 
@@ -32,6 +33,7 @@ export function takeStored(e: Enemy): number {
 /** the stop ran out: the stored share lands as one hit with a toll flash, and the speed it was given carries on */
 function restart(e: Enemy): void {
   e.vx = Math.max(-RESTART_SPEED, Math.min(RESTART_SPEED, e.vx));
+  emitSkillEvent({ type: "restart", foe: e });
   const stored = e.stopStore * e.stopShare;
   takeStored(e);
   if (stored < 1) return;
