@@ -15,7 +15,7 @@ A night goes through these steps, each one an agent with its own instructions in
 3. Triage: an agent with no tools reads the open `game-feedback` GitHub issues as data and decides now, later, skip, duplicate or hide for each item, with a reply.
 4. Direct: the director reads the charter, the roadmap, the feedback, the baseline and the code, and writes the plan and a decision memo.
 5. Build: the developer builds the plan, checks it and commits.
-6. QA: a separate agent tests the real game against the plan's acceptance checks and judges whether each change delivers in ordinary play. A failed QA gets up to two rounds of fixes; a third failure ends the night with nothing shipped. A passing QA with minor issues gets one polish round for what players would see, then QA checks again; a blocking issue found in that check gets one more round of fixes, even when the first two are used up.
+6. QA: a separate agent tests the real game against the plan's acceptance checks and judges whether each change delivers in ordinary play. Every issue QA raises, minor ones and suggestions included, goes back to the developer at once, for up to three rounds of fixes with QA after each. Then the patch ships with any minor issues left. A blocking issue left after the third round gets a cut round: the developer takes out the broken part, and the rest ships if QA no longer blocks it. Nothing waits for a human review.
 7. Media: an agent records clips and stills of the change through real play.
 8. Write: the writer turns the night into patch notes (`src/content/patches/<version>.json`), a journal entry (`journal/<version>.md`) and a roadmap update.
 9. Finalize: the version goes into `package.json`, every check runs again, and the patch is committed.

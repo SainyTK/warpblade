@@ -17,8 +17,9 @@ export const BRANCH_PREFIX = "studio/patch-";
 export const CLAUDE_BIN = process.env.STUDIO_CLAUDE ?? join(homedir(), ".local/bin/claude-pool");
 export const MODEL = process.env.STUDIO_MODEL ?? "claude-opus-5-5";
 
-/** a failed QA gets this many rounds of fixes before the night is called off */
-export const MAX_FIX_ROUNDS = 2;
+/** QA's issues, minor ones included, get this many rounds of fixes; then the patch ships with the minor ones left,
+    and a blocking one left gets the cut round (owner decision, 9 November 2026: no human review, one patch a day) */
+export const MAX_FIX_ROUNDS = 3;
 /** bot runs per hero for the baseline difficulty report */
 export const BASELINE_BOT_RUNS = 1;
 
