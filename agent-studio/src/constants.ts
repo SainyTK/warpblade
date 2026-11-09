@@ -17,8 +17,9 @@ export const BRANCH_PREFIX = "studio/patch-";
 export const CLAUDE_BIN = process.env.STUDIO_CLAUDE ?? join(homedir(), ".local/bin/claude-pool");
 export const MODEL = process.env.STUDIO_MODEL ?? "claude-opus-5-5";
 
-/** a failed QA gets this many rounds of fixes before the night is called off */
-export const MAX_FIX_ROUNDS = 2;
+/** QA's issues, minor ones included, get this many rounds of fixes; then the patch ships with the minor ones left,
+    and a blocking one left gets the cut round (owner decision, 9 November 2026: no human review, one patch a day) */
+export const MAX_FIX_ROUNDS = 3;
 /** bot runs per hero for the baseline difficulty report */
 export const BASELINE_BOT_RUNS = 1;
 
@@ -48,6 +49,10 @@ export const ROLES: Record<Role, RoleConfig> = {
 };
 /** a small patch gives the developer less time */
 export const SMALL_PATCH_DEVELOPER_MINUTES = 120;
+/** how often an agent's time limit is checked; a longer gap between checks means the Mac slept, and sleep does not count */
+export const AGENT_CLOCK_TICK_MS = 15_000;
+/** an agent that ran out of time gets this long, in its resumed session, to commit and give its answer */
+export const WRAP_UP_MINUTES = 20;
 
 /** the label on feedback issues the studio means to do */
 export const PLANNED_LABEL = "planned";

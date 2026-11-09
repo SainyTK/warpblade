@@ -6,7 +6,9 @@ export function withWallLimit<T>(work: Promise<T>, minutes: number, label: strin
   let timer: ReturnType<typeof setTimeout> | undefined;
   const limit = new Promise<never>((_, reject) => {
     timer = setTimeout(() => {
-      reject(new Error(`${label} ran past ${minutes} minutes of wall time; the page may be frozen by an endless loop.`));
+      reject(
+        new Error(`${label} ran past ${minutes} minutes of wall time; the page may be frozen by an endless loop.`),
+      );
     }, minutes * 60_000);
   });
   return Promise.race([work, limit]).finally(() => clearTimeout(timer));
