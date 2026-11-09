@@ -5,6 +5,8 @@ export const WICK = {
   /** seconds a Wick lives, and the last seconds over which its flame and body shrink */
   life: 18,
   shrink: 6,
+  /** Wicks that light for free at the start of a wave when she has none */
+  waveStart: 2,
   /** Wicks per Wenna at base */
   cap: 4,
   /** seconds a Wick takes to rise out of its pool; it cannot be hit and does not bite meanwhile */

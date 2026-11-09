@@ -58,7 +58,7 @@ A Wick is a wax figure about 12 px tall with a violet flame for a head.
 - Hold: a ground foe of rank minion that walks into a Wick stops at the Wick's front edge. While held, the foe burns the Wick for the foe's own contact damage once a second. Elites, mini bosses and the Rift Warden push through: the Wick is knocked back 20 px and takes double that contact damage. Fliers pass over Wicks.
 - Intercept: through `absorbHurt(dmg, fromX)`. When a blow or shot is about to land on her and a Wick stands within 20 px of her on the `fromX` side, the Wick takes the full damage after her `hurtScale` and she takes nothing (return true). The nearest such Wick takes it. One Wick intercepts at most once each 0.3 s so a fast flurry still reaches her through a single Wick.
 - End: at 0 HP or when its life runs out, the Wick melts into a puddle with a curl of smoke over 0.4 s and emits the kit event `wick` with `lit: false`.
-- Wave start: if she has no Wick at the start of a wave, one lights for free at her side, so every wave opens with a body in front of her.
+- Wave start: if she has no Wick at the start of a wave, two light for free at her side, so every wave opens with bodies in front of her.
 - A new run clears every Wick. A downed or departed Wenna's Wicks melt at once.
 
 ## Wax (WX bar)
@@ -202,3 +202,35 @@ Run the playtest bots on this build from wave 1, one run each. Wenna's mash deat
 ## Note for the owner
 
 The playtest bots have no Wenna entry. A skilled policy for her would press K whenever Wax allows, strike the nearest foe with J to set the Quarry, press I with Kindle when a Wick stands beside a crowd, and press L when a foe winds up in front of her with a Wick behind the foe.
+
+## Bot balance check
+
+Mash bot (`npm run playtest -- bot --hero all --policy mash`), one run each from wave 1, on this build.
+The other six heroes fall on the same waves with the same kills as the 0.6.0 baseline.
+
+| Hero | Baseline wave | Wave | Kills | Level |
+| --- | --- | --- | --- | --- |
+| Kael | 4 | 4 | 11 | 5 |
+| Ysra | 5 | 5 | 18 | 6 |
+| Sable | 5 | 5 | 18 | 6 |
+| Hulda | 4 | 4 | 11 | 5 |
+| Orrin | 5 | 5 | 18 | 6 |
+| Mirel | 5 | 5 | 16 | 5 |
+| Wenna, one free Wick at wave start | none | 3 | 6 | 3 |
+| Wenna, two free Wicks at wave start | none | 3 | 9 | 4 |
+
+The mash bot only walks and presses J, so it never lights a Wick and fights with her lamp, the weakest blow in the roster, plus the free Wicks.
+She falls one wave before Kael and Hulda, within the two-wave rule.
+As the plan asks, the free Wicks at wave start went from one to two before any other number moved; that raised her kills from 6 to 9.
+A stress run at wave 6, level 30, with all 20 skills at level 8 and then evolved, mashing every key, reached waves 9 and 10 with no page errors.
+
+## As built
+
+- A held foe burns its Wick for 7 times its wave power once a second, twice that for an elite, mini boss or the Warden, since foes have no shared contact damage value.
+- Foes stop at Wicks through a new shared seam, `src/game/enemies/holds.ts`, applied after each foe's own step; a thornback charging into a Wick ends its charge there, as on a pin.
+- Every Wenna's Wicks live in one world list (`src/game/hero/wenna/wickWorld.ts`), so foes meet any Wenna's Wicks in a room; a Wick its owner stops tending (she fell or left) holds nothing and melts when she rises.
+- Wick bites count for `abilities` and pass a new `noFlow` option to `dealDamage`.
+- Kills drop Wax through a new optional kit hook, `onKill`, called from `killEnemy` with the killer swapped in.
+- Beckon hops each Wick in an arc to its place in the ring, so the ring forms within its 2 s.
+- Hunting Call, Guttering, Wax Effigy and Singe start lower than the plan's table (see `docs/skills/wenna.md`), so each grows 6 to 8.5 times by level 8.
+

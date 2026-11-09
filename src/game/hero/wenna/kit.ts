@@ -41,12 +41,12 @@ function tickZones(dt: number): void {
   wennaHost.zones = wennaHost.zones.filter((z) => z.left > 0);
 }
 
-/** every wave opens with a body in front of her: one Wick lights for free when she has none */
+/** every wave opens with bodies in front of her: Wicks light for free when she has none */
 function openWave(): void {
   if (game.lull !== "fight" || game.wave === wenna.waveSeen) return;
   wenna.waveSeen = game.wave;
   if (liveWicks().length) return;
-  spawnWick(hero.x + hero.face * 14, hero.y, "wave");
+  for (let i = 0; i < WICK.waveStart; i++) spawnWick(hero.x + hero.face * (14 + i * 10), hero.y, "wave");
 }
 
 function tick(dt: number): void {
