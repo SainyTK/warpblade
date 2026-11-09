@@ -1,5 +1,6 @@
 import { ENEMIES } from "../../../constants/enemies";
 import { STILLFIELD } from "../../../constants/mirel/field";
+import { MIREL_JUMP_RISE } from "../../../constants/mirel/motion";
 import { W } from "../../../constants/stage";
 import { sfx } from "../../../services/audio";
 import type { Enemy } from "../../../types/enemy";
@@ -12,6 +13,7 @@ import { isHeld } from "../../input";
 import { emitSkillEvent } from "../../skills/events";
 import { skillValues, withCharms } from "../../skills/query";
 import { game, hero, progress } from "../../state";
+import { surfaceBelow } from "../../world";
 import { setState } from "../actions";
 import { createFieldLook } from "./fieldLook";
 import { mirel, mirelHost } from "./memory";
@@ -34,12 +36,23 @@ export function insideField(e: Enemy, f: { x: number; y: number; radius: number 
   return Math.hypot(cx - f.x, cy - f.y) <= f.radius;
 }
 
+/**
+ * How high a field aimed up stands. Up is also her jump, so aiming from the floor lifts her first: within a jump of the
+ * floor the field is measured from the floor she left, so it lands where she aimed it from; higher up, from her.
+ */
+function aboveHeight(): number {
+  const h = hero;
+  const floor = surfaceBelow(h.x, h.y - 1);
+  const from = floor - h.y <= MIREL_JUMP_RISE + 2 ? floor : h.y;
+  return from - STILLFIELD.above;
+}
+
 /** where a new field stands: ahead at chest height, above her with W held, on her with S held (Calm Eye: always on her) */
 function placeField(radius: number): { x: number; y: number } {
   const h = hero;
   const chest = h.y - STILLFIELD.chest;
   if (skillValues(PACE).eye || isHeld("down")) return { x: h.x, y: chest };
-  if (isHeld("up")) return { x: h.x, y: h.y - STILLFIELD.above };
+  if (isHeld("up")) return { x: h.x, y: aboveHeight() };
   const x = clamp(h.x + h.face * STILLFIELD.ahead, radius * 0.5, W - radius * 0.5);
   return { x, y: chest };
 }

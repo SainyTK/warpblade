@@ -31,6 +31,20 @@ const HOVER_FRAMES = 2;
 const shown = { hover: false };
 rememberPerSeat(objectMemory(shown, true));
 
+/** the staff carried upright in the shared clips, its top swaying a little with the hand */
+const CARRY = -1.45;
+/** the highest the hand may sit, so the staff's foot clears the floor while it is carried upright */
+const CARRY_HAND = -13.5;
+
+/**
+ * The shared walk, run, jump, fall, flinch and wounded clips swing Kael's sword low; her staff is long enough that the
+ * same angle would sink its ring into the floor, so she carries it upright like her stance, and a fall lays it flat.
+ */
+function carried(h: Hero, p: Pose): Pose {
+  if (h.state === "dead") return { ...p, sa: p.mr >= 0.5 ? Math.PI : 0, fy: Math.min(p.fy, -2) };
+  return { ...p, sa: CARRY + (p.fx - 6) * 0.03, fy: Math.min(p.fy, CARRY_HAND) };
+}
+
 /** a clip at its time, legs together when she is in the air */
 function play(h: Hero, clip: ActionClip): Pose {
   const p = sampleKeys(clip.keys, Math.min(h.st, clip.dur));
@@ -61,14 +75,15 @@ function statePose(h: Hero, t: number, fresh: boolean, dt: number, wound: number
       return CHARGE_POSE;
     case "idle": {
       const wounded = sampleKeys(KAEL_WOUNDED_IDLE.keys, h.st % KAEL_WOUNDED_IDLE.dur);
-      return woundedIdle(sampleKeys(MIREL_IDLE.keys, h.st % MIREL_IDLE.dur), wounded, wound);
+      const idle = woundedIdle(sampleKeys(MIREL_IDLE.keys, h.st % MIREL_IDLE.dur), wounded, wound);
+      return wound > 0 ? carried(h, idle) : idle;
     }
     case "jump":
-      return sampleKeys(STATE_CLIPS.jump.keys, jumpClock(h, fresh, dt));
+      return carried(h, sampleKeys(STATE_CLIPS.jump.keys, jumpClock(h, fresh, dt)));
     case "fall":
-      return mirel.hovering ? HOVER_POSE : clipPose(h, t);
+      return mirel.hovering ? HOVER_POSE : carried(h, clipPose(h, t));
     default:
-      return clipPose(h, t);
+      return carried(h, clipPose(h, t));
   }
 }
 

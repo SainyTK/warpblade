@@ -9,7 +9,6 @@ import { resetWound } from "./hero/wound";
 import { resetDanger } from "./lowHealth";
 import { resetProgress } from "./progress";
 import { clearWards } from "./shotWards";
-
 import { forgetSkills } from "./skills/runtime";
 import { freshHero, game, hero, ponytail, progress, scarf, showBanner } from "./state";
 import { clearFields } from "./timeFields";
