@@ -279,6 +279,11 @@ Changes made while building, each for the same goal as the design:
 - Buttons from the skill data: Quickened is on L because it follows a Rewind, Steady Pace on K because it acts in the field, and Entropy is `auto`.
   Spell cooldowns are Sundial 6 s, Foretell 6 s and Hour Hand 8 s; summon cooldowns are Past Self 1.5 s, Clockwork Wren 2 s and Orrery 2 s.
 - Light Boots play Rewind's path back faster, as `progress.stats.move` scales it.
+- In the shared walk, run, jump, fall and flinch clips she carries the staff upright, and a fall lays it flat.
+  Those clips swing Kael's short sword low, and at that angle her 34 px staff would sink its ring into the floor.
+- Up is also her jump, so a field aimed up from the floor lifts her first.
+  Within a jump of the floor the field is measured from the floor she left, 48 px above it, so it lands where she aimed it.
+- A foe stopped in time cannot raise its guard, so every blow on it lands and is stored.
 
 ## Balance check
 
@@ -292,7 +297,7 @@ The other five heroes fall on the same waves with the same kills as in the basel
 | Sable | 5 | 18 | 5 | 18 |
 | Hulda | 4 | 11 | 8 | 34 |
 | Orrin | 5 | 18 | 3 | 6 |
-| Mirel | 5 | 16 | 5 | 18 |
+| Mirel | 5 | 16 | 5 | 14 |
 
 Mirel falls on wave 5 with both bots, the same wave as most of the others.
 Neither bot presses K, since her Stillfield has no HUD tab, so these runs leave out her field, its echoes at full power and its snap.
