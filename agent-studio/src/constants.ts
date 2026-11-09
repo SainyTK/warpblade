@@ -48,6 +48,10 @@ export const ROLES: Record<Role, RoleConfig> = {
 };
 /** a small patch gives the developer less time */
 export const SMALL_PATCH_DEVELOPER_MINUTES = 120;
+/** how often an agent's time limit is checked; a longer gap between checks means the Mac slept, and sleep does not count */
+export const AGENT_CLOCK_TICK_MS = 15_000;
+/** an agent that ran out of time gets this long, in its resumed session, to commit and give its answer */
+export const WRAP_UP_MINUTES = 20;
 
 /** the label on feedback issues the studio means to do */
 export const PLANNED_LABEL = "planned";

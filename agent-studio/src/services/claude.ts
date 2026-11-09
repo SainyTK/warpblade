@@ -1,8 +1,9 @@
 import { spawn } from "node:child_process";
 import { createWriteStream, existsSync, statSync } from "node:fs";
 import { readFile } from "node:fs/promises";
-import { CLAUDE_BIN, MODEL } from "../constants.ts";
+import { AGENT_CLOCK_TICK_MS, CLAUDE_BIN, MODEL } from "../constants.ts";
 import type { AgentResult, RoleConfig } from "../types.ts";
+import { awakeMs } from "../utils/awakeTime.ts";
 
 interface AgentCall {
   name: string;
@@ -39,19 +40,32 @@ interface ResultEvent {
   total_cost_usd?: number;
 }
 
-/** the result events this call wrote to a stream-json log, from the byte where it started */
-async function readResults(logPath: string, from: number): Promise<ResultEvent[]> {
+/** an agent that stopped before its structured answer; its session can be resumed when it has one */
+export class NoAnswerError extends Error {
+  constructor(
+    message: string,
+    readonly sessionId: string | null,
+    readonly timedOut: boolean,
+  ) {
+    super(message);
+  }
+}
+
+/** the result events this call wrote to a stream-json log, from the byte where it started, and its session */
+async function readLog(logPath: string, from: number): Promise<{ results: ResultEvent[]; sessionId: string | null }> {
   const results: ResultEvent[] = [];
+  let sessionId: string | null = null;
   for (const line of (await readFile(logPath)).subarray(from).toString("utf8").split("\n")) {
     if (!line.startsWith("{")) continue;
     try {
-      const event = JSON.parse(line) as { type?: string };
+      const event = JSON.parse(line) as { type?: string; session_id?: string };
+      if (event.session_id) sessionId = event.session_id;
       if (event.type === "result") results.push(event as ResultEvent);
     } catch {
       // a partial line from a killed run
     }
   }
-  return results;
+  return { results, sessionId };
 }
 
 /** a session can wake up after its answer and end on a plain-text reply,
@@ -62,7 +76,8 @@ function answerOf(results: ResultEvent[]): { answer: ResultEvent; costUsd: numbe
   return { answer, costUsd: results.at(-1)?.total_cost_usd ?? answer.total_cost_usd ?? 0 };
 }
 
-/** run one headless Claude Code agent to its structured answer, or throw */
+/** run one headless Claude Code agent to its structured answer, or throw a NoAnswerError.
+    Its time limit counts only the time the Mac is awake */
 export function runAgent<T>(call: AgentCall): Promise<AgentResult<T>> {
   return new Promise((resolve, reject) => {
     // the log is appended to, so only what this call writes is read back
@@ -75,20 +90,34 @@ export function runAgent<T>(call: AgentCall): Promise<AgentResult<T>> {
     });
     child.stdout.pipe(log, { end: false });
     child.stderr.pipe(log, { end: false });
-    const timer = setTimeout(
-      () => {
-        if (child.pid) process.kill(-child.pid, "SIGTERM");
-      },
-      call.minutes * 60 * 1000,
-    );
-    child.on("error", reject);
+    const limit = call.minutes * 60 * 1000;
+    let used = 0;
+    let checked = Date.now();
+    let timedOut = false;
+    const clock = setInterval(() => {
+      const now = Date.now();
+      used += awakeMs(checked, now, AGENT_CLOCK_TICK_MS);
+      checked = now;
+      if (used < limit || !child.pid) return;
+      timedOut = true;
+      clearInterval(clock);
+      process.kill(-child.pid, "SIGTERM");
+    }, AGENT_CLOCK_TICK_MS);
+    child.on("error", (error) => {
+      clearInterval(clock);
+      reject(error);
+    });
     child.on("close", async (code) => {
-      clearTimeout(timer);
+      clearInterval(clock);
       // read the log only after every byte has reached the file
       await new Promise<void>((done) => log.end(done));
-      const found = answerOf(await readResults(call.logPath, from));
+      const { results, sessionId } = await readLog(call.logPath, from);
+      const found = answerOf(results);
       if (!found) {
-        reject(new Error(`${call.name} ended without a structured answer (exit ${code}); see ${call.logPath}`));
+        const why = timedOut
+          ? `ran past its ${call.minutes} minutes`
+          : `ended without a structured answer (exit ${code})`;
+        reject(new NoAnswerError(`${call.name} ${why}; see ${call.logPath}`, sessionId, timedOut));
         return;
       }
       resolve({
