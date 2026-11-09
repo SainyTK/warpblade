@@ -5,6 +5,7 @@ import type { Enemy } from "../../../types/enemy";
 import type { Wick } from "../../../types/wenna";
 import { clamp } from "../../../utils/math";
 import { enemyBox, enemyCenter } from "../../enemies/enemy";
+import { kindOf } from "../../enemies/kinds";
 import { skillValues } from "../../skills/query";
 import { foesOnScreen } from "../../skills/targets";
 import { game, hero, progress } from "../../state";
@@ -225,11 +226,12 @@ function tryBite(w: Wick): void {
   w.bite = biteEvery(w, prey);
 }
 
-/** where a Wick wants to be now: in Beckon's ring, beside its target, or at her heel */
-function goal(w: Wick, index: number): [number, number] {
+/** where a Wick wants to be now: in Beckon's ring, beside its target, or on guard in front of her. Her guard Wick
+ *  only leaves its post to hold a ground foe near her; it bites fliers from where it stands. */
+function goal(w: Wick, index: number, guard: boolean): [number, number] {
   if (w.ring > 0) return [ringSpot(w.slot), heroFloor()];
   const t = w.target;
-  if (!t) return [guardSpot(w, index), heroFloor()];
+  if (!t || (guard && kindOf(t.type).flies)) return [guardSpot(w, index), heroFloor()];
   const box = enemyBox(t);
   const cx = (box[0] + box[2]) / 2;
   const side = Math.sign(w.x - cx) || -hero.face;
@@ -268,7 +270,7 @@ function stepWick(w: Wick, index: number, guard: boolean, dt: number): void {
   w.bite = Math.max(0, w.bite - dt);
   if (guard || !w.target || w.target.hp <= 0 || !reachable(w.target) || !isQuarry(w.target))
     w.target = chooseTarget(w, guard);
-  const [gx, gy] = goal(w, index);
+  const [gx, gy] = goal(w, index, guard);
   if (w.leap <= 0) steer(w, gx, gy, dt);
   move(w, dt);
   tryBite(w);

@@ -11,7 +11,7 @@ import { resetMotion } from "../kael/motion";
 import { startCharge } from "../ultimate";
 import { nextAbility, pressAbility, resetAbilities, tickAbilities } from "./abilities";
 import { runAbilityCast } from "./abilityCast";
-import { drawWenna, drawWennaBack } from "./draw";
+import { drawWenna, drawWennaBack, drawWennaOver } from "./draw";
 import { clearDrips, dropDrip, stepDrips } from "./drips";
 import { runGreatWick } from "./greatWick";
 import { interceptBlow } from "./guard";
@@ -22,7 +22,7 @@ import { resetWenna, wenna, wennaHost } from "./memory";
 import { wennaPose } from "./pose";
 import { clearQuarries, tickQuarries } from "./quarry";
 import { landed, pressDrop, pressString, runDrop, runString } from "./string";
-import { pressSwap, runSwap, swapDodge, tickSwap } from "./swap";
+import { pressSwap, runSwap, swapDodge, swapGone, tickSwap } from "./swap";
 import { trickleWax } from "./wax";
 import { meltAll, stepWicks } from "./wickAi";
 import { wickStriking } from "./wickKills";
@@ -136,6 +136,8 @@ export const WENNA_KIT: HeroKit = {
   gravityScale: () => (hero.state === "swap" ? 0 : 1),
   drawBack: drawWennaBack,
   draw: drawWenna,
+  drawOver: drawWennaOver,
+  heroAlpha: () => (swapGone() ? 0 : 1),
   onKill,
   reset: () => {
     clearWicks();

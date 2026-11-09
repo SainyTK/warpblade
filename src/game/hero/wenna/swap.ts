@@ -17,7 +17,7 @@ import { refuseDash } from "../stamina";
 import { travelEnded } from "../travelEnd";
 import { wenna, wennaHost } from "./memory";
 import { inRecovery } from "./string";
-import { leaveSwapLook } from "./swapLook";
+import { arriveSwapLook, leaveSwapLook } from "./swapLook";
 import { cappedWicks, isUp, liveWicks, spawnWick, wickCap } from "./wicks";
 
 const STEP = "w_swap";
@@ -141,6 +141,7 @@ function arrive(): void {
   const w = wennaHost.swapWick;
   if (!from || !to) return;
   const wickAlive = !!w && w.melt < 0;
+  if (w) arriveSwapLook(from, h.face, { x: w.x, y: w.y });
   h.x = to.x;
   h.y = to.y;
   h.ground = true;
@@ -206,3 +207,6 @@ export function tickSwap(dt: number): void {
 /** where she is going and where she left, while a Swap is under way, for her look */
 export const swapEnds = (): { from: { x: number; y: number }; to: { x: number; y: number } } | null =>
   hero.state === "swap" && wenna.swapFrom && wenna.swapTo ? { from: wenna.swapFrom, to: wenna.swapTo } : null;
+
+/** she and the Wick are gone between the press and the arrival */
+export const swapGone = (): boolean => hero.state === "swap" && !hero.hitDone;

@@ -1,4 +1,5 @@
 import { PAL } from "../../../constants/palette";
+import { SWAP } from "../../../constants/wenna/swap";
 import { WICK } from "../../../constants/wenna/wick";
 import { glow, line, place, px } from "../../../engine/frame";
 import type { Wick } from "../../../types/wenna";
@@ -13,23 +14,27 @@ const GHOST = 2 / 30;
 /** the lamp's streak lasts a little longer */
 const STREAK = 0.1;
 
-/** a violet copy of her where she stood, fading over two frames */
-function heroGhost(): void {
+/** her copy as she stood at the press, kept for the arrival */
+let copy: ReturnType<typeof ghostCanvas.snapshot> | null = null;
+
+/** a violet copy of her where she stood: it holds through the moment both are gone, and fades after she arrives */
+function heroGhost(life: number): void {
   drawHero(ghostCanvas, hero.pose, heroLook(4));
-  game.ghosts.push({ s: ghostCanvas.snapshot(), x: hero.x, y: hero.y, flip: hero.face < 0, life: GHOST, max: GHOST });
+  copy = ghostCanvas.snapshot();
+  game.ghosts.push({ s: copy, x: hero.x, y: hero.y, flip: hero.face < 0, life, max: life });
 }
 
-/** a violet silhouette of the Wick where it stood, fading over two frames */
-function wickGhost(x: number, y: number): void {
+/** a violet silhouette of the Wick where it stood, fading over its life */
+function wickGhost(x: number, y: number, life: number): void {
   let t = 0;
   game.fx.push({
     update(dt) {
       t += dt;
-      return t < GHOST;
+      return t < life;
     },
     draw() {
       place();
-      const k = 1 - t / GHOST;
+      const k = 1 - t / life;
       const top = Math.round(y - WICK.height);
       for (let yy = top + 4; yy <= y; yy++) line(x - 3, yy, x + 3, yy, PAL.wick[3], 0.55 * k);
       px(Math.round(x), top + 2, PAL.wick[5], k);
@@ -56,12 +61,19 @@ function lampStreak(x0: number, y0: number, x1: number, y1: number): void {
   });
 }
 
-/** a Swap leaves her and the Wick each a violet afterimage, and her lamp a short streak toward where she goes */
+/** the moment of a Swap: she and the Wick vanish, each leaving a violet afterimage, and her lamp a short streak toward
+ *  where she goes */
 export function leaveSwapLook(w: Wick): void {
   const hook = hookPoint(hero.pose, hero.hand);
   const lx = hero.x + hook.x * hero.face;
   const ly = hero.y + hook.y;
-  heroGhost();
-  wickGhost(w.x, w.y);
+  heroGhost(SWAP.gone);
+  wickGhost(w.x, w.y, SWAP.gone);
   lampStreak(lx, ly, w.x + (lx - hero.x), w.y + (ly - hero.y));
+}
+
+/** both arrive: the copies left at the old spots fade over two frames */
+export function arriveSwapLook(from: { x: number; y: number }, face: number, wickFrom: { x: number; y: number }): void {
+  if (copy) game.ghosts.push({ s: copy, x: from.x, y: from.y, flip: face < 0, life: GHOST, max: GHOST });
+  wickGhost(wickFrom.x, wickFrom.y, GHOST);
 }

@@ -133,7 +133,13 @@ export function drawHeroLayer(): void {
   h.hand = drawHero(heroSprite, h.pose, heroLook(flare));
   const blink = h.inv > 0 && h.state !== "warpStrike" && h.state !== "ultimate" && Math.floor(game.t * 20) % 2 === 0;
   const struck = h.state === "hurt" && h.st < 0.06;
-  blit(heroSprite, h.x, h.y, h.face < 0, { alpha: blink ? 0.45 : 1, tint: WHITE, tintAmount: struck ? 1 : 0 });
+  const shown = shownKit().heroAlpha?.() ?? 1;
+  if (shown > 0)
+    blit(heroSprite, h.x, h.y, h.face < 0, {
+      alpha: (blink ? 0.45 : 1) * shown,
+      tint: WHITE,
+      tintAmount: struck ? 1 : 0,
+    });
   // the crystal blade gives off a faint light, brighter mid-swing
   place(h.x, h.y, h.face < 0);
   if (h.hasSword) {

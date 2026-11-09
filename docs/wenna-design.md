@@ -54,7 +54,7 @@ A Wick is a wax figure about 12 px tall with a violet flame for a head.
 - Cap: 4 Wicks per Wenna at base.
 - Bite: every 0.8 s the Wick bites the foe it is after if the foe is within 24 px ahead and up to 30 px above (a small hop). 0.4x AP, knockback 20, can crit through `dealDamage`. Wick bites count as source `abilities` and give no Flow, so a crowd of Wicks cannot farm Flow. If the shared damage options have no switch for Flow, add one optional flag.
 - Target: the Quarry if she has one and a Wick can reach it, else the nearest foe within 140 px of the Wick, else it stands guard 12 to 24 px in front of her, on the side of her nearest foe.
-  With two or more Wicks out, the one nearest her is her guard and only goes after foes within 40 px of her.
+  With two or more Wicks out, the one nearest her is her guard: it only goes after ground foes within 40 px of her, and bites fliers from its post.
 - Walk: 55 px/s, scaled by her move stat. A Wick walks on the floor or platform it stands on and hops up to a platform or floor up to 50 px above toward its target, or drops down to any lower one. With no route it goes back to her.
 - Hold: a ground foe of rank minion that walks into a Wick stops at the Wick's front edge. While held, the foe burns the Wick for the foe's own contact damage once a second. Elites, mini bosses and the Rift Warden push through: the Wick is knocked back 20 px and takes double that contact damage. Fliers pass over Wicks.
 - Intercept: through `absorbHurt(dmg, fromX)`. When a blow or shot is about to land on her and a Wick stands within 20 px of her on the `fromX` side, the Wick takes the full damage after her `hurtScale` and she takes nothing (return true). A shot that lands from straight above (its `fromX` within 4 px of her) may be taken by a Wick on either side. The nearest such Wick takes it. One Wick intercepts at most once each 0.3 s so a fast flurry still reaches her through a single Wick.
@@ -232,7 +232,9 @@ A stress run at wave 6, level 30, with all 20 skills at level 8 and then evolved
 - A held foe burns its Wick for 7 times its wave power once a second, twice that for an elite, mini boss or the Warden, since foes have no shared contact damage value.
   A heavy foe's shove moves the Wick back 20 px and adds no damage of its own.
 - Idle Wicks stand guard in front of her toward her nearest foe, and the Wick nearest her stays her guard, after QA measured that Wicks standing behind her took 2 of 12 blows in waves 3 to 5. With the change they took 13 of 21.
-- A Swap leaves a two-frame violet afterimage of her and of the Wick, and a streak where her lantern swung.
+- She, her lantern and the Wick are hidden for the 0.08 s of a Swap while their violet copies hold the old spots, and the copies fade over two frames after both arrive; her lantern leaves a streak. The kit interface has a new optional hook, `heroAlpha`, for hiding the hero's sprite.
+- The Quarry ring is 16 px wide, two pixels thick with a dark rim and a marker, and draws over the damage numbers through a new optional kit hook, `drawOver`, called after the numbers.
+- Standing still against Glimmer Moths in wave 2 (QA's s3), she took 1 hit instead of 5 once the guard Wick stopped chasing fliers.
 - A foe felled by the chip damage of a blocked blow now counts for the source of that blow, so its kill drips Wax and reaches skills as any other kill.
 - Foes stop at Wicks through a new shared seam, `src/game/enemies/holds.ts`, applied after each foe's own step; a thornback charging into a Wick ends its charge there, as on a pin.
 - Every Wenna's Wicks live in one world list (`src/game/hero/wenna/wickWorld.ts`), so foes meet any Wenna's Wicks in a room; a Wick its owner stops tending (she fell or left) holds nothing and melts when she rises.

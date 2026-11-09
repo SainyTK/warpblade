@@ -60,6 +60,10 @@ export interface HeroKit {
   drawBack?(): void;
   /** drawn in the world over the hero, for parts of the kit that reach past the sprite (a chain and its hook) */
   draw?(): void;
+  /** drawn over the whole scene after the damage numbers, for markers that must stay readable (Wenna's Quarry ring) */
+  drawOver?(): void;
+  /** how visible the hero's sprite is right now, 0 to 1 (gone mid-Swap); left out, 1 */
+  heroAlpha?(): number;
   /** a foe fell to a hit of this hero's (any source of theirs), with the hero swapped in: a kit's own drops or counts */
   onKill?(e: Enemy): void;
   /** a fresh run */
