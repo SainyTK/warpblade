@@ -19,20 +19,27 @@ import { mirel, mirelHost } from "./memory";
 const FACE = 10;
 const TICK = 0.25;
 
-/** the nearest foe ahead within reach, at any height near hers, or null */
-function foeAhead(): Enemy | null {
+/** a foe ahead counts as level with her when its centre is this near her chest height */
+const LEVEL = 20;
+
+/** the nearest foe ahead within reach whose centre is within `height` of her chest, or null */
+function nearestAhead(height: number): Enemy | null {
   let best: Enemy | null = null;
   let bestD: number = STOPPED_CLOCK.reach;
   for (const e of game.enemies) {
     if (e.hp <= 0) continue;
     const [cx, cy] = enemyCenter(e);
     const d = (cx - hero.x) * hero.face;
-    if (d < -6 || d > bestD || Math.abs(cy - (hero.y - 16)) > STOPPED_CLOCK.height) continue;
+    if (d < -6 || d > bestD || Math.abs(cy - (hero.y - 16)) > height) continue;
     best = e;
     bestD = d;
   }
   return best;
 }
+
+/** the foe she aims at: the nearest ahead level with her, so a flier above never takes the stop meant for the foe she
+ *  faces; failing that, the nearest ahead at any height within reach */
+const foeAhead = (): Enemy | null => nearestAhead(LEVEL) ?? nearestAhead(STOPPED_CLOCK.height);
 
 /** seconds a foe of this rank stays stopped */
 const stopFor = (e: Enemy): number => STOPPED_CLOCK.stop[e.rank];

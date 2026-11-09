@@ -261,6 +261,8 @@ Changes made while building, each for the same goal as the design:
   `disc` in `src/engine/frame.ts` takes an optional floor for this.
 - Every slow a skill names by a share (Wither, Sundial, Suspended, Orrery) uses the shared `chill` status, which halves a foe's pace, since foes have no slow of their own size.
 - Steady Pace's softer contact applies to blows from a foe standing within the field's width.
+- Stopped Clock aims at the nearest foe ahead level with her (centre within 20 px of her chest) first, and only with none takes the nearest ahead at any height within 60 px.
+  A flier above her no longer takes the stop meant for the ground foe she faces.
 - Stopped Clock's own hit lands before the stop, so only what comes after is stored for the restart.
   The restart deals its share of the stored damage through `dealDamage`, so Might and Flow apply to it as to any hit.
 - Hour of Stillness reaches the level's ultimate reach round her chest, and the whole stage at level 4; its toll deals the level's power as a multiple of ability power, as Arcana scales her special.
