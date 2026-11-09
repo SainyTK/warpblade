@@ -60,7 +60,6 @@ function startRewind(seconds: number, extraLoss = 0): void {
   mirelHost.rewoundLoss = lossAlong(stretch) + extraLoss;
   mirelHost.rewound = [...stretch].reverse();
   mirel.rewindFrom = { x: h.x, y: h.y };
-  mirel.rewindTo = { x: stretch[0].x, y: stretch[0].y };
   mirel.rewindDodged = false;
   mirel.hovering = false;
   Object.assign(h, { vx: 0, vy: 0, move: null, queued: null, charge: 0, chargeLevel: 0 });
@@ -180,7 +179,8 @@ function endRewind(): void {
 export function runRewind(): void {
   const h = hero;
   const points = mirelHost.rewound;
-  const u = Math.min(1, h.st / REWIND.play);
+  // Light Boots play the path back faster
+  const u = Math.min(1, h.st / (REWIND.play / progress.stats.move));
   const p = points[Math.min(points.length - 1, Math.floor(u * (points.length - 1)))];
   if (p) Object.assign(h, { x: p.x, y: p.y, face: p.face, vx: 0, vy: 0, ground: false });
   const before = h.st - STEP;

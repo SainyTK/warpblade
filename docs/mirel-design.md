@@ -278,3 +278,27 @@ Changes made while building, each for the same goal as the design:
 - The skin has a new flag, `bun`: the hair is gathered in a low bun with two pins in the trim colours, with no ponytail and no scarf streamer, which fits her high collar.
 - Buttons from the skill data: Quickened is on L because it follows a Rewind, Steady Pace on K because it acts in the field, and Entropy is `auto`.
   Spell cooldowns are Sundial 6 s, Foretell 6 s and Hour Hand 8 s; summon cooldowns are Past Self 1.5 s, Clockwork Wren 2 s and Orrery 2 s.
+- Light Boots play Rewind's path back faster, as `progress.stats.move` scales it.
+
+## Balance check
+
+Playtest bot runs on this build, one run each (runs are deterministic), from wave 1 with no shop upgrades.
+The other five heroes fall on the same waves with the same kills as in the baseline runs on the base commit.
+
+| Hero | Mash: death wave | Mash: kills | Skilled: death wave | Skilled: kills |
+| --- | --- | --- | --- | --- |
+| Kael | 4 | 11 | 5 | 15 |
+| Ysra | 5 | 18 | 5 | 16 |
+| Sable | 5 | 18 | 5 | 18 |
+| Hulda | 4 | 11 | 8 | 34 |
+| Orrin | 5 | 18 | 3 | 6 |
+| Mirel | 5 | 16 | 5 | 18 |
+
+Mirel falls on wave 5 with both bots, the same wave as most of the others.
+Neither bot presses K, since her Stillfield has no HUD tab, so these runs leave out her field, its echoes at full power and its snap.
+The skilled bot does press L toward a foe about to strike, which is her Rewind.
+
+## Note for the owner
+
+The playtest bots in `agent-studio/playtest/` have no Mirel entry, and the studio does not edit that folder.
+A skilled policy for her would hold K over a crowd, string J inside the field, let go for the snap, and press L just after a hit.

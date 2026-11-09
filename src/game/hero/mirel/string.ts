@@ -1,6 +1,5 @@
 import { PENDANTS_PER_AIR, SHOULDER_Y, STAFF_BLOWS, STAFF_LINK, STAFF_STRING } from "../../../constants/mirel/string";
 import { sfx } from "../../../services/audio";
-import type { StaffBlow } from "../../../types/mirel";
 import { createSlash } from "../../effects/slash";
 import { game, hero, progress } from "../../state";
 import { markStruck, newSwing, struckThisSwing } from "../../world";
@@ -174,6 +173,3 @@ export function runPendant(dt: number): void {
 export function givePendantBack(): void {
   mirel.pendants = PENDANTS_PER_AIR;
 }
-
-/** the blow being played, for the pose */
-export const playing = (): StaffBlow => mirel.current;

@@ -78,7 +78,6 @@ export interface MirelMemory {
   /** the Rewind under way: seconds into it, and its start and end */
   rewindT: number;
   rewindFrom: Point | null;
-  rewindTo: Point | null;
   /** the Rewind under way already earned its perfect dodge */
   rewindDodged: boolean;
   /** a blow inside this window after a Rewind is a Backswing; Quickened's seconds left */
@@ -111,8 +110,6 @@ export interface MirelHostMemory {
   rewoundLoss: number;
   /** the foe Stopped Clock aims at in the cast under way */
   clockFoe: Enemy | null;
-  /** foes the special has stopped */
-  stopped: readonly Enemy[];
   /** foes inside her field last step, to count those that fall inside it */
   inside: readonly Enemy[];
   /** damage her blows dealt lately, with the run time each landed, for Undone */
