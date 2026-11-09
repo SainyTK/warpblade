@@ -219,10 +219,12 @@ The other six heroes fall on the same waves with the same kills as the 0.6.0 bas
 | Mirel | 5 | 5 | 16 | 5 |
 | Wenna, one free Wick at wave start | none | 3 | 6 | 3 |
 | Wenna, two free Wicks at wave start | none | 3 | 9 | 4 |
+| Wenna, after the QA fixes (Wicks guard in front of her) | none | 3 | 8 | 3 |
 
 The mash bot only walks and presses J, so it never lights a Wick and fights with her lamp, the weakest blow in the roster, plus the free Wicks.
 She falls one wave before Kael and Hulda, within the two-wave rule.
 As the plan asks, the free Wicks at wave start went from one to two before any other number moved; that raised her kills from 6 to 9.
+After the QA fixes her Wicks stand guard in front of her instead of chasing every foe, and the bot run ends on wave 3 with 8 kills; the other six heroes still match the baseline.
 A stress run at wave 6, level 30, with all 20 skills at level 8 and then evolved, mashing every key, reached waves 9 and 10 with no page errors.
 
 ## As built
