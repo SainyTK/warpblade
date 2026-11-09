@@ -286,6 +286,20 @@ body {
     inset 0 1px 0 var(--chain-brass-glint),
     0 0 6px var(--chain-brass);
 }
+/* Mirel's Sand: a warm sand fill with a teal edge, a teal glow while her field holds it from refilling */
+.bar.sd span {
+  color: var(--hour-glint);
+}
+.bar.sd .fill {
+  background: var(--sand);
+  box-shadow: inset -1px 0 0 var(--hour-teal);
+}
+.bar.sd.held .fill {
+  background: var(--sand-dim);
+  box-shadow:
+    inset -1px 0 0 var(--hour-glint),
+    0 0 6px var(--hour-teal);
+}
 /* Sable's quiver: one notch per bolt; while she reloads the track shows the crank's progress and the bright window */
 .bar.qv span {
   color: var(--jade);

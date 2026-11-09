@@ -1,10 +1,13 @@
 import type { Enemy } from "../../types/enemy";
 import { coop } from "../coopHooks";
 import { game } from "../state";
+import { fieldPace } from "../timeFields";
 import { updateAirborne } from "./airborne";
+import { enemyCenter } from "./enemy";
 import { kindOf } from "./kinds";
 import { separateFoes } from "./separate";
 import { updateStatus } from "./status";
+import { tickStop } from "./timeStop";
 
 /** a tripped or landed foe lies still and slides to a stop */
 function updateStunned(e: Enemy, dt: number): boolean {
@@ -20,10 +23,14 @@ export function updateEnemies(dt: number): void {
   const room = coop();
   for (const e of game.enemies) {
     room?.nearest(e.x, e.y);
-    const ts = updateStatus(e, dt);
+    const status = updateStatus(e, dt);
     if (e.hp <= 0) continue;
     // a burn tick acts for the hero who lit the foe; the foe itself goes for the nearest
     room?.nearest(e.x, e.y);
+    // a foe stopped in time neither moves, acts nor falls until it restarts
+    if (tickStop(e, dt) || e.hp <= 0) continue;
+    const [cx, cy] = enemyCenter(e);
+    const ts = status * fieldPace(cx, cy, e.rank);
     const sdt = dt * ts;
     if (updateAirborne(e, sdt) || updateStunned(e, sdt)) continue;
     e.st += sdt;

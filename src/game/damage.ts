@@ -61,12 +61,21 @@ export function isBehind(e: Enemy, fromX: number): boolean {
   return side !== 0 && side !== e.face;
 }
 
-/** guarding kinds (husks from wave 3, brutes) hold up a guard while they walk, facing the blow */
+/** guarding kinds (husks from wave 3, brutes) hold up a guard while they walk, facing the blow; a foe stopped in time
+ *  cannot raise it */
 function guards(e: Enemy, o: HitOptions): boolean {
   if (!o.melee || o.curls || o.fromX === undefined) return false;
   const kind = kindOf(e.type);
   if (kind.guardFrom === undefined || game.wave < kind.guardFrom) return false;
-  return e.state === kind.rest && !e.air && e.stun <= 0 && e.frozen <= 0 && e.shock <= 0 && !isBehind(e, o.fromX);
+  return (
+    e.state === kind.rest &&
+    !e.air &&
+    e.stun <= 0 &&
+    e.frozen <= 0 &&
+    e.shock <= 0 &&
+    e.stopped <= 0 &&
+    !isBehind(e, o.fromX)
+  );
 }
 
 /** a blocked blow: a little chip damage, sparks, and on the second in a row a fast counter */
@@ -149,6 +158,8 @@ export function dealDamage(e: Enemy, base: number, o: HitOptions = {}): HitResul
   const value = Math.max(1, Math.round(dmg));
   e.hp -= value;
   recordDamage(source, value);
+  // a foe stopped in time stores what it takes, to land again in part when it restarts
+  if (e.stopped > 0) e.stopStore += value;
   const fromHero = isHeroSource(source);
   if (!o.dot && fromHero) addFlow(FLOW.perHit);
   e.flash = 0.1;

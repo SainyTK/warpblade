@@ -1,5 +1,6 @@
 import { STAMINA } from "../../constants/combat";
 import { RUSH } from "../../constants/hulda/rush";
+import { STILLFIELD } from "../../constants/mirel/field";
 import { BACKLINE } from "../../constants/orrin/backline";
 import { HOP, SLIDE } from "../../constants/sable/moves";
 import { TOUCH_TEXT } from "../../constants/touch";
@@ -8,6 +9,14 @@ import { VAULT } from "../../constants/ysra/stance";
 import { abilityMp, abilityRecharge, selectedAbility } from "../../game/hero/hulda/abilities";
 import { hulda } from "../../game/hero/hulda/memory";
 import { rushCost } from "../../game/hero/hulda/rush";
+import {
+  selectedAbility as mirelAbility,
+  abilityMp as mirelMp,
+  abilityRecharge as mirelRecharge,
+} from "../../game/hero/mirel/abilities";
+import { mirel } from "../../game/hero/mirel/memory";
+import { rewindCost } from "../../game/hero/mirel/rewind";
+import { hasSand } from "../../game/hero/mirel/sand";
 import {
   selectedAbility as orrinAbility,
   abilityMp as orrinMp,
@@ -119,6 +128,29 @@ function orrinLook(spec: TouchButtonSpec, look: ButtonLook): void {
   }
 }
 
+/** Mirel's Rewind and Still need Sand and wait out their own recharge; I shows the selected ability's MP and recharge */
+function mirelLook(spec: TouchButtonSpec, look: ButtonLook): void {
+  switch (spec.action) {
+    case "dash": {
+      const cost = rewindCost();
+      look.ready = mirel.rewindCd <= 0 && hasSand(cost);
+      look.cooldown = look.ready ? 0 : Math.max(0, 1 - mirel.sand / Math.max(1, cost));
+      break;
+    }
+    case "warp":
+      look.ready = !!mirel.field || (mirel.fieldCd <= 0 && hasSand(STILLFIELD.open));
+      look.cooldown = look.ready ? 0 : Math.max(mirel.fieldCd / STILLFIELD.cooldown, 1 - mirel.sand / STILLFIELD.open);
+      break;
+    case "cast": {
+      const id = mirelAbility();
+      look.cooldown = mirelRecharge(id);
+      look.ready = look.cooldown <= 0 && hero.mp >= mirelMp(id);
+      break;
+    }
+    default:
+  }
+}
+
 /** Ysra's guard needs stamina, her vault waits out its recharge, and the rite fills as Heat comes to cover it */
 function ysraLook(spec: TouchButtonSpec, look: ButtonLook): void {
   switch (spec.action) {
@@ -152,6 +184,7 @@ export function buttonLook(spec: TouchButtonSpec, pressed: boolean): ButtonLook 
   } else if (character.kit === "sable") sableLook(spec, look);
   else if (character.kit === "hulda") huldaLook(spec, look);
   else if (character.kit === "orrin") orrinLook(spec, look);
+  else if (character.kit === "mirel") mirelLook(spec, look);
   else if (character.kit === "ysra") ysraLook(spec, look);
   else kaelLook(spec, look);
   return look;

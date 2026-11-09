@@ -37,7 +37,8 @@ export function moveHero(dt: number, dir: number): void {
     }
     return;
   }
-  const speed = (h.running ? M.runSpeed : M.walkSpeed) * progress.stats.move;
+  const shared = (h.running ? M.runSpeed : M.walkSpeed) * progress.stats.move;
+  const speed = kit().walkSpeed?.(shared) ?? shared;
   const m = st === "move" && h.move ? MOVES[h.move] : null;
   const moveDriven = (!!m && (!!m.step || !!strideAt(m, h.st))) || kit().drivesMotion();
   if (isFree()) {

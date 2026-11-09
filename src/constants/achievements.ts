@@ -63,6 +63,7 @@ export const ACHIEVEMENTS: readonly Achievement[] = [
   heroTrial("sable", "Sable"),
   heroTrial("hulda", "Hulda"),
   heroTrial("orrin", "Orrin"),
+  heroTrial("mirel", "Mirel"),
   {
     id: "kills-100",
     name: "Culling",
@@ -143,6 +144,14 @@ export const ACHIEVEMENTS: readonly Achievement[] = [
     text: "As Orrin, defeat 3 foes with swing kicks in one swing.",
     group: "Skill",
     goal: { kind: "best", stat: "swingKills", need: 3 },
+    reward: 60,
+  },
+  {
+    id: "hold-the-hour",
+    name: "Hold the Hour",
+    text: "As Mirel, defeat 5 foes inside one Stillfield.",
+    group: "Skill",
+    goal: { kind: "best", stat: "fieldKills", need: 5 },
     reward: 60,
   },
   {

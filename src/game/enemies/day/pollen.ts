@@ -7,6 +7,7 @@ import { eachStanding } from "../../coopHooks";
 import { hurtHero } from "../../hurtHero";
 import { shotWarded } from "../../shotWards";
 import { particles, rng } from "../../state";
+import { fieldPace } from "../../timeFields";
 import { boxHit, heroBox } from "../../world";
 import { DAY_SPARKS, DAY_COLORS as DC } from "./colors";
 
@@ -18,7 +19,9 @@ export function createPollen(x: number, y: number, vx: number, damage: number): 
   const o = { x, y, t: 0, landed: -1, seed: rng.range(0, 9) };
   const P = DC.pollen;
   return {
-    update(dt) {
+    update(step) {
+      // a Stillfield slows the shot where it flies
+      const dt = step * fieldPace(o.x, o.y);
       o.t += dt;
       if (o.landed >= 0) {
         o.landed += dt;

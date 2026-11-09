@@ -1,6 +1,6 @@
 import { KAEL } from "../constants/characters/kael";
 import { AIR_STRING } from "../constants/combo";
-import { HERO_START_X, STAND } from "../constants/hero";
+import { HERO_START_X } from "../constants/hero";
 import { GROUND, SEED } from "../constants/stage";
 import { ULT_COOLDOWN } from "../constants/ultimate";
 import { Lights } from "../engine/lights";
@@ -11,6 +11,7 @@ import type { GameState } from "../types/game";
 import type { Hero } from "../types/hero";
 import type { Progress } from "../types/progress";
 import { freshBuild } from "../utils/build";
+import { restPose } from "../utils/restPose";
 import { Rng } from "../utils/rng";
 import { computeStats } from "../utils/stats";
 import { emptyStream } from "../utils/waves";
@@ -24,12 +25,29 @@ export const particles = new Particles(rng);
 export const lights = new Lights();
 /** the hero being played; chosen on the hero screen before a run, and fixed for the run */
 export let character: CharacterDef = KAEL;
+/** the hero drawn on the stage: the one played, or in the menus the one looked at on the hero screen */
+export let shown: CharacterDef = KAEL;
 applySkin(KAEL.skin);
 
 /** play as this hero from the next run on: their look now, their stats and skills when the run starts */
 export function setCharacter(c: CharacterDef): void {
   character = c;
+  shown = c;
   applySkin(c.skin);
+}
+
+/** choose this hero from a menu: as `setCharacter`, and standing at rest, since the menus show the hero before any
+ *  frame of play has posed them */
+export function chooseCharacter(c: CharacterDef): void {
+  setCharacter(c);
+  hero.pose = restPose(c.kit);
+}
+
+/** show this hero behind a menu without choosing it: drawn with its own look and kit, standing in its rest pose */
+export function previewCharacter(c: CharacterDef): void {
+  shown = c;
+  applySkin(c.skin);
+  hero.pose = restPose(c.kit);
 }
 
 export const game: GameState = {
@@ -102,7 +120,7 @@ export function freshHero(stats: Progress["stats"]): Hero {
     hitDone: false,
     cutShort: true,
     liftTop: GROUND,
-    pose: STAND,
+    pose: restPose(character.kit),
     hand: [6, -15],
     ghostTimer: 0,
     sword: null,

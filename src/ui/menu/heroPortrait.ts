@@ -1,34 +1,14 @@
-import { HULDA_IDLE } from "../../constants/clips/hulda/stance";
-import { ORRIN_IDLE } from "../../constants/clips/orrin/stance";
-import { SABLE_IDLE } from "../../constants/clips/sable/moves";
-import { YSRA_STATE_CLIPS } from "../../constants/clips/ysra";
-import { STAND } from "../../constants/hero";
 import { detailCanvas } from "../../engine/sprite";
 import { drawHero } from "../../game/hero/drawHero";
 import { applySkin } from "../../game/hero/skin";
-import { character } from "../../game/state";
+import { shown } from "../../game/state";
 import type { CharacterDef } from "../../types/character";
-import type { KitId } from "../../types/kit";
-import type { ActionClip, Pose } from "../../types/pose";
 import { sashAnchor } from "../../utils/poseFrame";
-import { sampleKeys } from "../../utils/sampleKeys";
+import { restPose } from "../../utils/restPose";
 import { spriteUrl } from "../spriteUrl";
 
 const canvas = detailCanvas(64, 56, 30, 50);
-/** each hero's own idle clip; a hero left out stands in the shared pose */
-const IDLES: Partial<Record<KitId, ActionClip>> = {
-  ysra: YSRA_STATE_CLIPS.idle,
-  sable: SABLE_IDLE,
-  hulda: HULDA_IDLE,
-  orrin: ORRIN_IDLE,
-};
 const cache = new Map<string, string>();
-
-/** the hero at rest: the first frame of their own idle clip, or the shared standing pose */
-function restPose(c: CharacterDef): Pose {
-  const idle = IDLES[c.kit];
-  return idle ? sampleKeys(idle.keys, 0) : STAND;
-}
 
 /** a hero standing on the rig in their own colours, as a PNG data URL, drawn once */
 export function heroPortrait(c: CharacterDef): string {
@@ -36,14 +16,15 @@ export function heroPortrait(c: CharacterDef): string {
   if (hit) return hit;
   applySkin(c.skin);
   // scarf and hair at rest, hanging back from the neck (a sash from the belt) and the head
-  const pose = restPose(c);
+  const pose = restPose(c.kit);
   const [kx, ky] = sashAnchor(pose);
   const scarf = c.skin.sash
     ? Array.from({ length: 8 }, (_, i): [number, number] => [kx - i * 1.7, ky + i * 1.6])
     : Array.from({ length: 8 }, (_, i): [number, number] => [-1 - i * 1.9, -23 + i * 1.1]);
   const tail = Array.from({ length: 4 }, (_, i): [number, number] => [-4 - i * 1.6, -27 + i * 1.8]);
   drawHero(canvas, pose, { scarf, tail, flare: 0, sword: true });
-  applySkin(character.skin);
+  // back to the hero on the stage, which on the hero screen is the one in focus
+  applySkin(shown.skin);
   const url = spriteUrl(canvas);
   cache.set(c.id, url);
   return url;

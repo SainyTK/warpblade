@@ -1,7 +1,7 @@
 import "./coopScreen.css";
 import { CHARACTERS } from "../../constants/characters";
 import { MAX_PLAYERS, SEAT_COLORS } from "../../constants/coop";
-import { character, setCharacter } from "../../game/state";
+import { character, chooseCharacter } from "../../game/state";
 import { copyText } from "../../services/clipboard";
 import { saveHeroChoice } from "../../services/heroChoice";
 import { roomView } from "../../store/coop";
@@ -101,7 +101,7 @@ function heroRow(): HTMLButtonElement {
     const open = CHARACTERS.filter((c) => heroUnlocked(c.id));
     const i = open.indexOf(character);
     const next = open[(i + by + open.length) % open.length];
-    setCharacter(next);
+    chooseCharacter(next);
     saveHeroChoice(next.id);
     roomHeroChanged(next.id);
     showScreen("coop");

@@ -11,14 +11,14 @@ A hero that is not in the table is free.
 
 Each new hero gets the next price: the n-th hero added to the table costs 300 x 1.35^(n - 1), rounded to the nearest 50.
 
-| Hero | 1st (Sable) | 2nd (Hulda) | 3rd (Orrin) | 4th | 5th | 6th | 7th | 8th | 9th |
+| Hero | 1st (Sable) | 2nd (Hulda) | 3rd (Orrin) | 4th (Mirel) | 5th | 6th | 7th | 8th | 9th |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | Price | 300 | 400 | 550 | 750 | 1000 | 1350 | 1800 | 2450 | 3300 |
 
 The basis is the coin table in `docs/meta-progress.md`.
 A run that reaches wave 8 to 10 banks about 60 to 80 coins and a full clear about 440.
 Sable takes a few good runs, or one run past wave 20 with the achievement coins earned on the way.
-Hulda, at 400, takes a few more, and Orrin, at 550, a few more again.
+Hulda, at 400, takes a few more, Orrin, at 550, a few more again, and Mirel, at 750, about two runs past wave 10 beyond that.
 The ninth hero costs about seven full clears.
 
 The hero screen shows a roster of every hero over one panel for the hero in focus; Left and Right, or a tap on a tile, move through them.
@@ -85,6 +85,7 @@ A save from before them loads with its coins and shop levels, no heroes bought a
 | Heroes | Sable's Trial | Clear wave 10 with Sable | 40 | |
 | Heroes | Hulda's Trial | Clear wave 10 with Hulda | 40 | |
 | Heroes | Orrin's Trial | Clear wave 10 with Orrin | 40 | |
+| Heroes | Mirel's Trial | Clear wave 10 with Mirel | 40 | |
 | Foes | Culling | Slay 100 foes | 20 | |
 | Foes | Thinning the Night | Slay 3,000 foes | 80 | |
 | Foes | Endless Blade | Slay 15,000 foes | 200 | Thinning the Night |
@@ -95,6 +96,7 @@ A save from before them loads with its coins and shop levels, no heroes bought a
 | Skill | Final Art | Take an ultimate skill | 30 | |
 | Skill | Evolved | Evolve a skill | 50 | |
 | Skill | Full Swing | As Orrin, defeat 3 foes with swing kicks in one swing | 60 | |
+| Skill | Hold the Hour | As Mirel, defeat 5 foes inside one Stillfield | 60 | |
 | Coins | Coin Purse | Bank 500 coins from runs | 25 | |
 | Coins | Treasury | Bank 3,000 coins from runs | 100 | Coin Purse |
 | Coins | Outfitted | Buy 10 levels or skills in the Shop | 30 | |
@@ -104,7 +106,8 @@ A hero's trial counts only once the hero is in `CHARACTERS`.
 Since waves stream their quota of foes (`docs/growth-design.md`), a full clear slays about 620 foes where it slew about 190, so the two larger kill goals went up from 1,000 and 5,000 to 3,000 and 15,000 to stay about as far off in runs.
 They keep their ids, `kills-1000` and `kills-5000`, so saves that earned them keep them.
 Full Swing counts the foes Orrin's swing kicks defeat between one latch and letting go, and keeps the best as the tracked stat `swingKills`.
-The page lists 24 achievements, and all of them together pay 1,570 coins.
+Hold the Hour counts the foes that fall inside one of Mirel's Stillfields between opening it and its close, and keeps the best as the tracked stat `fieldKills`.
+The page lists 26 achievements, and all of them together pay 1,670 coins.
 
 ## Adding a hero
 

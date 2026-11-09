@@ -4,7 +4,7 @@ import "./game/hero/kits";
 import { CHARACTERS } from "./constants/characters";
 import { MAX_FRAME, STEP } from "./constants/stage";
 import { frameDriver } from "./game/frameDriver";
-import { game, setCharacter } from "./game/state";
+import { chooseCharacter, game } from "./game/state";
 import { stepGame } from "./game/step";
 import { startAnalytics } from "./services/analytics";
 import { loadBest } from "./services/bestScore";
@@ -28,7 +28,7 @@ import { bindDiscoveryToasts } from "./ui/unlocks/discoveryToast";
 
 startAnalytics();
 game.best = loadBest();
-setCharacter(CHARACTERS.find((c) => c.id === loadHeroChoice() && heroUnlocked(c.id)) ?? CHARACTERS[0]);
+chooseCharacter(CHARACTERS.find((c) => c.id === loadHeroChoice() && heroUnlocked(c.id)) ?? CHARACTERS[0]);
 preventZoom();
 fitStage();
 bindKeyboard();

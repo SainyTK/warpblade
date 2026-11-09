@@ -7,6 +7,7 @@ import { createFloorRing } from "../../effects/floorRing";
 import { hurtHero } from "../../hurtHero";
 import { shotWarded } from "../../shotWards";
 import { game, particles, rng } from "../../state";
+import { fieldPace } from "../../timeFields";
 import { boxHit, heroBox } from "../../world";
 import { VOID, VOID_SPARKS } from "./colors";
 
@@ -23,7 +24,9 @@ export function createVoidOrb(x: number, y: number, vx: number, vy: number, dama
       });
   };
   return {
-    update(dt) {
+    update(step) {
+      // a Stillfield slows the shot where it flies
+      const dt = step * fieldPace(o.x, o.y);
       o.t += dt;
       o.vy += ORB_GRAVITY * dt;
       o.x += vx * dt;
