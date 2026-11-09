@@ -1,5 +1,5 @@
-import type { HeroKit } from "../../types/kit";
-import { character } from "../state";
+import type { HeroKit, KitId } from "../../types/kit";
+import { character, shown } from "../state";
 import { HULDA_KIT } from "./hulda/kit";
 import { KAEL_KIT } from "./kael/kit";
 import { MIREL_KIT } from "./mirel/kit";
@@ -9,7 +9,16 @@ import { YSRA_KIT } from "./ysra/kit";
 
 /** the kit of the hero being played; looked up on each call so module load order never matters */
 export function kit(): HeroKit {
-  switch (character.kit) {
+  return kitOf(character.kit);
+}
+
+/** the kit of the hero drawn on the stage, which in the menus can be one only looked at on the hero screen */
+export function shownKit(): HeroKit {
+  return kitOf(shown.kit);
+}
+
+function kitOf(id: KitId): HeroKit {
+  switch (id) {
     case "ysra":
       return YSRA_KIT;
     case "sable":

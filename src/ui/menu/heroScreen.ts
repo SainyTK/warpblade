@@ -1,7 +1,6 @@
 import "./heroScreen.css";
 import { CHARACTERS } from "../../constants/characters";
-import { applySkin } from "../../game/hero/skin";
-import { character, chooseCharacter } from "../../game/state";
+import { character, chooseCharacter, previewCharacter } from "../../game/state";
 import { sfx } from "../../services/audio";
 import { saveHeroChoice } from "../../services/heroChoice";
 import { bank, buyHero, heroUnlocked } from "../../store/meta";
@@ -66,8 +65,8 @@ export function heroScreen(): MenuView {
     pages[i].root.dataset.shown = "";
     panel.dataset.hero = c.id;
     content.style.setProperty("--accent", c.accent);
-    // the hero behind the menu changes to the one in focus
-    applySkin(c.skin);
+    // the hero behind the menu changes to the one in focus, in that hero's own rest pose
+    previewCharacter(c);
   };
   const tiles = CHARACTERS.map((_, i) =>
     heroTile(CHARACTERS[i], () => {

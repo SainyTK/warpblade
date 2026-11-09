@@ -25,11 +25,14 @@ export const particles = new Particles(rng);
 export const lights = new Lights();
 /** the hero being played; chosen on the hero screen before a run, and fixed for the run */
 export let character: CharacterDef = KAEL;
+/** the hero drawn on the stage: the one played, or in the menus the one looked at on the hero screen */
+export let shown: CharacterDef = KAEL;
 applySkin(KAEL.skin);
 
 /** play as this hero from the next run on: their look now, their stats and skills when the run starts */
 export function setCharacter(c: CharacterDef): void {
   character = c;
+  shown = c;
   applySkin(c.skin);
 }
 
@@ -37,6 +40,13 @@ export function setCharacter(c: CharacterDef): void {
  *  frame of play has posed them */
 export function chooseCharacter(c: CharacterDef): void {
   setCharacter(c);
+  hero.pose = restPose(c.kit);
+}
+
+/** show this hero behind a menu without choosing it: drawn with its own look and kit, standing in its rest pose */
+export function previewCharacter(c: CharacterDef): void {
+  shown = c;
+  applySkin(c.skin);
   hero.pose = restPose(c.kit);
 }
 

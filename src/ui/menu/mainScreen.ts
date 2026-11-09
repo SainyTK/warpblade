@@ -1,8 +1,7 @@
 import { REPO_URL } from "../../constants/feedback";
 import { GAME_VERSION, SITE_PAGES } from "../../constants/sitePages";
 import { STAGE_WAVES } from "../../constants/waves";
-import { applySkin } from "../../game/hero/skin";
-import { character, game, progress } from "../../game/state";
+import { character, game, previewCharacter, progress } from "../../game/state";
 import { inRoom, roomView } from "../../store/coop";
 import type { MenuContext, MenuScreen, MenuView } from "../../types/menu";
 import { leaveRoom } from "./coopActions";
@@ -50,7 +49,7 @@ export function mainScreen(context: MenuContext): MenuView {
   list.setAttribute("aria-label", context === "title" ? "Start menu" : "Pause menu");
   if (context === "title") {
     // a hero only looked at on the hero screen goes back to the one chosen
-    applySkin(character.skin);
+    previewCharacter(character);
     // while in a room, its lobby takes the place of a solo start
     if (inRoom()) list.append(screenItem(`Room ${roomView().code}`, "coop"));
     else list.append(screenItem("Start", "hero"), screenItem("Co-op", "coop"));
