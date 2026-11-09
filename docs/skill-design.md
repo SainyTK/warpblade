@@ -30,7 +30,7 @@ Numbers here are starting values; balance changes them in the constants files an
 
 ## Combo
 
-- `CharacterDef.comboHits` fixes the length of the ground string for the whole run: Kael 4, Ysra 3, Sable, Hulda and Orrin chosen by their designers (2 to 4).
+- `CharacterDef.comboHits` fixes the length of the ground string for the whole run: Kael 4, Ysra 3, Sable, Hulda, Orrin and Mirel chosen by their designers (2 to 4).
 - Attack skills change the string's damage, speed and on-hit effects, never its length.
 - The air string limit is fixed per hero or raised by one movement skill; the hero designer chooses.
 
@@ -205,7 +205,7 @@ Targeting helpers: `nearestFoe`, `foesOnScreen`, `distance2` and `touches` in `s
 | Event | Payload | Emitted by |
 | --- | --- | --- |
 | `blow` | `foe`, `damage`, `source` (`attacks`, `abilities`, `ultimate`), `move` (the combo move or null), `finisher`, `melee`, `back`, `crit`, `airborne`, `keen` | `dealDamage`, for every hit of the hero's own that is not damage over time |
-| `cast` | `ability` (the kit's id: Kael's element, Ysra's rite, `snare`, `bellow`, `whirlwall`, `anchorPin`) | Kael's `startCast`, Ysra's rite release, Sable's snare, Hulda's bellow, Orrin's abilities |
+| `cast` | `ability` (the kit's id: Kael's element, Ysra's rite, `snare`, `bellow`, `whirlwall`, `anchorPin`, `stoppedClock`, `secondHand`) | Kael's `startCast`, Ysra's rite release, Sable's snare, Hulda's bellow, Orrin's abilities |
 | `dash` | `dir`, `foes` passed through | Kael's dash when it ends |
 | `warp` | `x`, `y`, `foe` it was aimed at or null | Kael's warp and blink arrival |
 | `jump` | `air` | Kael's jump and double jump |
@@ -213,6 +213,7 @@ Targeting helpers: `nearestFoe`, `foesOnScreen`, `distance2` and `touches` in `s
 | `parry` | `fromX` | Ysra's brace parry |
 | `grab` | `foe` | Hulda's grab (declared in `src/types/hulda.ts`) |
 | `latch`, `release`, `tip`, `swingKick` | `kind` and `foe`; `speed` and `fling`; `foe` and `blow`; `foe` and `speed` | Orrin's hook, letting go of a swing, a chain hit at the tip and a swing kick (declared in `src/types/orrin.ts`) |
+| `echo`, `field`, `rewind`, `toll`, `restart` | `foe` and `blow`; `open`, `foes`, `x`, `y` and `radius`; `healed`, `from` and `to`; `foes`; `foe` | Mirel's echo striking a foe, her Stillfield opening or closing, a Rewind ending and a Toll landing, and the shared stop status when a foe she stopped restarts (declared in `src/types/mirel.ts`) |
 | `kill` | `foe`, `source` | `killEnemy`, when the killing hit has a source |
 | `hurt` | `damage`, `fromX` | `hurtHero`, when HP is lost |
 | `ultimate` | `level` | the shared ultimate release |
@@ -248,6 +249,8 @@ A skill effect carried by the hero's own press (a bigger J blow, a burst on the 
 - `stacksOf(foe, skillId)` and `consumeStacks(foe, skillId)` (returns the count and clears them) for detonations and consuming strikes.
 - `markFoe(foe, source, seconds, bonus)`: the foe takes `bonus` more damage from every source while marked (0.2 is +20%). Marks of different sources add, together with the kit's own damage-taken bonuses, capped at +100% (`DAMAGE.takenCap`); a source's new mark refreshes its own.
 - The older statuses stay: `ignite` (`src/game/enemies/burn.ts`), `chill`, `frozen`, `shock`, `stun`.
+- `stopFoe(foe, seconds, share)` (`src/game/enemies/timeStop.ts`): the foe stops dead in time and stores the damage it takes; when it restarts, `share` of what it stored lands again as one hit. `takeStored(foe)` takes the stored damage out for a skill that tolls it itself.
+- Time fields (`src/game/timeFields.ts`): `raiseField` holds an area open where foes act at their rank's pace and foe shots fly at their own; `fieldPace(x, y, rank?)` reads it.
 
 ### Per-seat memory rules
 

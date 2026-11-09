@@ -329,7 +329,7 @@ Changes made while building, each for the same goal as the design:
   Inner hits are still blocked, so spacing keeps its point.
 - A hook thrown in the air hangs him while it flies (gravity 0.3, falling at most 60 px/s), so a second air bite can catch before he lands.
 - A hook that reaches the stage's edge less than 24 px from his hand falls short: no swing, and its stamina and air hook come back.
-- Anchor Pin targets only foes standing on a floor, since it nails them there, and its stake goes in 4 px in front of the foe's body with the chain drawn in front of the foes, so the pin reads at game scale.
+- Anchor Pin targets only foes standing on a floor, and never a kind that flies even when one hovers level with a ledge (fixed in 0.6.0), since it nails them there, and its stake goes in 4 px in front of the foe's body with the chain drawn in front of the foes, so the pin reads at game scale.
 - Anchor Pin holds every foe where it is pinned: the shared foe step keeps a pinned foe's place whatever its own step asks for, and a pinned thornback cannot start or keep a charge.
 - The sash is drawn as a short strip of cloth from the belt that tapers, folds and splits at the end, and it takes half the scarf's breeze.
 
