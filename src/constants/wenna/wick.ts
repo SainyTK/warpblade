@@ -31,6 +31,9 @@ export const WICK = {
   guardFar: 24,
   /** with two or more out, the Wick nearest her stays her guard: it only goes after foes this near her */
   guardHold: 40,
+  /** her guard leaps straight up from its post to bite a flier hovering over it, its body's bottom up to this far above
+   *  the guard's feet */
+  guardLeap: 56,
   /** walking speed before her move stat */
   walk: 55,
   /** it hops up to a floor this far above toward its target */

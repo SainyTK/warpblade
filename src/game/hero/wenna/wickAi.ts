@@ -226,6 +226,34 @@ function tryBite(w: Wick): void {
   w.bite = biteEvery(w, prey);
 }
 
+/** a flier hovering over the guard's post, too high for a bite from the floor but within its leap */
+function flierOverhead(w: Wick): Enemy | null {
+  const reach = biteReach();
+  for (const e of game.enemies) {
+    if (e.hp <= 0 || !kindOf(e.type).flies) continue;
+    const box = enemyBox(e);
+    const above = w.y - box[3];
+    if (above < WICK.biteRise || above > WICK.guardLeap) continue;
+    if (box[2] < w.x - reach || box[0] > w.x + reach) continue;
+    return e;
+  }
+  return null;
+}
+
+/** the guard leaps straight up off its post at a flier over it; it bites at the top and lands back where it stood */
+function guardLeap(w: Wick): void {
+  if (!w.ground || w.bite > 0 || w.leap > 0) return;
+  const e = flierOverhead(w);
+  if (!e) return;
+  const box = enemyBox(e);
+  const rise = w.y - box[3] - WICK.height + 2;
+  w.face = Math.sign(enemyCenter(e)[0] - w.x) || w.face;
+  w.target = e;
+  w.vx = 0;
+  w.vy = -Math.sqrt(2 * WICK.gravity * Math.max(4, rise));
+  w.ground = false;
+}
+
 /** where a Wick wants to be now: in Beckon's ring, beside its target, or on guard in front of her. Her guard Wick
  *  only leaves its post to hold a ground foe near her; it bites fliers from where it stands. */
 function goal(w: Wick, index: number, guard: boolean): [number, number] {
@@ -272,6 +300,7 @@ function stepWick(w: Wick, index: number, guard: boolean, dt: number): void {
     w.target = chooseTarget(w, guard);
   const [gx, gy] = goal(w, index, guard);
   if (w.leap <= 0) steer(w, gx, gy, dt);
+  if (guard) guardLeap(w);
   move(w, dt);
   tryBite(w);
 }
