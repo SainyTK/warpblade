@@ -1,7 +1,7 @@
 import "./heroScreen.css";
 import { CHARACTERS } from "../../constants/characters";
 import { applySkin } from "../../game/hero/skin";
-import { character, setCharacter } from "../../game/state";
+import { character, chooseCharacter } from "../../game/state";
 import { sfx } from "../../services/audio";
 import { saveHeroChoice } from "../../services/heroChoice";
 import { bank, buyHero, heroUnlocked } from "../../store/meta";
@@ -21,7 +21,7 @@ import { focusEntry, onAdjust } from "./menuNav";
  */
 function act(panel: HTMLButtonElement, c: CharacterDef, page: HeroPage): void {
   if (!page.lock) {
-    setCharacter(c);
+    chooseCharacter(c);
     saveHeroChoice(c.id);
     startGame();
     return;
@@ -37,7 +37,7 @@ function act(panel: HTMLButtonElement, c: CharacterDef, page: HeroPage): void {
     return;
   }
   // the hero just bought becomes the choice, so the screen redraws on them, ready to start
-  setCharacter(c);
+  chooseCharacter(c);
   saveHeroChoice(c.id);
   if (buyHero(c.id)) sfx.learn();
 }

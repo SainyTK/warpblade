@@ -1,6 +1,6 @@
 import { KAEL } from "../constants/characters/kael";
 import { AIR_STRING } from "../constants/combo";
-import { HERO_START_X, STAND } from "../constants/hero";
+import { HERO_START_X } from "../constants/hero";
 import { GROUND, SEED } from "../constants/stage";
 import { ULT_COOLDOWN } from "../constants/ultimate";
 import { Lights } from "../engine/lights";
@@ -11,6 +11,7 @@ import type { GameState } from "../types/game";
 import type { Hero } from "../types/hero";
 import type { Progress } from "../types/progress";
 import { freshBuild } from "../utils/build";
+import { restPose } from "../utils/restPose";
 import { Rng } from "../utils/rng";
 import { computeStats } from "../utils/stats";
 import { emptyStream } from "../utils/waves";
@@ -30,6 +31,13 @@ applySkin(KAEL.skin);
 export function setCharacter(c: CharacterDef): void {
   character = c;
   applySkin(c.skin);
+}
+
+/** choose this hero from a menu: as `setCharacter`, and standing at rest, since the menus show the hero before any
+ *  frame of play has posed them */
+export function chooseCharacter(c: CharacterDef): void {
+  setCharacter(c);
+  hero.pose = restPose(c.kit);
 }
 
 export const game: GameState = {
@@ -102,7 +110,7 @@ export function freshHero(stats: Progress["stats"]): Hero {
     hitDone: false,
     cutShort: true,
     liftTop: GROUND,
-    pose: STAND,
+    pose: restPose(character.kit),
     hand: [6, -15],
     ghostTimer: 0,
     sword: null,

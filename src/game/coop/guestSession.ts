@@ -30,7 +30,7 @@ import { answerPick } from "../progress";
 import { resetRun } from "../run";
 import { reportRun } from "../runEnd";
 import { seatMemories } from "../seatMemory";
-import { character, game, hero, progress, setCharacter } from "../state";
+import { character, chooseCharacter, game, hero, progress } from "../state";
 import { writeAnswer } from "./readPick";
 
 const HOST_LEFT = "The host left, so the room has closed.";
@@ -245,7 +245,7 @@ export class GuestSession {
     game.enemies = [];
     hero.state = "idle";
     hero.pose = STAND;
-    setCharacter(CHARACTERS.find((c) => c.id === loadHeroChoice() && heroUnlocked(c.id)) ?? character);
+    chooseCharacter(CHARACTERS.find((c) => c.id === loadHeroChoice() && heroUnlocked(c.id)) ?? character);
     resetRun("");
     hero.inv = 0;
     game.mode = "play";
