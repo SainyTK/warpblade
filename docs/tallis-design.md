@@ -251,6 +251,7 @@ Mash bot on this build from wave 1, one run each (`agent-studio`, `npm run playt
 | Tallis, first build | | | 1 | 0 |
 | Tallis, with the springing Rising Cut | | | 4 | 11 |
 | Tallis, after QA (HP 90, Flick and Cross 15% stronger) | | | 4 | 12 |
+| Tallis, after QA round 2 (every knife blow staggers) | | | 4 | 10 |
 
 The first build fell on wave 1 with no kills.
 Wave 1 is mostly Glimmer Moths hovering 40 to 50 px above the floor, and none of his ground blows reached them, so the mash bot stood under them pressing J at the air.
@@ -264,7 +265,8 @@ On it Tallis fell on wave 2 with 5 kills, against Kael on wave 3 with 9 and Huld
 HP 86 alone changed nothing, so both of the plan's fallback steps went in: HP 80 to 90, then Flick and Cross 15% stronger.
 The plain script still ended on wave 2 with 5 kills.
 The cause was a bug: four of his six string blows (Flick, Heel Kick, Twist, Gut Slash) carried no stagger, while every other hero's blows stagger by default, so a walking thornback kept hurting him by touch at knife range (the skilled bot lost 54 HP on wave 1, Kael none).
-With every knife blow using the shared `COMBO.stagger` unless it sets its own, QA's player script reaches wave 3 with 8 kills, level with Kael and Hulda.
+With every knife blow using the shared `COMBO.stagger` unless it sets its own, QA's player script reaches wave 3 with 8 kills; on the same build and script Kael reaches wave 3 with 8 and Hulda wave 1 with 2.
+The skilled bot still ends on wave 2 with 4 kills, losing 54 HP on wave 1: it taps L against a foe's blow, which for Tallis is a 0.15 s Sink that rises again inside a thornback's charge. A Tallis policy that holds L through the blow, as the owner note below describes, is the fix for that bot.
 
 ## As built
 
