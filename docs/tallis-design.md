@@ -13,7 +13,7 @@ Code layout follows Wenna and Mirel: kit `src/game/hero/tallis/`, character `src
 - Kael (warp swordsman) dashes untouchable through foes in 0.24 s, double jumps and teleports to a thrown sword. His back attacks are one skill option (Phase Cut). Tallis has no dash, no double jump and no teleport in his base kit. He travels slowly and steerably under foes as a shadow pool, and his whole kit is built on where foes are facing.
 - Ysra (planted glaive, brace and parry, vault, Heat) meets blows from the front with a long weapon and vaults over foes. Tallis has the shortest reach in the roster (about 22 px), cannot block or parry, and gets behind foes by going under them.
 - Sable (ranged hunter, ammo and reload, hop and slide) fights from 250 px and slides under blows for a moment. Tallis fights at knife range, and his only escape is the pool, which also hides him.
-- Hulda (unarmed grappler, armour, grabs) walks into blows behind armour. Tallis has the lowest HP in the roster and no armour; his defence is staying out of sight.
+- Hulda (unarmed grappler, armour, grabs) walks into blows behind armour. Tallis has 90 HP against her 120 and no armour; his defence is staying out of sight.
 - Orrin (chain dancer, pendulum swing, Momentum) wants constant speed through the air. Tallis wants to be still and unseen, then strike once from behind.
 - Mirel (time mage, Stillfield, echoes, Sand refilled by waiting) controls how fast foes act. Tallis controls what foes notice.
 - Wenna (summoner, Wicks, Wax from kills) fights through bodies spread across the stage. Tallis fights alone, up close, and his resource comes from his position.
@@ -49,7 +49,7 @@ The patch adds one seam on top of that, `src/game/enemies/awareness.ts`, for any
 ## Stats
 
 `base: { ad: 11, ap: 8, hp: 90, mp: 80, stamina: 100, crit: 0.10, move: 1.08, aspd: 1.1, haste: 1 }`, growth `{ hp: 0.9, mp: 0.35 }` like Sable's, `comboHits: 3`, `special: "gloaming"`.
-The plan set HP 80, the lowest in the roster; after QA it went to 90 by the plan's own first fallback step (see the bot check), which leaves only Mirel (88) below him. Crit 0.10 is the highest.
+The plan set HP 80, the lowest in the roster; after QA it went to 90 by the plan's own first fallback step (see the bot check), which leaves Sable (85) and Mirel (88) below him and every front-line hero well above (Kael 100, Hulda 120, Ysra 130). Crit 0.10 is the highest.
 
 ## Controls
 
@@ -262,7 +262,9 @@ The skilled bot has no Tallis policy; it reaches wave 2 with 4 kills from wave 1
 QA's plain script walks up to the nearest foe and presses J, never using the Veil or Sink.
 On it Tallis fell on wave 2 with 5 kills, against Kael on wave 3 with 9 and Hulda on wave 3 with 7.
 HP 86 alone changed nothing, so both of the plan's fallback steps went in: HP 80 to 90, then Flick and Cross 15% stronger.
-The plain script still ends on wave 2 with 5 kills; he stays one wave behind them when he fights in the open, and his kit pays for using the Veil and Sink.
+The plain script still ended on wave 2 with 5 kills.
+The cause was a bug: four of his six string blows (Flick, Heel Kick, Twist, Gut Slash) carried no stagger, while every other hero's blows stagger by default, so a walking thornback kept hurting him by touch at knife range (the skilled bot lost 54 HP on wave 1, Kael none).
+With every knife blow using the shared `COMBO.stagger` unless it sets its own, QA's player script reaches wave 3 with 8 kills, level with Kael and Hulda.
 
 ## As built
 

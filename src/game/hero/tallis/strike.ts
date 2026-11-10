@@ -1,4 +1,4 @@
-import { MP_PER_HIT } from "../../../constants/combat";
+import { COMBO, MP_PER_HIT } from "../../../constants/combat";
 import { ENEMIES } from "../../../constants/enemies";
 import { KNIFE_BLOWS, type KnifeBlowSpec } from "../../../constants/tallis/knives";
 import { sfx } from "../../../services/audio";
@@ -63,7 +63,8 @@ export function strikeFoe(e: Enemy, s: KnifeStrike, ambush: boolean): boolean {
     heavy: spec.heavy,
     melee: true,
     sureCrit: ambush,
-    stagger: spec.stagger,
+    // every knife blow rocks the foe like any hero's string, so a walker it lands on stops hurting by touch
+    stagger: spec.stagger ?? COMBO.stagger,
   });
   if (result === "blocked") return false;
   const [cx, cy] = enemyCenter(e);

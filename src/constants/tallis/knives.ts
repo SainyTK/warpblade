@@ -12,7 +12,7 @@ export interface KnifeBlowSpec {
   /** damage as a multiple of attack damage */
   power: number;
   kx: number;
-  /** a foe struck stops walking this long */
+  /** a foe struck stops walking this long; left out, the shared `COMBO.stagger` */
   stagger?: number;
   /** breaks a guard and a wind-up */
   heavy?: boolean;

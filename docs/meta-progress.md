@@ -75,7 +75,7 @@ A new hero's kit keeps these promises, so every item works for it on day one:
   Shop skills that answer a hero's movement hook in there, never into one kit's code.
 - Coins, levels, Head Start and the pick tools live in shared code and need nothing from the kit.
 
-For Tallis, the eighth hero: Vitality raises the lowest HP in the roster; Honed Edge every knife blow, Rising Cut, Drop Stab and Gloaming; Arcana Hamstring, his spells, the ability power dots and Gloaming; Wellspring the MP his abilities and the ultimate spend; Precision every hit, on the highest base crit in the roster; Light Boots his walk, run, veiled walk and the pool's glide; Endurance the stamina his Sink spends; Aftershock rings out at every rise from the pool.
+For Tallis, the eighth hero: Vitality raises an HP bar well below the front-line heroes'; Honed Edge every knife blow, Rising Cut, Drop Stab and Gloaming; Arcana Hamstring, his spells, the ability power dots and Gloaming; Wellspring the MP his abilities and the ultimate spend; Precision every hit, on the highest base crit in the roster; Light Boots his walk, run, veiled walk and the pool's glide; Endurance the stamina his Sink spends; Aftershock rings out at every rise from the pool.
 
 A new item follows the same rule: it changes a shared stat or hooks into a shared event, and its text says what it does without naming a hero.
 Item ids are saved, so a renamed item keeps its id.

@@ -112,7 +112,7 @@ His crystal sword can be thrown, and wherever it lands, he follows.
   `J` swings a three-blow lamp string of Tap, Swing and Flare, with Lamp Drop in the air; the foe it hits becomes her Quarry, every Wick turns on it and bites faster, and the Flare's cone of flame calls every Wick near it to bite at once.
   `L` trades places with the Wick farthest ahead, which arrives in a flare, and `I` bursts the nearest Wick with Kindle or calls every Wick to a ring round her with Beckon, for MP.
   Wax, a bar under stamina, trickles in and drips from the foes she and her Wicks fell, flying to her when she is near; every wave opens with two free Wicks at her side (see [docs/wenna-design.md](docs/wenna-design.md)).
-  Tallis, the gloam knife, is a shadow assassin with two short knives in reverse grip, the lowest HP and the highest crit in the roster.
+  Tallis, the gloam knife, is a shadow assassin with two short knives in reverse grip, the shortest reach and the highest crit in the roster and HP well below the front-line heroes.
   `J` plays Flick, Cross and Heel Kick in front of a foe, and Backstab, Twist and Gut Slash on a foe's back, marked by a rose chevron; blows from behind deal 2.25 times as much.
   Under a hovering flier `J` springs into a Rising Cut, and in the air it is Drop Stab.
   `K` raises the Veil for Gloam: minions lose sight of him, keep their facing, start no attack at him and walk on past, with a grey question mark over each one that lost him; his first blow out of it is an Ambush, a sure crit.

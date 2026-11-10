@@ -25,6 +25,9 @@ const LOST_EDGE = hex("#16141c");
 /** the back-open chevron, pointing down at the open back from over it */
 const CHEVRON = ["#...#", "##.##", ".###.", "..#.."] as const;
 
+/** the chevron keeps clear of his own sprite: this near across his middle, and above this height over his feet */
+const CHEVRON_CLEAR = { across: 9, head: 31 } as const;
+
 /** the question mark of the lost cue, 5 by 5 */
 const QUESTION = [".###.", "#...#", "..##.", ".....", "..#.."] as const;
 
@@ -150,7 +153,9 @@ function drawChevron(e: Enemy): void {
   const back = e.face > 0 ? x0 + 2 : x1 - 2;
   const bob = Math.round(Math.sin(game.t * 8) * 0.8);
   const x = Math.round(back) - 2;
-  const y = Math.round(y0) - 8 + bob;
+  // over a short foe at knife range the spot falls on his own hood: the chevron lifts clear above his head
+  const overHim = Math.abs(x + 2 - hero.x) < CHEVRON_CLEAR.across && y0 - 8 > hero.y - CHEVRON_CLEAR.head;
+  const y = Math.round(overHim ? hero.y - CHEVRON_CLEAR.head - 6 : y0 - 8) + bob;
   glow(x + 2, y + 1, 6, G[4], 0.35);
   glyph(CHEVRON, x, y, G[5], LOST_EDGE);
 }
