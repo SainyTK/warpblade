@@ -279,8 +279,6 @@ Four of his six string blows (Flick, Heel Kick, Twist, Gut Slash) also carried n
 Logging every hit he took on it showed the damage came from thornbacks that wound up and charged right beside him (16 a charge) while he cut them, and from their touches (6).
 A knife that lands on a winding minion now cuts its wind-up short, and with that all three heroes end on wave 3.
 QA's other player script presses K and L for every hero, which are other moves for Kael and Hulda, so it measures only Tallis and is not used to compare heroes.
-The skilled bot still ends on wave 2 with 4 kills.
-QA's other player script presses K and L for every hero, which are other moves for Kael and Hulda, so it measures only Tallis and is left out of this comparison.
 The skilled bot still ends on wave 2 with 4 kills, losing 54 HP on wave 1: it taps L against a foe's blow, which for Tallis is a 0.15 s Sink that rises again inside a thornback's charge. A Tallis policy that holds L through the blow, as the owner note below describes, is the fix for that bot.
 
 ## As built
