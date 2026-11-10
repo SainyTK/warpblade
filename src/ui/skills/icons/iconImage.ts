@@ -9,6 +9,7 @@ import { MIREL_ICONS } from "./mirel/index";
 import { ORRIN_ICONS } from "./orrin/index";
 import { SABLE_ICONS } from "./sable/index";
 import { SHOP_ICONS } from "./shop";
+import { TALLIS_ICONS } from "./tallis/index";
 import { WENNA_ICONS } from "./wenna/index";
 import { YSRA_ICONS } from "./ysra/index";
 
@@ -24,6 +25,7 @@ const ICONS: Record<string, (s: SpriteCanvas) => void> = {
   ...ORRIN_ICONS,
   ...MIREL_ICONS,
   ...WENNA_ICONS,
+  ...TALLIS_ICONS,
   ...CHARM_ICONS,
   ...KAEL_SKILL_ICONS,
 };

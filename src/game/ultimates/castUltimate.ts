@@ -6,6 +6,7 @@ import { castEternalNoon, castHourOfStillness } from "../hero/mirel/hour";
 import { castMaelstrom } from "../hero/orrin/maelstrom";
 import { castGrandPendulum } from "../hero/orrin/pendulum";
 import { skin } from "../hero/skin";
+import { castEclipse, castGloaming } from "../hero/tallis/gloaming";
 import { castGreatWick, castThousandCandles } from "../hero/wenna/greatWick";
 import { SKY_FLASH } from "../spells/lightning";
 import { game, hero, lights } from "../state";
@@ -44,6 +45,8 @@ const ULTIMATES: Record<UltimateId, (level: number) => void> = {
   eternalNoon: castEternalNoon,
   greatWick: castGreatWick,
   thousandCandles: castThousandCandles,
+  gloaming: castGloaming,
+  eclipse: castEclipse,
 };
 
 /** a burst of light from the hero, bigger each level, then the ultimate itself; level 4 lights up the sky */

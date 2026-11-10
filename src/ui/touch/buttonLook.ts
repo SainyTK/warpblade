@@ -30,6 +30,14 @@ import { reloadShare } from "../../game/hero/sable/reload";
 import { selectedSpell } from "../../game/hero/sable/spells/cast";
 import { castCost, selectedAbility as kaelAbility, spellRecharge } from "../../game/hero/spell";
 import { canPayDash } from "../../game/hero/stamina";
+import {
+  selectedAbility as tallisAbility,
+  abilityMp as tallisMp,
+  abilityRecharge as tallisRecharge,
+} from "../../game/hero/tallis/abilities";
+import { tallis } from "../../game/hero/tallis/memory";
+import { canSink, sinkCost } from "../../game/hero/tallis/sink";
+import { veilCost } from "../../game/hero/tallis/veil";
 import { canAffordUlt, ultRecharge } from "../../game/hero/ultimate";
 import { warpCost, warpReady, warpRecharge } from "../../game/hero/warp";
 import {
@@ -184,6 +192,30 @@ function wennaLook(spec: TouchButtonSpec, look: ButtonLook): void {
   }
 }
 
+/** Tallis's Veil needs Gloam and waits a moment after it ends, his Sink stamina and its wait; I shows the selected
+ *  ability's MP and recharge */
+function tallisLook(spec: TouchButtonSpec, look: ButtonLook): void {
+  switch (spec.action) {
+    case "warp": {
+      const cost = veilCost();
+      look.ready = tallis.veil || (tallis.veilLock <= 0 && tallis.gloam >= cost && tallis.gloam > 0);
+      look.cooldown = look.ready ? 0 : Math.max(tallis.veilLock, 1 - tallis.gloam / Math.max(1, cost));
+      break;
+    }
+    case "dash":
+      look.ready = hero.state === "sink" || canSink() || !hero.ground;
+      look.cooldown = look.ready ? 0 : hero.stamina < sinkCost() ? 1 - hero.stamina / sinkCost() : 1;
+      break;
+    case "cast": {
+      const id = tallisAbility();
+      look.cooldown = tallisRecharge(id);
+      look.ready = look.cooldown <= 0 && hero.mp >= tallisMp(id);
+      break;
+    }
+    default:
+  }
+}
+
 /** Ysra's guard needs stamina, her vault waits out its recharge, and the rite fills as Heat comes to cover it */
 function ysraLook(spec: TouchButtonSpec, look: ButtonLook): void {
   switch (spec.action) {
@@ -219,6 +251,7 @@ export function buttonLook(spec: TouchButtonSpec, pressed: boolean): ButtonLook 
   else if (character.kit === "orrin") orrinLook(spec, look);
   else if (character.kit === "mirel") mirelLook(spec, look);
   else if (character.kit === "wenna") wennaLook(spec, look);
+  else if (character.kit === "tallis") tallisLook(spec, look);
   else if (character.kit === "ysra") ysraLook(spec, look);
   else kaelLook(spec, look);
   return look;

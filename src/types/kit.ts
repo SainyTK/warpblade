@@ -5,7 +5,7 @@ import type { MoveHit, MoveId, Situation } from "./move";
 import type { Pose } from "./pose";
 
 /** which hero's controls, moves and states drive the shared rig */
-export type KitId = "kael" | "ysra" | "sable" | "hulda" | "orrin" | "mirel" | "wenna";
+export type KitId = "kael" | "ysra" | "sable" | "hulda" | "orrin" | "mirel" | "wenna" | "tallis";
 
 /**
  * How one hero plays. The shared loop (updateHero, the combo engine, physics, hurt) calls into the kit of the hero

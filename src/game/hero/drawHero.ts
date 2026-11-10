@@ -6,6 +6,7 @@ import { armReach, drawArm } from "./draw/arm";
 import { drawBraid } from "./draw/braid";
 import { drawCoatTails } from "./draw/coatTails";
 import { drawHead } from "./draw/head";
+import { drawKnife, farKnifeAngle } from "./draw/knives";
 import { drawLeg } from "./draw/leg";
 import type { Vec } from "./draw/reach";
 import { drawSatchel } from "./draw/satchel";
@@ -44,8 +45,13 @@ export function drawHero(s: SpriteCanvas, p: Pose, look: HeroLook): Vec {
     if (look.sword) drawSword(s, hand, p.sa);
     drawArm(s, near, elbow, hand, !back);
   };
+  // a knife fighter holds a second knife in the far hand
+  const farArm = (front: boolean) => {
+    if (skin.weapon === "knives" && look.sword) drawKnife(s, farHand, farKnifeAngle(farElbow, farHand), front);
+    drawArm(s, far, farElbow, farHand, front);
+  };
   if (back) swordArm();
-  else drawArm(s, far, farElbow, farHand, false);
+  else farArm(false);
   drawLeg(s, atHip(p, -1.5, 0), [p.bfx, p.bfy], p.ba, true);
   drawCoatTails(s, p, look.flare);
   drawLeg(s, atHip(p, 1.5, 0), [p.ffx, p.ffy], p.fa, false);
@@ -53,7 +59,7 @@ export function drawHero(s: SpriteCanvas, p: Pose, look: HeroLook): Vec {
   if (skin.satchel && !back) drawSatchel(s, p);
   if (skin.braid) drawBraid(s, rope);
   drawHead(s, p, back);
-  if (back) drawArm(s, far, farElbow, farHand, true);
+  if (back) farArm(true);
   else swordArm();
   s.outline(HC.outline);
   if (!mirrored) return hand;

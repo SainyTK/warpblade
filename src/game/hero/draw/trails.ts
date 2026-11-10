@@ -9,6 +9,9 @@ const SASH_POINTS = 6;
 /** a hood's point hangs along the first points of the ponytail's rope */
 const HOOD_POINTS = 3;
 
+/** a scarf end under a hood uses the first points of the scarf's rope */
+const SCARF_END_POINTS = 5;
+
 /** the sash: a strip of cloth that tapers from the belt, with small folds across it and a split end */
 function drawSash(s: SpriteCanvas, rope: readonly Vec[]): void {
   const n = Math.min(rope.length, SASH_POINTS);
@@ -64,9 +67,26 @@ function drawHoodPoint(s: SpriteCanvas, tail: readonly Vec[]): void {
   s.commit(false);
 }
 
-/** the ponytail in lit strands, then the scarf with a light top edge and a shadowed underside, behind everything else */
+/** the scarf along its rope, or its first `points`, with a light top edge and a shadowed underside */
+function drawScarf(s: SpriteCanvas, scarf: readonly Vec[], points = scarf.length): void {
+  const n = Math.min(scarf.length, points);
+  s.begin();
+  for (let i = 1; i < n; i++) {
+    const [a, b] = [scarf[i - 1], scarf[i]];
+    s.stroke(a[0], a[1], b[0], b[1], 1.3 - i * 0.07, HC.scarf);
+  }
+  s.shadeEdges(HC.scarf, HC.scarfLight, HC.scarfDark, 2);
+  s.commit(false);
+}
+
+/** the ponytail in lit strands, then the scarf, behind everything else; a hood hides the ponytail, and the scarf unless a
+ *  short end of it trails from under the hood */
 export function drawTrails(s: SpriteCanvas, tail: readonly Vec[], scarf: readonly Vec[]): void {
-  if (skin.hood) return drawHoodPoint(s, tail);
+  if (skin.hood) {
+    drawHoodPoint(s, tail);
+    if (skin.scarfEnd) drawScarf(s, scarf, SCARF_END_POINTS);
+    return;
+  }
   if (skin.bun) return drawBun(s, tail);
   s.begin();
   for (let i = 1; i < tail.length; i++) {
@@ -76,11 +96,5 @@ export function drawTrails(s: SpriteCanvas, tail: readonly Vec[], scarf: readonl
   s.shadeEdges(HC.hairDark, HC.hair, HC.hairDeep, 2);
   s.commit(false);
   if (skin.sash) return drawSash(s, scarf);
-  s.begin();
-  for (let i = 1; i < scarf.length; i++) {
-    const [a, b] = [scarf[i - 1], scarf[i]];
-    s.stroke(a[0], a[1], b[0], b[1], 1.3 - i * 0.07, HC.scarf);
-  }
-  s.shadeEdges(HC.scarf, HC.scarfLight, HC.scarfDark, 2);
-  s.commit(false);
+  drawScarf(s, scarf);
 }

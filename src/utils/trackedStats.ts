@@ -23,6 +23,7 @@ const BEST_STATS: readonly BestStat[] = [
   "swingKills",
   "fieldKills",
   "wickKills",
+  "backKills",
 ];
 
 const isRecord = (v: unknown): v is Record<string, unknown> => typeof v === "object" && v !== null && !Array.isArray(v);
@@ -110,6 +111,9 @@ export function applyFeat(s: TrackedStats, feat: Feat): TrackedStats {
       break;
     case "wickKills":
       best.wickKills = raise(best.wickKills, feat.kills);
+      break;
+    case "backKills":
+      best.backKills = raise(best.backKills, feat.kills);
       break;
   }
   return { counts: c, best, heroWave, run };

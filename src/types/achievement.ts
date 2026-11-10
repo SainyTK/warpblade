@@ -27,7 +27,9 @@ export type BestStat =
   /** the most foes defeated inside one of Mirel's Stillfields, from open to close */
   | "fieldKills"
   /** the most foes Wenna's Wicks defeated in one run */
-  | "wickKills";
+  | "wickKills"
+  /** the most foes Tallis defeated with blows from behind in one run */
+  | "backKills";
 
 /** what the run in play has counted so far, for the goals met within one run */
 export interface RunTally {
@@ -99,4 +101,5 @@ export type Feat =
   | { kind: "flowFull" }
   | { kind: "swingKills"; kills: number }
   | { kind: "fieldKills"; kills: number }
-  | { kind: "wickKills"; kills: number };
+  | { kind: "wickKills"; kills: number }
+  | { kind: "backKills"; kills: number };

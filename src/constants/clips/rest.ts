@@ -4,6 +4,7 @@ import { HULDA_IDLE } from "./hulda/stance";
 import { MIREL_IDLE } from "./mirel/stance";
 import { ORRIN_IDLE } from "./orrin/stance";
 import { SABLE_IDLE } from "./sable/moves";
+import { TALLIS_IDLE } from "./tallis/stance";
 import { WENNA_IDLE } from "./wenna/stance";
 import { YSRA_STATE_CLIPS } from "./ysra";
 
@@ -15,4 +16,5 @@ export const HERO_IDLES: Partial<Record<KitId, ActionClip>> = {
   orrin: ORRIN_IDLE,
   mirel: MIREL_IDLE,
   wenna: WENNA_IDLE,
+  tallis: TALLIS_IDLE,
 };

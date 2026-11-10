@@ -5,6 +5,7 @@ import { KAEL_KIT } from "./kael/kit";
 import { MIREL_KIT } from "./mirel/kit";
 import { ORRIN_KIT } from "./orrin/kit";
 import { SABLE_KIT } from "./sable/kit";
+import { TALLIS_KIT } from "./tallis/kit";
 import { WENNA_KIT } from "./wenna/kit";
 import { YSRA_KIT } from "./ysra/kit";
 
@@ -32,6 +33,8 @@ function kitOf(id: KitId): HeroKit {
       return MIREL_KIT;
     case "wenna":
       return WENNA_KIT;
+    case "tallis":
+      return TALLIS_KIT;
     default:
       return KAEL_KIT;
   }
