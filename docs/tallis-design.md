@@ -250,13 +250,19 @@ Mash bot on this build from wave 1, one run each (`agent-studio`, `npm run playt
 | Wenna | 5 | 14 | 5 | 14 |
 | Tallis, first build | | | 1 | 0 |
 | Tallis, with the springing Rising Cut | | | 4 | 11 |
+| Tallis, after QA (HP 90, Flick and Cross 15% stronger) | | | 4 | 12 |
 
 The first build fell on wave 1 with no kills.
 Wave 1 is mostly Glimmer Moths hovering 40 to 50 px above the floor, and none of his ground blows reached them, so the mash bot stood under them pressing J at the air.
 Raising his HP would not have changed that, so the fix answers fliers instead: J on the floor with a flier hovering over him and no ground foe in reach springs 34 px into Rising Cut, whose slash stays live for three frames.
 After it he falls on wave 4 with 11 kills, level with Kael and Hulda and within two waves of every hero, so his HP and his front blows stay at the plan's numbers.
 
-The skilled bot has no Tallis policy; on this build it reaches wave 2 with 4 kills from wave 1, and at the wave 20 start (level 14) he falls to the Warden in 18.7 s like the others (18.4 to 27.5 s in the baseline).
+The skilled bot has no Tallis policy; it reaches wave 2 with 4 kills from wave 1, before and after QA, and at the wave 20 start (level 14) he falls to the Warden in 18.7 s like the others (18.4 to 27.5 s in the baseline).
+
+QA's plain script walks up to the nearest foe and presses J, never using the Veil or Sink.
+On it Tallis fell on wave 2 with 5 kills, against Kael on wave 3 with 9 and Hulda on wave 3 with 7.
+HP 86 alone changed nothing, so both of the plan's fallback steps went in: HP 80 to 90, then Flick and Cross 15% stronger.
+The plain script still ends on wave 2 with 5 kills; he stays one wave behind them when he fights in the open, and his kit pays for using the Veil and Sink.
 
 ## As built
 
