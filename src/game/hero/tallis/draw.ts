@@ -1,10 +1,11 @@
 import { frame } from "../../../constants/hero";
 import { PAL } from "../../../constants/palette";
 import { RES } from "../../../constants/stage";
+import { SMOKE_KNOT } from "../../../constants/tallis/abilities";
 import { KNIFE_BLOWS } from "../../../constants/tallis/knives";
 import { SINK } from "../../../constants/tallis/sink";
 import { VEIL } from "../../../constants/tallis/veil";
-import { bayerAt, glow, place, px, toScreenX, toScreenY } from "../../../engine/frame";
+import { bayerAt, blendScreen, glow, place, px, toScreenX, toScreenY } from "../../../engine/frame";
 import type { Color } from "../../../types/color";
 import type { Enemy } from "../../../types/enemy";
 import type { SmokeCloud } from "../../../types/tallis";
@@ -13,6 +14,7 @@ import { bladeAngle } from "../../../utils/poseFrame";
 import { enemyBox } from "../../enemies/enemy";
 import { game, hero } from "../../state";
 import { backOpenFoe } from "./backOpen";
+import { dimLights } from "./dark";
 import { tallis, tallisHost } from "./memory";
 
 const G = PAL.gloam;
@@ -41,7 +43,7 @@ function poolShare(): number {
   return 0;
 }
 
-/** the ink pool on the surface he stands on: a dithered oval in the gloam ramp with two rose eyes */
+/** the ink pool on the surface he stands on: a dithered oval in the gloam ramp, a rose rim along its top, two rose eyes */
 function drawPool(k: number): void {
   if (k <= 0) return;
   const half = (SINK.width / 2) * k;
@@ -50,40 +52,64 @@ function drawPool(k: number): void {
   for (let dx = -Math.ceil(half); dx <= Math.ceil(half); dx++) {
     const u = Math.abs(dx) / Math.max(1, half);
     if (u > 1) continue;
-    const ripple = Math.sin(game.t * 9 + dx * 0.7) * 0.5;
+    const ripple = Math.sin(game.t * 9 + dx * 0.7);
     const ix = Math.round(toScreenX(x + dx) * RES);
-    const deep = u < 0.55 ? G[0] : u < 0.85 ? G[1] : G[2];
-    px(x + dx, y - 1, deep);
-    if (u < 0.8 && bayerAt(ix, Math.round(toScreenY(y - 2) * RES)) < 0.7 - u * 0.5) px(x + dx, y - 2, G[1]);
-    if (u > 0.3 && u < 0.95 && ripple > 0.2) px(x + dx, y - 2, G[3], 0.6);
+    px(x + dx, y, G[0]);
+    px(x + dx, y - 1, u < 0.6 ? G[0] : G[1]);
+    if (u < 0.85) px(x + dx, y - 2, u < 0.5 ? G[1] : G[2]);
+    if (u < 0.6 && bayerAt(ix, Math.round(toScreenY(y - 3) * RES)) < 0.75 - u) px(x + dx, y - 3, G[2]);
+    const rim = u < 0.6 ? y - 3 : u < 0.85 ? y - 2 : y - 1;
+    if (ripple > 0.35) px(x + dx, rim, G[4], 0.7);
   }
   if (k >= 1) {
     const look = hero.face;
-    px(x + look * 2, y - 2, G[5]);
-    px(x + look * 4, y - 2, G[5]);
+    px(x + look * 1, y - 2, G[5]);
+    px(x + look * 3, y - 2, G[5]);
   }
-  glow(x, y - 1, 10 * k, G[3], 0.12);
+  glow(x, y - 2, 12 * k, G[4], 0.14);
 }
 
-/** one Smoke Knot: dithered smoke rolling out over its first moment and thinning over its last */
+/** the puffs a cloud is made of: where each sits across the cloud and up it, its size, and how fast it curls */
+const PUFFS = [
+  [-0.62, 0.22, 0.34, 1.3],
+  [-0.3, 0.3, 0.42, 0.9],
+  [0.05, 0.25, 0.46, 1.1],
+  [0.4, 0.3, 0.4, 0.8],
+  [0.66, 0.2, 0.32, 1.4],
+  [-0.4, 0.62, 0.34, 1],
+  [0.1, 0.66, 0.38, 1.2],
+  [0.48, 0.58, 0.3, 0.9],
+  [-0.08, 0.9, 0.26, 1.5],
+] as const;
+
+/** one Smoke Knot: soft, truly blended puffs of smoke rolling out over its first moment, curling, and thinning over its
+ *  last, lit rose along their tops */
 function drawCloud(c: SmokeCloud): void {
-  const grow = Math.min(1, c.t / 0.2);
-  const thin = Math.min(1, (c.life - c.t) / 0.5);
-  const w = (c.w / 2) * (0.4 + 0.6 * grow);
-  const h = c.h * (0.5 + 0.5 * grow);
-  for (let dy = 0; dy < h; dy += 1)
-    for (let dx = -w; dx <= w; dx += 1) {
-      const u = dx / w;
-      const v = dy / h;
-      const r = u * u + (v - 0.45) ** 2 * 2.2;
-      const curl = Math.sin(dx * 0.35 + game.t * 2.4 + dy * 0.2) * 0.12;
-      const d = r + curl;
-      if (d > 1) continue;
-      const x = c.x + dx;
-      const y = c.y - dy;
-      const a = (1 - d) * 0.9 * thin;
-      if (bayerAt(Math.round(toScreenX(x) * RES), Math.round(toScreenY(y) * RES)) > a) continue;
-      px(x, y, d < 0.35 ? G[3] : d < 0.7 ? G[2] : G[1]);
+  const grow = Math.min(1, c.t / SMOKE_KNOT.roll);
+  const thin = Math.min(1, (c.life - c.t) / SMOKE_KNOT.thin);
+  const half = c.w / 2;
+  const x0 = Math.floor(c.x - half - 4);
+  const x1 = Math.ceil(c.x + half + 4);
+  const y0 = Math.floor(c.y - c.h * 1.25);
+  const puffs = PUFFS.map(([u, v, size, curl], i) => ({
+    x: c.x + u * half * (0.35 + 0.65 * grow) + Math.sin(game.t * curl + i * 1.7) * 2,
+    y: c.y - v * c.h * (0.4 + 0.6 * grow) - (1 - thin) * 6,
+    r: size * c.h * (0.5 + 0.5 * grow) * (0.85 + 0.15 * thin),
+  }));
+  for (let y = y0; y <= c.y; y++)
+    for (let x = x0; x <= x1; x++) {
+      let a = 0;
+      let top = 0;
+      for (const p of puffs) {
+        const d = Math.hypot(x - p.x, (y - p.y) * 1.15) / p.r;
+        if (d >= 1) continue;
+        a += (1 - d * d) * 0.55;
+        if (y < p.y - p.r * 0.4) top = Math.max(top, 1 - d);
+      }
+      if (a <= 0.02) continue;
+      a = Math.min(0.85, a) * thin;
+      const c = top > 0.35 ? G[4] : top > 0.1 || a < 0.35 ? G[3] : G[2];
+      blendScreen(toScreenX(x), toScreenY(y), c, a);
     }
 }
 
@@ -148,6 +174,7 @@ function drawDuskMark(e: Enemy): void {
  * back, and the marks of Mark of Dusk, so each reads in a crowd.
  */
 export function drawTallisOver(): void {
+  if (tallisHost.dark) dimLights(tallisHost.dark);
   if (hero.state === "dead") return;
   place();
   for (const l of tallisHost.lost) {

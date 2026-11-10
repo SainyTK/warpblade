@@ -138,7 +138,9 @@ function startRise(): void {
   tallis.leapOpen = skillValues("t_nightLeap").window ?? 0;
   tallis.sinks--;
   if (tallis.sinks <= 0) tallis.sinkCd = SINK.wait;
+  // rising behind a foe he comes up facing its back, the knife ready
   const foe = openRiseAmbush();
+  if (foe) h.face = Math.sign(foe.x - h.x) || h.face;
   if (foe && skillValues("t_sink").tide) foe.stun = Math.max(foe.stun, 1);
   travelEnded();
   emitSkillEvent({ type: "dash", dir: Math.sign(h.x - tallis.sinkFrom) || h.face, foes: tallisHost.passed });

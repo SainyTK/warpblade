@@ -9,6 +9,7 @@ import { eachStanding } from "../../coopHooks";
 import { hurtHero } from "../../hurtHero";
 import { game, hero, particles, rng } from "../../state";
 import { boxHit, dust, heroBox } from "../../world";
+import { foeSees } from "../awareness";
 import { enemyBox } from "../enemy";
 import { facesHero, turnToHero } from "../facing";
 import { RAIN_HITS, WATER_SPARKS } from "./colors";
@@ -41,7 +42,7 @@ export function updateMire(e: Enemy, dt: number, ts: number): void {
     if (ready && Math.abs(dx) < 34 && Math.abs(hero.y - e.y) < 26) Object.assign(e, { state: "wind", st: 0, n: 0 });
     else if (ready && Math.abs(dx) > 60 && Math.abs(dx) < 170 && rng.chance(dt * 1.2))
       Object.assign(e, { state: "wind", st: 0, n: 1 });
-    else if (e.st > 0.5 + (e.seed % 0.4) && Math.abs(dx) > 18) {
+    else if (e.st > 0.5 + (e.seed % 0.4) && Math.abs(dx) > 18 && foeSees(e)) {
       Object.assign(e, { state: "hop", st: 0, vy: -150, vx: Math.sign(dx) * rng.range(45, 70) });
       e.face = Math.sign(dx) || e.face;
     }

@@ -138,8 +138,8 @@ export interface TallisHostMemory {
   passed: Enemy[];
   /** foes the special or ultimate under way has visited so far */
   visited: number;
-  /** the dark the special or ultimate under way lays over the scene, fading once it is over */
-  dark: { fading: boolean } | null;
+  /** the dark the special or ultimate under way lays over the scene, kept until it has lifted */
+  dark: { fading: boolean; k: number } | null;
 }
 
 declare module "./skillBehavior" {

@@ -42,6 +42,7 @@ function begin(level: number, targets: Enemy[], state: "gloaming" | "eclipse"): 
   tallis.ultAt = { x: hero.x, y: hero.y };
   tallisHost.targets = targets;
   tallisHost.visited = 0;
+  if (tallisHost.dark) tallisHost.dark.fading = true;
   tallisHost.dark = createDark(targets);
   setState(state);
 }
@@ -114,7 +115,6 @@ function finish(): void {
   hero.vx = 0;
   hero.vy = 0;
   if (tallisHost.dark) tallisHost.dark.fading = true;
-  tallisHost.dark = null;
   shake(0.25, GLOAMING.shake);
   if (hero.state === "eclipse") {
     if (skillValues("t_eclipse").refill) tallis.gloam = gloamMax();
@@ -165,5 +165,9 @@ export function runGloaming(): void {
 /** a fresh run or a fall mid-special: the dark lifts */
 export function liftDark(): void {
   if (tallisHost.dark) tallisHost.dark.fading = true;
-  tallisHost.dark = null;
+}
+
+/** the dark has lifted: let it go */
+export function forgetDark(): void {
+  if (tallisHost.dark?.fading && tallisHost.dark.k <= 0) tallisHost.dark = null;
 }

@@ -11,6 +11,7 @@ import { createSlash } from "../effects/slash";
 import { hurtHero } from "../hurtHero";
 import { game, hero, particles, rng } from "../state";
 import { boxHit, heroBox } from "../world";
+import { foeSees } from "./awareness";
 import { enemyBox } from "./enemy";
 import { facesHero, turnToHero } from "./facing";
 
@@ -19,7 +20,7 @@ export function updateHusk(e: Enemy, dt: number, ts: number): void {
   const dx = hero.x - e.x;
   if (e.state === "walk") {
     turnToHero(e, dt);
-    e.vx = approach(e.vx, Math.abs(dx) > 6 && e.stagger <= 0 ? e.face * 30 : 0, 200 * dt);
+    e.vx = approach(e.vx, (Math.abs(dx) > 6 || !foeSees(e)) && e.stagger <= 0 ? e.face * 30 : 0, 200 * dt);
     if (Math.abs(dx) < 26 && facesHero(e) && Math.abs(hero.y - e.y) < 30 && e.cd <= 0 && hero.state !== "dead")
       Object.assign(e, { state: "wind", st: 0 });
   } else if (e.state === "wind") {

@@ -15,7 +15,7 @@ import { nextAbility, pressAbility, resetAbilities, tickAbilities } from "./abil
 import { inCloud, stepClouds } from "./clouds";
 import { drawTallis, drawTallisBack, drawTallisOver, tallisAlpha, tallisRing } from "./draw";
 import { refillGloam } from "./gloam";
-import { liftDark, runGloaming } from "./gloaming";
+import { forgetDark, liftDark, runGloaming } from "./gloaming";
 import { runHamstring } from "./hamstring";
 import "./hooks";
 import { pressJump } from "./jump";
@@ -81,6 +81,7 @@ function tick(dt: number): void {
     endVeil("hurt");
     liftDark();
   }
+  forgetDark();
   if (h.ground) landed();
   stepPlummet();
   watchLost(hidden(), dt);
