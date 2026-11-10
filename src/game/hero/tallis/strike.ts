@@ -71,6 +71,8 @@ export function strikeFoe(e: Enemy, s: KnifeStrike, ambush: boolean): boolean {
   game.fx.push(createImpact(cx - dir * 3, cy, dir, s.blow === "backstab" || s.blow === "gutSlash" || ambush));
   hero.mp = Math.min(progress.stats.mp, hero.mp + MP_PER_HIT);
   hero.lastHit = e;
+  // a knife that lands on a winding minion cuts its wind-up short, as a heavy blow does for every hero
+  if (e.hp > 0 && e.rank === "minion" && e.state === "wind") Object.assign(e, { state: "recover", st: 0 });
   afterKnifeHit(e, s, { back, ambush, kill: hpBefore > 0 && e.hp <= 0, power });
   return true;
 }

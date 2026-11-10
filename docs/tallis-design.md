@@ -111,7 +111,7 @@ Each of his blows from behind sets the foe's turn timer back to 0, so a foe stru
 
 | Blow | Frames | Hit on | Reach | Power | Knockback | Extra |
 | --- | --- | --- | --- | --- | --- | --- |
-| Flick (front) | 8 | 3 | 8 to 20 px, 10 px tall | 0.8x AD | 20 | |
+| Flick (front) | 8 | 3 | 8 to 20 px, 10 px tall | 0.805x AD | 20 | |
 | Cross (front) | 9 | 4 | 6 to 22 px | 0.92x AD | 30 | stagger 0.3 s |
 | Heel Kick (front) | 13 | 6 | 4 to 24 px | 1.0x AD | 90 | heavy (breaks a guard); he hops back 10 px |
 | Backstab (behind) | 10 | 5 | 4 to 20 px | 1.2x AD | 0 | stagger 0.5 s |
@@ -119,6 +119,8 @@ Each of his blows from behind sets the foe's turn timer back to 0, so a foe stru
 | Gut Slash (behind) | 12 | 5 | 4 to 24 px | 1.3x AD | 70 away from him | launch 90 |
 | Drop Stab (air) | 10 | 4 | a plunge straight down, 14 px wide | 1.1x AD | 0 | dives at 300 px/s; always counts as from behind; once per airtime |
 | Rising Cut | 11 | 3 | 2 to 20 px, 24 px tall | 1.0x AD | 40 | launch 150, heavy; live for 3 frames |
+
+Every knife blow staggers the foe it lands on for the shared 0.35 s unless its row sets its own, and a knife that lands on a winding minion cuts its wind-up short.
 
 Back-open cue: while a ground foe within reach ahead of him has its back to him, a rose chevron 5 px wide with a dark outline points down at that foe's back from above it, clear of his own cloak.
 It is the one cue that tells the player the behind string is ready.
@@ -265,7 +267,10 @@ On it Tallis fell on wave 2 with 5 kills, against Kael on wave 3 with 9 and Huld
 HP 86 alone changed nothing, so both of the plan's fallback steps went in: HP 80 to 90, then Flick and Cross 15% stronger.
 The plain script still ended on wave 2 with 5 kills.
 The cause was a bug: four of his six string blows (Flick, Heel Kick, Twist, Gut Slash) carried no stagger, while every other hero's blows stagger by default, so a walking thornback kept hurting him by touch at knife range (the skilled bot lost 54 HP on wave 1, Kael none).
-With every knife blow using the shared `COMBO.stagger` unless it sets its own, QA's player script reaches wave 3 with 8 kills; on the same build and script Kael reaches wave 3 with 8 and Hulda wave 1 with 2.
+With every knife blow using the shared `COMBO.stagger` unless it sets its own, the plain script still ended on wave 2 with 5 kills.
+Every hit he took there came from thornbacks: charges of 16 that wound up right beside him, and touches of 6.
+A knife that lands on a winding minion now cuts its wind-up short; with that, a copy of the plain script that logs each hit reaches wave 3 with 6 kills, against Kael on wave 3 with 9 and Hulda on wave 3 with 7 on the same script (QA's runs; their kits are unchanged).
+QA's other player script presses K and L for every hero, which are other moves for Kael and Hulda, so it measures only Tallis and is left out of this comparison.
 The skilled bot still ends on wave 2 with 4 kills, losing 54 HP on wave 1: it taps L against a foe's blow, which for Tallis is a 0.15 s Sink that rises again inside a thornback's charge. A Tallis policy that holds L through the blow, as the owner note below describes, is the fix for that bot.
 
 ## As built
