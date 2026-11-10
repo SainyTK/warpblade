@@ -1,0 +1,420 @@
+{
+  "version": "0.8.0",
+  "kind": "big",
+  "date": "2026-11-11",
+  "title": "Unseen",
+  "tagline": "Tallis, the gloam knife, fights where foes are not looking. He slips out of sight in his Veil, glides under foes as a pool of shadow, and strikes their backs for 2.25 times the damage.",
+  "intro": "Tallis is the fifth hero of our hero sprint and the eighth in the game. He is a shadow assassin with two short knives, the shortest reach and the highest crit in the roster, and no way to block. He stays alive by staying out of sight: his Veil makes nearby minions lose track of him, and his shadow pool carries him under foes to their backs, where his blows hit hardest. To make that work, foes can now lose a hero they cannot see, a rule that leaves the other seven heroes playing exactly as before. Your coins, shop levels, unlocked heroes and options carry over as they were.",
+  "highlights": [
+    {
+      "title": "Tallis, the gloam knife",
+      "text": "Press K and Tallis fades to a faint rose outline. Minions near him lose track of him: a grey question mark pops over each one, and they keep their facing, start no attack at him and walk on past. His first blow out of the Veil is an Ambush, a sure crit. The Veil runs on Gloam, which refills only while no foe near him faces him. He costs 1350 coins on the hero screen.",
+      "media": {
+        "kind": "video",
+        "file": "tallis-veil.mp4",
+        "poster": "tallis-veil.png",
+        "alt": "Wave 3 in the sunlit ruins. As a thornback and two moths come out of their rifts, Tallis fades to a faint rose outline and grey question marks pop over the foes facing him. He walks up to the thornbacks and stands still; both walk straight through him without charging, and his HP bar stays full.",
+        "width": 640,
+        "height": 360
+      }
+    },
+    {
+      "title": "The behind string",
+      "text": "When a foe ahead of him has its back turned, a rose chevron marks it, and J plays Backstab, Twist and Gut Slash. His blows from behind deal 2.25 times as much. From the front, a guarding husk blocks his light blows.",
+      "media": {
+        "kind": "video",
+        "file": "tallis-behind-string.mp4",
+        "poster": "tallis-behind-string.png",
+        "alt": "Wave 4. Tallis walks up to a thornback and flicks a knife at its face; it blocks with sparks and a small BLOCK 1. He sinks into an ink pool, glides under it and rises behind it, where a rose chevron marks its back. Backstab lands as a CRIT 52 ambush, Twist hits for BACK 26, and Gut Slash finishes it with a CRIT 61.",
+        "width": 640,
+        "height": 360
+      }
+    },
+    {
+      "title": "Sink",
+      "text": "Hold L and he pours into a shadow pool that glides under ground foes while their blows pass over him. Steer it with A and D, let go to rise, and press J to come up in a Rising Cut that throws a foe into the air. Rise just behind a foe and his next blow is an Ambush.",
+      "media": {
+        "kind": "video",
+        "file": "tallis-sink.mp4",
+        "poster": "tallis-sink.png",
+        "alt": "A thornback paws the ground and charges at Tallis. He melts into a dark ink pool, the game shows PERFECT, and the thornback runs over him. He glides back under it and rises with Rising Cut, which hits for CRIT 52 and throws the thornback into the air.",
+        "width": 640,
+        "height": 360
+      }
+    },
+    {
+      "title": "Gloaming",
+      "text": "His special darkens the scene. He appears behind one, two, four or eight foes in turn, depending on the charge level, slashes each one from behind, and returns to where he crouched as the light comes back.",
+      "media": {
+        "kind": "video",
+        "file": "tallis-gloaming.mp4",
+        "poster": "tallis-gloaming.png",
+        "alt": "Wave 11 at night, with husks and wisps on both sides of a veiled Tallis. He holds the special: a charge ring grows at his feet, the scene darkens and the foes get rose outlines. He appears behind four foes in turn with a rose crescent slash each, for BACK 78, 75, 81 and 84, then returns to his spot as the light comes back.",
+        "width": 640,
+        "height": 360
+      }
+    }
+  ],
+  "sections": [
+    {
+      "id": "heroes",
+      "entries": [
+        {
+          "name": "Tallis",
+          "tag": "new",
+          "summary": "A shadow assassin who is frail up close and deadly from behind, and whose defence is staying out of sight.",
+          "context": "Kael warps through foes, Ysra meets blows with her glaive, Sable shoots from afar, Hulda walks into blows behind armour, Orrin swings at speed, Mirel slows time and Wenna fights through her Wicks. Tallis has no block, parry or armour, and everything he does depends on which way foes are facing.",
+          "changes": [
+            {
+              "kind": "stat",
+              "label": "Price on the hero screen",
+              "before": "Not in the game",
+              "after": "1350 coins"
+            },
+            {
+              "kind": "note",
+              "text": "Base stats: 90 HP, 11 attack, 8 ability power, 80 MP, 100 stamina, 10% crit, move 1.08. Only Sable and Mirel have less HP, and his crit is the highest in the roster."
+            },
+            {
+              "kind": "note",
+              "text": "A and D walk, and a double tap runs. W is one jump of 58 pixels, with no double jump."
+            },
+            {
+              "kind": "note",
+              "text": "Two achievements of his own: Tallis's Trial (clear wave 10 with him, 40 coins) and Knife in the Dark (defeat 30 foes with blows from behind in one run, 60 coins)."
+            },
+            {
+              "kind": "note",
+              "text": "He plays in co-op rooms like every hero. A veiled Tallis is drawn faded on every screen, and his player ring still shows."
+            }
+          ],
+          "media": {
+            "kind": "image",
+            "file": "tallis-hero-screen.png",
+            "alt": "The Choose a Hero screen with Tallis's tile, the eighth of eight, selected in a dusk rose frame. His panel shows a dark hooded silhouette, the title The gloam knife, rose stat bars, Special: Gloaming, his blurb, and a padlock with a price of 1350 coins.",
+            "width": 1280,
+            "height": 720
+          }
+        },
+        {
+          "name": "Tallis: Veil and Gloam",
+          "tag": "new",
+          "summary": "K hides him from minions for as long as his Gloam lasts, and his first blow out of hiding is a sure crit.",
+          "context": "His resource comes from where he stands. Gloam fills while no foe is looking at him and from blows to their backs, so standing in front of a crowd starves the bar.",
+          "changes": [
+            {
+              "kind": "note",
+              "text": "Raising the Veil costs 20 Gloam, and it drains 8 a second. With under 20 the press is refused and the GL bar blinks."
+            },
+            {
+              "kind": "note",
+              "text": "It ends when you press K again, when Gloam runs out, when a blow lands on him, or 0.2 seconds after his first blow out of it. K then waits 1 second."
+            },
+            {
+              "kind": "note",
+              "text": "While veiled he shows at about a third of his opacity inside a rose outline, and walks 15% faster."
+            },
+            {
+              "kind": "note",
+              "text": "Ambush: his first knife blow out of the Veil is a sure crit."
+            },
+            {
+              "kind": "note",
+              "text": "Gloam holds 100 and a run starts at 50. It refills 5 a second while he is out of the Veil and no minion or mini boss within 140 pixels faces him, and while no foe is on the stage."
+            },
+            {
+              "kind": "note",
+              "text": "Each knife blow from behind gives 6 Gloam, and a foe felled by one gives 12 more. Nothing refills it while a foe near him faces him."
+            },
+            {
+              "kind": "note",
+              "text": "The GL bar sits under stamina, and its rose edge glows while it refills."
+            }
+          ]
+        },
+        {
+          "name": "Tallis: the knife string",
+          "tag": "new",
+          "summary": "Three quick blows from the front, and a harder string of three when a foe has its back to him.",
+          "context": "His reach is about 22 pixels, the shortest in the game. Blows from behind already deal 1.5x for every hero, and his knives add half again on top, so getting behind a foe is worth more to him than to anyone else.",
+          "changes": [
+            {
+              "kind": "note",
+              "text": "Front string: Flick for 0.805x attack, Cross for 0.92x attack with a 0.3 second stagger, and Heel Kick for 1.0x attack, which breaks a guard and hops him back 10 pixels."
+            },
+            {
+              "kind": "note",
+              "text": "Behind string, when the nearest ground foe within 26 pixels ahead of him has its back to him: Backstab for 1.2x attack with a 0.5 second stagger, Twist for 1.0x attack, and Gut Slash for 1.3x attack, which throws the foe up and away from him."
+            },
+            {
+              "kind": "note",
+              "text": "Blows from behind deal 2.25 times as much, and a foe struck from behind cannot turn until 0.45 seconds after the last such blow."
+            },
+            {
+              "kind": "note",
+              "text": "A rose chevron over a foe's back shows when the behind string is ready."
+            },
+            {
+              "kind": "note",
+              "text": "Every knife blow staggers the foe it hits, and a knife that lands on a minion winding up an attack cuts the wind-up short."
+            },
+            {
+              "kind": "note",
+              "text": "Drop Stab: in the air, J dives straight down for 1.1x attack, once per jump, and always counts as a blow from behind."
+            },
+            {
+              "kind": "note",
+              "text": "Under a hovering flier with no ground foe in reach, J springs 34 pixels up into a Rising Cut."
+            },
+            {
+              "kind": "note",
+              "text": "Known issue: a blocked Flick does not push him back, so a guarding husk can walk into him before Heel Kick comes out."
+            },
+            {
+              "kind": "note",
+              "text": "Known issue: started from the far edge of the chevron's range, Backstab can leave a walking foe out of Twist's reach."
+            }
+          ]
+        },
+        {
+          "name": "Tallis: Sink",
+          "tag": "new",
+          "summary": "Hold L to melt into a shadow pool, glide under foes untouched, and rise behind them.",
+          "context": "Kael dashes through foes and Ysra vaults over them. Tallis goes under them, slowly and steerably, and comes up where they are not looking.",
+          "changes": [
+            {
+              "kind": "note",
+              "text": "Sinking costs 20 stamina to start and 40 a second while held, for at most 1 second. A tap sinks for 0.15 seconds."
+            },
+            {
+              "kind": "note",
+              "text": "The pool glides at 115 pixels a second, scaled by move speed, and stops at the edge of its platform. Ground foes and their blows pass over it."
+            },
+            {
+              "kind": "note",
+              "text": "He cannot be hit or seen while sunk. Rising takes 0.15 seconds and he can be hit during it, and the next Sink waits 0.7 seconds."
+            },
+            {
+              "kind": "note",
+              "text": "A blow in the first 0.12 seconds of a Sink counts as a perfect dodge, once per Sink."
+            },
+            {
+              "kind": "note",
+              "text": "Rising Cut: J while sunk or within 0.12 seconds of rising is an upward slash for 1.0x attack that breaks a guard and throws a minion into the air."
+            },
+            {
+              "kind": "note",
+              "text": "Rising within 24 pixels behind a foe turns him to face its back, and his next blow within 0.5 seconds is an Ambush."
+            },
+            {
+              "kind": "note",
+              "text": "In the air, L drops him straight down, and he sinks on landing if L is still held."
+            }
+          ]
+        },
+        {
+          "name": "Tallis: Smoke Knot and Hamstring",
+          "tag": "new",
+          "summary": "His two abilities on I blind a crowd or trip one foe, both to open a back for his knives.",
+          "context": "Each of them makes a foe stop facing him, which is when his knives work best.",
+          "changes": [
+            {
+              "kind": "note",
+              "text": "Smoke Knot: 18 MP, 8 second recharge. A cloud 72 pixels wide stands at his feet for 3 seconds. Minions and elites inside are blind, so they cannot turn or start an attack, and he counts as hidden while he stands in it."
+            },
+            {
+              "kind": "note",
+              "text": "Hamstring: 14 MP, 4 second recharge. A low sweep 6 to 30 pixels ahead for 0.8x ability power plus 0.4x attack trips the first foe it hits: 0.9 seconds for a minion, 0.6 for an elite and 0.3 for a mini boss. The Rift Warden does not trip. A tripped foe cannot turn."
+            },
+            {
+              "kind": "note",
+              "text": "O switches between Smoke Knot, Hamstring and any spell skills he picks up."
+            }
+          ],
+          "media": {
+            "kind": "video",
+            "file": "tallis-smoke-knot.mp4",
+            "poster": "tallis-smoke-knot.png",
+            "alt": "Tallis walks up to a thornback and drops a Smoke Knot; a dark rose-edged cloud rolls out around him. Question marks pop over the foes, and the thornback walks blind through the smoke and out the other side without charging. From the edge of the cloud he Hamstrings it in the back, trips it, then Backstab, Twist and Gut Slash kill it with BACK numbers.",
+            "width": 640,
+            "height": 360
+          }
+        },
+        {
+          "name": "Tallis: Gloaming",
+          "tag": "new",
+          "summary": "His special darkens the scene while he appears behind foe after foe with a slash each.",
+          "context": "His special is his kit at full size: every strike lands on a foe's back.",
+          "changes": [
+            {
+              "kind": "note",
+              "text": "After a 0.3 second crouch, the scene darkens to 55% and he strikes 1, 2, 4 or 8 foes by charge level, nearest first, 0.09 seconds each, appearing 12 pixels behind each one."
+            },
+            {
+              "kind": "note",
+              "text": "Each stab deals the level's power times 0.25 of attack plus ability power, counted as a blow from behind."
+            },
+            {
+              "kind": "note",
+              "text": "He cannot be hit from the release until he is back where he crouched. With no foe in reach he slashes the air, and the MP is still spent."
+            },
+            {
+              "kind": "note",
+              "text": "His ultimate skill, Eclipse, replaces it: every foe in the level's reach is struck from behind, then the Veil comes on for free. It evolves into Night Without End."
+            }
+          ]
+        },
+        {
+          "name": "Tallis: 20 skills",
+          "tag": "new",
+          "summary": "His own skills build on blows from behind, the Veil, Sink and Gloam.",
+          "context": "Every hero has 20 skills of their own, and Tallis arrives with his complete set, their evolutions and their icons in the cards and the Codex.",
+          "changes": [
+            {
+              "kind": "note",
+              "text": "Attacks: Backbiter, Ambush, Quick Knives, Turnabout, Plunge and Cut Tendon."
+            },
+            {
+              "kind": "note",
+              "text": "Movement: Deep Shadow, Quiet Step and Night Leap."
+            },
+            {
+              "kind": "note",
+              "text": "Spells on I: Needle Fan, Mark of Dusk and Caltrops."
+            },
+            {
+              "kind": "note",
+              "text": "Damage over time: Open Veins, Nightshade and Ink Wound."
+            },
+            {
+              "kind": "note",
+              "text": "Summons: Gloam Crows, Shadow Double and Hollow Wraith."
+            },
+            {
+              "kind": "note",
+              "text": "Passive: Shroud. Ultimate: Eclipse."
+            },
+            {
+              "kind": "note",
+              "text": "For example, Backbiter at level 8 with Shroud at level 4 evolves into Last Breath: a blow from behind fells a minion or elite under 25% HP outright, and a mini boss under it takes 3x."
+            }
+          ],
+          "media": {
+            "kind": "image",
+            "file": "tallis-evolution.png",
+            "alt": "A chest during a rainy wave 9 shows the gold EVOLUTION heading over one card, Last Breath, with a code-drawn icon of a dark drop and a knife: Backbiter evolved. A blow from behind fells a minion or elite under 25% HP outright; a mini boss under it takes 3x.",
+            "width": 1280,
+            "height": 720
+          }
+        },
+        {
+          "name": "Tallis: controls",
+          "tag": "new",
+          "summary": "His keys are on the Controls screen, and he has his own buttons on the touch controller.",
+          "context": "Every hero plays the same on a keyboard and on a phone.",
+          "changes": [
+            {
+              "kind": "note",
+              "text": "J is the knife string, K the Veil, L Sink, I the selected ability, O switches ability and U is the special."
+            },
+            {
+              "kind": "note",
+              "text": "On the touch controller his buttons are Knife, Jump, Veil, Sink, Ability, Switch and Special. Holding Sink keeps him in the pool."
+            }
+          ],
+          "media": {
+            "kind": "image",
+            "file": "tallis-touch-phone.png",
+            "alt": "An upright phone screen during wave 3 as Tallis. He stands veiled as a faint rose outline right behind a thornback that has walked past him. Below the stage are the move stick at the bottom left and his seven round buttons at the bottom right, each with its own rose icon: knives for Knife, a chevron for Jump, and icons for Veil, Sink, Ability, Switch and Special.",
+            "width": 780,
+            "height": 1688
+          }
+        }
+      ]
+    },
+    {
+      "id": "foes",
+      "entries": [
+        {
+          "name": "Foe awareness",
+          "tag": "new",
+          "summary": "Foes can now lose track of a hero they cannot see, and a blinded foe sees nobody.",
+          "context": "Every foe already faces a side and waits a moment before it turns, and the new rule builds on that. While no hero is hidden and no foe is blind, foes act exactly as before.",
+          "changes": [
+            {
+              "kind": "note",
+              "text": "A minion or elite that cannot see the hero keeps its facing, starts no new attack at him and walks on past. An attack it already started still lands, and shots already in flight still hit."
+            },
+            {
+              "kind": "note",
+              "text": "A foe walking on unaware does no harm by touch, and raises no guard against his blows."
+            },
+            {
+              "kind": "note",
+              "text": "When he slips out of sight, every minion within 160 pixels that was facing him shows a grey question mark over its head for 0.6 seconds."
+            },
+            {
+              "kind": "note",
+              "text": "Mini bosses turn toward a hidden hero twice as slowly. The Rift Warden always sees him."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "systems",
+      "entries": [
+        {
+          "name": "Co-op: who foes go for",
+          "tag": "adjusted",
+          "summary": "In a room, foes go for a hero they can see.",
+          "context": "A veiled Tallis should be able to slip away while a teammate holds the front.",
+          "changes": [
+            {
+              "kind": "stat",
+              "label": "Each foe acts against",
+              "before": "The nearest standing hero",
+              "after": "The nearest standing hero it can see, or the nearest standing hero when every one is hidden"
+            }
+          ]
+        },
+        {
+          "name": "Achievements",
+          "tag": "adjusted",
+          "summary": "Two new achievements for Tallis.",
+          "context": "Every new hero brings goals of their own, and Knife in the Dark rewards fighting from behind.",
+          "changes": [
+            {
+              "kind": "stat",
+              "label": "Achievements",
+              "before": "28, worth 1,770 coins",
+              "after": "30, worth 1,870 coins"
+            },
+            {
+              "kind": "note",
+              "text": "Knife in the Dark counts foes felled by his knife blows from behind, Drop Stab, the stabs of Gloaming and Eclipse, and his Shadow Double."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "items",
+      "entries": [
+        {
+          "name": "Aftershock",
+          "tag": "adjusted",
+          "summary": "Aftershock now answers Tallis's Sink too.",
+          "context": "Every shop item should help every hero.",
+          "changes": [
+            {
+              "kind": "note",
+              "text": "For Tallis: every rise out of his shadow pool."
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "feedback": []
+}
