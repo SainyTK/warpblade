@@ -1,5 +1,12 @@
 import { PAL } from "../../../constants/palette";
-import { BEHIND_STRING, DROP_STAB, FRONT_STRING, KNIFE_BLOWS, KNIFE_LINK } from "../../../constants/tallis/knives";
+import {
+  BEHIND_STRING,
+  DROP_STAB,
+  FRONT_STRING,
+  KNIFE_BLOWS,
+  KNIFE_LINK,
+  SPRING,
+} from "../../../constants/tallis/knives";
 import { SINK } from "../../../constants/tallis/sink";
 import { sfx } from "../../../services/audio";
 import type { KnifeBlow } from "../../../types/tallis";
@@ -10,7 +17,7 @@ import { game, hero, progress } from "../../state";
 import { dust, markStruck, newSwing, shake, struckThisSwing } from "../../world";
 import { isFree, setState, settle } from "../actions";
 import { lift } from "../lift";
-import { backOpenFoe } from "./backOpen";
+import { backOpenFoe, flierOverhead } from "./backOpen";
 import { tallis } from "./memory";
 import { smear } from "./smear";
 import { knifeStrike, strikeKnife } from "./strike";
@@ -50,6 +57,11 @@ export function pressString(): boolean {
     return true;
   }
   if (!isFree() || !hero.ground) return false;
+  if (flierOverhead(game.enemies)) {
+    startRisingCut();
+    lift(SPRING.rise, false);
+    return true;
+  }
   startBlow(tallis.link > 0 ? tallis.blow : 0);
   return true;
 }
@@ -174,8 +186,9 @@ export function runRisingCut(dt: number): void {
   if (!tallis.struck && h.st >= b.hit) {
     tallis.struck = true;
     smear("risingCut");
-    strikeKnife(knifeStrike("risingCut"), struckThisSwing, markStruck);
   }
+  // the slash stays live a moment, so a spring carries it up into a flier
+  if (tallis.struck && h.st <= b.hit + SPRING.live) strikeKnife(knifeStrike("risingCut"), struckThisSwing, markStruck);
   if (h.st >= b.dur) settle();
 }
 

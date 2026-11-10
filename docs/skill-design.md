@@ -30,7 +30,7 @@ Numbers here are starting values; balance changes them in the constants files an
 
 ## Combo
 
-- `CharacterDef.comboHits` fixes the length of the ground string for the whole run: Kael 4, Ysra 3, Sable, Hulda, Orrin, Mirel and Wenna chosen by their designers (2 to 4).
+- `CharacterDef.comboHits` fixes the length of the ground string for the whole run: Kael 4, Ysra 3, Sable, Hulda, Orrin, Mirel, Wenna and Tallis chosen by their designers (2 to 4).
 - Attack skills change the string's damage, speed and on-hit effects, never its length.
 - The air string limit is fixed per hero or raised by one movement skill; the hero designer chooses.
 
@@ -216,6 +216,7 @@ Targeting helpers: `nearestFoe`, `foesOnScreen`, `distance2` and `touches` in `s
 | `latch`, `release`, `tip`, `swingKick` | `kind` and `foe`; `speed` and `fling`; `foe` and `blow`; `foe` and `speed` | Orrin's hook, letting go of a swing, a chain hit at the tip and a swing kick (declared in `src/types/orrin.ts`) |
 | `echo`, `field`, `rewind`, `toll`, `restart` | `foe` and `blow`; `open`, `foes`, `x`, `y` and `radius`; `healed`, `from` and `to`; `foes`; `foe` | Mirel's echo striking a foe, her Stillfield opening or closing, a Rewind ending and a Toll landing, and the shared stop status when a foe she stopped restarts (declared in `src/types/mirel.ts`) |
 | `wick`, `swap`, `quarry`, `kindle`, `bite` | `x`, `y`, `lit`, `cause` and `wick`; `from`, `to` and `wick`; `foe`; `x`, `y` and `foes`; `foe`, `wick` and `damage` | Wenna's Wick lit or ended, a Swap arriving, a foe becoming her Quarry, a Wick bursting under Kindle and a Wick's bite (declared in `src/types/wenna.ts`) |
+| `veil`, `sink`, `ambush`, `backstab` | `on` and `cause`; `from` and `to`; `foe`; `foe` and `kill` | Tallis's Veil coming on or ending, a Sink ending in a rise, an Ambush landing and one of his blows from behind landing (declared in `src/types/tallis.ts`) |
 | `kill` | `foe`, `source` | `killEnemy`, when the killing hit has a source |
 | `hurt` | `damage`, `fromX` | `hurtHero`, when HP is lost |
 | `ultimate` | `level` | the shared ultimate release |
@@ -253,6 +254,7 @@ A skill effect carried by the hero's own press (a bigger J blow, a burst on the 
 - The older statuses stay: `ignite` (`src/game/enemies/burn.ts`), `chill`, `frozen`, `shock`, `stun`.
 - `stopFoe(foe, seconds, share)` (`src/game/enemies/timeStop.ts`): the foe stops dead in time and stores the damage it takes; when it restarts, `share` of what it stored lands again as one hit. `takeStored(foe)` takes the stored damage out for a skill that tolls it itself.
 - Time fields (`src/game/timeFields.ts`): `raiseField` holds an area open where foes act at their rank's pace and foe shots fly at their own; `fieldPace(x, y, rank?)` reads it.
+- Foe awareness (`src/game/enemies/awareness.ts`): a kit's `hidden()` hook hides its hero, and a foe's `blind` seconds blind it. `foeSees(e)` is false for a blind foe and for a minion while the hero is hidden; such a foe keeps its facing, starts no wind-up at the hero and walks on past them. Mini bosses turn twice as slowly toward a hidden hero, and the Rift Warden ignores the rule.
 
 ### Per-seat memory rules
 

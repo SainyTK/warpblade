@@ -102,5 +102,12 @@ export const BACK_REACH = 26;
 /** his kit adds this much to every knife blow from behind, on top of the shared back bonus: 1.5 x 1.5 = 2.25 */
 export const BACK_BONUS = 0.5;
 
+/**
+ * Springing Cut: J on the floor with a flier hovering over him and no ground foe in reach springs into Rising Cut this
+ * high; a flier this far above his feet (and this near across) calls it. Rising Cut's slash stays live `live` seconds
+ * after its hit frame, so it meets a foe the spring carries it up to.
+ */
+export const SPRING = { rise: 34, above: [16, 64], across: 22, live: 3 / 30 } as const;
+
 /** Drop Stab: the dive's speed, and the most it may last before it gives up */
 export const DROP_STAB = { speed: 300, most: 0.8 } as const;

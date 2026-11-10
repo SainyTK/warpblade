@@ -22,7 +22,7 @@ export const QUIET_STEP: SkillDef = {
   text: "His Veil drains slower and he walks faster in it.",
   levels: LEVELS,
   evolution: {
-    partner: "t_smokeKnot",
+    partner: "t_nightLeap",
     name: "Phantom Walk",
     text: "Walking veiled leaves a thin trail of smoke that blinds the foes in it for 1 s.",
     row: evolvedRow(LEVELS[7], "His veiled trail blinds foes.", { phantom: 1 }),

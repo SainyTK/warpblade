@@ -11,14 +11,14 @@ A hero that is not in the table is free.
 
 Each new hero gets the next price: the n-th hero added to the table costs 300 x 1.35^(n - 1), rounded to the nearest 50.
 
-| Hero | 1st (Sable) | 2nd (Hulda) | 3rd (Orrin) | 4th (Mirel) | 5th (Wenna) | 6th | 7th | 8th | 9th |
+| Hero | 1st (Sable) | 2nd (Hulda) | 3rd (Orrin) | 4th (Mirel) | 5th (Wenna) | 6th (Tallis) | 7th | 8th | 9th |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | Price | 300 | 400 | 550 | 750 | 1000 | 1350 | 1800 | 2450 | 3300 |
 
 The basis is the coin table in `docs/meta-progress.md`.
 A run that reaches wave 8 to 10 banks about 60 to 80 coins and a full clear about 440.
 Sable takes a few good runs, or one run past wave 20 with the achievement coins earned on the way.
-Hulda, at 400, takes a few more, Orrin, at 550, a few more again, Mirel, at 750, about two runs past wave 10 beyond that, and Wenna, at 1000, about three more.
+Hulda, at 400, takes a few more, Orrin, at 550, a few more again, Mirel, at 750, about two runs past wave 10 beyond that, Wenna, at 1000, about three more, and Tallis, at 1350, about one full clear past that.
 The ninth hero costs about seven full clears.
 
 The hero screen shows a roster of every hero over one panel for the hero in focus; Left and Right, or a tap on a tile, move through them.
@@ -87,6 +87,7 @@ A save from before them loads with its coins and shop levels, no heroes bought a
 | Heroes | Orrin's Trial | Clear wave 10 with Orrin | 40 | |
 | Heroes | Mirel's Trial | Clear wave 10 with Mirel | 40 | |
 | Heroes | Wenna's Trial | Clear wave 10 with Wenna | 40 | |
+| Heroes | Tallis's Trial | Clear wave 10 with Tallis | 40 | |
 | Foes | Culling | Slay 100 foes | 20 | |
 | Foes | Thinning the Night | Slay 3,000 foes | 80 | |
 | Foes | Endless Blade | Slay 15,000 foes | 200 | Thinning the Night |
@@ -99,6 +100,7 @@ A save from before them loads with its coins and shop levels, no heroes bought a
 | Skill | Full Swing | As Orrin, defeat 3 foes with swing kicks in one swing | 60 | |
 | Skill | Hold the Hour | As Mirel, defeat 5 foes inside one Stillfield | 60 | |
 | Skill | Many Hands | As Wenna, let your Wicks defeat 40 foes in one run | 60 | |
+| Skill | Knife in the Dark | As Tallis, defeat 30 foes with blows from behind in one run | 60 | |
 | Coins | Coin Purse | Bank 500 coins from runs | 25 | |
 | Coins | Treasury | Bank 3,000 coins from runs | 100 | Coin Purse |
 | Coins | Outfitted | Buy 10 levels or skills in the Shop | 30 | |
@@ -110,7 +112,8 @@ They keep their ids, `kills-1000` and `kills-5000`, so saves that earned them ke
 Full Swing counts the foes Orrin's swing kicks defeat between one latch and letting go, and keeps the best as the tracked stat `swingKills`.
 Hold the Hour counts the foes that fall inside one of Mirel's Stillfields between opening it and its close, and keeps the best as the tracked stat `fieldKills`.
 Many Hands counts the foes Wenna's Wicks defeat in one run (their bites, Kindle, Guttering's bursts, Pack Lunge and the Wicks Great Wick melts into; her own lamp does not count), and keeps the best as the tracked stat `wickKills`.
-The page lists 28 achievements, and all of them together pay 1,770 coins.
+Knife in the Dark counts the foes Tallis fells with blows from behind in one run (his J blows from behind, Drop Stab, the stabs of Gloaming and Eclipse and his Shadow Double's), and keeps the best as the tracked stat `backKills`.
+The page lists 30 achievements, and all of them together pay 1,870 coins.
 
 ## Adding a hero
 

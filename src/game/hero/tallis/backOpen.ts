@@ -1,5 +1,6 @@
-import { BACK_REACH } from "../../../constants/tallis/knives";
+import { BACK_REACH, SPRING } from "../../../constants/tallis/knives";
 import type { Enemy } from "../../../types/enemy";
+import { enemyCenter } from "../../enemies/enemy";
 import { kindOf } from "../../enemies/kinds";
 import { hero } from "../../state";
 
@@ -12,6 +13,17 @@ export const behindOf = (e: Enemy, x = hero.x): boolean => {
 /** a ground foe level with him, standing */
 const onFloorWithHim = (e: Enemy): boolean =>
   e.hp > 0 && !e.air && !kindOf(e.type).flies && Math.abs(e.y - hero.y) < 20;
+
+/** a flier hovering over him within the spring's reach, while no ground foe stands in reach of his knives */
+export function flierOverhead(foes: readonly Enemy[]): boolean {
+  const ground = foes.some((e) => onFloorWithHim(e) && Math.abs(e.x - hero.x) <= BACK_REACH);
+  if (ground) return false;
+  return foes.some((e) => {
+    if (e.hp <= 0 || (!kindOf(e.type).flies && !e.air)) return false;
+    const above = hero.y - enemyCenter(e)[1];
+    return Math.abs(e.x - hero.x) <= SPRING.across && above >= SPRING.above[0] && above <= SPRING.above[1];
+  });
+}
 
 /** a foe stands ahead of him, the way he faces, or right against him */
 const ahead = (e: Enemy): boolean => (e.x - hero.x) * hero.face >= -4;

@@ -22,7 +22,7 @@ export const AMBUSH: SkillDef = {
   text: "His Ambush, the first blow out of the Veil or out of the pool behind a foe, hits harder.",
   levels: LEVELS,
   evolution: {
-    partner: "t_smokeKnot",
+    partner: "t_quietStep",
     name: "Night Hunter",
     text: "A foe felled by an Ambush raises the Veil again for free.",
     row: evolvedRow(LEVELS[7], "An Ambush kill raises the Veil for free.", { nightHunter: 1 }),

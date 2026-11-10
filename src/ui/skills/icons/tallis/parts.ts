@@ -17,13 +17,13 @@ export const GOLD_LIGHT = COIN_GOLD[4];
 export const STEEL = hex("#aaa6b4");
 export const STEEL_LIGHT = hex("#f4eef4");
 export const GRIP = hex("#5e554a");
-export const HOOD = hex("#3c3a46");
-export const HOOD_LIGHT = hex("#5a5866");
+export const HOOD = hex("#646274");
+export const HOOD_LIGHT = hex("#8a8898");
 export const MASK = hex("#5e2c56");
 export const SKIN = hex("#c08a5e");
 /** a foe's dark hide and its lit rim */
-export const HIDE = hex("#4a3a5a");
-export const HIDE_LIGHT = hex("#7a6290");
+export const HIDE = hex("#8a6aa6");
+export const HIDE_LIGHT = hex("#c4a8e0");
 export const BLOOD = hex("#c0304a");
 export const POISON = hex("#7ad06a");
 
@@ -96,8 +96,8 @@ export function backChevron(s: S, x: number, y: number, dir: number, gold = fals
 /** the ink pool, w wide at floor y, two rose eyes in it */
 export function inkPool(s: S, cx: number, y: number, w: number, gold = false): void {
   fill(s, () => {
-    s.stroke(cx - w / 2, y, cx + w / 2, y, 0.8, G[1]);
-    s.stroke(cx - w / 2 + 1, y - 1, cx + w / 2 - 1, y - 1, 0.5, G[2]);
+    s.stroke(cx - w / 2, y, cx + w / 2, y, 0.8, G[2]);
+    s.stroke(cx - w / 2 + 1, y - 1, cx + w / 2 - 1, y - 1, 0.5, G[3]);
   });
   fill(s, () => {
     s.set(cx - 1, y - 1, glint(gold));
@@ -108,19 +108,19 @@ export function inkPool(s: S, cx: number, y: number, w: number, gold = false): v
 /** a puff of smoke, r across */
 export function puff(s: S, cx: number, cy: number, r: number, gold = false): void {
   fill(s, () => {
-    s.dot(cx - r * 0.5, cy, r * 0.55, G[2]);
-    s.dot(cx + r * 0.45, cy - r * 0.15, r * 0.6, G[2]);
-    s.dot(cx, cy - r * 0.45, r * 0.5, G[3]);
+    s.dot(cx - r * 0.5, cy, r * 0.55, G[3]);
+    s.dot(cx + r * 0.45, cy - r * 0.15, r * 0.6, G[3]);
+    s.dot(cx, cy - r * 0.45, r * 0.5, G[4]);
   });
-  fill(s, () => s.set(cx - r * 0.3, cy - r * 0.6, gold ? GOLD_LIGHT : G[4]));
+  fill(s, () => s.set(cx - r * 0.3, cy - r * 0.6, gold ? GOLD_LIGHT : G[5]));
 }
 
 /** a diving crow, wings swept back */
 export function crow(s: S, x: number, y: number, dir = 1, gold = false): void {
   fill(s, () => {
-    s.stroke(x - dir * 3, y - 2, x, y, 0.5, G[1]);
-    s.stroke(x - dir * 3, y + 1.5, x, y, 0.45, G[1]);
-    s.dot(x + dir * 0.6, y, 0.8, G[1]);
+    s.stroke(x - dir * 3, y - 2, x, y, 0.5, G[3]);
+    s.stroke(x - dir * 3, y + 1.5, x, y, 0.45, G[3]);
+    s.dot(x + dir * 0.6, y, 0.8, G[3]);
   });
   fill(s, () => s.set(x + dir * 1.4, y - 0.2, glint(gold)));
 }
@@ -139,7 +139,7 @@ export function wraith(s: S, x: number, y: number, gold = false): void {
         [x, y],
         [x - 1, y - 1.5],
       ],
-      G[2],
+      G[3],
     );
   });
   fill(s, () => {

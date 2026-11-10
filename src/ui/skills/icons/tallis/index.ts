@@ -45,8 +45,8 @@ export const TALLIS_ICONS: Record<string, (s: SpriteCanvas) => void> = {
   },
   /** his special Gloaming: a rose crescent across the dark with him at its end */
   t_gloaming: (s) => {
-    fill(s, () => s.dot(8, 8, 7, G[1]));
-    crescent(s, 8, 8, 5.5, -2.4, 0.7, G[4]);
+    fill(s, () => s.dot(8, 8, 7, G[2]));
+    crescent(s, 8, 8, 5.5, -2.4, 0.7, G[5]);
     assassin(s, 12, 15, -1);
   },
 
@@ -118,7 +118,7 @@ export const TALLIS_ICONS: Record<string, (s: SpriteCanvas) => void> = {
   /** Falling Night: a gold plunge into a dark ring that blinds */
   t_plunge_evo: (s) => {
     knife(s, 8, 1, 8, 10, true);
-    fill(s, () => s.stroke(2, 14, 14, 14, 0.8, G[1]));
+    fill(s, () => s.stroke(2, 14, 14, 14, 0.8, G[2]));
     arc(s, 8, 14, 6.5, Math.PI, Math.PI * 2, GOLD, 0.45);
     arc(s, 8, 14, 4, Math.PI, Math.PI * 2, G[4], 0.35);
   },
@@ -126,8 +126,8 @@ export const TALLIS_ICONS: Record<string, (s: SpriteCanvas) => void> = {
   t_cutTendon: (s) => {
     foeBack(s, 9, 7, 3.5, -1);
     fill(s, () => {
-      s.stroke(8, 11, 8, 14, 0.5, G[1]);
-      s.stroke(11, 11, 11, 14, 0.5, G[1]);
+      s.stroke(8, 11, 8, 14, 0.5, G[2]);
+      s.stroke(11, 11, 11, 14, 0.5, G[2]);
     });
     crescent(s, 6, 9, 7, 0.6, 1.6, G[4]);
     drops(s, 9, 15, 2);
@@ -151,7 +151,7 @@ export const TALLIS_ICONS: Record<string, (s: SpriteCanvas) => void> = {
   t_sink_evo: (s) => {
     foeBack(s, 8, 11, 3.5, 1);
     inkPool(s, 8, 14, 14, true);
-    fill(s, () => s.stroke(3, 13, 13, 13, 0.6, G[1]));
+    fill(s, () => s.stroke(3, 13, 13, 13, 0.6, G[2]));
   },
   /** Quiet Step: a faded foot over a row of soft prints */
   t_quietStep: (s) => {
@@ -254,7 +254,7 @@ export const TALLIS_ICONS: Record<string, (s: SpriteCanvas) => void> = {
   /** Black Lotus: a dark lotus of poison with gold petals */
   t_nightshade_evo: (s) => {
     fill(s, () => {
-      s.dot(8, 10, 2.5, G[1]);
+      s.dot(8, 10, 2.5, G[2]);
       s.poly(
         [
           [8, 3],
@@ -287,8 +287,8 @@ export const TALLIS_ICONS: Record<string, (s: SpriteCanvas) => void> = {
     foeBack(s, 7, 8, 4, -1);
     fill(s, () => {
       s.dot(9, 9, 1.6, G[0]);
-      s.set(11, 11, G[1]);
-      s.set(8, 12, G[1]);
+      s.set(11, 11, G[2]);
+      s.set(8, 12, G[2]);
     });
     fill(s, () => s.set(9, 8, G[4]));
   },
@@ -298,8 +298,8 @@ export const TALLIS_ICONS: Record<string, (s: SpriteCanvas) => void> = {
     foeBack(s, 13, 6, 2.4, -1);
     foeBack(s, 8, 12, 2.4, -1);
     fill(s, () => {
-      seg(s, 4, 8, 7, 11, G[1]);
-      seg(s, 12, 8, 9, 11, G[1]);
+      seg(s, 4, 8, 7, 11, G[2]);
+      seg(s, 12, 8, 9, 11, G[2]);
       s.set(8, 9, GOLD_LIGHT);
     });
   },
@@ -364,7 +364,7 @@ export const TALLIS_ICONS: Record<string, (s: SpriteCanvas) => void> = {
   /** Hollow Wraith: a wraith rising from a fallen foe */
   t_wraith: (s) => {
     wraith(s, 8, 12);
-    fill(s, () => s.stroke(3, 14, 13, 14, 0.8, G[1]));
+    fill(s, () => s.stroke(3, 14, 13, 14, 0.8, G[2]));
   },
   /** Legion of Dusk: three gold-eyed wraiths */
   t_wraith_evo: (s) => {
