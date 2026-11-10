@@ -9,6 +9,7 @@ import {
   caltrop,
   crow,
   drops,
+  dusk,
   eclipseDisc,
   foeBack,
   G,
@@ -30,8 +31,20 @@ const crossed = (s: SpriteCanvas, gold = false) => {
   knife(s, 13, 13, 4, 3, gold);
 };
 
+/** each drawer with his dusk behind it, lit gold for an evolution */
+const withDusk = (icons: Record<string, (s: SpriteCanvas) => void>): Record<string, (s: SpriteCanvas) => void> =>
+  Object.fromEntries(
+    Object.entries(icons).map(([id, draw]) => [
+      id,
+      (s: SpriteCanvas) => {
+        dusk(s, id.endsWith("_evo"));
+        draw(s);
+      },
+    ]),
+  );
+
 /** Tallis's icons: his own sources, his 20 skills and their evolutions (`<id>_evo`, the same parts lit gold) */
-export const TALLIS_ICONS: Record<string, (s: SpriteCanvas) => void> = {
+export const TALLIS_ICONS: Record<string, (s: SpriteCanvas) => void> = withDusk({
   /** his knife string: two curved knives crossed */
   t_knives: (s) => crossed(s),
   /** his abilities: a Smoke Knot's cloud over its knot */
@@ -77,18 +90,21 @@ export const TALLIS_ICONS: Record<string, (s: SpriteCanvas) => void> = {
       s.set(9, 4, G[5]);
     });
   },
-  /** Night Hunter: two foes felled, the figure fading back into the Veil in gold */
+  /** Night Hunter: a felled foe under a gold Veil rising round the hooded figure */
   t_ambush_evo: (s) => {
-    foeBack(s, 3, 12, 2.5, -1);
-    foeBack(s, 8, 13, 2.5, -1);
-    assassin(s, 13, 15, -1, true);
-    arc(s, 13, 8, 4, -2.6, -0.4, GOLD, 0.4);
+    foeBack(s, 4, 13, 2.6, -1);
+    arc(s, 11, 9, 5, -3, 0.1, GOLD, 0.5);
+    assassin(s, 11, 15, -1, true);
+    knife(s, 6, 4, 2, 9, true);
   },
-  /** Quick Knives: a knife thrown with speed lines behind it */
+
+  /** Quick Knives: two knives in flight, one after the other, speed lines behind them */
   t_quickKnives: (s) => {
-    knife(s, 4, 9, 13, 6);
-    speedLines(s, 5, [6, 9, 12], 4, G[3]);
+    speedLines(s, 6, [4, 6, 11, 13], 4, G[4]);
+    knife(s, 5, 5, 14, 5);
+    knife(s, 4, 12, 13, 12);
   },
+
   /** Knife Storm: a fan of three gold knives */
   t_quickKnives_evo: (s) => {
     knife(s, 3, 8, 14, 2, true);
@@ -153,13 +169,20 @@ export const TALLIS_ICONS: Record<string, (s: SpriteCanvas) => void> = {
     inkPool(s, 8, 14, 14, true);
     fill(s, () => s.stroke(3, 13, 13, 13, 0.6, G[2]));
   },
-  /** Quiet Step: a faded foot over a row of soft prints */
+  /** Quiet Step: the hooded figure stepping soft over rose footprints, his hood fading out */
   t_quietStep: (s) => {
     fill(s, () => {
-      for (const x of [2, 7, 12]) s.block(x, x === 7 ? 11 : 13, G[3], 2, 1);
+      for (const [x, y] of [
+        [2, 14],
+        [6, 13],
+        [10, 14],
+      ] as const)
+        s.block(x, y, G[4], 2, 1);
     });
-    assassin(s, 8, 10, 1);
+    assassin(s, 11, 12, 1);
+    arc(s, 11, 4, 3.5, -2.6, -0.4, G[4], 0.4);
   },
+
   /** Phantom Walk: a gold trail of smoke behind the walking figure */
   t_quietStep_evo: (s) => {
     puff(s, 3, 11, 3, true);
@@ -178,7 +201,7 @@ export const TALLIS_ICONS: Record<string, (s: SpriteCanvas) => void> = {
     knife(s, 10, 2, 10, 12, true);
     floor(s, 4, 15, 15, G[2]);
   },
-  /** Needle Fan: five needles spreading out */
+  /** Needle Fan: five rose needles fanning out of an open hand */
   t_needles: (s) => {
     for (const [x, y, dx, dy] of [
       [14, 3, 0.8, -0.6],
@@ -188,8 +211,10 @@ export const TALLIS_ICONS: Record<string, (s: SpriteCanvas) => void> = {
       [14, 15, 0.8, 0.6],
     ] as const)
       needle(s, x, y, dx, dy);
-    fill(s, () => s.dot(3, 9, 1.4, G[4]));
+    fill(s, () => s.dot(4, 9, 2, G[5]));
+    fill(s, () => s.set(4, 9, WHITE));
   },
+
   /** Iron Rain: gold needles falling on two foes */
   t_needles_evo: (s) => {
     foeBack(s, 4, 12, 2.5, -1);
@@ -394,4 +419,4 @@ export const TALLIS_ICONS: Record<string, (s: SpriteCanvas) => void> = {
     crescent(s, 8, 7, 4, -2.4, 0.6, glint(true));
     fill(s, () => s.stroke(1, 15, 15, 15, 0.6, rose(true)));
   },
-};
+});

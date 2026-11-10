@@ -22,8 +22,8 @@ export const HOOD_LIGHT = hex("#8a8898");
 export const MASK = hex("#5e2c56");
 export const SKIN = hex("#c08a5e");
 /** a foe's dark hide and its lit rim */
-export const HIDE = hex("#8a6aa6");
-export const HIDE_LIGHT = hex("#c4a8e0");
+export const HIDE = hex("#b08ad0");
+export const HIDE_LIGHT = hex("#e8d8f8");
 export const BLOOD = hex("#c0304a");
 export const POISON = hex("#7ad06a");
 
@@ -31,23 +31,37 @@ export const POISON = hex("#7ad06a");
 export const rose = (gold: boolean): Color => (gold ? GOLD : G[4]);
 export const glint = (gold: boolean): Color => (gold ? GOLD_LIGHT : G[5]);
 
-/** a curved knife from the grip at (x0, y0) to its point at (x1, y1), its edge bellied to one side */
+/** a curved knife from the grip at (x0, y0) to its point at (x1, y1): a wrapped grip, a rose guard, a broad steel blade
+ *  bellied on its edge with a lit edge and a white point */
 export function knife(s: S, x0: number, y0: number, x1: number, y1: number, gold = false): void {
   const L = Math.hypot(x1 - x0, y1 - y0) || 1;
   const ux = (x1 - x0) / L;
   const uy = (y1 - y0) / L;
-  fill(s, () => s.stroke(x0 - ux * 2.5, y0 - uy * 2.5, x0, y0, 0.5, GRIP));
+  fill(s, () => s.stroke(x0 - ux * 3, y0 - uy * 3, x0, y0, 0.7, GRIP));
   fill(s, () => {
-    s.stroke(x0 + ux * 0.5, y0 + uy * 0.5, x1, y1, 0.65, STEEL);
-    const mx = (x0 + x1) / 2 - uy * 0.8;
-    const my = (y0 + y1) / 2 + ux * 0.8;
-    s.set(mx, my, STEEL);
+    s.stroke(x0 + ux, y0 + uy, x1, y1, 0.95, STEEL);
+    s.dot((x0 + x1) / 2 - uy * 0.7, (y0 + y1) / 2 + ux * 0.7, 1, STEEL);
   });
   fill(s, () => {
-    s.set(x1 - ux * 2, y1 - uy * 2, glint(gold));
+    s.stroke(
+      x0 + ux * 2 - uy * 0.8,
+      y0 + uy * 2 + ux * 0.8,
+      x1 - ux * 1.5 - uy * 0.4,
+      y1 - uy * 1.5 + ux * 0.4,
+      0.35,
+      STEEL_LIGHT,
+    );
+    s.set(x1 - ux * 2.5, y1 - uy * 2.5, glint(gold));
     s.set(x1, y1, WHITE);
-    s.set(x0 - uy * 1.3, y0 + ux * 1.3, rose(gold));
-    s.set(x0 + uy * 1.3, y0 - ux * 1.3, rose(gold));
+  });
+  fill(s, () => s.stroke(x0 - uy * 2, y0 + ux * 2, x0 + uy * 2, y0 - ux * 2, 0.5, rose(gold)));
+}
+
+/** the dusk behind every one of his icons: a soft disc of ink and plum, lit rose at its upper edge */
+export function dusk(s: S, gold = false): void {
+  fill(s, () => s.dot(8, 8.5, 7, G[1]));
+  fill(s, () => {
+    for (let a = -2.6; a <= -0.5; a += 0.25) s.set(8 + Math.cos(a) * 7, 8.5 + Math.sin(a) * 7, gold ? GOLD : G[3]);
   });
 }
 
@@ -151,7 +165,7 @@ export function wraith(s: S, x: number, y: number, gold = false): void {
 /** a needle flying along (dx, dy) to its point at (x, y) */
 export function needle(s: S, x: number, y: number, dx: number, dy: number, gold = false): void {
   fill(s, () => {
-    s.stroke(x - dx * 4, y - dy * 4, x, y, 0.35, gold ? GOLD : G[3]);
+    s.stroke(x - dx * 5, y - dy * 5, x, y, 0.5, gold ? GOLD : G[4]);
     s.set(x, y, gold ? GOLD_LIGHT : G[5]);
   });
 }

@@ -5,7 +5,7 @@ import { SMOKE_KNOT } from "../../../constants/tallis/abilities";
 import { KNIFE_BLOWS } from "../../../constants/tallis/knives";
 import { SINK } from "../../../constants/tallis/sink";
 import { VEIL } from "../../../constants/tallis/veil";
-import { bayerAt, blendScreen, glow, place, px, toScreenX, toScreenY } from "../../../engine/frame";
+import { bayerAt, glow, place, px, toScreenX, toScreenY } from "../../../engine/frame";
 import type { Color } from "../../../types/color";
 import type { Enemy } from "../../../types/enemy";
 import type { SmokeCloud } from "../../../types/tallis";
@@ -21,6 +21,9 @@ const G = PAL.gloam;
 /** the lost cue's grey and its dark outline */
 const LOST_GREY = hex("#b4b0bc");
 const LOST_EDGE = hex("#16141c");
+
+/** the back-open chevron, pointing down at the open back from over it */
+const CHEVRON = ["#...#", "##.##", ".###.", "..#.."] as const;
 
 /** the question mark of the lost cue, 5 by 5 */
 const QUESTION = [".###.", "#...#", "..##.", ".....", "..#.."] as const;
@@ -82,8 +85,8 @@ const PUFFS = [
   [-0.08, 0.9, 0.26, 1.5],
 ] as const;
 
-/** one Smoke Knot: soft, truly blended puffs of smoke rolling out over its first moment, curling, and thinning over its
- *  last, lit rose along their tops */
+/** one Smoke Knot: puffs of dithered smoke rolling out over its first moment, curling, and thinning over its last, lit
+ *  rose along their tops */
 function drawCloud(c: SmokeCloud): void {
   const grow = Math.min(1, c.t / SMOKE_KNOT.roll);
   const thin = Math.min(1, (c.life - c.t) / SMOKE_KNOT.thin);
@@ -96,20 +99,22 @@ function drawCloud(c: SmokeCloud): void {
     y: c.y - v * c.h * (0.4 + 0.6 * grow) - (1 - thin) * 6,
     r: size * c.h * (0.5 + 0.5 * grow) * (0.85 + 0.15 * thin),
   }));
+  const density = (x: number, y: number): number => {
+    let a = 0;
+    for (const p of puffs) {
+      const d = Math.hypot(x - p.x, (y - p.y) * 1.15) / p.r;
+      if (d < 1) a += (1 - d * d) * 0.55;
+    }
+    return Math.min(0.92, a) * thin;
+  };
   for (let y = y0; y <= c.y; y++)
     for (let x = x0; x <= x1; x++) {
-      let a = 0;
-      let top = 0;
-      for (const p of puffs) {
-        const d = Math.hypot(x - p.x, (y - p.y) * 1.15) / p.r;
-        if (d >= 1) continue;
-        a += (1 - d * d) * 0.55;
-        if (y < p.y - p.r * 0.4) top = Math.max(top, 1 - d);
-      }
-      if (a <= 0.02) continue;
-      a = Math.min(0.85, a) * thin;
-      const c = top > 0.35 ? G[4] : top > 0.1 || a < 0.35 ? G[3] : G[2];
-      blendScreen(toScreenX(x), toScreenY(y), c, a);
+      const a = density(x, y);
+      // dithered on the art pixel grid like the rest of the finish: dense at the heart, broken up at the edges
+      if (a <= bayerAt(x & 3, y & 3)) continue;
+      // the cloud's upper edge catches the dusk light
+      const rim = density(x, y - 2) < 0.3;
+      px(x, y, rim ? G[4] : a < 0.5 ? G[3] : G[2]);
     }
 }
 
@@ -139,22 +144,15 @@ export function drawTallis(): void {
   for (const c of tallisHost.clouds) drawCloud(c);
 }
 
-/** the rose chevron on the back of the foe whose back is open to his string */
+/** the rose chevron over the back of the foe whose back is open to his string, outlined dark so it reads on any scene */
 function drawChevron(e: Enemy): void {
-  const [x0, y0, x1, y1] = enemyBox(e);
-  const back = e.face > 0 ? x0 - 2 : x1 + 2;
-  const y = Math.round((y0 + y1) / 2) - 2;
-  const point = e.face > 0 ? 1 : -1;
-  const bob = Math.round(Math.sin(game.t * 8));
-  const x = Math.round(back) + bob * -point;
-  for (const [dx, dy] of [
-    [0, 0],
-    [point, 1],
-    [0, 2],
-  ] as const) {
-    px(x + dx - point, y + dy, G[1]);
-    px(x + dx, y + dy, G[5]);
-  }
+  const [x0, y0, x1] = enemyBox(e);
+  const back = e.face > 0 ? x0 + 2 : x1 - 2;
+  const bob = Math.round(Math.sin(game.t * 8) * 0.8);
+  const x = Math.round(back) - 2;
+  const y = Math.round(y0) - 8 + bob;
+  glow(x + 2, y + 1, 6, G[4], 0.35);
+  glyph(CHEVRON, x, y, G[5], LOST_EDGE);
 }
 
 /** a dusk rose tick over a foe Mark of Dusk marks */

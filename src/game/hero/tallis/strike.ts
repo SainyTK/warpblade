@@ -11,7 +11,7 @@ import { enemyBox, enemyCenter } from "../../enemies/enemy";
 import { feat } from "../../feat";
 import { game, hero, progress } from "../../state";
 import { boxHit, hitStop, shake } from "../../world";
-import { takeAmbush } from "./ambush";
+import { ambushOpen, takeAmbush } from "./ambush";
 import { behindOf } from "./backOpen";
 import { afterKnifeHit, ambushPower, blowScale, executes } from "./blowSkills";
 import { isMarked, strikeFrom } from "./marks";
@@ -87,9 +87,14 @@ export function strikeKnife(s: KnifeStrike, struck: (e: Enemy) => boolean, mark:
   let blocked = 0;
   for (const e of foes) {
     mark(e);
-    const ambush = !landed.length && takeAmbush();
-    if (strikeFoe(e, s, ambush)) landed.push(e);
-    else blocked++;
+    // the Ambush is spent only by a blow that lands, never by one a guard stops
+    const ambush = !landed.length && ambushOpen();
+    if (!strikeFoe(e, s, ambush)) {
+      blocked++;
+      continue;
+    }
+    if (ambush) takeAmbush();
+    landed.push(e);
   }
   hero.moveHits += landed.length + blocked;
   if (landed.length) {

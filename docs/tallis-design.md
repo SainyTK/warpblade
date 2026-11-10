@@ -39,6 +39,8 @@ The patch adds one seam on top of that, `src/game/enemies/awareness.ts`, for any
 - The fliers that start their attack without `facesHero` (Glimmer Moths, Prism Sprites, Abyss Eyes) check `foeSees(e)` before they start one.
 - A foe that cannot see the hero walks on past him: husks, thornbacks, golems and stalkers no longer stop within a few pixels of a hero they cannot see, and Mire Toads do not hop toward him.
 - `unseenTouch(fromX)`: a foe walking on unaware does no harm by touch, so a hidden hero can stand in a husk's path and let it walk by.
+- A foe that cannot see the hero raises no guard against him (`guards` in `src/game/damage.ts`), so his blows from the Veil land from the front too.
+- A walker that cannot see the hero turns back when it meets another walker coming the other way or reaches the edge of the stage, so two foes that lost him never march on the spot against each other.
 - The Rift Warden is a boss, so it always sees him and keeps attacking a veiled Tallis.
 - The lost cue: when he becomes hidden, every minion within 160 px that was facing him shows a grey question mark (5 px, with a 1 px dark outline) over its head for 0.6 s, drawn through the kit's `drawOver`.
 - Co-op: `nearest` in `src/game/coop/hostRun.ts` skips a seat whose hero is hidden while any standing seat is visible, so foes go for the visible hero. When every standing hero is hidden it picks as before.
@@ -46,8 +48,8 @@ The patch adds one seam on top of that, `src/game/enemies/awareness.ts`, for any
 
 ## Stats
 
-`base: { ad: 11, ap: 8, hp: 80, mp: 80, stamina: 100, crit: 0.10, move: 1.08, aspd: 1.1, haste: 1 }`, growth `{ hp: 0.9, mp: 0.35 }` like Sable's, `comboHits: 3`, `special: "gloaming"`.
-HP 80 is the lowest in the roster on purpose, and crit 0.10 is the highest.
+`base: { ad: 11, ap: 8, hp: 90, mp: 80, stamina: 100, crit: 0.10, move: 1.08, aspd: 1.1, haste: 1 }`, growth `{ hp: 0.9, mp: 0.35 }` like Sable's, `comboHits: 3`, `special: "gloaming"`.
+The plan set HP 80, the lowest in the roster; after QA it went to 90 by the plan's own first fallback step (see the bot check), which leaves only Mirel (88) below him. Crit 0.10 is the highest.
 
 ## Controls
 
@@ -109,8 +111,8 @@ Each of his blows from behind sets the foe's turn timer back to 0, so a foe stru
 
 | Blow | Frames | Hit on | Reach | Power | Knockback | Extra |
 | --- | --- | --- | --- | --- | --- | --- |
-| Flick (front) | 8 | 3 | 8 to 20 px, 10 px tall | 0.7x AD | 20 | |
-| Cross (front) | 9 | 4 | 6 to 22 px | 0.8x AD | 30 | stagger 0.3 s |
+| Flick (front) | 8 | 3 | 8 to 20 px, 10 px tall | 0.8x AD | 20 | |
+| Cross (front) | 9 | 4 | 6 to 22 px | 0.92x AD | 30 | stagger 0.3 s |
 | Heel Kick (front) | 13 | 6 | 4 to 24 px | 1.0x AD | 90 | heavy (breaks a guard); he hops back 10 px |
 | Backstab (behind) | 10 | 5 | 4 to 20 px | 1.2x AD | 0 | stagger 0.5 s |
 | Twist (behind) | 9 | 4 | 4 to 18 px | 1.0x AD | 0 | |
@@ -118,7 +120,7 @@ Each of his blows from behind sets the foe's turn timer back to 0, so a foe stru
 | Drop Stab (air) | 10 | 4 | a plunge straight down, 14 px wide | 1.1x AD | 0 | dives at 300 px/s; always counts as from behind; once per airtime |
 | Rising Cut | 11 | 3 | 2 to 20 px, 24 px tall | 1.0x AD | 40 | launch 150, heavy; live for 3 frames |
 
-Back-open cue: while a ground foe within reach ahead of him has its back to him, a 3 px rose chevron sits on that foe's back.
+Back-open cue: while a ground foe within reach ahead of him has its back to him, a rose chevron 5 px wide with a dark outline points down at that foe's back from above it, clear of his own cloak.
 It is the one cue that tells the player the behind string is ready.
 
 Animation beats, to `docs/motion-standard.md`, with the knives held in reverse grip:
@@ -140,7 +142,7 @@ Smoke Knot: 18 MP, 8 s recharge.
 - He drops a knot at his feet and a cloud 72 px wide and 40 px tall stands for 3 s.
 - Minions and elites inside are blind (`e.blind` refreshed to 0.3 s each frame they are inside), so they do not turn or start a wind-up.
 - He counts as hidden while he stands inside it, and as Unseen for Gloam.
-- Look: soft blended puffs in the gloam ramp, lit rose along their tops, rolling outward over 0.2 s, curling, and thinning over the last 0.5 s.
+- Look: puffs of smoke dithered on the art pixel grid in the gloam ramp, dense at the heart and broken up at the edges, the cloud's upper edge lit rose, rolling outward over 0.2 s, curling, and thinning over the last 0.5 s.
 
 Hamstring: 14 MP, 4 s recharge.
 
@@ -266,6 +268,7 @@ The skilled bot has no Tallis policy; on this build it reaches wave 2 with 4 kil
 - Gloaming's dark dims the scene's additive light as well as its colour, since in the daylight eras the sun's light washed out a dark drawn on the colour alone.
 - He rises from the pool facing the back he came up behind, so the Ambush window can be used without turning round first.
 - The behind string and the chevron read only a foe ahead of him, so a foe at his back never turns J into a Backstab at the air.
+- After QA: an Ambush is spent only by a blow that lands, never by one a guard stops; foes that cannot see him do not guard; walkers that lose him turn back at each other and at the walls; the chevron moved above the open back with a dark outline; the smoke is dithered; the skill icons sit on a dusk disc with bolder knives; HP 80 to 90 and Flick and Cross 15% stronger.
 
 ## Note for the owner
 

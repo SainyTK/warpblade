@@ -29,8 +29,8 @@ export interface KnifeBlowSpec {
 
 /** every blow of his knives */
 export const KNIFE_BLOWS: Readonly<Record<KnifeBlow, KnifeBlowSpec>> = {
-  flick: { dur: frame(8), hit: frame(3), near: 8, far: 20, y: 15, height: 10, power: 0.7, kx: 20 },
-  cross: { dur: frame(9), hit: frame(4), near: 6, far: 22, y: 15, height: 12, power: 0.8, kx: 30, stagger: 0.3 },
+  flick: { dur: frame(8), hit: frame(3), near: 8, far: 20, y: 15, height: 10, power: 0.8, kx: 20 },
+  cross: { dur: frame(9), hit: frame(4), near: 6, far: 22, y: 15, height: 12, power: 0.92, kx: 30, stagger: 0.3 },
   heelKick: {
     dur: frame(13),
     hit: frame(6),

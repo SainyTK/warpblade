@@ -12,7 +12,7 @@ export const TALLIS: CharacterDef = {
     "He learned his trade in the hour between day and night, when nobody looks twice. Two short knives, no armour, no patience for a fair fight. Every foe has a back.",
   accent: "#f08ad0",
   special: "gloaming",
-  base: { ad: 11, ap: 8, hp: 80, mp: 80, stamina: 100, crit: 0.1, move: 1.08, aspd: 1.1, haste: 1 },
+  base: { ad: 11, ap: 8, hp: 90, mp: 80, stamina: 100, crit: 0.1, move: 1.08, aspd: 1.1, haste: 1 },
   growth: { ad: 0, ap: 0, hp: 0.9, mp: 0.35 },
   skills: TALLIS_SKILL_DEFS,
   comboHits: 3,
