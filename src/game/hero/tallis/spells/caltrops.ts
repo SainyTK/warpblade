@@ -27,6 +27,7 @@ export function scatterCaltrops(x0: number, x1: number, y: number, seconds: numb
   }));
   let t = 0;
   let cut = 0;
+  const tripped = new Set<object>();
   game.fx.push({
     update(dt) {
       t += dt;
@@ -38,6 +39,10 @@ export function scatterCaltrops(x0: number, x1: number, y: number, seconds: numb
         if (b[2] < lo || b[0] > hi || Math.abs(b[3] - y) > 4) continue;
         if (v.slow) e.chill = Math.max(e.chill, 0.3);
         if (v.still) e.turn = 0;
+        if (v.trip && !tripped.has(e)) {
+          tripped.add(e);
+          e.stun = Math.max(e.stun, v.trip);
+        }
         if (cut > 0) continue;
         dealDamage(e, progress.stats.ap * (v.power ?? 0.3), { fromX: e.x, source: ID });
         if (v.ignite) nightshade(e);

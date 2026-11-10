@@ -5,6 +5,7 @@ import type { SkillBehavior, SkillMemory } from "../../../types/skillBehavior";
 import { TAU } from "../../../utils/math";
 import { dealDamage } from "../../damage";
 import { enemyCenter } from "../../enemies/enemy";
+import { addStacks } from "../../enemies/skillStatus";
 import { hero, progress, rng } from "../../state";
 import { skillValues, withCharms } from "../query";
 import { nearestFoe } from "../targets";
@@ -37,6 +38,14 @@ function peck(c: Crow, e: Enemy): void {
   const v = skillValues(ID);
   dealDamage(e, progress.stats.ad * v.power, { fromX: c.x, source: ID });
   if (v.blind && e.rank === "minion") e.blind = Math.max(e.blind, v.blind);
+  if (v.bleed)
+    addStacks(e, ID, {
+      stacks: 1,
+      max: 5,
+      damage: progress.stats.ad * 0.08,
+      every: 1,
+      duration: withCharms("duration", 3),
+    });
   c.next = CROW.every;
 }
 

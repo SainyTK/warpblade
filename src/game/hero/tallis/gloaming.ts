@@ -1,5 +1,6 @@
 import { PAL } from "../../../constants/palette";
 import { W } from "../../../constants/stage";
+import { SMOKE_KNOT } from "../../../constants/tallis/abilities";
 import { GLOAMING } from "../../../constants/tallis/special";
 import { ULT_LEVELS, ULT_REACH } from "../../../constants/ultimate";
 import { sfx } from "../../../services/audio";
@@ -16,6 +17,7 @@ import { hitStop, shake } from "../../world";
 import { setState } from "../actions";
 import { skin } from "../skin";
 import { countBackKill } from "./blowSkills";
+import { raiseCloud } from "./clouds";
 import { createDark } from "./dark";
 import { gloamMax } from "./gloam";
 import { tallis, tallisHost } from "./memory";
@@ -117,7 +119,10 @@ function finish(): void {
   if (tallisHost.dark) tallisHost.dark.fading = true;
   shake(0.25, GLOAMING.shake);
   if (hero.state === "eclipse") {
-    if (skillValues("t_eclipse").refill) tallis.gloam = gloamMax();
+    const v = skillValues("t_eclipse");
+    if (v.refill) tallis.gloam = gloamMax();
+    if (v.smoke)
+      raiseCloud(hero.x, hero.y, SMOKE_KNOT.width, SMOKE_KNOT.height, withCharms("duration", SMOKE_KNOT.life));
     if (!tallis.veil) raiseVeil("free");
   }
   tallisHost.targets = [];

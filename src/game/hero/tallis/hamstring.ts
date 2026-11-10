@@ -8,7 +8,7 @@ import { createFloorRing } from "../../effects/floorRing";
 import { enemyBox } from "../../enemies/enemy";
 import { kindOf } from "../../enemies/kinds";
 import { emitSkillEvent } from "../../skills/events";
-import { skillEvolved, skillValues, withCharms } from "../../skills/query";
+import { skillValues, withCharms } from "../../skills/query";
 import { game, hero, progress } from "../../state";
 import { boxHit, hitStop, markStruck, newSwing, shake } from "../../world";
 import { setState, settle } from "../actions";
@@ -59,11 +59,12 @@ function trip(e: Enemy): void {
     e.vx = 0;
   }
   if (v.bleed) bleed(e, "t_cutTendon");
+  if (v.chill) e.chill = Math.max(e.chill, time + 1);
 }
 
 /** the foes the sweep reaches, nearest first: the box ahead, or the floor ahead with Crippling Line */
 function swept(): Enemy[] {
-  const wave = skillEvolved("t_cutTendon");
+  const wave = !!skillValues("t_cutTendon").wave;
   const box = strikeBox(KNIFE_BLOWS.hamstring);
   const reach = wave ? withCharms("area", WAVE_REACH) : 0;
   return game.enemies
@@ -84,8 +85,9 @@ export function runHamstring(): void {
     smear("hamstring");
     const foes = swept().slice(0, skillValues("t_cutTendon").foes || 1);
     for (const e of foes) trip(e);
-    if (skillEvolved("t_cutTendon")) game.fx.push(createFloorRing(h.x + h.face * 45, h.y, 45, PAL.gloam, 0.3, 0.12));
-    if (skillEvolved("t_nightshade"))
+    if (skillValues("t_cutTendon").wave)
+      game.fx.push(createFloorRing(h.x + h.face * 45, h.y, 45, PAL.gloam, 0.3, 0.12));
+    if (skillValues("t_nightshade").lotus)
       for (const e of game.enemies) if (e.hp > 0 && Math.abs(e.x - h.x) <= LOTUS_REACH) nightshade(e, true);
     if (foes.length) {
       hitStop(0.04);

@@ -25,6 +25,7 @@ function prick(e: Enemy, x: number): void {
     kx: Math.sign(e.x - x) * 15,
     source: "abilities",
   });
+  if (v.chill) e.chill = Math.max(e.chill, 1);
   if (v.bleed)
     addStacks(e, ID, {
       stacks: 1,

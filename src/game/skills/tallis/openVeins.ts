@@ -6,15 +6,18 @@ import { enemyCenter } from "../../enemies/enemy";
 import { consumeStacks, stacksOf } from "../../enemies/skillStatus";
 import { game, progress } from "../../state";
 import { skillEvolved, skillValues } from "../query";
+import { openVeinsSpread } from "./spreads";
 
 const ID = "t_openVeins";
 /** Exsanguinate's burst reaches this far, and deals this share of attack damage per stack */
 const BURST = { reach: 30, power: 1 } as const;
 
-/** Open Veins lays its Bleed in his kit; once evolved, a foe at most Bleed bursts on the next hit (Exsanguinate) */
+/** Open Veins lays its Bleed in his kit; its Bleed spreads on death, and once evolved a foe at most Bleed bursts on the
+ *  next hit (Exsanguinate) */
 export const openVeinsSkill: SkillBehavior = {
   create: () => ({}),
   on: {
+    ...openVeinsSpread,
     blow(_m, event) {
       if (!skillEvolved(ID)) return;
       const e = event.foe;

@@ -98,6 +98,8 @@ function act(sh: Shade, dt: number): boolean {
   if (sh.foe && sh.stabs > 0 && sh.next <= 0) {
     stab(sh, sh.foe);
     sh.stabs--;
+    const stun = skillValues(ID).stun;
+    if (stun && sh.stabs === 0 && sh.foe.rank !== "boss") sh.foe.stun = Math.max(sh.foe.stun, stun);
     sh.next = STAB_EVERY;
     if (sh.foe.hp > 0) standBehind(sh, sh.foe);
   }

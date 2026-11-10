@@ -3,6 +3,7 @@ import { glow, place, px } from "../../../engine/frame";
 import type { Enemy } from "../../../types/enemy";
 import type { SkillBehavior, SkillMemory } from "../../../types/skillBehavior";
 import { dealDamage } from "../../damage";
+import { createFloorRing } from "../../effects/floorRing";
 import { createSlash } from "../../effects/slash";
 import { addStacks } from "../../enemies/skillStatus";
 import { skin } from "../../hero/skin";
@@ -41,11 +42,25 @@ function slash(w: Wraith, e: Enemy): void {
       every: 1,
       duration: withCharms("duration", 3),
     });
+  if (v.blind && e.rank === "minion") e.blind = Math.max(e.blind, v.blind);
   const face = Math.sign(e.x - w.x) || 1;
   game.fx.push(
     createSlash(w.x, w.y, face, { cx: 4, cy: -10, R: 8, sy: 0.8, rot: 0, a0: -1.2, a1: 1, W: 2, ramp: skin.ramp }),
   );
   w.next = WRAITH.every;
+}
+
+/** a wraith's burst as it ends reaches this far */
+const BURST_REACH = 24;
+
+/** with its level, a wraith bursts as it ends */
+function burst(w: Wraith): void {
+  const power = skillValues(ID).burst;
+  if (!power) return;
+  for (const e of game.enemies)
+    if (e.hp > 0 && Math.abs(e.x - w.x) <= BURST_REACH)
+      dealDamage(e, progress.stats.ad * power, { fromX: w.x, source: ID });
+  game.fx.push(createFloorRing(w.x, w.y, BURST_REACH, PAL.gloam, 0.3));
 }
 
 /** it drifts to the nearest foe and slashes it; false once its time is up */
@@ -60,7 +75,9 @@ function haunt(w: Wraith, dt: number): boolean {
     w.y += (e.y - w.y) * Math.min(1, dt * 3);
     if (Math.abs(dx) <= WRAITH.reach && w.next <= 0) slash(w, e);
   }
-  return w.left > 0;
+  if (w.left > 0) return true;
+  burst(w);
+  return false;
 }
 
 /**

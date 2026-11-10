@@ -5,7 +5,7 @@ import { dealDamage } from "../../damage";
 import { addStacks, stacksOf } from "../../enemies/skillStatus";
 import { feat } from "../../feat";
 import { emitSkillEvent } from "../../skills/events";
-import { skillEvolved, skillValues, withCharms } from "../../skills/query";
+import { skillValues, withCharms } from "../../skills/query";
 import { game, hero, progress, rng } from "../../state";
 import { addGloam } from "./gloam";
 import { isMarked } from "./marks";
@@ -49,7 +49,7 @@ export const ambushPower = (): number => skillValues("t_ambush").power ?? 0;
 
 /** Last Breath: a blow from behind fells a weakened minion or elite and hits a weakened mini boss three times as hard */
 export function executes(e: Enemy): number {
-  if (!skillEvolved("t_backbiter") || e.hp > e.max * 0.25 || e.rank === "boss") return 1;
+  if (!skillValues("t_backbiter").lastBreath || e.hp > e.max * 0.25 || e.rank === "boss") return 1;
   return e.rank === "mini" ? 3 : 1000;
 }
 
@@ -64,6 +64,7 @@ function openVeins(e: Enemy, back: boolean): void {
     every: 1,
     duration: withCharms("duration", v.life),
   });
+  if (v.slow) e.chill = Math.max(e.chill, 1);
 }
 
 /** Nightshade on the last blow of a string */
@@ -103,6 +104,7 @@ function ink(e: Enemy): void {
     duration: withCharms("duration", v.life),
   };
   addStacks(e, "t_inkWound", spec);
+  if (v.slow) e.chill = Math.max(e.chill, withCharms("duration", v.life));
   if (!v.spreading) return;
   for (const o of game.enemies) if (o !== e && o.hp > 0 && Math.abs(o.x - e.x) < 60) addStacks(o, "t_inkWound", spec);
 }
@@ -113,7 +115,7 @@ function turnabout(e: Enemy): void {
   if (!v.chance) return;
   const turn = (f: Enemy) => {
     f.face = Math.sign(f.x - hero.x) || f.face;
-    f.turn = 0;
+    f.turn = -(v.hold ?? 0);
     if (v.daze) f.stun = Math.max(f.stun, v.daze);
   };
   if (v.pirouette) {
@@ -129,6 +131,7 @@ function ambushLanded(e: Enemy, hit: KnifeHit): void {
   const v = skillValues("t_ambush");
   emitSkillEvent({ type: "ambush", foe: e });
   if (v.stun) e.stun = Math.max(e.stun, v.stun);
+  if (v.gloam) addGloam(v.gloam);
   ink(e);
   if (v.cleave)
     for (const o of game.enemies)
@@ -141,7 +144,7 @@ function ambushLanded(e: Enemy, hit: KnifeHit): void {
 
 /** a blow from behind: Gloam back, the foe's turn held back, a kill counted toward Knife in the Dark */
 function fromBehind(e: Enemy, hit: KnifeHit): void {
-  const markGloam = isMarked(e) ? (skillValues("t_markDusk").gloam ?? 1) : 1;
+  const markGloam = isMarked(e) && skillValues("t_markDusk").gloam ? 2 : 1;
   addGloam(GLOAM.backBlow * markGloam);
   // a foe struck from behind cannot turn until a moment after the last such blow; Backbiter lengthens it
   e.turn = -(skillValues("t_backbiter").slow ?? 0);
@@ -162,6 +165,8 @@ export function countBackKill(): void {
 export function afterKnifeHit(e: Enemy, s: KnifeStrike, hit: KnifeHit): void {
   // Falling Night: a Drop Stab from the Veil keeps it
   const keeps = s.blow === "dropStab" && !!skillValues("t_plunge").fallingNight;
+  // Quiet Step: blows from the Veil give Gloam back
+  if (tallis.veil) addGloam(skillValues("t_quietStep").refund ?? 0);
   if (tallis.veil && !keeps) veilStruck();
   if (hit.back) fromBehind(e, hit);
   if (hit.ambush) ambushLanded(e, hit);
@@ -170,7 +175,11 @@ export function afterKnifeHit(e: Enemy, s: KnifeStrike, hit: KnifeHit): void {
   if (veins && stacksOf(e, "t_openVeins") > 0) addGloam(veins);
   if (LAST_BLOWS.has(s.blow)) nightshade(e);
   if (s.blow === "risingCut" && skillValues("t_nightshade").rising) nightshade(e);
-  if (s.blow === "heelKick") turnabout(e);
+  if (s.blow === "heelKick") {
+    turnabout(e);
+    const stagger = skillValues("t_turnabout").stagger;
+    if (stagger) e.stagger = Math.max(e.stagger, stagger);
+  }
   const bite = skillValues("t_backbiter");
   if (s.blow === "backstab" && bite.twice && e.hp > 0)
     dealDamage(e, progress.stats.ad * hit.power, { fromX: e.x - e.face * 6, melee: true, sureCrit: hit.ambush });

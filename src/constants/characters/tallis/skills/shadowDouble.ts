@@ -4,18 +4,18 @@ import { evolvedRow, levelRows } from "../../../../utils/skillRows";
 const LEVELS = levelRows([
   {
     text: "20%: a shade stabs the nearest foe 3 times from behind, 0.5x.",
-    values: { chance: 0.2, stabs: 3, power: 0.5, linger: 0, shades: 1, twoMoons: 0 },
+    values: { chance: 0.2, stabs: 3, power: 0.5, linger: 0, shades: 1, stun: 0, twoMoons: 0 },
   },
   { text: "35% chance.", values: { chance: 0.35 } },
   { text: "Four stabs.", values: { stabs: 4 } },
   { text: "The shade lingers 3 s.", values: { linger: 3 } },
   { text: "Stabs deal 0.7x.", values: { power: 0.7 } },
   { text: "Two shades.", values: { shades: 2 } },
-  { text: "Stabs deal 0.9x.", values: { power: 0.9 } },
+  { text: "The last stab stuns 0.5 s; 0.9x.", values: { power: 0.9, stun: 0.5 } },
   { text: "55% chance.", values: { chance: 0.55 } },
 ]);
 
-/** Shadow Double. Design: docs/skills/tallis.md. Values: chance: chance a perfect dodge or a rise calls it; stabs: stabs it strikes; power: attack damage a stab deals, from behind; linger: seconds it stays after, stabbing again; shades: shades called; twoMoons: 1 every rise calls one (evolution) */
+/** Shadow Double. Design: docs/skills/tallis.md. Values: chance: chance a perfect dodge or a rise calls it; stabs: stabs it strikes; power: attack damage a stab deals, from behind; linger: seconds it stays after, stabbing again; shades: shades called; stun: seconds its last stab on a foe stuns; twoMoons: 1 every rise calls one (evolution) */
 export const SHADOW_DOUBLE: SkillDef = {
   id: "t_double",
   name: "Shadow Double",

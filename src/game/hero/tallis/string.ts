@@ -120,6 +120,7 @@ function landingRing(): void {
     dealDamage(e, progress.stats.ad * KNIFE_BLOWS.dropStab.power * 0.5, {
       fromX: hero.x,
       kx: Math.sign(e.x - hero.x) * 60,
+      stun: v.stun || undefined,
     });
     if (v.fallingNight && tallis.veil && e.rank === "minion") e.blind = Math.max(e.blind, 2);
   }

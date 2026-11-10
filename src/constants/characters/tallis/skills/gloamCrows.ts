@@ -4,18 +4,18 @@ import { evolvedRow, levelRows } from "../../../../utils/skillRows";
 const LEVELS = levelRows([
   {
     text: "15%: three crows dive at foes, 0.4x each.",
-    values: { chance: 0.15, cooldown: 2, count: 3, power: 0.4, blind: 0, circle: 0, murder: 0 },
+    values: { chance: 0.15, cooldown: 2, count: 3, power: 0.4, blind: 0, circle: 0, bleed: 0, murder: 0 },
   },
   { text: "25% chance.", values: { chance: 0.25 } },
   { text: "Five crows.", values: { count: 5 } },
   { text: "Crows blind for 0.5 s.", values: { blind: 0.5 } },
   { text: "Crows deal 0.6x.", values: { power: 0.6 } },
   { text: "Crows circle him for 5 s and dive again.", values: { circle: 5 } },
-  { text: "Crows deal 0.8x.", values: { power: 0.8 } },
+  { text: "Crow dives bleed; 0.8x.", values: { power: 0.8, bleed: 1 } },
   { text: "Crows deal 1.0x.", values: { power: 1 } },
 ]);
 
-/** Gloam Crows. Design: docs/skills/tallis.md. Values: chance: chance a blow from behind sends them; cooldown: seconds between flocks; count: crows; power: attack damage each dive deals; blind: seconds a dive blinds its foe; circle: seconds they circle him after; murder: 1 every cast on I sends a flock (evolution) */
+/** Gloam Crows. Design: docs/skills/tallis.md. Values: chance: chance a blow from behind sends them; cooldown: seconds between flocks; count: crows; power: attack damage each dive deals; blind: seconds a dive blinds its foe; circle: seconds they circle him after; bleed: 1 their dives bleed; murder: 1 every cast on I sends a flock (evolution) */
 export const GLOAM_CROWS: SkillDef = {
   id: "t_crows",
   name: "Gloam Crows",

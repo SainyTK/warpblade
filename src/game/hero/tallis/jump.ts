@@ -4,7 +4,7 @@ import { sfx } from "../../../services/audio";
 import { isHeld } from "../../input";
 import { emitSkillEvent } from "../../skills/events";
 import { skillValues } from "../../skills/query";
-import { hero } from "../../state";
+import { game, hero } from "../../state";
 import { dust } from "../../world";
 import { isFree, setState } from "../actions";
 import { lift } from "../lift";
@@ -18,6 +18,11 @@ function nightLeap(): boolean {
   if (!v.leaps || tallis.leaps <= 0 || (!tallis.veil && tallis.leapOpen <= 0)) return false;
   tallis.leaps--;
   tallis.afterLeap = true;
+  // the leap's smoke blinds the minions under him
+  if (v.smoke)
+    for (const e of game.enemies)
+      if (e.hp > 0 && e.rank === "minion" && Math.abs(e.x - hero.x) < 20 && e.y >= hero.y - 4)
+        e.blind = Math.max(e.blind, 1);
   if (tallis.veil && !v.keep) endVeil("leap");
   hero.vy = 0;
   lift(v.rise, true);
