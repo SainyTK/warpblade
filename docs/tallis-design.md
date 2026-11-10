@@ -259,19 +259,26 @@ Mash bot on this build from wave 1, one run each (`agent-studio`, `npm run playt
 The first build fell on wave 1 with no kills.
 Wave 1 is mostly Glimmer Moths hovering 40 to 50 px above the floor, and none of his ground blows reached them, so the mash bot stood under them pressing J at the air.
 Raising his HP would not have changed that, so the fix answers fliers instead: J on the floor with a flier hovering over him and no ground foe in reach springs 34 px into Rising Cut, whose slash stays live for three frames.
-After it he falls on wave 4 with 11 kills, level with Kael and Hulda and within two waves of every hero, so his HP and his front blows stay at the plan's numbers.
+After it he falls on wave 4 with 11 kills, level with Kael and Hulda and within two waves of every hero; his HP and front blows only moved later, after QA's plain script (below).
 
 The skilled bot has no Tallis policy; it reaches wave 2 with 4 kills from wave 1, before and after QA, and at the wave 20 start (level 14) he falls to the Warden in 18.7 s like the others (18.4 to 27.5 s in the baseline).
 
-QA's plain script walks up to the nearest foe and presses J, never using the Veil or Sink.
-On it Tallis fell on wave 2 with 5 kills, against Kael on wave 3 with 9 and Hulda on wave 3 with 7.
+QA's plain script walks up to the nearest foe and presses J, never using the Veil or Sink, so it compares heroes on the same play.
+Each row is one run of it for all three heroes on the build named.
+
+| Build | Tallis | Kael | Hulda |
+| --- | --- | --- | --- |
+| After the springing Rising Cut | wave 2 / 5 kills | wave 3 / 9 | wave 3 / 7 |
+| HP 90, Flick and Cross 15% stronger | wave 2 / 5 | | |
+| Every knife blow staggers | wave 2 / 5 | | |
+| A knife cuts a minion's wind-up short | wave 3 / 6 | wave 3 / 9 | wave 3 / 7 |
+
 HP 86 alone changed nothing, so both of the plan's fallback steps went in: HP 80 to 90, then Flick and Cross 15% stronger.
-The plain script still ended on wave 2 with 5 kills.
-The cause was a bug: four of his six string blows (Flick, Heel Kick, Twist, Gut Slash) carried no stagger, while every other hero's blows stagger by default, so a walking thornback kept hurting him by touch at knife range (the skilled bot lost 54 HP on wave 1, Kael none).
-With every knife blow using the shared `COMBO.stagger` unless it sets its own, the plain script still ended on wave 2 with 5 kills.
-Every hit he took there came from thornbacks: charges of 16 that wound up right beside him, and touches of 6.
-A knife that lands on a winding minion now cuts its wind-up short.
-With that, the plain script on the same build ends on wave 3 for all three: Tallis with 6 kills, Kael with 9 and Hulda with 7.
+Neither moved the plain script.
+Four of his six string blows (Flick, Heel Kick, Twist, Gut Slash) also carried no stagger, while every other hero's blows stagger by default; they now use the shared `COMBO.stagger`, which keeps a walker he cuts from hurting him by touch, but did not move the plain script either.
+Logging every hit he took on it showed the damage came from thornbacks that wound up and charged right beside him (16 a charge) while he cut them, and from their touches (6).
+A knife that lands on a winding minion now cuts its wind-up short, and with that all three heroes end on wave 3.
+QA's other player script presses K and L for every hero, which are other moves for Kael and Hulda, so it measures only Tallis and is not used to compare heroes.
 The skilled bot still ends on wave 2 with 4 kills.
 QA's other player script presses K and L for every hero, which are other moves for Kael and Hulda, so it measures only Tallis and is left out of this comparison.
 The skilled bot still ends on wave 2 with 4 kills, losing 54 HP on wave 1: it taps L against a foe's blow, which for Tallis is a 0.15 s Sink that rises again inside a thornback's charge. A Tallis policy that holds L through the blow, as the owner note below describes, is the fix for that bot.
