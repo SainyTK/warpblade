@@ -10,6 +10,7 @@ import { createSlash } from "../../effects/slash";
 import { hurtHero } from "../../hurtHero";
 import { game, hero, particles, rng } from "../../state";
 import { boxHit, dust, heroBox } from "../../world";
+import { foeSees } from "../awareness";
 import { enemyBox } from "../enemy";
 import { facesHero, turnToHero } from "../facing";
 import { ABYSS_HITS, VOID, VOID_SPARKS } from "./colors";
@@ -59,7 +60,7 @@ export function updateStalker(e: Enemy, dt: number, ts: number): void {
   const ws = waveScale(game.wave);
   if (e.state === "walk") {
     turnToHero(e, dt);
-    e.vx = approach(e.vx, Math.abs(dx) > 6 && e.stagger <= 0 ? e.face * 32 : 0, 200 * dt);
+    e.vx = approach(e.vx, (Math.abs(dx) > 6 || !foeSees(e)) && e.stagger <= 0 ? e.face * 32 : 0, 200 * dt);
     if (e.cd <= 0 && facesHero(e) && hero.state !== "dead") {
       if (Math.abs(dx) < CLAW_RANGE && Math.abs(hero.y - e.y) < 30) Object.assign(e, { state: "wind", st: 0 });
       else if (Math.abs(dx) > 56 && Math.abs(dx) < 170 && !game.enemies.some((o) => o.type === "stalker" && sunk(o))) {

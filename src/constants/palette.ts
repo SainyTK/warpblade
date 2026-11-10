@@ -15,6 +15,9 @@ export const PAL = {
   hour: ramp(["#0c1e24", "#163e44", "#24706c", "#3fb0a0", "#8ae6cf", "#e6fff6"]),
   /** Wenna's lamp violet: Wick flames, the Flare, Swap, Kindle, the Quarry ring and the WX bar's edge */
   wick: ramp(["#1a0f2e", "#3a1f5c", "#6a3aa0", "#a46ae0", "#d8b4ff", "#f8eeff"]),
+  /** Tallis's gloam, ink to dusk rose: the Veil's outline and wisps, the pool, his smears, the back-open chevron, the
+   *  GL bar's edge, Smoke Knot and Gloaming */
+  gloam: ramp(["#0c0a14", "#1e1830", "#3a2c4e", "#6e4a78", "#c06a9e", "#ffb8dc"]),
 } as const;
 
 /** Mirel's falling sand, light and shade: the hourglass at her belt, the SD bar and the motes of her time magic */
@@ -34,6 +37,7 @@ export const SPARKS = {
   brass: [WHITE, hex("#fff6d0"), hex("#ffe08a"), hex("#c08a2e")],
   hour: [WHITE, hex("#e6fff6"), hex("#8ae6cf"), hex("#3fb0a0")],
   wick: [hex("#f8eeff"), hex("#d8b4ff"), hex("#a46ae0"), hex("#6a3aa0")],
+  gloam: [hex("#ffe4f2"), hex("#ffb8dc"), hex("#c06a9e"), hex("#6e4a78")],
 } satisfies Record<string, Ramp>;
 
 /** white hot to smouldering, and fresh smoke to thin */

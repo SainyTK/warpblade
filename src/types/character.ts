@@ -14,7 +14,7 @@ export interface HeroSkin {
    */
   head: readonly string[];
   headBack: readonly string[];
-  weapon: "sword" | "glaive" | "crossbow" | "gauntlets" | "chain" | "staff" | "lampPole";
+  weapon: "sword" | "glaive" | "crossbow" | "gauntlets" | "chain" | "staff" | "lampPole" | "knives";
   /** from the hand to the tip, in pixels */
   reach: number;
   /** slashes, floor rings, afterimages and sparks, dark to bright, seven steps */
@@ -32,6 +32,8 @@ export interface HeroSkin {
   bun?: boolean;
   /** a hood drawn in the head rows covers the hair: its point hangs from the back of the head, with no ponytail or scarf */
   hood?: boolean;
+  /** under a hood, a short scarf end still trails from the neck along the scarf's rope */
+  scarfEnd?: boolean;
   /** the coat tails hang long as a cloak, lined in the scarf colours, with drips of the trim colour along the hem */
   cloak?: boolean;
   /** a leather satchel at the front of the hip in the glove colours, three candle tips in the trim colours showing */

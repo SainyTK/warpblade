@@ -7,15 +7,16 @@ Order inside a list is priority order.
 ## Next big patches
 
 - Hero sprint (charter): one new hero every night until the game has ten. Each one plays completely differently from the rest. (Grand Chase, pillar 2)
-  - Taken play styles: Kael (warp swordsman), Ysra (planted glaive, brace and parry, Heat), Sable (ranged hunter, ammo and reload), Hulda (unarmed grappler, grabs and throws, armour plates built from Grit), Orrin (tether fighter, pendulum swing on a hooked chain, Momentum from speed, mid-range tip sweet spot), Mirel (time mage, Stillfield slowing foes and shots, delayed echoes on every blow, Rewind that heals, hover at the jump's apex, Sand refilled by waiting) and Wenna (summoner, Wicks that hold and intercept, Wax dripped by kills, Swap, Kindle). Seven of ten heroes.
-  - Next prices by the rule: 1350, 1800, 2450.
-  - Suggested order for the last three, chosen to keep each new hero far from the last: a shadow assassin (after a foe awareness rule), a fighter on a rhythm, and a berserker or shield thrower as the tenth.
+  - Taken play styles: Kael (warp swordsman), Ysra (planted glaive, brace and parry, Heat), Sable (ranged hunter, ammo and reload), Hulda (unarmed grappler, grabs and throws, armour plates built from Grit), Orrin (tether fighter, pendulum swing on a hooked chain, Momentum from speed, mid-range tip sweet spot), Mirel (time mage, Stillfield slowing foes and shots, delayed echoes on every blow, Rewind that heals, hover at the jump's apex, Sand refilled by waiting), Wenna (summoner, Wicks that hold and intercept, Wax dripped by kills, Swap, Kindle) and Tallis (shadow assassin, Veil from Gloam refilled while unseen, Sink shadow pool, blows from behind at 2.25x). Eight of ten heroes.
+  - Next prices by the rule: 1800, 2450.
+  - Suggested order for the last two, chosen to keep each new hero far from the last: the rhythm fighter next, then the berserker or the shield thrower as the tenth.
   - The trapper leaves the open directions, since Wenna covers damage placed away from the hero.
   - Engine note: the optional `steadfast` hook in `hurtHero` is new shared code; a future hero with super armour should reuse it.
   - Engine note: Orrin's swing runs in his kit through `drivesMotion` and `gravityScale`. A future hero with a tether or rope should reuse his pendulum step and write no second one.
   - Engine note: `src/game/timeFields.ts` (`fieldPace`) is the shared hook for anything that slows foes or foe shots in an area, and the foe `stopped` status is the shared full stop. Future time or control heroes and skills reuse both.
   - Engine note: Wenna's Wick hold (`src/game/enemies/holds.ts`) and her `absorbHurt` intercept are the pattern for any future ally that blocks for a hero. If a later hero needs foes to choose allies as targets, build a shared target hook then and move Wicks onto it.
   - Engine note: `dealDamage` has a `noFlow` option for Wenna's Wick bites; future summons in base kits should use it.
+  - Engine note: `src/game/enemies/awareness.ts` (`heroHidden`, `foeSees`), the optional kit hook `hidden`, and the foe `blind` status are the shared hooks for anything that hides a hero or blinds foes; future heroes and skills reuse them. The co-op `nearest` now skips hidden heroes while a visible one stands.
 
 - New system: class advancement. Each hero unlocks a second job after clearing the stage once, changing part of the combo, the special and the look. (Grand Chase, pillars 2 and 4)
 - Co-op round two: player names, rejoining a run, a guest joining between waves, hit-stop that freezes only the striking hero and its foes, and client-side prediction for the guest's own hero. (pillars 1 and 4, feedback 10)
@@ -33,11 +34,18 @@ Order inside a list is priority order.
 - Check the shop prices against coins earned per run (see `docs/meta-progress.md`).
 - Measure the four evolutions' damage per cast with the 0.2.0 scenario scripts and even them out; Glacier Bloom is the weakest on paper.
 - Tune `COOP_SCALING` once real rooms report results. (feedback 10)
+- Wenna's Flare cone starts at her chest, behind the lantern (0.7.0 known issue), as a polish fix. (pillar 5)
 
 Note for the owner: the playtest bots need an Orrin entry (hook use for the skilled bot) and a Mirel entry (a skilled policy would hold K over a crowd, string inside it and press L after a hit). The studio cannot edit `agent-studio/playtest/`.
 The bots also need a Wenna entry: a skilled policy would press K when Wax allows, strike the nearest foe with J to set the Quarry, Kindle a Wick beside a crowd, and press L away from a wind-up.
+The bots also need a Tallis entry: a skilled policy would press K when no foe within 60 px faces him, get behind the nearest foe by walking or Sink, press J when the back-open chevron shows, and press L when a foe winds up in front of him.
 
 ## Later
+
+- Tallis: climbing and clinging to the stage walls for drops from above. (pillar 1)
+- Tallis: his own walk and run from a gait model. (pillar 5)
+- Tallis: a third ultimate skill that marks a whole wave. (pillar 3)
+- Mini boss behaviour that hunts a veiled hero by sound, if players find the Veil too safe. (pillar 1)
 
 - Wenna: a second Wick kind (a shield-bearer or an archer) chosen with O, if players want more minion control. (pillar 2)
 - Wenna: an achievement for keeping eight Wicks lit at once. (pillar 4)
@@ -57,6 +65,7 @@ The bots also need a Wenna entry: a skilled policy would press K when Wax allows
 
 ## Shipped
 
+- 0.8.0 Unseen: Tallis the gloam knife (studio, hero sprint night five), the shared foe awareness rule, the foe blind status, and foes in co-op going for a visible hero first.
 - 0.7.0 Lamplight: Wenna the lamplighter (studio, hero sprint night four, the summoner from the suggested order), the shared foe hold seam, the `noFlow` damage option, and kills through a guard counting for the blow's source.
 - 0.6.0 Borrowed Time: Mirel the hour keeper (studio, hero sprint night three), the shared time fields and foe stop status, every hero in their own rest pose in the menus, and the Anchor Pin fix for fliers level with a ledge (the 0.5.0 known issue).
 - 0.5.0 Long Chain: Orrin the chain dancer (studio, hero sprint night two), hero skills replacing relics with 20 skills per hero (day work), the growth rework with charms, chests, Flow, streaming waves, damage by source and the Codex (day work). The hero skills also shipped evolutions for every hero (Evolutions round two, Hulda's evolutions), and the Codex shipped the collection screen from Achievements round two.

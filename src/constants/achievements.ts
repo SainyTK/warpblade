@@ -65,6 +65,7 @@ export const ACHIEVEMENTS: readonly Achievement[] = [
   heroTrial("orrin", "Orrin"),
   heroTrial("mirel", "Mirel"),
   heroTrial("wenna", "Wenna"),
+  heroTrial("tallis", "Tallis"),
   {
     id: "kills-100",
     name: "Culling",
@@ -161,6 +162,14 @@ export const ACHIEVEMENTS: readonly Achievement[] = [
     text: "As Wenna, let your Wicks defeat 40 foes in one run.",
     group: "Skill",
     goal: { kind: "best", stat: "wickKills", need: 40 },
+    reward: 60,
+  },
+  {
+    id: "knife-in-the-dark",
+    name: "Knife in the Dark",
+    text: "As Tallis, defeat 30 foes with blows from behind in one run.",
+    group: "Skill",
+    goal: { kind: "best", stat: "backKills", need: 30 },
     reward: 60,
   },
   {

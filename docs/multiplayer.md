@@ -22,7 +22,7 @@ Between steps the host's own hero is swapped in, so the host's keyboard, HUD and
 
 The shared game code asks a small set of hooks which hero to act on (`src/game/coopHooks.ts`):
 
-- each foe acts against the nearest standing hero, and so do coins, orbs and pickups;
+- each foe acts against the nearest standing hero foes can see, and so do coins, orbs and pickups; a hero their kit hides (Tallis in his Veil or his pool) is passed over while any standing hero is in sight, and when every standing hero is hidden the nearest is chosen as before;
 - a foe's blow, shot or hazard strikes every standing hero it reaches, each one once;
 - every effect remembers the hero who made it, so a flask, a brazier or an ultimate keeps hitting and following for its owner;
 - the step runs each hero's update, afterimages and input ageing once per hero;

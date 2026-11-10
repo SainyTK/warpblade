@@ -8,6 +8,7 @@ import { eachStanding } from "../../coopHooks";
 import { hurtHero } from "../../hurtHero";
 import { game, hero, particles, rng } from "../../state";
 import { boxHit, dust, heroBox, shake } from "../../world";
+import { foeSees } from "../awareness";
 import { enemyBox } from "../enemy";
 import { facesHero, turnToHero } from "../facing";
 import { DAY_SPARKS } from "./colors";
@@ -21,7 +22,7 @@ export function updateThornback(e: Enemy, dt: number, ts: number): void {
   const dx = hero.x - e.x;
   if (e.state === "walk") {
     turnToHero(e, dt);
-    e.vx = approach(e.vx, Math.abs(dx) > 8 && e.stagger <= 0 ? e.face * 26 : 0, 200 * dt);
+    e.vx = approach(e.vx, (Math.abs(dx) > 8 || !foeSees(e)) && e.stagger <= 0 ? e.face * 26 : 0, 200 * dt);
     if (e.cd <= 0 && facesHero(e) && Math.abs(dx) < 130 && hero.state !== "dead")
       Object.assign(e, { state: "wind", st: 0, n: 0 });
   } else if (e.state === "wind") {

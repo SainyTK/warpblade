@@ -51,7 +51,7 @@ Skills are bought once and none of them is offered on level up:
 
 - Lodestone (60): coins fly to the hero after 0.3 seconds, and foes drop another quarter of their base (a fraction left over is a chance at one more coin).
 - Aftershock (150, saved under the id `warpShock`): every travel move the hero ends sends a ring out from the hero that hits each foe within 40 art pixels for 0.8 times attack damage and stuns it briefly.
-  For Kael that is every dash and every warp, Blink Combo's included; for Ysra every vault, dive and backstep; for Sable every hop and slide; for Hulda every Bull Rush and every Skyfall Grab landing; for Orrin every release of a swing, every landing out of a fling, every zip, every ledge pull and every Backline; for Mirel the end of every Rewind and every landing out of a hover; for Wenna every Swap arrival.
+  For Kael that is every dash and every warp, Blink Combo's included; for Ysra every vault, dive and backstep; for Sable every hop and slide; for Hulda every Bull Rush and every Skyfall Grab landing; for Orrin every release of a swing, every landing out of a fling, every zip, every ledge pull and every Backline; for Mirel the end of every Rewind and every landing out of a hover; for Wenna every Swap arrival; for Tallis every rise out of his shadow pool.
 - Head Start (200): runs start at level 3 with two skill points, spent when wave 1 is cleared.
   A full run reaches about level 84, so level 3 is what wave 1 alone gives; the two picks are the whole head start.
 - Last Light (300): the first fatal blow of a run leaves the hero standing with half their HP.
@@ -74,6 +74,8 @@ A new hero's kit keeps these promises, so every item works for it on day one:
 - The kit calls `travelEnded()` from `src/game/hero/travelEnd.ts` when each of its travel moves ends: a dash, a warp, a leap, a landing out of the air (Aftershock).
   Shop skills that answer a hero's movement hook in there, never into one kit's code.
 - Coins, levels, Head Start and the pick tools live in shared code and need nothing from the kit.
+
+For Tallis, the eighth hero: Vitality raises an HP bar well below the front-line heroes'; Honed Edge every knife blow, Rising Cut, Drop Stab and Gloaming; Arcana Hamstring, his spells, the ability power dots and Gloaming; Wellspring the MP his abilities and the ultimate spend; Precision every hit, on the highest base crit in the roster; Light Boots his walk, run, veiled walk and the pool's glide; Endurance the stamina his Sink spends; Aftershock rings out at every rise from the pool.
 
 A new item follows the same rule: it changes a shared stat or hooks into a shared event, and its text says what it does without naming a hero.
 Item ids are saved, so a renamed item keeps its id.

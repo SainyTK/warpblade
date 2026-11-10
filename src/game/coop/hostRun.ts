@@ -15,6 +15,7 @@ import { scaleFoeHealth, scaleFoeList } from "../../utils/coopScaling";
 import { xpToReach } from "../../utils/progression";
 import { toWire } from "../../utils/wire";
 import { type CoopHooks, setCoopHooks } from "../coopHooks";
+import { heroHidden } from "../enemies/awareness";
 import { answerPick, earnXp, gainXp } from "../progress";
 import { resetRun } from "../run";
 import { runReport } from "../runReport";
@@ -57,7 +58,12 @@ export class HostRun implements CoopHooks {
     starts: readonly SeatStart[],
     private readonly events: RunEvents,
   ) {
-    this.seats = starts.map((s) => ({ ...s, saved: [], down: false, at: { x: 0, y: 0, standing: true } }));
+    this.seats = starts.map((s) => ({
+      ...s,
+      saved: [],
+      down: false,
+      at: { x: 0, y: 0, standing: true, hidden: false },
+    }));
     this.home = this.seats[0];
     this.current = this.home;
     for (const seat of this.seats) if (seat !== this.home) seat.saved = freshSaved();
@@ -101,17 +107,21 @@ export class HostRun implements CoopHooks {
     for (const f of game.fx) if (!this.owners.has(f)) this.owners.set(f, this.current);
   }
 
-  /** where a seat's hero stands, and whether foes, coins and orbs can go for it */
+  /** where a seat's hero stands, whether foes, coins and orbs can go for it, and whether foes can see it */
   private spot(seat: Seat): Seat["at"] {
-    return seat === this.current ? { x: hero.x, y: hero.y, standing: hero.state !== "dead" } : seat.at;
+    if (seat !== this.current) return seat.at;
+    return { x: hero.x, y: hero.y, standing: hero.state !== "dead", hidden: heroHidden() };
   }
 
+  /** the nearest standing hero foes can see, or the nearest standing one when every standing hero is hidden */
   nearest(x: number, y: number): void {
+    const spots = this.seats.map((seat) => this.spot(seat));
+    const seen = spots.some((s) => s.standing && !s.hidden);
     let best: Seat | null = null;
     let bestD = Number.POSITIVE_INFINITY;
-    for (const seat of this.seats) {
-      const s = this.spot(seat);
-      if (!s.standing) continue;
+    for (const [i, seat] of this.seats.entries()) {
+      const s = spots[i];
+      if (!s.standing || (seen && s.hidden)) continue;
       const d = Math.abs(s.x - x) + Math.abs(s.y - y) * 0.5;
       if (d < bestD) {
         best = seat;

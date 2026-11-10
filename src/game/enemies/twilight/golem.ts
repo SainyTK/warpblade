@@ -10,6 +10,7 @@ import { createImpact } from "../../effects/impact";
 import { hurtHero } from "../../hurtHero";
 import { game, hero, particles, rng } from "../../state";
 import { boxHit, dust, heroBox, shake } from "../../world";
+import { foeSees } from "../awareness";
 import { enemyBox } from "../enemy";
 import { facesHero, turnToHero } from "../facing";
 import { RUNE_RAMP, RUNE_SPARKS, TWILIGHT_COLORS as TC } from "./colors";
@@ -43,7 +44,7 @@ export function updateGolem(e: Enemy, dt: number, ts: number): void {
   const ws = waveScale(game.wave);
   if (e.state === "walk") {
     turnToHero(e, dt);
-    e.vx = approach(e.vx, Math.abs(dx) > 8 && e.stagger <= 0 ? e.face * 18 : 0, 120 * dt);
+    e.vx = approach(e.vx, (Math.abs(dx) > 8 || !foeSees(e)) && e.stagger <= 0 ? e.face * 18 : 0, 120 * dt);
     if (e.cd <= 0 && facesHero(e) && hero.state !== "dead") {
       if (Math.abs(dx) < PUNCH_RANGE && Math.abs(hero.y - e.y) < 30) Object.assign(e, { state: "wind", st: 0 });
       else if (Math.abs(dx) < SLAM_RANGE) Object.assign(e, { state: "charge", st: 0 });

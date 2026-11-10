@@ -56,6 +56,7 @@ export function makeEnemy(type: EnemyType, x: number, y: number, wave: number, x
     evadeCd: 0,
     stagger: 0,
     pinned: 0,
+    blind: 0,
     stopped: 0,
     stopStore: 0,
     stopShare: 0,

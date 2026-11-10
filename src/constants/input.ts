@@ -123,6 +123,19 @@ export const ACTION_TEXT: Record<KitId, Record<InputAction, string>> = {
     cast: "Use the selected ability: Kindle, Beckon or a spell skill (MP)",
     cycle: "Switch to the next ability",
   },
+  tallis: {
+    ...KAEL_ACTION_TEXT,
+    left: "Walk left. Tap twice and hold to run. In the shadow pool, glide left",
+    right: "Walk right. Tap twice and hold to run. In the shadow pool, glide right",
+    up: "Jump. One jump, no double jump",
+    down: "With jump, drop through a ledge",
+    attack:
+      "Knife string: Flick, Cross, Heel Kick, or Backstab, Twist, Gut Slash behind a foe's back. In the air, Drop Stab. Out of the pool, Rising Cut",
+    dash: "Hold to sink into a shadow pool and glide under foes (stamina); let go to rise. In the air, drop straight down",
+    warp: "Veil on or off: minions lose sight of you (20 Gloam, then Gloam over time). Your first blow out of it is an Ambush",
+    cast: "Use the selected ability: Smoke Knot, Hamstring or a spell skill (MP)",
+    cycle: "Switch to the next ability",
+  },
 };
 /** keys inside the menu */
 export const MENU_KEYMAP: Record<string, MenuCommand> = {

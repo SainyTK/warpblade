@@ -194,6 +194,31 @@ export const TOUCH_TEXT: Record<KitId, Record<TouchButtonAction, TouchButtonText
     ultimate: SPECIAL,
     cycle: { label: "Switch", hint: "Turn to the next ability", accent: "#d8b4ff" },
   },
+  tallis: {
+    attack: {
+      label: "Knife",
+      hint: "Knife string; behind a foe's back, Backstab, Twist, Gut Slash. In the air, Drop Stab. Out of the pool, Rising Cut",
+      accent: "#f08ad0",
+    },
+    up: { label: "Jump", hint: "One jump. Hold the stick down to drop through a ledge", accent: "#e8e6f6" },
+    dash: {
+      label: "Sink",
+      hint: "Hold to sink into a shadow pool and glide under foes, let go to rise (stamina). In the air, drop straight down",
+      accent: "#c06a9e",
+    },
+    warp: {
+      label: "Veil",
+      hint: "Veil on or off: minions lose sight of you (Gloam). Your first blow out of it is an Ambush",
+      accent: "#ffb8dc",
+    },
+    cast: {
+      label: "Ability",
+      hint: "Use the selected ability: Smoke Knot, Hamstring or a spell skill",
+      accent: "#ffe4f2",
+    },
+    ultimate: SPECIAL,
+    cycle: { label: "Switch", hint: "Turn to the next ability", accent: "#e8b4d0" },
+  },
 };
 
 /** where the attack button's center sits, art pixels in from the bottom right corner of the safe area */
@@ -262,6 +287,12 @@ export const STICK_DIRECTIONS: Record<KitId, readonly StickDirectionSpec[]> = {
     { direction: "far side", label: "Walk, she never runs" },
     { direction: "up", label: "Jump" },
     { direction: "down", label: "With Jump, drop through a ledge. With Light, light the Wick at your feet" },
+  ],
+  tallis: [
+    { direction: "side", label: "Walk. In the shadow pool, glide" },
+    { direction: "far side", label: "Run" },
+    { direction: "up", label: "Jump" },
+    { direction: "down", label: "With Jump, drop through a ledge" },
   ],
 };
 

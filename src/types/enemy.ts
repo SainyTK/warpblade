@@ -93,6 +93,8 @@ export interface Enemy {
   stagger: number;
   /** pinned to the floor for this long (Ysra's Impale and hook): held still; the damage it takes more is a mark */
   pinned: number;
+  /** blinded for this long (Tallis's Smoke Knot): it neither turns nor starts a wind-up at a hero (game/enemies/awareness.ts) */
+  blind: number;
   /** stopped in time for this long (Mirel's Stopped Clock and Hour of Stillness): it does not move, act or fall */
   stopped: number;
   /** damage it took while stopped, and the share of it that lands again as one hit when it restarts (0 for none) */

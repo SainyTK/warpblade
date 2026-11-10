@@ -14,6 +14,7 @@ import { hitBonus, takenBonus } from "./damageHooks";
 import { recordDamage } from "./damageLedger";
 import { createImpact } from "./effects/impact";
 import { launchEnemy } from "./enemies/airborne";
+import { foeSees } from "./enemies/awareness";
 import { enemyCenter } from "./enemies/enemy";
 import { kindOf } from "./enemies/kinds";
 import { markBonus } from "./enemies/skillStatus";
@@ -64,7 +65,7 @@ export function isBehind(e: Enemy, fromX: number): boolean {
 }
 
 /** guarding kinds (husks from wave 3, brutes) hold up a guard while they walk, facing the blow; a foe stopped in time
- *  cannot raise it */
+ *  cannot raise it, nor one that cannot see the hero (game/enemies/awareness.ts) */
 function guards(e: Enemy, o: HitOptions): boolean {
   if (!o.melee || o.curls || o.fromX === undefined) return false;
   const kind = kindOf(e.type);
@@ -76,6 +77,7 @@ function guards(e: Enemy, o: HitOptions): boolean {
     e.frozen <= 0 &&
     e.shock <= 0 &&
     e.stopped <= 0 &&
+    foeSees(e) &&
     !isBehind(e, o.fromX)
   );
 }

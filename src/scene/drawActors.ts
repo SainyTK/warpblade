@@ -2,7 +2,7 @@ import { CLIPS } from "../constants/clips";
 import { ABILITY_COLOR, COIN_GOLD, ENEMY_COLORS, PAL } from "../constants/palette";
 import { ULT_LEVELS } from "../constants/ultimate";
 import { ellipseRing, glow, glowLine, line, place, px } from "../engine/frame";
-import { blit, detailCanvas } from "../engine/sprite";
+import { blit, blitRing, detailCanvas } from "../engine/sprite";
 import { enemyBox, enemyCenter } from "../game/enemies/enemy";
 import { kindOf } from "../game/enemies/kinds";
 import { drawHero } from "../game/hero/drawHero";
@@ -134,6 +134,8 @@ export function drawHeroLayer(): void {
   const blink = h.inv > 0 && h.state !== "warpStrike" && h.state !== "ultimate" && Math.floor(game.t * 20) % 2 === 0;
   const struck = h.state === "hurt" && h.st < 0.06;
   const shown = shownKit().heroAlpha?.() ?? 1;
+  const ring = shownKit().heroRing?.();
+  if (ring && shown > 0) blitRing(heroSprite, h.x, h.y, h.face < 0, 1, () => ring);
   if (shown > 0)
     blit(heroSprite, h.x, h.y, h.face < 0, {
       alpha: (blink ? 0.45 : 1) * shown,

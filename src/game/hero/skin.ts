@@ -16,6 +16,7 @@ const look = (s: HeroSkin): Look => ({
   sash: s.sash ?? false,
   bun: s.bun ?? false,
   hood: s.hood ?? false,
+  scarfEnd: s.scarfEnd ?? false,
   cloak: s.cloak ?? false,
   satchel: s.satchel ?? false,
   wraps: s.wraps ?? false,

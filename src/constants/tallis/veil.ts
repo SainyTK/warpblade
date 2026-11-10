@@ -1,0 +1,16 @@
+/** K: the Veil, which hides him from minions while it lasts */
+export const VEIL = {
+  /** Gloam to raise it, and Gloam a second while it holds */
+  enter: 20,
+  drain: 8,
+  /** seconds K waits after the Veil ends */
+  lock: 1,
+  /** seconds the Veil holds after his first blow out of it */
+  strikeEnd: 0.2,
+  /** how much of his sprite shows while veiled */
+  alpha: 0.35,
+  /** his walk is this much faster while veiled */
+  walk: 1.15,
+  /** seconds the hood takes to come down: the crouch and flicker as it rises or falls */
+  flicker: 3 / 30,
+} as const;

@@ -5,6 +5,7 @@ import { PK } from "../../../types/particle";
 import { approach, clamp, TAU } from "../../../utils/math";
 import { waveScale } from "../../../utils/progression";
 import { game, hero, particles, rng } from "../../state";
+import { foeSees } from "../awareness";
 import { PRISM } from "./colors";
 import { createPrismShard } from "./prismShard";
 
@@ -59,7 +60,7 @@ export function updateSprite(e: Enemy, dt: number, ts: number): void {
     e.face = Math.sign(dx) || e.face;
     e.vx = approach(e.vx, clamp((tx - e.x) * 1.4, -60, 60), 200 * dt);
     e.vy = approach(e.vy, clamp((ty - e.y) * 1.4, -50, 50), 200 * dt);
-    if (e.cd <= 0 && d < 130 && hero.state !== "dead") {
+    if (e.cd <= 0 && d < 130 && hero.state !== "dead" && foeSees(e)) {
       const side = rng.chance(0.5) ? 1 : -1;
       Object.assign(e, {
         state: "blink",
