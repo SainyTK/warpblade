@@ -20,6 +20,7 @@ export function updateStatus(e: Enemy, dt: number): number {
   e.evadeCd = Math.max(0, e.evadeCd - dt);
   e.stagger = Math.max(0, e.stagger - dt);
   e.pinned = Math.max(0, e.pinned - dt);
+  e.blind = Math.max(0, e.blind - dt);
   updateSkillStatus(e, dt);
   // a pinned foe stays where the glaive holds it
   if (e.pinned > 0) e.vx = 0;

@@ -14,8 +14,8 @@ export interface Seat {
   saved: unknown[];
   /** fell and waits for the wave to be cleared */
   down: boolean;
-  /** where the hero stood when last swapped out, and whether it was standing */
-  at: { x: number; y: number; standing: boolean };
+  /** where the hero stood when last swapped out, whether it was standing, and whether it was hidden from foes */
+  at: { x: number; y: number; standing: boolean; hidden: boolean };
 }
 
 /** a copy of every per-player memory that shares nothing with the live state, for a seat that starts fresh */

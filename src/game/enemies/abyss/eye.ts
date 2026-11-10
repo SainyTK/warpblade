@@ -5,6 +5,7 @@ import { PK } from "../../../types/particle";
 import { approach, clamp } from "../../../utils/math";
 import { waveScale } from "../../../utils/progression";
 import { game, hero, particles, rng } from "../../state";
+import { foeSees } from "../awareness";
 import { ABYSS_HITS, VOID_SPARKS } from "./colors";
 import { BEAM, createEyeBeam } from "./eyeBeam";
 
@@ -32,7 +33,7 @@ export function updateEye(e: Enemy, dt: number, ts: number): void {
     e.face = Math.sign(dx) || e.face;
     e.vx = approach(e.vx, clamp((tx - e.x) * 1.3, -55, 55), 180 * dt);
     e.vy = approach(e.vy, clamp((ty - e.y) * 1.3, -45, 45), 180 * dt);
-    if (e.cd <= 0 && d < 150 && hero.state !== "dead" && staring() < MAX_STARING) {
+    if (e.cd <= 0 && d < 150 && hero.state !== "dead" && foeSees(e) && staring() < MAX_STARING) {
       Object.assign(e, { state: "wind", st: 0, n: 0, ay: Math.atan2(hy - e.y, dx) });
       game.fx.push(createEyeBeam(e, ABYSS_HITS.eyeBeam * e.power));
       sfx.chime(0);

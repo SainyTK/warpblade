@@ -5,6 +5,7 @@ import { PK } from "../../../types/particle";
 import { approach, clamp, TAU } from "../../../utils/math";
 import { waveScale } from "../../../utils/progression";
 import { game, hero, particles, rng } from "../../state";
+import { foeSees } from "../awareness";
 import { DAY_COLORS as DC } from "./colors";
 import { createPollen } from "./pollen";
 
@@ -39,7 +40,8 @@ export function updateMoth(e: Enemy, dt: number, ts: number): void {
     const ty = hy - 28 + flutter;
     e.vx = approach(e.vx, clamp((tx - e.x) * 1.4, -60, 60), 200 * dt);
     e.vy = approach(e.vy, clamp((ty - e.y) * 1.8, -60, 60), 240 * dt);
-    if (e.cd <= 0 && Math.abs(dx) < 80 && hero.state !== "dead") Object.assign(e, { state: "wind", st: 0 });
+    if (e.cd <= 0 && Math.abs(dx) < 80 && hero.state !== "dead" && foeSees(e))
+      Object.assign(e, { state: "wind", st: 0 });
   } else if (e.state === "wind") {
     e.vx = approach(e.vx, 0, 200 * dt);
     e.vy = approach(e.vy, -6, 200 * dt);
