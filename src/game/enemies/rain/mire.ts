@@ -98,7 +98,7 @@ export function updateMire(e: Enemy, dt: number, ts: number): void {
       sparks: SPARKS.shadow,
     });
   eachStanding(() => {
-    if ((e.state === "walk" || e.state === "hop") && e.stagger <= 0 && boxHit(enemyBox(e), heroBox()))
+    if ((e.state === "walk" || e.state === "hop") && e.halt <= 0 && boxHit(enemyBox(e), heroBox()))
       hurtHero(RAIN_HITS.mireTouch * e.power, e.x);
   });
 }

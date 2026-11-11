@@ -2,7 +2,6 @@ import type { Enemy } from "../../../types/enemy";
 import type { SkillBehavior } from "../../../types/skillBehavior";
 import { createFloorRing } from "../../effects/floorRing";
 import { enemyCenter } from "../../enemies/enemy";
-import { kindOf } from "../../enemies/kinds";
 import { addStacks, consumeStacks, markFoe, stacksOf } from "../../enemies/skillStatus";
 import { skin } from "../../hero/skin";
 import { burstEmbers } from "../../spells/rites/emberBurst";
@@ -12,9 +11,9 @@ import { createBrandMark } from "./brandMark";
 import { attackerAt, foesWithin, memoryAs, SPREAD_LOCK } from "./memory";
 
 const ID = "y_brand";
-/** seconds between brand ticks, and the stagger a branded foe takes each tick to slow it */
+/** seconds between brand ticks, and how long each tick holds a branded foe's feet to slow it */
 const TICK = 0.5;
-const SLOW_STAGGER = 0.1;
+const SLOW_HALT = 0.1;
 /** stacks the Pyre Mark blast lays on every foe it reaches */
 const BLAST_STACKS = 2;
 /** the moves that set off Pyre Mark */
@@ -23,7 +22,7 @@ const DETONATORS = new Set(["impale", "impaleTwist", "counterThrust"]);
 interface BrandMemory {
   /** foes branded by a blast, and when: they may not be blasted again until SPREAD_LOCK has passed */
   locked: Map<Enemy, number>;
-  /** seconds to the next slowing stagger */
+  /** seconds to the next slowing hold */
   slow: number;
 }
 
@@ -76,8 +75,7 @@ export const emberBrand: SkillBehavior = {
     m.slow -= dt;
     if (m.slow > 0 || !skillValues(ID).slow) return;
     m.slow = TICK;
-    for (const e of game.enemies)
-      if (e.hp > 0 && stacksOf(e, ID) > 0 && kindOf(e.type).staggers) e.stagger = Math.max(e.stagger, SLOW_STAGGER);
+    for (const e of game.enemies) if (e.hp > 0 && stacksOf(e, ID) > 0) e.halt = Math.max(e.halt, SLOW_HALT);
   },
   on: {
     parry(_memory, { fromX }) {

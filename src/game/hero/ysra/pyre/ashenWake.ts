@@ -7,8 +7,8 @@ import { game } from "../../../state";
 import { surfaceBelow } from "../../../world";
 import { onYsra } from "../events";
 
-/** Ashen Wake's fire slows foes by staggering them this long each tick */
-const SLOW_STAGGER = 0.12;
+/** Ashen Wake's fire slows foes by holding their feet this long each tick */
+const SLOW_HALT = 0.12;
 /** Scorched Earth: the small pillar each patch erupts as, patches younger than `settle` seconds stay, and at most
  *  `most` erupt at once */
 const ERUPTION = {
@@ -34,7 +34,7 @@ function patch(): CinderPatch {
     power: v.tick,
     halfWidth: v.halfWidth,
     overlap: v.overlap,
-    stagger: v.slow ? SLOW_STAGGER : 0,
+    halt: v.slow ? SLOW_HALT : 0,
     source: "y_ashen",
   };
 }

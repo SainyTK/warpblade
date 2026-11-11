@@ -7,6 +7,7 @@ import { enemyCenter } from "./enemy";
 import { applyHolds } from "./holds";
 import { kindOf } from "./kinds";
 import { separateFoes } from "./separate";
+import { updateStagger } from "./stagger";
 import { updateStatus } from "./status";
 import { tickStop } from "./timeStop";
 
@@ -33,7 +34,8 @@ export function updateEnemies(dt: number): void {
     const [cx, cy] = enemyCenter(e);
     const ts = status * fieldPace(cx, cy, e.rank);
     const sdt = dt * ts;
-    if (updateAirborne(e, sdt) || updateStunned(e, sdt)) continue;
+    const staggered = updateStagger(e, sdt);
+    if (updateAirborne(e, sdt) || updateStunned(e, sdt) || staggered) continue;
     e.st += sdt;
     e.cd -= sdt;
     const heldAt = e.x;

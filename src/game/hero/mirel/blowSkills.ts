@@ -8,6 +8,7 @@ import { dealDamage } from "../../damage";
 import { launchEnemy } from "../../enemies/airborne";
 import { enemyCenter } from "../../enemies/enemy";
 import { addStacks, consumeStacks, markFoe, stacksOf } from "../../enemies/skillStatus";
+import { staggerFoe } from "../../enemies/stagger";
 import { emitSkillEvent } from "../../skills/events";
 import { skillValues, withCharms } from "../../skills/query";
 import { game, hero, particles, progress, rng } from "../../state";
@@ -115,7 +116,7 @@ function backswing(e: Enemy, s: StaffStrike): void {
   if (s.echo || s.source || !backswingOpen()) return;
   const v = skillValues("m_backswing");
   if (v.heal) hero.hp = Math.min(progress.stats.hp, hero.hp + progress.stats.hp * v.heal);
-  if (v.stagger) e.stagger = Math.max(e.stagger, v.stagger);
+  if (v.stagger) staggerFoe(e, v.stagger);
   if (v.undone && mirelHost.replay > 0) {
     const replay = mirelHost.replay;
     mirelHost.replay = 0;

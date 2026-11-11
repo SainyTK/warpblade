@@ -47,8 +47,10 @@ export interface MoveHit {
   launch?: number;
   /** drives an airborne foe into the floor */
   spike?: boolean;
-  /** trips or staggers a foe for this long */
+  /** knocks a foe off its feet for this long */
   stun?: number;
+  /** staggers a minion for this long; COMBO.stagger when unset */
+  stagger?: number;
   big?: boolean;
   /** also hits behind */
   around?: boolean;

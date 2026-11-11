@@ -20,7 +20,7 @@ export function updateHusk(e: Enemy, dt: number, ts: number): void {
   const dx = hero.x - e.x;
   if (e.state === "walk") {
     turnToHero(e, dt);
-    e.vx = approach(e.vx, (Math.abs(dx) > 6 || !foeSees(e)) && e.stagger <= 0 ? e.face * 30 : 0, 200 * dt);
+    e.vx = approach(e.vx, (Math.abs(dx) > 6 || !foeSees(e)) && e.halt <= 0 ? e.face * 30 : 0, 200 * dt);
     if (Math.abs(dx) < 26 && facesHero(e) && Math.abs(hero.y - e.y) < 30 && e.cd <= 0 && hero.state !== "dead")
       Object.assign(e, { state: "wind", st: 0 });
   } else if (e.state === "wind") {
@@ -57,9 +57,9 @@ export function updateHusk(e: Enemy, dt: number, ts: number): void {
     particles.spawn(PK.EMBER, e.x + rng.range(-6, 6), e.y - rng.range(6, 22), 0, -10, rng.range(0.4, 0.8), {
       sparks: SPARKS.shadow,
     });
-  // a husk reeling from a sword blow does not hurt by touch, so Kael can lunge in close and cut through it
+  // a husk whose feet are held does not hurt by touch
   eachStanding(() => {
-    if (e.state === "walk" && e.stagger <= 0 && boxHit(enemyBox(e), heroBox()))
+    if (e.state === "walk" && e.halt <= 0 && boxHit(enemyBox(e), heroBox()))
       hurtHero(ENEMY_HITS.huskTouch * e.power, e.x);
   });
 }

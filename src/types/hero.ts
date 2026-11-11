@@ -171,6 +171,9 @@ export interface Hero {
   chargeLevel: number;
   /** foes the current move has struck; a move that hits nothing cannot be cancelled early */
   moveHits: number;
+  /** the hero's own hits in a row for the hit counter, and seconds since the last one */
+  hitCount: number;
+  hitIdle: number;
   /** this dash already earned a perfect dodge */
   perfectUsed: boolean;
   /** Riposte (Mirror Knight): time left in which the next sword blows hit harder */

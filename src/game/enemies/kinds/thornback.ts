@@ -17,7 +17,6 @@ export const thornback: EnemyKind = {
   draw: drawThornback,
   glow: { radius: 20, color: DAY_COLORS.crack, eyeY: 0 },
   guardFrom: GUARD.fromWave,
-  staggers: true,
   orbs: 2,
   heartChance: 0.2,
 };

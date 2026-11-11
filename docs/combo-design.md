@@ -15,6 +15,28 @@ Sources: the Grand Chase Fandom wiki pages for the Knight, Assassin, Thief, Spel
 - Air attacks are separate from ground attacks, and Down in the air drops fast to the floor.
 - Experienced players cancel the string before the knockdown hit and start it again, which the game allows and the PvP crowd calls a loop.
 
+## The combo layer every hero shares
+
+In the reference a blow that lands makes the monster flinch, so a string locks its target and plays out to the end.
+Every hero's blows go through the same three rules, in `src/game/enemies/stagger.ts`, `src/game/damage.ts` and `src/game/hitCount.ts`, with the numbers in `STAGGER`, `GUARD` and `HIT_COUNT` (`src/constants/combat.ts`).
+
+- Stagger: a hero's blow that carries `stagger` cuts whatever a minion was doing, a wind-up or an attack already under way, and the minion cannot act until the stagger ends. It slides to a stop, and a walker caught in the air drops to the floor.
+- Mini bosses and bosses never stagger, so their attacks still have to be dodged.
+- A minion staggered 7 blows in a row (an elite 4) braces: sparks fly off it and it cannot be staggered for 1.6 seconds, so no string holds one foe forever. The count starts again after a second without a stagger.
+- Guard: a guarding foe blocks the first frontal light blow, and the second in a row breaks through and staggers it. A heavy blow still knocks the guard down at once. A staggered foe cannot guard.
+- A struck foe is drawn knocked 2 pixels away from the hero and eases back while its hit flash lasts.
+- Hit counter: the hero's own hits in a row show at the right of the stage from 3 hits, pop on each hit and change colour at 10, 25 and 50. Two seconds without a hit, or a blow taken, ends the row. It counts the same hits Flow counts.
+- Burning ground and brands that used to slow walkers through `stagger` now use `halt`, which only holds a walker's feet.
+
+### The string contract
+
+Each hero's ground string must hold to these, measured on a lone walker (a thornback or husk) with J pressed about ten times a second:
+
+1. Every blow of the string lands from any starting distance inside the first blow's reach. Blows before the last push the foe a few pixels at most.
+2. Each blow before the last staggers long enough to reach the next blow, so the foe never starts a wind-up inside the string.
+3. The last blow has a payoff of the hero's own (a knockdown, a launch, a pin) that keeps the foe out of the fight until the next string's first blow can land.
+4. The pause from the last blow to the first blow of the next string is as short as the hero's weight allows: light heroes about half a second, heavy ones under a second.
+
 ## What Warpblade takes from it
 
 - Every hit of the ground string has its own pose, footwork, slash shape and reaction, so the string reads as a routine: step cut, rising backhand, twin thrust and a falling smash that knocks down.
@@ -30,7 +52,6 @@ Sources: the Grand Chase Fandom wiki pages for the Knight, Assassin, Thief, Spel
 - Foes on both sides get a ring cut that hits both.
 - A foe lying down in front gets a downward stab, once per combo, which keeps it down without stretching the stun.
 - A foe in the air in front of Kael gets a rising chase cut that takes him up after it, and the string goes on as an air string.
-- A husk reeling from a sword blow does not hurt by touch, so a foe pushed into Kael does not hurt him.
 - A heavy blow that drives a foe into the edge of the stage bounces it back off the wall and into the air.
 - No skill asks for a direction, a dash or a double tap during or after a combo; the old extended inputs (launcher, low sweep, Phase Finish, Skybreaker, dash strike, running thrust, meteor drop) were folded into the string's own hits, the dash and the warp.
 - The Critical and Double timing idea becomes Keen timing: a J pressed in the short moment after a blow lands makes the next blow a sure critical hit.

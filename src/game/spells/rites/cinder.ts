@@ -9,7 +9,6 @@ import { clamp } from "../../../utils/math";
 import { dealDamage } from "../../damage";
 import { ignite } from "../../enemies/burn";
 import { enemyBox } from "../../enemies/enemy";
-import { kindOf } from "../../enemies/kinds";
 import { game, particles, progress, rng } from "../../state";
 import { boxHit } from "../../world";
 import { drawFireBed, type FireColors } from "../fireBed";
@@ -27,13 +26,13 @@ const CINDER_FIRE: FireColors = {
 };
 
 /** a patch of burning ground: how long it burns, its tick's ability power multiple, its half width, the most patches
- *  that burn one foe in the same tick, the stagger each tick gives (0 none), and the skill it counts for */
+ *  that burn one foe in the same tick, how long each tick holds a foe's feet (0 none), and the skill it counts for */
 export interface CinderPatch {
   life: number;
   power: number;
   halfWidth: number;
   overlap: number;
-  stagger: number;
+  halt: number;
   source: SourceId;
 }
 
@@ -66,7 +65,7 @@ function createCinder(x: number, y: number, p: CinderPatch): Effect {
           if (!mayBurn(e, p.overlap)) continue;
           dealDamage(e, progress.stats.ap * p.power, { dot: true, source: p.source });
           ignite(e, A.burn);
-          if (p.stagger && kindOf(e.type).staggers) e.stagger = Math.max(e.stagger, p.stagger);
+          if (p.halt) e.halt = Math.max(e.halt, p.halt);
         }
       }
       if (rng.chance(0.08))

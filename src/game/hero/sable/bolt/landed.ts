@@ -3,6 +3,7 @@ import type { Enemy } from "../../../../types/enemy";
 import { dealDamage } from "../../../damage";
 import { enemyCenter } from "../../../enemies/enemy";
 import { addStacks, markFoe } from "../../../enemies/skillStatus";
+import { staggerFoe } from "../../../enemies/stagger";
 import { skillEvolved, skillValues } from "../../../skills/query";
 import { game, progress } from "../../../state";
 import { looseBolt } from "../loose";
@@ -48,7 +49,7 @@ function ricochet(e: Enemy, b: Shot): void {
   const count = family.splits > 0 && next.length > 1 ? 2 : 1;
   if (count > 1) family.splits--;
   for (const to of next.slice(0, count)) offshoot(e, to, b, { depth: depth + 1, share: v.share, family });
-  if (v.stagger) e.stagger = Math.max(e.stagger, v.stagger);
+  if (v.stagger) staggerFoe(e, v.stagger);
 }
 
 /** Breaching Bolt: the closing bolt bursts, throws its foe into others, pins it to the edge; Siege Bolt pins every foe */

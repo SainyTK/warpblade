@@ -629,6 +629,59 @@ body {
 .banner.show {
   opacity: 1;
 }
+/* The hit counter: the hero's hits in a row at the right edge of the stage, popping on each hit, warmer at each tier. */
+.hit-count {
+  position: absolute;
+  right: calc(var(--art) * 8);
+  top: 40%;
+  display: flex;
+  align-items: baseline;
+  gap: calc(var(--art) * 2);
+  font-family: var(--display);
+  color: var(--crystal);
+  text-shadow:
+    1px 0 0 var(--night),
+    -1px 0 0 var(--night),
+    0 1px 0 var(--night),
+    0 -1px 0 var(--night),
+    0 0 10px currentColor;
+  pointer-events: none;
+  opacity: 0;
+  transform-origin: right center;
+  transition: opacity 300ms;
+}
+.hit-count.show {
+  opacity: 1;
+  transition: none;
+}
+.hit-count b {
+  font-size: clamp(18px, calc(var(--art) * 14), 64px);
+  line-height: 1;
+}
+.hit-count span {
+  font-size: clamp(9px, calc(var(--art) * 5), 22px);
+  letter-spacing: 0.08em;
+}
+.hit-count[data-tier="1"] {
+  color: var(--gold);
+}
+.hit-count[data-tier="2"] {
+  color: var(--ember);
+}
+.hit-count[data-tier="3"] {
+  color: var(--pink);
+}
+.hit-count.pop {
+  animation: hit-pop 160ms ease-out;
+}
+@keyframes hit-pop {
+  from {
+    scale: 1.35;
+  }
+  to {
+    scale: 1;
+  }
+}
 .pause {
   position: fixed;
   z-index: 5;
@@ -661,6 +714,7 @@ body {
 body:not([data-menu="none"]) .pause,
 body[data-menu="title"] .hud,
 body[data-menu="title"] .boss,
+body[data-menu="title"] .hit-count,
 body[data-menu="title"] .banner {
   visibility: hidden;
 }
@@ -1091,6 +1145,7 @@ body[data-hud="outside"] .boss {
   .banner {
     transition: none;
   }
+  .hit-count.pop,
   .el.deny {
     animation: none;
     border-color: var(--hp);

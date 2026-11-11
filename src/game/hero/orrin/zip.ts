@@ -6,6 +6,7 @@ import type { Point } from "../../../types/world";
 import { dealDamage } from "../../damage";
 import { createImpact } from "../../effects/impact";
 import { enemyCenter } from "../../enemies/enemy";
+import { staggerFoe } from "../../enemies/stagger";
 import { skillValues, withCharms } from "../../skills/query";
 import { game, hero, progress } from "../../state";
 import { hitStop, shake } from "../../world";
@@ -66,7 +67,7 @@ function arrive(foe: Enemy): void {
       stun: winding && v.windup ? 1.2 : undefined,
     });
   }
-  if (winding && v.windup) foe.stagger = Math.max(foe.stagger, 1.2);
+  if (winding && v.windup) staggerFoe(foe, 1.2);
   if (crit && v.momentum) gainMomentum(v.momentum);
   game.fx.push(createImpact(fx, fy, hero.face, true));
   hitStop(0.07);

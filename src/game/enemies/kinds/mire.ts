@@ -16,7 +16,6 @@ export const mire: EnemyKind = {
   update: updateMire,
   draw: drawMire,
   glow: { radius: 18, color: RAIN_FOES.wart, eyeY: -4 },
-  staggers: true,
   orbs: 2,
   heartChance: 0.2,
 };

@@ -148,6 +148,8 @@ export function freshHero(stats: Progress["stats"]): Hero {
     charge: 0,
     chargeLevel: 0,
     moveHits: 0,
+    hitCount: 0,
+    hitIdle: 0,
     perfectUsed: false,
     riposte: 0,
     riposteBlows: 0,

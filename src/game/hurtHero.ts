@@ -7,6 +7,7 @@ import { createImpact } from "./effects/impact";
 import { heroGuarded } from "./hero/guard";
 import { kit } from "./hero/kits";
 import { perfectDodge } from "./hero/perfectDodge";
+import { loseHitCount } from "./hitCount";
 import { lastLight } from "./lastLight";
 import { emitSkillEvent } from "./skills/events";
 import { character, game, hero, showBanner } from "./state";
@@ -22,6 +23,7 @@ export function hurtHero(dmg: number, fromX: number): void {
   hero.hp = Math.max(0, hero.hp - taken);
   if (taken > 0) {
     hurtFlow();
+    loseHitCount();
     emitSkillEvent({ type: "hurt", damage: taken, fromX });
   }
   hero.inv = HURT_INVULN;

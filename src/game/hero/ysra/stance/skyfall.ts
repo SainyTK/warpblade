@@ -25,7 +25,7 @@ export function skyfall(v: Readonly<Record<string, number>>): void {
         power: CRATER_POWER,
         halfWidth: CRATER_STEP / 2,
         overlap: 1,
-        stagger: 0,
+        halt: 0,
         source: "y_vault",
       });
   lights.add(x, floor - 20, 80, skin.ramp[4], 0.6, 0.6);

@@ -37,7 +37,6 @@ export const husk: EnemyKind = {
   draw: drawHusk,
   glow: { radius: 22, color: PAL.shadow[3], eyeY: -6 },
   guardFrom: GUARD.fromWave,
-  staggers: true,
   orbs: 2,
   heartChance: 0.2,
 };

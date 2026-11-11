@@ -5,7 +5,7 @@ import { dealDamage } from "../../damage";
 import { createImpact } from "../../effects/impact";
 import { createSlash } from "../../effects/slash";
 import { enemyBox, enemyCenter } from "../../enemies/enemy";
-import { kindOf } from "../../enemies/kinds";
+import { staggerFoe } from "../../enemies/stagger";
 import { G_THRUST } from "../../hero/ysra/glaive/slashes";
 import { game, hero, progress, rng } from "../../state";
 import { boxHit } from "../../world";
@@ -60,7 +60,7 @@ function thrust(x: number, y: number, face: number, tilt = 0): void {
   for (const e of game.enemies) {
     if (e.hp <= 0 || !boxHit(box, enemyBox(e))) continue;
     dealDamage(e, progress.stats.ad * v.power, { fromX: x, kx: face * 80, source: ID });
-    if (v.stagger && kindOf(e.type).staggers) e.stagger = Math.max(e.stagger, v.stagger);
+    if (v.stagger) staggerFoe(e, v.stagger);
     const [cx, cy] = enemyCenter(e);
     game.fx.push(createImpact(cx, cy, face, false));
   }

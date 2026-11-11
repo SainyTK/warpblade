@@ -3,6 +3,7 @@ import type { Enemy } from "../../../types/enemy";
 import type { KnifeBlow } from "../../../types/tallis";
 import { dealDamage } from "../../damage";
 import { addStacks, stacksOf } from "../../enemies/skillStatus";
+import { staggerFoe } from "../../enemies/stagger";
 import { feat } from "../../feat";
 import { emitSkillEvent } from "../../skills/events";
 import { skillValues, withCharms } from "../../skills/query";
@@ -178,7 +179,7 @@ export function afterKnifeHit(e: Enemy, s: KnifeStrike, hit: KnifeHit): void {
   if (s.blow === "heelKick") {
     turnabout(e);
     const stagger = skillValues("t_turnabout").stagger;
-    if (stagger) e.stagger = Math.max(e.stagger, stagger);
+    if (stagger) staggerFoe(e, stagger);
   }
   const bite = skillValues("t_backbiter");
   if (s.blow === "backstab" && bite.twice && e.hp > 0)

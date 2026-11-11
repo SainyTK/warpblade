@@ -18,7 +18,9 @@ import { foeSees } from "./enemies/awareness";
 import { enemyCenter } from "./enemies/enemy";
 import { kindOf } from "./enemies/kinds";
 import { markBonus } from "./enemies/skillStatus";
+import { staggerFoe } from "./enemies/stagger";
 import { kit } from "./hero/kits";
+import { countHit } from "./hitCount";
 import { killEnemy } from "./kill";
 import { popNumber } from "./numbers";
 import { emitSkillEvent } from "./skills/events";
@@ -40,7 +42,7 @@ export interface HitOptions {
   melee?: boolean;
   /** comes round a guard (the head of Orrin's chain at its tip): guards never stop it */
   curls?: boolean;
-  /** a husk stops walking for this long */
+  /** a minion staggers for this long: its action is cut and it cannot act */
   stagger?: number;
   /** a Keen blow: always a critical hit */
   sureCrit?: boolean;
@@ -64,8 +66,8 @@ export function isBehind(e: Enemy, fromX: number): boolean {
   return side !== 0 && side !== e.face;
 }
 
-/** guarding kinds (husks from wave 3, brutes) hold up a guard while they walk, facing the blow; a foe stopped in time
- *  cannot raise it, nor one that cannot see the hero (game/enemies/awareness.ts) */
+/** guarding kinds (husks from wave 3, brutes) hold up a guard while they walk, facing the blow; a staggered foe or one
+ *  stopped in time cannot raise it, nor one that cannot see the hero (game/enemies/awareness.ts) */
 function guards(e: Enemy, o: HitOptions): boolean {
   if (!o.melee || o.curls || o.fromX === undefined) return false;
   const kind = kindOf(e.type);
@@ -74,6 +76,7 @@ function guards(e: Enemy, o: HitOptions): boolean {
     e.state === kind.rest &&
     !e.air &&
     e.stun <= 0 &&
+    e.stagger <= 0 &&
     e.frozen <= 0 &&
     e.shock <= 0 &&
     e.stopped <= 0 &&
@@ -82,7 +85,7 @@ function guards(e: Enemy, o: HitOptions): boolean {
   );
 }
 
-/** a blocked blow: a little chip damage, sparks, and on the second in a row a fast counter */
+/** a blocked blow: a little chip damage and sparks */
 function block(e: Enemy, base: number, source: SourceId): HitResult {
   const value = Math.max(1, Math.round(base * GUARD.chip));
   e.hp -= value;
@@ -92,8 +95,6 @@ function block(e: Enemy, base: number, source: SourceId): HitResult {
   game.fx.push(createImpact(cx + e.face * 6, cy - 4, -e.face, false, SPARKS.hot));
   sfx.block();
   e.guardHits++;
-  if (e.guardHits >= GUARD.counterAfter)
-    Object.assign(e, { state: "wind", st: GUARD.counterWind, guardHits: 0, cd: 0 });
   if (e.hp <= 0) killEnemy(e, source);
   return "blocked";
 }
@@ -129,9 +130,9 @@ export function dealDamage(e: Enemy, base: number, o: HitOptions = {}): HitResul
   const source = o.source ?? "attacks";
   let tag: DamageTag = o.dot ? "burn" : "normal";
   if (guards(e, o)) {
-    if (!o.heavy) return block(e, base, source);
-    e.stun = Math.max(e.stun, def.launchable ? GUARD.breakStun : GUARD.breakStun * 0.6);
-    e.guardHits = 0;
+    if (!o.heavy && e.guardHits + 1 < GUARD.breakAfter) return block(e, base, source);
+    // a heavy blow knocks the guard down; the second light blow in a row only opens it
+    if (o.heavy) e.stun = Math.max(e.stun, def.launchable ? GUARD.breakStun : GUARD.breakStun * 0.6);
     tag = "break";
   }
   const back = o.fromX !== undefined && isBehind(e, o.fromX);
@@ -165,7 +166,10 @@ export function dealDamage(e: Enemy, base: number, o: HitOptions = {}): HitResul
   // a foe stopped in time stores what it takes, to land again in part when it restarts
   if (e.stopped > 0) e.stopStore += value;
   const fromHero = isHeroSource(source);
-  if (!o.dot && fromHero && !o.noFlow) addFlow(FLOW.perHit);
+  if (!o.dot && fromHero && !o.noFlow) {
+    addFlow(FLOW.perHit);
+    countHit();
+  }
   e.flash = 0.1;
   e.guardHits = 0;
   // a skill's own hit is quiet and never drawn big, so a crowd of them does not drown out the hero's own
@@ -184,7 +188,7 @@ export function dealDamage(e: Enemy, base: number, o: HitOptions = {}): HitResul
     if (hold > 0) e.vy = Math.min(e.vy, ENEMY_AIR.juggle * hold);
   } else if (kindOf(e.type).flies && e.rank === "minion") e.vy += o.ky ?? 0;
   if (o.stun && def.launchable) e.stun = Math.max(e.stun, o.stun);
-  if (o.stagger && kindOf(e.type).staggers) e.stagger = Math.max(e.stagger, o.stagger);
+  if (o.stagger) staggerFoe(e, o.stagger);
   if (o.heavy && e.state === "wind" && def.rank === "minion") Object.assign(e, { state: "recover", st: 0 });
   if (!o.dot && isHeroSource(source)) {
     emitSkillEvent({

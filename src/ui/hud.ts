@@ -13,6 +13,7 @@ import { updateFlowBar } from "./flowBar";
 import { updateGloamBar } from "./gloamBar";
 import { updateGritBar } from "./gritBar";
 import { updateHeatBar } from "./heatBar";
+import { updateHitCounter } from "./hitCounter";
 import { updateHuldaTabs } from "./huldaTabs";
 import { updateMirelTabs } from "./mirelTabs";
 import { updateMomentumBar } from "./momentumBar";
@@ -68,6 +69,7 @@ export function updateHud(): void {
   updateWaxBar();
   updateGloamBar();
   updateFlowBar();
+  updateHitCounter();
   updateBuildStrip();
   updateWarpTab();
   updateCoinCount();
