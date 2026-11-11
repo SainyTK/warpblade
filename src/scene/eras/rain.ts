@@ -5,28 +5,38 @@ import { particles } from "../../game/state";
 import { PK } from "../../types/particle";
 import { lerp } from "../../utils/math";
 import { Rng } from "../../utils/rng";
-import { drawClouds, drawCurtains, SUN } from "./rain/clouds";
+import { paintClouds, SUN } from "./rain/clouds";
+import { paintFloor } from "./rain/floor";
 import { drawLightning, lightningFlash } from "./rain/lightning";
 import { RAIN_COLORS as RC, rainPalette } from "./rain/palette";
+import { drawRunoff } from "./rain/runoff";
+import { paintSlabs } from "./rain/slabs";
+import { paintTowers } from "./rain/towers";
+import { paintMist, paintVeils } from "./rain/veils";
 import { drawPuddleLight, drawRain, drawSplashes, updateRain } from "./rain/weather";
-import { drawWet } from "./rain/wet";
 import type { SceneDef } from "./sceneDef";
 
 /** Waves 6 to 10: an overcast afternoon that builds from a grey drizzle into a dark storm with far lightning. */
 
 const steam = new Rng(717);
+/** the braziers burn low in the wet */
+const BRAZIER_FIRE = 0.5;
 
 export const rain: SceneDef = {
   palette: rainPalette,
   stars: 0,
   windows: 0.28,
-  braziers: 0.5,
+  braziers: BRAZIER_FIRE,
   mist: 1,
-  sky(bg, r, k) {
-    drawClouds(bg, r, k);
-    drawCurtains(bg, r, k);
+  detail(paint, r, k) {
+    const P = rainPalette(k);
+    paintClouds(paint, k);
+    paintVeils(paint, r, k, P);
+    paintTowers(paint, r, P);
+    paintMist(paint, P);
+    paintFloor(paint, r, BRAZIER_FIRE);
+    paintSlabs(paint, r, P, BRAZIER_FIRE);
   },
-  decorate: drawWet,
   ambient(t, k) {
     place();
     if (k < 1) glow(SUN.x, SUN.y, 70, RC.sunGlow, 0.1 * (1 - k));
@@ -40,6 +50,7 @@ export const rain: SceneDef = {
   },
   weather(t, k) {
     drawRain(t, k);
+    drawRunoff(t, k);
     drawSplashes();
   },
   update(dt, k) {

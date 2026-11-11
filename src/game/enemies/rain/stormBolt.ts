@@ -1,5 +1,5 @@
 import { GROUND } from "../../../constants/stage";
-import { ellipseRing, glow, glowLine, line, place, px } from "../../../engine/frame";
+import { circle, ellipseRing, glow, glowLine, hairline, line, place, px } from "../../../engine/frame";
 import type { Effect } from "../../../types/effect";
 import type { Enemy } from "../../../types/enemy";
 import { PK } from "../../../types/particle";
@@ -17,6 +17,8 @@ export const BOLT_HALF = 6;
 const LIFE = 0.28;
 /** the bolt hurts only in its first instant, so a late dash through the fading light is safe */
 const LIVE = 0.08;
+/** seconds the bolt's fine forks and the white burst at its foot show */
+const FORK_LIFE = 0.09;
 
 /** a violet column on the floor under a winding kite, filling as its strike nears; gone once the kite strikes */
 export function createStormMark(e: Enemy, windup: number): Effect {
@@ -28,7 +30,11 @@ export function createStormMark(e: Enemy, windup: number): Effect {
     const r = BOLT_HALF + (1 - u) * 6;
     ellipseRing(e.ax, GROUND, r, r * 0.24, V[u > 0.7 ? 4 : 3], 0.6 + u * 0.4, half);
     ellipseRing(e.ax, GROUND, r - 2, (r - 2) * 0.24, V[2], 0.5, half);
-    if (half > 0) glow(e.ax, GROUND - 2, BOLT_HALF * 2.5, V[3], 0.2 + u * 0.25);
+    if (half > 0) {
+      glow(e.ax, GROUND - 2, BOLT_HALF * 2.5, V[3], 0.2 + u * 0.25);
+      // the strip it will strike fills in from the middle as the charge gathers
+      hairline(e.ax - BOLT_HALF * u, GROUND + 0.25, e.ax + BOLT_HALF * u, GROUND + 0.25, V[4], 0.9);
+    }
   };
   return {
     update(dt) {
@@ -77,6 +83,20 @@ export function createStormBolt(x: number, y: number, damage: number): Effect {
         line(ax - 1, ay, bx - 1, by, V[2], 0.7 * f * flick);
         line(ax + 1, ay, bx + 1, by, V[2], 0.7 * f * flick);
         line(ax, ay, bx, by, t < 0.06 ? WHITE : V[4], f * flick);
+        hairline(ax + 0.25, ay, bx + 0.25, by, WHITE, f * flick);
+        // a fine fork springs off every other bend, away from the bolt's line
+        if (i % 2 === 0 || t > FORK_LIFE) continue;
+        const side = ax < x ? -1 : 1;
+        hairline(ax, ay, ax + side * 4, ay + 3, V[4], flick);
+        hairline(ax + side * 4, ay + 3, ax + side * 5.5, ay + 7, V[3], flick);
+      }
+      // where it strikes: a white heart and rays along the floor
+      if (t < FORK_LIFE) {
+        circle(x, GROUND - 1, 2.2, WHITE);
+        for (const side of [-1, 1]) {
+          hairline(x, GROUND - 0.5, x + side * 9, GROUND - 0.5, V[4]);
+          hairline(x, GROUND - 1, x + side * 6, GROUND - 5, V[4]);
+        }
       }
       glowLine(x, y, x, GROUND, 10, V[3], 0.45 * f);
       glow(x, GROUND, 18, V[3], 0.5 * f);

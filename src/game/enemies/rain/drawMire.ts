@@ -46,13 +46,15 @@ export function drawMire(e: Enemy, t: number): SpriteCanvas {
   const dot = (x: number, y: number, r: number, c: number) => s.dot(x * K, y * K, r * K, c);
   const stroke = (x0: number, y0: number, x1: number, y1: number, r: number, c: number) =>
     s.stroke(x0 * K, y0 * K, x1 * K, y1 * K, r * K, c);
+  const taper = (x0: number, y0: number, x1: number, y1: number, r0: number, r1: number, c: number, bend = 0) =>
+    s.taper(x0 * K, y0 * K, x1 * K, y1 * K, r0 * K, r1 * K, c, bend * K);
   const set = (x: number, y: number, c: number) => s.set(x * K, y * K, c);
   const shine = (x: number, y: number, c: number) => glint(s, x * K, y * K, c);
   const pip = (x: number, y: number, c: number) => s.block(x * K, y * K, c);
   s.clear();
   // far legs, in shadow
   s.begin();
-  if (hop) stroke(-4, by - 3, rising ? -11 : -9, rising ? -1 : -2, 1.2, C.toadDark);
+  if (hop) taper(-4, by - 3, rising ? -11 : -9, rising ? -1 : -2, 1.5, 0.7, C.toadDark, rising ? 0.6 : 1.4);
   else dot(-6, -2.5, 2.6, C.toadDark);
   stroke(4, by - 3, 5.5, 0, 0.8, C.toadDark);
   s.shadeEdges(C.toadDark, C.toad, C.toadDeep);
@@ -70,8 +72,11 @@ export function drawMire(e: Enemy, t: number): SpriteCanvas {
   dot(3.2, by - 7.2, 2.3, C.toadLight);
   for (const [x, y, r] of MOTTLES) dot(x, by + y + breathe * 0.5, r, C.toadSpot);
   for (let a = -2.5; a < -0.9; a += 0.06)
-    set(-1.5 + Math.cos(a) * 4.95, by - 5 + breathe + Math.sin(a) * 4.95, C.toadRim);
-  for (let a = -2.6; a < -1.2; a += 0.1) set(5 + Math.cos(a) * 1.7, by - 8.6 + Math.sin(a) * 1.7, C.toadRim);
+    set(-1.5 + Math.cos(a) * 4.95, by - 5 + breathe + Math.sin(a) * 4.95, a < -1.5 ? C.wetSky : C.toadRim);
+  for (let a = -2.6; a < -1.2; a += 0.1) set(5 + Math.cos(a) * 1.7, by - 8.6 + Math.sin(a) * 1.7, C.wetSky);
+  // a streak of wet running down the flank
+  for (let a = -2.9; a < -2.3; a += 0.06)
+    set(-1.5 + Math.cos(a) * 3.9, by - 5 + breathe + Math.sin(a) * 3.9, C.toadRim);
   // the wet sheen: glints on the crown and the snout
   shine(-4.2, by - 8.4 + breathe, C.toadGlint);
   shine(-3.4, by - 9 + breathe, C.toadGlint);
@@ -131,9 +136,17 @@ export function drawMire(e: Enemy, t: number): SpriteCanvas {
   // near legs: a folded haunch and a forefoot with splayed toes, or kicked out behind in a hop
   s.begin();
   if (hop) {
-    stroke(-3, by - 3, rising ? -10 : -8, rising ? 0 : -1, 1.4, C.toad);
-    stroke(5, by - 2, 8, rising ? 0 : -0.5, 0.9, C.toad);
+    // the hind leg kicks straight as it leaves the floor and folds at the knee as it comes down, toes spread
+    const fx = rising ? -10 : -8;
+    const fy = rising ? 0 : -1;
+    taper(-3, by - 3, fx, fy, 1.9, 0.8, C.toad, rising ? 0.5 : 1.6);
+    stroke(fx, fy, fx - 1.8, fy - 0.9, 0.45, C.toad);
+    stroke(fx, fy, fx - 2, fy + 0.3, 0.45, C.toad);
+    stroke(fx, fy, fx - 1.2, fy + 1.2, 0.45, C.toad);
+    taper(5, by - 2, 8, rising ? 0 : -0.5, 1.1, 0.6, C.toad);
+    stroke(8, rising ? 0 : -0.5, 9.2, rising ? 0.8 : 0.2, 0.4, C.toad);
     s.shadeEdges(C.toad, C.toadLight, C.toadDark);
+    shine(-5, by - 3.4, C.wetSky);
   } else {
     dot(-4, -3.2 + breathe * 0.5, 2.8, C.toad);
     stroke(6.5, -3, 7.5, -0.5, 0.8, C.toad);
