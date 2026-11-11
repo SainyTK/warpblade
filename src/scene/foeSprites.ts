@@ -1,13 +1,13 @@
 import { STEP } from "../constants/stage";
 import { kindOf } from "../game/enemies/kinds";
 import { game } from "../game/state";
-import type { Enemy, EnemyState } from "../types/enemy";
+import type { Enemy } from "../types/enemy";
 import type { SpriteBox, SpriteImage } from "../types/sprite";
 
 /**
  * Foes are redrawn from their parts, which is most of a busy frame's cost. Each foe keeps its last drawn picture and
  * shows it for HOLD seconds of game time, so its pose changes about 30 times a second however fast the screen is,
- * while its place on the stage still moves every frame. A change of state redraws at once, so no wind-up shows late.
+ * while its place on the stage still moves every frame. A change of state, or being stunned, thrown in the air or frozen, redraws at once, so no wind-up or stagger shows late.
  */
 const HOLD = 1 / 36;
 /** new foes start their holds a step apart, so a crowd's redraws spread over the frames */
@@ -16,7 +16,8 @@ const PHASES = 4;
 interface Held {
   image: SpriteImage & { box: SpriteBox };
   at: number;
-  state: EnemyState;
+  /** what the pose depends on in steps: a change here redraws at once */
+  pose: string;
 }
 const held = new WeakMap<Enemy, Held>();
 let made = 0;
@@ -33,22 +34,25 @@ function keep(to: Held["image"], from: SpriteImage): void {
   to.box = { ...box };
 }
 
+const poseOf = (e: Enemy): string => `${e.state}:${e.stun > 0}:${Boolean(e.air)}:${e.frozen > 0}`;
+
 /** the foe's picture to show this frame */
 export function foeSprite(e: Enemy): SpriteImage {
   const t = game.t;
   let h = held.get(e);
-  if (h && h.state === e.state && t >= h.at && t - h.at < HOLD) return h.image;
+  const pose = poseOf(e);
+  if (h && h.pose === pose && t >= h.at && t - h.at < HOLD) return h.image;
   const drawn = kindOf(e.type).draw(e, t);
   if (!h) {
     const empty = { x0: 0, y0: 0, x1: -1, y1: -1 };
     h = {
       image: { ...drawn, d: new Uint32Array(drawn.d.length), box: empty },
       at: t - (made++ % PHASES) * STEP,
-      state: e.state,
+      pose,
     };
     held.set(e, h);
   } else h.at = t;
-  h.state = e.state;
+  h.pose = pose;
   keep(h.image, drawn);
   return h.image;
 }
