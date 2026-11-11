@@ -23,6 +23,17 @@ const FAR_TEXTURE = 0.45;
 const SLAB_BLOCK = 12;
 const SLAB_BLOCK_DEPTH = 0.08;
 
+/** haze in bands: depth from 0 to 1 stepped into HAZE.bands, the steps broken up by a dither threshold */
+const banded = (depth: number, threshold: number): number => Math.floor(depth * HAZE.bands + threshold) / HAZE.bands;
+
+/** how much of the horizon's color the far ridge takes at art row y */
+export const ridgeHaze = (y: number, threshold: number): number =>
+  banded(0.4 + 0.6 * smooth(HAZE.ridgeTop, GROUND, y), threshold) * HAZE.ridge;
+
+/** how much of the horizon's color a tower takes at art row y */
+const towerHaze = (y: number, threshold: number): number =>
+  banded(smooth(HAZE.towerTop, GROUND, y), threshold) * HAZE.tower;
+
 function slabBlockTone(x: number, y: number): number {
   const slab = PLATFORMS.find((p) => y >= p.y && y < p.y + 9 && x >= p.x0 && x <= p.x1);
   if (!slab) return 1;
@@ -54,11 +65,9 @@ export function developPlate(art: Uint32Array, layers: Uint8Array, P: ScenePalet
     }
     if (layer === LAYER.ridge || layer === LAYER.tower) {
       if (keepsLight.has(art[a])) continue;
-      const ridge = layer === LAYER.ridge;
-      const depth = ridge ? 0.4 + 0.6 * smooth(HAZE.ridgeTop, GROUND, y) : smooth(HAZE.towerTop, GROUND, y);
-      const band = Math.floor(depth * HAZE.bands + bayerAt(ix, iy)) / HAZE.bands;
       const textured = scale(plate[i], stoneTone(ix, iy, FAR_TEXTURE, false));
-      plate[i] = mix(textured, horizon, band * (ridge ? HAZE.ridge : HAZE.tower));
+      const haze = layer === LAYER.ridge ? ridgeHaze(y, bayerAt(ix, iy)) : towerHaze(y, bayerAt(ix, iy));
+      plate[i] = mix(textured, horizon, haze);
       continue;
     }
     if (decorated) continue;

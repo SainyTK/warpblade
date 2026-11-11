@@ -4,6 +4,7 @@ import type { Color } from "../types/color";
 import { cb, cg, cr, mix, scale } from "../utils/color";
 import { clamp } from "../utils/math";
 import { paletteAt, type ScenePalette, starsAt } from "./eras/sceneDef";
+import { ridgeHaze } from "./plate";
 import { scene } from "./scenery";
 import { floorToneAt } from "./stoneTone";
 import { groundAt, ridgeAt, ridgeTopAt, skyAt } from "./terrain";
@@ -28,7 +29,7 @@ function worldAt(x: number, y: number, P: ScenePalette, stars: number): Color {
     const fade = clamp((y - H) / DEPTH_FADE);
     return fade > bayerAt(x, y) ? P.sky[0] : scale(groundAt(x, y, P), floorToneAt(x, y));
   }
-  if (y >= ridgeTopAt(x)) return ridgeAt(x, y, P);
+  if (y >= ridgeTopAt(x)) return mix(ridgeAt(x, y, P), P.sky[P.sky.length - 1], ridgeHaze(y, bayerAt(x, y)));
   if (y < 110 && hash(x, y) < stars) return mix(P.starDim, P.starBright, hash(y, x) * 0.6);
   return skyAt(x, y, P);
 }
