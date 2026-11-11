@@ -49,6 +49,11 @@ export interface SceneDef {
   sky?(bg: Uint32Array, r: Rng, k: number): void;
   /** static: drawn last, over the floor and slabs (puddles, crystals, cracks, roots) */
   decorate?(bg: Uint32Array, r: Rng, k: number): void;
+  /**
+   * static: drawn last on the finished picture at the frame's full detail, FW by FH image pixels with RES of them to
+   * an art pixel, for anything finer than an art pixel
+   */
+  detail?(plate: Uint32Array, r: Rng, k: number): void;
   /** how strongly the braziers burn and glow, 0 for cold ones; the night uses 1 */
   braziers: number;
   /** each frame, light behind the actors: glows, fireflies, twinkling stars. Use engine/frame drawing after place() */

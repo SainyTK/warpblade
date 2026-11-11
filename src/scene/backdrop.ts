@@ -5,6 +5,7 @@ import { cb, cg, cr, mix, scale } from "../utils/color";
 import { clamp } from "../utils/math";
 import { paletteAt, type ScenePalette, starsAt } from "./eras/sceneDef";
 import { scene } from "./scenery";
+import { floorToneAt } from "./stoneTone";
 import { groundAt, ridgeAt, ridgeTopAt, skyAt } from "./terrain";
 
 /** the world beyond the stage darkens to this much of its light over FADE art pixels, so the edge of play reads without a frame */
@@ -25,7 +26,7 @@ function hash(x: number, y: number): number {
 function worldAt(x: number, y: number, P: ScenePalette, stars: number): Color {
   if (y >= GROUND) {
     const fade = clamp((y - H) / DEPTH_FADE);
-    return fade > bayerAt(x, y) ? P.sky[0] : groundAt(x, y, P);
+    return fade > bayerAt(x, y) ? P.sky[0] : scale(groundAt(x, y, P), floorToneAt(x, y));
   }
   if (y >= ridgeTopAt(x)) return ridgeAt(x, y, P);
   if (y < 110 && hash(x, y) < stars) return mix(P.starDim, P.starBright, hash(y, x) * 0.6);

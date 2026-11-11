@@ -10,6 +10,7 @@ import { drawEnemies, drawHeroLayer, drawPickups } from "./drawActors";
 import { drawAmbientLight, drawAnchors, drawMist, drawWarpAim, drawWeather, sceneFlash } from "./drawAmbience";
 import { drawCoins } from "./drawCoins";
 import { drawNumbers } from "./drawNumbers";
+import { drawShadows } from "./drawShadows";
 import { drawXpOrbs } from "./drawXpOrbs";
 import { sceneBackground } from "./scenery";
 
@@ -33,6 +34,7 @@ export function renderScene(out: Uint8ClampedArray): void {
   particles.draw("back");
   drawSkillsBack();
   drawChests();
+  drawShadows();
   drawEnemies();
   room?.drawUnderlay();
   eachHero(drawHeroLayer);

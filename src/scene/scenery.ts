@@ -1,4 +1,4 @@
-import { N, W } from "../constants/stage";
+import { FH, FN, FW } from "../constants/stage";
 import { STAGE_WAVES } from "../constants/waves";
 import { bayerAt } from "../engine/frame";
 import { game } from "../game/state";
@@ -33,7 +33,7 @@ function lookFor(wave: number): Omit<Look, "bg"> {
 let current: Look | null = null;
 let previous: Uint32Array | null = null;
 let fade = 1;
-const mixed = new Uint32Array(N);
+const mixed = new Uint32Array(FN);
 const listeners: (() => void)[] = [];
 
 /** call back when the look changes, to repaint whatever is drawn from it outside the game, such as the backdrop */
@@ -72,10 +72,7 @@ export function sceneBackground(): Uint32Array {
   if (!current) refresh();
   const c = current as Look;
   if (fade >= 1 || !previous) return c.bg;
-  for (let i = 0; i < N; i++) {
-    const x = i % W;
-    const y = (i - x) / W;
-    mixed[i] = fade > bayerAt(x, y) ? c.bg[i] : previous[i];
-  }
+  for (let y = 0, i = 0; y < FH; y++)
+    for (let x = 0; x < FW; x++, i++) mixed[i] = fade > bayerAt(x, y) ? c.bg[i] : previous[i];
   return mixed;
 }

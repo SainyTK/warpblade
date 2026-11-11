@@ -7,13 +7,16 @@ import type { ScenePalette } from "./eras/sceneDef";
 
 /** The parts of the night scene that go on forever, as functions of any art pixel, inside the stage or beyond it. */
 
-/** the sky darkens upward in dithered bands */
-export function skyAt(x: number, y: number, P: ScenePalette): Color {
+/** the sky's band at height y in art pixels, the step between two bands broken up by a dither threshold from 0 to 1 */
+export function skyBandAt(y: number, threshold: number, P: ScenePalette): Color {
   const S = P.sky;
   const v = clamp(y / 150) * (S.length - 1);
   const i = Math.floor(v);
-  return S[Math.min(S.length - 1, v - i > bayerAt(x, y) ? i + 1 : i)];
+  return S[Math.min(S.length - 1, v - i > threshold ? i + 1 : i)];
 }
+
+/** the sky darkens upward in dithered bands */
+export const skyAt = (x: number, y: number, P: ScenePalette): Color => skyBandAt(y, bayerAt(x, y), P);
 
 /** the top row of the far ridge in column x */
 export const ridgeTopAt = (x: number): number =>

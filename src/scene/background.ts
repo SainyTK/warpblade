@@ -2,6 +2,7 @@ import { BRAZIERS, GROUND, H, N, PLATFORMS, W } from "../constants/stage";
 import { mix } from "../utils/color";
 import { Rng } from "../utils/rng";
 import { paletteAt, type SceneDef, type ScenePalette, starsAt } from "./eras/sceneDef";
+import { DECORATED, developPlate, LAYER } from "./plate";
 import { groundAt, ridgeAt, ridgeTopAt, skyAt } from "./terrain";
 
 const TOWERS: readonly (readonly [number, number, number])[] = [
@@ -15,7 +16,7 @@ const TOWERS: readonly (readonly [number, number, number])[] = [
 ];
 
 // each part draws from its own seeded stream, so an era's sky or star count never reshapes the towers or the moss
-const SEEDS = { stars: 3, towers: 5, ground: 7, platforms: 9, sky: 11, decorate: 13 } as const;
+const SEEDS = { stars: 3, towers: 5, ground: 7, platforms: 9, sky: 11, decorate: 13, detail: 17 } as const;
 
 function sky(bg: Uint32Array, P: ScenePalette, stars: number): void {
   const r = new Rng(SEEDS.stars);
@@ -27,10 +28,14 @@ function sky(bg: Uint32Array, P: ScenePalette, stars: number): void {
   }
 }
 
-/** a far ridge, then ruined spires rim lit on the right, some windows lit */
-function skyline(bg: Uint32Array, P: ScenePalette, windows: number): void {
-  const r = new Rng(SEEDS.towers);
+/** a far ridge */
+function ridge(bg: Uint32Array, P: ScenePalette): void {
   for (let x = 0; x < W; x++) for (let y = ridgeTopAt(x); y < GROUND; y++) bg[y * W + x] = ridgeAt(x, y, P);
+}
+
+/** ruined spires rim lit on the right, some windows lit */
+function towers(bg: Uint32Array, P: ScenePalette, windows: number): void {
+  const r = new Rng(SEEDS.towers);
   for (const [tx, tw, top] of TOWERS) {
     const broken = r.next() > 0.5;
     for (let x = tx; x < tx + tw && x < W; x++) {
@@ -63,7 +68,7 @@ function ground(bg: Uint32Array, P: ScenePalette): void {
   }
 }
 
-/** stone slabs with hanging vines, and the iron braziers on them */
+/** stone slabs with hanging vines */
 function platforms(bg: Uint32Array, P: ScenePalette): void {
   const r = new Rng(SEEDS.platforms);
   for (const p of PLATFORMS) {
@@ -81,6 +86,10 @@ function platforms(bg: Uint32Array, P: ScenePalette): void {
       for (let k = 0; k < L; k++) bg[(p.y + 9 + k) * W + x] = k === L - 1 ? P.mossTip : P.vine;
     }
   }
+}
+
+/** the iron braziers on the slabs */
+function braziers(bg: Uint32Array, P: ScenePalette): void {
   for (const b of BRAZIERS)
     for (let y = b.y - 6; y < b.y; y++)
       for (let x = b.x - 4; x <= b.x + 4; x++) {
@@ -91,15 +100,38 @@ function platforms(bg: Uint32Array, P: ScenePalette): void {
       }
 }
 
-/** the static scene of one era at progress k, built when the wave changes */
+/**
+ * The static scene of one era at progress k, built when the wave changes: painted part by part in art pixels, each
+ * part's pixels noted in a layer map, then developed into the frame's full detail, where the era adds its fine detail.
+ */
 export function buildBackground(def: SceneDef, k: number): Uint32Array {
   const bg = new Uint32Array(N);
+  const layers = new Uint8Array(N);
+  const before = new Uint32Array(N);
+  /** note which pixels the last part painted */
+  const painted = (note: (i: number) => void): void => {
+    for (let i = 0; i < N; i++) if (bg[i] !== before[i]) note(i);
+    before.set(bg);
+  };
+  const part = (layer: number) => painted((i) => (layers[i] = layer));
   const P = paletteAt(def, k);
   sky(bg, P, starsAt(def, k));
+  part(LAYER.sky);
   def.sky?.(bg, new Rng(SEEDS.sky), k);
-  skyline(bg, P, def.windows);
+  part(LAYER.celestial);
+  ridge(bg, P);
+  part(LAYER.ridge);
+  towers(bg, P, def.windows);
+  part(LAYER.tower);
   ground(bg, P);
+  part(LAYER.ground);
   platforms(bg, P);
+  part(LAYER.slab);
+  braziers(bg, P);
+  part(LAYER.prop);
   def.decorate?.(bg, new Rng(SEEDS.decorate), k);
-  return bg;
+  painted((i) => (layers[i] |= DECORATED));
+  const plate = developPlate(bg, layers, P);
+  def.detail?.(plate, new Rng(SEEDS.detail), k);
+  return plate;
 }

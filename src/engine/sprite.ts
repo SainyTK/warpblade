@@ -1,8 +1,22 @@
-import { RES } from "../constants/stage";
+import { FH, FW, RES } from "../constants/stage";
 import type { Color } from "../types/color";
 import type { SpriteBox, SpriteImage } from "../types/sprite";
 import { mix, scale } from "../utils/color";
-import { blendImage, putImage, shakeOffset } from "./frame";
+import { blendImage, color, putImage, shakeOffset } from "./frame";
+
+/** where a part overlaps an earlier one, the pixel beside its edge darkens to this much of the part's colour */
+const INNER_LINE = 0.45;
+/** pixels a pass has chosen to recolour, held until the pass ends so it never reads its own changes */
+let scratchAt = new Int32Array(4096);
+let scratchTo = new Uint32Array(4096);
+function growScratch(): void {
+  const at = new Int32Array(scratchAt.length * 2);
+  at.set(scratchAt);
+  scratchAt = at;
+  const to = new Uint32Array(scratchTo.length * 2);
+  to.set(scratchTo);
+  scratchTo = to;
+}
 
 /**
  * A small canvas that builds a sprite part by part. Each part is drawn into a layer, then committed: where it overlaps
@@ -72,23 +86,43 @@ export class SpriteCanvas implements SpriteImage {
   set(x: number, y: number, c: Color): void {
     this.put(Math.floor(this.imageX(x)), Math.floor(this.imageY(y)), c);
   }
-  dot(cx: number, cy: number, r: number, c: Color): void {
-    const ix = this.imageX(cx);
-    const iy = this.imageY(cy);
-    const ir = r * this.res;
-    for (let y = Math.floor(iy - ir); y <= Math.ceil(iy + ir); y++)
-      for (let x = Math.floor(ix - ir); x <= Math.ceil(ix + ir); x++) {
-        const dx = x + 0.5 - ix;
-        const dy = y + 0.5 - iy;
-        if (dx * dx + dy * dy <= ir * ir) this.put(x, y, c);
-      }
+  /** a row of image pixels from x0 to x1, inclusive, clipped to the canvas */
+  private span(x0: number, x1: number, iy: number, c: Color): void {
+    if (iy < 0 || iy >= this.h) return;
+    const a = x0 < 0 ? 0 : x0;
+    const b = x1 >= this.w ? this.w - 1 : x1;
+    if (b < a) return;
+    this.layer.fill(c, iy * this.w + a, iy * this.w + b + 1);
+    if (a < this.x0) this.x0 = a;
+    if (b > this.x1) this.x1 = b;
+    if (iy < this.y0) this.y0 = iy;
+    if (iy > this.y1) this.y1 = iy;
   }
-  stroke(x0: number, y0: number, x1: number, y1: number, r: number, c: Color): void {
-    const n = Math.max(1, Math.ceil(Math.hypot(x1 - x0, y1 - y0) * this.res));
-    for (let i = 0; i <= n; i++) {
-      const u = i / n;
-      this.dot(x0 + (x1 - x0) * u, y0 + (y1 - y0) * u, r, c);
+  /** a disc in image pixels: every pixel whose center is within ir of (ix, iy), row by row */
+  private disc(ix: number, iy: number, ir: number, c: Color): void {
+    const r2 = ir * ir;
+    for (let y = Math.floor(iy - ir); y <= Math.ceil(iy + ir); y++) {
+      const dy = y + 0.5 - iy;
+      const reach = r2 - dy * dy;
+      if (reach < 0) continue;
+      const half = Math.sqrt(reach);
+      this.span(Math.ceil(ix - half - 0.5), Math.floor(ix + half - 0.5), y, c);
     }
+  }
+  dot(cx: number, cy: number, r: number, c: Color): void {
+    this.disc(this.imageX(cx), this.imageY(cy), r * this.res, c);
+  }
+  /** discs along a path overlap by half a radius or more, close enough that their edge reads as one line */
+  private static readonly SPACING = 0.5;
+  stroke(x0: number, y0: number, x1: number, y1: number, r: number, c: Color): void {
+    const ir = r * this.res;
+    const step = Math.max(1, ir * SpriteCanvas.SPACING);
+    const n = Math.max(1, Math.ceil((Math.hypot(x1 - x0, y1 - y0) * this.res) / step));
+    const ax = this.imageX(x0);
+    const ay = this.imageY(y0);
+    const dx = (this.imageX(x1) - ax) / n;
+    const dy = (this.imageY(y1) - ay) / n;
+    for (let i = 0; i <= n; i++) this.disc(ax + dx * i, ay + dy * i, ir, c);
   }
   poly(local: readonly (readonly [number, number])[], c: Color): void {
     const points = local.map(([x, y]) => [this.imageX(x), this.imageY(y)] as const);
@@ -118,7 +152,7 @@ export class SpriteCanvas implements SpriteImage {
     const y0 = Math.floor(this.imageY(y));
     const nx = Math.round(w * this.res);
     const ny = Math.round(h * this.res);
-    for (let j = 0; j < ny; j++) for (let i = 0; i < nx; i++) this.put(x0 + i, y0 + j, c);
+    for (let j = 0; j < ny; j++) this.span(x0, x0 + nx - 1, y0 + j, c);
   }
   /** a line one image pixel wide between two local points: seams, cracks, veins and fine light */
   hairline(x0: number, y0: number, x1: number, y1: number, c: Color): void {
@@ -133,11 +167,15 @@ export class SpriteCanvas implements SpriteImage {
     const len = Math.hypot(x1 - x0, y1 - y0);
     const nx = len > 0 ? (y1 - y0) / len : 0;
     const ny = len > 0 ? -(x1 - x0) / len : 0;
-    const n = Math.max(1, Math.ceil(len * this.res));
-    for (let i = 0; i <= n; i++) {
-      const u = i / n;
+    const run = len * this.res;
+    // each disc sits a share of its own radius past the last, so a thick base takes few and a fine tip stays smooth
+    for (let at = 0, last = false; !last; ) {
+      last = at >= run;
+      const u = run > 0 ? Math.min(1, at / run) : 1;
+      const r = r0 + (r1 - r0) * u;
       const push = bend * 4 * u * (1 - u);
-      this.dot(x0 + (x1 - x0) * u + nx * push, y0 + (y1 - y0) * u + ny * push, r0 + (r1 - r0) * u, c);
+      this.dot(x0 + (x1 - x0) * u + nx * push, y0 + (y1 - y0) * u + ny * push, r, c);
+      at += Math.max(1, r * this.res * SpriteCanvas.SPACING);
     }
   }
   /** pixel rows in image pixels, one character per pixel, "." is empty, the top left corner at this local point */
@@ -154,20 +192,27 @@ export class SpriteCanvas implements SpriteImage {
    */
   shadeEdges(base: Color, light: Color, dark: Color, depth = 1): void {
     const { w, h, layer } = this;
-    const lit = (x: number, y: number): boolean => x >= 0 && y >= 0 && x < w && y < h && layer[y * w + x] !== 0;
-    const at: number[] = [];
-    const to: Color[] = [];
-    for (let y = this.y0; y <= this.y1; y++)
+    let count = 0;
+    for (let y = this.y0; y <= this.y1; y++) {
+      const row = y * w;
       for (let x = this.x0; x <= this.x1; x++) {
-        if (layer[y * w + x] !== base) continue;
+        const i = row + x;
+        if (layer[i] !== base) continue;
         let c = 0;
-        if (!lit(x - 1, y - 1) || !lit(x - 1, y) || !lit(x, y - 1)) c = light;
-        else for (let k = 1; k <= depth; k++) if (!lit(x + k, y + k) || !lit(x + k, y)) c = dark;
+        if (x === 0 || y === 0 || !layer[i - w - 1] || !layer[i - 1] || !layer[i - w]) c = light;
+        else
+          for (let k = 1; k <= depth; k++) {
+            const beside = x + k < w ? layer[i + k] : 0;
+            const below = x + k < w && y + k < h ? layer[i + k * w + k] : 0;
+            if (!beside || !below) c = dark;
+          }
         if (!c) continue;
-        at.push(y * w + x);
-        to.push(c);
+        if (count === scratchAt.length) growScratch();
+        scratchAt[count] = i;
+        scratchTo[count++] = c;
       }
-    for (let i = 0; i < at.length; i++) layer[at[i]] = to[i];
+    }
+    for (let k = 0; k < count; k++) layer[scratchAt[k]] = scratchTo[k];
   }
   commit(innerLines = true): void {
     const { w, h, d, layer } = this;
@@ -177,37 +222,47 @@ export class SpriteCanvas implements SpriteImage {
       const yb = Math.min(h - 1, this.y1 + 1);
       const xa = Math.max(0, this.x0 - 1);
       const xb = Math.min(w - 1, this.x1 + 1);
-      for (let y = ya; y <= yb; y++)
+      for (let y = ya; y <= yb; y++) {
+        const row = y * w;
         for (let x = xa; x <= xb; x++) {
-          const i = y * w + x;
-          if (layer[i] || !d[i]) continue;
+          const i = row + x;
+          if (!d[i] || layer[i]) continue;
           const n =
             (x > 0 && layer[i - 1]) ||
             (x < w - 1 && layer[i + 1]) ||
             (y > 0 && layer[i - w]) ||
             (y < h - 1 && layer[i + w]);
-          if (n) d[i] = scale(n, 0.45);
+          if (n) d[i] = scale(n, INNER_LINE);
         }
-    }
-    for (let y = this.y0; y <= this.y1; y++)
-      for (let x = this.x0; x <= this.x1; x++) {
-        const i = y * w + x;
-        if (layer[i]) d[i] = layer[i];
       }
+    }
+    for (let y = this.y0; y <= this.y1; y++) {
+      const row = y * w;
+      for (let i = row + this.x0, end = row + this.x1; i <= end; i++) {
+        const c = layer[i];
+        if (c) d[i] = c;
+      }
+    }
     this.grow(this.x0, this.y0, this.x1, this.y1);
   }
   outline(c: Color): void {
     const { w, h, d, box } = this;
     if (box.x1 < box.x0) return;
-    const ring: number[] = [];
-    for (let y = Math.max(0, box.y0 - 1); y <= Math.min(h - 1, box.y1 + 1); y++)
-      for (let x = Math.max(0, box.x0 - 1); x <= Math.min(w - 1, box.x1 + 1); x++) {
-        const i = y * w + x;
+    const xa = Math.max(0, box.x0 - 1);
+    const xb = Math.min(w - 1, box.x1 + 1);
+    let count = 0;
+    for (let y = Math.max(0, box.y0 - 1); y <= Math.min(h - 1, box.y1 + 1); y++) {
+      const row = y * w;
+      for (let x = xa; x <= xb; x++) {
+        const i = row + x;
         if (d[i]) continue;
-        if ((x > 0 && d[i - 1]) || (x < w - 1 && d[i + 1]) || (y > 0 && d[i - w]) || (y < h - 1 && d[i + w]))
-          ring.push(i);
+        if ((x > 0 && d[i - 1]) || (x < w - 1 && d[i + 1]) || (y > 0 && d[i - w]) || (y < h - 1 && d[i + w])) {
+          if (count === scratchAt.length) growScratch();
+          scratchAt[count++] = i;
+        }
       }
-    for (const i of ring) d[i] = c;
+    }
+    for (let k = 0; k < count; k++) d[scratchAt[k]] = c;
     this.grow(box.x0 - 1, box.y0 - 1, box.x1 + 1, box.y1 + 1);
   }
   /** flip the drawn sprite left to right about local x = 0, the same way a flipped blit does */
@@ -265,6 +320,10 @@ export function blit(s: SpriteImage, x: number, y: number, flip: boolean, o: Bli
   const bx = Math.floor((x + shx) * step) * k;
   const by = Math.floor((y + shy) * step) * k;
   const box = s.box ?? { x0: 0, y0: 0, x1: s.w - 1, y1: s.h - 1 };
+  if (k === 1 && alpha >= 1 && tintAmount <= 0 && !soft) {
+    blitPlain(s, box, bx, by, flip);
+    return;
+  }
   for (let j = box.y0; j <= box.y1; j++)
     for (let i = box.x0; i <= box.x1; i++) {
       const c = s.d[j * s.w + i];
@@ -278,6 +337,29 @@ export function blit(s: SpriteImage, x: number, y: number, flip: boolean, o: Bli
           else putImage(ix + u, iy + v, col, alpha);
         }
     }
+}
+
+/** the common case: a full detail sprite, opaque and untinted, copied pixel for pixel with its box clipped to the frame once */
+function blitPlain(s: SpriteImage, box: SpriteBox, bx: number, by: number, flip: boolean): void {
+  const j0 = Math.max(box.y0, s.oy - by);
+  const j1 = Math.min(box.y1, s.oy - by + FH - 1);
+  // the sprite columns that land inside the frame, whichever way it faces
+  const i0 = Math.max(box.x0, flip ? s.ox + bx - (FW - 1) : s.ox - bx);
+  const i1 = Math.min(box.x1, flip ? s.ox + bx : s.ox - bx + FW - 1);
+  for (let j = j0; j <= j1; j++) {
+    const row = (by + j - s.oy) * FW;
+    const from = j * s.w;
+    if (flip) {
+      for (let i = i0, o = row + bx + s.ox - i0; i <= i1; i++, o--) {
+        const c = s.d[from + i];
+        if (c) color[o] = c;
+      }
+    } else
+      for (let i = i0, o = row + bx + i0 - s.ox; i <= i1; i++, o++) {
+        const c = s.d[from + i];
+        if (c) color[o] = c;
+      }
+  }
 }
 
 /**

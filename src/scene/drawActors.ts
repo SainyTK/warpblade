@@ -17,6 +17,7 @@ import { hex, WHITE } from "../utils/color";
 import { clamp, TAU } from "../utils/math";
 import { bladeAngle } from "../utils/poseFrame";
 import { drawEliteGlow, drawEliteRing } from "./drawElite";
+import { foeSprite } from "./foeSprites";
 
 const heroSprite = detailCanvas(80, 76, 40, 62);
 const HP_BAR_EMPTY = hex("#120a1e");
@@ -59,7 +60,7 @@ function drawStun(e: Enemy): void {
 export function drawEnemies(): void {
   for (const e of game.enemies) {
     const kind = kindOf(e.type);
-    const s = kind.draw(e, game.t);
+    const s = foeSprite(e);
     const winding =
       e.state === "wind" || e.state === "volley" || e.state === "charge" || (e.state === "leap" && e.vy === 0);
     const tremble = winding ? (Math.floor(game.t * 30) % 2 ? 1 : -1) : 0;

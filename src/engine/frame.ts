@@ -127,6 +127,31 @@ export function disc(x: number, y: number, r: number, c: Color, a: number, floor
       if (d <= r) blendImage(ix, iy, c, a * Math.min(1, (r - d) * 0.8 + 0.35));
     }
 }
+/**
+ * a shadow lying on a floor seen edge on: the lower half of a soft oval hung from the floor line at screen (x, y),
+ * rx wide and ry deep in art pixels, darkening what is there by up to k
+ */
+export function castShadow(x: number, y: number, rx: number, ry: number, k: number): void {
+  if (k <= 0.01 || rx <= 0 || ry <= 0) return;
+  const cx = (x + placement.shx) * RES;
+  const top = Math.round((y + placement.shy) * RES);
+  const irx = rx * RES;
+  const iry = ry * RES;
+  const x0 = Math.max(0, Math.floor(cx - irx));
+  const x1 = Math.min(FW - 1, Math.ceil(cx + irx));
+  for (let iy = Math.max(0, top); iy < Math.min(FH, top + iry); iy++) {
+    const dy = (iy + 0.5 - top) / iry;
+    for (let ix = x0; ix <= x1; ix++) {
+      const dx = (ix + 0.5 - cx) / irx;
+      const d = dx * dx + dy * dy;
+      if (d >= 1) continue;
+      const keep = 1 - k * (1 - d);
+      const i = iy * FW + ix;
+      const c = color[i];
+      color[i] = ((((c >> 16) & 255) * keep) << 16) | ((((c >> 8) & 255) * keep) << 8) | ((c & 255) * keep) || 0x010101;
+    }
+  }
+}
 export function polygon(points: readonly (readonly [number, number])[], c: Paint, a = 1): void {
   const sp = points.map(([x, y]) => [toScreenX(x) * RES, toScreenY(y) * RES] as const);
   let top = Number.POSITIVE_INFINITY;
@@ -206,35 +231,42 @@ export function shade(
 // ---- light
 /** the art rows any light fell on this frame, inclusive */
 const litRows = { top: H, bottom: -1 };
-/** light on the art pixel at screen (sx, sy) */
-function addLight(sx: number, sy: number, r: number, g: number, b: number): void {
-  if (sy < litRows.top) litRows.top = sy;
-  if (sy > litRows.bottom) litRows.bottom = sy;
-  const i = sy * W + sx;
-  lightR[i] += r;
-  lightG[i] += g;
-  lightB[i] += b;
+function markLit(top: number, bottom: number): void {
+  if (top < litRows.top) litRows.top = top;
+  if (bottom > litRows.bottom) litRows.bottom = bottom;
 }
+/** a glow's falloff by squared distance over squared radius: (1 - sqrt(d)) squared, read from a table */
+const FALLOFF_STEPS = 1024;
+const FALLOFF = Float32Array.from({ length: FALLOFF_STEPS + 1 }, (_, i) => (1 - Math.sqrt(i / FALLOFF_STEPS)) ** 2);
 /** radial glow: k at the center, falling to 0 at radius r */
 export function glow(x: number, y: number, r: number, c: Color, k = 0.5): void {
   if (r < 1 || k <= 0.004) return;
   const cx = toScreenX(x);
   const cy = toScreenY(y);
+  const x0 = Math.max(0, Math.floor(cx - r));
+  const x1 = Math.min(W - 1, Math.ceil(cx + r));
+  const y0 = Math.max(0, Math.floor(cy - r));
+  const y1 = Math.min(H - 1, Math.ceil(cy + r));
+  if (x1 < x0 || y1 < y0) return;
+  markLit(y0, y1);
   const ir = 1 / r;
   const rr = cr(c) * k;
   const gg = cg(c) * k;
   const bb = cb(c) * k;
-  const x0 = Math.max(0, Math.floor(cx - r));
-  const x1 = Math.min(W - 1, Math.ceil(cx + r));
-  for (let sy = Math.max(0, Math.floor(cy - r)); sy <= Math.min(H - 1, Math.ceil(cy + r)); sy++) {
+  for (let sy = y0; sy <= y1; sy++) {
     const dy = (sy + 0.5 - cy) * ir;
+    const dy2 = dy * dy;
+    if (dy2 >= 1) continue;
+    const row = sy * W;
     for (let sx = x0; sx <= x1; sx++) {
       const dx = (sx + 0.5 - cx) * ir;
-      const d = dx * dx + dy * dy;
+      const d = dx * dx + dy2;
       if (d >= 1) continue;
-      const f = 1 - Math.sqrt(d);
-      const w = f * f;
-      addLight(sx, sy, rr * w, gg * w, bb * w);
+      const w = FALLOFF[(d * FALLOFF_STEPS) | 0];
+      const i = row + sx;
+      lightR[i] += rr * w;
+      lightG[i] += gg * w;
+      lightB[i] += bb * w;
     }
   }
 }
@@ -245,24 +277,34 @@ export function glowLine(x0: number, y0: number, x1: number, y1: number, r: numb
   const ay = toScreenY(y0);
   const dx = toScreenX(x1) - ax;
   const dy = toScreenY(y1) - ay;
-  const len2 = dx * dx + dy * dy || 1e-9;
-  const rr = cr(c) * k;
-  const gg = cg(c) * k;
-  const bb = cb(c) * k;
   const X0 = Math.max(0, Math.floor(Math.min(ax, ax + dx) - r));
   const X1 = Math.min(W - 1, Math.ceil(Math.max(ax, ax + dx) + r));
   const Y0 = Math.max(0, Math.floor(Math.min(ay, ay + dy) - r));
   const Y1 = Math.min(H - 1, Math.ceil(Math.max(ay, ay + dy) + r));
-  for (let sy = Y0; sy <= Y1; sy++)
+  if (X1 < X0 || Y1 < Y0) return;
+  markLit(Y0, Y1);
+  const inv = 1 / (dx * dx + dy * dy || 1e-9);
+  const ir2 = 1 / (r * r);
+  const rr = cr(c) * k;
+  const gg = cg(c) * k;
+  const bb = cb(c) * k;
+  for (let sy = Y0; sy <= Y1; sy++) {
+    const qy = sy + 0.5 - ay;
+    const row = sy * W;
     for (let sx = X0; sx <= X1; sx++) {
       const qx = sx + 0.5 - ax;
-      const qy = sy + 0.5 - ay;
-      const u = clamp((qx * dx + qy * dy) / len2);
-      const d = Math.hypot(qx - dx * u, qy - dy * u) / r;
+      const u = clamp((qx * dx + qy * dy) * inv);
+      const ex = qx - dx * u;
+      const ey = qy - dy * u;
+      const d = (ex * ex + ey * ey) * ir2;
       if (d >= 1) continue;
-      const f = (1 - d) * (1 - d);
-      addLight(sx, sy, rr * f, gg * f, bb * f);
+      const f = FALLOFF[(d * FALLOFF_STEPS) | 0];
+      const i = row + sx;
+      lightR[i] += rr * f;
+      lightG[i] += gg * f;
+      lightB[i] += bb * f;
     }
+  }
 }
 /** a four-point star glint */
 export function sparkle(x: number, y: number, arm: number, c: Color, tip: Color, k = 0.5): void {
@@ -291,14 +333,23 @@ export function sparkle(x: number, y: number, arm: number, c: Color, tip: Color,
   glow(x, y, arm * 2 + 3, c, k);
 }
 
-/** start a frame from the background, an art pixel image, shifted by the shake */
+/** start a frame from the background, an image the size of the frame, shifted by the shake */
 export function beginFrame(background: Uint32Array): void {
   const [sx, sy] = shakeOffset();
-  for (let y = 0; y < H; y++) {
-    const row = clamp(Math.floor(y - sy), 0, H - 1) * W;
-    const first = y * RES * FW;
-    for (let ix = 0; ix < FW; ix++) color[first + ix] = background[row + clamp(Math.floor(ix / RES - sx), 0, W - 1)];
-    for (let k = 1; k < RES; k++) color.copyWithin(first + k * FW, first, first + FW);
+  if (sx === 0 && sy === 0) color.set(background);
+  else {
+    const dx = sx * RES;
+    const lead = Math.max(0, dx);
+    const from = Math.max(0, -dx);
+    const span = FW - Math.abs(dx);
+    for (let iy = 0; iy < FH; iy++) {
+      const row = clamp(iy - sy * RES, 0, FH - 1) * FW;
+      const first = iy * FW;
+      color.set(background.subarray(row + from, row + from + span), first + lead);
+      // the strip the shake uncovers repeats the picture's edge
+      if (dx > 0) color.fill(background[row], first, first + lead);
+      else if (dx < 0) color.fill(background[row + FW - 1], first + span, first + FW);
+    }
   }
   if (litRows.bottom >= 0) {
     const from = litRows.top * W;
@@ -310,8 +361,18 @@ export function beginFrame(background: Uint32Array): void {
   litRows.top = H;
   litRows.bottom = -1;
 }
-const byte = (v: number): number => (v >= 255 ? 255 : v | 0);
-/** color plus light into RGBA bytes, with an optional flat cold flash; rows without light skip the sums */
+/**
+ * How much a sum of light brightens a pixel: one for one while it is dim, then easing toward full white, so the heart
+ * of a burst keeps its colour and its shape where a straight sum would flatten it to white.
+ */
+const TONE_KNEE = 96;
+const TONE_SIZE = 2048;
+const TONE = Uint8Array.from({ length: TONE_SIZE }, (_, l) =>
+  l <= TONE_KNEE ? l : Math.round(TONE_KNEE + (255 - TONE_KNEE) * (1 - Math.exp(-(l - TONE_KNEE) / (255 - TONE_KNEE)))),
+);
+const toned = (l: number): number => TONE[l >= TONE_SIZE ? TONE_SIZE - 1 : l | 0];
+const byte = (v: number): number => (v >= 255 ? 255 : v);
+/** color plus light into RGBA bytes, with an optional flat cold flash; rows and pixels without light skip the sums */
 export function composite(out: Uint8ClampedArray, flash: number): void {
   // little endian RGBA bytes read as one word are ABGR
   const out32 = new Uint32Array(out.buffer, out.byteOffset, FN);
@@ -328,16 +389,24 @@ export function composite(out: Uint8ClampedArray, flash: number): void {
       }
       continue;
     }
-    for (let lx = 0, li = ly * W; lx < W; lx++, li++) {
-      const lr = lightR[li] + fr;
-      const lg = lightG[li] + fg;
-      const lb = lightB[li] + flash;
-      for (let u = 0, i = row + lx * RES; u < RES; u++, i++) {
+    for (let lx = 0, li = ly * W, i = row; lx < W; lx++, li++) {
+      const sum = lightR[li] + lightG[li] + lightB[li] + flash;
+      if (sum < 1) {
+        for (let u = 0; u < RES; u++, i++) {
+          const c = color[i];
+          out32[i] = 0xff000000 | ((c & 0xff) << 16) | (c & 0xff00) | ((c >> 16) & 0xff);
+        }
+        continue;
+      }
+      const lr = toned(lightR[li] + fr);
+      const lg = toned(lightG[li] + fg);
+      const lb = toned(lightB[li] + flash);
+      for (let u = 0; u < RES; u++, i++) {
         const c = color[i];
         const r = byte(((c >> 16) & 0xff) + lr);
         const g = byte(((c >> 8) & 0xff) + lg);
         const b = byte((c & 0xff) + lb);
-        out32[i] = (0xff000000 | (b << 16) | (g << 8) | r) >>> 0;
+        out32[i] = 0xff000000 | (b << 16) | (g << 8) | r;
       }
     }
   }
