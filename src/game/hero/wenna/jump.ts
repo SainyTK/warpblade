@@ -13,6 +13,7 @@ import { game, hero, particles, progress, rng } from "../../state";
 import { dust } from "../../world";
 import { isFree, setState } from "../actions";
 import { lift } from "../lift";
+import { takeOff } from "../takeoff";
 import { wenna } from "./memory";
 import { inRecovery } from "./string";
 import { loadOf, plan } from "./wickMoves";
@@ -78,10 +79,12 @@ export function pressJump(): boolean {
     h.ground = false;
     return true;
   }
-  lift(WENNA_JUMP_RISE, true);
-  h.jumps = 1;
-  setState("jump");
-  dust(h.x, h.y, 4);
-  emitSkillEvent({ type: "jump", air: false });
+  takeOff(() => {
+    lift(WENNA_JUMP_RISE, true);
+    h.jumps = 1;
+    setState("jump");
+    dust(h.x, h.y, 4);
+    emitSkillEvent({ type: "jump", air: false });
+  });
   return true;
 }

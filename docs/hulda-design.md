@@ -190,7 +190,7 @@ Walk, jump, fall, hurt and death use the shared clips through Kael's jump clock 
 Her own recoveries go over them (`settle.ts`, `landing.ts`, keys in `src/constants/clips/hulda/settle.ts`).
 From a stand her walk loads for three frames, her weight rocking back and sinking, then comes up to speed over four more as she tips into the stride.
 A walk that stops carries her weight on past her planted feet, sinks and rocks back into the guard over ten frames, and a turn on the floor dips her through the change of foot.
-Her jump sinks into her knees for two frames before it leaves the floor (`jumpLoad`), and a landing folds her knees deep with the fists dropped, scaled by the fall, then pushes her up into the guard over ten frames.
+Her jump sinks into her knees for two frames before it leaves the floor (the shared take-off load, into `JUMP_CROUCH`), and a landing folds her knees deep with the fists dropped, scaled by the fall, then pushes her up into the guard over ten frames.
 A broken plate shoves her shoulders back two pixels and gives her knees for eight frames over whatever she is doing.
 
 ## Code layout

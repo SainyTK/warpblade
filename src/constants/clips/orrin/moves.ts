@@ -2,7 +2,6 @@ import type { ActionClip, Pose } from "../../../types/pose";
 import { frame } from "../../hero";
 import { ANCHOR_PIN, WHIRLWALL } from "../../orrin/abilities";
 import { BACKLINE } from "../../orrin/backline";
-import { ORRIN_TAKEOFF } from "../../orrin/motion";
 import { HANG, o, STANCE, TUCK } from "./stance";
 
 /** the hook throw: the arm cocked behind his head for two frames, then thrown up along the aim */
@@ -233,28 +232,18 @@ export const ZIP_KICK: Pose = o({
 /** under the ultimate's tear, hanging from the chain */
 export const ULT_HANG: Pose = HANG;
 
-/** the bend before a jump: hips drop, knees and back bend, both arms swing down and back to throw up with the push */
-export const TAKEOFF_CLIP: ActionClip = {
-  dur: ORRIN_TAKEOFF,
-  hit: ORRIN_TAKEOFF,
-  keys: [
-    [0, o({ hy: -12.2, nx: 2, ny: -22.2, cb: 1, fx: 6, fy: -12, sa: 1.4, bx: 1.5, by: -15.5, ba: 0.2 })],
-    [
-      ORRIN_TAKEOFF,
-      o({
-        hy: -10.6,
-        nx: 2.8,
-        ny: -20.6,
-        cb: 1.4,
-        fx: 4.5,
-        fy: -9.5,
-        sa: 1.6,
-        bx: -0.5,
-        by: -13,
-        ffx: 4.5,
-        bfx: -4.5,
-        ba: 0.35,
-      }),
-    ],
-  ],
-};
+/** the deepest of the bend before a jump from a stand: hips drop, knees and back bend, both arms swing down and back to throw up with the push */
+export const TAKEOFF_CROUCH: Pose = o({
+  hy: -10.6,
+  nx: 2.8,
+  ny: -20.6,
+  cb: 1.4,
+  fx: 4.5,
+  fy: -9.5,
+  sa: 1.6,
+  bx: -0.5,
+  by: -13,
+  ffx: 4.5,
+  bfx: -4.5,
+  ba: 0.35,
+});

@@ -14,7 +14,7 @@ import { drawMirel } from "./draw";
 import { clearHeldStaggers, releaseHeldStaggers } from "./heldStagger";
 import { runHour } from "./hour";
 import { hoverGravity, tickHover } from "./hover";
-import { clearTakeoff, pressJump, tickTakeoff } from "./jump";
+import { pressJump } from "./jump";
 import { mirel, resetMirel } from "./memory";
 import { mirelPose } from "./pose";
 import { quickRate } from "./quicken";
@@ -71,7 +71,6 @@ function tick(dt: number): void {
   if (h.state === "dead") closeField(false);
   if (h.ground) givePendantBack();
   releaseHeldStaggers();
-  tickTakeoff(dt);
   tickHover(dt, heldSide());
 }
 
@@ -145,7 +144,6 @@ export const MIREL_KIT: HeroKit = {
     closeField(false);
     resetMirel();
     clearHeldStaggers();
-    clearTakeoff();
     resetAbilities();
     resetMotion();
   },

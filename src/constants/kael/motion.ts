@@ -24,6 +24,12 @@ export const HANDOVER_FRAMES: Partial<Record<HeroState, number>> = {
   walk: 3,
   run: 3,
 };
+/**
+ * Between a stand and a stride on the floor the feet step to their new places: a foot that must travel more than `min`
+ * pixels lifts up to `lift` pixels (full height from `span` pixels of travel), the farther foot first, the other
+ * following `lag` of the way behind. A stride that stops crosses into the stand over `stopFrames`.
+ */
+export const STEP = { min: 1.5, lift: 2.5, span: 6, lag: 0.4, stopFrames: 4 } as const;
 /** a turn on the spot or mid-stride swings the body through the new facing over this many frames */
 export const TURN_FRAMES = 2;
 
@@ -38,9 +44,10 @@ export const JUMP_CATCH_UP = 2.5;
 
 /**
  * The landing: a fall faster than `from` (pixels per second) ends in the knees taking the weight, scaled up to a full
- * crouch at `full`. Standing, the landing clip plays; in a stride, the hips dip by `dip` pixels and come back.
+ * crouch at `full`. Standing, the landing clip plays; in a stride, the hips dip by `dip` pixels and come back. The pose
+ * crosses from the fall into it over `cross` frames, so the arms come down through the touchdown.
  */
-export const LANDING = { from: 120, full: 380, dip: 2.5, dipFrames: 4, clipEnd: frame(7) } as const;
+export const LANDING = { from: 120, full: 380, dip: 2.5, dipFrames: 4, clipEnd: frame(7), cross: 2 } as const;
 
 /** the catch on a crystal: the feet swing this many pixels under the hand, once every `period` seconds, dying away over `settle` */
 export const HANG_SWING = { amplitude: 3, period: 0.7, settle: 0.45 } as const;
@@ -53,10 +60,10 @@ export const HANG_SWING = { amplitude: 3, period: 0.7, settle: 0.45 } as const;
 export const WINDUP = { short: frame(3), rate: 0.65 } as const;
 
 /**
- * A walk, run or dash that stops on the spot settles onto the knees like a light landing, this deep on the landing
- * clip's scale of 0 to 1, so the travel ends in a recovery.
+ * A walk, run or dash that stops on the spot, or Tallis rising out of his pool, settles onto the knees like a light
+ * landing, this deep on the landing clip's scale of 0 to 1, so the travel ends in a recovery.
  */
-export const STOP_DEPTH: Readonly<Record<string, number>> = { walk: 0.3, run: 0.55, dash: 0.75 };
+export const STOP_DEPTH: Readonly<Record<string, number>> = { walk: 0.3, run: 0.55, dash: 0.75, rise: 0.45 };
 
 /**
  * Travel from a stand starts with a load: the hips drop `dip` pixels and the chest leans `lean` pixels into it on the
@@ -67,6 +74,3 @@ export const TRAVEL_LOAD: Readonly<Record<string, { dip: number; lean: number; f
   run: { dip: 1.5, lean: 2.5, frames: 4 },
   dash: { dip: 2.5, lean: 3, frames: 3 },
 };
-
-/** a jump pushes off from bent knees: the hips start `dip` pixels low and the hands `swing` pixels low, rising out over `frames` */
-export const TAKEOFF = { dip: 3, swing: 3, frames: 3 } as const;

@@ -11,6 +11,7 @@ import {
 import { CHARGE_POSE, WENNA_IDLE } from "../../../constants/clips/wenna/stance";
 import { SWAP_CLIP, WENNA_JUMP } from "../../../constants/clips/wenna/travel";
 import { KAEL_WOUNDED_IDLE } from "../../../constants/clips/wounded";
+import { LANDING } from "../../../constants/kael/motion";
 import type { Hero } from "../../../types/hero";
 import type { ActionClip, Pose } from "../../../types/pose";
 import { sampleKeys } from "../../../utils/sampleKeys";
@@ -18,7 +19,9 @@ import { clipPose } from "../clipPose";
 import { clipKey, handOver, watchHandover } from "../kael/handover";
 import { jumpClock } from "../kael/jumpClock";
 import { landingPose, watchLanding } from "../kael/landing";
+import { loadPose } from "../kael/load";
 import { motion } from "../kael/motion";
+import { travelPose, watchTravel } from "../kael/travel";
 import { woundedIdle, woundWeight } from "../wound";
 import { wenna } from "./memory";
 
@@ -94,8 +97,9 @@ export function wennaPose(h: Hero, t: number): Pose {
   const fresh = clipKey(h) !== m.clip || restarted;
   m.st = h.st;
   const landed = watchLanding(h, t);
-  const base = statePose(h, t, fresh, dt, woundWeight(t));
-  watchHandover(h, t, restarted, landed ? 1 : undefined);
+  watchTravel(h, t, m.clip);
+  const base = loadPose(travelPose(h, statePose(h, t, fresh, dt, woundWeight(t)), t));
+  watchHandover(h, t, restarted, landed ? LANDING.cross : undefined);
   const p = handOver(landingPose(h, base, t), t);
   m.last = p;
   return p;

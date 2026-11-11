@@ -5,12 +5,13 @@ import {
   HOOK_CLIP,
   PIN_CLIP,
   ROLL_CLIP,
-  TAKEOFF_CLIP,
+  TAKEOFF_CROUCH,
   WHIRL_CLIP,
   ZIP_POSE,
 } from "../../../constants/clips/orrin/moves";
 import { CHARGE_POSE, HANG, ORRIN_IDLE, TUCK } from "../../../constants/clips/orrin/stance";
 import { KAEL_WOUNDED_IDLE } from "../../../constants/clips/wounded";
+import { LANDING } from "../../../constants/kael/motion";
 import { CHAIN_BLOWS } from "../../../constants/orrin/string";
 import type { Hero } from "../../../types/hero";
 import type { Pose } from "../../../types/pose";
@@ -21,7 +22,9 @@ import { clipPose } from "../clipPose";
 import { clipKey, handOver, watchHandover } from "../kael/handover";
 import { jumpClock } from "../kael/jumpClock";
 import { landingPose, watchLanding } from "../kael/landing";
+import { loadPose } from "../kael/load";
 import { motion } from "../kael/motion";
+import { travelPose, watchTravel } from "../kael/travel";
 import { woundedIdle, woundWeight } from "../wound";
 import { orrin } from "./memory";
 import { circleTurns } from "./string";
@@ -115,8 +118,6 @@ function statePose(h: Hero, t: number, fresh: boolean, dt: number, wound: number
       const clip = CHAIN_CLIPS[orrin.current];
       return sampleKeys(clip.keys, orrin.current === "circle" ? circleTime(h.st) : h.st);
     }
-    case "takeoff":
-      return sampleKeys(TAKEOFF_CLIP.keys, h.st);
     case "hookThrow": {
       const p = sampleKeys(HOOK_CLIP.keys, h.st);
       return h.ground ? p : { ...p, ...TUCK };
@@ -163,8 +164,9 @@ export function orrinPose(h: Hero, t: number): Pose {
   const fresh = clipKey(h) !== m.clip || restarted;
   m.st = h.st;
   const landed = watchLanding(h, t);
-  const base = withArc(h, statePose(h, t, fresh, dt, woundWeight(t)));
-  watchHandover(h, t, restarted, landed ? 1 : undefined);
+  watchTravel(h, t, m.clip);
+  const base = loadPose(travelPose(h, withArc(h, statePose(h, t, fresh, dt, woundWeight(t))), t), TAKEOFF_CROUCH);
+  watchHandover(h, t, restarted, landed ? LANDING.cross : undefined);
   const p = handOver(landingPose(h, base, t), t);
   m.last = p;
   return p;

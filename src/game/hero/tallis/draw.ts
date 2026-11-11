@@ -3,7 +3,7 @@ import { PAL } from "../../../constants/palette";
 import { KNIFE_BLOWS } from "../../../constants/tallis/knives";
 import { SINK } from "../../../constants/tallis/sink";
 import { VEIL } from "../../../constants/tallis/veil";
-import { glow, place, px } from "../../../engine/frame";
+import { glow, glowLine, place, px } from "../../../engine/frame";
 import type { Color } from "../../../types/color";
 import type { Enemy } from "../../../types/enemy";
 import { hex } from "../../../utils/color";
@@ -55,16 +55,45 @@ function drawGlint(): void {
   px(hx + Math.cos(a) * d, hy + Math.sin(a) * d, G[5]);
 }
 
+/** frames the rose edge stays on Heel Kick's leg after the hit */
+const HEEL_TRAIL_FRAMES = 6;
+
+/**
+ * Heel Kick's leg lit along its top edge in rose from the hit, brightest at the heel and fading over a few frames, so the
+ * straight leg reads against his dark cloak at game scale.
+ */
+function drawHeelEdge(): void {
+  if (hero.state !== "knife" || tallis.current !== "heelKick") return;
+  const u = (hero.st - KNIFE_BLOWS.heelKick.hit) / frame(HEEL_TRAIL_FRAMES);
+  if (u < 0 || u > 1) return;
+  const p = hero.pose;
+  const f = hero.face;
+  const hipX = hero.x + f * p.hx;
+  const hipY = hero.y + p.hy;
+  const heelX = hero.x + f * p.ffx;
+  const heelY = hero.y + p.ffy - 1;
+  const fade = 1 - u;
+  glowLine(hipX, hipY, heelX, heelY, 3, G[4], 0.35 * fade);
+  const steps = Math.ceil(Math.hypot(heelX - hipX, heelY - hipY));
+  for (let i = Math.floor(steps / 3); i <= steps; i++) {
+    const k = i / steps;
+    px(Math.round(hipX + (heelX - hipX) * k), Math.round(hipY + (heelY - hipY) * k) - 1, k > 0.75 ? G[5] : G[4], fade);
+  }
+  glow(heelX, heelY, 5, G[5], 0.5 * fade);
+}
+
 /** behind him: the pool he melts into */
 export function drawTallisBack(): void {
   place();
   drawPool();
 }
 
-/** over him: his knife's glint, placed on him the way the hero layer leaves it, his shadow form and his smoke */
+/** over him: his knife's glint, placed on him the way the hero layer leaves it, Heel Kick's lit leg, his shadow form and
+ *  his smoke */
 export function drawTallis(): void {
   drawGlint();
   place();
+  drawHeelEdge();
   drawShadowForm();
   for (const c of tallisHost.clouds) drawCloud(c);
 }

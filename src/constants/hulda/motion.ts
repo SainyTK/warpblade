@@ -9,10 +9,6 @@ export const HULDA_STRIDE = 20;
 /** from a stand her walk loads for `load` seconds before her feet move, then comes up to speed over `ramp` */
 export const WALK_LOAD = { load: frame(3), ramp: frame(4) } as const;
 
-/** she sinks into her knees this long before a jump leaves the floor; the jump's hand-over carries the crouch on into
- *  the take-off */
-export const JUMP_LOAD = frame(2);
-
 /**
  * Her landing: a fall faster than `from` (pixels per second) ends in the knees taking her weight, scaled up to the
  * full clip at `full`; in a stride the hips dip by `dip` pixels over `dipFrames` frames.

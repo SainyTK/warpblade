@@ -3,7 +3,6 @@ import type { Point } from "./world";
 
 /** states only Orrin enters; his kit runs and poses them */
 export type OrrinState =
-  | "takeoff"
   | "lash"
   | "hookThrow"
   | "swing"

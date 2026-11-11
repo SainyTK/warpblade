@@ -2,13 +2,13 @@ import { WALK_LOAD } from "../../../constants/hulda/motion";
 import { clamp } from "../../../utils/math";
 import { isHeld } from "../../input";
 import { hero } from "../../state";
-import { isFree } from "../actions";
+import { inFreeState } from "../actions";
 import { hulda } from "./memory";
 
 /** count how long she has been pushed while free; letting go, or any action, starts the load over */
 export function tickPush(dt: number): void {
   const pushed = isHeld("left") !== isHeld("right");
-  hulda.push = pushed && isFree() ? hulda.push + dt : 0;
+  hulda.push = pushed && inFreeState() ? hulda.push + dt : 0;
 }
 
 /** on the floor her walk loads first, then comes up to speed; in the air she steers as any hero */

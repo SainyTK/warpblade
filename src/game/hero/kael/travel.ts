@@ -1,17 +1,14 @@
 import { ANIM_FPS } from "../../../constants/hero";
-import { STOP_DEPTH, TAKEOFF, TRAVEL_LOAD } from "../../../constants/kael/motion";
+import { STOP_DEPTH, TRAVEL_LOAD } from "../../../constants/kael/motion";
 import type { Hero } from "../../../types/hero";
 import type { Pose } from "../../../types/pose";
 import { objectMemory, rememberPerSeat } from "../../seatMemory";
 import { motion } from "./motion";
 
-/** when Kael last set off from a stand, and in what: a walk, a run, a dash or a jump */
+/** when Kael last set off from a stand, and in what: a walk, a run or a dash */
 const load = { at: Number.NEGATIVE_INFINITY, kind: "" };
 // each co-op player's Kael keeps his own; only the host poses heroes
 rememberPerSeat(objectMemory(load, true));
-
-/** clips that start from a stand and travel, and the stand they start from */
-const STANDING = new Set(["idle", "walk", "run"]);
 
 /**
  * Watch the change of clip from `last` to Kael's state: setting off from a stand marks a load, and a stride or dash
@@ -19,10 +16,8 @@ const STANDING = new Set(["idle", "walk", "run"]);
  */
 export function watchTravel(h: Hero, t: number, last: string): void {
   if (last === h.state) return;
-  const fromStand = STANDING.has(last);
   if ((h.state === "walk" || h.state === "run" || h.state === "dash") && last === "idle")
     Object.assign(load, { at: t, kind: h.state });
-  else if (h.state === "jump" && fromStand) Object.assign(load, { at: t, kind: "jump" });
   const depth = STOP_DEPTH[last];
   if (h.state === "idle" && depth !== undefined) Object.assign(motion, { landAt: t, landDepth: depth });
 }
@@ -31,13 +26,6 @@ export function watchTravel(h: Hero, t: number, last: string): void {
 export function travelPose(h: Hero, p: Pose, t: number): Pose {
   if (load.kind !== h.state) return p;
   const k = Math.floor((t - load.at) * ANIM_FPS + 1e-6);
-  if (h.state === "jump") {
-    if (k >= TAKEOFF.frames) return p;
-    const u = 1 - k / TAKEOFF.frames;
-    const dip = TAKEOFF.dip * u;
-    const swing = TAKEOFF.swing * u;
-    return { ...p, hy: p.hy + dip, ny: p.ny + dip, fy: p.fy + swing, by: p.by + swing, cb: p.cb + u };
-  }
   const shape = TRAVEL_LOAD[h.state];
   if (!shape || k >= shape.frames) return p;
   const u = 1 - k / shape.frames;

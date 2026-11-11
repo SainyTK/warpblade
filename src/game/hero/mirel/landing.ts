@@ -1,4 +1,4 @@
-import { MIREL_SETTLE } from "../../../constants/clips/mirel/settle";
+import { MIREL_LAND } from "../../../constants/clips/mirel/settle";
 import { STANCE } from "../../../constants/clips/mirel/stance";
 import { ANIM_FPS } from "../../../constants/hero";
 import type { Hero } from "../../../types/hero";
@@ -23,7 +23,7 @@ export function settleRewind(t: number): void {
  */
 export function mirelLanding(h: Hero, p: Pose, t: number): Pose {
   const m = motion;
-  const clip = MIREL_SETTLE.land;
+  const clip = MIREL_LAND;
   const u = t - m.landAt;
   if (h.state !== "idle" || u >= clip.dur) return landingPose(h, p, t);
   const rise = Math.floor(u * ANIM_FPS) / ANIM_FPS / clip.dur;

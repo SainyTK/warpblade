@@ -135,7 +135,7 @@ Each blow loads the other way and holds the load three frames, snaps on its hit 
 
 - Flick: the hips turn back and the near knife cocks at the hip, then a level slash at chest height as the hips drive in and the back heel lifts; the wrist rolls back after.
 - Cross: he rises with the far knife lifted high behind his shoulder, then cuts down across to the front as he lunges low onto the front knee, with an X of two smears.
-- Heel Kick: he sinks and chambers the near knee with both arms swung back, then rises onto the far toes, leans back and whips the near heel up in a crescent overhead, arms flung wide; the leg comes down ahead and takes his weight.
+- Heel Kick: he sinks and chambers the near knee with both arms swung back, then rises onto the far toes, leans far back and whips the near leg out straight with the heel high in front of his head, clear of his cloak, arms flung wide; its smear rides the heel's arc round the hip from the chamber up over his head, and the leg comes down ahead and takes his weight.
 - Drop Stab: a tuck with both knives raised that rides out the rise under way and hangs at its top, then straight down with both knives under him, held to the landing. A J just after the take-off dives from the top of the full jump.
 - Rising Cut: from the pool's crouch he coils lower with the knife wound back, then rises onto the toes sweeping it up overhead.
 - A rose glint slides along the near knife for the two frames after each blow lands.

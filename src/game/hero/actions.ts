@@ -1,8 +1,12 @@
 import type { HeroState } from "../../types/hero";
 import { hero } from "../state";
+import { loading } from "./takeoff";
 
 export const FREE_STATES: ReadonlySet<HeroState> = new Set(["idle", "walk", "run", "jump", "fall"]);
-export const isFree = (): boolean => FREE_STATES.has(hero.state);
+/** the hero walks, stands, jumps or falls, steered by the player, also while a jump loads */
+export const inFreeState = (): boolean => FREE_STATES.has(hero.state);
+/** the hero may start something: in a free state with no jump loading */
+export const isFree = (): boolean => inFreeState() && !loading();
 
 export function setState(s: HeroState): void {
   hero.state = s;

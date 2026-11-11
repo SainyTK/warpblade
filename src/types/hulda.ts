@@ -2,7 +2,6 @@ import type { Enemy } from "./enemy";
 
 /** states only Hulda enters; her kit runs and poses them */
 export type HuldaState =
-  | "jumpLoad"
   | "fist"
   | "airFist"
   | "grab"

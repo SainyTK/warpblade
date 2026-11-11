@@ -27,6 +27,20 @@ A blow shows its wind-up for at least one calm frame between the hand-over and t
 Travel ends with a recovery: the knees take the landing, the hips sink and rise back into the stand the next clip starts from.
 A landing is never a cut from the fall pose to the standing pose.
 The harder the fall, the deeper the landing, and a landing in a stride is a dip of the hips without stopping the feet.
+A move that touches down and settles into the stand a step later still gets its landing.
+
+## Jump take-off
+
+Every hero follows one take-off rule.
+A jump from the floor out of a stand, a walk or a run loads for two animation frames (`JUMP_LOAD` in `src/constants/takeoff.ts`) with a visible knee bend, then leaves the floor.
+A jump out of a blow's follow-through, out of a dash, a double jump, a jump off a crystal and a hop in the air leave at once.
+The load keeps the hero's speed, so a running jump goes as far as before, and the stride keeps stepping under the bend.
+Nothing else starts during the load: a press of J, L or a skill waits in the input buffer and acts as soon as the hero is in the air.
+A hit or a fall off a ledge cancels the load.
+`src/game/hero/takeoff.ts` owns the load (`takeOff` in each hero's jump press), and `loadPose` (`src/game/hero/kael/load.ts`) poses it for every hero.
+From a stand a hero with a crouch of its own sinks into it (Hulda's `JUMP_CROUCH`, Orrin's `TAKEOFF_CROUCH`, Mirel's `MIREL_CROUCH`, the squat Ysra's jump clip starts from); every other load adds `LOAD_BEND` to the stand or the stride.
+The jump's hand-over then crosses from the crouch into the rise.
+The smoke check expects the hero off the floor 120 ms after W, so the load stays at two frames.
 
 ## Hand-overs
 
@@ -36,6 +50,8 @@ When a hand-over cannot be authored (a blow cancelled into a jump, a dash out of
 Blows cross in no more frames than they have before their hit frame, so the wind-up still reads.
 Hits taken and warp arrivals cut at once, because the cut is what the player has to read.
 A turn swings the limbs through to the new facing over two frames.
+Between a stand and a stride on the floor the feet step to their new places: a planted foot that must move lifts and sets down, the farther foot first and the other behind it, so a stop never slides the feet through each other (`STEP`).
+A stride that stops crosses into the stand over four frames.
 
 ## Blows
 
@@ -58,12 +74,14 @@ The stride length is a constant next to the clip (`STRIDE` for Kael); a faster h
 ## Where Kael meets it
 
 Kael's pose layer is `src/game/hero/kael/`: his kit's `pose` wraps the shared clips with the rules above, so Ysra's path is untouched.
+Sable, Tallis, Wenna, Orrin and Mirel pose through the same layer, so they share the travel load, the stop settle and the stepping feet.
 `jumpClock.ts` runs the jump clip on the rise, so the top key lands on the real apex of every jump, hop and double jump.
 `landing.ts` plays the landing clip (`SETTLE_CLIPS.land`) or a hip dip in a stride, scaled by the fall speed.
 `handover.ts` crosses every change of clip or facing, with lengths in `HANDOVER_FRAMES` and `TURN_FRAMES` (`src/constants/kael/motion.ts`).
 `hangSwing.ts` swings the body in under a crystal he warps to, dying away into the hang's sway.
 His walk and run clips were rebuilt from a gait model, and the kit's `stride` hook samples them by ground covered.
-`travel.ts` gives every walk, run and dash from a stand a load (the hips drop and the chest leans in over the first frames, `TRAVEL_LOAD`), pushes a jump off from bent knees (`TAKEOFF`), and settles a walk, run or dash that stops on the spot onto the knees through the landing clip (`STOP_DEPTH`).
+`travel.ts` gives every walk, run and dash from a stand a load (the hips drop and the chest leans in over the first frames, `TRAVEL_LOAD`), and settles a walk, run or dash that stops on the spot, and Tallis's rise out of his pool, onto the knees through the landing clip (`STOP_DEPTH`).
+The landing crosses from the fall over `LANDING.cross` frames, so the arms come down through the touchdown.
 His blows cross from the last pose over two frames (`HANDOVER_FRAMES.move`).
 The ground string and the air string are keyed with the wind-up reached by frame 2 and held to the strike on frame 5 (the smash on frame 7), and `onFrame` (`src/constants/combo.ts`) sets each blow's `at` so it is dealt on that key.
 `windup.ts` runs the clock of a skill blow whose first hit comes before 0.1 s at 0.65 until that hit, so its wind-up still holds a beat before the snap.

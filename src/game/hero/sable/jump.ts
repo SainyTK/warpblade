@@ -7,6 +7,7 @@ import { hero } from "../../state";
 import { dust } from "../../world";
 import { isFree, setState } from "../actions";
 import { lift } from "../lift";
+import { takeOff } from "../takeoff";
 import { sable } from "./memory";
 
 /** she may jump now: free, or out of a shot's recovery */
@@ -34,12 +35,14 @@ export function pressJump(): boolean {
     h.ground = false;
     return true;
   }
-  lift(rise, true);
-  h.jumps = 1;
-  sable.string = 0;
-  setState("jump");
-  dust(h.x, h.y, 5);
-  emitSkillEvent({ type: "jump", air: false });
+  takeOff(() => {
+    lift(rise, true);
+    h.jumps = 1;
+    sable.string = 0;
+    setState("jump");
+    dust(h.x, h.y, 5);
+    emitSkillEvent({ type: "jump", air: false });
+  });
   return true;
 }
 

@@ -16,7 +16,7 @@ import { gritScale, tickGrit } from "./grit";
 import { drop, watchGrip } from "./hold";
 import { runChain } from "./ironChain";
 import { runBrace } from "./ironWall";
-import { pressJump, runJumpLoad } from "./jump";
+import { pressJump } from "./jump";
 import { hulda, resetHulda } from "./memory";
 import { huldaPose } from "./pose";
 import { dropCarried, pressRush, runRush } from "./rush";
@@ -53,9 +53,6 @@ function tick(dt: number): void {
 
 function runState(dt: number): boolean {
   switch (hero.state) {
-    case "jumpLoad":
-      runJumpLoad();
-      return true;
     case "fist":
       runFist(dt);
       return true;

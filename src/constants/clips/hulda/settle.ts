@@ -1,6 +1,5 @@
 import type { ActionClip, Pose } from "../../../types/pose";
 import { frame } from "../../hero";
-import { JUMP_LOAD } from "../../hulda/motion";
 import { GUARD, g } from "./stance";
 
 /** no change to any joint */
@@ -86,31 +85,22 @@ export const SETTLE_NUDGES = {
   },
 } satisfies Record<string, ActionClip>;
 
-/** the load of her jump: she sinks into her knees with the fists dropping, the body coiled over the front foot */
-export const JUMP_LOAD_CLIP: ActionClip = {
-  dur: JUMP_LOAD,
-  hit: 0,
-  keys: [
-    [0, GUARD],
-    [
-      JUMP_LOAD,
-      g({
-        hx: 0.2,
-        hy: -10.2,
-        nx: 2.8,
-        ny: -20.2,
-        cb: 1,
-        fx: 6.5,
-        fy: -15.5,
-        bx: 4,
-        by: -16.5,
-        ffx: 5.5,
-        bfx: -5.5,
-        ba: 0.3,
-      }),
-    ],
-  ],
-};
+/** the deepest of her jump's load from a stand: she sinks into her knees with the fists dropping, the body coiled over
+ *  the front foot */
+export const JUMP_CROUCH: Pose = g({
+  hx: 0.2,
+  hy: -10.2,
+  nx: 2.8,
+  ny: -20.2,
+  cb: 1,
+  fx: 6.5,
+  fy: -15.5,
+  bx: 4,
+  by: -16.5,
+  ffx: 5.5,
+  bfx: -5.5,
+  ba: 0.3,
+});
 
 /**
  * Her landing from a full fall: the knees fold deep under her weight with the fists dropped to her chest, hold, and

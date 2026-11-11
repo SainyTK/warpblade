@@ -243,8 +243,8 @@ export const KNIFE_CLIPS: Record<KnifeBlow, ActionClip> = {
   ]),
   /**
    * The finisher: he sinks and chambers the near knee with both arms swung back, then rises onto the far toes, leans
-   * back and whips the near heel up in a crescent overhead, arms flung wide; the leg comes down ahead and takes his
-   * weight as he settles.
+   * far back and whips the near leg out straight, the heel high in front of his head and clear of the cloak, arms
+   * flung wide; the leg comes down ahead and takes his weight as he settles.
    */
   heelKick: timed("heelKick", [
     [0, STANCE],
@@ -293,21 +293,21 @@ export const KNIFE_CLIPS: Record<KnifeBlow, ActionClip> = {
     [
       frame(6),
       s({
-        hx: -1.5,
+        hx: -2,
         hy: -14.5,
-        nx: -3,
-        ny: -22.5,
-        cb: -1,
-        ffx: 8,
-        ffy: -24,
-        fa: -0.8,
+        nx: -4.5,
+        ny: -22,
+        cb: -1.5,
+        ffx: 9.5,
+        ffy: -21.5,
+        fa: -0.5,
         bfx: -3,
         ba: 0.7,
-        fx: -6,
-        fy: -17,
+        fx: -7,
+        fy: -16,
         sa: 1,
-        bx: 5,
-        by: -23,
+        bx: 1,
+        by: -25,
         be: 0,
       }),
       "snap",
@@ -315,21 +315,21 @@ export const KNIFE_CLIPS: Record<KnifeBlow, ActionClip> = {
     [
       frame(8),
       s({
-        hx: -1.5,
+        hx: -2,
         hy: -14.3,
-        nx: -2.6,
-        ny: -22.6,
-        cb: -0.9,
-        ffx: 8.3,
-        ffy: -23,
-        fa: -0.7,
+        nx: -4.2,
+        ny: -22.1,
+        cb: -1.4,
+        ffx: 9.8,
+        ffy: -21.8,
+        fa: -0.45,
         bfx: -3,
         ba: 0.65,
-        fx: -5.5,
-        fy: -17.5,
+        fx: -6.5,
+        fy: -16.5,
         sa: 1.1,
-        bx: 5.3,
-        by: -22.5,
+        bx: 1.5,
+        by: -24.5,
         be: 0,
       }),
     ],

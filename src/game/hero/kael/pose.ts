@@ -1,5 +1,6 @@
 import { STATE_CLIPS } from "../../../constants/clips";
 import { KAEL_WOUNDED_IDLE } from "../../../constants/clips/wounded";
+import { LANDING } from "../../../constants/kael/motion";
 import type { Hero } from "../../../types/hero";
 import type { Pose } from "../../../types/pose";
 import { sampleKeys } from "../../../utils/sampleKeys";
@@ -9,6 +10,7 @@ import { clipKey, handOver, watchHandover } from "./handover";
 import { hangSwing } from "./hangSwing";
 import { jumpClock } from "./jumpClock";
 import { landingPose, watchLanding } from "./landing";
+import { loadPose } from "./load";
 import { motion } from "./motion";
 import { travelPose, watchTravel } from "./travel";
 
@@ -34,8 +36,8 @@ export function kaelPose(h: Hero, t: number): Pose {
   m.st = h.st;
   const landed = watchLanding(h, t);
   watchTravel(h, t, m.clip);
-  const base = travelPose(h, statePose(h, t, fresh, dt, woundWeight(t)), t);
-  watchHandover(h, t, restarted, landed ? 1 : undefined);
+  const base = loadPose(travelPose(h, statePose(h, t, fresh, dt, woundWeight(t)), t));
+  watchHandover(h, t, restarted, landed ? LANDING.cross : undefined);
   const p = handOver(hangSwing(h, landingPose(h, base, t)), t);
   m.last = p;
   return p;

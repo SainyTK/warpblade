@@ -2,9 +2,10 @@ import { STATE_CLIPS } from "../../../constants/clips";
 import { FIST_CLIPS, HAMMER_CLIP } from "../../../constants/clips/hulda/fists";
 import { GRAPPLE_CLIPS, THROW_CLIPS } from "../../../constants/clips/hulda/grapple";
 import { HULDA_CLIPS } from "../../../constants/clips/hulda/moves";
-import { JUMP_LOAD_CLIP } from "../../../constants/clips/hulda/settle";
+import { JUMP_CROUCH } from "../../../constants/clips/hulda/settle";
 import { CHARGE_POSE, HOLD_POSE, HULDA_IDLE } from "../../../constants/clips/hulda/stance";
 import { KAEL_WOUNDED_IDLE } from "../../../constants/clips/wounded";
+import { LANDING } from "../../../constants/kael/motion";
 import type { Hero } from "../../../types/hero";
 import type { ActionClip, Pose } from "../../../types/pose";
 import type { UltimateId } from "../../../types/skill";
@@ -13,6 +14,7 @@ import { progress } from "../../state";
 import { clipPose } from "../clipPose";
 import { clipKey, handOver, watchHandover } from "../kael/handover";
 import { jumpClock } from "../kael/jumpClock";
+import { loadPose } from "../kael/load";
 import { motion } from "../kael/motion";
 import { woundedIdle, woundWeight } from "../wound";
 import { carry, holding } from "./carry";
@@ -62,8 +64,6 @@ function walkingSpin(h: Hero): Pose {
 /** her clip for a state: her own for her actions and her idle, Kael's shared ones with her fists up otherwise */
 function statePose(h: Hero, t: number, fresh: boolean, dt: number, wound: number): Pose {
   switch (h.state) {
-    case "jumpLoad":
-      return sampleKeys(JUMP_LOAD_CLIP.keys, h.st);
     case "fist":
       return sampleKeys(FIST_CLIPS[currentBlow()].keys, h.st);
     case "airFist":
@@ -120,9 +120,9 @@ export function huldaPose(h: Hero, t: number): Pose {
   const fresh = clipKey(h) !== m.clip || restarted;
   m.st = h.st;
   const landed = watchHuldaLanding(h, t);
-  const base = statePose(h, t, fresh, dt, woundWeight(t));
+  const base = loadPose(statePose(h, t, fresh, dt, woundWeight(t)), JUMP_CROUCH);
   watchSettle(h, t, m.clip, m.face);
-  watchHandover(h, t, restarted, landed ? 1 : undefined);
+  watchHandover(h, t, restarted, landed ? LANDING.cross : undefined);
   const p = settlePose(h, handOver(huldaLandingPose(h, base, t), t), t);
   m.last = p;
   return p;
