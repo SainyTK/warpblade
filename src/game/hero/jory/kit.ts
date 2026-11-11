@@ -55,7 +55,19 @@ function pressMallets(): boolean {
     judgeKept();
     return false;
   }
+  // the press kept from the flinch waits for the landing (startKeptJ), so it never turns into a Downstroke
+  if (jory.keptJ >= 0 && !hero.ground) return true;
   return hero.ground ? pressString() : pressDownstroke();
+}
+
+/**
+ * A J kept from the flinch: the knockback leaves him in the air, so it waits for the landing and opens the string with
+ * Tap there, not a Downstroke; its time to lapse only runs once he is back on the floor.
+ */
+function startKeptJ(): void {
+  if (!keptJWaiting()) return;
+  if (hero.ground) pressString();
+  else jory.keptJ = jory.clock;
 }
 
 function runState(dt: number): boolean {
@@ -109,7 +121,7 @@ export const JORY_KIT: HeroKit = {
     use("dash", () => pressStep(dir));
     use("up", pressJump);
     use("attack", pressMallets);
-    if (hero.state !== "hurt" && keptJWaiting()) pressMallets();
+    if (hero.state !== "hurt") startKeptJ();
     use("warp", pressBoom);
     use("cast", pressAbility);
     use("cycle", nextAbility);
