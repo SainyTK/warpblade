@@ -25,8 +25,21 @@ export const STANCE: Pose = pose({
 /** a pose that changes only some joints of her stance */
 export const m = (p: Partial<Pose>): Pose => ({ ...STANCE, ...p });
 
+/** the far hand closed on the shaft `d` pixels along it from the near hand (negative toward the butt), for a two-handed grip */
+export const onShaft = (fx: number, fy: number, sa: number, d: number): { bx: number; by: number } => ({
+  bx: fx + Math.cos(sa) * d,
+  by: fy + Math.sin(sa) * d,
+});
+
 /** legs drawn together and pointed down as she hangs in the air */
-export const HANG_LEGS = { ffx: 1.5, ffy: -1.5, fa: 0.6, bfx: -1, bfy: -2.5, ba: 0.7 } as const;
+export const HANG_LEGS = {
+  ffx: 1.5,
+  ffy: -1.5,
+  fa: 0.6,
+  bfx: -1,
+  bfy: -2.5,
+  ba: 0.7,
+} as const;
 
 /** her idle: the stance breathing, the ring swaying a little at the staff's top */
 export const MIREL_IDLE: ActionClip = {

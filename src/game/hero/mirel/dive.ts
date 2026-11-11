@@ -14,6 +14,8 @@ import { type StaffStrike, strikeShape } from "./strike";
 const ID = "m_fallinghour";
 /** how fast the dive drops her */
 const DIVE_SPEED = 300;
+/** the dive ring's hit on a foe; the landing itself shakes and rings on its own */
+const DIVE_FEEL = { stop: 0.06, shake: [0.1, 1.2], pitch: 1 } as const;
 
 /** Falling Hour: the Pendant Strike becomes a dive straight down, harder out of a hover, which it ends */
 export function startDive(): void {
@@ -37,7 +39,7 @@ function diveStrike(): StaffStrike {
     kx: 80,
     ky: -40,
     lift: v.launch ? -150 : undefined,
-    stop: 0.06,
+    feel: DIVE_FEEL,
   };
   return {
     blow: "pendant",

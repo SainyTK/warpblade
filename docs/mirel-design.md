@@ -59,30 +59,41 @@ The Controls screen lists every key above.
 
 ## The staff string (J)
 
-Clips at 30 fps like every hero.
-Each blow carries on within 0.35 s of the last.
+Clips at 30 fps like every hero, at the fight's 0.8 pace, so a frame lasts 1/24 of a real second.
+Each blow carries on within 0.35 s of the last, and a J pressed during Toll starts the next string as Toll ends.
+Pressing J on the floor always plays Tick, Tock, Toll in that order, whatever foes stand around her, and she never turns by herself: she faces where the player last pointed.
 
-| Blow | Frames | Hit on | Reach | Power | Knockback | Extra |
-| --- | --- | --- | --- | --- | --- | --- |
-| Tick | 9 | 4 | a straight jab 8 to 38 px, 10 px tall | 0.9x AD | 50 | stagger 0.3 s |
-| Tock | 11 | 5 | an arc of radius 34 from level front to 100 degrees (over her head) | 1.0x AD | 70 up | lifts a minion (vy -120), catches fliers up to 34 px above |
-| Toll | 16 | 7 | she plants the staff and the clock ring rings: a ring of radius 30 centred 18 px ahead | 1.3x AD | 120 outward | stun 0.3 s, hit-stop 0.05 s |
-| Pendant Strike (air) | 10 | 4 | a downward arc ahead, radius 30 | 0.8x AD | 80 down | one per airtime |
+| Blow | Frames | Hit on | Reach | Power | Knockback | Stagger | Hit-stop, shake, pitch |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| Tick | 12 | 5 | a straight jab 8 to 38 px, 10 px tall | 1.0x AD | 8 | 0.55 s | 0.05 s, 1 px, 1.2 |
+| Tock | 10 | 5 | an arc of radius 34 from level front to 100 degrees (over her head) | 1.1x AD | 6, 30 up on fliers | 0.6 s | 0.07 s, 1.5 px, 1.0 |
+| Toll | 18 | 7 | she plants the staff and the clock ring rings: a ring of radius 30 centred 18 px ahead | 1.45x AD | 15 and a knockdown (vy -110) | 0.7 s | 0.11 s, 2.6 px, 0.75 |
+| Pendant Strike (air) | 12 | 5 | a downward arc ahead, radius 30 | 0.95x AD | 80 down | 0.45 s | 0.06 s, 1.3 px, 1.1 |
+
+The string holds a lone walker from Tick to Toll.
+Tick and Tock push it about a pixel and stagger it past the next blow's hit frame, so it never starts a wind-up inside the string and cannot raise a guard.
+Toll knocks it down a few pixels away; it lies on the floor until after the next Tick lands.
+On screen the hit frames land 0.55 s (Tick to Tock) and 0.6 s (Tock to Toll) apart, and Toll's hit is 0.8 s before the next string's Tick, each with its hit-stop.
+A foe stopped in time cannot stagger, so a blow on it holds its stagger and the foe takes it the moment it restarts.
 
 The echo: every blow above (and only these) repeats 0.5 s after its hit frame, in the same world position and facing, with the same hit shape, at 0.5x the blow's power and half its knockback.
 An echo hits each foe once.
+It never staggers or throws a foe up, so a string with its echoes counts three staggers toward a foe's brace.
+Its hit-stop is 0.02 s, its shake 1.2 px and its pitch 1.35, lighter than any blow.
 An echo on a foe inside her Stillfield or under Stopped Clock hits at 1.0x.
 Echoes count as her attacks (source `attacks`), build Flow and can crit.
 The echo does not move with her, so a foe that walks into the spot gets hit; a foe knocked away misses it.
-Base rate: about 2.4 AD/s on one foe with echoes, about the same as Orrin's 2.0 at his higher AD.
+Base rate: 3.55x AD a string of 40 frames, the same damage a game second as the old 36-frame string of 3.2x AD.
 
 Echo look: at the hit frame a pale ghost of her pose in the new `PAL.hour` ramp stays at 50 percent alpha, with a 1 px clock tick ring at the strike point that closes over the 0.5 s like a clock hand sweeping.
 On the echo hit the ghost flashes to the brightest step, swings once (2 frames) and breaks into sand motes.
 
-Animation beats (to `docs/motion-standard.md`):
-- Tick: 2 calm frames drawing the staff back at the hip, snap to full extension on frame 4, 3 frames of follow-through as the ring trails a teal smear, settle to guard.
-- Tock: crouch with the staff low ahead, sweep up and over in one curve with a 3-frame arc smear, the staff rests on her shoulder for 2 frames.
-- Toll: 4 calm frames lifting the staff two-handed, plant on frame 7 with a ring flash, sand dust at the staff foot, a 2 px shake, 4 frames of settle as the ring stops swinging.
+Animation beats (to `docs/motion-standard.md`), keyed every two frames with a snap only on the hit frame:
+- Her feet set for the string as Tick's wind-up steps the front foot out, and stay planted until Toll's recovery steps it home.
+- Tick: the hips sink and lean back as the staff draws back level at the hip, held three frames; the snap throws her body flat along a level jab with the back heel lifting off the push; she holds it two frames with a pixel of overshoot, then draws the staff up to a forward guard.
+- Tock: the knees drop and the staff swings low ahead with its ring near the floor, held three frames; the snap stands her up on her toes with her back arched and the staff thrown up over her head; it carries on over and comes to rest on her shoulder, where Toll starts.
+- Toll: she rises onto her back foot with the staff high in both hands and the front knee drawn up, held four frames; the snap stamps the foot a step on and drives the staff's foot into the floor ahead, her body dropped low over it and the back leg stretched; she holds the plant through the ring, draws the staff up out of the floor and steps back into the stance.
+- Pendant Strike: knees tucked and the staff raised behind her head, held three frames; the snap curls her forward over a downward arc with her legs kicked back; she uncurls with the staff carried level.
 
 ## Hover (W held)
 
@@ -125,6 +136,7 @@ On close: the ring snaps inward with a 1-frame white flash and sand bursts outwa
 
 - Her kit records her position, facing and HP every fixed step, keeping the last 2 s (host-only kit seat memory).
 - L plays that path backwards over 0.25 s; she is untouchable and moved along it, gravity off.
+  The pull starts slow and eases into the stop: she dips back against it, leans into it with the staff swung up behind her, and stops on bent knees.
 - At the end she gets back 40 percent of the HP she lost in those 1.2 s (never above max).
 - Cost 40 Sand, 0.8 s before the next.
   With under 40 Sand the press is denied.
@@ -178,7 +190,7 @@ Kinds: attack 5, movement 4, spell 3, dot 3, summon 3, passive 1, ultimate 1.
 | Id | Name | Kind, risk, button | Level 1 | Properties added along the levels | Evolution (partner) |
 | --- | --- | --- | --- | --- | --- |
 | m_echo | Long Echo | attack, easy, J | echoes +30% | echo shape +6 px; a second echo at 1.0 s (0.3x); echo delay 0.35 s; Toll's echo stuns 0.3 s; echoes pull foes 8 px toward the strike point | Choir of Hours (m_patience): every blow echoes three times, the last at full power |
-| m_toll | Great Toll | attack, timed, J third blow | Toll +25%, ring +6 px | Toll launches minions; 5 Sand per foe hit; Toll breaks guards; Toll also rings at her Stillfield's centre | Midnight (m_handsweep): Toll rings twelve times over 1.2 s at 0.4x, the twelfth at 3x |
+| m_toll | Great Toll | attack, timed, J third blow | Toll +25%, ring +6 px | Toll throws minions high; 5 Sand per foe hit; Toll breaks guards; Toll also rings at her Stillfield's centre | Midnight (m_handsweep): Toll rings twelve times over 1.2 s at 0.4x, the twelfth at 3x |
 | m_stillpoint | Still Point | attack, precise, J on a slowed or stopped foe | +40% on foes in a field or stopped | such hits crit; refund 3 Sand; mark +15% for 2 s; the hit's echo is instant; +80% | Frozen Instant (m_foretell): a hit on a stopped foe is stored twice for the restart |
 | m_fallinghour | Falling Hour | attack, timed, J in the air | Pendant Strike becomes a dive, 1.1x AD in a 24 px ring | +40% from a hover; ring 34 px; the dive gives back the hover; launches minions; the dive echoes | Sky Clock (m_suspend): the dive opens a free Stillfield for 1.5 s where it lands |
 | m_backswing | Backswing | attack, precise, J after a Rewind | a blow within 0.4 s after a Rewind ends +60%, its echo at once | crit; window 0.6 s; the blow heals 3% HP; +100%; stagger 1 s | Undone (m_longrewind): the first blow after a Rewind replays every blow she landed in the rewound 1.2 s on that foe at full power |
@@ -218,6 +230,8 @@ Every colour runs deep shadow to glint like the other skins.
 New `PAL.hour`: `#0c1e24`, `#163e44`, `#24706c`, `#3fb0a0`, `#8ae6cf`, `#e6fff6`, and `SPARKS.hour`, for echoes, the field, Rewind and the SD bar edge; sand motes use a warm sand colour `#e8d6a0` with `#a8885a` shade.
 Own clips in `src/constants/clips/mirel/`: idle (staff upright, ring swaying, robe breathing), every blow, the K cast pose (staff held forward, ring bright), hover, Rewind, both ability poses, the charge pose and both ultimates.
 Walk, jump, fall, hurt and death use the shared clips through the motion layer with a 22 px stride.
+Her own settle clips (`src/constants/clips/mirel/settle.ts`) give the jump a two-frame push-off on the floor before she leaves it, and the landing her own bent-knee recovery with the staff upright.
+A jump out of a blow's recovery or a cast leaves at once.
 Hover enters with 2 frames of crossfade from the fall pose.
 
 ## Achievements
@@ -253,7 +267,7 @@ Changes made while building, each for the same goal as the design:
 - Echoes, the Stillfield's look, Stopped Clock's clock face, the special's clock and the spells are game effects.
   The co-op host runs every effect with its owner swapped in, so each Mirel's echoes and field act as her own.
 - Tick's jab is centred 12 px above her feet, not at shoulder height, so it reaches short ground foes.
-- An echo keeps the blow's shape, half its power and half its knockback, but not its stun; Long Echo gives Toll's echo its stun.
+- An echo keeps the blow's shape, half its power and half its knockback, but not its stagger or its knockdown; Long Echo gives Toll's echo a stun.
   Only her own blows give MP on a hit, so echoes do not double her MP.
 - Pressing K on the floor plays a 0.2 s cast pose with the staff held out; she is free after it while K stays held.
   Sand drains from the press while K is held, and the field stands its 0.6 s least even after a tap.
@@ -306,6 +320,10 @@ The other five heroes fall on the same waves with the same kills as in the basel
 Mirel falls on wave 5 with both bots, the same wave as most of the others.
 Neither bot presses K, since her Stillfield has no HUD tab, so these runs leave out her field, its echoes at full power and its snap.
 The skilled bot does press L toward a foe about to strike, which is her Rewind.
+
+After the shared combo layer and the slower pace, her skilled bot fell a wave earlier (wave 4, 12 kills, on that build).
+Her echoes each counted as a stagger, so a lone foe braced in the second string, and Tick's 0.3 s stagger ran out before Tock, so a guard caught Tock.
+With the movement pass (echoes no longer stagger, Tick and Tock stagger past the next blow, Toll knocks down in place) both bots reach wave 5 again: mash 18 kills, skilled 18 kills.
 
 ## Note for the owner
 

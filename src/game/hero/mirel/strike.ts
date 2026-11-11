@@ -1,6 +1,6 @@
 import { COMBO, MP_PER_HIT } from "../../../constants/combat";
 import { ENEMIES } from "../../../constants/enemies";
-import { ECHO, type StaffBlowSpec } from "../../../constants/mirel/string";
+import { ECHO, ECHO_FEEL, type StaffBlowSpec } from "../../../constants/mirel/string";
 import { SPARKS } from "../../../constants/palette";
 import { sfx } from "../../../services/audio";
 import type { SourceId } from "../../../types/build";
@@ -15,7 +15,8 @@ import { skillValues } from "../../skills/query";
 import { game, hero, progress } from "../../state";
 import { fieldPace } from "../../timeFields";
 import { hitStop, shake } from "../../world";
-import { afterStaffHit, blowSkillScale } from "./blowSkills";
+import { afterStaffHit, blowLift, blowSkillScale } from "./blowSkills";
+import { holdStagger } from "./heldStagger";
 import { type StrikePlace, shapeReaches } from "./shape";
 
 /** one blow of her staff, or its echo, struck at a place */
@@ -53,10 +54,16 @@ function echoShare(e: Enemy): number {
   return e.stopped > 0 && skillValues("m_noon").echoes ? ECHO.still * 2 : ECHO.still;
 }
 
-/** a blow's stun: the echo of Toll stuns only with Long Echo */
-function stunOf(s: StaffStrike): number | undefined {
-  if (!s.echo) return s.spec.stun;
-  return s.blow === "toll" ? skillValues("m_echo").stun || undefined : undefined;
+/** Long Echo makes the echo of Toll stun */
+const stunOf = (s: StaffStrike): number | undefined =>
+  s.echo && s.blow === "toll" ? skillValues("m_echo").stun || undefined : undefined;
+
+/** a blow staggers what it strikes, and holds the stagger for the restart of a foe stopped in time; echoes only hit */
+function staggerOf(e: Enemy, s: StaffStrike): number | undefined {
+  if (s.echo) return undefined;
+  const seconds = s.spec.stagger ?? COMBO.stagger;
+  if (e.stopped > 0) holdStagger(e, seconds);
+  return seconds;
 }
 
 /** one foe struck by the blow or its echo */
@@ -73,13 +80,13 @@ function strikeFoe(e: Enemy, s: StaffStrike): boolean {
     fromX: s.at.x,
     kx: spec.kx * dir * knock,
     ky: spec.ky * knock,
-    launch: spec.lift && launchable ? spec.lift * knock : undefined,
+    launch: launchable ? blowLift(s) : undefined,
     stun: stunOf(s),
     heavy: s.heavy,
     melee: true,
     source: s.source,
     sureCrit: s.sure || stillCrit(e),
-    stagger: spec.stagger ?? COMBO.stagger,
+    stagger: staggerOf(e, s),
   });
   if (result === "blocked") return false;
   const [cx, cy] = enemyCenter(e);
@@ -109,9 +116,10 @@ export function strikeShape(s: StaffStrike, struck: (e: Enemy) => boolean, mark:
   const hits = landed.length;
   if (!s.echo) hero.moveHits += hits + blocked;
   if (hits) {
-    hitStop(s.echo ? 0.03 : (s.spec.stop ?? 0.05));
-    shake(s.echo ? 0.06 : 0.1, s.blow === "toll" && !s.echo ? 2 : 1.2);
-    sfx.hit(s.blow === "toll", s.echo ? 1.35 : 1);
+    const feel = s.echo ? ECHO_FEEL : s.spec.feel;
+    hitStop(feel.stop);
+    shake(...feel.shake);
+    sfx.hit(s.blow === "toll" && !s.echo, feel.pitch);
     if (!s.echo) feat({ kind: "comboHit", moves: hero.chain });
   } else if (blocked) hitStop(0.04);
   return landed;

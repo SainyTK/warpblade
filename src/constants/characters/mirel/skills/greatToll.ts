@@ -1,6 +1,6 @@
 import type { SkillDef } from "../../../../types/skill";
 
-/** Great Toll. Design: docs/skills/mirel.md. Values: power: share more Toll deals; ring: pixels Toll's ring grows; launch: 1 Toll launches minions; sand: Sand Toll gives for each foe it hits; guard: 1 Toll breaks guards; field: 1 Toll also rings at the centre of her Stillfield; midnight: 1 Toll rings twelve times over 1.2 s, 0.4x of Toll each and the twelfth 3x (evolution) */
+/** Great Toll. Design: docs/skills/mirel.md. Values: power: share more Toll deals; ring: pixels Toll's ring grows; launch: 1 Toll throws minions high in place of its knockdown; sand: Sand Toll gives for each foe it hits; guard: 1 Toll breaks guards; field: 1 Toll also rings at the centre of her Stillfield; midnight: 1 Toll rings twelve times over 1.2 s, 0.4x of Toll each and the twelfth 3x (evolution) */
 export const GREAT_TOLL: SkillDef = {
   id: "m_toll",
   name: "Great Toll",
@@ -14,7 +14,7 @@ export const GREAT_TOLL: SkillDef = {
       values: { power: 0.25, ring: 6, launch: 0, sand: 0, guard: 0, field: 0, midnight: 0 },
     },
     {
-      text: "Toll launches minions.",
+      text: "Toll throws minions high.",
       values: { power: 0.25, ring: 6, launch: 1, sand: 0, guard: 0, field: 0, midnight: 0 },
     },
     {
