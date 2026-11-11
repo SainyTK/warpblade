@@ -5,9 +5,10 @@ import { dealDamage } from "../../../damage";
 import { createFloorRing } from "../../../effects/floorRing";
 import { createImpact } from "../../../effects/impact";
 import { enemyCenter } from "../../../enemies/enemy";
-import { game, lights, progress } from "../../../state";
+import { game, progress } from "../../../state";
 import { shake } from "../../../world";
 import { skin } from "../../skin";
+import { jadeLight } from "../effects/jadeLight";
 
 export interface Burst {
   x: number;
@@ -43,7 +44,7 @@ export function burst(b: Burst): Enemy[] {
   }
   game.fx.push(createFloorRing(b.x, b.y, b.radius, skin.ramp, 0.35, 0.5));
   game.fx.push(createImpact(b.x, b.y, 1, true));
-  lights.add(b.x, b.y, b.radius + 12, skin.ramp[4], 0.9, 0.2);
+  jadeLight(b.x, b.y, "burst");
   shake(0.1, 1 + b.radius / 40);
   sfx.boom();
   return hit;

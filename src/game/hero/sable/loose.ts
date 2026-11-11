@@ -7,13 +7,14 @@ import { createImpact } from "../../effects/impact";
 import { enemyCenter } from "../../enemies/enemy";
 import { createPayoff, payoffLands } from "../../skills/payoff";
 import { skillValues } from "../../skills/query";
-import { game, hero, lights, progress } from "../../state";
+import { game, hero, progress } from "../../state";
 import { foesOnSegment } from "../../ultimates/segmentHits";
 import { hitStop, shake } from "../../world";
 import { skin } from "../skin";
 import { boltLanded, boltStopped } from "./bolt/landed";
 import { basePower, bonusSum, pierceOf, rangeOf, speedOf, sureCrit } from "./bolt/power";
 import type { Shot } from "./bolt/shot";
+import { jadeLight } from "./effects/jadeLight";
 import { kegsOnSegment } from "./spells/keg";
 
 /** where a bolt struck from in its flight, for the skills that care */
@@ -51,7 +52,7 @@ function strike(e: Enemy, shot: Shot, f: Flight): boolean {
   });
   hero.lastHit = e;
   game.fx.push(createImpact(cx - f.dir * 3, cy, f.dir, lit || !!b.closing));
-  lights.add(cx, cy, lit ? 22 : 14, skin.ramp[4], 0.7, 0.12);
+  jadeLight(cx, cy, lit ? "primedHit" : "hit");
   sfx.hit(lit, 1.3);
   if (lit) {
     hitStop(0.03);

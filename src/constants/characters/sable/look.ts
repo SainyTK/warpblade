@@ -1,5 +1,5 @@
 import type { HeroSkin } from "../../../types/character";
-import { hex, ramp, WHITE } from "../../../utils/color";
+import { hex, ramp } from "../../../utils/color";
 import type { HeroColors } from "../../palette";
 
 /** Sable: a pine-green hood over copper hair, an olive leather jerkin with bone buckles, a rust half-cape and a
@@ -104,7 +104,11 @@ const HEAD_BACK = [
 
 /** her bolts, trails and floor rings: jade, dark to white */
 export const JADE = ramp(["#0a1a16", "#123a2e", "#1e6a4a", "#2fa86a", "#6ee0a0", "#c4ffd8", "#ffffff"]);
-const JADE_SPARKS = [WHITE, hex("#d8ffe8"), hex("#7ee0a8"), hex("#2f9a6a")];
+/**
+ * Her sparks, young to dying. A hit throws several from one point with a glow each in the first color, and lights the
+ * spot in the third: so none of them is white or pale, or the struck foe washes out.
+ */
+const JADE_SPARKS = [hex("#30c070"), hex("#249a5c"), hex("#187a48"), hex("#0e4a2e")];
 
 /** Sable's look on the shared rig: a repeating crossbow and jade bolts */
 export const SABLE_SKIN: HeroSkin = {

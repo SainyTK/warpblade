@@ -9,11 +9,12 @@ import { createIronBurst } from "../../effects/ironBurst";
 import { enemyCenter } from "../../enemies/enemy";
 import { emitSkillEvent } from "../../skills/events";
 import { skillValues } from "../../skills/query";
-import { game, hero, lights, progress } from "../../state";
+import { game, hero, progress } from "../../state";
 import { hitStop, shake } from "../../world";
 import { isFree, setState, settle } from "../actions";
 import { deny } from "../deny";
 import { skin } from "../skin";
+import { thudLight } from "./effects/thud";
 import { gainFury } from "./fury";
 import { gainGrit } from "./grit";
 import { hulda } from "./memory";
@@ -53,7 +54,7 @@ export function braceTook(): void {
   hulda.braced = Math.min(v.stacks, hulda.braced + 1);
   hero.inv = Math.min(hero.inv, WALL.safe);
   if (v.plate) gainGrit(GRIT.plate);
-  lights.add(hero.x, hero.y - 18, 20, skin.ramp[5], 0.8, 0.12);
+  thudLight(hero.x + hero.face * 5, hero.y - 18, "small");
 }
 
 /** foes the release reaches: a box ahead, or a ring round her */

@@ -1,5 +1,6 @@
+import { IRON_LIGHT } from "../../constants/hulda/look";
+import { HERO_COLORS } from "../../constants/palette";
 import { sfx } from "../../services/audio";
-import { WHITE } from "../../utils/color";
 import { createFloorRing } from "../effects/floorRing";
 import { maxGrit } from "../hero/hulda/grit";
 import { hulda } from "../hero/hulda/memory";
@@ -23,7 +24,7 @@ export function castUnbroken(level: number): void {
   hulda.iron = v.bonus;
   if (v.fill) hulda.grit = maxGrit();
   game.fx.push(createFloorRing(hero.x, hero.y, 30, skin.ramp, 0.5));
-  lights.add(hero.x, hero.y - 18, 40, WHITE, 0.8, 0.3);
+  lights.add(hero.x, hero.y - 18, IRON_LIGHT.radius, HERO_COLORS.steel, IRON_LIGHT.strength, IRON_LIGHT.life);
   shake(0.2, 2);
   sfx.block();
 }

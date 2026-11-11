@@ -7,11 +7,12 @@ import { createBellowRing } from "../../effects/bellowRing";
 import { enemyCenter } from "../../enemies/enemy";
 import { kindOf } from "../../enemies/kinds";
 import { emitSkillEvent } from "../../skills/events";
-import { game, hero, lights, progress } from "../../state";
+import { game, hero, progress } from "../../state";
 import { shake } from "../../world";
 import { isFree, setState, settle } from "../actions";
 import { deny } from "../deny";
 import { skin } from "../skin";
+import { thudLight } from "./effects/thud";
 import { gainGrit } from "./grit";
 import { hulda } from "./memory";
 
@@ -50,7 +51,7 @@ function roar(): void {
   }
   gainGrit(GRIT.bellow);
   game.fx.push(createBellowRing(h.x + h.face * 4, h.y - 22, caught, [h.x, h.y], skin.ramp));
-  lights.add(h.x, h.y - 20, 50, skin.ramp[4], 0.7, 0.3);
+  thudLight(h.x + h.face * 4, h.y - 22, "big");
   shake(0.15, 1.5);
   sfx.tone(140, 55, 0.35, "sawtooth", 0.08);
   sfx.noise(0.3, 400, 120, 0.12, "lowpass");

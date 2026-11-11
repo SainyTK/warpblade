@@ -5,10 +5,14 @@ import { dealDamage } from "../../damage";
 import { createFloorRing } from "../../effects/floorRing";
 import { createImpact } from "../../effects/impact";
 import { enemyCenter } from "../../enemies/enemy";
-import { game, lights, progress } from "../../state";
+import { game, progress } from "../../state";
 import { dust, hitStop, shake } from "../../world";
 import { skin } from "../skin";
+import { floorThud } from "./effects/thud";
 import { spreadFracture, throwPower } from "./fracture";
+
+/** a ring wider than this throws up the big slam's rubble */
+const SLAM_BIG = 50;
 
 export interface Slam {
   x: number;
@@ -47,7 +51,7 @@ export function slamRing(s: Slam): number {
     game.fx.push(createImpact(cx, cy, Math.sign(cx - s.x) || 1, false));
   }
   game.fx.push(createFloorRing(s.x, s.floor, s.radius, skin.ramp, 0.4));
-  lights.add(s.x, s.floor - 4, s.radius + 10, skin.ramp[4], 0.8, 0.2);
+  floorThud(s.x, s.floor, s.radius > SLAM_BIG ? "big" : "mid");
   dust(s.x, s.floor, 10);
   hitStop(s.stop);
   shake(s.shake[0], s.shake[1]);

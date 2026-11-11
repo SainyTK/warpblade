@@ -1,3 +1,4 @@
+import { RUST_ARC } from "../../../constants/characters/hulda/look";
 import { FISTS, HAMMER, STRING, STRING_LINK } from "../../../constants/hulda/fists";
 import { sfx } from "../../../services/audio";
 import type { FistBlow } from "../../../types/hulda";
@@ -6,7 +7,7 @@ import { meleeHit } from "../../meleeHit";
 import { game, hero, progress } from "../../state";
 import { boxAhead, newSwing } from "../../world";
 import { isFree, setState, settle } from "../actions";
-import { skin } from "../skin";
+import { fistHit } from "./effects/thud";
 import { fistGrit, gainGrit } from "./grit";
 import { afterHaymaker, haymakerBoost } from "./haymaker";
 import { hulda } from "./memory";
@@ -61,7 +62,7 @@ function land(blow: FistBlow): void {
   const f = FISTS[blow];
   const [x0, y0, x1, y1] = f.box;
   const boost = blow === "haymaker" ? haymakerBoost() : null;
-  if (f.arc) game.fx.push(createSlash(hero.x, hero.y, hero.face, { ...f.arc, ramp: skin.ramp }));
+  if (f.arc) game.fx.push(createSlash(hero.x, hero.y, hero.face, { ...f.arc, ramp: RUST_ARC }));
   hero.lastHit = null;
   const hits = meleeHit([boxAhead(x0, y0, x1, y1)], {
     power: f.power + (boost?.power ?? 0),
@@ -74,6 +75,7 @@ function land(blow: FistBlow): void {
     feel: f.stop ? { stop: f.stop, shake: f.shake ?? [0.12, 1.5], pitch: 0.75 } : undefined,
   });
   if (hits) gainGrit(fistGrit() * hits);
+  if (hits && hero.lastHit) fistHit(blow, hero.lastHit);
   sendWaves(blow);
   if (blow === "haymaker") afterHaymaker(hits ? hero.lastHit : null);
 }
@@ -102,9 +104,11 @@ export function runAirFist(): void {
   const h = hero;
   if (!hulda.struck && h.st >= HAMMER.hit) {
     hulda.struck = true;
+    hero.lastHit = null;
     const [x0, y0, x1, y1] = HAMMER.box;
     const hits = meleeHit([boxAhead(x0, y0, x1, y1)], { power: HAMMER.power, kx: 30, ky: 0, spike: true });
     if (hits) gainGrit(fistGrit() * hits);
+    if (hits && hero.lastHit) fistHit("hammer", hero.lastHit);
   }
   if (h.st >= HAMMER.dur) settle();
 }

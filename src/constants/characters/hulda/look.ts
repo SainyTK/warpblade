@@ -1,5 +1,5 @@
 import type { HeroSkin } from "../../../types/character";
-import { hex, ramp, WHITE } from "../../../utils/color";
+import { hex, ramp } from "../../../utils/color";
 import type { HeroColors } from "../../palette";
 
 /**
@@ -107,7 +107,15 @@ const HEAD_BACK = [
 
 /** her trails, rings and sparks: rust, dark to white */
 export const RUST = ramp(["#1a0a0e", "#3e1220", "#7a1e30", "#c43848", "#ff5f6d", "#ffc2b8", "#ffffff"]);
-const RUST_SPARKS = [WHITE, hex("#ffd8d0"), hex("#ff7a7a"), hex("#c43848")];
+/** the haymaker's smear: her rust with a deeper fifth step, the one the smear's own light takes, so the arc keeps
+ *  its red over the foe it lands on */
+export const RUST_ARC = ramp(["#1a0a0e", "#3e1220", "#7a1e30", "#c43848", "#a82c3e", "#ffc2b8", "#ffffff"]);
+
+/**
+ * Her sparks, young to dying. A hit throws a dozen from one point with a glow each in the first color, and lights the
+ * spot in the third, and a hit-stop holds that frame: so none of them is white or pale, or the fighters wash out.
+ */
+const RUST_SPARKS = [hex("#d82a3c"), hex("#b02038"), hex("#7e182c"), hex("#48101e")];
 
 /** Hulda's look on the shared rig: iron gauntlets and rust-red rings */
 export const HULDA_SKIN: HeroSkin = {
