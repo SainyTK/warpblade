@@ -66,4 +66,4 @@ His walk and run clips were rebuilt from a gait model, and the kit's `stride` ho
 `travel.ts` gives every walk, run and dash from a stand a load (the hips drop and the chest leans in over the first frames, `TRAVEL_LOAD`), pushes a jump off from bent knees (`TAKEOFF`), and settles a walk, run or dash that stops on the spot onto the knees through the landing clip (`STOP_DEPTH`).
 His blows cross from the last pose over two frames (`HANDOVER_FRAMES.move`).
 The ground string and the air string are keyed with the wind-up reached by frame 2 and held to the strike on frame 5 (the smash on frame 7), and `onFrame` (`src/constants/combo.ts`) sets each blow's `at` so it is dealt on that key.
-`windup.ts` runs the clock of a skill blow whose first hit comes before 0.1 s at 0.65 until that hit, so its wind-up still holds a beat before the snap.
+The blows his skills put in the string and in the air (the sweep, the crescent turn, the phase cut, the hop cleave, Skybreaker, the whirlwind and the meteor drop) are keyed the same way, so every blow runs on the plain move clock.

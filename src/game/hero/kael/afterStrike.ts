@@ -23,5 +23,6 @@ function afterPhase(hits: number): void {
   if (v.backTime) kael.phaseBack = withCharms("duration", v.backTime);
   const foe = hero.lastHit;
   if (!v.echo || !hits || !foe || foe.hp <= 0) return;
-  game.fx.push(createEcho(foe, progress.stats.ad * v.power * v.echo, hero.face, "k_phase"));
+  // Kael lands past the foe still facing on, so the echo cuts it back toward where he came from
+  game.fx.push(createEcho(foe, progress.stats.ad * v.power * v.echo, -hero.face, "k_phase"));
 }
