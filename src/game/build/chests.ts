@@ -1,8 +1,9 @@
-import { CHEST_COLORS, CHEST_ROWS } from "../../constants/chest";
+import { CHEST_ROWS } from "../../constants/chest";
+import { CHEST_PIXEL_COLORS, CHEST_PIXELS } from "../../constants/chestPixels";
 import { CHEST_MOTION as M } from "../../constants/growth";
 import { COIN_GOLD } from "../../constants/palette";
 import { GROUND, W } from "../../constants/stage";
-import { glow, place, px, sparkle } from "../../engine/frame";
+import { glow, place, sparkle } from "../../engine/frame";
 import { sfx } from "../../services/audio";
 import type { ChestReward } from "../../types/build";
 import { PK } from "../../types/particle";
@@ -11,6 +12,7 @@ import { rollChest } from "../../utils/chests";
 import { clamp } from "../../utils/math";
 import { skillOf } from "../../utils/skills";
 import { eachStanding } from "../coopHooks";
+import { stampPixels } from "../effects/fine";
 import { queueEvolution } from "../evolve";
 import { feat } from "../feat";
 import { refreshGrowing } from "../progress";
@@ -113,20 +115,15 @@ export function updateChests(dt: number): void {
   chests = chests.filter((c) => !c.opened);
 }
 
-/** a wooden chest with gold bands and a lock, a soft gold glow under it and a glint that runs now and then */
+/** a wooden chest with planks, gold bands, rivets and a lock, a soft gold glow around it and a glint that runs now and then */
 export function drawChests(): void {
   place();
   for (const c of chests) {
-    const left = Math.round(c.x) - HALF_W;
+    const x = Math.round(c.x);
     const top = Math.round(c.y) - CHEST_ROWS.length;
     glow(c.x, c.y - 4, 14, COIN_GOLD[3], 0.35);
-    CHEST_ROWS.forEach((row, j) => {
-      for (let i = 0; i < row.length; i++) {
-        const key = row[i] as keyof typeof CHEST_COLORS;
-        if (key in CHEST_COLORS) px(left + i, top + j, CHEST_COLORS[key]);
-      }
-    });
+    stampPixels(CHEST_PIXELS, x + 0.5, top + CHEST_ROWS.length / 2, CHEST_PIXEL_COLORS);
     const phase = (c.t % M.glint) / M.glint;
-    if (phase < 0.18) sparkle(left + 2 + Math.round(phase * 50), top + 3, 2, COIN_GOLD[4], COIN_GOLD[3], 0.8);
+    if (phase < 0.18) sparkle(x - HALF_W + 2 + Math.round(phase * 50), top + 3, 2, COIN_GOLD[4], COIN_GOLD[3], 0.8);
   }
 }

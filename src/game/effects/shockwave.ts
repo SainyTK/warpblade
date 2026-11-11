@@ -1,7 +1,7 @@
 import { WORLD_COLORS } from "../../constants/palette";
 import { W } from "../../constants/stage";
 import { QUAKE } from "../../constants/ysra/stance";
-import { glow, line, place, px } from "../../engine/frame";
+import { fleck, glow, hairline, line, place, px } from "../../engine/frame";
 import type { Ramp } from "../../types/color";
 import type { Effect } from "../../types/effect";
 import type { Enemy } from "../../types/enemy";
@@ -52,13 +52,19 @@ export function createShockwave(x: number, y: number, damage: number, ramp: Ramp
       (u) => ramp[Math.max(1, Math.min(ramp.length - 2, Math.round(u * 4)))],
       (u) => k * (0.3 + 0.7 * u),
     );
+    // a white hot seam in the crack close behind the front
+    hairline(fx - side * 14, y + 0.25, fx, y + 0.25, WHITE, (u) => k * u);
     HUMP.forEach((h, i) => {
       const hx = fx - side * i;
       const lift = Math.round(h * k);
       for (let j = 1; j <= lift; j++) px(hx, y - j, j === lift ? WORLD_COLORS.stoneTop : WORLD_COLORS.stone);
+      // the light from the crack catches the lifted stone on the side facing the front
+      if (lift > 0) fleck(hx + (side > 0 ? 0.75 : 0.25), y - lift + 0.25, ramp[ramp.length - 2], k);
     });
     px(fx, y - 1, ramp[4]);
     px(fx + side, y, WHITE, k);
+    // light thrown ahead of the front along the floor
+    hairline(fx + side, y - 0.25, fx + side * 7, y - 0.25, ramp[ramp.length - 2], (u) => k * (1 - u));
     glow(fx, y - 2, 9, ramp[3], 0.5 * k);
   };
   return {

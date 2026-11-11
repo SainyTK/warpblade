@@ -1,11 +1,20 @@
 // The crescent, its dotted trace and the light riding its head are adapted from Sprite Fusion's open-source slash
 // (https://www.spritefusion.com/pixel-art-vfx/slash), MIT License, Copyright (c) 2026 Hugo Duprez.
-import { glow, place, px, shade } from "../../engine/frame";
+import { fleck, glow, place, shade } from "../../engine/frame";
 import type { Effect, SlashShape } from "../../types/effect";
+import { grain } from "../../utils/grain";
 import { clamp, ease, smooth, TAU } from "../../utils/math";
 import { skin } from "../hero/skin";
 
 type Slash = Required<SlashShape>;
+
+/** the smear starts to break up at this age, first into arcs along the swing and then into specks */
+const BREAK_FROM = 0.4;
+/** the white hot stretch at the leading edge, as a share of the smear's length, and the age it cools at */
+const HOT_HEAD = 0.1;
+const HOT_AGE = 0.4;
+/** the light riding the head of the swing */
+const HEAD_LIGHT = { radius: 24, strength: 0.4, life: 0.25 } as const;
 
 function onArc(s: Slash, r: number, a: number): [number, number] {
   const lx = Math.cos(a) * r;
@@ -15,7 +24,10 @@ function onArc(s: Slash, r: number, a: number): [number, number] {
   return [s.cx + lx * c - ly * n, s.cy + lx * n + ly * c];
 }
 
-/** the smear: thickest just behind the leading edge, white on the rim while young, cooling down the ramp with age */
+/**
+ * the smear: thickest just behind the leading edge, white on the rim and at the head while young, cooling down the
+ * ramp with age, then splitting into thin arcs and specks from the tail and the inside outward
+ */
 function crescent(s: Slash, tailAngle: number, L: number, width: number, age: number): void {
   if (Math.abs(L) < 0.02 || width < 0.3) return;
   const R = s.ramp;
@@ -25,6 +37,7 @@ function crescent(s: Slash, tailAngle: number, L: number, width: number, age: nu
   const c = Math.cos(s.rot);
   const sn = Math.sin(s.rot);
   const B = s.R + 2;
+  const wear = clamp((age - BREAK_FROM) / (1 - BREAK_FROM));
   shade(s.cx - B, s.cy - B, s.cx + B, s.cy + B, (x, y, out) => {
     const dx = x - s.cx;
     const dy = y - s.cy;
@@ -40,7 +53,12 @@ function crescent(s: Slash, tailAngle: number, L: number, width: number, age: nu
     if (w < 0.35) return;
     const q = (s.R - r) / w;
     if (q < 0 || q > 1) return;
-    const ci = q < 0.22 && age < 0.5 ? 0 : Math.round(q * (n - 1) * 0.75 + age * 2.4 - v * 0.8 + 0.4);
+    if (wear > 0) {
+      const band = grain(Math.floor((s.R - r) * 2), Math.floor(s.R)) * 0.65 + grain(x * 2, y * 2) * 0.35;
+      if (band < wear * (0.55 + 0.6 * q + 0.5 * (1 - v))) return;
+    }
+    const hot = age < HOT_AGE && (q < 0.22 || v > 1 - HOT_HEAD);
+    const ci = hot ? 0 : Math.round(q * (n - 1) * 0.75 + age * 2.4 - v * 0.8 + 0.4);
     out.c = R[n - 1 - clamp(ci, 0, n - 1)];
     out.a = Math.min(1, v / 0.4);
   });
@@ -71,13 +89,14 @@ export function createSlash(x: number, y: number, face: number, shape: SlashShap
       if (tail < 1) crescent(s, s.a0 + span * tail, span * (head - tail), s.W * (1 - tail * 0.55), age);
       const trace = 0.7 * (1 - clamp((u - s.sweep - s.hold) / (s.trail + 0.2)));
       if (tail > 0.02 && trace > 0)
-        for (let k = 0; k <= tail; k += 0.6 / (Math.abs(span) * s.R)) {
+        for (let k = 0; k <= tail; k += 0.3 / (Math.abs(span) * s.R)) {
           const [ax, ay] = onArc(s, s.R - 0.5, s.a0 + span * k);
-          px(ax, ay, s.ramp[1], trace * (0.4 + 0.6 * k));
+          // a hair of light along the path, solid where the smear just left and thinning back toward the start
+          fleck(ax, ay, s.ramp[k > tail - 0.25 ? 3 : 2], trace * (0.25 + 0.75 * (k / tail) ** 2) * 1.4);
         }
-      if (u < 0.25) {
+      if (u < HEAD_LIGHT.life) {
         const [hx, hy] = onArc(s, s.R - 4, s.a0 + span * head);
-        glow(hx, hy, 34, s.ramp[3], 0.45 * (1 - u / 0.25));
+        glow(hx, hy, HEAD_LIGHT.radius, s.ramp[3], HEAD_LIGHT.strength * (1 - u / HEAD_LIGHT.life));
       }
     },
   };

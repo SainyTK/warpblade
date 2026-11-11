@@ -1,5 +1,7 @@
 import { DAMAGE_NUMBERS as N, NUMBER_WORDS, WORD_LIFT } from "../constants/damageNumbers";
+import { NUMBER_LOOK } from "../constants/effectLook";
 import { GLYPH } from "../constants/font";
+import { RES } from "../constants/stage";
 import { textWidth } from "../engine/font";
 import type { Enemy } from "../types/enemy";
 import type { DamageNumber, DamageTag } from "../types/game";
@@ -52,7 +54,7 @@ type NumberShape = Pick<DamageNumber, "x" | "value" | "tag" | "big" | "quiet">;
 
 /** the art pixels a number covers with its word, as left, top, right, bottom */
 function numberRect(n: NumberShape, y: number): [number, number, number, number] {
-  const scale = n.big ? 2 : 1;
+  const scale = (n.big ? NUMBER_LOOK.bigCell : NUMBER_LOOK.cell) / RES;
   const word = n.value && !n.quiet ? NUMBER_WORDS[n.tag] : "";
   const w = Math.max(textWidth(n.value ? numberFigure(n.value) : NUMBER_WORDS[n.tag], scale), textWidth(word));
   const top = word ? y - WORD_LIFT : y;
