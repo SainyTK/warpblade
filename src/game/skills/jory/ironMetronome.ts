@@ -14,9 +14,10 @@ import { createAccentRing } from "../../effects/jory/accentRing";
 import { enemyCenter, walks } from "../../enemies/enemy";
 import { beatShare, tier } from "../../hero/jory/beat";
 import { jory } from "../../hero/jory/memory";
+import { soundRing } from "../../hero/jory/soundRing";
 import { game, hero, lights, particles, progress, rng } from "../../state";
 import { shake } from "../../world";
-import { skillValues } from "../query";
+import { skillValues, withCharms } from "../query";
 import { distance2, nearestFoe } from "../targets";
 
 const ID = "j_metronome";
@@ -116,6 +117,8 @@ function strike(m: Metronome): void {
   });
   game.fx.push(createAccentRing(ex, ey));
   game.fx.push(createImpact(ex, ey, dir, true, SPARKS.beat));
+  if (v.ring)
+    soundRing(ex, e.y, withCharms("area", v.ring), { damage: progress.stats.ad * v.power * 0.4, source: ID, skip: e });
   lights.add(m.x, m.floor - BODY.tall, 20, PAL.beat[3], 0.5, LOOK.flash);
 }
 

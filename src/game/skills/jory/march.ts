@@ -1,4 +1,5 @@
 import { COMBO } from "../../../constants/combat";
+import { KNOCKDOWN } from "../../../constants/jory/mallets";
 import type { SkillBehavior } from "../../../types/skillBehavior";
 import { dealDamage } from "../../damage";
 import { enemyBox } from "../../enemies/enemy";
@@ -36,6 +37,7 @@ export const marchSkill: SkillBehavior = {
             fromX: hero.x,
             kx: Math.sign(e.x - hero.x || hero.face) * BUMP,
             stagger: COMBO.stagger,
+            launch: v.knock ? KNOCKDOWN : undefined,
           });
         }
       }

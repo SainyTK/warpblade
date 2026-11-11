@@ -30,6 +30,7 @@ import {
   reachGrow,
   sendEchoWave,
   staggerOf,
+  swellBreaks,
 } from "./blowSkills";
 import { jory } from "./memory";
 import { smear } from "./smear";
@@ -59,7 +60,8 @@ function currentStrike(): MalletStrike {
     repeat: jory.hits > 0,
   };
   s.stagger = staggerOf(s);
-  if (accentBreaks(s)) s.heavy = true;
+  if (accentBreaks(s) || swellBreaks()) s.heavy = true;
+  if (blow === "kick" && skillValues("j_kickDrum").guard) s.heavy = true;
   if (blow === "roll" && skillValues("j_paradiddle").shred) s.heavy = true;
   return s;
 }

@@ -145,6 +145,7 @@ function blast(b: Bearer, dir: number): void {
       launch: v.knock && e.rank === "minion" ? CONE.launch : undefined,
       source: ID,
     });
+    if (v.slow && e.hp > 0) e.chill = Math.max(e.chill, v.slow);
     game.fx.push(createImpact(ex, ey, dir, false, SPARKS.beat));
   }
 }

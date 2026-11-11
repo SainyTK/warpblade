@@ -3,10 +3,10 @@ import { evolvedRow, levelRows } from "../../../../utils/skillRows";
 
 const LEVELS = levelRows([
   {
-    text: "An on-beat Tap deals 80% more; +50% crit chance.",
-    values: { power: 0.8, crit: 0.5, stun: 0, pierce: 0, sure: 0, gunshot: 0 },
+    text: "An on-beat Tap deals 80% more to the first foe.",
+    values: { power: 0.8, crit: 0, stun: 0, pierce: 0, sure: 0, gunshot: 0 },
   },
-  { text: "The crack deals 110% more.", values: { power: 1.1 } },
+  { text: "+50% crit chance on the crack; 110% more.", values: { power: 1.1, crit: 0.5 } },
   { text: "The crack stuns for 0.5 s.", values: { stun: 0.5 } },
   { text: "The crack deals 150% more.", values: { power: 1.5 } },
   { text: "The crack carries to a second foe, 0.6x.", values: { pierce: 0.6 } },

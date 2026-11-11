@@ -41,7 +41,7 @@ export function castDrumroll(level: number): void {
 /** Grand Finale: the roll with wider rings, a cymbal crash on every foe in each, and Crescendo locked after it */
 export function castGrandFinale(level: number): void {
   const v = skillValues("j_finale");
-  begin(level, v.encore ? 12 : DRUMROLL.beats[level - 1]);
+  begin(level, v.encore ? 12 : DRUMROLL.beats[level - 1] + (v.extra ?? 0));
 }
 
 /** a cymbal crash dropped on a foe in a Grand Finale ring */
@@ -74,10 +74,12 @@ function ring(): void {
       kx: Math.sign(cx - hero.x) * 40,
       stagger: COMBO.stagger,
       launch: knock && e.rank === "minion" && !e.elite ? DRUMROLL.launch : undefined,
-      stun: knock && e.elite ? 0.8 : undefined,
+      stun: knock && e.elite ? 0.8 : e.rank === "minion" ? finale.stun || undefined : undefined,
       source: "ultimate",
     });
     if (finale.cymbal) crashes.push([cx, cy - 6]);
+    if (finale.pull && e.hp > 0 && e.rank === "minion")
+      e.x += Math.sign(hero.x - e.x) * Math.max(0, Math.min(finale.pull, Math.abs(hero.x - e.x) - 8));
   }
   for (const [x, y] of crashes) cymbal(x, y, power * (finale.cymbal ?? 0));
   game.fx.push(createBoomRing(hero.x + hero.face * 6, hero.y - 14, hero.y, r, true, 0.32));
@@ -103,6 +105,8 @@ export function runDrumroll(dt: number): void {
   if (jory.rung < jory.rings) return;
   h.st = 0;
   raiseGroove(DRUMROLL.groove);
+  const refund = skillValues("j_finale").refund ?? 0;
+  if (refund) h.mp = Math.min(progress.stats.mp, h.mp + refund);
   const lock = skillValues("j_finale").lock ?? 0;
   if (lock) {
     addGroove(GROOVE.max);

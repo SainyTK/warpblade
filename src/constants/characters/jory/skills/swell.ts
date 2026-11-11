@@ -4,18 +4,18 @@ import { evolvedRow, levelRows } from "../../../../utils/skillRows";
 const LEVELS = levelRows([
   {
     text: "Every blow deals 5% more for each Groove tier.",
-    values: { perTier: 0.05, stagger: 0, reach: 0, fortissimo: 0 },
+    values: { perTier: 0.05, stagger: 0, mp: 0, reach: 0, guard: 0, fortissimo: 0 },
   },
   { text: "8% a tier.", values: { perTier: 0.08 } },
   { text: "From tier 3 his blows stagger 0.2 s longer.", values: { stagger: 0.2 } },
-  { text: "11% a tier.", values: { perTier: 0.11 } },
+  { text: "Each Accent gives 3 MP; 11% a tier.", values: { mp: 3, perTier: 0.11 } },
   { text: "At Crescendo his blows reach 10% further.", values: { reach: 0.1 } },
-  { text: "14% a tier.", values: { perTier: 0.14 } },
+  { text: "From tier 2 his string breaks guards; 14% a tier.", values: { guard: 1, perTier: 0.14 } },
   { text: "At Crescendo, 15% further.", values: { reach: 0.15 } },
   { text: "18% a tier.", values: { perTier: 0.18 } },
 ]);
 
-/** Swell. Design: docs/skills/jory.md. Values: perTier: share more every blow deals for each Groove tier; stagger: seconds more his blows stagger from tier 3; reach: share further his blows reach at Crescendo; fortissimo: 1 at Crescendo every blow sends a 30 px ring (evolution) */
+/** Swell. Design: docs/skills/jory.md. Values: perTier: share more every blow deals for each Groove tier; stagger: seconds more his blows stagger from tier 3; mp: MP the first foe of each Accent gives; reach: share further his blows reach at Crescendo; guard: 1 from tier 2 his string breaks guards; fortissimo: 1 at Crescendo every blow sends a 30 px ring (evolution) */
 export const SWELL: SkillDef = {
   id: "j_swell",
   name: "Swell",

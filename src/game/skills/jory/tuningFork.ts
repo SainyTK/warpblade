@@ -69,6 +69,7 @@ export const tuningSkill: SkillBehavior = {
       for (const foe of picked) {
         tuned.push({ foe, left: beats, half, accents: 0 });
         if (v.bonus) markFoe(foe, ID, beats * jory.beatLen, v.bonus * (half ? 0.5 : 1));
+        if (v.slow) foe.chill = Math.max(foe.chill, v.slow);
         const [cx, cy] = enemyCenter(foe);
         game.fx.push(createAccentRing(cx, cy));
       }

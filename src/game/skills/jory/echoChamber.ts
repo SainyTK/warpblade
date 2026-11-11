@@ -1,3 +1,4 @@
+import { COMBO } from "../../../constants/combat";
 import { PAL } from "../../../constants/palette";
 import { RES } from "../../../constants/stage";
 import { bayerAt, fleck, place, toScreenX, toScreenY } from "../../../engine/frame";
@@ -70,7 +71,8 @@ export const echoSkill: SkillBehavior = {
         if (e.hp <= 0) continue;
         const [cx, cy] = enemyCenter(e);
         if (Math.abs(cx - d.x) > r || cy < d.floor - r * 0.6) continue;
-        if (damage > 0) dealDamage(e, damage, { fromX: d.x, source: ID });
+        if (damage > 0)
+          dealDamage(e, damage, { fromX: d.x, source: ID, stagger: v.stagger ? COMBO.stagger : undefined });
         if (v.slow) e.chill = Math.max(e.chill, v.slow);
       }
       d.pulse = 0;

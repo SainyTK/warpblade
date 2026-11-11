@@ -22,6 +22,7 @@ function resonate(e: Enemy, stacks: number): void {
     every: jory.beatLen,
     duration: jory.beatLen * LASTS,
   });
+  if (v.slow) e.chill = Math.max(e.chill, v.slow);
 }
 
 /** Resonance: his blows lay stacks that hum on each beat; Accents lay two, and with Sympathy spread them */

@@ -95,6 +95,9 @@ export function staggerOf(s: MalletStrike): number {
   return t;
 }
 
+/** Swell: from tier 2 every blow of his string breaks guards */
+export const swellBreaks = (): boolean => tier() >= 2 && !!skillValues("j_swell").guard;
+
 /** Heavy Accent's guard break: an Accent breaks a guard */
 export const accentBreaks = (s: MalletStrike): boolean => s.accent && !!skillValues("j_accent").guard;
 
@@ -130,6 +133,7 @@ export function afterMalletHit(e: Enemy, s: MalletStrike, at: { first: boolean; 
     ringAt(hero.x + hero.face * 10, withCharms("area", kick.thump), 0.5, e);
   if (s.blow === "kick" && kick.elite && e.elite && e.hp > 0) e.stun = Math.max(e.stun, 0.6);
   const swellV = skillValues("j_swell");
+  if (s.accent && at.first && swellV.mp) hero.mp = Math.min(progress.stats.mp, hero.mp + swellV.mp);
   if (swellV.fortissimo && tier() >= 4 && at.first) ringAt(cx, withCharms("area", 30), 0.3, e);
   const para = skillValues("j_paradiddle");
   if (s.blow === "roll" && at.first && para.chain) chainHit(e, para.chain);
