@@ -409,9 +409,13 @@ export function beginFrame(background: Uint32Array): void {
  * of a burst keeps its colour and its shape where a straight sum would flatten it to white.
  */
 const TONE_KNEE = 96;
+/** the most that light can add to a pixel however much is stacked on it, so dark lines under a burst stay darker than what they outline */
+const TONE_MOST = 176;
 const TONE_SIZE = 2048;
 const TONE = Uint8Array.from({ length: TONE_SIZE }, (_, l) =>
-  l <= TONE_KNEE ? l : Math.round(TONE_KNEE + (255 - TONE_KNEE) * (1 - Math.exp(-(l - TONE_KNEE) / (255 - TONE_KNEE)))),
+  l <= TONE_KNEE
+    ? l
+    : Math.round(TONE_KNEE + (TONE_MOST - TONE_KNEE) * (1 - Math.exp(-(l - TONE_KNEE) / (TONE_MOST - TONE_KNEE)))),
 );
 const toned = (l: number): number => TONE[l >= TONE_SIZE ? TONE_SIZE - 1 : l | 0];
 const byte = (v: number): number => (v >= 255 ? 255 : v);
