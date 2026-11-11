@@ -1,13 +1,17 @@
-import { FEEL, onFrame } from "../../../constants/combo";
+import { HERO_MOVE } from "../../../constants/combat";
+import { onFrame } from "../../../constants/combo";
 import { frame } from "../../../constants/hero";
+import { HOP_CLEAVE, SKILL_CANCEL, SKILL_FEEL } from "../../../constants/kael/skillBlows";
 import { STRING_CANCEL, STRING_FEEL } from "../../../constants/kael/string";
 import { WORLD_COLORS } from "../../../constants/palette";
 import type { MoveDef } from "../../../types/move";
 import { PK } from "../../../types/particle";
 import { createFloorRing } from "../../effects/floorRing";
 import { createSlash } from "../../effects/slash";
+import { objectMemory, rememberPerSeat } from "../../seatMemory";
 import { game, hero, particles, rng } from "../../state";
 import { dust, shake } from "../../world";
+import { lift } from "../lift";
 import { skin } from "../skin";
 import { CLEAVE, CROSS, FLAT_BACK, FLAT_FRONT, RISING, STAB } from "./slashes";
 
@@ -48,6 +52,19 @@ function smashImpact(): void {
       },
     );
   shake(0.2, 2);
+}
+
+/** whether the hop cleave in play has left the floor yet */
+const hop = { done: false };
+rememberPerSeat(objectMemory(hop));
+/** the hop's height, so it comes down on the cleave's hit frame */
+const HOP_RISE = (HERO_MOVE.gravity * (HOP_CLEAVE.land - HOP_CLEAVE.off) ** 2) / 8;
+
+/** the hop cleave hops off its crouch so it lands on its hit frame */
+function hopStep(t: number): void {
+  if (hop.done || t < HOP_CLEAVE.off) return;
+  hop.done = true;
+  lift(HOP_RISE, false);
 }
 
 /** the hop cleave comes down: a small ring and dust where the blade meets the floor */
@@ -136,16 +153,20 @@ export const CHAIN_MOVES = {
     cancel: STRING_CANCEL.finisher,
     hits: [
       {
-        at: 0.2,
-        box: [-2, -44, 32, 2],
+        at: onFrame(8),
+        box: [-2, -44, 32, 4],
         power: 1.5,
-        kx: 50,
+        kx: 30,
         ky: 0,
         slash: CLEAVE,
-        feel: FEEL.firm,
+        feel: SKILL_FEEL.hopCleave,
       },
     ],
-    lift: 22,
+    strides: [{ from: HOP_CLEAVE.off, to: HOP_CLEAVE.land, speed: HOP_CLEAVE.speed }],
+    enter: () => {
+      hop.done = false;
+    },
+    step: hopStep,
     afterHit: cleaveImpact,
   },
   crescentTurn: {
@@ -153,17 +174,26 @@ export const CHAIN_MOVES = {
     name: "Crescent turn",
     clip: "crescent",
     pitch: 1.05,
+    cancel: SKILL_CANCEL.crescentTurn,
     hits: [
-      { at: 0.07, box: [-4, -38, 30, -2], power: 0.9, kx: 20, ky: -30, slash: FLAT_FRONT, feel: FEEL.light },
       {
-        at: 0.17,
+        at: onFrame(5),
         box: [-4, -38, 30, -2],
-        power: 0.9,
-        kx: 50,
-        ky: -30,
+        power: 1.32,
+        kx: 10,
+        ky: -10,
+        slash: FLAT_FRONT,
+        feel: SKILL_FEEL.crescentFront,
+      },
+      {
+        at: onFrame(10),
+        box: [-4, -38, 30, -2],
+        power: 1.32,
+        kx: 15,
+        ky: -20,
         around: true,
         slash: FLAT_BACK,
-        feel: { ...FEEL.light, pitch: 0.95 },
+        feel: SKILL_FEEL.crescentBack,
       },
     ],
   },

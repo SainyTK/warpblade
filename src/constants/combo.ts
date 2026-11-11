@@ -8,8 +8,8 @@ export const REACH = { above: 44, below: 6 } as const;
 /** travelling moves stop this close to the foe in front, and go this much further while forward is held */
 export const ADVANCE = { contact: 6, lean: 1.5 } as const;
 
-/** air attacks Kael may make before he lands: one, plus one per rank of the skill named here (temporary, until his skills are designed) */
-export const AIR_STRING = { hits: 1, skill: "p_skyDance" } as const;
+/** air attacks Kael may make before he lands: the wheel and the scissor cut, plus the stomp with Sky Dance (its `air` value) */
+export const AIR_STRING = { hits: 2, skill: "k_skydance" } as const;
 
 /** a blow is dealt this many seconds before its `at`, so the strike shows on the clip key the hit lands on */
 export const STRIKE_LEAD = 0.025;

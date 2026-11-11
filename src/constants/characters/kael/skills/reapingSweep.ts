@@ -4,13 +4,16 @@ import { evolvedRow, levelRows } from "../../../../utils/skillRows";
 /** values: `power` of the sweep, `reach` in pixels, `drag` pixels it pulls foes in, `behind`, `trip` damage tripped
  *  foes take from the rest of the string, `crescent` the 3rd hit cuts front and back, `flyers` pulled down */
 const LEVELS = levelRows([
-  { text: "The 1st hit is a low sweep that trips foes and drags them in.", values: { power: 1, reach: 34, drag: 20 } },
+  {
+    text: "The 1st hit is a low sweep that trips foes and drags them in.",
+    values: { power: 1.65, reach: 34, drag: 20 },
+  },
   { text: "New: the sweep reaches behind Kael too.", values: { behind: 1 } },
   { text: "Reach 34 to 50 px; drags twice as far.", values: { reach: 50, drag: 40 } },
   { text: "New: tripped foes take +25% damage.", values: { trip: 0.25 } },
   { text: "New: the 3rd hit is a crescent turn, front and back.", values: { crescent: 1 } },
   { text: "New: the sweep pulls flying foes down to the floor.", values: { flyers: 1 } },
-  { text: "Sweep power 1 to 2; tripped foes take +40%.", values: { power: 2, trip: 0.4 } },
+  { text: "Sweep power 1.65 to 3.3; tripped foes take +40%.", values: { power: 3.3, trip: 0.4 } },
   { text: "Reach 50 to 70 px; drags them to Kael's feet.", values: { reach: 70, drag: 60 } },
 ]);
 

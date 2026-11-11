@@ -45,11 +45,14 @@ Each hero's ground string must hold to these, measured on a lone walker (a thorn
 - Skills change which blow fills a place in the string, never its length: Reaping Sweep opens with the low sweep, Phase Cut and the crescent turn take the third hit, Skybreaker and a Keen hop cleave take the last (`docs/skills/kael.md`).
 - The reference changes the whole body on every hit, so each of Kael's hits has its own silhouette at a glance: hip height from a deep crouch to airborne, the torso leaning far ahead or back, wide leg spreads, the back turned in spins, and the arms overhead.
 - Each blow is keyed as an anticipation the opposite way, reached by frame 2 and held to the hit frame (frame 5, the smash frame 7), a snap to the strike pose, an overshoot held through the hit-stop, a follow-through onto the front foot and a keyed recovery to guard (`src/constants/clips/string.ts`).
+- The blows skills put in the string are keyed the same way: the sweep, the crescent turn's front cut and the phase cut strike on frame 5, the crescent turn's cut behind on frame 10, Skybreaker on frame 7 and the hop cleave on frame 8, the frame it lands (`src/constants/clips/skills.ts`, `ground.ts` and `finishers.ts`).
 - The tempo, in real seconds from one blow landing to the next with J pressed in time, is about 0.45 through the string, 0.5 into the smash and 0.6 from the smash to the next string's step cut (`STRING_CANCEL` in `src/constants/kael/string.ts`).
-- Hit-stop, shake and sound grow through the string, and the smash is by far the heaviest (`STRING_FEEL`).
+- The skill blows keep that tempo: about 0.47 from the sweep or the phase cut to the next blow and 0.5 from the crescent turn's cut behind into the smash (`SKILL_CANCEL` in `src/constants/kael/skillBlows.ts`); Skybreaker lands 0.5 after the 3rd hit and the hop cleave 0.55, and the next string's first blow lands about 0.6 after either.
+- Hit-stop, shake and sound grow through the string, and the smash is by far the heaviest (`STRING_FEEL`); a skill blow takes the hit feel of the place it fills, and Skybreaker and the hop cleave are as heavy as the smash (`SKILL_FEEL`).
 - The smash closes the combo once its follow-through starts, so J then starts the next string over its recovery; this stands in for the combo cooldown, and the same holds for every last blow that sets its own `cancel` (Skybreaker, the hop cleave).
 - Kael's feet stay planted for every hit of the string, and the blows push the foe back only a few pixels, so it stays in reach for the next one.
-- Only moves that end or open with travel move him: the smash that ends every combo, Phase Cut's pass and Skybreaker's launch.
+- Only moves that end or open with travel move him: the smash that ends every combo, Phase Cut's pass, Skybreaker's slide in and launch, and the hop cleave's hop.
+- Reaping Sweep's drag stops a foe at Kael's feet, so the sweep never pulls it past him and out of the next blow's reach.
 - The last hit a combo allows is always the knockdown smash, at every combo length, so short combos at level 1 still end with a payoff.
 - J on the ground plays the same string in the same order wherever the foes stand: in front, behind, on both sides, in the air or lying down.
 - No blow turns Kael around; he faces where the player last pointed.
@@ -60,7 +63,8 @@ Each hero's ground string must hold to these, measured on a lone walker (a thorn
 - Air attacks share no shape with the ground string, and each holds a three-frame wind-up before its strike: a wheel slash that circles his whole body while he rolls in a ball, a scissor cut that lays him back with one leg kicked high and sweeps the blade under his feet, and a stomp that drops him feet first with his arms thrown up.
 - Kael starts with two air attacks per jump (wheel and scissor cut). Sky Dance adds the stomp, so three is the most, and a double jump adds none.
 - The stomp spikes what is under him on the way down and knocks foes on both sides off their feet when he lands.
-- The launch still pays: Skybreaker lifts Kael with the foe, and a J pressed once its follow-through starts begins the air string there, with the same limit.
+- Sky Dance's whirlwind and meteor drop hold the same three-frame wind-up: the whirlwind twists away with the blade over the far shoulder, then cuts in front, behind and in front on frames 5, 8 and 11; the meteor drop tucks with the blade raised and dives on frame 5 with the stomp's own fall.
+- The launch still pays: Skybreaker lifts Kael 40 px with the foe and throws the foe just high enough that a J pressed once its follow-through starts begins the air string within reach of it, with the same limit (`SKYBREAKER` in `src/constants/kael/skillBlows.ts`).
 - Nothing done in the air carries Kael above his jump: attacks, casts and the special charge keep full gravity while he rises and only hang once he starts to fall.
 - Moves that lift Kael on their own, like Skybreaker and the whirlwind, rise by their own height but never past the top of his last jump, and a lift never adds to a rise he already has.
 - Hit feel is set per hit: hitstop, screen shake, sound pitch, slash shape and color, afterimages on the fast footwork, and how early the next press may cancel the follow-through.

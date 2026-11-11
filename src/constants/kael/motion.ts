@@ -53,13 +53,6 @@ export const LANDING = { from: 120, full: 380, dip: 2.5, dipFrames: 4, clipEnd: 
 export const HANG_SWING = { amplitude: 3, period: 0.7, settle: 0.45 } as const;
 
 /**
- * A blow whose first hit comes sooner than `short` runs its clock at `rate` until that hit, so the wind-up holds a beat
- * before the snap. The string and the air string are keyed with their own held wind-ups; the skill blows that strike
- * early (the whirlwind, the crescent turn, the phase cut) still lean on this.
- */
-export const WINDUP = { short: frame(3), rate: 0.65 } as const;
-
-/**
  * A walk, run or dash that stops on the spot, or Tallis rising out of his pool, settles onto the knees like a light
  * landing, this deep on the landing clip's scale of 0 to 1, so the travel ends in a recovery.
  */

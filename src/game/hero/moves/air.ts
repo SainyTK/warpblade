@@ -1,6 +1,7 @@
 import { ENEMY_AIR } from "../../../constants/combat";
 import { FEEL, onFrame, PHANTOM_RAMP } from "../../../constants/combo";
 import { frame } from "../../../constants/hero";
+import { METEOR_POWER, WHIRL_FEEL } from "../../../constants/kael/skillBlows";
 import { AIR_CANCEL } from "../../../constants/kael/string";
 import { PAL, WORLD_COLORS } from "../../../constants/palette";
 import type { MoveDef } from "../../../types/move";
@@ -15,7 +16,10 @@ import { gravityPull } from "../gravityWell";
 import { skin } from "../skin";
 
 const WHIRL = { cx: 0, cy: -18, R: 25, sy: 0.85, rot: 0, a0: -1.6, a1: 1.5, W: 7 };
-const METEOR_REACH = 46;
+/** each of the whirlwind's cuts strikes both sides and throws foes up */
+const WHIRL_HIT = { box: [-4, -42, 28, 6], power: 0.92, kx: 30, ky: 0, launch: -150, around: true } as const;
+/** the meteor lands this far to each side and drifts forward this fast */
+const METEOR = { reach: 46, drift: 30 } as const;
 const SKILL = "k_skydance";
 /** the stomp's power and reach on each side, from Sky Dance */
 const stompPower = (): number => skillValues(SKILL).stomp ?? 2.2;
@@ -65,7 +69,7 @@ function meteorLanding(): void {
   newSwing();
   gravityPull();
   if (cometLanding()) return;
-  const reach = stompReach(METEOR_REACH);
+  const reach = stompReach(METEOR.reach);
   game.fx.push(createFloorRing(hero.x, hero.y, reach, skin.ramp, 0.45));
   game.fx.push(
     createSlash(hero.x, hero.y, hero.face, { cx: 0, cy: -4, R: 30, sy: 0.25, rot: 0, a0: 3.1, a1: 0, W: 7 }),
@@ -74,7 +78,7 @@ function meteorLanding(): void {
   dust(hero.x + 8, hero.y, 6, 1);
   shake(0.25, 3);
   meleeHit([boxAhead(-reach, -26, reach, 4)], {
-    power: stompPower(),
+    power: stompPower() * METEOR_POWER,
     kx: 60,
     ky: 0,
     launch: -240,
@@ -192,40 +196,11 @@ export const AIR_MOVES = {
     name: "Whirlwind",
     clip: "spin",
     pitch: 1.2,
+    cancel: AIR_CANCEL,
     hits: [
-      {
-        at: 0.06,
-        box: [-4, -42, 28, 6],
-        power: 0.7,
-        kx: 30,
-        ky: 0,
-        launch: -150,
-        around: true,
-        slash: WHIRL,
-        feel: FEEL.tap,
-      },
-      {
-        at: 0.14,
-        box: [-4, -42, 28, 6],
-        power: 0.7,
-        kx: 30,
-        ky: 0,
-        launch: -150,
-        around: true,
-        slash: { ...WHIRL, a0: 1.5, a1: 4.6 },
-        feel: FEEL.tap,
-      },
-      {
-        at: 0.22,
-        box: [-4, -42, 28, 6],
-        power: 0.7,
-        kx: 30,
-        ky: 0,
-        launch: -170,
-        around: true,
-        slash: WHIRL,
-        feel: FEEL.light,
-      },
+      { ...WHIRL_HIT, at: onFrame(5), slash: WHIRL, feel: WHIRL_FEEL[0] },
+      { ...WHIRL_HIT, at: onFrame(8), slash: { ...WHIRL, a0: 1.5, a1: 4.6 }, feel: WHIRL_FEEL[1] },
+      { ...WHIRL_HIT, at: onFrame(11), launch: -170, slash: WHIRL, feel: WHIRL_FEEL[2] },
     ],
     lift: 14,
     enter: () => {
@@ -243,10 +218,11 @@ export const AIR_MOVES = {
     pitch: 0.6,
     lift: 6,
     enter: () => {
-      hero.vx = hero.face * 30;
+      hero.vx = hero.face * METEOR.drift;
     },
+    // the same tuck and dive as the stomp it replaces
     step: (t) => {
-      if (t > 0.1) hero.vy = 460;
+      hero.vy = t < STOMP.tuck ? Math.min(hero.vy, -30) : STOMP.dive;
     },
     land: meteorLanding,
   },
