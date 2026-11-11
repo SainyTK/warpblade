@@ -34,7 +34,7 @@ function keep(to: Held["image"], from: SpriteImage): void {
   to.box = { ...box };
 }
 
-const poseOf = (e: Enemy): string => `${e.state}:${e.stun > 0}:${Boolean(e.air)}:${e.frozen > 0}`;
+const poseOf = (e: Enemy): string => `${e.state}:${e.stun > 0}:${Boolean(e.air)}:${e.frozen > 0}:${e.stagger > 0}`;
 
 /** the foe's picture to show this frame */
 export function foeSprite(e: Enemy): SpriteImage {

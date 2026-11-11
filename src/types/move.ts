@@ -11,10 +11,6 @@ export type KaelMoveId =
   | "hopCleave"
   | "crescentTurn"
   | "smash"
-  | "turnCut"
-  | "ringCut"
-  | "downStab"
-  | "chaseCut"
   | "sweep"
   | "airWheel"
   | "airScissor"
@@ -47,8 +43,10 @@ export interface MoveHit {
   launch?: number;
   /** drives an airborne foe into the floor */
   spike?: boolean;
-  /** trips or staggers a foe for this long */
+  /** knocks a foe off its feet for this long */
   stun?: number;
+  /** staggers a minion for this long; COMBO.stagger when unset */
+  stagger?: number;
   big?: boolean;
   /** also hits behind */
   around?: boolean;
@@ -74,8 +72,6 @@ export interface MoveDef {
   name: string;
   clip: ClipName;
   hits: readonly MoveHit[];
-  /** turns to a foe that is only behind before it starts */
-  turns?: boolean;
   /** ends the combo whatever its length */
   finisher?: boolean;
   /** invulnerable for this long from the start */
@@ -104,17 +100,13 @@ export interface MoveDef {
   land?: () => void;
 }
 
-/** What is around Kael when J is pressed, read from the world for the combo to branch on. */
+/** What the hero is doing when J is pressed. Nothing about the foes around is in it: the string is the same wherever they stand. */
 export interface Situation {
   ground: boolean;
   /** the move about to start is this hit of the combo, from 1 */
   next: number;
   limit: number;
-  up: boolean;
-  down: boolean;
   running: boolean;
-  /** dashing, or just finished a dash */
-  dashing: boolean;
   /** a hang on a crystal */
   hanging: boolean;
   /** air attacks since leaving the ground, and how many Kael may make before he lands */
@@ -122,17 +114,6 @@ export interface Situation {
   airLimit: number;
   doubleJumped: boolean;
   whirled: boolean;
-  /** a foe within reach behind, and none in front */
-  foeBehindOnly: boolean;
-  /** foes within reach on both sides */
-  surrounded: boolean;
-  /** the nearest foe in front is lying down, or is in the air above the blade */
-  foeDown: boolean;
-  foeAirborne: boolean;
-  /** the move before this one in the combo */
-  previous: MoveId | null;
-  /** a downward stab was already used in this combo */
-  stabbed: boolean;
   /** the J press was Keen: the move it starts is a sure crit */
   keen: boolean;
   /** the hero's skills and their levels */

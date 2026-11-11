@@ -1,3 +1,5 @@
+import type { ChainBlow } from "../../types/orrin";
+
 /**
  * How his chain is drawn, in image pixels (half an art pixel each). Links alternate a ring seen face on and one seen
  * edge on, a `pitch` apart along the chain.
@@ -93,3 +95,35 @@ export const BELL_LOOK = { tall: 8 } as const;
 
 /** Brass Kite's kite, in art pixels: half its height and half its width, and its ribbon tails */
 export const KITE_SHAPE = { tall: 4.6, wide: 3.4, tails: 2, tailLength: 7 } as const;
+
+/**
+ * The chain's weight during a blow, in radians, pixels and game seconds. After the strike it whips `over` past the end
+ * of the sweep and `stretch` past full reach, swinging back and forth every `period` and dying away at `damp` a second,
+ * while the bend that trails the hand (`bend`) flips over and settles. Through the recovery it falls slack by `sag` and
+ * coils to `coil` from his shoulder, hanging at `restAngle`. A new blow crosses from the chain's last shape over
+ * `cross`. Full Circle's ring is seen from a little above, its height `ringFlat` of its width.
+ */
+export const CHAIN_WHIP = {
+  over: 0.35,
+  stretch: 4,
+  period: 0.2,
+  damp: 9,
+  bend: 0.45,
+  sag: 7,
+  coil: 11,
+  restAngle: 1.25,
+  cross: 0.1,
+  ringFlat: 0.35,
+} as const;
+
+/**
+ * Where each blow winds the chain before it strikes, round his shoulder: the tip's angle at the start of the wind-up
+ * and at its end, and its distance. The Lash draws it back behind him, the Rising Arc drags it along the floor ahead,
+ * Full Circle swings it round over his head into the front, and the Hanging Arc throws it up behind him.
+ */
+export const CHAIN_WIND: Readonly<Record<ChainBlow | "hanging", { from: number; to: number; reach: number }>> = {
+  lash: { from: -2.4, to: -2.85, reach: 20 },
+  rising: { from: 0.9, to: 0.7, reach: 30 },
+  circle: { from: -2.7, to: -0.9, reach: 20 },
+  hanging: { from: -1.9, to: -2.6, reach: 18 },
+};

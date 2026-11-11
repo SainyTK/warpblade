@@ -15,7 +15,6 @@ export const stalker: EnemyKind = {
   update: updateStalker,
   draw: drawStalker,
   glow: { radius: 16, color: VOID[3], eyeY: -5 },
-  staggers: true,
   orbs: 2,
   heartChance: 0.2,
 };

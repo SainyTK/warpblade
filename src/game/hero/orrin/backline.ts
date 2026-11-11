@@ -10,7 +10,7 @@ import { isFree, setState, settle } from "../actions";
 import { refuseDash } from "../stamina";
 import { travelEnded } from "../travelEnd";
 import { orrin } from "./memory";
-import { inRecovery } from "./string";
+import { inRecovery } from "./recovery";
 
 const UNDERTOW = "o_undertow";
 const BOOST_TIME = 0.3;
@@ -38,7 +38,7 @@ export function pressBackline(): boolean {
   h.running = false;
   h.perfectUsed = false;
   orrin.backFrom = h.x;
-  orrin.backlineCd = BACKLINE.cooldown + BACKLINE.time;
+  orrin.backlineCd = BACKLINE.cooldown + BACKLINE.load + BACKLINE.time;
   setState("backline");
   dust(h.x, h.y, 3, h.face);
   sfx.clink();
@@ -52,8 +52,28 @@ export function pressBackline(): boolean {
 /** the floor point the hook bit, behind where he started */
 export const backlinePoint = (): number => orrin.backFrom - hero.face * BACKLINE.bite;
 
-/** the yank back over its time, his feet low; Undertow drags foes after him and leaves a chain line that trips */
+/**
+ * The hook flies back to the floor for its load, then the yank drags him back with his feet low; Undertow drags foes
+ * after him and leaves a chain line that trips. He skids to a stop over the settle.
+ */
 export function runBackline(dt: number): void {
+  const h = hero;
+  if (h.st < BACKLINE.load) {
+    h.vx = 0;
+    return;
+  }
+  const t = h.st - BACKLINE.load;
+  if (t < BACKLINE.time) {
+    yank(dt);
+    return;
+  }
+  if (t - dt < BACKLINE.time) endYank();
+  h.vx = 0;
+  if (t >= BACKLINE.time + BACKLINE.settle) settle();
+}
+
+/** the yank under way */
+function yank(dt: number): void {
   const h = hero;
   const v = skillValues(UNDERTOW);
   const speed = (backlineDistance() / BACKLINE.time) * progress.stats.move;
@@ -61,8 +81,13 @@ export function runBackline(dt: number): void {
   const dragged = v.riptide ? foesAhead(withCharms("area", v.riptide) + 24) : v.drag ? foesAhead(40).slice(0, 1) : [];
   const pull = v.riptide ? speed : v.drag / BACKLINE.time;
   for (const e of dragged) e.x -= h.face * pull * dt;
-  if (h.st < BACKLINE.time) return;
-  h.vx = 0;
+}
+
+/** the yank ends: the trip line, Undertow's boost, and the travel's end for the skills that answer it */
+function endYank(): void {
+  const h = hero;
+  const v = skillValues(UNDERTOW);
+  dust(h.x, h.y, 3, -h.face);
   if (v.trip) game.fx.push(createTripLine(orrin.backFrom, h.x, h.y, v.trip, v.power));
   if (v.boost) {
     orrin.flingBoost = v.boost;
@@ -70,7 +95,6 @@ export function runBackline(dt: number): void {
   }
   emitSkillEvent({ type: "dash", dir: -h.face, foes: [] });
   travelEnded();
-  settle();
 }
 
 /** Undertow: a blow early in a Backline is a Slip */

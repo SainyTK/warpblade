@@ -28,7 +28,7 @@ const KAEL_ACTION_TEXT: Record<InputAction, string> = {
   right: "Walk right. Tap twice and hold to run",
   up: "Jump. Press again in the air to jump again",
   down: "Hold and jump to drop through a ledge",
-  attack: "Sword combo of four hits. Each hit fits where the foes are. Press again just as a blow lands for a Keen hit",
+  attack: "Sword combo of four hits, the same every time. Press again just as a blow lands for a Keen hit",
   dash: "Dash. Nothing can touch you while you dash, and each dash spends stamina",
   run: "Run toward the side held",
   warp: "Warp strike (10 MP). Hold up to warp to a crystal",
@@ -87,8 +87,7 @@ export const ACTION_TEXT: Record<KitId, Record<InputAction, string>> = {
     right: "Walk right. No run. While swinging, pump the swing",
     up: "Jump. One light jump, no double jump. While swinging, let go with a hop",
     down: "With jump, drop through a ledge. While swinging, Plumb Drop once learned",
-    attack:
-      "Chain string: Lash, Rising Arc, Full Circle, hardest at the chain's tip. A foe right against you takes a knee. In the air, a Hanging Arc",
+    attack: "Chain string: Lash, Rising Arc, Full Circle, hardest at the chain's tip. In the air, a Hanging Arc",
     dash: "While swinging, hold to reel the chain in and swing faster. On the floor, Backline: yank yourself back",
     run: "Walk toward the side held",
     warp: "Hook: hold to swing from a crystal, a platform or the air, let go to fling. On a foe, zip to it and kick. Hold up to aim steeper, down in the air to aim low",
@@ -129,8 +128,7 @@ export const ACTION_TEXT: Record<KitId, Record<InputAction, string>> = {
     right: "Walk right. Tap twice and hold to run. In the shadow pool, glide right",
     up: "Jump. One jump, no double jump",
     down: "With jump, drop through a ledge",
-    attack:
-      "Knife string: Flick, Cross, Heel Kick, or Backstab, Twist, Gut Slash behind a foe's back. In the air, Drop Stab. Out of the pool, Rising Cut",
+    attack: "Knife string: Flick, Cross, Heel Kick. In the air, Drop Stab. Out of the pool, Rising Cut",
     dash: "Hold to sink into a shadow pool and glide under foes (stamina); let go to rise. In the air, drop straight down",
     warp: "Veil on or off: minions lose sight of you (20 Gloam, then Gloam over time). Your first blow out of it is an Ambush",
     cast: "Use the selected ability: Smoke Knot, Hamstring or a spell skill (MP)",

@@ -93,7 +93,7 @@ function run(s: Salamander, dt: number): boolean {
   }
   if (v.trail && Math.abs(s.x - s.lastTrail) >= TRAIL_STEP && s.y >= floor) {
     s.lastTrail = s.x;
-    layCinder(s.x, floor, { life: 2, power: v.trail, halfWidth: 4, overlap: 1, stagger: 0, source: ID });
+    layCinder(s.x, floor, { life: 2, power: v.trail, halfWidth: 4, overlap: 1, halt: 0, source: ID });
   }
   const out = s.life <= 0 || s.x < 4 || s.x > W - 4;
   if (out && v.burst) burstEmbers(s.x, s.y - 4, progress.stats.ap * v.burst, BURST_RADIUS, 1.5, ID);

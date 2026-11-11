@@ -260,34 +260,36 @@ export const STANCE_FEET_CLIPS = {
       ],
     ],
   },
-  /** the heavy jump: a deep push off the floor, then the knees drawn up and the glaive hoisted flat over her head */
+  /** the heavy jump: a squat that loads the legs, a deep push off the floor onto the toes, then the knees drawn up and
+   *  the glaive hoisted flat over her head */
   jump: {
-    dur: frame(10),
+    dur: frame(12),
     hit: 0,
     keys: [
+      [0, y({ hy: -11, cb: 1, nx: 3.5, ny: -20.5, fx: 7, fy: -17, sa: -0.4, ffx: 3, bfx: -3 }, 7)],
       [
-        0,
+        frame(2),
         y(
           { hy: -15, nx: 2.5, ny: -25, fx: 7, fy: -21, sa: -0.5, ffx: 2, ffy: 0, fa: 0.8, bfx: -2, bfy: 0, ba: 0.8 },
           7,
         ),
       ],
       [
-        frame(2),
+        frame(4),
         y(
           { hy: -15, nx: 2, ny: -25, fx: 6, fy: -25, sa: -0.25, ffx: 3, ffy: -3, fa: 0.5, bfx: -3, bfy: -1, ba: 0.6 },
           8,
         ),
       ],
       [
-        frame(4),
+        frame(6),
         y(
           { hy: -15, nx: 1.5, ny: -25, fx: 5, fy: -28, sa: -0.15, ffx: 4, ffy: -6, fa: 0.3, bfx: -3, bfy: -3, ba: 0.5 },
           8,
         ),
       ],
       [
-        frame(6),
+        frame(8),
         y(
           {
             hy: -15,
@@ -308,7 +310,7 @@ export const STANCE_FEET_CLIPS = {
         ),
       ],
       [
-        frame(8),
+        frame(10),
         y(
           {
             hy: -15,
@@ -329,7 +331,7 @@ export const STANCE_FEET_CLIPS = {
         ),
       ],
       [
-        frame(10),
+        frame(12),
         y(
           {
             hy: -15,

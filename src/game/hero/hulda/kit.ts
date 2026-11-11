@@ -9,7 +9,7 @@ import { nextAbility, pressAbility, resetAbilities } from "./abilities";
 import { steadfast } from "./armour";
 import { runBellow } from "./bellow";
 import { clearClaims } from "./claims";
-import { pressFist, runAirFist, runFist } from "./fists";
+import { fistSteps, pressFist, runAirFist, runFist } from "./fists";
 import { huldaDamageScale, tickFury } from "./fury";
 import { pressGrab, runCrush, runGrab } from "./grab";
 import { gritScale, tickGrit } from "./grit";
@@ -22,14 +22,17 @@ import { huldaPose } from "./pose";
 import { dropCarried, pressRush, runRush } from "./rush";
 import { rushDrives } from "./rushClock";
 import { rustGuard } from "./rustGuard";
+import { resetSettle } from "./settle";
 import { pressSkyfall, ridesFoe, runRide, runSkyfall, skyfallDrives } from "./skyfall";
 import { runTaunt } from "./taunt";
 import { pressKnee, pressThrow, runHold, runKnee, runToss } from "./throws";
 import { runStomp } from "./tremorStomp";
+import { huldaWalkSpeed, tickPush } from "./walk";
 
 function tick(dt: number): void {
   tickGrit(dt);
   tickFury(dt);
+  tickPush(dt);
   const recharge = rechargeStep(dt);
   hulda.bellowCd = Math.max(0, hulda.bellowCd - recharge);
   hulda.tauntCd = Math.max(0, hulda.tauntCd - recharge);
@@ -133,11 +136,16 @@ export const HULDA_KIT: HeroKit = {
     return false;
   },
   stride: () => HULDA_STRIDE,
+  walkSpeed: huldaWalkSpeed,
   hurtScale: () => gritScale() * rustGuard(),
   damageScale: huldaDamageScale,
   steadfast,
   drivesMotion: () =>
-    rushDrives() || skyfallDrives() || ridesFoe() || ((hero.state === "hold" || hero.state === "knee") && hero.ground),
+    rushDrives() ||
+    skyfallDrives() ||
+    ridesFoe() ||
+    fistSteps() ||
+    ((hero.state === "hold" || hero.state === "knee") && hero.ground),
   gravityScale: () => (ridesFoe() ? 0 : 1),
   reset: () => {
     drop();
@@ -146,5 +154,6 @@ export const HULDA_KIT: HeroKit = {
     resetHulda();
     resetAbilities();
     resetMotion();
+    resetSettle();
   },
 };

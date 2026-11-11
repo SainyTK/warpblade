@@ -38,7 +38,8 @@ export function bitePower(e: Enemy, scale = 1): number {
   return power;
 }
 
-/** one bite lands on a foe: a hit for her abilities that builds no Flow, a small violet spark */
+/** one bite lands on a foe: a hit for her abilities that builds no Flow, a small violet spark. A foe in the air is only
+ *  nipped where it hangs, so the Wicks never carry a foe her Flare threw up out of her reach. */
 function strike(w: Wick, e: Enemy, scale: number): void {
   const fangs = skillValues("w_fangs");
   const minion = ENEMIES[e.type].rank === "minion";
@@ -47,7 +48,7 @@ function strike(w: Wick, e: Enemy, scale: number): void {
   byWick(() => {
     dealDamage(e, progress.stats.ap * bitePower(e, scale), {
       fromX: w.x,
-      kx: w.face * knock,
+      kx: e.air ? 0 : w.face * knock,
       source: "abilities",
       noFlow: true,
     });

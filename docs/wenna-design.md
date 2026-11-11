@@ -52,13 +52,16 @@ A Wick is a wax figure about 12 px tall with a violet flame for a head.
 - HP: 30% of her max HP, so about 28 at the start and more with Vitality. A health pip row of 3 px shows above a Wick only after it is hurt.
 - Life: 18 s. The flame and the wax body visibly shrink over the last 6 s so the timer reads without a number.
 - Cap: 4 Wicks per Wenna at base.
-- Bite: every 0.8 s the Wick bites the foe it is after if the foe is within 24 px ahead and up to 30 px above (a small hop). 0.4x AP, knockback 20, can crit through `dealDamage`. Wick bites count as source `abilities` and give no Flow, so a crowd of Wicks cannot farm Flow. If the shared damage options have no switch for Flow, add one optional flag.
+- Bite: every 0.8 s the Wick bites the foe it is after if the foe is within 24 px ahead and up to 30 px above (a small hop). 0.4x AP, knockback 20 on a foe on the floor and none on a foe in the air, can crit through `dealDamage`.
+  Each bite winds up first: the Wick sinks, widens and draws its flame back for 0.08 s, then leans in with its flame stretched forward as the bite lands, and eases back upright over 0.18 s.
+  A foe in the air is only nipped where it hangs, so the Wicks never carry a foe her Flare threw up out of her reach.
+  Wick bites count as source `abilities` and give no Flow, so a crowd of Wicks cannot farm Flow. If the shared damage options have no switch for Flow, add one optional flag.
 - Target: the Quarry if she has one and a Wick can reach it, else the nearest foe within 140 px of the Wick, else it stands guard 12 to 24 px in front of her, on the side of her nearest foe.
   With two or more Wicks out, the one nearest her is her guard: it only goes after ground foes within 40 px of her.
   A flier hovering over its post, too high for a bite from the floor (its body up to 56 px above the guard's feet), gets a straight leap and a bite, and the guard lands back on its post.
   A Wick takes a blow for her from 16 px below her feet to 40 px above them, so a guard mid-leap over her still meets a falling shot.
   Without that, the leaps let acorns past and the mash bot fell back to wave 3 with 7 kills.
-- Walk: 55 px/s, scaled by her move stat. A Wick walks on the floor or platform it stands on and hops up to a platform or floor up to 50 px above toward its target, or drops down to any lower one. With no route it goes back to her.
+- Walk: 55 px/s, scaled by her move stat. It gathers into its walk and brakes before its spot at 400 px/s each second, so it never starts or stops at full speed. Every hop and leap leaves the floor after a 0.08 s crouch, and every landing squashes its body for 0.14 s. A Wick walks on the floor or platform it stands on and hops up to a platform or floor up to 50 px above toward its target, or drops down to any lower one. With no route it goes back to her.
 - Hold: a ground foe of rank minion that walks into a Wick stops at the Wick's front edge. While held, the foe burns the Wick for the foe's own contact damage once a second. Elites, mini bosses and the Rift Warden push through: the Wick is knocked back 20 px and takes double that contact damage. Fliers pass over Wicks.
 - Intercept: through `absorbHurt(dmg, fromX)`. When a blow or shot is about to land on her and a Wick stands within 20 px of her on the `fromX` side, the Wick takes the full damage after her `hurtScale` and she takes nothing (return true). A shot that lands from straight above (its `fromX` within 4 px of her) may be taken by a Wick on either side. The nearest such Wick takes it. One Wick intercepts at most once each 0.3 s so a fast flurry still reaches her through a single Wick.
 - End: at 0 HP or when its life runs out, the Wick melts into a puddle with a curl of smoke over 0.4 s and emits the kit event `wick` with `lit: false`.
@@ -84,26 +87,34 @@ Second bar under stamina, label WX, same HUD slot as MO, GR, QV and SD (`src/ui/
 ## J: the lamp string
 
 Clips at 30 fps like every hero. Each blow carries on within 0.35 s of the last.
+J on the floor always plays Tap, Swing, Flare in that order, wherever the foes stand, and never turns her round: she faces where the player last pointed.
 
-| Blow | Frames | Hit on | Reach | Power | Knockback | Extra |
-| --- | --- | --- | --- | --- | --- | --- |
-| Tap | 9 | 4 | a straight jab of the lamp pole 8 to 30 px, 10 px tall | 0.8x AD | 40 | stagger 0.25 s |
-| Swing | 11 | 5 | an arc of radius 30 from low ahead to level | 0.9x AD | 60 | |
-| Flare | 15 | 7 | she opens the lamp's shutter: a violet flame cone 12 to 46 px ahead, 30 degree half angle | 0.6x AD + 0.6x AP | 90 | hit-stop 0.04 s; every Wick within 100 px of the Flare's first foe bites it at once, outside its own timer |
-| Lamp Drop (air) | 10 | 4 | a downward swing ahead, radius 26 | 0.8x AD | 70 down | one per airtime |
+| Blow | Frames | Hit on | Reach | Power | Knockback | Stagger | Hit feel (hit-stop, shake, pitch) | Extra |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| Tap | 11 | 5 | a straight jab of the lamp pole 8 to 30 px, 10 px tall | 0.88x AD | 15 | 0.5 s | 0.045 s, 0.08 s at 1 px, 1.2 | |
+| Swing | 11 | 5 | an arc of radius 30 from low ahead to level | 0.99x AD | 20 | 0.55 s | 0.055 s, 0.11 s at 1.4 px, 1.0 | |
+| Flare | 16.5 | 6.5 | she opens the lamp's shutter: a violet flame cone 12 to 46 px ahead, 30 degree half angle | 0.66x AD + 0.66x AP | 6 | 0.6 s | 0.12 s, 0.22 s at 2.6 px, 0.8 | throws the foe off its feet (launch 170 up); every Wick within 100 px of the Flare's first foe winds up and bites it, outside its own timer |
+| Lamp Drop (air) | 12 | 5 | a downward swing ahead, radius 26 | 0.8x AD | 70 down | 0.45 s | 0.06 s, 0.1 s at 1.2 px, 1.05 | one per airtime |
+
+With J pressed in time, Tap lands 0.5 s on screen before Swing, Swing 0.58 s before the Flare, and the next string's Tap about 0.8 s after the Flare.
+Each blow's stagger outlasts the gap to the next, so a walker never starts a wind-up inside the string, and her feet stay where they are.
+The Flare's launch and the 0.45 s a thrown walker lies on landing keep it down until the next Tap lands on it.
+The blows took 35 clip frames before and take 38.5 now, so their power rose by the same 10%: the string still deals 0.066x AD and 0.017x AP per clip frame.
 
 Quarry: the last foe any of her J blows hit becomes her Quarry for 4 s. A small violet lamplight ring hangs over its head and pulses. Every Wick that can reach it goes for it, and Wicks bite the Quarry every 0.55 s instead of 0.8 s. A new J hit moves the Quarry. When the Quarry dies the mark ends.
 
-Animation beats (to `docs/motion-standard.md`):
-- Tap: 2 calm frames drawing the pole back at the hip with the lamp swaying behind, snap to full extension on frame 4, 3 frames of follow-through as the lamp swings past the pole tip on its chain, settle.
-- Swing: crouch with the pole low behind, one sweep with a 3 frame violet arc smear, the lamp keeps swinging 2 frames after the pole stops.
-- Flare: 4 calm frames bringing the lamp to chest height two-handed, shutter open on frame 7 with a flash and the cone, 2 px shake, a ring of violet sparks, 4 frames as the shutter closes and the lamp dims.
+Animation beats (to `docs/motion-standard.md`), each a wind-up held for 3 calm frames, a snap on the hit frame, a 1 frame overshoot, a hold through the hit-stop, a follow-through onto the front foot and a keyed settle back to her stance:
+- Tap, upright at hip height: she sits back on her rear foot with the pole drawn level at her hip while the front foot steps out, then drives hips and shoulders forward and runs the pole out to full reach on frame 5, rear heel up, and draws the pole back upright as the front foot steps home.
+- Swing, low: she sinks and twists away with the pole raised level behind her shoulder, then drops deep over her front knee on frame 5 and whips it down and through low ahead with a violet arc smear, carrying it up to level as she rises.
+- Flare, tall and two-handed: she gathers the lantern into her chest and sinks away from the foe, rises onto her front foot and thrusts it out at chest height on frame 6.5 with a flash and the cone, then the blast rocks her back onto her heels before she draws it in.
+- Lamp Drop: the pole raised up and back with her legs tucked behind for 3 frames, then swung down ahead as the legs kick forward under it.
 
 ## L: Swap
 
 - She trades places with the Wick farthest ahead in her facing within 160 px. With none ahead, the nearest Wick in any direction within 160 px. With no Wick in reach the press is denied.
 - 15 stamina, 1.0 s cooldown.
 - Both vanish in a puff of violet smoke and appear at the other's spot after 0.08 s. A thread of flame joins the two spots for 3 frames. She cannot be hit from the press until 0.15 s after arrival.
+- She arrives gathered small, sinks a little further into the arrival and rises back to her stance through keyed poses by 0.22 s.
 - The Wick arrives where she stood with a flare: 0.6x AP to every foe within 24 px, knockback 60 away from it.
 - A blow or shot that would have reached her in the first 0.1 s counts as a perfect dodge (`rewardPerfectDodge()`, once per Swap).
 - It calls `travelEnded()` and emits `dash` with `dir` the direction she moved, plus the kit event `swap` with `from`, `to` and the Wick.
@@ -146,7 +157,7 @@ The developer sets level tables to the contract (four or more new properties acr
 | w_gutter | Guttering | attack, timed, a Wick ends | a Wick that dies or burns out bursts for 0.4x AP in 24 px | 32 px; the burst launches minions; each burst leaves 5 Wax; burst chills; 1.6x | Wildfire (w_kindle): bursts at 2.5x leave a 2 s fire on the floor |
 | w_kindle | Chain Kindle | attack, timed, I Kindle | Kindle +25% and refunds all of the Wick's Wax | Kindle radius +10 px; Kindle chains to one more Wick within 40 px at 0.6x; Kindle stuns 0.5 s; the next Wick lit after a Kindle costs nothing; +100% | Bonfire (w_gutter): Kindle leaves a bonfire for 3 s where Wicks bite twice as fast |
 | w_swap | Changeling Step | movement, timed, L | Swap range 220 px, the arriving Wick's flare +50% | a second Swap charge; untouchable 0.3 s; foes on the line between take 0.6x AD; perfect-dodge window 0.2 s; the swapped Wick heals full | Mirror Wick (w_procession): every Swap also lights a free Wick where she arrives, if under the cap |
-| w_hop | Wick Hop | movement, timed, W | in the air above a Wick, W jumps again off its head, once per airtime | the hopped Wick flares for 0.6x AP; two hops; higher hops; Lamp Drop after a hop +60% | Candle Stair (w_fangs): no hop limit while over Wicks and each hop makes that Wick bite at once |
+| w_hop | Wick Hop | movement, timed, W | in the air above a Wick, W jumps again off its head, once per airtime | the hopped Wick flares for 0.6x AP; two hops; higher hops; Lamp Drop after a hop +60% | Candle Stair (w_fangs): no hop limit while over Wicks and each hop makes that Wick bite |
 | w_procession | Procession | movement, easy, walk | she walks 5% faster for each Wick lit | idle Wicks walk beside her; Wicks walk 30% faster; Wicks lose life at half rate while she walks; Wick cap +1 | Vigil March (w_waxPool): Wicks walking beside her leave wax that chills foes |
 | w_lampVolley | Lamp Volley | spell, easy, I | 18 MP, 6 s: every Wick spits a flame bolt at the Quarry or its nearest foe, 1.0x AP | two bolts each; bolts pierce one foe; bolts ignite; 6 s to 4 s; 1.8x | Starfire (w_flare): bolts curve to foes and burst for 24 px |
 | w_waxPool | Wax Pool | spell, timed, I | 20 MP, 8 s: a pool 70 px wide on the floor ahead for 5 s; foes on it chilled; Wicks on it heal 4 HP a second | 90 px; foes on it take 0.3x AP each 0.5 s; Wicks on it bite 25% faster; 8 s; two pools | Hearth (w_procession): the pool follows her and covers 140 px |
@@ -176,7 +187,7 @@ Every colour runs deep shadow to glint like the other skins.
 New `PAL.wick`: `#1a0f2e`, `#3a1f5c`, `#6a3aa0`, `#a46ae0`, `#d8b4ff`, `#f8eeff`, and `SPARKS.wick` from it, for the Wick flames, the Flare, Swap, Kindle, the Quarry ring and the WX bar edge.
 Wax colour `WAX` (in the palette file beside `SAND`): `#5a4a3a`, `#a8947a`, `#e8dcc4`, `#fff8e8`, for Wick bodies, drips and the WX bar fill.
 Wick sprite: ivory wax body with a darker base, two stubby arms, two dark dot eyes under a flame head that flickers between three shapes with a gold core pixel. Walk: a 2 frame waddle. Bite: lean in, the flame stretches forward and flashes. Hurt: the flame gutters sideways for 3 frames. Death: melts into a puddle with a smoke curl.
-Own clips in `src/constants/clips/wenna/`: idle (lamp swaying, cloak breathing), every blow, the K cast pose, Swap, both ability poses, the charge pose and both ultimates. Walk, jump, fall, hurt and death use the shared clips through the motion layer with a 20 px stride, carrying the pole upright so the lantern never sinks into the floor (the lesson from Mirel's staff).
+Own clips in `src/constants/clips/wenna/`: idle (lamp swaying, cloak breathing), every blow, the K cast pose, Swap, both ability poses, the charge pose and both ultimates. From a stand or a walk her jump first bends her knees on the floor for 2 frames (the shared take-off load), then her own take-off crouch pushes off into the shared rise over its first 2 frames. Walk, fall, hurt and death use the shared clips through the motion layer with a 20 px stride, carrying the pole upright so the lantern never sinks into the floor (the lesson from Mirel's staff).
 
 ## Achievements
 
@@ -225,12 +236,14 @@ The other six heroes fall on the same waves with the same kills as the 0.6.0 bas
 | Wenna, after the QA fixes (Wicks guard in front of her) | none | 3 | 8 | 3 |
 | Wenna, after the second QA round (her guard Wick holds its post against fliers) | none | 5 | 15 | 5 |
 | Wenna, after the third QA round (the guard leaps at fliers and still takes blows in the air) | none | 5 | 14 | 5 |
+| Wenna, after the movement pass (a fixed string that staggers through to the Flare's launch, Wicks that wind up) | none | 5 | 16 | 5 |
 
 The mash bot only walks and presses J, so it never lights a Wick and fights with her lamp, the weakest blow in the roster, plus the free Wicks.
 Her first runs fell one wave before Kael and Hulda, within the two-wave rule.
 As the plan asks, the free Wicks at wave start went from one to two before any other number moved; that raised her kills from 6 to 9.
 After the QA fixes her Wicks stand guard in front of her instead of chasing every foe, and the bot run ends on wave 3 with 8 kills; the other six heroes still match the baseline.
 Once her guard Wick held its post against fliers, the mash bot reached wave 5 with 15 kills, level with Ysra, Sable, Orrin and Mirel.
+After the movement pass the mash bot reaches wave 5 with 16 kills and the skilled bot wave 5 with 14, against waves 5 and 4 before it.
 A stress run at wave 6, level 30, with all 20 skills at level 8 and then evolved, mashing every key, reached waves 9 and 10 with no page errors.
 
 ## As built

@@ -1,5 +1,6 @@
 import { STATE_CLIPS } from "../../../constants/clips";
 import { KAEL_WOUNDED_IDLE } from "../../../constants/clips/wounded";
+import { LANDING } from "../../../constants/kael/motion";
 import type { Hero } from "../../../types/hero";
 import type { Pose } from "../../../types/pose";
 import { sampleKeys } from "../../../utils/sampleKeys";
@@ -9,8 +10,9 @@ import { clipKey, handOver, watchHandover } from "./handover";
 import { hangSwing } from "./hangSwing";
 import { jumpClock } from "./jumpClock";
 import { landingPose, watchLanding } from "./landing";
+import { loadPose } from "./load";
 import { motion } from "./motion";
-import { windupCross } from "./windup";
+import { travelPose, watchTravel } from "./travel";
 
 /** the clip Kael's state plays, his idle sunk into the wounded stance as far as his HP calls for */
 function statePose(h: Hero, t: number, fresh: boolean, dt: number, wound: number): Pose {
@@ -21,8 +23,9 @@ function statePose(h: Hero, t: number, fresh: boolean, dt: number, wound: number
 }
 
 /**
- * Kael's pose: his clips, with the jump's clock following the rise, the knees taking each landing, the body swinging in under a crystal it caught, and every change of
- * clip or facing crossed over a few even frames instead of cut.
+ * Kael's pose: his clips, with the jump's clock following the rise, a load at the start of every walk, run, dash and
+ * jump, the knees taking each landing and each stop, the body swinging in under a crystal it caught, and every change
+ * of clip or facing crossed over a few even frames instead of cut.
  */
 export function kaelPose(h: Hero, t: number): Pose {
   const m = motion;
@@ -32,8 +35,9 @@ export function kaelPose(h: Hero, t: number): Pose {
   const fresh = clipKey(h) !== m.clip || restarted;
   m.st = h.st;
   const landed = watchLanding(h, t);
-  const base = statePose(h, t, fresh, dt, woundWeight(t));
-  watchHandover(h, t, restarted, landed ? 1 : h.state === "move" ? windupCross(h) : undefined);
+  watchTravel(h, t, m.clip);
+  const base = loadPose(travelPose(h, statePose(h, t, fresh, dt, woundWeight(t)), t));
+  watchHandover(h, t, restarted, landed ? LANDING.cross : undefined);
   const p = handOver(hangSwing(h, landingPose(h, base, t)), t);
   m.last = p;
   return p;

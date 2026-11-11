@@ -1,4 +1,3 @@
-import { STATE_CLIPS } from "../../../constants/clips";
 import { LAMP_CLIPS } from "../../../constants/clips/wenna/lamp";
 import {
   airborne,
@@ -7,11 +6,12 @@ import {
   KINDLE_CLIP,
   LIGHT_CLIP,
   SPELL_CLIP,
-  SWAP_POSE,
   THOUSAND_CLIP,
 } from "../../../constants/clips/wenna/moves";
 import { CHARGE_POSE, WENNA_IDLE } from "../../../constants/clips/wenna/stance";
+import { SWAP_CLIP, WENNA_JUMP } from "../../../constants/clips/wenna/travel";
 import { KAEL_WOUNDED_IDLE } from "../../../constants/clips/wounded";
+import { LANDING } from "../../../constants/kael/motion";
 import type { Hero } from "../../../types/hero";
 import type { ActionClip, Pose } from "../../../types/pose";
 import { sampleKeys } from "../../../utils/sampleKeys";
@@ -19,7 +19,9 @@ import { clipPose } from "../clipPose";
 import { clipKey, handOver, watchHandover } from "../kael/handover";
 import { jumpClock } from "../kael/jumpClock";
 import { landingPose, watchLanding } from "../kael/landing";
+import { loadPose } from "../kael/load";
 import { motion } from "../kael/motion";
+import { travelPose, watchTravel } from "../kael/travel";
 import { woundedIdle, woundWeight } from "../wound";
 import { wenna } from "./memory";
 
@@ -58,7 +60,7 @@ function statePose(h: Hero, t: number, fresh: boolean, dt: number, wound: number
     case "lightCast":
       return play(h, LIGHT_CLIP);
     case "swap":
-      return h.ground ? SWAP_POSE : airborne(SWAP_POSE);
+      return play(h, SWAP_CLIP);
     case "kindleCast":
       return play(h, KINDLE_CLIP);
     case "beckonCast":
@@ -77,7 +79,7 @@ function statePose(h: Hero, t: number, fresh: boolean, dt: number, wound: number
       return wound > 0 ? carried(h, idle) : idle;
     }
     case "jump":
-      return carried(h, sampleKeys(STATE_CLIPS.jump.keys, jumpClock(h, fresh, dt)));
+      return carried(h, sampleKeys(WENNA_JUMP.keys, jumpClock(h, fresh, dt)));
     default:
       return carried(h, clipPose(h, t));
   }
@@ -95,8 +97,9 @@ export function wennaPose(h: Hero, t: number): Pose {
   const fresh = clipKey(h) !== m.clip || restarted;
   m.st = h.st;
   const landed = watchLanding(h, t);
-  const base = statePose(h, t, fresh, dt, woundWeight(t));
-  watchHandover(h, t, restarted, landed ? 1 : undefined);
+  watchTravel(h, t, m.clip);
+  const base = loadPose(travelPose(h, statePose(h, t, fresh, dt, woundWeight(t)), t));
+  watchHandover(h, t, restarted, landed ? LANDING.cross : undefined);
   const p = handOver(landingPose(h, base, t), t);
   m.last = p;
   return p;

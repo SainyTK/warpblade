@@ -14,8 +14,8 @@ export type OrrinState =
   | "pendulum"
   | "maelstrom";
 
-/** the blows of his chain string; the knee replaces the lash when a foe stands right against him */
-export type ChainBlow = "lash" | "knee" | "rising" | "circle";
+/** the blows of his chain string, always in this order */
+export type ChainBlow = "lash" | "rising" | "circle";
 
 /** what the hook bit: a foe to zip to, a crystal or a platform to swing from, or the air itself */
 export type LatchKind = "foe" | "anchor" | "platform" | "air";
@@ -46,7 +46,7 @@ export interface OrrinMemory {
   grounded: number;
   /** the blow of the string under way, or the one the next J starts (index into the string) */
   blow: number;
-  /** the string blow being played, the knee included */
+  /** the string blow being played */
   current: ChainBlow;
   /** seconds left to carry the string on from a free state */
   link: number;

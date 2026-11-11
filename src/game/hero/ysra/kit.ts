@@ -5,11 +5,12 @@ import { startCharge } from "../ultimate";
 import { buffs, resetBuffs, tickBuffs } from "./buffs";
 import { emitYsra } from "./events";
 import { chooseGlaive, GLAIVE_PART, pressGlaive } from "./glaive/glaive";
+import { resetHandover } from "./handover";
+import { resetLandingDip } from "./landingDip";
 import type { YsraPart } from "./part";
 import { ysraPose } from "./pose";
 import { cycleRite, PYRE_PART, pressRite } from "./pyre/pyre";
 import { chargeNow, pressGuard, pressJump, pressVault, STANCE_PART } from "./stance/stance";
-import { resetWoundCross } from "./woundCross";
 
 /** the glaive string (J), the vault and guard (K, L, Up), Heat and rites (I, O) */
 const PARTS: readonly YsraPart[] = [GLAIVE_PART, STANCE_PART, PYRE_PART];
@@ -52,6 +53,7 @@ export const YSRA_KIT: HeroKit = {
   reset: () => {
     for (const p of PARTS) p.reset?.();
     resetBuffs();
-    resetWoundCross();
+    resetHandover();
+    resetLandingDip();
   },
 };

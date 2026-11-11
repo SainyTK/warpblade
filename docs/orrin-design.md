@@ -43,9 +43,9 @@ Price 550 coins in `src/constants/heroUnlocks.ts`, which is the next price by th
 | Key | Orrin |
 | --- | --- |
 | A / D | Walk (about 71 px/s). No run; a double tap does nothing. While swinging, pumps the swing |
-| W | One jump of 52 px. No double jump. While swinging, lets go with a small hop |
+| W | One jump of 52 px, after a 2-frame bend of the knees. No double jump. While swinging, lets go with a small hop |
 | S | With W, drop through a ledge. While swinging, Plumb Drop when held (skill) |
-| J | Chain string of three: Lash (Chain Knee up close), Rising Arc, Full Circle. In the air, one Hanging Arc per airtime, given back by each new latch |
+| J | Chain string of three, always Lash, Rising Arc, Full Circle, wherever the foes stand. In the air, one Hanging Arc per airtime, given back by each new latch |
 | K | Hook. Hold to keep swinging and release to let go. W held aims steeper, S held in the air aims low |
 | L | Reel: while swinging, reels the chain in. On the floor, Backline, a yank backwards |
 | I | The selected ability: Whirlwall, Anchor Pin, or a spell skill (MP) |
@@ -60,33 +60,51 @@ The Controls screen lists every key above.
 
 ## The chain string (J)
 
-Clips run at 30 frames a second, the same as the other heroes.
+Clips run at 30 frames a second, the same as the other heroes, and the whole fight plays at `PACE` (0.8), so a frame takes 1/24 s on screen.
+J on the floor always plays the same three blows in the same order, near or far, with foes on one side or both.
+Nothing picks a blow from the foes around him, and J never turns him round: he faces where the player last pointed.
 Each blow has a tip band, the last 18 px of its reach, which deals the tip damage and makes a brass tip flash.
-The inner part of the chain deals the inner damage.
+The inner part of the chain, from his shoulder out, deals the inner damage.
 
-| Blow | Frames | Hit on | Reach | Tip | Inner | Knockback | Extra |
-| --- | --- | --- | --- | --- | --- | --- | --- |
-| Lash | 10 | 5 | 12 to 64 px, a flat arc from 20 degrees up to 10 degrees down | 1.1x | 0.55x | 60 | stagger 0.35 s |
-| Chain Knee (replaces Lash when the nearest foe ahead is within 18 px) | 9 | 4 | 0 to 18 px | 0.7x | | 160 | pushes the foe out into tip range |
-| Rising Arc | 12 | 6 | radius 56, swept from 30 degrees below the front to 120 degrees (over his head) | 1.2x | 0.6x | 80 up | a tip hit lifts a minion (vy -140). Catches fliers up to 56 px above |
-| Full Circle | 18 | 6 to 12, each foe once | ring of radius 58 all round him, tip band 40 to 58 | 1.5x | 0.6x | 200 outward | stun 0.4 s, hit-stop 0.06 s on a tip |
-| Hanging Arc (air) | 11 | 5 | radius 54, a downward arc ahead | 1.0x | 0.5x | 90 down | one per airtime, given back by each latch |
+| Blow | Frames | Hit on | Link | Reach | Tip | Inner | Knockback | Extra |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| Lash | 16 | 7 | 11 | 0 to 64 px, a flat arc from 20 degrees up to 10 degrees down | 1.1x | 0.55x | 30 out; a tip hit's hook drags the foe 110 toward him | stagger 0.6 s |
+| Rising Arc | 18 | 7 to 8 | 11 | radius 62, swept from 30 degrees below the front to 120 degrees (over his head) | 1.2x | 0.6x | 20, 80 up | stagger 0.65 s; a tip hit lifts a minion (vy -140). Catches fliers up to 62 px above |
+| Full Circle | 28 | 8 to 14, each foe once | 16 | ring of radius 60 all round him, tip band 42 to 60 | 1.5x | 0.6x | 70 outward | knocks the foe down for 0.8 s; a tip breaks the guard |
+| Hanging Arc (air) | 15 | 7 to 8 | | radius 54, a downward arc ahead | 1.0x | 0.5x | 90 down | one per airtime, given back by each latch |
 
-Each blow carries on within 0.35 s of the last.
-Base rate: tip-and-inner mix at about 70 percent landed is about 2.0 AD/s on one foe and 4 AD/s on a crowd of six, before Momentum.
+A J pressed during a blow carries the string on at the blow's link frame, out of its follow-through.
+After Full Circle a press already made starts the next string at its link frame.
+Without a press the blow plays on to its last frame and settles back to his stance, and J within 0.35 s of that carries the string on.
+
+Hit feel grows through the string (`feel` on each blow in `src/constants/orrin/string.ts`); a tip hit adds 0.5 px of shake and a higher ring:
+
+| Blow | Hit-stop | Shake | Hit pitch |
+| --- | --- | --- | --- |
+| Lash | 0.06 s | 0.1 s, 1.2 px | 1.15 |
+| Rising Arc | 0.08 s | 0.13 s, 1.6 px | 0.98 |
+| Full Circle | 0.13 s | 0.22 s, 2.8 px | 0.72 |
+| Hanging Arc | 0.07 s | 0.1 s, 1.4 px | 1.02 |
+
+With J pressed in time, on screen: the Lash lands 0.3 s after the press, the Rising Arc 0.53 s after the Lash, Full Circle 0.59 s after the Rising Arc, and the next string's Lash 0.77 s after Full Circle.
+The staggers outlast the gap to the next blow, so a minion never starts a wind-up inside the string, and a guard cannot form between blows.
+Full Circle's knockdown lasts until the next Lash has landed.
+The Lash's tip drags the foe in and the other blows push it only 2 to 6 px, so a foe struck from anywhere inside the Lash's reach settles at the chain's tip and stays in reach string after string.
+Base rate: a string takes 1.9 s on screen with J pressed ten times a second, the same as before the pace change (1.92 s), so its damage per second did not change: tip-and-inner mix at about 70 percent landed is about 2.0 AD/s on one foe and 4 AD/s on a crowd of six, before Momentum.
 For comparison, Hulda does 1.8 and 3.6.
 Inner hits are blocked by guarding foes as for every hero.
 A tip hit curls round the guard and lands, and Full Circle's tip also breaks the guard.
 
-Animation beats:
-- Lash: the arm draws back for 3 frames with the chain trailing behind him. On frame 5 the chain snaps straight and a 3-frame brass smear follows the tip. For 4 frames the chain falls back into a loop at the forearm.
-- Rising Arc: he crouches with the chain low ahead, sweeps it up and over in one curve, and the chain hangs behind his shoulder for 3 frames.
-- Full Circle: 4 calm frames of wind-up with the chain swung once overhead. A full turn of the body follows, the chain level at radius 58 with a brass ring smear. He settles over 4 frames as the chain coils back.
+Animation beats, each blow loading against its direction, holding the wind-up for four frames, snapping on its hit frame, holding with a small overshoot and following through, with his feet planted (the front foot steps in only while lifted):
+- Lash: he sits back and draws the chain hand far behind his hip, the free hand reaching at the foe and the front heel up. On frame 7 the arm snaps straight out at chest height with his weight thrown onto the front foot and the back heel up. The chain whips past the foe, drops to the floor and is drawn back into the coil.
+- Rising Arc: from the Lash's follow-through he sinks low with the chain dragged along the floor ahead, then rises onto his toes with the back arched and the chain hand thrown overhead. The chain flies up and over and hangs behind his shoulder, which is where Full Circle starts.
+- Full Circle: crouched and leaning back, he swings the chain round over his head for the wind-up. On frame 8 the chain goes level ahead and his body turns once on planted feet, the chain flat at radius 60 with a brass ring smear. He ends in a deep bow over the front foot as the chain whips past and goes slack, then rises back to his stance.
+- Hanging Arc: he curls up with the chain hand thrown up and back, holds it, snaps open with the chain brought down across in front of him and his legs kicked back, and curls up again as the chain falls.
 
 The chain is drawn from the hand to the hook as links:
 - 3 by 2 px ovals alternate with 1 by 2 px links seen side-on, every 3 px.
 - Each link has a dark outline and a steel ramp highlight.
-- During a blow the chain follows a curve that lags behind the hand, as a quadratic from the hand through a lagged control point to the tip.
+- During a blow the chain is a quadratic from the hand through a control point to the tip (`blowChain.ts`). The control point trails the motion in the wind-up and the sweep. After the strike the tip whips past the end of the sweep and past full reach, swings back and settles, and the bend flips over and dies away; then the chain sags and coils back to the rest hang. A new blow crosses from the chain's last shape, so the string's chain never jumps. On the floor the chain lies along it.
 - At rest a short loop hangs from the left forearm and sways, using the existing verlet `Chain` (`src/game/hero/chain.ts`).
 
 The hook head is a 7 px brass sickle with a dark outline and a one-pixel glint.
@@ -147,13 +165,14 @@ His swing speed rises as the chain shortens: speed times old length divided by n
 Reeling costs 10 stamina a second.
 
 On the floor, L is Backline, costing 16 stamina:
-- the hook bites the floor 50 px behind him and yanks him 48 px back over 0.2 s, his feet low;
+- he drops his weight and throws the hook back for 3 frames, then it bites the floor 50 px behind him and yanks him 48 px back over 0.2 s, his feet low;
+- he skids to a stop over 6 frames as his knees take the stop, and a blow, a jump, the hook or another Backline may cut the skid short;
 - he has no untouchable frames;
 - he faces forward through it;
 - 0.35 s before the next;
-- it calls `travelEnded()` when it ends.
+- it calls `travelEnded()` when the yank ends.
 
-The chain is drawn taut to the floor point for its 0.2 s.
+The chain flies out to the floor point through the throw and is drawn taut through the yank.
 
 ## Momentum (MO bar)
 
@@ -225,7 +244,7 @@ Kinds: attack 5, movement 4, spell 3, dot 3, summon 3, passive 1, ultimate 1.
 | Id | Name | Kind, risk, button | Level 1 | Properties added along the levels | Evolution (partner) |
 | --- | --- | --- | --- | --- | --- |
 | o_sweetspot | Sweet Spot | attack, precise, J | tip hits +25% | tip band +4 px; a tip hit marks the foe (+10%, 2 s); Full Circle tips always crit; a tip hit refunds 4 stamina; mark +20% | Perfect Arc (o_perpetual): at 50+ Momentum every tip hit deals double and sends a 20 px shock through the foes behind it |
-| o_ironweight | Iron Weight | attack, easy, J | string +15% | Full Circle radius +6; Rising Arc launches higher; Full Circle turns twice (second turn at half); foes knocked into others hit them for 0.5x | Wrecking Ball (o_reelsnap): the hook becomes a spiked iron ball, and Full Circle turns three times at radius 72 |
+| o_ironweight | Iron Weight | attack, easy, J | string +15% | Full Circle radius +6; Rising Arc launches higher; Full Circle turns twice (second turn at half); foes knocked into others hit them for 0.5x | Wrecking Ball (o_reelsnap): the hook becomes a spiked iron ball, and Full Circle turns three times at radius 74 |
 | o_skylash | Sky Lash | attack, timed, J in the air | two Hanging Arcs per airtime | a Hanging Arc above 160 px/s deals +50%; air arcs spike minions so they bounce; three per airtime; a spiked foe hits the foes it lands on for 0.5x; the arc throws a brass crescent 60 px on | Falling Star (o_pump): every air arc throws a crescent that pierces, and at 100 Momentum a second one follows |
 | o_pendulumkick | Pendulum Kick | attack, timed, swing body | swing kick from 110 px/s, +25% | kicks launch minions; a pass that hits 2 or more foes gives back a hook; kicks stun 0.5 s; each foe can be kicked going and coming back; at top speed an afterimage kicks again 0.2 s later | Comet Heel (o_skylash): kicks leave a brass comet trail that burns foes under it, and the afterimage kicks every pass |
 | o_gaff | Gaff | attack, precise, K on a foe | the arrival kick +40% | a foe winding up is staggered 1.2 s and the kick crits; the bounce gives back a hook; the hooked minion is yanked along on the bounce; the arrival hits a 26 px ring; a crit arrival gives +20 Momentum | Harpoon (o_sweetspot): a hook on a foe drags every foe on the chain's line to it before the kick, and the kick is a guaranteed crit for 3x |
@@ -273,7 +292,7 @@ Effect ramps:
 
 His own clips go in `src/constants/clips/orrin/`:
 - idle, with the hand loose and the chain loop swaying;
-- every blow, the hook throw, the swing, the reel, the release roll, Backline, the reel-to-foe zip and its kick, both ability clips, the charge pose and both ultimates.
+- every blow, the hook throw, the swing, the reel, the release roll, Backline, the bend before a jump, the reel-to-foe zip and its kick, both ability clips, the charge pose and both ultimates.
 
 Walk, jump, fall, hurt and death use the shared clips through the motion layer, to `docs/motion-standard.md`, with a light 24 px stride.
 The idle chain loop and the swing pose must hand over without a pop: 2 frames of crossfade into the swing pose on latch, and out of the release roll.

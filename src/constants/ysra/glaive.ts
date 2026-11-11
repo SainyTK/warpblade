@@ -42,8 +42,8 @@ export const GLAIVE_FEEL = {
   poke: { stop: 0.06, shake: [0.1, 1.2], pitch: 1.05 },
   thrust: { stop: 0.09, shake: [0.14, 1.8], pitch: 0.9 },
   sweep: { stop: 0.1, shake: [0.16, 2], pitch: 0.82 },
-  cleave: { stop: 0.15, shake: [0.26, 3.2], pitch: 0.62 },
-  twirl: { stop: 0.07, shake: [0.1, 1.4], pitch: 1 },
+  rise: { stop: 0.12, shake: [0.2, 2.6], pitch: 0.72 },
+  windmill: { stop: 0.07, shake: [0.1, 1.4], pitch: 1 },
   impale: { stop: 0.2, shake: [0.32, 3.8], pitch: 0.55 },
   lunge: { stop: 0.11, shake: [0.2, 2.6], pitch: 0.75 },
   counter: { stop: 0.24, shake: [0.36, 4.2], pitch: 0.5 },
@@ -53,8 +53,8 @@ export const GLAIVE_FEEL = {
 export const WARPATH_RUN = { speed: 170, time: 0.26, brake: 0.85 } as const;
 
 /**
- * Sky thrust: a foe counts as overhead when its box sits wholly above her chest, reaches down below the top of the
- * thrust, and is no further ahead than the thrust reaches; a foe whose box comes down below her chest this close in
- * front keeps the plain string. Pixels from her feet, edge to edge ahead.
+ * The ground string's rhythm. A queued blow cuts in this long after the hip thrust or the middle blow lands, once its
+ * hold and the start of its follow-through have shown; the middle blow hands over sooner, since the impale's wind-up is
+ * the longest. Every blow before the impale staggers a minion past the next blow of the string. Game seconds.
  */
-export const OVERHEAD = { chest: 26, top: 72, front: 34, level: 40 } as const;
+export const GLAIVE_STRING = { cancel: { hip: 0.16, sweep: 0.14 }, stagger: 0.65 } as const;

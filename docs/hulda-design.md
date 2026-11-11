@@ -61,19 +61,26 @@ Kael, Ysra and Sable leave the hook out, so their play is unchanged.
 ## The fist string
 
 Three blows (`comboHits: 3`), J by J, each carried on within 0.35 s of the last.
+Pressing J always plays the same string in the same order, wherever the foes stand.
+A J pressed during a blow is kept, and the next blow starts from the pose the follow-through has reached at the blow's next frame; after the haymaker that next blow is a new string's jab.
+Frames are animation frames at 30 a game second; on screen at `PACE` 0.8 one frame takes 1/24 s.
 
-| Blow | Frames | Hit on | Damage | Knockback | Extra |
-| --- | --- | --- | --- | --- | --- |
-| Jab | 8 | 3 | 0.9x | 30 | stagger 0.3 s |
-| Body Hook | 11 | 5 | 1.3x | 60 | breaks a guard, stagger 0.6 s |
-| Haymaker | 16 | 8 | 2.8x | 70 | heavy, stun 0.5 s, hit-stop 0.07 s |
+| Blow | Frames | Hit on | Next from | Damage | Push | Stagger | Hit feel | Extra |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| Jab | 16 | 5 | 11 | 1.2x | under 2 px | 0.55 s | `FEEL.light` | |
+| Body Hook | 20 | 8 | 13 | 1.7x | under 2 px | 0.6 s | `FEEL.firm` | breaks a guard |
+| Haymaker | 26 | 10 | 21 | 3.67x | about 5 px | none | `FEEL.crush` | heavy, knocked down 0.8 s, a 9 px step in |
 
+Pressed in time, the hook lands about 0.65 real seconds after the jab, the haymaker about 0.7 after the hook, and the next string's jab about 0.83 after the haymaker.
+The jab and hook stagger the foe until the next blow lands, so it never winds up inside the string.
+The haymaker knocks it down for longer than the pause to the next jab, and its step carries her after the foe as far as the string pushed it, so string after string lands from where the first one started.
+Each blow loads the other way and holds the load three frames or more, snaps to a new silhouette on its hit frame, overshoots while the hit-stop runs, carries her weight onto the front foot and settles back to the guard.
+The jab is the lead fist straight at the head as the rear heel lifts; the hook sinks her with the rear fist at the hip, then drives it rising into the body; the haymaker cocks the lead fist behind her head with the front toe raised, then steps in and throws it down over the foe while the rear foot drags after her.
 Jab and hook reach a box 2 to 16 px ahead at head height, the shortest reach in the game.
-The haymaker is an overhand: the arm cocks back past her head, holds four calm frames and comes down over it, so its box reaches 42 px up, as far as the fist travels, and no further ahead than the jab.
+The haymaker's box reaches 42 px up, as far as the fist travels, and no further ahead than the jab.
 Light blows are blocked by guarding husks as for every hero; the haymaker breaks a guard, and the grab beats one.
-In the air, J is one hammer fist per airtime that spikes a foe into the floor.
-The first blow of a string faces the held direction; with none held, she turns to a foe within reach only behind her, as Kael's turning moves do.
-The grab starts the same way, so a foe left behind her by a suplex or the rush is in front of her fists again.
+In the air, J is one hammer fist per airtime that spikes a foe into the floor: both fists rise overhead as she arches back, hang there three frames, then her body jackknifes down (16 frames, hit on 6).
+A new string faces the held direction, and with none held the way she already faces; the blows never turn her by themselves, and neither does the grab.
 
 ## The grab and the throws
 
@@ -103,15 +110,15 @@ Bull Rush: floor only, 25 stamina, a two-frame load, 0.32 s at 200 px/s times mo
 She charges the way she is pushed when L is pressed, so L toward a foe behind her turns her first.
 Every foe she runs into takes 0.6x, a short 60 shove and a 0.4 s stun once per rush, and a guard breaks.
 Once she has run into a foe (one she did not lift onto her shoulder) and no other foe stands within 24 px ahead of her shoulder, the charge stops at its next stride key and the clip's own last stride and skid play from the same pose (`stopCharge` in `rushClock.ts`).
-She skids out 10 to 20 px past the foe and, as she settles, wheels round to it when it is the only foe in reach.
+She skids out 10 to 20 px past the foe and settles facing the way she charged, every time; to strike the foe behind her the player turns with A or D.
 Through a packed crowd she still runs the whole charge.
 
 ### Keeping contact with a lone foe (8 November 2026)
 
 A player-style test (real keys, a walking husk with three times its HP, every gap measured) showed the string itself keeps contact: each jab, hook and haymaker landed 4 to 13 px from the foe and a human-paced string dealt about 80 a second.
 What broke contact was the rush: it ran 21 to 31 px past the foe and left her back to it, so the next jab whiffed; pressed with the foe behind her it charged the way she faced, 110 px away from it.
-Neither the string nor the grab turned to a foe behind her, so the jab after a suplex or a rush also swung at air.
-After the fix the same test ends each rush 10 to 19 px past the foe, facing it, and the jab lands.
+After the fix the same test ended each rush 10 to 19 px past the foe.
+The string, the grab and the rush's end also turned her to a foe only behind her until the movement pass of 11 November 2026, which took out every turn the game made on its own, so the player turns her with A or D.
 Bellow: 20 MP, 4 s recharge on the HUD tab where Sable shows her snare's.
 Every foe within 80 px takes 0.6x ability power, minions reel 0.5 s, and all of them are dragged 36 px toward her over 0.25 s, under three expanding crimson rings.
 Flying minions are also dragged up to 48 px down to her hands and reel 0.9 s, so Bellow then a grab catches a flier that hovers out of reach.
@@ -144,6 +151,7 @@ Skilled bot, the same way:
 | Hulda | 4 | 11 |
 
 After the skill rework (7 November 2026) the skilled bot reached wave 5 with 18 kills (wave 3 with 6 on the commit before); her abilities moved to their own HUD tabs on I, so it casts Bellow, which drags the opening wave's moths down to her fists.
+After the movement pass (11 November 2026, the slower pace and the staggering combo layer included) the mash bot falls on wave 4 with 13 kills and the skilled bot on wave 10 with 50 kills; on the commit before the pass they fell on waves 4 and 5.
 The bots never grab, throw or rush on purpose, so they show her floor; a player who grabs fliers out of the air and throws foes into each other does far better.
 
 ## Shop items and kit hooks
@@ -178,8 +186,12 @@ Her skin is ash-grey hair cropped to dark stubble at the sides with a lighter cr
 Both fists wear iron-banded gauntlets with wrapped wrists and knuckle studs, drawn with the arms (`src/game/hero/draw/gauntlets.ts`), and her rings, trails and sparks use a rust ramp.
 Her own clips cover the guard idle, every blow, the hammer fist, the grab, the crush, the hold, the knee, the three throws, Skyfall, the Skyfall ride, the spell clips, the rush, Bellow, the taunt, the charge pose and both ultimates (`src/constants/clips/hulda/`).
 Blows wind up the other way, snap on the hit frame and settle back to the guard, so the string chains without a seam; the haymaker holds four calm frames before it snaps.
-Walk, jump, fall, hurt and death use the shared clips through Kael's motion layer (jump clock, landings, hand-overs) with her fists up before her chin (`src/game/hero/hulda/carry.ts`), and her stride is 20 px, shorter and heavier than Kael's.
-A broken plate shoves her torso back a pixel for four frames over whatever she is doing.
+Walk, jump, fall, hurt and death use the shared clips through Kael's jump clock and hand-overs with her fists up before her chin (`src/game/hero/hulda/carry.ts`), and her stride is 20 px, shorter and heavier than Kael's.
+Her own recoveries go over them (`settle.ts`, `landing.ts`, keys in `src/constants/clips/hulda/settle.ts`).
+From a stand her walk loads for three frames, her weight rocking back and sinking, then comes up to speed over four more as she tips into the stride.
+A walk that stops carries her weight on past her planted feet, sinks and rocks back into the guard over ten frames, and a turn on the floor dips her through the change of foot.
+Her jump sinks into her knees for two frames before it leaves the floor (the shared take-off load, into `JUMP_CROUCH`), and a landing folds her knees deep with the fists dropped, scaled by the fall, then pushes her up into the guard over ten frames.
+A broken plate shoves her shoulders back two pixels and gives her knees for eight frames over whatever she is doing.
 
 ## Code layout
 

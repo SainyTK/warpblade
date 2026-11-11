@@ -3,7 +3,7 @@ import { WORLD_COLORS } from "../../constants/palette";
 import { PK } from "../../types/particle";
 import { sashAnchor, scarfAnchor, tailAnchor } from "../../utils/poseFrame";
 import { game, hero, particles, ponytail, scarf } from "../state";
-import { isFree, setState } from "./actions";
+import { inFreeState, setState } from "./actions";
 import { kit } from "./kits";
 import { heroPose } from "./pose";
 import { skin } from "./skin";
@@ -11,7 +11,7 @@ import { skin } from "./skin";
 /** pick the free state from the motion, step the stride, pose the body and swing the scarf and ponytail */
 export function animateHero(dt: number): void {
   const h = hero;
-  if (isFree()) {
+  if (inFreeState()) {
     const moving = Math.abs(h.vx) > 15;
     const want = h.ground ? (moving ? (h.running ? "run" : "walk") : "idle") : h.vy < 0 ? "jump" : "fall";
     if (want !== h.state) setState(want);

@@ -11,6 +11,7 @@ import { isFree, leaveHang, setState } from "./actions";
 import { blowsDone, endMove } from "./combo";
 import { lift } from "./lift";
 import { skin } from "./skin";
+import { takeOff } from "./takeoff";
 
 function doubleJumpBurst(): void {
   const h = hero;
@@ -22,7 +23,17 @@ function doubleJumpBurst(): void {
   sfx.doubleJump();
 }
 
-/** Up: jump (also out of an attack's follow-through), jump off a crystal, drop through a ledge with Down held, or jump again in the air */
+/** off the floor from a jump: the rise, the dust and the skill event */
+function leaveFloor(): void {
+  const h = hero;
+  lift(M.jumpRise, true);
+  h.jumps = 1;
+  setState("jump");
+  dust(h.x, h.y, 4);
+  emitSkillEvent({ type: "jump", air: false });
+}
+
+/** Up: jump, loading from a stand or a stride (at once out of an attack's follow-through), jump off a crystal, drop through a ledge with Down held, or jump again in the air */
 export function jump(): boolean {
   const h = hero;
   if (h.state === "hang") {
@@ -32,8 +43,9 @@ export function jump(): boolean {
     setState("jump");
     return true;
   }
-  // a jump cancels a move's follow-through and keeps the combo going in the air
-  if (blowsDone()) endMove();
+  // a jump cancels a move's follow-through and keeps the combo going in the air, leaving the floor at once
+  const fromBlow = blowsDone();
+  if (fromBlow) endMove();
   if (!isFree() && h.state !== "dash") return false;
   if (h.ground && isHeld("down") && h.y < GROUND) {
     h.drop = 0.22;
@@ -41,11 +53,7 @@ export function jump(): boolean {
     return true;
   }
   if (h.ground) {
-    lift(M.jumpRise, true);
-    h.jumps = 1;
-    setState("jump");
-    dust(h.x, h.y, 4);
-    emitSkillEvent({ type: "jump", air: false });
+    takeOff(leaveFloor, fromBlow);
     return true;
   }
   if (h.jumps >= 2) return false;

@@ -60,7 +60,7 @@ export function updateStalker(e: Enemy, dt: number, ts: number): void {
   const ws = waveScale(game.wave);
   if (e.state === "walk") {
     turnToHero(e, dt);
-    e.vx = approach(e.vx, (Math.abs(dx) > 6 || !foeSees(e)) && e.stagger <= 0 ? e.face * 32 : 0, 200 * dt);
+    e.vx = approach(e.vx, (Math.abs(dx) > 6 || !foeSees(e)) && e.halt <= 0 ? e.face * 32 : 0, 200 * dt);
     if (e.cd <= 0 && facesHero(e) && hero.state !== "dead") {
       if (Math.abs(dx) < CLAW_RANGE && Math.abs(hero.y - e.y) < 30) Object.assign(e, { state: "wind", st: 0 });
       else if (Math.abs(dx) > 56 && Math.abs(dx) < 170 && !game.enemies.some((o) => o.type === "stalker" && sunk(o))) {
@@ -106,7 +106,7 @@ export function updateStalker(e: Enemy, dt: number, ts: number): void {
       sparks: VOID_SPARKS,
     });
   eachStanding(() => {
-    if (e.state === "walk" && e.stagger <= 0 && boxHit(enemyBox(e), heroBox()))
+    if (e.state === "walk" && e.halt <= 0 && boxHit(enemyBox(e), heroBox()))
       hurtHero(ABYSS_HITS.stalkerTouch * e.power, e.x);
   });
 }

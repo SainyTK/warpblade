@@ -83,14 +83,21 @@ export interface Enemy {
   marks: FoeMark[];
   /** boss phase: 1, or 2 once it is enraged */
   phase: number;
-  /** frontal blows blocked in a row; the second one sets off a counter */
+  /** frontal blows blocked in a row; the next one breaks the guard */
   guardHits: number;
   /** hits taken while airborne: each holds it up less */
   airHits: number;
   /** time before a wisp can slip away from a swing again */
   evadeCd: number;
-  /** a husk rocked by a sword blow stops walking for this long; a wind-up already started goes on */
+  /** staggered by a hero's blow for this long: its action is cut and it cannot act (game/enemies/stagger.ts) */
   stagger: number;
+  /** blows in a row it has staggered for, and seconds since the last stagger ended */
+  staggerHits: number;
+  staggerIdle: number;
+  /** braced after too many staggers in a row: it cannot be staggered for this long */
+  brace: number;
+  /** its feet are held for this long (burning ground, a brand): a walker stops walking and does not hurt by touch */
+  halt: number;
   /** pinned to the floor for this long (Ysra's Impale and hook): held still; the damage it takes more is a mark */
   pinned: number;
   /** blinded for this long (Tallis's Smoke Knot): it neither turns nor starts a wind-up at a hero (game/enemies/awareness.ts) */

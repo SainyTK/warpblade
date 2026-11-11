@@ -33,7 +33,7 @@ const AIR_THROW_GRAVITY = 0.3;
 /** the side held now */
 const heldSide = (): number => (isHeld("right") ? 1 : 0) - (isHeld("left") ? 1 : 0);
 
-/** states in which the kit moves him itself */
+/** states in which the kit moves him itself, or keeps the speed he came in with */
 const DRIVEN = new Set(["swing", "zip", "fly", "backline", "whirl", "pendulum", "maelstrom"]);
 /** states in which the kit's own physics replace gravity */
 const WEIGHTLESS = new Set(["swing", "zip", "pendulum", "maelstrom"]);

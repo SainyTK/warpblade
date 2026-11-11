@@ -18,7 +18,7 @@ export function updateStatus(e: Enemy, dt: number): number {
   e.chill = Math.max(0, e.chill - dt);
   e.shock = Math.max(0, e.shock - dt);
   e.evadeCd = Math.max(0, e.evadeCd - dt);
-  e.stagger = Math.max(0, e.stagger - dt);
+  e.halt = Math.max(0, e.halt - dt);
   e.pinned = Math.max(0, e.pinned - dt);
   e.blind = Math.max(0, e.blind - dt);
   updateSkillStatus(e, dt);

@@ -36,7 +36,8 @@ export function landingPose(h: Hero, p: Pose, t: number): Pose {
     return blendPose(p, land, m.landDepth);
   }
   if (h.state !== "walk" && h.state !== "run") {
-    m.landAt = Number.NEGATIVE_INFINITY;
+    // a move that touches down settles into the stand a step later, and the landing waits for it; any other state ends it
+    if (u >= 1 / ANIM_FPS) m.landAt = Number.NEGATIVE_INFINITY;
     return p;
   }
   const k = Math.floor(u * ANIM_FPS);

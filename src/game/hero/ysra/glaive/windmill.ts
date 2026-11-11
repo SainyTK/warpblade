@@ -1,7 +1,7 @@
 import { ENEMIES } from "../../../../constants/enemies";
 import { FLARE } from "../../../../constants/ysra/rites";
 import { enemyCenter } from "../../../enemies/enemy";
-import { kindOf } from "../../../enemies/kinds";
+import { staggerFoe } from "../../../enemies/stagger";
 import { emitSkillEvent } from "../../../skills/events";
 import { skillValues } from "../../../skills/query";
 import { burstEmbers } from "../../../spells/rites/emberBurst";
@@ -48,9 +48,7 @@ function flingEmbers(power: number): void {
 export function windmillPassed(last: boolean): void {
   const v = windmill();
   pullIn(v.pull ?? 0);
-  if (v.stagger)
-    for (const e of game.enemies)
-      if (struckThisSwing(e) && kindOf(e.type).staggers) e.stagger = Math.max(e.stagger, v.stagger);
+  if (v.stagger) for (const e of game.enemies) if (struckThisSwing(e)) staggerFoe(e, v.stagger);
   if (v.embers) flingEmbers(v.embers);
   if (!last) return;
   if (v.ring) game.fx.push(castFlare(hero.x, hero.y, { ...FLARE, radius: RING, power: v.ring }, "attacks"));

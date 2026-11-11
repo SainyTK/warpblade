@@ -10,6 +10,7 @@ const fresh = (): KaelMotion => ({
   from: null,
   since: 0,
   frames: 0,
+  step: false,
   jumpT: 0,
   jumpV0: 1,
   t: 0,

@@ -10,6 +10,7 @@ import {
 } from "../../../constants/clips/tallis/moves";
 import { CHARGE_POSE, REVERSE, TALLIS_IDLE, VEIL_DIP } from "../../../constants/clips/tallis/stance";
 import { KAEL_WOUNDED_IDLE } from "../../../constants/clips/wounded";
+import { LANDING } from "../../../constants/kael/motion";
 import { GLOAMING } from "../../../constants/tallis/special";
 import { VEIL } from "../../../constants/tallis/veil";
 import type { Hero } from "../../../types/hero";
@@ -19,7 +20,9 @@ import { clipPose } from "../clipPose";
 import { clipKey, handOver, watchHandover } from "../kael/handover";
 import { jumpClock } from "../kael/jumpClock";
 import { landingPose, watchLanding } from "../kael/landing";
+import { loadPose } from "../kael/load";
 import { motion } from "../kael/motion";
+import { travelPose, watchTravel } from "../kael/travel";
 import { woundedIdle, woundWeight } from "../wound";
 import { tallis } from "./memory";
 
@@ -99,8 +102,9 @@ export function tallisPose(h: Hero, t: number): Pose {
   const fresh = clipKey(h) !== m.clip || restarted;
   m.st = h.st;
   const landed = watchLanding(h, t);
-  const base = dipped(h, statePose(h, t, fresh, dt, woundWeight(t)));
-  watchHandover(h, t, restarted, landed ? 1 : undefined);
+  watchTravel(h, t, m.clip);
+  const base = loadPose(travelPose(h, dipped(h, statePose(h, t, fresh, dt, woundWeight(t))), t));
+  watchHandover(h, t, restarted, landed ? LANDING.cross : undefined);
   const p = handOver(landingPose(h, base, t), t);
   m.last = p;
   return p;

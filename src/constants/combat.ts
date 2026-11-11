@@ -16,8 +16,6 @@ export const HERO_MOVE = {
   hangJumpRise: 38,
   dashSpeed: 270,
   dashTime: 0.24,
-  /** a J this soon after a dash is a dash attack */
-  dashLink: 0.18,
 } as const;
 
 /** Stamina: every dash spends part of the bar, and it comes back after a short pause, slower while Kael attacks. */
@@ -55,16 +53,42 @@ export const WARP = {
 
 export const COMBO = {
   /** pause after a combo is finished before the next one can start */
-  cooldown: 0.5,
+  cooldown: 0.2,
   /** a move that hits nothing plays this much of its clip before anything can cancel it */
   whiff: 0.85,
   /** time after a move ends to press J and keep the combo going */
   link: 0.25,
   /** a queued move starts this long after the last blow of the current one */
   cancel: 0.09,
-  /** a husk struck by the sword stops walking this long, so it does not walk into Kael mid-combo */
-  stagger: 0.35,
+  /** a minion struck by the sword staggers this long, which outlasts the gap to the string's next blow */
+  stagger: 0.45,
 } as const;
+
+/** A minion struck by a hero's blow staggers: its wind-up or attack is cut and it cannot act until it steadies.
+ *  Mini bosses and bosses never stagger. */
+export const STAGGER = {
+  /** blows in a row a minion staggers for before it braces, and an elite */
+  limit: 7,
+  eliteLimit: 4,
+  /** seconds a braced foe cannot be staggered */
+  brace: 1.6,
+  /** seconds without a stagger before the count of blows starts again */
+  forget: 1,
+  /** seconds after a stagger ends before the foe may attack, walk on or hurt by touch */
+  rest: 0.35,
+  /** how fast a staggered foe slides to a stop */
+  friction: 6,
+  /** a struck foe is drawn knocked this many pixels away from the hero, easing back while its hit flash lasts */
+  kick: 2,
+  /** a staggered foe is drawn tipped away from the hero: image pixels per row of height, eased out over `leanEase` seconds */
+  lean: 0.14,
+  leanEase: 0.15,
+  /** a minion knocked off its feet is drawn tipped this far, so a knockdown reads at a glance */
+  downLean: 0.4,
+} as const;
+
+/** The hit counter: the hero's hits in a row, shown from `from` hits, lost after `window` seconds without one or when hurt */
+export const HIT_COUNT = { from: 3, window: 2, tiers: [10, 25, 50] } as const;
 
 export const DAMAGE = {
   crit: 1.75,
@@ -95,10 +119,8 @@ export const GUARD = {
   fromWave: 3,
   /** share of the damage a blocked blow still does */
   chip: 0.1,
-  /** blocked blows in a row before the foe strikes back at once */
-  counterAfter: 2,
-  /** how far into its wind-up a counter starts, so it comes out fast */
-  counterWind: 0.4,
+  /** frontal blows in a row that open the guard: the first is blocked, the second breaks through */
+  breakAfter: 2,
   /** a heavy blow breaks the guard and staggers the foe this long */
   breakStun: 0.7,
   /** Kael is pushed back this fast off a blocked blow */

@@ -13,6 +13,8 @@ export interface KaelMotion {
   /** game time the hand-over began, and its length in animation frames */
   since: number;
   frames: number;
+  /** the hand-over is between a stand and a stride on the floor, so the feet step across it */
+  step: boolean;
   /** the jump clip's own clock, steered by the rise, and the launch speed it is measured against */
   jumpT: number;
   jumpV0: number;

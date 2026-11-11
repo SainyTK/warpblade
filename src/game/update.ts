@@ -11,6 +11,7 @@ import { coop, eachHero } from "./coopHooks";
 import { updateEnemies } from "./enemies/updateEnemies";
 import { celebrateEvolutions } from "./evolve";
 import { updateHero } from "./hero/updateHero";
+import { updateHitCount } from "./hitCount";
 import { agePresses } from "./input";
 import { updateDanger } from "./lowHealth";
 import { updateNumbers } from "./numbers";
@@ -82,6 +83,7 @@ export function update(dt: number): void {
   updateDanger(dt);
   eachHero(() => {
     updateFlow(dt);
+    updateHitCount(dt);
     regenVigor(dt);
   });
   updateSkills(world);

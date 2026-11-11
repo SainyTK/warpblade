@@ -1,4 +1,7 @@
-import { FEEL, PHANTOM_RAMP } from "../../../constants/combo";
+import { onFrame, PHANTOM_RAMP } from "../../../constants/combo";
+import { frame } from "../../../constants/hero";
+import { PHASE, SKILL_CANCEL, SKILL_FEEL, SKYBREAKER } from "../../../constants/kael/skillBlows";
+import { STRING_CANCEL } from "../../../constants/kael/string";
 import { W } from "../../../constants/stage";
 import type { Enemy } from "../../../types/enemy";
 import type { MoveDef } from "../../../types/move";
@@ -10,13 +13,16 @@ import { skillEvolved, skillValues, withCharms } from "../../skills/query";
 import { game, hero } from "../../state";
 import { leaveAfterimages } from "../afterimages";
 import { kael } from "../kael/state";
-import { THRUST_SLASH, UPPERCUT } from "./slashes";
+import { lift } from "../lift";
+import { UPPERCUT } from "./slashes";
 
-/** the phase cut runs from here to there in its first frames */
-const phase = { from: 0, to: 0, turned: false };
+/** the phase cut runs from here to there between `PHASE.from` and `PHASE.to`, then turns to the foe it passed */
+const phase = { from: 0, to: 0, passed: false, turned: false };
 rememberPerSeat(objectMemory(phase));
-/** Phase Cut keeps Kael out of harm's way this long in the pass, from its second level */
+/** Phase Cut keeps Kael out of harm's way this long from the start of the move, through the pass, from its second level */
 const PHASE_GUARD = 0.25;
+/** the cut shown along the pass, behind Kael as he lands on the far side */
+const PHASE_SLASH = { cx: -12, cy: -18, R: 24, sy: 0.16, rot: 0, a0: -0.5, a1: -3.39, W: 8, ramp: PHANTOM_RAMP };
 
 /** the foe the phase cut passes: the nearest ahead within reach, or as Phantom Passage the farthest */
 function phaseFoe(reach: number, passage: boolean): Enemy | undefined {
@@ -28,28 +34,34 @@ function phaseFoe(reach: number, passage: boolean): Enemy | undefined {
 
 function phaseEnter(): void {
   const v = skillValues("k_phase");
-  const passage = skillEvolved("k_phase");
-  const ahead = phaseFoe(withCharms("area", v.reach ?? 80), passage);
-  kael.passage = passage;
+  kael.passage = skillEvolved("k_phase");
   if (v.guard) hero.inv = Math.max(hero.inv, PHASE_GUARD);
+  phase.passed = false;
+  phase.turned = false;
+}
+
+/** the coil is over: the pass is aimed past the foe ahead as it stands now, and the afterimages trail along it */
+function startPass(): void {
+  const v = skillValues("k_phase");
+  const ahead = phaseFoe(withCharms("area", v.reach ?? 80), kael.passage);
   const past = ahead ? ahead.x + hero.face * (Math.abs(enemyCenter(ahead)[0] - ahead.x) + 18) : hero.x + hero.face * 50;
   phase.from = hero.x;
   phase.to = clamp(past, 10, W - 10);
-  phase.turned = false;
-  leaveAfterimages(hero.x, hero.y, phase.to, hero.y);
+  phase.passed = true;
+  leaveAfterimages(phase.from, hero.y, phase.to, hero.y);
 }
 /** how far the last phase cut carried Kael, for Phase Cut's cut along the whole pass */
 export const phaseLength = (): number => Math.abs(phase.to - phase.from);
 
+/** planted through the coil, through the foe in a blink, then the turn to face it */
 function phaseStep(t: number): void {
-  if (t < 0.07) {
-    hero.x = lerp(phase.from, phase.to, t / 0.07);
-    hero.vx = 0;
-  } else if (!phase.turned) {
-    phase.turned = true;
-    hero.x = phase.to;
-    hero.face = -hero.face;
-  }
+  hero.vx = 0;
+  if (t < PHASE.from) return;
+  if (!phase.passed) startPass();
+  hero.x = lerp(phase.from, phase.to, Math.min(1, (t - PHASE.from) / (PHASE.to - PHASE.from)));
+  if (phase.turned || t < PHASE.turn) return;
+  phase.turned = true;
+  hero.face = -hero.face;
 }
 
 /** moves that carry Kael through or up: Phase Cut's pass and Skybreaker's launch */
@@ -59,17 +71,19 @@ export const FINISHER_MOVES = {
     name: "Phase cut",
     clip: "phase",
     pitch: 1.3,
+    cancel: SKILL_CANCEL.phaseCut,
+    // dealt as Kael lands on the far side, still facing on: the foe is behind him
     hits: [
       {
-        at: 0.09,
-        box: [-6, -38, 30, 0],
+        at: onFrame(5),
+        box: [-30, -38, 6, 0],
         power: 1.8,
-        kx: 60,
-        ky: -30,
+        kx: 20,
+        ky: -20,
         big: true,
         wall: true,
-        slash: { ...THRUST_SLASH, R: 28, W: 8, ramp: PHANTOM_RAMP },
-        feel: FEEL.heavy,
+        slash: PHASE_SLASH,
+        feel: SKILL_FEEL.phaseCut,
       },
     ],
     enter: phaseEnter,
@@ -82,21 +96,24 @@ export const FINISHER_MOVES = {
     pitch: 0.7,
     falls: true,
     finisher: true,
+    cancel: STRING_CANCEL.finisher,
     hits: [
       {
-        at: 0.1,
+        at: onFrame(7),
         box: [-6, -58, 34, 2],
         power: 1.6,
         kx: 30,
         ky: 0,
-        launch: -430,
+        launch: SKYBREAKER.launch,
         big: true,
         slash: { ...UPPERCUT, R: 27, W: 11 },
-        feel: FEEL.crush,
+        feel: SKILL_FEEL.skybreaker,
       },
     ],
-    lift: 22,
+    strides: [{ from: frame(3), to: frame(7), speed: SKYBREAKER.step }],
+    // Kael rises with the foe off the blow itself, so the crouch before it stays on the floor
     afterHit: () => {
+      lift(SKYBREAKER.rise, false);
       game.fx.push(createSlash(hero.x, hero.y, hero.face, { ...UPPERCUT, R: 20, W: 5, t0: 0.02 }));
     },
   },

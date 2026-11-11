@@ -1,4 +1,3 @@
-import type { HeroState } from "../types/hero";
 import type { DangerTier } from "../types/lowHealth";
 import { SPARKS } from "./palette";
 
@@ -18,13 +17,3 @@ export const DANGER_GLOW = {
 
 /** animation frames the idle takes to sink into the wounded stance, or to straighten out of it after a heal */
 export const WOUND_FRAMES = 12;
-
-/** animation frames a hero crosses from her last pose into or out of a wounded idle; hits taken and death cut at once */
-export const WOUND_CROSS_FRAMES: Partial<Record<HeroState, number>> & { other: number } = {
-  idle: 3,
-  walk: 3,
-  run: 3,
-  hurt: 0,
-  dead: 0,
-  other: 2,
-};

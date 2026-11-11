@@ -24,7 +24,7 @@ The axes:
 - Defence: the Veil and the pool make foes lose him. No block, parry, armour or dodge frames outside the pool.
 - Resource: Gloam (GL), refilled while no foe is facing him and by blows from behind, spent to hold the Veil.
 - Range: 22 px knives.
-- Attack shape: positional. His string changes when he stands behind a foe, and blows from behind deal 2.25 times as much.
+- Attack shape: positional. His string is the same wherever he stands, and blows from behind deal 2.25 times as much.
 
 ## The shared foe awareness rule
 
@@ -58,7 +58,7 @@ The plan set HP 80, the lowest in the roster; after QA it went to 90 by the plan
 | A / D | Walk; a double tap runs. Steer the pool during Sink |
 | W | One jump of 58 px. No double jump |
 | S | With W, drop through a ledge |
-| J | Knife string; it changes behind a foe's back. Under a hovering flier, a springing Rising Cut. In the air, Drop Stab, once per airtime. Out of the pool, Rising Cut |
+| J | Knife string: Flick, Cross, Heel Kick, the same wherever foes stand. In the air, Drop Stab, once per airtime. Out of the pool, Rising Cut |
 | K | Veil on and off (Gloam) |
 | L | Hold: Sink into a shadow pool and glide; let go to rise. In the air: drop straight down and sink on landing while L is held |
 | I | Selected ability: Smoke Knot, Hamstring, or a spell skill (MP) |
@@ -104,37 +104,40 @@ Its rose edge glows while he is Unseen, so the player can read when it refills, 
 ## J: the knife string
 
 Clips run at 30 fps like every hero, and each blow carries on within 0.3 s of the last.
-Each blow of the string is chosen when it starts: the behind string when the nearest ground foe within 26 px ahead of him has its back to him, the front string otherwise.
+J on the floor plays Flick, Cross and Heel Kick in that order every time, wherever foes stand: near, far, behind him, on both sides, in the air or lying down.
+J never turns him; he faces where the player last pointed.
 
 Blows from behind deal the shared 1.5x, and his kit's damage hook (`registerDamageHooks`, `hitBonus` on `back && melee`) adds half again, so 2.25x in all.
 Each of his blows from behind sets the foe's turn timer back to 0, so a foe struck from behind cannot turn until 0.45 s after the last such blow.
+A staggered foe keeps its facing, so a string that starts on a foe's back stays on its back.
 
-| Blow | Frames | Hit on | Reach | Power | Knockback | Extra |
-| --- | --- | --- | --- | --- | --- | --- |
-| Flick (front) | 8 | 3 | 8 to 20 px, 10 px tall | 0.805x AD | 20 | |
-| Cross (front) | 9 | 4 | 6 to 22 px | 0.92x AD | 30 | stagger 0.3 s |
-| Heel Kick (front) | 13 | 6 | 4 to 24 px | 1.0x AD | 90 | heavy (breaks a guard); he hops back 10 px |
-| Backstab (behind) | 10 | 5 | 4 to 20 px | 1.2x AD | 0 | stagger 0.5 s |
-| Twist (behind) | 9 | 4 | 4 to 18 px | 1.0x AD | 0 | |
-| Gut Slash (behind) | 12 | 5 | 4 to 24 px | 1.3x AD | 70 away from him | launch 90 |
-| Drop Stab (air) | 10 | 4 | a plunge straight down, 14 px wide | 1.1x AD | 0 | dives at 300 px/s; always counts as from behind; once per airtime |
-| Rising Cut | 11 | 3 | 2 to 20 px, 24 px tall | 1.0x AD | 40 | launch 150, heavy; live for 3 frames |
+| Blow | Frames | Hit on | Reach | Power | Knockback | Hit-stop, shake, pitch | Extra |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| Flick | 10 | 5 | 8 to 20 px, 7 to 29 px up | 0.88x AD | 8 | 0.05 s, 1 px, 1.35 | |
+| Cross | 10 | 5 | 6 to 22 px, 6 to 26 px up | 0.97x AD | 10 | 0.07 s, 1.4 px, 1.15 | |
+| Heel Kick | 14 | 6 | 2 to 24 px, 4 to 48 px up | 1.24x AD | 10 | 0.12 s, 2.5 px, 0.8 | heavy (breaks a guard); launch 170 |
+| Drop Stab (air) | 12 | 5 | a plunge straight down, 14 px wide | 1.1x AD | 0 | 0.06 s, 1.2 px, 1.1 | dives at 300 px/s; always counts as from behind; once per airtime |
+| Rising Cut | 13 | 5 | 2 to 20 px, 6 to 42 px up | 1.0x AD | 40 | 0.08 s, 1.6 px, 0.95 | launch 150, heavy |
 
-Every knife blow staggers the foe it lands on for the shared 0.35 s unless its row sets its own, and a knife that lands on a winding minion cuts its wind-up short.
+Frames are clip frames, which run 1.1 times as fast at his base attack speed.
+Every knife blow staggers the minion it lands on for the shared `COMBO.stagger` (0.45 s), and a knife that lands on a winding minion cuts its wind-up short.
+Heel Kick's launch is the string's payoff: the foe flies up and lies stunned after it lands until the next string's Flick can reach it.
+Heel Kick sweeps up over his head, so it also meets a flier hovering over him.
+
+Measured on a lone thornback with J pressed every 96 ms, in real seconds: Flick to Cross 0.43, Cross to Heel Kick 0.51, Heel Kick to the next Flick 0.62.
+Every blow lands from any start inside Flick's reach (up to 33 px between centres on a thornback), and each blow pushes the foe about 1 px.
 
 Back-open cue: while a ground foe within reach ahead of him has its back to him, a rose chevron 5 px wide with a dark outline points down at that foe's back from above it, clear of his own cloak.
-It is the one cue that tells the player the behind string is ready.
+It tells the player his next blow lands from behind.
 
-Animation beats, to `docs/motion-standard.md`, with the knives held in reverse grip:
+Animation beats, to `docs/motion-standard.md`, with the knives held in reverse grip.
+Each blow loads the other way and holds the load three frames, snaps on its hit frame, holds with a small overshoot, carries through onto the front foot and settles to the stance through keyed poses.
 
-- Flick: 1 calm frame with the near knife drawn to the hip, a snap out on frame 3 with a rose smear, 2 frames of follow-through as the wrist rolls back.
-- Cross: the shoulders turn back, the far knife crosses on frame 4 under the near arm with an X of two smears, then a settle.
-- Heel Kick: 3 frames winding on the back leg with the near knee drawn up, a spinning heel on frame 6, a hop back into a crouch.
-- Backstab: 3 frames rising onto the toes with the knife high, a drive down on frame 5 with 0.04 s hit-stop and 1 px shake, the blade held in for 2 frames.
-- Twist: the wrist turns with a short burst, no travel.
-- Gut Slash: a low crouch, a wide sweep on frame 5, 2 px shake, then the arm carries across his body as he squares up again.
-- Drop Stab: a tuck with both knives raised, then straight down with both knives under him, held to the landing.
-- Rising Cut: from the pool's crouch, a rise onto the toes on frame 3 with the knife swept up overhead.
+- Flick: the hips turn back and the near knife cocks at the hip, then a level slash at chest height as the hips drive in and the back heel lifts; the wrist rolls back after.
+- Cross: he rises with the far knife lifted high behind his shoulder, then cuts down across to the front as he lunges low onto the front knee, with an X of two smears.
+- Heel Kick: he sinks and chambers the near knee with both arms swung back, then rises onto the far toes, leans far back and whips the near leg out straight with the heel high in front of his head, clear of his cloak, arms flung wide; its smear rides the heel's arc round the hip from the chamber up over his head, and the leg comes down ahead and takes his weight.
+- Drop Stab: a tuck with both knives raised that rides out the rise under way and hangs at its top, then straight down with both knives under him, held to the landing. A J just after the take-off dives from the top of the full jump.
+- Rising Cut: from the pool's crouch he coils lower with the knife wound back, then rises onto the toes sweeping it up overhead.
 - A rose glint slides along the near knife for the two frames after each blow lands.
 
 ## Abilities on I (MP), rotation on O
@@ -258,7 +261,7 @@ Mash bot on this build from wave 1, one run each (`agent-studio`, `npm run playt
 
 The first build fell on wave 1 with no kills.
 Wave 1 is mostly Glimmer Moths hovering 40 to 50 px above the floor, and none of his ground blows reached them, so the mash bot stood under them pressing J at the air.
-Raising his HP would not have changed that, so the fix answers fliers instead: J on the floor with a flier hovering over him and no ground foe in reach springs 34 px into Rising Cut, whose slash stays live for three frames.
+Raising his HP would not have changed that, so the fix answered fliers instead: J on the floor with a flier hovering over him and no ground foe in reach sprang 34 px into Rising Cut. The movement pass removed that springing cut, since the game chose it from where foes stood; Heel Kick's overhead crescent and a Drop Stab that rides the jump to its top answer fliers now.
 After it he falls on wave 4 with 11 kills, level with Kael and Hulda and within two waves of every hero; his HP and front blows only moved later, after QA's plain script (below).
 
 The skilled bot has no Tallis policy; it reaches wave 2 with 4 kills from wave 1, before and after QA, and at the wave 20 start (level 14) he falls to the Warden in 18.7 s like the others (18.4 to 27.5 s in the baseline).
@@ -275,22 +278,24 @@ Each row is one run of it for all three heroes on the build named.
 
 HP 86 alone changed nothing, so both of the plan's fallback steps went in: HP 80 to 90, then Flick and Cross 15% stronger.
 Neither moved the plain script.
-Four of his six string blows (Flick, Heel Kick, Twist, Gut Slash) also carried no stagger, while every other hero's blows stagger by default; they now use the shared `COMBO.stagger`, which keeps a walker he cuts from hurting him by touch, but did not move the plain script either.
+Four of the six string blows he had then (Flick, Heel Kick and two blows of a behind string since removed) also carried no stagger, while every other hero's blows stagger by default; they now use the shared `COMBO.stagger`, which keeps a walker he cuts from hurting him by touch, but did not move the plain script either.
 Logging every hit he took on it showed the damage came from thornbacks that wound up and charged right beside him (16 a charge) while he cut them, and from their touches (6).
 A knife that lands on a winding minion now cuts its wind-up short, and with that all three heroes end on wave 3.
 QA's other player script presses K and L for every hero, which are other moves for Kael and Hulda, so it measures only Tallis and is not used to compare heroes.
 The skilled bot still ends on wave 2 with 4 kills, losing 54 HP on wave 1: it taps L against a foe's blow, which for Tallis is a 0.15 s Sink that rises again inside a thornback's charge. A Tallis policy that holds L through the blow, as the owner note below describes, is the fix for that bot.
 
+After the combo layer and the movement pass (one fixed string, no springing cut), from wave 1: the mash bot reaches wave 4 with 12 kills and the skilled bot wave 3 with 6 kills, against wave 4 and wave 2 on the build before the stagger existed.
+The skilled bot answers a flier overhead with a tapped jump and J; Drop Stab now rides that jump to its top before it dives, so it reaches the moths, where it used to dive from a hop just off the floor.
+
 ## As built
 
 - The plan named Smoke Knot, a base ability, as the evolution partner of Ambush (Night Hunter) and Quiet Step (Phantom Walk). A partner must be one of his 20 skills, so Night Hunter evolves with Quiet Step and Phantom Walk with Night Leap.
 - Several level tables in the plan added fewer than four new properties. Each such skill gained one small property where a number step was, recorded in `docs/skills/tallis.md`: Ambush refunds 15 Gloam, Turnabout holds a turned foe 0.5 s and staggers, Plunge's ring stuns, Cut Tendon chills, Quiet Step's veiled blows give 4 Gloam, Night Leap blinds the minions under the leap, Needle Fan chills, Caltrops trip a foe once, Open Veins slows and spreads, Nightshade bursts on death, Ink Wound slows, Gloam Crows bleed, Shadow Double's last stab stuns, Hollow Wraith blinds and bursts, and Eclipse leaves a Smoke Knot.
-- J under a hovering flier springs into Rising Cut (see the bot check above).
 - The Veil's shadow form is drawn by his kit from its own copy of the hero's sprite, since the kit's `draw` has no access to the hero layer's sprite.
 - A foe that cannot see the hero walks on past him and does no harm by touch; without it a husk stopped on top of a veiled Tallis and stood there.
 - Gloaming's dark dims the scene's additive light as well as its colour, since in the daylight eras the sun's light washed out a dark drawn on the colour alone.
 - He rises from the pool facing the back he came up behind, so the Ambush window can be used without turning round first.
-- The behind string and the chevron read only a foe ahead of him, so a foe at his back never turns J into a Backstab at the air.
+- The chevron reads only a foe ahead of him.
 - After QA: an Ambush is spent only by a blow that lands, never by one a guard stops; foes that cannot see him do not guard; walkers that lose him turn back at each other and at the walls; the chevron moved above the open back with a dark outline; the smoke is dithered; the skill icons sit on a dusk disc with bolder knives; HP 80 to 90 and Flick and Cross 15% stronger.
 
 ## Note for the owner

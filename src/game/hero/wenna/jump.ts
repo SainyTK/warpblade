@@ -13,9 +13,10 @@ import { game, hero, particles, progress, rng } from "../../state";
 import { dust } from "../../world";
 import { isFree, setState } from "../actions";
 import { lift } from "../lift";
-import { biteFoe } from "./bite";
+import { takeOff } from "../takeoff";
 import { wenna } from "./memory";
 import { inRecovery } from "./string";
+import { loadOf, plan } from "./wickMoves";
 import { isUp, liveWicks } from "./wicks";
 
 const HOP = "w_hop";
@@ -44,7 +45,7 @@ function hopFlare(w: Wick): void {
     const [cx, cy] = enemyCenter(e);
     if (Math.hypot(cx - w.x, cy - (w.y - 8)) > FLARE_REACH) continue;
     if (v.flare) dealDamage(e, progress.stats.ap * v.flare, { fromX: w.x, kx: Math.sign(cx - w.x) * 50 });
-    if (v.stair) biteFoe(w, e);
+    if (v.stair) plan(w, { kind: "call", foe: e, left: loadOf("call") });
   }
 }
 
@@ -78,10 +79,12 @@ export function pressJump(): boolean {
     h.ground = false;
     return true;
   }
-  lift(WENNA_JUMP_RISE, true);
-  h.jumps = 1;
-  setState("jump");
-  dust(h.x, h.y, 4);
-  emitSkillEvent({ type: "jump", air: false });
+  takeOff(() => {
+    lift(WENNA_JUMP_RISE, true);
+    h.jumps = 1;
+    setState("jump");
+    dust(h.x, h.y, 4);
+    emitSkillEvent({ type: "jump", air: false });
+  });
   return true;
 }

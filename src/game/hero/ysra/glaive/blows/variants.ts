@@ -1,9 +1,8 @@
 import { frame } from "../../../../../constants/hero";
-import { GLAIVE_FEEL, WARPATH_RUN } from "../../../../../constants/ysra/glaive";
+import { GLAIVE_FEEL, GLAIVE_STRING, WARPATH_RUN } from "../../../../../constants/ysra/glaive";
 import type { MoveDef } from "../../../../../types/move";
-import { skillValues } from "../../../../skills/query";
+import { skillLevel, skillValues } from "../../../../skills/query";
 import { hero } from "../../../../state";
-import { dust } from "../../../../world";
 import { emitYsra } from "../../events";
 import { spendCounter } from "../../stance/stance";
 import { bowlOver } from "../bowl";
@@ -11,7 +10,7 @@ import { counterLanded, counterTune } from "../counter";
 import { hookStruck } from "../hook";
 import { setLungeCharge, startLunge } from "../lunge";
 import { glaiveHit } from "../reach";
-import { G_COUNTER, G_LASH, G_RUN, G_SKYHOOK, G_WINDMILL_BACK, G_WINDMILL_FRONT } from "../slashes";
+import { G_COUNTER, G_RUN, G_SKYHOOK, G_WINDMILL_BACK, G_WINDMILL_FRONT } from "../slashes";
 import { windmillPassed } from "../windmill";
 import { HELD_BLOWS } from "./held";
 
@@ -24,25 +23,35 @@ const windmillPass = (n: number) =>
   glaiveHit(
     {
       at: frame(4 + n * 4),
-      box: [-4, -46, 38, -10],
+      box: [-4, -58, 38, -10],
       power: 0.2,
       kx: -70,
       ky: -10,
+      stagger: GLAIVE_STRING.stagger,
       around: true,
       slash: n % 2 ? G_WINDMILL_BACK : G_WINDMILL_FRONT,
-      feel: GLAIVE_FEEL.twirl,
+      feel: GLAIVE_FEEL.windmill,
     },
     { power: () => windmill().power ?? 0.2 },
   );
 
-/** the windmill with this many passes; the last one closes it with Windmill's ring of fire */
+/** after a pass: Windmill's pull and embers; the last pass closes it with the ring of fire, and hooks flyers down when
+ *  Skyhook is held too */
+function windmillStruck(passes: number): void {
+  const last = hero.hitIndex === passes;
+  windmillPassed(last);
+  if (last && skillLevel("y_skyhook")) hookStruck();
+}
+
+/** the windmill with this many passes, the string's middle blow while Windmill is held */
 const windmillMove = (id: "windmill" | "windmillFull", passes: number): MoveDef => ({
   id,
   name: "Windmill",
   clip: "yWindmill",
   pitch: 1.05,
+  cancel: GLAIVE_STRING.cancel.sweep,
   hits: Array.from({ length: passes }, (_, n) => windmillPass(n)),
-  afterHit: () => windmillPassed(hero.hitIndex === passes),
+  afterHit: () => windmillStruck(passes),
 });
 
 /** the running impale's two blows, from Warpath */
@@ -71,13 +80,14 @@ function runOn(t: number): void {
   } else h.vx *= WARPATH_RUN.brake;
 }
 
-/** the glaive's situational, counter and running blows */
+/** the glaive's skill, counter and running blows */
 export const VARIANT_BLOWS = {
   skyhook: {
     id: "skyhook",
     name: "Skyhook",
     clip: "ySkyhook",
     pitch: 0.78,
+    cancel: GLAIVE_STRING.cancel.sweep,
     hits: [
       glaiveHit(
         {
@@ -86,6 +96,7 @@ export const VARIANT_BLOWS = {
           power: 2,
           kx: -30,
           ky: 0,
+          stagger: GLAIVE_STRING.stagger,
           big: true,
           slash: G_SKYHOOK,
           feel: GLAIVE_FEEL.sweep,
@@ -94,25 +105,6 @@ export const VARIANT_BLOWS = {
       ),
     ],
     afterHit: hookStruck,
-  },
-  groundLash: {
-    id: "groundLash",
-    name: "Ground lash",
-    clip: "yLash",
-    pitch: 0.9,
-    hits: [
-      glaiveHit({
-        at: frame(6),
-        box: [-2, -16, 62, 2],
-        power: 1,
-        kx: -190,
-        ky: 0,
-        stun: 0.7,
-        slash: { ...G_LASH, R: 52 },
-        feel: GLAIVE_FEEL.sweep,
-      }),
-    ],
-    afterHit: () => dust(hero.x + hero.face * 30, hero.y, 6, -hero.face),
   },
   windmill: windmillMove("windmill", 4),
   windmillFull: windmillMove("windmillFull", 5),

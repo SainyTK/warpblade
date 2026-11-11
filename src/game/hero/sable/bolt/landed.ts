@@ -3,6 +3,7 @@ import type { Enemy } from "../../../../types/enemy";
 import { dealDamage } from "../../../damage";
 import { enemyCenter } from "../../../enemies/enemy";
 import { addStacks, markFoe } from "../../../enemies/skillStatus";
+import { staggerFoe } from "../../../enemies/stagger";
 import { skillEvolved, skillValues } from "../../../skills/query";
 import { game, progress } from "../../../state";
 import { looseBolt } from "../loose";
@@ -33,7 +34,17 @@ function foesNear(x: number, y: number, reach: number, skip: ReadonlySet<Enemy>)
 function offshoot(from: Enemy, to: Enemy, b: Shot, change: Partial<Shot>): void {
   const [x, y] = enemyCenter(from);
   const [tx, ty] = enemyCenter(to);
-  looseBolt({ ...b, x, y, angle: Math.atan2(ty - y, tx - x), closing: false, side: false, offshoot: true, ...change });
+  looseBolt({
+    ...b,
+    x,
+    y,
+    angle: Math.atan2(ty - y, tx - x),
+    closing: false,
+    beat: undefined,
+    side: false,
+    offshoot: true,
+    ...change,
+  });
 }
 
 /** Ricochet: a bolt that hits bounces on to the nearest foe it has not struck; Splinter Storm splits each bounce */
@@ -48,7 +59,7 @@ function ricochet(e: Enemy, b: Shot): void {
   const count = family.splits > 0 && next.length > 1 ? 2 : 1;
   if (count > 1) family.splits--;
   for (const to of next.slice(0, count)) offshoot(e, to, b, { depth: depth + 1, share: v.share, family });
-  if (v.stagger) e.stagger = Math.max(e.stagger, v.stagger);
+  if (v.stagger) staggerFoe(e, v.stagger);
 }
 
 /** Breaching Bolt: the closing bolt bursts, throws its foe into others, pins it to the edge; Siege Bolt pins every foe */
@@ -88,7 +99,16 @@ function longshot(e: Enemy, b: Shot, killed: boolean): void {
 function featherSplit(e: Enemy, b: Shot, dir: number): void {
   const [x, y] = enemyCenter(e);
   for (const a of [-0.45, 0.45])
-    looseBolt({ ...b, x, y, angle: (dir > 0 ? 0 : Math.PI) + a, share: 0.5, closing: false, offshoot: true });
+    looseBolt({
+      ...b,
+      x,
+      y,
+      angle: (dir > 0 ? 0 : Math.PI) + a,
+      share: 0.5,
+      closing: false,
+      beat: undefined,
+      offshoot: true,
+    });
 }
 
 /** what the skills do when a bolt strikes a foe (it may still fly on) */

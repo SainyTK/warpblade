@@ -307,28 +307,31 @@ export interface BlitOptions {
   tintAmount?: number;
   /** blend translucently instead of dithering */
   soft?: boolean;
+  /** tip the sprite over: each row above the feet is shifted this many image pixels further along x */
+  lean?: number;
 }
 /**
  * draw a sprite with its feet at (x, y), in art pixels. Each sprite pixel covers RES / s.res image pixels a side:
  * a classic sprite keeps its art pixel blocks, a detailed one lands pixel for pixel, placed to the half art pixel.
  */
 export function blit(s: SpriteImage, x: number, y: number, flip: boolean, o: BlitOptions = {}): void {
-  const { alpha = 1, tint = 0, tintAmount = 0, soft = false } = o;
+  const { alpha = 1, tint = 0, tintAmount = 0, soft = false, lean = 0 } = o;
   const [shx, shy] = shakeOffset();
   const k = Math.max(1, Math.round(RES / s.res));
   const step = RES / k;
   const bx = Math.floor((x + shx) * step) * k;
   const by = Math.floor((y + shy) * step) * k;
   const box = s.box ?? { x0: 0, y0: 0, x1: s.w - 1, y1: s.h - 1 };
-  if (k === 1 && alpha >= 1 && tintAmount <= 0 && !soft) {
+  if (k === 1 && alpha >= 1 && tintAmount <= 0 && !soft && !lean) {
     blitPlain(s, box, bx, by, flip);
     return;
   }
-  for (let j = box.y0; j <= box.y1; j++)
+  for (let j = box.y0; j <= box.y1; j++) {
+    const tip = Math.round(lean * (s.oy - j));
     for (let i = box.x0; i <= box.x1; i++) {
       const c = s.d[j * s.w + i];
       if (!c) continue;
-      const ix = flip ? bx + (s.ox - i) * k : bx + (i - s.ox) * k;
+      const ix = (flip ? bx + (s.ox - i) * k : bx + (i - s.ox) * k) + tip;
       const iy = by + (j - s.oy) * k;
       const col = tintAmount > 0 ? mix(c, tint, tintAmount) : c;
       for (let v = 0; v < k; v++)
@@ -337,6 +340,7 @@ export function blit(s: SpriteImage, x: number, y: number, flip: boolean, o: Bli
           else putImage(ix + u, iy + v, col, alpha);
         }
     }
+  }
 }
 
 /** the common case: a full detail sprite, opaque and untinted, copied pixel for pixel with its box clipped to the frame once */

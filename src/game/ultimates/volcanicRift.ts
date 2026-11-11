@@ -78,7 +78,7 @@ function aftermath(
 ) {
   if (v.burn)
     for (let x = lo; x <= hi; x += GAP / 2)
-      layCinder(x, floor, { life: v.burn, power: 0.5, halfWidth: GAP / 4, overlap: 1, stagger: 0, source: "y_rift" });
+      layCinder(x, floor, { life: v.burn, power: 0.5, halfWidth: GAP / 4, overlap: 1, halt: 0, source: "y_rift" });
   const waves: [number, number][] = [];
   if (v.wave) waves.push([WAVE_AFTER, v.wave]);
   for (let k = 1; k <= (v.open ?? 0); k++) waves.push([k, v.eruption]);

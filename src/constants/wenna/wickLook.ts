@@ -30,6 +30,10 @@ export const WICK_FLAME = {
  */
 export const WICK_LOOK = {
   canvas: { w: 30, h: 30 },
+  /** a wind-up sinks its body by this share, widens it by this share, draws its crown this far back and bends its flame
+   *  back this far; a landing squashes it by its own shares */
+  load: { sink: 0.18, spread: 0.12, back: 1.4, bend: 1.8 },
+  land: { sink: 0.22, spread: 0.2 },
   tall: 8,
   half: 3.1,
   /** the pooled wax at its foot stands out this far past its body and is this thick */

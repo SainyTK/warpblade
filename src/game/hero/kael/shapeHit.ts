@@ -30,11 +30,13 @@ function sweep(hit: MoveHit): MoveHit {
   return { ...hit, power: v.power, box: [-2, -16, reach, 2], kx: -v.drag * DRAG_KICK, around: !!v.behind };
 }
 
-/** the 3rd hit: Phase Cut, which cuts every foe on its pass from its fourth level */
+/** the 3rd hit: Phase Cut, dealt behind Kael as he lands past the foe, which cuts every foe on its pass from its fourth
+ *  level */
 function phaseCut(hit: MoveHit): MoveHit {
   const v = skillValues("k_phase");
   const pass = v.line ? phaseLength() : 0;
-  return { ...hit, power: v.power, big: !!v.guard, box: [-6, -38, Math.max(30, pass + 6), 0] };
+  const [x0, y0, x1, y1] = hit.box;
+  return { ...hit, power: v.power, big: !!v.guard, box: [Math.min(x0, -(pass + 6)), y0, x1, y1] };
 }
 
 /** the last hit after Phantom Passage strikes every foe around Kael from its back */

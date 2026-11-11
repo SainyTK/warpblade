@@ -13,6 +13,7 @@ import { kit } from "./kits";
 import { moveHero } from "./physics";
 import { rechargeSpells, runCast } from "./spell";
 import { regenStamina } from "./stamina";
+import { tickTakeoff } from "./takeoff";
 import { readDoubleTap } from "./taps";
 import { runCharge, runUltimate } from "./ultimate";
 import { doWarp, releaseSword } from "./warp";
@@ -75,10 +76,10 @@ export function updateHero(dt: number): void {
   rechargeSpells(recharge);
   tickDenied(dt);
   h.riposte = Math.max(0, h.riposte - dt);
-  h.sinceDash += dt;
   regenStamina(dt);
   tickCombo(dt);
   kit().tick(dt);
+  tickTakeoff(dt);
   if (h.running && dir !== h.face) h.running = false;
   if (h.state !== "dead") {
     h.mp = Math.min(progress.stats.mp, h.mp + (h.state === "hang" ? MP_REGEN.hanging : MP_REGEN.normal) * dt);

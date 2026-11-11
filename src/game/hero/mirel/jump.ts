@@ -6,9 +6,13 @@ import { hero } from "../../state";
 import { dust } from "../../world";
 import { isFree, setState } from "../actions";
 import { lift } from "../lift";
+import { takeOff } from "../takeoff";
 import { inRecovery } from "./string";
 
-/** Up: one jump from the floor; Down held drops through a ledge. No jump in the air: holding Up there hovers. */
+/**
+ * Up: one jump from the floor; Down held drops through a ledge. No jump in the air: holding Up there hovers. Standing or
+ * walking she sinks into a short push-off first; out of a blow's recovery or a cast she leaps at once.
+ */
 export function pressJump(): boolean {
   const h = hero;
   if ((!isFree() && !inRecovery() && h.state !== "stillCast") || !h.ground) return false;
@@ -17,10 +21,12 @@ export function pressJump(): boolean {
     h.ground = false;
     return true;
   }
-  lift(MIREL_JUMP_RISE, true);
-  h.jumps = 1;
-  setState("jump");
-  dust(h.x, h.y, 4);
-  emitSkillEvent({ type: "jump", air: false });
+  takeOff(() => {
+    lift(MIREL_JUMP_RISE, true);
+    h.jumps = 1;
+    setState("jump");
+    dust(h.x, h.y, 4);
+    emitSkillEvent({ type: "jump", air: false });
+  });
   return true;
 }

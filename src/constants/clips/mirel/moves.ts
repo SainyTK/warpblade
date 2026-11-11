@@ -1,6 +1,7 @@
 import type { ActionClip, Pose } from "../../../types/pose";
 import { frame } from "../../hero";
 import { SECOND_HAND, STOPPED_CLOCK } from "../../mirel/abilities";
+import { REWIND } from "../../mirel/rewind";
 import { CHARGE_POSE, HANG_LEGS, m, STANCE } from "./stance";
 
 /** K: the staff held out ahead, ring forward and bright, as the field opens */
@@ -14,8 +15,8 @@ export const STILL_CAST: ActionClip = {
   ],
 };
 
-/** L: leaning back into the Rewind, the staff swung up and behind her, legs trailing forward */
-export const REWIND_POSE: Pose = m({
+/** the middle of the Rewind: leaning back, the staff swung up and behind her, legs trailing forward */
+const REWIND_LEAN = m({
   hx: 0.5,
   hy: -14.5,
   nx: -2,
@@ -34,6 +35,52 @@ export const REWIND_POSE: Pose = m({
   bfy: -1,
   ba: 0.2,
 });
+
+/** L, over the Rewind's playback: a dip back against the pull, the lean with the staff swung up behind her and her legs
+ *  trailing forward, then the knees bending under her for the stop */
+export const REWIND_CLIP: ActionClip = {
+  dur: REWIND.play,
+  hit: 0,
+  keys: [
+    [
+      0,
+      m({
+        hy: -12.8,
+        nx: -1,
+        ny: -22.8,
+        cb: -0.6,
+        fx: 3.5,
+        fy: -20,
+        sa: -1.85,
+        bx: 5,
+        by: -15,
+        be: 0,
+        ffx: 4,
+        bfx: -2.5,
+      }),
+    ],
+    [frame(2), REWIND_LEAN],
+    [frame(4), { ...REWIND_LEAN, nx: -2.4, cb: -1.4, fx: 1.5, fy: -25.5, sa: -2.2 }],
+    [
+      frame(6),
+      m({
+        hy: -13.6,
+        nx: -0.6,
+        ny: -23.4,
+        cb: -0.5,
+        fx: 4.5,
+        fy: -19,
+        sa: -1.7,
+        bx: 5,
+        by: -15,
+        be: 0,
+        ffx: 3.5,
+        ffy: -1,
+      }),
+    ],
+    [REWIND.play, m({ hy: -12.8, nx: 0.8, ny: -22.8, cb: 0.3, fx: 6.3, fy: -15.2, sa: -1.45, by: -12.5 })],
+  ],
+};
 
 /** Stopped Clock: the staff pulled back, then thrust out ahead and up at the foe, the far hand open beside it */
 export const CLOCK_CLIP: ActionClip = {

@@ -1,4 +1,4 @@
-import { PHANTOM_RAMP, STAB_RAMP } from "../../../constants/combo";
+import { STAB_RAMP } from "../../../constants/combo";
 import type { SlashShape } from "../../../types/effect";
 
 /** slash shapes shared by several moves, in local pixels facing right */
@@ -23,14 +23,3 @@ export const UPPERCUT: SlashShape = { cx: 5, cy: -22, R: 22, sy: 0.75, rot: 0.3,
 export const CLEAVE: SlashShape = { cx: 6, cy: -18, R: 24, sy: 0.9, rot: 0, a0: -2.2, a1: 1.25, W: 10, hold: 0.06 };
 export const FLAT_FRONT: SlashShape = { cx: 0, cy: -18, R: 26, sy: 0.3, rot: 0, a0: 3.0, a1: 0, W: 7 };
 export const FLAT_BACK: SlashShape = { ...FLAT_FRONT, a0: 0, a1: -3.0, W: 6 };
-export const PHANTOM_SWEEP: SlashShape = {
-  cx: 2,
-  cy: -20,
-  R: 24,
-  sy: 0.4,
-  rot: -0.1,
-  a0: 2.9,
-  a1: -0.3,
-  W: 8,
-  ramp: PHANTOM_RAMP,
-};

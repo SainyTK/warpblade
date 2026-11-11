@@ -42,7 +42,6 @@ function knockAside(fromX: number): void {
   if (!e) return;
   const stun = BRACE.parryStun * (e.rank === "boss" ? 0.5 : 1);
   e.stun = Math.max(e.stun, stun);
-  e.stagger = Math.max(e.stagger, stun);
   e.vx = hero.face * 60;
   e.flash = 0.1;
 }

@@ -26,10 +26,6 @@ export type KaelClipName =
   | "twinFang"
   | "hopCleave"
   | "crescent"
-  | "pivot"
-  | "ring"
-  | "downStab"
-  | "chase"
   | "airWheel"
   | "airScissor"
   | "airStomp"
@@ -148,8 +144,6 @@ export interface Hero {
   /** seconds left of the bar's flash after a dash it could not pay for */
   staminaFlash: number;
   airDashed: boolean;
-  /** seconds since the last dash ended */
-  sinceDash: number;
   warpCd: number;
   /** seconds before the ultimate can be charged again */
   ultCd: number;
@@ -171,14 +165,15 @@ export interface Hero {
   chargeLevel: number;
   /** foes the current move has struck; a move that hits nothing cannot be cancelled early */
   moveHits: number;
+  /** the hero's own hits in a row for the hit counter, and seconds since the last one */
+  hitCount: number;
+  hitIdle: number;
   /** this dash already earned a perfect dodge */
   perfectUsed: boolean;
   /** Riposte (Mirror Knight): time left in which the next sword blows hit harder */
   riposte: number;
   /** Riposte: sword blows left that it covers */
   riposteBlows: number;
-  /** a downward stab was used in this combo */
-  stabbed: boolean;
   /** Keen timing: time left in which a J press makes the next move a sure crit */
   keenOpen: number;
   /** J was pressed before the current blow landed, so this move cannot open Keen timing */

@@ -17,7 +17,6 @@ export const golem: EnemyKind = {
   draw: drawGolem,
   glow: { radius: 22, color: RUNE_RAMP[1], eyeY: -11 },
   guardFrom: GUARD.fromWave,
-  staggers: true,
   orbs: 2,
   heartChance: 0.2,
 };

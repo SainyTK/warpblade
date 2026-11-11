@@ -34,7 +34,7 @@ His crystal sword can be thrown, and wherever it lands, he follows.
 - **Fixed combo strings.** Each hero's ground string has a fixed length for the whole run: four hits for Kael and three for Ysra, Sable, Hulda, Orrin, Mirel, Wenna and Tallis.
   Kael's string is a step-in cut, a rising backhand, a twin-fang double stab and a falling smash that knocks the foe down, and each one moves his whole body while his feet stay planted.
   Skills change what the hits do, never how many there are.
-- **Combos that read the room.** The next hit follows the fight: Kael turns to cut a foe behind him, spins when foes stand on both sides, stabs a foe lying down, leaps after one in the air, and bounces foes off the edge of the stage.
+- **Combos that play the same every time.** Each press of J plays one whole blow with a wind-up, a strike that holds through the hit and a follow-through, in the same order wherever the foes stand, and heavy blows bounce foes off the edge of the stage.
   Air attacks are their own moves: a wheel slash that circles Kael's whole body, a scissor cut that lays him back and sweeps the blade under his feet, and a stomp that drops him feet first and knocks nearby foes down.
   Kael has two air attacks per jump, the wheel slash and the scissor cut; the Sky Dance skill adds the stomp.
 - **Keen timing.** Press J just after a blow lands and the next one is a sure critical hit with a gold slash.

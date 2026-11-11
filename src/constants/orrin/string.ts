@@ -1,3 +1,4 @@
+import type { HitFeel } from "../../types/move";
 import type { ChainBlow } from "../../types/orrin";
 import { frame } from "../hero";
 
@@ -8,10 +9,13 @@ import { frame } from "../hero";
  * Angles are in radians facing right with up negative: 0 is straight ahead, -PI/2 straight up.
  */
 export interface ChainBlowSpec {
+  /** the whole clip, recovery to his stance included, when no press carries the string on */
   dur: number;
   /** the first and last frame the chain strikes on; a quick blow strikes on one frame */
   hit: number;
   hitEnd: number;
+  /** a string blow: a press already made starts the next blow from this frame, out of the follow-through */
+  link?: number;
   inner: number;
   reach: number;
   /** the arc swept, from `a0` to `a1`; a full turn covers every angle */
@@ -21,14 +25,16 @@ export interface ChainBlowSpec {
   innerPower: number;
   kx: number;
   ky: number;
+  /** a tip hit's hook catches the foe and drags it toward him this fast, in place of `kx` */
+  pull?: number;
   stagger?: number;
   stun?: number;
   /** a tip hit lifts a minion this fast */
   lift?: number;
-  /** hit-stop on a tip hit */
-  stop?: number;
   /** breaks a guard on a tip hit */
   breaks?: boolean;
+  /** hit-stop, shake and sound on contact; a tip hit adds `TIP_FEEL` */
+  feel: HitFeel;
 }
 
 /** the last pixels of every blow's reach: the tip */
@@ -37,84 +43,84 @@ export const TIP_BAND = 18;
 /** where the chain sweeps from, above his feet */
 export const SHOULDER_Y = 18;
 
+/** the chain's whoosh starts this long before a blow's hit frame, as it whips out of the wind-up */
+export const WHOOSH_LEAD = frame(2);
+
+/** what a tip hit adds to a blow's feel: more shake, a higher ring */
+export const TIP_FEEL = { shake: 0.5, pitch: 0.12 } as const;
+
 const DEG = Math.PI / 180;
 
-/** the string's blows and the knee that stands in for the lash up close */
+/**
+ * The string's blows. Each winds up for four frames against the blow, snaps on its hit frame, holds, and follows
+ * through to its `link` frame; a press made by then starts the next blow there, and without one the clip settles back
+ * to his stance by `dur`. The hit feel grows through the string to Full Circle, which trips the foe flat.
+ */
 export const CHAIN_BLOWS: Readonly<Record<ChainBlow, ChainBlowSpec>> = {
   lash: {
-    dur: frame(10),
-    hit: frame(5),
-    hitEnd: frame(5),
-    inner: 12,
+    dur: frame(16),
+    hit: frame(7),
+    hitEnd: frame(7),
+    link: frame(11),
+    inner: 0,
     reach: 64,
     a0: -20 * DEG,
     a1: 10 * DEG,
     tipPower: 1.1,
     innerPower: 0.55,
-    kx: 60,
+    kx: 30,
     ky: -10,
-    stagger: 0.35,
-  },
-  knee: {
-    dur: frame(9),
-    hit: frame(4),
-    hitEnd: frame(4),
-    inner: 0,
-    reach: 20,
-    a0: -60 * DEG,
-    a1: 40 * DEG,
-    tipPower: 0.7,
-    innerPower: 0.7,
-    kx: 160,
-    ky: -20,
-    stagger: 0.4,
+    pull: 110,
+    stagger: 0.6,
+    feel: { stop: 0.06, shake: [0.1, 1.2], pitch: 1.15 },
   },
   rising: {
-    dur: frame(12),
-    hit: frame(6),
-    hitEnd: frame(7),
-    inner: 10,
-    reach: 56,
+    dur: frame(18),
+    hit: frame(7),
+    hitEnd: frame(8),
+    link: frame(11),
+    inner: 0,
+    reach: 62,
     a0: 30 * DEG,
     a1: -120 * DEG,
     tipPower: 1.2,
     innerPower: 0.6,
-    kx: 30,
+    kx: 20,
     ky: -80,
     lift: -140,
+    stagger: 0.65,
+    feel: { stop: 0.08, shake: [0.13, 1.6], pitch: 0.98 },
   },
   circle: {
-    dur: frame(18),
-    hit: frame(6),
-    hitEnd: frame(12),
-    inner: 8,
-    reach: 58,
+    dur: frame(28),
+    hit: frame(8),
+    hitEnd: frame(14),
+    link: frame(16),
+    inner: 0,
+    reach: 60,
     a0: 0,
     a1: Math.PI * 2,
     tipPower: 1.5,
     innerPower: 0.6,
-    kx: 200,
+    kx: 70,
     ky: -30,
-    stun: 0.4,
-    stop: 0.06,
+    stun: 0.8,
     breaks: true,
+    feel: { stop: 0.13, shake: [0.22, 2.8], pitch: 0.72 },
   },
 };
 
-/** the ground string's order from the start; the knee takes the lash's place when a foe is right against him */
+/** the ground string, the same three blows in the same order every time */
 export const CHAIN_STRING: readonly ChainBlow[] = ["lash", "rising", "circle"];
-
-/** a foe ahead this close turns the lash into the knee */
-export const KNEE_RANGE = 18;
 
 /** seconds after a blow ends in which J carries the string on */
 export const CHAIN_LINK = 0.35;
 
 /** J in the air: the Hanging Arc, a downward sweep ahead, one per airtime and one more for each latch */
 export const HANGING_ARC: ChainBlowSpec = {
-  dur: frame(11),
-  hit: frame(5),
-  hitEnd: frame(6),
+  dur: frame(15),
+  hit: frame(7),
+  hitEnd: frame(8),
   inner: 8,
   reach: 54,
   a0: -40 * DEG,
@@ -123,6 +129,7 @@ export const HANGING_ARC: ChainBlowSpec = {
   innerPower: 0.5,
   kx: 40,
   ky: 90,
+  feel: { stop: 0.07, shake: [0.1, 1.4], pitch: 1.02 },
 };
 
 /** at 50 Momentum or more every blow reaches this much further, its tip band with it */

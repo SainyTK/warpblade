@@ -30,8 +30,6 @@ export interface EnemyKind {
   guardFrom?: number;
   /** slips away from swings while in its rest state, like a wisp */
   evades?: boolean;
-  /** stops walking for a moment when the sword hits it, like a husk */
-  staggers?: boolean;
   /** MP orbs it drops, when not the rank's usual count */
   orbs?: number;
   /** chance of a heal orb, when not the usual 6% */

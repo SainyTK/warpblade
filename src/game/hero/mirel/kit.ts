@@ -11,6 +11,7 @@ import { startCharge } from "../ultimate";
 import { nextAbility, pressAbility, resetAbilities, tickAbilities } from "./abilities";
 import { landDive } from "./dive";
 import { drawMirel } from "./draw";
+import { clearHeldStaggers, releaseHeldStaggers } from "./heldStagger";
 import { runHour } from "./hour";
 import { hoverGravity, tickHover } from "./hover";
 import { pressJump } from "./jump";
@@ -69,6 +70,7 @@ function tick(dt: number): void {
   }
   if (h.state === "dead") closeField(false);
   if (h.ground) givePendantBack();
+  releaseHeldStaggers();
   tickHover(dt, heldSide());
 }
 
@@ -141,6 +143,7 @@ export const MIREL_KIT: HeroKit = {
   reset: () => {
     closeField(false);
     resetMirel();
+    clearHeldStaggers();
     resetAbilities();
     resetMotion();
   },

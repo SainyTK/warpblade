@@ -55,7 +55,7 @@ export function phoenixCrash(x: number, floor: number, reach: number, flood: num
         power: FLOOD_POWER,
         halfWidth: FLOOD_STEP / 2,
         overlap: 1,
-        stagger: 0,
+        halt: 0,
         source: "y_dive",
       });
   for (let i = 0; i < 40; i++) {

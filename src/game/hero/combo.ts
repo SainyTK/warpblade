@@ -1,6 +1,6 @@
 import { CLIPS } from "../../constants/clips";
 import { COMBO } from "../../constants/combat";
-import { KEEN, KEEN_RAMP } from "../../constants/combo";
+import { KEEN, KEEN_RAMP, STRIKE_LEAD } from "../../constants/combo";
 import { sfx } from "../../services/audio";
 import type { MoveHit, MoveId } from "../../types/move";
 import { createSlash } from "../effects/slash";
@@ -16,7 +16,7 @@ import { kit } from "./kits";
 import { lift } from "./lift";
 import { MOVES } from "./moves";
 import { advance, strideAt } from "./moves/advance";
-import { foeOnlyBehind, readSituation } from "./situation";
+import { readSituation } from "./situation";
 
 /** seconds between afterimages of a fast move */
 const GHOST_EVERY = 0.03;
@@ -35,8 +35,6 @@ export function startMove(id: MoveId): void {
   const h = hero;
   const m = MOVES[id];
   if (h.state === "hang") leaveHang();
-  if (h.chain === 0) h.stabbed = false;
-  if (m.turns && foeOnlyBehind()) h.face = -h.face;
   h.chain++;
   if (!h.ground) h.airHits++;
   Object.assign(h, {
@@ -72,14 +70,22 @@ export function endCombo(cooldown: boolean): void {
   if (cooldown) hero.comboCd = COMBO.cooldown;
 }
 
-/** end the current move: close the combo if it was the last one, otherwise open the link window */
+/** end the current move: close the combo if it was the last one, otherwise open the link window; a finisher that
+ *  already closed the combo leaves nothing to close */
 export function endMove(): void {
   const id = hero.move;
   hero.move = null;
-  if (id && endsChain(id)) endCombo(true);
-  else hero.link = COMBO.link;
   hero.queued = null;
   settle();
+  if (!id || hero.chain === 0) return;
+  if (endsChain(id)) endCombo(true);
+  else hero.link = COMBO.link;
+}
+
+/** a finisher with a cancel of its own closes the combo once its follow-through starts, so the next string's first
+ *  blow may cut into its recovery, the cancel standing in for the combo cooldown */
+function closeFinisher(id: MoveId): void {
+  if (hero.chain > 0 && MOVES[id].cancel !== undefined && endsChain(id) && blowsDone()) endCombo(false);
 }
 
 function strike(id: MoveId, raw: MoveHit): number {
@@ -129,7 +135,7 @@ export function runMove(dt: number): void {
   const m = MOVES[id];
   m.step?.(h.st);
   moveBody(dt);
-  while (h.hitIndex < m.hits.length && h.st >= m.hits[h.hitIndex].at - 0.025) {
+  while (h.hitIndex < m.hits.length && h.st >= m.hits[h.hitIndex].at - STRIKE_LEAD) {
     const hits = strike(id, m.hits[h.hitIndex]);
     h.hitIndex++;
     m.afterHit?.(hits);
@@ -137,8 +143,9 @@ export function runMove(dt: number): void {
     // the last blow landed clean: a J pressed in the next moment is Keen
     if (h.hitIndex === m.hits.length && hits > 0 && !h.keenSpoiled) h.keenOpen = kit().keenWindow?.() ?? KEEN.window;
   }
+  closeFinisher(id);
   // a hop finishes its landing before the next move
-  if (h.queued && blowsDone() && !endsChain(id) && (!m.hop || h.ground)) {
+  if (h.queued && blowsDone() && (h.chain === 0 || !endsChain(id)) && (!m.hop || h.ground)) {
     const next = h.queued;
     h.move = null;
     startMove(next);

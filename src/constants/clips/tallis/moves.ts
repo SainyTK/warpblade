@@ -4,13 +4,20 @@ import { SMOKE_KNOT, SPELL_CAST } from "../../tallis/abilities";
 import { SINK } from "../../tallis/sink";
 import { CHARGE_POSE, STANCE, s } from "./stance";
 
-/** the body pouring down into the pool: the knees bend and the cloak folds in as he sinks, three frames */
+/**
+ * The body pouring down into the pool, three frames: he draws up onto his toes with the hands gathered to the chest,
+ * then the knees bend and the cloak folds in as he sinks.
+ */
 export const SINK_POUR: ActionClip = {
   dur: SINK.pour,
   hit: 0,
   keys: [
     [0, STANCE],
-    [frame(1), s({ hy: -10.5, ny: -20, nx: 1.5, cb: 1, fx: 5, fy: -12, bx: 4, by: -15, ffx: 5, bfx: -5 })],
+    [
+      frame(1),
+      s({ hy: -13.4, ny: -23.4, nx: 1.5, cb: -0.4, fx: 4.5, fy: -18.5, bx: 3.5, by: -20.5, fa: 0.3, ba: 0.3 }),
+    ],
+    [frame(2), s({ hy: -10.5, ny: -20, nx: 1.5, cb: 1, fx: 5, fy: -12, bx: 4, by: -15, ffx: 5, bfx: -5 })],
     [
       frame(3),
       s({ hx: -0.5, hy: -6.5, ny: -14, nx: 1.5, cb: 1.4, fx: 4, fy: -5, sa: 2.6, bx: 3, by: -7, ffx: 6, bfx: -6 }),

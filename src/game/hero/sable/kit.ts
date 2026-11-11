@@ -38,7 +38,6 @@ function land(): void {
 function tick(dt: number): void {
   tickReload(dt);
   tickSpells(rechargeStep(dt));
-  sable.cock = Math.max(0, sable.cock - dt);
   sable.haste = Math.max(0, sable.haste - dt);
   sable.shade = Math.max(0, sable.shade - dt);
   sable.sincePerfect += dt;

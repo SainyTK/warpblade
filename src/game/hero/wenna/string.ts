@@ -10,12 +10,12 @@ import { game, hero, lights, progress } from "../../state";
 import { markStruck, newSwing, struckThisSwing } from "../../world";
 import { isFree, setState, settle } from "../actions";
 import { skin } from "../skin";
-import { biteFoe } from "./bite";
 import { wenna } from "./memory";
 import { packLunge } from "./packLunge";
 import { isQuarry, markQuarry } from "./quarry";
 import type { LampStrike } from "./strike";
 import { strikeShape } from "./strike";
+import { loadOf, plan } from "./wickMoves";
 import { cappedWicks, spawnWick, wickCap, wicksNear } from "./wicks";
 
 /** Open Shutter's Lighthouse: the Flare's cone becomes a long thin beam */
@@ -106,13 +106,13 @@ function smear(s: LampStrike, power = 1): void {
   );
 }
 
-/** the Flare calls every Wick near its first foe to bite it at once, outside its own timer */
+/** the Flare calls every Wick near its first foe to wind up and bite it, outside its own timer */
 function callWicks(e: Enemy): void {
   const [cx, cy] = enemyCenter(e);
   for (const w of wicksNear(cx, cy, QUARRY.flareCall)) {
     if (e.hp <= 0) return;
     w.face = Math.sign(cx - w.x) || w.face;
-    biteFoe(w, e);
+    plan(w, { kind: "call", foe: e, left: loadOf("call") });
   }
 }
 

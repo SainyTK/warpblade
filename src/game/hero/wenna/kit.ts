@@ -26,6 +26,7 @@ import { pressSwap, runSwap, swapDodge, swapGone, tickSwap } from "./swap";
 import { trickleWax } from "./wax";
 import { meltAll, stepWicks } from "./wickAi";
 import { wickStriking } from "./wickKills";
+import { clearWickMoves } from "./wickMoves";
 import { liveWicks, spawnWick } from "./wicks";
 import { clearWicks, dropMelted } from "./wickWorld";
 
@@ -141,6 +142,7 @@ export const WENNA_KIT: HeroKit = {
   onKill,
   reset: () => {
     clearWicks();
+    clearWickMoves();
     clearDrips();
     clearQuarries();
     resetWenna();

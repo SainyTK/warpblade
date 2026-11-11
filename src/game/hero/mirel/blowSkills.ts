@@ -5,9 +5,9 @@ import type { Enemy } from "../../../types/enemy";
 import type { StaffBlow } from "../../../types/mirel";
 import { PK } from "../../../types/particle";
 import { dealDamage } from "../../damage";
-import { launchEnemy } from "../../enemies/airborne";
 import { enemyCenter } from "../../enemies/enemy";
 import { addStacks, consumeStacks, markFoe, stacksOf } from "../../enemies/skillStatus";
+import { staggerFoe } from "../../enemies/stagger";
 import { emitSkillEvent } from "../../skills/events";
 import { skillValues, withCharms } from "../../skills/query";
 import { game, hero, particles, progress, rng } from "../../state";
@@ -18,6 +18,8 @@ import { isStill } from "./strike";
 import { ringMidnight, ringTollAt } from "./tollRings";
 
 const TOLL_SAND = 3;
+/** how fast Great Toll throws a minion up */
+const GREAT_TOLL_LIFT = -150;
 /** seconds of blows Undone remembers */
 const LANDED_KEEP = 2;
 
@@ -44,6 +46,12 @@ export const blowSure = (): boolean => backswingOpen() && !!skillValues("m_backs
 
 /** Great Toll breaks guards */
 export const blowHeavy = (blow: StaffBlow): boolean => blow === "toll" && !!skillValues("m_toll").guard;
+
+/** how fast the blow throws a minion up: Great Toll throws it high in place of Toll's knockdown; echoes throw nothing */
+export function blowLift(s: StaffStrike): number | undefined {
+  if (s.echo) return undefined;
+  return s.blow === "toll" && skillValues("m_toll").launch ? GREAT_TOLL_LIFT : s.spec.lift;
+}
 
 /** her skills' share more on one blow or echo landing on this foe: Still Point on a still foe, Patience on echoes */
 export function blowSkillScale(e: Enemy, s: StaffStrike): number {
@@ -115,7 +123,7 @@ function backswing(e: Enemy, s: StaffStrike): void {
   if (s.echo || s.source || !backswingOpen()) return;
   const v = skillValues("m_backswing");
   if (v.heal) hero.hp = Math.min(progress.stats.hp, hero.hp + progress.stats.hp * v.heal);
-  if (v.stagger) e.stagger = Math.max(e.stagger, v.stagger);
+  if (v.stagger) staggerFoe(e, v.stagger);
   if (v.undone && mirelHost.replay > 0) {
     const replay = mirelHost.replay;
     mirelHost.replay = 0;
@@ -129,7 +137,6 @@ export function afterStaffHit(e: Enemy, s: StaffStrike, dealt: number, stored: n
   wither(e, s);
   pull(e, s);
   backswing(e, s);
-  if (s.blow === "toll" && !s.echo && skillValues("m_toll").launch && ENEMIES[e.type].launchable) launchEnemy(e, -150);
   if (!s.echo && !s.source && dealt > 0) {
     const now = game.t;
     mirelHost.landed = [...mirelHost.landed.filter((l) => now - l.t < LANDED_KEEP), { damage: dealt, t: now }];

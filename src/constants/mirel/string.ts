@@ -1,4 +1,5 @@
 import type { StaffBlow } from "../../types/mirel";
+import type { HitFeel } from "../../types/move";
 import { frame } from "../hero";
 
 /**
@@ -20,12 +21,12 @@ export interface StaffBlowSpec {
   power: number;
   kx: number;
   ky: number;
+  /** seconds a struck minion staggers; unset uses `COMBO.stagger` */
   stagger?: number;
-  stun?: number;
-  /** a hit lifts a minion this fast */
+  /** a hit throws a minion up this fast and it lies stunned where it lands */
   lift?: number;
-  /** hit-stop when it lands */
-  stop?: number;
+  /** hit-stop, screen shake and hit pitch when it lands */
+  feel: HitFeel;
 }
 
 /** where her blows strike from, above her feet */
@@ -33,48 +34,64 @@ export const SHOULDER_Y = 18;
 
 const DEG = Math.PI / 180;
 
-/** Tick, Tock and Toll on the floor, and Pendant Strike in the air */
+/**
+ * Tick, Tock and Toll on the floor, and Pendant Strike in the air. Tick and Tock push a foe a few pixels and stagger it
+ * past the next blow's hit; Toll knocks it down, out of the fight until the next Tick lands. At the 0.8 pace the hit
+ * frames fall 0.5 to 0.6 real seconds apart with each blow's hit-stop, and Toll's recovery leaves 0.78 s to the next
+ * Tick's hit.
+ */
 export const STAFF_BLOWS: Readonly<Record<StaffBlow, StaffBlowSpec>> = {
   tick: {
-    dur: frame(9),
-    hit: frame(4),
+    dur: frame(12),
+    hit: frame(5),
     shape: { kind: "jab", near: 8, far: 38, height: 10, y: 12 },
-    power: 0.9,
-    kx: 50,
+    power: 1,
+    kx: 8,
     ky: -10,
-    stagger: 0.3,
+    stagger: 0.55,
+    feel: { stop: 0.05, shake: [0.08, 1], pitch: 1.2 },
   },
   tock: {
-    dur: frame(11),
+    dur: frame(10),
     hit: frame(5),
     shape: { kind: "arc", radius: 34, a0: 0, a1: -100 * DEG },
-    power: 1.0,
-    kx: 30,
-    ky: -70,
-    lift: -120,
+    power: 1.1,
+    kx: 6,
+    ky: -30,
+    stagger: 0.6,
+    feel: { stop: 0.07, shake: [0.11, 1.5], pitch: 1 },
   },
   toll: {
-    dur: frame(16),
+    dur: frame(18),
     hit: frame(7),
     shape: { kind: "ring", ahead: 18, radius: 30 },
-    power: 1.3,
-    kx: 120,
+    power: 1.45,
+    kx: 15,
     ky: -20,
-    stun: 0.3,
-    stop: 0.05,
+    lift: -110,
+    stagger: 0.7,
+    feel: { stop: 0.11, shake: [0.2, 2.6], pitch: 0.75 },
   },
   pendant: {
-    dur: frame(10),
-    hit: frame(4),
+    dur: frame(12),
+    hit: frame(5),
     shape: { kind: "arc", radius: 30, a0: -20 * DEG, a1: 100 * DEG },
-    power: 0.8,
+    power: 0.95,
     kx: 30,
     ky: 80,
+    feel: { stop: 0.06, shake: [0.1, 1.3], pitch: 1.1 },
   },
 };
 
 /** the ground string's order */
 export const STAFF_STRING: readonly StaffBlow[] = ["tick", "tock", "toll"];
+
+/** an echo's hit-stop, shake and pitch: lighter than any blow */
+export const ECHO_FEEL: HitFeel = {
+  stop: 0.02,
+  shake: [0.06, 1.2],
+  pitch: 1.35,
+};
 
 /** seconds after a blow ends in which J carries the string on */
 export const STAFF_LINK = 0.35;

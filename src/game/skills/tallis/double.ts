@@ -39,10 +39,10 @@ interface DoubleMemory {
 
 const memoryOf = (m: SkillMemory): DoubleMemory => m as unknown as DoubleMemory;
 
-/** a shade's pose: his backstab, timed so the knife lands on each of its stabs, and his idle while it waits */
+/** a shade's pose: his Cross, timed so the knife lands on each of its stabs, and his idle while it waits */
 function shadePose(sh: Shade): Pose {
   if (sh.stabs <= 0) return sampleKeys(TALLIS_IDLE.keys, sh.t % TALLIS_IDLE.dur);
-  const clip = KNIFE_CLIPS.backstab;
+  const clip = KNIFE_CLIPS.cross;
   const at = sh.next <= clip.hit ? clip.hit - sh.next : clip.hit + STAB_EVERY - sh.next;
   return sampleKeys(clip.keys, Math.min(clip.dur, Math.max(0, at)));
 }

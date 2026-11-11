@@ -21,6 +21,8 @@ export interface Blow {
   launch?: number;
   spike?: boolean;
   stun?: number;
+  /** staggers a minion for this long; COMBO.stagger when unset */
+  stagger?: number;
   big?: boolean;
   /** a foe driven into the stage edge bounces back off it */
   wall?: boolean;
@@ -69,7 +71,7 @@ export function meleeHit(boxes: readonly Box[], blow: Blow): number {
       heavy: blow.big || riposte,
       melee: true,
       sureCrit: blow.sureCrit,
-      stagger: COMBO.stagger,
+      stagger: blow.stagger ?? COMBO.stagger,
     });
     hits++;
     hero.lastHit = e;

@@ -1,4 +1,4 @@
-import { HANGING_ARC, SHOULDER_Y } from "../../../constants/orrin/string";
+import { HANGING_ARC, SHOULDER_Y, WHOOSH_LEAD } from "../../../constants/orrin/string";
 import { sfx } from "../../../services/audio";
 import { createBrassCrescent } from "../../effects/orrin/brassCrescent";
 import { createSlash } from "../../effects/slash";
@@ -31,7 +31,6 @@ export function pressAirArc(): boolean {
   else orrin.arcSide = hero.face;
   hero.face = orrin.arcSide;
   newSwing();
-  sfx.swing(1.05);
   return true;
 }
 
@@ -56,6 +55,8 @@ export function tickAirArc(dt: number): void {
   const before = orrin.arc;
   orrin.arc += dt * progress.stats.aspd;
   const t = orrin.arc;
+  const whoosh = b.hit - WHOOSH_LEAD;
+  if (before < whoosh && t >= whoosh) sfx.swing(b.feel.pitch * 1.05);
   if (before < b.hit && t >= b.hit) {
     game.fx.push(
       createSlash(hero.x, hero.y, hero.face, {

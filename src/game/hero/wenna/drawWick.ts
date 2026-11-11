@@ -7,6 +7,7 @@ import type { Wick } from "../../../types/wenna";
 import { clamp, ease } from "../../../utils/math";
 import { game } from "../../state";
 import { paintFlame } from "./wickFlame";
+import { loadOfWick, squashOfWick } from "./wickMoves";
 import { drawHealthPips, drawPool, drawSmokeCurl } from "./wickParts";
 
 const V = PAL.wick;
@@ -25,6 +26,10 @@ interface WickLook {
   waddle: number;
   /** 0 to 1 into a bite's lean */
   lean: number;
+  /** 0 to 1 into the wind-up before a bite, a hop or a leap: it sinks and draws its flame back */
+  load: number;
+  /** 1 the moment it lands from a hop or a fall, easing back to 0 */
+  squash: number;
   hurt: boolean;
 }
 
@@ -36,12 +41,14 @@ function lookOf(w: Wick): WickLook {
     melted: w.melt >= 0 ? clamp(w.melt / WICK.melt) : 0,
     waddle: walking ? Math.floor(game.t * 8) % 2 : -1,
     lean: w.lunge > 0 ? Math.sin(clamp(w.lunge / WICK.lunge) * Math.PI * 0.5 + 0.35) : 0,
+    load: ease.outQuad(loadOfWick(w)),
+    squash: squashOfWick(w),
     hurt: w.hurt > 0,
   };
 }
 
 /** a Wick standing still at full size */
-const STILL: WickLook = { scale: 1, risen: 1, melted: 0, waddle: -1, lean: 0, hurt: false };
+const STILL: WickLook = { scale: 1, risen: 1, melted: 0, waddle: -1, lean: 0, load: 0, squash: 0, hurt: false };
 
 /** the body's measures this frame, in art pixels on the canvas: `sink` pushes everything down into the floor */
 interface Frame {
@@ -134,15 +141,16 @@ export function drawWick(w: Wick): void {
   place();
   const o = lookOf(w);
   const dir = w.face < 0 ? -1 : 1;
-  const tall = L.tall * o.scale * (1 - o.melted * 0.85) - (o.waddle === 1 ? 0.5 : 0);
-  const half = L.half * o.scale ** 0.6 + o.melted * 2.2;
+  const crouch = 1 - L.load.sink * o.load - L.land.sink * o.squash;
+  const tall = L.tall * o.scale * (1 - o.melted * 0.85) * crouch - (o.waddle === 1 ? 0.5 : 0);
+  const half = (L.half * o.scale ** 0.6 + o.melted * 2.2) * (1 + L.load.spread * o.load + L.land.spread * o.squash);
   const flameTall = L.flame.tall * o.scale * clamp(1 - o.melted * 2.5) * (o.lean > 0 ? L.flame.bite : 1);
   const rock = o.waddle < 0 ? 0 : o.waddle === 0 ? L.rock : -L.rock;
   const f: Frame = {
     tall,
     half,
     sink: (1 - o.risen) * (tall + flameTall + 1),
-    top: o.lean * L.lean + rock,
+    top: o.lean * L.lean - o.load * L.load.back + rock,
   };
   if (o.risen < 1 || o.melted > 0) drawPool(w.x, w.y, half + 2 + o.melted * 4, o.risen < 1 ? 1 : 1 - o.melted * 0.3);
   const s = figure;
@@ -162,7 +170,7 @@ export function drawWick(w: Wick): void {
       y: crown - 0.2,
       tall: flameTall,
       wide: L.flame.wide * o.scale ** 0.7,
-      bend: o.hurt ? -2.4 : o.lean > 0 ? 2.6 * o.lean : o.waddle >= 0 ? -0.8 : 0,
+      bend: o.hurt ? -2.4 : o.lean > 0 ? 2.6 * o.lean : o.load > 0 ? -L.load.bend * o.load : o.waddle >= 0 ? -0.8 : 0,
       lift: flash + (w.extra ? 1 : 0),
       t: Math.floor(game.t * L.flicker) / L.flicker,
       seed: w.id * 0.7,

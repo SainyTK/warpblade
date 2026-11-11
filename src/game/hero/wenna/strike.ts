@@ -1,4 +1,4 @@
-import { COMBO, MP_PER_HIT } from "../../../constants/combat";
+import { MP_PER_HIT } from "../../../constants/combat";
 import { SPARKS } from "../../../constants/palette";
 import type { LampBlowSpec } from "../../../constants/wenna/lamp";
 import { sfx } from "../../../services/audio";
@@ -27,6 +27,10 @@ export interface LampStrike {
   repeat: boolean;
 }
 
+/** a Wick's repeat of the Flare: a short hit-stop and a higher sound, with no shake of its own */
+const REPEAT_STOP = 0.02;
+const REPEAT_PITCH = 1.3;
+
 /** one foe struck by a lamp blow; false when a guard stopped it */
 function strikeFoe(e: Enemy, s: LampStrike): boolean {
   const { spec } = s;
@@ -38,7 +42,8 @@ function strikeFoe(e: Enemy, s: LampStrike): boolean {
     kx: spec.kx * dir,
     ky: spec.ky,
     melee: !flame,
-    stagger: spec.stagger ?? COMBO.stagger,
+    stagger: spec.stagger,
+    launch: s.repeat ? undefined : spec.launch,
   });
   if (result === "blocked") return false;
   const [cx, cy] = enemyCenter(e);
@@ -72,10 +77,10 @@ export function strikeShape(s: LampStrike, struck: (e: Enemy) => boolean, mark: 
   }
   if (!s.repeat) hero.moveHits += landed.length + blocked;
   if (landed.length) {
-    const flare = s.blow === "flare";
-    hitStop(s.repeat ? 0.02 : (s.spec.stop ?? 0.04));
-    shake(flare ? 0.12 : 0.08, flare && !s.repeat ? 2 : 1);
-    sfx.hit(flare, s.repeat ? 1.3 : 1);
+    const feel = s.spec.feel;
+    hitStop(s.repeat ? REPEAT_STOP : feel.stop);
+    shake(feel.shake[0], s.repeat ? 1 : feel.shake[1]);
+    sfx.hit(s.blow === "flare", s.repeat ? REPEAT_PITCH : feel.pitch);
     if (!s.repeat) feat({ kind: "comboHit", moves: hero.chain });
   } else if (blocked) hitStop(0.04);
   return landed;

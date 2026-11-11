@@ -108,15 +108,23 @@ export const SABLE_CLIPS = {
       [frame(11), L],
     ],
   },
-  /** a crouch to load, a push off backward with the crossbow kept level on the foe, the shot at the top, the knees taking the landing */
+  /** a crouch to load with the weight sinking onto the heels, a push off backward with the crossbow kept level on the
+   *  foe, the shot at the top, the knees taking the landing */
   hop: {
     dur: HOP.land + HOP.recover,
     hit: HOP.shot,
     keys: [
       [0, L],
-      [frame(2), s({ hx: 0, hy: -11, nx: 3, ny: -21, cb: 1, fx: 7, fy: -16, sa: 0.05, ffx: 5, bfx: -5, ba: 0.2 })],
       [
-        frame(4),
+        HOP.load - frame(1),
+        s({ hx: -0.5, hy: -11, nx: 2.5, ny: -21, cb: 1, fx: 7, fy: -16, sa: 0.05, ffx: 5, bfx: -5, ba: 0.2 }),
+      ],
+      [
+        HOP.load,
+        s({ hx: -1, hy: -10, nx: 3, ny: -20, cb: 1.5, fx: 7, fy: -15, sa: 0.1, ffx: 5, fa: -0.15, bfx: -5, ba: 0.4 }),
+      ],
+      [
+        HOP.load + frame(2),
         s({
           hx: -1,
           hy: -15,
@@ -135,7 +143,26 @@ export const SABLE_CLIPS = {
         }),
       ],
       [
-        frame(5),
+        HOP.shot - frame(1),
+        s({
+          hx: -1,
+          hy: -15,
+          nx: -0.5,
+          ny: -25,
+          cb: 0,
+          fx: 5.5,
+          fy: -19,
+          sa: 0,
+          ffx: 6,
+          ffy: -5,
+          fa: 0.4,
+          bfx: -2,
+          bfy: -6,
+          ba: 0.6,
+        }),
+      ],
+      [
+        HOP.shot,
         s({
           hx: -1.5,
           hy: -15,
@@ -155,7 +182,7 @@ export const SABLE_CLIPS = {
         "snap",
       ],
       [
-        frame(8),
+        HOP.air,
         s({
           hx: -1,
           hy: -15,
@@ -173,25 +200,23 @@ export const SABLE_CLIPS = {
           ba: 0.4,
         }),
       ],
+      [HOP.land, s({ hx: -1.5, hy: -9.5, nx: 2, ny: -19.5, cb: 1, fx: 7, fy: -14, sa: 0.1, ffx: 5, bfx: -5, ba: 0.3 })],
       [
-        frame(10),
-        s({ hx: -1.5, hy: -9.5, nx: 2, ny: -19.5, cb: 1, fx: 7, fy: -14, sa: 0.1, ffx: 5, bfx: -5, ba: 0.3 }),
-      ],
-      [
-        frame(12),
+        HOP.land + frame(2),
         s({ hx: -1, hy: -11.5, nx: 1.5, ny: -21.5, cb: 0.5, fx: 6.5, fy: -16, sa: 0.05, ffx: 5, bfx: -5, ba: 0.2 }),
       ],
       [HOP.land + HOP.recover, L],
     ],
   },
-  /** she drops onto her hip with the near leg out ahead, leaning back under the blows, then rises onto her feet */
+  /** she plants and drops onto her hip with the near leg out ahead, leaning back under the blows through the glide,
+   *  then rises onto her feet; the pose holds the glide's last key however long the glide runs */
   slide: {
-    dur: SLIDE.time + SLIDE.recover,
+    dur: SLIDE.load + SLIDE.time + SLIDE.recover,
     hit: 0,
     keys: [
       [0, L],
       [
-        frame(2),
+        SLIDE.load,
         s({
           hx: -2,
           hy: -9,
@@ -210,7 +235,7 @@ export const SABLE_CLIPS = {
         }),
       ],
       [
-        frame(4),
+        SLIDE.load + frame(2),
         s({
           hx: -3,
           hy: -6,
@@ -229,7 +254,7 @@ export const SABLE_CLIPS = {
         }),
       ],
       [
-        SLIDE.time,
+        SLIDE.load + SLIDE.time,
         s({
           hx: -3,
           hy: -6,
@@ -248,10 +273,14 @@ export const SABLE_CLIPS = {
         }),
       ],
       [
-        SLIDE.time + frame(3),
-        s({ hx: -1.5, hy: -10, nx: 0, ny: -19.5, cb: 0, fx: 5, fy: -14.5, sa: 0.2, ffx: 6, bfx: -4, ba: 0.4 }),
+        SLIDE.load + SLIDE.time + frame(2),
+        s({ hx: -2, hy: -8.5, nx: -1.5, ny: -18, cb: -0.5, fx: 4, fy: -13, sa: 0.15, ffx: 7, bfx: -3, ba: 0.6 }),
       ],
-      [SLIDE.time + SLIDE.recover, SABLE_STAND],
+      [
+        SLIDE.load + SLIDE.time + frame(4),
+        s({ hx: -1, hy: -11.5, nx: 0.5, ny: -21, cb: 0.5, fx: 5, fy: -15, sa: 0.3, ffx: 6, bfx: -4, ba: 0.3 }),
+      ],
+      [SLIDE.load + SLIDE.time + SLIDE.recover, SABLE_STAND],
     ],
   },
   /** down on one knee, the far hand sets the snare on the floor ahead and springs it open, then she rises */
@@ -384,6 +413,25 @@ export const SABLE_CLIPS = {
           bfx: -3,
           bfy: -4,
           ba: 0.5,
+        }),
+      ],
+      [
+        frame(8),
+        s({
+          hx: -0.5,
+          hy: -14.5,
+          nx: -1,
+          ny: -23.5,
+          cb: -0.5,
+          fx: 4.5,
+          fy: -18.5,
+          sa: -0.15,
+          ffx: 8,
+          ffy: -7.5,
+          fa: -0.2,
+          bfx: -3,
+          bfy: -3.5,
+          ba: 0.45,
         }),
       ],
       [frame(11), s({ hx: -1, hy: -14, nx: 1, ny: -24, cb: 0, fx: 6, fy: -18, sa: 0, ...AIR_LEGS })],

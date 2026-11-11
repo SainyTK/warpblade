@@ -17,13 +17,13 @@ export const RUSH = {
   lastKey: frame(1),
   /**
    * Once her shoulder has met a foe and no other foe stands within this many pixels ahead of it, the charge stops at the
-   * next stride key and she skids out just past the foe, then wheels round to it: a lone foe stays within her reach.
+   * next stride key and she skids out just past the foe, so a lone foe stays a step behind her.
    */
   ahead: 24,
   /** blows on her during the rush deal this share and never flinch her */
   armour: 0.5,
   power: 0.6,
-  /** a short shove: the foe reels where her shoulder met it, so the skid leaves her at arm's length past it */
+  /** a short shove: the foe reels where her shoulder met it, so the skid leaves her a step past it */
   kx: 60,
   stun: 0.4,
   /** the box her shoulder sweeps, from her feet */

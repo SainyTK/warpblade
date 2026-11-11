@@ -22,7 +22,7 @@ export const NIGHTSHADE: SkillDef = {
   kind: "dot",
   risk: "timed",
   button: "J",
-  text: "The last blow of either string poisons with Nightshade.",
+  text: "Heel Kick, the last blow of his string, poisons with Nightshade.",
   levels: LEVELS,
   evolution: {
     partner: "t_cutTendon",

@@ -5,8 +5,10 @@ import { hero } from "../../state";
 import { dust } from "../../world";
 import { isFree, setState } from "../actions";
 import { lift } from "../lift";
+import { takeOff } from "../takeoff";
 
-/** Up: one low, heavy jump from the floor; Down held drops through a ledge. No jump in the air. */
+/** Up: she sinks into her knees for a low, heavy jump from the floor; Down held drops through a ledge. No jump in the
+ *  air. */
 export function pressJump(): boolean {
   const h = hero;
   if (!isFree() || !h.ground) return false;
@@ -15,9 +17,11 @@ export function pressJump(): boolean {
     h.ground = false;
     return true;
   }
-  lift(HULDA_JUMP_RISE, true);
-  h.jumps = 1;
-  setState("jump");
-  dust(h.x, h.y, 6);
+  takeOff(() => {
+    lift(HULDA_JUMP_RISE, true);
+    h.jumps = 1;
+    setState("jump");
+    dust(h.x, h.y, 6);
+  });
   return true;
 }

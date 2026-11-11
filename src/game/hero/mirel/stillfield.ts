@@ -8,6 +8,7 @@ import type { StillfieldView } from "../../../types/mirel";
 import { clamp } from "../../../utils/math";
 import { dealDamage } from "../../damage";
 import { enemyCenter } from "../../enemies/enemy";
+import { staggerFoe } from "../../enemies/stagger";
 import { feat } from "../../feat";
 import { isHeld } from "../../input";
 import { emitSkillEvent } from "../../skills/events";
@@ -67,7 +68,7 @@ export function snapField(x: number, y: number, radius: number): number {
     const dir = Math.sign(cx - x) || hero.face;
     const weight = ENEMIES[e.type].weight;
     e.x = clamp(e.x + dir * STILLFIELD.push * (1 - weight), 8, W - 8);
-    if (e.rank === "minion") e.stagger = Math.max(e.stagger, STILLFIELD.stagger);
+    staggerFoe(e, STILLFIELD.stagger);
     dealDamage(e, progress.stats.ap * STILLFIELD.snap, { fromX: x, kx: dir * 40, source: "abilities" });
   }
   return foes;

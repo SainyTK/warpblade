@@ -22,7 +22,7 @@ export function updateThornback(e: Enemy, dt: number, ts: number): void {
   const dx = hero.x - e.x;
   if (e.state === "walk") {
     turnToHero(e, dt);
-    e.vx = approach(e.vx, (Math.abs(dx) > 8 || !foeSees(e)) && e.stagger <= 0 ? e.face * 26 : 0, 200 * dt);
+    e.vx = approach(e.vx, (Math.abs(dx) > 8 || !foeSees(e)) && e.halt <= 0 ? e.face * 26 : 0, 200 * dt);
     if (e.cd <= 0 && facesHero(e) && Math.abs(dx) < 130 && hero.state !== "dead")
       Object.assign(e, { state: "wind", st: 0, n: 0 });
   } else if (e.state === "wind") {
@@ -79,7 +79,6 @@ export function updateThornback(e: Enemy, dt: number, ts: number): void {
       sparks: DAY_SPARKS.rift,
     });
   eachStanding(() => {
-    if (e.state === "walk" && e.stagger <= 0 && boxHit(enemyBox(e), heroBox()))
-      hurtHero(THORN_HITS.touch * e.power, e.x);
+    if (e.state === "walk" && e.halt <= 0 && boxHit(enemyBox(e), heroBox())) hurtHero(THORN_HITS.touch * e.power, e.x);
   });
 }

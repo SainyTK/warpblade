@@ -8,6 +8,7 @@ import { game, hero } from "../../state";
 import { dust } from "../../world";
 import { isFree, setState } from "../actions";
 import { lift } from "../lift";
+import { takeOff } from "../takeoff";
 import { tallis } from "./memory";
 import { inRecovery } from "./string";
 import { endVeil } from "./veil";
@@ -42,10 +43,12 @@ export function pressJump(): boolean {
     h.ground = false;
     return true;
   }
-  lift(TALLIS_JUMP_RISE, true);
-  h.jumps = 1;
-  setState("jump");
-  dust(h.x, h.y, 3);
-  emitSkillEvent({ type: "jump", air: false });
+  takeOff(() => {
+    lift(TALLIS_JUMP_RISE, true);
+    h.jumps = 1;
+    setState("jump");
+    dust(h.x, h.y, 3);
+    emitSkillEvent({ type: "jump", air: false });
+  });
   return true;
 }
