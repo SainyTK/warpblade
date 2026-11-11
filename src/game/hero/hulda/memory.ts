@@ -46,6 +46,7 @@ const fresh = (): HuldaMemory => ({
   comet: false,
   ironT: 0,
   iron: 0,
+  push: 0,
 });
 
 /** the one owner of what Hulda's kit remembers */

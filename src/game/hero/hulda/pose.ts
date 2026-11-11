@@ -2,6 +2,7 @@ import { STATE_CLIPS } from "../../../constants/clips";
 import { FIST_CLIPS, HAMMER_CLIP } from "../../../constants/clips/hulda/fists";
 import { GRAPPLE_CLIPS, THROW_CLIPS } from "../../../constants/clips/hulda/grapple";
 import { HULDA_CLIPS } from "../../../constants/clips/hulda/moves";
+import { JUMP_LOAD_CLIP } from "../../../constants/clips/hulda/settle";
 import { CHARGE_POSE, HOLD_POSE, HULDA_IDLE } from "../../../constants/clips/hulda/stance";
 import { KAEL_WOUNDED_IDLE } from "../../../constants/clips/wounded";
 import type { Hero } from "../../../types/hero";
@@ -12,13 +13,14 @@ import { progress } from "../../state";
 import { clipPose } from "../clipPose";
 import { clipKey, handOver, watchHandover } from "../kael/handover";
 import { jumpClock } from "../kael/jumpClock";
-import { landingPose, watchLanding } from "../kael/landing";
 import { motion } from "../kael/motion";
 import { woundedIdle, woundWeight } from "../wound";
 import { carry, holding } from "./carry";
 import { currentBlow } from "./fists";
+import { huldaLandingPose, watchHuldaLanding } from "./landing";
 import { hulda } from "./memory";
 import { rushClipTime } from "./rushClock";
+import { settlePose, watchSettle } from "./settle";
 import { spellPose } from "./spellPose";
 import { swingClipTime } from "./swing";
 
@@ -60,6 +62,8 @@ function walkingSpin(h: Hero): Pose {
 /** her clip for a state: her own for her actions and her idle, Kael's shared ones with her fists up otherwise */
 function statePose(h: Hero, t: number, fresh: boolean, dt: number, wound: number): Pose {
   switch (h.state) {
+    case "jumpLoad":
+      return sampleKeys(JUMP_LOAD_CLIP.keys, h.st);
     case "fist":
       return sampleKeys(FIST_CLIPS[currentBlow()].keys, h.st);
     case "airFist":
@@ -104,15 +108,9 @@ function statePose(h: Hero, t: number, fresh: boolean, dt: number, wound: number
   }
 }
 
-/** a plate breaking shoves her torso back a pixel for a few frames, over whatever she is doing */
-function flinch(p: Pose): Pose {
-  if (hulda.flinch <= 0) return p;
-  return { ...p, nx: p.nx - 1, cb: p.cb - 0.5 };
-}
-
 /**
- * Hulda's pose: her clips, Kael's motion layer for the jump's clock, the landings and the hand-overs between clips, and
- * the flinch of a plate breaking.
+ * Hulda's pose: her clips, Kael's motion layer for the jump's clock and the hand-overs between clips, her own heavy
+ * landings, and her recoveries: a walk loading and stopping, a turn, and a plate breaking.
  */
 export function huldaPose(h: Hero, t: number): Pose {
   const m = motion;
@@ -121,10 +119,11 @@ export function huldaPose(h: Hero, t: number): Pose {
   const restarted = clipKey(h) === m.clip && h.st < m.st - 1e-6;
   const fresh = clipKey(h) !== m.clip || restarted;
   m.st = h.st;
-  const landed = watchLanding(h, t);
+  const landed = watchHuldaLanding(h, t);
   const base = statePose(h, t, fresh, dt, woundWeight(t));
+  watchSettle(h, t, m.clip, m.face);
   watchHandover(h, t, restarted, landed ? 1 : undefined);
-  const p = flinch(handOver(landingPose(h, base, t), t));
+  const p = settlePose(h, handOver(huldaLandingPose(h, base, t), t), t);
   m.last = p;
   return p;
 }

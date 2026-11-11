@@ -13,7 +13,6 @@ import { game, hero, progress } from "../../state";
 import { boxAhead, boxHit, dust, hitStop, markStruck, newSwing, shake, struckThisSwing } from "../../world";
 import { isFree, setState, settle } from "../actions";
 import { dropMoveGhost } from "../afterimages";
-import { foeOnlyBehind } from "../situation";
 import { skin } from "../skin";
 import { refuseDash } from "../stamina";
 import { travelEnded } from "../travelEnd";
@@ -208,9 +207,9 @@ function foeAhead(): boolean {
 }
 
 /**
- * The load digs in, the charge runs through foes at one speed, then she skids to a stop. Once she has run into a foe
- * and none waits ahead, the charge stops at its next stride, so the skid leaves her just past the foe; she wheels round
- * to it as she settles.
+ * The load digs in, the charge runs through foes at one speed, then she skids to a stop facing the way she charged.
+ * Once she has run into a foe and none waits ahead, the charge stops at its next stride, so the skid leaves her just
+ * past the foe.
  */
 export function runRush(dt: number): void {
   const h = hero;
@@ -248,6 +247,5 @@ export function runRush(dt: number): void {
     emitSkillEvent({ type: "dash", dir: h.face, foes: hulda.passed });
   }
   if (h.st < end + RUSH.recover) return;
-  if (hulda.passed.length && foeOnlyBehind()) h.face = -h.face;
   settle();
 }

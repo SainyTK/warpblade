@@ -2,6 +2,7 @@ import type { Enemy } from "./enemy";
 
 /** states only Hulda enters; her kit runs and poses them */
 export type HuldaState =
+  | "jumpLoad"
   | "fist"
   | "airFist"
   | "grab"
@@ -108,6 +109,18 @@ export interface HuldaMemory {
   /** Unbroken: seconds of iron left and its damage share */
   ironT: number;
   iron: number;
+  /** seconds she has been pushed along the floor from a stand; her walk loads before it gets going */
+  push: number;
+}
+
+/** a recovery her pose layer plays over a free state: a walk coming to a stop, or a turn on the floor */
+export type HuldaSettle = "stop" | "turn";
+
+/** what Hulda's pose layer remembers about the recovery under way, one copy per player */
+export interface HuldaSettleMemory {
+  kind: HuldaSettle | null;
+  /** the game time it started */
+  at: number;
 }
 
 declare module "./skillBehavior" {
