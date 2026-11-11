@@ -1,8 +1,11 @@
-import { PAL, WAX } from "../../../constants/palette";
-import { glow, line, place, px } from "../../../engine/frame";
+import { PAL } from "../../../constants/palette";
+import { CANDLE_ART, CANDLE_FLAMES, FLAME_LETTERS, WAX_LETTERS } from "../../../constants/wenna/stamps";
+import { glow, place } from "../../../engine/frame";
 import type { Enemy } from "../../../types/enemy";
 import type { SkillBehavior, SkillMemory } from "../../../types/skillBehavior";
 import { dealDamage } from "../../damage";
+import { stampPixels } from "../../effects/fine";
+import { drawFlameBolt } from "../../effects/wenna/flameBolt";
 import { enemyCenter } from "../../enemies/enemy";
 import { addStacks } from "../../enemies/skillStatus";
 import { game, progress, rng } from "../../state";
@@ -96,13 +99,10 @@ function haunt(g: Ghost, m: GhostMemory, dt: number): boolean {
 /** a pale candle with a violet ghost flame, bobbing, fading over its last half second */
 function drawGhost(g: Ghost): void {
   const k = Math.min(1, g.t * 4, (g.life - g.t) * 2);
-  const x = Math.round(g.x);
-  const y = Math.round(g.y + Math.sin(g.t * 4) * 1.5);
-  for (let i = 0; i < 5; i++) px(x, y + i, i === 4 ? WAX[1] : WAX[2], 0.6 * k);
-  px(x - 1, y + 1, WAX[3], 0.4 * k);
-  px(x, y - 1, PAL.wick[4], k);
-  px(x, y - 2, PAL.wick[5], k * (Math.floor(g.t * 10) % 2 === 0 ? 1 : 0.6));
-  glow(x, y - 1, 7, PAL.wick[3], 0.3 * k);
+  const y = g.y + Math.sin(g.t * 4) * 1.5;
+  stampPixels(CANDLE_ART, g.x, y + 2.5, WAX_LETTERS, 0.7 * k);
+  stampPixels(CANDLE_FLAMES[Math.floor(g.t * 10) % CANDLE_FLAMES.length], g.x, y - 1.25, FLAME_LETTERS, k);
+  glow(g.x, y - 1, 7, PAL.wick[3], 0.3 * k);
 }
 
 /**
@@ -122,8 +122,7 @@ export const remembranceSkill: SkillBehavior = {
     place();
     for (const g of m.ghosts) drawGhost(g);
     for (const b of m.bolts) {
-      line(b.x, b.y, b.x - b.vx * 0.02, b.y - b.vy * 0.02, PAL.wick[3]);
-      px(Math.round(b.x), Math.round(b.y), PAL.wick[5]);
+      drawFlameBolt(b.x, b.y, b.vx, b.vy);
     }
   },
   on: {

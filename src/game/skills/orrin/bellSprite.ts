@@ -1,8 +1,12 @@
+import { BELL_LOOK, TEAR_LOOK } from "../../../constants/orrin/chainLook";
 import { PAL } from "../../../constants/palette";
-import { ellipseRing, glow, line, place, px } from "../../../engine/frame";
-import { ramp, WHITE } from "../../../utils/color";
+import { glow, place } from "../../../engine/frame";
+import { ramp } from "../../../utils/color";
 import { clamp } from "../../../utils/math";
+import { fineRing } from "../../effects/fine";
 import { drawLinks } from "../../effects/orrin/chainLinks";
+import { drawTear } from "../../effects/orrin/tearLens";
+import { drawTurned } from "../../effects/orrin/turned";
 import { game } from "../../state";
 import { BELL_TIME, type Bell, bellAngle, bellChain, bellMouth, tollReach } from "./bellShape";
 
@@ -21,18 +25,18 @@ export function drawBellRift(b: Bell): void {
   const open = riftOpen(b);
   if (open <= 0) return;
   place();
-  const V = PAL.volt;
-  const w = (5 + 2 * b.size) * open;
-  line(b.x - w, b.y, b.x + w, b.y, V[2]);
-  line(b.x - w * 0.6, b.y - 1, b.x + w * 0.6, b.y - 1, V[1], 0.8);
-  line(b.x - w * 0.6, b.y + 1, b.x + w * 0.6, b.y + 1, V[3], 0.8);
-  px(b.x, b.y, WHITE);
-  glow(b.x, b.y, 14 * b.size, V[2], 0.4 * open);
+  const look = TEAR_LOOK.bell;
+  drawTear(b.x, b.y, { ...look, tall: look.tall + 2 * b.size, light: look.light * b.size }, open, game.t, true);
 }
 
+/** the bell's half width at a share `k` of the way from its crown to its lip: a round crown, a waist, a flared lip */
+const bellHalf = (k: number, s: number): number =>
+  s * (1.2 + 2.4 * Math.sqrt(Math.min(1, k * 3)) * 0.6 + 1.3 * k + (k > 0.75 ? (k - 0.75) * 8 : 0));
+
 /**
- * The bell on its chain: links from the rift down to the crown, then a bronze bell flaring from a narrow shoulder to a
- * wide lip, lit on the side the light comes from, with a dark mouth and a clapper. Twice the size as a Great Bell.
+ * The bell on its chain: links from the rift down to the crown, then a bronze bell at full detail, flaring from a round
+ * crown to a wide lip, lit down one side and dark down the other, with a raised band above the lip, a dark mouth and a
+ * clapper that lags behind the swing. Twice the size as a Great Bell.
  */
 export function drawBell(b: Bell): void {
   place();
@@ -44,48 +48,34 @@ export function drawBell(b: Bell): void {
   const crownY = b.y + uy * len;
   if (len > 1) drawLinks(b.x, b.y, crownX, crownY);
   const s = b.size;
-  const height = 8 * s;
-  // across the bell, at right angles to the chain
-  const nx = uy;
-  const ny = -ux;
-  for (let i = 0; i <= height * 2; i++) {
-    const d = i / 2;
-    const k = d / height;
-    // the bell's profile: a rounded crown, a straight waist, a flared lip
-    const half = s * (2 + 1.5 * k + (k > 0.75 ? (k - 0.75) * 8 : 0));
-    const cx = crownX + ux * d;
-    const cy = crownY + uy * d;
-    for (let j = -Math.ceil(half * 2); j <= Math.ceil(half * 2); j++) {
-      const w = j / 2;
-      if (Math.abs(w) > half) continue;
-      const edge = Math.abs(w) > half - 0.75 || d < 0.75 || d > height - 0.75;
-      const lit = -w / half;
-      const shadeIdx = edge ? 0 : clamp(Math.round(3 + lit * 2 - k * 0.8), 1, 5);
-      px(cx + nx * w, cy + ny * w, BRONZE[shadeIdx]);
-    }
-  }
-  // a raised band near the lip, the dark mouth and the clapper hanging in it
-  const lipX = crownX + ux * (height - 1.5 * s);
-  const lipY = crownY + uy * (height - 1.5 * s);
-  line(lipX - nx * 3 * s, lipY - ny * 3 * s, lipX + nx * 3 * s, lipY + ny * 3 * s, BRONZE[2]);
+  const height = BELL_LOOK.tall * s;
+  const lag = Math.sin(game.t * 20) * 0.6 * s;
+  drawTurned(crownX, crownY, ux, uy, height + 4 * s, (d, w) => {
+    // the clapper hangs out of the mouth, below the lip
+    if (d > height) return (d - height - s) ** 2 + (w - lag) ** 2 <= (0.9 * s) ** 2 ? PAL.brass[2] : 0;
+    if (d < -0.5) return 0;
+    const k = Math.max(0, d) / height;
+    const half = bellHalf(k, s);
+    if (Math.abs(w) > half + 0.5) return 0;
+    if (Math.abs(w) > half || d < 0 || d > height - 0.5) return BRONZE[0];
+    const band = d > height - 2.2 * s && d < height - 1.5 * s;
+    const lit = w / half;
+    return BRONZE[clamp(Math.round(3.4 + lit * 2.4 - k * 0.8 - (band ? 1.4 : 0)), 1, 6)];
+  });
   const [mx, my] = bellMouth(b);
-  line(mx - nx * 3.5 * s, my - ny * 3.5 * s, mx + nx * 3.5 * s, my + ny * 3.5 * s, BRONZE[0]);
-  // the clapper lags behind the swing
-  const lag = Math.sin(game.t * 20) * 0.6;
-  px(mx + nx * lag, my + ny * lag + 1, PAL.brass[2]);
-  // a glint on the shoulder
-  px(crownX + ux * 2 * s - nx * s, crownY + uy * 2 * s - ny * s, BRONZE[6]);
   if (b.flash > 0) glow(mx, my, 10 * s, PAL.brass[4], 0.6 * (b.flash / 0.12));
 }
 
-/** the toll: a brass ring of sound spreading from the bell's mouth */
+/** the toll: thin brass rings of sound spreading from the bell's mouth, the outer one breaking up as it fades */
 export function drawToll(b: Bell): void {
   const r = tollReach(b);
   if (r <= 0) return;
   place();
   const [mx, my] = bellMouth(b);
   const fade = 1 - b.t / BELL_TIME.toll;
-  ellipseRing(mx, my, r, r * 0.55, PAL.brass[4], 0.7 * fade);
-  ellipseRing(mx, my, r * 0.75, r * 0.4, PAL.brass[3], 0.45 * fade);
+  fineRing(mx, my, r, r * 0.55, PAL.brass[4], fade);
+  fineRing(mx, my, r - 0.5, r * 0.55 - 0.5, PAL.brass[5], fade * 0.8);
+  fineRing(mx, my, r * 0.75, r * 0.4, PAL.brass[3], 0.6 * fade);
+  fineRing(mx, my, r * 0.5, r * 0.27, PAL.brass[3], 0.35 * fade);
   glow(mx, my, r * 0.6, PAL.brass[3], 0.25 * fade);
 }

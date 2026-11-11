@@ -1,54 +1,61 @@
+import { KITE_SHAPE } from "../../../constants/orrin/chainLook";
 import { HERO_COLORS as HC, PAL } from "../../../constants/palette";
-import { glow, line, place, px } from "../../../engine/frame";
+import { glow, hairline, place } from "../../../engine/frame";
 import type { Point } from "../../../types/world";
+import { drawTurned } from "../../effects/orrin/turned";
 
 const B = PAL.brass;
 
 /**
- * A brass kite, 9 px tall: a diamond with a dark edge, a lit upper half and a shaded lower half, a cross spar, and two
- * ribbon tails that flutter. It tips nose-down while it dives. A faint steel string runs back to `hand` when it has one.
+ * A brass kite, 9 px tall, at full detail: a diamond with a dark edge, its four panels each in their own tone of brass
+ * so it reads as folded, a dark spine and cross spar, a glint, and two ribbon tails that ripple behind it. It tips
+ * nose-down while it dives. A faint steel string sags back to `hand` when it has one.
  */
 export function drawKite(x: number, y: number, t: number, diving: boolean, hand: Point | null, alpha: number): void {
   if (alpha <= 0) return;
   place();
   const flutter = Math.sin(t * 9);
   if (hand) {
-    // the string sags a little between his hand and the kite
     const mx = (hand.x + x) / 2;
     const my = (hand.y + y) / 2 + 6;
-    line(hand.x, hand.y, mx, my, HC.steelDark, 0.35 * alpha);
-    line(mx, my, x, y + 3, HC.steelDark, 0.35 * alpha);
+    hairline(hand.x, hand.y, mx, my, HC.steelDark, 0.6 * alpha);
+    hairline(mx, my, x, y + 3, HC.steelDark, 0.6 * alpha);
   }
   const tilt = diving ? 0.9 : 0.2 * flutter;
-  const c = Math.cos(tilt);
-  const s = Math.sin(tilt);
-  const at = (lx: number, ly: number): [number, number] => [x + lx * c - ly * s, y + lx * s + ly * c];
-  // the sail, row by row: a diamond 7 px wide and 9 px tall
-  for (let ly = -4; ly <= 4; ly++) {
-    const half = Math.round(3 - Math.abs(ly) * 0.75);
-    for (let lx = -half; lx <= half; lx++) {
-      const edge = Math.abs(lx) === half || Math.abs(ly) === 4;
-      const col = edge ? B[0] : ly < 0 ? (lx < 0 ? B[4] : B[3]) : lx < 0 ? B[3] : B[2];
-      const [wx, wy] = at(lx, ly);
-      px(wx, wy, col, alpha);
+  // the kite's own up, turned by its tilt: "along" runs from its nose down to its tail
+  const ux = -Math.sin(tilt);
+  const uy = Math.cos(tilt);
+  const { tall, wide, tails, tailLength } = KITE_SHAPE;
+  for (let i = 0; i < tails; i++) {
+    const side = i === 0 ? -0.6 : 0.6;
+    let fromX = x + ux * tall;
+    let fromY = y + uy * tall;
+    for (let k = 1; k <= tailLength; k++) {
+      const wave = Math.sin(t * 10 - k * 0.9 + i * 1.7) * (0.4 + k * 0.18);
+      const toX = x + ux * (tall + k) + uy * (wave + side * k * 0.25);
+      const toY = y + uy * (tall + k) - ux * (wave + side * k * 0.25);
+      hairline(fromX, fromY, toX, toY, k % 2 ? B[3] : B[2], alpha * (1 - k / (tailLength + 2)));
+      fromX = toX;
+      fromY = toY;
     }
   }
-  const [gx, gy] = at(-1, -2);
-  const [hx, hy] = at(-2, -1);
-  px(hx, hy, B[5], alpha * 0.7);
-  px(gx, gy, B[5], alpha);
-  // the cross spar and the spine
-  const [sx0, sy0] = at(-2, -1);
-  const [sx1, sy1] = at(2, -1);
-  const [px0, py0] = at(0, -3);
-  const [px1, py1] = at(0, 3);
-  line(px0, py0, px1, py1, B[2], 0.7 * alpha);
-  line(sx0, sy0, sx1, sy1, HC.steelDeep, 0.8 * alpha);
-  // two ribbon tails off the bottom point
-  const [tx, ty] = at(0, 5);
-  for (let i = 0; i < 4; i++) {
-    const wave = Math.sin(t * 10 - i * 1.3) * 1.2;
-    px(tx + wave - i * 0.4, ty + i + 1, i % 2 ? B[2] : B[3], alpha * (1 - i * 0.18));
-  }
+  drawTurned(
+    x,
+    y,
+    ux,
+    uy,
+    tall + 1,
+    (d, w) => {
+      // the widest point sits a third of the way down from the nose
+      const k = d < -tall / 3 ? (d + tall) / (tall * (2 / 3)) : (tall - d) / (tall * (4 / 3));
+      const half = wide * k;
+      if (k < 0 || Math.abs(w) > half + 0.5) return 0;
+      if (Math.abs(w) > half - 0.1) return B[0];
+      if (Math.abs(w) < 0.3 || Math.abs(d + tall / 3) < 0.3) return B[1];
+      const upper = d < -tall / 3;
+      return upper ? (w > 0 ? B[5] : B[4]) : w > 0 ? B[3] : B[2];
+    },
+    alpha,
+  );
   if (diving) glow(x, y, 7, B[3], 0.3 * alpha);
 }

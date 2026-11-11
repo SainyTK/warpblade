@@ -12,6 +12,6 @@ export function drawRestLantern(s: SpriteCanvas, p: Pose, hand: readonly [number
   const top = Math.round(at.y) + LANTERN.chain + 1;
   s.begin();
   for (let k = 0; k < LANTERN.chain; k++) s.block(left + 2, Math.round(at.y) + k, k % 2 ? HC.bladeBack : HC.blade);
-  paintLantern((x, y, c) => s.block(x, y, c), left, top, 0, 0);
+  paintLantern((x, y, c) => s.set(x, y, c), left, top, 0, 0);
   s.commit(false);
 }

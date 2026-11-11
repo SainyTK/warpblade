@@ -1,6 +1,6 @@
 import { PAL } from "../../../constants/palette";
 import { SWAP } from "../../../constants/wenna/swap";
-import { line, place } from "../../../engine/frame";
+import { glowLine, hairline, place } from "../../../engine/frame";
 import { sfx } from "../../../services/audio";
 import type { Enemy } from "../../../types/enemy";
 import { PK } from "../../../types/particle";
@@ -61,8 +61,10 @@ function thread(x0: number, y0: number, x1: number, y1: number): void {
     draw() {
       place();
       const k = 1 - t / 0.1;
-      line(x0, y0 - 12, x1, y1 - 12, PAL.wick[4], k);
-      line(x0, y0 - 11, x1, y1 - 11, PAL.wick[2], k * 0.6);
+      hairline(x0, y0 - 12, x1, y1 - 12, PAL.wick[5], k);
+      hairline(x0, y0 - 11.5, x1, y1 - 11.5, PAL.wick[4], k);
+      hairline(x0, y0 - 11, x1, y1 - 11, PAL.wick[2], k * 0.6);
+      glowLine(x0, y0 - 12, x1, y1 - 12, 4, PAL.wick[3], 0.25 * k);
     },
   });
 }

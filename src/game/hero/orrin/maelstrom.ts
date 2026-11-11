@@ -17,7 +17,7 @@ const SKILL = "o_maelstrom";
 const TOP = 14;
 
 /** the circle's size: wide as the skill's radius, as tall as the stage allows */
-function radii(): { rx: number; ry: number; cy: number } {
+export function radii(): { rx: number; ry: number; cy: number } {
   const rx = withCharms("area", skillValues(SKILL).radius ?? 96);
   const cy = (TOP + GROUND - HOOK.grip) / 2;
   return { rx, ry: Math.min(rx, cy - TOP), cy };

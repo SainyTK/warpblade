@@ -1,5 +1,5 @@
 import { PAL, WAX } from "../../../../constants/palette";
-import { glow, place, px } from "../../../../engine/frame";
+import { fleck, glow, place } from "../../../../engine/frame";
 import type { Effect } from "../../../../types/effect";
 import type { BiteZone } from "../../../../types/wenna";
 import { dealDamage } from "../../../damage";
@@ -55,11 +55,14 @@ function createPool(x0: number): Effect {
       const y = floor();
       const k = Math.min(1, t * 6, (life - t) * 2);
       const half = (width / 2) * Math.min(1, t * 5);
-      for (let dx = -half; dx <= half; dx++) {
+      for (let dx = -half; dx <= half; dx += 0.5) {
         const edge = 1 - Math.abs(dx) / Math.max(1, half);
-        const ripple = Math.sin(dx * 0.5 + t * 4) > 0.6;
-        px(Math.round(x + dx), y, ripple ? WAX[3] : WAX[2], k * (0.5 + edge * 0.5));
-        if (edge > 0.2) px(Math.round(x + dx), y - 1, WAX[1], k * edge * 0.6);
+        const ripple = Math.sin(dx * 0.5 + t * 4);
+        const rim = edge < 0.06;
+        fleck(x + dx, y + 0.5, rim ? WAX[0] : WAX[1], k);
+        fleck(x + dx, y, rim ? WAX[1] : ripple > 0.6 ? WAX[3] : WAX[2], k);
+        if (edge > 0.12) fleck(x + dx, y - 0.5, ripple > 0.85 ? WAX[3] : ripple < -0.5 ? WAX[1] : WAX[2], k);
+        if (edge > 0.3 && ripple > 0.2) fleck(x + dx, y - 1, WAX[2], k * edge);
       }
       glow(x, y - 2, width * 0.4, PAL.wick[3], 0.12 * k);
     },

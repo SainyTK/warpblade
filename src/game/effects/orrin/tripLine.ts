@@ -1,10 +1,11 @@
 import { PAL } from "../../../constants/palette";
-import { line, place, px } from "../../../engine/frame";
+import { place } from "../../../engine/frame";
 import type { Effect } from "../../../types/effect";
 import type { Enemy } from "../../../types/enemy";
 import { dealDamage } from "../../damage";
 import { enemyBox } from "../../enemies/enemy";
 import { game, progress } from "../../state";
+import { drawLinks } from "./chainLinks";
 
 const LIFE = 2.5;
 
@@ -33,8 +34,7 @@ export function createTripLine(x0: number, x1: number, y: number, stun: number, 
     drawBack() {
       place();
       const fade = Math.min(1, (LIFE - t) / 0.4);
-      line(lo, y - 1, hi, y - 1, PAL.brass[1], 0.8 * fade);
-      for (let x = lo; x <= hi; x += 3) px(x, y - 1, PAL.brass[3], fade);
+      drawLinks(lo, y - 1, hi, y - 1, PAL.brass[4], fade);
     },
     draw() {},
   };

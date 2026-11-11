@@ -1,11 +1,12 @@
 import { PAL } from "../../../../constants/palette";
 import { W } from "../../../../constants/stage";
-import { glow, line, place, px } from "../../../../engine/frame";
+import { hairline, place } from "../../../../engine/frame";
 import { sfx } from "../../../../services/audio";
 import type { Enemy } from "../../../../types/enemy";
 import { PK } from "../../../../types/particle";
 import type { Wick } from "../../../../types/wenna";
 import { dealDamage } from "../../../damage";
+import { drawFlameBolt } from "../../../effects/wenna/flameBolt";
 import { ignite } from "../../../enemies/burn";
 import { enemyCenter } from "../../../enemies/enemy";
 import { skillValues } from "../../../skills/query";
@@ -75,9 +76,8 @@ function spit(w: Wick, target: Enemy, delay: number): void {
       if (t < 0) return;
       place();
       for (let i = 1; i < trail.length; i++)
-        line(trail[i - 1][0], trail[i - 1][1], trail[i][0], trail[i][1], PAL.wick[3 - Math.min(2, i)], 1 - i / 5);
-      px(Math.round(x), Math.round(y), PAL.wick[5]);
-      glow(x, y, 6, PAL.wick[4], 0.4);
+        hairline(trail[i - 1][0], trail[i - 1][1], trail[i][0], trail[i][1], PAL.wick[3 - Math.min(2, i)], 1 - i / 5);
+      drawFlameBolt(x, y, Math.cos(a) * BOLT.speed, Math.sin(a) * BOLT.speed);
     },
   });
 }
