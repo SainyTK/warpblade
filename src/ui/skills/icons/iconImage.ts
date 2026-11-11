@@ -4,6 +4,7 @@ import { spriteUrl } from "../../spriteUrl";
 import { BOON_ICONS } from "./boon";
 import { CHARM_ICONS } from "./charms";
 import { HULDA_ICONS } from "./hulda/index";
+import { JORY_ICONS } from "./jory/index";
 import { KAEL_SKILL_ICONS } from "./kael/index";
 import { MIREL_ICONS } from "./mirel/index";
 import { ORRIN_ICONS } from "./orrin/index";
@@ -26,6 +27,7 @@ const ICONS: Record<string, (s: SpriteCanvas) => void> = {
   ...MIREL_ICONS,
   ...WENNA_ICONS,
   ...TALLIS_ICONS,
+  ...JORY_ICONS,
   ...CHARM_ICONS,
   ...KAEL_SKILL_ICONS,
 };
