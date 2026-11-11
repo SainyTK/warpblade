@@ -5,7 +5,7 @@
 // at the finer image grid, single art pixels (px, putScreen, text) fill a RES by RES block.
 import { FH, FN, FW, H, N, RES, W } from "../constants/stage";
 import type { Alpha, Color, Paint } from "../types/color";
-import { cb, cg, cr, mix, WHITE } from "../utils/color";
+import { cb, cg, cr, WHITE } from "../utils/color";
 import { clamp, TAU } from "../utils/math";
 
 export const color = new Uint32Array(FN);
@@ -45,10 +45,20 @@ export function putImage(ix: number, iy: number, c: Color, a = 1): void {
   if (ix < 0 || iy < 0 || ix >= FW || iy >= FH) return;
   color[iy * FW + ix] = c;
 }
+/** c over the pixel at buffer index i by k, from 0 to 256, in whole numbers */
+function blendAt(i: number, c: Color, k: number): void {
+  const under = color[i];
+  const r = (under >> 16) & 255;
+  const g = (under >> 8) & 255;
+  const b = under & 255;
+  color[i] =
+    ((r + (((((c >> 16) & 255) - r) * k) >> 8)) << 16) |
+      ((g + (((((c >> 8) & 255) - g) * k) >> 8)) << 8) |
+      (b + ((((c & 255) - b) * k) >> 8)) || 0x010101;
+}
 export function blendImage(ix: number, iy: number, c: Color, a: number): void {
   if (a <= 0.01 || ix < 0 || iy < 0 || ix >= FW || iy >= FH) return;
-  const i = iy * FW + ix;
-  color[i] = mix(color[i], c, Math.min(1, a));
+  blendAt(iy * FW + ix, c, a >= 1 ? 256 : (a * 256) | 0);
 }
 /** a RES by RES block of image pixels with its top left corner here */
 function putBlock(ix: number, iy: number, c: Color, a: number): void {
@@ -121,11 +131,44 @@ export function disc(x: number, y: number, r: number, c: Color, a: number, floor
   if (a <= 0.01) return;
   const b = imageBox(x, y, r);
   const last = Number.isFinite(floor) ? Math.min(b.y1, Math.floor(toScreenY(floor) * RES) - 1) : b.y1;
-  for (let iy = b.y0; iy <= last; iy++)
+  const reach = b.ir * b.ir;
+  for (let iy = b.y0; iy <= last; iy++) {
+    const dy = iy + 0.5 - b.cy;
+    const row = iy * FW;
     for (let ix = b.x0; ix <= b.x1; ix++) {
-      const d = Math.hypot(ix + 0.5 - b.cx, iy + 0.5 - b.cy) / RES;
-      if (d <= r) blendImage(ix, iy, c, a * Math.min(1, (r - d) * 0.8 + 0.35));
+      const dx = ix + 0.5 - b.cx;
+      const d2 = dx * dx + dy * dy;
+      if (d2 > reach) continue;
+      const edge = (r - Math.sqrt(d2) / RES) * 0.8 + 0.35;
+      const k = (a * (edge < 1 ? edge : 1) * 256) | 0;
+      if (k > 2) blendAt(row + ix, c, k > 256 ? 256 : k);
     }
+  }
+}
+/**
+ * a wide soft oval of haze centered at local (x, y), rx by ry art pixels, thickest in the middle at a and gone at
+ * the rim; one sample per art pixel, for mist banks and other fills with no fine edge
+ */
+export function haze(x: number, y: number, rx: number, ry: number, c: Color, a: number): void {
+  if (a <= 0.01 || rx <= 0 || ry <= 0) return;
+  const cx = toScreenX(x);
+  const cy = toScreenY(y);
+  const x0 = Math.max(0, Math.floor(cx - rx));
+  const x1 = Math.min(W - 1, Math.ceil(cx + rx));
+  const y0 = Math.max(0, Math.floor(cy - ry));
+  const y1 = Math.min(H - 1, Math.ceil(cy + ry));
+  for (let sy = y0; sy <= y1; sy++) {
+    const dy = (sy + 0.5 - cy) / ry;
+    for (let sx = x0; sx <= x1; sx++) {
+      const dx = (sx + 0.5 - cx) / rx;
+      const d = Math.sqrt(dx * dx + dy * dy);
+      if (d >= 1) continue;
+      const k = (a * (1 - d) * (1 - d) * 256) | 0;
+      if (k <= 2) continue;
+      const first = sy * RES * FW + sx * RES;
+      for (let v = 0; v < RES; v++) for (let u = 0; u < RES; u++) blendAt(first + v * FW + u, c, k);
+    }
+  }
 }
 /**
  * a shadow lying on a floor seen edge on: the lower half of a soft oval hung from the floor line at screen (x, y),

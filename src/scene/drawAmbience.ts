@@ -1,6 +1,6 @@
 import { PAL, WORLD_COLORS as WC } from "../constants/palette";
 import { ANCHORS, BRAZIERS, GROUND, W } from "../constants/stage";
-import { ellipseRing, glow, line, place, polygon, px, shade, sparkle, toScreenX } from "../engine/frame";
+import { ellipseRing, glow, haze, line, place, polygon, px, sparkle, toScreenX } from "../engine/frame";
 import { findWarpTarget } from "../game/hero/warp";
 import { isHeld } from "../game/input";
 import { character, game, hero } from "../game/state";
@@ -10,6 +10,8 @@ import { TAU } from "../utils/math";
 import { paletteAt } from "./eras/sceneDef";
 import { scene } from "./scenery";
 
+/** how thick a mist bank is at its middle when the era's mist is full */
+const MIST_DENSITY = 0.09;
 const MIST = Array.from({ length: 7 }, (_, i) => ({
   x: i * 52,
   y: GROUND - 2 + (i % 3) * 3,
@@ -99,18 +101,6 @@ export function drawMist(): void {
   place();
   for (const m of MIST) {
     const x = ((m.x + game.t * m.v) % (W + 60)) - 30;
-    shade(
-      x - m.r * 2,
-      m.y - m.r * 0.5,
-      x + m.r * 2,
-      m.y + m.r * 0.5,
-      (lx, ly, out) => {
-        const d = Math.hypot((lx - x) / (m.r * 2), (ly - m.y) / (m.r * 0.5));
-        if (d >= 1) return;
-        out.c = tint;
-        out.a = 0.09 * def.mist * (1 - d) * (1 - d);
-      },
-      { soft: true, coarse: true },
-    );
+    haze(x, m.y, m.r * 2, m.r * 0.5, tint, MIST_DENSITY * def.mist);
   }
 }
