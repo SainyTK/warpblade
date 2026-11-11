@@ -1,6 +1,6 @@
 import { COMBO, MP_PER_HIT } from "../../../constants/combat";
 import { ENEMIES } from "../../../constants/enemies";
-import type { ChainBlowSpec } from "../../../constants/orrin/string";
+import { type ChainBlowSpec, TIP_FEEL } from "../../../constants/orrin/string";
 import { SPARKS } from "../../../constants/palette";
 import { sfx } from "../../../services/audio";
 import type { Enemy } from "../../../types/enemy";
@@ -38,7 +38,7 @@ export function strikeFoe(e: Enemy, tip: boolean, s: ChainStrike): HitResult {
   const power = (tip ? spec.tipPower : spec.innerPower) * chainPower(e, tip, s);
   const result = dealDamage(e, progress.stats.ad * power, {
     fromX: hero.x,
-    kx: spec.kx * dir,
+    kx: (tip && spec.pull ? -spec.pull : spec.kx) * dir,
     ky: spec.ky,
     launch: tip && spec.lift && launchable ? spec.lift * liftScale(s) : undefined,
     spike: s.blow === "hanging" && hangingSpikes(),
@@ -78,16 +78,17 @@ export function sweepChain(s: ChainStrike, s0: number, s1: number): number {
     const b = bearing(e);
     if (b.near > reach || b.far < s.spec.inner || !inSpan(b, s0, s1)) continue;
     markStruck(e);
-    const tip = b.near >= reach - band && s.blow !== "knee";
+    const tip = b.near >= reach - band;
     hits++;
     if (strikeFoe(e, tip, s) === "blocked") blocked++;
     else if (tip) tips++;
   }
   hero.moveHits += hits;
   if (hits > blocked) {
-    hitStop(tips && s.spec.stop ? s.spec.stop : 0.05);
-    shake(0.1, tips ? 2 : 1.2);
-    sfx.hit(tips > 0, tips ? 1.25 : 1);
+    const { stop, shake: jolt, pitch } = s.spec.feel;
+    hitStop(stop);
+    shake(jolt[0], jolt[1] + (tips ? TIP_FEEL.shake : 0));
+    sfx.hit(tips > 0, pitch + (tips ? TIP_FEEL.pitch : 0));
     if (!hero.ground) hero.vy = Math.min(hero.vy, -30);
     feat({ kind: "comboHit", moves: hero.chain });
   } else if (blocked) hitStop(0.04);

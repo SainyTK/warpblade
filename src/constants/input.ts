@@ -87,8 +87,7 @@ export const ACTION_TEXT: Record<KitId, Record<InputAction, string>> = {
     right: "Walk right. No run. While swinging, pump the swing",
     up: "Jump. One light jump, no double jump. While swinging, let go with a hop",
     down: "With jump, drop through a ledge. While swinging, Plumb Drop once learned",
-    attack:
-      "Chain string: Lash, Rising Arc, Full Circle, hardest at the chain's tip. A foe right against you takes a knee. In the air, a Hanging Arc",
+    attack: "Chain string: Lash, Rising Arc, Full Circle, hardest at the chain's tip. In the air, a Hanging Arc",
     dash: "While swinging, hold to reel the chain in and swing faster. On the floor, Backline: yank yourself back",
     run: "Walk toward the side held",
     warp: "Hook: hold to swing from a crystal, a platform or the air, let go to fling. On a foe, zip to it and kick. Hold up to aim steeper, down in the air to aim low",

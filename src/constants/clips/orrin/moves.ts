@@ -1,6 +1,8 @@
 import type { ActionClip, Pose } from "../../../types/pose";
 import { frame } from "../../hero";
 import { ANCHOR_PIN, WHIRLWALL } from "../../orrin/abilities";
+import { BACKLINE } from "../../orrin/backline";
+import { ORRIN_TAKEOFF } from "../../orrin/motion";
 import { HANG, o, STANCE, TUCK } from "./stance";
 
 /** the hook throw: the arm cocked behind his head for two frames, then thrown up along the aim */
@@ -63,8 +65,8 @@ export const ROLL_CLIP: ActionClip = {
   ],
 };
 
-/** Backline: yanked back by the chain, feet low and sliding, the chain hand thrown back toward the floor point */
-export const BACKLINE_POSE: Pose = o({
+/** Backline's yank: dragged back by the chain, feet low and sliding ahead of him, the chain hand back toward the floor */
+const YANKED: Pose = o({
   hx: -1,
   hy: -10.5,
   nx: 3,
@@ -83,6 +85,80 @@ export const BACKLINE_POSE: Pose = o({
   bfy: 0,
   ba: 0.2,
 });
+
+/**
+ * Backline: he drops his weight and throws the hook back to the floor behind him, is dragged back along it with his
+ * feet sliding, then the knees take the stop and he rises back into the stance as the chain goes slack.
+ */
+export const BACKLINE_CLIP: ActionClip = {
+  dur: BACKLINE.load + BACKLINE.time + BACKLINE.settle,
+  hit: BACKLINE.load,
+  keys: [
+    [0, STANCE],
+    [
+      frame(2),
+      o({
+        hx: 0.5,
+        hy: -12.3,
+        nx: 2.6,
+        ny: -22.3,
+        cb: 1,
+        fx: -5,
+        fy: -14,
+        fe: 0,
+        sa: 2.4,
+        bx: 6,
+        by: -18,
+        ffx: 4.6,
+        ffy: -0.8,
+        ba: 0.25,
+      }),
+    ],
+    [BACKLINE.load, o({ ...YANKED, hx: -0.5, hy: -11, ny: -20.5, fx: -8.5, fy: -10, ffx: 5.5, fa: -0.2, bfx: -5 })],
+    [BACKLINE.load + frame(3), o({ ...YANKED, hy: -10.2, ny: -19.8, cb: 1.7, by: -15.6 })],
+    [BACKLINE.load + BACKLINE.time, YANKED],
+    [
+      BACKLINE.load + BACKLINE.time + frame(2),
+      o({
+        hx: -1.2,
+        hy: -10.2,
+        nx: 2.3,
+        ny: -19.8,
+        cb: 1.4,
+        fx: -2,
+        fy: -12,
+        fe: 0,
+        sa: 1.8,
+        bx: 5.5,
+        by: -16.5,
+        ffx: 6.5,
+        fa: -0.15,
+        bfx: -5.6,
+        bfy: -0.6,
+        ba: 0.2,
+      }),
+    ],
+    [
+      BACKLINE.load + BACKLINE.time + frame(4),
+      o({
+        hx: -0.4,
+        hy: -12.6,
+        nx: 1.9,
+        ny: -22.6,
+        cb: 0.8,
+        fx: 4.5,
+        fy: -14,
+        sa: 1.3,
+        bx: 3.6,
+        by: -17.6,
+        ffx: 5,
+        ffy: -0.8,
+        bfx: -4.4,
+      }),
+    ],
+    [BACKLINE.load + BACKLINE.time + BACKLINE.settle, STANCE],
+  ],
+};
 
 /** hauled along the chain to a foe: stretched out, the chain hand ahead, legs trailing */
 export const ZIP_POSE: Pose = o({
@@ -156,3 +232,29 @@ export const ZIP_KICK: Pose = o({
 
 /** under the ultimate's tear, hanging from the chain */
 export const ULT_HANG: Pose = HANG;
+
+/** the bend before a jump: hips drop, knees and back bend, both arms swing down and back to throw up with the push */
+export const TAKEOFF_CLIP: ActionClip = {
+  dur: ORRIN_TAKEOFF,
+  hit: ORRIN_TAKEOFF,
+  keys: [
+    [0, o({ hy: -12.2, nx: 2, ny: -22.2, cb: 1, fx: 6, fy: -12, sa: 1.4, bx: 1.5, by: -15.5, ba: 0.2 })],
+    [
+      ORRIN_TAKEOFF,
+      o({
+        hy: -10.6,
+        nx: 2.8,
+        ny: -20.6,
+        cb: 1.4,
+        fx: 4.5,
+        fy: -9.5,
+        sa: 1.6,
+        bx: -0.5,
+        by: -13,
+        ffx: 4.5,
+        bfx: -4.5,
+        ba: 0.35,
+      }),
+    ],
+  ],
+};

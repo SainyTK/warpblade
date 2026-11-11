@@ -30,9 +30,9 @@ export const IRON_WEIGHT: SkillDef = {
   evolution: {
     partner: "o_reelsnap",
     name: "Wrecking Ball",
-    text: "The hook becomes a spiked iron ball, and Full Circle turns three times at radius 72.",
+    text: "The hook becomes a spiked iron ball, and Full Circle turns three times at radius 74.",
     row: {
-      text: "A spiked ball: three turns at radius 72.",
+      text: "A spiked ball: three turns at radius 74.",
       values: { power: 0.6, radius: 14, lift: 0.4, turns: 3, knock: 0.5, ball: 1 },
     },
   },

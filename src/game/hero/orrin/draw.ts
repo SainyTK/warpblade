@@ -7,6 +7,7 @@ import { FIRE_RAMP, HERO_COLORS as HC, PAL } from "../../../constants/palette";
 import { RES } from "../../../constants/stage";
 import { fleck, glow, glowLine, place, px } from "../../../engine/frame";
 import type { Color } from "../../../types/color";
+import type { ChainBlow } from "../../../types/orrin";
 import type { Point } from "../../../types/world";
 import { WHITE } from "../../../utils/color";
 import { clamp, lerp, TAU } from "../../../utils/math";
@@ -22,12 +23,13 @@ import { skillEvolved, skillValues } from "../../skills/query";
 import { game, hero } from "../../state";
 import { Chain } from "../chain";
 import { backlinePoint } from "./backline";
+import { blowShape, restChain } from "./blowChain";
 import { hookHead } from "./hook";
 import { radii } from "./maelstrom";
 import { orrin, orrinHost } from "./memory";
 import { fullMomentum } from "./momentum";
 import { blowReach } from "./reach";
-import { blowLength } from "./string";
+import { blowLength, circleTurns } from "./string";
 
 /** the short loop of chain that hangs from his hand at rest, swaying */
 const loop = new Chain(6, 2.2, 420);
@@ -94,46 +96,37 @@ function curved(from: Point, ctrl: Point, to: Point): void {
 }
 
 /**
- * The chain during a blow: wound back and trailing before the hit frame, snapped out to the sweep's angle at full reach
- * while it strikes (bending behind the hand as it lags), and falling back into the loop after.
+ * The chain during a blow, from the hand through a control point that trails the motion to the tip: it lags the hand
+ * in the wind-up, whips past the foe after the strike and settles slack into the coil (`blowShape`).
  */
 function blowChain(
+  blow: ChainBlow | "hanging",
   spec: ChainBlowSpec,
-  blow: "lash" | "knee" | "rising" | "circle" | "hanging",
   st: number,
   dur: number,
+  reach: number,
+  turns: number,
 ): void {
   const hand = handAt();
   const [ox, oy] = [hero.x, hero.y - SHOULDER_Y];
-  const reach = blowReach(spec, blow);
-  const span = spec.hitEnd - spec.hit;
-  let angle: number;
-  let r: number;
-  if (st < spec.hit) {
-    const k = st / spec.hit;
-    angle = spec.a0 + Math.PI * (1 - k) * 0.9 * Math.sign(spec.a1 - spec.a0 || 1);
-    r = lerp(10, 18, k);
-  } else if (st <= spec.hitEnd + 1 / 30 || blow === "circle") {
-    const turns = blow === "circle" ? Math.max(1, (dur - spec.dur) / Math.max(span, 1e-3) + 1) : 1;
-    const f = span > 0 ? clamp((st - spec.hit) / span, 0, turns) : 1;
-    angle = spec.a0 + (spec.a1 - spec.a0) * (f % 1 || (f >= 1 ? 1 : 0));
-    r =
-      st > spec.hit + span * turns + 1 / 30
-        ? lerp(reach, 10, clamp((st - spec.hit - span * turns) / (dur - spec.hit - span * turns)))
-        : reach;
-  } else {
-    const k = clamp((st - spec.hitEnd) / Math.max(1e-3, dur - spec.hitEnd));
-    angle = spec.a1 + k * 0.8;
-    r = lerp(reach, 10, k);
-  }
-  const tip = { x: ox + Math.cos(angle) * r * hero.face, y: oy + Math.sin(angle) * r };
-  const lag = angle - 0.5 * Math.sign(spec.a1 - spec.a0 || 1);
-  const ctrl = { x: ox + Math.cos(lag) * r * 0.55 * hero.face, y: oy + Math.sin(lag) * r * 0.55 };
+  // on the floor the chain lies along it, never through it
+  const floor = hero.ground ? hero.y - 1 : Number.POSITIVE_INFINITY;
+  const c = blowShape(blow, spec, st, dur, reach, turns);
+  const tip = {
+    x: ox + Math.cos(c.angle) * c.r * hero.face,
+    y: Math.min(floor, oy + Math.sin(c.angle) * c.r * c.flat),
+  };
+  const lag = c.angle + c.bend;
+  const ctrl = {
+    x: ox + Math.cos(lag) * c.r * 0.55 * hero.face,
+    y: Math.min(floor, oy + Math.sin(lag) * c.r * 0.55 * c.flat + c.sag),
+  };
   curved(hand, ctrl, tip);
 }
 
 /** the loop hanging from his hand at rest */
 function restLoop(): void {
+  restChain();
   const p = loop.points;
   drawChain(p, p.length, linkGlint());
   const a = p[p.length - 2];
@@ -240,16 +233,28 @@ function drawPin(): void {
   drawStake(at.x, at.y);
 }
 
+/** Backline's chain: the hook flies back to the floor point through the load, holds taut through the yank, then slackens */
+function backlineChain(hand: Point): void {
+  const bite = { x: backlinePoint(), y: hero.y - 1 };
+  const out = clamp(hero.st / BACKLINE.load);
+  if (hero.st >= BACKLINE.load + BACKLINE.time) return restLoop();
+  taut(hand, { x: lerp(hand.x, bite.x, out), y: lerp(hand.y, bite.y, out) });
+}
+
 /** in front of him: the chain from his hand, in whatever shape the state gives it */
 export function drawOrrin(): void {
   place();
   drawPin();
   const h = hero;
   const hand = handAt();
-  if (orrin.arc >= 0) return blowChain(HANGING_ARC, "hanging", orrin.arc, HANGING_ARC.dur);
+  if (orrin.arc >= 0)
+    return blowChain("hanging", HANGING_ARC, orrin.arc, HANGING_ARC.dur, blowReach(HANGING_ARC, "hanging"), 1);
   switch (h.state) {
-    case "lash":
-      return blowChain(CHAIN_BLOWS[orrin.current], orrin.current, h.st, blowLength(orrin.current));
+    case "lash": {
+      const blow = orrin.current;
+      const turns = blow === "circle" ? circleTurns() : 1;
+      return blowChain(blow, CHAIN_BLOWS[blow], h.st, blowLength(blow), blowReach(CHAIN_BLOWS[blow], blow), turns);
+    }
     case "hookThrow": {
       const head = hookHead();
       if (head) return taut(hand, head);
@@ -272,8 +277,7 @@ export function drawOrrin(): void {
       return taut(hand, { x: cx, y: cy });
     }
     case "backline":
-      if (h.st < BACKLINE.time) return taut(hand, { x: backlinePoint(), y: h.y - 1 });
-      return restLoop();
+      return backlineChain(hand);
     case "whirl":
       return whirlRing();
     default:

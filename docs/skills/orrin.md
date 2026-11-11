@@ -76,9 +76,9 @@ Values: power: share more the string deals; radius: pixels Full Circle reaches f
 | 6 | power 0.3 to 0.4 | The string deals 40% more. |
 | 7 | knock 0 to 0.5 | Foes knocked into others hit them. |
 | 8 | power 0.4 to 0.6 | The string deals 60% more. |
-| Evolved | radius 6 to 14, turns 2 to 3, ball 0 to 1 | A spiked ball: three turns at radius 72. |
+| Evolved | radius 6 to 14, turns 2 to 3, ball 0 to 1 | A spiked ball: three turns at radius 74. |
 
-Evolution: **Wrecking Ball** (partner `o_reelsnap`). The hook becomes a spiked iron ball, and Full Circle turns three times at radius 72.
+Evolution: **Wrecking Ball** (partner `o_reelsnap`). The hook becomes a spiked iron ball, and Full Circle turns three times at radius 74.
 
 ### o_skylash: Sky Lash
 
