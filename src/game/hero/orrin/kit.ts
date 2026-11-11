@@ -14,7 +14,7 @@ import { pressBackline, runBackline } from "./backline";
 import { drawOrrin, drawOrrinBack, stepChainLoop } from "./draw";
 import { runFly } from "./fly";
 import { hooksPerAir, pressHook, runHookThrow } from "./hook";
-import { pressJump } from "./jump";
+import { pressJump, runTakeoff } from "./jump";
 import { runMaelstrom } from "./maelstrom";
 import { orrin, resetOrrin } from "./memory";
 import { momentumScale, tickMomentum } from "./momentum";
@@ -33,8 +33,8 @@ const AIR_THROW_GRAVITY = 0.3;
 /** the side held now */
 const heldSide = (): number => (isHeld("right") ? 1 : 0) - (isHeld("left") ? 1 : 0);
 
-/** states in which the kit moves him itself */
-const DRIVEN = new Set(["swing", "zip", "fly", "backline", "whirl", "pendulum", "maelstrom"]);
+/** states in which the kit moves him itself, or keeps the speed he came in with */
+const DRIVEN = new Set(["takeoff", "swing", "zip", "fly", "backline", "whirl", "pendulum", "maelstrom"]);
 /** states in which the kit's own physics replace gravity */
 const WEIGHTLESS = new Set(["swing", "zip", "pendulum", "maelstrom"]);
 
@@ -88,6 +88,9 @@ function tick(dt: number): void {
 
 function runState(dt: number): boolean {
   switch (hero.state) {
+    case "takeoff":
+      runTakeoff();
+      return true;
     case "lash":
       runString(dt);
       return true;

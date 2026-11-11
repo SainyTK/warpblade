@@ -16,7 +16,7 @@ import { refuseDash } from "../stamina";
 import { giveArcBack } from "./airArc";
 import { startClimb } from "./climb";
 import { orrin, orrinHost } from "./memory";
-import { inRecovery } from "./string";
+import { inRecovery } from "./recovery";
 import { startSwing, swingRoom } from "./swing";
 import { startZip } from "./zip";
 

@@ -1,10 +1,11 @@
 import { STATE_CLIPS } from "../../../constants/clips";
 import { CHAIN_CLIPS, HANGING_CLIP } from "../../../constants/clips/orrin/chain";
 import {
-  BACKLINE_POSE,
+  BACKLINE_CLIP,
   HOOK_CLIP,
   PIN_CLIP,
   ROLL_CLIP,
+  TAKEOFF_CLIP,
   WHIRL_CLIP,
   ZIP_POSE,
 } from "../../../constants/clips/orrin/moves";
@@ -69,11 +70,28 @@ function circleTime(st: number): number {
   return st - extra;
 }
 
-/** the Hanging Arc's arms drawn over whatever the body is doing in the air */
-function withArc(p: Pose): Pose {
+/**
+ * The Hanging Arc over whatever he is doing in the air: the whole body curls and snaps open with it, and while the chain
+ * holds him in a swing the legs keep trailing the way he travels.
+ */
+function withArc(h: Hero, p: Pose): Pose {
   if (orrin.arc < 0) return p;
   const a = sampleKeys(HANGING_CLIP.keys, orrin.arc);
-  return { ...p, fx: a.fx, fy: a.fy, fe: a.fe, sa: a.sa, bx: a.bx, by: a.by, nx: a.nx, cb: a.cb };
+  const upper = {
+    ...p,
+    fx: a.fx,
+    fy: a.fy,
+    fe: a.fe,
+    be: a.be,
+    sa: a.sa,
+    bx: a.bx,
+    by: a.by,
+    nx: a.nx,
+    ny: a.ny,
+    cb: a.cb,
+  };
+  if (h.state === "swing") return upper;
+  return { ...upper, hy: a.hy, ffx: a.ffx, ffy: a.ffy, fa: a.fa, bfx: a.bfx, bfy: a.bfy, ba: a.ba };
 }
 
 /** the flight after a release: one roll out of a fling, then the shared fall */
@@ -97,6 +115,8 @@ function statePose(h: Hero, t: number, fresh: boolean, dt: number, wound: number
       const clip = CHAIN_CLIPS[orrin.current];
       return sampleKeys(clip.keys, orrin.current === "circle" ? circleTime(h.st) : h.st);
     }
+    case "takeoff":
+      return sampleKeys(TAKEOFF_CLIP.keys, h.st);
     case "hookThrow": {
       const p = sampleKeys(HOOK_CLIP.keys, h.st);
       return h.ground ? p : { ...p, ...TUCK };
@@ -108,7 +128,7 @@ function statePose(h: Hero, t: number, fresh: boolean, dt: number, wound: number
     case "fly":
       return flyPose(h);
     case "backline":
-      return BACKLINE_POSE;
+      return sampleKeys(BACKLINE_CLIP.keys, h.st);
     case "whirl":
       return sampleKeys(WHIRL_CLIP.keys, h.st);
     case "pin":
@@ -143,7 +163,7 @@ export function orrinPose(h: Hero, t: number): Pose {
   const fresh = clipKey(h) !== m.clip || restarted;
   m.st = h.st;
   const landed = watchLanding(h, t);
-  const base = withArc(statePose(h, t, fresh, dt, woundWeight(t)));
+  const base = withArc(h, statePose(h, t, fresh, dt, woundWeight(t)));
   watchHandover(h, t, restarted, landed ? 1 : undefined);
   const p = handOver(landingPose(h, base, t), t);
   m.last = p;

@@ -1,9 +1,8 @@
-import { CHAIN_BLOWS, CHAIN_LINK, CHAIN_STRING, KNEE_RANGE, SHOULDER_Y } from "../../../constants/orrin/string";
+import { CHAIN_BLOWS, CHAIN_LINK, CHAIN_STRING, SHOULDER_Y, WHOOSH_LEAD } from "../../../constants/orrin/string";
 import { sfx } from "../../../services/audio";
 import type { ChainBlow } from "../../../types/orrin";
 import { clamp, TAU } from "../../../utils/math";
 import { createSlash } from "../../effects/slash";
-import { enemyBox } from "../../enemies/enemy";
 import { skillValues } from "../../skills/query";
 import { game, hero, progress } from "../../state";
 import { newSwing } from "../../world";
@@ -12,17 +11,7 @@ import { skin } from "../skin";
 import { type ChainStrike, sweepChain } from "./chainHit";
 import { orrin } from "./memory";
 import { blowReach } from "./reach";
-
-/** a foe on the floor ahead right against him turns the lash into the knee */
-function foeAgainstHim(): boolean {
-  for (const e of game.enemies) {
-    if (e.hp <= 0) continue;
-    const [x0, y0, x1, y1] = enemyBox(e);
-    const gap = hero.face > 0 ? x0 - hero.x : hero.x - x1;
-    if (gap > -6 && gap < KNEE_RANGE && y1 > hero.y - 30 && y0 < hero.y) return true;
-  }
-  return false;
-}
+import { backlineSettling } from "./recovery";
 
 /** how many times Full Circle turns: Iron Weight adds turns */
 export const circleTurns = (): number => Math.max(1, skillValues("o_ironweight").turns ?? 1);
@@ -33,17 +22,21 @@ export function currentStrike(): ChainStrike {
   return { spec: CHAIN_BLOWS[blow], blow, tipCrit: blow === "circle" && !!skillValues("o_sweetspot").circleCrit };
 }
 
-/** the blow's length, Full Circle's growing with each extra turn */
-export function blowLength(blow: ChainBlow): number {
+/** seconds Full Circle's extra Iron Weight turns add to the blow; none for the other blows */
+const extraTurns = (blow: ChainBlow): number => {
   const b = CHAIN_BLOWS[blow];
-  if (blow !== "circle") return b.dur;
-  return b.dur + (circleTurns() - 1) * (b.hitEnd - b.hit);
-}
+  return blow === "circle" ? (circleTurns() - 1) * (b.hitEnd - b.hit) : 0;
+};
+
+/** the blow's length, Full Circle's growing with each extra turn */
+export const blowLength = (blow: ChainBlow): number => CHAIN_BLOWS[blow].dur + extraTurns(blow);
+
+/** the moment a press already made carries on out of the blow's follow-through */
+const linkAt = (blow: ChainBlow): number => (CHAIN_BLOWS[blow].link ?? CHAIN_BLOWS[blow].dur) + extraTurns(blow);
 
 /** the brass smear the blow leaves on its hit frame */
 function smear(blow: ChainBlow): void {
   const b = CHAIN_BLOWS[blow];
-  if (blow === "knee") return;
   const R = blowReach(b, blow);
   const full = blow === "circle";
   game.fx.push(
@@ -65,7 +58,7 @@ function smear(blow: ChainBlow): void {
 
 function startBlow(index: number): void {
   orrin.blow = index;
-  orrin.current = index === 0 && foeAgainstHim() ? "knee" : CHAIN_STRING[index];
+  orrin.current = CHAIN_STRING[index];
   orrin.queued = false;
   orrin.struck = false;
   orrin.swept = 0;
@@ -74,7 +67,6 @@ function startBlow(index: number): void {
   hero.vx = 0;
   newSwing();
   setState("lash");
-  sfx.swing(orrin.current === "circle" ? 0.8 : 1.15);
 }
 
 /** J on the floor: the next blow of the string, or queue it during one */
@@ -83,7 +75,7 @@ export function pressString(): boolean {
     orrin.queued = true;
     return true;
   }
-  if (!isFree() || !hero.ground) return false;
+  if ((!isFree() && !backlineSettling()) || !hero.ground) return false;
   startBlow(orrin.link > 0 ? orrin.blow : 0);
   return true;
 }
@@ -99,6 +91,8 @@ export function runString(dt: number): void {
   const b = CHAIN_BLOWS[blow];
   const span = b.hitEnd - b.hit;
   const turns = blow === "circle" ? circleTurns() : 1;
+  const whoosh = b.hit - WHOOSH_LEAD;
+  if (h.st - dt * progress.stats.aspd < whoosh && h.st >= whoosh) sfx.swing(b.feel.pitch * 1.05);
   if (h.st >= b.hit && orrin.swept < turns) {
     if (!orrin.struck) {
       orrin.struck = true;
@@ -119,13 +113,11 @@ export function runString(dt: number): void {
       }
     }
   }
-  if (h.st < blowLength(blow)) return;
   const next = orrin.blow < CHAIN_STRING.length - 1 ? orrin.blow + 1 : -1;
-  if (orrin.queued && next >= 0) return startBlow(next);
+  // a press already made carries on from the follow-through: the next blow, or after the last a new string
+  if (orrin.queued && orrin.swept >= turns - 1e-6 && h.st >= linkAt(blow)) return startBlow(Math.max(0, next));
+  if (h.st < blowLength(blow)) return;
   settle();
   orrin.blow = next >= 0 ? next : 0;
   orrin.link = next >= 0 ? CHAIN_LINK : 0;
 }
-
-/** a blow's recovery after it struck can be cut short by the hook or a Backline */
-export const inRecovery = (): boolean => hero.state === "lash" && orrin.struck && orrin.swept >= 1;
