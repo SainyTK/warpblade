@@ -4,7 +4,7 @@ import { ABILITY_COLOR, COIN_GOLD, ENEMY_COLORS, PAL } from "../constants/palett
 import { MOTE_PIXELS } from "../constants/pickupPixels";
 import { ULT_LEVELS } from "../constants/ultimate";
 import { ellipseRing, fleck, glow, glowLine, hairline, place, px } from "../engine/frame";
-import { blit, blitRing, detailCanvas } from "../engine/sprite";
+import { blit, detailCanvas } from "../engine/sprite";
 import { fineRing, stampPixels } from "../game/effects/fine";
 import { enemyBox, enemyCenter } from "../game/enemies/enemy";
 import { kindOf } from "../game/enemies/kinds";

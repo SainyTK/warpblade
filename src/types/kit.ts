@@ -1,4 +1,3 @@
-import type { Color } from "./color";
 import type { Enemy } from "./enemy";
 import type { Hero } from "./hero";
 import type { MoveHit, MoveId, Situation } from "./move";
