@@ -14,6 +14,6 @@ export const eye: EnemyKind = {
   rift: { height: 11, y: () => rng.range(36, 90), riftY: (y) => y },
   update: updateEye,
   draw: drawEye,
-  glow: { radius: 16, color: VOID[3], eyeY: 0 },
+  glow: { radius: 13, color: VOID[3], eyeY: 0 },
   evades: true,
 };

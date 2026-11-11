@@ -1,15 +1,17 @@
-import { H, W } from "../../constants/stage";
-import { glow, place, px } from "../../engine/frame";
 import { hex, mix } from "../../utils/color";
-import { Rng } from "../../utils/rng";
-import { breakRuins, drawRuinLight, drawVoidFlames, saveSky } from "./abyss/ruins";
-import { drawAbyssSky, drawSkyLight, tearPath } from "./abyss/sky";
+import { drawAsh } from "./abyss/ash";
+import { drawChunks } from "./abyss/chunks";
+import { drawEclipseLight } from "./abyss/eclipse";
+import { drawVoidFlames } from "./abyss/flames";
+import { drawTearLight, paintAbyss } from "./abyss/paintAbyss";
+import { drawVeinLight } from "./abyss/veins";
 import type { SceneDef, ScenePalette } from "./sceneDef";
 
 /**
  * Waves 21 to 30: the ruins have fallen into the rift. A black sun burns over a near-black sky, a tear in the sky
  * widens, tower tops float loose and the floor cracks open, darker and more broken wave by wave. The floor lip and
- * slab lips stay light so the floor still reads.
+ * slab lips stay light so the floor still reads. Everything that stands still is painted once on the plate, at the
+ * frame's full detail, by paintAbyss.
  */
 
 type Pair = readonly [string, string];
@@ -55,42 +57,19 @@ function paletteAt(k: number): ScenePalette {
   return cached.p;
 }
 
-let tear: [number, number][] = tearPath(0, new Rng(1));
-const ASH = [hex("#3a2c3e"), hex("#54445a"), hex("#6e5a6a")];
-const EMBER = [hex("#ff9a6a"), hex("#ff5a5a"), hex("#d82a4a")];
-const EMBER_GLOW = hex("#e0303a");
-
 export const abyss: SceneDef = {
   palette: paletteAt,
   stars: (k) => Math.round(28 - k * 20),
   windows: 0.14,
   braziers: 0,
   mist: 0.7,
-  sky(bg, r, k) {
-    tear = tearPath(k, new Rng(21));
-    drawAbyssSky(bg, r, k, tear);
-    saveSky(bg);
-  },
-  decorate: (bg, r, k) => breakRuins(bg, r, k, paletteAt(k).towerTop),
+  detail: (paint, _r, k) => paintAbyss(paint, paletteAt(k), k),
   ambient(t, k) {
-    drawSkyLight(t, k, tear);
-    drawRuinLight(t, k);
+    drawEclipseLight(t, k);
+    drawTearLight(t, k);
+    drawChunks(t);
+    drawVeinLight(t, k);
     drawVoidFlames(t);
   },
-  weather(t, k) {
-    // ash and embers drift up toward the tear, a few more each wave
-    place();
-    const n = 24 + Math.round(k * 22);
-    for (let i = 0; i < n; i++) {
-      const speed = 7 + ((i * 7) % 11);
-      const y = H + 8 - ((t * speed + i * 53) % (H + 16));
-      const x = (((i * 67) % W) + Math.sin(t * 0.5 + i * 1.9) * 7 + t * 2) % W;
-      if (i % 4 === 0) {
-        const c = EMBER[i % 3];
-        const b = 0.55 + 0.45 * Math.sin(t * 3 + i);
-        px(x, y, c, b);
-        glow(x, y, 4, EMBER_GLOW, 0.18 * b);
-      } else px(x, y, ASH[i % 3], 0.75);
-    }
-  },
+  weather: drawAsh,
 };

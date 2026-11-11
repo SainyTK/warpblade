@@ -46,6 +46,22 @@ export const AC = {
   gulletDeep: hex("#3c0416"),
 } as const;
 
+/** one creature's hide, from its deepest shadow to the sheen where light grazes it */
+export interface Hide {
+  deep: Color;
+  dark: Color;
+  body: Color;
+  sheen: Color;
+}
+/** the hides a pack is drawn in, so neighbours that overlap differ in value and hue: ink violet, ashen and wine dark */
+const HIDES: readonly Hide[] = [
+  { deep: AC.bodyDeep, dark: AC.bodyDark, body: AC.body, sheen: AC.sheen },
+  { deep: hex("#120c1c"), dark: hex("#22172e"), body: hex("#3c2a4c"), sheen: hex("#8c6eaa") },
+  { deep: hex("#0e050c"), dark: hex("#1c0a18"), body: hex("#34122c"), sheen: hex("#84406a") },
+];
+/** the hide a creature wears, fixed by a number of its own from 0 to 9 */
+export const hideOf = (seed: number): Hide => HIDES[Math.floor(seed * 7) % HIDES.length];
+
 /** crimson void light, dark to white hot, for beams, cracks, orbs and slashes */
 export const VOID = ramp(["#1a0612", "#4a0a24", "#8a1438", "#d8325a", "#ff8aa8", "#ffe4ec"]);
 export const VOID_SPARKS: readonly Color[] = [hex("#ffe4ec"), hex("#ff8aa8"), hex("#d8325a"), hex("#6a0e2a")];
@@ -60,16 +76,6 @@ export const ABYSS_HITS = {
   mawOrb: 12,
   mawSlam: 24,
 } as const;
-
-/** light the top edge of the drawn silhouette, as if the black sun's corona caught it from above */
-export function rimLight(s: SpriteCanvas, c: Color, from = 0): void {
-  const { w, h, d } = s;
-  for (let y = 1; y < h; y++)
-    for (let x = 0; x < w; x++) {
-      const i = y * w + x;
-      if (d[i] && !d[i - w] && x - s.ox >= from) d[i] = c;
-    }
-}
 
 /** clear everything drawn below local y, so a body can sink into the floor */
 export function clipBelow(s: SpriteCanvas, y: number): void {
