@@ -1,5 +1,5 @@
 import { GROUND, W } from "../../../constants/stage";
-import { glow, place, px } from "../../../engine/frame";
+import { place } from "../../../engine/frame";
 import type { Effect } from "../../../types/effect";
 import { PK } from "../../../types/particle";
 import { TAU } from "../../../utils/math";
@@ -10,6 +10,7 @@ import { particles, rng } from "../../state";
 import { fieldPace } from "../../timeFields";
 import { boxHit, heroBox } from "../../world";
 import { DAY_SPARKS, DAY_COLORS as DC } from "./colors";
+import { drawPollen } from "./drawPollen";
 
 const FALL = 34;
 const FADE = 0.5;
@@ -56,17 +57,8 @@ export function createPollen(x: number, y: number, vx: number, damage: number): 
     },
     draw() {
       place();
-      const k = o.landed >= 0 ? 1 - o.landed / FADE : Math.min(1, o.t * 4);
-      const spread = 3.5 + (o.landed >= 0 ? o.landed * 10 : 0);
-      for (let i = 0; i < 9; i++) {
-        const a = o.t * (i % 2 ? 2.2 : -1.6) + i * 2.4;
-        const r = spread * (0.35 + ((i * 37) % 10) / 14);
-        const tw = Math.sin(o.t * 9 + i * 1.7);
-        const c = tw > 0.6 ? P[3] : i % 3 === 0 ? DC.pollenPink : i % 2 ? P[2] : P[1];
-        px(o.x + Math.cos(a) * r, o.y + Math.sin(a) * r * 0.8, c, k);
-      }
-      px(o.x, o.y, P[3], k);
-      glow(o.x, o.y, 11, P[2], 0.35 * k);
+      const landed = Math.max(0, o.landed);
+      drawPollen(o.x, o.y, o.t, o.landed >= 0 ? 1 - o.landed / FADE : Math.min(1, o.t * 4), landed);
     },
   };
 }

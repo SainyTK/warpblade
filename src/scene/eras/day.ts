@@ -1,19 +1,12 @@
-import { GROUND, PLATFORMS, W } from "../../constants/stage";
-import { bayerAt, glow, place } from "../../engine/frame";
+import { GROUND, N, W } from "../../constants/stage";
+import { glow, place } from "../../engine/frame";
 import type { Color } from "../../types/color";
-import { hex, mix, ramp, scale } from "../../utils/color";
+import { hex, mix, ramp } from "../../utils/color";
 import type { Rng } from "../../utils/rng";
-import { drawBirds, drawButterflies, drawDriftingClouds, drawSeedsAndMotes } from "./day/life";
-import {
-  drawClouds,
-  drawFarMountains,
-  drawSun,
-  markOpenSky,
-  type SkyColors,
-  skyColors,
-  skySnapshot,
-  sunAt,
-} from "./day/sky";
+import { type SkyColors, skyColors } from "./day/colors";
+import { paintDayDetail } from "./day/detail";
+import { drawBirds, drawButterflies, drawDriftingClouds, drawSeedsAndMotes, drawStalks, setStalks } from "./day/life";
+import { sunAt } from "./day/sky";
 import type { SceneDef, ScenePalette } from "./sceneDef";
 
 /** Waves 1 to 5: the sunlit meadow ruins under a clear blue sky, warming toward late afternoon by the fifth wave. */
@@ -87,7 +80,6 @@ export function dayPalette(k: number): ScenePalette {
   return p;
 }
 
-const FLOWERS = [hex("#ffffff"), hex("#ffe14a"), hex("#ff9ab8"), hex("#b8a0ff")];
 const RIFT = hex("#b673e8");
 const RIFT_HOT = hex("#ecc8ff");
 /** where the static scene shows faint violet rift cracks in the floor, so the ambient light can make them breathe */
@@ -95,52 +87,6 @@ const CRACKS: readonly (readonly [number, number])[] = [
   [128, 164],
   [262, 170],
 ];
-
-/** faint stone courses on the towers and a shaded left face, the sun being on their right */
-function towerStone(bg: Uint32Array, P: ScenePalette): void {
-  const joint = scale(P.tower, 0.93);
-  const shadow = scale(P.tower, 0.84);
-  const body = new Set([P.tower, joint, shadow]);
-  for (let y = 0; y < GROUND; y++)
-    for (let x = 1; x < W; x++) {
-      const i = y * W + x;
-      if (bg[i] !== P.tower) continue;
-      let edge = 0;
-      while (edge < 3 && x - edge - 1 >= 0 && body.has(bg[i - edge - 1])) edge++;
-      if (edge < 3 && (3 - edge) / 3 > bayerAt(x, y)) bg[i] = shadow;
-      else if (y % 6 === 0 || (x + (Math.floor(y / 6) % 2) * 5) % 10 === 0) bg[i] = joint;
-    }
-}
-
-/** ivy creeping down the towers from their broken tops */
-function ivy(bg: Uint32Array, r: Rng, P: ScenePalette): void {
-  for (let x = 0; x < W; x++)
-    for (let y = 40; y < GROUND - 4; y++) {
-      if (bg[y * W + x] !== P.towerTop || !r.chance(0.3)) continue;
-      bg[y * W + x] = P.mossTip;
-      const L = r.chance(0.4) ? r.int(4, 22) : r.int(1, 3);
-      for (let k = 1; k <= L; k++) {
-        const i = (y + k) * W + x;
-        if (bg[i] !== P.tower) break;
-        bg[i] = k === L ? P.mossTip : k % 5 === 2 ? P.moss : P.vine;
-      }
-    }
-}
-
-/** tufts of grass and small flowers along the lit lips of the floor and the slabs */
-function meadow(bg: Uint32Array, r: Rng, P: ScenePalette): void {
-  const lips: (readonly [number, number, number])[] = [[0, W - 1, GROUND]];
-  for (const p of PLATFORMS) lips.push([p.x0 + 1, p.x1 - 1, p.y]);
-  for (const [x0, x1, y0] of lips)
-    for (let x = x0; x <= x1; x++) {
-      if (r.chance(0.16)) {
-        const h = r.int(1, 3);
-        for (let k = 1; k <= h; k++) bg[(y0 - k) * W + x] = k === h ? P.mossTip : P.moss;
-        if (h >= 2 && r.chance(0.35)) bg[(y0 - h - 1) * W + x] = r.pick(FLOWERS);
-      }
-      if (y0 === GROUND && r.chance(0.05)) bg[(y0 + 1) * W + x] = P.moss;
-    }
-}
 
 /** the rift has split the floor in two places; the cracks hold a faint violet light */
 function riftCracks(bg: Uint32Array, r: Rng): void {
@@ -155,7 +101,18 @@ function riftCracks(bg: Uint32Array, r: Rng): void {
   }
 }
 
+/** the art pixel at the top of each tower window, read from the art pixel picture */
+function findWindows(bg: Uint32Array, window: Color): [number, number][] {
+  const found: [number, number][] = [];
+  for (let y = 1; y < GROUND; y++)
+    for (let x = 0; x < W; x++) if (bg[y * W + x] === window && bg[(y - 1) * W + x] !== window) found.push([x, y]);
+  return found;
+}
+
 let colors: SkyColors = skyColors(0);
+/** the art pixel picture as the last static step left it, kept for the detail pass that follows */
+const artPicture = new Uint32Array(N);
+let windows: [number, number][] = [];
 
 export const day: SceneDef = {
   palette: dayPalette,
@@ -163,20 +120,16 @@ export const day: SceneDef = {
   windows: 0,
   braziers: 0,
   mist: 0,
-  sky(bg, r, k) {
-    colors = skyColors(k);
-    drawFarMountains(bg, colors);
-    drawSun(bg, k, colors);
-    drawClouds(bg, r, k, colors);
-    skySnapshot.set(bg);
-  },
   decorate(bg, r, k) {
-    const P = dayPalette(k);
-    markOpenSky(bg);
-    ivy(bg, r, P);
-    towerStone(bg, P);
-    meadow(bg, r, P);
+    windows = findWindows(bg, dayPalette(k).windowDark);
     riftCracks(bg, r);
+    artPicture.set(bg);
+  },
+  detail(paint, r, k) {
+    const P = dayPalette(k);
+    colors = skyColors(k);
+    const stalks = paintDayDetail(paint, r, k, colors, P, { picture: artPicture, windows });
+    setStalks(stalks, { foot: P.vine, stem: P.moss, tip: P.mossTip });
   },
   ambient(t, k) {
     place();
@@ -186,6 +139,7 @@ export const day: SceneDef = {
     drawDriftingClouds(t, colors);
     drawBirds(t);
     drawButterflies(t);
+    drawStalks(t);
     for (const [cx, cy] of CRACKS) glow(cx + 3, cy, 9, RIFT, 0.18 + Math.sin(t * 1.4 + cx) * 0.06);
   },
   weather: drawSeedsAndMotes,

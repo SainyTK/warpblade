@@ -65,6 +65,25 @@ const CRACK: readonly Pt[] = [
 const inBody = (x: number, y: number, margin: number): boolean =>
   BODY.some(([cx, cy, r]) => Math.hypot(x - cx, y - cy) < r - margin);
 
+/** how fast its flanks rise and fall, and by how much of an art pixel, calm and winded */
+const BREATH = { calm: 3.2, winded: 11, shallow: 0.22, deep: 0.5 };
+type TailMood = "wag" | "raised" | "stream" | "limp";
+
+/** a short tail ending in a dark tuft: it wags at a trot, stands stiff before a charge, streams behind one and hangs after */
+function tail(s: SpriteCanvas, by: number, time: number, mood: TailMood): void {
+  const root: Pt = [-11.5, -10.5 + by];
+  let tip: Pt = [-15.5, -12.5 + by + Math.sin(time * 9) * 1.2];
+  if (mood === "raised") tip = [-13.5 + Math.sin(time * 40) * 0.4, -16 + by];
+  if (mood === "stream") tip = [-17.5, -11.5 + by + Math.sin(time * 30) * 0.5];
+  if (mood === "limp") tip = [-14, -6.5 + by];
+  s.begin();
+  s.taper(root[0], root[1], tip[0], tip[1], 0.9, 0.45, H[1], mood === "limp" ? -1 : 1);
+  s.shadeEdges(H[1], H[2], H[0]);
+  s.dot(tip[0], tip[1], 0.9, H[0]);
+  s.set(tip[0] - 0.5, tip[1] - 0.5, H[1]);
+  s.commit();
+}
+
 /** a leg from hip to hoof: a shaded column and a split hoof */
 function leg(s: SpriteCanvas, hx: number, hy: number, fx: number, fy: number, near: boolean): void {
   const hide = near ? H[2] : H[0];
@@ -124,16 +143,21 @@ export function drawThornback(e: Enemy, t: number): SpriteCanvas {
   const sag = winded ? 1 + (Math.floor(time * 3) % 2) : 0;
   const paw = winding ? Math.sin(e.st * 22) * 2.5 : 0;
   const lift = charging ? -1 : 0;
-  const by = lift + sag;
+  // the body rides half a pixel higher on every other step of its trot
+  const trot = e.state === "walk" && gait ? -0.5 : 0;
+  const by = lift + sag + trot;
+  // its flanks swell as it breathes, fast and deep while it stands winded
+  const breath = Math.sin(time * (winded ? BREATH.winded : BREATH.calm)) * (winded ? BREATH.deep : BREATH.shallow);
   s.clear();
+  tail(s, by, time, charging ? "stream" : winding ? "raised" : winded ? "limp" : "wag");
   // the far legs, in shadow
   leg(s, -8, -6 + sag, -8 - step, 0, false);
   leg(s, 6, -6 + sag, 6 + step, 0, false);
   // the body: a hide lit across the back, a dark belly and coarse hair combed back
   s.begin();
-  for (const [x, y, r] of BODY) {
-    s.dot(x, y + by, r, H[1]);
-  }
+  BODY.forEach(([x, y, r], i) => {
+    s.dot(x, y + by, r + (i === 0 ? 0 : breath), H[1]);
+  });
   s.shadeEdges(H[1], H[2], H[0], 3);
   s.dot(-3, -11 + by, 4.6, H[2]);
   s.dot(4, -12 + by, 3.6, H[2]);
@@ -240,6 +264,13 @@ export function drawThornback(e: Enemy, t: number): SpriteCanvas {
   s.shadeEdges(DC.tusk, DC.thornTip, DC.tuskShade);
   s.set(16, -8.5 + hy, WHITE);
   s.commit();
+  if (winded) {
+    // its tongue hangs out while it pants
+    s.begin();
+    s.block(14.5, -3 + hy, DC.tongue, 1, breath > 0 ? 1.5 : 1);
+    s.set(14.5, -3 + hy, DC.tongueLit);
+    s.commit();
+  }
   // the near legs, one pawing the ground before a charge
   const pawLift = Math.min(0, -Math.abs(paw) * 0.6);
   leg(s, -5, -5 + sag, -5 + step, 0, true);

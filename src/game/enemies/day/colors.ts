@@ -28,6 +28,8 @@ export const DAY_COLORS = {
   hideGlint: hex("#d0a678"),
   snout: hex("#8a5a46"),
   snoutLit: hex("#b48068"),
+  tongue: hex("#d8687a"),
+  tongueLit: hex("#f09aa4"),
   hoof: hex("#2a1d1a"),
   hoofLit: hex("#5a4a44"),
   brambleLit: hex("#a4d060"),

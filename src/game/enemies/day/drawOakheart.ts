@@ -1,3 +1,4 @@
+import { RES } from "../../../constants/stage";
 import { detailCanvas, type SpriteCanvas } from "../../../engine/sprite";
 import type { Enemy } from "../../../types/enemy";
 import { mix, WHITE } from "../../../utils/color";
@@ -14,6 +15,10 @@ const canvas = detailCanvas(76, 62, 38, 54);
 type Pt = readonly [number, number];
 const B = DC.bark;
 const L = DC.leaf;
+/** how fast the crown's clumps stir and the acorns swing */
+const SWAY = { crown: 1.7, acorns: 2.6 };
+/** it blinks for `shut` seconds every `every` seconds while it walks */
+const BLINK = { every: 3.4, shut: 0.14 };
 /** the trunk, wider at the roots and the shoulders */
 const TRUNK: readonly Pt[] = [
   [-10, -3],
@@ -168,21 +173,23 @@ function arm(s: SpriteCanvas, sx: number, sy: number, hand: Pt, lit: boolean): v
   s.commit();
 }
 
-/** a root leg from the trunk to a foot of roots splayed on the ground */
+/** a root leg under the trunk: a short thick root flaring into a foot of toes splayed on the ground */
 function root(s: SpriteCanvas, x0: number, x1: number, step: number, lit: boolean): void {
   const bark = lit ? B[2] : B[1];
+  const fx = x1 + step;
   s.begin();
-  s.stroke(x0, -8, x1 + step, 0, lit ? 3.2 : 3, bark);
-  s.stroke(x1 + step, 0, x1 + step + (lit ? 6 : -5), 0, 1, bark);
+  s.taper(x0, -5, fx, -1.2, lit ? 2.6 : 2.4, lit ? 3 : 2.8, bark);
+  s.taper(fx + 1, -1, fx + (lit ? 7 : -6), 0, 1.3, 0.5, bark, lit ? 0.6 : -0.6);
+  s.taper(fx - 1, -1, fx + (lit ? -5 : 4.5), 0, 1.2, 0.5, bark, lit ? -0.5 : 0.5);
   if (lit) {
-    s.stroke(x1 - 1 + step, 0, x1 - 4 + step, 0, 1, bark);
+    s.taper(fx, -0.5, fx + 3.5, 0.2, 1, 0.5, bark);
   }
   s.shadeEdges(bark, lit ? B[3] : B[2], lit ? B[1] : B[0], 2);
-  for (const k of [0.3, 0.65]) {
-    s.set(x0 + (x1 + step - x0) * k, -8 + 8 * k, B[0]);
-  }
+  s.hairline(x0 + 0.5, -4.5, fx + 1, -0.5, B[0]);
+  s.hairline(x0 - 1.2, -4, fx - 1.5, -1, lit ? B[1] : B[0]);
   if (lit) {
-    s.stroke(x1 + step, -6, x1 + 1 + step, -1, 0.3, B[3]);
+    s.set(fx + 4.5, -0.8, B[4]);
+    s.set(fx + 5, -0.8, B[4]);
   }
   s.commit();
 }
@@ -198,6 +205,9 @@ export function drawOakheart(e: Enemy, t: number): SpriteCanvas {
   const [backHand, frontHand] = hands(e, step);
   const glowCol = heat > 0.75 ? DC.crackHot : mix(DC.crack, DC.crackHot, heat);
   const hot = heat > 0.5;
+  // each clump of the crown rises and settles in its own time, half an art pixel, so the leaves seem to stir
+  const rustle = (clump: number): number => Math.round(Math.sin(time * SWAY.crown + clump * 1.9)) / RES;
+  const blinking = e.state === "walk" && time % BLINK.every < BLINK.shut;
   s.clear();
   // the far root leg and the far branch arm, in shadow
   root(s, -4, -6, -step, false);
@@ -244,6 +254,10 @@ export function drawOakheart(e: Enemy, t: number): SpriteCanvas {
   s.begin();
   for (const x of [1, 5]) {
     s.stroke(x + 0.2, -21.6 + drop, x + 1.8, -21.6 + drop, 0.75, B[0]);
+    if (blinking) {
+      s.hairline(x, -21.5 + drop, x + 1.5, -21.5 + drop, DC.crackDeep);
+      continue;
+    }
     glowEye(s, x, -22 + drop, hot ? DC.crackHot : DC.eye, WHITE);
     s.block(x + 1, -22 + drop, hot ? DC.crackHot : DC.crack);
     if (!hot) {
@@ -276,9 +290,9 @@ export function drawOakheart(e: Enemy, t: number): SpriteCanvas {
     s.dot(x + shiver + 0.5, y + cy + 0.5, r + 0.5, DC.leafDeep);
   }
   s.commit();
-  for (const [x, y, r] of CROWN) {
+  CROWN.forEach(([x, y, r], clump) => {
     const lx = x + shiver;
-    const ly = y + cy;
+    const ly = y + cy + rustle(clump);
     s.begin();
     s.dot(lx, ly, r, L[2]);
     for (let a = 0; a < 6.2; a += 0.8)
@@ -298,11 +312,11 @@ export function drawOakheart(e: Enemy, t: number): SpriteCanvas {
         s.set(lx + i + 0.5, ly + j, leafCol);
       }
     s.commit();
-  }
+  });
   if (e.state !== "shoot") {
     s.begin();
     for (const [x, y] of ACORNS) {
-      const ax = x + shiver;
+      const ax = x + shiver + Math.round(Math.sin(time * SWAY.acorns + x)) / RES;
       const ay = y + cy;
       s.dot(ax + 0.5, ay + 1.6, 1.1, DC.acorn);
       s.shadeEdges(DC.acorn, DC.acornLit, DC.acornShade);
