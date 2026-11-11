@@ -134,6 +134,19 @@ export const ACTION_TEXT: Record<KitId, Record<InputAction, string>> = {
     cast: "Use the selected ability: Smoke Knot, Hamstring or a spell skill (MP)",
     cycle: "Switch to the next ability",
   },
+  jory: {
+    ...KAEL_ACTION_TEXT,
+    left: "Walk left. Tap twice and hold to run",
+    right: "Walk right. Tap twice and hold to run",
+    up: "Jump. One jump, no double jump",
+    down: "With jump, drop through a ledge",
+    attack:
+      "Mallet string: Tap, Roll, Crash. On the beat a blow is an Accent and builds Groove; off it, Groove falls. In the air, Downstroke",
+    dash: "Beat Step (stamina). On the beat nothing can touch you and you pass through foes",
+    warp: "Boom (stamina): push foes away. On the beat it is bigger, drowns foe shots and nothing can touch you",
+    cast: "Use the selected ability: Steady Hand, Thunder Skin or a spell skill (MP). Judged on the beat",
+    cycle: "Switch to the next ability",
+  },
 };
 /** keys inside the menu */
 export const MENU_KEYMAP: Record<string, MenuCommand> = {

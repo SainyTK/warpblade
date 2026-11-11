@@ -31,7 +31,7 @@ His crystal sword can be thrown, and wherever it lands, he follows.
 
 - **A full kit from the first second.** Every hero starts a run with every button already doing something.
   Kael has his four-hit sword string, a double jump, a dash, Warp Strike on `K` (throw the sword at a foe and appear beside it mid-swing, harder the farther he travels, 10 MP), and two crystal abilities on `I`, Crystal Lance and Crystal Burst.
-- **Fixed combo strings.** Each hero's ground string has a fixed length for the whole run: four hits for Kael and three for Ysra, Sable, Hulda, Orrin, Mirel, Wenna and Tallis.
+- **Fixed combo strings.** Each hero's ground string has a fixed length for the whole run: four hits for Kael and three for Ysra, Sable, Hulda, Orrin, Mirel, Wenna, Tallis and Jory.
   Kael's string is a step-in cut, a rising backhand, a twin-fang double stab and a falling smash that knocks the foe down, and each one moves his whole body while his feet stay planted.
   Skills change what the hits do, never how many there are.
 - **Combos that play the same every time.** Each press of J plays one whole blow with a wind-up, a strike that holds through the hit and a follow-through, in the same order wherever the foes stand, and heavy blows bounce foes off the edge of the stage.
@@ -53,10 +53,10 @@ His crystal sword can be thrown, and wherever it lands, he follows.
 - **Charms.** Charms multiply one stat for every source at once: Might for damage, Haste for cooldowns, Vigor for HP, Insight for experience, and more that are found over many runs.
 - **Chests and evolutions.** Elites with a gold ring, mini bosses and the wave 20 Warden drop chests; touching one opens it.
   A chest raises held skills and charms, sometimes three or five at once, and from wave 8 it evolves a skill at level 8 whose partner skill is held at level 4 or more.
-  Kael's Fire Flask evolves with Crystal Familiar into Sunflask, Orrin's Sweet Spot with Perpetual Motion into Perfect Arc, Mirel's Long Echo with Patience into Choir of Hours, Wenna's Hunting Call with Deep Tallow into Pack Law, and Tallis's Backbiter with Shroud into Last Breath.
+  Kael's Fire Flask evolves with Crystal Familiar into Sunflask, Orrin's Sweet Spot with Perpetual Motion into Perfect Arc, Mirel's Long Echo with Patience into Choir of Hours, Wenna's Hunting Call with Deep Tallow into Pack Law, Tallis's Backbiter with Shroud into Last Breath, and Jory's Heavy Accent with Iron Metronome into Thunderclap.
   A card says "Evolves with ???" until the player has made that evolution once.
 - **Flow.** Every hit of the hero's own adds a stack of Flow, up to 25, each one +4% damage on every source, so a full bar doubles it; a perfect dodge adds five, and getting hurt halves it.
-- **Charged ultimates.** Every hero has a special on `U` from the start: Crystal Nova for Kael, Pyre Wave for Ysra, Bolt Storm for Sable, Quake Drop for Hulda, Grand Pendulum for Orrin, Hour of Stillness for Mirel, Great Wick for Wenna and Gloaming for Tallis.
+- **Charged ultimates.** Every hero has a special on `U` from the start: Crystal Nova for Kael, Pyre Wave for Ysra, Bolt Storm for Sable, Quake Drop for Hulda, Grand Pendulum for Orrin, Hour of Stillness for Mirel, Great Wick for Wenna, Gloaming for Tallis and Drumroll for Jory.
   Hold U through four levels; level 4 spends a full MP bar. After a strike the ultimate recharges for 20 seconds, and its row on the HUD dims with a bar filling under it.
   An ultimate skill upgrades or replaces the special, and a build holds at most one.
 - **Experience to pick up.** Slain foes drop lime orbs of experience that bounce on the floor. Walk over them to collect them; any left behind fly to the hero after 4 seconds, or in a room to the nearest standing hero.
@@ -71,11 +71,11 @@ His crystal sword can be thrown, and wherever it lands, he follows.
   When a run ends, cleared or lost, its coins go to the bank and a result screen shows the wave reached and the coins earned.
   The Shop on the start menu sells stats in levels (HP, attack, ability power, MP, crit, move speed, stamina), more rerolls, skips and banishes for the cards, and four skills: Lodestone, Aftershock and Head Start, bought once, and Last Light, bought in three levels, each saving the hero from one more fatal blow per run.
   Everything bought applies to every run and every hero, on top of the level-up picks, and is saved in this browser.
-- **Achievements and hero unlocks.** Thirty-one achievements track goals across runs: waves reached, a clear of wave 10 with each hero, foes slain, long combos, perfect dodges, evolutions, three foes felled by Orrin's swing kicks in one swing, five foes felled inside one of Mirel's Stillfields, forty foes felled by Wenna's Wicks in one run, thirty foes felled from behind by Tallis in one run, coins banked, the Rift Warden and The Unblinking.
+- **Achievements and hero unlocks.** Thirty-three achievements track goals across runs: waves reached, a clear of wave 10 with each hero, foes slain, long combos, perfect dodges, evolutions, three foes felled by Orrin's swing kicks in one swing, five foes felled inside one of Mirel's Stillfields, forty foes felled by Wenna's Wicks in one run, thirty foes felled from behind by Tallis in one run, twenty seconds held at Crescendo by Jory, coins banked, the Rift Warden and The Unblinking.
   Most pay coins, a few stay hidden as ??? until an earlier one is earned, and a small banner slides down when one is earned without stopping play.
   The Achievements page on the start menu shows what each one asks, with a progress bar for those that count up, and the result screen names those a run earned.
   Kael and Ysra are free; every newer hero is unlocked with coins on the hero screen, each one costing more than the last (see [docs/achievements.md](docs/achievements.md)).
-- **Eight heroes.** Start opens the hero screen, a roster of hero tiles over one panel for the hero in focus. Kael throws his crystal sword and appears where it lands; he is balanced, starts with Warp Strike, Crystal Lance and Crystal Burst, and adds his spells and ultimates from picks.
+- **Nine heroes.** Start opens the hero screen, a roster of hero tiles over one panel for the hero in focus. Kael throws his crystal sword and appears where it lands; he is balanced, starts with Warp Strike, Crystal Lance and Crystal Burst, and adds his spells and ultimates from picks.
   Ysra, the ember lancer, is a flame-temple guard who woke when the braziers lit again.
   She shares Kael's rig and plays nothing like him: tougher and slower, with one heavy jump and no dash.
   Her glaive string pokes far and pierces every foe in the line, holding `J` winds a lunge, and up or down with `J` hooks a foe up or drags it in.
@@ -120,7 +120,15 @@ His crystal sword can be thrown, and wherever it lands, he follows.
   Gloam, a bar under stamina, refills only while no foe near faces him and from his blows from behind.
   `I` drops a Smoke Knot that blinds the minions inside, or Hamstrings the foe ahead, for MP, and his special Gloaming darkens the scene while he appears behind foe after foe (see [docs/tallis-design.md](docs/tallis-design.md)).
   Mini bosses only turn more slowly toward a hidden hero, the Rift Warden is never fooled, and in co-op foes go for a hero they can see.
-  Sable, Hulda, Orrin, Mirel, Wenna and Tallis start locked and are bought with coins.
+  Jory, the war drummer, fights to a beat everyone can see and hear: a cobalt ring at his feet closes and flashes on every beat, his body rides it, the GV bar's lamp blinks with it and a soft tick sounds.
+  Every press of `J`, `K`, `L` and `I` is judged against that beat.
+  On the beat a blow is an Accent that hits 1.4 times as hard and adds a pip of Groove; off the beat Groove falls, and mashing never builds it.
+  Groove, twelve pips under stamina, raises his tempo from 96 to 132 beats a minute in four tiers, so a player who keeps time gets faster and reaches further.
+  `J` plays Tap, Roll and Crash with his two mallets, and from tier 3 Crash sends a sound wave along the floor; in the air it is Downstroke.
+  `K` is Boom, both palms on the drum: it pushes foes away, and on the beat it is wider, drowns foe shots and nothing can touch him for a moment.
+  `L` is Beat Step, a short step that is untouchable and passes through foes on the beat.
+  `I` casts Steady Hand, which widens his window and holds his Groove for eight beats, or Thunder Skin, a wave along the floor, for MP, and his special Drumroll plants the drum for a roll of heavy rings (see [docs/jory-design.md](docs/jory-design.md)).
+  Sable, Hulda, Orrin, Mirel, Wenna, Tallis and Jory start locked and are bought with coins.
   The hero behind the menu changes as you look through the cards, and the choice is saved in this browser.
 - **A 30-wave stage in five eras.** The sky and the foes change as the waves go on, and the scene dissolves into the next era between waves.
   Waves 1 to 5 are a sunlit day with Thornbacks, Glimmer Moths and the Oakheart.
@@ -179,7 +187,7 @@ Buttons dim while their action lacks MP or stamina or waits on a cooldown, and p
 The page holds still under your fingers: double taps, pinches and long presses never zoom, select text or open a menu.
 
 The game opens on a start menu with Start, Co-op, Shop, Achievements, Codex, Controls and Options.
-Start opens the hero screen: pick Kael, Ysra, Sable, Hulda, Orrin, Mirel, Wenna or Tallis with `A` `D` or the arrows and begin with `J` or `Enter`.
+Start opens the hero screen: pick Kael, Ysra, Sable, Hulda, Orrin, Mirel, Wenna, Tallis or Jory with `A` `D` or the arrows and begin with `J` or `Enter`.
 In the Shop, pick an item once to see "Buy?" and again to buy it; a locked hero on the hero screen asks the same way before it is unlocked.
 When a run ends, the start menu opens on its result, with Continue and Shop.
 Pausing adds Resume, Restart run and Quit run, and freezes the game until you resume.
@@ -259,7 +267,7 @@ src/
   services/        Web Audio sound effects, saved options, best wave and shop progress in local storage, the Fullscreen API, vibration, the clipboard
     coop/          the PeerJS links of a co-op room's host and guests, and the game stream
   store/           the player's options, the coin bank, shop purchases, unlocked heroes and achievements kept between runs, achievement tracking, and the co-op room as the menu sees it
-  game/            the simulation
+  game/            the simulation; beat.ts is the shared beat clock that keeps counting through hit-stop and slow motion
     coop/          a co-op room: the host's run with every player's hero, the host and guest sessions, player tags
     hero/          poses, drawing, rope physics, combos and moves, dash, warp, ultimate charge, per-step update
     enemies/       every foe's drawing and behavior, one folder per era (day, rain, twilight, abyss; the night foes sit at the top level)
@@ -286,6 +294,7 @@ docs/
   hulda-design.md  Hulda's kit, Grit and plates, grabs and throws, and her balance check
   orrin-design.md  Orrin's kit, the hook and the pendulum swing, Momentum, and his balance check
   mirel-design.md  Mirel's kit, echoes, the Stillfield, Rewind, Sand, and her balance check
+  jory-design.md   Jory's kit, the beat and Groove, Accents, Boom and Beat Step, and his balance check
   motion-standard.md the rules every hero's animation follows
   pick-pacing.md   when picks come, how long the skill pool lasts and Second Wind after it
   multiplayer.md   co-op rooms: who runs the game, what crosses the network, downs, picks, coins and what is left for later

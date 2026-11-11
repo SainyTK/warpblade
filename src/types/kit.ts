@@ -4,7 +4,7 @@ import type { MoveHit, MoveId, Situation } from "./move";
 import type { Pose } from "./pose";
 
 /** which hero's controls, moves and states drive the shared rig */
-export type KitId = "kael" | "ysra" | "sable" | "hulda" | "orrin" | "mirel" | "wenna" | "tallis";
+export type KitId = "kael" | "ysra" | "sable" | "hulda" | "orrin" | "mirel" | "wenna" | "tallis" | "jory";
 
 /**
  * How one hero plays. The shared loop (updateHero, the combo engine, physics, hurt) calls into the kit of the hero
@@ -56,6 +56,8 @@ export interface HeroKit {
   drivesMotion(): boolean;
   /** gravity multiplier for the kit's own states; 1 for shared behaviour */
   gravityScale(): number;
+  /** drawn on the floor in front of the scene and behind the foes, so it never covers a wind-up (Jory's beat ring) */
+  drawFloor?(): void;
   /** drawn in the world behind the hero, for parts of the kit that reach past the sprite (a chain's anchor) */
   drawBack?(): void;
   /** drawn in the world over the hero, for parts of the kit that reach past the sprite (a chain and its hook) */

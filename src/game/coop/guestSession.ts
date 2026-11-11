@@ -108,6 +108,9 @@ export class GuestSession {
       case "left":
         postNote(leftNote(msg.slot));
         break;
+      case "probe":
+        this.link?.send({ t: "probe", at: msg.at });
+        break;
       case "start":
         this.startRun();
         break;

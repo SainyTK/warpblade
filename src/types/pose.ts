@@ -19,6 +19,7 @@ export const POSE_KEYS = [
   "sa",
   "tw",
   "mr",
+  "dr",
 ] as const;
 export type PoseKey = (typeof POSE_KEYS)[number];
 /**
@@ -29,6 +30,7 @@ export type PoseKey = (typeof POSE_KEYS)[number];
  * fe and be at 1 bend the near and far elbow the other way. fa and ba tilt the near and far foot in radians: positive
  * points the toes down, negative lifts them onto the heel.
  * tw at 1 turns Kael's back to the camera, mid-spin. mr at 1 draws the whole pose mirrored, facing behind him.
+ * dr swings a drum worn at the hip round to the front of the belly, 0 at the hip to 1 in front (Jory's war drum).
  */
 export type Pose = Record<PoseKey, number>;
 /** [time, pose, "snap"]: snap holds the previous key and jumps on this one. */

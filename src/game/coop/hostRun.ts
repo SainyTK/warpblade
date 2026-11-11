@@ -41,6 +41,8 @@ export interface SeatStart {
   peer: string | null;
   character: CharacterDef;
   owned: Record<string, number> | null;
+  /** the guest's measured round trip in seconds, -1 until measured, 0 for the host */
+  rtt: number;
 }
 
 /**
@@ -163,6 +165,10 @@ export class HostRun implements CoopHooks {
 
   slot(): number {
     return this.current.slot;
+  }
+
+  inputLag(): number {
+    return this.current.peer ? this.current.rtt : 0;
   }
 
   shareXp(amount: number): void {

@@ -5,6 +5,7 @@ import { atHip, farShoulder, isElbowFlipped, isMirrored, isTurned, nearShoulder 
 import { armReach, drawArm } from "./draw/arm";
 import { drawBraid } from "./draw/braid";
 import { drawCoatTails } from "./draw/coatTails";
+import { drawDrum, drawMallet, farMalletAngle } from "./draw/drum";
 import { drawHead } from "./draw/head";
 import { drawKnife, farKnifeAngle } from "./draw/knives";
 import { drawLeg } from "./draw/leg";
@@ -45,9 +46,10 @@ export function drawHero(s: SpriteCanvas, p: Pose, look: HeroLook): Vec {
     if (look.sword) drawSword(s, hand, p.sa);
     drawArm(s, near, elbow, hand, !back);
   };
-  // a knife fighter holds a second knife in the far hand
+  // a knife fighter holds a second knife in the far hand, a drummer a second mallet
   const farArm = (front: boolean) => {
     if (skin.weapon === "knives" && look.sword) drawKnife(s, farHand, farKnifeAngle(farElbow, farHand), front);
+    if (skin.weapon === "mallets" && look.sword) drawMallet(s, farHand, farMalletAngle(farElbow, farHand), front);
     drawArm(s, far, farElbow, farHand, front);
   };
   if (back) swordArm();
@@ -57,6 +59,7 @@ export function drawHero(s: SpriteCanvas, p: Pose, look: HeroLook): Vec {
   drawLeg(s, atHip(p, 1.5, 0), [p.ffx, p.ffy], p.fa, false);
   drawTorso(s, p, back);
   if (skin.satchel && !back) drawSatchel(s, p);
+  if (skin.drum && !back) drawDrum(s, p);
   if (skin.braid) drawBraid(s, rope);
   drawHead(s, p, back);
   if (back) farArm(true);

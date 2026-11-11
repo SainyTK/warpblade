@@ -35,6 +35,7 @@ export function renderScene(out: Uint8ClampedArray): void {
   drawSkillsBack();
   drawChests();
   drawShadows();
+  eachHero(() => shownKit().drawFloor?.());
   drawEnemies();
   room?.drawUnderlay();
   eachHero(drawHeroLayer);

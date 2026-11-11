@@ -38,24 +38,25 @@ class SoundEffects {
     }
     return this.tap.stream;
   }
-  private envelope(g: GainNode, vol: number, dur: number): void {
+  private envelope(g: GainNode, vol: number, dur: number, delay = 0): void {
     if (!this.ctx) return;
-    const t = this.ctx.currentTime;
+    const t = this.ctx.currentTime + delay;
     g.gain.setValueAtTime(0.0001, t);
     g.gain.exponentialRampToValueAtTime(vol, t + 0.005);
     g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
   }
-  tone(f0: number, f1: number, dur: number, type: OscillatorType = "sine", vol = 0.1): void {
+  /** a tone gliding from f0 to f1, starting `delay` seconds from now */
+  tone(f0: number, f1: number, dur: number, type: OscillatorType = "sine", vol = 0.1, delay = 0): void {
     if (!this.ctx || !this.master || !this.enabled) return;
     const o = this.ctx.createOscillator();
     const g = this.ctx.createGain();
-    const t = this.ctx.currentTime;
+    const t = this.ctx.currentTime + delay;
     o.type = type;
     o.frequency.setValueAtTime(f0, t);
     o.frequency.exponentialRampToValueAtTime(Math.max(20, f1), t + dur);
-    this.envelope(g, vol, dur);
+    this.envelope(g, vol, dur, delay);
     o.connect(g).connect(this.master);
-    o.start();
+    o.start(t);
     o.stop(t + dur + 0.02);
   }
   noise(dur: number, f0: number, f1: number, vol = 0.15, type: BiquadFilterType = "bandpass", q = 1.2): void {
@@ -167,6 +168,24 @@ class SoundEffects {
   ultimate(level: number): void {
     this.noise(0.3 + level * 0.15, 3000, 200, 0.12 + level * 0.04, "lowpass", 0.8);
     this.tone(500, 1500 + level * 300, 0.2, "triangle", 0.06);
+  }
+  /** Jory's beat: a soft low tick on every beat, a little louder on a bar's downbeat */
+  beat(downbeat: boolean): void {
+    this.tone(110, 70, 0.07, "sine", downbeat ? 0.06 : 0.04);
+  }
+  /** a judged press on the beat: a drum thump */
+  thump(): void {
+    this.tone(160, 60, 0.12, "triangle", 0.08);
+    this.noise(0.06, 900, 200, 0.05, "lowpass");
+  }
+  /** a judged press off the beat: a muted, flat click */
+  offBeat(): void {
+    this.tone(220, 200, 0.04, "square", 0.02);
+  }
+  /** Groove climbed a tier: two rising notes */
+  tierUp(): void {
+    this.tone(330, 392, 0.1, "triangle", 0.05);
+    this.tone(440, 523, 0.14, "triangle", 0.05, 0.09);
   }
 }
 

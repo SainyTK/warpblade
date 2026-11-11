@@ -20,6 +20,8 @@ export const HUD_RATE = 15;
 export const JOIN_TIMEOUT_MS = 12000;
 /** each side says it is still there this often, and counts the other gone after the quiet limit */
 export const PING_MS = 1500;
+/** a guest's round trip is smoothed over the probes: each new one moves it this share of the way */
+export const RTT_SMOOTHING = 0.3;
 export const QUIET_LIMIT_MS = 6000;
 /** a guest with no HUD from the host for this long tells its player the host is away */
 export const HOST_AWAY_MS = 1000;

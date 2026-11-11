@@ -1,5 +1,6 @@
 import { STAMINA } from "../../constants/combat";
 import { RUSH } from "../../constants/hulda/rush";
+import { BEAT_STEP, BOOM } from "../../constants/jory/moves";
 import { STILLFIELD } from "../../constants/mirel/field";
 import { BACKLINE } from "../../constants/orrin/backline";
 import { HOP, SLIDE } from "../../constants/sable/moves";
@@ -10,6 +11,13 @@ import { VAULT } from "../../constants/ysra/stance";
 import { abilityMp, abilityRecharge, selectedAbility } from "../../game/hero/hulda/abilities";
 import { hulda } from "../../game/hero/hulda/memory";
 import { rushCost } from "../../game/hero/hulda/rush";
+import {
+  selectedAbility as joryAbility,
+  abilityMp as joryMp,
+  abilityRecharge as joryRecharge,
+} from "../../game/hero/jory/abilities";
+import { jory } from "../../game/hero/jory/memory";
+import { stepCost } from "../../game/hero/jory/stepSkills";
 import {
   selectedAbility as mirelAbility,
   abilityMp as mirelMp,
@@ -216,6 +224,29 @@ function tallisLook(spec: TouchButtonSpec, look: ButtonLook): void {
   }
 }
 
+/** Jory's Boom and Beat Step need stamina and wait a moment after each; I shows the selected ability's MP and recharge */
+function joryLook(spec: TouchButtonSpec, look: ButtonLook): void {
+  switch (spec.action) {
+    case "warp":
+      look.ready = hero.stamina >= BOOM.stamina && jory.boomWait <= 0;
+      look.cooldown = look.ready ? 0 : Math.max(jory.boomWait / BOOM.wait, 1 - hero.stamina / BOOM.stamina);
+      break;
+    case "dash": {
+      const cost = stepCost();
+      look.ready = hero.stamina >= cost && jory.stepWait <= 0;
+      look.cooldown = look.ready ? 0 : Math.max(jory.stepWait / BEAT_STEP.wait, 1 - hero.stamina / Math.max(1, cost));
+      break;
+    }
+    case "cast": {
+      const id = joryAbility();
+      look.cooldown = joryRecharge(id);
+      look.ready = look.cooldown <= 0 && hero.mp >= joryMp(id);
+      break;
+    }
+    default:
+  }
+}
+
 /** Ysra's guard needs stamina, her vault waits out its recharge, and the rite fills as Heat comes to cover it */
 function ysraLook(spec: TouchButtonSpec, look: ButtonLook): void {
   switch (spec.action) {
@@ -252,6 +283,7 @@ export function buttonLook(spec: TouchButtonSpec, pressed: boolean): ButtonLook 
   else if (character.kit === "mirel") mirelLook(spec, look);
   else if (character.kit === "wenna") wennaLook(spec, look);
   else if (character.kit === "tallis") tallisLook(spec, look);
+  else if (character.kit === "jory") joryLook(spec, look);
   else if (character.kit === "ysra") ysraLook(spec, look);
   else kaelLook(spec, look);
   return look;

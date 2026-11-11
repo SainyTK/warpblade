@@ -32,6 +32,7 @@ export const STAND: Pose = {
   sa: 1.15,
   tw: 0,
   mr: 0,
+  dr: 0,
 };
 /** a pose that changes only some joints of the standing pose */
 export const pose = (o: Partial<Pose>): Pose => ({ ...STAND, ...o });

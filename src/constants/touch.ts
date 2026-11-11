@@ -219,6 +219,31 @@ export const TOUCH_TEXT: Record<KitId, Record<TouchButtonAction, TouchButtonText
     ultimate: SPECIAL,
     cycle: { label: "Switch", hint: "Turn to the next ability", accent: "#e8b4d0" },
   },
+  jory: {
+    attack: {
+      label: "Mallets",
+      hint: "Mallet string: Tap, Roll, Crash. On the beat a blow is an Accent and builds Groove. In the air, Downstroke",
+      accent: "#5a82ff",
+    },
+    up: { label: "Jump", hint: "One jump. Hold the stick down to drop through a ledge", accent: "#e8e6f6" },
+    dash: {
+      label: "Step",
+      hint: "Beat Step (stamina). On the beat nothing can touch you and you pass through foes",
+      accent: "#a6c0ff",
+    },
+    warp: {
+      label: "Boom",
+      hint: "Push foes away (stamina). On the beat it is bigger, drowns foe shots and nothing can touch you",
+      accent: "#eef3ff",
+    },
+    cast: {
+      label: "Ability",
+      hint: "Use the selected ability: Steady Hand, Thunder Skin or a spell skill. Judged on the beat",
+      accent: "#dce6ff",
+    },
+    ultimate: SPECIAL,
+    cycle: { label: "Switch", hint: "Turn to the next ability", accent: "#8eaaf0" },
+  },
 };
 
 /** where the attack button's center sits, art pixels in from the bottom right corner of the safe area */
@@ -290,6 +315,12 @@ export const STICK_DIRECTIONS: Record<KitId, readonly StickDirectionSpec[]> = {
   ],
   tallis: [
     { direction: "side", label: "Walk. In the shadow pool, glide" },
+    { direction: "far side", label: "Run" },
+    { direction: "up", label: "Jump" },
+    { direction: "down", label: "With Jump, drop through a ledge" },
+  ],
+  jory: [
+    { direction: "side", label: "Walk. With Step, step that way; with none held, step back" },
     { direction: "far side", label: "Run" },
     { direction: "up", label: "Jump" },
     { direction: "down", label: "With Jump, drop through a ledge" },

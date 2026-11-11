@@ -66,6 +66,7 @@ export const ACHIEVEMENTS: readonly Achievement[] = [
   heroTrial("mirel", "Mirel"),
   heroTrial("wenna", "Wenna"),
   heroTrial("tallis", "Tallis"),
+  heroTrial("jory", "Jory"),
   {
     id: "kills-100",
     name: "Culling",
@@ -179,6 +180,14 @@ export const ACHIEVEMENTS: readonly Achievement[] = [
     text: "As Tallis, defeat 30 foes with blows from behind in one run.",
     group: "Skill",
     goal: { kind: "best", stat: "backKills", need: 30 },
+    reward: 60,
+  },
+  {
+    id: "in-time",
+    name: "In Time",
+    text: "As Jory, hold Crescendo for 20 seconds in a row.",
+    group: "Skill",
+    goal: { kind: "best", stat: "crescendoSeconds", need: 20 },
     reward: 60,
   },
   {

@@ -2,6 +2,7 @@ import { sfx } from "../../services/audio";
 import type { UltimateId } from "../../types/skill";
 import { WHITE } from "../../utils/color";
 import { createFloorRing } from "../effects/floorRing";
+import { castDrumroll, castGrandFinale } from "../hero/jory/drumroll";
 import { castEternalNoon, castHourOfStillness } from "../hero/mirel/hour";
 import { castMaelstrom } from "../hero/orrin/maelstrom";
 import { castGrandPendulum } from "../hero/orrin/pendulum";
@@ -47,6 +48,8 @@ const ULTIMATES: Record<UltimateId, (level: number) => void> = {
   thousandCandles: castThousandCandles,
   gloaming: castGloaming,
   eclipse: castEclipse,
+  drumroll: castDrumroll,
+  grandFinale: castGrandFinale,
 };
 
 /** a burst of light from the hero, bigger each level, then the ultimate itself; level 4 lights up the sky */

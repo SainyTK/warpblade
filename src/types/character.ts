@@ -14,7 +14,7 @@ export interface HeroSkin {
    */
   head: readonly string[];
   headBack: readonly string[];
-  weapon: "sword" | "glaive" | "crossbow" | "gauntlets" | "chain" | "staff" | "lampPole" | "knives";
+  weapon: "sword" | "glaive" | "crossbow" | "gauntlets" | "chain" | "staff" | "lampPole" | "knives" | "mallets";
   /** from the hand to the tip, in pixels */
   reach: number;
   /** slashes, floor rings, afterimages and sparks, dark to bright, seven steps */
@@ -40,6 +40,11 @@ export interface HeroSkin {
   satchel?: boolean;
   /** cloth bands wound round the shins over the boots */
   wraps?: boolean;
+  /** a headband in the scarf colours: its two short ends trail along the ponytail's rope, with no ponytail, and the
+   *  scarf's rope hangs from the belt as a sash */
+  headband?: boolean;
+  /** a war drum on a strap across the chest, worn at the hip and swung to the front by the pose's `dr` */
+  drum?: boolean;
 }
 
 export interface CharacterDef {
