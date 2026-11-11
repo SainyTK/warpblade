@@ -3,6 +3,7 @@ import type { TouchButtonAction } from "../../../types/touch";
 import { selectionKey, type TouchSelection } from "../selection";
 import { huldaArt } from "./huldaArt";
 import { iconFrom } from "./iconArt";
+import { joryArt } from "./joryArt";
 import { kaelArt } from "./kaelArt";
 import { mirelArt } from "./mirelArt";
 import { orrinArt } from "./orrinArt";
@@ -22,5 +23,6 @@ export function touchIcon(action: TouchButtonAction, s: TouchSelection): SpriteI
   if (s.kit === "mirel") return iconFrom(key, mirelArt(action, s.ability, s.known));
   if (s.kit === "wenna") return iconFrom(key, wennaArt(action, s.ability, s.known));
   if (s.kit === "tallis") return iconFrom(key, tallisArt(action, s.ability, s.known));
+  if (s.kit === "jory") return iconFrom(key, joryArt(action, s.ability, s.known));
   return iconFrom(key, s.kit === "ysra" ? ysraArt(action, s.rite) : kaelArt(action, s.ability, s.known));
 }

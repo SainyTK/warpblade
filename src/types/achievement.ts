@@ -31,7 +31,9 @@ export type BestStat =
   /** the most foes Wenna's Wicks defeated in one run */
   | "wickKills"
   /** the most foes Tallis defeated with blows from behind in one run */
-  | "backKills";
+  | "backKills"
+  /** the longest Jory held Crescendo without a break, in whole seconds */
+  | "crescendoSeconds";
 
 /** what the run in play has counted so far, for the goals met within one run */
 export interface RunTally {
@@ -104,4 +106,5 @@ export type Feat =
   | { kind: "swingKills"; kills: number }
   | { kind: "fieldKills"; kills: number }
   | { kind: "wickKills"; kills: number }
-  | { kind: "backKills"; kills: number };
+  | { kind: "backKills"; kills: number }
+  | { kind: "crescendo"; seconds: number };

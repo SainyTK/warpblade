@@ -18,7 +18,12 @@ export const PAL = {
   /** Tallis's gloam, ink to dusk rose: the Veil's outline and wisps, the pool, his smears, the back-open chevron, the
    *  GL bar's edge, Smoke Knot and Gloaming */
   gloam: ramp(["#0c0a14", "#1e1830", "#3a2c4e", "#6e4a78", "#c06a9e", "#ffb8dc"]),
+  /** Jory's cobalt, deep to white-hot: the floor ring, Accents, Boom, the sound waves, Drumroll and the GV bar */
+  beat: ramp(["#0a0f2a", "#182a66", "#2c4fb0", "#5a82ff", "#a6c0ff", "#eef3ff"]),
 } as const;
+
+/** Jory's drum shell, oxblood lacquer deep to glint */
+export const DRUM = ramp(["#3a1210", "#7a2a24", "#a8443a", "#d07060"]);
 
 /** Mirel's falling sand, light and shade: the hourglass at her belt, the SD bar and the motes of her time magic */
 export const SAND = { light: hex("#e8d6a0"), shade: hex("#a8885a") } as const;
@@ -38,6 +43,7 @@ export const SPARKS = {
   hour: [WHITE, hex("#e6fff6"), hex("#8ae6cf"), hex("#3fb0a0")],
   wick: [hex("#f8eeff"), hex("#d8b4ff"), hex("#a46ae0"), hex("#6a3aa0")],
   gloam: [hex("#ffe4f2"), hex("#ffb8dc"), hex("#c06a9e"), hex("#6e4a78")],
+  beat: [hex("#eef3ff"), hex("#a6c0ff"), hex("#5a82ff"), hex("#2c4fb0")],
 } satisfies Record<string, Ramp>;
 
 /** white hot to smouldering, and fresh smoke to thin */

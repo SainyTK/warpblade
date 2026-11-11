@@ -9,6 +9,9 @@ const SASH_POINTS = 6;
 /** a hood's point hangs along the first points of the ponytail's rope */
 const HOOD_POINTS = 3;
 
+/** a headband's two short ends ride the first points of the ponytail's rope, in the scarf colours */
+const HEADBAND_POINTS = 4;
+
 /** a scarf end under a hood uses the first points of the scarf's rope */
 const SCARF_END_POINTS = 5;
 
@@ -88,6 +91,10 @@ export function drawTrails(s: SpriteCanvas, tail: readonly Vec[], scarf: readonl
     return;
   }
   if (skin.bun) return drawBun(s, tail);
+  if (skin.headband) {
+    drawScarf(s, tail, HEADBAND_POINTS);
+    return drawSash(s, scarf);
+  }
   s.begin();
   for (let i = 1; i < tail.length; i++) {
     const [a, b] = [tail[i - 1], tail[i]];

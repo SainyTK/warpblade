@@ -14,4 +14,5 @@ export const HERO_SOURCE_ICONS: Readonly<Record<string, Readonly<Record<HeroSour
   mirel: { attacks: "m_staff", abilities: "m_field", ultimate: "m_hour" },
   wenna: { attacks: "w_lamp", abilities: "w_wicks", ultimate: "w_great" },
   tallis: { attacks: "t_knives", abilities: "t_smoke", ultimate: "t_gloaming" },
+  jory: { attacks: "j_mallets", abilities: "j_boom", ultimate: "j_drumroll" },
 };

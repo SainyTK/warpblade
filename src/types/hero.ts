@@ -1,6 +1,7 @@
 import type { Projectile } from "./effect";
 import type { Enemy } from "./enemy";
 import type { HuldaState } from "./hulda";
+import type { JoryState } from "./jory";
 import type { MirelState } from "./mirel";
 import type { MoveId } from "./move";
 import type { OrrinState } from "./orrin";
@@ -58,7 +59,8 @@ export type HeroState =
   | OrrinState
   | MirelState
   | WennaState
-  | TallisState;
+  | TallisState
+  | JoryState;
 /** the states posed by their own keyed clip; the rest play an action clip */
 export type StateClipName = Exclude<
   HeroState,
@@ -73,6 +75,7 @@ export type StateClipName = Exclude<
   | MirelState
   | WennaState
   | TallisState
+  | JoryState
 >;
 
 /** Where a warp goes: an enemy, a floating crystal, or a point in the air. */

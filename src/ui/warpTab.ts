@@ -7,9 +7,8 @@ import { createRechargeTab } from "./rechargeTab";
 
 /**
  * The K tab: Kael's warp from the start, Ysra's vault from the start and Sable's snare (on I) from the start; Hulda's,
- * Orrin's, Mirel's, Wenna's and Tallis's abilities have their own tabs (huldaTabs.ts, orrinTabs.ts, mirelTabs.ts, wennaTabs.ts,
- * tallisTabs.ts). It shows the recharge,
- * and jolts when a press is refused while it recharges.
+ * Orrin's, Mirel's, Wenna's, Tallis's and Jory's abilities have their own tabs (huldaTabs.ts, orrinTabs.ts, mirelTabs.ts,
+ * wennaTabs.ts, tallisTabs.ts, joryTabs.ts). It shows the recharge, and jolts when a press is refused while it recharges.
  */
 const el = byId("warpTab");
 const tab = createRechargeTab(el);
@@ -30,6 +29,7 @@ function tabState(): { label: string; known: boolean; recharge: number; denied: 
     case "mirel":
     case "wenna":
     case "tallis":
+    case "jory":
       return { label: "", known: false, recharge: 0, denied: 0 };
     default:
       return { label: "WARP", known: true, recharge: warpRecharge(), denied: hero.denied.warp };

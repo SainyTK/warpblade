@@ -1,6 +1,7 @@
 import type { HeroKit, KitId } from "../../types/kit";
 import { character, shown } from "../state";
 import { HULDA_KIT } from "./hulda/kit";
+import { JORY_KIT } from "./jory/kit";
 import { KAEL_KIT } from "./kael/kit";
 import { MIREL_KIT } from "./mirel/kit";
 import { ORRIN_KIT } from "./orrin/kit";
@@ -35,6 +36,8 @@ function kitOf(id: KitId): HeroKit {
       return WENNA_KIT;
     case "tallis":
       return TALLIS_KIT;
+    case "jory":
+      return JORY_KIT;
     default:
       return KAEL_KIT;
   }

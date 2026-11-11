@@ -340,6 +340,58 @@ body {
     inset 0 1px 0 var(--gloam-glint),
     inset -1px 0 0 var(--gloam-glint);
 }
+/* Jory's Groove: twelve pips in three groups of four, lit in a cobalt that brightens with each tier and glows white-hot at
+   Crescendo; a lost pip blinks grey, and the lamp after the bar flashes on every beat */
+.bar.gv {
+  grid-template-columns: 22px 1fr 6px;
+}
+.bar.gv span {
+  color: var(--beat-pale);
+}
+.bar.gv .track {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr) 2px repeat(4, 1fr) 2px repeat(4, 1fr);
+  column-gap: 1px;
+  padding: 1px;
+  background: var(--hud-bg);
+}
+.bar.gv .track i {
+  background: var(--beat-deep);
+  opacity: 0.45;
+}
+.bar.gv .track i.gap {
+  background: none;
+}
+.bar.gv .track i.on {
+  opacity: 1;
+  background: var(--pip, var(--beat-low));
+}
+.bar.gv .track i.lost {
+  opacity: 1;
+  background: #8a8a96;
+}
+.bar.gv.t2 {
+  --pip: var(--beat);
+}
+.bar.gv.t3 {
+  --pip: var(--beat-pale);
+}
+.bar.gv.t4 {
+  --pip: var(--beat-hot);
+}
+.bar.gv.t4 .track i.on {
+  box-shadow: 0 0 4px var(--beat);
+}
+.bar.gv .lamp {
+  width: 6px;
+  height: 6px;
+  background: var(--beat-deep);
+  border: 1px solid var(--line);
+}
+.bar.gv .lamp.on {
+  background: var(--beat-hot);
+  box-shadow: 0 0 6px var(--beat);
+}
 /* Sable's quiver: one notch per bolt; while she reloads the track shows the crank's progress and the bright window */
 .bar.qv span {
   color: var(--jade);

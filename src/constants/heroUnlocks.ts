@@ -14,4 +14,5 @@ export const HERO_PRICES: Readonly<Record<string, number>> = {
   mirel: 750,
   wenna: 1000,
   tallis: 1350,
+  jory: 1800,
 };
