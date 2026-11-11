@@ -650,6 +650,14 @@ body {
   transform-origin: right center;
   transition: opacity 300ms;
 }
+/* with the touch controller up, the thumb buttons own the right side, so the counter sits under the pause button */
+.touch-play .hit-count {
+  right: auto;
+  left: 50%;
+  top: 16%;
+  translate: -50% 0;
+  transform-origin: center;
+}
 .hit-count.show {
   opacity: 1;
   transition: none;
