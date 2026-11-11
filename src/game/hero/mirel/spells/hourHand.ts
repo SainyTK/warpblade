@@ -1,13 +1,17 @@
+import { DIAL } from "../../../../constants/mirel/look";
 import { PAL } from "../../../../constants/palette";
-import { glow, line, place, px } from "../../../../engine/frame";
+import { fleck, glow, place } from "../../../../engine/frame";
 import { sfx } from "../../../../services/audio";
 import type { Effect } from "../../../../types/effect";
 import type { Enemy } from "../../../../types/enemy";
+import { WHITE } from "../../../../utils/color";
+import { TAU } from "../../../../utils/math";
 import { dealDamage } from "../../../damage";
 import { enemyBox } from "../../../enemies/enemy";
 import { skillValues, withCharms } from "../../../skills/query";
 import { game, hero, lights, progress } from "../../../state";
 import { shake } from "../../../world";
+import { type Dial, dialArc, drawHand, drawHandWake, drawHub } from "../clockArt";
 import { pressSpell } from "./castSpell";
 
 const ID = "m_handsweep";
@@ -15,6 +19,9 @@ const ID = "m_handsweep";
 const SWEEP = 0.35;
 /** Clockwork's two hands turn for this long */
 const CLOCKWORK = 1.2;
+/** how far back a sweeping hand's wake fans, in turns, and the size its hub is drawn at */
+const WAKE = 0.07;
+const HUB = 24;
 
 /** one hand sweeping round a point: from straight up over the front down to straight below, or a full turn */
 interface Sweep {
@@ -95,25 +102,25 @@ function createHourHand(cx: number, cy: number, face: number): Effect {
         if (u < 0 || u > 1.3) continue;
         const k = u > 1 ? 1 - (u - 1) / 0.3 : 1;
         const angle = s.from + s.turn * Math.min(1, u);
-        for (let j = 1; j <= 4; j++) {
-          const a = angle - Math.sign(s.turn) * j * 0.12;
-          line(cx, cy, cx + Math.cos(a) * r * face, cy + Math.sin(a) * r, PAL.hour[2], 0.25 * k * (1 - j / 5));
-        }
         const tx = cx + Math.cos(angle) * r * face;
         const ty = cy + Math.sin(angle) * r;
-        line(cx, cy, tx, ty, PAL.hour[4], k);
-        line(
-          cx + face * Math.cos(angle + 0.06) * r * 0.9,
-          cy + Math.sin(angle + 0.06) * r * 0.9,
-          tx,
-          ty,
-          PAL.hour[5],
+        // the hand as the clock faces draw it, measured round from twelve the way it is seen on screen
+        const dial: Dial = { x: cx, y: cy, r, a: k, floor: Number.POSITIVE_INFINITY };
+        const turn = (Math.atan2(ty - cy, tx - cx) + Math.PI / 2) / TAU;
+        drawHandWake(dial, turn, r, Math.sign(s.turn) * face * WAKE);
+        drawHand(dial, turn, r, true);
+        dialArc(
+          dial,
+          r,
+          turn * TAU - Math.PI / 2 - Math.sign(s.turn) * face * 0.5,
+          turn * TAU - Math.PI / 2,
+          DIAL.bezel,
           k,
         );
-        px(tx, ty, PAL.hour[5], k);
+        fleck(tx, ty, WHITE, k);
         glow(tx, ty, 10, PAL.hour[3], 0.3 * k);
       }
-      px(cx, cy, PAL.hour[5]);
+      drawHub({ x: cx, y: cy, r: HUB, a: 1, floor: Number.POSITIVE_INFINITY });
       glow(cx, cy, 12, PAL.hour[3], 0.25);
     },
   };
@@ -127,5 +134,5 @@ export function castHourHand(): void {
   const cx = hero.x;
   const cy = hero.y - 18;
   game.fx.push(createHourHand(cx, cy, hero.face));
-  lights.add(cx, cy, 60, PAL.hour[4], 0.8, 0.3);
+  lights.add(cx, cy, 60, PAL.hour[3], 0.5, 0.3);
 }

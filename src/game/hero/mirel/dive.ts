@@ -64,7 +64,7 @@ export function landDive(): void {
   }
   if (v.field) openFreeField(hero.x, hero.y - 16, withCharms("duration", v.field));
   game.fx.push(createFloorRing(hero.x, hero.y, s.spec.shape.kind === "ring" ? s.spec.shape.radius : 24, PAL.hour, 0.4));
-  lights.add(hero.x, hero.y - 6, 40, PAL.hour[4], 0.8, 0.25);
+  lights.add(hero.x, hero.y - 6, 40, PAL.hour[3], 0.5, 0.25);
   dust(hero.x, hero.y, 8);
   shake(0.15, 2.5);
   sfx.hit(true, 0.8);

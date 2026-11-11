@@ -1,9 +1,10 @@
 import { PAL, SAND } from "../../../constants/palette";
-import { glow, place, px } from "../../../engine/frame";
+import { glow, place } from "../../../engine/frame";
 import type { Enemy } from "../../../types/enemy";
 import type { SkillBehavior, SkillMemory } from "../../../types/skillBehavior";
 import { TAU } from "../../../utils/math";
 import { dealDamage } from "../../damage";
+import { drawGearWheel } from "../../hero/mirel/trinkets";
 import { game, hero, progress, rng } from "../../state";
 import { skillValues, withCharms } from "../query";
 import { nearestFoe, touches } from "../targets";
@@ -42,12 +43,7 @@ function gears(): [number, number][] {
 
 /** a small gear planet: a sand-brass rim with teeth, a teal heart */
 function drawGear(x: number, y: number, k: number): void {
-  const t = game.t * 6;
-  for (let i = 0; i < 6; i++) {
-    const a = t + (i * TAU) / 6;
-    px(x + Math.cos(a) * 2, y + Math.sin(a) * 2, i % 2 ? SAND.shade : SAND.light, k);
-  }
-  px(x, y, PAL.hour[4], k);
+  drawGearWheel(x, y, game.t * 6, SAND.light, SAND.shade, k);
   glow(x, y, 6, PAL.hour[3], 0.25 * k);
 }
 

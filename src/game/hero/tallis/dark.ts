@@ -4,10 +4,10 @@ import { DARK } from "../../../constants/tallis/look";
 import { GLOAMING } from "../../../constants/tallis/special";
 import { blendScreen, lightB, lightG, lightR, shakeOffset } from "../../../engine/frame";
 import { blitRing } from "../../../engine/sprite";
+import { foeSprite } from "../../../scene/foeSprites";
 import type { Enemy } from "../../../types/enemy";
 import { mix } from "../../../utils/color";
 import { clamp } from "../../../utils/math";
-import { kindOf } from "../../enemies/kinds";
 import { game } from "../../state";
 
 /** the dark under way: how deep it is now, 0 to 1, and whether it is lifting */
@@ -81,7 +81,7 @@ export function createDark(targets: readonly Enemy[]): GloamDark {
       if (handle.fading) return;
       for (const e of targets) {
         if (e.hp <= 0) continue;
-        blitRing(kindOf(e.type).draw(e, game.t), e.x, e.y, e.face < 0, 1, () => PAL.gloam[4]);
+        blitRing(foeSprite(e), e.x, e.y, e.face < 0, 1, () => PAL.gloam[4]);
       }
     },
     draw() {},

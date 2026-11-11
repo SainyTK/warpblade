@@ -1,6 +1,7 @@
+import { DIAL } from "../../../constants/mirel/look";
 import { ECHO, SHOULDER_Y } from "../../../constants/mirel/string";
 import { PAL, SAND } from "../../../constants/palette";
-import { glow, place, px } from "../../../engine/frame";
+import { glow, place } from "../../../engine/frame";
 import { blit } from "../../../engine/sprite";
 import type { Effect } from "../../../types/effect";
 import type { Enemy } from "../../../types/enemy";
@@ -13,6 +14,7 @@ import { game, hero, lights, particles, rng } from "../../state";
 import { ghostCanvas } from "../afterimages";
 import { drawHero } from "../drawHero";
 import { heroLook } from "../look";
+import { type Dial, dialArc, drawHand, drawHub } from "./clockArt";
 import { mirel } from "./memory";
 import { ringCentre } from "./shape";
 import { type StaffStrike, strikeShape } from "./strike";
@@ -26,7 +28,7 @@ interface EchoBeat {
 /** seconds the ghost flashes and swings as its echo lands */
 const STRIKE_FLASH = 2 / 30;
 /** the clock tick ring round the strike point */
-const TICK_RING = 4;
+const TICK_RING = 5;
 
 /** the echoes a blow leaves: one at half power after half a second, or what Long Echo and Quickened make of it */
 function echoBeats(instant: boolean): EchoBeat[] {
@@ -94,7 +96,7 @@ function createEcho(s: StaffStrike, ghost: SpriteImage, beat: EchoBeat): Effect 
         (e) => struck.has(e),
         (e) => struck.add(e),
       );
-      lights.add(px0, py0, 26, PAL.hour[4], 0.7, 0.2);
+      lights.add(px0, py0, 26, PAL.hour[3], 0.45, 0.2);
       breakIntoSand(s.at.x, s.at.y);
       return true;
     },
@@ -112,14 +114,13 @@ function createEcho(s: StaffStrike, ghost: SpriteImage, beat: EchoBeat): Effect 
       place();
       glow(s.at.x, s.at.y - 16, 12, PAL.hour[3], 0.12 * fade);
       if (flash) return;
-      // a one-pixel ring round the strike point closes as the half second runs out, like a clock hand sweeping
+      // a fine ring round the strike point, with a hand at its end, closes as the half second runs out, like a clock hand sweeping
       const left = beat.delay > 0 ? 1 - t / beat.delay : 0;
-      const steps = 24;
-      for (let i = 0; i < steps * left; i++) {
-        const a = -Math.PI / 2 + (i / steps) * TAU;
-        px(px0 + Math.cos(a) * TICK_RING, py0 + Math.sin(a) * TICK_RING, PAL.hour[4], 0.85);
-      }
-      px(px0, py0, PAL.hour[5], 0.9);
+      const dial: Dial = { x: px0, y: py0, r: TICK_RING, a: 1, floor: Number.POSITIVE_INFINITY };
+      dialArc(dial, TICK_RING, -Math.PI / 2, -Math.PI / 2 + left * TAU, DIAL.hour, 1);
+      dialArc(dial, TICK_RING - 1, -Math.PI / 2, -Math.PI / 2 + left * TAU, DIAL.bezelInner, 0.8);
+      drawHand(dial, left, TICK_RING - 1, false);
+      drawHub(dial);
     },
   };
 }

@@ -66,7 +66,7 @@ function startRewind(seconds: number, extraLoss = 0): void {
   setState("rewind");
   sfx.swing(0.45);
   sfx.chime(0);
-  lights.add(h.x, h.y - 16, 40, PAL.hour[4], 0.8, 0.25);
+  lights.add(h.x, h.y - 16, 40, PAL.hour[3], 0.5, 0.25);
   const v = skillValues(LONG);
   if (v.field) openFreeField(h.x, h.y - 16, withCharms("duration", v.fieldLife), withCharms("area", v.field));
 }
@@ -94,7 +94,7 @@ export function secondChance(dmg: number): boolean {
   mirel.secondChance = game.wave;
   startRewind(CHANCE_LOOK, 0);
   mirelHost.rewoundLoss = Number.POSITIVE_INFINITY;
-  lights.add(hero.x, hero.y - 16, 70, PAL.hour[5], 1, 0.4);
+  lights.add(hero.x, hero.y - 16, 70, PAL.hour[4], 0.55, 0.4);
   return true;
 }
 

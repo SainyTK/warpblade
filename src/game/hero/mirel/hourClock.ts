@@ -1,9 +1,9 @@
+import { DIAL } from "../../../constants/mirel/look";
 import { HOUR } from "../../../constants/mirel/special";
 import { PAL, SAND, WORLD_COLORS } from "../../../constants/palette";
 import { ULT_LEVELS } from "../../../constants/ultimate";
-import { circle, disc, glow, place, px } from "../../../engine/frame";
+import { disc, glow, place } from "../../../engine/frame";
 import { sfx } from "../../../services/audio";
-import type { Color } from "../../../types/color";
 import type { Effect } from "../../../types/effect";
 import type { Enemy } from "../../../types/enemy";
 import { PK } from "../../../types/particle";
@@ -17,6 +17,8 @@ import { stopFoe, takeStored } from "../../enemies/timeStop";
 import { game, lights, particles, progress, rng } from "../../state";
 import { lowerField, raiseField, type TimeField } from "../../timeFields";
 import { dust, hitStop, shake } from "../../world";
+import { type Dial, dialArc, dialMark, drawDial, drawHand, drawHandWake, drawHub } from "./clockArt";
+import { drawStoppedRim } from "./stoppedLook";
 
 /** what one clock does: how long foes stop, what the toll deals, and what of the stored damage it adds */
 export interface HourSpec {
@@ -40,6 +42,11 @@ export interface HourSpec {
 const DRAWN = 150;
 /** a hair past the toll, so the stop never runs out before the toll takes what it stored */
 const MARGIN = 0.05;
+/** seconds the face takes to open, and to fade after the toll */
+const OPEN = 0.12;
+const CLOSE = 0.2;
+/** the inner chapter ring, as a share of the face's radius */
+const CHAPTER = 0.62;
 
 /** the toll: each stopped foe takes the level's power and part of what it took while stopped */
 function toll(spec: HourSpec, foes: readonly Enemy[]): void {
@@ -63,7 +70,7 @@ function toll(spec: HourSpec, foes: readonly Enemy[]): void {
   }
   const drawn = Math.min(spec.reach, DRAWN);
   game.fx.push(createFloorRing(spec.x, spec.floor, drawn, PAL.hour, 0.5));
-  lights.add(spec.x, spec.y, drawn * 0.6, PAL.hour[4], 0.7, 0.3);
+  lights.add(spec.x, spec.y, drawn * 0.6, PAL.hour[3], 0.5, 0.3);
   dust(spec.x, spec.floor, 12);
   for (let i = 0; i < 24; i++) {
     const a = rng.range(0, TAU);
@@ -106,40 +113,30 @@ export function createHourClock(spec: HourSpec): Effect {
         lowerField(shots);
         toll(spec, foes);
       }
-      return t < spec.stop + 0.2;
+      return t < spec.stop + CLOSE;
     },
-    draw() {},
+    draw() {
+      for (const e of foes) drawStoppedRim(e);
+    },
     drawBack() {
       place();
-      const r = Math.min(spec.reach, DRAWN);
-      const open = Math.min(1, t / 0.12);
-      const fade = tolled ? Math.max(0, 1 - (t - spec.stop) / 0.2) : 1;
-      const rr = r * open;
+      const r = Math.min(spec.reach, DRAWN) * Math.min(1, t / OPEN);
+      const fade = tolled ? Math.max(0, 1 - (t - spec.stop) / CLOSE) : 1;
       const flash = t < 2 / 30 || (tolled && t - spec.stop < 1 / 30);
-      const ring = flash ? WHITE : PAL.hour[3];
-      // the floor stands in front of the clock's lower part
-      const dot = (x: number, y: number, c: Color, a: number): void => {
-        if (y < spec.floor) px(x, y, c, a);
-      };
-      const ray = (a: number, from: number, to: number, c: Color): void => {
-        for (let k = from; k <= to; k += 0.7) dot(spec.x + Math.cos(a) * k, spec.y + Math.sin(a) * k, c, fade);
-      };
-      const steps = Math.max(48, Math.round(TAU * rr));
-      for (let i = 0; i < steps; i++) {
-        const a = (i / steps) * TAU;
-        dot(spec.x + Math.cos(a) * rr, spec.y + Math.sin(a) * rr, ring, 0.9 * fade);
-        dot(spec.x + Math.cos(a) * (rr - 3), spec.y + Math.sin(a) * (rr - 3), PAL.hour[2], 0.5 * fade);
-      }
-      for (let i = 0; i < 12; i++) {
-        const a = -Math.PI / 2 + (i / 12) * TAU;
-        ray(a, i % 3 ? rr - 6 : rr - 9, rr - 3, i % 3 ? PAL.hour[4] : PAL.hour[5]);
-      }
+      const dial: Dial = { x: spec.x, y: spec.y, r, a: fade, floor: spec.floor, flash };
+      disc(spec.x, spec.y, r, DIAL.fill, (flash ? 0.25 : 0.16) * fade, spec.floor);
+      drawDial(dial);
+      // inside the bezel a second, plainer ring with its own hour marks, like the chapter ring of a tower clock
+      const chapter = r * CHAPTER;
+      dialArc(dial, chapter, 0, TAU, DIAL.bezelInner, fade);
+      for (let i = 0; i < 12; i++) dialMark(dial, (i / 12) * TAU, chapter - 3, chapter, DIAL.minute, fade);
       const u = Math.min(1, t / spec.stop);
-      ray(-Math.PI / 2 + u * TAU, 0, rr - 8, PAL.hour[5]);
-      ray(-Math.PI / 2 + u * Math.PI, 0, rr * 0.5, PAL.hour[4]);
-      circle(spec.x, spec.y, 2, PAL.hour[5], fade);
-      disc(spec.x, spec.y, rr, PAL.hour[2], (flash ? 0.25 : 0.08) * fade, spec.floor);
-      glow(spec.x, spec.y, rr * 0.5, PAL.hour[3], (flash ? 0.3 : 0.1) * fade);
+      // the long hand goes once round and the short hand half way, so the toll falls on the hour
+      drawHandWake(dial, u, r - 8, 0.09);
+      drawHand(dial, u * 0.5, r * 0.5, true);
+      drawHand(dial, u, r - 8, true);
+      drawHub(dial);
+      glow(spec.x, spec.y, r * 0.5, DIAL.light, (flash ? 0.3 : 0.1) * fade);
     },
   };
 }

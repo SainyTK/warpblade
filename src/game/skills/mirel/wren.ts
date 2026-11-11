@@ -1,10 +1,11 @@
-import { PAL, SAND, SPARKS } from "../../../constants/palette";
-import { glow, place, px } from "../../../engine/frame";
+import { WREN_COLORS, WREN_PIXELS } from "../../../constants/mirel/pixels";
+import { PAL, SPARKS } from "../../../constants/palette";
+import { glow, place } from "../../../engine/frame";
 import { sfx } from "../../../services/audio";
 import type { Enemy } from "../../../types/enemy";
 import type { SkillBehavior, SkillMemory } from "../../../types/skillBehavior";
-import { TAU } from "../../../utils/math";
 import { dealDamage } from "../../damage";
+import { stampPixels } from "../../effects/fine";
 import { createImpact } from "../../effects/impact";
 import { enemyCenter } from "../../enemies/enemy";
 import { addStacks } from "../../enemies/skillStatus";
@@ -87,25 +88,18 @@ function fly(w: Wren, dt: number): boolean {
   return true;
 }
 
+/** the wren facing left: each row of its picture turned round */
+const WREN_MIRRORED = WREN_PIXELS.map((frame) => frame.map((row) => [...row].reverse().join("")));
+
 /** a small clockwork bird: a sand-brass body, a teal eye, wings ticking up and down, a key turning on its back */
 function drawWren(w: Wren): void {
   place();
   const k = w.gone >= 0 ? 1 - w.gone / WREN.fade : Math.min(1, w.t * 6);
   const face = w.target ? Math.sign(enemyCenter(w.target)[0] - w.x) || 1 : 1;
-  const x = Math.round(w.x);
-  const y = Math.round(w.y);
-  const up = Math.floor(w.t * 16) % 2 === 0;
-  px(x, y, SAND.shade, k);
-  px(x - face, y, SAND.shade, k);
-  px(x + face, y - 1, SAND.light, k);
-  px(x + face * 2, y - 1, PAL.hour[4], k);
-  px(x + face * 3, y - 1, SAND.light, k);
-  px(x - face * 2, y + (up ? -1 : 0), SAND.shade, k);
-  px(x, y + (up ? -2 : 1), SAND.light, k);
-  px(x - face, y + (up ? -2 : 1), SAND.shade, k);
-  const a = w.t * TAU;
-  px(x + Math.round(Math.cos(a)), y - 2, PAL.hour[3], k);
-  glow(x, y, 6, PAL.hour[3], 0.2 * k);
+  const up = Math.floor(w.t * 16) % 2;
+  const rows = face > 0 ? WREN_PIXELS[up] : WREN_MIRRORED[up];
+  stampPixels(rows, w.x, w.y, WREN_COLORS, k);
+  glow(w.x, w.y, 6, PAL.hour[3], 0.2 * k);
 }
 
 /**
