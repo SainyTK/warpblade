@@ -11,7 +11,7 @@ Every rule below is meant to make her play differently from Kael from the first 
 | --- | --- | --- |
 | A / D | Walk, double tap to run | Walk, a steady stride with no run. With Warpath, walking on breaks into a charge (the run key charges at once) |
 | W | Jump, double jump with a pick | One heavy jump, lower than Kael's. No double jump ever |
-| J | Sword string picked by the situation | Glaive string of three blows that pierce every foe in the line; the middle blow is picked by the foes around her |
+| J | Sword string | Glaive string of three blows that pierce every foe in the line, the same every time: hip thrust, reverse sweep, impale |
 | Hold J | Nothing | Heft: wind a lunge while standing still, release to lunge forward through the line |
 | J in the air | Air string | One wide air sweep (two with Vault Strike), then nothing until she lands |
 | J in a vault | | The vault crash, glaive driven down where she lands |
@@ -32,13 +32,21 @@ MP only pays for her ultimate.
 ## Starting kit
 
 She starts with the whole base kit in `docs/skills/ysra.md`: the three-blow glaive string, the heft lunge, the air sweep, the vault and its crash, the dive, the brace, the parry, the backstep, and two rites, Flare and Cinder Lash.
-No blow needs a direction held: the string picks the twirl, the haft ram, the sky thrust, the overhead cleave or the ground lash from the foes around her.
+No blow needs a direction held, and no blow depends on where the foes stand: the string is the hip thrust, the reverse sweep and the impale, and J never turns her round.
+The reverse sweep rises from low behind her to over her head, so the fixed string reaches the day's moths, which hover 40 to 53 px up.
+Windmill and Skyhook change the middle blow while they are held.
 Her 20 skills change and extend these.
 
 ## Numbers to start from
 
 - Jump rise about 46 px (Kael 61). Walk speed through her 1.1 move stat: 74.8 px/s (Kael walks 68 and runs 125).
 - Glaive string blows reach about 40 px ahead, hit every foe in the box, and plant her feet. Wind-ups are longer than Kael's and the hits heavier.
+- String rhythm, in real seconds on screen with J pressed in time: 0.70 from the hip thrust to the reverse sweep, 0.74 from the sweep to the impale, and 0.98 from the impale to the next string's hip thrust.
+- Each blow winds up the other way and holds the coil for at least 3 animation frames, snaps out past the mark, holds through the hit-stop, carries onto the front foot and settles home.
+- Hit feel grows through the string: hit-stop 0.09, 0.12 and 0.2 s, shake 1.8, 2.6 and 3.8 px, hit pitch 0.9, 0.72 and 0.55 (`GLAIVE_FEEL` in `src/constants/ysra/glaive.ts`).
+- The hip thrust and the middle blow stagger a minion 0.65 s, past the next blow; the impale knocks it down 0.8 s, past the next string's first blow (`GLAIVE_STRING`).
+- Every change of clip crosses from the pose shown last over a few frames (`src/game/hero/ysra/handover.ts`, `HANDOVER_FRAMES` in `src/constants/ysra/motion.ts`): a blow's wind-up starts where the last blow left her, idle takes 5 frames to settle her back into guard, a turn swings her limbs through over 2 frames, and a hurt cuts at once.
+- Her jump loads in a squat for 2 frames before the push onto her toes, and a landing dips her hips by the fall speed (1.5 to 4.5 px over 8 frames, `LANDING_DIP`).
 - Heft: 0.6 s to a full wind; release under 0.2 s is a quick poke; a full lunge travels about 60 px, pierces all, and is untouchable for its first 0.15 s.
 - Vault: about 70 px forward, peak about 40 px, untouchable from the plant until 0.1 s past the peak. 0.95 s recharge shown in the HUD tab where Kael's warp recharge sits, just longer than a vault takes, so vaults chain.
 - The vault starts out of a brace (K while L is held) and out of a backstep (K in the hop vaults on landing, K in the skid vaults at once), toward a held side. Backstep then K with the side away held is her escape: a hop back, a turn and a vault away.

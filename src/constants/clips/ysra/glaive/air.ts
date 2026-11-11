@@ -10,8 +10,8 @@ export const GLAIVE_AIR_CLIPS = {
   /** legs tucked and the glaive cocked high over the back shoulder, then a wide reap down across the front, the body
    *  curling over it and the legs split apart */
   yAirReap: {
-    dur: 0.42,
-    hit: frame(4),
+    dur: 0.45,
+    hit: frame(5),
     keys: [
       [0, AIR_GUARD],
       [
@@ -84,6 +84,28 @@ export const GLAIVE_AIR_CLIPS = {
         frame(4),
         held(
           {
+            hx: -1.5,
+            hy: -16.5,
+            cb: 1.5,
+            nx: -3,
+            ny: -26.5,
+            fx: -2.5,
+            fy: -29.5,
+            sa: -2.55,
+            ffx: 4,
+            ffy: -7,
+            fa: 0.5,
+            bfx: -3,
+            bfy: -5,
+            ba: 0.4,
+          },
+          5,
+        ),
+      ],
+      [
+        frame(5),
+        held(
+          {
             hx: 2,
             hy: -14,
             cb: -1.5,
@@ -104,7 +126,7 @@ export const GLAIVE_AIR_CLIPS = {
         "snap",
       ],
       [
-        frame(5),
+        frame(6),
         held(
           {
             hx: 2,
@@ -126,7 +148,7 @@ export const GLAIVE_AIR_CLIPS = {
         ),
       ],
       [
-        frame(6),
+        frame(7),
         held(
           {
             hx: 2,
@@ -148,7 +170,7 @@ export const GLAIVE_AIR_CLIPS = {
         ),
       ],
       [
-        frame(7),
+        frame(8),
         held(
           {
             hx: 1.5,
@@ -170,7 +192,7 @@ export const GLAIVE_AIR_CLIPS = {
         ),
       ],
       [
-        frame(9),
+        frame(10),
         held(
           {
             hx: 1,
@@ -191,14 +213,14 @@ export const GLAIVE_AIR_CLIPS = {
           5,
         ),
       ],
-      [frame(11), held({ hy: -15, nx: 1.5, ny: -24.5, fx: 6, fy: -18, sa: 0.7, ffx: 4, ffy: -4, bfx: -4, bfy: -2 })],
-      [0.42, AIR_GUARD],
+      [frame(12), held({ hy: -15, nx: 1.5, ny: -24.5, fx: 6, fy: -18, sa: 0.7, ffx: 4, ffy: -4, bfx: -4, bfy: -2 })],
+      [0.45, AIR_GUARD],
     ],
   },
   /** the glaive hanging low under her, then reaped up and over in front as she arches back, knees driven up */
   yAirReapRise: {
-    dur: 0.42,
-    hit: frame(4),
+    dur: 0.45,
+    hit: frame(5),
     keys: [
       [0, AIR_GUARD],
       [
@@ -268,6 +290,27 @@ export const GLAIVE_AIR_CLIPS = {
         frame(4),
         held(
           {
+            hx: -0.5,
+            hy: -15,
+            cb: -1.5,
+            nx: 0.5,
+            ny: -23.5,
+            fx: 0.5,
+            fy: -10.5,
+            sa: 2.15,
+            ffx: 5,
+            ffy: -2,
+            bfx: -4,
+            bfy: -1,
+            ba: 0.4,
+          },
+          5,
+        ),
+      ],
+      [
+        frame(5),
+        held(
+          {
             hx: -1,
             hy: -17,
             cb: 2,
@@ -288,7 +331,7 @@ export const GLAIVE_AIR_CLIPS = {
         "snap",
       ],
       [
-        frame(5),
+        frame(6),
         held(
           {
             hx: -1,
@@ -310,7 +353,7 @@ export const GLAIVE_AIR_CLIPS = {
         ),
       ],
       [
-        frame(6),
+        frame(7),
         held(
           {
             hx: -1,
@@ -332,7 +375,7 @@ export const GLAIVE_AIR_CLIPS = {
         ),
       ],
       [
-        frame(7),
+        frame(8),
         held(
           {
             hx: -0.5,
@@ -354,7 +397,7 @@ export const GLAIVE_AIR_CLIPS = {
         ),
       ],
       [
-        frame(9),
+        frame(10),
         held(
           {
             hx: 0,
@@ -375,8 +418,8 @@ export const GLAIVE_AIR_CLIPS = {
           5,
         ),
       ],
-      [frame(11), held({ hy: -15, nx: 1, ny: -25, fx: 6, fy: -21, sa: 0.1, ffx: 4, ffy: -4, bfx: -4, bfy: -2 })],
-      [0.42, AIR_GUARD],
+      [frame(12), held({ hy: -15, nx: 1, ny: -25, fx: 6, fy: -21, sa: 0.1, ffx: 4, ffy: -4, bfx: -4, bfy: -2 })],
+      [0.45, AIR_GUARD],
     ],
   },
 } satisfies Record<string, ActionClip>;

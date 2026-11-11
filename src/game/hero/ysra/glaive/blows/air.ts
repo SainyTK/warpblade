@@ -33,7 +33,7 @@ export const AIR_BLOWS = {
     falls: true,
     hits: [
       reaping({
-        at: frame(4),
+        at: frame(5),
         box: [-14, -44, 42, 8],
         power: 1.3,
         kx: 120,
@@ -52,7 +52,7 @@ export const AIR_BLOWS = {
     falls: true,
     hits: [
       reaping({
-        at: frame(4),
+        at: frame(5),
         box: [-10, -50, 40, 4],
         power: 1.3,
         kx: 90,

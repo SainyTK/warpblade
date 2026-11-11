@@ -3,12 +3,12 @@ import { evolved, grow } from "./rows";
 
 /**
  * power: the hook's attack damage multiple; stun: seconds a hooked foe is stunned; cone: hooks every flyer over her;
- * slam: the floor slam's power (0 off); ground: seconds a hooked flyer cannot fly; reach: pixels above her it reaches
- * (0 for the sky thrust's own); rise: pixels she rises with it; heap: pixels the evolved hook gathers flyers from;
+ * slam: the floor slam's power (0 off); ground: seconds a hooked flyer cannot fly; reach: pixels above her the cone reaches
+ * (0 for the hook's own); rise: pixels she rises with it; heap: pixels the evolved hook gathers flyers from;
  * heapPower: the heap slam's power
  */
 const levels = grow({ power: 1.2, stun: 0, cone: 0, slam: 0, ground: 0, reach: 0, rise: 0, heap: 0 }, [
-  ["A foe overhead is hooked down to the floor.", { power: 2, stun: 0.8 }],
+  ["The string's middle blow hooks flyers down to the floor.", { power: 2, stun: 0.8 }],
   ["A harder hook and a longer stun.", { power: 2.8, stun: 1.2 }],
   ["Hooks every flyer above you.", { power: 3.5, cone: 1 }],
   ["Hooked foes slam into the floor.", { power: 4.2, slam: 3 }],
@@ -18,14 +18,14 @@ const levels = grow({ power: 1.2, stun: 0, cone: 0, slam: 0, ground: 0, reach: 0
   ["Hook and slam much harder.", { power: 14, slam: 14 }],
 ]);
 
-/** Skyhook: her answer to flyers; the sky thrust hooks them down where the glaive reaches */
+/** Skyhook: her answer to flyers; the string's middle blow hooks them down where the glaive reaches */
 export const SKYHOOK: SkillDef = {
   id: "y_skyhook",
   name: "Skyhook",
   kind: "attack",
   risk: "timed",
   button: "J",
-  text: "When a foe hovers overhead, the sky thrust hooks it down to the floor.",
+  text: "The string's middle blow becomes a rising hook that drags flyers down to the floor.",
   levels,
   evolution: {
     partner: "y_vault",

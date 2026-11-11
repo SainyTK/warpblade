@@ -7,10 +7,8 @@ import { pressAttack } from "../../combo";
 import { skin } from "../../skin";
 import type { YsraPart } from "../part";
 import { counterReady } from "../stance/stance";
-import { type GlaiveRead, pickGlaive } from "./choose";
-import { foeFar, foesInFront } from "./foes";
+import { pickGlaive } from "./choose";
 import { resetHeft, runHeft, tickHeft, watchHeft } from "./heft";
-import { foeOverhead } from "./overhead";
 import { haftReach } from "./reach";
 
 /** J: the next glaive blow. A fresh string's hip thrust is watched, so J held through it becomes a heft. */
@@ -21,24 +19,20 @@ export function pressGlaive(): boolean {
   return true;
 }
 
-/** Windmill's trigger: foes on both sides, a crowd of three in front from its level 7, any foe once evolved */
-function windmillRead(s: Situation): Pick<GlaiveRead, "windmill" | "spins"> {
-  const v = skillValues("y_windmill");
-  if (!skillLevel("y_windmill")) return { windmill: "none", spins: false };
-  const spins = s.surrounded || (!!v.ahead && foesInFront(60) >= 3) || !!v.lone;
-  return { windmill: v.passes >= 5 ? "full" : "spin", spins };
+/** the string's middle blow: Windmill's spin when held (its last pass hooks when Skyhook is held too), otherwise the
+ *  Skyhook when held, otherwise the reverse sweep */
+function middleBlow(): MoveId {
+  if (skillLevel("y_windmill")) return (skillValues("y_windmill").passes ?? 4) >= 5 ? "windmillFull" : "windmill";
+  if (skillLevel("y_skyhook")) return "skyhook";
+  return "reverseSweep";
 }
 
-/** the glaive blow J starts now, from the situation and what only the glaive reads */
+/** the glaive blow J starts now, from the string's place and her skills */
 export function chooseGlaive(s: Situation): MoveId | null {
-  const hook = skillValues("y_skyhook");
   return pickGlaive(s, {
     counter: counterReady() && skillLevel("y_counter") > 0,
-    overhead: hero.ground && foeOverhead(hook.reach ?? 0),
-    hook: skillLevel("y_skyhook") > 0,
-    far: hero.ground && foeFar(),
     airSweeps: skillValues("y_vault").sweeps ?? 1,
-    ...windmillRead(s),
+    middle: middleBlow(),
     warpath: skillLevel("y_warpath") > 0,
     railLunge: skillEvolved("y_heft"),
     twist: (skillValues("y_impale").twist ?? 0) > 0,
