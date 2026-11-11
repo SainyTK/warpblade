@@ -51,7 +51,7 @@ export const fromBehindOn = (e: Enemy, s: KnifeStrike): boolean => !!s.fromBehin
 export function strikeFoe(e: Enemy, s: KnifeStrike, ambush: boolean): boolean {
   const { spec } = s;
   const back = fromBehindOn(e, s);
-  const dir = spec.away ? hero.face : Math.sign(e.x - hero.x) || hero.face;
+  const dir = Math.sign(e.x - hero.x) || hero.face;
   const launchable = ENEMIES[e.type].launchable;
   const power = spec.power * s.scale * (ambush ? 1 + ambushPower() : 1) * (back ? executes(e) : 1);
   const hpBefore = e.hp;
@@ -68,7 +68,7 @@ export function strikeFoe(e: Enemy, s: KnifeStrike, ambush: boolean): boolean {
   });
   if (result === "blocked") return false;
   const [cx, cy] = enemyCenter(e);
-  game.fx.push(createImpact(cx - dir * 3, cy, dir, s.blow === "backstab" || s.blow === "gutSlash" || ambush));
+  game.fx.push(createImpact(cx - dir * 3, cy, dir, back || !!spec.launch || ambush));
   hero.mp = Math.min(progress.stats.mp, hero.mp + MP_PER_HIT);
   hero.lastHit = e;
   // a knife that lands on a winding minion cuts its wind-up short, as a heavy blow does for every hero
@@ -101,9 +101,10 @@ export function strikeKnife(s: KnifeStrike, struck: (e: Enemy) => boolean, mark:
   }
   hero.moveHits += landed.length + blocked;
   if (landed.length) {
-    hitStop(s.spec.stop ?? 0.03);
-    shake(0.08, s.spec.shake ?? 1);
-    sfx.hit(!!s.spec.heavy, s.blow === "flick" || s.blow === "twist" ? 1.4 : 1.15);
+    const { feel } = s.spec;
+    hitStop(feel.stop);
+    shake(feel.shake[0], feel.shake[1]);
+    sfx.hit(!!s.spec.heavy, feel.pitch);
     feat({ kind: "comboHit", moves: hero.chain });
   } else if (blocked) hitStop(0.04);
   return landed;

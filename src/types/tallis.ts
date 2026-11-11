@@ -14,17 +14,8 @@ export type TallisState =
   | "gloaming"
   | "eclipse";
 
-/** the blows of his two knife strings, Drop Stab in the air, Rising Cut out of the pool, and Hamstring's sweep */
-export type KnifeBlow =
-  | "flick"
-  | "cross"
-  | "heelKick"
-  | "backstab"
-  | "twist"
-  | "gutSlash"
-  | "dropStab"
-  | "risingCut"
-  | "hamstring";
+/** the blows of his knife string, Drop Stab in the air, Rising Cut out of the pool, and Hamstring's sweep */
+export type KnifeBlow = "flick" | "cross" | "heelKick" | "dropStab" | "risingCut" | "hamstring";
 
 /** the abilities on I, in the order O turns through them: his two from the start and his three spell skills */
 export type TallisAbility = "smokeKnot" | "hamstring" | "t_needles" | "t_markDusk" | "t_caltrops";

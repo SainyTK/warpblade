@@ -28,7 +28,6 @@ import { runKnotCast } from "./smokeKnot";
 import { runSpellCast } from "./spells/castSpell";
 import { passMark } from "./spells/markDusk";
 import {
-  hopping,
   landed,
   pressDropStab,
   pressString,
@@ -155,7 +154,7 @@ function onKill(e: Enemy): void {
 }
 
 /**
- * Tallis: a knife string that changes behind a foe's back, the Veil on K that hides him from minions for Gloam, Sink
+ * Tallis: a knife string that deals more from behind a foe's back, the Veil on K that hides him from minions for Gloam, Sink
  * on L that glides under foes as a shadow pool, Smoke Knot and Hamstring on I (O turns through them and his spell
  * skills), and Gloaming on U. Gloam refills while no foe faces him.
  */
@@ -178,9 +177,13 @@ export const TALLIS_KIT: HeroKit = {
   walkSpeed,
   stride: () => TALLIS_STRIDE,
   hurtScale: () => 1,
-  drivesMotion: () => DRIVEN.has(hero.state) || tallis.plummet || hopping(),
+  drivesMotion: () => DRIVEN.has(hero.state) || tallis.plummet,
   gravityScale: () =>
-    hero.state === "gloaming" || hero.state === "eclipse" || (hero.state === "dropStab" && !tallis.diving) ? 0 : 1,
+    hero.state === "gloaming" ||
+    hero.state === "eclipse" ||
+    (hero.state === "dropStab" && !tallis.diving && hero.vy >= 0)
+      ? 0
+      : 1,
   drawBack: drawTallisBack,
   draw: drawTallis,
   drawOver: drawTallisOver,

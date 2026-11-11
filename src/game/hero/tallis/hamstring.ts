@@ -90,9 +90,10 @@ export function runHamstring(): void {
     if (skillValues("t_nightshade").lotus)
       for (const e of game.enemies) if (e.hp > 0 && Math.abs(e.x - h.x) <= LOTUS_REACH) nightshade(e, true);
     if (foes.length) {
-      hitStop(0.04);
-      shake(0.08, 1);
-      sfx.hit(true, 0.9);
+      const { feel } = KNIFE_BLOWS.hamstring;
+      hitStop(feel.stop);
+      shake(feel.shake[0], feel.shake[1]);
+      sfx.hit(true, feel.pitch);
     }
   }
   if (h.st >= HAMSTRING.dur) settle();
