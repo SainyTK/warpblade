@@ -200,10 +200,10 @@ Mash bot from wave 1, deterministic runs, after all of tonight's changes:
 | Mirel | 5, 18, 81.4 | 5, 18, 81.4 |
 | Wenna | 5, 15, 87.1 | 5, 15, 87.1 |
 | Tallis | 3, 9, 67.1 | 3, 9, 67.1 |
-| Jory | | 5, 15, 114.8 |
+| Jory | | 4, 10, 98.9 |
 
 The other eight heroes play exactly as before.
-Jory falls on wave 5, level with every hero but Tallis and past the plan's floor of wave 3, so his stats stay as planned. Before QA he fell on wave 4 with 11 kills; judging every J, including a J during the flinch, lets the mash bot recover faster after a hit.
+Jory falls on wave 4, within two waves of every hero and past the plan's floor of wave 3, so his stats stay as planned. Over the QA rounds his mash result moved between wave 4 and wave 5 as the handling of a J pressed during the flinch changed; it now waits for the landing and opens with Tap.
 
 The mash bot only mashes J, so Jory never builds Groove and plays at tier 1 throughout: the floor of his kit.
 No fallback step was needed.
