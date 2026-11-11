@@ -40,6 +40,29 @@ const STREAKS = [
   [-10, -11, -9.4, -10],
 ] as const;
 
+/** folds where one flow of mud has slid over another, from the feet: centre, radius and the arc's start and end angle */
+const FOLDS = [
+  [-5, -15, 9.5, 0.5, 1.9],
+  [-7, -19, 6.5, 0.3, 1.5],
+  [2, -12, 5.5, 0.9, 2.3],
+] as const;
+/** stones packed in the mud, from the feet: x, y and radius */
+const PEBBLES = [
+  [-10.5, -10.5, 1.1],
+  [-2, -7.5, 0.9],
+  [-13, -15.5, 0.8],
+  [0.5, -15, 0.7],
+] as const;
+/** sludge hanging from the belly and the back, from the feet: x, y, length and its place in the drip cycle */
+const SLUDGE = [
+  [-13, -9, 2.6, 0],
+  [-9.5, -5.5, 3.2, 0.4],
+  [-3.5, -4.8, 2.4, 0.7],
+  [1, -5.2, 3, 0.2],
+] as const;
+/** how far the elbow pushes out of the straight line from shoulder to fist */
+const ELBOW = { near: 1.3, far: 1 };
+
 /** where the near and far fists are for the state: low at rest, raised for the slam, back for a scoop or a lob */
 function fists(e: Enemy, step: number, u: number): [Point, Point] {
   switch (e.state) {
@@ -141,8 +164,8 @@ export function drawBoghulk(e: Enemy, t: number): SpriteCanvas {
   s.commit();
   // far arm and leg in shadow
   s.begin();
-  s.stroke(-7, -9 + sink, -8 - step, 0, 3.6, C.mudDark);
-  s.stroke(-1, -24 + sink, far[0], far[1], 3.2, C.mudDark);
+  s.taper(-7, -9 + sink, -8 - step, -1, 3.2, 4.2, C.mudDark);
+  s.taper(-1, -24 + sink, far[0], far[1], 2.8, 3.6, C.mudDark, ELBOW.far);
   s.dot(far[0], far[1], 4.2, C.mudDark);
   s.shadeEdges(C.mudDark, C.mud, C.mudDeep, 2);
   for (let j = -1; j <= 1; j++) s.hairline(far[0] + 2, far[1] + j * 1.6, far[0] + 3.4, far[1] + j * 1.6, C.mudDeep);
@@ -158,8 +181,22 @@ export function drawBoghulk(e: Enemy, t: number): SpriteCanvas {
   s.dot(-5.6, -22.6 + sink, 8.4, mix(C.mud, C.mudLight, 0.5));
   s.dot(-6, -23 + sink, 7, C.mudLight);
   s.dot(-7.5, -25 + sink, 3.5, mix(C.mudLight, C.mudRim, 0.5));
-  for (let a = 3.6; a < 4.4; a += 0.06) s.set(-6 + Math.cos(a) * 5, -23 + sink + Math.sin(a) * 5, C.mudGlint);
+  for (let a = 3.5; a < 4.5; a += 0.05) s.set(-6 + Math.cos(a) * 5, -23 + sink + Math.sin(a) * 5, C.wetSky);
+  for (let a = 3.7; a < 4.2; a += 0.05) s.set(-6 + Math.cos(a) * 5.5, -23 + sink + Math.sin(a) * 5.5, WHITE);
   glint(s, -9.5, -26 + sink, WHITE);
+  // folds where one flow of mud has slid over another: a dark crease with a wet lip above it
+  for (const [x, y, r, a0, a1] of FOLDS)
+    for (let a = a0; a < a1; a += 0.5 / r) {
+      s.set(x + Math.cos(a) * r, y + sink + Math.sin(a) * r, C.mudDeep);
+      s.set(x + Math.cos(a) * (r - 0.6), y + sink + Math.sin(a) * (r - 0.6), C.mudLight);
+    }
+  // stones packed in the mud, wet on top
+  for (const [x, y, r] of PEBBLES) {
+    s.dot(x, y + sink, r + 0.4, C.pebbleDark);
+    s.dot(x - 0.15, y + sink - 0.15, r, C.pebble);
+    s.set(x - 0.4, y + sink - 0.5, C.pebbleLight);
+    s.set(x, y + sink - 0.5, C.pebbleLight);
+  }
   for (let a = 0.6; a < 2.2; a += 0.05) s.set(3 + Math.cos(a) * 8.2, -13 + sink + Math.sin(a) * 8.2, C.mudDeep);
   // small bubbles and wet streaks in the mud
   for (const [x, y, r] of BUBBLES) {
@@ -187,20 +224,32 @@ export function drawBoghulk(e: Enemy, t: number): SpriteCanvas {
     if (lit) s.set(x, y + sink, C.wartHot);
   }
   // near leg, a heavy stump with toes of packed mud
-  s.stroke(4, -8 + sink, 5 + step, 0, 3.8, C.mud);
-  s.stroke(1 + step, -0.5, 9 + step, -0.5, 1, C.mudLight);
+  s.taper(4, -8 + sink, 5 + step, -1.2, 3.4, 4.6, C.mud);
+  s.stroke(0.5 + step, -0.5, 10 + step, -0.5, 1, C.mudLight);
   s.shadeEdges(C.mud, C.mudLight, C.mudDark, 2);
   s.shadeEdges(C.mudLight, C.mudRim, C.mudDark);
   glint(s, 2.5, -7 + sink, C.mudGlint);
-  for (const x of [4, 6.5]) s.hairline(x + step, -1, x + step, 0.4, C.mudDark);
+  for (const x of [3.5, 6, 8.5]) s.hairline(x + step, -1.2, x + step, 0.4, C.mudDark);
   s.commit();
+  // sludge hanging from the belly, each strand stretching and letting go in turn
+  s.begin();
+  for (const [x, y, len, phase] of SLUDGE) {
+    const d = (time * 0.7 + phase) % 1;
+    const reach = len * (0.6 + 0.4 * Math.min(1, d * 3));
+    s.taper(x, y + sink - 1, x, y + sink + reach, 1, 0.4, C.mud);
+    s.dot(x, y + sink + reach, 0.7, C.mud);
+  }
+  s.shadeEdges(C.mud, C.mudLight, C.mudDark);
+  for (const [x, y, len] of SLUDGE) s.set(x - 0.4, y + sink + len * 0.6, C.wetSky);
+  s.commit(false);
   // near arm: a thick limb ending in a fist of packed mud, glossy on its knuckles
   s.begin();
-  s.stroke(3, -18 + sink, near[0], near[1], 3.6, C.mud);
-  s.dot(near[0], near[1], 4.8, C.mud);
+  s.taper(3, -18 + sink, near[0], near[1], 3.2, 4.2, C.mud, ELBOW.near);
+  s.dot(near[0], near[1], 5, C.mud);
   s.shadeEdges(C.mud, C.mudLight, C.mudDark, 2);
-  s.stroke(3, -20 + sink, near[0], near[1] - 2.5, 1.2, C.mudLight);
-  s.stroke(4, -16 + sink, near[0] + 1, near[1] + 2, 1, C.mudDark);
+  s.taper(3, -20 + sink, near[0] - 0.5, near[1] - 2.8, 0.9, 1.5, C.mudLight, ELBOW.near);
+  s.taper(4, -16 + sink, near[0] + 1, near[1] + 2.4, 0.8, 1.2, C.mudDark, ELBOW.near);
+  s.taper(3, -20.6 + sink, near[0] - 0.5, near[1] - 3.6, 0.3, 0.3, C.wetSkyDim, ELBOW.near);
   s.dot(near[0] - 1, near[1] - 1.5, 2.6, C.mudLight);
   s.dot(near[0] - 1.6, near[1] - 2.2, 1.2, mix(C.mudLight, C.mudRim, 0.5));
   glint(s, near[0] - 2.5, near[1] - 3, WHITE);
@@ -208,7 +257,7 @@ export function drawBoghulk(e: Enemy, t: number): SpriteCanvas {
     s.hairline(near[0] + 1.8, near[1] + j * 1.6, near[0] + 3.6, near[1] + j * 1.6, C.mudDeep);
     glint(s, near[0] + 2.2, near[1] + j * 1.6 - 0.6, C.mudRim);
   }
-  glint(s, near[0] - 1.5, near[1] - 4.2, C.mudRim);
+  for (let a = 3.6; a < 5; a += 0.08) s.set(near[0] + Math.cos(a) * 4.7, near[1] + Math.sin(a) * 4.7, C.wetSky);
   glint(s, near[0] + 0.5, near[1] - 4.2, C.mudGlint);
   s.commit();
   // a glob of bog held up to be thrown, rift motes glowing in it
@@ -233,6 +282,7 @@ export function drawBoghulk(e: Enemy, t: number): SpriteCanvas {
   s.shadeEdges(C.mudLight, C.mudRim, C.mudLight);
   s.hairline(8.5, hy - 1.4, 15, hy - 0.6, C.mudDeep);
   for (let a = -2.6; a < -0.5; a += 0.08) s.set(10 + Math.cos(a) * 5.4, hy + Math.sin(a) * 5.4, C.mudRim);
+  for (let a = -2.5; a < -1.3; a += 0.08) s.set(10 + Math.cos(a) * 5.4, hy + Math.sin(a) * 5.4, C.wetSky);
   glint(s, 7.5, hy - 3.6, C.mudGlint);
   glint(s, 11, hy - 3.2, C.mudGlint);
   // the eyes: a violet glow around a pale core with a white hot centre, burning whiter as an attack gathers
@@ -246,7 +296,7 @@ export function drawBoghulk(e: Enemy, t: number): SpriteCanvas {
     s.set(x - 0.25, y - 0.25, WHITE);
   }
   // the slack mouth, a lit lower lip, and mud drooling from it
-  s.stroke(10, hy + 3.5, 15, hy + 2.5, 0.8, C.outline);
+  s.taper(10, hy + 3.5, 15, hy + 2.5, 0.7, 1.2, C.maw);
   s.hairline(10.5, hy + 4.4, 14.6, hy + 3.4, C.mudLight);
   const drool = (time * 2) % 1;
   s.stroke(12, hy + 4, 12, hy + 4.5 + drool * 2, 0.3, C.mudLight);

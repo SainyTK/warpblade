@@ -52,6 +52,14 @@ export const RAIN_FOES = {
   cattail: hex("#4e3220"),
   cattailLight: hex("#835a36"),
   globDeep: hex("#2a2018"),
+  /** the storm sky caught on wet skin, mud and hide: a cold rim against the warm and green bodies */
+  wetSky: hex("#a9bace"),
+  wetSkyDim: hex("#6f8196"),
+  /** stones packed in the bog mud */
+  pebble: hex("#6a6a68"),
+  pebbleLight: hex("#a2a6a4"),
+  pebbleDark: hex("#33312f"),
+  maw: hex("#1a0f14"),
 };
 
 /** the kite's hostile lightning, violet against Kael's blue-white bolt */

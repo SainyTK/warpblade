@@ -1,49 +1,68 @@
 import { GROUND, H, PLATFORMS, W } from "../../../constants/stage";
-import { ellipseRing, glow, line, px } from "../../../engine/frame";
+import { fleck, glow, hairline, px } from "../../../engine/frame";
 import { mix } from "../../../utils/color";
-import { lerp } from "../../../utils/math";
+import { lerp, TAU } from "../../../utils/math";
 import { Rng } from "../../../utils/rng";
 import { RAIN_COLORS as RC } from "./palette";
+import { inPuddle, PUDDLES } from "./puddles";
 
 /** Rain in front of the fight, splashes on the floor and the slab tops, drips from the slab edges, rings in puddles. */
 
 const r = new Rng(6061);
 
-/** puddles along the floor: left edge and width */
-export const PUDDLES: readonly (readonly [number, number])[] = [
-  [8, 22],
-  [62, 14],
-  [118, 30],
-  [176, 12],
-  [214, 26],
-  [268, 18],
-  [300, 14],
-];
-const inPuddle = (x: number): boolean => PUDDLES.some(([x0, w]) => x >= x0 + 2 && x <= x0 + w - 2);
+/** the rain's three depths, far to near: speed in art pixels a second, streak length, and the share of drops at that depth */
+const DEPTHS = [
+  { speed: 150, length: 3, share: 0.45 },
+  { speed: 200, length: 5.5, share: 0.4 },
+  { speed: 270, length: 9, share: 0.15 },
+] as const;
+const MAX_DROPS = 210;
+const MIN_DROPS = 60;
+/** the field the drops wrap around in, wider and taller than the stage so the slant never leaves a gap */
+const FIELD = { w: W + 60, h: H + 20 };
+const DROPS = Array.from({ length: MAX_DROPS }, () => {
+  const roll = r.next();
+  return {
+    x: r.range(0, FIELD.w),
+    y: r.range(0, FIELD.h),
+    v: r.range(0.85, 1.15),
+    depth: roll < DEPTHS[0].share ? 0 : roll < DEPTHS[0].share + DEPTHS[1].share ? 1 : 2,
+  };
+});
+/** how far the wind's gusts swing the slant of the streaks, and how fast */
+const GUST = { swing: 0.07, pace: 0.6 };
 
-const MAX_DROPS = 150;
-const DROPS = Array.from({ length: MAX_DROPS }, () => ({
-  x: r.range(0, W + 60),
-  y: r.range(0, H + 20),
-  v: r.range(0.85, 1.15),
-  near: r.chance(0.4),
-}));
+const tailFade = (u: number): number => 0.15 + u * 0.75;
 
-const nearAlpha = (u: number): number => 0.25 + u * 0.4;
+/** how far left a drop drifts for each art pixel it falls: steeper in the storm, swinging with the gusts */
+const slantAt = (t: number, k: number): number =>
+  lerp(0.18, 0.42, k) + Math.sin(t * GUST.pace) * Math.sin(t * GUST.pace * 2.7 + 1) * GUST.swing * (0.4 + k);
 
-/** slanted streaks; few and short in the drizzle, many, long and wind-driven in the storm */
+/**
+ * slanted streaks at three depths: fine dim ones far off, brighter ones between, and a few long thick ones close to
+ * the eye; few and short in the drizzle, many, long and wind-driven in the storm
+ */
 export function drawRain(t: number, k: number): void {
-  const n = Math.round(lerp(34, MAX_DROPS, k));
-  const slope = lerp(0.18, 0.42, k);
+  const n = Math.round(lerp(MIN_DROPS, MAX_DROPS, k));
+  const drift = lerp(0.18, 0.42, k);
+  const slant = slantAt(t, k);
+  const stretch = 1 + k * 0.5;
   for (let i = 0; i < n; i++) {
     const d = DROPS[i];
-    const speed = (d.near ? 230 : 170) * d.v * (1 + k * 0.25);
-    const y = ((d.y + t * speed) % (H + 20)) - 10;
-    const x = ((((d.x - t * speed * slope) % (W + 60)) + W + 60) % (W + 60)) - 30;
+    const depth = DEPTHS[d.depth];
+    const speed = depth.speed * d.v * (1 + k * 0.25);
+    const y = ((d.y + t * speed) % FIELD.h) - 10;
     if (y > GROUND + 14) continue;
-    const len = (d.near ? 6 : 3.5) * (1 + k * 0.5);
-    if (d.near) line(x + slope * len, y - len, x, y, RC.drop, nearAlpha);
-    else line(x + slope * len, y - len, x, y, RC.dropFar, 0.4);
+    const x = ((((d.x - t * speed * drift) % FIELD.w) + FIELD.w) % FIELD.w) - 30;
+    const len = depth.length * stretch;
+    const tx = x + slant * len;
+    if (d.depth === 0) hairline(tx, y - len, x, y, RC.dropFar, 0.55);
+    else hairline(tx, y - len, x, y, RC.drop, tailFade);
+    // a near drop is a full art pixel thick along its lower half, with a bright head
+    if (d.depth === 2) {
+      hairline(x + slant * len * 0.5 + 0.5, y - len * 0.5, x + 0.5, y, RC.drop, 0.8);
+      fleck(x, y, RC.splash);
+    }
   }
 }
 
@@ -89,22 +108,35 @@ export function updateRain(dt: number, k: number): void {
   }
 }
 
+/** a ripple in standing water: a fine oval ring, its near half brighter than its far half */
+function ripple(x: number, y: number, rx: number, ry: number, a: number): void {
+  const n = Math.ceil(rx * 8);
+  for (let i = 0; i < n; i++) {
+    const g = (i / n) * TAU;
+    const s = Math.sin(g);
+    fleck(x + Math.cos(g) * rx, y + s * ry, s > 0 ? RC.puddleLip : RC.puddleSky, a);
+  }
+}
+
 /** splashes as a little crown of two flying beads, rings where they land in a puddle, and the drips */
 export function drawSplashes(): void {
   for (const s of SPLASHES) {
     if (s.ring) {
       if (s.t >= RING_LIFE) continue;
       const u = s.t / RING_LIFE;
-      ellipseRing(s.x, GROUND + 1.5, 1 + u * 4, 0.6 + u * 0.8, RC.puddleLip, (1 - u) * 0.8);
+      ripple(s.x, GROUND + 1.25, 1 + u * 4, 0.5 + u * 0.7, 1 - u * 0.6);
       continue;
     }
     if (s.t >= SPLASH_LIFE) continue;
     const u = s.t / SPLASH_LIFE;
     const h = Math.sin(u * Math.PI) * 2.5;
     const a = 1 - u * 0.6;
-    px(s.x, s.y - 1, RC.splash, u < 0.3 ? 1 : 0);
+    if (u < 0.3) px(s.x, s.y - 1, RC.splash);
+    else fleck(s.x + 0.5, s.y - 0.5 - h * 1.4, RC.splash, a);
     px(s.x - 1 - u * 3, s.y - 1 - h, RC.splash, a);
     px(s.x + 1 + u * 3, s.y - 1 - h, RC.splash, a);
+    fleck(s.x - 2 - u * 5, s.y - 0.5 - h * 0.5, RC.drop, a);
+    fleck(s.x + 2.5 + u * 5, s.y - 0.5 - h * 0.5, RC.drop, a);
   }
   for (const d of DRIPS) {
     const cyc = (clock + d.phase) % d.period;

@@ -1,80 +1,101 @@
-import { H, W } from "../../../constants/stage";
+import { FW, RES } from "../../../constants/stage";
 import { bayerAt } from "../../../engine/frame";
+import type { Color } from "../../../types/color";
 import { mix } from "../../../utils/color";
 import { clamp } from "../../../utils/math";
-import type { Rng } from "../../../utils/rng";
+import { LAYER } from "../../plate";
+import type { PlatePaint } from "../../platePaint";
+import { billows, noise } from "./noise";
 import { CLOUD_DARK, CLOUD_LIGHT, RAIN_COLORS as RC } from "./palette";
 
 /** where the hidden sun glows through the clouds, fading out as the storm builds */
 export const SUN = { x: 236, y: 40, r: 48 } as const;
 
-/** base row, puff radius range and puff count of each bank, far to near */
-const BANKS: readonly (readonly [number, number, number, number])[] = [
-  [104, 6, 13, 26],
-  [84, 8, 17, 20],
-  [60, 10, 20, 16],
-  [30, 12, 24, 14],
-];
-
 /**
- * Overcast banks drawn far to near: each is a row of round puffs over a wavy base, dithered at its top edge, darker
- * through the body and lit along its underside. The hidden sun brightens what lies in front of it.
+ * One cloud bank: the art row of its flat base, how far it billows above and hangs below that row, the size of its
+ * billows across and down in art pixels, how much of the sky it fills from 0 to 1, and its own place in the noise.
  */
-export function drawClouds(bg: Uint32Array, r: Rng, k: number): void {
-  const top = new Float32Array(W);
-  for (let b = 0; b < BANKS.length; b++) {
-    const [base, r0, r1, n] = BANKS[b];
-    const [rim, body, under] = CLOUD_LIGHT[b].map((c, i) => mix(c, CLOUD_DARK[b][i], k));
-    top.fill(Number.POSITIVE_INFINITY);
-    for (let i = 0; i < n; i++) {
-      const cx = r.range(-20, W + 20);
-      const pr = r.range(r0, r1) * (1 + k * 0.25);
-      const lift = r.range(0, pr * 0.5);
-      for (let x = Math.max(0, Math.floor(cx - pr)); x <= Math.min(W - 1, Math.ceil(cx + pr)); x++) {
-        const u = (x + 0.5 - cx) / pr;
-        const y = base - lift - Math.sqrt(Math.max(0, 1 - u * u)) * pr * 0.8;
-        if (y < top[x]) top[x] = y;
-      }
-    }
-    const p0 = r.range(0, 6);
-    const p1 = r.range(0, 6);
-    for (let x = 0; x < W; x++) {
-      const bottom = base + Math.sin(x * 0.045 + p0) * 3 + Math.sin(x * 0.12 + p1) * 1.5;
-      const t0 = Math.min(top[x], bottom - 3);
-      for (let y = Math.max(0, Math.floor(t0)); y < Math.min(H, Math.ceil(bottom)); y++) {
-        const th = bayerAt(x, y);
-        const edgeTop = y + 0.5 - t0;
-        const edgeBottom = bottom - (y + 0.5);
-        // the top and bottom rows break up in the dither, so the banks have soft edges
-        if (edgeTop < 1.2 && th > 0.5) continue;
-        if (edgeBottom < 1 && th > 0.45) continue;
-        const v = (y + 0.5 - t0) / Math.max(1, bottom - t0);
-        let c = edgeTop < 2 ? rim : body;
-        if (v > 0.62 && (v - 0.62) * 3.2 > th) c = under;
-        const sun = clamp(1 - Math.hypot(x - SUN.x, (y - SUN.y) * 1.3) / SUN.r) * (1 - k);
-        if (sun > 0) c = mix(c, RC.sunHaze, sun * sun * (0.5 + th * 0.2));
-        bg[y * W + x] = c;
-      }
-    }
-  }
+interface Bank {
+  base: number;
+  above: number;
+  below: number;
+  across: number;
+  down: number;
+  cover: number;
+  seed: number;
 }
 
-/** grey curtains of rain hanging from the far banks, stronger as the storm builds */
-export function drawCurtains(bg: Uint32Array, r: Rng, k: number): void {
-  const n = 2 + Math.round(k * 4);
-  for (let i = 0; i < n; i++) {
-    const cx = r.range(10, W - 10);
-    const w = r.range(18, 44);
-    const y0 = r.range(78, 92);
-    for (let y = Math.floor(y0); y < 128; y++)
-      for (let x = Math.floor(cx - w / 2); x < cx + w / 2; x++) {
-        if (x < 0 || x >= W) continue;
-        const slant = Math.floor(x + (y - y0) * 0.35);
-        if (slant % 3 !== 0) continue;
-        const edge = clamp(1 - Math.abs(x - cx) / (w / 2)) * clamp((y - y0) / 8) * clamp((128 - y) / 20);
-        if (edge * (0.4 + k * 0.4) <= bayerAt(x, y)) continue;
-        const i2 = y * W + x;
-        bg[i2] = mix(bg[i2], RC.dropFar, 0.22);
+/** the banks from the heavy one overhead to the far, hazy one over the horizon, in the order of the cloud ramps */
+const BANKS: readonly Bank[] = [
+  { base: 36, above: 70, below: 16, across: 50, down: 30, cover: 0.84, seed: 1 },
+  { base: 66, above: 24, below: 7, across: 36, down: 20, cover: 0.66, seed: 2 },
+  { base: 88, above: 15, below: 5, across: 26, down: 13, cover: 0.6, seed: 3 },
+  { base: 105, above: 9, below: 3, across: 18, down: 8, cover: 0.56, seed: 4 },
+];
+/** the lowest art row any bank reaches */
+const CLOUD_FLOOR = 112;
+const SKY_LAYERS = [LAYER.sky, LAYER.celestial] as const;
+/** the light comes from the upper right: how far toward it, in art pixels, a bank is sampled to find its lit side */
+const LIGHT = { dx: 3, dy: -4, gain: 5 };
+/** how strongly the heaps shape a bank's outline */
+const SHAPE = 1.6;
+/** how thick a bank must be before it is solid; thinner than this its edge breaks up in the dither */
+const WISP = 0.06;
+const SUN_HAZE = 0.55;
+/** how much narrower than a whole tone step the dithered seam between two tones is */
+const SEAM = 2.4;
+
+/** the bank's heaps at an art position, from 0 in a crease to 1 on a crown, in as much detail as `octaves` gives */
+const heaps = (b: Bank, x: number, y: number, octaves: number): number =>
+  billows(x / b.across + b.seed * 19.7, y / b.down + b.seed * 7.3, octaves);
+
+/** how thick the bank is at an art position: above 0 inside it, growing toward its heart */
+function thickness(b: Bank, x: number, y: number): number {
+  const v = y - b.base;
+  const span = v < 0 ? b.above : b.below;
+  const profile = 1 - (v / span) * (v / span);
+  // the base is flat and the billows are tall: the heaps shape the top far more than the underside
+  const reach = v < 0 ? 1 : 0.45;
+  return profile * 0.5 + (heaps(b, x, y, 4) - 0.4) * SHAPE * reach + b.cover - 1;
+}
+
+/** the tone of a bank's pixel from 0, its darkest belly, to 1, its lit rim */
+function toneAt(b: Bank, x: number, y: number): number {
+  const lit = clamp((heaps(b, x, y, 2) - heaps(b, x + LIGHT.dx, y + LIGHT.dy, 2)) * LIGHT.gain, -1, 1);
+  const belly = clamp((y - (b.base - b.above * 0.3)) / (b.above * 0.3 + b.below));
+  const streak = noise(x / 14 + b.seed * 3.1, y / 3) - 0.5;
+  return clamp(0.48 + lit * 0.5 - belly * 0.4 + streak * 0.16);
+}
+
+/**
+ * Storm banks painted on the sky at the frame's full detail: each has a flat dark belly and tall billows lit on the
+ * side that faces the hidden sun, its tones stepping through a dither, its thin edges breaking up into wisps. The far
+ * banks are paler and flatter, and the sun's haze warms what lies in front of it while the storm is still light.
+ */
+export function paintClouds(paint: PlatePaint, k: number): void {
+  const ramps: Color[][] = BANKS.map((_, b) => CLOUD_LIGHT[b].map((c, i) => mix(c, CLOUD_DARK[b][i], k)));
+  for (let iy = 0; iy < CLOUD_FLOOR * RES; iy++) {
+    const y = (iy + 0.5) / RES;
+    for (let ix = 0; ix < FW; ix++) {
+      if (!paint.on(ix, iy, SKY_LAYERS)) continue;
+      const x = (ix + 0.5) / RES;
+      const th = bayerAt(ix, iy);
+      for (let b = 0; b < BANKS.length; b++) {
+        const bank = BANKS[b];
+        if (y < bank.base - bank.above || y > bank.base + bank.below) continue;
+        const d = thickness(bank, x, y);
+        if (d <= 0 || d < WISP * th) continue;
+        const ramp = ramps[b];
+        const step = toneAt(bank, x, y) * (ramp.length - 1);
+        const whole = Math.floor(step);
+        // flat tones with a narrow dithered seam between them
+        const seam = (step - whole - 0.5) * SEAM + 0.5;
+        let c = ramp[Math.min(ramp.length - 1, seam > th ? whole + 1 : whole)];
+        const sun = clamp(1 - Math.hypot(x - SUN.x, (y - SUN.y) * 1.3) / SUN.r) * (1 - k);
+        if (sun > 0) c = mix(c, RC.sunHaze, sun * sun * SUN_HAZE);
+        paint.put(ix, iy, c);
+        break;
       }
+    }
   }
 }

@@ -1,5 +1,5 @@
 import { GROUND, W } from "../../../constants/stage";
-import { circle, ellipseRing, glow, line, place, px } from "../../../engine/frame";
+import { circle, ellipseRing, fleck, glow, hairline, line, place, px } from "../../../engine/frame";
 import type { Effect } from "../../../types/effect";
 import { PK } from "../../../types/particle";
 import { clamp } from "../../../utils/math";
@@ -14,6 +14,8 @@ import { RAIN_FOES as C, MUD_SPARKS } from "./colors";
 const GRAVITY = 520;
 const PUDDLE_LIFE = 2.4;
 const PUDDLE_HALF = 10;
+/** seconds of flight the glob's tail of sludge trails behind it */
+const TAIL = 0.035;
 
 /** a brief sludge puddle where a glob splats: touching it on foot hurts once and drags at Kael's feet */
 export function createMudPuddle(x: number, damage: number): Effect {
@@ -48,6 +50,8 @@ export function createMudPuddle(x: number, damage: number): Effect {
         px(x + dx, GROUND, edge ? C.puddleLip : C.puddle, fade);
         if (!edge) px(x + dx, GROUND + 1, C.puddle, fade * 0.8);
       }
+      hairline(x - hw * 0.6, GROUND + 0.25, x - hw * 0.1, GROUND + 0.25, C.wetSkyDim, fade * 0.8);
+      fleck(x + hw * 0.4, GROUND + 0.25, C.wetSky, fade);
       if (Math.sin(t * 9 + x) > 0.6) px(x + Math.sin(t * 3) * 5, GROUND - 1, C.globLight, fade);
       glow(x, GROUND, 12, C.wart, 0.08 * fade);
     },
@@ -101,12 +105,24 @@ export function createMudGlob(
     },
     draw() {
       place();
-      line(o.x - o.vx * 0.02, o.y - o.vy * 0.02, o.x, o.y, C.mud);
+      // a tail of sludge strung out behind it, thinning to drops
+      const bx = -o.vx * TAIL;
+      const by = -o.vy * TAIL;
+      line(o.x + bx * 0.5, o.y + by * 0.5, o.x, o.y, C.mud);
+      hairline(o.x + bx, o.y + by, o.x + bx * 0.5, o.y + by * 0.5, C.mudLight);
+      fleck(o.x + bx * 1.4, o.y + by * 1.4 + 0.5, C.mudLight);
+      // the glob: a dark rim, a wet body lit from above, the sky's glint on it and a rift mote sunk in it
+      circle(o.x, o.y, 3.1, C.outline);
       circle(o.x, o.y, 2.6, C.mudDark);
-      circle(o.x - 0.4, o.y - 0.4, 1.8, C.glob);
-      px(o.x - 1, o.y - 1, C.globLight);
+      circle(o.x - 0.3, o.y - 0.4, 2, C.glob);
+      circle(o.x - 0.7, o.y - 0.9, 1.1, C.globLight);
+      fleck(o.x - 1.25, o.y - 1.5, C.wetSky);
+      fleck(o.x - 0.75, o.y - 1.5, C.wetSky);
+      fleck(o.x + 0.75, o.y + 0.75, C.wart);
       // where it will land, so Kael can step away
-      ellipseRing(clamp(tx, 8, W - 8), GROUND, 5, 1.3, C.wart, 0.5);
+      const mark = clamp(tx, 8, W - 8);
+      ellipseRing(mark, GROUND, 5, 1.3, C.wart, 0.5);
+      hairline(mark - 1.5, GROUND, mark + 1.5, GROUND, C.wartHot, 0.8);
       glow(o.x, o.y, 8, C.wart, 0.15);
     },
   };

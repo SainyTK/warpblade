@@ -72,18 +72,18 @@ export function rainPalette(k: number): ScenePalette {
   return out;
 }
 
-/** cloud banks from the far, hazy one near the horizon to the heavy one overhead: top edge, body, lit underside */
-export const CLOUD_LIGHT: readonly (readonly [Color, Color, Color])[] = [
-  [hex("#6c7888"), hex("#748090"), hex("#8894a2")],
-  [hex("#5c6878"), hex("#626e7e"), hex("#7c8898")],
-  [hex("#4c5666"), hex("#525c6c"), hex("#6e7a8a")],
-  [hex("#3c4554"), hex("#434c5b"), hex("#5e6979")],
+/** the cloud banks from the heavy one overhead to the far, hazy one over the horizon, each from its belly to its lit rim */
+export const CLOUD_LIGHT: readonly Ramp[] = [
+  ramp(["#2c3440", "#363f4c", "#434c5b", "#566170", "#727e8e"]),
+  ramp(["#3a4350", "#454f5d", "#525c6c", "#66717f", "#838f9e"]),
+  ramp(["#4a5462", "#56606f", "#626e7e", "#75818f", "#909caa"]),
+  ramp(["#5c6776", "#667282", "#748090", "#84909e", "#9aa6b2"]),
 ];
-export const CLOUD_DARK: readonly (readonly [Color, Color, Color])[] = [
-  [hex("#465060"), hex("#4c5666"), hex("#5e6878")],
-  [hex("#3a4351"), hex("#3f4856"), hex("#545e6e")],
-  [hex("#2e3642"), hex("#333b48"), hex("#4a5464")],
-  [hex("#232a34"), hex("#283039"), hex("#3e4856")],
+export const CLOUD_DARK: readonly Ramp[] = [
+  ramp(["#161b23", "#1e242d", "#283039", "#364050", "#4e5a6c"]),
+  ramp(["#1f252e", "#283039", "#333b48", "#434d5c", "#5c6878"]),
+  ramp(["#2a313c", "#333b47", "#3f4856", "#4e5868", "#667282"]),
+  ramp(["#353d4a", "#3f4856", "#4c5666", "#5a6474", "#6e7a8a"]),
 ];
 
 export const RAIN_COLORS = {
@@ -93,7 +93,6 @@ export const RAIN_COLORS = {
   puddle: hex("#2a3442"),
   puddleSky: hex("#4e5a6c"),
   puddleLip: hex("#b8c6d6"),
-  stain: hex("#20252d"),
   sheen: hex("#d0dae6"),
   sunHaze: hex("#b4bcc6"),
   sunGlow: hex("#8a8e9a"),

@@ -58,7 +58,7 @@ export function drawStormkite(e: Enemy, t: number): SpriteCanvas {
     px0 = wx;
     py0 = y;
   }
-  s.shadeEdges(C.kiteDark, C.kite, C.kiteDeep);
+  s.shadeEdges(C.kiteDark, C.wetSkyDim, C.kiteDeep);
   s.commit(false);
   s.begin();
   for (const [x, y] of bows) {
@@ -99,6 +99,9 @@ export function drawStormkite(e: Enemy, t: number): SpriteCanvas {
   });
   for (const [end] of spars) s.stroke(hub[0], hub[1], ...along(hub, end, 0.86), 0.4, vein);
   // storm light glinting off the upper edges and the top tip
+  // the wet upper edges catch the sky: a cold line from the top tip down to the back corner and along the front
+  s.hairline(...along(top, back, 0.06), ...along(top, back, 0.94), C.wetSky);
+  s.hairline(...along(top, front, 0.1), ...along(top, front, 0.75), C.wetSkyDim);
   glint(s, top[0] - 0.5, top[1] + 1, C.kiteGlint);
   glint(s, ...along(top, back, 0.35), C.kiteGlint);
   s.set(...along(top, back, 0.6), C.kiteGlint);
