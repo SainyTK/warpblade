@@ -1,5 +1,5 @@
 import { W } from "../../../constants/stage";
-import { ellipseRing, glow, place, px } from "../../../engine/frame";
+import { place } from "../../../engine/frame";
 import { sfx } from "../../../services/audio";
 import type { Effect } from "../../../types/effect";
 import { PK } from "../../../types/particle";
@@ -11,6 +11,7 @@ import { hero, particles, rng } from "../../state";
 import { fieldPace } from "../../timeFields";
 import { boxHit, heroBox } from "../../world";
 import { DAY_SPARKS, DAY_COLORS as DC } from "./colors";
+import { drawAcorn, drawLandingMark } from "./drawAcorn";
 
 const GRAVITY = 420;
 const SPLASH = { reach: 10, height: 14 } as const;
@@ -67,28 +68,12 @@ export function createAcorn(x: number, y: number, tx: number, ty: number, flight
       return o.x > -10 && o.x < W + 10;
     },
     drawBack() {
-      // the landing mark tightens as the acorn comes down
       place();
-      const k = Math.min(1, o.t / flight);
-      const r = SPLASH.reach * (1.4 - k * 0.6);
-      ellipseRing(tx, ty, r, r * 0.3, k > 0.75 ? DC.pollen[3] : DC.pollen[1], 0.5 + k * 0.5);
+      drawLandingMark(tx, ty, SPLASH.reach, Math.min(1, o.t / flight));
     },
     draw() {
       place();
-      const c = Math.cos(o.spin) > 0;
-      for (let i = -1; i <= 2; i++) px(o.x + i, o.y - 1, DC.acornCap);
-      px(o.x - 1, o.y, DC.acorn);
-      px(o.x, o.y, c ? DC.acornLit : DC.acorn);
-      px(o.x + 1, o.y, c ? DC.acorn : DC.acornLit);
-      px(o.x + 2, o.y, DC.bark[2]);
-      px(o.x - 1, o.y + 1, DC.acorn);
-      px(o.x, o.y + 1, DC.acorn);
-      px(o.x + 1, o.y + 1, DC.acorn);
-      px(o.x + 2, o.y + 1, DC.bark[2]);
-      px(o.x, o.y + 2, DC.acorn);
-      px(o.x + 1, o.y + 2, DC.bark[2]);
-      px(o.x + (c ? 1 : 0), o.y - 2, DC.bark[1]);
-      glow(o.x, o.y, 6, DC.pollen[1], 0.25);
+      drawAcorn(o.x, o.y, o.spin, vx, vy);
     },
   };
 }

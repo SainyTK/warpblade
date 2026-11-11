@@ -45,6 +45,8 @@ const HIND_VEINS: readonly Pt[] = [
 ];
 const W = DC.wing;
 const B = DC.mothBody;
+/** past this heat the wings and their eye spots burn at their brightest */
+const HOT = 0.6;
 
 interface Wing {
   x: number;
@@ -107,11 +109,14 @@ function wing(s: SpriteCanvas, w: Wing, shape: readonly Pt[], dim: number, heat:
   const fore = shape === FORE;
   const tip = fore ? 12.5 : 7.5;
   s.begin();
+  // the membrane glows a tone brighter once the wings are hot, so the wind-up shows on the whole moth
+  const aglow = heat > HOT;
+  const membrane = c(aglow ? W[3] : W[2]);
   s.poly(
     shape.map(([u, v]) => at(w, u, v)),
-    c(W[2]),
+    membrane,
   );
-  s.shadeEdges(c(W[2]), c(W[3]), c(W[2]));
+  s.shadeEdges(membrane, c(aglow ? W[4] : W[3]), membrane);
   s.poly(
     shape.map(([u, v]) => at(w, u * 0.32, v * 0.6)),
     c(W[1]),
@@ -129,7 +134,7 @@ function wing(s: SpriteCanvas, w: Wing, shape: readonly Pt[], dim: number, heat:
   for (let u = 2; u <= tip; u += 0.5) {
     const v = fore ? -2.4 - u * 0.2 : -2.6 * Math.sin((u / (tip + 1)) * Math.PI) - 0.4;
     const [x, y] = at(w, u, v);
-    s.dot(x, y, 0.4, c(u > tip - 3 ? W[4] : W[3]));
+    s.dot(x, y, 0.4, c(u > tip - 3 || aglow ? W[4] : W[3]));
   }
   if (near) {
     const [gx, gy] = at(w, tip - 1, fore ? -4.6 : -1.4);
@@ -139,7 +144,7 @@ function wing(s: SpriteCanvas, w: Wing, shape: readonly Pt[], dim: number, heat:
     const [x, y] = at(w, spotAt, 0);
     s.dot(x, y, 1.9, W[0]);
     s.dot(x, y, 1.4, DC.wingSpot);
-    const hot = heat > 0.6;
+    const hot = heat > HOT;
     s.dot(x, y, 0.8, hot ? DC.crackHot : heat > 0.2 ? DC.crack : DC.crackDeep);
     glowEye(s, x - 0.5, y - 0.5, hot ? WHITE : heat > 0.2 ? DC.crackHot : DC.crack, hot ? WHITE : DC.crackHot);
   }
@@ -157,17 +162,16 @@ function heatOf(e: Enemy): number {
   return 0;
 }
 
-/** a feathered feeler from its root to its tip, with fine barbs down both sides */
+/** a fine feathered feeler curving from its root to a pale bead at its tip, with a few barbs along its back */
 function feeler(s: SpriteCanvas, x0: number, y0: number, x1: number, y1: number): void {
-  s.stroke(x0, y0, x1, y1, 0.3, B[3]);
-  for (let k = 0.3; k < 0.95; k += 0.17) {
-    const x = x0 + (x1 - x0) * k;
-    const y = y0 + (y1 - y0) * k;
-    s.set(x - 0.5, y, B[2]);
-    s.set(x + 0.5, y + 0.5, B[2]);
+  const mx = (x0 + x1) / 2 - 0.8;
+  const my = (y0 + y1) / 2 - 0.4;
+  s.hairline(x0, y0, mx, my, B[3]);
+  s.hairline(mx, my, x1, y1, B[3]);
+  for (const k of [0.45, 0.75]) {
+    s.set(mx + (x1 - mx) * k - 0.5, my + (y1 - my) * k, B[2]);
   }
-  s.block(x1 - 0.5, y1 - 0.5, W[3]);
-  s.set(x1 - 0.5, y1 - 0.5, W[4]);
+  s.set(x1, y1, W[4]);
 }
 
 /** a Glimmer Moth: a furred violet body, amber wings with violet eyes, feathered feelers; wings beat faster to wind up */
@@ -185,13 +189,16 @@ export function drawMoth(e: Enemy, t: number): SpriteCanvas {
   wing(s, { x: -1, y: -1 + bob, a: fore + 0.35 }, FORE, 0.62, heat, 0);
   wing(s, { x: -2, y: 0 + bob, a: fore - 0.4 }, HIND, 0.55, heat, 0);
   // the banded abdomen and its thin legs
+  // the abdomen trails a beat behind the wings, curling under on the down stroke
+  const curl = e.state === "shoot" ? 1.5 : Math.sin(time * rate - 1.3) * 0.9;
   s.begin();
-  s.stroke(-2, 1 + bob, -7, 3 + bob, 2.1, B[1]);
+  s.taper(-2, 1 + bob, -7.5, 3 + bob + curl, 2.1, 1.5, B[1], curl * 0.4);
   s.shadeEdges(B[1], B[2], B[0], 2);
   for (const x of [-3.4, -5, -6.6]) {
-    s.stroke(x + 0.4, -0.2 + bob, x - 0.2, 3.6 + bob, 0.25, B[0]);
+    const sink = ((-2 - x) / 5.5) * curl;
+    s.stroke(x + 0.4, -0.2 + bob + sink, x - 0.2, 3.6 + bob + sink, 0.25, B[0]);
   }
-  s.block(-8.5, 2.5 + bob, B[2]);
+  s.block(-9, 2.5 + bob + curl, B[2]);
   s.stroke(0, 2.5 + bob, -0.5, 4 + bob, 0.25, B[0]);
   s.stroke(2, 2.5 + bob, 2.6, 4 + bob, 0.25, B[0]);
   s.commit();
