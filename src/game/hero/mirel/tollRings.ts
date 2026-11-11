@@ -23,7 +23,7 @@ export function ringTollAt(s: StaffStrike, at: StrikePlace, scale = 1): void {
   if (shape.kind !== "ring") return;
   const [cx, cy] = ringCentre(shape, at);
   game.fx.push(createFloorRing(cx, cy, shape.radius + s.grow, PAL.hour, 0.3, 0.6));
-  lights.add(cx, cy, 30, PAL.hour[4], 0.7, 0.15);
+  lights.add(cx, cy, 30, PAL.hour[3], 0.45, 0.15);
 }
 
 /** Midnight: Toll rings twelve times where it struck, the twelfth hardest */

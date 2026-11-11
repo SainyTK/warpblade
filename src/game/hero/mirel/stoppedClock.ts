@@ -1,11 +1,11 @@
 import { STOPPED_CLOCK } from "../../../constants/mirel/abilities";
+import { DIAL } from "../../../constants/mirel/look";
 import { PAL, SAND } from "../../../constants/palette";
-import { line, place, px } from "../../../engine/frame";
+import { disc, place } from "../../../engine/frame";
 import { sfx } from "../../../services/audio";
 import type { Effect } from "../../../types/effect";
 import type { Enemy } from "../../../types/enemy";
 import { PK } from "../../../types/particle";
-import { TAU } from "../../../utils/math";
 import { dealDamage } from "../../damage";
 import { enemyBox, enemyCenter } from "../../enemies/enemy";
 import { stopFoe } from "../../enemies/timeStop";
@@ -13,11 +13,15 @@ import { emitSkillEvent } from "../../skills/events";
 import { game, hero, lights, particles, progress, rng } from "../../state";
 import { setState } from "../actions";
 import { canCast } from "./castCheck";
+import { type Dial, drawDial, drawHand, drawHub } from "./clockArt";
 import { mirel, mirelHost } from "./memory";
+import { drawStoppedRim } from "./stoppedLook";
 
 /** the clock face over a stopped foe: its width, and how often its hand ticks */
 const FACE = 10;
 const TICK = 0.25;
+/** seconds the face is white as it opens */
+const OPEN_FLASH = 2 / 30;
 
 /** a foe ahead counts as level with her when its centre is this near her chest height */
 const LEVEL = 20;
@@ -57,18 +61,12 @@ export function createClockFace(e: Enemy): Effect {
       const b = enemyBox(e);
       const [cx] = enemyCenter(e);
       const cy = b[1] - FACE - 2;
-      const steps = 40;
-      for (let i = 0; i < steps; i++) {
-        const a = (i / steps) * TAU;
-        px(cx + Math.cos(a) * FACE, cy + Math.sin(a) * FACE, PAL.hour[3], 0.9);
-      }
-      for (let i = 0; i < 12; i += 3) {
-        const a = -Math.PI / 2 + (i / 12) * TAU;
-        px(cx + Math.cos(a) * (FACE - 2), cy + Math.sin(a) * (FACE - 2), PAL.hour[5]);
-      }
-      const hand = -Math.PI / 2 + Math.floor(t / TICK) * (TAU / 12);
-      line(cx, cy, cx + Math.cos(hand) * (FACE - 3), cy + Math.sin(hand) * (FACE - 3), PAL.hour[4]);
-      px(cx, cy, PAL.hour[5]);
+      drawStoppedRim(e);
+      const dial: Dial = { x: cx, y: cy, r: FACE, a: 1, floor: Number.POSITIVE_INFINITY, flash: t < OPEN_FLASH };
+      disc(cx, cy, FACE, DIAL.fill, 0.3);
+      drawDial(dial);
+      drawHand(dial, Math.floor(t / TICK) / 12, FACE - 3, false);
+      drawHub(dial);
     },
   };
 }
@@ -122,7 +120,7 @@ export function runClockCast(): void {
       stopFoe(e, stopFor(e), STOPPED_CLOCK.returns);
       game.fx.push(createClockFace(e));
       const [cx, cy] = enemyCenter(e);
-      lights.add(cx, cy, 34, PAL.hour[4], 0.9, 0.25);
+      lights.add(cx, cy, 34, PAL.hour[3], 0.55, 0.25);
       sfx.chime(3);
     }
   }

@@ -1,6 +1,6 @@
 import { SECOND_HAND } from "../../../constants/mirel/abilities";
-import { PAL, SPARKS } from "../../../constants/palette";
-import { glow, line, place, px } from "../../../engine/frame";
+import { SPARKS } from "../../../constants/palette";
+import { place } from "../../../engine/frame";
 import { sfx } from "../../../services/audio";
 import type { Effect } from "../../../types/effect";
 import type { Enemy } from "../../../types/enemy";
@@ -12,9 +12,10 @@ import { game, hero, progress } from "../../state";
 import { setState } from "../actions";
 import { canCast } from "./castCheck";
 import { mirel } from "./memory";
+import { drawFlyingHand } from "./trinkets";
 
 /** the hand's length, pixels */
-const LENGTH = 8;
+const LENGTH = 10;
 
 /** a thin clock hand flying straight ahead through foes, each once, up to its pierce, chilling them */
 function createSecondHand(x: number, y: number, dir: number): Effect {
@@ -44,13 +45,7 @@ function createSecondHand(x: number, y: number, dir: number): Effect {
     },
     draw() {
       place();
-      const tail = px0 - dir * LENGTH;
-      for (let i = 1; i <= 3; i++) px(tail - dir * i * 3, y, PAL.hour[3], 0.5 - i * 0.12);
-      line(tail, y, px0, y, PAL.hour[4]);
-      px(px0, y, PAL.hour[5]);
-      px(tail + dir, y - 1, PAL.hour[2]);
-      px(tail + dir, y + 1, PAL.hour[2]);
-      glow(px0, y, 8, PAL.hour[3], 0.35);
+      drawFlyingHand(px0, y, dir, 0, LENGTH);
     },
   };
 }

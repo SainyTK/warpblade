@@ -1,11 +1,16 @@
+import { KNIFE_CLIPS } from "../../../constants/clips/tallis/knives";
+import { TALLIS_IDLE } from "../../../constants/clips/tallis/stance";
 import { PAL } from "../../../constants/palette";
-import { glow, place, px } from "../../../engine/frame";
+import { glow, place } from "../../../engine/frame";
 import type { Enemy } from "../../../types/enemy";
+import type { Pose } from "../../../types/pose";
 import type { SkillBehavior, SkillMemory } from "../../../types/skillBehavior";
+import { sampleKeys } from "../../../utils/sampleKeys";
 import { dealDamage } from "../../damage";
 import { createSlash } from "../../effects/slash";
 import { skin } from "../../hero/skin";
 import { countBackKill } from "../../hero/tallis/blowSkills";
+import { drawForm, poseForm } from "../../hero/tallis/shadowForm";
 import { game, hero, progress, rng } from "../../state";
 import { skillValues, withCharms } from "../query";
 import { nearestFoe } from "../targets";
@@ -13,6 +18,8 @@ import { nearestFoe } from "../targets";
 const ID = "t_double";
 /** seconds between a shade's stabs */
 const STAB_EVERY = 0.14;
+/** seconds a shade takes to come out of the dark */
+const APPEAR = 0.1;
 
 interface Shade {
   foe: Enemy | null;
@@ -31,6 +38,14 @@ interface DoubleMemory {
 }
 
 const memoryOf = (m: SkillMemory): DoubleMemory => m as unknown as DoubleMemory;
+
+/** a shade's pose: his backstab, timed so the knife lands on each of its stabs, and his idle while it waits */
+function shadePose(sh: Shade): Pose {
+  if (sh.stabs <= 0) return sampleKeys(TALLIS_IDLE.keys, sh.t % TALLIS_IDLE.dur);
+  const clip = KNIFE_CLIPS.backstab;
+  const at = sh.next <= clip.hit ? clip.hit - sh.next : clip.hit + STAB_EVERY - sh.next;
+  return sampleKeys(clip.keys, Math.min(clip.dur, Math.max(0, at)));
+}
 
 /** a shade stands behind its foe, on the side the foe does not face */
 function standBehind(sh: Shade, e: Enemy): void {
@@ -121,14 +136,9 @@ export const doubleSkill: SkillBehavior = {
   draw(memory) {
     place();
     for (const sh of memoryOf(memory).shades) {
-      const flicker = Math.floor(sh.t * 20) % 3 === 0 ? 0.5 : 0.8;
-      const x = Math.round(sh.x);
-      const y = Math.round(sh.y);
-      for (let j = 2; j < 22; j++) {
-        const w = j > 16 ? 2 : j < 6 ? 3 : 2;
-        for (let i = -w; i <= w; i++) px(x + i, y - j, PAL.gloam[j > 16 ? 2 : 1], flicker);
-      }
-      px(x + sh.face, y - 19, PAL.gloam[5]);
+      const flicker = Math.floor(sh.t * 20) % 3 === 0 ? 0.7 : 1;
+      const show = Math.min(1, sh.t / APPEAR) * flicker;
+      drawForm(poseForm(shadePose(sh)), sh.x, sh.y, sh.face < 0, { ink: 1, squash: 1, show });
       glow(sh.x, sh.y - 12, 10, PAL.gloam[3], 0.15);
     }
   },

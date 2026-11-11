@@ -13,7 +13,7 @@ import { resetMotion } from "../kael/motion";
 import { startCharge } from "../ultimate";
 import { nextAbility, pressAbility, resetAbilities, tickAbilities } from "./abilities";
 import { inCloud, stepClouds } from "./clouds";
-import { drawTallis, drawTallisBack, drawTallisOver, tallisAlpha, tallisRing } from "./draw";
+import { drawTallis, drawTallisBack, drawTallisOver, tallisAlpha } from "./draw";
 import { refillGloam } from "./gloam";
 import { forgetDark, liftDark, runGloaming } from "./gloaming";
 import { runHamstring } from "./hamstring";
@@ -185,7 +185,6 @@ export const TALLIS_KIT: HeroKit = {
   draw: drawTallis,
   drawOver: drawTallisOver,
   heroAlpha: tallisAlpha,
-  heroRing: tallisRing,
   hidden,
   onKill,
   reset: () => {

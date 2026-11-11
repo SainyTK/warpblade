@@ -1,6 +1,7 @@
-import { PAL, SAND } from "../../../../constants/palette";
+import { DIAL } from "../../../../constants/mirel/look";
+import { PAL } from "../../../../constants/palette";
 import { W } from "../../../../constants/stage";
-import { glow, line, place, px } from "../../../../engine/frame";
+import { fleck, glow, hairline, place, polygon } from "../../../../engine/frame";
 import type { Effect } from "../../../../types/effect";
 import { clamp } from "../../../../utils/math";
 import { dealDamage } from "../../../damage";
@@ -60,15 +61,27 @@ function createDial(x0: number): Effect {
       const y = floor() - 1;
       const k = Math.min(1, t * 6) * Math.min(1, (life - t) * 3);
       const half = width / 2;
-      line(x - half, y, x + half, y, PAL.hour[3], 0.8 * k);
+      // the dial's plate lies on the floor: two fine lines, hour marks standing on it, the quarters taller
+      hairline(x - half, y + 0.5, x + half, y + 0.5, DIAL.bezel, k);
+      hairline(x - half, y, x + half, y, DIAL.hour, 0.8 * k);
       for (let i = 0; i <= 12; i++) {
         const tx = x - half + (width * i) / 12;
-        px(tx, y - 1, i % 3 ? PAL.hour[2] : PAL.hour[4], 0.9 * k);
+        hairline(tx, y - (i % 3 ? 1 : 2), tx, y - 0.5, i % 3 ? DIAL.minute : DIAL.quarter, k);
       }
       const shadow = (sweep / SWEEP) * 2 - 1;
-      line(x, y - 1, x + shadow * half, y - 1, SAND.shade, 0.7 * k);
-      line(x, y - 1, x, y - 7, SAND.light, k);
-      px(x, y - 8, PAL.hour[5], k);
+      hairline(x, y - 0.5, x + shadow * half, y - 0.5, DIAL.sandShade, 0.8 * k);
+      // the gnomon: a brass blade leaning the way its shadow falls, lit along its upright edge
+      polygon(
+        [
+          [x - 0.5, y],
+          [x + 3, y],
+          [x, y - 8],
+        ],
+        DIAL.sandShade,
+        k,
+      );
+      hairline(x, y - 0.5, x, y - 8, DIAL.sand, k);
+      fleck(x, y - 8.5, DIAL.quarter, k);
       glow(x, y - 2, half * 0.6, PAL.hour[3], 0.12 * k);
     },
   };

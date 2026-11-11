@@ -1,15 +1,15 @@
 import { STILLFIELD } from "../../../constants/mirel/field";
+import { DIAL } from "../../../constants/mirel/look";
 import { PAL, SAND } from "../../../constants/palette";
 import { GROUND } from "../../../constants/stage";
-import { disc, glow, place, px } from "../../../engine/frame";
-import type { Color } from "../../../types/color";
+import { disc, fleck, glow, place } from "../../../engine/frame";
 import type { Effect } from "../../../types/effect";
 import type { StillfieldView } from "../../../types/mirel";
 import { PK } from "../../../types/particle";
-import { WHITE } from "../../../utils/color";
 import { TAU } from "../../../utils/math";
 import { character, lights, particles, rng } from "../../state";
 import { lowerField, raiseField, type TimeField } from "../../timeFields";
+import { type Dial, dialArc, drawDial, drawHand, drawHandWake, drawHub } from "./clockArt";
 import { mirel } from "./memory";
 import { snapField } from "./stillfield";
 
@@ -20,7 +20,9 @@ const CLOSE = 3 / 30;
 /** seconds the second hand takes to go round once */
 const SWEEP = 2;
 /** sand motes hanging still inside */
-const MOTES = 12;
+const MOTES = 16;
+/** the inner ring of dashes: how far out it sits, how many dashes, and how fast it turns against the hand */
+const INNER = { at: 0.58, dashes: 12, speed: 0.35 } as const;
 
 /** a mote's resting place inside the field, the same every frame for this field */
 function motePlace(id: number, i: number): [number, number] {
@@ -47,40 +49,35 @@ function burst(f: StillfieldView): void {
       },
     );
   }
-  lights.add(f.x, f.y, f.radius + 10, PAL.hour[4], 0.9, 0.15);
+  lights.add(f.x, f.y, f.radius + 10, PAL.hour[3], 0.55, 0.15);
 }
 
-/** a pixel of the field, hidden where the floor stands in front of it */
-function fieldPx(x: number, y: number, c: Color, a: number): void {
-  if (y < GROUND) px(x, y, c, a);
-}
-
-/** the clock ring: twelve ticks, a faint fill, a second hand going round and sand hanging still inside; the floor in
- *  front hides what is below it */
+/**
+ * The clock face of a field: a faint fill, the dial, a slower ring of dashes turning the other way inside it, a second
+ * hand going round with its wake, and sand hanging still inside; the floor in front hides what is below it.
+ */
 function drawRing(f: StillfieldView, r: number, age: number, white: boolean): void {
   place();
-  const ring = white ? WHITE : PAL.hour[3];
-  disc(f.x, f.y, r, PAL.hour[2], 0.15, GROUND);
-  const steps = Math.max(24, Math.round(TAU * r));
-  for (let i = 0; i < steps; i++) {
-    const a = (i / steps) * TAU;
-    fieldPx(f.x + Math.cos(a) * r, f.y + Math.sin(a) * r, ring, 0.9);
+  const dial: Dial = { x: f.x, y: f.y, r, a: 1, floor: GROUND, flash: white };
+  disc(f.x, f.y, r, DIAL.fill, 0.15, GROUND);
+  drawDial(dial);
+  const inner = r * INNER.at;
+  const turn = -age * INNER.speed;
+  for (let i = 0; i < INNER.dashes; i++) {
+    const from = turn + (i / INNER.dashes) * TAU;
+    dialArc(dial, inner, from, from + (TAU / INNER.dashes) * 0.55, DIAL.minute, 0.7);
   }
-  for (let i = 0; i < 12; i++) {
-    const a = -Math.PI / 2 + (i / 12) * TAU;
-    const c = i === 0 ? PAL.hour[5] : PAL.hour[4];
-    fieldPx(f.x + Math.cos(a) * (r - 2), f.y + Math.sin(a) * (r - 2), c, 0.9);
-    fieldPx(f.x + Math.cos(a) * (r - 3), f.y + Math.sin(a) * (r - 3), c, 0.6);
-  }
-  const hand = -Math.PI / 2 + (age / SWEEP) * TAU;
-  for (let k = 0; k <= r - 4; k++) fieldPx(f.x + Math.cos(hand) * k, f.y + Math.sin(hand) * k, PAL.hour[4], 0.6);
-  px(f.x, f.y, PAL.hour[5]);
+  const hand = age / SWEEP;
+  drawHandWake(dial, hand, r * 0.8, 0.06);
+  drawHand(dial, hand, r * 0.8, false);
+  drawHub(dial);
   for (let i = 0; i < MOTES; i++) {
     const [mx, my] = motePlace(f.id, i);
-    const drift = Math.sin(age * 0.6 + i) * 0.6;
-    fieldPx(f.x + mx * r, f.y + my * r + drift, i % 3 ? SAND.light : SAND.shade, 0.8);
+    const y = f.y + my * r + Math.sin(age * 0.6 + i) * 0.6;
+    if (y < GROUND) fleck(f.x + mx * r, y, i % 3 ? DIAL.sand : DIAL.sandShade);
+    if (y < GROUND && i % 4 === 0) fleck(f.x + mx * r + 0.5, y, DIAL.sandShade);
   }
-  glow(f.x, f.y, r * 0.8, PAL.hour[3], white ? 0.4 : 0.14);
+  glow(f.x, f.y, r * 0.8, DIAL.light, white ? 0.26 : 0.14);
 }
 
 /**

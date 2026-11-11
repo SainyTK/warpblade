@@ -1,5 +1,6 @@
 import { PAL } from "../../../constants/palette";
-import { glow, place, px } from "../../../engine/frame";
+import { WRAITH_COLORS, WRAITH_PIXELS, WRAITH_SOLID } from "../../../constants/tallis/pixels";
+import { glow, place } from "../../../engine/frame";
 import type { Enemy } from "../../../types/enemy";
 import type { SkillBehavior, SkillMemory } from "../../../types/skillBehavior";
 import { dealDamage } from "../../damage";
@@ -7,6 +8,7 @@ import { createFloorRing } from "../../effects/floorRing";
 import { createSlash } from "../../effects/slash";
 import { addStacks } from "../../enemies/skillStatus";
 import { skin } from "../../hero/skin";
+import { stampSoft } from "../../hero/tallis/stamp";
 import { game, progress, rng } from "../../state";
 import { skillValues, withCharms } from "../query";
 import { nearestFoe } from "../targets";
@@ -95,17 +97,16 @@ export const wraithSkill: SkillBehavior = {
     place();
     for (const w of memoryOf(memory).wraiths) {
       const fade = Math.min(1, w.left * 2, w.t * 4);
-      const x = Math.round(w.x);
-      const y = Math.round(w.y);
-      const sway = Math.round(Math.sin(w.t * 6));
-      for (let j = 1; j < 16; j++) {
-        const half = j < 4 ? 1 : j < 12 ? 2 : 1;
-        for (let i = -half; i <= half; i++)
-          px(x + i + (j < 5 ? sway : 0), y - j, PAL.gloam[j < 5 ? 1 : 2], fade * (j < 4 ? 0.5 : 0.85));
-      }
-      px(x - 1, y - 12, PAL.gloam[5], fade);
-      px(x + 1, y - 12, PAL.gloam[5], fade);
-      glow(w.x, w.y - 9, 9, PAL.gloam[3], 0.18 * fade);
+      const e = nearestFoe(w.x, w.y - 10);
+      // it hangs over the floor, bobbing, and its rags trail more the lower they hang
+      const lift = 3 + Math.sin(w.t * 4) * 1.2;
+      stampSoft(WRAITH_PIXELS, w.x, w.y - lift, WRAITH_COLORS, {
+        flip: e ? e.x < w.x : false,
+        show: fade * 0.85,
+        solid: WRAITH_SOLID,
+        sway: (row) => Math.sin(w.t * 6 + row * 0.5) * Math.max(0, row - 9) * 0.22,
+      });
+      glow(w.x, w.y - 10, 9, PAL.gloam[3], 0.18 * fade);
     }
   },
   on: {

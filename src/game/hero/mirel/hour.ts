@@ -50,7 +50,7 @@ function openClock(): void {
     spec.cap = v.endless ? Number.POSITIVE_INFINITY : spec.cap;
   }
   game.fx.push(createHourClock(spec));
-  lights.add(at.x, at.y, 80, PAL.hour[4], 1, 0.3);
+  lights.add(at.x, at.y, 80, PAL.hour[3], 0.55, 0.3);
   sfx.chime(5);
 }
 

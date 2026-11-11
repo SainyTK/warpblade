@@ -1,5 +1,4 @@
-import { PAL } from "../../../../constants/palette";
-import { glow, line, place, px } from "../../../../engine/frame";
+import { place } from "../../../../engine/frame";
 import type { Enemy } from "../../../../types/enemy";
 import { dealDamage } from "../../../damage";
 import { enemyBox, enemyCenter } from "../../../enemies/enemy";
@@ -8,6 +7,7 @@ import { skillValues, withCharms } from "../../../skills/query";
 import { foesOnScreen } from "../../../skills/targets";
 import { game, hero, progress } from "../../../state";
 import { boxHit } from "../../../world";
+import { drawNeedle } from "../blades";
 import { strikeFrom } from "../marks";
 
 const ID = "t_needles";
@@ -58,10 +58,7 @@ function needle(x0: number, y0: number, vx: number, vy: number, range: number, p
     },
     draw() {
       place();
-      const k = 3 / Math.max(1, speed);
-      line(x - vx * k, y - vy * k, x, y, PAL.gloam[3], 0.9);
-      px(Math.round(x), Math.round(y), PAL.gloam[5]);
-      glow(x, y, 4, PAL.gloam[4], 0.2);
+      drawNeedle(x, y, vx / Math.max(1, speed), vy / Math.max(1, speed));
     },
   });
 }

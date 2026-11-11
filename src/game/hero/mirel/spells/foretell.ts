@@ -1,8 +1,10 @@
+import { DIAL } from "../../../../constants/mirel/look";
 import { PAL, SPARKS } from "../../../../constants/palette";
-import { glow, line, place, px } from "../../../../engine/frame";
+import { fleck, place } from "../../../../engine/frame";
 import { sfx } from "../../../../services/audio";
 import type { Effect } from "../../../../types/effect";
 import type { Enemy } from "../../../../types/enemy";
+import { TAU } from "../../../../utils/math";
 import { dealDamage } from "../../../damage";
 import { createImpact } from "../../../effects/impact";
 import { enemyBox, enemyCenter } from "../../../enemies/enemy";
@@ -10,7 +12,9 @@ import { skillValues, withCharms } from "../../../skills/query";
 import { foesOnScreen } from "../../../skills/targets";
 import { game, hero, lights, progress } from "../../../state";
 import { shake } from "../../../world";
+import { type Dial, dialArc, dialMark } from "../clockArt";
 import { isStill } from "../strike";
+import { drawFlyingHand } from "../trinkets";
 import { pressSpell } from "./castSpell";
 
 const ID = "m_foretell";
@@ -18,6 +22,8 @@ const ID = "m_foretell";
 const FALL = 0.12;
 /** pixels above the foe the blade appears */
 const DROP = 56;
+/** the falling hand's length */
+const HAND = 11;
 
 /** a blade lands on its foe, and its ring on the foes beside it */
 function land(e: Enemy, others: readonly Enemy[]): void {
@@ -34,7 +40,7 @@ function land(e: Enemy, others: readonly Enemy[]): void {
     }
   }
   game.fx.push(createImpact(cx, cy, 1, true, SPARKS.hour));
-  lights.add(cx, cy, 30, PAL.hour[4], 0.9, 0.18);
+  lights.add(cx, cy, 30, PAL.hour[3], 0.5, 0.18);
 }
 
 /** the foes Foretell marks: the nearest few, or with Prophecy every foe on screen */
@@ -75,19 +81,16 @@ function createForetell(foes: readonly Enemy[]): Effect {
         if (t < delay) {
           const k = 1 - t / delay;
           const r = 2 + k * 3;
-          px(cx, top - r, PAL.hour[4]);
-          px(cx - r, top, PAL.hour[3]);
-          px(cx + r, top, PAL.hour[3]);
-          px(cx, top + r * 0.4, PAL.hour[5]);
+          // the mark of what is to come: a fine ring closing on the spot, with a mark at each quarter
+          const dial: Dial = { x: cx, y: top, r, a: 1, floor: Number.POSITIVE_INFINITY };
+          dialArc(dial, r, 0, TAU, DIAL.hour, 1);
+          for (let q = 0; q < 4; q++) dialMark(dial, (q * TAU) / 4, r, r + 1.5, DIAL.quarter, 1);
+          fleck(cx, top, DIAL.hub);
           continue;
         }
         const u = Math.min(1, (t - delay) / FALL);
         const tip = top - DROP * (1 - u);
-        line(cx, tip - 10, cx, tip, PAL.hour[4]);
-        px(cx, tip, PAL.hour[5]);
-        px(cx - 1, tip - 9, PAL.hour[2]);
-        px(cx + 1, tip - 9, PAL.hour[2]);
-        glow(cx, tip - 4, 9, PAL.hour[3], 0.3);
+        drawFlyingHand(cx, tip, 0, 1, HAND);
       }
     },
   };

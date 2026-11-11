@@ -1,5 +1,5 @@
-import { PAL } from "../../../../constants/palette";
-import { place, px } from "../../../../engine/frame";
+import { CALTROP_COLORS, CALTROP_PIXELS } from "../../../../constants/tallis/pixels";
+import { place } from "../../../../engine/frame";
 import { dealDamage } from "../../../damage";
 import { enemyBox } from "../../../enemies/enemy";
 import { kindOf } from "../../../enemies/kinds";
@@ -7,6 +7,7 @@ import { skillValues, withCharms } from "../../../skills/query";
 import { game, hero, progress, rng } from "../../../state";
 import { surfaceBelow } from "../../../world";
 import { nightshade } from "../blowSkills";
+import { stampSoft } from "../stamp";
 
 const ID = "t_caltrops";
 /** seconds between a strip's cuts on a foe standing on it */
@@ -53,10 +54,7 @@ export function scatterCaltrops(x0: number, x1: number, y: number, seconds: numb
     drawBack() {
       place();
       const fade = Math.min(1, (seconds - t) * 2);
-      for (const s of spikes) {
-        px(Math.round(s.x), y - 1, PAL.gloam[2], fade);
-        px(Math.round(s.x) + s.tip, y - 2, PAL.gloam[4], fade);
-      }
+      for (const s of spikes) stampSoft(CALTROP_PIXELS[s.tip], s.x, y, CALTROP_COLORS, { show: fade, solid: "tsb" });
     },
     draw() {},
   });

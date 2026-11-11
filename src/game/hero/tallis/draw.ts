@@ -1,14 +1,11 @@
 import { frame } from "../../../constants/hero";
 import { PAL } from "../../../constants/palette";
-import { RES } from "../../../constants/stage";
-import { SMOKE_KNOT } from "../../../constants/tallis/abilities";
 import { KNIFE_BLOWS } from "../../../constants/tallis/knives";
 import { SINK } from "../../../constants/tallis/sink";
 import { VEIL } from "../../../constants/tallis/veil";
-import { bayerAt, glow, place, px, toScreenX, toScreenY } from "../../../engine/frame";
+import { glow, place, px } from "../../../engine/frame";
 import type { Color } from "../../../types/color";
 import type { Enemy } from "../../../types/enemy";
-import type { SmokeCloud } from "../../../types/tallis";
 import { hex } from "../../../utils/color";
 import { bladeAngle } from "../../../utils/poseFrame";
 import { enemyBox } from "../../enemies/enemy";
@@ -16,6 +13,9 @@ import { game, hero } from "../../state";
 import { backOpenFoe } from "./backOpen";
 import { dimLights } from "./dark";
 import { tallis, tallisHost } from "./memory";
+import { drawPool } from "./pool";
+import { drawForm, heroForm } from "./shadowForm";
+import { drawCloud } from "./smokeLook";
 
 const G = PAL.gloam;
 /** the lost cue's grey and its dark outline */
@@ -42,85 +42,6 @@ function glyph(rows: readonly string[], x: number, y: number, c: Color, edge: Co
   for (let j = 0; j < rows.length; j++) for (let i = 0; i < rows[0].length; i++) if (on(i, j)) px(x + i, y + j, c);
 }
 
-/** how far the pool has spread, 0 to 1: it grows as his body pours down and shrinks as he rises */
-function poolShare(): number {
-  if (hero.state === "sink") return Math.min(1, tallis.sinkT / SINK.pour);
-  if (hero.state === "rise") return Math.max(0, 1 - hero.st / SINK.rise);
-  return 0;
-}
-
-/** the ink pool on the surface he stands on: a dithered oval in the gloam ramp, a rose rim along its top, two rose eyes */
-function drawPool(k: number): void {
-  if (k <= 0) return;
-  const half = (SINK.width / 2) * k;
-  const x = hero.x;
-  const y = hero.y;
-  for (let dx = -Math.ceil(half); dx <= Math.ceil(half); dx++) {
-    const u = Math.abs(dx) / Math.max(1, half);
-    if (u > 1) continue;
-    const ripple = Math.sin(game.t * 9 + dx * 0.7);
-    const ix = Math.round(toScreenX(x + dx) * RES);
-    px(x + dx, y, G[0]);
-    px(x + dx, y - 1, u < 0.6 ? G[0] : G[1]);
-    if (u < 0.85) px(x + dx, y - 2, u < 0.5 ? G[1] : G[2]);
-    if (u < 0.6 && bayerAt(ix, Math.round(toScreenY(y - 3) * RES)) < 0.75 - u) px(x + dx, y - 3, G[2]);
-    const rim = u < 0.6 ? y - 3 : u < 0.85 ? y - 2 : y - 1;
-    if (ripple > 0.35) px(x + dx, rim, G[4], 0.7);
-  }
-  if (k >= 1) {
-    const look = hero.face;
-    px(x + look * 1, y - 2, G[5]);
-    px(x + look * 3, y - 2, G[5]);
-  }
-  glow(x, y - 2, 12 * k, G[4], 0.14);
-}
-
-/** the puffs a cloud is made of: where each sits across the cloud and up it, its size, and how fast it curls */
-const PUFFS = [
-  [-0.62, 0.22, 0.34, 1.3],
-  [-0.3, 0.3, 0.42, 0.9],
-  [0.05, 0.25, 0.46, 1.1],
-  [0.4, 0.3, 0.4, 0.8],
-  [0.66, 0.2, 0.32, 1.4],
-  [-0.4, 0.62, 0.34, 1],
-  [0.1, 0.66, 0.38, 1.2],
-  [0.48, 0.58, 0.3, 0.9],
-  [-0.08, 0.9, 0.26, 1.5],
-] as const;
-
-/** one Smoke Knot: puffs of dithered smoke rolling out over its first moment, curling, and thinning over its last, lit
- *  rose along their tops */
-function drawCloud(c: SmokeCloud): void {
-  const grow = Math.min(1, c.t / SMOKE_KNOT.roll);
-  const thin = Math.min(1, (c.life - c.t) / SMOKE_KNOT.thin);
-  const half = c.w / 2;
-  const x0 = Math.floor(c.x - half - 4);
-  const x1 = Math.ceil(c.x + half + 4);
-  const y0 = Math.floor(c.y - c.h * 1.25);
-  const puffs = PUFFS.map(([u, v, size, curl], i) => ({
-    x: c.x + u * half * (0.35 + 0.65 * grow) + Math.sin(game.t * curl + i * 1.7) * 2,
-    y: c.y - v * c.h * (0.4 + 0.6 * grow) - (1 - thin) * 6,
-    r: size * c.h * (0.5 + 0.5 * grow) * (0.85 + 0.15 * thin),
-  }));
-  const density = (x: number, y: number): number => {
-    let a = 0;
-    for (const p of puffs) {
-      const d = Math.hypot(x - p.x, (y - p.y) * 1.15) / p.r;
-      if (d < 1) a += (1 - d * d) * 0.55;
-    }
-    return Math.min(0.92, a) * thin;
-  };
-  for (let y = y0; y <= c.y; y++)
-    for (let x = x0; x <= x1; x++) {
-      const a = density(x, y);
-      // dithered on the art pixel grid like the rest of the finish: dense at the heart, broken up at the edges
-      if (a <= bayerAt(x & 3, y & 3)) continue;
-      // the cloud's upper edge catches the dusk light
-      const rim = density(x, y - 2) < 0.3;
-      px(x, y, rim ? G[4] : a < 0.5 ? G[3] : G[2]);
-    }
-}
-
 /** the rose glint sliding along his near knife for two frames after a blow lands */
 function drawGlint(): void {
   const st = hero.state;
@@ -137,13 +58,14 @@ function drawGlint(): void {
 /** behind him: the pool he melts into */
 export function drawTallisBack(): void {
   place();
-  drawPool(poolShare());
+  drawPool();
 }
 
-/** over him: his smoke, and his knife's glint, placed on him the way the hero layer leaves it */
+/** over him: his knife's glint, placed on him the way the hero layer leaves it, his shadow form and his smoke */
 export function drawTallis(): void {
   drawGlint();
   place();
+  drawShadowForm();
   for (const c of tallisHost.clouds) drawCloud(c);
 }
 
@@ -192,16 +114,28 @@ export function drawTallisOver(): void {
   if (foe) drawChevron(foe);
 }
 
-/** how much of him shows: faded in the Veil, poured away in the pool, coming back as he rises */
-export function tallisAlpha(): number {
-  const pool =
-    hero.state === "sink"
-      ? Math.max(0, 1 - tallis.sinkT / SINK.pour)
-      : hero.state === "rise"
-        ? Math.min(1, hero.st / SINK.rise)
-        : 1;
-  return pool * (tallis.veil ? VEIL.alpha : 1);
+/** how far into his shadow form he is, 0 to 1: it comes on over the hood's flicker as the Veil rises and leaves the same way */
+function veilInk(): number {
+  if (tallis.veil) return Math.min(1, tallis.veilT / VEIL.flicker);
+  const since = VEIL.lock - tallis.veilLock;
+  return since >= 0 && since < VEIL.flicker ? 1 - since / VEIL.flicker : 0;
 }
 
-/** the Veil's shimmering outline round his sprite */
-export const tallisRing = (): Color | null => (tallis.veil ? (Math.floor(game.t * 12) % 3 === 0 ? G[5] : G[4]) : null);
+/** how much of his body still stands over the pool: it pours down as he sinks and comes back as he rises */
+function poured(): number {
+  if (hero.state === "sink") return Math.max(0, 1 - tallis.sinkT / SINK.pour);
+  if (hero.state === "rise") return Math.min(1, hero.st / SINK.rise);
+  return 1;
+}
+
+/** his shadow form, in place of his sprite: in the Veil, and squashed down into the pool as he sinks or rises */
+function drawShadowForm(): void {
+  const standing = poured();
+  const ink = Math.max(veilInk(), standing < 1 ? Math.min(1, (1 - standing) * 3) : 0);
+  if (ink <= 0 || standing <= 0) return;
+  drawForm(heroForm(), hero.x, hero.y, hero.face < 0, { ink, squash: standing, show: 1 });
+  if (tallis.veil) glow(hero.x, hero.y - 16, 12, G[4], 0.1);
+}
+
+/** the hero layer draws his own sprite only while he wears no shadow form */
+export const tallisAlpha = (): number => (veilInk() > 0 || poured() < 1 ? 0 : 1);
