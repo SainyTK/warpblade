@@ -1,8 +1,9 @@
 import { PAL } from "../../../constants/palette";
-import { glow, line, place, px } from "../../../engine/frame";
+import { fleck, glow, hairline, place, polygon } from "../../../engine/frame";
 import type { Enemy } from "../../../types/enemy";
 import { PK } from "../../../types/particle";
 import type { SkillBehavior, SkillMemory } from "../../../types/skillBehavior";
+import { grain } from "../../../utils/grain";
 import { TAU } from "../../../utils/math";
 import { dealDamage } from "../../damage";
 import { createFloorRing } from "../../effects/floorRing";
@@ -19,6 +20,9 @@ const ID = "k_rift";
 /** seconds between the wound's ticks; how far a new layer reaches the nearest foe; how long a collapse's layers keep a
  *  foe from collapsing in turn */
 const RIFT = { every: 0.5, spreadReach: 40, collapseLock: 1, pull: 220 } as const;
+
+/** the drawn wound: its half width with one layer, how much each layer widens it, and how far its threads fray */
+const WOUND = { width: 0.8, widen: 0.3, fray: 3 } as const;
 
 interface RiftMemory {
   lock: SpreadLock;
@@ -85,17 +89,32 @@ function collapse(m: RiftMemory, e: Enemy): void {
   }
 }
 
-/** a wound: a dark rift slit down the foe's middle, longer with each layer, with a violet glow */
+/** a wound: a dark rift slit down the foe's middle, longer and wider with each layer, its edges lit violet and frayed */
 function drawWound(e: Enemy): void {
   const n = stacksOf(e, ID);
   if (!n) return;
   const [x, y] = enemyCenter(e);
   const S = PAL.shadow;
   const h = 3 + n * 2;
+  const half = WOUND.width + n * WOUND.widen;
   const wob = Math.sin(game.t * 9 + e.seed * TAU) * 0.6;
-  line(x + wob, y - h, x - wob, y + h, S[1]);
-  line(x + wob + 1, y - h + 1, x - wob + 1, y + h - 1, S[4], 0.8);
-  px(x, y, S[5]);
+  const top: [number, number] = [x + wob, y - h];
+  const foot: [number, number] = [x - wob, y + h];
+  polygon([top, [x + half, y], foot, [x - half, y]], S[0]);
+  hairline(top[0], top[1], x - half, y, S[4]);
+  hairline(x - half, y, foot[0], foot[1], S[3]);
+  hairline(top[0], top[1], x + half, y, S[5]);
+  hairline(x + half, y, foot[0], foot[1], S[4]);
+  // threads of the rift fraying off its edges, crawling as it drains
+  for (let i = 0; i < n + 1; i++) {
+    const v = (i + 0.5) / (n + 1);
+    const side = i % 2 ? 1 : -1;
+    const fy = y - h + v * h * 2;
+    const fx = x + side * half * (1 - Math.abs(v * 2 - 1));
+    const reach = WOUND.fray * (0.5 + 0.5 * grain(i, Math.floor(game.t * 8) + e.seed));
+    hairline(fx, fy, fx + side * reach, fy - 1, S[4], 0.8);
+  }
+  fleck(x, y, S[5]);
   glow(x, y, 6 + n * 2, S[4], 0.25);
 }
 

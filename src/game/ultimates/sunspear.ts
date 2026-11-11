@@ -132,7 +132,7 @@ export function castSunspear(level: number): void {
   const y = hero.y - CHEST;
   const hand = hero.x + hero.face * 4;
   game.fx.push(createGlint(hand, hero.y - 36, EMBER[4]));
-  lights.add(hand, hero.y - 36, 40, EMBER[4], 0.8, WIND + 0.1);
+  lights.add(hand, hero.y - 36, 36, EMBER[4], 0.5, WIND + 0.1);
   const dirs = level >= 3 || v.both ? [hero.face, -hero.face] : [hero.face];
   const fan = FAN.slice(0, v.fan ?? 1);
   dirs.forEach((dir, i) => {

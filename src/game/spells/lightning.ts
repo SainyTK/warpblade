@@ -1,14 +1,16 @@
 import { PAL, SPARKS } from "../../constants/palette";
 import { GROUND } from "../../constants/stage";
-import { ellipseRing, glow, glowLine, line, place } from "../../engine/frame";
+import { glow, glowLine, hairline, line, place } from "../../engine/frame";
 import { sfx } from "../../services/audio";
 import type { SourceId } from "../../types/build";
 import type { Effect } from "../../types/effect";
 import type { Enemy } from "../../types/enemy";
 import { PK } from "../../types/particle";
 import { WHITE } from "../../utils/color";
+import { grain } from "../../utils/grain";
 import { TAU } from "../../utils/math";
 import { dealDamage } from "../damage";
+import { fineRing } from "../effects/fine";
 import { createFloorRing } from "../effects/floorRing";
 import { enemyCenter } from "../enemies/enemy";
 import { game, lights, particles, rng } from "../state";
@@ -20,6 +22,12 @@ export const STRIKE = 0.18;
 const LIFE = 0.34;
 export const SKY_FLASH = 0.16;
 const ARC_REACH = 90;
+/** how far the violet threads run beside a bolt's core, in art pixels */
+const BOLT = { halo: 0.75 } as const;
+/** the crackling mark before a strike: its ring, and the threads of static that climb from it */
+const MARK = { radius: 10, shrink: 6, threads: 5, rise: 9 } as const;
+/** the light of a strike: the wide flare, the white core and the wash on the floor */
+const STRIKE_LIGHT = { wide: 0.42, core: 0.5, floor: 0.45 } as const;
 
 export interface LightningOptions {
   damage: number;
@@ -63,20 +71,21 @@ export function boltPath(x0: number, y0: number, x1: number, y1: number, displac
   return pts;
 }
 
+/** a bolt along its path: a white core, an art pixel wide for the main bolt and one image pixel for forks, with thin
+ *  violet threads beside it and light around it */
 export function strokeBolt(pts: Path, thick: boolean, k: number): void {
   const V = PAL.volt;
+  const core = thick ? line : hairline;
   for (let i = 1; i < pts.length; i++) {
     const [ax, ay] = pts[i - 1];
     const [bx, by] = pts[i];
-    if (thick) {
-      line(ax - 1, ay, bx - 1, by, V[3], k * 1.3);
-      line(ax + 1, ay, bx + 1, by, V[2], k * 1.1);
-    }
-    line(ax, ay, bx, by, WHITE, Math.min(1, k * 1.6));
+    hairline(ax - BOLT.halo, ay, bx - BOLT.halo, by, V[3], k * 1.3);
+    if (thick) hairline(ax + BOLT.halo + 0.5, ay, bx + BOLT.halo + 0.5, by, V[2], k * 1.1);
+    core(ax, ay, bx, by, WHITE, Math.min(1, k * 1.6));
   }
   for (let i = 0; i < pts.length - 1; i += 4) {
     const j = Math.min(pts.length - 1, i + 4);
-    glowLine(pts[i][0], pts[i][1], pts[j][0], pts[j][1], thick ? 12 : 6, V[2], (thick ? 0.35 : 0.2) * k);
+    glowLine(pts[i][0], pts[i][1], pts[j][0], pts[j][1], thick ? 10 : 5, V[2], (thick ? 0.3 : 0.18) * k);
   }
 }
 
@@ -103,9 +112,9 @@ export function createLightning(target: Enemy | null, point: readonly [number, n
     struck = true;
     if (o.skyFlash ?? true) game.flash = SKY_FLASH;
     const k = o.glow ?? 1;
-    lights.add(tx, ty, 80, V[3], 0.55 * k, 0.45);
-    lights.add(tx, ty, 18, WHITE, 0.6 * k, 0.1);
-    lights.add(tx, ground, 50, V[2], 0.6 * k, 0.6);
+    lights.add(tx, ty, 70, V[3], STRIKE_LIGHT.wide * k, 0.45);
+    lights.add(tx, ty, 14, WHITE, STRIKE_LIGHT.core * k, 0.1);
+    lights.add(tx, ground, 44, V[2], STRIKE_LIGHT.floor * k, 0.6);
     for (let i = 0; i < 26; i++) {
       const a = rng.range(Math.PI, TAU);
       const sp = rng.range(140, 420);
@@ -190,7 +199,22 @@ export function createLightning(target: Enemy | null, point: readonly [number, n
       place();
       if (t < STRIKE) {
         const k = t / STRIKE;
-        ellipseRing(tx, ground, 10 - k * 6, (10 - k * 6) * 0.3, V[3], 0.8);
+        const r = MARK.radius - k * MARK.shrink;
+        fineRing(tx, ground, r, r * 0.3, V[4], 1);
+        fineRing(tx, ground, r + 1.5, (r + 1.5) * 0.3, V[2], 0.6);
+        // static crawling up from the mark toward where the bolt will land
+        for (let i = 0; i < MARK.threads; i++) {
+          const side = (i / (MARK.threads - 1)) * 2 - 1;
+          const jump = grain(i, Math.floor(t * 40));
+          hairline(
+            tx + side * r,
+            ground,
+            tx + side * r * 0.4 + (jump - 0.5) * 4,
+            ground - MARK.rise * k * (0.4 + jump),
+            V[3 + (i % 2)],
+            0.9,
+          );
+        }
         glow(tx, ground, 24, V[2], 0.3 * k);
         return;
       }

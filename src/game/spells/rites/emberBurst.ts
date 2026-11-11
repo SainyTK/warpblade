@@ -1,11 +1,12 @@
 import { RITE_RAMP, RITE_SPARKS } from "../../../constants/ysra/emberLook";
-import { glow, line, place, px } from "../../../engine/frame";
+import { glow, place, px } from "../../../engine/frame";
 import type { SourceId } from "../../../types/build";
 import type { Effect } from "../../../types/effect";
 import { PK } from "../../../types/particle";
 import { WHITE } from "../../../utils/color";
 import { TAU } from "../../../utils/math";
 import { dealDamage } from "../../damage";
+import { ray } from "../../effects/fine";
 import { enemyCenter } from "../../enemies/enemy";
 import { game, particles, rng } from "../../state";
 import { crackle } from "./riteSound";
@@ -49,13 +50,7 @@ export function burstEmbers(
         const a = spin + (i / RAYS) * TAU;
         const r0 = radius * 0.2 + u * radius * 0.5;
         const r1 = r0 + radius * 0.4 * (1 - u);
-        line(
-          x + Math.cos(a) * r0,
-          y + Math.sin(a) * r0,
-          x + Math.cos(a) * r1,
-          y + Math.sin(a) * r1,
-          (s) => RITE_RAMP[s < 0.5 ? 5 : 4],
-        );
+        ray(x, y, a, r0, r1, RITE_RAMP[5], RITE_RAMP[4]);
       }
       if (u < 0.3) px(x, y, WHITE);
       glow(x, y, radius, RITE_RAMP[4], 0.5 * (1 - u));

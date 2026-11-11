@@ -1,6 +1,6 @@
 import { RITE_RAMP, RITE_SPARKS } from "../../../constants/ysra/emberLook";
 import { FLARE } from "../../../constants/ysra/rites";
-import { circle, glow, place, px } from "../../../engine/frame";
+import { circle, fleck, glow, place } from "../../../engine/frame";
 import type { SourceId } from "../../../types/build";
 import type { Effect } from "../../../types/effect";
 import { PK } from "../../../types/particle";
@@ -10,6 +10,7 @@ import { ease, TAU } from "../../../utils/math";
 import { dealDamage } from "../../damage";
 import { createFloorRing } from "../../effects/floorRing";
 import { enemyBox } from "../../enemies/enemy";
+import { drawTongue } from "../../hero/ysra/art/flame";
 import { game, lights, particles, progress, rng } from "../../state";
 import { boxHit, hitStop, shake } from "../../world";
 import { riteSound } from "./riteSound";
@@ -70,7 +71,7 @@ export function castFlare(x: number, y: number, f: FireRing = FLARE, source: Sou
   const hits = strikeRing(x, y, f, source);
   sparksOut(x, y, f.radius);
   game.fx.push(createFloorRing(x, y, f.radius * 1.15, [...RITE_RAMP].reverse(), 0.45, 0.3));
-  lights.add(x, y - 8, 60, RITE_RAMP[4], 0.7, 0.45);
+  lights.add(x, y - 8, 54, RITE_RAMP[4], 0.5, 0.45);
   lights.add(x, y - 8, 16, WHITE, 0.5, 0.08);
   shake(0.22, 2.5);
   if (hits) hitStop(0.06);
@@ -91,15 +92,10 @@ export function castFlare(x: number, y: number, f: FireRing = FLARE, source: Sou
       const h = (8 + f.radius / 8) * heights[i] * life * (0.85 + 0.15 * Math.sin(t * 40 + i * 1.7));
       if (h < 1.5) continue;
       const out = Math.sign(Math.cos(a)) * 2.5 + tilt[i] * 0.5;
-      for (let d = 0; d < h; d++) {
-        const u = d / h;
-        const cx = bx + out * u * u;
-        const c = RITE_RAMP[u < 0.35 ? 3 : u < 0.75 ? 4 : 5];
-        px(cx, by - d, c);
-        if (u < 0.6) px(cx + 1, by - d, u < 0.3 ? RITE_RAMP[2] : RITE_RAMP[3]);
-        if (u < 0.3) px(cx - 1, by - d, RITE_RAMP[2]);
-      }
-      if (t < LIFE * 0.35) px(bx + out, by - h, WHITE);
+      drawTongue(bx, by, h, out, RITE_RAMP);
+      // a smaller tongue beside it, on its own beat, fills the ring between the tall ones
+      drawTongue(bx + 2.5, by, h * (0.4 + 0.2 * Math.sin(t * 31 + i)), out * 0.5, RITE_RAMP);
+      if (t < LIFE * 0.35) fleck(bx + out, by - h, WHITE);
       glow(bx, by - h * 0.5, 6, RITE_RAMP[4], 0.2 * life);
     }
   };

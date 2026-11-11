@@ -1,5 +1,5 @@
 import { EMBER } from "../../constants/characters/ysra/look";
-import { glow, line, place, polygon } from "../../engine/frame";
+import { glow, hairline, place, polygon } from "../../engine/frame";
 import type { Effect } from "../../types/effect";
 import { PF, PK } from "../../types/particle";
 import { WHITE } from "../../utils/color";
@@ -10,6 +10,8 @@ import { game, lights, particles, rng } from "../state";
 const SHOOT = 0.1;
 const ROAR = 0.22;
 const SINK = 0.25;
+/** the pillar's light: its flare as it bursts out, the glow round its body and the white at its root */
+const PILLAR_LIGHT = { flare: 0.5, body: 0.35, root: 0.18 } as const;
 
 /** a pillar of fire bursting out of the floor at (x, floor), `height` tall and `width` wide, after `delay`;
  *  `erupt` gets the box it fills the moment it bursts out */
@@ -35,7 +37,7 @@ export function createEruption(
       if (!burst) {
         burst = true;
         erupt(x - width, floor - height, x + width, floor);
-        lights.add(x, floor - height / 2, height, EMBER[4], 0.9, SHOOT + ROAR);
+        lights.add(x, floor - height / 2, height, EMBER[4], PILLAR_LIGHT.flare, SHOOT + ROAR);
         for (let i = 0; i < 8; i++) {
           const sp = rng.range(160, 320);
           const a = -Math.PI / 2 + rng.range(-0.5, 0.5);
@@ -78,9 +80,26 @@ export function createEruption(
       polygon(column(width, 1), EMBER[3]);
       polygon(column(width * 0.6, 0.85), EMBER[4]);
       polygon(column(width * 0.3, 0.6), EMBER[5]);
-      line(x, floor - 1, x, floor - h * 0.35, WHITE);
-      glow(x, floor - h / 2, h * 0.7 + width, EMBER[3], 0.55);
-      glow(x, floor - 2, width * 2, WHITE, 0.25);
+      // white threads up the heart of the pillar, wavering with it
+      for (const side of [-1, 0, 1]) {
+        const reach = side ? 0.3 : 0.45;
+        hairline(
+          x + side * width * 0.18,
+          floor - 1,
+          x + side * width * 0.1 + wob(side + 2) * 0.5,
+          floor - h * reach,
+          WHITE,
+          (u) => 1 - u * 0.6,
+        );
+      }
+      // tongues torn off the pillar's edges
+      for (let k = 1; k <= 3; k++) {
+        const up = floor - (h * k) / 4;
+        hairline(x - width + wob(k), up, x - width - 1.5 + wob(k + 1), up - 4, EMBER[4]);
+        hairline(x + width + wob(k + 7), up, x + width + 1.5 + wob(k + 8), up - 4, EMBER[4]);
+      }
+      glow(x, floor - h / 2, h * 0.7 + width, EMBER[3], PILLAR_LIGHT.body);
+      glow(x, floor - 2, width * 2, WHITE, PILLAR_LIGHT.root);
     },
   };
 }

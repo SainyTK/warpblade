@@ -1,5 +1,5 @@
 import { EMBER } from "../../constants/characters/ysra/look";
-import { glowLine, line, place, polygon, px } from "../../engine/frame";
+import { fleck, glowLine, hairline, line, place, polygon } from "../../engine/frame";
 import type { Effect } from "../../types/effect";
 import { PF, PK } from "../../types/particle";
 import { WHITE } from "../../utils/color";
@@ -72,7 +72,10 @@ export function createBurningSpear(f: SpearFlight): Effect {
       const [tx, ty] = at(d);
       // the streak fades from where it was thrown toward where it landed
       const [sx, sy] = at(d * (after / WAKE));
-      line(sx, sy, tx, ty, EMBER[3], fade * 0.9);
+      // the streak: an ember thread with a hotter seam, breaking up as it cools
+      hairline(sx, sy, tx, ty, EMBER[4], (u) => fade * (0.4 + 0.6 * u));
+      hairline(sx, sy + 0.5, tx, ty + 0.5, EMBER[3], fade * 0.9);
+      hairline(sx, sy + 1, tx, ty + 1, EMBER[2], fade * 0.5);
       glowLine(sx, sy, tx, ty, 6, EMBER[3], 0.35 * fade);
       if (after > 0) return;
       const nx = -uy;
@@ -80,7 +83,8 @@ export function createBurningSpear(f: SpearFlight): Effect {
       const [bx, by] = at(d - SHAFT);
       const [hx, hy] = at(d - HEAD);
       line(bx, by, hx, hy, (u) => EMBER[2 + Math.round(u * 2)]);
-      line(bx + nx, by + ny, hx + nx, hy + ny, (u) => EMBER[1 + Math.round(u * 2)]);
+      hairline(bx + nx * 0.75, by + ny * 0.75, hx + nx * 0.75, hy + ny * 0.75, (u) => EMBER[1 + Math.round(u * 2)]);
+      hairline(bx - nx * 0.25, by - ny * 0.25, hx - nx * 0.25, hy - ny * 0.25, (u) => EMBER[4 + Math.round(u)]);
       polygon(
         [
           [tx, ty],
@@ -89,8 +93,17 @@ export function createBurningSpear(f: SpearFlight): Effect {
         ],
         EMBER[5],
       );
-      line(hx, hy, tx, ty, WHITE);
-      px(tx, ty, WHITE);
+      // the head: a dark red underside, a white ridge to the point
+      polygon(
+        [
+          [tx, ty],
+          [hx - nx * 2.5 + ux, hy - ny * 2.5 + uy],
+          [hx, hy],
+        ],
+        EMBER[3],
+      );
+      hairline(hx, hy, tx, ty, WHITE);
+      fleck(tx, ty, WHITE);
       glowLine(bx, by, tx, ty, 10, EMBER[4], 0.55);
     },
   };

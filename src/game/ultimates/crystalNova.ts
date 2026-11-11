@@ -1,21 +1,27 @@
+import { NOVA_CRYSTALS, NOVA_RING } from "../../constants/kael/crystalLook";
 import { PAL } from "../../constants/palette";
 import { ULT_LEVELS } from "../../constants/ultimate";
-import { ellipseRing, glow, place } from "../../engine/frame";
+import { glow, place } from "../../engine/frame";
 import type { Effect } from "../../types/effect";
 import type { Enemy } from "../../types/enemy";
 import { PK } from "../../types/particle";
-import { WHITE } from "../../utils/color";
+import { scale, WHITE } from "../../utils/color";
+import { grain } from "../../utils/grain";
 import { ease, TAU } from "../../utils/math";
 import { dealDamage } from "../damage";
+import { fineRing } from "../effects/fine";
 import { createImpact } from "../effects/impact";
 import { enemyCenter } from "../enemies/enemy";
+import { createCrystalRow } from "../hero/kael/art/crystalRow";
 import { game, hero, particles, progress, rng } from "../state";
+import { surfaceBelow } from "../world";
 
 /** how far the ring runs at each level; level 4 crosses the whole screen */
 const RADIUS = [60, 100, 150, 340] as const;
 /** the special is the weakest ultimate: this share of a level's power */
 const SHARE = 0.75;
 const GROW = 0.4;
+const C = PAL.crystal;
 
 /** Crystal Nova, Kael's special from the start: a ring of crystal bursts out around him and throws foes up */
 export function castCrystalNova(level: number): void {
@@ -33,6 +39,31 @@ export function castCrystalNova(level: number): void {
       size: rng.range(1, 2.5),
     });
   }
+  /** one half of the ring: a white front, bands cooling behind it and a wake of dashes; the far half is dimmer */
+  const ring = (half: number) => {
+    place();
+    const u = Math.min(1, t / GROW);
+    const r = reach * ease.outCubic(u);
+    const k = (1 - Math.max(0, (t - GROW) / 0.25)) * (half > 0 ? 1 : NOVA_RING.farStrength);
+    const sy = NOVA_RING.squash;
+    fineRing(x, y, r, r * sy, WHITE, k * 1.6, half);
+    NOVA_RING.bands.forEach((d, i) => {
+      fineRing(x, y, r - d, (r - d) * sy, C[5 - i], k * (1.4 - i * 0.3), half);
+    });
+    NOVA_RING.wake.forEach((d, i) => {
+      // the wake breaks into dashes that drift round the ring
+      const dashed = grain(Math.floor(t * 30), i) * 0.3 + 0.35;
+      fineRing(x, y, r - d, (r - d) * sy, scale(C[3], 1 - i * 0.3), k * dashed, half);
+    });
+    if (half > 0) glow(x, y, 30 + level * 10, C[3], 0.5 * (1 - u));
+  };
+  game.fx.push(
+    createCrystalRow(x, surfaceBelow(x, y), C, {
+      ...NOVA_CRYSTALS[level - 1],
+      reach: Math.min(reach, 170),
+      grow: GROW,
+    }),
+  );
   const effect: Effect = {
     update(dt) {
       t += dt;
@@ -48,16 +79,8 @@ export function castCrystalNova(level: number): void {
       }
       return t < GROW + 0.25;
     },
-    draw() {
-      place();
-      const u = Math.min(1, t / GROW);
-      const r = reach * ease.outCubic(u);
-      const k = 1 - Math.max(0, (t - GROW) / 0.25);
-      ellipseRing(x, y, r, r * 0.62, WHITE, k);
-      ellipseRing(x, y, r - 2, (r - 2) * 0.62, PAL.crystal[4], k);
-      ellipseRing(x, y, r - 5, (r - 5) * 0.62, PAL.crystal[2], k * 0.6);
-      glow(x, y, 30 + level * 10, PAL.crystal[3], 0.5 * (1 - u));
-    },
+    drawBack: () => ring(-1),
+    draw: () => ring(1),
   };
   game.fx.push(effect);
 }

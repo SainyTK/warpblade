@@ -1,6 +1,6 @@
 import { RITE_RAMP, RITE_SPARKS } from "../../../constants/ysra/emberLook";
 import { ASHEN_WAKE as A } from "../../../constants/ysra/rites";
-import { glow, place, px } from "../../../engine/frame";
+import { place } from "../../../engine/frame";
 import type { SourceId } from "../../../types/build";
 import type { Effect } from "../../../types/effect";
 import type { Enemy } from "../../../types/enemy";
@@ -12,12 +12,19 @@ import { enemyBox } from "../../enemies/enemy";
 import { kindOf } from "../../enemies/kinds";
 import { game, particles, progress, rng } from "../../state";
 import { boxHit } from "../../world";
+import { drawFireBed, type FireColors } from "../fireBed";
 
 /** patches burning now, for the cap */
 let burning = 0;
 
-/** which cinder of a strip glows this beat: a cheap stable flicker */
-const flicker = (i: number, beat: number): number => Math.abs(Math.sin(i * 12.9898 + beat * 78.233) * 43758.5453) % 1;
+/** a cinder patch's colors, in her ember ramp */
+const CINDER_FIRE: FireColors = {
+  hot: RITE_RAMP[6],
+  bright: RITE_RAMP[5],
+  body: RITE_RAMP[4],
+  edge: RITE_RAMP[3],
+  deep: RITE_RAMP[2],
+};
 
 /** a patch of burning ground: how long it burns, its tick's ability power multiple, its half width, the most patches
  *  that burn one foe in the same tick, the stagger each tick gives (0 none), and the skill it counts for */
@@ -72,15 +79,7 @@ function createCinder(x: number, y: number, p: CinderPatch): Effect {
     },
     drawBack() {
       place();
-      const k = clamp((p.life - t) / (p.life * 0.4));
-      const beat = Math.floor(t * 10);
-      for (let dx = -p.halfWidth; dx <= p.halfWidth; dx++) {
-        const f = flicker(x + dx, beat);
-        px(x + dx, y, RITE_RAMP[f > 0.6 ? 4 : f > 0.25 ? 3 : 2], k);
-        if (f > 0.7) px(x + dx, y - 1, RITE_RAMP[f > 0.9 ? 5 : 4], k);
-        if (f > 0.9) px(x + dx, y - 2, RITE_RAMP[4], k);
-      }
-      glow(x, y - 2, 10, RITE_RAMP[4], 0.3 * k);
+      drawFireBed(x, y, p.halfWidth, t, clamp((p.life - t) / (p.life * 0.4)), CINDER_FIRE);
     },
     draw() {},
   };

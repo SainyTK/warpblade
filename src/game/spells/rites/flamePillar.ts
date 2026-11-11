@@ -1,16 +1,19 @@
 import { RITE_RAMP, RITE_SPARKS } from "../../../constants/ysra/emberLook";
 import { FLAME_PILLAR as P } from "../../../constants/ysra/rites";
-import { ellipseRing, glow, glowLine, place, px } from "../../../engine/frame";
+import { fleck, glow, glowLine, hairline, place, shade } from "../../../engine/frame";
 import type { SourceId } from "../../../types/build";
 import type { Effect } from "../../../types/effect";
 import { PF, PK } from "../../../types/particle";
 import type { Box } from "../../../types/world";
 import type { PillarShape } from "../../../types/ysra/pyre";
 import { WHITE } from "../../../utils/color";
+import { grain } from "../../../utils/grain";
 import { TAU } from "../../../utils/math";
 import { dealDamage } from "../../damage";
+import { fineRing } from "../../effects/fine";
 import { createFloorRing } from "../../effects/floorRing";
 import { enemyBox } from "../../enemies/enemy";
+import { drawTongue } from "../../hero/ysra/art/flame";
 import { game, lights, particles, progress, rng } from "../../state";
 import { boxHit, dust, hitStop, shake } from "../../world";
 import { riteSound } from "./riteSound";
@@ -69,7 +72,7 @@ function erupt(x: number, floor: number, shape: PillarShape, source: SourceId): 
     );
   dust(x, floor, 10);
   game.fx.push(createFloorRing(x, floor, 22, [...RITE_RAMP].reverse(), 0.35, 0.3));
-  lights.add(x, floor - 30, 50, RITE_RAMP[4], 0.7, 0.5);
+  lights.add(x, floor - 30, 46, RITE_RAMP[4], 0.4, 0.5);
   shake(shape.shake, shape.amp);
   if (hits) hitStop(shape.hitStop);
   riteSound(P.pitch);
@@ -109,12 +112,24 @@ export function castFlamePillar(
     place();
     const u = t / shape.warn;
     const r = (4 + u * 8) * shape.sigil;
-    if (shape.ring) ellipseRing(x, floor, r * 1.4, r * 1.4 * 0.28, RITE_RAMP[5], 0.4 + u * 0.6);
-    ellipseRing(x, floor, r, r * 0.28, RITE_RAMP[3], 0.6 + u * 0.4);
-    ellipseRing(x, floor, r * 0.55, r * 0.55 * 0.28, RITE_RAMP[4], u);
+    if (shape.ring) fineRing(x, floor, r * 1.4, r * 1.4 * 0.28, RITE_RAMP[5], 0.4 + u * 0.6);
+    fineRing(x, floor, r, r * 0.28, RITE_RAMP[4], 0.6 + u * 0.4);
+    fineRing(x, floor, r - 0.5, (r - 0.5) * 0.28, RITE_RAMP[3], 0.6 + u * 0.4);
+    fineRing(x, floor, r * 0.55, r * 0.55 * 0.28, RITE_RAMP[4], u);
+    // four runes turning on the ring, each a spoke of light toward the middle that grows as the pillar nears
     for (let i = 0; i < 4; i++) {
       const a = t * 9 + (i / 4) * TAU;
-      px(x + Math.cos(a) * r, floor + Math.sin(a) * r * 0.28, RITE_RAMP[5]);
+      const rx = x + Math.cos(a) * r;
+      const ry = floor + Math.sin(a) * r * 0.28;
+      hairline(
+        rx,
+        ry,
+        x + Math.cos(a) * r * (1 - 0.45 * u),
+        floor + Math.sin(a) * r * 0.28 * (1 - 0.45 * u),
+        RITE_RAMP[4],
+      );
+      fleck(rx, ry, WHITE);
+      hairline(rx, ry, rx, ry - 2 - u * 3, RITE_RAMP[5], (v) => 1 - v);
     }
     glow(x, floor - 2, (10 + u * 8) * shape.sigil, RITE_RAMP[4], 0.3 + u * 0.3);
   };
@@ -125,17 +140,21 @@ export function castFlamePillar(
     const top = floor - shape.height * Math.min(1, s / RISE);
     const thin = u < 0.7 ? 1 : Math.max(0, 1 - (u - 0.7) / 0.3);
     const young = u < 0.35;
-    for (let y = Math.ceil(top); y <= floor; y++) {
-      const along = (y - top) / Math.max(1, floor - top);
+    // the column, image pixel row by row: its edges waver more toward the top and carry a darker ragged rim
+    shade(x - shape.halfWidth - 2, top, x + shape.halfWidth + 2, floor, (px, py, o) => {
+      const along = (py - top) / Math.max(1, floor - top);
       const hw = shape.halfWidth * thin * (0.45 + 0.55 * along);
-      const wobble = Math.sin(y * 0.45 + t * 38) * 1.2 * (1 - along);
-      for (let dx = -hw; dx <= hw; dx++) px(x + dx + wobble, y, columnColor(Math.abs(dx) / Math.max(1, hw), young));
-    }
+      const wobble = Math.sin(py * 0.45 + t * 38) * 1.2 * (1 - along);
+      const d = Math.abs(px - x - wobble) / Math.max(1, hw);
+      const ragged = 1 - 0.18 * grain(Math.floor(py * 2 - t * 90), px > x ? 1 : 2);
+      if (d > ragged) return;
+      o.c = columnColor(d, young);
+    });
     // tongues licking off the top
     for (let i = 0; i < 4; i++) {
       const tx = x + Math.sin(t * 30 + i * 2.1) * shape.halfWidth * thin * 0.6;
       const h = (3 + ((i * 7 + Math.floor(t * 30)) % 5)) * thin;
-      for (let d = 0; d < h; d++) px(tx, top - d, d < h * 0.5 ? RITE_RAMP[4] : RITE_RAMP[5]);
+      drawTongue(tx, top + 1, h + 1, Math.sin(t * 22 + i) * 1.5, RITE_RAMP);
     }
     glowLine(x, floor, x, top, 12 * thin + 2, RITE_RAMP[4], 0.3 * thin);
   };

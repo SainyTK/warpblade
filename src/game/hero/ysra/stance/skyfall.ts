@@ -28,7 +28,7 @@ export function skyfall(v: Readonly<Record<string, number>>): void {
         stagger: 0,
         source: "y_vault",
       });
-  lights.add(x, floor - 20, 90, skin.ramp[4], 1, 0.6);
+  lights.add(x, floor - 20, 80, skin.ramp[4], 0.6, 0.6);
   hitStop(0.08);
   shake(0.4, 5);
   sfx.boom();

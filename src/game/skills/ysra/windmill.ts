@@ -1,10 +1,11 @@
 import { EMBER } from "../../../constants/characters/ysra/look";
 import { ENEMIES } from "../../../constants/enemies";
-import { ellipseRing, glow, line, place, px } from "../../../engine/frame";
+import { fleck, glow, line, place } from "../../../engine/frame";
 import type { Enemy } from "../../../types/enemy";
 import type { SkillBehavior } from "../../../types/skillBehavior";
 import { WHITE } from "../../../utils/color";
 import { dealDamage } from "../../damage";
+import { fineRing } from "../../effects/fine";
 import { enemyBox } from "../../enemies/enemy";
 import { game, hero, progress } from "../../state";
 import { boxHit } from "../../world";
@@ -13,6 +14,8 @@ import { memoryAs } from "./memory";
 import { scorch } from "./scorch";
 
 const ID = "y_windmill";
+/** how many steps of fire trail behind each tip of the turning glaive */
+const WAKE_STEPS = 12;
 /** the wheel's radius around her middle, its passes a second, and how fast it draws foes in */
 const RADIUS = 30;
 const PASSES = 6;
@@ -59,13 +62,20 @@ export const windmill: SkillBehavior = {
     const cy = hero.y - 18;
     const a0 = game.t * 18;
     place();
-    ellipseRing(cx, cy, r, r * 0.35, EMBER[3], 0.6);
+    fineRing(cx, cy, r, r * 0.35, EMBER[4], 0.9);
+    fineRing(cx, cy, r - 1, (r - 1) * 0.35, EMBER[2], 0.5);
     for (let k = 0; k < 2; k++) {
       const a = a0 + k * Math.PI;
       const tx = cx + Math.cos(a) * r;
       const ty = cy + Math.sin(a) * r * 0.35;
       line(cx - (tx - cx) * 0.4, cy - (ty - cy) * 0.4, tx, ty, (u) => EMBER[u > 0.7 ? 5 : 4]);
-      px(tx, ty, WHITE);
+      // the blade's wake: an arc of fire trailing behind each tip round the ring
+      for (let w = 1; w <= WAKE_STEPS; w++) {
+        const b = a - w * 0.09;
+        fleck(cx + Math.cos(b) * r, cy + Math.sin(b) * r * 0.35, EMBER[w < 5 ? 5 : 4], 1 - w / WAKE_STEPS);
+        fleck(cx + Math.cos(b) * (r - 0.5), cy + Math.sin(b) * (r - 0.5) * 0.35, EMBER[3], 1 - w / WAKE_STEPS);
+      }
+      fleck(tx, ty, WHITE);
       glow(tx, ty, 8, EMBER[4], 0.5);
     }
     glow(cx, cy, r, EMBER[3], 0.25 * Math.min(1, m.spin * 3));

@@ -1,4 +1,4 @@
-import { glow, line, place, px } from "../../../engine/frame";
+import { glow, hairline, place, polygon } from "../../../engine/frame";
 import type { Effect } from "../../../types/effect";
 import type { Enemy } from "../../../types/enemy";
 import { WHITE } from "../../../utils/color";
@@ -23,12 +23,33 @@ export function createBrandMark(e: Enemy): Effect {
       place();
       for (let i = 0; i < n; i++) {
         const a = -Math.PI / 2 + ((i - (n - 1) / 2) * Math.PI) / 7;
-        line(x + Math.cos(a) * 2, y + Math.sin(a) * 2, x + Math.cos(a) * 4, y + Math.sin(a) * 4, R[4]);
+        hairline(
+          x + 0.5 + Math.cos(a) * 2,
+          y + 0.5 + Math.sin(a) * 2,
+          x + 0.5 + Math.cos(a) * 4.5,
+          y + 0.5 + Math.sin(a) * 4.5,
+          (u) => R[u < 0.5 ? 5 : 3],
+        );
       }
-      px(x, y, Math.floor(t * 8) % 2 ? R[5] : WHITE);
-      px(x - 1, y, R[3]);
-      px(x + 1, y, R[3]);
-      px(x, y + 1, R[3]);
+      // the brand: a small diamond of ember with a core that pulses white
+      polygon(
+        [
+          [x + 0.5, y - 1.5],
+          [x + 2.5, y + 0.5],
+          [x + 0.5, y + 2.5],
+          [x - 1.5, y + 0.5],
+        ],
+        R[3],
+      );
+      polygon(
+        [
+          [x + 0.5, y - 0.5],
+          [x + 1.5, y + 0.5],
+          [x + 0.5, y + 1.5],
+          [x - 0.5, y + 0.5],
+        ],
+        Math.floor(t * 8) % 2 ? R[5] : WHITE,
+      );
       glow(x, y, 7, R[4], 0.35 + n * 0.04);
     },
   };

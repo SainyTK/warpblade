@@ -116,7 +116,7 @@ function drakeBreath(m: SalamanderMemory, dt: number): void {
   for (const e of game.enemies)
     if (e.hp > 0 && boxHit(box, enemyBox(e)))
       dealDamage(e, progress.stats.ap * v.breath, { fromX: x0, kx: hero.face * 60, source: ID });
-  lights.add((x0 + x1) / 2, hero.y - 8, 60, EMBER[4], 0.7, DRAKE.flame);
+  lights.add((x0 + x1) / 2, hero.y - 8, 56, EMBER[4], 0.5, DRAKE.flame);
   for (let i = 0; i < 30; i++)
     particles.spawn(
       PK.FIRE,

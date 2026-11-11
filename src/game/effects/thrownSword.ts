@@ -1,6 +1,6 @@
 import { WARP } from "../../constants/combat";
 import { HERO_COLORS as HC } from "../../constants/palette";
-import { glow, glowLine, line, place } from "../../engine/frame";
+import { fleck, glow, glowLine, hairline, line, place } from "../../engine/frame";
 import type { Projectile } from "../../types/effect";
 import type { WarpTarget } from "../../types/hero";
 import { PK } from "../../types/particle";
@@ -8,6 +8,11 @@ import { WHITE } from "../../utils/color";
 import { enemyCenter } from "../enemies/enemy";
 import { skin } from "../hero/skin";
 import { particles, rng } from "../state";
+
+/** the flying sword: its length from pommel to point, where the blade starts and how far the guard reaches */
+const BLADE = { length: 16, grip: 3.5, guard: 2.2 } as const;
+/** how far apart the wake's two outer threads open at its old end */
+const WAKE_SPREAD = 2;
 
 /** the crystal sword flying point first, homing on a moving target; `onMove` hears each step of its flight */
 export function createThrownSword(
@@ -60,14 +65,33 @@ export function createThrownSword(
     },
     draw() {
       place();
-      for (let i = 1; i < trail.length; i++)
-        line(trail[i - 1][0], trail[i - 1][1], trail[i][0], trail[i][1], skin.ramp[i > 5 ? 4 : 2], i / trail.length);
       const c = Math.cos(angle);
       const n = Math.sin(angle);
-      line(s.x - c * 15, s.y - n * 15, s.x, s.y, (u) => (u > 0.85 ? WHITE : u < 0.15 ? HC.trim : HC.blade));
-      line(s.x - c * 13 - n, s.y - n * 13 + c, s.x - c * 2 - n, s.y - n * 2 + c, HC.bladeEdge);
-      glowLine(s.x - c * 14, s.y - n * 14, s.x, s.y, 7, skin.ramp[3], 0.5);
-      glow(s.x, s.y, 10, WHITE, 0.25);
+      // the wake: two fine threads that open behind the blade and a brighter one between them, thinning with age
+      for (let i = 1; i < trail.length; i++) {
+        const [ax, ay] = trail[i - 1];
+        const [bx, by] = trail[i];
+        const young = i / trail.length;
+        const spread = (1 - young) * WAKE_SPREAD;
+        hairline(ax - n * spread, ay + c * spread, bx - n * spread, by + c * spread, skin.ramp[2], young * 0.7);
+        hairline(ax + n * spread, ay - c * spread, bx + n * spread, by - c * spread, skin.ramp[2], young * 0.7);
+        hairline(ax, ay, bx, by, skin.ramp[i > 5 ? 5 : 3], young);
+      }
+      const at = (d: number, w: number): [number, number] => [
+        s.x - c * (BLADE.length - d) - n * w,
+        s.y - n * (BLADE.length - d) + c * w,
+      ];
+      const [tipX, tipY] = at(BLADE.length, 0);
+      const [neckX, neckY] = at(BLADE.grip, 0);
+      line(neckX, neckY, tipX, tipY, HC.blade);
+      hairline(...at(BLADE.grip, 0.5), ...at(BLADE.length - 1.5, 0.5), HC.bladeBack);
+      hairline(...at(BLADE.grip, -0.25), ...at(BLADE.length, -0.25), (u) => (u > 0.8 ? WHITE : HC.bladeEdge));
+      hairline(...at(0, 0), neckX, neckY, HC.hilt);
+      hairline(...at(BLADE.grip, -BLADE.guard), ...at(BLADE.grip, BLADE.guard), HC.trim);
+      fleck(...at(0, 0), HC.trimLight);
+      fleck(tipX, tipY, WHITE);
+      glowLine(...at(1, 0), s.x, s.y, 6, skin.ramp[3], 0.45);
+      glow(s.x, s.y, 8, WHITE, 0.2);
     },
   };
   return s;

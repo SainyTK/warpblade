@@ -1,9 +1,10 @@
 import { FIRE_RAMP } from "../../constants/palette";
 import { ULT_LEVELS } from "../../constants/ultimate";
-import { circle, glow, glowLine, line, place, px } from "../../engine/frame";
+import { circle, fleck, glow, glowLine, hairline, line, place } from "../../engine/frame";
 import type { Blast, Effect } from "../../types/effect";
 import { PF, PK } from "../../types/particle";
-import { WHITE } from "../../utils/color";
+import { hex, WHITE } from "../../utils/color";
+import { lerp } from "../../utils/math";
 import { launchEnemy } from "../enemies/airborne";
 import { enemyCenter } from "../enemies/enemy";
 import { skillEvolved, skillValues } from "../skills/query";
@@ -29,6 +30,8 @@ const SKILL = "k_starfall";
 const FALL = { floorWidth: 24, floorPower: 0.25, launch: -260, late: 0.5 } as const;
 /** Cataclysm: meteors fall on foes this close to Kael */
 const RAIN_REACH = 140;
+/** a meteor's look: seconds of flight its tail covers, the radius of its rock, and the rock's color */
+const METEOR = { tail: 0.1, rock: 2.6, stone: hex("#5a2416") } as const;
 
 /** what a meteor does besides its blast, from Starfall's levels */
 interface MeteorExtras {
@@ -73,14 +76,34 @@ function createMeteor(x: number, floor: number, delay: number, extras: MeteorExt
     draw() {
       if (o.t < 0) return;
       place();
-      const tx = o.x - vx * 0.06;
-      const ty = o.y - vy * 0.06;
-      line(tx, ty, o.x, o.y, (u) => FIRE_RAMP[Math.round((1 - u) * 5)]);
-      glowLine(tx, ty, o.x, o.y, 8, FIRE_RAMP[4], 0.5);
-      circle(o.x, o.y, 3, FIRE_RAMP[3]);
-      circle(o.x - 0.5, o.y - 0.5, 1.8, FIRE_RAMP[1]);
-      px(o.x - 1, o.y - 1, WHITE);
-      glow(o.x, o.y, 22, FIRE_RAMP[4], 0.6);
+      const tx = o.x - vx * METEOR.tail;
+      const ty = o.y - vy * METEOR.tail;
+      const nx = -vy / SPEED;
+      const ny = vx / SPEED;
+      // the tail: a hot core with two cooler threads beside it that close on it toward the end
+      for (const side of [-1, 1]) {
+        const off = side * METEOR.rock * 0.7;
+        hairline(
+          tx,
+          ty,
+          o.x + nx * off,
+          o.y + ny * off,
+          (u) => FIRE_RAMP[Math.round(7 - u * 3)],
+          (u) => u,
+        );
+      }
+      line(lerp(tx, o.x, 0.45), lerp(ty, o.y, 0.45), o.x, o.y, (u) => FIRE_RAMP[Math.round((1 - u) * 4)]);
+      hairline(tx, ty, o.x, o.y, (u) => FIRE_RAMP[Math.round((1 - u) * 5)]);
+      glowLine(tx, ty, o.x, o.y, 7, FIRE_RAMP[4], 0.45);
+      // the head: a dark rock in a shell of fire, white where it meets the air
+      const hx = vx / SPEED;
+      const hy = vy / SPEED;
+      circle(o.x, o.y, METEOR.rock + 1, FIRE_RAMP[4]);
+      circle(o.x + hx * 0.6, o.y + hy * 0.6, METEOR.rock, FIRE_RAMP[2]);
+      circle(o.x - hx * 0.8, o.y - hy * 0.8, METEOR.rock * 0.6, METEOR.stone);
+      fleck(o.x + hx * METEOR.rock, o.y + hy * METEOR.rock, WHITE);
+      fleck(o.x + hx * METEOR.rock - 0.5, o.y + hy * METEOR.rock, WHITE);
+      glow(o.x, o.y, 20, FIRE_RAMP[4], 0.5);
     },
   };
 }

@@ -122,7 +122,7 @@ export function castVolcanicRift(level: number): void {
     return clamp(x0 + dir * run, lo, hi);
   });
   emberBurst(x0, floor - 2, 18, null);
-  lights.add(x0, floor, 60, EMBER[4], 0.8, 0.6);
+  lights.add(x0, floor, 56, EMBER[4], 0.5, 0.6);
   shake(0.3, 3);
   sfx.boom();
   const cracks: FloorCrack[] = ends.map((end) => createFloorCrack(x0, end, floor, speed));

@@ -62,7 +62,7 @@ export function parry(fromX: number): void {
   const fx = h.x + h.face * 10;
   game.fx.push(createImpact(fx, h.y - 20, -h.face, true, SPARKS.hot));
   game.fx.push(createFloorRing(h.x, h.y, 24, skin.ramp, 0.35));
-  lights.add(fx, h.y - 20, 56, skin.ramp[4], 0.9, 0.35);
+  lights.add(fx, h.y - 20, 48, skin.ramp[4], 0.55, 0.35);
   cue(h.x, h.y - 38, "parry");
   hitStop(0.06);
   sfx.block();

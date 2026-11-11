@@ -1,5 +1,5 @@
 import { PAL, SPARKS } from "../../../constants/palette";
-import { line, place, px } from "../../../engine/frame";
+import { fleck, place } from "../../../engine/frame";
 import type { Enemy } from "../../../types/enemy";
 import { PK } from "../../../types/particle";
 import type { SkillBehavior, SkillMemory } from "../../../types/skillBehavior";
@@ -9,6 +9,7 @@ import { dealDamage } from "../../damage";
 import { createImpact } from "../../effects/impact";
 import { enemyCenter } from "../../enemies/enemy";
 import { addStacks, consumeStacks, stacksOf } from "../../enemies/skillStatus";
+import { drawGem } from "../../hero/kael/art/crystal";
 import { game, particles, progress, rng } from "../../state";
 import { skillValues, withCharms } from "../query";
 import { foesOnScreen } from "../targets";
@@ -16,8 +17,16 @@ import { isLocked, lockFoe, pruneLock, type SpreadLock } from "./spreadLock";
 
 const ID = "k_splinters";
 /** seconds between splinter ticks; how far a full foe passes splinters on, and how often; how far a dying foe fires
- *  them; the most drawn on one foe */
-const SPLINTER = { every: 0.5, spreadReach: 30, spreadEvery: 1, burstReach: 40, drawn: 8 } as const;
+ *  them; the most drawn on one foe, and the length and half width of a drawn splinter */
+const SPLINTER = {
+  every: 0.5,
+  spreadReach: 30,
+  spreadEvery: 1,
+  burstReach: 40,
+  drawn: 8,
+  length: 2.8,
+  half: 0.9,
+} as const;
 
 interface SplinterMemory {
   spreadT: number;
@@ -111,8 +120,8 @@ function drawSplinters(e: Enemy): void {
     const r = 5 + (i % 3);
     const sx = x + Math.cos(a) * r;
     const sy = y + Math.sin(a) * r * 0.8;
-    line(sx, sy, sx + Math.cos(a) * 3, sy + Math.sin(a) * 3, C[4]);
-    px(sx + Math.cos(a) * 3, sy + Math.sin(a) * 3, WHITE);
+    drawGem(sx + Math.cos(a) * 1.5, sy + Math.sin(a) * 1.5, SPLINTER.length, SPLINTER.half, a, C);
+    fleck(sx + Math.cos(a) * (1.5 + SPLINTER.length), sy + Math.sin(a) * (1.5 + SPLINTER.length), WHITE);
   }
 }
 

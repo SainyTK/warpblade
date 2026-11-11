@@ -1,4 +1,4 @@
-import { glow, line, place, px } from "../../../engine/frame";
+import { fleck, glow, hairline, line, place } from "../../../engine/frame";
 import type { Effect } from "../../../types/effect";
 import type { Enemy } from "../../../types/enemy";
 import { enemyBox } from "../../enemies/enemy";
@@ -20,9 +20,12 @@ export function createPinMark(e: Enemy): Effect {
       const R = skin.ramp;
       const flicker = Math.floor(t * 20) % 2;
       place();
-      line(cx - 5, top - 4, cx + 2, y1, R[4 + flicker]);
-      line(cx - 4, top - 4, cx + 3, y1, R[2]);
-      px(cx - 5, top - 4, R[6]);
+      // the pin: a shaft of fire driven through the foe into the floor, hot on its upper edge
+      line(cx - 4.5, top - 4, cx + 2.5, y1, R[3]);
+      hairline(cx - 5, top - 4, cx + 2, y1, R[4 + flicker]);
+      hairline(cx - 3.75, top - 4, cx + 3.25, y1, R[1]);
+      fleck(cx - 5, top - 4, R[6]);
+      fleck(cx - 4.5, top - 4, R[6]);
       glow(cx + 2, y1, 8, R[3], 0.35 * Math.min(1, e.pinned * 2));
     },
   };

@@ -1,10 +1,12 @@
-import { glow, line, place, px } from "../../../../../engine/frame";
+import { STAKE_LOOK } from "../../../../../constants/ysra/fireLook";
+import { fleck, glow, hairline, place, polygon } from "../../../../../engine/frame";
 import type { Effect } from "../../../../../types/effect";
 import { PK } from "../../../../../types/particle";
 import { WHITE } from "../../../../../utils/color";
 import { particles, rng } from "../../../../state";
 import { dust } from "../../../../world";
 import { skin } from "../../../skin";
+import { drawTongue } from "../../art/flame";
 
 /** seconds the row stands, and the part of it spent bursting up out of the floor */
 const LIFE = 1.1;
@@ -43,9 +45,21 @@ export function createStakes(x: number, y: number, dir: number, length: number):
         const fade = Math.min(1, (LIFE - t) / 0.3);
         const h = s.tall * u * fade;
         const top = [s.x + dir * s.lean * u, y - h] as const;
-        line(s.x, y, top[0], top[1], R[2]);
-        line(s.x + 1, y, top[0] + 1, top[1], (k) => R[k > 0.6 ? 5 : 4]);
-        px(top[0], top[1], t - s.delay < 0.15 ? WHITE : R[6]);
+        // a charred stake, glowing along the edge that faces the way it burst, with a flame at its point
+        polygon(
+          [
+            [s.x - STAKE_LOOK.half, y],
+            [s.x + STAKE_LOOK.half, y],
+            [top[0], top[1]],
+          ],
+          R[1],
+        );
+        hairline(s.x - dir * STAKE_LOOK.half, y, top[0], top[1], R[0]);
+        hairline(s.x + dir * STAKE_LOOK.half, y, top[0], top[1], (k) => R[k > 0.6 ? 5 : 4]);
+        hairline(s.x, y, top[0], top[1], (k) => R[k > 0.5 ? 4 : 2], 0.6);
+        const flame = STAKE_LOOK.flame * fade * (0.6 + 0.4 * Math.abs(Math.sin(t * 17 + s.x)));
+        drawTongue(top[0], top[1] + 1, flame, dir * 1.2, R);
+        fleck(top[0], top[1], t - s.delay < 0.15 ? WHITE : R[6]);
         glow(top[0], top[1] + 2, 6, R[4], 0.4 * fade);
       }
     },

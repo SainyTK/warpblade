@@ -1,5 +1,5 @@
 import { FIRE_RAMP } from "../../constants/palette";
-import { glow, place, px } from "../../engine/frame";
+import { place } from "../../engine/frame";
 import type { SourceId } from "../../types/build";
 import type { Effect } from "../../types/effect";
 import { PK } from "../../types/particle";
@@ -9,12 +9,19 @@ import { ignite } from "../enemies/burn";
 import { enemyBox } from "../enemies/enemy";
 import { game, particles, rng } from "../state";
 import { boxHit } from "../world";
+import { drawFireBed, type FireColors } from "./fireBed";
 
 /** seconds between the floor's burns, and how long a foe standing in it keeps burning */
 const FIRE = { tick: 0.4, burn: 1 } as const;
 
-/** which pixel of the strip glows this beat: a cheap stable flicker */
-const flicker = (i: number, beat: number): number => Math.abs(Math.sin(i * 12.9898 + beat * 78.233) * 43758.5453) % 1;
+/** the burning floor's colors */
+const FLOOR_FIRE: FireColors = {
+  hot: FIRE_RAMP[1],
+  bright: FIRE_RAMP[3],
+  body: FIRE_RAMP[4],
+  edge: FIRE_RAMP[5],
+  deep: FIRE_RAMP[6],
+};
 
 /** a strip of burning floor `halfWidth` either side of x: foes standing in it take `damage` each tick and catch fire */
 export function createFloorFire(
@@ -47,15 +54,7 @@ export function createFloorFire(
     },
     drawBack() {
       place();
-      const k = clamp((life - t) / (life * 0.4));
-      const beat = Math.floor(t * 10);
-      for (let dx = -w; dx <= w; dx++) {
-        const f = flicker(cx + dx, beat);
-        px(cx + dx, cy, FIRE_RAMP[f > 0.6 ? 3 : f > 0.25 ? 4 : 5], k);
-        if (f > 0.7) px(cx + dx, cy - 1, FIRE_RAMP[f > 0.9 ? 2 : 3], k);
-        if (f > 0.9) px(cx + dx, cy - 2, FIRE_RAMP[3], k);
-      }
-      glow(cx, cy - 2, w * 0.8, FIRE_RAMP[4], 0.3 * k);
+      drawFireBed(cx, cy, w, t, clamp((life - t) / (life * 0.4)), FLOOR_FIRE);
     },
     draw() {},
   };

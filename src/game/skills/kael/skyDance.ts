@@ -1,5 +1,5 @@
 import { PAL, SPARKS } from "../../../constants/palette";
-import { glow, line, place, px } from "../../../engine/frame";
+import { fleck, glow, hairline, place } from "../../../engine/frame";
 import type { Enemy } from "../../../types/enemy";
 import type { MoveId } from "../../../types/move";
 import type { SkillBehavior, SkillMemory } from "../../../types/skillBehavior";
@@ -7,6 +7,7 @@ import { WHITE } from "../../../utils/color";
 import { dealDamage } from "../../damage";
 import { createImpact } from "../../effects/impact";
 import { enemyCenter } from "../../enemies/enemy";
+import { drawGem } from "../../hero/kael/art/crystal";
 import { game, progress } from "../../state";
 import { skillValues } from "../query";
 
@@ -40,6 +41,9 @@ function fall(s: Shard, dt: number): boolean {
   return false;
 }
 
+/** a falling shard: its gem's length and half width, and how far its thread of light trails above it */
+const COMET = { length: 3.5, half: 1.2, tail: 11 } as const;
+
 /** Sky Dance evolved, Comet Dance: every air hit drops a crystal shard on the foe it struck */
 export const skyDance: SkillBehavior = {
   create: () => ({ shards: [] }),
@@ -51,9 +55,10 @@ export const skyDance: SkillBehavior = {
     place();
     const C = PAL.crystal;
     for (const s of memoryOf(memory).shards) {
-      line(s.x, s.y - 6, s.x, s.y, C[4]);
-      line(s.x - 1, s.y - 4, s.x - 1, s.y - 1, C[2]);
-      px(s.x, s.y, WHITE);
+      // a cut shard falling point first, with a thread of light above it
+      hairline(s.x, s.y - COMET.tail, s.x, s.y - COMET.length, C[4], (u) => u);
+      drawGem(s.x, s.y - COMET.length, COMET.length, COMET.half, Math.PI / 2, C);
+      fleck(s.x, s.y, WHITE);
       glow(s.x, s.y - 2, 6, C[3], 0.4);
     }
   },

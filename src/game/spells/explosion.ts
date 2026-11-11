@@ -16,14 +16,18 @@ import { dust, hitStop, shake } from "../world";
 /** the shake and hit-stop of a full-size burst */
 const FULL = { brands: 4, shake: 0.28, amp: 3, hitStop: 0.06 } as const;
 
+/** the light of a burst: a wide orange flare and a small white core, dim enough that the flames and the foes in them
+ *  keep their shapes */
+const BLAST_LIGHT = { radius: 70, color: hex("#ff8a2a"), strength: 0.5, core: 12, coreStrength: 0.5 } as const;
+
 /** A white core, rolling flame that cools into smoke, sparks, burning chunks that set the floor alight. */
 export function explode(x: number, y: number, blast: Blast): void {
   const { radius, damage, burn } = blast;
   const brands = blast.brands ?? FULL.brands;
   const R = rng;
   const k = radius / 42;
-  lights.add(x, y - 6, 80 * k, hex("#ff8a2a"), 1, 0.6);
-  lights.add(x, y - 6, 26, WHITE, 0.9, 0.12);
+  lights.add(x, y - 6, BLAST_LIGHT.radius * k, BLAST_LIGHT.color, BLAST_LIGHT.strength, 0.6);
+  lights.add(x, y - 6, BLAST_LIGHT.core, WHITE, BLAST_LIGHT.coreStrength, 0.12);
   for (let i = 0; i < 30 * k; i++) {
     const a = R.range(Math.PI, TAU) + R.range(-0.4, 0.4);
     const sp = R.range(30, 150) * k;

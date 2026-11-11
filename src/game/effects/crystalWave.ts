@@ -1,10 +1,12 @@
+import { LANCE_LOOK } from "../../constants/kael/crystalLook";
 import { PAL, SPARKS } from "../../constants/palette";
-import { W } from "../../constants/stage";
-import { glow, line, place, px } from "../../engine/frame";
+import { RES, W } from "../../constants/stage";
+import { fleck, glow, hairline, place } from "../../engine/frame";
 import type { SourceId } from "../../types/build";
 import type { Effect } from "../../types/effect";
 import type { Enemy } from "../../types/enemy";
 import { WHITE } from "../../utils/color";
+import { grain } from "../../utils/grain";
 import { dealDamage } from "../damage";
 import { enemyBox } from "../enemies/enemy";
 import { type Payoff, payoffLands } from "../skills/payoff";
@@ -45,14 +47,30 @@ export function createCrystalWave(
     draw() {
       place();
       const k = 1 - o.t / LIFE;
-      for (let i = -HALF; i <= HALF; i++) {
-        const bow = (1 - (i / HALF) ** 2) * 4 * face;
-        px(o.x + bow, y + i, Math.abs(i) < HALF - 2 ? PAL.crystal[4] : PAL.crystal[2], k + 0.2);
-        px(o.x + bow - face, y + i, PAL.crystal[2], k * 0.6);
+      const C = PAL.crystal;
+      const L = LANCE_LOOK;
+      // image pixel rows from tip to tip: a white leading edge, a body that thins toward the tips, a dithered back
+      for (let j = -HALF * RES; j <= HALF * RES; j++) {
+        const v = j / (HALF * RES);
+        const open = 1 - v * v;
+        const front = o.x + face * open * L.bow;
+        const thick = (L.thin + (L.thick - L.thin) * open) * (0.5 + 0.5 * k) * RES;
+        const row = y + j / RES;
+        for (let s = 0; s <= thick; s++) {
+          const c = s === 0 ? WHITE : s < thick * 0.35 ? C[5] : s < thick * 0.7 ? C[4] : C[3];
+          fleck(front - (face * s) / RES, row, c, s < thick * 0.7 ? 1 : k + 0.2);
+        }
       }
-      px(o.x + face * 4, y, WHITE);
-      line(o.x - face * 10, y, o.x, y, PAL.crystal[3], k * 0.5);
-      glow(o.x, y, 14, PAL.crystal[3], 0.4 * k);
+      // streaks left behind it, each a fixed row of the crescent
+      for (let i = 0; i < L.streaks; i++) {
+        const v = ((i + 0.5) / L.streaks) * 2 - 1;
+        const from = o.x + face * ((1 - v * v) * L.bow - L.thick);
+        const len = L.tail * (0.4 + 0.6 * grain(i, 3)) * (1 - Math.abs(v) * 0.5);
+        const row = y + v * (HALF - 1);
+        hairline(from, row, from - face * len, row, C[i % 2 ? 4 : 3], (u) => k * (1 - u));
+      }
+      fleck(o.x + face * (L.bow + 0.5), y, WHITE);
+      glow(o.x, y, 14, C[3], 0.35 * k);
     },
   };
 }
