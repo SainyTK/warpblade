@@ -34,7 +34,17 @@ function foesNear(x: number, y: number, reach: number, skip: ReadonlySet<Enemy>)
 function offshoot(from: Enemy, to: Enemy, b: Shot, change: Partial<Shot>): void {
   const [x, y] = enemyCenter(from);
   const [tx, ty] = enemyCenter(to);
-  looseBolt({ ...b, x, y, angle: Math.atan2(ty - y, tx - x), closing: false, side: false, offshoot: true, ...change });
+  looseBolt({
+    ...b,
+    x,
+    y,
+    angle: Math.atan2(ty - y, tx - x),
+    closing: false,
+    beat: undefined,
+    side: false,
+    offshoot: true,
+    ...change,
+  });
 }
 
 /** Ricochet: a bolt that hits bounces on to the nearest foe it has not struck; Splinter Storm splits each bounce */
@@ -89,7 +99,16 @@ function longshot(e: Enemy, b: Shot, killed: boolean): void {
 function featherSplit(e: Enemy, b: Shot, dir: number): void {
   const [x, y] = enemyCenter(e);
   for (const a of [-0.45, 0.45])
-    looseBolt({ ...b, x, y, angle: (dir > 0 ? 0 : Math.PI) + a, share: 0.5, closing: false, offshoot: true });
+    looseBolt({
+      ...b,
+      x,
+      y,
+      angle: (dir > 0 ? 0 : Math.PI) + a,
+      share: 0.5,
+      closing: false,
+      beat: undefined,
+      offshoot: true,
+    });
 }
 
 /** what the skills do when a bolt strikes a foe (it may still fly on) */

@@ -13,6 +13,8 @@ export interface Shot {
   prime: Prime;
   /** the last bolt of a string */
   closing?: boolean;
+  /** the beat of the string it was loosed on, first bolt to closing bolt, for its stagger and hit feel */
+  beat?: number;
   /** loosed in the air */
   air?: boolean;
   /** a fan's side bolt */

@@ -1,6 +1,6 @@
-import { shootClip } from "../../../constants/clips/sable/shoot";
+import { stringClips } from "../../../constants/clips/sable/shoot";
 import { AIM_STANCE } from "../../../constants/clips/sable/stance";
-import { BOLT, MUZZLE, SHOOT_TIMES } from "../../../constants/sable/bolt";
+import { BEATS, BOLT, MUZZLE } from "../../../constants/sable/bolt";
 import { glow, place } from "../../../engine/frame";
 import { blit } from "../../../engine/sprite";
 import type { SkillBehavior, SkillMemory } from "../../../types/skillBehavior";
@@ -46,7 +46,7 @@ const memoryOf = (m: SkillMemory): ShadeMemory => m as unknown as ShadeMemory;
 
 /** her shooting pose at the release, drawn once as a shade */
 function shadeLook(): SpriteImage {
-  drawHero(ghostCanvas, sampleKeys(shootClip(AIM_STANCE.level).keys, SHOOT_TIMES.fire), heroLook(4));
+  drawHero(ghostCanvas, sampleKeys(stringClips(AIM_STANCE.level).beats[0].keys, BEATS[0].fire), heroLook(4));
   return ghostCanvas.snapshot();
 }
 
