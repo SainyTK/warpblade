@@ -6,7 +6,7 @@ import { createFloorRing } from "../../effects/floorRing";
 import { enemyBox } from "../../enemies/enemy";
 import { kindOf } from "../../enemies/kinds";
 import { emitSkillEvent } from "../../skills/events";
-import { withCharms } from "../../skills/query";
+import { skillValues, withCharms } from "../../skills/query";
 import { game, hero, progress, rng } from "../../state";
 import { boxHit, dust, heroBox } from "../../world";
 import { isFree, setState, settle } from "../actions";
@@ -37,7 +37,8 @@ export function pressStep(dir: number): boolean {
   h.stamina -= cost;
   h.staminaWait = 0.5;
   if (!h.ground) jory.airStep = false;
-  const reach = BEAT_STEP.reach[tier() - 1] * progress.stats.move * (h.ground ? 1 : BEAT_STEP.air);
+  const touch = 1 + (skillValues("j_stepTouch").reach ?? 0);
+  const reach = BEAT_STEP.reach[tier() - 1] * progress.stats.move * touch * (h.ground ? 1 : BEAT_STEP.air);
   jory.stepDir = dir || -h.face;
   jory.stepLen = withCharms("area", reach);
   jory.stepOnBeat = judged.onBeat;

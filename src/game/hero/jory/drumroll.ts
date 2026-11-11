@@ -60,8 +60,9 @@ function ring(): void {
   const level = jory.ultLevel;
   const last = jory.rung === jory.rings - 1;
   const r = ringOf(level);
-  const power = ULT_LEVELS[level - 1].power * DRUMROLL.share * (progress.stats.ad + progress.stats.ap);
   const finale = skillValues("j_finale");
+  const power =
+    ULT_LEVELS[level - 1].power * DRUMROLL.share * (progress.stats.ad + progress.stats.ap) * (finale.power ?? 1);
   const crashes: [number, number][] = [];
   for (const e of game.enemies) {
     if (e.hp <= 0) continue;

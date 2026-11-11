@@ -1,5 +1,5 @@
 import { PAL } from "../../../constants/palette";
-import { fleck, glow, place } from "../../../engine/frame";
+import { fleck, glow, place, px } from "../../../engine/frame";
 import type { SourceId } from "../../../types/build";
 import type { Effect } from "../../../types/effect";
 import type { Enemy } from "../../../types/enemy";
@@ -101,7 +101,13 @@ export function createSoundWave(s: SoundWaveSpec): Effect {
           // the front leans ahead at its middle, like a curved sound line
           const lean = Math.sin(v * Math.PI) * 3;
           if (a > 0 && grain(i + a * 31, seed) < 0.3 * a) continue;
-          fleck(ax + dir * lean, s.floor - v * s.height, c, k * 1.4);
+          const fx = ax + dir * lean;
+          const fy = s.floor - v * s.height;
+          // the leading arc is a full art pixel wide with a dark edge behind it, so it reads against bright scenery
+          if (a === 0) {
+            px(fx - dir, fy, PAL.beat[1], k * 0.8);
+            px(fx, fy, c, k);
+          } else fleck(fx, fy, c, k * 1.4);
         }
       }
       glow(x, s.floor - s.height / 2, s.height * 0.7, PAL.beat[3], 0.18 * fade);

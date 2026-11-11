@@ -9,7 +9,7 @@ import { feat } from "../../feat";
 import { pressAge } from "../../input";
 import { emitSkillEvent } from "../../skills/events";
 import { skillValues } from "../../skills/query";
-import { game } from "../../state";
+import { game, hero } from "../../state";
 import { jory } from "./memory";
 
 /** the action behind each judged button */
@@ -121,7 +121,8 @@ function beatPlayed(sound: boolean): void {
   if (jory.lockBeats > 0) jory.lockBeats--;
   jory.silent++;
   const quiet = skillValues("j_encore").silence ?? GROOVE.silence;
-  if (jory.silent > quiet && foesStanding()) addGroove(-1);
+  const marching = hero.running && !!skillValues("j_march").hold;
+  if (jory.silent > quiet && foesStanding() && !marching) addGroove(-1);
   const downbeat = onDownbeat();
   if (sound) sfx.beat(downbeat);
   emitSkillEvent({ type: "tick", beats: jory.beats, downbeat });

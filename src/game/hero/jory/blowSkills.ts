@@ -1,12 +1,10 @@
 import { COMBO } from "../../../constants/combat";
 import { frame } from "../../../constants/hero";
 import { KNOCKDOWN, MALLET_BLOWS } from "../../../constants/jory/mallets";
-import { PAL } from "../../../constants/palette";
 import { W } from "../../../constants/stage";
 import type { Enemy } from "../../../types/enemy";
 import type { BeatJudgement, MalletBlow } from "../../../types/jory";
 import { dealDamage } from "../../damage";
-import { createFloorRing } from "../../effects/floorRing";
 import { createAccentRing } from "../../effects/jory/accentRing";
 import { createSoundWave } from "../../effects/jory/soundWave";
 import { enemyCenter } from "../../enemies/enemy";
@@ -14,6 +12,7 @@ import { skillLevel, skillValues, withCharms } from "../../skills/query";
 import { game, hero, progress, rng } from "../../state";
 import { tier } from "./beat";
 import { jory } from "./memory";
+import { soundRing } from "./soundRing";
 import type { MalletStrike } from "./strike";
 
 /** what a skill adds to the first foe a blow reaches: the payoff of a precise press lands on that foe only */
@@ -99,16 +98,10 @@ export function staggerOf(s: MalletStrike): number {
 /** Heavy Accent's guard break: an Accent breaks a guard */
 export const accentBreaks = (s: MalletStrike): boolean => s.accent && !!skillValues("j_accent").guard;
 
-/** a ring of sound round a point that strikes every foe in it but one, once */
-function ringAt(x: number, y: number, r: number, power: number, skip: Enemy | null): void {
-  game.fx.push(createFloorRing(x, hero.y, r, PAL.beat, 0.3));
-  for (const e of game.enemies) {
-    if (e === skip || e.hp <= 0) continue;
-    const [cx, cy] = enemyCenter(e);
-    if (Math.hypot(cx - x, cy - y) > r) continue;
-    dealDamage(e, progress.stats.ad * power, { fromX: x, kx: Math.sign(cx - x) * 30, stagger: COMBO.stagger });
-  }
-}
+/** a ring of sound round a struck point that strikes every foe in it but the one struck, once */
+const ringAt = (x: number, r: number, power: number, skip: Enemy | null): void => {
+  soundRing(x, hero.y, r, { damage: progress.stats.ad * power, stagger: true, skip });
+};
 
 /** Rimshot's Gunshot Snare: an on-beat Tap fires a crack straight ahead at the first foe within reach */
 function gunshot(power: number): void {
@@ -125,18 +118,19 @@ function gunshot(power: number): void {
 
 /** what happens after a mallet blow lands on a foe: the rings, waves and statuses his attack skills add */
 export function afterMalletHit(e: Enemy, s: MalletStrike, at: { first: boolean; kill: boolean }): void {
-  const [cx, cy] = enemyCenter(e);
+  const [cx] = enemyCenter(e);
   const accent = skillValues("j_accent");
-  if (s.accent && at.first && accent.ring) ringAt(cx, cy, withCharms("area", accent.ring), 0.4, e);
-  if (s.accent && at.first && accent.thunderclap && s.downbeat) ringAt(cx, cy, withCharms("area", 50), 0.9, e);
+  if (s.accent && at.first && accent.ring) ringAt(cx, withCharms("area", accent.ring), 0.4, e);
+  if (s.accent && at.first && accent.thunderclap && s.downbeat) ringAt(cx, withCharms("area", 50), 0.9, e);
   const rim = skillValues("j_rimshot");
   if (s.accent && s.blow === "tap" && at.first && rim.gunshot && !s.repeat) gunshot(rim.gunshot);
+  if (s.accent && s.blow === "tap" && at.first && rim.pierce) chainHit(e, rim.pierce);
   const kick = skillValues("j_kickDrum");
   if (s.blow === "kick" && at.first && kick.thump)
-    ringAt(hero.x + hero.face * 10, hero.y - 8, withCharms("area", kick.thump), 0.5, e);
+    ringAt(hero.x + hero.face * 10, withCharms("area", kick.thump), 0.5, e);
   if (s.blow === "kick" && kick.elite && e.elite && e.hp > 0) e.stun = Math.max(e.stun, 0.6);
   const swellV = skillValues("j_swell");
-  if (swellV.fortissimo && tier() >= 4 && at.first) ringAt(cx, cy, withCharms("area", 30), 0.3, e);
+  if (swellV.fortissimo && tier() >= 4 && at.first) ringAt(cx, withCharms("area", 30), 0.3, e);
   const para = skillValues("j_paradiddle");
   if (s.blow === "roll" && at.first && para.chain) chainHit(e, para.chain);
   if (s.blow === "roll" && para.blast) drawIn(cx);

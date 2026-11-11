@@ -67,7 +67,7 @@ function strikeFoe(e: Enemy, s: MalletStrike, first: boolean): boolean {
   });
   if (result === "blocked") return false;
   const [cx, cy] = enemyCenter(e);
-  game.fx.push(createImpact(cx - dir * 3, cy, dir, s.heavy || s.accent, s.accent ? SPARKS.beat : undefined));
+  game.fx.push(createImpact(cx - dir * 3, cy, dir, s.heavy, s.accent ? SPARKS.beat : undefined));
   if (s.accent) {
     game.fx.push(createAccentRing(cx - dir * 2, cy));
     emitSkillEvent({ type: "accent", foe: e, blow: s.blow, downbeat: s.downbeat });

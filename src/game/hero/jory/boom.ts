@@ -12,7 +12,7 @@ import { createBoomRing } from "../../effects/jory/boomRing";
 import { enemyCenter } from "../../enemies/enemy";
 import { lowerWard, raiseWard, type ShotWard } from "../../shotWards";
 import { emitSkillEvent } from "../../skills/events";
-import { withCharms } from "../../skills/query";
+import { skillValues, withCharms } from "../../skills/query";
 import { game, hero, particles, progress, rng } from "../../state";
 import { shake } from "../../world";
 import { isFree, setState, settle } from "../actions";
@@ -30,12 +30,13 @@ export function pressBoom(): boolean {
   const h = hero;
   if (!isFree() && !inRecovery()) return false;
   if (jory.boomWait > 0) return false;
-  if (h.stamina < BOOM.stamina) {
+  const cost = !h.ground && skillValues("j_leap").boom ? 0 : BOOM.stamina;
+  if (h.stamina < cost) {
     refuseDash();
     return true;
   }
   const judged = judge("K");
-  h.stamina -= BOOM.stamina;
+  h.stamina -= cost;
   h.staminaWait = 0.5;
   jory.boomWait = BOOM.wait;
   jory.boomOnBeat = judged.onBeat;
@@ -92,7 +93,7 @@ function drownShots(): void {
 /** the Boom strikes: every foe in the ring takes the hit, minions and elites are pushed out and staggered */
 function strike(): void {
   const onBeat = jory.boomOnBeat;
-  const r = withCharms("area", onBeat ? BOOM.ring : BOOM.offRing);
+  const r = withCharms("area", (onBeat ? BOOM.ring : BOOM.offRing) * (1 + (skillValues("j_eardrum").wider ?? 0)));
   const cy = hero.y - DRUM_Y;
   const foes: Enemy[] = [];
   for (const e of game.enemies) {
