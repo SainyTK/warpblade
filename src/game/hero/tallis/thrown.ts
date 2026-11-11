@@ -1,5 +1,4 @@
-import { PAL } from "../../../constants/palette";
-import { glow, line, place, px } from "../../../engine/frame";
+import { place } from "../../../engine/frame";
 import type { Enemy } from "../../../types/enemy";
 import type { KnifeBlow } from "../../../types/tallis";
 import { dealDamage } from "../../damage";
@@ -7,6 +6,7 @@ import { enemyBox } from "../../enemies/enemy";
 import { skillValues, withCharms } from "../../skills/query";
 import { game, hero, progress } from "../../state";
 import { boxHit } from "../../world";
+import { drawSpinningKnife } from "./blades";
 
 /** a thrown knife's speed */
 const SPEED = 280;
@@ -41,9 +41,7 @@ function throwKnife(angle: number): void {
     },
     draw() {
       place();
-      line(x - face * 4, y - vy * 0.012, x, y, PAL.gloam[3], 0.8);
-      px(Math.round(x), Math.round(y), PAL.gloam[5]);
-      glow(x, y, 5, PAL.gloam[4], 0.25);
+      drawSpinningKnife(x, y, face, flown);
     },
   });
 }

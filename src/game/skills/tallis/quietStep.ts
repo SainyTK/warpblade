@@ -1,7 +1,9 @@
 import { PAL } from "../../../constants/palette";
-import { place, px } from "../../../engine/frame";
+import { PRINT_COLORS, PRINT_PIXELS } from "../../../constants/tallis/pixels";
+import { disc, place } from "../../../engine/frame";
 import type { SkillBehavior, SkillMemory } from "../../../types/skillBehavior";
 import { tallis } from "../../hero/tallis/memory";
+import { stampSoft } from "../../hero/tallis/stamp";
 import { game, hero } from "../../state";
 import { skillValues } from "../query";
 
@@ -58,10 +60,13 @@ export const quietStepSkill: SkillBehavior = {
     place();
     for (const k of memoryOf(memory).marks) {
       const a = Math.min(1, k.left);
-      px(Math.round(k.x), k.y - 1, PAL.gloam[3], a * 0.8);
-      px(Math.round(k.x) + 1, k.y - 1, PAL.gloam[2], a * 0.8);
+      stampSoft(PRINT_PIXELS, k.x, k.y, PRINT_COLORS, { show: a * 0.8 });
       if (!k.smoke) continue;
-      for (let j = 2; j < 9; j++) px(Math.round(k.x + Math.sin(j + k.left * 3) * 1.5), k.y - j, PAL.gloam[2], a * 0.45);
+      // a thread of smoke climbs off a phantom print, swelling and thinning as it curls
+      for (let j = 0; j < 4; j++) {
+        const up = 2 + j * 2.4;
+        disc(k.x + Math.sin(j * 1.3 + k.left * 3) * 1.6, k.y - up, 1.1 + j * 0.35, PAL.gloam[2], a * (0.5 - j * 0.09));
+      }
     }
   },
 };

@@ -1,11 +1,13 @@
 import { PAL } from "../../../constants/palette";
-import { glow, place, px } from "../../../engine/frame";
+import { CROW_COLORS, CROW_PIXELS } from "../../../constants/tallis/pixels";
+import { glow, hairline, place } from "../../../engine/frame";
 import type { Enemy } from "../../../types/enemy";
 import type { SkillBehavior, SkillMemory } from "../../../types/skillBehavior";
 import { TAU } from "../../../utils/math";
 import { dealDamage } from "../../damage";
 import { enemyCenter } from "../../enemies/enemy";
 import { addStacks } from "../../enemies/skillStatus";
+import { stampSoft } from "../../hero/tallis/stamp";
 import { hero, progress, rng } from "../../state";
 import { skillValues, withCharms } from "../query";
 import { nearestFoe } from "../targets";
@@ -110,12 +112,10 @@ export const crowsSkill: SkillBehavior = {
     place();
     for (const c of memoryOf(memory).crows) {
       const flap = Math.floor(c.t * 16 + c.phase) % 2;
-      const x = Math.round(c.x);
-      const y = Math.round(c.y);
-      px(x, y, PAL.gloam[1]);
-      px(x - 1, y - flap, PAL.gloam[1]);
-      px(x + 1, y - flap, PAL.gloam[1]);
-      px(x, y - 1, PAL.gloam[5]);
+      // a diving crow looks at its foe; a circling one flies the way its circle turns
+      const left = c.target ? c.target.x < c.x : Math.sin(c.phase + c.t * 2.5) > 0;
+      stampSoft(CROW_PIXELS[flap], c.x, c.y + 2, CROW_COLORS, { flip: left, solid: "bwhke" });
+      if (c.target) hairline(c.x + (left ? 7 : -7), c.y - 1, c.x, c.y, PAL.gloam[3], (u) => u * 0.7);
       glow(c.x, c.y, 4, PAL.gloam[3], 0.2);
     }
   },

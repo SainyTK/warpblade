@@ -1,9 +1,12 @@
 import { PAL } from "../../../constants/palette";
 import { H, W } from "../../../constants/stage";
+import { DARK } from "../../../constants/tallis/look";
 import { GLOAMING } from "../../../constants/tallis/special";
 import { blendScreen, lightB, lightG, lightR, shakeOffset } from "../../../engine/frame";
 import { blitRing } from "../../../engine/sprite";
 import type { Enemy } from "../../../types/enemy";
+import { mix } from "../../../utils/color";
+import { clamp } from "../../../utils/math";
 import { kindOf } from "../../enemies/kinds";
 import { game } from "../../state";
 
@@ -24,9 +27,46 @@ export function dimLights(dark: GloamDark): void {
   }
 }
 
+/** the rows and columns the dark is laid over, a little past the stage so a shake shows no edge */
+const MARGIN = 2;
+const ROWS = H + MARGIN * 2;
+const COLS = W + MARGIN * 2;
+/** the dusk band sits at this row and is this many rows deep; the dark falls with a front this many rows soft */
+const BAND = { row: 122, depth: 34 } as const;
+const FRONT = 46;
+
+/** each row's colour: ink, turning to dusk plum in a band low over the horizon, where the last light lingers */
+const rowColor = Array.from({ length: ROWS }, (_, i) => {
+  const d = (i - MARGIN - BAND.row) / BAND.depth;
+  return mix(DARK.ink, DARK.dusk, Math.exp(-d * d));
+});
+/** how deep the dark is in each row and column: lighter in the dusk band, deeper toward the stage's sides */
+const rowDepth = Float32Array.from({ length: ROWS }, (_, i) => {
+  const d = (i - MARGIN - BAND.row) / BAND.depth;
+  return 1 - DARK.band * Math.exp(-d * d);
+});
+const colDepth = Float32Array.from({ length: COLS }, (_, i) => {
+  const d = (i - MARGIN - W / 2) / (W / 2);
+  return 1 + DARK.edge * d * d;
+});
+
+/** the dark over the scene at depth k: as it comes on it falls from the top of the sky like a curtain; it lifts evenly */
+function drawDark(k: number, falling: boolean): void {
+  const [sx, sy] = shakeOffset();
+  const front = k * (ROWS + FRONT);
+  for (let j = 0; j < ROWS; j++) {
+    const fallen = falling ? clamp((front - j) / FRONT) : k;
+    if (fallen <= 0) break;
+    const a = GLOAMING.dark * fallen * rowDepth[j];
+    const c = rowColor[j];
+    const y = j - MARGIN + sy;
+    for (let i = 0; i < COLS; i++) blendScreen(i - MARGIN + sx, y, c, Math.min(1, a * colDepth[i]));
+  }
+}
+
 /**
  * The dark Gloaming and Eclipse lay over the scene: drawn behind the foes and the heroes, so only they stand out of it,
- * each foe struck rimmed in dusk rose. It deepens over the wind-up and fades once `fading` is set.
+ * each foe struck rimmed in dusk rose. It falls over the wind-up and lifts once `fading` is set.
  */
 export function createDark(targets: readonly Enemy[]): GloamDark {
   const handle: GloamDark = { fading: false, k: 0 };
@@ -37,9 +77,7 @@ export function createDark(targets: readonly Enemy[]): GloamDark {
       return !handle.fading || handle.k > 0;
     },
     drawBack() {
-      const [sx, sy] = shakeOffset();
-      const a = GLOAMING.dark * handle.k;
-      for (let y = -2; y < H + 2; y++) for (let x = -2; x < W + 2; x++) blendScreen(x + sx, y + sy, PAL.gloam[0], a);
+      drawDark(handle.k, !handle.fading);
       if (handle.fading) return;
       for (const e of targets) {
         if (e.hp <= 0) continue;

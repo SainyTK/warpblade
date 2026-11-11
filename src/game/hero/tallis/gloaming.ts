@@ -20,6 +20,7 @@ import { countBackKill } from "./blowSkills";
 import { raiseCloud } from "./clouds";
 import { createDark } from "./dark";
 import { gloamMax } from "./gloam";
+import { createGloamShade, createGloamThread } from "./gloamLook";
 import { tallis, tallisHost } from "./memory";
 import { raiseVeil } from "./veil";
 
@@ -75,7 +76,10 @@ function appearBehind(e: Enemy): void {
 
 /** one visit: the crescent slash and the stabs from behind */
 function stab(e: Enemy): void {
+  const from = { x: hero.x, y: hero.y, face: hero.face };
   appearBehind(e);
+  if (tallisHost.visited > 1) game.fx.push(createGloamShade(from.x, from.y, from.face));
+  game.fx.push(createGloamThread(from.x, from.y - 14, hero.x, hero.y - 14));
   const eclipse = hero.state === "eclipse";
   const v = eclipse ? skillValues("t_eclipse") : {};
   const power = ULT_LEVELS[tallis.ultLevel - 1].power * GLOAMING.share * (progress.stats.ad + progress.stats.ap);
