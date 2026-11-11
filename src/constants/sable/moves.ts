@@ -21,24 +21,29 @@ export const HOP = {
   /** pixels it rises */
   rise: 16,
   speed: 150,
+  /** on the floor she crouches this long to load before she pushes off; from the air she pushes off at once */
+  load: frame(3),
   /** nothing touches her for this long from the press */
-  guard: 0.22,
-  /** she looses the bolt this long into the hop */
-  shot: frame(5),
+  guard: 0.32,
+  /** she looses the bolt this long into the hop, five frames after the push off */
+  shot: frame(8),
   /** the landing crouch before she is free again */
   recover: frame(5),
   /** the hop's clip: the air key it holds until it lands, and where the landing starts */
-  air: frame(8),
-  land: frame(10),
+  air: frame(11),
+  land: frame(13),
 } as const;
 
 /** L with the side ahead held: a low slide along the floor, under blows */
 export const SLIDE = {
   cost: 18,
   speed: 210,
-  /** seconds she slides before she rises */
+  /** she plants and drops this long before the glide */
+  load: frame(2),
+  /** seconds she glides before she rises */
   time: 0.3,
-  guard: 0.28,
+  /** nothing touches her for this long from the press */
+  guard: 0.35,
   /** the rise out of the slide */
   recover: frame(6),
 } as const;

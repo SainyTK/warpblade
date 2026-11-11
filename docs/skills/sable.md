@@ -13,7 +13,7 @@ Every button does something from the first second.
 | --- | --- |
 | J | The string: three bolts, the third a closing bolt. Tap or hold. |
 | K | Kick: front kick, 0.55A, strong push, 0.5 s stun. A landed air kick springs her up and back. |
-| L | Hop back with a free bolt at 0.8 (once on the floor, once in the air). From a walk or run toward the facing side, a slide instead. |
+| L | Hop back with a free bolt of 0.76A (once on the floor, once in the air). From a walk or run toward the facing side, a slide instead. |
 | I | Snare at her feet: 20 MP, 3.5 s recharge, two on the floor, 6P and a 1.6 s hold. |
 | O | Reload; a second O in the bright window is a perfect reload (full quiver, next 4 bolts primed at +35%). Perfect Rhythm builds on it. |
 | U | Bolt Storm, the base special, with the shared charge levels. |
@@ -22,12 +22,13 @@ Every button does something from the first second.
 ### The string
 
 String length is 3.
-A held or tapped J looses bolt, bolt, closing bolt.
-The closing bolt deals 1.8A (a normal bolt is 0.95A), passes through one foe, pushes twice as far and staggers 0.35 s, so the foe ends the string out at range again.
-After the closing bolt the crossbow cocks for 0.18 s before the next string.
+A held or tapped J looses bolt, bolt, closing bolt, each with a full draw; a press during a bolt plays the next one where it ends.
+A normal bolt deals 1.11A and staggers 0.36 s (first) or 0.4 s (second).
+The closing bolt deals 2.1A, passes through one foe, pushes twice as far as a bolt and staggers 0.62 s, so the foe is still held when the next string's first bolt lands.
+After the closing bolt the crossbow cocks for 6 frames (0.2 s) before the next string.
 A string pressed after she has settled starts again from the first bolt.
-The quiver holds 9 bolts (was 8), three full strings.
-Firing without a break, her damage on one foe stays where it was: 35.2 per string, 3 strings in 2.7 s plus a 1.05 s reload is 28.2 per second (before, 28.1).
+The quiver holds 9 bolts, three full strings.
+Firing without a break, her damage on one foe holds: 47.5 per string, 3 strings in 2.7 s plus a 1.05 s reload is 38.0 per second, the same as before the full draws (40.7 per string, 3 strings in 2.16 s plus the reload).
 
 Three fits a ranged hero: a string is a short burst she can fire between dodges, and the closing bolt gives attack skills a "last hit" to build on, the same hook Kael's and Ysra's last blows give theirs.
 
@@ -42,7 +43,8 @@ Featherdraw raises the limit to 3.
 
 Up and Down no longer aim while J is held.
 The bolt aims itself at the nearest foe ahead within range, anywhere from 60 degrees up to 40 degrees down.
-The stance follows the chosen angle (up, level, kneeling low, slanted down in the air), so her existing clips still play.
+The stance follows the chosen angle (up, level, kneeling low, slanted down in the air), and each plays the same three-beat string.
+The aim never turns her: it only tilts the shot at a foe ahead of where she faces.
 With no foe in reach she shoots level on the floor and slanted down in the air.
 Up while shooting now jumps, which is ordinary movement.
 

@@ -1,6 +1,7 @@
-import { BOLT, STRING } from "../../../constants/sable/bolt";
+import { BEATS, BOLT, PRIMED_FEEL, STRING } from "../../../constants/sable/bolt";
 import { sfx } from "../../../services/audio";
 import type { Enemy } from "../../../types/enemy";
+import type { HitFeel } from "../../../types/move";
 import { dealDamage } from "../../damage";
 import { createCrossbowBolt } from "../../effects/crossbowBolt";
 import { createImpact } from "../../effects/impact";
@@ -30,6 +31,16 @@ interface Flight {
 const paidOff = (e: Enemy, b: Shot): Shot =>
   b.prime === "reload" && b.payoff && !payoffLands(b.payoff, e) ? { ...b, prime: "charged" } : b;
 
+/** the hit feel of a bolt: its beat's, at least the primed feel for a lit bolt, a plain tick for any other */
+function impact(lit: boolean, feel: HitFeel | undefined): void {
+  const stop = Math.max(feel?.stop ?? 0, lit ? PRIMED_FEEL.stop : 0);
+  const [time, amp] = feel?.shake ?? [0, 0];
+  if (stop) hitStop(stop);
+  if (lit) shake(Math.max(time, PRIMED_FEEL.shake[0]), Math.max(amp, PRIMED_FEEL.shake[1]));
+  else if (time) shake(time, amp);
+  sfx.hit(lit, feel?.pitch ?? PRIMED_FEEL.pitch);
+}
+
 /** a bolt strikes a foe: damage from attack damage with every skill bonus added into one sum, a push away from where it
  *  was loosed and a spark; true when the foe fell */
 function strike(e: Enemy, shot: Shot, f: Flight): boolean {
@@ -38,7 +49,8 @@ function strike(e: Enemy, shot: Shot, f: Flight): boolean {
   const breach = b.closing && !b.plain ? skillValues("s_breach") : {};
   const push = b.closing ? STRING.closingPush * (breach.push ?? 1) : 1;
   const passStagger = b.plain ? 0 : (skillValues("s_pierce").stagger ?? 0);
-  const stagger = Math.max(b.closing ? STRING.closingStagger : BOLT.stagger, passStagger);
+  const beat = b.beat === undefined ? null : BEATS[b.beat];
+  const stagger = Math.max(beat ? beat.stagger : BOLT.stagger, passStagger);
   const [cx, cy] = enemyCenter(e);
   dealDamage(e, progress.stats.ad * basePower(b) * (1 + bonusSum(b, f.passed, f.flown)), {
     fromX: b.x - f.dir * 10,
@@ -53,11 +65,7 @@ function strike(e: Enemy, shot: Shot, f: Flight): boolean {
   hero.lastHit = e;
   game.fx.push(createImpact(cx - f.dir * 3, cy, f.dir, lit || !!b.closing));
   jadeLight(cx, cy, lit ? "primedHit" : "hit");
-  sfx.hit(lit, 1.3);
-  if (lit) {
-    hitStop(0.03);
-    shake(0.08, 1);
-  }
+  impact(lit, beat?.feel);
   return e.hp <= 0;
 }
 

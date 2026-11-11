@@ -36,7 +36,13 @@ const fresh = (): SableMemory => ({
 export const sable: SableMemory = fresh();
 rememberPerSeat(objectMemory(sable));
 
+/** the bolt of the string under way: its beat (first bolt to closing bolt), and J pressed during it, so the next bolt
+ *  follows once this one has run */
+export const bowString = { beat: 0, queued: false };
+rememberPerSeat(objectMemory(bowString));
+
 /** a fresh run: a full quiver, nothing set or primed */
 export function resetSable(full: number): void {
   Object.assign(sable, fresh(), { ammo: full });
+  Object.assign(bowString, { beat: 0, queued: false });
 }

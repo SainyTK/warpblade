@@ -5,6 +5,7 @@ import { riseSpeed } from "../../../utils/math";
 import { dealDamage } from "../../damage";
 import { createFloorRing } from "../../effects/floorRing";
 import { enemyBox } from "../../enemies/enemy";
+import { objectMemory, rememberPerSeat } from "../../seatMemory";
 import { emitSkillEvent } from "../../skills/events";
 import { skillValues } from "../../skills/query";
 import { game, hero, progress } from "../../state";
@@ -21,6 +22,10 @@ import { tangle } from "./effects/tangle";
 import { looseBolt } from "./loose";
 import { sable } from "./memory";
 import { chargeBolts, loadBolts } from "./quiver";
+
+/** the hop under way has left the floor */
+const hop = { launched: false };
+rememberPerSeat(objectMemory(hop));
 
 /** how far a seeking hop bolt bends toward a foe, in radians */
 const HOP_SEEK = 0.7;
@@ -62,7 +67,8 @@ function pay(cost: number): boolean {
  *  (twice with Hop Volley). From a walk or run toward the side she faces, a slide forward under blows instead. */
 export function pressEvade(dir: number): boolean {
   const h = hero;
-  if (!isFree() && !(h.state === "shoot" && sable.fired) && h.state !== "kick") return false;
+  // a bolt's draw is the longest part of a beat, so L may break out of any part of a shot
+  if (!isFree() && h.state !== "shoot" && h.state !== "kick") return false;
   if (h.ground && isFree() && dir && dir === h.face) return startSlide();
   const v = skillValues("s_hopVolley");
   if (!h.ground && sable.airHops >= (v.airHops ?? 1)) return false;
@@ -70,13 +76,25 @@ export function pressEvade(dir: number): boolean {
   if (!h.ground) sable.airHops++;
   Object.assign(sable, { hopShot: false, landed: false, perfectUsed: false, string: 0 });
   h.running = false;
+  setState("hop");
+  hop.launched = false;
+  // from the air there is no floor to load against: she pushes off at once
+  if (!h.ground) {
+    h.st = HOP.load;
+    pushOff();
+  }
+  return true;
+}
+
+/** the hop leaves the floor, or the air, backward */
+function pushOff(): void {
+  const h = hero;
+  hop.launched = true;
   h.vy = Math.min(h.vy, -riseSpeed(HOP.rise, HERO_MOVE.gravity));
+  if (h.ground) dust(h.x, h.y, 3, h.face);
   h.ground = false;
   h.cutShort = true;
-  setState("hop");
-  dust(h.x, h.y, 3, h.face);
   sfx.dodge();
-  return true;
 }
 
 function startSlide(): boolean {
@@ -84,9 +102,9 @@ function startSlide(): boolean {
   if (!pay(v.cost ?? SLIDE.cost)) return true;
   Object.assign(sable, { landed: false, perfectUsed: false, string: 0, slid: 0 });
   hero.running = false;
+  hero.vx = 0;
   newSwing();
   setState("slide");
-  dust(hero.x, hero.y, 4, -hero.face);
   sfx.dodge();
   return true;
 }
@@ -109,12 +127,18 @@ function hopShot(): void {
   sfx.swing(1.7);
 }
 
-/** the hop carries her back at one speed; the clip holds its air key until she lands, then the knees take it */
+/** the hop loads on the floor, then carries her back at one speed; the clip holds its air key until she lands, then
+ *  the knees take it */
 export function runHop(): void {
   const h = hero;
   if (sable.landed) {
     if (h.st >= HOP.land + HOP.recover) settle();
     return;
+  }
+  if (!hop.launched) {
+    h.vx = 0;
+    if (h.st < HOP.load) return;
+    pushOff();
   }
   if (!sable.hopShot && h.st >= HOP.shot) hopShot();
   h.vx = -h.face * HOP.speed * progress.stats.move * (skillValues("s_hopVolley").carry ?? 1);
@@ -160,11 +184,19 @@ function rise(): void {
   }
 }
 
-/** low along the floor at one speed, then she rises out of it */
+/** seconds from the press to the end of the glide: the plant, then the glide, longer with Slide Kick */
+export const slideEnd = (): number => SLIDE.load + (skillValues("s_slideKick").time ?? SLIDE.time);
+
+/** she plants and drops, glides low along the floor at one speed, then rises out of it */
 export function runSlide(): void {
   const h = hero;
-  const time = skillValues("s_slideKick").time ?? SLIDE.time;
+  const time = slideEnd();
+  if (h.st < SLIDE.load) {
+    h.vx = 0;
+    return;
+  }
   if (h.st < time) {
+    if (h.vx === 0) dust(h.x, h.y, 4, -h.face);
     h.vx = h.face * SLIDE.speed * progress.stats.move;
     if (Math.floor(h.st * 30) % 3 === 0) dust(h.x - h.face * 4, h.y, 1, -h.face);
     if (skillValues("s_slideKick").power) trip();
@@ -180,5 +212,4 @@ export function runSlide(): void {
 
 /** the hop flies and the slide glides under her own speed */
 export const evadeDrives = (): boolean =>
-  (hero.state === "hop" && !sable.landed) ||
-  (hero.state === "slide" && hero.st < (skillValues("s_slideKick").time ?? SLIDE.time));
+  (hero.state === "hop" && !sable.landed) || (hero.state === "slide" && hero.st < slideEnd());

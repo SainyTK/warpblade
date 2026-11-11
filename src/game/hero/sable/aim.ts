@@ -1,3 +1,4 @@
+import { BEAT_DRAW } from "../../../constants/clips/sable/shoot";
 import { AIM_ANGLE, AIM_ASSIST, AIM_PICK, BOLT, MUZZLE } from "../../../constants/sable/bolt";
 import type { Enemy } from "../../../types/enemy";
 import type { SableAim } from "../../../types/sable";
@@ -36,14 +37,16 @@ export function autoAim(range = BOLT.range): SableAim {
   return a > AIM_PICK.airLevel ? "low" : "level";
 }
 
-/** where a bolt leaves the crossbow and at what angle, for an aim, in world pixels and radians */
-export function muzzle(aim: SableAim): { x: number; y: number; angle: number } {
+/** where a bolt leaves the crossbow and at what angle, for an aim and the string's beat (whose draw shifts the crossbow
+ *  a little), in world pixels and radians */
+export function muzzle(aim: SableAim, beat?: number): { x: number; y: number; angle: number } {
   const air = aim === "low" && !hero.ground;
   const m = air ? MUZZLE.air : MUZZLE[aim];
   const a = air ? AIM_ANGLE.air : AIM_ANGLE[aim];
   const angle = hero.face > 0 ? a : Math.PI - a;
-  const x = hero.x + hero.face * m.x;
-  const y = hero.y + m.y;
+  const draw = beat === undefined ? { fx: 0, fy: 0 } : BEAT_DRAW[beat];
+  const x = hero.x + hero.face * (m.x + draw.fx);
+  const y = hero.y + m.y + draw.fy;
   const to = assisted(y, angle);
   if (to === angle) return { x, y, angle };
   // a bent shot leaves from the chest side of the crossbow toward its foe
