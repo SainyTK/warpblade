@@ -5,6 +5,7 @@ import { particles, rng } from "../../game/state";
 import { PK } from "../../types/particle";
 import { mix, WHITE } from "../../utils/color";
 import { drawFireflies, drawMoon } from "./night";
+import { paintMoon } from "./night/moon";
 import type { SceneDef } from "./sceneDef";
 import { PLANET_AT, PLANET_FROM, paintMoonRing, paintPlanet } from "./twilight/celestial";
 import { FLAME_MAGIC, FLAME_NIGHT, MOON_HALO, PLANET_LIGHT } from "./twilight/colors";
@@ -41,6 +42,7 @@ export const twilight: SceneDef = {
     const veil = veilAt(k);
     const horizon = P.sky[P.sky.length - 1];
     paintSky(paint, P, veil, haloAt(k));
+    paintMoon(paint);
     paintTears(paint, r, k);
     paintMoonRing(paint, k);
     paintPlanet(paint, k);

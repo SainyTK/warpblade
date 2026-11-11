@@ -105,7 +105,7 @@ function braziers(bg: Uint32Array, P: ScenePalette): void {
  * The static scene of one era at progress k, built when the wave changes: painted part by part in art pixels, each
  * part's pixels noted in a layer map, then developed into the frame's full detail, where the era adds its fine detail.
  */
-export function buildBackground(def: SceneDef, k: number): Uint32Array {
+export function buildBackground(def: SceneDef, k: number): { plate: Uint32Array; layers: Uint8Array } {
   const bg = new Uint32Array(N);
   const layers = new Uint8Array(N);
   const before = new Uint32Array(N);
@@ -134,5 +134,5 @@ export function buildBackground(def: SceneDef, k: number): Uint32Array {
   painted((i) => (layers[i] |= DECORATED));
   const plate = developPlate(bg, layers, P);
   def.detail?.(new PlatePaint(plate, layers), new Rng(SEEDS.detail), k);
-  return plate;
+  return { plate, layers };
 }

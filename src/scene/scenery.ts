@@ -16,6 +16,8 @@ interface Look {
   def: SceneDef;
   k: number;
   bg: Uint32Array;
+  /** the layer of each art pixel of bg */
+  layers: Uint8Array;
 }
 
 /** the wave whose look the stage wears: the one being fought, or during the lull the one about to come */
@@ -24,7 +26,7 @@ export function sceneWave(): number {
   return clamp(wave, 1, STAGE_WAVES);
 }
 
-function lookFor(wave: number): Omit<Look, "bg"> {
+function lookFor(wave: number): Omit<Look, "bg" | "layers"> {
   const era = eraOf(wave);
   const k = eraProgress(wave);
   return { key: `${era.id}:${k}`, def: SCENES[era.id], k };
@@ -48,13 +50,21 @@ export function scene(): { def: SceneDef; k: number } {
   return { def: c.def, k: c.k };
 }
 
+/** the finished static picture of the scene being shown, at full detail, with the layer of each art pixel */
+export function scenePlate(): { plate: Uint32Array; layers: Uint8Array } {
+  if (!current) refresh();
+  const c = current as Look;
+  return { plate: c.bg, layers: c.layers };
+}
+
 /** rebuild the background when the wave's look differs from the one shown, and start the dissolve */
 function refresh(): void {
   const next = lookFor(sceneWave());
   if (current && current.key === next.key) return;
   previous = current ? sceneBackground().slice() : null;
   const first = !current;
-  current = { ...next, bg: buildBackground(next.def, next.k) };
+  const built = buildBackground(next.def, next.k);
+  current = { ...next, bg: built.plate, layers: built.layers };
   fade = first ? 1 : 0;
   for (const fn of listeners) fn();
 }
