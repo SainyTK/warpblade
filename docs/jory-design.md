@@ -187,17 +187,20 @@ Saves: coins, shop levels, unlocked heroes and options load as before; the new t
 
 Mash bot from wave 1, deterministic runs, after all of tonight's changes:
 
-| Hero | Baseline wave, kills | Tonight wave, kills |
+| Hero | Baseline wave, kills, game s | Tonight wave, kills, game s |
 | --- | --- | --- |
-| Kael | 5, 14 | BOT_KAEL |
-| Ysra | 5, 17 | BOT_YSRA |
-| Sable | 5, 17 | BOT_SABLE |
-| Hulda | 5 | BOT_HULDA |
-| Orrin | 5 | BOT_ORRIN |
-| Mirel | 5 | BOT_MIREL |
-| Wenna | 5 | BOT_WENNA |
-| Tallis | 3, 9 | BOT_TALLIS |
-| Jory | | BOT_JORY |
+| Kael | 5, 14, 82.6 | 5, 14, 82.6 |
+| Ysra | 5, 17, 77.1 | 5, 17, 77.1 |
+| Sable | 5, 17, 73.7 | 5, 17, 73.7 |
+| Hulda | 5, 14, 104.4 | 5, 14, 104.4 |
+| Orrin | 5, 18, 75.1 | 5, 18, 75.1 |
+| Mirel | 5, 18, 81.4 | 5, 18, 81.4 |
+| Wenna | 5, 15, 87.1 | 5, 15, 87.1 |
+| Tallis | 3, 9, 67.1 | 3, 9, 67.1 |
+| Jory | | 4, 11, 98.4 |
+
+The other eight heroes play exactly as before.
+Jory falls on wave 4, within two waves of every hero and past the plan's floor of wave 3, so his stats stay as planned.
 
 The mash bot only mashes J, so Jory never builds Groove and plays at tier 1 throughout: the floor of his kit.
 No fallback step was needed.
