@@ -82,6 +82,9 @@ export const STAGGER = {
   friction: 6,
   /** a struck foe is drawn knocked this many pixels away from the hero, easing back while its hit flash lasts */
   kick: 2,
+  /** a staggered foe is drawn tipped away from the hero: image pixels per row of height, eased out over `leanEase` seconds */
+  lean: 0.14,
+  leanEase: 0.15,
 } as const;
 
 /** The hit counter: the hero's hits in a row, shown from `from` hits, lost after `window` seconds without one or when hurt */

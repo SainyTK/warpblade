@@ -12,6 +12,8 @@ export const FN = FW * FH;
 export const GROUND = 156;
 /** the simulation steps at 120 Hz whatever the display rate */
 export const STEP = 1 / 120;
+/** game seconds that pass in one real second: the whole fight, heroes, foes and effects alike, plays at this pace */
+export const PACE = 0.8;
 export const MAX_FRAME = 0.05;
 
 export const PLATFORMS: readonly Platform[] = [

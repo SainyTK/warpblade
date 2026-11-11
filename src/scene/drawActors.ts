@@ -110,7 +110,10 @@ export function drawEnemies(): void {
       e.state === "wind" || e.state === "volley" || e.state === "charge" || (e.state === "leap" && e.vy === 0);
     const tremble = winding ? (Math.floor(game.t * 30) % 2 ? 1 : -1) : 0;
     // a struck foe is knocked away from the hero and eases back while its hit flash lasts
-    const recoil = (Math.sign(e.x - hero.x) || 1) * STAGGER.kick * clamp(e.flash / HIT_FLASH.life);
+    const away = Math.sign(e.x - hero.x) || 1;
+    const recoil = away * STAGGER.kick * clamp(e.flash / HIT_FLASH.life);
+    // a staggered foe tips back from the blow and rights itself as the stagger runs out
+    const lean = e.air || e.stun > 0 ? 0 : away * STAGGER.lean * clamp(e.stagger / STAGGER.leanEase);
     const at = e.x + tremble + recoil;
     const time = timeTint(e);
     const tint =
@@ -118,7 +121,7 @@ export function drawEnemies(): void {
     const struck = HIT_FLASH.rest + (HIT_FLASH.peak - HIT_FLASH.rest) * clamp(e.flash / HIT_FLASH.life);
     const tintAmount = e.flash > 0 ? struck : e.frozen > 0 ? 0.5 : time.amount ? time.amount : e.chill > 0 ? 0.3 : 0;
     if (e.elite) drawEliteRing(e, s, at);
-    blit(s, at, e.y, e.face < 0, { tint, tintAmount });
+    blit(s, at, e.y, e.face < 0, { tint, tintAmount, lean });
     place();
     const [cx, cy] = enemyCenter(e);
     glow(cx, cy, kind.glow.radius, kind.glow.color, winding ? 0.5 : 0.22);

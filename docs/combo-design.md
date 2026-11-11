@@ -24,7 +24,8 @@ Every hero's blows go through the same three rules, in `src/game/enemies/stagger
 - Mini bosses and bosses never stagger, so their attacks still have to be dodged.
 - A minion staggered 7 blows in a row (an elite 4) braces: sparks fly off it and it cannot be staggered for 1.6 seconds, so no string holds one foe forever. The count starts again after a second without a stagger.
 - Guard: a guarding foe blocks the first frontal light blow, and the second in a row breaks through and staggers it. A heavy blow still knocks the guard down at once. A staggered foe cannot guard.
-- A struck foe is drawn knocked 2 pixels away from the hero and eases back while its hit flash lasts.
+- A struck foe is drawn knocked 2 pixels away from the hero and eases back while its hit flash lasts. A staggered foe is drawn tipped back from the blow and rights itself as the stagger runs out.
+- Pace: the whole fight runs at `PACE` (0.8, `src/constants/stage.ts`) of real time, heroes, foes and effects alike, so every number in the constants is in game seconds and takes 1.25 times as long on screen. Hit-stop is counted in real time.
 - Hit counter: the hero's own hits in a row show at the right of the stage from 3 hits, pop on each hit and change colour at 10, 25 and 50. Two seconds without a hit, or a blow taken, ends the row. It counts the same hits Flow counts.
 - Burning ground and brands that used to slow walkers through `stagger` now use `halt`, which only holds a walker's feet.
 
