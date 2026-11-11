@@ -30,7 +30,7 @@ Numbers here are starting values; balance changes them in the constants files an
 
 ## Combo
 
-- `CharacterDef.comboHits` fixes the length of the ground string for the whole run: Kael 4, Ysra 3, Sable, Hulda, Orrin, Mirel, Wenna and Tallis chosen by their designers (2 to 4).
+- `CharacterDef.comboHits` fixes the length of the ground string for the whole run: Kael 4, Ysra 3, Sable, Hulda, Orrin, Mirel, Wenna, Tallis and Jory chosen by their designers (2 to 4).
 - Attack skills change the string's damage, speed and on-hit effects, never its length.
 - The air string limit is fixed per hero or raised by one movement skill; the hero designer chooses.
 
@@ -217,6 +217,7 @@ Targeting helpers: `nearestFoe`, `foesOnScreen`, `distance2` and `touches` in `s
 | `echo`, `field`, `rewind`, `toll`, `restart` | `foe` and `blow`; `open`, `foes`, `x`, `y` and `radius`; `healed`, `from` and `to`; `foes`; `foe` | Mirel's echo striking a foe, her Stillfield opening or closing, a Rewind ending and a Toll landing, and the shared stop status when a foe she stopped restarts (declared in `src/types/mirel.ts`) |
 | `wick`, `swap`, `quarry`, `kindle`, `bite` | `x`, `y`, `lit`, `cause` and `wick`; `from`, `to` and `wick`; `foe`; `x`, `y` and `foes`; `foe`, `wick` and `damage` | Wenna's Wick lit or ended, a Swap arriving, a foe becoming her Quarry, a Wick bursting under Kindle and a Wick's bite (declared in `src/types/wenna.ts`) |
 | `veil`, `sink`, `ambush`, `backstab` | `on` and `cause`; `from` and `to`; `foe`; `foe` and `kill` | Tallis's Veil coming on or ending, a Sink ending in a rise, an Ambush landing and one of his blows from behind landing (declared in `src/types/tallis.ts`) |
+| `beat`, `accent`, `boom`, `tier`, `tick` | `onBeat`, `button`, `groove` and `downbeat`; `foe`, `blow` and `downbeat`; `onBeat` and `foes`; `from` and `to`; `beats` and `downbeat` | Jory's judged press of J, K, L or I, an Accent landing, a Boom striking, his Groove tier changing and a beat of his clock going by (declared in `src/types/jory.ts`) |
 | `kill` | `foe`, `source` | `killEnemy`, when the killing hit has a source |
 | `hurt` | `damage`, `fromX` | `hurtHero`, when HP is lost |
 | `ultimate` | `level` | the shared ultimate release |

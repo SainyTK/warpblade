@@ -10,7 +10,7 @@ const SASH_POINTS = 6;
 const HOOD_POINTS = 3;
 
 /** a headband's two short ends ride the first points of the ponytail's rope, in the scarf colours */
-const HEADBAND_POINTS = 4;
+const HEADBAND_POINTS = 3;
 
 /** a scarf end under a hood uses the first points of the scarf's rope */
 const SCARF_END_POINTS = 5;
@@ -70,6 +70,21 @@ function drawHoodPoint(s: SpriteCanvas, tail: readonly Vec[]): void {
   s.commit(false);
 }
 
+/** a headband's two thin ends tied at the back of the head, trailing along the first points of the ponytail's rope */
+function drawHeadbandEnds(s: SpriteCanvas, tail: readonly Vec[]): void {
+  const n = Math.min(tail.length, HEADBAND_POINTS);
+  s.begin();
+  for (let i = 1; i < n; i++) {
+    const [a, b] = [tail[i - 1], tail[i]];
+    // the two ends part a little as they trail
+    const part = i * 0.45;
+    s.stroke(a[0], a[1] - part + 0.45, b[0], b[1] - part, 0.5, HC.scarf);
+    s.stroke(a[0], a[1] + part - 0.45, b[0], b[1] + part, 0.5, HC.scarf);
+  }
+  s.shadeEdges(HC.scarf, HC.scarfLight, HC.scarfDark);
+  s.commit(false);
+}
+
 /** the scarf along its rope, or its first `points`, with a light top edge and a shadowed underside */
 function drawScarf(s: SpriteCanvas, scarf: readonly Vec[], points = scarf.length): void {
   const n = Math.min(scarf.length, points);
@@ -92,7 +107,7 @@ export function drawTrails(s: SpriteCanvas, tail: readonly Vec[], scarf: readonl
   }
   if (skin.bun) return drawBun(s, tail);
   if (skin.headband) {
-    drawScarf(s, tail, HEADBAND_POINTS);
+    drawHeadbandEnds(s, tail);
     return drawSash(s, scarf);
   }
   s.begin();

@@ -5,8 +5,8 @@ import { atHip, farShoulder } from "../../../utils/poseFrame";
 import type { Vec } from "./reach";
 
 /** the drum in local art pixels: its depth along its axis and the radius of its heads */
-const DRUM_DEPTH = 5;
-const DRUM_RADIUS = 3.5;
+const DRUM_DEPTH = 5.5;
+const DRUM_RADIUS = 4;
 /** where its middle sits: at the hip, and in front of the belly with its head up */
 const AT_HIP: Vec = [1.5, 1.5];
 const IN_FRONT: Vec = [6.5, -1.5];
@@ -69,7 +69,7 @@ export function drawDrum(s: SpriteCanvas, p: Pose): void {
   s.shadeEdges(PEWTER, HC.steelGlint, HC.steelDark);
   s.commit();
   // the head facing out: a thin pale lens at the forward end while level, opening to an oval on top as it turns up
-  const open = 0.6 + k * 1.6;
+  const open = 1.3 + k * 1;
   const head = at(half + 0.2, 0);
   s.begin();
   const lens: Vec[] = [];

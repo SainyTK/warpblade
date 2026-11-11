@@ -28,7 +28,7 @@ export const s = (p: Partial<Pose>): Pose => ({ ...STANCE, ...p });
 export const RIDE_DOWN: Pose = s({ fx: 6.5, fy: -16, sa: -0.35 });
 
 /** the beat ride, up: the near mallet raised over the shoulder, peaking just before the beat */
-export const RIDE_UP: Pose = s({ fx: 3.8, fy: -21, sa: -1.95, ny: -23.8 });
+export const RIDE_UP: Pose = s({ fx: 7, fy: -20, sa: -1.3, ny: -23.8 });
 
 /** the nod on the beat: the head and shoulders drop a little and come back */
 export const NOD: Partial<Pose> = { ny: 0.8, nx: 0.3, hy: 0.3, fy: 0.4, by: 0.4 };

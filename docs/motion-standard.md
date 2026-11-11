@@ -74,7 +74,8 @@ The stride length is a constant next to the clip (`STRIDE` for Kael); a faster h
 ## Where Kael meets it
 
 Kael's pose layer is `src/game/hero/kael/`: his kit's `pose` wraps the shared clips with the rules above, so Ysra's path is untouched.
-Sable, Tallis, Wenna, Orrin and Mirel pose through the same layer, so they share the travel load, the stop settle and the stepping feet.
+Sable, Tallis, Wenna, Orrin, Mirel and Jory pose through the same layer, so they share the travel load, the stop settle and the stepping feet.
+Jory's idle rides his beat instead of a clip clock: the near mallet rises through the second half of each beat and taps down on it, and his head nods on the beat in his idle, walk and run (`src/game/hero/jory/pose.ts`).
 `jumpClock.ts` runs the jump clip on the rise, so the top key lands on the real apex of every jump, hop and double jump.
 `landing.ts` plays the landing clip (`SETTLE_CLIPS.land`) or a hip dip in a stride, scaled by the fall speed.
 `handover.ts` crosses every change of clip or facing, with lengths in `HANDOVER_FRAMES` and `TURN_FRAMES` (`src/constants/kael/motion.ts`).
