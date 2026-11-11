@@ -84,7 +84,7 @@ Its rose edge glows while he is Unseen, so the player can read when it refills, 
 - K costs 20 Gloam to raise and drains 8 a second. With under 20 the press is refused: the GL bar blinks and the shared deny tick plays.
 - It ends on K again, at 0 Gloam, when a blow lands on him, or 0.2 s after his first blow from the Veil. After it ends, K waits 1.0 s; a press in that wait gets the same deny cue.
 - It works on the floor and in the air, with no cast time: the knees and shoulders dip over 3 frames as the hood comes down, with a puff of ink.
-- While veiled: `hidden()` is true, his sprite draws at 0.35 alpha inside a 1 px rose outline that shimmers (the new kit hook `heroRing`), thin ink wisps rise from his shoulders, and his walk is 15% faster.
+- While veiled: `hidden()` is true, he is drawn as a shadow form (an ink body the scene shows through, his lit edges kept as rose line work, a rim brightest at the hood, legs fraying into rising wisps), and his walk is 15% faster.
 - Ambush: his first knife blow out of the Veil, or the first within 0.5 s after rising from Sink behind a foe, is a sure crit, shown in the crit style. It emits kit event `ambush`.
 - The Veil emits kit event `veil` with `on` and `cause` (`press`, `empty`, `hurt`, `strike`, `free` or `leap`).
 
@@ -99,7 +99,7 @@ Its rose edge glows while he is Unseen, so the player can read when it refills, 
 - A blow in the first 0.12 s of the Sink is a perfect dodge (`rewardPerfectDodge()`, once per Sink).
 - The rise calls `travelEnded()` (Aftershock) and emits `dash` with the direction travelled, plus kit event `sink` with `from` and `to`.
 - In the air, L drops him straight down at 360 px/s, and he sinks on landing if L is still held.
-- Look: his body pours down into the pool over 3 frames as the knees bend and the coat folds in, fading out as it goes. The pool is a dithered ink oval in the gloam ramp with a rose rim and two rose eye pixels. The rise reverses the pour.
+- Look: the shadow form squashes down into the pool as the knees bend and the coat folds in. The pool is an ink oval in the gloam ramp at image pixel detail, with a paler lip, sliding glints, a ripple and two rose eyes. The rise reverses the pour.
 
 ## J: the knife string
 
@@ -144,7 +144,7 @@ Smoke Knot: 18 MP, 8 s recharge.
 - He drops a knot at his feet and a cloud 72 px wide and 40 px tall stands for 3 s.
 - Minions and elites inside are blind (`e.blind` refreshed to 0.3 s each frame they are inside), so they do not turn or start a wind-up.
 - He counts as hidden while he stands inside it, and as Unseen for Gloam.
-- Look: puffs of smoke dithered on the art pixel grid in the gloam ramp, dense at the heart and broken up at the edges, the cloud's upper edge lit rose, rolling outward over 0.2 s, curling, and thinning over the last 0.5 s.
+- Look: round shaded billows of smoke in the gloam ramp, blended so a foe inside still shows as a shape, a rose crescent on each billow's lit side, rolling outward over 0.2 s, curling, and thinning over the last 0.5 s.
 
 Hamstring: 14 MP, 4 s recharge.
 
@@ -227,7 +227,7 @@ Vitality: his HP. Honed Edge: every knife blow, Rising Cut, Drop Stab and Gloami
 
 Gloam, the Veil, Sink and its wait, the Ambush window and the selected ability live in kit seat memory (`rememberPerSeat(objectMemory(...))`).
 His clouds, marks and the foes his special strikes are kept to the host.
-A veiled Tallis in a room draws at 0.35 alpha with his rose outline on every screen, since guests watch the host's picture, and his player ring still shows.
+A veiled Tallis in a room shows as his shadow form on every screen, since guests watch the host's picture, and his player ring still shows.
 Foes go for a visible hero first (the `nearest` change above).
 
 ## What stays unchanged
@@ -286,7 +286,7 @@ The skilled bot still ends on wave 2 with 4 kills, losing 54 HP on wave 1: it ta
 - The plan named Smoke Knot, a base ability, as the evolution partner of Ambush (Night Hunter) and Quiet Step (Phantom Walk). A partner must be one of his 20 skills, so Night Hunter evolves with Quiet Step and Phantom Walk with Night Leap.
 - Several level tables in the plan added fewer than four new properties. Each such skill gained one small property where a number step was, recorded in `docs/skills/tallis.md`: Ambush refunds 15 Gloam, Turnabout holds a turned foe 0.5 s and staggers, Plunge's ring stuns, Cut Tendon chills, Quiet Step's veiled blows give 4 Gloam, Night Leap blinds the minions under the leap, Needle Fan chills, Caltrops trip a foe once, Open Veins slows and spreads, Nightshade bursts on death, Ink Wound slows, Gloam Crows bleed, Shadow Double's last stab stuns, Hollow Wraith blinds and bursts, and Eclipse leaves a Smoke Knot.
 - J under a hovering flier springs into Rising Cut (see the bot check above).
-- The Veil's outline is drawn through a new optional kit hook, `heroRing`, since the kit's `draw` has no access to the hero's sprite.
+- The Veil's shadow form is drawn by his kit from its own copy of the hero's sprite, since the kit's `draw` has no access to the hero layer's sprite.
 - A foe that cannot see the hero walks on past him and does no harm by touch; without it a husk stopped on top of a veiled Tallis and stood there.
 - Gloaming's dark dims the scene's additive light as well as its colour, since in the daylight eras the sun's light washed out a dark drawn on the colour alone.
 - He rises from the pool facing the back he came up behind, so the Ambush window can be used without turning round first.

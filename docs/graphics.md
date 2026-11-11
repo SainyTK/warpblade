@@ -10,8 +10,8 @@ Game positions, hitboxes and effect coordinates are in art pixels.
 Everything is drawn in software into two buffers in `src/engine/frame.ts`.
 The color buffer holds one opaque color per image pixel.
 The light buffer holds additive light per art pixel.
-`composite` adds the light to the color through a curve: dim light adds one for one, strong light eases toward white.
-A burst's core therefore keeps its hue and its shape, and stacking more glow on it adds little.
+`composite` adds the light to the color through a curve: dim light adds one for one, and stacked light eases toward a cap well short of white (`TONE_MOST`).
+Light alone never turns a dark pixel white, so outlines under a burst stay readable, and stacking more glow on one spot adds little.
 Put the brightest part of an effect in the color buffer as pixels, and use light for the bloom around it.
 
 Drawing order is in `src/scene/renderScene.ts`: static scene, ambient light, effects behind, shadows, foes, heroes, effects in front, particles, pickups, weather, mist, flaring lights, numbers.
@@ -20,12 +20,10 @@ Drawing order is in `src/scene/renderScene.ts`: static scene, ambient light, eff
 
 `src/scene/background.ts` paints the scene part by part in art pixels and notes each pixel's layer (`LAYER` in `src/scene/plate.ts`): sky, celestial, ridge, tower, ground, slab, prop.
 `developPlate` turns that picture into the full detail plate: Scale2x half steps on slopes and curves, sky bands dithered on the image grid, haze on the ridge and towers toward the horizon color, and weathering on stone.
+The world beyond the stage (`src/scene/backdrop.ts`) mirrors this plate outward without its slabs and braziers, so whatever an era paints continues past the edge.
 An era then paints fine detail on the plate through `SceneDef.detail`, with a `PlatePaint` that can hold a write to chosen layers.
 The plate is built once when the wave's look changes, so anything static costs nothing per frame.
 Prefer the plate for anything that does not move.
-
-The world beyond the stage (`src/scene/backdrop.ts`) is drawn from the same terrain functions at one sample per art pixel.
-Anything that reaches the stage's edge should also exist there, or the edge shows.
 
 ## Sprites
 

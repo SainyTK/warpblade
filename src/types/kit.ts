@@ -65,8 +65,6 @@ export interface HeroKit {
   drawOver?(): void;
   /** how visible the hero's sprite is right now, 0 to 1 (gone mid-Swap); left out, 1 */
   heroAlpha?(): number;
-  /** a 1 px ring drawn round the hero's sprite in this colour right now (Tallis's Veil); left out or null, none */
-  heroRing?(): Color | null;
   /**
    * foes cannot see the hero right now (Tallis's Veil and shadow pool): minions lose them, mini bosses turn slower, and
    * in a room foes go for a hero they can see (game/enemies/awareness.ts); left out, always seen
