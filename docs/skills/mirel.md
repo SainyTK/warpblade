@@ -65,12 +65,12 @@ Evolution: **Choir of Hours** (partner `m_patience`). Every blow echoes three ti
 
 attack, timed, J. Toll, the third blow of her string, rings harder and wider.
 
-Values: power: share more Toll deals; ring: pixels Toll's ring grows; launch: 1 Toll launches minions; sand: Sand Toll gives for each foe it hits; guard: 1 Toll breaks guards; field: 1 Toll also rings at the centre of her Stillfield; midnight: 1 Toll rings twelve times over 1.2 s, 0.4x of Toll each and the twelfth 3x (evolution)
+Values: power: share more Toll deals; ring: pixels Toll's ring grows; launch: 1 Toll throws minions high in place of its knockdown; sand: Sand Toll gives for each foe it hits; guard: 1 Toll breaks guards; field: 1 Toll also rings at the centre of her Stillfield; midnight: 1 Toll rings twelve times over 1.2 s, 0.4x of Toll each and the twelfth 3x (evolution)
 
 | Lv | Change | Card |
 | --- | --- | --- |
 | 1 | power 0.25, ring 6 | Toll deals 25% more; its ring grows 6 px. |
-| 2 | launch 0 to 1 | Toll launches minions. |
+| 2 | launch 0 to 1 | Toll throws minions high. |
 | 3 | power 0.25 to 0.6 | Toll deals 60% more. |
 | 4 | sand 0 to 5 | Toll gives 5 Sand for each foe hit. |
 | 5 | guard 0 to 1 | Toll breaks guards. |

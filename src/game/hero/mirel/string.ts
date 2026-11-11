@@ -123,7 +123,8 @@ export function pressString(): boolean {
 /** the clock of a blow: attack speed, and Quickened on top */
 const blowRate = (): number => progress.stats.aspd * quickRate() - 1;
 
-/** the blow under way: it strikes on its hit frame, and when it ends a queued press carries the string on */
+/** the blow under way: it strikes on its hit frame, and when it ends a queued press carries the string on, or after
+ *  Toll starts the next string */
 export function runString(dt: number): void {
   const h = hero;
   h.st += dt * blowRate();
@@ -133,11 +134,12 @@ export function runString(dt: number): void {
     strikeNow();
   }
   if (h.st < b.dur) return;
-  const next = mirel.blow < STAFF_STRING.length - 1 ? mirel.blow + 1 : -1;
-  if (mirel.queued && next >= 0) return startBlow(next);
+  const last = mirel.blow >= STAFF_STRING.length - 1;
+  const next = last ? 0 : mirel.blow + 1;
+  if (mirel.queued) return startBlow(next);
   settle();
-  mirel.blow = next >= 0 ? next : 0;
-  mirel.link = next >= 0 ? STAFF_LINK : 0;
+  mirel.blow = next;
+  mirel.link = last ? 0 : STAFF_LINK;
 }
 
 /** a blow's recovery after it struck can be cut short by a jump, a Rewind or the field */

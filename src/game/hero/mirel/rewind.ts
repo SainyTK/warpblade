@@ -181,7 +181,9 @@ export function runRewind(): void {
   const points = mirelHost.rewound;
   // Light Boots play the path back faster
   const u = Math.min(1, h.st / (REWIND.play / progress.stats.move));
-  const p = points[Math.min(points.length - 1, Math.floor(u * (points.length - 1)))];
+  // the pull starts slow and eases into the stop, so the body loads before it travels and settles after
+  const eased = u * u * (3 - 2 * u);
+  const p = points[Math.min(points.length - 1, Math.floor(eased * (points.length - 1)))];
   if (p) Object.assign(h, { x: p.x, y: p.y, face: p.face, vx: 0, vy: 0, ground: false });
   const before = h.st - STEP;
   if (Math.floor(h.st / GHOST_EVERY) !== Math.floor(before / GHOST_EVERY)) dropMoveGhost();

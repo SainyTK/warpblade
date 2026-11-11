@@ -5,23 +5,28 @@ import {
   HAND_CLIP,
   HOUR_CLIP,
   NOON_CLIP,
-  REWIND_POSE,
+  REWIND_CLIP,
   SPELL_CLIP,
   STILL_CAST,
 } from "../../../constants/clips/mirel/moves";
+import { MIREL_SETTLE } from "../../../constants/clips/mirel/settle";
 import { STAFF_CLIPS } from "../../../constants/clips/mirel/staff";
 import { CHARGE_POSE, HOVER_POSE, MIREL_IDLE } from "../../../constants/clips/mirel/stance";
 import { KAEL_WOUNDED_IDLE } from "../../../constants/clips/wounded";
+import { REWIND } from "../../../constants/mirel/rewind";
 import type { Hero } from "../../../types/hero";
 import type { ActionClip, Pose } from "../../../types/pose";
 import { sampleKeys } from "../../../utils/sampleKeys";
 import { objectMemory, rememberPerSeat } from "../../seatMemory";
+import { progress } from "../../state";
 import { clipPose } from "../clipPose";
 import { clipKey, handOver, watchHandover } from "../kael/handover";
 import { jumpClock } from "../kael/jumpClock";
-import { landingPose, watchLanding } from "../kael/landing";
+import { watchLanding } from "../kael/landing";
 import { motion } from "../kael/motion";
 import { woundedIdle, woundWeight } from "../wound";
+import { takeoffTime } from "./jump";
+import { mirelLanding, settleRewind } from "./landing";
 import { mirel } from "./memory";
 
 /** frames the hover crosses in over from the fall pose, and back out */
@@ -60,7 +65,8 @@ function statePose(h: Hero, t: number, fresh: boolean, dt: number, wound: number
     case "stillCast":
       return play(h, STILL_CAST);
     case "rewind":
-      return REWIND_POSE;
+      // Light Boots play the path back faster, and the clip with it
+      return sampleKeys(REWIND_CLIP.keys, Math.min(REWIND.play, h.st * progress.stats.move));
     case "clockCast":
       return play(h, CLOCK_CLIP);
     case "handCast":
@@ -73,7 +79,11 @@ function statePose(h: Hero, t: number, fresh: boolean, dt: number, wound: number
       return play(h, NOON_CLIP);
     case "charge":
       return CHARGE_POSE;
+    case "walk":
     case "idle": {
+      const push = takeoffTime();
+      if (push >= 0) return sampleKeys(MIREL_SETTLE.takeoff.keys, push);
+      if (h.state === "walk") return carried(h, clipPose(h, t));
       const wounded = sampleKeys(KAEL_WOUNDED_IDLE.keys, h.st % KAEL_WOUNDED_IDLE.dur);
       const idle = woundedIdle(sampleKeys(MIREL_IDLE.keys, h.st % MIREL_IDLE.dur), wounded, wound);
       return wound > 0 ? carried(h, idle) : idle;
@@ -99,12 +109,13 @@ export function mirelPose(h: Hero, t: number): Pose {
   const fresh = clipKey(h) !== m.clip || restarted;
   m.st = h.st;
   const landed = watchLanding(h, t);
+  if (m.clip === "rewind" && clipKey(h) === "idle") settleRewind(t);
   const base = statePose(h, t, fresh, dt, woundWeight(t));
   const hovering = mirel.hovering && h.state === "fall";
   const toggled = hovering !== shown.hover;
   shown.hover = hovering;
   watchHandover(h, t, restarted || toggled, landed ? 1 : toggled ? HOVER_FRAMES : undefined);
-  const p = handOver(landingPose(h, base, t), t);
+  const p = handOver(mirelLanding(h, base, t), t);
   m.last = p;
   return p;
 }
