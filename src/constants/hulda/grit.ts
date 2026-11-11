@@ -24,6 +24,6 @@ export const GRIT = {
   stop: 0.05,
   /** Iron Hide: a broken plate heals at most once in this many seconds */
   healEvery: 2,
-  /** seconds the plate-break flinch plays over her action */
-  flinch: 4 / 30,
+  /** seconds the plate-break flinch plays over her action: `FLINCH_NUDGE`'s length */
+  flinch: 8 / 30,
 } as const;

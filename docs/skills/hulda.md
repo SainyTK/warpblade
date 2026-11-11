@@ -15,9 +15,9 @@ Rates of ordinary play used in every number below, at attack speed 1:
 
 | Event | Rate | Basis |
 | --- | --- | --- |
-| J blow landed, one foe | 1.8 a second | The 3-blow string runs 35 frames (1.17 s); with walking back in after the haymaker's knockback about 70% of blows land. |
+| J blow landed, one foe | 2 a second | The 3-blow string runs 45 frames (1.5 game seconds) when J is pressed in time, and every blow lands on a lone foe. |
 | J foe-hits, crowd of 6 | 3.6 a second | Her box is 14 px wide, so a blow catches about 2 foes in a crowd. |
-| Haymaker landed | 0.6 a second | One per string. |
+| Haymaker landed | 0.67 a second | One per string. |
 | Grab and throw | 0.3 a second | A grab, three knees and a throw take about 1.6 s, plus the walk in. |
 | Bull Rush | 0.4 a second | 25 of 120 stamina, 0.4 s cooldown; her only travel move. |
 | Casts of one spell | 0.3 a second | MP income about 5.6 a second (2 regen, 2 per landed blow), shared over the rotation. |
@@ -37,9 +37,9 @@ Skyfall Breaker level 6 is the one skill that gives a second Skyfall after a cat
 
 | Key | Base kit |
 | --- | --- |
-| J | Fist string: jab 0.9x, body hook 1.3x (breaks guards), haymaker 2.8x (armoured wind-up, stun 0.5 s); short pushes so she stays in reach; the first blow faces the held direction or turns to a foe only behind her. In the air one hammer fist 0.9x that spikes. While holding a foe, a knee 0.5x (up to 3). |
+| J | Fist string: jab 1.2x, body hook 1.7x (breaks guards), haymaker 3.67x (armoured wind-up, a step in, knocked down 0.8 s); the same string every time, pushes of a few pixels so she stays in reach; a new string faces the held direction and never turns by itself. In the air one hammer fist 0.9x that spikes. While holding a foe, a knee 0.5x (up to 3). |
 | K | Grab: holds a minion, crushes a mini or boss for 1.3x. While holding, the throw, picked by the situation (below). In the air, Skyfall Grab (catch, ride, slam 2.0x, ring 0.8x). |
-| L | Bull Rush: armoured shoulder charge the way she is pushed, 0.6x, a short shove and stun 0.4 s to each foe, 25 stamina. Once she has run into a foe and none waits ahead, it stops at the next stride and she wheels round to the foe, so a lone foe stays in reach. Still allowed out of a landed blow's recovery. |
+| L | Bull Rush: armoured shoulder charge the way she is pushed, 0.6x, a short shove and stun 0.4 s to each foe, 25 stamina. Once she has run into a foe and none waits ahead, it stops at the next stride, a step past the foe, and she ends facing the way she charged. Still allowed out of a landed blow's recovery. |
 | Up | One low jump. Down with Up drops through a ledge. |
 | I | The ability in the rotation: Bellow (20 MP, 4x AP, pulls foes in, drags fliers down) or Taunt (free, 3 s cooldown, 24 Grit over two slaps). |
 | O | Switches the I rotation. With no skill it switches between Bellow and Taunt. |
@@ -50,11 +50,12 @@ She suplexes (2.2x, 30 px ring 0.8x behind her) unless a foe stands within 100 p
 Alone with one foe she suplexes it for the most damage; facing a crowd she bowls the foe into it; surrounded from behind she slams it into them.
 The hold still runs out into a throw on its own.
 
-Base DPS (string only): 1.8 AD/s on one foe, 3.6 AD/s on a crowd.
+Base DPS (string only): 4.4 AD a game second while the string runs (6.57x over 45 frames, 4.3 before the slower string), 2 AD/s on one foe in ordinary play and 4 on a crowd.
 Grab and throw cycles add about 1.1 AD/s on one foe (3.7x every 3.3 s).
 
 The string drops the cross. Balance round 2 (`docs/skills/balance.md`) made the hook break guards and shortened the pushes.
 Its raise of the blows to 8.1x a string made up for contact the room's player lost; once the rush stopped carrying her past a lone foe they came back to 5.0x a string (round 3 in the balance file).
+The movement pass (11 November 2026) slowed the string from 35 to 45 frames and raised it to 6.57x, so its damage per game second stays within 3% of before.
 
 ## What goes away and where it went
 
@@ -138,7 +139,7 @@ attack, timed, J. The string's last blow becomes her big hit.
 | --- | --- | --- |
 | 1 | Haymaker +0.6x | The haymaker hits harder. |
 | 2 | On hit, a crack 24 px ahead: 0.5x to foes on the floor there | The haymaker cracks the floor ahead. |
-| 3 | +1.2x total, stun 0.9 s | Harder haymaker, longer stun. |
+| 3 | +1.2x total, stun 1.2 s | Harder haymaker, longer stun. |
 | 4 | Throws minions up (launch -260) | The haymaker throws minions up. |
 | 5 | +2.0x total, crack 48 px, 0.8x | Wider, harder crack. |
 | 6 | The crack also runs behind her | The crack runs both ways. |
