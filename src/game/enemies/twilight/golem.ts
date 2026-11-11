@@ -15,6 +15,7 @@ import { enemyBox } from "../enemy";
 import { facesHero, turnToHero } from "../facing";
 import { RUNE_RAMP, RUNE_SPARKS, TWILIGHT_COLORS as TC } from "./colors";
 import { createRuneWave } from "./runeWave";
+import { createSlamBurst } from "./slamBurst";
 
 /** golem blows before wave scaling */
 export const GOLEM_HITS = { punch: 17, wave: 14, touch: 8 } as const;
@@ -27,6 +28,7 @@ function slam(e: Enemy): void {
   const fx = e.x + e.face * 9;
   game.fx.push(createFloorRing(fx, GROUND, 26, RUNE_RAMP, 0.35));
   game.fx.push(createRuneWave(fx, e.face, GOLEM_HITS.wave * e.power));
+  game.fx.push(createSlamBurst(fx));
   dust(fx - 4, GROUND, 4, -1);
   dust(fx + 4, GROUND, 4, 1);
   for (let i = 0; i < 6; i++)

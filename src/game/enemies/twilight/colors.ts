@@ -5,6 +5,7 @@ import { hex, ramp, WHITE } from "../../../utils/color";
 export const TWILIGHT_COLORS = {
   outline: hex("#0b0a1a"),
   stoneDark: hex("#2a2b4c"),
+  stoneShade: hex("#35375c"),
   stone: hex("#41436c"),
   stoneLight: hex("#5d608e"),
   stoneRim: hex("#8f93c4"),
