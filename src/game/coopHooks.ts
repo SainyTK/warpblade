@@ -18,6 +18,9 @@ export interface CoopHooks {
   eachStanding(run: () => void): void;
   /** the place in the room of the hero in play */
   slot(): number;
+  /** seconds the hero in play's presses take to come back round to the host as a round trip: 0 for the host, -1 for a
+   *  guest not measured yet */
+  inputLag(): number;
   /** experience picked up by anyone goes to everyone */
   shareXp(amount: number): void;
   /** a wave was cleared */
@@ -56,3 +59,6 @@ export function eachStanding(run: () => void): void {
 
 /** which hero is in play, for a hazard that strikes each hero once: always 0 in solo play */
 export const heroSlot = (): number => hooks?.slot() ?? 0;
+
+/** the round trip of the hero in play's link, in seconds: 0 in solo play and for the host, -1 for a guest not measured */
+export const heroInputLag = (): number => hooks?.inputLag() ?? 0;

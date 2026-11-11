@@ -105,6 +105,8 @@ export function runDrumroll(dt: number): void {
   if (jory.rung < jory.rings) return;
   h.st = 0;
   raiseGroove(DRUMROLL.groove);
+  // the roll counts as playing: silence only starts to cost Groove once the grace has run out
+  jory.silent = -DRUMROLL.grace;
   const refund = skillValues("j_finale").refund ?? 0;
   if (refund) h.mp = Math.min(progress.stats.mp, h.mp + refund);
   const lock = skillValues("j_finale").lock ?? 0;

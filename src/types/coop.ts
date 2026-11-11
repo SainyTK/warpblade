@@ -49,6 +49,8 @@ export type GuestMessage =
   /** the guest has seen what their chest gave */
   | { t: "chestSeen" }
   | { t: "ping" }
+  /** the host's probe sent straight back, so the host can time the round trip */
+  | { t: "probe"; at: number }
   /** the guest is leaving, so the host need not wait for the link to go quiet */
   | { t: "bye" };
 
@@ -57,6 +59,8 @@ export type HostMessage =
   | { t: "welcome"; slot: number }
   | { t: "refuse"; reason: string }
   | { t: "lobby"; seats: SeatInfo[] }
+  /** a probe stamped with the host's clock, which the guest sends straight back */
+  | { t: "probe"; at: number }
   | { t: "start" }
   | { t: "hud"; hud: GuestHud }
   | { t: "end"; outcome: RunOutcome; wave: number; coins: number; report: RunReport }

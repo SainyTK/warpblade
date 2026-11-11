@@ -10,6 +10,8 @@ export interface Seat {
   character: CharacterDef;
   /** what this player bought in their own shop; null for the host, who wears their own */
   owned: Record<string, number> | null;
+  /** the guest's measured round trip in seconds, -1 until measured, 0 for the host */
+  rtt: number;
   /** the per-player memories while another seat is swapped in, in registration order */
   saved: unknown[];
   /** fell and waits for the wave to be cleared */

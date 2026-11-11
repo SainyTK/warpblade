@@ -19,7 +19,7 @@ const CORE = 1 / 30;
  */
 export function createAccentRing(x: number, y: number): Effect {
   let t = 0;
-  lights.add(x, y, 22, PAL.beat[3], 0.45, 0.14);
+  lights.add(x, y, 12, PAL.beat[3], 0.22, 0.1);
   return {
     update(dt) {
       t += dt;
@@ -33,8 +33,8 @@ export function createAccentRing(x: number, y: number): Effect {
       fineRing(x, y, r, r, PAL.beat[4], k * 1.6);
       if (r > 6) fineRing(x, y, r - 2, r - 2, PAL.beat[3], k);
       if (t < CORE) {
-        circle(x, y, 2, WHITE, 1);
-        glow(x, y, 8, PAL.beat[5], 0.5);
+        circle(x, y, 1, WHITE, 1);
+        glow(x, y, 4, PAL.beat[4], 0.25);
       }
     },
   };

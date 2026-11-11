@@ -28,8 +28,9 @@ export function createBoomRing(
 ): Effect {
   let t = 0;
   const seed = Math.floor(x * 5 + radius * 7);
-  lights.add(x, y, radius * 0.7, PAL.beat[3], loud ? 0.5 : 0.3, life);
-  lights.add(x, y, 10, WHITE, loud ? 0.6 : 0.35, 0.08);
+  // a dim cobalt light on the ring, and only a small white one at the drum head, so the drummer is never bleached
+  lights.add(x, y, radius * 0.6, PAL.beat[3], loud ? 0.22 : 0.15, life * 0.7);
+  lights.add(x, y, 5, WHITE, 0.2, 0.05);
   for (let i = 0; i < (loud ? 10 : 5); i++) {
     const side = rng.chance(0.5) ? 1 : -1;
     particles.spawn(
@@ -81,7 +82,7 @@ export function createBoomRing(
           if (bayerAt(sx, sy) > v * k * 0.5 || grain(sx, sy + seed) < 0.3) continue;
           putImage(sx, sy, PAL.beat[2], 0.6);
         }
-      if (t < 0.06) glow(x, y, 9, WHITE, 0.6);
+      if (t < 0.04) glow(x, y, 5, PAL.beat[4], 0.25);
     },
   };
 }

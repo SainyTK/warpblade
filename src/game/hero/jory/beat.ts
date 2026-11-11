@@ -4,7 +4,7 @@ import { sfx } from "../../../services/audio";
 import type { InputAction } from "../../../types/input";
 import type { BeatButton, BeatJudgement } from "../../../types/jory";
 import { beatSeconds, offBeat, tierOf } from "../../../utils/beat";
-import { heroSlot } from "../../coopHooks";
+import { heroInputLag, heroSlot } from "../../coopHooks";
 import { feat } from "../../feat";
 import { pressAge } from "../../input";
 import { emitSkillEvent } from "../../skills/events";
@@ -58,6 +58,13 @@ function windowNow(): number {
   return heroSlot() > 0 ? Math.max(own, BEAT.guestWindow + encore) : own;
 }
 
+/** the shift a guest's presses are judged with, in game seconds: its round trip and a video frame, or 0.12 s unmeasured */
+function guestLag(): number {
+  const rtt = heroInputLag();
+  if (rtt < 0) return BEAT.guestLag;
+  return Math.min(BEAT.guestLagMost, rtt + BEAT.videoFrame) * PACE;
+}
+
 /** the beat-clock time a button's waiting press was made, or now when it came this step */
 const stampOf = (button: BeatButton): number => {
   const at = jory[STAMPS[button]];
@@ -66,7 +73,7 @@ const stampOf = (button: BeatButton): number => {
 
 /** where a press made at this beat-clock time fell: on the beat or not, and whether the beat it was nearest opened a bar */
 function placeOf(at: number): BeatJudgement {
-  const lag = heroSlot() > 0 ? BEAT.guestLag : 0;
+  const lag = heroSlot() > 0 ? guestLag() : 0;
   const phase = jory.phase - (jory.clock - at) - lag;
   const off = offBeat(phase, jory.beatLen);
   // a late press is nearest the beat already played; an early one, the beat to come

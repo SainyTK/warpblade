@@ -5,14 +5,18 @@ export const TEMPO_BPM = [96, 108, 120, 132] as const;
 
 /**
  * His beat: how near a judged press must fall to the nearest beat, before or after, in game seconds. A real tenth of a
- * second, wider with Steady Hand; a guest seat in a room is judged a little wider and against the beat shifted later
- * by the time its keys take to reach the host (the room measures no round trip, so a fixed 0.12 s).
+ * second, wider with Steady Hand. A guest seat in a room is judged a little wider and against the beat shifted later:
+ * the guest sees the beat a video frame and a one-way trip late and its keys take another one-way trip back, so the
+ * shift is the link's measured round trip plus a video frame, at most `guestLagMost`, and 0.12 s until it is measured.
  */
 export const BEAT = {
   window: 0.1 * PACE,
   steadyWindow: 0.18 * PACE,
   guestWindow: 0.14 * PACE,
   guestLag: 0.12 * PACE,
+  /** a video frame of the stream, in real seconds, and the most a guest's shift may be */
+  videoFrame: 1 / 30,
+  guestLagMost: 0.3,
   /** a bar has four beats; its first is the downbeat */
   bar: 4,
   /** the floor ring closes from this width to this one over each beat, in art pixels, and flashes on the beat */

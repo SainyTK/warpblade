@@ -8,7 +8,7 @@ import { hero } from "../../state";
 import { resetMotion } from "../kael/motion";
 import { startCharge } from "../ultimate";
 import { nextAbility, pressAbility, resetAbilities, tickAbilities } from "./abilities";
-import { addGroove, tier } from "./beat";
+import { addGroove, judge, tier } from "./beat";
 import { boomAbsorbs, pressBoom, runBoom, tickBoom } from "./boom";
 import { runCast } from "./cast";
 import { trailMallets } from "./crescendo";
@@ -49,7 +49,14 @@ function tick(dt: number): void {
 }
 
 /** J: the mallet string on the floor, Downstroke in the air */
-const pressMallets = (): boolean => (hero.ground ? pressString() : pressDownstroke());
+function pressMallets(): boolean {
+  // a J during the flinch still keeps time: it is judged, with its thump or click, though no blow starts
+  if (hero.state === "hurt") {
+    judge("J");
+    return true;
+  }
+  return hero.ground ? pressString() : pressDownstroke();
+}
 
 function runState(dt: number): boolean {
   switch (hero.state) {

@@ -1,5 +1,5 @@
 import { CHARACTERS } from "../../constants/characters";
-import { HUD_RATE, MAX_PLAYERS, PING_MS, QUIET_LIMIT_MS } from "../../constants/coop";
+import { HUD_RATE, MAX_PLAYERS, PING_MS, QUIET_LIMIT_MS, RTT_SMOOTHING } from "../../constants/coop";
 import { GAME_VERSION } from "../../constants/sitePages";
 import { MAX_FRAME, STEP } from "../../constants/stage";
 import { sfx } from "../../services/audio";
@@ -36,6 +36,8 @@ interface Guest {
   hero: string;
   owned: Record<string, number>;
   lastSeen: number;
+  /** the smoothed round trip of its link in seconds, -1 until the first probe comes back */
+  rtt: number;
 }
 
 const heroById = (id: string) => CHARACTERS.find((c) => c.id === id) ?? CHARACTERS[0];
@@ -104,6 +106,7 @@ export class HostSession {
   private ping(): void {
     const now = performance.now();
     for (const [peer, g] of this.guests) if (now - g.lastSeen > QUIET_LIMIT_MS) this.link?.drop(peer);
+    for (const peer of this.guests.keys()) this.link?.send(peer, { t: "probe", at: now });
     this.publishLobby();
   }
 
@@ -131,6 +134,7 @@ export class HostSession {
     if (msg.t === "hello") return this.welcome(peer, msg.hero, msg.owned, msg.version);
     if (!guest) return;
     if (msg.t === "bye") return this.link?.drop(peer);
+    if (msg.t === "probe") return this.timeRoundTrip(peer, guest, msg.at);
     if (msg.t === "hero" && !this.run) {
       guest.hero = heroById(msg.hero).id;
       this.publishLobby();
@@ -148,6 +152,14 @@ export class HostSession {
     else if (msg.t === "chestSeen") this.run.chestSeenFor(seat);
   }
 
+  /** a probe came back: the guest's round trip, smoothed, also on its seat in a run under way */
+  private timeRoundTrip(peer: string, guest: Guest, at: number): void {
+    const rtt = Math.max(0, performance.now() - at) / 1000;
+    guest.rtt = guest.rtt < 0 ? rtt : guest.rtt + (rtt - guest.rtt) * RTT_SMOOTHING;
+    const seat = this.run?.seatOf(peer);
+    if (seat) seat.rtt = guest.rtt;
+  }
+
   private welcome(peer: string, hero: string, owned: Record<string, number>, version: string): void {
     if (this.guests.has(peer)) return;
     if (version !== GAME_VERSION)
@@ -155,7 +167,7 @@ export class HostSession {
     if (this.run) return this.refuse(peer, "That room is already playing. Join when the run ends.");
     const slot = this.freeSlot();
     if (slot < 0) return this.refuse(peer, `That room is full: ${MAX_PLAYERS} players already.`);
-    this.guests.set(peer, { slot, hero: heroById(hero).id, owned, lastSeen: performance.now() });
+    this.guests.set(peer, { slot, hero: heroById(hero).id, owned, lastSeen: performance.now(), rtt: -1 });
     this.link?.send(peer, { t: "welcome", slot });
     // someone joining makes a note about someone leaving old news
     updateRoom({ note: "" });
@@ -178,9 +190,9 @@ export class HostSession {
   start(): void {
     if (this.run || !this.link) return;
     const link = this.link;
-    const starts: SeatStart[] = [{ slot: 0, peer: null, character, owned: null }];
+    const starts: SeatStart[] = [{ slot: 0, peer: null, character, owned: null, rtt: 0 }];
     for (const [peer, g] of this.guests)
-      starts.push({ slot: g.slot, peer, character: heroById(g.hero), owned: g.owned });
+      starts.push({ slot: g.slot, peer, character: heroById(g.hero), owned: g.owned, rtt: g.rtt });
     starts.sort((a, b) => a.slot - b.slot);
     this.run = new HostRun(starts, {
       ended: (outcome, wave, coins, reports) => this.ended(outcome, wave, coins, reports),

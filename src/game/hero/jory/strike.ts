@@ -1,7 +1,6 @@
 import { MP_PER_HIT } from "../../../constants/combat";
 import { ENEMIES } from "../../../constants/enemies";
 import { ACCENT, type MalletBox } from "../../../constants/jory/mallets";
-import { SPARKS } from "../../../constants/palette";
 import { sfx } from "../../../services/audio";
 import type { Enemy } from "../../../types/enemy";
 import type { MalletBlow } from "../../../types/jory";
@@ -67,7 +66,8 @@ function strikeFoe(e: Enemy, s: MalletStrike, first: boolean): boolean {
   });
   if (result === "blocked") return false;
   const [cx, cy] = enemyCenter(e);
-  game.fx.push(createImpact(cx - dir * 3, cy, dir, s.heavy, s.accent ? SPARKS.beat : undefined));
+  // an Accent shows its own thin ring in place of the shared hit spark, so a crowd of Accents never washes the foes out
+  if (!s.accent) game.fx.push(createImpact(cx - dir * 3, cy, dir, s.heavy));
   if (s.accent) {
     game.fx.push(createAccentRing(cx - dir * 2, cy));
     emitSkillEvent({ type: "accent", foe: e, blow: s.blow, downbeat: s.downbeat });

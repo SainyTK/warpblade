@@ -129,9 +129,10 @@ const cancelAt = (blow: MalletBlow): number =>
 /** J on the floor: the next blow of the string, or queue it during one */
 export function pressString(): boolean {
   if (hero.state === "mallet") {
-    if (jory.queued) return true;
-    // a press before the blow under way has struck counts as off the beat, so mashing never builds Groove
+    // a press before the blow under way has struck counts as off the beat, so mashing never builds Groove; every press
+    // is judged, and a later press on the beat turns the queued blow into an Accent
     const judged = judge("J", jory.struckAt < 0);
+    if (jory.queued && !judged.onBeat) return true;
     jory.queued = true;
     jory.queuedAccent = judged.onBeat;
     jory.queuedDownbeat = judged.downbeat;

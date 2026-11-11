@@ -71,6 +71,8 @@ export const DRUMROLL = {
   settle: frame(8),
   /** Groove is at least this much after it */
   groove: 8,
+  /** beats after it in which silence costs no Groove, so tier 3 lasts long enough to use */
+  grace: 8,
   shake: 2,
   lastShake: 4,
 } as const;

@@ -4,7 +4,7 @@ The ninth hero and the sixth built in the hero sprint (patch 0.9.0).
 Id `jory`, kit `jory`, name Jory (he/him), title "The war drummer".
 Blurb: "He beat the march for an army that never came home. He still keeps time, and the rift has started to move to it. Miss a beat and he is a big man with two sticks."
 Price: 1800 coins in `src/constants/heroUnlocks.ts`, the seventh price by the rule written there.
-Accent `#5a82ff` (cobalt), which no other hero uses: Kael's is cyan, Sable's mint, Orrin's amber, Mirel's teal, Wenna's violet and Tallis's rose.
+Accent `#5a82ff` (cobalt), which no other hero uses: Kael's is cyan, Ysra's orange, Sable's mint, Hulda's coral, Orrin's amber, Mirel's teal, Wenna's violet and Tallis's rose.
 
 Code layout follows Tallis and Wenna: kit `src/game/hero/jory/`, character `src/constants/characters/jory/` (index, look, skills), numbers `src/constants/jory/`, clips `src/constants/clips/jory/`, types and kit events `src/types/jory.ts`, skill behaviours `src/game/skills/jory/`, effects `src/game/effects/jory/`, icons `src/ui/skills/icons/jory/`, touch icons `src/ui/touch/icons/joryArt.ts`, the GV bar `src/ui/grooveBar.ts`, his ability tabs `src/ui/joryTabs.ts`, his mallets and drum `src/game/hero/draw/drum.ts`, and his skill tables `docs/skills/jory.md`.
 The shared beat clock is `src/game/beat.ts`.
@@ -46,8 +46,11 @@ AD 12 is high because off the beat he swings at the slowest tempo in the roster;
 
 ### The guest window, as shipped
 
-`src/game/coop` keeps no round trip: its pings are one-way heartbeats.
-A guest seat (`heroSlot() > 0`) is therefore judged within 0.14 s (`BEAT.guestWindow`) against the beat shifted 0.12 s later (`BEAT.guestLag`), the fixed fallback the plan set out.
+The room did not measure a round trip, so tonight's patch adds one.
+On each heartbeat (every 1.5 s) the host sends every guest a `probe` stamped with its clock, the guest sends it straight back, and the host keeps each guest's round trip smoothed over the probes (`RTT_SMOOTHING`) on the guest and on its seat in a run (`inputLag()` in `src/game/coopHooks.ts`).
+A guest sees the beat a one-way trip and a video frame late, and its keys take another one-way trip to the host.
+So a guest seat (`heroSlot() > 0`) is judged within 0.14 s (`BEAT.guestWindow`) against the beat shifted later by its round trip plus one video frame (1/30 s), at most 0.3 s.
+Until the first probe comes back the shift is 0.12 s (`BEAT.guestLag`).
 
 ### Cues
 
@@ -87,9 +90,9 @@ The Controls screen lists every key above from `ACTION_TEXT.jory` and, on touch 
 J on the floor plays Tap, Roll and Crash in that order every time, wherever foes stand, and never turns him (`docs/combo-design.md`).
 Each blow's clip lasts one beat at the current tempo: 15 clip frames at 96 bpm, played faster by `attackRate()` at higher tiers. A queued J starts the next blow from 0.8 of the clip. Crash lasts 1.25 beats and the next string's Tap may start from 1.0 beat.
 
-Which press is judged: the first J pressed after the current blow's hit frame. A J pressed before the hit frame still queues the next blow but counts as off the beat, so mashing never builds Groove. A J from a stand is judged at once.
+Which press is judged: every J. A J pressed before the current blow's hit frame still queues the next blow but counts as off the beat, so mashing never builds Groove. A later J on the beat, after the hit frame, turns the queued blow into an Accent. A J from a stand is judged at once, and a J during the flinch after a blow is judged too, with its thump or click, though no blow starts, so every press gets an answer.
 
-Accent: a blow started by an on-beat press deals 1.4x (1.6x at Crescendo), shows a cobalt ring at the struck point (one image pixel wide, 4 to 14 px over 0.15 s, with a white core on the hit frame), plays the thump, and emits the kit event `accent` with `foe`, `blow` and `downbeat`. Off the beat the blow is plain and shows only the shared hit spark.
+Accent: a blow started by an on-beat press deals 1.4x (1.6x at Crescendo), shows a cobalt ring at the struck point (one image pixel wide, 4 to 14 px over 0.15 s, with a one-pixel white core and a small cobalt light on the hit frame only, in place of the shared hit spark, so a crowd of Accents never washes the foes out), plays the thump, and emits the kit event `accent` with `foe`, `blow` and `downbeat`. Off the beat the blow is plain and shows only the shared hit spark.
 
 | Blow | Clip frames at 96 bpm | Hit on | Reach | Power | Knockback | Hit-stop, shake, pitch | Extra |
 | --- | --- | --- | --- | --- | --- | --- | --- |
@@ -135,7 +138,7 @@ Shared charge levels and MP costs.
 - On release he plants the drum in front of him and plays a roll of 2, 3, 4 or 6 heavy beats by charge level at 150 real beats a minute, whatever his tempo.
 - Each beat sends a ring of 70, 90, 110 or 140 px that deals the level's power x 0.3 x (AD + AP) and staggers minions. The last ring throws minions up (160 px/s) and knocks elites down.
 - Screen shake 2 px a ring, 4 px on the last. He is untouchable from the release to the last ring.
-- After it his Groove is at least 8 (tier 3).
+- After it his Groove is at least 8 (tier 3), and silence costs no Groove for the next 8 beats (`DRUMROLL.grace`), so tier 3 lasts long enough to use: the first silent pip goes 12 beats after the roll.
 - The ultimate skill `j_finale` replaces it with Grand Finale.
 
 ## The 20 skills

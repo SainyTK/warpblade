@@ -23,7 +23,7 @@ Between steps the host's own hero is swapped in, so the host's keyboard, HUD and
 The shared game code asks a small set of hooks which hero to act on (`src/game/coopHooks.ts`):
 
 - each Jory in the room keeps his own beat clock and Groove in his seat memory, and his clock counts on through hit-stop and slow motion like the host's own; a room plays on under the pause menu, so the beat does too, and only the first Jory's tick sounds;
-- a guest Jory's presses reach the host about a round trip late, so the host judges a guest's press within 0.14 s of the beat shifted 0.12 s later (the room measures no round trip, so the shift is fixed);
+- a guest Jory sees the beat about a one-way trip and a video frame late and his presses take another one-way trip back, so the host judges a guest's press within 0.14 s of the beat shifted later by that guest's round trip plus a video frame; the host measures each guest's round trip with a probe on every heartbeat, which the guest sends straight back, and uses 0.12 s until the first one returns;
 - each foe acts against the nearest standing hero foes can see, and so do coins, orbs and pickups; a hero their kit hides (Tallis in his Veil or his pool) is passed over while any standing hero is in sight, and when every standing hero is hidden the nearest is chosen as before;
 - a foe's blow, shot or hazard strikes every standing hero it reaches, each one once;
 - every effect remembers the hero who made it, so a flask, a brazier or an ultimate keeps hitting and following for its owner;
