@@ -1,7 +1,12 @@
 import { WORLD_COLORS as WC } from "../../constants/palette";
 import { MOON, W } from "../../constants/stage";
-import { bayerAt, glow, place, px } from "../../engine/frame";
-import { mix, ramp, scale, WHITE } from "../../utils/color";
+import { bayerAt, fleck, glow, place, px } from "../../engine/frame";
+import { mix, ramp, scale } from "../../utils/color";
+import { paintFloor } from "./night/floor";
+import { drawMeteor, drawTwinkles } from "./night/life";
+import { paintMoon } from "./night/moon";
+import { type BrightStar, paintSky } from "./night/sky";
+import { paintTowers } from "./night/towers";
 import type { SceneDef, ScenePalette } from "./sceneDef";
 
 /** Waves 11 to 15: the moonlit ruins, a little lighter than the old night so the fight still reads. */
@@ -63,18 +68,31 @@ export function drawMoon(bg: Uint32Array, halo = WC.moonHalo): void {
 }
 
 const FIREFLIES = Array.from({ length: 12 }, (_, i) => ({ x: (i * 53) % W, y: 120 + ((i * 17) % 30), p: i * 1.7 }));
+/** a firefly wanders on two slow loops and a small quick one, and its light swells and dies away */
+const FIREFLY = { glow: 8, dim: 0.12, hot: 0.72 };
 
 /** fireflies wandering low over the floor */
 export function drawFireflies(t: number, count = FIREFLIES.length): void {
-  for (const f of FIREFLIES.slice(0, count)) {
-    const x = f.x + Math.sin(t * 0.6 + f.p) * 14;
-    const y = f.y + Math.sin(t * 0.9 + f.p * 2) * 6;
-    const b = Math.max(0, Math.sin(t * 1.8 + f.p * 3));
-    if (b <= 0.15) continue;
-    px(x, y, b > 0.7 ? WC.fireflyHot : WC.firefly);
-    glow(x, y, 7, WC.fireflyGlow, 0.3 * b);
+  for (let i = 0; i < Math.min(count, FIREFLIES.length); i++) {
+    const f = FIREFLIES[i];
+    const pulse = Math.sin(t * 1.8 + f.p * 3);
+    if (pulse <= FIREFLY.dim) continue;
+    const b = pulse * pulse;
+    const x = f.x + Math.sin(t * 0.6 + f.p) * 14 + Math.sin(t * 2.3 + f.p * 5) * 2;
+    const y = f.y + Math.sin(t * 0.9 + f.p * 2) * 6 + Math.cos(t * 2.9 + f.p * 4) * 1.5;
+    if (b > FIREFLY.hot) {
+      px(x, y, WC.fireflyHot);
+      fleck(x + 1, y + 0.25, WC.firefly);
+      fleck(x - 0.5, y + 0.25, WC.firefly);
+    } else fleck(x, y, b > 0.3 ? WC.fireflyHot : WC.firefly);
+    glow(x, y, FIREFLY.glow * (0.6 + 0.4 * b), WC.fireflyGlow, 0.34 * b);
   }
 }
+
+/** the bright stars of the scene last built, for the twinkle */
+const sky: { stars: BrightStar[] } = { stars: [] };
+/** the moon's wide glow is painted into the scene; this small one over it breathes a little */
+const MOON_GLOW = { radius: 34, strength: 0.2, swell: 0.03 };
 
 export const night: SceneDef = {
   palette: NIGHT_PALETTE,
@@ -83,10 +101,17 @@ export const night: SceneDef = {
   braziers: 1,
   mist: 1,
   sky: (bg) => drawMoon(bg),
+  detail(paint, r) {
+    sky.stars = paintSky(paint, r, NIGHT_PALETTE);
+    paintMoon(paint);
+    paintTowers(paint, r, NIGHT_PALETTE);
+    paintFloor(paint);
+  },
   ambient(t) {
     place();
-    glow(MOON.x, MOON.y, 60, WC.moonGlow, 0.26);
+    glow(MOON.x, MOON.y, MOON_GLOW.radius, WC.moonGlow, MOON_GLOW.strength + Math.sin(t * 0.7) * MOON_GLOW.swell);
+    drawTwinkles(t, sky.stars);
+    drawMeteor(t);
     drawFireflies(t);
-    for (let i = 0; i < 6; i++) if (Math.sin(t * 3 + i * 2.1) > 0.85) px((i * 97) % W, (i * 23) % 100, WHITE);
   },
 };

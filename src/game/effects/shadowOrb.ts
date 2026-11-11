@@ -1,6 +1,6 @@
 import { PAL, SPARKS } from "../../constants/palette";
 import { GROUND, W } from "../../constants/stage";
-import { circle, glow, place, px } from "../../engine/frame";
+import { circle, fleck, glow, place, px } from "../../engine/frame";
 import type { Effect } from "../../types/effect";
 import { PK } from "../../types/particle";
 import { WHITE } from "../../utils/color";
@@ -12,10 +12,18 @@ import { fieldPace } from "../timeFields";
 import { boxHit, heroBox } from "../world";
 import { createImpact } from "./impact";
 
+/** the orb's layers as radii in art pixels, dark shell to white core, and the ring its sparks circle on */
+const ORB = { shell: 3.6, body: 2.9, fire: 2.1, core: 1.1, orbit: 4.6 };
+/** the tail: how many shrinking discs, how far apart, and how much thinner each is */
+const TAIL = { length: 3, gap: 2.4, thin: 0.8 };
+
 /** a slow orb of shadow fired by the Rift Warden; it bursts on Kael, the floor or the edge of the stage */
 export function createShadowOrb(x: number, y: number, vx: number, vy: number, damage: number): Effect {
   const o = { x, y, t: 0 };
   const S = PAL.shadow;
+  const speed = Math.hypot(vx, vy) || 1;
+  const ux = vx / speed;
+  const uy = vy / speed;
   return {
     update(step) {
       // a Stillfield slows the shot where it flies
@@ -42,10 +50,32 @@ export function createShadowOrb(x: number, y: number, vx: number, vy: number, da
     },
     draw() {
       place();
-      circle(o.x, o.y, 3.4, S[2]);
-      circle(o.x - 0.5, o.y - 0.5, 2.2, S[4]);
-      px(o.x - 1, o.y - 1, WHITE);
-      glow(o.x, o.y, 16, S[3], 0.55);
+      const beat = Math.sin(o.t * 16) * 0.3;
+      // a tail of shrinking shadow behind it
+      for (let i = TAIL.length; i >= 1; i--) {
+        const back = i * TAIL.gap;
+        const sway = Math.sin(o.t * 20 + i * 1.4) * 0.5 * i;
+        circle(
+          o.x - ux * back - uy * sway,
+          o.y - uy * back + ux * sway,
+          ORB.shell - i * TAIL.thin,
+          S[i > 1 ? 1 : 2],
+          1 - i * 0.22,
+        );
+      }
+      circle(o.x, o.y, ORB.shell, S[1]);
+      circle(o.x, o.y, ORB.body + beat, S[2]);
+      circle(o.x + ux * 0.4, o.y + uy * 0.4, ORB.fire + beat, S[3]);
+      circle(o.x + ux * 0.7, o.y + uy * 0.7, ORB.core, S[5]);
+      px(o.x + ux * 0.7 - 0.5, o.y + uy * 0.7 - 0.5, WHITE);
+      // two sparks circle it
+      for (let i = 0; i < 2; i++) {
+        const a = o.t * 9 + i * Math.PI;
+        fleck(o.x + Math.cos(a) * ORB.orbit, o.y + Math.sin(a) * ORB.orbit * 0.6, S[5]);
+        fleck(o.x + Math.cos(a - 0.5) * ORB.orbit, o.y + Math.sin(a - 0.5) * ORB.orbit * 0.6, S[4], 0.6);
+      }
+      glow(o.x, o.y, 16 + beat * 4, S[3], 0.55);
+      glow(o.x, o.y, 6, S[5], 0.35);
     },
   };
 }

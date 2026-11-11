@@ -1,11 +1,18 @@
 import { PAL } from "../../constants/palette";
-import { glow, place, shade } from "../../engine/frame";
+import { glow, hairline, place, shade } from "../../engine/frame";
 import type { Effect } from "../../types/effect";
 import { PK } from "../../types/particle";
+import { grain } from "../../utils/grain";
 import { ease, TAU } from "../../utils/math";
 import { game, lights, particles, rng } from "../state";
 
 const OPEN_AT = 0.45;
+/**
+ * the tear's shape: its half width in art pixels, how sharply it narrows to its points, how much its edge wavers,
+ * where its white edge, bright rim and violet shell begin as shares of the half width, the share of the void's pixels
+ * that are stars, and how far the forks at its points reach
+ */
+const TEAR = { width: 5.5, point: 0.7, waver: 0.1, edge: 0.84, rim: 0.66, shell: 0.5, stars: 0.975, fork: 5 };
 const LIFE = 1.0;
 
 /** a rift that gathers streaks, opens, lets a shadow through at OPEN_AT and seals; waits `delay` before starting */
@@ -58,15 +65,38 @@ export function createRift(x: number, y: number, height: number, delay: number, 
       place();
       const open = t < 0.35 ? ease.outBack(t / 0.35) : t < 0.6 ? 1 : 1 - ease.outCubic((t - 0.6) / 0.4);
       const ry = height * open;
-      const rx = 5 * open;
+      const rx = TEAR.width * open;
       if (ry < 1) return;
-      shade(x - rx - 2, y - ry - 2, x + rx + 2, y + ry + 2, (lx, ly, out) => {
-        const d = Math.hypot((lx - x) / Math.max(1, rx), (ly - y) / ry);
+      const now = game.t;
+      // a tear pointed at both ends: a white hot edge that wavers, then the void with a slow swirl and stars in it
+      shade(x - rx - 2, y - ry - 1, x + rx + 2, y + ry + 1, (lx, ly, out) => {
+        const v = (ly - y) / ry;
+        if (v <= -1 || v >= 1) return;
+        const half = rx * (1 - v * v) ** TEAR.point * (1 + TEAR.waver * Math.sin(ly * 0.8 + now * 14));
+        const d = Math.abs(lx - x) / Math.max(0.5, half);
         if (d > 1) return;
-        const swirl = Math.sin(d * 9 - game.t * 10 + Math.atan2(ly - y, lx - x) * 2);
-        out.c = d > 0.85 ? S[5] : d > 0.7 ? S[4] : swirl > 0.6 ? S[2] : S[0];
+        if (d > TEAR.edge || half < 0.8) out.c = S[5];
+        else if (d > TEAR.rim) out.c = S[4];
+        else if (d > TEAR.shell) out.c = S[3];
+        else if (grain(Math.floor(lx * 2), Math.floor(ly * 2) + Math.floor(now * 9)) > TEAR.stars) out.c = S[5];
+        else out.c = Math.sin(d * 7 - now * 10 + v * 5) > 0.55 ? S[2] : S[0];
       });
+      // forks of light crackle from both points
+      for (const end of [-1, 1])
+        for (let i = 0; i < 2; i++) {
+          const flick = grain(Math.floor(now * 22) + i * 7, end * 3 + x);
+          const reach = TEAR.fork * open * (0.4 + 0.6 * flick);
+          hairline(
+            x,
+            y + end * ry,
+            x + (flick - 0.5) * 5 + (i ? 1.5 : -1.5),
+            y + end * (ry + reach),
+            S[i ? 4 : 5],
+            0.9,
+          );
+        }
       glow(x, y, ry * 1.6, S[3], 0.45 * open);
+      glow(x, y, Math.max(3, rx * 2), S[5], 0.16 * open);
     },
   };
 }
