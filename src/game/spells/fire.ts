@@ -1,13 +1,11 @@
 import { SUNFLASK } from "../../constants/evolutions";
-import { FIRE_RAMP } from "../../constants/palette";
 import { FLASK_THROW, SECOND_FLASK } from "../../constants/spells";
-import { circle, glow, place, px } from "../../engine/frame";
 import type { Blast, Effect, Flask } from "../../types/effect";
-import { WHITE } from "../../utils/color";
 import { skillEvolved, skillValues, withCharms } from "../skills/query";
 import { game, progress } from "../state";
 import { explode } from "./explosion";
 import { flaskBurst, flyFlask, trailFlask } from "./flask";
+import { drawFlaskBody } from "./flaskArt";
 import { createFloorFire } from "./floorFire";
 import { drawSunflask, launchChildFlasks } from "./sunflask";
 
@@ -16,14 +14,8 @@ const LIFE = 2;
 /** the burning floor a burst leaves: its width as a share of the burst, and its burn as a share of ability power */
 const FLOOR = { width: 0.8, power: 0.25 } as const;
 const SKILL = "k_flame";
-
-function drawFlask(o: Flask): void {
-  place();
-  circle(o.x, o.y, 2.6, FIRE_RAMP[4]);
-  circle(o.x - 0.5, o.y - 0.5, 1.6, FIRE_RAMP[1]);
-  px(o.x - 1, o.y - 1, WHITE);
-  glow(o.x, o.y, 18, FIRE_RAMP[4], 0.5);
-}
+/** the plain flask: its body and the fire inside it, and its light */
+const FLASK_LOOK = { body: 2.6, inner: 1.6, glow: 15, glowK: 0.4 } as const;
 
 /** one flask of flame thrown in an arc that bursts on whatever it touches first; as Sunflask it is bigger and its burst
  *  throws three more */
@@ -46,7 +38,7 @@ function createFlask(x: number, y: number, face: number, speed: number, blast: B
     },
     draw() {
       if (evolved) drawSunflask(o);
-      else drawFlask(o);
+      else drawFlaskBody(o, FLASK_LOOK.body, FLASK_LOOK.inner, FLASK_LOOK.glow, FLASK_LOOK.glowK);
     },
   };
 }

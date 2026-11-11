@@ -1,17 +1,18 @@
 import { GLACIER_BLOOM } from "../../constants/evolutions";
 import { PAL, SPARKS } from "../../constants/palette";
 import { W } from "../../constants/stage";
-import { glow, line, place, polygon, px, sparkle } from "../../engine/frame";
+import { glow, hairline, place, sparkle } from "../../engine/frame";
 import { sfx } from "../../services/audio";
 import type { Ramp } from "../../types/color";
 import type { Effect } from "../../types/effect";
 import type { Enemy } from "../../types/enemy";
 import { PK } from "../../types/particle";
-import { scale, WHITE } from "../../utils/color";
+import { WHITE } from "../../utils/color";
 import { clamp, ease, TAU } from "../../utils/math";
 import { dealDamage } from "../damage";
 import { createImpact } from "../effects/impact";
 import { enemyBox, enemyCenter } from "../enemies/enemy";
+import { drawCrystal } from "../hero/kael/art/crystal";
 import { skillEvolved, skillValues, withCharms } from "../skills/query";
 import { game, lights, particles, progress, rng } from "../state";
 import { boxHit, shake, surfaceBelow } from "../world";
@@ -26,6 +27,10 @@ const STAND = 1.0;
 /** where the first spike rises from the hero, and the gap between spikes */
 const SPACING = { start: 18, gap: 15 } as const;
 const SPIRE = GLACIER_BLOOM.spire;
+/** the flare as a spike erupts, dim enough that a whole row of them leaves the foes in view */
+const ERUPT_LIGHT = { radius: 24, strength: 0.32 } as const;
+/** the frost on the floor at a spike's foot: how far it reaches each way and how solid its lower line is */
+const FROST = { reach: 8, under: 0.5 } as const;
 
 interface Spike {
   x: number;
@@ -44,17 +49,6 @@ interface Spike {
   /** foes beside it have been chilled */
   chilled: boolean;
   hit: Set<Enemy>;
-}
-
-/** a faceted crystal: lit left face, shaded right face, a bright ridge */
-function crystal(x: number, base: number, h: number, w: number, lean: number, I: Ramp, bright: number): void {
-  if (h < 1) return;
-  const tip: [number, number] = [x + lean, base - h];
-  polygon([[x - w, base], [x, base], tip], scale(I[4], bright));
-  polygon([[x, base], [x + w, base], tip], scale(I[2], bright));
-  line(x - w, base, tip[0], tip[1], scale(I[1], bright));
-  line(x + w, base, tip[0], tip[1], scale(I[0], bright + 0.4));
-  line(x, base, tip[0], tip[1], (u) => (u > 0.6 ? WHITE : I[5]));
 }
 
 /** spikes running from x along `dir`, one after another, stopping at the stage edge */
@@ -84,9 +78,9 @@ function spikeLine(x: number, y: number, dir: number, heights: readonly number[]
 /** Glacier Bloom's crown: a tall faceted spire flanked by two side crystals */
 function drawSpire(s: Spike, h: number, I: Ramp): void {
   const [left, right] = SPIRE.sides;
-  crystal(s.x - 7, s.base, h * left, 4, s.lean - 3, I, 0.75);
-  crystal(s.x + 7, s.base, h * right, 4, s.lean + 3, I, 0.75);
-  crystal(s.x, s.base, h, SPIRE.width, s.lean, I, 1);
+  drawCrystal(s.x - 7, s.base, h * left, 4, s.lean - 3, I, 0.75);
+  drawCrystal(s.x + 7, s.base, h * right, 4, s.lean + 3, I, 0.75);
+  drawCrystal(s.x, s.base, h, SPIRE.width, s.lean, I, 1);
   glow(s.x, s.base - h * 0.5, 30, I[3], 0.4);
 }
 
@@ -147,7 +141,7 @@ export function castIce(x: number, y: number, face: number, power: number): Effe
   const erupt = (s: Spike, i: number) => {
     s.on = true;
     if (s.spire) lights.add(s.x, s.base - SPIRE.height / 2, SPIRE.light, I[3], SPIRE.lightK, 0.35);
-    else lights.add(s.x, s.base - 8, 30, I[3], 0.7, 0.35);
+    else lights.add(s.x, s.base - 8, ERUPT_LIGHT.radius, I[3], ERUPT_LIGHT.strength, 0.35);
     for (let k = 0; k < 6; k++)
       particles.spawn(
         PK.FLAKE,
@@ -229,13 +223,22 @@ export function castIce(x: number, y: number, face: number, power: number): Effe
         const u = t - s.delay;
         if (u < 0 || s.gone) continue;
         const h = s.h * clamp(ease.outBack(clamp(u / 0.09)), 0, 1.15);
-        for (let k = -7; k <= 7; k++) px(s.x + k, s.base, I[4], 0.8 - Math.abs(k) / 9);
+        // frost creeping out over the floor from the spike's foot
+        hairline(
+          s.x - FROST.reach,
+          s.base - 0.25,
+          s.x + FROST.reach,
+          s.base - 0.25,
+          I[5],
+          (v) => 1 - Math.abs(v * 2 - 1),
+        );
+        hairline(s.x - FROST.reach * 0.6, s.base + 0.25, s.x + FROST.reach * 0.6, s.base + 0.25, I[3], FROST.under);
         if (s.spire) drawSpire(s, h, I);
         else {
-          crystal(s.x - 5, s.base, h * 0.5, 3, s.lean - 3, I, 0.75);
-          crystal(s.x + 5, s.base, h * 0.42, 3, s.lean + 3, I, 0.75);
-          crystal(s.x, s.base, h, 4.5, s.lean, I, 1);
-          glow(s.x, s.base - h * 0.5, 20, I[3], 0.3);
+          drawCrystal(s.x - 5, s.base, h * 0.5, 3, s.lean - 3, I, 0.75);
+          drawCrystal(s.x + 5, s.base, h * 0.42, 3, s.lean + 3, I, 0.75);
+          drawCrystal(s.x, s.base, h, 4.5, s.lean, I, 1);
+          glow(s.x, s.base - h * 0.5, 18, I[3], 0.22);
         }
         if (u > 0.06 && u < 0.3) sparkle(s.x + s.lean, s.base - h, 4 * (1 - (u - 0.06) / 0.24) + 1, I[5], I[3], 0.4);
       }

@@ -1,13 +1,14 @@
 import { ABILITY_COLOR, PAL } from "../../../constants/palette";
-import { circle, glow, hairline, place, polygon, px } from "../../../engine/frame";
+import { fleck, glow, hairline, place, polygon, px } from "../../../engine/frame";
 import type { Enemy } from "../../../types/enemy";
 import type { SkillBehavior, SkillMemory } from "../../../types/skillBehavior";
 import type { Element } from "../../../types/spell";
-import { WHITE } from "../../../utils/color";
+import { scale, WHITE } from "../../../utils/color";
 import { TAU } from "../../../utils/math";
 import { dealDamage } from "../../damage";
 import { ignite } from "../../enemies/burn";
 import { enemyCenter } from "../../enemies/enemy";
+import { drawGem } from "../../hero/kael/art/crystal";
 import { createLightning } from "../../spells/lightning";
 import { game, hero, progress, rng } from "../../state";
 import { skillValues, withCharms } from "../query";
@@ -20,6 +21,10 @@ const SHARD = { speed: 200, turn: 9, life: 1.6, reach: 3, kick: 40 } as const;
 const HOVER = { back: 10, up: 34, apart: 9, bob: 2, follow: 6 } as const;
 /** how long an ice shard chills, a fire shard burns, and how far a lightning shard (or the Choir's) arcs */
 const ELEMENT_HIT = { chill: 1.5, burn: 1, arcReach: 60, arcShare: 0.5 } as const;
+/** a familiar's crystal: half its width and half its height, its mote's path and the mote's speed in radians a second */
+const FAMILIAR = { half: 2.5, tall: 4.5, path: [5.5, 2], orbit: 4 } as const;
+/** a shard's gem and the seconds of flight its thread of light covers */
+const SHARD_LOOK = { length: 2.6, half: 1, tail: 0.05 } as const;
 /** the familiars of Crystal Choir never leave */
 const FOREVER = 600;
 
@@ -151,39 +156,45 @@ function answerCast(m: FamiliarMemory, evolved: boolean): void {
   else m.familiars.sort((a, b) => a.left - b.left)[0].left = life;
 }
 
-/** a familiar: a faceted crystal with a bright core, a soft glow, and a glint that turns */
+/** a familiar: a cut crystal standing on its point, lit from the upper right, with a mote circling it on a tilted path */
 function drawFamiliar(f: Familiar, evolved: boolean): void {
   const C = PAL.crystal;
-  const x = Math.round(f.x);
-  const y = Math.round(f.y);
-  polygon(
-    [
-      [x, y - 4],
-      [x + 3, y],
-      [x, y + 4],
-      [x - 3, y],
-    ],
-    C[3],
-  );
-  polygon(
-    [
-      [x, y - 4],
-      [x + 3, y],
-      [x, y],
-    ],
-    C[5],
-  );
-  px(x, y - 1, WHITE);
+  const { x, y } = f;
+  const { half, tall } = FAMILIAR;
+  const top: [number, number] = [x, y - tall];
+  const foot: [number, number] = [x, y + tall];
+  const g = game.t * FAMILIAR.orbit + f.phase;
+  const ox = x + Math.cos(g) * FAMILIAR.path[0];
+  const oy = y + Math.sin(g) * FAMILIAR.path[1];
+  // the mote passes behind the crystal on the far half of its path
+  if (Math.sin(g) < 0) fleck(ox, oy, C[4]);
+  polygon([top, [x - half, y], [x, y]], C[4]);
+  polygon([top, [x, y], [x + half, y]], C[5]);
+  polygon([[x - half, y], foot, [x, y]], C[2]);
+  polygon([[x, y], foot, [x + half, y]], C[3]);
+  hairline(x, y - tall, x, y + tall, (u) => (u < 0.5 ? WHITE : C[4]));
+  hairline(x - half, y, x + half, y, C[5]);
+  fleck(x + half * 0.5, y - tall * 0.5, WHITE);
+  if (Math.sin(g) >= 0) {
+    px(ox - 0.5, oy - 0.5, WHITE);
+    hairline(ox, oy, ox + Math.sin(g) * 2.5, oy - Math.cos(g) * 1, C[4], 0.8);
+  }
   glow(x, y, evolved ? 12 : 9, C[3], 0.4);
-  const g = game.t * 4 + f.phase;
-  px(x + Math.round(Math.cos(g) * 5), y + Math.round(Math.sin(g) * 2), C[4], 0.8);
 }
 
+/** a shard in flight: a small cut gem pointing where it flies, with a thread of light behind it */
 function drawShard(s: Shard): void {
   const c = s.element ? ABILITY_COLOR[s.element] : PAL.crystal[4];
-  hairline(s.x, s.y, s.x - s.vx * 0.03, s.y - s.vy * 0.03, PAL.crystal[2], 0.6);
-  circle(s.x, s.y, 1.2, c);
-  px(s.x - 0.5, s.y - 0.5, WHITE);
+  const angle = Math.atan2(s.vy, s.vx);
+  hairline(s.x, s.y, s.x - s.vx * SHARD_LOOK.tail, s.y - s.vy * SHARD_LOOK.tail, c, (u) => 0.9 * (1 - u));
+  drawGem(
+    s.x,
+    s.y,
+    SHARD_LOOK.length,
+    SHARD_LOOK.half,
+    angle,
+    s.element ? [c, c, scale(c, 0.6), c, c, WHITE] : PAL.crystal,
+  );
   glow(s.x, s.y, 5, c, 0.4);
 }
 

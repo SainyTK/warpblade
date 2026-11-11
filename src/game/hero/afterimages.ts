@@ -11,13 +11,19 @@ import { skin } from "./skin";
 /** afterimages are drawn into their own canvas, then copied */
 export const ghostCanvas = detailCanvas(80, 76, 40, 62);
 
+/** where a warp ends: no afterimage stands closer to it than `clear`, and the flare of light there */
+const ARRIVAL = { clear: 16, light: 28, strength: 0.3 } as const;
+
 /** a line of fading copies of Kael from where he was to where he is going, and a streak of light between */
 export function leaveAfterimages(ox: number, oy: number, nx: number, ny: number): void {
   drawHero(ghostCanvas, POSES.warpFly, heroLook(4));
   const snap = ghostCanvas.snapshot();
+  const distance = Math.hypot(nx - ox, ny - oy);
   for (let i = 0; i < 5; i++) {
     const u = i / 5;
     const life = 0.18 + u * 0.18;
+    // a copy that would stand on Kael where he arrives is left out, so a short warp does not bury him in light
+    if (distance * (1 - u) < ARRIVAL.clear) continue;
     game.ghosts.push({ s: snap, x: lerp(ox, nx, u), y: lerp(oy, ny, u), flip: hero.face < 0, life, max: life });
   }
   game.fx.push(createWarpLine(ox, oy - 18, nx, ny - 18));
@@ -29,7 +35,7 @@ export function leaveAfterimages(ox: number, oy: number, nx: number, ny: number)
       size: 0.6,
     });
   }
-  lights.add(nx, ny - 18, 44, skin.ramp[4], 0.9, 0.25);
+  lights.add(nx, ny - 18, ARRIVAL.light, skin.ramp[4], ARRIVAL.strength, 0.25);
 }
 
 /** one fading copy in the dash pose, dropped every few frames while dashing */

@@ -1,3 +1,4 @@
+import { BURST_CRYSTALS } from "../../constants/kael/crystalLook";
 import { PAL, SPARKS } from "../../constants/palette";
 import { BURST } from "../../constants/spells";
 import { sfx } from "../../services/audio";
@@ -7,8 +8,9 @@ import { dealDamage } from "../damage";
 import { createFloorRing } from "../effects/floorRing";
 import { createImpact } from "../effects/impact";
 import { enemyCenter } from "../enemies/enemy";
+import { createCrystalRow } from "../hero/kael/art/crystalRow";
 import { game, hero, lights, particles, progress, rng } from "../state";
-import { shake } from "../world";
+import { shake, surfaceBelow } from "../world";
 
 /** Crystal Burst: a ring of crystal bursts out around Kael and pushes every foe in reach away from him */
 export function castBurst(power: number): void {
@@ -16,7 +18,10 @@ export function castBurst(power: number): void {
   const y = hero.y - 16;
   game.fx.push(createFloorRing(x, hero.y, BURST.reach, PAL.crystal, 0.35));
   game.fx.push(createFloorRing(x, y, BURST.reach * 0.8, PAL.crystal, 0.3, 0.9));
-  lights.add(x, y, 50, PAL.crystal[4], 0.8, 0.3);
+  game.fx.push(
+    createCrystalRow(x, surfaceBelow(x, hero.y), PAL.crystal, { ...BURST_CRYSTALS, reach: BURST.reach, grow: 0.12 }),
+  );
+  lights.add(x, y, 40, PAL.crystal[4], 0.5, 0.3);
   for (let i = 0; i < 18; i++) {
     const a = (i / 18) * TAU + rng.range(-0.15, 0.15);
     const sp = rng.range(120, 200);

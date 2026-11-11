@@ -1,30 +1,37 @@
 import { SUNFLASK } from "../../constants/evolutions";
 import { FIRE_RAMP } from "../../constants/palette";
 import { FLASK_THROW } from "../../constants/spells";
-import { circle, glow, place, px } from "../../engine/frame";
+import { hairline, place } from "../../engine/frame";
 import type { Blast, Effect, Flask } from "../../types/effect";
-import { WHITE } from "../../utils/color";
-import { clamp, lobSpeed } from "../../utils/math";
+import { clamp, lobSpeed, TAU } from "../../utils/math";
 import { enemyCenter } from "../enemies/enemy";
 import { game } from "../state";
 import { surfaceBelow } from "../world";
 import { explode } from "./explosion";
 import { flaskBurst, flyFlask, trailFlask } from "./flask";
+import { drawFlaskBody } from "./flaskArt";
+
+/** the rays about a Sunflask: how many, how long, and how fast they turn in radians a second */
+const CORONA = { rays: 8, length: 3, turn: 5 } as const;
 
 /** the evolved flask: bigger, brighter, with a 2 x 2 white core */
 export function drawSunflask(o: Flask): void {
   const f = SUNFLASK.flask;
+  drawFlaskBody(o, f.body, f.inner, f.glow, f.glowK);
   place();
-  circle(o.x, o.y, f.body, FIRE_RAMP[4]);
-  circle(o.x - 0.5, o.y - 0.5, f.inner, FIRE_RAMP[1]);
-  for (const [dx, dy] of [
-    [-1, -1],
-    [0, -1],
-    [-1, 0],
-    [0, 0],
-  ])
-    px(o.x + dx, o.y + dy, WHITE);
-  glow(o.x, o.y, f.glow, FIRE_RAMP[4], f.glowK);
+  // a sun's corona: short rays turning about the flask
+  for (let i = 0; i < CORONA.rays; i++) {
+    const a = (i / CORONA.rays) * TAU + o.t * CORONA.turn;
+    const r0 = f.body + 1.5;
+    const r1 = r0 + CORONA.length * (i % 2 ? 0.6 : 1);
+    hairline(
+      o.x + Math.cos(a) * r0,
+      o.y + Math.sin(a) * r0,
+      o.x + Math.cos(a) * r1,
+      o.y + Math.sin(a) * r1,
+      (u) => FIRE_RAMP[u < 0.5 ? 1 : 3],
+    );
+  }
 }
 
 /** one small flask thrown out of a Sunflask burst, bursting on its own with a smaller blast */
@@ -41,11 +48,7 @@ function createChildFlask(x: number, y: number, vx: number, vy: number, blast: B
       return false;
     },
     draw() {
-      place();
-      circle(o.x, o.y, c.body, FIRE_RAMP[4]);
-      circle(o.x - 0.5, o.y - 0.5, c.body * 0.6, FIRE_RAMP[2]);
-      px(o.x - 1, o.y - 1, WHITE);
-      glow(o.x, o.y, 12, FIRE_RAMP[4], 0.4);
+      drawFlaskBody(o, c.body, c.body * 0.6, 11, 0.35);
     },
   };
 }

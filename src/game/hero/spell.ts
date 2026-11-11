@@ -28,6 +28,9 @@ import { game, hero, lights, particles, progress, rng } from "../state";
 import { leaveHang, setState } from "./actions";
 import { endCombo } from "./combo";
 
+/** the flare at the hand as a spell leaves it: small enough to leave Kael in view */
+const CAST_LIGHT = { radius: 24, strength: 0.45 } as const;
+
 /** Kael has an ability when it is a base one or its element's skill is held */
 export const knowsAbility = (a: KaelAbility): boolean =>
   a === "lance" || a === "burst" || skillLevel(ELEMENT_SKILL[a]) > 0;
@@ -135,7 +138,7 @@ export function runCast(): void {
   }
   if (h.hitDone || h.st < CLIPS.cast.hit) return;
   h.hitDone = true;
-  lights.add(hx, hy, 30, c, 0.8, 0.2);
+  lights.add(hx, hy, CAST_LIGHT.radius, c, CAST_LIGHT.strength, 0.2);
   game.fx.push(createGlint(hx, hy, c));
   // an evolved spell: a second glint in white, larger, over its own
   if (abilityEvolved(a)) game.fx.push(createGlint(hx, hy, WHITE, SUNFLASK.glintGrow));
