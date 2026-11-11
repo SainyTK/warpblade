@@ -21,6 +21,7 @@ In the reference a blow that lands makes the monster flinch, so a string locks i
 Every hero's blows go through the same three rules, in `src/game/enemies/stagger.ts`, `src/game/damage.ts` and `src/game/hitCount.ts`, with the numbers in `STAGGER`, `GUARD` and `HIT_COUNT` (`src/constants/combat.ts`).
 
 - Stagger: a hero's blow that carries `stagger` cuts whatever a minion was doing, a wind-up or an attack already under way, and the minion cannot act until the stagger ends. It slides to a stop, and a walker caught in the air drops to the floor.
+- The blow stops a charge or lunge where it was hit, so a staggered foe never slides through the hero. When the stagger ends the foe waits 0.35 seconds before it may attack, walk on or hurt by touch.
 - Mini bosses and bosses never stagger, so their attacks still have to be dodged.
 - A minion staggered 7 blows in a row (an elite 4) braces: sparks fly off it and it cannot be staggered for 1.6 seconds, so no string holds one foe forever. The count starts again after a second without a stagger, and at once when the foe is thrown up or knocked down, so a string that ends in its finisher never braces its target.
 - Guard: a guarding foe blocks the first frontal light blow, which still staggers it, and the next blow lands. A heavy blow still knocks the guard down at once. A staggered foe cannot guard.
@@ -28,6 +29,12 @@ Every hero's blows go through the same three rules, in `src/game/enemies/stagger
 - Pace: the whole fight runs at `PACE` (0.8, `src/constants/stage.ts`) of real time, heroes, foes and effects alike, so every number in the constants is in game seconds and takes 1.25 times as long on screen. Hit-stop is counted in real time.
 - Hit counter: the hero's own hits in a row show at the right of the stage from 3 hits, pop on each hit and change colour at 10, 25 and 50. Two seconds without a hit, or a blow taken, ends the row. It counts the same hits Flow counts.
 - Burning ground and brands that used to slow walkers through `stagger` now use `halt`, which only holds a walker's feet.
+
+### One string, the same every time
+
+Pressing J on the ground plays the hero's string in the same order wherever foes stand.
+The game never picks a blow from the foes around the hero, and the normal attack never turns the hero around; the hero faces where the player last pointed.
+A blow changes only when a learned skill says so, and then it changes every time.
 
 ### The string contract
 
