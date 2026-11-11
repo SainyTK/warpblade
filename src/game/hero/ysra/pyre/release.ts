@@ -78,7 +78,7 @@ function brazier(): void {
 function overheat(): void {
   startOverheat();
   game.fx.push(createFloorRing(hero.x, hero.y, 44, [...RITE_RAMP].reverse(), 0.6, 0.3));
-  lights.add(hero.x, hero.y - 16, 60, RITE_RAMP[4], 0.7, 0.6);
+  lights.add(hero.x, hero.y - 16, 56, RITE_RAMP[4], 0.5, 0.6);
   for (let i = 0; i < 30; i++)
     particles.spawn(PK.SPARK, hero.x, hero.y - 16, rng.range(-200, 200), -rng.range(80, 320), rng.range(0.3, 0.7), {
       sparks: RITE_SPARKS,

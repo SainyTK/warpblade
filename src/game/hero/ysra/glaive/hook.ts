@@ -2,7 +2,7 @@ import { ENEMY_AIR } from "../../../../constants/combat";
 import { ENEMIES } from "../../../../constants/enemies";
 import { GROUND } from "../../../../constants/stage";
 import { GLAIVE_FEEL } from "../../../../constants/ysra/glaive";
-import { glow, line, place } from "../../../../engine/frame";
+import { glow, hairline, place } from "../../../../engine/frame";
 import type { Effect } from "../../../../types/effect";
 import type { Enemy } from "../../../../types/enemy";
 import { dealDamage } from "../../../damage";
@@ -68,7 +68,11 @@ function createDrag(e: Enemy, power: number): Effect {
     draw() {
       const [cx, cy] = enemyCenter(e);
       place();
-      line(hero.x + hero.face * 10, hero.y - 30, cx, cy, (u) => skin.ramp[u < 0.5 ? 4 : 5]);
+      const hx = hero.x + hero.face * 10;
+      const hy = hero.y - 30;
+      hairline(hx, hy, cx, cy, (u) => skin.ramp[u < 0.5 ? 4 : 5]);
+      hairline(hx, hy + 0.5, cx, cy + 0.5, (u) => skin.ramp[u < 0.5 ? 2 : 3]);
+      hairline(hx, hy - 0.5, cx, cy - 0.5, skin.ramp[6], (u) => u * u);
       glow(cx, cy, 6, skin.ramp[4], 0.4);
     },
   };

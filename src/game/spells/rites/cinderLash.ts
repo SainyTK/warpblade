@@ -1,6 +1,8 @@
+import { RES } from "../../../constants/stage";
 import { RITE_RAMP, RITE_SPARKS } from "../../../constants/ysra/emberLook";
+import { LASH_LOOK } from "../../../constants/ysra/fireLook";
 import { CINDER_LASH as L } from "../../../constants/ysra/rites";
-import { glow, place, px } from "../../../engine/frame";
+import { fleck, glow, place, px } from "../../../engine/frame";
 import type { Effect } from "../../../types/effect";
 import type { Enemy } from "../../../types/enemy";
 import { PK } from "../../../types/particle";
@@ -10,6 +12,7 @@ import { ease } from "../../../utils/math";
 import { dealDamage } from "../../damage";
 import { ignite } from "../../enemies/burn";
 import { enemyBox } from "../../enemies/enemy";
+import { drawTongue } from "../../hero/ysra/art/flame";
 import { game, lights, particles, progress, rng } from "../../state";
 import { boxHit, hitStop, shake } from "../../world";
 import { riteSound } from "./riteSound";
@@ -57,7 +60,7 @@ export function castCinderLash(x: number, floor: number, dir: number): Effect {
         if (strike(x, floor, dir)) hitStop(0.05);
         shake(0.14, 1.8);
         const [tx, ty] = along(x, floor, dir, L.reach, 1);
-        lights.add(tx, ty, 36, RITE_RAMP[4], 0.8, 0.25);
+        lights.add(tx, ty, 32, RITE_RAMP[4], 0.55, 0.25);
         for (let i = 0; i < 14; i++)
           particles.spawn(PK.SPARK, tx, ty, rng.range(-120, 120), -rng.range(40, 180), rng.range(0.2, 0.4), {
             sparks: RITE_SPARKS,
@@ -73,14 +76,23 @@ export function castCinderLash(x: number, floor: number, dir: number): Effect {
     draw() {
       place();
       const reach = L.reach * reachAt();
-      const steps = Math.max(2, Math.ceil(reach));
+      const steps = Math.max(2, Math.ceil(reach * RES));
+      const cracking = t >= L.out && t < L.out + LASH_LOOK.crack;
+      // the whip: an art pixel thick near her hand, thinning to one image pixel at the tip, hottest along its top
       for (let i = 0; i <= steps; i++) {
         const u = i / steps;
         const [lx, ly] = along(x, floor, dir, reach, u);
-        const hot = u > 0.8;
-        px(lx, ly, hot ? RITE_RAMP[5] : RITE_RAMP[4]);
-        px(lx, ly + 1, RITE_RAMP[u < 0.4 ? 2 : 3]);
-        if (hot && t < L.out + 0.04) px(lx, ly - 1, WHITE);
+        const dot = u < 0.7 ? px : fleck;
+        dot(lx, ly, RITE_RAMP[u > 0.8 ? 5 : 4]);
+        fleck(lx, ly + (u < 0.7 ? 1 : 0.5), RITE_RAMP[u < 0.4 ? 2 : 3]);
+        if (cracking || u > 0.85) fleck(lx, ly - 0.25, WHITE);
+      }
+      // licks of flame standing on the whip, each on its own beat
+      for (let i = 0; i < LASH_LOOK.licks; i++) {
+        const u = (i + 0.5) / LASH_LOOK.licks;
+        const [lx, ly] = along(x, floor, dir, reach, u);
+        const h = LASH_LOOK.lickHeight * (0.4 + 0.6 * Math.abs(Math.sin(t * 26 + i * 2.1))) * (0.5 + 0.5 * u);
+        drawTongue(lx, ly, h, -dir * 1.5, RITE_RAMP);
       }
       const [tx, ty] = along(x, floor, dir, reach, 1);
       glow(tx, ty, 10, RITE_RAMP[4], 0.5);

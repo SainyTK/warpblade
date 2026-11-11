@@ -7,12 +7,15 @@ import { dust } from "../world";
 import { createBlastCore } from "./flash";
 import { createFloorRing } from "./floorRing";
 
+/** the light of a burst: a wide ember flare and a small white core, dim enough that the flames keep their shapes */
+const BURST_LIGHT = { radius: 62, strength: 0.5, core: 12, coreStrength: 0.5 } as const;
+
 /** a burst of Ysra's forge-fire at (x, y), sized by its radius: an ember core, rolling flame, sparks and a floor ring.
  *  Only the look: whoever calls it deals the damage. */
 export function emberBurst(x: number, y: number, radius: number, floor: number | null = y): void {
   const k = radius / 30;
-  lights.add(x, y - 4, 70 * k, EMBER[4], 1, 0.5);
-  lights.add(x, y - 4, 22, WHITE, 0.9, 0.1);
+  lights.add(x, y - 4, BURST_LIGHT.radius * k, EMBER[4], BURST_LIGHT.strength, 0.5);
+  lights.add(x, y - 4, BURST_LIGHT.core, WHITE, BURST_LIGHT.coreStrength, 0.1);
   for (let i = 0; i < 22 * k; i++) {
     const a = rng.range(0, TAU);
     const sp = rng.range(30, 130) * k;

@@ -9,6 +9,9 @@ import { drawLampPole } from "./lampPole";
 import type { Vec } from "./reach";
 import { drawStaff } from "./staff";
 
+/** the glaive's blade: its length along the haft, how far its belly swells, and where its edge turns white-hot */
+const GLAIVE_HEAD = { length: 9.5, belly: 2.7, hotFrom: 0.45 } as const;
+
 /** a point d along the weapon from the hand and w across it, toward the edge */
 type Along = (d: number, w: number) => [number, number];
 
@@ -53,7 +56,7 @@ function drawBlade(s: SpriteCanvas, at: Along): void {
 /** a glaive: a long wrapped haft through the hand with a butt cap, a collar, then a curved blade of forge-fire */
 function drawGlaive(s: SpriteCanvas, at: Along): void {
   const L = skin.reach;
-  const head = 8;
+  const head = GLAIVE_HEAD.length;
   const neck = L - head;
   s.begin();
   const [h0, h1] = [at(-7, 0), at(neck, 0)];
@@ -71,7 +74,7 @@ function drawGlaive(s: SpriteCanvas, at: Along): void {
     s.dot(cap[0], cap[1], 0.75, HC.trim);
   });
   // the blade swells on its edge side and sweeps back to a hooked point
-  const bulge = (u: number) => Math.sin(Math.PI * Math.min(1, u * 1.15)) * 2.2;
+  const bulge = (u: number) => Math.sin(Math.PI * Math.min(1, u * 1.15)) * GLAIVE_HEAD.belly;
   const edge: [number, number][] = [];
   const spine: [number, number][] = [];
   for (let d = 0.5; d <= head; d += 0.5) {
@@ -84,9 +87,15 @@ function drawGlaive(s: SpriteCanvas, at: Along): void {
   s.shadeEdges(HC.blade, HC.bladeEdge, HC.bladeBack, 2);
   s.commit();
   s.begin();
-  for (let d = 1; d < head - 1; d += 0.5) {
+  for (let d = 1; d < head - 1; d += 0.25) {
+    const u = d / head;
     const back = at(neck + d, -0.3);
     s.set(back[0], back[1], d < 3 ? HC.bladeDeep : HC.bladeBack);
+    // the forge-fire in the blade: a white-hot line just inside the cutting edge, and a cooler band at its middle
+    const hot = at(neck + d, (u > 0.85 ? bulge(u) * 0.5 : bulge(u) + 0.6) - 0.5);
+    s.set(hot[0], hot[1], u > GLAIVE_HEAD.hotFrom ? WHITE : HC.bladeEdge);
+    const mid = at(neck + d, bulge(u) * 0.45);
+    if (u > 0.2 && u < 0.8) s.set(mid[0], mid[1], HC.trimLight);
   }
   const tip = at(L - 0.3, bulge(1) * 0.5);
   s.set(tip[0], tip[1], WHITE);
