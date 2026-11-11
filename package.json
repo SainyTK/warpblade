@@ -1,6 +1,6 @@
 {
   "name": "warpblade",
-  "version": "0.8.0",
+  "version": "0.9.0",
   "description": "A pixel art action game about a warp knight, with every sprite and effect drawn in code.",
   "license": "MIT",
   "private": true,

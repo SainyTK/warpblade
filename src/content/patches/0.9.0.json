@@ -1,0 +1,690 @@
+{
+  "version": "0.9.0",
+  "kind": "big",
+  "date": "2026-11-12",
+  "title": "Keep Time",
+  "tagline": "Jory, the war drummer, fights to a beat you can see and hear, and keeping time makes him faster. Wave 30 now has a boss of its own, every fight carries more weight, and every era is drawn at full detail.",
+  "intro": "Jory is the sixth hero of our hero sprint and the ninth in the game. His whole kit runs on one beat: a ring at his feet, a nod of his head and a soft tick, and every press of J, K, L and I is judged against it. Players who keep time build Groove and speed up; players who mash still get an honest heavy hitter at his slowest tempo. Alongside him ships a lot of work from the day: the Abyss Sovereign now holds wave 30 with something waiting behind it, the fight runs at four fifths of its old pace so every blow has weight, and every era has been redrawn at full detail while the busiest frames cost about 45% less. Your coins, shop levels, unlocked heroes and options carry over as they were.",
+  "highlights": [
+    {
+      "title": "Jory, the war drummer",
+      "text": "A cobalt ring at Jory's feet closes and flashes on every beat, and a soft tick sounds with it. Press J on the beat and the blow is an Accent that hits 1.4 times as hard and adds a pip to his GV bar. Twelve pips is Crescendo: his tempo climbs from 96 to 132 beats a minute and his Crash sends a sound wave along the floor. Off the beat he loses three pips, so mashing never builds Groove. He costs 1800 coins on the hero screen.",
+      "media": {
+        "kind": "video",
+        "file": "jory-groove.mp4",
+        "poster": "jory-groove.png",
+        "alt": "Jory fights thornbacks and moths in the sunlit ruins on wave 3, striking Tap, Roll and Crash on every beat. The GV bar fills pip by pip and changes colour at each tier, the hit counter climbs past 10 and turns gold, and the bar goes white-hot at Crescendo as a Crash sends a sound wave along the floor.",
+        "width": 640,
+        "height": 360
+      }
+    },
+    {
+      "title": "Boom",
+      "text": "K strikes the drum with both palms and pushes every minion around him away. On the beat the ring is wider, foe shots near him vanish, and nothing can touch him for a moment. Off the beat the ring is small and the shots still come through.",
+      "media": {
+        "kind": "video",
+        "file": "jory-boom.mp4",
+        "poster": "jory-boom.png",
+        "alt": "Two thornbacks close in on Jory while moths shed pollen over him. An on-beat Boom throws a wide cobalt ring that pushes both thornbacks out to either side and breaks the pollen into sparks. Two beats later an off-beat Boom makes a much smaller ring.",
+        "width": 640,
+        "height": 360
+      }
+    },
+    {
+      "title": "Beat Step",
+      "text": "L is a short, measured step that grows with his Groove. On the beat he is untouchable and passes straight through ground foes. Off the beat he can be hit and stops against a foe's body.",
+      "media": {
+        "kind": "video",
+        "file": "jory-beat-step.mp4",
+        "poster": "jory-beat-step.png",
+        "alt": "A thornback winds up and charges at Jory. He Beat Steps through it on the beat and PERFECT appears overhead. He turns and runs his mallet string into its back, with BACK hits, until it falls.",
+        "width": 640,
+        "height": 360
+      }
+    },
+    {
+      "title": "Drumroll",
+      "text": "His special plants the drum and plays a roll of 2, 3, 4 or 6 heavy beats by charge level, each one a widening ring. The last ring throws minions into the air, and he comes out of it with at least 8 Groove.",
+      "media": {
+        "kind": "video",
+        "file": "jory-drumroll.mp4",
+        "poster": "jory-drumroll.png",
+        "alt": "On a moonlit night wave, Jory charges his special to full as husks and wisps close in from both sides. He plants the drum and six widening cobalt rings sweep the stage. The last ring wipes out all ten foes and the hit counter reaches 22.",
+        "width": 640,
+        "height": 360
+      }
+    },
+    {
+      "title": "The Abyss Sovereign",
+      "text": "Wave 30 now ends with a boss of its own: a crowned giant with a blade of void light. It cleaves everything in front of it, steps through a rift to rise behind you, and calls pillars of void light down around you. Below half its HP it cleaves twice and drives its blade into the floor. When it falls, the stage is not quite over. Something comes through that nothing seems to hurt. There is a way. It has never looked away from anything that moved.",
+      "media": {
+        "kind": "video",
+        "file": "abyss-sovereign.mp4",
+        "poster": "abyss-sovereign.png",
+        "alt": "Under a black eclipse, the banner WAVE 30: ABYSS SOVEREIGN appears and the crowned giant with a red void blade walks in with its stalkers and eyes. As Kael fights in the middle of the stage, the Sovereign raises its blade and calls a row of void-light pillars that crash down around him.",
+        "width": 640,
+        "height": 360
+      }
+    },
+    {
+      "title": "Combos with weight",
+      "text": "The whole fight now runs at four fifths of its old pace. Every hero's string plays the same blows in the same order every time, each with a full wind-up, strike and follow-through. A minion you strike staggers and tips back with its attack cut, and a new hit counter shows your hits in a row.",
+      "media": {
+        "kind": "video",
+        "file": "hit-counter.mp4",
+        "poster": "hit-counter.png",
+        "alt": "Mirel plays her fixed staff string into two thornbacks and the moths above them, and each struck thornback staggers back. The hit counter on the right climbs from 4 to 8 in blue, turns gold at 11 and reaches 17.",
+        "width": 640,
+        "height": 360
+      }
+    },
+    {
+      "title": "Every era at full detail",
+      "text": "Every era's scene is redrawn at full detail, from the sunlit ruins to the Abyss. Foes are redrawn to read against them, hit effects and hero skills are finer, and soft shadows sit under every foe and hero. The busiest fights cost about 45% less to draw.",
+      "media": {
+        "kind": "image",
+        "file": "graphics-storm.png",
+        "alt": "The redrawn storm era mid-fight on wave 7: rain over dark ruined towers and torches, Hulda grappling a mire toad under three storm kites, with soft shadows under the hero and the toads.",
+        "width": 1280,
+        "height": 720
+      }
+    }
+  ],
+  "sections": [
+    {
+      "id": "heroes",
+      "entries": [
+        {
+          "name": "Jory",
+          "tag": "new",
+          "summary": "A heavy drummer whose every press is judged against one beat, and who gets faster the longer he keeps time.",
+          "context": "Kael's Keen timing only follows his own blows, Ysra parries one blow from the front, Sable fights from afar, Hulda walks into blows, Orrin earns his resource from speed, Mirel slows foes, Wenna fights through her Wicks and Tallis wins by where he stands. Jory wins by when he presses: one clock for the whole run judges his blows, his defence and his travel.",
+          "changes": [
+            {
+              "kind": "stat",
+              "label": "Price on the hero screen",
+              "before": "Not in the game",
+              "after": "1800 coins"
+            },
+            {
+              "kind": "note",
+              "text": "Base stats: 105 HP, 12 attack, 8 ability power, 85 MP, 110 stamina, 4% crit, move 1.0. His attack is high because off the beat he swings at the slowest tempo in the roster."
+            },
+            {
+              "kind": "note",
+              "text": "A and D walk, and a double tap runs. W is one jump of the shared height, with no double jump."
+            },
+            {
+              "kind": "note",
+              "text": "Two achievements of his own: Jory's Trial (clear wave 10 with him, 40 coins) and In Time (hold Crescendo for 20 seconds in a row, 60 coins)."
+            },
+            {
+              "kind": "note",
+              "text": "He plays in co-op rooms like every hero. Each Jory keeps his own beat and Groove, and a guest's presses are judged against the beat shifted by that guest's measured delay."
+            },
+            {
+              "kind": "note",
+              "text": "Known issue: the guest timing has only been tested in rooms on one machine so far, not across a real network."
+            }
+          ],
+          "media": {
+            "kind": "image",
+            "file": "jory-hero-screen.png",
+            "alt": "The Choose a Hero screen with Jory's ninth tile selected in a cobalt frame. His panel shows his silhouette in the rest pose, the title The war drummer, cobalt stat bars, Special: Drumroll, his blurb and a padlock at 1800 coins.",
+            "width": 1280,
+            "height": 720
+          }
+        },
+        {
+          "name": "Jory: the beat and Groove",
+          "tag": "new",
+          "summary": "Press J, K, L or I on the beat to build Groove, and Groove raises his tempo in four tiers.",
+          "context": "The beat is shown four ways so it works with sound off: the floor ring, his body, a lamp on the GV bar and a soft tick. Only J, K, L and I are judged, so jumping and walking never cost Groove.",
+          "changes": [
+            {
+              "kind": "note",
+              "text": "A press is on the beat when it lands within a tenth of a second of the nearest beat, before or after."
+            },
+            {
+              "kind": "note",
+              "text": "Groove holds 12 pips and a run starts at 0. On the beat: +1. Off the beat: -3. A blow that takes his HP: -4. With foes on the stage, every beat after four silent beats costs 1."
+            },
+            {
+              "kind": "note",
+              "text": "Tempo by tier, in beats a minute: 96 at 0 to 3 Groove, 108 at 4 to 7, 120 at 8 to 11, and 132 at Crescendo (12). His blows speed up with the tempo, so one blow always lasts one beat."
+            },
+            {
+              "kind": "note",
+              "text": "Tier 2: Crash reaches 54 pixels in place of 44. Tier 3: Crash sends a sound wave 90 pixels along the floor for 0.6x attack. Crescendo: the wave runs 150 pixels for 0.8x attack and knocks minions down, and Accents deal 1.6x."
+            },
+            {
+              "kind": "note",
+              "text": "The GV bar sits under stamina, in three groups of four pips, and changes colour by tier. A lost pip blinks grey."
+            }
+          ]
+        },
+        {
+          "name": "Jory: the mallet string",
+          "tag": "new",
+          "summary": "J plays Tap, Roll and Crash every time, and each blow pressed on the beat is an Accent.",
+          "context": "His hit frames come early on purpose, so the impact lands close to the beat you pressed on. A press before the current blow lands still queues the next blow but counts as off the beat, so mashing never builds Groove.",
+          "changes": [
+            {
+              "kind": "note",
+              "text": "Tap: 0.95x attack. Roll: two hits of 0.55x attack from one press. Crash: 1.45x attack in a cone 44 pixels ahead that breaks a guard and knocks the foe down."
+            },
+            {
+              "kind": "note",
+              "text": "Accent: a blow started on the beat deals 1.4x, shows a cobalt ring where it lands and plays a drum thump."
+            },
+            {
+              "kind": "note",
+              "text": "Downstroke: in the air, J drives both mallets down for 1.1x attack, once per jump. An Accent Downstroke that lands bounces him 18 pixels up."
+            },
+            {
+              "kind": "note",
+              "text": "A J pressed while he flinches from a blow is judged at once, and if it came late in the flinch its blow opens the string with Tap when he lands."
+            },
+            {
+              "kind": "note",
+              "text": "Known issue: mashing J through a flinch can bring him back into the string a little later than other heroes, and on rare frames a press just after the flinch gets no answer."
+            }
+          ]
+        },
+        {
+          "name": "Jory: Boom and Beat Step",
+          "tag": "new",
+          "summary": "K pushes foes away and drowns their shots, and L steps through foes, both only fully safe on the beat.",
+          "context": "Jory has no block, parry or armour. He clears space around him on his own timing, whatever the foes are doing.",
+          "changes": [
+            {
+              "kind": "note",
+              "text": "Boom: 25 stamina, then 0.5 seconds before the next one. It deals 0.5x ability power plus 0.2x attack to each foe in its ring and works on the floor and in the air."
+            },
+            {
+              "kind": "note",
+              "text": "Boom on the beat: a 40 pixel ring that pushes minions out to 52 pixels, removes every foe shot within 48 pixels, and makes him untouchable for 0.12 seconds. A blow that meets that moment is a perfect dodge."
+            },
+            {
+              "kind": "note",
+              "text": "Boom off the beat: a 26 pixel ring with the same push, no shot removal and no untouchable moment."
+            },
+            {
+              "kind": "note",
+              "text": "Beat Step: 18 stamina, then 0.25 seconds before the next one. A step of 34, 40, 46 or 52 pixels by Groove tier, toward the side held or back with none held. In the air, once per jump, at 70% of the distance."
+            },
+            {
+              "kind": "note",
+              "text": "Beat Step on the beat: untouchable through the whole step and through ground foes, with a perfect dodge in its first 0.12 seconds. Off the beat he can be hit and stops against a foe's body."
+            }
+          ]
+        },
+        {
+          "name": "Jory: Steady Hand and Thunder Skin",
+          "tag": "new",
+          "summary": "His two abilities on I give you room to find the beat or send a wave along the floor.",
+          "context": "Steady Hand is there for players still learning his timing. Both abilities are judged presses, so casting them on the beat also builds Groove.",
+          "changes": [
+            {
+              "kind": "note",
+              "text": "Steady Hand: 20 MP, 12 second recharge. For the next 8 beats his window widens to 0.18 seconds and his Groove cannot fall. A small metronome arm swings over his head until it ends."
+            },
+            {
+              "kind": "note",
+              "text": "Thunder Skin: 16 MP, 5 second recharge. A wave runs 160 pixels along the floor for 0.9x ability power plus 0.4x attack, staggering minions. On the beat it runs 200 pixels and knocks minions down."
+            },
+            {
+              "kind": "note",
+              "text": "O switches between Steady Hand, Thunder Skin and any spell skills he picks up."
+            }
+          ]
+        },
+        {
+          "name": "Jory: Drumroll",
+          "tag": "new",
+          "summary": "His special is a roll of heavy rings that leaves him in a high Groove tier.",
+          "context": "A special should feel like his kit at full size, and for Jory that is the drum played as loud as it goes.",
+          "changes": [
+            {
+              "kind": "note",
+              "text": "A roll of 2, 3, 4 or 6 beats by charge level, at 150 beats a minute whatever his tempo. Each beat sends a ring of 70, 90, 110 or 140 pixels for the level's power times 0.3 of attack plus ability power."
+            },
+            {
+              "kind": "note",
+              "text": "The last ring throws minions into the air and knocks elites down. He cannot be hit from the release to the last ring."
+            },
+            {
+              "kind": "note",
+              "text": "Afterwards his Groove is at least 8, and silence costs no Groove for the next 8 beats."
+            },
+            {
+              "kind": "note",
+              "text": "His ultimate skill, Grand Finale, replaces it with wider rings that drop a cymbal crash on every foe they reach. It evolves into Encore of Thunder."
+            }
+          ]
+        },
+        {
+          "name": "Jory: 20 skills",
+          "tag": "new",
+          "summary": "His own skills reward pressing on the beat, and the ones that act on each beat speed up with his Groove.",
+          "context": "Every hero has 20 skills of their own, and Jory arrives with his complete set, their evolutions and their icons in the cards and the Codex.",
+          "changes": [
+            {
+              "kind": "note",
+              "text": "Attacks: Heavy Accent, Paradiddle, Crash Wave, Rimshot, Kick Drum and Swell."
+            },
+            {
+              "kind": "note",
+              "text": "Movement: Step Touch, War March and Downbeat Leap."
+            },
+            {
+              "kind": "note",
+              "text": "Spells on I: Gong, Tuning Fork and Echo Chamber."
+            },
+            {
+              "kind": "note",
+              "text": "Damage over time: Resonance, Ringing Ears and Dissonance."
+            },
+            {
+              "kind": "note",
+              "text": "Summons: Drum Corps, War Horn and Iron Metronome."
+            },
+            {
+              "kind": "note",
+              "text": "Passive: Encore. Ultimate: Grand Finale."
+            },
+            {
+              "kind": "note",
+              "text": "For example, Heavy Accent at level 8 with Iron Metronome at level 4 evolves into Thunderclap: an Accent on the first beat of a bar is a sure crit and splits a 50 pixel ring."
+            }
+          ],
+          "media": {
+            "kind": "image",
+            "file": "jory-evolution.png",
+            "alt": "A chest during a rainy storm-era fight shows the gold EVOLUTION heading over Thunderclap and its icon. The card reads: Heavy Accent evolved. An Accent on a bar's downbeat is a sure crit and splits a 50 px thunderclap ring.",
+            "width": 1280,
+            "height": 720
+          }
+        },
+        {
+          "name": "Jory: controls",
+          "tag": "new",
+          "summary": "His keys are on the Controls screen, and he has his own buttons on the touch controller.",
+          "context": "Every hero plays the same on a keyboard and on a phone.",
+          "changes": [
+            {
+              "kind": "note",
+              "text": "J is the mallet string, K Boom, L Beat Step, I the selected ability, O switches ability and U is the special."
+            },
+            {
+              "kind": "note",
+              "text": "On the touch controller his buttons are Mallets, Jump, Boom, Step, Ability, Switch and Special, and taps are judged on the beat like keys."
+            }
+          ],
+          "media": {
+            "kind": "image",
+            "file": "jory-touch-phone.png",
+            "alt": "An upright phone screen during wave 3 as Jory strikes a thornback. The HUD shows the GV bar lit white-hot at Crescendo and the floor ring at his feet. Below the stage are the stick and his seven touch buttons with their cobalt mallet, drum, boot and metronome icons.",
+            "width": 780,
+            "height": 1688
+          }
+        },
+        {
+          "name": "Every hero's string",
+          "tag": "rework",
+          "summary": "Each hero's J string now plays the same blows in the same order every time, wherever foes stand, and each blow has a full wind-up, strike and follow-through.",
+          "context": "A string you can count on is a string you can learn. Picking blows from where foes stood made the same press do different things, and the blows were too quick to read.",
+          "changes": [
+            {
+              "kind": "note",
+              "text": "Kael's sword string plays the same every time, and his skill blows now wind up, strike and settle like the rest of his string."
+            },
+            {
+              "kind": "note",
+              "text": "Ysra's glaive string plays the same three blows every time, each with a full wind-up, hold and follow-through."
+            },
+            {
+              "kind": "note",
+              "text": "Sable's crossbow draws, looses and recoils on every bolt, and her hop and slide load before they travel."
+            },
+            {
+              "kind": "note",
+              "text": "Hulda's fist string plays the same way every time, slower and heavier. Her hook and haymaker now reach past where her jab pushed the foe."
+            },
+            {
+              "kind": "note",
+              "text": "Orrin's chain string plays the same three blows every time, with weight in every lash."
+            },
+            {
+              "kind": "note",
+              "text": "Mirel's staff string reads as three full blows and holds the foe from Tick to Toll."
+            },
+            {
+              "kind": "note",
+              "text": "Wenna's lamp string plays Tap, Swing and Flare every time, and the Flare throws the foe off its feet. Her jump pushes off from a crouch, Swap lands into a recovery, and her Wicks crouch before they bite, hop or lunge."
+            },
+            {
+              "kind": "note",
+              "text": "Tallis's J plays Flick, Cross and Heel Kick every time, with weightier blows."
+            },
+            {
+              "kind": "note",
+              "text": "Every jump from the floor now loads for two frames with a knee bend before it leaves."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "foes",
+      "entries": [
+        {
+          "name": "Abyss Sovereign",
+          "tag": "new",
+          "summary": "Wave 30 now brings a boss of its own, a crowned giant with a blade of void light.",
+          "context": "The last wave of the stage deserved a fight with readable phases, in the spirit of the dungeon bosses the game leans on. The Rift Warden at wave 20 was the only boss until now.",
+          "changes": [
+            {
+              "kind": "stat",
+              "label": "Wave 30",
+              "before": "The Abyss Maw, the era's mini boss",
+              "after": "The Abyss Sovereign, a boss"
+            },
+            {
+              "kind": "note",
+              "text": "800 base HP, 40 coins. Up close it cleaves everything in front of it, 58 pixels ahead and floor to crown."
+            },
+            {
+              "kind": "note",
+              "text": "From further off it sinks into a rift and rises 34 pixels behind you to cleave, or raises its blade and calls 3 pillars of void light down in a row around you."
+            },
+            {
+              "kind": "note",
+              "text": "Below half its HP it is enraged: it walks faster, cleaves twice in a row, calls 5 pillars, and drives its blade into the floor to send spikes out both ways."
+            }
+          ],
+          "media": {
+            "kind": "image",
+            "file": "abyss-sovereign.png",
+            "alt": "Under a black eclipse, the banner WAVE 30: ABYSS SOVEREIGN appears as the crowned giant with a red void blade walks in with its stalkers and eyes.",
+            "width": 640,
+            "height": 360
+          }
+        },
+        {
+          "name": "The Unblinking",
+          "tag": "new",
+          "summary": "When the Sovereign falls, one more foe comes through, and nothing seems to hurt it.",
+          "context": "There is a way. It has never looked away from anything that moved.",
+          "changes": [
+            {
+              "kind": "note",
+              "text": "A hero who falls to it has still cleared the stage."
+            },
+            {
+              "kind": "note",
+              "text": "A new achievement, worth 500 coins, waits for whoever defeats it."
+            }
+          ]
+        },
+        {
+          "name": "Struck minions stagger",
+          "tag": "rework",
+          "summary": "A minion you hit stops where it was struck, tips back, and loses the attack it was winding up.",
+          "context": "Combos should lock their target, so a string that lands plays out to its end. Mini bosses and bosses never stagger, and minions brace after a long run of blows so a crowd cannot be held forever.",
+          "changes": [
+            {
+              "kind": "note",
+              "text": "A staggered minion waits 0.35 seconds after the stagger ends before it can attack, walk on or hurt by touch."
+            },
+            {
+              "kind": "note",
+              "text": "A minion braces after 7 blows in a row, an elite after 4, and cannot be staggered for 1.6 seconds."
+            },
+            {
+              "kind": "note",
+              "text": "A guard breaks on the second blow, a blocked blow still staggers, and a knockdown starts the stagger count again."
+            },
+            {
+              "kind": "note",
+              "text": "A minion knocked off its feet is drawn tipped over, so a knockdown reads at a glance."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "systems",
+      "entries": [
+        {
+          "name": "Game pace",
+          "tag": "adjusted",
+          "summary": "The whole fight, heroes, foes and effects alike, now plays slower so every movement has weight.",
+          "context": "With full wind-ups and follow-throughs on every blow, the old pace made the fight hard to read. Slowing everything together keeps every timing in proportion.",
+          "changes": [
+            {
+              "kind": "stat",
+              "label": "Game speed",
+              "before": "100%",
+              "after": "80%"
+            }
+          ]
+        },
+        {
+          "name": "Hit counter",
+          "tag": "new",
+          "summary": "A counter below the HUD shows your hits in a row.",
+          "context": "Long strings are the heart of the fighting, and now you can see how long yours runs.",
+          "changes": [
+            {
+              "kind": "note",
+              "text": "It shows from 3 hits and changes colour as it passes 10, 25 and 50. It is lost after 2 seconds without a hit or when you are hurt."
+            },
+            {
+              "kind": "note",
+              "text": "With the touch controller up it sits under the pause button."
+            }
+          ]
+        },
+        {
+          "name": "Jump",
+          "tag": "adjusted",
+          "summary": "Every jump rises the same height however long you hold Up.",
+          "context": "A jump that depends on how long a key is held is hard to repeat in a busy fight. One height per hero is easier to read and to plan around.",
+          "changes": [
+            {
+              "kind": "stat",
+              "label": "Jump height",
+              "before": "Higher the longer Up is held",
+              "after": "The same for every press"
+            }
+          ]
+        },
+        {
+          "name": "Skill picks",
+          "tag": "adjusted",
+          "summary": "The skill cards now wait a moment for the wave's last foe to finish falling.",
+          "context": "The pick used to cover the last kill of the wave before you could see it land.",
+          "changes": [
+            {
+              "kind": "stat",
+              "label": "Cards open",
+              "before": "As the last foe falls",
+              "after": "0.9 seconds later"
+            }
+          ]
+        },
+        {
+          "name": "Skill cards",
+          "tag": "buff",
+          "summary": "The next level of a skill you hold comes up a little more often, so more of your skills reach their evolution.",
+          "context": "In 2,000 simulated runs, a player steering toward evolutions reached four or more in 7.6% to 9.5% of runs. With the new weight it is 11.0% to 12.8%.",
+          "changes": [
+            {
+              "kind": "stat",
+              "label": "Weight of a held skill's next level (a new skill is 100)",
+              "before": "6",
+              "after": "9"
+            }
+          ]
+        },
+        {
+          "name": "Achievements",
+          "tag": "adjusted",
+          "summary": "Three new achievements: one at the very end of the stage, and two for Jory.",
+          "context": "Every new hero brings goals of their own, and the end of the stage now has something to chase.",
+          "changes": [
+            {
+              "kind": "stat",
+              "label": "Achievements",
+              "before": "30, worth 1,870 coins",
+              "after": "33, worth 2,470 coins"
+            },
+            {
+              "kind": "note",
+              "text": "In Time counts the seconds Jory holds Crescendo without dropping out of it."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "items",
+      "entries": [
+        {
+          "name": "Last Light",
+          "tag": "buff",
+          "summary": "Last Light can now be bought three times, and each level saves your hero from one more fatal blow per run.",
+          "context": "With a boss at wave 30 and something behind it, a long run needs more than one second chance for players who want to pay for it.",
+          "changes": [
+            {
+              "kind": "stat",
+              "label": "Levels",
+              "before": "1, for 300 coins",
+              "after": "3, for 300, 480 and 770 coins"
+            }
+          ]
+        },
+        {
+          "name": "Aftershock",
+          "tag": "adjusted",
+          "summary": "Aftershock now answers Jory's Beat Step too.",
+          "context": "Every shop item should help every hero.",
+          "changes": [
+            {
+              "kind": "note",
+              "text": "For Jory: the end of every Beat Step."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "art",
+      "entries": [
+        {
+          "name": "Eras",
+          "tag": "rework",
+          "summary": "Every era's scene is drawn at full detail, and the world beyond the stage continues the stage's own picture.",
+          "context": "The scenes were the flattest part of the game. They are painted once when a wave's look changes, so the extra detail costs nothing per frame.",
+          "changes": [
+            {
+              "kind": "note",
+              "text": "Sunlit Ruins: a haloed sun, shaded clouds, two mountain ranges, wooded hills, weathered masonry, grass, flowers, vines, swaying stalks and falling leaves."
+            },
+            {
+              "kind": "note",
+              "text": "Storm: billowing lit clouds, rain veils and mist between the towers, a wet mirrored floor, rain at three depths and lightning that rims the towers."
+            },
+            {
+              "kind": "note",
+              "text": "Night: a finer moon and halo, stars and a milky band, lit windows, firelight and grass."
+            },
+            {
+              "kind": "note",
+              "text": "Twilight: its own smooth sky with aurora curtains and tears showing another sky, and crystal, runes and glowing veins on the ruins."
+            },
+            {
+              "kind": "note",
+              "text": "Abyss: a black sun with a streaming corona, a soft-edged rift, dust clouds, far ruins in the sky, and tower tops that float as carved pieces."
+            },
+            {
+              "kind": "note",
+              "text": "Soft shadows sit under every foe and hero."
+            }
+          ],
+          "media": {
+            "kind": "image",
+            "file": "graphics-twilight.png",
+            "alt": "The redrawn twilight era mid-fight on wave 17: a violet sky with a ringed moon and falling crystal shards, Wenna leaping among rune golems, horned husks and prism sprites, with soft glowing shadows under the foes.",
+            "width": 1280,
+            "height": 720
+          }
+        },
+        {
+          "name": "Foes",
+          "tag": "rework",
+          "summary": "Foes in every era are redrawn to read clearly against their scene, with livelier poses and clearer wind-ups.",
+          "context": "A foe must read at a glance against its background, and its wind-up must never hide.",
+          "changes": [
+            {
+              "kind": "note",
+              "text": "Day foes breathe, wag and rustle, with finer roots, acorns and pollen."
+            },
+            {
+              "kind": "note",
+              "text": "Storm toads, kites and the Bog Hulk are wetter and better shaded."
+            },
+            {
+              "kind": "note",
+              "text": "Moonlight falls on the wisp, husk, brute and Rift Warden, and the Warden is cloaked and haloed."
+            },
+            {
+              "kind": "note",
+              "text": "Rune Golems and Prism Sprites are sharper with clearer wind-ups."
+            },
+            {
+              "kind": "note",
+              "text": "Stalkers, eyes and the Maw are shaded with lit backs and dark bellies, and stalker packs come in three hides."
+            }
+          ]
+        },
+        {
+          "name": "Hit effects and hero skills",
+          "tag": "rework",
+          "summary": "Impacts are finer and bursts no longer bury the fight in white light.",
+          "context": "Big moments should look big without hiding the foes, the hero or a wind-up. Stacked light now adds at most a set amount, so outlines under a burst stay readable.",
+          "changes": [
+            {
+              "kind": "note",
+              "text": "Impacts are a small core with thin rays and a ring, slashes break up as they fade, damage numbers are finer and crits smaller, and a struck foe or hero keeps its shape through the flash."
+            },
+            {
+              "kind": "note",
+              "text": "Coins, experience orbs, motes and the chest are drawn at full detail."
+            },
+            {
+              "kind": "note",
+              "text": "Kael, Ysra, Sable, Hulda, Orrin, Mirel, Wenna and Tallis each have finer skill effects. For example, Crystal Nova throws crystals up from the floor, Orrin's chain has real links, Wenna's Wicks are shaded wax figures and Mirel's clocks are real dials."
+            }
+          ]
+        },
+        {
+          "name": "Frame cost",
+          "tag": "adjusted",
+          "summary": "The busiest fights cost about 45% less to draw, so phones keep up better.",
+          "context": "The detail pass had to pay for itself. Foes keep their picture for a thirtieth of a second, sprite parts fill row by row, and glows read from a table.",
+          "changes": [
+            {
+              "kind": "stat",
+              "label": "Cost of a frame in the busiest fights",
+              "before": "100%",
+              "after": "About 55%"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "feedback": []
+}
