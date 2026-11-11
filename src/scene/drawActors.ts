@@ -113,7 +113,12 @@ export function drawEnemies(): void {
     const away = Math.sign(e.x - hero.x) || 1;
     const recoil = away * STAGGER.kick * clamp(e.flash / HIT_FLASH.life);
     // a staggered foe tips back from the blow and rights itself as the stagger runs out
-    const lean = e.air || e.stun > 0 ? 0 : away * STAGGER.lean * clamp(e.stagger / STAGGER.leanEase);
+    const down = e.stun > 0 && !e.air && e.rank === "minion" && !kind.flies;
+    const lean = down
+      ? away * STAGGER.downLean * clamp(e.stun / STAGGER.leanEase)
+      : e.air || e.stun > 0
+        ? 0
+        : away * STAGGER.lean * clamp(e.stagger / STAGGER.leanEase);
     const at = e.x + tremble + recoil;
     const time = timeTint(e);
     const tint =

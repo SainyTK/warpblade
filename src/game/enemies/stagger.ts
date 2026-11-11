@@ -45,7 +45,11 @@ export function updateStagger(e: Enemy, dt: number): boolean {
     return false;
   }
   e.stagger -= dt;
-  if (e.air || e.stun > 0) return false;
+  // thrown up or knocked down, the foe is out of the string: the count of blows starts again
+  if (e.air || e.stun > 0) {
+    e.staggerHits = 0;
+    return false;
+  }
   e.vx -= e.vx * STAGGER.friction * dt;
   e.x = clamp(e.x + e.vx * dt, 10, W - 10);
   if (kindOf(e.type).flies) e.vy -= e.vy * STAGGER.friction * dt;

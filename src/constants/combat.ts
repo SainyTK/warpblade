@@ -16,8 +16,6 @@ export const HERO_MOVE = {
   hangJumpRise: 38,
   dashSpeed: 270,
   dashTime: 0.24,
-  /** a J this soon after a dash is a dash attack */
-  dashLink: 0.18,
 } as const;
 
 /** Stamina: every dash spends part of the bar, and it comes back after a short pause, slower while Kael attacks. */
@@ -85,6 +83,8 @@ export const STAGGER = {
   /** a staggered foe is drawn tipped away from the hero: image pixels per row of height, eased out over `leanEase` seconds */
   lean: 0.14,
   leanEase: 0.15,
+  /** a minion knocked off its feet is drawn tipped this far, so a knockdown reads at a glance */
+  downLean: 0.4,
 } as const;
 
 /** The hit counter: the hero's hits in a row, shown from `from` hits, lost after `window` seconds without one or when hurt */

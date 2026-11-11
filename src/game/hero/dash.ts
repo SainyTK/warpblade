@@ -71,7 +71,6 @@ export function runDash(dt: number): void {
   emitSkillEvent({ type: "dash", dir: h.face, foes: passed.foes });
   endPassingCut();
   h.vx *= 0.4;
-  h.sinceDash = 0;
   settle();
   travelEnded();
 }

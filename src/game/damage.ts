@@ -130,7 +130,11 @@ export function dealDamage(e: Enemy, base: number, o: HitOptions = {}): HitResul
   const source = o.source ?? "attacks";
   let tag: DamageTag = o.dot ? "burn" : "normal";
   if (guards(e, o)) {
-    if (!o.heavy && e.guardHits + 1 < GUARD.breakAfter) return block(e, base, source);
+    if (!o.heavy && e.guardHits + 1 < GUARD.breakAfter) {
+      // the blocked blow still rocks the foe, so it cannot walk on or wind up before the string's next blow
+      if (o.stagger) staggerFoe(e, o.stagger);
+      return block(e, base, source);
+    }
     // a heavy blow knocks the guard down; the second light blow in a row only opens it
     if (o.heavy) e.stun = Math.max(e.stun, def.launchable ? GUARD.breakStun : GUARD.breakStun * 0.6);
     tag = "break";

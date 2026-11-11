@@ -75,7 +75,6 @@ export function updateHero(dt: number): void {
   rechargeSpells(recharge);
   tickDenied(dt);
   h.riposte = Math.max(0, h.riposte - dt);
-  h.sinceDash += dt;
   regenStamina(dt);
   tickCombo(dt);
   kit().tick(dt);

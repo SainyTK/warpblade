@@ -2,18 +2,8 @@ import type { HitFeel } from "../types/move";
 import { ramp } from "../utils/color";
 import { frame } from "./hero";
 
-/** how far around Kael the combo looks for foes, in pixels edge to edge */
-export const REACH = {
-  front: 30,
-  back: 26,
-  /** a foe counts as level with Kael when its box reaches this far above or below his feet */
-  above: 44,
-  below: 6,
-  /** an airborne foe worth chasing: this far above his feet at least, and at most */
-  airAbove: 18,
-  airHigh: 100,
-  airFront: 56,
-} as const;
+/** a foe counts as level with the hero when its box reaches this far above or below the feet, in pixels */
+export const REACH = { above: 44, below: 6 } as const;
 
 /** travelling moves stop this close to the foe in front, and go this much further while forward is held */
 export const ADVANCE = { contact: 6, lean: 1.5 } as const;
