@@ -108,6 +108,36 @@ export function judge(button: BeatButton, early = false): BeatJudgement {
   return { onBeat, downbeat: place.downbeat };
 }
 
+/**
+ * A J during the flinch: judged at once, with its thump or click, and kept waiting in the input buffer so it starts a
+ * blow as soon as the flinch ends, even once the buffer would have let it go. Judging it again returns this judgement.
+ */
+export function judgeKept(): void {
+  const at = stampOf("J");
+  if (jory.keptJ === at) return;
+  const judged = judge("J");
+  jory.keptJ = at;
+  jory.keptOnBeat = judged.onBeat;
+  jory.keptDownbeat = judged.downbeat;
+}
+
+/** a J kept from the flinch is still waiting for its blow: it lapses this long after it was pressed */
+export const keptJWaiting = (): boolean => {
+  if (jory.keptJ < 0) return false;
+  if (jory.clock - jory.keptJ <= BEAT.keepJ) return true;
+  jory.keptJ = -1;
+  return false;
+};
+
+/** judge a J that starts or queues a blow; a press already judged during the flinch keeps its judgement */
+export function judgeJ(early = false): BeatJudgement {
+  if (jory.keptJ >= 0) {
+    jory.keptJ = -1;
+    return { onBeat: jory.keptOnBeat && !early, downbeat: jory.keptDownbeat };
+  }
+  return judge("J", early);
+}
+
 /** each judged button's waiting press keeps the beat-clock time it was first seen at, through hit-stop too */
 function stampPresses(): void {
   for (const button of Object.keys(ACTIONS) as BeatButton[]) {

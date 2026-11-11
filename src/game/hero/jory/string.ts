@@ -19,7 +19,7 @@ import { game, hero, progress } from "../../state";
 import { dust, markStruck, newSwing, shake, struckThisSwing } from "../../world";
 import { isFree, setState, settle } from "../actions";
 import { lift } from "../lift";
-import { judge, tier } from "./beat";
+import { judgeJ, tier } from "./beat";
 import {
   accentBreaks,
   blowFor,
@@ -131,7 +131,7 @@ export function pressString(): boolean {
   if (hero.state === "mallet") {
     // a press before the blow under way has struck counts as off the beat, so mashing never builds Groove; every press
     // is judged, and a later press on the beat turns the queued blow into an Accent
-    const judged = judge("J", jory.struckAt < 0);
+    const judged = judgeJ(jory.struckAt < 0);
     if (jory.queued && !judged.onBeat) return true;
     jory.queued = true;
     jory.queuedAccent = judged.onBeat;
@@ -139,7 +139,7 @@ export function pressString(): boolean {
     return true;
   }
   if (!isFree() || !hero.ground) return false;
-  startBlow(jory.link > 0 ? jory.blow : 0, judge("J"));
+  startBlow(jory.link > 0 ? jory.blow : 0, judgeJ());
   return true;
 }
 
@@ -173,7 +173,7 @@ export function tickLink(dt: number): void {
 /** J in the air: Downstroke, once per airtime */
 export function pressDownstroke(): boolean {
   if (hero.ground || jory.downstrokes <= 0 || !isFree()) return false;
-  const judged = judge("J");
+  const judged = judgeJ();
   jory.downstrokes--;
   jory.current = "downstroke";
   jory.accent = judged.onBeat;

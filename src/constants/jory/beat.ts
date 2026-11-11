@@ -17,6 +17,8 @@ export const BEAT = {
   /** a video frame of the stream, in real seconds, and the most a guest's shift may be */
   videoFrame: 1 / 30,
   guestLagMost: 0.3,
+  /** a J judged during the flinch starts its blow when the flinch ends, if it was pressed at most this long before */
+  keepJ: 0.2,
   /** a bar has four beats; its first is the downbeat */
   bar: 4,
   /** the floor ring closes from this width to this one over each beat, in art pixels, and flashes on the beat */

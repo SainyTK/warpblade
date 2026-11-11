@@ -45,6 +45,10 @@ export interface JoryMemory {
   stampK: number;
   stampL: number;
   stampI: number;
+  /** a J judged during the flinch and kept waiting to start a blow: its stamp (-1 for none) and its judgement */
+  keptJ: number;
+  keptOnBeat: boolean;
+  keptDownbeat: boolean;
   /** the mallet string: the blow under way or the one the next J starts (index), which blow it is, and its timing */
   blow: number;
   current: "tap" | "roll" | "crash" | "kick" | "downstroke";
