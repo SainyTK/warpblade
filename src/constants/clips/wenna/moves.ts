@@ -18,21 +18,6 @@ export const LIGHT_CLIP: ActionClip = {
   ],
 };
 
-/** L: gathered small as she vanishes and arrives, the pole drawn in close and upright, knees bent */
-export const SWAP_POSE: Pose = m({
-  hy: -12,
-  ny: -21.6,
-  nx: 1.5,
-  cb: 0.6,
-  fx: 5,
-  fy: -15,
-  sa: -1.5,
-  bx: 4,
-  by: -11.5,
-  ffx: 4,
-  bfx: -3,
-});
-
 /** Kindle: the pole tipped back, then the lantern pointed down at the Wick as its flame swells, the far hand thrown open */
 export const KINDLE_CLIP: ActionClip = {
   dur: KINDLE.dur,

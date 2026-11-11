@@ -3,7 +3,7 @@ import { BECKON } from "../../../constants/wenna/abilities";
 import { WICK } from "../../../constants/wenna/wick";
 import type { Enemy } from "../../../types/enemy";
 import type { Wick } from "../../../types/wenna";
-import { clamp } from "../../../utils/math";
+import { approach, clamp } from "../../../utils/math";
 import { enemyBox, enemyCenter } from "../../enemies/enemy";
 import { kindOf } from "../../enemies/kinds";
 import { skillValues } from "../../skills/query";
@@ -12,7 +12,9 @@ import { game, hero, progress } from "../../state";
 import { surfaceBelow } from "../../world";
 import { biteFoe } from "./bite";
 import { wennaHost } from "./memory";
+import { packStrike } from "./packLunge";
 import { isQuarry, quarries } from "./quarry";
+import { endPlan, loadOf, plan, planOf, squash, tickSquash, type WickPlan } from "./wickMoves";
 import { endWick, isUp } from "./wicks";
 import { ownWicks } from "./wickWorld";
 
@@ -116,14 +118,23 @@ function walkSpeed(w: Wick): number {
   return speed;
 }
 
-/** hop up toward a floor this far above */
+/** crouch, then hop up toward a floor this far above */
 function hop(w: Wick, rise: number, dir: number): void {
-  w.vy = -Math.sqrt(2 * WICK.gravity * (rise + 8));
-  w.vx = dir * walkSpeed(w) * 1.1;
-  w.ground = false;
+  plan(w, {
+    kind: "jump",
+    vx: dir * walkSpeed(w) * 1.1,
+    vy: -Math.sqrt(2 * WICK.gravity * (rise + 8)),
+    left: loadOf("jump"),
+  });
 }
 
-/** step the Wick toward a spot on a floor: walk, hop up to a platform near enough, or drop down */
+/** gather into a walk toward this speed, or brake out of it */
+function pace(w: Wick, want: number, dt: number): void {
+  w.vx = approach(w.vx, want, WICK.accel * dt);
+}
+
+/** step the Wick toward a spot on a floor: walk, hop up to a platform near enough, or drop down; it gathers into its
+ *  walk and brakes before the spot, so it never starts or stops at full speed */
 function steer(w: Wick, goalX: number, goalY: number, dt: number): void {
   if (!w.ground) return;
   const dx = goalX - w.x;
@@ -132,7 +143,7 @@ function steer(w: Wick, goalX: number, goalY: number, dt: number): void {
     const rise = w.y - goalY;
     const p = platformAt(goalX, goalY);
     if (rise > WICK.hopUp || !p) {
-      w.vx = 0;
+      pace(w, 0, dt);
       return;
     }
     const near = clamp(w.x, p.x0 + 3, p.x1 - 3);
@@ -141,7 +152,7 @@ function steer(w: Wick, goalX: number, goalY: number, dt: number): void {
       hop(w, rise, Math.sign(off) || Math.sign(dx));
       return;
     }
-    w.vx = Math.sign(off) * speed;
+    pace(w, Math.sign(off) * speed, dt);
     w.face = Math.sign(off);
     return;
   }
@@ -154,10 +165,10 @@ function steer(w: Wick, goalX: number, goalY: number, dt: number): void {
     return;
   }
   if (Math.abs(dx) < 1.5) {
-    w.vx = 0;
+    pace(w, 0, dt);
     return;
   }
-  w.vx = Math.sign(dx) * Math.min(speed, Math.abs(dx) / dt);
+  pace(w, Math.sign(dx) * Math.min(speed, Math.sqrt(2 * WICK.accel * Math.abs(dx))), dt);
   w.face = Math.sign(dx);
 }
 
@@ -175,6 +186,7 @@ function flyLeap(w: Wick, dt: number): void {
   w.vy = 0;
   w.ground = true;
   w.leapTo = null;
+  squash(w);
 }
 
 /** start a leap in an arc to a spot on a floor, landing after `seconds` */
@@ -208,13 +220,14 @@ function move(w: Wick, dt: number): void {
     w.vy = 0;
     w.ground = true;
     w.dropping = false;
+    squash(w);
     if (Math.abs(w.x - x0) < 1e-3) w.vx = 0;
   }
 }
 
-/** a Wick with a foe ahead in reach bites it, once its own timer allows */
+/** a Wick with a foe ahead in reach winds up to bite it, once its own timer allows */
 function tryBite(w: Wick): void {
-  if (w.bite > 0) return;
+  if (w.bite > 0 || planOf(w)) return;
   const t = w.target;
   if (t && t.hp > 0) {
     const tx = enemyCenter(t)[0];
@@ -222,7 +235,7 @@ function tryBite(w: Wick): void {
   }
   const prey = t && t.hp > 0 && inBite(w, t) ? t : (game.enemies.find((e) => e.hp > 0 && inBite(w, e)) ?? null);
   if (!prey) return;
-  biteFoe(w, prey);
+  plan(w, { kind: "bite", foe: prey, left: loadOf("bite") });
   w.bite = biteEvery(w, prey);
 }
 
@@ -240,18 +253,46 @@ function flierOverhead(w: Wick): Enemy | null {
   return null;
 }
 
-/** the guard leaps straight up off its post at a flier over it; it bites at the top and lands back where it stood */
+/** the guard crouches and leaps straight up off its post at a flier over it; it bites at the top and lands back where
+ *  it stood */
 function guardLeap(w: Wick): void {
-  if (!w.ground || w.bite > 0 || w.leap > 0) return;
+  if (!w.ground || w.bite > 0 || w.leap > 0 || planOf(w)) return;
   const e = flierOverhead(w);
   if (!e) return;
   const box = enemyBox(e);
   const rise = w.y - box[3] - WICK.height + 2;
   w.face = Math.sign(enemyCenter(e)[0] - w.x) || w.face;
   w.target = e;
-  w.vx = 0;
-  w.vy = -Math.sqrt(2 * WICK.gravity * Math.max(4, rise));
-  w.ground = false;
+  plan(w, { kind: "jump", vx: 0, vy: -Math.sqrt(2 * WICK.gravity * Math.max(4, rise)), left: loadOf("jump") });
+}
+
+/** the plan's wind-up is over: the bite lands, the jump leaves the floor, Pack Lunge leaps and then strikes */
+function act(w: Wick, p: WickPlan): void {
+  if (p.kind === "jump") {
+    endPlan(w);
+    Object.assign(w, { vx: p.vx, vy: p.vy, ground: false });
+    return;
+  }
+  if (p.kind === "pack" && !p.leaping) {
+    const cx = enemyCenter(p.foe)[0];
+    p.leaping = true;
+    p.left = WICK.packLeap;
+    leapTo(w, w.x + (cx - w.x) * WICK.packReach, w.y, WICK.packLeap);
+    return;
+  }
+  endPlan(w);
+  if (p.foe.hp <= 0) return;
+  if (p.kind === "pack") return packStrike(w, p.foe);
+  if (p.kind === "call") return biteFoe(w, p.foe);
+  const prey = inBite(w, p.foe) ? p.foe : game.enemies.find((e) => e.hp > 0 && inBite(w, e));
+  if (prey) biteFoe(w, prey);
+}
+
+/** a Wick winding up holds its ground, braking out of any walk, until the plan acts */
+function runPlan(w: Wick, p: WickPlan, dt: number): void {
+  p.left -= dt;
+  if (w.ground && w.leap <= 0) pace(w, 0, dt);
+  if (p.left <= 0) act(w, p);
 }
 
 /** where a Wick wants to be now: in Beckon's ring, beside its target, or on guard in front of her. Her guard Wick
@@ -287,6 +328,7 @@ function stepWick(w: Wick, index: number, guard: boolean, dt: number): void {
   w.shoved = Math.max(0, w.shoved - dt);
   w.ring = Math.max(0, w.ring - dt);
   w.great = Math.max(0, w.great - dt);
+  tickSquash(w, dt);
   if (w.melt >= 0) {
     w.melt += dt;
     return;
@@ -298,8 +340,12 @@ function stepWick(w: Wick, index: number, guard: boolean, dt: number): void {
   w.bite = Math.max(0, w.bite - dt);
   if (guard || !w.target || w.target.hp <= 0 || !reachable(w.target) || !isQuarry(w.target))
     w.target = chooseTarget(w, guard);
-  const [gx, gy] = goal(w, index, guard);
-  if (w.leap <= 0) steer(w, gx, gy, dt);
+  const held = planOf(w);
+  if (held) runPlan(w, held, dt);
+  else if (w.leap <= 0) {
+    const [gx, gy] = goal(w, index, guard);
+    steer(w, gx, gy, dt);
+  }
   if (guard) guardLeap(w);
   move(w, dt);
   tryBite(w);
