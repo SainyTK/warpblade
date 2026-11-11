@@ -20,6 +20,8 @@ import { drawEliteGlow, drawEliteRing } from "./drawElite";
 import { foeSprite } from "./foeSprites";
 
 const heroSprite = detailCanvas(80, 76, 40, 62);
+/** how solid the hero shows on the off beats of the blink while a blow cannot land */
+const BLINK_ALPHA = 0.5;
 const HP_BAR_EMPTY = hex("#120a1e");
 const STUN_STAR = hex("#ffe26b");
 /** a foe stopped in time */
@@ -139,9 +141,10 @@ export function drawHeroLayer(): void {
   if (ring && shown > 0) blitRing(heroSprite, h.x, h.y, h.face < 0, 1, () => ring);
   if (shown > 0)
     blit(heroSprite, h.x, h.y, h.face < 0, {
-      alpha: (blink ? 0.45 : 1) * shown,
+      alpha: (blink ? BLINK_ALPHA : 1) * shown,
       tint: WHITE,
       tintAmount: struck ? 1 : 0,
+      soft: blink,
     });
   // the crystal blade gives off a faint light, brighter mid-swing
   place(h.x, h.y, h.face < 0);

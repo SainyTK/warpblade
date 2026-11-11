@@ -3,6 +3,7 @@ import { mix } from "../utils/color";
 import { Rng } from "../utils/rng";
 import { paletteAt, type SceneDef, type ScenePalette, starsAt } from "./eras/sceneDef";
 import { DECORATED, developPlate, LAYER } from "./plate";
+import { PlatePaint } from "./platePaint";
 import { groundAt, ridgeAt, ridgeTopAt, skyAt } from "./terrain";
 
 const TOWERS: readonly (readonly [number, number, number])[] = [
@@ -132,6 +133,6 @@ export function buildBackground(def: SceneDef, k: number): Uint32Array {
   def.decorate?.(bg, new Rng(SEEDS.decorate), k);
   painted((i) => (layers[i] |= DECORATED));
   const plate = developPlate(bg, layers, P);
-  def.detail?.(plate, new Rng(SEEDS.detail), k);
+  def.detail?.(new PlatePaint(plate, layers), new Rng(SEEDS.detail), k);
   return plate;
 }

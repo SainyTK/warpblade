@@ -1,5 +1,6 @@
 import type { Color, Ramp } from "../../types/color";
 import type { Rng } from "../../utils/rng";
+import type { PlatePaint } from "../platePaint";
 
 /** the colors of the shared stage layout: sky, far ridge, ruined towers, stone floor, slabs and braziers */
 export interface ScenePalette {
@@ -50,10 +51,10 @@ export interface SceneDef {
   /** static: drawn last, over the floor and slabs (puddles, crystals, cracks, roots) */
   decorate?(bg: Uint32Array, r: Rng, k: number): void;
   /**
-   * static: drawn last on the finished picture at the frame's full detail, FW by FH image pixels with RES of them to
-   * an art pixel, for anything finer than an art pixel
+   * static: drawn last on the finished picture at the frame's full detail, for anything finer than an art pixel.
+   * The paint knows which layer each pixel belongs to, so detail can go only on the sky, the towers or the floor.
    */
-  detail?(plate: Uint32Array, r: Rng, k: number): void;
+  detail?(paint: PlatePaint, r: Rng, k: number): void;
   /** how strongly the braziers burn and glow, 0 for cold ones; the night uses 1 */
   braziers: number;
   /** each frame, light behind the actors: glows, fireflies, twinkling stars. Use engine/frame drawing after place() */

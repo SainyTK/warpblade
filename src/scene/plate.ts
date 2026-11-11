@@ -10,9 +10,10 @@ import { skyBandAt } from "./terrain";
 
 /** what each art pixel of the static scene belongs to, from far to near */
 export const LAYER = { sky: 0, celestial: 1, ridge: 2, tower: 3, ground: 4, slab: 5, prop: 6 } as const;
+export type Layer = (typeof LAYER)[keyof typeof LAYER];
 /** set on an art pixel the era's own decoration painted, which keeps the layer underneath */
 export const DECORATED = 0x80;
-const LAYER_MASK = 0x7f;
+export const LAYER_MASK = 0x7f;
 
 /** how far the far ridge and the towers fade into the horizon's color, most at their feet, in dithered bands */
 const HAZE = { ridge: 0.34, tower: 0.24, bands: 4, towerTop: 44, ridgeTop: 100 };
