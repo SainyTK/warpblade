@@ -68,7 +68,8 @@ export const game: GameState = {
   coins: 0,
   coinDrops: [],
   xpOrbs: [],
-  revived: false,
+  finale: "none",
+  revives: 0,
   enemies: [],
   fx: [],
   ghosts: [],
@@ -118,7 +119,6 @@ export function freshHero(stats: Progress["stats"]): Hero {
     anchor: null,
     hasSword: true,
     hitDone: false,
-    cutShort: true,
     liftTop: GROUND,
     pose: restPose(character.kit),
     hand: [6, -15],
@@ -171,7 +171,7 @@ rememberPerSeat(objectMemory(progress));
 rememberPerSeat(objectMemory(scarf, true));
 rememberPerSeat(objectMemory(ponytail, true));
 rememberPerSeat({
-  save: () => ({ coins: game.coins, revived: game.revived }),
+  save: () => ({ coins: game.coins, revives: game.revives }),
   load(saved) {
     Object.assign(game, saved);
   },

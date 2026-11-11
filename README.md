@@ -69,9 +69,9 @@ His crystal sword can be thrown, and wherever it lands, he follows.
   The HUD tabs dim while an ability recharges, a bar along each tab fills back up, and a press too early is refused with a tick and a jolt of the tab, or a blink of the MP bar when MP is short.
 - **Coins and a shop.** Foes drop pixel coins that Kael picks up by touch, and any left behind fly to him after a moment.
   When a run ends, cleared or lost, its coins go to the bank and a result screen shows the wave reached and the coins earned.
-  The Shop on the start menu sells stats in levels (HP, attack, ability power, MP, crit, move speed, stamina), more rerolls, skips and banishes for the cards, and four skills bought once: Lodestone, Aftershock, Head Start and Last Light.
+  The Shop on the start menu sells stats in levels (HP, attack, ability power, MP, crit, move speed, stamina), more rerolls, skips and banishes for the cards, and four skills: Lodestone, Aftershock and Head Start, bought once, and Last Light, bought in three levels, each saving the hero from one more fatal blow per run.
   Everything bought applies to every run and every hero, on top of the level-up picks, and is saved in this browser.
-- **Achievements and hero unlocks.** Thirty achievements track goals across runs: waves reached, a clear of wave 10 with each hero, foes slain, long combos, perfect dodges, evolutions, three foes felled by Orrin's swing kicks in one swing, five foes felled inside one of Mirel's Stillfields, forty foes felled by Wenna's Wicks in one run, thirty foes felled from behind by Tallis in one run, coins banked and the Rift Warden.
+- **Achievements and hero unlocks.** Thirty-one achievements track goals across runs: waves reached, a clear of wave 10 with each hero, foes slain, long combos, perfect dodges, evolutions, three foes felled by Orrin's swing kicks in one swing, five foes felled inside one of Mirel's Stillfields, forty foes felled by Wenna's Wicks in one run, thirty foes felled from behind by Tallis in one run, coins banked, the Rift Warden and The Unblinking.
   Most pay coins, a few stay hidden as ??? until an earlier one is earned, and a small banner slides down when one is earned without stopping play.
   The Achievements page on the start menu shows what each one asks, with a progress bar for those that count up, and the result screen names those a run earned.
   Kael and Ysra are free; every newer hero is unlocked with coins on the hero screen, each one costing more than the last (see [docs/achievements.md](docs/achievements.md)).
@@ -128,7 +128,8 @@ His crystal sword can be thrown, and wherever it lands, he follows.
   Waves 11 to 15 are night with horned husks, floating wisps and the Rift Brute.
   Waves 16 to 20 turn the night magical, with Rune Golems and Prism Sprites taking over from the night's foes.
   Waves 21 to 30 are the darkest, with Void Stalkers, Abyss Eyes and the Abyss Maw.
-  Waves 5, 10, 15 and 25 bring the era's mini boss, and the Rift Warden waits at waves 20 and 30.
+  Waves 5, 10, 15 and 25 bring the era's mini boss, the Rift Warden waits at wave 20 and the Abyss Sovereign at wave 30.
+  When the Sovereign falls, The Unblinking comes through: a great eye that nothing seems to hurt.
 - **Co-op for up to four.** Co-op on the start menu hosts a room in your browser, and friends join with its five-letter code or an invite link.
   Each player picks a hero, the same hero twice is fine, and a P1 to P4 tag in the player's colour floats over each hero.
   Waves bring more and tougher foes for each extra player.
@@ -157,7 +158,7 @@ The keys below are Kael's; every hero uses the same keys for their own actions, 
 | Key | Action |
 | --- | --- |
 | `A` `D` or arrows | Walk. Tap a side twice and hold to run |
-| `W` or `Up` | Jump, higher the longer you hold it. Hold `S` and jump to drop through a ledge |
+| `W` or `Up` | Jump, the same height however long you hold it. Hold `S` and jump to drop through a ledge |
 | `J` | Sword combo of four hits. Each press is a different hit, picked from where the foes are |
 | `L` | Dash. Nothing can touch you while you dash, and each dash spends stamina |
 | `K` | Warp strike (10 MP). Hold `W` to warp to a crystal |

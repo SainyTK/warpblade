@@ -17,7 +17,12 @@ import { foundList } from "../unlocks/foundList";
 import { menuItem } from "./menuItem";
 import { showScreen } from "./menuState";
 
-const RESULT_TITLES: Record<RunOutcome, string> = { clear: "Stage clear", fallen: "Fallen", left: "Left the room" };
+const RESULT_TITLES: Record<RunOutcome, string> = {
+  clear: "Stage clear",
+  beyond: "The eye is shut",
+  fallen: "Fallen",
+  left: "Left the room",
+};
 
 function line(label: string, value: HTMLElement): HTMLElement {
   const row = document.createElement("div");

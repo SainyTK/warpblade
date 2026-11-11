@@ -93,6 +93,18 @@ Play styles already taken: Kael (warp swordsman, situational combos, warp telepo
 Open directions to choose from, one per night, never two alike: a summoner who fights through minions, an unarmed grappler with throws and armour, a trapper who builds turrets and mines, a shadow assassin with stealth and back stabs, a tether fighter who swings on a chain, a time or gravity mage, a berserker who spends HP for power, a shield thrower, a fighter whose blows land on a rhythm.
 The director may pick another direction when it is more distinct than these.
 
+## Secrets
+
+Some parts of the game are secrets the game never explains.
+Everything players can read or watch outside the game keeps them: patch notes, the journal, the roadmap, the README, the docs, media and replies to feedback.
+
+- The Unblinking, the foe that comes after the wave 30 boss falls, can be defeated.
+  How is a secret kept only in the code (`src/game/enemies/abyss/gaze.ts`).
+  Patch notes may say that it exists, that nothing seems to hurt it and that there is a way.
+  The only hint allowed is this line: "It has never looked away from anything that moved."
+  Never state or show the method: no text about it, and no clip, still or caption of the eye strained, shut, on the floor or defeated.
+  QA checks the method from the code and writes only "the secret works" or "the secret is broken" in anything that is published.
+
 ## How the studio decides
 
 The director weighs each candidate with these questions, in order:

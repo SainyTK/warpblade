@@ -29,7 +29,6 @@ export function startDive(): boolean {
   stance.landed = false;
   h.vx = 0;
   h.vy = Math.min(h.vy, 0);
-  h.cutShort = true;
   // one swing for the whole drop, so the point strikes each foe once
   newSwing();
   setState("dive");

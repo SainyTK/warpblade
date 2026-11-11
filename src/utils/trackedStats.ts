@@ -4,6 +4,7 @@ import type { BestStat, CountStat, Feat, RunTally, TrackedStats } from "../types
 const COUNT_STATS: readonly CountStat[] = [
   "kills",
   "clears",
+  "beyonds",
   "miniKills",
   "bossKills",
   "perfects",
@@ -71,8 +72,9 @@ export function applyFeat(s: TrackedStats, feat: Feat): TrackedStats {
       heroWave[feat.hero] = raise(heroWave[feat.hero] ?? 0, feat.wave);
       break;
     case "runEnd":
-      if (feat.outcome === "clear") {
+      if (feat.outcome === "clear" || feat.outcome === "beyond") {
         c.clears++;
+        if (feat.outcome === "beyond") c.beyonds++;
         heroWave[feat.hero] = raise(heroWave[feat.hero] ?? 0, feat.wave);
       }
       break;

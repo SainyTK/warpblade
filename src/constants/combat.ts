@@ -10,7 +10,7 @@ export const HERO_MOVE = {
   airAccel: 650,
   gravity: 900,
   maxFall: 420,
-  /** pixels each jump rises with Up held all the way: from the floor, again in the air, and off a crystal */
+  /** pixels each jump rises, however long Up is held: from the floor, again in the air, and off a crystal */
   jumpRise: 62,
   doubleJumpRise: 50,
   hangJumpRise: 38,

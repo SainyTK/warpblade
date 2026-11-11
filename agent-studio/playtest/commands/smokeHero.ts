@@ -9,6 +9,8 @@ const WALK_MS = 600;
 const WALK_MIN_PX = 5;
 const ACTION_PRESS_MS = 120;
 const ACTION_SETTLE_MS = 500;
+/** game milliseconds a hero may take to come down from a jump before the check gives up */
+const LANDING_MS = 3000;
 /** the HP bar may lag the hero's HP by this many percent */
 const HP_BAR_SLACK = 1.5;
 
@@ -49,6 +51,8 @@ async function checkActions(session: Session, add: Add): Promise<void> {
     outcomes.set(key, after);
     seen.push(`${key}: ${before.hero.state} to ${after.hero.state}`);
     await session.advance(ACTION_SETTLE_MS);
+    // a jump always rises its full height, so the next key waits for the landing
+    if (key === KEYS.up) await session.waitFor((s) => s.hero.ground, LANDING_MS, "the landing after the jump");
     add(`${key} raises no errors`, session.errors().length === errorsBefore);
   }
   const attack = outcomes.get(KEYS.attack);

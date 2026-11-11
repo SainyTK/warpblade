@@ -1,12 +1,26 @@
+import type { EnemyType } from "../types/enemy";
+
 export const STAGE_WAVES = 30;
 export const MINI_BOSS_EVERY = 5;
-export const BOSS_WAVES: readonly number[] = [20, 30];
+/** the boss each boss wave brings */
+export const BOSSES: Readonly<Record<number, EnemyType>> = { 20: "warden", 30: "sovereign" };
+/**
+ * After the last wave's boss falls the stage seems cleared for `quiet` seconds, then one more foe comes through.
+ * `clear` is how long the banner shows once that one has fallen too, before the run ends.
+ */
+export const FINALE = { foe: "unblinking", quiet: 2.6, clear: 6 } as const satisfies {
+  foe: EnemyType;
+  quiet: number;
+  clear: number;
+};
 /** seconds from a cleared wave to the rifts of the next one */
 export const WAVE_PAUSE = 2;
+/** seconds of that pause before the skill picks open, so the last foe's fall plays out first */
+export const PICK_DELAY = 0.9;
 
 /** foes a wave brings in all: base x growth^(wave - 1), rounded; 4 at wave 1, 63 at wave 30 */
 export const WAVE_QUOTA = { base: 3, growth: 1.11 } as const;
-/** a boss wave streams this share of its quota besides the Warden */
+/** a boss wave streams this share of its quota besides its boss */
 export const BOSS_STREAM_SHARE = 0.5;
 /** foes standing at once: base + ceil(perWave x wave), at most `most`; a co-op room's longer stream raises it to `coopMost` */
 export const ALIVE_CAP = { base: 2, perWave: 0.6, most: 22, coopMost: 30 } as const;

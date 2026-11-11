@@ -3,8 +3,8 @@ import type { PickToolKey } from "../types/build";
 import type { ShopItem } from "../types/shop";
 import type { Stats } from "../types/stats";
 
-/** how many times an item can be bought: every level of a stat or a tool, a skill once */
-export const maxLevel = (item: ShopItem): number => (item.kind === "skill" ? 1 : item.levels);
+/** how many times an item can be bought: every level of a stat or a tool, a skill once unless it has levels */
+export const maxLevel = (item: ShopItem): number => item.levels ?? 1;
 
 /** the price of the next level after `level`, or null once the item is maxed */
 export function nextPrice(item: ShopItem, level: number): number | null {

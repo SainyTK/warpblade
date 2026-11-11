@@ -1,8 +1,11 @@
 import type { SourceId } from "./build";
 import type { UltimateId } from "./skill";
 
-/** how a run ended: Kael fell, he cleared the stage, or a co-op room closed under it */
-export type RunOutcome = "fallen" | "clear" | "left";
+/**
+ * how a run ended: the hero fell, cleared the stage (also when they fell to what comes after its last wave), defeated
+ * that too, or a co-op room closed under the run
+ */
+export type RunOutcome = "fallen" | "clear" | "beyond" | "left";
 
 /** one source's damage over a run */
 export interface SourceResult {

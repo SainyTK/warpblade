@@ -1,4 +1,5 @@
 import type { ShopItem } from "../types/shop";
+import { LAST_LIGHT_LEVELS } from "./shopSkills";
 
 /** each level of a stat costs this many times the one before, rounded to PRICE_ROUND */
 export const PRICE_GROWTH = 1.6;
@@ -93,7 +94,8 @@ export const SHOP_ITEMS: readonly ShopItem[] = [
     kind: "skill",
     id: "lastLight",
     name: "Last Light",
-    text: "Once per run, a fatal blow leaves your hero standing with half their HP.",
+    text: "A fatal blow leaves your hero standing with half their HP, once per run for each level.",
     price: 300,
+    levels: LAST_LIGHT_LEVELS,
   },
 ];

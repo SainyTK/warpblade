@@ -55,7 +55,7 @@ export interface Blaze {
 }
 export type DamageTag = "normal" | "crit" | "back" | "air" | "burn" | "block" | "break" | "shatter";
 /** a word that pops without a number */
-export type CueWord = "evade" | "perfect" | "parry" | "broken";
+export type CueWord = "evade" | "perfect" | "parry" | "broken" | "warded";
 /** a number that pops out of a struck foe */
 export interface DamageNumber {
   x: number;
@@ -90,7 +90,8 @@ export interface GameState {
   stage: number;
   wave: number;
   /** fight while a wave is on; once it is clear, count down to the next wave */
-  lull: "fight" | "toNext";
+  /** a wave in play, the beat after its last foe falls before the picks open, or the rest of the pause to the next wave */
+  lull: "fight" | "cleared" | "toNext";
   waveTimer: number;
   stream: WaveStream;
   kills: number;
@@ -100,8 +101,10 @@ export interface GameState {
   coins: number;
   coinDrops: Coin[];
   xpOrbs: XpOrb[];
-  /** Last Light has been spent this run */
-  revived: boolean;
+  /** the stage's end: its last boss still to fall, the quiet after it fell, or the fight with what came after */
+  finale: "none" | "quiet" | "beyond";
+  /** times Last Light has saved the hero this run */
+  revives: number;
   enemies: Enemy[];
   fx: Effect[];
   ghosts: Ghost[];

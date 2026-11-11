@@ -6,6 +6,8 @@ import type { RunOutcome } from "./run";
 export type CountStat =
   | "kills"
   | "clears"
+  /** runs that also defeated what comes after the last wave */
+  | "beyonds"
   | "miniKills"
   | "bossKills"
   | "perfects"

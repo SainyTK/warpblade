@@ -4,6 +4,7 @@ import { bySourceDamage } from "../utils/runReport";
 import { bankCoins } from "./coins";
 import { coop } from "./coopHooks";
 import { feat } from "./feat";
+import { countedOutcome } from "./finale";
 import { resetRun } from "./run";
 import { runReport } from "./runReport";
 import { character, game, hero } from "./state";
@@ -19,9 +20,10 @@ export function onRunEnd(listener: (result: RunResult) => void): void {
 }
 
 /** Kael fell or cleared the stage: bank the coins, set the stage fresh behind the menu and report how far he got */
-export function endRun(outcome: RunOutcome): void {
+export function endRun(fate: RunOutcome): void {
   const room = coop();
-  if (room) return room.endRun(outcome);
+  if (room) return room.endRun(fate);
+  const outcome = countedOutcome(fate);
   feat({ kind: "runEnd", outcome, wave: game.wave, hero: character.id });
   const result = { outcome, wave: game.wave, coins: bankCoins(), report: runReport() };
   resetRun("");

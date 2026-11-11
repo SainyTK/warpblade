@@ -6,7 +6,7 @@ import { motion } from "./motion";
 
 /**
  * The jump clip's clock follows the rise: it starts at the launch and reaches its last key, the top of the arc, when
- * the rise stops, however high the jump goes. A let-go of Up that cuts the rise short lets it catch up, never jump.
+ * the rise stops, however high the jump goes. A rise cut short lets it catch up, never jump.
  */
 export function jumpClock(h: Hero, fresh: boolean, dt: number): number {
   const m = motion;

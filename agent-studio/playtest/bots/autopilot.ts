@@ -20,6 +20,9 @@ export interface AutopilotOptions {
   onTick?: (state: GameSnapshot) => void;
 }
 
+/** run outcomes that count as a cleared stage: the stage alone, or the stage and what comes after its last boss */
+const CLEARED: ReadonlySet<string> = new Set(["clear", "beyond"]);
+
 const freshMemory = (): BotMemory => ({ now: 0, lastDodge: -1e9, lastVault: -1e9, ultUntil: 0 });
 
 /** play the current run with a policy, a decision every tick of game time, until it ends or the goal is met */
@@ -35,7 +38,7 @@ export async function autopilot(session: Session, policy: Policy, options: Autop
   for (;;) {
     const state = await session.state();
     if (state.menu.context === "title") {
-      return finish(state.lastRun.outcome === "clear" ? "clear" : "fallen", state);
+      return finish(CLEARED.has(state.lastRun.outcome) ? "clear" : "fallen", state);
     }
     options.onTick?.(state);
     if (options.until?.(state)) {

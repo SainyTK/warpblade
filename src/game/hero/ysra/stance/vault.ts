@@ -50,7 +50,6 @@ function launch(rise: number): void {
   if (h.vy > vy) h.vy = vy;
   if (h.ground) h.liftTop = h.y - rise;
   h.ground = false;
-  h.cutShort = true;
   stance.launched = true;
   sfx.lunge();
 }

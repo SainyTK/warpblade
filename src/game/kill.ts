@@ -48,7 +48,7 @@ function lightShare(k: number): number {
   return given / k;
 }
 
-/** elites, mini bosses and the Warden of any wave but the last leave a chest */
+/** elites, mini bosses and the boss of any wave but the last leave a chest */
 const leavesChest = (e: Enemy): boolean =>
   e.elite || e.rank === "mini" || (e.rank === "boss" && game.wave < STAGE_WAVES);
 

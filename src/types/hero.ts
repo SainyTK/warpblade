@@ -111,7 +111,6 @@ export interface Hero {
   anchor: Point | null;
   hasSword: boolean;
   hitDone: boolean;
-  cutShort: boolean;
   /** the highest point Kael may rise to before he lands again, set by his last jump or a lift from the floor */
   liftTop: number;
   pose: Pose;

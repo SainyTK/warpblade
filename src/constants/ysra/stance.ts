@@ -1,7 +1,7 @@
 import { HERO_MOVE } from "../combat";
 import { frame } from "../hero";
 
-/** Ysra's one jump: pixels it rises with Up held all the way (Kael 62) */
+/** Ysra's one jump: pixels it rises (Kael 62) */
 export const YSRA_JUMP_RISE = 46;
 
 /**

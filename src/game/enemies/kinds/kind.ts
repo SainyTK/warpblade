@@ -30,6 +30,8 @@ export interface EnemyKind {
   guardFrom?: number;
   /** slips away from swings while in its rest state, like a wisp */
   evades?: boolean;
+  /** nothing can hurt it right now: every hit is turned away (game/enemies/ward.ts) */
+  warded?(e: Enemy): boolean;
   /** MP orbs it drops, when not the rank's usual count */
   orbs?: number;
   /** chance of a heal orb, when not the usual 6% */

@@ -39,7 +39,7 @@ export const TURN_FRAMES = 2;
  */
 export const STRIDE = { walk: 24, run: 44 } as const;
 
-/** the jump clip may run ahead of the clock by at most this rate when a let-go of Up cuts the rise short */
+/** the jump clip may run ahead of the clock by at most this rate when something cuts the rise short */
 export const JUMP_CATCH_UP = 2.5;
 
 /**

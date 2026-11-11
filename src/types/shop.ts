@@ -30,13 +30,16 @@ export interface ToolUpgrade {
 
 export type SkillId = "lastLight" | "headStart" | "lodestone" | "warpShock";
 
-/** a skill bought once and kept for every run; none of them is offered on level up */
+/** a skill kept for every run, bought once unless it has `levels`; none of them is offered on level up */
 export interface ShopSkill {
   kind: "skill";
   id: SkillId;
   name: string;
   text: string;
+  /** price of the first level; later levels cost more */
   price: number;
+  /** how many times it can be bought, when more than once */
+  levels?: number;
 }
 
 export type ShopItem = StatUpgrade | ToolUpgrade | ShopSkill;

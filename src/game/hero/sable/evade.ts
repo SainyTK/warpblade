@@ -93,7 +93,6 @@ function pushOff(): void {
   h.vy = Math.min(h.vy, -riseSpeed(HOP.rise, HERO_MOVE.gravity));
   if (h.ground) dust(h.x, h.y, 3, h.face);
   h.ground = false;
-  h.cutShort = true;
   sfx.dodge();
 }
 

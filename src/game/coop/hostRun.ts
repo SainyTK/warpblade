@@ -16,6 +16,7 @@ import { xpToReach } from "../../utils/progression";
 import { toWire } from "../../utils/wire";
 import { type CoopHooks, setCoopHooks } from "../coopHooks";
 import { heroHidden } from "../enemies/awareness";
+import { countedOutcome } from "../finale";
 import { answerPick, earnXp, gainXp } from "../progress";
 import { resetRun } from "../run";
 import { runReport } from "../runReport";
@@ -273,9 +274,10 @@ export class HostRun implements CoopHooks {
   }
 
   /** bank every player's coins, clear the field and hand the result to the room */
-  finish(outcome: RunOutcome): void {
+  finish(fate: RunOutcome): void {
     if (this.over) return;
     this.over = true;
+    const outcome = countedOutcome(fate);
     const wave = game.wave;
     const loose = game.coinDrops.length;
     const coins = new Map<Seat, number>();

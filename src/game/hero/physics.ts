@@ -21,7 +21,7 @@ function floats(): boolean {
 function land(): void {
   const h = hero;
   if (!h.ground && h.vy > 220) dust(h.x, h.y, 5);
-  Object.assign(h, { vy: 0, ground: true, jumps: 0, airHits: 0, airDashed: false, whirled: false, cutShort: true });
+  Object.assign(h, { vy: 0, ground: true, jumps: 0, airHits: 0, airDashed: false, whirled: false });
 }
 
 /** walk, or run after a double tap; gravity; floors and ledges */

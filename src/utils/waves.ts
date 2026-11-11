@@ -2,7 +2,7 @@ import { CARRY_SHARE } from "../constants/eras";
 import {
   ALIVE_CAP,
   BOSS_STREAM_SHARE,
-  BOSS_WAVES,
+  BOSSES,
   ELITE,
   MINI_BOSS_EVERY,
   WALKER_SHARE,
@@ -14,7 +14,7 @@ import { eraOf, eraProgress } from "./eras";
 
 export type WaveKind = "normal" | "mini" | "boss";
 
-/** what a wave brings: its leader (a mini boss or the Warden), the foes that stream in after it, and its elite's place */
+/** what a wave brings: its leader (a mini boss or a boss), the foes that stream in after it, and its elite's place */
 export interface WavePlan {
   kind: WaveKind;
   leader: EnemyType | null;
@@ -24,7 +24,7 @@ export interface WavePlan {
 }
 
 export function waveKind(wave: number): WaveKind {
-  if (BOSS_WAVES.includes(wave)) return "boss";
+  if (BOSSES[wave]) return "boss";
   return wave % MINI_BOSS_EVERY === 0 ? "mini" : "normal";
 }
 
@@ -65,7 +65,7 @@ export function mixedStream(wave: number, count: number): EnemyType[] {
 
 /**
  * The foes of a wave, from its era. A normal wave streams its quota with one elite in the middle on every third wave from
- * wave 3; a mini boss wave brings the era's mini boss with a stream of flyers; a boss wave the Warden with a stream
+ * wave 3; a mini boss wave brings the era's mini boss with a stream of flyers; a boss wave its boss with a stream
  * of half the quota.
  */
 export function wavePlan(wave: number): WavePlan {
@@ -73,7 +73,7 @@ export function wavePlan(wave: number): WavePlan {
   const era = eraOf(wave);
   const quota = waveQuota(wave);
   if (kind === "boss")
-    return { kind, leader: "warden", stream: mixedStream(wave, Math.round(quota * BOSS_STREAM_SHARE)), elite: -1 };
+    return { kind, leader: BOSSES[wave], stream: mixedStream(wave, Math.round(quota * BOSS_STREAM_SHARE)), elite: -1 };
   if (kind === "mini") return { kind, leader: era.mini, stream: Array(quota - 1).fill(era.flyer), elite: -1 };
   const stream = mixedStream(wave, quota);
   if (!hasElite(wave)) return { kind, leader: null, stream, elite: -1 };

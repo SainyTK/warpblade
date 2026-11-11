@@ -19,6 +19,7 @@ import { enemyCenter } from "./enemies/enemy";
 import { kindOf } from "./enemies/kinds";
 import { markBonus } from "./enemies/skillStatus";
 import { staggerFoe } from "./enemies/stagger";
+import { isWarded, turnAway } from "./enemies/ward";
 import { kit } from "./hero/kits";
 import { countHit } from "./hitCount";
 import { killEnemy } from "./kill";
@@ -128,6 +129,10 @@ export function dealDamage(e: Enemy, base: number, o: HitOptions = {}): HitResul
   if (e.hp <= 0) return "hit";
   const def = ENEMIES[e.type];
   const source = o.source ?? "attacks";
+  if (isWarded(e)) {
+    turnAway(e, !o.dot && isHeroSource(source));
+    return "blocked";
+  }
   let tag: DamageTag = o.dot ? "burn" : "normal";
   if (guards(e, o)) {
     if (!o.heavy && e.guardHits + 1 < GUARD.breakAfter) {

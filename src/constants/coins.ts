@@ -17,6 +17,8 @@ export const COIN_DROP: Record<EnemyType, number> = {
   stalker: 2,
   eye: 1,
   maw: 9,
+  sovereign: 40,
+  unblinking: 60,
 };
 
 /**

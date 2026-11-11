@@ -84,7 +84,6 @@ export function pressDropStab(): boolean {
   newSwing();
   setState("dropStab");
   // the tuck rides out the rise under way to its top, so a J just after the take-off dives from the top of the jump
-  hero.cutShort = true;
   sfx.swing(KNIFE_BLOWS.dropStab.feel.pitch);
   return true;
 }

@@ -1,6 +1,6 @@
 import { ENEMIES } from "../constants/enemies";
 import { W } from "../constants/stage";
-import { ELITE, OPENING_STAGGER, REFILL_DELAY, SPAWN, STAGE_WAVES } from "../constants/waves";
+import { ELITE, FINALE, OPENING_STAGGER, REFILL_DELAY, SPAWN, STAGE_WAVES } from "../constants/waves";
 import { sfx } from "../services/audio";
 import { saveBest } from "../services/bestScore";
 import type { EnemyType } from "../types/enemy";
@@ -10,12 +10,13 @@ import { pickSpawn } from "../utils/spawnPoint";
 import { aliveCap, streamLeft, wavePlan } from "../utils/waves";
 import { coop, eachStanding } from "./coopHooks";
 import { createRift } from "./effects/rift";
-import { endWave, fightOver } from "./endWave";
+import { endWave, fightOver, settleWave } from "./endWave";
 import { makeEnemy } from "./enemies/enemy";
 import { kindOf } from "./enemies/kinds";
 import { feat } from "./feat";
 import { endRun } from "./runEnd";
 import { game, hero, rng, showBanner } from "./state";
+import { shake } from "./world";
 
 /** rifts opened and not yet let through their foe, so the next one keeps away from them too */
 let opening: Point[] = [];
@@ -40,7 +41,8 @@ function spawnPoint(type: EnemyType): Point {
 /** open a rift that lets one foe through after `delay`; an elite comes tougher, worth more, and glinting gold */
 function openRift(type: EnemyType, delay: number, elite = false): void {
   const r = kindOf(type).rift;
-  const at = type === "warden" ? { x: hero.x < W / 2 ? W - 70 : 70, y: r.y() } : spawnPoint(type);
+  // a boss comes through on the far side of the stage from the hero
+  const at = ENEMIES[type].rank === "boss" ? { x: hero.x < W / 2 ? W - 70 : 70, y: r.y() } : spawnPoint(type);
   opening.push(at);
   const room = coop();
   game.fx.push(
@@ -49,7 +51,6 @@ function openRift(type: EnemyType, delay: number, elite = false): void {
       const e = makeEnemy(type, at.x, at.y, game.wave);
       if (elite) Object.assign(e, { elite, max: e.max * ELITE.hp, xp: Math.round(e.xp * ELITE.xp) });
       e.hp = e.max = room ? room.scaleFoeHp(e.rank, e.max) : e.max;
-      if (type === "warden" && game.wave === STAGE_WAVES) e.phase = 2;
       game.enemies.push(e);
     }),
   );
@@ -102,28 +103,56 @@ function startWave(): void {
   for (let i = 0; i < first; i++) sendNext((i + (plan.leader ? 1 : 0)) * OPENING_STAGGER);
 }
 
-/** fight a wave as it streams in; once it is clear, wait, then open rifts for the next wave */
+/** what came after the last boss has fallen too: the banner shows, then the run ends */
+function clearStage(): void {
+  game.mode = "clear";
+  game.waveTimer = FINALE.clear;
+  showBanner(`${ENEMIES[FINALE.foe].name} sleeps`, FINALE.clear);
+  sfx.levelUp();
+}
+
+/**
+ * The last wave is fought out. Its boss's fall looks like the stage's end for a moment; then one more foe comes
+ * through, and the stage is cleared only when that one falls too.
+ */
+function updateFinale(dt: number): void {
+  if (game.finale === "none") {
+    game.finale = "quiet";
+    game.waveTimer = FINALE.quiet;
+    showBanner(`Stage ${game.stage} clear`, FINALE.quiet);
+    sfx.levelUp();
+    return;
+  }
+  if (game.finale === "beyond") {
+    clearStage();
+    return;
+  }
+  game.waveTimer -= dt;
+  if (game.waveTimer > 0) return;
+  game.finale = "beyond";
+  showBanner(ENEMIES[FINALE.foe].name, 2.6);
+  shake(0.6, 3);
+  sfx.boom();
+  openRift(FINALE.foe, 0.4);
+}
+
+/** fight a wave as it streams in; once it is clear, wait (the picks open a beat in), then open rifts for the next wave */
 export function updateWaves(dt: number): void {
   if (hero.state === "dead") return;
   if (game.mode === "clear") {
     game.waveTimer -= dt;
-    if (game.waveTimer <= 0) endRun("clear");
+    if (game.waveTimer <= 0) endRun("beyond");
     return;
   }
   if (game.lull === "fight") updateStream(dt);
   if (!fightOver()) return;
   if (game.lull === "fight") {
-    if (game.wave >= STAGE_WAVES) {
-      game.mode = "clear";
-      game.waveTimer = 6;
-      showBanner(`Stage ${game.stage} clear`, 6);
-      sfx.levelUp();
-      return;
-    }
-    endWave();
+    if (game.wave >= STAGE_WAVES) updateFinale(dt);
+    else endWave();
     return;
   }
   game.waveTimer -= dt;
+  settleWave();
   if (game.waveTimer > 0) return;
   startWave();
 }

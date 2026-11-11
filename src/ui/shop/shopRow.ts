@@ -15,7 +15,7 @@ function span(cls: string, text = ""): HTMLSpanElement {
   return el;
 }
 
-/** level pips for a stat or a tool: one per level, lit for each one bought */
+/** level pips for an item bought in levels: one per level, lit for each one bought */
 function levelPips(level: number, levels: number): HTMLSpanElement {
   const el = span("shop-pips");
   for (let i = 0; i < levels; i++) {
@@ -29,7 +29,7 @@ function levelPips(level: number, levels: number): HTMLSpanElement {
 /** the price of the next level, or that there is nothing left to buy */
 function priceTag(item: ShopItem, level: number): HTMLSpanElement {
   const price = nextPrice(item, level);
-  if (price === null) return span("shop-price done", item.kind === "skill" ? "Owned" : "Max");
+  if (price === null) return span("shop-price done", maxLevel(item) === 1 ? "Owned" : "Max");
   const tag = coinAmount(price, "shop-price");
   if (price > bank()) tag.classList.add("short");
   return tag;
@@ -58,7 +58,7 @@ export function shopRow(item: ShopItem): HTMLButtonElement {
   const name = span("shop-name", item.name);
   const head = span("shop-head");
   head.append(name);
-  if (item.kind !== "skill") head.append(levelPips(level, maxLevel(item)));
+  if (maxLevel(item) > 1) head.append(levelPips(level, maxLevel(item)));
   const body = span("shop-body");
   body.append(head, span("shop-text", item.text));
   const tag = priceTag(item, level);

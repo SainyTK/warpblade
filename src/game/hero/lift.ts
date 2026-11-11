@@ -7,7 +7,7 @@ import { hero } from "../state";
  * A jump, or a move started on the floor, rises its full height and sets the highest point of this time in the air.
  * A move started in the air rises its own height at most, and never past that point.
  * Lifts never stack: while Kael already rises faster, he keeps that rise and the new lift adds nothing.
- * Letting go of Up cuts short only a jump's rise.
+ * A jump always rises its full height, however briefly Up is pressed.
  */
 export function lift(rise: number, isJump: boolean): void {
   const h = hero;
@@ -18,6 +18,5 @@ export function lift(rise: number, isJump: boolean): void {
   if (h.vy <= vy) return;
   h.vy = vy;
   h.ground = false;
-  h.cutShort = !isJump;
   if (fromFloor) h.liftTop = h.y - rise;
 }

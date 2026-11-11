@@ -47,14 +47,14 @@ Pick tools are bought in levels too, three each, priced the same way: each level
 | Skip | One more skip | 3 | 25 |
 | Banish | One more banish | 3 | 35 |
 
-Skills are bought once and none of them is offered on level up:
+Skills are bought once, except Last Light with its three levels, and none of them is offered on level up:
 
 - Lodestone (60): coins fly to the hero after 0.3 seconds, and foes drop another quarter of their base (a fraction left over is a chance at one more coin).
 - Aftershock (150, saved under the id `warpShock`): every travel move the hero ends sends a ring out from the hero that hits each foe within 40 art pixels for 0.8 times attack damage and stuns it briefly.
   For Kael that is every dash and every warp, Blink Combo's included; for Ysra every vault, dive and backstep; for Sable every hop and slide; for Hulda every Bull Rush and every Skyfall Grab landing; for Orrin every release of a swing, every landing out of a fling, every zip, every ledge pull and every Backline; for Mirel the end of every Rewind and every landing out of a hover; for Wenna every Swap arrival; for Tallis every rise out of his shadow pool.
 - Head Start (200): runs start at level 3 with two skill points, spent when wave 1 is cleared.
   A full run reaches about level 84, so level 3 is what wave 1 alone gives; the two picks are the whole head start.
-- Last Light (300): the first fatal blow of a run leaves the hero standing with half their HP.
+- Last Light (300, then 480 and 770): a fatal blow leaves the hero standing with half their HP, once per run for each of its three levels (`LAST_LIGHT_LEVELS`).
 
 ## Every shop item helps every hero
 
@@ -99,7 +99,7 @@ Before 0.2.0 the playtest bots banked 12 to 20 coins on runs that fell at waves 
 Such a run bought one first level at most, which was too slow.
 With the bonus, a run that reaches wave 8 to 10 earns about 60 to 80 coins, enough for two first levels or a first and a second level.
 The first skill, Lodestone, takes about one good run, and Last Light about a run that reaches wave 20.
-Every stat at its top level costs 2585 coins and the four skills 710, about 3300 in all, roughly nine full clears or a few dozen ordinary runs.
+Every stat at its top level costs 2585 coins and the four skills with all three levels of Last Light 1960, about 4550 in all, roughly twelve full clears or a few dozen ordinary runs.
 
 ## Saving
 

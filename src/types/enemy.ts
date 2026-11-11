@@ -14,7 +14,9 @@ export type EnemyType =
   | "sprite"
   | "stalker"
   | "eye"
-  | "maw";
+  | "maw"
+  | "sovereign"
+  | "unblinking";
 export type EnemyState =
   | "drift"
   | "walk"
@@ -33,7 +35,7 @@ export type EnemyState =
   | "blink"
   | "burrow"
   | "beam";
-/** minions come in waves, a mini boss every fifth wave, bosses at waves 20 and 30 */
+/** minions come in waves, a mini boss every fifth wave, bosses at waves 20 and 30 and one more after the last wave */
 export type EnemyRank = "minion" | "mini" | "boss";
 
 export interface Enemy {

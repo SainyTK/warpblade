@@ -93,6 +93,7 @@ A save from before them loads with its coins and shop levels, no heroes bought a
 | Foes | Endless Blade | Slay 15,000 foes | 200 | Thinning the Night |
 | Foes | Giant Slayer | Slay 10 mini bosses | 40 | |
 | Foes | Warden's End | Slay the Rift Warden | 100 | Deep Rift |
+| Foes | Lights Out | Defeat The Unblinking | 500 | Warpblade |
 | Skill | Flowing Steel | Land the fifth move of a combo | 40 | |
 | Skill | Untouchable | Make 25 perfect dodges or parries | 40 | |
 | Skill | Final Art | Take an ultimate skill | 30 | |

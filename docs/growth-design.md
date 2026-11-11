@@ -80,14 +80,16 @@ The hero is synthetic: 20 skills, 2 of them ultimates, with partners either in m
 The greedy player knows no partners and uses no tools: a new skill while a slot is free, then the highest skill level, then a charm.
 The steering player knows every partner: it raises skills whose partner it holds (and partners to level 4), takes new skills that complete a pair, and otherwise rerolls, then banishes a lone new skill, then skips once it holds four skills.
 
-Results with the tuned weights (new skill 100, skill level 6, starting tools 2 rerolls, 2 skips, 1 banish):
+Results with the weights in the game (new skill 100, skill level 9, starting tools 2 rerolls, 2 skips, 1 banish):
 
 | Player | Partners | Median | 4 or more | 0 / 1 / 2 / 3 / 4 / 5 evolutions, of 2,000 |
 | --- | --- | --- | --- | --- |
-| Greedy | pairs | 2 | 2.5% | 267 / 465 / 835 / 384 / 48 / 1 |
-| Greedy | cycle | 2 | 1.3% | 62 / 532 / 955 / 426 / 24 / 1 |
-| Steering | pairs | 3 | 9.5% | 3 / 142 / 697 / 968 / 185 / 5 |
-| Steering | cycle | 3 | 7.6% | 1 / 91 / 660 / 1095 / 148 / 5 |
+| Greedy | pairs | 2 | 3.4% | 254 / 427 / 868 / 383 / 66 / 2 |
+| Greedy | cycle | 2 | 2.0% | 48 / 545 / 906 / 461 / 39 / 1 |
+| Steering | pairs | 3 | 12.8% | 6 / 111 / 641 / 987 / 249 / 6 |
+| Steering | cycle | 3 | 11.0% | 1 / 74 / 546 / 1160 / 212 / 7 |
+
+The skill level weight was 6 until 11 November 2026, when the owner asked for held skills to come up a little more often so more of them evolve; at 6 the steering player evolved 4 or more in 7.6% to 9.5% of runs.
 
 The first evolution comes at wave 24 (median): most skills reach level 8 late, since the next level of a held skill is a rare card.
 The skill level weight is the lever: at 20, steering players evolved 4 or more in 38% of runs; at 8 it was 10%.
@@ -105,11 +107,11 @@ With every pick tool bought in the shop (5, 5, 3) the simulated steering player 
 
 `src/constants/waves.ts` and `src/utils/waves.ts`.
 
-- Still 30 waves in the same five eras with the same foes, mini bosses at 5, 10, 15 and 25 and the Warden at 20 and 30.
+- Still 30 waves in the same five eras with the same foes, mini bosses at 5, 10, 15 and 25, the Warden at 20 and the Abyss Sovereign at 30 (`BOSSES` in `src/constants/waves.ts`). After the Sovereign falls The Unblinking comes through (`FINALE`); a hero who falls to it has still cleared the stage.
 - A wave has a quota of foes, `round(3 x 1.11^(wave - 1))` (3 at wave 1, 62 at wave 30), that stream in through rifts. At most `min(2 + ceil(0.6 x wave), 22)` stand at once; a new rift opens 0.35 s after a place frees. The wave ends when the quota is dead.
 - Mini boss waves bring the mini boss with a stream of flyers (the quota less one); boss waves bring the Warden with a stream of half the quota.
 - Rifts open away from every hero and spread from the foes and rifts already there. Minions standing their ground ease apart so a crowd stays readable.
-- Foe HP grows by x1.125 per wave (about x30 at wave 30); mini bosses have x3 and the Warden x6 on top. Experience grows by x1.07 per wave. Damage keeps its slow linear growth.
+- Foe HP grows by x1.125 per wave (about x30 at wave 30); mini bosses have x3 and bosses x6 on top. Experience grows by x1.07 per wave. Damage keeps its slow linear growth.
 - From wave 3, waves divisible by 3 that are not boss waves bring one elite halfway through the stream: a normal foe of the era with x3 HP, x3 experience, x2 coins and a gold ring with a glint, which drops a chest.
 - Coins per run stay about where they are today (`docs/meta-progress.md`), so drops per foe shrink as foes multiply.
 - Experience orbs grow with the wave, so a kill drops as many orbs late as early; with many orbs about, kills drop fewer, and past 60 they join the nearest orb. Kill bursts of light and particles shrink when many foes fall at once.

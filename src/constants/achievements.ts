@@ -109,6 +109,15 @@ export const ACHIEVEMENTS: readonly Achievement[] = [
     hiddenUntil: "wave-15",
   },
   {
+    id: "unblinking",
+    name: "Lights Out",
+    text: "Defeat The Unblinking.",
+    group: "Foes",
+    goal: { kind: "count", stat: "beyonds", need: 1 },
+    reward: 500,
+    hiddenUntil: "stage-clear",
+  },
+  {
     id: "combo-5",
     name: "Flowing Steel",
     text: "Land the fifth move of a combo.",

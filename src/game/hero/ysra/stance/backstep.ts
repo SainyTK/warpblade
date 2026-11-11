@@ -27,7 +27,6 @@ export function startBackstep(): boolean {
   h.running = false;
   h.vy = -riseSpeed(BACKSTEP.hop, HERO_MOVE.gravity);
   h.ground = false;
-  h.cutShort = true;
   stance.landed = false;
   stance.vaultNext = false;
   setState("backstep");

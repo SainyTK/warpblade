@@ -75,6 +75,12 @@ export const ABYSS_HITS = {
   mawBite: 22,
   mawOrb: 12,
   mawSlam: 24,
+  sovereignCleave: 30,
+  sovereignPillar: 24,
+  sovereignSpikes: 26,
+  unblinkingLance: 20,
+  unblinkingTear: 16,
+  unblinkingGaze: 36,
 } as const;
 
 /** clear everything drawn below local y, so a body can sink into the floor */

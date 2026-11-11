@@ -52,8 +52,9 @@ The cost is video softness on a slow link and about one round trip plus a video 
 A hero whose HP runs out lies down and is skipped by foes, coins and orbs.
 Their status line reads "Down until the wave is cleared".
 When the wave is cleared, every downed hero stands up with half their HP.
-The run ends only when every hero is down at once, or when wave 30 is cleared.
-Last Light still saves each player once per run if they bought it.
+The run ends only when every hero is down at once, or when wave 30 and what comes after its boss are cleared.
+A room that goes down to The Unblinking has still cleared the stage.
+Last Light still saves each player once per run for each level they bought.
 
 ## Picks at the end of a wave
 
