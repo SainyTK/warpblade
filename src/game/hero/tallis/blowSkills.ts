@@ -1,4 +1,5 @@
 import { GLOAM } from "../../../constants/tallis/gloam";
+import { STRING } from "../../../constants/tallis/knives";
 import type { Enemy } from "../../../types/enemy";
 import type { KnifeBlow } from "../../../types/tallis";
 import { dealDamage } from "../../damage";
@@ -23,11 +24,8 @@ export interface KnifeHit {
   power: number;
 }
 
-/** the blows of his ground strings, which Quick Knives quickens and strengthens */
-const STRING_BLOWS: ReadonlySet<KnifeBlow> = new Set(["flick", "cross", "heelKick", "backstab", "twist", "gutSlash"]);
-
-/** the last blow of either string */
-const LAST_BLOWS: ReadonlySet<KnifeBlow> = new Set(["heelKick", "gutSlash"]);
+/** the blows of his ground string, which Quick Knives quickens and strengthens */
+const STRING_BLOWS: ReadonlySet<KnifeBlow> = new Set(STRING);
 
 /** a blow's power from the skills that shape it */
 export function blowScale(blow: KnifeBlow): number {
@@ -82,7 +80,7 @@ export function nightshade(e: Enemy, full = false): void {
   if (v.slow) e.chill = Math.max(e.chill, 1);
 }
 
-/** a bleed from Backbiter's Gut Slash or Cut Tendon's Hamstring, under the skill's own name */
+/** a bleed from Backbiter's Heel Kick or Cut Tendon's Hamstring, under the skill's own name */
 export function bleed(e: Enemy, source: string): void {
   addStacks(e, source, {
     stacks: 2,
@@ -174,15 +172,16 @@ export function afterKnifeHit(e: Enemy, s: KnifeStrike, hit: KnifeHit): void {
   openVeins(e, hit.back);
   const veins = skillValues("t_openVeins").gloam;
   if (veins && stacksOf(e, "t_openVeins") > 0) addGloam(veins);
-  if (LAST_BLOWS.has(s.blow)) nightshade(e);
+  if (s.blow === "heelKick") nightshade(e);
   if (s.blow === "risingCut" && skillValues("t_nightshade").rising) nightshade(e);
   if (s.blow === "heelKick") {
     turnabout(e);
     const stagger = skillValues("t_turnabout").stagger;
     if (stagger) staggerFoe(e, stagger);
   }
+  // Backbiter: from behind, Cross strikes twice and Heel Kick bleeds
   const bite = skillValues("t_backbiter");
-  if (s.blow === "backstab" && bite.twice && e.hp > 0)
+  if (hit.back && s.blow === "cross" && bite.twice && e.hp > 0)
     dealDamage(e, progress.stats.ad * hit.power, { fromX: e.x - e.face * 6, melee: true, sureCrit: hit.ambush });
-  if (s.blow === "gutSlash" && bite.bleed) bleed(e, "t_backbiter");
+  if (hit.back && s.blow === "heelKick" && bite.bleed) bleed(e, "t_backbiter");
 }

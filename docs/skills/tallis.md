@@ -19,7 +19,7 @@ Every button does something from the first second of a run.
 | --- | --- |
 | A / D | Walk at 1.08 times the shared speed, 15% faster in the Veil; a double tap runs. In the pool, glide at 115 px/s. |
 | W | One jump of 58 px. No double jump. |
-| J | The front string Flick, Cross, Heel Kick, or the behind string Backstab, Twist, Gut Slash on a foe's open back. With a flier overhead and no ground foe in reach, a springing Rising Cut. In the air, Drop Stab, once per airtime. Out of the pool, Rising Cut. |
+| J | The string Flick, Cross, Heel Kick, the same wherever foes stand; blows from behind deal 2.25x. In the air, Drop Stab, once per airtime. Out of the pool, Rising Cut. |
 | K | The Veil: 20 Gloam, then 8 a second. Minions lose him. His first blow out of it is an Ambush, a sure crit. |
 | L | Sink: 20 stamina, then 40 a second, at most 1.0 s. Untouchable and hidden in the pool. In the air, drop straight down. |
 | I | The selected ability: Smoke Knot, Hamstring, or a spell skill. |
@@ -60,7 +60,7 @@ Kit events he emits through the shared function: `veil` (the Veil came on or end
 
 attack, precise, J. His knife blows from behind cut deeper.
 
-Values: power: share more his knife blows from behind deal; refund: Gloam a kill from behind gives back; slow: seconds more a foe he struck from behind takes to turn; twice: 1 Backstab strikes twice; bleed: 1 Gut Slash bleeds; lastBreath: 1 a blow from behind fells a minion or elite under 25% HP, and deals 3x to a mini boss under it (evolution)
+Values: power: share more his knife blows from behind deal; refund: Gloam a kill from behind gives back; slow: seconds more a foe he struck from behind takes to turn; twice: 1 Cross from behind strikes twice; bleed: 1 Heel Kick from behind bleeds; lastBreath: 1 a blow from behind fells a minion or elite under 25% HP, and deals 3x to a mini boss under it (evolution)
 
 | Lv | Change | Card |
 | --- | --- | --- |
@@ -68,9 +68,9 @@ Values: power: share more his knife blows from behind deal; refund: Gloam a kill
 | 2 | refund 0 to 10 | A kill from behind gives 10 Gloam back. |
 | 3 | power 0.2 to 0.4 | Blows from behind deal 40% more. |
 | 4 | slow 0 to 0.2 | Foes struck from behind turn 0.2 s slower. |
-| 5 | twice 0 to 1 | Backstab strikes twice. |
+| 5 | twice 0 to 1 | Cross from behind strikes twice. |
 | 6 | power 0.4 to 0.7 | Blows from behind deal 70% more. |
-| 7 | bleed 0 to 1 | Gut Slash leaves a bleed. |
+| 7 | bleed 0 to 1 | Heel Kick from behind leaves a bleed. |
 | 8 | power 0.7 to 1.5 | Blows from behind deal 150% more. |
 | Evolved | lastBreath 0 to 1 | Blows from behind fell weakened foes. |
 
@@ -318,7 +318,7 @@ Evolution: **Exsanguinate** (partner `t_nightshade`). A foe at most Bleed bursts
 
 ### t_nightshade: Nightshade
 
-dot, timed, J. The last blow of either string poisons with Nightshade.
+dot, timed, J. Heel Kick, the last blow of his string, poisons with Nightshade.
 
 Values: stacks: stacks the third blow adds; damage: ability power a stack deals a second; max: most stacks; life: seconds; slow: 1 poisoned foes are slowed; spread: 1 a poisoned foe that dies passes it on; rising: 1 Rising Cut adds stacks; burst: ability power a poisoned foe bursts for on death, within 20 px; lotus: 1 Hamstring coats every foe within 40 px with full stacks (evolution)
 

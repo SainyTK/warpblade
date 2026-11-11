@@ -1,15 +1,7 @@
 import { PAL } from "../../../constants/palette";
-import {
-  BEHIND_STRING,
-  DROP_STAB,
-  FRONT_STRING,
-  KNIFE_BLOWS,
-  KNIFE_LINK,
-  SPRING,
-} from "../../../constants/tallis/knives";
+import { DROP_STAB, KNIFE_BLOWS, KNIFE_LINK, STRING } from "../../../constants/tallis/knives";
 import { SINK } from "../../../constants/tallis/sink";
 import { sfx } from "../../../services/audio";
-import type { KnifeBlow } from "../../../types/tallis";
 import { dealDamage } from "../../damage";
 import { createFloorRing } from "../../effects/floorRing";
 import { skillValues, withCharms } from "../../skills/query";
@@ -17,21 +9,17 @@ import { game, hero, progress } from "../../state";
 import { dust, markStruck, newSwing, shake, struckThisSwing } from "../../world";
 import { isFree, setState, settle } from "../actions";
 import { lift } from "../lift";
-import { backOpenFoe, flierOverhead } from "./backOpen";
 import { tallis } from "./memory";
 import { smear } from "./smear";
 import { knifeStrike, strikeKnife } from "./strike";
 import { throwKnives } from "./thrown";
-
-/** the blow at this place in the string, from where the foes stand: the behind string on a foe's open back */
-const blowAt = (index: number): KnifeBlow => (backOpenFoe(game.enemies) ? BEHIND_STRING : FRONT_STRING)[index];
 
 /** the clock of a blow beyond the shared one: attack speed and Quick Knives */
 const blowRate = (): number => progress.stats.aspd * (1 + (skillValues("t_quickKnives").speed ?? 0)) - 1;
 
 function startBlow(index: number): void {
   tallis.blow = index;
-  tallis.current = blowAt(index);
+  tallis.current = STRING[index];
   tallis.queued = false;
   tallis.struck = false;
   tallis.link = 0;
@@ -39,7 +27,7 @@ function startBlow(index: number): void {
   hero.vx = 0;
   newSwing();
   setState("knife");
-  sfx.swing(tallis.current === "heelKick" || tallis.current === "gutSlash" ? 0.9 : 1.35);
+  sfx.swing(KNIFE_BLOWS[tallis.current].feel.pitch);
 }
 
 /** the blow strikes on its hit frame */
@@ -57,29 +45,23 @@ export function pressString(): boolean {
     return true;
   }
   if (!isFree() || !hero.ground) return false;
-  if (flierOverhead(game.enemies)) {
-    startRisingCut();
-    lift(SPRING.rise, false);
-    return true;
-  }
   startBlow(tallis.link > 0 ? tallis.blow : 0);
   return true;
 }
 
-/** the blow under way: it strikes on its hit frame, Heel Kick hops him back after, and a queued press carries on */
+/** the blow under way: it strikes on its hit frame, and a queued press carries on */
 export function runString(dt: number): void {
   const h = hero;
   h.st += dt * blowRate();
+  h.vx = 0;
   const b = KNIFE_BLOWS[tallis.current];
   if (!tallis.struck && h.st >= b.hit) {
     tallis.struck = true;
     strikeNow();
   }
-  h.vx = tallis.struck && b.hop ? (-h.face * b.hop) / Math.max(0.05, b.dur - b.hit) : 0;
   if (h.st < b.dur) return;
-  const next = tallis.blow < FRONT_STRING.length - 1 ? tallis.blow + 1 : -1;
+  const next = tallis.blow < STRING.length - 1 ? tallis.blow + 1 : -1;
   if (tallis.queued && next >= 0) return startBlow(next);
-  h.vx = 0;
   settle();
   tallis.blow = next >= 0 ? next : 0;
   tallis.link = next >= 0 ? KNIFE_LINK : 0;
@@ -87,9 +69,6 @@ export function runString(dt: number): void {
 
 /** a blow's recovery after it struck can be cut short by a jump, the Veil or a Sink */
 export const inRecovery = (): boolean => hero.state === "knife" && tallis.struck;
-
-/** Heel Kick hops him back after it lands */
-export const hopping = (): boolean => hero.state === "knife" && tallis.struck && !!KNIFE_BLOWS[tallis.current].hop;
 
 /** J in the air: Drop Stab, once per airtime */
 export function pressDropStab(): boolean {
@@ -104,8 +83,9 @@ export function pressDropStab(): boolean {
   tallis.diving = false;
   newSwing();
   setState("dropStab");
-  hero.vy = 0;
-  sfx.swing(1.25);
+  // the tuck rides out the rise under way to its top, so a J just after the take-off dives from the top of the jump
+  hero.cutShort = true;
+  sfx.swing(KNIFE_BLOWS.dropStab.feel.pitch);
   return true;
 }
 
@@ -126,14 +106,23 @@ function landingRing(): void {
   }
 }
 
-/** Drop Stab: a tuck, then straight down with both knives under him, striking every foe it passes through */
+/**
+ * Drop Stab: a tuck that rides out the rise under way and hangs once he stops rising, then straight down with both
+ * knives under him, striking every foe it passes through. The clip holds the tuck until the dive starts.
+ */
 export function runDropStab(): void {
   const h = hero;
   const b = KNIFE_BLOWS.dropStab;
   if (!tallis.diving) {
-    h.vy = 0;
     h.vx = 0;
-    if (h.st >= b.hit) tallis.diving = true;
+    h.vy = Math.min(h.vy, 0);
+    if (h.st < b.hit) return;
+    if (h.vy < 0) {
+      h.st = b.hit - 1e-3;
+      return;
+    }
+    tallis.diving = true;
+    h.st = b.hit;
     return;
   }
   h.vx = 0;
@@ -176,7 +165,7 @@ export function startRisingCut(): void {
   newSwing();
   setState("risingCut");
   hero.vx = 0;
-  sfx.swing(0.85);
+  sfx.swing(KNIFE_BLOWS.risingCut.feel.pitch);
 }
 
 /** Rising Cut strikes on its hit frame, then he settles */
@@ -187,9 +176,8 @@ export function runRisingCut(dt: number): void {
   if (!tallis.struck && h.st >= b.hit) {
     tallis.struck = true;
     smear("risingCut");
+    strikeKnife(knifeStrike("risingCut"), struckThisSwing, markStruck);
   }
-  // the slash stays live a moment, so a spring carries it up into a flier
-  if (tallis.struck && h.st <= b.hit + SPRING.live) strikeKnife(knifeStrike("risingCut"), struckThisSwing, markStruck);
   if (h.st >= b.dur) settle();
 }
 

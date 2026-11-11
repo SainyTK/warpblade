@@ -197,7 +197,7 @@ export const TOUCH_TEXT: Record<KitId, Record<TouchButtonAction, TouchButtonText
   tallis: {
     attack: {
       label: "Knife",
-      hint: "Knife string; behind a foe's back, Backstab, Twist, Gut Slash. In the air, Drop Stab. Out of the pool, Rising Cut",
+      hint: "Knife string: Flick, Cross, Heel Kick. In the air, Drop Stab. Out of the pool, Rising Cut",
       accent: "#f08ad0",
     },
     up: { label: "Jump", hint: "One jump. Hold the stick down to drop through a ledge", accent: "#e8e6f6" },
