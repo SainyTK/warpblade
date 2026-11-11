@@ -7,6 +7,7 @@ import { waveScale } from "../../../utils/progression";
 import { game, hero, particles, rng } from "../../state";
 import { foeSees } from "../awareness";
 import { PRISM } from "./colors";
+import { createPrismFlash } from "./prismFlash";
 import { createPrismShard } from "./prismShard";
 
 /** sprite blows before wave scaling */
@@ -15,6 +16,8 @@ export const SPRITE_HITS = { shard: 9 } as const;
 export const BLINK = { out: 0.18, back: 0.36 } as const;
 const SHARD_SPEED = 135;
 const FAN = 0.28;
+/** the reach of the flash of light as the shards leave, in art pixels */
+const MUZZLE = 10;
 
 function sparkleBurst(x: number, y: number): void {
   for (let i = 0; i < 9; i++) {
@@ -45,6 +48,7 @@ function fire(e: Enemy): void {
       ),
     );
   }
+  game.fx.push(createPrismFlash(e.x + e.face * 4, e.y, PRISM[1], MUZZLE));
   sfx.chime(2);
 }
 

@@ -32,15 +32,19 @@ const SKY_MAGIC = ramp(["#1a1046", "#24145a", "#32196a", "#432078", "#562a86", "
 
 const cache = new Map<number, ScenePalette>();
 
-/** the night palette at k = 0, shifting toward violet sky, cyan moss and teal-lit stone by k = 1 */
-export function twilightPalette(k: number): ScenePalette {
-  const hit = cache.get(k);
+/** how far the first wave has already turned from the night toward the magical colors */
+const FIRST_TURN = 0.22;
+
+/** a step past the night palette at k = 0, shifting toward violet sky, cyan moss and teal-lit stone by k = 1 */
+export function twilightPalette(progress: number): ScenePalette {
+  const hit = cache.get(progress);
   if (hit) return hit;
+  const k = FIRST_TURN + (1 - FIRST_TURN) * progress;
   const P: ScenePalette = { ...NIGHT_PALETTE, sky: NIGHT_PALETTE.sky.map((c, i) => mix(c, SKY_MAGIC[i], k)) };
   for (const key of Object.keys(MAGIC) as (keyof typeof MAGIC)[]) {
     const to = MAGIC[key] as Color;
     (P as unknown as Record<string, Color>)[key] = mix(NIGHT_PALETTE[key] as Color, to, k);
   }
-  cache.set(k, P);
+  cache.set(progress, P);
   return P;
 }
