@@ -30,7 +30,7 @@ export const TOUCH_TEXT: Record<KitId, Record<TouchButtonAction, TouchButtonText
   kael: {
     attack: {
       label: "Attack",
-      hint: "Sword combo. Each hit fits where the foes are. Push the stick up or down, jump, dash or run for the variants",
+      hint: "Sword combo of four hits, the same every time. Press again just as a blow lands for a Keen hit",
       accent: "#7fe3ff",
     },
     up: { label: "Jump", hint: "Jump. Hold the stick down to drop through a ledge", accent: "#e8e6f6" },

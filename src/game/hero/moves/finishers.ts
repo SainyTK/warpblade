@@ -1,4 +1,5 @@
 import { FEEL, PHANTOM_RAMP } from "../../../constants/combo";
+import { STRING_CANCEL } from "../../../constants/kael/string";
 import { W } from "../../../constants/stage";
 import type { Enemy } from "../../../types/enemy";
 import type { MoveDef } from "../../../types/move";
@@ -82,6 +83,7 @@ export const FINISHER_MOVES = {
     pitch: 0.7,
     falls: true,
     finisher: true,
+    cancel: STRING_CANCEL.finisher,
     hits: [
       {
         at: 0.1,

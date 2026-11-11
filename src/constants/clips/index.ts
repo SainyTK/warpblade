@@ -4,8 +4,8 @@ import { ACTION_CLIPS } from "./actions";
 import { AIR_CLIPS } from "./air";
 import { FINISHER_CLIPS } from "./finishers";
 import { GROUND_CLIPS } from "./ground";
-import { SITUATIONAL_CLIPS } from "./situational";
 import { SKILL_CLIPS } from "./skills";
+import { STRING_CLIPS } from "./string";
 import { GLAIVE_CLIPS, STANCE_CLIPS } from "./ysra";
 
 /**
@@ -13,8 +13,8 @@ import { GLAIVE_CLIPS, STANCE_CLIPS } from "./ysra";
  * holds it a beat and follows through.
  */
 export const CLIPS = {
+  ...STRING_CLIPS,
   ...GROUND_CLIPS,
-  ...SITUATIONAL_CLIPS,
   ...SKILL_CLIPS,
   ...AIR_CLIPS,
   ...FINISHER_CLIPS,

@@ -21,15 +21,6 @@ function airMove(s: Situation): MoveId | null {
   return id === "airStomp" && level(s, "k_skydance") >= SKY_DANCE.meteor ? "meteor" : id;
 }
 
-/** what the foes around Kael ask for */
-function situational(s: Situation): MoveId | null {
-  if (s.foeAirborne) return "chaseCut";
-  if (s.surrounded && s.previous !== "ringCut") return "ringCut";
-  if (s.foeBehindOnly) return "turnCut";
-  if (s.foeDown && !s.stabbed) return "downStab";
-  return null;
-}
-
 /** the last hit: a Keen hop cleave with Keen Edge, the launch with Skybreaker, otherwise the falling smash */
 function finisher(s: Situation): MoveId {
   if (s.keen && level(s, "k_keen") >= CLEAVE_FROM) return "hopCleave";
@@ -46,14 +37,12 @@ function stringHit(s: Situation): MoveId {
 }
 
 /**
- * The move J starts now. The situation comes first (a foe in the air, behind or down), then the last hit's finisher,
- * then the string's next hit. No held key or dash changes it. Null when the air string is spent.
+ * The move J starts now: the last hit's finisher, otherwise the string's next hit, the same wherever the foes stand.
+ * No held key or dash changes it. Null when the air string is spent.
  */
 export function chooseMove(s: Situation): MoveId | null {
   if (!s.ground && !s.hanging) return airMove(s);
   if (s.hanging) return AIR_CHAIN[0];
-  const branch = situational(s);
-  if (branch === "chaseCut") return branch;
   if (s.next === s.limit) return finisher(s);
-  return branch ?? stringHit(s);
+  return stringHit(s);
 }

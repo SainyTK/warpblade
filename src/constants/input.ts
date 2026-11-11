@@ -28,7 +28,7 @@ const KAEL_ACTION_TEXT: Record<InputAction, string> = {
   right: "Walk right. Tap twice and hold to run",
   up: "Jump. Press again in the air to jump again",
   down: "Hold and jump to drop through a ledge",
-  attack: "Sword combo of four hits. Each hit fits where the foes are. Press again just as a blow lands for a Keen hit",
+  attack: "Sword combo of four hits, the same every time. Press again just as a blow lands for a Keen hit",
   dash: "Dash. Nothing can touch you while you dash, and each dash spends stamina",
   run: "Run toward the side held",
   warp: "Warp strike (10 MP). Hold up to warp to a crystal",

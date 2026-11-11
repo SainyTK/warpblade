@@ -1,5 +1,6 @@
 import type { HitFeel } from "../types/move";
 import { ramp } from "../utils/color";
+import { frame } from "./hero";
 
 /** how far around Kael the combo looks for foes, in pixels edge to edge */
 export const REACH = {
@@ -19,6 +20,11 @@ export const ADVANCE = { contact: 6, lean: 1.5 } as const;
 
 /** air attacks Kael may make before he lands: one, plus one per rank of the skill named here (temporary, until his skills are designed) */
 export const AIR_STRING = { hits: 1, skill: "p_skyDance" } as const;
+
+/** a blow is dealt this many seconds before its `at`, so the strike shows on the clip key the hit lands on */
+export const STRIKE_LEAD = 0.025;
+/** the `at` of a blow dealt on this animation frame of its clip, where the clip snaps to the strike */
+export const onFrame = (n: number): number => frame(n) + STRIKE_LEAD;
 
 /** Keen timing: J pressed this soon after a blow lands makes the next move a sure crit */
 export const KEEN = { window: 0.1 } as const;

@@ -1,4 +1,6 @@
-import { FEEL } from "../../../constants/combo";
+import { FEEL, onFrame } from "../../../constants/combo";
+import { frame } from "../../../constants/hero";
+import { STRING_CANCEL, STRING_FEEL } from "../../../constants/kael/string";
 import { WORLD_COLORS } from "../../../constants/palette";
 import type { MoveDef } from "../../../types/move";
 import { PK } from "../../../types/particle";
@@ -56,63 +58,82 @@ function cleaveImpact(): void {
 }
 
 /**
- * The plain ground string, one routine: a step-in cut, a rising backhand, a lunging double stab,
- * a hop into an overhead cleave, a turn that cuts front then back, and the falling smash that knocks down.
+ * The ground string, one routine: a step-in cut, a rising backhand, a lunging double stab and the falling smash that
+ * knocks down, with the blows skills put in it: Keen Edge's hop into an overhead cleave and Reaping Sweep's turn that
+ * cuts front then back.
  */
 export const CHAIN_MOVES = {
   stepCut: {
     id: "stepCut",
-    turns: true,
     name: "Step cut",
     clip: "atk1",
     pitch: 1,
-    hits: [{ at: 0.09, box: [-2, -38, 30, -2], power: 1.1, kx: 50, ky: -20, slash: CROSS, feel: FEEL.light }],
+    cancel: STRING_CANCEL.stepCut,
+    hits: [
+      {
+        at: onFrame(5),
+        box: [-2, -38, 30, -2],
+        power: 1.15,
+        kx: 10,
+        ky: -20,
+        slash: CROSS,
+        feel: STRING_FEEL.stepCut,
+      },
+    ],
   },
   risingBackhand: {
     id: "risingBackhand",
-    turns: true,
     name: "Rising backhand",
     clip: "atk2",
     pitch: 1.15,
+    cancel: STRING_CANCEL.risingBackhand,
     hits: [
       {
-        at: 0.09,
+        at: onFrame(5),
         box: [-4, -46, 26, -2],
-        power: 1.1,
-        kx: 30,
-        ky: -70,
+        power: 1.15,
+        kx: 10,
+        ky: -40,
         slash: RISING,
-        feel: { ...FEEL.light, pitch: 1.25 },
+        feel: STRING_FEEL.risingBackhand,
       },
     ],
   },
   twinFang: {
     id: "twinFang",
-    turns: true,
     name: "Twin fang",
     clip: "twinFang",
     pitch: 1.4,
+    cancel: STRING_CANCEL.twinFang,
     hits: [
-      { at: 0.07, box: [0, -26, 36, -12], power: 0.7, kx: 20, ky: 0, slash: STAB, feel: FEEL.tap },
       {
-        at: 0.15,
+        at: onFrame(5),
+        box: [0, -26, 36, -12],
+        power: 0.75,
+        kx: 10,
+        ky: 0,
+        slash: STAB,
+        feel: STRING_FEEL.twinFangFirst,
+      },
+      {
+        at: onFrame(10),
         box: [0, -24, 38, -8],
-        power: 0.8,
-        kx: 50,
+        power: 0.85,
+        kx: 15,
         ky: -20,
         slash: { ...STAB, cy: -14, R: 24 },
-        feel: { ...FEEL.light, pitch: 1.4 },
+        feel: STRING_FEEL.twinFangSecond,
       },
     ],
   },
   hopCleave: {
     id: "hopCleave",
-    turns: true,
     name: "Hop cleave",
     clip: "hopCleave",
     falls: true,
     hop: true,
     pitch: 0.85,
+    cancel: STRING_CANCEL.finisher,
     hits: [
       {
         at: 0.2,
@@ -129,7 +150,6 @@ export const CHAIN_MOVES = {
   },
   crescentTurn: {
     id: "crescentTurn",
-    turns: true,
     name: "Crescent turn",
     clip: "crescent",
     pitch: 1.05,
@@ -149,16 +169,16 @@ export const CHAIN_MOVES = {
   },
   smash: {
     id: "smash",
-    turns: true,
     name: "Falling smash",
     clip: "atk3",
     pitch: 0.7,
+    cancel: STRING_CANCEL.finisher,
     hits: [
       {
-        at: 0.16,
+        at: onFrame(7),
         box: [-2, -40, 38, 2],
-        power: 2.2,
-        kx: 220,
+        power: 2.35,
+        kx: 60,
         ky: -60,
         stun: 0.8,
         big: true,
@@ -176,10 +196,10 @@ export const CHAIN_MOVES = {
           hold: 0.07,
           trail: 0.28,
         },
-        feel: FEEL.crush,
+        feel: STRING_FEEL.smash,
       },
     ],
-    strides: [{ from: 0.08, to: 0.18, speed: 330 }],
+    strides: [{ from: frame(3), to: frame(7), speed: 250 }],
     afterHit: smashImpact,
   },
 } satisfies Record<string, MoveDef>;

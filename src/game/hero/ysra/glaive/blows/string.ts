@@ -67,7 +67,6 @@ export const STRING_BLOWS = {
     name: "Hip thrust",
     clip: "yHipThrust",
     pitch: 0.85,
-    turns: true,
     hits: [
       glaiveHit({
         at: frame(6),

@@ -6,7 +6,7 @@ AD and AP mean Kael's attack damage and ability power (both 10 at hero level 1, 
 
 ## Identity
 
-Kael is the warp knight: a sword string that reads the room, a thrown sword he appears beside, a dash nothing can touch, and crystal magic.
+Kael is the warp knight: a sword string that plays the same every time, a thrown sword he appears beside, a dash nothing can touch, and crystal magic.
 His skills lean on what makes him different from the other three: the warp (K), back attacks, Keen timing, launches into short air strings, and spells on a rotation.
 Every skill is on a single button press or runs on its own; nothing asks for a direction, a dash or a double tap during or after a combo.
 
@@ -14,10 +14,9 @@ Every skill is on a single button press or runs on its own; nothing asks for a d
 
 | Button | What it does |
 | --- | --- |
-| J | The ground string, fixed at 4 hits: step cut (1.1 AD), rising backhand (1.1 AD), twin fang (0.7 + 0.8 AD), falling smash (2.2 AD, knocks down). |
-| J (situation) | The string still reads the foes: turning cut (foe only behind), ring cut (foes on both sides), pinning stab (foe down, once a combo), chase cut (foe in the air ahead, starts the air string). The 4th hit is always the smash. |
+| J | The ground string, fixed at 4 hits and the same wherever the foes stand: step cut (1.15 AD), rising backhand (1.15 AD), twin fang (0.75 + 0.85 AD), falling smash (2.35 AD, knocks down). No blow turns Kael around. |
 | J (Keen) | J pressed in the 0.1 s after a blow lands makes the next blow a sure crit, drawn gold. Mashing spoils it. |
-| J (air) | Air string of 2 per jump: wheel slash (1.2 AD), scissor cut (1.3 AD, pops the foe up). |
+| J (air) | Air string of 2 per jump: wheel slash (1.7 AD), scissor cut (1.85 AD, pops the foe up). |
 | K | Warp Strike: throw the sword at the nearest foe ahead and appear beside it striking, 1.8 AD plus 0.014 AD per pixel travelled (up to +2.8). 10 MP, 2 s recharge. |
 | K with Up held | Crystal Hang: warp to a floating crystal and hang there to recover MP fast (14 MP/s). Unchanged from today. |
 | L | Dash: 0.24 s, untouchable, ground only, two per stamina bar. A perfect dodge in its first 0.12 s slows the world and gives 8 MP, 25 stamina and 5 Flow. |
@@ -38,7 +37,7 @@ The ability rotation is Lance, Burst, then each spell skill in the order learned
 
 - `comboHits: 4`. The string is step cut, rising backhand, twin fang, smash; hop cleave and crescent turn leave the plain string and come back as skill moves (Keen Edge, Reaping Sweep).
 - Combo length never changes. Skills change hit 1 (Reaping Sweep), hit 3 (Phase Cut), hit 4 (Skybreaker, Keen Edge) or add effects to every hit.
-- When two skills claim the same hit: Phase Cut wins hit 3 over the crescent turn, and a Keen 4th hit is the hop cleave (Keen Edge level 7) over Skybreaker's launch. The situational moves still take priority over all of them, as today.
+- When two skills claim the same hit: Phase Cut wins hit 3 over the crescent turn, and a Keen 4th hit is the hop cleave (Keen Edge level 7) over Skybreaker's launch.
 - Air string limit: 2 per jump in the base kit (wheel, scissor), 3 with Sky Dance (adds the stomp). A double jump adds no air hits.
 
 ## What leaves today's kit
@@ -53,7 +52,7 @@ The ability rotation is Lance, Burst, then each spell skill in the order learned
 | Dash Strike | J right after a dash | Passing Cut: the dash itself cuts foes it passes and ends with the uppercut, no J. |
 | Running Thrust | J while running | Warpcraft level 2: the warp arrival is the lunging thrust with its wall bounce. |
 | Meteor Drop | Down + J in the air | Sky Dance level 6: the air string's stomp lands as the meteor bounce. |
-| Whirlwind | J after a double jump | Sky Dance level 3: picked by the situation, as today. |
+| Whirlwind | J after a double jump | Sky Dance level 3: the first air hit after a double jump. |
 | Blink Combo | K in a combo | Blink Step: kept on one button, the combo goes on after it. |
 | Flowing Chain | passive | Gone (combo length is fixed). |
 | Warp Strike, Double Jump, Crystal Hang | skills | Base kit. |

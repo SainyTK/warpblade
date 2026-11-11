@@ -11,10 +11,6 @@ export type KaelMoveId =
   | "hopCleave"
   | "crescentTurn"
   | "smash"
-  | "turnCut"
-  | "ringCut"
-  | "downStab"
-  | "chaseCut"
   | "sweep"
   | "airWheel"
   | "airScissor"
@@ -76,8 +72,6 @@ export interface MoveDef {
   name: string;
   clip: ClipName;
   hits: readonly MoveHit[];
-  /** turns to a foe that is only behind before it starts */
-  turns?: boolean;
   /** ends the combo whatever its length */
   finisher?: boolean;
   /** invulnerable for this long from the start */

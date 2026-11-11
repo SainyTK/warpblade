@@ -2,10 +2,12 @@ import type { HeroState } from "../../types/hero";
 import { frame } from "../hero";
 
 /**
- * Animation frames Kael's pose takes to cross from wherever it was into a new clip, at even steps. Blows take theirs
- * from `WINDUP`; hits taken and warp arrivals cut at once, since the cut is the read.
+ * Animation frames Kael's pose takes to cross from wherever it was into a new clip, at even steps. A blow crosses into
+ * its wind-up over two, so the wind-up then holds for the frames left before the strike; hits taken and warp arrivals
+ * cut at once, since the cut is the read.
  */
 export const HANDOVER_FRAMES: Partial<Record<HeroState, number>> = {
+  move: 2,
   jump: 2,
   dash: 2,
   hurt: 0,
@@ -45,7 +47,26 @@ export const HANG_SWING = { amplitude: 3, period: 0.7, settle: 0.45 } as const;
 
 /**
  * A blow whose first hit comes sooner than `short` runs its clock at `rate` until that hit, so the wind-up holds a beat
- * before the snap: the string's 0.09 s hits take 0.065 s of clip to the strike, now 0.1 s. A blow may cross in from
- * the last pose over the frames before its hit, from `minCross` up to `maxCross`.
+ * before the snap. The string and the air string are keyed with their own held wind-ups; the skill blows that strike
+ * early (the whirlwind, the crescent turn, the phase cut) still lean on this.
  */
-export const WINDUP = { short: frame(3), rate: 0.65, minCross: 2, maxCross: 4 } as const;
+export const WINDUP = { short: frame(3), rate: 0.65 } as const;
+
+/**
+ * A walk, run or dash that stops on the spot settles onto the knees like a light landing, this deep on the landing
+ * clip's scale of 0 to 1, so the travel ends in a recovery.
+ */
+export const STOP_DEPTH: Readonly<Record<string, number>> = { walk: 0.3, run: 0.55, dash: 0.75 };
+
+/**
+ * Travel from a stand starts with a load: the hips drop `dip` pixels and the chest leans `lean` pixels into it on the
+ * first frame, easing out over `frames`. A dash loads deeper.
+ */
+export const TRAVEL_LOAD: Readonly<Record<string, { dip: number; lean: number; frames: number }>> = {
+  walk: { dip: 1, lean: 1.5, frames: 4 },
+  run: { dip: 1.5, lean: 2.5, frames: 4 },
+  dash: { dip: 2.5, lean: 3, frames: 3 },
+};
+
+/** a jump pushes off from bent knees: the hips start `dip` pixels low and the hands `swing` pixels low, rising out over `frames` */
+export const TAKEOFF = { dip: 3, swing: 3, frames: 3 } as const;

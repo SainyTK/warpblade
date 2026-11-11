@@ -1,4 +1,4 @@
-# Combo design: situational strings
+# Combo design: fixed strings
 
 Kael's sword combo takes its structure from the classic side-scrolling action RPG Grand Chase (KOG, 2003).
 The moves, their names and their timing are Kael's own; nothing below copies a Grand Chase character's moveset.
@@ -44,25 +44,25 @@ Each hero's ground string must hold to these, measured on a lone walker (a thorn
 - The string is fixed at four hits (`CharacterDef.comboHits`), since a game full of knock-ups gives a player one or two hits before a dodge.
 - Skills change which blow fills a place in the string, never its length: Reaping Sweep opens with the low sweep, Phase Cut and the crescent turn take the third hit, Skybreaker and a Keen hop cleave take the last (`docs/skills/kael.md`).
 - The reference changes the whole body on every hit, so each of Kael's hits has its own silhouette at a glance: hip height from a deep crouch to airborne, the torso leaning far ahead or back, wide leg spreads, the back turned in spins, and the arms overhead.
-- Each blow is keyed as an anticipation the opposite way, a snap to the strike pose on the hit frame, a hold of about a tenth of a second, then the follow-through.
+- Each blow is keyed as an anticipation the opposite way, reached by frame 2 and held to the hit frame (frame 5, the smash frame 7), a snap to the strike pose, an overshoot held through the hit-stop, a follow-through onto the front foot and a keyed recovery to guard (`src/constants/clips/string.ts`).
+- The tempo, in real seconds from one blow landing to the next with J pressed in time, is about 0.45 through the string, 0.5 into the smash and 0.6 from the smash to the next string's step cut (`STRING_CANCEL` in `src/constants/kael/string.ts`).
+- Hit-stop, shake and sound grow through the string, and the smash is by far the heaviest (`STRING_FEEL`).
+- The smash closes the combo once its follow-through starts, so J then starts the next string over its recovery; this stands in for the combo cooldown, and the same holds for every last blow that sets its own `cancel` (Skybreaker, the hop cleave).
 - Kael's feet stay planted for every hit of the string, and the blows push the foe back only a few pixels, so it stays in reach for the next one.
 - Only moves that end or open with travel move him: the smash that ends every combo, Phase Cut's pass and Skybreaker's launch.
 - The last hit a combo allows is always the knockdown smash, at every combo length, so short combos at level 1 still end with a payoff.
-- The situation picks the next blow, and the rule a player expects is the one the game uses.
-- A foe only behind Kael gets a turning cut that pivots to face it.
-- Foes on both sides get a ring cut that hits both.
-- A foe lying down in front gets a downward stab, once per combo, which keeps it down without stretching the stun.
-- A foe in the air in front of Kael gets a rising chase cut that takes him up after it, and the string goes on as an air string.
+- J on the ground plays the same string in the same order wherever the foes stand: in front, behind, on both sides, in the air or lying down.
+- No blow turns Kael around; he faces where the player last pointed.
 - A heavy blow that drives a foe into the edge of the stage bounces it back off the wall and into the air.
 - No skill asks for a direction, a dash or a double tap during or after a combo; the old extended inputs (launcher, low sweep, Phase Finish, Skybreaker, dash strike, running thrust, meteor drop) were folded into the string's own hits, the dash and the warp.
 - The Critical and Double timing idea becomes Keen timing: a J pressed in the short moment after a blow lands makes the next blow a sure critical hit.
 - Mashing spoils Keen timing, because any J pressed before the current blow has landed cancels it, so rhythm pays and mashing does not.
-- Air attacks share no shape with the ground string: a wheel slash that circles his whole body while he rolls in a ball, a scissor cut that lays him back with one leg kicked high and sweeps the blade under his feet, and a stomp that drops him feet first with his arms thrown up.
+- Air attacks share no shape with the ground string, and each holds a three-frame wind-up before its strike: a wheel slash that circles his whole body while he rolls in a ball, a scissor cut that lays him back with one leg kicked high and sweeps the blade under his feet, and a stomp that drops him feet first with his arms thrown up.
 - Kael starts with two air attacks per jump (wheel and scissor cut). Sky Dance adds the stomp, so three is the most, and a double jump adds none.
 - The stomp spikes what is under him on the way down and knocks foes on both sides off their feet when he lands.
-- The launch still pays: after Skybreaker's launch the chase cut takes Kael straight up after the foe, and the air string that follows has the same limit.
+- The launch still pays: Skybreaker lifts Kael with the foe, and a J pressed once its follow-through starts begins the air string there, with the same limit.
 - Nothing done in the air carries Kael above his jump: attacks, casts and the special charge keep full gravity while he rises and only hang once he starts to fall.
-- Moves that lift Kael on their own, like the chase cut, rise by their own height but never past the top of his last jump, and a lift never adds to a rise he already has.
+- Moves that lift Kael on their own, like Skybreaker and the whirlwind, rise by their own height but never past the top of his last jump, and a lift never adds to a rise he already has.
 - Hit feel is set per hit: hitstop, screen shake, sound pitch, slash shape and color, afterimages on the fast footwork, and how early the next press may cancel the follow-through.
 
 ## What Warpblade leaves out

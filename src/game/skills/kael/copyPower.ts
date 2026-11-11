@@ -2,13 +2,11 @@ import type { MoveDef, MoveId } from "../../../types/move";
 import { AIR_MOVES } from "../../hero/moves/air";
 import { CHAIN_MOVES } from "../../hero/moves/chain";
 import { FINISHER_MOVES } from "../../hero/moves/finishers";
-import { SITUATIONAL_MOVES } from "../../hero/moves/situational";
 import { SKILL_MOVES } from "../../hero/moves/skills";
 
 /** Kael's own moves; read from their own files, so a skill does not load the other heroes' moves with them */
 const KAEL_MOVES: Partial<Record<MoveId, MoveDef>> = {
   ...CHAIN_MOVES,
-  ...SITUATIONAL_MOVES,
   ...SKILL_MOVES,
   ...AIR_MOVES,
   ...FINISHER_MOVES,

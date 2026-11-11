@@ -5,8 +5,8 @@ import { ghostCanvas } from "./afterimages";
 import { drawHero } from "./drawHero";
 import { heroLook } from "./look";
 
-/** the strike pose, taken from the cross cut's hit frame */
-export const STRIKE_POSE: Pose = CLIPS.atk1.keys[2][1];
+/** the strike pose, taken from the step cut's hit frame */
+export const STRIKE_POSE: Pose = (CLIPS.atk1.keys.find(([, , snap]) => snap) ?? CLIPS.atk1.keys[0])[1];
 
 /** a fading phantom of Kael standing at (x, y), facing `face`, for `life` seconds: the shape every phantom of his skills
  *  takes (Phantom Edge, Mirror Knight, Shadow Step, Heavenfall) */

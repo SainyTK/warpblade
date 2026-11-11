@@ -1,6 +1,7 @@
 import { ENEMY_AIR } from "../../../constants/combat";
-import { FEEL, PHANTOM_RAMP } from "../../../constants/combo";
+import { FEEL, onFrame, PHANTOM_RAMP } from "../../../constants/combo";
 import { frame } from "../../../constants/hero";
+import { AIR_CANCEL } from "../../../constants/kael/string";
 import { PAL, WORLD_COLORS } from "../../../constants/palette";
 import type { MoveDef } from "../../../types/move";
 import { PK } from "../../../types/particle";
@@ -83,7 +84,7 @@ function meteorLanding(): void {
 }
 
 /** the stomp drops at this speed once its tuck is over, and its landing hits this far to each side */
-const STOMP = { tuck: 0.08, dive: 520, reach: 40 } as const;
+const STOMP = { tuck: frame(5), dive: 520, reach: 40 } as const;
 
 /** the stomp lands: a wide ring, dust and rubble to both sides, and every foe near the floor knocked off its feet */
 function stompLanding(): void {
@@ -124,15 +125,15 @@ function stompLanding(): void {
 export const AIR_MOVES = {
   airWheel: {
     id: "airWheel",
-    turns: true,
     name: "Wheel slash",
     clip: "airWheel",
     pitch: 1.2,
+    cancel: AIR_CANCEL,
     hits: [
       {
-        at: frame(2),
+        at: onFrame(5),
         box: [-6, -44, 28, 10],
-        power: 1.2,
+        power: 1.7,
         kx: 30,
         ky: -40,
         // the blade comes round the whole body: from high behind, over the head, down in front and under the feet
@@ -143,15 +144,15 @@ export const AIR_MOVES = {
   },
   airScissor: {
     id: "airScissor",
-    turns: true,
     name: "Scissor cut",
     clip: "airScissor",
     pitch: 1.35,
+    cancel: AIR_CANCEL,
     hits: [
       {
-        at: frame(2),
+        at: onFrame(5),
         box: [-8, -36, 30, 14],
-        power: 1.3,
+        power: 1.85,
         kx: 40,
         ky: -120,
         // from low behind, under his feet, and up in front
@@ -162,7 +163,6 @@ export const AIR_MOVES = {
   },
   airStomp: {
     id: "airStomp",
-    turns: true,
     name: "Sky stomp",
     clip: "airStomp",
     pitch: 0.7,
@@ -171,7 +171,7 @@ export const AIR_MOVES = {
     // on the way down the feet spike anything under him into the floor
     hits: [
       {
-        at: STOMP.tuck,
+        at: onFrame(5),
         box: [-12, -24, 16, 14],
         power: 1.2,
         kx: 20,
