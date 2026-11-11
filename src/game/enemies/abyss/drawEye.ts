@@ -3,8 +3,8 @@ import type { Color } from "../../../types/color";
 import type { Enemy } from "../../../types/enemy";
 import { clamp } from "../../../utils/math";
 import { hero } from "../../state";
-import { AC, rimLight, VOID } from "./colors";
-import { fang, rimBand } from "./paint";
+import { AC, hideOf, VOID } from "./colors";
+import { fang, sunRim } from "./paint";
 
 const canvas = detailCanvas(40, 40, 20, 20);
 /** spines around the shell, as angles from straight ahead */
@@ -18,14 +18,20 @@ const VEINS: readonly (readonly [number, number, number, number])[] = [
   [0.6, -0.3, 0.5, -0.1],
 ];
 
+/** no vein comes nearer the eyeball's middle than this, in units of its radius */
+const VEINS_FROM = 0.3;
+
 /** whether this point of the eyeball, in units of its radii, lies on a vein */
 function onVein(u: number, v: number, width: number): boolean {
-  return VEINS.some(([u0, v0, u1, v1]) => {
+  // the veins keep to the eyeball's sides, so its middle needs no test
+  if (Math.abs(u) < VEINS_FROM) return false;
+  for (const [u0, v0, u1, v1] of VEINS) {
     const du = u1 - u0;
     const dv = v1 - v0;
     const k = clamp(((u - u0) * du + (v - v0) * dv) / (du * du + dv * dv));
-    return Math.hypot(u - u0 - du * k, v - v0 - dv * k) < width;
-  });
+    if (Math.hypot(u - u0 - du * k, v - v0 - dv * k) < width) return true;
+  }
+  return false;
 }
 
 /** how wide the lid is open: half shut while it drifts, with a slow blink, and wide open as it stares and fires */
@@ -94,34 +100,35 @@ export function drawEye(e: Enemy, t: number): SpriteCanvas {
   const lx = Math.cos(aim) * e.face;
   const ly = Math.sin(aim);
   const hot = e.state === "wind" || e.state === "beam";
+  const H = hideOf(e.seed);
   s.clear();
   // nerve tendrils trailing below and behind, each ending in a glowing bead
   s.begin();
   for (let k = 0; k < 4; k++) {
     const ox = -3 + k * 2;
     const w = Math.sin(time * 5 + k * 1.7) * 2;
-    s.taper(ox, 4 + bob, ox - 2 + w * 0.5, 9 + bob, 0.95, 0.75, AC.bodyDark);
-    s.taper(ox - 2 + w * 0.5, 9 + bob, ox - 4 + w, 13 + k + bob, 0.75, 0.45, AC.bodyDark);
+    s.taper(ox, 4 + bob, ox - 2 + w * 0.5, 9 + bob, 0.95, 0.75, H.dark);
+    s.taper(ox - 2 + w * 0.5, 9 + bob, ox - 4 + w, 13 + k + bob, 0.75, 0.45, H.dark);
   }
-  s.shadeEdges(AC.bodyDark, AC.body, AC.bodyDeep);
+  s.shadeEdges(H.dark, H.body, H.deep);
   for (let k = 0; k < 4; k++) {
     const w = Math.sin(time * 5 + k * 1.7) * 2;
     s.block(-3 + k * 2 - 4 + w, 13 + k + bob, AC.rimSoft, 1, 1);
     s.set(-3 + k * 2 - 4 + w, 13 + k + bob, AC.rim);
   }
-  s.commit(false);
   // the spines, thinning to points, behind the shell
-  s.begin();
   for (const a of SPINES) {
     const len = Math.abs(a) > 2.6 ? 12.5 : 10.5;
     s.taper(Math.cos(a) * 5, Math.sin(a) * 5 + bob, Math.cos(a) * len, Math.sin(a) * len + bob, 1.3, 0.35, AC.plate);
   }
   s.shadeEdges(AC.plate, AC.plateLight, AC.plateDark);
-  s.commit();
-  // the shell of black flesh, lit from the top left and shadowed underneath
+  s.commit(false);
+  // the shell of black flesh: a lit dome over a crescent of shadow underneath
   s.begin();
-  s.dot(-1, bob, 7.6, AC.body);
-  s.shadeEdges(AC.body, AC.sheen, AC.bodyDark, 3);
+  s.dot(-1, bob, 7.6, H.dark);
+  s.dot(-1.9, bob - 1.3, 6.3, H.body);
+  s.shadeEdges(H.body, H.sheen, H.body);
+  s.shadeEdges(H.dark, H.dark, H.deep, 2);
   s.commit();
   // a chitin cap over the crown, with a seam and a glint on its ridge
   s.begin();
@@ -142,25 +149,24 @@ export function drawEye(e: Enemy, t: number): SpriteCanvas {
   s.commit();
   // the lids, a heavy plated one above and a dark fold below
   s.begin();
+  /** a lid as one band along the eye's edge, r thick each side of a line just outside the opening */
   const lid = (sign: number, r: number, c: Color) => {
-    let prev: [number, number] | null = null;
-    for (let x = -rx; x <= rx + 0.01; x += 0.5) {
-      const p: [number, number] = [ex + x, ey + sign * (ry * Math.sqrt(Math.max(0, 1 - (x / rx) ** 2)) + r * 0.6)];
-      if (prev) s.stroke(prev[0], prev[1], p[0], p[1], r, c);
-      prev = p;
+    const outer: [number, number][] = [];
+    const inner: [number, number][] = [];
+    for (let x = -rx - r; x <= rx + r + 0.01; x += 1) {
+      const arc = ry * Math.sqrt(Math.max(0, 1 - (x / rx) ** 2));
+      outer.push([ex + x, ey + sign * (arc + r * 1.6)]);
+      inner.unshift([ex + x, ey + sign * (arc - r * 0.4)]);
     }
+    s.poly([...outer, ...inner], c);
   };
   lid(-1, 0.65, AC.plate);
-  s.shadeEdges(AC.plate, AC.plateLight, AC.plateDark);
-  lid(1, 0.5, AC.bodyDark);
-  s.commit();
   // a hooked spur at the front of the upper lid
-  s.begin();
   fang(s, [ex + rx - 0.5, ey - ry - 0.6], [ex + rx + 1.6, ey - ry + 0.4], 1.1, AC.plate);
   s.shadeEdges(AC.plate, AC.plateLight, AC.plateDark);
+  lid(1, 0.5, H.dark);
   s.commit();
-  rimBand(s, AC.rim);
-  rimLight(s, AC.rim);
+  sunRim(s, AC.rim, AC.rimSoft);
   s.outline(AC.outline);
   return s;
 }

@@ -1,9 +1,9 @@
 import { detailCanvas, type SpriteCanvas } from "../../../engine/sprite";
 import type { Enemy } from "../../../types/enemy";
 import { mix } from "../../../utils/color";
-import { AC, rimLight, VOID } from "./colors";
+import { AC, VOID } from "./colors";
 import { mawPose, turn } from "./mawPose";
-import { fang, glowEye, type Pt, rimBand } from "./paint";
+import { fang, glowEye, type Pt, sunRim } from "./paint";
 
 const canvas = detailCanvas(104, 84, 52, 76);
 const HINGE: Pt = [3, -19];
@@ -15,6 +15,15 @@ const SPINES: readonly (readonly [number, number, number])[] = [
   [-5, -29, 6],
   [1, -29, 4],
 ];
+/** the hump as overlapping masses, tail to shoulder: centres and radii */
+const HUMP: readonly (readonly [number, number, number])[] = [
+  [-16, -11, 9.3],
+  [-8, -17, 12.8],
+  [0, -19, 9.8],
+];
+/** how far the lit dome sits up and back from the hump's full mass, leaving a crescent of shadow under the belly */
+const LIT_SHIFT = 1;
+
 /** the chitin plates over the hump, back to front, as centres and radii */
 const PLATES: readonly (readonly [number, number, number])[] = [
   [-10, -22, 6],
@@ -68,18 +77,22 @@ export function drawMaw(e: Enemy, t: number): SpriteCanvas {
   s.shadeEdges(AC.bodyDark, AC.body, AC.bodyDeep);
   claws(9 + step, 0, 2, AC.clawDeep);
   s.shadeEdges(AC.clawDeep, AC.clawDark, AC.bodyDeep);
-  s.commit();
+  s.commit(false);
   // the spines along the hump, thinning to points
   s.begin();
-  for (const [x, y, back] of SPINES) s.taper(...B(x, y), ...B(x - back, y - 5.5), 1.3, 0.35, AC.plate);
+  SPINES.forEach(([x, y, back], i) => {
+    // the spines rise and settle with its breath, one after another along the hump
+    const bristle = Math.sin(time * 2 + i * 0.8) * 0.8;
+    s.taper(...B(x, y), ...B(x - back, y - 5.5 - bristle), 1.3, 0.35, AC.plate);
+  });
   s.shadeEdges(AC.plate, AC.plateLight, AC.plateDark);
   s.commit();
   // the hump, lit from the top left with a deep shadow under its belly
   s.begin();
-  s.dot(...B(-16, -11), 9.3, AC.body);
-  s.dot(...B(-8, -17), 12.8, AC.body);
-  s.dot(...B(0, -19), 9.8, AC.body);
-  s.shadeEdges(AC.body, AC.sheen, AC.bodyDark, 4);
+  for (const [x, y, r] of HUMP) s.dot(...B(x, y), r, AC.bodyDark);
+  for (const [x, y, r] of HUMP) s.dot(...B(x - LIT_SHIFT, y - LIT_SHIFT * 1.6), r - LIT_SHIFT * 1.9, AC.body);
+  s.shadeEdges(AC.body, AC.sheen, AC.body);
+  s.shadeEdges(AC.bodyDark, AC.bodyDark, AC.bodyDeep, 4);
   s.commit();
   // chitin plates over the hump, each overlapping the one behind it, a glint on each ridge
   for (const [x, y, r] of PLATES) {
@@ -164,8 +177,7 @@ export function drawMaw(e: Enemy, t: number): SpriteCanvas {
   for (let j = -1; j <= 1; j++) s.taper(hx + 1, hy - 2, hx + 5.5, hy - 1.5 + j * 1.8, 0.8, 0.3, AC.claw);
   s.shadeEdges(AC.claw, AC.clawLight, AC.clawDark);
   s.commit();
-  rimBand(s, AC.rim);
-  rimLight(s, AC.rim);
+  sunRim(s, AC.rim, AC.rimSoft);
   s.outline(AC.outline);
   return s;
 }

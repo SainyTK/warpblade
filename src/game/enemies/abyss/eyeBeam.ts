@@ -1,8 +1,10 @@
 import { GROUND, W } from "../../../constants/stage";
-import { glow, glowLine, line, place, px } from "../../../engine/frame";
+import { ellipseRing, glow, glowLine, hairline, line, place, px, sparkle } from "../../../engine/frame";
 import type { Effect } from "../../../types/effect";
 import type { Enemy } from "../../../types/enemy";
 import { PK } from "../../../types/particle";
+import { WHITE } from "../../../utils/color";
+import { grain } from "../../../utils/grain";
 import { clamp } from "../../../utils/math";
 import { eachStanding, heroSlot } from "../../coopHooks";
 import { hurtHero } from "../../hurtHero";
@@ -13,6 +15,10 @@ import { VOID, VOID_SPARKS } from "./colors";
 /** how long the beam burns, and the part of that in which it can hurt */
 export const BEAM = { life: 0.32, hurts: 0.14 } as const;
 const REACH = 260;
+/** the share of the beam's life left above which it is at its widest, and below which it is a single thread */
+const FLARE = { wide: 0.7, thread: 0.3 };
+/** forks of light off the beam: how many, and how many times a second they jump */
+const FORKS = { count: 5, rate: 40 };
 
 /** where a ray from (x, y) along (ux, uy) meets the floor or the edge of the stage */
 function rayEnd(x: number, y: number, ux: number, uy: number): [number, number] {
@@ -75,19 +81,38 @@ export function createEyeBeam(e: Enemy, damage: number): Effect {
           if (!locked && Math.floor(d + crawl) % 8 > 4) continue;
           px(sx + ux * d, sy + uy * d, locked ? VOID[4] : VOID[3], k);
         }
-        if (locked) glowLine(sx, sy, x1, y1, 4, VOID[3], 0.2);
+        if (locked) {
+          glowLine(sx, sy, x1, y1, 4, VOID[3], 0.2);
+          // a ring marks where the beam will land
+          ellipseRing(x1, Math.min(y1, GROUND - 1), 4, 1.2, VOID[5], 0.6 + 0.4 * Math.sin(game.t * 30));
+        }
         return;
       }
       const k = 1 - clamp(t / BEAM.life);
-      const wide = k > 0.5 ? 2 : 1;
       const nx = -uy;
       const ny = ux;
+      // the beam opens wide for an instant, then narrows to a thread as it dies
+      const wide = k > FLARE.wide ? 2 : k > FLARE.thread ? 1 : 0;
       for (let o = -wide; o <= wide; o++) {
-        const c = o === 0 ? VOID[5] : Math.abs(o) === 1 ? VOID[4] : VOID[3];
-        line(sx + nx * o, sy + ny * o, x1 + nx * o, y1 + ny * o, c, o === 0 ? 1 : 0.85 * k + 0.15);
+        if (o === 0) continue;
+        const c = Math.abs(o) === 2 ? VOID[3] : VOID[4];
+        line(sx + nx * o, sy + ny * o, x1 + nx * o, y1 + ny * o, c, 0.4 + 0.6 * k);
+      }
+      line(sx, sy, x1, y1, wide > 0 ? VOID[5] : VOID[4]);
+      if (wide > 0) hairline(sx + nx * 0.5, sy + ny * 0.5, x1 + nx * 0.5, y1 + ny * 0.5, WHITE);
+      // fine forks of light jump off the beam, in new places every few frames
+      const len = Math.hypot(x1 - sx, y1 - sy);
+      const beat = Math.floor(game.t * FORKS.rate);
+      for (let j = 0; j < FORKS.count; j++) {
+        const at = grain(j * 3 + 1, beat) * len;
+        const side = grain(j * 5 + 2, beat) > 0.5 ? 1 : -1;
+        const reach = (2 + grain(j, beat + 7) * 3) * k;
+        const fx = sx + ux * at;
+        const fy = sy + uy * at;
+        hairline(fx, fy, fx + nx * side * reach + ux * 2.5, fy + ny * side * reach + uy * 2.5, VOID[4], 0.9);
       }
       glowLine(sx, sy, x1, y1, 6 + 4 * k, VOID[3], 0.5 * k);
-      glow(x1, Math.min(y1, GROUND - 1), 14, VOID[4], 0.6 * k);
+      sparkle(x1, Math.min(y1, GROUND - 1), 1.5 + 4 * k, VOID[5], VOID[4], 0.6 * k);
       glow(sx, sy, 10, VOID[5], 0.6 * k);
     },
   };

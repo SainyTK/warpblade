@@ -14,6 +14,6 @@ export const maw: EnemyKind = {
   rift: { height: 26, y: () => GROUND, riftY: () => GROUND - 20 },
   update: updateMaw,
   draw: drawMaw,
-  glow: { radius: 40, color: VOID[3], eyeY: -9 },
+  glow: { radius: 34, color: VOID[3], eyeY: -9 },
   guardFrom: 1,
 };

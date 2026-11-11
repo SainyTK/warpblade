@@ -7,6 +7,15 @@ import { AC, VOID } from "./colors";
 import { fang, glowEye } from "./paint";
 import { RISE, SINK } from "./stalker";
 
+/** the pool's rows from far to near, as a height in art pixels and the share of its half width each spans */
+const LENS: readonly (readonly [number, number])[] = [
+  [-1.5, 0.55],
+  [-1, 0.82],
+  [-0.5, 0.96],
+  [0, 1],
+  [0.5, 0.86],
+];
+
 /** the shadow pool a stalker sinks into: a flat ink puddle with a crimson lip, cracking with light before it rises */
 export function drawStalkerPool(s: SpriteCanvas, e: Enemy, t: number): void {
   const time = t + e.seed;
@@ -15,19 +24,17 @@ export function drawStalkerPool(s: SpriteCanvas, e: Enemy, t: number): void {
   const half = Math.round((7 + heat * 3) * fade);
   if (half < 2) return;
   s.begin();
-  // the ink surface: a wide floor row and a narrower raised row, each with a crimson lip at its ends
-  s.block(-half, 0, AC.rimSoft, half * 2 + 1, 1);
-  s.block(-half + 2, 0, AC.bodyDark, half * 2 - 3, 1);
-  s.block(-half + 2, 0.5, AC.bodyDeep, half * 2 - 3, 0.5);
-  if (half > 2) {
-    s.block(-half + 3, -1, AC.rimSoft, half * 2 - 5, 1);
-    s.block(-half + 5, -1, AC.body, Math.max(0, half * 2 - 9), 1);
-    s.block(-half + 5, -1, AC.sheen, Math.max(0, half * 2 - 9), 0.5);
-  }
+  // the ink surface seen edge on: a lens of half art pixel rows, its far rows catching a sheen, a crimson lip all round
+  LENS.forEach(([y, share], row) => {
+    const reach = Math.max(1, Math.round(half * share * 2) / 2);
+    s.block(-reach, y, row === LENS.length - 1 ? AC.rim : AC.rimSoft, reach * 2 + 1, 0.5);
+    if (row > 0 && reach > 1.5) s.block(-reach + 1, y, row === 1 ? AC.sheen : AC.bodyDeep, reach * 2 - 1, 0.5);
+  });
   // ripples crawl across the surface, a bright glint riding each
   const r = Math.sin(time * 5) * (half - 3);
   s.block(r - 0.5, -1, AC.rim, 1.5, 0.5);
   s.block(-r - 0.5, 0, AC.rimSoft, 1.5, 0.5);
+  s.block(r * 0.4 - 1, -0.5, AC.body, 2, 0.5);
   if (e.state === "charge") {
     // cracks of void light run out from the middle, brighter and longer as the rise nears
     const c = heat > 0.7 ? VOID[5] : heat > 0.35 ? VOID[4] : VOID[3];

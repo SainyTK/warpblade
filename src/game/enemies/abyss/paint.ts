@@ -23,14 +23,24 @@ export function glowEye(s: SpriteCanvas, x: number, y: number, hot: Color, dim: 
 }
 
 /**
- * Soften the image pixel row just under the silhouette's top edge toward the rim colour, from local x = 0 forward,
- * so the black sun's light reads as a band that fades into the hide. Run it before rimLight.
+ * The black sun's light on a finished sprite, in one pass over what was drawn: the top edge of every shape takes the
+ * rim colour, hot from local x = 0 forward and soft behind, and the image pixel row under it fades into the hide.
  */
-export function rimBand(s: SpriteCanvas, c: Color, amount = 0.45): void {
-  const { w, h, d } = s;
-  for (let y = 2; y < h; y++)
-    for (let x = s.ox; x < w; x++) {
-      const i = y * w + x;
-      if (d[i] && d[i - w] && !d[i - 2 * w]) d[i] = mix(d[i], c, amount);
+export function sunRim(s: SpriteCanvas, hot: Color, soft: Color, fade = 0.45): void {
+  const { w, d, box } = s;
+  for (let y = Math.max(2, box.y0); y <= box.y1; y++) {
+    const row = y * w;
+    for (let x = box.x0; x <= box.x1; x++) {
+      const i = row + x;
+      if (!d[i]) {
+        continue;
+      }
+      const front = x >= s.ox;
+      if (!d[i - w]) {
+        d[i] = front ? hot : soft;
+      } else if (!d[i - 2 * w]) {
+        d[i] = mix(d[i], front ? hot : soft, fade);
+      }
     }
+  }
 }
