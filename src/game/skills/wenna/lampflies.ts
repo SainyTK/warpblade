@@ -1,9 +1,11 @@
 import { PAL } from "../../../constants/palette";
-import { glow, place, px } from "../../../engine/frame";
+import { FLAME_LETTERS, LAMPFLY_ART } from "../../../constants/wenna/stamps";
+import { glow, place } from "../../../engine/frame";
 import type { Enemy } from "../../../types/enemy";
 import type { SkillBehavior, SkillMemory } from "../../../types/skillBehavior";
 import { TAU } from "../../../utils/math";
 import { dealDamage } from "../../damage";
+import { stampPixels } from "../../effects/fine";
 import { enemyCenter } from "../../enemies/enemy";
 import { hero, progress, rng } from "../../state";
 import { skillValues, withCharms } from "../query";
@@ -106,8 +108,8 @@ export const lampfliesSkill: SkillBehavior = {
   draw(memory) {
     place();
     for (const f of memoryOf(memory).flies) {
-      const on = Math.floor(f.t * 14 + f.phase) % 2 === 0;
-      px(Math.round(f.x), Math.round(f.y), on ? PAL.wick[5] : PAL.wick[4]);
+      const beat = Math.floor(f.t * 14 + f.phase) % LAMPFLY_ART.length;
+      stampPixels(LAMPFLY_ART[beat], f.x, f.y, FLAME_LETTERS);
       glow(f.x, f.y, 4, PAL.wick[3], 0.3);
     }
   },

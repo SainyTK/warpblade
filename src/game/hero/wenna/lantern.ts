@@ -1,7 +1,8 @@
 import { HERO_COLORS as HC, PAL } from "../../../constants/palette";
+import { RES } from "../../../constants/stage";
 import { LAMP_BLOWS } from "../../../constants/wenna/lamp";
 import { LAMP_POLE, LANTERN } from "../../../constants/wenna/lantern";
-import { glow, place, px } from "../../../engine/frame";
+import { fleck, glow, place } from "../../../engine/frame";
 import type { Hero } from "../../../types/hero";
 import type { Pose } from "../../../types/pose";
 import type { Point } from "../../../types/world";
@@ -110,16 +111,19 @@ function brightness(h: Hero): number {
   return 0;
 }
 
-/** the chain from the hook down to the lantern's ring: dark iron links with no gap, however far a swing stretches it */
+/**
+ * the chain from the hook down to the lantern's ring: fine iron links, one seen edge on then one face on, with no gap
+ * however far a swing stretches it
+ */
 function drawChain(from: Point, to: Point): void {
-  const steps = Math.max(LANTERN.chain, Math.ceil(Math.hypot(to.x - from.x, to.y - from.y)));
+  const steps = Math.max(LANTERN.chain, Math.ceil(Math.hypot(to.x - from.x, to.y - from.y))) * RES;
   for (let k = 0; k < steps; k++) {
     const u = (k + 0.5) / steps;
-    px(
-      Math.round(lerp(from.x, to.x, u) - 0.5),
-      Math.round(lerp(from.y, to.y, u) - 0.5),
-      k % 2 ? HC.bladeDeep : HC.bladeBack,
-    );
+    const x = lerp(from.x, to.x, u);
+    const y = lerp(from.y, to.y, u);
+    const ring = k % 4 >= 2;
+    fleck(x, y, ring ? HC.blade : HC.bladeDeep);
+    if (ring) fleck(x + 0.5, y, HC.bladeBack);
   }
 }
 
@@ -136,12 +140,12 @@ export function drawLantern(): void {
   const cx = at.x + Math.sin(swing.a) * ARM;
   const floor = h.ground ? h.y - LANTERN.size / 2 - 1 : Number.POSITIVE_INFINITY;
   const cy = Math.min(at.y + Math.cos(swing.a) * ARM, floor);
-  const left = Math.round(cx - LANTERN.size / 2);
-  const top = Math.round(cy - LANTERN.size / 2);
-  drawChain(at, { x: left + 2.5, y: top - 1 });
+  const left = Math.round((cx - LANTERN.size / 2) * RES) / RES;
+  const top = Math.round((cy - LANTERN.size / 2) * RES) / RES;
+  drawChain(at, { x: left + LANTERN.size / 2 - 0.5, y: top - 1 });
   const bright = brightness(h);
   const flicker = Math.floor(game.t * 12);
-  paintLantern((x, y, c) => px(x, y, c), left, top, bright, flicker);
+  paintLantern(fleck, left, top, bright, flicker);
   const r = lerp(LANTERN.light.r, LANTERN.flare.r, bright);
   const k = lerp(LANTERN.light.k, LANTERN.flare.k, bright) * (0.92 + 0.08 * Math.sin(game.t * 23));
   glow(left + 2.5, top + 2.5, r, PAL.wick[3], k);

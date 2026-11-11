@@ -1,7 +1,8 @@
 import { WICK } from "../../../constants/wenna/wick";
 import { place } from "../../../engine/frame";
 import { game } from "../../state";
-import { drawGreatWick, drawWick } from "./drawWick";
+import { drawGreatWick } from "./drawGreatWick";
+import { drawWick } from "./drawWick";
 import { drawDrips } from "./drips";
 import { drawLantern } from "./lantern";
 import { wennaHost } from "./memory";

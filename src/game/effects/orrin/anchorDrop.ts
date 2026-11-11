@@ -1,14 +1,17 @@
-import { HERO_COLORS as HC, PAL } from "../../../constants/palette";
+import { ANCHOR_SHAPE, TEAR_LOOK } from "../../../constants/orrin/chainLook";
+import { PAL } from "../../../constants/palette";
 import { GROUND } from "../../../constants/stage";
-import { glow, line, place, px } from "../../../engine/frame";
+import { glow, place } from "../../../engine/frame";
 import { sfx } from "../../../services/audio";
 import type { Effect } from "../../../types/effect";
-import { WHITE } from "../../../utils/color";
 import { dealDamage } from "../../damage";
 import { createFloorRing } from "../../effects/floorRing";
 import { enemyCenter } from "../../enemies/enemy";
 import { game, progress } from "../../state";
 import { dust, shake } from "../../world";
+import { drawAnchor } from "./anchor";
+import { drawLinks } from "./chainLinks";
+import { drawTear } from "./tearLens";
 
 /** what one anchor does where it lands */
 export interface AnchorSpec {
@@ -27,7 +30,6 @@ const FALL = 0.32;
 export function createAnchorDrop(x: number, floor: number, spec: AnchorSpec, landed: (x: number) => void): Effect {
   let t = -spec.delay;
   let down = false;
-  const V = PAL.volt;
   return {
     update(dt) {
       t += dt;
@@ -63,22 +65,12 @@ export function createAnchorDrop(x: number, floor: number, spec: AnchorSpec, lan
       if (t < -0.15) return;
       place();
       const open = Math.min(1, (t + 0.15) / 0.15) * (t > FALL + 0.2 ? Math.max(0, 1 - (t - FALL - 0.2) / 0.3) : 1);
-      line(x - 5 * open, TOP, x + 5 * open, TOP, V[3]);
-      px(x, TOP, WHITE, open);
-      glow(x, TOP, 12, V[2], 0.4 * open);
+      drawTear(x, TOP, TEAR_LOOK.anchor, open, game.t, true);
       const k = Math.min(1, Math.max(0, t / FALL));
       const y = TOP + (floor - 2 - TOP) * k * k;
       if (t < 0) return;
-      // shank, crown, flukes and the ring at the top, in iron with a lit edge
-      line(x, TOP, x, y - 9, HC.steelDark, 0.7);
-      line(x, y - 9, x, y, HC.steelDark);
-      px(x - 1, y - 8, HC.steelLight);
-      line(x - 3, y - 6, x + 3, y - 6, HC.steel);
-      line(x - 4, y - 2, x, y, HC.steelDark);
-      line(x + 4, y - 2, x, y, HC.steelDark);
-      px(x - 4, y - 3, HC.steelLight);
-      px(x + 4, y - 3, HC.steelLight);
-      px(x, y - 10, PAL.brass[4]);
+      drawLinks(x, TOP, x, y - ANCHOR_SHAPE.tall, undefined, 0.8);
+      drawAnchor(x, y);
       if (y > GROUND - 40) glow(x, y, 10, PAL.brass[3], 0.3);
     },
   };

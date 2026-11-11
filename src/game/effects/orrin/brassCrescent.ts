@@ -1,5 +1,6 @@
+import { CRESCENT_SHAPE } from "../../../constants/orrin/chainLook";
 import { PAL, SPARKS } from "../../../constants/palette";
-import { glow, line, place, px } from "../../../engine/frame";
+import { glow, hairline, place } from "../../../engine/frame";
 import type { Effect } from "../../../types/effect";
 import type { Enemy } from "../../../types/enemy";
 import { PK } from "../../../types/particle";
@@ -7,6 +8,7 @@ import { WHITE } from "../../../utils/color";
 import { dealDamage } from "../../damage";
 import { touches } from "../../skills/targets";
 import { game, particles, progress, rng } from "../../state";
+import { drawTurned } from "./turned";
 
 const SPEED = 240;
 
@@ -51,16 +53,29 @@ export function createBrassCrescent(x: number, y: number, dir: number, spec: Cre
       place();
       const ux = vx / SPEED;
       const uy = vy / SPEED;
-      const nx = -uy;
-      const ny = ux;
-      for (let k = -3; k <= 3; k++) {
-        const bend = Math.abs(k) * 0.8;
-        const ax = o.x + nx * k - ux * bend;
-        const ay = o.y + ny * k - uy * bend;
-        px(ax, ay, Math.abs(k) < 2 ? WHITE : B[4]);
-        px(ax - ux, ay - uy, B[3]);
+      const { radius, thick, span, trail } = CRESCENT_SHAPE;
+      for (let k = -2; k <= 2; k++) {
+        const off = k * 1.6;
+        const back = trail * (1 - Math.abs(k) * 0.3);
+        hairline(
+          o.x - uy * off - ux * 2,
+          o.y + ux * off - uy * 2,
+          o.x - uy * off - ux * (2 + back),
+          o.y + ux * off - uy * (2 + back),
+          k === 0 ? B[4] : B[3],
+          (u) => (1 - u) * 0.9,
+        );
       }
-      line(o.x - ux * 6, o.y - uy * 6, o.x - ux * 2, o.y - uy * 2, B[2], 0.6);
+      // a crescent whose horns trail back: the outside of a disc with a smaller disc cut out of its back
+      drawTurned(o.x, o.y, ux, uy, radius + 1, (d, w) => {
+        const out = Math.hypot(d + radius * 0.4, w);
+        if (out > radius + 0.5 || Math.abs(Math.atan2(w, d + radius * 0.4)) > span) return 0;
+        const cut = Math.hypot(d + radius * 0.4 + thick, w * 0.9);
+        if (cut < radius - 0.5) return 0;
+        if (out > radius || cut < radius) return B[1];
+        const q = (out - (radius - thick)) / thick;
+        return q > 0.7 ? WHITE : q > 0.4 ? B[5] : B[4];
+      });
       glow(o.x, o.y, 10, B[3], 0.4);
     },
   };

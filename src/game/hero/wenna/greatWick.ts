@@ -1,21 +1,24 @@
 import { ENEMIES } from "../../../constants/enemies";
 import { PAL, WAX } from "../../../constants/palette";
-import { W } from "../../../constants/stage";
+import { RES, W } from "../../../constants/stage";
 import { ULT_LEVELS, ULT_REACH } from "../../../constants/ultimate";
 import { GREAT_WICK } from "../../../constants/wenna/special";
-import { glow, place, px } from "../../../engine/frame";
+import { CANDLE_ART, CANDLE_FLAMES, FLAME_LETTERS, WAX_LETTERS } from "../../../constants/wenna/stamps";
+import { glow, place } from "../../../engine/frame";
 import { sfx } from "../../../services/audio";
 import type { Enemy } from "../../../types/enemy";
 import { PK } from "../../../types/particle";
 import { dealDamage } from "../../damage";
+import { stampPixels } from "../../effects/fine";
 import { createFloorRing } from "../../effects/floorRing";
+import { createFlameWave } from "../../effects/wenna/flameWave";
 import { launchEnemy } from "../../enemies/airborne";
 import { enemyCenter } from "../../enemies/enemy";
 import { skillValues, withCharms } from "../../skills/query";
 import { game, hero, lights, particles, progress, rng } from "../../state";
 import { hitStop, shake, surfaceBelow } from "../../world";
 import { setState } from "../actions";
-import { drawGreatWick } from "./drawWick";
+import { drawGreatWick } from "./drawGreatWick";
 import { wenna } from "./memory";
 import { byWick } from "./wickKills";
 import { cappedWicks, isUp, liveWicks, spawnWick, wickCap } from "./wicks";
@@ -85,6 +88,7 @@ export function castGreatWick(level: number): void {
           for (const e of inReach(x, face, reach, level)) smite(e, x, power, true);
         });
         splash(x + face * 20, y, reach);
+        game.fx.push(createFlameWave(x, y, face, reach, level >= 3));
         shake(0.35, 5);
         hitStop(0.08);
         sfx.boom();
@@ -120,13 +124,18 @@ function candleAt(x: number, y: number, delay: number): void {
     draw() {
       if (t < 0) return;
       place();
-      const rise = Math.min(1, t * 8);
+      const shown = Math.min(1, t * 8);
       const fade = Math.min(1, (0.7 - t) * 4);
-      const h = Math.round(6 * rise);
-      for (let i = 0; i < h; i++) px(Math.round(x), y - i, i === 0 ? WAX[1] : WAX[2], fade);
-      px(Math.round(x), y - h - 1, PAL.wick[4], fade);
-      px(Math.round(x), y - h - 2, PAL.wick[5], fade * 0.8);
-      glow(x, y - h - 1, 5, PAL.wick[4], 0.35 * fade);
+      const h = CANDLE_ART.length / RES;
+      stampPixels(CANDLE_ART, x, y - h / 2, WAX_LETTERS, fade * shown);
+      stampPixels(
+        CANDLE_FLAMES[Math.floor(t * 12) % CANDLE_FLAMES.length],
+        x,
+        y - h - 1.25,
+        FLAME_LETTERS,
+        fade * shown,
+      );
+      glow(x, y - h - 1, 6, PAL.wick[4], 0.35 * fade);
     },
   });
 }

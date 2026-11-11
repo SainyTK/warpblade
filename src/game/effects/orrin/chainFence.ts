@@ -1,5 +1,5 @@
 import { PAL, SPARKS } from "../../../constants/palette";
-import { line, place, px } from "../../../engine/frame";
+import { place } from "../../../engine/frame";
 import type { Effect } from "../../../types/effect";
 import type { Enemy } from "../../../types/enemy";
 import { PK } from "../../../types/particle";
@@ -8,6 +8,7 @@ import { enemyBox, enemyCenter } from "../../enemies/enemy";
 import { addStacks } from "../../enemies/skillStatus";
 import { game, hero, particles, progress, rng } from "../../state";
 import { drawLinks } from "./chainLinks";
+import { drawStake } from "./stake";
 
 /** what a fence does, read from Chain Fence's row when it is set */
 export interface FenceSpec {
@@ -76,8 +77,7 @@ export function createChainFence(cx: number, floor: number, spec: FenceSpec): Ef
       const B = PAL.brass;
       for (const s of [-1, 1]) {
         const x = o.x + s * half;
-        line(x, floor, x, floor - KNEE - 3, B[1], fade);
-        px(x, floor - KNEE - 3, B[4], fade);
+        drawStake(x, floor, KNEE + 3, fade);
       }
       const sag = 2 + Math.sin(o.t * 4) * 0.5;
       for (let k = 0; k < 8; k++) {

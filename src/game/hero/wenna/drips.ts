@@ -1,12 +1,14 @@
 import { PAL, WAX } from "../../../constants/palette";
+import { DRIP_ART, WAX_LETTERS } from "../../../constants/wenna/stamps";
 import { WAX_DRIP } from "../../../constants/wenna/wax";
-import { glow, place, px } from "../../../engine/frame";
+import { fleck, glow, place } from "../../../engine/frame";
 import { sfx } from "../../../services/audio";
 import { ownsSkill } from "../../../store/meta";
 import type { Enemy } from "../../../types/enemy";
 import { PK } from "../../../types/particle";
 import type { Drip } from "../../../types/wenna";
 import { heroSlot } from "../../coopHooks";
+import { stampPixels } from "../../effects/fine";
 import { enemyCenter } from "../../enemies/enemy";
 import { stacksOf } from "../../enemies/skillStatus";
 import { skillValues } from "../../skills/query";
@@ -85,14 +87,8 @@ export function drawDrips(): void {
     if (d.owner !== mine) continue;
     const left = WAX_DRIP.life - d.t;
     if (!d.flying && left < WAX_DRIP.blink && Math.floor(d.t * 10) % 2 === 0) continue;
-    const x = Math.round(d.x);
-    const y = Math.round(d.y);
-    px(x, y - 2, WAX[3]);
-    px(x, y - 1, WAX[2]);
-    px(x - 1, y - 1, WAX[1]);
-    px(x + 1, y - 1, WAX[2]);
-    px(x, y, WAX[1]);
-    px(x + 1, y - 2, PAL.wick[4], 0.8);
-    glow(x, y - 1, 4, PAL.wick[3], 0.18);
+    stampPixels(DRIP_ART, d.x, d.y - 2, WAX_LETTERS);
+    fleck(d.x + 1.5, d.y - 4, PAL.wick[4]);
+    glow(d.x, d.y - 2, 5, PAL.wick[3], 0.22);
   }
 }

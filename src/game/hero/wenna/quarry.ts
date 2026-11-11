@@ -1,7 +1,9 @@
 import { PAL } from "../../../constants/palette";
 import { QUARRY } from "../../../constants/wenna/lamp";
-import { glow, place, px } from "../../../engine/frame";
+import { QUARRY_LETTERS, QUARRY_MARK } from "../../../constants/wenna/stamps";
+import { fleck, glow, place } from "../../../engine/frame";
 import type { Enemy } from "../../../types/enemy";
+import { floorArc, stampPixels } from "../../effects/fine";
 import { enemyBox, enemyCenter } from "../../enemies/enemy";
 import { emitSkillEvent } from "../../skills/events";
 import { skillValues, withCharms } from "../../skills/query";
@@ -53,8 +55,8 @@ export function clearQuarries(): void {
   wennaHost.quarries = [];
 }
 
-/** the ring's radius across, how flat it lies, and how far over the foe's head it hangs */
-const RING = { radius: 8, flat: 0.45, over: 13 } as const;
+/** the ring's radius across, how flat it lies, how far over the foe's head it hangs, its beads and its marker's drop */
+const RING = { radius: 8, flat: 0.45, over: 13, beads: 5, mark: 8 } as const;
 
 /**
  * A ring of violet lamplight over each Quarry's head, turning and pulsing, with a dark rim so it reads against the sky,
@@ -70,31 +72,19 @@ export function drawQuarries(): void {
     const y = Math.round(box[1]) - RING.over;
     const pulse = 0.5 + 0.5 * Math.sin(t * 8);
     const r = RING.radius + pulse * 0.6;
-    const dots = 28;
-    for (let i = 0; i < dots; i++) {
-      const a = (i / dots) * Math.PI * 2 + t * 2;
-      const dx = Math.round(Math.cos(a) * r);
-      const dy = Math.round(Math.sin(a) * r * RING.flat);
-      px(x + dx, y + dy + 2, PAL.wick[0], 0.8);
+    const ry = r * RING.flat;
+    for (const half of [-1, 1]) {
+      floorArc(x, y + 1, r + 0.5, ry + 0.5, PAL.wick[0], 0.9, half, 0, 0);
+      floorArc(x, y, r, ry, PAL.wick[4], 1, half, 0, 0);
+      floorArc(x, y + 0.5, r, ry, PAL.wick[3], 1, half, 0, 0);
     }
-    for (let i = 0; i < dots; i++) {
-      const a = (i / dots) * Math.PI * 2 + t * 2;
-      const c = i % 5 === 0 ? PAL.wick[5] : PAL.wick[4];
-      const rx = x + Math.round(Math.cos(a) * r);
-      const ry = y + Math.round(Math.sin(a) * r * RING.flat);
-      // two pixels thick, the lower one a step darker, so it reads at phone size
-      px(rx, ry, c);
-      px(rx, ry + 1, PAL.wick[3]);
+    // bright beads run round the ring
+    for (let i = 0; i < RING.beads; i++) {
+      const a = (i / RING.beads) * Math.PI * 2 + t * 2;
+      fleck(x + Math.cos(a) * r, y + Math.sin(a) * ry, PAL.wick[5]);
+      fleck(x + Math.cos(a) * r + 0.5, y + Math.sin(a) * ry, PAL.wick[5]);
     }
-    // a small chevron under the ring, pointing at the foe
-    for (const [dx, dy] of [
-      [-1, 6],
-      [0, 7],
-      [1, 6],
-    ] as const) {
-      px(x + dx, y + dy + 2, PAL.wick[0], 0.8);
-      px(x + dx, y + dy + 1, PAL.wick[4]);
-    }
+    stampPixels(QUARRY_MARK, x, y + RING.mark, QUARRY_LETTERS);
     glow(x, y, 9, PAL.wick[4], 0.25 + pulse * 0.15);
   }
 }
