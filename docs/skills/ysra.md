@@ -13,8 +13,8 @@ The air string limit is 1 sweep; `y_vault` raises it to 2 from its level 2.
 
 | Button | With no skill |
 | --- | --- |
-| J on the floor | The glaive string, 3 blows: hip thrust (1.25 AD), a middle blow picked by the situation, impale finisher (2.3 AD, no pin). |
-| J, middle blow | Reverse sweep (1.4) by default; twirl (0.85 each side) when foes stand on both sides; haft ram (1.1) when the foe is only behind; overhead cleave (1.9) on a foe knocked down in front; sky thrust (1.2) when a foe hovers overhead; ground lash (1.0, drags the foe in) when the nearest foe ahead stands past the thrust's reach (40 to 60 px), which is where the hip thrust's knockback leaves it. |
+| J on the floor | The glaive string, 3 blows, the same every time wherever the foes stand: hip thrust (1.25 AD), reverse sweep (1.4 AD), impale finisher (2.3 AD, no pin). |
+| J, middle blow | The reverse sweep, rising from low behind her to over her head, so it reaches flyers up to 58 px. Windmill makes it the windmill and Skyhook makes it the Skyhook; with both, the windmill's last pass hooks. |
 | Hold J | Heft on the first blow: quick poke (1.0) or the lunge (1.3 to 3.0, pierces the line, 60 px). |
 | J in the air | One air reap (1.3). |
 | J in a vault's flight | The vault crash (1.9 AD in 36 px), moved into the base kit from Vault Strike. |
@@ -31,9 +31,9 @@ Heat works as today: 6 per foe for a string blow, 12 for a lunge, crash, dive or
 
 | Today | Change |
 | --- | --- |
-| Up + J Skyhook (in a string and out of a jump) | Input removed. The hook comes back as `y_skyhook`, picked by the situation: it replaces the sky thrust when a foe hovers overhead. |
-| Down + J Ground lash | Input removed. The lash stays in the base kit as the middle blow when the foe stands just out of reach. |
-| Down + J Windmill (skill) | `y_windmill`: replaces the twirl when she is surrounded. |
+| Up + J Skyhook (in a string and out of a jump) | Input removed. The hook comes back as `y_skyhook`: it is the string's middle blow while held. |
+| Down + J Ground lash | Removed. |
+| Down + J Windmill (skill) | `y_windmill`: the string's middle blow while held. |
 | Long String, combo growing with level | Gone. The string is 3 blows all run. |
 | Warpath double tap | Input removed. `y_warpath` charges on its own after she walks one way for a moment. |
 | Vault Strike | The crash is base kit. `y_vault` grows it. |
@@ -84,9 +84,9 @@ Damage over time skills grow about 10 times, so they start below an attack skill
 | --- | --- | --- | --- | --- | --- |
 | `y_heft` | Deep Heft | attack | timed | J (hold) | `y_warpath` |
 | `y_impale` | Impale | attack | timed | J (finisher) | `y_skyhook` |
-| `y_windmill` | Windmill | attack | easy | J (surrounded) | `y_searing` |
+| `y_windmill` | Windmill | attack | easy | J (middle blow) | `y_searing` |
 | `y_counter` | Counter Thrust | attack | precise | L (parry), then J | `y_brand` |
-| `y_skyhook` | Skyhook | attack | timed | J (foe overhead) | `y_vault` |
+| `y_skyhook` | Skyhook | attack | timed | J (middle blow) | `y_vault` |
 | `y_vault` | Vault Strike | movement | timed | K, J in flight | `y_ashen` |
 | `y_dive` | Falling Star | movement | timed | K in the air | `y_hawk` |
 | `y_warpath` | Warpath | movement | easy | auto (walking) | `y_impale` |
@@ -144,21 +144,21 @@ Built in `glaive/blows/string.ts` (impale and `impaleTwist` from the row), `ysra
 
 ### `y_windmill` Windmill
 
-Attack, easy, J when foes stand on both sides. The twirl becomes a spinning windmill that draws the crowd in.
+Attack, easy, the string's middle blow. The reverse sweep becomes a spinning windmill that hits both ways and draws the crowd in.
 
 | Lv | Numbers | Card |
 | --- | --- | --- |
-| 1 | passes 4, power 0.2, pull 20, stagger 0, ring 0, embers 0, ahead 0 | Surrounded, the twirl becomes a windmill that draws foes in. |
+| 1 | passes 4, power 0.2, pull 20, stagger 0, ring 0, embers 0 | The string's middle blow becomes a windmill that draws foes in. |
 | 2 | passes 5, power 0.22 | One more pass. |
 | 3 | power 0.25, pull 40, stagger 0.5 | Draws from farther away and staggers foes. |
 | 4 | power 0.3 | Windmill damage +20%. |
 | 5 | ring 1.5 | The windmill ends in a ring of fire. |
 | 6 | power 0.33, embers 0.15 | Each pass throws an ember. |
-| 7 | power 0.36, ahead 1 | Spins into a crowd in front too. |
+| 7 | power 0.36, pull 60 | Draws from farther still. |
 | 8 | power 0.4, ring 2, embers 0.2 | Windmill damage +10%, a hotter ring. |
 
-Evolution, Fire Wheel (with `y_searing`): after the windmill a wheel of fire spins around her for 1.5 s as she walks, six passes a second at the windmill pass power, drawing from 70 px and laying a Scorch stack each pass; the windmill also starts on a lone foe.
-Built in `glaive/blows/variants.ts` (`windmill` and `windmillFull`), `glaive/windmill.ts` (pull, stagger, embers, ring through `castFlare`), and the wheel in `src/game/skills/ysra/windmill.ts` on the kit's `spin` event. The wheel is a drawn ring of fire around her, so her walk and clips stay as they are.
+Evolution, Fire Wheel (with `y_searing`): after the windmill a wheel of fire spins around her for 1.5 s as she walks, six passes a second at the windmill pass power, drawing from 70 px and laying a Scorch stack each pass.
+Built in `glaive/glaive.ts` (the middle blow), `glaive/blows/variants.ts` (`windmill` and `windmillFull`, the last pass hooking when Skyhook is held), `glaive/windmill.ts` (pull, stagger, embers, ring through `castFlare`), and the wheel in `src/game/skills/ysra/windmill.ts` on the kit's `spin` event. The wheel is a drawn ring of fire around her, so her walk and clips stay as they are.
 
 ### `y_counter` Counter Thrust
 
@@ -180,11 +180,11 @@ Built in `glaive/counter.ts` (power, reach, sure crit, stun, stamina refill, Rip
 
 ### `y_skyhook` Skyhook
 
-Attack, timed, J when a foe hovers overhead. Her answer to flyers: hook them down where the glaive reaches.
+Attack, timed, the string's middle blow. Her answer to flyers: the middle blow becomes a rising hook that drags them down where the glaive reaches.
 
 | Lv | Numbers | Card |
 | --- | --- | --- |
-| 1 | power 2, stun 0.8, cone 0, slam 0, ground 0, reach 0, rise 0, heap 0 | A foe overhead is hooked down to the floor. |
+| 1 | power 2, stun 0.8, cone 0, slam 0, ground 0, reach 0, rise 0, heap 0 | The string's middle blow hooks flyers down to the floor. |
 | 2 | power 2.8, stun 1.2 | A harder hook and a longer stun. |
 | 3 | power 3.5, cone 1 | Hooks every flyer above you. |
 | 4 | power 4.2, slam 3 | Hooked foes slam into the floor. |
@@ -502,9 +502,9 @@ DPS added to the base kit (spells and ultimates gross), hero level 1, no charms,
 | --- | --- | --- | --- | --- | --- |
 | `y_heft` | timed | 6* / 20 | 45* / 140 | 80 / 300 | Lunge every 3.5 s (3.2 at level 6+), line of 4 in a crowd; slam only on minions. |
 | `y_impale` | timed | 6* / 17 | 41* / 122 | 74 / 280 | One impale per string; pin bonus on the next 2 blows; 3 of 6 struck. |
-| `y_windmill` | easy | 0 / 12* | 0 / 90* | 15 / 200* | Windmill needs a surround; 4 foes drawn into it; about 1.3 windmills per string at level 7+. |
+| `y_windmill` | easy | 0 / 12* | 0 / 90* | 15 / 200* | One windmill per string; 4 foes drawn into it. |
 | `y_counter` | precise | 10* / 10 | 75* / 215 | 156* / 450 | 0.2 parries per second, 0.28 at level 6 (wider window); Riposte on 3 blows; line of 3 at level 5+. |
-| `y_skyhook` | timed | 6* / 8 | 39* / 115 | 85 / 260 | On flyers only: one hook per string lets the sweep and impale reach the flyer; 3 flyers in the cone. |
+| `y_skyhook` | timed | 6* / 8 | 39* / 115 | 85 / 260 | On flyers only: one hook per string drags the flyer down where the impale reaches it; 3 flyers in the cone. |
 | `y_vault` | timed | 6* / 17 | 40* / 120 | 85 / 290 | A crash every 3 s (2.5 s at level 6+); crash strikes 3, shockwave 5. |
 | `y_dive` | timed | 5* / 14 | 38* / 130 | 80 / 300 | A dive every 4 s, 0.37 per second with two per airtime; the pull gathers 4. |
 | `y_warpath` | easy | 7 / 12* | 21 / 82* | 35 / 190* | A charge pass every 3.5 s through 4 minions, the running impale opening the string. |
@@ -554,7 +554,7 @@ She never stops travelling: vault over, crash, dive, land on her own burning tra
 ## Code notes for the base kit
 
 - `kit.ts`: drop `pressSkyhook` and the double tap; Up only jumps.
-- `choose.ts`: drop the `s.up`, `s.down`, `rising` and `windmill` branches; add the far-foe read for the ground lash and the skill checks for windmill, skyhook, counter and running impale.
+- `choose.ts`: the string is fixed (hip thrust, middle blow, impale); it reads only the skills (windmill, skyhook, counter, running impale) and never the foes around her.
 - `CharacterDef.comboHits: 3` replaces `stringLimit` and `GLAIVE_STRING_BONUS`.
 - `vaultStrike()` runs the crash without a skill.
 - The hip thrust and reverse sweep push foes back less (110 to 40, 140 to 60), so the impale lands from closer in; measured on a lone walking husk, thornback and mire, the impale landed 10 of 10 strings either way, with the foe 10 to 15 px ahead after the change against 13 to 19 px before.

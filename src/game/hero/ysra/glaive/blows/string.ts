@@ -1,5 +1,5 @@
 import { frame } from "../../../../../constants/hero";
-import { GLAIVE_FEEL } from "../../../../../constants/ysra/glaive";
+import { GLAIVE_FEEL, GLAIVE_STRING } from "../../../../../constants/ysra/glaive";
 import type { MoveDef } from "../../../../../types/move";
 import { createFloorRing } from "../../../../effects/floorRing";
 import { skillValues } from "../../../../skills/query";
@@ -8,10 +8,10 @@ import { dust } from "../../../../world";
 import { skin } from "../../../skin";
 import { pinStruck } from "../../pin";
 import { glaiveHit } from "../reach";
-import { G_CLEAVE, G_IMPALE, G_RAM, G_SKY, G_SWEEP, G_THRUST, G_TWIRL_BACK, G_TWIRL_FRONT } from "../slashes";
+import { G_IMPALE, G_SWEEP, G_THRUST } from "../slashes";
 import { driveStakes } from "../stakes";
 
-/** where the cleave and the impale bite the floor, ahead of her feet */
+/** where the impale bites the floor, ahead of her feet */
 function bite(at: number, n: number): void {
   const x = hero.x + hero.face * at;
   dust(x, hero.y, n, hero.face);
@@ -30,7 +30,7 @@ const impaleHit = (at: number, share: () => number) =>
       power: 2.3,
       kx: 40,
       ky: 0,
-      stun: 0.6,
+      stun: 0.8,
       big: true,
       slash: G_IMPALE,
       feel: GLAIVE_FEEL.impale,
@@ -50,7 +50,7 @@ function impaleMove(id: "impale" | "impaleTwist"): MoveDef {
     hits:
       id === "impale"
         ? [impaleHit(frame(9), () => 1)]
-        : [impaleHit(frame(9), () => 1), impaleHit(frame(13), () => impale().twist ?? 0)],
+        : [impaleHit(frame(9), () => 1), impaleHit(frame(12), () => impale().twist ?? 0)],
     afterHit: () => {
       if (hero.hitIndex > 1) return;
       bite(28, 8);
@@ -60,13 +60,15 @@ function impaleMove(id: "impale" | "impaleTwist"): MoveDef {
   };
 }
 
-/** the plain glaive string and its situational blows; every blow keeps her feet set except the impale's skip */
+/** the glaive string: the hip thrust, the reverse sweep that rises over her head, and the impale; every blow keeps her
+ *  feet set except the impale's skip, and every blow before the impale holds the foe until the next one lands */
 export const STRING_BLOWS = {
   hipThrust: {
     id: "hipThrust",
     name: "Hip thrust",
     clip: "yHipThrust",
     pitch: 0.85,
+    cancel: GLAIVE_STRING.cancel.hip,
     hits: [
       glaiveHit({
         at: frame(6),
@@ -74,6 +76,7 @@ export const STRING_BLOWS = {
         power: 1.25,
         kx: 40,
         ky: -10,
+        stagger: GLAIVE_STRING.stagger,
         slash: G_THRUST,
         feel: GLAIVE_FEEL.thrust,
       }),
@@ -84,96 +87,17 @@ export const STRING_BLOWS = {
     name: "Reverse sweep",
     clip: "yReverseSweep",
     pitch: 0.72,
+    cancel: GLAIVE_STRING.cancel.sweep,
     hits: [
       glaiveHit({
-        at: frame(7),
-        box: [-12, -30, 40, -2],
+        at: frame(9),
+        box: [-12, -58, 42, -2],
         power: 1.4,
         kx: 60,
         ky: -30,
+        stagger: GLAIVE_STRING.stagger,
         slash: G_SWEEP,
-        feel: GLAIVE_FEEL.sweep,
-      }),
-    ],
-  },
-  overheadCleave: {
-    id: "overheadCleave",
-    name: "Overhead cleave",
-    clip: "yCleave",
-    pitch: 0.6,
-    hits: [
-      glaiveHit({
-        at: frame(8),
-        box: [6, -46, 42, 2],
-        power: 1.9,
-        kx: 50,
-        ky: 0,
-        stun: 0.5,
-        big: true,
-        slash: G_CLEAVE,
-        feel: GLAIVE_FEEL.cleave,
-      }),
-    ],
-    afterHit: () => bite(32, 7),
-  },
-  twirl: {
-    id: "twirl",
-    name: "Glaive twirl",
-    clip: "yTwirl",
-    pitch: 1,
-    hits: [
-      glaiveHit({
-        at: frame(5),
-        box: [0, -44, 36, 0],
-        power: 0.85,
-        kx: 80,
-        ky: -20,
-        slash: G_TWIRL_FRONT,
-        feel: GLAIVE_FEEL.twirl,
-      }),
-      glaiveHit({
-        at: frame(9),
-        box: [-36, -44, 0, 0],
-        power: 0.85,
-        kx: 80,
-        ky: -20,
-        slash: G_TWIRL_BACK,
-        feel: GLAIVE_FEEL.twirl,
-      }),
-    ],
-  },
-  haftRam: {
-    id: "haftRam",
-    name: "Haft ram",
-    clip: "yHaftRam",
-    pitch: 0.95,
-    hits: [
-      glaiveHit({
-        at: frame(5),
-        box: [-30, -28, -2, -4],
-        power: 1.1,
-        kx: 150,
-        ky: -20,
-        stun: 0.4,
-        slash: G_RAM,
-        feel: GLAIVE_FEEL.thrust,
-      }),
-    ],
-  },
-  skyThrust: {
-    id: "skyThrust",
-    name: "Sky thrust",
-    clip: "ySkyThrust",
-    pitch: 0.95,
-    hits: [
-      glaiveHit({
-        at: frame(5),
-        box: [0, -72, 34, -26],
-        power: 1.2,
-        kx: 60,
-        ky: -40,
-        slash: G_SKY,
-        feel: GLAIVE_FEEL.thrust,
+        feel: GLAIVE_FEEL.rise,
       }),
     ],
   },

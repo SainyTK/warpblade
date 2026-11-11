@@ -5,8 +5,9 @@ import type { Pose } from "../../../types/pose";
 import { sampleKeys } from "../../../utils/sampleKeys";
 import { clipPose } from "../clipPose";
 import { woundedIdle, woundWeight } from "../wound";
+import { handOver } from "./handover";
+import { landingDip } from "./landingDip";
 import { crossIntoVault } from "./stance/vaultEntry";
-import { crossWound } from "./woundCross";
 
 /** her own clip for a state, or Kael's shared one; walk and run follow the stride, loops repeat, the rest play once.
  *  A vault crosses from the pose shown before it. */
@@ -18,11 +19,12 @@ function statePose(h: Hero, t: number): Pose {
   return sampleKeys(clip.keys, YSRA_LOOPING.has(h.state) ? h.st % clip.dur : h.st);
 }
 
-/** Ysra's pose: her clips, her idle sunk into the wounded stance as far as her HP calls for, crossed into and out of */
+/** Ysra's pose: her clips, her idle sunk into the wounded stance as far as her HP calls for, each clip crossed into
+ *  from the pose shown before it, and dipped by a landing */
 export function ysraPose(h: Hero, t: number): Pose {
   const wound = woundWeight(t);
   const base = statePose(h, t);
-  if (h.state !== "idle") return crossWound(h, base, t, wound);
+  if (h.state !== "idle") return landingDip(h, handOver(h, base, t), t);
   const wounded = sampleKeys(YSRA_WOUNDED_IDLE.keys, h.st % YSRA_WOUNDED_IDLE.dur);
-  return crossWound(h, woundedIdle(base, wounded, wound), t, wound);
+  return landingDip(h, handOver(h, woundedIdle(base, wounded, wound), t), t);
 }
