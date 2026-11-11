@@ -10,6 +10,7 @@ import { emitSkillEvent } from "../../skills/events";
 import { skillValues, withCharms } from "../../skills/query";
 import { game, hero, lights, particles, progress, rng } from "../../state";
 import { surfaceBelow } from "../../world";
+import { forgetWick } from "./wickMoves";
 import { addWick, newWickId, ownWicks, standing } from "./wickWorld";
 
 /** how many Wicks she keeps lit at once: Procession and Deep Tallow raise it */
@@ -120,6 +121,7 @@ export function weakestWick(): Wick | null {
 /** a Wick of hers ends: it melts into a puddle with a curl of smoke, and her skills hear of it */
 export function endWick(w: Wick, cause: WickCause): void {
   if (w.melt >= 0) return;
+  forgetWick(w);
   w.melt = 0;
   w.hp = Math.max(0, w.hp);
   for (let i = 0; i < 5; i++)

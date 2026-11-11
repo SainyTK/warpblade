@@ -47,9 +47,9 @@ A foe killed by her, her Wicks or her skills drips 10 Wax (minion), 20 (elite) o
 
 | Blow | Reach | Power | Extra |
 | --- | --- | --- | --- |
-| Tap | a jab 8 to 30 px ahead | 0.8x AD | stagger 0.25 s |
-| Swing | an arc of radius 30 | 0.9x AD | |
-| Flare | a violet cone 12 to 46 px ahead, 30 degree half angle | 0.6x AD + 0.6x AP | every Wick within 100 px of the first foe bites it at once |
+| Tap | a jab 8 to 30 px ahead | 0.88x AD | stagger 0.5 s |
+| Swing | an arc of radius 30 | 0.99x AD | stagger 0.55 s |
+| Flare | a violet cone 12 to 46 px ahead, 30 degree half angle | 0.66x AD + 0.66x AP | throws the foe off its feet; every Wick within 100 px of the first foe winds up and bites it |
 | Lamp Drop | a downward swing of radius 26 | 0.8x AD | one per airtime |
 
 A Quarry wears a violet lamplight ring.
@@ -160,6 +160,7 @@ Evolution: **Lighthouse** (partner `w_lampVolley`). The Flare becomes a 160 px b
 ### w_packLunge: Pack Lunge
 
 attack, precise, J. A blow on a Quarry ringed by Wicks sends them all lunging at it.
+Each Wick sinks for 0.08 s, leaps 40% of the way in over 0.12 s and strikes as it lands.
 
 Values: power: ability power of each lunge, on the Quarry only; need: Wicks within 40 px of the Quarry a blow needs to send them lunging; stun: seconds a lunge stuns; crit: 1 lunges always crit; heal: share of its HP a lunging Wick heals; frenzy: 1 each lunge strikes three times and a kill by a lunge relights every Wick (evolution)
 
@@ -241,7 +242,7 @@ Evolution: **Mirror Wick** (partner `w_procession`). Every Swap also lights a fr
 
 movement, timed, jump. In the air above a Wick, jump again off its head.
 
-Values: hops: hops off a Wick's head per airtime; flare: ability power the hopped Wick flares for (0: no flare); rise: pixels a hop rises; drop: share more Lamp Drop deals after a hop; stair: 1 no hop limit while over Wicks, and each hop makes that Wick bite at once (evolution)
+Values: hops: hops off a Wick's head per airtime; flare: ability power the hopped Wick flares for (0: no flare); rise: pixels a hop rises; drop: share more Lamp Drop deals after a hop; stair: 1 no hop limit while over Wicks, and each hop makes that Wick bite (evolution)
 
 | Lv | Change | Card |
 | --- | --- | --- |
@@ -255,7 +256,7 @@ Values: hops: hops off a Wick's head per airtime; flare: ability power the hoppe
 | 8 | flare 0.9 to 1.4 | The hopped Wick flares for 1.4x. |
 | Evolved | stair 0 to 1 | Endless hops; each Wick bites. |
 
-Evolution: **Candle Stair** (partner `w_fangs`). No hop limit while over Wicks, and each hop makes that Wick bite at once.
+Evolution: **Candle Stair** (partner `w_fangs`). No hop limit while over Wicks, and each hop makes that Wick bite.
 
 ### w_procession: Procession
 

@@ -22,8 +22,17 @@ export const WICK = {
   /** ability power of one bite, and its knockback */
   bitePower: 0.4,
   biteKnock: 20,
-  /** seconds of the lean and flame lunge of a bite */
+  /** seconds a Wick sinks and draws its flame back before a bite lands, then seconds of the lean and flame lunge after */
+  load: 0.08,
   lunge: 0.18,
+  /** seconds it crouches before a hop or a leap leaves the floor, and seconds its body squashes when it lands */
+  hopLoad: 0.08,
+  landSquash: 0.14,
+  /** how fast it gathers into its walk and brakes out of it, pixels per second each second */
+  accel: 400,
+  /** seconds Pack Lunge's leap flies, and the share of the way to the Quarry it covers */
+  packLeap: 0.12,
+  packReach: 0.4,
   /** a Wick goes after foes this near when she has no Quarry it can reach */
   seek: 140,
   /** with no foe of its own, it stands guard this far in front of her, toward the nearest foe, where blows come from */

@@ -1,4 +1,3 @@
-import { STATE_CLIPS } from "../../../constants/clips";
 import { LAMP_CLIPS } from "../../../constants/clips/wenna/lamp";
 import {
   airborne,
@@ -7,10 +6,10 @@ import {
   KINDLE_CLIP,
   LIGHT_CLIP,
   SPELL_CLIP,
-  SWAP_POSE,
   THOUSAND_CLIP,
 } from "../../../constants/clips/wenna/moves";
 import { CHARGE_POSE, WENNA_IDLE } from "../../../constants/clips/wenna/stance";
+import { SWAP_CLIP, WENNA_JUMP } from "../../../constants/clips/wenna/travel";
 import { KAEL_WOUNDED_IDLE } from "../../../constants/clips/wounded";
 import type { Hero } from "../../../types/hero";
 import type { ActionClip, Pose } from "../../../types/pose";
@@ -58,7 +57,7 @@ function statePose(h: Hero, t: number, fresh: boolean, dt: number, wound: number
     case "lightCast":
       return play(h, LIGHT_CLIP);
     case "swap":
-      return h.ground ? SWAP_POSE : airborne(SWAP_POSE);
+      return play(h, SWAP_CLIP);
     case "kindleCast":
       return play(h, KINDLE_CLIP);
     case "beckonCast":
@@ -77,7 +76,7 @@ function statePose(h: Hero, t: number, fresh: boolean, dt: number, wound: number
       return wound > 0 ? carried(h, idle) : idle;
     }
     case "jump":
-      return carried(h, sampleKeys(STATE_CLIPS.jump.keys, jumpClock(h, fresh, dt)));
+      return carried(h, sampleKeys(WENNA_JUMP.keys, jumpClock(h, fresh, dt)));
     default:
       return carried(h, clipPose(h, t));
   }

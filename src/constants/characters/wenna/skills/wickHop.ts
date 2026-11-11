@@ -1,6 +1,6 @@
 import type { SkillDef } from "../../../../types/skill";
 
-/** Wick Hop. Design: docs/skills/wenna.md. Values: hops: hops off a Wick's head per airtime; flare: ability power the hopped Wick flares for (0: no flare); rise: pixels a hop rises; drop: share more Lamp Drop deals after a hop; stair: 1 no hop limit while over Wicks, and each hop makes that Wick bite at once (evolution) */
+/** Wick Hop. Design: docs/skills/wenna.md. Values: hops: hops off a Wick's head per airtime; flare: ability power the hopped Wick flares for (0: no flare); rise: pixels a hop rises; drop: share more Lamp Drop deals after a hop; stair: 1 no hop limit while over Wicks, and each hop makes that Wick bite (evolution) */
 export const WICK_HOP: SkillDef = {
   id: "w_hop",
   name: "Wick Hop",
@@ -21,7 +21,7 @@ export const WICK_HOP: SkillDef = {
   evolution: {
     partner: "w_fangs",
     name: "Candle Stair",
-    text: "No hop limit while over Wicks, and each hop makes that Wick bite at once.",
+    text: "No hop limit while over Wicks, and each hop makes that Wick bite.",
     row: { text: "Endless hops; each Wick bites.", values: { hops: 2, flare: 1.4, rise: 52, drop: 0.6, stair: 1 } },
   },
 };
