@@ -18,6 +18,10 @@ const CROSS = [
   [0, 1],
   [0, -1],
 ] as const;
+/** below this share of its life a spark or an ember is down to a single image pixel wide */
+const THIN_BELOW = 0.3;
+/** a flame's tongue: no taller or wider than this in art pixels, so a large puff costs no more than a small one */
+const TONGUE = { height: 4, width: 2.5 } as const;
 
 export interface SpawnOptions {
   col?: Color;
@@ -201,6 +205,20 @@ export class Particles {
     }
   }
 
+  /** a flame's tongue: a column of image pixel rows over the puff, narrowing to a point that sways */
+  private tongue(q: Particle, r: number, body: Color, rim: Color): void {
+    const height = Math.min(TONGUE.height, r * (1.4 + (q.seed % 1) * 0.6));
+    const half = Math.min(TONGUE.width, r) * 0.7;
+    const lean = Math.sin(this.t * 13 + q.seed) * r * 0.8;
+    for (let j = 0; j <= height; j += 0.5) {
+      const v = j / height;
+      const w = half * (1 - v);
+      const cx = q.x + lean * v * v;
+      const cy = q.y - r * 0.6 - j;
+      for (let i = -w; i <= w; i += 0.5) fleck(cx + i, cy, v > 0.55 || Math.abs(i) > w - 0.5 ? rim : body);
+    }
+  }
+
   private drawOne(q: Particle): void {
     const k = q.life / q.max;
     const { x, y } = q;
@@ -214,7 +232,9 @@ export class Particles {
         const len = Math.min(9, 1 + sp * 0.022);
         // a fine tail behind a full head with a white-hot point
         hairline(x - ux * len, y - uy * len, x - ux * len * 0.4, y - uy * len * 0.4, k > 0.5 ? head : S[S.length - 1]);
-        line(x - ux * len * 0.45, y - uy * len * 0.45, x, y, head);
+        // a dying spark thins to a hair
+        if (k > THIN_BELOW) line(x - ux * len * 0.45, y - uy * len * 0.45, x, y, head);
+        else hairline(x - ux * len * 0.45, y - uy * len * 0.45, x, y, head);
         if (k > 0.5) fleck(x + 0.25, y + 0.25, WHITE);
         glow(x, y, 3, head, 0.45 * k);
         break;
@@ -242,7 +262,17 @@ export class Particles {
       case PK.FLAKE: {
         const a = Math.min(1, k * 3);
         px(x, y, q.col, a);
-        if (q.size > 1.3) for (const [dx, dy] of CROSS) px(x + dx, y + dy, scale(q.col, 0.8), a * 0.8);
+        // a large flake is a fine cross: arms one image pixel wide that turn between upright and slanted
+        if (q.size > 1.3) {
+          const slant = Math.sin(this.t * 3 + q.seed) > 0;
+          const arm = scale(q.col, 0.8);
+          for (const [dx, dy] of CROSS) {
+            const ax = slant ? dx - dy : dx;
+            const ay = slant ? dx + dy : dy;
+            fleck(x + 0.5 + ax * 0.75 - 0.25, y + 0.5 + ay * 0.75 - 0.25, q.col, a);
+            if (!slant) fleck(x + 0.5 + ax * 1.25 - 0.25, y + 0.5 + ay * 1.25 - 0.25, arm, a * 0.8);
+          }
+        }
         glow(x, y, 3, q.col, 0.15 * a);
         break;
       }
@@ -252,9 +282,14 @@ export class Particles {
         glow(x, y, r * 1.8, q.col, 0.1 * k);
         break;
       }
-      case PK.DUST:
-        disc(x, y, q.size * (0.6 + (1 - k) * 0.9), q.col, k ** 1.3 * 0.6);
+      case PK.DUST: {
+        const r = q.size * (0.6 + (1 - k) * 0.9);
+        const a = k ** 1.3 * 0.6;
+        disc(x, y, r, q.col, a);
+        // a second lobe gives a large puff a lumpy outline
+        if (r > 2) disc(x + ((q.seed % 1) - 0.5) * r, y - r * 0.35, r * 0.55, q.col, a * 0.7);
         break;
+      }
       case PK.SMOKE: {
         // three soft discs: a body, a denser core sitting low, a lit cap while it is young
         const age = 1 - k;
@@ -277,18 +312,23 @@ export class Particles {
         const r = q.size * (0.55 + 0.45 * Math.min(1, age * 7)) * (1 - age * 0.55);
         const c = F[idx];
         if (idx >= n - 2) {
-          disc(x, y, r, c, Math.min(1, k * 3) * 0.85);
+          // the last of it: a dim wisp with a speck still glowing above
+          disc(x, y, r, c, Math.min(1, k * 3) * 0.7);
+          fleck(x, y - r - 0.5, F[n - 4], k * 4);
           break;
         }
-        circle(x, y, r, F[Math.min(n - 1, idx + 2)]);
+        const rim = F[Math.min(n - 1, idx + 2)];
+        circle(x, y, r, rim);
         circle(x - r * 0.16, y - r * 0.22, r * 0.78, c);
-        if (r > 1.6) circle(x, y - r * 0.9, r * 0.42, c);
+        this.tongue(q, r, c, rim);
         if (idx <= 3 && r > 1.8) circle(x - r * 0.28, y - r * 0.34, r * 0.36, F[Math.max(0, idx - 1)]);
         if (idx < 6) glow(x, y, r * 2.4 + 2, c, 0.18 * k);
         break;
       }
       case PK.BRAND:
+        hairline(x - ux * 5, y - uy * 5, x, y, SPARKS.hot[2], (u) => u);
         circle(x, y, 1.6, SPARKS.hot[3]);
+        circle(x, y, 1, SPARKS.hot[2]);
         px(x, y, Math.sin(this.t * 40 + q.seed) > 0 ? SPARKS.hot[0] : SPARKS.hot[1]);
         glow(x, y, 7, SPARKS.hot[2], 0.45);
         break;
@@ -296,7 +336,12 @@ export class Particles {
         const S = q.sparks;
         const c = k > 0.6 ? S[0] : k > 0.3 ? S[1] : S[2];
         if (k < 0.25 && Math.sin(this.t * 40 + q.seed) < 0) break;
-        px(x, y, c);
+        // a glowing grain with a white heart and a speck of tail, shrinking to a single image pixel as it dies
+        if (k > THIN_BELOW) {
+          px(x, y, c);
+          if (k > 0.6) fleck(x + 0.25, y + 0.25, WHITE);
+          fleck(x + 0.5 - ux, y + 0.5 - uy, S[S.length - 1], 0.7);
+        } else fleck(x + 0.25, y + 0.25, c);
         glow(x, y, 3 + q.size, c, 0.35 * k);
         break;
       }

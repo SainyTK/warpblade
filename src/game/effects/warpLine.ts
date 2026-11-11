@@ -1,10 +1,13 @@
-import { glowLine, line, place } from "../../engine/frame";
+import { glowLine, hairline, line, place } from "../../engine/frame";
 import type { Effect } from "../../types/effect";
 import { PK } from "../../types/particle";
 import { WHITE } from "../../utils/color";
 import { ease, lerp } from "../../utils/math";
 import { skin } from "../hero/skin";
 import { particles, rng } from "../state";
+
+/** how far along the line, from its collapsing end, the full width head begins */
+const HEAD_FROM = 0.55;
 
 /** the line of light left where the hero warped, collapsing toward where he arrived */
 export function createWarpLine(x0: number, y0: number, x1: number, y1: number): Effect {
@@ -36,15 +39,13 @@ export function createWarpLine(x0: number, y0: number, x1: number, y1: number): 
       const sx = lerp(x0, x1, u);
       const sy = lerp(y0, y1, u);
       const k = 1 - t / life;
-      line(
-        sx,
-        sy,
-        x1,
-        y1,
-        (v) => (v > 0.8 ? WHITE : skin.ramp[4]),
-        (v) => k * (0.4 + 0.6 * v),
-      );
-      line(sx, sy + 1, x1, y1 + 1, skin.ramp[2], k * 0.6);
+      // a thread of light that thickens toward where he arrived: a fine tail, a full head, a white seam through both
+      const mx = lerp(sx, x1, HEAD_FROM);
+      const my = lerp(sy, y1, HEAD_FROM);
+      hairline(sx, sy + 0.75, x1, y1 + 0.75, skin.ramp[2], (v) => k * (0.3 + 0.5 * v));
+      hairline(sx, sy, mx, my, skin.ramp[4], (v) => k * (0.4 + 0.6 * v));
+      line(mx, my, x1, y1, skin.ramp[4], k);
+      hairline(mx, my + 0.25, x1, y1 + 0.25, WHITE, (v) => k * (0.5 + v));
       glowLine(sx, sy, x1, y1, 7, skin.ramp[3], 0.4 * k);
     },
   };

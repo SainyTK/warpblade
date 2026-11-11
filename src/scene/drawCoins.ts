@@ -1,30 +1,17 @@
+import { COIN_BACK, COIN_FRONT } from "../constants/effectColors";
 import { COIN_GOLD as G } from "../constants/palette";
-import { glow, place, px } from "../engine/frame";
+import { COIN_SPIN, COIN_STEPS, COIN_TURNS } from "../constants/pickupPixels";
+import { glow, place } from "../engine/frame";
+import { stampPixels } from "../game/effects/fine";
 import { game } from "../game/state";
-import { WHITE } from "../utils/color";
 
-/** 3 by 3 coins that spin: full face, edge on, then the face again, with a glint on the face */
+/** round coins that spin through face, three quarters and edge, with a glint on the front face */
 export function drawCoins(): void {
   place();
   for (const c of game.coinDrops) {
-    const x = Math.round(c.x);
-    const y = Math.round(c.y) - 1;
-    const turn = Math.floor(game.t * 8 + c.x * 0.37) % 4;
-    if (turn === 1 || turn === 3) {
-      px(x, y - 1, G[2]);
-      px(x, y, G[3]);
-      px(x, y + 1, G[1]);
-    } else {
-      px(x - 1, y - 1, G[2]);
-      px(x, y - 1, turn === 0 ? WHITE : G[4]);
-      px(x + 1, y - 1, G[2]);
-      px(x - 1, y, G[2]);
-      px(x, y, G[3]);
-      px(x + 1, y, G[1]);
-      px(x - 1, y + 1, G[1]);
-      px(x, y + 1, G[1]);
-      px(x + 1, y + 1, G[0]);
-    }
-    glow(x, y, 5, G[3], 0.3);
+    const y = c.y - 0.5;
+    const step = COIN_STEPS[Math.floor(game.t * COIN_SPIN + c.x * 0.37) % COIN_STEPS.length];
+    stampPixels(COIN_TURNS[step.turn], c.x, y, step.front ? COIN_FRONT : COIN_BACK);
+    glow(c.x, y, 5, G[3], 0.3);
   }
 }

@@ -1,7 +1,8 @@
 import { EMBER } from "../../constants/characters/ysra/look";
-import { glowLine, place, px } from "../../engine/frame";
+import { fleck, glowLine, place, px } from "../../engine/frame";
 import type { Ramp } from "../../types/color";
 import type { Effect } from "../../types/effect";
+import { grain } from "../../utils/grain";
 import { clamp } from "../../utils/math";
 import { rng } from "../state";
 
@@ -48,9 +49,16 @@ export function createFloorCrack(x0: number, x1: number, y: number, speed: numbe
       const hot = cool > 0 ? glowRamp[Math.round(4 - cool * 4)] : glowRamp[5];
       for (let i = 0; i <= ran; i++) {
         // the last few pixels of a running crack burn white
-        const c = ran < len && ran - i < 4 ? glowRamp[6] : hot;
-        px(x0 + dir * i, y + depth[i], c, 1 - cool * 0.5);
-        px(x0 + dir * i, y + depth[i] + 1, glowRamp[2], 1 - cool);
+        const running = ran < len && ran - i < 4;
+        const c = running ? glowRamp[6] : hot;
+        const cx = x0 + dir * i;
+        // a cooling crack closes in patches
+        if (cool > 0 && grain(i, len) < cool * 0.7) continue;
+        px(cx, y + depth[i], c, 1 - cool * 0.5);
+        px(cx, y + depth[i] + 1, glowRamp[2], 1 - cool);
+        // a white hot seam down the middle while it glows, and a scorched lip above it
+        if (cool <= 0 && !running && grain(i, 3) < 0.6) fleck(cx + 0.25, y + depth[i] + 0.75, glowRamp[6]);
+        if (grain(i, 5) < 0.4) fleck(cx + 0.25, y + depth[i] - 0.25, glowRamp[1], 1 - cool);
       }
       for (const f of forks) {
         if (f.at > ran) continue;

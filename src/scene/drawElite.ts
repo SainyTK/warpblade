@@ -1,4 +1,4 @@
-import { ELITE_LOOK as L } from "../constants/elite";
+import { ELITE_LOOK } from "../constants/elite";
 import { COIN_GOLD } from "../constants/palette";
 import { FW } from "../constants/stage";
 import { glow, place } from "../engine/frame";
@@ -7,6 +7,9 @@ import { enemyCenter } from "../game/enemies/enemy";
 import { game } from "../game/state";
 import type { Enemy } from "../types/enemy";
 import type { SpriteImage } from "../types/sprite";
+
+/** the ring's look, with the light gold bands that drift across it: their pitch in image pixels, speed and share */
+const L = { ...ELITE_LOOK, bandPitch: 0.16, bandSpeed: 2.5, bandCut: 0.2 } as const;
 
 /**
  * an elite's gold ring around its sprite, drawn before the sprite, with a glint sweeping across it on the diagonal and
@@ -18,7 +21,8 @@ export function drawEliteRing(e: Enemy, s: SpriteImage, x: number): void {
   blitRing(s, x, e.y, e.face < 0, L.width, (ix, iy) => {
     const d = ix + iy * 0.5 - sweep;
     if (d >= 0 && d < L.glint) return COIN_GOLD[4];
-    return (ix + iy) % 2 ? COIN_GOLD[3] : COIN_GOLD[2];
+    // bands of lighter gold drift up the ring, so it reads as worked metal with a slow shimmer
+    return Math.sin((ix - iy * 2) * L.bandPitch + game.t * L.bandSpeed) > L.bandCut ? COIN_GOLD[3] : COIN_GOLD[2];
   });
 }
 
