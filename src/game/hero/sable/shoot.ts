@@ -4,11 +4,11 @@ import { PK } from "../../../types/particle";
 import { isHeld } from "../../input";
 import { emitSkillEvent } from "../../skills/events";
 import { skillValues } from "../../skills/query";
-import { character, hero, lights, particles, progress, rng } from "../../state";
+import { character, hero, particles, progress, rng } from "../../state";
 import { isFree, setState, settle } from "../actions";
-import { skin } from "../skin";
 import { assisted, autoAim, muzzle } from "./aim";
 import type { Shot } from "./bolt/shot";
+import { jadeLight } from "./effects/jadeLight";
 import { looseBolt } from "./loose";
 import { sable } from "./memory";
 import { drawBolt, flashQuiver } from "./quiver";
@@ -54,7 +54,7 @@ export function pressShoot(): boolean {
 function muzzleFlash(x: number, y: number, angle: number, primed: boolean): void {
   const ux = Math.cos(angle);
   const uy = Math.sin(angle);
-  lights.add(x, y, primed ? 20 : 12, primed ? skin.ramp[5] : skin.ramp[4], 0.7, 0.08);
+  jadeLight(x, y, primed ? "primedMuzzle" : "muzzle");
   for (let i = 0; i < 3; i++)
     particles.spawn(PK.SMOKE, x, y, ux * rng.range(10, 30), uy * 10 - rng.range(4, 12), rng.range(0.25, 0.4), {
       size: rng.range(0.8, 1.3),

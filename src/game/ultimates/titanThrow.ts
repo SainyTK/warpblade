@@ -1,12 +1,14 @@
 import { ENEMIES } from "../../constants/enemies";
+import { HEAP_TRAIL } from "../../constants/hulda/look";
 import { TITAN } from "../../constants/hulda/ultimates";
 import { W } from "../../constants/stage";
 import { ULT_LEVELS } from "../../constants/ultimate";
-import { glow, line, place } from "../../engine/frame";
+import { glow, hairline, line, place } from "../../engine/frame";
 import { sfx } from "../../services/audio";
 import type { Ramp } from "../../types/color";
 import type { Effect } from "../../types/effect";
 import type { Enemy } from "../../types/enemy";
+import { grain } from "../../utils/grain";
 import { clamp } from "../../utils/math";
 import { dealDamage } from "../damage";
 import { createFloorRing } from "../effects/floorRing";
@@ -14,9 +16,10 @@ import { createImpact } from "../effects/impact";
 import { enemyBox, enemyCenter } from "../enemies/enemy";
 import { kindOf } from "../enemies/kinds";
 import { claim, isClaimed, unclaim } from "../hero/hulda/claims";
+import { floorThud, thudLight } from "../hero/hulda/effects/thud";
 import { skin } from "../hero/skin";
 import { skillValues, withCharms } from "../skills/query";
-import { game, hero, lights, progress } from "../state";
+import { game, hero, progress } from "../state";
 import { boxHit, dust, hitStop, newSwing, shake } from "../world";
 import { ultTargets } from "./targets";
 
@@ -148,7 +151,7 @@ export function castTitanThrow(level: number): void {
     }
     game.fx.push(createFloorRing(hx, floor, burstR * 1.4, ramp, 0.5));
     game.fx.push(createImpact(hx, floor - 10, face, true));
-    lights.add(hx, floor - 10, 70, ramp[4], 1, 0.4);
+    floorThud(hx, floor, "big");
     dust(hx, floor, 14);
     hitStop(0.1);
     shake(0.4, 4);
@@ -259,9 +262,22 @@ export function castTitanThrow(level: number): void {
         }
         return;
       }
-      if (flying && !landed) glow(hx, hy - 4, 16, ramp[3], 0.35);
+      if (!flying || landed) return;
+      // the heap tears the air behind it: lines of her ramp along its flight, their lengths flickering
+      const speed = Math.hypot(vx, vy) || 1;
+      const ux = vx / speed;
+      const uy = vy / speed;
+      for (let i = 0; i < HEAP_TRAIL.lines; i++) {
+        const off = (i - (HEAP_TRAIL.lines - 1) / 2) * HEAP_TRAIL.gap;
+        const len = HEAP_TRAIL.length * (0.5 + 0.5 * grain(i, Math.floor(t * 30)));
+        const sx = hx - ux * HEAP_TRAIL.behind - uy * off;
+        const sy = hy - 6 - uy * HEAP_TRAIL.behind + ux * off;
+        hairline(sx, sy, sx - ux * len, sy - uy * len, ramp[i % 2 ? 4 : 5], (u) => 1.6 * (1 - u));
+        hairline(sx, sy + 0.5, sx - ux * len * 0.7, sy + 0.5 - uy * len * 0.7, ramp[2], (u) => 1.4 * (1 - u));
+      }
+      glow(hx, hy - 4, 12, ramp[3], 0.3);
     },
   };
   game.fx.push(effect);
-  lights.add(hero.x, hero.y - 20, 60, ramp[4], 0.8, 0.4);
+  thudLight(hero.x, hero.y - 20, "big");
 }

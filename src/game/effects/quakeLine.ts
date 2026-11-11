@@ -3,7 +3,8 @@ import type { Effect } from "../../types/effect";
 import type { Enemy } from "../../types/enemy";
 import { PK } from "../../types/particle";
 import { enemyCenter, walks } from "../enemies/enemy";
-import { game, lights, particles, rng } from "../state";
+import { floorThud } from "../hero/hulda/effects/thud";
+import { game, particles, rng } from "../state";
 import { createFloorCrack, type FloorCrack } from "./floorCrack";
 
 /** pixels a second the crack runs, and how often it throws a rock chunk up */
@@ -37,7 +38,7 @@ export function createQuakeLine(q: Quake): Effect {
   const start = () => {
     cracks = q.ends.map((end) => createFloorCrack(q.x, end, q.floor, SPEED, q.ramp));
     for (const c of cracks) game.fx.push(c);
-    lights.add(q.x, q.floor, 60, q.ramp[4], 0.9, 0.4);
+    floorThud(q.x, q.floor, "big");
     q.slam();
   };
   return {

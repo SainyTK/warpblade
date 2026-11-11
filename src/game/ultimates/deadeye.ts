@@ -9,10 +9,12 @@ import { createGlint } from "../effects/flash";
 import { createImpact } from "../effects/impact";
 import { enemyCenter } from "../enemies/enemy";
 import { markFoe } from "../enemies/skillStatus";
+import { createBoltWake } from "../hero/sable/effects/boltWake";
+import { jadeLight } from "../hero/sable/effects/jadeLight";
 import { sable } from "../hero/sable/memory";
 import { skin } from "../hero/skin";
 import { skillValues } from "../skills/query";
-import { game, hero, lights, progress } from "../state";
+import { game, hero, progress } from "../state";
 import { hitStop, shake } from "../world";
 import { foesOnSegment } from "./segmentHits";
 import { ultTargets } from "./targets";
@@ -36,6 +38,7 @@ function heavyBolt(
   struck: Set<Enemy>,
 ): void {
   const dir = Math.cos(angle) >= 0 ? 1 : -1;
+  game.fx.push(createBoltWake({ x, y, angle, speed: SPEED, range: W, ramp: skin.ramp }));
   game.fx.push(
     createCrossbowBolt({
       x,
@@ -75,7 +78,7 @@ export function castDeadeye(level: number): void {
     if (v.mark) markFoe(e, "s_deadeye", v.markTime, v.mark);
     if (v.pin) e.pinned = Math.max(e.pinned, v.pin);
     game.fx.push(createImpact(cx, cy, dir, true));
-    lights.add(cx, cy, 30, skin.ramp[5], 0.9, 0.2);
+    jadeLight(cx, cy, "primedHit");
     sfx.hit(true, 0.9);
     hitStop(0.03);
     if (e.hp > 0) return;

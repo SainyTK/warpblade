@@ -1,4 +1,5 @@
 import { ENEMIES } from "../../../constants/enemies";
+import { SPIRIT_LIGHT } from "../../../constants/hulda/look";
 import { FIST, SPIRIT, SUMMON_GATE } from "../../../constants/hulda/spirits";
 import { sfx } from "../../../services/audio";
 import type { Enemy } from "../../../types/enemy";
@@ -115,7 +116,14 @@ function slam(m: FistMemory, f: Fist, evolved: boolean): void {
     const next = nearestFoe(f.x, f.goal, [e]);
     if (next) summon(m, next, FIST.second, false);
   }
-  lights.add(f.x, f.goal, evolved ? 70 : 40, SPIRIT[5], 0.9, 0.25);
+  lights.add(
+    f.x,
+    f.goal,
+    evolved ? SPIRIT_LIGHT.big : SPIRIT_LIGHT.radius,
+    SPIRIT[3],
+    SPIRIT_LIGHT.strength,
+    SPIRIT_LIGHT.life,
+  );
   dust(f.x, floor, evolved ? 14 : 8);
   hitStop(evolved ? 0.1 : 0.06);
   shake(evolved ? 0.35 : 0.2, evolved ? 4 : 2.5);

@@ -7,7 +7,7 @@ import { createFloorRing } from "../../effects/floorRing";
 import { enemyBox } from "../../enemies/enemy";
 import { emitSkillEvent } from "../../skills/events";
 import { skillValues } from "../../skills/query";
-import { game, hero, lights, progress } from "../../state";
+import { game, hero, progress } from "../../state";
 import { boxHit, dust, heroBox, markStruck, newSwing, struckThisSwing } from "../../world";
 import { isFree, setState, settle } from "../actions";
 import { rewardPerfectDodge } from "../perfectDodge";
@@ -16,6 +16,7 @@ import { refuseDash } from "../stamina";
 import { travelEnded } from "../travelEnd";
 import { assisted, muzzle } from "./aim";
 import { scatterCaltrops } from "./effects/caltrops";
+import { jadeLight } from "./effects/jadeLight";
 import { tangle } from "./effects/tangle";
 import { looseBolt } from "./loose";
 import { sable } from "./memory";
@@ -39,7 +40,7 @@ export function evadeAbsorbs(): boolean {
     sable.perfectUsed = true;
     rewardPerfectDodge();
     game.fx.push(createFloorRing(hero.x, hero.y, 28, skin.ramp, 0.4));
-    lights.add(hero.x, hero.y - 18, 50, skin.ramp[4], 0.7, 0.4);
+    jadeLight(hero.x, hero.y - 18, "burst");
     sfx.perfect();
   }
   return true;

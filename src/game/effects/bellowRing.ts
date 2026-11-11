@@ -1,10 +1,32 @@
 import { BELLOW } from "../../constants/hulda/bellow";
-import { ellipseRing, glow, place } from "../../engine/frame";
+import { ROAR_LOOK } from "../../constants/hulda/look";
+import { fleck, glow, place } from "../../engine/frame";
 import type { Ramp } from "../../types/color";
 import type { Effect } from "../../types/effect";
 import type { Enemy } from "../../types/enemy";
-import { clamp, ease } from "../../utils/math";
+import { grain } from "../../utils/grain";
+import { clamp, ease, TAU } from "../../utils/math";
 import { kindOf } from "../enemies/kinds";
+
+/**
+ * one ring of the roar: a bright line two image pixels thick with a dark rim outside it, breaking into dashes of sound
+ * as it runs out and thins
+ */
+function roarRing(x: number, y: number, r: number, k: number, seed: number, ramp: Ramp): void {
+  const n = Math.max(12, Math.ceil(TAU * r * 2.4));
+  const dashes = Math.max(8, Math.round(r * 0.7));
+  const wear = Math.max(0, (ROAR_LOOK.breakFrom - k) / ROAR_LOOK.breakFrom);
+  const c = ramp[Math.min(6, 3 + Math.round(k * 3))];
+  for (let i = 0; i < n; i++) {
+    const g = (i / n) * TAU;
+    if (wear > 0 && grain(Math.floor((i / n) * dashes), seed) < wear) continue;
+    const ux = Math.cos(g);
+    const uy = Math.sin(g) * ROAR_LOOK.squash;
+    fleck(x + ux * (r + 0.5), y + uy * (r + 0.5), ramp[2], k * 2);
+    fleck(x + ux * r, y + uy * r, c, k * 2);
+    if (k > 0.5) fleck(x + ux * (r - 0.5), y + uy * (r - 0.5), ramp[4], k * 2);
+  }
+}
 
 /**
  * Bellow: three rings run out from her mouth to the roar's reach, and every foe it caught is dragged toward her over a
@@ -42,10 +64,9 @@ export function createBellowRing(
         if (u <= 0 || u >= 1) continue;
         const r = BELLOW.reach * ease.outQuad(u);
         const k = 1 - u;
-        ellipseRing(x, y, r, r * 0.7, ramp[Math.min(6, 3 + Math.round(k * 2))], k);
-        ellipseRing(x, y, r - 1, (r - 1) * 0.7, ramp[2], k * 0.5);
+        roarRing(x, y, r, k, i, ramp);
       }
-      glow(x, y, 16, ramp[4], 0.35 * Math.max(0, 1 - t / life));
+      glow(x, y, ROAR_LOOK.light, ramp[3], 0.3 * Math.max(0, 1 - t / life));
     },
   };
 }

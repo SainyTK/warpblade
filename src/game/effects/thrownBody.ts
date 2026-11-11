@@ -1,7 +1,7 @@
 import { ENEMIES } from "../../constants/enemies";
 import { THROWN } from "../../constants/hulda/grab";
 import { W } from "../../constants/stage";
-import { glow, line, place } from "../../engine/frame";
+import { glow, hairline, place } from "../../engine/frame";
 import { sfx } from "../../services/audio";
 import type { SourceId } from "../../types/build";
 import type { Ramp } from "../../types/color";
@@ -10,10 +10,11 @@ import type { Enemy } from "../../types/enemy";
 import { dealDamage } from "../damage";
 import { enemyBox, enemyCenter } from "../enemies/enemy";
 import { isClaimed } from "../hero/hulda/claims";
+import { floorThud, thudLight } from "../hero/hulda/effects/thud";
 import { spreadFracture, throwPower } from "../hero/hulda/fracture";
 import { emitSkillEvent } from "../skills/events";
 import { skillLevel, skillValues } from "../skills/query";
-import { game, lights, progress } from "../state";
+import { game, progress } from "../state";
 import { boxHit, dust, hitStop, shake } from "../world";
 import { createFloorRing } from "./floorRing";
 import { createImpact } from "./impact";
@@ -21,6 +22,8 @@ import { createImpact } from "./impact";
 /** how many past centres the streak behind the body keeps */
 const TRAIL = 6;
 const ID = "h_wreckingThrow";
+/** a burst wider than this throws up the big slam's rubble */
+const BIG_BURST = 40;
 
 /**
  * `throw`: a foe Hulda threw herself, its hits her own. `flung`: a foe Wrecking Throw sent flying on from a thrown
@@ -47,7 +50,7 @@ function burst(body: Enemy, x: number, y: number, radius: number, power: number,
   }
   game.fx.push(createFloorRing(x, body.y, radius, ramp, 0.35));
   game.fx.push(createImpact(x, y, Math.sign(x - body.x) || 1, true));
-  lights.add(x, y, radius + 12, ramp[4], 0.8, 0.2);
+  floorThud(x, body.y, radius > BIG_BURST ? "big" : "mid");
   sfx.boom();
 }
 
@@ -93,7 +96,7 @@ export function createThrownBody(body: Enemy, dir: number, ramp: Ramp, kind: Bod
       if (own) spreadFracture(body, e);
     }
     game.fx.push(createImpact((cx + ex) / 2, (cy + ey) / 2, dir, true));
-    lights.add(ex, ey, 30, ramp[4], 0.8, 0.15);
+    thudLight(ex, ey, "small");
     hitStop(THROWN.stop);
     sfx.hit(true, 0.7);
     if (own && v?.fling) fling(e, dir, ramp);
@@ -115,6 +118,7 @@ export function createThrownBody(body: Enemy, dir: number, ramp: Ramp, kind: Bod
       });
       body.stun = Math.max(body.stun, THROWN.landStun);
       dust(cx, body.y, 6);
+      floorThud(cx, body.y, "small");
       shake(0.1, 1.5);
       if (own) emitSkillEvent({ type: "throw", foe: body, x: cx, y: body.y, slam: false });
     }
@@ -167,11 +171,15 @@ export function createThrownBody(body: Enemy, dir: number, ramp: Ramp, kind: Bod
         const [x0, y0] = trail[i - 1];
         const [x1, y1] = trail[i];
         const k = 1 - i / trail.length;
-        line(x0, y0, x1, y1, ramp[Math.max(1, Math.round(2 + k * 3))], k * 0.8);
-        line(x0, y0 + 3, x1, y1 + 3, ramp[2], k * 0.5);
-        if (wide) line(x0, y0 - 3, x1, y1 - 3, ramp[5], k * 0.6);
+        // lines of torn air behind the body: a bright one two image pixels thick with thinner ones either side
+        const c = ramp[Math.max(2, Math.round(2 + k * 3))];
+        hairline(x0, y0, x1, y1, c, k * 1.4);
+        hairline(x0, y0 + 0.5, x1, y1 + 0.5, ramp[2], k * 1.4);
+        hairline(x0, y0 + 4, x1, y1 + 4, ramp[3], k * 0.9);
+        hairline(x0, y0 - 4, x1, y1 - 4, ramp[wide ? 5 : 4], k * 0.9);
+        if (wide) hairline(x0, y0 - 7, x1, y1 - 7, ramp[4], k * 0.7);
       }
-      if (trail.length) glow(trail[0][0], trail[0][1], 10 + wide * 3, ramp[3], own ? 0.25 : 0.15);
+      if (trail.length) glow(trail[0][0], trail[0][1], 8 + wide * 2, ramp[3], own ? 0.22 : 0.14);
     },
   };
 }

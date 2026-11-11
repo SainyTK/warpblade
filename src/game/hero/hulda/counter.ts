@@ -4,16 +4,17 @@ import { FURY } from "../../../constants/hulda/fury";
 import { GRIT } from "../../../constants/hulda/grit";
 import { sfx } from "../../../services/audio";
 import type { Enemy } from "../../../types/enemy";
-import { WHITE } from "../../../utils/color";
 import { dealDamage } from "../../damage";
 import { createFloorRing } from "../../effects/floorRing";
 import { createImpact } from "../../effects/impact";
 import { enemyCenter } from "../../enemies/enemy";
 import { emitSkillEvent } from "../../skills/events";
 import { skillLevel, skillValues } from "../../skills/query";
-import { game, hero, lights, progress } from "../../state";
+import { game, hero, progress } from "../../state";
 import { hitStop, shake } from "../../world";
 import { skin } from "../skin";
+import { createShockArcs } from "./effects/shockArcs";
+import { thudLight } from "./effects/thud";
 import { gainFury } from "./fury";
 import { gainGrit, maxGrit } from "./grit";
 import { hulda } from "./memory";
@@ -36,13 +37,17 @@ function roar(caught: Enemy): void {
   game.fx.push(createFloorRing(hero.x, hero.y, COUNTER.roarReach, skin.ramp, 0.35));
 }
 
-/** the flash of a counter: a white burst at her hands, a long hit-stop and a heavy shake */
+/** the flash of a counter: a white star at her hands with the air torn past it, a long hit-stop and a heavy shake */
 function flash(e: Enemy): void {
   const [cx, cy] = enemyCenter(e);
+  const angle = hero.face > 0 ? 0 : Math.PI;
   game.fx.push(
-    createImpact(cx - hero.face * 3, cy, hero.face, true, [WHITE, skin.ramp[6], skin.ramp[5], skin.ramp[4]]),
+    createImpact(cx - hero.face * 3, cy, hero.face, true, [skin.ramp[5], skin.ramp[4], skin.ramp[3], skin.ramp[2]]),
   );
-  lights.add(cx, cy, 40, WHITE, 0.9, 0.18);
+  game.fx.push(
+    createShockArcs({ x: cx, y: cy, angle, size: 16, arcs: 3, streaks: 4, ramp: skin.ramp, seed: hero.swing }),
+  );
+  thudLight(cx, cy, "mid");
   hitStop(COUNTER.stop);
   shake(COUNTER.shake[0], COUNTER.shake[1]);
   sfx.hit(true, 0.5);

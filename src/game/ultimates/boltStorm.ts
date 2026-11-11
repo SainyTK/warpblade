@@ -30,6 +30,7 @@ export function castBoltStorm(level: number): void {
       angle: -Math.PI / 2 + hero.face * 0.12,
       ramp: skin.ramp,
       primed: true,
+      heavy: true,
       bounces: 0,
       range: 200,
       pass: () => false,
@@ -52,6 +53,8 @@ export function castBoltStorm(level: number): void {
         angle: Math.atan2(floor - top, slant * (floor - top)),
         ramp: skin.ramp,
         primed: i < 4,
+        // the storm's bolts are drawn long and thick, so the rain reads as an ultimate's
+        heavy: true,
         bounces: 0,
         delay: FROM + (i * SPAN) / aims.length,
         speed: FALL_SPEED,

@@ -11,11 +11,12 @@ import { enemyCenter } from "../../enemies/enemy";
 import { kindOf } from "../../enemies/kinds";
 import { emitSkillEvent } from "../../skills/events";
 import { skillValues } from "../../skills/query";
-import { game, hero, lights, progress } from "../../state";
+import { game, hero, progress } from "../../state";
 import { dust, shake } from "../../world";
 import { isFree, setState, settle } from "../actions";
 import { deny } from "../deny";
 import { skin } from "../skin";
+import { floorThud } from "./effects/thud";
 import { gainGrit } from "./grit";
 import { hulda } from "./memory";
 
@@ -82,7 +83,7 @@ function tremble(t: Tremor): void {
   game.fx.push(createFloorRing(t.x, t.floor, ring, skin.ramp, 0.45, Math.min(0.2, STOMP.ringDepth / ring)));
   game.fx.push(createFloorCrack(t.x, x0, t.floor, t.radius * 4, skin.ramp));
   game.fx.push(createFloorCrack(t.x, x1, t.floor, t.radius * 4, skin.ramp));
-  lights.add(t.x, t.floor - 4, Math.min(t.radius, 90), skin.ramp[4], 0.7, 0.2);
+  floorThud(t.x, t.floor, "big");
   dust(t.x, t.floor, 8);
   shake(0.18, 2);
   sfx.boom();

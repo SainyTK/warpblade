@@ -5,9 +5,12 @@ import type { Vec } from "./reach";
 /** how many links of the rope the braid takes: a short, heavy plait that ends between the shoulder blades */
 const LINKS = 4;
 /** how far each link sinks from the rope toward hanging straight down: the braid is heavier than a scarf */
-const SAG = 0.55;
+const SAG = 0.65;
 /** the length of one link, as the scarf's rope is built */
 const LINK = 2.2;
+/** the braid's radius at its root, and how much each link narrows it toward the tie */
+const ROOT = 1.8;
+const NARROW = 0.25;
 
 /** the rope pulled toward hanging straight down from its first point */
 function hang(rope: readonly Vec[]): Vec[] {
@@ -24,7 +27,7 @@ export function drawBraid(s: SpriteCanvas, rope: readonly Vec[]): void {
   s.begin();
   for (let i = 1; i < links.length; i++) {
     const [a, b] = [links[i - 1], links[i]];
-    s.taper(a[0], a[1], b[0], b[1], 1.9 - (i - 1) * 0.15, 1.9 - i * 0.15, HC.hair);
+    s.taper(a[0], a[1], b[0], b[1], ROOT - (i - 1) * NARROW, ROOT - i * NARROW, HC.hair);
   }
   s.shadeEdges(HC.hair, HC.hairLight, HC.hairDeep);
   for (let i = 1; i < links.length; i++) {

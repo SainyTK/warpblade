@@ -1,9 +1,10 @@
-import { line, place, px } from "../../engine/frame";
+import { fleck, hairline, place } from "../../engine/frame";
 import type { Ramp } from "../../types/color";
 import type { Effect } from "../../types/effect";
 import type { Enemy } from "../../types/enemy";
 import { hex, WHITE } from "../../utils/color";
 import { enemyBox } from "../enemies/enemy";
+import { jadeLight } from "../hero/sable/effects/jadeLight";
 import { game, lights } from "../state";
 
 export interface SnareSet {
@@ -23,7 +24,13 @@ export interface SnareSet {
 /** how long the shut jaws stay on the floor after they spring */
 const SHUT = 0.5;
 const STEEL = hex("#8a9aa0");
+const STEEL_LIGHT = hex("#c8d4d8");
 const IRON = hex("#2a3236");
+/** the shut jaws jump this long as they bite */
+const SNAP = 0.08;
+/** the jaws: half the width of the plate between them, teeth each side, the gap between teeth, a tooth's height and
+ *  the height of the peak they shut into */
+const JAWS = { plate: 2.5, teeth: 5, gap: 1.5, tooth: 1.5, peak: 7 } as const;
 
 /** a hunter's snare on the floor: open steel jaws with a glowing trigger plate, snapping shut on the first foe over it */
 export function createSnareTrap(s: SnareSet): Effect {
@@ -44,7 +51,7 @@ export function createSnareTrap(s: SnareSet): Effect {
         rearm--;
         shut = -1;
         t = 0;
-        lights.add(s.x, s.y - 2, 14, s.ramp[4], 0.6, 0.2);
+        jadeLight(s.x, s.y - 2, "snareSet");
         return true;
       }
       if (t > s.life) return finish();
@@ -58,30 +65,47 @@ export function createSnareTrap(s: SnareSet): Effect {
       if (!prey) return true;
       shut = 0;
       s.spring(prey);
-      lights.add(s.x, s.y - 4, 26, s.ramp[4], 0.9, 0.2);
+      jadeLight(s.x, s.y - 4, "snareShut");
       return true;
     },
     drawBack() {
       place();
       const r = s.reach;
       if (shut >= 0) {
-        // the jaws closed into a peak of teeth, fading
-        const a = 1 - shut / SHUT;
-        line(s.x - r * 0.6, s.y - 1, s.x, s.y - 7, STEEL, a);
-        line(s.x + r * 0.6, s.y - 1, s.x, s.y - 7, STEEL, a);
-        for (let i = -2; i <= 2; i++) px(s.x + i * 1.5, s.y - 4 + Math.abs(i), WHITE, a);
+        // the jaws shut into a peak, their teeth locked down both edges, fading
+        const a = (1 - shut / SHUT) * 2;
+        const lean = shut < SNAP ? (1 - shut / SNAP) * 1.5 : 0;
+        const peak = s.y - JAWS.peak - lean;
+        for (const side of [-1, 1]) {
+          const bx = s.x + side * r * 0.6;
+          hairline(bx, s.y - 0.5, s.x, peak, STEEL, a);
+          hairline(bx + side * 0.5, s.y - 0.5, s.x + side * 0.5, peak, IRON, a);
+          for (let i = 1; i < JAWS.teeth; i++) {
+            const u = i / JAWS.teeth;
+            fleck(bx + (s.x - bx) * u - side * 0.5, s.y - 0.5 + (peak - s.y + 0.5) * u, i % 2 ? STEEL_LIGHT : WHITE, a);
+          }
+        }
+        fleck(s.x, peak - 0.5, WHITE, a);
         return;
       }
-      // open jaws lying flat with teeth up, a plate in the middle that pulses
+      // open jaws lying flat on an iron bar: a row of fine teeth each side, hinge pins at the ends, a plate that pulses
       const pulse = 0.5 + 0.5 * Math.sin(t * 6);
-      line(s.x - r, s.y - 1, s.x + r, s.y - 1, IRON);
-      line(s.x - r, s.y - 2, s.x - 3, s.y - 2, STEEL);
-      line(s.x + 3, s.y - 2, s.x + r, s.y - 2, STEEL);
-      for (let i = 0; i <= 4; i++) {
-        px(s.x - r + i * 1.5, s.y - 3, i % 2 ? STEEL : WHITE);
-        px(s.x + r - i * 1.5, s.y - 3, i % 2 ? STEEL : WHITE);
+      hairline(s.x - r, s.y - 0.5, s.x + r, s.y - 0.5, IRON);
+      hairline(s.x - r, s.y - 1, s.x + r, s.y - 1, IRON);
+      for (const side of [-1, 1]) {
+        hairline(s.x + side * JAWS.plate, s.y - 1.5, s.x + side * r, s.y - 1.5, STEEL);
+        for (let i = 0; i < JAWS.teeth; i++) {
+          const tx = s.x + side * (JAWS.plate + 0.75 + i * JAWS.gap);
+          if (Math.abs(tx - s.x) > r) continue;
+          const tall = i % 2 ? JAWS.tooth : JAWS.tooth - 0.5;
+          hairline(tx, s.y - 2, tx, s.y - 1.5 - tall, STEEL_LIGHT);
+          fleck(tx, s.y - 2 - tall, WHITE);
+        }
+        fleck(s.x + side * r, s.y - 1.5, STEEL_LIGHT);
+        fleck(s.x + side * r, s.y - 2, STEEL);
       }
-      line(s.x - 2, s.y - 2, s.x + 2, s.y - 2, s.ramp[3 + Math.round(pulse * 2)]);
+      hairline(s.x - JAWS.plate + 0.5, s.y - 1.5, s.x + JAWS.plate - 0.5, s.y - 1.5, s.ramp[3 + Math.round(pulse * 2)]);
+      if (pulse > 0.5) hairline(s.x - 1, s.y - 2, s.x + 1, s.y - 2, s.ramp[5]);
     },
     draw() {},
   };

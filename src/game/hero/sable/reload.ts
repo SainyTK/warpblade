@@ -5,9 +5,10 @@ import { enemyCenter } from "../../enemies/enemy";
 import { createPayoff } from "../../skills/payoff";
 import { skillValues } from "../../skills/query";
 import { nearestFoe } from "../../skills/targets";
-import { hero, lights, particles, progress, rng } from "../../state";
+import { hero, particles, progress, rng } from "../../state";
 import { skin } from "../skin";
 import { muzzle } from "./aim";
+import { jadeLight } from "./effects/jadeLight";
 import { looseBolt } from "./loose";
 import { sable } from "./memory";
 import { flashQuiver, primedBolts, quiverSize, reloadWindow } from "./quiver";
@@ -35,7 +36,7 @@ function perfect(): void {
   sable.primed = Math.min(primedBolts(), quiverSize());
   flashQuiver("perfect");
   sfx.perfect();
-  lights.add(hero.x, hero.y - 18, 28, skin.ramp[5], 0.9, 0.25);
+  jadeLight(hero.x + hero.face * 6, hero.y - 17, "perfect");
   for (let i = 0; i < 8; i++)
     particles.spawn(PK.STAR, hero.x + hero.face * 6, hero.y - 17, rng.range(-50, 50), -rng.range(30, 90), 0.4, {
       col: skin.ramp[5],
