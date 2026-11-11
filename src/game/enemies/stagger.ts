@@ -5,7 +5,7 @@ import { sfx } from "../../services/audio";
 import type { Enemy } from "../../types/enemy";
 import { clamp } from "../../utils/math";
 import { createImpact } from "../effects/impact";
-import { game } from "../state";
+import { game, hero } from "../state";
 import { enemyCenter } from "./enemy";
 import { kindOf } from "./kinds";
 
@@ -32,6 +32,8 @@ export function staggerFoe(e: Enemy, seconds: number): void {
   }
   if (e.stagger <= 0 && !e.air && e.stun <= 0) {
     Object.assign(e, { state: kindOf(e.type).rest, st: 0 });
+    // the blow stops a charge or lunge dead: only speed away from the hero is kept, so the foe never slides through them
+    if (e.vx * (hero.x - e.x) > 0) e.vx = 0;
     if (!kindOf(e.type).flies && e.y >= GROUND) e.vy = 0;
   }
   e.stagger = Math.max(e.stagger, seconds);
@@ -56,6 +58,9 @@ export function updateStagger(e: Enemy, dt: number): boolean {
   else e.vy = e.y < GROUND ? e.vy + ENEMY_AIR.gravity * dt : 0;
   e.y += e.vy * dt;
   if (!kindOf(e.type).flies) e.y = Math.min(e.y, GROUND);
-  if (e.stagger <= 0) e.cd = Math.max(e.cd, STAGGER.rest);
+  if (e.stagger > 0) return true;
+  // back on its feet: a moment before it may attack, walk on or hurt by touch
+  e.cd = Math.max(e.cd, STAGGER.rest);
+  e.halt = Math.max(e.halt, STAGGER.rest);
   return true;
 }

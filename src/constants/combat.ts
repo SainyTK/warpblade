@@ -74,7 +74,7 @@ export const STAGGER = {
   brace: 1.6,
   /** seconds without a stagger before the count of blows starts again */
   forget: 1,
-  /** seconds after a stagger ends before the foe may attack */
+  /** seconds after a stagger ends before the foe may attack, walk on or hurt by touch */
   rest: 0.35,
   /** how fast a staggered foe slides to a stop */
   friction: 6,

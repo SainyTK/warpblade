@@ -40,11 +40,13 @@ export interface FistSpec {
 
 /** straight blows reach this box ahead of her feet at head height: the shortest reach in the game */
 const STRAIGHT = [2, -22, 16, -8] as const;
+/** the hook comes from the rear hip and carries through the body, so it reaches past where the jab pushed the foe */
+const HOOK = [2, -22, 20, -6] as const;
 /**
  * The overhand haymaker travels up through the space over her head, so its box reaches as high as the fist goes; this
- * is how her string touches a flier hovering over her, still no further ahead than her jab.
+ * is how her string touches a flier hovering over her, reaching just past the hook.
  */
-const OVERHAND = [0, -42, 18, -8] as const;
+const OVERHAND = [0, -42, 22, -8] as const;
 
 /**
  * The string's three blows. Each lands about 0.6 to 0.75 real seconds after the last when J is pressed in time, and
@@ -67,7 +69,7 @@ export const FISTS: Record<FistBlow, FistSpec> = {
     dur: frame(20),
     hit: frame(8),
     next: frame(13),
-    box: STRAIGHT,
+    box: HOOK,
     power: 1.7,
     kx: 22,
     ky: -20,
