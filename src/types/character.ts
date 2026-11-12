@@ -55,7 +55,8 @@ export interface HeroSkin {
   headband?: boolean;
   /** a war drum on a strap across the chest, worn at the hip and swung to the front by the pose's `dr` */
   drum?: boolean;
-  /** a bare chest in the skin colours with pale scars, under a fur mantle across the shoulders in the coat colours */
+  /** a bare chest in the skin colours with pale scars, under a fur mantle across the shoulders in the coat colours, and a
+   *  short pelt behind the belt in place of coat tails */
   bareChest?: boolean;
   /** a wild mane: the ponytail's rope carries two thick braids in the hair colours, bound in the scarf colours, with no
    *  scarf streamer */

@@ -5,7 +5,7 @@ import { type HeroColors, PAL, SPARKS } from "../../palette";
 
 /**
  * Brannoc: pale weathered skin, a wild ash-blond mane and braided beard, a bone-white war paint band across both eyes, a
- * bare scarred chest under a dark wolf-fur mantle, iron bracers bound in bone cord, a wide leather belt with an iron
+ * bare scarred chest under a dark wolf-fur mantle and a short wolf pelt hung behind his belt, iron bracers bound in bone cord, a wide leather belt with an iron
  * buckle, dark trousers and fur-wrapped boots, and a great axe with a dark ash haft and a bearded iron head.
  * The scarf colours are his bone: the war paint, the cord at his throat and the bindings on his haft.
  */
@@ -54,58 +54,58 @@ const BRANNOC_COLORS: HeroColors = {
 };
 
 /**
- * Brannoc's head, 24 by 22 image pixels, facing right in three-quarters: a wild ash-blond mane spilling back from the
- * crown, a heavy brow, a bone-white war paint band across both eyes with a grey eye in it, a broken nose, and a short
+ * Brannoc's head, 24 by 22 image pixels, facing right in three-quarters: a wild ash-blond mane in ragged locks, each
+ * streaked light and dark, spilling back from the crown, a heavy brow, a bone-white war paint band across both eyes with a grey eye in it, a broken nose, and a short
  * braided beard ending in a bound tip. Letters: D d h H W hair deep to glint, L s S m skin light to deep, w I P eye
  * white, iris and pupil, r the war paint.
  */
 const HEAD = [
-  "........................",
-  ".......DDDDDDD..........",
-  ".....DDhhHHHhhDD........",
-  "...DDhhHHWWHHHhhDD......",
-  "..DdhhHHHWHHHHHhhhD.....",
-  ".DdhhhHHHHHHhhhhhhhD....",
-  ".DdhhhhHHhhhhhhdhhhhD...",
-  "DddhhhhhhhhhhdhhssssdD..",
-  "DdhhhhdhhhhhdSssssssshD.",
-  "DdhhhhhdhhhdSsssssssssD.",
-  "DddhhhhhdhdSsssssssssssD",
-  ".DdhhhhhhhdSSssssssLLsss",
-  ".DddhhhhdhSSsssssmmmmmss",
-  "..DdhhhhdrrrrrrrrrrrrrrS",
-  "..DddhhhdrrrrrrrrrwIPrrs",
-  "...DdhhhdSssssLssssmsss.",
-  "...DddhhhSssssLLsssssss.",
-  "....DdhhhSsssHHhhhhhhs..",
-  ".....DdhhSShhHHHhhhhhh..",
-  "......DdhhhhhhhHhhhhhd..",
-  ".......DddddddhhHhhdD...",
+  "......D...D.DD..........",
+  "....D.DhDDHhWDD.........",
+  "...DhDHhdHWHhhDD........",
+  "..DhHdhHHdHHhdhhD.......",
+  ".DdHhdHhhdhHHhdhdD......",
+  "DdhHdhHdhhdhhHdmmSD.....",
+  "DhdhhdhHdhdhhdSsssssD...",
+  "DdhHdhdhhdhhdSsssssssD..",
+  "DhdhhdhhHdhdSssssssssD..",
+  ".DdhHdhdhhdSsssssssssLD.",
+  "DdhdhhdHdhSSssssssssLLs.",
+  ".DhhdhHdhdSSsssssmmmmmss",
+  "DdhdhhdhdSSssssmmmmmmmss",
+  ".DdhdhhdhrrrrrrrrrrrrrrS",
+  "..DhdhdhdrrrrrrrrrwIPrrs",
+  ".DdhhdhhdSsssssLssssmsss",
+  "..DhdhdhhSsssLLLsssssss.",
+  "...DdhdhhSssHHhhhhhhhs..",
+  "....DdhhSShhHdhHhdhhhh..",
+  ".....DdhhhhhdhHhhdhhhd..",
+  "......DddddddhhHhhdD....",
   "..............DdhhdD....",
 ] as const;
 
 /** the back of his head: the mane falling to the nape, where the two braids leave on the rope, and the neck under it */
 const HEAD_BACK = [
-  "........................",
-  ".......DDDDDDD..........",
-  ".....DDhhHHHhhDD........",
-  "...DDhhHHWWHHHhhDD......",
-  "..DdhhHHHWHHHHHhhhD.....",
-  ".DdhhhHHHHHHhhhhhhhD....",
-  ".DdhhhhHHhhhhhhdhhhhD...",
-  "DddhhhhhhhhhhdhhhhhhdD..",
-  "DdhhhhdhhhhhdhhhhhhhhD..",
-  "DdhhhhhdhhhdhhhHhhhhhD..",
-  "DddhhhhhdhdhhhHHhhhhhD..",
-  ".DdhhhhhhhdhhHHhhhhhdD..",
-  ".DddhhhhdhhhhhhhhhhdD...",
-  "..DdhhhhdhhhhhhhhhhdD...",
-  "..DddhhhdhhhhhhhhhdD....",
-  "...DdhhhdhhhhhhhhdD.....",
-  "...DDdhhhdhhhhhhdD......",
-  "....DDdhhhhhhhhdD.......",
-  ".....DDddhhhhddD........",
-  ".......DDddddDD.........",
+  "......D...D.DD..........",
+  "....D.DhDDHhWDD.........",
+  "...DhDHhdHWHhhDD........",
+  "..DhHdhHHdHHhdhhD.......",
+  ".DdHhdHhhdhHHhdhdD......",
+  "DdhHdhHdhhdhhHdhhhD.....",
+  "DhdhhdhHdhdhhdhdhhdD....",
+  "DdhHdhdhhdhhdhHdhdhD....",
+  "DhdhhdhhHdhdhdhhdhdD....",
+  ".DdhHdhdhhdhHdhdhhdD....",
+  "DdhdhhdHdhdhhdhHdhdD....",
+  ".DhhdhHdhdhhdHhdhdD.....",
+  "DdhdhhdhdhdhHdhhdhD.....",
+  ".DdhdhhdhhdhdhhdhD......",
+  "..DhdhdhdhhdhhdhD.......",
+  ".DdhhdhhdhhdhdhD........",
+  "..DhdhdhhdhhdhD.........",
+  "...DdhdhhdhhdD..........",
+  "....DdhhdhhdD...........",
+  ".....DDddddD............",
   "...........SSSSS........",
   "...........SSSSS........",
 ] as const;
