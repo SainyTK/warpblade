@@ -137,6 +137,9 @@ export function runHunt(): void {
     return;
   }
   const dir = brannoc.huntDir;
+  // the lunge goes for where the quarry is now, not where it stood when L was pressed
+  const quarry = brannocHost.quarry;
+  if (quarry && quarry.hp > 0) brannoc.huntGoal = goalFor(dir, quarry);
   h.vx = dir * HUNT.speed * progress.stats.move;
   if (rng.chance(0.4)) dust(h.x - dir * 5, h.y, 1);
   // two afterimages over the lunge, no more, so the lunge reads and the stage stays clear

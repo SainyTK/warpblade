@@ -24,7 +24,9 @@ export const HUNT = {
   load: frame(2),
   speed: 380,
   reach: 110,
-  short: 18,
+  /** lands this far short of the quarry's middle: outside a walker's touch (its 12 px half-width and his 5) and well
+   *  inside the chop's 26 px reach */
+  short: 24,
   /** with no foe ahead it travels this far */
   bare: 56,
   /** how high over the floor the lunge carries him, drawn only */
