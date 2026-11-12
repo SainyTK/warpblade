@@ -1,6 +1,6 @@
+import { FRENZY, HUNT } from "../../constants/brannoc/moves";
 import { STAMINA } from "../../constants/combat";
 import { RUSH } from "../../constants/hulda/rush";
-import { FRENZY, HUNT } from "../../constants/brannoc/moves";
 import { BEAT_STEP, BOOM } from "../../constants/jory/moves";
 import { STILLFIELD } from "../../constants/mirel/field";
 import { BACKLINE } from "../../constants/orrin/backline";
@@ -9,16 +9,16 @@ import { TOUCH_TEXT } from "../../constants/touch";
 import { ULT_LEVELS } from "../../constants/ultimate";
 import { SWAP } from "../../constants/wenna/swap";
 import { VAULT } from "../../constants/ysra/stance";
-import { abilityMp, abilityRecharge, selectedAbility } from "../../game/hero/hulda/abilities";
-import { hulda } from "../../game/hero/hulda/memory";
 import {
+  selectedAbility as brannocAbility,
   abilityCost as brannocCost,
   abilityRecharge as brannocRecharge,
-  selectedAbility as brannocAbility,
 } from "../../game/hero/brannoc/abilities";
 import { canSpend } from "../../game/hero/brannoc/debt";
 import { huntCost } from "../../game/hero/brannoc/hunt";
 import { brannoc } from "../../game/hero/brannoc/memory";
+import { abilityMp, abilityRecharge, selectedAbility } from "../../game/hero/hulda/abilities";
+import { hulda } from "../../game/hero/hulda/memory";
 import { rushCost } from "../../game/hero/hulda/rush";
 import {
   selectedAbility as joryAbility,

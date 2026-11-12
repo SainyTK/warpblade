@@ -45,9 +45,9 @@ export function tickSteam(dt: number): void {
   if (!bloodied && !frenzied) return;
   brannoc.steamT = frenzied ? FRENZY.breath : FURY.steam;
   const puff = (x: number, y: number) =>
-    particles.spawn(PK.SMOKE, hero.x + hero.face * x, hero.y + y, rng.range(-6, 6), -rng.range(14, 24), 0.7, {
-      col: PAL.rage[2],
-      size: rng.range(1.5, 2.5),
+    particles.spawn(PK.VAPOUR, hero.x + hero.face * x, hero.y + y, rng.range(-4, 4), -rng.range(10, 18), 0.5, {
+      col: PAL.rage[3],
+      size: rng.range(0.6, 1),
     });
   if (frenzied) puff(MOUTH.x, MOUTH.y);
   if (bloodied) for (const x of SHOULDERS) puff(x, -22);

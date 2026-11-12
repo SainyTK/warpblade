@@ -5,10 +5,7 @@ import { JADE } from "../../constants/characters/sable/look";
 import { ABILITY_COLOR, PAL } from "../../constants/palette";
 import { KAEL_ABILITIES } from "../../constants/spells";
 import { RITES } from "../../constants/ysra/rites";
-import {
-  knownAbilities as brannocKnown,
-  selectedAbility as brannocSelected,
-} from "../../game/hero/brannoc/abilities";
+import { knownAbilities as brannocKnown, selectedAbility as brannocSelected } from "../../game/hero/brannoc/abilities";
 import { knownAbilities, selectedAbility } from "../../game/hero/hulda/abilities";
 import { knownAbilities as joryKnown, selectedAbility as jorySelected } from "../../game/hero/jory/abilities";
 import { knownAbilities as mirelKnown, selectedAbility as mirelSelected } from "../../game/hero/mirel/abilities";

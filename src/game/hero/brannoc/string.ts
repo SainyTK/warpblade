@@ -29,7 +29,7 @@ import { isFree, setState, settle } from "../actions";
 import { bloodRing } from "./bloodRing";
 import { rendPast, rendReach } from "./blowSkills";
 import { attackRate, isBloodied } from "./fury";
-import { brannoc, brannocHost } from "./memory";
+import { brannoc } from "./memory";
 import { smear } from "./smear";
 import { type AxeStrike, axeBox, strikeAxe } from "./strike";
 
@@ -88,7 +88,6 @@ function startBlow(index: number): void {
   brannoc.queued = false;
   brannoc.hits = 0;
   brannoc.link = 0;
-  brannocHost.spun = [];
   hero.chain = Math.min(progress.comboLimit, index + 1);
   hero.vx = 0;
   newSwing();

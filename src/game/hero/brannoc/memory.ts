@@ -29,6 +29,7 @@ const fresh = (): BrannocMemory => ({
   huntDir: 1,
   huntGoal: 0,
   huntFound: false,
+  huntGhosts: 0,
   freeHunt: 0,
   cryCd: 0,
   crescentCd: 0,
@@ -48,7 +49,7 @@ const fresh = (): BrannocMemory => ({
   steamT: 0,
 });
 
-const freshHost = (): BrannocHostMemory => ({ quarry: null, from: 0, passed: [], spun: [] });
+const freshHost = (): BrannocHostMemory => ({ quarry: null, from: 0, passed: [] });
 
 /** the one owner of what Brannoc's kit remembers; the guest's HUD reads the debt and the abilities from it */
 export const brannoc: BrannocMemory = fresh();

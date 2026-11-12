@@ -15,7 +15,7 @@ import { skillValues, withCharms } from "../../skills/query";
 import { game, hero, progress, rng } from "../../state";
 import { boxHit, dust, heroBox, markStruck, newSwing, struckThisSwing } from "../../world";
 import { isFree, setState, settle } from "../actions";
-import { dropDashGhost } from "../afterimages";
+import { dropMoveGhost } from "../afterimages";
 import { refuseDash } from "../stamina";
 import { travelEnded } from "../travelEnd";
 import { bloodRing } from "./bloodRing";
@@ -24,6 +24,10 @@ import { brannoc, brannocHost } from "./memory";
 import { smear } from "./smear";
 import { type AxeStrike, axeBox, strikeAxe } from "./strike";
 import { CHOP_LAUNCH, inRecovery } from "./string";
+
+/** the lunge leaves this many afterimages, this far apart in seconds */
+const GHOSTS = 2;
+const GHOST_EVERY = 0.06;
 
 /** the stage's walls, which a Hunt never passes */
 const EDGE = 8;
@@ -86,6 +90,7 @@ export function pressHunt(dir: number): boolean {
   const quarry = quarryAhead(brannoc.huntDir);
   brannocHost.quarry = quarry;
   brannoc.huntFound = !!quarry;
+  brannoc.huntGhosts = 0;
   brannoc.huntGoal = goalFor(brannoc.huntDir, quarry);
   h.vx = 0;
   setState("hunt");
@@ -134,7 +139,12 @@ export function runHunt(): void {
   const dir = brannoc.huntDir;
   h.vx = dir * HUNT.speed * progress.stats.move;
   if (rng.chance(0.4)) dust(h.x - dir * 5, h.y, 1);
-  if (h.ground && rng.chance(0.5)) dropDashGhost();
+  // two afterimages over the lunge, no more, so the lunge reads and the stage stays clear
+  const ghosts = Math.min(GHOSTS, Math.floor((h.st - HUNT.load) / GHOST_EVERY) + 1);
+  if (ghosts > brannoc.huntGhosts) {
+    brannoc.huntGhosts = ghosts;
+    dropMoveGhost();
+  }
   const arrived = Math.sign(brannoc.huntGoal - h.x) !== dir || Math.abs(brannoc.huntGoal - h.x) < 2;
   if (arrived || meetFoes() || !h.ground) land(false);
 }

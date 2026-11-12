@@ -122,6 +122,3 @@ export function tickDebt(dt: number): void {
   fade(dt);
   brannoc.debt = Math.max(0, Math.min(brannoc.debt, progress.stats.hp - hero.hp));
 }
-
-/** HP spent and refused presses: a press that cannot be paid for gets the HP bar's blink */
-export const debtShare = (): number => brannoc.debt / Math.max(1, progress.stats.hp);

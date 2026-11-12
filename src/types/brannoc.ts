@@ -69,6 +69,8 @@ export interface BrannocMemory {
   huntDir: number;
   huntGoal: number;
   huntFound: boolean;
+  /** afterimages the lunge under way has left */
+  huntGhosts: number;
   /** Long Hunt: a second Hunt within this many seconds is free */
   freeHunt: number;
   /** seconds until each ability on I can be used again */
@@ -102,8 +104,6 @@ export interface BrannocHostMemory {
   quarry: Enemy | null;
   from: number;
   passed: Enemy[];
-  /** the foes the first spin of a Bloodied Cleave struck */
-  spun: Enemy[];
 }
 
 declare module "./skillBehavior" {
