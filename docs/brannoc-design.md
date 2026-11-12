@@ -114,7 +114,7 @@ Animation beats, to `docs/motion-standard.md`, both hands on the haft:
 ## L: Hunt
 
 - 20 stamina, then 0.6 s before the next Hunt. With too little stamina, the shared tired puff.
-- Two-frame crouch load, then a low lunge 8 px off the floor at 380 px/s scaled by move speed toward the facing side (or the side held). If a ground foe stands ahead within 110 px, he lands 18 px short of it; otherwise he travels 56 px.
+- Two-frame crouch load, then a low lunge 8 px off the floor at 380 px/s scaled by move speed toward the facing side (or the side held). If a ground foe stands ahead within 110 px, he goes for it, following it as it moves through the lunge, and lands 24 px short of it: outside a walking foe's touch (its 12 px half-width and his 5) and inside the chop's 26 px reach. Otherwise he travels 56 px.
 - On landing, Hunt Chop: 0.8x AD, 4 to 26 px ahead, staggers, knockback 10. Then 0.2 s recovery.
 - He is never untouchable during Hunt, and he stops against a foe's body.
 - In the air, once per airtime: Headlong, a 45 degree dive down and ahead at 420 px/s that lands into the same chop.
@@ -129,7 +129,8 @@ Both cost HP into the debt and emit the shared `cast` with ability `warCry` or `
 - Red Crescent: 10% max HP, 4 s recharge. An overhead swing throws a crimson crescent 150 px along the floor at 280 px/s that passes through foes, 0.9x AD + 0.6x AP to each. Each foe it strikes repays the debt like a blow. Look: a 14 px tall crescent in `PAL.rage[3]` with a `[5]` core and a trail of drips.
 
 The HUD tabs (CRY, CRESCENT, GEYSER, AXE and PACT) and the touch Ability button show the selected one and its recharge, as for Jory.
-A tab whose HP cost would leave him under 1 HP is struck through in crimson, and the touch button dims, so the cost reads as "can I pay it" without a number on the tab.
+Each tab also shows its HP cost as a share of max HP ("CRY 8%", "CRESCENT 10%"), and the touch Ability button shows the selected one's cost as crimson pips along the bottom of its face, one for each 5% of max HP.
+A tab whose HP cost would leave him under 1 HP is also struck through in crimson, and the touch button dims.
 
 ## U: Berserk
 
@@ -180,8 +181,8 @@ Kit events declared in `src/types/brannoc.ts`: `debt`, `frenzy`, `hunt`, `bloodi
 
 Shared rig, heavy build, his own skin in `src/constants/characters/brannoc/look.ts`.
 
-- Pale weathered skin, a wild ash-blond mane with two thick braids on the ponytail rope, a short braided beard, and a bone-white war paint band across both eyes.
-- Bare scarred chest under a dark wolf-fur mantle on the shoulders (coat tails code for the fur ends), iron bracers bound in bone-coloured cord, a wide leather belt with an iron buckle, dark trousers and fur-wrapped boots.
+- Pale weathered skin, a wild ash-blond mane in ragged, streaked locks with two thick braids on the ponytail rope, a short braided beard, and a bone-white war paint band across both eyes.
+- Bare scarred chest under a dark wolf-fur mantle on the shoulders and a short ragged wolf pelt hung from the back of the belt in place of coat tails (`src/game/hero/draw/furTails.ts`), so the legs stay clear, iron bracers bound in bone-coloured cord, a wide leather belt with an iron buckle, dark trousers and fur-wrapped boots.
 - The great axe (`src/game/hero/draw/greatAxe.ts`): a long dark ash haft wrapped in bone cord at both grips, a wide bearded iron head with a pale edge and a crimson glint along it for two frames after each blow lands. Held two-handed at the clip's blade angle; in walk and run it rests on the near shoulder so it never cuts through the body.
 - Bloodied: the war paint glows `PAL.rage[4]`, his eyes become two crimson pixels, and red steam rises from his shoulders every 0.5 s.
 
@@ -220,7 +221,6 @@ Early, he plays as a slow heavy hitter who gets stronger as foes chip him. A ski
 - Reaver level 1 also adds 20% to Reave, so its first card is worth taking on its own.
 - Forebear's sixth level makes its swing stagger and mark minions: foes in this game have no taunt to aim them at a summon.
 - Forebear sits on K (it comes with Frenzy), Blood Wolves and Carrion Ravens are automatic.
-- The tabs show whether he can pay for an ability (see Abilities) and not the HP number.
 - Hunt's two afterimages are copies of his lunge pose in his own crimson glow, from the shared move ghost.
 
 ## Bot check
@@ -242,7 +242,23 @@ The other nine heroes' rows match the 0.9.0 baseline exactly.
 | Brannoc | 5 | 5 | 14 | 102.2 |
 
 Brannoc falls on wave 5, within two waves of every other hero, so the balance fallback in Stats was not needed.
-The skilled bot from wave 20 was not run for him this patch.
+
+The skilled bot from wave 20 at level 14 (the 0.9.0 baseline for the other nine heroes, run again for him on this patch):
+
+| Hero | Wave | Level | Kills | Game seconds |
+| --- | --- | --- | --- | --- |
+| Kael | 20 | 14 | 0 | 23.1 |
+| Ysra | 20 | 14 | 0 | 24.3 |
+| Sable | 20 | 14 | 0 | 29.5 |
+| Hulda | 20 | 14 | 0 | 28.8 |
+| Orrin | 20 | 14 | 0 | 21 |
+| Mirel | 20 | 14 | 0 | 24.5 |
+| Wenna | 20 | 14 | 0 | 22.2 |
+| Tallis | 20 | 14 | 0 | 23.1 |
+| Jory | 20 | 14 | 0 | 26.9 |
+| Brannoc | 20 | 14 | 0 | 24.6 |
+
+Like every hero, he falls to the Rift Warden at wave 20 in 21 to 30 s with no kills.
 
 ## Note for the owner
 
