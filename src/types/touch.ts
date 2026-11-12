@@ -53,6 +53,7 @@ export interface ButtonLook {
   affordable: number;
   /** ultimate only: charge progress across the four levels, 0 to 4, or -1 when not charging */
   charge: number;
-  /** an HP cost shown as crimson pips along the bottom of the face, one for each 5% of max HP (Brannoc); 0 for none */
+  /** an HP cost shown as a crimson arc along the bottom of the rim, one step longer for each 5% of max HP (Brannoc);
+   *  0 for none */
   costPips: number;
 }

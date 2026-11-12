@@ -256,12 +256,11 @@ function joryLook(spec: TouchButtonSpec, look: ButtonLook): void {
   }
 }
 
-/** Ysra's guard needs stamina, her vault waits out its recharge, and the rite fills as Heat comes to cover it */
-/** one crimson pip on the Ability button for each this much of his max HP an ability costs */
+/** the Ability button's crimson cost arc is one step longer for each this much of his max HP an ability costs */
 const HP_PIP = 0.05;
 
 /** Brannoc's Frenzy waits while it runs and after it and costs HP, Hunt needs stamina and waits a moment after each;
- *  I shows the selected ability's HP cost as crimson pips, and its recharge */
+ *  I shows the selected ability's HP cost as a crimson arc along the bottom of its rim, and its recharge */
 function brannocLook(spec: TouchButtonSpec, look: ButtonLook): void {
   switch (spec.action) {
     case "warp": {
@@ -287,6 +286,7 @@ function brannocLook(spec: TouchButtonSpec, look: ButtonLook): void {
   }
 }
 
+/** Ysra's guard needs stamina, her vault waits out its recharge, and the rite fills as Heat comes to cover it */
 function ysraLook(spec: TouchButtonSpec, look: ButtonLook): void {
   switch (spec.action) {
     case "dash":
