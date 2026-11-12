@@ -5,6 +5,7 @@ import { skin } from "../skin";
 import { drawChainGrip } from "./chainGrip";
 import { drawCrossbow } from "./crossbow";
 import { drawMallet } from "./drum";
+import { drawGreatAxe } from "./greatAxe";
 import { drawKnife } from "./knives";
 import { drawLampPole } from "./lampPole";
 import type { Vec } from "./reach";
@@ -107,13 +108,14 @@ function drawGlaive(s: SpriteCanvas, at: Along): void {
   });
 }
 
-/** the hero's weapon in the hand at this angle; a fist fighter has none to draw here */
-export function drawSword(s: SpriteCanvas, hand: Vec, angle: number): void {
+/** the hero's weapon in the hand at this angle (a great axe's head turned over with `flip`); a fist fighter has none to draw here */
+export function drawSword(s: SpriteCanvas, hand: Vec, angle: number, flip = false): void {
   // gauntlets are drawn on both fists with the arms, and a chain's links are drawn in the world from the hand
   if (skin.weapon === "gauntlets") return;
   if (skin.weapon === "chain") return drawChainGrip(s, hand, angle);
   if (skin.weapon === "knives") return drawKnife(s, hand, angle, true);
   if (skin.weapon === "mallets") return drawMallet(s, hand, angle, true);
+  if (skin.weapon === "greatAxe") return drawGreatAxe(s, hand, angle, flip);
   const ca = Math.cos(angle);
   const sn = Math.sin(angle);
   const at: Along = (d, w) => [hand[0] + ca * d - sn * w, hand[1] + sn * d + ca * w];

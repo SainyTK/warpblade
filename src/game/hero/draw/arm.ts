@@ -61,15 +61,32 @@ function drawBareArm(s: SpriteCanvas, shoulder: Vec, elbow: Vec, hand: Vec, fron
   s.stroke(elbow[0], elbow[1], hand[0], hand[1], 1.0, flesh);
   s.shadeEdges(flesh, front ? HC.skinLight : HC.skin, front ? HC.skinShade : HC.skinDeep);
   s.commit();
-  const [w0, w1] = [along(elbow, hand, 0.62), along(elbow, hand, 0.9)];
-  const wrap = front ? HC.glove : HC.trimDark;
-  s.begin();
-  s.stroke(w0[0], w0[1], w1[0], w1[1], 1.1, wrap);
-  s.shadeEdges(wrap, front ? HC.gloveLight : HC.glove, HC.hilt);
-  s.commit();
+  if (skin.bareChest) drawBracer(s, elbow, hand, front);
+  else {
+    const [w0, w1] = [along(elbow, hand, 0.62), along(elbow, hand, 0.9)];
+    const wrap = front ? HC.glove : HC.trimDark;
+    s.begin();
+    s.stroke(w0[0], w0[1], w1[0], w1[1], 1.1, wrap);
+    s.shadeEdges(wrap, front ? HC.gloveLight : HC.glove, HC.hilt);
+    s.commit();
+  }
   if (skin.weapon === "chain" && !front) drawChainCoil(s, elbow, hand);
   s.begin();
   s.dot(hand[0], hand[1], 1.1, flesh);
   s.shadeEdges(flesh, front ? HC.skinLight : HC.skin, HC.skinDeep);
   s.commit();
+}
+
+/** an iron bracer over the forearm, bound in the middle with a cord in the scarf colours */
+function drawBracer(s: SpriteCanvas, elbow: Vec, hand: Vec, front: boolean): void {
+  const [b0, b1] = [along(elbow, hand, 0.4), along(elbow, hand, 0.88)];
+  const plate = front ? HC.steel : HC.steelDark;
+  s.begin();
+  s.stroke(b0[0], b0[1], b1[0], b1[1], 1.15, plate);
+  s.shadeEdges(plate, front ? HC.steelLight : HC.steel, HC.steelDeep);
+  s.commit();
+  const cord = along(elbow, hand, 0.64);
+  s.begin();
+  s.set(cord[0], cord[1], front ? HC.scarf : HC.scarfDark);
+  s.commit(false);
 }

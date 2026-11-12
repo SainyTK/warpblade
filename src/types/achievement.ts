@@ -33,7 +33,9 @@ export type BestStat =
   /** the most foes Tallis defeated with blows from behind in one run */
   | "backKills"
   /** the longest Jory held Crescendo without a break, in whole seconds */
-  | "crescendoSeconds";
+  | "crescendoSeconds"
+  /** the most foes Brannoc defeated while Bloodied in one run */
+  | "bloodiedKills";
 
 /** what the run in play has counted so far, for the goals met within one run */
 export interface RunTally {
@@ -107,4 +109,5 @@ export type Feat =
   | { kind: "fieldKills"; kills: number }
   | { kind: "wickKills"; kills: number }
   | { kind: "backKills"; kills: number }
-  | { kind: "crescendo"; seconds: number };
+  | { kind: "crescendo"; seconds: number }
+  | { kind: "bloodiedKills"; kills: number };

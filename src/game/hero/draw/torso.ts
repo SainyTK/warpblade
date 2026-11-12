@@ -2,6 +2,8 @@ import { HERO_COLORS as HC } from "../../../constants/palette";
 import type { SpriteCanvas } from "../../../engine/sprite";
 import type { Pose } from "../../../types/pose";
 import { atChest, atHip, atNeck } from "../../../utils/poseFrame";
+import { skin } from "../skin";
+import { drawBareChest } from "./bareChest";
 import type { Vec } from "./reach";
 
 /**
@@ -10,6 +12,7 @@ import type { Vec } from "./reach";
  * Both ways a belt with a buckle.
  */
 export function drawTorso(s: SpriteCanvas, p: Pose, back: boolean): void {
+  if (skin.bareChest) return drawBareChest(s, p, back);
   /** a line down the torso from the neck, through the chest, to the hip */
   const spineLine = (dxNeck: number, dyNeck: number, dxHip: number, dyHip: number, r: number, c: number) => {
     const points: Vec[] = [atNeck(p, dxNeck, dyNeck), atChest(p, (dxNeck + dxHip) / 2), atHip(p, dxHip, dyHip)];

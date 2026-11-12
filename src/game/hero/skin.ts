@@ -22,6 +22,8 @@ const look = (s: HeroSkin): Look => ({
   wraps: s.wraps ?? false,
   drum: s.drum ?? false,
   headband: s.headband ?? false,
+  bareChest: s.bareChest ?? false,
+  mane: s.mane ?? false,
 });
 
 /** the look of the hero being drawn, Kael's until another is chosen; the draw code reads this and HERO_COLORS every frame */

@@ -20,6 +20,8 @@ export const PAL = {
   gloam: ramp(["#0c0a14", "#1e1830", "#3a2c4e", "#6e4a78", "#c06a9e", "#ffb8dc"]),
   /** Jory's cobalt, deep to white-hot: the floor ring, Accents, Boom, the sound waves, Drumroll and the GV bar */
   beat: ramp(["#0a0f2a", "#182a66", "#2c4fb0", "#5a82ff", "#a6c0ff", "#eef3ff"]),
+  /** Brannoc's crimson, clotted to pale: his smears, the debt segment, the motes, War Cry, Red Crescent and Berserk */
+  rage: ramp(["#1a0508", "#4a0c14", "#8e1424", "#d0283a", "#ff6a5a", "#ffd8c8"]),
 } as const;
 
 /** Jory's drum shell, oxblood lacquer deep to glint */
@@ -44,6 +46,7 @@ export const SPARKS = {
   wick: [hex("#f8eeff"), hex("#d8b4ff"), hex("#a46ae0"), hex("#6a3aa0")],
   gloam: [hex("#ffe4f2"), hex("#ffb8dc"), hex("#c06a9e"), hex("#6e4a78")],
   beat: [hex("#eef3ff"), hex("#a6c0ff"), hex("#5a82ff"), hex("#2c4fb0")],
+  rage: [hex("#ffd8c8"), hex("#ff6a5a"), hex("#d0283a"), hex("#8e1424")],
 } satisfies Record<string, Ramp>;
 
 /** white hot to smouldering, and fresh smoke to thin */

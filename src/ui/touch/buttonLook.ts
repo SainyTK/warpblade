@@ -1,5 +1,6 @@
 import { STAMINA } from "../../constants/combat";
 import { RUSH } from "../../constants/hulda/rush";
+import { FRENZY, HUNT } from "../../constants/brannoc/moves";
 import { BEAT_STEP, BOOM } from "../../constants/jory/moves";
 import { STILLFIELD } from "../../constants/mirel/field";
 import { BACKLINE } from "../../constants/orrin/backline";
@@ -10,6 +11,14 @@ import { SWAP } from "../../constants/wenna/swap";
 import { VAULT } from "../../constants/ysra/stance";
 import { abilityMp, abilityRecharge, selectedAbility } from "../../game/hero/hulda/abilities";
 import { hulda } from "../../game/hero/hulda/memory";
+import {
+  abilityCost as brannocCost,
+  abilityRecharge as brannocRecharge,
+  selectedAbility as brannocAbility,
+} from "../../game/hero/brannoc/abilities";
+import { canSpend } from "../../game/hero/brannoc/debt";
+import { huntCost } from "../../game/hero/brannoc/hunt";
+import { brannoc } from "../../game/hero/brannoc/memory";
 import { rushCost } from "../../game/hero/hulda/rush";
 import {
   selectedAbility as joryAbility,
@@ -248,6 +257,32 @@ function joryLook(spec: TouchButtonSpec, look: ButtonLook): void {
 }
 
 /** Ysra's guard needs stamina, her vault waits out its recharge, and the rite fills as Heat comes to cover it */
+/** Brannoc's Frenzy waits while it runs and after it and costs HP, Hunt needs stamina and waits a moment after each;
+ *  I shows the selected ability's HP cost and recharge */
+function brannocLook(spec: TouchButtonSpec, look: ButtonLook): void {
+  switch (spec.action) {
+    case "warp": {
+      const wait = brannoc.frenzyT > 0 ? 1 : brannoc.frenzyWait / FRENZY.wait;
+      look.ready = wait <= 0 && canSpend(FRENZY.cost);
+      look.cooldown = look.ready ? 0 : Math.max(wait, 0.01);
+      break;
+    }
+    case "dash": {
+      const cost = huntCost();
+      look.ready = !hero.ground || (hero.stamina >= cost && brannoc.huntWait <= 0);
+      look.cooldown = look.ready ? 0 : Math.max(brannoc.huntWait / HUNT.wait, 1 - hero.stamina / Math.max(1, cost));
+      break;
+    }
+    case "cast": {
+      const id = brannocAbility();
+      look.cooldown = brannocRecharge(id);
+      look.ready = look.cooldown <= 0 && canSpend(brannocCost(id));
+      break;
+    }
+    default:
+  }
+}
+
 function ysraLook(spec: TouchButtonSpec, look: ButtonLook): void {
   switch (spec.action) {
     case "dash":
@@ -284,6 +319,7 @@ export function buttonLook(spec: TouchButtonSpec, pressed: boolean): ButtonLook 
   else if (character.kit === "wenna") wennaLook(spec, look);
   else if (character.kit === "tallis") tallisLook(spec, look);
   else if (character.kit === "jory") joryLook(spec, look);
+  else if (character.kit === "brannoc") brannocLook(spec, look);
   else if (character.kit === "ysra") ysraLook(spec, look);
   else kaelLook(spec, look);
   return look;

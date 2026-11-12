@@ -4,7 +4,7 @@ import type { MoveHit, MoveId, Situation } from "./move";
 import type { Pose } from "./pose";
 
 /** which hero's controls, moves and states drive the shared rig */
-export type KitId = "kael" | "ysra" | "sable" | "hulda" | "orrin" | "mirel" | "wenna" | "tallis" | "jory";
+export type KitId = "kael" | "ysra" | "sable" | "hulda" | "orrin" | "mirel" | "wenna" | "tallis" | "jory" | "brannoc";
 
 /**
  * How one hero plays. The shared loop (updateHero, the combo engine, physics, hurt) calls into the kit of the hero
@@ -73,6 +73,13 @@ export interface HeroKit {
   hidden?(): boolean;
   /** a foe fell to a hit of this hero's (any source of theirs), with the hero swapped in: a kit's own drops or counts */
   onKill?(e: Enemy): void;
+  /**
+   * One of the hero's own hits landed on a foe (not damage over time, not a skill's own hit): `crit` it was a critical
+   * hit, `kill` it felled the foe. Left out, nothing happens.
+   */
+  landed?(e: Enemy, hit: { crit: boolean; kill: boolean }): void;
+  /** the least HP a blow can leave the hero at right now (Brannoc's Berserk keeps him at 1); left out, 0 */
+  hpFloor?(): number;
   /** a fresh run */
   reset(): void;
 }

@@ -20,7 +20,9 @@ export function hurtHero(dmg: number, fromX: number): void {
     return;
   }
   const taken = Math.round(dmg * kit().hurtScale());
-  hero.hp = Math.max(0, hero.hp - taken);
+  // a kit may hold the hero up at a floor (Brannoc's Deathless), before Last Light is asked
+  const floor = Math.min(hero.hp, kit().hpFloor?.() ?? 0);
+  hero.hp = Math.max(floor, hero.hp - taken);
   if (taken > 0) {
     hurtFlow();
     loseHitCount();

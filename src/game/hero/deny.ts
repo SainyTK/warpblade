@@ -16,4 +16,5 @@ export function tickDenied(dt: number): void {
   d.warp = Math.max(0, d.warp - dt);
   d.mp = Math.max(0, d.mp - dt);
   d.ult = Math.max(0, d.ult - dt);
+  d.hp = Math.max(0, d.hp - dt);
 }

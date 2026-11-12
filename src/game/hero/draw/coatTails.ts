@@ -39,8 +39,10 @@ export function drawCoatTails(s: SpriteCanvas, p: Pose, flare: number): void {
   s.commit(false);
   const [c, d] = [at(3.6 + fl * 0.2, 7.5 + drop), at(-4.8 - fl, hem + 0.2 - fl * 0.4)];
   s.begin();
-  s.stroke(c[0], c[1], d[0], d[1], 0.45, HC.trim);
-  s.shadeEdges(HC.trim, HC.trimLight, HC.trimDark);
+  // a fur mantle's ends have a ragged lit edge in place of a trim hem
+  const edge = skin.bareChest ? HC.coatLight : HC.trim;
+  s.stroke(c[0], c[1], d[0], d[1], 0.45, edge);
+  s.shadeEdges(edge, skin.bareChest ? HC.coat : HC.trimLight, skin.bareChest ? HC.coatDeep : HC.trimDark);
   s.commit();
   if (skin.cloak) drawHemDrips(s, c, d);
 }

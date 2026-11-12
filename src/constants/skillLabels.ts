@@ -34,6 +34,8 @@ export const ULT_LABEL: Record<UltimateId, string> = {
   eclipse: "ECLIPSE",
   drumroll: "DRUMROLL",
   grandFinale: "GRAND FINALE",
+  berserk: "BERSERK",
+  unendingRage: "UNENDING RAGE",
 };
 /** the kind line of a boon card */
 export const BOON_KIND = "Boon";

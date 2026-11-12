@@ -27,7 +27,7 @@
       <canvas class="danger-glow" id="dangerGlow" aria-hidden="true" hidden></canvas>
       <div class="hud">
         <div class="bars">
-          <div class="bar hp"><span>HP</span><div class="track"><div class="fill" id="hpFill"></div></div></div>
+          <div class="bar hp" id="hpBar"><span>HP</span><div class="track"><div class="fill" id="hpFill"></div><div class="debt" id="hpDebt" hidden></div><b class="shards" id="hpShards" hidden><i></i><i></i><i></i><i></i></b><i class="tick" id="hpTick" hidden></i></div></div>
           <div class="bar mp" id="mpBar"><span>MP</span><div class="track"><div class="fill" id="mpFill"></div></div></div>
           <div class="bar st" id="stBar"><span>ST</span><div class="track"><div class="fill" id="stFill"></div></div></div>
           <div class="bar ht" id="heatBar" hidden><span>HT</span><div class="track"><div class="fill" id="heatFill"></div></div></div>
@@ -54,6 +54,7 @@
             <span class="rite-tabs" id="wennaTabs" hidden></span>
             <span class="rite-tabs" id="tallisTabs" hidden></span>
             <span class="rite-tabs" id="joryTabs" hidden></span>
+            <span class="rite-tabs" id="brannocTabs" hidden></span>
           </div>
           <div class="score" id="wave">STAGE 1 WAVE 0/30</div>
           <div class="score coin-count" id="coinCount"></div>

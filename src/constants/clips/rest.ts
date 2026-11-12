@@ -1,5 +1,6 @@
 import type { KitId } from "../../types/kit";
 import type { ActionClip } from "../../types/pose";
+import { BRANNOC_IDLE } from "./brannoc/stance";
 import { HULDA_IDLE } from "./hulda/stance";
 import { JORY_IDLE } from "./jory/stance";
 import { MIREL_IDLE } from "./mirel/stance";
@@ -19,4 +20,5 @@ export const HERO_IDLES: Partial<Record<KitId, ActionClip>> = {
   wenna: WENNA_IDLE,
   tallis: TALLIS_IDLE,
   jory: JORY_IDLE,
+  brannoc: BRANNOC_IDLE,
 };

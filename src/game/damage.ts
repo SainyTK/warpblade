@@ -200,6 +200,7 @@ export function dealDamage(e: Enemy, base: number, o: HitOptions = {}): HitResul
   if (o.stagger) staggerFoe(e, o.stagger);
   if (o.heavy && e.state === "wind" && def.rank === "minion") Object.assign(e, { state: "recover", st: 0 });
   if (!o.dot && isHeroSource(source)) {
+    kit().landed?.(e, { crit, kill: e.hp <= 0 });
     emitSkillEvent({
       type: "blow",
       foe: e,
