@@ -15,8 +15,12 @@ const LABELS: Readonly<Record<BrannocAbility, string>> = {
   b_pact: "PACT",
 };
 
-/** Brannoc's ability tabs in place of the element tabs: the one I uses now, each one's recharge, a dimmed tab while
- *  his HP cannot pay for it, a gold top edge once a spell skill evolves, and the jolt of a refused press */
+/** a tab's text: the ability and its HP cost as a share of his max HP */
+const tabText = (id: BrannocAbility): string => `${LABELS[id]} ${Math.round(abilityCost(id) * 100)}%`;
+
+/** Brannoc's ability tabs in place of the element tabs: the one I uses now with its HP cost, each one's recharge, a
+ *  struck-through tab while his HP cannot pay for it, a gold top edge once a spell skill evolves, and the jolt of a
+ *  refused press */
 const box = byId("brannocTabs");
 const tabs = (Object.keys(LABELS) as BrannocAbility[]).map((id) => {
   const el = document.createElement("span");
@@ -42,6 +46,8 @@ export function updateBrannocTabs(): void {
     el.classList.toggle("on", id === selected);
     el.classList.toggle("evolved", id.startsWith("b_") && skillEvolved(id));
     el.classList.toggle("poor", !canSpend(abilityCost(id)));
+    const text = tabText(id);
+    if (el.textContent !== text) el.textContent = text;
     tab.update(abilityRecharge(id));
   }
   const denied = Math.max(hero.denied.cast, hero.denied.hp);

@@ -1,3 +1,4 @@
+import { PAL } from "../../constants/palette";
 import type { Color } from "../../types/color";
 import type { SpriteImage } from "../../types/sprite";
 import type { ButtonLook } from "../../types/touch";
@@ -50,5 +51,19 @@ export function drawButtonFace(canvas: PixelCanvas, look: ButtonLook, icon: Spri
   });
   const dim = !look.ready || look.cooldown > 0;
   canvas.sprite(icon, look.pressed ? 1 : 0, (c) => (dim ? mix(scale(c, 0.55), INK, 0.25) : c));
+  costPips(canvas, look, rimWidth);
   canvas.flush();
+}
+
+/** an HP cost: crimson pips one pixel apart on the last row of the face above the rim, with a dark pixel over each so
+ *  they stand apart from the icon; dimmed while it cannot be paid */
+function costPips(canvas: PixelCanvas, look: ButtonLook, rimWidth: number): void {
+  if (look.costPips <= 0) return;
+  const y = Math.floor(canvas.size - rimWidth - 0.5);
+  const x0 = Math.round(canvas.size / 2 - look.costPips + 0.5);
+  const c = look.ready ? PAL.rage[4] : PAL.rage[2];
+  for (let i = 0; i < look.costPips; i++) {
+    canvas.put(x0 + i * 2, y - 1, INK, 0.9);
+    canvas.put(x0 + i * 2, y, c, 1);
+  }
 }

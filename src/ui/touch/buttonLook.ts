@@ -257,8 +257,11 @@ function joryLook(spec: TouchButtonSpec, look: ButtonLook): void {
 }
 
 /** Ysra's guard needs stamina, her vault waits out its recharge, and the rite fills as Heat comes to cover it */
+/** one crimson pip on the Ability button for each this much of his max HP an ability costs */
+const HP_PIP = 0.05;
+
 /** Brannoc's Frenzy waits while it runs and after it and costs HP, Hunt needs stamina and waits a moment after each;
- *  I shows the selected ability's HP cost and recharge */
+ *  I shows the selected ability's HP cost as crimson pips, and its recharge */
 function brannocLook(spec: TouchButtonSpec, look: ButtonLook): void {
   switch (spec.action) {
     case "warp": {
@@ -277,6 +280,7 @@ function brannocLook(spec: TouchButtonSpec, look: ButtonLook): void {
       const id = brannocAbility();
       look.cooldown = brannocRecharge(id);
       look.ready = look.cooldown <= 0 && canSpend(brannocCost(id));
+      look.costPips = Math.round(brannocCost(id) / HP_PIP);
       break;
     }
     default:
@@ -306,7 +310,7 @@ function ysraLook(spec: TouchButtonSpec, look: ButtonLook): void {
 export function buttonLook(spec: TouchButtonSpec, pressed: boolean): ButtonLook {
   const text = TOUCH_TEXT[character.kit][spec.action];
   const accent = text.accent ? hex(text.accent) : selectionTint(touchSelection());
-  const look: ButtonLook = { pressed, ready: true, cooldown: 0, accent, affordable: 0, charge: -1 };
+  const look: ButtonLook = { pressed, ready: true, cooldown: 0, accent, affordable: 0, charge: -1, costPips: 0 };
   if (spec.action === "ultimate") {
     look.cooldown = ultRecharge();
     look.affordable = !hero.ultCd ? ULT_LEVELS.filter((_, i) => canAffordUlt(i + 1)).length : 0;
