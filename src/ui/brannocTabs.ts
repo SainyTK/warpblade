@@ -15,8 +15,10 @@ const LABELS: Readonly<Record<BrannocAbility, string>> = {
   b_pact: "PACT",
 };
 
-/** a tab's text: the ability and its HP cost as a share of his max HP */
-const tabText = (id: BrannocAbility): string => `${LABELS[id]} ${Math.round(abilityCost(id) * 100)}%`;
+/** a tab's text: the ability, and on the selected one its HP cost as a share of his max HP, so the row stays as narrow
+ *  as the other heroes' tabs */
+const tabText = (id: BrannocAbility, selected: boolean): string =>
+  selected ? `${LABELS[id]} ${Math.round(abilityCost(id) * 100)}%` : LABELS[id];
 
 /** Brannoc's ability tabs in place of the element tabs: the one I uses now with its HP cost, each one's recharge, a
  *  struck-through tab while his HP cannot pay for it, a gold top edge once a spell skill evolves, and the jolt of a
@@ -46,7 +48,7 @@ export function updateBrannocTabs(): void {
     el.classList.toggle("on", id === selected);
     el.classList.toggle("evolved", id.startsWith("b_") && skillEvolved(id));
     el.classList.toggle("poor", !canSpend(abilityCost(id)));
-    const text = tabText(id);
+    const text = tabText(id, id === selected);
     if (el.textContent !== text) el.textContent = text;
     tab.update(abilityRecharge(id));
   }

@@ -82,8 +82,11 @@ body {
     0 1px 0 var(--night),
     0 -1px 0 var(--night);
 }
+/* the bars keep to their column: no bar's own content may push its track past the column's right edge, where the
+   right column's tabs begin */
 .bars {
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   gap: 5px;
   min-width: 0;
   width: min(40%, 220px);
@@ -622,13 +625,19 @@ body {
   background: var(--volt);
   box-shadow: 0 0 6px var(--volt);
 }
+/* the right column takes the room the bars leave and no more, so its tabs wrap onto a second row rather than run
+   over the bars */
 .right {
   display: grid;
   justify-items: end;
   gap: 6px;
+  flex: 1;
+  min-width: 0;
 }
 .elements {
   display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
   gap: 4px;
 }
 .el {
@@ -648,7 +657,13 @@ body {
 .ability-tabs,
 .rite-tabs {
   display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
   gap: 4px;
+}
+/* a tab keeps to one line, so a longer label (Brannoc's selected tab with its HP cost) never doubles the row's height */
+.rite-tabs .el {
+  white-space: nowrap;
 }
 .el.on.ability,
 .el.on.rite {
@@ -1182,6 +1197,10 @@ body[data-hud="outside"] .boss {
   fill: currentColor;
 }
 @media (max-height: 520px) {
+  /* on a landscape phone the pause button sits at the top middle; the right column stays clear of it */
+  .right {
+    max-width: calc(50% - 32px);
+  }
   .menu {
     padding-block: max(8px, env(safe-area-inset-top, 0px)) max(8px, env(safe-area-inset-bottom, 0px));
   }
