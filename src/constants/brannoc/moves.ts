@@ -27,6 +27,9 @@ export const HUNT = {
   /** lands this far short of the quarry's middle: outside a walker's touch (its 12 px half-width and his 5) and well
    *  inside the chop's 26 px reach */
   short: 24,
+  /** a mini boss or boss winding up is met this far short instead, past the longest slam in the game (64 px from its
+   *  middle, and his own 5), and the chop is held */
+  wary: 72,
   /** with no foe ahead it travels this far */
   bare: 56,
   /** how high over the floor the lunge carries him, drawn only */

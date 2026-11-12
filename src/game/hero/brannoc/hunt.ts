@@ -54,9 +54,13 @@ function quarryAhead(dir: number): Enemy | null {
   return best;
 }
 
-/** where the Hunt lands: just short of its quarry, or a bare lunge's length on */
+/** a big quarry winding up: Hunt pulls up out of its swing */
+const wary = (e: Enemy | null): boolean => !!e && e.state === "wind" && (e.rank === "mini" || e.rank === "boss");
+
+/** where the Hunt lands: just short of its quarry (well short of a big one winding up), or a bare lunge's length on */
 function goalFor(dir: number, quarry: Enemy | null): number {
-  const to = quarry ? quarry.x - dir * HUNT.short : hero.x + dir * HUNT.bare * progress.stats.move;
+  const short = wary(quarry) ? HUNT.wary : HUNT.short;
+  const to = quarry ? quarry.x - dir * short : hero.x + dir * HUNT.bare * progress.stats.move;
   return Math.max(EDGE, Math.min(W - EDGE, to));
 }
 
@@ -175,6 +179,11 @@ function land(air: boolean): void {
   const free = skillValues("b_hunt").free ?? 0;
   if (free) brannoc.freeHunt = free;
   brannoc.hits = 0;
+  // he pulls up out of a big quarry's swing and holds the chop: a skid into his stance, ready for its next opening
+  if (wary(brannocHost.quarry)) {
+    settle();
+    return;
+  }
   // a quarry caught winding up is chopped on the landing frame, heavy, so the blow breaks the wind-up before it lands
   brannoc.quickChop = brannocHost.quarry?.state === "wind";
   newSwing();
