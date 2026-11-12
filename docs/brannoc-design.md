@@ -116,7 +116,7 @@ Animation beats, to `docs/motion-standard.md`, both hands on the haft:
 - 20 stamina, then 0.6 s before the next Hunt. With too little stamina, the shared tired puff.
 - Two-frame crouch load, then a low lunge 8 px off the floor at 380 px/s scaled by move speed toward the facing side (or the side held). If a ground foe stands ahead within 110 px, he goes for it, following it as it moves through the lunge, and lands 24 px short of it: outside a walking foe's touch (its 12 px half-width and his 5) and inside the chop's 26 px reach. Otherwise he travels 56 px.
 - On landing, Hunt Chop: 0.8x AD, 4 to 26 px ahead, staggers, knockback 10. Then 0.2 s recovery.
-- A quarry caught winding up is chopped on the landing frame and the chop is heavy, so it breaks a minion's wind-up before the blow lands. A mini boss or boss winding up is not broken by a chop, so Hunt pulls up 72 px short of it, past the longest slam in the game, and holds the chop.
+- A quarry caught winding up is chopped on the landing frame and the chop is heavy, so it breaks a minion's wind-up before the blow lands. A mini boss or boss winding up still swings: a chop does not break its wind-up, so Hunt into one trades the chop for its blow.
 - He is never untouchable during Hunt, and he stops against a foe's body.
 - In the air, once per airtime: Headlong, a 45 degree dive down and ahead at 420 px/s that lands into the same chop.
 - Each Hunt calls `travelEnded()` (Aftershock) on landing and emits the shared `dash` with direction and the foes passed, plus kit event `hunt` with `foe` (or null).
