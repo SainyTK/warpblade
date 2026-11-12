@@ -878,10 +878,6 @@ body[data-menu="title"] .banner {
 }
 
 /* On tall screens such as a phone held upright, the HUD and boss bar move out of the stage into the room around it. */
-/* over the game the pause button sits at the top middle; the right column stays clear of it */
-body[data-hud="inside"] .right {
-  max-width: calc(50% - 32px);
-}
 body[data-hud="outside"] .hud {
   inset: auto 4px calc(100% + 16px) 4px;
 }
@@ -1203,6 +1199,10 @@ body[data-hud="outside"] .boss {
   fill: currentColor;
 }
 @media (max-height: 520px) {
+  /* on a landscape phone the pause button sits at the top middle; the right column stays clear of it */
+  .right {
+    max-width: calc(50% - 32px);
+  }
   .menu {
     padding-block: max(8px, env(safe-area-inset-top, 0px)) max(8px, env(safe-area-inset-bottom, 0px));
   }

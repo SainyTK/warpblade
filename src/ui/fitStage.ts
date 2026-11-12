@@ -21,28 +21,8 @@ function safeInsets(): Insets {
   };
 }
 
-const hud = document.querySelector<HTMLElement>(".hud") as HTMLElement;
-const pause = byId("pauseButton");
-
-/** CSS pixels the HUD keeps clear of the pause button above it and of the stage below it when it sits above the stage,
- *  and the extra room it asks before it moves out, so a HUD on the edge of fitting does not flip back and forth */
-const HUD_CLEAR = { pause: 4, stage: 16, settle: 8 } as const;
-
-/** the room above the stage, in CSS pixels, as the last fit measured it */
-let roomAbove = 0;
-
-/**
- * The HUD moves out of the game into the room above the stage when its whole height fits there below the pause button,
- * and stays over the game otherwise; checked on every fit and whenever the HUD's height changes (a second row of tabs,
- * a new bar).
- */
-function placeHud(): void {
-  const outside = document.body.dataset.hud === "outside";
-  const above = pause.getBoundingClientRect().bottom + HUD_CLEAR.pause;
-  const need = above + hud.offsetHeight + HUD_CLEAR.stage + (outside ? 0 : HUD_CLEAR.settle);
-  const place = roomAbove >= need ? "outside" : "inside";
-  if (document.body.dataset.hud !== place) document.body.dataset.hud = place;
-}
+/** with this many CSS pixels free above the stage, the HUD moves out of the game into that room */
+const HUD_ROOM = 120;
 
 const px = (devicePx: number, dpr: number): string => `${devicePx / dpr}px`;
 
@@ -77,8 +57,7 @@ export function fitStage(): void {
       (layout.backdropY - layout.stageY) / dpr,
       scale / dpr,
     );
-    roomAbove = layout.stageY / dpr;
-    placeHud();
+    document.body.dataset.hud = layout.stageY / dpr >= HUD_ROOM ? "outside" : "inside";
     const key = [cols, rows, layout.artLeft, layout.artTop].join();
     if (!ctx || key === painted) return;
     painted = key;
@@ -104,7 +83,6 @@ export function fitStage(): void {
     fit();
   });
   addEventListener("resize", fit);
-  new ResizeObserver(placeHud).observe(hud);
   document.addEventListener("fullscreenchange", fit);
   watchDensity();
   fit();
