@@ -653,18 +653,20 @@ body {
 .el.on.evolved {
   border-top-color: var(--gold);
 }
-/* Kael's ability tabs and Ysra's rite tabs; each one's colour comes in as --tint */
+/* a hero's tab group adds its tabs to the one row of tabs, so they wrap together and a lone tab never takes a row */
 .ability-tabs,
 .rite-tabs {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: flex-end;
-  gap: 4px;
+  display: contents;
+}
+.ability-tabs[hidden],
+.rite-tabs[hidden] {
+  display: none;
 }
 /* a tab keeps to one line, so a longer label (Brannoc's selected tab with its HP cost) never doubles the row's height */
 .rite-tabs .el {
   white-space: nowrap;
 }
+/* Kael's ability tabs and every other hero's own tabs; each one's colour comes in as --tint */
 .el.on.ability,
 .el.on.rite {
   color: var(--tint);
@@ -876,6 +878,10 @@ body[data-menu="title"] .banner {
 }
 
 /* On tall screens such as a phone held upright, the HUD and boss bar move out of the stage into the room around it. */
+/* over the game the pause button sits at the top middle; the right column stays clear of it */
+body[data-hud="inside"] .right {
+  max-width: calc(50% - 32px);
+}
 body[data-hud="outside"] .hud {
   inset: auto 4px calc(100% + 16px) 4px;
 }
@@ -1197,10 +1203,6 @@ body[data-hud="outside"] .boss {
   fill: currentColor;
 }
 @media (max-height: 520px) {
-  /* on a landscape phone the pause button sits at the top middle; the right column stays clear of it */
-  .right {
-    max-width: calc(50% - 32px);
-  }
   .menu {
     padding-block: max(8px, env(safe-area-inset-top, 0px)) max(8px, env(safe-area-inset-bottom, 0px));
   }
