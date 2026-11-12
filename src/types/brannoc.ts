@@ -71,6 +71,8 @@ export interface BrannocMemory {
   huntFound: boolean;
   /** afterimages the lunge under way has left */
   huntGhosts: number;
+  /** the Hunt Chop under way strikes on its landing frame, heavy, because its quarry was winding up */
+  quickChop: boolean;
   /** Long Hunt: a second Hunt within this many seconds is free */
   freeHunt: number;
   /** seconds until each ability on I can be used again */

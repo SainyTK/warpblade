@@ -30,6 +30,7 @@ const fresh = (): BrannocMemory => ({
   huntGoal: 0,
   huntFound: false,
   huntGhosts: 0,
+  quickChop: false,
   freeHunt: 0,
   cryCd: 0,
   crescentCd: 0,

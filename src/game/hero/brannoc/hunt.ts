@@ -175,6 +175,8 @@ function land(air: boolean): void {
   const free = skillValues("b_hunt").free ?? 0;
   if (free) brannoc.freeHunt = free;
   brannoc.hits = 0;
+  // a quarry caught winding up is chopped on the landing frame, heavy, so the blow breaks the wind-up before it lands
+  brannoc.quickChop = brannocHost.quarry?.state === "wind";
   newSwing();
   setState("huntChop");
 }
@@ -188,7 +190,7 @@ function chopStrike(): AxeStrike {
     hit: 0,
     power: spec.power[0],
     kx: spec.kx[0],
-    heavy: false,
+    heavy: brannoc.quickChop,
     launch: v.launch ? CHOP_LAUNCH : undefined,
     stagger: COMBO.stagger,
     feel: spec.feel[0],
@@ -201,7 +203,7 @@ export function runChop(): void {
   const h = hero;
   h.vx = 0;
   const spec = AXE_BLOWS.huntChop;
-  if (brannoc.hits === 0 && h.st >= spec.hits[0]) {
+  if (brannoc.hits === 0 && h.st >= (brannoc.quickChop ? 0 : spec.hits[0])) {
     brannoc.hits = 1;
     smear("huntChop", isBloodied());
     const b = spec.box;
