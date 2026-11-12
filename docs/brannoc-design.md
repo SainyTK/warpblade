@@ -224,3 +224,27 @@ Early, he plays as a slow heavy hitter who gets stronger as foes chip him. A ski
 - Hunt's two afterimages are copies of his lunge pose in his own crimson glow, from the shared move ghost.
 
 ## Bot check
+
+The mash bot (walk to the nearest foe and mash J, first card of every pick) from wave 1, one run per hero on this patch.
+The other nine heroes' rows match the 0.9.0 baseline exactly.
+
+| Hero | Wave | Level | Kills | Game seconds |
+| --- | --- | --- | --- | --- |
+| Kael | 5 | 5 | 14 | 82.6 |
+| Ysra | 5 | 5 | 17 | 77.1 |
+| Sable | 5 | 6 | 17 | 73.7 |
+| Hulda | 5 | 5 | 14 | 104.4 |
+| Orrin | 5 | 6 | 18 | 75.1 |
+| Mirel | 5 | 6 | 18 | 81.4 |
+| Wenna | 5 | 5 | 15 | 87.1 |
+| Tallis | 3 | 4 | 9 | 67.1 |
+| Jory | 4 | 5 | 10 | 98.9 |
+| Brannoc | 5 | 5 | 14 | 102.2 |
+
+Brannoc falls on wave 5, within two waves of every other hero, so the balance fallback in Stats was not needed.
+The skilled bot from wave 20 was not run for him this patch.
+
+## Note for the owner
+
+A skilled bot policy for Brannoc would press K before a crowd, string J into it, press L at a foe out of reach, and press U when Bloodied.
+The mash bot never spends HP, so it measures him as a plain heavy hitter with Fury from the HP foes take.
