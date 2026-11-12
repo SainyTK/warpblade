@@ -256,9 +256,6 @@ function joryLook(spec: TouchButtonSpec, look: ButtonLook): void {
   }
 }
 
-/** the Ability button's crimson cost arc is one step longer for each this much of his max HP an ability costs */
-const HP_PIP = 0.05;
-
 /** Brannoc's Frenzy waits while it runs and after it and costs HP, Hunt needs stamina and waits a moment after each;
  *  I shows the selected ability's HP cost as a crimson arc along the bottom of its rim, and its recharge */
 function brannocLook(spec: TouchButtonSpec, look: ButtonLook): void {
@@ -279,7 +276,7 @@ function brannocLook(spec: TouchButtonSpec, look: ButtonLook): void {
       const id = brannocAbility();
       look.cooldown = brannocRecharge(id);
       look.ready = look.cooldown <= 0 && canSpend(brannocCost(id));
-      look.costPips = Math.round(brannocCost(id) / HP_PIP);
+      look.costShare = brannocCost(id);
       break;
     }
     default:
@@ -310,7 +307,7 @@ function ysraLook(spec: TouchButtonSpec, look: ButtonLook): void {
 export function buttonLook(spec: TouchButtonSpec, pressed: boolean): ButtonLook {
   const text = TOUCH_TEXT[character.kit][spec.action];
   const accent = text.accent ? hex(text.accent) : selectionTint(touchSelection());
-  const look: ButtonLook = { pressed, ready: true, cooldown: 0, accent, affordable: 0, charge: -1, costPips: 0 };
+  const look: ButtonLook = { pressed, ready: true, cooldown: 0, accent, affordable: 0, charge: -1, costShare: 0 };
   if (spec.action === "ultimate") {
     look.cooldown = ultRecharge();
     look.affordable = !hero.ultCd ? ULT_LEVELS.filter((_, i) => canAffordUlt(i + 1)).length : 0;

@@ -56,14 +56,15 @@ export function drawButtonFace(canvas: PixelCanvas, look: ButtonLook, icon: Spri
   canvas.flush();
 }
 
-/** each step of an HP cost is this share of a turn of the rim, centred on the bottom */
-const COST_STEP = 0.045;
+/** the cost's stretch of the rim, as a share of a turn, for each share of max HP the ability costs: 8% is about a
+ *  tenth of the rim, 20% about a quarter */
+const COST_TURNS = 1.2;
 
-/** an HP cost: the rim at the bottom of the button turns crimson over a length that grows with the cost, dimmed while
+/** an HP cost: the rim at the bottom of the button turns crimson over a length in proportion to the cost, darker while
  *  it cannot be paid */
 function costRim(look: ButtonLook, angle: number): Color | null {
-  if (look.costPips <= 0) return null;
-  const half = (look.costPips * COST_STEP) / 2;
+  if (look.costShare <= 0) return null;
+  const half = (look.costShare * COST_TURNS) / 2;
   if (Math.abs(angle - 0.5) > half) return null;
-  return look.ready ? PAL.rage[3] : PAL.rage[1];
+  return look.ready ? PAL.rage[3] : PAL.rage[2];
 }
