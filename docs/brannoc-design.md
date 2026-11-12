@@ -116,6 +116,7 @@ Animation beats, to `docs/motion-standard.md`, both hands on the haft:
 - 20 stamina, then 0.6 s before the next Hunt. With too little stamina, the shared tired puff.
 - Two-frame crouch load, then a low lunge 8 px off the floor at 380 px/s scaled by move speed toward the facing side (or the side held). If a ground foe stands ahead within 110 px, he goes for it, following it as it moves through the lunge, and lands 24 px short of it: outside a walking foe's touch (its 12 px half-width and his 5) and inside the chop's 26 px reach. Otherwise he travels 56 px.
 - On landing, Hunt Chop: 0.8x AD, 4 to 26 px ahead, staggers, knockback 10. Then 0.2 s recovery.
+- A quarry caught winding up is chopped on the landing frame and the chop is heavy, so it breaks a minion's wind-up before the blow lands. A mini boss or boss winding up still swings: Hunt into one is a trade the player chooses.
 - He is never untouchable during Hunt, and he stops against a foe's body.
 - In the air, once per airtime: Headlong, a 45 degree dive down and ahead at 420 px/s that lands into the same chop.
 - Each Hunt calls `travelEnded()` (Aftershock) on landing and emits the shared `dash` with direction and the foes passed, plus kit event `hunt` with `foe` (or null).
@@ -129,7 +130,8 @@ Both cost HP into the debt and emit the shared `cast` with ability `warCry` or `
 - Red Crescent: 10% max HP, 4 s recharge. An overhead swing throws a crimson crescent 150 px along the floor at 280 px/s that passes through foes, 0.9x AD + 0.6x AP to each. Each foe it strikes repays the debt like a blow. Look: a 14 px tall crescent in `PAL.rage[3]` with a `[5]` core and a trail of drips.
 
 The HUD tabs (CRY, CRESCENT, GEYSER, AXE and PACT) and the touch Ability button show the selected one and its recharge, as for Jory.
-Each tab also shows its HP cost as a share of max HP ("CRY 8%", "CRESCENT 10%"), and the touch Ability button shows the selected one's cost as crimson pips along the bottom of its face, one for each 5% of max HP.
+The selected tab also shows its HP cost as a share of max HP ("CRY 8%"), and the touch Ability button shows the selected one's cost as a crimson stretch of its rim at the bottom, longer for each 5% of max HP.
+On a narrow screen the tabs wrap onto a second row on the right, clear of the HP and MP bars and of the pause button, as every hero's tabs do.
 A tab whose HP cost would leave him under 1 HP is also struck through in crimson, and the touch button dims.
 
 ## U: Berserk
