@@ -6,7 +6,7 @@ export const PLUMB_DROP: SkillDef = {
   name: "Plumb Drop",
   kind: "movement",
   risk: "precise",
-  button: "K",
+  button: "J",
   text: "Hold Down while swinging to let go and drop straight down onto foes.",
   levels: [
     {

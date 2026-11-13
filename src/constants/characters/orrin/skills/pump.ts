@@ -6,8 +6,8 @@ export const PENDULUM_PUMP: SkillDef = {
   name: "Pendulum Pump",
   kind: "movement",
   risk: "easy",
-  button: "K",
-  text: "Swing higher and hook further.",
+  button: "J",
+  text: "The swing hook (J held with Up) flies further, and you swing higher.",
   levels: [
     {
       text: "Pump 30% harder; air bites hold 1.6 s.",

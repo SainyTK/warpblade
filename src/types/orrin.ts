@@ -2,23 +2,13 @@ import type { Enemy } from "./enemy";
 import type { Point } from "./world";
 
 /** states only Orrin enters; his kit runs and poses them */
-export type OrrinState =
-  | "lash"
-  | "hookThrow"
-  | "swing"
-  | "zip"
-  | "fly"
-  | "backline"
-  | "whirl"
-  | "pin"
-  | "pendulum"
-  | "maelstrom";
+export type OrrinState = "lash" | "hookThrow" | "swing" | "climb" | "fly" | "whirl" | "pin" | "pendulum";
 
 /** the blows of his chain string, always in this order */
 export type ChainBlow = "lash" | "rising" | "circle";
 
-/** what the hook bit: a foe to zip to, a crystal or a platform to swing from, or the air itself */
-export type LatchKind = "foe" | "anchor" | "platform" | "air";
+/** what the swing hook bit: a crystal or a platform to swing from, or the air itself */
+export type LatchKind = "anchor" | "platform" | "air";
 
 /** the abilities on I, in the order O turns through them: his two from the start and his three spell skills */
 export type OrrinAbility = "whirlwall" | "anchorPin" | "o_chainfence" | "o_tether" | "o_anchorfall";
@@ -81,6 +71,8 @@ export interface OrrinMemory {
   biteLeft: number;
   /** the speed when the reel started, which caps how fast reeling can make him */
   reelBase: number;
+  /** J was held down again while swinging: the reel pulls while it stays down */
+  reelHeld: boolean;
   /** the reel is pulling now, and it already snapped (Reel Snap) */
   reeling: boolean;
   snapped: boolean;
@@ -91,30 +83,28 @@ export interface OrrinMemory {
   flung: boolean;
   /** foes his swing kicks have defeated in the swing under way, from latch to letting go (Full Swing) */
   kickKills: number;
-  /** Undertow: a hook just after a Backline flings harder by this share, for `boostLeft` seconds */
-  flingBoost: number;
-  boostLeft: number;
   /** Plumb Drop: he let go downward and drops onto the floor */
   plumb: boolean;
-  /** seconds left before the next Backline */
-  backlineCd: number;
-  /** Backline's floor point and the step's start */
-  backFrom: number;
   /** seconds until each ability on I can be used again */
   whirlCd: number;
   pinCd: number;
   fenceCd: number;
   tetherCd: number;
   anchorCd: number;
-  /** the ability the cast under way is using */
+  /** the ability the cast under way is using, and whether it is the wide form */
   casting: OrrinAbility;
+  wide: boolean;
   /** Whirlwall's damage ticks dealt so far */
   whirlTicks: number;
-  /** Anchor Pin's floor spike and the foe it holds, for the chain drawn between them */
-  pinAt: Point | null;
+  /** Anchor Pin's floor spikes, one for each foe it holds, for the chains drawn between them */
+  pinAt: readonly Point[];
   pinLeft: number;
-  /** the side a Grand Pendulum or Maelstrom swings round, and its centre */
+  /** seconds left of a bind's wrap round the foes it holds, and since it caught them */
+  bindLeft: number;
+  bindT: number;
+  /** the tear Grand Pendulum swings round now, and where it opened (the turns drop it to the middle of the stage) */
   ultAt: Point | null;
+  ultTear: Point;
   ultLevel: number;
   /** Grand Pendulum's chain length, set at the cast from the floor under him */
   ultRadius: number;
@@ -122,12 +112,18 @@ export interface OrrinMemory {
   kites: number;
 }
 
+/** a foe the chain holds, and where the yank hauls it to (null when it is held where it stands) */
+export interface Bound {
+  foe: Enemy;
+  toX: number | null;
+}
+
 /** what the host alone keeps for Orrin: foes, which never go to a guest */
 export interface OrrinHostMemory {
-  /** the foe a zip pulls him to */
-  zipFoe: Enemy | null;
-  /** the foe Anchor Pin holds */
-  pinned: Enemy | null;
+  /** the foes Anchor Pin holds, in the order of its spikes */
+  pinned: readonly Enemy[];
+  /** the foes a Chain Bind or a warp kick holds */
+  bound: readonly Bound[];
   /** foes the swing under way has kicked */
   kicked: readonly Enemy[];
   /** foes the ultimate's pass under way has struck */
@@ -137,8 +133,8 @@ export interface OrrinHostMemory {
 declare module "./skillBehavior" {
   /** Orrin's own skill events */
   interface SkillEvents {
-    /** the hook bit something: a foe to zip to, a crystal, a platform or the air */
-    latch: { kind: LatchKind; foe: Enemy | null };
+    /** the swing hook bit a crystal, a platform or the air */
+    latch: { kind: LatchKind };
     /** he let go of a swing, at this speed */
     release: { speed: number; fling: boolean };
     /** a blow landed in the last part of the chain's reach */

@@ -22,7 +22,6 @@ import { updateHuldaTabs } from "./huldaTabs";
 import { updateJoryTabs } from "./joryTabs";
 import { updateMirelTabs } from "./mirelTabs";
 import { updateMomentumBar } from "./momentumBar";
-import { updateOrrinTabs } from "./orrinTabs";
 import { updateQuiverBar } from "./quiverBar";
 import { createRechargeTab } from "./rechargeTab";
 import { updateRiteTabs } from "./riteTabs";
@@ -61,7 +60,6 @@ export function updateHud(): void {
   updateAbilityTabs();
   updateRiteTabs();
   updateHuldaTabs();
-  updateOrrinTabs();
   updateMirelTabs();
   updateWennaTabs();
   updateTallisTabs();

@@ -1,54 +1,37 @@
 import type { SkillDef } from "../../../../types/skill";
+import { evolvedRow, levelRows } from "../../../../utils/skillRows";
 
-/** Gaff. Design: docs/skills/orrin.md. Values: power: share more the arrival kick deals; windup: 1 a foe winding up is staggered 1.2 s and the kick crits; hook: 1 the bounce gives a hook back; yank: 1 a hooked minion is yanked along on the bounce; ring: pixels round the arrival every foe takes the kick; momentum: Momentum a crit arrival gives; harpoon: 1 every foe on the chain's line is dragged to the hooked one first (evolution); crit: the kick's damage multiple as a sure crit (evolution) */
+/** Gaff, his warp skill. Design: docs/skills/orrin.md. Values: cost: MP a warp costs; recharge: seconds; charges: warps
+ *  in a row; strike: the warp kick's power as attack damage; windup: 1 a foe winding up reels 1.2 s and the kick crits;
+ *  path: attack damage the thrown hook deals to foes on its way; ring: pixels round the kick every foe takes it;
+ *  momentum: Momentum a crit kick gives; harpoon: pixels round the hooked foe from which foes are dragged in to it first
+ *  (evolution); sure: 1 the kick always crits (evolution) */
+const LEVELS = levelRows([
+  {
+    text: "The warp kick deals 2.4x, costs 6 MP and recharges in 1.5 s.",
+    values: { cost: 6, recharge: 1.5, charges: 1, strike: 2.4 },
+  },
+  { text: "New: a foe winding up reels 1.2 s and the kick crits.", values: { windup: 1 } },
+  { text: "New: the thrown hook cuts every foe on its way.", values: { path: 1 } },
+  { text: "New: two warp charges.", values: { charges: 2 } },
+  { text: "New: the kick hits every foe within 26 px.", values: { ring: 26 } },
+  { text: "Recharge 1.5 to 1.1 s.", values: { recharge: 1.1 } },
+  { text: "New: a crit kick gives 20 Momentum.", values: { momentum: 20 } },
+  { text: "Warp kick 2.4 to 6.5; the hook's cut hits harder.", values: { strike: 6.5, path: 2 } },
+]);
+
 export const GAFF: SkillDef = {
   id: "o_gaff",
   name: "Gaff",
   kind: "attack",
   risk: "precise",
-  button: "K",
-  text: "The kick at the end of a zip to a hooked foe hits much harder.",
-  levels: [
-    {
-      text: "The arrival kick deals 40% more.",
-      values: { power: 0.4, windup: 0, hook: 0, yank: 0, ring: 0, momentum: 0, harpoon: 0, crit: 0 },
-    },
-    {
-      text: "A foe winding up reels; the kick crits.",
-      values: { power: 0.4, windup: 1, hook: 0, yank: 0, ring: 0, momentum: 0, harpoon: 0, crit: 0 },
-    },
-    {
-      text: "The arrival kick deals 70% more.",
-      values: { power: 0.7, windup: 1, hook: 0, yank: 0, ring: 0, momentum: 0, harpoon: 0, crit: 0 },
-    },
-    {
-      text: "The bounce gives a hook back.",
-      values: { power: 0.7, windup: 1, hook: 1, yank: 0, ring: 0, momentum: 0, harpoon: 0, crit: 0 },
-    },
-    {
-      text: "A hooked minion comes along on the bounce.",
-      values: { power: 0.7, windup: 1, hook: 1, yank: 1, ring: 0, momentum: 0, harpoon: 0, crit: 0 },
-    },
-    {
-      text: "The kick hits every foe within 26 px.",
-      values: { power: 0.7, windup: 1, hook: 1, yank: 1, ring: 26, momentum: 0, harpoon: 0, crit: 0 },
-    },
-    {
-      text: "A crit arrival gives 20 Momentum.",
-      values: { power: 0.7, windup: 1, hook: 1, yank: 1, ring: 26, momentum: 20, harpoon: 0, crit: 0 },
-    },
-    {
-      text: "The arrival kick deals 140% more.",
-      values: { power: 1.4, windup: 1, hook: 1, yank: 1, ring: 26, momentum: 20, harpoon: 0, crit: 0 },
-    },
-  ],
+  button: "J",
+  text: "The warp kick hits harder, costs less and comes back sooner, and catches a foe winding up.",
+  levels: LEVELS,
   evolution: {
     partner: "o_sweetspot",
     name: "Harpoon",
-    text: "A hook on a foe drags every foe on the chain's line to it before the kick, and the kick is a sure crit for 3x.",
-    row: {
-      text: "Drag the line in; a sure crit for 3x.",
-      values: { power: 1.4, windup: 1, hook: 1, yank: 1, ring: 26, momentum: 20, harpoon: 1, crit: 3 },
-    },
+    text: "Every foe within 80 px of the hooked one is dragged in to it before the kick, and the kick always crits.",
+    row: evolvedRow(LEVELS[7], "Drag the foes round it in; the kick always crits.", { harpoon: 80, sure: 1 }),
   },
 };

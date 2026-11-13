@@ -23,27 +23,28 @@ const fresh = (): OrrinMemory => ({
   climbTo: null,
   biteLeft: 0,
   reelBase: 0,
+  reelHeld: false,
   reeling: false,
   snapped: false,
   sinceRelease: 9,
   releaseSpeed: 0,
   flung: false,
   kickKills: 0,
-  flingBoost: 0,
-  boostLeft: 0,
   plumb: false,
-  backlineCd: 0,
-  backFrom: 0,
   whirlCd: 0,
   pinCd: 0,
   fenceCd: 0,
   tetherCd: 0,
   anchorCd: 0,
   casting: "whirlwall",
+  wide: false,
   whirlTicks: 0,
-  pinAt: null,
+  pinAt: [],
   pinLeft: 0,
+  bindLeft: 0,
+  bindT: 9,
   ultAt: null,
+  ultTear: { x: 0, y: 0 },
   ultLevel: 0,
   ultRadius: 0,
   kites: 0,
@@ -54,11 +55,11 @@ export const orrin: OrrinMemory = fresh();
 rememberPerSeat(objectMemory(orrin));
 
 /** foes his kit holds on to, kept to the host */
-export const orrinHost: OrrinHostMemory = { zipFoe: null, pinned: null, kicked: [], passed: [] };
+export const orrinHost: OrrinHostMemory = { pinned: [], bound: [], kicked: [], passed: [] };
 rememberPerSeat(objectMemory(orrinHost, true));
 
 /** a fresh run: no Momentum, the chain coiled */
 export function resetOrrin(): void {
   Object.assign(orrin, fresh());
-  Object.assign(orrinHost, { zipFoe: null, pinned: null, kicked: [], passed: [] });
+  Object.assign(orrinHost, { pinned: [], bound: [], kicked: [], passed: [] });
 }

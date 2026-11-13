@@ -6,10 +6,13 @@ export const RUST_BITE: SkillDef = {
   name: "Rust Bite",
   kind: "dot",
   risk: "timed",
-  button: "K",
-  text: "A hooked foe rusts and keeps hurting.",
+  button: "J",
+  text: "A foe your warp kick or Chain Bind catches rusts and keeps hurting.",
   levels: [
-    { text: "A hooked foe rusts.", values: { damage: 0.2, life: 4, taken: 0, spread: 0, pin: 0, slow: 0, corrode: 0 } },
+    {
+      text: "A foe your warp kick or Chain Bind catches rusts.",
+      values: { damage: 0.2, life: 4, taken: 0, spread: 0, pin: 0, slow: 0, corrode: 0 },
+    },
     {
       text: "Rusted foes take 15% more.",
       values: { damage: 0.2, life: 4, taken: 0.15, spread: 0, pin: 0, slow: 0, corrode: 0 },

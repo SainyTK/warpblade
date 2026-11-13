@@ -127,3 +127,7 @@ export const CHAIN_WIND: Readonly<Record<ChainBlow | "hanging", { from: number; 
   circle: { from: -2.7, to: -0.9, reach: 20 },
   hanging: { from: -1.9, to: -2.6, reach: 18 },
 };
+
+/** the guard disc: how far ahead of his hand it spins, how deep it looks (share of its height), the points its ring
+ *  of links is laid along, and the brass streaks racing round its rim with their trail length in flecks */
+export const GUARD_LOOK = { ahead: 3, depth: 0.42, points: 20, streaks: 3, trail: 10 } as const;

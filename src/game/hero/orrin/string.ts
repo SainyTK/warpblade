@@ -11,7 +11,6 @@ import { skin } from "../skin";
 import { type ChainStrike, sweepChain } from "./chainHit";
 import { orrin } from "./memory";
 import { blowReach } from "./reach";
-import { backlineSettling } from "./recovery";
 
 /** how many times Full Circle turns: Iron Weight adds turns */
 export const circleTurns = (): number => Math.max(1, skillValues("o_ironweight").turns ?? 1);
@@ -75,7 +74,7 @@ export function pressString(): boolean {
     orrin.queued = true;
     return true;
   }
-  if ((!isFree() && !backlineSettling()) || !hero.ground) return false;
+  if (!isFree() || !hero.ground) return false;
   startBlow(orrin.link > 0 ? orrin.blow : 0);
   return true;
 }

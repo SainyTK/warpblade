@@ -5,7 +5,6 @@ import { createFloorRing } from "../effects/floorRing";
 import { castBerserk, castUnendingRage } from "../hero/brannoc/berserk";
 import { castDrumroll, castGrandFinale } from "../hero/jory/drumroll";
 import { castEternalNoon, castHourOfStillness } from "../hero/mirel/hour";
-import { castMaelstrom } from "../hero/orrin/maelstrom";
 import { castGrandPendulum } from "../hero/orrin/pendulum";
 import { skin } from "../hero/skin";
 import { castEclipse, castGloaming } from "../hero/tallis/gloaming";
@@ -42,7 +41,7 @@ const ULTIMATES: Record<UltimateId, (level: number) => void> = {
   titanThrow: castTitanThrow,
   unbroken: castUnbroken,
   grandPendulum: castGrandPendulum,
-  maelstrom: castMaelstrom,
+  maelstrom: castGrandPendulum,
   hourOfStillness: castHourOfStillness,
   eternalNoon: castEternalNoon,
   greatWick: castGreatWick,

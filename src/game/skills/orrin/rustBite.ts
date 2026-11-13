@@ -73,8 +73,9 @@ function corrode(foe: Enemy, power: number): void {
 }
 
 /**
- * Rust Bite: a foe the hook bites rusts and takes damage over time; levels make rusted foes take more from everything,
- * let the rust creep to a foe it touches, rust Anchor Pin's foe and slow them. Corrode bursts a rusted foe that falls.
+ * Rust Bite: a foe his warp kick or Chain Bind catches rusts (the kit calls `rustFoe`) and takes damage over time;
+ * levels make rusted foes take more from everything, let the rust creep to a foe it touches, rust Anchor Pin's foes and
+ * slow them. Corrode bursts a rusted foe that falls.
  */
 export const rustBite: SkillBehavior = {
   create: () => ({ spread: RUST_BITE.spreadEvery, caught: new WeakMap() }),
@@ -90,9 +91,6 @@ export const rustBite: SkillBehavior = {
     creep(m);
   },
   on: {
-    latch(_memory, event) {
-      if (event.foe) rustFoe(event.foe);
-    },
     kill(_memory, event) {
       const v = skillValues(RUST_ID);
       if (v.corrode && rusted(event.foe)) corrode(event.foe, v.corrode);

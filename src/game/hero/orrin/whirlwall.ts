@@ -12,7 +12,7 @@ import { lowerWard, raiseWard, type ShotWard } from "../../shotWards";
 import { emitSkillEvent } from "../../skills/events";
 import { game, hero, particles, progress, rng } from "../../state";
 import { setState, settle } from "../actions";
-import { canCast } from "./castCheck";
+import { castsWide, startAbility } from "./castCheck";
 import { orrin } from "./memory";
 
 /** the ring's centre over his head */
@@ -22,12 +22,15 @@ const ringAt = (): Point => ({ x: hero.x, y: hero.y - 22 });
 const live: { ward: (ShotWard & { x: number; y: number }) | null } = { ward: null };
 rememberPerSeat(objectMemory(live, true));
 
+/** the ring's radius: wider for Whirlpool, the wide form */
+export const whirlRadius = (): number => WHIRLWALL.radius * (orrin.wide ? WHIRLWALL.wideRadius : 1);
+
 /** a ward that follows the ring: the kit moves it each step while its hero is the one in play */
 function makeWard(): ShotWard & { x: number; y: number } {
   const w = {
     x: hero.x,
     y: hero.y - 22,
-    radius: WHIRLWALL.radius,
+    radius: whirlRadius(),
     at: (): Point => ({ x: w.x, y: w.y }),
     broke(x: number, y: number) {
       for (let i = 0; i < 6; i++)
@@ -40,13 +43,14 @@ function makeWard(): ShotWard & { x: number; y: number } {
   return w;
 }
 
-/** I: spin the chain over his head */
-export function pressWhirl(): boolean {
-  if (!canCast(orrin.whirlCd, WHIRLWALL.mp)) return true;
-  hero.mp -= WHIRLWALL.mp;
+/** I: spin the chain over his head; held, Whirlpool, a wider ring that draws foes in */
+export function castWhirl(wide: boolean): boolean {
+  const big = castsWide(wide, WHIRLWALL.mp);
+  if (!startAbility(WHIRLWALL.mp, big)) return false;
   orrin.whirlCd = WHIRLWALL.cooldown;
   orrin.whirlTicks = 0;
   orrin.casting = "whirlwall";
+  orrin.wide = big;
   setState("whirl");
   const ward = makeWard();
   live.ward = ward;
@@ -56,17 +60,21 @@ export function pressWhirl(): boolean {
   return true;
 }
 
-/** the ring cuts every foe in it each tick and shoves it outward */
+/** the ring cuts every foe in it each tick and shoves it outward; Whirlpool's draws it in toward him instead */
 function tick(): void {
   const c = ringAt();
+  const radius = whirlRadius();
+  const ticks = WHIRLWALL.time / WHIRLWALL.every;
   for (const e of game.enemies) {
     if (e.hp <= 0) continue;
     const [cx, cy] = enemyCenter(e);
     const d = Math.hypot(cx - c.x, cy - c.y);
-    if (d > WHIRLWALL.radius) continue;
+    if (d > radius) continue;
     const dir = Math.sign(cx - c.x) || hero.face;
-    dealDamage(e, progress.stats.ap * WHIRLWALL.power, { fromX: c.x, kx: dir * 60, source: "abilities" });
-    e.x += dir * (WHIRLWALL.push / (WHIRLWALL.time / WHIRLWALL.every));
+    const kx = orrin.wide ? -dir * 30 : dir * 60;
+    dealDamage(e, progress.stats.ap * WHIRLWALL.power, { fromX: c.x, kx, source: "abilities" });
+    if (orrin.wide) e.x -= dir * Math.max(0, Math.min(Math.abs(cx - c.x) - 8, WHIRLWALL.pull / ticks));
+    else e.x += dir * (WHIRLWALL.push / ticks);
   }
   sfx.swing(1.4);
 }

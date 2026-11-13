@@ -7,10 +7,10 @@ export const TWIN_CHAIN: SkillDef = {
   kind: "summon",
   risk: "precise",
   button: "auto",
-  text: "A Slip calls a shade of you that spins a Full Circle.",
+  text: "A Slip or a perfect dodge calls a shade of you that spins a Full Circle.",
   levels: [
     {
-      text: "A Slip calls a shade's Full Circle.",
+      text: "A Slip or perfect dodge calls a shade's Full Circle.",
       values: { power: 1, momentum: 0, count: 1, swing: 0, copy: 0, mirror: 0 },
     },
     { text: "A shade gives 10 Momentum.", values: { power: 1, momentum: 10, count: 1, swing: 0, copy: 0, mirror: 0 } },

@@ -1,54 +1,34 @@
 import type { SkillDef } from "../../../../types/skill";
+import { evolvedRow, levelRows } from "../../../../utils/skillRows";
 
-/** Undertow. Design: docs/skills/orrin.md. Values: distance: pixels Backline yanks; drag: pixels the nearest foe ahead is dragged after; slip: seconds at the start of a Backline in which a blow is a Slip; boost: share harder a hook within 0.3 s of a Backline flings; trip: seconds the chain line on the floor trips foes; power: attack damage of the trip; riptide: pixels ahead within which every foe is pulled and rooted 1 s (evolution) */
+/** Undertow, his parry skill. Design: docs/skills/orrin.md. Values: bind: seconds Chain Bind holds a minion; power:
+ *  attack damage of the yank on the bound foe; drag: foes beside the bound one yanked in and bound with it; big: 1 mini
+ *  bosses and bosses are yanked in and held still too; trip: seconds the chain line left on the floor trips foes, and
+ *  tripPower its attack damage; mark: share more the bound foe takes from every source while bound; riptide: pixels
+ *  round the bound foe within which every foe is yanked in and bound (evolution) */
+const LEVELS = levelRows([
+  { text: "Chain Bind holds 1.6 s; the yank deals 1.0x.", values: { bind: 1.6, power: 1 } },
+  { text: "New: the foe nearest the bound one is yanked in too.", values: { drag: 1 } },
+  { text: "The yank deals 1.8x.", values: { power: 1.8 } },
+  { text: "New: mini bosses and bosses are yanked in and held.", values: { big: 1 } },
+  { text: "New: the yank leaves a chain on the floor that trips.", values: { trip: 0.6, tripPower: 0.6 } },
+  { text: "Chain Bind holds 2.2 s; the yank deals 2.6x.", values: { bind: 2.2, power: 2.6 } },
+  { text: "New: the bound foe takes 30% more while bound.", values: { mark: 0.3 } },
+  { text: "The yank deals 4.0x; two foes come in with it.", values: { power: 4, drag: 2 } },
+]);
+
 export const UNDERTOW: SkillDef = {
   id: "o_undertow",
   name: "Undertow",
-  kind: "movement",
-  risk: "timed",
-  button: "L",
-  text: "Backline yanks you further and drags foes after you.",
-  levels: [
-    {
-      text: "Backline yanks 64 px.",
-      values: { distance: 64, drag: 0, slip: 0, boost: 0, trip: 0, power: 0, riptide: 0 },
-    },
-    {
-      text: "The nearest foe ahead is dragged 20 px.",
-      values: { distance: 64, drag: 20, slip: 0, boost: 0, trip: 0, power: 0, riptide: 0 },
-    },
-    {
-      text: "A blow early in a Backline is a Slip.",
-      values: { distance: 64, drag: 20, slip: 0.1, boost: 0, trip: 0, power: 0, riptide: 0 },
-    },
-    {
-      text: "A hook just after a Backline flings 30% more.",
-      values: { distance: 64, drag: 20, slip: 0.1, boost: 0.3, trip: 0, power: 0, riptide: 0 },
-    },
-    {
-      text: "Backline yanks 72 px.",
-      values: { distance: 72, drag: 20, slip: 0.1, boost: 0.3, trip: 0, power: 0, riptide: 0 },
-    },
-    {
-      text: "A chain line on the floor trips foes.",
-      values: { distance: 72, drag: 20, slip: 0.1, boost: 0.3, trip: 0.4, power: 0.3, riptide: 0 },
-    },
-    {
-      text: "The trip deals 0.6x.",
-      values: { distance: 72, drag: 20, slip: 0.1, boost: 0.3, trip: 0.4, power: 0.6, riptide: 0 },
-    },
-    {
-      text: "The trip deals 1.0x.",
-      values: { distance: 72, drag: 20, slip: 0.1, boost: 0.3, trip: 0.4, power: 1, riptide: 0 },
-    },
-  ],
+  kind: "attack",
+  risk: "precise",
+  button: "K",
+  text: "Chain Bind holds longer, its yank hits hard, and it drags more foes in with the one that struck.",
+  levels: LEVELS,
   evolution: {
     partner: "o_anchorfall",
     name: "Riptide",
-    text: "Backline pulls every foe within 60 px ahead after you and roots them for 1 s.",
-    row: {
-      text: "Pull every foe ahead along and root them.",
-      values: { distance: 72, drag: 20, slip: 0.1, boost: 0.3, trip: 0.4, power: 1, riptide: 60 },
-    },
+    text: "A parry yanks in every foe within 60 px of the one that struck, and binds them all.",
+    row: evolvedRow(LEVELS[7], "Every foe round it is yanked in and bound.", { riptide: 60 }),
   },
 };
