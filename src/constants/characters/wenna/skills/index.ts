@@ -3,6 +3,7 @@ import { BRIGHT_FANGS } from "./brightFangs";
 import { CHAIN_KINDLE } from "./chainKindle";
 import { CHANGELING_STEP } from "./changelingStep";
 import { DEEP_TALLOW } from "./deepTallow";
+import { GREAT_WICK_SKILL } from "./greatWick";
 import { GUTTERING } from "./guttering";
 import { HOT_WAX } from "./hotWax";
 import { HUNTING_CALL } from "./huntingCall";
@@ -14,7 +15,6 @@ import { PROCESSION } from "./procession";
 import { REMEMBRANCE } from "./remembrance";
 import { SINGE } from "./singe";
 import { SMOULDER } from "./smoulder";
-import { THOUSAND_CANDLES } from "./thousandCandles";
 import { TWIN_WICK } from "./twinWick";
 import { WAX_EFFIGY } from "./waxEffigy";
 import { WAX_POOL } from "./waxPool";
@@ -41,5 +41,5 @@ export const WENNA_SKILL_DEFS: readonly SkillDef[] = [
   TWIN_WICK,
   REMEMBRANCE,
   DEEP_TALLOW,
-  THOUSAND_CANDLES,
+  GREAT_WICK_SKILL,
 ];

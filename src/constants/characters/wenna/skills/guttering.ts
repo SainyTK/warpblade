@@ -6,7 +6,7 @@ export const GUTTERING: SkillDef = {
   name: "Guttering",
   kind: "attack",
   risk: "timed",
-  button: "K",
+  button: "auto",
   text: "A Wick that dies or burns out bursts.",
   levels: [
     {

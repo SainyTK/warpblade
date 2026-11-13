@@ -377,7 +377,7 @@ export const WENNA_ICONS: Record<string, (s: SpriteCanvas) => void> = {
     waxDrop(s, 12.5, 5, 2, true);
     candle(s, 8, 16, 7, 3, false, 4);
   },
-  /** both ends of a Swap smouldering, a flame thread strung between */
+  /** both ends of a warp smouldering, a flame thread strung between */
   w_smoulder: (s) => {
     floor(s, 0, 15, 15, VIOLET[1]);
     flame(s, 2.5, 14, 7);
@@ -487,26 +487,23 @@ export const WENNA_ICONS: Record<string, (s: SpriteCanvas) => void> = {
     hoop(s, 8, 8, 7, GOLD_DARK, GOLD_LIGHT);
     candle(s, 8, 14, 4, 4, false, 8);
   },
-  /** Thousand Candles: candles of every height rising across the floor */
-  w_thousand: (s) => {
-    candle(s, 1.5, 16, 4, 2, false, 3);
-    candle(s, 5, 16, 8, 2, false, 3);
-    candle(s, 8.5, 16, 5, 2, false, 3);
-    candle(s, 12, 16, 9, 2, false, 3);
-    candle(s, 15, 16, 3, 2, false, 3);
+  /** Great Wick: the giant swinging its arm up over a row of small candles rising round its foot */
+  w_greatWick: (s) => {
+    greatWick(s, 8, 14);
+    candle(s, 1.5, 16, 3, 2, false, 2);
+    candle(s, 14.5, 16, 4, 2, false, 2);
   },
-  /** Night of Lamps: a gold moon over a stage full of candles */
-  w_thousand_evo: (s) => {
+  /** Night of Lamps: the giant lit gold under a gold moon, candles burning across the whole floor */
+  w_greatWick_evo: (s) => {
     fill(s, () => s.pixels([".GG", "G..", "G..", ".GG"], { G: GOLD_LIGHT }, 1, 0));
-    candle(s, 1.5, 16, 5, 2, true, 3);
-    candle(s, 5, 16, 3, 2, true, 3);
-    candle(s, 8.5, 16, 7, 2, true, 3);
-    candle(s, 12, 16, 4, 2, true, 3);
-    candle(s, 15, 16, 8, 2, true, 3);
+    greatWick(s, 8, 14, true);
+    candle(s, 1.5, 16, 3, 2, true, 2);
+    candle(s, 4.5, 16, 2, 2, true, 2);
+    candle(s, 11.5, 16, 2, 2, true, 2);
+    candle(s, 14.5, 16, 4, 2, true, 2);
     fill(s, () => {
-      s.set(9, 1, WHITE);
       s.set(14, 3, GOLD);
-      s.set(5, 4, VIOLET[4]);
+      s.set(12, 1, WHITE);
     });
   },
 };
