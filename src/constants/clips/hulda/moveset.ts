@@ -29,16 +29,15 @@ const t = GUARD_TIMES;
  * on arriving, and the iron guard with its block and Iron Catch.
  */
 export const MOVESET_CLIPS = {
-  /** the gauntlet cocks back by her ear, then the arm snaps straight out after it just before the shared throw lets go
-   *  at 0.1 s, so the wait that follows starts from the same pose */
+  /** the gauntlet cocks back by her ear, then on the clip's third frame the arm snaps straight out after it, before the
+   *  shared throw lets go at 0.1 s, so the wait that follows starts from the same pose */
   throw: {
     dur: 0.15,
     hit: 0.1,
     keys: [
       [0, GUARD],
-      [frame(1), g({ hx: -1, nx: -0.5, cb: -0.5, fx: 1, fy: -22, bx: 6, by: -19 })],
-      [frame(2.4), g({ hx: -1.5, nx: -1, cb: -1, fx: -1, fy: -23, bx: 6, by: -19, ffx: 6 })],
-      [frame(2.5), ARM_OUT, "snap"],
+      [frame(1), g({ hx: -1.5, nx: -1, cb: -1, fx: -1, fy: -23, bx: 6, by: -19, ffx: 6 })],
+      [frame(2), ARM_OUT, "snap"],
       [0.15, ARM_OUT],
     ],
   },
