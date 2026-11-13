@@ -15,7 +15,7 @@ const RIPPLE = 0.45;
 /** how far the pool has spread, 0 to 1: it grows as his body pours down and shrinks as he rises */
 function poolShare(): number {
   if (hero.state === "sink") return Math.min(1, tallis.sinkT / SINK.pour);
-  if (hero.state === "rise") return Math.max(0, 1 - hero.st / SINK.rise);
+  if (hero.state === "risingCut") return Math.max(0, 1 - hero.st / SINK.rise);
   return 0;
 }
 

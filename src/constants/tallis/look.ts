@@ -43,7 +43,7 @@ export const SMOKE = {
   solid: 0.74,
 } as const;
 
-/** the dark of Gloaming and Eclipse: the ink the scene sinks into and the dusk band left along the horizon */
+/** the dark of Gloaming: the ink the scene sinks into and the dusk band left along the horizon */
 export const DARK = {
   ink: G[0],
   dusk: hex("#4a2450"),

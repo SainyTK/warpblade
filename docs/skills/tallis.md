@@ -1,13 +1,13 @@
 # Tallis's skills
 
 Tallis's 20 skills, written from the skill data in `src/constants/characters/tallis/skills/`, which is the source of truth.
-His kit, Gloam, the Veil, Sink and the foe awareness rule are in `docs/tallis-design.md`; the rules every hero's skills follow are in `docs/skill-design.md`.
+His kit, Gloam, the Veil, Sink, his warp and guard, and the foe awareness rule are in `docs/tallis-design.md`; the rules every hero's skills follow are in `docs/skill-design.md`.
 
 ## Units
 
 Damage is a multiple of attack damage (x AD) from `progress.stats.ad`, or of ability power (x AP) from `progress.stats.ap` where a skill's values say so.
 At the start of a run AD is 11 and AP is 8.
-His knives read AD; Hamstring, his spells and Nightshade read AP.
+His knives and his warp read AD; Hamstring, his spells and Nightshade read AP.
 Every melee hit of his own from behind deals 2.25 times: the shared 1.5 times, and half again from his kit's damage hook.
 Distances are art pixels, times are seconds, speeds are pixels a second.
 
@@ -19,10 +19,11 @@ Every button does something from the first second of a run.
 | --- | --- |
 | A / D | Walk at 1.08 times the shared speed, 15% faster in the Veil; a double tap runs. In the pool, glide at 115 px/s. |
 | W | One jump of 58 px. No double jump. |
-| J | The string Flick, Cross, Heel Kick, the same wherever foes stand; blows from behind deal 2.25x. In the air, Drop Stab, once per airtime. Out of the pool, Rising Cut. |
-| K | The Veil: 20 Gloam, then 8 a second. Minions lose him. His first blow out of it is an Ambush, a sure crit. |
-| L | Sink: 20 stamina, then 40 a second, at most 1.0 s. Untouchable and hidden in the pool. In the air, drop straight down. |
-| I | The selected ability: Smoke Knot, Hamstring, or a spell skill. |
+| J tapped | The string Flick, Cross, Heel Kick, the same wherever foes stand; blows from behind deal 2.25x. In the air, Drop Stab, once per airtime. In the pool, rise with Rising Cut. |
+| J held | The shared warp: a knife into the foe, and he steps out of its shadow at its back to strike, scaled so it deals the shared warp's damage; then 0.5 s veiled. |
+| K | Guard with crossed knives: 9 stamina a block, 45% through. Fade, the parry: 2 s of free Veil, his next blow an Ambush. |
+| L | The shared front dodge. |
+| I | The selected ability: Smoke Knot, Hamstring, a spell skill, the Veil (20 Gloam, then 8 a second) or Sink (20 stamina, then 40 a second; tapped a dip, held while I is held). Held, Smoke Knot and Hamstring cast their wide forms. |
 | O | Switch ability. |
 | U | Gloaming, the base special, with the shared charge levels. |
 
@@ -36,8 +37,8 @@ Every button does something from the first second of a run.
 | `t_turnabout` | Turnabout | attack | timed | J | `t_sink` |
 | `t_plunge` | Plunge | attack | timed | J | `t_nightLeap` |
 | `t_cutTendon` | Cut Tendon | attack | timed | I | `t_openVeins` |
-| `t_sink` | Deep Shadow | movement | timed | L | `t_ambush` |
-| `t_quietStep` | Quiet Step | movement | easy | auto | `t_nightLeap` |
+| `t_sink` | Deep Shadow | movement | timed | I | `t_ambush` |
+| `t_quietStep` | Quiet Step | movement | timed | J | `t_nightLeap` |
 | `t_nightLeap` | Night Leap | movement | timed | jump | `t_plunge` |
 | `t_needles` | Needle Fan | spell | easy | I | `t_quickKnives` |
 | `t_markDusk` | Mark of Dusk | spell | precise | I | `t_backbiter` |
@@ -46,15 +47,15 @@ Every button does something from the first second of a run.
 | `t_nightshade` | Nightshade | dot | timed | J | `t_cutTendon` |
 | `t_inkWound` | Ink Wound | dot | precise | J | `t_ambush` |
 | `t_crows` | Gloam Crows | summon | easy | auto | `t_needles` |
-| `t_double` | Shadow Double | summon | timed | L | `t_sink` |
+| `t_double` | Shadow Double | summon | timed | K | `t_sink` |
 | `t_wraith` | Hollow Wraith | summon | timed | auto | `t_openVeins` |
 | `t_shroud` | Shroud | passive | easy | auto | `t_quietStep` |
-| `t_eclipse` | Eclipse | ultimate | timed | U | `t_shroud` |
+| `t_gloaming` | Gloaming | ultimate | timed | U | `t_shroud` |
 
 Counts: attack 6, movement 3, spell 3, dot 3, summon 3, passive 1, ultimate 1.
-Risk: precise 4, easy 6, timed 10.
+Risk: precise 4, easy 5, timed 11.
 
-Kit events he emits through the shared function: `veil` (the Veil came on or ended, and why), `sink` (a Sink ended in a rise), `ambush` (an Ambush landed) and `backstab` (one of his blows from behind landed), declared in `src/types/tallis.ts`; and the shared `cast`, `jump`, `dash` (each rise from the pool) and `perfectDodge`.
+Kit events he emits through the shared function: `veil` (the Veil came on or ended, and why), `sink` (a Sink ended in a rise), `ambush` (an Ambush landed) and `backstab` (one of his blows from behind landed), declared in `src/types/tallis.ts`; and the shared `cast`, `jump`, `dash` (each rise from the pool), `perfectDodge` (a blow in the Sink's first moment), `warp`, `block` and `parry`.
 
 ### t_backbiter: Backbiter
 
@@ -178,7 +179,7 @@ Evolution: **Crippling Line** (partner `t_openVeins`). Hamstring runs along the 
 
 ### t_sink: Deep Shadow
 
-movement, timed, L. His shadow pool lasts longer and cuts the foes it passes under.
+movement, timed, I. His shadow pool lasts longer and cuts the foes it passes under.
 
 Values: longer: seconds more a Sink may last; pass: attack damage foes the pool passes under take, once each per Sink; rising: share more Rising Cut deals; sinks: Sinks before the wait; cheaper: share less stamina a Sink spends; power: share more the pool's cut and Rising Cut deal; tide: 1 the first foe he rises behind is dragged down and stunned 1 s (evolution)
 
@@ -198,23 +199,23 @@ Evolution: **Shadow Tide** (partner `t_ambush`). The first foe he rises behind i
 
 ### t_quietStep: Quiet Step
 
-movement, easy, auto. His Veil drains slower and he walks faster in it.
+movement, timed, J. His warp steps out of the foe's shadow quieter: veiled longer, more often, and cutting on the way.
 
-Values: drain: share less Gloam the Veil drains; walk: share faster he walks veiled, on top of the Veil's own; free: 1 the first Veil of each wave costs nothing; prints: 1 his veiled footprints chill foes that cross them; refund: Gloam each veiled blow gives; phantom: 1 walking veiled leaves smoke that blinds foes 1 s (evolution)
+Values: breath: seconds more he stays veiled after a warp; refund: Gloam a warp gives; path: attack damage foes the thrown knife passes through take; charges: warps in a row before the recharge; ambush: 1 the veil after a warp primes an Ambush; blind: seconds the arrival blinds minions within 40 px; phantom: 1 the arrival leaves a cloud of smoke (evolution)
 
 | Lv | Change | Card |
 | --- | --- | --- |
-| 1 | drain 0.25 | The Veil drains 25% slower. |
-| 2 | walk 0 to 0.1 | He walks 10% faster veiled. |
-| 3 | drain 0.25 to 0.3 | The Veil drains 30% slower. |
-| 4 | free 0 to 1 | The first Veil of each wave is free. |
-| 5 | prints 0 to 1 | Veiled footprints chill foes that cross them. |
-| 6 | walk 0.1 to 0.2 | He walks 20% faster veiled. |
-| 7 | drain 0.3 to 0.4, refund 0 to 4 | Veiled blows give 4 Gloam; drain 40% slower. |
-| 8 | drain 0.4 to 0.5 | The Veil drains 50% slower. |
-| Evolved | phantom 0 to 1 | His veiled trail blinds foes. |
+| 1 | breath 0.3, charges 1 | His warp leaves him veiled 0.3 s longer. |
+| 2 | refund 0 to 8 | A warp gives 8 Gloam back. |
+| 3 | path 0 to 0.5 | The thrown knife cuts foes it passes, 0.5x. |
+| 4 | charges 1 to 2 | Two warps in a row. |
+| 5 | ambush 0 to 1 | The veil after a warp primes an Ambush. |
+| 6 | blind 0 to 1 | Arriving blinds near minions 1 s. |
+| 7 | path 0.5 to 0.8, breath 0.3 to 0.6 | The knife cuts for 0.8x; veiled 0.6 s longer. |
+| 8 | charges 2 to 3 | Three warps in a row. |
+| Evolved | phantom 0 to 1 | A warp leaves a cloud of smoke. |
 
-Evolution: **Phantom Walk** (partner `t_nightLeap`). Walking veiled leaves a thin trail of smoke that blinds the foes in it for 1 s.
+Evolution: **Phantom Step** (partner `t_nightLeap`). Every warp leaves a cloud of smoke (0.7 of a Smoke Knot's width, 2 s) where he steps out, hiding him and blinding the minions in it.
 
 ### t_nightLeap: Night Leap
 
@@ -378,9 +379,9 @@ Evolution: **Murder of Crows** (partner `t_needles`). Every cast on I sends a fl
 
 ### t_double: Shadow Double
 
-summon, timed, L. A perfect dodge or a rise may call a shade of him behind the nearest foe.
+summon, timed, K. A Fade (his parry) or a rise from the pool may call a shade of him behind the nearest foe.
 
-Values: chance: chance a perfect dodge or a rise calls it; stabs: stabs it strikes; power: attack damage a stab deals, from behind; linger: seconds it stays after, stabbing again; shades: shades called; stun: seconds its last stab on a foe stuns; twoMoons: 1 every rise calls one (evolution)
+Values: chance: chance a Fade or a rise calls it; stabs: stabs it strikes; power: attack damage a stab deals, from behind; linger: seconds it stays after, stabbing again; shades: shades called; stun: seconds its last stab on a foe stuns; twoMoons: 1 every Fade and every rise calls one (evolution)
 
 | Lv | Change | Card |
 | --- | --- | --- |
@@ -392,9 +393,9 @@ Values: chance: chance a perfect dodge or a rise calls it; stabs: stabs it strik
 | 6 | shades 1 to 2 | Two shades. |
 | 7 | power 0.7 to 0.9, stun 0 to 0.5 | The last stab stuns 0.5 s; 0.9x. |
 | 8 | chance 0.35 to 0.55 | 55% chance. |
-| Evolved | twoMoons 0 to 1 | Every rise calls a shade. |
+| Evolved | twoMoons 0 to 1 | Every Fade and rise calls a shade. |
 
-Evolution: **Two Moons** (partner `t_sink`). Every rise from the pool leaves a shade behind the nearest foe.
+Evolution: **Two Moons** (partner `t_sink`). Every Fade and every rise from the pool leaves a shade behind the nearest foe.
 
 ### t_wraith: Hollow Wraith
 
@@ -436,30 +437,33 @@ Values: max: Gloam the bar holds more; refill: share faster Gloam refills; cost:
 
 Evolution: **Endless Night** (partner `t_quietStep`). The Veil does not drain while he stands still.
 
-### t_eclipse: Eclipse
+### t_gloaming: Gloaming
 
-ultimate, timed, U. Replaces Gloaming: the sun goes dark and he strikes every foe in reach from behind, then the Veil comes on.
+ultimate, timed, U. His Gloaming visits more foes, strikes each more often and leaves him in the Veil.
+It upgrades his special through `ultimateValues()`; the plain special's stab is the charge level's power x 0.25 x (AD + AP), from behind.
 
-Values: power: share of the level's power each stab deals, as Gloaming's; hits: stabs on each foe; stun: seconds struck minions lie stunned; refill: 1 Gloam refills in full; smoke: 1 a Smoke Knot rises where he returns; stage: 1 the whole stage is in reach (evolution)
+Values: power: share of the charge level's power each stab deals; more: foes visited more at every charge level; hits: stabs on each foe; veil: seconds of free Veil he returns in, his next blow an Ambush; stun: seconds struck minions lie stunned; refill: 1 Gloam refills in full; smoke: 1 a Smoke Knot rises where he returns; stage: 1 every foe on the stage is visited (evolution)
 
 | Lv | Change | Card |
 | --- | --- | --- |
-| 1 | power 1, hits 1 | Strike every foe in reach from behind, then the Veil. |
-| 2 | power 1 to 1.3 | Stabs deal 1.3x. |
+| 1 | power 1.25, more 1, hits 1 | Gloaming visits one more foe; stabs deal 1.25x. |
+| 2 | veil 0 to 2 | He returns veiled for 2 s; his next blow is an Ambush. |
 | 3 | hits 1 to 2 | Each foe is struck twice. |
 | 4 | stun 0 to 1 | Struck minions lie stunned 1 s. |
-| 5 | power 1.3 to 1.6 | Stabs deal 1.6x. |
+| 5 | more 1 to 2, power 1.25 to 1.6 | Two more foes; stabs deal 1.6x. |
 | 6 | refill 0 to 1 | Gloam refills in full. |
-| 7 | power 1.6 to 2, smoke 0 to 1 | A Smoke Knot rises where he returns; 2x. |
-| 8 | power 2 to 3 | Stabs deal 3x. |
-| Evolved | stage 0 to 1, hits 2 to 3, power 3 to 4 | The whole stage; every foe struck 3 times. |
+| 7 | smoke 0 to 1, power 1.6 to 2 | A Smoke Knot rises where he returns; 2x. |
+| 8 | hits 2 to 3 | Each foe is struck three times. |
+| Evolved | stage 0 to 1, hits 3 to 4, power 2 to 3.75 | The whole stage; every foe struck 4 times. |
 
-Evolution: **Night Without End** (partner `t_shroud`). The whole stage goes dark, and every foe on it is struck three times.
+On one foe, level 8 deals 2 x 3 = 6 times the plain special, and evolved 3.75 x 4 = 15 times.
+
+Evolution: **Night Without End** (partner `t_shroud`). The whole stage goes dark, and every foe on it is struck four times.
 
 ## Shape check
 
 The contract asks that at least four of a skill's seven level ups add a new property and that the rest are large number steps.
-The table counts, from the data, the level ups that turn a value on from 0 or add another foe, needle, mark, shade, wraith, Sink, stab, leap or hit (a new property), and those that only raise a number; Shroud's crit step adds a stat.
+The table counts, from the data, the level ups that turn a value on from 0 or add another foe, needle, mark, shade, wraith, Sink, warp, stab, leap or hit (a new property), and those that only raise a number; Shroud's crit step adds a stat.
 
 | Skill | Level ups adding a property | Number steps |
 | --- | --- | --- |
@@ -470,7 +474,7 @@ The table counts, from the data, the level ups that turn a value on from 0 or ad
 | Plunge | 4 | 3 |
 | Cut Tendon | 4 | 3 |
 | Deep Shadow | 5 | 2 |
-| Quiet Step | 4 | 3 |
+| Quiet Step | 6 | 1 |
 | Night Leap | 4 | 3 |
 | Needle Fan | 4 | 3 |
 | Mark of Dusk | 4 | 3 |
@@ -482,4 +486,4 @@ The table counts, from the data, the level ups that turn a value on from 0 or ad
 | Shadow Double | 4 | 3 |
 | Hollow Wraith | 4 | 3 |
 | Shroud | 4 | 3 |
-| Eclipse | 4 | 3 |
+| Gloaming | 6 | 1 |

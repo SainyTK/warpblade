@@ -21,7 +21,7 @@ export const DEEP_SHADOW: SkillDef = {
   name: "Deep Shadow",
   kind: "movement",
   risk: "timed",
-  button: "L",
+  button: "I",
   text: "His shadow pool lasts longer and cuts the foes it passes under.",
   levels: LEVELS,
   evolution: {

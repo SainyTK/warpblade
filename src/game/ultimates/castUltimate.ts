@@ -7,7 +7,7 @@ import { castDrumroll } from "../hero/jory/drumroll";
 import { castHourOfStillness } from "../hero/mirel/hour";
 import { castGrandPendulum } from "../hero/orrin/pendulum";
 import { skin } from "../hero/skin";
-import { castEclipse, castGloaming } from "../hero/tallis/gloaming";
+import { castGloaming } from "../hero/tallis/gloaming";
 import { castGreatWick } from "../hero/wenna/greatWick";
 import { SKY_FLASH } from "../spells/lightning";
 import { game, hero, lights } from "../state";
@@ -42,7 +42,7 @@ const ULTIMATES: Record<UltimateId, (level: number) => void> = {
   greatWick: castGreatWick,
   thousandCandles: castGreatWick,
   gloaming: castGloaming,
-  eclipse: castEclipse,
+  eclipse: castGloaming,
   drumroll: castDrumroll,
   grandFinale: castDrumroll,
   berserk: castBerserk,

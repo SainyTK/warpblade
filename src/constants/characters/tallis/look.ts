@@ -8,7 +8,7 @@ import { type HeroColors, PAL, SPARKS } from "../../palette";
  * mouth so only the eyes read, a short charcoal coat with a plum scarf end, fitted dark leathers with rose-stitched
  * straps, linen-wrapped forearms and shins, and soft split-toe boots. His knives are steel with a dusk rose edge.
  */
-const TALLIS_COLORS: HeroColors = {
+export const TALLIS_COLORS: HeroColors = {
   outline: hex("#0a080e"),
   skinLight: hex("#e0b48a"),
   skin: hex("#c08a5e"),

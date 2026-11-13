@@ -25,17 +25,6 @@ export const SINK_POUR: ActionClip = {
   ],
 };
 
-/** the rise out of the pool: the pour run backwards, from the crouch up into the stance */
-export const SINK_RISE: ActionClip = {
-  dur: SINK.rise,
-  hit: 0,
-  keys: [
-    [0, s({ hx: -0.5, hy: -6.5, ny: -14, nx: 1.5, cb: 1.4, fx: 4, fy: -5, sa: 2.6, bx: 3, by: -7, ffx: 6, bfx: -6 })],
-    [frame(2), s({ hy: -10, ny: -19.5, nx: 1.8, cb: 1, fx: 5, fy: -12, bx: 4, by: -15, ffx: 5, bfx: -5 })],
-    [SINK.rise, STANCE],
-  ],
-};
-
 /** Smoke Knot: the near hand dips to his feet and lets the knot fall, then he comes back up into the stance */
 export const KNOT_CLIP: ActionClip = {
   dur: SMOKE_KNOT.dur,

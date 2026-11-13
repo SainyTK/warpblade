@@ -4,7 +4,6 @@ import { crowsSkill } from "./crows";
 import { doubleSkill } from "./double";
 import { markDuskSkill } from "./markDusk";
 import { openVeinsSkill } from "./openVeins";
-import { quietStepSkill } from "./quietStep";
 import { inkWoundSkill, nightshadeSkill } from "./spreads";
 import { wraithSkill } from "./wraith";
 
@@ -17,6 +16,5 @@ export const TALLIS_SKILLS: Readonly<Record<string, SkillBehavior>> = {
   t_nightshade: nightshadeSkill,
   t_inkWound: inkWoundSkill,
   t_markDusk: markDuskSkill,
-  t_quietStep: quietStepSkill,
   t_caltrops: caltropsSkill,
 };

@@ -43,7 +43,7 @@ const withDusk = (icons: Record<string, (s: SpriteCanvas) => void>): Record<stri
     ]),
   );
 
-/** Tallis's icons: his own sources, his 20 skills and their evolutions (`<id>_evo`, the same parts lit gold) */
+/** Tallis's icons: his own sources, his 20 skills (Gloaming's is his special's own) and their evolutions (`<id>_evo`, the same parts lit gold) */
 export const TALLIS_ICONS: Record<string, (s: SpriteCanvas) => void> = withDusk({
   /** his knife string: two curved knives crossed */
   t_knives: (s) => crossed(s),
@@ -56,7 +56,7 @@ export const TALLIS_ICONS: Record<string, (s: SpriteCanvas) => void> = withDusk(
       s.set(8, 13, G[4]);
     });
   },
-  /** his special Gloaming: a rose crescent across the dark with him at its end */
+  /** his special Gloaming, and the skill that upgrades it: a rose crescent across the dark with him at its end */
   t_gloaming: (s) => {
     fill(s, () => s.dot(8, 8, 7, G[2]));
     crescent(s, 8, 8, 5.5, -2.4, 0.7, G[5]);
@@ -169,25 +169,19 @@ export const TALLIS_ICONS: Record<string, (s: SpriteCanvas) => void> = withDusk(
     inkPool(s, 8, 14, 14, true);
     fill(s, () => s.stroke(3, 13, 13, 13, 0.6, G[2]));
   },
-  /** Quiet Step: the hooded figure stepping soft over rose footprints, his hood fading out */
+  /** Quiet Step: a knife stuck in a foe, and him stepping out of the foe's shadow at its back */
   t_quietStep: (s) => {
-    fill(s, () => {
-      for (const [x, y] of [
-        [2, 14],
-        [6, 13],
-        [10, 14],
-      ] as const)
-        s.block(x, y, G[4], 2, 1);
-    });
-    assassin(s, 11, 12, 1);
-    arc(s, 11, 4, 3.5, -2.6, -0.4, G[4], 0.4);
+    foeBack(s, 6, 11, 3.2, -1);
+    knife(s, 1, 6, 5, 9);
+    fill(s, () => s.stroke(1, 15, 15, 15, 0.6, G[2]));
+    assassin(s, 12, 15, -1);
   },
-
-  /** Phantom Walk: a gold trail of smoke behind the walking figure */
+  /** Phantom Step: the knife in gold, and him stepping out of a gold-lit cloud behind the foe */
   t_quietStep_evo: (s) => {
-    puff(s, 3, 11, 3, true);
-    puff(s, 7, 13, 2.5, true);
-    assassin(s, 12, 15, 1, true);
+    foeBack(s, 5, 11, 3.2, -1);
+    knife(s, 0.5, 6, 4, 9, true);
+    puff(s, 12, 12, 4, true);
+    assassin(s, 12, 15, -1, true);
   },
   /** Night Leap: the figure jumping high in the air, a rose arc under him */
   t_nightLeap: (s) => {
@@ -407,14 +401,8 @@ export const TALLIS_ICONS: Record<string, (s: SpriteCanvas) => void> = withDusk(
     eclipseDisc(s, 8, 5, 3.5, true);
     assassin(s, 8, 15, 1, true);
   },
-  /** Eclipse: a dark sun ringed in rose over a foe */
-  t_eclipse: (s) => {
-    eclipseDisc(s, 8, 6, 4.5);
-    foeBack(s, 4, 13, 2.4, -1);
-    foeBack(s, 12, 13, 2.4, -1);
-  },
   /** Night Without End: the dark sun in gold over the whole floor, a crescent cut through it */
-  t_eclipse_evo: (s) => {
+  t_gloaming_evo: (s) => {
     eclipseDisc(s, 8, 7, 5.5, true);
     crescent(s, 8, 7, 4, -2.4, 0.6, glint(true));
     fill(s, () => s.stroke(1, 15, 15, 15, 0.6, rose(true)));

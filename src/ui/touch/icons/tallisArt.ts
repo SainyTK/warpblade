@@ -3,7 +3,7 @@ import type { TallisAbility } from "../../../types/tallis";
 import type { TouchButtonAction } from "../../../types/touch";
 import { hex } from "../../../utils/color";
 import { ICON_WHITE, type IconArt } from "./iconArt";
-import { JUMP } from "./sharedArt";
+import { DODGE, JUMP } from "./sharedArt";
 
 const G = PAL.gloam;
 const STEEL = hex("#aaa6b4");
@@ -26,6 +26,22 @@ const KNIFE: IconArt = {
     ".OO.....OO.",
   ],
   colors: { W: ICON_WHITE, S: STEEL, R: G[5], g: GRIP, O: G[4] },
+};
+
+/** the guard: two knives crossed blade down under a rose arc of the warded blow, a white flash where they meet */
+const GUARD: IconArt = {
+  rows: [
+    "..OOOOOOO..",
+    ".O.......O.",
+    "O..S...S..O",
+    "...SS.SS...",
+    "....SWS....",
+    "...SS.SS...",
+    "..gS...Sg..",
+    ".gg.....gg.",
+    "...........",
+  ],
+  colors: { O: G[4], S: STEEL, W: ICON_WHITE, g: GRIP },
 };
 
 /** the Veil: a hooded head fading out from solid to dithered, a rose outline round the fading half */
@@ -124,6 +140,8 @@ const GLOAMING: IconArt = {
 };
 
 const ABILITY_ART: Readonly<Record<TallisAbility, IconArt>> = {
+  veil: VEIL,
+  sink: SINK,
   smokeKnot: SMOKE,
   hamstring: HAMSTRING,
   t_needles: NEEDLES,
@@ -131,13 +149,15 @@ const ABILITY_ART: Readonly<Record<TallisAbility, IconArt>> = {
   t_caltrops: CALTROPS,
 };
 
-/** where each of up to five abilities sits on the switch dial, clockwise from the top */
+/** where each of up to seven abilities sits on the switch dial, clockwise from the top */
 const DIAL: readonly [number, number][] = [
   [4, 0],
-  [8, 3],
-  [7, 8],
-  [1, 8],
-  [0, 3],
+  [7, 1],
+  [8, 4],
+  [7, 7],
+  [4, 8],
+  [1, 7],
+  [0, 4],
 ];
 
 /** the switch: one mark for each ability he knows round a dial, the selected one white */
@@ -157,7 +177,8 @@ function switchArt(selected: TallisAbility, known: readonly TallisAbility[]): Ic
   return { rows: grid.map((r) => r.join("")), colors: { B: G[3], W: ICON_WHITE } };
 }
 
-/** Tallis's buttons: the knives, the Veil, Sink, the selected ability on I, the switch dial on O and Gloaming */
+/** Tallis's buttons: the knives, his crossed-knives guard, the shared dodge, the selected ability on I, the switch dial on
+ *  O and Gloaming */
 export function tallisArt(action: TouchButtonAction, ability: TallisAbility, known: readonly TallisAbility[]): IconArt {
   switch (action) {
     case "attack":
@@ -165,9 +186,9 @@ export function tallisArt(action: TouchButtonAction, ability: TallisAbility, kno
     case "up":
       return JUMP;
     case "guard":
-      return VEIL;
+      return GUARD;
     case "dash":
-      return SINK;
+      return DODGE;
     case "cast":
       return ABILITY_ART[ability];
     case "cycle":
