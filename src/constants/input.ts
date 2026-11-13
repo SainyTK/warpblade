@@ -124,14 +124,16 @@ export const ACTION_TEXT: Record<KitId, Record<InputAction, string>> = {
     left: "Walk left. No run",
     right: "Walk right. No run",
     up: "Jump. One jump, no double jump",
-    down: "With jump, drop through a ledge. Held as you press K, light the Wick at your feet",
+    down: "With jump, drop through a ledge",
     attack:
       "Lamp string: Tap, Swing, Flare. The foe it hits becomes your Quarry and every Wick turns on it. In the air, Lamp Drop",
-    dash: "Swap places with the Wick farthest ahead (stamina). The Wick arrives in a flare",
+    warp: "Throw a lit candle at the foe ahead and trade places with it (10 MP): the foe becomes your Quarry and the candle burns on as a Wick. With no foe ahead, trade places with your farthest Wick",
+    guard:
+      "Raise the lantern: hold to block blows from the front. Press just as a blow lands for Flare Back: it blinds the foes ahead and lights a Wick at your feet",
     run: "Walk toward the side held",
-    warp: "Light a Wick from your lamp (25 Wax). With four out, relight the weakest",
-    cast: "Use the selected ability: Kindle, Beckon or a spell skill (MP)",
-    cycle: "Switch to the next ability",
+    cast: "Use the selected ability: Light a Wick (Wax), Kindle, Beckon or a spell skill (MP). If it is not ready, the next ready one goes",
+    castWide: "Hold to light the Wick at your feet, or Kindle every Wick near you at once",
+    cycle: "Switch ability: Light, Kindle, Beckon and the spells you learn",
   },
   tallis: {
     ...SHARED_ACTION_TEXT,

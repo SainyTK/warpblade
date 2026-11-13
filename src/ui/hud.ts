@@ -30,7 +30,6 @@ import { updateSandBar } from "./sandBar";
 import { updateTallisTabs } from "./tallisTabs";
 import { updateWarpTab } from "./warpTab";
 import { updateWaxBar } from "./waxBar";
-import { updateWennaTabs } from "./wennaTabs";
 
 const hp = byId("hpFill");
 const mp = byId("mpFill");
@@ -63,7 +62,6 @@ export function updateHud(): void {
   updateHuldaTabs();
   updateOrrinTabs();
   updateMirelTabs();
-  updateWennaTabs();
   updateTallisTabs();
   updateJoryTabs();
   updateBrannocTabs();

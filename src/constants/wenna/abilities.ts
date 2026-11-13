@@ -9,8 +9,11 @@ export const KINDLE = {
   ky: -60,
   /** the flame swells this long before it bursts */
   swell: 0.15,
-  /** Wax back for the spent Wick, and the MP a fizzle costs */
+  /** Wax back for the spent Wick */
   refund: 12,
+  /** held: every Wick in reach bursts at this share of the power, for this many times the MP */
+  wideShare: 0.7,
+  wideMp: 1.75,
   /** the cast pose */
   dur: 10 / 30,
 } as const;

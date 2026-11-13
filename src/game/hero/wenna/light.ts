@@ -2,13 +2,13 @@ import { PAL } from "../../../constants/palette";
 import { LIGHT } from "../../../constants/wenna/wax";
 import { sfx } from "../../../services/audio";
 import { PK } from "../../../types/particle";
-import { isHeld } from "../../input";
 import { skillValues } from "../../skills/query";
 import { hero, particles, rng } from "../../state";
 import { surfaceBelow } from "../../world";
-import { isFree, setState, settle } from "../actions";
+import { setState, settle } from "../actions";
 import { wenna } from "./memory";
-import { hasWax, refuseWax, spendWax } from "./wax";
+import { startCasting } from "./startCasting";
+import { hasWax, spendWax } from "./wax";
 import { cappedWicks, relight, spawnWick, weakestWick, wickCap } from "./wicks";
 
 /** what a Wick costs: Deep Tallow takes some off; the next Wick after Chain Kindle costs nothing */
@@ -18,18 +18,16 @@ export const wickCost = (): number =>
 /** at the cap a press relights the weakest Wick for less */
 const atCap = (): boolean => cappedWicks().length >= wickCap();
 
-/** what this press of K costs now */
+/** what Light costs now */
 export const lightCost = (): number => (atCap() ? LIGHT.relight : wickCost());
 
-/** K: light a Wick ahead (at her feet with Down held), or relight the weakest at the cap; refused under the cost */
-export function pressLight(): boolean {
-  if (!isFree()) return false;
-  if (atCap() && !weakestWick()) return false;
-  if (!hasWax(lightCost())) {
-    refuseWax();
-    return true;
-  }
-  wenna.atFeet = isHeld("down") || !hero.ground;
+/** Light can go now: Wax for it, and at the cap a standing Wick to relight */
+export const lightAffordable = (): boolean => hasWax(lightCost()) && (!atCap() || !!weakestWick());
+
+/** I with Light: light a Wick ahead (held, at her feet), or relight the weakest at the cap */
+export function castLight(wide: boolean): boolean {
+  if (!startCasting()) return false;
+  wenna.atFeet = wide || !hero.ground;
   hero.vx = 0;
   setState("lightCast");
   sfx.swing(0.9);
@@ -70,7 +68,7 @@ function release(): void {
   spawnWick(x, y, "light");
 }
 
-/** the K cast: the lamp swings, the drop leaves at the release frame, she is free when the swing ends */
+/** the Light cast: the lamp swings, the drop leaves at the release frame, she is free when the swing ends */
 export function runLightCast(): void {
   const h = hero;
   if (h.ground) h.vx = 0;

@@ -16,8 +16,8 @@ import { skillValues, withCharms } from "../../skills/query";
 import { game, hero, lights, particles, progress, rng } from "../../state";
 import { hitStop, shake } from "../../world";
 import { setState } from "../actions";
-import { canCast } from "./castCheck";
 import { wenna } from "./memory";
+import { startCasting } from "./startCasting";
 import { gainWax } from "./wax";
 import { byWick } from "./wickKills";
 import { endWick, wicksNear } from "./wicks";
@@ -74,8 +74,8 @@ export function burstWick(w: Wick, share: number): Enemy[] {
   return hit;
 }
 
-/** the flame swells over a moment before the body cracks: the burst comes on the swell's end */
-function swell(w: Wick): void {
+/** the flame swells over a moment before the body cracks: the burst comes on the swell's end, at `share` of its power */
+function swell(w: Wick, share: number): void {
   let t = 0;
   game.fx.push({
     update(dt) {
@@ -83,7 +83,7 @@ function swell(w: Wick): void {
       if (w.melt >= 0) return false;
       if (t < KINDLE.swell) return true;
       const v = skillValues(CHAIN);
-      burstWick(w, 1);
+      burstWick(w, share);
       gainWax(v.refund ? LIGHT.cost : KINDLE.refund);
       if (v.free) wenna.freeWick = true;
       if (v.chain) {
@@ -101,27 +101,25 @@ function swell(w: Wick): void {
   });
 }
 
-/** I with Kindle: the Wick nearest her bursts; with none in reach it fizzles and costs half */
-export function pressKindle(): boolean {
-  if (!canCast(wenna.kindleCd, KINDLE.mp)) return true;
-  const w = kindleTarget();
+/** MP Kindle costs, more for its wide form */
+export const kindleMp = (wide: boolean): number => KINDLE.mp * (wide ? KINDLE.wideMp : 1);
+
+/** I with Kindle: the Wick nearest her bursts; held, with MP for it, every Wick in reach bursts at a share */
+export function castKindle(wide: boolean): boolean {
+  const near = kindleTarget();
+  if (!near || !startCasting()) return false;
+  const all = wide && hero.mp >= kindleMp(true);
+  hero.mp -= kindleMp(all);
   wenna.kindleCd = KINDLE.cooldown;
   wenna.casting = "kindle";
   hero.vx = hero.ground ? 0 : hero.vx;
   setState("kindleCast");
   emitSkillEvent({ type: "cast", ability: "kindle" });
-  if (!w) {
-    hero.mp -= KINDLE.mp / 2;
-    sfx.denied();
-    for (let i = 0; i < 4; i++)
-      particles.spawn(PK.SMOKE, hero.x + hero.face * 8, hero.y - 20, rng.range(-8, 8), -10, 0.5, {
-        col: PAL.wick[2],
-        size: 2,
-      });
+  sfx.cast();
+  if (!all) {
+    swell(near, 1);
     return true;
   }
-  hero.mp -= KINDLE.mp;
-  sfx.cast();
-  swell(w);
+  for (const w of wicksNear(hero.x, hero.y - 4, KINDLE.reach)) swell(w, KINDLE.wideShare);
   return true;
 }

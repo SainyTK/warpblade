@@ -18,7 +18,7 @@ export const LANTERN = {
   /** pull down on the swing, and how fast a swing dies away, a second */
   gravity: 320,
   damping: 3.2,
-  /** the hook moving further than this in one frame jumped (a Swap, a respawn) and the swing starts over */
+  /** the hook moving further than this in one frame jumped (a warp, a respawn) and the swing starts over */
   jump: 24,
   /** limits on the hook's measured speed and acceleration, so a hit frame's snap flings it hard but not wild */
   speed: 260,
@@ -31,7 +31,7 @@ export const LANTERN = {
   /** how bright it burns while she gathers U, before the levels add to it, and with each level reached */
   charge: 0.45,
   chargeLevel: 0.12,
-  /** how bright it roars while Great Wick or Thousand Candles goes up */
+  /** how bright it roars while Great Wick goes up */
   roar: 0.85,
   /** the light it throws the moment the Flare opens: radius, strength and seconds */
   flash: { r: 28, k: 0.4, life: 0.18 },

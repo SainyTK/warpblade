@@ -200,8 +200,15 @@ export function runString(dt: number): void {
   wenna.link = next >= 0 ? LAMP_LINK : 0;
 }
 
-/** a blow's recovery after it struck can be cut short by a jump or a Swap */
+/** a blow's recovery after it struck can be cut short by a jump or a shared action (warp, guard, dodge, ability, U) */
 export const inRecovery = (): boolean => (hero.state === "lamp" || hero.state === "lampDrop") && wenna.struck;
+
+/** a shared action cuts the string: the next J starts it over */
+export function cutString(): void {
+  wenna.queued = false;
+  wenna.blow = 0;
+  wenna.link = 0;
+}
 
 /** J in the air: Lamp Drop, one per airtime */
 export function pressDrop(): boolean {

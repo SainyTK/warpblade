@@ -59,7 +59,7 @@ function strike(w: Wick, e: Enemy, scale: number): void {
   emitSkillEvent({ type: "bite", foe: e, wick: w, damage: Math.max(0, before - e.hp) });
 }
 
-/** a Great Wick (Thousand Candles) bites this many times as hard */
+/** a Great Wick (her Great Wick skill) bites this many times as hard */
 const GREAT_BITE = 3;
 
 /** a Wick bites a foe: Bright Fangs bites twice on every third, and Blue Flame strikes the foe behind too */

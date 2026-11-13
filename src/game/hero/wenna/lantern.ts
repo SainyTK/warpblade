@@ -99,7 +99,7 @@ function flareOpen(h: Hero): number {
   return h.st >= LAMP_BLOWS.flare.hit ? h.st - LAMP_BLOWS.flare.hit : -1;
 }
 
-/** how bright the lantern burns, 0 at rest to 1 with the shutter open: a Flare, gathering U, the ultimates going up */
+/** how bright the lantern burns, 0 at rest to 1 with the shutter open: a Flare, gathering U, Great Wick going up */
 function brightness(h: Hero): number {
   const open = flareOpen(h);
   if (open >= 0) {
@@ -107,7 +107,7 @@ function brightness(h: Hero): number {
     return open < LANTERN.open / 30 ? 1 : clamp(1 - (open - LANTERN.open / 30) / Math.max(shut, 1e-3));
   }
   if (h.state === "charge") return clamp(LANTERN.charge + LANTERN.chargeLevel * h.chargeLevel);
-  if (h.state === "greatWick" || h.state === "thousand") return LANTERN.roar;
+  if (h.state === "greatWick") return LANTERN.roar;
   return 0;
 }
 
