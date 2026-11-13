@@ -26,18 +26,18 @@ const SWORD: IconArt = {
   colors: { W: ICON_WHITE, C: hex("#7fe3ff"), B: hex("#e0ac48"), G: hex("#7a5236"), P: hex("#ffd27a") },
 };
 
-/** Kael's guard: the crystal sword raised across, point up and back, a blow's spark on its edge */
+/** Kael's guard: the crystal blade held level across, a blow's spark bursting off its edge */
 const GUARD: IconArt = {
   rows: [
-    "WC.....S.",
-    ".WC...SWS",
-    "..WC...S.",
-    "...WC....",
-    "....WC...",
-    ".....WCB.",
-    "......B..",
-    ".....B.G.",
-    "........P",
+    ".........",
+    ".........",
+    "..S.S....",
+    "...W.....",
+    "..S.S.B..",
+    "WWWWWWBGP",
+    "CCCCC.B..",
+    ".........",
+    ".........",
   ],
   colors: {
     W: ICON_WHITE,
