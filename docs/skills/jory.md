@@ -1,13 +1,13 @@
 # Jory's skills
 
 Jory's 20 skills, written from the skill data in `src/constants/characters/jory/skills/`, which is the source of truth.
-His beat, Groove, the mallet string, Boom, Beat Step and Drumroll are in `docs/jory-design.md`; the rules every hero's skills follow are in `docs/skill-design.md`.
+His beat, Groove, the mallet string, the warp, the guard, Boom and Drumroll are in `docs/jory-design.md`; the rules every hero's skills follow are in `docs/skill-design.md`.
 
 ## Units
 
 Damage is a multiple of attack damage (x AD) from `progress.stats.ad`, or of ability power (x AP) from `progress.stats.ap` where a skill's values say so.
 At the start of a run AD is 12 and AP is 8.
-His mallets, the Crash wave, Downstroke and Step Touch read AD; Boom, Thunder Skin, his spells and his damage over time read AP.
+His mallets, the warp, the Crash wave, Downstroke and Step Touch read AD; Boom, Counterbeat, Thunder Skin, his spells and his damage over time read AP.
 An Accent is a blow started by a press on the beat: it deals 1.4 times, 1.6 times at Crescendo.
 "On each beat" means on each beat of his own clock, which runs faster as his Groove tier rises, so those skills speed up with Groove; they are budgeted at tier 2 (108 beats a minute), the tempo an ordinary player holds.
 The damage over time skills lay their stacks through the shared `addStacks`, ticking once a beat at the tempo when the stack was laid.
@@ -21,10 +21,11 @@ Every button does something from the first second of a run.
 | --- | --- |
 | A / D | Walk at the shared speed; a double tap runs. |
 | W | One jump of the shared height. No double jump. |
-| J | The string Tap, Roll (two hits), Crash, the same wherever foes stand. On the beat each blow is an Accent and adds a pip of Groove; off it, Groove falls by 3. In the air, Downstroke, once per airtime. |
-| K | Boom: 25 stamina. On the beat a 40 px ring that pushes minions out to 52 px, drowns foe shots within 48 px and makes him untouchable for 0.12 s; off it a 26 px ring. |
-| L | Beat Step: 18 stamina, 34 to 52 px by tier. On the beat untouchable and through ground foes; off it he can be hit. |
-| I | The selected ability: Steady Hand, Thunder Skin, or a spell skill. |
+| J tapped | The string Tap, Roll (two hits), Crash, the same wherever foes stand. On the beat each blow is an Accent and adds a pip of Groove; off it, Groove falls by 3. In the air, Downstroke, once per airtime. |
+| J held | The shared warp: a mallet spun at the foe, and he arrives with a crash. Thrown on the beat it adds a pip of Groove and lands as an Accent. |
+| K | Guard with the drum: 30% through, 16 stamina a block. A parry is Counterbeat, a full Boom off the drum; on the beat it raises a Groove tier. |
+| L | The shared dodge. On the beat it adds a pip of Groove. |
+| I | The selected ability: Boom (25 stamina; on the beat a 40 px ring that pushes minions out, drowns foe shots and makes him untouchable for 0.12 s, off it a 26 px ring), Steady Hand, Thunder Skin (held, a wave each way), or a spell skill. |
 | O | Switch ability. |
 | U | Drumroll, the base special, with the shared charge levels. |
 
@@ -51,12 +52,12 @@ Every button does something from the first second of a run.
 | `j_horn` | War Horn | summon | easy | auto | `j_crashWave` |
 | `j_metronome` | Iron Metronome | summon | precise | auto | `j_swell` |
 | `j_encore` | Encore | passive | easy | auto | `j_dissonance` |
-| `j_finale` | Grand Finale | ultimate | timed | U | `j_encore` |
+| `j_drumroll` | Drumroll | ultimate | timed | U | `j_encore` |
 
 Counts: attack 6, movement 3, spell 3, dot 3, summon 3, passive 1, ultimate 1.
 Risk: precise 5, easy 7, timed 8.
 
-Kit events he emits through the shared function, declared in `src/types/jory.ts`: `beat` (a judged press of J, K, L or I, on the beat or off it, with Groove after it), `accent` (an Accent landed on a foe), `boom` (a Boom struck, on the beat or not, with the foes in its ring), `tier` (his Groove tier changed) and `tick` (a beat of his clock went by); and the shared `cast`, `jump`, `dash` (each Beat Step) and `perfectDodge`.
+Kit events he emits through the shared function, declared in `src/types/jory.ts`: `beat` (a judged press of J or I, on the beat or off it, and a warp, parry or dodge on the beat, with Groove after it), `accent` (an Accent landed on a foe, from a blow or an on-beat warp), `boom` (a Boom or Counterbeat struck, on the beat or not, with the foes in its ring), `drumBlock` (a blow blocked on his drum, with its foe), `tier` (his Groove tier changed) and `tick` (a beat of his clock went by); and the shared `cast`, `jump`, `dash`, `warp`, `parry` and `perfectDodge`.
 
 ### j_accent: Heavy Accent
 
@@ -100,13 +101,13 @@ Evolution: **Blast Beat** (partner `j_stepTouch`). Roll is an eight hit flurry t
 
 ### j_crashWave: Crash Wave
 
-attack, easy, J. Crash sends its sound wave along the floor at any Groove.
+attack, easy, J. Crash and the warp's arrival send a sound wave along the floor at any Groove.
 
 Values: reach: pixels the wave runs; power: attack damage it deals; height: pixels it stands; pierce: 1 it passes through every foe; echo: 1 at tier 3 a second wave follows on the next beat; slow: seconds a foe it passes is slowed; bounce: 1 it bounces off the stage edge; wall: 1 it crosses the whole stage both ways and knocks minions down (evolution)
 
 | Lv | Change | Card |
 | --- | --- | --- |
-| 1 | reach 60, power 0.5, height 20 | Crash sends a 60 px wave at any Groove, 0.5x. |
+| 1 | reach 60, power 0.5, height 20 | Crash and the warp's crash send a 60 px wave at any Groove, 0.5x. |
 | 2 | height 20 to 30, power 0.5 to 0.6 | The wave stands taller; 0.6x. |
 | 3 | pierce 0 to 1 | The wave passes through every foe. |
 | 4 | reach 60 to 80, power 0.6 to 0.8 | The wave runs 80 px, 0.8x. |
@@ -180,23 +181,23 @@ Evolution: **Fortissimo** (partner `j_encore`). At Crescendo every blow reaches 
 
 ### j_stepTouch: Step Touch
 
-movement, timed, L. Beat Step strikes the foes it passes.
+movement, timed, L. His dodge strikes the foes it passes, harder on the beat.
 
-Values: power: attack damage each foe passed takes; echo: share of it struck again on the next beat; reach: share further the step goes; stagger: 1 struck minions stagger; second: 1 an on-beat step makes the next step free; moonwalk: 1 on-beat steps cost no stamina for four in a row (evolution)
+Values: power: attack damage each foe passed takes; echo: share of it struck again on the next beat; onBeat: share more an on-beat dodge strikes; stagger: 1 struck minions stagger; refund: stamina an on-beat dodge gives back; moonwalk: 1 an on-beat dodge gives back all its stamina (evolution)
 
 | Lv | Change | Card |
 | --- | --- | --- |
-| 1 | power 0.6 | Beat Step strikes the foes it passes, 0.6x. |
+| 1 | power 0.6 | His dodge strikes the foes it passes, 0.6x. |
 | 2 | power 0.6 to 0.8 | 0.8x. |
 | 3 | echo 0 to 0.5 | An echo strikes them again on the next beat, half as hard. |
-| 4 | reach 0 to 0.15 | The step goes 15% further. |
+| 4 | onBeat 0 to 0.5 | An on-beat dodge strikes 50% harder. |
 | 5 | stagger 0 to 1 | Struck minions stagger. |
 | 6 | power 0.8 to 1.1, echo 0.5 to 0.7 | 1.1x; the echo 70%. |
-| 7 | second 0 to 1 | An on-beat step makes the next one free. |
+| 7 | refund 0 to 15 | An on-beat dodge gives back 15 stamina. |
 | 8 | power 1.1 to 1.5 | 1.5x. |
-| Evolved | moonwalk 0 to 1 | Four on-beat steps in a row cost nothing. |
+| Evolved | moonwalk 0 to 1 | On-beat dodges cost no stamina. |
 
-Evolution: **Moonwalk** (partner `j_paradiddle`). On-beat steps cost no stamina for four in a row, each striking.
+Evolution: **Moonwalk** (partner `j_paradiddle`). On-beat dodges cost no stamina, each striking.
 
 ### j_march: War March
 
@@ -222,7 +223,7 @@ Evolution: **Parade** (partner `j_drumCorps`). Walking at Crescendo stamps a 40 
 
 movement, timed, jump. A jump pressed on the beat lets Up jump again in the air, on a beat.
 
-Values: leaps: jumps in the air after an on-beat jump; ring: pixels of the ring his landing sends out after a leap; power: attack damage of that ring; stun: seconds it stuns; boom: 1 Boom in the air costs no stamina; skybeat: 1 each air jump drops a sound blast below him (evolution)
+Values: leaps: jumps in the air after an on-beat jump; ring: pixels of the ring his landing sends out after a leap; power: attack damage of that ring; stun: seconds it stuns; boom: 1 Boom (on I) in the air costs no stamina; skybeat: 1 each air jump drops a sound blast below him (evolution)
 
 | Lv | Change | Card |
 | --- | --- | --- |
@@ -320,23 +321,23 @@ Evolution: **Sympathy** (partner `j_gong`). Each Accent spreads the Resonance on
 
 ### j_eardrum: Ringing Ears
 
-dot, timed, K. Boom leaves Ringing on the foes it reaches, which hurts on each beat.
+dot, timed, K. Boom and Counterbeat leave Ringing on the foes they reach, which hurts on each beat.
 
-Values: stacks: stacks a Boom lays; ap: ability power each stack deals on each beat; slow: seconds ringing foes are slowed; taken: share more ringing foes take from every source; blind: seconds an on-beat Boom blinds them; wider: share wider his Boom rings; roar: 1 an on-beat Boom consumes the Ringing for a burst (evolution)
+Values: stacks: stacks a Boom or Counterbeat lays; ap: ability power each stack deals on each beat; slow: seconds ringing foes are slowed; block: 1 a blow blocked on his drum lays a stack on its attacker; taken: share more ringing foes take from every source; blind: seconds an on-beat Boom or Counterbeat blinds them; wider: share wider his Boom and Counterbeat ring; roar: 1 an on-beat Boom or Counterbeat consumes the Ringing for a burst (evolution)
 
 | Lv | Change | Card |
 | --- | --- | --- |
-| 1 | stacks 1, ap 0.1 | Boom leaves 1 Ringing stack, 0.1x a beat. |
+| 1 | stacks 1, ap 0.1 | Boom and Counterbeat leave 1 Ringing stack, 0.1x a beat. |
 | 2 | stacks 1 to 2 | 2 stacks. |
 | 3 | slow 0 to 1 | Ringing foes are slowed. |
-| 4 | ap 0.1 to 0.16 | 0.16x. |
+| 4 | block 0 to 1, ap 0.1 to 0.16 | A blow blocked on his drum rings its attacker; 0.16x. |
 | 5 | taken 0 to 0.1 | Ringing foes take 10% more. |
-| 6 | blind 0 to 0.5 | An on-beat Boom blinds them 0.5 s. |
-| 7 | wider 0 to 0.2 | Boom rings 20% wider. |
+| 6 | blind 0 to 0.5 | An on-beat Boom or Counterbeat blinds them 0.5 s. |
+| 7 | wider 0 to 0.2 | Boom and Counterbeat ring 20% wider. |
 | 8 | stacks 2 to 3, ap 0.16 to 0.26 | 3 stacks, 0.26x. |
-| Evolved | roar 0 to 1 | An on-beat Boom bursts the Ringing. |
+| Evolved | roar 0 to 1 | An on-beat Boom or Counterbeat bursts the Ringing. |
 
-Evolution: **Deafening Roar** (partner `j_echo`). An on-beat Boom consumes the Ringing on every foe it reaches for a burst.
+Evolution: **Deafening Roar** (partner `j_echo`). An on-beat Boom or Counterbeat consumes the Ringing on every foe it reaches for a burst.
 
 ### j_dissonance: Dissonance
 
@@ -438,25 +439,28 @@ Values: cost: Groove an off-beat press costs; window: game seconds wider his bea
 
 Evolution: **Standing Ovation** (partner `j_dissonance`). Every 8th on-beat press heals 2% of his HP.
 
-### j_finale: Grand Finale
+### j_drumroll: Drumroll
 
-ultimate, timed, U. Replaces Drumroll: wider rings, a cymbal crash on every foe each ring reaches, and Crescendo held after it.
+ultimate, timed, U. Upgrades Drumroll, his one ultimate: cymbal crashes on every foe a ring reaches, wider rings that pull, and Crescendo held after it.
+It has no `ultimate` field; `castDrumroll` reads it through `ultimateValues()`.
 
-Values: wider: share wider the rings are; power: a multiple on each ring's damage; cymbal: share of a ring's damage each cymbal crash adds; lock: beats Crescendo is held after it; stun: seconds each ring stuns minions; pull: pixels each ring pulls foes in; extra: beats added to the roll; refund: MP given back when the roll ends; encore: 1 the roll lasts 12 beats and every ring knocks down (evolution)
+Values: power: a multiple on each ring's damage; cymbal: share of a ring's damage each cymbal crash adds; wider: share wider the rings are; pull: pixels each ring pulls minions in; lock: beats Crescendo is held after it; stun: seconds each ring stuns minions; extra: beats added to the roll; refund: MP given back when the roll ends; encore: 1 the roll plays twice as many beats and every ring knocks down (evolution)
 
 | Lv | Change | Card |
 | --- | --- | --- |
-| 1 | wider 0.25, power 1.2, cymbal 0.3, lock 8 | Drumroll rings 25% wider with cymbal crashes; Crescendo held 8 beats. |
-| 2 | power 1.2 to 1.5, cymbal 0.3 to 0.45 | Rings deal 1.5x; cymbals 45%. |
-| 3 | stun 0 to 0.4 | Each ring stuns minions 0.4 s. |
-| 4 | power 1.5 to 2, cymbal 0.45 to 0.6, wider 0.25 to 0.4 | Rings deal 2x; cymbals 60%; 40% wider. |
-| 5 | pull 0 to 8 | Each ring pulls foes 8 px in. |
-| 6 | power 2 to 2.6, cymbal 0.6 to 0.8, lock 8 to 12 | Rings deal 2.6x; cymbals 80%; held 12 beats. |
-| 7 | extra 0 to 1 | One more beat in the roll. |
-| 8 | refund 0 to 25, power 2.6 to 3.5, cymbal 0.8 to 1.1, lock 12 to 16 | 25 MP back after it; 3.5x; cymbals 110%; held 16 beats. |
-| Evolved | encore 0 to 1, power 3.5 to 5 | 12 beats; every ring knocks down. |
+| 1 | power 1.3, cymbal 0.3 | Drumroll's rings strike 30% harder and drop a cymbal crash on each foe they reach. |
+| 2 | wider 0 to 0.25 | Rings reach 25% wider. |
+| 3 | pull 0 to 8 | Each ring pulls minions 8 px in. |
+| 4 | power 1.3 to 2, cymbal 0.3 to 0.5 | Rings deal 2x; cymbals 50%. |
+| 5 | lock 0 to 8 | After it, Crescendo is held for 8 beats. |
+| 6 | stun 0 to 0.4 | Each ring stuns minions 0.4 s. |
+| 7 | extra 0 to 1, power 2 to 2.5 | One more beat in the roll; 2.5x. |
+| 8 | power 2.5 to 3, cymbal 0.5 to 0.7, lock 8 to 12, refund 0 to 25 | 3x; cymbals 70%; Crescendo held 12 beats; 25 MP back. |
+| Evolved | encore 0 to 1, power 3 to 3.8 | Twice the beats; every ring knocks down. |
 
-Evolution: **Encore of Thunder** (partner `j_encore`). The roll lasts 12 beats, and every ring knocks foes down.
+Evolution: **Encore of Thunder** (partner `j_encore`). The roll plays twice as many beats, and every ring knocks foes down.
+
+Budget per cast against the plain special at the fourth charge level (6 rings), on one foe every ring reaches: level 8 deals 7 rings x 3 x 1.7 (the cymbal) over 6 plain rings, about 6 times; evolved, 14 rings x 3.8 x 1.7 over 6, about 15 times.
 
 ## Shape check
 
@@ -478,10 +482,10 @@ The table counts, from the data, the level ups that turn a value on from 0 or ad
 | Tuning Fork | 4 | 3 |
 | Echo Chamber | 4 | 3 |
 | Resonance | 4 | 3 |
-| Ringing Ears | 6 | 1 |
+| Ringing Ears | 7 | 0 |
 | Dissonance | 4 | 3 |
 | Drum Corps | 4 | 3 |
 | War Horn | 4 | 3 |
 | Iron Metronome | 4 | 3 |
 | Encore | 4 | 3 |
-| Grand Finale | 4 | 3 |
+| Drumroll | 6 | 1 |
