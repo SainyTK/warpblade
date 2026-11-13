@@ -10,30 +10,30 @@ export const BACKSWING: SkillDef = {
   text: "A blow just after a Stopped Moment hits much harder.",
   levels: [
     {
-      text: "A blow 0.4 s after a Stopped Moment deals 60% more.",
-      values: { power: 0.6, window: 0.4, crit: 0, heal: 0, stagger: 0, undone: 0 },
+      text: "A blow 0.6 s after a Stopped Moment deals 60% more.",
+      values: { power: 0.6, window: 0.6, crit: 0, heal: 0, stagger: 0, undone: 0 },
     },
-    { text: "The blow always crits.", values: { power: 0.6, window: 0.4, crit: 1, heal: 0, stagger: 0, undone: 0 } },
+    { text: "The blow always crits.", values: { power: 0.6, window: 0.6, crit: 1, heal: 0, stagger: 0, undone: 0 } },
     {
-      text: "The window grows to 0.6 s.",
-      values: { power: 0.6, window: 0.6, crit: 1, heal: 0, stagger: 0, undone: 0 },
+      text: "The window grows to 0.8 s.",
+      values: { power: 0.6, window: 0.8, crit: 1, heal: 0, stagger: 0, undone: 0 },
     },
-    { text: "The blow heals 3% HP.", values: { power: 0.6, window: 0.6, crit: 1, heal: 0.03, stagger: 0, undone: 0 } },
+    { text: "The blow heals 3% HP.", values: { power: 0.6, window: 0.8, crit: 1, heal: 0.03, stagger: 0, undone: 0 } },
     {
       text: "The blow deals 100% more.",
-      values: { power: 1, window: 0.6, crit: 1, heal: 0.03, stagger: 0, undone: 0 },
+      values: { power: 1, window: 0.8, crit: 1, heal: 0.03, stagger: 0, undone: 0 },
     },
     {
       text: "The blow staggers for 1 s.",
-      values: { power: 1, window: 0.6, crit: 1, heal: 0.03, stagger: 1, undone: 0 },
+      values: { power: 1, window: 0.8, crit: 1, heal: 0.03, stagger: 1, undone: 0 },
     },
     {
       text: "The blow deals 160% more.",
-      values: { power: 1.6, window: 0.6, crit: 1, heal: 0.03, stagger: 1, undone: 0 },
+      values: { power: 1.6, window: 0.8, crit: 1, heal: 0.03, stagger: 1, undone: 0 },
     },
     {
       text: "The blow deals 260% more.",
-      values: { power: 2.6, window: 0.6, crit: 1, heal: 0.03, stagger: 1, undone: 0 },
+      values: { power: 2.6, window: 0.8, crit: 1, heal: 0.03, stagger: 1, undone: 0 },
     },
   ],
   evolution: {
@@ -42,7 +42,7 @@ export const BACKSWING: SkillDef = {
     text: "The first blow after a Stopped Moment replays on its foe, at full power, every blow she landed in the time it looked back over.",
     row: {
       text: "Replay every rewound blow on the foe.",
-      values: { power: 2.6, window: 0.6, crit: 1, heal: 0.03, stagger: 1, undone: 1 },
+      values: { power: 2.6, window: 0.8, crit: 1, heal: 0.03, stagger: 1, undone: 1 },
     },
   },
 };
