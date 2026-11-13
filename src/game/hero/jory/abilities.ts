@@ -1,42 +1,36 @@
-import { STEADY_HAND, THUNDER_SKIN } from "../../../constants/jory/moves";
+import { BOOM, STEADY_HAND, THUNDER_SKIN } from "../../../constants/jory/moves";
 import type { JoryAbility } from "../../../types/jory";
-import { skillLevel, skillValues } from "../../skills/query";
-import { createRotation } from "../../skills/rotation";
-import { pressCast } from "./cast";
+import type { AbilitySlot } from "../../../types/moveset";
+import { skillEvolved, skillLevel, skillValues } from "../../skills/query";
+import { hero } from "../../state";
+import { boomCost } from "./boom";
+import { castAbility } from "./cast";
 import { jory } from "./memory";
 
-/** his abilities on I in the order O turns through them: Steady Hand and Thunder Skin from the start, then his spells */
-export const ABILITIES: readonly JoryAbility[] = ["steadyHand", "thunderSkin", "j_gong", "j_tuning", "j_echo"];
+/** his abilities on I in the order O turns through them: Boom, Steady Hand and Thunder Skin from the start, then his spells */
+const ABILITIES: readonly JoryAbility[] = ["boom", "steadyHand", "thunderSkin", "j_gong", "j_tuning", "j_echo"];
 
-/** an ability he has now: his own two always, a spell skill once held */
-const known = (id: JoryAbility): boolean => id === "steadyHand" || id === "thunderSkin" || skillLevel(id) > 0;
+/** his own three, which he has from the start */
+const own = (id: JoryAbility): boolean => id === "boom" || id === "steadyHand" || id === "thunderSkin";
 
-const rotation = createRotation(ABILITIES, (id) => known(id as JoryAbility));
-
-/** the ability I uses now */
-export const selectedAbility = (): JoryAbility => (rotation.selected() as JoryAbility | null) ?? "steadyHand";
-
-/** O: turn to the next ability he has */
-export const nextAbility = (): boolean => rotation.next();
-
-/** a fresh run: back to Steady Hand */
-export const resetAbilities = (): void => rotation.reset();
-
-/** what an ability costs in MP */
-export function abilityMp(id: JoryAbility): number {
+/** what an ability costs in MP (Boom costs stamina), and Thunder Skin's wide form more */
+function abilityMp(id: JoryAbility, wide = false): number {
+  if (id === "boom") return 0;
   if (id === "steadyHand") return STEADY_HAND.mp;
-  if (id === "thunderSkin") return THUNDER_SKIN.mp;
+  if (id === "thunderSkin") return wide ? THUNDER_SKIN.wideMp : THUNDER_SKIN.mp;
   return skillValues(id).mp ?? 0;
 }
 
 /** an ability's own recharge time */
-export function abilityCooldown(id: JoryAbility): number {
+function abilityCooldown(id: JoryAbility): number {
+  if (id === "boom") return BOOM.wait;
   if (id === "steadyHand") return STEADY_HAND.cooldown;
   if (id === "thunderSkin") return THUNDER_SKIN.cooldown;
   return skillValues(id).cooldown ?? 1;
 }
 
 const WAITS = {
+  boom: "boomWait",
   steadyHand: "steadyCd",
   thunderSkin: "thunderCd",
   j_gong: "gongCd",
@@ -44,22 +38,45 @@ const WAITS = {
   j_echo: "echoCd",
 } as const satisfies Record<JoryAbility, keyof typeof jory>;
 
-/** seconds an ability still waits */
-export const abilityWait = (id: JoryAbility): number => jory[WAITS[id]];
+/** each ability's HUD tab label */
+const LABELS: Readonly<Record<JoryAbility, string>> = {
+  boom: "BOOM",
+  steadyHand: "STEADY",
+  thunderSkin: "THUNDER",
+  j_gong: "GONG",
+  j_tuning: "TUNING",
+  j_echo: "ECHO",
+};
 
-/** start an ability's wait */
-export function startWait(id: JoryAbility): void {
+/** the hero can pay for an ability now: stamina for Boom, MP for the rest */
+const affordable = (id: JoryAbility): boolean =>
+  id === "boom" ? hero.stamina >= boomCost() : hero.mp >= abilityMp(id);
+
+/** I held on Thunder Skin with MP for its wide form: a wave each way */
+const wideNow = (id: JoryAbility, wide: boolean): boolean =>
+  wide && id === "thunderSkin" && hero.mp >= abilityMp(id, true);
+
+/** pay for an ability and start its recharge, then cast it */
+function cast(id: JoryAbility, wide: boolean): boolean {
+  const both = wideNow(id, wide);
+  if (!castAbility(id, both)) return false;
+  hero.mp -= abilityMp(id, both);
   jory[WAITS[id]] = abilityCooldown(id);
+  return true;
 }
 
-/** the share of an ability's recharge still to run, 0 when ready */
-export const abilityRecharge = (id: JoryAbility): number => Math.min(1, abilityWait(id) / abilityCooldown(id));
-
-/** I: use the selected ability */
-export const pressAbility = (): boolean => pressCast(selectedAbility());
-
-/** every ability he knows, for the HUD */
-export const knownAbilities = (): JoryAbility[] => ABILITIES.filter(known);
+/** Jory's abilities on I: Boom (stamina), Steady Hand and Thunder Skin (MP), then the spell skills he holds */
+export const JORY_SLOTS: readonly AbilitySlot[] = ABILITIES.map((id) => ({
+  id,
+  label: LABELS[id],
+  known: () => own(id) || skillLevel(id) > 0,
+  wait: () => jory[WAITS[id]],
+  full: () => Math.max(0.01, abilityCooldown(id)),
+  affordable: () => affordable(id),
+  cast: (wide: boolean) => cast(id, wide),
+  evolved: own(id) ? undefined : () => skillEvolved(id),
+  cost: id === "boom" ? () => `${boomCost()} ST` : undefined,
+}));
 
 /** recharges run down */
 export function tickAbilities(recharge: number): void {

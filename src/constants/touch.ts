@@ -205,23 +205,27 @@ export const TOUCH_TEXT: Record<KitId, Record<TouchButtonAction, TouchButtonText
   jory: {
     attack: {
       label: "Mallets",
-      hint: "Mallet string: Tap, Roll, Crash. On the beat a blow is an Accent and builds Groove. In the air, Downstroke",
+      hint: "Tap: mallet string Tap, Roll, Crash; on the beat a blow is an Accent and builds Groove. In the air, Downstroke. Hold: spin a mallet at a foe and arrive with a crash (10 MP)",
       accent: "#5a82ff",
     },
     up: { label: "Jump", hint: "One jump. Hold the stick down to drop through a ledge", accent: "#e8e6f6" },
     dash: DODGE_BUTTON,
     guard: {
-      label: "Boom",
-      hint: "Push foes away (stamina). On the beat it is bigger, drowns foe shots and nothing can touch you",
+      label: "Guard",
+      hint: "Hold to block with the drum. Tap just as a blow lands for Counterbeat, a Boom off the drum; on the beat it lifts Groove a tier",
       accent: "#eef3ff",
     },
     cast: {
       label: "Ability",
-      hint: "Use the selected ability: Steady Hand, Thunder Skin or a spell skill. Judged on the beat",
+      hint: "Tap: the selected ability, Boom, Steady Hand, Thunder Skin or a spell skill, judged on the beat. Hold: Thunder Skin sends a wave each way",
       accent: "#dce6ff",
     },
     ultimate: SPECIAL,
-    cycle: { label: "Switch", hint: "Turn to the next ability", accent: "#8eaaf0" },
+    cycle: {
+      label: "Switch",
+      hint: "Switch ability: Boom, Steady Hand, Thunder Skin and the spells you learn",
+      accent: "#8eaaf0",
+    },
   },
   brannoc: {
     attack: {

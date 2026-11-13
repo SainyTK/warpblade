@@ -60,7 +60,7 @@ export const JORY_ICONS: Record<string, (s: SpriteCanvas) => void> = withBeat({
     soundRing(s, 8, 9, 6.5);
     drum(s, 8, 13, 4, 5);
   },
-  /** his special Drumroll: the drum planted on the floor under both mallets, rings widening from it */
+  /** his special Drumroll, and the Drumroll skill that upgrades it: the drum planted under both mallets, rings widening */
   j_drumroll: (s) => {
     beatRing(s, 8, 13, 7.5, 2, B[3]);
     beatRing(s, 8, 13, 5.5, 1.3, B[4]);
@@ -420,15 +420,8 @@ export const JORY_ICONS: Record<string, (s: SpriteCanvas) => void> = withBeat({
     }
     sparkle(s, 8, 4, 1.5, GOLD_LIGHT);
   },
-  /** Grand Finale: the drum with two cymbals crashing over it */
-  j_finale: (s) => {
-    drum(s, 8, 15, 4, 4);
-    cymbal(s, 4, 6, 3.2, 1);
-    cymbal(s, 12, 6, 3.2, -1);
-    crash(s, 8, 4, 2.6, B[5]);
-  },
-  /** Encore of Thunder: the gold drum under crashing gold cymbals and thunder */
-  j_finale_evo: (s) => {
+  /** Encore of Thunder, Drumroll evolved: the gold drum under crashing gold cymbals and thunder */
+  j_drumroll_evo: (s) => {
     drum(s, 8, 15, 4, 4, true);
     cymbal(s, 3, 7, 3, 1, true);
     cymbal(s, 13, 7, 3, -1, true);

@@ -3,10 +3,10 @@ import { CRASH_WAVE } from "./crashWave";
 import { DISSONANCE } from "./dissonance";
 import { DOWNBEAT_LEAP } from "./downbeatLeap";
 import { DRUM_CORPS } from "./drumCorps";
+import { DRUMROLL_SKILL } from "./drumroll";
 import { ECHO_CHAMBER } from "./echoChamber";
 import { ENCORE } from "./encore";
 import { GONG } from "./gong";
-import { GRAND_FINALE } from "./grandFinale";
 import { HEAVY_ACCENT } from "./heavyAccent";
 import { IRON_METRONOME } from "./ironMetronome";
 import { KICK_DRUM } from "./kickDrum";
@@ -41,5 +41,5 @@ export const JORY_SKILL_DEFS: readonly SkillDef[] = [
   WAR_HORN,
   IRON_METRONOME,
   ENCORE,
-  GRAND_FINALE,
+  DRUMROLL_SKILL,
 ];

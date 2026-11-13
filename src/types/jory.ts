@@ -1,13 +1,14 @@
 import type { Enemy } from "./enemy";
+import type { HeroState } from "./hero";
 
 /** states only Jory enters; his kit runs and poses them */
-export type JoryState = "mallet" | "downstroke" | "boom" | "beatStep" | "abilityCast" | "spellCast" | "drumroll";
+export type JoryState = "mallet" | "downstroke" | "boom" | "abilityCast" | "spellCast" | "drumroll";
 
 /** the blows of his mallet string, Kick Drum's front kick, and Downstroke in the air */
 export type MalletBlow = "tap" | "roll" | "crash" | "kick" | "downstroke";
 
-/** the abilities on I, in the order O turns through them: his two from the start and his three spell skills */
-export type JoryAbility = "steadyHand" | "thunderSkin" | "j_gong" | "j_tuning" | "j_echo";
+/** the abilities on I, in the order O turns through them: his three from the start and his three spell skills */
+export type JoryAbility = "boom" | "steadyHand" | "thunderSkin" | "j_gong" | "j_tuning" | "j_echo";
 
 /** the presses his beat judges */
 export type BeatButton = "J" | "K" | "L" | "I";
@@ -40,11 +41,23 @@ export interface JoryMemory {
   /** on-beat presses in a row (Iron Metronome) and in all this run (Standing Ovation) */
   streak: number;
   onBeats: number;
-  /** the beat-clock time each judged button was first seen pressed, -1 when no press waits */
+  /** the beat-clock time each judged button went down, -1 when its key is up and no press of it waits */
   stampJ: number;
   stampK: number;
   stampL: number;
   stampI: number;
+  /** the beat-clock time of each button's latest press, kept after it is used, for the presses the shared moveset takes */
+  lastJ: number;
+  lastK: number;
+  lastL: number;
+  lastI: number;
+  /** the hero state seen last step, so the kit hears a warp or a dodge start */
+  seen: HeroState;
+  /** the warp under way was thrown on the beat, and on a bar's downbeat: its arrival is an Accent */
+  warpOnBeat: boolean;
+  warpDownbeat: boolean;
+  /** the dodge under way went on the beat */
+  dodgeOnBeat: boolean;
   /** a J judged during the flinch and kept waiting to start a blow: its stamp (-1 for none) and its judgement */
   keptJ: number;
   keptOnBeat: boolean;
@@ -66,22 +79,13 @@ export interface JoryMemory {
   link: number;
   /** Downbeat Leap: jumps left in this airtime */
   leaps: number;
-  /** Downstrokes left in this airtime, and the air step */
+  /** Downstrokes left in this airtime */
   downstrokes: number;
-  airStep: boolean;
-  /** Boom: its wait, the untouchable moment of an on-beat Boom, whether it was on the beat, and its perfect dodge */
+  /** Boom: its recharge, the untouchable moment of an on-beat Boom, whether it was on the beat, and its perfect dodge */
   boomWait: number;
   boomGuard: number;
   boomOnBeat: boolean;
   boomDodged: boolean;
-  /** Beat Step: its wait, direction, length, whether it was on the beat, and its perfect dodge */
-  stepWait: number;
-  stepDir: number;
-  stepLen: number;
-  stepOnBeat: boolean;
-  stepDodged: boolean;
-  /** Moonwalk: on-beat steps left that cost no stamina */
-  freeSteps: number;
   /** Steady Hand: beats left */
   steadyBeats: number;
   /** seconds until each ability on I can be used again */
@@ -90,15 +94,16 @@ export interface JoryMemory {
   gongCd: number;
   tuningCd: number;
   echoCd: number;
-  /** the ability the cast under way is using, and whether its press was on the beat */
+  /** the ability the cast under way is using, whether its press was on the beat, and whether it is the wide form */
   casting: JoryAbility;
   castOnBeat: boolean;
-  /** the special or ultimate under way: its level, rings in all and rings played, and seconds since the last ring */
+  castWide: boolean;
+  /** the Drumroll under way: its level, rings in all and rings played, and seconds since the last ring */
   ultLevel: number;
   rings: number;
   rung: number;
   ringT: number;
-  /** Grand Finale holds Crescendo for this many more beats */
+  /** Drumroll's upgrade holds Crescendo for this many more beats */
   lockBeats: number;
   /** seconds held at Crescendo without a break, and the most this run (In Time) */
   crescendoT: number;
@@ -109,14 +114,6 @@ export interface JoryMemory {
   shrugCd: number;
 }
 
-/** what the host alone keeps for Jory: foes his kit holds on to, which never go to a guest */
-export interface JoryHostMemory {
-  /** the last foe a blow landed on */
-  lastFoe: Enemy | null;
-  /** the ground foes the Beat Step under way has passed through */
-  passed: Enemy[];
-}
-
 declare module "./skillBehavior" {
   /** Jory's own skill events */
   interface SkillEvents {
@@ -124,8 +121,10 @@ declare module "./skillBehavior" {
     beat: { onBeat: boolean; button: BeatButton; groove: number; downbeat: boolean };
     /** an Accent landed on this foe, from this blow */
     accent: { foe: Enemy; blow: MalletBlow; downbeat: boolean };
-    /** a Boom struck, on the beat or not, and the foes in its ring */
+    /** a Boom struck (his ability on I, or Counterbeat from a parry), on the beat or not, and the foes in its ring */
     boom: { onBeat: boolean; foes: Enemy[] };
+    /** a blow from this foe was blocked on his drum */
+    drumBlock: { foe: Enemy };
     /** his Groove tier changed */
     tier: { from: number; to: number };
     /** a beat of his clock went by */

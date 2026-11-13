@@ -1,6 +1,6 @@
 import type { ActionClip, Pose } from "../../../types/pose";
 import { frame } from "../../hero";
-import { ABILITY_CAST, BEAT_STEP, BOOM, SPELL_CAST } from "../../jory/moves";
+import { ABILITY_CAST, BOOM, SPELL_CAST } from "../../jory/moves";
 import { CHARGE_POSE, STANCE, s } from "./stance";
 
 /** Boom: palms out, a two frame load with the drum pulled to his belly, then both palms flat on the drum head */
@@ -21,48 +21,6 @@ export const BOOM_CLIP: ActionClip = {
     ],
     [frame(6), s({ hy: -13, fx: 6, fy: -16, sa: -1.2, bx: 4.4, by: -15, dr: 0.6 })],
     [BOOM.dur, STANCE],
-  ],
-};
-
-/** the step's clock: the load, the slide and the landing */
-const SLIDE_FROM = BEAT_STEP.load;
-const SLIDE_TO = BEAT_STEP.load + BEAT_STEP.slide;
-
-/** the long low slide, mallets crossed at the chest */
-const SLIDE: Pose = s({
-  hx: 0.4,
-  hy: -11,
-  nx: 1.6,
-  ny: -21,
-  cb: 0.9,
-  fx: 4.4,
-  fy: -18,
-  sa: -2.3,
-  bx: 5.4,
-  by: -18.4,
-  be: 0,
-  ffx: 7,
-  bfx: -7,
-  fa: -0.2,
-});
-
-/**
- * Beat Step: a two frame load with the weight on the back foot, a long low slide with the mallets crossed at the chest,
- * and a landing that sinks into the knees and rises back into the stance
- */
-export const STEP_CLIP: ActionClip = {
-  dur: SLIDE_TO + BEAT_STEP.land,
-  hit: 0,
-  keys: [
-    [0, STANCE],
-    [
-      SLIDE_FROM,
-      s({ hx: -1.4, hy: -12.4, nx: -0.4, ny: -22.6, cb: 0.1, ffx: 3, bfx: -5.6, fx: 3.6, fy: -18.6, sa: -1.9 }),
-    ],
-    [SLIDE_FROM + frame(1), SLIDE],
-    [SLIDE_TO, { ...SLIDE, hy: -10.8, ny: -20.8 }],
-    [SLIDE_TO + frame(2), s({ hy: -10.6, ny: -20.6, nx: 1.8, cb: 1, ffx: 5.5, bfx: -5.5, fx: 5, fy: -17, sa: -1.3 })],
-    [SLIDE_TO + BEAT_STEP.land, STANCE],
   ],
 };
 
