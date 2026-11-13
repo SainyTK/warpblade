@@ -6,6 +6,7 @@ import { blit } from "../../../engine/sprite";
 import type { Effect } from "../../../types/effect";
 import type { Enemy } from "../../../types/enemy";
 import { PK } from "../../../types/particle";
+import type { Pose } from "../../../types/pose";
 import type { SpriteImage } from "../../../types/sprite";
 import { WHITE } from "../../../utils/color";
 import { TAU } from "../../../utils/math";
@@ -125,10 +126,10 @@ function createEcho(s: StaffStrike, ghost: SpriteImage, beat: EchoBeat): Effect 
   };
 }
 
-/** the blow struck now leaves its echoes, with a ghost of her pose as she struck; Long Echo widens their shape and
- *  Still Point lands the first at once */
-export function leaveEchoes(s: StaffStrike, instant = false): void {
-  drawHero(ghostCanvas, hero.pose, heroLook(2));
+/** the blow struck now leaves its echoes, with a ghost of her pose as she struck (or of `pose`); Long Echo widens their
+ *  shape and Still Point lands the first at once */
+export function leaveEchoes(s: StaffStrike, instant = false, pose: Pose = hero.pose): void {
+  drawHero(ghostCanvas, pose, heroLook(2));
   const ghost = ghostCanvas.snapshot();
   const grow = s.grow + withCharms("area", skillValues("m_echo").reach ?? 0);
   for (const beat of echoBeats(instant)) game.fx.push(createEcho({ ...s, grow }, ghost, beat));

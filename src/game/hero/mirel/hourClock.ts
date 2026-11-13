@@ -14,10 +14,12 @@ import { createFloorRing } from "../../effects/floorRing";
 import { createImpact } from "../../effects/impact";
 import { enemyCenter } from "../../enemies/enemy";
 import { stopFoe, takeStored } from "../../enemies/timeStop";
+import { withCharms } from "../../skills/query";
 import { game, lights, particles, progress, rng } from "../../state";
 import { lowerField, raiseField, type TimeField } from "../../timeFields";
 import { dust, hitStop, shake } from "../../world";
 import { type Dial, dialArc, dialMark, drawDial, drawHand, drawHandWake, drawHub } from "./clockArt";
+import { openFreeField } from "./stillfield";
 import { drawStoppedRim } from "./stoppedLook";
 
 /** what one clock does: how long foes stop, what the toll deals, and what of the stored damage it adds */
@@ -36,6 +38,8 @@ export interface HourSpec {
   cap: number;
   /** seconds the toll stuns */
   stun: number;
+  /** seconds a free Stillfield stands where it tolled, 0 for none */
+  field: number;
 }
 
 /** the clock face drawn no wider than this, even when it reaches the whole screen */
@@ -72,6 +76,7 @@ function toll(spec: HourSpec, foes: readonly Enemy[]): void {
   game.fx.push(createFloorRing(spec.x, spec.floor, drawn, PAL.hour, 0.5));
   lights.add(spec.x, spec.y, drawn * 0.6, PAL.hour[3], 0.5, 0.3);
   dust(spec.x, spec.floor, 12);
+  if (spec.field) openFreeField(spec.x, spec.y, spec.field, withCharms("area", HOUR.field));
   for (let i = 0; i < 24; i++) {
     const a = rng.range(0, TAU);
     const sp = rng.range(60, 160);
@@ -141,7 +146,29 @@ export function createHourClock(spec: HourSpec): Effect {
   };
 }
 
-/** Hour of Stillness at its level, as the special: the toll deals the level's power and 30% of what was stored */
-export function hourSpec(x: number, y: number, floor: number, reach: number, level: number): HourSpec {
-  return { x, y, floor, reach, level, stop: HOUR.stop, power: 1, stored: HOUR.stored, cap: HOUR.cap, stun: 0 };
+/**
+ * Hour of Stillness at its level: as the special, the toll deals the level's power and 30% of what was stored; its
+ * ultimate skill (`v`, empty until held) stops foes longer, tolls harder, returns more, stuns and leaves a field.
+ */
+export function hourSpec(
+  x: number,
+  y: number,
+  floor: number,
+  reach: number,
+  level: number,
+  v: Readonly<Record<string, number>>,
+): HourSpec {
+  return {
+    x,
+    y,
+    floor,
+    reach,
+    level,
+    stop: v.stop ? withCharms("duration", v.stop) : HOUR.stop,
+    power: v.power ?? 1,
+    stored: v.stored ?? HOUR.stored,
+    cap: v.endless ? Number.POSITIVE_INFINITY : (v.cap ?? HOUR.cap),
+    stun: v.stun ?? 0,
+    field: v.field ? withCharms("duration", v.field) : 0,
+  };
 }

@@ -10,7 +10,6 @@ import { skillValues, withCharms } from "../../../skills/query";
 import { game, hero, progress } from "../../../state";
 import { surfaceBelow } from "../../../world";
 import { mirel } from "../memory";
-import { pressSpell } from "./castSpell";
 
 const ID = "m_sundial";
 /** seconds between the dial's ticks, and between the gnomon's sweeps */
@@ -86,9 +85,6 @@ function createDial(x0: number): Effect {
     },
   };
 }
-
-/** I with Sundial */
-export const pressSundial = (): boolean => pressSpell(ID);
 
 /** the dial lands on the floor ahead of her, or under her once it follows her, while fewer than its count stand */
 export function castSundial(): void {

@@ -1,16 +1,16 @@
 import type { SkillDef } from "../../../../types/skill";
 
-/** Backswing. Design: docs/skills/mirel.md. Values: power: share more the first blow after a Rewind deals; window: seconds after a Rewind ends the blow counts; crit: 1 the blow always crits; heal: share of max HP the blow heals; stagger: seconds it staggers the foe; undone: 1 the blow replays on its foe, at full power, every blow she landed in the rewound 1.2 s (evolution) */
+/** Backswing. Design: docs/skills/mirel.md. Values: power: share more the first blow after a rewind deals (a Stopped Moment, or Second Chance); window: seconds after the rewind the blow counts; crit: 1 the blow always crits; heal: share of max HP the blow heals; stagger: seconds it staggers the foe; undone: 1 the blow replays on its foe, at full power, every blow she landed in the time the rewind looked back over (evolution) */
 export const BACKSWING: SkillDef = {
   id: "m_backswing",
   name: "Backswing",
   kind: "attack",
   risk: "precise",
   button: "J",
-  text: "A blow just after a Rewind hits much harder, and its echo lands at once.",
+  text: "A blow just after a Stopped Moment hits much harder.",
   levels: [
     {
-      text: "A blow 0.4 s after a Rewind deals 60% more.",
+      text: "A blow 0.4 s after a Stopped Moment deals 60% more.",
       values: { power: 0.6, window: 0.4, crit: 0, heal: 0, stagger: 0, undone: 0 },
     },
     { text: "The blow always crits.", values: { power: 0.6, window: 0.4, crit: 1, heal: 0, stagger: 0, undone: 0 } },
@@ -39,7 +39,7 @@ export const BACKSWING: SkillDef = {
   evolution: {
     partner: "m_longrewind",
     name: "Undone",
-    text: "The first blow after a Rewind replays on its foe, at full power, every blow she landed in the rewound 1.2 s.",
+    text: "The first blow after a Stopped Moment replays on its foe, at full power, every blow she landed in the time it looked back over.",
     row: {
       text: "Replay every rewound blow on the foe.",
       values: { power: 2.6, window: 0.6, crit: 1, heal: 0.03, stagger: 1, undone: 1 },

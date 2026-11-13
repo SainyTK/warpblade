@@ -4,7 +4,7 @@ import { WHITE } from "../../utils/color";
 import { createFloorRing } from "../effects/floorRing";
 import { castBerserk, castUnendingRage } from "../hero/brannoc/berserk";
 import { castDrumroll, castGrandFinale } from "../hero/jory/drumroll";
-import { castEternalNoon, castHourOfStillness } from "../hero/mirel/hour";
+import { castHourOfStillness } from "../hero/mirel/hour";
 import { castMaelstrom } from "../hero/orrin/maelstrom";
 import { castGrandPendulum } from "../hero/orrin/pendulum";
 import { skin } from "../hero/skin";
@@ -44,7 +44,7 @@ const ULTIMATES: Record<UltimateId, (level: number) => void> = {
   grandPendulum: castGrandPendulum,
   maelstrom: castMaelstrom,
   hourOfStillness: castHourOfStillness,
-  eternalNoon: castEternalNoon,
+  eternalNoon: castHourOfStillness,
   greatWick: castGreatWick,
   thousandCandles: castThousandCandles,
   gloaming: castGloaming,

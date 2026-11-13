@@ -142,7 +142,7 @@ export function runString(dt: number): void {
   mirel.link = last ? 0 : STAFF_LINK;
 }
 
-/** a blow's recovery after it struck can be cut short by a jump, a Rewind or the field */
+/** a blow's recovery after it struck can be cut short by a jump or a shared action */
 export const inRecovery = (): boolean => (hero.state === "staff" || hero.state === "pendant") && mirel.struck;
 
 /** J in the air: Pendant Strike, one per airtime; a hover goes on through it. Falling Hour makes it a dive. */
@@ -174,4 +174,12 @@ export function runPendant(dt: number): void {
 /** a landing hands the airtime's Pendant Strike back */
 export function givePendantBack(): void {
   mirel.pendants = PENDANTS_PER_AIR;
+}
+
+/** a shared action cuts in: the string starts over and a dive under way ends where she is */
+export function cutString(): void {
+  mirel.queued = false;
+  mirel.blow = 0;
+  mirel.link = 0;
+  mirel.diving = false;
 }

@@ -109,15 +109,17 @@ export const ACTION_TEXT: Record<KitId, Record<InputAction, string>> = {
     ...SHARED_ACTION_TEXT,
     left: "Walk left. No run",
     right: "Walk right. No run",
-    up: "Jump. One jump, no double jump. Hold past the top of the jump to hover, spending stamina",
-    down: "With jump, drop through a ledge. Held as you press K, open the Stillfield on yourself",
+    up: "Jump. One jump, no double jump. Hold past the top of the jump to hover, spending stamina. Held as you open the Stillfield, open it above you",
+    down: "With jump, drop through a ledge. Held as you open the Stillfield, open it on yourself",
     attack:
       "Staff string: Tick, Tock, Toll. Every blow strikes again half a second later as an echo. In the air, Pendant Strike",
-    dash: "Rewind: go back along your path and get back part of the HP you lost (40 Sand)",
+    warp: "Warp: fling the staff at the nearest foe ahead, skip to it and strike, and the blow echoes (10 MP)",
+    guard:
+      "Guard in a time bubble that slows blows near you. Press just as a blow lands for a Stopped Moment: the attacker stops in time and the HP you lost rewinds",
     run: "Walk toward the side held",
-    warp: "Hold to keep the Stillfield open ahead, where foes and their shots crawl; let go to snap it shut (Sand). Hold up to open it above you",
-    cast: "Use the selected ability: Stopped Clock, Second Hand or a spell skill (MP)",
-    cycle: "Switch to the next ability",
+    cast: "Cast the selected ability: the Stillfield (Sand), Stopped Clock, Second Hand or a spell skill (MP). If it is recharging, the next ready one goes",
+    castWide: "Keep the Stillfield open until you let go, then it snaps shut. Stopped Clock stops every foe round you",
+    cycle: "Switch ability: Stillfield, Stopped Clock, Second Hand and the spells you learn",
   },
   wenna: {
     ...SHARED_ACTION_TEXT,

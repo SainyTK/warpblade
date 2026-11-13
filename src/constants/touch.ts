@@ -138,7 +138,7 @@ export const TOUCH_TEXT: Record<KitId, Record<TouchButtonAction, TouchButtonText
   mirel: {
     attack: {
       label: "Staff",
-      hint: "Staff string: Tick, Tock, Toll, each echoing half a second later. In the air, Pendant Strike",
+      hint: "Tap: staff string Tick, Tock, Toll, each echoing half a second later; in the air, Pendant Strike. Hold: fling the staff, skip to the foe and strike, and the blow echoes (10 MP)",
       accent: "#6fe0c8",
     },
     up: {
@@ -148,13 +148,13 @@ export const TOUCH_TEXT: Record<KitId, Record<TouchButtonAction, TouchButtonText
     },
     dash: DODGE_BUTTON,
     guard: {
-      label: "Still",
-      hint: "Hold to keep the Stillfield open, lift to snap it shut (Sand). Stick up opens it above you, down on you",
+      label: "Guard",
+      hint: "Hold to guard in a time bubble. Tap just as a blow lands for a Stopped Moment: the attacker stops and your lost HP rewinds",
       accent: "#8ae6cf",
     },
     cast: {
       label: "Ability",
-      hint: "Use the selected ability: Stopped Clock, Second Hand or a spell skill",
+      hint: "Tap to cast the selected ability; the Stillfield stands a while. Hold to keep the Stillfield open until you lift, or to stop every foe round you with Stopped Clock",
       accent: "#e6fff6",
     },
     ultimate: SPECIAL,
@@ -304,8 +304,8 @@ export const STICK_DIRECTIONS: Record<KitId, readonly StickDirectionSpec[]> = {
   mirel: [
     { direction: "side", label: "Walk. While hovering, drift" },
     { direction: "far side", label: "Walk, she never runs" },
-    { direction: "up", label: "Jump, hold to hover. With Still, open the field above you" },
-    { direction: "down", label: "With Jump, drop through a ledge. With Still, open the field on you" },
+    { direction: "up", label: "Jump, hold to hover. With the Stillfield, open it above you" },
+    { direction: "down", label: "With Jump, drop through a ledge. With the Stillfield, open it on you" },
   ],
   wenna: [
     { direction: "side", label: "Walk" },
