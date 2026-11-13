@@ -544,6 +544,9 @@ Skills that deal their own hits show under their own name on the end of run scre
 Skills carried by her presses raised her attacks or abilities over the base run's 375 attacks: Breaching Bolt 383, 1506, 3046 and 2658; Scattershot 1076, 1537 and 1542; Perfect Rhythm 1928 at level 8 and 3096 evolved; Net Bolt 140 abilities at level 1 and 843 at level 8.
 The mash bot still falls on wave 5 (18 kills, 14 before); the skilled bot falls on wave 5 too (14 kills, 17 before, with a different set of cards).
 
+On the shared moveset (13 November 2026) the changed skills were played from wave 8 at hero level 1 with real keys, one pull-off each, damage from the run's ledger:
+Heavy Boot on one parry 106, 792 and 1848 at levels 1 and 8 and evolved; Bolt Storm at charge level 3 216 at level 1, and at level 8 and evolved it felled every foe in reach (838 and 691, all their HP); Slide Kick on one slide 11, 46 and 39; Hop Volley on one hop 23 and 48 (Wheeling Volley's ring 20, sprayed all round); the grapple warp's heavy bolt 76 with no skill and 77, 90 and 100 with Longshot; Shade Archer at level 5 left a shade on a parry.
+
 ## Example builds
 
 Volley, easy and timed, kills crowds from range.
