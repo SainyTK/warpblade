@@ -9,6 +9,7 @@ import { boxAhead, boxBehind } from "../../world";
 import { THRUST_SLASH } from "../moves/slashes";
 import { sharedWarpStrike, warpSlash } from "../warp";
 import { startChain } from "./blink";
+import { spellwarpArrived } from "./spellwarp";
 
 const SKILL = "k_warpcraft";
 /** Warpcraft's thrust: the arrival drives the foe this hard and bounces it off a wall */
@@ -24,11 +25,15 @@ function strike(power: number, foe: Enemy | null, sureCrit: boolean): void {
   meleeHit(boxes, { power, kx: v.thrust ? THRUST_KICK : 160, ky: -80, big: true, wall: !!v.thrust, sureCrit });
 }
 
-/** Kael's warp: the crystal sword thrown, a crystal to hang from with Up held, Warpcraft's numbers and Rift Walker's chain */
+/** Kael's warp: the crystal sword thrown, a crystal to hang from with Up held, Warpcraft's numbers, Rift Walker's chain
+ *  and Spellwarp's element on arrival */
 export const KAEL_WARP: WarpStyle = {
   anchors: true,
   drawThrown: drawThrownSword,
   strike,
-  arrived: startChain,
+  arrived: (foe) => {
+    startChain(foe);
+    spellwarpArrived(foe);
+  },
   tune: () => skillValues(SKILL),
 };

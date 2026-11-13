@@ -1,5 +1,6 @@
 import { STATE_CLIPS } from "../../../constants/clips";
 import { KAEL_WOUNDED_IDLE } from "../../../constants/clips/wounded";
+import { KAEL_GUARD_CLIP } from "../../../constants/kael/guardClip";
 import { LANDING } from "../../../constants/kael/motion";
 import type { Hero } from "../../../types/hero";
 import type { Pose } from "../../../types/pose";
@@ -17,6 +18,7 @@ import { travelPose, watchTravel } from "./travel";
 /** the clip Kael's state plays, his idle sunk into the wounded stance as far as his HP calls for */
 function statePose(h: Hero, t: number, fresh: boolean, dt: number, wound: number): Pose {
   if (h.state === "jump") return sampleKeys(STATE_CLIPS.jump.keys, jumpClock(h, fresh, dt));
+  if (h.state === "guard") return sampleKeys(KAEL_GUARD_CLIP.keys, h.st);
   if (h.state !== "idle") return clipPose(h, t);
   const wounded = sampleKeys(KAEL_WOUNDED_IDLE.keys, h.st % KAEL_WOUNDED_IDLE.dur);
   return woundedIdle(clipPose(h, t), wounded, wound);

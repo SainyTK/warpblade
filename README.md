@@ -30,7 +30,7 @@ His crystal sword can be thrown, and wherever it lands, he follows.
 ## Features
 
 - **A full kit from the first second.** Every hero starts a run with every button already doing something.
-  Kael has his four-hit sword string, a double jump, a dash, Warp Strike on `K` (throw the sword at a foe and appear beside it mid-swing, harder the farther he travels, 10 MP), and two crystal abilities on `I`, Crystal Lance and Crystal Burst.
+  Kael has his four-hit sword string, a double jump, Warp Strike on a long press of `J` (throw the sword at a foe and appear beside it mid-swing, harder the farther he travels, 10 MP), a sword guard on `K` whose parry cuts back and lets `J` blink him behind the attacker, the dodge on `L`, and two crystal abilities on `I`, Crystal Lance and Crystal Burst, each with a wide form on a long press.
 - **Fixed combo strings.** Each hero's ground string has a fixed length for the whole run: four hits for Kael and three for Ysra, Sable, Hulda, Orrin, Mirel, Wenna, Tallis, Jory and Brannoc.
   Kael's string is a step-in cut, a rising backhand, a twin-fang double stab and a falling smash that knocks the foe down, and each one moves his whole body while his feet stay planted.
   Skills change what the hits do, never how many there are.
@@ -75,7 +75,7 @@ His crystal sword can be thrown, and wherever it lands, he follows.
   Most pay coins, a few stay hidden as ??? until an earlier one is earned, and a small banner slides down when one is earned without stopping play.
   The Achievements page on the start menu shows what each one asks, with a progress bar for those that count up, and the result screen names those a run earned.
   Kael and Ysra are free; every newer hero is unlocked with coins on the hero screen, each one costing more than the last (see [docs/achievements.md](docs/achievements.md)).
-- **Ten heroes.** Start opens the hero screen, a roster of hero tiles over one panel for the hero in focus. Kael throws his crystal sword and appears where it lands; he is balanced, starts with Warp Strike, Crystal Lance and Crystal Burst, and adds his spells and ultimates from picks.
+- **Ten heroes.** Start opens the hero screen, a roster of hero tiles over one panel for the hero in focus. Kael throws his crystal sword and appears where it lands; he is balanced, starts with Warp Strike, Crystal Lance and Crystal Burst, and adds his spells and Crystal Nova's upgrades from picks.
   Ysra, the ember lancer, is a flame-temple guard who woke when the braziers lit again.
   She shares Kael's rig and plays nothing like him: tougher and slower, with one heavy jump and no dash.
   Her glaive string pokes far and pierces every foe in the line, holding `J` winds a lunge, and up or down with `J` hooks a foe up or drags it in.
@@ -173,10 +173,12 @@ The keys below are Kael's; every hero uses the same keys for their own actions, 
 | --- | --- |
 | `A` `D` or arrows | Walk. Tap a side twice and hold to run |
 | `W` or `Up` | Jump, the same height however long you hold it. Hold `S` and jump to drop through a ledge |
-| `J` | Sword combo of four hits. Each press is a different hit, picked from where the foes are |
-| `L` | Dash. Nothing can touch you while you dash, and each dash spends stamina |
-| `K` | Warp strike (10 MP). Hold `W` to warp to a crystal |
-| `I` | Cast the selected ability: Crystal Lance, Crystal Burst or a spell skill. Each then recharges for a few seconds |
+| `J` | Sword combo of four hits, the same every time. Just after a parry, blink behind the attacker |
+| `J` held | Warp strike (10 MP). Hold `W` too to warp to a crystal |
+| `K` | Guard: hold to block blows from the front, press just as a blow lands to parry |
+| `L` | Dodge forward. Nothing can touch you while you dodge, and each dodge spends stamina |
+| `I` | Cast the selected ability: Crystal Lance, Crystal Burst or a spell skill. If it is recharging, the next ready one goes |
+| `I` held | Cast the wide form of the selected ability, for half again the MP |
 | `O` | Switch to the next ability |
 | `U` | Hold to charge the ultimate, release to strike |
 | `M` | Sound on or off |
@@ -186,7 +188,7 @@ The keys below are Kael's; every hero uses the same keys for their own actions, 
 On phones and tablets a touch controller appears, in landscape or portrait, and hides again when you press a key.
 The stick on the left appears wherever your left thumb lands.
 Push it to walk, push it all the way to run, push up to jump and down for the down variants.
-The buttons on the right sit in an arc around a large Attack button: for Kael Jump, Dash, Warp, Spell, Ability and Special, and each hero's own actions for the others.
+The buttons on the right sit in an arc around a large Attack button: for Kael Jump, Dodge, Guard, Spell, Ability and Special, and each hero's own actions for the others.
 Several fingers work at once, and a thumb can slide from one button to the next.
 Hold Special to charge it: its ring fills one quarter per level, and you strike when you let go.
 Buttons dim while their action lacks MP or stamina or waits on a cooldown, and phones that support it give a short vibration on each press.
@@ -280,7 +282,7 @@ src/
       kinds/       one kind per foe type, the registry the game looks foes up in
     effects/       slash, impact, floor ring, warp line, rift, thrown sword, shadow orb
     spells/        fire, ice, bolt and the explosion they share
-    ultimates/     Thousand Edges, Phantom Legion, Starfall, Tempest
+    ultimates/     Crystal Nova and its upgrades, Tempest and the other heroes' ultimates
   scene/           background, the backdrop around the stage, the order layers are drawn in, and the dissolve between eras
     eras/          one scene per era: palette, sky, decorations, weather and lighting
   site/            the patch notes page and its shared header and shell

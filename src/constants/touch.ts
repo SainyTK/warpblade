@@ -37,17 +37,21 @@ export const TOUCH_TEXT: Record<KitId, Record<TouchButtonAction, TouchButtonText
   kael: {
     attack: {
       label: "Attack",
-      hint: "Tap: sword combo of four hits, the same every time; tap again just as a blow lands for a Keen hit. Hold: throw the sword and warp to it (10 MP)",
+      hint: "Tap: sword combo of four hits; tap again just as a blow lands for a Keen hit, or just after a parry to blink behind the attacker. Hold: throw the sword and warp to it (10 MP)",
       accent: "#7fe3ff",
     },
     up: { label: "Jump", hint: "Jump. Hold the stick down to drop through a ledge", accent: "#e8e6f6" },
     dash: DODGE_BUTTON,
     guard: {
       label: "Guard",
-      hint: "Hold to block blows from the front. Tap just as a blow lands to parry with a riposte cut",
+      hint: "Hold to block blows from the front. Tap just as a blow lands to parry: a riposte cut, then Attack blinks you behind the attacker",
       accent: "#a8ecff",
     },
-    cast: { label: "Spell", hint: "Tap to cast the selected spell. Hold for its wide form", accent: null },
+    cast: {
+      label: "Spell",
+      hint: "Tap to cast the selected ability; if it is recharging, the next ready one goes. Hold for its wide form, for half again the MP",
+      accent: null,
+    },
     ultimate: SPECIAL,
     cycle: { label: "Ability", hint: "Switch ability: lance, burst and the spells you learn", accent: null },
   },
@@ -303,8 +307,8 @@ export const STICK_DIRECTIONS: Record<KitId, readonly StickDirectionSpec[]> = {
   kael: [
     { direction: "side", label: "Walk" },
     { direction: "far side", label: "Run" },
-    { direction: "up", label: "Jump, and the up variants of attacks" },
-    { direction: "down", label: "Down variants. With Jump, drop through a ledge" },
+    { direction: "up", label: "Jump. Held as the warp throws, warp to a crystal" },
+    { direction: "down", label: "With Jump, drop through a ledge" },
   ],
   ysra: [
     { direction: "side", label: "Walk" },

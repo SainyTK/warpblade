@@ -19,7 +19,7 @@ export const WARPCRAFT: SkillDef = {
   name: "Warpcraft",
   kind: "movement",
   risk: "timed",
-  button: "K",
+  button: "J",
   text: "Warp Strike costs less, recharges faster and reaches further, and its arrival hits like a thrust.",
   levels: LEVELS,
   evolution: {

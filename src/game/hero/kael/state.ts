@@ -5,11 +5,13 @@ const fresh = (): KaelState => ({
   keenStreak: 0,
   keenCount: 0,
   freeKeen: 0,
-  warpCharges: 1,
   blinkCd: 0,
   phaseBack: 0,
   passage: false,
   chainCd: 0,
+  plates: 0,
+  spellwarp: 0,
+  arcaneCd: 0,
   stormLeft: 0,
   stormVolleys: 0,
 });
@@ -29,4 +31,6 @@ export function tickKaelState(dt: number): void {
   kael.blinkCd = Math.max(0, kael.blinkCd - dt);
   kael.phaseBack = Math.max(0, kael.phaseBack - dt);
   kael.chainCd = Math.max(0, kael.chainCd - dt);
+  kael.spellwarp = Math.max(0, kael.spellwarp - dt);
+  kael.arcaneCd = Math.max(0, kael.arcaneCd - dt);
 }

@@ -155,33 +155,28 @@ const EVOLVED: Record<string, (s: SpriteCanvas) => void> = {
     sword(s, 3, 13, 13, 3);
     sword(s, 13, 13, 3, 3, GHOST[4]);
   },
-  /** Endless Edges: blades circling Kael */
-  k_edges_evo: (s) => {
-    figure(s, 8, 15, HC.hair, HC.coat);
-    arc(s, 8, 9, 6.5, 3.4, 6.0, C[4]);
-    sword(s, 2, 6, 6, 2, C[4]);
-    sword(s, 14, 6, 10, 2, C[4]);
+  /** Diamond Aegis: the guard set with crystals throws a lance back */
+  k_aegis_evo: (s) => {
+    sword(s, 1, 11, 11, 11);
+    gem(s, 3, 7, 2, 3);
+    gem(s, 7, 6, 2, 3);
+    crescent(s, 12, 6, 4, -1.2, 1.2, C[4]);
+    speedLines(s, 7, [4, 8], 3, C[3]);
   },
-  /** Phantom Army: a crowd of phantoms */
-  k_legion_evo: (s) => {
-    figure(s, 2, 15, GHOST[3], GHOST[2]);
-    figure(s, 6, 13, GHOST[4], GHOST[2]);
-    figure(s, 10, 13, GHOST[4], GHOST[2]);
-    figure(s, 14, 15, GHOST[3], GHOST[2]);
+  /** Arcane Arrival: the thrown sword inside a ring, the element bursting off it */
+  k_spellwarp_evo: (s) => {
+    ring(s, 8, 8, 7, C[2]);
+    sword(s, 3, 13, 13, 3);
+    flame(s, 4, 8, 4);
+    sparkle(s, 12, 11, 2, PAL.volt[4]);
   },
-  /** Cataclysm: several meteors over the floor */
-  k_starfall_evo: (s) => {
-    fill(s, () => {
-      for (const [x, y] of [
-        [4, 5],
-        [11, 3],
-        [8, 10],
-      ]) {
-        s.dot(x, y, 2, FIRE_RAMP[3]);
-        s.stroke(x - 3, y - 3, x - 1, y - 1, 0.4, FIRE_RAMP[4]);
-      }
-    });
-    ground(s, FIRE_RAMP[5]);
+  /** Supernova: three rings bursting out of a crystal, edges at their rim */
+  k_nova_evo: (s) => {
+    ring(s, 8, 8, 7.5, C[2]);
+    ring(s, 8, 8, 5.5, C[3]);
+    ring(s, 8, 8, 3.5, C[4]);
+    gem(s, 8, 8, 2.5, 4);
+    crescent(s, 8, 8, 7, -2.6, -1.6, WHITE);
   },
 };
 

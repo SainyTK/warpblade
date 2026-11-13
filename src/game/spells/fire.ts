@@ -1,8 +1,10 @@
 import { SUNFLASK } from "../../constants/evolutions";
-import { FLASK_THROW, SECOND_FLASK } from "../../constants/spells";
+import { FIRE_WALL, FLASK_THROW, SECOND_FLASK } from "../../constants/spells";
+import { sfx } from "../../services/audio";
 import type { Blast, Effect, Flask } from "../../types/effect";
 import { skillEvolved, skillValues, withCharms } from "../skills/query";
 import { game, progress } from "../state";
+import { surfaceBelow } from "../world";
 import { explode } from "./explosion";
 import { flaskBurst, flyFlask, trailFlask } from "./flask";
 import { drawFlaskBody } from "./flaskArt";
@@ -18,8 +20,8 @@ const SKILL = "k_flame";
 const FLASK_LOOK = { body: 2.6, inner: 1.6, glow: 15, glowK: 0.4 } as const;
 
 /** one flask of flame thrown in an arc that bursts on whatever it touches first; as Sunflask it is bigger and its burst
- *  throws three more */
-function createFlask(x: number, y: number, face: number, speed: number, blast: Blast): Effect {
+ *  throws three more; thrown held (`wall`), its burst raises a wall of flame on the floor */
+function createFlask(x: number, y: number, face: number, speed: number, blast: Blast, wall: boolean): Effect {
   const o: Flask = { x, y, vx: face * FLASK_THROW.vx * speed, vy: FLASK_THROW.vy, t: 0 };
   const v = skillValues(SKILL);
   const evolved = skillEvolved(SKILL);
@@ -32,7 +34,10 @@ function createFlask(x: number, y: number, face: number, speed: number, blast: B
       const at = flaskBurst(o, dt, 3);
       if (at === null) return o.t < LIFE;
       explode(o.x, at, blast);
-      if (floor) game.fx.push(createFloorFire(o.x, at, blast.radius * FLOOR.width, floor, floorDamage, SKILL));
+      // a flask that bursts on a flying foe still lights the floor under it
+      const ground = surfaceBelow(o.x, at - 1);
+      if (floor) game.fx.push(createFloorFire(o.x, ground, blast.radius * FLOOR.width, floor, floorDamage, SKILL));
+      if (wall) raiseWall(o.x, ground, blast.damage);
       if (evolved) launchChildFlasks(o.x, at, face, blast);
       return false;
     },
@@ -43,8 +48,16 @@ function createFlask(x: number, y: number, face: number, speed: number, blast: B
   };
 }
 
-/** Fire Flask: one flask, or two in a short spread, each bursting and setting foes burning */
-export function castFire(x: number, y: number, face: number, power: number): void {
+/** a wall of flame stands where a held flask burst, burning every foe in it */
+function raiseWall(x: number, floor: number, burst: number): void {
+  const w = FIRE_WALL;
+  game.fx.push(createFloorFire(x, floor, w.halfWidth, w.life, burst * w.power, "abilities", w.height));
+  sfx.boom();
+}
+
+/** Fire Flask: one flask, or two in a short spread, each bursting and setting foes burning; held, each burst raises a
+ *  wall of flame */
+export function castFire(x: number, y: number, face: number, power: number, wide: boolean): void {
   const v = skillValues(SKILL);
   const blast: Blast = {
     radius: withCharms("area", v.radius),
@@ -53,6 +66,6 @@ export function castFire(x: number, y: number, face: number, power: number): voi
     stun: v.stun,
     source: "abilities",
   };
-  game.fx.push(createFlask(x, y, face, 1, blast));
-  if (v.flasks > 1) game.fx.push(createFlask(x, y, face, SECOND_FLASK, blast));
+  game.fx.push(createFlask(x, y, face, 1, blast, wide));
+  if (v.flasks > 1) game.fx.push(createFlask(x, y, face, SECOND_FLASK, blast, wide));
 }

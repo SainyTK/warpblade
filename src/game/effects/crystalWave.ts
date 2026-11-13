@@ -18,6 +18,13 @@ const SPEED = 250;
 const LIFE = 0.6;
 const HALF = 9;
 
+/** a wave of a fan (Crystal Lance's wide form): it climbs this many pixels for each pixel it flies, and shares the foes
+ *  it has cut with the other waves of its fan, so each foe is cut once */
+export interface WaveFan {
+  rise: number;
+  struck: Set<Enemy>;
+}
+
 /** a crescent of crystal that flies forward and cuts each foe once (Crystal Lance, Keen Edge's wave); it is not a sword
  *  blow, so guards do not stop it. A precise skill's wave carries its pull-off's payoff and cuts only the foes it lands
  *  on, passing the others by */
@@ -28,13 +35,17 @@ export function createCrystalWave(
   damage: number,
   source?: SourceId,
   payoff?: Payoff,
+  fan?: WaveFan,
 ): Effect {
-  const o = { x, t: 0 };
-  const struck = new Set<Enemy>();
+  const o = { x, y, t: 0 };
+  const struck = fan?.struck ?? new Set<Enemy>();
+  const rise = fan?.rise ?? 0;
   return {
     update(dt) {
       o.t += dt;
       o.x += face * SPEED * dt;
+      o.y += rise * SPEED * dt;
+      const y = o.y;
       for (const e of game.enemies) {
         if (struck.has(e) || e.hp <= 0 || !boxHit([o.x - 3, y - HALF, o.x + 3, y + HALF], enemyBox(e))) continue;
         struck.add(e);
@@ -46,6 +57,7 @@ export function createCrystalWave(
     },
     draw() {
       place();
+      const y = o.y;
       const k = 1 - o.t / LIFE;
       const C = PAL.crystal;
       const L = LANCE_LOOK;

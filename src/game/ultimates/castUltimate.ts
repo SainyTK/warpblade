@@ -14,19 +14,16 @@ import { game, hero, lights } from "../state";
 import { shake } from "../world";
 import { castBoltStorm } from "./boltStorm";
 import { castCrystalNova } from "./crystalNova";
-import { castPhantomLegion } from "./phantomLegion";
 import { castPyreWave } from "./pyreWave";
 import { castQuakeDrop } from "./quakeDrop";
-import { castStarfall } from "./starfall";
 import { castTempest } from "./tempest";
-import { castThousandEdges } from "./thousandEdges";
 
 const ULTIMATES: Record<UltimateId, (level: number) => void> = {
   crystalNova: castCrystalNova,
   pyreWave: castPyreWave,
-  thousandEdges: castThousandEdges,
-  phantomLegion: castPhantomLegion,
-  starfall: castStarfall,
+  thousandEdges: castCrystalNova,
+  phantomLegion: castCrystalNova,
+  starfall: castCrystalNova,
   tempest: castTempest,
   sunspear: castPyreWave,
   volcanicRift: castPyreWave,
