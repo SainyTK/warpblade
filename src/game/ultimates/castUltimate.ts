@@ -3,7 +3,7 @@ import type { UltimateId } from "../../types/skill";
 import { WHITE } from "../../utils/color";
 import { createFloorRing } from "../effects/floorRing";
 import { castBerserk, castUnendingRage } from "../hero/brannoc/berserk";
-import { castDrumroll, castGrandFinale } from "../hero/jory/drumroll";
+import { castDrumroll } from "../hero/jory/drumroll";
 import { castEternalNoon, castHourOfStillness } from "../hero/mirel/hour";
 import { castMaelstrom } from "../hero/orrin/maelstrom";
 import { castGrandPendulum } from "../hero/orrin/pendulum";
@@ -50,7 +50,7 @@ const ULTIMATES: Record<UltimateId, (level: number) => void> = {
   gloaming: castGloaming,
   eclipse: castEclipse,
   drumroll: castDrumroll,
-  grandFinale: castGrandFinale,
+  grandFinale: castDrumroll,
   berserk: castBerserk,
   unendingRage: castUnendingRage,
 };
