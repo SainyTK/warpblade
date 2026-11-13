@@ -230,11 +230,11 @@ Deterministic runs from wave 1, before on the core branch with his old K and L, 
 | Policy | Before: wave, kills, game s | After: wave, kills, game s |
 | --- | --- | --- |
 | Mash | 4, 10, 98.9 | 4, 10, 98.9 |
-| Skilled | 5, 14, 94.5 | 5, 18, 130.7 |
+| Skilled | 5, 14, 94.5 | 5, 18, 109.1 |
 
 Kael on the same code: mash 5, 14, 94.0; skilled 5, 15, 98.3.
 The mash bot presses only J, so its run is the same as before.
-The skilled bot warps, dodges and casts Boom, and now lasts longer and fells more foes than Kael's, all off the beat.
+The skilled bot warps, dodges and casts Boom, and now lasts longer and fells more foes than Kael, all off the beat.
 
 ## Note for the owner
 
