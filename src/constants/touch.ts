@@ -48,7 +48,7 @@ export const TOUCH_TEXT: Record<KitId, Record<TouchButtonAction, TouchButtonText
       accent: "#a8ecff",
     },
     cast: {
-      label: "Spell",
+      label: "Ability",
       hint: "Tap to cast the selected ability; if it is recharging, the next ready one goes. Hold for its wide form, for half again the MP",
       accent: null,
     },
@@ -78,11 +78,11 @@ export const TOUCH_TEXT: Record<KitId, Record<TouchButtonAction, TouchButtonText
       accent: null,
     },
     ultimate: SPECIAL,
-    cycle: { label: "Next", hint: `Switch ability: the vault, ${RITE_NAMES}`, accent: null },
+    cycle: { label: "Switch", hint: `Switch ability: the vault, ${RITE_NAMES}`, accent: null },
   },
   sable: {
     attack: {
-      label: "Shoot",
+      label: "Attack",
       hint: "Tap: the next bolt of the string; with the stick down on the floor, reload; while reloading, tap in the bright window for a perfect reload. Hold: grapple away from the foe and fire a heavy bolt back (10 MP)",
       accent: "#6ee0a0",
     },
@@ -103,7 +103,7 @@ export const TOUCH_TEXT: Record<KitId, Record<TouchButtonAction, TouchButtonText
   },
   hulda: {
     attack: {
-      label: "Punch",
+      label: "Attack",
       hint: "Tap: fist string of jab, body hook and haymaker; in the air a hammer fist; while holding a foe, a knee. Hold: hurl the chained gauntlet and haul yourself in holding the foe (10 MP); while holding, throw it",
       accent: "#ff5f6d",
     },
@@ -132,7 +132,7 @@ export const TOUCH_TEXT: Record<KitId, Record<TouchButtonAction, TouchButtonText
   },
   orrin: {
     attack: {
-      label: "Lash",
+      label: "Attack",
       hint: "Tap: chain string, hardest at the tip; in the air, a Hanging Arc. Hold: throw the hook at a foe and kick it (10 MP); with the stick up, hook above and swing",
       accent: "#e8b04a",
     },
@@ -157,7 +157,7 @@ export const TOUCH_TEXT: Record<KitId, Record<TouchButtonAction, TouchButtonText
   },
   mirel: {
     attack: {
-      label: "Staff",
+      label: "Attack",
       hint: "Tap: staff string Tick, Tock, Toll, each echoing half a second later; in the air, Pendant Strike. Hold: fling the staff, skip to the foe and strike, and the blow echoes (10 MP)",
       accent: "#6fe0c8",
     },
@@ -182,7 +182,7 @@ export const TOUCH_TEXT: Record<KitId, Record<TouchButtonAction, TouchButtonText
   },
   wenna: {
     attack: {
-      label: "Lamp",
+      label: "Attack",
       hint: "Tap: lamp string, Tap, Swing, Flare; the foe it hits becomes the Quarry every Wick turns on. In the air, Lamp Drop. Hold: throw a lit candle and trade places with it (10 MP)",
       accent: "#b48cff",
     },
@@ -207,7 +207,7 @@ export const TOUCH_TEXT: Record<KitId, Record<TouchButtonAction, TouchButtonText
   },
   tallis: {
     attack: {
-      label: "Knife",
+      label: "Attack",
       hint: "Tap: knife string, Flick, Cross, Heel Kick; in the air, Drop Stab. Hold: throw a knife and step out of the foe's shadow at its back (10 MP)",
       accent: "#f08ad0",
     },
@@ -232,7 +232,7 @@ export const TOUCH_TEXT: Record<KitId, Record<TouchButtonAction, TouchButtonText
   },
   jory: {
     attack: {
-      label: "Mallets",
+      label: "Attack",
       hint: "Tap: mallet string Tap, Roll, Crash; on the beat a blow is an Accent and builds Groove. In the air, Downstroke. Hold: spin a mallet at a foe and arrive with a crash (10 MP)",
       accent: "#5a82ff",
     },
@@ -257,7 +257,7 @@ export const TOUCH_TEXT: Record<KitId, Record<TouchButtonAction, TouchButtonText
   },
   brannoc: {
     attack: {
-      label: "Axe",
+      label: "Attack",
       hint: "Tap: axe string Hew, Reave, Cleave; in the air, Hatchet Drop. Hold: Hunt, hurl the axe into a foe and rip it out with a chop (10 MP)",
       accent: "#ff6a5a",
     },
@@ -320,7 +320,7 @@ export const STICK_DIRECTIONS: Record<KitId, readonly StickDirectionSpec[]> = {
     { direction: "side", label: "Walk" },
     { direction: "far side", label: "Run" },
     { direction: "up", label: "Jump" },
-    { direction: "down", label: "With Jump, drop through a ledge. With Shoot on the floor, reload" },
+    { direction: "down", label: "With Jump, drop through a ledge. With Attack on the floor, reload" },
   ],
   hulda: [
     { direction: "side", label: "Walk" },
@@ -353,7 +353,7 @@ export const STICK_DIRECTIONS: Record<KitId, readonly StickDirectionSpec[]> = {
     { direction: "down", label: "With Jump, drop through a ledge" },
   ],
   jory: [
-    { direction: "side", label: "Walk. With Step, step that way; with none held, step back" },
+    { direction: "side", label: "Walk" },
     { direction: "far side", label: "Run" },
     { direction: "up", label: "Jump" },
     { direction: "down", label: "With Jump, drop through a ledge" },

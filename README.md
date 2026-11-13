@@ -29,6 +29,12 @@ His crystal sword can be thrown, and wherever it lands, he follows.
 
 ## Features
 
+- **One moveset for every hero.** Every hero plays on the same buttons and fills them with their own moves.
+  Tap `J` for the hero's string, and hold it for a quarter of a second to warp: the hero throws their weapon at the nearest foe ahead, follows it and strikes on arrival, with the same numbers and the same 10 MP for every hero.
+  Hold `K` to guard against blows from the front, and press it just as a blow lands to parry, with a reward of the hero's own.
+  `L` is the same front dodge for everyone.
+  `I` casts the selected ability, `I` held casts its wide form where it has one, and `O` switches ability.
+  `U` is the hero's one ultimate.
 - **A full kit from the first second.** Every hero starts a run with every button already doing something.
   Kael has his four-hit sword string, a double jump, Warp Strike on a long press of `J` (throw the sword at a foe and appear beside it mid-swing, harder the farther he travels, 10 MP), a sword guard on `K` whose parry cuts back and lets `J` blink him behind the attacker, the dodge on `L`, and two crystal abilities on `I`, Crystal Lance and Crystal Burst, each with a wide form on a long press.
 - **Fixed combo strings.** Each hero's ground string has a fixed length for the whole run: four hits for Kael and three for Ysra, Sable, Hulda, Orrin, Mirel, Wenna, Tallis, Jory and Brannoc.
@@ -42,10 +48,13 @@ His crystal sword can be thrown, and wherever it lands, he follows.
 - **Positioning pays.** Hits from behind deal 1.5 times the damage and foes in the air take double, with the numbers popping out of every hit.
 - **Low health warning.** At a quarter of HP or less, a faint red light glows in from the edges of the screen, and under a tenth it grows wider and beats like a heart. It fades in and out as HP drops or comes back.
   A hurt hero stands wounded when idle: Kael hunches over his sword planted in the floor, and Ysra lets her glaive sag onto the floor ahead, both short of breath.
-- **Fights that need skill.** Husks block blows from the front and strike back, wisps slip away from swings, and missed swings leave you open. Dash through an attack at the last moment for a perfect dodge and slow motion.
-- **Stamina.** Each dash spends half the green stamina bar, so two dashes in a row leave Kael out of breath until it refills.
-  It comes back after a short pause, slower while he attacks, and a perfect dodge gives some back.
-- **Hero skills.** Every hero has 20 skills of their own, each with eight levels and an evolution: attacks, movement, spells, damage over time, summons and ultimates, and for some heroes a passive.
+- **Fights that need skill.** Husks block blows from the front and strike back, wisps slip away from swings, and missed swings leave you open.
+  Press `K` just as a blow lands to parry it: the hero takes nothing, a minion attacker reels, the world slows for a beat, and MP, stamina and Flow come back.
+  Dodge through an attack at the last moment for a perfect dodge and slow motion.
+- **Stamina.** The green stamina bar pays for dodges and blocks, and some heroes spend it on moves of their own.
+  Each dodge spends 50, half of Kael's bar, so two dodges in a row leave him out of breath until it refills, and every blow the guard blocks costs some more.
+  It comes back after a short pause, slower while the hero attacks, and a perfect dodge or a parry gives some back.
+- **Hero skills.** Every hero has 20 skills of their own, each with eight levels and an evolution: attacks, movement, spells, damage over time, summons and one ultimate skill, and for some heroes a passive.
   Every level up gives a point, and when a wave's last foe falls the fight pauses on a pick of three cards for each point, four with luck.
   A card offers a new skill, the next level of a held skill, or a charm, each with its own pixel icon.
   A build holds up to 8 skills and 3 charms at first, and every run starts with 2 rerolls, 2 skips and 1 banish to steer the cards.
@@ -56,9 +65,10 @@ His crystal sword can be thrown, and wherever it lands, he follows.
   Kael's Fire Flask evolves with Crystal Familiar into Sunflask, Orrin's Sweet Spot with Perpetual Motion into Perfect Arc, Mirel's Long Echo with Patience into Choir of Hours, Wenna's Hunting Call with Deep Tallow into Pack Law, Tallis's Backbiter with Shroud into Last Breath, Jory's Heavy Accent with Iron Metronome into Thunderclap, and Brannoc's Heavy Hew with Blood Geyser into Earthsplitter.
   A card says "Evolves with ???" until the player has made that evolution once.
 - **Flow.** Every hit of the hero's own adds a stack of Flow, up to 25, each one +4% damage on every source, so a full bar doubles it; a perfect dodge adds five, and getting hurt halves it.
-- **Charged ultimates.** Every hero has a special on `U` from the start: Crystal Nova for Kael, Pyre Wave for Ysra, Bolt Storm for Sable, Quake Drop for Hulda, Grand Pendulum for Orrin, Hour of Stillness for Mirel, Great Wick for Wenna, Gloaming for Tallis, Drumroll for Jory and Berserk for Brannoc.
-  Hold U through four levels; level 4 spends a full MP bar. After a strike the ultimate recharges for 20 seconds, and its row on the HUD dims with a bar filling under it.
-  An ultimate skill upgrades or replaces the special, and a build holds at most one.
+- **Charged ultimates.** Every hero has one ultimate on `U` for the whole run: Crystal Nova for Kael, Pyre Wave for Ysra, Bolt Storm for Sable, Quake Drop for Hulda, Grand Pendulum for Orrin, Hour of Stillness for Mirel, Great Wick for Wenna, Gloaming for Tallis, Drumroll for Jory and Berserk for Brannoc.
+  Hold U through four levels; level 4 spends a full MP bar.
+  After a strike the ultimate recharges for 20 seconds, less with some ultimate skills, and its row on the HUD dims with a bar filling under it.
+  Each hero has one ultimate skill, named after their ultimate, that upgrades it level by level and evolves it into a bigger form, such as Supernova for Crystal Nova.
 - **Experience to pick up.** Slain foes drop lime orbs of experience that bounce on the floor. Walk over them to collect them; any left behind fly to the hero after 4 seconds, or in a room to the nearest standing hero.
   Attack and ability power grow 2.5% with every level, compounding, and a full run reaches about level 84.
 - **Streaming waves.** Each wave has a quota of foes, from 3 at wave 1 to 62 at wave 30, that stream in through rifts until the quota is spent.
@@ -66,7 +76,9 @@ His crystal sword can be thrown, and wherever it lands, he follows.
 - **Damage by source.** The result screen lists every source of damage with its level, total damage and damage per second: the hero's attacks, abilities and ultimate, and each skill that strikes on its own.
 - **The Codex.** The Codex on the start menu lists every hero's skills and evolutions and every charm, with the ones still locked shown as silhouettes with a short hint, and a few as ???.
 - **Abilities on `I`.** Each hero turns through their abilities with `O`: their base ones and every spell skill they hold, such as Kael's Fire Flask that sets the floor burning, his Ice Spikes that freeze and his Lightning that arcs to a second foe.
-  The HUD tabs dim while an ability recharges, a bar along each tab fills back up, and a press too early is refused with a tick and a jolt of the tab, or a blink of the MP bar when MP is short (the HP bar for Brannoc, who pays in HP).
+  Each ability has its own recharge, and casting one adds no wait to any other.
+  When the selected one is recharging or cannot be paid for, `I` casts the next ready one and selects it; with none ready, the press is refused with a dull tick and a jolt of the tab.
+  The HUD tabs dim while an ability recharges, and a bar along each tab fills back up.
 - **Coins and a shop.** Foes drop pixel coins that Kael picks up by touch, and any left behind fly to him after a moment.
   When a run ends, cleared or lost, its coins go to the bank and a result screen shows the wave reached and the coins earned.
   The Shop on the start menu sells stats in levels (HP, attack, ability power, MP, crit, move speed, stamina), more rerolls, skips and banishes for the cards, and four skills: Lodestone, Aftershock and Head Start, bought once, and Last Light, bought in three levels, each saving the hero from one more fatal blow per run.
@@ -75,65 +87,70 @@ His crystal sword can be thrown, and wherever it lands, he follows.
   Most pay coins, a few stay hidden as ??? until an earlier one is earned, and a small banner slides down when one is earned without stopping play.
   The Achievements page on the start menu shows what each one asks, with a progress bar for those that count up, and the result screen names those a run earned.
   Kael and Ysra are free; every newer hero is unlocked with coins on the hero screen, each one costing more than the last (see [docs/achievements.md](docs/achievements.md)).
-- **Ten heroes.** Start opens the hero screen, a roster of hero tiles over one panel for the hero in focus. Kael throws his crystal sword and appears where it lands; he is balanced, starts with Warp Strike, Crystal Lance and Crystal Burst, and adds his spells and Crystal Nova's upgrades from picks.
+- **Ten heroes.** Start opens the hero screen, a roster of hero tiles over one panel for the hero in focus.
+  Kael throws his crystal sword and appears where it lands; he is balanced, with a four-hit sword string, a double jump and Warp Strike on `J` held.
+  His guard lets a fifth of a blow through, and his parry cuts back at once and lets `J` blink him behind the attacker.
+  He starts with Crystal Lance and Crystal Burst on `I`, adds his element spells from picks, and his Crystal Nova skill grows his ultimate with phantoms, falling stars and a storm of edges.
   Ysra, the ember lancer, is a flame-temple guard who woke when the braziers lit again.
-  She shares Kael's rig and plays nothing like him: tougher and slower, with one heavy jump and no dash.
-  Her glaive string pokes far and pierces every foe in the line, holding `J` winds a lunge, and up or down with `J` hooks a foe up or drags it in.
-  `K` pole-vaults over foes on the floor, also straight out of a brace or a backstep, and dives glaive first in the air.
-  Holding `L` braces against blows from the front, with a parry for a press just in time that gives stamina back.
-  Her blows build Heat, a second bar that pays for fire rites on `I`; MP only pays for her ultimate.
-  She starts every run with the whole glaive kit and the Flare and Cinder Lash rites, and her picks change and extend those moves.
-  Her special is Pyre Wave, a wall of flame rolling ahead of her.
-  Her two ultimates are Sunspear, a burning spear thrown the length of the stage through every foe in its line, and Volcanic Rift, a crack in the floor that erupts in pillars of fire.
-  Sable, the hooded hunter, fights at range with a repeating crossbow: `J` shoots and aims with up or down, the quiver runs dry and reloads on `O`, with a perfect reload for a press in the bright window.
-  `K` kicks foes away, `L` hops back and shoots or slides forward under blows, and `I` sets snares for MP (see [docs/sable-design.md](docs/sable-design.md)).
-  Hulda, the iron grappler, fights bare-handed in iron gauntlets with the shortest reach of all and no dodge.
+  She shares Kael's rig and plays nothing like him: tougher and slower, with one heavy jump and no run.
+  Her glaive string of hip thrust, reverse sweep and impale pokes far and pierces every foe in the line.
+  Her warp hurls the glaive like a javelin, and she wrenches it free from the foe in a burst of embers.
+  Her guard is firm and cheap, a parry gives her Heat and makes `J` a counter thrust, and the side behind her held while she guards steps her back.
+  Her blows build Heat, a second bar that pays for her fire rites on `I`, Flare and Cinder Lash from the start; MP pays only for her warp and her ultimate.
+  `I` also pole-vaults her over foes, and in the air the vault dives glaive first.
+  Her ultimate is Pyre Wave, a wall of flame rolling ahead of her, and its skill makes it roll both ways, erupt and come again.
+  Sable, the hooded hunter, fights at range with a repeating crossbow: `J` shoots a three-bolt string at the foe ahead, and an empty quiver reloads on `J`, or by hand with Down and `J`, with a perfect reload for a tap in the bright window.
+  Her warp is a grapple that zips her away from the foe and fires a heavy bolt back, and the parry of her crossbow-stock guard, Point-Blank, kicks the attacker away and fills the quiver with primed bolts.
+  `I` hops her back with a shot or sets snares for MP, and her ultimate Bolt Storm rains bolts on the foes in reach (see [docs/sable-design.md](docs/sable-design.md)).
+  Hulda, the iron grappler, fights bare-handed in iron gauntlets with the shortest reach of all, a slow walk and no run.
   `J` throws a three-blow string of jab, body hook and an overhand haymaker, a hammer fist in the air, and a knee while she holds a foe.
-  `K` grabs the foe ahead and holds it while she walks, then throws it: forward into the others, a suplex into the floor behind her with the side behind held, or straight up with Up.
-  Bigger foes are crushed in both hands instead, and in the air `K` is Skyfall Grab, which catches a flier and drives it into the floor.
-  `L` is an armoured Bull Rush, `I` a Bellow that drags foes in, and fliers down to her hands, for MP, and `O` a taunt.
-  Her blows, grabs and throws fill Grit, four iron plates under stamina; a blow on a full plate breaks it for half the damage and never stops her (see [docs/hulda-design.md](docs/hulda-design.md)).
-  Orrin, the chain dancer, fights at the length of a brass hook on a steel chain and never runs, dashes or blocks.
-  `J` lashes a three-blow string of Lash, Rising Arc and Full Circle that hits hardest in the last 18 px of the chain, with a knee for a foe right against him and a Hanging Arc in the air.
-  `K` throws the hook: into a warp crystal, under a high platform or into the air itself, where a small rift tear holds it for 1.2 s, and he swings under it as a pendulum while `K` is held.
-  `A` and `D` pump the swing, `L` reels the chain in to swing faster, and letting go of `K` flings him along the arc; a hook on a foe zips him to it for a flying kick, and a hook on a platform too low to swing under pulls him up onto it.
-  On the floor `L` is Backline, a yank backwards, and `I` spins Whirlwall, a chain ring that breaks foe shots, or hurls Anchor Pin to root a foe, for MP.
+  Her warp hurls a chained gauntlet and hauls her in already holding the foe, which `J` held or `K` then throws: forward into the others, or a suplex into the floor behind her with the side behind held; bigger foes are crushed in both hands.
+  Her iron guard lets almost nothing through, and her parry, Iron Catch, seizes the attacker.
+  `I` is an armoured Bull Rush (in the air Skyfall Grab, which catches a flier and drives it into the floor), a Bellow that drags foes in, and fliers down to her hands, for MP, or a taunt.
+  Her blows, grabs and throws fill Grit, four iron plates under stamina; a blow on a full plate breaks it for half the damage and never stops her, and her ultimate Quake Drop slams both fists into the floor (see [docs/hulda-design.md](docs/hulda-design.md)).
+  Orrin, the chain dancer, fights at the length of a brass hook on a steel chain and never runs.
+  `J` lashes a three-blow string of Lash, Rising Arc and Full Circle that hits hardest in the last 18 px of the chain, with a Hanging Arc in the air.
+  His warp throws the hook at a foe and lands him on it with a flying kick that leaves it bound in chain; with Up held, the hook bites a platform or the air itself, and he swings under it as a pendulum.
+  `A` and `D` pump the swing, `J` held reels the chain in to swing faster, and `W` lets go and flings him along the arc.
+  His guard spins the chain into a weak shield, and his parry, Chain Bind, hauls the attacker out to the chain's tip and holds it there.
+  `I` spins Whirlwall, a chain ring that breaks foe shots, or hurls Anchor Pin to root a foe, for MP, and his ultimate Grand Pendulum swings him under a rift tear and ends in a crash.
   Speed in the air fills Momentum, a bar under stamina that makes every blow hit up to 40% harder, and it drains when he stands still (see [docs/orrin-design.md](docs/orrin-design.md)).
-  Mirel, the hour keeper, is a time mage with a staff topped by a clock ring, the most fragile hero and the most patient one.
-  She walks slowly, jumps once and never runs, dashes or blocks; holding `W` past the top of her jump hangs her in the air while her stamina lasts.
+  Mirel, the hour keeper, is a time mage with a staff topped by a clock ring, fragile and patient.
+  She walks slowly, jumps once and never runs; holding `W` past the top of her jump hangs her in the air while her stamina lasts.
   `J` swings a three-blow string of Tick, Tock and Toll, with Pendant Strike in the air, and every blow strikes again half a second later as a pale teal echo at the same spot, so a foe that walks into it is hit.
-  Holding `K` keeps a Stillfield open ahead, where foes act at a fifth of their pace and their shots nearly stop, and letting go snaps it shut, hitting and pushing out every foe inside.
-  `L` rewinds her backwards along the path she walked and gives back part of the HP she lost on it.
-  The field and Rewind spend Sand, a bar under stamina that refills only while she waits.
-  `I` stops the foe ahead dead under a clock face with Stopped Clock, part of what it takes while stopped landing again when it restarts, or throws Second Hand through a line of foes, for MP (see [docs/mirel-design.md](docs/mirel-design.md)).
-  Wenna, the lamplighter, is a summoner who fights through the wax figures her lamp lights, the weakest hero alone.
-  She walks slowly, jumps once and never runs, dashes or blocks.
-  `K` lights a Wick for Wax: a wax figure with a violet flame for a head that walks to the nearest foe and bites it, stops ground minions that walk into it, and takes blows aimed at her from its side.
-  `J` swings a three-blow lamp string of Tap, Swing and Flare, with Lamp Drop in the air; the foe it hits becomes her Quarry, every Wick turns on it and bites faster, and the Flare's cone of flame calls every Wick near it to bite at once.
-  `L` trades places with the Wick farthest ahead, which arrives in a flare, and `I` bursts the nearest Wick with Kindle or calls every Wick to a ring round her with Beckon, for MP.
+  Her warp flings the staff and skips her to the foe, and its blow echoes too.
+  Her guard is a time bubble that slows blows as they reach her, and her parry, the Stopped Moment, stops the attacker in time and gives back half the HP she lost in the last two seconds.
+  `I` opens a Stillfield ahead for Sand, a bar under stamina that refills while she spends none, and foes inside act at a fifth of their pace while their shots nearly stop.
+  Held, `I` keeps the field open until she lets go, and when it closes it snaps shut, hitting and pushing out every foe inside.
+  For MP, `I` also stops the foe ahead dead under a clock face with Stopped Clock or throws Second Hand through a line of foes, and her ultimate Hour of Stillness stops every foe in reach and tolls (see [docs/mirel-design.md](docs/mirel-design.md)).
+  Wenna, the lamplighter, is a summoner who fights through the wax figures her lamp lights, the weakest hero alone, with a slow walk and no run.
+  `I` lights a Wick for Wax: a wax figure with a violet flame for a head that walks to the nearest foe and bites it, stops ground minions that walk into it, and takes blows aimed at her from its side.
+  `J` swings a three-blow lamp string of Tap, Swing and Flare, with Lamp Drop in the air; the foe it hits becomes her Quarry, and every Wick turns on it and bites faster.
+  Her warp throws a lit candle at a foe and trades places with it, and the candle burns on as a Wick; her lantern guard's parry, Flare Back, blinds the foes ahead and lights a Wick at her feet.
+  `I` also bursts the nearest Wick with Kindle or calls every Wick to a ring round her with Beckon, for MP, and her ultimate Great Wick raises a giant Wick that swings at every foe in reach and melts into new Wicks.
   Wax, a bar under stamina, trickles in and drips from the foes she and her Wicks fell, flying to her when she is near; every wave opens with two free Wicks at her side (see [docs/wenna-design.md](docs/wenna-design.md)).
-  Tallis, the gloam knife, is a shadow assassin with two short knives in reverse grip, the shortest reach and the highest crit in the roster and HP well below the front-line heroes.
-  `J` plays Flick, Cross and Heel Kick in front of a foe, and Backstab, Twist and Gut Slash on a foe's back, marked by a rose chevron; blows from behind deal 2.25 times as much.
-  Under a hovering flier `J` springs into a Rising Cut, and in the air it is Drop Stab.
-  `K` raises the Veil for Gloam: minions lose sight of him, keep their facing, start no attack at him and walk on past, with a grey question mark over each one that lost him; his first blow out of it is an Ambush, a sure crit.
-  Holding `L` sinks him into a shadow pool that glides under ground foes, untouchable, and he rises facing the back of a foe he came up behind; `J` out of the pool is Rising Cut.
-  Gloam, a bar under stamina, refills only while no foe near faces him and from his blows from behind.
-  `I` drops a Smoke Knot that blinds the minions inside, or Hamstrings the foe ahead, for MP, and his special Gloaming darkens the scene while he appears behind foe after foe (see [docs/tallis-design.md](docs/tallis-design.md)).
+  Tallis, the gloam knife, is a shadow assassin with two short knives in reverse grip, the highest crit in the roster and HP well below the front-line heroes.
+  `J` plays Flick, Cross and Heel Kick, with Drop Stab in the air; blows from behind deal 2.25 times as much, and a rose chevron marks a foe whose back is open to him.
+  His warp throws a knife into the foe, and he steps out of its shadow at its back to strike.
+  His guard of crossed knives is thin, and his parry, Fade, drops him into the Veil, where minions lose sight of him, keep their facing, start no attack at him and walk on past, with a grey question mark over each one that lost him; his first blow out of it is an Ambush, a sure crit.
+  `I` raises the Veil for Gloam, sinks him for stamina into a shadow pool that glides under ground foes and rises facing the back of a foe he came up behind, or for MP drops a Smoke Knot that blinds the minions inside or Hamstrings the foe ahead.
+  Gloam, a bar under stamina, refills only while no foe near faces him and from his blows from behind, and his ultimate Gloaming darkens the scene while he appears behind foe after foe (see [docs/tallis-design.md](docs/tallis-design.md)).
   Mini bosses only turn more slowly toward a hidden hero, the Rift Warden is never fooled, and in co-op foes go for a hero they can see.
   Jory, the war drummer, fights to a beat everyone can see and hear: a cobalt ring at his feet closes and flashes on every beat, his body rides it, the GV bar's lamp blinks with it and a soft tick sounds.
-  Every press of `J`, `K`, `L` and `I` is judged against that beat.
+  Every tap of `J` and every press of `I` is judged against that beat, and his warp, dodge and parry give more on it.
   On the beat a blow is an Accent that hits 1.4 times as hard and adds a pip of Groove; off the beat Groove falls, and mashing never builds it.
   Groove, twelve pips under stamina, raises his tempo from 96 to 132 beats a minute in four tiers, so a player who keeps time gets faster and reaches further.
   `J` plays Tap, Roll and Crash with his two mallets, and from tier 3 Crash sends a sound wave along the floor; in the air it is Downstroke.
-  `K` is Boom, both palms on the drum: it pushes foes away, and on the beat it is wider, drowns foe shots and nothing can touch him for a moment.
-  `L` is Beat Step, a short step that is untouchable and passes through foes on the beat.
-  `I` casts Steady Hand, which widens his window and holds his Groove for eight beats, or Thunder Skin, a wave along the floor, for MP, and his special Drumroll plants the drum for a roll of heavy rings (see [docs/jory-design.md](docs/jory-design.md)).
+  His warp spins a mallet at the foe and he arrives with a crash, and his drum guard's parry, Counterbeat, bursts a Boom off the drum and on the beat lifts Groove a tier.
+  `I` casts Boom for stamina, which pushes foes away and on the beat drowns foe shots and leaves him untouchable for a moment, or for MP Steady Hand, which widens his window and holds his Groove for eight beats, or Thunder Skin, a wave along the floor.
+  His ultimate Drumroll plants the drum for a roll of heavy rings (see [docs/jory-design.md](docs/jory-design.md)).
   Brannoc, the berserker, pays for his power in his own HP and wins it back by striking.
-  `K` is Frenzy and `I` casts War Cry, which staggers and marks the foes round him, or Red Crescent, a crescent of blood along the floor; each costs HP, and the HP spent shows as a crimson debt segment after the HP fill.
+  His abilities on `I` cost HP: Frenzy, which keeps blows from knocking him back for four seconds, War Cry, which staggers and marks the foes round him, and Red Crescent, a crescent of blood along the floor; the HP spent shows as a crimson debt segment after the HP fill.
   Every foe a blow of his lands on wins some of the debt back into his HP, with crimson motes flying from the foe to him, and a blow that lands on him first breaks the whole debt away.
   Every point of HP he is missing makes him hit harder, swing faster and walk faster, up to 1.6 times the damage near 0 HP.
   `J` plays Hew, Reave and Cleave with his great axe: Reave sweeps a foe behind him round to his front, and Cleave hits both sides and knocks minions down; at or under 35% HP he is Bloodied, his war paint glows, and Cleave spins twice.
-  Frenzy keeps blows from knocking him back for four seconds, `L` is Hunt, a lunge at the nearest foe ahead that ends in a chop, and his special Berserk keeps him from falling below 1 HP for a few seconds and ends in Last Cleave, a wide ring (see [docs/brannoc-design.md](docs/brannoc-design.md)).
+  His warp, the Hunt, hurls the axe into the foe and he rips it out with a chop that wins back more of the debt; his guard lets half of each blow bleed into the debt, and his parry, Blood Answer, wins the whole debt back and starts Frenzy for free.
+  His ultimate Berserk keeps him from falling below 1 HP for a few seconds and ends in Last Cleave, a wide ring (see [docs/brannoc-design.md](docs/brannoc-design.md)).
   Sable, Hulda, Orrin, Mirel, Wenna, Tallis, Jory and Brannoc start locked and are bought with coins.
   The hero behind the menu changes as you look through the cards, and the choice is saved in this browser.
 - **A 30-wave stage in five eras.** The sky and the foes change as the waves go on, and the scene dissolves into the next era between waves.
@@ -143,7 +160,8 @@ His crystal sword can be thrown, and wherever it lands, he follows.
   Waves 16 to 20 turn the night magical, with Rune Golems and Prism Sprites taking over from the night's foes.
   Waves 21 to 30 are the darkest, with Void Stalkers, Abyss Eyes and the Abyss Maw.
   Waves 5, 10, 15 and 25 bring the era's mini boss, the Rift Warden waits at wave 20 and the Abyss Sovereign at wave 30.
-  When the Sovereign falls, The Unblinking comes through: a great eye that nothing seems to hurt.
+  When the Sovereign falls, The Unblinking comes through: a great eye that every hit reaches and none seems to matter to.
+  Its lances, tears and gaze hit far harder than anything before it.
 - **Co-op for up to four.** Co-op on the start menu hosts a room in your browser, and friends join with its five-letter code or an invite link.
   Each player picks a hero, the same hero twice is fine, and a P1 to P4 tag in the player's colour floats over each hero.
   Waves bring more and tougher foes for each extra player.
@@ -167,17 +185,18 @@ His crystal sword can be thrown, and wherever it lands, he follows.
 
 ## Controls
 
-The keys below are Kael's; every hero uses the same keys for their own actions, and the Controls screen lists each hero's.
+Every hero plays on the same keys.
+The table names Kael's moves, and the Controls screen lists each hero's own.
 
 | Key | Action |
 | --- | --- |
 | `A` `D` or arrows | Walk. Tap a side twice and hold to run |
-| `W` or `Up` | Jump, the same height however long you hold it. Hold `S` and jump to drop through a ledge |
-| `J` | Sword combo of four hits, the same every time. Just after a parry, blink behind the attacker |
-| `J` held | Warp strike (10 MP). Hold `W` too to warp to a crystal |
-| `K` | Guard: hold to block blows from the front, press just as a blow lands to parry |
+| `W` or `Up` | Jump, the same height however long you hold it. Press again in the air to jump again. Hold `S` and jump to drop through a ledge |
+| `J` | Sword combo of four hits, the same every time. Press again just after a blow lands for a Keen hit. Just after a parry, blink behind the attacker and strike |
+| `J` held | Warp strike: throw the sword at the nearest foe ahead and warp to it (10 MP) |
+| `K` | Guard: hold to block blows from the front. Press just as a blow lands to parry with a riposte cut |
 | `L` | Dodge forward. Nothing can touch you while you dodge, and each dodge spends stamina |
-| `I` | Cast the selected ability: Crystal Lance, Crystal Burst or a spell skill. If it is recharging, the next ready one goes |
+| `I` | Cast the selected ability: Crystal Lance, Crystal Burst or a spell you learn. If it is recharging, the next ready one goes |
 | `I` held | Cast the wide form of the selected ability, for half again the MP |
 | `O` | Switch to the next ability |
 | `U` | Hold to charge the ultimate, release to strike |
@@ -188,7 +207,9 @@ The keys below are Kael's; every hero uses the same keys for their own actions, 
 On phones and tablets a touch controller appears, in landscape or portrait, and hides again when you press a key.
 The stick on the left appears wherever your left thumb lands.
 Push it to walk, push it all the way to run, push up to jump and down for the down variants.
-The buttons on the right sit in an arc around a large Attack button: for Kael Jump, Dodge, Guard, Spell, Ability and Special, and each hero's own actions for the others.
+The buttons on the right sit in an arc around a large Attack button: tap it to attack, and hold it to warp.
+Around it sit Jump, Dodge, Guard, an ability button that casts on a tap and casts the wide form on a hold, a button that switches ability, and Special.
+Each hero's buttons carry that hero's own names where they differ, such as Shoot for Sable's attack.
 Several fingers work at once, and a thumb can slide from one button to the next.
 Hold Special to charge it: its ring fills one quarter per level, and you strike when you let go.
 Buttons dim while their action lacks MP or stamina or waits on a cooldown, and phones that support it give a short vibration on each press.
@@ -258,7 +279,7 @@ Arms and legs are placed by two-bone reach, each elbow can bend either way, and 
 The heroes are drawn at the frame's finer grid: each part is lit from the top left with a light edge and a shadow edge, plate armour carries a glint, and the head is a 24 by 22 pixel portrait with a lit eye.
 Every hero shares this rig and differs by their colours, head art and weapon (`src/constants/characters/`).
 Each body part is outlined where it overlaps the one behind it, and the whole figure gets a dark outline.
-Every move, action and state is a keyed clip sampled at 30 frames a second, with a pose keyed on nearly every frame; idle, walk, run, hang, charge and the throw wait loop (`src/constants/clips/`).
+Every move, action and state is a keyed clip sampled at 30 frames a second, with a pose keyed on nearly every frame; idle, walk, run, charge and the throw wait loop (`src/constants/clips/`).
 His scarf and ponytail are verlet ropes, so they trail behind him as he runs and warps (`src/game/hero/chain.ts`).
 
 The README images were captured from the game canvas when it was 320 by 180 and scaled up with nearest-neighbour, so they show the earlier, coarser heroes.
@@ -269,7 +290,7 @@ The README images were captured from the game canvas when it was 320 by 180 and 
 src/
   main.ts          wires everything and runs the 120 Hz loop
   types/           shared types
-  constants/       stage layout, palettes, poses and attack keyframes, tuning, key map, touch controller layout, waves, Kael's skills, coin drops and the shop items
+  constants/       stage layout, palettes, poses and attack keyframes, tuning, key map, touch controller layout, waves, every hero's stats, numbers and skills, coin drops and the shop items
   utils/           pure helpers: math, color, seeded random, stats, experience, level-up picks, wave plan, shop prices and save parsing
   engine/          the pixel renderer: frame buffers and painter, particles, lights, sprite canvas
   services/        Web Audio sound effects, saved options, best wave and shop progress in local storage, the Fullscreen API, vibration, the clipboard
@@ -277,12 +298,13 @@ src/
   store/           the player's options, the coin bank, shop purchases, unlocked heroes and achievements kept between runs, achievement tracking, and the co-op room as the menu sees it
   game/            the simulation; beat.ts is the shared beat clock that keeps counting through hit-stop and slow motion
     coop/          a co-op room: the host's run with every player's hero, the host and guest sessions, player tags
-    hero/          poses, drawing, rope physics, combos and moves, dash, warp, ultimate charge, per-step update
+    hero/          the moveset every hero shares (warp, guard, dodge, ability bar, ultimate charge), poses, drawing, rope physics, combos and moves, per-step update, and one folder per hero's kit
     enemies/       every foe's drawing and behavior, one folder per era (day, rain, twilight, abyss; the night foes sit at the top level)
       kinds/       one kind per foe type, the registry the game looks foes up in
-    effects/       slash, impact, floor ring, warp line, rift, thrown sword, shadow orb
-    spells/        fire, ice, bolt and the explosion they share
-    ultimates/     Crystal Nova and its upgrades, Tempest and the other heroes' ultimates
+    effects/       slash, impact, floor ring, warp line, rift, the thrown weapon, crossbow bolt, shadow orb, and folders for Orrin's, Wenna's, Jory's and Brannoc's effects
+    spells/        fire, ice, bolt and the explosion they share, and Ysra's rites
+    ultimates/     the cast every ultimate goes through, Crystal Nova with its phantoms, stars and storm of edges, Pyre Wave, Bolt Storm and Quake Drop; the other heroes' ultimates sit in their kit folders
+    skills/        the skills that act on their own, one folder per hero
   scene/           background, the backdrop around the stage, the order layers are drawn in, and the dissolve between eras
     eras/          one scene per era: palette, sky, decorations, weather and lighting
   site/            the patch notes page and its shared header and shell
@@ -294,6 +316,7 @@ src/
     shop/          one shop row and the shop's styles
 studio/            a local tool to pose Kael with the game's rig, draw effects and send them to agents (see studio/README.md)
 docs/
+  moveset-design.md the layout every hero shares: the warp, guard and parry, dodge, abilities and ultimate
   combo-design.md  what the combo takes from Grand Chase and what it leaves out
   meta-progress.md coins, the shop items and the basis for their prices
   achievements.md  the achievements, how they are tracked, hero unlock prices and how a new hero adds its own
@@ -301,8 +324,8 @@ docs/
   sable-design.md  Sable's kit, the quiver and reload, and her balance check
   hulda-design.md  Hulda's kit, Grit and plates, grabs and throws, and her balance check
   orrin-design.md  Orrin's kit, the hook and the pendulum swing, Momentum, and his balance check
-  mirel-design.md  Mirel's kit, echoes, the Stillfield, Rewind, Sand, and her balance check
-  jory-design.md   Jory's kit, the beat and Groove, Accents, Boom and Beat Step, and his balance check
+  mirel-design.md  Mirel's kit, echoes, the Stillfield, the Stopped Moment, Sand, and her balance check
+  jory-design.md   Jory's kit, the beat and Groove, Accents, Boom and Counterbeat, and his balance check
   brannoc-design.md Brannoc's kit, the HP debt, Fury, Frenzy, Hunt and Berserk, and his balance check
   motion-standard.md the rules every hero's animation follows
   pick-pacing.md   when picks come, how long the skill pool lasts and Second Wind after it

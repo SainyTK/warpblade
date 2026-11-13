@@ -77,7 +77,7 @@ Spellblade works on the wide form: held during an open combo, the wide form leav
 | Whirlwind | J after a double jump | Sky Dance level 3: the first air hit after a double jump. |
 | Blink Combo | K in a combo | Blink Step: J held in an open combo, the combo goes on after it. |
 | Flowing Chain | passive | Gone (combo length is fixed). |
-| Warp Strike, Double Jump, Crystal Hang | skills | Base kit. |
+| Warp Strike, Double Jump | skills | Base kit. |
 | Sky Dance, Jump Dash, Gravity Well | skills, fusion | Sky Dance levels 1, 2, 5. |
 | Warpcraft | skill | Warpcraft level 1. |
 | Deep Breath, Quickstep | passives | Passing Cut levels 2 and 5 (stamina). |

@@ -14,7 +14,7 @@ Every hero plays on the same layout (`docs/moveset-design.md`): J tapped for the
 Orrin keeps his own shape inside it:
 - His string is three curved sweeps with a sweet spot at the chain's tip, and the third goes all the way round him.
 - His warp throws the hook on its chain and lands him on the foe with a flying kick that leaves the foe bound in chain.
-- J held with Up held is his swing instead: the hook bites a crystal, a platform or the air, and he swings, pumps, reels in and flings himself across the stage.
+- J held with Up held is his swing instead: the hook bites a platform or the air, and he swings, pumps, reels in and flings himself across the stage.
 - His guard spins the chain into a disc, a weak block, and his parry, Chain Bind, hauls the attacker out to the chain's tip and holds it there for a free string.
 - Momentum fills from speed in the air and multiplies every hit he deals.
 
@@ -119,7 +119,7 @@ The swing hook costs 18 stamina.
 It flies at 420 px/s along the aim: 75 degrees up toward the facing side, or 40 degrees with A or D held too.
 It flies up to 84 px past every foe and latches on the first thing it meets:
 
-1. An anchor crystal (`ANCHORS`, within 10 px of the path), or the underside or edge of a platform (`PLATFORMS`): a swing that holds until he lets go.
+1. The underside or edge of a platform (`PLATFORMS`): a swing that holds until he lets go.
 2. Nothing within 84 px: the hook bites the air at full length and opens a small rift tear. The swing holds for 1.2 s, then the tear snaps shut and he lets go.
 
 Hooks per airtime: 2, reset on landing.
@@ -343,7 +343,7 @@ Changes made while building, each for the same goal as the design:
   A hook that bites a platform with less room than that hauls him up and over its lip onto the platform instead (`src/game/hero/orrin/climb.ts`).
   The high middle platform keeps the full swing.
 - The room for a swing is measured from the floor under him, as the design says, so an air bite over a low platform still gives a full swing while he stands on the floor below it.
-- The hook flies a fixed line in the world from where it left his hand, so a hook thrown on the rise of a jump reaches a crystal.
+- The hook flies a fixed line in the world from where it left his hand, so a hook thrown on the rise of a jump reaches a high platform.
   W is also the jump, so the swing hook from the floor starts with a jump: W and J held together.
 - The hook bites the air at the edge of the stage, and a swing into either side of the stage stops there, so he never hangs against a wall with his speed kept.
 - A chain blow strikes any foe whose body crosses the swept arc.
@@ -378,4 +378,4 @@ The skilled bot holds J for the warp kick, dodges and casts, and goes five waves
 ## Note for the owner
 
 The skilled playtest bot reads the HUD tabs and holds J for the warp when the WARP tab is ready, so it plays his warp kick, guard, dodge and abilities.
-It never holds W with J, so it never swings; a policy that swings would hook a crystal or the air, pump toward the swing, let go on the forward upswing and lash with J at foes 46 to 64 px away.
+It never holds W with J, so it never swings; a policy that swings would hook a platform or the air, pump toward the swing, let go on the forward upswing and lash with J at foes 46 to 64 px away.

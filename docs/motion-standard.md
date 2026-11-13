@@ -33,7 +33,7 @@ A move that touches down and settles into the stand a step later still gets its 
 
 Every hero follows one take-off rule.
 A jump from the floor out of a stand, a walk or a run loads for two animation frames (`JUMP_LOAD` in `src/constants/takeoff.ts`) with a visible knee bend, then leaves the floor.
-A jump out of a blow's follow-through, out of a dash, a double jump, a jump off a crystal and a hop in the air leave at once.
+A jump out of a blow's follow-through, out of a dash, a double jump and a hop in the air leave at once.
 The load keeps the hero's speed, so a running jump goes as far as before, and the stride keeps stepping under the bend.
 Nothing else starts during the load: a press of J, L or a skill waits in the input buffer and acts as soon as the hero is in the air.
 A hit or a fall off a ledge cancels the load.

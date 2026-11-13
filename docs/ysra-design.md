@@ -1,7 +1,7 @@
 # Ysra design
 
 Ysra shares Kael's rig and the moveset every hero plays on (`docs/moveset-design.md`): J tapped and held, K guard, L dodge, I abilities, O switch, U ultimate.
-Kael is a fast duelist: a sword string, crystal hangs, juggles, element spells paid with MP.
+Kael is a fast duelist: a sword string, juggles, element spells paid with MP.
 Ysra is a heavy reach fighter: long pokes that pierce a whole line, a glaive hurled like a javelin, a firm guard whose parry opens a counter thrust, a pole vault and a dive for travel, and Heat that her blows build and her fire rites spend.
 Every rule below is meant to make her play differently from Kael from the first second of a run.
 
