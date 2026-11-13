@@ -96,14 +96,16 @@ export const ACTION_TEXT: Record<KitId, Record<InputAction, string>> = {
     ...SHARED_ACTION_TEXT,
     left: "Walk left. No run. While swinging, pump the swing",
     right: "Walk right. No run. While swinging, pump the swing",
-    up: "Jump. One light jump, no double jump. While swinging, let go with a hop",
+    up: "Jump. One light jump, no double jump. While swinging, let go with a fling",
     down: "With jump, drop through a ledge. While swinging, Plumb Drop once learned",
-    attack: "Chain string: Lash, Rising Arc, Full Circle, hardest at the chain's tip. In the air, a Hanging Arc",
-    dash: "While swinging, hold to reel the chain in and swing faster. On the floor, Backline: yank yourself back",
+    attack:
+      "Chain string: Lash, Rising Arc, Full Circle, hardest at the chain's tip. In the air or swinging, a Hanging Arc. Hold while swinging to reel in",
     run: "Walk toward the side held",
-    warp: "Hook: hold to swing from a crystal, a platform or the air, let go to fling. On a foe, zip to it and kick. Hold up to aim steeper, down in the air to aim low",
-    cast: "Use the selected ability: Whirlwall, Anchor Pin or a spell skill (MP)",
-    cycle: "Switch to the next ability",
+    warp: "Hook: throw the hook at the nearest foe ahead, land on it with a flying kick that binds it (10 MP). With Up held, hook a crystal, a platform or the air and swing",
+    guard:
+      "Guard: hold to spin the chain into a shield. Press just as a blow lands for Chain Bind: the attacker is hauled to your chain's tip and held",
+    castWide: "Cast the selected ability's wide form: Whirlpool, Stake Line, Stockade or Anchor Ring (more MP)",
+    cycle: "Switch ability: Whirlwall, Anchor Pin and the spells you learn",
   },
   mirel: {
     ...SHARED_ACTION_TEXT,

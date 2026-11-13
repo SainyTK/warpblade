@@ -2,7 +2,7 @@ import type { OrrinAbility } from "../../../types/orrin";
 import type { TouchButtonAction } from "../../../types/touch";
 import { hex } from "../../../utils/color";
 import { ICON_WHITE, type IconArt } from "./iconArt";
-import { JUMP, NOVA } from "./sharedArt";
+import { DODGE, JUMP, NOVA } from "./sharedArt";
 
 const LINK = hex("#b8c0cc");
 const STEEL = hex("#7e8898");
@@ -18,25 +18,20 @@ const LASH: IconArt = {
   colors: { L: LINK, S: STEEL, B: BRASS, D: BRASS_DARK, W: ICON_WHITE },
 };
 
-/** the reel: the chain winding back onto a brass drum, an arrow pulling toward it */
-const REEL: IconArt = {
+/** the guard: the chain spun into a tall disc seen edge on, its tail running down to the hand, a parry spark off its rim */
+const GUARD: IconArt = {
   rows: [
-    "....W.........",
-    "...WWWWWWWW...",
-    "....W.........",
-    ".BBB........W.",
-    "BSLSB........B",
-    "BLDLBSLSLSBBB.",
-    "BSLSB.........",
-    ".BBB..........",
+    "....LS..W",
+    "...S..L.W",
+    "...L..S..",
+    "...S.BL..",
+    "...L.DS..",
+    "...S..L..",
+    "..LS..S..",
+    ".S..LS...",
+    "L........",
   ],
-  colors: { B: BRASS, D: BRASS_LIGHT, L: LINK, S: STEEL, W: ICON_WHITE },
-};
-
-/** the hook thrown up on its chain, speed ticks beside it */
-const HOOK: IconArt = {
-  rows: ["...BB.", "..B..B", "..B..W", "..B...", "..L...", "M.S.M.", "M.L.M.", "..S...", "..L..."],
-  colors: { B: BRASS, L: LINK, S: STEEL, M: BRASS_DARK, W: ICON_WHITE },
+  colors: { L: LINK, S: STEEL, B: BRASS, D: BRASS_LIGHT, W: ICON_WHITE },
 };
 
 /** Whirlwall: a ring of chain spun round him, the hook riding its edge */
@@ -114,7 +109,7 @@ function switchArt(selected: OrrinAbility, known: readonly OrrinAbility[]): Icon
   return { rows: grid.map((r) => r.join("")), colors: { B: BRASS_DARK, W: ICON_WHITE } };
 }
 
-/** Orrin's buttons: the lash, the reel, the hook, the selected ability on I and the switch dial on O */
+/** Orrin's buttons: the lash, the chain guard, the selected ability on I and the switch dial on O */
 export function orrinArt(action: TouchButtonAction, ability: OrrinAbility, known: readonly OrrinAbility[]): IconArt {
   switch (action) {
     case "attack":
@@ -122,9 +117,9 @@ export function orrinArt(action: TouchButtonAction, ability: OrrinAbility, known
     case "up":
       return JUMP;
     case "dash":
-      return REEL;
+      return DODGE;
     case "guard":
-      return HOOK;
+      return GUARD;
     case "cast":
       return ABILITY_ART[ability];
     case "cycle":

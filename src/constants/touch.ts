@@ -113,23 +113,23 @@ export const TOUCH_TEXT: Record<KitId, Record<TouchButtonAction, TouchButtonText
   orrin: {
     attack: {
       label: "Lash",
-      hint: "Chain string: Lash, Rising Arc, Full Circle, hardest at the tip. In the air, a Hanging Arc",
+      hint: "Tap: chain string, hardest at the tip; in the air, a Hanging Arc. Hold: throw the hook at a foe and kick it (10 MP); with the stick up, hook above and swing",
       accent: "#e8b04a",
     },
     up: {
       label: "Jump",
-      hint: "One light jump. While swinging, let go with a hop. Hold the stick down to drop through a ledge",
+      hint: "One light jump. While swinging, let go with a fling. Hold the stick down to drop through a ledge",
       accent: "#e8e6f6",
     },
     dash: DODGE_BUTTON,
     guard: {
-      label: "Hook",
-      hint: "Hold to swing from a crystal, a platform or the air, lift to let go. On a foe, zip to it. Stick up aims steeper, down in the air aims low",
+      label: "Guard",
+      hint: "Hold to spin the chain into a shield. Tap just as a blow lands for Chain Bind: the attacker is hauled in and held",
       accent: "#b8c0cc",
     },
     cast: {
       label: "Ability",
-      hint: "Use the selected ability: Whirlwall, Anchor Pin or a spell skill",
+      hint: "Tap to use the selected ability: Whirlwall, Anchor Pin or a spell skill. Hold for its wide form",
       accent: "#ffe08a",
     },
     ultimate: SPECIAL,
@@ -295,11 +295,8 @@ export const STICK_DIRECTIONS: Record<KitId, readonly StickDirectionSpec[]> = {
   orrin: [
     { direction: "side", label: "Walk. While swinging, pump the swing" },
     { direction: "far side", label: "Walk, he never runs" },
-    { direction: "up", label: "Jump. With Hook, aim steeper" },
-    {
-      direction: "down",
-      label: "With Jump, drop through a ledge. With Hook in the air, aim low. While swinging, Plumb Drop",
-    },
+    { direction: "up", label: "Jump. Held with a long press of Attack, hook above and swing" },
+    { direction: "down", label: "With Jump, drop through a ledge. While swinging, Plumb Drop" },
   ],
   mirel: [
     { direction: "side", label: "Walk. While hovering, drift" },
