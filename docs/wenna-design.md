@@ -10,15 +10,15 @@ Code layout follows Mirel and Orrin: kit `src/game/hero/wenna/`, character `src/
 
 ## How she differs from every hero in the game
 
-- Kael (warp swordsman): runs, double jumps, dashes through foes, teleports to a thrown pick and strikes. His summons are chance procs from skills. Wenna's minions are her base kit and most of her damage. Her one teleport needs a Wick at the far end and leaves that Wick where she stood, so it moves a body into danger to get her out.
-- Ysra (planted glaive, brace and parry, Heat): defends from the front with her own weapon. Wenna cannot block or parry. Her Wicks stand in front of her and take the blow.
+- Kael (warp swordsman): runs, double jumps and throws his sword to warp to it. His summons are chance procs from skills. Wenna's minions are her base kit and most of her damage. Her warp throws a lit candle and trades places with it, so a Wick always stands where she left.
+- Ysra (planted glaive, brace and parry, Heat): defends from the front with her own weapon. Wenna's lantern guard lets much of a blow through, and her Wicks stand in front of her and take the blow. Her parry blinds foes and lights a Wick.
 - Sable (ranged hunter, ammo and reload): deals her damage herself from 250 px with aimed bolts. Wenna's damage comes from bodies spread across the stage, and she aims it by striking a foe up close with her lamp.
 - Hulda (unarmed grappler, armour, grabs): walks into blows behind her own armour. Wenna has no armour. Her protection is outside her body and dies.
 - Orrin (chain dancer, pendulum swing, Momentum): wants constant speed through the air. Wenna walks slowly, does not run, and stays behind a line of her Wicks.
 - Mirel (time mage, Stillfield, echoes, Rewind, Sand refilled by waiting): controls how fast foes act. Wenna controls where foes stand by holding them with bodies. Her resource is earned from kills and collected, the opposite of Mirel's waiting.
 
 Axes that differ:
-- Movement: slow walk with no run, one jump, and Swap, a trade of places with a Wick.
+- Movement: slow walk with no run, one jump, the shared front dodge, and a warp that trades places with a thrown candle or with her farthest Wick.
 - Defence: Wicks hold ground foes in place and intercept blows aimed at her.
 - Resource: Wax, which drips from foes that die and flies to her when she is close. A slow trickle keeps her from ever being stuck.
 - Range: her lamp is short (30 px), her reach is wherever her Wicks stand.
@@ -35,15 +35,17 @@ Her own AD is the lowest in the roster on purpose. Her damage per second with tw
 | --- | --- |
 | A / D | Walk, about 60 px/s. No run; a double tap does nothing |
 | W | One jump of 48 px. No double jump |
-| S | With W, drop through a ledge. Held with K, lights the Wick at her feet |
-| J | Lamp string: Tap, Swing, Flare. In the air: Lamp Drop, one per airtime |
-| K | Light a Wick (Wax) |
-| L | Swap with a Wick |
-| I | Selected ability: Kindle, Beckon, or a spell skill (MP) |
+| S | With W, drop through a ledge |
+| J tapped | Lamp string: Tap, Swing, Flare. In the air: Lamp Drop, one per airtime |
+| J held | Candle warp: throw a lit candle at the foe ahead and trade places with it; with no foe ahead, trade places with her farthest Wick |
+| K | Raise the lantern: guard, and Flare Back on a parry |
+| L | The shared front dodge |
+| I | Selected ability: Light (Wax), Kindle, Beckon, or a spell skill (MP). Held: Light at her feet, or Kindle every Wick near her |
 | O | Switch ability |
 | U | Special: Great Wick (shared charge and MP rules) |
 
-Touch buttons read Lamp, Jump, Light, Swap, Ability, Switch and Special, with icons in `wennaArt.ts`. The stick held down while pressing Light lights the Wick at her feet, like S. The Controls screen lists every key above.
+Touch buttons read Lamp, Jump, Dodge, Guard, Ability, Switch and Special, with icons in `wennaArt.ts`.
+The Ability button shows the selected ability, Light included. The Controls screen lists every key above.
 
 ## Wicks, her minions
 
@@ -76,13 +78,14 @@ Second bar under stamina, label WX, same HUD slot as MO, GR, QV and SD (`src/ui/
 - Drips: a foe killed by her or by any of her Wicks or skills leaves a wax drip: 10 Wax for a minion, 20 for an elite, 40 for a mini boss. A drip flies to her when she is within 80 px and lies on the floor for 6 s otherwise, blinking for the last 1.5 s. Lodestone pulls drips like it pulls other pickups if the shared pickup code makes that simple; otherwise leave it.
 - No skill or charm turns Wax into damage directly; skills change costs, refill and drip value.
 
-## K: Light a Wick
+## I: Light a Wick
 
-- Cost 25 Wax. With under 25 the press is denied with the shared deny cue.
-- On the floor: a 0.25 s cast. She swings the lamp forward and a drop of violet flame arcs to the floor 20 px ahead (at her feet with S held). On landing, wax pools and the Wick rises over 0.35 s; it cannot be hit and does not bite while rising.
+Light is the first of her abilities on I.
+- Cost 25 Wax and no MP. With under 25 the press goes to the next ready ability, or is refused and the WX bar flashes.
+- On the floor: a 0.25 s cast. She swings the lamp forward and a drop of violet flame arcs to the floor 20 px ahead. I held lights it at her feet.
 - In the air: the drop falls straight down to the floor under her.
-- At the cap, K relights the weakest Wick instead: back to full HP and full life for 10 Wax, with a flame burst on it.
-- Emits the kit event `wick` with `lit: true`, `x`, `y`.
+- At the cap, Light relights the weakest Wick instead: back to full HP and full life for 10 Wax, with a flame burst on it.
+- Emits the kit event `wick` with `lit: true`, `x`, `y` and cause `light`.
 
 ## J: the lamp string
 
@@ -109,30 +112,40 @@ Animation beats (to `docs/motion-standard.md`), each a wind-up held for 3 calm f
 - Flare, tall and two-handed: she gathers the lantern into her chest and sinks away from the foe, rises onto her front foot and thrusts it out at chest height on frame 6.5 with a flash and the cone, then the blast rocks her back onto her heels before she draws it in.
 - Lamp Drop: the pole raised up and back with her legs tucked behind for 3 frames, then swung down ahead as the legs kick forward under it.
 
-## L: Swap
+## J held: the candle warp
 
-- She trades places with the Wick farthest ahead in her facing within 160 px. With none ahead, the nearest Wick in any direction within 160 px. With no Wick in reach the press is denied.
-- 15 stamina, 1.0 s cooldown.
-- Both vanish in a puff of violet smoke and appear at the other's spot after 0.08 s. A thread of flame joins the two spots for 3 frames. She cannot be hit from the press until 0.15 s after arrival.
-- She arrives gathered small, sinks a little further into the arrival and rises back to her stance through keyed poses by 0.22 s.
-- The Wick arrives where she stood with a flare: 0.6x AP to every foe within 24 px, knockback 60 away from it.
-- A blow or shot that would have reached her in the first 0.1 s counts as a perfect dodge (`rewardPerfectDodge()`, once per Swap).
-- It calls `travelEnded()` and emits `dash` with `dir` the direction she moved, plus the kit event `swap` with `from`, `to` and the Wick.
-- Look: her sprite and the Wick each leave a 2 frame afterimage in the violet ramp; the lamp leaves a short streak.
+The shared warp (`src/game/hero/warp.ts`) with her look and her extra, in `src/game/hero/wenna/warpStyle.ts` and `candleWarp.ts`.
+Its cost, recharge, reach and arrival power are the shared ones, and it grows with ability power (`stat: "ap"`), since her own AD is the lowest in the roster.
+- Throw: her far hand draws a lit candle back past her shoulder and flings it at the nearest foe ahead. The candle tumbles end over end with its flame streaming behind it.
+- Arrival: she appears beside the foe with her lantern thrust out in a Flare; the cone of flame is the shared arrival blow.
+- Extra: the foe becomes her Quarry, so every Wick turns on it, and the candle stands up as a Wick where she stood, burning 4 s. At the cap her weakest Wick takes her old place instead. A thread of flame joins the two spots.
+- With no foe ahead in reach, the candle goes to her farthest standing Wick ahead within 160 px. She lands where it stood and strikes there, and the Wick arrives where she stood in a flare: 0.4x AP to every foe within 24 px, knockback 60 away from it.
+- Every arrival emits the kit event `swap` with `from`, `to` and the Wick left behind, which Smoulder and Hot Wax answer.
 
-## Abilities on I (MP), rotation on O
+## K: the lantern guard
 
-Kindle: 16 MP, 3 s recharge.
-- The Wick nearest her within 120 px bursts: 2.0x AP to every foe within 36 px, knockback 100 outward and up 60, 3 px shake, 0.05 s hit-stop.
+The shared guard (`src/game/hero/heroGuard.ts`) with her style in `src/game/hero/wenna/guardStyle.ts`.
+- She raises the pole across her like a quarterstaff, the lantern hanging out before her.
+- A block costs 8 stamina and lets 40% of the blow through. A blow from behind lands, though a Wick behind her still takes it for her.
+- Parry, Flare Back: she thrusts the lantern into the attacker's face and its shutter flies open. Every foe ahead within 90 px is blinded for 1.6 s (a mini boss or the Warden for 0.5 s) and takes 0.8x AP, and a free Wick rises at her feet. At the cap the weakest Wick flares back to full instead.
+- A blinded foe neither turns nor starts a wind-up at her, which gives her Wicks time to bite.
+
+## Abilities on I, rotation on O
+
+Her abilities are `AbilitySlot`s (`src/game/hero/wenna/abilities.ts`) in the order Light, Kindle, Beckon, then the spell skills she holds. Each has its own recharge.
+I on an ability that is recharging or cannot be used casts the next ready one.
+
+Kindle: 16 MP, 3 s recharge. It needs a Wick within 120 px.
+- The Wick nearest her bursts: 2.0x AP to every foe within 36 px, knockback 100 outward and up 60, 3 px shake, 0.05 s hit-stop.
 - The Wick is spent. She gets back half its cost (12 Wax).
-- With no Wick in reach it fizzles and costs half.
+- I held, with 28 MP: every Wick within 120 px bursts at 70% of the power.
 - Look: the Wick's flame swells over 0.15 s (anticipation), the body cracks, a violet and gold burst with wax droplets flying, a scorch ring on the floor.
 
-Beckon: 12 MP, 6 s recharge.
+Beckon: 12 MP, 6 s recharge. It needs a Wick within 200 px.
 - Every Wick within 200 px drops what it is doing and hops to stand in a ring around her for 2 s, taking 50% less damage. Wicks keep biting foes that come within reach.
 - Use it to pull a screen of bodies to her when she is swarmed.
 
-Both emit `cast` with ability `kindle` and `beckon`. The HUD ability tab and the touch Ability button show the selected one and its recharge, as for Mirel and Orrin.
+Both emit `cast` with ability `kindle` and `beckon`. The shared HUD ability tabs and the touch Ability button show the selected one and its recharge; Light's tab shows its Wax cost.
 
 ## U: Great Wick
 
@@ -141,7 +154,7 @@ Shared charge levels.
 - A giant Wick, about 48 px tall, rises out of the pool over 0.3 s.
 - At 0.6 s it swings one great arm in an arc across the level's reach: every foe in reach takes the level's power as a multiple of AP, knockback 160 and up 120, 5 px shake, 0.08 s hit-stop.
 - It then melts over 0.4 s into new Wicks: 1, 2, 3 or 4 by charge level, allowed up to 2 past her cap; these extra Wicks live 8 s.
-The ultimate skill `w_thousand` replaces it.
+Her ultimate skill, Great Wick (`w_greatWick`), upgrades it: harder swings and a second one, a field of candles, every Wick flaring and standing as a Great Wick, and more Wicks from the melt. Night of Lamps fills the whole stage with candles.
 
 ## The 20 skills
 
@@ -154,25 +167,25 @@ The developer sets level tables to the contract (four or more new properties acr
 | w_fangs | Bright Fangs | attack, easy, auto | Wick bites +30% | bite reach +8 px; bites knock minions back; every third bite of a Wick hits twice; bite every 0.6 s; +90% | Blue Flame (w_singe): every bite also strikes the next foe behind its target and adds 2 Singe |
 | w_flare | Open Shutter | attack, timed, J third blow | Flare +30%, cone +8 px | Flare ignites (shared `ignite`); a kill by the Flare lights a free Wick; cone 60 px; each Wick within 100 px repeats the Flare from where it stands at 0.4x; +80% | Lighthouse (w_lampVolley): the Flare becomes a 160 px beam and every Wick fires one too |
 | w_packLunge | Pack Lunge | attack, precise, J on a Quarry with 3 or more Wicks within 40 px of it | the blow sends every Wick near it lunging at the Quarry, 1.2x AP each, payoff on the Quarry only | lunges stun 0.4 s; lunges crit; works with 2 Wicks; lunging Wicks heal 20%; 2.4x | Feeding Frenzy (w_quarry): each lunge strikes three times and a kill by a lunge relights every Wick |
-| w_gutter | Guttering | attack, timed, a Wick ends | a Wick that dies or burns out bursts for 0.4x AP in 24 px | 32 px; the burst launches minions; each burst leaves 5 Wax; burst chills; 1.6x | Wildfire (w_kindle): bursts at 2.5x leave a 2 s fire on the floor |
+| w_gutter | Guttering | attack, timed, auto (a Wick ends) | a Wick that dies or burns out bursts for 0.4x AP in 24 px | 32 px; the burst launches minions; each burst leaves 5 Wax; burst chills; 1.6x | Wildfire (w_kindle): bursts at 2.5x leave a 2 s fire on the floor |
 | w_kindle | Chain Kindle | attack, timed, I Kindle | Kindle +25% and refunds all of the Wick's Wax | Kindle radius +10 px; Kindle chains to one more Wick within 40 px at 0.6x; Kindle stuns 0.5 s; the next Wick lit after a Kindle costs nothing; +100% | Bonfire (w_gutter): Kindle leaves a bonfire for 3 s where Wicks bite twice as fast |
-| w_swap | Changeling Step | movement, timed, L | Swap range 220 px, the arriving Wick's flare +50% | a second Swap charge; untouchable 0.3 s; foes on the line between take 0.6x AD; perfect-dodge window 0.2 s; the swapped Wick heals full | Mirror Wick (w_procession): every Swap also lights a free Wick where she arrives, if under the cap |
+| w_swap | Changeling Step | movement, timed, J held | a warp with no foe ahead reaches Wicks 220 px away, the traded Wick's flare +50% | two warp charges; the candle burns 8 s; the thrown candle burns foes it passes for 2x AD; warps recharge in 1.5 s; the traded Wick heals full; flare +150% and the candle burns 12 s | Mirror Wick (w_procession): every warp also lights a free Wick beside her, if under the cap |
 | w_hop | Wick Hop | movement, timed, W | in the air above a Wick, W jumps again off its head, once per airtime | the hopped Wick flares for 0.6x AP; two hops; higher hops; Lamp Drop after a hop +60% | Candle Stair (w_fangs): no hop limit while over Wicks and each hop makes that Wick bite |
 | w_procession | Procession | movement, easy, walk | she walks 5% faster for each Wick lit | idle Wicks walk beside her; Wicks walk 30% faster; Wicks lose life at half rate while she walks; Wick cap +1 | Vigil March (w_waxPool): Wicks walking beside her leave wax that chills foes |
 | w_lampVolley | Lamp Volley | spell, easy, I | 18 MP, 6 s: every Wick spits a flame bolt at the Quarry or its nearest foe, 1.0x AP | two bolts each; bolts pierce one foe; bolts ignite; 6 s to 4 s; 1.8x | Starfire (w_flare): bolts curve to foes and burst for 24 px |
 | w_waxPool | Wax Pool | spell, timed, I | 20 MP, 8 s: a pool 70 px wide on the floor ahead for 5 s; foes on it chilled; Wicks on it heal 4 HP a second | 90 px; foes on it take 0.3x AP each 0.5 s; Wicks on it bite 25% faster; 8 s; two pools | Hearth (w_procession): the pool follows her and covers 140 px |
 | w_effigy | Wax Effigy | spell, timed, I | 24 MP, 10 s: a tall effigy 40 px ahead lures ground minions within 90 px (reuse Sable's `lure`), stands 4 s, then bursts 0.8x AP in 40 px | lure 130 px; Wicks near the effigy bite 30% faster; the effigy holds foes like a Wick; burst ignites; 3.0x | Martyr's Light (w_gutter): the effigy's burst lights two free Wicks |
 | w_singe | Singe | dot, easy, auto | Wick bites add 1 Singe (0.05x AP a second, 6 max, 3 s) through `addStacks` | her own blows add stacks; 10 max; Singed foes take 10% more from Wicks; 0.22x; 5 s | Ashfall (w_hotWax): a foe at max stacks bursts, consuming them for 1.2x AP each to foes within 30 px |
-| w_hotWax | Hot Wax | dot, timed, K | a Wick landing splashes foes within 24 px with 2 Hot Wax stacks (0.15x AP a second, 4 s) | splash 32 px; splashed foes chilled; relights also splash; Swap arrivals splash; 0.35x | Candlemaker (w_singe): splashed foes that die drip double Wax |
-| w_smoulder | Smoulder | dot, timed, L | both ends of a Swap burn for 2 s, foes there gain Smoulder (0.2x AP a second, 3 s) | 3 s; the flame thread between the ends burns too; burn 32 px wide; spreads on kill; 0.45x | Pyre Path (w_swap): each Swap leaves a burning trail along the thread for 4 s |
+| w_hotWax | Hot Wax | dot, timed, K | Flare Back splashes the foe she parried, and each Wick she lights splashes foes within 24 px, with 2 Hot Wax stacks (0.15x AP a second, 4 s) | splash 32 px; splashed foes chilled; a blocked blow splashes the attacker; a warp's arrival splashes round her; 0.35x | Candlemaker (w_singe): splashed foes that die drip double Wax |
+| w_smoulder | Smoulder | dot, timed, J held | both ends of a warp burn for 2 s, foes there gain Smoulder (0.2x AP a second, 3 s) | 3 s; the flame thread between the ends burns too; burn 32 px wide; spreads on kill; 0.45x | Pyre Path (w_swap): each warp leaves a burning trail along the thread for 4 s |
 | w_lampflies | Lampflies | summon, easy, on a J hit | 15%, cooldown 2 s: three lampflies dart at foes, 0.3x AP each | 25%; five lampflies; they chill; they stay 5 s circling her; 0.8x | Lantern Swarm (w_lampVolley): every cast on I sends a swarm too |
-| w_twinWick | Twin Wick | summon, timed, on K | 20%: a second Wick lights beside the first, allowed past the cap, lives 6 s | 35%; the twin bites 30% faster; twin lives 10 s; two twins; 55% | Candelabra (w_tallow): every K lights three Wicks |
+| w_twinWick | Twin Wick | summon, timed, on Light (I) | 20%: a second Wick lights beside the first, allowed past the cap, lives 6 s | 35%; the twin bites 30% faster; twin lives 10 s; two twins; 55% | Candelabra (w_tallow): every Light lights three Wicks |
 | w_ghost | Remembrance | summon, timed, on a Wick's end | 25%, cooldown 2 s: a ghost candle rises for 4 s, firing a bolt every 0.6 s at 0.5x AP | 40%; bolts pierce; 6 s; two ghosts; 1.2x | Vigil of the Lost (w_hotWax): every ended Wick leaves a ghost whose bolts add Hot Wax |
 | w_tallow | Deep Tallow | passive, easy | Wax max +20, trickle +25% | Wick cap +1; Wick HP +25%; Wicks cost 5 less; Wick cap +2 in total; trickle +60% | Eternal Flame (w_twinWick): Wicks never burn out on their own |
-| w_thousand | Thousand Candles | ultimate, timed, U | replaces Great Wick: a field of candles rises across the reach, each foe takes the level's power, then every Wick she has flares for 0.5x of it | every Wick becomes a Great Wick for 3 s; candles knock up; leaves 4 Wicks; 1.5x | Night of Lamps (w_tallow): the whole stage fills with candles, every foe takes the hit three times, about 15 times the special |
+| w_greatWick | Great Wick | ultimate, timed, U | upgrades Great Wick: each swing 1.3x the level's power and one more Wick from the melt | candles rise across the reach for half a swing; every Wick flares for half a swing; every Wick stands as a Great Wick for 3 s; the giant swings twice; 2.5x and two more Wicks | Night of Lamps (w_tallow): candles fill the whole stage and strike every foe three times, about 15 times the special |
 
 Ultimate budget: level 8 about 6 times Great Wick, evolved about 15 times.
-Kit events declared in `src/types/wenna.ts`: `wick: { x; y; lit; cause }`, `swap: { from; to }`, `quarry: { foe }`, `kindle: { x; y; foes }`. The shared `cast`, `jump`, `dash` and `perfectDodge` are emitted as for Mirel.
+Kit events declared in `src/types/wenna.ts`: `wick: { x; y; lit; cause }`, `swap: { from; to; wick }` (each warp arrival), `quarry: { foe }`, `kindle: { x; y; foes }`. The shared `cast`, `jump`, `warp`, `block` and `parry` are emitted by the shared code.
 
 ## Look
 
@@ -184,10 +197,10 @@ Shared rig with her own skin in `src/constants/characters/wenna/look.ts`:
 - the lamp pole: dark wood, 30 px, with an iron hook at the top and a small square lantern (5 px) hanging on a 3 px chain that swings with her motion. New drawer `src/game/hero/draw/lampPole.ts`. The lantern's light is a small `lights.add` that follows it, brighter while a Flare is open.
 Every colour runs deep shadow to glint like the other skins.
 
-New `PAL.wick`: `#1a0f2e`, `#3a1f5c`, `#6a3aa0`, `#a46ae0`, `#d8b4ff`, `#f8eeff`, and `SPARKS.wick` from it, for the Wick flames, the Flare, Swap, Kindle, the Quarry ring and the WX bar edge.
+New `PAL.wick`: `#1a0f2e`, `#3a1f5c`, `#6a3aa0`, `#a46ae0`, `#d8b4ff`, `#f8eeff`, and `SPARKS.wick` from it, for the Wick flames, the Flare, the warp, Kindle, the Quarry ring and the WX bar edge.
 Wax colour `WAX` (in the palette file beside `SAND`): `#5a4a3a`, `#a8947a`, `#e8dcc4`, `#fff8e8`, for Wick bodies, drips and the WX bar fill.
 Wick sprite: ivory wax body with a darker base, two stubby arms, two dark dot eyes under a flame head that flickers between three shapes with a gold core pixel. Walk: a 2 frame waddle. Bite: lean in, the flame stretches forward and flashes. Hurt: the flame gutters sideways for 3 frames. Death: melts into a puddle with a smoke curl.
-Own clips in `src/constants/clips/wenna/`: idle (lamp swaying, cloak breathing), every blow, the K cast pose, Swap, both ability poses, the charge pose and both ultimates. From a stand or a walk her jump first bends her knees on the floor for 2 frames (the shared take-off load), then her own take-off crouch pushes off into the shared rise over its first 2 frames. Walk, fall, hurt and death use the shared clips through the motion layer with a 20 px stride, carrying the pole upright so the lantern never sinks into the floor (the lesson from Mirel's staff).
+Own clips in `src/constants/clips/wenna/`: idle (lamp swaying, cloak breathing), every blow, the Light cast pose, both ability poses, the charge pose and Great Wick; for the shared moves, the throw with a candle in her far hand, the wait on its flight, the arrival in a Flare and the guard in its four segments (`moveset.ts`). From a stand or a walk her jump first bends her knees on the floor for 2 frames (the shared take-off load), then her own take-off crouch pushes off into the shared rise over its first 2 frames. Walk, fall, hurt and death use the shared clips through the motion layer with a 20 px stride, carrying the pole upright so the lantern never sinks into the floor (the lesson from Mirel's staff).
 
 ## Achievements
 
@@ -196,13 +209,13 @@ Own clips in `src/constants/clips/wenna/`: idle (lamp swaying, cloak breathing),
 
 ## Shop items (docs/meta-progress.md)
 
-Vitality: her HP, and Wick HP since it is a share of her max HP. Honed Edge: her lamp string and Lamp Drop scale with `progress.stats.ad`. Arcana: Wick bites, the Flare's AP part, Swap's flare, Kindle, the spells and the special scale with `progress.stats.ap`. Wellspring: abilities and the ultimate spend MP. Precision: every hit, Wick bites included, goes through `dealDamage`. Light Boots: her walk and her Wicks' walk scale with `progress.stats.move`. Endurance: Swap spends stamina.
-Aftershock: each Swap arrival calls `travelEnded()`; add Wenna to the Aftershock line.
+Vitality: her HP, and Wick HP since it is a share of her max HP. Honed Edge: her lamp string and Lamp Drop scale with `progress.stats.ad`. Arcana: Wick bites, the Flare's AP part, the warp and its Wick's flare, Flare Back, Kindle, the spells and the special scale with `progress.stats.ap`. Wellspring: abilities and the ultimate spend MP. Precision: every hit, Wick bites included, goes through `dealDamage`. Light Boots: her walk and her Wicks' walk scale with `progress.stats.move`. Endurance: blocks and the dodge spend stamina.
+Aftershock: each warp arrival calls `travelEnded()` in the shared warp.
 Lodestone, Head Start and Last Light work in shared code.
 
 ## Co-op
 
-Wicks, Wax, the Quarry, the Swap cooldown and the selected ability live in kit seat memory (`rememberPerSeat(objectMemory(...))`); the Wick list is host-only data, the Wax value and Wick count are what a guest's HUD reads.
+Wicks, Wax, the Quarry, the ability recharges and where a warp left from live in kit seat memory (`rememberPerSeat(objectMemory(...))`); the Wick list is host-only data, the Wax value and Wick count are what a guest's HUD reads.
 Each Wenna has her own Wicks and cap. Any Wenna's Wicks hold foes for every hero. A Wick intercepts blows only for the Wenna who lit it.
 Wax drips go to the Wenna whose blow or Wick made the kill.
 
@@ -216,7 +229,7 @@ Run the playtest bots on this build from wave 1, one run each. Wenna's mash deat
 
 ## Note for the owner
 
-The playtest bots have no Wenna entry. A skilled policy for her would press K whenever Wax allows, strike the nearest foe with J to set the Quarry, press I with Kindle when a Wick stands beside a crowd, and press L when a foe winds up in front of her with a Wick behind the foe.
+The playtest bots have no Wenna entry. A skilled policy for her would press I with Light whenever Wax allows, strike the nearest foe with J to set the Quarry, press I with Kindle when a Wick stands beside a crowd, and hold J to warp when a Wick stands behind a foe.
 
 ## Bot balance check
 
@@ -246,12 +259,23 @@ Once her guard Wick held its post against fliers, the mash bot reached wave 5 wi
 After the movement pass the mash bot reaches wave 5 with 16 kills and the skilled bot wave 5 with 14, against waves 5 and 4 before it.
 A stress run at wave 6, level 30, with all 20 skills at level 8 and then evolved, mashing every key, reached waves 9 and 10 with no page errors.
 
+### The shared moveset (13 November 2026)
+
+One run each from wave 1, before on the core branch `SainyTK/unified-moveset` (the provisional warp and guard) and after on this rework.
+
+| Policy | Before wave | Before kills | After wave | After kills | After level |
+| --- | --- | --- | --- | --- | --- |
+| Mash | 5 | 15 | 5 | 15 | 5 |
+| Skilled | 5 | 18 | 10 | 50 | 13 |
+
+The mash bot only walks and taps J, so it plays the same lamp string and free Wicks as before.
+The skilled bot warps at foes at a distance and casts from I; with the candle warp, Light on I and Great Wick it clears wave 9 and falls on wave 10.
+
 ## As built
 
 - A held foe burns its Wick for 7 times its wave power once a second, twice that for an elite, mini boss or the Warden, since foes have no shared contact damage value.
   A heavy foe's shove moves the Wick back 20 px and adds no damage of its own.
 - Idle Wicks stand guard in front of her toward her nearest foe, and the Wick nearest her stays her guard, after QA measured that Wicks standing behind her took 2 of 12 blows in waves 3 to 5. With the change they took 13 of 21.
-- She, her lantern and the Wick are hidden for the 0.08 s of a Swap while their violet copies hold the old spots, and the copies fade over two frames after both arrive; her lantern leaves a streak. The kit interface has a new optional hook, `heroAlpha`, for hiding the hero's sprite.
 - The Quarry ring is 16 px wide, two pixels thick with a dark rim and a marker, and draws over the damage numbers through a new optional kit hook, `drawOver`, called after the numbers.
 - Standing still against Glimmer Moths in wave 2 (QA's s3), she took 1 hit instead of 5 once the guard Wick stopped chasing fliers.
 - The dev start `?wave=8&level=30&build=w_quarry:8,w_tallow:4` has Hunting Call ready to evolve, but a chest drops only from an elite, a mini boss or the Warden. The first one comes from the wave 9 elite or later, so a run that falls to the wave 10 Bog Hulk before an elite dies sees no chest.
