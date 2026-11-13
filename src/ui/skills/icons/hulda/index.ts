@@ -3,7 +3,7 @@ import { COIN_GOLD } from "../../../../constants/palette";
 import type { SpriteCanvas } from "../../../../engine/sprite";
 import { arc, arrow, chevron, fill, ring, sparkle, speedLines } from "../parts";
 import { floor, foe, heart, seg } from "../ysra/parts";
-import { bear, body, crack, fist, HC, plate, shards, shield } from "./parts";
+import { bear, body, chainLinks, crack, fist, HC, plate, shards, shield } from "./parts";
 
 /** the gold of an evolved icon */
 const GOLD = COIN_GOLD[3];
@@ -322,36 +322,35 @@ export const HULDA_ICONS: Record<string, (s: SpriteCanvas) => void> = {
     });
     ring(s, 8, 6, 6.4, GOLD);
   },
-  /** a heap of foes flung in an arc */
-  h_titanThrow: (s) => {
-    arc(s, 7, 15, 8, Math.PI * 1.05, Math.PI * 1.75, RUST[4]);
-    body(s, 12, 6, 2.6);
-    body(s, 9, 3, 2.2);
-    body(s, 14, 2, 1.8);
-    fist(s, 3, 12, 2.6, -1);
+  /** the chained gauntlet flung up at a foe, speed lines along the chain */
+  h_chainHaul: (s) => {
+    chainLinks(s, 1, 14, 9, 6);
+    fist(s, 11, 5, 2.8, 1);
+    speedLines(s, 2, [9, 12], 3, RUST[4]);
+    foe(s, 14, 9, 1.8, -1);
   },
-  /** the heap whirled on a gold ring */
-  h_titanThrow_evo: (s) => {
+  /** the gauntlet landing in the middle of a gold ring, foes knocked out both ways */
+  h_chainHaul_evo: (s) => {
     ring(s, 8, 9, 6, GOLD);
-    body(s, 8, 3, 2.4);
-    body(s, 13, 9, 2.2);
-    body(s, 3, 9, 2.2);
-    fill(s, () => s.dot(8, 9, 2, HC.coat));
+    fist(s, 8, 9, 3, 1);
+    chainLinks(s, 1, 1, 5, 6);
+    sparkle(s, 2, 13, 1.6, RUST[5]);
+    sparkle(s, 14, 13, 1.6, RUST[5]);
   },
-  /** a figure of iron: a plate chest, glowing seams */
-  h_unbroken: (s) => {
-    plate(s, 3, 2, 10, 6);
-    plate(s, 4, 9, 8, 5);
-    fill(s, () => {
-      seg(s, 8, 3, 8, 13, RUST[4]);
-      s.set(8, 8, RUST[6]);
-    });
+  /** fists slamming the floor, a tether dragging a foe in, the crack running out */
+  h_quakeDrop: (s) => {
+    crack(s, 14, RUST[4], RUST[5]);
+    fist(s, 6, 9, 3.2, 1);
+    fill(s, () => seg(s, 9, 8, 14, 5, RUST[5]));
+    foe(s, 14, 5, 1.8, -1);
+    plate(s, 1, 1, 6, 3);
   },
-  /** the iron figure twice the size, gold seams and a quake under it */
-  h_unbroken_evo: (s) => {
-    plate(s, 2, 1, 12, 7);
-    plate(s, 3, 9, 10, 4);
-    fill(s, () => seg(s, 8, 2, 8, 12, GOLD));
-    crack(s, 15, GOLD, GOLD_LIGHT);
+  /** the fists on an iron plate, the crack lit gold from wall to wall */
+  h_quakeDrop_evo: (s) => {
+    crack(s, 14, GOLD, GOLD_LIGHT);
+    plate(s, 3, 1, 10, 5);
+    fill(s, () => seg(s, 8, 2, 8, 5, GOLD));
+    fist(s, 5, 10, 2.8, -1);
+    fist(s, 11, 10, 2.8, 1);
   },
 };

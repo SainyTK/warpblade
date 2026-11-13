@@ -9,15 +9,13 @@ import { skillLevel, skillValues } from "../../skills/query";
 import { hero } from "../../state";
 import { claim, isClaimed, unclaim } from "./claims";
 import { fracture } from "./fracture";
-import { ironBigGrab } from "./iron";
 import { hulda } from "./memory";
 
 /** states in which a foe stays in her hands */
 const HOLDING = new Set(["hold", "knee", "toss"]);
 
 /** a foe she can take into her hands: a live minion nobody else holds */
-export const canHold = (e: Enemy): boolean =>
-  e.hp > 0 && (ENEMIES[e.type].launchable || ironBigGrab()) && !isClaimed(e);
+export const canHold = (e: Enemy): boolean => e.hp > 0 && ENEMIES[e.type].launchable && !isClaimed(e);
 
 /** seconds a hold lasts: longer with Crushing Grip, Executioner's Grip's own on its big foe */
 export function holdTime(): number {

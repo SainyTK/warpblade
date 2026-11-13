@@ -1,6 +1,6 @@
 import { frame } from "../hero";
 
-/** L: an armoured shoulder charge along the floor */
+/** Bull Rush, on I: an armoured shoulder charge along the floor */
 export const RUSH = {
   cost: 25,
   load: frame(2),
@@ -8,7 +8,8 @@ export const RUSH = {
   time: 0.32,
   speed: 200,
   recover: frame(6),
-  cooldown: 0.4,
+  /** seconds before the next, from the end of the charge */
+  cooldown: 0.8,
   /** the rush clip's stride, from `stride[0]` after the load to `stride[1]`, loops while a skill makes the rush longer */
   stride: [frame(2), frame(8)] as const,
   /** the stride's middle key after the load, where the feet pass the other way; the charge's last key, `lastKey` before

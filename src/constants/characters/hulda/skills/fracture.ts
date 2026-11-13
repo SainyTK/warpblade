@@ -6,7 +6,7 @@ export const CRUSHING_GRIP: SkillDef = {
   name: "Crushing Grip",
   kind: "dot",
   risk: "timed",
-  button: "K",
+  button: "J",
   text: "Foes in your hands are crushed, and leave fractured.",
   levels: [
     {

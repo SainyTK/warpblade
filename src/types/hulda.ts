@@ -4,8 +4,6 @@ import type { Enemy } from "./enemy";
 export type HuldaState =
   | "fist"
   | "airFist"
-  | "grab"
-  | "crush"
   | "hold"
   | "knee"
   | "toss"
@@ -24,11 +22,14 @@ export type FistBlow = "jab" | "hook" | "haymaker";
 /** how a held foe leaves her hands: ahead, over her head into the floor behind, or swung round her */
 export type ThrowKind = "forward" | "suplex" | "swing";
 
-/** the abilities on I, in the order O turns through them: her two from the start and her three spell skills */
-export type HuldaAbility = "bellow" | "taunt" | "h_ironChain" | "h_tremorStomp" | "h_ironWall";
+/** the abilities on I, in the order O turns through them: her three from the start and her three spell skills */
+export type HuldaAbility = "rush" | "bellow" | "taunt" | "h_ironChain" | "h_tremorStomp" | "h_ironWall";
 
-/** how her armour took a blow: a plate broke, or the rush, the haymaker's wind-up or Iron Wall's brace took it */
-export type ArmourKind = "plate" | "rush" | "windup" | "brace";
+/**
+ * how her armour took a blow: a plate broke; the rush, the haymaker's wind-up or Iron Wall's brace took it; her iron
+ * guard blocked it; or Iron Catch, her parry, met it
+ */
+export type ArmourKind = "plate" | "rush" | "windup" | "brace" | "block" | "parry";
 
 /** what Hulda's kit remembers between frames, one copy per player */
 export interface HuldaMemory {
@@ -42,8 +43,6 @@ export interface HuldaMemory {
   flinch: number;
   /** the foe in her hands, during a hold, a throw or a Skyfall ride */
   held: Enemy | null;
-  /** the big foe in a crush */
-  crushed: Enemy | null;
   /** seconds she has held it */
   holdT: number;
   /** knees landed in this hold */
@@ -59,6 +58,8 @@ export interface HuldaMemory {
   throwKind: ThrowKind;
   /** seconds until each ability on I can be used again */
   bellowCd: number;
+  /** the Bellow under way is the wide one */
+  wideBellow: boolean;
   tauntCd: number;
   chainCd: number;
   stompCd: number;
@@ -68,8 +69,9 @@ export interface HuldaMemory {
   airGrabbed: boolean;
   /** the rush or a Skyfall has landed and is in its recovery */
   landed: boolean;
-  /** seconds until the next Bull Rush */
+  /** seconds until the next Bull Rush, and the rush under way is the long one of I held */
   rushCd: number;
+  longRush: boolean;
   /** the foes Bull Horns carries on her shoulder; replaced whole, never pushed to, so co-op seats keep their own */
   carried: readonly Enemy[];
   /** foes the rush under way has struck, for the dash event; replaced whole */
@@ -82,11 +84,12 @@ export interface HuldaMemory {
   rushJoin: number;
   /** Stampede: L in the skid may start one free rush */
   rushAgain: boolean;
-  /** Iron Counter: the next throw's damage multiple, whether the held big foe is the evolved grip's, and seconds left
-   *  in which no plate breaks */
+  /** Iron Counter: the next throw's damage multiple, whether the held big foe is the evolved grip's, seconds left in
+   *  which no plate breaks, and seconds left in which her blocks cost no stamina */
   counterThrow: number;
   execute: boolean;
   unbreakT: number;
+  freeBlock: number;
   /** Fury: her damage is up by this share while `furyT` runs */
   fury: number;
   furyT: number;
@@ -98,14 +101,13 @@ export interface HuldaMemory {
   chainBusy: boolean;
   /** Iron Wall: blows taken in the brace under way */
   braced: number;
-  /** Skyfall Breaker: the big foe she rides and the pounds left, the foes her dive drags down, the bounce after a catch
-   *  already spent this airtime, and a Comet Grab leap under way */
+  /** Skyfall Breaker: the big foe she rides and the pounds left, the foes her dive drags down, and the bounce after a
+   *  catch already spent this airtime */
   ridden: Enemy | null;
   pounds: number;
   dove: readonly Enemy[];
   bounced: boolean;
-  comet: boolean;
-  /** Unbroken: seconds of iron left and its damage share */
+  /** Quake Drop's iron: seconds left and its damage share */
   ironT: number;
   iron: number;
   /** seconds she has been pushed along the floor from a stand; her walk loads before it gets going */
@@ -125,13 +127,13 @@ export interface HuldaSettleMemory {
 declare module "./skillBehavior" {
   /** Hulda's own skill events */
   interface SkillEvents {
-    /** a foe caught in her hands, or crushed when too big to hold */
+    /** a foe caught in her hands by the warp or Iron Catch */
     grab: { foe: Enemy };
     /** a foe she threw or slammed landed; `slam` for a Skyfall or a Bull Horns slam (a suplex is a throw) */
     throw: { foe: Enemy; x: number; y: number; slam: boolean };
-    /** her armour took a blow; `counter` when she took it on purpose (rush, wind-up, brace), her parry */
+    /** her armour took a blow; `counter` when she took it on purpose (rush, wind-up, brace) or parried it */
     armour: { kind: ArmourKind; fromX: number; counter: boolean };
-    /** an Iron Counter grab or a loaded Iron Wall release */
+    /** an Iron Counter catch or a loaded Iron Wall release */
     counter: { foe: Enemy | null };
   }
 }

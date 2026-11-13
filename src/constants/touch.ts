@@ -92,7 +92,7 @@ export const TOUCH_TEXT: Record<KitId, Record<TouchButtonAction, TouchButtonText
   hulda: {
     attack: {
       label: "Punch",
-      hint: "Fist string: jab, body hook, haymaker. In the air, a hammer fist. While holding a foe, a knee",
+      hint: "Tap: fist string of jab, body hook and haymaker; in the air a hammer fist; while holding a foe, a knee. Hold: hurl the chained gauntlet and haul yourself in holding the foe (10 MP); while holding, throw it",
       accent: "#ff5f6d",
     },
     up: {
@@ -102,13 +102,21 @@ export const TOUCH_TEXT: Record<KitId, Record<TouchButtonAction, TouchButtonText
     },
     dash: DODGE_BUTTON,
     guard: {
-      label: "Grab",
-      hint: "Grab a foe ahead; big foes are crushed. While holding, throw it: into the crowd ahead, or a suplex behind. In the air, Skyfall Grab",
+      label: "Guard",
+      hint: "Hold to block blows from the front for little stamina. Tap just as a blow lands for Iron Catch: seize the attacker, or a haymaker on a big foe",
       accent: "#b4bcc4",
     },
-    cast: { label: "Ability", hint: "Use the selected ability: Bellow, the taunt or a spell skill", accent: "#ffc2b8" },
+    cast: {
+      label: "Ability",
+      hint: "Tap: Bull Rush (Skyfall Grab in the air), Bellow, the taunt or a spell skill. Hold: a longer rush, a wider Bellow",
+      accent: "#ffc2b8",
+    },
     ultimate: SPECIAL,
-    cycle: { label: "Switch", hint: "Turn to the next ability", accent: "#e0ac48" },
+    cycle: {
+      label: "Switch",
+      hint: "Switch ability: Bull Rush, Bellow, the taunt and the spells you learn",
+      accent: "#e0ac48",
+    },
   },
   orrin: {
     attack: {

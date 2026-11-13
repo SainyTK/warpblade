@@ -64,14 +64,14 @@ export function pressFist(dir: number): boolean {
  * A blow lands on every foe in the box ahead; each foe struck gives Grit. Knuckle Wave pushes its waves on, and on the
  * haymaker Wrecking Haymaker adds its power, stun, launch and spike, then its crack and knock-down.
  */
-function land(blow: FistBlow): void {
+function land(blow: FistBlow, power: number = FISTS[blow].power): void {
   const f = FISTS[blow];
   const [x0, y0, x1, y1] = f.box;
   const boost = blow === "haymaker" ? haymakerBoost() : null;
   if (f.arc) game.fx.push(createSlash(hero.x, hero.y, hero.face, { ...f.arc, ramp: RUST_ARC }));
   hero.lastHit = null;
   const hits = meleeHit([boxAhead(x0, y0, x1, y1)], {
-    power: f.power + (boost?.power ?? 0),
+    power: power + (boost?.power ?? 0),
     kx: f.kx,
     ky: f.ky,
     stun: Math.max(f.stun ?? 0, boost?.stun ?? 0),
@@ -87,6 +87,17 @@ function land(blow: FistBlow): void {
   if (f.step) dust(hero.x + hero.face * 5, hero.y, 3, hero.face);
   sendWaves(blow);
   if (blow === "haymaker") afterHaymaker(hits ? hero.lastHit : null);
+}
+
+/**
+ * Iron Catch on a big foe: the haymaker lands at once at `power`, Wrecking Haymaker and all, and its clip plays on from
+ * the blow; the string then starts again from the jab.
+ */
+export function counterHaymaker(power: number): void {
+  startBlow(HAYMAKER);
+  hero.st = FISTS.haymaker.hit;
+  hulda.struck = true;
+  land("haymaker", power);
 }
 
 /** the step into a blow drives her feet at an even speed over its frames, so the clip's planted foot holds the floor */
@@ -147,9 +158,6 @@ export function runAirFist(): void {
   }
   if (h.st >= HAMMER.dur) settle();
 }
-
-/** a blow's recovery after it landed can be cut short by a grab or a rush */
-export const inRecovery = (): boolean => hero.state === "fist" && hulda.struck;
 
 /** the haymaker is under way */
 export const inHaymaker = (): boolean => hero.state === "fist" && hulda.blow === HAYMAKER;

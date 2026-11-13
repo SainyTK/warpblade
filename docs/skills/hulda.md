@@ -31,21 +31,22 @@ Crowd of 6: `easy` about 7 to 8, `timed` about 10 to 11, `precise` about 8 to 10
 ## Base kit with no skill
 
 Combo length: **3** (`comboHits: 3`).
-Her blows knock foes back and her armour already lets her stay in, so the grab is her extender.
+Her blows knock foes back and her armour already lets her stay in, so the hold is her extender: the warp and Iron Catch put a foe in her hands.
 Air limit: **1** hammer fist and **1** Skyfall Grab per airtime.
 Skyfall Breaker level 6 is the one skill that gives a second Skyfall after a catch.
 
 | Key | Base kit |
 | --- | --- |
 | J | Fist string: jab 1.2x, body hook 1.7x (breaks guards), haymaker 3.67x (armoured wind-up, a step in, knocked down 0.8 s); the same string every time, pushes of a few pixels so she stays in reach; a new string faces the held direction and never turns by itself. In the air one hammer fist 0.9x that spikes. While holding a foe, a knee 0.5x (up to 3). |
-| K | Grab: holds a minion, crushes a mini or boss for 1.3x. While holding, the throw, picked by the situation (below). In the air, Skyfall Grab (catch, ride, slam 2.0x, ring 0.8x). |
-| L | Bull Rush: armoured shoulder charge the way she is pushed, 0.6x, a short shove and stun 0.4 s to each foe, 25 stamina. Once she has run into a foe and none waits ahead, it stops at the next stride, a step past the foe, and she ends facing the way she charged. Still allowed out of a landed blow's recovery. |
+| J held | Chain warp, the shared warp: the gauntlet flies on its chain, she hauls herself in, strikes and lands holding a minion; a flier is ridden down into the Skyfall slam; a mini or boss is crushed (Grit, and Fractures with Crushing Grip). While holding, J held throws: the side behind held a suplex, the side ahead a forward throw, neither picked by the situation (below). |
+| K | Iron guard: 5% through, 10 stamina a block, 6 Grit a block. Iron Catch, the parry: a minion attacker is seized into her hands, a mini or boss takes a 2x haymaker. While holding, K throws as J held does. |
+| L | The shared front dodge. |
 | Up | One low jump. Down with Up drops through a ledge. |
-| I | The ability in the rotation: Bellow (20 MP, 4x AP, pulls foes in, drags fliers down) or Taunt (free, 3 s cooldown, 24 Grit over two slaps). |
-| O | Switches the I rotation. With no skill it switches between Bellow and Taunt. |
+| I | The selected ability, each with its own recharge: Bull Rush (25 stamina, 0.8 s; an armoured charge, 0.6x, a short shove and stun 0.4 s to each foe; held, 1.6 times as long; in the air, Skyfall Grab: catch, ride, slam 2.0x, ring 0.8x), Bellow (20 MP, 4x AP, pulls foes in, drags fliers down; held, 1.6 times the reach for 30 MP) or Taunt (free, 3 s cooldown, 24 Grit over two slaps). |
+| O | Switches the I rotation: Bull Rush, Bellow, Taunt, then the spell skills held. |
 | U | Quake Drop. |
 
-The throw picks itself.
+With no side held the throw picks itself.
 She suplexes (2.2x, 30 px ring 0.8x behind her) unless a foe stands within 100 px ahead and more foes stand ahead than within 40 px behind; then she throws forward (1.2x, the body strikes each foe it meets for 1.0x and lands for 0.6x).
 Alone with one foe she suplexes it for the most damage; facing a crowd she bowls the foe into it; surrounded from behind she slams it into them.
 The hold still runs out into a throw on its own.
@@ -75,7 +76,7 @@ The movement pass (11 November 2026) slowed the string from 35 to 45 frames and 
 | Wrecking Throw (`h_wreck`), Aftershock Suplex (`x_aftershock`) | Tree nodes | Wrecking Throw skill, level 1 and level 4. |
 | Rush Grab (`x_rushGrab`) | Fusion node | Iron Chain: a ranged way to bring a foe into her hands. |
 | Bellow (`t_bellow`, rank 1 from the start) | Rank gate | Base kit, no rank check. |
-| Titan Throw (`b_titan`) | Tree node | Titan Throw ultimate skill. |
+| Titan Throw (`b_titan`) | Tree node | Titan Throw ultimate skill; since the moveset rework its tethers are Quake Drop's first level. |
 | Quake Drop (`b_quake`) | Tree node | Base special. |
 
 ## The 20 skills
@@ -85,29 +86,30 @@ The movement pass (11 November 2026) slowed the string from 35 to 45 frames and 
 | `h_knuckleWave` | Knuckle Wave | attack | easy | J | `h_bruise` |
 | `h_haymaker` | Wrecking Haymaker | attack | timed | J | `h_knuckleWave` |
 | `h_counterGrab` | Iron Counter | attack | precise | K | `h_ironWall` |
-| `h_wreckingThrow` | Wrecking Throw | attack | timed | K | `h_giantSwing` |
-| `h_giantSwing` | Giant Swing | attack | easy | K | `h_ironChain` |
-| `h_bullHorns` | Bull Horns | movement | timed | L | `h_ironHide` |
-| `h_stampede` | Stampede | movement | easy | L | `h_shieldSister` |
-| `h_skyfall` | Skyfall Breaker | movement | precise | K (air) | `h_counterGrab` |
+| `h_wreckingThrow` | Wrecking Throw | attack | timed | J | `h_giantSwing` |
+| `h_giantSwing` | Giant Swing | attack | easy | J | `h_ironChain` |
+| `h_bullHorns` | Bull Horns | movement | timed | I | `h_ironHide` |
+| `h_stampede` | Stampede | movement | easy | I | `h_shieldSister` |
+| `h_skyfall` | Skyfall Breaker | movement | precise | J (warp, and I in the air) | `h_counterGrab` |
+| `h_chainHaul` | Chain Haul | movement | timed | J (warp) | `h_bullHorns` |
 | `h_ironHide` | Iron Hide | passive | easy | auto | `h_rustShards` |
 | `h_ironChain` | Iron Chain | spell | timed | I | `h_tremorStomp` |
 | `h_tremorStomp` | Tremor Stomp | spell | easy | I | `h_stampede` |
 | `h_ironWall` | Iron Wall | spell | precise | I | `h_ancestorFist` |
 | `h_bruise` | Bruising Knuckles | dot | easy | J | `h_haymaker` |
-| `h_fracture` | Crushing Grip | dot | timed | K | `h_wreckingThrow` |
+| `h_fracture` | Crushing Grip | dot | timed | J | `h_wreckingThrow` |
 | `h_rustShards` | Rust Shards | dot | easy | auto | `h_ironHide` |
 | `h_shieldSister` | Shield-Sister | summon | easy | auto | `h_stampede` |
 | `h_spiritBear` | Spirit Bear | summon | timed | auto | `h_bullHorns` |
 | `h_ancestorFist` | Ancestor's Fist | summon | precise | auto | `h_skyfall` |
-| `h_titanThrow` | Titan Throw | ultimate | easy | U | `h_giantSwing` |
-| `h_unbroken` | Unbroken | ultimate | timed | U | `h_ironHide` |
+| `h_quakeDrop` | Quake Drop | ultimate | timed | U | `h_ironHide` |
 
-Counts: attack 5, movement 3, spell 3, dot 3, summon 3, ultimate 2, passive 1.
-Risk: easy 9, timed 7, precise 4.
+Counts: attack 5, movement 4, spell 3, dot 3, summon 3, ultimate 1, passive 1.
+Risk: easy 8, timed 8, precise 4.
 
 Kit events she emits through the shared function: `grab`, `throw` (when a thrown or slammed foe lands), `armour` (a blow taken on a plate, in the rush, in the haymaker's wind-up or in Iron Wall), `counter` (Iron Counter, Iron Wall release, armoured counter).
-An armoured counter is a blow taken in the haymaker's wind-up, in the rush or in Iron Wall: her parry.
+An armoured counter is a blow taken in the haymaker's wind-up, in the rush or in Iron Wall.
+Her guard sends `armour` too: kind `block` for a blocked blow, and kind `parry` with `counter` for Iron Catch, so skills that answer an armoured counter answer a parry.
 
 Fury is the buff of her precise skills: all her damage up by the given share for 4 s; the highest share wins and a new one refreshes the time.
 One owner in `src/game/skills/hulda/fury.ts`.
@@ -152,26 +154,27 @@ Build: `FISTS.haymaker` power read through `skillValues`; crack with `effects/fl
 
 ### h_counterGrab: Iron Counter
 
-attack, precise, K. A grab that catches a foe winding up a blow (`wind` or `charge`) is a counter.
+attack, precise, K. Iron Catch, her parry, becomes a counter that hits the attacker very hard.
+Until the moveset rework (13 November 2026) this was a grab that caught a foe winding up; the parry is that moment on the shared guard.
 
 | Lv | Change | Card |
 | --- | --- | --- |
-| 1 | Counter catch 2x and a plate of Grit | Grab a foe winding up: 2x and a plate. |
-| 2 | 3.5x | Counter damage up. |
-| 3 | Also a counter within the 0.8 s after a plate breaks | Counter right after a plate breaks. |
-| 4 | On a mini or boss the counter crush deals 1.5 times and stuns 1.2 s | Counters crush big foes. |
+| 1 | The parried attacker takes 8x and she gains a plate | Parry: a counter and a plate. |
+| 2 | 12x | Counter damage up. |
+| 3 | For 3 s after a counter her blocks cost no stamina | After a counter, blocks are free for a while. |
+| 4 | On a mini or boss the counter deals 1.5 times | Counters crush big foes harder. |
 | 5 | A counter gives Fury +25% | A counter gives Fury. |
-| 6 | 6x; the throw after a counter deals double | Counter 6x, its throw doubled. |
+| 6 | 25x; the throw after a counter deals double | Counter harder, and its throw is doubled. |
 | 7 | A counter roars: other foes within 50 px reel 0.8 s | A counter makes foes nearby reel. |
 | 8 | 70x, Fury +50%, refills every plate | Huge counter, more Fury, full plates. |
 
 Evolution: **Executioner's Grip** (partner `h_ironWall`). Every counter deals 160x, and a counter on a mini or boss holds it for 1 s and suplexes it for 120x. Fury +80%, and while it lasts no blow breaks a plate.
 
-Build: `pressGrab`/`runGrab` in `hero/hulda/grab.ts` read the foe's state at the catch; crush from `runCrush`; new `fury.ts`; emits `counter`. Pose: the grab clip with a two-frame hit-stop flash; the evolution's big-foe hold needs a heavy hold pose (the suplex lift clip at arm's length).
+Build: `counterCatch` in `hero/hulda/counter.ts`, called by Iron Catch in `guardStyle.ts`; free blocks through the guard's `blockCost`; emits `counter`.
 
 ### h_wreckingThrow: Wrecking Throw
 
-attack, timed, K. Thrown foes become bombs.
+attack, timed, J (the throws while holding). Thrown foes become bombs.
 
 | Lv | Change | Card |
 | --- | --- | --- |
@@ -190,7 +193,7 @@ Build: `effects/thrownBody.ts` (it already has `THROWN.wreckRing`), `slamRing`, 
 
 ### h_giantSwing: Giant Swing
 
-attack, easy, K. With two or more other foes within 40 px when she throws, the throw is a Giant Swing on its own.
+attack, easy, J (the throws while holding). With two or more other foes within 40 px when she throws, the throw is a Giant Swing on its own, unless she holds the side behind her for a suplex.
 
 | Lv | Change | Card |
 | --- | --- | --- |
@@ -209,7 +212,7 @@ Build: `runSwing` in `hero/hulda/throws.ts`; the situational pick goes in the ne
 
 ### h_bullHorns: Bull Horns
 
-movement, timed, L. The rush picks foes up on her shoulder and slams them at the end.
+movement, timed, I (Bull Rush). The rush picks foes up on her shoulder and slams them at the end.
 
 | Lv | Change | Card |
 | --- | --- | --- |
@@ -228,7 +231,7 @@ Build: `hulda.carried` in `hero/hulda/rush.ts` becomes a list; `slamCarried` plu
 
 ### h_stampede: Stampede
 
-movement, easy, L. The rush gets cheaper, longer and cracks the floor behind her.
+movement, easy, I (Bull Rush). The rush gets cheaper, longer and cracks the floor behind her.
 
 | Lv | Change | Card |
 | --- | --- | --- |
@@ -237,34 +240,35 @@ movement, easy, L. The rush gets cheaper, longer and cracks the floor behind her
 | 3 | The trail cracks a second time 0.4 s later | The trail strikes twice. |
 | 4 | Rush 40% further | Longer rush. |
 | 5 | Foes she passes are dragged 20 px along in her wake | The rush drags foes along. |
-| 6 | L in the skid starts a second rush, free | Press L again in the skid for a free rush. |
+| 6 | I in the skid starts a second rush, free | Press I in the skid for a free rush. |
 | 7 | The trail throws minions up | The trail throws foes up. |
 | 8 | Shoulder 1.5x, trail 1.2x | Shoulder and trail hit far harder. |
 
 Evolution: **Thundering Herd** (partner `h_shieldSister`). The trail stays 3 s and keeps cracking every 0.5 s, and two shield-sisters charge beside each rush. An easy evolution: area and uptime.
 
-Build: `runRush`; trail from `effects/quakeLine.ts` segments laid each ghost tick. Level 6 reads L during the skid (`runEnd` to `RUSH.recover`); it is a second press of the same travel move and no combo input.
+Build: `runRush`; trail from `effects/quakeLine.ts` segments laid each ghost tick. Level 6 makes the Bull Rush tab ready during the skid (`rushAgainReady`); it is a second press of the same travel move and no combo input.
 
 ### h_skyfall: Skyfall Breaker
 
-movement, precise, K in the air. Catching a foe from the air is a hard read; it pays big.
+movement, precise, J (the warp) and I in the air (Skyfall Grab). Catching a foe from the air is a hard read; it pays big.
+The warp's catch of a flier rides it down into the same slam, and from level 3 the warp rides a big foe it clamps on.
 
 | Lv | Change | Card |
 | --- | --- | --- |
 | 1 | Slam 2.5x, lunge 30% further | Longer lunge, harder slam. |
 | 2 | Slam 4x | Slam damage up. |
-| 3 | Catches a mini or boss: she rides its back 1 s, pounds twice for 2x, leaps off | Ride big foes and pound them. |
+| 3 | The warp or Skyfall Grab on a mini or boss: she rides its back 1 s, pounds twice for 2x, leaps off | The warp rides big foes and pounds them. |
 | 4 | The ride drags foes under her path into the slam | The dive drags foes into the slam. |
 | 5 | Ring 50 px, 1.5x | Bigger ring. |
-| 6 | A catch gives one more Skyfall before she lands | Catch again before you land. |
+| 6 | A catch gives one more Skyfall Grab before she lands | Skyfall Grab again before you land. |
 | 7 | A catch gives Fury +30% and makes her blows break guards for 4 s | A catch gives Fury. |
 | 8 | Slam 20x, pounds 3x and three of them | Slam 20x, three pounds. |
 
-Evolution: **Comet Grab** (partner `h_counterGrab`). K on the floor with no foe in reach leaps her into a Skyfall. The slam is 40x, and a catch gives Fury +60% and a full plate.
+Evolution: **Comet Grab** (partner `h_counterGrab`). A warp at a minion on the floor arrives 30 px over it, already clamped on, and rides it down into the slam. The slam is 40x, and a catch gives Fury +60% and a full plate.
 
 Data since balance round 3: level 8 slam 46x, Comet Grab 65x. The slam and pounds strike only the caught foe, which is the precise payoff; dragged foes take only the ring, the skill's own area.
 
-Build: `hero/hulda/skyfall.ts`; the ride needs a new pose (kneeling on the foe's back, both fists overhead, reusing the hammer fist keys) and a `ride` state.
+Build: `hero/hulda/skyfall.ts` (`rideDown` and `mount` for the warp, called from `warpStyle.ts`); the ride pose kneels on the foe's back, both fists overhead, in a `ride` state.
 
 ### h_ironHide: Iron Hide
 
@@ -302,7 +306,7 @@ spell, timed, I (18 MP, 5 s). Her gauntlet flies out on a chain and drags a foe 
 
 Evolution: **Hell Chains** (partner `h_tremorStomp`). Four chains fan out over 200 px, every foe they meet is dragged into the heap, and the heap's landing stomps for 2x in a 50 px ring.
 
-Build: new `skills/hulda/ironChain.ts` and `effects/chainHook.ts`, drawn like Titan Throw's tethers (`ultimates/titanThrow.ts`); `take()` from `hold.ts`. Pose: a new straight-arm thrust and haul clip in `constants/clips/hulda/`.
+Build: `hero/hulda/ironChain.ts` and `chainCast.ts`; `take()` from `hold.ts`. Pose: a straight-arm thrust and haul clip in `constants/clips/hulda/spells.ts`.
 
 ### h_tremorStomp: Tremor Stomp
 
@@ -363,7 +367,7 @@ Build: a per-foe stack store (see Contract points), ticked in `skills/hulda/brui
 
 ### h_fracture: Crushing Grip
 
-dot, timed, K. Her grip breaks bones: held foes are crushed, and they leave fractured.
+dot, timed, J (the warp's hold and crush). Her grip breaks bones: held foes are crushed, and they leave fractured.
 
 | Lv | Change | Card |
 | --- | --- | --- |
@@ -372,7 +376,7 @@ dot, timed, K. Her grip breaks bones: held foes are crushed, and they leave frac
 | 3 | A thrown or dropped foe keeps a Fracture: 0.3x a second for 4 s | Thrown foes stay fractured. |
 | 4 | Fracture passes to every foe the thrown body or ring strikes | Fractures spread to struck foes. |
 | 5 | 0.6x a second, hold 2.2 s | Stronger crush, longer hold. |
-| 6 | Fractures stack up to 3; a crush on a big foe gives 3 | Fractures stack. |
+| 6 | Fractures stack up to 3; the warp's crush on a big foe gives 3 | Fractures stack. |
 | 7 | Fractured foes take 20% more from throws and slams | Fractured foes take more from throws. |
 | 8 | 1.2x a second a stack | Fractures far stronger. |
 
@@ -439,16 +443,16 @@ Build: new `skills/hulda/spiritBear.ts`; a new code-drawn bear (the largest art 
 
 ### h_ancestorFist: Ancestor's Fist
 
-summon, precise, auto (on an armoured counter, own cooldown). A giant spectral gauntlet answers a blow she took on purpose.
+summon, precise, auto (on Iron Catch or an armoured counter, own cooldown). A giant spectral gauntlet answers a blow she took on purpose.
 
 | Lv | Change | Card |
 | --- | --- | --- |
-| 1 | 50% on an armoured counter, 3 s cooldown; the fist slams the attacker for 6x | An armoured counter may call a giant fist. |
+| 1 | 50% on a parry or an armoured counter, 3 s cooldown; the fist slams the attacker for 6x | A parry or armoured counter may call a giant fist. |
 | 2 | 10x | The fist hits harder. |
 | 3 | The fist grabs the attacker and throws it at the nearest crowd | The fist throws the attacker. |
 | 4 | 75%, 2 s cooldown | More often. |
 | 5 | The slam rings 24 px at half its damage | The slam strikes foes near. |
-| 6 | 100%; it gives Fury +25% | Every armoured counter calls it, with Fury. |
+| 6 | 100%; it gives Fury +25% | Every parry and armoured counter calls it, with Fury. |
 | 7 | A second fist slams the nearest other foe 0.3 s later | A second fist. |
 | 8 | 100x | The fist hits far harder. |
 
@@ -456,43 +460,49 @@ Evolution: **Hand of the Mountain** (partner `h_skyfall`). The fist is twice the
 
 Build: new `skills/hulda/ancestorFist.ts`; drawn by scaling `hero/draw/gauntlets.ts` with a pale ramp; slam with `slamRing`; throw with `hurl()`.
 
-### h_titanThrow: Titan Throw
+### h_chainHaul: Chain Haul
 
-ultimate, easy, U. Replaces Quake Drop: tethers pull minions into a heap she hurls.
-
-| Lv | Change | Card |
-| --- | --- | --- |
-| 1 | Replaces Quake Drop; reach 80 px; path 0.6x, burst 1.0x of the level's power | Heap the minions and hurl them. |
-| 2 | Tethers drag fliers down too | Tethers catch fliers. |
-| 3 | Minis and bosses are dragged to the landing spot | Big foes are dragged to the landing. |
-| 4 | Burst 1.3x, reach 120 px | Bigger burst, longer tethers. |
-| 5 | The heap bounces once and bursts again | The heap bursts twice. |
-| 6 | Cooldown 20 to 16 s | Faster recharge. |
-| 7 | The heap scatters into bodies that each strike foes they meet for 1.0x | The heap scatters. |
-| 8 | Burst 5x, path 1.5x | Burst far harder. |
-
-Evolution: **Mountain Hurl** (partner `h_giantSwing`). She swings the heap round twice first, striking everything within 60 px each turn for 1.0x, then hurls it wall to wall; burst 9x, path 1.5x.
-
-Build: `ultimates/titanThrow.ts` and `TITAN` constants; the swing reuses the Giant Swing keys with the heap pinned.
-
-### h_unbroken: Unbroken
-
-ultimate, timed, U. Replaces Quake Drop: an iron form for a few seconds; the charge level adds time.
+movement, timed, J (the warp). Her chained gauntlet hits on the way out, and she hauls in harder and more often.
+Added in the moveset rework (13 November 2026) to fill the place of the two ultimates it cut.
+Its numbers are the shared warp's (`WarpTune`), read by her warp's `tune`.
 
 | Lv | Change | Card |
 | --- | --- | --- |
-| 1 | 4 s (+1 s a charge level): no blow breaks a plate or flinches her; her damage +20% | Turn to iron for a few seconds. |
-| 2 | +35% | More damage in iron. |
-| 3 | Every blow she lands quakes the floor 40 px each way, 1.0x (one quake each 0.2 s) | Blows quake the floor. |
-| 4 | Fills Grit at the start and ends in a level 1 Quake Drop | Start full, end with a quake. |
-| 5 | 6 s, +50% | Longer and stronger. |
-| 6 | Full walk speed while holding; throws +50% | Hold and throw at full strength. |
-| 7 | Foes that strike her are knocked down 0.8 s | Foes that hit you fall. |
-| 8 | +100%, quakes 9x | Far stronger iron. |
+| 1 | Foes the gauntlet passes take 0.6x | The gauntlet strikes every foe it passes. |
+| 2 | Arrival blow 1.8x to 2.6x before the distance bonus | A harder arrival. |
+| 3 | Two warps in a row | Two warps in a row. |
+| 4 | Foes within 40 px of the landing reel 0.6 s | Your landing makes foes near reel. |
+| 5 | Path 1.2x, recharge 2 s to 1.6 s | Harder chain, faster recharge. |
+| 6 | The reeling foes are dragged up to 20 px toward her | Foes near your landing are dragged in. |
+| 7 | Three warps in a row, 7 MP each | Three warps in a row, for less MP. |
+| 8 | Arrival 4.5x, path 3x | The chain and the arrival hit far harder. |
 
-Evolution: **Iron Titan** (partner `h_ironHide`). 10 s; her blows quake for 20x, every step she takes quakes the floor 30 px for 0.6x, and her grab holds minis and bosses.
+Evolution: **Wrecking Ball** (partner `h_bullHorns`). The arrival blow (6x) strikes every foe within 48 px round her, foes within 60 px reel and are dragged in, and a warp costs 5 MP. A timed evolution: area.
 
-Build: new `ultimates/unbroken.ts`; armour through `steadfast()`; quakes from `effects/quakeLine.ts`; a steel tint over her skin ramp and lit plates on the pauldron. No new clip apart from a chest-slam start (the taunt slap held).
+Build: `tune`, `strike` and `arrived` in `hero/hulda/warpStyle.ts`; the path hits are the shared warp's.
+
+### h_quakeDrop: Quake Drop
+
+ultimate, timed, U. Her special grows; the one ultimate skill she has since the moveset rework (13 November 2026).
+It folds in the best of the two it replaced: Titan Throw's tethers now drag minions in before the drop, and Unbroken's iron now follows it.
+The cast reads it through `ultimateValues()`.
+
+| Lv | Change | Card |
+| --- | --- | --- |
+| 1 | Tethers drag minions within 70 px in front of her before the fists fall; the drop 1.3 times | Tethers drag minions in before the drop. |
+| 2 | 1.5 times; the crack runs both ways at charge levels 1 and 2 | The crack runs both ways. |
+| 3 | 1.7 times; fliers over the crack are shaken 40 px down, reel 0.8 s and take the drop | The quake shakes fliers down. |
+| 4 | 3 s of iron after the drop: no blow breaks a plate or flinches her, her damage +25% | Turn to iron after the drop. |
+| 5 | 2.2 times; an aftershock crack 0.4 s later at half the drop | An aftershock follows. |
+| 6 | Tethers reach 110 px, the drop fills her plates, recharge 20 s to 16 s | Longer tethers, full plates, faster recharge. |
+| 7 | In iron every landed blow cracks the floor 40 px each way for 2x (one each 0.2 s) | Blows in iron crack the floor. |
+| 8 | 3.2 times, aftershock 0.7, 5 s of iron at +50%, blow cracks 4x | A far heavier drop and a longer iron. |
+
+Evolution: **Titan's Fall** (partner `h_ironHide`). Every crack runs wall to wall, the tethers reach 160 px and drag minis and bosses too, the drop is 7 times with a full aftershock, and 8 s of iron at +100% with 8x blow cracks.
+
+Per cast against the plain drop at charge level 3 (7x on each foe it reaches): level 8 is about 5.5 times from the drop and the aftershock, about 6.5 times with the iron; evolved about 14 times from the cracks, about 16 with the iron.
+
+Build: `ultimates/quakeDrop.ts` (`QUAKE_SKILL` constants), the tethers in `hero/hulda/effects/quakeTethers.ts`, the iron's sheen and blow cracks in `skills/hulda/quakeDrop.ts`; the iron is `hulda.ironT` read by `steadfast()` and the damage scale.
 
 ## Balance
 
@@ -519,8 +529,8 @@ DPS in AD per second (multiply by 12 for damage at the start of a run), the skil
 | Shield-Sister | easy | 0.26 | 2.4 | 3.0 | 0.5 | 7.2 | 14 | L1 0.27 calls/s, 80% hit; L8 two sisters charging each second, two passes at 1.2x, half land on a lone foe; crowd 3 a pass. |
 | Spirit Bear | timed | 0.32 | 3.7 | 5.5 | 0.6 | 11 | 18 | L1 0.1 calls/s at 3x; L8 0.25 calls/s at 5x plus mauls at 2.4/s near full uptime; crowd drop on 4, swipe on 2.5. |
 | Ancestor's Fist | precise | 0.6 | 6.7 | 11 | 0.8 | 9.0 | 16 | 0.2 armoured counters/s; L8 30x = 6.0, Fury 0.7. |
-| Titan Throw | easy ult | 0.23 | 1.1 | 1.6 | 1.4 | 8.4 | 14 | One a 20 s (16 s from L6) at 4.5x; crowd 6 in the heap. |
-| Unbroken | timed ult | 0.43 | 1.9 | 3.0 | 0.8 | 4.5 | 7 | One a 20 s; L1 4 s of +20% on 2 AD/s base; L8 8 s at +80% plus quakes. |
+| Chain Haul | timed | 0.15 | 2.2 | 3.2 | 0.4 | 6.5 | 11 | 0.5 warps/s at most; L8 3 charges, +2.7x arrival and 3x path on about 1 foe; crowd path on 3, evolved ring on 4. |
+| Quake Drop | timed ult | 0.1 | 1.6 | 3.5 | 0.6 | 7 | 15 | One a 20 s (16 s from L6) at charge level 3, 7x a foe; per cast against the plain drop, see its section. |
 
 Checks against the contract:
 
@@ -532,23 +542,23 @@ Checks against the contract:
 - L8 against L1, on the intended target: Knuckle Wave, Wrecking Haymaker, Wrecking Throw, Bull Horns, Tremor Stomp, Iron Wall and Iron Counter without Fury land at 6 to 10 times.
   Skills whose level 1 is a small add-on to a base move run higher on the add-on alone (Skyfall Breaker, Stampede, Iron Chain, Giant Swing); measured on the whole move they are 8 to 12 times.
   Dots and summons run 10 to 60 times, because the early level is weak on purpose and chance and count grow together (see Contract points).
-  The two ultimates run 4 to 5 times, since the base special already deals most of their damage.
+  Quake Drop is budgeted per cast against the plain drop: about 6.5 times at level 8 and 16 evolved.
 
 ## Builds
 
 Three example builds of 8 and the three each would evolve.
 
-**Brawler** (J and the floor; easy to play): Knuckle Wave, Wrecking Haymaker, Bruising Knuckles, Shield-Sister, Stampede, Tremor Stomp, Iron Hide, Unbroken.
+**Brawler** (J and the floor; easy to play): Knuckle Wave, Wrecking Haymaker, Bruising Knuckles, Shield-Sister, Stampede, Tremor Stomp, Iron Hide, Quake Drop.
 Evolve Knuckle Wave (Bruising Knuckles), Bruising Knuckles (Wrecking Haymaker) and Shield-Sister (Stampede).
 Thunder Knuckles spreads bruises down the floor, Shatter turns them into haymaker bursts, Shieldwall keeps the crowd moving into her fists.
 
-**Grappler** (grabs and throws): Wrecking Throw, Giant Swing, Crushing Grip, Iron Chain, Bull Horns, Spirit Bear, Titan Throw, Iron Hide.
+**Grappler** (holds and throws): Wrecking Throw, Giant Swing, Crushing Grip, Iron Chain, Chain Haul, Bull Horns, Spirit Bear, Iron Hide.
 Evolve Wrecking Throw (Giant Swing), Crushing Grip (Wrecking Throw) and Giant Swing (Iron Chain).
-Iron Chain fills her hands, Cyclone gathers the crowd, Bonebreaker and Human Cannonball turn every throw into a blast. Spirit Bear and Titan Throw are the next ready ones, which is where skips and banishes decide.
+Iron Chain and the chain warp fill her hands, Cyclone gathers the crowd, Bonebreaker and Human Cannonball turn every throw into a blast. Spirit Bear and Wrecking Ball are the next ready ones, which is where skips and banishes decide.
 
-**Iron Wall** (precise; armour as a parry): Iron Counter, Iron Wall, Ancestor's Fist, Skyfall Breaker, Rust Shards, Iron Hide, Wrecking Haymaker, Unbroken.
+**Iron Wall** (precise; the parry and armour): Iron Counter, Iron Wall, Ancestor's Fist, Skyfall Breaker, Rust Shards, Iron Hide, Wrecking Haymaker, Quake Drop.
 Evolve Iron Counter (Iron Wall), Iron Wall (Ancestor's Fist) and Ancestor's Fist (Skyfall Breaker).
-She walks into blows on purpose: every absorbed blow calls a fist, loads a wall and keeps Fury lit; Rust Shards and Iron Hide pay for the hits she takes. Highest damage on bosses, hard to play.
+She meets blows on purpose: every parry and absorbed blow calls a fist, loads a wall and keeps Fury lit; Rust Shards and Iron Hide pay for the hits she takes. Highest damage on bosses, hard to play.
 
 The partner graph keeps each theme in a chain (Knuckle Wave, Bruising Knuckles, Wrecking Haymaker; Wrecking Throw, Giant Swing, Iron Chain, Tremor Stomp, Stampede, Shield-Sister; Iron Counter, Iron Wall, Ancestor's Fist, Skyfall Breaker), so a focused build has more ready evolutions than it can take, and Iron Hide links the armour skills across themes.
 
@@ -562,8 +572,8 @@ Points where Hulda's design needs the contract or the framework to move; not cha
 - Events: she needs `grab`, `throw`, `armour` and `counter` added to the event list, or confirmation that kit-only names are allowed through the shared emit function.
 - The 6 to 10 times rule from level 1 to level 8 clashes with dots that are weak early by design and with summons whose chance, count and damage all grow. Suggest the rule applies to attack, movement, spell and passive skills, and dots and summons are judged at level 4 and level 8 only.
 - Precise budgets per second need rare, very large hits (12x to 30x AD) or a buff like Fury to reach 2.5 to 3 times easy. Confirm buffs count toward the budget; without them her precise skills sit near 2 times.
-- Bull Rush out of a landed blow's recovery stays: L starts the same rush it always does and ends the string. Confirm the owner does not count this as an extended combo input.
-- The base throw now picks itself (forward or suplex by where foes stand), which removes all directional input from the hold. This is a base kit change in the kit code, done in the build phase.
+- Bull Rush out of a landed blow's recovery stays: since the moveset rework it is an ability on I, which may cut a landed blow as every ability does.
+- The base throw picks itself (forward or suplex by where foes stand) when no side is held; since the moveset rework the side behind picks the suplex and the side ahead the forward throw, as the owner asked.
 
 ## As built
 
@@ -571,9 +581,8 @@ The skill data in `src/constants/characters/hulda/skills/` is the source of trut
 Changes made while building:
 
 - Balance review must-changes are in the data: Wrecking Haymaker L8 +10x (crack 3x, knock-down 2x); Iron Counter L1 8x and L8 45x, Executioner's Grip 120x; Skyfall Breaker L1 8x and L8 45x with 6x pounds, Comet Grab 120x; Iron Wall L1 7x and L8 50x a blow, Unbreakable Wall 130x with at most 3 fists a brace on Ancestor's Fist's cooldown; Ancestor's Fist L8 55x and Hand of the Mountain 150x; Bull Horns L8 slam 3.5x and ring 1.5x; Stampede L8 shoulder 0.8x and trail 0.6x; Crushing Grip L8 2.5x a second a stack for 8 s; Rust Shards L8 0.3x; Shield-Sister L8 0.8x a pass; Giant Swing gained a level 2 property (swung foes reel).
-- Suggestions taken: Wrecking Throw L8 path 3.5x and burst 4x; Titan Throw L8 burst 3x; Unbroken L8 +100%. Per-cast totals against Quake Drop are in the ultimates' code comments.
+- Suggestions taken: Wrecking Throw L8 path 3.5x and burst 4x. Titan Throw and Unbroken, measured here, were cut in the moveset rework; Quake Drop's per-cast totals are in its code comment.
 - Loops closed: flung bodies fling no further and emit no `throw` event; a broken plate heals at most once in 2 s whatever refills it; summons and ticks pass their skill id as source, so they emit no events.
 - Iron Hide's start Grit fills when the skill is taken, so a card taken mid-run still gives the plates.
 - Rust Shards' weaken softens blows on her while a rusted foe stands within 40 px of her.
 - Executioner's Grip's suplex skips the counter's throw doubling, so it stays at 120x.
-- Unbroken's start pose is the taunt's chest slap.

@@ -108,3 +108,14 @@ export function bear(s: S, x: number, y: number, c: Color, eye: Color = RUST[2])
     s.set(x + 1.4, y - 1, eye);
   });
 }
+
+/** a chain of links from (x0, y0) to (x1, y1), every other link lit */
+export function chainLinks(s: S, x0: number, y0: number, x1: number, y1: number): void {
+  const n = Math.max(1, Math.round(Math.hypot(x1 - x0, y1 - y0) / 1.5));
+  fill(s, () => {
+    for (let i = 0; i <= n; i++) {
+      const u = i / n;
+      s.set(x0 + (x1 - x0) * u, y0 + (y1 - y0) * u, i % 2 ? HC.steelDark : HC.steelLight);
+    }
+  });
+}

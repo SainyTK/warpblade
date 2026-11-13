@@ -1,19 +1,19 @@
 import type { SkillDef } from "../../../../types/skill";
 
-/** Iron Counter. Design: docs/skills/hulda.md. Values: power: attack damage of the counter catch; afterBreak: 1 also counters in the safe time after a plate breaks; big: share more on a mini or boss; fury: damage share of the Fury it gives; throwScale: the next throw's damage; roar: 1 makes foes near reel; fullPlates: 1 refills every plate; hold: 1 holds big foes for a suplex (evolution); suplex: its attack damage; unbreakable: 1 no plate breaks while Fury lasts */
+/** Iron Counter. Design: docs/skills/hulda.md. Values: power: attack damage of the counter on Iron Catch, her parry; freeBlock: seconds after a counter in which blocks cost no stamina; big: share more on a mini or boss; fury: damage share of the Fury it gives; throwScale: the next throw's damage; roar: 1 makes foes near reel; fullPlates: 1 refills every plate; hold: 1 holds big foes for a suplex (evolution); suplex: its attack damage; unbreakable: 1 no plate breaks while Fury lasts */
 export const IRON_COUNTER: SkillDef = {
   id: "h_counterGrab",
   name: "Iron Counter",
   kind: "attack",
   risk: "precise",
   button: "K",
-  text: "Grab a foe while it winds up a blow: a counter that hits very hard and gives a plate.",
+  text: "Iron Catch, your parry, becomes a counter: it hits the attacker very hard and gives a plate.",
   levels: [
     {
-      text: "Grab a foe winding up: a counter and a plate.",
+      text: "Parry: a counter and a plate.",
       values: {
         power: 8,
-        afterBreak: 0,
+        freeBlock: 0,
         big: 1,
         fury: 0,
         throwScale: 1,
@@ -28,7 +28,7 @@ export const IRON_COUNTER: SkillDef = {
       text: "Counter damage up.",
       values: {
         power: 12,
-        afterBreak: 0,
+        freeBlock: 0,
         big: 1,
         fury: 0,
         throwScale: 1,
@@ -40,10 +40,10 @@ export const IRON_COUNTER: SkillDef = {
       },
     },
     {
-      text: "Counter right after a plate breaks.",
+      text: "After a counter, blocks are free for a while.",
       values: {
         power: 12,
-        afterBreak: 1,
+        freeBlock: 3,
         big: 1,
         fury: 0,
         throwScale: 1,
@@ -58,7 +58,7 @@ export const IRON_COUNTER: SkillDef = {
       text: "Counters crush big foes harder.",
       values: {
         power: 12,
-        afterBreak: 1,
+        freeBlock: 3,
         big: 1.5,
         fury: 0,
         throwScale: 1,
@@ -73,7 +73,7 @@ export const IRON_COUNTER: SkillDef = {
       text: "A counter gives Fury.",
       values: {
         power: 12,
-        afterBreak: 1,
+        freeBlock: 3,
         big: 1.5,
         fury: 0.25,
         throwScale: 1,
@@ -88,7 +88,7 @@ export const IRON_COUNTER: SkillDef = {
       text: "Counter harder, and its throw is doubled.",
       values: {
         power: 25,
-        afterBreak: 1,
+        freeBlock: 3,
         big: 1.5,
         fury: 0.25,
         throwScale: 2,
@@ -103,7 +103,7 @@ export const IRON_COUNTER: SkillDef = {
       text: "A counter makes foes nearby reel.",
       values: {
         power: 25,
-        afterBreak: 1,
+        freeBlock: 3,
         big: 1.5,
         fury: 0.25,
         throwScale: 2,
@@ -118,7 +118,7 @@ export const IRON_COUNTER: SkillDef = {
       text: "Huge counter, more Fury, full plates.",
       values: {
         power: 70,
-        afterBreak: 1,
+        freeBlock: 3,
         big: 1.5,
         fury: 0.5,
         throwScale: 2,
@@ -138,7 +138,7 @@ export const IRON_COUNTER: SkillDef = {
       text: "Hold big foes for a suplex; unbreakable Fury.",
       values: {
         power: 160,
-        afterBreak: 1,
+        freeBlock: 3,
         big: 1.5,
         fury: 0.8,
         throwScale: 2,

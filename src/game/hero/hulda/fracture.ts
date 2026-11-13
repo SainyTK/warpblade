@@ -7,7 +7,6 @@ import { addStacks, stacksOf } from "../../enemies/skillStatus";
 import { skillLevel, skillValues } from "../../skills/query";
 import { game, progress } from "../../state";
 import { shake } from "../../world";
-import { ironThrowBonus } from "./iron";
 
 const ID = "h_fracture";
 
@@ -27,7 +26,7 @@ export function fracture(e: Enemy, stacks = 1): void {
   });
 }
 
-/** Fracture stacks a crush on a big foe lays: one, or a full set once they stack (level 6) */
+/** Fracture stacks the warp's crush on a big foe lays: one, or a full set once they stack (level 6) */
 export const crushFractures = (): number => (skillLevel(ID) ? skillValues(ID).max : 1);
 
 /** a foe a thrown body or a slam ring struck catches the Fracture of the foe thrown, from level 4; it never spreads on */
@@ -38,7 +37,7 @@ export function spreadFracture(from: Enemy, to: Enemy): void {
 /** throws and slams hit a fractured foe harder, from level 7 */
 export function throwPower(e: Enemy, power: number): number {
   const mark = skillLevel(ID) && stacksOf(e, ID) > 0 ? skillValues(ID).mark : 0;
-  return power * (1 + mark + ironThrowBonus());
+  return power * (1 + mark);
 }
 
 /**

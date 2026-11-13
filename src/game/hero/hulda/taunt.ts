@@ -3,19 +3,16 @@ import { TAUNT } from "../../../constants/hulda/taunt";
 import { sfx } from "../../../services/audio";
 import { createFloorRing } from "../../effects/floorRing";
 import { game, hero, lights } from "../../state";
-import { isFree, setState, settle } from "../actions";
+import { setState, settle } from "../actions";
 import { skin } from "../skin";
+import { castGate } from "./castGate";
 import { gainGrit } from "./grit";
 import { hulda } from "./memory";
 
-/** O: stand and slap the chest twice for Grit; rooted and open the whole time */
+/** I with the taunt: stand and slap the chest twice for Grit; rooted and open the whole time */
 export function pressTaunt(): boolean {
   const h = hero;
-  if (!isFree() || !h.ground) return false;
-  if (hulda.tauntCd > 0) {
-    sfx.denied();
-    return true;
-  }
+  if (!castGate()) return false;
   hulda.tauntCd = TAUNT.cooldown;
   h.vx = 0;
   setState("taunt");

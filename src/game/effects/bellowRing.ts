@@ -30,7 +30,8 @@ function roarRing(x: number, y: number, r: number, k: number, seed: number, ramp
 
 /**
  * Bellow: three rings run out from her mouth to the roar's reach, and every foe it caught is dragged toward her over a
- * quarter of a second, walkers sliding along the floor and flying minions drifting down to her hands.
+ * quarter of a second, walkers sliding along the floor and flying minions drifting down to her hands. The wide Bellow
+ * passes its own `reach` and `pull`.
  */
 export function createBellowRing(
   x: number,
@@ -38,10 +39,12 @@ export function createBellowRing(
   caught: readonly Enemy[],
   [toX, toY]: readonly [number, number],
   ramp: Ramp,
+  reach: number = BELLOW.reach,
+  pull: number = BELLOW.pull,
 ): Effect {
   const pulls = caught.map((e) => ({
     e,
-    dx: Math.sign(toX - e.x) * Math.max(0, Math.min(BELLOW.pull, Math.abs(toX - e.x) - 8)),
+    dx: Math.sign(toX - e.x) * Math.max(0, Math.min(pull, Math.abs(toX - e.x) - 8)),
     dy: kindOf(e.type).flies && e.rank === "minion" ? clamp(toY + BELLOW.dropTo - e.y, -BELLOW.drop, BELLOW.drop) : 0,
   }));
   const life = BELLOW.ringTime + BELLOW.ringGap * 2;
@@ -62,7 +65,7 @@ export function createBellowRing(
       for (let i = 0; i < 3; i++) {
         const u = (t - i * BELLOW.ringGap) / BELLOW.ringTime;
         if (u <= 0 || u >= 1) continue;
-        const r = BELLOW.reach * ease.outQuad(u);
+        const r = reach * ease.outQuad(u);
         const k = 1 - u;
         roarRing(x, y, r, k, i, ramp);
       }

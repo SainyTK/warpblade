@@ -4,31 +4,31 @@ import { rechargeStep } from "../../build/recharge";
 import { take, use } from "../../input";
 import { hero } from "../../state";
 import { resetMotion } from "../kael/motion";
-import { PROVISIONAL_GUARD, PROVISIONAL_WARP } from "../provisionalMoveset";
-import { startCharge } from "../ultimate";
-import { nextAbility, pressAbility, resetAbilities } from "./abilities";
+import { huldaCut, huldaMayAct } from "./act";
 import { steadfast } from "./armour";
 import { runBellow } from "./bellow";
 import { clearClaims } from "./claims";
 import { fistSteps, pressFist, runAirFist, runFist } from "./fists";
 import { huldaDamageScale, tickFury } from "./fury";
-import { pressGrab, runCrush, runGrab } from "./grab";
 import { gritScale, tickGrit } from "./grit";
+import { HULDA_GUARD } from "./guardStyle";
 import { drop, watchGrip } from "./hold";
 import { runChain } from "./ironChain";
 import { runBrace } from "./ironWall";
 import { pressJump } from "./jump";
 import { hulda, resetHulda } from "./memory";
 import { huldaPose } from "./pose";
-import { dropCarried, pressRush, runRush } from "./rush";
+import { dropCarried, runRush } from "./rush";
 import { rushDrives } from "./rushClock";
 import { rustGuard } from "./rustGuard";
 import { resetSettle } from "./settle";
-import { pressSkyfall, ridesFoe, runRide, runSkyfall, skyfallDrives } from "./skyfall";
+import { ridesFoe, runRide, runSkyfall, skyfallDrives } from "./skyfall";
+import { HULDA_SLOTS } from "./slots";
 import { runTaunt } from "./taunt";
 import { pressKnee, pressThrow, runHold, runKnee, runToss } from "./throws";
 import { runStomp } from "./tremorStomp";
 import { huldaWalkSpeed, tickPush } from "./walk";
+import { HULDA_WARP } from "./warpStyle";
 
 function tick(dt: number): void {
   tickGrit(dt);
@@ -59,12 +59,6 @@ function runState(dt: number): boolean {
       return true;
     case "airFist":
       runAirFist();
-      return true;
-    case "grab":
-      runGrab();
-      return true;
-    case "crush":
-      runCrush();
       return true;
     case "hold":
       runHold(dt);
@@ -104,32 +98,33 @@ function runState(dt: number): boolean {
   }
 }
 
-/** while a foe is in her hands, J knees it and K throws it, the throw picked by where the foes stand; Up does nothing */
-function readHolding(): void {
+/**
+ * While a foe is in her hands she owns J and K: J tapped knees it, J held or K throws it (the side held picks the
+ * throw); Up does nothing.
+ */
+function readHolding(dir: number): void {
   take("up");
   use("attack", pressKnee);
-  use("warp", pressThrow);
+  use("warp", () => pressThrow(dir));
+  use("guard", () => pressThrow(dir));
 }
 
 /**
- * Hulda: bare fists and iron gauntlets. A short three-blow string, grabs that hold minions and crush bigger foes, throws
- * that pick themselves by where the foes stand, an armoured Bull Rush, Bellow, the taunt and her spell skills on I (O
- * turns through them), and Grit plates that take blows for her. She never dodges.
+ * Hulda: bare fists and iron gauntlets. A short three-blow string; a warp that throws her chained gauntlet and hauls her
+ * in already holding the foe; an iron guard whose parry catches the attacker; knees and throws while she holds a foe;
+ * Bull Rush, Bellow, the taunt and her spell skills on I; and Grit plates that take blows for her.
  */
 export const HULDA_KIT: HeroKit = {
-  warp: PROVISIONAL_WARP,
-  guard: PROVISIONAL_GUARD,
-  abilities: [],
+  warp: HULDA_WARP,
+  guard: HULDA_GUARD,
+  abilities: HULDA_SLOTS,
+  mayAct: huldaMayAct,
+  cutForAction: huldaCut,
   tick,
   readActions: (dir) => {
-    if (hulda.held && (hero.state === "hold" || hero.state === "knee")) return readHolding();
-    use("dash", () => pressRush(dir));
+    if (hulda.held && (hero.state === "hold" || hero.state === "knee")) return readHolding(dir);
     use("up", pressJump);
     use("attack", () => pressFist(dir));
-    use("warp", () => (hero.ground ? pressGrab(dir) : pressSkyfall()));
-    use("cast", pressAbility);
-    use("cycle", nextAbility);
-    use("ultimate", startCharge);
   },
   chooseMove: () => null,
   runState,
@@ -156,7 +151,6 @@ export const HULDA_KIT: HeroKit = {
     dropCarried();
     clearClaims();
     resetHulda();
-    resetAbilities();
     resetMotion();
     resetSettle();
   },

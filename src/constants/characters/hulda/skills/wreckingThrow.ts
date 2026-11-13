@@ -6,7 +6,7 @@ export const WRECKING_THROW: SkillDef = {
   name: "Wrecking Throw",
   kind: "attack",
   risk: "timed",
-  button: "K",
+  button: "J",
   text: "Foes you throw burst where they land.",
   levels: [
     {

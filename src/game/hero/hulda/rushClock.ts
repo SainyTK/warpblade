@@ -1,12 +1,14 @@
+import { RUSH_SLOT } from "../../../constants/hulda/moveset";
 import { RUSH } from "../../../constants/hulda/rush";
 import { skillLevel, skillValues } from "../../skills/query";
 import { hero } from "../../state";
 import { hulda } from "./memory";
 
-/** seconds the charge runs: Bull Horns' time, stretched by Stampede's reach */
+/** seconds the charge runs: Bull Horns' time, stretched by Stampede's reach and by I held */
 export function rushTime(): number {
   const time = skillLevel("h_bullHorns") ? skillValues("h_bullHorns").time : RUSH.time;
-  return time * (skillLevel("h_stampede") ? skillValues("h_stampede").reach : 1);
+  const long = hulda.longRush ? RUSH_SLOT.wideTime : 1;
+  return time * (skillLevel("h_stampede") ? skillValues("h_stampede").reach : 1) * long;
 }
 
 /** seconds into the rush the full charge ends */

@@ -11,9 +11,9 @@ import { emitSkillEvent } from "../../skills/events";
 import { skillValues } from "../../skills/query";
 import { game, hero, progress } from "../../state";
 import { hitStop, shake } from "../../world";
-import { isFree, setState, settle } from "../actions";
-import { deny } from "../deny";
+import { setState, settle } from "../actions";
 import { skin } from "../skin";
+import { castGate } from "./castGate";
 import { thudLight } from "./effects/thud";
 import { gainFury } from "./fury";
 import { gainGrit } from "./grit";
@@ -28,15 +28,7 @@ export const braceTime = (): number => skillValues(ID).brace;
 export function pressBrace(): boolean {
   const h = hero;
   const v = skillValues(ID);
-  if (!isFree() || !h.ground) return false;
-  if (hulda.wallCd > 0) {
-    deny("cast");
-    return true;
-  }
-  if (h.mp < v.mp) {
-    deny("mp");
-    return true;
-  }
+  if (!castGate()) return false;
   h.mp -= v.mp;
   hulda.wallCd = v.cooldown;
   hulda.braced = 0;
