@@ -1,14 +1,16 @@
 import { SNARE } from "../../../../constants/sable/snare";
+import { W } from "../../../../constants/stage";
 import { sfx } from "../../../../services/audio";
 import type { Enemy } from "../../../../types/enemy";
+import { clamp } from "../../../../utils/math";
 import { dealDamage } from "../../../damage";
 import { createSnareTrap } from "../../../effects/snareTrap";
-import { enemyCenter } from "../../../enemies/enemy";
+import { enemyCenter, walks } from "../../../enemies/enemy";
 import { addStacks, consumeStacks } from "../../../enemies/skillStatus";
 import { emitSkillEvent } from "../../../skills/events";
 import { skillValues } from "../../../skills/query";
 import { game, hero, progress } from "../../../state";
-import { shake } from "../../../world";
+import { shake, surfaceBelow } from "../../../world";
 import { skin } from "../../skin";
 import { looseBolt } from "../loose";
 import { sable } from "../memory";
@@ -100,9 +102,22 @@ export function setSnare(x: number, y: number, counted: boolean): void {
   sfx.tone(180, 90, 0.08, "square", 0.05);
 }
 
+/** a foe this far ahead of her is in the tossed snare's reach */
+const inToss = (ahead: number): boolean => ahead > 0 && ahead <= SNARE.toss;
+
+/** I held: the snare is tossed under the nearest foe ahead on the floor, or as far as it flies with none */
+function tossSnare(): void {
+  const ahead = game.enemies.filter((e) => e.hp > 0 && walks(e) && inToss((e.x - hero.x) * hero.face));
+  const foe = ahead.sort((a, b) => Math.abs(a.x - hero.x) - Math.abs(b.x - hero.x))[0];
+  const x = foe ? foe.x : hero.x + hero.face * SNARE.toss;
+  setSnare(clamp(x, 8, W - 8), surfaceBelow(x, hero.y - 1), true);
+  sfx.swing(1.3);
+}
+
 /** the snare: in her base kit, Barbed Jaws makes more of them, cheaper and quicker */
 export const SNARE_SPELL: SableSpell = {
   label: "SNARE",
+  tint: "#e88a4c",
   mp: () => skillValues("s_barbed").mp ?? SNARE.mp,
   cooldown: () => skillValues("s_barbed").cooldown ?? SNARE.cooldown,
   left: () => sable.snareCd,
@@ -111,4 +126,5 @@ export const SNARE_SPELL: SableSpell = {
   },
   room: () => sable.snares < (skillValues("s_barbed").snares ?? SNARE.max),
   release: () => setSnare(hero.x + hero.face * 8, hero.y, true),
+  wide: tossSnare,
 };

@@ -1,9 +1,13 @@
-import { STATE_CLIPS } from "../../../constants/clips";
+import { CLIPS, STATE_CLIPS } from "../../../constants/clips";
+import { SABLE_GUARD_CLIP } from "../../../constants/clips/sable/guard";
 import { SABLE_CLIPS, SABLE_IDLE } from "../../../constants/clips/sable/moves";
 import { type StringClips, stringClips } from "../../../constants/clips/sable/shoot";
 import { AIM_STANCE, AIR_LEGS, hold } from "../../../constants/clips/sable/stance";
 import { KAEL_WOUNDED_IDLE } from "../../../constants/clips/wounded";
+import { GUARD_TIMES } from "../../../constants/combat";
 import { LANDING } from "../../../constants/kael/motion";
+import { BEATS } from "../../../constants/sable/bolt";
+import { POINT_BLANK } from "../../../constants/sable/guard";
 import { SLIDE } from "../../../constants/sable/moves";
 import type { Hero } from "../../../types/hero";
 import type { Pose } from "../../../types/pose";
@@ -41,6 +45,28 @@ function shotPose(h: Hero): Pose {
   return sampleKeys(clips.beats[bowString.beat].keys, h.st);
 }
 
+/** the closing beat, for the warp's heavy bolt */
+const CLOSING = BEATS.length - 1;
+
+/** the guard: her own clip, and in the parry's segment Point-Blank's kick from its hit frame on */
+function guardPose(h: Hero): Pose {
+  if (h.st < GUARD_TIMES.parry) return sampleKeys(SABLE_GUARD_CLIP.keys, h.st);
+  const kick = h.ground ? SABLE_CLIPS.kick : SABLE_CLIPS.airKick;
+  const share = (h.st - GUARD_TIMES.parry) / (GUARD_TIMES.parryEnd - GUARD_TIMES.parry);
+  return sampleKeys(kick.keys, POINT_BLANK.hit + share * (kick.dur - POINT_BLANK.hit));
+}
+
+/** the warp: the grapple bolt loosed as the string's first beat, held aimed while it flies, and on arrival the closing
+ *  beat from its release, for the heavy bolt */
+function warpPose(h: Hero): Pose {
+  const clips = h.ground ? SHOTS.level : SHOTS.levelAir;
+  const first = clips.beats[0];
+  if (h.state === "throw") return sampleKeys(first.keys, (h.st / CLIPS.throw.hit) * BEATS[0].fire);
+  if (h.state === "throwWait")
+    return sampleKeys(first.keys, BEATS[0].fire + Math.min(h.st, BEATS[0].dur - BEATS[0].fire));
+  return sampleKeys(clips.beats[CLOSING].keys, BEATS[CLOSING].fire + h.st);
+}
+
 /** the slide clip's time: it holds the glide's last key while a longer glide (Slide Kick) runs, then rises */
 function slideTime(st: number): number {
   const glide = SLIDE.load + SLIDE.time;
@@ -54,8 +80,12 @@ function statePose(h: Hero, t: number, fresh: boolean, dt: number, wound: number
   switch (h.state) {
     case "shoot":
       return shotPose(h);
-    case "kick":
-      return sampleKeys((h.ground ? SABLE_CLIPS.kick : SABLE_CLIPS.airKick).keys, h.st);
+    case "guard":
+      return guardPose(h);
+    case "throw":
+    case "throwWait":
+    case "warpStrike":
+      return warpPose(h);
     case "slide":
       return sampleKeys(SABLE_CLIPS.slide.keys, slideTime(h.st));
     case "hop":

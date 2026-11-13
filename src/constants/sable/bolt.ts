@@ -11,7 +11,7 @@ export const BOLT = {
   range: 250,
   /** damage as a multiple of attack damage */
   power: 1.11,
-  /** a primed bolt (a perfect reload's, a kick's, a slide's or a hop's) deals this much more */
+  /** a primed bolt (a perfect reload's, a parry's, a slide's or a hop's) deals this much more */
   primedBonus: 0.35,
   /** foes a bolt passes through before it stops, before Piercing Bolts */
   pierce: 0,
@@ -30,7 +30,7 @@ export const BOLT = {
   stuck: 0.6,
 } as const;
 
-/** the string: bolts in a row before the crossbow cocks again, the last one a closing bolt */
+/** the string: bolts in a row, one per J tap, before the crossbow cocks again, the last one a closing bolt */
 export const STRING = {
   /** the closing bolt's damage as a multiple of attack damage, and its push multiple */
   closingPower: 2.1,
@@ -39,6 +39,8 @@ export const STRING = {
   closingPierce: 1,
   /** bolts in one airtime with no skill, the last a closing bolt */
   air: 2,
+  /** seconds after a bolt's beat in which the next J tap still goes on with the string; after that it starts again */
+  link: 0.4,
 } as const;
 
 /** where the bolt leaves the crossbow, pixels from her feet facing right, for each aim */
@@ -92,3 +94,9 @@ export const PRIMED_FEEL: HitFeel = { stop: 0.03, shake: [0.08, 1], pitch: 1.3 }
 
 /** seconds at attack speed 1 the crossbow cocks after a closing bolt, before the next string may start */
 export const COCK = frame(6);
+
+/**
+ * The warp's heavy bolt, loosed at the foe she zipped away from: pixels a second, pixels it flies, its push and the
+ * stagger of each foe it passes through, and the recoil that slides her back, pixels a second.
+ */
+export const HEAVY_BOLT = { speed: 760, range: 340, kx: 190, ky: -40, stagger: 0.6, recoil: 70 } as const;

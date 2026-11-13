@@ -1,23 +1,9 @@
 import { frame } from "../hero";
 
-/** K: a front kick that throws foes away from her */
-export const KICK = {
-  dur: frame(11),
-  hit: frame(4),
-  /** the box ahead of her the boot reaches, pixels from her feet */
-  box: [2, -20, 20, -4] as const,
-  power: 0.55,
-  kx: 250,
-  ky: -60,
-  stun: 0.5,
-  /** a kick that lands in the air springs her up and back off the foe */
-  airSpring: 34,
-  airPush: 70,
-} as const;
-
-/** L: a hop back that looses a bolt at the top, still facing the foe */
+/** I: a hop back that looses a bolt at the top, still facing the foe; free, on its own recharge */
 export const HOP = {
-  cost: 22,
+  /** seconds the hop takes to come back, cut by spell haste */
+  recharge: 2,
   /** pixels it rises */
   rise: 16,
   speed: 150,
@@ -34,9 +20,8 @@ export const HOP = {
   land: frame(13),
 } as const;
 
-/** L with the side ahead held: a low slide along the floor, under blows */
+/** I held on the hop: a low slide forward along the floor, under blows, on the hop's recharge */
 export const SLIDE = {
-  cost: 18,
   speed: 210,
   /** she plants and drops this long before the glide */
   load: frame(2),

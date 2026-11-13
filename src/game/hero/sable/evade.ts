@@ -1,4 +1,4 @@
-import { HERO_MOVE, PERFECT, STAMINA } from "../../../constants/combat";
+import { HERO_MOVE, PERFECT } from "../../../constants/combat";
 import { HOP, SLIDE } from "../../../constants/sable/moves";
 import { sfx } from "../../../services/audio";
 import { riseSpeed } from "../../../utils/math";
@@ -10,10 +10,10 @@ import { emitSkillEvent } from "../../skills/events";
 import { skillValues } from "../../skills/query";
 import { game, hero, progress } from "../../state";
 import { boxHit, dust, heroBox, markStruck, newSwing, struckThisSwing } from "../../world";
-import { isFree, setState, settle } from "../actions";
+import { setState, settle } from "../actions";
 import { rewardPerfectDodge } from "../perfectDodge";
+import { cutForSharedAction, maySharedAct } from "../sharedCut";
 import { skin } from "../skin";
-import { refuseDash } from "../stamina";
 import { travelEnded } from "../travelEnd";
 import { assisted, muzzle } from "./aim";
 import { scatterCaltrops } from "./effects/caltrops";
@@ -22,6 +22,7 @@ import { tangle } from "./effects/tangle";
 import { looseBolt } from "./loose";
 import { sable } from "./memory";
 import { chargeBolts, loadBolts } from "./quiver";
+import { kickKegs } from "./spells/keg";
 
 /** the hop under way has left the floor */
 const hop = { launched: false };
@@ -36,12 +37,10 @@ export function evadeGuarded(): boolean {
   return (h.state === "hop" && h.st < HOP.guard) || (h.state === "slide" && h.st < SLIDE.guard);
 }
 
-/** a blow met her in the first moments of a hop or a slide: a perfect dodge, once per evade; Shade Archer widens the
- *  moment */
+/** a blow met her in the first moments of a hop or a slide: a perfect dodge, once per evade */
 export function evadeAbsorbs(): boolean {
   if (!evadeGuarded()) return false;
-  const window = skillValues("s_shade").window ?? PERFECT.window;
-  if (hero.st <= window && !sable.perfectUsed) {
+  if (hero.st <= PERFECT.window && !sable.perfectUsed) {
     sable.perfectUsed = true;
     rewardPerfectDodge();
     game.fx.push(createFloorRing(hero.x, hero.y, 28, skin.ramp, 0.4));
@@ -51,31 +50,49 @@ export function evadeAbsorbs(): boolean {
   return true;
 }
 
-/** pay stamina for a hop or a slide; false, with the bar flashing, when she cannot */
-function pay(cost: number): boolean {
-  const h = hero;
-  if (h.stamina < cost) {
-    refuseDash();
-    return false;
-  }
-  h.stamina -= cost;
-  h.staminaWait = STAMINA.delay;
-  return true;
+/** hops she can hold ready: one, two with Hop Volley */
+const hopCharges = (): number => skillValues("s_hopVolley").charges ?? 1;
+
+/** seconds a spent hop takes to come back, shorter with Hop Volley and spell haste */
+const hopRecharge = (): number => (skillValues("s_hopVolley").recharge ?? HOP.recharge) / progress.stats.haste;
+
+/** seconds before a hop is ready, 0 while one is */
+export const hopWait = (): number => (sable.hops > 0 ? 0 : sable.hopCd);
+
+/** a hop comes back each time the recharge runs out, until all are back */
+export function tickHop(step: number): void {
+  const max = hopCharges();
+  if (sable.hops > max) sable.hops = max;
+  if (sable.hops >= max) return;
+  sable.hopCd = Math.max(0, sable.hopCd - step);
+  if (sable.hopCd > 0) return;
+  sable.hops++;
+  if (sable.hops < max) startHopRecharge();
 }
 
-/** L: a hop back, still facing the foe, that looses a free bolt at the top; once on the floor and once in each airtime
- *  (twice with Hop Volley). From a walk or run toward the side she faces, a slide forward under blows instead. */
-export function pressEvade(dir: number): boolean {
+function startHopRecharge(): void {
+  sable.hopCd = hopRecharge();
+  sable.hopFull = Math.max(0.01, sable.hopCd);
+}
+
+/** a hop comes back at once (a slide through a crowd with Slide Kick) */
+function refundHop(): void {
+  sable.hops = Math.min(hopCharges(), sable.hops + 1);
+}
+
+/**
+ * I on the hop: a hop back, still facing the foe, that looses a free bolt at the top; held on the floor, a slide forward
+ * under blows instead. Both spend a hop, which comes back on its own recharge.
+ */
+export function castHop(wide: boolean): boolean {
   const h = hero;
-  // a bolt's draw is the longest part of a beat, so L may break out of any part of a shot
-  if (!isFree() && h.state !== "shoot" && h.state !== "kick") return false;
-  if (h.ground && isFree() && dir && dir === h.face) return startSlide();
-  const v = skillValues("s_hopVolley");
-  if (!h.ground && sable.airHops >= (v.airHops ?? 1)) return false;
-  if (!pay(v.cost ?? HOP.cost)) return true;
-  if (!h.ground) sable.airHops++;
-  Object.assign(sable, { hopShot: false, landed: false, perfectUsed: false, string: 0 });
+  if (!maySharedAct()) return false;
+  cutForSharedAction();
+  sable.hops--;
+  if (sable.hopCd <= 0) startHopRecharge();
   h.running = false;
+  if (wide && h.ground) return startSlide();
+  Object.assign(sable, { hopShot: false, landed: false, perfectUsed: false, string: 0 });
   setState("hop");
   hop.launched = false;
   // from the air there is no floor to load against: she pushes off at once
@@ -97,10 +114,7 @@ function pushOff(): void {
 }
 
 function startSlide(): boolean {
-  const v = skillValues("s_slideKick");
-  if (!pay(v.cost ?? SLIDE.cost)) return true;
   Object.assign(sable, { landed: false, perfectUsed: false, string: 0, slid: 0 });
-  hero.running = false;
   hero.vx = 0;
   newSwing();
   setState("slide");
@@ -153,6 +167,11 @@ export function runHop(): void {
   travelEnded();
 }
 
+/** the slide sends kegs it meets flying, with Powder Keg's kick */
+function slideKegs(): void {
+  kickKegs(heroBox());
+}
+
 /** Slide Kick: foes she slides through are tripped and thrown up */
 function trip(): void {
   const v = skillValues("s_slideKick");
@@ -171,14 +190,14 @@ function trip(): void {
   }
 }
 
-/** the slide ends: Slide Kick turns her to face the foes she passed, primes bolts and may refund itself */
+/** the slide ends: Slide Kick turns her to face the foes she passed, primes bolts and may give the hop back */
 function rise(): void {
   const v = skillValues("s_slideKick");
   if (!sable.slid) return;
   if (v.turn) hero.face = -hero.face;
   if (v.charged) chargeBolts(v.charged);
   if (v.refund && sable.slid >= v.refund) {
-    hero.stamina = Math.min(progress.stats.stamina, hero.stamina + (v.cost ?? SLIDE.cost));
+    refundHop();
     loadBolts(3);
   }
 }
@@ -198,6 +217,7 @@ export function runSlide(): void {
     if (h.vx === 0) dust(h.x, h.y, 4, -h.face);
     h.vx = h.face * SLIDE.speed * progress.stats.move;
     if (Math.floor(h.st * 30) % 3 === 0) dust(h.x - h.face * 4, h.y, 1, -h.face);
+    slideKegs();
     if (skillValues("s_slideKick").power) trip();
     return;
   }

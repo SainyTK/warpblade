@@ -16,6 +16,8 @@ export const SNARE = {
   life: 20,
   /** Barbed Jaws: the bolts a sprung snare looses at foes near it, as a share of a bolt */
   volleyPower: 0.7,
+  /** I held: pixels ahead the snare is tossed, under a foe within it */
+  toss: 110,
   /** the setting clip */
   dur: frame(9),
   set: frame(5),

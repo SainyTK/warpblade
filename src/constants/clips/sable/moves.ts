@@ -6,7 +6,7 @@ import { AIM_STANCE, AIR_LEGS, SABLE_STAND, s } from "./stance";
 
 const L = AIM_STANCE.level;
 
-/** her own action clips: the kick, the hop back, the slide and setting a snare */
+/** her own action clips: Point-Blank's kick (her parry), the hop back, the slide and setting a snare */
 export const SABLE_CLIPS = {
   /** the knee chambers high while she leans back, the heel drives straight out on the hit frame, then the leg folds back */
   kick: {
