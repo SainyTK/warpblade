@@ -6,13 +6,16 @@ Blurb: "He learned his trade in the hour between day and night, when nobody look
 Price: 1350 coins in `src/constants/heroUnlocks.ts`, the sixth price by the rule written there.
 Accent `#f08ad0` (dusk rose), which no other hero uses: Hulda's `#ff5f6d` is coral red and Wenna's `#b48cff` is violet.
 
-Code layout follows Wenna and Mirel: kit `src/game/hero/tallis/`, character `src/constants/characters/tallis/` (index, look, skills), numbers `src/constants/tallis/`, clips `src/constants/clips/tallis/`, types and kit events `src/types/tallis.ts`, skill behaviours `src/game/skills/tallis/`, icons `src/ui/skills/icons/tallis/`, touch icons `src/ui/touch/icons/tallisArt.ts`, the GL bar `src/ui/gloamBar.ts`, his ability tabs `src/ui/tallisTabs.ts`, his knives `src/game/hero/draw/knives.ts`, and his skill tables `docs/skills/tallis.md`.
+Code layout follows Wenna and Mirel: kit `src/game/hero/tallis/`, character `src/constants/characters/tallis/` (index, look, skills), numbers `src/constants/tallis/`, clips `src/constants/clips/tallis/`, types and kit events `src/types/tallis.ts`, skill behaviours `src/game/skills/tallis/`, icons `src/ui/skills/icons/tallis/`, touch icons `src/ui/touch/icons/tallisArt.ts`, the GL bar `src/ui/gloamBar.ts`, his knives `src/game/hero/draw/knives.ts`, and his skill tables `docs/skills/tallis.md`.
 
 ## How he differs from every hero in the game
 
-- Kael (warp swordsman) dashes untouchable through foes in 0.24 s, double jumps and teleports to a thrown sword. His back attacks are one skill option (Phase Cut). Tallis has no dash, no double jump and no teleport in his base kit. He travels slowly and steerably under foes as a shadow pool, and his whole kit is built on where foes are facing.
-- Ysra (planted glaive, brace and parry, vault, Heat) meets blows from the front with a long weapon and vaults over foes. Tallis has the shortest reach in the roster (about 22 px), cannot block or parry, and gets behind foes by going under them.
-- Sable (ranged hunter, ammo and reload, hop and slide) fights from 250 px and slides under blows for a moment. Tallis fights at knife range, and his only escape is the pool, which also hides him.
+Since the shared moveset (`docs/moveset-design.md`) every hero has the warp on J held, a guard and parry on K and the front dodge on L.
+Tallis's warp lands him at the foe's back, and his parry hides him.
+
+- Kael (warp swordsman) double jumps and hangs from crystals. His back attacks are one skill option (Phase Cut). Tallis has one jump, travels slowly and steerably under foes as a shadow pool, and his whole kit is built on where foes are facing.
+- Ysra (planted glaive, brace and parry, vault, Heat) meets blows from the front with a long weapon and vaults over foes. Tallis has the shortest reach in the roster (about 22 px), the thinnest block, and gets behind foes by going under them or through their shadow.
+- Sable (ranged hunter, ammo and reload, hop and slide) fights from 250 px. Tallis fights at knife range, and his escapes, the pool and the Veil, also hide him.
 - Hulda (unarmed grappler, armour, grabs) walks into blows behind armour. Tallis has 90 HP against her 120 and no armour; his defence is staying out of sight.
 - Orrin (chain dancer, pendulum swing, Momentum) wants constant speed through the air. Tallis wants to be still and unseen, then strike once from behind.
 - Mirel (time mage, Stillfield, echoes, Sand refilled by waiting) controls how fast foes act. Tallis controls what foes notice.
@@ -20,8 +23,8 @@ Code layout follows Wenna and Mirel: kit `src/game/hero/tallis/`, character `src
 
 The axes:
 
-- Movement: walk and run with one jump, plus Sink, a held shadow-pool glide along the floor that passes under ground foes.
-- Defence: the Veil and the pool make foes lose him. No block, parry, armour or dodge frames outside the pool.
+- Movement: walk and run with one jump, the shared warp and dodge, plus Sink, a shadow-pool glide along the floor that passes under ground foes.
+- Defence: the Veil and the pool make foes lose him. His guard lets 45% through, and his parry drops him into the Veil.
 - Resource: Gloam (GL), refilled while no foe is facing him and by blows from behind, spent to hold the Veil.
 - Range: 22 px knives.
 - Attack shape: positional. His string is the same wherever he stands, and blows from behind deal 2.25 times as much.
@@ -58,15 +61,17 @@ The plan set HP 80, the lowest in the roster; after QA it went to 90 by the plan
 | A / D | Walk; a double tap runs. Steer the pool during Sink |
 | W | One jump of 58 px. No double jump |
 | S | With W, drop through a ledge |
-| J | Knife string: Flick, Cross, Heel Kick, the same wherever foes stand. In the air, Drop Stab, once per airtime. Out of the pool, Rising Cut |
-| K | Veil on and off (Gloam) |
-| L | Hold: Sink into a shadow pool and glide; let go to rise. In the air: drop straight down and sink on landing while L is held |
-| I | Selected ability: Smoke Knot, Hamstring, or a spell skill (MP) |
+| J tapped | Knife string: Flick, Cross, Heel Kick, the same wherever foes stand. In the air, Drop Stab, once per airtime. In the pool, rise at once with Rising Cut |
+| J held | The warp: a knife thrown into the foe, and he steps out of its shadow at its back |
+| K | Guard with crossed knives; a parry is Fade |
+| L | The shared front dodge |
+| I tapped | Selected ability: Smoke Knot, Hamstring, a spell skill, the Veil or Sink (a dip). On a recharging one, the next ready one |
+| I held | Sink stays under while held; Smoke Knot and Hamstring cast their wide forms |
 | O | Switch ability |
 | U | Special: Gloaming (shared charge and MP rules) |
 
-Touch buttons read Knife, Jump, Veil, Sink, Ability, Switch and Special, with icons in `tallisArt.ts`.
-Sink acts while the button is held, like Ysra's brace.
+Touch buttons read Knife, Jump, Dodge, Guard, Ability, Switch and Special, with icons in `tallisArt.ts`.
+The Ability button tells a tap from a hold like the I key.
 The Controls screen lists every key above, and on touch screens the stick and the buttons.
 
 ## Gloam (GL bar)
@@ -78,28 +83,54 @@ Its rose edge glows while he is Unseen, so the player can read when it refills, 
 - Unseen: while he is out of the Veil and no minion or mini boss within 140 px faces him (real facing, `Math.sign(hero.x - e.x) === e.face`), Gloam refills 5 a second. With no foe on the stage it also refills. Standing in his own Smoke Knot counts as Unseen.
 - Each knife blow from behind gives 6. A foe felled by a blow from behind gives 12 more.
 - No passive trickle while a foe faces him, so standing in front of a crowd starves the bar.
+- The Veil's tab on the ability row shows its cost in Gloam and is struck through while the bar holds too little.
 
-## K: Veil
+## J held: the warp
 
-- K costs 20 Gloam to raise and drains 8 a second. With under 20 the press is refused: the GL bar blinks and the shared deny tick plays.
-- It ends on K again, at 0 Gloam, when a blow lands on him, or 0.2 s after his first blow from the Veil. After it ends, K waits 1.0 s; a press in that wait gets the same deny cue.
-- It works on the floor and in the air, with no cast time: the knees and shoulders dip over 3 frames as the hood comes down, with a puff of ink.
+The shared warp (`src/game/hero/warp.ts`) in every number: the throw, the flight, 10 MP, the 2 s recharge, the reach and the arrival's power.
+His style is `src/game/hero/tallis/warpStyle.ts`, with its numbers in `src/constants/tallis/moveset.ts`.
+
+- He throws one knife, drawn at image pixel detail: steel lit white along its hooked edge, a plum guard, a dark grip and a rose ring pommel, with a thread of ink and rose drawn out behind it.
+- The knife sinks into the foe and he steps out of its shadow 13 px behind it, on the side it does not face, facing its back. He leaves a shade of himself where he first appeared and a thread of dusk light to where he steps out.
+- The arrival is a knife cut from behind, so it takes the shared back bonus and his kit's on top (2.25 times). Its power is scaled by 1 / 2.25 (`TALLIS_WARP.backShare`), so it deals what every hero's warp deals. With no foe, or when the foe's back is against the stage's edge, it is the shared blow at full power.
+- The shove is small (60 px/s), so the foe stays in knife reach, and J tapped may start the string out of the arrival once it has struck (`WARP.cut`).
+- His extra: he stays in the Veil for a breath (0.5 s) that drains no Gloam. Minions lose sight of him, and it primes no Ambush.
+- Quiet Step (`t_quietStep`) is his warp skill: a longer breath, Gloam back, a knife that cuts foes it passes, more warps in a row, an Ambush primed by the breath, blinded minions, and smoke with its evolution.
+
+Measured on a thornback at wave 3: the shared warp from 48 px away would deal 27, and his arrival from behind dealt 27.
+
+## K: guard and Fade
+
+Crossed knives (`src/game/hero/tallis/guardStyle.ts`): a thin block and a strong parry.
+
+- A blocked blow costs 9 stamina and lets 45% of its damage through, the cheapest and the thinnest block in the roster.
+- Fade, his parry: on top of the shared parry he vanishes into the Veil for 2 s that drain no Gloam (`FADE` in `src/constants/tallis/moveset.ts`), and his first blow out of it is an Ambush. A Veil he had raised already stays up after those 2 s.
+- Shadow Double (`t_double`) is his guard skill: a Fade may call a shade of him behind the nearest foe.
+- Look: his own guard clip (`src/constants/clips/tallis/guard.ts`) on the shared segments. Both knives cross in reverse grip before his chest, a block drives him onto the rear foot with the cross pressed in, and Fade flings the knives apart as his body turns to ink.
+
+## I: the Veil
+
+- I on the Veil costs 20 Gloam to raise it, and it drains 8 a second. The shared ability bar refuses the press with too little Gloam.
+- It ends on I again, at 0 Gloam, when a blow lands on him, or 0.2 s after his first blow from the Veil. After it ends, it waits 1.0 s; I in that wait casts the next ready ability.
+- A free Veil (Fade, the warp's breath, Gloaming with its skill) drains nothing for its seconds and then ends, unless he had raised the Veil already.
+- It works on the floor and in the air, with no cast time, and cuts nothing he is doing: the knees and shoulders dip over 3 frames as the hood comes down, with a puff of ink.
 - While veiled: `hidden()` is true, he is drawn as a shadow form (an ink body the scene shows through, his lit edges kept as rose line work, a rim brightest at the hood, legs fraying into rising wisps), and his walk is 15% faster.
 - Ambush: his first knife blow out of the Veil, or the first within 0.5 s after rising from Sink behind a foe, is a sure crit, shown in the crit style. It emits kit event `ambush`.
-- The Veil emits kit event `veil` with `on` and `cause` (`press`, `empty`, `hurt`, `strike`, `free` or `leap`).
+- The Veil emits kit event `veil` with `on` and `cause` (`press`, `empty`, `hurt`, `strike`, `free`, `leap`, `fade`, `warp` or `faded`).
 
-## L: Sink
+## I: Sink
 
-- Hold L on the floor or a platform: 20 stamina to start and 40 a second while held, for at most 1.0 s. A tap still sinks for 0.15 s.
-- He pours into a flat ink pool 18 px wide on the surface he stands on and glides at 115 px/s scaled by move speed, steered with A and D, and can stop. The pool stops at the edge of its platform.
+- I tapped on Sink is a dip: he pours into the pool and glides 0.35 s on his own the way he faces (A or D still steer), far enough to pass under a foe ahead, then rises.
+- I held on Sink (the long press) keeps him under while I is held, steered with A and D, for at most 1.0 s; let go and he rises once he has been under 0.15 s.
+- Either costs 20 stamina to start and 40 a second under. Then 0.7 s before the next Sink.
+- He pours into a flat ink pool 18 px wide on the surface he stands on and glides at 115 px/s scaled by move speed. The pool stops at the edge of its platform.
 - He is untouchable and hidden while sunk. Ground foes and their blows pass over the pool.
-- Release, empty stamina or the time limit makes him rise over 0.15 s, during which he can be hit. Then 0.7 s before the next Sink.
-- Rising Cut: J pressed while sunk or within 0.12 s of the rise becomes an upward slash, 1.0x AD, knockback 40, launch 150, heavy (breaks a guard).
+- Every rise is Rising Cut, an upward slash, 1.0x AD, knockback 40, launch 150, heavy (breaks a guard). J in the pool rises at once.
 - Rising within 24 px on the side a foe does not face opens an Ambush for 0.5 s, and he comes up facing that foe's back.
 - A blow in the first 0.12 s of the Sink is a perfect dodge (`rewardPerfectDodge()`, once per Sink).
 - The rise calls `travelEnded()` (Aftershock) and emits `dash` with the direction travelled, plus kit event `sink` with `from` and `to`.
-- In the air, L drops him straight down at 360 px/s, and he sinks on landing if L is still held.
-- Look: the shadow form squashes down into the pool as the knees bend and the coat folds in. The pool is an ink oval in the gloam ramp at image pixel detail, with a paler lip, sliding glints, a ripple and two rose eyes. The rise reverses the pour.
+- In the air, Sink drops him straight down at 360 px/s, and he sinks on landing, held while I still is.
+- Look: the shadow form squashes down into the pool as the knees bend and the coat folds in. The pool is an ink oval in the gloam ramp at image pixel detail, with a paler lip, sliding glints, a ripple and two rose eyes. Rising Cut pours his body back up out of it.
 
 ## J: the knife string
 
@@ -140,11 +171,16 @@ Each blow loads the other way and holds the load three frames, snaps on its hit 
 - Rising Cut: from the pool's crouch he coils lower with the knife wound back, then rises onto the toes sweeping it up overhead.
 - A rose glint slides along the near knife for the two frames after each blow lands.
 
-## Abilities on I (MP), rotation on O
+## Smoke Knot, Hamstring and the spells (MP)
+
+The ability row reads SMOKE, HAMSTRING, NEEDLES, MARK and CALTROPS once their skills are held, then VEIL and SINK, in the order O turns through them (`src/game/hero/tallis/abilities.ts`).
+The casts come first, so I on a recharging cast falls to another cast before it toggles the Veil or sinks him.
+Each has its own recharge, and none waits on another. An ability may start from a free state or once the blow under way has struck, and cuts it.
 
 Smoke Knot: 18 MP, 8 s recharge.
 
 - He drops a knot at his feet and a cloud 72 px wide and 40 px tall stands for 3 s.
+- I held: a big knot for 28 MP, its cloud 1.6 times as wide and tall.
 - Minions and elites inside are blind (`e.blind` refreshed to 0.3 s each frame they are inside), so they do not turn or start a wind-up.
 - He counts as hidden while he stands inside it, and as Unseen for Gloam.
 - Look: round shaded billows of smoke in the gloam ramp, blended so a foe inside still shows as a shape, a rose crescent on each billow's lit side, rolling outward over 0.2 s, curling, and thinning over the last 0.5 s.
@@ -152,10 +188,10 @@ Smoke Knot: 18 MP, 8 s recharge.
 Hamstring: 14 MP, 4 s recharge.
 
 - A low crouching sweep 6 to 30 px ahead, 0.8x AP + 0.4x AD, that trips the first foe it hits: 0.9 s for a minion, 0.6 s for an elite, 0.3 s for a mini boss, none for the Warden.
+- I held: for 22 MP he spins the sweep round both sides, tripping the first foe on each.
 - A tripped foe does not turn (the shared stun step skips its update), so Hamstring then Sink puts him behind a foe that cannot face him.
 
 Both emit `cast` with ability `smokeKnot` and `hamstring`.
-The HUD ability tabs (SMOKE, HAMSTRING, NEEDLES, MARK, CALTROPS) and the touch Ability button show the selected one and its recharge, as for Wenna.
 
 ## U: Gloaming
 
@@ -168,7 +204,8 @@ Shared charge levels and MP costs.
 - He is untouchable from the release to the return.
 - With no foe in reach he slashes the air in place, and the MP is still spent.
 
-The ultimate skill `t_eclipse` replaces it with Eclipse: every foe in the level's reach, struck from behind, and then the Veil comes on for free.
+His ultimate skill Gloaming (`t_gloaming`) upgrades it, read through `ultimateValues()`: more foes at each charge level, two and then three stabs on each, a return into a free Veil with an Ambush primed, stunned minions, a full Gloam bar and a Smoke Knot where he lands. Evolved, Night Without End darkens the whole stage and strikes every foe on it four times.
+Level 8 deals 6 times the plain special on one foe, and evolved 15 times.
 
 ## The 20 skills
 
@@ -185,7 +222,7 @@ Each skill adds a new property on at least four of its seven level ups.
 | t_plunge | Plunge | attack, timed | Falling Night (t_nightLeap) |
 | t_cutTendon | Cut Tendon | attack, timed | Crippling Line (t_openVeins) |
 | t_sink | Deep Shadow | movement, timed | Shadow Tide (t_ambush) |
-| t_quietStep | Quiet Step | movement, easy | Phantom Walk (t_nightLeap) |
+| t_quietStep | Quiet Step | movement, timed | Phantom Step (t_nightLeap) |
 | t_nightLeap | Night Leap | movement, timed | Raven Drop (t_plunge) |
 | t_needles | Needle Fan | spell, easy | Iron Rain (t_quickKnives) |
 | t_markDusk | Mark of Dusk | spell, precise | Death Sentence (t_backbiter) |
@@ -197,10 +234,10 @@ Each skill adds a new property on at least four of its seven level ups.
 | t_double | Shadow Double | summon, timed | Two Moons (t_sink) |
 | t_wraith | Hollow Wraith | summon, timed | Legion of Dusk (t_openVeins) |
 | t_shroud | Shroud | passive, easy | Endless Night (t_quietStep) |
-| t_eclipse | Eclipse | ultimate, timed | Night Without End (t_shroud) |
+| t_gloaming | Gloaming | ultimate, timed | Night Without End (t_shroud) |
 
 Kit events declared in `src/types/tallis.ts`: `veil: { on; cause }`, `sink: { from; to }`, `ambush: { foe }`, `backstab: { foe; kill }`.
-The shared `cast`, `jump`, `dash` and `perfectDodge` are emitted as for Wenna.
+The shared `cast`, `jump`, `dash`, `perfectDodge`, `warp`, `block` and `parry` are emitted as for every hero.
 
 ## Look
 
@@ -213,22 +250,22 @@ Shared rig with his own skin in `src/constants/characters/tallis/look.ts`, slim 
 
 Every colour runs deep shadow to glint like the other skins.
 `PAL.gloam` is `#0c0a14`, `#1e1830`, `#3a2c4e`, `#6e4a78`, `#c06a9e`, `#ffb8dc`, and `SPARKS.gloam` comes from it (`#ffe4f2`, `#ffb8dc`, `#c06a9e`, `#6e4a78`), for the Veil outline and wisps, the pool, smears, the back-open chevron, the GL bar edge, Smoke Knot and Gloaming.
-His own clips are in `src/constants/clips/tallis/`: the idle (a low ready stance, the near knife turning in his fingers, the shoulders breathing), every blow, the pour and the rise, both ability poses, the charge pose, and the Gloaming crouch and slash.
+His own clips are in `src/constants/clips/tallis/`: the idle (a low ready stance, the near knife turning in his fingers, the shoulders breathing), every blow, the pour into the pool, both ability poses, the guard, the charge pose, and the Gloaming crouch and slash.
 Walk, run, jump, fall, hurt and death use the shared clips through the motion layer, with both knives held close in reverse grip so they never cut through the body.
 
 ## Achievements
 
 - `heroTrial("tallis", "Tallis")`: clear wave 10 with him, 40 coins.
-- Knife in the Dark (group Skill, 60 coins): "As Tallis, defeat 30 foes with blows from behind in one run." It keeps the best of a run as the tracked stat `backKills` in `src/utils/trackedStats.ts`, and is listed in `docs/achievements.md`. Kills by his knife blows from behind, Drop Stab, Gloaming, Eclipse and Shadow Double count.
+- Knife in the Dark (group Skill, 60 coins): "As Tallis, defeat 30 foes with blows from behind in one run." It keeps the best of a run as the tracked stat `backKills` in `src/utils/trackedStats.ts`, and is listed in `docs/achievements.md`. Kills by his knife blows from behind, Drop Stab, Gloaming and Shadow Double count.
 - Achievements go from 28 worth 1,770 coins to 30 worth 1,870.
 
 ## Shop items (docs/meta-progress.md)
 
-Vitality: his HP. Honed Edge: every knife blow, Rising Cut, Drop Stab and Gloaming. Arcana: Hamstring, the spells, the AP dots and Gloaming. Wellspring: abilities and the ultimate spend MP. Precision: every hit, and he has the highest base crit. Light Boots: walk, run, veiled walk and the pool's glide. Endurance: Sink spends stamina. Aftershock: each Sink rise calls `travelEnded()`. Lodestone, Head Start and Last Light work in shared code.
+Vitality: his HP. Honed Edge: every knife blow, Rising Cut, Drop Stab and Gloaming. Arcana: Hamstring, the spells, the AP dots and Gloaming. Wellspring: abilities and the ultimate spend MP. Precision: every hit, and he has the highest base crit. Light Boots: walk, run, veiled walk and the pool's glide. Endurance: Sink, the guard and the dodge spend stamina. Aftershock: each Sink rise calls `travelEnded()`. Lodestone, Head Start and Last Light work in shared code.
 
 ## Co-op
 
-Gloam, the Veil, Sink and its wait, the Ambush window and the selected ability live in kit seat memory (`rememberPerSeat(objectMemory(...))`).
+Gloam, the Veil, Sink and its wait, the Ambush window and the recharges live in kit seat memory, and the selected ability in the shared bar's (`rememberPerSeat(objectMemory(...))`).
 His clouds, marks and the foes his special strikes are kept to the host.
 A veiled Tallis in a room shows as his shadow form on every screen, since guests watch the host's picture, and his player ring still shows.
 Foes go for a visible hero first (the `nearest` change above).
@@ -287,10 +324,22 @@ The skilled bot still ends on wave 2 with 4 kills, losing 54 HP on wave 1: it ta
 After the combo layer and the movement pass (one fixed string, no springing cut), from wave 1: the mash bot reaches wave 4 with 12 kills and the skilled bot wave 3 with 6 kills, against wave 4 and wave 2 on the build before the stagger existed.
 The skilled bot answers a flier overhead with a tapped jump and J; Drop Stab now rides that jump to its top before it dives, so it reaches the moths, where it used to dive from a hop just off the floor.
 
+### The shared moveset (13 November 2026)
+
+One run each from wave 1 on `SainyTK/unified-moveset` (Tallis with the provisional warp and guard and no abilities on I) and on this build.
+
+| Bot | Before: wave, level, kills | After: wave, level, kills |
+| --- | --- | --- |
+| Mash | 3, 4, 9 | 3, 4, 9 |
+| Skilled | 5, 5, 14 | 8, 10, 34 |
+
+The mash bot only taps J, and his string is unchanged, so its run is the same frame for frame.
+With the abilities in the order Veil, Sink, Smoke Knot, Hamstring the skilled bot reached wave 5 (level 6, 17 kills): it toggled the Veil and dipped into Sink at every ready tab.
+
 ## As built
 
-- The plan named Smoke Knot, a base ability, as the evolution partner of Ambush (Night Hunter) and Quiet Step (Phantom Walk). A partner must be one of his 20 skills, so Night Hunter evolves with Quiet Step and Phantom Walk with Night Leap.
-- Several level tables in the plan added fewer than four new properties. Each such skill gained one small property where a number step was, recorded in `docs/skills/tallis.md`: Ambush refunds 15 Gloam, Turnabout holds a turned foe 0.5 s and staggers, Plunge's ring stuns, Cut Tendon chills, Quiet Step's veiled blows give 4 Gloam, Night Leap blinds the minions under the leap, Needle Fan chills, Caltrops trip a foe once, Open Veins slows and spreads, Nightshade bursts on death, Ink Wound slows, Gloam Crows bleed, Shadow Double's last stab stuns, Hollow Wraith blinds and bursts, and Eclipse leaves a Smoke Knot.
+- The plan named Smoke Knot, a base ability, as the evolution partner of Ambush (Night Hunter) and Quiet Step. A partner must be one of his 20 skills, so Night Hunter evolves with Quiet Step and Quiet Step with Night Leap.
+- Several level tables in the plan added fewer than four new properties. Each such skill gained one small property where a number step was, recorded in `docs/skills/tallis.md`: Ambush refunds 15 Gloam, Turnabout holds a turned foe 0.5 s and staggers, Plunge's ring stuns, Cut Tendon chills, Night Leap blinds the minions under the leap, Needle Fan chills, Caltrops trip a foe once, Open Veins slows and spreads, Nightshade bursts on death, Ink Wound slows, Gloam Crows bleed, Shadow Double's last stab stuns, and Hollow Wraith blinds and bursts.
 - The Veil's shadow form is drawn by his kit from its own copy of the hero's sprite, since the kit's `draw` has no access to the hero layer's sprite.
 - A foe that cannot see the hero walks on past him and does no harm by touch; without it a husk stopped on top of a veiled Tallis and stood there.
 - Gloaming's dark dims the scene's additive light as well as its colour, since in the daylight eras the sun's light washed out a dark drawn on the colour alone.
@@ -300,5 +349,6 @@ The skilled bot answers a flier overhead with a tapped jump and J; Drop Stab now
 
 ## Note for the owner
 
-The playtest bots have no Tallis entry.
-A skilled policy would press K when no foe within 60 px faces him, walk or Sink behind the nearest foe, press J when the back-open chevron shows, and press L when a foe winds up in front of him.
+The skilled bot is generic: it taps I whenever the selected tab is ready, so with the Veil selected it turns the Veil on and off, and with Sink selected it dips and spends the stamina its dodge needs.
+His casts come first in the ability order, which keeps it on Smoke Knot and Hamstring.
+A Tallis policy would raise the Veil when no foe within 60 px faces him, hold Sink to pass under a foe, press J when the back-open chevron shows, and press K just as a blow comes, for Fade.
