@@ -170,7 +170,7 @@ The bots never grab, throw or rush on purpose, so they show her floor; a player 
 
 After the moveset rework (13 November 2026) the mash bot falls on wave 5 with 18 kills and the skilled bot on wave 9 with 36 kills; on the core commit before her rework they fell on wave 5 with 14 kills and wave 5 with 18 kills.
 The skilled bot now holds J for the chain warp, which seizes the opening wave's moths out of the air and slams them, and casts Bull Rush and Bellow from I.
-It never guards, so Iron Catch is all upside a bot does not use.
+It never guards, so a player who parries gets Iron Catch on top of these numbers.
 
 ## Shop items and kit hooks
 
