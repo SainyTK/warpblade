@@ -1,5 +1,6 @@
 import { ENEMIES } from "../../../constants/enemies";
 import { HOLD } from "../../../constants/hulda/grab";
+import { RUSH_SLOT } from "../../../constants/hulda/moveset";
 import { RUSH } from "../../../constants/hulda/rush";
 import { sfx } from "../../../services/audio";
 import type { Enemy } from "../../../types/enemy";
@@ -7,17 +8,17 @@ import { dealDamage } from "../../damage";
 import { createImpact } from "../../effects/impact";
 import { createTrailPiece } from "../../effects/stampedeTrail";
 import { enemyBox, enemyCenter } from "../../enemies/enemy";
+import { isHeld } from "../../input";
 import { emitSkillEvent } from "../../skills/events";
 import { skillLevel, skillValues } from "../../skills/query";
 import { game, hero, progress } from "../../state";
 import { boxAhead, boxHit, dust, hitStop, markStruck, newSwing, shake, struckThisSwing } from "../../world";
-import { isFree, setState, settle } from "../actions";
+import { setState, settle } from "../actions";
 import { dropMoveGhost } from "../afterimages";
 import { skin } from "../skin";
-import { refuseDash } from "../stamina";
 import { travelEnded } from "../travelEnd";
+import { castGate } from "./castGate";
 import { isClaimed, unclaim } from "./claims";
-import { inRecovery } from "./fists";
 import { throwPower } from "./fracture";
 import { canHold, pin } from "./hold";
 import { hulda } from "./memory";
@@ -28,13 +29,19 @@ const HORNS = "h_bullHorns";
 const STAMPEDE = "h_stampede";
 const GHOST_EVERY = 3 / 30;
 
-/** stamina a rush costs: Stampede's, or the rush's own */
-export const rushCost = (): number => (skillLevel(STAMPEDE) ? skillValues(STAMPEDE).cost : RUSH.cost);
+/** stamina a rush costs: Stampede's, or the rush's own; the long rush of I held costs more */
+export const rushCost = (long = false): number =>
+  (skillLevel(STAMPEDE) ? skillValues(STAMPEDE).cost : RUSH.cost) * (long ? RUSH_SLOT.wideCost : 1);
+
+/** Stampede at level 6: the rush is in its skid and one free rush is still waiting */
+export const rushAgainReady = (): boolean => hero.state === "rush" && hulda.landed && hulda.rushAgain;
 
 /** drop the shoulder and go, the way she is pushed if any */
-function startRush(dir: number): void {
+function startRush(long: boolean): void {
   const h = hero;
+  const dir = (isHeld("right") ? 1 : 0) - (isHeld("left") ? 1 : 0);
   if (dir) h.face = dir;
+  hulda.longRush = long;
   hulda.landed = false;
   hulda.carried = [];
   hulda.passed = [];
@@ -49,25 +56,22 @@ function startRush(dir: number): void {
 }
 
 /**
- * L on the floor: drop the shoulder and charge the way she is pushed, paid with stamina; also out of a blow that
- * landed. With Stampede at level 6, L in the skid charges again once for free.
+ * I with Bull Rush on the floor: drop the shoulder and charge the way she is pushed, paid with stamina; held, a longer
+ * charge for more. With Stampede at level 6, I in the skid charges again once for free.
  */
-export function pressRush(dir: number): boolean {
+export function pressRush(long: boolean): boolean {
   const h = hero;
-  if (h.state === "rush" && hulda.landed && hulda.rushAgain) {
+  if (rushAgainReady()) {
     hulda.rushAgain = false;
-    startRush(dir);
+    startRush(long);
     return true;
   }
-  if ((!isFree() && !inRecovery()) || !h.ground || hulda.rushCd > 0) return false;
-  if (h.stamina < rushCost()) {
-    refuseDash();
-    return true;
-  }
-  h.stamina -= rushCost();
+  if (!castGate()) return false;
+  const paid = long && h.stamina >= rushCost(true);
+  h.stamina -= rushCost(paid);
   h.staminaWait = 0.6;
   hulda.rushAgain = skillLevel(STAMPEDE) > 0 && skillValues(STAMPEDE).again > 0;
-  startRush(dir);
+  startRush(paid);
   return true;
 }
 

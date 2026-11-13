@@ -17,8 +17,5 @@ export const RIDE = {
 /** a catch with Skyfall Breaker's bounce: she springs back up this fast to catch again */
 export const SKY_BOUNCE = -240;
 
-/** Comet Grab: K on the floor with nothing in reach leaps her up into a Skyfall, and its hands reach this box */
-export const COMET = { rise: -300, ahead: 90, box: [0, -44, 24, 4] as const } as const;
-
 /** Skyfall Breaker's dive drags foes it touches on the way down; its body box, from her feet */
 export const DIVE_BOX = [-8, -28, 10, 2] as const;

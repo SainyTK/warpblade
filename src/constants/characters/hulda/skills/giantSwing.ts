@@ -6,8 +6,8 @@ export const GIANT_SWING: SkillDef = {
   name: "Giant Swing",
   kind: "attack",
   risk: "easy",
-  button: "K",
-  text: "Throw into a crowd and you swing the foe round you first, striking every foe near.",
+  button: "J",
+  text: "Throw into a crowd and you swing the foe round you first, striking every foe near. Hold the side behind for a suplex instead.",
   levels: [
     {
       text: "Throw into a crowd: swing the foe round you.",

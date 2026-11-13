@@ -46,7 +46,7 @@ function breakPlate(): void {
   emitSkillEvent({ type: "armour", kind: "plate", fromX: hulda.hitFrom, counter: false });
 }
 
-/** armour took a blow without spending a plate: Unbroken's iron, or a blow she meant to take */
+/** armour took a blow without spending a plate: Quake Drop's iron, or a blow she meant to take */
 function shrug(kind: ArmourKind | null): void {
   gainGrit(GRIT.hurt);
   hero.inv = Math.max(hero.inv, GRIT.safe);
@@ -57,7 +57,7 @@ function shrug(kind: ArmourKind | null): void {
 }
 
 /**
- * A blow has taken its HP and she still stands. Unbroken's iron, the rush, the haymaker's wind-up and Iron Wall's brace
+ * A blow has taken its HP and she still stands. Quake Drop's iron, the rush, the haymaker's wind-up and Iron Wall's brace
  * take it without spending a plate; otherwise a full plate breaks and she keeps her action. With neither, the blow hurts
  * her as any hero, and earns Grit.
  */

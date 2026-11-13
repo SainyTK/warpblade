@@ -49,7 +49,7 @@ export const SLAM_LOOK = {
   big: { chips: 16, dent: 16 },
 } as const;
 
-/** the cold light of her iron form taking hold */
+/** the cold light of Quake Drop's iron taking hold */
 export const IRON_LIGHT = { radius: 26, strength: 0.4, life: 0.3 } as const;
 
 /** the light of a spirit's blow: an ancestor's fist, a bear's maul */
@@ -78,7 +78,3 @@ export const WAVE_LOOK = {
 
 /** Bellow's rings: how flat they lie, when in their fade they break into dashes, and the soft light at her mouth */
 export const ROAR_LOOK = { squash: 0.7, breakFrom: 0.6, light: 10 } as const;
-
-/** the lines of torn air behind Titan Throw's flying heap: how many, the gap between them, their length and how far
- *  behind the heap's middle they start */
-export const HEAP_TRAIL = { lines: 6, gap: 3.5, length: 26, behind: 9 } as const;

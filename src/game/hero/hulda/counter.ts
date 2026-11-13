@@ -21,12 +21,6 @@ import { hulda } from "./memory";
 
 const ID = "h_counterGrab";
 
-/** the grab meets a foe winding up a blow, or comes in the safe time after a plate broke once the skill allows it */
-function isCounter(e: Enemy): boolean {
-  if (!skillLevel(ID)) return false;
-  return COUNTER.states.includes(e.state) || (skillValues(ID).afterBreak === 1 && hulda.safe > 0);
-}
-
 /** the roar of a counter: every other foe near reels */
 function roar(caught: Enemy): void {
   for (const e of game.enemies) {
@@ -55,14 +49,15 @@ function flash(e: Enemy): void {
 }
 
 /**
- * Iron Counter: a grab that catches a foe winding up hits it very hard, gives a plate (all of them at level 8), Fury, a
- * doubled next throw and a roar, as the level allows. Evolved, a mini or boss is held for the grip's suplex and no plate
- * breaks while Fury lasts. Every grab clears a counter's leftovers first. Returns whether the grab was a counter.
+ * Iron Counter: Iron Catch, her parry, hits the attacker very hard and gives a plate (all of them at level 8), free
+ * blocks for a while, Fury, a doubled next throw and a roar, as the level allows. Evolved, a mini or boss is held for
+ * the grip's suplex and no plate breaks while Fury lasts. Every catch clears a counter's leftovers first. Returns
+ * whether the catch was a counter.
  */
-export function counterGrab(e: Enemy): boolean {
+export function counterCatch(e: Enemy): boolean {
   hulda.execute = false;
   hulda.counterThrow = 1;
-  if (!isCounter(e)) return false;
+  if (!skillLevel(ID)) return false;
   const v = skillValues(ID);
   const big = !ENEMIES[e.type].launchable;
   e.state = "recover";
@@ -74,6 +69,7 @@ export function counterGrab(e: Enemy): boolean {
   else gainGrit(GRIT.plate);
   gainFury(v.fury);
   if (v.unbreakable) hulda.unbreakT = FURY.time;
+  hulda.freeBlock = Math.max(hulda.freeBlock, v.freeBlock);
   hulda.counterThrow = v.throwScale;
   hulda.execute = big && v.hold === 1 && e.hp > 0;
   if (v.roar) roar(e);

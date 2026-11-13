@@ -2,7 +2,7 @@ import type { HuldaAbility } from "../../../types/hulda";
 import type { TouchButtonAction } from "../../../types/touch";
 import { hex } from "../../../utils/color";
 import { ICON_WHITE, type IconArt } from "./iconArt";
-import { JUMP, NOVA } from "./sharedArt";
+import { DODGE, JUMP, NOVA } from "./sharedArt";
 
 const IRON = hex("#b4bcc4");
 const IRON_DARK = hex("#78828c");
@@ -39,10 +39,20 @@ const RUSH: IconArt = {
   colors: { P: PALE, R: RUST, D: RUST_DARK, L: ICON_WHITE },
 };
 
-/** two gauntlets closing on a foe from either side, fingers curled in */
-const GRAB: IconArt = {
-  rows: ["IIII....IIII", "IDDI.FF.IDDI", "IIII.FF.IIII", ".II.FFFF.II.", "..I.FFFF.I..", ".....FF....."],
-  colors: { I: IRON, D: IRON_DARK, F: RUST },
+/** her iron guard: two gauntlets stacked upright before her, the open hand of Iron Catch glinting on top */
+const GUARD: IconArt = {
+  rows: [
+    "..G.....G..",
+    "...IIIII...",
+    "..IIDIDII..",
+    "..IIIIIII..",
+    "WWDIIIIIDWW",
+    "..IIIIIII..",
+    "..IIDIDII..",
+    "..IIIIIII..",
+    "...WWWWW...",
+  ],
+  colors: { I: IRON, D: IRON_DARK, W: WRAP, G: ICON_WHITE },
 };
 
 /** rings rolling out from an open mouth */
@@ -76,6 +86,7 @@ const WALL: IconArt = {
 };
 
 const ABILITY_ART: Readonly<Record<HuldaAbility, IconArt>> = {
+  rush: RUSH,
   bellow: BELLOW,
   taunt: TAUNT,
   h_ironChain: CHAIN,
@@ -83,13 +94,14 @@ const ABILITY_ART: Readonly<Record<HuldaAbility, IconArt>> = {
   h_ironWall: WALL,
 };
 
-/** where each of up to five abilities sits on the switch dial, clockwise from the top */
+/** where each of up to six abilities sits on the switch dial, clockwise from the top */
 const DIAL: readonly [number, number][] = [
   [4, 0],
-  [8, 3],
-  [7, 8],
-  [1, 8],
-  [0, 3],
+  [8, 2],
+  [8, 6],
+  [4, 8],
+  [0, 6],
+  [0, 2],
 ];
 
 /** the switch: one mark for each ability she knows round a dial, the selected one white, as Kael's element ring */
@@ -109,7 +121,7 @@ function switchArt(selected: HuldaAbility, known: readonly HuldaAbility[]): Icon
   return { rows: grid.map((r) => r.join("")), colors: { R: RUST_DARK, W: ICON_WHITE } };
 }
 
-/** Hulda's buttons: the fist, the rush, the grab, the selected ability on I and the switch dial on O */
+/** Hulda's buttons: the fist, the iron guard, the selected ability on I and the switch dial on O; the dodge is shared */
 export function huldaArt(action: TouchButtonAction, ability: HuldaAbility, known: readonly HuldaAbility[]): IconArt {
   switch (action) {
     case "attack":
@@ -117,9 +129,9 @@ export function huldaArt(action: TouchButtonAction, ability: HuldaAbility, known
     case "up":
       return JUMP;
     case "dash":
-      return RUSH;
+      return DODGE;
     case "guard":
-      return GRAB;
+      return GUARD;
     case "cast":
       return ABILITY_ART[ability];
     case "cycle":

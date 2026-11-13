@@ -7,10 +7,10 @@ export const ANCESTORS_FIST: SkillDef = {
   kind: "summon",
   risk: "precise",
   button: "auto",
-  text: "An armoured counter (a blow taken in the haymaker's wind-up, the rush or Iron Wall) may call a giant fist on the attacker.",
+  text: "A parry or an armoured counter (a blow taken in the haymaker's wind-up, the rush or Iron Wall) may call a giant fist on the attacker.",
   levels: [
     {
-      text: "An armoured counter may call a giant fist.",
+      text: "A parry or armoured counter may call a giant fist.",
       values: { chance: 0.5, cooldown: 3, power: 7, throw: 0, ring: 0, fury: 0, second: 0, pin: 0, mark: 0 },
     },
     {
@@ -30,7 +30,7 @@ export const ANCESTORS_FIST: SkillDef = {
       values: { chance: 0.75, cooldown: 2, power: 12, throw: 1, ring: 24, fury: 0, second: 0, pin: 0, mark: 0 },
     },
     {
-      text: "Every armoured counter calls it, with Fury.",
+      text: "Every parry and armoured counter calls it, with Fury.",
       values: { chance: 1, cooldown: 2, power: 12, throw: 1, ring: 24, fury: 0.25, second: 0, pin: 0, mark: 0 },
     },
     {

@@ -3,7 +3,7 @@ import { frame } from "../../hero";
 import { BELLOW } from "../../hulda/bellow";
 import { RUSH } from "../../hulda/rush";
 import { TAUNT } from "../../hulda/taunt";
-import { QUAKE, TITAN } from "../../hulda/ultimates";
+import { QUAKE } from "../../hulda/ultimates";
 import { ULT_LOCK } from "../../ultimate";
 import { CHARGE_POSE, GUARD, g } from "./stance";
 
@@ -146,28 +146,6 @@ export const HULDA_CLIPS = {
       ],
       [frame(17), g({ hy: -11, nx: 3, ny: -21, fx: 8, fy: -14, bx: 6, by: -16 })],
       [ULT_LOCK, GUARD],
-    ],
-  },
-  /** Titan Throw: arms flung out for the tethers, the heap pulled in, one spin, and the heave */
-  titan: {
-    dur: ULT_LOCK,
-    hit: TITAN.pull,
-    keys: [
-      [0, CHARGE_POSE],
-      [frame(2), g({ nx: 3, cb: 1, fx: 15, fy: -21, bx: 14, by: -23, be: 0, ffx: 6, bfx: -5 })],
-      [TITAN.pull, g({ nx: 0, cb: -0.5, fx: 7, fy: -25, bx: 5, by: -26, be: 0, ffx: 5, bfx: -6 })],
-      [TITAN.pull + frame(2), g({ nx: 0, cb: -0.5, fx: 7, fy: -25, bx: 5, by: -26, be: 0, ffx: 5, bfx: -6, tw: 1 })],
-      [TITAN.pull + frame(4), g({ nx: 0, cb: -0.5, fx: 7, fy: -25, bx: 5, by: -26, be: 0, ffx: 5, bfx: -6, mr: 1 })],
-      [
-        TITAN.pull + frame(6),
-        g({ nx: 0, cb: -0.5, fx: 7, fy: -25, bx: 5, by: -26, be: 0, ffx: 5, bfx: -6, mr: 1, tw: 1 }),
-      ],
-      [
-        TITAN.pull + TITAN.spin,
-        g({ hx: 1, nx: 5, ny: -22, cb: 1.5, fx: 15, fy: -26, bx: 13, by: -27, be: 0, ffx: 8, bfx: -5, ba: 0.4 }),
-        "snap",
-      ],
-      [ULT_LOCK, g({ hx: 0.5, nx: 3, fx: 9, fy: -18, ffx: 6, bfx: -4 })],
     ],
   },
 } satisfies Record<string, ActionClip>;

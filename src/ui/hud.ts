@@ -18,7 +18,6 @@ import { updateGritBar } from "./gritBar";
 import { updateGrooveBar } from "./grooveBar";
 import { updateHeatBar } from "./heatBar";
 import { updateHitCounter } from "./hitCounter";
-import { updateHuldaTabs } from "./huldaTabs";
 import { updateJoryTabs } from "./joryTabs";
 import { updateMirelTabs } from "./mirelTabs";
 import { updateMomentumBar } from "./momentumBar";
@@ -60,7 +59,6 @@ const pips = (n: number, lit: (i: number) => boolean): string =>
 export function updateHud(): void {
   updateAbilityTabs();
   updateRiteTabs();
-  updateHuldaTabs();
   updateOrrinTabs();
   updateMirelTabs();
   updateWennaTabs();

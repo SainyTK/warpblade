@@ -1,16 +1,5 @@
 import { frame } from "../hero";
 
-/** K on the floor: both hands reach out, and catch the nearest foe in the box while it is live */
-export const GRAB = {
-  dur: frame(10),
-  from: frame(3),
-  to: frame(6),
-  box: [0, -24, 18, -2] as const,
-} as const;
-
-/** a foe too big to hold is crushed in both hands instead */
-export const CRUSH = { dur: frame(12), hit: frame(6), power: 1.3, stop: 0.06 } as const;
-
 /** a held foe: where it sits, how long she keeps it and the knees she can drive into it */
 export const HOLD = {
   /** pixels ahead of her a small foe's centre sits; a bigger foe sits further out by the half width past `grip` */
@@ -33,11 +22,11 @@ export const HOLD = {
 /** J while holding: a knee into the held foe */
 export const KNEE = { dur: frame(8), hit: frame(3), max: 3, power: 0.5 } as const;
 
-/** how the throw picks itself: foes within `ahead` in front against those within `behind`; `swing` is how near counts for
- *  Giant Swing */
+/** how a throw with no side held picks itself: foes within `ahead` in front against those within `behind`; `swing` is
+ *  how near counts for Giant Swing */
 export const THROW_PICK = { ahead: 100, behind: 40, swing: 40 } as const;
 
-/** K while holding, and how each throw lands */
+/** J held or K while holding, and how each throw lands */
 export const THROWS = {
   forward: { dur: frame(10), release: frame(5), power: 1.2, vx: 320, vy: -120 },
   suplex: {
@@ -91,7 +80,7 @@ export const THROWN = {
   cannonLife: 2,
 } as const;
 
-/** K in the air: a lunge down with both hands, a ride to the floor and a slam */
+/** Skyfall Grab, Bull Rush in the air: a lunge down with both hands, a ride to the floor and a slam */
 export const SKYFALL = {
   lunge: frame(6),
   box: [0, -26, 20, 4] as const,

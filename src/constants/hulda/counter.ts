@@ -1,7 +1,6 @@
-/** Iron Counter: the foe states a grab counters, how far the roar reaches and how long it makes foes reel, how long the
- *  evolved grip holds a big foe before the suplex, and the counter's hit-stop and shake */
+/** Iron Counter: how far the roar reaches and how long it makes foes reel, how long the evolved grip holds a big foe
+ *  before the suplex, and the counter's hit-stop and shake */
 export const COUNTER = {
-  states: ["wind", "charge"] as readonly string[],
   roarReach: 50,
   roarStun: 0.8,
   hold: 1,

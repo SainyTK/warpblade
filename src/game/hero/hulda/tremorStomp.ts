@@ -13,9 +13,9 @@ import { emitSkillEvent } from "../../skills/events";
 import { skillValues } from "../../skills/query";
 import { game, hero, progress } from "../../state";
 import { dust, shake } from "../../world";
-import { isFree, setState, settle } from "../actions";
-import { deny } from "../deny";
+import { setState, settle } from "../actions";
 import { skin } from "../skin";
+import { castGate } from "./castGate";
 import { floorThud } from "./effects/thud";
 import { gainGrit } from "./grit";
 import { hulda } from "./memory";
@@ -36,15 +36,7 @@ interface Tremor {
 export function pressStomp(): boolean {
   const h = hero;
   const v = skillValues(ID);
-  if (!isFree() || !h.ground) return false;
-  if (hulda.stompCd > 0) {
-    deny("cast");
-    return true;
-  }
-  if (h.mp < v.mp) {
-    deny("mp");
-    return true;
-  }
+  if (!castGate()) return false;
   h.mp -= v.mp;
   hulda.stompCd = v.cooldown;
   h.vx = 0;

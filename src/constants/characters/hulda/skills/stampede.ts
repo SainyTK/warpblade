@@ -6,7 +6,7 @@ export const STAMPEDE: SkillDef = {
   name: "Stampede",
   kind: "movement",
   risk: "easy",
-  button: "L",
+  button: "I",
   text: "The Bull Rush gets cheaper and longer and cracks the floor behind you.",
   levels: [
     {
@@ -85,7 +85,7 @@ export const STAMPEDE: SkillDef = {
       },
     },
     {
-      text: "Press L in the skid for a free rush.",
+      text: "Press I in the skid for a free rush.",
       values: {
         trail: 0.15,
         cost: 15,
