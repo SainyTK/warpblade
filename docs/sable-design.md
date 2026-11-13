@@ -35,9 +35,9 @@ The reload starts by itself when the quiver runs dry, on J with an empty quiver,
 Down let go up to 0.15 s before the J tap still counts, since a tap is read when J comes up.
 While she reloads the bar shows the crank's progress with a bright window from 42% to 62% of the way.
 A J tap inside the window is a perfect reload: the quiver is full at once and the next 4 bolts are primed, dealing 35% more and burning white.
-A J tap after the first quarter of the crank and outside the window jams it and adds 0.45 s.
-Taps in the first quarter do nothing, so the taps that emptied the quiver never jam the reload; mashing J later does.
-One try per reload.
+A J tap before the window spends the try, and a tap after it jams the crank and adds 0.45 s.
+Taps in the first quarter of the crank do nothing, so the taps that emptied the quiver never spend the try.
+One try per reload, so mashing J gives a plain reload and only a timed tap is perfect.
 MP pays for the grapple, spells and the ultimate; bolts cost nothing but time.
 
 ## The grapple warp
@@ -106,9 +106,10 @@ Mash bot (walk to the nearest foe, mash J, take the first card) and skilled bot,
 | Sable | Mash bot | Skilled bot |
 | --- | --- | --- |
 | Before the shared moveset (core branch, 13 November 2026) | wave 5, 17 kills | wave 3, 6 kills |
-| On the shared moveset | BOT_AFTER_MASH | BOT_AFTER_SKILLED |
+| On the shared moveset | wave 5, 14 kills | wave 10, 50 kills |
 
 The mash bot never reloads by hand, guards or uses I, so it shows her floor; a player who spaces with the hop, parries and times reloads does better.
+Before the rework the skilled bot's held J was her old kick, so its "before" undersells her; Kael on the core measures wave 5 with both bots.
 
 ## Shop items and kit hooks
 

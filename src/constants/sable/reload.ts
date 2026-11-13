@@ -1,7 +1,7 @@
 /**
  * The reload: an empty quiver starts it, so does J with Down held on the floor, and a J pressed inside the bright window
- * finishes it at once and primes the bolts. A J pressed after the grace and outside the window jams the crank and costs
- * extra time; presses in the grace are the shots that emptied the quiver, and do nothing.
+ * finishes it at once and primes the bolts. A J pressed before the window spends the try, and one after it jams the
+ * crank and costs extra time; presses in the grace are the shots that emptied the quiver, and do nothing.
  */
 export const RELOAD = {
   /** seconds a plain reload takes, cut by attack speed */

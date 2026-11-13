@@ -60,8 +60,8 @@ function volley(count: number): void {
     looseBolt({ ...m, angle: Math.atan2(cy - m.y, cx - m.x), share: 1, prime: "reload", payoff });
 }
 
-/** J while she reloads: early in the crank it does nothing; in the bright window it is a perfect reload; anywhere else
- *  it jams the crank. One try per reload */
+/** J while she reloads: early in the crank it does nothing; in the bright window it is a perfect reload; before the
+ *  window it spends the try; after it, it jams the crank. One try per reload */
 export function timeReload(): boolean {
   const r = sable.reload;
   if (!r || r.tried) return true;
@@ -69,7 +69,11 @@ export function timeReload(): boolean {
   if (u < RELOAD.grace) return true;
   r.tried = true;
   const [a, b] = reloadWindow();
-  if (u >= a && u <= b && !r.jammed) {
+  if (u < a) {
+    sfx.denied();
+    return true;
+  }
+  if (u <= b && !r.jammed) {
     perfect();
     return true;
   }
