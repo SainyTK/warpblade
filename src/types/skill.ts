@@ -3,29 +3,14 @@ import type { Stats } from "./stats";
 export type UltimateId =
   | "crystalNova"
   | "pyreWave"
-  | "thousandEdges"
-  | "phantomLegion"
-  | "starfall"
-  | "tempest"
-  | "sunspear"
-  | "volcanicRift"
   | "boltStorm"
-  | "deadeye"
   | "quakeDrop"
-  | "titanThrow"
-  | "unbroken"
   | "grandPendulum"
-  | "maelstrom"
   | "hourOfStillness"
-  | "eternalNoon"
   | "greatWick"
-  | "thousandCandles"
   | "gloaming"
-  | "eclipse"
   | "drumroll"
-  | "grandFinale"
-  | "berserk"
-  | "unendingRage";
+  | "berserk";
 /** what a skill is, for its card colour and the contract's least counts per hero (docs/skill-design.md) */
 export type SkillKind = "attack" | "movement" | "spell" | "dot" | "summon" | "passive" | "ultimate";
 /** how hard a skill is to pull off: the harder, the more it deals */
@@ -68,8 +53,6 @@ export interface SkillDef {
   /** levels 1 to 8, index 0 is level 1 */
   levels: readonly SkillLevel[];
   evolution: SkillEvolution;
-  /** an ultimate skill: the ultimate it puts on U in place of the hero's special */
-  ultimate?: UltimateId;
 }
 
 /** a small reward offered when too few skills are left to fill the cards, so a pick always gives something */

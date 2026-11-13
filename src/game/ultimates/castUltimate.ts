@@ -16,34 +16,18 @@ import { castBoltStorm } from "./boltStorm";
 import { castCrystalNova } from "./crystalNova";
 import { castPyreWave } from "./pyreWave";
 import { castQuakeDrop } from "./quakeDrop";
-import { castTempest } from "./tempest";
 
 const ULTIMATES: Record<UltimateId, (level: number) => void> = {
   crystalNova: castCrystalNova,
   pyreWave: castPyreWave,
-  thousandEdges: castCrystalNova,
-  phantomLegion: castCrystalNova,
-  starfall: castCrystalNova,
-  tempest: castTempest,
-  sunspear: castPyreWave,
-  volcanicRift: castPyreWave,
   boltStorm: castBoltStorm,
-  deadeye: castBoltStorm,
   quakeDrop: castQuakeDrop,
-  titanThrow: castQuakeDrop,
-  unbroken: castQuakeDrop,
   grandPendulum: castGrandPendulum,
-  maelstrom: castGrandPendulum,
   hourOfStillness: castHourOfStillness,
-  eternalNoon: castHourOfStillness,
   greatWick: castGreatWick,
-  thousandCandles: castGreatWick,
   gloaming: castGloaming,
-  eclipse: castGloaming,
   drumroll: castDrumroll,
-  grandFinale: castDrumroll,
   berserk: castBerserk,
-  unendingRage: castBerserk,
 };
 
 /** a burst of light from the hero, bigger each level, then the ultimate itself; level 4 lights up the sky */
