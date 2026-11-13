@@ -429,42 +429,6 @@ export function smallHelm(s: S, x: number, y: number, gold = false): void {
   fill(s, () => s.pixels(SMALL_HELM, helmColors(gold), x, y));
 }
 
-/** his own face roaring, eleven wide and twelve tall: the mane about it, the bone war paint across his eyes, the mouth
- *  thrown open on his teeth, the braided beard under it */
-const ROAR = [
-  "..MMMMMMM..",
-  ".MhhMMMhhM.",
-  "MMSSSSSSSMM",
-  "MSPPPPPPPSM",
-  "MPPePPPePPM",
-  "MSSSSnSSSSM",
-  "MSSDDDDDSSM",
-  "MSDTDDDTDSM",
-  "MSDDDDDDDSM",
-  ".MSDDDDDSM.",
-  "..MSSSSSM..",
-  "...MhMhM...",
-] as const;
-export function roar(s: S, x: number, y: number, gold = false): void {
-  fill(s, () =>
-    s.pixels(
-      ROAR,
-      {
-        M: BC.hairDark,
-        h: BC.hair,
-        S: BC.skin,
-        n: BC.skinShade,
-        P: gold ? GOLD : BC.trim,
-        e: R[3],
-        D: R[0],
-        T: BC.trimLight,
-      },
-      x,
-      y,
-    ),
-  );
-}
-
 /** a pillar of blood rising from the floor at x to row top, w wide, drops thrown off its crown */
 export function pillar(s: S, x: number, top: number, w: number, gold = false): void {
   fill(s, () => {
@@ -485,39 +449,4 @@ export function pillar(s: S, x: number, top: number, w: number, gold = false): v
     s.set(x + w / 2 + 1.5, top - 0.5, gold ? GOLD_LIGHT : R[4]);
     s.set(x, top - 1.5, gold ? GOLD_LIGHT : R[5]);
   });
-}
-
-/** his body diving head first down to the right at 45 degrees, twelve wide and twelve tall: boots trailing up
- *  behind, the fur mantle over his bare back, and the mane leading */
-const DIVER = [
-  "PP...........",
-  "PPP..........",
-  ".PPP.........",
-  "..PPCC.......",
-  "...CCCCS.....",
-  "...CCCSSS....",
-  "....CsSSSS...",
-  ".....sSSSSS..",
-  "......sSSSMM.",
-  ".......sSMMMM",
-  "........MMMfM",
-  "........MMMff",
-  "..........ff.",
-] as const;
-export function diver(s: S, x: number, y: number, gold = false): void {
-  fill(s, () =>
-    s.pixels(
-      DIVER,
-      {
-        P: BC.bootLight,
-        C: BC.coatLight,
-        S: BC.skin,
-        s: BC.skinShade,
-        M: gold ? GOLD : BC.hairLight,
-        f: BC.skinLight,
-      },
-      x,
-      y,
-    ),
-  );
 }

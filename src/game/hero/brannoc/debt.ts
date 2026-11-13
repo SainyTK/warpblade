@@ -8,6 +8,7 @@ import { emitSkillEvent } from "../../skills/events";
 import { skillValues } from "../../skills/query";
 import { game, hero, progress } from "../../state";
 import { deny } from "../deny";
+import { ultimateValues } from "../ultimate";
 import { brannoc } from "./memory";
 
 /** where the motes land: his chest */
@@ -23,8 +24,16 @@ function emit(change: DebtChange, amount: number): void {
 /** HP he can spend without falling under 1 */
 export const canSpend = (share: number): boolean => hero.hp - progress.stats.hp * share >= 1;
 
+/** put `cost` HP he has already lost into the debt, up to its cap; anything past the cap is gone for good */
+function owe(cost: number): void {
+  brannoc.lastHp = hero.hp;
+  brannoc.debt += Math.min(cost, Math.max(0, debtCap() - brannoc.debt));
+  brannoc.debtIdle = 0;
+  emit("spend", cost);
+}
+
 /**
- * Pay for a K or I press with HP: refused with the deny tick and a blink of the HP bar when it would leave him under 1
+ * Pay for an ability on I with HP: refused with the deny tick and a blink of the HP bar when it would leave him under 1
  * HP; otherwise the cost comes off his HP into the debt, up to its cap, and anything past the cap is gone for good.
  */
 export function spendHp(share: number): boolean {
@@ -34,20 +43,29 @@ export function spendHp(share: number): boolean {
   }
   const cost = progress.stats.hp * share;
   hero.hp -= cost;
-  brannoc.lastHp = hero.hp;
-  const kept = Math.min(cost, Math.max(0, debtCap() - brannoc.debt));
-  brannoc.debt += kept;
-  brannoc.debtIdle = 0;
-  emit("spend", cost);
+  owe(cost);
   return true;
 }
 
-/** a multiple on what one repay returns: Frenzy, Berserk (Unending Rage's own) */
+/**
+ * A blow he blocked bled through his guard: the HP it took goes into the debt like HP he spent, and the debt he already
+ * owed stays, so a block never forfeits it
+ */
+export function bleedThrough(): void {
+  owe(Math.max(0, brannoc.lastHp - hero.hp));
+}
+
+/** a multiple on what one repay returns: Frenzy, and Berserk (more with the Berserk skill) */
 function repayScale(): number {
   let k = 1;
   if (brannoc.frenzyT > 0) k *= FRENZY.repay;
-  if (brannoc.berserkT > 0) k *= brannoc.unending ? (skillValues("b_unending").repay ?? BERSERK.repay) : BERSERK.repay;
+  if (brannoc.berserkT > 0) k *= ultimateValues().repay ?? BERSERK.repay;
   return k;
+}
+
+/** win back the whole debt at once into his HP (a parry's Blood Answer, Last Cleave with the Berserk skill) */
+export function repayAll(from: Enemy | null): number {
+  return give(brannoc.debt, from);
 }
 
 /**
@@ -55,9 +73,14 @@ function repayScale(): number {
  * his chest and the segment brightens. Returns the HP won back.
  */
 export function repay(share: number, from: Enemy | null): number {
+  return give(progress.stats.hp * share * repayScale(), from);
+}
+
+/** move up to `want` HP from the debt into his HP, with the motes from `from` and the segment's flash */
+function give(want: number, from: Enemy | null): number {
   if (brannoc.debt <= 0 || hero.hp <= 0) return 0;
   const room = Math.max(0, progress.stats.hp - hero.hp);
-  const amount = Math.min(brannoc.debt, room, progress.stats.hp * share * repayScale());
+  const amount = Math.min(brannoc.debt, room, want);
   if (amount <= 0) return 0;
   brannoc.debt -= amount;
   hero.hp += amount;

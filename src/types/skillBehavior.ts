@@ -37,8 +37,10 @@ export interface SkillEvents {
   jump: { air: boolean };
   /** any kit's perfect dodge, through `rewardPerfectDodge`, at the hero's x */
   perfectDodge: { at: number };
-  /** a kit's parry: Ysra's brace, and any other hero's */
+  /** the shared guard's parry, for every hero */
   parry: { fromX: number };
+  /** the shared guard stopped a blow from the front, outside the parry window */
+  block: { fromX: number };
   kill: { foe: Enemy; source: SourceId };
   hurt: { damage: number; fromX: number };
   ultimate: { level: number };

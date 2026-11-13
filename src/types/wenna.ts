@@ -1,25 +1,28 @@
 import type { Enemy } from "./enemy";
 
 /** states only Wenna enters; her kit runs and poses them */
-export type WennaState =
-  | "lamp"
-  | "lampDrop"
-  | "lightCast"
-  | "swap"
-  | "kindleCast"
-  | "beckonCast"
-  | "spellCast"
-  | "greatWick"
-  | "thousand";
+export type WennaState = "lamp" | "lampDrop" | "lightCast" | "kindleCast" | "beckonCast" | "spellCast" | "greatWick";
 
 /** the blows of her lamp string, and Lamp Drop in the air */
 export type LampBlow = "tap" | "swing" | "flare" | "drop";
 
-/** the abilities on I, in the order O turns through them: her two from the start and her three spell skills */
-export type WennaAbility = "kindle" | "beckon" | "w_lampVolley" | "w_waxPool" | "w_effigy";
+/** the abilities on I, in the order O turns through them: her three from the start and her three spell skills */
+export type WennaAbility = "light" | "kindle" | "beckon" | "w_lampVolley" | "w_waxPool" | "w_effigy";
 
 /** why a Wick was lit or why it ended */
-export type WickCause = "light" | "wave" | "relight" | "twin" | "great" | "skill" | "life" | "hp" | "kindle" | "gone";
+export type WickCause =
+  | "light"
+  | "warp"
+  | "parry"
+  | "wave"
+  | "relight"
+  | "twin"
+  | "great"
+  | "skill"
+  | "life"
+  | "hp"
+  | "kindle"
+  | "gone";
 
 /**
  * One Wick: a wax figure with a violet flame for a head. It lives in the world list of every Wenna's Wicks
@@ -63,7 +66,7 @@ export interface Wick {
   /** seconds left in Beckon's ring round her, with its place in the ring */
   ring: number;
   slot: number;
-  /** seconds left standing as a Great Wick (Thousand Candles): drawn giant, its bites three times as hard */
+  /** seconds left standing as a Great Wick (her Great Wick skill): drawn giant, its bites three times as hard */
   great: number;
   /** bites made, for every third bite of Bright Fangs */
   bites: number;
@@ -100,17 +103,10 @@ export interface WennaMemory {
   /** Wick Hops left in this airtime, and a hop was made this airtime (Lamp Drop after a hop) */
   hops: number;
   hopped: boolean;
-  /** the K cast under way lights at her feet */
+  /** the Light cast under way lights at her feet */
   atFeet: boolean;
-  /** Swap: charges left, seconds until one comes back, seconds of the swap under way and its two ends */
-  swapCharges: number;
-  swapCd: number;
-  swapFrom: { x: number; y: number } | null;
-  swapTo: { x: number; y: number } | null;
-  /** the swap under way already earned its perfect dodge */
-  swapDodged: boolean;
-  /** seconds she cannot be hit after a Swap */
-  untouchable: number;
+  /** where she stood as she threw the candle of the warp under way, where its Wick is left */
+  warpFrom: { x: number; y: number } | null;
   /** seconds until each ability on I can be used again */
   kindleCd: number;
   beckonCd: number;
@@ -133,7 +129,7 @@ export interface WennaMemory {
 export interface WennaHostMemory {
   /** the Quarries every Wick turns on, newest first, with seconds left on each */
   quarries: { foe: Enemy; left: number }[];
-  /** the Wick the swap under way trades places with */
+  /** the Wick the warp under way trades places with, when she threw at a Wick of hers */
   swapWick: Wick | null;
   /** places where her Wicks bite faster for a while (Wax Pool, Bonfire, the effigy) */
   zones: BiteZone[];
@@ -168,7 +164,7 @@ declare module "./skillBehavior" {
   interface SkillEvents {
     /** a Wick was lit, or ended, at a place */
     wick: { x: number; y: number; lit: boolean; cause: WickCause; wick: Wick };
-    /** a Swap traded her place with a Wick */
+    /** a warp left a Wick where she stood: a Wick she traded places with, or the thrown candle */
     swap: { from: { x: number; y: number }; to: { x: number; y: number }; wick: Wick };
     /** a foe became her Quarry */
     quarry: { foe: Enemy };

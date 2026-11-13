@@ -6,6 +6,7 @@ import { overheat } from "./overheat";
 import { salamander } from "./salamander";
 import { searingEdge } from "./searing";
 import { glaiveShade } from "./shade";
+import { haftWard } from "./ward";
 import { windmill } from "./windmill";
 
 /** the code of each of Ysra's skills that acts on its own or answers events, by skill id; the rest live in her kit */
@@ -18,4 +19,5 @@ export const YSRA_SKILLS: Readonly<Record<string, SkillBehavior>> = {
   y_shade: glaiveShade,
   y_salamander: salamander,
   y_hawk: sunHawk,
+  y_ward: haftWard,
 };

@@ -1,7 +1,7 @@
 import type { Enemy } from "../enemy";
 import type { Pose } from "../pose";
 
-/** blows thrown out of Ysra's vault, dive, guard and charge */
+/** blows thrown out of Ysra's vault */
 export type StanceMoveId = "vaultCrash";
 export type StanceClipName = "yVaultCrash";
 
@@ -11,7 +11,12 @@ export interface StanceMemory {
   launched: boolean;
   /** the vault or dive has landed and she is in the landing crouch */
   landed: boolean;
-  /** K was pressed in a backstep's hop: she vaults as soon as her feet touch the floor */
+  /** the vault under way is the high one (I held) */
+  high: boolean;
+  /** seconds before the vault can be cast again, and the length of its last recharge */
+  vaultCd: number;
+  vaultFull: number;
+  /** I was pressed on the vault in a backstep's hop: she vaults as soon as her feet touch the floor */
   vaultNext: boolean;
   /** the pose a starting vault crosses from, until its crossing frames have passed */
   entry: Pose | null;
@@ -20,16 +25,12 @@ export interface StanceMemory {
   /** dives used in this airtime */
   dives: number;
   /** where she faced at the last tick, where she faced before her last turn, and seconds since that turn:
-   *  a side held away that turned her just before L still counts as away */
+   *  a side held away that turned her just before the guard still counts as away */
   face: number;
   faceBefore: number;
   turned: number;
-  /** seconds since the brace went up, for the parry window */
-  braced: number;
   /** seconds left in which J is a Counter Thrust */
   counter: number;
-  /** seconds left in which more blows from the front cost nothing */
-  shield: number;
   /** seconds she has walked one way without stopping, toward Warpath's charge */
   walked: number;
   /** foes the Warpath charge shouldered lately, and how long before it may again */

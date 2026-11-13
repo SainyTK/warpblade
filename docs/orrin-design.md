@@ -6,28 +6,21 @@ He fights at the chain's length, swings through the air on it, and grows stronge
 He is the first hero whose travel follows real physics: a pendulum he pumps, reels in and lets go of.
 
 Id `orrin`, kit `orrin`, name Orrin, title "The chain dancer".
-Blurb: "A rift drifter with a brass hook on a long chain. He swings from crystals, ledges and the air itself, flings himself across the stage and lashes foes at the chain's tip. Never stands still for long."
+Blurb: "A rift drifter with a brass hook on a long chain. He swings from ledges and the air itself, flings himself across the stage and lashes foes at the chain's tip. Never stands still for long."
 
 ## How he differs from every hero in the game
 
-- Kael, the warp swordsman, runs, double jumps, dashes untouchable and teleports to a thrown pick. His sword works at 30 px and his spells cost MP.
-  Orrin has no run, no double jump, no dash and no teleport.
-  He travels along a visible chain: a swing that keeps its speed, a fling, a reel in and a zip to a hooked foe.
-  Kael hangs still from a crystal. Orrin swings from it, and from platforms and the air as well.
-- Ysra, the planted glaive fighter, pokes 40 px in a straight line, blocks and parries from the front, vaults over foes and spends Heat on fire rites.
-  Orrin has no block and no parry.
-  His blows are curved sweeps with a sweet spot at the tip, and the third one goes all the way round him.
-  Momentum fills from moving, not from blows, and no button spends it.
-- Sable, the ranged hunter, fires bolts out to 250 px, counts ammo, reloads and hops away.
-  Orrin never fires a projectile.
-  His reach stops at 64 px, and he wins by moving into and out of that ring.
-- Hulda, the iron grappler, has the shortest reach, armour plates, grabs and throws, and walks slowly into blows.
-  Orrin has no armour, cannot grab, and he moves foes only by knocking them back.
-  He stays above and around them.
+Every hero plays on the same layout (`docs/moveset-design.md`): J tapped for the string, J held for the warp, K guard and parry, L the front dodge, I abilities, O switch, U the special.
+Orrin keeps his own shape inside it:
+- His string is three curved sweeps with a sweet spot at the chain's tip, and the third goes all the way round him.
+- His warp throws the hook on its chain and lands him on the foe with a flying kick that leaves the foe bound in chain.
+- J held with Up held is his swing instead: the hook bites a platform or the air, and he swings, pumps, reels in and flings himself across the stage.
+- His guard spins the chain into a disc, a weak block, and his parry, Chain Bind, hauls the attacker out to the chain's tip and holds it there for a free string.
+- Momentum fills from speed in the air and multiplies every hit he deals.
 
 The axes that differ:
-- Movement: pendulum swing, fling, reel and zip.
-- Defence: positioning, plus a Slip on a well-timed release and a projectile-breaking whirl.
+- Movement: pendulum swing, fling and reel, on top of the shared warp and dodge.
+- Defence: a weak block for a strong parry, a Slip on a well-timed release, and a projectile-breaking whirl.
 - Resource: Momentum, a damage multiplier filled by speed in the air.
 - Range: mid, with a 46 to 64 px sweet spot and weak blows up close.
 - Attack shape: arcs and full circles, plus body kicks during a swing.
@@ -44,18 +37,18 @@ Price 550 coins in `src/constants/heroUnlocks.ts`, which is the next price by th
 | --- | --- |
 | A / D | Walk (about 71 px/s). No run; a double tap does nothing. While swinging, pumps the swing |
 | W | One jump of 52 px, after a 2-frame bend of the knees. No double jump. While swinging, lets go with a small hop |
-| S | With W, drop through a ledge. While swinging, Plumb Drop when held (skill) |
-| J | Chain string of three, always Lash, Rising Arc, Full Circle, wherever the foes stand. In the air, one Hanging Arc per airtime, given back by each new latch |
-| K | Hook. Hold to keep swinging and release to let go. W held aims steeper, S held in the air aims low |
-| L | Reel: while swinging, reels the chain in. On the floor, Backline, a yank backwards |
-| I | The selected ability: Whirlwall, Anchor Pin, or a spell skill (MP) |
+| S | With W, drop through a ledge. While swinging, Plumb Drop (skill) |
+| J tapped | Chain string of three, always Lash, Rising Arc, Full Circle, wherever the foes stand. In the air or while swinging, one Hanging Arc per airtime, given back by each new latch |
+| J held | The warp: the hook thrown at the nearest foe ahead, a flying kick on arrival that binds it. With W held, the swing hook. While swinging, reels the chain in |
+| K | Guard: the chain spun into a disc in front of him. Pressed just as a blow lands, Chain Bind |
+| L | The shared front dodge |
+| I | The selected ability: Whirlwall, Anchor Pin or a spell skill (MP). Held, its wide form |
 | O | Switch to the next ability on I |
-| U | Ultimate (shared charge and MP rules) |
+| U | Grand Pendulum (shared charge and MP rules) |
 
-Touch buttons read Lash, Jump, Hook, Reel, Ability, Switch and Special.
-Icons go in `src/ui/touch/icons/orrinArt.ts`.
-The Hook button works on hold: holding it keeps the swing and lifting the finger lets go.
-The stick pushed up while pressing Hook aims steeper, and pushed down in the air aims low.
+Touch buttons read Lash, Jump, Dodge, Guard, Ability, Switch and Special.
+Icons go in `src/ui/touch/icons/orrinArt.ts`; the dodge icon is shared.
+Holding Lash is the warp, and with the stick pushed up it is the swing hook.
 The Controls screen lists every key above.
 
 ## The chain string (J)
@@ -109,18 +102,28 @@ The chain is drawn from the hand to the hook as links:
 
 The hook head is a 7 px brass sickle with a dark outline and a one-pixel glint.
 
-## The hook and the swing (K)
+## The warp: the hook and the flying kick (J held)
 
-K costs 18 stamina.
-The hook flies at 420 px/s along the aim: 40 degrees up toward the facing side, 75 degrees with W held, 30 degrees below level with S held in the air.
-It flies up to 84 px and latches on the first thing it meets:
+The throw, the flight, the cost (10 MP), the recharge (2 s) and the arrival blow's power are the shared warp's (`src/game/hero/warp.ts`).
+His `WarpStyle` is in `src/game/hero/orrin/warpStyle.ts`:
+- The thrown weapon is his brass hook, a short run of chain whipping behind it, and the chain paid out from his hand to the hook while it flies.
+- The arrival blow is a flying kick: he lands heel first beside the foe at the shared power, with a short knockback (40 px/s) so the foe stays in his reach.
+- His extra: the chain stays wound round the foe, a minion stunned for 0.6 s and a mini boss or boss held in place for 0.25 s, ready for his string.
+  In the air the kick also gives back a hook and a Hanging Arc, so a warp to a flying foe can go straight into a swing.
+- Gaff, his warp skill, changes the shared numbers through `tune` and adds its own crits, ring and drag (below).
 
-1. A foe: Reel to the foe (below).
-2. An anchor crystal (`ANCHORS`, within 10 px of the path), or the underside or edge of a platform (`PLATFORMS`): a swing that holds as long as K is held.
-3. Nothing within 84 px: the hook bites the air at full length and opens a small rift tear. The swing holds for 1.2 s, then the tear snaps shut and he lets go.
+## The swing (J held with W held)
+
+`readActions` takes the long press of J with W held before the shared warp sees it.
+The swing hook costs 18 stamina.
+It flies at 420 px/s along the aim: 75 degrees up toward the facing side, or 40 degrees with A or D held too.
+It flies up to 84 px past every foe and latches on the first thing it meets:
+
+1. The underside or edge of a platform (`PLATFORMS`): a swing that holds until he lets go.
+2. Nothing within 84 px: the hook bites the air at full length and opens a small rift tear. The swing holds for 1.2 s, then the tear snaps shut and he lets go.
 
 Hooks per airtime: 2, reset on landing.
-Latches on anchors and platforms do not count against the limit.
+Latches on anchors and platforms give one back.
 
 The swing is a pendulum around the latch point with a fixed chain length:
 - Chain length on latch is the smallest of: the distance to the latch point, 84 px, and the latch point's height above the floor under him minus 6 px. The bottom of the arc therefore always clears the floor by 6 px. The length is never under 24 px.
@@ -129,50 +132,46 @@ The swing is a pendulum around the latch point with a fixed chain length:
   - with A or D held, add 260 px/s squared along the tangent toward that side;
   - move him, then put him back on the circle and remove the velocity along the chain.
 - Speed is capped at 300 px/s.
-- A latch from the floor gives a 0.12 s yank that lifts him onto the arc with 170 px/s along the tangent toward the facing side. A grounded K therefore always launches him into a swing.
-- Letting go keeps his velocity. Letting go while moving up in the forward half of the arc adds 15 percent: the fling.
-- W while swinging lets go with an extra 80 px/s upward.
+- A latch from the floor gives a 0.12 s yank that lifts him onto the arc with 170 px/s along the tangent toward the facing side.
+- W lets go and keeps his velocity, with an extra 80 px/s upward. Letting go while moving up in the forward half of the arc adds 15 percent: the fling.
+- J held down again reels the chain in at 160 px/s, down to 24 px, for 10 stamina a second. His speed rises as the chain shortens, capped at 1.6 times the speed when the reel started.
+- J tapped is the Hanging Arc, swept along his direction of travel.
 - Touching the floor while moving down ends the swing as a landing.
-- Swinging into the side of a platform stops the swing there.
-- After letting go he is in the air with normal air control. One Hanging Arc is given back, and a hook is left if he has one this airtime.
+- The shared actions (warp, guard, dodge, abilities, special) wait until he lets go.
 - Every release and every landing out of a fling calls `travelEnded()`, which is what Aftershock answers.
 
-While swinging:
-- J is the Hanging Arc, swept along his direction of travel.
-- His body is a weapon. Above 140 px/s, each foe he passes through takes the swing kick: 0.7x AD times speed divided by 200, capped at 1.2x, once per foe per swing, knocked along his velocity.
+His body is a weapon while he swings.
+Above 140 px/s, each foe he passes through takes the swing kick: 0.7x AD times speed divided by 200, capped at 1.2x, once per foe per swing, knocked along his velocity.
 
-Slip, his perfect dodge: a blow or projectile that would hit him within 0.12 s after he lets go at more than 120 px/s misses. `absorbHurt` returns true and calls `rewardPerfectDodge()`.
-
-Reel to a foe: the chain pulls him to the foe at 360 px/s and he can be hit on the way.
-He arrives in a flying kick for 1.0x AD, knockback 140, then bounces off up and back at 120 px/s up and 90 px/s back.
-He stays in the air with the Hanging Arc given back.
-The same happens on minis and bosses.
+Slip: a blow or projectile that would hit him within 0.12 s after he lets go at more than 120 px/s misses, with the shared perfect dodge reward and 20 Momentum.
 
 Hook beats:
 - 2 frames of anticipation with the arm cocked behind the head.
 - The throw frame: the chain pays out link by link behind the flying hook.
-- On a latch, a 2-frame brass spark burst at the hook, and the chain goes taut and straight. During the swing the chain stays a straight line.
-- An air bite opens a 6 px tall slit in the volt ramp with two sparks. At 0.9 s it flickers as a warning. At 1.2 s it closes with a one-frame flash.
+- On a latch, a brass spark burst at the hook, and the chain goes taut and straight.
+- An air bite opens a 6 px tall slit in the volt ramp. At 0.9 s it flickers as a warning. At 1.2 s it closes with a one-frame flash.
 
 His body pose follows the swing: legs trail behind the direction of travel and the free arm reaches forward.
 At the bottom of the arc his knees tuck.
-On release he spins once in the air over 6 frames (body roll), then takes the fall pose.
+On release he spins once in the air over 6 frames, then takes the fall pose.
 
-## Reel and Backline (L)
+## Guard and Chain Bind (K)
 
-While swinging, holding L reels the chain in at 160 px/s, down to 24 px.
-His swing speed rises as the chain shortens: speed times old length divided by new length, capped at 1.6 times the speed when the reel started.
-Reeling costs 10 stamina a second.
+The shared guard (`src/game/hero/heroGuard.ts`) with his `GuardStyle` in `src/game/hero/orrin/guardStyle.ts`.
+Held, the chain spins into a disc of links in front of his hand.
+The block is weak: 35 percent of a blocked blow gets through, and each block costs 18 stamina.
+The parry is strong.
+Chain Bind: the chain whips out, wraps the foe that struck and hauls it out to the tip of his Lash, 52 px in front of him, in 0.16 s.
+A minion is stunned there for 1.2 s, and the yank strikes it for 0.5x AD.
+A mini boss or boss is held in place for 0.5 s and keeps fighting.
+The parry gives 20 Momentum on top of the shared reward.
+The bound foe is wound in brass chain until it is free (`src/game/hero/orrin/bind.ts`).
+Undertow, his parry skill, holds longer, hits harder and drags more foes in.
 
-On the floor, L is Backline, costing 16 stamina:
-- he drops his weight and throws the hook back for 3 frames, then it bites the floor 50 px behind him and yanks him 48 px back over 0.2 s, his feet low;
-- he skids to a stop over 6 frames as his knees take the stop, and a blow, a jump, the hook or another Backline may cut the skid short;
-- he has no untouchable frames;
-- he faces forward through it;
-- 0.35 s before the next;
-- it calls `travelEnded()` when the yank ends.
+## The dodge (L)
 
-The chain flies out to the floor point through the throw and is drawn taut through the yank.
+The shared front dodge.
+Backline, his old yank back on L, is gone; the dodge and Chain Bind cover its job.
 
 ## Momentum (MO bar)
 
@@ -199,34 +198,44 @@ A run starts at 0.
 
 ## Abilities on I (MP), rotation on O
 
-Both abilities are in the base kit and both cast events.
+His abilities sit on the shared bar (`src/game/hero/abilityBar.ts`) through `ORRIN_SLOTS` in `src/game/hero/orrin/abilities.ts`, in this order: Whirlwall, Anchor Pin, Chain Fence, Tether, Anchor Fall.
+Each has its own recharge.
+I on a recharging ability casts the next ready one.
+A long press of I casts the wide form for 1.5 times the MP, or the plain form when the MP bar cannot pay for it.
 
 Whirlwall: 20 MP, 5 s recharge.
 - He spins the chain over his head for 1.2 s and walks at half speed.
 - The ring has radius 46. Every foe in it takes 0.35x AP every 0.2 s (six ticks) and is pushed outward 20 px.
-- Every foe projectile that touches the ring is destroyed with a brass spark. This is his answer to orbs and spit.
-- The ring is drawn as a blurred chain loop with a faint brass ring and three link ghosts at 120 degree steps.
+- Every foe projectile that touches the ring is destroyed with a brass spark.
+- Wide, Whirlpool: the ring is 1.5 times as wide, and it draws the foes in toward him, 36 px over the spin.
 
 Anchor Pin: 24 MP, 6 s recharge.
 - He hurls the hook down through the nearest foe ahead within 90 px for 2.0x AP and nails it to the floor: a minion is rooted for 1.8 s, a mini or boss for 0.6 s.
 - The chain stays drawn from the floor spike to the foe while it is rooted.
 - With no foe in reach, the hook strikes the floor 60 px ahead for a small dust burst and costs half.
+- Wide, Stake Line: the chain splits and nails the three nearest foes within 90 px on either side, each for 0.7 times the power.
 
-The HUD K tab and the touch Ability button show the selected ability and its recharge, as for Hulda.
+Chain Fence wide, Stockade: the same fences go up behind him too.
+Anchor Fall wide, Anchor Ring: the same line of anchors falls behind him too; evolved, the rain already covers the screen.
+Tether has no wide form.
 
 ## Special and ultimate
 
-Base special, Grand Pendulum, with the shared charge levels:
+Grand Pendulum, with the shared charge levels (`src/game/hero/orrin/pendulum.ts`):
 - A rift tear opens 70 px above him and he swings two wide passes under it, radius 90, across and back over 1.2 s.
+  The tear opens far enough from the stage's sides that his widest swing stays on the stage.
 - His body and chain hit every foe they pass for 0.5x the level's power, once per pass.
-- At the end of the second pass he lets go and crashes down. A brass and volt ring deals the level's full power within the level's reach.
+- At the end of the passes he lets go and crashes down. A brass and volt ring deals the level's full power within the level's reach.
 - Beats:
   - 0.2 s of anticipation, him crouched with the chain swung overhead;
   - the tear opening with a flash;
-  - the two passes, with a brass arc smear and light from the tear;
+  - the passes, with a brass arc smear and light from the tear;
   - the crash, with a 4 px screen shake, 0.08 s hit-stop and dust and rock chunks.
 
-The ultimate skill `o_maelstrom` replaces it (below).
+The ultimate skill `o_grandpendulum` upgrades it, read through `ultimateValues()`: more passes, foes dragged under the tear, a longer chain, chain shards, a stunning crash, and full turns round the tear.
+Evolved, Maelstrom: four full turns in a circle as tall as the stage, and the foes drawn in under the tear burst together.
+For the turns the tear drops to the middle of the stage, and he loops on round it the way the last pass went.
+Maelstrom, once an ultimate skill that replaced the special, is now this evolution.
 
 ## The 20 skills
 
@@ -239,7 +248,7 @@ Budgets follow `docs/skill-design.md`:
 - timed is about 1.6 times easy, and precise about 2.5 to 3 times easy;
 - movement skills sit at about 0.8 of their band.
 
-Kinds: attack 5, movement 4, spell 3, dot 3, summon 3, passive 1, ultimate 1.
+Kinds: attack 6, movement 3, spell 3, dot 3, summon 3, passive 1, ultimate 1.
 
 | Id | Name | Kind, risk, button | Level 1 | Properties added along the levels | Evolution (partner) |
 | --- | --- | --- | --- | --- | --- |
@@ -247,22 +256,22 @@ Kinds: attack 5, movement 4, spell 3, dot 3, summon 3, passive 1, ultimate 1.
 | o_ironweight | Iron Weight | attack, easy, J | string +15% | Full Circle radius +6; Rising Arc launches higher; Full Circle turns twice (second turn at half); foes knocked into others hit them for 0.5x | Wrecking Ball (o_reelsnap): the hook becomes a spiked iron ball, and Full Circle turns three times at radius 74 |
 | o_skylash | Sky Lash | attack, timed, J in the air | two Hanging Arcs per airtime | a Hanging Arc above 160 px/s deals +50%; air arcs spike minions so they bounce; three per airtime; a spiked foe hits the foes it lands on for 0.5x; the arc throws a brass crescent 60 px on | Falling Star (o_pump): every air arc throws a crescent that pierces, and at 100 Momentum a second one follows |
 | o_pendulumkick | Pendulum Kick | attack, timed, swing body | swing kick from 110 px/s, +25% | kicks launch minions; a pass that hits 2 or more foes gives back a hook; kicks stun 0.5 s; each foe can be kicked going and coming back; at top speed an afterimage kicks again 0.2 s later | Comet Heel (o_skylash): kicks leave a brass comet trail that burns foes under it, and the afterimage kicks every pass |
-| o_gaff | Gaff | attack, precise, K on a foe | the arrival kick +40% | a foe winding up is staggered 1.2 s and the kick crits; the bounce gives back a hook; the hooked minion is yanked along on the bounce; the arrival hits a 26 px ring; a crit arrival gives +20 Momentum | Harpoon (o_sweetspot): a hook on a foe drags every foe on the chain's line to it before the kick, and the kick is a guaranteed crit for 3x |
-| o_pump | Pendulum Pump | movement, easy, swing | pump +30%, air bite 1.6 s | hook range +12; fling +15% more; hook costs 4 less stamina; a third hook per airtime; air bite 2.2 s; hook range +24 | Skyline (o_friction): with 50+ Momentum hooks are not limited per airtime, and the chain cuts foes it sweeps through for 0.5x AD |
-| o_reelsnap | Reel Snap | movement, timed, L in a swing | a reel that reaches 1.3x speed snaps 0.8x AD at foes within 30 px | reel 220 px/s; the snap stuns 0.4 s; the snap gives back the Hanging Arc; the snap radius is 44; a snap at the bottom of the arc sends a shock along the floor | Whiplash (o_ironweight): every snap is a Full Circle at the swing point |
-| o_undertow | Undertow | movement, timed, L on the floor | Backline 64 px | Backline drags the nearest foe ahead 20 px after him; a blow in the first 0.1 s of a Backline is a Slip; K within 0.3 s of a Backline flings 30% harder; Backline leaves a chain line on the floor that trips foes (0.4 s) | Riptide (o_anchorpin): Backline pulls every foe within 60 px ahead after him and roots them 1 s |
-| o_plumbdrop | Plumb Drop | movement, precise, S held in a swing | lets go and drops straight down: 1.2x AD in a 28 px ring | ring 40 px; foes in it are launched; Momentum adds to the drop's damage; a drop on a foe's head crits; a drop gives back a hook | Meteor Anchor (o_gaff): the drop drives the hook into the floor for a 64 px quake and a 1 s root |
+| o_gaff | Gaff | attack, precise, J held | the warp kick deals 2.4x, costs 6 MP and recharges in 1.5 s | a foe winding up reels 1.2 s and the kick crits; the thrown hook cuts every foe on its way; two warp charges; the kick hits a 26 px ring; recharge 1.1 s; a crit kick gives 20 Momentum; warp kick 6.5x | Harpoon (o_sweetspot): every foe within 80 px of the hooked one is dragged in to it before the kick, and the kick always crits |
+| o_pump | Pendulum Pump | movement, easy, J held with W | pump +30%, air bite 1.6 s | hook range +12; fling +15% more; hook costs 4 less stamina; a third hook per airtime; air bite 2.2 s; hook range +24 | Skyline (o_friction): with 50+ Momentum hooks are not limited per airtime, and the chain cuts foes it sweeps through for 0.5x AD |
+| o_reelsnap | Reel Snap | movement, timed, J held in a swing | a reel that reaches 1.3x speed snaps 0.8x AD at foes within 30 px | reel 220 px/s; the snap stuns 0.4 s; the snap gives back the Hanging Arc; the snap radius is 44; a snap at the bottom of the arc sends a shock along the floor | Whiplash (o_ironweight): every snap is a Full Circle at the swing point |
+| o_undertow | Undertow | attack, precise, K parry | Chain Bind holds a minion 1.6 s and its yank deals 1.0x AD | the foe nearest the bound one is yanked in too; yank 1.8x; mini bosses and bosses are yanked in and held; the yank leaves a chain on the floor that trips; hold 2.2 s, yank 2.6x; the bound foe takes 30% more; yank 4.0x, two foes come in with it | Riptide (o_anchorfall): a parry yanks in every foe within 60 px of the one that struck, and binds them all |
+| o_plumbdrop | Plumb Drop | movement, precise, S in a swing | lets go and drops straight down: 1.2x AD in a 28 px ring | ring 40 px; foes in it are launched; Momentum adds to the drop's damage; a drop on a foe's head crits; a drop gives back a hook | Meteor Anchor (o_gaff): the drop drives the hook into the floor for a 64 px quake and a 1 s root |
 | o_chainfence | Chain Fence | spell, easy, I | 18 MP: two posts 60 px apart with a chain at knee height. A foe crossing it takes 1.2x AP and stumbles 0.4 s. Lasts 5 s | 80 px long; two fences at once; foes crossing are slowed; the chain sparks every 0.5 s for 0.3x AP to foes near it; lasts 8 s | Razor Fence (o_barbs): the chain is barbed, every crossing adds 3 bleed stacks, and the fence follows him |
 | o_tether | Tether | spell, timed, I | 22 MP: chains the two nearest foes together for 4 s and shares 30% of the damage one takes with the other | three foes; 45% shared; foes pulled more than 70 px apart are yanked together and collide for 1.5x AP; lasts 6 s; when a tethered foe dies, the others take 2x AP | Chain Gang (o_bell): every foe on screen is tethered in one chain |
 | o_anchorfall | Anchor Fall | spell, timed, I | 26 MP: an iron anchor drops from a rift 50 px ahead for 3.0x AP in a 26 px ring, stun 0.6 s | a second anchor 30 px further; the anchors leave a chain between them that roots for 0.8 s; the ring is 36 px; the drop pulls foes 20 px in first; three anchors | Iron Rain (o_tether): five anchors fall across the screen, each 6x AP |
 | o_barbs | Barbed Links | dot, easy, J | chain hits add 1 bleed stack (0.12x AD a second, 6 max, 3 s) | 2 stacks on tip hits; 10 max; swing kicks add stacks; bleeding foes take +10% from the chain; 0.3x AD a tick | Flay (o_chainfence): a Full Circle tip consumes the stacks for 1.2x AD each |
-| o_rust | Rust Bite | dot, timed, K latch | a hooked foe rusts: 0.2x AD a second for 4 s | rusted foes take +15% from every source; rust spreads to one foe it touches; Anchor Pin rusts; rust 0.45x a second; rusted foes slowed 20% | Corrode (o_gaff): rust on a foe that dies bursts for 3x AD and rusts every foe in 40 px |
+| o_rust | Rust Bite | dot, timed, J held and K parry | a foe the warp kick or Chain Bind catches rusts: 0.2x AD a second for 4 s | rusted foes take +15% from every source; rust spreads to one foe it touches; Anchor Pin rusts; rust 0.45x a second; rusted foes slowed 20% | Corrode (o_gaff): rust on a foe that dies bursts for 3x AD and rusts every foe in 40 px |
 | o_friction | Friction Burn | dot, timed, swing and Full Circle | foes the chain sweeps in a swing or a Full Circle are ignited (the shared `ignite`) | the burn lasts longer; the burn spreads on a kill; a burning foe takes +20% from the swing kick; stronger burns; a brass flame trail on the chain at 100 Momentum | Scorched Arc (o_pendulumkick): every swing leaves a burning arc in the air that hits foes passing through |
 | o_kite | Brass Kite | summon, easy, on letting go | 20% chance: a brass kite on a string trails behind him for 6 s and dives at the nearest foe for 0.6x AD every 1 s | 35% chance; two kites; kites dive in pairs; a kite dive chills; kites last 10 s | Sky Armada (o_pump): four kites circle him all the time and dive with every swing kick |
 | o_bell | Rift Bell | summon, timed, on a tip hit | 12% chance, cooldown 2 s: a bronze bell drops on a chain from a rift above the foe and swings through it twice for 0.8x AD | stun on the first swing; the swing also hits the foes beside it; a toll ring for 0.4x AP; two bells; swings 3 times | Great Bell (o_tether): the bell is twice the size, and its toll stuns everything on screen for 0.5 s |
-| o_twin | Twin Chain | summon, precise, on a Slip | a shade of Orrin appears where he let go and does a Full Circle at 1.0x | the shade gives +10 Momentum; two shades; the shade hooks and swings once; the shade copies his next Hanging Arc; 2.0x | Mirror Dance (o_sweetspot): every Slip calls three shades whose tip hits all crit |
+| o_twin | Twin Chain | summon, precise, on a Slip or a perfect dodge | a shade of Orrin appears and does a Full Circle at 1.0x | the shade gives +10 Momentum; two shades; the shade hooks and swings once; the shade copies his next Hanging Arc; 2.0x | Mirror Dance (o_sweetspot): every Slip calls three shades whose tip hits all crit |
 | o_perpetual | Perpetual Motion | passive, easy | Momentum empties half as fast | Momentum bonus up to +50%; +5 Momentum a second on the floor while walking; Momentum never falls below 30; hurts cost 15; +60% at full | (passive: an evolution partner only, no evolution of its own, as passives allow) |
-| o_maelstrom | Maelstrom | ultimate, timed, U | replaces Grand Pendulum: he swings full vertical circles round a rift tear, two turns, chain radius 96, 0.6x the level's power per foe per turn | three turns; foes in the circle are pulled toward its middle; radius 120; chain shards fly out on each turn; four turns, with a crash ring at the end | Eye of the Maelstrom (o_pump): five turns, a circle as tall as the screen, and foes pulled into its middle burst together at the end for about 15 times the special |
+| o_grandpendulum | Grand Pendulum | ultimate, timed, U | three passes, each 0.6x the level's power | each pass drags the foes it meets under the tear; radius 110, 0.8x; chain shards on the floor each pass, 0.5x; the crash deals 2x and stuns 1 s; a full turn round the tear after the passes; 1.2x; two turns, passes 1.4x, crash 3x | Maelstrom (o_pump): four full turns in a circle as tall as the stage, and the foes drawn in under the tear burst together for 8x |
 
 If the skill contract does not allow a passive with no evolution, `o_perpetual` evolves into Endless Motion (o_kite): Momentum never empties while a kite is out.
 Ultimate budget: level 8 about 6 times Grand Pendulum's cast, evolved about 15 times.
@@ -270,9 +279,10 @@ Ultimate budget: level 8 about 6 times Grand Pendulum's cast, evolved about 15 t
 Events his kit emits:
 - `cast` for each ability;
 - `jump`;
-- `dash` on each Backline and each release, with `dir`;
+- `dash` on each release, with `dir`;
 - `perfectDodge` through `rewardPerfectDodge`;
-- a kit event `latch: { kind: "foe" | "anchor" | "platform" | "air"; foe: Enemy | null }`, declared in `src/types/orrin.ts`, the same way Hulda declares `grab`.
+- a kit event `latch: { kind: "anchor" | "platform" | "air" }`, declared in `src/types/orrin.ts`, the same way Hulda declares `grab`.
+The shared warp and parry emit `warp` and `parry`.
 
 ## Look
 
@@ -292,9 +302,9 @@ Effect ramps:
 
 His own clips go in `src/constants/clips/orrin/`:
 - idle, with the hand loose and the chain loop swaying;
-- every blow, the hook throw, the swing, the reel, the release roll, Backline, the bend before a jump, the reel-to-foe zip and its kick, both ability clips, the charge pose and both ultimates.
+- every blow, the hook throw, the swing, the reel, the release roll, the bend before a jump, the ledge pull, the warp kick, both ability clips, the charge pose and the special.
 
-Walk, jump, fall, hurt and death use the shared clips through the motion layer, to `docs/motion-standard.md`, with a light 24 px stride.
+Walk, jump, fall, hurt, death, the warp's throw, the guard and the dodge use the shared clips through the motion layer, to `docs/motion-standard.md`, with a light 24 px stride.
 The idle chain loop and the swing pose must hand over without a pop: 2 frames of crossfade into the swing pose on latch, and out of the release roll.
 
 ## Achievements
@@ -305,13 +315,13 @@ The idle chain loop and the swing pose must hand over without a pop: 2 frames of
 ## Shop items (docs/meta-progress.md)
 
 - Vitality: his HP.
-- Honed Edge: the string, the swing kick, the arrival kick and every attack skill scale with `progress.stats.ad`.
+- Honed Edge: the string, the swing kick, the warp kick, Chain Bind's yank and every attack skill scale with `progress.stats.ad`.
 - Arcana: Whirlwall, Anchor Pin and the spell skills scale with `progress.stats.ap`.
 - Wellspring: abilities and the ultimate spend MP.
 - Precision: every hit goes through `dealDamage`.
-- Light Boots: his walk, the swing pump, the reel speed and Backline scale with `progress.stats.move`.
-- Endurance: hooks, reels and Backline spend stamina.
-- Aftershock: every release, fling landing and Backline calls `travelEnded()`. Add Orrin to the Aftershock line in the shop doc.
+- Light Boots: his walk, the swing pump and the reel speed scale with `progress.stats.move`.
+- Endurance: swing hooks, reels, blocks and the dodge spend stamina.
+- Aftershock: every release, fling landing, ledge pull and warp calls `travelEnded()`.
 - Lodestone, Head Start and Last Light work in shared code.
 
 ## Co-op
@@ -333,14 +343,14 @@ Changes made while building, each for the same goal as the design:
   A hook that bites a platform with less room than that hauls him up and over its lip onto the platform instead (`src/game/hero/orrin/climb.ts`).
   The high middle platform keeps the full swing.
 - The room for a swing is measured from the floor under him, as the design says, so an air bite over a low platform still gives a full swing while he stands on the floor below it.
-- The hook flies a fixed line in the world from where it left his hand, so a hook thrown on the rise of a jump reaches a crystal.
-  W is also the jump, so the steep aim works in the air: jump, then press K with W still held.
+- The hook flies a fixed line in the world from where it left his hand, so a hook thrown on the rise of a jump reaches a high platform.
+  W is also the jump, so the swing hook from the floor starts with a jump: W and J held together.
 - The hook bites the air at the edge of the stage, and a swing into either side of the stage stops there, so he never hangs against a wall with his speed kept.
 - A chain blow strikes any foe whose body crosses the swept arc.
   Measuring only to a foe's centre left the flat Lash unable to reach short ground foes.
 - Grand Pendulum measures its chain from the floor under him when it is cast and passes through the low platforms, so its passes keep their 90 px reach in the middle of the stage.
+- The moveset rework (13 November 2026, `docs/moveset-design.md`): the hook on a foe became the shared warp with a flying kick that binds, the swing moved to J held with W, the reel to J held while swinging, the guard and Chain Bind came in on K, Backline went away for the shared dodge, Undertow became the parry skill, Gaff the warp skill, and Maelstrom the evolution of the new Grand Pendulum skill.
 - Perpetual Motion level 4 holds Momentum at 30 or more, since the skill is always taken mid-run and a run start would never see it.
-- Undertow's harder fling lasts until he lets go of the swing that follows the Backline.
 - Full Swing counts foes his swing kicks defeat between one latch and letting go, as the best-of-run stat `swingKills`.
 - Every skill's own hits carry its id as the damage source, so the end-of-run screen lists them by name.
 - Tip hits curl round a guard (`curls` in the shared hit options).
@@ -354,24 +364,18 @@ Changes made while building, each for the same goal as the design:
 
 ## Balance check
 
-Playtest bot runs on this build, one run each (runs are deterministic), from wave 1 with no shop upgrades.
-The other four heroes fall on the same waves as in the baseline runs on the base commit.
+Playtest bot runs, one run each (runs are deterministic), from wave 1 with no shop upgrades.
+Before is the shared moveset core (`SainyTK/unified-moveset`) with his old kit on provisional warp and guard; after is this rework.
 
-| Hero | Mash: death wave | Mash: kills | Skilled: death wave | Skilled: kills |
+| Build | Mash: death wave | Mash: kills | Skilled: death wave | Skilled: kills |
 | --- | --- | --- | --- | --- |
-| Kael | 4 | 11 | 5 | 15 |
-| Ysra | 5 | 18 | 5 | 16 |
-| Sable | 5 | 18 | 5 | 14 |
-| Hulda | 3 | 7 | 5 | 18 |
-| Orrin | 5 | 18 | 5 | 18 |
+| Before the rework | 5 | 18 | 5 | 18 |
+| After the rework | 5 | 18 | 10 | 50 |
 
-Orrin falls on the same wave as most of the others with both bots.
-Before his tips curled round guards he fell on wave 4 with both (13 and 11 kills).
-The skilled bot never hooks or swings: it reads the HUD tabs, and Orrin's tabs are his two abilities, so K is never pressed for travel.
-It plays him as a walker who lashes and spins Whirlwall, which leaves out his Momentum and his swing kicks.
-At wave 8 and level 30, the skilled bot defeated 12 foes in 60 s with Orrin and 13 with Hulda.
+The mash bot only taps J, and his string is the same as before, so it plays the same run.
+The skilled bot holds J for the warp kick, dodges and casts, and goes five waves deeper.
 
 ## Note for the owner
 
-The playtest bots in `agent-studio/playtest/` have no Orrin entry, and the studio does not edit that folder.
-A skilled policy for him would throw K toward a crystal or into the air, hold it while pumping toward the swing, let go on the forward upswing, and lash with J at foes 46 to 64 px away.
+The skilled playtest bot reads the HUD tabs and holds J for the warp when the WARP tab is ready, so it plays his warp kick, guard, dodge and abilities.
+It never holds W with J, so it never swings; a policy that swings would hook a platform or the air, pump toward the swing, let go on the forward upswing and lash with J at foes 46 to 64 px away.

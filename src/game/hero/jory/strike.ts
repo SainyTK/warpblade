@@ -16,7 +16,6 @@ import { game, hero, progress } from "../../state";
 import { boxHit, hitStop, shake } from "../../world";
 import { tier } from "./beat";
 import { afterMalletHit, blowScale, firstFoe } from "./blowSkills";
-import { joryHost } from "./memory";
 
 /** one blow of his mallets as it strikes */
 export interface MalletStrike {
@@ -74,7 +73,6 @@ function strikeFoe(e: Enemy, s: MalletStrike, first: boolean): boolean {
   }
   hero.mp = Math.min(progress.stats.mp, hero.mp + MP_PER_HIT);
   hero.lastHit = e;
-  joryHost.lastFoe = e;
   afterMalletHit(e, s, { first, kill: hpBefore > 0 && e.hp <= 0 });
   return true;
 }

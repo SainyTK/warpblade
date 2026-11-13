@@ -11,7 +11,6 @@ import type { SableState } from "./sable";
 import type { KaelAbility } from "./spell";
 import type { TallisState } from "./tallis";
 import type { WennaState } from "./wenna";
-import type { Point } from "./world";
 import type { YsraClipName, YsraState } from "./ysra";
 
 /** why a press was refused: the selected spell or the warp is still recharging, MP is short, or HP is (Brannoc) */
@@ -53,7 +52,8 @@ export type HeroState =
   | "dash"
   | "hurt"
   | "dead"
-  | "hang"
+  /** K held: the guard every hero shares */
+  | "guard"
   | YsraState
   | SableState
   | HuldaState
@@ -86,7 +86,8 @@ export interface WarpTarget {
   x: number;
   y: number;
   enemy?: Enemy;
-  anchor?: Point;
+  /** a ranged hero's throw away from a foe: the foe they strike once they land */
+  aim?: Enemy;
 }
 
 /** A verlet rope point. */
@@ -114,7 +115,6 @@ export interface Hero {
   inv: number;
   jumps: number;
   drop: number;
-  anchor: Point | null;
   hasSword: boolean;
   hitDone: boolean;
   /** the highest point Kael may rise to before he lands again, set by his last jump or a lift from the floor */
@@ -160,6 +160,8 @@ export interface Hero {
   spellCdFull: Record<KaelAbility, number>;
   /** the ability of the cast under way, fixed when the cast starts */
   castAbility: KaelAbility;
+  /** the cast in progress is the wide form, from I held */
+  castWide: boolean;
   /** seconds left of the HUD flash after a refused press: a spell or the warp still recharging, or MP short */
   denied: Record<DenyReason, number>;
   /** the spell is cast at once and stronger: Spellblade, I during a combo */

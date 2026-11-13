@@ -17,8 +17,3 @@ export function setState(s: HeroState): void {
 export function settle(): void {
   setState(hero.ground ? "idle" : "fall");
 }
-export function leaveHang(): void {
-  hero.anchor = null;
-  hero.hasSword = true;
-  hero.ground = false;
-}

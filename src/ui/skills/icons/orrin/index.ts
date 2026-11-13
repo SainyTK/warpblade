@@ -417,13 +417,16 @@ export const ORRIN_ICONS: Record<string, (s: SpriteCanvas) => void> = {
     kite(s, 12, 0, 2.6, 11, 8, true);
     sparkle(s, 3, 3, 1.6, GOLD);
   },
-  /** a vortex of chain turning round a rift */
-  o_maelstrom: (s) => {
-    spiral(s, 8, 8, 3, 7.2, 1.15, 0.3);
-    tear(s, 8, 8, 6, 3);
+  /** a chain swung from a rift tear, its arc sweeping low, a boot at its end */
+  o_grandpendulum: (s) => {
+    swingArc(s, 8, 1, 12, 0.55, 2.6, BRASS[2]);
+    tear(s, 8, 1, 6, 3);
+    chain(s, 8, 2, 10, 7, 12, 10);
+    boot(s, 11, 11, true);
+    speedLines(s, 4, [12, 14], 3, OC.steelLight);
   },
-  /** a giant vortex, two arms of chain round a rift opened like an eye */
-  o_maelstrom_evo: (s) => {
+  /** Maelstrom: a giant vortex, two arms of chain round a rift opened like an eye */
+  o_grandpendulum_evo: (s) => {
     spiral(s, 8, 8, 4, 7.6, 0.9, 0.2, BRASS_LINKS);
     spiral(s, 8, 8, 4, 7.6, 0.9, 0.2 + Math.PI);
     fill(s, () => {

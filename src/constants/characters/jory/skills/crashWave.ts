@@ -3,7 +3,7 @@ import { evolvedRow, levelRows } from "../../../../utils/skillRows";
 
 const LEVELS = levelRows([
   {
-    text: "Crash sends a 60 px wave at any Groove, 0.5x.",
+    text: "Crash and the warp's crash send a 60 px wave at any Groove, 0.5x.",
     values: { reach: 60, power: 0.5, height: 20, pierce: 0, echo: 0, slow: 0, bounce: 0, wall: 0 },
   },
   { text: "The wave stands taller; 0.6x.", values: { height: 30, power: 0.6 } },
@@ -22,7 +22,7 @@ export const CRASH_WAVE: SkillDef = {
   kind: "attack",
   risk: "easy",
   button: "J",
-  text: "Crash sends its sound wave along the floor at any Groove.",
+  text: "Crash and the warp's arrival send a sound wave along the floor at any Groove.",
   levels: LEVELS,
   evolution: {
     partner: "j_horn",

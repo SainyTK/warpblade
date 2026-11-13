@@ -1,7 +1,7 @@
 import { BEATS, BOLT, COCK, STRING } from "../../../constants/sable/bolt";
+import { RELOAD } from "../../../constants/sable/reload";
 import { sfx } from "../../../services/audio";
 import { PK } from "../../../types/particle";
-import { isHeld } from "../../input";
 import { emitSkillEvent } from "../../skills/events";
 import { skillValues } from "../../skills/query";
 import { character, hero, particles, progress, rng } from "../../state";
@@ -12,7 +12,7 @@ import { jadeLight } from "./effects/jadeLight";
 import { looseBolt } from "./loose";
 import { bowString, sable } from "./memory";
 import { drawBolt, flashQuiver } from "./quiver";
-import { startReload } from "./reload";
+import { startReload, timeReload } from "./reload";
 import { kegInSights } from "./spells/keg";
 
 /** a perfect reload's quickened shots (Perfect Rhythm) */
@@ -27,8 +27,8 @@ const LAST = BEATS.length - 1;
 /** bolts she may loose in one airtime: two, three with Featherdraw */
 export const airLimit = (): number => skillValues("s_featherdraw").airLimit ?? STRING.air;
 
-/** Skyhunter: J held in the air keeps her aloft for a while, and those shots do not count toward the air limit */
-export const hovering = (): boolean => !hero.ground && sable.hover > 0 && isHeld("attack");
+/** Skyhunter: shooting in the air keeps her aloft for a while, and those shots do not count toward the air limit */
+export const hovering = (): boolean => !hero.ground && sable.hover > 0 && hero.state === "shoot";
 
 /** the air string still has a shot in it */
 const airShotLeft = (): boolean => hero.ground || hovering() || sable.airShots < airLimit();
@@ -47,19 +47,27 @@ function startBolt(): void {
   sable.aim = autoAim();
   sable.fired = false;
   sable.cock = 0;
-  Object.assign(bowString, { beat: nextBeat(), queued: false });
+  Object.assign(bowString, { beat: nextBeat(), queued: false, link: 0 });
   setState("shoot");
 }
 
-/** J: start a string when she is free, or ask for the next bolt while one is under way; an empty quiver starts the
- *  reload instead */
+/** Down held (or just let go) on the floor: J asks for a reload, from a free stance or during a shot */
+const asksReload = (): boolean =>
+  sable.sinceDown <= RELOAD.downGrace && hero.ground && (isFree() || hero.state === "shoot");
+
+/** J tapped: the timing press while she reloads; with Down on the floor a reload; the next bolt of the string, asked
+ *  for while one is under way or started when she is free; an empty quiver starts the reload instead */
 export function pressShoot(): boolean {
+  if (sable.reload) return timeReload();
+  if (asksReload()) {
+    startReload();
+    return true;
+  }
   if (hero.state === "shoot") {
     bowString.queued = true;
     return true;
   }
   if (!isFree() || !airShotLeft()) return false;
-  if (sable.reload) return true;
   if (sable.ammo <= 0) {
     flashQuiver("empty");
     return startReload();
@@ -138,8 +146,8 @@ function fire(): void {
 
 /**
  * The bolt leaves on its beat's release frame and the clip runs on through the recoil; after the closing bolt the
- * crossbow cocks. J pressed during a bolt, or held, starts the next bolt where this one ends; otherwise she settles and
- * the next press starts a new string.
+ * crossbow cocks. J tapped during a bolt starts the next bolt where this one ends; otherwise she settles and the next
+ * tap goes on with the string.
  */
 export function runShoot(dt: number): void {
   const h = hero;
@@ -154,12 +162,18 @@ export function runShoot(dt: number): void {
     sable.cock = Math.max(0, beat.dur + COCK - h.st);
     if (sable.cock > 0) return;
   }
-  const next = bowString.queued || isHeld("attack");
-  if (next && sable.ammo > 0 && !sable.reload && airShotLeft()) {
+  if (bowString.queued && sable.ammo > 0 && !sable.reload && airShotLeft()) {
     startBolt();
     return;
   }
-  sable.string = 0;
+  bowString.link = STRING.link;
   settle();
   if (sable.ammo <= 0) startReload();
+}
+
+/** the string's link runs out: the next tap starts it again from the first bolt */
+export function tickString(dt: number): void {
+  if (bowString.link <= 0) return;
+  bowString.link = Math.max(0, bowString.link - dt);
+  if (bowString.link <= 0) sable.string = 0;
 }

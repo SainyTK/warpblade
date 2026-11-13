@@ -117,7 +117,7 @@ They keep their ids, `kills-1000` and `kills-5000`, so saves that earned them ke
 Full Swing counts the foes Orrin's swing kicks defeat between one latch and letting go, and keeps the best as the tracked stat `swingKills`.
 Hold the Hour counts the foes that fall inside one of Mirel's Stillfields between opening it and its close, and keeps the best as the tracked stat `fieldKills`.
 Many Hands counts the foes Wenna's Wicks defeat in one run (their bites, Kindle, Guttering's bursts, Pack Lunge and the Wicks Great Wick melts into; her own lamp does not count), and keeps the best as the tracked stat `wickKills`.
-Knife in the Dark counts the foes Tallis fells with blows from behind in one run (his J blows from behind, Drop Stab, the stabs of Gloaming and Eclipse and his Shadow Double's), and keeps the best as the tracked stat `backKills`.
+Knife in the Dark counts the foes Tallis fells with blows from behind in one run (his J blows from behind, Drop Stab, the stabs of Gloaming and his Shadow Double's), and keeps the best as the tracked stat `backKills`.
 In Time counts the seconds Jory holds Crescendo, his top Groove tier, without dropping out of it, in real time, and keeps the best as the tracked stat `crescendoSeconds`.
 On the Edge counts the foes that fall to any hit of Brannoc's while he is Bloodied (at or under 35% of his max HP, 40% with Scarred Hide) in one run, and keeps the best as the tracked stat `bloodiedKills`.
 The page lists 35 achievements, and all of them together pay 2,570 coins.

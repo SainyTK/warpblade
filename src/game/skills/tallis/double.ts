@@ -122,10 +122,16 @@ function act(sh: Shade, dt: number): boolean {
   return sh.stabs > 0 || sh.linger > 0;
 }
 
+/** a Fade or a rise: a shade comes at its chance, or always with Two Moons */
+function summon(memory: SkillMemory): void {
+  const v = skillValues(ID);
+  if (v.twoMoons || rng.chance(v.chance)) call(memoryOf(memory));
+}
+
 /**
- * Shadow Double: a perfect dodge or a rise from the pool may call a shade of him behind the nearest foe that stabs it
+ * Shadow Double: a Fade (his parry) or a rise from the pool may call a shade of him behind the nearest foe that stabs it
  * from behind; with its levels more often, more stabs, lingering for new foes and two shades. Two Moons calls one with
- * every rise.
+ * every Fade and every rise.
  */
 export const doubleSkill: SkillBehavior = {
   create: () => ({ shades: [] }),
@@ -143,12 +149,7 @@ export const doubleSkill: SkillBehavior = {
     }
   },
   on: {
-    perfectDodge(memory) {
-      if (rng.chance(skillValues(ID).chance)) call(memoryOf(memory));
-    },
-    sink(memory) {
-      const v = skillValues(ID);
-      if (v.twoMoons || rng.chance(v.chance)) call(memoryOf(memory));
-    },
+    parry: summon,
+    sink: summon,
   },
 };

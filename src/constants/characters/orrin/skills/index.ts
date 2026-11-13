@@ -5,8 +5,8 @@ import { BRASS_KITE } from "./brassKite";
 import { CHAIN_FENCE } from "./chainFence";
 import { FRICTION_BURN } from "./frictionBurn";
 import { GAFF } from "./gaff";
+import { GRAND_PENDULUM_SKILL } from "./grandPendulum";
 import { IRON_WEIGHT } from "./ironWeight";
-import { MAELSTROM } from "./maelstrom";
 import { PENDULUM_KICK } from "./pendulumKick";
 import { PERPETUAL_MOTION } from "./perpetualMotion";
 import { PLUMB_DROP } from "./plumbDrop";
@@ -41,5 +41,5 @@ export const ORRIN_SKILL_DEFS: readonly SkillDef[] = [
   RIFT_BELL,
   TWIN_CHAIN,
   PERPETUAL_MOTION,
-  MAELSTROM,
+  GRAND_PENDULUM_SKILL,
 ];

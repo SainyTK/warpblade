@@ -82,8 +82,9 @@ export function createCrossbowBolt(f: BoltFlight): Effect {
       if (f.pass(ax, ay, x, y)) return false;
       trail.push([x, y]);
       if (trail.length > 6) trail.shift();
+      // a bolt flying up passes through a ledge from below; one coming down or level stops on it
       const floor = surfaceBelow(x, ay - 1);
-      if (y >= floor) {
+      if (uy >= 0 && y >= floor) {
         y = floor;
         if (f.bounces > 0) bounce(true);
         else {

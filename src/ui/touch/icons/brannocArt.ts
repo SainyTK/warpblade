@@ -4,7 +4,7 @@ import type { BrannocAbility } from "../../../types/brannoc";
 import type { TouchButtonAction } from "../../../types/touch";
 import { hex } from "../../../utils/color";
 import { ICON_WHITE, type IconArt } from "./iconArt";
-import { JUMP } from "./sharedArt";
+import { DODGE, JUMP } from "./sharedArt";
 
 const R = PAL.rage;
 const BC = BRANNOC_SKIN.colors;
@@ -52,18 +52,20 @@ const FRENZY: IconArt = {
   colors: { R: R[3], K: BC.skinLight, F: BC.skin, T: BC.skinShade, C: R[4], W: ICON_WHITE, B: BC.trim },
 };
 
-/** Hunt: the axe lunging head first, its edge leading and speed lines behind it */
-const HUNT: IconArt = {
+/** the guard: the great axe's haft held across him, a blow landing on it in white and crimson, blood bleeding through */
+const GUARD: IconArt = {
   rows: [
-    "..........E.",
-    "LLL......SEE",
-    ".......SSSSE",
-    "LLLLhhhhSSSE",
-    ".......SSSSE",
-    "LL.......SEE",
-    "..........E.",
+    "....W.......",
+    "...WRW......",
+    "....W....E..",
+    "........SSE.",
+    "hhbhhhhhSSSE",
+    "........SSE.",
+    "..D.D....E..",
+    "..D...D.....",
+    "......D.....",
   ],
-  colors: { L: R[4], ...AXE_COLORS },
+  colors: { W: ICON_WHITE, R: R[4], D: R[3], ...AXE_COLORS },
 };
 
 /** War Cry: his face roaring, the mane round it, the bone war paint across his eyes, arcs of the roar either side */
@@ -168,6 +170,7 @@ const BERSERK: IconArt = {
 };
 
 const ABILITY_ART: Readonly<Record<BrannocAbility, IconArt>> = {
+  frenzy: FRENZY,
   warCry: WAR_CRY,
   redCrescent: RED_CRESCENT,
   b_geyser: GEYSER,
@@ -175,13 +178,14 @@ const ABILITY_ART: Readonly<Record<BrannocAbility, IconArt>> = {
   b_pact: PACT,
 };
 
-/** where each of up to five abilities sits on the switch dial, clockwise from the top */
+/** where each of up to six abilities sits on the switch dial, clockwise from the top */
 const DIAL: readonly [number, number][] = [
   [4, 0],
-  [8, 3],
-  [7, 8],
-  [1, 8],
-  [0, 3],
+  [8, 2],
+  [8, 6],
+  [4, 8],
+  [0, 6],
+  [0, 2],
 ];
 
 /** the switch: one mark for each ability he knows round a dial, the selected one white */
@@ -201,7 +205,7 @@ function switchArt(selected: BrannocAbility, known: readonly BrannocAbility[]): 
   return { rows: grid.map((r) => r.join("")), colors: { B: R[3], W: ICON_WHITE } };
 }
 
-/** Brannoc's buttons: the axe, Frenzy, Hunt, the selected ability on I, the switch dial on O and Berserk */
+/** Brannoc's buttons: the axe, his guard, the selected ability on I, the switch dial on O and Berserk; the dodge is shared */
 export function brannocArt(
   action: TouchButtonAction,
   ability: BrannocAbility,
@@ -212,10 +216,10 @@ export function brannocArt(
       return AXE;
     case "up":
       return JUMP;
-    case "warp":
-      return FRENZY;
     case "dash":
-      return HUNT;
+      return DODGE;
+    case "guard":
+      return GUARD;
     case "cast":
       return ABILITY_ART[ability];
     case "cycle":

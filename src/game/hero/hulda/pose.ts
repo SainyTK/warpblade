@@ -2,15 +2,14 @@ import { STATE_CLIPS } from "../../../constants/clips";
 import { FIST_CLIPS, HAMMER_CLIP } from "../../../constants/clips/hulda/fists";
 import { GRAPPLE_CLIPS, THROW_CLIPS } from "../../../constants/clips/hulda/grapple";
 import { HULDA_CLIPS } from "../../../constants/clips/hulda/moves";
+import { MOVESET_CLIPS } from "../../../constants/clips/hulda/moveset";
 import { JUMP_CROUCH } from "../../../constants/clips/hulda/settle";
 import { CHARGE_POSE, HOLD_POSE, HULDA_IDLE } from "../../../constants/clips/hulda/stance";
 import { KAEL_WOUNDED_IDLE } from "../../../constants/clips/wounded";
 import { LANDING } from "../../../constants/kael/motion";
 import type { Hero } from "../../../types/hero";
-import type { ActionClip, Pose } from "../../../types/pose";
-import type { UltimateId } from "../../../types/skill";
+import type { Pose } from "../../../types/pose";
 import { sampleKeys } from "../../../utils/sampleKeys";
-import { progress } from "../../state";
 import { clipPose } from "../clipPose";
 import { clipKey, handOver, watchHandover } from "../kael/handover";
 import { jumpClock } from "../kael/jumpClock";
@@ -25,12 +24,6 @@ import { rushClipTime } from "./rushClock";
 import { settlePose, watchSettle } from "./settle";
 import { spellPose } from "./spellPose";
 import { swingClipTime } from "./swing";
-
-/** her clip for each ultimate she can hold: the heave of Titan Throw, the chest slams that turn her to iron */
-const ULTIMATE_CLIPS: Partial<Record<UltimateId, ActionClip>> = {
-  titanThrow: HULDA_CLIPS.titan,
-  unbroken: HULDA_CLIPS.taunt,
-};
 
 /** walking with a foe in her hands strides on; standing, she holds it at her hands */
 function holdPose(h: Hero): Pose {
@@ -61,15 +54,14 @@ function walkingSpin(h: Hero): Pose {
   };
 }
 
-/** her clip for a state: her own for her actions and her idle, Kael's shared ones with her fists up otherwise */
+/** her clip for a state: her own for her actions, the shared moves and her idle, Kael's shared ones with her fists up
+ *  otherwise (the dodge among them) */
 function statePose(h: Hero, t: number, fresh: boolean, dt: number, wound: number): Pose {
   switch (h.state) {
     case "fist":
       return sampleKeys(FIST_CLIPS[currentBlow()].keys, h.st);
     case "airFist":
       return sampleKeys(HAMMER_CLIP.keys, h.st);
-    case "grab":
-    case "crush":
     case "knee":
     case "skyfall":
       return sampleKeys(GRAPPLE_CLIPS[h.state].keys, h.st);
@@ -93,7 +85,13 @@ function statePose(h: Hero, t: number, fresh: boolean, dt: number, wound: number
       return { ...CHARGE_POSE, nx: CHARGE_POSE.nx + tremble };
     }
     case "ultimate":
-      return sampleKeys(ULTIMATE_CLIPS[progress.ultimate]?.keys ?? HULDA_CLIPS.quake.keys, h.st);
+      return sampleKeys(HULDA_CLIPS.quake.keys, h.st);
+    case "throw":
+    case "warpStrike":
+    case "guard":
+      return sampleKeys(MOVESET_CLIPS[h.state].keys, h.st);
+    case "throwWait":
+      return sampleKeys(MOVESET_CLIPS.throwWait.keys, h.st % MOVESET_CLIPS.throwWait.dur);
     case "idle": {
       const wounded = carry(sampleKeys(KAEL_WOUNDED_IDLE.keys, h.st % KAEL_WOUNDED_IDLE.dur));
       return woundedIdle(sampleKeys(HULDA_IDLE.keys, h.st % HULDA_IDLE.dur), wounded, wound);

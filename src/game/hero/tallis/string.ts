@@ -1,6 +1,6 @@
+import { WARP } from "../../../constants/combat";
 import { PAL } from "../../../constants/palette";
 import { DROP_STAB, KNIFE_BLOWS, KNIFE_LINK, STRING } from "../../../constants/tallis/knives";
-import { SINK } from "../../../constants/tallis/sink";
 import { sfx } from "../../../services/audio";
 import { dealDamage } from "../../damage";
 import { createFloorRing } from "../../effects/floorRing";
@@ -38,13 +38,16 @@ function strikeNow(): void {
   throwKnives(blow);
 }
 
-/** J on the floor: the next blow of the string, or queue it during one */
+/** the warp's arrival blow has struck: he is at the foe's back, and the string may cut its recovery */
+const afterWarp = (): boolean => hero.state === "warpStrike" && hero.st >= WARP.cut;
+
+/** J on the floor: the next blow of the string, or queue it during one; also straight out of the warp's arrival */
 export function pressString(): boolean {
   if (hero.state === "knife") {
     tallis.queued = true;
     return true;
   }
-  if (!isFree() || !hero.ground) return false;
+  if ((!isFree() && !afterWarp()) || !hero.ground) return false;
   startBlow(tallis.link > 0 ? tallis.blow : 0);
   return true;
 }
@@ -67,7 +70,7 @@ export function runString(dt: number): void {
   tallis.link = next >= 0 ? KNIFE_LINK : 0;
 }
 
-/** a blow's recovery after it struck can be cut short by a jump, the Veil or a Sink */
+/** a blow's recovery after it struck can be cut short by a jump or any shared action */
 export const inRecovery = (): boolean => hero.state === "knife" && tallis.struck;
 
 /** J in the air: Drop Stab, once per airtime */
@@ -156,7 +159,7 @@ export function landed(): void {
   tallis.leaps = skillValues("t_nightLeap").leaps ?? 0;
 }
 
-/** J out of the pool, or just after rising: Rising Cut, an upward slash that throws a minion up */
+/** Rising Cut, the rise out of the pool: his body pours up into an upward slash that throws a minion up */
 export function startRisingCut(): void {
   tallis.current = "risingCut";
   tallis.struck = false;
@@ -179,7 +182,3 @@ export function runRisingCut(dt: number): void {
   }
   if (h.st >= b.dur) settle();
 }
-
-/** a J now would rise into Rising Cut: in the pool, rising, or just risen */
-export const risingCutOpen = (): boolean =>
-  hero.state === "sink" || hero.state === "rise" || (isFree() && hero.ground && tallis.sinceRise < SINK.risingWindow);

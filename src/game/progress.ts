@@ -10,7 +10,7 @@ import { buildStats } from "../utils/build";
 import { cardKey } from "../utils/cards";
 import { xpToNext } from "../utils/progression";
 import { heldRows } from "../utils/skills";
-import { computeStats, heldUltimate } from "../utils/stats";
+import { computeStats } from "../utils/stats";
 import { raiseCharm, raiseSkill } from "./build/raise";
 import { createFloorRing } from "./effects/floorRing";
 import { forgetEvolutions } from "./evolve";
@@ -21,7 +21,8 @@ import { character, freshProgress, game, hero, lights, particles, progress, rng,
 export function refreshProgress(): void {
   const build = progress.build;
   progress.stats = computeStats(character, progress.level, heldRows(character, build), metaBonus(), buildStats(build));
-  progress.ultimate = heldUltimate(character, build);
+  // every hero keeps one ultimate all run; their ultimate skill upgrades it
+  progress.ultimate = character.special;
   progress.comboLimit = character.comboHits;
   progress.airLimit = airLimit();
   hero.hp = Math.min(hero.hp, progress.stats.hp);

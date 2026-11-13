@@ -1,9 +1,12 @@
 import { VOID } from "../abyss/colors";
 import { drawUnblinking } from "../abyss/drawUnblinking";
-import { updateUnblinking } from "../abyss/unblinking";
+import { UNBLINKING_SHUT_SHARE, updateUnblinking } from "../abyss/unblinking";
 import type { EnemyKind } from "./kind";
 
-/** The Unblinking, what comes after the last wave's boss: a great eye that nothing can hurt while it is open */
+/**
+ * The Unblinking, what comes after the last wave's boss: a great eye with HP far past anything a run can deal. Every hit
+ * lands, and none of them seems to matter. Shut, each of the hero's own blows takes a share of all it has (gaze.ts).
+ */
 export const unblinking: EnemyKind = {
   flies: true,
   box: (e) => [e.x - 22, e.y - 16, e.x + 22, e.y + 16],
@@ -14,5 +17,5 @@ export const unblinking: EnemyKind = {
   update: updateUnblinking,
   draw: drawUnblinking,
   glow: { radius: 40, color: VOID[2], eyeY: 0 },
-  warded: (e) => e.state !== "blink",
+  takes: (e, dmg, loud) => (e.state === "blink" && loud ? Math.max(dmg, e.max * UNBLINKING_SHUT_SHARE) : dmg),
 };

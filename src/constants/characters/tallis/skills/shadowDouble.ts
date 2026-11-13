@@ -15,19 +15,19 @@ const LEVELS = levelRows([
   { text: "55% chance.", values: { chance: 0.55 } },
 ]);
 
-/** Shadow Double. Design: docs/skills/tallis.md. Values: chance: chance a perfect dodge or a rise calls it; stabs: stabs it strikes; power: attack damage a stab deals, from behind; linger: seconds it stays after, stabbing again; shades: shades called; stun: seconds its last stab on a foe stuns; twoMoons: 1 every rise calls one (evolution) */
+/** Shadow Double. Design: docs/skills/tallis.md. Values: chance: chance a Fade (his parry) or a rise from the pool calls it; stabs: stabs it strikes; power: attack damage a stab deals, from behind; linger: seconds it stays after, stabbing again; shades: shades called; stun: seconds its last stab on a foe stuns; twoMoons: 1 every Fade and every rise calls one (evolution) */
 export const SHADOW_DOUBLE: SkillDef = {
   id: "t_double",
   name: "Shadow Double",
   kind: "summon",
   risk: "timed",
-  button: "L",
-  text: "A perfect dodge or a rise may call a shade of him behind the nearest foe.",
+  button: "K",
+  text: "A Fade or a rise from the pool may call a shade of him behind the nearest foe.",
   levels: LEVELS,
   evolution: {
     partner: "t_sink",
     name: "Two Moons",
-    text: "Every rise from the pool leaves a shade behind the nearest foe.",
-    row: evolvedRow(LEVELS[7], "Every rise calls a shade.", { twoMoons: 1 }),
+    text: "Every Fade and every rise from the pool leaves a shade behind the nearest foe.",
+    row: evolvedRow(LEVELS[7], "Every Fade and rise calls a shade.", { twoMoons: 1 }),
   },
 };

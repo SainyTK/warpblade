@@ -7,28 +7,27 @@ import { emitSkillEvent } from "../skills/events";
 import { skillValues } from "../skills/query";
 import { game, hero, progress } from "../state";
 import { boxHit, heroBox } from "../world";
-import { isFree, leaveHang, setState, settle } from "./actions";
+import { setState, settle } from "./actions";
 import { dropDashGhost } from "./afterimages";
-import { endCombo } from "./combo";
 import { cutPassed, endPassingCut, startPassingCut } from "./kael/passingCut";
+import { cutForSharedAction, maySharedAct } from "./sharedCut";
 import { canPayDash, refuseDash, spendDashStamina } from "./stamina";
 import { travelEnded } from "./travelEnd";
 
-/** L: a short dash that nothing can touch, paid with stamina. On the ground only, until Sky Dance. It cancels attacks and casts. */
+/**
+ * L: the front dodge every hero shares, a short dash toward the side held that nothing can touch, paid with stamina. On
+ * the ground only, until Kael's Sky Dance. It cancels a blow's follow-through, a cast and the guard.
+ */
 export function tryDash(dir: number): boolean {
   const h = hero;
-  const air = !h.ground && h.state !== "hang";
+  const air = !h.ground;
   if (air && (!skillValues("k_skydance").airDash || h.airDashed)) return false;
-  if (!isFree() && h.state !== "hang" && h.state !== "move" && h.state !== "cast") return false;
+  if (!maySharedAct() && h.state !== "cast" && h.state !== "guard") return false;
   if (!canPayDash()) {
     refuseDash();
     return false;
   }
-  if (h.state === "hang") leaveHang();
-  if (h.state === "move") {
-    h.move = null;
-    endCombo(false);
-  }
+  cutForSharedAction();
   if (dir) h.face = dir;
   if (air) h.airDashed = true;
   spendDashStamina();

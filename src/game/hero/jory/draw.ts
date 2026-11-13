@@ -1,12 +1,16 @@
 import { BEAT } from "../../../constants/jory/beat";
 import { PAL } from "../../../constants/palette";
-import { ellipseRing, glow, hairline, place, px } from "../../../engine/frame";
+import { ellipseRing, fleck, glow, hairline, place, px } from "../../../engine/frame";
+import { WHITE } from "../../../utils/color";
 import { hero } from "../../state";
+import { parryOpen } from "../heroGuard";
 import { beatShare, onDownbeat, tier } from "./beat";
 import { jory } from "./memory";
 
 /** the metronome's pivot above his head, its arm's length and how far it swings each way, in radians */
 const METRONOME = { above: 40, arm: 7, swing: 0.55 } as const;
+/** the guard's wall of sound: an upright half ring in front of the drum, its reach ahead, half height and middle height */
+const WARD = { ahead: 9, rx: 4, ry: 15, mid: 17 } as const;
 /** at Crescendo the ring is doubled this far outside the first */
 const DOUBLE_OUT = 4;
 
@@ -52,7 +56,30 @@ function drawMetronome(): void {
   px(tx, ty, flashing() ? PAL.beat[5] : PAL.beat[4]);
 }
 
-/** drawn over him: Steady Hand's metronome */
+/**
+ * While he guards, the drum's hum stands as a thin upright half ring of sound in front of him that pulses with the beat,
+ * white while a fresh press can still parry.
+ */
+function drawGuardWard(): void {
+  if (hero.state !== "guard") return;
+  place();
+  const open = parryOpen();
+  const pulse = flashing() ? 1 : 0.45 + 0.3 * (1 - beatShare());
+  const cx = hero.x + hero.face * WARD.ahead;
+  const cy = hero.y - WARD.mid;
+  const n = Math.ceil(WARD.ry * 6);
+  for (let i = 0; i <= n; i++) {
+    const g = -Math.PI / 2 + (i / n) * Math.PI;
+    const x = cx + hero.face * Math.cos(g) * WARD.rx;
+    const y = cy + Math.sin(g) * WARD.ry;
+    fleck(x, y, open ? WHITE : PAL.beat[4], open ? 1 : pulse);
+    fleck(x - hero.face * 1.5, y, PAL.beat[3], pulse * 0.5);
+  }
+  glow(cx, cy, 10, PAL.beat[3], open ? 0.35 : 0.15 * pulse);
+}
+
+/** drawn over him: Steady Hand's metronome and the guard's wall of sound */
 export function drawJory(): void {
   drawMetronome();
+  drawGuardWard();
 }

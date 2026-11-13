@@ -4,11 +4,11 @@ import {
   CLOCK_CLIP,
   HAND_CLIP,
   HOUR_CLIP,
-  NOON_CLIP,
   REWIND_CLIP,
   SPELL_CLIP,
   STILL_CAST,
 } from "../../../constants/clips/mirel/moves";
+import { ARRIVAL_CLIP, GUARD_CLIP, THROW_CLIP } from "../../../constants/clips/mirel/moveset";
 import { MIREL_CROUCH } from "../../../constants/clips/mirel/settle";
 import { STAFF_CLIPS } from "../../../constants/clips/mirel/staff";
 import { CHARGE_POSE, HOVER_POSE, MIREL_IDLE } from "../../../constants/clips/mirel/stance";
@@ -58,7 +58,8 @@ function play(h: Hero, clip: ActionClip): Pose {
   return h.ground ? p : airborne(p);
 }
 
-/** her clip for a state: her own for her actions, her idle and the hover, the shared ones otherwise */
+/** her clip for a state: her own for her actions, the throw, the arrival, the guard, her idle and the hover; the shared
+ *  ones otherwise */
 function statePose(h: Hero, t: number, fresh: boolean, dt: number, wound: number): Pose {
   switch (h.state) {
     case "staff":
@@ -77,8 +78,12 @@ function statePose(h: Hero, t: number, fresh: boolean, dt: number, wound: number
       return play(h, SPELL_CLIP);
     case "hour":
       return play(h, HOUR_CLIP);
-    case "noon":
-      return play(h, NOON_CLIP);
+    case "throw":
+      return play(h, THROW_CLIP);
+    case "warpStrike":
+      return play(h, ARRIVAL_CLIP);
+    case "guard":
+      return play(h, GUARD_CLIP);
     case "charge":
       return CHARGE_POSE;
     case "walk":

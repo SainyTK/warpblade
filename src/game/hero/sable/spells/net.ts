@@ -18,6 +18,8 @@ const ROPE = hex("#c8b48a");
 const WEIGHT = hex("#5a6468");
 /** pixels a second and pixels a thrown net flies before it opens on the floor */
 const FLIGHT = { speed: 230, range: 150 } as const;
+/** radians between nets thrown at once; I held throws this many more nets, this far apart */
+const FAN = { spread: 0.22, wideMore: 2, wideSpread: 0.3 } as const;
 /** seconds pitch burns on a foe, and how near a foe must stand to a burning one to catch */
 const PITCH = { burn: 3, catch: 14 } as const;
 
@@ -137,9 +139,17 @@ function throwNet(x: number, y: number, angle: number): void {
   });
 }
 
-/** Net Bolt on her I rotation */
+/** `n` nets thrown from the kneeling shot, `spread` radians apart */
+function fan(n: number, spread: number): void {
+  const m = muzzle("low");
+  for (let i = 0; i < n; i++) throwNet(m.x, m.y, m.angle + (i - (n - 1) / 2) * spread);
+  sfx.swing(1.1);
+}
+
+/** Net Bolt on her I bar */
 export const NET_SPELL: SableSpell = {
   label: "NET",
+  tint: "#c8b48a",
   mp: () => skillValues("s_net").mp,
   cooldown: () => skillValues("s_net").cooldown,
   left: () => sable.netCd,
@@ -147,10 +157,6 @@ export const NET_SPELL: SableSpell = {
     sable.netCd = s;
   },
   room: () => true,
-  release() {
-    const n = skillValues("s_net").nets;
-    const m = muzzle("low");
-    for (let i = 0; i < n; i++) throwNet(m.x, m.y, m.angle + (i - (n - 1) / 2) * 0.22);
-    sfx.swing(1.1);
-  },
+  release: () => fan(skillValues("s_net").nets, FAN.spread),
+  wide: () => fan(skillValues("s_net").nets + FAN.wideMore, FAN.wideSpread),
 };

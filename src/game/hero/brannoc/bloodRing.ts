@@ -22,6 +22,8 @@ export interface BloodRingHit {
   kx?: number;
   /** a foe it leaves out, already struck by the blow that sent the ring */
   skip?: Enemy | null;
+  /** foes it leaves out, for a ring that follows a blow that struck several */
+  spared?: (e: Enemy) => boolean;
 }
 
 /**
@@ -32,7 +34,7 @@ export function bloodRing(x: number, floor: number, r: number, hit: BloodRingHit
   game.fx.push(createFloorRing(x, floor, r, PAL.rage, 0.32));
   const reached: Enemy[] = [];
   for (const e of game.enemies) {
-    if (e === hit.skip || e.hp <= 0) continue;
+    if (e === hit.skip || e.hp <= 0 || hit.spared?.(e)) continue;
     const [cx, cy] = enemyCenter(e);
     if (Math.abs(cx - x) > r || Math.abs(cy - (floor - 12)) > r * 0.8 + 12) continue;
     reached.push(e);

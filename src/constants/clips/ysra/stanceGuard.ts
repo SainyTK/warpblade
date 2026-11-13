@@ -1,9 +1,10 @@
 import type { ActionClip } from "../../../types/pose";
+import { GUARD_TIMES } from "../../combat";
 import { frame } from "../../hero";
-import { BACKSTEP_TIMES, BRACE_TIMES } from "../../ysra/stance";
+import { BACKSTEP_TIMES } from "../../ysra/stance";
 import { y } from "./stanceBase";
 
-/** the brace: sunk low behind the haft held near upright in front of her, the far hand high up it toward the blade */
+/** the guard: sunk low behind the haft held near upright in front of her, the far hand high up it toward the blade */
 const GUARD = {
   hx: -1,
   hy: -11.5,
@@ -18,24 +19,23 @@ const GUARD = {
   ba: 0.3,
 } as const;
 const HAFT = -8;
-const t = BRACE_TIMES;
+const t = GUARD_TIMES;
 
-/** Ysra bracing, blocking and parrying; backstepping; thrown back by a blow. */
+/** Ysra guarding, blocking and parrying; backstepping; thrown back by a blow. */
 export const STANCE_GUARD_CLIPS = {
   /**
    * In segments: the haft snapped up into place; the held guard breathing; the jolt of a block, driven back onto the rear
    * foot; and the parry, the haft whipped outward and up to knock the blow aside, then back into place.
    */
-  brace: {
+  guard: {
     dur: t.parryEnd,
     hit: 0,
     keys: [
       [0, y({ hy: -12.5, nx: 2, ny: -22.5, fx: 6, fy: -15, sa: -0.95, ffx: 5, bfx: -5 }, HAFT)],
-      [frame(2), y({ ...GUARD, hy: -11, ny: -21, fx: 7.5, sa: -1.4 }, HAFT)],
-      [t.loopFrom, y(GUARD, HAFT)],
-      [frame(13), y({ ...GUARD, ny: -22, cb: 1, fy: -13.5 }, HAFT)],
-      [frame(22), y({ ...GUARD, ny: -22, cb: 1, fy: -13.5, sa: -1.34 }, HAFT)],
-      [frame(31), y({ ...GUARD, hy: -11, ny: -21, cb: 0, fy: -12.5, sa: -1.3 }, HAFT)],
+      [t.loopFrom, y(GUARD, HAFT), "snap"],
+      [frame(6), y({ ...GUARD, ny: -22, cb: 1, fy: -13.5 }, HAFT)],
+      [frame(10), y({ ...GUARD, ny: -22, cb: 1, fy: -13.5, sa: -1.34 }, HAFT)],
+      [frame(14), y({ ...GUARD, hy: -11, ny: -21, cb: 0, fy: -12.5, sa: -1.3 }, HAFT)],
       [t.loopTo - 0.001, y(GUARD, HAFT)],
       [
         t.block,
@@ -46,7 +46,7 @@ export const STANCE_GUARD_CLIPS = {
         "snap",
       ],
       [t.block + frame(2), y({ ...GUARD, hx: -2, nx: 0.5, ny: -21, fx: 5.5, sa: -1.45, bfx: -7, ba: 0.5 }, HAFT)],
-      [t.block + frame(5), y({ ...GUARD, hx: -1.5, nx: 2, fx: 6.5, sa: -1.36 }, HAFT)],
+      [t.block + frame(4), y({ ...GUARD, hx: -1.5, nx: 2, fx: 6.5, sa: -1.36 }, HAFT)],
       [t.blockEnd - 0.001, y(GUARD, HAFT)],
       [t.parry, y({ ...GUARD, hy: -12, nx: 3.5, ny: -22, fx: 9, fy: -17, sa: -2.1, ffx: 7 }, HAFT), "snap"],
       [
@@ -54,10 +54,10 @@ export const STANCE_GUARD_CLIPS = {
         y({ ...GUARD, hy: -12.5, cb: -0.5, nx: 3, ny: -23, fx: 8, fy: -21, sa: -2.55, ffx: 7 }, HAFT),
       ],
       [
-        t.parry + frame(5),
+        t.parry + frame(4),
         y({ ...GUARD, hy: -12.5, cb: -0.5, nx: 3, ny: -23, fx: 8, fy: -21, sa: -2.6, ffx: 7 }, HAFT),
       ],
-      [t.parry + frame(9), y({ ...GUARD, hy: -12, nx: 3, ny: -22, fx: 7.5, fy: -16, sa: -1.7, ffx: 6.5 }, HAFT)],
+      [t.parry + frame(6), y({ ...GUARD, hy: -12, nx: 3, ny: -22, fx: 7.5, fy: -16, sa: -1.7, ffx: 6.5 }, HAFT)],
       [t.parryEnd, y(GUARD, HAFT)],
     ],
   },

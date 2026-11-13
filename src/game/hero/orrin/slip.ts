@@ -4,13 +4,11 @@ import { sfx } from "../../../services/audio";
 import { hero } from "../../state";
 import { heroGuarded } from "../guard";
 import { rewardPerfectDodge } from "../perfectDodge";
-import { backlineSlip } from "./backline";
 import { orrin } from "./memory";
 import { gainMomentum, loseMomentumToHurt } from "./momentum";
 
-/** a blow meets him just after he let go of a fast swing, or early in an Undertow Backline */
-const inSlip = (): boolean =>
-  (orrin.sinceRelease < SWING.slipWindow && orrin.releaseSpeed > SWING.slipSpeed) || backlineSlip();
+/** a blow meets him just after he let go of a fast swing */
+const inSlip = (): boolean => orrin.sinceRelease < SWING.slipWindow && orrin.releaseSpeed > SWING.slipSpeed;
 
 /**
  * A blow is about to land: in the Slip's window it misses, with the shared perfect dodge reward and Momentum. Otherwise

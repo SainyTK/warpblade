@@ -1,88 +1,70 @@
 import { SECOND_HAND, STOPPED_CLOCK } from "../../../constants/mirel/abilities";
-import type { MirelAbility } from "../../../types/mirel";
-import { skillLevel, skillValues } from "../../skills/query";
-import { createRotation } from "../../skills/rotation";
+import { STILLFIELD } from "../../../constants/mirel/field";
+import type { AbilitySlot } from "../../../types/moveset";
+import { skillEvolved, skillLevel, skillValues } from "../../skills/query";
+import { hero } from "../../state";
 import { mirel } from "./memory";
-import { pressSecondHand } from "./secondHand";
-import { pressForetell } from "./spells/foretell";
-import { pressHourHand } from "./spells/hourHand";
-import { pressSundial } from "./spells/sundial";
-import { pressStoppedClock } from "./stoppedClock";
+import { hasSand } from "./sand";
+import { castSecondHand } from "./secondHand";
+import { castSpell, type SpellId, WAIT } from "./spells/castSpell";
+import { castField, fieldCost, fieldWait } from "./stillfield";
+import { castStoppedClock, clockMp } from "./stoppedClock";
 
-/** her abilities on I in the order O turns through them: Stopped Clock and Second Hand from the start, then her spells */
-export const ABILITIES: readonly MirelAbility[] = [
-  "stoppedClock",
-  "secondHand",
-  "m_sundial",
-  "m_foretell",
-  "m_handsweep",
+/** the Stillfield, paid in Sand: tapped it stands a while, held it stays while I is held */
+const STILLFIELD_SLOT: AbilitySlot = {
+  id: "stillfield",
+  label: "STILL",
+  known: () => true,
+  wait: fieldWait,
+  full: () => STILLFIELD.cooldown,
+  affordable: () => hasSand(fieldCost()),
+  cast: castField,
+  cost: () => `${Math.round(fieldCost())} SD`,
+};
+
+/** Stopped Clock: the foe ahead stops dead; held, every foe round her for a shorter while */
+const STOPPED_CLOCK_SLOT: AbilitySlot = {
+  id: "stoppedClock",
+  label: "STOP",
+  known: () => true,
+  wait: () => mirel.clockCd,
+  full: () => STOPPED_CLOCK.cooldown,
+  affordable: () => hero.mp >= clockMp(false),
+  cast: castStoppedClock,
+};
+
+/** Second Hand: a clock hand flies ahead through foes */
+const SECOND_HAND_SLOT: AbilitySlot = {
+  id: "secondHand",
+  label: "HAND",
+  known: () => true,
+  wait: () => mirel.handCd,
+  full: () => SECOND_HAND.cooldown,
+  affordable: () => hero.mp >= SECOND_HAND.mp,
+  cast: castSecondHand,
+};
+
+/** a spell skill on I, once she holds it */
+const spellSlot = (id: SpellId, label: string): AbilitySlot => ({
+  id,
+  label,
+  known: () => skillLevel(id) > 0,
+  wait: () => mirel[WAIT[id]],
+  full: () => Math.max(0.01, skillValues(id).cooldown ?? 1),
+  affordable: () => hero.mp >= (skillValues(id).mp ?? 0),
+  cast: () => castSpell(id),
+  evolved: () => skillEvolved(id),
+});
+
+/** her abilities on I in the order O turns through them: her three from the start, then her spell skills */
+export const MIREL_SLOTS: readonly AbilitySlot[] = [
+  STILLFIELD_SLOT,
+  STOPPED_CLOCK_SLOT,
+  SECOND_HAND_SLOT,
+  spellSlot("m_sundial", "DIAL"),
+  spellSlot("m_foretell", "FORETELL"),
+  spellSlot("m_handsweep", "HOUR"),
 ];
-
-/** an ability she has now: her own two always, a spell skill once held */
-const known = (id: MirelAbility): boolean => id === "stoppedClock" || id === "secondHand" || skillLevel(id) > 0;
-
-const rotation = createRotation(ABILITIES, (id) => known(id as MirelAbility));
-
-/** the ability I uses now */
-export const selectedAbility = (): MirelAbility => (rotation.selected() as MirelAbility | null) ?? "stoppedClock";
-
-/** O: turn to the next ability she has */
-export const nextAbility = (): boolean => rotation.next();
-
-/** a fresh run: back to Stopped Clock */
-export const resetAbilities = (): void => rotation.reset();
-
-/** what an ability costs in MP */
-export function abilityMp(id: MirelAbility): number {
-  if (id === "stoppedClock") return STOPPED_CLOCK.mp;
-  if (id === "secondHand") return SECOND_HAND.mp;
-  return skillValues(id).mp ?? 0;
-}
-
-/** an ability's own recharge time, for the HUD */
-function abilityCooldown(id: MirelAbility): number {
-  if (id === "stoppedClock") return STOPPED_CLOCK.cooldown;
-  if (id === "secondHand") return SECOND_HAND.cooldown;
-  return skillValues(id).cooldown ?? 1;
-}
-
-/** seconds an ability still waits */
-function abilityWait(id: MirelAbility): number {
-  switch (id) {
-    case "stoppedClock":
-      return mirel.clockCd;
-    case "secondHand":
-      return mirel.handCd;
-    case "m_sundial":
-      return mirel.sundialCd;
-    case "m_foretell":
-      return mirel.foretellCd;
-    case "m_handsweep":
-      return mirel.sweepCd;
-  }
-}
-
-/** the share of an ability's recharge still to run, 0 when ready */
-export const abilityRecharge = (id: MirelAbility): number => Math.min(1, abilityWait(id) / abilityCooldown(id));
-
-/** I: use the selected ability */
-export function pressAbility(): boolean {
-  switch (selectedAbility()) {
-    case "secondHand":
-      return pressSecondHand();
-    case "m_sundial":
-      return pressSundial();
-    case "m_foretell":
-      return pressForetell();
-    case "m_handsweep":
-      return pressHourHand();
-    default:
-      return pressStoppedClock();
-  }
-}
-
-/** every ability she knows, for the HUD */
-export const knownAbilities = (): MirelAbility[] => ABILITIES.filter(known);
 
 /** recharges run down */
 export function tickAbilities(recharge: number): void {

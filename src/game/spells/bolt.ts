@@ -1,3 +1,4 @@
+import { BOLT_CHAIN } from "../../constants/spells";
 import { W } from "../../constants/stage";
 import type { Enemy } from "../../types/enemy";
 import { clamp } from "../../utils/math";
@@ -25,9 +26,24 @@ function foeOnSide(x: number, side: number): Enemy | null {
   );
 }
 
+/** Lightning held: bolts fall one after another across the whole screen, on the foes nearest Kael first and outward,
+ *  one on each; with no foe, the floor ahead takes the one bolt */
+function boltChain(x: number, point: [number, number], o: LightningOptions, count: number): Enemy | null {
+  const foes = game.enemies
+    .filter((e) => e.hp > 0)
+    .sort((a, b) => Math.abs(a.x - x) - Math.abs(b.x - x))
+    .slice(0, count);
+  const each: LightningOptions = { ...o, damage: o.damage * BOLT_CHAIN.share, arcs: 0 };
+  if (!foes.length) game.fx.push(createLightning(null, point, each));
+  foes.forEach((foe, i) => {
+    game.fx.push(createLightning(foe, point, { ...each, delay: i * BOLT_CHAIN.gap, skyFlash: i === 0 }));
+  });
+  return foes[0] ?? null;
+}
+
 /** Lightning: a bolt on the nearest foe in front, or on the floor ahead, arcing on; with its levels it strikes twice and
- *  also behind, and as Thunderhead a storm cloud follows */
-export function castBolt(x: number, y: number, face: number, power: number): void {
+ *  also behind, and as Thunderhead a storm cloud follows. Held, a chain of bolts across the screen */
+export function castBolt(x: number, y: number, face: number, power: number, wide: boolean): void {
   const v = skillValues(SKILL);
   const ap = progress.stats.ap * power;
   const target = foeOnSide(x, face);
@@ -41,6 +57,12 @@ export function castBolt(x: number, y: number, face: number, power: number): voi
     stun: v.stun,
     source: "abilities",
   };
+  if (wide) {
+    const first = boltChain(x, point, o, BOLT_CHAIN.base + o.arcs);
+    if (skillEvolved(SKILL))
+      game.fx.push(createThunderhead(first ? enemyCenter(first)[0] : markX, ap, v.cloud, v.cloudArcs));
+    return;
+  }
   game.fx.push(createLightning(target, point, o));
   if (v.twice) game.fx.push(createLightning(target, point, { ...o, delay: AGAIN, skyFlash: false }));
   const back = v.behind ? foeOnSide(x, -face) : null;

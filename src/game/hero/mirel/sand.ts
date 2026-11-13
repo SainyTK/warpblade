@@ -1,6 +1,4 @@
-import { DENY_FLASH } from "../../../constants/combat";
 import { SAND_BAR } from "../../../constants/mirel/field";
-import { sfx } from "../../../services/audio";
 import { mirel } from "./memory";
 import { sandMaxBonus, sandRefillScale } from "./sandSkills";
 
@@ -26,16 +24,9 @@ export function gainSand(amount: number): void {
 
 /** Sand refills while she waits: never while her own field stands (unless a skill says so), nor just after a spend */
 export function refillSand(dt: number): void {
-  mirel.sandFlash = Math.max(0, mirel.sandFlash - dt);
   mirel.sandWait = Math.max(0, mirel.sandWait - dt);
   if (mirel.sandWait > 0) return;
   const rate = SAND_BAR.refill * sandRefillScale(!!mirel.field);
   if (rate <= 0) return;
   gainSand(rate * dt);
-}
-
-/** a press the hourglass could not pay for: the shared refusal tick, and the SD bar flashes */
-export function refuseSand(): void {
-  mirel.sandFlash = DENY_FLASH;
-  sfx.denied();
 }

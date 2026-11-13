@@ -6,7 +6,7 @@ export const BULL_HORNS: SkillDef = {
   name: "Bull Horns",
   kind: "movement",
   risk: "timed",
-  button: "L",
+  button: "I",
   text: "The Bull Rush lifts foes onto your shoulder and slams them down at the end.",
   levels: [
     {

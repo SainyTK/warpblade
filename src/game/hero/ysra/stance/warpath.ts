@@ -1,6 +1,6 @@
 import { STAMINA } from "../../../../constants/combat";
 import { SPARKS } from "../../../../constants/palette";
-import { BRACE, WARPATH } from "../../../../constants/ysra/stance";
+import { GUARD, WARPATH } from "../../../../constants/ysra/stance";
 import { sfx } from "../../../../services/audio";
 import type { Enemy } from "../../../../types/enemy";
 import { dealDamage } from "../../../damage";
@@ -127,12 +127,12 @@ export function tickWarpath(dt: number): void {
   carry();
 }
 
-/** Warpath: a blow from the front while she charges is braced for stamina, as the brace takes it */
+/** Warpath: a blow from the front while she charges is blocked for stamina, as her guard takes it */
 export function chargeTakes(fromX: number): boolean {
   const h = hero;
   if (h.state !== "run" || !warpath().block || (fromX - h.x) * h.face < 0) return false;
-  if (h.stamina < BRACE.blockCost) return false;
-  h.stamina -= BRACE.blockCost;
+  if (h.stamina < GUARD.blockCost) return false;
+  h.stamina -= GUARD.blockCost;
   h.staminaWait = STAMINA.delay;
   game.fx.push(createImpact(h.x + h.face * 9, h.y - 19, -h.face, false, SPARKS.hot));
   sfx.block();

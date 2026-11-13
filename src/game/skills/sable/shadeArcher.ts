@@ -82,8 +82,31 @@ function fire(s: Shade): void {
   s.next = s.shots % STRING.bolts ? STRING.gap : STRING.rest;
 }
 
-/** Shade Archer: a perfect dodge leaves a shade of her that shoots strings at the nearest foe; with level 7 her own bolts
- *  are primed while it stands; Twin Shadows leaves two that copy her hop volley */
+/** a shade of her stays at x and shoots; a perfect dodge refills the quiver with Twin Shadows */
+function leaveShade(m: ShadeMemory, at: number): void {
+  const v = skillValues(ID);
+  if (v.refill) loadBolts(quiverSize());
+  if (m.cd > 0) return;
+  m.cd = withCharms("cooldown", v.cooldown);
+  const life = v.stay ? withCharms("duration", v.stay) : STRING.lone;
+  const look = shadeLook();
+  for (let i = 0; i < v.shades; i++)
+    m.shades.push({
+      x: at - hero.face * i * TWIN,
+      y: hero.y,
+      face: hero.face,
+      life,
+      max: life,
+      next: 0.1 + i * 0.1,
+      shots: 0,
+      look,
+    });
+  if (v.prime) sable.shade = life;
+  lights.add(at, hero.y - 18, 40, skin.glow, 0.8, 0.3);
+}
+
+/** Shade Archer: a perfect dodge (and from level 5 a parry) leaves a shade of her that shoots strings at the nearest foe;
+ *  with level 7 her own bolts are primed while it stands; Twin Shadows leaves two that copy her hop volley */
 export const shadeArcher: SkillBehavior = {
   create: () => ({ cd: 0, shades: [] }),
   update(memory, _state, dt) {
@@ -106,26 +129,10 @@ export const shadeArcher: SkillBehavior = {
   },
   on: {
     perfectDodge(memory, event) {
-      const m = memoryOf(memory);
-      const v = skillValues(ID);
-      if (v.refill) loadBolts(quiverSize());
-      if (m.cd > 0) return;
-      m.cd = withCharms("cooldown", v.cooldown);
-      const life = v.stay ? withCharms("duration", v.stay) : STRING.lone;
-      const look = shadeLook();
-      for (let i = 0; i < v.shades; i++)
-        m.shades.push({
-          x: event.at - hero.face * i * TWIN,
-          y: hero.y,
-          face: hero.face,
-          life,
-          max: life,
-          next: 0.1 + i * 0.1,
-          shots: 0,
-          look,
-        });
-      if (v.prime) sable.shade = life;
-      lights.add(event.at, hero.y - 18, 40, skin.glow, 0.8, 0.3);
+      leaveShade(memoryOf(memory), event.at);
+    },
+    parry(memory) {
+      if (skillValues(ID).parry) leaveShade(memoryOf(memory), hero.x);
     },
     hop(memory, event) {
       const v = skillValues(ID);

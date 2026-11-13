@@ -82,10 +82,13 @@ function startBlow(index: number, judged: BeatJudgement): void {
   sfx.swing(MALLET_BLOWS[jory.current].feel.pitch);
 }
 
-/** Crash's sound wave along the floor: from tier 3, or from tier 1 with Crash Wave */
-function sendCrashWave(): void {
+/**
+ * Crash's sound wave along the floor: from tier 3, or from tier 1 with Crash Wave. The warp's crash (`own` false) sends
+ * Crash Wave's wave only.
+ */
+export function sendCrashWave(own = true): void {
   const t = tier() - 1;
-  const wave = crashWave(CRASH_WAVE.reach[t], CRASH_WAVE.power[t], CRASH_WAVE.height);
+  const wave = own ? crashWave(CRASH_WAVE.reach[t], CRASH_WAVE.power[t], CRASH_WAVE.height) : crashWave(0, 0, 0);
   if (!wave) return;
   const x = hero.x + hero.face * 10;
   game.fx.push(
@@ -160,7 +163,7 @@ export function runString(dt: number): void {
   jory.link = next > 0 ? MALLET_LINK * jory.beatLen : 0;
 }
 
-/** a blow's recovery after it struck can be cut short by a jump, a Boom or a Beat Step */
+/** a blow's recovery after it struck can be cut short by a jump or any of the shared moves */
 export const inRecovery = (): boolean => hero.state === "mallet" && jory.struckAt >= 0;
 
 /** the link runs down while he is out of the string; once it lapses the next J starts a new string */
@@ -219,9 +222,8 @@ export function runDownstroke(dt: number): void {
   if (h.st >= b.dur) settle();
 }
 
-/** a landing gives the airtime's Downstroke and air step back */
+/** a landing gives the airtime's Downstroke back */
 export function landed(): void {
   jory.downstrokes = 1;
-  jory.airStep = true;
   jory.leaps = 0;
 }

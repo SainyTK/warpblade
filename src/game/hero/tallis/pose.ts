@@ -1,13 +1,7 @@
 import { STATE_CLIPS } from "../../../constants/clips";
+import { TALLIS_GUARD_CLIP } from "../../../constants/clips/tallis/guard";
 import { KNIFE_CLIPS } from "../../../constants/clips/tallis/knives";
-import {
-  GLOAM_CROUCH,
-  GLOAM_SLASH,
-  KNOT_CLIP,
-  SINK_POUR,
-  SINK_RISE,
-  SPELL_CLIP,
-} from "../../../constants/clips/tallis/moves";
+import { GLOAM_CROUCH, GLOAM_SLASH, KNOT_CLIP, SINK_POUR, SPELL_CLIP } from "../../../constants/clips/tallis/moves";
 import { CHARGE_POSE, REVERSE, TALLIS_IDLE, VEIL_DIP } from "../../../constants/clips/tallis/stance";
 import { KAEL_WOUNDED_IDLE } from "../../../constants/clips/wounded";
 import { LANDING } from "../../../constants/kael/motion";
@@ -51,16 +45,15 @@ function statePose(h: Hero, t: number, fresh: boolean, dt: number, wound: number
       return play(h, KNIFE_CLIPS.hamstring);
     case "sink":
       return sampleKeys(SINK_POUR.keys, Math.min(tallis.sinkT, SINK_POUR.dur));
-    case "rise":
-      return play(h, SINK_RISE);
     case "knotCast":
       return play(h, KNOT_CLIP);
     case "spellCast":
       return play(h, SPELL_CLIP);
     case "charge":
       return CHARGE_POSE;
+    case "guard":
+      return sampleKeys(TALLIS_GUARD_CLIP.keys, h.st);
     case "gloaming":
-    case "eclipse":
       return h.st < GLOAMING.windup ? GLOAM_CROUCH : GLOAM_SLASH;
     case "idle": {
       const wounded = sampleKeys(KAEL_WOUNDED_IDLE.keys, h.st % KAEL_WOUNDED_IDLE.dur);

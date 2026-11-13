@@ -28,14 +28,18 @@ export function ultHit(e: Enemy, share: number, fromX: number): void {
   game.fx.push(createImpact(cx, cy, Math.sign(cx - fromX) || 1, true, SPARKS.brass));
 }
 
-/** the crash at the end: a brass and volt ring that deals `share` of the level's power to every foe in its reach */
-export function crashRing(share: number, reach = ULT_REACH[Math.max(0, orrin.ultLevel - 1)]): void {
+/**
+ * The crash at the end: a brass and volt ring that deals `share` of the level's power to every foe in its reach, and
+ * stuns each for `stun` seconds when given
+ */
+export function crashRing(share: number, reach = ULT_REACH[Math.max(0, orrin.ultLevel - 1)], stun = 0): void {
   const h = hero;
   for (const e of game.enemies) {
     if (e.hp <= 0) continue;
     const [cx] = enemyCenter(e);
     if (Math.abs(cx - h.x) > reach) continue;
     ultHit(e, share, h.x);
+    if (stun) e.stun = Math.max(e.stun, stun);
   }
   game.fx.push(createFloorRing(h.x, h.y, Math.min(reach, 160), skin.ramp, 0.5));
   game.fx.push(createFloorRing(h.x, h.y, Math.min(reach, 160) * 0.7, PAL.volt, 0.4));

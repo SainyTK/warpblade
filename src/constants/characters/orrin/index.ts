@@ -9,7 +9,7 @@ export const ORRIN: CharacterDef = {
   name: "Orrin",
   title: "The chain dancer",
   blurb:
-    "A rift drifter with a brass hook on a long chain. He swings from crystals, ledges and the air itself, flings himself across the stage and lashes foes at the chain's tip. Never stands still for long.",
+    "A rift drifter with a brass hook on a long chain. He swings from ledges and the air itself, flings himself across the stage and lashes foes at the chain's tip. Never stands still for long.",
   accent: "#e8b04a",
   special: "grandPendulum",
   base: { ad: 11, ap: 8, hp: 95, mp: 85, stamina: 130, crit: 0.06, move: 1.05, aspd: 1, haste: 1 },

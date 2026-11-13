@@ -2,13 +2,13 @@ import type { SkillDef } from "../../../../types/skill";
 import { evolved, grow } from "./rows";
 
 /**
- * life: seconds a patch burns; tick: its ability power multiple each 0.4 s; lunge: lunges and charges lay patches
- * too; halfWidth: a patch's half width in pixels; overlap: patches burning one foe at once; ring: pixels of the fire
+ * life: seconds a patch burns; tick: its ability power multiple each 0.4 s; warp: the line she warps along and her
+ * charges lay patches too; halfWidth: a patch's half width in pixels; overlap: patches burning one foe at once; ring: pixels of the fire
  * ring a landing lays (0 off); slow: share foes in the fire are slowed; erupt: the evolution's eruption per patch
  */
-const levels = grow({ life: 3, tick: 0.45, lunge: 0, halfWidth: 5, overlap: 1, ring: 0, slow: 0 }, [
+const levels = grow({ life: 3, tick: 0.45, warp: 0, halfWidth: 5, overlap: 1, ring: 0, slow: 0 }, [
   ["Your vaults and dives leave burning ground.", {}],
-  ["Lunges and charges burn the floor too.", { tick: 0.5, lunge: 1 }],
+  ["Warps and charges burn the floor too.", { tick: 0.5, warp: 1 }],
   ["The fire lasts longer and spreads wider.", { life: 4, tick: 0.6, halfWidth: 7 }],
   ["Fire damage +33%.", { tick: 0.8 }],
   ["Fire on fire burns twice.", { tick: 1, overlap: 2 }],

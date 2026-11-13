@@ -7,4 +7,6 @@ export const HOUR = {
   /** share of the damage a foe took while stopped added to the toll, capped at this many times the level's power */
   stored: 0.3,
   cap: 2,
+  /** the radius of the Stillfield its upgrade leaves where it tolled */
+  field: 50,
 } as const;

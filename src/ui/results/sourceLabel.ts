@@ -20,12 +20,10 @@ export function sourceName(s: SourceResult, report: RunReport): string {
   return `${hero?.name ?? "Hero"}'s ${id}`;
 }
 
-/** the icon id of a source: the hero's own kit icons, the held ultimate skill's, or the skill's (evolved art once evolved) */
+/** the icon id of a source: the hero's own kit icons, or the skill's (evolved art once evolved) */
 export function sourceIcon(s: SourceResult, report: RunReport): string {
   const { id } = s;
   if (!isHeroSource(id)) return skillIcon(id, !!s.evolved);
-  const hero = heroOf(report);
   const icons = HERO_SOURCE_ICONS[report.hero] ?? HERO_SOURCE_ICONS.kael;
-  if (id !== "ultimate" || !hero) return icons[id];
-  return hero.skills.find((n) => n.ultimate && n.ultimate === report.ultimate)?.id ?? icons.ultimate;
+  return icons[id];
 }

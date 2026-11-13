@@ -25,7 +25,7 @@ export const WAX_DRIP = {
   reach: 8,
 } as const;
 
-/** K: lighting a Wick */
+/** Light, on I: lighting a Wick */
 export const LIGHT = {
   cost: 25,
   /** a relight at the cap */

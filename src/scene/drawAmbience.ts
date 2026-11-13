@@ -1,12 +1,7 @@
-import { PAL, WORLD_COLORS as WC } from "../constants/palette";
-import { ANCHORS, BRAZIERS, GROUND, W } from "../constants/stage";
-import { ellipseRing, glow, haze, line, place, polygon, px, sparkle, toScreenX } from "../engine/frame";
-import { findWarpTarget } from "../game/hero/warp";
-import { isHeld } from "../game/input";
-import { character, game, hero } from "../game/state";
-import type { Point } from "../types/world";
-import { WHITE } from "../utils/color";
-import { TAU } from "../utils/math";
+import { WORLD_COLORS as WC } from "../constants/palette";
+import { BRAZIERS, GROUND, W } from "../constants/stage";
+import { glow, haze, place } from "../engine/frame";
+import { game } from "../game/state";
 import { paletteAt } from "./eras/sceneDef";
 import { scene } from "./scenery";
 
@@ -48,49 +43,6 @@ export function drawWeather(): void {
 export function sceneFlash(): number {
   const { def, k } = scene();
   return def.flash?.(game.t, k) ?? 0;
-}
-
-/** where a warp crystal hangs now, as it bobs */
-const anchorY = (a: Point): number => a.y + Math.sin(game.t * 1.6 + a.x) * 1.5;
-
-/** the warp crystals bob and glow, drawn once whoever is playing */
-export function drawAnchors(): void {
-  const I = PAL.crystal;
-  place();
-  for (const a of ANCHORS) {
-    const y = anchorY(a);
-    const cx = toScreenX(a.x);
-    polygon(
-      [
-        [a.x, y - 7],
-        [a.x + 4, y],
-        [a.x, y + 6],
-        [a.x - 4, y],
-      ],
-      (sx) => (sx < cx ? I[4] : I[2]),
-    );
-    line(a.x, y - 7, a.x, y + 6, I[5]);
-    px(a.x - 1, y - 3, WHITE);
-    glow(a.x, y, 22, I[3], 0.35 + Math.sin(game.t * 2 + a.x) * 0.05);
-    const o = game.t * 1.4 + a.x;
-    for (let k = 0; k < 3; k++) {
-      const g = o + (k * TAU) / 3;
-      px(a.x + Math.cos(g) * 9, y + Math.sin(g) * 3, I[4], Math.sin(g) > 0 ? 1 : 0.4);
-    }
-  }
-}
-
-/** while Kael holds Up, the crystal he would warp to gets a ring */
-export function drawWarpAim(): void {
-  const aiming =
-    character.kit === "kael" && isHeld("up") && ["idle", "walk", "run", "jump", "fall", "hang"].includes(hero.state);
-  const target = aiming ? findWarpTarget().anchor : undefined;
-  if (!target) return;
-  const I = PAL.crystal;
-  const y = anchorY(target);
-  place();
-  ellipseRing(target.x, y, 10, 10, I[5], 0.7);
-  sparkle(target.x, y - 11, 3, WHITE, I[4], 0.3);
 }
 
 /** faint wide banks of mist drifting along the floor, in front of everything */

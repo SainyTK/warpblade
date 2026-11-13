@@ -9,6 +9,8 @@ export const GRIT = {
   throw: 15,
   bellow: 10,
   taunt: 12,
+  /** a blow her iron guard blocks */
+  block: 6,
   /** a blow she takes without spending a plate */
   hurt: 10,
   /** after this many quiet seconds, Grit drains at this rate */

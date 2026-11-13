@@ -6,15 +6,17 @@ import type { BeatButton, BeatJudgement } from "../../../types/jory";
 import { beatSeconds, offBeat, tierOf } from "../../../utils/beat";
 import { heroInputLag, heroSlot } from "../../coopHooks";
 import { feat } from "../../feat";
-import { pressAge } from "../../input";
+import { isHeld, pressAge } from "../../input";
 import { emitSkillEvent } from "../../skills/events";
 import { skillValues } from "../../skills/query";
 import { game, hero } from "../../state";
 import { jory } from "./memory";
 
-/** the action behind each judged button */
-const ACTIONS: Readonly<Record<BeatButton, InputAction>> = { J: "attack", K: "warp", L: "dash", I: "cast" };
+/** the action behind each judged button, and the long press of J and I, which tell a tap from a hold */
+const ACTIONS: Readonly<Record<BeatButton, InputAction>> = { J: "attack", K: "guard", L: "dash", I: "cast" };
+const LONG: Readonly<Partial<Record<BeatButton, InputAction>>> = { J: "warp", I: "castWide" };
 const STAMPS = { J: "stampJ", K: "stampK", L: "stampL", I: "stampI" } as const;
+const LAST = { J: "lastJ", K: "lastK", L: "lastL", I: "lastI" } as const;
 
 /** his Groove tier now, 1 to 4 */
 export const tier = (): number => tierOf(jory.groove);
@@ -25,7 +27,7 @@ export const beatShare = (): number => Math.min(1, jory.phase / jory.beatLen);
 /** the beat just played opened a bar */
 export const onDownbeat = (): boolean => jory.beats % BEAT.bar === 0;
 
-/** Groove cannot fall: Steady Hand's beats, and Grand Finale's locked Crescendo */
+/** Groove cannot fall: Steady Hand's beats, and Crescendo locked after an upgraded Drumroll */
 const held = (): boolean => jory.steadyBeats > 0 || jory.lockBeats > 0;
 
 /** change Groove by a whole number; a loss blinks the lost pips grey, a new tier sounds and tells the skills */
@@ -51,6 +53,11 @@ export function raiseGroove(least: number): void {
   if (jory.groove < least) addGroove(least - jory.groove);
 }
 
+/** up to the first Groove of the tier above `from` (Counterbeat on the beat); at Crescendo it stays */
+export function raiseTier(from: number): void {
+  raiseGroove(GROOVE.tiers[Math.min(from, GROOVE.tiers.length - 1)]);
+}
+
 /** the window of a press: wider with Steady Hand and Encore, and wider for a guest seat whose keys come late */
 function windowNow(): number {
   const encore = skillValues("j_encore").window ?? 0;
@@ -65,7 +72,7 @@ function guestLag(): number {
   return Math.min(BEAT.guestLagMost, rtt + BEAT.videoFrame) * PACE;
 }
 
-/** the beat-clock time a button's waiting press was made, or now when it came this step */
+/** the beat-clock time a button's waiting press went down, or now when it came this step */
 const stampOf = (button: BeatButton): number => {
   const at = jory[STAMPS[button]];
   return at >= 0 ? at : jory.clock;
@@ -85,27 +92,44 @@ function placeOf(at: number): BeatJudgement {
 /** a press right now would fall on the beat: for Up, which is never judged */
 export const onBeatNow = (): boolean => placeOf(jory.clock).onBeat;
 
+/** an on-beat press: a pip of Groove, the thump, and the streak goes on */
+function onBeatPress(): void {
+  jory.streak++;
+  jory.onBeats++;
+  addGroove(GROOVE.onBeat);
+  sfx.thump();
+}
+
 /**
- * Judge a press of J, K, L or I: on the beat it adds a pip of Groove and a thump, off the beat it costs Groove and a
- * muted click. `early` marks a J pressed before the blow under way had struck, which always counts as off the beat, so
- * mashing never builds Groove.
+ * Judge a press of J or I: on the beat it adds a pip of Groove and a thump, off the beat it costs Groove and a muted
+ * click. `early` marks a J pressed before the blow under way had struck, which always counts as off the beat, so mashing
+ * never builds Groove.
  */
 export function judge(button: BeatButton, early = false): BeatJudgement {
   const place = placeOf(stampOf(button));
   const onBeat = place.onBeat && !early;
   jory.silent = 0;
-  if (onBeat) {
-    jory.streak++;
-    jory.onBeats++;
-    addGroove(GROOVE.onBeat);
-    sfx.thump();
-  } else {
+  if (onBeat) onBeatPress();
+  else {
     jory.streak = 0;
     addGroove(-(skillValues("j_encore").cost ?? -GROOVE.offBeat));
     sfx.offBeat();
   }
   emitSkillEvent({ type: "beat", onBeat, button, groove: jory.groove, downbeat: place.downbeat });
   return { onBeat, downbeat: place.downbeat };
+}
+
+/**
+ * Judge a press the shared moveset took (the warp on J held, the guard on K, the dodge on L) by when its key went down:
+ * on the beat it counts as any on-beat press, off the beat nothing happens, so the shared moves never cost Groove.
+ */
+export function judgeShared(button: BeatButton): BeatJudgement {
+  const place = placeOf(jory[LAST[button]]);
+  if (!place.onBeat) return place;
+  jory.silent = 0;
+  onBeatPress();
+  emitSkillEvent({ type: "beat", onBeat: true, button, groove: jory.groove, downbeat: place.downbeat });
+  return place;
 }
 
 /**
@@ -138,12 +162,24 @@ export function judgeJ(early = false): BeatJudgement {
   return judge("J", early);
 }
 
-/** each judged button's waiting press keeps the beat-clock time it was first seen at, through hit-stop too */
+/** a button's key is down, or a press of it (tap or long) still waits */
+function down(button: BeatButton): boolean {
+  const long = LONG[button];
+  return isHeld(ACTIONS[button]) || pressAge(ACTIONS[button]) >= 0 || (!!long && pressAge(long) >= 0);
+}
+
+/**
+ * Each judged button keeps the beat-clock time its key went down, through hit-stop too, until the key is up and its
+ * press used; the last of them stays for presses the shared moveset uses.
+ */
 function stampPresses(): void {
   for (const button of Object.keys(ACTIONS) as BeatButton[]) {
     const key = STAMPS[button];
-    if (pressAge(ACTIONS[button]) < 0) jory[key] = -1;
-    else if (jory[key] < 0) jory[key] = jory.clock;
+    if (!down(button)) jory[key] = -1;
+    else if (jory[key] < 0) {
+      jory[key] = jory.clock;
+      jory[LAST[button]] = jory.clock;
+    }
   }
 }
 

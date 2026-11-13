@@ -6,11 +6,11 @@ import { evolvedRow, levelRows } from "../../../../utils/skillRows";
  *  Kael's blows it repeats, `cooldown` */
 const LEVELS = levelRows([
   {
-    text: "A perfect dodge calls a mirror knight that warp-strikes a foe.",
+    text: "A parry or a perfect dodge calls a mirror knight that warp-strikes a foe.",
     values: { strike: 6, targets: 1, cooldown: 1 },
   },
   {
-    text: "New: Riposte: the next blow after a perfect dodge deals triple.",
+    text: "New: Riposte: the next blow after a parry or perfect dodge deals triple.",
     values: { riposte: 3, ripTime: 1.5, ripBlows: 1 },
   },
   { text: "Knight strike 6 to 12.", values: { strike: 12 } },
@@ -33,12 +33,12 @@ export const MIRROR_KNIGHT: SkillDef = {
   kind: "summon",
   risk: "precise",
   button: "auto",
-  text: "A perfect dodge calls a mirror knight that warp-strikes the nearest foe.",
+  text: "A parry or a perfect dodge calls a mirror knight that warp-strikes the attacker first, then the nearest foes.",
   levels: LEVELS,
   evolution: {
     partner: "k_keen",
     name: "Perfect Reflection",
-    text: "A perfect dodge stops time while Kael and the knight strike the attacker and every foe near.",
+    text: "A parry or a perfect dodge stops time while Kael and the knight strike the attacker and every foe near.",
     row: evolvedRow(LEVELS[7], "Time stops; the attacker and all near are struck.", {
       reflect: 150,
       reflectArea: 15,

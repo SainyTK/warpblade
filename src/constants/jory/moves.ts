@@ -1,8 +1,9 @@
 import { frame } from "../hero";
 
-/** K: Boom, both palms flat on the drum. Radii in art pixels round him, seconds in game time */
+/** I: Boom, both palms flat on the drum, his first ability. Radii in art pixels round him, seconds in game time */
 export const BOOM = {
   stamina: 25,
+  /** its own recharge */
   wait: 0.5,
   /** on the beat: its ring, how far minions and elites are pushed out, shots erased, and the untouchable moment */
   ring: 40,
@@ -22,27 +23,16 @@ export const BOOM = {
   dur: frame(9),
 } as const;
 
-/** L: Beat Step, a short measured step */
-export const BEAT_STEP = {
-  /** pixels by Groove tier */
-  reach: [34, 40, 46, 52],
-  /** a step in the air goes this share of the floor step, once per airtime */
-  air: 0.7,
-  stamina: 18,
-  wait: 0.25,
-  /** the 2 frame load on the back foot, the slide, and the landing into the knees */
-  load: frame(2),
-  slide: 0.15,
-  land: frame(4),
-  /** a blow in this first part of an on-beat step is a perfect dodge */
-  dodge: 0.12,
-} as const;
+/** K: the war drum held up as a shield. A middling block: a parry is the play, and it answers with Counterbeat */
+export const DRUM_GUARD = { chip: 0.3, blockCost: 16 } as const;
 
 /** I: Steady Hand and Thunder Skin */
 export const STEADY_HAND = { mp: 20, cooldown: 12, beats: 8 } as const;
 export const THUNDER_SKIN = {
   mp: 16,
   cooldown: 5,
+  /** I held: a wave each way, for this much MP */
+  wideMp: 24,
   /** the floor wave: reach and speed, on the beat a longer reach that knocks minions down */
   reach: 160,
   onBeatReach: 200,

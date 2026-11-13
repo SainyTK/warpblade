@@ -33,7 +33,7 @@ A move that touches down and settles into the stand a step later still gets its 
 
 Every hero follows one take-off rule.
 A jump from the floor out of a stand, a walk or a run loads for two animation frames (`JUMP_LOAD` in `src/constants/takeoff.ts`) with a visible knee bend, then leaves the floor.
-A jump out of a blow's follow-through, out of a dash, a double jump, a jump off a crystal and a hop in the air leave at once.
+A jump out of a blow's follow-through, out of a dash, a double jump and a hop in the air leave at once.
 The load keeps the hero's speed, so a running jump goes as far as before, and the stride keeps stepping under the bend.
 Nothing else starts during the load: a press of J, L or a skill waits in the input buffer and acts as soon as the hero is in the air.
 A hit or a fall off a ledge cancels the load.
@@ -80,7 +80,6 @@ Brannoc carries his great axe on the near shoulder through the shared walk, run,
 `jumpClock.ts` runs the jump clip on the rise, so the top key lands on the real apex of every jump, hop and double jump.
 `landing.ts` plays the landing clip (`SETTLE_CLIPS.land`) or a hip dip in a stride, scaled by the fall speed.
 `handover.ts` crosses every change of clip or facing, with lengths in `HANDOVER_FRAMES` and `TURN_FRAMES` (`src/constants/kael/motion.ts`).
-`hangSwing.ts` swings the body in under a crystal he warps to, dying away into the hang's sway.
 His walk and run clips were rebuilt from a gait model, and the kit's `stride` hook samples them by ground covered.
 `travel.ts` gives every walk, run and dash from a stand a load (the hips drop and the chest leans in over the first frames, `TRAVEL_LOAD`), and settles a walk, run or dash that stops on the spot, and Tallis's rise out of his pool, onto the knees through the landing clip (`STOP_DEPTH`).
 The landing crosses from the fall over `LANDING.cross` frames, so the arms come down through the touchdown.

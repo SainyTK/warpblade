@@ -44,7 +44,3 @@ export const CALTROP_PIXELS = [
   [".t...", ".sbs.", "sbbbs"],
 ] as const;
 export const CALTROP_COLORS: PixelColors = { t: G[5], s: G[4], b: G[2] };
-
-/** a footprint Quiet Step leaves, in image pixels */
-export const PRINT_PIXELS = [".hmm.", "mmmmh"] as const;
-export const PRINT_COLORS: PixelColors = { m: G[2], h: G[3] };

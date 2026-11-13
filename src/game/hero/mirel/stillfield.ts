@@ -18,7 +18,7 @@ import { surfaceBelow } from "../../world";
 import { setState } from "../actions";
 import { createFieldLook } from "./fieldLook";
 import { mirel, mirelHost } from "./memory";
-import { hasSand, refuseSand, spendSand } from "./sand";
+import { hasSand, spendSand } from "./sand";
 
 const PACE = "m_pace";
 
@@ -86,29 +86,35 @@ export function openFreeField(x: number, y: number, seconds: number, radius = fi
   sfx.chime(2);
 }
 
-/** K: open the Stillfield, paid in Sand; one at a time, with a wait after the last one closed */
-export function pressField(): boolean {
-  if (hero.state === "dead" || hero.state === "hurt") return false;
-  if (mirel.field || mirel.fieldCd > 0) return true;
-  const cost = STILLFIELD.open * costScale();
-  if (!hasSand(cost)) {
-    refuseSand();
-    return true;
-  }
-  spendSand(cost);
+/** Sand a field costs to open now */
+export const fieldCost = (): number => STILLFIELD.open * costScale();
+
+/** I: one field at a time, with a wait after the last one closed; seconds before the next can open */
+export const fieldWait = (): number => (mirel.field ? STILLFIELD.cooldown : mirel.fieldCd);
+
+/**
+ * I with the Stillfield, paid in Sand: tapped, it stands a while and snaps shut; held, it stays while I is held. It opens
+ * from almost anything she is doing, and only from standing does she stop to hold the staff out.
+ */
+export function castField(wide: boolean): boolean {
+  const s = hero.state;
+  if (s === "dead" || s === "hurt" || s === "charge" || s === "rewind") return false;
+  spendSand(fieldCost());
   const radius = fieldRadius();
   const at = placeField(radius);
   const view: StillfieldView = { id: nextId++, ...at, radius, t: 0 };
   mirel.field = view;
-  mirel.fieldLetGo = false;
+  mirel.fieldLetGo = !wide;
+  mirel.fieldLeast = wide ? STILLFIELD.least : STILLFIELD.tapped;
   mirel.fieldKills = 0;
   mirelHost.inside = [];
   open(view, true, STILLFIELD.most);
-  if (hero.ground && (hero.state === "idle" || hero.state === "walk")) {
+  if (hero.ground && (s === "idle" || s === "walk")) {
     hero.vx = 0;
     setState("stillCast");
   }
   sfx.chime(1);
+  emitSkillEvent({ type: "cast", ability: "stillfield" });
   return true;
 }
 
@@ -144,8 +150,9 @@ function follow(f: StillfieldView, dt: number): StillfieldView {
 }
 
 /**
- * The held field each step: it drains Sand while K is held, stays its least time after a tap, and closes on letting go,
- * at its most time, or when Sand runs out. A fall closes it at once with no snap.
+ * The field each step: a held one drains Sand while I is held and closes on letting go once it has stood its least
+ * time; a tapped one stands its own time. Either closes at its most time or when Sand runs out, and a fall closes it at
+ * once with no snap.
  */
 export function tickField(dt: number): void {
   mirel.fieldCd = Math.max(0, mirel.fieldCd - dt);
@@ -155,11 +162,11 @@ export function tickField(dt: number): void {
   const t = f.t + dt;
   mirel.field = { ...follow(f, dt), t };
   countFallen(mirel.field);
-  if (!isHeld("warp")) mirel.fieldLetGo = true;
+  if (!isHeld("cast")) mirel.fieldLetGo = true;
   const drain = STILLFIELD.perSecond * costScale() * dt;
   const dry = !hasSand(drain);
   if (!mirel.fieldLetGo && !dry) spendSand(drain);
-  if (t < STILLFIELD.least) return;
+  if (t < mirel.fieldLeast) return;
   if (mirel.fieldLetGo || dry || t >= STILLFIELD.most) closeField(true);
 }
 

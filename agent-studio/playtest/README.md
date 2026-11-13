@@ -72,18 +72,18 @@ Both policies close a chest screen with J once its input lock has passed.
 
 `skilled` adds a few general rules that work for any hero:
 
-- it presses L toward a foe that is striking or about to strike close by, which is a dash for Kael and whatever the hero has on L for others;
+- it presses L toward a foe that is striking or about to strike close by, the front dodge every hero has;
 - it steps out from under a flying foe that is winding up or shooting overhead;
 - it goes for foes it can reach, and for high foes when they sink after an attack;
 - it holds U to charge the ultimate when the HUD's ultimate pips show it is paid for and two foes or a boss are near;
 - it casts with I when the selected HUD spell tab is ready, and cycles with O to a ready one;
-- it uses any other ready HUD tab with its key, such as WARP on K, on a foe at a distance;
+- it holds J for the warp when the WARP tab is ready and a foe it faces is at a distance;
 - it jumps over a foe on the ground that faces the hero, to strike its back;
 - it raises a held skill already at level 5 or more, so it heads for an evolution; otherwise it takes a new skill by kind in this order: ultimate, attack, summon, spell, dot, movement, passive; then the highest skill level, then a charm, then a boon.
 
 The bot reads only the hero's position, HP and MP, the foes' positions, states and facing, and the HUD.
 Tab readiness comes from the HUD, so a new hero whose tabs or keys differ still gets used sensibly.
-The tab-to-key table lives in `constants/keys.ts` (`HUD_TAB_KEYS`); any tab not listed there is treated as a spell.
+Tabs that are not abilities on I are listed in `constants/keys.ts` (`MOVE_TABS`); any other tab is treated as a spell.
 
 `--runs` is runs per hero (default 1).
 `--max-minutes` is game minutes per run before it is stopped as a `timeout` (default 30).

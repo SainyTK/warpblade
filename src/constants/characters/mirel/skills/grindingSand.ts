@@ -6,7 +6,7 @@ export const GRINDING_SAND: SkillDef = {
   name: "Grinding Sand",
   kind: "dot",
   risk: "timed",
-  button: "K",
+  button: "I",
   text: "Foes inside her Stillfield are ground by sand.",
   levels: [
     {

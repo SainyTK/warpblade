@@ -35,6 +35,8 @@ interface ForebearMemory {
   blows: number;
   swing: number;
   outlast: number;
+  /** a parry has just come: every forebear standing swings at once, once the Frenzy it starts has called them */
+  answer: boolean;
 }
 
 const memoryOf = (m: SkillMemory): ForebearMemory => m as unknown as ForebearMemory;
@@ -104,6 +106,11 @@ function strike(b: Bear): void {
   }
 }
 
+/** every forebear standing swings, one after another */
+function swingAll(m: ForebearMemory): void {
+  for (const b of m.bears) if (standing(b)) b.pending = b.slot * STAGGER_SWINGS;
+}
+
 /** it keeps its place behind him, swings when called, and is gone once faded */
 function stand(b: Bear, dt: number): boolean {
   b.t += dt;
@@ -123,16 +130,20 @@ function stand(b: Bear, dt: number): boolean {
 }
 
 /**
- * Forebear: Frenzy calls a ghostly forebear who stands behind him through it and swings its great axe on every few of
- * his blows; with its levels harder, more often, both sides, staggering and marking minions, and staying a while after
- * Frenzy. Host of Forebears keeps three with him through Berserk.
+ * Forebear: Frenzy, from I or from a parry's Blood Answer, calls a ghostly forebear who stands behind him through it
+ * and swings its great axe on every few of his blows and at once on each parry; with its levels harder, more often,
+ * both sides, a longer Blood Answer, staggering and marking minions, and staying a while after Frenzy. Host of Forebears keeps three with him through Berserk.
  */
 export const forebearSkill: SkillBehavior = {
-  create: () => ({ bears: [], blows: 0, swing: -1, outlast: 0 }),
+  create: () => ({ bears: [], blows: 0, swing: -1, outlast: 0, answer: false }),
   update(memory, _s, dt) {
     const m = memoryOf(memory);
     m.outlast = Math.max(0, m.outlast - dt);
     muster(m);
+    if (m.answer) {
+      m.answer = false;
+      swingAll(m);
+    }
     m.bears = m.bears.filter((b) => stand(b, dt));
   },
   draw(memory) {
@@ -147,6 +158,9 @@ export const forebearSkill: SkillBehavior = {
       const m = memoryOf(memory);
       m.outlast = event.on ? 0 : withCharms("duration", skillValues(ID).outlast ?? 0);
     },
+    parry(memory) {
+      memoryOf(memory).answer = true;
+    },
     blow(memory, event) {
       if (event.source !== "attacks") return;
       const m = memoryOf(memory);
@@ -156,7 +170,7 @@ export const forebearSkill: SkillBehavior = {
       if (!bears.length) return;
       m.blows++;
       if (m.blows % Math.max(1, skillValues(ID).every ?? 3)) return;
-      for (const b of bears) b.pending = b.slot * STAGGER_SWINGS;
+      swingAll(m);
     },
   },
 };

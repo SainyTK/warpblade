@@ -5,21 +5,23 @@ import { rechargeStep } from "../../build/recharge";
 import { use } from "../../input";
 import { skillValues } from "../../skills/query";
 import { hero } from "../../state";
+import { isFree } from "../actions";
 import { resetMotion } from "../kael/motion";
-import { startCharge } from "../ultimate";
-import { nextAbility, pressAbility, resetAbilities, tickAbilities } from "./abilities";
+import { JORY_SLOTS, tickAbilities } from "./abilities";
 import { addGroove, judgeKept, keptJWaiting, tier } from "./beat";
-import { boomAbsorbs, pressBoom, runBoom, tickBoom } from "./boom";
+import { boomAbsorbs, runBoom, tickBoom } from "./boom";
 import { runCast } from "./cast";
 import { trailMallets } from "./crescendo";
 import { drawJory, drawJoryFloor } from "./draw";
 import { rolling, runDrumroll } from "./drumroll";
+import { JORY_GUARD } from "./guardStyle";
 import "./hooks";
 import { pressJump } from "./jump";
 import { jory, resetJory } from "./memory";
 import { joryPose } from "./pose";
-import { pressStep, runStep, sliding, stepAbsorbs, tickStep } from "./step";
-import { landed, pressDownstroke, pressString, runDownstroke, runString, tickLink } from "./string";
+import { watchSharedPresses } from "./sharedPresses";
+import { inRecovery, landed, pressDownstroke, pressString, runDownstroke, runString, tickLink } from "./string";
+import { JORY_WARP } from "./warpStyle";
 
 /** Encore: one blow taken at Crescendo every this many seconds costs no Groove */
 const SHRUG_EVERY = 10;
@@ -39,8 +41,8 @@ function watchHurt(dt: number): void {
 }
 
 function tick(dt: number): void {
+  watchSharedPresses();
   tickBoom(dt);
-  tickStep(dt);
   tickAbilities(rechargeStep(dt));
   tickLink(dt);
   if (hero.ground) landed();
@@ -81,9 +83,6 @@ function runState(dt: number): boolean {
     case "boom":
       runBoom();
       return true;
-    case "beatStep":
-      runStep();
-      return true;
     case "abilityCast":
     case "spellCast":
       runCast();
@@ -97,51 +96,59 @@ function runState(dt: number): boolean {
 }
 
 /** states in which the kit moves him itself */
-const DRIVEN = new Set(["beatStep", "drumroll", "downstroke"]);
+const DRIVEN = new Set(["drumroll", "downstroke"]);
 
-/** a blow meets him: nothing touches him through the Drumroll, an on-beat Boom's moment or an on-beat step */
+/** a blow meets him: nothing touches him through the Drumroll or an on-beat Boom's moment */
 function absorbHurt(): boolean {
   if (rolling()) return true;
   if (hero.inv > 0) return false;
-  return boomAbsorbs() || stepAbsorbs();
+  return boomAbsorbs();
+}
+
+/** the shared moves (warp, guard, dodge, ability, special) may cut in when he is free or a blow has struck */
+const mayAct = (): boolean => isFree() || inRecovery();
+
+/** a shared move cuts his string: the queued blow is dropped, and the next J starts a new string */
+function cutForAction(): void {
+  jory.queued = false;
+  jory.link = 0;
 }
 
 /** his walk: War March adds a little for each Groove tier */
 const walkSpeed = (shared: number): number => shared * (1 + (skillValues("j_march").walk ?? 0) * tier());
 
 /**
- * Jory: one beat for the whole run, seen at his feet, felt in his body and heard as a tick, that judges every press of
- * J, K, L and I. On the beat his mallet blows are Accents, his Boom (K) drowns shots and his Beat Step (L) cannot be
- * touched, and Groove builds, raising his tempo; off the beat he is a big man with two sticks. Steady Hand and Thunder
- * Skin on I (O turns through them and his spell skills), and Drumroll on U.
+ * Jory: one beat for the whole run, seen at his feet, felt in his body and heard as a tick, that judges his presses. On
+ * the beat his mallet blows are Accents, his warp arrives as one, his dodge and his Counterbeat build Groove, and Groove
+ * raises his tempo; off the beat he is a big man with two sticks. Boom, Steady Hand, Thunder Skin and his spell skills
+ * on I, Drumroll on U.
  */
 export const JORY_KIT: HeroKit = {
+  warp: JORY_WARP,
+  guard: JORY_GUARD,
+  abilities: JORY_SLOTS,
   tick,
-  readActions: (dir) => {
-    use("dash", () => pressStep(dir));
+  readActions: () => {
     use("up", pressJump);
     use("attack", pressMallets);
     if (hero.state !== "hurt") startKeptJ();
-    use("warp", pressBoom);
-    use("cast", pressAbility);
-    use("cycle", nextAbility);
-    use("ultimate", startCharge);
   },
   chooseMove: () => null,
   runState,
   pose: joryPose,
   afterStrike: () => {},
+  mayAct,
+  cutForAction,
   absorbHurt,
   walkSpeed,
   stride: () => JORY_STRIDE,
   hurtScale: () => 1,
   drivesMotion: () => DRIVEN.has(hero.state),
-  gravityScale: () => (sliding() && !hero.ground ? 0 : 1),
+  gravityScale: () => 1,
   drawFloor: drawJoryFloor,
   draw: drawJory,
   reset: () => {
     resetJory();
-    resetAbilities();
     resetMotion();
   },
 };

@@ -28,10 +28,6 @@ export function animateHero(dt: number): void {
         size: 1.6,
       });
   }
-  if (h.state === "hang" && h.anchor) {
-    h.x = h.anchor.x - h.face * 2;
-    h.y = h.anchor.y + 38;
-  }
   h.pose = heroPose(h, game.t);
   // the scarf hangs off the neck (a sash off the belt) and the ponytail off the back of the head, blown back by a breeze
   // and by speed

@@ -5,7 +5,7 @@ import type { KaelAbility } from "../../../types/spell";
 import type { TouchButtonAction } from "../../../types/touch";
 import { hex } from "../../../utils/color";
 import { ICON_WHITE, type IconArt } from "./iconArt";
-import { JUMP, NOVA } from "./sharedArt";
+import { DODGE, JUMP, NOVA } from "./sharedArt";
 
 const SWORD: IconArt = {
   rows: [
@@ -26,34 +26,27 @@ const SWORD: IconArt = {
   colors: { W: ICON_WHITE, C: hex("#7fe3ff"), B: hex("#e0ac48"), G: hex("#7a5236"), P: hex("#ffd27a") },
 };
 
-const DASH: IconArt = {
+/** Kael's guard: the crystal blade held level across, a blow's spark bursting off its edge */
+const GUARD: IconArt = {
   rows: [
-    "....W....",
-    "....WW...",
-    "VV..WWW..",
-    "...VWWWW.",
-    "VVVVWWWWW",
-    "...VWWWW.",
-    "VV..WWW..",
-    "....WW...",
-    "....W....",
+    ".........",
+    ".........",
+    "..S.S....",
+    "...W.....",
+    "..S.S.B..",
+    "WWWWWWBGP",
+    "CCCCC.B..",
+    ".........",
+    ".........",
   ],
-  colors: { W: ICON_WHITE, V: hex("#b4a8ff") },
-};
-
-const WARP: IconArt = {
-  rows: [
-    "....W....",
-    "...WAC...",
-    "..WAACC..",
-    ".WAACCCB.",
-    "WAACCCCBB",
-    ".ACCCCBB.",
-    "..CCCBB..",
-    "...CBB...",
-    "....B....",
-  ],
-  colors: { W: ICON_WHITE, A: hex("#a8ecff"), C: hex("#5ec8ef"), B: hex("#2f86c4") },
+  colors: {
+    W: ICON_WHITE,
+    C: hex("#7fe3ff"),
+    B: hex("#e0ac48"),
+    G: hex("#7a5236"),
+    P: hex("#ffd27a"),
+    S: hex("#ffd76b"),
+  },
 };
 
 const SPELLS: Record<KaelAbility, IconArt> = {
@@ -162,9 +155,9 @@ export function kaelArt(action: TouchButtonAction, ability: KaelAbility, known: 
     case "up":
       return JUMP;
     case "dash":
-      return DASH;
-    case "warp":
-      return WARP;
+      return DODGE;
+    case "guard":
+      return GUARD;
     case "cast":
       return SPELLS[ability];
     case "cycle":

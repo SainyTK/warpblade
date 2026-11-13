@@ -12,7 +12,7 @@ import { seg } from "../ysra/parts";
  */
 type S = SpriteCanvas;
 type Point = readonly [number, number];
-/** her lamp violet, deep to glint: Wick flames, the Flare, Swap, Kindle and the Quarry ring */
+/** her lamp violet, deep to glint: Wick flames, the Flare, the warp, Kindle and the Quarry ring */
 export const VIOLET = PAL.wick;
 /** candle wax, deep to glint: Wick bodies, drips and pools */
 export { WAX };

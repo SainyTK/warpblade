@@ -3,7 +3,7 @@ import type { TouchButtonAction } from "../../../types/touch";
 import type { WennaAbility } from "../../../types/wenna";
 import { hex } from "../../../utils/color";
 import { ICON_WHITE, type IconArt } from "./iconArt";
-import { JUMP } from "./sharedArt";
+import { DODGE, JUMP } from "./sharedArt";
 
 const VIOLET = PAL.wick;
 const WOOD = hex("#8a6440");
@@ -40,7 +40,7 @@ const LAMP: IconArt = {
   colors: { W: WOOD, I: ICON_WHITE, i: IRON, V: VIOLET[3], F: VIOLET[4], c: ICON_WHITE },
 };
 
-/** Light: a drop of violet flame falling onto an unlit candle */
+/** Light, on I: a drop of violet flame falling onto an unlit candle */
 const LIGHT: IconArt = {
   rows: [
     "....F....",
@@ -58,23 +58,21 @@ const LIGHT: IconArt = {
   colors: { F: VIOLET[4], c: ICON_WHITE, V: VIOLET[3], k: VIOLET[0], L: WAX[3], X: WAX[2], x: WAX[1], d: WAX[0] },
 };
 
-/** Swap: the lamplighter and a Wick under a curved arrow that runs both ways */
-const SWAP: IconArt = {
+/** the guard: the lantern raised before her on the pole, its shutter thrown open in a flash of Flare Back */
+const GUARD: IconArt = {
   rows: [
-    "...AAAAAAA...",
-    "..A.......A..",
-    "AAAAA...AAAAA",
-    ".AAA.....AAA.",
-    "..A.......A..",
-    ".............",
-    "..hH......f..",
-    ".hHS.....fcF.",
-    "..CC.....XXX.",
-    ".VCC.....eXe.",
-    ".CCC....xXXXx",
-    ".LLL.....ddd.",
+    "...F.....F.",
+    "....F...F..",
+    ".....iii...",
+    "..W..iVi..F",
+    ".W..iVcVi..",
+    "W...iFFFi.F",
+    "....iVFVi..",
+    ".....iii.F.",
+    "....F...F..",
+    "...F.....F.",
   ],
-  colors: { A: VIOLET[4], h: HOOD, H: CLOAK, S: SKIN, C: CLOAK, V: VIOLET[2], L: WAX[2], ...WICK_COLORS },
+  colors: { W: WOOD, i: IRON, V: VIOLET[3], F: VIOLET[4], c: ICON_WHITE },
 };
 
 /** Kindle: a Wick bursting in a violet and gold star, its wax flying */
@@ -164,6 +162,7 @@ const GREAT_WICK: IconArt = {
 };
 
 const ABILITY_ART: Readonly<Record<WennaAbility, IconArt>> = {
+  light: LIGHT,
   kindle: KINDLE,
   beckon: BECKON,
   w_lampVolley: VOLLEY,
@@ -171,13 +170,14 @@ const ABILITY_ART: Readonly<Record<WennaAbility, IconArt>> = {
   w_effigy: EFFIGY,
 };
 
-/** where each of up to five abilities sits on the switch dial, clockwise from the top */
+/** where each of up to six abilities sits on the switch dial, clockwise from the top */
 const DIAL: readonly [number, number][] = [
   [4, 0],
-  [8, 3],
-  [7, 8],
-  [1, 8],
-  [0, 3],
+  [8, 2],
+  [8, 6],
+  [4, 8],
+  [0, 6],
+  [0, 2],
 ];
 
 /** the switch: one mark for each ability she knows round a dial, the selected one white, as Mirel's */
@@ -197,17 +197,18 @@ function switchArt(selected: WennaAbility, known: readonly WennaAbility[]): Icon
   return { rows: grid.map((r) => r.join("")), colors: { B: VIOLET[2], W: ICON_WHITE } };
 }
 
-/** Wenna's buttons: the lamp, Light, Swap, the selected ability on I, the switch dial on O and the Great Wick */
+/** Wenna's buttons: the lamp, the raised lantern of her guard, the selected ability on I, the switch dial on O and the
+ *  Great Wick; the dodge is the shared one */
 export function wennaArt(action: TouchButtonAction, ability: WennaAbility, known: readonly WennaAbility[]): IconArt {
   switch (action) {
     case "attack":
       return LAMP;
     case "up":
       return JUMP;
-    case "warp":
-      return LIGHT;
+    case "guard":
+      return GUARD;
     case "dash":
-      return SWAP;
+      return DODGE;
     case "cast":
       return ABILITY_ART[ability];
     case "cycle":

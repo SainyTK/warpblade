@@ -2,12 +2,12 @@ import type { SkillDef } from "../../../../types/skill";
 import { BACKSWING } from "./backswing";
 import { CLOCKWORK_WREN } from "./clockworkWren";
 import { ENTROPY } from "./entropy";
-import { ETERNAL_NOON } from "./eternalNoon";
 import { FALLING_HOUR } from "./fallingHour";
 import { FORETELL } from "./foretell";
 import { GREAT_TOLL } from "./greatToll";
 import { GRINDING_SAND } from "./grindingSand";
 import { HOUR_HAND } from "./hourHand";
+import { HOUR_OF_STILLNESS } from "./hourOfStillness";
 import { LONG_ECHO } from "./longEcho";
 import { LONG_REWIND } from "./longRewind";
 import { ORRERY } from "./orrery";
@@ -41,5 +41,5 @@ export const MIREL_SKILL_DEFS: readonly SkillDef[] = [
   CLOCKWORK_WREN,
   ORRERY,
   PATIENCE,
-  ETERNAL_NOON,
+  HOUR_OF_STILLNESS,
 ];

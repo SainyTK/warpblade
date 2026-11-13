@@ -1,6 +1,6 @@
-import { WHIRLWALL } from "../../../constants/orrin/abilities";
-import { BACKLINE } from "../../../constants/orrin/backline";
-import { BEND_STEPS, SWING_SMEAR as S, TEAR_LOOK, WHIRL_LOOK } from "../../../constants/orrin/chainLook";
+import { GUARD_TIMES } from "../../../constants/combat";
+import { BEND_STEPS, GUARD_LOOK, SWING_SMEAR as S, TEAR_LOOK, WHIRL_LOOK } from "../../../constants/orrin/chainLook";
+import { CHAIN_GUARD } from "../../../constants/orrin/guard";
 import { HOOK } from "../../../constants/orrin/hook";
 import { CHAIN_BLOWS, type ChainBlowSpec, HANGING_ARC, SHOULDER_Y } from "../../../constants/orrin/string";
 import { FIRE_RAMP, HERO_COLORS as HC, PAL } from "../../../constants/palette";
@@ -10,7 +10,7 @@ import type { Color } from "../../../types/color";
 import type { ChainBlow } from "../../../types/orrin";
 import type { Point } from "../../../types/world";
 import { WHITE } from "../../../utils/color";
-import { clamp, lerp, TAU } from "../../../utils/math";
+import { clamp, TAU } from "../../../utils/math";
 import { floorArc } from "../../effects/fine";
 import { drawChain, drawLinks } from "../../effects/orrin/chainLinks";
 import { drawHookHead, drawWeightHead } from "../../effects/orrin/hookHead";
@@ -22,14 +22,14 @@ import { objectMemory, rememberPerSeat } from "../../seatMemory";
 import { skillEvolved, skillValues } from "../../skills/query";
 import { game, hero } from "../../state";
 import { Chain } from "../chain";
-import { backlinePoint } from "./backline";
+import { drawBind } from "./bind";
 import { blowShape, restChain } from "./blowChain";
 import { hookHead } from "./hook";
-import { radii } from "./maelstrom";
 import { orrin, orrinHost } from "./memory";
 import { fullMomentum } from "./momentum";
 import { blowReach } from "./reach";
 import { blowLength, circleTurns } from "./string";
+import { whirlRadius } from "./whirlwall";
 
 /** the short loop of chain that hangs from his hand at rest, swaying */
 const loop = new Chain(6, 2.2, 420);
@@ -41,13 +41,13 @@ function handAt(): Point {
 }
 
 /** the head at the chain's end, facing along it: the brass hook, or the spiked ball once Iron Weight has evolved */
-function drawHook(at: Point, ux: number, uy: number): void {
+export function drawHook(at: Point, ux: number, uy: number): void {
   if (skillEvolved("o_ironweight")) return drawWeightHead(at.x, at.y);
   drawHookHead(at.x, at.y, ux, uy, hero.face);
 }
 
 /** the chain's lit edge: steel, and glowing brass at full Momentum */
-const linkGlint = (): Color => (fullMomentum() ? PAL.brass[4] : HC.steelLight);
+export const linkGlint = (): Color => (fullMomentum() ? PAL.brass[4] : HC.steelLight);
 
 /** Friction Burn at level 7: at full Momentum the chain burns along its length */
 const ablaze = (): boolean => fullMomentum() && (skillValues("o_friction").trail ?? 0) > 0;
@@ -153,7 +153,7 @@ function ultTear(at: Point): void {
 function whirlRing(): void {
   const cx = hero.x;
   const cy = hero.y - 26;
-  const r = WHIRLWALL.radius;
+  const r = whirlRadius();
   const ry = r * 0.3;
   for (const half of [-1, 1]) {
     floorArc(cx, cy, r, ry, HC.steel, half < 0 ? 0.55 : 0.9, half, 0, 0);
@@ -208,45 +208,74 @@ export function drawOrrinBack(): void {
   if (hero.state === "swing" && orrin.latchAt)
     swingSmear(orrin.latchAt, 1, 1, clamp((speed - S.from) / (S.full - S.from)));
   if (!orrin.ultAt) return;
-  if (hero.state === "pendulum") {
-    ultTear(orrin.ultAt);
-    if (speed > S.from) swingSmear(orrin.ultAt, 1, 1, 1);
-  }
-  if (hero.state === "maelstrom") {
-    ultTear(orrin.ultAt);
-    const { rx, ry } = radii();
-    if (speed > S.from) swingSmear(orrin.ultAt, rx, ry, 1);
-  }
+  if (hero.state !== "pendulum") return;
+  ultTear(orrin.ultAt);
+  if (speed > S.from) swingSmear(orrin.ultAt, 1, 1, 1);
 }
 
 /**
- * Anchor Pin, in front of the foes so their bodies never hide it: a steel stake with a brass cap driven into the floor
- * just in front of the foe, and a run of glinting links from it to the foe's side.
+ * Anchor Pin, in front of the foes so their bodies never hide it: for each pinned foe a steel stake with a brass cap
+ * driven into the floor just in front of it, and a run of glinting links from the stake to the foe's side.
  */
-function drawPin(): void {
-  const pinned = orrinHost.pinned;
-  const at = orrin.pinAt;
-  if (!at || !pinned || pinned.hp <= 0) return;
-  const [cx, cy] = enemyCenter(pinned);
-  const side = Math.sign(cx - at.x) || 1;
-  drawLinks(at.x, at.y - 3, cx - side * 3, cy + 2, PAL.brass[4]);
-  drawStake(at.x, at.y);
+function drawPins(): void {
+  orrinHost.pinned.forEach((foe, i) => {
+    const at = orrin.pinAt[i];
+    if (!at || foe.hp <= 0) return;
+    const [cx, cy] = enemyCenter(foe);
+    const side = Math.sign(cx - at.x) || 1;
+    drawLinks(at.x, at.y - 3, cx - side * 3, cy + 2, PAL.brass[4]);
+    drawStake(at.x, at.y);
+  });
 }
 
-/** Backline's chain: the hook flies back to the floor point through the load, holds taut through the yank, then slackens */
-function backlineChain(hand: Point): void {
-  const bite = { x: backlinePoint(), y: hero.y - 1 };
-  const out = clamp(hero.st / BACKLINE.load);
-  if (hero.st >= BACKLINE.load + BACKLINE.time) return restLoop();
-  taut(hand, { x: lerp(hand.x, bite.x, out), y: lerp(hand.y, bite.y, out) });
+/** the guard disc's rim, kept between frames so drawing it allocates nothing */
+const disc: Point[] = Array.from({ length: GUARD_LOOK.points + 1 }, () => ({ x: 0, y: 0 }));
+
+/**
+ * The guard: the chain spun into a disc in front of his hand, seen nearly edge on. A ring of links that turns as it
+ * spins, brass streaks racing round its rim, a soft brass glow behind it that flares on a block or a parry.
+ */
+function guardDisc(hand: Point): void {
+  const cx = hand.x + hero.face * GUARD_LOOK.ahead;
+  const cy = hand.y;
+  const ry = CHAIN_GUARD.radius;
+  const rx = ry * GUARD_LOOK.depth * hero.face;
+  const spin = game.t * CHAIN_GUARD.spin * TAU;
+  const n = GUARD_LOOK.points;
+  // the ring starts at a point that turns with the spin, so the links ride round it
+  for (let i = 0; i <= n; i++) {
+    const g = spin + (i / n) * TAU;
+    disc[i].x = cx + Math.cos(g) * rx;
+    disc[i].y = cy + Math.sin(g) * ry;
+  }
+  const struck = hero.st >= GUARD_TIMES.block;
+  glow(cx, cy, ry + 4, PAL.brass[3], struck ? 0.45 : 0.2);
+  drawChain(disc, disc.length, linkGlint());
+  for (let k = 0; k < GUARD_LOOK.streaks; k++) {
+    const a = spin * 1.5 + (k * TAU) / GUARD_LOOK.streaks;
+    for (let j = 0; j < GUARD_LOOK.trail; j++) {
+      const g = a - j * 0.14;
+      const c = j < 2 ? WHITE : j < 5 ? PAL.brass[4] : PAL.brass[2];
+      fleck(cx + Math.cos(g) * rx, cy + Math.sin(g) * ry, c, 1 - j / GUARD_LOOK.trail);
+    }
+  }
+  taut(hand, { x: cx, y: cy }, false);
+}
+
+/** the chain paid out from his hand to the hook in flight while the warp's throw flies */
+function thrownChain(hand: Point): void {
+  const head = hero.sword;
+  if (!head) return restLoop();
+  drawLinks(hand.x, hand.y, head.x, head.y, linkGlint());
 }
 
 /** in front of him: the chain from his hand, in whatever shape the state gives it */
 export function drawOrrin(): void {
   place();
-  drawPin();
+  drawPins();
   const h = hero;
   const hand = handAt();
+  drawBind(hand);
   if (orrin.arc >= 0)
     return blowChain("hanging", HANGING_ARC, orrin.arc, HANGING_ARC.dur, blowReach(HANGING_ARC, "hanging"), 1);
   switch (h.state) {
@@ -261,23 +290,19 @@ export function drawOrrin(): void {
       return restLoop();
     }
     case "swing":
-    case "pendulum":
-    case "maelstrom": {
+    case "pendulum": {
       const at = h.state === "swing" ? orrin.latchAt : orrin.ultAt;
       if (!at || (h.state !== "swing" && h.st < 0.2)) return restLoop();
       // an ultimate's chain carries the tear's light down to his hand
       if (h.state !== "swing") glowLine(hand.x, hand.y, at.x, at.y, 5, PAL.volt[2], 0.3);
       return taut(hand, at, h.state === "swing" && orrin.latch !== "air");
     }
-    case "zip": {
-      if (orrin.climbTo && orrin.latchAt) return taut(hand, orrin.latchAt);
-      const foe = orrinHost.zipFoe;
-      if (!foe) return restLoop();
-      const [cx, cy] = enemyCenter(foe);
-      return taut(hand, { x: cx, y: cy });
-    }
-    case "backline":
-      return backlineChain(hand);
+    case "climb":
+      return orrin.latchAt ? taut(hand, orrin.latchAt) : restLoop();
+    case "throwWait":
+      return thrownChain(hand);
+    case "guard":
+      return guardDisc(hand);
     case "whirl":
       return whirlRing();
     default:

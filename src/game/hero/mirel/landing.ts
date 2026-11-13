@@ -8,10 +8,10 @@ import { sampleKeys } from "../../../utils/sampleKeys";
 import { landingPose } from "../kael/landing";
 import { motion } from "../kael/motion";
 
-/** how deep the knees take the stop at the end of a Rewind on the floor, as a share of a full landing */
+/** how deep the knees take the stop at the end of Second Chance's rewind on the floor, as a share of a full landing */
 const REWIND_STOP = 0.6;
 
-/** a Rewind that ends on the floor stops on bent knees, like a landing */
+/** a rewind that ends on the floor stops on bent knees, like a landing */
 export function settleRewind(t: number): void {
   motion.landAt = t;
   motion.landDepth = REWIND_STOP;

@@ -7,30 +7,38 @@ import { feat } from "../../feat";
 import { use } from "../../input";
 import { skillValues } from "../../skills/query";
 import { hero, progress } from "../../state";
+import { isFree } from "../actions";
 import { resetMotion } from "../kael/motion";
-import { startCharge } from "../ultimate";
-import { nextAbility, pressAbility, resetAbilities, tickAbilities } from "./abilities";
+import { BRANNOC_SLOTS, tickAbilities } from "./abilities";
 import { deathless, extendOnKill, runLastCleave, runRoar, tickBerserk, untouchable } from "./berserk";
 import { runCast } from "./cast";
 import { repayOnHit, tickDebt } from "./debt";
-import { pressFrenzy, runFrenzy, steadfast, tickFrenzy } from "./frenzy";
+import { runFrenzy, steadfast, tickFrenzy } from "./frenzy";
 import { attackRate, furyDamage, isBloodied, walkSpeed, watchBloodied } from "./fury";
-import { pressHunt, runChop, runHeadlong, runHunt, tickHunt } from "./hunt";
+import { BRANNOC_GUARD_STYLE } from "./guardStyle";
 import { pressJump } from "./jump";
 import { drawBerserkTint, dressBrannoc, tickSteam } from "./look";
-import { brannoc, resetBrannoc } from "./memory";
+import { brannoc, brannocHost, resetBrannoc } from "./memory";
 import { brannocPose } from "./pose";
-import { landed, pressHatchet, pressString, runHatchet, runString, tickLink } from "./string";
+import { endString, inRecovery, landed, pressHatchet, pressString, runHatchet, runString, tickLink } from "./string";
+import { BRANNOC_WARP } from "./warpStyle";
+
+/** while the axe is wound back for his warp, where he stands is where the Hunt leaves from */
+function watchThrow(): void {
+  if (hero.state !== "throw") return;
+  brannocHost.from = hero.x;
+  brannocHost.air = !hero.ground;
+}
 
 function tick(dt: number): void {
   tickDebt(dt);
   watchBloodied(dt);
   tickFrenzy(dt);
   tickBerserk(dt);
-  tickHunt(dt);
   tickAbilities(rechargeStep(dt));
   tickLink(dt);
   tickSteam(dt);
+  watchThrow();
   brannoc.pactT = Math.max(0, brannoc.pactT - dt);
   if (hero.ground) landed();
 }
@@ -49,15 +57,6 @@ function runState(dt: number): boolean {
     case "frenzy":
       runFrenzy();
       return true;
-    case "hunt":
-      runHunt();
-      return true;
-    case "headlong":
-      runHeadlong();
-      return true;
-    case "huntChop":
-      runChop();
-      return true;
     case "abilityCast":
     case "spellCast":
       runCast();
@@ -73,10 +72,7 @@ function runState(dt: number): boolean {
   }
 }
 
-/** states in which the kit moves him itself */
-const DRIVEN = new Set(["hunt", "headlong", "hatchet"]);
-
-/** a foe fell to one of his hits: Bloodthirst heals while Bloodied, On the Edge counts it, and Unending Rage lasts */
+/** a foe fell to one of his hits: Bloodthirst heals while Bloodied, On the Edge counts it, and Berserk lasts */
 function onKill(_e: Enemy): void {
   extendOnKill();
   if (!isBloodied()) return;
@@ -88,25 +84,29 @@ function onKill(_e: Enemy): void {
 }
 
 /**
- * Brannoc: his HP is his resource. Frenzy (K) and his abilities on I cost HP, which becomes a debt he wins back by
- * landing blows before a foe lands one on him; every point of missing HP is Fury, and below 35% he is Bloodied and his
- * Cleave spins twice. Hunt (L) lunges at the nearest foe ahead, and Berserk (U) keeps him standing for a few seconds.
+ * Brannoc: his HP is his resource. Frenzy and his abilities on I cost HP, which becomes a debt he wins back by landing
+ * blows before a foe lands one on him; every point of missing HP is Fury, and below 35% he is Bloodied and his Cleave
+ * spins twice. His warp is the Hunt: the great axe hurled into a foe and ripped out with a chop. His guard bleeds into
+ * the debt, and its parry, Blood Answer, pays the whole debt back and starts Frenzy for free. Berserk (U) keeps him
+ * standing for a few seconds.
  */
 export const BRANNOC_KIT: HeroKit = {
+  warp: BRANNOC_WARP,
+  guard: BRANNOC_GUARD_STYLE,
+  abilities: BRANNOC_SLOTS,
   tick,
-  readActions: (dir) => {
-    use("dash", () => pressHunt(dir));
+  readActions: () => {
     use("up", pressJump);
     use("attack", pressAxe);
-    use("warp", pressFrenzy);
-    use("cast", pressAbility);
-    use("cycle", nextAbility);
-    use("ultimate", startCharge);
   },
   chooseMove: () => null,
   runState,
   pose: brannocPose,
   afterStrike: () => {},
+  mayAct: () => isFree() || inRecovery(),
+  cutForAction: () => {
+    if (hero.state === "axe") endString();
+  },
   absorbHurt: untouchable,
   attackRate,
   walkSpeed,
@@ -114,8 +114,8 @@ export const BRANNOC_KIT: HeroKit = {
   hurtScale: () => 1,
   damageScale: furyDamage,
   steadfast,
-  drivesMotion: () => DRIVEN.has(hero.state),
-  gravityScale: () => (hero.state === "headlong" || hero.state === "hunt" ? 0 : 1),
+  drivesMotion: () => hero.state === "hatchet",
+  gravityScale: () => 1,
   drawBack: dressBrannoc,
   drawOver: drawBerserkTint,
   onKill,
@@ -123,7 +123,6 @@ export const BRANNOC_KIT: HeroKit = {
   hpFloor: () => (deathless() ? 1 : 0),
   reset: () => {
     resetBrannoc();
-    resetAbilities();
     resetMotion();
   },
 };

@@ -7,28 +7,29 @@ Damage figures are at her base stats (attack 11, ability 8), with no charms, no 
 
 ## Base kit
 
-Every button does something from the first second.
+Every button does something from the first second, on the moveset every hero shares (`docs/moveset-design.md`).
 
 | Key | With no skill |
 | --- | --- |
-| J | The string: three bolts, the third a closing bolt. Tap or hold. |
-| K | Kick: front kick, 0.55A, strong push, 0.5 s stun. A landed air kick springs her up and back. |
-| L | Hop back with a free bolt of 0.76A (once on the floor, once in the air). From a walk or run toward the facing side, a slide instead. |
-| I | Snare at her feet: 20 MP, 3.5 s recharge, two on the floor, 6P and a 1.6 s hold. |
-| O | Reload; a second O in the bright window is a perfect reload (full quiver, next 4 bolts primed at +35%). Perfect Rhythm builds on it. |
-| U | Bolt Storm, the base special, with the shared charge levels. |
+| J tapped | The string: three bolts, one per tap, the third a closing bolt. An empty quiver reloads. While reloading, a tap in the bright window is a perfect reload (full quiver, next 4 bolts primed at +35%); Perfect Rhythm builds on it. Down and J on the floor reload by hand. |
+| J held | Grapple warp: a grapple bolt away from the nearest foe, a zip, and a heavy bolt back through the line at the warp's power (10 MP). The zip loads a bolt. |
+| K | Stock guard: 40% chip, 14 stamina a block. Parry, Point-Blank: a kick of 1.6A with a long throw and a 0.8 s stun, and the quiver full with 4 bolts primed. |
+| L | The shared front dodge. |
+| I | Abilities: the hop back with a free bolt of 0.76A (free, 2 s recharge; held, a slide forward under blows), then the snare at her feet (20 MP, 3.5 s recharge, two on the floor, 6P and a 1.6 s hold; held, tossed under the foe ahead for 30 MP) and her spell skills. |
+| O | Switch ability. |
+| U | Bolt Storm, her one ultimate, with the shared charge levels. |
 | Up | One light jump, also out of a shot. Down and Up drops through a ledge. |
 
 ### The string
 
 String length is 3.
-A held or tapped J looses bolt, bolt, closing bolt, each with a full draw; a press during a bolt plays the next one where it ends.
+Each J tap looses the next of bolt, bolt, closing bolt, each with a full draw; a tap during a bolt plays the next one where it ends, and a tap within 0.4 s of a bolt's end goes on with the string.
 A normal bolt deals 1.11A and staggers 0.36 s (first) or 0.4 s (second).
 The closing bolt deals 2.1A, passes through one foe, pushes twice as far as a bolt and staggers 0.62 s, so the foe is still held when the next string's first bolt lands.
 After the closing bolt the crossbow cocks for 6 frames (0.2 s) before the next string.
-A string pressed after she has settled starts again from the first bolt.
+A tap after that starts again from the first bolt.
 The quiver holds 9 bolts, three full strings.
-Firing without a break, her damage on one foe holds: 47.5 per string, 3 strings in 2.7 s plus a 1.05 s reload is 38.0 per second, the same as before the full draws (40.7 per string, 3 strings in 2.16 s plus the reload).
+Tapping without a break, her damage on one foe holds: 47.5 per string, 3 strings in 2.7 s plus a 1.05 s reload is 38.0 per second.
 
 Three fits a ranged hero: a string is a short burst she can fire between dodges, and the closing bolt gives attack skills a "last hit" to build on, the same hook Kael's and Ysra's last blows give theirs.
 
@@ -50,17 +51,32 @@ Up while shooting now jumps, which is ordinary movement.
 
 ### Perfect dodge
 
-A blow that meets her in the first 0.12 s of a hop or a slide is a perfect dodge through the shared `rewardPerfectDodge()` (Flow, slow motion, MP and stamina, the cue and the `perfectDodge` event).
-Before, her guard swallowed the blow with no reward.
+A blow that meets her in the first 0.12 s of a hop or a slide is a perfect dodge through the shared `rewardPerfectDodge()` (Flow, slow motion, MP and stamina, the cue and the `perfectDodge` event), and so is one in the first moments of the shared dodge on L.
 
-### Spell rotation
+### Abilities on I
 
-The snare is the first spell in her I rotation; Net Bolt, Straw Decoy and Powder Keg join it.
-O stays the reload, so for Sable the rotation advances on its own: after a cast, I points at the next spell that is ready and affordable.
-The K tab of the HUD (and the touch Spell button) shows the selected spell and its recharge.
-Every spell is cast with the snare's kneeling clip and goes off on its set frame.
+The hop is the first ability on I, free and on its own recharge; the snare is the second; Net Bolt, Straw Decoy and Powder Keg join them.
+Each has its own recharge and none waits on another.
+I on one that is recharging casts the next ready one; O switches by hand.
+The hop goes from the floor or the air; spells are cast kneeling, on the floor only.
+The HUD's ability tabs and the touch I button show the selected ability and its recharge.
+Wide forms (I held): the hop slides forward, the snare is tossed under the foe ahead, Net Bolt throws two more nets in a wider fan; the decoy and the keg have none.
 
-## What leaves today's kit
+## The shared moveset (13 November 2026)
+
+| Before | Now |
+| --- | --- |
+| J held kept shooting | J held is the grapple warp; each tap looses one bolt. |
+| K kick | Point-Blank, the parry's kick, refills the quiver. Heavy Boot rebound to it. |
+| L hop back, slide from a walk ahead | The hop is an ability on I with its own recharge; the slide is its wide form. Hop Volley and Slide Kick moved to I. L is the shared dodge. |
+| O reload, a second O for a perfect reload | Down and J reload by hand; J in the bright window is the perfect reload. Perfect Rhythm moved to J. O switches ability. |
+| Spells turned on their own after each cast | The shared ability bar picks the next ready one. |
+| Deadeye replaced Bolt Storm | Deadeye is gone; Bolt Storm, the skill, upgrades her one ultimate and takes Deadeye's mark, pin, perfect reload bonus and kill refund. |
+| Shade Archer's wider perfect dodge window | A parry also leaves a shade. |
+| Lodged Bolts and Snare Hound answered the kick | They answer Point-Blank's kick and the warp's heavy bolt. |
+| Powder Keg's kicked keg | The slide or Point-Blank's kick sends a keg flying. |
+
+## What left the first kit
 
 | Today | Where it goes |
 | --- | --- |
@@ -75,8 +91,8 @@ Every spell is cast with the snare's kneeling clip and goes off on its set frame
 | Deep Quiver | `s_rhythm` level 4. |
 | Ricochet | `s_ricochet` levels 1 and 2. |
 | Scattershot | `s_scatter`. |
-| Deadeye | `s_deadeye`, the ultimate skill. |
-| Fleet Foot | Dropped as stats; Featherdraw's higher jump and Slide Kick's cheaper slide take its place. |
+| Deadeye | `s_deadeye`, later cut; its ideas live on in Bolt Storm (`s_storm`). |
+| Fleet Foot | Dropped as stats; Featherdraw's higher jump and Slide Kick's longer slide take its place. |
 | Hop Volley | `s_hopVolley` level 1. |
 | Heavy Boot | `s_heavyBoot` levels 1 and 2. |
 | Slide Kick | `s_slideKick` level 1. |
@@ -91,7 +107,7 @@ Every spell is cast with the snare's kneeling clip and goes off on its set frame
 ## Rules every skill follows
 
 - Bonuses to one bolt add into one sum: the prime, Piercing Bolts per foe passed, Longshot far, Featherdraw in the air, Ricochet per bounce and Breaching Bolt on the closing bolt (`src/game/hero/sable/bolt/power.ts`).
-- Only bolts a perfect reload primed take Perfect Rhythm's bonus; bolts primed by a kick, a slide, a hop or a standing shade take the base +35%.
+- Only bolts a perfect reload primed take Perfect Rhythm's bonus; bolts primed by Point-Blank, a slide, a hop or a standing shade take the base +35%.
 - Copies and a skill's own bolts (shades, decoys, snare volleys, torn-out bolts) are plain: their own damage and the base back, air and crit rules, no skill bonuses.
 - Hits a skill deals on its own carry its id as source, so they show under the skill's name on the end of run screen and call no other skill; hits carried by her presses (bolts, bursts, kicks, the net and keg blasts) count as her attacks or abilities.
 - A poison spread or a cloud does not spread again from the same foe within 0.5 s.
@@ -100,7 +116,7 @@ Every spell is cast with the snare's kneeling clip and goes off on its set frame
 ## The 20 skills
 
 Kinds: attack 7, movement 3, spell 3, dot 3, summon 3, ultimate 1.
-Risk: easy 6, timed 11, precise 3.
+Risk: easy 6, timed 10, precise 4.
 
 ### s_pierce Piercing Bolts (attack, easy, J)
 
@@ -177,23 +193,23 @@ Built: `breach()` in `bolt/landed.ts`: `burst()` (`bolt/burst.ts`), a thrown foe
 
 ### s_longshot Longshot (attack, timed, J)
 
-Bolts hit harder the farther they fly, so keeping range pays.
+Bolts and the warp's heavy bolt hit harder the farther they fly or zip, so keeping range pays.
 
 | Lv | Change | Card |
 | --- | --- | --- |
-| 1 | far 120, bonus 0.3, range 250 | Bolts that fly past half range hit 30% harder. |
+| 1 | far 120, bonus 0.3, range 250, perPx 0.018, cap 2.8, charges 1, strike 1.8 | Bolts past half range, and long warp zips, hit harder. |
 | 2 | bonus 0.5 | Far hits are stronger. |
 | 3 | crit 0.2 | Far hits crit more often. |
-| 4 | range 320 | Bolts fly farther. |
+| 4 | range 320, cap 3.6 | Bolts fly farther, and long zips hit harder. |
 | 5 | mark 0.15, markTime 3 | Far hits mark the foe. |
 | 6 | bonus 1.2 | Far hits are much stronger. |
-| 7 | refund 1 | A far kill puts the bolt back in the quiver. |
-| 8 | bonus 8, mark 0.3, sweet 1 | Far hits are far stronger, and the end of the flight always crits. |
+| 7 | refund 1, charges 2 | A far kill puts the bolt back, and you hold two warps. |
+| 8 | bonus 8, mark 0.3, sweet 1, strike 2.4 | Far hits and the heavy bolt are far stronger; the end of the flight crits. |
 
-Evolution Horizon Shot (with `s_ricochet`): range doubles, every far hit crits and splits into two bolts that seek the nearest foes.
+Evolution Horizon Shot (with `s_ricochet`): bolts fly twice as far, every far hit crits and splits into two bolts that seek other foes, and long zips hit harder still. (crit 1, range 640, split 2, perPx 0.022, cap 4.4)
 Built: the bolt counts the pixels it has flown; `isFar`, `sureCrit` in `bolt/power.ts`; the mark is the shared `markFoe`; Horizon Shot's splits are offshoots that never split again.
-
-### s_rhythm Perfect Rhythm (attack, precise, O)
+The warp reads `perPx`, `cap`, `charges` and `strike` through `SABLE_WARP.tune` (`hero/sable/warpStyle.ts`).
+### s_rhythm Perfect Rhythm (attack, precise, J)
 
 The perfect reload pays far more.
 
@@ -211,60 +227,58 @@ The perfect reload pays far more.
 Evolution Clockwork Cadence (with `s_breach`): a perfect reload primes the whole quiver, every primed closing bolt bursts (4A in 60 px), and blows do not throw her while primed bolts remain.
 Built: `quiver.ts` (`primedBolts`, `reloadWindow`, `quiverSize`) and `perfect()` in `reload.ts` (stamina, MP, volley, haste); Clockwork Cadence's burst in `bolt/landed.ts` and its steadfast in the kit.
 
-### s_heavyBoot Heavy Boot (attack, timed, K)
+### s_heavyBoot Heavy Boot (attack, precise, K)
 
-The kick becomes a weapon and a reload.
+Point-Blank, the parry's kick, hits like a ram, and the guard bashes back.
 
 | Lv | Change | Card |
 | --- | --- | --- |
-| 1 | power 1.6, stun 1, wide 1 | The kick hits much harder and stuns longer. |
+| 1 | power 8, stun 1, chip 1, wide 1 | Point-Blank kicks far harder and stuns longer. |
 | 2 | wall 1 | Kicked foes bounce off the edge. |
-| 3 | load 2 | A kick that lands loads 2 bolts. |
-| 4 | bodies 1 | Kicked foes knock down the foes behind them. |
-| 5 | power 4, stun 1.4 | The kick hits much harder. |
-| 6 | charged 3 | After a kick your next 3 bolts are primed. |
-| 7 | wide 1.6, airRefill 1 | A wider kick, and an air kick refills your air shots. |
-| 8 | power 13, shock 4, radius 60 | The kick hits far harder and lands with a shockwave. |
+| 3 | bash 0.8 | A block bashes the foe back with the stock. |
+| 4 | power 14, bodies 1 | Kicked foes knock down others, and the kick hits harder. |
+| 5 | power 20, chip 0.5 | Blocks let half as much through; the kick hits harder. |
+| 6 | power 26, wide 1.6 | A wider kick that hits harder. |
+| 7 | power 32, shock 5, radius 60 | Point-Blank hits harder and lands with a shockwave. |
+| 8 | power 60, bash 2 | Point-Blank hits far harder, and so does the bash. |
 
-Evolution Thunder Heel (with `s_slideKick`): every kick rings a 100 px shockwave at 6A, kicked foes fly into others, and a kick that hits 3 or more foes refills the quiver.
-Built: `kick.ts` reads the values; the kick emits Sable's `kick` event with the foes it struck, which Lodged Bolts and Snare Hound answer.
-
-### s_hopVolley Hop Volley (movement, timed, L)
+Evolution Thunder Heel (with `s_slideKick`): point-Blank rings a wide shockwave and hits harder still, and every block bashes hard. (power 140, bash 4, shock 15, radius 100)
+Heavy Boot is precise: its power lands on the nearest foe the boot reaches, and every other foe takes Point-Blank's own 1.6A.
+Built: `hero/sable/guardStyle.ts` reads the values; the kick emits Sable's `kick` event with the foes it struck, which Lodged Bolts and Snare Hound answer; the chip share scales the guard's.
+### s_hopVolley Hop Volley (movement, timed, I)
 
 The hop back looses a primed fan.
 
 | Lv | Change | Card |
 | --- | --- | --- |
-| 1 | bolts 3, cost 22, airHops 1, carry 1 | The hop looses three primed bolts. |
-| 2 | cost 16 | The hop costs less stamina. |
+| 1 | bolts 3, recharge 2, charges 1, carry 1 | The hop looses three primed bolts. |
+| 2 | recharge 1.4 | The hop comes back sooner. |
 | 3 | seek 1 | Hop bolts seek foes. |
-| 4 | airHops 2 | Hop once more in the air. |
+| 4 | charges 2 | Hold two hops ready. |
 | 5 | bolts 5 | The hop looses five bolts. |
 | 6 | pierce 1 | Hop bolts pass through a foe. |
 | 7 | caltrops 1 | Landing from a hop scatters caltrops. |
 | 8 | slow 0.3, slowTime 1, carry 1.3 | Hop bolts slow foes, and the hop carries farther. |
 
-Evolution Wheeling Volley (with `s_scatter`): the hop turns her in the air and looses a full ring of 12 primed bolts.
-Built: `hopShot()` in `evade.ts`; caltrops in `hero/sable/effects/caltrops.ts` (their hits are the skill's own); the hop emits Sable's `hop` event for Twin Shadows.
-
-### s_slideKick Slide Kick (movement, timed, L)
+Evolution Wheeling Volley (with `s_scatter`): the hop turns her in the air and looses a full ring of twelve primed bolts. (bolts 12, seek 0, ring 1)
+Built: `castHop()`, `tickHop()` and `hopShot()` in `hero/sable/evade.ts`; caltrops in `hero/sable/effects/caltrops.ts` (their hits are the skill's own); the hop emits Sable's `hop` event for Twin Shadows.
+### s_slideKick Slide Kick (movement, timed, I)
 
 The slide trips foes into the air and she rises facing them.
 
 | Lv | Change | Card |
 | --- | --- | --- |
-| 1 | power 1, trip 0.9, time 0.3, cost 18 | The slide trips every foe it passes. |
+| 1 | power 1, trip 0.9, time 0.3 | The slide trips every foe it passes. |
 | 2 | launch 160 | Tripped foes fly into the air. |
-| 3 | time 0.4, cost 12 | A longer, cheaper slide. |
+| 3 | time 0.4 | A longer slide. |
 | 4 | turn 1 | You rise facing the foes you slid under. |
 | 5 | power 2.5 | The slide hits harder. |
 | 6 | charged 3 | Your next 3 bolts after a slide are primed. |
-| 7 | refund 3 | A slide through a crowd refunds itself and loads bolts. |
+| 7 | refund 3 | A slide through a crowd gives the hop back and loads bolts. |
 | 8 | power 3.5, launch 220 | Tripped foes take much more and fly higher. |
 
-Evolution Tangle Slide (with `s_net`): foes the slide throws hang tangled in a net at the top of their rise for 1.5 s, taking 25% more.
+Evolution Tangle Slide (with `s_net`): foes the slide throws hang tangled in a net in the air, taking 25% more. (tangle 1.5)
 Built: `trip()` and `rise()` in `evade.ts`; the turn to face the foes uses the kit's hand-over; Tangle Slide in `effects/tangle.ts` holds the thrown foe at the top of its rise and marks it.
-
 ### s_featherdraw Featherdraw (movement, easy, jump)
 
 She hangs in the air while she shoots. The one skill that raises the air limit.
@@ -280,8 +294,8 @@ She hangs in the air while she shoots. The one skill that raises the air limit.
 | 7 | jumps 2 | Jump once more in the air. |
 | 8 | bonus 1, split 1 | Air bolts hit twice as hard and split. |
 
-Evolution Skyhunter (with `s_hawk`): hold J in the air to hover up to 1.5 s firing full strings, each bolt a fan of 3, and every air string calls a hawk.
-Built: the air limit and closing air bolt in `shoot.ts`, the jump and second jump in `jump.ts`, the landing volley and Skyhunter's hover (gravity at 0.12 while J is held) in `kit.ts`; Skyhunter's hawk answers the `airString` event.
+Evolution Skyhunter (with `s_hawk`): shooting in the air hovers her up to 1.5 s firing full strings, each bolt a fan of 3, and every air string calls a hawk.
+Built: the air limit and closing air bolt in `shoot.ts`, the jump and second jump in `jump.ts`, the landing volley and Skyhunter's hover (gravity at 0.05 while she shoots in the air) in `kit.ts`; Skyhunter's hawk answers the `airString` event.
 
 ### s_net Net Bolt (spell, timed, I)
 
@@ -331,11 +345,11 @@ Roll a keg ahead, then shoot it as foes reach it. A primed bolt makes it far str
 | 4 | blast 6, radius 35 | A bigger blast. |
 | 5 | pitch 3 | The blast leaves burning pitch. |
 | 6 | kegs 2 | Roll two kegs; one sets off the other. |
-| 7 | kick 1 | Kick a keg to send it flying. |
+| 7 | kick 1 | Slide into or kick a keg to send it flying. |
 | 8 | blast 20, primedMul 1.6, mpBack 15 | A far bigger blast; a primed one gives back MP. |
 
 Evolution Powder Effigy (with `s_decoy`): the keg wears a decoy cloak, foes crowd it, and the blast covers twice the area (blast 12).
-Built: `spells/keg.ts`; bolts test kegs along their flight (`kegsOnSegment`), the kick sends them flying (`kickKegs`), blasts set off kegs near them, pitch is the shared `ignite`.
+Built: `spells/keg.ts`; bolts test kegs along their flight (`kegsOnSegment`), the slide and Point-Blank's kick send them flying (`kickKegs`), blasts set off kegs near them, pitch is the shared `ignite`.
 
 ### s_venom Venom Tips (dot, easy, J)
 
@@ -375,13 +389,13 @@ Built: `spells/snare.ts` lays the bleed, shoots the volley and throws Bloodtrap'
 
 ### s_lodged Lodged Bolts (dot, timed, J)
 
-Bolts stay in the foe and fester; a kick tears them out.
+Bolts stay in the foe and fester; Point-Blank's kick or the warp's heavy bolt tears them out.
 
 | Lv | Change | Card |
 | --- | --- | --- |
 | 1 | rate 0.1, max 3, closing 1 | Bolts stay lodged and fester. |
 | 2 | max 5 | More bolts stay lodged. |
-| 3 | tear 0.5 | A kick rips the bolts out. |
+| 3 | tear 0.5 | A parry kick or a warp's heavy bolt rips them out. |
 | 4 | rate 0.2, max 6 | Lodged bolts fester faster. |
 | 5 | slow 2 | Lodged bolts slow the foe. |
 | 6 | max 10, closing 2 | The closing bolt lodges two. |
@@ -389,8 +403,8 @@ Bolts stay in the foe and fester; a kick tears them out.
 | 8 | rate 0.9, max 12, tear 1.5 | Lodged bolts fester much faster. |
 
 A bolt that pierces lodges only in the last foe it hits, so this skill pulls against Piercing Bolts.
-Evolution Pincushion (with `s_heavyBoot`): up to 20 lodged; a kick tears them out as a burst of seeking bolts at 2A each through every foe around.
-Built: `boltStopped()` in `bolt/landed.ts` lays the stacks; `skills/sable/lodgedBolts.ts` draws the shafts, slows, and tears them out on her `kick` event.
+Evolution Pincushion (with `s_heavyBoot`): up to 20 lodged; a parry kick or a heavy bolt tears them out as a burst of seeking bolts at 2A each through every foe around.
+Built: `boltStopped()` in `bolt/landed.ts` lays the stacks; `skills/sable/lodgedBolts.ts` draws the shafts, slows, and tears them out on her `kick` and `warpBolt` events.
 
 ### s_hawk Hunting Hawk (summon, easy, auto)
 
@@ -416,7 +430,7 @@ A hound bounds in and drags foes away from her.
 
 | Lv | Change | Card |
 | --- | --- | --- |
-| 1 | chance 0.25, cooldown 4, power 2, hold 1, every 1.5, hounds 1 | A hound may bite the foe you kick or snare. |
+| 1 | chance 0.25, cooldown 4, power 2, hold 1, every 1.5, hounds 1 | A hound may bite a foe you snare, kick or warp-shoot. |
 | 2 | chance 0.4 | The hound comes more often. |
 | 3 | stay 5 | The hound stays and hunts. |
 | 4 | power 3 | The hound bites harder. |
@@ -426,43 +440,43 @@ A hound bounds in and drags foes away from her.
 | 8 | power 5, stay 8 | The hounds hunt longer and harder. |
 
 Evolution Bloodhound (with `s_barbed`): three hounds that hunt bleeding foes first; a bite doubles the bleed's stacks.
-Built: `skills/sable/snareHound.ts`, answering her `kick` and `snareBite` events; Bloodhound lays one more bleed per bleed the foe carries.
+Built: `skills/sable/snareHound.ts`, answering her `kick`, `warpBolt` and `snareBite` events; Bloodhound lays one more bleed per bleed the foe carries.
 
 ### s_shade Shade Archer (summon, precise, auto)
 
-A shade of Sable stays where the blow missed and shoots.
+A shade of Sable stays where the blow missed her and shoots.
 
 | Lv | Change | Card |
 | --- | --- | --- |
-| 1 | power 1, cooldown 3, window 0.12, shades 1 | A perfect dodge leaves a shade that shoots. |
+| 1 | power 1, cooldown 3, shades 1 | A perfect dodge leaves a shade that shoots. |
 | 2 | power 1.3 | The shade's bolts hit harder. |
 | 3 | stay 3 | The shade stays and keeps shooting. |
 | 4 | power 1.5 | The shade hits harder. |
-| 5 | window 0.2 | Perfect dodges are easier. |
+| 5 | parry 1 | A parry also leaves a shade. |
 | 6 | pierce 2 | The shade's bolts pass through two foes. |
 | 7 | power 3, prime 1 | While a shade stands your bolts are primed. |
 | 8 | power 8, stay 6 | The shade stays longer and hits far harder. |
 
-Evolution Twin Shadows (with `s_hopVolley`): two shades, each copying her hop volley at its base damage; while one stands blows do not throw her, and a perfect dodge refills the quiver.
-Built: `skills/sable/shadeArcher.ts` draws her shooting pose once with `drawHero` into `ghostCanvas` and blits it tinted; its bolts are plain; Twin Shadows answers the `hop` event.
+Evolution Twin Shadows (with `s_hopVolley`): two shades that copy her hop volley; while one stands blows do not throw her, and a perfect dodge refills the quiver. (shades 2, copyHop 1, steadfast 1, refill 1)
+Built: `skills/sable/shadeArcher.ts` draws her shooting pose once with `drawHero` into `ghostCanvas` and blits it tinted; its bolts are plain; it answers the `perfectDodge` and `parry` events, and Twin Shadows the `hop` event.
+### s_storm Bolt Storm (ultimate, precise, U)
 
-### s_deadeye Deadeye (ultimate, precise, U)
-
-Replaces Bolt Storm with one heavy bolt through a line.
+Bolt Storm rains harder and longer, and strikes each foe more than once.
 
 | Lv | Change | Card |
 | --- | --- | --- |
-| 1 | power 1.2, cooldown 20, perfect 1 | Bolt Storm becomes Deadeye: one heavy bolt through a line. |
-| 2 | cooldown 16 | Deadeye is ready sooner. |
-| 3 | mark 0.3, markTime 4 | Deadeye marks the foes it strikes. |
-| 4 | power 1.6 | Deadeye hits harder. |
-| 5 | split 1 | A kill splits the bolt toward fliers and the floor. |
-| 6 | perfect 2 | A perfect reload just before Deadeye doubles it. |
-| 7 | pin 1.5 | Deadeye pins the foes it strikes. |
-| 8 | power 2, refund 2.5, refundCap 8 | Deadeye hits harder, and kills bring it back sooner. |
+| 1 | power 1.2, cooldown 20, hits 1, perfect 1 | Bolt Storm hits harder. |
+| 2 | mark 0.3, markTime 4 | The storm marks the foes it strikes. |
+| 3 | hits 2 | Each foe is struck twice. |
+| 4 | power 1.5, cooldown 15 | Harder, and back sooner. |
+| 5 | pin 1.2 | The storm pins foes to the floor. |
+| 6 | perfect 2 | A perfect reload or a parry just before doubles it. |
+| 7 | refund 2, refundCap 8 | Kills bring it back sooner. |
+| 8 | power 2, hits 3 | Each foe is struck three times, much harder. |
 
-Evolution Heartseeker (with `s_rhythm`): every charge level fires both ways and sends a seeking bolt at every foe on screen; a perfect reload just before triples it.
-Built: `src/game/ultimates/deadeye.ts` reads the skill's values: power, cooldown, mark, pin, split, the perfect reload window and the kill refund.
+Level 8 is about 6 times the plain storm on one foe (power 2, struck three times), 12 times after a perfect reload or a parry.
+Evolution Heartseeker (with `s_rhythm`): every bolt of the storm seeks a foe, each foe can be struck five times, and a perfect reload or a parry just before doubles it. (power 2.5, cooldown 12, hits 5, seek 1)
+Built: `src/game/ultimates/boltStorm.ts` reads the skill through `ultimateValues()`: power, hits, mark, pin, the perfect reload or parry window (`sable.sincePerfect`), the kill refund and Heartseeker's seeking open-floor bolts; the shared ultimate reads its cooldown.
 
 ## Evolutions
 
@@ -487,11 +501,12 @@ Built: `src/game/ultimates/deadeye.ts` reads the skill's values: power, cooldown
 | `s_hawk` | `s_venom` | Shrike Flock |
 | `s_hound` | `s_barbed` | Bloodhound |
 | `s_shade` | `s_hopVolley` | Twin Shadows |
-| `s_deadeye` | `s_rhythm` | Heartseeker |
+| `s_storm` | `s_rhythm` | Heartseeker |
 
 ## Balance
 
-Figures follow the shared play model of the balance review (7 November 2026): bolts landed 0.98 a second, closing bolts 0.33, hop 0.35, slide 0.2, kick 0.3, a quarter of the time in the air, about 0.1 casts a second for each spell, a perfect reload 0.077 a second and a perfect dodge 0.14 (0.2 with Shade Archer's wider window).
+Figures follow the shared play model of the balance review (7 November 2026): bolts landed 0.98 a second, closing bolts 0.33, hop 0.35, slide 0.2, a quarter of the time in the air, about 0.1 casts a second for each spell, a perfect reload 0.077 a second and a perfect dodge 0.14.
+On the shared moveset Heavy Boot is measured at a parry every 6.7 s, the model's parry rate, and Bolt Storm per cast.
 Each figure is the damage per second a skill adds on its intended target, in multiples of her attack (A) or ability power (P).
 Bands at level 8: easy 3.8 A, timed 6.1 A, precise 9.5 to 11.5 A; movement 0.8 of those; spells 5.3, 8.4 and 13 to 16 P; dots 1.1 to 1.4 times the attack band of their risk.
 Level 1 is level 8 divided by 6 to 12, dots and summons by up to 25; evolutions about 2 times (easy), 2.2 times (timed) or 3 times (precise).
@@ -504,7 +519,7 @@ Level 1 is level 8 divided by 6 to 12, dots and summons by up to 25; evolutions 
 | Breaching Bolt | timed, one | 0.5 | 4.6 (7.5 on a crowd) | 11 | 6.1 |
 | Longshot | timed, one at range | 0.3 | 5 with the mark | 10 | 6.1 |
 | Perfect Rhythm | precise, one | 1 | 10.7 | 25 | 9.5 to 11.5 |
-| Heavy Boot | timed, one that closes in | 0.6 | 5.2 | 11 | 6.1 |
+| Heavy Boot | precise, one that strikes her | 1.2 (8A a parry every 6.7 s) | 9.3 (60A a parry, and a 2A bash on blocks) | 21 and a 15A shockwave on a crowd | 9.5 to 11.5 |
 | Hop Volley | timed movement, crowd | 0.5 | 3.9 | 9 | 4.9 |
 | Slide Kick | timed movement, crowd | 0.35 | 4.2 | 8.6 | 4.9 |
 | Featherdraw | easy movement, crowd | 0.3 | 3.7 | 8 | 3.1 |
@@ -517,7 +532,7 @@ Level 1 is level 8 divided by 6 to 12, dots and summons by up to 25; evolutions 
 | Hunting Hawk | easy summon, one | 0.15 | 4.2 | 9 | 3.8 |
 | Snare Hound | timed summon, one | 0.2 | 5 | 11 | 6.1 |
 | Shade Archer | precise summon, one | 0.4 | 9 (pierce 2 on a crowd: 20) | 24 | 9.5 to 11.5 |
-| Deadeye | precise ultimate, per cast | 1.2 times Bolt Storm | 6 times (4 times power, both ways at charge 3, splits) | 15 times (seeks every foe at every charge, a perfect reload triples it) | 6 and 15 times |
+| Bolt Storm | precise ultimate, per cast | 1.2 times the plain storm | 6 times (power 2, three strikes a foe; 12 after a perfect reload or a parry) | 12.5 times (power 2.5, five strikes, seeking bolts; 25 pulled off) | 6 and 15 times |
 
 Damage over time against attack skills of the same level, on their intended target: Venom Tips 0.2, 0.9, 3.5 and 5.5 A at levels 1, 4, 7 and 8; Lodged Bolts 0.1, 1.3, 3.5 and 7.5 A; Barbed Jaws 0.15, 0.6, 4.5 and 11 P.
 They stay under the attack skills at 1 to 4 and pass them at 7 and 8.
@@ -527,8 +542,10 @@ They stay under the attack skills at 1 to 4 and pass them at 7 and 8.
 Each skill was played in headless Chromium at levels 1, 4 and 8 and evolved, from wave 4 with hero level 1, for 10 s each, with a driver that shoots, kicks, slides, hops at foes winding up, casts and charges the ultimate; stills and logs are kept out of the repository.
 Skills that deal their own hits show under their own name on the end of run screen and grew level by level, for example over 10 s: Hunting Hawk 45, 63, 900 and 1487; Venom Tips 47, 50, 576 and 1113; Straw Decoy 18, 185, 211 and 226; Shade Archer 780 at level 8 over 14 timed hops.
 Skills carried by her presses raised her attacks or abilities over the base run's 375 attacks: Breaching Bolt 383, 1506, 3046 and 2658; Scattershot 1076, 1537 and 1542; Perfect Rhythm 1928 at level 8 and 3096 evolved; Net Bolt 140 abilities at level 1 and 843 at level 8.
-Deadeye at level 8 dealt 308 per cast against 116 for Bolt Storm in the same spot.
 The mash bot still falls on wave 5 (18 kills, 14 before); the skilled bot falls on wave 5 too (14 kills, 17 before, with a different set of cards).
+
+On the shared moveset (13 November 2026) the changed skills were played from wave 8 at hero level 1 with real keys, one pull-off each, damage from the run's ledger:
+Heavy Boot on one parry 106, 792 and 1848 at levels 1 and 8 and evolved; Bolt Storm at charge level 3 216 at level 1, and at level 8 and evolved it felled every foe in reach (838 and 691, all their HP); Slide Kick on one slide 11, 46 and 39; Hop Volley on one hop 23 and 48 (Wheeling Volley's ring 20, sprayed all round); the grapple warp's heavy bolt 76 with no skill and 77, 90 and 100 with Longshot; Shade Archer at level 5 left a shade on a parry.
 
 ## Example builds
 
@@ -541,7 +558,7 @@ Trapline, slow start, huge late game, MP-hungry.
 Evolves Bloodtrap, Powder Effigy and Pincushion; Bloodhound and Pitch Net compete for the same partners.
 
 Cadence, precise, one foe at a time with huge spikes.
-`s_rhythm`, `s_breach`, `s_shade`, `s_hopVolley`, `s_deadeye`, `s_heavyBoot`, `s_slideKick`, `s_scatter`.
+`s_rhythm`, `s_breach`, `s_shade`, `s_hopVolley`, `s_storm`, `s_heavyBoot`, `s_slideKick`, `s_scatter`.
 Evolves Clockwork Cadence, Twin Shadows and Heartseeker; Siege Bolt and Thunder Heel are ready too, so skips and banishes decide.
 
 ## Contract points
@@ -549,5 +566,5 @@ Evolves Clockwork Cadence, Twin Shadows and Heartseeker; Siege Bolt and Thunder 
 All seven points of the design were accepted into `docs/skill-design.md`.
 The framework has since met both remaining ones:
 
-- `markFoe` takes a source, and marks of different sources add under the +100% cap (rule G3). Sable's marks (Longshot, Net Bolt, Siege Bolt, Tangle Slide, Deadeye) each mark under their own skill id.
-- `SkillButton` gained `O`, for Perfect Rhythm.
+- `markFoe` takes a source, and marks of different sources add under the +100% cap (rule G3). Sable's marks (Longshot, Net Bolt, Siege Bolt, Tangle Slide, Bolt Storm) each mark under their own skill id.
+- `SkillButton` gained `O`, for Perfect Rhythm; on the shared moveset Perfect Rhythm is on J again.

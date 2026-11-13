@@ -1,40 +1,11 @@
 import type { ThrowKind } from "../../../types/hulda";
 import type { ActionClip } from "../../../types/pose";
 import { frame } from "../../hero";
-import { CRUSH, GRAB, KNEE, SKYFALL, THROWS } from "../../hulda/grab";
+import { KNEE, SKYFALL, THROWS } from "../../hulda/grab";
 import { AIR_LEGS, GUARD, g, HOLD_POSE } from "./stance";
 
-/** her grab and what she does with a foe in her hands */
+/** what she does with a foe in her hands, and Skyfall Grab */
 export const GRAPPLE_CLIPS = {
-  /** both hands shoot out low and open, then pull back empty with a stagger forward on a whiff */
-  grab: {
-    dur: GRAB.dur,
-    hit: GRAB.from,
-    keys: [
-      [0, GUARD],
-      [frame(1), g({ nx: 0.5, hx: -1, fx: 5, fy: -18, bx: 3, by: -18 })],
-      [frame(3), g({ nx: 4, ny: -21.5, hx: 0.5, cb: 1, fx: 14, fy: -17, bx: 13, by: -18, be: 0, ffx: 7, bfx: -5 })],
-      [
-        frame(5),
-        g({ nx: 4.5, ny: -21, hx: 0.5, cb: 1, fx: 14.5, fy: -16.5, bx: 13.5, by: -17.5, be: 0, ffx: 7, bfx: -5 }),
-      ],
-      [frame(7), g({ nx: 3.5, ny: -21.5, hx: 0.5, fx: 11, fy: -17, bx: 9, by: -18.5, ffx: 7, bfx: -4 })],
-      [frame(10), GUARD],
-    ],
-  },
-  /** both hands close round a big foe, she leans in and squeezes */
-  crush: {
-    dur: CRUSH.dur,
-    hit: CRUSH.hit,
-    keys: [
-      [0, g({ nx: 4, ny: -21.5, cb: 1, fx: 13, fy: -17, bx: 12, by: -18, be: 0, ffx: 7, bfx: -5 })],
-      [frame(3), g({ nx: 3, ny: -22, cb: 0.5, fx: 13, fy: -21, bx: 12, by: -15, be: 0, ffx: 7, bfx: -5 })],
-      [frame(5), g({ nx: 2.5, ny: -22.5, cb: 0, fx: 13.5, fy: -22, bx: 12.5, by: -14, be: 0, ffx: 7, bfx: -5 })],
-      [frame(6), g({ nx: 5, ny: -21, cb: 1.5, fx: 11, fy: -19, bx: 11, by: -16, be: 0, ffx: 7, bfx: -6 }), "snap"],
-      [frame(8), g({ nx: 4.5, ny: -21, cb: 1.5, fx: 11, fy: -19, bx: 11, by: -16.5, be: 0, ffx: 7, bfx: -6 })],
-      [frame(12), GUARD],
-    ],
-  },
   /** the near knee drives up into the held foe as both hands pull it down onto it */
   knee: {
     dur: KNEE.dur,

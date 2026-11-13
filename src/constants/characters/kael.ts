@@ -65,7 +65,7 @@ export const KAEL: CharacterDef = {
   name: "Kael",
   title: "The last warp knight",
   blurb:
-    "Throws his crystal sword and appears where it lands. A quick sword string, a dash nothing can touch, and crystal magic.",
+    "Throws his crystal sword and appears where it lands. A quick sword string, a parry that blinks him behind the attacker, and crystal magic.",
   accent: "#7fe3ff",
   special: "crystalNova",
   base: { ad: 10, ap: 10, hp: 100, mp: 100, stamina: 100, crit: 0.05, move: 1, aspd: 1, haste: 1 },

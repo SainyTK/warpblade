@@ -1,13 +1,13 @@
 import type { SkillDef } from "../../../../types/skill";
 
-/** Skyfall Breaker. Design: docs/skills/hulda.md. Values: slam: attack damage of the slam; lunge: share further the lunge reaches; ride: 1 rides a mini or boss and pounds it; pounds; poundPower; drag: 1 drags foes under the dive into the slam; ring: radius; ringPower; again: 1 a catch gives one more Skyfall before landing; fury: share of the Fury a catch gives; leap: 1 K on the floor with nothing in reach leaps into a Skyfall (evolution); plate: 1 a catch fills a plate */
+/** Skyfall Breaker. Design: docs/skills/hulda.md. Values: slam: attack damage of the slam; lunge: share further the Skyfall Grab lunge reaches; ride: 1 rides a mini or boss and pounds it; pounds; poundPower; drag: 1 drags foes under the dive into the slam; ring: radius; ringPower; again: 1 a catch gives one more Skyfall Grab before landing; fury: share of the Fury a catch gives; plate: 1 a catch fills a plate. Evolved (Comet Grab), the warp at a minion on the floor arrives over it and rides it down */
 export const SKYFALL_BREAKER: SkillDef = {
   id: "h_skyfall",
   name: "Skyfall Breaker",
   kind: "movement",
   risk: "precise",
-  button: "K",
-  text: "Skyfall Grab reaches further and its slam hits very hard.",
+  button: "J",
+  text: "Catches from the air hit very hard: the warp clamped on a flier, or Bull Rush in the air, rides the foe down into a slam.",
   levels: [
     {
       text: "Longer lunge, harder slam.",
@@ -22,7 +22,6 @@ export const SKYFALL_BREAKER: SkillDef = {
         ringPower: 0.8,
         again: 0,
         fury: 0,
-        leap: 0,
         plate: 0,
       },
     },
@@ -39,12 +38,11 @@ export const SKYFALL_BREAKER: SkillDef = {
         ringPower: 0.8,
         again: 0,
         fury: 0,
-        leap: 0,
         plate: 0,
       },
     },
     {
-      text: "Ride big foes and pound them.",
+      text: "The warp rides big foes and pounds them.",
       values: {
         slam: 12,
         lunge: 1.3,
@@ -56,7 +54,6 @@ export const SKYFALL_BREAKER: SkillDef = {
         ringPower: 0.8,
         again: 0,
         fury: 0,
-        leap: 0,
         plate: 0,
       },
     },
@@ -73,7 +70,6 @@ export const SKYFALL_BREAKER: SkillDef = {
         ringPower: 0.8,
         again: 0,
         fury: 0,
-        leap: 0,
         plate: 0,
       },
     },
@@ -90,12 +86,11 @@ export const SKYFALL_BREAKER: SkillDef = {
         ringPower: 1.5,
         again: 0,
         fury: 0,
-        leap: 0,
         plate: 0,
       },
     },
     {
-      text: "Catch again before you land.",
+      text: "Skyfall Grab again before you land.",
       values: {
         slam: 18,
         lunge: 1.3,
@@ -107,7 +102,6 @@ export const SKYFALL_BREAKER: SkillDef = {
         ringPower: 1.5,
         again: 1,
         fury: 0,
-        leap: 0,
         plate: 0,
       },
     },
@@ -124,7 +118,6 @@ export const SKYFALL_BREAKER: SkillDef = {
         ringPower: 1.5,
         again: 1,
         fury: 0.3,
-        leap: 0,
         plate: 0,
       },
     },
@@ -141,7 +134,6 @@ export const SKYFALL_BREAKER: SkillDef = {
         ringPower: 1.5,
         again: 1,
         fury: 0.3,
-        leap: 0,
         plate: 0,
       },
     },
@@ -149,9 +141,9 @@ export const SKYFALL_BREAKER: SkillDef = {
   evolution: {
     partner: "h_counterGrab",
     name: "Comet Grab",
-    text: "K on the floor with nothing in reach leaps into a Skyfall. The slam is enormous, and a catch gives strong Fury and a plate.",
+    text: "A warp at a minion on the floor drops on it from above and slams it. The slam is enormous, and a catch gives strong Fury and a plate.",
     row: {
-      text: "Leap into Skyfall; enormous slam, Fury and a plate.",
+      text: "Every warp catch slams; Fury and a plate.",
       values: {
         slam: 65,
         lunge: 1.3,
@@ -163,7 +155,6 @@ export const SKYFALL_BREAKER: SkillDef = {
         ringPower: 1.5,
         again: 1,
         fury: 0.6,
-        leap: 1,
         plate: 1,
       },
     },

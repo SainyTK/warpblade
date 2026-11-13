@@ -10,7 +10,7 @@ import { meleeHit } from "../meleeHit";
 import { startMovePayoff } from "../skills/payoff";
 import { game, hero, progress } from "../state";
 import { boxAhead, boxBehind, newSwing } from "../world";
-import { isFree, leaveHang, setState, settle } from "./actions";
+import { isFree, setState, settle } from "./actions";
 import { dropMoveGhost } from "./afterimages";
 import { kit } from "./kits";
 import { lift } from "./lift";
@@ -34,7 +34,6 @@ const endsChain = (id: MoveId): boolean => !!MOVES[id].finisher || hero.chain >=
 export function startMove(id: MoveId): void {
   const h = hero;
   const m = MOVES[id];
-  if (h.state === "hang") leaveHang();
   h.chain++;
   if (!h.ground) h.airHits++;
   Object.assign(h, {
@@ -182,7 +181,7 @@ export function pressAttack(): boolean {
     hero.queued = id;
     return true;
   }
-  if (!isFree() && hero.state !== "hang" && hero.state !== "dash") return false;
+  if (!isFree() && hero.state !== "dash") return false;
   startMove(id);
   return true;
 }

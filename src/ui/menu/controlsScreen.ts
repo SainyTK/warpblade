@@ -1,5 +1,6 @@
-import { ACTION_TEXT, KEYMAP } from "../../constants/input";
+import { ACTION_TEXT, HOLD_ACTIONS, KEYMAP } from "../../constants/input";
 import { character } from "../../game/state";
+import type { HeldAction, InputAction } from "../../types/input";
 import type { MenuView } from "../../types/menu";
 import { keysByAction } from "../../utils/keymap";
 import { touchLegend } from "../touch/touchLegend";
@@ -23,12 +24,29 @@ function section(heading: string, rows: readonly [HTMLElement, string][]): HTMLE
   return box;
 }
 
+/** the keys of one row, after the word Hold for a long press */
+function capsOf(codes: readonly string[], hold: boolean): HTMLElement {
+  const caps = document.createElement("span");
+  caps.className = "caps";
+  if (hold) {
+    const word = document.createElement("span");
+    word.className = "cap-hold";
+    word.textContent = "Hold";
+    caps.append(word);
+  }
+  caps.append(...codes.map(keycap));
+  return caps;
+}
+
+const isHeldAction = (a: InputAction): a is HeldAction => a in HOLD_ACTIONS;
+
+/** each action's keys and what it does; a key with a long press gets a second row for it, Hold J under J */
 function keyboardRows(): [HTMLElement, string][] {
-  return [...keysByAction(KEYMAP)].map(([action, codes]) => {
-    const caps = document.createElement("span");
-    caps.className = "caps";
-    caps.append(...codes.map(keycap));
-    return [caps, ACTION_TEXT[character.kit][action]];
+  const text = ACTION_TEXT[character.kit];
+  return [...keysByAction(KEYMAP)].flatMap(([action, codes]): [HTMLElement, string][] => {
+    const row: [HTMLElement, string] = [capsOf(codes, false), text[action]];
+    if (!isHeldAction(action)) return [row];
+    return [row, [capsOf(codes, true), text[HOLD_ACTIONS[action]]]];
   });
 }
 

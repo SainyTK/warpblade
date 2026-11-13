@@ -4,7 +4,7 @@ import { evolved, grow } from "./rows";
 /**
  * crash: the vault crash's attack damage multiple; reach: pixels it hits to each side; sweeps: air sweeps before she
  * lands; quake: the landing shockwave's power (0 off), over quakeRange pixels each way, stunning quakeStun seconds;
- * airVault: K in the flight vaults again; cooldown: seconds between vaults; launch: the crash throws foes up; ring: the
+ * airVault: I in the flight vaults again; cooldown: seconds between vaults; launch: the crash throws foes up; ring: the
  * crash's ring of fire, in ability power (0 off); meteor: the evolved crash's radius; burn: seconds the crater burns
  */
 const levels = grow(
@@ -38,8 +38,8 @@ export const VAULT_STRIKE: SkillDef = {
   name: "Vault Strike",
   kind: "movement",
   risk: "timed",
-  button: "K",
-  text: "J in a vault drives the glaive down harder where you land.",
+  button: "I",
+  text: "J in a vault's flight drives the glaive down harder where you land, and the air opens up.",
   levels,
   evolution: {
     partner: "y_ashen",

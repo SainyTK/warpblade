@@ -1,7 +1,7 @@
 import { DENY_FLASH } from "../../../constants/combat";
 import { WAX_BAR } from "../../../constants/wenna/wax";
-import { sfx } from "../../../services/audio";
 import { skillValues } from "../../skills/query";
+import { hero } from "../../state";
 import { wenna } from "./memory";
 
 /** the most Wax she can carry: Deep Tallow adds to it */
@@ -26,8 +26,7 @@ export function trickleWax(dt: number): void {
   gainWax(WAX_BAR.trickle * (1 + (skillValues("w_tallow").trickle ?? 0)) * dt);
 }
 
-/** a press the WX bar could not pay for: the shared refusal tick, and the bar flashes */
-export function refuseWax(): void {
-  wenna.waxFlash = DENY_FLASH;
-  sfx.denied();
+/** a press of I was refused on the last step while Light was selected: the WX bar flashes with the shared MP flash */
+export function flashWaxOnRefusal(lightSelected: boolean, dt: number): void {
+  if (lightSelected && hero.denied.mp >= DENY_FLASH - dt - 1e-6) wenna.waxFlash = DENY_FLASH;
 }

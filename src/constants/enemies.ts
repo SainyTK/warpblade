@@ -33,7 +33,7 @@ export const ENEMIES: Record<EnemyType, EnemyDef> = {
   maw: { rank: "mini", hp: 460, xp: 76, weight: 0.9, launchable: false, name: "Abyss Maw" },
   // the boss of wave 30, and what comes after it
   sovereign: { rank: "boss", hp: 800, xp: 300, weight: 1, launchable: false, name: "Abyss Sovereign" },
-  unblinking: { rank: "boss", hp: 900, xp: 400, weight: 1, launchable: false, name: "The Unblinking" },
+  unblinking: { rank: "boss", hp: 90000, xp: 400, weight: 1, launchable: false, name: "The Unblinking" },
 };
 
 /** contact and attack damage before wave scaling */

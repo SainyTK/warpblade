@@ -10,8 +10,8 @@ import { drawLinks } from "./chainLinks";
 const LIFE = 2.5;
 
 /**
- * Undertow's chain line, left on the floor along a Backline: each foe that walks across it trips once, stunned and cut.
- * It rides his Backline, so it counts for his attacks.
+ * Undertow's chain line, left on the floor along a Chain Bind's yank: each foe that walks across it trips once, stunned
+ * and cut. It is the skill's own hit, so it carries the skill's id.
  */
 export function createTripLine(x0: number, x1: number, y: number, stun: number, power: number): Effect {
   const struck = new Set<Enemy>();

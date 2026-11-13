@@ -1,6 +1,6 @@
 import type { SkillDef } from "../../../../types/skill";
 
-/** Powder Keg: Roll a keg ahead, then shoot it as foes reach it. A primed bolt makes it far stronger. Values: mp, cooldown: its cost and recharge; wait: seconds the keg waits; blast, radius: ability power and pixels; primedMul: the blast's multiple when a primed bolt sets it off; launch: foes are thrown up this hard; pitch: seconds of burning pitch; kegs: kegs per cast; kick: a kicked keg flies and blows on the first foe; mpBack: MP a primed blast gives back; lure: pixels the keg draws foes from. Design: docs/skills/sable.md */
+/** Powder Keg: Roll a keg ahead, then shoot it as foes reach it. A primed bolt makes it far stronger. Values: mp, cooldown: its cost and recharge; wait: seconds the keg waits; blast, radius: ability power and pixels; primedMul: the blast's multiple when a primed bolt sets it off; launch: foes are thrown up this hard; pitch: seconds of burning pitch; kegs: kegs per cast; kick: a keg her slide or her parry kick meets flies and blows on the first foe; mpBack: MP a primed blast gives back; lure: pixels the keg draws foes from. Design: docs/skills/sable.md */
 export const POWDER_KEG: SkillDef = {
   id: "s_keg",
   name: "Powder Keg",
@@ -112,7 +112,7 @@ export const POWDER_KEG: SkillDef = {
       },
     },
     {
-      text: "Kick a keg to send it flying.",
+      text: "Slide into or kick a keg to send it flying.",
       values: {
         mp: 30,
         cooldown: 6,

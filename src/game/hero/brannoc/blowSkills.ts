@@ -34,13 +34,13 @@ const hpShare = (e: Enemy): number => e.hp / Math.max(1, e.max);
 /** Rend's stacks on a foe */
 const rended = (e: Enemy): boolean => stacksOf(e, "b_rend") > 0;
 
-/** a multiple on a blow's power for every foe it reaches: Heavy Hew and Flay on Hew, Reaver on Reave */
+/** a multiple on a blow's power for every foe it reaches: Heavy Hew and Flay on Hew, Reaver on Reave (Long Hunt's chop
+ *  power is the warp's own, through its `tune`) */
 export function blowScale(e: Enemy, s: AxeStrike): number {
   let k = 1;
   if (s.blow === "hew") k *= 1 + (skillValues("b_heavyHew").power ?? 0);
   if (s.blow === "hew" && rended(e)) k *= 1 + (skillValues("b_rend").flay ?? 0);
   if (s.blow === "reave") k *= 1 + (skillValues("b_reaver").power ?? 0);
-  if (s.blow === "huntChop") k *= 1 + (skillValues("b_hunt").power ?? 0);
   return k;
 }
 

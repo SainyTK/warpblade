@@ -1,6 +1,6 @@
 export const COST = { warp: 10 } as const;
-/** MP per second, standing and hanging from a crystal */
-export const MP_REGEN = { normal: 2, hanging: 14 } as const;
+/** MP per second */
+export const MP_REGEN = 2;
 export const MP_PER_HIT = 2;
 
 export const HERO_MOVE = {
@@ -10,10 +10,9 @@ export const HERO_MOVE = {
   airAccel: 650,
   gravity: 900,
   maxFall: 420,
-  /** pixels each jump rises, however long Up is held: from the floor, again in the air, and off a crystal */
+  /** pixels each jump rises, however long Up is held: from the floor, and again in the air */
   jumpRise: 62,
   doubleJumpRise: 50,
-  hangJumpRise: 38,
   dashSpeed: 270,
   dashTime: 0.24,
 } as const;
@@ -49,6 +48,8 @@ export const WARP = {
   power: 1.8,
   powerPerPixel: 0.014,
   maxDistanceBonus: 2.8,
+  /** seconds into the arrival blow after which a shared action (guard, dodge, ability) may cut its recovery */
+  cut: 0.14,
 } as const;
 
 export const COMBO = {
@@ -152,3 +153,40 @@ export const CHILL_PACE = 0.5;
 export const ECHO_DELAY = 0.3;
 /** a stomp drags airborne foes this close down with Kael */
 export const GRAVITY_REACH = 60;
+
+/**
+ * K: the guard every hero shares. Held, it blocks blows from the front for stamina; a blow that meets it in its first
+ * moments is a parry (perfect guard), which takes nothing, staggers a minion attacker and lets the hero's own parry
+ * reward fire. Each hero's `GuardStyle` sets how much a block lets through and costs.
+ */
+export const HERO_GUARD = {
+  /** a blow this long after K went down is a parry */
+  parryWindow: 0.15,
+  /** a parried minion reels this long; a mini boss or boss only flinches */
+  parryStagger: 0.9,
+  /** world slow motion after a parry, in seconds */
+  parrySlow: 0.35,
+  /** MP and stamina a parry gives back */
+  parryMp: 8,
+  parryStamina: 25,
+  /** nothing touches the hero this long after a parry, so the rest of a flurry passes */
+  parryShield: 0.3,
+  /** the hero slides back this fast off a blocked blow */
+  pushback: 70,
+  /** a blow from within this many pixels behind the hero's middle still counts as the front */
+  frontSlack: 3,
+  /** the foe nearest where the blow came from, within this many pixels, is the one that struck */
+  attackerReach: 44,
+  /** walking speed share while guarding */
+  walk: 0,
+} as const;
+
+/** the shared guard clip's segments, in seconds: the raise, the held loop, a block's jolt and a parry's snap */
+export const GUARD_TIMES = {
+  loopFrom: 0.05,
+  loopTo: 0.55,
+  block: 0.6,
+  blockEnd: 0.78,
+  parry: 0.8,
+  parryEnd: 1.05,
+} as const;

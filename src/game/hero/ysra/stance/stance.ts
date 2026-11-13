@@ -1,59 +1,64 @@
-import { BACKSTEP, VAULT } from "../../../../constants/ysra/stance";
+import { VAULT } from "../../../../constants/ysra/stance";
+import { rechargeStep } from "../../../build/recharge";
 import { pressAge, take } from "../../../input";
 import { skillValues } from "../../../skills/query";
 import { hero } from "../../../state";
 import { startMove } from "../../combo";
 import type { YsraPart } from "../part";
-import { backstepGuarded, runBackstep, startBackstep } from "./backstep";
-import { braceTakes, runBrace, startBrace } from "./brace";
-import { canCut } from "./cut";
+import { backstepFromGuard, backstepGuarded, runBackstep, watchFacing } from "./backstep";
+import { canCut, cutMove } from "./cut";
 import { runDive, startDive } from "./dive";
 import { resetStance, stance } from "./memory";
 import { airVault, runVault, startVault, vaultFlying, vaultGuarded } from "./vault";
 import { chargeTakes, tickWarpath } from "./warpath";
 
+export { YSRA_GUARD } from "./guardStyle";
 export { pressJump } from "./jump";
 export { chargeNow } from "./warpath";
 
-/** K: the pole vault on the floor, also out of a brace or a backstep; in the air, Vault Strike's second vault out of a
- *  vault, otherwise the dive. K in a backstep's hop vaults the moment she lands. */
-export function pressVault(): boolean {
+/** a vault or dive has come down and she is in its landing crouch, or a backstep is skidding to a stop */
+const settling = (): boolean =>
+  (hero.state === "vault" || hero.state === "dive" || hero.state === "backstep") && stance.landed;
+
+/** the shared actions (warp, guard, dodge, ultimate) may cut in: free, a glaive blow out, a vault in flight, or the
+ *  landing of a vault, a dive or a backstep */
+export const stanceMayAct = (): boolean => canCut() || vaultFlying() || settling();
+
+/** she may dive now: in the air with a dive left this airtime */
+const diveLeft = (): boolean => !hero.ground && stance.dives < (skillValues("y_dive").dives ?? 1);
+
+/** seconds before the vault ability can be cast: none in the air while a dive is left, else the vault's recharge */
+export const vaultWait = (): number => (diveLeft() || vaultFlying() ? 0 : stance.vaultCd);
+/** the length of the vault's last recharge, for its tab */
+export const vaultFull = (): number => Math.max(0.01, stance.vaultFull);
+
+/**
+ * I on the vault: on the floor the pole vault toward a held side (held, the high vault), also out of the guard or a
+ * backstep's skid; in a vault's flight Vault Strike's air vault once, otherwise the dive; in the air the dive. I in a
+ * backstep's hop vaults the moment she lands.
+ */
+export function castVault(high: boolean): boolean {
   const h = hero;
   if (vaultFlying()) {
-    if (skillValues("y_vault").airVault && stance.airVaults === 0) airVault();
-    else return startDive();
+    if (!skillValues("y_vault").airVault || stance.airVaults > 0) return startDive();
+    airVault();
     return true;
   }
   if (h.state === "backstep" && !stance.landed) {
     stance.vaultNext = true;
     return true;
   }
-  if (!canCut() && h.state !== "brace" && h.state !== "backstep") return false;
-  return h.ground ? startVault() : startDive();
-}
-
-/** where she faced before a turn the held side made a moment ago, otherwise where she faces */
-const settledFace = (): number => (stance.turned < BACKSTEP.turnGrace ? stance.faceBefore : hero.face);
-
-/** L: a backstep with a side held away from where she faces, otherwise the brace. Both on the floor only. */
-export function pressGuard(dir: number): boolean {
-  if (!canCut() || !hero.ground) return false;
-  const face = settledFace();
-  if (dir && dir === -face) {
-    hero.face = face;
-    return startBackstep();
-  }
-  startBrace();
+  if (!stanceMayAct() && h.state !== "guard") return false;
+  if (!h.ground) return startDive();
+  if (stance.vaultCd > 0) return false;
+  cutMove();
+  startVault(high);
   return true;
 }
 
-/** her turns, so a side held a moment before L still reads as held away */
-function watchFacing(dt: number): void {
-  stance.turned += dt;
-  if (hero.face === stance.face) return;
-  stance.faceBefore = stance.face;
-  stance.face = hero.face;
-  stance.turned = 0;
+/** Heaven's Hook: the vault comes back at once */
+export function rechargeVault(): void {
+  stance.vaultCd = 0;
 }
 
 /** a parry opened a counter: the next J is the counter thrust */
@@ -74,7 +79,7 @@ export const STANCE_PART: YsraPart = {
   tick: (dt) => {
     watchFacing(dt);
     stance.counter = Math.max(0, stance.counter - dt);
-    stance.shield = Math.max(0, stance.shield - dt);
+    stance.vaultCd = Math.max(0, stance.vaultCd - rechargeStep(dt));
     if (hero.ground) {
       stance.airVaults = 0;
       stance.dives = 0;
@@ -82,7 +87,7 @@ export const STANCE_PART: YsraPart = {
     vaultStrike();
     tickWarpath(dt);
   },
-  runState: (dt) => {
+  runState: () => {
     switch (hero.state) {
       case "vault":
         runVault();
@@ -90,12 +95,11 @@ export const STANCE_PART: YsraPart = {
       case "dive":
         runDive();
         return true;
-      case "brace":
-        runBrace(dt);
-        return true;
       case "backstep":
         runBackstep();
         return true;
+      case "guard":
+        return backstepFromGuard();
       default:
         return false;
     }
@@ -109,6 +113,6 @@ export const STANCE_PART: YsraPart = {
     if (vaultFlying()) return VAULT.gravity;
     return null;
   },
-  absorbHurt: (_dmg, fromX) => vaultGuarded() || backstepGuarded() || braceTakes(fromX) || chargeTakes(fromX),
+  absorbHurt: (_dmg, fromX) => vaultGuarded() || backstepGuarded() || chargeTakes(fromX),
   reset: resetStance,
 };

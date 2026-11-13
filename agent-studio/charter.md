@@ -100,7 +100,7 @@ Everything players can read or watch outside the game keeps them: patch notes, t
 
 - The Unblinking, the foe that comes after the wave 30 boss falls, can be defeated.
   How is a secret kept only in the code (`src/game/enemies/abyss/gaze.ts`).
-  Patch notes may say that it exists, that nothing seems to hurt it and that there is a way.
+  Patch notes may say that it exists, that every hit reaches it while its HP never seems to fall, that it hits harder than anything else, and that there is a way.
   The only hint allowed is this line: "It has never looked away from anything that moved."
   Never state or show the method: no text about it, and no clip, still or caption of the eye strained, shut, on the floor or defeated.
   QA checks the method from the code and writes only "the secret works" or "the secret is broken" in anything that is published.

@@ -7,7 +7,7 @@ export const LONG_ECHO: SkillDef = {
   kind: "attack",
   risk: "easy",
   button: "J",
-  text: "Her echoes hit harder, land sooner and reach further.",
+  text: "Her echoes, her warp's too, hit harder, land sooner and reach further.",
   levels: [
     {
       text: "Echoes deal 30% more.",

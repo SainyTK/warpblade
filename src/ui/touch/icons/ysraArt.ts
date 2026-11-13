@@ -1,10 +1,9 @@
-import { RITES } from "../../../constants/ysra/rites";
-import { knowsRite } from "../../../game/hero/ysra/pyre/riteChoice";
+import { YSRA_SLOTS } from "../../../game/hero/ysra/abilities";
 import type { TouchButtonAction } from "../../../types/touch";
-import type { RiteId } from "../../../types/ysra/pyre";
+import type { YsraAbility } from "../../../types/ysra";
 import { hex } from "../../../utils/color";
 import { ICON_WHITE, type IconArt } from "./iconArt";
-import { JUMP, NOVA } from "./sharedArt";
+import { DODGE, JUMP, NOVA } from "./sharedArt";
 
 const HOT = hex("#ffe08a");
 const FLAME = hex("#ec7228");
@@ -46,13 +45,35 @@ const VAULT: IconArt = {
   colors: { A: hex("#ffae48"), H: HAFT, T: BRONZE, G: hex("#6c6694") },
 };
 
-/** a bronze-rimmed brace */
+/** her guard: the glaive held upright before her, blade high, a blow striking sparks off the haft */
 const GUARD: IconArt = {
-  rows: ["..BBBBB..", ".BWWWWWB.", ".BWCCCWB.", ".BWCHCWB.", ".BWCCCWB.", "..BWCWB..", "...BWB...", "....B...."],
-  colors: { B: BRONZE, W: HOT, C: hex("#8e1f2c"), H: hex("#c0383e") },
+  rows: [
+    "....WE...",
+    "....EEO..",
+    "....EO...",
+    "...BB....",
+    "Y..H.....",
+    ".YSH.....",
+    "Y..H.....",
+    "...H.....",
+    "...H.....",
+    "..T......",
+  ],
+  colors: {
+    W: hex("#fff2c4"),
+    E: hex("#ffae48"),
+    O: hex("#c0441a"),
+    B: BRONZE,
+    H: HAFT,
+    T: BRONZE,
+    Y: HOT,
+    S: ICON_WHITE,
+  },
 };
 
-const RITE_ART: Record<RiteId, IconArt> = {
+/** each ability's art on the I button: the vault's arc, then the rites */
+const ABILITY_ART: Record<YsraAbility, IconArt> = {
+  vault: VAULT,
   /** fire bursting out in a ring */
   flare: {
     rows: [
@@ -130,33 +151,35 @@ const RITE_ART: Record<RiteId, IconArt> = {
   },
 };
 
-/** O: a pip for each of her rites in tab order, lit in its tint when she has it, the selected one white */
-function cycleArt(selected: RiteId): IconArt {
-  const pips = RITES.map((r, i) => (r.id === selected ? "W" : knowsRite(r) ? String.fromCharCode(65 + i) : "D"));
+/** O: a pip for each of her abilities in tab order, lit in its tint when she has it, the selected one white */
+function cycleArt(selected: string): IconArt {
+  const pips = YSRA_SLOTS.map((slot, i) =>
+    slot.id === selected ? "W" : slot.known() ? String.fromCharCode(65 + i) : "D",
+  );
   const row = pips.join(".");
   const blank = ".".repeat(row.length);
   const colors: Record<string, number> = { W: ICON_WHITE, D: DEEP };
-  RITES.forEach((r, i) => {
-    colors[String.fromCharCode(65 + i)] = hex(r.tint);
+  YSRA_SLOTS.forEach((slot, i) => {
+    colors[String.fromCharCode(65 + i)] = hex(slot.tint ?? "#ffae48");
   });
   return { rows: [blank, row, blank], colors };
 }
 
-/** Ysra's button art, per action and selected rite */
-export function ysraArt(action: TouchButtonAction, rite: RiteId): IconArt {
+/** Ysra's button art, per action and selected ability */
+export function ysraArt(action: TouchButtonAction, ability: YsraAbility): IconArt {
   switch (action) {
     case "attack":
       return GLAIVE;
     case "up":
       return JUMP;
     case "dash":
+      return DODGE;
+    case "guard":
       return GUARD;
-    case "warp":
-      return VAULT;
     case "cast":
-      return RITE_ART[rite];
+      return ABILITY_ART[ability] ?? VAULT;
     case "cycle":
-      return cycleArt(rite);
+      return cycleArt(ability);
     case "ultimate":
       return NOVA;
   }

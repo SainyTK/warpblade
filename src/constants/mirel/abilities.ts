@@ -13,6 +13,8 @@ export const STOPPED_CLOCK = {
   /** the cast pose, and when it goes off */
   dur: 12 / 30,
   hit: 6 / 30,
+  /** I held: every foe round her within this reach stops for this share of the time, for this many times the MP */
+  wide: { reach: 70, stop: 0.6, mp: 1.5 },
 } as const;
 
 /** Second Hand: a thin clock hand flies ahead through foes */

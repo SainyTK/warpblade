@@ -3,13 +3,14 @@ import type { HeroState } from "../../types/hero";
 /**
  * Animation frames Ysra crosses from the pose shown last into a new clip, by the state she enters. Idle takes the
  * longest: it is where a blow, a landing or a hurt settles back into her guard. A hurt cuts at once, since the cut is
- * what the player has to read, and the vault crosses into its plant by itself.
+ * what the player has to read, a warp's arrival cuts at once, since she appears there, and the vault crosses into its
+ * plant by itself.
  */
 export const HANDOVER_FRAMES: Partial<Record<HeroState, number>> & { other: number } = {
   idle: 5,
   walk: 3,
   run: 3,
-  brace: 2,
+  warpStrike: 0,
   hurt: 0,
   dead: 0,
   vault: 0,

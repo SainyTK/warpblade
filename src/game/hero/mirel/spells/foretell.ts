@@ -15,7 +15,6 @@ import { shake } from "../../../world";
 import { type Dial, dialArc, dialMark } from "../clockArt";
 import { isStill } from "../strike";
 import { drawFlyingHand } from "../trinkets";
-import { pressSpell } from "./castSpell";
 
 const ID = "m_foretell";
 /** seconds a blade takes to fall from above the foe */
@@ -95,9 +94,6 @@ function createForetell(foes: readonly Enemy[]): Effect {
     },
   };
 }
-
-/** I with Foretell */
-export const pressForetell = (): boolean => pressSpell(ID);
 
 /** the marks go out on the cast's frame */
 export function castForetell(): void {

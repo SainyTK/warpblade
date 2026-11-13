@@ -22,7 +22,6 @@ import { executing, spendCounterThrow, spendSuplex } from "./counter";
 import { fracture, snapFractures, throwPower } from "./fracture";
 import { gainGrit } from "./grit";
 import { holdTime, pin } from "./hold";
-import { holdWalk } from "./iron";
 import { hulda } from "./memory";
 import { slamRing } from "./slam";
 import { spin, swingLength, swingRelease } from "./swing";
@@ -45,14 +44,15 @@ function foesAround(held: Enemy, ahead: number, behind: number): { front: number
 }
 
 /**
- * The throw picks itself from where the foes stand: a Giant Swing when they crowd her and she has it, a forward throw
- * when foes stand ahead and fewer behind, otherwise a suplex, which is also the hardest throw on a lone foe.
+ * The side held picks the throw: behind her a suplex; otherwise a Giant Swing when foes crowd her and she has it; ahead
+ * a forward throw. With no side held the throw picks itself from where the foes stand: forward when foes stand ahead
+ * and fewer behind, otherwise a suplex, which is also the hardest throw on a lone foe.
  */
-function throwFor(held: Enemy): ThrowKind {
-  if (executing()) return "suplex";
+function throwFor(held: Enemy, dir: number): ThrowKind {
+  if (executing() || dir === -hero.face) return "suplex";
   const { front, back, near } = foesAround(held, THROW_PICK.ahead, THROW_PICK.behind);
   if (skillLevel(SWING) && near >= skillValues(SWING).foes) return "swing";
-  if (front > 0 && front > back) return "forward";
+  if (dir === hero.face || (front > 0 && front > back)) return "forward";
   return "suplex";
 }
 
@@ -65,14 +65,14 @@ function startThrow(kind: ThrowKind): void {
   sfx.swing(kind === "suplex" ? 0.6 : 0.8);
 }
 
-/** K while holding: the throw the crowd asks for */
-export function pressThrow(): boolean {
+/** J held or K while holding: the throw the side held asks for, or with none the one the crowd asks for */
+export function pressThrow(dir: number): boolean {
   if (!hulda.held || (hero.state !== "hold" && hero.state !== "knee")) return false;
-  startThrow(throwFor(hulda.held));
+  startThrow(throwFor(hulda.held, dir));
   return true;
 }
 
-/** J while holding: a knee into the held foe, up to three in a hold */
+/** J tapped while holding: a knee into the held foe, up to three in a hold */
 export function pressKnee(): boolean {
   if (!hulda.held || hero.state !== "hold" || hulda.knees >= KNEE.max) return false;
   hulda.knees++;
@@ -89,10 +89,10 @@ export function runHold(dt: number): void {
   if (!e) return settle();
   hulda.holdT += dt;
   const dir = (isHeld("right") ? 1 : 0) - (isHeld("left") ? 1 : 0);
-  h.vx = h.ground ? dir * HERO_MOVE.walkSpeed * holdWalk() * progress.stats.move : h.vx;
+  h.vx = h.ground ? dir * HERO_MOVE.walkSpeed * HOLD.walk * progress.stats.move : h.vx;
   h.runPhase = (h.runPhase + (dt * Math.abs(h.vx)) / HULDA_STRIDE) % 1;
   pin(e);
-  if (h.state === "hold" && hulda.holdT >= holdTime()) startThrow(throwFor(e));
+  if (h.state === "hold" && hulda.holdT >= holdTime()) startThrow(throwFor(e, 0));
 }
 
 /** the knee lands on its frame, then she is back to holding */

@@ -24,7 +24,7 @@ export const EMBER_BRAND: SkillDef = {
   name: "Ember Brand",
   kind: "dot",
   risk: "precise",
-  button: "L",
+  button: "K",
   text: "A parry brands the attacker with fire, and each of your blows on it adds to the brand.",
   levels,
   evolution: {

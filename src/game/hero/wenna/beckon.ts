@@ -6,14 +6,17 @@ import { emitSkillEvent } from "../../skills/events";
 import { game, hero, lights } from "../../state";
 import { surfaceBelow } from "../../world";
 import { setState } from "../actions";
-import { canCast } from "./castCheck";
 import { wenna } from "./memory";
+import { startCasting } from "./startCasting";
 import { leapTo, ringSpot } from "./wickAi";
 import { wicksNear } from "./wicks";
 
+/** Beckon has Wicks to call: one stands within its reach */
+export const beckonReach = (): boolean => wicksNear(hero.x, hero.y, BECKON.reach).length > 0;
+
 /** I with Beckon: every Wick near her hops to stand in a ring round her, taking half damage while it holds */
-export function pressBeckon(): boolean {
-  if (!canCast(wenna.beckonCd, BECKON.mp)) return true;
+export function castBeckon(): boolean {
+  if (!startCasting()) return false;
   hero.mp -= BECKON.mp;
   wenna.beckonCd = BECKON.cooldown;
   wenna.casting = "beckon";

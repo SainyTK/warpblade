@@ -264,9 +264,16 @@ function slam(): void {
   shake(0.12, 2);
 }
 
-/** a blow's recovery after it struck can be cut short by a jump, a Hunt or Frenzy */
+/** a blow's recovery after it struck can be cut short by a jump, the warp, the guard, the dodge or an ability */
 export const inRecovery = (): boolean =>
   hero.state === "axe" && brannoc.hits >= currentSpec().hits.length && brannoc.reapLeft <= 0;
+
+/** a shared action or an ability cut the string: the next J starts it afresh */
+export function endString(): void {
+  brannoc.queued = false;
+  brannoc.blow = 0;
+  brannoc.link = 0;
+}
 
 /** the link runs down while he is out of the string; once it lapses the next J starts a new string */
 export function tickLink(dt: number): void {
@@ -314,11 +321,10 @@ export function runHatchet(dt: number): void {
   if (h.st >= spec.dur + 0.4) settle();
 }
 
-/** a landing gives the airtime's Hatchet Drop and Headlong back */
+/** a landing gives the airtime's Hatchet Drop back */
 export function landed(): void {
   brannoc.hatchets = 1;
-  brannoc.headlongs = 1;
 }
 
-/** the knockdown the Hunt Chop throws with Long Hunt's launch */
+/** the knockdown the Hunt chop throws with Long Hunt's launch */
 export const CHOP_LAUNCH = KNOCKDOWN * 1.5;

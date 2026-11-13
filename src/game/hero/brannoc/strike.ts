@@ -28,6 +28,8 @@ export interface AxeStrike {
   feel: HitFeel;
   /** a Bloodied blow */
   bloodied: boolean;
+  /** every foe it strikes takes a sure crit (the warp's chop when the shared warp asks for one) */
+  sure?: boolean;
 }
 
 /** a box from `near` to `far` ahead of him (negative is behind), from `low` to `high` above his feet */
@@ -63,7 +65,7 @@ function strikeFoe(e: Enemy, s: AxeStrike, first: boolean, sweep: number): boole
     heavy: s.heavy,
     melee: true,
     stagger: s.stagger,
-    sureCrit: payoff?.sureCrit || sureCrit(),
+    sureCrit: s.sure || payoff?.sureCrit || sureCrit(),
     stun: payoff?.stun || undefined,
   });
   if (result === "blocked") return false;

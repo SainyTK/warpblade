@@ -30,8 +30,11 @@ export interface EnemyKind {
   guardFrom?: number;
   /** slips away from swings while in its rest state, like a wisp */
   evades?: boolean;
-  /** nothing can hurt it right now: every hit is turned away (game/enemies/ward.ts) */
-  warded?(e: Enemy): boolean;
+  /**
+   * the damage a hit of `dmg` does to this foe right now; `loud` is a hit of the hero's own that is not damage over
+   * time. Left out, all of it.
+   */
+  takes?(e: Enemy, dmg: number, loud: boolean): number;
   /** MP orbs it drops, when not the rank's usual count */
   orbs?: number;
   /** chance of a heal orb, when not the usual 6% */

@@ -32,7 +32,6 @@ export function readSituation(): Situation {
     next: h.chain + 1,
     limit: progress.comboLimit,
     running: h.running && h.state === "run",
-    hanging: h.state === "hang",
     airHits: h.airHits,
     airLimit: progress.airLimit,
     doubleJumped: h.jumps >= 2,

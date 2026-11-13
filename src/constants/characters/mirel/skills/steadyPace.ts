@@ -6,7 +6,7 @@ export const STEADY_PACE: SkillDef = {
   name: "Steady Pace",
   kind: "movement",
   risk: "easy",
-  button: "K",
+  button: "I",
   text: "She walks faster inside her own Stillfield, and the field shelters her.",
   levels: [
     {

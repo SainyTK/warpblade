@@ -1,17 +1,17 @@
+import { WIDE_MP } from "../../../constants/orrin/abilities";
 import { hero } from "../../state";
-import { isFree } from "../actions";
-import { deny } from "../deny";
+import { cutForSharedAction, maySharedAct } from "../sharedCut";
 
-/** an ability on I may start: from a free state or a flight, ready, and paid for; a refused press flashes the HUD */
-export function canCast(wait: number, mp: number): boolean {
-  if (!isFree() && hero.state !== "fly") return false;
-  if (wait > 0) {
-    deny("cast");
-    return false;
-  }
-  if (hero.mp < mp) {
-    deny("mp");
-    return false;
-  }
+/** a long press casts the wide form when the MP bar pays for it, and the plain form otherwise */
+export const castsWide = (wide: boolean, mp: number): boolean => wide && hero.mp >= mp * WIDE_MP;
+
+/**
+ * An ability on I starts now if a shared action may cut in, paying its MP (more for the wide form); false keeps the
+ * press waiting. The shared bar has already checked that it is ready and paid for.
+ */
+export function startAbility(mp: number, wide: boolean): boolean {
+  if (!maySharedAct()) return false;
+  cutForSharedAction();
+  hero.mp -= wide ? mp * WIDE_MP : mp;
   return true;
 }

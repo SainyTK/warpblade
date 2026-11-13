@@ -1,14 +1,15 @@
-/** K: the Stillfield, a circle where foes and their shots crawl */
+/** I: the Stillfield, a circle where foes and their shots crawl; tapped it stands a while, held it stays while I is held */
 export const STILLFIELD = {
   radius: 44,
   /** centred this far ahead of her, at this height above her feet; with W held this far straight above her */
   ahead: 56,
   chest: 16,
   above: 48,
-  /** Sand on the press, and a second while K is held */
+  /** Sand on the press, and a second while I is held */
   open: 25,
   perSecond: 18,
-  /** it stays at least this long (a tap) and at most this long */
+  /** a tapped field stands this long; a held one at least this long and at most this long */
+  tapped: 1.5,
   least: 0.6,
   most: 4,
   /** seconds after it closes before the next */

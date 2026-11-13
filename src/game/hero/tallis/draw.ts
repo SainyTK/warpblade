@@ -153,7 +153,7 @@ function veilInk(): number {
 /** how much of his body still stands over the pool: it pours down as he sinks and comes back as he rises */
 function poured(): number {
   if (hero.state === "sink") return Math.max(0, 1 - tallis.sinkT / SINK.pour);
-  if (hero.state === "rise") return Math.min(1, hero.st / SINK.rise);
+  if (hero.state === "risingCut") return Math.min(1, hero.st / SINK.rise);
   return 1;
 }
 

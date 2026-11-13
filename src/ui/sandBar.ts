@@ -1,6 +1,7 @@
+import { selectedSlot } from "../game/hero/abilityBar";
 import { mirel } from "../game/hero/mirel/memory";
 import { sandShare } from "../game/hero/mirel/sand";
-import { character } from "../game/state";
+import { character, hero } from "../game/state";
 import { byId } from "./dom";
 
 /** Mirel's Sand bar under stamina: a sand fill with a teal edge, glowing while her field holds it, blinking when short */
@@ -14,7 +15,8 @@ export function updateSandBar(): void {
   if (!shown) return;
   const share = sandShare();
   const held = !!mirel.field;
-  const empty = mirel.sandFlash > 0;
+  // a refused press of the Stillfield, which Sand pays for
+  const empty = hero.denied.mp > 0 && selectedSlot()?.id === "stillfield";
   const key = [Math.round(share * 100), held, empty].join();
   if (key === last) return;
   last = key;

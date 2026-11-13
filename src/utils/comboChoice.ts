@@ -41,8 +41,7 @@ function stringHit(s: Situation): MoveId {
  * No held key or dash changes it. Null when the air string is spent.
  */
 export function chooseMove(s: Situation): MoveId | null {
-  if (!s.ground && !s.hanging) return airMove(s);
-  if (s.hanging) return AIR_CHAIN[0];
+  if (!s.ground) return airMove(s);
   if (s.next === s.limit) return finisher(s);
   return stringHit(s);
 }

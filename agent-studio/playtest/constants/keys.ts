@@ -5,10 +5,10 @@ export const KEYS = {
   up: "KeyW",
   down: "KeyS",
   attack: "KeyJ",
-  /** warp strike, or a hero's own move on K such as a vault */
-  skill: "KeyK",
-  /** dash, or a hero's own move on L such as a brace */
-  defend: "KeyL",
+  /** guard, and a parry when pressed just as a blow lands */
+  guard: "KeyK",
+  /** the front dodge */
+  dodge: "KeyL",
   /** the selected spell, or a hero's rite */
   spell: "KeyI",
   ultimate: "KeyU",
@@ -21,11 +21,11 @@ export const KEYS = {
 export const ACTION_KEYS = [
   KEYS.up,
   KEYS.attack,
-  KEYS.skill,
-  KEYS.defend,
+  KEYS.guard,
+  KEYS.dodge,
   KEYS.spell,
   KEYS.ultimate,
   KEYS.cycle,
 ] as const;
-/** HUD tabs that are not spells, and the key that uses each; any other tab in the row is a spell, cast with I */
-export const HUD_TAB_KEYS: Readonly<Record<string, string>> = { warpTab: KEYS.skill };
+/** HUD tabs that are not abilities on I: the warp, used by holding J */
+export const MOVE_TABS: readonly string[] = ["warpTab"];

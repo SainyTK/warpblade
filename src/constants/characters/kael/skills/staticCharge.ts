@@ -5,7 +5,7 @@ import { evolvedRow, levelRows } from "../../../../utils/skillRows";
  *  sword blow calls (once per 2 s per foe), `arcs`, `contagion` the charge jumps to foes touching, `death` a dying
  *  charged foe arcs, `perfect` a perfect dodge charges foes near */
 const LEVELS = levelRows([
-  { text: "Foes the dash passes through are charged and crackle.", values: { tick: 0.2, life: 3 } },
+  { text: "Foes the dodge passes through are charged and crackle.", values: { tick: 0.2, life: 3 } },
   { text: "Charge lasts 3 to 5 s.", values: { life: 5 } },
   { text: "New: a sword blow on a charged foe calls lightning.", values: { bolt: 1.5, arc: 1, arcs: 1 } },
   { text: "Charged foes crackle 0.2 to 0.5 a second.", values: { tick: 0.5 } },
@@ -21,13 +21,13 @@ export const STATIC_CHARGE: SkillDef = {
   kind: "dot",
   risk: "timed",
   button: "auto",
-  text: "Dash through foes to charge them; they crackle, and your sword sets them off.",
+  text: "Dodge through foes to charge them; they crackle, and your sword sets them off.",
   levels: LEVELS,
   evolution: {
     partner: "k_passing",
     name: "Overload",
-    text: "Charge never runs out, and each dash strikes up to 8 charged foes with lightning.",
-    row: evolvedRow(LEVELS[7], "Every dash strikes the charged foes.", {
+    text: "Charge never runs out, and each dodge strikes up to 8 charged foes with lightning.",
+    row: evolvedRow(LEVELS[7], "Every dodge strikes the charged foes.", {
       overload: 3,
       overloadArcs: 2,
       most: 8,

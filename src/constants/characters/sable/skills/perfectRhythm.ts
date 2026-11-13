@@ -6,7 +6,7 @@ export const PERFECT_RHYTHM: SkillDef = {
   name: "Perfect Rhythm",
   kind: "attack",
   risk: "precise",
-  button: "O",
+  button: "J",
   text: "The perfect reload pays far more.",
   levels: [
     {

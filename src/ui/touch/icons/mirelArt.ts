@@ -2,7 +2,7 @@ import type { MirelAbility } from "../../../types/mirel";
 import type { TouchButtonAction } from "../../../types/touch";
 import { hex } from "../../../utils/color";
 import { ICON_WHITE, type IconArt } from "./iconArt";
-import { JUMP, NOVA } from "./sharedArt";
+import { DODGE, JUMP, NOVA } from "./sharedArt";
 
 const TEAL = hex("#3fb0a0");
 const TEAL_DARK = hex("#24706c");
@@ -12,10 +12,7 @@ const ACCENT = hex("#6fe0c8");
 const SAND = hex("#e8d6a0");
 const SAND_SHADE = hex("#a8885a");
 const WOOD = hex("#7a5434");
-const ROBE = hex("#6e5a7e");
 const TRIM = hex("#d8b060");
-const HAIR = hex("#d8dce6");
-const SKIN = hex("#6a4028");
 const FOE = hex("#9a6ad8");
 
 /** the staff swung up, its clock ring at the top with one hand inside, a teal smear trailing behind it */
@@ -53,21 +50,22 @@ const STILL: IconArt = {
   colors: { C: TEAL, W: PALE, H: ICON_WHITE, O: SAND },
 };
 
-/** Rewind: the hour keeper with an arrow curling back over her head to the left */
-const REWIND: IconArt = {
+/** her guard: the staff held upright inside the time bubble, its ring at the top, sand hanging still round it */
+const GUARD: IconArt = {
   rows: [
-    "...AAAAA.....",
-    "..A.....P....",
-    ".A.......P...",
-    "AAA.......HH.",
-    ".A.......HHS.",
-    "..........SS.",
-    ".........RTR.",
-    ".........RRR.",
-    "........RRRR.",
-    "........TTTT.",
+    "...BBBBB...",
+    "..B..C..B..",
+    ".B..CHC..B.",
+    "B....C...OB",
+    "B....W....B",
+    "B.O..W....B",
+    "B....W....B",
+    "B....W..O.B",
+    ".B...W...B.",
+    "..B..W..B..",
+    "...BBBBB...",
   ],
-  colors: { A: PALE, P: TEAL_DARK, H: HAIR, S: SKIN, R: ROBE, T: TRIM },
+  colors: { B: TEAL, C: ACCENT, H: ICON_WHITE, W: WOOD, O: SAND },
 };
 
 /** Stopped Clock: a dark clock face, its hands stopped at three */
@@ -142,6 +140,7 @@ const HAND_SWEEP: IconArt = {
 };
 
 const ABILITY_ART: Readonly<Record<MirelAbility, IconArt>> = {
+  stillfield: STILL,
   stoppedClock: CLOCK,
   secondHand: SECOND_HAND,
   m_sundial: SUNDIAL,
@@ -149,13 +148,14 @@ const ABILITY_ART: Readonly<Record<MirelAbility, IconArt>> = {
   m_handsweep: HAND_SWEEP,
 };
 
-/** where each of up to five abilities sits on the switch dial, clockwise from the top */
+/** where each of up to six abilities sits on the switch dial, clockwise from the top */
 const DIAL: readonly [number, number][] = [
   [4, 0],
-  [8, 3],
-  [7, 8],
-  [1, 8],
-  [0, 3],
+  [8, 2],
+  [8, 6],
+  [4, 8],
+  [0, 6],
+  [0, 2],
 ];
 
 /** the switch: one mark for each ability she knows round a dial, the selected one white, as Orrin's */
@@ -175,17 +175,18 @@ function switchArt(selected: MirelAbility, known: readonly MirelAbility[]): Icon
   return { rows: grid.map((r) => r.join("")), colors: { B: TEAL_DARK, W: ICON_WHITE } };
 }
 
-/** Mirel's buttons: the staff, the Stillfield, Rewind, the selected ability on I and the switch dial on O */
+/** Mirel's buttons: the staff, the time-bubble guard, the selected ability on I and the switch dial on O; the dodge is
+ *  the shared one */
 export function mirelArt(action: TouchButtonAction, ability: MirelAbility, known: readonly MirelAbility[]): IconArt {
   switch (action) {
     case "attack":
       return STAFF;
     case "up":
       return JUMP;
-    case "warp":
-      return STILL;
+    case "guard":
+      return GUARD;
     case "dash":
-      return REWIND;
+      return DODGE;
     case "cast":
       return ABILITY_ART[ability];
     case "cycle":

@@ -27,8 +27,8 @@ export const FALLING_STAR: SkillDef = {
   name: "Falling Star",
   kind: "movement",
   risk: "timed",
-  button: "K",
-  text: "Your dive strikes harder and wider where it lands.",
+  button: "I",
+  text: "Your dive, the vault on I in the air, strikes harder and wider where it lands.",
   levels,
   evolution: {
     partner: "y_hawk",

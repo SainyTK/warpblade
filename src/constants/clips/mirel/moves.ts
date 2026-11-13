@@ -4,7 +4,7 @@ import { SECOND_HAND, STOPPED_CLOCK } from "../../mirel/abilities";
 import { REWIND } from "../../mirel/rewind";
 import { CHARGE_POSE, HANG_LEGS, m, STANCE } from "./stance";
 
-/** K: the staff held out ahead, ring forward and bright, as the field opens */
+/** I with the Stillfield: the staff held out ahead, ring forward and bright, as the field opens */
 export const STILL_CAST: ActionClip = {
   dur: 0.2,
   hit: 0,
@@ -15,7 +15,7 @@ export const STILL_CAST: ActionClip = {
   ],
 };
 
-/** the middle of the Rewind: leaning back, the staff swung up and behind her, legs trailing forward */
+/** the middle of a rewind: leaning back, the staff swung up and behind her, legs trailing forward */
 const REWIND_LEAN = m({
   hx: 0.5,
   hy: -14.5,
@@ -36,7 +36,7 @@ const REWIND_LEAN = m({
   ba: 0.2,
 });
 
-/** L, over the Rewind's playback: a dip back against the pull, the lean with the staff swung up behind her and her legs
+/** Second Chance, over its rewind's playback: a dip back against the pull, the lean with the staff swung up behind her and her legs
  *  trailing forward, then the knees bending under her for the stop */
 export const REWIND_CLIP: ActionClip = {
   dur: REWIND.play,
@@ -137,26 +137,6 @@ export const HOUR_CLIP: ActionClip = {
     [
       frame(10),
       m({ hy: -12.5, ny: -22.5, nx: 1.8, cb: 0.8, fx: 9, fy: -12.5, sa: -1.42, bx: 7, by: -14.5, ffx: 6, bfx: -5 }),
-    ],
-    [frame(14), STANCE],
-  ],
-};
-
-/** Eternal Noon: arms wide, the staff held straight up high, the body arched back to the sky */
-export const NOON_CLIP: ActionClip = {
-  dur: frame(14),
-  hit: frame(6),
-  keys: [
-    [0, CHARGE_POSE],
-    [frame(5), { ...CHARGE_POSE, ny: -25, cb: -1, fy: -32, by: -26, bx: -6 }],
-    [
-      frame(6),
-      m({ hy: -14.5, ny: -25, nx: -0.5, cb: -1.5, fx: 6, fy: -32, sa: -1.57, bx: -8, by: -24, be: 0, ffx: 4, bfx: -4 }),
-      "snap",
-    ],
-    [
-      frame(10),
-      m({ hy: -14.3, ny: -24.8, nx: -0.3, cb: -1.2, fx: 6, fy: -31, sa: -1.57, bx: -7, by: -23, ffx: 4, bfx: -4 }),
     ],
     [frame(14), STANCE],
   ],

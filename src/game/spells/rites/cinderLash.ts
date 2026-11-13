@@ -27,14 +27,14 @@ function along(x: number, floor: number, dir: number, reach: number, u: number):
   return [lx, ly];
 }
 
-/** strike every foe on the lash's line, and drag the nearest of them in */
-function strike(x: number, floor: number, dir: number): number {
+/** strike every foe on the lash's line at this share of its power, and drag the nearest of them in */
+function strike(x: number, floor: number, dir: number, share: number): number {
   const line: Box = dir > 0 ? [x, floor - L.height, x + L.reach, floor] : [x - L.reach, floor - L.height, x, floor];
   let nearest: Enemy | null = null;
   let hits = 0;
   for (const e of game.enemies) {
     if (e.hp <= 0 || !boxHit(line, enemyBox(e))) continue;
-    dealDamage(e, progress.stats.ap * L.power, { fromX: x, kx: 0, heavy: true, source: "abilities" });
+    dealDamage(e, progress.stats.ap * L.power * share, { fromX: x, kx: 0, heavy: true, source: "abilities" });
     ignite(e, L.burn);
     hits++;
     if (!nearest || Math.abs(e.x - x) < Math.abs(nearest.x - x)) nearest = e;
@@ -44,10 +44,10 @@ function strike(x: number, floor: number, dir: number): number {
 }
 
 /**
- * Cinder Lash, her second base rite: a whip of fire lashes low along the floor ahead, strikes every foe on it as it
- * cracks, drags the nearest one in, and recoils into her hand.
+ * Cinder Lash, her second base rite: a whip of fire lashes low along the floor toward `dir`, strikes every foe on it at
+ * `share` of its power as it cracks, drags the nearest one in, and recoils into her hand.
  */
-export function castCinderLash(x: number, floor: number, dir: number): Effect {
+export function castCinderLash(x: number, floor: number, dir: number, share = 1): Effect {
   let t = 0;
   let cracked = false;
   riteSound(L.pitch);
@@ -57,7 +57,7 @@ export function castCinderLash(x: number, floor: number, dir: number): Effect {
       t += dt;
       if (!cracked && t >= L.out) {
         cracked = true;
-        if (strike(x, floor, dir)) hitStop(0.05);
+        if (strike(x, floor, dir, share)) hitStop(0.05);
         shake(0.14, 1.8);
         const [tx, ty] = along(x, floor, dir, L.reach, 1);
         lights.add(tx, ty, 32, RITE_RAMP[4], 0.55, 0.25);

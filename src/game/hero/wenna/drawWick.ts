@@ -191,7 +191,7 @@ export function drawWick(w: Wick): void {
     drawHealthPips(Math.round(w.x), Math.round(fy - 8), clamp(w.hp / w.max));
 }
 
-/** a still Wick as a violet shape at (x, y), `alpha` strong: the afterimage a Swap leaves where the Wick stood */
+/** a still Wick as a violet shape at (x, y), `alpha` strong: the copy a Wick leaves where it stood when a warp moves it */
 export function drawWickGhost(x: number, y: number, alpha: number): void {
   place();
   const f: Frame = { tall: L.tall, half: L.half, sink: 0, top: 0 };

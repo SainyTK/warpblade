@@ -1,3 +1,4 @@
+import { JAVELIN } from "../../../../constants/ysra/javelin";
 import type { Enemy } from "../../../../types/enemy";
 import { enemyCenter } from "../../../enemies/enemy";
 import { skillValues } from "../../../skills/query";
@@ -30,8 +31,9 @@ function burstStruck(): void {
   }
 }
 
-/** glaive blows that land build Heat and carry its fire */
+/** glaive blows that land build Heat and carry its fire; a warp's arrival builds a little, more with Ember Javelin */
 export function listenStrikes(): void {
+  onYsra("warp", () => gainHeat(skillValues("y_javelin").heat ?? JAVELIN.heat));
   onYsra("strike", ({ source, hits }) => {
     if (hits <= 0) return;
     burstStruck();

@@ -39,6 +39,9 @@ async function checkWalk(session: Session, add: Add): Promise<void> {
   );
 }
 
+/** one frame of game time */
+const TAP_FRAME_MS = 17;
+
 /** every action key once; J must start a blow and W a jump, the rest must at least not break anything */
 async function checkActions(session: Session, add: Add): Promise<void> {
   const seen: string[] = [];
@@ -47,6 +50,8 @@ async function checkActions(session: Session, add: Add): Promise<void> {
     const errorsBefore = session.errors().length;
     const before = await session.state();
     await session.press(key, ACTION_PRESS_MS);
+    // J and I act on their key-up (a tap, as opposed to a long press), so give the game a frame to start the move
+    await session.advance(TAP_FRAME_MS);
     const after = await session.state();
     outcomes.set(key, after);
     seen.push(`${key}: ${before.hero.state} to ${after.hero.state}`);

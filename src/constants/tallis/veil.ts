@@ -1,9 +1,9 @@
-/** K: the Veil, which hides him from minions while it lasts */
+/** I: the Veil, which hides him from minions while it lasts */
 export const VEIL = {
   /** Gloam to raise it, and Gloam a second while it holds */
   enter: 20,
   drain: 8,
-  /** seconds K waits after the Veil ends */
+  /** seconds before I can raise it again after it ends */
   lock: 1,
   /** seconds the Veil holds after his first blow out of it */
   strikeEnd: 0.2,

@@ -54,6 +54,7 @@ export function startSwing(kind: LatchKind, at: Point): void {
   orrin.length = chainLength(at, hand);
   orrin.latchT = 0;
   orrin.biteLeft = kind === "air" ? biteTime() : 0;
+  orrin.reelHeld = false;
   orrin.reeling = false;
   orrin.reelBase = 0;
   orrin.kickKills = 0;
@@ -108,10 +109,17 @@ function runYank(dt: number): boolean {
   return true;
 }
 
-/** the reel: L held pulls the chain in, and the swing speeds up as it shortens, up to a cap; Reel Snap answers */
+/** J held down again while he swings: the reel pulls the chain in while it stays down */
+export function holdReel(): boolean {
+  orrin.reelHeld = true;
+  return true;
+}
+
+/** the reel: J held pulls the chain in, and the swing speeds up as it shortens, up to a cap; Reel Snap answers */
 function runReel(dt: number): void {
   const snap = skillValues("o_reelsnap");
-  const reeling = isHeld("dash") && orrin.length > HOOK.minLength && hero.stamina > 0;
+  if (!isHeld("attack")) orrin.reelHeld = false;
+  const reeling = orrin.reelHeld && orrin.length > HOOK.minLength && hero.stamina > 0;
   if (!reeling) {
     orrin.reeling = false;
     return;
@@ -252,16 +260,16 @@ export function letGo(hop: boolean): void {
   const forward = !!at && Math.sign(h.x - at.x) === Math.sign(h.vx);
   const fling = h.vy < 0 && forward && speed > 60;
   if (fling) {
-    const boost = 1 + SWING.fling + (skillValues(PUMP).fling ?? 0) + orrin.flingBoost;
+    const boost = 1 + SWING.fling + (skillValues(PUMP).fling ?? 0);
     h.vx *= boost;
     h.vy *= boost;
   }
   if (hop) h.vy -= SWING.hopUp;
-  orrin.flingBoost = 0;
   orrin.latch = null;
   orrin.latchAt = null;
   orrin.yankTo = null;
   orrin.biteLeft = 0;
+  orrin.reelHeld = false;
   orrin.reeling = false;
   orrin.sinceRelease = 0;
   orrin.releaseSpeed = Math.hypot(h.vx, h.vy);
@@ -281,19 +289,19 @@ export function endSwingOnFloor(): void {
   orrin.yankTo = null;
   orrin.climbTo = null;
   orrin.biteLeft = 0;
+  orrin.reelHeld = false;
   orrin.reeling = false;
 }
 
-/** let go at once and without a fling: hurt, down, or the run's end */
+/** let go at once and without a fling: hurt, down, a shared action, or the run's end */
 export function dropChain(): void {
   endSwingOnFloor();
   orrin.flight = null;
-  orrinHost.zipFoe = null;
 }
 
 /**
- * The swing: the yank onto the arc, then the pendulum he pumps with Left and Right and reels in with L. He lets go when
- * K is let go or an air bite's tear closes; Plumb Drop lets go downward with Down held.
+ * The swing: the yank onto the arc, then the pendulum he pumps with Left and Right and reels in with J held. Jump lets
+ * go with a fling, and so does an air bite's tear closing; Plumb Drop lets go downward with Down.
  */
 export function runSwing(dt: number, dir: number): void {
   const h = hero;
@@ -302,7 +310,6 @@ export function runSwing(dt: number, dir: number): void {
     orrin.biteLeft -= dt;
     if (orrin.biteLeft <= 0) return letGo(false);
   }
-  if (orrin.latchT > SWING.yankTime * 0.5 && !isHeld("warp")) return letGo(false);
   if (runYank(dt)) return;
   pendulum(dt, dir);
   runReel(dt);

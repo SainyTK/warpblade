@@ -1,10 +1,9 @@
 import type { MoveHit } from "../../../../types/move";
 import type { Box } from "../../../../types/world";
-import { skillValues } from "../../../skills/query";
 import { blowBonus, buffs } from "../buffs";
 
-/** Deep Heft: how many pixels further every glaive blow reaches; Overheat's tongue of flame while it burns */
-export const haftReach = (): number => (skillValues("y_heft").reach ?? 0) + buffs.reach;
+/** how many pixels further every glaive blow reaches: Overheat's tongue of flame while it burns */
+export const haftReach = (): number => buffs.reach;
 
 /** a box pushed out at its far end: forward for a blow ahead, backward for a blow behind */
 export function longer(box: Box, extra: number): Box {

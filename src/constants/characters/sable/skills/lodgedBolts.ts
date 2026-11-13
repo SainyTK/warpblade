@@ -1,13 +1,13 @@
 import type { SkillDef } from "../../../../types/skill";
 
-/** Lodged Bolts: Bolts stay in the foe and fester; a kick tears them out. Values: rate: attack damage a second per lodged bolt; max: bolts a foe carries; tear: attack damage per bolt a kick tears out; slow: lodged bolts slow from this many; closing: bolts a closing bolt lodges; flyOn: attack damage of torn bolts flying on at other foes; seek: torn bolts seek every foe around. Design: docs/skills/sable.md */
+/** Lodged Bolts: Bolts stay in the foe and fester; a kick or a heavy bolt tears them out. Values: rate: attack damage a second per lodged bolt; max: bolts a foe carries; tear: attack damage per bolt Point-Blank's kick or the warp's heavy bolt tears out; slow: lodged bolts slow from this many; closing: bolts a closing bolt lodges; flyOn: attack damage of torn bolts flying on at other foes; seek: torn bolts seek every foe around. Design: docs/skills/sable.md */
 export const LODGED_BOLTS: SkillDef = {
   id: "s_lodged",
   name: "Lodged Bolts",
   kind: "dot",
   risk: "timed",
   button: "J",
-  text: "Bolts stay in the foe and fester; a kick tears them out.",
+  text: "Bolts stay in the foe and fester; a kick or a heavy bolt tears them out.",
   levels: [
     {
       text: "Bolts stay lodged and fester.",
@@ -15,7 +15,7 @@ export const LODGED_BOLTS: SkillDef = {
     },
     { text: "More bolts stay lodged.", values: { rate: 0.1, max: 5, tear: 0, slow: 0, closing: 1, flyOn: 0, seek: 0 } },
     {
-      text: "A kick rips the bolts out.",
+      text: "A parry kick or a warp's heavy bolt rips them out.",
       values: { rate: 0.1, max: 5, tear: 0.5, slow: 0, closing: 1, flyOn: 0, seek: 0 },
     },
     {
@@ -42,9 +42,9 @@ export const LODGED_BOLTS: SkillDef = {
   evolution: {
     partner: "s_heavyBoot",
     name: "Pincushion",
-    text: "Up to twenty bolts lodge, and a kick tears them out as a burst of seeking bolts through every foe around.",
+    text: "Up to twenty bolts lodge, and a parry kick or a heavy bolt tears them out as a burst of seeking bolts through every foe around.",
     row: {
-      text: "A kick tears out a burst of seeking bolts.",
+      text: "Torn bolts burst out and seek.",
       values: { rate: 0.9, max: 20, tear: 1.5, slow: 2, closing: 2, flyOn: 2, seek: 1 },
     },
   },

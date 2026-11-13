@@ -13,11 +13,18 @@ export const TOUCH_BUTTONS: readonly TouchButtonSpec[] = [
   { action: "attack", key: "J", size: 24, angle: 0, reach: 0 },
   { action: "up", key: "W", size: 17, angle: 190, reach: 30 },
   { action: "dash", key: "L", size: 17, angle: 150, reach: 30 },
-  { action: "warp", key: "K", size: 17, angle: 110, reach: 30 },
+  { action: "guard", key: "K", size: 17, angle: 110, reach: 30 },
   { action: "cast", key: "I", size: 17, angle: 70, reach: 30 },
   { action: "ultimate", key: "U", size: 19, angle: 129, reach: 54 },
   { action: "cycle", key: "O", size: 15, angle: 80, reach: 54 },
 ];
+
+/** the front dodge every hero shares */
+const DODGE_BUTTON: TouchButtonText = {
+  label: "Dodge",
+  hint: "Dodge forward. Nothing can touch you while you dodge, and each dodge spends stamina",
+  accent: "#b4a8ff",
+};
 
 const SPECIAL: TouchButtonText = {
   label: "Special",
@@ -30,24 +37,28 @@ export const TOUCH_TEXT: Record<KitId, Record<TouchButtonAction, TouchButtonText
   kael: {
     attack: {
       label: "Attack",
-      hint: "Sword combo of four hits, the same every time. Press again just as a blow lands for a Keen hit",
+      hint: "Tap: sword combo of four hits; tap again just as a blow lands for a Keen hit, or just after a parry to blink behind the attacker. Hold: throw the sword and warp to it (10 MP)",
       accent: "#7fe3ff",
     },
     up: { label: "Jump", hint: "Jump. Hold the stick down to drop through a ledge", accent: "#e8e6f6" },
-    dash: {
-      label: "Dash",
-      hint: "Dash. Nothing can touch you while you dash, and each dash spends stamina",
-      accent: "#b4a8ff",
+    dash: DODGE_BUTTON,
+    guard: {
+      label: "Guard",
+      hint: "Hold to block blows from the front. Tap just as a blow lands to parry: a riposte cut, then Attack blinks you behind the attacker",
+      accent: "#a8ecff",
     },
-    warp: { label: "Warp", hint: "Warp strike (10 MP)", accent: "#a8ecff" },
-    cast: { label: "Spell", hint: "Cast the selected spell (18 MP)", accent: null },
+    cast: {
+      label: "Ability",
+      hint: "Tap to cast the selected ability; if it is recharging, the next ready one goes. Hold for its wide form, for half again the MP",
+      accent: null,
+    },
     ultimate: SPECIAL,
     cycle: { label: "Ability", hint: "Switch ability: lance, burst and the spells you learn", accent: null },
   },
   ysra: {
     attack: {
       label: "Attack",
-      hint: "Glaive string of three blows that pierce the whole line. Hold to wind a lunge, let go to lunge. In a vault, crash down",
+      hint: "Tap: glaive string of three blows that pierce the whole line; right after a parry, a counter thrust; in a vault, crash down. Hold: hurl the glaive and warp to it (10 MP)",
       accent: "#ffae48",
     },
     up: {
@@ -55,45 +66,45 @@ export const TOUCH_TEXT: Record<KitId, Record<TouchButtonAction, TouchButtonText
       hint: "One heavy jump, no double jump. Hold the stick down to drop through a ledge",
       accent: "#e8e6f6",
     },
-    dash: {
+    dash: DODGE_BUTTON,
+    guard: {
       label: "Guard",
-      hint: "Hold to brace and block blows from the front. Tap just before a blow to parry. With the stick pushed behind you, step back",
-      accent: "#d08a3c",
-    },
-    warp: {
-      label: "Vault",
-      hint: "Pole vault over foes, also out of a brace or a backstep. In the air, dive glaive first",
+      hint: "Hold to block blows from the front. Tap just as a blow lands to parry: Heat, and Attack is a counter thrust. Hold the stick away to step back",
       accent: "#ec7228",
     },
-    cast: { label: "Rite", hint: "Call the selected rite, paid with Heat", accent: null },
+    cast: {
+      label: "Ability",
+      hint: "Tap: the selected ability, the vault or a rite paid with Heat; in the air the vault dives. Hold: its wide form",
+      accent: null,
+    },
     ultimate: SPECIAL,
-    cycle: { label: "Next rite", hint: `Switch rite: ${RITE_NAMES}`, accent: null },
+    cycle: { label: "Switch", hint: `Switch ability: the vault, ${RITE_NAMES}`, accent: null },
   },
   sable: {
     attack: {
-      label: "Shoot",
-      hint: "Shoot a bolt. Hold to keep shooting. Push the stick up or down while you hold it to aim",
+      label: "Attack",
+      hint: "Tap: the next bolt of the string; with the stick down on the floor, reload; while reloading, tap in the bright window for a perfect reload. Hold: grapple away from the foe and fire a heavy bolt back (10 MP)",
       accent: "#6ee0a0",
     },
     up: { label: "Jump", hint: "One light jump. Hold the stick down to drop through a ledge", accent: "#e8e6f6" },
-    dash: {
-      label: "Hop",
-      hint: "Hop back and shoot at the top. With the stick pushed ahead, slide forward under blows. Both spend stamina",
-      accent: "#3fc06a",
+    dash: DODGE_BUTTON,
+    guard: {
+      label: "Guard",
+      hint: "Hold to block blows from the front with the crossbow stock. Tap just as a blow lands for Point-Blank: a kick and a full, primed quiver",
+      accent: "#ccb88c",
     },
-    warp: { label: "Kick", hint: "Kick foes away from you", accent: "#ccb88c" },
-    cast: { label: "Spell", hint: "Cast the selected spell, a snare at first", accent: "#e88a4c" },
+    cast: {
+      label: "Ability",
+      hint: "Tap to cast the selected ability: the hop back, the snare or a spell. Hold for its wide form: the hop slides forward",
+      accent: null,
+    },
     ultimate: SPECIAL,
-    cycle: {
-      label: "Reload",
-      hint: "Reload. Tap again in the bright window for a perfect reload and primed bolts",
-      accent: "#c4ffd8",
-    },
+    cycle: { label: "Switch", hint: "Switch ability: hop, snare and the spells you learn", accent: null },
   },
   hulda: {
     attack: {
-      label: "Punch",
-      hint: "Fist string: jab, body hook, haymaker. In the air, a hammer fist. While holding a foe, a knee",
+      label: "Attack",
+      hint: "Tap: fist string of jab, body hook and haymaker; in the air a hammer fist; while holding a foe, a knee. Hold: hurl the chained gauntlet and haul yourself in holding the foe (10 MP); while holding, throw it",
       accent: "#ff5f6d",
     },
     up: {
@@ -101,40 +112,44 @@ export const TOUCH_TEXT: Record<KitId, Record<TouchButtonAction, TouchButtonText
       hint: "One low, heavy jump. Hold the stick down to drop through a ledge",
       accent: "#e8e6f6",
     },
-    dash: { label: "Rush", hint: "Bull Rush: an armoured shoulder charge that spends stamina", accent: "#c43848" },
-    warp: {
-      label: "Grab",
-      hint: "Grab a foe ahead; big foes are crushed. While holding, throw it: into the crowd ahead, or a suplex behind. In the air, Skyfall Grab",
+    dash: DODGE_BUTTON,
+    guard: {
+      label: "Guard",
+      hint: "Hold to block blows from the front for little stamina. Tap just as a blow lands for Iron Catch: seize the attacker, or a haymaker on a big foe",
       accent: "#b4bcc4",
     },
-    cast: { label: "Ability", hint: "Use the selected ability: Bellow, the taunt or a spell skill", accent: "#ffc2b8" },
+    cast: {
+      label: "Ability",
+      hint: "Tap: Bull Rush (Skyfall Grab in the air), Bellow, the taunt or a spell skill. Hold: a longer rush, a wider Bellow",
+      accent: "#ffc2b8",
+    },
     ultimate: SPECIAL,
-    cycle: { label: "Switch", hint: "Turn to the next ability", accent: "#e0ac48" },
+    cycle: {
+      label: "Switch",
+      hint: "Switch ability: Bull Rush, Bellow, the taunt and the spells you learn",
+      accent: "#e0ac48",
+    },
   },
   orrin: {
     attack: {
-      label: "Lash",
-      hint: "Chain string: Lash, Rising Arc, Full Circle, hardest at the tip. In the air, a Hanging Arc",
+      label: "Attack",
+      hint: "Tap: chain string, hardest at the tip; in the air, a Hanging Arc. Hold: throw the hook at a foe and kick it (10 MP); with the stick up, hook above and swing",
       accent: "#e8b04a",
     },
     up: {
       label: "Jump",
-      hint: "One light jump. While swinging, let go with a hop. Hold the stick down to drop through a ledge",
+      hint: "One light jump. While swinging, let go with a fling. Hold the stick down to drop through a ledge",
       accent: "#e8e6f6",
     },
-    dash: {
-      label: "Reel",
-      hint: "While swinging, hold to reel the chain in. On the floor, Backline: yank yourself back",
-      accent: "#c08a2e",
-    },
-    warp: {
-      label: "Hook",
-      hint: "Hold to swing from a crystal, a platform or the air, lift to let go. On a foe, zip to it. Stick up aims steeper, down in the air aims low",
+    dash: DODGE_BUTTON,
+    guard: {
+      label: "Guard",
+      hint: "Hold to spin the chain into a shield. Tap just as a blow lands for Chain Bind: the attacker is hauled in and held",
       accent: "#b8c0cc",
     },
     cast: {
       label: "Ability",
-      hint: "Use the selected ability: Whirlwall, Anchor Pin or a spell skill",
+      hint: "Tap to use the selected ability: Whirlwall, Anchor Pin or a spell skill. Hold for its wide form",
       accent: "#ffe08a",
     },
     ultimate: SPECIAL,
@@ -142,8 +157,8 @@ export const TOUCH_TEXT: Record<KitId, Record<TouchButtonAction, TouchButtonText
   },
   mirel: {
     attack: {
-      label: "Staff",
-      hint: "Staff string: Tick, Tock, Toll, each echoing half a second later. In the air, Pendant Strike",
+      label: "Attack",
+      hint: "Tap: staff string Tick, Tock, Toll, each echoing half a second later; in the air, Pendant Strike. Hold: fling the staff, skip to the foe and strike, and the blow echoes (10 MP)",
       accent: "#6fe0c8",
     },
     up: {
@@ -151,19 +166,15 @@ export const TOUCH_TEXT: Record<KitId, Record<TouchButtonAction, TouchButtonText
       hint: "One jump. Hold past the top to hover. Hold the stick down to drop through a ledge",
       accent: "#e8e6f6",
     },
-    dash: {
-      label: "Rewind",
-      hint: "Go back along your path and get back part of the HP you lost (40 Sand)",
-      accent: "#3fb0a0",
-    },
-    warp: {
-      label: "Still",
-      hint: "Hold to keep the Stillfield open, lift to snap it shut (Sand). Stick up opens it above you, down on you",
+    dash: DODGE_BUTTON,
+    guard: {
+      label: "Guard",
+      hint: "Hold to guard in a time bubble. Tap just as a blow lands for a Stopped Moment: the attacker stops and your lost HP rewinds",
       accent: "#8ae6cf",
     },
     cast: {
       label: "Ability",
-      hint: "Use the selected ability: Stopped Clock, Second Hand or a spell skill",
+      hint: "Tap to cast the selected ability; the Stillfield stands a while. Hold to keep the Stillfield open until you lift, or to stop every foe round you with Stopped Clock",
       accent: "#e6fff6",
     },
     ultimate: SPECIAL,
@@ -171,103 +182,103 @@ export const TOUCH_TEXT: Record<KitId, Record<TouchButtonAction, TouchButtonText
   },
   wenna: {
     attack: {
-      label: "Lamp",
-      hint: "Lamp string: Tap, Swing, Flare. The foe it hits becomes the Quarry every Wick turns on. In the air, Lamp Drop",
+      label: "Attack",
+      hint: "Tap: lamp string, Tap, Swing, Flare; the foe it hits becomes the Quarry every Wick turns on. In the air, Lamp Drop. Hold: throw a lit candle and trade places with it (10 MP)",
       accent: "#b48cff",
     },
     up: { label: "Jump", hint: "One jump. Hold the stick down to drop through a ledge", accent: "#e8e6f6" },
-    dash: {
-      label: "Swap",
-      hint: "Trade places with the Wick farthest ahead, which arrives in a flare (stamina)",
-      accent: "#a46ae0",
-    },
-    warp: {
-      label: "Light",
-      hint: "Light a Wick ahead (25 Wax). Stick down lights it at your feet. With four out, relight the weakest",
-      accent: "#e8dcc4",
+    dash: DODGE_BUTTON,
+    guard: {
+      label: "Guard",
+      hint: "Hold to raise the lantern and block blows from the front. Tap just as a blow lands for Flare Back: it blinds the foes ahead and lights a Wick",
+      accent: "#d8b4ff",
     },
     cast: {
       label: "Ability",
-      hint: "Use the selected ability: Kindle, Beckon or a spell skill",
+      hint: "Tap: Light a Wick (Wax), Kindle, Beckon or a spell skill. Hold: Light at your feet, or Kindle every Wick near you",
       accent: "#f8eeff",
     },
     ultimate: SPECIAL,
-    cycle: { label: "Switch", hint: "Turn to the next ability", accent: "#d8b4ff" },
+    cycle: {
+      label: "Switch",
+      hint: "Switch ability: Light, Kindle, Beckon and the spells you learn",
+      accent: "#d8b4ff",
+    },
   },
   tallis: {
     attack: {
-      label: "Knife",
-      hint: "Knife string: Flick, Cross, Heel Kick. In the air, Drop Stab. Out of the pool, Rising Cut",
+      label: "Attack",
+      hint: "Tap: knife string, Flick, Cross, Heel Kick; in the air, Drop Stab. Hold: throw a knife and step out of the foe's shadow at its back (10 MP)",
       accent: "#f08ad0",
     },
     up: { label: "Jump", hint: "One jump. Hold the stick down to drop through a ledge", accent: "#e8e6f6" },
-    dash: {
-      label: "Sink",
-      hint: "Hold to sink into a shadow pool and glide under foes, let go to rise (stamina). In the air, drop straight down",
-      accent: "#c06a9e",
-    },
-    warp: {
-      label: "Veil",
-      hint: "Veil on or off: minions lose sight of you (Gloam). Your first blow out of it is an Ambush",
+    dash: DODGE_BUTTON,
+    guard: {
+      label: "Guard",
+      hint: "Hold to block blows from the front with crossed knives. Tap just as a blow lands to Fade into the Veil",
       accent: "#ffb8dc",
     },
     cast: {
       label: "Ability",
-      hint: "Use the selected ability: Smoke Knot, Hamstring or a spell skill",
+      hint: "Tap to cast the selected ability. Hold to stay in the shadow pool, or for a wider Smoke Knot or Hamstring",
       accent: "#ffe4f2",
     },
     ultimate: SPECIAL,
-    cycle: { label: "Switch", hint: "Turn to the next ability", accent: "#e8b4d0" },
+    cycle: {
+      label: "Switch",
+      hint: "Switch ability: Smoke Knot, Hamstring, the spells you learn, the Veil and Sink",
+      accent: "#e8b4d0",
+    },
   },
   jory: {
     attack: {
-      label: "Mallets",
-      hint: "Mallet string: Tap, Roll, Crash. On the beat a blow is an Accent and builds Groove. In the air, Downstroke",
+      label: "Attack",
+      hint: "Tap: mallet string Tap, Roll, Crash; on the beat a blow is an Accent and builds Groove. In the air, Downstroke. Hold: spin a mallet at a foe and arrive with a crash (10 MP)",
       accent: "#5a82ff",
     },
     up: { label: "Jump", hint: "One jump. Hold the stick down to drop through a ledge", accent: "#e8e6f6" },
-    dash: {
-      label: "Step",
-      hint: "Beat Step (stamina). On the beat nothing can touch you and you pass through foes",
-      accent: "#a6c0ff",
-    },
-    warp: {
-      label: "Boom",
-      hint: "Push foes away (stamina). On the beat it is bigger, drowns foe shots and nothing can touch you",
+    dash: DODGE_BUTTON,
+    guard: {
+      label: "Guard",
+      hint: "Hold to block with the drum. Tap just as a blow lands for Counterbeat, a Boom off the drum; on the beat it lifts Groove a tier",
       accent: "#eef3ff",
     },
     cast: {
       label: "Ability",
-      hint: "Use the selected ability: Steady Hand, Thunder Skin or a spell skill. Judged on the beat",
+      hint: "Tap: the selected ability, Boom, Steady Hand, Thunder Skin or a spell skill, judged on the beat. Hold: Thunder Skin sends a wave each way",
       accent: "#dce6ff",
     },
     ultimate: SPECIAL,
-    cycle: { label: "Switch", hint: "Turn to the next ability", accent: "#8eaaf0" },
+    cycle: {
+      label: "Switch",
+      hint: "Switch ability: Boom, Steady Hand, Thunder Skin and the spells you learn",
+      accent: "#8eaaf0",
+    },
   },
   brannoc: {
     attack: {
-      label: "Axe",
-      hint: "Axe string: Hew, Reave, Cleave. The Cleave hits both sides. In the air, Hatchet Drop",
+      label: "Attack",
+      hint: "Tap: axe string Hew, Reave, Cleave; in the air, Hatchet Drop. Hold: Hunt, hurl the axe into a foe and rip it out with a chop (10 MP)",
       accent: "#ff6a5a",
     },
     up: { label: "Jump", hint: "One jump. Hold the stick down to drop through a ledge", accent: "#f2eadb" },
-    dash: {
-      label: "Hunt",
-      hint: "Lunge at the nearest foe ahead and chop it (stamina). In the air, dive at a foe below",
-      accent: "#eadbb8",
-    },
-    warp: {
-      label: "Frenzy",
-      hint: "Spend 12% HP: blows do not stagger you and you swing faster. Strike to win the HP back",
+    dash: DODGE_BUTTON,
+    guard: {
+      label: "Guard",
+      hint: "Hold to take blows on the haft; half bleeds through into your spent HP. Tap just as a blow lands: Blood Answer wins all spent HP back and starts Frenzy",
       accent: "#d0283a",
     },
     cast: {
       label: "Ability",
-      hint: "Use the selected ability: War Cry, Red Crescent or a spell skill (HP)",
+      hint: "Tap: the selected ability, paid with HP. Hold: War Cry reaches further, Red Crescent goes both ways",
       accent: "#ffd8c8",
     },
     ultimate: SPECIAL,
-    cycle: { label: "Switch", hint: "Turn to the next ability", accent: "#c8a890" },
+    cycle: {
+      label: "Switch",
+      hint: "Switch ability: Frenzy, War Cry, Red Crescent and the spells you learn",
+      accent: "#c8a890",
+    },
   },
 };
 
@@ -296,8 +307,8 @@ export const STICK_DIRECTIONS: Record<KitId, readonly StickDirectionSpec[]> = {
   kael: [
     { direction: "side", label: "Walk" },
     { direction: "far side", label: "Run" },
-    { direction: "up", label: "Jump, and the up variants of attacks" },
-    { direction: "down", label: "Down variants. With Jump, drop through a ledge" },
+    { direction: "up", label: "Jump" },
+    { direction: "down", label: "With Jump, drop through a ledge" },
   ],
   ysra: [
     { direction: "side", label: "Walk" },
@@ -309,7 +320,7 @@ export const STICK_DIRECTIONS: Record<KitId, readonly StickDirectionSpec[]> = {
     { direction: "side", label: "Walk" },
     { direction: "far side", label: "Run" },
     { direction: "up", label: "Jump" },
-    { direction: "down", label: "With Jump, drop through a ledge" },
+    { direction: "down", label: "With Jump, drop through a ledge. With Attack on the floor, reload" },
   ],
   hulda: [
     { direction: "side", label: "Walk" },
@@ -320,23 +331,20 @@ export const STICK_DIRECTIONS: Record<KitId, readonly StickDirectionSpec[]> = {
   orrin: [
     { direction: "side", label: "Walk. While swinging, pump the swing" },
     { direction: "far side", label: "Walk, he never runs" },
-    { direction: "up", label: "Jump. With Hook, aim steeper" },
-    {
-      direction: "down",
-      label: "With Jump, drop through a ledge. With Hook in the air, aim low. While swinging, Plumb Drop",
-    },
+    { direction: "up", label: "Jump. Held with a long press of Attack, hook above and swing" },
+    { direction: "down", label: "With Jump, drop through a ledge. While swinging, Plumb Drop" },
   ],
   mirel: [
     { direction: "side", label: "Walk. While hovering, drift" },
     { direction: "far side", label: "Walk, she never runs" },
-    { direction: "up", label: "Jump, hold to hover. With Still, open the field above you" },
-    { direction: "down", label: "With Jump, drop through a ledge. With Still, open the field on you" },
+    { direction: "up", label: "Jump, hold to hover. With the Stillfield, open it above you" },
+    { direction: "down", label: "With Jump, drop through a ledge. With the Stillfield, open it on you" },
   ],
   wenna: [
     { direction: "side", label: "Walk" },
     { direction: "far side", label: "Walk, she never runs" },
     { direction: "up", label: "Jump" },
-    { direction: "down", label: "With Jump, drop through a ledge. With Light, light the Wick at your feet" },
+    { direction: "down", label: "With Jump, drop through a ledge" },
   ],
   tallis: [
     { direction: "side", label: "Walk. In the shadow pool, glide" },
@@ -345,13 +353,13 @@ export const STICK_DIRECTIONS: Record<KitId, readonly StickDirectionSpec[]> = {
     { direction: "down", label: "With Jump, drop through a ledge" },
   ],
   jory: [
-    { direction: "side", label: "Walk. With Step, step that way; with none held, step back" },
+    { direction: "side", label: "Walk" },
     { direction: "far side", label: "Run" },
     { direction: "up", label: "Jump" },
     { direction: "down", label: "With Jump, drop through a ledge" },
   ],
   brannoc: [
-    { direction: "side", label: "Walk. With Hunt, lunge that way" },
+    { direction: "side", label: "Walk" },
     { direction: "far side", label: "Run" },
     { direction: "up", label: "Jump" },
     { direction: "down", label: "With Jump, drop through a ledge" },

@@ -17,10 +17,18 @@ const TONGUES = { gap: 2.5, height: 6 } as const;
 
 /**
  * a strip of burning floor `half` to each side of (x, y) at time t: a bed of embers along the floor, then tongues of
- * flame standing in it, each swaying on its own beat and shorter toward the strip's ends. `k` fades the whole fire.
- * Call after `place()`.
+ * flame standing in it, each swaying on its own beat and shorter toward the strip's ends. `k` fades the whole fire;
+ * `height` is the tallest tongue, a wall of flame when raised. Call after `place()`.
  */
-export function drawFireBed(x: number, y: number, half: number, t: number, k: number, c: FireColors): void {
+export function drawFireBed(
+  x: number,
+  y: number,
+  half: number,
+  t: number,
+  k: number,
+  c: FireColors,
+  height: number = TONGUES.height,
+): void {
   const count = Math.max(1, Math.floor((half * 2) / TONGUES.gap));
   const beatNow = Math.floor(t * 10);
   hairline(
@@ -36,7 +44,7 @@ export function drawFireBed(x: number, y: number, half: number, t: number, k: nu
     const tx = x - half + i * TONGUES.gap + (grain(i, x) - 0.5) * TONGUES.gap;
     const edge = 1 - Math.abs((i / count) * 2 - 1) ** 3;
     const beat = t * (7 + 5 * grain(x, i)) + grain(i, 7) * TAU;
-    const h = TONGUES.height * edge * k * (0.45 + 0.55 * Math.abs(Math.sin(beat)));
+    const h = height * edge * k * (0.45 + 0.55 * Math.abs(Math.sin(beat)));
     if (h < 0.8) continue;
     const sway = Math.sin(beat * 1.7) * 1.2;
     hairline(tx - 0.5, y, tx - 0.5 + sway * 0.5, y - h * 0.6, c.edge, k);

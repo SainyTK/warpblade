@@ -7,23 +7,26 @@ import { feat } from "../../feat";
 import { use } from "../../input";
 import { skillValues } from "../../skills/query";
 import { game, hero } from "../../state";
+import { selectedSlot } from "../abilityBar";
+import { isFree } from "../actions";
 import { resetMotion } from "../kael/motion";
-import { startCharge } from "../ultimate";
-import { nextAbility, pressAbility, resetAbilities, tickAbilities } from "./abilities";
+import { tickAbilities, WENNA_SLOTS } from "./abilities";
 import { runAbilityCast } from "./abilityCast";
+import { releaseCandle, tickCandleWarp } from "./candleWarp";
 import { drawWenna, drawWennaBack, drawWennaOver } from "./draw";
 import { clearDrips, dropDrip, stepDrips } from "./drips";
 import { runGreatWick } from "./greatWick";
 import { interceptBlow } from "./guard";
+import { WENNA_GUARD } from "./guardStyle";
 import "./hold";
 import { pressJump } from "./jump";
-import { pressLight, runLightCast } from "./light";
+import { runLightCast } from "./light";
 import { resetWenna, wenna, wennaHost } from "./memory";
 import { wennaPose } from "./pose";
 import { clearQuarries, tickQuarries } from "./quarry";
-import { landed, pressDrop, pressString, runDrop, runString } from "./string";
-import { pressSwap, runSwap, swapDodge, swapGone, tickSwap } from "./swap";
-import { trickleWax } from "./wax";
+import { cutString, inRecovery, landed, pressDrop, pressString, runDrop, runString } from "./string";
+import { WENNA_WARP } from "./warpStyle";
+import { flashWaxOnRefusal, trickleWax } from "./wax";
 import { meltAll, stepWicks } from "./wickAi";
 import { wickStriking } from "./wickKills";
 import { clearWickMoves } from "./wickMoves";
@@ -53,8 +56,9 @@ function openWave(): void {
 function tick(dt: number): void {
   const h = hero;
   trickleWax(dt);
+  flashWaxOnRefusal(selectedSlot()?.id === "light", dt);
   tickAbilities(rechargeStep(dt));
-  tickSwap(dt);
+  tickCandleWarp();
   tickQuarries(dt);
   tickZones(dt);
   if (h.state !== "lamp") wenna.link = Math.max(0, wenna.link - dt);
@@ -72,6 +76,8 @@ function tick(dt: number): void {
 
 function runState(dt: number): boolean {
   switch (hero.state) {
+    case "throw":
+      return releaseCandle();
     case "lamp":
       runString(dt);
       return true;
@@ -81,25 +87,18 @@ function runState(dt: number): boolean {
     case "lightCast":
       runLightCast();
       return true;
-    case "swap":
-      runSwap();
-      return true;
     case "kindleCast":
     case "beckonCast":
     case "spellCast":
       runAbilityCast();
       return true;
     case "greatWick":
-    case "thousand":
       runGreatWick();
       return true;
     default:
       return false;
   }
 }
-
-/** states in which the kit holds her still itself */
-const DRIVEN = new Set(["swap", "greatWick", "thousand"]);
 
 /** a foe she or her Wicks felled drips Wax for her; a Wick's kill counts toward Many Hands */
 function onKill(e: Enemy): void {
@@ -110,35 +109,34 @@ function onKill(e: Enemy): void {
 }
 
 /**
- * Wenna: a short lamp string whose blows mark a Quarry, Wicks lit on K for Wax that walk to foes, hold minions and take
- * blows meant for her, Swap on L that trades her place with a Wick, Kindle and Beckon on I (O turns through them and her
- * spell skills), and Great Wick on U.
+ * Wenna: a short lamp string whose blows mark a Quarry; a thrown candle she trades places with on J held; the lantern
+ * raised on K, whose parry blinds the foes ahead and lights a Wick; Light, Kindle, Beckon and her spell skills on I; and
+ * Great Wick on U. Her Wicks walk to foes, hold minions and take blows meant for her.
  */
 export const WENNA_KIT: HeroKit = {
+  warp: WENNA_WARP,
+  guard: WENNA_GUARD,
+  abilities: WENNA_SLOTS,
   tick,
   readActions: () => {
-    use("dash", pressSwap);
     use("up", pressJump);
     use("attack", () => (hero.ground ? pressString() : pressDrop()));
-    use("warp", pressLight);
-    use("cast", pressAbility);
-    use("cycle", nextAbility);
-    use("ultimate", startCharge);
   },
+  mayAct: () => isFree() || inRecovery(),
+  cutForAction: cutString,
   chooseMove: () => null,
   runState,
   pose: wennaPose,
   afterStrike: () => {},
-  absorbHurt: (dmg, fromX) => swapDodge() || interceptBlow(dmg, fromX),
+  absorbHurt: interceptBlow,
   walkSpeed,
   stride: () => WENNA_STRIDE,
   hurtScale: () => 1,
-  drivesMotion: () => DRIVEN.has(hero.state),
-  gravityScale: () => (hero.state === "swap" ? 0 : 1),
+  drivesMotion: () => hero.state === "greatWick",
+  gravityScale: () => 1,
   drawBack: drawWennaBack,
   draw: drawWenna,
   drawOver: drawWennaOver,
-  heroAlpha: () => (swapGone() ? 0 : 1),
   onKill,
   reset: () => {
     clearWicks();
@@ -146,7 +144,6 @@ export const WENNA_KIT: HeroKit = {
     clearDrips();
     clearQuarries();
     resetWenna();
-    resetAbilities();
     resetMotion();
   },
 };

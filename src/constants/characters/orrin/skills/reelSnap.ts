@@ -6,8 +6,8 @@ export const REEL_SNAP: SkillDef = {
   name: "Reel Snap",
   kind: "movement",
   risk: "timed",
-  button: "L",
-  text: "A reel that speeds you up enough snaps the chain at foes near you.",
+  button: "J",
+  text: "Hold J while swinging to reel in: a reel that speeds you up enough snaps the chain at foes near you.",
   levels: [
     {
       text: "A fast reel snaps 0.8x at foes within 30 px.",

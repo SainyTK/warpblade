@@ -1,5 +1,6 @@
 import { GLACIER_BLOOM } from "../../constants/evolutions";
 import { PAL, SPARKS } from "../../constants/palette";
+import { ICE_FIELD } from "../../constants/spells";
 import { W } from "../../constants/stage";
 import { glow, hairline, place, sparkle } from "../../engine/frame";
 import { sfx } from "../../services/audio";
@@ -10,6 +11,7 @@ import { PK } from "../../types/particle";
 import { WHITE } from "../../utils/color";
 import { clamp, ease, TAU } from "../../utils/math";
 import { dealDamage } from "../damage";
+import { createFloorRing } from "../effects/floorRing";
 import { createImpact } from "../effects/impact";
 import { enemyBox, enemyCenter } from "../enemies/enemy";
 import { drawCrystal } from "../hero/kael/art/crystal";
@@ -123,19 +125,48 @@ function chillBeside(s: Spike, seconds: number): void {
   }
 }
 
-/** a row of crystal spikes erupting one after another along the floor, freezing what they touch, then shattering */
-export function castIce(x: number, y: number, face: number, power: number): Effect {
+/** Ice Spikes held: frost spreads over the floor round Kael and slows every foe on it */
+function frostField(x: number, y: number): void {
+  const f = ICE_FIELD;
+  const reach = withCharms("area", f.reach);
+  game.fx.push(createFloorRing(x, y, reach, PAL.ice, 0.6));
+  game.fx.push(createFloorRing(x, y, reach * 0.6, PAL.ice, 0.5, 0.7));
+  for (let k = 0; k < 24; k++)
+    particles.spawn(
+      PK.FLAKE,
+      x + rng.range(-reach, reach),
+      y - rng.range(0, 30),
+      rng.range(-20, 20),
+      rng.range(-30, 0),
+      rng.range(0.6, 1.2),
+      {
+        col: rng.pick([PAL.ice[4], PAL.ice[5]]),
+        size: rng.range(1, 2),
+      },
+    );
+  for (const e of game.enemies)
+    if (e.hp > 0 && Math.abs(enemyCenter(e)[0] - x) <= reach)
+      e.chill = Math.max(e.chill, withCharms("duration", f.chill));
+}
+
+/** a row of crystal spikes erupting one after another along the floor, freezing what they touch, then shattering; held,
+ *  a full row runs each way and frost slows every foe near */
+export function castIce(x: number, y: number, face: number, power: number, wide: boolean): Effect {
   const I = PAL.ice;
   const v = skillValues(SKILL);
   const bloom = skillEvolved(SKILL);
   const damage = v.power * progress.stats.ap * power * (bloom ? v.bloomPower : 1);
   const freeze = withCharms("duration", v.freeze);
-  const spikes = spikeLine(x, y, face, heightsOf(Math.round(withCharms("amount", v.spikes))));
+  const heights = heightsOf(Math.round(withCharms("amount", v.spikes)));
+  const spikes = spikeLine(x, y, face, heights);
   if (bloom) {
     const crown = spikes[spikes.length - 1];
     if (crown) Object.assign(crown, { spire: true, h: SPIRE.height, stand: STAND + SPIRE.stand });
-    spikes.push(...spikeLine(x, y, -face, GLACIER_BLOOM.backHeights));
   }
+  if (wide) {
+    spikes.push(...spikeLine(x, y, -face, heights));
+    frostField(x, surfaceBelow(x, y));
+  } else if (bloom) spikes.push(...spikeLine(x, y, -face, GLACIER_BLOOM.backHeights));
   const end = Math.max(...spikes.map((s) => s.delay + s.stand), 0) + STAGGER + 0.1;
   let t = 0;
   const erupt = (s: Spike, i: number) => {

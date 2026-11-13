@@ -3,8 +3,8 @@ import { sfx } from "../../../services/audio";
 import { emitSkillEvent } from "../../skills/events";
 import { skillValues } from "../../skills/query";
 import { game, hero } from "../../state";
-import { isFree, setState, settle } from "../actions";
-import { deny } from "../deny";
+import { setState, settle } from "../actions";
+import { castGate } from "./castGate";
 import { type ChainSpec, createChainCast } from "./chainCast";
 import { hulda } from "./memory";
 
@@ -14,15 +14,7 @@ const ID = "h_ironChain";
 export function pressChain(): boolean {
   const h = hero;
   const v = skillValues(ID);
-  if (!isFree() || !h.ground) return false;
-  if (hulda.chainCd > 0) {
-    deny("cast");
-    return true;
-  }
-  if (h.mp < v.mp) {
-    deny("mp");
-    return true;
-  }
+  if (!castGate()) return false;
   h.mp -= v.mp;
   hulda.chainCd = v.cooldown;
   h.vx = 0;

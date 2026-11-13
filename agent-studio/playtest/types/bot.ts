@@ -12,6 +12,8 @@ export interface BotMemory {
   lastDodge: number;
   lastVault: number;
   ultUntil: number;
+  /** J is held for the warp until then */
+  warpUntil: number;
 }
 export interface Policy {
   name: PolicyName;

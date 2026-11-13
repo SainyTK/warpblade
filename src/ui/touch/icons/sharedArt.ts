@@ -1,6 +1,22 @@
 import { hex } from "../../../utils/color";
 import { ICON_WHITE, type IconArt } from "./iconArt";
 
+/** the front dodge looks the same for every hero: a chevron with speed lines */
+export const DODGE: IconArt = {
+  rows: [
+    "....W....",
+    "....WW...",
+    "VV..WWW..",
+    "...VWWWW.",
+    "VVVVWWWWW",
+    "...VWWWW.",
+    "VV..WWW..",
+    "....WW...",
+    "....W....",
+  ],
+  colors: { W: ICON_WHITE, V: hex("#b4a8ff") },
+};
+
 /** the jump and the ultimate look the same for every hero */
 export const JUMP: IconArt = {
   rows: ["....W....", "...WWW...", "..WW.WW..", ".WW...WW.", "....M....", "...MMM...", "..MM.MM..", ".MM...MM."],

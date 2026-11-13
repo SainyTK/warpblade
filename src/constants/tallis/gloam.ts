@@ -9,6 +9,4 @@ export const GLOAM = {
   /** each knife blow from behind, and more when it fells the foe */
   backBlow: 6,
   backKill: 12,
-  /** seconds the bar blinks after a press it could not pay for */
-  flash: 0.35,
 } as const;

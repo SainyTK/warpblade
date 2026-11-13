@@ -1,7 +1,7 @@
 import { skillValues, withCharms } from "../../skills/query";
 import { mirel } from "./memory";
 
-/** Quickened: a Rewind's end speeds her own walk and blows for a while */
+/** Quickened: a rewind (a Stopped Moment or Second Chance) speeds her own walk and blows for a while */
 export function quicken(): void {
   const v = skillValues("m_quicken");
   if (v.speed) mirel.quickLeft = withCharms("duration", v.life);

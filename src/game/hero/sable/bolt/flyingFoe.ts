@@ -10,7 +10,7 @@ import { boxHit, shake } from "../../../world";
 const FLIGHT = 0.45;
 
 /**
- * A foe Sable sent flying (a closing bolt or a kick): while it flies it strikes every other foe it touches once, for
+ * A foe Sable sent flying (a closing bolt or Point-Blank's kick): while it flies it strikes every other foe it touches once, for
  * `power` times her attack damage, and knocks them down. Foes it strikes do not fly on as weapons themselves.
  */
 export function createFlyingFoe(body: Enemy, dir: number, power: number): Effect {

@@ -7,7 +7,7 @@ import { SKY_FLASH } from "../game/spells/lightning";
 import { game, hero, lights, particles, rng } from "../game/state";
 import { settings } from "../store/settings";
 import { drawEnemies, drawHeroLayer, drawPickups } from "./drawActors";
-import { drawAmbientLight, drawAnchors, drawMist, drawWarpAim, drawWeather, sceneFlash } from "./drawAmbience";
+import { drawAmbientLight, drawMist, drawWeather, sceneFlash } from "./drawAmbience";
 import { drawCoins } from "./drawCoins";
 import { drawNumbers } from "./drawNumbers";
 import { drawShadows } from "./drawShadows";
@@ -24,8 +24,6 @@ export function renderScene(out: Uint8ClampedArray): void {
   if (game.shake <= 0) game.amp = 0;
   beginFrame(sceneBackground());
   drawAmbientLight();
-  drawAnchors();
-  eachHero(drawWarpAim);
   const room = coop();
   for (const f of game.fx) {
     room?.owner(f);

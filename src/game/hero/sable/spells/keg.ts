@@ -80,7 +80,7 @@ export function kegInSights(range: number): readonly [number, number] | null {
   return null;
 }
 
-/** her kick sends a keg it reaches flying (Powder Keg level 7) */
+/** her slide or Point-Blank's kick sends a keg it reaches flying (Powder Keg level 7) */
 export function kickKegs(box: Box): void {
   if (!skillValues("s_keg").kick) return;
   for (const k of liveKegs()) if (boxHit(box, k.box())) k.kick(hero.face);
@@ -197,6 +197,7 @@ function rollKeg(x0: number, y: number, dir: number, from: number, far: number):
 /** Powder Keg on her I rotation */
 export const KEG_SPELL: SableSpell = {
   label: "KEG",
+  tint: "#ff8a3a",
   mp: () => skillValues("s_keg").mp,
   cooldown: () => skillValues("s_keg").cooldown,
   left: () => sable.kegCd,

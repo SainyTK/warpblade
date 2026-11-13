@@ -6,16 +6,17 @@ import { hero } from "../../state";
 import { settle } from "../actions";
 import { resetMotion } from "../kael/motion";
 import { travelEnded } from "../travelEnd";
-import { startCharge } from "../ultimate";
-import { nextAbility, pressAbility, resetAbilities } from "./abilities";
+import { ORRIN_SLOTS } from "./abilities";
 import { arcsPerAir, pressAirArc, tickAirArc } from "./airArc";
 import { runPin, tickPin } from "./anchorPin";
-import { pressBackline, runBackline } from "./backline";
+import { tickBind } from "./bind";
+import { runClimb } from "./climb";
 import { drawOrrin, drawOrrinBack, stepChainLoop } from "./draw";
 import { runFly } from "./fly";
-import { hooksPerAir, pressHook, runHookThrow } from "./hook";
+import { ORRIN_GUARD } from "./guardStyle";
+import { hooksPerAir, pressSwingHook, runHookThrow } from "./hook";
 import { pressJump } from "./jump";
-import { runMaelstrom } from "./maelstrom";
+import { cutOrrin, mayOrrinAct } from "./mayAct";
 import { orrin, resetOrrin } from "./memory";
 import { momentumScale, tickMomentum } from "./momentum";
 import { runPendulum } from "./pendulum";
@@ -23,9 +24,9 @@ import { plumbHead, plumbLand, pressPlumb } from "./plumbDrop";
 import { orrinPose } from "./pose";
 import { absorbBlow } from "./slip";
 import { pressString, runString } from "./string";
-import { dropChain, endSwingOnFloor, letGo, runSwing } from "./swing";
+import { dropChain, endSwingOnFloor, holdReel, letGo, runSwing } from "./swing";
+import { ORRIN_WARP } from "./warpStyle";
 import { endWhirl, runWhirl } from "./whirlwall";
-import { runZip } from "./zip";
 
 /** gravity while a hook flies from the air */
 const AIR_THROW_GRAVITY = 0.3;
@@ -34,9 +35,9 @@ const AIR_THROW_GRAVITY = 0.3;
 const heldSide = (): number => (isHeld("right") ? 1 : 0) - (isHeld("left") ? 1 : 0);
 
 /** states in which the kit moves him itself, or keeps the speed he came in with */
-const DRIVEN = new Set(["swing", "zip", "fly", "backline", "whirl", "pendulum", "maelstrom"]);
+const DRIVEN = new Set(["swing", "climb", "fly", "whirl", "pendulum"]);
 /** states in which the kit's own physics replace gravity */
-const WEIGHTLESS = new Set(["swing", "zip", "pendulum", "maelstrom"]);
+const WEIGHTLESS = new Set(["swing", "climb", "pendulum"]);
 
 /** a landing ends a swing or a flight; a Plumb Drop sets off its ring, a fling answers Aftershock */
 function watchFloor(): void {
@@ -65,12 +66,7 @@ function tick(dt: number): void {
   orrin.fenceCd = Math.max(0, orrin.fenceCd - recharge);
   orrin.tetherCd = Math.max(0, orrin.tetherCd - recharge);
   orrin.anchorCd = Math.max(0, orrin.anchorCd - recharge);
-  orrin.backlineCd = Math.max(0, orrin.backlineCd - dt);
   orrin.sinceRelease += dt;
-  orrin.boostLeft = Math.max(0, orrin.boostLeft - dt);
-  // Undertow's boost rides on a hook thrown in its window until that swing lets go
-  const hooked = h.state === "hookThrow" || h.state === "swing";
-  if (orrin.boostLeft <= 0 && !hooked) orrin.flingBoost = 0;
   if (h.state !== "lash") orrin.link = Math.max(0, orrin.link - dt);
   if (h.state !== "lash" && orrin.link <= 0) h.chain = 0;
   if (h.state === "hurt" || h.state === "dead") {
@@ -83,6 +79,7 @@ function tick(dt: number): void {
   watchFloor();
   tickAirArc(dt);
   tickPin(dt);
+  tickBind(dt);
   stepChainLoop(dt);
 }
 
@@ -97,14 +94,11 @@ function runState(dt: number): boolean {
     case "swing":
       runSwing(dt, heldSide());
       return true;
-    case "zip":
-      runZip();
+    case "climb":
+      runClimb();
       return true;
     case "fly":
       runFly(dt, heldSide());
-      return true;
-    case "backline":
-      runBackline(dt);
       return true;
     case "whirl":
       runWhirl();
@@ -115,15 +109,13 @@ function runState(dt: number): boolean {
     case "pendulum":
       runPendulum(dt);
       return true;
-    case "maelstrom":
-      runMaelstrom(dt);
-      return true;
     default:
       return false;
   }
 }
 
-/** while he swings: Up lets go with a hop, Down drops with Plumb Drop, J is the Hanging Arc */
+/** while he swings: jump lets go with a hop and a fling, Down drops with Plumb Drop, J tapped is the Hanging Arc, and J
+ *  held reels the chain in; the shared moveset waits for him to let go */
 function readSwinging(): void {
   use("up", () => {
     letGo(true);
@@ -131,26 +123,28 @@ function readSwinging(): void {
   });
   use("down", pressPlumb);
   use("attack", pressAirArc);
-  take("cast");
+  if (take("warp")) holdReel();
 }
 
 /**
- * Orrin: a brass hook on a long chain. A three-blow chain string that hits hardest at the tip, a hook that zips him to
- * a foe or swings him under a crystal, a platform or the air itself, a reel and a Backline on L, Whirlwall and Anchor
- * Pin on I (O turns through them and his spell skills), and Momentum, filled by speed, on every hit he deals.
+ * Orrin: a brass hook on a long chain. A three-blow chain string that hits hardest at the tip; J held throws the hook at
+ * a foe and he lands on it with a flying kick that binds it, or with Up held hooks a crystal, a platform or the air and
+ * swings; a spinning-chain guard whose parry, Chain Bind, hauls the attacker to his chain's tip; Whirlwall, Anchor Pin
+ * and his spell skills on I; Grand Pendulum on U; and Momentum, filled by speed, on every hit he deals.
  */
 export const ORRIN_KIT: HeroKit = {
+  warp: ORRIN_WARP,
+  guard: ORRIN_GUARD,
+  abilities: ORRIN_SLOTS,
   tick,
   readActions: () => {
     if (hero.state === "swing") return readSwinging();
-    use("dash", pressBackline);
     use("up", pressJump);
     use("attack", () => (hero.ground ? pressString() : pressAirArc()));
-    use("warp", pressHook);
-    use("cast", pressAbility);
-    use("cycle", nextAbility);
-    use("ultimate", startCharge);
+    use("warp", pressSwingHook);
   },
+  mayAct: mayOrrinAct,
+  cutForAction: cutOrrin,
   chooseMove: () => null,
   runState,
   pose: orrinPose,
@@ -172,7 +166,6 @@ export const ORRIN_KIT: HeroKit = {
     dropChain();
     endWhirl();
     resetOrrin();
-    resetAbilities();
     resetMotion();
   },
 };
