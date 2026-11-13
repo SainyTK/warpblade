@@ -278,6 +278,18 @@ The skilled bot from wave 20 at level 14 (the 0.9.0 baseline for the other nine 
 
 Like every hero, he falls to the Rift Warden at wave 20 in 21 to 30 s with no kills.
 
+### On the shared moveset
+
+From wave 1, one run each, on the core branch before his rework and on his branch after it.
+
+| Policy | Before | After |
+| --- | --- | --- |
+| Mash | wave 5, level 5, 14 kills, 102.2 s | wave 5, level 5, 14 kills, 102.2 s |
+| Skilled | wave 5, level 6, 16 kills, 91.3 s | wave 5, level 6, 18 kills, 106 s |
+
+The mash bot only walks and presses J, so it plays him the same way on both.
+The skilled bot uses the Hunt, the dodge, his abilities and Berserk, kills more and lasts longer, and still falls on wave 5, as every hero's bot does there; it never guards, so Blood Answer is not in its numbers.
+
 ## Note for the owner
 
 A skilled bot policy for Brannoc would press I for Frenzy before a crowd, string J into it, hold J at a foe out of reach, tap K into a wind-up for Blood Answer, and press U when Bloodied.
