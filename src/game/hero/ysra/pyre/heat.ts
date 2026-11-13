@@ -29,7 +29,7 @@ export const nearDeath = (): boolean => !!kindling().low && hero.hp < progress.s
 /** Kindling multiplies gains, and doubles them near death; Haste, which recharges rites, adds to it */
 const gainScale = (): number => (kindling().gain ?? 1) * (nearDeath() ? 2 : 1) * rechargeStep(1);
 
-/** Heat for each foe a blow struck, heavier for lunges, vault crashes, dive impacts and counters */
+/** Heat for each foe a blow struck, heavier for a warp's rail, vault crashes, dive impacts and counters */
 export function heatForStrike(source: string, hits: number): number {
   const heavy = HEAT.heavySources.some((s) => source.toLowerCase().includes(s));
   return hits * (heavy ? HEAT.perFoeHeavy : HEAT.perFoe);

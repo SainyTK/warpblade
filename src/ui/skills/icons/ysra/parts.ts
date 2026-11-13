@@ -80,28 +80,6 @@ export function glaive(
   });
 }
 
-/** a straight spear of fire from the butt at (x0, y0) to the point at (x1, y1) */
-export function spear(s: S, x0: number, y0: number, x1: number, y1: number): void {
-  const L = Math.hypot(x1 - x0, y1 - y0) || 1;
-  const ux = (x1 - x0) / L;
-  const uy = (y1 - y0) / L;
-  fill(s, () => {
-    s.stroke(x0, y0, x1 - ux * 4, y1 - uy * 4, 0.5, EMBER[4]);
-    seg(s, x0 + ux * 2, y0 + uy * 2, x1 - ux * 4, y1 - uy * 4, EMBER[5]);
-  });
-  fill(s, () => {
-    s.poly(
-      [
-        [x1 + 0.5, y1 + 0.5],
-        [x1 - ux * 5 - uy * 2.2 + 0.5, y1 - uy * 5 + ux * 2.2 + 0.5],
-        [x1 - ux * 5 + uy * 2.2 + 0.5, y1 - uy * 5 - ux * 2.2 + 0.5],
-      ],
-      EMBER[5],
-    );
-    s.set(x1, y1, WHITE);
-  });
-}
-
 /** a flame of her ember fire rising from base to base - h */
 export function ember(s: S, cx: number, base: number, h: number, lean = 0): void {
   fill(s, () =>

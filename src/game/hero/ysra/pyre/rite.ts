@@ -1,25 +1,23 @@
 import { PYRE_STATE_CLIPS } from "../../../../constants/clips/ysra/pyre";
-import { DENY_FLASH } from "../../../../constants/combat";
-import { sfx } from "../../../../services/audio";
-import type { RiteDef, RiteId } from "../../../../types/ysra/pyre";
+import type { RiteId } from "../../../../types/ysra/pyre";
 import { objectMemory, rememberPerSeat } from "../../../seatMemory";
 import { emitSkillEvent } from "../../../skills/events";
 import { hero } from "../../../state";
 import { isFree, setState, settle } from "../../actions";
 import { blowsDone, endCombo } from "../../combo";
 import { afterRite } from "./hearthfire";
-import { flashHeat, heat, overheatLeft, spendHeat } from "./heat";
-import { letLoose } from "./release";
-import { riteCost, selectedRite } from "./riteChoice";
+import { heat, overheatLeft, spendHeat } from "./heat";
+import { hasWideForm, letLoose } from "./release";
+import { riteById, riteCost } from "./riteCost";
 
 const CLIP = PYRE_STATE_CLIPS.rite;
-/** the rite under way, let loose when the glaive is planted */
-const rite: { calling: RiteId } = { calling: "flare" };
+/** the rite under way, let loose when the glaive is planted, and whether it is the wide form */
+const rite: { calling: RiteId; wide: boolean } = { calling: "flare", wide: false };
 rememberPerSeat(objectMemory(rite));
 
 /** she plants the glaive and the rite bursts out */
 function release(): void {
-  letLoose(rite.calling);
+  letLoose(rite.calling, rite.wide);
   afterRite(rite.calling);
   emitSkillEvent({ type: "cast", ability: rite.calling });
 }
@@ -27,30 +25,22 @@ function release(): void {
 /** a rite can start on the floor, standing or out of a string blow that has landed */
 const canCall = (): boolean => hero.ground && (isFree() || (hero.state === "move" && blowsDone()));
 
-function begin(chosen: RiteDef): void {
-  rite.calling = chosen.id;
+/** she can pay for the rite now: Heat covers it, and Overheat is not already burning */
+export const riteAffordable = (id: RiteId): boolean => overheatLeft() <= 0 && heat() >= riteCost(riteById(id));
+
+/** I on a rite (held, its wide form where it has one): false when she cannot call it now. Overheat spends the whole bar
+ *  when it is let loose; every other rite pays its cost now. */
+export function castRite(id: RiteId, wide: boolean): boolean {
+  if (!canCall() || !riteAffordable(id)) return false;
+  if (id !== "overheat") spendHeat(riteCost(riteById(id)));
+  rite.calling = id;
+  rite.wide = wide && hasWideForm(id);
   if (hero.state === "move") {
     hero.move = null;
     endCombo(true);
   }
   hero.vx = 0;
   setState("rite");
-}
-
-/** I: the selected rite; refused with a tick when Heat is short or Overheat already burns. Overheat spends the whole
- *  bar when it is let loose; every other rite pays its cost now. */
-export function pressRite(): boolean {
-  if (!canCall()) return false;
-  const chosen = selectedRite();
-  if (!chosen) return true;
-  const cost = riteCost(chosen);
-  if (overheatLeft() > 0 || heat() < cost) {
-    flashHeat(DENY_FLASH);
-    sfx.denied();
-    return true;
-  }
-  if (chosen.id !== "overheat") spendHeat(cost);
-  begin(chosen);
   return true;
 }
 

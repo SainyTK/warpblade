@@ -17,11 +17,10 @@ const ERUPTION = {
   most: 14,
 } as const;
 
-/** lastX: where the last patch was laid, so patches fall every ASHEN_WAKE.spacing pixels of travel; lungePath: a
- *  lunge's path waits for its end, since only a full lunge leaves fire; laid: patches still burning, for Scorched Earth */
-const wake: { lastX: number; lungePath: [number, number][]; laid: { x: number; y: number; at: number }[] } = {
+/** lastX: where the last patch was laid, so patches fall every ASHEN_WAKE.spacing pixels of travel; laid: patches
+ *  still burning, for Scorched Earth */
+const wake: { lastX: number; laid: { x: number; y: number; at: number }[] } = {
   lastX: Number.NaN,
-  lungePath: [],
   laid: [],
 };
 rememberPerSeat(objectMemory(wake, true));
@@ -65,14 +64,21 @@ function ring(x: number, y: number, reach: number): void {
   }
 }
 
-/** Ashen Wake: vaults and dives leave burning ground behind her, lunges and charges too from its level 2 */
+/** the floor under the line she warped along, from where she threw to where she landed */
+function burnLine(x0: number, x: number, y: number): void {
+  wake.lastX = Number.NaN;
+  const step = Math.sign(x - x0) * ASHEN_WAKE.spacing;
+  if (step) for (let at = x0; Math.abs(at - x0) < Math.abs(x - x0); at += step) lay(at, y);
+  lay(x, y);
+  wake.lastX = Number.NaN;
+}
+
+/** Ashen Wake: vaults and dives leave burning ground behind her, warps and charges too from its level 2 */
 export function listenAshenWake(): void {
   onYsra("travel", ({ x, y, from }) => {
     if (!skillLevel("y_ashen")) return;
-    const lunges = !!skillValues("y_ashen").lunge;
-    if ((from === "charge" || from === "lunge") && !lunges) return;
-    if (from === "lunge") wake.lungePath.push([x, y]);
-    else lay(x, y);
+    if (from === "charge" && !skillValues("y_ashen").warp) return;
+    lay(x, y);
   });
   onYsra("land", ({ x, y }) => {
     if (!skillLevel("y_ashen")) return;
@@ -83,20 +89,13 @@ export function listenAshenWake(): void {
     lay(x, y);
     wake.lastX = Number.NaN;
   });
-  onYsra("lungeEnd", ({ x, y, full }) => {
-    const path = wake.lungePath;
-    wake.lungePath = [];
-    wake.lastX = Number.NaN;
-    if (!full || !skillLevel("y_ashen")) return;
-    for (const [px, py] of path) lay(px, py);
-    lay(x, y);
-    wake.lastX = Number.NaN;
+  onYsra("warp", ({ x0, x, y }) => {
+    if (skillValues("y_ashen").warp) burnLine(x0, x, y);
   });
 }
 
 export function resetAshenWake(): void {
   wake.lastX = Number.NaN;
-  wake.lungePath = [];
   wake.laid = [];
   clearCinders();
 }

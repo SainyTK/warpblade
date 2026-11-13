@@ -54,7 +54,7 @@ export const TOUCH_TEXT: Record<KitId, Record<TouchButtonAction, TouchButtonText
   ysra: {
     attack: {
       label: "Attack",
-      hint: "Glaive string of three blows that pierce the whole line. Hold to wind a lunge, let go to lunge. In a vault, crash down",
+      hint: "Tap: glaive string of three blows that pierce the whole line; right after a parry, a counter thrust; in a vault, crash down. Hold: hurl the glaive and warp to it (10 MP)",
       accent: "#ffae48",
     },
     up: {
@@ -64,13 +64,17 @@ export const TOUCH_TEXT: Record<KitId, Record<TouchButtonAction, TouchButtonText
     },
     dash: DODGE_BUTTON,
     guard: {
-      label: "Vault",
-      hint: "Pole vault over foes, also out of a brace or a backstep. In the air, dive glaive first",
+      label: "Guard",
+      hint: "Hold to block blows from the front. Tap just as a blow lands to parry: Heat, and Attack is a counter thrust. Hold the stick away to step back",
       accent: "#ec7228",
     },
-    cast: { label: "Rite", hint: "Call the selected rite, paid with Heat", accent: null },
+    cast: {
+      label: "Ability",
+      hint: "Tap: the selected ability, the vault or a rite paid with Heat; in the air the vault dives. Hold: its wide form",
+      accent: null,
+    },
     ultimate: SPECIAL,
-    cycle: { label: "Next rite", hint: `Switch rite: ${RITE_NAMES}`, accent: null },
+    cycle: { label: "Next", hint: `Switch ability: the vault, ${RITE_NAMES}`, accent: null },
   },
   sable: {
     attack: {

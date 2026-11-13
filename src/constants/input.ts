@@ -61,12 +61,14 @@ export const ACTION_TEXT: Record<KitId, Record<InputAction, string>> = {
     right: "Walk right. With Warpath, keep walking to charge",
     up: "Jump. One heavy jump, no double jump",
     attack:
-      "Glaive string of three blows that pierce the whole line, picked by the foes around you. Hold to wind a lunge, let go to lunge. In a vault, crash down",
-    dash: "Hold to brace and block blows from the front. Press just before a blow to parry. With the side behind you held, step back",
+      "Glaive string of three blows that pierce the whole line, the same every time. Right after a parry, a counter thrust. In a vault, crash down",
+    warp: "Hurl the glaive like a javelin, warp to its haft and wrench it free in a burst of embers that builds Heat (10 MP)",
+    guard:
+      "Guard: hold to block blows from the front, cheaply. Press just as a blow lands to parry: Heat, and J is a counter thrust. Hold the side behind you to step back",
     run: "Charge toward the side held at once, once Warpath is learned",
-    warp: "Pole vault over foes, also out of a brace or a backstep. In the air, dive glaive first",
-    cast: "Call the selected rite, paid with Heat",
-    cycle: `Switch rite: ${RITE_NAMES}`,
+    cast: "Vault over foes, or dive glaive first in the air. Rites are paid with Heat. If one is not ready, the next ready one goes",
+    castWide: "The high vault, a wider Flare, a Cinder Lash both ways, more Flame Pillars",
+    cycle: `Switch ability: the vault, ${RITE_NAMES}`,
   },
   sable: {
     ...SHARED_ACTION_TEXT,

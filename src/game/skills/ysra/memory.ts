@@ -34,13 +34,5 @@ export function foesWithin(x: number, y: number, reach: number, skip: Enemy | nu
 }
 
 /** the glaive moves and travel blows that count as heavy */
-const HEAVY = new Set([
-  "heftLunge",
-  "railLunge",
-  "vaultCrash",
-  "counterThrust",
-  "impale",
-  "impaleTwist",
-  "runningImpale",
-]);
+const HEAVY = new Set(["vaultCrash", "counterThrust", "impale", "impaleTwist", "runningImpale"]);
 export const isHeavy = (move: string | null, diving: boolean): boolean => diving || (!!move && HEAVY.has(move));

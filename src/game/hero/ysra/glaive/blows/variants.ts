@@ -8,11 +8,9 @@ import { spendCounter } from "../../stance/stance";
 import { bowlOver } from "../bowl";
 import { counterLanded, counterTune } from "../counter";
 import { hookStruck } from "../hook";
-import { setLungeCharge, startLunge } from "../lunge";
 import { glaiveHit } from "../reach";
 import { G_COUNTER, G_RUN, G_SKYHOOK, G_WINDMILL_BACK, G_WINDMILL_FRONT } from "../slashes";
 import { windmillPassed } from "../windmill";
-import { HELD_BLOWS } from "./held";
 
 const windmill = () => skillValues("y_windmill");
 const warpath = () => skillValues("y_warpath");
@@ -144,15 +142,6 @@ export const VARIANT_BLOWS = {
     step: runOn,
     afterHit: () => {
       if (hero.hitIndex === 1) bowlOver();
-    },
-  },
-  /** Rail Lance: J while charging lets a full lunge go at once */
-  railLunge: {
-    ...HELD_BLOWS.heftLunge,
-    id: "railLunge",
-    enter: () => {
-      setLungeCharge(1);
-      startLunge();
     },
   },
 } satisfies Record<string, MoveDef>;

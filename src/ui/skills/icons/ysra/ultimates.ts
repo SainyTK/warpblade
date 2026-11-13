@@ -1,17 +1,7 @@
 import { EMBER } from "../../../../constants/characters/ysra/look";
 import type { SpriteCanvas } from "../../../../engine/sprite";
-import { WHITE } from "../../../../utils/color";
 import { evolvedStar, fill } from "../parts";
-import { ember, glaive, seg, spear, YC } from "./parts";
-
-/** a sun of fire at (x, y) */
-function sun(s: SpriteCanvas, x: number, y: number, r: number): void {
-  fill(s, () => s.dot(x, y, r, EMBER[3]));
-  fill(s, () => {
-    s.dot(x, y, r * 0.62, EMBER[5]);
-    s.set(x - 1, y - 1, WHITE);
-  });
-}
+import { ember, floor, seg, YC } from "./parts";
 
 /** the cracked floor at y = 13.5, glowing through the cracks */
 function crackedFloor(s: SpriteCanvas): void {
@@ -21,38 +11,26 @@ function crackedFloor(s: SpriteCanvas): void {
   });
 }
 
-/** Ysra's ultimates and their evolved forms */
+/** a wall of flame rolling toward the right, tallest at its front */
+function wave(s: SpriteCanvas): void {
+  ember(s, 4, 13, 5, 1);
+  ember(s, 8, 13, 8, 1);
+  ember(s, 12, 13, 11, 1);
+}
+
+/** Ysra's one ultimate, Pyre Wave, and its evolved form */
 export const ULTIMATE_ICONS: Record<string, (s: SpriteCanvas) => void> = {
-  /** Sunspear: a spear of fire flung across the sun */
-  y_sunspear: (s) => {
-    sun(s, 6, 6, 4.2);
+  /** Pyre Wave: a wall of flame rolling out over the floor */
+  y_pyre: (s) => {
+    wave(s);
+    floor(s, 0, 16, 14);
     fill(s, () => {
-      for (const [x, y] of [
-        [3, 13],
-        [5, 14],
-        [1, 11],
-      ])
-        s.set(x, y, EMBER[4]);
+      s.set(14, 3, EMBER[5]);
+      s.set(15, 6, EMBER[4]);
     });
-    spear(s, 1, 15, 15, 1);
-  },
-  /** Solar Lance: a fan of three spears thrown out of the sun */
-  y_sunspear_evo: (s) => {
-    sun(s, 3, 13, 3);
-    spear(s, 3, 13, 15, 13);
-    spear(s, 3, 13, 12, 5);
-    spear(s, 3, 13, 5, 1);
-    evolvedStar(s);
-  },
-  /** Volcanic Rift: the glaive driven into a cracked floor, fire erupting from the crack both sides */
-  y_rift: (s) => {
-    ember(s, 3, 13, 9, -1);
-    ember(s, 13, 13, 9, 1);
-    crackedFloor(s);
-    glaive(s, 8, 1, 8, 15, false, 5);
   },
   /** Caldera: a volcano blowing fire out of its crater, lava running down its sides */
-  y_rift_evo: (s) => {
+  y_pyre_evo: (s) => {
     ember(s, 7, 7, 7);
     fill(s, () =>
       s.poly(

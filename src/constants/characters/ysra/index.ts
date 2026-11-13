@@ -9,7 +9,7 @@ export const YSRA: CharacterDef = {
   name: "Ysra",
   title: "The ember lancer",
   blurb:
-    "A flame-temple guard with a long glaive. She vaults over foes, braces against their blows and builds Heat with every hit to spend on fire rites. Slower and tougher than Kael.",
+    "A flame-temple guard with a long glaive. She hurls the glaive to warp to it, vaults over foes, guards against their blows and builds Heat with every hit to spend on fire rites. Slower and tougher than Kael.",
   accent: "#ff8a2a",
   special: "pyreWave",
   base: { ad: 13, ap: 7, hp: 130, mp: 80, stamina: 110, crit: 0.03, move: 1.1, aspd: 0.92, haste: 1 },
