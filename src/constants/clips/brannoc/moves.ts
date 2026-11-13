@@ -1,64 +1,7 @@
 import type { ActionClip, Pose } from "../../../types/pose";
-import { BERSERK, CRESCENT_CAST, CRY_CAST, FRENZY_CAST, HUNT, SPELL_CAST } from "../../brannoc/moves";
+import { BERSERK, CRESCENT_CAST, CRY_CAST, FRENZY_CAST, SPELL_CAST } from "../../brannoc/moves";
 import { frame } from "../../hero";
 import { free, STANCE, s } from "./stance";
-
-/** Hunt's crouch: two frames low on the back foot, the axe drawn back for the lunge */
-export const HUNT_LOAD: Pose = s({
-  hx: -1,
-  hy: -10.6,
-  cb: -0.4,
-  nx: 0.6,
-  ny: -20.2,
-  fx: -1,
-  fy: -14,
-  sa: 2.6,
-  ffx: 5.6,
-  bfx: -5.4,
-  ba: 0.3,
-  ah: 1,
-});
-
-/**
- * Hunt's lunge: the body leaning almost flat toward the foe, the axe trailing low behind, the front knee driving and
- * the back leg long, carried `HUNT.lift` pixels over the floor.
- */
-const LUNGE_AT: Partial<Pose> = {
-  hx: -0.5,
-  hy: -10.5 - HUNT.lift,
-  cb: 0.8,
-  nx: 7.4,
-  ny: -16.4 - HUNT.lift,
-  fx: -2.4,
-  fy: -11 - HUNT.lift,
-  sa: 2.95,
-  ffx: 5.6,
-  ffy: -2 - HUNT.lift,
-  fa: 0.3,
-  bfx: -8,
-  bfy: -3.6 - HUNT.lift,
-  ba: 0.7,
-  ah: 1,
-};
-export const HUNT_LUNGE: Pose = s(LUNGE_AT);
-
-/** Headlong: diving 45 degrees down, the axe raised over his head to come down on the foe below */
-export const HEADLONG: Pose = s({
-  hx: -1.4,
-  hy: -15,
-  cb: 0.6,
-  nx: 4.6,
-  ny: -22.6,
-  fx: 4,
-  fy: -26.4,
-  sa: -1.5,
-  ffx: 2,
-  ffy: -4.4,
-  fa: 0.5,
-  bfx: -4.6,
-  bfy: -6,
-  ba: 0.6,
-});
 
 /**
  * Frenzy: the far forearm held out across his chest, the near hand drags the axe edge across it on the hit frame, then

@@ -230,23 +230,27 @@ export const TOUCH_TEXT: Record<KitId, Record<TouchButtonAction, TouchButtonText
   brannoc: {
     attack: {
       label: "Axe",
-      hint: "Axe string: Hew, Reave, Cleave. The Cleave hits both sides. In the air, Hatchet Drop",
+      hint: "Tap: axe string Hew, Reave, Cleave; in the air, Hatchet Drop. Hold: Hunt, hurl the axe into a foe and rip it out with a chop (10 MP)",
       accent: "#ff6a5a",
     },
     up: { label: "Jump", hint: "One jump. Hold the stick down to drop through a ledge", accent: "#f2eadb" },
     dash: DODGE_BUTTON,
     guard: {
-      label: "Frenzy",
-      hint: "Spend 12% HP: blows do not stagger you and you swing faster. Strike to win the HP back",
+      label: "Guard",
+      hint: "Hold to take blows on the haft; half bleeds through into your spent HP. Tap just as a blow lands: Blood Answer wins all spent HP back and starts Frenzy",
       accent: "#d0283a",
     },
     cast: {
       label: "Ability",
-      hint: "Use the selected ability: War Cry, Red Crescent or a spell skill (HP)",
+      hint: "Tap: the selected ability, paid with HP. Hold: War Cry reaches further, Red Crescent goes both ways",
       accent: "#ffd8c8",
     },
     ultimate: SPECIAL,
-    cycle: { label: "Switch", hint: "Turn to the next ability", accent: "#c8a890" },
+    cycle: {
+      label: "Switch",
+      hint: "Switch ability: Frenzy, War Cry, Red Crescent and the spells you learn",
+      accent: "#c8a890",
+    },
   },
 };
 
@@ -330,7 +334,7 @@ export const STICK_DIRECTIONS: Record<KitId, readonly StickDirectionSpec[]> = {
     { direction: "down", label: "With Jump, drop through a ledge" },
   ],
   brannoc: [
-    { direction: "side", label: "Walk. With Hunt, lunge that way" },
+    { direction: "side", label: "Walk" },
     { direction: "far side", label: "Run" },
     { direction: "up", label: "Jump" },
     { direction: "down", label: "With Jump, drop through a ledge" },

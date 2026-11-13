@@ -161,16 +161,16 @@ export const ACTION_TEXT: Record<KitId, Record<InputAction, string>> = {
   },
   brannoc: {
     ...SHARED_ACTION_TEXT,
-    left: "Walk left. Tap twice and hold to run",
-    right: "Walk right. Tap twice and hold to run",
     up: "Jump. One jump, no double jump",
     down: "With jump, drop through a ledge",
     attack:
       "Axe string: Hew, Reave, Cleave. The Cleave hits both sides, and spins twice when you are Bloodied. In the air, Hatchet Drop",
-    dash: "Hunt (stamina): lunge at the nearest foe ahead and chop it. In the air, dive at a foe below",
-    warp: "Frenzy (12% HP): blows do not stagger you and you swing faster. Spent HP comes back as you strike, until you are hit",
-    cast: "Use the selected ability: War Cry, Red Crescent or a spell skill (HP)",
-    cycle: "Switch to the next ability",
+    warp: "Hunt: hurl the great axe into the nearest foe ahead, leap after it and rip it out with a chop (10 MP). It wins back some spent HP",
+    guard:
+      "Guard: hold to take blows from the front on the haft. Half bleeds through into your spent HP. Press just as a blow lands to parry: Blood Answer wins back all spent HP and starts Frenzy for free",
+    cast: "Use the selected ability, paid with HP: Frenzy, War Cry, Red Crescent or a spell skill. If it is recharging, the next ready one goes",
+    castWide: "War Cry reaches further and Red Crescent goes both ways, for more HP",
+    cycle: "Switch ability: Frenzy, War Cry, Red Crescent and the spells you learn",
   },
 };
 /** keys inside the menu */

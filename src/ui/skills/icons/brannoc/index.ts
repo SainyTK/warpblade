@@ -8,7 +8,6 @@ import {
   burst,
   claws,
   crack,
-  diver,
   fist,
   floor,
   GOLD,
@@ -23,7 +22,6 @@ import {
   R,
   rageDisc,
   raven,
-  roar,
   scar,
   seg,
   shield,
@@ -57,7 +55,7 @@ export const BRANNOC_ICONS: Record<string, (s: SpriteCanvas) => void> = withDisc
     fist(s, 3, 3);
     slash(s, 4, 13, 11, 10, R[3], false);
   },
-  /** his special Berserk: two great axes crossed in a crimson ring */
+  /** his special Berserk, and the Berserk skill that upgrades it: two great axes crossed in a crimson ring */
   b_berserk: (s) => {
     ring(s, 8, 8.5, 6.2, R[3], 0.6);
     axe(s, 13, 15, 6, 4, { bloody: true, side: -1, size: 0.7 });
@@ -187,25 +185,22 @@ export const BRANNOC_ICONS: Record<string, (s: SpriteCanvas) => void> = withDisc
     wolf(s, 3, 2, true);
     floor(s, 1, 15, 13, GOLD);
   },
-  /** Headlong: his body diving head first at 45 degrees, speed lines behind and a burst where he strikes */
+  /** Headlong: the hurled axe flying on through a row of foes, a cut across each */
   b_headlong: (s) => {
-    speedLines(s, 6, [8, 10], 3, R[4]);
-    diver(s, 2, 2);
-    chevron(s, 14, 6, 0.7, -0.7, 2, R[4]);
-    chevron(s, 6, 14, -0.7, 0.7, 2, R[4]);
+    speedLines(s, 4, [6, 10], 3, R[4]);
+    fill(s, () => {
+      for (const x of [5, 9]) s.block(x - 1, 5, R[1], 3, 8);
+    });
+    slash(s, 2, 9, 12, 8, R[3], false);
+    handAxe(s, 13, 7, -0.9, 6, false, 0.7);
   },
-  /** Juggernaut: the gold diver driving through a row of foes, all of them thrown */
+  /** Juggernaut: the gold axe through the row of foes, each one bursting where it was cut */
   b_headlong_evo: (s) => {
     fill(s, () => {
-      for (const [x, y] of [
-        [2, 13],
-        [13, 3],
-        [14, 9],
-      ] as const)
-        s.block(x - 1, y - 1, R[3], 2, 3);
+      for (const x of [3, 7, 11]) s.block(x - 1, 6, R[3], 3, 8);
     });
-    diver(s, 2, 2, true);
-    burst(s, 14, 14, 2.5, GOLD_LIGHT, 5, -0.6);
+    for (const x of [3, 7, 11]) burst(s, x + 0.5, 9, 2.2, GOLD_LIGHT, 5, -0.6);
+    handAxe(s, 13, 4, -0.9, 6, true, 0.7);
   },
   /** Blood Trail: drops left in a line along the floor, growing to the fresh one */
   b_bloodTrail: (s) => {
@@ -355,14 +350,9 @@ export const BRANNOC_ICONS: Record<string, (s: SpriteCanvas) => void> = withDisc
     scar(s, 6, 4, 9, 4, 1, GOLD_LIGHT);
     scar(s, 6, 13, 10, 13, 1, GOLD_LIGHT);
   },
-  /** Unending Rage: his face roaring in a ring of crimson fire */
-  b_unending: (s) => {
-    ring(s, 8, 8.5, 6.2, R[3], 0.6);
-    burst(s, 8, 8.5, 7.6, R[4], 12, 0);
-    roar(s, 3, 3);
-  },
-  /** World Ender: the gold axe come down and the floor split from one edge of the stage to the other */
-  b_unending_evo: (s) => {
+  /** the Berserk skill's evolution, World Ender: the gold axe come down and the floor split from one edge of the stage
+   *  to the other (the skill itself shares the special's crossed axes) */
+  b_berserk_evo: (s) => {
     axe(s, 15, 1, 7, 4, { gold: true, side: -1, size: 0.75 });
     fill(s, () => s.block(0, 11, R[1], 16, 5));
     crack(

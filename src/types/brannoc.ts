@@ -1,23 +1,13 @@
 import type { Enemy } from "./enemy";
 
 /** states only Brannoc enters; his kit runs and poses them */
-export type BrannocState =
-  | "axe"
-  | "hatchet"
-  | "frenzy"
-  | "hunt"
-  | "headlong"
-  | "huntChop"
-  | "abilityCast"
-  | "spellCast"
-  | "roar"
-  | "lastCleave";
+export type BrannocState = "axe" | "hatchet" | "frenzy" | "abilityCast" | "spellCast" | "roar" | "lastCleave";
 
-/** the blows of his axe string, Hatchet Drop in the air, and the chop Hunt lands into */
+/** the blows of his axe string, Hatchet Drop in the air, and the Hunt chop his warp lands with */
 export type AxeBlow = "hew" | "reave" | "cleave" | "hatchet" | "huntChop";
 
-/** the abilities on I, in the order O turns through them: his two from the start and his three spell skills */
-export type BrannocAbility = "warCry" | "redCrescent" | "b_geyser" | "b_axeThrow" | "b_pact";
+/** the abilities on I, in the order O turns through them: his three from the start and his three spell skills */
+export type BrannocAbility = "frenzy" | "warCry" | "redCrescent" | "b_geyser" | "b_axeThrow" | "b_pact";
 
 /** how the debt changed: HP spent into it, won back out of it, faded, or forfeited to a blow */
 export type DebtChange = "spend" | "repay" | "fade" | "forfeit";
@@ -58,38 +48,26 @@ export interface BrannocMemory {
   link: number;
   /** a blow has landed: seconds the axe edge glints crimson */
   glint: number;
-  /** Hatchet Drop and Headlong left in this airtime */
+  /** Hatchet Drop left in this airtime */
   hatchets: number;
-  headlongs: number;
-  /** Frenzy: seconds left of it, seconds of its activation, and the wait after it ends */
+  /** Frenzy: seconds left of it, and the wait after it ends before I can start it again */
   frenzyT: number;
   frenzyWait: number;
-  /** Hunt: its wait, direction, where it lands, whether it found a foe, and how far it may still go */
-  huntWait: number;
-  huntDir: number;
-  huntGoal: number;
-  huntFound: boolean;
-  /** afterimages the lunge under way has left */
-  huntGhosts: number;
-  /** the Hunt Chop under way strikes on its landing frame, heavy, because its quarry was winding up */
-  quickChop: boolean;
-  /** Long Hunt: a second Hunt within this many seconds is free */
-  freeHunt: number;
   /** seconds until each ability on I can be used again */
   cryCd: number;
   crescentCd: number;
   geyserCd: number;
   axeCd: number;
   pactCd: number;
-  /** the ability the cast under way is using */
+  /** the ability the cast under way is using, and whether it is the wide form (I held) */
   casting: BrannocAbility;
+  castWide: boolean;
   /** Blood Pact: seconds left of it, and whether its first Bloodied blow has been spent */
   pactT: number;
   pactFirst: boolean;
-  /** Berserk: seconds left, its charge level, whether Unending Rage is the one playing, and Last Cleave's strikes left */
+  /** Berserk: seconds left, its charge level, and Last Cleave's strikes left */
   berserkT: number;
   berserkLevel: number;
-  unending: boolean;
   cleaves: number;
   /** foes repaid on by the blow under way, and which swing that count belongs to */
   repaid: number;
@@ -100,12 +78,11 @@ export interface BrannocMemory {
   steamT: number;
 }
 
-/** what the host alone keeps for Brannoc: foes his kit holds on to, which never go to a guest */
+/** what the host alone keeps for Brannoc, which never goes to a guest */
 export interface BrannocHostMemory {
-  /** the foe the Hunt under way is going for, where it left from, and the ground foes it has passed */
-  quarry: Enemy | null;
+  /** where he stood as he hurled the axe for his warp, and whether he was in the air */
   from: number;
-  passed: Enemy[];
+  air: boolean;
 }
 
 declare module "./skillBehavior" {
@@ -115,7 +92,7 @@ declare module "./skillBehavior" {
     debt: { change: DebtChange; amount: number };
     /** Frenzy began or ended */
     frenzy: { on: boolean };
-    /** a Hunt landed, beside the foe it went for (null when it found none) */
+    /** his warp (the Hunt) landed, beside the foe it went for (null when it found none), from where he threw */
     hunt: { foe: Enemy | null; air: boolean; from: number };
     /** he crossed into or out of Bloodied */
     bloodied: { on: boolean };

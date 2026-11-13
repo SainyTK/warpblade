@@ -1,7 +1,7 @@
 # Brannoc's skills
 
 Brannoc's 20 skills, written from the skill data in `src/constants/characters/brannoc/skills/`, which is the source of truth.
-His debt, Fury, the axe string, Frenzy, Hunt and Berserk are in `docs/brannoc-design.md`; the rules every hero's skills follow are in `docs/skill-design.md`.
+His debt, Fury, the axe string, the Hunt, his guard and Blood Answer, Frenzy and Berserk are in `docs/brannoc-design.md`; the rules every hero's skills follow are in `docs/skill-design.md`.
 
 ## Units
 
@@ -22,10 +22,11 @@ Every button does something from the first second of a run.
 | --- | --- |
 | A / D | Walk, faster as his HP falls; a double tap runs. |
 | W | One jump of the shared height. No double jump. |
-| J | The string Hew, Reave, Cleave, the same wherever foes stand. Cleave hits both sides and spins twice while Bloodied. In the air, Hatchet Drop, once per airtime. |
-| K | Frenzy: 12% HP into the debt. For 4 s blows do not stagger him, he swings 20% faster and repays 1.5 times. Then 2 s before the next. |
-| L | Hunt: 20 stamina, a lunge to just short of the nearest ground foe ahead within 110 px, or 56 px, then a chop. In the air, Headlong, once per airtime. |
-| I | The selected ability: War Cry (8% HP), Red Crescent (10% HP), or a spell skill. |
+| J tapped | The string Hew, Reave, Cleave, the same wherever foes stand. Cleave hits both sides and spins twice while Bloodied. In the air, Hatchet Drop, once per airtime. |
+| J held | The Hunt, his warp on the shared numbers (10 MP): the great axe hurled into the nearest foe ahead, and him after it with a chop that wins back 5% of max HP more from the debt. |
+| K | Guard: half a blocked blow bleeds through into the debt, 25 stamina a block. A parry is Blood Answer: the whole debt back at once and 3 s of Frenzy for free. |
+| L | The shared front dodge. |
+| I | The selected ability, paid in HP: Frenzy (12%: for 4 s blows do not stagger him, he swings 20% faster and repays 1.5 times, then 2 s before the next), War Cry (8%), Red Crescent (10%), or a spell skill. Held, War Cry reaches further and Red Crescent goes both ways, for 1.5 times the HP. |
 | O | Switch ability. |
 | U | Berserk, the base special, with the shared charge levels. |
 
@@ -39,9 +40,9 @@ Every button does something from the first second of a run.
 | `b_executioner` | Executioner | attack | precise | J | `b_bleed` |
 | `b_spinningReap` | Spinning Reap | attack | timed | J | `b_headlong` |
 | `b_sunder` | Sunder | attack | precise | J | `b_rend` |
-| `b_hunt` | Long Hunt | movement | timed | L | `b_wolves` |
-| `b_headlong` | Headlong | movement | easy | L | `b_reaver` |
-| `b_bloodTrail` | Blood Trail | movement | timed | L | `b_hemorrhage` |
+| `b_hunt` | Long Hunt | movement | timed | J | `b_wolves` |
+| `b_headlong` | Headlong | movement | easy | J | `b_reaver` |
+| `b_bloodTrail` | Blood Trail | movement | timed | J | `b_hemorrhage` |
 | `b_geyser` | Blood Geyser | spell | easy | I | `b_pact` |
 | `b_axeThrow` | Hurled Axe | spell | easy | I | `b_spinningReap` |
 | `b_pact` | Blood Pact | spell | precise | I | `b_executioner` |
@@ -49,16 +50,16 @@ Every button does something from the first second of a run.
 | `b_rend` | Rend | dot | timed | J | `b_heavyHew` |
 | `b_hemorrhage` | Haemorrhage | dot | precise | auto | `b_redEdge` |
 | `b_wolves` | Blood Wolves | summon | easy | auto | `b_ravens` |
-| `b_ancestor` | Forebear | summon | timed | K | `b_unending` |
+| `b_ancestor` | Forebear | summon | timed | K | `b_berserk` |
 | `b_ravens` | Carrion Ravens | summon | timed | auto | `b_axeThrow` |
 | `b_scarred` | Scarred Hide | passive | easy | auto | `b_ancestor` |
-| `b_unending` | Unending Rage | ultimate | timed | U | `b_bloodTrail` |
+| `b_berserk` | Berserk | ultimate | timed | U | `b_bloodTrail` |
 
 Counts: attack 6, movement 3, spell 3, dot 3, summon 3, passive 1, ultimate 1.
 Risk: precise 5, easy 7, timed 8.
 His precise skills pay off on the first foe a blow reaches (`PRECISE_TARGETS`): Red Edge while Bloodied, Executioner on a wounded foe, Sunder on a foe caught winding up, Blood Pact's first Bloodied blow, and Haemorrhage's mark.
 
-Kit events he emits through the shared function, declared in `src/types/brannoc.ts`: `debt` (spend, repay, fade or forfeit, with the HP), `frenzy` (on or off), `hunt` (a Hunt landed, with its quarry and where it left from), `bloodied` (he crossed the line), `berserk` (on with its level, or off) and `cleave` (a Cleave struck, with the foes it landed on); and the shared `cast`, `jump`, `dash` (each Hunt) and `hurt`.
+Kit events he emits through the shared function, declared in `src/types/brannoc.ts`: `debt` (spend, repay, fade or forfeit, with the HP), `frenzy` (on or off), `hunt` (his warp landed, with its foe, whether he threw from the air and where he threw from), `bloodied` (he crossed the line), `berserk` (on with its level, or off) and `cleave` (a Cleave struck, with the foes it landed on); and the shared `cast`, `jump`, `warp`, `dash`, `parry` and `hurt`.
 
 ### b_redEdge: Red Edge
 
@@ -182,53 +183,55 @@ Evolution: **Shatterblow** (partner `b_rend`). The stunned foe bursts for 50 px,
 
 ### b_hunt: Long Hunt
 
-movement, timed, L. Hunt reaches further and its chop bites deeper.
+movement, timed, J. The Hunt (J held) bites deeper, hunts twice in a row and marks its foe.
+Its numbers reach the shared warp through his warp's `tune`; left out, the shared number stays.
 
-Values: reach: pixels Hunt looks ahead for a foe; power: share more the Hunt Chop deals; free: seconds after a Hunt in which the next is free (0 for none); launch: 1 the chop launches minions; mark: extra damage the hunted foe takes from all sources for 5 s; stamina: stamina less Hunt costs; wolves: 1 each Hunt sends a red wolf down the lane (evolution)
+Values: strike: attack damage of the Hunt chop; perPx and cap: power added per pixel the axe flew, and the most it adds; launch: 1 the chop launches minions; mark: extra damage the hunted foe takes from all sources for 5 s; charges: Hunts in a row before the first comes back; cost: MP a Hunt costs; wolves: 1 each Hunt sends a red wolf down the lane (evolution)
 
 | Lv | Change | Card |
 | --- | --- | --- |
-| 1 | reach 150, power 0.4 | Hunt reaches 150 px; the chop deals 40% more. |
-| 2 | free 0 to 0.6 | A second Hunt within 0.6 s is free. |
-| 3 | power 0.4 to 0.7 | The chop deals 70% more. |
+| 1 | strike 2.4 | The Hunt's chop deals 2.4x. |
+| 2 | perPx 0.025, cap 4.5 | The further the axe flew, the harder the chop, up to +4.5x. |
+| 3 | strike 2.4 to 3 | The chop deals 3x. |
 | 4 | launch 0 to 1 | The chop launches minions. |
 | 5 | mark 0 to 0.2 | The hunted foe is marked: +20% for 5 s. |
-| 6 | stamina 0 to 5 | Hunt costs 5 less stamina. |
-| 7 | power 0.7 to 1 | The chop deals 100% more. |
-| 8 | power 1 to 1.4 | The chop deals 140% more. |
+| 6 | charges 2 | Two Hunts in a row. |
+| 7 | cost 6 | The Hunt costs 6 MP. |
+| 8 | strike 3 to 5.4 | The chop deals 5.4x. |
 | Evolved | wolves 0 to 1 | Each Hunt sends a red wolf down the lane. |
 
 Evolution: **Wolf's Road** (partner `b_wolves`). Each Hunt also sends a red wolf running down the lane ahead, 1.2x to each foe it passes.
 
 ### b_headlong: Headlong
 
-movement, easy, L. Foes in Hunt's way are struck and shoved aside.
+movement, easy, J. The Hunt (J held) lands headlong, striking and dragging in the foes round where he lands.
+The landing strikes every foe within reach that the chop did not reach; its seventh level adds the shared warp's `path`, the hurled axe cutting what it passes.
 
-Values: power: attack damage each foe Hunt passes takes; through: 1 Hunt passes through minions; stagger: 1 they are staggered; elites: 1 elites too; wave: pixels of a dust wave Hunt leaves (0 for none); juggernaut: 1 Hunt passes every ground foe and the chop strikes all of them (evolution)
+Values: power: attack damage the landing deals to each foe within reach the chop did not reach; reach: pixels round where he lands; stagger: 1 minions it strikes stagger; drag: 1 it drags the minions it strikes in front of him, into the next blow's arc; elites: 1 it drags elites too; path: attack damage each foe the hurled axe passes takes; juggernaut: 1 the landing throws the minions it strikes up (evolution)
 
 | Lv | Change | Card |
 | --- | --- | --- |
-| 1 | power 0.5 | Foes Hunt touches take 0.5x and are shoved aside. |
-| 2 | through 0 to 1 | Hunt passes through minions. |
-| 3 | stagger 0 to 1 | They are staggered. |
-| 4 | power 0.5 to 0.8 | 0.8x. |
-| 5 | elites 0 to 1 | Elites are shoved too. |
-| 6 | power 0.8 to 1.1 | 1.1x. |
-| 7 | wave 0 to 60 | Hunt leaves a 60 px dust wave, 0.5x. |
+| 1 | power 0.5, reach 30 | The Hunt lands headlong: foes within 30 px take 0.5x. |
+| 2 | stagger 0 to 1 | Minions it strikes stagger. |
+| 3 | power 0.5 to 0.8 | 0.8x. |
+| 4 | drag 0 to 1 | It drags the minions it strikes in front of him. |
+| 5 | reach 30 to 45 | It reaches 45 px. |
+| 6 | power 0.8 to 1.1, elites 0 to 1 | 1.1x; it drags elites too. |
+| 7 | path 0 to 1 | The hurled axe also cuts every foe it passes, 1x. |
 | 8 | power 1.1 to 1.5 | 1.5x. |
-| Evolved | juggernaut 0 to 1 | Hunt passes every foe; the chop strikes all. |
+| Evolved | juggernaut 0 to 1, reach 45 to 60 | The landing reaches 60 px and throws minions up. |
 
-Evolution: **Juggernaut** (partner `b_reaver`). Hunt passes every ground foe in its way, and the chop strikes all of them.
+Evolution: **Juggernaut** (partner `b_reaver`). The landing reaches 60 px and throws the minions it strikes up.
 
 ### b_bloodTrail: Blood Trail
 
-movement, timed, L. Hunt leaves a trail of blood that hurts foes standing in it.
+movement, timed, J. The Hunt (J held) leaves a trail of blood from where he threw to where he lands, hurting foes standing in it.
 
 Values: power: attack damage the trail deals every 0.5 s; time: seconds the trail lasts; slow: 1 foes on it are slowed to half speed; bleed: 1 it bleeds foes; killRepay: share of max HP a kill on it repays; river: 1 the trail lasts 3 s more and bursts at its end for 2x (evolution)
 
 | Lv | Change | Card |
 | --- | --- | --- |
-| 1 | power 0.2, time 2 | Hunt leaves a 2 s trail, 0.2x every 0.5 s. |
+| 1 | power 0.2, time 2 | The Hunt leaves a 2 s trail, 0.2x every 0.5 s. |
 | 2 | slow 0 to 1 | The trail slows foes on it. |
 | 3 | power 0.2 to 0.3 | 0.3x. |
 | 4 | time 2 to 3 | The trail lasts 3 s. |
@@ -382,23 +385,23 @@ Evolution: **Blood Pack** (partner `b_ravens`). Every kill while he is Bloodied 
 
 ### b_ancestor: Forebear
 
-summon, timed, K. Frenzy calls a ghostly forebear who stands beside him and swings with him.
+summon, timed, K. Frenzy, from I or from a parry's Blood Answer (K), calls a ghostly forebear who swings with him and answers each parry.
 
-Values: every: his blows between the forebear's swings; power: attack damage each swing deals; both: 1 it cleaves both sides; stagger: 1 its swing staggers minions and marks them; outlast: seconds it stays after Frenzy ends; host: forebears that stand with him through Berserk (evolution)
+Values: every: his blows between the forebear's swings (a parry makes it swing at once); power: attack damage each swing deals; both: 1 it cleaves both sides; answer: seconds a parry's Blood Answer adds to its free Frenzy; stagger: 1 its swing staggers minions and marks them; outlast: seconds it stays after Frenzy ends; host: forebears that stand with him through Berserk (evolution)
 
 | Lv | Change | Card |
 | --- | --- | --- |
-| 1 | every 3, power 1 | Through Frenzy a forebear swings on every third blow, 1x. |
+| 1 | every 3, power 1 | Frenzy calls a forebear: it swings on every third blow and at once on a parry, 1x. |
 | 2 | power 1 to 1.4 | 1.4x. |
 | 3 | every 3 to 2 | It swings on every second blow. |
 | 4 | both 0 to 1 | It cleaves both sides. |
-| 5 | power 1.4 to 1.8 | 1.8x. |
-| 6 | stagger 0 to 1 | Its swing staggers and marks minions. |
+| 5 | answer 0 to 2 | Blood Answer's free Frenzy lasts 2 s longer. |
+| 6 | stagger 0 to 1, power 1.4 to 1.8 | Its swing staggers and marks minions; 1.8x. |
 | 7 | outlast 0 to 2 | It stays 2 s after Frenzy. |
 | 8 | power 1.8 to 2.4 | 2.4x. |
 | Evolved | host 0 to 3 | Three forebears stand with him through Berserk. |
 
-Evolution: **Host of Forebears** (partner `b_unending`). Three forebears stand with him through Berserk too.
+Evolution: **Host of Forebears** (partner `b_berserk`). Three forebears stand with him through Berserk too.
 
 ### b_ravens: Carrion Ravens
 
@@ -440,22 +443,24 @@ Values: cap: share of max HP added to the debt's cap; fade: share slower the deb
 
 Evolution: **Thousand Scars** (partner `b_ancestor`). A blow forfeits only half the debt.
 
-### b_unending: Unending Rage
+### b_berserk: Berserk
 
-ultimate, timed, U. Replaces Berserk: it lasts longer, and Last Cleave strikes twice.
+ultimate, timed, U. Berserk lasts longer as he kills, and Last Cleave strikes harder, wider and more than once.
+It upgrades his special, which `castBerserk` reads through `ultimateValues()`; the plain special is Berserk without it.
+Budget: level 8 is 2x on each of three strikes, about 6 times the plain special's one; evolved, 3x on each of three strikes and the same again across the whole stage, about 15 times.
 
-Values: extra: seconds Berserk lasts longer; strikes: times Last Cleave strikes; wider: share wider its ring is; repay: a multiple on repays in it; extend: seconds each kill in it adds; stun: seconds the roar stuns foes; power: a multiple on Last Cleave's damage; world: 1 Last Cleave splits the floor across the stage (evolution)
+Values: power: a multiple on Last Cleave's damage; extend: seconds each kill in Berserk adds; strikes: times Last Cleave strikes; wider: share wider its ring is; stun: seconds the roar stuns foes; repay: a multiple on repays in Berserk (2 without the skill); extra: seconds Berserk lasts longer; settle: 1 the last strike wins back the whole debt; world: 1 Last Cleave splits the floor across the stage (evolution)
 
 | Lv | Change | Card |
 | --- | --- | --- |
-| 1 | extra 2, strikes 2, repay 2, power 1 | Berserk lasts 2 s longer and Last Cleave strikes twice. |
-| 2 | wider 0 to 0.2 | Last Cleave rings 20% wider. |
-| 3 | power 1 to 1.5 | Last Cleave deals 1.5x. |
-| 4 | repay 2 to 3 | Repays triple in it. |
-| 5 | extend 0 to 0.5 | Each kill adds 0.5 s. |
-| 6 | power 1.5 to 2, wider 0.2 to 0.35 | 2x; 35% wider. |
-| 7 | stun 0 to 1 | The roar stuns foes 1 s. |
-| 8 | power 2 to 3, extra 2 to 3 | 3x; 3 s longer. |
-| Evolved | world 0 to 1, power 3 to 4 | Last Cleave splits the floor across the stage, 4x. |
+| 1 | power 1.3, extend 0.5, strikes 1, repay 2 | Last Cleave deals 1.3x; each kill in Berserk adds 0.5 s. |
+| 2 | strikes 1 to 2 | Last Cleave strikes twice. |
+| 3 | power 1.3 to 1.6, wider 0 to 0.25 | Last Cleave deals 1.6x and rings 25% wider. |
+| 4 | stun 0 to 1 | The roar stuns foes 1 s. |
+| 5 | repay 2 to 3 | Blows repay triple in Berserk. |
+| 6 | power 1.6 to 2, extra 0 to 1 | Last Cleave deals 2x; Berserk lasts 1 s longer. |
+| 7 | settle 0 to 1 | The last strike of Last Cleave wins back the whole debt. |
+| 8 | strikes 2 to 3, extra 1 to 2 | Last Cleave strikes three times; Berserk lasts 2 s longer. |
+| Evolved | world 0 to 1, power 2 to 3 | Last Cleave splits the floor across the stage, 3x. |
 
-Evolution: **World Ender** (partner `b_bloodTrail`). Last Cleave splits the floor across the whole stage, 4x.
+Evolution: **World Ender** (partner `b_bloodTrail`). Every strike of Last Cleave splits the floor across the whole stage, 3x.

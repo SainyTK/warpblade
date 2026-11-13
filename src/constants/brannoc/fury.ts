@@ -13,7 +13,7 @@ export const FURY = {
   rim: 1 / 30,
 } as const;
 
-/** The debt: HP he spends on K and I, which he wins back by landing blows before a foe lands one on him */
+/** The debt: HP he spends on I or bleeds through his guard, which he wins back by landing blows before a foe lands one on him */
 export const DEBT = {
   /** the most it holds, as a share of max HP; HP spent past it is gone */
   cap: 0.4,

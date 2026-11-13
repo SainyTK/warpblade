@@ -3,7 +3,7 @@ import { evolvedRow, levelRows } from "../../../../utils/skillRows";
 
 const LEVELS = levelRows([
   {
-    text: "Hunt leaves a 2 s trail, 0.2x every 0.5 s.",
+    text: "The Hunt leaves a 2 s trail, 0.2x every 0.5 s.",
     values: { power: 0.2, time: 2, slow: 0, bleed: 0, killRepay: 0, river: 0 },
   },
   { text: "The trail slows foes on it.", values: { slow: 1 } },
@@ -15,14 +15,14 @@ const LEVELS = levelRows([
   { text: "0.6x; lasts 4 s.", values: { power: 0.6, time: 4 } },
 ]);
 
-/** Blood Trail. Design: docs/skills/brannoc.md. Values: power: attack damage the trail deals every 0.5 s; time: seconds the trail lasts; slow: 1 foes on it are slowed to half speed; bleed: 1 it bleeds foes; killRepay: share of max HP a kill on it repays; river: 1 the trail lasts 3 s more and bursts at its end for 2x (evolution) */
+/** Blood Trail. Design: docs/skills/brannoc.md. The trail runs along the floor from where he hurled the axe to where his Hunt landed. Values: power: attack damage the trail deals every 0.5 s; time: seconds the trail lasts; slow: 1 foes on it are slowed to half speed; bleed: 1 it bleeds foes; killRepay: share of max HP a kill on it repays; river: 1 the trail lasts 3 s more and bursts at its end for 2x (evolution) */
 export const BLOOD_TRAIL: SkillDef = {
   id: "b_bloodTrail",
   name: "Blood Trail",
   kind: "movement",
   risk: "timed",
-  button: "L",
-  text: "Hunt leaves a trail of blood that hurts foes standing in it.",
+  button: "J",
+  text: "The Hunt (J held) leaves a trail of blood from where he threw to where he lands, hurting foes standing in it.",
   levels: LEVELS,
   evolution: {
     partner: "b_hemorrhage",
