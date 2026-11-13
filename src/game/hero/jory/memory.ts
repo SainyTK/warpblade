@@ -1,5 +1,5 @@
 import { TEMPO_BPM } from "../../../constants/jory/beat";
-import type { JoryHostMemory, JoryMemory } from "../../../types/jory";
+import type { JoryMemory } from "../../../types/jory";
 import { beatSeconds } from "../../../utils/beat";
 import { objectMemory, rememberPerSeat } from "../../seatMemory";
 
@@ -18,6 +18,14 @@ const fresh = (): JoryMemory => ({
   stampK: -1,
   stampL: -1,
   stampI: -1,
+  lastJ: -1,
+  lastK: -1,
+  lastL: -1,
+  lastI: -1,
+  seen: "idle",
+  warpOnBeat: false,
+  warpDownbeat: false,
+  dodgeOnBeat: false,
   keptJ: -1,
   keptOnBeat: false,
   keptDownbeat: false,
@@ -33,17 +41,10 @@ const fresh = (): JoryMemory => ({
   link: 0,
   leaps: 0,
   downstrokes: 1,
-  airStep: true,
   boomWait: 0,
   boomGuard: 0,
   boomOnBeat: false,
   boomDodged: false,
-  stepWait: 0,
-  stepDir: 1,
-  stepLen: 0,
-  stepOnBeat: false,
-  stepDodged: false,
-  freeSteps: 0,
   steadyBeats: 0,
   steadyCd: 0,
   thunderCd: 0,
@@ -52,6 +53,7 @@ const fresh = (): JoryMemory => ({
   echoCd: 0,
   casting: "steadyHand",
   castOnBeat: false,
+  castWide: false,
   ultLevel: 0,
   rings: 0,
   rung: 0,
@@ -63,18 +65,11 @@ const fresh = (): JoryMemory => ({
   shrugCd: 0,
 });
 
-const freshHost = (): JoryHostMemory => ({ lastFoe: null, passed: [] });
-
 /** the one owner of what Jory's kit remembers; the guest's HUD reads Groove, the beat and the abilities from it */
 export const jory: JoryMemory = fresh();
 rememberPerSeat(objectMemory(jory));
 
-/** the foes his kit holds on to, kept to the host */
-export const joryHost: JoryHostMemory = freshHost();
-rememberPerSeat(objectMemory(joryHost, true));
-
 /** a fresh run: the beat at 0 on the first frame, no Groove */
 export function resetJory(): void {
   Object.assign(jory, fresh());
-  Object.assign(joryHost, freshHost());
 }

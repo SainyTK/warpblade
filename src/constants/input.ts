@@ -147,16 +147,17 @@ export const ACTION_TEXT: Record<KitId, Record<InputAction, string>> = {
   },
   jory: {
     ...SHARED_ACTION_TEXT,
-    left: "Walk left. Tap twice and hold to run",
-    right: "Walk right. Tap twice and hold to run",
     up: "Jump. One jump, no double jump",
     down: "With jump, drop through a ledge",
     attack:
       "Mallet string: Tap, Roll, Crash. On the beat a blow is an Accent and builds Groove; off it, Groove falls. In the air, Downstroke",
-    dash: "Beat Step (stamina). On the beat nothing can touch you and you pass through foes",
-    warp: "Boom (stamina): push foes away. On the beat it is bigger, drowns foe shots and nothing can touch you",
-    cast: "Use the selected ability: Steady Hand, Thunder Skin or a spell skill (MP). Judged on the beat",
-    cycle: "Switch to the next ability",
+    warp: "Warp: spin a mallet at the nearest foe ahead and arrive with a crash (10 MP). Thrown on the beat, it lands as an Accent",
+    guard:
+      "Guard: hold to block with the drum. Press just as a blow lands for Counterbeat, a Boom off the drum. On the beat it lifts Groove a tier",
+    dash: "Dodge forward. Nothing can touch you while you dodge. On the beat it builds Groove",
+    cast: "Use the selected ability: Boom (stamina), Steady Hand, Thunder Skin or a spell skill (MP). Judged on the beat",
+    castWide: "Use the selected ability. Thunder Skin sends a wave each way",
+    cycle: "Switch ability: Boom, Steady Hand, Thunder Skin and the spells you learn",
   },
   brannoc: {
     ...SHARED_ACTION_TEXT,

@@ -15,36 +15,28 @@ import { emitSkillEvent } from "../../skills/events";
 import { skillValues, withCharms } from "../../skills/query";
 import { game, hero, particles, progress, rng } from "../../state";
 import { shake } from "../../world";
-import { isFree, setState, settle } from "../actions";
+import { setState, settle } from "../actions";
 import { rewardPerfectDodge } from "../perfectDodge";
-import { refuseDash } from "../stamina";
 import { judge } from "./beat";
 import { jory } from "./memory";
-import { inRecovery } from "./string";
 
 /** the drum head sits this high above his feet, where the ring leaves from */
 const DRUM_Y = 14;
 
-/** K: Boom, judged against the beat; a press with too little stamina gets the tired puff and is not judged */
-export function pressBoom(): boolean {
+/** what one Boom costs in stamina: none in the air with Downbeat Leap */
+export const boomCost = (): number => (!hero.ground && skillValues("j_leap").boom ? 0 : BOOM.stamina);
+
+/** I on Boom: judged against the beat, paid with stamina, and the palms come down on the drum */
+export function castBoom(): void {
   const h = hero;
-  if (!isFree() && !inRecovery()) return false;
-  if (jory.boomWait > 0) return false;
-  const cost = !h.ground && skillValues("j_leap").boom ? 0 : BOOM.stamina;
-  if (h.stamina < cost) {
-    refuseDash();
-    return true;
-  }
-  const judged = judge("K");
-  h.stamina -= cost;
+  const judged = judge("I");
+  h.stamina -= boomCost();
   h.staminaWait = 0.5;
-  jory.boomWait = BOOM.wait;
   jory.boomOnBeat = judged.onBeat;
   jory.boomGuard = judged.onBeat ? BOOM.guard : 0;
   jory.boomDodged = false;
   if (h.ground) h.vx = 0;
   setState("boom");
-  return true;
 }
 
 /** a foe pushed out to `to` pixels from him over the push's time, side to side only */
@@ -65,7 +57,7 @@ function pushOut(e: Enemy, to: number): void {
   });
 }
 
-/** an on-beat Boom drowns every foe shot near him for its untouchable moment, each with a cobalt spark */
+/** an on-beat Boom or Counterbeat drowns every foe shot near him for a moment, each with a cobalt spark */
 function drownShots(): void {
   const ward: ShotWard = {
     at: () => ({ x: hero.x, y: hero.y - DRUM_Y }),
@@ -90,10 +82,12 @@ function drownShots(): void {
   });
 }
 
-/** the Boom strikes: every foe in the ring takes the hit, minions and elites are pushed out and staggered */
-function strike(): void {
-  const onBeat = jory.boomOnBeat;
-  const r = withCharms("area", (onBeat ? BOOM.ring : BOOM.offRing) * (1 + (skillValues("j_eardrum").wider ?? 0)));
+/**
+ * A Boom bursts from the drum: every foe in the ring takes the hit, minions and elites are pushed out and staggered.
+ * `full` is the big ring that drowns foe shots (an on-beat Boom, and every Counterbeat); `onBeat` is what the skills hear.
+ */
+export function burstBoom(full: boolean, onBeat: boolean): void {
+  const r = withCharms("area", (full ? BOOM.ring : BOOM.offRing) * (1 + (skillValues("j_eardrum").wider ?? 0)));
   const cy = hero.y - DRUM_Y;
   const foes: Enemy[] = [];
   for (const e of game.enemies) {
@@ -109,10 +103,10 @@ function strike(): void {
     });
     if (pushed && e.hp > 0) pushOut(e, e.elite ? BOOM.pushElite : BOOM.pushMinion);
   }
-  if (onBeat) drownShots();
-  game.fx.push(createBoomRing(hero.x, cy, hero.y, r, onBeat));
+  if (full) drownShots();
+  game.fx.push(createBoomRing(hero.x, cy, hero.y, r, full));
   game.fx.push(createFloorRing(hero.x, hero.y, r, PAL.beat, 0.3));
-  shake(onBeat ? 0.14 : 0.08, onBeat ? 2 : 1);
+  shake(full ? 0.14 : 0.08, full ? 2 : 1);
   sfx.boom();
   emitSkillEvent({ type: "boom", onBeat, foes });
 }
@@ -123,7 +117,7 @@ export function runBoom(): void {
   if (h.ground) h.vx = 0;
   if (!h.hitDone && h.st >= BOOM.hit) {
     h.hitDone = true;
-    strike();
+    burstBoom(jory.boomOnBeat, jory.boomOnBeat);
   }
   if (h.st >= BOOM.dur) settle();
 }
@@ -139,8 +133,7 @@ export function boomAbsorbs(): boolean {
   return true;
 }
 
-/** the waits run down */
+/** the untouchable moment of an on-beat Boom runs down */
 export function tickBoom(dt: number): void {
-  jory.boomWait = Math.max(0, jory.boomWait - dt);
   jory.boomGuard = Math.max(0, jory.boomGuard - dt);
 }

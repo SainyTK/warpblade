@@ -35,7 +35,7 @@ const CRASH_HIGH = s({
 });
 
 /** Crash's strike: a deep knee bend, both mallets down on the drum head */
-const CRASH_LOW = s({
+export const CRASH_LOW = s({
   hx: 0.2,
   hy: -9.5,
   ny: -19.2,

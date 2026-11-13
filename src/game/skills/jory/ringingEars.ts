@@ -1,3 +1,4 @@
+import type { Enemy } from "../../../types/enemy";
 import type { SkillBehavior } from "../../../types/skillBehavior";
 import { dealDamage } from "../../damage";
 import { createAccentRing } from "../../effects/jory/accentRing";
@@ -8,15 +9,29 @@ import { game, hero, progress } from "../../state";
 import { skillValues } from "../query";
 
 const ID = "j_eardrum";
-/** Ringing lasts this many beats after a Boom, and holds at most this many stacks */
+/** Ringing lasts this many beats after it is laid, and holds at most this many stacks */
 const LASTS = 8;
 const MOST = 9;
 /** Deafening Roar bursts each stack for this much ability power */
 const ROAR = 1.2;
 
+/** lay Ringing on one foe at this level, slowing it */
+function ring(e: Enemy, stacks: number): void {
+  const v = skillValues(ID);
+  addStacks(e, ID, {
+    stacks,
+    max: MOST,
+    damage: progress.stats.ap * (v.ap ?? 0),
+    every: jory.beatLen,
+    duration: jory.beatLen * LASTS,
+  });
+  if (v.slow) e.chill = Math.max(e.chill, v.slow);
+}
+
 /**
- * Ringing Ears: Boom leaves Ringing on every foe in its ring, which hurts on each beat, slows and, on the beat, blinds;
- * Deafening Roar consumes it on an on-beat Boom for a burst. The wider Boom and the damage taken live in his kit.
+ * Ringing Ears: Boom and Counterbeat leave Ringing on every foe in the ring, which hurts on each beat, slows and, on the
+ * beat, blinds; a blow blocked on his drum rings its attacker; Deafening Roar consumes it on an on-beat Boom for a
+ * burst. The wider ring and the damage taken live in his kit.
  */
 export const ringingEarsSkill: SkillBehavior = {
   create: () => ({}),
@@ -34,16 +49,12 @@ export const ringingEarsSkill: SkillBehavior = {
           }
         }
         if (e.hp <= 0) continue;
-        addStacks(e, ID, {
-          stacks: v.stacks ?? 1,
-          max: MOST,
-          damage: progress.stats.ap * (v.ap ?? 0),
-          every: jory.beatLen,
-          duration: jory.beatLen * LASTS,
-        });
-        if (v.slow) e.chill = Math.max(e.chill, v.slow);
+        ring(e, v.stacks ?? 1);
         if (v.blind && event.onBeat) e.blind = Math.max(e.blind, v.blind);
       }
+    },
+    drumBlock(_m, event) {
+      if (skillValues(ID).block && event.foe.hp > 0) ring(event.foe, 1);
     },
   },
 };

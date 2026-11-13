@@ -8,31 +8,28 @@ import { emitSkillEvent } from "../../skills/events";
 import { withCharms } from "../../skills/query";
 import { game, hero, progress } from "../../state";
 import { dust, shake } from "../../world";
-import { isFree, setState, settle } from "../actions";
-import { deny } from "../deny";
-import { abilityMp, abilityWait, startWait } from "./abilities";
+import { setState, settle } from "../actions";
+import { cutForSharedAction, maySharedAct } from "../sharedCut";
 import { judge } from "./beat";
+import { castBoom } from "./boom";
 import { jory } from "./memory";
-import { inRecovery } from "./string";
 
-/** the ability pose: his two abilities have their own, the spell skills share one */
+/** the ability pose: his own abilities have their own, the spell skills share one */
 const spell = (id: JoryAbility): boolean => id !== "steadyHand" && id !== "thunderSkin";
 
-/** I: an ability may start from a free state or a blow's recovery, ready and paid for; a refused press is not judged */
-export function pressCast(id: JoryAbility): boolean {
-  if (!isFree() && !inRecovery()) return false;
-  if (abilityWait(id) > 0) {
-    deny("cast");
+/**
+ * Cast an ability, judged on the beat, from a free state or a blow's recovery; false while he cannot, which keeps the
+ * press waiting. `wide` is Thunder Skin's wide form, already paid for.
+ */
+export function castAbility(id: JoryAbility, wide: boolean): boolean {
+  if (!maySharedAct()) return false;
+  cutForSharedAction();
+  if (id === "boom") {
+    castBoom();
     return true;
   }
-  const mp = abilityMp(id);
-  if (hero.mp < mp) {
-    deny("mp");
-    return true;
-  }
-  hero.mp -= mp;
-  startWait(id);
   jory.casting = id;
+  jory.castWide = wide;
   jory.castOnBeat = judge("I").onBeat;
   if (hero.ground) hero.vx = 0;
   setState(spell(id) ? "spellCast" : "abilityCast");
@@ -45,14 +42,14 @@ function steadyHand(): void {
   jory.steadyBeats = STEADY_HAND.beats;
 }
 
-/** Thunder Skin: the drum beaten against the floor sends a wave ahead; on the beat it runs further and knocks down */
-function thunderSkin(): void {
+/** one wave of Thunder Skin along the floor toward `dir`; on the beat it runs further and knocks down */
+function thunderWave(dir: number): void {
   const onBeat = jory.castOnBeat;
   game.fx.push(
     createSoundWave({
-      x: hero.x + hero.face * 8,
+      x: hero.x + dir * 8,
       floor: hero.y,
-      dir: hero.face,
+      dir,
       reach: withCharms("area", onBeat ? THUNDER_SKIN.onBeatReach : THUNDER_SKIN.reach),
       speed: THUNDER_SKIN.speed,
       damage: progress.stats.ap * THUNDER_SKIN.ap + progress.stats.ad * THUNDER_SKIN.ad,
@@ -62,8 +59,14 @@ function thunderSkin(): void {
       source: "abilities",
     }),
   );
+}
+
+/** Thunder Skin: the drum beaten against the floor sends a wave ahead, and in its wide form a second one behind */
+function thunderSkin(): void {
+  thunderWave(hero.face);
+  if (jory.castWide) thunderWave(-hero.face);
   dust(hero.x + hero.face * 6, hero.y, 6);
-  shake(0.12, 2);
+  shake(0.12, jory.castWide ? 3 : 2);
 }
 
 /** the cast under way: the ability leaves on its frame, then he settles */

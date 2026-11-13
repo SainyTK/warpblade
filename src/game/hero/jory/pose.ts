@@ -7,9 +7,9 @@ import {
   ROLL_PLANT,
   SPELL_CLIP,
   STEADY_CLIP,
-  STEP_CLIP,
   THUNDER_CLIP,
 } from "../../../constants/clips/jory/moves";
+import { JORY_GUARD_CLIP, JORY_THROW, JORY_WARP_STRIKE } from "../../../constants/clips/jory/shared";
 import { CHARGE_POSE, NOD, RIDE_DOWN, RIDE_UP } from "../../../constants/clips/jory/stance";
 import { KAEL_WOUNDED_IDLE } from "../../../constants/clips/wounded";
 import { LANDING } from "../../../constants/kael/motion";
@@ -89,8 +89,12 @@ function statePose(h: Hero, t: number, fresh: boolean, dt: number, wound: number
       return play(h, MALLET_CLIPS.downstroke);
     case "boom":
       return play(h, BOOM_CLIP);
-    case "beatStep":
-      return play(h, STEP_CLIP);
+    case "guard":
+      return sampleKeys(JORY_GUARD_CLIP.keys, h.st);
+    case "throw":
+      return play(h, JORY_THROW);
+    case "warpStrike":
+      return play(h, JORY_WARP_STRIKE);
     case "abilityCast":
       return play(h, jory.casting === "thunderSkin" ? THUNDER_CLIP : STEADY_CLIP);
     case "spellCast":

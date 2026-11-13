@@ -3,7 +3,7 @@ import type { JoryAbility } from "../../../types/jory";
 import type { TouchButtonAction } from "../../../types/touch";
 import { hex } from "../../../utils/color";
 import { ICON_WHITE, type IconArt } from "./iconArt";
-import { JUMP } from "./sharedArt";
+import { DODGE, JUMP } from "./sharedArt";
 
 const B = PAL.beat;
 const WOOD = hex("#8a6440");
@@ -12,7 +12,6 @@ const PEWTER = hex("#9a9ca8");
 const IRON = hex("#6a6c7c");
 const BRONZE = hex("#c08a3a");
 const BRONZE_LIGHT = hex("#f0c878");
-const BOOT = hex("#8a5e3e");
 
 /** the colours of the drum in the rows below: hide head, pewter hoops, oxblood shell and cobalt lacing */
 const DRUM_COLORS = { h: HIDE, p: PEWTER, D: DRUM[2], l: B[3] };
@@ -49,20 +48,19 @@ const BOOM: IconArt = {
   colors: { R: B[4], ...DRUM_COLORS },
 };
 
-/** Beat Step: a boot stepping onto a beat ring, speed lines behind */
-const BEAT_STEP: IconArt = {
+/** the guard: the war drum held up head on like a shield, the mallet raised behind it, Counterbeat ringing off its face */
+const GUARD: IconArt = {
   rows: [
-    "....BB.....",
-    "SS..BB.....",
-    "....BBB....",
-    "SSS.BBBBB..",
-    "....ddddd..",
-    "...........",
-    ".RRRRRRRRR.",
-    "RR.......RR",
-    ".RRRRRRRRR.",
+    ".......FFF.",
+    "R.ppp..FWF.",
+    ".phhhp.FFF.",
+    "phhhhhp.S..",
+    "phhhhhp.S..",
+    "phhhhhp.S..",
+    ".phhhp..S..",
+    "R.ppp...S..",
   ],
-  colors: { B: BOOT, d: hex("#4a2e1c"), S: B[4], R: B[4] },
+  colors: { F: B[3], W: ICON_WHITE, S: WOOD, R: B[5], p: PEWTER, h: HIDE },
 };
 
 /** Steady Hand: an iron metronome with its arm swung over */
@@ -154,6 +152,7 @@ const DRUMROLL: IconArt = {
 };
 
 const ABILITY_ART: Readonly<Record<JoryAbility, IconArt>> = {
+  boom: BOOM,
   steadyHand: STEADY,
   thunderSkin: THUNDER,
   j_gong: GONG,
@@ -161,13 +160,14 @@ const ABILITY_ART: Readonly<Record<JoryAbility, IconArt>> = {
   j_echo: ECHO,
 };
 
-/** where each of up to five abilities sits on the switch dial, clockwise from the top */
+/** where each of up to six abilities sits on the switch dial, clockwise from the top */
 const DIAL: readonly [number, number][] = [
   [4, 0],
-  [8, 3],
-  [7, 8],
-  [1, 8],
-  [0, 3],
+  [8, 2],
+  [8, 6],
+  [4, 8],
+  [0, 6],
+  [0, 2],
 ];
 
 /** the switch: one mark for each ability he knows round a dial, the selected one white */
@@ -187,7 +187,7 @@ function switchArt(selected: JoryAbility, known: readonly JoryAbility[]): IconAr
   return { rows: grid.map((r) => r.join("")), colors: { B: B[3], W: ICON_WHITE } };
 }
 
-/** Jory's buttons: the mallets, Beat Step, Boom, the selected ability on I, the switch dial on O and Drumroll */
+/** Jory's buttons: the mallets, the dodge, the drum guard, the selected ability on I, the switch dial on O and Drumroll */
 export function joryArt(action: TouchButtonAction, ability: JoryAbility, known: readonly JoryAbility[]): IconArt {
   switch (action) {
     case "attack":
@@ -195,9 +195,9 @@ export function joryArt(action: TouchButtonAction, ability: JoryAbility, known: 
     case "up":
       return JUMP;
     case "guard":
-      return BOOM;
+      return GUARD;
     case "dash":
-      return BEAT_STEP;
+      return DODGE;
     case "cast":
       return ABILITY_ART[ability];
     case "cycle":

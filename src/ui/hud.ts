@@ -19,7 +19,6 @@ import { updateGrooveBar } from "./grooveBar";
 import { updateHeatBar } from "./heatBar";
 import { updateHitCounter } from "./hitCounter";
 import { updateHuldaTabs } from "./huldaTabs";
-import { updateJoryTabs } from "./joryTabs";
 import { updateMirelTabs } from "./mirelTabs";
 import { updateMomentumBar } from "./momentumBar";
 import { updateOrrinTabs } from "./orrinTabs";
@@ -65,7 +64,6 @@ export function updateHud(): void {
   updateMirelTabs();
   updateWennaTabs();
   updateTallisTabs();
-  updateJoryTabs();
   updateBrannocTabs();
   updateDebtBar();
   updateHeatBar();
