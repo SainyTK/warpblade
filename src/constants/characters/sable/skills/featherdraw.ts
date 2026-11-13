@@ -1,6 +1,6 @@
 import type { SkillDef } from "../../../../types/skill";
 
-/** Featherdraw: She hangs in the air while she shoots. The one skill that raises her air string. Values: airLimit: bolts per airtime; bonus: damage added to air bolts; hang: seconds each air shot holds her up; pierce: foes an air bolt passes through; rise: the jump's height multiple; landing: attack damage of the bolts her landing looses along the floor; jumps: jumps in one airtime; split: an air bolt splits on a hit; hover: seconds held J keeps her aloft; fan: side bolts of each air bolt. Design: docs/skills/sable.md */
+/** Featherdraw: She hangs in the air while she shoots. The one skill that raises her air string. Values: airLimit: bolts per airtime; bonus: damage added to air bolts; hang: seconds each air shot holds her up; pierce: foes an air bolt passes through; rise: the jump's height multiple; landing: attack damage of the bolts her landing looses along the floor; jumps: jumps in one airtime; split: an air bolt splits on a hit; hover: seconds her air shots keep her aloft; fan: side bolts of each air bolt. Design: docs/skills/sable.md */
 export const FEATHERDRAW: SkillDef = {
   id: "s_featherdraw",
   name: "Featherdraw",
@@ -133,9 +133,9 @@ export const FEATHERDRAW: SkillDef = {
   evolution: {
     partner: "s_hawk",
     name: "Skyhunter",
-    text: "Hold J in the air to hover and fire whole strings, each bolt a fan of three; every air string calls a hawk.",
+    text: "Shooting in the air hovers her and fires whole strings, each bolt a fan of three; every air string calls a hawk.",
     row: {
-      text: "Hover and fire; air strings call a hawk.",
+      text: "Air shots hover; air strings call a hawk.",
       values: {
         airLimit: 3,
         bonus: 1,

@@ -1,6 +1,6 @@
 import type { SkillDef } from "../../../../types/skill";
 
-/** Snare Hound: A hound bounds in and drags foes away from her. Values: chance: chance a landed kick or a snare's bite calls the hound; cooldown: least seconds between calls; power: attack damage of a bite; hold: seconds a bite holds; stay: seconds the hound hunts; every: seconds between bites; drag: it drags its foe away from her; hounds: hounds at once; howl: seconds its howl stuns foes near it; bleed: a bite doubles the bleed. Design: docs/skills/sable.md */
+/** Snare Hound: A hound bounds in and drags foes away from her. Values: chance: chance a snare's bite, a parry kick or a warp's heavy bolt calls the hound; cooldown: least seconds between calls; power: attack damage of a bite; hold: seconds a bite holds; stay: seconds the hound hunts; every: seconds between bites; drag: it drags its foe away from her; hounds: hounds at once; howl: seconds its howl stuns foes near it; bleed: a bite doubles the bleed. Design: docs/skills/sable.md */
 export const SNARE_HOUND: SkillDef = {
   id: "s_hound",
   name: "Snare Hound",
@@ -10,7 +10,7 @@ export const SNARE_HOUND: SkillDef = {
   text: "A hound bounds in and drags foes away from her.",
   levels: [
     {
-      text: "A hound may bite the foe you kick or snare.",
+      text: "A hound may bite a foe you snare, kick or warp-shoot.",
       values: {
         chance: 0.25,
         cooldown: 4,

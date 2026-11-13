@@ -1,21 +1,21 @@
 import type { SkillDef } from "../../../../types/skill";
 
-/** Hop Volley: The hop back looses a primed fan. Values: bolts: bolts the hop looses; cost: stamina; seek: hop bolts bend toward foes; airHops: hops in one airtime; pierce: foes a hop bolt passes through; caltrops: attack damage of caltrops scattered on landing; slow, slowTime: the slow a hop bolt lays and its seconds; carry: the hop's length multiple; ring: the hop looses a full ring. Design: docs/skills/sable.md */
+/** Hop Volley: The hop back on I looses a primed fan. Values: bolts: bolts the hop looses; recharge: seconds the hop takes to come back; charges: hops held ready; seek: hop bolts bend toward foes; pierce: foes a hop bolt passes through; caltrops: attack damage of caltrops scattered on landing; slow, slowTime: the slow a hop bolt lays and its seconds; carry: the hop's length multiple; ring: the hop looses a full ring. Design: docs/skills/sable.md */
 export const HOP_VOLLEY: SkillDef = {
   id: "s_hopVolley",
   name: "Hop Volley",
   kind: "movement",
   risk: "timed",
-  button: "L",
+  button: "I",
   text: "The hop back looses a primed fan.",
   levels: [
     {
       text: "The hop looses three primed bolts.",
       values: {
         bolts: 3,
-        cost: 22,
+        recharge: 2,
+        charges: 1,
         seek: 0,
-        airHops: 1,
         pierce: 0,
         caltrops: 0,
         slow: 0,
@@ -25,12 +25,12 @@ export const HOP_VOLLEY: SkillDef = {
       },
     },
     {
-      text: "The hop costs less stamina.",
+      text: "The hop comes back sooner.",
       values: {
         bolts: 3,
-        cost: 16,
+        recharge: 1.4,
+        charges: 1,
         seek: 0,
-        airHops: 1,
         pierce: 0,
         caltrops: 0,
         slow: 0,
@@ -43,9 +43,9 @@ export const HOP_VOLLEY: SkillDef = {
       text: "Hop bolts seek foes.",
       values: {
         bolts: 3,
-        cost: 16,
+        recharge: 1.4,
+        charges: 1,
         seek: 1,
-        airHops: 1,
         pierce: 0,
         caltrops: 0,
         slow: 0,
@@ -55,12 +55,12 @@ export const HOP_VOLLEY: SkillDef = {
       },
     },
     {
-      text: "Hop once more in the air.",
+      text: "Hold two hops ready.",
       values: {
         bolts: 3,
-        cost: 16,
+        recharge: 1.4,
+        charges: 2,
         seek: 1,
-        airHops: 2,
         pierce: 0,
         caltrops: 0,
         slow: 0,
@@ -73,9 +73,9 @@ export const HOP_VOLLEY: SkillDef = {
       text: "The hop looses five bolts.",
       values: {
         bolts: 5,
-        cost: 16,
+        recharge: 1.4,
+        charges: 2,
         seek: 1,
-        airHops: 2,
         pierce: 0,
         caltrops: 0,
         slow: 0,
@@ -88,9 +88,9 @@ export const HOP_VOLLEY: SkillDef = {
       text: "Hop bolts pass through a foe.",
       values: {
         bolts: 5,
-        cost: 16,
+        recharge: 1.4,
+        charges: 2,
         seek: 1,
-        airHops: 2,
         pierce: 1,
         caltrops: 0,
         slow: 0,
@@ -103,9 +103,9 @@ export const HOP_VOLLEY: SkillDef = {
       text: "Landing from a hop scatters caltrops.",
       values: {
         bolts: 5,
-        cost: 16,
+        recharge: 1.4,
+        charges: 2,
         seek: 1,
-        airHops: 2,
         pierce: 1,
         caltrops: 1,
         slow: 0,
@@ -118,9 +118,9 @@ export const HOP_VOLLEY: SkillDef = {
       text: "Hop bolts slow foes, and the hop carries farther.",
       values: {
         bolts: 5,
-        cost: 16,
+        recharge: 1.4,
+        charges: 2,
         seek: 1,
-        airHops: 2,
         pierce: 1,
         caltrops: 1,
         slow: 0.3,
@@ -138,9 +138,9 @@ export const HOP_VOLLEY: SkillDef = {
       text: "The hop looses a ring of bolts.",
       values: {
         bolts: 12,
-        cost: 16,
+        recharge: 1.4,
+        charges: 2,
         seek: 0,
-        airHops: 2,
         pierce: 1,
         caltrops: 1,
         slow: 0.3,

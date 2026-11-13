@@ -1,7 +1,7 @@
 import type { SkillDef } from "../../../../types/skill";
 import { BARBED_JAWS } from "./barbedJaws";
+import { BOLT_STORM } from "./boltStorm";
 import { BREACHING_BOLT } from "./breachingBolt";
-import { DEADEYE } from "./deadeye";
 import { FEATHERDRAW } from "./featherdraw";
 import { HEAVY_BOOT } from "./heavyBoot";
 import { HOP_VOLLEY } from "./hopVolley";
@@ -41,5 +41,5 @@ export const SABLE_SKILLS_DATA: readonly SkillDef[] = [
   HUNTING_HAWK,
   SNARE_HOUND,
   SHADE_ARCHER,
-  DEADEYE,
+  BOLT_STORM,
 ];
