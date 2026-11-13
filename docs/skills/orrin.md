@@ -18,27 +18,28 @@ Distances are art pixels, times are seconds, speeds are pixels a second.
 | `o_ironweight` | Iron Weight | attack | easy | J | `o_reelsnap` |
 | `o_skylash` | Sky Lash | attack | timed | J | `o_pump` |
 | `o_pendulumkick` | Pendulum Kick | attack | timed | auto | `o_skylash` |
-| `o_gaff` | Gaff | attack | precise | K | `o_sweetspot` |
-| `o_pump` | Pendulum Pump | movement | easy | K | `o_friction` |
-| `o_reelsnap` | Reel Snap | movement | timed | L | `o_ironweight` |
-| `o_undertow` | Undertow | movement | timed | L | `o_anchorfall` |
-| `o_plumbdrop` | Plumb Drop | movement | precise | K | `o_gaff` |
+| `o_gaff` | Gaff | attack | precise | J | `o_sweetspot` |
+| `o_pump` | Pendulum Pump | movement | easy | J | `o_friction` |
+| `o_reelsnap` | Reel Snap | movement | timed | J | `o_ironweight` |
+| `o_undertow` | Undertow | attack | precise | K | `o_anchorfall` |
+| `o_plumbdrop` | Plumb Drop | movement | precise | J | `o_gaff` |
 | `o_chainfence` | Chain Fence | spell | easy | I | `o_barbs` |
 | `o_tether` | Tether | spell | timed | I | `o_bell` |
 | `o_anchorfall` | Anchor Fall | spell | timed | I | `o_tether` |
 | `o_barbs` | Barbed Links | dot | easy | J | `o_chainfence` |
-| `o_rust` | Rust Bite | dot | timed | K | `o_gaff` |
+| `o_rust` | Rust Bite | dot | timed | J | `o_gaff` |
 | `o_friction` | Friction Burn | dot | timed | J | `o_pendulumkick` |
 | `o_kite` | Brass Kite | summon | easy | auto | `o_pump` |
 | `o_bell` | Rift Bell | summon | timed | auto | `o_tether` |
 | `o_twin` | Twin Chain | summon | precise | auto | `o_sweetspot` |
 | `o_perpetual` | Perpetual Motion | passive | easy | auto | `o_kite` |
-| `o_maelstrom` | Maelstrom | ultimate | timed | U | `o_pump` |
+| `o_grandpendulum` | Grand Pendulum | ultimate | timed | U | `o_pump` |
 
-Counts: attack 5, movement 4, spell 3, dot 3, summon 3, passive 1, ultimate 1.
-Risk: precise 4, easy 6, timed 10.
+Counts: attack 6, movement 3, spell 3, dot 3, summon 3, passive 1, ultimate 1.
+Risk: precise 5, easy 6, timed 9.
 
-Kit events he emits through the shared function: `latch` (the hook bit a foe, a crystal, a platform or the air), `release` (he let go of a swing), `tip` (a chain hit at the tip) and `swingKick`, declared in `src/types/orrin.ts`; and the shared `cast`, `dash` and `perfectDodge`.
+Kit events he emits through the shared function: `latch` (the swing hook bit a crystal, a platform or the air), `release` (he let go of a swing), `tip` (a chain hit at the tip) and `swingKick`, declared in `src/types/orrin.ts`; and the shared `cast`, `dash` and `perfectDodge`.
+The shared warp and guard emit `warp` and `parry` for him.
 
 ### o_sweetspot: Sweet Spot
 
@@ -122,27 +123,27 @@ Evolution: **Comet Heel** (partner `o_skylash`). Kicks leave a brass comet trail
 
 ### o_gaff: Gaff
 
-attack, precise, K. The kick at the end of a zip to a hooked foe hits much harder.
+attack, precise, J. The warp kick hits harder, costs less and comes back sooner, and catches a foe winding up.
 
-Values: power: share more the arrival kick deals; windup: 1 a foe winding up is staggered 1.2 s and the kick crits; hook: 1 the bounce gives a hook back; yank: 1 a hooked minion is yanked along on the bounce; ring: pixels round the arrival every foe takes the kick; momentum: Momentum a crit arrival gives; harpoon: 1 every foe on the chain's line is dragged to the hooked one first (evolution); crit: the kick's damage multiple as a sure crit (evolution)
+Values: cost: MP a warp costs; recharge: seconds; charges: warps in a row; strike: the warp kick's power as attack damage; windup: 1 a foe winding up reels 1.2 s and the kick crits; path: attack damage the thrown hook deals to foes on its way; ring: pixels round the kick every foe takes it; momentum: Momentum a crit kick gives; harpoon: pixels round the hooked foe from which foes are dragged in to it first (evolution); sure: 1 the kick always crits (evolution)
 
 | Lv | Change | Card |
 | --- | --- | --- |
-| 1 | power 0.4 | The arrival kick deals 40% more. |
-| 2 | windup 0 to 1 | A foe winding up reels; the kick crits. |
-| 3 | power 0.4 to 0.7 | The arrival kick deals 70% more. |
-| 4 | hook 0 to 1 | The bounce gives a hook back. |
-| 5 | yank 0 to 1 | A hooked minion comes along on the bounce. |
-| 6 | ring 0 to 26 | The kick hits every foe within 26 px. |
-| 7 | momentum 0 to 20 | A crit arrival gives 20 Momentum. |
-| 8 | power 0.7 to 1.4 | The arrival kick deals 140% more. |
-| Evolved | harpoon 0 to 1, crit 0 to 3 | Drag the line in; a sure crit for 3x. |
+| 1 | cost 6, recharge 1.5, charges 1, strike 2.4 | The warp kick deals 2.4x, costs 6 MP and recharges in 1.5 s. |
+| 2 | windup 1 | New: a foe winding up reels 1.2 s and the kick crits. |
+| 3 | path 1 | New: the thrown hook cuts every foe on its way. |
+| 4 | charges 1 to 2 | New: two warp charges. |
+| 5 | ring 26 | New: the kick hits every foe within 26 px. |
+| 6 | recharge 1.5 to 1.1 | Recharge 1.5 to 1.1 s. |
+| 7 | momentum 20 | New: a crit kick gives 20 Momentum. |
+| 8 | strike 2.4 to 6.5, path 1 to 2 | Warp kick 2.4 to 6.5; the hook's cut hits harder. |
+| Evolved | harpoon 80, sure 1 | Drag the foes round it in; the kick always crits. |
 
-Evolution: **Harpoon** (partner `o_sweetspot`). A hook on a foe drags every foe on the chain's line to it before the kick, and the kick is a sure crit for 3x.
+Evolution: **Harpoon** (partner `o_sweetspot`). Every foe within 80 px of the hooked one is dragged in to it before the kick, and the kick always crits.
 
 ### o_pump: Pendulum Pump
 
-movement, easy, K. Swing higher and hook further.
+movement, easy, J. The swing hook (J held with Up) flies further, and you swing higher.
 
 Values: pump: share harder Left and Right pump the swing; bite: seconds an air bite holds; range: pixels more the hook flies; fling: share more a fling adds; cost: stamina less a hook costs; hooks: air hooks more per airtime; skyline: 1 at 50+ Momentum hooks are not limited per airtime (evolution); cut: attack damage the chain deals to foes it sweeps through in a swing (evolution)
 
@@ -162,7 +163,7 @@ Evolution: **Skyline** (partner `o_friction`). With 50 Momentum or more hooks ar
 
 ### o_reelsnap: Reel Snap
 
-movement, timed, L. A reel that speeds you up enough snaps the chain at foes near you.
+movement, timed, J. Hold J while swinging to reel in: a reel that speeds you up enough snaps the chain at foes near you.
 
 Values: power: attack damage of the snap; at: share of the reel's starting speed it must reach; reel: reel speed in px/s; radius: the snap's reach; stun: seconds it stuns; arc: 1 the snap gives the Hanging Arc back; shock: 1 a snap at the bottom of the arc sends a shock along the floor; whiplash: 1 every snap is a Full Circle at the swing point (evolution)
 
@@ -182,27 +183,27 @@ Evolution: **Whiplash** (partner `o_ironweight`). Every snap is a Full Circle ro
 
 ### o_undertow: Undertow
 
-movement, timed, L. Backline yanks you further and drags foes after you.
+attack, precise, K. Chain Bind holds longer, its yank hits hard, and it drags more foes in with the one that struck.
 
-Values: distance: pixels Backline yanks; drag: pixels the nearest foe ahead is dragged after; slip: seconds at the start of a Backline in which a blow is a Slip; boost: share harder a hook within 0.3 s of a Backline flings; trip: seconds the chain line on the floor trips foes; power: attack damage of the trip; riptide: pixels ahead within which every foe is pulled and rooted 1 s (evolution)
+Values: bind: seconds Chain Bind holds a minion; power: attack damage of the yank on the bound foe; drag: foes beside the bound one yanked in and bound with it; big: 1 mini bosses and bosses are yanked in and held too; trip: seconds the chain line left on the floor trips foes; tripPower: its attack damage; mark: share more the bound foe takes from every source while bound; riptide: pixels round the bound foe within which every foe is yanked in and bound (evolution)
 
 | Lv | Change | Card |
 | --- | --- | --- |
-| 1 | distance 64 | Backline yanks 64 px. |
-| 2 | drag 0 to 20 | The nearest foe ahead is dragged 20 px. |
-| 3 | slip 0 to 0.1 | A blow early in a Backline is a Slip. |
-| 4 | boost 0 to 0.3 | A hook just after a Backline flings 30% more. |
-| 5 | distance 64 to 72 | Backline yanks 72 px. |
-| 6 | trip 0 to 0.4, power 0 to 0.3 | A chain line on the floor trips foes. |
-| 7 | power 0.3 to 0.6 | The trip deals 0.6x. |
-| 8 | power 0.6 to 1 | The trip deals 1.0x. |
-| Evolved | riptide 0 to 60 | Pull every foe ahead along and root them. |
+| 1 | bind 1.6, power 1 | Chain Bind holds 1.6 s; the yank deals 1.0x. |
+| 2 | drag 1 | New: the foe nearest the bound one is yanked in too. |
+| 3 | power 1 to 1.8 | The yank deals 1.8x. |
+| 4 | big 1 | New: mini bosses and bosses are yanked in and held. |
+| 5 | trip 0.6, tripPower 0.6 | New: the yank leaves a chain on the floor that trips. |
+| 6 | bind 1.6 to 2.2, power 1.8 to 2.6 | Chain Bind holds 2.2 s; the yank deals 2.6x. |
+| 7 | mark 0.3 | New: the bound foe takes 30% more while bound. |
+| 8 | power 2.6 to 4, drag 1 to 2 | The yank deals 4.0x; two foes come in with it. |
+| Evolved | riptide 60 | Every foe round it is yanked in and bound. |
 
-Evolution: **Riptide** (partner `o_anchorfall`). Backline pulls every foe within 60 px ahead after you and roots them for 1 s.
+Evolution: **Riptide** (partner `o_anchorfall`). A parry yanks in every foe within 60 px of the one that struck, and binds them all.
 
 ### o_plumbdrop: Plumb Drop
 
-movement, precise, K. Hold Down while swinging to let go and drop straight down onto foes.
+movement, precise, J. Hold Down while swinging to let go and drop straight down onto foes.
 
 Values: power: attack damage in the ring; ring: its radius; launch: 1 foes in it are launched; momentum: 1 Momentum adds up to +50% to the drop; head: 1 a drop on a foe's head crits; hook: 1 a drop gives a hook back; quake: the evolved quake's radius; root: seconds it roots (evolution)
 
@@ -302,13 +303,13 @@ Evolution: **Flay** (partner `o_chainfence`). A Full Circle tip consumes the sta
 
 ### o_rust: Rust Bite
 
-dot, timed, K. A hooked foe rusts and keeps hurting.
+dot, timed, J. A foe your warp kick or Chain Bind catches rusts and keeps hurting.
 
 Values: damage: attack damage of rust a second; life: seconds; taken: share more rusted foes take from every source; spread: 1 rust spreads to one foe it touches; pin: 1 Anchor Pin rusts; slow: 1 rusted foes are slowed; corrode: attack damage a rusted foe bursts for when it dies, rusting every foe within 40 px (evolution)
 
 | Lv | Change | Card |
 | --- | --- | --- |
-| 1 | damage 0.2, life 4 | A hooked foe rusts. |
+| 1 | damage 0.2, life 4 | A foe your warp kick or Chain Bind catches rusts. |
 | 2 | taken 0 to 0.15 | Rusted foes take 15% more. |
 | 3 | spread 0 to 1 | Rust spreads to a foe it touches. |
 | 4 | pin 0 to 1 | Anchor Pin rusts. |
@@ -382,13 +383,13 @@ Evolution: **Great Bell** (partner `o_tether`). The bell is twice the size, and 
 
 ### o_twin: Twin Chain
 
-summon, precise, auto. A Slip calls a shade of you that spins a Full Circle.
+summon, precise, auto. A Slip or a perfect dodge calls a shade of you that spins a Full Circle.
 
 Values: power: the shade's Full Circle as a multiple of yours; momentum: Momentum a shade gives; count: shades a Slip calls; swing: 1 the shade swings and spins again; copy: 1 the shade copies your next Hanging Arc; mirror: 1 a Slip calls three shades whose tips all crit (evolution)
 
 | Lv | Change | Card |
 | --- | --- | --- |
-| 1 | power 1, count 1 | A Slip calls a shade's Full Circle. |
+| 1 | power 1, count 1 | A Slip or perfect dodge calls a shade's Full Circle. |
 | 2 | momentum 0 to 10 | A shade gives 10 Momentum. |
 | 3 | count 1 to 2 | Two shades. |
 | 4 | swing 0 to 1 | The shade swings and spins again. |
@@ -420,22 +421,22 @@ Values: drain: Momentum drains at this share of its usual rate; bonus: Momentum'
 
 Evolution: **Endless Motion** (partner `o_kite`). Momentum never drains while a Brass Kite is out.
 
-### o_maelstrom: Maelstrom
+### o_grandpendulum: Grand Pendulum
 
-ultimate, timed, U. Replaces Grand Pendulum: full vertical turns round a rift tear that strike every foe in the circle.
+ultimate, timed, U. Grand Pendulum swings more passes, drags foes under the tear, and ends in full turns round it.
 
-Values: turns: full turns; radius: the circle's radius; power: share of the level's power each foe takes a turn; pull: 1 foes in the circle are pulled to its middle; shards: 1 chain shards fly out each turn; crash: share of the level's power of the crash ring at the end; burst: share of the level's power the foes pulled in burst for together (evolution)
+Values: passes: wide passes under the tear; power: share of the level's power each pass and turn deals each foe; pull: 1 a pass drags the foes it meets under the tear; radius: the chain's length in pixels; shards: share of the level's power the chain shards of each pass and turn deal foes on the floor beneath; crash: share of the level's power of the crash ring; stun: seconds the crash stuns; turns: full turns round the tear after the passes; burst: share of the level's power the foes drawn in under the tear burst for together at the end (evolution)
 
 | Lv | Change | Card |
 | --- | --- | --- |
-| 1 | turns 2, radius 96, power 0.6 | Two turns, 0.6x the level's power each. |
-| 2 | turns 2 to 3 | Three turns. |
-| 3 | pull 0 to 1 | Foes are pulled to the middle. |
-| 4 | radius 96 to 120 | The circle grows to radius 120. |
-| 5 | shards 0 to 1 | Chain shards fly out each turn. |
-| 6 | power 0.6 to 1.4 | Each turn deals 1.4x. |
-| 7 | turns 3 to 4, crash 0 to 1 | Four turns and a crash ring. |
-| 8 | power 1.4 to 2.5, crash 1 to 2 | Each turn 2.5x, the crash 2x. |
-| Evolved | turns 4 to 5, radius 120 to 150, power 2.5 to 3, crash 2 to 0, burst 0 to 15 | Five turns, a giant circle, a final burst. |
+| 1 | passes 3, power 0.6, crash 1 | Three passes, each 0.6x the level's power. |
+| 2 | pull 1 | New: each pass drags the foes it meets under the tear. |
+| 3 | power 0.6 to 0.8, radius 110 | A longer chain, radius 110; passes deal 0.8x. |
+| 4 | shards 0.5 | New: each pass sprays chain shards on the floor, 0.5x. |
+| 5 | crash 1 to 2, stun 1 | New: the crash deals 2x and stuns for 1 s. |
+| 6 | turns 1 | New: after the passes he loops a full turn round the tear. |
+| 7 | power 0.8 to 1.2 | Passes and turns deal 1.2x. |
+| 8 | power 1.2 to 1.4, crash 2 to 3, turns 1 to 2 | Two full turns; passes 1.4x, the crash 3x. |
+| Evolved | power 1.4 to 2.2, radius 110 to 140, turns 2 to 4, burst 8 | Four turns, a giant circle, a final burst. |
 
-Evolution: **Eye of the Maelstrom** (partner `o_pump`). Five turns in a circle as tall as the screen, and the foes pulled into its middle burst together at the end.
+Evolution: **Maelstrom** (partner `o_pump`). Four full turns in a circle as tall as the screen, and the foes drawn in under the tear burst together at the end.

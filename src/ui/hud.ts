@@ -24,7 +24,6 @@ import { updateHuldaTabs } from "./huldaTabs";
 import { updateJoryTabs } from "./joryTabs";
 >>>>>>> SainyTK/moveset-mirel
 import { updateMomentumBar } from "./momentumBar";
-import { updateOrrinTabs } from "./orrinTabs";
 import { updateQuiverBar } from "./quiverBar";
 import { createRechargeTab } from "./rechargeTab";
 import { updateSandBar } from "./sandBar";
@@ -64,8 +63,12 @@ export function updateHud(): void {
   updateRiteTabs();
 =======
   updateHuldaTabs();
+<<<<<<< HEAD
 >>>>>>> SainyTK/moveset-ysra
   updateOrrinTabs();
+=======
+  updateMirelTabs();
+>>>>>>> SainyTK/moveset-orrin
   updateWennaTabs();
   updateTallisTabs();
   updateDebtBar();

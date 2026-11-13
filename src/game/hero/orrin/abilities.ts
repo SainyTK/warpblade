@@ -1,85 +1,85 @@
 import { ANCHOR_PIN, WHIRLWALL } from "../../../constants/orrin/abilities";
+import type { AbilitySlot } from "../../../types/moveset";
 import type { OrrinAbility } from "../../../types/orrin";
-import { skillLevel, skillValues } from "../../skills/query";
-import { createRotation } from "../../skills/rotation";
-import { pressPin } from "./anchorPin";
+import { skillEvolved, skillLevel, skillValues, withCharms } from "../../skills/query";
+import { hero } from "../../state";
+import { castPin } from "./anchorPin";
 import { orrin } from "./memory";
-import { pressAnchorFall } from "./spells/anchorFall";
-import { pressFence } from "./spells/chainFence";
-import { pressTether } from "./spells/tether";
-import { pressWhirl } from "./whirlwall";
+import { castAnchorFall } from "./spells/anchorFall";
+import { castFence } from "./spells/chainFence";
+import { castTether } from "./spells/tether";
+import { castWhirl } from "./whirlwall";
+
+/** what one of his abilities needs to sit on the shared bar */
+interface Ability {
+  label: string;
+  /** seconds it still waits, and the length of its recharge */
+  wait(): number;
+  cooldown(): number;
+  /** MP its plain form costs */
+  mp(): number;
+  cast(wide: boolean): boolean;
+}
+
+/** a spell skill's cooldown, as the charms shorten it */
+const spellCooldown = (id: string): number => withCharms("cooldown", skillValues(id).cooldown ?? 1);
+
+const ABILITY: Readonly<Record<OrrinAbility, Ability>> = {
+  whirlwall: {
+    label: "WHIRL",
+    wait: () => orrin.whirlCd,
+    cooldown: () => WHIRLWALL.cooldown,
+    mp: () => WHIRLWALL.mp,
+    cast: castWhirl,
+  },
+  anchorPin: {
+    label: "PIN",
+    wait: () => orrin.pinCd,
+    cooldown: () => ANCHOR_PIN.cooldown,
+    // with nobody in reach the pin costs half, so half is enough to try it
+    mp: () => ANCHOR_PIN.mp / 2,
+    cast: castPin,
+  },
+  o_chainfence: {
+    label: "FENCE",
+    wait: () => orrin.fenceCd,
+    cooldown: () => spellCooldown("o_chainfence"),
+    mp: () => skillValues("o_chainfence").mp ?? 0,
+    cast: castFence,
+  },
+  o_tether: {
+    label: "TETHER",
+    wait: () => orrin.tetherCd,
+    cooldown: () => spellCooldown("o_tether"),
+    mp: () => skillValues("o_tether").mp ?? 0,
+    cast: castTether,
+  },
+  o_anchorfall: {
+    label: "ANCHOR",
+    wait: () => orrin.anchorCd,
+    cooldown: () => spellCooldown("o_anchorfall"),
+    mp: () => skillValues("o_anchorfall").mp ?? 0,
+    cast: castAnchorFall,
+  },
+};
 
 /** his abilities on I in the order O turns through them: Whirlwall and Anchor Pin from the start, then his spell skills */
-export const ABILITIES: readonly OrrinAbility[] = [
-  "whirlwall",
-  "anchorPin",
-  "o_chainfence",
-  "o_tether",
-  "o_anchorfall",
-];
+const ORDER: readonly OrrinAbility[] = ["whirlwall", "anchorPin", "o_chainfence", "o_tether", "o_anchorfall"];
 
-/** an ability he has now: his own two always, a spell skill once held */
+/** his own two always; a spell skill once held */
 const known = (id: OrrinAbility): boolean => id === "whirlwall" || id === "anchorPin" || skillLevel(id) > 0;
 
-const rotation = createRotation(ABILITIES, (id) => known(id as OrrinAbility));
-
-/** the ability I uses now */
-export const selectedAbility = (): OrrinAbility => (rotation.selected() as OrrinAbility | null) ?? "whirlwall";
-
-/** O: turn to the next ability he has */
-export const nextAbility = (): boolean => rotation.next();
-
-/** a fresh run: back to Whirlwall */
-export const resetAbilities = (): void => rotation.reset();
-
-/** what an ability costs in MP */
-export function abilityMp(id: OrrinAbility): number {
-  if (id === "whirlwall") return WHIRLWALL.mp;
-  if (id === "anchorPin") return ANCHOR_PIN.mp;
-  return skillValues(id).mp ?? 0;
-}
-
-/** an ability's own recharge time, for the HUD */
-function abilityCooldown(id: OrrinAbility): number {
-  if (id === "whirlwall") return WHIRLWALL.cooldown;
-  if (id === "anchorPin") return ANCHOR_PIN.cooldown;
-  return skillValues(id).cooldown ?? 1;
-}
-
-/** seconds an ability still waits */
-function abilityWait(id: OrrinAbility): number {
-  switch (id) {
-    case "whirlwall":
-      return orrin.whirlCd;
-    case "anchorPin":
-      return orrin.pinCd;
-    case "o_chainfence":
-      return orrin.fenceCd;
-    case "o_tether":
-      return orrin.tetherCd;
-    case "o_anchorfall":
-      return orrin.anchorCd;
-  }
-}
-
-/** the share of an ability's recharge still to run, 0 when ready */
-export const abilityRecharge = (id: OrrinAbility): number => Math.min(1, abilityWait(id) / abilityCooldown(id));
-
-/** I: use the selected ability */
-export function pressAbility(): boolean {
-  switch (selectedAbility()) {
-    case "anchorPin":
-      return pressPin();
-    case "o_chainfence":
-      return pressFence();
-    case "o_tether":
-      return pressTether();
-    case "o_anchorfall":
-      return pressAnchorFall();
-    default:
-      return pressWhirl();
-  }
-}
-
-/** every ability he knows, for the HUD */
-export const knownAbilities = (): OrrinAbility[] => ABILITIES.filter(known);
+/** Orrin's abilities on the shared bar, each with its own recharge */
+export const ORRIN_SLOTS: readonly AbilitySlot[] = ORDER.map((id) => {
+  const a = ABILITY[id];
+  return {
+    id,
+    label: a.label,
+    known: () => known(id),
+    wait: a.wait,
+    full: () => Math.max(0.01, a.cooldown()),
+    affordable: () => hero.mp >= a.mp(),
+    cast: a.cast,
+    evolved: () => id.startsWith("o_") && skillEvolved(id),
+  };
+});

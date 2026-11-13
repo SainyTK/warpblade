@@ -1,13 +1,13 @@
 import { STATE_CLIPS } from "../../../constants/clips";
 import { CHAIN_CLIPS, HANGING_CLIP } from "../../../constants/clips/orrin/chain";
 import {
-  BACKLINE_CLIP,
+  CLIMB_POSE,
   HOOK_CLIP,
   PIN_CLIP,
   ROLL_CLIP,
   TAKEOFF_CROUCH,
+  WARP_KICK_CLIP,
   WHIRL_CLIP,
-  ZIP_POSE,
 } from "../../../constants/clips/orrin/moves";
 import { CHARGE_POSE, HANG, ORRIN_IDLE, TUCK } from "../../../constants/clips/orrin/stance";
 import { KAEL_WOUNDED_IDLE } from "../../../constants/clips/wounded";
@@ -104,7 +104,7 @@ function flyPose(h: Hero): Pose {
   return sampleKeys(fall.keys, h.st % fall.dur);
 }
 
-/** the ultimates: crouched under the opening tear, then hanging from it */
+/** the special: crouched under the opening tear, then hanging from it */
 function ultPose(h: Hero): Pose {
   if (h.st < 0.2 || !orrin.ultAt) return CHARGE_POSE;
   if (h.ground) return CHARGE_POSE;
@@ -124,18 +124,17 @@ function statePose(h: Hero, t: number, fresh: boolean, dt: number, wound: number
     }
     case "swing":
       return orrin.latchAt ? hangPose(h, orrin.latchAt) : HANG;
-    case "zip":
-      return ZIP_POSE;
+    case "climb":
+      return CLIMB_POSE;
     case "fly":
       return flyPose(h);
-    case "backline":
-      return sampleKeys(BACKLINE_CLIP.keys, h.st);
+    case "warpStrike":
+      return sampleKeys(WARP_KICK_CLIP.keys, h.st);
     case "whirl":
       return sampleKeys(WHIRL_CLIP.keys, h.st);
     case "pin":
       return sampleKeys(PIN_CLIP.keys, h.st);
     case "pendulum":
-    case "maelstrom":
       return ultPose(h);
     case "charge": {
       const tremble = h.chargeLevel >= 3 && Math.floor(t * 30) % 2 ? 0.5 : 0;

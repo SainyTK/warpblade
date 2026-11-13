@@ -1,8 +1,8 @@
 import type { ActionClip, Pose } from "../../../types/pose";
 import { frame } from "../../hero";
 import { ANCHOR_PIN, WHIRLWALL } from "../../orrin/abilities";
-import { BACKLINE } from "../../orrin/backline";
-import { HANG, o, STANCE, TUCK } from "./stance";
+import { ACTION_CLIPS } from "../actions";
+import { o, STANCE, TUCK } from "./stance";
 
 /** the hook throw: the arm cocked behind his head for two frames, then thrown up along the aim */
 export const HOOK_CLIP: ActionClip = {
@@ -64,103 +64,8 @@ export const ROLL_CLIP: ActionClip = {
   ],
 };
 
-/** Backline's yank: dragged back by the chain, feet low and sliding ahead of him, the chain hand back toward the floor */
-const YANKED: Pose = o({
-  hx: -1,
-  hy: -10.5,
-  nx: 3,
-  ny: -20,
-  cb: 1.5,
-  fx: -9,
-  fy: -9,
-  fe: 0,
-  sa: 2.6,
-  bx: 7,
-  by: -16,
-  ffx: 7,
-  ffy: 0,
-  fa: -0.3,
-  bfx: -6,
-  bfy: 0,
-  ba: 0.2,
-});
-
-/**
- * Backline: he drops his weight and throws the hook back to the floor behind him, is dragged back along it with his
- * feet sliding, then the knees take the stop and he rises back into the stance as the chain goes slack.
- */
-export const BACKLINE_CLIP: ActionClip = {
-  dur: BACKLINE.load + BACKLINE.time + BACKLINE.settle,
-  hit: BACKLINE.load,
-  keys: [
-    [0, STANCE],
-    [
-      frame(2),
-      o({
-        hx: 0.5,
-        hy: -12.3,
-        nx: 2.6,
-        ny: -22.3,
-        cb: 1,
-        fx: -5,
-        fy: -14,
-        fe: 0,
-        sa: 2.4,
-        bx: 6,
-        by: -18,
-        ffx: 4.6,
-        ffy: -0.8,
-        ba: 0.25,
-      }),
-    ],
-    [BACKLINE.load, o({ ...YANKED, hx: -0.5, hy: -11, ny: -20.5, fx: -8.5, fy: -10, ffx: 5.5, fa: -0.2, bfx: -5 })],
-    [BACKLINE.load + frame(3), o({ ...YANKED, hy: -10.2, ny: -19.8, cb: 1.7, by: -15.6 })],
-    [BACKLINE.load + BACKLINE.time, YANKED],
-    [
-      BACKLINE.load + BACKLINE.time + frame(2),
-      o({
-        hx: -1.2,
-        hy: -10.2,
-        nx: 2.3,
-        ny: -19.8,
-        cb: 1.4,
-        fx: -2,
-        fy: -12,
-        fe: 0,
-        sa: 1.8,
-        bx: 5.5,
-        by: -16.5,
-        ffx: 6.5,
-        fa: -0.15,
-        bfx: -5.6,
-        bfy: -0.6,
-        ba: 0.2,
-      }),
-    ],
-    [
-      BACKLINE.load + BACKLINE.time + frame(4),
-      o({
-        hx: -0.4,
-        hy: -12.6,
-        nx: 1.9,
-        ny: -22.6,
-        cb: 0.8,
-        fx: 4.5,
-        fy: -14,
-        sa: 1.3,
-        bx: 3.6,
-        by: -17.6,
-        ffx: 5,
-        ffy: -0.8,
-        bfx: -4.4,
-      }),
-    ],
-    [BACKLINE.load + BACKLINE.time + BACKLINE.settle, STANCE],
-  ],
-};
-
-/** hauled along the chain to a foe: stretched out, the chain hand ahead, legs trailing */
-export const ZIP_POSE: Pose = o({
+/** hauled up a ledge on the chain: stretched out, the chain hand ahead, legs trailing */
+export const CLIMB_POSE: Pose = o({
   hx: 0,
   hy: -15,
   nx: 6,
@@ -213,24 +118,41 @@ export const PIN_CLIP: ActionClip = {
   ],
 };
 
-/** the kick at the end of a zip */
-export const ZIP_KICK: Pose = o({
-  ...TUCK,
-  nx: -1,
-  cb: -1,
-  ffx: 9,
-  ffy: -10,
-  fa: 0.2,
-  bfx: -3,
-  bfy: -5,
-  fx: -2,
-  fy: -20,
-  bx: 3,
-  by: -26,
-});
-
-/** under the ultimate's tear, hanging from the chain */
-export const ULT_HANG: Pose = HANG;
+/**
+ * The warp kick: he lands on the foe heel first, the front leg driven out at its middle with the body thrown back and
+ * the chain hand flung behind, holds it a beat, drops onto both feet in a crouch and rises back into his stance.
+ */
+export const WARP_KICK_CLIP: ActionClip = {
+  dur: ACTION_CLIPS.warpStrike.dur,
+  hit: 0,
+  keys: [
+    [0, o({ hy: -16, nx: -1, ny: -26, cb: -1, fx: -5, fy: -23, sa: 2.4, bx: 2, by: -27, ffx: 11, ffy: -12, fa: 0.1 })],
+    [
+      frame(3),
+      o({
+        hy: -15.5,
+        nx: -1,
+        ny: -25.5,
+        cb: -1,
+        fx: -5,
+        fy: -22,
+        sa: 2.4,
+        bx: 2,
+        by: -26,
+        ffx: 10,
+        ffy: -11,
+        fa: 0.1,
+        bfx: -3,
+        bfy: -5.5,
+        ba: 0.6,
+      }),
+    ],
+    [frame(4), o({ ...TUCK, hy: -15, nx: 1, ny: -25, fx: -2, fy: -20, sa: 2, bx: 4, by: -24, ffx: 6, ffy: -5 })],
+    [frame(6), o({ hy: -10.5, nx: 3, ny: -20.5, cb: 1.5, fx: 6, fy: -11, sa: 1.4, ffx: 6, bfx: -5, ba: 0.3 }), "snap"],
+    [frame(9), o({ hy: -11.5, nx: 2.5, ny: -21.5, cb: 1, fx: 6.5, fy: -12.5, ffx: 5, bfx: -4.5 })],
+    [ACTION_CLIPS.warpStrike.dur, STANCE],
+  ],
+};
 
 /** the deepest of the bend before a jump from a stand: hips drop, knees and back bend, both arms swing down and back to throw up with the push */
 export const TAKEOFF_CROUCH: Pose = o({

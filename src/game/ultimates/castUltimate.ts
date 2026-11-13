@@ -9,9 +9,13 @@ import { castEternalNoon, castHourOfStillness } from "../hero/mirel/hour";
 =======
 import { castBerserk, castUnendingRage } from "../hero/brannoc/berserk";
 import { castDrumroll, castGrandFinale } from "../hero/jory/drumroll";
+<<<<<<< HEAD
 import { castHourOfStillness } from "../hero/mirel/hour";
 >>>>>>> SainyTK/moveset-mirel
 import { castMaelstrom } from "../hero/orrin/maelstrom";
+=======
+import { castEternalNoon, castHourOfStillness } from "../hero/mirel/hour";
+>>>>>>> SainyTK/moveset-orrin
 import { castGrandPendulum } from "../hero/orrin/pendulum";
 import { skin } from "../hero/skin";
 import { castEclipse, castGloaming } from "../hero/tallis/gloaming";
@@ -50,7 +54,7 @@ const ULTIMATES: Record<UltimateId, (level: number) => void> = {
   titanThrow: castQuakeDrop,
   unbroken: castQuakeDrop,
   grandPendulum: castGrandPendulum,
-  maelstrom: castMaelstrom,
+  maelstrom: castGrandPendulum,
   hourOfStillness: castHourOfStillness,
   eternalNoon: castHourOfStillness,
   greatWick: castGreatWick,

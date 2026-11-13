@@ -1,13 +1,12 @@
-/** K: the hook and the swing under it. Speeds in pixels a second, accelerations in pixels a second squared. */
+/** J held with Up: the swing hook and the swing under it. Speeds in pixels a second, accelerations in pixels a second squared. */
 export const HOOK = {
   /** stamina a hook costs */
   cost: 18,
   speed: 420,
   range: 84,
-  /** aim angles above level, toward the facing side: plain, with Up held, and low with Down held in the air */
+  /** aim angles above level, toward the facing side: with Up and a side held, and with Up alone */
   aim: 40,
   aimUp: 75,
-  aimLow: -30,
   /** a crystal this close to the hook's path catches it */
   anchorCatch: 10,
   /** air hooks per airtime; latches on crystals and platforms give the hook back */
@@ -47,7 +46,7 @@ export const SWING = {
   slipSpeed: 120,
 } as const;
 
-/** the reel: L held while swinging pulls the chain in */
+/** the reel: J held down again while swinging pulls the chain in */
 export const REEL = {
   speed: 160,
   /** speed may rise to this many times what it was when the reel started */
@@ -56,14 +55,9 @@ export const REEL = {
   cost: 10,
 } as const;
 
-/** a zip to a hooked foe and the kick and bounce at the end of it */
-export const ZIP = {
+/** a ledge pull up onto a platform too low to swing under: its speed, and the longest it may take */
+export const CLIMB = {
   speed: 360,
-  power: 1.0,
-  kx: 140,
-  bounceUp: 120,
-  bounceBack: 90,
-  /** a zip ends when he reaches the foe or after this long */
   most: 0.5,
 } as const;
 

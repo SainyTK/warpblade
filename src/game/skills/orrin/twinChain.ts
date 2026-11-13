@@ -267,9 +267,9 @@ function drawChain(s: Shade, alpha: number): void {
 }
 
 /**
- * Twin Chain: a Slip (a blow dodged just after letting go of a fast swing) calls a brass shade of Orrin where he let go,
- * which spins a Full Circle; levels add Momentum, a second shade, a swing and a second spin, a copy of his next Hanging
- * Arc and harder blows. Mirror Dance calls three shades whose tip hits always crit.
+ * Twin Chain: a Slip (a blow dodged just after letting go of a fast swing) or a perfect dodge calls a brass shade of
+ * Orrin, which spins a Full Circle; levels add Momentum, a second shade, a swing and a second spin, a copy of his next
+ * Hanging Arc and harder blows. Mirror Dance calls three shades whose tip hits always crit.
  */
 export const twinChain: SkillBehavior = {
   create: () => ({ shades: [], copyLeft: 0, copies: 0, arcWas: -1 }),
