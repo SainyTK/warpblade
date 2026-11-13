@@ -2,6 +2,7 @@ import { SpriteCanvas } from "../../../engine/sprite";
 import { hex } from "../../../utils/color";
 import { spriteUrl } from "../../spriteUrl";
 import { BOON_ICONS } from "./boon";
+import { BRANNOC_ICONS } from "./brannoc/index";
 import { CHARM_ICONS } from "./charms";
 import { HULDA_ICONS } from "./hulda/index";
 import { JORY_ICONS } from "./jory/index";
@@ -28,6 +29,7 @@ const ICONS: Record<string, (s: SpriteCanvas) => void> = {
   ...WENNA_ICONS,
   ...TALLIS_ICONS,
   ...JORY_ICONS,
+  ...BRANNOC_ICONS,
   ...CHARM_ICONS,
   ...KAEL_SKILL_ICONS,
 };

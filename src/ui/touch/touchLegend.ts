@@ -18,6 +18,7 @@ const STICK_LOOK: ButtonLook = {
   accent: hex("#9a94c4"),
   affordable: 0,
   charge: -1,
+  costShare: 0,
 };
 
 function face(draw: (canvas: PixelCanvas) => void): HTMLElement {

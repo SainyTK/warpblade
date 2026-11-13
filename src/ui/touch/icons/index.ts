@@ -1,6 +1,7 @@
 import type { SpriteImage } from "../../../types/sprite";
 import type { TouchButtonAction } from "../../../types/touch";
 import { selectionKey, type TouchSelection } from "../selection";
+import { brannocArt } from "./brannocArt";
 import { huldaArt } from "./huldaArt";
 import { iconFrom } from "./iconArt";
 import { joryArt } from "./joryArt";
@@ -24,5 +25,6 @@ export function touchIcon(action: TouchButtonAction, s: TouchSelection): SpriteI
   if (s.kit === "wenna") return iconFrom(key, wennaArt(action, s.ability, s.known));
   if (s.kit === "tallis") return iconFrom(key, tallisArt(action, s.ability, s.known));
   if (s.kit === "jory") return iconFrom(key, joryArt(action, s.ability, s.known));
+  if (s.kit === "brannoc") return iconFrom(key, brannocArt(action, s.ability, s.known));
   return iconFrom(key, s.kit === "ysra" ? ysraArt(action, s.rite) : kaelArt(action, s.ability, s.known));
 }

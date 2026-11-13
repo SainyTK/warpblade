@@ -147,6 +147,19 @@ export const ACTION_TEXT: Record<KitId, Record<InputAction, string>> = {
     cast: "Use the selected ability: Steady Hand, Thunder Skin or a spell skill (MP). Judged on the beat",
     cycle: "Switch to the next ability",
   },
+  brannoc: {
+    ...KAEL_ACTION_TEXT,
+    left: "Walk left. Tap twice and hold to run",
+    right: "Walk right. Tap twice and hold to run",
+    up: "Jump. One jump, no double jump",
+    down: "With jump, drop through a ledge",
+    attack:
+      "Axe string: Hew, Reave, Cleave. The Cleave hits both sides, and spins twice when you are Bloodied. In the air, Hatchet Drop",
+    dash: "Hunt (stamina): lunge at the nearest foe ahead and chop it. In the air, dive at a foe below",
+    warp: "Frenzy (12% HP): blows do not stagger you and you swing faster. Spent HP comes back as you strike, until you are hit",
+    cast: "Use the selected ability: War Cry, Red Crescent or a spell skill (HP)",
+    cycle: "Switch to the next ability",
+  },
 };
 /** keys inside the menu */
 export const MENU_KEYMAP: Record<string, MenuCommand> = {

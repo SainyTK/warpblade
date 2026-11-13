@@ -3,6 +3,7 @@ import type { SkillBehavior, SkillMemory, SkillState } from "../../types/skillBe
 import { eachHero, eachStanding } from "../coopHooks";
 import { rememberPerSeat } from "../seatMemory";
 import { character, progress } from "../state";
+import { BRANNOC_SKILLS } from "./brannoc/index";
 import { HULDA_SKILLS } from "./hulda/index";
 import { JORY_SKILLS } from "./jory/index";
 import { KAEL_SKILLS } from "./kael/index";
@@ -23,6 +24,7 @@ const BEHAVIORS: Readonly<Record<KitId, Readonly<Record<string, SkillBehavior>>>
   wenna: WENNA_SKILLS,
   tallis: TALLIS_SKILLS,
   jory: JORY_SKILLS,
+  brannoc: BRANNOC_SKILLS,
 };
 
 /** each held skill's live state for the hero in play: projectiles, summons, timers, foes in reach. Kept to the host,

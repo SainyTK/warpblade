@@ -1,6 +1,7 @@
 import { HERO_COLORS as HC } from "../../../constants/palette";
 import type { SpriteCanvas } from "../../../engine/sprite";
 import { skin } from "../skin";
+import { drawMane } from "./mane";
 import type { Vec } from "./reach";
 
 /** a sash uses the first points of the scarf's rope: a short tail of cloth, not a scarf's long streamer */
@@ -106,6 +107,7 @@ export function drawTrails(s: SpriteCanvas, tail: readonly Vec[], scarf: readonl
     return;
   }
   if (skin.bun) return drawBun(s, tail);
+  if (skin.mane) return drawMane(s, tail);
   if (skin.headband) {
     drawHeadbandEnds(s, tail);
     return drawSash(s, scarf);

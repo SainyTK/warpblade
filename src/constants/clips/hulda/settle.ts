@@ -25,6 +25,7 @@ const STILL: Pose = {
   tw: 0,
   mr: 0,
   dr: 0,
+  ah: 0,
 };
 
 /** a change added to some joints of whatever pose she is in; positive y is down */

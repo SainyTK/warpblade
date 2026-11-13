@@ -23,7 +23,9 @@ export type UltimateId =
   | "gloaming"
   | "eclipse"
   | "drumroll"
-  | "grandFinale";
+  | "grandFinale"
+  | "berserk"
+  | "unendingRage";
 /** what a skill is, for its card colour and the contract's least counts per hero (docs/skill-design.md) */
 export type SkillKind = "attack" | "movement" | "spell" | "dot" | "summon" | "passive" | "ultimate";
 /** how hard a skill is to pull off: the harder, the more it deals */

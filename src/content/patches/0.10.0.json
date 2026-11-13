@@ -1,0 +1,389 @@
+{
+  "version": "0.10.0",
+  "kind": "big",
+  "date": "2026-11-13",
+  "title": "Red Oath",
+  "tagline": "Brannoc, the berserker, pays for his power in his own HP and wins it back by striking. He is the tenth hero, and the hero sprint is complete.",
+  "intro": "Brannoc is the seventh and last hero of our hero sprint and the tenth in the game. No hero so far paid for anything with HP, so we gave him nothing else to pay with: Frenzy and his abilities cost HP, every point he is missing makes him hit harder and swing faster, and the HP he spends becomes a debt he wins back by landing blows before a foe lands one on him. He has no block, no parry, no armour and no untouchable travel, and his only lunge goes toward foes. With ten heroes in the game, big patches go back to every few days, and class advancement is first in line. Your coins, shop levels, unlocked heroes and options carry over as they were.",
+  "highlights": [
+    {
+      "title": "Brannoc, the berserker",
+      "text": "A great axe and three heavy blows: Hew, Reave and Cleave, the same every time. Every string blow hits every foe in its arc, Reave sweeps a foe behind him round to his front, and Cleave hits 36 pixels on both sides and knocks minions down. He has 125 HP and the slowest base swing in the roster, and he costs 2450 coins on the hero screen.",
+      "media": {
+        "kind": "video",
+        "file": "brannoc-axe-string.mp4",
+        "poster": "brannoc-axe-string.png",
+        "alt": "In the sunlit ruins on wave 4, Brannoc stands between two thornbacks and swings Hew and Reave. His Cleave spins a full crimson ring that hits the thornback on each side, breaking one's guard, and knocks both down. The hit counter climbs from 3 to 7.",
+        "width": 640,
+        "height": 360
+      }
+    },
+    {
+      "title": "The debt",
+      "text": "HP he spends on Frenzy and his abilities shows as a crimson segment after the HP fill. Every foe a blow of his lands on wins some of it back into his HP, with crimson motes flying from the foe to him. If a foe lands a blow on him first, the whole debt breaks away.",
+      "media": {
+        "kind": "video",
+        "file": "brannoc-debt.mp4",
+        "poster": "brannoc-debt.png",
+        "alt": "On wave 4, Brannoc presses Frenzy beside a thornback: 15 HP leaves his HP bar as a dark crimson debt segment and a red outline pulses on him. Three axe blows land and the segment fills back into the bar as crimson motes fly to him. He spends HP again on a Red Crescent, then a thornback charges into him, and the segment flashes white and drops out of the bar.",
+        "width": 640,
+        "height": 360
+      }
+    },
+    {
+      "title": "Fury and Bloodied",
+      "text": "The less HP he has, the harder he hits, the faster he swings and the faster he walks, up to 1.6 times the damage near 0 HP. At 35% HP or less he is Bloodied: his war paint glows, his Cleave spins twice, and every kill heals him a little.",
+      "media": {
+        "kind": "video",
+        "file": "brannoc-bloodied.mp4",
+        "poster": "brannoc-bloodied.png",
+        "alt": "On the rainy wave 7, Brannoc fights Bloodied with under a fifth of his HP left, his HP bar nearly empty and the screen edge glowing red. He strings his axe into storm kites and a mire toad, and each Cleave spins twice, two crimson rings one after the other. The hit counter climbs from 5 to 11 and turns gold.",
+        "width": 640,
+        "height": 360
+      }
+    },
+    {
+      "title": "Hunt",
+      "text": "L is a low lunge at the nearest ground foe ahead that ends in a chop. From the air it becomes Headlong, a dive at 45 degrees onto a foe below. There is no backstep anywhere in his kit.",
+      "media": {
+        "kind": "video",
+        "file": "brannoc-hunt.mp4",
+        "poster": "brannoc-hunt.png",
+        "alt": "Two moments in the sunlit ruins. Brannoc lunges low across about 100 px, trailing crimson afterimages, and lands a chop on a thornback. Then he steps off a ledge, dives at 45 degrees onto a thornback below and chops it from behind.",
+        "width": 640,
+        "height": 360
+      }
+    },
+    {
+      "title": "Berserk",
+      "text": "His special is a roar that pushes minions back, then a few seconds in which no blow can bring him below 1 HP. It ends in Last Cleave, a wide ring around him. It is his answer to the bosses.",
+      "media": {
+        "kind": "video",
+        "file": "brannoc-berserk.mp4",
+        "poster": "brannoc-berserk.png",
+        "alt": "Three moments at the Rift Warden on wave 20. Brannoc releases a full-charge Berserk: he roars and a crimson ring pushes the rune golems and prism sprites back. Later, with the screen edges tinted crimson and 1 HP left, the Warden dives into him and he stays standing at 1 HP. When Berserk ends, Last Cleave spins a wide crimson ring that hits 13 foes at once.",
+        "width": 640,
+        "height": 360
+      }
+    }
+  ],
+  "sections": [
+    {
+      "id": "heroes",
+      "entries": [
+        {
+          "name": "Brannoc",
+          "tag": "new",
+          "summary": "A great-axe berserker whose HP is his resource, who gets stronger the more he is hurt and wins spent HP back by striking.",
+          "context": "Kael spends MP, Ysra braces and parries, Sable keeps her distance, Hulda halves blows with armour, Orrin earns power from speed, Mirel turns HP loss back by waiting, Wenna fights through her Wicks, Tallis wins by not being seen and Jory wins by when he presses. Brannoc takes every blow in full and turns what he loses into damage.",
+          "changes": [
+            {
+              "kind": "stat",
+              "label": "Price on the hero screen",
+              "before": "Not in the game",
+              "after": "2450 coins"
+            },
+            {
+              "kind": "note",
+              "text": "Base stats: 125 HP, 13 attack, 6 ability power, 70 MP, 100 stamina, 6% crit, move 1.02, attack speed 0.9. His HP sits between Hulda's and Ysra's because it is also what he spends, and his base swing is the slowest in the roster because Fury lifts it."
+            },
+            {
+              "kind": "note",
+              "text": "A and D walk, and a double tap runs. W is one jump of the shared height, with no double jump."
+            },
+            {
+              "kind": "note",
+              "text": "Two achievements of his own: Brannoc's Trial (clear wave 10 with him, 40 coins) and On the Edge (defeat 30 foes while Bloodied in one run, 60 coins)."
+            },
+            {
+              "kind": "note",
+              "text": "He plays in co-op rooms like every hero. Each Brannoc keeps his own debt, Frenzy, Berserk and selected ability, and his Fury reads his own HP."
+            }
+          ],
+          "media": {
+            "kind": "image",
+            "file": "brannoc-hero-screen.png",
+            "alt": "The Choose a Hero screen with Brannoc's tenth tile selected in a bone-coloured frame. His panel shows his silhouette in the rest pose with his great axe, the title The red oath, bone stat bars, Special: Berserk, his blurb and a padlock at 2450 coins.",
+            "width": 1280,
+            "height": 720
+          }
+        },
+        {
+          "name": "Brannoc: Fury and the debt",
+          "tag": "new",
+          "summary": "Missing HP makes him stronger, and HP he spends can be won back by landing blows before a foe lands one on him.",
+          "context": "A berserker should want to be hurt and still have a way back. The debt rewards a player who spends HP right before a crowd and sweeps it, and it punishes spending HP while a foe is about to strike.",
+          "changes": [
+            {
+              "kind": "note",
+              "text": "Fury: damage from every source rises by up to 60%, attack speed by up to 30% and walk speed by up to 15%, in proportion to the HP he is missing. At 35% HP that is 1.39x damage and 1.195x attack speed."
+            },
+            {
+              "kind": "note",
+              "text": "Bloodied at 35% of max HP or less: the Cleave spins twice, a kill heals 3% of max HP, his war paint glows, his eyes turn crimson and his idle heaves with the axe dragging. A tick on the HP bar marks the line."
+            },
+            {
+              "kind": "note",
+              "text": "HP spent on K and I becomes debt, up to 40% of max HP. HP spent past that is gone for good. A press that would leave him under 1 HP is refused and the HP bar blinks."
+            },
+            {
+              "kind": "note",
+              "text": "Each foe a blow lands on wins back 2.5% of max HP from the debt, 5% on a crit, and 5% more on a kill, for up to 3 foes a blow. Summon and damage over time hits win nothing back."
+            },
+            {
+              "kind": "note",
+              "text": "After 3 seconds without landing a blow, the debt fades at 5% of max HP a second. Any blow that takes his HP clears the whole debt."
+            }
+          ]
+        },
+        {
+          "name": "Brannoc: the axe string",
+          "tag": "new",
+          "summary": "J plays Hew, Reave and Cleave every time, each hitting every foe in its arc, and Hatchet Drop in the air.",
+          "context": "His attack shape is wide and heavy, so he wants foes on both sides of him. Every blow has a long wind-up, and the Cleave has the longest in his kit.",
+          "changes": [
+            {
+              "kind": "note",
+              "text": "Hew: 1.15x attack, 8 to 30 pixels ahead."
+            },
+            {
+              "kind": "note",
+              "text": "Reave: 1.0x attack, from 14 pixels behind him to 32 ahead. A foe behind him is swept round to his front."
+            },
+            {
+              "kind": "note",
+              "text": "Cleave: 1.9x attack, 36 pixels on both sides. It breaks a guard and knocks minions down. Bloodied, it spins a second time for 0.8x attack and hits everyone the first spin did and anyone new."
+            },
+            {
+              "kind": "note",
+              "text": "Hatchet Drop: in the air, a straight chop down for 1.2x attack that breaks a guard, once per jump."
+            }
+          ]
+        },
+        {
+          "name": "Brannoc: Frenzy and Hunt",
+          "tag": "new",
+          "summary": "K trades HP for four seconds of faster swings that blows cannot knock back, and L lunges at the nearest foe ahead.",
+          "context": "He has no defence in the usual sense. Frenzy lets him keep swinging through blows, and Hunt only ever closes the distance.",
+          "changes": [
+            {
+              "kind": "note",
+              "text": "Frenzy: costs 12% of max HP into the debt, no stamina and no MP. For 4 seconds he swings 20% faster, wins back 1.5x from each blow, and a blow on him takes its HP with no knockback, flinch or broken string. That blow still clears the debt. Then K waits 2 seconds."
+            },
+            {
+              "kind": "note",
+              "text": "Hunt: 20 stamina, then 0.6 seconds before the next one. With a ground foe ahead within 110 pixels he follows it and lands 24 pixels short of it, then chops for 0.8x attack and staggers it. With no foe ahead he travels 56 pixels."
+            },
+            {
+              "kind": "note",
+              "text": "Headlong: in the air, once per jump, a 45 degree dive at a foe below that lands into the same chop."
+            },
+            {
+              "kind": "note",
+              "text": "He can be hit through the whole Hunt and stops against a foe's body. A minion caught winding up has its attack broken by the chop. A mini boss or boss winding up still swings, so a Hunt into one trades the chop for its blow."
+            }
+          ]
+        },
+        {
+          "name": "Brannoc: War Cry and Red Crescent",
+          "tag": "new",
+          "summary": "His two abilities on I cost HP: one staggers and marks the foes around him, the other sends a crescent of blood along the floor.",
+          "context": "Paying HP for an ability puts debt on the bar, and both abilities set up blows that win it straight back.",
+          "changes": [
+            {
+              "kind": "note",
+              "text": "War Cry: 8% of max HP, 10 second recharge. Foes within 64 pixels take 0.5x ability power plus 0.2x attack and are marked to take 20% more from everything for 6 seconds. Minions and elites are also staggered for 0.5 seconds."
+            },
+            {
+              "kind": "note",
+              "text": "Red Crescent: 10% of max HP, 4 second recharge. A crescent runs 150 pixels along the floor through foes for 0.9x attack plus 0.6x ability power each, and every foe it strikes wins back debt like a blow."
+            },
+            {
+              "kind": "note",
+              "text": "O switches between War Cry, Red Crescent and any spell skills he picks up. The selected tab shows its HP cost, and a tab he cannot pay for is struck through in crimson."
+            }
+          ],
+          "media": {
+            "kind": "video",
+            "file": "brannoc-war-cry.mp4",
+            "poster": "brannoc-war-cry.png",
+            "alt": "In the rain on wave 7, Brannoc roars War Cry with three storm kites over him and mire toads on both sides. Crimson arcs spread out, all five foes are hit and staggered out of their attacks, and the counter reads 5 hits. Then, in the sunlit ruins, he swings a Red Crescent that runs along the floor into two thornbacks.",
+            "width": 640,
+            "height": 360
+          }
+        },
+        {
+          "name": "Brannoc: Berserk",
+          "tag": "new",
+          "summary": "His special keeps him from falling below 1 HP for a few seconds and ends in a wide ring.",
+          "context": "A hero with no defence needs one moment where he cannot fall, and for Brannoc that is the fight against a boss.",
+          "changes": [
+            {
+              "kind": "note",
+              "text": "The roar: 0.35 seconds in which nothing can touch him, with a ring that pushes minions out to 56 pixels."
+            },
+            {
+              "kind": "note",
+              "text": "Berserk lasts 3, 4, 5 or 7 seconds by charge level. A blow can leave him at 1 HP but never below, and Last Light is not spent. He swings 40% faster, blows do not knock him back, he wins back twice as much from each blow, and the debt does not fade."
+            },
+            {
+              "kind": "note",
+              "text": "Last Cleave: when Berserk ends he spins a ring of 60, 80, 100 or 130 pixels by charge level, knocking minions down and elites over. Nothing can touch him through the spin."
+            },
+            {
+              "kind": "note",
+              "text": "His ultimate skill, Unending Rage, makes Berserk last 2 seconds longer and Last Cleave strike twice. It evolves into World Ender."
+            }
+          ]
+        },
+        {
+          "name": "Brannoc: 20 skills",
+          "tag": "new",
+          "summary": "His own skills reward fighting Bloodied, sweeping crowds and winning the debt back.",
+          "context": "Every hero has 20 skills of their own, and Brannoc arrives with his complete set, their evolutions and their icons in the cards and the Codex. His spell skills cost HP into the debt, like his base abilities.",
+          "changes": [
+            {
+              "kind": "note",
+              "text": "Attacks: Red Edge, Heavy Hew, Reaver, Executioner, Spinning Reap and Sunder."
+            },
+            {
+              "kind": "note",
+              "text": "Movement: Long Hunt, Headlong and Blood Trail."
+            },
+            {
+              "kind": "note",
+              "text": "Spells on I: Blood Geyser (8% HP), Hurled Axe (10% HP) and Blood Pact (20% HP)."
+            },
+            {
+              "kind": "note",
+              "text": "Damage over time: Open Wounds, Rend and Haemorrhage."
+            },
+            {
+              "kind": "note",
+              "text": "Summons: Blood Wolves, Forebear and Carrion Ravens."
+            },
+            {
+              "kind": "note",
+              "text": "Passive: Scarred Hide. Ultimate: Unending Rage."
+            },
+            {
+              "kind": "note",
+              "text": "For example, Heavy Hew at level 8 with Blood Geyser at level 4 evolves into Earthsplitter: Hew's floor crack runs 140 pixels and erupts in spikes that throw minions up."
+            },
+            {
+              "kind": "note",
+              "text": "Known issue: Carrion Storm's raven cloud wins back no debt. Only the single ravens of Carrion Ravens do."
+            }
+          ],
+          "media": {
+            "kind": "image",
+            "file": "brannoc-evolution.png",
+            "alt": "A chest during the rainy wave 10 fight with the Bog Hulk shows the gold EVOLUTION heading over Earthsplitter and its icon. The card reads: Heavy Hew evolved. Hew's crack runs 140 px and erupts in spikes that throw minions up.",
+            "width": 1280,
+            "height": 720
+          }
+        },
+        {
+          "name": "Brannoc: controls",
+          "tag": "new",
+          "summary": "His keys are on the Controls screen, and he has his own buttons on the touch controller.",
+          "context": "Every hero plays the same on a keyboard and on a phone.",
+          "changes": [
+            {
+              "kind": "note",
+              "text": "J is the axe string, K Frenzy, L Hunt, I the selected ability, O switches ability and U is the special."
+            },
+            {
+              "kind": "note",
+              "text": "On the touch controller his buttons are Axe, Jump, Frenzy, Hunt, Ability, Switch and Special. The Ability button shows the selected ability's HP cost as a crimson stretch along the bottom of its rim, darker while he cannot pay it."
+            }
+          ],
+          "media": {
+            "kind": "image",
+            "file": "brannoc-touch-phone.png",
+            "alt": "An upright phone screen during the rainy wave 7 as Brannoc's Cleave ring hits two mire toads. The HP bar shows its fill at about 38%, a dark crimson debt segment after it and the 35% tick, and the CRESCENT 10% tab is selected. Below the stage are the stick and his seven touch buttons, Axe, Jump, Hunt, Frenzy, Ability, Switch and Special, each with its own icon.",
+            "width": 780,
+            "height": 1688
+          }
+        }
+      ]
+    },
+    {
+      "id": "systems",
+      "entries": [
+        {
+          "name": "Ability tabs",
+          "tag": "adjusted",
+          "summary": "On narrow screens, every hero's ability tabs now wrap together into tidy rows on the right, clear of the HP and MP bars.",
+          "context": "A hero with several spell skills could fill the top of a phone screen with tabs. Each hero's tabs now share one row that wraps, so a lone tab never takes a row of its own.",
+          "changes": [
+            {
+              "kind": "note",
+              "text": "On a landscape phone the tabs keep clear of the pause button."
+            },
+            {
+              "kind": "note",
+              "text": "Known issue, also in 0.9.0: in some desktop windows, such as 640 by 600 and 700 by 700, the HUD sits partly above the top of the screen, and at 600 by 540 the first row of tabs touches the pause button."
+            }
+          ]
+        },
+        {
+          "name": "Achievements",
+          "tag": "adjusted",
+          "summary": "Two new achievements for Brannoc.",
+          "context": "Every new hero brings goals of their own.",
+          "changes": [
+            {
+              "kind": "stat",
+              "label": "Achievements",
+              "before": "33, worth 2,470 coins",
+              "after": "35, worth 2,570 coins"
+            },
+            {
+              "kind": "note",
+              "text": "On the Edge counts the foes that fall to any hit of Brannoc's while he is Bloodied, and keeps the best of a run."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "items",
+      "entries": [
+        {
+          "name": "Aftershock",
+          "tag": "adjusted",
+          "summary": "Aftershock now answers Brannoc's Hunt too.",
+          "context": "Every shop item should help every hero.",
+          "changes": [
+            {
+              "kind": "note",
+              "text": "For Brannoc: every Hunt and Headlong landing."
+            }
+          ]
+        },
+        {
+          "name": "Shop items for Brannoc",
+          "tag": "adjusted",
+          "summary": "Every shop item helps Brannoc, and Vitality buys him both life and power.",
+          "context": "His HP is also what he spends, so raising it raises the size of every cost he can pay.",
+          "changes": [
+            {
+              "kind": "note",
+              "text": "Vitality raises his HP. Honed Edge raises every axe blow, the Hunt chop, Hatchet Drop, Red Crescent and Last Cleave. Arcana raises War Cry, Red Crescent, his spells and Last Cleave. Wellspring raises the MP Berserk spends."
+            },
+            {
+              "kind": "note",
+              "text": "Precision raises every hit, and his crits win back twice the debt. Light Boots raise his walk, run and Hunt speed. Endurance raises the stamina for Hunt."
+            },
+            {
+              "kind": "note",
+              "text": "Last Light works as for every hero, and Berserk leaves it unspent."
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "feedback": []
+}

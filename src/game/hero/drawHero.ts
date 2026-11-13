@@ -43,7 +43,7 @@ export function drawHero(s: SpriteCanvas, p: Pose, look: HeroLook): Vec {
   const [elbow, hand] = armReach(near, [p.fx, p.fy], isElbowFlipped(p.fe));
   const [farElbow, farHand] = armReach(far, [p.bx, p.by], isElbowFlipped(p.be));
   const swordArm = () => {
-    if (look.sword) drawSword(s, hand, p.sa);
+    if (look.sword) drawSword(s, hand, p.sa, p.ah >= 0.5);
     drawArm(s, near, elbow, hand, !back);
   };
   // a knife fighter holds a second knife in the far hand, a drummer a second mallet

@@ -31,7 +31,7 @@ His crystal sword can be thrown, and wherever it lands, he follows.
 
 - **A full kit from the first second.** Every hero starts a run with every button already doing something.
   Kael has his four-hit sword string, a double jump, a dash, Warp Strike on `K` (throw the sword at a foe and appear beside it mid-swing, harder the farther he travels, 10 MP), and two crystal abilities on `I`, Crystal Lance and Crystal Burst.
-- **Fixed combo strings.** Each hero's ground string has a fixed length for the whole run: four hits for Kael and three for Ysra, Sable, Hulda, Orrin, Mirel, Wenna, Tallis and Jory.
+- **Fixed combo strings.** Each hero's ground string has a fixed length for the whole run: four hits for Kael and three for Ysra, Sable, Hulda, Orrin, Mirel, Wenna, Tallis, Jory and Brannoc.
   Kael's string is a step-in cut, a rising backhand, a twin-fang double stab and a falling smash that knocks the foe down, and each one moves his whole body while his feet stay planted.
   Skills change what the hits do, never how many there are.
 - **Combos that play the same every time.** Each press of J plays one whole blow with a wind-up, a strike that holds through the hit and a follow-through, in the same order wherever the foes stand, and heavy blows bounce foes off the edge of the stage.
@@ -53,10 +53,10 @@ His crystal sword can be thrown, and wherever it lands, he follows.
 - **Charms.** Charms multiply one stat for every source at once: Might for damage, Haste for cooldowns, Vigor for HP, Insight for experience, and more that are found over many runs.
 - **Chests and evolutions.** Elites with a gold ring, mini bosses and the wave 20 Warden drop chests; touching one opens it.
   A chest raises held skills and charms, sometimes three or five at once, and from wave 8 it evolves a skill at level 8 whose partner skill is held at level 4 or more.
-  Kael's Fire Flask evolves with Crystal Familiar into Sunflask, Orrin's Sweet Spot with Perpetual Motion into Perfect Arc, Mirel's Long Echo with Patience into Choir of Hours, Wenna's Hunting Call with Deep Tallow into Pack Law, Tallis's Backbiter with Shroud into Last Breath, and Jory's Heavy Accent with Iron Metronome into Thunderclap.
+  Kael's Fire Flask evolves with Crystal Familiar into Sunflask, Orrin's Sweet Spot with Perpetual Motion into Perfect Arc, Mirel's Long Echo with Patience into Choir of Hours, Wenna's Hunting Call with Deep Tallow into Pack Law, Tallis's Backbiter with Shroud into Last Breath, Jory's Heavy Accent with Iron Metronome into Thunderclap, and Brannoc's Heavy Hew with Blood Geyser into Earthsplitter.
   A card says "Evolves with ???" until the player has made that evolution once.
 - **Flow.** Every hit of the hero's own adds a stack of Flow, up to 25, each one +4% damage on every source, so a full bar doubles it; a perfect dodge adds five, and getting hurt halves it.
-- **Charged ultimates.** Every hero has a special on `U` from the start: Crystal Nova for Kael, Pyre Wave for Ysra, Bolt Storm for Sable, Quake Drop for Hulda, Grand Pendulum for Orrin, Hour of Stillness for Mirel, Great Wick for Wenna, Gloaming for Tallis and Drumroll for Jory.
+- **Charged ultimates.** Every hero has a special on `U` from the start: Crystal Nova for Kael, Pyre Wave for Ysra, Bolt Storm for Sable, Quake Drop for Hulda, Grand Pendulum for Orrin, Hour of Stillness for Mirel, Great Wick for Wenna, Gloaming for Tallis, Drumroll for Jory and Berserk for Brannoc.
   Hold U through four levels; level 4 spends a full MP bar. After a strike the ultimate recharges for 20 seconds, and its row on the HUD dims with a bar filling under it.
   An ultimate skill upgrades or replaces the special, and a build holds at most one.
 - **Experience to pick up.** Slain foes drop lime orbs of experience that bounce on the floor. Walk over them to collect them; any left behind fly to the hero after 4 seconds, or in a room to the nearest standing hero.
@@ -66,16 +66,16 @@ His crystal sword can be thrown, and wherever it lands, he follows.
 - **Damage by source.** The result screen lists every source of damage with its level, total damage and damage per second: the hero's attacks, abilities and ultimate, and each skill that strikes on its own.
 - **The Codex.** The Codex on the start menu lists every hero's skills and evolutions and every charm, with the ones still locked shown as silhouettes with a short hint, and a few as ???.
 - **Abilities on `I`.** Each hero turns through their abilities with `O`: their base ones and every spell skill they hold, such as Kael's Fire Flask that sets the floor burning, his Ice Spikes that freeze and his Lightning that arcs to a second foe.
-  The HUD tabs dim while an ability recharges, a bar along each tab fills back up, and a press too early is refused with a tick and a jolt of the tab, or a blink of the MP bar when MP is short.
+  The HUD tabs dim while an ability recharges, a bar along each tab fills back up, and a press too early is refused with a tick and a jolt of the tab, or a blink of the MP bar when MP is short (the HP bar for Brannoc, who pays in HP).
 - **Coins and a shop.** Foes drop pixel coins that Kael picks up by touch, and any left behind fly to him after a moment.
   When a run ends, cleared or lost, its coins go to the bank and a result screen shows the wave reached and the coins earned.
   The Shop on the start menu sells stats in levels (HP, attack, ability power, MP, crit, move speed, stamina), more rerolls, skips and banishes for the cards, and four skills: Lodestone, Aftershock and Head Start, bought once, and Last Light, bought in three levels, each saving the hero from one more fatal blow per run.
   Everything bought applies to every run and every hero, on top of the level-up picks, and is saved in this browser.
-- **Achievements and hero unlocks.** Thirty-three achievements track goals across runs: waves reached, a clear of wave 10 with each hero, foes slain, long combos, perfect dodges, evolutions, three foes felled by Orrin's swing kicks in one swing, five foes felled inside one of Mirel's Stillfields, forty foes felled by Wenna's Wicks in one run, thirty foes felled from behind by Tallis in one run, twenty seconds held at Crescendo by Jory, coins banked, the Rift Warden and The Unblinking.
+- **Achievements and hero unlocks.** Thirty-five achievements track goals across runs: waves reached, a clear of wave 10 with each hero, foes slain, long combos, perfect dodges, evolutions, three foes felled by Orrin's swing kicks in one swing, five foes felled inside one of Mirel's Stillfields, forty foes felled by Wenna's Wicks in one run, thirty foes felled from behind by Tallis in one run, twenty seconds held at Crescendo by Jory, thirty foes felled by Brannoc while Bloodied in one run, coins banked, the Rift Warden and The Unblinking.
   Most pay coins, a few stay hidden as ??? until an earlier one is earned, and a small banner slides down when one is earned without stopping play.
   The Achievements page on the start menu shows what each one asks, with a progress bar for those that count up, and the result screen names those a run earned.
   Kael and Ysra are free; every newer hero is unlocked with coins on the hero screen, each one costing more than the last (see [docs/achievements.md](docs/achievements.md)).
-- **Nine heroes.** Start opens the hero screen, a roster of hero tiles over one panel for the hero in focus. Kael throws his crystal sword and appears where it lands; he is balanced, starts with Warp Strike, Crystal Lance and Crystal Burst, and adds his spells and ultimates from picks.
+- **Ten heroes.** Start opens the hero screen, a roster of hero tiles over one panel for the hero in focus. Kael throws his crystal sword and appears where it lands; he is balanced, starts with Warp Strike, Crystal Lance and Crystal Burst, and adds his spells and ultimates from picks.
   Ysra, the ember lancer, is a flame-temple guard who woke when the braziers lit again.
   She shares Kael's rig and plays nothing like him: tougher and slower, with one heavy jump and no dash.
   Her glaive string pokes far and pierces every foe in the line, holding `J` winds a lunge, and up or down with `J` hooks a foe up or drags it in.
@@ -128,7 +128,13 @@ His crystal sword can be thrown, and wherever it lands, he follows.
   `K` is Boom, both palms on the drum: it pushes foes away, and on the beat it is wider, drowns foe shots and nothing can touch him for a moment.
   `L` is Beat Step, a short step that is untouchable and passes through foes on the beat.
   `I` casts Steady Hand, which widens his window and holds his Groove for eight beats, or Thunder Skin, a wave along the floor, for MP, and his special Drumroll plants the drum for a roll of heavy rings (see [docs/jory-design.md](docs/jory-design.md)).
-  Sable, Hulda, Orrin, Mirel, Wenna, Tallis and Jory start locked and are bought with coins.
+  Brannoc, the berserker, pays for his power in his own HP and wins it back by striking.
+  `K` is Frenzy and `I` casts War Cry, which staggers and marks the foes round him, or Red Crescent, a crescent of blood along the floor; each costs HP, and the HP spent shows as a crimson debt segment after the HP fill.
+  Every foe a blow of his lands on wins some of the debt back into his HP, with crimson motes flying from the foe to him, and a blow that lands on him first breaks the whole debt away.
+  Every point of HP he is missing makes him hit harder, swing faster and walk faster, up to 1.6 times the damage near 0 HP.
+  `J` plays Hew, Reave and Cleave with his great axe: Reave sweeps a foe behind him round to his front, and Cleave hits both sides and knocks minions down; at or under 35% HP he is Bloodied, his war paint glows, and Cleave spins twice.
+  Frenzy keeps blows from knocking him back for four seconds, `L` is Hunt, a lunge at the nearest foe ahead that ends in a chop, and his special Berserk keeps him from falling below 1 HP for a few seconds and ends in Last Cleave, a wide ring (see [docs/brannoc-design.md](docs/brannoc-design.md)).
+  Sable, Hulda, Orrin, Mirel, Wenna, Tallis, Jory and Brannoc start locked and are bought with coins.
   The hero behind the menu changes as you look through the cards, and the choice is saved in this browser.
 - **A 30-wave stage in five eras.** The sky and the foes change as the waves go on, and the scene dissolves into the next era between waves.
   Waves 1 to 5 are a sunlit day with Thornbacks, Glimmer Moths and the Oakheart.
@@ -187,7 +193,7 @@ Buttons dim while their action lacks MP or stamina or waits on a cooldown, and p
 The page holds still under your fingers: double taps, pinches and long presses never zoom, select text or open a menu.
 
 The game opens on a start menu with Start, Co-op, Shop, Achievements, Codex, Controls and Options.
-Start opens the hero screen: pick Kael, Ysra, Sable, Hulda, Orrin, Mirel, Wenna, Tallis or Jory with `A` `D` or the arrows and begin with `J` or `Enter`.
+Start opens the hero screen: pick Kael, Ysra, Sable, Hulda, Orrin, Mirel, Wenna, Tallis, Jory or Brannoc with `A` `D` or the arrows and begin with `J` or `Enter`.
 In the Shop, pick an item once to see "Buy?" and again to buy it; a locked hero on the hero screen asks the same way before it is unlocked.
 When a run ends, the start menu opens on its result, with Continue and Shop.
 Pausing adds Resume, Restart run and Quit run, and freezes the game until you resume.
@@ -295,6 +301,7 @@ docs/
   orrin-design.md  Orrin's kit, the hook and the pendulum swing, Momentum, and his balance check
   mirel-design.md  Mirel's kit, echoes, the Stillfield, Rewind, Sand, and her balance check
   jory-design.md   Jory's kit, the beat and Groove, Accents, Boom and Beat Step, and his balance check
+  brannoc-design.md Brannoc's kit, the HP debt, Fury, Frenzy, Hunt and Berserk, and his balance check
   motion-standard.md the rules every hero's animation follows
   pick-pacing.md   when picks come, how long the skill pool lasts and Second Wind after it
   multiplayer.md   co-op rooms: who runs the game, what crosses the network, downs, picks, coins and what is left for later

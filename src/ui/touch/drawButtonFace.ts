@@ -1,3 +1,4 @@
+import { PAL } from "../../constants/palette";
 import type { Color } from "../../types/color";
 import type { SpriteImage } from "../../types/sprite";
 import type { ButtonLook } from "../../types/touch";
@@ -39,6 +40,8 @@ export function drawButtonFace(canvas: PixelCanvas, look: ButtonLook, icon: Spri
     if (r > R) return;
     if (r > R - 1) return canvas.put(x, y, INK, 0.9);
     if (r > R - rimWidth) {
+      const cost = costRim(look, angle);
+      if (cost) return canvas.put(x, y, cost, 1);
       const [c, a] = ultimate ? ultimateRim(look, angle) : [rim, 0.95];
       return canvas.put(x, y, c, a);
     }
@@ -51,4 +54,17 @@ export function drawButtonFace(canvas: PixelCanvas, look: ButtonLook, icon: Spri
   const dim = !look.ready || look.cooldown > 0;
   canvas.sprite(icon, look.pressed ? 1 : 0, (c) => (dim ? mix(scale(c, 0.55), INK, 0.25) : c));
   canvas.flush();
+}
+
+/** the cost's stretch of the rim, as a share of a turn, for each share of max HP the ability costs: 8% is about a
+ *  tenth of the rim, 20% about a quarter */
+const COST_TURNS = 1.2;
+
+/** an HP cost: the rim at the bottom of the button turns crimson over a length in proportion to the cost, darker while
+ *  it cannot be paid */
+function costRim(look: ButtonLook, angle: number): Color | null {
+  if (look.costShare <= 0) return null;
+  const half = (look.costShare * COST_TURNS) / 2;
+  if (Math.abs(angle - 0.5) > half) return null;
+  return look.ready ? PAL.rage[3] : PAL.rage[2];
 }

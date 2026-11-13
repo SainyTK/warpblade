@@ -67,6 +67,7 @@ export const ACHIEVEMENTS: readonly Achievement[] = [
   heroTrial("wenna", "Wenna"),
   heroTrial("tallis", "Tallis"),
   heroTrial("jory", "Jory"),
+  heroTrial("brannoc", "Brannoc"),
   {
     id: "kills-100",
     name: "Culling",
@@ -188,6 +189,14 @@ export const ACHIEVEMENTS: readonly Achievement[] = [
     text: "As Jory, hold Crescendo for 20 seconds in a row.",
     group: "Skill",
     goal: { kind: "best", stat: "crescendoSeconds", need: 20 },
+    reward: 60,
+  },
+  {
+    id: "on-the-edge",
+    name: "On the Edge",
+    text: "As Brannoc, defeat 30 foes while Bloodied in one run.",
+    group: "Skill",
+    goal: { kind: "best", stat: "bloodiedKills", need: 30 },
     reward: 60,
   },
   {

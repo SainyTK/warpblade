@@ -5,6 +5,7 @@ import { JADE } from "../../constants/characters/sable/look";
 import { ABILITY_COLOR, PAL } from "../../constants/palette";
 import { KAEL_ABILITIES } from "../../constants/spells";
 import { RITES } from "../../constants/ysra/rites";
+import { knownAbilities as brannocKnown, selectedAbility as brannocSelected } from "../../game/hero/brannoc/abilities";
 import { knownAbilities, selectedAbility } from "../../game/hero/hulda/abilities";
 import { knownAbilities as joryKnown, selectedAbility as jorySelected } from "../../game/hero/jory/abilities";
 import { knownAbilities as mirelKnown, selectedAbility as mirelSelected } from "../../game/hero/mirel/abilities";
@@ -14,6 +15,7 @@ import { knownAbilities as tallisKnown, selectedAbility as tallisSelected } from
 import { knownAbilities as wennaKnown, selectedAbility as wennaSelected } from "../../game/hero/wenna/abilities";
 import { knowsRite, selectedRite } from "../../game/hero/ysra/pyre/riteChoice";
 import { character } from "../../game/state";
+import type { BrannocAbility } from "../../types/brannoc";
 import type { Color } from "../../types/color";
 import type { HuldaAbility } from "../../types/hulda";
 import type { JoryAbility } from "../../types/jory";
@@ -26,7 +28,7 @@ import type { RiteId } from "../../types/ysra/pyre";
 import { hex } from "../../utils/color";
 
 /** what the cast and cycle buttons show: Kael's selected ability among those he holds, Ysra's selected rite, Hulda's,
- *  Orrin's, Mirel's, Wenna's, Tallis's and Jory's selected ability among those they know, or nothing to select for Sable */
+ *  Orrin's, Mirel's, Wenna's, Tallis's, Jory's and Brannoc's selected ability among those they know, or nothing to select for Sable */
 export type TouchSelection =
   | { kit: "kael"; ability: KaelAbility; known: readonly KaelAbility[] }
   | { kit: "ysra"; rite: RiteId; known: string }
@@ -36,7 +38,8 @@ export type TouchSelection =
   | { kit: "mirel"; ability: MirelAbility; known: readonly MirelAbility[] }
   | { kit: "wenna"; ability: WennaAbility; known: readonly WennaAbility[] }
   | { kit: "tallis"; ability: TallisAbility; known: readonly TallisAbility[] }
-  | { kit: "jory"; ability: JoryAbility; known: readonly JoryAbility[] };
+  | { kit: "jory"; ability: JoryAbility; known: readonly JoryAbility[] }
+  | { kit: "brannoc"; ability: BrannocAbility; known: readonly BrannocAbility[] };
 
 export function touchSelection(): TouchSelection {
   if (character.kit === "sable") return { kit: "sable" };
@@ -46,6 +49,7 @@ export function touchSelection(): TouchSelection {
   if (character.kit === "wenna") return { kit: "wenna", ability: wennaSelected(), known: wennaKnown() };
   if (character.kit === "tallis") return { kit: "tallis", ability: tallisSelected(), known: tallisKnown() };
   if (character.kit === "jory") return { kit: "jory", ability: jorySelected(), known: joryKnown() };
+  if (character.kit === "brannoc") return { kit: "brannoc", ability: brannocSelected(), known: brannocKnown() };
   if (character.kit === "ysra")
     return {
       kit: "ysra",
@@ -66,7 +70,8 @@ export function selectionKey(s: TouchSelection): string {
     s.kit === "mirel" ||
     s.kit === "wenna" ||
     s.kit === "tallis" ||
-    s.kit === "jory"
+    s.kit === "jory" ||
+    s.kit === "brannoc"
   )
     return `${s.kit}:${s.ability}:${s.known.join()}`;
   return s.kit === "ysra" ? `ysra:${s.rite}:${s.known}` : `kael:${s.ability}:${s.known.join()}`;
@@ -82,6 +87,7 @@ export function selectionTint(s: TouchSelection): Color {
   if (s.kit === "wenna") return PAL.wick[4];
   if (s.kit === "tallis") return PAL.gloam[4];
   if (s.kit === "jory") return PAL.beat[4];
+  if (s.kit === "brannoc") return PAL.rage[4];
   const rite = RITES.find((r) => r.id === s.rite) ?? RITES[0];
   return hex(rite.tint);
 }

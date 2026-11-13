@@ -1,3 +1,4 @@
+import type { BrannocState } from "./brannoc";
 import type { Projectile } from "./effect";
 import type { Enemy } from "./enemy";
 import type { HuldaState } from "./hulda";
@@ -13,8 +14,8 @@ import type { WennaState } from "./wenna";
 import type { Point } from "./world";
 import type { YsraClipName, YsraState } from "./ysra";
 
-/** why a press was refused: the selected spell or the warp is still recharging, or MP is short */
-export type DenyReason = "cast" | "warp" | "mp" | "ult";
+/** why a press was refused: the selected spell or the warp is still recharging, MP is short, or HP is (Brannoc) */
+export type DenyReason = "cast" | "warp" | "mp" | "ult" | "hp";
 
 /** Kael's action clips */
 export type KaelClipName =
@@ -60,7 +61,8 @@ export type HeroState =
   | MirelState
   | WennaState
   | TallisState
-  | JoryState;
+  | JoryState
+  | BrannocState;
 /** the states posed by their own keyed clip; the rest play an action clip */
 export type StateClipName = Exclude<
   HeroState,
@@ -76,6 +78,7 @@ export type StateClipName = Exclude<
   | WennaState
   | TallisState
   | JoryState
+  | BrannocState
 >;
 
 /** Where a warp goes: an enemy, a floating crystal, or a point in the air. */

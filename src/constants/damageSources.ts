@@ -15,4 +15,5 @@ export const HERO_SOURCE_ICONS: Readonly<Record<string, Readonly<Record<HeroSour
   wenna: { attacks: "w_lamp", abilities: "w_wicks", ultimate: "w_great" },
   tallis: { attacks: "t_knives", abilities: "t_smoke", ultimate: "t_gloaming" },
   jory: { attacks: "j_mallets", abilities: "j_boom", ultimate: "j_drumroll" },
+  brannoc: { attacks: "b_axe", abilities: "b_frenzy", ultimate: "b_berserk" },
 };

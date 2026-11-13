@@ -1,3 +1,4 @@
+import { FRENZY, HUNT } from "../../constants/brannoc/moves";
 import { STAMINA } from "../../constants/combat";
 import { RUSH } from "../../constants/hulda/rush";
 import { BEAT_STEP, BOOM } from "../../constants/jory/moves";
@@ -8,6 +9,14 @@ import { TOUCH_TEXT } from "../../constants/touch";
 import { ULT_LEVELS } from "../../constants/ultimate";
 import { SWAP } from "../../constants/wenna/swap";
 import { VAULT } from "../../constants/ysra/stance";
+import {
+  selectedAbility as brannocAbility,
+  abilityCost as brannocCost,
+  abilityRecharge as brannocRecharge,
+} from "../../game/hero/brannoc/abilities";
+import { canSpend } from "../../game/hero/brannoc/debt";
+import { huntCost } from "../../game/hero/brannoc/hunt";
+import { brannoc } from "../../game/hero/brannoc/memory";
 import { abilityMp, abilityRecharge, selectedAbility } from "../../game/hero/hulda/abilities";
 import { hulda } from "../../game/hero/hulda/memory";
 import { rushCost } from "../../game/hero/hulda/rush";
@@ -247,6 +256,33 @@ function joryLook(spec: TouchButtonSpec, look: ButtonLook): void {
   }
 }
 
+/** Brannoc's Frenzy waits while it runs and after it and costs HP, Hunt needs stamina and waits a moment after each;
+ *  I shows the selected ability's HP cost as a crimson arc along the bottom of its rim, and its recharge */
+function brannocLook(spec: TouchButtonSpec, look: ButtonLook): void {
+  switch (spec.action) {
+    case "warp": {
+      const wait = brannoc.frenzyT > 0 ? 1 : brannoc.frenzyWait / FRENZY.wait;
+      look.ready = wait <= 0 && canSpend(FRENZY.cost);
+      look.cooldown = look.ready ? 0 : Math.max(wait, 0.01);
+      break;
+    }
+    case "dash": {
+      const cost = huntCost();
+      look.ready = !hero.ground || (hero.stamina >= cost && brannoc.huntWait <= 0);
+      look.cooldown = look.ready ? 0 : Math.max(brannoc.huntWait / HUNT.wait, 1 - hero.stamina / Math.max(1, cost));
+      break;
+    }
+    case "cast": {
+      const id = brannocAbility();
+      look.cooldown = brannocRecharge(id);
+      look.ready = look.cooldown <= 0 && canSpend(brannocCost(id));
+      look.costShare = brannocCost(id);
+      break;
+    }
+    default:
+  }
+}
+
 /** Ysra's guard needs stamina, her vault waits out its recharge, and the rite fills as Heat comes to cover it */
 function ysraLook(spec: TouchButtonSpec, look: ButtonLook): void {
   switch (spec.action) {
@@ -271,7 +307,7 @@ function ysraLook(spec: TouchButtonSpec, look: ButtonLook): void {
 export function buttonLook(spec: TouchButtonSpec, pressed: boolean): ButtonLook {
   const text = TOUCH_TEXT[character.kit][spec.action];
   const accent = text.accent ? hex(text.accent) : selectionTint(touchSelection());
-  const look: ButtonLook = { pressed, ready: true, cooldown: 0, accent, affordable: 0, charge: -1 };
+  const look: ButtonLook = { pressed, ready: true, cooldown: 0, accent, affordable: 0, charge: -1, costShare: 0 };
   if (spec.action === "ultimate") {
     look.cooldown = ultRecharge();
     look.affordable = !hero.ultCd ? ULT_LEVELS.filter((_, i) => canAffordUlt(i + 1)).length : 0;
@@ -284,6 +320,7 @@ export function buttonLook(spec: TouchButtonSpec, pressed: boolean): ButtonLook 
   else if (character.kit === "wenna") wennaLook(spec, look);
   else if (character.kit === "tallis") tallisLook(spec, look);
   else if (character.kit === "jory") joryLook(spec, look);
+  else if (character.kit === "brannoc") brannocLook(spec, look);
   else if (character.kit === "ysra") ysraLook(spec, look);
   else kaelLook(spec, look);
   return look;

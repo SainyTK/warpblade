@@ -1,4 +1,5 @@
 import type { CharacterDef } from "../../types/character";
+import { BRANNOC } from "./brannoc/index";
 import { HULDA } from "./hulda/index";
 import { JORY } from "./jory/index";
 import { KAEL } from "./kael";
@@ -10,4 +11,15 @@ import { WENNA } from "./wenna/index";
 import { YSRA } from "./ysra/index";
 
 /** every playable hero, in the order the hero screen shows them */
-export const CHARACTERS: readonly CharacterDef[] = [KAEL, YSRA, SABLE, HULDA, ORRIN, MIREL, WENNA, TALLIS, JORY];
+export const CHARACTERS: readonly CharacterDef[] = [
+  KAEL,
+  YSRA,
+  SABLE,
+  HULDA,
+  ORRIN,
+  MIREL,
+  WENNA,
+  TALLIS,
+  JORY,
+  BRANNOC,
+];
