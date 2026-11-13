@@ -11,7 +11,7 @@ import { knotMp, pressSmokeKnot } from "./smokeKnot";
 import { pressSpell, SPELL_WAIT, type SpellId } from "./spells/castSpell";
 import { pressVeil, veilAffordable, veilCost } from "./veil";
 
-/** his spell skills on I, after his own four, in the order O turns through them */
+/** his spell skills on I, after Smoke Knot and Hamstring, in the order O turns through them */
 const SPELLS: readonly { id: SpellId; label: string }[] = [
   { id: "t_needles", label: "NEEDLES" },
   { id: "t_markDusk", label: "MARK" },
@@ -31,11 +31,31 @@ const spellSlot = ({ id, label }: { id: SpellId; label: string }): AbilitySlot =
 });
 
 /**
- * Tallis's abilities on I, in the order O turns through them: the Veil (on and off, paid in Gloam), Sink (tapped a dip
- * under the foe ahead, held the pool he stays in while I is held, paid in stamina), Smoke Knot and Hamstring (held, their
- * wide forms), then his spell skills.
+ * Tallis's abilities on I, in the order O turns through them: Smoke Knot and Hamstring (held, their wide forms), his spell
+ * skills, then the Veil (on and off, paid in Gloam) and Sink (tapped a dip under the foe ahead, held the pool he stays in
+ * while I is held, paid in stamina). With the casts first, I on a recharging one falls to another cast before it toggles
+ * the Veil or sinks him.
  */
 export const TALLIS_SLOTS: readonly AbilitySlot[] = [
+  {
+    id: "smokeKnot",
+    label: "SMOKE",
+    known: () => true,
+    wait: () => tallis.knotCd,
+    full: () => SMOKE_KNOT.cooldown,
+    affordable: () => hero.mp >= knotMp(false),
+    cast: pressSmokeKnot,
+  },
+  {
+    id: "hamstring",
+    label: "HAMSTRING",
+    known: () => true,
+    wait: () => tallis.hamCd,
+    full: () => HAMSTRING.cooldown,
+    affordable: () => hero.mp >= hamstringMp(false),
+    cast: pressHamstring,
+  },
+  ...SPELLS.map(spellSlot),
   {
     id: "veil",
     label: "VEIL",
@@ -57,25 +77,6 @@ export const TALLIS_SLOTS: readonly AbilitySlot[] = [
     cast: pressSink,
     cost: () => `${Math.round(sinkCost())} ST`,
   },
-  {
-    id: "smokeKnot",
-    label: "SMOKE",
-    known: () => true,
-    wait: () => tallis.knotCd,
-    full: () => SMOKE_KNOT.cooldown,
-    affordable: () => hero.mp >= knotMp(false),
-    cast: pressSmokeKnot,
-  },
-  {
-    id: "hamstring",
-    label: "HAMSTRING",
-    known: () => true,
-    wait: () => tallis.hamCd,
-    full: () => HAMSTRING.cooldown,
-    affordable: () => hero.mp >= hamstringMp(false),
-    cast: pressHamstring,
-  },
-  ...SPELLS.map(spellSlot),
 ];
 
 /** the recharges of Smoke Knot, Hamstring and the spells run down */

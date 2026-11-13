@@ -202,7 +202,7 @@ export const TOUCH_TEXT: Record<KitId, Record<TouchButtonAction, TouchButtonText
     ultimate: SPECIAL,
     cycle: {
       label: "Switch",
-      hint: "Switch ability: Veil, Sink, Smoke Knot, Hamstring and the spells you learn",
+      hint: "Switch ability: Smoke Knot, Hamstring, the spells you learn, the Veil and Sink",
       accent: "#e8b4d0",
     },
   },

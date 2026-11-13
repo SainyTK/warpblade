@@ -142,9 +142,9 @@ export const ACTION_TEXT: Record<KitId, Record<InputAction, string>> = {
     attack: "Knife string: Flick, Cross, Heel Kick. In the air, Drop Stab. In the shadow pool, rise with Rising Cut",
     warp: "Throw a knife into the foe ahead and step out of its shadow at its back to strike (10 MP)",
     guard: "Crossed knives: hold to block blows from the front. Press just as a blow lands to Fade into the Veil",
-    cast: "Cast the selected ability: Veil (Gloam), Sink (stamina), Smoke Knot, Hamstring or a spell (MP)",
+    cast: "Cast the selected ability: Smoke Knot, Hamstring or a spell (MP), the Veil (Gloam) or Sink (stamina)",
     castWide: "Sink: stay in the shadow pool until you let go. Smoke Knot and Hamstring: the wide form, for more MP",
-    cycle: "Switch ability: Veil, Sink, Smoke Knot, Hamstring and the spells you learn",
+    cycle: "Switch ability: Smoke Knot, Hamstring, the spells you learn, the Veil and Sink",
   },
   jory: {
     ...SHARED_ACTION_TEXT,
