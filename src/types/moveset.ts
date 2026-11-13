@@ -91,4 +91,6 @@ export interface AbilitySlot {
   evolved?(): boolean;
   /** what it costs, shown on its selected tab when the cost is not MP (Brannoc's HP) */
   cost?(): string;
+  /** an HP cost as a share of max HP, 0 to 1, drawn as a crimson stretch of the touch I button's rim (Brannoc) */
+  costShare?(): number;
 }

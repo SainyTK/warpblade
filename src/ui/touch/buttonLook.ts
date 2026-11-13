@@ -43,6 +43,7 @@ export function buttonLook(spec: TouchButtonSpec, pressed: boolean): ButtonLook 
       const slot = selectedSlot();
       look.ready = !!slot && slot.wait() <= 0 && slot.affordable();
       look.cooldown = slot ? Math.min(1, slot.wait() / slot.full()) : 0;
+      look.costShare = slot?.costShare?.() ?? 0;
       break;
     }
     case "ultimate":
