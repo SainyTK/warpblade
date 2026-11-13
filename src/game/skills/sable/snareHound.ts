@@ -123,7 +123,7 @@ function run(h: Hound, dt: number): boolean {
   return true;
 }
 
-/** Snare Hound: a landed kick or a snare's bite may call a hound that bites, holds and drags foes away from her */
+/** Snare Hound: a snare's bite, Point-Blank's kick or the warp's heavy bolt may call a hound that bites, holds and drags foes away from her */
 export const snareHound: SkillBehavior = {
   create: () => ({ cd: 0, hounds: [] }),
   update(memory, _state, dt) {
@@ -151,6 +151,10 @@ export const snareHound: SkillBehavior = {
     kick(memory, event) {
       const m = memoryOf(memory);
       if (m.cd <= 0 && event.foes[0] && rng.chance(skillValues(ID).chance)) call(m, event.foes[0]);
+    },
+    warpBolt(memory, event) {
+      const m = memoryOf(memory);
+      if (m.cd <= 0 && rng.chance(skillValues(ID).chance)) call(m, event.foe);
     },
     snareBite(memory, event) {
       const m = memoryOf(memory);

@@ -333,19 +333,23 @@ export const SABLE_ICONS: Record<string, (s: SpriteCanvas) => void> = {
     figure(s, 11, 14, JADE[5], JADE[4]);
     sparkle(s, 8, 3, 2, GOLD);
   },
-  /** one heavy bolt across the whole icon with a glint at the eye */
-  s_deadeye: (s) => {
-    fill(s, () => s.stroke(0, 8, 13, 8, 0.8, JADE[4]));
-    bolt(s, 0, 8, 15, 8, true);
-    sparkle(s, 12, 8, 3, WHITE);
+  /** three bolts falling on a foe under a jade mark */
+  s_storm: (s) => {
+    foe(s, 9, 11, 3);
+    ring(s, 9, 9, 3, JADE[4]);
+    bolt(s, 2, 0, 6, 7, true);
+    bolt(s, 8, 0, 9, 6, true);
+    bolt(s, 14, 1, 12, 7, true);
+    ground(s);
   },
-  /** a crosshair over a heart, bolts from both sides */
-  s_deadeye_evo: (s) => {
-    ring(s, 8, 8, 5, JADE[4]);
-    bolt(s, 0, 8, 6, 8, true);
-    bolt(s, 15, 8, 10, 8, true);
-    fill(s, () => s.dot(8, 8, 1.4, BLOOD));
-    sparkle(s, 8, 2, 2, GOLD);
+  /** bolts from every side homing on a heart */
+  s_storm_evo: (s) => {
+    ring(s, 8, 9, 5, JADE[4]);
+    bolt(s, 1, 1, 6, 7, true);
+    bolt(s, 15, 1, 10, 7, true);
+    bolt(s, 8, 0, 8, 5, true);
+    fill(s, () => s.dot(8, 9, 1.4, BLOOD));
+    sparkle(s, 13, 13, 2, GOLD);
   },
   /** her base kit on the end of run screen: the crossbow with the string drawn */
   sable_bolts: (s) => {

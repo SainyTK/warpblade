@@ -3,6 +3,7 @@ import type { HuldaAbility } from "../../../types/hulda";
 import type { JoryAbility } from "../../../types/jory";
 import type { MirelAbility } from "../../../types/mirel";
 import type { OrrinAbility } from "../../../types/orrin";
+import type { SableAbility } from "../../../types/sable";
 import type { KaelAbility } from "../../../types/spell";
 import type { SpriteImage } from "../../../types/sprite";
 import type { TallisAbility } from "../../../types/tallis";
@@ -32,7 +33,7 @@ export function touchIcon(action: TouchButtonAction, s: TouchSelection): SpriteI
   const known = s.known;
   switch (s.kit) {
     case "sable":
-      return iconFrom(key, sableArt(action));
+      return iconFrom(key, sableArt(action, s.ability as SableAbility, known as SableAbility[]));
     case "hulda":
       return iconFrom(key, huldaArt(action, s.ability as HuldaAbility, known as HuldaAbility[]));
     case "orrin":

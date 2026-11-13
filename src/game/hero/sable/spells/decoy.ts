@@ -151,6 +151,7 @@ function setDecoy(x: number, y: number): void {
 /** Straw Decoy on her I rotation */
 export const DECOY_SPELL: SableSpell = {
   label: "DECOY",
+  tint: "#d8c890",
   mp: () => skillValues("s_decoy").mp,
   cooldown: () => skillValues("s_decoy").cooldown,
   left: () => sable.decoyCd,

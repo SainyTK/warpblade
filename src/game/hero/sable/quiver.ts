@@ -3,7 +3,7 @@ import { RELOAD } from "../../../constants/sable/reload";
 import { skillValues } from "../../skills/query";
 import { sable } from "./memory";
 
-/** how a drawn bolt is primed: by a perfect reload (Perfect Rhythm's bonus), by a kick, slide or hop (the base bonus),
+/** how a drawn bolt is primed: by a perfect reload (Perfect Rhythm's bonus), by a parry, a slide or a hop (the base bonus),
  *  or not at all */
 export type Prime = "reload" | "charged" | null;
 
@@ -40,7 +40,7 @@ export function drawBolt(): { prime: Prime } | false {
   return { prime: sable.shade > 0 ? "charged" : null };
 }
 
-/** prime the next bolts at the base bonus (a kick, a slide or a hop did it) */
+/** prime the next bolts at the base bonus (a parry, a slide or a hop did it) */
 export function chargeBolts(n: number): void {
   sable.charged = Math.max(sable.charged, n);
 }

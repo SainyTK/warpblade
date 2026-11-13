@@ -79,19 +79,23 @@ export const TOUCH_TEXT: Record<KitId, Record<TouchButtonAction, TouchButtonText
   sable: {
     attack: {
       label: "Shoot",
-      hint: "Shoot a bolt. Hold to keep shooting. Push the stick up or down while you hold it to aim",
+      hint: "Tap: the next bolt of the string; with the stick down on the floor, reload; while reloading, tap in the bright window for a perfect reload. Hold: grapple away from the foe and fire a heavy bolt back (10 MP)",
       accent: "#6ee0a0",
     },
     up: { label: "Jump", hint: "One light jump. Hold the stick down to drop through a ledge", accent: "#e8e6f6" },
     dash: DODGE_BUTTON,
-    guard: { label: "Kick", hint: "Kick foes away from you", accent: "#ccb88c" },
-    cast: { label: "Spell", hint: "Cast the selected spell, a snare at first", accent: "#e88a4c" },
-    ultimate: SPECIAL,
-    cycle: {
-      label: "Reload",
-      hint: "Reload. Tap again in the bright window for a perfect reload and primed bolts",
-      accent: "#c4ffd8",
+    guard: {
+      label: "Guard",
+      hint: "Hold to block blows from the front with the crossbow stock. Tap just as a blow lands for Point-Blank: a kick and a full, primed quiver",
+      accent: "#ccb88c",
     },
+    cast: {
+      label: "Ability",
+      hint: "Tap to cast the selected ability: the hop back, the snare or a spell. Hold for its wide form: the hop slides forward",
+      accent: null,
+    },
+    ultimate: SPECIAL,
+    cycle: { label: "Switch", hint: "Switch ability: hop, snare and the spells you learn", accent: null },
   },
   hulda: {
     attack: {
@@ -308,7 +312,7 @@ export const STICK_DIRECTIONS: Record<KitId, readonly StickDirectionSpec[]> = {
     { direction: "side", label: "Walk" },
     { direction: "far side", label: "Run" },
     { direction: "up", label: "Jump" },
-    { direction: "down", label: "With Jump, drop through a ledge" },
+    { direction: "down", label: "With Jump, drop through a ledge. With Shoot on the floor, reload" },
   ],
   hulda: [
     { direction: "side", label: "Walk" },

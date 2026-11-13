@@ -10,7 +10,7 @@ export function basePower(b: Shot): number {
   return p * b.share * (b.hop ? BOLT.hopShare : 1);
 }
 
-/** a primed bolt's bonus: a perfect reload's takes Perfect Rhythm's, a kick's, slide's or hop's the base one */
+/** a primed bolt's bonus: a perfect reload's takes Perfect Rhythm's, a parry's, slide's or hop's the base one */
 export function primeBonus(b: Shot): number {
   if (b.prime === "reload") return skillValues("s_rhythm").bonus ?? BOLT.primedBonus;
   return b.prime === "charged" ? BOLT.primedBonus : 0;

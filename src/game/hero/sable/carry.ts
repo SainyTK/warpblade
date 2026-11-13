@@ -10,6 +10,7 @@ const CARRY: Partial<Record<HeroState, { x: number; y: number; sa: number }>> = 
   run: { x: 5, y: 8, sa: 0.65 },
   jump: { x: 4.5, y: 6.5, sa: -0.15 },
   fall: { x: 4.5, y: 7, sa: 0.2 },
+  dash: { x: 5, y: 8.5, sa: 0.75 },
 };
 
 /** Kael's clip for a free state, with Sable's hands on the crossbow, riding with the chest so it moves as the body does */

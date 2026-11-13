@@ -39,3 +39,17 @@ export const BOLT_LOOK = {
  * far the pieces drift apart, the motes along it, and the ring at the muzzle with its life.
  */
 export const WAKE_LOOK = { linger: 0.3, piece: 6, drift: 3, motes: 14, ring: 9, ringLife: 0.16 } as const;
+
+/**
+ * The grapple bolt of her warp: its length from tail to point, the head's share of it, how far its hooks spread once
+ * open and how soon they open, the light on its point, and the cord's sag and how finely it is drawn.
+ */
+export const GRAPPLE_LOOK = {
+  length: 14,
+  head: 4,
+  hookSpread: 1.2,
+  openTime: 0.08,
+  glow: 6,
+  sag: 6,
+  cordSteps: 10,
+} as const;

@@ -16,7 +16,7 @@ import { flashQuiver, primedBolts, quiverSize, reloadWindow } from "./quiver";
 /** the share of the reload done, 0 to 1 */
 export const reloadShare = (): number => (sable.reload ? Math.min(1, sable.reload.t / sable.reload.dur) : 0);
 
-/** start cranking a fresh quiver in; she keeps walking, jumping and kicking while she cranks */
+/** start cranking a fresh quiver in; she keeps walking, jumping, guarding and hopping while she cranks */
 export function startReload(): boolean {
   if (sable.reload || sable.ammo >= quiverSize()) return false;
   sable.reload = { t: 0, dur: RELOAD.dur / progress.stats.aspd, tried: false, jammed: false };
@@ -60,15 +60,20 @@ function volley(count: number): void {
     looseBolt({ ...m, angle: Math.atan2(cy - m.y, cx - m.x), share: 1, prime: "reload", payoff });
 }
 
-/** O: start the reload, or the timing press inside one: in the bright window a perfect reload, outside it a jam */
-export function pressReload(): boolean {
+/** J while she reloads: early in the crank it does nothing; in the bright window it is a perfect reload; before the
+ *  window it spends the try; after it, it jams the crank. One try per reload */
+export function timeReload(): boolean {
   const r = sable.reload;
-  if (!r) return startReload() || true;
-  if (r.tried) return true;
+  if (!r || r.tried) return true;
+  const u = r.t / r.dur;
+  if (u < RELOAD.grace) return true;
   r.tried = true;
   const [a, b] = reloadWindow();
-  const u = r.t / r.dur;
-  if (u >= a && u <= b && !r.jammed) {
+  if (u < a) {
+    sfx.denied();
+    return true;
+  }
+  if (u <= b && !r.jammed) {
     perfect();
     return true;
   }
@@ -77,6 +82,11 @@ export function pressReload(): boolean {
   flashQuiver("jam");
   sfx.denied();
   return true;
+}
+
+/** stop the crank: the quiver was filled another way */
+export function endReload(): void {
+  sable.reload = null;
 }
 
 /** the crank turns on; a reload left alone finishes on its own */

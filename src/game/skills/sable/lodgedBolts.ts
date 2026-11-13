@@ -23,7 +23,7 @@ const SPOTS = [
   [0.45, 0.25, 1],
 ] as const;
 
-/** a kick tears the bolts out of a foe: damage for each, and with level 7 they fly on at other foes (Pincushion: a
+/** Point-Blank's kick or the warp's heavy bolt tears the bolts out of a foe: damage for each, and with level 7 they fly on at other foes (Pincushion: a
  *  burst of seeking bolts at every foe around) */
 function tearOut(e: Enemy): void {
   const v = skillValues(ID);
@@ -54,8 +54,8 @@ function tearOut(e: Enemy): void {
   }
 }
 
-/** Lodged Bolts: the bolts are laid by the shots themselves; they slow the foe and show as shafts, and a kick tears them
- *  out */
+/** Lodged Bolts: the bolts are laid by the shots themselves; they slow the foe and show as shafts, and Point-Blank's
+ *  kick or the warp's heavy bolt tears them out */
 export const lodgedBolts: SkillBehavior = {
   create: () => ({}),
   update() {
@@ -82,6 +82,9 @@ export const lodgedBolts: SkillBehavior = {
     kick(_memory, event) {
       if (!skillValues(ID).tear) return;
       for (const e of event.foes) tearOut(e);
+    },
+    warpBolt(_memory, event) {
+      if (skillValues(ID).tear) tearOut(event.foe);
     },
   },
 };
