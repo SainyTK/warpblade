@@ -91,8 +91,7 @@ export interface OrrinMemory {
   fenceCd: number;
   tetherCd: number;
   anchorCd: number;
-  /** the ability the cast under way is using, and whether it is the wide form */
-  casting: OrrinAbility;
+  /** the ability under way is its wide form */
   wide: boolean;
   /** Whirlwall's damage ticks dealt so far */
   whirlTicks: number;

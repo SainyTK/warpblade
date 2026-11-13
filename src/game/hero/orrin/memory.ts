@@ -36,7 +36,6 @@ const fresh = (): OrrinMemory => ({
   fenceCd: 0,
   tetherCd: 0,
   anchorCd: 0,
-  casting: "whirlwall",
   wide: false,
   whirlTicks: 0,
   pinAt: [],

@@ -49,7 +49,6 @@ export function castWhirl(wide: boolean): boolean {
   if (!startAbility(WHIRLWALL.mp, big)) return false;
   orrin.whirlCd = WHIRLWALL.cooldown;
   orrin.whirlTicks = 0;
-  orrin.casting = "whirlwall";
   orrin.wide = big;
   setState("whirl");
   const ward = makeWard();

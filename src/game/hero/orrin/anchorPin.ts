@@ -58,7 +58,6 @@ export function castPin(wide: boolean): boolean {
   const mp = targets.length ? ANCHOR_PIN.mp : ANCHOR_PIN.mp / 2;
   if (!startAbility(mp, big)) return false;
   orrin.pinCd = ANCHOR_PIN.cooldown;
-  orrin.casting = "anchorPin";
   orrin.wide = big;
   orrinHost.pinned = targets;
   orrin.pinAt = [];
