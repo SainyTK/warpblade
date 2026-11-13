@@ -175,23 +175,27 @@ export const TOUCH_TEXT: Record<KitId, Record<TouchButtonAction, TouchButtonText
   wenna: {
     attack: {
       label: "Lamp",
-      hint: "Lamp string: Tap, Swing, Flare. The foe it hits becomes the Quarry every Wick turns on. In the air, Lamp Drop",
+      hint: "Tap: lamp string, Tap, Swing, Flare; the foe it hits becomes the Quarry every Wick turns on. In the air, Lamp Drop. Hold: throw a lit candle and trade places with it (10 MP)",
       accent: "#b48cff",
     },
     up: { label: "Jump", hint: "One jump. Hold the stick down to drop through a ledge", accent: "#e8e6f6" },
     dash: DODGE_BUTTON,
     guard: {
-      label: "Light",
-      hint: "Light a Wick ahead (25 Wax). Stick down lights it at your feet. With four out, relight the weakest",
-      accent: "#e8dcc4",
+      label: "Guard",
+      hint: "Hold to raise the lantern and block blows from the front. Tap just as a blow lands for Flare Back: it blinds the foes ahead and lights a Wick",
+      accent: "#d8b4ff",
     },
     cast: {
       label: "Ability",
-      hint: "Use the selected ability: Kindle, Beckon or a spell skill",
+      hint: "Tap: Light a Wick (Wax), Kindle, Beckon or a spell skill. Hold: Light at your feet, or Kindle every Wick near you",
       accent: "#f8eeff",
     },
     ultimate: SPECIAL,
-    cycle: { label: "Switch", hint: "Turn to the next ability", accent: "#d8b4ff" },
+    cycle: {
+      label: "Switch",
+      hint: "Switch ability: Light, Kindle, Beckon and the spells you learn",
+      accent: "#d8b4ff",
+    },
   },
   tallis: {
     attack: {
@@ -328,7 +332,7 @@ export const STICK_DIRECTIONS: Record<KitId, readonly StickDirectionSpec[]> = {
     { direction: "side", label: "Walk" },
     { direction: "far side", label: "Walk, she never runs" },
     { direction: "up", label: "Jump" },
-    { direction: "down", label: "With Jump, drop through a ledge. With Light, light the Wick at your feet" },
+    { direction: "down", label: "With Jump, drop through a ledge" },
   ],
   tallis: [
     { direction: "side", label: "Walk. In the shadow pool, glide" },

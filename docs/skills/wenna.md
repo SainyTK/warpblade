@@ -1,7 +1,7 @@
 # Wenna's skills
 
 Wenna's 20 skills, written from the skill data in `src/constants/characters/wenna/skills/`, which is the source of truth.
-Her kit, Wicks, Wax, Swap and the Quarry are in `docs/wenna-design.md`; the rules every hero's skills follow are in `docs/skill-design.md`.
+Her kit, Wicks, Wax, the candle warp, the lantern guard and the Quarry are in `docs/wenna-design.md`; the rules every hero's skills follow are in `docs/skill-design.md`.
 
 ## Units
 
@@ -18,10 +18,11 @@ Every button does something from the first second of a run.
 | --- | --- |
 | A / D | Walk, about 60 px/s. No run. |
 | W | One jump of 48 px. No double jump. |
-| J | The lamp string: Tap, Swing, Flare. In the air, Lamp Drop, one per airtime. The last foe a blow hits becomes her Quarry for 4 s. |
-| K | Light a Wick for 25 Wax. At the cap, relight the weakest for 10 Wax. With S held, at her feet. |
-| L | Swap with a Wick within 160 px: 15 stamina, 1.0 s cooldown, the Wick arrives with a 0.6x AP flare in 24 px. |
-| I | The selected ability: Kindle, Beckon, or a spell skill. |
+| J tapped | The lamp string: Tap, Swing, Flare. In the air, Lamp Drop, one per airtime. The last foe a blow hits becomes her Quarry for 4 s. |
+| J held | The candle warp (10 MP, 2 s): she throws a lit candle at the foe ahead, trades places with it and arrives in a Flare at the shared warp power, grown by AP. The foe becomes her Quarry and the candle burns on as a Wick for 4 s where she stood. With no foe ahead, she trades places with her farthest Wick within 160 px, which arrives in a 0.4x AP flare in 24 px. |
+| K | The lantern guard: a block costs 8 stamina and lets 40% through. Parry, Flare Back: foes ahead within 90 px are blinded 1.6 s (bosses 0.5 s) and take 0.8x AP, and a free Wick rises at her feet. |
+| L | The shared front dodge. |
+| I | The selected ability: Light (a Wick for 25 Wax, or a relight of the weakest for 10 at the cap), Kindle, Beckon, or a spell skill. Held: Light at her feet, or Kindle every Wick near her. |
 | O | Switch ability. |
 | U | Great Wick, the base special, with the shared charge levels. |
 
@@ -35,7 +36,7 @@ Ground minions that walk into a Wick stop at its front edge and burn it for thei
 Elites, mini bosses and the Rift Warden push through.
 A blow or shot about to land on her from a side where a Wick stands within 20 px of her lands on the Wick, at most once each 0.3 s for each Wick.
 At 0 HP or the end of its life the Wick melts away.
-If she has no Wick at the start of a wave, one lights for free at her side.
+If she has no Wick at the start of a wave, two light for free at her side.
 
 ### Wax
 
@@ -57,15 +58,16 @@ Every Wick that can reach it goes for it and bites it every 0.55 s.
 
 ### Abilities on I
 
-Kindle (16 MP, 3 s): the Wick nearest her within 120 px bursts for 2.0x AP in 36 px and is spent; she gets back half its cost.
+Light (25 Wax): a Wick rises 20 px ahead, at her feet with I held; at the cap the weakest Wick relights for 10 Wax.
+Kindle (16 MP, 3 s): the Wick nearest her within 120 px bursts for 2.0x AP in 36 px and is spent; she gets back half its cost. Held, for 28 MP, every Wick within 120 px bursts at 70%.
 Beckon (12 MP, 6 s): every Wick within 200 px hops to a ring round her for 2 s and takes 50% less damage.
-The spell skills Lamp Volley, Wax Pool and Wax Effigy join the rotation.
+The spell skills Lamp Volley, Wax Pool and Wax Effigy join the rotation after Beckon.
 
 ### Great Wick
 
 A giant Wick rises from a pool of wax at her lamp pole and swings one arm across the level's reach: every foe in reach takes the level's power as a multiple of AP, knockback 160 and up 120.
 It then melts into 1 to 4 new Wicks by charge level, allowed up to 2 past her cap, living 8 s.
-Thousand Candles replaces it.
+Her ultimate skill Great Wick upgrades it.
 
 ## The 20 skills
 
@@ -75,9 +77,9 @@ Thousand Candles replaces it.
 | `w_fangs` | Bright Fangs | attack | easy | auto | `w_singe` |
 | `w_flare` | Open Shutter | attack | timed | J | `w_lampVolley` |
 | `w_packLunge` | Pack Lunge | attack | precise | J | `w_quarry` |
-| `w_gutter` | Guttering | attack | timed | K | `w_kindle` |
+| `w_gutter` | Guttering | attack | timed | auto | `w_kindle` |
 | `w_kindle` | Chain Kindle | attack | timed | I | `w_gutter` |
-| `w_swap` | Changeling Step | movement | timed | L | `w_procession` |
+| `w_swap` | Changeling Step | movement | timed | J | `w_procession` |
 | `w_hop` | Wick Hop | movement | timed | jump | `w_fangs` |
 | `w_procession` | Procession | movement | easy | auto | `w_waxPool` |
 | `w_lampVolley` | Lamp Volley | spell | easy | I | `w_flare` |
@@ -85,17 +87,17 @@ Thousand Candles replaces it.
 | `w_effigy` | Wax Effigy | spell | timed | I | `w_gutter` |
 | `w_singe` | Singe | dot | easy | auto | `w_hotWax` |
 | `w_hotWax` | Hot Wax | dot | timed | K | `w_singe` |
-| `w_smoulder` | Smoulder | dot | timed | L | `w_swap` |
+| `w_smoulder` | Smoulder | dot | timed | J | `w_swap` |
 | `w_lampflies` | Lampflies | summon | easy | J | `w_lampVolley` |
-| `w_twinWick` | Twin Wick | summon | timed | K | `w_tallow` |
+| `w_twinWick` | Twin Wick | summon | timed | I | `w_tallow` |
 | `w_ghost` | Remembrance | summon | timed | auto | `w_hotWax` |
 | `w_tallow` | Deep Tallow | passive | easy | auto | `w_twinWick` |
-| `w_thousand` | Thousand Candles | ultimate | timed | U | `w_tallow` |
+| `w_greatWick` | Great Wick | ultimate | timed | U | `w_tallow` |
 
 Counts: attack 6, movement 3, spell 3, dot 3, summon 3, passive 1, ultimate 1.
 Risk: precise 1, easy 7, timed 12.
 
-Kit events she emits through the shared function: `wick` (a Wick was lit or ended), `swap` (a Swap traded her place with a Wick), `quarry` (a foe became her Quarry), `kindle` (a Wick burst under Kindle) and `bite` (a Wick bit a foe), declared in `src/types/wenna.ts`; and the shared `cast`, `jump`, `dash` (each Swap) and `perfectDodge`.
+Kit events she emits through the shared function: `wick` (a Wick was lit or ended), `swap` (a warp left a Wick where she stood), `quarry` (a foe became her Quarry), `kindle` (a Wick burst under Kindle) and `bite` (a Wick bit a foe), declared in `src/types/wenna.ts`; and the shared `cast`, `jump`, `dash` (each Swap) and `perfectDodge`.
 
 ### w_quarry: Hunting Call
 
@@ -180,7 +182,7 @@ Evolution: **Feeding Frenzy** (partner `w_quarry`). Each lunge strikes three tim
 
 ### w_gutter: Guttering
 
-attack, timed, K. A Wick that dies or burns out bursts.
+attack, timed, auto. A Wick that dies or burns out bursts.
 
 Values: power: ability power of the burst when a Wick dies or burns out; radius: the burst's radius; launch: 1 the burst launches minions; wax: Wax each burst leaves; chill: 1 the burst chills; wildfire: 1 the burst leaves a 2 s fire on the floor (evolution)
 
@@ -220,23 +222,24 @@ Evolution: **Bonfire** (partner `w_gutter`). Kindle leaves a bonfire for 3 s whe
 
 ### w_swap: Changeling Step
 
-movement, timed, L. Swap reaches further, and the Wick she trades with arrives burning.
+movement, timed, J. Her warp reaches further for a Wick, and the candle she leaves behind burns longer.
 
-Values: range: pixels Swap reaches for a Wick (160 in the base kit); flare: share more the arriving Wick's flare deals; charges: Swaps she can make before the cooldown; untouch: seconds she cannot be hit after arriving; line: attack damage foes on the line between the two ends take; dodge: seconds after the press a blow counts as a perfect dodge; heal: 1 the swapped Wick heals to full; mirror: 1 every Swap also lights a free Wick where she arrives, if under the cap (evolution)
+Values: range: pixels a warp with no foe ahead reaches for a Wick to trade places with (160 in the base kit); flare: share more the traded Wick's flare deals; charges: warps she can throw before the first comes back; life: seconds the thrown candle burns as a Wick (4 in the base kit); path: attack damage foes the thrown candle passes through take; recharge: seconds a spent warp takes to come back (2 in the base kit); heal: 1 the traded Wick heals to full; mirror: 1 every warp also lights a free Wick beside her, if under the cap (evolution)
 
 | Lv | Change | Card |
 | --- | --- | --- |
-| 1 | range 220, flare 0.5, charges 1, untouch 0.15, dodge 0.1 | Swap reaches 220 px; the flare deals 50% more. |
-| 2 | charges 1 to 2 | A second Swap charge. |
-| 3 | flare 0.5 to 0.8 | The flare deals 80% more. |
-| 4 | untouch 0.15 to 0.3 | Untouchable 0.3 s after a Swap. |
-| 5 | line 0 to 0.6 | Foes on the line between take 0.6x. |
-| 6 | dodge 0.1 to 0.2 | The perfect dodge window is 0.2 s. |
-| 7 | heal 0 to 1 | The swapped Wick heals to full. |
-| 8 | flare 0.8 to 1.5 | The flare deals 150% more. |
-| Evolved | mirror 0 to 1 | Each Swap lights a free Wick. |
+| 1 | range 220, flare 0.5, charges 1, life 4, recharge 2 | Warps reach Wicks 220 px away; their flare deals 50% more. |
+| 2 | charges 1 to 2 | New: two warp charges. |
+| 3 | life 4 to 8 | The candle left behind burns 8 s. |
+| 4 | path 0 to 2 | New: the thrown candle burns foes it passes for 2x. |
+| 5 | flare 0.5 to 0.8 | The flare deals 80% more. |
+| 6 | recharge 2 to 1.5 | Warps come back in 1.5 s. |
+| 7 | heal 0 to 1 | New: the Wick you trade with heals to full. |
+| 8 | flare 0.8 to 1.5, life 8 to 12 | The flare deals 150% more; the candle burns 12 s. |
+| Evolved | mirror 0 to 1 | Each warp lights a free Wick. |
 
-Evolution: **Mirror Wick** (partner `w_procession`). Every Swap also lights a free Wick where she arrives, if she is under the cap.
+Evolution: **Mirror Wick** (partner `w_procession`). Every warp also lights a free Wick beside her, if she is under the cap.
+Its warp numbers (charges, recharge, path) go through the shared `WarpTune`, as Kael's Warpcraft does, so its warp stays close to every hero's.
 
 ### w_hop: Wick Hop
 
@@ -360,33 +363,34 @@ Evolution: **Ashfall** (partner `w_hotWax`). A foe at max stacks bursts, consumi
 
 ### w_hotWax: Hot Wax
 
-dot, timed, K. A Wick that lands splashes hot wax on the foes round it.
+dot, timed, K. Her lantern spills hot wax: Flare Back and each Wick she lights splash the foes round them.
 
-Values: stacks: Hot Wax stacks a splash adds; damage: ability power a stack deals a second; life: seconds stacks last; radius: the splash's radius round a landing Wick; chill: 1 splashed foes are chilled; relight: 1 relights splash too; swap: 1 Swap arrivals splash; candle: 1 splashed foes that die drip double Wax (evolution)
+Values: stacks: Hot Wax stacks a splash adds; damage: ability power a stack deals a second; life: seconds stacks last; radius: the splash's radius; chill: 1 splashed foes are chilled; block: 1 a blocked blow splashes the attacker; warp: 1 a warp's arrival splashes round her; candle: 1 splashed foes that die drip double Wax (evolution)
 
 | Lv | Change | Card |
 | --- | --- | --- |
-| 1 | stacks 2, damage 0.15, life 4, radius 24 | A landing Wick splashes 2 Hot Wax in 24 px. |
+| 1 | stacks 2, damage 0.15, life 4, radius 24 | Flare Back and each Wick you light splash 2 Hot Wax. |
 | 2 | radius 24 to 32 | The splash reaches 32 px. |
-| 3 | chill 0 to 1 | Splashed foes are chilled. |
+| 3 | chill 0 to 1 | New: splashed foes are chilled. |
 | 4 | damage 0.15 to 0.2 | Hot Wax burns for 0.2x. |
-| 5 | relight 0 to 1 | Relights splash too. |
-| 6 | swap 0 to 1 | Swap arrivals splash. |
+| 5 | block 0 to 1 | New: a blocked blow splashes the attacker. |
+| 6 | warp 0 to 1 | New: a warp's arrival splashes round you. |
 | 7 | damage 0.2 to 0.27 | Hot Wax burns for 0.27x. |
 | 8 | damage 0.27 to 0.35 | Hot Wax burns for 0.35x. |
 | Evolved | candle 0 to 1 | Splashed foes drip double Wax. |
 
 Evolution: **Candlemaker** (partner `w_singe`). Splashed foes that die drip double Wax.
+Flare Back's splash lands on the foe she parried; a Wick she lights with Light splashes where it rises.
 
 ### w_smoulder: Smoulder
 
-dot, timed, L. Both ends of a Swap smoulder, burning the foes that stand there.
+dot, timed, J. Both ends of a warp smoulder, burning the foes that stand there.
 
-Values: burn: seconds both ends of a Swap burn; damage: ability power a Smoulder stack deals a second; life: seconds a stack lasts; thread: 1 the flame thread between the ends burns too; width: pixels wide each burn is; spread: 1 Smoulder spreads to the nearest foe on a kill; pyre: 1 each Swap leaves a burning trail along the thread for 4 s (evolution)
+Values: burn: seconds both ends of a warp burn; damage: ability power a Smoulder stack deals a second; life: seconds a stack lasts; thread: 1 the flame thread between the ends burns too; width: pixels wide each burn is; spread: 1 Smoulder spreads to the nearest foe on a kill; pyre: 1 each Swap leaves a burning trail along the thread for 4 s (evolution)
 
 | Lv | Change | Card |
 | --- | --- | --- |
-| 1 | burn 2, damage 0.2, life 3, width 24 | Both Swap ends burn 2 s, adding Smoulder. |
+| 1 | burn 2, damage 0.2, life 3, width 24 | Both warp ends burn 2 s, adding Smoulder. |
 | 2 | burn 2 to 3 | The ends burn 3 s. |
 | 3 | thread 0 to 1 | The thread between them burns too. |
 | 4 | damage 0.2 to 0.27 | Smoulder burns for 0.27x. |
@@ -394,9 +398,9 @@ Values: burn: seconds both ends of a Swap burn; damage: ability power a Smoulder
 | 6 | spread 0 to 1 | Smoulder spreads on a kill. |
 | 7 | damage 0.27 to 0.35 | Smoulder burns for 0.35x. |
 | 8 | damage 0.35 to 0.45 | Smoulder burns for 0.45x. |
-| Evolved | pyre 0 to 1 | Swaps leave a 4 s burning trail. |
+| Evolved | pyre 0 to 1 | Warps leave a 4 s burning trail. |
 
-Evolution: **Pyre Path** (partner `w_swap`). Each Swap leaves a burning trail along the thread for 4 s.
+Evolution: **Pyre Path** (partner `w_swap`). Each warp leaves a burning trail along the thread for 4 s.
 
 ### w_lampflies: Lampflies
 
@@ -420,13 +424,13 @@ Evolution: **Lantern Swarm** (partner `w_lampVolley`). Every cast on I sends a s
 
 ### w_twinWick: Twin Wick
 
-summon, timed, K. Lighting a Wick may light a twin beside it, past the cap.
+summon, timed, I. Lighting a Wick may light a twin beside it, past the cap.
 
-Values: chance: chance a K lights a twin beside the Wick, past the cap; bite: share faster twins bite; life: seconds a twin lives; count: twins it lights; candelabra: 1 every K lights three Wicks (evolution)
+Values: chance: chance a Light lights a twin beside the Wick, past the cap; bite: share faster twins bite; life: seconds a twin lives; count: twins it lights; candelabra: 1 every K lights three Wicks (evolution)
 
 | Lv | Change | Card |
 | --- | --- | --- |
-| 1 | chance 0.2, life 6, count 1 | 20% on K: a twin Wick for 6 s. |
+| 1 | chance 0.2, life 6, count 1 | 20% on Light: a twin Wick for 6 s. |
 | 2 | chance 0.2 to 0.35 | 35% chance. |
 | 3 | bite 0 to 0.3 | Twins bite 30% faster. |
 | 4 | life 6 to 10 | Twins live 10 s. |
@@ -434,9 +438,9 @@ Values: chance: chance a K lights a twin beside the Wick, past the cap; bite: sh
 | 6 | count 1 to 2 | Two twins. |
 | 7 | chance 0.45 to 0.5 | 50% chance. |
 | 8 | chance 0.5 to 0.55 | 55% chance. |
-| Evolved | candelabra 0 to 1 | Every K lights three Wicks. |
+| Evolved | candelabra 0 to 1 | Every Light lights three Wicks. |
 
-Evolution: **Candelabra** (partner `w_tallow`). Every K lights three Wicks.
+Evolution: **Candelabra** (partner `w_tallow`). Every Light lights three Wicks.
 
 ### w_ghost: Remembrance
 
@@ -478,25 +482,27 @@ Values: wax: Wax added to her most; trickle: share more Wax trickles in; cap: Wi
 
 Evolution: **Eternal Flame** (partner `w_twinWick`). Wicks never burn out on their own.
 
-### w_thousand: Thousand Candles
+### w_greatWick: Great Wick
 
-ultimate, timed, U. Replaces Great Wick: a field of candles rises across the reach, and every Wick flares with them.
+ultimate, timed, U. Great Wick swings harder, raises a field of candles and wakes every Wick she has.
 
-Values: power: share of the level's power each foe in reach takes from the candles; flare: share of that hit every Wick she has flares for; great: seconds every Wick becomes a Great Wick (0: none); knock: 1 the candles knock foes up; leave: Wicks the candles leave when they melt; night: 1 the whole stage fills with candles and every foe takes the hit three times (evolution)
+Values: power: share of the level's power each swing of the giant deals; more: Wicks it melts into on top of the level's; candles: share of a swing's power the candles rising across the reach deal each foe (0: none); flare: share of a swing's power every Wick she has flares for (0: none); great: seconds every Wick stands as a Great Wick (0: none); swings: times the giant swings; night: 1 the candles fill the whole stage and strike every foe three times (evolution)
 
 | Lv | Change | Card |
 | --- | --- | --- |
-| 1 | power 1, flare 0.5 | Candles rise for 1.0x; every Wick flares half. |
-| 2 | knock 0 to 1 | The candles knock foes up. |
-| 3 | power 1 to 1.4 | The candles deal 1.4x. |
-| 4 | great 0 to 3 | Every Wick is a Great Wick for 3 s. |
-| 5 | power 1.4 to 1.8 | The candles deal 1.8x. |
-| 6 | leave 0 to 4 | The candles leave 4 Wicks. |
-| 7 | power 1.8 to 2.3 | The candles deal 2.3x. |
-| 8 | power 2.3 to 3 | The candles deal 3x. |
-| Evolved | night 0 to 1 | Candles fill the stage; three hits. |
+| 1 | power 1.3, more 1, swings 1 | The giant swings for 1.3x and melts into one more Wick. |
+| 2 | candles 0 to 0.5 | New: candles rise across the reach and strike for half. |
+| 3 | flare 0 to 0.5 | New: every Wick you have flares with it for half. |
+| 4 | power 1.3 to 1.8 | The giant swings for 1.8x. |
+| 5 | great 0 to 3 | New: every Wick stands as a Great Wick for 3 s. |
+| 6 | swings 1 to 2 | New: the giant swings back a second time. |
+| 7 | power 1.8 to 2.2 | The giant swings for 2.2x. |
+| 8 | power 2.2 to 2.5, more 1 to 2 | The giant swings for 2.5x and melts into two more Wicks. |
+| Evolved | candles 0.5 to 1, night 0 to 1 | Candles fill the stage; three strikes. |
 
-Evolution: **Night of Lamps** (partner `w_tallow`). The whole stage fills with candles, and every foe takes the hit three times.
+Evolution: **Night of Lamps** (partner `w_tallow`). Candles fill the whole stage and strike every foe three times.
+It takes the place of Thousand Candles, the ultimate skill that replaced Great Wick before the shared moveset; its candle field, its flaring Wicks and its Great Wicks are now levels of this one.
+
 ## Budget check
 
 Figures follow the measuring room in `docs/skills/balance.md`: raw damage per second each skill adds over the base kit at hero level 1 (AD 6, AP 11), against the bands there (easy 70, timed 112, precise 175 to 210 on one foe, movement 0.8 of its band, damage over time 1.1 to 1.4 times the attack band of its risk).
@@ -506,7 +512,7 @@ They are estimates from this play model and need a pass in the room once the kit
   A bite deals 4.4.
   70% of bites go to a Quarry while she keeps striking, so a Wick bites 1.65 times a second and her Wicks deal about 22 a second together, 17 of it on Quarries.
 - Her blows land 2 a second, with one Flare every 1.4 s reaching 2 foes at base.
-- She lights 0.3 Wicks a second, Wicks end 0.25 a second, she swaps 0.25 times a second, hops off a Wick 0.15 times a second and casts Kindle 0.2 times a second on 3 foes.
+- She lights 0.3 Wicks a second, Wicks end 0.25 a second, she warps 0.25 times a second, parries 0.1 times a second, hops off a Wick 0.15 times a second and casts Kindle 0.2 times a second on 3 foes.
 - Spells are cast at their recharge.
 
 | Skill | Risk, target | Level ups adding a property | L1 | L8 | L8 / L1 | Evolved | Band |
@@ -517,14 +523,14 @@ They are estimates from this play model and need a pass in the room once the kit
 | Pack Lunge | precise, one | stun, crit, need 2, heal | 32 | 190 | 6 | 570 | 175 to 210 |
 | Guttering | timed, crowd | 32 px, launch, wax, chill | 2.2 | 16 | 7.3 | 25 | 112 |
 | Chain Kindle | timed, crowd | radius, chain, stun, free | 6.3 | 44 | 7 | 90 | 112 |
-| Changeling Step | timed movement, crowd | charges, untouchable, line, dodge window, heal | 1.2 | 10 | 8 | 20 | 90 |
+| Changeling Step | timed movement, crowd | charges, longer candle, path, recharge, heal | 1.2 | 10 | 8 | 20 | 90 |
 | Wick Hop | timed movement, crowd | flare, two hops, rise, drop | 0 | 6.7 | movement only at L1 | 14 | 90 |
 | Procession | easy movement, crowd | beside, Wick walk, slow burn, cap | 0 | 9 | movement only at L1 | 15 | 56 |
 | Lamp Volley | easy spell, crowd | two bolts, pierce, ignite, 4 s recharge | 5.5 | 48 | 9 | 95 | 70 |
 | Wax Pool | timed spell, crowd | width, damage, faster bites, 8 s, two pools | 0 | 47 | control only at L1 | 90 | 112 |
 | Wax Effigy | timed spell, crowd | lure 130, faster bites, hold, ignite | 3.5 | 22 | 6.3 | 40 | 112 |
 | Singe | easy dot, crowd | own blows, 10 stacks, weak, 5 s | 5 | 35 | 7 | 75 | 77 to 98 |
-| Hot Wax | timed dot, crowd | 32 px, chill, relight, Swap | 7.9 | 51 | 6.4 | 100 | 123 to 157 |
+| Hot Wax | timed dot, crowd | 32 px, chill, block, warp | 7.9 | 51 | 6.4 | 100 | 123 to 157 |
 | Smoulder | timed dot, crowd | 3 s, thread, 32 px, spread | 6.6 | 44 | 6.7 | 95 | 123 to 157 |
 | Lampflies | easy summon, crowd | five flies, chill, stay 5 s (and 25%) | 2.7 | 52 | 19 | 110 | 70 |
 | Twin Wick | timed summon, crowd | faster bites, 10 s, two twins (and 55%) | 2.6 | 31 | 12 | 70 | 112 |
@@ -542,10 +548,10 @@ Its payoff lands on the Quarry only, so its crowd figure is the same as its one 
   Every figure grows with the number of Wicks she keeps standing (Deep Tallow, Procession, Twin Wick).
   The balance pass should measure her in the room before any number moves.
 
-### Thousand Candles
+### Great Wick
 
-Budgeted per cast against Great Wick, counted in S, Great Wick's one hit on every foe in its reach.
+Budgeted per cast against plain Great Wick, counted in S, its one swing on every foe in its reach.
 
-- Level 1: the candles deal 1.0 S, and three Wicks flaring for half of it reach about 40% of the foes each, another 0.6 S: about 1.6 S, with no Wicks left behind.
-- Level 8: the candles deal 3 S, the flares 1.8 S, and 3 s of Great Wicks biting three times as hard about 1 S: about 6 S, and the candles leave 4 Wicks, as much as Great Wick's top charge.
-- Evolved (Night of Lamps): every foe on the stage, about 1.5 times the foes in reach, takes the candles three times, 13.5 S, plus the flares and the Great Wicks: about 15 S.
+- Level 1: one swing at 1.3 S and one more Wick from the melt.
+- Level 8: two swings at 2.5 S, 5 S, and the candles at half a swing, 1.25 S: about 6.25 S on every foe in reach, plus the flares of the Wicks near foes, 3 s of Great Wicks biting three times as hard, and two more Wicks.
+- Evolved (Night of Lamps): two swings, 5 S, and every foe on the stage takes the candles three times at a full swing, 7.5 S: 12.5 S, plus the flares and the Great Wicks: about 15 S.

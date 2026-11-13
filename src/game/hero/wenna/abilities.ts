@@ -1,63 +1,69 @@
 import { BECKON, KINDLE } from "../../../constants/wenna/abilities";
-import type { WennaAbility } from "../../../types/wenna";
-import { skillLevel, skillValues } from "../../skills/query";
-import { createRotation } from "../../skills/rotation";
-import { pressBeckon } from "./beckon";
-import { pressKindle } from "./kindle";
+import type { AbilitySlot } from "../../../types/moveset";
+import { skillEvolved, skillLevel, skillValues } from "../../skills/query";
+import { hero } from "../../state";
+import { beckonReach, castBeckon } from "./beckon";
+import { castKindle, kindleMp, kindleTarget } from "./kindle";
+import { castLight, lightAffordable, lightCost } from "./light";
 import { wenna } from "./memory";
-import { pressSpell, spellWait } from "./spells/castSpell";
+import { castSpell, spellMp, spellWait, type WennaSpell } from "./spells/castSpell";
 
-/** her abilities on I in the order O turns through them: Kindle and Beckon from the start, then her spells */
-export const ABILITIES: readonly WennaAbility[] = ["kindle", "beckon", "w_lampVolley", "w_waxPool", "w_effigy"];
+/** Light, Kindle and Beckon: her abilities from the start */
+const BASE: readonly AbilitySlot[] = [
+  {
+    id: "light",
+    label: "LIGHT",
+    tint: "var(--wax)",
+    known: () => true,
+    wait: () => 0,
+    full: () => 0.01,
+    affordable: lightAffordable,
+    cast: castLight,
+    cost: () => `${Math.ceil(lightCost())} WX`,
+  },
+  {
+    id: "kindle",
+    label: "KINDLE",
+    known: () => true,
+    wait: () => wenna.kindleCd,
+    full: () => KINDLE.cooldown,
+    affordable: () => hero.mp >= kindleMp(false) && !!kindleTarget(),
+    cast: castKindle,
+  },
+  {
+    id: "beckon",
+    label: "BECKON",
+    known: () => true,
+    wait: () => wenna.beckonCd,
+    full: () => BECKON.cooldown,
+    affordable: () => hero.mp >= BECKON.mp && beckonReach(),
+    cast: () => castBeckon(),
+  },
+];
 
-/** an ability she has now: her own two always, a spell skill once held */
-const known = (id: WennaAbility): boolean => id === "kindle" || id === "beckon" || skillLevel(id) > 0;
+/** her spell skills on I and their tab labels */
+const SPELLS: readonly { id: WennaSpell; label: string }[] = [
+  { id: "w_lampVolley", label: "VOLLEY" },
+  { id: "w_waxPool", label: "POOL" },
+  { id: "w_effigy", label: "EFFIGY" },
+];
 
-const rotation = createRotation(ABILITIES, (id) => known(id as WennaAbility));
-
-/** the ability I uses now */
-export const selectedAbility = (): WennaAbility => (rotation.selected() as WennaAbility | null) ?? "kindle";
-
-/** O: turn to the next ability she has */
-export const nextAbility = (): boolean => rotation.next();
-
-/** a fresh run: back to Kindle */
-export const resetAbilities = (): void => rotation.reset();
-
-/** what an ability costs in MP */
-export function abilityMp(id: WennaAbility): number {
-  if (id === "kindle") return KINDLE.mp;
-  if (id === "beckon") return BECKON.mp;
-  return skillValues(id).mp ?? 0;
-}
-
-/** an ability's own recharge time, for the HUD */
-function abilityCooldown(id: WennaAbility): number {
-  if (id === "kindle") return KINDLE.cooldown;
-  if (id === "beckon") return BECKON.cooldown;
-  return skillValues(id).cooldown ?? 1;
-}
-
-/** seconds an ability still waits */
-function abilityWait(id: WennaAbility): number {
-  if (id === "kindle") return wenna.kindleCd;
-  if (id === "beckon") return wenna.beckonCd;
-  return spellWait(id);
-}
-
-/** the share of an ability's recharge still to run, 0 when ready */
-export const abilityRecharge = (id: WennaAbility): number => Math.min(1, abilityWait(id) / abilityCooldown(id));
-
-/** I: use the selected ability */
-export function pressAbility(): boolean {
-  const id = selectedAbility();
-  if (id === "kindle") return pressKindle();
-  if (id === "beckon") return pressBeckon();
-  return pressSpell(id);
-}
-
-/** every ability she knows, for the HUD */
-export const knownAbilities = (): WennaAbility[] => ABILITIES.filter(known);
+/** her abilities on I in the order O turns through them: Light, Kindle and Beckon, then the spell skills she holds */
+export const WENNA_SLOTS: readonly AbilitySlot[] = [
+  ...BASE,
+  ...SPELLS.map(
+    ({ id, label }): AbilitySlot => ({
+      id,
+      label,
+      known: () => skillLevel(id) > 0,
+      wait: () => spellWait(id),
+      full: () => Math.max(0.01, skillValues(id).cooldown ?? 1),
+      affordable: () => hero.mp >= spellMp(id),
+      cast: () => castSpell(id),
+      evolved: () => skillEvolved(id),
+    }),
+  ),
+];
 
 /** recharges run down */
 export function tickAbilities(recharge: number): void {

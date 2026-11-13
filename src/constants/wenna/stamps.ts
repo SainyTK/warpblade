@@ -32,7 +32,7 @@ export const DRIP_ART = [
   "..kkkk..",
 ] as const;
 
-/** a small candle: the ghost candle of Remembrance and each candle of Thousand Candles */
+/** a small candle: the ghost candle of Remembrance and each candle of Great Wick's field */
 export const CANDLE_ART = [
   "..kk..",
   ".kLWk.",

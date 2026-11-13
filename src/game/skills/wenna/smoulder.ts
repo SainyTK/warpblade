@@ -59,7 +59,7 @@ function burnStrip(x0: number, x1: number, y: number, seconds: number): void {
 }
 
 /**
- * Smoulder: both ends of a Swap burn for a while; with its levels the thread between burns too, the burn spreads on a
+ * Smoulder: both ends of a warp burn for a while; with its levels the thread between burns too, the burn spreads on a
  * kill, and Pyre Path leaves a burning trail along the thread.
  */
 export const smoulderSkill: SkillBehavior = {

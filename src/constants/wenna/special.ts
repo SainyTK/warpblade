@@ -17,4 +17,12 @@ export const GREAT_WICK = {
   wickLife: 8,
   /** the pose holds this long, then she is free while it swings */
   hold: 0.35,
+  /** her Great Wick skill: seconds between swings, the reach of each Wick's flare, and the candle field's candles: how
+   *  far apart they rise, how fast the rising runs out from her, how long each burns, and Night of Lamps' strikes */
+  again: 0.3,
+  flareReach: 40,
+  candleGap: 7,
+  candleSpeed: 600,
+  candleLife: 0.7,
+  nightStrikes: 3,
 } as const;

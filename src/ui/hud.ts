@@ -24,7 +24,6 @@ import { updateSandBar } from "./sandBar";
 import { updateTallisTabs } from "./tallisTabs";
 import { updateWarpTab } from "./warpTab";
 import { updateWaxBar } from "./waxBar";
-import { updateWennaTabs } from "./wennaTabs";
 
 const hp = byId("hpFill");
 const mp = byId("mpFill");
@@ -53,7 +52,6 @@ const pips = (n: number, lit: (i: number) => boolean): string =>
 /** sync the HTML overlay with the game, touching the DOM only when something shown has changed */
 export function updateHud(): void {
   updateAbilityTabs();
-  updateWennaTabs();
   updateTallisTabs();
   updateDebtBar();
   updateHeatBar();

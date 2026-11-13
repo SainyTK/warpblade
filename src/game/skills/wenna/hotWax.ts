@@ -3,7 +3,7 @@ import { PK } from "../../../types/particle";
 import type { SkillBehavior } from "../../../types/skillBehavior";
 import { enemyCenter } from "../../enemies/enemy";
 import { addStacks } from "../../enemies/skillStatus";
-import { game, particles, progress, rng } from "../../state";
+import { game, hero, particles, progress, rng } from "../../state";
 import { skillValues, withCharms } from "../query";
 
 const ID = "w_hotWax";
@@ -34,19 +34,24 @@ export function splashWax(x: number, y: number): void {
 }
 
 /**
- * Hot Wax: a Wick that lands from her lamp splashes the foes near it; with its levels relights and Swap arrivals splash
- * too. Candlemaker (in her drips) doubles the Wax a splashed foe drips.
+ * Hot Wax: her lantern spills hot wax. Flare Back splashes the foe she parried, and a Wick she lights splashes the foes
+ * round it; with its levels a blocked blow splashes the attacker and a warp's arrival splashes round her. Candlemaker
+ * (in her drips) doubles the Wax a splashed foe drips.
  */
 export const hotWaxSkill: SkillBehavior = {
   create: () => ({}),
   on: {
+    parry(_m, event) {
+      splashWax(event.fromX, hero.y);
+    },
+    block(_m, event) {
+      if (skillValues(ID).block) splashWax(event.fromX, hero.y);
+    },
     wick(_m, event) {
-      if (!event.lit) return;
-      const v = skillValues(ID);
-      if (event.cause === "light" || (event.cause === "relight" && v.relight)) splashWax(event.x, event.y);
+      if (event.lit && event.cause === "light") splashWax(event.x, event.y);
     },
     swap(_m, event) {
-      if (skillValues(ID).swap) splashWax(event.from.x, event.from.y);
+      if (skillValues(ID).warp) splashWax(event.to.x, event.to.y);
     },
   },
 };

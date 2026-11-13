@@ -5,7 +5,7 @@ import { GREAT_WICK } from "../../wenna/special";
 import { LIGHT } from "../../wenna/wax";
 import { CHARGE_POSE, HANG_LEGS, m, STANCE } from "./stance";
 
-/** K: the pole tipped back, then swung forward so the lantern throws its drop of flame ahead, and settled */
+/** Light: the pole tipped back, then swung forward so the lantern throws its drop of flame ahead, and settled */
 export const LIGHT_CLIP: ActionClip = {
   dur: LIGHT.dur,
   hit: LIGHT.release,
@@ -105,26 +105,6 @@ export const GREAT_CLIP: ActionClip = {
         bfx: -5,
       }),
     ],
-  ],
-};
-
-/** Thousand Candles: the lantern held straight up high at full reach, the body arched back and the far arm thrown wide */
-export const THOUSAND_CLIP: ActionClip = {
-  dur: frame(14),
-  hit: frame(6),
-  keys: [
-    [0, CHARGE_POSE],
-    [frame(5), { ...CHARGE_POSE, ny: -25, cb: -1, fy: -28, by: -23, bx: -3 }],
-    [
-      frame(6),
-      m({ hy: -14.5, ny: -25, nx: -0.5, cb: -1.5, fx: 6, fy: -31, sa: -1.57, bx: -8, by: -24, be: 0, ffx: 4, bfx: -4 }),
-      "snap",
-    ],
-    [
-      frame(10),
-      m({ hy: -14.3, ny: -24.8, nx: -0.3, cb: -1.2, fx: 6, fy: -30.5, sa: -1.57, bx: -7, by: -23, ffx: 4, bfx: -4 }),
-    ],
-    [frame(14), STANCE],
   ],
 };
 
