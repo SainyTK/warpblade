@@ -6,8 +6,6 @@ export interface KaelState {
   keenCount: number;
   /** seconds left in which every move is Keen (Peerless Edge) */
   freeKeen: number;
-  /** warps ready to throw (Warpcraft's charges) */
-  warpCharges: number;
   /** seconds before Blink Step can blink again, once it has its own recharge */
   blinkCd: number;
   /** seconds left in which back attacks hit harder after a phase cut */
@@ -16,7 +14,13 @@ export interface KaelState {
   passage: boolean;
   /** seconds before Rift Walker can chain again */
   chainCd: number;
-  /** seconds left of Endless Edges' storm round Kael */
+  /** crystals Crystal Aegis has set in the guard, shattered by the next parry */
+  plates: number;
+  /** seconds left in which a cast is a Spellblade cast, after a warp arrival (Spellwarp) */
+  spellwarp: number;
+  /** seconds before Arcane Arrival can cast for free again */
+  arcaneCd: number;
+  /** seconds left of Supernova's storm round Kael */
   stormLeft: number;
   /** Keen blows landed in the storm since its last cut, each a volley more */
   stormVolleys: number;

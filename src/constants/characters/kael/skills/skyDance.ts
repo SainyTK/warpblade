@@ -5,7 +5,7 @@ import { evolvedRow, levelRows } from "../../../../utils/skillRows";
  *  `gravity` the stomp drags flyers down, `meteor` the stomp bounces foes up, `stompReach` pixels each side */
 const LEVELS = levelRows([
   { text: "One more air hit: a stomp that knocks foes down.", values: { air: 1, stomp: 2.2, stompReach: 40 } },
-  { text: "New: L in the air dashes, once per jump.", values: { airDash: 1 } },
+  { text: "New: L dodges in the air too, once per jump.", values: { airDash: 1 } },
   { text: "New: after a double jump, the first air hit spins both ways.", values: { whirl: 1 } },
   { text: "Air hits +30%.", values: { airBonus: 0.3 } },
   { text: "New: the stomp drags airborne foes down with Kael.", values: { gravity: 1 } },
@@ -20,7 +20,7 @@ export const SKY_DANCE: SkillDef = {
   kind: "movement",
   risk: "timed",
   button: "jump",
-  text: "One more attack in the air, ending in a stomp, and later an air dash.",
+  text: "One more attack in the air, ending in a stomp, and later a dodge in the air.",
   levels: LEVELS,
   evolution: {
     partner: "k_reap",

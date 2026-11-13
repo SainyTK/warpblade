@@ -44,10 +44,15 @@ const SHARED_ACTION_TEXT: Record<InputAction, string> = {
 /** what each of Kael's actions does, as the Controls screen tells it */
 const KAEL_ACTION_TEXT: Record<InputAction, string> = {
   ...SHARED_ACTION_TEXT,
-  attack: "Sword combo of four hits, the same every time. Press again just as a blow lands for a Keen hit",
-  warp: "Warp strike: throw the sword and warp to it (10 MP). With Up held, warp to a crystal and hang",
-  guard: "Guard: hold to block blows from the front. Press just as a blow lands to parry with a riposte cut",
-  castWide: "Cast the selected spell in its wide form, for more MP",
+  up: "Jump. Press again in the air to jump again. Held with a long press of Attack, warp to a crystal and hang",
+  attack:
+    "Sword combo of four hits, the same every time. Press again just as a blow lands for a Keen hit. Just after a parry, blink to the attacker's back and strike",
+  warp: "Warp strike: throw the sword at the nearest foe ahead and warp to it (10 MP). With Up held, warp to a crystal and hang",
+  guard:
+    "Guard: hold to block blows from the front. Press just as a blow lands to parry: a riposte cut, then Attack blinks you behind the attacker",
+  cast: "Cast the selected ability: Crystal Lance, Crystal Burst or a spell you learn. If it is recharging, the next ready one goes",
+  castWide:
+    "Wide form for half again the MP: three lances, a burst that pulls foes in, a wall of fire, an ice field, a chain of bolts",
   cycle: "Switch ability: lance, burst and the spells you learn",
 };
 /** the rites O cycles through, as the controls name them */

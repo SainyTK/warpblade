@@ -8,10 +8,12 @@ import {
   ELEMENT_SKILL,
   KAEL_ABILITIES,
   LANCE,
+  LANCE_FAN,
   SPELLBLADE,
   WIDE_COST,
 } from "../../constants/spells";
 import { sfx } from "../../services/audio";
+import type { Enemy } from "../../types/enemy";
 import type { AbilitySlot } from "../../types/moveset";
 import { PK } from "../../types/particle";
 import type { KaelAbility } from "../../types/spell";
@@ -28,6 +30,8 @@ import { castIce } from "../spells/ice";
 import { game, hero, lights, particles, progress, rng } from "../state";
 import { isFree, leaveHang, setState } from "./actions";
 import { comboOpen, endCombo } from "./combo";
+import { spellwarpCostShare, spellwarpOpen } from "./kael/spellwarp";
+import { kael } from "./kael/state";
 
 /** the flare at the hand as a spell leaves it: small enough to leave Kael in view */
 const CAST_LIGHT = { radius: 24, strength: 0.45 } as const;
@@ -58,13 +62,14 @@ export function rechargeSpells(dt: number): void {
   for (const a of KAEL_ABILITIES) cd[a] = Math.max(0, cd[a] - dt);
 }
 
-/** I: cast `a`; with Spellblade in an open combo it leaves the hand at once and hits harder; held, its wide form */
-function startCast(a: KaelAbility, spellblade: boolean, wide: boolean): void {
+/** I: cast `a`; with Spellblade (in an open combo or just after a warp) it leaves the hand at once and hits harder;
+ *  held, its wide form */
+function startCast(a: KaelAbility, spellblade: boolean, wide: boolean, costShare: number): void {
   const h = hero;
   if (h.state === "hang") leaveHang();
   h.castAbility = a;
   h.castWide = wide;
-  h.mp -= castCost(a, wide);
+  h.mp -= castCost(a, wide) * costShare;
   h.spellCd[a] = recharge(a);
   h.spellCdFull[a] = h.spellCd[a];
   h.move = null;
@@ -78,17 +83,30 @@ function startCast(a: KaelAbility, spellblade: boolean, wide: boolean): void {
   emitSkillEvent({ type: "cast", ability: a });
 }
 
-/** I on `a`: Spellblade after the second hit of a combo, otherwise a cast from a free state or a crystal */
+/** I on `a`: Spellblade after the second hit of a combo or just after a warp (Spellwarp), otherwise a cast from a free
+ *  state or a crystal */
 function castFrom(a: KaelAbility, wide: boolean): boolean {
-  const spellblade = comboOpen(SPELLBLADE.after);
+  const afterWarp = !comboOpen(SPELLBLADE.after) && spellwarpOpen();
+  const spellblade = afterWarp || comboOpen(SPELLBLADE.after);
   if (!spellblade && !isFree() && hero.state !== "hang") return false;
-  if (hero.mp < castCost(a, false)) return false;
+  const share = afterWarp ? spellwarpCostShare() : 1;
+  if (hero.mp < castCost(a, false) * share) return false;
+  if (afterWarp) kael.spellwarp = 0;
   // held with MP for the plain form only, the plain form goes
-  startCast(a, spellblade, wide && hero.mp >= castCost(a, true));
+  startCast(a, spellblade, wide && hero.mp >= castCost(a, true) * share, share);
   return true;
 }
 
-/** Kael's abilities on I, in the order O turns through them: Crystal Lance and Crystal Burst, then the element spells */
+/** Arcane Arrival: `a` goes off from Kael's hand at once at `power`, with no MP, no recharge and no cast pose */
+export function castFree(a: KaelAbility, power: number): void {
+  const h = hero;
+  const hx = h.x + h.face * h.hand[0];
+  const hy = h.y + h.hand[1];
+  lights.add(hx, hy, CAST_LIGHT.radius, ABILITY_COLOR[a], CAST_LIGHT.strength, 0.2);
+  game.fx.push(createGlint(hx, hy, ABILITY_COLOR[a]));
+  release(a, hx, hy, power, false);
+}
+
 /** each ability's tab label and the colour it lights in when selected */
 const TAB: Readonly<Record<KaelAbility, { label: string; tint: string }>> = {
   lance: { label: "LANCE", tint: "var(--crystal)" },
@@ -98,6 +116,7 @@ const TAB: Readonly<Record<KaelAbility, { label: string; tint: string }>> = {
   volt: { label: "BOLT", tint: "var(--volt)" },
 };
 
+/** Kael's abilities on I, in the order O turns through them: Crystal Lance and Crystal Burst, then the element spells */
 export const KAEL_SLOTS: readonly AbilitySlot[] = KAEL_ABILITIES.map((a) => ({
   id: a,
   label: TAB[a].label,
@@ -110,24 +129,35 @@ export const KAEL_SLOTS: readonly AbilitySlot[] = KAEL_ABILITIES.map((a) => ({
   evolved: () => abilityEvolved(a),
 }));
 
-/** the ability leaves the hand */
-function release(a: KaelAbility, hx: number, hy: number, power: number): void {
+/** Crystal Lance, or held a fan of three lances that cut each foe once */
+function releaseLance(hx: number, hy: number, face: number, damage: number, wide: boolean): void {
+  if (!wide) {
+    game.fx.push(createCrystalWave(hx, hy, face, damage, "abilities"));
+    return;
+  }
+  const struck = new Set<Enemy>();
+  for (const rise of LANCE_FAN)
+    game.fx.push(createCrystalWave(hx, hy, face, damage, "abilities", undefined, { rise, struck }));
+}
+
+/** the ability leaves the hand, in its wide form when it was held */
+function release(a: KaelAbility, hx: number, hy: number, power: number, wide: boolean): void {
   const h = hero;
   switch (a) {
     case "lance":
-      game.fx.push(createCrystalWave(hx, hy, h.face, progress.stats.ap * LANCE.power * power, "abilities"));
+      releaseLance(hx, hy, h.face, progress.stats.ap * LANCE.power * power, wide);
       return;
     case "burst":
-      castBurst(power);
+      castBurst(power, wide);
       return;
     case "fire":
-      castFire(hx, hy, h.face, power);
+      castFire(hx, hy, h.face, power, wide);
       return;
     case "ice":
-      game.fx.push(castIce(h.x, h.y, h.face, power));
+      game.fx.push(castIce(h.x, h.y, h.face, power, wide));
       return;
     case "volt":
-      castBolt(h.x, h.y, h.face, power);
+      castBolt(h.x, h.y, h.face, power, wide);
   }
 }
 
@@ -157,5 +187,5 @@ export function runCast(): void {
   game.fx.push(createGlint(hx, hy, c));
   // an evolved spell: a second glint in white, larger, over its own
   if (abilityEvolved(a)) game.fx.push(createGlint(hx, hy, WHITE, SUNFLASK.glintGrow));
-  release(a, hx, hy, h.spellPower);
+  release(a, hx, hy, h.spellPower, h.castWide);
 }

@@ -53,6 +53,19 @@ export const KAEL_SKILL_BASE_ICONS: Record<string, (s: SpriteCanvas) => void> = 
     speedLines(s, 5, [4, 8], 4, C[3]);
     sword(s, 6, 6, 15, 6);
   },
+  /** the thrown sword trailing fire, frost and a spark of lightning */
+  k_spellwarp: (s) => {
+    speedLines(s, 1, [9, 13], 4, C[3]);
+    sword(s, 4, 13, 14, 3);
+    flame(s, 4, 9, 4);
+    sparkle(s, 9, 11, 1.5, PAL.ice[4]);
+    bolt(s, [
+      [11, 9],
+      [13, 11],
+      [12, 12],
+      [15, 14],
+    ]);
+  },
   /** a ghost in front of a foe, Kael behind it */
   k_blink: (s) => {
     figure(s, 3, 15, GHOST[3], GHOST[2]);
@@ -153,25 +166,20 @@ export const KAEL_SKILL_BASE_ICONS: Record<string, (s: SpriteCanvas) => void> = 
     sword(s, 13, 13, 3, 3, GHOST[4]);
     ring(s, 8, 8, 2, KEEN_RAMP[4]);
   },
-  /** three blades crossing */
-  k_edges: (s) => {
-    sword(s, 3, 13, 13, 3, C[4]);
-    sword(s, 13, 13, 3, 3, C[4]);
-    sword(s, 8, 15, 8, 1, PAL.volt[4]);
+  /** the sword held across in guard, crystals set along it */
+  k_aegis: (s) => {
+    sword(s, 1, 8, 15, 8);
+    gem(s, 5, 4, 2, 3);
+    gem(s, 9, 3, 2, 3);
+    gem(s, 13, 4, 2, 3);
   },
-  /** phantoms of Kael round a foe */
-  k_legion: (s) => {
-    figure(s, 3, 15, GHOST[4], GHOST[2]);
-    figure(s, 13, 15, GHOST[4], GHOST[2]);
-    figure(s, 8, 13, PAL.shadow[5], GHOST[3]);
-  },
-  /** a meteor falling in a fiery trail */
-  k_starfall: (s) => {
-    fill(s, () => {
-      for (let i = 0; i < 7; i++) s.dot(2 + i, 2 + i, 0.6 + i * 0.12, FIRE_RAMP[Math.max(1, 6 - i)]);
-    });
-    fill(s, () => s.dot(11, 11, 2.8, FIRE_RAMP[3]));
-    fill(s, () => s.set(10, 10, WHITE));
+  /** the nova ring round a crystal, a star falling into it and a phantom at its edge */
+  k_nova: (s) => {
+    ring(s, 8, 10, 5.5, C[3]);
+    gem(s, 8, 10, 3, 5);
+    figure(s, 14, 15, GHOST[4], GHOST[2]);
+    fill(s, () => s.stroke(2, 1, 5, 5, 0.4, C[3]));
+    sparkle(s, 5, 5, 1.5, WHITE);
   },
   /** Kael's attacks on the end of run screen: his crystal sword */
   kael_attacks: (s) => {
