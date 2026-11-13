@@ -15,19 +15,43 @@ function flyer(s: SpriteCanvas, x: number, y: number): void {
 
 /** Ysra's glaive attack icons and their evolved forms */
 export const GLAIVE_ICONS: Record<string, (s: SpriteCanvas) => void> = {
-  /** Deep Heft: the glaive drawn back while a coil of heat winds up behind it */
-  y_heft: (s) => {
-    arc(s, 4, 9, 3.5, 0.6, 5.6, EMBER[3]);
-    arc(s, 4, 9, 1.8, 0.6, 5.6, EMBER[5]);
-    glaive(s, 2, 9, 15, 9);
+  /** Ember Javelin: the glaive hurled point first at a foe, trailing fire */
+  y_javelin: (s) => {
+    foe(s, 13, 11, 2.4);
+    speedLines(s, 4, [9.5, 12.5], 3, EMBER[3]);
+    fill(s, () => {
+      s.set(3, 7, EMBER[4]);
+      s.set(5, 14, EMBER[5]);
+    });
+    glaive(s, 1, 14, 11, 4, true, 5);
   },
-  /** Rail Lance: the lunge run through a line of foes */
-  y_heft_evo: (s) => {
+  /** Rail Lance: the glaive through a line of foes, a rail of fire along it */
+  y_javelin_evo: (s) => {
     foe(s, 4, 10, 2.6);
     foe(s, 10, 10, 2.6);
-    speedLines(s, 4.5, [6.5, 14.5], 3, EMBER[3]);
-    speedLines(s, 15.5, [14.5], 6, EMBER[3]);
+    fill(s, () => seg(s, 0, 13, 15, 13, EMBER[4]));
+    fill(s, () => seg(s, 2, 13, 13, 13, EMBER[5]));
     glaive(s, 0, 10, 15, 10);
+    evolvedStar(s);
+  },
+  /** Haft Ward: the haft held upright, a blow stopped on it and fire lashing back */
+  y_ward: (s) => {
+    foe(s, 13, 9, 2.4);
+    fill(s, () => {
+      seg(s, 7, 8, 11, 6, EMBER[4]);
+      seg(s, 7, 10, 11, 12, EMBER[3]);
+      s.set(12, 5, EMBER[5]);
+    });
+    glaive(s, 5, 15, 5, 1, false, 5);
+    chevron(s, 9, 9, 1, 0, 2, EMBER[5]);
+  },
+  /** Temple Gate: the upright glaive inside a ring of fire */
+  y_ward_evo: (s) => {
+    arc(s, 8, 9, 6, Math.PI * 0.85, Math.PI * 2.15, EMBER[3]);
+    arc(s, 8, 9, 4.6, Math.PI * 0.9, Math.PI * 2.1, EMBER[5], 0.4);
+    ember(s, 2, 15, 5, -1);
+    ember(s, 14, 15, 5, 1);
+    glaive(s, 8, 15, 8, 1, false, 5);
     evolvedStar(s);
   },
   /** Impale: a foe pinned to the floor under the glaive */

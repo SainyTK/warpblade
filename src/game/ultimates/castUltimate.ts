@@ -26,10 +26,14 @@ import { castPhantomLegion } from "./phantomLegion";
 import { castPyreWave } from "./pyreWave";
 import { castQuakeDrop } from "./quakeDrop";
 import { castStarfall } from "./starfall";
-import { castSunspear } from "./sunspear";
 import { castTempest } from "./tempest";
 import { castThousandEdges } from "./thousandEdges";
+<<<<<<< HEAD
 import { castVolcanicRift } from "./volcanicRift";
+=======
+import { castTitanThrow } from "./titanThrow";
+import { castUnbroken } from "./unbroken";
+>>>>>>> SainyTK/moveset-ysra
 
 const ULTIMATES: Record<UltimateId, (level: number) => void> = {
   crystalNova: castCrystalNova,
@@ -38,8 +42,8 @@ const ULTIMATES: Record<UltimateId, (level: number) => void> = {
   phantomLegion: castPhantomLegion,
   starfall: castStarfall,
   tempest: castTempest,
-  sunspear: castSunspear,
-  volcanicRift: castVolcanicRift,
+  sunspear: castPyreWave,
+  volcanicRift: castPyreWave,
   boltStorm: castBoltStorm,
   deadeye: castDeadeye,
   quakeDrop: castQuakeDrop,

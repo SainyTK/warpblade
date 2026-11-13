@@ -7,7 +7,7 @@ export const HERO_SOURCES: ReadonlySet<SourceId> = new Set<SourceId>(["attacks",
 /** the icon of each hero's own sources on the end of run screen, by hero id; the ultimate shows the learned one's own icon when there is one */
 export const HERO_SOURCE_ICONS: Readonly<Record<string, Readonly<Record<HeroSource, string>>>> = {
   kael: { attacks: "kael_attacks", abilities: "kael_abilities", ultimate: "kael_ultimate" },
-  ysra: { attacks: "y_heft", abilities: "r_flare", ultimate: "y_sunspear" },
+  ysra: { attacks: "y_impale", abilities: "r_flare", ultimate: "y_pyre" },
   sable: { attacks: "sable_bolts", abilities: "sable_snare", ultimate: "sable_storm" },
   hulda: { attacks: "h_fists", abilities: "h_bellow", ultimate: "h_quake" },
   orrin: { attacks: "o_chain", abilities: "o_whirl", ultimate: "o_pendulum" },

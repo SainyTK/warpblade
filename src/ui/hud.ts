@@ -27,7 +27,6 @@ import { updateMomentumBar } from "./momentumBar";
 import { updateOrrinTabs } from "./orrinTabs";
 import { updateQuiverBar } from "./quiverBar";
 import { createRechargeTab } from "./rechargeTab";
-import { updateRiteTabs } from "./riteTabs";
 import { updateSandBar } from "./sandBar";
 import { updateTallisTabs } from "./tallisTabs";
 import { updateWarpTab } from "./warpTab";
@@ -61,7 +60,11 @@ const pips = (n: number, lit: (i: number) => boolean): string =>
 /** sync the HTML overlay with the game, touching the DOM only when something shown has changed */
 export function updateHud(): void {
   updateAbilityTabs();
+<<<<<<< HEAD
   updateRiteTabs();
+=======
+  updateHuldaTabs();
+>>>>>>> SainyTK/moveset-ysra
   updateOrrinTabs();
   updateWennaTabs();
   updateTallisTabs();

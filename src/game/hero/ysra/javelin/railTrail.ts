@@ -1,13 +1,13 @@
-import { glowLine, hairline, line, place } from "../../../../../engine/frame";
-import type { Effect } from "../../../../../types/effect";
-import { WHITE } from "../../../../../utils/color";
-import { skin } from "../../../skin";
+import { glowLine, hairline, line, place } from "../../../../engine/frame";
+import type { Effect } from "../../../../types/effect";
+import { WHITE } from "../../../../utils/color";
+import { skin } from "../../skin";
 
 /**
- * A streak of ember along the line a lunge ran, at blade height: white-hot at first, then cooling down her ramp from
- * the start of the line to the end. A rail pass draws it again, brighter.
+ * A streak of ember along the line she warped, at blade height: white-hot at first, then cooling down her ramp from the
+ * start of the line to the end. A rail pass back draws it brighter.
  */
-export function createLungeTrail(x0: number, x1: number, y: number, bright = false): Effect {
+export function createRailTrail(x0: number, x1: number, y: number, bright = false): Effect {
   const life = bright ? 0.3 : 0.4;
   let t = 0;
   return {

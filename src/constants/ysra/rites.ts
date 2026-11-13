@@ -1,7 +1,7 @@
 import type { RiteDef } from "../../types/ysra/pyre";
 
-/** Ysra's rites in tab order: Flare and Cinder Lash from the start, the others with their skills; O cycles through the
- *  ones she has. A skill's rite costs the Heat its level sets; Overheat spends all of it. */
+/** Ysra's rites in tab order, after her vault: Flare and Cinder Lash from the start, the others with their skills; O
+ *  turns through the ones she has. A skill's rite costs the Heat its level sets; Overheat spends all of it. */
 export const RITES: readonly RiteDef[] = [
   { id: "flare", name: "Flare", tab: "FLARE", cost: 30, tint: "#ffae48" },
   { id: "cinderLash", name: "Cinder Lash", tab: "LASH", cost: 25, tint: "#ff8a3a" },
@@ -9,6 +9,17 @@ export const RITES: readonly RiteDef[] = [
   { id: "brazier", name: "Brazier", tab: "BRAZIER", skill: "y_brazier", cost: 50, tint: "#e0a050" },
   { id: "overheat", name: "Overheat", tab: "OVERHEAT", skill: "y_overheat", cost: 60, tint: "#ffe08a" },
 ];
+
+/** the wide forms on I held: Flare's ring this much wider at this share of its power, throwing foes this much farther;
+ *  Cinder Lash each way at this share; Flame Pillar this many more pillars, on both sides, each at this share */
+export const RITE_WIDE = {
+  flareRadius: 1.7,
+  flarePower: 0.7,
+  flareThrow: 1.3,
+  lashShare: 0.75,
+  pillars: 2,
+  pillarShare: 0.5,
+} as const;
 
 /** Cinder Lash: a whip of fire lashed along the floor `reach` pixels ahead in `out` seconds, striking every foe on it
  *  for `power` times ability power and dragging the nearest `drag` pixels toward her */

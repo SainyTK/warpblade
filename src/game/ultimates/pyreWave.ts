@@ -12,11 +12,19 @@ import { createImpact } from "../effects/impact";
 import { ignite } from "../enemies/burn";
 import { enemyBox, enemyCenter } from "../enemies/enemy";
 import { skin } from "../hero/skin";
+import { ultimateValues } from "../hero/ultimate";
+import { pinFoe } from "../hero/ysra/pin";
+import { addHeat } from "../hero/ysra/pyre/heat";
 import { game, hero, lights, particles, progress, rng } from "../state";
 import { surfaceBelow } from "../world";
+import { eruptAlong, keepOpen } from "./pyreEruptions";
 
 /** how far the wall rolls at each level; level 4 crosses the whole stage */
 const RANGE = [90, 140, 200, 330] as const;
+/** Pyre Wave's skill: its second wave follows the first this long after, and the floor erupts this long after the wall
+ *  has rolled */
+const AGAIN_AFTER = 0.55;
+const ERUPT_AFTER = 0.15;
 /** the special is the weakest ultimate: this share of a level's power */
 const SHARE = 0.75;
 /** seconds to roll its whole way */
@@ -29,22 +37,31 @@ const FRONT_LIGHT = 0.1;
 const WALL_SPAN = PYRE_WALL.trail + PYRE_WALL.lead + PYRE_WALL.curl * 2 + 2;
 const FALLOFF = Float32Array.from({ length: WALL_SPAN * RES }, (_, i) => Math.exp(-i / RES / PYRE_WALL.falloff));
 
-/** Pyre Wave, Ysra's special: a wall of flame rolls out ahead of her, burning each foe it passes and leaving fires on the floor */
-export function castPyreWave(level: number): void {
-  const dir = hero.face;
-  const x0 = hero.x + dir * 6;
-  const floor = hero.ground ? hero.y : surfaceBelow(hero.x, hero.y);
-  const reach = RANGE[level - 1];
+/** what one wall needs: the charge level, the way it rolls, how far, its damage per foe, and where it starts */
+interface Wall {
+  level: number;
+  dir: number;
+  reach: number;
+  damage: number;
+  x0: number;
+  floor: number;
+  delay: number;
+}
+
+/** a wall of flame rolling out from x0, burning each foe it passes once and leaving fires on the floor; Pyre Wave's skill
+ *  pins the foes it burns and takes Heat from them */
+function rollWall(w: Wall, v: Readonly<Record<string, number>>): void {
+  const { level, dir, reach, damage, x0, floor } = w;
   const tall = 20 + level * 7;
-  const damage = ULT_LEVELS[level - 1].power * progress.stats.ad * SHARE;
   const struck = new Set<Enemy>();
   const licks = new Float32Array(WALL_SPAN * RES);
   let lastFire = x0;
-  let t = 0;
-  const front = () => x0 + dir * reach * ease.outCubic(Math.min(1, t / ROLL));
+  let t = -w.delay;
+  const front = () => x0 + dir * reach * ease.outCubic(Math.min(1, Math.max(0, t) / ROLL));
   const effect: Effect = {
     update(dt) {
       t += dt;
+      if (t < 0) return true;
       const fx = front();
       const live = t < ROLL;
       if (live) {
@@ -85,11 +102,14 @@ export function castPyreWave(level: number): void {
           source: "ultimate",
         });
         ignite(e, BURN);
+        if (v.pin) pinFoe(e, { time: v.pin, taken: v.taken ?? 0, burn: 0 });
+        if (v.heat) addHeat(v.heat);
         game.fx.push(createImpact(cx, cy, dir, level >= 3));
       }
       return t < ROLL + 0.3;
     },
     draw() {
+      if (t < 0) return;
       place();
       const fx = front();
       const k = 1 - Math.max(0, (t - ROLL) / 0.3);
@@ -123,4 +143,40 @@ export function castPyreWave(level: number): void {
     },
   };
   game.fx.push(effect);
+}
+
+/**
+ * Pyre Wave, Ysra's special: a wall of flame rolls out ahead of her, burning each foe it passes and leaving fires on the
+ * floor. Its skill makes it roll farther and harder, both ways, then erupt the floor it crossed, pin what it burns, roll
+ * a second time, cross the whole stage, and as Caldera keep the floor erupting.
+ */
+export function castPyreWave(level: number): void {
+  const v = ultimateValues();
+  const floor = hero.ground ? hero.y : surfaceBelow(hero.x, hero.y);
+  const reach = v.whole ? W : RANGE[level - 1] * (v.reach ?? 1);
+  const damage = ULT_LEVELS[level - 1].power * progress.stats.ad * SHARE * (v.power ?? 1);
+  const dirs = v.both ? [hero.face, -hero.face] : [hero.face];
+  for (const dir of dirs) {
+    const x0 = hero.x + dir * 6;
+    const end = Math.min(W - 4, Math.max(4, x0 + dir * reach));
+    const wall = { level, dir, reach, damage, x0, floor, delay: 0 };
+    rollWall(wall, v);
+    if (v.again) rollWall({ ...wall, damage: damage * v.again, delay: AGAIN_AFTER }, v);
+    if (v.erupt) afterRoll(() => eruptAlong(x0, end, floor, damage * v.erupt, v.heat ?? 0));
+    if (v.open) keepOpen(x0, end, floor, damage * v.eruption, v.open, v.heat ?? 0);
+  }
+}
+
+/** once the wall has rolled its way */
+function afterRoll(then: () => void): void {
+  let t = 0;
+  game.fx.push({
+    update(dt) {
+      t += dt;
+      if (t < ROLL + ERUPT_AFTER) return true;
+      then();
+      return false;
+    },
+    draw() {},
+  });
 }

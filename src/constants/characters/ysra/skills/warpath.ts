@@ -4,7 +4,7 @@ import { evolved, grow } from "./rows";
 /**
  * after: seconds of walking one way before the charge; shoulder: attack damage
  * multiple of a shoulder; launch: shoulders throw minions up; elites: bigger foes stagger and let her through; impale
- * and impale2: the running impale's two blows; block: blows from the front are braced; knock: seconds a shoulder
+ * and impale2: the running impale's two blows; block: blows from the front are blocked; knock: seconds a shoulder
  * knocks down; bowl: the carried foe's damage to those it hits (0 off); gather: the evolved charge carries every
  * minion, slammed for slam
  */

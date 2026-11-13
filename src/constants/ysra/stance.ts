@@ -17,8 +17,11 @@ export const VAULT = {
   /** pixels from the press to the landing on flat floor */
   travel: 70,
   gravity: 1.35,
-  /** seconds between vaults, shown on the HUD tab; a little longer than a vault on flat floor takes, so vaults chain */
+  /** seconds between vaults, shown on its ability tab; a little longer than a vault on flat floor takes, so vaults chain */
   cooldown: 0.95,
+  /** I held: the high vault rises this far and carries her this far, over a big foe */
+  highPeak: 58,
+  highTravel: 100,
   /** nothing touches her from the plant until this many seconds past the top of the arc */
   guardPastPeak: frame(3),
   /** the pose shown last crosses into the vault's first keys over this many frames, before the plant's stab */
@@ -58,31 +61,18 @@ export const CRASH = {
   impactKey: frame(8),
 } as const;
 
-/** the brace and its parry */
-export const BRACE = {
-  /** stamina per blocked blow */
-  blockCost: 12,
-  /** a blow in this long after the press is a parry; Counter Thrust widens it */
-  parryWindow: 0.12,
-  /** the attacker reels this long; bosses half as long */
-  parryStun: 1,
-  /** world slow motion after a parry, in seconds */
-  parrySlow: 0.35,
-  /** Counter Thrust: J is the counter for this long after a parry */
+/** her guard on K: a firm block that costs little and lets little through, and a parry that opens the counter */
+export const GUARD = {
+  /** share of a blocked blow she still takes, and stamina per block */
+  chip: 0.1,
+  blockCost: 9,
+  /** J is the counter thrust for this long after a parry */
   counterTime: 0.8,
-  /** a blow from within this many pixels behind her middle still counts as the front */
-  frontSlack: 2,
-  /** the parry knocks aside a foe within this many pixels of where the blow came from */
-  attackerReach: 40,
-  /** pushed back this fast by a block */
-  pushback: 110,
-  /** after a block or parry, more blows from the front in this long are taken without cost */
-  shieldTime: 0.22,
-  /** stamina a parry gives back */
-  parryRefund: 25,
+  /** Heat a parry gives */
+  parryHeat: 12,
 } as const;
 
-/** L with a side held away: a low hop back that nothing touches at first */
+/** a side held away while she guards: a low hop back that nothing touches at first */
 export const BACKSTEP = {
   distance: 36,
   /** pixels of the hop */
@@ -122,8 +112,9 @@ export const VAULT_TIMES = (() => {
   const land = VAULT.plant + airtime(VAULT.peak, VAULT.gravity);
   return { launch: VAULT.plant, tuck: VAULT.plant + frame(2), land, end: land + VAULT.recover };
 })();
-/** her speed along the floor in the vault's flight, so the flight covers VAULT.travel */
+/** her speed along the floor in the vault's flight, so the flight covers VAULT.travel; the high vault's covers its own */
 export const VAULT_SPEED = VAULT.travel / (VAULT_TIMES.land - VAULT_TIMES.launch);
+export const HIGH_VAULT_SPEED = VAULT.highTravel / airtime(VAULT.highPeak, VAULT.gravity);
 
 /** the dive's clip: the tuck, the drop held until the floor, the blow into it and the pull out */
 export const DIVE_TIMES = {
@@ -141,15 +132,6 @@ export const BACKSTEP_TIMES = (() => {
 /** her speed back along the floor in the hop, so the hop covers BACKSTEP.distance */
 export const BACKSTEP_SPEED = BACKSTEP.distance / BACKSTEP_TIMES.land;
 
-/**
- * The brace clip in segments: raising the guard, a held loop that breathes, the jolt of a block and the snap of a
- * parry. Each segment goes back into the loop when it ends.
- */
-export const BRACE_TIMES = {
-  loopFrom: frame(4),
-  loopTo: frame(40),
-  block: frame(40),
-  blockEnd: frame(48),
-  parry: frame(48),
-  parryEnd: frame(62),
-} as const;
+/** Haft Ward: a held guard burns foes pressed against it every `every` seconds, this far ahead of her feet; Temple Gate's
+ *  ring bursts at most once every `ringEvery` seconds */
+export const WARD = { every: 0.4, reach: 18, height: 34, ringEvery: 0.5 } as const;
