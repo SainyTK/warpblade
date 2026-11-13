@@ -7,6 +7,7 @@ import { isFree } from "./actions";
 import { comboOpen, endCombo, pressAttack } from "./combo";
 import { jump } from "./jump";
 import { blink } from "./kael/blink";
+import { pressCounter } from "./kael/counter";
 import { kael } from "./kael/state";
 import { warpCost, warpReady } from "./warp";
 
@@ -42,11 +43,12 @@ function pressBlink(): boolean {
   return false;
 }
 
-/** Kael's own presses: jump, a double tap to run, the sword string on J tapped and Blink Step on J held mid-combo. The
- *  shared moveset (warp, guard, dodge, abilities, ultimate) is read by updateHero. */
+/** Kael's own presses: jump, a double tap to run, J tapped for the counter a parry opened or else the sword string, and
+ *  Blink Step on J held mid-combo. The shared moveset (warp, guard, dodge, abilities, ultimate) is read by updateHero. */
 export function readActions(_dir: number, tap: number): void {
   use("up", jump);
   if (tap) doubleTap(tap);
+  use("attack", pressCounter);
   use("attack", pressAttack);
   use("warp", pressBlink);
 }

@@ -4,9 +4,11 @@ import { chooseMove } from "../../../utils/comboChoice";
 import { registerDamageHooks } from "../../damageHooks";
 import { readActions } from "../readActions";
 import { KAEL_SLOTS } from "../spell";
+import { drawAegis } from "./aegis";
 import { afterStrike } from "./afterStrike";
 import { tickChain } from "./blink";
 import { hitBonus, takenBonus } from "./bonus";
+import { drawCounter, openCounter, tickCounter } from "./counter";
 import { KAEL_GUARD } from "./guardStyle";
 import { alwaysKeen, keenWindow } from "./keen";
 import { resetMotion } from "./motion";
@@ -18,11 +20,12 @@ import { KAEL_WARP } from "./warpStyle";
 registerDamageHooks("kael", { hitBonus, takenBonus });
 
 /** Kael: a fixed sword string his skills reshape, the crystal sword's warp with crystal hangs, a sword guard whose
- *  parry primes a riposte, the dash, and crystal and element abilities */
+ *  parry cuts back and opens a counter blink, the shared dodge, and crystal and element abilities */
 export const KAEL_KIT: HeroKit = {
   tick: (dt) => {
     tickKaelState(dt);
     tickChain(dt);
+    tickCounter(dt);
   },
   readActions,
   warp: KAEL_WARP,
@@ -36,6 +39,10 @@ export const KAEL_KIT: HeroKit = {
   keenWindow,
   alwaysKeen,
   absorbHurt: () => false,
+  draw: () => {
+    drawAegis();
+    drawCounter();
+  },
   stride: (running) => (running ? STRIDE.run : STRIDE.walk),
   hurtScale: () => 1,
   drivesMotion: () => false,
@@ -43,5 +50,6 @@ export const KAEL_KIT: HeroKit = {
   reset: () => {
     resetMotion();
     resetKaelState();
+    openCounter(null);
   },
 };

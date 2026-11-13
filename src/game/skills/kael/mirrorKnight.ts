@@ -21,8 +21,9 @@ import { foesOnScreen } from "../targets";
 import { copyPower } from "./copyPower";
 
 const ID = "k_mirror";
-/** how far the knight looks for foes, the seconds between its warps, and the slash of its strike */
-const KNIGHT = { reach: 160, gap: 0.12, show: 0.35 } as const;
+/** how far the knight looks for foes, the seconds between its warps, how long it shows, and how near where a parried
+ *  blow came from its attacker stands */
+const KNIGHT = { reach: 160, gap: 0.12, show: 0.35, attacker: 40 } as const;
 const KNIGHT_SLASH = { cx: 2, cy: -20, R: 24, sy: 0.55, rot: -0.4, a0: -2.5, a1: 0.9, W: 9, hold: 0.05, trail: 0.24 };
 /** Perfect Reflection: how long the world stands still */
 const REFLECT_SLOW = 0.6;
@@ -93,7 +94,36 @@ function reflect(): void {
   shake(0.4, 4);
 }
 
-/** Mirror Knight: a perfect dodge calls a mirror knight that warp-strikes the nearest foes; later it stays and copies
+/** the foe a parried blow came from, nearest that side of Kael */
+function attackerNear(fromX: number): Enemy | null {
+  return (
+    foesOnScreen()
+      .filter((e) => Math.abs(e.x - fromX) <= KNIGHT.attacker)
+      .sort((a, b) => Math.abs(a.x - fromX) - Math.abs(b.x - fromX))[0] ?? null
+  );
+}
+
+/** a parry or a perfect dodge calls the knight: it warp-strikes the attacker first (a parry's), then the nearest foes;
+ *  as Perfect Reflection the world stands still instead */
+function summon(m: KnightMemory, evolved: boolean, attacker: Enemy | null): void {
+  const v = skillValues(ID);
+  if (m.cd > 0) return;
+  m.cd = withCharms("cooldown", v.cooldown);
+  if (v.stay) m.stay = withCharms("duration", v.stay);
+  if (evolved) {
+    reflect();
+    return;
+  }
+  m.x = hero.x;
+  m.y = hero.y;
+  const near = foesOnScreen()
+    .filter((e) => e !== attacker && Math.abs(e.x - hero.x) <= KNIGHT.reach)
+    .sort((a, b) => Math.abs(a.x - hero.x) - Math.abs(b.x - hero.x));
+  m.queue = (attacker ? [attacker, ...near] : near).slice(0, v.targets);
+  m.next = 0;
+}
+
+/** Mirror Knight: a parry or a perfect dodge calls a mirror knight that warp-strikes the nearest foes; later it stays and copies
  *  Kael's blows; as Perfect Reflection the world stands still while both strike everything near */
 export const mirrorKnight: SkillBehavior = {
   create: () => ({ cd: 0, queue: [], next: 0, x: 0, y: 0, stay: 0 }),
@@ -110,22 +140,16 @@ export const mirrorKnight: SkillBehavior = {
   },
   on: {
     perfectDodge(memory, _ev, state) {
-      const m = memoryOf(memory);
+      summon(memoryOf(memory), state.evolved, null);
+    },
+    parry(memory, ev, state) {
+      // Riposte after a perfect dodge is set by the dodge itself; after a parry, here
       const v = skillValues(ID);
-      if (m.cd > 0) return;
-      m.cd = withCharms("cooldown", v.cooldown);
-      if (v.stay) m.stay = withCharms("duration", v.stay);
-      if (state.evolved) {
-        reflect();
-        return;
+      if (v.riposte) {
+        hero.riposte = Math.max(hero.riposte, withCharms("duration", v.ripTime));
+        hero.riposteBlows = Math.max(hero.riposteBlows, v.ripBlows);
       }
-      m.x = hero.x;
-      m.y = hero.y;
-      m.queue = foesOnScreen()
-        .filter((e) => Math.abs(e.x - hero.x) <= KNIGHT.reach)
-        .sort((a, b) => Math.abs(a.x - hero.x) - Math.abs(b.x - hero.x))
-        .slice(0, v.targets);
-      m.next = 0;
+      summon(memoryOf(memory), state.evolved, attackerNear(ev.fromX));
     },
     blow(memory, ev) {
       const m = memoryOf(memory);
