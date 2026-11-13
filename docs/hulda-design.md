@@ -168,6 +168,10 @@ After the skill rework (7 November 2026) the skilled bot reached wave 5 with 18 
 After the movement pass (11 November 2026, the slower pace and the staggering combo layer included) the mash bot falls on wave 4 with 13 kills and the skilled bot on wave 10 with 50 kills; on the commit before the pass they fell on waves 4 and 5.
 The bots never grab, throw or rush on purpose, so they show her floor; a player who grabs fliers out of the air and throws foes into each other does far better.
 
+After the moveset rework (13 November 2026) the mash bot falls on wave 5 with 18 kills and the skilled bot on wave 9 with 36 kills; on the core commit before her rework they fell on wave 5 with 14 kills and wave 5 with 18 kills.
+The skilled bot now holds J for the chain warp, which seizes the opening wave's moths out of the air and slams them, and casts Bull Rush and Bellow from I.
+It never guards, so Iron Catch is all upside a bot does not use.
+
 ## Shop items and kit hooks
 
 - Vitality: her HP.
