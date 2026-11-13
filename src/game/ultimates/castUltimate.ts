@@ -2,20 +2,9 @@ import { sfx } from "../../services/audio";
 import type { UltimateId } from "../../types/skill";
 import { WHITE } from "../../utils/color";
 import { createFloorRing } from "../effects/floorRing";
-<<<<<<< HEAD
 import { castBerserk } from "../hero/brannoc/berserk";
 import { castDrumroll } from "../hero/jory/drumroll";
-import { castEternalNoon, castHourOfStillness } from "../hero/mirel/hour";
-=======
-import { castBerserk, castUnendingRage } from "../hero/brannoc/berserk";
-import { castDrumroll, castGrandFinale } from "../hero/jory/drumroll";
-<<<<<<< HEAD
 import { castHourOfStillness } from "../hero/mirel/hour";
->>>>>>> SainyTK/moveset-mirel
-import { castMaelstrom } from "../hero/orrin/maelstrom";
-=======
-import { castEternalNoon, castHourOfStillness } from "../hero/mirel/hour";
->>>>>>> SainyTK/moveset-orrin
 import { castGrandPendulum } from "../hero/orrin/pendulum";
 import { skin } from "../hero/skin";
 import { castEclipse, castGloaming } from "../hero/tallis/gloaming";
@@ -32,12 +21,6 @@ import { castQuakeDrop } from "./quakeDrop";
 import { castStarfall } from "./starfall";
 import { castTempest } from "./tempest";
 import { castThousandEdges } from "./thousandEdges";
-<<<<<<< HEAD
-import { castVolcanicRift } from "./volcanicRift";
-=======
-import { castTitanThrow } from "./titanThrow";
-import { castUnbroken } from "./unbroken";
->>>>>>> SainyTK/moveset-ysra
 
 const ULTIMATES: Record<UltimateId, (level: number) => void> = {
   crystalNova: castCrystalNova,
