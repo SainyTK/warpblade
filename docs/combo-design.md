@@ -64,7 +64,9 @@ Each hero's ground string must hold to these, measured on a lone walker (a thorn
 - J on the ground plays the same string in the same order wherever the foes stand: in front, behind, on both sides, in the air or lying down.
 - No blow turns Kael around; he faces where the player last pointed.
 - A heavy blow that drives a foe into the edge of the stage bounces it back off the wall and into the air.
-- No skill asks for a direction, a dash or a double tap during or after a combo; the old extended inputs (launcher, low sweep, Phase Finish, Skybreaker, dash strike, running thrust, meteor drop) were folded into the string's own hits, the dash and the warp.
+- No skill asks for a direction, a dash or a double tap during or after a combo; the old extended inputs (launcher, low sweep, Phase Finish, Skybreaker, dash strike, running thrust, meteor drop) were folded into the string's own hits, the dodge and the warp.
+- J held is the warp (Blink Step in an open combo with that skill), and a long press never also plays a string blow.
+- K is the guard: a parry cuts a riposte at once, and a J pressed in the next 0.7 seconds is a counter that blinks Kael to the attacker's back and strikes it, a sure critical hit.
 - The Critical and Double timing idea becomes Keen timing: a J pressed in the short moment after a blow lands makes the next blow a sure critical hit.
 - Mashing spoils Keen timing, because any J pressed before the current blow has landed cancels it, so rhythm pays and mashing does not.
 - Air attacks share no shape with the ground string, and each holds a three-frame wind-up before its strike: a wheel slash that circles his whole body while he rolls in a ball, a scissor cut that lays him back with one leg kicked high and sweeps the blade under his feet, and a stomp that drops him feet first with his arms thrown up.
