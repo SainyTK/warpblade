@@ -22,27 +22,19 @@ const fresh = (): BrannocMemory => ({
   link: 0,
   glint: 0,
   hatchets: 1,
-  headlongs: 1,
   frenzyT: 0,
   frenzyWait: 0,
-  huntWait: 0,
-  huntDir: 1,
-  huntGoal: 0,
-  huntFound: false,
-  huntGhosts: 0,
-  quickChop: false,
-  freeHunt: 0,
   cryCd: 0,
   crescentCd: 0,
   geyserCd: 0,
   axeCd: 0,
   pactCd: 0,
-  casting: "warCry",
+  casting: "frenzy",
+  castWide: false,
   pactT: 0,
   pactFirst: false,
   berserkT: 0,
   berserkLevel: 0,
-  unending: false,
   cleaves: 0,
   repaid: 0,
   repaidSwing: -1,
@@ -50,13 +42,13 @@ const fresh = (): BrannocMemory => ({
   steamT: 0,
 });
 
-const freshHost = (): BrannocHostMemory => ({ quarry: null, from: 0, passed: [] });
+const freshHost = (): BrannocHostMemory => ({ from: 0, air: false });
 
 /** the one owner of what Brannoc's kit remembers; the guest's HUD reads the debt and the abilities from it */
 export const brannoc: BrannocMemory = fresh();
 rememberPerSeat(objectMemory(brannoc));
 
-/** the foes his kit holds on to, kept to the host */
+/** where his warp left from, kept to the host */
 export const brannocHost: BrannocHostMemory = freshHost();
 rememberPerSeat(objectMemory(brannocHost, true));
 

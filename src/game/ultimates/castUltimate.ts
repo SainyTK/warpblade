@@ -2,7 +2,7 @@ import { sfx } from "../../services/audio";
 import type { UltimateId } from "../../types/skill";
 import { WHITE } from "../../utils/color";
 import { createFloorRing } from "../effects/floorRing";
-import { castBerserk, castUnendingRage } from "../hero/brannoc/berserk";
+import { castBerserk } from "../hero/brannoc/berserk";
 import { castDrumroll, castGrandFinale } from "../hero/jory/drumroll";
 import { castEternalNoon, castHourOfStillness } from "../hero/mirel/hour";
 import { castMaelstrom } from "../hero/orrin/maelstrom";
@@ -52,7 +52,7 @@ const ULTIMATES: Record<UltimateId, (level: number) => void> = {
   drumroll: castDrumroll,
   grandFinale: castGrandFinale,
   berserk: castBerserk,
-  unendingRage: castUnendingRage,
+  unendingRage: castBerserk,
 };
 
 /** a burst of light from the hero, bigger each level, then the ultimate itself; level 4 lights up the sky */

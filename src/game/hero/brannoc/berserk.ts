@@ -12,10 +12,12 @@ import { createFloorRing } from "../../effects/floorRing";
 import { createQuakeLine } from "../../effects/quakeLine";
 import { enemyCenter } from "../../enemies/enemy";
 import { emitSkillEvent } from "../../skills/events";
-import { skillValues, withCharms } from "../../skills/query";
+import { withCharms } from "../../skills/query";
 import { game, hero, lights, progress } from "../../state";
 import { newSwing, shake } from "../../world";
 import { setState, settle } from "../actions";
+import { ultimateValues } from "../ultimate";
+import { repayAll } from "./debt";
 import { brannoc } from "./memory";
 import { smear } from "./smear";
 
@@ -37,29 +39,19 @@ function pushOut(e: Enemy, to: number): void {
   });
 }
 
-function begin(level: number, unending: boolean): void {
+/** U: Berserk at a charge level, as the Berserk skill shapes it */
+export function castBerserk(level: number): void {
   brannoc.berserkLevel = level;
-  brannoc.unending = unending;
   brannoc.berserkT = 0;
   hero.vx = 0;
   setState("roar");
   roar();
 }
 
-/** U: Berserk at a charge level */
-export function castBerserk(level: number): void {
-  begin(level, false);
-}
-
-/** Unending Rage: Berserk that lasts longer, a wider and harder Last Cleave that strikes more than once */
-export function castUnendingRage(level: number): void {
-  begin(level, true);
-}
-
-/** the roar: a crimson ring that pushes minions out, and with Unending Rage's level a stun on every foe in it */
+/** the roar: a crimson ring that pushes minions out, and with the Berserk skill's level a stun on every foe in it */
 function roar(): void {
   const r = withCharms("area", BERSERK.ring);
-  const stun = brannoc.unending ? (skillValues("b_unending").stun ?? 0) : 0;
+  const stun = ultimateValues().stun ?? 0;
   for (const e of game.enemies) {
     if (e.hp <= 0) continue;
     const [cx, cy] = enemyCenter(e);
@@ -73,9 +65,8 @@ function roar(): void {
   shake(0.25, 2.5);
 }
 
-/** seconds of Berserk for the charge level, longer with Unending Rage */
-const lasts = (level: number): number =>
-  BERSERK.time[level - 1] + (brannoc.unending ? (skillValues("b_unending").extra ?? 0) : 0);
+/** seconds of Berserk for the charge level, longer with the Berserk skill */
+const lasts = (level: number): number => BERSERK.time[level - 1] + (ultimateValues().extra ?? 0);
 
 /** the roar under way; untouchable through it, then Berserk begins */
 export function runRoar(): void {
@@ -86,10 +77,10 @@ export function runRoar(): void {
   settle();
 }
 
-/** Last Cleave: the ring of the level, wider and harder with Unending Rage */
+/** Last Cleave: the ring of the level, wider and harder with the Berserk skill */
 function lastCleaveRing(): void {
   const level = brannoc.berserkLevel;
-  const v = brannoc.unending ? skillValues("b_unending") : {};
+  const v = ultimateValues();
   const r = withCharms("area", BERSERK.rings[level - 1] * (1 + (v.wider ?? 0)));
   const power = ULT_LEVELS[level - 1].power * BERSERK.share * (progress.stats.ad + progress.stats.ap) * (v.power ?? 1);
   newSwing();
@@ -135,9 +126,9 @@ function worldEnder(power: number): void {
   );
 }
 
-/** Berserk is over: the automatic Last Cleave, one strike or Unending Rage's several */
+/** Berserk is over: the automatic Last Cleave, one strike or the Berserk skill's several */
 function startLastCleave(): void {
-  brannoc.cleaves = brannoc.unending ? (skillValues("b_unending").strikes ?? 1) : 1;
+  brannoc.cleaves = ultimateValues().strikes ?? 1;
   hero.vx = 0;
   setState("lastCleave");
   emitSkillEvent({ type: "berserk", on: false, level: brannoc.berserkLevel });
@@ -151,6 +142,8 @@ export function runLastCleave(): void {
     h.hitDone = true;
     brannoc.cleaves--;
     lastCleaveRing();
+    // the Berserk skill's level: the last strike wins back the whole debt
+    if (brannoc.cleaves <= 0 && ultimateValues().settle) repayAll(null);
   }
   if (h.st < BERSERK.spin) return;
   if (brannoc.cleaves > 0) {
@@ -170,10 +163,10 @@ export function tickBerserk(dt: number): void {
   startLastCleave();
 }
 
-/** Unending Rage: each kill in Berserk makes it last longer */
+/** the Berserk skill: each kill in Berserk makes it last longer */
 export function extendOnKill(): void {
-  if (brannoc.berserkT <= 0 || !brannoc.unending) return;
-  brannoc.berserkT += skillValues("b_unending").extend ?? 0;
+  if (brannoc.berserkT <= 0) return;
+  brannoc.berserkT += ultimateValues().extend ?? 0;
 }
 
 /** nothing touches him through the roar and the Last Cleave's spin */

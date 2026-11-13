@@ -7,7 +7,6 @@ import { canAffordUlt, ultRecharge } from "../game/hero/ultimate";
 import { game, hero, progress } from "../game/state";
 import { xpToNext } from "../utils/progression";
 import { updateAbilityTabs } from "./abilityTabs";
-import { updateBrannocTabs } from "./brannocTabs";
 import { updateBuildStrip } from "./buildStrip";
 import { updateCoinCount } from "./coinCount";
 import { updateDebtBar } from "./debtBar";
@@ -66,7 +65,6 @@ export function updateHud(): void {
   updateWennaTabs();
   updateTallisTabs();
   updateJoryTabs();
-  updateBrannocTabs();
   updateDebtBar();
   updateHeatBar();
   updateGritBar();

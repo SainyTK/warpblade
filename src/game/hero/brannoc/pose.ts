@@ -1,18 +1,16 @@
-import { HUNT } from "../../../constants/brannoc/moves";
 import { STATE_CLIPS } from "../../../constants/clips";
 import { AXE_CLIPS, REAP_TURN_KEYS } from "../../../constants/clips/brannoc/axe";
+import { BRANNOC_GUARD_CLIP } from "../../../constants/clips/brannoc/guard";
 import {
   CRESCENT_CLIP,
   CRY_CLIP,
   FRENZY_CLIP,
-  HEADLONG,
-  HUNT_LOAD,
-  HUNT_LUNGE,
   LAST_CLEAVE_CLIP,
   ROAR_POSE,
   SPELL_CLIP,
 } from "../../../constants/clips/brannoc/moves";
 import { BLOODIED_IDLE, BRANNOC_IDLE, CHARGE_POSE } from "../../../constants/clips/brannoc/stance";
+import { HUNT_THROW_CLIP, HUNT_WAIT_CLIP } from "../../../constants/clips/brannoc/warp";
 import { LANDING } from "../../../constants/kael/motion";
 import type { Hero } from "../../../types/hero";
 import type { ActionClip, Pose } from "../../../types/pose";
@@ -43,6 +41,12 @@ function shouldered(h: Hero, p: Pose): Pose {
 /** a clip at its time, held on its last key */
 const play = (h: Hero, clip: ActionClip): Pose => sampleKeys(clip.keys, Math.min(h.st, clip.dur));
 
+/** the warp's arrival: the Hunt chop from the moment the axe is buried in the foe, ripped out and brought round */
+const huntChop = (h: Hero): Pose => {
+  const clip = AXE_CLIPS.huntChop;
+  return sampleKeys(clip.keys, Math.min(h.st + clip.hit, clip.dur));
+};
+
 /** the axe blow under way: the Bloodied Cleave has its own clip, and Spinning Reap's turns loop the turn */
 function axePose(h: Hero): Pose {
   if (reaping()) return sampleKeys(REAP_TURN_KEYS, reapShare());
@@ -57,12 +61,16 @@ function statePose(h: Hero, t: number, fresh: boolean, dt: number): Pose {
       return axePose(h);
     case "hatchet":
       return play(h, AXE_CLIPS.hatchet);
-    case "hunt":
-      return h.st < HUNT.load ? HUNT_LOAD : HUNT_LUNGE;
-    case "headlong":
-      return HEADLONG;
-    case "huntChop":
-      return play(h, AXE_CLIPS.huntChop);
+    case "warpStrike":
+      return huntChop(h);
+    case "throw":
+      return play(h, HUNT_THROW_CLIP);
+    case "throwWait":
+      return sampleKeys(HUNT_WAIT_CLIP.keys, h.st % HUNT_WAIT_CLIP.dur);
+    case "guard":
+      return sampleKeys(BRANNOC_GUARD_CLIP.keys, h.st);
+    case "dash":
+      return clipPose(h, t);
     case "frenzy":
       return play(h, FRENZY_CLIP);
     case "abilityCast":
