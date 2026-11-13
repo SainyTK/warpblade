@@ -1,7 +1,10 @@
 import type { InputAction } from "./input";
 
 /** The actions that have a button on the touch controller. */
-export type TouchButtonAction = Extract<InputAction, "attack" | "up" | "dash" | "warp" | "cast" | "cycle" | "ultimate">;
+export type TouchButtonAction = Extract<
+  InputAction,
+  "attack" | "up" | "dash" | "guard" | "cast" | "cycle" | "ultimate"
+>;
 
 /** One action button: what it does and where it sits around the attack button. */
 export interface TouchButtonSpec {

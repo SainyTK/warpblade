@@ -1,7 +1,7 @@
 import { HERO_LEVEL_POWER } from "../constants/growth";
-import type { Build, BuildStats } from "../types/build";
+import type { BuildStats } from "../types/build";
 import type { CharacterDef } from "../types/character";
-import type { SkillLevel, UltimateId } from "../types/skill";
+import type { SkillLevel } from "../types/skill";
 import type { StatKey, Stats } from "../types/stats";
 
 export const STAT_KEYS: readonly StatKey[] = ["ad", "ap", "hp", "mp", "stamina", "crit", "move", "aspd", "haste"];
@@ -34,9 +34,4 @@ export function computeStats(
   out.crit += build.crit;
   out.move *= build.move;
   return out;
-}
-
-/** the ultimate on U: the held ultimate skill's, or the hero's special */
-export function heldUltimate(c: CharacterDef, b: Build): UltimateId {
-  return c.skills.find((s) => s.ultimate && b.skills[s.id])?.ultimate ?? c.special;
 }

@@ -194,7 +194,7 @@ export function joryArt(action: TouchButtonAction, ability: JoryAbility, known: 
       return MALLETS;
     case "up":
       return JUMP;
-    case "warp":
+    case "guard":
       return BOOM;
     case "dash":
       return BEAT_STEP;

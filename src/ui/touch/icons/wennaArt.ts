@@ -204,7 +204,7 @@ export function wennaArt(action: TouchButtonAction, ability: WennaAbility, known
       return LAMP;
     case "up":
       return JUMP;
-    case "warp":
+    case "guard":
       return LIGHT;
     case "dash":
       return SWAP;

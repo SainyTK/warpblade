@@ -7,6 +7,7 @@ import { skillValues } from "../../skills/query";
 import { hero, progress } from "../../state";
 import { isFree } from "../actions";
 import { resetMotion } from "../kael/motion";
+import { PROVISIONAL_GUARD, PROVISIONAL_WARP } from "../provisionalMoveset";
 import { startCharge } from "../ultimate";
 import { nextAbility, pressAbility, resetAbilities, tickAbilities } from "./abilities";
 import { landDive } from "./dive";
@@ -116,6 +117,9 @@ const DRIVEN = new Set(["rewind"]);
  * Second Hand on I (O turns through them and her spell skills), and Sand, the hourglass that pays for bending time.
  */
 export const MIREL_KIT: HeroKit = {
+  warp: PROVISIONAL_WARP,
+  guard: PROVISIONAL_GUARD,
+  abilities: [],
   tick,
   readActions: () => {
     use("dash", pressRewind);

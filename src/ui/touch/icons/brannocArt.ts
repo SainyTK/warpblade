@@ -212,7 +212,7 @@ export function brannocArt(
       return AXE;
     case "up":
       return JUMP;
-    case "warp":
+    case "guard":
       return FRENZY;
     case "dash":
       return HUNT;

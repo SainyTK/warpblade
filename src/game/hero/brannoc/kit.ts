@@ -8,6 +8,7 @@ import { use } from "../../input";
 import { skillValues } from "../../skills/query";
 import { hero, progress } from "../../state";
 import { resetMotion } from "../kael/motion";
+import { PROVISIONAL_GUARD, PROVISIONAL_WARP } from "../provisionalMoveset";
 import { startCharge } from "../ultimate";
 import { nextAbility, pressAbility, resetAbilities, tickAbilities } from "./abilities";
 import { deathless, extendOnKill, runLastCleave, runRoar, tickBerserk, untouchable } from "./berserk";
@@ -93,6 +94,9 @@ function onKill(_e: Enemy): void {
  * Cleave spins twice. Hunt (L) lunges at the nearest foe ahead, and Berserk (U) keeps him standing for a few seconds.
  */
 export const BRANNOC_KIT: HeroKit = {
+  warp: PROVISIONAL_WARP,
+  guard: PROVISIONAL_GUARD,
+  abilities: [],
   tick,
   readActions: (dir) => {
     use("dash", () => pressHunt(dir));

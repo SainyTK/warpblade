@@ -78,9 +78,9 @@ export const ABYSS_HITS = {
   sovereignCleave: 30,
   sovereignPillar: 24,
   sovereignSpikes: 26,
-  unblinkingLance: 20,
-  unblinkingTear: 16,
-  unblinkingGaze: 36,
+  unblinkingLance: 55,
+  unblinkingTear: 40,
+  unblinkingGaze: 150,
 } as const;
 
 /** clear everything drawn below local y, so a body can sink into the floor */

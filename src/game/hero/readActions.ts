@@ -1,19 +1,14 @@
 import { CLIPS } from "../../constants/clips";
 import { BLINK_COST, COMBO } from "../../constants/combat";
-import { SPELLBLADE } from "../../constants/spells";
-import { sfx } from "../../services/audio";
-import { take, use } from "../input";
+import { use } from "../input";
 import { skillLevel } from "../skills/query";
 import { hero } from "../state";
 import { isFree } from "./actions";
-import { blowsDone, comboOpen, endCombo, pressAttack } from "./combo";
-import { tryDash } from "./dash";
-import { deny } from "./deny";
+import { comboOpen, endCombo, pressAttack } from "./combo";
 import { jump } from "./jump";
+import { blink } from "./kael/blink";
 import { kael } from "./kael/state";
-import { castCost, isRecharging, selectNextAbility, startCast } from "./spell";
-import { startCharge } from "./ultimate";
-import { blink, startThrow, warpCost, warpReady } from "./warp";
+import { warpCost, warpReady } from "./warp";
 
 /** a double tap starts a run */
 function doubleTap(dir: number): void {
@@ -29,58 +24,29 @@ function mayBlink(): boolean {
   return kael.blinkCd <= 0 && (skillLevel("k_blink") >= 6 || warpReady());
 }
 
-/** K: Blink Step during a combo, otherwise a warp throw. A press while the warp recharges is refused with a tick at
- *  once, whatever Kael is doing; so is one short of MP when he could warp. */
-function pressWarp(): boolean {
+/** J held in an open combo with Blink Step: no throw, Kael steps through to the foe's back; otherwise the shared warp */
+function pressBlink(): boolean {
+  if (!mayBlink()) return false;
   const h = hero;
-  if (mayBlink()) {
-    const keen = h.keenOpen > 0 || h.keenNext;
-    // from Blink Step's second level the combo goes on from the foe's back; before it, the blink ends it
-    const keep = skillLevel("k_blink") >= 2;
-    h.move = null;
-    h.queued = null;
-    if (!keep) endCombo(true);
-    if (blink(keen)) {
-      if (keep) h.link = CLIPS.warpStrike.dur + COMBO.link;
-      return true;
-    }
-    if (keep) endCombo(true);
-  }
-  if (!warpReady()) {
-    deny("warp");
-    return true;
-  }
-  if (!(isFree() || h.state === "hang" || blowsDone())) return false;
-  if (h.mp < warpCost()) {
-    deny("mp");
-    return true;
-  }
+  const keen = h.keenOpen > 0 || h.keenNext;
+  // from Blink Step's second level the combo goes on from the foe's back; before it, the blink ends it
+  const keep = skillLevel("k_blink") >= 2;
   h.move = null;
-  endCombo(false);
-  startThrow();
-  return true;
+  h.queued = null;
+  if (!keep) endCombo(true);
+  if (blink(keen)) {
+    if (keep) h.link = CLIPS.warpStrike.dur + COMBO.link;
+    return true;
+  }
+  if (keep) endCombo(true);
+  return false;
 }
 
-/** I: Spellblade after the second hit of a combo, otherwise a normal cast.
- *  A press while the ability recharges is refused with a tick at once, whatever Kael is doing; so is one short of MP. */
-function pressCast(): boolean {
-  const spellblade = comboOpen(SPELLBLADE.after);
-  if (isRecharging()) deny("cast");
-  else if (!spellblade && !isFree() && hero.state !== "hang") return false;
-  else if (hero.mp < castCost()) deny("mp");
-  else startCast(spellblade);
-  return true;
-}
-
-/** use waiting presses in a fixed order: dash first so it can cancel, then up, taps, attack, warp, cast, ultimate.
- *  A press that cannot act yet stays buffered for a moment. */
-export function readActions(dir: number, tap: number): void {
-  use("dash", () => tryDash(dir));
+/** Kael's own presses: jump, a double tap to run, the sword string on J tapped and Blink Step on J held mid-combo. The
+ *  shared moveset (warp, guard, dodge, abilities, ultimate) is read by updateHero. */
+export function readActions(_dir: number, tap: number): void {
   use("up", jump);
   if (tap) doubleTap(tap);
   use("attack", pressAttack);
-  use("warp", pressWarp);
-  use("cast", pressCast);
-  use("ultimate", startCharge);
-  if (take("cycle") && selectNextAbility()) sfx.pickup();
+  use("warp", pressBlink);
 }

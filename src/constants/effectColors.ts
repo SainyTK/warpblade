@@ -19,7 +19,6 @@ export const NUMBER_INK: Record<DamageTag | CueWord, number> = {
   perfect: hex("#a8ecff"),
   parry: hex("#ffd27a"),
   broken: hex("#ff6a5a"),
-  warded: hex("#8a84a8"),
 };
 /** numbers of a skill's own hits in duller inks of the same hues */
 export const NUMBER_INK_QUIET: Partial<Record<DamageTag | CueWord, number>> = {

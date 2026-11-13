@@ -18,6 +18,7 @@ import { refillGloam } from "./gloam";
 import { forgetDark, liftDark, runGloaming } from "./gloaming";
 import { runHamstring } from "./hamstring";
 import "./hooks";
+import { PROVISIONAL_GUARD, PROVISIONAL_WARP } from "../provisionalMoveset";
 import { pressJump } from "./jump";
 import { watchLost } from "./lostCue";
 import { isMarked, tickMarks } from "./marks";
@@ -159,6 +160,9 @@ function onKill(e: Enemy): void {
  * skills), and Gloaming on U. Gloam refills while no foe faces him.
  */
 export const TALLIS_KIT: HeroKit = {
+  warp: PROVISIONAL_WARP,
+  guard: PROVISIONAL_GUARD,
+  abilities: [],
   tick,
   readActions: () => {
     use("dash", pressSink);

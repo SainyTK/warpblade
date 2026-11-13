@@ -54,6 +54,8 @@ export type HeroState =
   | "hurt"
   | "dead"
   | "hang"
+  /** K held: the guard every hero shares */
+  | "guard"
   | YsraState
   | SableState
   | HuldaState
@@ -87,6 +89,8 @@ export interface WarpTarget {
   y: number;
   enemy?: Enemy;
   anchor?: Point;
+  /** a ranged hero's throw away from a foe: the foe they strike once they land */
+  aim?: Enemy;
 }
 
 /** A verlet rope point. */
@@ -160,6 +164,8 @@ export interface Hero {
   spellCdFull: Record<KaelAbility, number>;
   /** the ability of the cast under way, fixed when the cast starts */
   castAbility: KaelAbility;
+  /** the cast in progress is the wide form, from I held */
+  castWide: boolean;
   /** seconds left of the HUD flash after a refused press: a spell or the warp still recharging, or MP short */
   denied: Record<DenyReason, number>;
   /** the spell is cast at once and stronger: Spellblade, I during a combo */

@@ -13,11 +13,18 @@ export const TOUCH_BUTTONS: readonly TouchButtonSpec[] = [
   { action: "attack", key: "J", size: 24, angle: 0, reach: 0 },
   { action: "up", key: "W", size: 17, angle: 190, reach: 30 },
   { action: "dash", key: "L", size: 17, angle: 150, reach: 30 },
-  { action: "warp", key: "K", size: 17, angle: 110, reach: 30 },
+  { action: "guard", key: "K", size: 17, angle: 110, reach: 30 },
   { action: "cast", key: "I", size: 17, angle: 70, reach: 30 },
   { action: "ultimate", key: "U", size: 19, angle: 129, reach: 54 },
   { action: "cycle", key: "O", size: 15, angle: 80, reach: 54 },
 ];
+
+/** the front dodge every hero shares */
+const DODGE_BUTTON: TouchButtonText = {
+  label: "Dodge",
+  hint: "Dodge forward. Nothing can touch you while you dodge, and each dodge spends stamina",
+  accent: "#b4a8ff",
+};
 
 const SPECIAL: TouchButtonText = {
   label: "Special",
@@ -30,17 +37,17 @@ export const TOUCH_TEXT: Record<KitId, Record<TouchButtonAction, TouchButtonText
   kael: {
     attack: {
       label: "Attack",
-      hint: "Sword combo of four hits, the same every time. Press again just as a blow lands for a Keen hit",
+      hint: "Tap: sword combo of four hits, the same every time; tap again just as a blow lands for a Keen hit. Hold: throw the sword and warp to it (10 MP)",
       accent: "#7fe3ff",
     },
     up: { label: "Jump", hint: "Jump. Hold the stick down to drop through a ledge", accent: "#e8e6f6" },
-    dash: {
-      label: "Dash",
-      hint: "Dash. Nothing can touch you while you dash, and each dash spends stamina",
-      accent: "#b4a8ff",
+    dash: DODGE_BUTTON,
+    guard: {
+      label: "Guard",
+      hint: "Hold to block blows from the front. Tap just as a blow lands to parry with a riposte cut",
+      accent: "#a8ecff",
     },
-    warp: { label: "Warp", hint: "Warp strike (10 MP)", accent: "#a8ecff" },
-    cast: { label: "Spell", hint: "Cast the selected spell (18 MP)", accent: null },
+    cast: { label: "Spell", hint: "Tap to cast the selected spell. Hold for its wide form", accent: null },
     ultimate: SPECIAL,
     cycle: { label: "Ability", hint: "Switch ability: lance, burst and the spells you learn", accent: null },
   },
@@ -55,12 +62,8 @@ export const TOUCH_TEXT: Record<KitId, Record<TouchButtonAction, TouchButtonText
       hint: "One heavy jump, no double jump. Hold the stick down to drop through a ledge",
       accent: "#e8e6f6",
     },
-    dash: {
-      label: "Guard",
-      hint: "Hold to brace and block blows from the front. Tap just before a blow to parry. With the stick pushed behind you, step back",
-      accent: "#d08a3c",
-    },
-    warp: {
+    dash: DODGE_BUTTON,
+    guard: {
       label: "Vault",
       hint: "Pole vault over foes, also out of a brace or a backstep. In the air, dive glaive first",
       accent: "#ec7228",
@@ -76,12 +79,8 @@ export const TOUCH_TEXT: Record<KitId, Record<TouchButtonAction, TouchButtonText
       accent: "#6ee0a0",
     },
     up: { label: "Jump", hint: "One light jump. Hold the stick down to drop through a ledge", accent: "#e8e6f6" },
-    dash: {
-      label: "Hop",
-      hint: "Hop back and shoot at the top. With the stick pushed ahead, slide forward under blows. Both spend stamina",
-      accent: "#3fc06a",
-    },
-    warp: { label: "Kick", hint: "Kick foes away from you", accent: "#ccb88c" },
+    dash: DODGE_BUTTON,
+    guard: { label: "Kick", hint: "Kick foes away from you", accent: "#ccb88c" },
     cast: { label: "Spell", hint: "Cast the selected spell, a snare at first", accent: "#e88a4c" },
     ultimate: SPECIAL,
     cycle: {
@@ -101,8 +100,8 @@ export const TOUCH_TEXT: Record<KitId, Record<TouchButtonAction, TouchButtonText
       hint: "One low, heavy jump. Hold the stick down to drop through a ledge",
       accent: "#e8e6f6",
     },
-    dash: { label: "Rush", hint: "Bull Rush: an armoured shoulder charge that spends stamina", accent: "#c43848" },
-    warp: {
+    dash: DODGE_BUTTON,
+    guard: {
       label: "Grab",
       hint: "Grab a foe ahead; big foes are crushed. While holding, throw it: into the crowd ahead, or a suplex behind. In the air, Skyfall Grab",
       accent: "#b4bcc4",
@@ -122,12 +121,8 @@ export const TOUCH_TEXT: Record<KitId, Record<TouchButtonAction, TouchButtonText
       hint: "One light jump. While swinging, let go with a hop. Hold the stick down to drop through a ledge",
       accent: "#e8e6f6",
     },
-    dash: {
-      label: "Reel",
-      hint: "While swinging, hold to reel the chain in. On the floor, Backline: yank yourself back",
-      accent: "#c08a2e",
-    },
-    warp: {
+    dash: DODGE_BUTTON,
+    guard: {
       label: "Hook",
       hint: "Hold to swing from a crystal, a platform or the air, lift to let go. On a foe, zip to it. Stick up aims steeper, down in the air aims low",
       accent: "#b8c0cc",
@@ -151,12 +146,8 @@ export const TOUCH_TEXT: Record<KitId, Record<TouchButtonAction, TouchButtonText
       hint: "One jump. Hold past the top to hover. Hold the stick down to drop through a ledge",
       accent: "#e8e6f6",
     },
-    dash: {
-      label: "Rewind",
-      hint: "Go back along your path and get back part of the HP you lost (40 Sand)",
-      accent: "#3fb0a0",
-    },
-    warp: {
+    dash: DODGE_BUTTON,
+    guard: {
       label: "Still",
       hint: "Hold to keep the Stillfield open, lift to snap it shut (Sand). Stick up opens it above you, down on you",
       accent: "#8ae6cf",
@@ -176,12 +167,8 @@ export const TOUCH_TEXT: Record<KitId, Record<TouchButtonAction, TouchButtonText
       accent: "#b48cff",
     },
     up: { label: "Jump", hint: "One jump. Hold the stick down to drop through a ledge", accent: "#e8e6f6" },
-    dash: {
-      label: "Swap",
-      hint: "Trade places with the Wick farthest ahead, which arrives in a flare (stamina)",
-      accent: "#a46ae0",
-    },
-    warp: {
+    dash: DODGE_BUTTON,
+    guard: {
       label: "Light",
       hint: "Light a Wick ahead (25 Wax). Stick down lights it at your feet. With four out, relight the weakest",
       accent: "#e8dcc4",
@@ -201,12 +188,8 @@ export const TOUCH_TEXT: Record<KitId, Record<TouchButtonAction, TouchButtonText
       accent: "#f08ad0",
     },
     up: { label: "Jump", hint: "One jump. Hold the stick down to drop through a ledge", accent: "#e8e6f6" },
-    dash: {
-      label: "Sink",
-      hint: "Hold to sink into a shadow pool and glide under foes, let go to rise (stamina). In the air, drop straight down",
-      accent: "#c06a9e",
-    },
-    warp: {
+    dash: DODGE_BUTTON,
+    guard: {
       label: "Veil",
       hint: "Veil on or off: minions lose sight of you (Gloam). Your first blow out of it is an Ambush",
       accent: "#ffb8dc",
@@ -226,12 +209,8 @@ export const TOUCH_TEXT: Record<KitId, Record<TouchButtonAction, TouchButtonText
       accent: "#5a82ff",
     },
     up: { label: "Jump", hint: "One jump. Hold the stick down to drop through a ledge", accent: "#e8e6f6" },
-    dash: {
-      label: "Step",
-      hint: "Beat Step (stamina). On the beat nothing can touch you and you pass through foes",
-      accent: "#a6c0ff",
-    },
-    warp: {
+    dash: DODGE_BUTTON,
+    guard: {
       label: "Boom",
       hint: "Push foes away (stamina). On the beat it is bigger, drowns foe shots and nothing can touch you",
       accent: "#eef3ff",
@@ -251,12 +230,8 @@ export const TOUCH_TEXT: Record<KitId, Record<TouchButtonAction, TouchButtonText
       accent: "#ff6a5a",
     },
     up: { label: "Jump", hint: "One jump. Hold the stick down to drop through a ledge", accent: "#f2eadb" },
-    dash: {
-      label: "Hunt",
-      hint: "Lunge at the nearest foe ahead and chop it (stamina). In the air, dive at a foe below",
-      accent: "#eadbb8",
-    },
-    warp: {
+    dash: DODGE_BUTTON,
+    guard: {
       label: "Frenzy",
       hint: "Spend 12% HP: blows do not stagger you and you swing faster. Strike to win the HP back",
       accent: "#d0283a",

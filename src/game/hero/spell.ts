@@ -4,13 +4,15 @@ import { ABILITY_COLOR } from "../../constants/palette";
 import {
   ABILITY_COST,
   BASE_RECHARGE,
+  ELEMENT_RECHARGE,
   ELEMENT_SKILL,
   KAEL_ABILITIES,
   LANCE,
-  SPELL_SHARED_COOLDOWN,
   SPELLBLADE,
+  WIDE_COST,
 } from "../../constants/spells";
 import { sfx } from "../../services/audio";
+import type { AbilitySlot } from "../../types/moveset";
 import { PK } from "../../types/particle";
 import type { KaelAbility } from "../../types/spell";
 import { WHITE } from "../../utils/color";
@@ -19,14 +21,13 @@ import { createCrystalWave } from "../effects/crystalWave";
 import { createGlint } from "../effects/flash";
 import { emitSkillEvent } from "../skills/events";
 import { skillEvolved, skillLevel, skillValues } from "../skills/query";
-import { createRotation } from "../skills/rotation";
 import { castBolt } from "../spells/bolt";
 import { castBurst } from "../spells/burst";
 import { castFire } from "../spells/fire";
 import { castIce } from "../spells/ice";
 import { game, hero, lights, particles, progress, rng } from "../state";
-import { leaveHang, setState } from "./actions";
-import { endCombo } from "./combo";
+import { isFree, leaveHang, setState } from "./actions";
+import { comboOpen, endCombo } from "./combo";
 
 /** the flare at the hand as a spell leaves it: small enough to leave Kael in view */
 const CAST_LIGHT = { radius: 24, strength: 0.45 } as const;
@@ -35,55 +36,37 @@ const CAST_LIGHT = { radius: 24, strength: 0.45 } as const;
 export const knowsAbility = (a: KaelAbility): boolean =>
   a === "lance" || a === "burst" || skillLevel(ELEMENT_SKILL[a]) > 0;
 
-/** the abilities O turns through, each co-op seat with its own selection */
-const rotation = createRotation(KAEL_ABILITIES, (id) => knowsAbility(id as KaelAbility));
-
-/** the selected ability */
-export const selectedAbility = (): KaelAbility => (rotation.selected() ?? "lance") as KaelAbility;
-/** O: move to the next ability Kael has; true when the selection changed */
-export const selectNextAbility = (): boolean => rotation.next();
-/** a fresh run starts on Crystal Lance */
-export const resetAbilities = (): void => rotation.reset();
-
 /** an element spell evolved by its skill */
 export const abilityEvolved = (a: KaelAbility): boolean =>
   a !== "lance" && a !== "burst" && skillEvolved(ELEMENT_SKILL[a]);
 
-/** MP the selected ability costs */
-export const castCost = (): number => ABILITY_COST[selectedAbility()];
+/** MP an ability costs, more for its wide form */
+const castCost = (a: KaelAbility, wide: boolean): number => ABILITY_COST[a] * (wide ? WIDE_COST : 1);
 
-/** an ability's own recharge: fixed for the base abilities, from its skill's level for the elements */
-function ownRecharge(a: KaelAbility): number {
-  if (a === "lance" || a === "burst") return BASE_RECHARGE[a];
-  return skillValues(ELEMENT_SKILL[a]).recharge ?? SPELL_SHARED_COOLDOWN;
+/** an ability's own recharge: fixed for the base abilities, from its skill's level for the elements; spell haste
+ *  shortens it, and no cast makes another ability wait */
+function recharge(a: KaelAbility): number {
+  const own =
+    a === "lance" || a === "burst" ? BASE_RECHARGE[a] : (skillValues(ELEMENT_SKILL[a]).recharge ?? ELEMENT_RECHARGE);
+  return own / progress.stats.haste;
 }
-
-/** seconds an ability waits after a cast: its own recharge when it was the one cast, the shared one otherwise; spell
- *  haste shortens both */
-const spellWait = (a: KaelAbility, cast: KaelAbility): number =>
-  (a === cast ? ownRecharge(a) : SPELL_SHARED_COOLDOWN) / progress.stats.haste;
 /** share of the current wait an ability still has to recharge, 0 when ready */
 export const spellRecharge = (a: KaelAbility): number => hero.spellCd[a] / hero.spellCdFull[a];
-/** the selected ability is still recharging */
-export const isRecharging = (): boolean => hero.spellCd[selectedAbility()] > 0;
 
 export function rechargeSpells(dt: number): void {
   const cd = hero.spellCd;
   for (const a of KAEL_ABILITIES) cd[a] = Math.max(0, cd[a] - dt);
 }
 
-/** I: start a cast; with Spellblade in an open combo it leaves the hand at once and hits harder */
-export function startCast(spellblade: boolean): void {
+/** I: cast `a`; with Spellblade in an open combo it leaves the hand at once and hits harder; held, its wide form */
+function startCast(a: KaelAbility, spellblade: boolean, wide: boolean): void {
   const h = hero;
   if (h.state === "hang") leaveHang();
-  h.castAbility = selectedAbility();
-  h.mp -= ABILITY_COST[h.castAbility];
-  for (const a of KAEL_ABILITIES) {
-    const wait = spellWait(a, h.castAbility);
-    if (wait <= h.spellCd[a]) continue;
-    h.spellCd[a] = wait;
-    h.spellCdFull[a] = wait;
-  }
+  h.castAbility = a;
+  h.castWide = wide;
+  h.mp -= castCost(a, wide);
+  h.spellCd[a] = recharge(a);
+  h.spellCdFull[a] = h.spellCd[a];
   h.move = null;
   h.spellPower = spellblade ? SPELLBLADE.power : 1;
   setState("cast");
@@ -92,8 +75,40 @@ export function startCast(spellblade: boolean): void {
     h.st = CLIPS.cast.hit;
   }
   sfx.cast();
-  emitSkillEvent({ type: "cast", ability: h.castAbility });
+  emitSkillEvent({ type: "cast", ability: a });
 }
+
+/** I on `a`: Spellblade after the second hit of a combo, otherwise a cast from a free state or a crystal */
+function castFrom(a: KaelAbility, wide: boolean): boolean {
+  const spellblade = comboOpen(SPELLBLADE.after);
+  if (!spellblade && !isFree() && hero.state !== "hang") return false;
+  if (hero.mp < castCost(a, false)) return false;
+  // held with MP for the plain form only, the plain form goes
+  startCast(a, spellblade, wide && hero.mp >= castCost(a, true));
+  return true;
+}
+
+/** Kael's abilities on I, in the order O turns through them: Crystal Lance and Crystal Burst, then the element spells */
+/** each ability's tab label and the colour it lights in when selected */
+const TAB: Readonly<Record<KaelAbility, { label: string; tint: string }>> = {
+  lance: { label: "LANCE", tint: "var(--crystal)" },
+  burst: { label: "BURST", tint: "var(--mist)" },
+  fire: { label: "FIRE", tint: "var(--fire)" },
+  ice: { label: "ICE", tint: "var(--ice)" },
+  volt: { label: "BOLT", tint: "var(--volt)" },
+};
+
+export const KAEL_SLOTS: readonly AbilitySlot[] = KAEL_ABILITIES.map((a) => ({
+  id: a,
+  label: TAB[a].label,
+  tint: TAB[a].tint,
+  known: () => knowsAbility(a),
+  wait: () => hero.spellCd[a],
+  full: () => Math.max(0.01, hero.spellCdFull[a]),
+  affordable: () => hero.mp >= ABILITY_COST[a],
+  cast: (wide: boolean) => castFrom(a, wide),
+  evolved: () => abilityEvolved(a),
+}));
 
 /** the ability leaves the hand */
 function release(a: KaelAbility, hx: number, hy: number, power: number): void {

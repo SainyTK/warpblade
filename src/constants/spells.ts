@@ -14,8 +14,10 @@ export const ABILITY_COST: Readonly<Record<KaelAbility, number>> = {
 };
 /** seconds before a base ability can be cast again; the element spells take theirs from their skill's level */
 export const BASE_RECHARGE = { lance: 4, burst: 6 } as const;
-/** after any cast the other abilities wait at least this long, so switching cannot chain casts back to back */
-export const SPELL_SHARED_COOLDOWN = 3;
+/** an element spell's recharge when its skill sets none */
+export const ELEMENT_RECHARGE = 3;
+/** I held: the wide form of a spell costs this much more MP than the tapped one */
+export const WIDE_COST = 1.5;
 /** Spellblade: I during a combo, after this many hits, casts at once and this much harder */
 export const SPELLBLADE = { after: 2, power: 1.5 } as const;
 /** Crystal Lance: a crystal crescent that flies ahead and cuts each foe in its line once, passing guards */

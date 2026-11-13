@@ -143,10 +143,6 @@ body {
     var(--night) calc(var(--dash-share, 50%) - 1px) var(--dash-share, 50%)
   );
 }
-/* heroes without a dash have no dash notches on their stamina bar */
-.bar.st.no-dash .track::after {
-  content: none;
-}
 /* a dash the bar could not pay for: the empty track blinks red */
 /* a bar too empty for what was pressed blinks its border */
 .bar.empty .track {
@@ -1192,6 +1188,12 @@ body[data-hud="outside"] .boss {
 }
 .cap-wide {
   font-size: 12px;
+}
+.cap-hold {
+  align-self: center;
+  font-family: var(--display);
+  font-size: 12px;
+  color: var(--muted);
 }
 .cap .arrow {
   width: 14px;

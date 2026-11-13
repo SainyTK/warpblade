@@ -16,6 +16,7 @@ import { clearDrips, dropDrip, stepDrips } from "./drips";
 import { runGreatWick } from "./greatWick";
 import { interceptBlow } from "./guard";
 import "./hold";
+import { PROVISIONAL_GUARD, PROVISIONAL_WARP } from "../provisionalMoveset";
 import { pressJump } from "./jump";
 import { pressLight, runLightCast } from "./light";
 import { resetWenna, wenna, wennaHost } from "./memory";
@@ -115,6 +116,9 @@ function onKill(e: Enemy): void {
  * spell skills), and Great Wick on U.
  */
 export const WENNA_KIT: HeroKit = {
+  warp: PROVISIONAL_WARP,
+  guard: PROVISIONAL_GUARD,
+  abilities: [],
   tick,
   readActions: () => {
     use("dash", pressSwap);

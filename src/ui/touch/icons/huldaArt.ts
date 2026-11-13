@@ -118,7 +118,7 @@ export function huldaArt(action: TouchButtonAction, ability: HuldaAbility, known
       return JUMP;
     case "dash":
       return RUSH;
-    case "warp":
+    case "guard":
       return GRAB;
     case "cast":
       return ABILITY_ART[ability];

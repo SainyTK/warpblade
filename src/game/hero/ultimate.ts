@@ -5,9 +5,9 @@ import { emitSkillEvent } from "../skills/events";
 import { skillLevel, skillValues } from "../skills/query";
 import { character, hero, progress } from "../state";
 import { castUltimate } from "../ultimates/castUltimate";
-import { isFree, leaveHang, setState, settle } from "./actions";
-import { endCombo } from "./combo";
+import { leaveHang, setState, settle } from "./actions";
 import { deny } from "./deny";
+import { cutForSharedAction, maySharedAct } from "./sharedCut";
 
 /** whether the MP bar pays for an ultimate level, 1 to 4; level 4 needs it full */
 export function canAffordUlt(level: number): boolean {
@@ -15,9 +15,9 @@ export function canAffordUlt(level: number): boolean {
   return Number.isFinite(cost) ? hero.mp >= cost : hero.mp >= progress.stats.mp - 0.5;
 }
 
-/** the numbers of the held ultimate skill, empty with the hero's special */
-function ultimateValues(): Readonly<Record<string, number>> {
-  const skill = character.skills.find((s) => s.ultimate === progress.ultimate && skillLevel(s.id));
+/** the numbers of the hero's ultimate skill, which upgrades their one ultimate; empty until it is held */
+export function ultimateValues(): Readonly<Record<string, number>> {
+  const skill = character.skills.find((s) => s.kind === "ultimate" && skillLevel(s.id));
   return skill ? skillValues(skill.id) : {};
 }
 
@@ -36,10 +36,9 @@ export function startCharge(): boolean {
     return true;
   }
   if (!canAffordUlt(1)) return false;
-  if (!isFree() && h.state !== "hang" && h.state !== "move") return false;
+  if (!maySharedAct() && h.state !== "hang" && h.state !== "guard") return false;
   if (h.state === "hang") leaveHang();
-  h.move = null;
-  endCombo(false);
+  cutForSharedAction();
   h.charge = 0;
   h.chargeLevel = 1;
   setState("charge");

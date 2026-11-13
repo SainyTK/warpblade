@@ -4,8 +4,9 @@ import { ULT_LABEL } from "../constants/skillLabels";
 import { ULT_LEVELS } from "../constants/ultimate";
 import { STAGE_WAVES } from "../constants/waves";
 import { canAffordUlt, ultRecharge } from "../game/hero/ultimate";
-import { character, game, hero, progress } from "../game/state";
+import { game, hero, progress } from "../game/state";
 import { xpToNext } from "../utils/progression";
+import { updateAbilityTabs } from "./abilityTabs";
 import { updateBrannocTabs } from "./brannocTabs";
 import { updateBuildStrip } from "./buildStrip";
 import { updateCoinCount } from "./coinCount";
@@ -26,7 +27,6 @@ import { updateQuiverBar } from "./quiverBar";
 import { createRechargeTab } from "./rechargeTab";
 import { updateRiteTabs } from "./riteTabs";
 import { updateSandBar } from "./sandBar";
-import { updateSpellTabs } from "./spellTabs";
 import { updateTallisTabs } from "./tallisTabs";
 import { updateWarpTab } from "./warpTab";
 import { updateWaxBar } from "./waxBar";
@@ -58,7 +58,7 @@ const pips = (n: number, lit: (i: number) => boolean): string =>
 
 /** sync the HTML overlay with the game, touching the DOM only when something shown has changed */
 export function updateHud(): void {
-  updateSpellTabs();
+  updateAbilityTabs();
   updateRiteTabs();
   updateHuldaTabs();
   updateOrrinTabs();
@@ -116,7 +116,6 @@ export function updateHud(): void {
   stamina.style.width = `${(hero.stamina / progress.stats.stamina) * 100}%`;
   staminaBar.classList.toggle("empty", hero.staminaFlash > 0);
   staminaBar.style.setProperty("--dash-share", `${(STAMINA.dashCost / progress.stats.stamina) * 100}%`);
-  staminaBar.classList.toggle("no-dash", character.kit !== "kael");
   const need = xpToNext(progress.level);
   xp.style.width = need ? `${(progress.xp / need) * 100}%` : "100%";
   level.textContent = `LV ${progress.level}`;

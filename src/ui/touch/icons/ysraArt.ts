@@ -151,7 +151,7 @@ export function ysraArt(action: TouchButtonAction, rite: RiteId): IconArt {
       return JUMP;
     case "dash":
       return GUARD;
-    case "warp":
+    case "guard":
       return VAULT;
     case "cast":
       return RITE_ART[rite];

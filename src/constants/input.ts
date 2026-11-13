@@ -1,4 +1,4 @@
-import type { InputAction, MenuCommand } from "../types/input";
+import type { HeldAction, InputAction, MenuCommand } from "../types/input";
 import type { KitId } from "../types/kit";
 import { RITES } from "./ysra/rites";
 
@@ -12,7 +12,7 @@ export const KEYMAP: Record<string, InputAction> = {
   ArrowDown: "down",
   KeyS: "down",
   KeyJ: "attack",
-  KeyK: "warp",
+  KeyK: "guard",
   KeyL: "dash",
   KeyI: "cast",
   KeyO: "cycle",
@@ -22,22 +22,33 @@ export const KEYMAP: Record<string, InputAction> = {
   KeyP: "pause",
   KeyF: "fullscreen",
 };
-/** what each of Kael's actions does, as the Controls screen tells it */
-const KAEL_ACTION_TEXT: Record<InputAction, string> = {
+/** what the moveset every hero shares does, as the Controls screen tells it; each hero's own lines go over it */
+const SHARED_ACTION_TEXT: Record<InputAction, string> = {
   left: "Walk left. Tap twice and hold to run",
   right: "Walk right. Tap twice and hold to run",
   up: "Jump. Press again in the air to jump again",
   down: "Hold and jump to drop through a ledge",
-  attack: "Sword combo of four hits, the same every time. Press again just as a blow lands for a Keen hit",
-  dash: "Dash. Nothing can touch you while you dash, and each dash spends stamina",
+  attack: "Attack",
+  warp: "Warp: throw your weapon at the nearest foe ahead, warp to it and strike as you land (10 MP)",
+  guard: "Guard: hold to block blows from the front. Press just as a blow lands to parry",
+  dash: "Dodge forward. Nothing can touch you while you dodge, and each dodge spends stamina",
   run: "Run toward the side held",
-  warp: "Warp strike (10 MP). Hold up to warp to a crystal",
-  cast: "Cast the selected ability. During a combo it leaves the hand at once",
-  cycle: "Switch ability: lance, burst and the spells you learn",
+  cast: "Cast the selected ability. If it is recharging, the next ready one goes",
+  castWide: "Cast the selected ability, wider where it has a wide form",
+  cycle: "Switch ability",
   ultimate: "Hold to charge the ultimate, release to strike",
   mute: "Sound on or off",
   pause: "Pause and open the menu",
   fullscreen: "Fullscreen on or off",
+};
+/** what each of Kael's actions does, as the Controls screen tells it */
+const KAEL_ACTION_TEXT: Record<InputAction, string> = {
+  ...SHARED_ACTION_TEXT,
+  attack: "Sword combo of four hits, the same every time. Press again just as a blow lands for a Keen hit",
+  warp: "Warp strike: throw the sword and warp to it (10 MP). With Up held, warp to a crystal and hang",
+  guard: "Guard: hold to block blows from the front. Press just as a blow lands to parry with a riposte cut",
+  castWide: "Cast the selected spell in its wide form, for more MP",
+  cycle: "Switch ability: lance, burst and the spells you learn",
 };
 /** the rites O cycles through, as the controls name them */
 export const RITE_NAMES = RITES.map((r) => r.name).join(", ");
@@ -45,7 +56,7 @@ export const RITE_NAMES = RITES.map((r) => r.name).join(", ");
 export const ACTION_TEXT: Record<KitId, Record<InputAction, string>> = {
   kael: KAEL_ACTION_TEXT,
   ysra: {
-    ...KAEL_ACTION_TEXT,
+    ...SHARED_ACTION_TEXT,
     left: "Walk left. With Warpath, keep walking to charge",
     right: "Walk right. With Warpath, keep walking to charge",
     up: "Jump. One heavy jump, no double jump",
@@ -58,7 +69,7 @@ export const ACTION_TEXT: Record<KitId, Record<InputAction, string>> = {
     cycle: `Switch rite: ${RITE_NAMES}`,
   },
   sable: {
-    ...KAEL_ACTION_TEXT,
+    ...SHARED_ACTION_TEXT,
     up: "Jump. One light jump, also out of a shot",
     down: "With jump, drop through a ledge",
     attack:
@@ -69,7 +80,7 @@ export const ACTION_TEXT: Record<KitId, Record<InputAction, string>> = {
     cycle: "Reload. Press again in the bright window for a perfect reload and primed bolts",
   },
   hulda: {
-    ...KAEL_ACTION_TEXT,
+    ...SHARED_ACTION_TEXT,
     left: "Walk left. No run",
     right: "Walk right. No run",
     up: "Jump. One low, heavy jump. Held as you throw, toss the foe straight up",
@@ -82,7 +93,7 @@ export const ACTION_TEXT: Record<KitId, Record<InputAction, string>> = {
     cycle: "Taunt: slap your chest twice for Grit",
   },
   orrin: {
-    ...KAEL_ACTION_TEXT,
+    ...SHARED_ACTION_TEXT,
     left: "Walk left. No run. While swinging, pump the swing",
     right: "Walk right. No run. While swinging, pump the swing",
     up: "Jump. One light jump, no double jump. While swinging, let go with a hop",
@@ -95,7 +106,7 @@ export const ACTION_TEXT: Record<KitId, Record<InputAction, string>> = {
     cycle: "Switch to the next ability",
   },
   mirel: {
-    ...KAEL_ACTION_TEXT,
+    ...SHARED_ACTION_TEXT,
     left: "Walk left. No run",
     right: "Walk right. No run",
     up: "Jump. One jump, no double jump. Hold past the top of the jump to hover, spending stamina",
@@ -109,7 +120,7 @@ export const ACTION_TEXT: Record<KitId, Record<InputAction, string>> = {
     cycle: "Switch to the next ability",
   },
   wenna: {
-    ...KAEL_ACTION_TEXT,
+    ...SHARED_ACTION_TEXT,
     left: "Walk left. No run",
     right: "Walk right. No run",
     up: "Jump. One jump, no double jump",
@@ -123,7 +134,7 @@ export const ACTION_TEXT: Record<KitId, Record<InputAction, string>> = {
     cycle: "Switch to the next ability",
   },
   tallis: {
-    ...KAEL_ACTION_TEXT,
+    ...SHARED_ACTION_TEXT,
     left: "Walk left. Tap twice and hold to run. In the shadow pool, glide left",
     right: "Walk right. Tap twice and hold to run. In the shadow pool, glide right",
     up: "Jump. One jump, no double jump",
@@ -135,7 +146,7 @@ export const ACTION_TEXT: Record<KitId, Record<InputAction, string>> = {
     cycle: "Switch to the next ability",
   },
   jory: {
-    ...KAEL_ACTION_TEXT,
+    ...SHARED_ACTION_TEXT,
     left: "Walk left. Tap twice and hold to run",
     right: "Walk right. Tap twice and hold to run",
     up: "Jump. One jump, no double jump",
@@ -148,7 +159,7 @@ export const ACTION_TEXT: Record<KitId, Record<InputAction, string>> = {
     cycle: "Switch to the next ability",
   },
   brannoc: {
-    ...KAEL_ACTION_TEXT,
+    ...SHARED_ACTION_TEXT,
     left: "Walk left. Tap twice and hold to run",
     right: "Walk right. Tap twice and hold to run",
     up: "Jump. One jump, no double jump",
@@ -181,5 +192,9 @@ export const MENU_KEYMAP: Record<string, MenuCommand> = {
 export const DOUBLE_TAP = 0.25;
 /** a press is kept this many simulation steps (120 a second) until it can be used: about 0.15 seconds */
 export const INPUT_BUFFER_STEPS = 18;
+/** J and I: let go sooner than this many simulation steps (0.25 seconds) and the press is a tap; hold this long for the long press */
+export const HOLD_STEPS = 30;
+/** the long press each tap-or-hold key queues */
+export const HOLD_ACTIONS: Readonly<Record<HeldAction, InputAction>> = { attack: "warp", cast: "castWide" };
 /** presses that wait out a whole move: a jump pressed while a blow winds up or strikes jumps out of its follow-through */
 export const KEPT_DURING_MOVE: readonly InputAction[] = ["up"];

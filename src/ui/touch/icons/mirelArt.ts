@@ -182,7 +182,7 @@ export function mirelArt(action: TouchButtonAction, ability: MirelAbility, known
       return STAFF;
     case "up":
       return JUMP;
-    case "warp":
+    case "guard":
       return STILL;
     case "dash":
       return REWIND;

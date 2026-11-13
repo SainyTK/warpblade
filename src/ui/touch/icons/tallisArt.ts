@@ -164,7 +164,7 @@ export function tallisArt(action: TouchButtonAction, ability: TallisAbility, kno
       return KNIFE;
     case "up":
       return JUMP;
-    case "warp":
+    case "guard":
       return VEIL;
     case "dash":
       return SINK;

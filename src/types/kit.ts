@@ -1,6 +1,7 @@
 import type { Enemy } from "./enemy";
 import type { Hero } from "./hero";
 import type { MoveHit, MoveId, Situation } from "./move";
+import type { AbilitySlot, GuardStyle, WarpStyle } from "./moveset";
 import type { Pose } from "./pose";
 
 /** which hero's controls, moves and states drive the shared rig */
@@ -35,6 +36,19 @@ export interface HeroKit {
   /** every move starts Keen right now, whatever the timing */
   alwaysKeen?(): boolean;
 
+  /** J held: how the hero's warp move looks and what it adds (the shared move is src/game/hero/warp.ts) */
+  warp: WarpStyle;
+  /** K: how the hero's guard and parry play (the shared guard is src/game/hero/heroGuard.ts) */
+  guard: GuardStyle;
+  /** I: the hero's abilities in the order O turns through them (the shared bar is src/game/hero/abilityBar.ts) */
+  abilities: readonly AbilitySlot[];
+  /**
+   * The shared actions (warp, guard, dodge, ability, ultimate) may start now, cutting what the hero is doing; left out,
+   * when the hero is free or the current blow has landed
+   */
+  mayAct?(): boolean;
+  /** a shared action is starting: the kit ends its own state (a string, a held foe, a hover) */
+  cutForAction?(): void;
   /** a blow is about to land on the hero: true when the kit took it (a block or a parry) */
   absorbHurt(dmg: number, fromX: number): boolean;
   /** combo moves play this much faster on top of attack speed, right now */

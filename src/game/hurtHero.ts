@@ -5,6 +5,7 @@ import { hurtFlow } from "./build/flow";
 import { coop, heroSlot } from "./coopHooks";
 import { createImpact } from "./effects/impact";
 import { heroGuarded } from "./hero/guard";
+import { guardTakes } from "./hero/heroGuard";
 import { kit } from "./hero/kits";
 import { perfectDodge } from "./hero/perfectDodge";
 import { loseHitCount } from "./hitCount";
@@ -14,6 +15,7 @@ import { character, game, hero, showBanner } from "./state";
 import { hitStop, shake } from "./world";
 
 export function hurtHero(dmg: number, fromX: number): void {
+  if (guardTakes(dmg, fromX)) return;
   if (kit().absorbHurt(dmg, fromX)) return;
   if (heroGuarded()) {
     perfectDodge();

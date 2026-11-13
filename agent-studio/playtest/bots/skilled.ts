@@ -8,6 +8,7 @@ import {
   ULT_HOLD_MS,
   ULT_RANGE,
   VAULT_GAP_MS,
+  WARP_HOLD_MS,
   WARP_RANGE,
 } from "../constants/bot";
 import { KEYS } from "../constants/keys";
@@ -15,7 +16,7 @@ import type { BotMemory, Intent, Policy } from "../types/bot";
 import type { GameSnapshot } from "../types/snapshot";
 import { facesHero, foesWithin, hazardAbove, isHigh, isOpen, sideOf, targetFoe, threatOf } from "../utils/foes";
 import { directionKey } from "./directionKey";
-import { readyMoveKeys, spellChoice, ultimateReady } from "./hudReadiness";
+import { spellChoice, ultimateReady, warpReady } from "./hudReadiness";
 
 /** spend MP on a spell only while this share of the bar is left */
 const SPELL_MP_SHARE = 0.25;
@@ -26,6 +27,9 @@ function decide(state: GameSnapshot, memory: BotMemory): Intent {
   if (memory.now < memory.ultUntil) {
     return { hold: [KEYS.ultimate], tap: [] };
   }
+  if (memory.now < memory.warpUntil) {
+    return { hold: [KEYS.attack], tap: [] };
+  }
   const foe = targetFoe(hero, enemies, HIGH_FOE);
   if (!foe) {
     return IDLE;
@@ -34,10 +38,10 @@ function decide(state: GameSnapshot, memory: BotMemory): Intent {
   const toward = directionKey(side);
   const dx = Math.abs(foe.x - hero.x);
   const threat = threatOf(hero, enemies);
-  // L is a dash or a brace, whichever the hero has: taken toward the blow, it passes through or blocks it
+  // every hero's L is a front dodge: taken toward the blow, it passes through it
   if (threat && memory.now - memory.lastDodge > DODGE_GAP_MS) {
     memory.lastDodge = memory.now;
-    return { hold: [directionKey(sideOf(hero, threat))], tap: [KEYS.defend] };
+    return { hold: [directionKey(sideOf(hero, threat))], tap: [KEYS.dodge] };
   }
   const hazard = hazardAbove(hero, enemies, HIGH_FOE);
   if (hazard) {
@@ -55,9 +59,9 @@ function decide(state: GameSnapshot, memory: BotMemory): Intent {
   if (spell === "cast" && dx < SPELL_RANGE && hero.mp >= hero.maxMp * SPELL_MP_SHARE) {
     return { hold: hero.face === side ? [] : [toward], tap: [KEYS.spell] };
   }
-  const moves = readyMoveKeys(hud);
-  if (moves.length > 0 && dx > WARP_RANGE.min && dx < WARP_RANGE.max) {
-    return { hold: [toward], tap: moves };
+  if (warpReady(hud) && hero.face === side && dx > WARP_RANGE.min && dx < WARP_RANGE.max) {
+    memory.warpUntil = memory.now + WARP_HOLD_MS;
+    return { hold: [KEYS.attack], tap: [] };
   }
   if (isHigh(hero, foe, HIGH_FOE) && dx < STRIKE_REACH && isOpen(foe)) {
     return { hold: [toward], tap: [KEYS.up, KEYS.attack] };

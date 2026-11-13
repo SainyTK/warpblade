@@ -20,8 +20,10 @@ const TEARS = { count: 4, enraged: 6, gap: 24, rise: -15 } as const;
 export const TEAR_WINDUP = 0.6;
 /** it gazes after this many other actions */
 const GAZE_EVERY = 2;
-/** seconds its lid stays shut once the gaze has failed it, lying on the floor where blows reach it */
+/** seconds its lid stays shut once the gaze has failed it, lying on the floor */
 export const SHUT = 8;
+/** shut, each of the hero's own blows takes this share of its whole HP */
+export const UNBLINKING_SHUT_SHARE = 0.03;
 
 /**
  * e.n: gazes in a row that found nothing (the drawing droops the lid by it). e.ax: actions since its last gaze.
@@ -68,10 +70,10 @@ function chooseAction(e: Enemy): void {
 }
 
 /**
- * The Unblinking, what comes after the last wave's boss: a great eye that nothing can hurt while it is open
- * (kinds/unblinking.ts). It hovers out of reach, burns lances of sight down where the hero stands, weeps globs of void
+ * The Unblinking, what comes after the last wave's boss: a great eye with HP no run can wear down
+ * (kinds/unblinking.ts), whose every attack all but kills. It hovers out of reach, burns lances of sight down where the hero stands, weeps globs of void
  * that fall around them, and every few actions sweeps its gaze across the whole stage. Only its own gaze can shut it: see gaze.ts. Shut, it
- * lies on the floor for `SHUT` seconds and takes blows like any foe, then opens and rises again.
+ * lies on the floor for `SHUT` seconds, where each blow takes a share of its HP, then opens and rises again.
  */
 export function updateUnblinking(e: Enemy, dt: number, ts: number): void {
   if (e.phase === 1 && e.hp < e.max * 0.5) e.phase = 2;

@@ -4,6 +4,7 @@ import { rechargeStep } from "../../build/recharge";
 import { take, use } from "../../input";
 import { hero } from "../../state";
 import { resetMotion } from "../kael/motion";
+import { PROVISIONAL_GUARD, PROVISIONAL_WARP } from "../provisionalMoveset";
 import { startCharge } from "../ultimate";
 import { nextAbility, pressAbility, resetAbilities } from "./abilities";
 import { steadfast } from "./armour";
@@ -116,6 +117,9 @@ function readHolding(): void {
  * turns through them), and Grit plates that take blows for her. She never dodges.
  */
 export const HULDA_KIT: HeroKit = {
+  warp: PROVISIONAL_WARP,
+  guard: PROVISIONAL_GUARD,
+  abilities: [],
   tick,
   readActions: (dir) => {
     if (hulda.held && (hero.state === "hold" || hero.state === "knee")) return readHolding();

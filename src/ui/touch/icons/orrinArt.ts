@@ -123,7 +123,7 @@ export function orrinArt(action: TouchButtonAction, ability: OrrinAbility, known
       return JUMP;
     case "dash":
       return REEL;
-    case "warp":
+    case "guard":
       return HOOK;
     case "cast":
       return ABILITY_ART[ability];

@@ -48,7 +48,7 @@ export function sableArt(action: TouchButtonAction): IconArt {
       return JUMP;
     case "dash":
       return HOP;
-    case "warp":
+    case "guard":
       return KICK;
     case "cast":
       return SNARE;

@@ -5,6 +5,7 @@ import { isHeld, take, use } from "../../input";
 import { hero } from "../../state";
 import { settle } from "../actions";
 import { resetMotion } from "../kael/motion";
+import { PROVISIONAL_GUARD, PROVISIONAL_WARP } from "../provisionalMoveset";
 import { travelEnded } from "../travelEnd";
 import { startCharge } from "../ultimate";
 import { nextAbility, pressAbility, resetAbilities } from "./abilities";
@@ -140,6 +141,9 @@ function readSwinging(): void {
  * Pin on I (O turns through them and his spell skills), and Momentum, filled by speed, on every hit he deals.
  */
 export const ORRIN_KIT: HeroKit = {
+  warp: PROVISIONAL_WARP,
+  guard: PROVISIONAL_GUARD,
+  abilities: [],
   tick,
   readActions: () => {
     if (hero.state === "swing") return readSwinging();

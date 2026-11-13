@@ -6,6 +6,7 @@ import { use } from "../../input";
 import { skillValues } from "../../skills/query";
 import { hero } from "../../state";
 import { resetMotion } from "../kael/motion";
+import { PROVISIONAL_GUARD, PROVISIONAL_WARP } from "../provisionalMoveset";
 import { startCharge } from "../ultimate";
 import { evadeAbsorbs, evadeDrives, pressEvade, runHop, runSlide } from "./evade";
 import { doubleTapRun, pressJump } from "./jump";
@@ -81,6 +82,9 @@ const steadfast = (): boolean =>
  * it. The bolts aim themselves at the foe ahead, so Up and Down only jump and drop.
  */
 export const SABLE_KIT: HeroKit = {
+  warp: PROVISIONAL_WARP,
+  guard: PROVISIONAL_GUARD,
+  abilities: [],
   tick,
   readActions: (dir, tap) => {
     use("dash", () => pressEvade(dir));

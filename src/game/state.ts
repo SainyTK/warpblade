@@ -141,6 +141,7 @@ export function freshHero(stats: Progress["stats"]): Hero {
     spellCd: { lance: 0, burst: 0, fire: 0, ice: 0, volt: 0 },
     spellCdFull: { lance: 1, burst: 1, fire: 1, ice: 1, volt: 1 },
     castAbility: "lance",
+    castWide: false,
     denied: { cast: 0, warp: 0, mp: 0, ult: 0, hp: 0 },
     spellPower: 1,
     lastHit: null,

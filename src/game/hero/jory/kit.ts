@@ -15,6 +15,7 @@ import { trailMallets } from "./crescendo";
 import { drawJory, drawJoryFloor } from "./draw";
 import { rolling, runDrumroll } from "./drumroll";
 import "./hooks";
+import { PROVISIONAL_GUARD, PROVISIONAL_WARP } from "../provisionalMoveset";
 import { pressJump } from "./jump";
 import { jory, resetJory } from "./memory";
 import { joryPose } from "./pose";
@@ -116,6 +117,9 @@ const walkSpeed = (shared: number): number => shared * (1 + (skillValues("j_marc
  * Skin on I (O turns through them and his spell skills), and Drumroll on U.
  */
 export const JORY_KIT: HeroKit = {
+  warp: PROVISIONAL_WARP,
+  guard: PROVISIONAL_GUARD,
+  abilities: [],
   tick,
   readActions: (dir) => {
     use("dash", () => pressStep(dir));

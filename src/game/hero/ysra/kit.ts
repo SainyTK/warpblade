@@ -1,6 +1,7 @@
 import { sfx } from "../../../services/audio";
 import type { HeroKit } from "../../../types/kit";
 import { take, use } from "../../input";
+import { PROVISIONAL_GUARD, PROVISIONAL_WARP } from "../provisionalMoveset";
 import { startCharge } from "../ultimate";
 import { buffs, resetBuffs, tickBuffs } from "./buffs";
 import { emitYsra } from "./events";
@@ -20,6 +21,9 @@ const PARTS: readonly YsraPart[] = [GLAIVE_PART, STANCE_PART, PYRE_PART];
  * in place of a dodge, and Heat built by her blows and spent on fire rites.
  */
 export const YSRA_KIT: HeroKit = {
+  warp: PROVISIONAL_WARP,
+  guard: PROVISIONAL_GUARD,
+  abilities: [],
   tick: (dt) => {
     tickBuffs(dt);
     for (const p of PARTS) p.tick?.(dt);

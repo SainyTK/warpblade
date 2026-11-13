@@ -1,14 +1,14 @@
-import { HUD_TAB_KEYS } from "../constants/keys";
+import { MOVE_TABS } from "../constants/keys";
 import type { HudSnapshot, HudTab } from "../types/snapshot";
 
 const usable = (tab: HudTab): boolean => tab.visible && tab.ready;
-const isSpellTab = (tab: HudTab): boolean => !(tab.id in HUD_TAB_KEYS);
+const isSpellTab = (tab: HudTab): boolean => !MOVE_TABS.includes(tab.id);
 
-/** the keys of HUD tabs other than spells that are learned and recharged, such as WARP on K */
-export const readyMoveKeys = (hud: HudSnapshot): string[] =>
-  hud.tabs.filter((tab) => !isSpellTab(tab) && usable(tab)).map((tab) => HUD_TAB_KEYS[tab.id]);
+/** the warp tab (J held) is shown and recharged */
+export const warpReady = (hud: HudSnapshot): boolean => hud.tabs.some((tab) => tab.id === "warpTab" && usable(tab));
 
-/** "cast" when the selected spell is ready, "cycle" when another learned one is, else null */
+/** "cast" when the selected spell is ready, "cycle" when another learned one is, else null; I casts the next ready one
+ *  on its own, so "cycle" only keeps the HUD selection near what is ready */
 export function spellChoice(hud: HudSnapshot): "cast" | "cycle" | null {
   const spells = hud.tabs.filter(isSpellTab);
   if (spells.some((tab) => tab.selected && usable(tab))) {

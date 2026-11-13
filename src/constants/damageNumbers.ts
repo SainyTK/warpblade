@@ -36,7 +36,6 @@ export const NUMBER_WORDS: Readonly<Record<DamageTag | CueWord, string>> = {
   perfect: "PERFECT",
   parry: "PARRY",
   broken: "GUARD BROKEN",
-  warded: "NO EFFECT",
 };
 /** how far above a number its word sits */
 export const WORD_LIFT = 7;
