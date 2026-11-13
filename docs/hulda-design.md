@@ -3,25 +3,23 @@
 Hulda is the fourth hero and the first one the studio built in the hero sprint.
 She shares the rig with Kael, Ysra and Sable and plays nothing like any of them.
 She is a slow, heavy, unarmed wrestler in iron gauntlets with the shortest reach in the game.
-She wins by getting her hands on foes: grabs, throws that turn one foe into a weapon against the others, and armour that lets her walk through blows to get there.
-She is never untouchable.
-Every other hero escapes blows; she absorbs them.
+She wins by getting her hands on foes: a chained gauntlet that hauls her in already holding one, throws that turn one foe into a weapon against the others, and armour that lets her walk through blows to get there.
+Her iron guard and her plates absorb blows; the shared dodge is her one way to slip one.
 
 ## How she differs from every hero in the game
 
-- Kael is a fast warp swordsman with a run, a double jump, an untouchable dash, a warp throw and MP element spells, his combo picked by the situation.
-  Hulda walks slowest of all and has no run, no double jump and no untouchable frame anywhere in her kit.
-  She fights with fists that reach 16 px ahead, and her key moves are grabs and throws that move a foe's body.
-  Her defence is armour plates, and her MP pays only for Bellow and the ultimate.
-- Ysra is a planted glaive fighter with long piercing pokes, a front brace that blocks and parries, a pole vault, and Heat spent on fire rites.
-  Hulda has no block or parry button; her armour works from every side and breaks one plate per blow.
-  Grit is never spent by a button: blows she takes spend it, and grabbing, throwing, taunting and getting hit build it.
-  Her travel is a charge along the floor through foes, never over them.
-- Sable is a ranged hunter who keeps foes away with bolts, a kick, a hop back and snares, and manages ammo.
-  Hulda does the opposite: Bellow pulls foes in, Bull Rush closes the distance, and she wants foes in her hands.
-  She has no projectile of her own; the only things she throws are foes.
+Every hero plays on the same buttons since the moveset rework of 13 November 2026 (`docs/moveset-design.md`); she plays them as a wrestler.
 
-The axes that differ: movement (a slow walk, an armoured charge, a low jump and an air grab dive), defence (armour plates), resource (Grit as armour), range (the shortest melee, plus foes as projectiles) and the shape of her attacks (grab, then throw by direction).
+- Kael throws his crystal sword and strikes as he lands; Hulda throws a chained gauntlet and lands with the foe already in her hands.
+  She walks slowest of all and has no run and no double jump.
+  She fights with fists that reach 16 px ahead, and her key moves are holds and throws that move a foe's body.
+- Kael's parry cuts back at once; hers, Iron Catch, seizes the attacker, and her guard lets almost nothing through.
+- Her defence goes on beyond the guard: armour plates of Grit take blows from every side and break one plate per blow.
+  Grit is never spent by a button: blows she takes spend it, and holding, throwing, blocking, taunting and getting hit build it.
+- Her travel is a charge along the floor through foes, Bull Rush on I, never over them.
+- She has no projectile of her own; the only things she throws are her gauntlet on its chain and foes.
+
+The axes that differ: movement (a slow walk, an armoured charge, a low jump and an air grab dive), defence (an iron guard and armour plates), resource (Grit as armour), range (the shortest melee, the chain, and foes as projectiles) and the shape of her attacks (seize, then knee and throw by direction).
 
 ## Controls
 
@@ -30,15 +28,16 @@ The axes that differ: movement (a slow walk, an armoured charge, a low jump and 
 | A / D | Walk. No run; a double tap does nothing |
 | W | One low, heavy jump (44 px). No double jump |
 | S | With W, drop through a ledge |
-| J | Fist string: jab, body hook, haymaker. In the air one hammer fist. While holding a foe, a knee |
-| K | Grab. While holding a foe, throw it: the throw picks itself by where the foes stand. In the air, Skyfall Grab |
-| L | Bull Rush, an armoured shoulder charge (25 stamina) |
-| I | The selected ability: Bellow (20 MP), the taunt, or a spell skill |
+| J tapped | Fist string: jab, body hook, haymaker. In the air one hammer fist. While holding a foe, a knee |
+| J held | Chain warp: the gauntlet flies on its chain, she hauls herself in and lands holding the foe. While holding a foe, a throw |
+| K | Iron guard, held; Iron Catch, the parry, when pressed just as a blow lands. While holding a foe, a throw |
+| L | The shared front dodge |
+| I | The selected ability: Bull Rush (Skyfall Grab in the air), Bellow, the taunt or a spell skill; held, the wide form |
 | O | Switch to the next ability on I |
-| U | Ultimate (shared charge and MP rules) |
+| U | Quake Drop (shared charge and MP rules) |
 
-On the touch controller the buttons read Punch, Jump, Rush, Grab, Bellow, Taunt and Special, with icons drawn in `src/ui/touch/icons/huldaArt.ts`.
-While she holds a foe, the stick pushed behind her picks the suplex and pushed up picks the toss.
+On the touch controller the buttons read Punch, Jump, Dodge, Guard, Ability, Switch and Special, with icons drawn in `src/ui/touch/icons/huldaArt.ts`.
+While she holds a foe, the stick pushed behind her picks the suplex and pushed ahead the forward throw.
 
 ## Grit and armour plates
 
@@ -46,12 +45,13 @@ Grit is her second bar, 0 to 100, shown as GR under stamina and split into four 
 Full plates are bright steel with a lit top edge; the plate filling is a dim fill.
 A run starts with 25 Grit, one plate.
 
-Grit comes from her blows (4 for each foe a J blow lands on), a grab (10), a knee (5), a throw or Skyfall slam (15), Bellow (10), each taunt slap (12), and each blow she takes without spending a plate (10).
+Grit comes from her blows (4 for each foe a J blow lands on), a foe seized by the warp or Iron Catch or crushed by the warp (10), a knee (5), a throw or Skyfall slam (15), Bellow (10), each taunt slap (12), each blow her guard blocks (6), and each blow she takes without spending a plate (10).
 It drains 4 a second once 4 seconds pass with no blow landed or taken.
 
 A blow on her with a full plate deals half its damage (40% with Iron Plates), breaks one plate with steel shards from her shoulder, and leaves her doing whatever she was doing, safe for 0.8 s, as long as after any hurt.
 With no full plate, a blow hurts her as it hurts any hero: the knockback, the hurt state and a dropped foe.
 During the Bull Rush every blow deals half and never flinches her, and spends no plate.
+The guard comes before the plates: a blocked blow spends stamina and never a plate.
 The haymaker's wind-up is armoured from its second frame until it lands.
 
 The engine hook is `steadfast` on `HeroKit` (`src/types/kit.ts`): `hurtHero` takes the HP as before, then when the hero still stands and the kit's `steadfast()` says its armour took the blow, it skips the knockback, the hurt state and the combo reset.
@@ -78,51 +78,65 @@ Each blow loads the other way and holds the load three frames or more, snaps to 
 The jab is the lead fist straight at the head as the rear heel lifts; the hook sinks her with the rear fist at the hip, then drives it rising into the body; the haymaker cocks the lead fist behind her head with the front toe raised, then steps in and throws it down over the foe while the rear foot drags after her.
 Jab and hook reach a box 2 to 16 px ahead at head height, the shortest reach in the game.
 The haymaker's box reaches 42 px up, as far as the fist travels, and no further ahead than the jab.
-Light blows are blocked by guarding husks as for every hero; the haymaker breaks a guard, and the grab beats one.
+Light blows are blocked by guarding husks as for every hero; the haymaker breaks a guard.
 In the air, J is one hammer fist per airtime that spikes a foe into the floor: both fists rise overhead as she arches back, hang there three frames, then her body jackknifes down (16 frames, hit on 6).
-A new string faces the held direction, and with none held the way she already faces; the blows never turn her by themselves, and neither does the grab.
+A new string faces the held direction, and with none held the way she already faces; the blows never turn her by themselves.
 
-## The grab and the throws
+## The chain warp, the hold and the throws
 
-K on the floor reaches with both hands and catches the nearest foe in a box 0 to 18 px ahead on frames 3 to 5.
-A minion is held; a mini boss or boss is crushed in both hands instead (1.3x, heavy) and never held.
+J held is the warp every hero shares (`src/game/hero/warp.ts`): the same cost, recharge, reach, flight and arrival blow as Kael's.
+Hers throws an iron gauntlet on a chain (`warpStyle.ts`, drawn in `effects/thrownGauntlet.ts`): she leans into the chain as it flies, then hauls herself in.
+Her arrival blow is both gauntlets slamming into the foe with a short shove, so a minion stays at her hands.
+Her extra is what the gauntlet clamped on:
+
+- A minion on the floor is in her hands as she lands.
+- A flier is caught in the air and ridden down into the Skyfall slam (below).
+- A mini boss or boss is crushed in both hands: Grit and, with Crushing Grip, Fractures; with Skyfall Breaker from its third level she rides its back and pounds it instead.
+
 A held foe sits at her hands, its near side a few pixels ahead of them, and stays stunned there.
-The hold lasts 1.4 s (longer with Crushing Grip), she walks at half speed and cannot jump, rush or Bellow, and J lands up to three knees (0.5x each).
+The hold lasts 1.4 s (longer with Crushing Grip), she walks at half speed, and the shared moves wait until the foe has left her hands.
+J tapped lands up to three knees (0.5x each).
+J held or K throws: with the side behind her held a suplex, with the side ahead a forward throw, and with neither the throw picks itself.
 When the hold runs out she throws the foe on her own.
 A blow that breaks no plate makes her drop it.
 
-The throw picks itself: a Giant Swing when foes crowd her and she holds that skill, a forward throw when foes stand within 100 px ahead and fewer within 40 px behind, otherwise a suplex, which is also the hardest throw on a lone foe.
+With no side held the throw picks itself: a Giant Swing when foes crowd her and she holds that skill, a forward throw when foes stand within 100 px ahead and fewer within 40 px behind, otherwise a suplex, which is also the hardest throw on a lone foe.
+Giant Swing also takes the place of a forward throw into a crowd.
 
 | Throw | When | What it does |
 | --- | --- | --- |
-| Forward | foes ahead | 1.2x, then the foe flies ahead as a body that hits each other foe it touches for 1.0x, knocks it back and stuns it, and lands for 0.6x more |
-| Suplex | alone, or foes behind | lifted overhead, swung over her head and slammed 14 px behind her: 2.2x, heavy, stun 1.2 s, and a 30 px ring that hits the others for 0.8x |
+| Forward | ahead held, or foes ahead | 1.2x, then the foe flies ahead as a body that hits each other foe it touches for 1.0x, knocks it back and stuns it, and lands for 0.6x more |
+| Suplex | behind held, alone, or foes behind | lifted overhead, swung over her head and slammed 14 px behind her: 2.2x, heavy, stun 1.2 s, and a 30 px ring that hits the others for 0.8x |
 | Giant Swing | foes crowd her, with the skill | turns round her that strike every foe near her each turn, then a forward throw |
 
-Skyfall Grab is K in the air, once per airtime: a lunge down and ahead with both hands.
+Skyfall Grab is Bull Rush in the air, once per airtime: a lunge down and ahead with both hands.
 On a minion it catches it, rides it down at 300 px/s and slams it into the floor for 2.0x with a 34 px ring (0.8x, stun 1.0 s).
+The warp's catch of a flier rides it down the same way.
 This is how she deals with fliers.
 A whiff lands with a short recovery, and both landings call `travelEnded()`.
 
+## The iron guard and Iron Catch
+
+K is the guard every hero shares (`src/game/hero/heroGuard.ts`); hers is iron (`guardStyle.ts`).
+Both gauntlets stack before her face: a blocked blow lets 5% through, costs 10 stamina and earns 6 Grit.
+Her parry is Iron Catch: the attacker, within 40 px, is seized.
+A minion is in her hands at once, ready for knees and a throw.
+A mini boss or boss is answered with a haymaker at 2x, its clip playing on from the blow; Wrecking Haymaker adds to it.
+The parry and the block also count as her armour for her skills (`armour` events of kind `parry` and `block`), so Ancestor's Fist answers a parry and Rust Shards sprays on a block.
+Her strong block pairs with a parry that wins position more than damage, until Iron Counter turns it into her hardest hit.
+
 ## Bull Rush, Bellow and the taunt
 
-Bull Rush: floor only, 25 stamina, a two-frame load, 0.32 s at 200 px/s times move speed, a six-frame skid, 0.4 s before the next.
-She charges the way she is pushed when L is pressed, so L toward a foe behind her turns her first.
+All three are base abilities on I, each with its own recharge (`slots.ts`); the shared bar casts the next ready one when the selected one recharges.
+
+Bull Rush: floor only, 25 stamina, a two-frame load, 0.32 s at 200 px/s times move speed, a six-frame skid, 0.8 s before the next.
+I held charges 1.6 times as long for 1.5 times the stamina.
+In the air the same ability is Skyfall Grab.
+She charges the way she is pushed when I is pressed, so I toward a foe behind her turns her first.
 Every foe she runs into takes 0.6x, a short 60 shove and a 0.4 s stun once per rush, and a guard breaks.
 Once she has run into a foe (one she did not lift onto her shoulder) and no other foe stands within 24 px ahead of her shoulder, the charge stops at its next stride key and the clip's own last stride and skid play from the same pose (`stopCharge` in `rushClock.ts`).
 She skids out 10 to 20 px past the foe and settles facing the way she charged, every time; to strike the foe behind her the player turns with A or D.
 Through a packed crowd she still runs the whole charge.
-
-### Keeping contact with a lone foe (8 November 2026)
-
-A player-style test (real keys, a walking husk with three times its HP, every gap measured) showed the string itself keeps contact: each jab, hook and haymaker landed 4 to 13 px from the foe and a human-paced string dealt about 80 a second.
-What broke contact was the rush: it ran 21 to 31 px past the foe and left her back to it, so the next jab whiffed; pressed with the foe behind her it charged the way she faced, 110 px away from it.
-After the fix the same test ended each rush 10 to 19 px past the foe.
-The string, the grab and the rush's end also turned her to a foe only behind her until the movement pass of 11 November 2026, which took out every turn the game made on its own, so the player turns her with A or D.
-Bellow: 20 MP, 4 s recharge on the HUD tab where Sable shows her snare's.
-Every foe within 80 px takes 0.6x ability power, minions reel 0.5 s, and all of them are dragged 36 px toward her over 0.25 s, under three expanding crimson rings.
-Flying minions are also dragged up to 48 px down to her hands and reel 0.9 s, so Bellow then a grab catches a flier that hovers out of reach.
-Taunt: 0.7 s rooted, two chest slaps worth 12 Grit each, 3 s before the next.
 
 ## Balance check
 
@@ -157,7 +171,7 @@ The bots never grab, throw or rush on purpose, so they show her floor; a player 
 ## Shop items and kit hooks
 
 - Vitality: her HP.
-- Honed Edge: every blow, knee, throw, thrown body, slam ring and both ultimates scale with `progress.stats.ad`.
+- Honed Edge: every blow, the warp, knee, throw, thrown body, slam ring and Quake Drop scale with `progress.stats.ad`.
 - Arcana: Bellow scales with `progress.stats.ap`.
 - Wellspring: Bellow and the ultimate spend MP.
 - Precision: every blow and throw goes through `dealDamage`, which rolls crits.
@@ -170,21 +184,19 @@ The bots never grab, throw or rush on purpose, so they show her floor; a player 
 ## Skills
 
 Her 20 skills, their levels, evolutions and balance are in `docs/skills/hulda.md`; their data is in `src/constants/characters/hulda/skills/`.
-Quake Drop is her special from the start; Titan Throw and Unbroken are the ultimate skills that replace it.
+Quake Drop is her one ultimate for the whole run, and the Quake Drop skill upgrades it.
 
 Quake Drop: she hops with both fists raised and slams them into the floor, and a crack in her ramp runs out to the level's reach, throwing rock chunks.
 Each foe standing on the floor in reach takes the level's power once; minions are thrown up and bigger foes reel 0.6 s.
-Titan Throw: crimson tethers yank every minion in reach into a heap over her head, she spins once and hurls the heap ahead as one body.
-It strikes every foe in its path for 0.6x the level's power and bursts where it lands for the full power on each foe in the heap.
-Minis and bosses are never pulled; they take the burst when it reaches them.
-Unbroken: an iron form for a few seconds (more per charge level) in which no blow breaks a plate or flinches her and her damage is up; from level 3 every blow she lands sends a quake 40 px each way along the floor (one each 0.2 s).
-Most of its value is these quakes: doubling her own blows for eight seconds alone is under one Quake Drop.
+The Quake Drop skill folds in the best of the two ultimates it replaced: Titan Throw's crimson tethers now drag minions in front of her before the fists fall, and Unbroken's iron now follows the drop, with blows that crack the floor while it lasts.
+Its levels also run the crack both ways from the first charge level, shake fliers down, add an aftershock and fill her plates.
 
 ## Look and motion
 
 Her skin is ash-grey hair cropped to dark stubble at the sides with a lighter crest and a braid, a scar through the brow, deep brown skin, a dark leather harness with an iron pauldron, a crimson sash, wrapped trousers and iron-toed boots (`src/constants/characters/hulda/look.ts`).
 Both fists wear iron-banded gauntlets with wrapped wrists and knuckle studs, drawn with the arms (`src/game/hero/draw/gauntlets.ts`), and her rings, trails and sparks use a rust ramp.
-Her own clips cover the guard idle, every blow, the hammer fist, the grab, the crush, the hold, the knee, the three throws, Skyfall, the Skyfall ride, the spell clips, the rush, Bellow, the taunt, the charge pose and both ultimates (`src/constants/clips/hulda/`).
+Her own clips cover the guard idle, every blow, the hammer fist, the hold, the knee, the three throws, Skyfall, the Skyfall ride, the spell clips, the rush, Bellow, the taunt, the charge pose, Quake Drop, and the shared moves: the gauntlet throw, the lean into the chain, the clamp on arriving and the iron guard with its block and catch (`src/constants/clips/`, `hulda/moveset.ts`).
+The dodge is Kael's dash clip with her fists up.
 Blows wind up the other way, snap on the hit frame and settle back to the guard, so the string chains without a seam; the haymaker holds four calm frames before it snaps.
 Walk, jump, fall, hurt and death use the shared clips through Kael's jump clock and hand-overs with her fists up before her chin (`src/game/hero/hulda/carry.ts`), and her stride is 20 px, shorter and heavier than Kael's.
 Her own recoveries go over them (`settle.ts`, `landing.ts`, keys in `src/constants/clips/hulda/settle.ts`).
@@ -195,22 +207,23 @@ A broken plate shoves her shoulders back two pixels and gives her knees for eigh
 
 ## Code layout
 
-- `src/game/hero/hulda/`: the kit (`kit.ts`), memory registered per seat (`memory.ts`), Grit and the plates (`grit.ts`, `armour.ts`), the string (`fists.ts`), the grab and crush (`grab.ts`), the hold (`hold.ts`), knees and throws (`throws.ts`), Skyfall (`skyfall.ts`), the slam ring (`slam.ts`), the rush, Bellow, the taunt, her jump, the pose and the carry layer, and the claims on held foes shared by every Hulda in a room (`claims.ts`).
+- `src/game/hero/hulda/`: the kit (`kit.ts`), when the shared moves may cut in (`act.ts`), the warp (`warpStyle.ts`), the guard and Iron Catch (`guardStyle.ts`), the abilities on I (`slots.ts`, with `castGate.ts`), memory registered per seat (`memory.ts`), Grit and the plates (`grit.ts`, `armour.ts`), the string (`fists.ts`), the hold (`hold.ts`), knees and throws (`throws.ts`), Skyfall (`skyfall.ts`), the slam ring (`slam.ts`), the rush, Bellow, the taunt, her jump, the pose and the carry layer, and the claims on held foes shared by every Hulda in a room (`claims.ts`).
+- `src/game/hero/hulda/effects/`: the thrown gauntlet, Quake Drop's tethers and her blow and slam effects.
 - `src/game/effects/thrownBody.ts`, `bellowRing.ts`, `quakeLine.ts` and `plateShards.ts`.
-- `src/game/ultimates/quakeDrop.ts` and `titanThrow.ts`.
-- `src/ui/gritBar.ts`: the GR bar; the K tab shows Bellow's recharge for her.
-- Numbers in `src/constants/hulda/`, skill icons in `src/ui/skills/icons/hulda/`.
+- `src/game/ultimates/quakeDrop.ts`.
+- `src/ui/gritBar.ts`: the GR bar; her abilities show on the shared ability tabs.
+- Numbers in `src/constants/hulda/` (the moveset's in `moveset.ts`), skill icons in `src/ui/skills/icons/hulda/`.
 
 ## Co-op
 
 Her memory registers per seat like Sable's.
-A held foe belongs to the hero holding it, and a second Hulda cannot grab it.
+A held foe belongs to the hero holding it, and a second Hulda cannot seize it.
 A hold counts only while its holder refreshes it each step, so a downed or departed Hulda lets go at once.
-Effects she spawns (the thrown body, Bellow's pull, the quake, Titan Throw) credit her through the shared owner path.
+Effects she spawns (the thrown body, Bellow's pull, the quake and its tethers) credit her through the shared owner path.
 
 ## Later
 
 - An Evolution branch, as Kael and Ysra have.
 - Her own walk built from a gait model; today it is Kael's legs with her fists up.
+- Her near gauntlet still shows on her hand while it flies on the chain; the shared arm draws it.
 - Throws that read the foe's weight: today a Thornback and a Wisp fly the same.
-- A grab cue on foes in reach, so a new player sees when K will catch.
