@@ -1,25 +1,23 @@
 import { COST, WARP } from "../../constants/combat";
-import { PAL, SPARKS } from "../../constants/palette";
-import { ANCHORS, GROUND, W } from "../../constants/stage";
+import { SPARKS } from "../../constants/palette";
+import { GROUND, W } from "../../constants/stage";
 import { sfx } from "../../services/audio";
 import type { Enemy } from "../../types/enemy";
 import type { WarpTarget } from "../../types/hero";
 import type { WarpTune } from "../../types/moveset";
 import { clamp } from "../../utils/math";
 import { dealDamage } from "../damage";
-import { createFloorRing } from "../effects/floorRing";
 import { createImpact } from "../effects/impact";
 import { createSlash } from "../effects/slash";
 import { createThrownWeapon } from "../effects/thrownWeapon";
 import { enemyCenter, walks } from "../enemies/enemy";
-import { isHeld } from "../input";
 import { meleeHit } from "../meleeHit";
 import { objectMemory, rememberPerSeat } from "../seatMemory";
 import { emitSkillEvent } from "../skills/events";
 import { game, hero, ponytail, progress, scarf } from "../state";
 import { foesOnSegment } from "../ultimates/segmentHits";
 import { boxAhead, newSwing, surfaceBelow } from "../world";
-import { leaveHang, setState } from "./actions";
+import { setState } from "./actions";
 import { leaveAfterimages } from "./afterimages";
 import { deny } from "./deny";
 import { kit } from "./kits";
@@ -72,20 +70,6 @@ export function resetWarp(): void {
   charges.left = 1;
 }
 
-/** the nearest crystal in reach, for a hero whose warp can hang from one */
-function anchorTarget(chest: number): WarpTarget | null {
-  let best: WarpTarget | null = null;
-  let bestD: number = WARP.anchorReach;
-  for (const a of ANCHORS) {
-    const d = Math.hypot(a.x - hero.x, a.y - chest);
-    if (d < bestD && hero.anchor !== a) {
-      bestD = d;
-      best = { anchor: a, x: a.x, y: a.y };
-    }
-  }
-  return best;
-}
-
 /** the nearest standing foe, ahead only or on either side, within `reach` */
 function nearestFoe(ahead: boolean, reach: number): Enemy | null {
   const chest = hero.y - 20;
@@ -114,14 +98,9 @@ function rangedTarget(): WarpTarget {
   return { x, y: hero.y - 18, aim: foe ?? undefined };
 }
 
-/** where the throw goes: a crystal with Up held (Kael), the nearest foe ahead, or a point ahead; a ranged hero's away */
+/** where the throw goes: the nearest foe ahead, or a point ahead; a ranged hero's away */
 export function findWarpTarget(): WarpTarget {
-  const style = kit().warp;
-  if (style.anchors && isHeld("up")) {
-    const anchor = anchorTarget(hero.y - 20);
-    if (anchor) return anchor;
-  }
-  if (style.ranged) return rangedTarget();
+  if (kit().warp.ranged) return rangedTarget();
   const foe = nearestFoe(true, WARP.reach);
   if (foe) {
     const [x, y] = enemyCenter(foe);
@@ -136,7 +115,7 @@ export function pressWarp(): boolean {
     deny("warp");
     return true;
   }
-  if (!maySharedAct() && hero.state !== "hang") return false;
+  if (!maySharedAct()) return false;
   if (hero.mp < warpCost()) {
     deny("mp");
     return true;
@@ -149,7 +128,6 @@ export function pressWarp(): boolean {
 function startThrow(): void {
   hero.mp -= warpCost();
   spendWarpCharge();
-  if (hero.state === "hang") leaveHang();
   const target = findWarpTarget();
   if (Math.abs(target.x - hero.x) > 2) hero.face = Math.sign(target.x - hero.x);
   hero.warpTarget = target;
@@ -238,7 +216,7 @@ export function warpBeside(enemy: Enemy, told: boolean): void {
   strikeOnArrival(warpPower(Math.hypot(nx - ox, ny - oy)), enemy);
 }
 
-/** the hero appears where the weapon landed: beside a foe and striking, hanging from a crystal, or at a point */
+/** the hero appears where the weapon landed: beside a foe and striking, or at a point */
 export function doWarp(target: WarpTarget): void {
   const enemy = target.enemy && target.enemy.hp > 0 ? target.enemy : null;
   if (enemy) {
@@ -247,25 +225,9 @@ export function doWarp(target: WarpTarget): void {
   }
   const ox = hero.x;
   const oy = hero.y;
-  let nx: number;
-  let ny: number;
-  if (target.anchor) {
-    nx = target.anchor.x - hero.face * 2;
-    ny = target.anchor.y + 38;
-  } else {
-    nx = hero.sword?.x ?? target.x;
-    ny = (hero.sword?.y ?? target.y) + 18;
-  }
-  nx = clamp(nx, 8, W - 8);
-  ny = Math.min(ny, GROUND);
+  const nx = clamp(hero.sword?.x ?? target.x, 8, W - 8);
+  const ny = Math.min((hero.sword?.y ?? target.y) + 18, GROUND);
   arrive(nx, ny, enemy);
-  if (target.anchor) {
-    hero.anchor = target.anchor;
-    hero.ground = false;
-    setState("hang");
-    game.fx.push(createFloorRing(target.anchor.x, target.anchor.y + 2, 18, PAL.crystal, 0.35, 0.35));
-    return;
-  }
   // a ranged hero turns to the foe they threw away from and strikes it from here
   const aim = target.aim && target.aim.hp > 0 ? target.aim : null;
   if (aim) hero.face = Math.sign(aim.x - hero.x) || hero.face;

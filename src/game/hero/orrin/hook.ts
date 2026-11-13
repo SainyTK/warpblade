@@ -1,6 +1,6 @@
 import { HOOK } from "../../../constants/orrin/hook";
 import { SPARKS } from "../../../constants/palette";
-import { ANCHORS, PLATFORMS, W } from "../../../constants/stage";
+import { PLATFORMS, W } from "../../../constants/stage";
 import { sfx } from "../../../services/audio";
 import type { LatchKind } from "../../../types/orrin";
 import { PK } from "../../../types/particle";
@@ -92,15 +92,13 @@ function latch(kind: LatchKind, at: Point): void {
   sfx.clink();
   emitSkillEvent({ type: "latch", kind });
   giveArcBack(false);
-  if (kind === "anchor" || kind === "platform") orrin.hooks = Math.min(hooksPerAir(), orrin.hooks + 1);
+  if (kind === "platform") orrin.hooks = Math.min(hooksPerAir(), orrin.hooks + 1);
   if (kind === "platform" && swingRoom(at) < HOOK.minLength) return startClimb(at);
   startSwing(kind, at);
 }
 
-/** what the hook meets at a point of its flight: a crystal, a platform, or nothing; it flies past foes */
+/** what the hook meets at a point of its flight: a platform, or nothing; it flies past foes */
 function meets(x: number, y: number): { kind: LatchKind; at: Point } | null {
-  for (const a of ANCHORS)
-    if (Math.hypot(a.x - x, a.y - y) <= HOOK.anchorCatch) return { kind: "anchor", at: { x: a.x, y: a.y } };
   for (const p of PLATFORMS)
     if (x >= p.x0 - 1 && x <= p.x1 + 1 && y >= p.y && y <= p.y + 5)
       return { kind: "platform", at: { x: Math.min(p.x1, Math.max(p.x0, x)), y: p.y + 4 } };

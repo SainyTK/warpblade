@@ -8,7 +8,6 @@ export const HOOK = {
   aim: 40,
   aimUp: 75,
   /** a crystal this close to the hook's path catches it */
-  anchorCatch: 10,
   /** air hooks per airtime; latches on crystals and platforms give the hook back */
   perAir: 2,
   /** the hand the chain hangs from, above his feet, while he swings */

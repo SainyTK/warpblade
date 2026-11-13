@@ -11,7 +11,7 @@ Blurb: "A keeper of the rift's broken clocks. She holds moments still, strikes o
 
 ## How she differs from every hero in the game
 
-- Kael (warp swordsman): runs, double jumps and hangs from crystals.
+- Kael (warp swordsman): runs and double jumps.
   Mirel has no run and no double jump; she hovers at the top of her one jump.
   Her warp flings her staff like a pendulum, and its arrival echoes like her blows.
 - Ysra (planted glaive, brace and parry, vault, Heat): parries to counter and builds Heat from blows.

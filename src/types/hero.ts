@@ -11,7 +11,6 @@ import type { SableState } from "./sable";
 import type { KaelAbility } from "./spell";
 import type { TallisState } from "./tallis";
 import type { WennaState } from "./wenna";
-import type { Point } from "./world";
 import type { YsraClipName, YsraState } from "./ysra";
 
 /** why a press was refused: the selected spell or the warp is still recharging, MP is short, or HP is (Brannoc) */
@@ -53,7 +52,6 @@ export type HeroState =
   | "dash"
   | "hurt"
   | "dead"
-  | "hang"
   /** K held: the guard every hero shares */
   | "guard"
   | YsraState
@@ -88,7 +86,6 @@ export interface WarpTarget {
   x: number;
   y: number;
   enemy?: Enemy;
-  anchor?: Point;
   /** a ranged hero's throw away from a foe: the foe they strike once they land */
   aim?: Enemy;
 }
@@ -118,7 +115,6 @@ export interface Hero {
   inv: number;
   jumps: number;
   drop: number;
-  anchor: Point | null;
   hasSword: boolean;
   hitDone: boolean;
   /** the highest point Kael may rise to before he lands again, set by his last jump or a lift from the floor */

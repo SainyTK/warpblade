@@ -14,7 +14,6 @@ export const HANDOVER_FRAMES: Partial<Record<HeroState, number>> = {
   dead: 0,
   warpStrike: 0,
   fall: 2,
-  hang: 2,
   cast: 2,
   throw: 2,
   throwWait: 2,

@@ -13,7 +13,7 @@ Add `brannoc` to `KitId` in `src/types/kit.ts`.
 
 ## How he differs from every hero in the game
 
-- Kael (warp swordsman) double jumps, hangs from crystals and spends MP on element spells. Brannoc has no double jump and spends MP only on the shared warp and his special. His abilities are paid in HP.
+- Kael (warp swordsman) double jumps and spends MP on element spells. Brannoc has no double jump and spends MP only on the shared warp and his special. His abilities are paid in HP.
 - Ysra (planted glaive, brace and parry, vault, Heat) blocks well. Brannoc's guard is the worst in the roster: half of each blow bleeds through it. His parry is the best: it wins back all the HP he spent.
 - Sable (ranged hunter, ammo and reload) keeps foes at 250 px. Brannoc wants foes on both sides of him: his finisher hits all around.
 - Hulda (grappler, armour plates from Grit) halves blows with armour and moves foes with her hands. Brannoc has no armour and no grab. His only no-flinch window is Frenzy and Berserk, and a blow then still takes full HP and forfeits his debt.

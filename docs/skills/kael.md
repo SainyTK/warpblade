@@ -19,7 +19,6 @@ Every skill is on a single button press or runs on its own; nothing asks for a d
 | J (Keen) | J pressed in the 0.1 s after a blow lands makes the next blow a sure crit, drawn gold. Mashing spoils it. |
 | J (air) | Air string of 2 per jump: wheel slash (1.7 AD), scissor cut (1.85 AD, pops the foe up). |
 | J held | Warp Strike, the shared warp: throw the sword at the nearest foe ahead and appear beside it striking, 1.8 AD plus 0.014 AD per pixel travelled (up to +2.8). 10 MP, 2 s recharge. |
-| J held with Up | Crystal Hang: warp to a floating crystal and hang there to recover MP fast (14 MP/s). |
 | K | Guard: held, it blocks blows from the front for 14 stamina and lets 20% through. A blow from behind lands. |
 | K (parry) | Pressed just as a blow lands: the shared parry, then a riposte cut at once (1.6 AD, sure crit), the next string blow is Keen, and for 0.7 s J is the counter. |
 | J after a parry | The counter: Kael blinks to the attacker's back and strikes it, 2 AD and a sure crit. A gold mark shows where he will land. |
@@ -91,7 +90,7 @@ Spellblade works on the wide form: held during an open combo, the wide form leav
 | Mana Blade | fusion | Keen Edge level 4 (a Keen blow sends the crystal wave). |
 | Riposte | fusion | Mirror Knight level 2. |
 | Thousand Edges, Phantom Legion, Starfall | ultimates | Crystal Nova's levels: phantoms (level 3), falling stars (level 5), a storm of edges (level 6), and Supernova's storm that follows Kael. |
-| Dash and its K warp | L, K | The shared dodge on L and the shared warp on J held; Kael keeps the warp's crystal hang and Rift Walker. |
+| Dash and its K warp | L, K | The shared dodge on L and the shared warp on J held; Kael keeps Rift Walker. |
 | Tempest | ultimate | Folded into Thunderhead (the storm cloud keeps striking). |
 | Keen Edge (stat), Swift Hands, Killing Intent, Berserker, Iron Will, Fleet Foot, Mana Font, Arcane Power, Archmage, Swift Sigils, Quick Cast, Siphon | passives | Dropped; Might, Haste and the other charms cover stat growth. |
 

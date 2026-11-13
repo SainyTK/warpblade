@@ -8,7 +8,7 @@ export type OrrinState = "lash" | "hookThrow" | "swing" | "climb" | "fly" | "whi
 export type ChainBlow = "lash" | "rising" | "circle";
 
 /** what the swing hook bit: a crystal or a platform to swing from, or the air itself */
-export type LatchKind = "anchor" | "platform" | "air";
+export type LatchKind = "platform" | "air";
 
 /** the abilities on I, in the order O turns through them: his two from the start and his three spell skills */
 export type OrrinAbility = "whirlwall" | "anchorPin" | "o_chainfence" | "o_tether" | "o_anchorfall";

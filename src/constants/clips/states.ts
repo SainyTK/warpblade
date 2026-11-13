@@ -14,4 +14,4 @@ export const STATE_CLIPS = { ...LOCOMOTION_CLIPS, ...HELD_CLIPS, ...GUARD_CLIPS 
 >;
 
 /** states whose clip repeats while Kael stays in them */
-export const LOOPING_STATES: ReadonlySet<StateClipName> = new Set(["idle", "hang", "charge", "throwWait"]);
+export const LOOPING_STATES: ReadonlySet<StateClipName> = new Set(["idle", "charge", "throwWait"]);

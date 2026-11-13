@@ -28,7 +28,7 @@ import { castBurst } from "../spells/burst";
 import { castFire } from "../spells/fire";
 import { castIce } from "../spells/ice";
 import { game, hero, lights, particles, progress, rng } from "../state";
-import { isFree, leaveHang, setState } from "./actions";
+import { isFree, setState } from "./actions";
 import { comboOpen, endCombo } from "./combo";
 import { spellwarpCostShare, spellwarpOpen } from "./kael/spellwarp";
 import { kael } from "./kael/state";
@@ -66,7 +66,6 @@ export function rechargeSpells(dt: number): void {
  *  held, its wide form */
 function startCast(a: KaelAbility, spellblade: boolean, wide: boolean, costShare: number): void {
   const h = hero;
-  if (h.state === "hang") leaveHang();
   h.castAbility = a;
   h.castWide = wide;
   h.mp -= castCost(a, wide) * costShare;
@@ -88,7 +87,7 @@ function startCast(a: KaelAbility, spellblade: boolean, wide: boolean, costShare
 function castFrom(a: KaelAbility, wide: boolean): boolean {
   const afterWarp = !comboOpen(SPELLBLADE.after) && spellwarpOpen();
   const spellblade = afterWarp || comboOpen(SPELLBLADE.after);
-  if (!spellblade && !isFree() && hero.state !== "hang") return false;
+  if (!spellblade && !isFree()) return false;
   const share = afterWarp ? spellwarpCostShare() : 1;
   if (hero.mp < castCost(a, false) * share) return false;
   if (afterWarp) kael.spellwarp = 0;

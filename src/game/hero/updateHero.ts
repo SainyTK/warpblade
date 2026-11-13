@@ -107,7 +107,7 @@ export function updateHero(dt: number): void {
   tickTakeoff(dt);
   if (h.running && dir !== h.face) h.running = false;
   if (h.state !== "dead") {
-    h.mp = Math.min(progress.stats.mp, h.mp + (h.state === "hang" ? MP_REGEN.hanging : MP_REGEN.normal) * dt);
+    h.mp = Math.min(progress.stats.mp, h.mp + MP_REGEN * dt);
     readActions(dir, tap);
   }
   if (!kit().runState(dt)) runState(dt);

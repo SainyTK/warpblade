@@ -21,12 +21,6 @@ export const PLATFORMS: readonly Platform[] = [
   { x0: 208, x1: 284, y: 114 },
   { x0: 128, x1: 192, y: 76 },
 ];
-/** floating warp crystals Kael can hang from */
-export const ANCHORS: readonly Point[] = [
-  { x: 22, y: 44 },
-  { x: 160, y: 28 },
-  { x: 298, y: 44 },
-];
 export const BRAZIERS: readonly Point[] = [
   { x: 46, y: 114 },
   { x: 274, y: 114 },

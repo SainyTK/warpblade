@@ -42,7 +42,6 @@ A kit's `WarpStyle` gives it its look and one small extra:
 - `tune`: the numbers the hero's warp skill changes, read on every warp.
 - `stat: "ap"`: the warp grows with ability power, for a hero whose damage comes mostly from it, so every warp hits about as hard.
 - `ranged`: the throw goes away from the nearest foe, the hero lands at a safe distance and strikes that foe from there.
-- `anchors`: Up held throws at a floating crystal, and the hero hangs from it (Kael).
 
 The arrival blow may be cut by a guard, a dodge or an ability once it has struck (`WARP.cut`).
 

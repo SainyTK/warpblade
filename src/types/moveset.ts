@@ -35,8 +35,6 @@ export interface WarpStyle {
    * every hero's warp hits about as hard. Left out, attack damage.
    */
   stat?: "ap";
-  /** with Up held the throw goes to the nearest floating crystal, and the hero hangs from it (Kael) */
-  anchors?: boolean;
   /** draws the thrown weapon at (x, y), pointing along `angle` (radians), `t` seconds into its flight */
   drawThrown(x: number, y: number, angle: number, t: number): void;
   /**

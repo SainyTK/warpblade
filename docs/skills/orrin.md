@@ -38,7 +38,7 @@ Distances are art pixels, times are seconds, speeds are pixels a second.
 Counts: attack 6, movement 3, spell 3, dot 3, summon 3, passive 1, ultimate 1.
 Risk: precise 5, easy 6, timed 9.
 
-Kit events he emits through the shared function: `latch` (the swing hook bit a crystal, a platform or the air), `release` (he let go of a swing), `tip` (a chain hit at the tip) and `swingKick`, declared in `src/types/orrin.ts`; and the shared `cast`, `dash` and `perfectDodge`.
+Kit events he emits through the shared function: `latch` (the swing hook bit a platform or the air), `release` (he let go of a swing), `tip` (a chain hit at the tip) and `swingKick`, declared in `src/types/orrin.ts`; and the shared `cast`, `dash` and `perfectDodge`.
 The shared warp and guard emit `warp` and `parry` for him.
 
 ### o_sweetspot: Sweet Spot

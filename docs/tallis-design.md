@@ -13,7 +13,7 @@ Code layout follows Wenna and Mirel: kit `src/game/hero/tallis/`, character `src
 Since the shared moveset (`docs/moveset-design.md`) every hero has the warp on J held, a guard and parry on K and the front dodge on L.
 Tallis's warp lands him at the foe's back, and his parry hides him.
 
-- Kael (warp swordsman) double jumps and hangs from crystals. His back attacks are one skill option (Phase Cut). Tallis has one jump, travels slowly and steerably under foes as a shadow pool, and his whole kit is built on where foes are facing.
+- Kael (warp swordsman) double jumps. His back attacks are one skill option (Phase Cut). Tallis has one jump, travels slowly and steerably under foes as a shadow pool, and his whole kit is built on where foes are facing.
 - Ysra (planted glaive, brace and parry, vault, Heat) meets blows from the front with a long weapon and vaults over foes. Tallis has the shortest reach in the roster (about 22 px), the thinnest block, and gets behind foes by going under them or through their shadow.
 - Sable (ranged hunter, ammo and reload, hop and slide) fights from 250 px. Tallis fights at knife range, and his escapes, the pool and the Veil, also hide him.
 - Hulda (unarmed grappler, armour, grabs) walks into blows behind armour. Tallis has 90 HP against her 120 and no armour; his defence is staying out of sight.

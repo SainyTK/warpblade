@@ -32,7 +32,7 @@ function farthestWickAhead(): Wick | null {
 /** the shared throw found no foe ahead: the candle goes to her farthest Wick ahead instead, and she trades places */
 function aimAtWick(): void {
   const target = hero.warpTarget;
-  if (!target || target.enemy || target.anchor || target.aim) return;
+  if (!target || target.enemy || target.aim) return;
   const w = farthestWickAhead();
   if (!w) return;
   wennaHost.swapWick = w;

@@ -7,7 +7,7 @@ import { isHeld } from "../input";
 import { emitSkillEvent } from "../skills/events";
 import { game, hero, particles, rng } from "../state";
 import { dust } from "../world";
-import { isFree, leaveHang, setState } from "./actions";
+import { isFree, setState } from "./actions";
 import { blowsDone, endMove } from "./combo";
 import { lift } from "./lift";
 import { skin } from "./skin";
@@ -33,16 +33,9 @@ function leaveFloor(): void {
   emitSkillEvent({ type: "jump", air: false });
 }
 
-/** Up: jump, loading from a stand or a stride (at once out of an attack's follow-through), jump off a crystal, drop through a ledge with Down held, or jump again in the air */
+/** Up: jump, loading from a stand or a stride (at once out of an attack's follow-through), drop through a ledge with Down held, or jump again in the air */
 export function jump(): boolean {
   const h = hero;
-  if (h.state === "hang") {
-    leaveHang();
-    lift(M.hangJumpRise, true);
-    h.jumps = 1;
-    setState("jump");
-    return true;
-  }
   // a jump cancels a move's follow-through and keeps the combo going in the air, leaving the floor at once
   const fromBlow = blowsDone();
   if (fromBlow) endMove();

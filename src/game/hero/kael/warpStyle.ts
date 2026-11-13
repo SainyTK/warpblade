@@ -28,7 +28,6 @@ function strike(power: number, foe: Enemy | null, sureCrit: boolean): void {
 /** Kael's warp: the crystal sword thrown, a crystal to hang from with Up held, Warpcraft's numbers, Rift Walker's chain
  *  and Spellwarp's element on arrival */
 export const KAEL_WARP: WarpStyle = {
-  anchors: true,
   drawThrown: drawThrownSword,
   strike,
   arrived: (foe) => {

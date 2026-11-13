@@ -307,7 +307,7 @@ export const STICK_DIRECTIONS: Record<KitId, readonly StickDirectionSpec[]> = {
   kael: [
     { direction: "side", label: "Walk" },
     { direction: "far side", label: "Run" },
-    { direction: "up", label: "Jump. Held as the warp throws, warp to a crystal" },
+    { direction: "up", label: "Jump" },
     { direction: "down", label: "With Jump, drop through a ledge" },
   ],
   ysra: [

@@ -1,6 +1,6 @@
 export const COST = { warp: 10 } as const;
-/** MP per second, standing and hanging from a crystal */
-export const MP_REGEN = { normal: 2, hanging: 14 } as const;
+/** MP per second */
+export const MP_REGEN = 2;
 export const MP_PER_HIT = 2;
 
 export const HERO_MOVE = {
@@ -10,10 +10,9 @@ export const HERO_MOVE = {
   airAccel: 650,
   gravity: 900,
   maxFall: 420,
-  /** pixels each jump rises, however long Up is held: from the floor, again in the air, and off a crystal */
+  /** pixels each jump rises, however long Up is held: from the floor, and again in the air */
   jumpRise: 62,
   doubleJumpRise: 50,
-  hangJumpRise: 38,
   dashSpeed: 270,
   dashTime: 0.24,
 } as const;

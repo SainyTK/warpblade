@@ -5,7 +5,7 @@ import { emitSkillEvent } from "../skills/events";
 import { skillLevel, skillValues } from "../skills/query";
 import { character, hero, progress } from "../state";
 import { castUltimate } from "../ultimates/castUltimate";
-import { leaveHang, setState, settle } from "./actions";
+import { setState, settle } from "./actions";
 import { deny } from "./deny";
 import { cutForSharedAction, maySharedAct } from "./sharedCut";
 
@@ -36,8 +36,7 @@ export function startCharge(): boolean {
     return true;
   }
   if (!canAffordUlt(1)) return false;
-  if (!maySharedAct() && h.state !== "hang" && h.state !== "guard") return false;
-  if (h.state === "hang") leaveHang();
+  if (!maySharedAct() && h.state !== "guard") return false;
   cutForSharedAction();
   h.charge = 0;
   h.chargeLevel = 1;

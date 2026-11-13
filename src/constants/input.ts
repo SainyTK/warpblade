@@ -44,10 +44,10 @@ const SHARED_ACTION_TEXT: Record<InputAction, string> = {
 /** what each of Kael's actions does, as the Controls screen tells it */
 const KAEL_ACTION_TEXT: Record<InputAction, string> = {
   ...SHARED_ACTION_TEXT,
-  up: "Jump. Press again in the air to jump again. Held with a long press of Attack, warp to a crystal and hang",
+  up: "Jump. Press again in the air to jump again",
   attack:
     "Sword combo of four hits, the same every time. Press again just as a blow lands for a Keen hit. Just after a parry, blink to the attacker's back and strike",
-  warp: "Warp strike: throw the sword at the nearest foe ahead and warp to it (10 MP). With Up held, warp to a crystal and hang",
+  warp: "Warp strike: throw the sword at the nearest foe ahead and warp to it (10 MP)",
   guard:
     "Guard: hold to block blows from the front. Press just as a blow lands to parry: a riposte cut, then Attack blinks you behind the attacker",
   cast: "Cast the selected ability: Crystal Lance, Crystal Burst or a spell you learn. If it is recharging, the next ready one goes",
@@ -112,7 +112,7 @@ export const ACTION_TEXT: Record<KitId, Record<InputAction, string>> = {
     attack:
       "Chain string: Lash, Rising Arc, Full Circle, hardest at the chain's tip. In the air or swinging, a Hanging Arc. Hold while swinging to reel in",
     run: "Walk toward the side held",
-    warp: "Hook: throw the hook at the nearest foe ahead, land on it with a flying kick that binds it (10 MP). With Up held, hook a crystal, a platform or the air and swing",
+    warp: "Hook: throw the hook at the nearest foe ahead, land on it with a flying kick that binds it (10 MP). With Up held, hook a platform or the air and swing",
     guard:
       "Guard: hold to spin the chain into a shield. Press just as a blow lands for Chain Bind: the attacker is hauled to your chain's tip and held",
     castWide: "Cast the selected ability's wide form: Whirlpool, Stake Line, Stockade or Anchor Ring (more MP)",

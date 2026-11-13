@@ -1,10 +1,9 @@
 import { HERO_MOVE as M } from "../../constants/combat";
 import { GROUND, PLATFORMS, W } from "../../constants/stage";
 import { approach, clamp } from "../../utils/math";
-import { take } from "../input";
 import { hero, progress } from "../state";
 import { dust, surfaceBelow } from "../world";
-import { inFreeState, leaveHang, setState } from "./actions";
+import { inFreeState } from "./actions";
 import { kit } from "./kits";
 import { MOVES } from "./moves";
 import { strideAt } from "./moves/advance";
@@ -28,15 +27,6 @@ function land(): void {
 export function moveHero(dt: number, dir: number): void {
   const h = hero;
   const st = h.state;
-  if (st === "hang") {
-    h.vx = 0;
-    h.vy = 0;
-    if (take("down")) {
-      leaveHang();
-      setState("fall");
-    }
-    return;
-  }
   const shared = (h.running ? M.runSpeed : M.walkSpeed) * progress.stats.move;
   const speed = kit().walkSpeed?.(shared) ?? shared;
   const m = st === "move" && h.move ? MOVES[h.move] : null;

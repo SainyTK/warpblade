@@ -7,7 +7,7 @@ import { emitSkillEvent } from "../skills/events";
 import { skillValues } from "../skills/query";
 import { game, hero, progress } from "../state";
 import { boxHit, heroBox } from "../world";
-import { leaveHang, setState, settle } from "./actions";
+import { setState, settle } from "./actions";
 import { dropDashGhost } from "./afterimages";
 import { cutPassed, endPassingCut, startPassingCut } from "./kael/passingCut";
 import { cutForSharedAction, maySharedAct } from "./sharedCut";
@@ -20,14 +20,13 @@ import { travelEnded } from "./travelEnd";
  */
 export function tryDash(dir: number): boolean {
   const h = hero;
-  const air = !h.ground && h.state !== "hang";
+  const air = !h.ground;
   if (air && (!skillValues("k_skydance").airDash || h.airDashed)) return false;
-  if (!maySharedAct() && h.state !== "hang" && h.state !== "cast" && h.state !== "guard") return false;
+  if (!maySharedAct() && h.state !== "cast" && h.state !== "guard") return false;
   if (!canPayDash()) {
     refuseDash();
     return false;
   }
-  if (h.state === "hang") leaveHang();
   cutForSharedAction();
   if (dir) h.face = dir;
   if (air) h.airDashed = true;

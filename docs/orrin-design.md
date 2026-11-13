@@ -6,7 +6,7 @@ He fights at the chain's length, swings through the air on it, and grows stronge
 He is the first hero whose travel follows real physics: a pendulum he pumps, reels in and lets go of.
 
 Id `orrin`, kit `orrin`, name Orrin, title "The chain dancer".
-Blurb: "A rift drifter with a brass hook on a long chain. He swings from crystals, ledges and the air itself, flings himself across the stage and lashes foes at the chain's tip. Never stands still for long."
+Blurb: "A rift drifter with a brass hook on a long chain. He swings from ledges and the air itself, flings himself across the stage and lashes foes at the chain's tip. Never stands still for long."
 
 ## How he differs from every hero in the game
 

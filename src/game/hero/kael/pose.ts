@@ -8,7 +8,6 @@ import { sampleKeys } from "../../../utils/sampleKeys";
 import { clipPose } from "../clipPose";
 import { woundedIdle, woundWeight } from "../wound";
 import { clipKey, handOver, watchHandover } from "./handover";
-import { hangSwing } from "./hangSwing";
 import { jumpClock } from "./jumpClock";
 import { landingPose, watchLanding } from "./landing";
 import { loadPose } from "./load";
@@ -40,7 +39,7 @@ export function kaelPose(h: Hero, t: number): Pose {
   watchTravel(h, t, m.clip);
   const base = loadPose(travelPose(h, statePose(h, t, fresh, dt, woundWeight(t)), t));
   watchHandover(h, t, restarted, landed ? LANDING.cross : undefined);
-  const p = handOver(hangSwing(h, landingPose(h, base, t)), t);
+  const p = handOver(landingPose(h, base, t), t);
   m.last = p;
   return p;
 }

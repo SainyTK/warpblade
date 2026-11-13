@@ -11,7 +11,7 @@ The shared beat clock is `src/game/beat.ts`.
 
 ## How he differs from every hero in the game
 
-- Kael (warp swordsman) double jumps and hangs from crystals. His Keen timing is a short window after his own blow lands and only makes the next J a crit. Jory's beat is one clock for the whole run, shown on screen and heard, and it judges his J and I presses and rewards his warp, parry and dodge on the beat. Missing it costs Groove, and keeping it speeds up his whole kit.
+- Kael (warp swordsman) double jumps. His Keen timing is a short window after his own blow lands and only makes the next J a crit. Jory's beat is one clock for the whole run, shown on screen and heard, and it judges his J and I presses and rewards his warp, parry and dodge on the beat. Missing it costs Groove, and keeping it speeds up his whole kit.
 - Ysra (planted glaive, brace, pole vault, Heat) meets one blow from the front at the right moment. Jory's parry answers with a Boom off his drum, and his Boom on I pushes everything around him away and drowns foe shots, on his timing, whatever the foes are doing.
 - Sable (ranged hunter, aimed bolts, ammo and reload) fights from 250 px. Jory fights at mallet reach (26 px) and his reach grows only with Groove, through the sound wave of his Crash.
 - Hulda (unarmed grappler, armour, grabs) walks into blows. Jory has no armour and no grab; he clears space.

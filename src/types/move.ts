@@ -107,8 +107,6 @@ export interface Situation {
   next: number;
   limit: number;
   running: boolean;
-  /** a hang on a crystal */
-  hanging: boolean;
   /** air attacks since leaving the ground, and how many Kael may make before he lands */
   airHits: number;
   airLimit: number;
