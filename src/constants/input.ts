@@ -71,13 +71,16 @@ export const ACTION_TEXT: Record<KitId, Record<InputAction, string>> = {
   sable: {
     ...SHARED_ACTION_TEXT,
     up: "Jump. One light jump, also out of a shot",
-    down: "With jump, drop through a ledge",
+    down: "With jump, drop through a ledge. With J on the floor, reload",
     attack:
-      "Shoot a string of three bolts at the foe ahead, the last a closing bolt. Hold to keep shooting. An empty quiver reloads",
-    dash: "Hop back and shoot at the top of the hop. Walking or running ahead, slide forward under blows. Both spend stamina",
-    warp: "Kick foes away from you",
-    cast: "Cast the selected spell: a snare at your feet (20 MP) at first. The next ready spell is selected after each cast",
-    cycle: "Reload. Press again in the bright window for a perfect reload and primed bolts",
+      "Shoot the next bolt of a three-bolt string at the foe ahead, the third a closing bolt. An empty quiver reloads. While reloading, tap in the bright window for a perfect reload and primed bolts",
+    warp: "Grapple: shoot a line away from the nearest foe, zip along it and fire a heavy bolt back through the line (10 MP). The zip loads a bolt",
+    guard:
+      "Guard with the crossbow stock: hold to block blows from the front, a lot gets through. Press just as a blow lands for Point-Blank: kick the attacker away and fill the quiver with primed bolts",
+    cast: "Cast the selected ability: the hop back and its shot, the snare and the spells you learn. If it is recharging, the next ready one goes",
+    castWide:
+      "Wide form: the hop becomes a slide forward under blows, the snare is tossed under the foe ahead, nets fan wider",
+    cycle: "Switch ability: hop, snare and the spells you learn",
   },
   hulda: {
     ...SHARED_ACTION_TEXT,
