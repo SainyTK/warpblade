@@ -2,6 +2,7 @@ import { RIPOSTE } from "../../../constants/kael/guard";
 import type { Enemy } from "../../../types/enemy";
 import type { GuardStyle } from "../../../types/moveset";
 import { meleeHit } from "../../meleeHit";
+import { skillValues, withCharms } from "../../skills/query";
 import { hero } from "../../state";
 import { boxAhead, newSwing } from "../../world";
 import { warpSlash } from "../warp";
@@ -25,8 +26,10 @@ export const KAEL_GUARD: GuardStyle = {
     warpSlash();
     meleeHit([boxAhead(-4, -40, 30, 2)], { power: RIPOSTE.power, kx: 140, ky: -60, big: true, sureCrit: true });
     hero.keenNext = true;
-    hero.riposte = Math.max(hero.riposte, RIPOSTE.time);
-    hero.riposteBlows = Math.max(hero.riposteBlows, RIPOSTE.blows);
+    // Mirror Knight's Riposte, when held, can last longer and cover more blows than the parry's own
+    const mirror = skillValues("k_mirror");
+    hero.riposte = Math.max(hero.riposte, RIPOSTE.time, mirror.ripTime ? withCharms("duration", mirror.ripTime) : 0);
+    hero.riposteBlows = Math.max(hero.riposteBlows, RIPOSTE.blows, mirror.ripBlows ?? 0);
     aegisParried(foe);
     openCounter(foe);
   },

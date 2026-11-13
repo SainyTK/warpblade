@@ -143,12 +143,6 @@ export const mirrorKnight: SkillBehavior = {
       summon(memoryOf(memory), state.evolved, null);
     },
     parry(memory, ev, state) {
-      // Riposte after a perfect dodge is set by the dodge itself; after a parry, here
-      const v = skillValues(ID);
-      if (v.riposte) {
-        hero.riposte = Math.max(hero.riposte, withCharms("duration", v.ripTime));
-        hero.riposteBlows = Math.max(hero.riposteBlows, v.ripBlows);
-      }
       summon(memoryOf(memory), state.evolved, attackerNear(ev.fromX));
     },
     blow(memory, ev) {

@@ -450,7 +450,7 @@ Summon, precise, auto. A parry or a perfect dodge calls a mirror knight that war
 Evolution **Perfect Reflection** (partner `k_keen`): A parry or a perfect dodge stops time while Kael and the knight strike the attacker and every foe near.
 Evolved values added: stay 8, reflect 150, reflectArea 15, reflectReach 120.
 After a parry the knight's first warp goes to the foe that struck, so it lands with Kael's counter.
-Code: `skills/kael/mirrorKnight.ts` (both triggers, Riposte after a parry); Riposte after a perfect dodge in `hero/perfectDodge.ts`, `meleeHit.ts` and `hero/kael/bonus.ts`.
+Code: `skills/kael/mirrorKnight.ts` (both triggers); Riposte after a parry in `hero/kael/guardStyle.ts`, after a perfect dodge in `hero/perfectDodge.ts`, its bonus in `meleeHit.ts` and `hero/kael/bonus.ts`.
 
 #### `k_aegis` Crystal Aegis
 
