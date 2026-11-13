@@ -36,13 +36,13 @@ Numbers here are starting values; balance changes them in the constants files an
 
 ## Base kit and buttons
 
-- J attack, L dash, K warp or the hero's K action, I ability, O switch ability, U ultimate, Up jump: the controls stay as they are.
+- Every hero plays on the same layout (`docs/moveset-design.md`): J tapped for the string, J held for the warp move, K guard and parry, L front dodge, I ability (held, its wide form), O switch ability, U ultimate, Up jump.
 - With no skill, every button the hero uses does something. The hero designer chooses the base kit and writes it in `docs/skills/<hero>.md`.
 - A skill either attaches to one of those buttons (`button` in its data) or runs on its own (`auto`). No skill adds a new key combination.
 - Several skills on J, K, L or jump stack: each adds its effect to the same press.
-- Ability skills on I join the kit's ability rotation, the way Kael's elements work today: the hero's base abilities plus the spell skills held, up to about five entries.
-  The rotation is per kit (`createRotation` in `src/game/skills/rotation.ts`): the kit decides which button turns it (O for most; Sable reloads on O and turns hers her own way) and what an ability costs (MP, Heat or nothing).
-- The special ultimate is in the base kit. Ultimate skills upgrade or replace it. A build holds at most one ultimate skill; once one is owned the others are no longer dealt.
+- Ability skills on I join the kit's ability list (`HeroKit.abilities`): the hero's base abilities plus the spell skills held, up to about five entries.
+  The shared ability bar (`src/game/hero/abilityBar.ts`) casts them: each has its own recharge, I on a recharging one casts the next ready one, O switches by hand, and the kit decides what each costs (MP, Heat, Sand, HP or nothing).
+- The special ultimate is in the base kit and stays on U all run. The hero's one ultimate skill upgrades it.
 
 ## The 20 skills
 
@@ -56,7 +56,7 @@ Each hero has exactly 20 skills, at least this many of each kind:
 | `dot` | 3 | Damage over time: burns, bleeds, poisons, curses. Weak early, a real attack once levelled and evolved. |
 | `summon` | 3 | A chance on a trigger (blow landed, ability cast, perfect dodge, parry, kill) to call a supporter that strikes on its own. |
 | `passive` | 0 | A lasting change: stats, Flow, sustain. |
-| `ultimate` | 1 | Upgrades or replaces the U special. At most 3 per hero. |
+| `ultimate` | 1 | Upgrades the U special. Exactly 1 per hero. |
 
 The rest are the designer's choice.
 
@@ -207,11 +207,12 @@ Targeting helpers: `nearestFoe`, `foesOnScreen`, `distance2` and `touches` in `s
 | --- | --- | --- |
 | `blow` | `foe`, `damage`, `source` (`attacks`, `abilities`, `ultimate`), `move` (the combo move or null), `finisher`, `melee`, `back`, `crit`, `airborne`, `keen` | `dealDamage`, for every hit of the hero's own that is not damage over time |
 | `cast` | `ability` (the kit's id: Kael's element, Ysra's rite, `snare`, `bellow`, `whirlwall`, `anchorPin`, `stoppedClock`, `secondHand`) | Kael's `startCast`, Ysra's rite release, Sable's snare, Hulda's bellow, Orrin's abilities |
-| `dash` | `dir`, `foes` passed through | Kael's dash when it ends |
-| `warp` | `x`, `y`, `foe` it was aimed at or null | Kael's warp and blink arrival |
+| `dash` | `dir`, `foes` passed through | the shared front dodge when it ends |
+| `warp` | `x`, `y`, `foe` it was aimed at or null | the shared warp's arrival, and Kael's blink |
 | `jump` | `air` | Kael's jump and double jump |
 | `perfectDodge` | `at` (the hero's x) | `rewardPerfectDodge` |
-| `parry` | `fromX` | Ysra's brace parry |
+| `parry` | `fromX` | the shared guard's parry (`src/game/hero/heroGuard.ts`) |
+| `block` | `fromX` | the shared guard's block |
 | `grab` | `foe` | Hulda's grab (declared in `src/types/hulda.ts`) |
 | `latch`, `release`, `tip`, `swingKick` | `kind` and `foe`; `speed` and `fling`; `foe` and `blow`; `foe` and `speed` | Orrin's hook, letting go of a swing, a chain hit at the tip and a swing kick (declared in `src/types/orrin.ts`) |
 | `echo`, `field`, `rewind`, `toll`, `restart` | `foe` and `blow`; `open`, `foes`, `x`, `y` and `radius`; `healed`, `from` and `to`; `foes`; `foe` | Mirel's echo striking a foe, her Stillfield opening or closing, a Rewind ending and a Toll landing, and the shared stop status when a foe she stopped restarts (declared in `src/types/mirel.ts`) |
