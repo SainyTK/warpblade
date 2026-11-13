@@ -65,7 +65,7 @@ function drawDark(k: number, falling: boolean): void {
 }
 
 /**
- * The dark Gloaming and Eclipse lay over the scene: drawn behind the foes and the heroes, so only they stand out of it,
+ * The dark Gloaming lays over the scene: drawn behind the foes and the heroes, so only they stand out of it,
  * each foe struck rimmed in dusk rose. It falls over the wind-up and lifts once `fading` is set.
  */
 export function createDark(targets: readonly Enemy[]): GloamDark {

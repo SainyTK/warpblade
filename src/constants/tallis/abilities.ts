@@ -13,6 +13,9 @@ export const SMOKE_KNOT = {
   /** the cast pose, and when the knot drops */
   dur: 9 / 30,
   hit: 4 / 30,
+  /** I held: a bigger knot for more MP, its cloud this much wider and taller */
+  wideMp: 28,
+  wideGrow: 1.6,
 } as const;
 
 /** Hamstring: a low crouching sweep that trips the first foe it hits */
@@ -28,6 +31,8 @@ export const HAMSTRING = {
   stun: { minion: 0.9, elite: 0.6, mini: 0.3 },
   dur: 12 / 30,
   hit: 5 / 30,
+  /** I held: a spinning sweep that trips foes on both sides of him, for more MP */
+  wideMp: 22,
 } as const;
 
 /** the spell pose for his spell skills: a hand flung forward, the spell leaving it on its frame */

@@ -10,19 +10,20 @@ import { dealDamage } from "../../damage";
 import { createSlash } from "../../effects/slash";
 import { enemyCenter } from "../../enemies/enemy";
 import { kindOf } from "../../enemies/kinds";
-import { skillValues, withCharms } from "../../skills/query";
+import { withCharms } from "../../skills/query";
 import { foesOnScreen } from "../../skills/targets";
 import { game, hero, lights, progress } from "../../state";
 import { hitStop, shake } from "../../world";
 import { setState } from "../actions";
 import { skin } from "../skin";
+import { ultimateValues } from "../ultimate";
 import { countBackKill } from "./blowSkills";
 import { raiseCloud } from "./clouds";
 import { createDark } from "./dark";
 import { gloamMax } from "./gloam";
 import { createGloamShade, createGloamThread } from "./gloamLook";
 import { tallis, tallisHost } from "./memory";
-import { raiseVeil } from "./veil";
+import { fadeIn } from "./veil";
 
 /** the whole-screen level reaches this far, which covers the stage from anywhere */
 const SCREEN = 400;
@@ -40,25 +41,20 @@ function inReach(level: number): Enemy[] {
     .sort((a, b) => Math.abs(a.x - hero.x) - Math.abs(b.x - hero.x));
 }
 
-function begin(level: number, targets: Enemy[], state: "gloaming" | "eclipse"): void {
+/**
+ * Gloaming: the scene goes dark and he visits 1, 2, 4 or 8 foes by charge level, nearest first, and more with his
+ * ultimate skill; evolved (Night Without End), every foe on the stage.
+ */
+export function castGloaming(level: number): void {
+  const v = ultimateValues();
+  const count = GLOAMING.counts[level - 1] + (v.more ?? 0);
   tallis.ultLevel = level;
   tallis.ultAt = { x: hero.x, y: hero.y };
-  tallisHost.targets = targets;
+  tallisHost.targets = v.stage ? foesOnScreen() : inReach(level).slice(0, count);
   tallisHost.visited = 0;
   if (tallisHost.dark) tallisHost.dark.fading = true;
-  tallisHost.dark = createDark(targets);
-  setState(state);
-}
-
-/** Gloaming: 1, 2, 4 or 8 foes by level, nearest first */
-export function castGloaming(level: number): void {
-  begin(level, inReach(level).slice(0, GLOAMING.counts[level - 1]), "gloaming");
-}
-
-/** Eclipse: every foe in the level's reach, or on the whole stage once evolved */
-export function castEclipse(level: number): void {
-  const v = skillValues("t_eclipse");
-  begin(level, v.stage ? foesOnScreen() : inReach(level), "eclipse");
+  tallisHost.dark = createDark(tallisHost.targets);
+  setState("gloaming");
 }
 
 /** seconds on each foe: Gloaming's beat, shortened so a crowd never takes too long */
@@ -80,8 +76,7 @@ function stab(e: Enemy): void {
   appearBehind(e);
   if (tallisHost.visited > 1) game.fx.push(createGloamShade(from.x, from.y, from.face));
   game.fx.push(createGloamThread(from.x, from.y - 14, hero.x, hero.y - 14));
-  const eclipse = hero.state === "eclipse";
-  const v = eclipse ? skillValues("t_eclipse") : {};
+  const v = ultimateValues();
   const power = ULT_LEVELS[tallis.ultLevel - 1].power * GLOAMING.share * (progress.stats.ad + progress.stats.ap);
   game.fx.push(
     createSlash(hero.x, hero.y, hero.face, {
@@ -113,28 +108,25 @@ function stab(e: Enemy): void {
   lights.add(cx, cy, 26, PAL.gloam[4], 0.7, 0.15);
 }
 
-/** back where he crouched, as the light comes back; Eclipse raises the Veil and may refill Gloam */
+/** back where he crouched, as the light comes back; his ultimate skill may veil him, refill Gloam and leave smoke */
 function finish(): void {
   const at = tallis.ultAt ?? { x: hero.x, y: hero.y };
+  const v = ultimateValues();
   hero.x = at.x;
   hero.y = at.y;
   hero.vx = 0;
   hero.vy = 0;
   if (tallisHost.dark) tallisHost.dark.fading = true;
   shake(0.25, GLOAMING.shake);
-  if (hero.state === "eclipse") {
-    const v = skillValues("t_eclipse");
-    if (v.refill) tallis.gloam = gloamMax();
-    if (v.smoke)
-      raiseCloud(hero.x, hero.y, SMOKE_KNOT.width, SMOKE_KNOT.height, withCharms("duration", SMOKE_KNOT.life));
-    if (!tallis.veil) raiseVeil("free");
-  }
+  if (v.refill) tallis.gloam = gloamMax();
+  if (v.smoke) raiseCloud(hero.x, hero.y, SMOKE_KNOT.width, SMOKE_KNOT.height, withCharms("duration", SMOKE_KNOT.life));
+  if (v.veil) fadeIn(v.veil, "free", true);
   tallisHost.targets = [];
   setState(hero.ground ? "idle" : "fall");
 }
 
 /**
- * The special or ultimate under way: the crouch while the scene darkens, then a visit behind each foe in turn with a
+ * Gloaming under way: the crouch while the scene darkens, then a visit behind each foe in turn with a
  * slash, then back where he crouched. Nothing touches him from the release to the return.
  */
 export function runGloaming(): void {

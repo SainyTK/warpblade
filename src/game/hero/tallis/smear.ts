@@ -13,10 +13,10 @@ const SMEARS: Partial<Record<KnifeBlow, Omit<SlashShape, "ramp">>> = {
   hamstring: { cx: 4, cy: -4, R: 22, sy: 0.25, rot: 0, a0: -0.8, a1: 0.7, W: 2, sweep: 0.05, trail: 0.12 },
 };
 
-/** the blow's smear, in his gloam ramp; the cross leaves an X of two */
-export function smear(blow: KnifeBlow): void {
+/** the blow's smear toward `face`, in his gloam ramp; the cross leaves an X of two */
+export function smear(blow: KnifeBlow, face = hero.face): void {
   const shape = SMEARS[blow];
   if (!shape) return;
-  game.fx.push(createSlash(hero.x, hero.y, hero.face, { ...shape, ramp: skin.ramp }));
-  if (blow === "cross") game.fx.push(createSlash(hero.x, hero.y, hero.face, { ...shape, rot: -0.75, ramp: skin.ramp }));
+  game.fx.push(createSlash(hero.x, hero.y, face, { ...shape, ramp: skin.ramp }));
+  if (blow === "cross") game.fx.push(createSlash(hero.x, hero.y, face, { ...shape, rot: -0.75, ramp: skin.ramp }));
 }

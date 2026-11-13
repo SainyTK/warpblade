@@ -27,7 +27,6 @@ import { updateQuiverBar } from "./quiverBar";
 import { createRechargeTab } from "./rechargeTab";
 import { updateRiteTabs } from "./riteTabs";
 import { updateSandBar } from "./sandBar";
-import { updateTallisTabs } from "./tallisTabs";
 import { updateWarpTab } from "./warpTab";
 import { updateWaxBar } from "./waxBar";
 import { updateWennaTabs } from "./wennaTabs";
@@ -64,7 +63,6 @@ export function updateHud(): void {
   updateOrrinTabs();
   updateMirelTabs();
   updateWennaTabs();
-  updateTallisTabs();
   updateJoryTabs();
   updateBrannocTabs();
   updateDebtBar();

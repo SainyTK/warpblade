@@ -1,74 +1,84 @@
 import { HAMSTRING, SMOKE_KNOT } from "../../../constants/tallis/abilities";
-import type { TallisAbility } from "../../../types/tallis";
-import { skillLevel, skillValues } from "../../skills/query";
-import { createRotation } from "../../skills/rotation";
-import { pressHamstring } from "./hamstring";
+import { SINK } from "../../../constants/tallis/sink";
+import { VEIL } from "../../../constants/tallis/veil";
+import type { AbilitySlot } from "../../../types/moveset";
+import { skillEvolved, skillLevel, skillValues } from "../../skills/query";
+import { hero } from "../../state";
+import { hamstringMp, pressHamstring } from "./hamstring";
 import { tallis } from "./memory";
-import { pressSmokeKnot } from "./smokeKnot";
-import { pressSpell } from "./spells/castSpell";
+import { pressSink, sinkCost, sinkWait } from "./sink";
+import { knotMp, pressSmokeKnot } from "./smokeKnot";
+import { pressSpell, SPELL_WAIT, type SpellId } from "./spells/castSpell";
+import { pressVeil, veilAffordable, veilCost } from "./veil";
 
-/** his abilities on I in the order O turns through them: Smoke Knot and Hamstring from the start, then his spells */
-export const ABILITIES: readonly TallisAbility[] = ["smokeKnot", "hamstring", "t_needles", "t_markDusk", "t_caltrops"];
+/** his spell skills on I, after his own four, in the order O turns through them */
+const SPELLS: readonly { id: SpellId; label: string }[] = [
+  { id: "t_needles", label: "NEEDLES" },
+  { id: "t_markDusk", label: "MARK" },
+  { id: "t_caltrops", label: "CALTROPS" },
+];
 
-/** an ability he has now: his own two always, a spell skill once held */
-const known = (id: TallisAbility): boolean => id === "smokeKnot" || id === "hamstring" || skillLevel(id) > 0;
+/** a spell skill on I: held once its skill is, paid in MP, its recharge from its level */
+const spellSlot = ({ id, label }: { id: SpellId; label: string }): AbilitySlot => ({
+  id,
+  label,
+  known: () => skillLevel(id) > 0,
+  wait: () => tallis[SPELL_WAIT[id]],
+  full: () => Math.max(0.01, skillValues(id).cooldown ?? 1),
+  affordable: () => hero.mp >= (skillValues(id).mp ?? 0),
+  cast: () => pressSpell(id),
+  evolved: () => skillEvolved(id),
+});
 
-const rotation = createRotation(ABILITIES, (id) => known(id as TallisAbility));
+/**
+ * Tallis's abilities on I, in the order O turns through them: the Veil (on and off, paid in Gloam), Sink (tapped a dip
+ * under the foe ahead, held the pool he stays in while I is held, paid in stamina), Smoke Knot and Hamstring (held, their
+ * wide forms), then his spell skills.
+ */
+export const TALLIS_SLOTS: readonly AbilitySlot[] = [
+  {
+    id: "veil",
+    label: "VEIL",
+    tint: "var(--gloam-glint)",
+    known: () => true,
+    wait: () => (tallis.veil ? 0 : tallis.veilLock),
+    full: () => VEIL.lock,
+    affordable: veilAffordable,
+    cast: pressVeil,
+    cost: () => (tallis.veil ? "OFF" : `${veilCost()} GL`),
+  },
+  {
+    id: "sink",
+    label: "SINK",
+    known: () => true,
+    wait: sinkWait,
+    full: () => SINK.wait,
+    affordable: () => hero.stamina >= sinkCost(),
+    cast: pressSink,
+    cost: () => `${Math.round(sinkCost())} ST`,
+  },
+  {
+    id: "smokeKnot",
+    label: "SMOKE",
+    known: () => true,
+    wait: () => tallis.knotCd,
+    full: () => SMOKE_KNOT.cooldown,
+    affordable: () => hero.mp >= knotMp(false),
+    cast: pressSmokeKnot,
+  },
+  {
+    id: "hamstring",
+    label: "HAMSTRING",
+    known: () => true,
+    wait: () => tallis.hamCd,
+    full: () => HAMSTRING.cooldown,
+    affordable: () => hero.mp >= hamstringMp(false),
+    cast: pressHamstring,
+  },
+  ...SPELLS.map(spellSlot),
+];
 
-/** the ability I uses now */
-export const selectedAbility = (): TallisAbility => (rotation.selected() as TallisAbility | null) ?? "smokeKnot";
-
-/** O: turn to the next ability he has */
-export const nextAbility = (): boolean => rotation.next();
-
-/** a fresh run: back to Smoke Knot */
-export const resetAbilities = (): void => rotation.reset();
-
-/** what an ability costs in MP */
-export function abilityMp(id: TallisAbility): number {
-  if (id === "smokeKnot") return SMOKE_KNOT.mp;
-  if (id === "hamstring") return HAMSTRING.mp;
-  return skillValues(id).mp ?? 0;
-}
-
-/** an ability's own recharge time, for the HUD */
-function abilityCooldown(id: TallisAbility): number {
-  if (id === "smokeKnot") return SMOKE_KNOT.cooldown;
-  if (id === "hamstring") return HAMSTRING.cooldown;
-  return skillValues(id).cooldown ?? 1;
-}
-
-/** seconds an ability still waits */
-function abilityWait(id: TallisAbility): number {
-  switch (id) {
-    case "smokeKnot":
-      return tallis.knotCd;
-    case "hamstring":
-      return tallis.hamCd;
-    case "t_needles":
-      return tallis.needlesCd;
-    case "t_markDusk":
-      return tallis.markCd;
-    case "t_caltrops":
-      return tallis.caltropsCd;
-  }
-}
-
-/** the share of an ability's recharge still to run, 0 when ready */
-export const abilityRecharge = (id: TallisAbility): number => Math.min(1, abilityWait(id) / abilityCooldown(id));
-
-/** I: use the selected ability */
-export function pressAbility(): boolean {
-  const id = selectedAbility();
-  if (id === "smokeKnot") return pressSmokeKnot();
-  if (id === "hamstring") return pressHamstring();
-  return pressSpell(id);
-}
-
-/** every ability he knows, for the HUD */
-export const knownAbilities = (): TallisAbility[] => ABILITIES.filter(known);
-
-/** recharges run down */
+/** the recharges of Smoke Knot, Hamstring and the spells run down */
 export function tickAbilities(recharge: number): void {
   tallis.knotCd = Math.max(0, tallis.knotCd - recharge);
   tallis.hamCd = Math.max(0, tallis.hamCd - recharge);

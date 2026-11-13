@@ -5,16 +5,17 @@ import { emitSkillEvent } from "../../../skills/events";
 import { skillValues } from "../../../skills/query";
 import { hero } from "../../../state";
 import { setState, settle } from "../../actions";
-import { canCast } from "../castCheck";
+import { startAbility } from "../castCheck";
 import { tallis } from "../memory";
 import { castCaltrops } from "./caltrops";
 import { castMarkDusk } from "./markDusk";
 import { castNeedles } from "./needles";
 
-type SpellId = Exclude<TallisAbility, "smokeKnot" | "hamstring">;
+/** his spell skills on I */
+export type SpellId = Exclude<TallisAbility, "veil" | "sink" | "smokeKnot" | "hamstring">;
 
 /** each spell's recharge in his memory */
-const WAIT: Readonly<Record<SpellId, "needlesCd" | "markCd" | "caltropsCd">> = {
+export const SPELL_WAIT: Readonly<Record<SpellId, "needlesCd" | "markCd" | "caltropsCd">> = {
   t_needles: "needlesCd",
   t_markDusk: "markCd",
   t_caltrops: "caltropsCd",
@@ -27,12 +28,12 @@ const SPELLS: Readonly<Record<SpellId, () => void>> = {
   t_caltrops: castCaltrops,
 };
 
-/** I with a spell skill: paid in MP, its recharge started, the spell pose played */
+/** I on a spell skill: paid in MP, its recharge started, the spell pose played; false while he cannot cast yet */
 export function pressSpell(id: SpellId): boolean {
   const v = skillValues(id);
-  if (!canCast(tallis[WAIT[id]], v.mp ?? 0)) return true;
+  if (!startAbility()) return false;
   hero.mp -= v.mp ?? 0;
-  tallis[WAIT[id]] = v.cooldown ?? 1;
+  tallis[SPELL_WAIT[id]] = v.cooldown ?? 1;
   tallis.casting = id;
   if (hero.ground) hero.vx = 0;
   setState("spellCast");

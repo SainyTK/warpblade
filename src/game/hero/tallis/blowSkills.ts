@@ -164,8 +164,6 @@ export function countBackKill(): void {
 export function afterKnifeHit(e: Enemy, s: KnifeStrike, hit: KnifeHit): void {
   // Falling Night: a Drop Stab from the Veil keeps it
   const keeps = s.blow === "dropStab" && !!skillValues("t_plunge").fallingNight;
-  // Quiet Step: blows from the Veil give Gloam back
-  if (tallis.veil) addGloam(skillValues("t_quietStep").refund ?? 0);
   if (tallis.veil && !keeps) veilStruck();
   if (hit.back) fromBehind(e, hit);
   if (hit.ambush) ambushLanded(e, hit);

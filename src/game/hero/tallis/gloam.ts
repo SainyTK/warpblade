@@ -1,5 +1,4 @@
 import { GLOAM } from "../../../constants/tallis/gloam";
-import { sfx } from "../../../services/audio";
 import { skillValues } from "../../skills/query";
 import { game, hero } from "../../state";
 import { inCloud } from "./clouds";
@@ -13,12 +12,6 @@ export const gloamShare = (): number => Math.min(1, tallis.gloam / gloamMax());
 
 export function addGloam(amount: number): void {
   tallis.gloam = Math.min(gloamMax(), tallis.gloam + amount);
-}
-
-/** a press Gloam could not pay for: the bar blinks and the shared deny tick plays */
-export function denyGloam(): void {
-  if (tallis.gloamFlash <= 0) sfx.denied();
-  tallis.gloamFlash = GLOAM.flash;
 }
 
 /** a minion or mini boss near him really faces him (whatever it can see) */
@@ -35,7 +28,6 @@ function faced(): boolean {
  * quickens it and adds a trickle even while he is seen.
  */
 export function refillGloam(dt: number): void {
-  tallis.gloamFlash = Math.max(0, tallis.gloamFlash - dt);
   const v = skillValues("t_shroud");
   tallis.unseen = !tallis.veil && hero.state !== "dead" && (inCloud() || !faced());
   const rate = (tallis.unseen ? GLOAM.refill * (1 + (v.refill ?? 0)) : 0) + (v.trickle ?? 0);

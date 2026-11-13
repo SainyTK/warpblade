@@ -1,17 +1,11 @@
-import { hero } from "../../state";
-import { isFree } from "../actions";
-import { deny } from "../deny";
+import { cutForSharedAction, maySharedAct } from "../sharedCut";
 
-/** an ability on I may start: from a free state, ready, and paid for; a refused press flashes the HUD */
-export function canCast(wait: number, mp: number): boolean {
-  if (!isFree()) return false;
-  if (wait > 0) {
-    deny("cast");
-    return false;
-  }
-  if (hero.mp < mp) {
-    deny("mp");
-    return false;
-  }
+/**
+ * An ability on I may start now: from a free state or once the blow under way has struck, which it then cuts. The shared
+ * ability bar has already checked its recharge and its cost.
+ */
+export function startAbility(): boolean {
+  if (!maySharedAct()) return false;
+  cutForSharedAction();
   return true;
 }

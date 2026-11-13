@@ -10,13 +10,13 @@ import { isHeld } from "../../input";
 import { emitSkillEvent } from "../../skills/events";
 import { skillValues } from "../../skills/query";
 import { game, hero, particles, progress, rng } from "../../state";
-import { isFree, setState, settle } from "../actions";
+import { isFree, setState } from "../actions";
 import { rewardPerfectDodge } from "../perfectDodge";
-import { refuseDash } from "../stamina";
+import { cutForSharedAction, maySharedAct } from "../sharedCut";
 import { travelEnded } from "../travelEnd";
 import { openRiseAmbush } from "./ambush";
 import { tallis, tallisHost } from "./memory";
-import { inRecovery, startRisingCut } from "./string";
+import { startRisingCut } from "./string";
 
 /** stamina a Sink spends to start, and a second: Deep Shadow and Endurance's stamina lower it */
 const cheaper = (): number => 1 - (skillValues("t_sink").cheaper ?? 0);
@@ -25,24 +25,27 @@ export const sinkCost = (): number => SINK.start * cheaper();
 /** Sinks before the wait: Deep Shadow gives two */
 const sinksMax = (): number => skillValues("t_sink").sinks || 1;
 
+/** seconds before a Sink can start again, 0 while one is left */
+export const sinkWait = (): number => (tallis.sinks > 0 ? 0 : tallis.sinkCd);
+
 /** the platform he stands on, or null on the floor */
 const platformUnder = () =>
   hero.y < GROUND
     ? (PLATFORMS.find((p) => hero.x >= p.x0 - 3 && hero.x <= p.x1 + 3 && Math.abs(p.y - hero.y) < 1) ?? null)
     : null;
 
-/** a Sink may start now: ready, paid for, from a stand, a walk or a blow's recovery */
-export const canSink = (): boolean =>
-  hero.ground && tallis.sinks > 0 && tallis.sinkCd <= 0 && hero.stamina >= sinkCost() && (isFree() || inRecovery());
+/** a Sink may start on landing from a plunge: ready and paid for */
+const canSink = (): boolean => tallis.sinks > 0 && tallis.sinkCd <= 0 && hero.stamina >= sinkCost();
 
-/** he pours down into the pool */
-function startSink(): void {
+/** he pours down into the pool: the held form stays under while I is held, the dip glides on its own a moment */
+function startSink(held: boolean): void {
   const h = hero;
   h.stamina -= sinkCost();
   h.staminaWait = 0.5;
   tallis.sinkT = 0;
   tallis.sinkMax = SINK.max + (skillValues("t_sink").longer ?? 0);
   tallis.sinkFrom = h.x;
+  tallis.sinkHeld = held;
   tallis.sinkDodged = false;
   tallis.sinkLetGo = false;
   tallis.risingQueued = false;
@@ -64,25 +67,23 @@ function startSink(): void {
     );
 }
 
-/** L: sink into the pool on the floor; in the air, drop straight down and sink on landing while L is held */
-export function pressSink(): boolean {
-  const h = hero;
-  if (!h.ground) {
-    if (!isFree() || tallis.plummet) return false;
+/**
+ * I on Sink: tapped, a dip that glides under the foe ahead and rises behind it; held (`held`), he stays under while I is
+ * held. In the air he drops straight down and sinks on landing. False while he cannot act yet.
+ */
+export function pressSink(held: boolean): boolean {
+  if (tallis.plummet || !maySharedAct()) return false;
+  cutForSharedAction();
+  if (!hero.ground) {
     tallis.plummet = true;
+    tallis.plummetHeld = held;
     return true;
   }
-  if (!isFree() && !inRecovery()) return false;
-  if (tallis.sinks <= 0 || tallis.sinkCd > 0) return false;
-  if (h.stamina < sinkCost()) {
-    refuseDash();
-    return true;
-  }
-  startSink();
+  startSink(held);
   return true;
 }
 
-/** L held in the air: straight down, then into the pool on landing if L is still held */
+/** Sink pressed in the air: straight down, then into the pool on landing, held while I still is */
 export function stepPlummet(): void {
   if (!tallis.plummet) return;
   const h = hero;
@@ -96,7 +97,7 @@ export function stepPlummet(): void {
     return;
   }
   tallis.plummet = false;
-  if (isHeld("dash") && canSink()) startSink();
+  if (canSink()) startSink(tallis.plummetHeld && isHeld("cast"));
 }
 
 /** Deep Shadow: each ground foe the pool passes under takes a cut, once a Sink */
@@ -113,25 +114,38 @@ function cutPassing(): void {
   }
 }
 
-/** in the pool: steered with A and D, never past its platform's edge, until L is let go, time or stamina run out */
+/** the side he glides to: A or D, or for a dip with neither held, the way he faces */
+function glideSide(): number {
+  const dir = (isHeld("right") ? 1 : 0) - (isHeld("left") ? 1 : 0);
+  return dir || (tallis.sinkHeld ? 0 : hero.face);
+}
+
+/** the Sink is over: a held one let go of (after its least), a dip's glide done, its time or his stamina run out */
+function sinkDone(): boolean {
+  const t = tallis.sinkT;
+  if (t >= tallis.sinkMax || hero.stamina <= 0 || tallis.risingQueued) return true;
+  return tallis.sinkHeld ? tallis.sinkLetGo && t >= SINK.least : t >= SINK.dip;
+}
+
+/** in the pool: steered with A and D, never past its platform's edge, until it is done; then he rises with Rising Cut */
 export function runSink(dt: number): void {
   const h = hero;
   tallis.sinkT += dt;
   h.stamina = Math.max(0, h.stamina - SINK.drain * cheaper() * dt);
   h.staminaWait = 0.5;
-  const dir = (isHeld("right") ? 1 : 0) - (isHeld("left") ? 1 : 0);
+  const dir = glideSide();
   if (dir) h.face = dir;
   h.vx = tallis.sinkT < SINK.pour ? 0 : dir * SINK.glide * progress.stats.move;
   const p = platformUnder();
   if (p && ((h.x <= p.x0 && h.vx < 0) || (h.x >= p.x1 && h.vx > 0))) h.vx = 0;
-  if (!isHeld("dash")) tallis.sinkLetGo = true;
+  if (!isHeld("cast")) tallis.sinkLetGo = true;
   cutPassing();
-  const done = (tallis.sinkLetGo && tallis.sinkT >= SINK.least) || tallis.sinkT >= tallis.sinkMax || h.stamina <= 0;
-  if (done || tallis.risingQueued) startRise();
+  if (sinkDone()) rise();
 }
 
-/** he rises out of the pool: an Ambush opens behind a foe, Shadow Tide drags that foe down, and the travel ends */
-function startRise(): void {
+/** he rises out of the pool with Rising Cut: an Ambush opens behind a foe, Shadow Tide drags that foe down, and the
+ *  travel ends */
+function rise(): void {
   const h = hero;
   h.vx = 0;
   tallis.sinceRise = 0;
@@ -145,27 +159,14 @@ function startRise(): void {
   travelEnded();
   emitSkillEvent({ type: "dash", dir: Math.sign(h.x - tallis.sinkFrom) || h.face, foes: tallisHost.passed });
   emitSkillEvent({ type: "sink", from: tallis.sinkFrom, to: h.x });
-  if (tallis.risingQueued) return startRisingCut();
-  setState("rise");
+  startRisingCut();
 }
 
-/** the rise: he can be hit again, and a J rises into Rising Cut */
-export function runRise(): void {
-  hero.vx = 0;
-  if (hero.st >= SINK.rise) settle();
-}
-
-/** J while in the pool: rise into Rising Cut */
-export function queueRisingCut(): boolean {
-  if (hero.state === "sink") {
-    tallis.risingQueued = true;
-    return true;
-  }
-  if (hero.state === "rise") {
-    startRisingCut();
-    return true;
-  }
-  return false;
+/** J in the pool: he rises at once */
+export function riseNow(): boolean {
+  if (hero.state !== "sink") return false;
+  tallis.risingQueued = true;
+  return true;
 }
 
 /** a blow meets him in the pool: nothing touches him, and in its first moment it is a perfect dodge */
