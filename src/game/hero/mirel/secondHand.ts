@@ -10,7 +10,8 @@ import { enemyBox, enemyCenter } from "../../enemies/enemy";
 import { emitSkillEvent } from "../../skills/events";
 import { game, hero, progress } from "../../state";
 import { setState } from "../actions";
-import { canCast } from "./castCheck";
+import { cutForSharedAction } from "../sharedCut";
+import { mayCast } from "./castCheck";
 import { mirel } from "./memory";
 import { drawFlyingHand } from "./trinkets";
 
@@ -51,8 +52,9 @@ function createSecondHand(x: number, y: number, dir: number): Effect {
 }
 
 /** I with Second Hand */
-export function pressSecondHand(): boolean {
-  if (!canCast(mirel.handCd, SECOND_HAND.mp)) return true;
+export function castSecondHand(): boolean {
+  if (!mayCast()) return false;
+  cutForSharedAction();
   hero.mp -= SECOND_HAND.mp;
   mirel.handCd = SECOND_HAND.cooldown;
   mirel.casting = "secondHand";

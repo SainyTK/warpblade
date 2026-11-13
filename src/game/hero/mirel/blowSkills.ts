@@ -23,7 +23,7 @@ const GREAT_TOLL_LIFT = -150;
 /** seconds of blows Undone remembers */
 const LANDED_KEEP = 2;
 
-/** Backswing: this blow is the first after a Rewind, inside its window */
+/** Backswing: this blow is the first after a rewind (a Stopped Moment or Second Chance), inside its window */
 const backswingOpen = (): boolean => {
   const v = skillValues("m_backswing");
   return !!v.power && mirel.sinceRewind <= (v.window ?? 0);
@@ -33,7 +33,7 @@ const backswingOpen = (): boolean => {
 export const blowGrow = (blow: StaffBlow): number =>
   blow === "toll" ? withCharms("area", skillValues("m_toll").ring ?? 0) : 0;
 
-/** the blow's power on top of its own: Great Toll for Toll, Backswing for the first blow after a Rewind */
+/** the blow's power on top of its own: Great Toll for Toll, Backswing for the first blow after a rewind */
 export function blowScale(blow: StaffBlow): number {
   let scale = 1;
   if (blow === "toll") scale += skillValues("m_toll").power ?? 0;

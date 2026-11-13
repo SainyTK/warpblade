@@ -17,7 +17,12 @@ import { updateGritBar } from "./gritBar";
 import { updateGrooveBar } from "./grooveBar";
 import { updateHeatBar } from "./heatBar";
 import { updateHitCounter } from "./hitCounter";
+<<<<<<< HEAD
 import { updateMirelTabs } from "./mirelTabs";
+=======
+import { updateHuldaTabs } from "./huldaTabs";
+import { updateJoryTabs } from "./joryTabs";
+>>>>>>> SainyTK/moveset-mirel
 import { updateMomentumBar } from "./momentumBar";
 import { updateOrrinTabs } from "./orrinTabs";
 import { updateQuiverBar } from "./quiverBar";
@@ -58,7 +63,6 @@ export function updateHud(): void {
   updateAbilityTabs();
   updateRiteTabs();
   updateOrrinTabs();
-  updateMirelTabs();
   updateWennaTabs();
   updateTallisTabs();
   updateDebtBar();

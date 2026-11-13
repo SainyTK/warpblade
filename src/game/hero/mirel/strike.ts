@@ -5,7 +5,7 @@ import { SPARKS } from "../../../constants/palette";
 import { sfx } from "../../../services/audio";
 import type { SourceId } from "../../../types/build";
 import type { Enemy } from "../../../types/enemy";
-import type { StaffBlow } from "../../../types/mirel";
+import type { EchoedBlow } from "../../../types/mirel";
 import { dealDamage } from "../../damage";
 import { createImpact } from "../../effects/impact";
 import { enemyBox, enemyCenter } from "../../enemies/enemy";
@@ -15,16 +15,17 @@ import { skillValues } from "../../skills/query";
 import { game, hero, progress } from "../../state";
 import { fieldPace } from "../../timeFields";
 import { hitStop, shake } from "../../world";
+import { ultimateValues } from "../ultimate";
 import { afterStaffHit, blowLift, blowSkillScale } from "./blowSkills";
 import { holdStagger } from "./heldStagger";
 import { type StrikePlace, shapeReaches } from "./shape";
 
 /** one blow of her staff, or its echo, struck at a place */
 export interface StaffStrike {
-  blow: StaffBlow;
+  blow: EchoedBlow;
   spec: StaffBlowSpec;
   at: StrikePlace;
-  /** the echo half a second after the blow, rather than the blow */
+  /** the echo half a second after the blow */
   echo: boolean;
   /** pixels the shape grows (Long Echo, Great Toll) */
   grow: number;
@@ -48,10 +49,11 @@ export function isStill(e: Enemy): boolean {
 /** Still Point: blows on a still foe always crit once it says so */
 const stillCrit = (e: Enemy): boolean => !!skillValues("m_stillpoint").crit && isStill(e);
 
-/** an echo's share of the blow's power on this foe: full on a still foe, and with Eternal Noon twice that on a stopped one */
+/** an echo's share of the blow's power on this foe: full on a still foe, and with Hour of Stillness's level twice that
+ *  on a stopped one */
 function echoShare(e: Enemy): number {
   if (!isStill(e)) return ECHO.power;
-  return e.stopped > 0 && skillValues("m_noon").echoes ? ECHO.still * 2 : ECHO.still;
+  return e.stopped > 0 && ultimateValues().echoes ? ECHO.still * 2 : ECHO.still;
 }
 
 /** Long Echo makes the echo of Toll stun */

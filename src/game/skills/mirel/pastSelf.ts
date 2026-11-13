@@ -85,8 +85,8 @@ function taunt(g: Ghost, dt: number): void {
 }
 
 /**
- * Past Self: a Rewind may leave a ghost where it began, which strikes her string again; levels raise the chance and the
- * ghost's power, let it draw foes in and replay twice. Many Selves leaves one with every Rewind, and its blows echo.
+ * Past Self: a Stopped Moment may leave a ghost where she parried, which strikes her string; levels raise the chance and the
+ * ghost's power, let it draw foes in and strike twice. Many Selves leaves one with every Stopped Moment, and its blows echo.
  */
 export const pastSelf: SkillBehavior = {
   create: () => ({ ghosts: [], cd: 0 }),

@@ -12,7 +12,6 @@ import { skillValues, withCharms } from "../../../skills/query";
 import { game, hero, lights, progress } from "../../../state";
 import { shake } from "../../../world";
 import { type Dial, dialArc, drawHand, drawHandWake, drawHub } from "../clockArt";
-import { pressSpell } from "./castSpell";
 
 const ID = "m_handsweep";
 /** seconds one sweep takes */
@@ -125,9 +124,6 @@ function createHourHand(cx: number, cy: number, face: number): Effect {
     },
   };
 }
-
-/** I with Hour Hand */
-export const pressHourHand = (): boolean => pressSpell(ID);
 
 /** the hand turns round her on the cast's frame */
 export function castHourHand(): void {

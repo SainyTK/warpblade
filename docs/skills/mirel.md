@@ -1,14 +1,16 @@
 # Mirel's skills
 
 Mirel's 20 skills, written from the skill data in `src/constants/characters/mirel/skills/`, which is the source of truth.
-Her kit, Sand, the Stillfield, Rewind and the echo are in `docs/mirel-design.md`; the rules every hero's skills follow are in `docs/skill-design.md`.
+Her kit, Sand, the Stillfield, the Stopped Moment and the echo are in `docs/mirel-design.md`; the rules every hero's skills follow are in `docs/skill-design.md`.
 
 ## Units
 
 Damage is a multiple of attack damage (x AD) from `progress.stats.ad`, or of ability power (x AP) from `progress.stats.ap` where a skill's values say so.
 At the start of a run AD is 9 and AP is 12.
 Every blow of her string lands again 0.5 s later as an echo at 0.5x, or at 1.0x on a foe inside her Stillfield or stopped.
-A still foe is one inside a Stillfield or stopped by Stopped Clock, Hour of Stillness or Eternal Noon.
+Her warp's arrival blow echoes too, at a fifth of its power (two fifths on a still foe).
+A still foe is one inside a Stillfield or stopped by Stopped Clock, a Stopped Moment or Hour of Stillness.
+A rewind is a Stopped Moment (her parry) or Second Chance.
 Distances are art pixels, times are seconds, speeds are pixels a second.
 
 ## The 20 skills
@@ -21,29 +23,29 @@ Distances are art pixels, times are seconds, speeds are pixels a second.
 | `m_fallinghour` | Falling Hour | attack | timed | J | `m_suspend` |
 | `m_backswing` | Backswing | attack | precise | J | `m_longrewind` |
 | `m_suspend` | Suspended | movement | easy | jump | `m_sandstorm` |
-| `m_longrewind` | Long Rewind | movement | timed | L | `m_pastself` |
-| `m_quicken` | Quickened | movement | timed | L | `m_echo` |
-| `m_pace` | Steady Pace | movement | easy | K | `m_patience` |
+| `m_longrewind` | Long Rewind | passive | precise | K | `m_pastself` |
+| `m_quicken` | Quickened | movement | precise | K | `m_echo` |
+| `m_pace` | Steady Pace | movement | easy | I | `m_patience` |
 | `m_sundial` | Sundial | spell | easy | I | `m_patience` |
 | `m_foretell` | Foretell | spell | timed | I | `m_stillpoint` |
 | `m_handsweep` | Hour Hand | spell | timed | I | `m_toll` |
 | `m_wither` | Wither | dot | easy | J | `m_echo` |
-| `m_sandstorm` | Grinding Sand | dot | timed | K | `m_sundial` |
+| `m_sandstorm` | Grinding Sand | dot | timed | I | `m_sundial` |
 | `m_entropy` | Entropy | dot | timed | auto | `m_foretell` |
-| `m_pastself` | Past Self | summon | timed | auto | `m_quicken` |
+| `m_pastself` | Past Self | summon | precise | K | `m_quicken` |
 | `m_wren` | Clockwork Wren | summon | easy | auto | `m_wither` |
 | `m_orrery` | Orrery | summon | easy | auto | `m_handsweep` |
 | `m_patience` | Patience | passive | easy | auto | `m_pastself` |
-| `m_noon` | Eternal Noon | ultimate | timed | U | `m_patience` |
+| `m_hour` | Hour of Stillness | ultimate | timed | U | `m_patience` |
 
-Counts: attack 5, movement 4, spell 3, dot 3, summon 3, passive 1, ultimate 1.
-Risk: precise 2, easy 8, timed 10.
+Counts: attack 5, movement 3, spell 3, dot 3, summon 3, passive 2, ultimate 1.
+Risk: precise 5, easy 8, timed 7.
 
-Kit events she emits through the shared function: `echo` (an echo of a blow struck a foe), `field` (her Stillfield opened or closed) and `rewind` (a Rewind ended, with the HP it gave back), declared in `src/types/mirel.ts`; and the shared `cast`, `jump`, `dash` (each Rewind) and `perfectDodge`.
+Kit events she emits through the shared function: `echo` (an echo of a blow or of the warp's arrival struck a foe), `field` (her Stillfield opened or closed) and `rewind` (a Stopped Moment, or Second Chance as it ends, with the HP it gave back), declared in `src/types/mirel.ts`; and the shared `cast` (with `stillfield`, `stoppedClock` and `secondHand` for her own three), `jump`, `warp` and `parry`.
 
 ### m_echo: Long Echo
 
-attack, easy, J. Her echoes hit harder, land sooner and reach further.
+attack, easy, J. Her echoes, her warp's too, hit harder, land sooner and reach further.
 
 Values: power: share more every echo deals; reach: pixels the echo's hit shape grows; second: share of the blow's power a second echo deals 1.0 s after the blow; delay: seconds after the blow the echo lands; stun: seconds Toll's echo stuns; pull: pixels an echo pulls the foes it hits toward the strike point; choir: 1 every blow echoes three times, the last at full power (evolution)
 
@@ -123,15 +125,15 @@ Evolution: **Sky Clock** (partner `m_suspend`). The dive opens a free Stillfield
 
 ### m_backswing: Backswing
 
-attack, precise, J. A blow just after a Rewind hits much harder, and its echo lands at once.
+attack, precise, J. A blow just after a Stopped Moment hits much harder.
 
-Values: power: share more the first blow after a Rewind deals; window: seconds after a Rewind ends the blow counts; crit: 1 the blow always crits; heal: share of max HP the blow heals; stagger: seconds it staggers the foe; undone: 1 the blow replays on its foe, at full power, every blow she landed in the rewound 1.2 s (evolution)
+Values: power: share more the first blow after a rewind (a Stopped Moment, or Second Chance) deals; window: seconds after the rewind the blow counts; crit: 1 the blow always crits; heal: share of max HP the blow heals; stagger: seconds it staggers the foe; undone: 1 the blow replays on its foe, at full power, every blow she landed in the time the rewind looked back over (evolution)
 
 | Lv | Change | Card |
 | --- | --- | --- |
-| 1 | power 0.6, window 0.4 | A blow 0.4 s after a Rewind deals 60% more. |
+| 1 | power 0.6, window 0.6 | A blow 0.6 s after a Stopped Moment deals 60% more. |
 | 2 | crit 0 to 1 | The blow always crits. |
-| 3 | window 0.4 to 0.6 | The window grows to 0.6 s. |
+| 3 | window 0.6 to 0.8 | The window grows to 0.8 s. |
 | 4 | heal 0 to 0.03 | The blow heals 3% HP. |
 | 5 | power 0.6 to 1 | The blow deals 100% more. |
 | 6 | stagger 0 to 1 | The blow staggers for 1 s. |
@@ -139,7 +141,7 @@ Values: power: share more the first blow after a Rewind deals; window: seconds a
 | 8 | power 1.6 to 2.6 | The blow deals 260% more. |
 | Evolved | undone 0 to 1 | Replay every rewound blow on the foe. |
 
-Evolution: **Undone** (partner `m_longrewind`). The first blow after a Rewind replays on its foe, at full power, every blow she landed in the rewound 1.2 s.
+Evolution: **Undone** (partner `m_longrewind`). The first blow after a Stopped Moment replays on its foe, at full power, every blow she landed in the time it looked back over.
 
 ### m_suspend: Suspended
 
@@ -163,39 +165,39 @@ Evolution: **Hanging Hour** (partner `m_sandstorm`). At 50 Sand or more the hove
 
 ### m_longrewind: Long Rewind
 
-movement, timed, L. Rewind looks further back, heals more and hurts foes on the path.
+passive, precise, K. Her parry, the Stopped Moment, rewinds more of the HP she lost and holds foes longer.
 
-Values: back: seconds of path Rewind plays back; heal: share of the HP lost in them she gets back; cost: Sand a Rewind costs; power: attack damage foes on the path take; dodge: seconds at the start that count as a perfect dodge; field: radius of a free Stillfield where the Rewind began; fieldLife: seconds it stands; secondChance: 1 once per wave a fatal blow rewinds her 2 s and restores all HP lost in them (evolution)
+Values: back: seconds of HP loss a Stopped Moment looks back over; heal: share of it she gets back; stop: share longer the attacker stays stopped; ring: pixels round the attacker in which other foes stop too; returns: share of the damage a stopped foe took that lands again on its restart; field: radius of a free Stillfield that opens on the attacker; fieldLife: seconds it stands; secondChance: 1 once per wave a fatal blow rewinds her 2 s along her path and restores all HP lost in them (evolution)
 
 | Lv | Change | Card |
 | --- | --- | --- |
-| 1 | back 1.6, heal 0.5, cost 40, dodge 0.12 | Rewind looks back 1.6 s and heals 50%. |
-| 2 | cost 40 to 30 | Rewind costs 30 Sand. |
-| 3 | power 0 to 0.6 | Foes on the path take 0.6x. |
-| 4 | dodge 0.12 to 0.2 | The perfect dodge window grows to 0.2 s. |
-| 5 | power 0.6 to 1 | Foes on the path take 1.0x. |
-| 6 | field 0 to 24, fieldLife 0 to 1 | A free 24 px field stands 1 s where it began. |
-| 7 | heal 0.5 to 0.65 | Rewind heals 65%. |
-| 8 | power 1 to 1.6 | Foes on the path take 1.6x. |
+| 1 | back 2.5, heal 0.65, returns 0.4 | A parry looks back 2.5 s and gives back 65%. |
+| 2 | stop 0 to 0.5 | Foes stay stopped 50% longer. |
+| 3 | ring 0 to 30 | Foes within 30 px of the attacker stop too. |
+| 4 | returns 0.4 to 0.6 | 60% of their stored damage returns. |
+| 5 | field 0 to 30, fieldLife 0 to 1.5 | A free 30 px Stillfield opens on the attacker. |
+| 6 | back 2.5 to 3, heal 0.65 to 0.8 | Looks back 3 s; gives back 80%. |
+| 7 | ring 30 to 50 | Foes within 50 px of the attacker stop too. |
+| 8 | stop 0.5 to 1, returns 0.6 to 1 | Stopped twice as long; all stored damage returns. |
 | Evolved | secondChance 0 to 1 | Once a wave, a fatal blow is undone. |
 
-Evolution: **Second Chance** (partner `m_pastself`). Once per wave a fatal blow rewinds her 2 s and restores all HP lost in them.
+Evolution: **Second Chance** (partner `m_pastself`). Once per wave a fatal blow rewinds her 2 s along her path and restores all HP lost in them.
 
 ### m_quicken: Quickened
 
-movement, timed, L. After a Rewind she moves and attacks faster for a while.
+movement, precise, K. After a Stopped Moment she moves, attacks and warps faster for a while.
 
-Values: speed: share more move and attack speed after a Rewind; life: seconds it lasts; refill: share faster Sand refills while it lasts (1 is double); sooner: seconds sooner her echoes land while it lasts; overclock: 1 while Quickened every echo lands at once at full power (evolution)
+Values: speed: share more move and attack speed after a rewind (a Stopped Moment, or Second Chance); life: seconds it lasts; refill: share faster Sand refills while it lasts (1 is double); sooner: seconds sooner her echoes land while it lasts; warp: share less her warp's recharge while it lasts; overclock: 1 while Quickened every echo lands at once at full power (evolution)
 
 | Lv | Change | Card |
 | --- | --- | --- |
-| 1 | speed 0.15, life 2 | After a Rewind: 15% faster for 2 s. |
-| 2 | life 2 to 3 | Quickened lasts 3 s. |
+| 1 | speed 0.15, life 3 | After a parry: 15% faster for 3 s. |
+| 2 | life 3 to 4 | Quickened lasts 4 s. |
 | 3 | speed 0.15 to 0.25 | 25% faster. |
 | 4 | refill 0 to 1 | Sand refills double while Quickened. |
 | 5 | sooner 0 to 0.2 | Echoes land 0.2 s sooner. |
 | 6 | speed 0.25 to 0.35 | 35% faster. |
-| 7 | life 3 to 4 | Quickened lasts 4 s. |
+| 7 | warp 0 to 0.5 | The warp recharges twice as fast. |
 | 8 | speed 0.35 to 0.5 | 50% faster. |
 | Evolved | overclock 0 to 1 | Quickened echoes land at once, at full. |
 
@@ -203,7 +205,7 @@ Evolution: **Overclock** (partner `m_echo`). While Quickened every echo lands at
 
 ### m_pace: Steady Pace
 
-movement, easy, K. She walks faster inside her own Stillfield, and the field shelters her.
+movement, easy, I. She walks faster inside her own Stillfield, and the field shelters her.
 
 Values: walk: share faster she walks inside her own Stillfield; contact: share less contact damage foes inside deal; refill: share of the usual Sand refill she gets while the field stands; follow: px/s the field follows her; radius: pixels the field's radius grows; eye: 1 the field centres on her and moves with her (evolution)
 
@@ -303,7 +305,7 @@ Evolution: **Dust to Dust** (partner `m_echo`). A foe at max stacks crumbles, co
 
 ### m_sandstorm: Grinding Sand
 
-dot, timed, K. Foes inside her Stillfield are ground by sand.
+dot, timed, I. Foes inside her Stillfield are ground by sand.
 
 Values: stacks: grind stacks a foe gains each second inside her Stillfield; damage: ability power a stack deals a second; max: most stacks; linger: seconds stacks last after the field closes; taken: share more ground foes take from every source; spread: 1 the grind spreads on a kill; storm: ability power a stack deals when the closing field bursts in 80 px (evolution)
 
@@ -343,23 +345,23 @@ Evolution: **Heat Death** (partner `m_foretell`). A decaying foe that dies stops
 
 ### m_pastself: Past Self
 
-summon, timed, auto. A Rewind may leave a ghost of her that replays her last blows.
+summon, precise, K. A Stopped Moment may leave a ghost of her that strikes her string where she parried.
 
-Values: chance: chance a Rewind leaves a ghost; cooldown: seconds between ghosts; power: share of her blows' power the ghost's replays deal; taunt: seconds the ghost draws foes; replays: times it replays her blows of the last 1.2 s; many: 1 every Rewind leaves a ghost and its blows echo (evolution)
+Values: chance: chance a Stopped Moment leaves a ghost; cooldown: seconds between ghosts; power: share of her blows' power the ghost's blows deal; taunt: seconds the ghost draws foes; replays: times it strikes her whole string; many: 1 every Stopped Moment leaves a ghost and its blows echo (evolution)
 
 | Lv | Change | Card |
 | --- | --- | --- |
-| 1 | chance 0.3, cooldown 1.5, power 0.8, replays 1 | 30% on a Rewind: a ghost replays at 0.8x. |
-| 2 | chance 0.3 to 0.45 | 45% chance. |
+| 1 | chance 0.5, cooldown 1.5, power 0.8, replays 1 | 50% on a parry: a ghost strikes at 0.8x. |
+| 2 | chance 0.5 to 0.7 | 70% chance. |
 | 3 | taunt 0 to 1 | The ghost draws foes for 1 s. |
-| 4 | power 0.8 to 1.2 | Replays deal 1.2x. |
-| 5 | replays 1 to 2 | The ghost replays twice. |
-| 6 | chance 0.45 to 0.6 | 60% chance. |
-| 7 | power 1.2 to 1.6 | Replays deal 1.6x. |
-| 8 | power 1.6 to 2.2 | Replays deal 2.2x. |
-| Evolved | many 0 to 1 | Every Rewind leaves a ghost; its blows echo. |
+| 4 | power 0.8 to 1.2 | The ghost deals 1.2x. |
+| 5 | replays 1 to 2 | The ghost strikes its string twice. |
+| 6 | chance 0.7 to 1 | Every parry. |
+| 7 | power 1.2 to 1.6 | The ghost deals 1.6x. |
+| 8 | power 1.6 to 2.2 | The ghost deals 2.2x. |
+| Evolved | many 0 to 1 | Every parry leaves a ghost; its blows echo. |
 
-Evolution: **Many Selves** (partner `m_quicken`). Every Rewind leaves a ghost, and its blows echo.
+Evolution: **Many Selves** (partner `m_quicken`). Every Stopped Moment leaves a ghost, and its blows echo.
 
 ### m_wren: Clockwork Wren
 
@@ -405,7 +407,7 @@ Evolution: **Celestial Clock** (partner `m_handsweep`). The gears orbit her all 
 
 passive, easy, auto. Sand refills faster and goes further.
 
-Values: refill: share faster Sand refills; max: Sand above 100 she can hold; field: share less the Stillfield costs; rewind: Sand less a Rewind costs; echo: share more her echoes deal to still foes; timeless: 1 Sand keeps refilling while a Stillfield stands (evolution)
+Values: refill: share faster Sand refills; max: Sand above 100 she can hold; field: share less the Stillfield costs; parry: Sand a Stopped Moment gives back; echo: share more her echoes deal to still foes; timeless: 1 Sand keeps refilling while a Stillfield stands (evolution)
 
 | Lv | Change | Card |
 | --- | --- | --- |
@@ -413,7 +415,7 @@ Values: refill: share faster Sand refills; max: Sand above 100 she can hold; fie
 | 2 | max 0 to 20 | Hold 20 more Sand. |
 | 3 | refill 0.25 to 0.4 | Sand refills 40% faster. |
 | 4 | field 0 to 0.2 | The Stillfield costs 20% less. |
-| 5 | rewind 0 to 5 | Rewind costs 5 less Sand. |
+| 5 | parry 0 to 15 | A Stopped Moment gives back 15 Sand. |
 | 6 | echo 0 to 0.15 | Echoes on still foes deal 15% more. |
 | 7 | max 20 to 30 | Hold 30 more Sand. |
 | 8 | refill 0.4 to 0.6 | Sand refills 60% faster. |
@@ -421,22 +423,23 @@ Values: refill: share faster Sand refills; max: Sand above 100 she can hold; fie
 
 Evolution: **Timeless** (partner `m_pastself`). Sand keeps refilling while a Stillfield stands.
 
-### m_noon: Eternal Noon
+### m_hour: Hour of Stillness
 
-ultimate, timed, U. Replaces Hour of Stillness: every foe on screen stops, and the damage it takes while stopped returns.
+ultimate, timed, U. Hour of Stillness, her special, stops foes longer and tolls harder.
+The special's own numbers without the skill: foes stop 1.2 s, the toll deals 1.0x the charge level's power, and 30% of what a foe took while stopped adds to it, up to 2x.
 
-Values: stop: seconds every foe on screen stops; returns: share of the damage a foe took while stopped that lands again when it restarts; power: share of the level's power each foe takes at the toll; echoes: 1 her echoes on stopped foes hit twice as hard; stun: seconds the toll stuns; endless: 1 the stored damage has no cap (evolution)
+Values: stop: seconds the foes inside stop; power: multiple of the charge level's power the toll deals; stored: share of the damage a foe took while stopped added to the toll; cap: the most that adds, in multiples of the level's power; screen: 1 the clock covers the whole screen at every level; echoes: 1 her echoes on stopped foes hit twice as hard; stun: seconds the toll stuns; field: seconds a free Stillfield stands where it tolled; endless: 1 the stored damage has no cap (evolution)
 
 | Lv | Change | Card |
 | --- | --- | --- |
-| 1 | stop 1.6, returns 0.4, power 0.8 | Stop the screen 1.6 s; 40% returns, 0.8x. |
-| 2 | stop 1.6 to 2 | Foes stop for 2.0 s. |
-| 3 | returns 0.4 to 0.6 | 60% of stored damage returns. |
-| 4 | power 0.8 to 1.6 | The toll deals 1.6x. |
-| 5 | echoes 0 to 1 | Echoes on stopped foes hit twice as hard. |
-| 6 | stop 2 to 2.6 | Foes stop for 2.6 s. |
-| 7 | stun 0 to 1 | The toll stuns for 1 s. |
-| 8 | power 1.6 to 4 | The toll deals 4x. |
-| Evolved | stop 2.6 to 3.5, returns 0.6 to 1, power 4 to 6, endless 0 to 1 | Stop 3.5 s; all stored damage returns. |
+| 1 | stop 1.6, power 1.2, stored 0.4, cap 2 | Foes stop 1.6 s; the toll deals 1.2x. |
+| 2 | screen 0 to 1 | The clock covers the whole screen. |
+| 3 | echoes 0 to 1 | Echoes on stopped foes hit twice as hard. |
+| 4 | power 1.2 to 2 | The toll deals 2x. |
+| 5 | stun 0 to 1 | The toll stuns for 1 s. |
+| 6 | stored 0.4 to 0.6, cap 2 to 4 | 60% of stored damage returns, up to 4x. |
+| 7 | field 0 to 2 | The toll leaves a Stillfield for 2 s. |
+| 8 | stop 1.6 to 2.4, power 2 to 3.5 | Foes stop 2.4 s; the toll deals 3.5x. |
+| Evolved | stop 2.4 to 3.5, power 3.5 to 6, stored 0.6 to 1, endless 0 to 1 | Stop 3.5 s; all stored damage returns. |
 
-Evolution: **Endless Noon** (partner `m_patience`). Foes stop for 3.5 s, and the damage they take while stopped returns in full with no cap.
+Evolution: **Eternal Noon** (partner `m_patience`). Foes stop for 3.5 s, the toll deals 6x, and the damage they took while stopped returns in full with no cap.

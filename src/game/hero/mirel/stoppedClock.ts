@@ -1,27 +1,18 @@
 import { STOPPED_CLOCK } from "../../../constants/mirel/abilities";
-import { DIAL } from "../../../constants/mirel/look";
 import { PAL, SAND } from "../../../constants/palette";
-import { disc, place } from "../../../engine/frame";
 import { sfx } from "../../../services/audio";
-import type { Effect } from "../../../types/effect";
 import type { Enemy } from "../../../types/enemy";
 import { PK } from "../../../types/particle";
 import { dealDamage } from "../../damage";
-import { enemyBox, enemyCenter } from "../../enemies/enemy";
+import { enemyCenter } from "../../enemies/enemy";
 import { stopFoe } from "../../enemies/timeStop";
 import { emitSkillEvent } from "../../skills/events";
 import { game, hero, lights, particles, progress, rng } from "../../state";
 import { setState } from "../actions";
-import { canCast } from "./castCheck";
-import { type Dial, drawDial, drawHand, drawHub } from "./clockArt";
+import { cutForSharedAction } from "../sharedCut";
+import { mayCast } from "./castCheck";
+import { createClockFace } from "./clockFace";
 import { mirel, mirelHost } from "./memory";
-import { drawStoppedRim } from "./stoppedLook";
-
-/** the clock face over a stopped foe: its width, and how often its hand ticks */
-const FACE = 10;
-const TICK = 0.25;
-/** seconds the face is white as it opens */
-const OPEN_FLASH = 2 / 30;
 
 /** a foe ahead counts as level with her when its centre is this near her chest height */
 const LEVEL = 20;
@@ -45,41 +36,45 @@ function nearestAhead(height: number): Enemy | null {
  *  faces; failing that, the nearest ahead at any height within reach */
 const foeAhead = (): Enemy | null => nearestAhead(LEVEL) ?? nearestAhead(STOPPED_CLOCK.height);
 
-/** seconds a foe of this rank stays stopped */
-const stopFor = (e: Enemy): number => STOPPED_CLOCK.stop[e.rank];
-
-/** a clock face over a stopped foe, its hand ticking every quarter second, until the foe restarts */
-export function createClockFace(e: Enemy): Effect {
-  let t = 0;
-  return {
-    update(dt) {
-      t += dt;
-      return e.hp > 0 && e.stopped > 0;
-    },
-    draw() {
-      place();
-      const b = enemyBox(e);
-      const [cx] = enemyCenter(e);
-      const cy = b[1] - FACE - 2;
-      drawStoppedRim(e);
-      const dial: Dial = { x: cx, y: cy, r: FACE, a: 1, floor: Number.POSITIVE_INFINITY, flash: t < OPEN_FLASH };
-      disc(cx, cy, FACE, DIAL.fill, 0.3);
-      drawDial(dial);
-      drawHand(dial, Math.floor(t / TICK) / 12, FACE - 3, false);
-      drawHub(dial);
-    },
-  };
+/** every living foe round her within the wide form's reach */
+function foesRound(): Enemy[] {
+  return game.enemies.filter((e) => {
+    if (e.hp <= 0) return false;
+    const [cx, cy] = enemyCenter(e);
+    return Math.hypot(cx - hero.x, cy - (hero.y - 16)) <= STOPPED_CLOCK.wide.reach;
+  });
 }
 
-/** I with Stopped Clock: aim at the foe ahead; with nobody in reach it fizzles for half the MP */
-export function pressStoppedClock(): boolean {
-  const target = foeAhead();
-  const mp = target ? STOPPED_CLOCK.mp : STOPPED_CLOCK.mp / 2;
-  if (!canCast(mirel.clockCd, mp)) return true;
-  hero.mp -= mp;
+/** the foes a cast would stop: the foe ahead, or held every foe round her */
+const targets = (wide: boolean): Enemy[] => {
+  if (wide) return foesRound();
+  const foe = foeAhead();
+  return foe ? [foe] : [];
+};
+
+/** MP a cast costs now: more for the wide form, half when it would find nobody */
+export function clockMp(wide: boolean): number {
+  const mp = STOPPED_CLOCK.mp * (wide ? STOPPED_CLOCK.wide.mp : 1);
+  return targets(wide).length ? mp : mp / 2;
+}
+
+/** seconds a foe of this rank stays stopped, shorter in the wide form */
+const stopFor = (e: Enemy, wide: boolean): number => STOPPED_CLOCK.stop[e.rank] * (wide ? STOPPED_CLOCK.wide.stop : 1);
+
+/**
+ * I with Stopped Clock: aim at the foe ahead; held, at every foe round her, for more MP and a shorter stop. With nobody
+ * in reach it fizzles for half the MP.
+ */
+export function castStoppedClock(wide: boolean): boolean {
+  if (!mayCast()) return false;
+  // held with MP for the plain form only, the plain form goes
+  const held = wide && hero.mp >= clockMp(true);
+  cutForSharedAction();
+  hero.mp -= clockMp(held);
   mirel.clockCd = STOPPED_CLOCK.cooldown;
   mirel.casting = "stoppedClock";
-  mirelHost.clockFoe = target;
+  mirel.wide = held;
+  mirelHost.clockFoes = targets(held);
   if (hero.ground) hero.vx = 0;
   setState("clockCast");
   sfx.cast();
@@ -106,23 +101,26 @@ function fizzle(): void {
     );
 }
 
-/** the cast: on its frame the foe stops dead under a clock face and takes the hit */
+/** one foe takes the cast's hit and stops dead under a clock face */
+function stop(e: Enemy, wide: boolean): void {
+  // the cast's own hit lands before the stop, so only what comes after is stored
+  dealDamage(e, progress.stats.ap * STOPPED_CLOCK.power, { fromX: hero.x, source: "abilities" });
+  stopFoe(e, stopFor(e, wide), STOPPED_CLOCK.returns);
+  game.fx.push(createClockFace(e));
+  const [cx, cy] = enemyCenter(e);
+  lights.add(cx, cy, 34, PAL.hour[3], 0.55, 0.25);
+}
+
+/** the cast: on its frame the foes stop dead under clock faces and take the hit */
 export function runClockCast(): void {
   const h = hero;
   if (!h.hitDone && h.st >= STOPPED_CLOCK.hit) {
     h.hitDone = true;
-    const e = mirelHost.clockFoe;
-    mirelHost.clockFoe = null;
-    if (!e || e.hp <= 0) fizzle();
-    else {
-      // the cast's own hit lands before the stop, so only what comes after is stored
-      dealDamage(e, progress.stats.ap * STOPPED_CLOCK.power, { fromX: h.x, source: "abilities" });
-      stopFoe(e, stopFor(e), STOPPED_CLOCK.returns);
-      game.fx.push(createClockFace(e));
-      const [cx, cy] = enemyCenter(e);
-      lights.add(cx, cy, 34, PAL.hour[3], 0.55, 0.25);
-      sfx.chime(3);
-    }
+    const foes = mirelHost.clockFoes.filter((e) => e.hp > 0);
+    mirelHost.clockFoes = [];
+    if (!foes.length) fizzle();
+    for (const e of foes) stop(e, mirel.wide);
+    if (foes.length) sfx.chime(3);
   }
   if (h.st >= STOPPED_CLOCK.dur) setState(h.ground ? "idle" : "fall");
 }

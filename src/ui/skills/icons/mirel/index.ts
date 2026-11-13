@@ -66,7 +66,7 @@ export const MIREL_ICONS: Record<string, (s: SpriteCanvas) => void> = {
       s.set(11, 11, HOUR[4]);
     });
   },
-  /** her special Hour of Stillness: a big clock face with two hands */
+  /** her special Hour of Stillness, and the ultimate skill that upgrades it: a big clock face with two hands */
   m_hour: (s) => {
     clockFace(s, 8, 8, 7.4);
     hand(s, 8, 8, UP, 5, HOUR[5]);
@@ -213,14 +213,11 @@ export const MIREL_ICONS: Record<string, (s: SpriteCanvas) => void> = {
     foe(s, 12, 13, 2.4, -1);
     glint(s, 13, 3, 2, GOLD_LIGHT);
   },
-  /** a long arrow curling back from her along her path to the floor mark she returns to */
+  /** the Stopped Moment: the staff raised upright in guard, a rewind arrow winding back round a heart beside it */
   m_longrewind: (s) => {
-    fill(s, () => {
-      for (let x = 4; x <= 9; x += 2) s.set(x, 15, HOUR[3]);
-      seg(s, 1, 14, 5, 14, HOUR[4]);
-    });
-    rewindArrow(s, 7, 7, 4.2, -0.3, -Math.PI, HOUR[2], HOUR[4]);
-    mage(s, 12, 15, false, false);
+    rewindArrow(s, 10, 7, 4.6, 0.6, 0.6 - TAU * 0.78, HOUR[2], HOUR[4]);
+    heart(s, 10, 7.5, 2.4, HEART, HEART_LIGHT);
+    staff(s, 3, 15, 4, 3, false, 2.2);
   },
   /** Second Chance: a heart wound back inside a gold rewind loop */
   m_longrewind_evo: (s) => {
@@ -537,14 +534,8 @@ export const MIREL_ICONS: Record<string, (s: SpriteCanvas) => void> = {
     hourglass(s, 8, 2, 7, 12, 0.6, true);
     glint(s, 14, 2, 1, GOLD_LIGHT);
   },
-  /** Eternal Noon: the sun stood at twelve on a clock, both hands pointing up */
-  m_noon: (s) => {
-    sun(s, 8, 8, 4.4, 7);
-    hand(s, 8, 8, UP, 3.6, GOLD_DARK, WHITE);
-    hand(s, 7, 8, UP, 2.4, GOLD_DARK, GOLD_DARK);
-  },
-  /** Endless Noon: a blazing sun ringed with twelve hours, stood still for good */
-  m_noon_evo: (s) => {
+  /** Eternal Noon: the sun stood at twelve on a clock ringed with twelve hours, both hands pointing up for good */
+  m_hour_evo: (s) => {
     ticks(s, 8, 8, 7.2, GOLD, WHITE);
     sun(s, 8, 8, 4, 5.8);
     hand(s, 8, 8, UP, 3.4, HOUR[2], WHITE);
