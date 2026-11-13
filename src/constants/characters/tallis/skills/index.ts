@@ -4,8 +4,8 @@ import { BACKBITER } from "./backbiter";
 import { CALTROPS } from "./caltrops";
 import { CUT_TENDON } from "./cutTendon";
 import { DEEP_SHADOW } from "./deepShadow";
-import { ECLIPSE } from "./eclipse";
 import { GLOAM_CROWS } from "./gloamCrows";
+import { GLOAMING } from "./gloaming";
 import { HOLLOW_WRAITH } from "./hollowWraith";
 import { INK_WOUND } from "./inkWound";
 import { MARK_OF_DUSK } from "./markOfDusk";
@@ -41,5 +41,5 @@ export const TALLIS_SKILL_DEFS: readonly SkillDef[] = [
   SHADOW_DOUBLE,
   HOLLOW_WRAITH,
   SHROUD,
-  ECLIPSE,
+  GLOAMING,
 ];

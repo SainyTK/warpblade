@@ -184,23 +184,27 @@ export const TOUCH_TEXT: Record<KitId, Record<TouchButtonAction, TouchButtonText
   tallis: {
     attack: {
       label: "Knife",
-      hint: "Knife string: Flick, Cross, Heel Kick. In the air, Drop Stab. Out of the pool, Rising Cut",
+      hint: "Tap: knife string, Flick, Cross, Heel Kick; in the air, Drop Stab. Hold: throw a knife and step out of the foe's shadow at its back (10 MP)",
       accent: "#f08ad0",
     },
     up: { label: "Jump", hint: "One jump. Hold the stick down to drop through a ledge", accent: "#e8e6f6" },
     dash: DODGE_BUTTON,
     guard: {
-      label: "Veil",
-      hint: "Veil on or off: minions lose sight of you (Gloam). Your first blow out of it is an Ambush",
+      label: "Guard",
+      hint: "Hold to block blows from the front with crossed knives. Tap just as a blow lands to Fade into the Veil",
       accent: "#ffb8dc",
     },
     cast: {
       label: "Ability",
-      hint: "Use the selected ability: Smoke Knot, Hamstring or a spell skill",
+      hint: "Tap to cast the selected ability. Hold to stay in the shadow pool, or for a wider Smoke Knot or Hamstring",
       accent: "#ffe4f2",
     },
     ultimate: SPECIAL,
-    cycle: { label: "Switch", hint: "Turn to the next ability", accent: "#e8b4d0" },
+    cycle: {
+      label: "Switch",
+      hint: "Switch ability: Veil, Sink, Smoke Knot, Hamstring and the spells you learn",
+      accent: "#e8b4d0",
+    },
   },
   jory: {
     attack: {
