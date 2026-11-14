@@ -29,10 +29,5 @@ export const ROSTER = {
 /** a hero's id: a key of the roster */
 export type HeroId = keyof typeof ROSTER;
 
-/**
- * Every playable hero, in the order the hero screen shows them. A production build leaves out a hero that is still a
- * stand-in (`CharacterDef.stub`), so one can never reach players; dev builds and the playtest harness show all nine.
- */
-export const CHARACTERS: readonly CharacterDef[] = Object.values<CharacterDef>(ROSTER).filter(
-  (c) => !(import.meta.env?.PROD && c.stub),
-);
+/** every playable hero, in the order the hero screen shows them */
+export const CHARACTERS: readonly CharacterDef[] = Object.values<CharacterDef>(ROSTER);

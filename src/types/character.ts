@@ -92,6 +92,4 @@ export interface CharacterDef {
   achievements: readonly Achievement[];
   /** the icon id of each of the hero's own damage sources on the end of run screen */
   sourceIcons: Readonly<Record<HeroSource, string>>;
-  /** this hero is a stand-in that plays as Kael until its own module is built; no stand-in may ship */
-  stub?: true;
 }

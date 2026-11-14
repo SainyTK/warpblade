@@ -12,7 +12,7 @@ export const STAT = {
 export const ALDRIC_ACHIEVEMENTS: readonly Achievement[] = [
   {
     id: "aldric-bulwark",
-    name: "Unbroken Line",
+    name: "Bulwark",
     text: "As Aldric, block 500 blows with your guard",
     group: "Skill",
     goal: { kind: "hero", stat: STAT.blocks, need: 500 },

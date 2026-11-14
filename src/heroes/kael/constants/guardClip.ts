@@ -32,8 +32,8 @@ export const KAEL_GUARD_CLIP = {
   keys: [
     [0, pose({ hy: -13.5, nx: 1, ny: -23.5, fx: 6, fy: -15, bx: 5, by: -14, sa: -0.9, ffx: 4, bfx: -5 })],
     [t.loopFrom, pose(HOLD), "snap"],
-    [frame(16), pose({ ...HOLD, ny: -23, cb: 1, fy: -20, by: -18 })],
-    [frame(32), pose({ ...HOLD, hy: -12, ny: -22.5, cb: 0.5, sa: -2.15 })],
+    [frame(8), pose({ ...HOLD, ny: -23, cb: 1, fy: -20, by: -18 })],
+    [frame(15), pose({ ...HOLD, hy: -12, ny: -22.5, cb: 0.5, sa: -2.15 })],
     [t.loopTo - 0.001, pose(HOLD)],
     [
       t.block,

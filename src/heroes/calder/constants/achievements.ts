@@ -12,7 +12,7 @@ export const CALDER_ACHIEVEMENTS: readonly Achievement[] = [
   {
     id: "calder-quick",
     name: "Hot Hands",
-    text: `As Calder, make ${QUICK_RELOAD_GOAL} quick reloads.`,
+    text: `As Calder, make ${QUICK_RELOAD_GOAL} quick reloads`,
     group: "Skill",
     goal: { kind: "hero", stat: CALDER_STAT.quickReloads, need: QUICK_RELOAD_GOAL },
     reward: 60,
@@ -20,7 +20,7 @@ export const CALDER_ACHIEVEMENTS: readonly Achievement[] = [
   {
     id: "calder-triggers",
     name: "Six for Six",
-    text: `As Calder, land ${TRIGGER_RUN_GOAL} Triggers in a row.`,
+    text: `As Calder, land ${TRIGGER_RUN_GOAL} Triggers in a row`,
     group: "Skill",
     goal: { kind: "hero", stat: CALDER_STAT.triggerRun, need: TRIGGER_RUN_GOAL },
     reward: 80,

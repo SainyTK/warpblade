@@ -11,10 +11,9 @@ Kael (`src/heroes/kael/`) is the worked example; every hook below shows how he f
 | --- | --- | --- |
 | `src/heroes/roster.ts` | data | `ROSTER`, every hero's `CharacterDef` by id in hero screen order, `CHARACTERS` and the `HeroId` type |
 | `src/heroes/index.ts` | code | `heroModule(id)`, every hero's `HeroModule` by id |
-| `src/heroes/stub.ts` | data | `stubCharacter`, the stand-in a hero uses until it is built |
 
-The nine heroes are registered in both files already, in this order: kael, cerise, aldric, vesper, saya, yun, brynn, zafir, calder.
-Nobody edits the roster files to build a hero.
+The nine heroes are registered in both files in this order: kael, cerise, aldric, vesper, saya, yun, brynn, zafir, calder.
+A new hero adds one line to each file; everything else lives in the hero's own folders.
 
 Each hero has two entry files, one per layer:
 
@@ -77,14 +76,6 @@ src/heroes/kael/
 - Any module-level state of the hero or its pose is per seat for co-op: register it with `rememberPerSeat` (`src/game/seatMemory.ts`, `docs/multiplayer.md`). Keep sprites, pixel arrays, foes and effect lists `hostOnly`.
 - A draw function never changes game state and never reads the game `rng`.
 - Numbers live in the hero's `constants/`, and any text that shows a number reads the constant.
-
-## Replacing a stand-in
-
-Each of the eight new heroes starts as a stand-in: `character.ts` calls `stubCharacter` and `index.ts` re-exports Kael's module, so the hero plays as Kael under its own id and name.
-`CharacterDef.stub` marks it, and the hero screen titles it "Not built yet".
-To build the hero, replace both files with the hero's own and stop importing `../stub` and `../kael`.
-A finished hero has no `stub` field.
-When no hero calls `stubCharacter`, `src/heroes/stub.ts` and the `stub` field are deleted by whoever integrates the last hero.
 
 ## The data entry: `CharacterDef`
 

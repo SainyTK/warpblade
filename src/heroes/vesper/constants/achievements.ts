@@ -5,7 +5,7 @@ export const VESPER_ACHIEVEMENTS: readonly Achievement[] = [
   {
     id: "vesper-tempo",
     name: "Never Miss a Beat",
-    text: "As Vesper, reach the top of Tempo 40 times.",
+    text: "As Vesper, reach the top of Tempo 40 times",
     group: "Skill",
     goal: { kind: "hero", stat: "vesper.tops", need: 40 },
     reward: 60,
