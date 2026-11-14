@@ -4,7 +4,7 @@
   "date": "2026-11-15",
   "title": "Nine Blades",
   "tagline": "Every hero now fights with a sword. Eight sword heroes join Kael, Kael gets a new look, and the nine heroes who carried other weapons leave the game.",
-  "intro": "Our owner found only Kael fun to play, and only swords fit Warpblade's story, so the nine heroes who fought with other weapons have left the game. In their place come eight sword heroes, each built on the same moveset as Kael and each with one thing no other hero does, and Kael wears a new look with his play unchanged. Your coins, shop levels, options and records stay as they were, and if you bought a hero who left, the coins you paid come back to your bank once. Achievements that belonged to the heroes who left are no longer listed, and the coins they paid stay with you. The roster is now set at nine, so the hero sprint is over: new heroes come only when the owner asks for one, and class advancement is next in line.",
+  "intro": "Only Kael was fun to play, and only swords fit Warpblade's story, so the nine heroes who fought with other weapons have left the game. In their place come eight sword heroes, each built on the same moveset as Kael and each with one thing no other hero does, and Kael wears a new look with his play unchanged. Your coins, shop levels, options and records stay as they were, and if you bought a hero who left, the coins you paid come back to your bank once. Achievements that belonged to the heroes who left are no longer listed, and the coins they paid stay with you. The roster is now set at nine and the hero sprint is over, so class advancement is next in line.",
   "highlights": [
     {
       "title": "Cerise, the rose duelist",
@@ -568,7 +568,7 @@
           "name": "The nine heroes who left",
           "tag": "rework",
           "summary": "Ysra, Sable, Hulda, Orrin, Mirel, Wenna, Tallis, Jory and Brannoc have left the game.",
-          "context": "Our owner found only Kael fun to play, and only swords fit the story. Each of the nine carried another weapon: a glaive, a crossbow, a gauntlet, a chain, a staff, a lantern, knives, a drum and a great axe.",
+          "context": "Only Kael was fun to play, and only swords fit the story. Each of the nine carried another weapon: a glaive, a crossbow, a gauntlet, a chain, a staff, a lantern, knives, a drum and a great axe.",
           "changes": [
             {
               "kind": "stat",
