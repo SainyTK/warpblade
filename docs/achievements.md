@@ -103,6 +103,8 @@ A save that bought a hero no longer in the roster gets that hero's price back in
 | Skill | Untouchable | Make 25 perfect dodges or parries | 40 | |
 | Skill | Final Art | Take an ultimate skill | 30 | |
 | Skill | Evolved | Evolve a skill | 50 | |
+| Skill | Unbroken Line | As Aldric, block 500 blows with your guard | 60 | |
+| Skill | Dawnbringer | As Aldric, kindle Radiance 50 times | 60 | |
 | Coins | Coin Purse | Bank 500 coins from runs | 25 | |
 | Coins | Treasury | Bank 3,000 coins from runs | 100 | Coin Purse |
 | Coins | Outfitted | Buy 10 levels or skills in the Shop | 30 | |
@@ -112,7 +114,7 @@ The trials are built from the roster: `src/constants/achievements.ts` adds one f
 A hero left out of a production build has no trial there until it is built.
 Since waves stream their quota of foes (`docs/growth-design.md`), a full clear slays about 620 foes where it slew about 190, so the two larger kill goals went up from 1,000 and 5,000 to 3,000 and 15,000 to stay about as far off in runs.
 They keep their ids, `kills-1000` and `kills-5000`, so saves that earned them keep them.
-The 19 shared achievements pay 1,810 coins and each hero's trial 40, so with all nine heroes the page lists 28 achievements that together pay 2,170 coins.
+The 19 shared achievements pay 1,810 coins and each hero's trial 40, so with all nine heroes and Aldric's two the page lists 30 achievements that together pay 2,290 coins.
 
 ## A hero's own achievements
 
@@ -131,7 +133,7 @@ The hero's kit counts the stat with `feat`:
 
 Every achievement id starts with `<id>-` and every hero stat with `<id>.`, so two heroes never share one.
 The stats are saved with the player's other tracked stats, under `tracked.hero`.
-No hero has achievements of its own yet: Kael's list is empty, and the eight heroes being built add theirs with their kits.
+Kael's list is empty; Aldric has two (Unbroken Line, Dawnbringer), and the other heroes being built add theirs with their kits.
 
 ## Adding a hero
 
