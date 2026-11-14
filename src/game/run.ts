@@ -4,8 +4,11 @@ import { emptyStream } from "../utils/waves";
 import { clearChests } from "./build/chests";
 import { bankCoins } from "./coins";
 import { resetLedger } from "./damageLedger";
+import { resetAbilityBar } from "./hero/abilityBar";
+import { resetGuard } from "./hero/heroGuard";
 import { kit } from "./hero/kits";
 import { clearTakeoff } from "./hero/takeoff";
+import { resetWarp } from "./hero/warp";
 import { resetWound } from "./hero/wound";
 import { resetDanger } from "./lowHealth";
 import { resetProgress } from "./progress";
@@ -53,6 +56,9 @@ export function resetRun(banner = "Rise again"): void {
   // every field starts fresh, so nothing from the last run carries over; the hero stays untouchable a moment
   Object.assign(hero, freshHero(progress.stats), { face: hero.face, inv: 1.5 });
   kit().reset();
+  resetGuard();
+  resetWarp();
+  resetAbilityBar();
   clearTakeoff();
   resetWound();
   resetDanger();
