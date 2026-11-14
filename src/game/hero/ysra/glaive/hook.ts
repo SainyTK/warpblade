@@ -17,7 +17,6 @@ import { boxAhead, dust, shake, struckThisSwing } from "../../../world";
 import { lift } from "../../lift";
 import { skin } from "../../skin";
 import { pinFoe } from "../pin";
-import { rechargeVault } from "../stance/stance";
 
 /** the hooked foe's slam hits foes this close to where it lands */
 const SLAM_REACH = 20;
@@ -97,7 +96,6 @@ function heap(power: number): void {
     e.x = hero.x + hero.face * (HEAP_AHEAD + rng.range(-4, 4));
     drag(e, power);
   }
-  rechargeVault();
 }
 
 /** the Skyhook landed: the cone takes every flyer over her, struck foes are dragged down, and she rises with the hook */

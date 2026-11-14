@@ -114,3 +114,21 @@ export const PYRE_COLONNADE = {
   /** a flank is skipped when it would stand closer than this to a stage edge */
   margin: 8,
 } as const;
+
+/** Pillar Stride: low flame pillars along the front dodge's path, one every `spacing` pixels from where she set off to
+ *  where she stopped, each bursting `warn` seconds after the dodge ends */
+export const PILLAR_STRIDE = {
+  spacing: 18,
+  shape: {
+    ...FLAME_PILLAR,
+    height: 40,
+    halfWidth: 6,
+    launch: 180,
+    warn: 0.16,
+    stand: 0.3,
+    sigil: 0.55,
+    shake: 0.06,
+    amp: 1.2,
+    hitStop: 0.02,
+  } satisfies Omit<PillarShape, "power">,
+} as const;

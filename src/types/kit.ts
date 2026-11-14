@@ -66,7 +66,7 @@ export interface HeroKit {
    * state, so the knockback, the flinch and the combo reset are skipped. Left out, every blow hurts as usual.
    */
   steadfast?(): boolean;
-  /** the kit drives the hero's horizontal speed itself this frame (vaults, dives, charges) */
+  /** the kit drives the hero's horizontal speed itself this frame (a backstep, a dive, a charge) */
   drivesMotion(): boolean;
   /** gravity multiplier for the kit's own states; 1 for shared behaviour */
   gravityScale(): number;

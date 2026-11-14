@@ -28,7 +28,7 @@ function middleBlow(): MoveId {
 export function chooseGlaive(s: Situation): MoveId | null {
   return pickGlaive(s, {
     counter: counterReady(),
-    airSweeps: skillValues("y_vault").sweeps ?? 1,
+    airSweeps: skillValues("y_firewalk").sweeps ?? 1,
     middle: middleBlow(),
     warpath: skillLevel("y_warpath") > 0,
     twist: (skillValues("y_impale").twist ?? 0) > 0,

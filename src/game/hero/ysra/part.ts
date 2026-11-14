@@ -4,8 +4,6 @@ export interface YsraPart {
   /** true when this part ran the hero's current state */
   runState?(dt: number): boolean;
   drivesMotion?(): boolean;
-  /** gravity multiplier this part wants now, or null to leave it */
-  gravity?(): number | null;
   /** attack speed multiplier this part applies */
   attackRate?(): number;
   /** damage multiplier this part applies */

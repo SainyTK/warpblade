@@ -1,5 +1,5 @@
 import { RITE_RAMP, RITE_SPARKS } from "../../../constants/ysra/emberLook";
-import { ASHEN_WAKE as A } from "../../../constants/ysra/rites";
+import { CINDER as A } from "../../../constants/ysra/rites";
 import { place } from "../../../engine/frame";
 import type { SourceId } from "../../../types/build";
 import type { Effect } from "../../../types/effect";

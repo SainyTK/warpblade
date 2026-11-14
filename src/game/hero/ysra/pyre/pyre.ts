@@ -4,12 +4,12 @@ import { FLARE, RITES } from "../../../../constants/ysra/rites";
 import { objectMemory, rememberPerSeat } from "../../../seatMemory";
 import { skillValues } from "../../../skills/query";
 import { clearBrazier } from "../../../spells/rites/brazier";
+import { clearCinders } from "../../../spells/rites/cinder";
 import { castFlare } from "../../../spells/rites/flare";
 import { game, hero } from "../../../state";
 import { selectedSlot } from "../../abilityBar";
 import { buffs } from "../buffs";
 import type { YsraPart } from "../part";
-import { listenAshenWake, resetAshenWake } from "./ashenWake";
 import { burnGlaive } from "./glaiveFire";
 import { listenGuard } from "./guardHeat";
 import { flashHeat, heat, nearDeath, overheatLeft, resetHeat, tickHeat } from "./heat";
@@ -22,7 +22,6 @@ export { castRite, riteAffordable } from "./rite";
 const NOVA_RADIUS = 60;
 
 listenStrikes();
-listenAshenWake();
 listenGuard();
 
 /** the refused-press flash last seen, so a new refusal of a rite blinks the Heat bar */
@@ -60,7 +59,7 @@ export const PYRE_PART: YsraPart = {
   reset: () => {
     resetHeat();
     refused.seen = 0;
-    resetAshenWake();
+    clearCinders();
     clearBrazier();
   },
 };

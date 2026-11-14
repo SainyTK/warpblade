@@ -111,7 +111,7 @@ function slamCarried(): void {
   emitYsra("strike", { source: "juggernaut", hits: 1 });
 }
 
-/** the charge: built from a steady walk, foes in the way shouldered, her path reported each frame */
+/** the charge: built from a steady walk, foes in the way shouldered */
 export function tickWarpath(dt: number): void {
   for (const [e, left] of stance.shouldered) {
     if (left <= dt) stance.shouldered.delete(e);
@@ -122,7 +122,6 @@ export function tickWarpath(dt: number): void {
     slamCarried();
     return;
   }
-  emitYsra("travel", { x: hero.x, y: hero.y, from: "charge" });
   shoulder();
   carry();
 }

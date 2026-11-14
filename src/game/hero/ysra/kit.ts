@@ -12,13 +12,13 @@ import { ysraPose } from "./pose";
 import { PYRE_PART } from "./pyre/pyre";
 import { chargeNow, pressJump, STANCE_PART, stanceMayAct, YSRA_GUARD } from "./stance/stance";
 
-/** the glaive string (J), the hurled glaive (J held), her vault, dive and guard, Heat and rites */
+/** the glaive string (J), the hurled glaive (J held), her guard, backstep and charge, Heat and rites */
 const PARTS: readonly YsraPart[] = [GLAIVE_PART, JAVELIN_PART, STANCE_PART, PYRE_PART];
 
 /**
  * Ysra: a long glaive string that pierces the line, the glaive hurled like a javelin to warp to, a firm guard whose
- * parry opens a counter thrust, a pole vault and an air dive for travel, and Heat built by her blows and spent on fire
- * rites. The shared reader takes the warp, guard, dodge, abilities and ultimate.
+ * parry opens a counter thrust and a backstep out of it, and Heat built by her blows and spent on fire rites. The shared
+ * reader takes the warp, guard, dodge, abilities and ultimate.
  */
 export const YSRA_KIT: HeroKit = {
   warp: YSRA_WARP,
@@ -43,13 +43,7 @@ export const YSRA_KIT: HeroKit = {
   attackRate: () => PARTS.reduce((r, p) => r * (p.attackRate?.() ?? 1), 1),
   hurtScale: () => PARTS.reduce((s, p) => s * (p.hurtScale?.() ?? 1), 1 - buffs.guard),
   drivesMotion: () => PARTS.some((p) => p.drivesMotion?.() ?? false),
-  gravityScale: () => {
-    for (const p of PARTS) {
-      const g = p.gravity?.();
-      if (g != null) return g;
-    }
-    return 1;
-  },
+  gravityScale: () => 1,
   reset: () => {
     for (const p of PARTS) p.reset?.();
     resetBuffs();

@@ -7,10 +7,11 @@ At hero level 1 her AD is 13 and her AP is 7.
 
 ## Base kit
 
-Her walk, jump, vault, dive and backstep stay exactly as they are: the owner's movement standard.
-The moveset every hero shares (`docs/moveset-design.md`) gives her the warp on J held, the guard on K and the front dodge on L; the vault moved to I.
+Her walk, jump and backstep stay exactly as they are: the owner's movement standard.
+The moveset every hero shares (`docs/moveset-design.md`) gives her the warp on J held, the guard on K and the front dodge on L.
+Her vault and dive were removed on 14 November 2026 (below); I casts only her rites.
 `comboHits` is 3.
-The air string limit is 1 sweep; `y_vault` raises it to 2 from its level 2.
+The air string limit is 1 sweep; `y_firewalk` raises it to 2 from its level 2.
 
 | Button | With no skill |
 | --- | --- |
@@ -19,14 +20,13 @@ The air string limit is 1 sweep; `y_vault` raises it to 2 from its level 2.
 | J right after a parry | The counter thrust (3.75 AD), straight out of the guard, for 0.8 s after the parry. |
 | Hold J | The warp: the glaive hurled like a javelin, she warps to its haft and wrenches it free (the shared warp's power), then 8 Heat. |
 | J in the air | One air reap (1.3). |
-| J in a vault's flight | The vault crash (1.9 AD in 36 px). |
 | K | The guard: 10% of a blocked blow through, 9 stamina a block. A parry gives 12 Heat and opens the counter thrust. A side held away while she guards is the backstep. |
 | L | The front dodge every hero shares. |
-| I | The selected ability. The vault first: free, 0.95 s recharge, a dive in the air (1.5 impact, 0.75 on the way down); held, the high vault. Flare: 30 Heat, 4 AP around her, throws foes back, heals 5% HP; held, a ring 1.7 times as wide at 0.7 power. Cinder Lash: 25 Heat, a whip of fire 70 px along the floor ahead, 3 AP to each foe on it, the nearest dragged 30 px in; held, a lash each way at 0.75 power. |
-| O | Switches between the vault, Flare and Cinder Lash, and the rite skills she owns. |
+| I | The selected ability, a rite paid with Heat. Flare: 30 Heat, 4 AP around her, throws foes back, heals 5% HP; held, a ring 1.7 times as wide at 0.7 power. Cinder Lash: 25 Heat, a whip of fire 70 px along the floor ahead, 3 AP to each foe on it, the nearest dragged 30 px in; held, a lash each way at 0.75 power. |
+| O | Switches between Flare and Cinder Lash, and the rite skills she owns. |
 | U | Pyre Wave, her special. |
 
-Heat works as before: 6 per foe for a string blow, 12 for a counter, rail, crash or dive, drains after 2.5 s.
+Heat works as before: 6 per foe for a string blow, 12 for a counter or a rail, drains after 2.5 s.
 The warp's arrival adds 8 and a parry 12.
 
 ## What goes away and where it went
@@ -38,33 +38,48 @@ The warp's arrival adds 8 and a parry 12.
 | Down + J Windmill (skill) | `y_windmill`: the string's middle blow while held. |
 | Long String, combo growing with level | Gone. The string is 3 blows all run. |
 | Warpath double tap | Input removed. `y_warpath` charges on its own after she walks one way for a moment. |
-| Vault Strike | The crash is base kit. `y_vault` grows it. |
-| High Reaper, Skyline, Earthshaker | Levels of `y_vault` (second air sweep, air vault, shockwave). |
+| Vault Strike | Removed with the vault (14 November 2026). |
+| High Reaper, Skyline, Earthshaker | The second air sweep is Firewalk's level 2; the air vault and the shockwave went with the vault. |
 | Deep Heft, Skewer, Rail Lance, Long Haft reach | Levels of `y_heft`, which the shared moveset turned into Ember Javelin (below). Long Haft's damage share is left to the Might charm. |
 | Impale pin | `y_impale`. |
 | Counter Thrust, Ember Parry window, Firm Stance | Levels of `y_counter`. |
 | Kindling, Molten Guard, Hearthfire, Unbroken | Levels of `y_kindling`. |
-| Searing Edge, Ashen Wake | `y_searing`, `y_ashen`, now stacking damage over time. |
+| Searing Edge, Ashen Wake | `y_searing`, now stacking damage over time; Ashen Wake went with the vault. |
 | Flame Pillar, Brazier, Overheat | Spell skills in the rite rotation. Overheat becomes a rite of its own (no longer hidden behind a full bar). |
 | Pyre Colonnade | `y_pillar`'s evolution, with the same partner idea (Kindling). |
 | Sunspear, Volcanic Rift | Ultimate skills, cut again by the shared moveset (below). |
-| Phoenix Dive | `y_dive`'s evolution. Its phoenix drawing and floor flood are reused there. |
+| Phoenix Dive | Went with the vault; the phoenix drawing stays for Sun Hawk. |
 | Bulwark, Hot Iron | Dropped. Bulwark's push cut was a small effect; Hot Iron tied three skills together in one rule. |
 
-Kept inputs: guard then I, and backstep then I, still vault (they were brace then K and backstep then K).
-They are her escape and part of the movement the owner likes, and they follow a guard, never a combo.
+Guard then I and backstep then I vaulted until the vault was removed; now I casts only rites, on the floor.
 
 ## The shared moveset (13 November 2026)
 
 | Before | Now |
 | --- | --- |
 | Hold J: the heft lunge | Gone: J held is the warp. Deep Heft (`y_heft`) became Ember Javelin (`y_javelin`), which tunes the warp; Rail Lance is its evolution, now a rail of fire along the warp's line. |
-| K: the vault, the dive in the air | I: the vault ability, first in her list, free, its own 0.95 s recharge; the dive is the same ability in the air. |
+| K: the vault, the dive in the air | I: the vault ability, first in her list; removed on 14 November 2026 (below). |
 | L: the brace, its parry, the backstep | K: the shared guard with her own firm block; the parry always opens the counter thrust and gives Heat; the backstep is a side held away while she guards. |
 | Counter Thrust's wider parry window | The shared parry window is the same for every hero; Counter Thrust now keeps J a counter longer and hits harder. |
 | Her own rite tabs | The shared ability tabs, each rite showing its Heat cost. |
 | Sunspear, Volcanic Rift | Cut. Pyre Wave (`y_pyre`) upgrades her special, with Volcanic Rift's eruptions and Heat, Sunspear's both ways and pins. |
 | | New: Haft Ward (`y_ward`), her block answering with fire. |
+
+## The vault removed (14 November 2026)
+
+Owner feedback: the vault blocked her other skills.
+It had a long recharge, it carried her a long way, and by the time she landed she could not use her other skills.
+The vault, the high vault, the dive, the vault crash, the vault out of the guard and the backstep, and the three skills built on them are gone.
+Her backstep and her guard stay.
+
+| Removed | Replaced by |
+| --- | --- |
+| `y_vault` Vault Strike (movement), Skyfall | `y_firewalk` Firewalk (movement, L): the shared front dodge cuts through the foes it passes, and its level 2 gives the second air sweep. |
+| `y_dive` Falling Star (movement), Phoenix Dive | `y_reap` Sunreap (attack, J in the air): her air reap grows into a weapon of its own. |
+| `y_ashen` Ashen Wake (dot), Scorched Earth | `y_smoulder` Smoulder (dot): her rites leave the foes they strike smouldering. |
+
+Each new skill keeps her free: the dodge takes 0.24 s and the reap is one blow of her air string, so nothing she does with them waits on a long recharge or stops her other buttons.
+Heaven's Hook's partner moved from `y_vault` to `y_reap`, and it no longer recharges the vault.
 
 ## Ordinary play model
 
@@ -73,7 +88,7 @@ Every DPS figure below uses these assumptions, at hero level 1 with no charm and
 - A full string takes about 2.4 s (clip times at 0.92 attack speed, the 0.5 s combo cooldown and hit stops). In ordinary play she lands one every 3.4 s: 0.29 strings and 0.88 blows per second.
 - Base string on one foe: 4.95 AD per string, about 19 DPS. Flare adds about 5 (Heat income about 5.3 per second on one foe). Base kit total: about 24 DPS on one foe.
 - Crowd of 6: a glaive blow strikes 3 of them. Heat income about 16 per second. Base kit: about 100 DPS (string 57, Flare 45).
-- A warp player warps about every 2.5 s; a vault player crashes about every 3 s; a diver dives about every 4 s.
+- A warp player warps about every 2.5 s; a dodger dodges through a foe about every 2.5 s; a jumper reaps about every 3 s.
 - A good player parries about once every 5 s (0.2 per second) in a crowded fight.
 - Rites: one foe gives a 40 Heat rite about every 7.5 s; a crowd about every 2.5 to 3 s, since casting stops her attacking.
 - Burn (the existing status) is 0.5 AP per second and does not stack. Scorch and Brand are new stacking statuses.
@@ -100,15 +115,15 @@ Damage over time skills grow about 10 times, so they start below an attack skill
 | `y_impale` | Impale | attack | timed | J (finisher) | `y_skyhook` |
 | `y_windmill` | Windmill | attack | easy | J (middle blow) | `y_searing` |
 | `y_counter` | Counter Thrust | attack | precise | K (parry), then J | `y_brand` |
-| `y_skyhook` | Skyhook | attack | timed | J (middle blow) | `y_vault` |
-| `y_vault` | Vault Strike | movement | timed | I (vault), J in flight | `y_ashen` |
-| `y_dive` | Falling Star | movement | timed | I in the air | `y_hawk` |
+| `y_skyhook` | Skyhook | attack | timed | J (middle blow) | `y_reap` |
+| `y_reap` | Sunreap | attack | timed | J in the air | `y_firewalk` |
+| `y_firewalk` | Firewalk | movement | timed | L (front dodge) | `y_pillar` |
 | `y_warpath` | Warpath | movement | easy | auto (walking) | `y_impale` |
 | `y_pillar` | Flame Pillar | spell | timed | I | `y_kindling` |
 | `y_brazier` | Brazier | spell | easy | I | `y_salamander` |
 | `y_overheat` | Overheat | spell | timed | I | `y_searing` |
 | `y_searing` | Searing Edge | dot | easy | auto (J blows) | `y_kindling` |
-| `y_ashen` | Ashen Wake | dot | timed | auto (travel) | `y_dive` |
+| `y_smoulder` | Smoulder | dot | timed | auto (rite hit) | `y_brazier` |
 | `y_brand` | Ember Brand | dot | precise | K (parry) | `y_impale` |
 | `y_shade` | Glaive Shade | summon | easy | auto (blow landed) | `y_windmill` |
 | `y_salamander` | Salamander | summon | timed | auto (rite cast) | `y_pillar` |
@@ -117,7 +132,7 @@ Damage over time skills grow about 10 times, so they start below an attack skill
 | `y_ward` | Haft Ward | attack | easy | K (block) | `y_kindling` |
 | `y_pyre` | Pyre Wave | ultimate | easy | U | `y_overheat` |
 
-Kinds: attack 5, movement 4, spell 3, dot 3, summon 3, passive 1, ultimate 1.
+Kinds: attack 6, movement 3, spell 3, dot 3, summon 3, passive 1, ultimate 1.
 The precise skills all hang off the parry, her one hard read; Haft Ward is the easy answer of her firm block.
 
 ### `y_javelin` Ember Javelin
@@ -209,44 +224,47 @@ Attack, timed, the string's middle blow. Her answer to flyers: the middle blow b
 | 7 | power 7.5, slam 6.5, reach 70, rise 20 | Reaches higher and lifts you with it. |
 | 8 | power 14, slam 14 | Hook and slam much harder. |
 
-Evolution, Heaven's Hook (with `y_vault`): every flyer within 100 px is hauled into a heap at her feet and slammed for 12 AD, and the vault ability recharges at once.
+Evolution, Heaven's Hook (with `y_reap`): every flyer within 100 px is hauled into a heap at her feet and slammed for 12 AD.
 Built in `glaive/hook.ts`: struck flyers are dragged down at spike speed along a burning hook line (each foe once), slam on landing (the slam strikes the foe and the walkers it lands on, never the other heaped flyers), and stay pinned (grounded) for the level's seconds. No new enemy field: grounding uses the pin.
 
-### `y_vault` Vault Strike
+### `y_reap` Sunreap
 
-Movement, timed, I (the vault) then J in flight. The vault crash grows, the air opens up, and landings shake the floor.
-
-| Lv | Numbers | Card |
-| --- | --- | --- |
-| 1 | crash 2.4, reach 44, sweeps 1, quake 0, quakeRange 0, quakeStun 0, airVault 0, cooldown 0.95, launch 0, ring 0 | The vault crash hits harder and wider. |
-| 2 | crash 2.6, sweeps 2 | Air string +1: two air sweeps before you land. |
-| 3 | crash 2.8, quake 0.5, quakeRange 96 | Landings send a shockwave along the floor. |
-| 4 | crash 3, quake 0.6 | Crash damage +7%, a stronger wave. |
-| 5 | crash 3.2, airVault 1 | Vault again in the air. |
-| 6 | crash 3.5, cooldown 0.7, launch 1 | Vaults recharge faster; the crash launches. |
-| 7 | crash 3.7, quake 0.9, quakeRange 130, quakeStun 0.5 | A stronger, longer shockwave that stuns. |
-| 8 | crash 4, ring 1 | The crash burns. |
-
-Evolution, Skyfall (with `y_ashen`): the crash comes down as a burning meteor, 8 AD in 60 px, the shockwave crosses the whole floor, the floor cracks both ways and the crater burns for 3 s.
-Built in `stance/moves.ts` (crash power, width, launch, ring), `stance/stance.ts` (the crash on J through the whole flight, air vault, the vault's recharge), `glaive/blows/air.ts` (second sweep), `stance/landing.ts` (shockwave) and `stance/skyfall.ts`.
-
-### `y_dive` Falling Star
-
-Movement, timed, I (the vault) in the air. The dive becomes a weapon: a pull, a second drop, a burning line.
+Attack, timed, J in the air. Her air reap becomes a weapon of its own: harder, burning, all the way round her, and evolved it throws fire on along the floor.
 
 | Lv | Numbers | Card |
 | --- | --- | --- |
-| 1 | power 2, reach 36, spring 0, pull 0, dives 1, skewer 0.75, burn 0, launch 0, ring 0 | The dive hits harder and wider. |
-| 2 | power 2.2, spring 24 | Spring out of the impact. |
-| 3 | power 2.5, pull 50 | The impact draws foes in. |
-| 4 | power 2.8 | Impact damage +12%. |
-| 5 | power 3, dives 2 | Dive twice before you land. |
-| 6 | power 3.3, skewer 1, burn 2 | The dive's line burns. |
-| 7 | power 3.6, launch 1, ring 1 | The impact launches and burns. |
-| 8 | power 4, ring 1.2 | Impact damage +11%, a hotter ring. |
+| 1 | power 2.2, burn 0, around 0, spike 0, ring 0, heavy 0 | The air reap hits harder. |
+| 2 | power 2.5, burn 2 | The reap sets foes burning. |
+| 3 | power 2.9, around 1 | The reap sweeps behind you too. |
+| 4 | power 3.6 | Reap damage +25%. |
+| 5 | power 4, spike 1 | The reap drives foes in the air into the floor. |
+| 6 | power 4.5, ring 1.2 | The reap bursts in a ring of fire below you. |
+| 7 | power 5, heavy 1 | Reaps build Heat like a counter. |
+| 8 | power 10 | Reap damage much higher. |
 
-Evolution, Phoenix Dive (with `y_hawk`): she dives wrapped in a burning phoenix, 9 AD in 70 px, floods the floor with fire for 3 s, three dives per airtime.
-Built in `stance/dive.ts`, `stance/landing.ts` (pull, ring), `stance/spring.ts` and `stance/phoenixCrash.ts` (wings and flood); the Phoenix Dive ultimate and `densestSpot.ts` are deleted.
+Evolution, Sunscythe (with `y_firewalk`): each reap throws a crescent of fire that runs 130 px along the floor ahead of her, 5 AD to every foe it passes.
+Both air sweeps carry it (the rising reap too), so Firewalk's second sweep throws a second crescent.
+Built in `glaive/blows/air.ts` (power, the sweep behind, the spike), `glaive/reap.ts` (burn, ring, crescent), `glaive/effects/crescent.ts`, and the heavy Heat in `pyre/heat.ts`.
+
+### `y_firewalk` Firewalk
+
+Movement, timed, L (the front dodge). The shared front dodge cuts through the foes it passes; it stays the same short dodge, so she is free the moment it ends.
+
+| Lv | Numbers | Card |
+| --- | --- | --- |
+| 1 | cut 0.9, sweeps 1, burn 0, heat 0, turn 0, pin 0 | The dodge cuts every foe it passes through. |
+| 2 | cut 1, sweeps 2 | Air string +1: two air sweeps before you land. |
+| 3 | cut 1.2, burn 2 | Foes cut are set burning. |
+| 4 | cut 1.4, heat 6 | Each foe cut builds Heat. |
+| 5 | cut 1.8 | Cut damage +30%. |
+| 6 | cut 2, turn 1.5 | The dodge ends in a sweep behind you. |
+| 7 | cut 2.3, pin 0.8 | Foes cut are pinned for a moment. |
+| 8 | cut 4.2, turn 3 | Cut and sweep much harder. |
+
+Evolution, Pillar Stride (with `y_pillar`): low flame pillars burst every 18 px along the dodge's path, 0.16 s after it ends, 4 AP each.
+The second air sweep (level 2) is the movement skill's raise of her air string limit (`docs/skill-design.md`, Combo); each sweep that lands throws the foe up with her, as High Reaper did.
+Built in `src/game/skills/ysra/firewalk.ts`: the cut runs in the skill's `update` while she dodges, so each foe is cut as she passes it, and the sweep behind and the pillars answer the shared `dash` event; `PILLAR_STRIDE` is in `src/constants/evolutions.ts`.
+Her kit reads `sweeps` in `glaive/glaive.ts` and `glaive/blows/air.ts`.
 
 ### `y_warpath` Warpath
 
@@ -338,23 +356,25 @@ Dot, easy, automatic on J blows. Blows lay Scorch stacks; weak alone, a furnace 
 Evolution, Wildfire (with `y_kindling`): a scorched foe that dies throws its stacks onto every foe within 50 px, and a foe at full stacks bursts for twice their remaining damage in 30 px and drops to 0; a foe a spread reached cannot spread or burst for 0.5 s (G5).
 Built in `src/game/skills/ysra/searing.ts` and `scorch.ts` on the shared `addStacks`; the glaive flame is `pyre/glaiveFire.ts`.
 
-### `y_ashen` Ashen Wake
+### `y_smoulder` Smoulder
 
-Dot, timed, automatic on her travel. Her path burns; she has to travel through and over the crowd.
+Dot, timed, automatic on a rite. Her rites leave every foe they strike smouldering; she has to cast into the crowd, then keep her blows on it.
 
 | Lv | Numbers | Card |
 | --- | --- | --- |
-| 1 | life 3, tick 0.45, warp 0, halfWidth 5, overlap 1, ring 0, slow 0 | Your vaults and dives leave burning ground. |
-| 2 | tick 0.5, warp 1 | Warps and charges burn the floor too. |
-| 3 | life 4, tick 0.6, halfWidth 7 | The fire lasts longer and spreads wider. |
-| 4 | tick 0.8 | Fire damage +33%. |
-| 5 | tick 1, overlap 2 | Fire on fire burns twice. |
-| 6 | tick 1.2, ring 40 | Landings ring the floor with fire. |
-| 7 | tick 1.5, slow 0.3 | Hotter fire that slows. |
-| 8 | life 5, tick 1.8 | Hotter, longer fire. |
+| 1 | stacks 1, perSecond 0.8, duration 4, max 4, heat 0, blow 0, warp 0, taken 0 | Rites lay Smoulder on every foe they strike. |
+| 2 | stacks 2 | Rites lay two stacks. |
+| 3 | perSecond 0.85, heat 3 | Blows on a smouldering foe build more Heat. |
+| 4 | perSecond 1.05 | Smoulder +25%. |
+| 5 | blow 1 | Glaive blows feed the Smoulder they strike. |
+| 6 | warp 2, max 8, duration 6 | The warp lays Smoulder; stacks to 8. |
+| 7 | taken 0.15 | A foe at full stacks takes more damage. |
+| 8 | perSecond 1.2 | Far hotter Smoulder. |
 
-Evolution, Scorched Earth (with `y_dive`): a vault or dive landing sets off every settled patch she has laid (up to 14), each erupting as a small pillar for 5 AP.
-Built in `pyre/ashenWake.ts` and `spells/rites/cinder.ts`; at most `overlap` patches burn one foe per tick (1, then 2 from level 5).
+Evolution, Ashfall (with `y_brazier`): each rite sets off the Smoulder on every foe it strikes, every stack bursting for 3 AP in 16 px, then lays its stacks fresh; a foe set off cannot be set off again for 0.5 s (G5).
+A rite's hit is a `blow` event with the `abilities` source (Flare, Cinder Lash, Flame Pillar, Overheat's nova); Brazier's embers and the salamanders count as their own skills and lay none.
+The full-stack bonus goes through `markFoe`, so it sums under the +100% cap.
+Built in `src/game/skills/ysra/smoulder.ts` on the shared `addStacks`; smouldering foes give off smoke and embers by their stacks.
 
 ### `y_brand` Ember Brand
 
@@ -494,13 +514,10 @@ Applied from it, all in the skill data rows (`src/constants/characters/ysra/skil
 - `y_impale` level 8 impale 14 AD, and a fourth new property (level 2 sets pinned foes burning).
 - `y_counter` level 8 counter 25 AD, always a crit; Riposte +100%; Sun Piercer 60 AD.
 - `y_skyhook` level 8 hook 9 AD and slam 9 AD.
-- `y_vault` level 8 crash 4 AD, shockwave 0.9 AD, ring 1 AP.
-- `y_dive` level 8 impact 4 AD, ring 1.2 AP.
 - `y_warpath` level 8 shoulder 1 AD, running impale 2.2 + 1.2 AD, and a fourth new property (level 6 shoulders knock foes down).
 - `y_pillar` a fourth new property (level 2 the sigil draws foes in).
 - `y_windmill` a fourth new property (level 3 staggers), and the suggested level 8 pass 0.4 AD.
 - `y_brazier` level 8 ember 1.0 AP.
-- `y_ashen` at most two patches burn one foe at once (level 5), and the suggested level 8 tick 1.8 AP.
 - `y_brand` level 8 4 AP a second per stack, a parry lays 2 stacks, Pyre Mark 12 AP per stack.
 - `y_searing` the suggested level 8 0.75 AP a second per stack; Wildfire's spreads cannot burst for 0.5 s.
 - `y_shade` level 8 thrust 1.2 AD.
@@ -522,14 +539,14 @@ DPS added to the base kit (spells and ultimates gross), hero level 1, no charms,
 | `y_windmill` | easy | 0 / 12* | 0 / 90* | 15 / 200* | One windmill per string; 4 foes drawn into it. |
 | `y_counter` | precise | 10* / 10 | 75* / 215 | 156* / 450 | 0.2 parries per second, 0.28 at level 6 (wider window); Riposte on 3 blows; line of 3 at level 5+. |
 | `y_skyhook` | timed | 6* / 8 | 39* / 115 | 85 / 260 | On flyers only: one hook per string drags the flyer down where the impale reaches it; 3 flyers in the cone. |
-| `y_vault` | timed | 6* / 17 | 40* / 120 | 85 / 290 | A crash every 3 s (2.5 s at level 6+); crash strikes 3, shockwave 5. |
-| `y_dive` | timed | 5* / 14 | 38* / 130 | 80 / 300 | A dive every 4 s, 0.37 per second with two per airtime; the pull gathers 4. |
+| `y_reap` | timed | 4* / 8 | 42* / 120 | 64 / 185 | A reap every 3 s, landing on one foe, three in a crowd once it sweeps both ways; the ring and the burn on top; the crescent through a line of 3. |
+| `y_firewalk` | timed | 5* / 9 | 38* / 90 | 50 / 160 | A dodge through a foe every 2.5 s, two foes passed in a crowd and three in the sweep behind; four pillars on 1.5 foes each. |
 | `y_warpath` | easy | 7 / 12* | 21 / 82* | 35 / 190* | A charge pass every 3.5 s through 4 minions, the running impale opening the string. |
 | `y_pillar` | timed | 6* / 10 | 37* / 160 | 70 / 380 | All Heat spent on pillars: one foe 5.3 Heat/s; crowd a cast every 3 s, 1.3 foes per pillar. |
 | `y_brazier` | easy | 5* / 8 | 30* / 95 | 45 / 200 | All Heat spent on braziers, one standing at a time; pierce and two embers spread it in a crowd. |
 | `y_overheat` | timed | 4 / 19* | 23 / 122* | 50 / 260* | Uptime 24% on one foe, 40 to 50% in a crowd; the nova once per cycle. |
 | `y_searing` | easy | 3.6* / 11 | 38* / 114 | 50 / 250 | 0.88 blows/s; average stacks 1.3 at level 1, 5.4 at level 8; 3 foes struck per blow. |
-| `y_ashen` | timed | 5.5* / 20 | 52* / 156 | 100 / 380 | The foe stands in fire 70% (level 1) to 90% (level 7+) of the time; 3 of 6 in the fire. |
+| `y_smoulder` | timed | 3 / 22* | 55 / 165* | 72 / 290* | One foe: a rite every 7.5 s, then 6 stacks on average at level 8 with blows feeding them. Crowd: a rite every 2.7 s on 4 foes. Ashfall sets off about 4 stacks a foe each rite. |
 | `y_brand` | precise | 9* / 9 | 88* / 100 | 220* / 400 | Brand on the parried foe always up from level 2; average 2 stacks at level 1, 6 at level 8. |
 | `y_shade` | easy | 3* / 8 | 30* / 80 | 45 / 200 | Triggers 0.13/s at level 1, 0.31/s at level 8; a line of 3 in a crowd. |
 | `y_salamander` | timed | 6* / 15 | 54* / 150 | 100 / 300 | 0.18 rites/s on one foe, the cooldown caps it in a crowd; two salamanders on one foe. |
@@ -545,15 +562,15 @@ Checks against the contract:
   `y_pillar` and `y_overheat` sit low on one foe on purpose: Heat comes slowly from one foe, and both are crowd rites.
 - precise at level 8: 75 to 88, 2.5 to 2.9 times easy.
 - Level 8 over level 1: 6.5 to 10 for every skill on its intended target except `y_warpath` on one foe (3) and `y_kindling` (no damage of its own).
-- Damage over time against an attack skill of the same risk: `y_searing` 11 / 114 against `y_windmill` 12 / 90 (crowd), `y_ashen` 5.5 / 52 against `y_impale` 6 / 41, `y_brand` 9 / 88 against `y_counter` 10 / 75. At level 4 each dot is about a third to a half below its attack skill; at levels 7 and 8 above it.
+- Damage over time against an attack skill of the same risk: `y_searing` 11 / 114 against `y_windmill` 12 / 90 (crowd), `y_smoulder` 22 / 165 against `y_impale` 17 / 122 (crowd), `y_brand` 9 / 88 against `y_counter` 10 / 75. At level 4 each dot is about a third to a half below its attack skill; at levels 7 and 8 above it.
 - Evolutions: easy ones about double the crowd figure and add a little on one foe; timed ones about double; precise ones about 2.5 times on one foe and add a buff (Riposte crits, Sunflock's guard).
 
 ## Evolution pairs and builds
 
 Partners form short chains so a build of eight keeps two or three ready at most:
-javelin to warpath to impale to skyhook to vault to ashen to dive to hawk to counter to brand to impale;
-windmill to searing to kindling to overheat to searing;
-pillar to kindling; brazier to salamander to pillar; shade to windmill; ward to kindling; pyre to overheat.
+javelin to warpath to impale to skyhook to reap to firewalk to pillar to kindling to overheat to searing to kindling;
+hawk to counter to brand to impale;
+smoulder to brazier to salamander to pillar; windmill to searing; shade to windmill; ward to kindling; pyre to overheat.
 
 **Temple Guard** (precise, parry everything): `y_counter`, `y_brand`, `y_hawk`, `y_impale`, `y_kindling`, `y_ward`, `y_skyhook`, `y_pyre`.
 Evolves Sun Piercer (counter, brand at 4+), Pyre Mark (brand, impale at 4+) and Sunflock (hawk, counter at 4+).
@@ -564,9 +581,9 @@ Highest damage when the parries land; a missed read is a hit taken with nothing 
 Evolves Wildfire (searing, kindling at 4+), Fire Wheel (windmill, searing at 4+) and Eternal Hearth or Forge Altar.
 Slow first ten waves, then the stacks spread through every crowd and the glaive never cools.
 
-**Skyfall Vaulter** (timed, all movement): `y_vault`, `y_ashen`, `y_dive`, `y_hawk`, `y_warpath`, `y_javelin`, `y_pillar`, `y_skyhook`.
-Evolves Skyfall (vault, ashen at 4+), Scorched Earth (ashen, dive at 4+) and Phoenix Dive (dive, hawk at 4+).
-She never stops travelling: hurl the glaive, vault over, crash, dive, land on her own burning trail and set it off.
+**Sunstrider** (timed, dodge and air): `y_firewalk`, `y_reap`, `y_skyhook`, `y_pillar`, `y_javelin`, `y_warpath`, `y_smoulder`, `y_pyre`.
+Evolves Pillar Stride (firewalk, pillar at 4+), Sunscythe (reap, firewalk at 4+) and Heaven's Hook (skyhook, reap at 4+).
+She cuts through the line with the dodge, jumps and reaps twice, and leaves pillars and crescents of fire behind her, never far from her other buttons.
 
 ## Code notes for the base kit
 
@@ -574,7 +591,6 @@ She never stops travelling: hurl the glaive, vault over, crash, dive, land on he
 - `kit.ts` reads only Up, J tapped and the Warpath double tap; the shared reader takes J held, K, L, I, O and U. J tapped while she still guards right after a parry ends the guard and throws the counter.
 - `choose.ts`: the string is fixed (hip thrust, middle blow, impale); it reads only the skills (windmill, skyhook, running impale) and the open counter, never the foes around her.
 - `CharacterDef.comboHits: 3` replaces `stringLimit` and `GLAIVE_STRING_BONUS`.
-- `vaultStrike()` runs the crash without a skill.
 - The hip thrust and reverse sweep push foes back less (110 to 40, 140 to 60), so the impale lands from closer in; measured on a lone walking husk, thornback and mire, the impale landed 10 of 10 strings either way, with the foe 10 to 15 px ahead after the change against 13 to 19 px before.
 - Perks and ranks read by the kit (`hasPerk`, `progress.ranks`) move to `skillLevel`, `skillEvolved` and `skillValues`.
 - Scorch and Brand need a stacking status per foe, ticked by the skill and dealing damage with the skill's id as source.

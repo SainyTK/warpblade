@@ -401,3 +401,11 @@ Skyfall Breaker's runs at 45 and 48 spread from 128 to 297 on the late target; 4
 - Sky Dance was not measured: in the room the air string ends after one whiff on ground foes, so the stomp never comes.
 - Warpath and Deep Heft on one foe still read near zero; the charge and the lunge carry her past the lone foe.
 - Rift Wound and Ember Brand on one foe are capped by the room's elite dying; the late target is the better read for damage over time.
+
+## Ysra's vault removed (14 November 2026)
+
+Ysra's vault, dive and their three skills were removed (`docs/skills/ysra.md`, "The vault removed").
+The `y_vault`, `y_dive` and `y_ashen` rows in the tables above, and the room's vault and dive routine for Ysra, are the record of the rounds that measured them.
+Their places went to Firewalk (`y_firewalk`, movement), Sunreap (`y_reap`, attack) and Smoulder (`y_smoulder`, damage over time).
+Those three have not been through the room yet; their starting figures are the design estimates in `docs/skills/ysra.md`.
+A room run for them needs Ysra's routine changed: a dodge through a foe in place of the vault and crash, and a jump with two air reaps in place of the dive.

@@ -29,22 +29,6 @@ const GLAIVE: IconArt = {
   colors: { W: hex("#fff2c4"), E: hex("#ffae48"), O: hex("#c0441a"), B: BRONZE, H: HAFT, T: BRONZE },
 };
 
-/** the arc of a vault over a planted pole */
-const VAULT: IconArt = {
-  rows: [
-    "...AAA...",
-    "..A...A..",
-    ".A.....A.",
-    ".A..H..A.",
-    "A...H.AAA",
-    "A...H..A.",
-    "....H....",
-    "....H....",
-    "GGGGTGGGG",
-  ],
-  colors: { A: hex("#ffae48"), H: HAFT, T: BRONZE, G: hex("#6c6694") },
-};
-
 /** her guard: the glaive held upright before her, blade high, a blow striking sparks off the haft */
 const GUARD: IconArt = {
   rows: [
@@ -71,9 +55,8 @@ const GUARD: IconArt = {
   },
 };
 
-/** each ability's art on the I button: the vault's arc, then the rites */
+/** each ability's art on the I button: her rites */
 const ABILITY_ART: Record<YsraAbility, IconArt> = {
-  vault: VAULT,
   /** fire bursting out in a ring */
   flare: {
     rows: [
@@ -177,7 +160,7 @@ export function ysraArt(action: TouchButtonAction, ability: YsraAbility): IconAr
     case "guard":
       return GUARD;
     case "cast":
-      return ABILITY_ART[ability] ?? VAULT;
+      return ABILITY_ART[ability] ?? ABILITY_ART.flare;
     case "cycle":
       return cycleArt(ability);
     case "ultimate":

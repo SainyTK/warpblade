@@ -126,4 +126,21 @@ export const GLAIVE_ICONS: Record<string, (s: SpriteCanvas) => void> = {
     glaive(s, 13, 15, 13, 7, false, 5);
     evolvedStar(s);
   },
+  /** Sunreap: the glaive swung in a full burning arc high in the air, a foe caught at its edge */
+  y_reap: (s) => {
+    crescent(s, 7, 8, 6.5, Math.PI * 0.75, Math.PI * 2.05, EMBER[3]);
+    crescent(s, 7, 8, 5, Math.PI * 1.05, Math.PI * 1.85, EMBER[5]);
+    foe(s, 13.5, 11, 2.2);
+    glaive(s, 3, 13, 12, 3, false, 5);
+    fill(s, () => s.set(13, 13, EMBER[5]));
+  },
+  /** Sunscythe: a crescent of fire stood on the floor, running on ahead into a foe */
+  y_reap_evo: (s) => {
+    floor(s, 0, 16, 15, EMBER[2]);
+    speedLines(s, 5.5, [7.5, 10.5, 13.5], 4, EMBER[3]);
+    crescent(s, 5, 9, 6, -1.25, 1.25, EMBER[3]);
+    crescent(s, 5.5, 9, 4.5, -1.1, 1.1, EMBER[5]);
+    foe(s, 13, 12, 2.4);
+    evolvedStar(s);
+  },
 };

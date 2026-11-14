@@ -76,7 +76,7 @@ Both policies close a chest screen with J once its input lock has passed.
 - it steps out from under a flying foe that is winding up or shooting overhead;
 - it goes for foes it can reach, and for high foes when they sink after an attack;
 - it holds U to charge the ultimate when the HUD's ultimate pips show it is paid for and two foes or a boss are near;
-- it casts with I when the selected HUD spell tab is ready, and cycles with O to a ready one;
+- it casts with I when the selected HUD spell tab is ready (recharged and paid for), and cycles with O to a ready one;
 - it holds J for the warp when the WARP tab is ready and a foe it faces is at a distance;
 - it jumps over a foe on the ground that faces the hero, to strike its back;
 - it raises a held skill already at level 5 or more, so it heads for an evolution; otherwise it takes a new skill by kind in this order: ultimate, attack, summon, spell, dot, movement, passive; then the highest skill level, then a charm, then a boon.

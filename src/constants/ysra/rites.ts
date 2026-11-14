@@ -1,6 +1,6 @@
 import type { RiteDef } from "../../types/ysra/pyre";
 
-/** Ysra's rites in tab order, after her vault: Flare and Cinder Lash from the start, the others with their skills; O
+/** Ysra's rites in tab order: Flare and Cinder Lash from the start, the others with their skills; O
  *  turns through the ones she has. A skill's rite costs the Heat its level sets; Overheat spends all of it. */
 export const RITES: readonly RiteDef[] = [
   { id: "flare", name: "Flare", tab: "FLARE", cost: 30, tint: "#ffae48" },
@@ -76,6 +76,6 @@ export const BRAZIER = {
   pitch: 1.6,
 } as const;
 
-/** burning ground: Ashen Wake lays a patch every `spacing` pixels of travel; at most `cap` patches burn at once, each
- *  ticking every `tick` seconds and setting foes burning for `burn` seconds */
-export const ASHEN_WAKE = { spacing: 10, cap: 28, tick: 0.4, burn: 1 } as const;
+/** burning ground (a salamander's trail): at most `cap` patches burn at once, each ticking every `tick` seconds and
+ *  setting foes burning for `burn` seconds */
+export const CINDER = { cap: 28, tick: 0.4, burn: 1 } as const;

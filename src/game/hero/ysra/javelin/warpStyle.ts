@@ -41,11 +41,11 @@ function wrench(power: number, _foe: Enemy | null, sureCrit: boolean): void {
   }
 }
 
-/** after the wrench: the floor rings with her fire, the line she warped along is told to her other parts (Heat, Ashen
- *  Wake), and Ember Javelin's rail runs back along it */
+/** after the wrench: the floor rings with her fire, her other parts hear of the warp (Heat), and Ember Javelin's rail
+ *  runs back along the line she warped along */
 function arrived(): void {
   game.fx.push(createFloorRing(hero.x, hero.y, 20, EMBER, 0.35));
-  emitYsra("warp", { x0: javelin.x0, y0: javelin.y0, x: hero.x, y: hero.y });
+  emitYsra("warp", {});
   startRail(javelin.x0, hero.x + hero.face * JAVELIN.ahead, hero.y);
 }
 

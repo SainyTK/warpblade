@@ -23,7 +23,7 @@ export interface HeroSnapshot {
   face: number;
   ground: boolean;
 }
-/** a HUD tab such as WARP or FIRE: shown once learned, ready when recharged */
+/** a HUD tab such as WARP or FIRE: shown once learned, ready when recharged and paid for */
 export interface HudTab {
   id: string;
   label: string;

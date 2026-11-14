@@ -58,7 +58,7 @@ export const TOUCH_TEXT: Record<KitId, Record<TouchButtonAction, TouchButtonText
   ysra: {
     attack: {
       label: "Attack",
-      hint: "Tap: glaive string of three blows that pierce the whole line; right after a parry, a counter thrust; in a vault, crash down. Hold: hurl the glaive and warp to it (10 MP)",
+      hint: "Tap: glaive string of three blows that pierce the whole line; right after a parry, a counter thrust; in the air, a wide reap. Hold: hurl the glaive and warp to it (10 MP)",
       accent: "#ffae48",
     },
     up: {
@@ -74,11 +74,11 @@ export const TOUCH_TEXT: Record<KitId, Record<TouchButtonAction, TouchButtonText
     },
     cast: {
       label: "Ability",
-      hint: "Tap: the selected ability, the vault or a rite paid with Heat; in the air the vault dives. Hold: its wide form",
+      hint: "Tap: the selected ability, a rite paid with Heat. Hold: its wide form",
       accent: null,
     },
     ultimate: SPECIAL,
-    cycle: { label: "Switch", hint: `Switch ability: the vault, ${RITE_NAMES}`, accent: null },
+    cycle: { label: "Switch", hint: `Switch ability: ${RITE_NAMES}`, accent: null },
   },
   sable: {
     attack: {

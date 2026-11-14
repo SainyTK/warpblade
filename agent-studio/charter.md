@@ -89,7 +89,7 @@ Every new hero must:
 - Pass the playtest smoke check, with a mash bot death wave within two waves of the other heroes.
 - Have a design note in `docs/<hero>-design.md` that lists every hero already in the game and says how this one differs from each.
 
-Play styles already taken: Kael (warp swordsman, situational combos, warp teleport, MP spells), Ysra (planted glaive, brace and parry, pole vault, Heat rites) and Sable (ranged hunter, aimed bolts, ammo and reload, spacing).
+Play styles already taken: Kael (warp swordsman, situational combos, warp teleport, MP spells), Ysra (planted glaive, guard and parry, backstep, Heat rites) and Sable (ranged hunter, aimed bolts, ammo and reload, spacing).
 Open directions to choose from, one per night, never two alike: a summoner who fights through minions, an unarmed grappler with throws and armour, a trapper who builds turrets and mines, a shadow assassin with stealth and back stabs, a tether fighter who swings on a chain, a time or gravity mage, a berserker who spends HP for power, a shield thrower, a fighter whose blows land on a rhythm.
 The director may pick another direction when it is more distinct than these.
 
