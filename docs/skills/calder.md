@@ -68,17 +68,17 @@ Values: `bonus` added share of a Trigger's blast on the struck foe, `window` sec
 
 | Lv | Card line | Values |
 | --- | --- | --- |
-| 1 | Trigger blasts deal +150% to the struck foe. | bonus 1.5, window 0.1 |
+| 1 | Trigger blasts deal +200% to the struck foe. | bonus 2, window 0.1 |
 | 2 | Trigger window 0.10 to 0.14 s. | window 0.14 |
 | 3 | New: a Trigger blast breaks guards and staggers. | guardBreak 1, stagger 0.6 |
-| 4 | Bonus +150% to +350%. | bonus 3.5 |
+| 4 | Bonus +200% to +600%. | bonus 6 |
 | 5 | New: each Trigger in a row adds +50%, up to +200%. | streak 0.5, streakCap 2 |
 | 6 | New: a Trigger on Breaker fires a second round. | twin 1 |
 | 7 | New: the struck foe takes +20% from everything for 3 s. | mark 0.2, markTime 3 |
-| 8 | Bonus +350% to +1200%. | bonus 12 |
+| 8 | Bonus +600% to +5000%. | bonus 50 |
 
 Evolution **Dead Center** (partner `ca_speedload`): A Trigger gives its round back, and every third Trigger in a row sends a breaching slug through the foe.
-Evolved values added: refund 1, breachEvery 3, breach 25.
+Evolved values added: refund 1, breachEvery 3, breach 60.
 Code: `skills/hairTrigger.ts` (window, bonus, mark, Dead Center), `skills/hairTriggerTwin.ts`, `trigger.ts`.
 
 #### `ca_breech` Breech Slam
@@ -133,15 +133,15 @@ Values: `power` added share of the counter shot, `rounds` more rounds a parry lo
 | --- | --- | --- |
 | 1 | The counter shot deals +150%. | power 1.5 |
 | 2 | New: a parry loads one more round. | rounds 1 |
-| 3 | New: the struck foe takes +25% from everything for 4 s. | mark 0.25 |
+| 3 | New: the struck foe takes +15% from everything for 4 s. | mark 0.15 |
 | 4 | Counter shot +150% to +400%. | power 4 |
 | 5 | New: the shot pierces to the foes behind. | pierce 1 |
 | 6 | New: a perfect dodge fires the counter shot too. | dodge 1 |
 | 7 | New: the next Trigger after a parry spends no round. | free 1 |
-| 8 | Counter shot +400% to +1000%. | power 10 |
+| 8 | Counter shot +400% to +1600%. | power 16 |
 
-Evolution **Deadeye** (partner `ca_trigger`): A parry fills the chamber with hot rounds, and the counter shot hits three times as hard.
-Evolved values added: fill 1, power 32.
+Evolution **Deadeye** (partner `ca_trigger`): A parry fills the chamber with hot rounds, and the counter shot hits half again as hard.
+Evolved values added: fill 1, power 24.
 Code: `skills/pointBlank.ts`, `counterShot.ts`.
 
 #### `ca_speedload` Speed Loader
@@ -159,10 +159,10 @@ Values: `window` seconds added to the quick reload window, `ring` attack damage 
 | 5 | Reload 30% faster; ring 1.2 to 2. | rate 0.3, ring 2 |
 | 6 | New: the ring throws foes away and staggers them. | push 1 |
 | 7 | New: a quick reload sets off a hot blast round you. | burst 2.5 |
-| 8 | Ring 2 to 5; blast 2.5 to 6. | ring 5, burst 6 |
+| 8 | Ring 2 to 9; blast 2.5 to 10. | ring 9, burst 10 |
 
 Evolution **Spin Cycle** (partner `ca_drum`): Every reload is quick, and the ring draws foes in before it cuts.
-Evolved values added: auto 1, pull 1, ring 8.
+Evolved values added: auto 1, pull 1, ring 14.
 Code: `skills/speedLoader.ts`, `reload.ts` (window, rate, Spin Cycle).
 
 #### `ca_ricochet` Ricochet
@@ -222,10 +222,10 @@ Values: `path` attack damage to foes the thrown sword passes, `free` the arrival
 | 5 | Tracer 0.8 to 1.6; blast 0.5 to 0.7. | path 1.6, blast 0.7 |
 | 6 | New: two warps in a row. | charges 2 |
 | 7 | New: the arrival loads a round. | load 1 |
-| 8 | Tracer 1.6 to 3; blast 0.7 to 1. | path 3, blast 1 |
+| 8 | Tracer 1.6 to 6; blast 0.7 to 3.5. | path 6, blast 3.5 |
 
 Evolution **Green Line** (partner `ca_ricochet`): The tracer line stays for 2 seconds and burns every foe on it.
-Evolved values added: line 4.
+Evolved values added: line 8.
 Code: `warpStyle.ts` (tune, arrival round), `skills/tracerWarp.ts` (load, Green Line).
 
 #### `ca_blastjump` Blast Jump
@@ -264,10 +264,10 @@ Values: `cost` MP, `recharge` seconds, `power` ability power of the burst, `burn
 | 5 | Burst 1.6 to 3; wider pool. | power 3, radius 30 |
 | 6 | New: two shells a cast. | shells 2 |
 | 7 | New: the fire stacks twice as high. | burnMax 5 |
-| 8 | Burst 3 to 5; fire 0.3 to 0.7. | power 5, burn 0.7 |
+| 8 | Burst 3 to 6; fire 0.3 to 1. | power 6, burn 1 |
 
 Evolution **Greenfire Barrage** (partner `ca_scorch`): Four shells a cast, and their fire burns twice as hot.
-Evolved values added: shells 4, burn 1.4.
+Evolved values added: shells 4, burn 2.4.
 Code: `shells/phosphorShell.ts`.
 
 #### `ca_chainshot` Chain Shot
@@ -285,10 +285,10 @@ Values: `cost` MP, `recharge` seconds, `power` ability power of a strike, `drag`
 | 5 | Power 3 to 5; recharge 5 to 4 s. | power 5, recharge 4 |
 | 6 | New: foes it strikes are held fast for 1 s. | wrap 1 |
 | 7 | New: costs 8 MP. | cost 8 |
-| 8 | Power 5 to 9. | power 9 |
+| 8 | Power 5 to 14. | power 14 |
 
 Evolution **Reaper Chain** (partner `ca_ricochet`): The chain comes back to you and strikes every foe again on the way.
-Evolved values added: power 12.
+Evolved values added: power 10.
 Code: `shells/chainShot.ts`.
 
 #### `ca_charge` Blast Charge
@@ -299,14 +299,14 @@ Values: `cost` MP, `recharge` seconds, `power` ability power of the blast, `radi
 
 | Lv | Card line | Values |
 | --- | --- | --- |
-| 1 | Learn Blast Charge: a charge that blows when touched. | cost 13, recharge 6, power 3, radius 34, fuse 2.5 |
-| 2 | Blast 3 to 4.5. | power 4.5 |
+| 1 | Learn Blast Charge: a charge that blows when touched. | cost 13, recharge 6, power 1.5, radius 34, fuse 1.5 |
+| 2 | Blast 1.5 to 2.2. | power 2.2 |
 | 3 | New: the blast knocks foes down. | stun 0.6 |
 | 4 | New: the charge draws foes in as it blows. | pull 1 |
-| 5 | Blast 4.5 to 7; wider. | power 7, radius 44 |
+| 5 | Blast 2.2 to 3.5; wider. | power 3.5, radius 44 |
 | 6 | New: two charges a cast. | count 2 |
 | 7 | New: each charge blows again a moment later. | echo 0.6, echoDelay 0.3 |
-| 8 | Blast 7 to 12. | power 12 |
+| 8 | Blast 3.5 to 6. | power 6 |
 
 Evolution **Demolition** (partner `ca_tracer`): Every cast lays a row of charges, and each blast is far wider.
 Evolved values added: radius 60.
@@ -321,13 +321,13 @@ Values: `damage` attack damage a tick per stack, `max` stacks a foe can carry, `
 | Lv | Card line | Values |
 | --- | --- | --- |
 | 1 | Every round's blast leaves bleeding shrapnel. | damage 0.05, max 5, stacks 1 |
-| 2 | Bleed 0.05 to 0.08. | damage 0.08 |
+| 2 | Bleed 0.05 to 0.06. | damage 0.06 |
 | 3 | New: each blast lays two stacks. | stacks 2 |
 | 4 | New: a fallen foe's shrapnel passes to the nearest foe. | pass 1 |
-| 5 | Bleed 0.15; up to 8 stacks. | damage 0.15, max 8 |
+| 5 | Bleed 0.08; up to 8 stacks. | damage 0.08, max 8 |
 | 6 | New: Breaker tears the shrapnel out at once. | rip 0.5 |
 | 7 | New: up to 12 stacks. | max 12 |
-| 8 | Bleed 0.15 to 0.3. | damage 0.3 |
+| 8 | Bleed 0.08 to 0.18. | damage 0.18 |
 
 Evolution **Shrapnel Storm** (partner `ca_vent`): A blast on a foe carrying 6 stacks or more detonates them all round it.
 Evolved values added: burst 1.2, at 6.
@@ -345,10 +345,10 @@ Values: `damage` attack damage a tick per stack, `max` stacks, `splash` the blas
 | 2 | Burn 0.15 to 0.25. | damage 0.25 |
 | 3 | New: the blast's splash burns too. | splash 1 |
 | 4 | New: slugs and pellets burn too. | shots 1 |
-| 5 | Burn 0.25 to 0.45. | damage 0.45 |
+| 5 | Burn 0.25 to 0.3. | damage 0.3 |
 | 6 | New: a burning foe that falls sets the nearest foe alight. | spread 1 |
 | 7 | New: up to 8 stacks. | max 8 |
-| 8 | Burn 0.45 to 0.9. | damage 0.9 |
+| 8 | Burn 0.3 to 0.7. | damage 0.7 |
 
 Evolution **Phosphor Heart** (partner `ca_flare`): A Trigger on a foe burning with 4 stacks or more consumes the fire in one burst.
 Evolved values added: consume 2.5, at 4.
@@ -369,7 +369,7 @@ Values: `casings` thrown a reload, `damage` attack damage a tick per stack, `ran
 | 5 | Burn 0.2 to 0.4. | damage 0.4 |
 | 6 | New: Cylinder Break's reload throws casings too. | ult 1 |
 | 7 | New: six casings a reload. | casings 6 |
-| 8 | Burn 0.4 to 0.8. | damage 0.8 |
+| 8 | Burn 0.4 to 1.5. | damage 1.5 |
 
 Evolution **Brass Rain** (partner `ca_speedload`): Casings rain on every foe on screen.
 Evolved values added: rain 1, casings 12.
@@ -379,21 +379,21 @@ Code: `skills/hotBrass.ts`.
 
 Summon, precise, K. A parry may plant a spare barrel on legs that shoots the nearest foe.
 
-Values: `chance` a parry plants one, `life` seconds it stands, `every` seconds between its shots, `power` attack damage a shot, `pierce` its shots pierce, `most` barrels at once, `splash` attack damage of a splash round each struck foe, `dodge` a perfect dodge plants one too, `cooldown` least seconds between plants.
+Values: `chance` a parry plants one, `life` seconds it stands, `every` seconds between its shots, `power` attack damage a shot, `pierce` its shots pierce, `most` barrels at once, `stagger` seconds its shots stagger, `dodge` a perfect dodge plants one too, `cooldown` least seconds between plants.
 
 | Lv | Card line | Values |
 | --- | --- | --- |
 | 1 | A parry may plant a barrel that shoots the nearest foe. | chance 0.5, life 4, every 0.6, power 0.6, most 1, cooldown 1 |
 | 2 | Chance 50% to 80%. | chance 0.8 |
 | 3 | New: its shots pierce. | pierce 1 |
-| 4 | Shot 0.6 to 1.2; stands 6 s. | power 1.2, life 6 |
+| 4 | Shot 0.6 to 1.5; stands 6 s. | power 1.5, life 6 |
 | 5 | New: two barrels at once. | most 2 |
-| 6 | New: its shots burst on the foe. | splash 0.5 |
+| 6 | New: its shots stagger the foe. | stagger 0.2 |
 | 7 | New: a perfect dodge plants one too. | dodge 1 |
-| 8 | Shot 1.2 to 3; always plants. | power 3, chance 1 |
+| 8 | Shot 1.5 to 4; always plants. | power 4, chance 1 |
 
-Evolution **Gun Nest** (partner `ca_pointblank`): Three barrels at once, firing hot rounds twice as fast.
-Evolved values added: most 3, every 0.3, power 4.5.
+Evolution **Gun Nest** (partner `ca_pointblank`): Three barrels at once, firing faster and harder.
+Evolved values added: most 3, every 0.4, power 5.
 Code: `skills/spareBarrel.ts`.
 
 #### `ca_double` Smoke Double
@@ -407,11 +407,11 @@ Values: `chance` a Trigger calls one, `power` share of a Trigger's blast it fire
 | 1 | A Trigger may call a smoke double that fires it again. | chance 0.35, power 1, shots 1, doubles 1, cooldown 0.6 |
 | 2 | Chance 35% to 60%. | chance 0.6 |
 | 3 | New: the double cuts before it fires. | cut 1.5 |
-| 4 | Round power 1 to 2. | power 2 |
+| 4 | Round power 1 to 4. | power 4 |
 | 5 | New: it fires twice. | shots 2 |
 | 6 | New: every Trigger calls one, and its rounds splash. | chance 1, splash 0.5 |
 | 7 | New: its rounds are hot. | hot 1 |
-| 8 | Round power 2 to 5. | power 5 |
+| 8 | Round power 4 to 24. | power 24 |
 
 Evolution **Gunsmoke Gallery** (partner `ca_pointblank`): Two doubles at a time, each firing three rounds.
 Evolved values added: doubles 2, shots 3.
@@ -425,14 +425,14 @@ Values: `chance` a kill calls one, `life` seconds it runs, `power` attack damage
 
 | Lv | Card line | Values |
 | --- | --- | --- |
-| 1 | A kill may call a clockwork hound that bites. | chance 0.3, life 5, power 0.4, every 0.5, most 1, cooldown 1 |
+| 1 | A kill may call a clockwork hound that bites. | chance 0.3, life 5, power 0.25, every 0.5, most 1, cooldown 1 |
 | 2 | Chance 30% to 50%. | chance 0.5 |
 | 3 | New: bites stagger. | stagger 0.3 |
-| 4 | Hounds run 8 s; bite 0.4 to 0.7. | life 8, power 0.7 |
+| 4 | Hounds run 8 s; bite 0.25 to 0.4. | life 8, power 0.4 |
 | 5 | New: two hounds at once. | most 2 |
-| 6 | New: hounds leap at foes in the air; bite 0.7 to 1.2. | power 1.2, leap 1 |
-| 7 | New: a hound blows up when it winds down. | boom 3 |
-| 8 | Bite 1.2 to 2.4. | power 2.4 |
+| 6 | New: hounds leap at foes in the air; bite 0.4 to 0.6. | power 0.6, leap 1 |
+| 7 | New: a hound blows up when it winds down. | boom 2 |
+| 8 | Bite 0.6 to 0.9. | power 0.9 |
 
 Evolution **Scrap Pack** (partner `ca_drum`): Three hounds, always at your side.
 Evolved values added: most 3, pack 1.
@@ -471,11 +471,11 @@ Values: values, damage a share of the run's own cut: `power` each cut, `pull` cu
 | 2 | Recharge 20 to 15 s; charges 30% faster. | cooldown 15, charge 1.3 |
 | 3 | New: two more cuts. | cuts 2 |
 | 4 | New: the run ends in a breaching shot across the screen. | finale 3 |
-| 5 | Cut power +30% to +100%. | power 2 |
+| 5 | Cut power +30% to +40%. | power 1.4 |
 | 6 | New: every cut is a hot round. | hot 1 |
 | 7 | New: four more cuts; the shot hits harder. | cuts 4, finale 5 |
-| 8 | Cut power +100% to +200%; the shot hits far harder. | power 3, finale 8 |
+| 8 | Cut power +40% to +50%; the shot hits far harder. | power 1.5, finale 6 |
 
 Evolution **Last Cylinder** (partner `ca_trigger`): The run goes on through a second cylinder: twice the cuts, and the shot hits far harder.
-Evolved values added: cuts 13, finale 14.
+Evolved values added: cuts 13, finale 14, power 2.2.
 Code: `ultimate/cylinderBreak.ts`, `ultimate/finale.ts`.

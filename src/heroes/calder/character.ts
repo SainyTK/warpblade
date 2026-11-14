@@ -1,4 +1,5 @@
 import type { CharacterDef } from "../../types/character";
+import { CALDER_ACHIEVEMENTS } from "./constants/achievements";
 import { CALDER_CLIPS } from "./constants/clips";
 import { ACCENT } from "./constants/colors";
 import { CALDER_CONTROLS } from "./constants/controls";
@@ -25,6 +26,6 @@ export const CALDER: CharacterDef = {
   skin: CALDER_SKIN,
   clips: CALDER_CLIPS,
   controls: CALDER_CONTROLS,
-  achievements: [],
+  achievements: CALDER_ACHIEVEMENTS,
   sourceIcons: { attacks: "calder_attacks", abilities: "calder_abilities", ultimate: "calder_ultimate" },
 };

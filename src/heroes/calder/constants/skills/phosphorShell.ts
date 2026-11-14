@@ -13,7 +13,7 @@ const LEVELS = levelRows([
   { text: "Burst 1.6 to 3; wider pool.", values: { power: 3, radius: 30 } },
   { text: "New: two shells a cast.", values: { shells: 2 } },
   { text: "New: the fire stacks twice as high.", values: { burnMax: 5 } },
-  { text: "Burst 3 to 5; fire 0.3 to 0.7.", values: { power: 5, burn: 0.7 } },
+  { text: "Burst 3 to 6; fire 0.3 to 1.", values: { power: 6, burn: 1 } },
 ]);
 
 export const PHOSPHOR_SHELL: SkillDef = {
@@ -28,6 +28,6 @@ export const PHOSPHOR_SHELL: SkillDef = {
     partner: "ca_scorch",
     name: "Greenfire Barrage",
     text: "Four shells a cast, and their fire burns twice as hot.",
-    row: evolvedRow(LEVELS[7], "Four shells; fire twice as hot.", { shells: 4, burn: 1.4 }),
+    row: evolvedRow(LEVELS[7], "Four shells; fire twice as hot.", { shells: 4, burn: 2.4 }),
   },
 };

@@ -1,8 +1,10 @@
+import { feat } from "../../../game/feat";
 import { isFree, setState, settle } from "../../../game/hero/actions";
 import { endCombo } from "../../../game/hero/combo";
 import { emitSkillEvent } from "../../../game/skills/events";
 import { skillValues, withCharms } from "../../../game/skills/query";
 import { hero } from "../../../game/state";
+import { CALDER_STAT } from "../constants/achievements";
 import { RELOAD } from "../constants/chamber";
 import { fillChamber } from "./chamber";
 import { calderSound } from "./sound";
@@ -72,6 +74,7 @@ export function runReload(dt: number): void {
     h.hitDone = true;
     fillChamber(calder.reloadQuick);
     calderSound.shut(calder.reloadQuick);
+    if (calder.reloadQuick) feat({ kind: "heroCount", stat: CALDER_STAT.quickReloads, add: 1 });
     emitSkillEvent({ type: "calderReload", quick: calder.reloadQuick, ultimate: false });
   }
   if (h.st >= RELOAD.dur) settle();

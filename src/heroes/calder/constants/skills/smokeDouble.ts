@@ -9,11 +9,11 @@ const LEVELS = levelRows([
   },
   { text: "Chance 35% to 60%.", values: { chance: 0.6 } },
   { text: "New: the double cuts before it fires.", values: { cut: 1.5 } },
-  { text: "Round power 1 to 2.", values: { power: 2 } },
+  { text: "Round power 1 to 4.", values: { power: 4 } },
   { text: "New: it fires twice.", values: { shots: 2 } },
   { text: "New: every Trigger calls one, and its rounds splash.", values: { chance: 1, splash: 0.5 } },
   { text: "New: its rounds are hot.", values: { hot: 1 } },
-  { text: "Round power 2 to 5.", values: { power: 5 } },
+  { text: "Round power 4 to 24.", values: { power: 24 } },
 ]);
 
 export const SMOKE_DOUBLE: SkillDef = {

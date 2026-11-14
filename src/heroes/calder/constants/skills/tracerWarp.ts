@@ -10,7 +10,7 @@ const LEVELS = levelRows([
   { text: "Tracer 0.8 to 1.6; blast 0.5 to 0.7.", values: { path: 1.6, blast: 0.7 } },
   { text: "New: two warps in a row.", values: { charges: 2 } },
   { text: "New: the arrival loads a round.", values: { load: 1 } },
-  { text: "Tracer 1.6 to 3; blast 0.7 to 1.", values: { path: 3, blast: 1 } },
+  { text: "Tracer 1.6 to 6; blast 0.7 to 3.5.", values: { path: 6, blast: 3.5 } },
 ]);
 
 export const TRACER_WARP: SkillDef = {
@@ -25,6 +25,6 @@ export const TRACER_WARP: SkillDef = {
     partner: "ca_ricochet",
     name: "Green Line",
     text: "The tracer line stays for 2 seconds and burns every foe on it.",
-    row: evolvedRow(LEVELS[7], "The tracer line burns for 2 s.", { line: 4 }),
+    row: evolvedRow(LEVELS[7], "The tracer line burns for 2 s.", { line: 8 }),
   },
 };

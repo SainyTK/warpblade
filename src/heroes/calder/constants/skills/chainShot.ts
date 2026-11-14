@@ -10,7 +10,7 @@ const LEVELS = levelRows([
   { text: "Power 3 to 5; recharge 5 to 4 s.", values: { power: 5, recharge: 4 } },
   { text: "New: foes it strikes are held fast for 1 s.", values: { wrap: 1 } },
   { text: "New: costs 8 MP.", values: { cost: 8 } },
-  { text: "Power 5 to 9.", values: { power: 9 } },
+  { text: "Power 5 to 14.", values: { power: 14 } },
 ]);
 
 export const CHAIN_SHOT: SkillDef = {
@@ -25,6 +25,6 @@ export const CHAIN_SHOT: SkillDef = {
     partner: "ca_ricochet",
     name: "Reaper Chain",
     text: "The chain comes back to you and strikes every foe again on the way.",
-    row: evolvedRow(LEVELS[7], "The chain comes back, striking again.", { power: 12 }),
+    row: evolvedRow(LEVELS[7], "The chain comes back, striking again.", { power: 10 }),
   },
 };

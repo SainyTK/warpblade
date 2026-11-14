@@ -10,7 +10,7 @@ const LEVELS = levelRows([
   { text: "Reload 30% faster; ring 1.2 to 2.", values: { rate: 0.3, ring: 2 } },
   { text: "New: the ring throws foes away and staggers them.", values: { push: 1 } },
   { text: "New: a quick reload sets off a hot blast round you.", values: { burst: 2.5 } },
-  { text: "Ring 2 to 5; blast 2.5 to 6.", values: { ring: 5, burst: 6 } },
+  { text: "Ring 2 to 9; blast 2.5 to 10.", values: { ring: 9, burst: 10 } },
 ]);
 
 export const SPEED_LOADER: SkillDef = {
@@ -25,6 +25,6 @@ export const SPEED_LOADER: SkillDef = {
     partner: "ca_drum",
     name: "Spin Cycle",
     text: "Every reload is quick, and the ring draws foes in before it cuts.",
-    row: evolvedRow(LEVELS[7], "Every reload is quick; the ring draws foes in.", { auto: 1, pull: 1, ring: 8 }),
+    row: evolvedRow(LEVELS[7], "Every reload is quick; the ring draws foes in.", { auto: 1, pull: 1, ring: 14 }),
   },
 };

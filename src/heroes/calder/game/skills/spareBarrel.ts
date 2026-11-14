@@ -1,20 +1,20 @@
 import { fleck, glow, hairline, place } from "../../../../engine/frame";
 import { dealDamage } from "../../../../game/damage";
 import { enemyCenter } from "../../../../game/enemies/enemy";
-import { skillEvolved, skillValues, withCharms } from "../../../../game/skills/query";
+import { staggerFoe } from "../../../../game/enemies/stagger";
+import { skillValues, withCharms } from "../../../../game/skills/query";
 import { nearestFoe } from "../../../../game/skills/targets";
 import { game, hero, progress, rng } from "../../../../game/state";
 import { surfaceBelow } from "../../../../game/world";
 import type { SkillBehavior, SkillMemory } from "../../../../types/skillBehavior";
 import { hex } from "../../../../utils/color";
 import { PHOSPHOR } from "../../constants/colors";
-import { blastFoe } from "../blastFoe";
 import { createMuzzleFlash } from "../effects/muzzleFlash";
 import { createTracerLine } from "../effects/tracerLine";
 
 const ID = "ca_turret";
 /** how far a barrel sees, how high its muzzle sits, and how far behind Calder it is planted */
-const BARREL = { range: 170, muzzle: 9, behind: 10, pierce: 4 } as const;
+const BARREL = { range: 170, muzzle: 9, behind: 10, pierce: 4, pierceShare: 0.25 } as const;
 const STEEL = hex("#686f74");
 const DARK = hex("#2a2f33");
 
@@ -61,22 +61,14 @@ function shoot(b: Barrel): void {
   game.fx.push(createTracerLine(b.x + b.face * 3, my, fx, fy));
   const damage = progress.stats.ad * v.power;
   dealDamage(foe, damage, { fromX: b.x, kx: b.face * 30, ky: -10, source: ID });
-  if (v.splash)
-    blastFoe(foe, {
-      damage: progress.stats.ad * v.splash,
-      splash: 0,
-      reach: 0,
-      kx: 30,
-      hot: skillEvolved(ID),
-      source: ID,
-    });
+  if (v.stagger && foe.rank === "minion") staggerFoe(foe, v.stagger);
   if (!v.pierce) return;
   for (const e of game.enemies) {
     if (e === foe || e.hp <= 0) continue;
     const [ex, ey] = enemyCenter(e);
     const u = (ex - b.x) / (fx - b.x || 1);
     if (u > 1 && Math.abs(ey - (my + (fy - my) * u)) < BARREL.pierce)
-      dealDamage(e, damage, { fromX: b.x, kx: b.face * 30, source: ID });
+      dealDamage(e, damage * BARREL.pierceShare, { fromX: b.x, kx: b.face * 30, source: ID });
   }
 }
 

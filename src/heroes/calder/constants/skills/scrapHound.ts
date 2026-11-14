@@ -5,15 +5,15 @@ import { evolvedRow, levelRows } from "../../../../utils/skillRows";
 const LEVELS = levelRows([
   {
     text: "A kill may call a clockwork hound that bites.",
-    values: { chance: 0.3, life: 5, power: 0.4, every: 0.5, most: 1, cooldown: 1 },
+    values: { chance: 0.3, life: 5, power: 0.25, every: 0.5, most: 1, cooldown: 1 },
   },
   { text: "Chance 30% to 50%.", values: { chance: 0.5 } },
   { text: "New: bites stagger.", values: { stagger: 0.3 } },
-  { text: "Hounds run 8 s; bite 0.4 to 0.7.", values: { life: 8, power: 0.7 } },
+  { text: "Hounds run 8 s; bite 0.25 to 0.4.", values: { life: 8, power: 0.4 } },
   { text: "New: two hounds at once.", values: { most: 2 } },
-  { text: "New: hounds leap at foes in the air; bite 0.7 to 1.2.", values: { power: 1.2, leap: 1 } },
-  { text: "New: a hound blows up when it winds down.", values: { boom: 3 } },
-  { text: "Bite 1.2 to 2.4.", values: { power: 2.4 } },
+  { text: "New: hounds leap at foes in the air; bite 0.4 to 0.6.", values: { power: 0.6, leap: 1 } },
+  { text: "New: a hound blows up when it winds down.", values: { boom: 2 } },
+  { text: "Bite 0.6 to 0.9.", values: { power: 0.9 } },
 ]);
 
 export const SCRAP_HOUND: SkillDef = {

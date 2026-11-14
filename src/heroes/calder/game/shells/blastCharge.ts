@@ -35,6 +35,7 @@ function createCharge(x: number, y: number, delay: number): Effect {
       heavy: true,
       hot: false,
       big: true,
+      source: "abilities",
     });
     if (v.stun)
       for (const e of game.enemies)

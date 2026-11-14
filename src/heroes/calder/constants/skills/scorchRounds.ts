@@ -7,10 +7,10 @@ const LEVELS = levelRows([
   { text: "Burn 0.15 to 0.25.", values: { damage: 0.25 } },
   { text: "New: the blast's splash burns too.", values: { splash: 1 } },
   { text: "New: slugs and pellets burn too.", values: { shots: 1 } },
-  { text: "Burn 0.25 to 0.45.", values: { damage: 0.45 } },
+  { text: "Burn 0.25 to 0.3.", values: { damage: 0.3 } },
   { text: "New: a burning foe that falls sets the nearest foe alight.", values: { spread: 1 } },
   { text: "New: up to 8 stacks.", values: { max: 8 } },
-  { text: "Burn 0.45 to 0.9.", values: { damage: 0.9 } },
+  { text: "Burn 0.3 to 0.7.", values: { damage: 0.7 } },
 ]);
 
 export const SCORCH_ROUNDS: SkillDef = {

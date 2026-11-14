@@ -1,4 +1,6 @@
+import { feat } from "../../../game/feat";
 import { hero } from "../../../game/state";
+import { CALDER_STAT } from "../constants/achievements";
 import type { CalderMoveId } from "../types/moves";
 import { CALDER_MOVES } from "./moves";
 import { skyshot } from "./skills/blastJump";
@@ -21,6 +23,7 @@ export function afterStrike(id: CalderMoveId, hits: number): void {
     return;
   }
   calder.triggerStreak++;
+  feat({ kind: "heroBest", stat: CALDER_STAT.triggerRun, value: calder.triggerStreak });
   fireTrigger();
   if (id === "breaker") twinRound();
 }

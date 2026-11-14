@@ -10,7 +10,7 @@ const LEVELS = levelRows([
   { text: "Burn 0.2 to 0.4.", values: { damage: 0.4 } },
   { text: "New: Cylinder Break's reload throws casings too.", values: { ult: 1 } },
   { text: "New: six casings a reload.", values: { casings: 6 } },
-  { text: "Burn 0.4 to 0.8.", values: { damage: 0.8 } },
+  { text: "Burn 0.4 to 1.5.", values: { damage: 1.5 } },
 ]);
 
 export const HOT_BRASS: SkillDef = {
