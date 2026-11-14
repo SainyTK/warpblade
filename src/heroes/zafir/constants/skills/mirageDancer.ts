@@ -27,7 +27,7 @@ export const MIRAGE_DANCER: SkillDef = {
   evolution: {
     partner: "za_slip",
     name: "Court of Mirages",
-    text: "The dancers' last spin bursts into sand blades, 20 times attack damage on the attacker.",
-    row: evolvedRow(LEVELS[7], "Their last spin bursts for 20.", { burst: 20 }),
+    text: "The dancers' last spin bursts into sand blades, 40 times attack damage on the attacker.",
+    row: evolvedRow(LEVELS[7], "Their last spin bursts for 40.", { burst: 40 }),
   },
 };

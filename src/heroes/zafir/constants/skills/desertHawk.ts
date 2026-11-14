@@ -13,7 +13,7 @@ const LEVELS = levelRows([
   { text: "Hawk 1 to 1.5.", values: { power: 1.5 } },
   { text: "New: the dive knocks the foe down.", values: { stun: 0.6 } },
   { text: "New: kills by your skills call hawks too.", values: { any: 1 } },
-  { text: "Chance 45% to 60%; hawk 1.5 to 2.2; three dives.", values: { chance: 0.6, power: 2.2, dives: 3 } },
+  { text: "Chance 45% to 60%; hawk 1.5 to 3.5; three dives.", values: { chance: 0.6, power: 3.5, dives: 3 } },
 ]);
 
 export const DESERT_HAWK: SkillDef = {

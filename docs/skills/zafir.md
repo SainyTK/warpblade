@@ -80,8 +80,8 @@ Values: `keen` added damage share of a Keen spin on the foe its payoff lands on,
 | 5 | New: each Keen spin in a row adds 15%, up to 60%. | streak 0.15, streakCap 0.6 |
 | 6 | Keen bonus 70% to 150%; gust 0.8 to 1.6. | keen 1.5, wave 1.6 |
 | 7 | New: a Keen spin adds 20 Whirl. | whirl 20 |
-| 8 | Keen bonus 150% to 300%; gust 1.6 to 3. | keen 3, wave 3 |
-| Evolved: Desert Noon (with Mirage Dancer) | Every third Keen spin in a row calls a blazing ring of noon light on the foe it reached, for 12 times attack damage. | noon 12, noonEvery 3 |
+| 8 | Keen bonus 150% to 500%; gust 1.6 to 4. | keen 5, wave 4 |
+| Evolved: Desert Noon (with Mirage Dancer) | Every third Keen spin in a row calls a blazing ring of noon light on the foe it reached, for 24 times attack damage. | noon 24, noonEvery 3 |
 
 ### Opened Veins (`za_veins`)
 
@@ -296,7 +296,7 @@ Values: `taken` share more damage a bleeding foe takes from every source, `perWo
 | 5 | Per wound 3% to 5%. | perWound 0.05 |
 | 6 | New: a bleeding foe under a third of its HP takes 25% more. | low 0.25 |
 | 7 | New: a bleeding foe you fell bursts, opening two wounds on foes beside it. | burst 2 |
-| 8 | Taken 12% to 25%; per wound 9%; 4 HP back. | taken 0.25, perWound 0.09, heal 4 |
+| 8 | Taken 12% to 35%; per wound 12%; 4 HP back. | taken 0.35, perWound 0.12, heal 4 |
 | Evolved: Thirst of the Hawk (with Desert Hawk) | Every bleeding foe you fell calls a desert hawk at once. | hawk 1 |
 
 ### Sand Wraith (`za_wraith`)
@@ -333,7 +333,7 @@ Values: `chance` a parry calls a dancer, `power` attack damage of each spin on t
 | 6 | New: the dancer blinds the minions round it. | blind 1 |
 | 7 | New: two dancers, one each side of the attacker. | pair 1 |
 | 8 | A parry always calls them; dancer 1.8 to 5. | chance 1, power 5 |
-| Evolved: Court of Mirages (with Sand Slip) | The dancers' last spin bursts into sand blades, 20 times attack damage on the attacker. | burst 20 |
+| Evolved: Court of Mirages (with Sand Slip) | The dancers' last spin bursts into sand blades, 40 times attack damage on the attacker. | burst 40 |
 
 ### Desert Hawk (`za_hawk`)
 
@@ -350,7 +350,7 @@ Values: `chance` a kill calls a hawk, `power` attack damage of each dive, `coold
 | 5 | Hawk 1 to 1.5. | power 1.5 |
 | 6 | New: the dive knocks the foe down. | stun 0.6 |
 | 7 | New: kills by your skills call hawks too. | any 1 |
-| 8 | Chance 45% to 60%; hawk 1.5 to 2.2; three dives. | chance 0.6, power 2.2, dives 3 |
+| 8 | Chance 45% to 60%; hawk 1.5 to 3.5; three dives. | chance 0.6, power 3.5, dives 3 |
 | Evolved: Sky of Hawks (with Desert Thirst) | Every kill calls a hawk, at most one every 0.6 s, and each dive opens three wounds. | every 1, wounds 3 |
 
 ### Unbroken Whirl (`za_unbroken`)
@@ -404,6 +404,53 @@ Values: each a multiple of the storm's own: `power` its cuts, `cooldown` seconds
 | 5 | Storm power +30% to +90%. | power 1.9 |
 | 6 | New: each cut opens two wounds. | wounds 1 |
 | 7 | New: the storm reaches 40% farther. | reach 1.4 |
-| 8 | Storm power +90% to +300%. | power 4 |
-| Evolved: Endless Sirocco (with Whirling Edge) | A second, wider storm turns round the first, and the storm lasts twice as long. | twin 1, time 2 |
+| 8 | Storm power +90% to +380%. | power 4.8 |
+| Evolved: Endless Sirocco (with Whirling Edge) | A second, wider storm turns round the first, and the storm lasts twice as long. | twin 1.5, time 2 |
 
+
+## Balance, measured
+
+Measured on 15 November 2026 in a measuring room built to the method in `docs/skills/balance.md`, driven through the playtest harness.
+The run starts at wave 2, hero level 1, with only the skill under test held; the wave's stream is stopped and the room keeps its own foes, refilled 0.35 s after one falls, with the hero's HP kept full.
+Targets: the crowd (four husks and two wisps), and the late target (one husk at 12 times its HP), since the 3 times elite dies to one dancer burst and caps what a precise skill can show.
+The scripted player walks to the nearest foe and presses J every 0.2 s, three Keen presses in every ten, I every second, a dodge every 4 s, a jump and descent every 6 s and a warp every 5 s; a perfect dodge and a parry run through the game's own functions every 7 s, and the ultimate at charge level 3 every 10 s.
+Figures are raw damage per second added over the base kit in 60 s, on the sources each kind can change.
+The script that ran it is not in the repo.
+
+Base kit: about 216 a second on the crowd (two runs, 192 and 240), 79 on the late target (two runs, 79 and 80).
+Base runs differ by about 20% from run to run on the crowd, so a skill within about 40 of its band is inside the noise.
+
+| Skill | Kind, risk | Target | Level 8 | Evolved | Band at level 8 |
+| --- | --- | --- | --- | --- | --- |
+| Whirling Edge | attack, easy | crowd | 102 | 141 | 70 |
+| Sirocco Timing | attack, precise | late / crowd | 116 / 138 | not measured after the last step | 175 to 210 on one; crowd under 300 |
+| Opened Veins | attack, timed | crowd | 107 | 156 | 112 |
+| Two-Faced Cut | attack, timed | crowd | 41 | 137 | 112 |
+| Falling Dune | attack, timed | crowd | 82 | 35 | 112 |
+| Dune Walk | movement, easy | crowd | 67 | 63 | 56 |
+| Whirlwind Arrival | movement, timed | crowd | 39 | 67 | 90 |
+| Sand Slip | movement, timed | crowd | 78 | 26 | 90 |
+| Hot Gale | spell, easy | crowd | 83 | 55 | 70 |
+| Glass Rain | spell, timed | crowd | 43 | 45 | 112 |
+| Quicksand | spell, easy | crowd | 60 | 80 | 70 |
+| Deep Wounds | damage over time, easy | crowd | 134 | 258 | 77 to 98 |
+| Scouring Sand | damage over time, timed | crowd | 33 | 155 | 123 to 157 |
+| Desert Thirst | damage over time, timed | crowd | 4 | 85 | 123 to 157 |
+| Sand Wraith | summon, easy | crowd | 124 | 143 | 70 |
+| Mirage Dancer | summon, precise | late | 201 | 250 | 175 to 210 |
+| Desert Hawk | summon, timed | crowd | 38 | 145 | 112 |
+| Unbroken Whirl | passive, easy | crowd | -39 (noise) | 124 | none |
+| Sand Veil | passive, timed | crowd | 38 | 51 | none |
+| Sandstorm | ultimate | crowd | 3.9 times the base special per cast | 7.8 times | 6 and 15 times |
+
+The table is the last full pass (after the second tuning step).
+A last step after it raised Sirocco Timing (300% to 500%, gust 3 to 4; measured above), Desert Noon (12 to 24), Court of Mirages (20 to 40), Desert Thirst (taken 25% to 35%, 9% to 12% a wound), Desert Hawk's level 8 dive (2.2 to 3.5) and Sandstorm (level 8 power 4 to 4.8, its evolution's second storm 1 to 1.5); those are not measured again.
+
+### Still off
+
+- Sirocco Timing sits under its band on one foe: three Keen spins in ten rarely chain onto the same foe in the room, so the bonus moves the figure little.
+- Glass Rain, Desert Thirst, Desert Hawk, Two-Faced Cut and Whirlwind Arrival read under band at level 8; the room plays them little (the bar spends I on the base abilities first, foes stand mostly ahead of a hero who walks at them, a warp comes once in 5 s), and their evolutions read near or over twice level 8.
+- Deep Wounds and Sand Wraith read over band; Deep Wounds' bleed counts every wound a crowd carries.
+- Falling Dune and Sand Slip read lower evolved than at level 8, inside the noise of one run each; their evolutions add spouts, a pit and mirages that the room's routine meets only now and then.
+- Sandstorm read 3.9 times the base special per cast at level 8 with power 4 and 7.9 times with 5.3, so 4.8 is set between them; evolved it read 7.8 times against the 15 asked before its second storm went from 1 to 1.5.
+- Every figure is one run.

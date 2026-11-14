@@ -11,7 +11,7 @@ const LEVELS = levelRows([
   { text: "Storm power +30% to +90%.", values: { power: 1.9 } },
   { text: "New: each cut opens two wounds.", values: { wounds: 1 } },
   { text: "New: the storm reaches 40% farther.", values: { reach: 1.4 } },
-  { text: "Storm power +90% to +300%.", values: { power: 4 } },
+  { text: "Storm power +90% to +380%.", values: { power: 4.8 } },
 ]);
 
 export const SANDSTORM: SkillDef = {
@@ -26,6 +26,6 @@ export const SANDSTORM: SkillDef = {
     partner: "za_whirling",
     name: "Endless Sirocco",
     text: "A second, wider storm turns round the first, and the storm lasts twice as long.",
-    row: evolvedRow(LEVELS[7], "A second, wider storm; twice as long.", { twin: 1, time: 2 }),
+    row: evolvedRow(LEVELS[7], "A second, wider storm; twice as long.", { twin: 1.5, time: 2 }),
   },
 };

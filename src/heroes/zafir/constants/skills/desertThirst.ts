@@ -10,7 +10,7 @@ const LEVELS = levelRows([
   { text: "Per wound 3% to 5%.", values: { perWound: 0.05 } },
   { text: "New: a bleeding foe under a third of its HP takes 25% more.", values: { low: 0.25 } },
   { text: "New: a bleeding foe you fell bursts, opening two wounds on foes beside it.", values: { burst: 2 } },
-  { text: "Taken 12% to 25%; per wound 9%; 4 HP back.", values: { taken: 0.25, perWound: 0.09, heal: 4 } },
+  { text: "Taken 12% to 35%; per wound 12%; 4 HP back.", values: { taken: 0.35, perWound: 0.12, heal: 4 } },
 ]);
 
 export const DESERT_THIRST: SkillDef = {

@@ -10,7 +10,7 @@ const LEVELS = levelRows([
   { text: "New: each Keen spin in a row adds 15%, up to 60%.", values: { streak: 0.15, streakCap: 0.6 } },
   { text: "Keen bonus 70% to 150%; gust 0.8 to 1.6.", values: { keen: 1.5, wave: 1.6 } },
   { text: "New: a Keen spin adds 20 Whirl.", values: { whirl: 20 } },
-  { text: "Keen bonus 150% to 300%; gust 1.6 to 3.", values: { keen: 3, wave: 3 } },
+  { text: "Keen bonus 150% to 500%; gust 1.6 to 4.", values: { keen: 5, wave: 4 } },
 ]);
 
 export const SIROCCO_TIMING: SkillDef = {
@@ -24,7 +24,7 @@ export const SIROCCO_TIMING: SkillDef = {
   evolution: {
     partner: "za_mirage",
     name: "Desert Noon",
-    text: "Every third Keen spin in a row calls a blazing ring of noon light on the foe it reached, for 12 times attack damage.",
-    row: evolvedRow(LEVELS[7], "Every third Keen spin in a row: a noon ring for 12.", { noon: 12, noonEvery: 3 }),
+    text: "Every third Keen spin in a row calls a blazing ring of noon light on the foe it reached, for 24 times attack damage.",
+    row: evolvedRow(LEVELS[7], "Every third Keen spin in a row: a noon ring for 24.", { noon: 24, noonEvery: 3 }),
   },
 };
