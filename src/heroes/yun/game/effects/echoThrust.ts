@@ -5,6 +5,7 @@ import { enemyBox, enemyCenter } from "../../../../game/enemies/enemy";
 import { game, hero, progress } from "../../../../game/state";
 import { boxHit } from "../../../../game/world";
 import type { Effect } from "../../../../types/effect";
+import type { Enemy } from "../../../../types/enemy";
 import type { Box } from "../../../../types/world";
 import { clamp, ease } from "../../../../utils/math";
 import { ECHO } from "../../constants/swords";
@@ -22,6 +23,12 @@ export interface EchoThrust {
   height: number;
   power: number;
   crit: boolean;
+  /** share of the power a second cut deals as it flies back; 0 for none */
+  back: number;
+  /** seconds a foe it strikes is slowed */
+  chill: number;
+  /** a foe it struck, for the skills that answer an echo */
+  struck?: (e: Enemy) => void;
 }
 
 /**
@@ -38,6 +45,7 @@ export function createEchoThrust(o: EchoThrust): Effect {
   const total = o.delay + out + ECHO.hold + ECHO.back;
   let t = 0;
   let struck = false;
+  let returned = false;
   const target = (): [number, number] => [baseX + face * o.reach, baseY + o.height];
   return {
     update(dt) {
@@ -59,7 +67,11 @@ export function createEchoThrust(o: EchoThrust): Effect {
       }
       if (!struck && local >= out) {
         struck = true;
-        strike(baseX, baseY, face, o);
+        strike(baseX, baseY, face, o, o.power);
+      }
+      if (o.back > 0 && !returned && local >= out + ECHO.hold) {
+        returned = true;
+        strike(baseX, baseY, face, o, o.power * o.back);
       }
       return t < total;
     },
@@ -75,18 +87,20 @@ export function createEchoThrust(o: EchoThrust): Effect {
 }
 
 /** the thrust's line: from the near end to its reach, over the height of a foe on the floor */
-function strike(x: number, y: number, face: number, o: EchoThrust): void {
+function strike(x: number, y: number, face: number, o: EchoThrust, power: number): void {
   const near = x + face * ECHO.near;
   const far = x + face * o.reach;
   const box: Box = [Math.min(near, far), y + ECHO.top, Math.max(near, far), y + ECHO.low];
   for (const e of game.enemies) {
     if (e.hp <= 0 || !boxHit(box, enemyBox(e))) continue;
-    dealDamage(e, progress.stats.ad * o.power, {
+    dealDamage(e, progress.stats.ad * power, {
       fromX: x,
       kx: face * ECHO.push,
       stagger: COMBO.stagger,
       sureCrit: o.crit,
     });
+    if (o.chill) e.chill = Math.max(e.chill, o.chill);
+    o.struck?.(e);
     const [ex, ey] = enemyCenter(e);
     game.fx.push(createImpact(ex, ey, face, false, JADE_SPARKS));
   }

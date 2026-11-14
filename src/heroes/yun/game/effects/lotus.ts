@@ -21,6 +21,8 @@ export interface LotusShape {
   source: SourceId;
   /** seconds between one sword's cuts */
   every?: number;
+  /** the ring has ended */
+  ended: () => void;
 }
 
 /** seconds the swords take to fly from his back into the ring, and to fade out of it */
@@ -48,7 +50,9 @@ export function createLotus(o: LotusShape): Effect {
   };
   return {
     update(dt) {
+      const was = t;
       t += dt;
+      if (was <= o.life && t > o.life) o.ended();
       if (t > o.life) return t < o.life + FADE;
       for (let i = 0; i < o.swords; i++) {
         if (t < next[i]) continue;

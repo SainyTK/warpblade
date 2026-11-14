@@ -1,30 +1,47 @@
+import { skillValues } from "../../../game/skills/query";
 import { game } from "../../../game/state";
+import { SKILL } from "../constants/skillIds";
 import { SPIRIT } from "../constants/swords";
 import { yun } from "./state";
 
-/** spirit swords come back while he holds fewer than his resting count, and the timers of swords away run down */
+/** the most spirit swords he can hold now: Sage's Breath adds to it */
+export const mostSwords = (): number => Math.min(SPIRIT.cap, SPIRIT.most + (skillValues(SKILL.breath).most ?? 0));
+/** how many come back on their own */
+const restSwords = (): number => Math.min(mostSwords(), SPIRIT.rest + (skillValues(SKILL.breath).rest ?? 0));
+/** seconds between swords coming back */
+const regenTime = (): number => skillValues(SKILL.breath).regen ?? SPIRIT.regen;
+
+/** spirit swords come back while he holds fewer than his resting count, and the timers of swords away and of the
+ *  skills that give swords run down */
 export function tickSwords(dt: number): void {
   for (let i = 0; i < yun.away.length; i++) yun.away[i] = Math.max(0, yun.away[i] - dt);
-  if (yun.swords >= SPIRIT.rest) {
-    yun.regen = SPIRIT.regen;
+  yun.keenSwordCd = Math.max(0, yun.keenSwordCd - dt);
+  yun.dodgeSwordCd = Math.max(0, yun.dodgeSwordCd - dt);
+  if (yun.swords >= restSwords()) {
+    yun.regen = regenTime();
     return;
   }
   yun.regen -= dt;
   if (yun.regen > 0) return;
-  yun.regen = SPIRIT.regen;
+  yun.regen = regenTime();
   yun.swords++;
 }
 
 /** spirit swords join him, up to the most he can hold */
 export function gainSwords(n: number): void {
-  yun.swords = Math.min(SPIRIT.most, yun.swords + n);
+  yun.swords = Math.min(mostSwords(), yun.swords + n);
+}
+
+/** every sword he can hold is back at once */
+export function fillSwords(): void {
+  yun.swords = mostSwords();
 }
 
 /** every held sword leaves: returns how many went */
 export function spendSwords(): number {
   const n = yun.swords;
   yun.swords = 0;
-  yun.regen = SPIRIT.regen;
+  yun.regen = regenTime();
   return n;
 }
 

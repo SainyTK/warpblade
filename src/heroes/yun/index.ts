@@ -25,7 +25,7 @@ export const YUN_MODULE: HeroModule = {
   castUltimate: castJadeRain,
   icons: YUN_ICONS,
   touch: {
-    art: (action, ability) => yunArt(action, asAbility(ability)),
+    art: (action, ability, known) => yunArt(action, asAbility(ability), known),
     tint: (ability) => abilityColor(asAbility(ability)),
   },
   meter: YUN_METER,

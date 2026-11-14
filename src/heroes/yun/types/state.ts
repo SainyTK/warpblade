@@ -14,6 +14,11 @@ export interface YunState {
   /** the ability of the cast under way and whether it is the wide form */
   castAbility: YunAbility;
   castWide: boolean;
+  /** seconds before a Keen blow (Flowing Water) or a dodge through a foe (Drifting Leaf) may give a sword again */
+  keenSwordCd: number;
+  dodgeSwordCd: number;
+  /** an air cut has given its sword this jump (Petal Storm) */
+  airSword: boolean;
   /** the tassel's swing from straight down, radians, its speed, and where the pommel was last frame */
   tassel: number;
   tasselSpeed: number;

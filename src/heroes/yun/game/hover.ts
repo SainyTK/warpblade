@@ -15,10 +15,12 @@ const faced = (angle: number): number => (hero.face > 0 ? angle : Math.PI - angl
 /** where held sword `i` hovers: behind his shoulders in a fan, points up and forward, bobbing gently */
 export function hoverPlace(i: number): SwordPlace {
   const bob = Math.sin(floatPhase() * HOVER.rate + i * 1.3) * HOVER.bob;
+  const fan = Math.floor(i / HOVER.perFan);
+  const j = i % HOVER.perFan;
   return {
-    x: hero.x + hero.face * (HOVER.x + i * HOVER.stepX),
-    y: hero.y + HOVER.y + i * HOVER.stepY + bob,
-    angle: faced(HOVER.tilt + i * HOVER.tiltStep),
+    x: hero.x + hero.face * (HOVER.x + j * HOVER.stepX + fan * HOVER.backX),
+    y: hero.y + HOVER.y + j * HOVER.stepY + fan * HOVER.backY + bob,
+    angle: faced(HOVER.tilt + j * HOVER.tiltStep),
   };
 }
 

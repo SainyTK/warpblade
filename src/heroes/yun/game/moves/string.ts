@@ -2,33 +2,46 @@ import { onFrame } from "../../../../constants/combo";
 import { frame } from "../../../../constants/hero";
 import { createFloorRing } from "../../../../game/effects/floorRing";
 import { skin } from "../../../../game/hero/skin";
+import { skillEvolved, skillValues, withCharms } from "../../../../game/skills/query";
 import { game, hero, progress } from "../../../../game/state";
 import { dust, shake } from "../../../../game/world";
 import type { MoveDef } from "../../../../types/move";
+import { SKILL } from "../../constants/skillIds";
 import { STRING_CANCEL, STRING_FEEL, STRING_POWER, TIDE_WAVE } from "../../constants/string";
 import { SPIRIT } from "../../constants/swords";
+import { createDelayed } from "../effects/delayed";
 import { createQiWave } from "../effects/qiWave";
 import { gainSwords } from "../swords";
 import { CRANE, LEAF, TIDE, WILLOW } from "./slashes";
 
-/** Returning Tide meets the floor: a ring and dust, the qi crescent runs along the floor, and a landed tide gives a
- *  spirit sword */
+/** Returning Tide meets the floor: a ring and dust, the qi crescent runs along the floor as High Tide shapes it, and a
+ *  landed tide gives spirit swords (a missed one too, with Harmony at level 8) */
 function tideImpact(hits: number): void {
+  const v = skillValues(SKILL.tide);
   const gx = hero.x + hero.face * 20;
   if (hero.ground) {
     game.fx.push(createFloorRing(gx, hero.y, 26, skin.ramp, 0.35));
     dust(gx, hero.y, 6, hero.face);
   }
-  game.fx.push(
-    createQiWave(gx, hero.y - 6, hero.face, {
-      reach: TIDE_WAVE.reach,
-      speed: TIDE_WAVE.speed,
-      damage: progress.stats.ad * TIDE_WAVE.power,
-      half: TIDE_WAVE.half,
-    }),
-  );
+  const half = TIDE_WAVE.half * (v.tall ?? 1);
+  const crescent = {
+    reach: TIDE_WAVE.reach + withCharms("area", v.reach ?? 0),
+    speed: TIDE_WAVE.speed,
+    damage: progress.stats.ad * TIDE_WAVE.power * (v.wave ?? 1),
+    half,
+    launch: v.launch ? TIDE_WAVE.launch : undefined,
+  };
+  const ways = skillEvolved(SKILL.tide) ? [hero.face, -hero.face] : [hero.face];
+  for (const face of ways) {
+    const x = hero.x + face * 20;
+    game.fx.push(createQiWave(x, hero.y + 1 - half, face, crescent));
+    if (v.twin)
+      game.fx.push(
+        createDelayed(TIDE_WAVE.twinDelay, () => game.fx.push(createQiWave(x, hero.y + 1 - half, face, crescent))),
+      );
+  }
   shake(0.18, 2);
-  if (hits > 0) gainSwords(SPIRIT.gain);
+  if (hits > 0 || skillValues(SKILL.harmony).tide) gainSwords(v.gain ?? SPIRIT.gain);
 }
 
 /**

@@ -19,6 +19,14 @@ export interface StreamSword {
   rise: number;
   damage: number;
   source: SourceId;
+  /** it flies back to Yun cutting again; false, it fades at its reach */
+  returns: boolean;
+  /** seconds foes it cuts are knocked down */
+  stun?: number;
+  /** a foe it cut, for the skills that answer it */
+  struck?: (e: Enemy) => void;
+  /** the way it flies; left out, the way Yun faces */
+  face?: number;
 }
 
 /** the height the line runs at, from Yun's feet, and how close to him a returning sword must come to be spent */
@@ -32,7 +40,7 @@ const MOTES = 0.3;
  * the way out, turns at its reach and flies back to him, cutting each foe once more, then is spent in a puff of motes.
  */
 export function createStreamSword(o: StreamSword): Effect {
-  const face = hero.face;
+  const face = o.face ?? hero.face;
   const startX = hero.x + face * 8;
   const startY = hero.y + LINE;
   const p = { x: o.from.x, y: o.from.y, angle: o.from.angle };
@@ -47,7 +55,8 @@ export function createStreamSword(o: StreamSword): Effect {
       if (struck.has(e) || e.hp <= 0) continue;
       if (!boxHit([p.x - 4, p.y - STREAM.half, p.x + 4, p.y + STREAM.half], enemyBox(e))) continue;
       struck.add(e);
-      dealDamage(e, o.damage, { fromX: p.x - dir * 6, kx: dir * 40, source: o.source });
+      dealDamage(e, o.damage, { fromX: p.x - dir * 6, kx: dir * 40, source: o.source, stun: o.stun });
+      o.struck?.(e);
       game.fx.push(createImpact(...enemyCenter(e), dir, false, JADE_SPARKS));
     }
   };
@@ -69,7 +78,9 @@ export function createStreamSword(o: StreamSword): Effect {
         p.y += (ty - p.y) * ease;
         p.angle = face > 0 ? Math.atan2(o.rise, 1) : Math.PI - Math.atan2(o.rise, 1);
         cut(out, face);
-        if (flown >= o.reach) returning = true;
+        if (flown < o.reach) return true;
+        if (o.returns) returning = true;
+        else spent = 0;
         return true;
       }
       const hx = hero.x;

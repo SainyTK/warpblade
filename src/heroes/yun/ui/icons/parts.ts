@@ -20,7 +20,7 @@ export function jian(s: S, x0: number, y0: number, x1: number, y1: number): void
   layer(s, () => {
     s.stroke(x0 - ux * 3, y0 - uy * 3, x0, y0, 0.5, 0x2c2024);
     s.stroke(x0 - uy * 2, y0 + ux * 2, x0 + uy * 2, y0 - ux * 2, 0.5, JADE[3]);
-    s.stroke(x0 + ux, y0 + uy, x1, y1, 0.7, 0xc6e6dc);
+    s.stroke(x0 + ux, y0 + uy, x1, y1, 0.85, 0xc6e6dc);
     s.stroke(x0 + ux * 2, y0 + uy * 2, x1 - ux * 2, y1 - uy * 2, 0.25, WHITE);
   });
   layer(s, () => {
@@ -34,8 +34,12 @@ export function spirit(s: S, x0: number, y0: number, x1: number, y1: number, c: 
   const ux = (x1 - x0) / L;
   const uy = (y1 - y0) / L;
   layer(s, () => {
-    s.stroke(x0 - uy * 1.5, y0 + ux * 1.5, x0 + uy * 1.5, y0 - ux * 1.5, 0.4, JADE[3]);
-    s.stroke(x0, y0, x1, y1, 0.55, c);
+    s.stroke(x0 - uy * 1.8, y0 + ux * 1.8, x0 + uy * 1.8, y0 - ux * 1.8, 0.5, JADE[2]);
+    s.stroke(x0 - ux * 1.5, y0 - uy * 1.5, x0, y0, 0.5, JADE[2]);
+    s.stroke(x0 + ux, y0 + uy, x1, y1, 0.8, c);
+  });
+  layer(s, () => {
+    s.stroke(x0 + ux * 2, y0 + uy * 2, x1 - ux, y1 - uy, 0.3, JADE[5]);
     s.set(x1, y1, WHITE);
   });
 }
@@ -65,4 +69,34 @@ export function swirl(s: S, cx: number, cy: number, r: number, a0: number, a1: n
       s.dot(cx + Math.cos(a) * r, cy + Math.sin(a) * r, w, c);
     }
   });
+}
+
+/** a foe's round body at (x, y), radius r, in the foes' violet with a pale eye */
+export function foe(s: S, x: number, y: number, r: number): void {
+  layer(s, () => {
+    s.dot(x, y, r, 0x3d2a5c);
+    s.set(x + r * 0.4, y - r * 0.3, 0xffd0ff);
+  });
+}
+
+/** a jade figure of Yun: robe, topknot, from the feet at (x, y) */
+export function sage(s: S, x: number, y: number, c: Color = JADE[3]): void {
+  layer(s, () => {
+    s.poly(
+      [
+        [x - 2, y],
+        [x + 2, y],
+        [x + 1.5, y - 6],
+        [x - 1.5, y - 6],
+      ],
+      c,
+    );
+    s.dot(x, y - 7.5, 1.4, c);
+    s.dot(x - 0.5, y - 9.5, 0.7, c);
+  });
+}
+
+/** a row of floor under an icon, at height y */
+export function floor(s: S, y: number, c: Color = JADE[1]): void {
+  layer(s, () => s.stroke(0, y, 15, y, 0.8, c));
 }

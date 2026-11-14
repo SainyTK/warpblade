@@ -3,6 +3,7 @@ import { fleck, glow, hairline, place } from "../../../../engine/frame";
 import { dealDamage } from "../../../../game/damage";
 import { createImpact } from "../../../../game/effects/impact";
 import { enemyBox } from "../../../../game/enemies/enemy";
+import { type Payoff, payoffLands } from "../../../../game/skills/payoff";
 import { game } from "../../../../game/state";
 import { boxHit } from "../../../../game/world";
 import type { SourceId } from "../../../../types/build";
@@ -21,6 +22,12 @@ export interface QiWaveShape {
   source?: SourceId;
   /** knocks the foes it cuts off their feet for this long */
   stun?: number;
+  /** throws the foes it cuts up at this speed */
+  launch?: number;
+  /** a precise pull-off's payoff: the wave cuts only the foe it lands on and passes the others by */
+  payoff?: Payoff;
+  /** the first foe it cuts, once */
+  first?: (e: Enemy) => void;
 }
 
 /** how far the crescent bows forward at its middle, its thickness, and the streaks it leaves */
@@ -44,11 +51,14 @@ export function createQiWave(x: number, y: number, face: number, shape: QiWaveSh
         if (struck.has(e) || e.hp <= 0) continue;
         if (!boxHit([o.x - 3, y - shape.half, o.x + 3, y + shape.half], enemyBox(e))) continue;
         struck.add(e);
+        if (shape.payoff && !payoffLands(shape.payoff, e)) continue;
+        if (struck.size === 1) shape.first?.(e);
         dealDamage(e, shape.damage, {
           fromX: o.x - face * 8,
           kx: face * 70,
           ky: shape.stun ? -40 : -10,
           stun: shape.stun,
+          launch: shape.launch,
           source: shape.source,
         });
         game.fx.push(createImpact(o.x, y, face, false, JADE_SPARKS));

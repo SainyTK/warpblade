@@ -79,6 +79,51 @@ const ABILITY_ART: Readonly<Record<YunAbility, IconArt>> = {
     ],
     colors: { W: ICON_WHITE, M: MINT, D: DEEP },
   },
+  /** swords flying out in a spread */
+  fan: {
+    rows: [
+      ".......JW",
+      ".....JJ..",
+      "...JJ....",
+      "D.JJJJJJW",
+      "...JJ....",
+      ".....JJ..",
+      ".......JW",
+      ".........",
+      ".........",
+    ],
+    colors: { W: ICON_WHITE, J: JADE, D: DEEP },
+  },
+  /** swords standing in the floor round a foe's place */
+  cage: {
+    rows: [
+      ".W.....W.",
+      ".J..W..J.",
+      ".J..J..J.",
+      ".J..J..J.",
+      ".J.MMM.J.",
+      ".J.MMM.J.",
+      ".J..J..J.",
+      "DDDDDDDDD",
+      ".........",
+    ],
+    colors: { W: ICON_WHITE, J: JADE, D: DEEP, M: MINT },
+  },
+  /** a tall crescent of qi */
+  crescent: {
+    rows: [
+      "...MW....",
+      "....MW...",
+      ".....MW..",
+      ".....MW..",
+      "......MW.",
+      ".....MW..",
+      ".....MW..",
+      "....MW...",
+      "...MW....",
+    ],
+    colors: { W: ICON_WHITE, M: MINT },
+  },
 };
 
 /** Jade Rain: swords falling point first */
@@ -89,22 +134,26 @@ const RAIN: IconArt = {
 
 /** where each ability's dot sits on the switch button */
 const DOTS: readonly (readonly [number, number])[] = [
-  [2, 4],
-  [6, 4],
+  [4, 0],
+  [8, 3],
+  [6, 8],
+  [2, 8],
+  [0, 3],
 ];
 
-/** the switch button: a dot per ability, the selected one white */
-function abilityDots(selected: YunAbility): IconArt {
+/** the switch button: a dot per ability he knows round a ring, the selected one white */
+function abilityDots(selected: YunAbility, known: readonly string[]): IconArt {
   const rows = Array.from({ length: 9 }, () => Array<string>(9).fill("."));
   YUN_ABILITIES.forEach((a, i) => {
+    if (!known.includes(a)) return;
     const [x, y] = DOTS[i];
     rows[y][x] = a === selected ? "W" : "J";
   });
   return { rows: rows.map((r) => r.join("")), colors: { W: ICON_WHITE, J: JADE } };
 }
 
-/** Yun's button art, per action and selected ability */
-export function yunArt(action: TouchButtonAction, ability: YunAbility): IconArt {
+/** Yun's button art, per action, selected ability and the abilities he knows */
+export function yunArt(action: TouchButtonAction, ability: YunAbility, known: readonly string[]): IconArt {
   switch (action) {
     case "attack":
       return JIAN;
@@ -117,7 +166,7 @@ export function yunArt(action: TouchButtonAction, ability: YunAbility): IconArt 
     case "cast":
       return ABILITY_ART[ability];
     case "cycle":
-      return abilityDots(ability);
+      return abilityDots(ability, known);
     case "ultimate":
       return RAIN;
   }
