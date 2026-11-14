@@ -2,9 +2,9 @@ import type { ThrowKind } from "../../../types/hulda";
 import type { ActionClip } from "../../../types/pose";
 import { frame } from "../../hero";
 import { KNEE, SKYFALL, THROWS } from "../../hulda/grab";
-import { AIR_LEGS, GUARD, g, HOLD_POSE } from "./stance";
+import { GUARD, g, HOLD_POSE } from "./stance";
 
-/** what she does with a foe in her hands, and Skyfall Grab */
+/** what she does with a foe in her hands, and the Skyfall ride */
 export const GRAPPLE_CLIPS = {
   /** the near knee drives up into the held foe as both hands pull it down onto it */
   knee: {
@@ -53,15 +53,14 @@ export const GRAPPLE_CLIPS = {
       [frame(8), HOLD_POSE],
     ],
   },
-  /** a lunge down and ahead with both hands out, the legs trailing; held until she lands, then the slam's crouch */
+  /** both hands driving the caught foe down ahead of her, the legs trailing; held until she lands, then the slam's
+   *  crouch */
   skyfall: {
-    dur: SKYFALL.lunge + SKYFALL.slamRecover,
-    hit: SKYFALL.lunge,
+    dur: SKYFALL.slamRecover,
+    hit: 0,
     keys: [
-      [0, g({ hy: -14, ny: -24, ...AIR_LEGS })],
-      [frame(2), g({ hy: -14, nx: -0.5, ny: -24, cb: -0.5, fx: 4, fy: -26, bx: 2, by: -27, be: 0, ...AIR_LEGS })],
       [
-        SKYFALL.lunge,
+        0,
         g({
           hx: -1,
           hy: -15,
@@ -82,15 +81,15 @@ export const GRAPPLE_CLIPS = {
         }),
       ],
       [
-        SKYFALL.lunge + frame(1),
+        frame(1),
         g({ hx: 0, hy: -8, nx: 5, ny: -17, cb: 1.5, fx: 11, fy: -3, bx: 10, by: -3, be: 0, ffx: 6, bfx: -6, ba: 1 }),
       ],
       [
-        SKYFALL.lunge + frame(4),
+        frame(4),
         g({ hx: 0, hy: -8.5, nx: 4.5, ny: -17.5, cb: 1, fx: 10, fy: -4, bx: 9, by: -4, be: 0, ffx: 6, bfx: -6, ba: 1 }),
       ],
-      [SKYFALL.lunge + frame(7), g({ hy: -11, nx: 3, ny: -21, fx: 8, fy: -15, bx: 6, by: -17 })],
-      [SKYFALL.lunge + SKYFALL.slamRecover, GUARD],
+      [frame(7), g({ hy: -11, nx: 3, ny: -21, fx: 8, fy: -15, bx: 6, by: -17 })],
+      [SKYFALL.slamRecover, GUARD],
     ],
   },
 } satisfies Record<string, ActionClip>;

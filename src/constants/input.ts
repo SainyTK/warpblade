@@ -99,9 +99,9 @@ export const ACTION_TEXT: Record<KitId, Record<InputAction, string>> = {
     warp: "Chain warp: hurl a chained gauntlet at the nearest foe ahead and haul yourself in, already holding it (10 MP). Big foes are crushed. While holding, throw: forward, or a suplex with the side behind held",
     guard:
       "Iron guard: hold to block blows from the front for little stamina and earn Grit. Press just as a blow lands for Iron Catch: seize the attacker, or answer a big foe with a haymaker. While holding a foe, throw it",
-    cast: "Use the selected ability: Bull Rush (in the air, Skyfall Grab), Bellow, the taunt or a spell skill",
-    castWide: "Use the selected ability's wide form: a longer Bull Rush, a wider Bellow",
-    cycle: "Switch ability: Bull Rush, Bellow, the taunt and the spells you learn",
+    cast: "Use the selected ability: Bellow, the taunt or a spell skill",
+    castWide: "Use the selected ability's wide form: a wider Bellow",
+    cycle: "Switch ability: Bellow, the taunt and the spells you learn",
   },
   orrin: {
     ...SHARED_ACTION_TEXT,

@@ -7,7 +7,7 @@ import { dealDamage } from "../../damage";
 import { enemyBox } from "../../enemies/enemy";
 import { game, hero, progress, rng } from "../../state";
 import { boxHit, surfaceBelow } from "../../world";
-import { skillEvolved, skillValues, withCharms } from "../query";
+import { skillValues, withCharms } from "../query";
 import { nearestFoe } from "../targets";
 import { drawSister, sisterFrames } from "./sisterSprite";
 
@@ -154,7 +154,7 @@ function wall(m: SisterMemory, dt: number): void {
 /**
  * Shield-Sister: a landed blow may call spectral shield-sisters of her clan who charge through foes along the floor;
  * levels add a pass back, a stunning bash, a stay and a second sister. Shieldwall sends them in from both edges for
- * good. With Thundering Herd (Stampede evolved), two charge beside each Bull Rush.
+ * good.
  */
 export const shieldSister: SkillBehavior = {
   create: () => ({ cd: 0, wallT: 0, wallSide: 1, sisters: [] }),
@@ -176,12 +176,6 @@ export const shieldSister: SkillBehavior = {
       if (state.evolved || event.source !== "attacks" || m.cd > 0) return;
       if (rng.chance(skillValues(ID).chance)) call(m);
       else m.cd = SUMMON_GATE;
-    },
-    dash(memory, event) {
-      if (!skillEvolved("h_stampede")) return;
-      const m = memoryOf(memory);
-      for (const side of [0, 1])
-        spawn(m, hero.x - event.dir * (SISTER.herdBack + side * SISTER.gap), event.dir, SISTER.herdLength);
     },
   },
 };

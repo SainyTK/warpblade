@@ -25,20 +25,6 @@ const FIST: IconArt = {
   colors: { I: IRON, D: IRON_DARK, W: WRAP, G: ICON_WHITE },
 };
 
-/** a shoulder plate lowered into the charge, speed lines trailing behind it */
-const RUSH: IconArt = {
-  rows: [
-    "......PPPP..",
-    "....PPRRRRP.",
-    "LLL.PRRRRRRP",
-    "...PRRRRRRRP",
-    "LLLL.RRRRRRP",
-    ".....DDDDDD.",
-    "LL...DDDDD..",
-  ],
-  colors: { P: PALE, R: RUST, D: RUST_DARK, L: ICON_WHITE },
-};
-
 /** her iron guard: two gauntlets stacked upright before her, the open hand of Iron Catch glinting on top */
 const GUARD: IconArt = {
   rows: [
@@ -86,7 +72,6 @@ const WALL: IconArt = {
 };
 
 const ABILITY_ART: Readonly<Record<HuldaAbility, IconArt>> = {
-  rush: RUSH,
   bellow: BELLOW,
   taunt: TAUNT,
   h_ironChain: CHAIN,

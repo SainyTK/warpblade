@@ -8,7 +8,6 @@ export type HuldaState =
   | "knee"
   | "toss"
   | "skyfall"
-  | "rush"
   | "bellow"
   | "taunt"
   | "chain"
@@ -22,14 +21,14 @@ export type FistBlow = "jab" | "hook" | "haymaker";
 /** how a held foe leaves her hands: ahead, over her head into the floor behind, or swung round her */
 export type ThrowKind = "forward" | "suplex" | "swing";
 
-/** the abilities on I, in the order O turns through them: her three from the start and her three spell skills */
-export type HuldaAbility = "rush" | "bellow" | "taunt" | "h_ironChain" | "h_tremorStomp" | "h_ironWall";
+/** the abilities on I, in the order O turns through them: her two from the start and her three spell skills */
+export type HuldaAbility = "bellow" | "taunt" | "h_ironChain" | "h_tremorStomp" | "h_ironWall";
 
 /**
- * how her armour took a blow: a plate broke; the rush, the haymaker's wind-up or Iron Wall's brace took it; her iron
- * guard blocked it; or Iron Catch, her parry, met it
+ * how her armour took a blow: a plate broke; the haymaker's wind-up or Iron Wall's brace took it; her iron guard blocked
+ * it; or Iron Catch, her parry, met it
  */
-export type ArmourKind = "plate" | "rush" | "windup" | "brace" | "block" | "parry";
+export type ArmourKind = "plate" | "windup" | "brace" | "block" | "parry";
 
 /** what Hulda's kit remembers between frames, one copy per player */
 export interface HuldaMemory {
@@ -64,26 +63,13 @@ export interface HuldaMemory {
   chainCd: number;
   stompCd: number;
   wallCd: number;
-  /** one hammer fist and one Skyfall Grab in each airtime */
+  /** one hammer fist in each airtime */
   airFisted: boolean;
-  airGrabbed: boolean;
-  /** the rush or a Skyfall has landed and is in its recovery */
+  /** a Skyfall ride has landed and is in its recovery */
   landed: boolean;
-  /** seconds until the next Bull Rush, and the rush under way is the long one of I held */
-  rushCd: number;
-  longRush: boolean;
-  /** the foes Bull Horns carries on her shoulder; replaced whole, never pushed to, so co-op seats keep their own */
-  carried: readonly Enemy[];
-  /** foes the rush under way has struck, for the dash event; replaced whole */
-  passed: readonly Enemy[];
-  /**
-   * Seconds into the rush its charge ends when it stops early past a lone foe, and the clip time from which the clip's
-   * own last stride carries on into the skid; 0 while the charge runs its full length
-   */
-  rushStop: number;
-  rushJoin: number;
-  /** Stampede: L in the skid may start one free rush */
-  rushAgain: boolean;
+  /** Anvil Drop: she left the floor by her own jump, and the hop in the air is already spent this airtime */
+  leapt: boolean;
+  hopped: boolean;
   /** Iron Counter: the next throw's damage multiple, whether the held big foe is the evolved grip's, seconds left in
    *  which no plate breaks, and seconds left in which her blocks cost no stamina */
   counterThrow: number;
@@ -101,12 +87,10 @@ export interface HuldaMemory {
   chainBusy: boolean;
   /** Iron Wall: blows taken in the brace under way */
   braced: number;
-  /** Skyfall Breaker: the big foe she rides and the pounds left, the foes her dive drags down, and the bounce after a
-   *  catch already spent this airtime */
+  /** Skyfall Breaker: the big foe she rides and the pounds left, and the foes her dive drags down */
   ridden: Enemy | null;
   pounds: number;
   dove: readonly Enemy[];
-  bounced: boolean;
   /** Quake Drop's iron: seconds left and its damage share */
   ironT: number;
   iron: number;
@@ -129,9 +113,9 @@ declare module "./skillBehavior" {
   interface SkillEvents {
     /** a foe caught in her hands by the warp or Iron Catch */
     grab: { foe: Enemy };
-    /** a foe she threw or slammed landed; `slam` for a Skyfall or a Bull Horns slam (a suplex is a throw) */
+    /** a foe she threw or slammed landed; `slam` for a Skyfall slam or a Shoulder Check flip (a suplex is a throw) */
     throw: { foe: Enemy; x: number; y: number; slam: boolean };
-    /** her armour took a blow; `counter` when she took it on purpose (rush, wind-up, brace) or parried it */
+    /** her armour took a blow; `counter` when she took it on purpose (wind-up, brace) or parried it */
     armour: { kind: ArmourKind; fromX: number; counter: boolean };
     /** an Iron Counter catch or a loaded Iron Wall release */
     counter: { foe: Enemy | null };

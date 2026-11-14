@@ -3,7 +3,7 @@ import { COIN_GOLD } from "../../../../constants/palette";
 import type { SpriteCanvas } from "../../../../engine/sprite";
 import { arc, arrow, chevron, fill, ring, sparkle, speedLines } from "../parts";
 import { floor, foe, heart, seg } from "../ysra/parts";
-import { bear, body, chainLinks, crack, fist, HC, plate, shards, shield } from "./parts";
+import { anvil, bear, body, chainLinks, crack, fist, HC, plate, shards, shield } from "./parts";
 
 /** the gold of an evolved icon */
 const GOLD = COIN_GOLD[3];
@@ -104,35 +104,44 @@ export const HULDA_ICONS: Record<string, (s: SpriteCanvas) => void> = {
     body(s, 14, 4, 2.2);
     body(s, 2, 12, 2.2);
   },
-  /** a lowered shoulder carrying a foe, speed lines behind */
-  h_bullHorns: (s) => {
-    speedLines(s, 5, [8, 11, 14], 5, RUST[4]);
-    fill(s, () => s.dot(10, 11, 4.2, HC.coat));
-    plate(s, 6, 6, 8, 3);
-    body(s, 11, 3, 2.6);
+  /** a lowered pauldron charging right, a foe flipped over it and slammed into the floor behind */
+  h_shoulderCheck: (s) => {
+    floor(s, 0, 15, 15, HC.trim);
+    arc(s, 7, 10, 5, -0.4, -Math.PI + 0.2, RUST[4]);
+    chevron(s, 2.5, 9.5, 0, 1, 1.6, RUST[4]);
+    fill(s, () => s.dot(11.5, 11, 3.4, HC.coat));
+    plate(s, 9, 6, 6, 3);
+    body(s, 3, 12.5, 2.2);
   },
-  /** a heap of foes on the shoulder, a gold crater below */
-  h_bullHorns_evo: (s) => {
-    arc(s, 8, 15, 7, Math.PI, Math.PI * 2, GOLD);
-    fill(s, () => s.dot(9, 12, 3.6, HC.coat));
-    plate(s, 5, 8, 8, 3);
-    body(s, 7, 4, 2.2);
-    body(s, 12, 3, 2.2);
-    body(s, 10, 0.5, 1.8);
+  /** the pauldron lit gold, the flipped foe in a gold ring */
+  h_shoulderCheck_evo: (s) => {
+    floor(s, 0, 15, 15, HC.trim);
+    arc(s, 7, 10, 5, -0.4, -Math.PI + 0.2, GOLD);
+    chevron(s, 2.5, 9.5, 0, 1, 1.6, GOLD);
+    arc(s, 3, 15, 4.5, Math.PI, Math.PI * 2, GOLD_LIGHT);
+    fill(s, () => s.dot(11.5, 11, 3.4, HC.coat));
+    plate(s, 9, 6, 6, 3);
+    fill(s, () => seg(s, 10, 6, 14, 6, GOLD));
+    body(s, 3, 12.5, 2.2);
   },
-  /** cracks trailing behind a charging shoulder */
-  h_stampede: (s) => {
-    crack(s, 14, RUST[3], RUST[4], 0, 9);
-    fill(s, () => s.dot(12, 9, 3.4, HC.coat));
-    plate(s, 9, 5, 6, 3);
-    speedLines(s, 7, [5, 8], 5, RUST[4]);
+  /** an anvil dropping onto the floor, fall lines above it and a shock out both ways */
+  h_anvilDrop: (s) => {
+    fill(s, () => {
+      for (const x of [4, 8, 12]) seg(s, x, 0, x, 2, RUST[4]);
+    });
+    anvil(s, 8, 5);
+    floor(s, 0, 15, 14, HC.trim);
+    arc(s, 8, 14, 7, Math.PI + 0.2, Math.PI + 0.9, RUST[5]);
+    arc(s, 8, 14, 7, -0.9, -0.2, RUST[5]);
   },
-  /** two shields beside the charge, the trail lit gold */
-  h_stampede_evo: (s) => {
-    crack(s, 14, GOLD, GOLD_LIGHT, 0, 11);
-    fill(s, () => s.dot(9, 8, 3, HC.coat));
-    shield(s, 13, 5, 2.4, RUST[5]);
-    shield(s, 13, 11, 2.4, RUST[5]);
+  /** the anvil on a floor split wall to wall in gold, the shock rolling out wide */
+  h_anvilDrop_evo: (s) => {
+    anvil(s, 8, 4);
+    crack(s, 14, GOLD, GOLD_LIGHT);
+    arc(s, 8, 14, 7, Math.PI + 0.2, Math.PI + 1.1, GOLD);
+    arc(s, 8, 14, 7, -1.1, -0.2, GOLD);
+    sparkle(s, 1, 12, 1.6, GOLD_LIGHT);
+    sparkle(s, 15, 12, 1.6, GOLD_LIGHT);
   },
   /** two hands diving down from above onto a foe */
   h_skyfall: (s) => {

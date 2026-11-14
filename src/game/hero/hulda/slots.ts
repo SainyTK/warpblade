@@ -1,5 +1,4 @@
 import { BELLOW } from "../../../constants/hulda/bellow";
-import { RUSH } from "../../../constants/hulda/rush";
 import { TAUNT } from "../../../constants/hulda/taunt";
 import type { HuldaAbility } from "../../../types/hulda";
 import type { AbilitySlot } from "../../../types/moveset";
@@ -9,8 +8,6 @@ import { bellowMp, pressBellow } from "./bellow";
 import { pressChain } from "./ironChain";
 import { pressBrace } from "./ironWall";
 import { hulda } from "./memory";
-import { pressRush, rushAgainReady, rushCost } from "./rush";
-import { pressSkyfall } from "./skyfall";
 import { pressTaunt } from "./taunt";
 import { pressStomp } from "./tremorStomp";
 
@@ -27,22 +24,6 @@ function spellSlot(id: HuldaAbility, label: string, wait: () => number, press: (
     evolved: () => skillEvolved(id),
   };
 }
-
-/**
- * Bull Rush: the armoured charge on the floor (held, a longer one) and Skyfall Grab in the air. Stampede's free rush
- * in the skid is ready at once.
- */
-const RUSH_TAB: AbilitySlot = {
-  id: "rush",
-  label: "RUSH",
-  tint: "var(--rust)",
-  known: () => true,
-  wait: () => (rushAgainReady() ? 0 : hulda.rushCd),
-  full: () => RUSH.cooldown,
-  affordable: () => (hero.ground ? hero.stamina >= rushCost() || rushAgainReady() : !hulda.airGrabbed),
-  cast: (wide) => (hero.ground ? pressRush(wide) : pressSkyfall()),
-  cost: () => `${Math.round(rushCost())}ST`,
-};
 
 /** Bellow: the roar that drags foes in; held, a wider roar that pulls harder for more MP */
 const BELLOW_TAB: AbilitySlot = {
@@ -67,9 +48,8 @@ const TAUNT_TAB: AbilitySlot = {
   cast: pressTaunt,
 };
 
-/** Hulda's abilities on I in the order O turns through them: Bull Rush, Bellow and the taunt, then her spell skills */
+/** Hulda's abilities on I in the order O turns through them: Bellow and the taunt, then her spell skills */
 export const HULDA_SLOTS: readonly AbilitySlot[] = [
-  RUSH_TAB,
   BELLOW_TAB,
   TAUNT_TAB,
   spellSlot("h_ironChain", "CHAIN", () => hulda.chainCd, pressChain),

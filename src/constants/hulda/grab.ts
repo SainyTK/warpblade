@@ -80,10 +80,8 @@ export const THROWN = {
   cannonLife: 2,
 } as const;
 
-/** Skyfall Grab, Bull Rush in the air: a lunge down with both hands, a ride to the floor and a slam */
+/** the Skyfall slam: the warp's catch of a flier rides it down to the floor this fast and slams it */
 export const SKYFALL = {
-  lunge: frame(6),
-  box: [0, -26, 20, 4] as const,
   ride: 300,
   power: 2.0,
   ring: 34,
@@ -91,8 +89,7 @@ export const SKYFALL = {
   ringStun: 1.0,
   stop: 0.09,
   shake: [0.25, 3] as const,
-  /** the slam and the whiff each settle over this many frames once she lands */
-  recover: frame(6),
+  /** the slam settles over this many frames once she lands */
   slamRecover: frame(10),
 } as const;
 

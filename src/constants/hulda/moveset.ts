@@ -23,8 +23,5 @@ export const THROWN_GAUNTLET = { length: 7, fist: 2.6, cuff: 1.8, link: 3 } as c
  */
 export const IRON_GUARD = { chip: 0.05, blockCost: 10, reach: 40, haymaker: 2 } as const;
 
-/** I held with Bull Rush selected: a charge this much longer, for this much more stamina */
-export const RUSH_SLOT = { wideTime: 1.6, wideCost: 1.5 } as const;
-
 /** I held with Bellow selected: a wider roar that pulls from further, for more MP */
 export const WIDE_BELLOW = { reach: 1.6, pull: 1.5, mp: 1.5 } as const;

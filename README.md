@@ -104,9 +104,9 @@ His crystal sword can be thrown, and wherever it lands, he follows.
   `I` hops her back with a shot or sets snares for MP, and her ultimate Bolt Storm rains bolts on the foes in reach (see [docs/sable-design.md](docs/sable-design.md)).
   Hulda, the iron grappler, fights bare-handed in iron gauntlets with the shortest reach of all, a slow walk and no run.
   `J` throws a three-blow string of jab, body hook and an overhand haymaker, a hammer fist in the air, and a knee while she holds a foe.
-  Her warp hurls a chained gauntlet and hauls her in already holding the foe, which `J` held or `K` then throws: forward into the others, or a suplex into the floor behind her with the side behind held; bigger foes are crushed in both hands.
+  Her warp hurls a chained gauntlet and hauls her in already holding the foe, which `J` held or `K` then throws: forward into the others, or a suplex into the floor behind her with the side behind held; a flier is ridden down and slammed into the floor, and bigger foes are crushed in both hands.
   Her iron guard lets almost nothing through, and her parry, Iron Catch, seizes the attacker.
-  `I` is an armoured Bull Rush (in the air Skyfall Grab, which catches a flier and drives it into the floor), a Bellow that drags foes in, and fliers down to her hands, for MP, or a taunt.
+  `I` is a Bellow that drags foes in, and fliers down to her hands, for MP, or a taunt.
   Her blows, grabs and throws fill Grit, four iron plates under stamina; a blow on a full plate breaks it for half the damage and never stops her, and her ultimate Quake Drop slams both fists into the floor (see [docs/hulda-design.md](docs/hulda-design.md)).
   Orrin, the chain dancer, fights at the length of a brass hook on a steel chain and never runs.
   `J` lashes a three-blow string of Lash, Rising Arc and Full Circle that hits hardest in the last 18 px of the chain, with a Hanging Arc in the air.

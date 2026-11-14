@@ -1,33 +1,28 @@
 import type { ActionClip } from "../../../types/pose";
 import { frame } from "../../hero";
 import { BELLOW } from "../../hulda/bellow";
-import { RUSH } from "../../hulda/rush";
 import { TAUNT } from "../../hulda/taunt";
 import { QUAKE } from "../../hulda/ultimates";
 import { ULT_LOCK } from "../../ultimate";
 import { CHARGE_POSE, GUARD, g } from "./stance";
 
-const RUN_END = RUSH.load + RUSH.time;
-/** her shoulder dropped into the charge, the head tucked behind it */
-const RUSH_LEAN = g({ hx: 0, hy: -12.5, nx: 5, ny: -20.5, cb: 1.5, fx: 9, fy: -18, bx: 6, by: -19, fe: 1, be: 0 });
+/** her shoulder dropped into a charge, the head tucked behind it */
+const SHOULDER_LEAN = g({ hx: 0, hy: -12.5, nx: 5, ny: -20.5, cb: 1.5, fx: 9, fy: -18, bx: 6, by: -19, fe: 1, be: 0 });
+/** the lean's two strides: the front foot reaching out, then the feet passing */
+const SHOULDER_REACH = { ...SHOULDER_LEAN, ffx: 7, ffy: -3, fa: 0.2, bfx: -6, ba: 0.4 };
+const SHOULDER_PASS = { ...SHOULDER_LEAN, ffx: 2, bfx: -2, bfy: -3, ba: 0.6 };
 
 /** her own action clips beside the string and the grapple */
 export const HULDA_CLIPS = {
-  /** the load digs in and drops the shoulder, the charge pumps the legs under a fixed lean, the skid leans back */
-  rush: {
-    dur: RUN_END + RUSH.recover,
-    hit: RUSH.load,
+  /** Shoulder Check's dodge and a shield-sister's charge: the shoulder dropped, the legs pumping under a fixed lean, the
+   *  two strides looped */
+  shoulder: {
+    dur: frame(6),
+    hit: 0,
     keys: [
-      [0, GUARD],
-      [frame(1), g({ hy: -11.5, nx: 0.5, ny: -21, cb: 1, fx: 5, fy: -19, bx: 3, by: -20, ffx: 4, bfx: -6 })],
-      [RUSH.load, g({ hy: -11.5, nx: 1, ny: -21, cb: 1, fx: 5, fy: -19, bx: 3, by: -20, ffx: 4, bfx: -6 })],
-      [RUSH.load + RUSH.stride[0], { ...RUSH_LEAN, ffx: 7, ffy: -3, fa: 0.2, bfx: -6, ba: 0.4 }],
-      [RUSH.load + RUSH.midStride, { ...RUSH_LEAN, ffx: 2, bfx: -2, bfy: -3, ba: 0.6 }],
-      [RUSH.load + RUSH.stride[1], { ...RUSH_LEAN, ffx: 7, ffy: -3, fa: 0.2, bfx: -6, ba: 0.4 }],
-      [RUN_END - RUSH.lastKey, { ...RUSH_LEAN, ffx: 2, bfx: -2, bfy: -3, ba: 0.6 }],
-      [RUN_END + frame(1), g({ hx: -1.5, hy: -11.5, nx: -1, ny: -21.5, cb: -0.5, ffx: 8, fa: -0.3, bfx: -4 })],
-      [RUN_END + frame(3), g({ hx: -1, hy: -12, nx: 0, ny: -22, ffx: 7, fa: -0.2, bfx: -4 })],
-      [RUN_END + RUSH.recover, GUARD],
+      [0, SHOULDER_REACH],
+      [frame(3), SHOULDER_PASS],
+      [frame(6), SHOULDER_REACH],
     ],
   },
   /** she draws breath and rears back, roars with her fists out low, and holds it */

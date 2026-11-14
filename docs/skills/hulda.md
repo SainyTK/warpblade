@@ -19,7 +19,8 @@ Rates of ordinary play used in every number below, at attack speed 1:
 | J foe-hits, crowd of 6 | 3.6 a second | Her box is 14 px wide, so a blow catches about 2 foes in a crowd. |
 | Haymaker landed | 0.67 a second | One per string. |
 | Grab and throw | 0.3 a second | A grab, three knees and a throw take about 1.6 s, plus the walk in. |
-| Bull Rush | 0.4 a second | 25 of 120 stamina, 0.4 s cooldown; her only travel move. |
+| Dodge through a foe | 0.4 a second | The shared front dodge, 50 of 120 stamina; with the warp, her only travel. |
+| Jump landing | 0.5 a second | Her low jump onto a foe and back down, about 1 s in the air, when a skill pays for it. |
 | Casts of one spell | 0.3 a second | MP income about 5.6 a second (2 regen, 2 per landed blow), shared over the rotation. |
 | Precise trigger (counter grab, Skyfall catch, Iron Wall release, armoured counter) | 0.2 a second | A skilled player, with foes winding up and fliers around. |
 | Ultimate | one per 20 s | Charge level 2 (4.5x AD). |
@@ -32,8 +33,8 @@ Crowd of 6: `easy` about 7 to 8, `timed` about 10 to 11, `precise` about 8 to 10
 
 Combo length: **3** (`comboHits: 3`).
 Her blows knock foes back and her armour already lets her stay in, so the hold is her extender: the warp and Iron Catch put a foe in her hands.
-Air limit: **1** hammer fist and **1** Skyfall Grab per airtime.
-Skyfall Breaker level 6 is the one skill that gives a second Skyfall after a catch.
+Air limit: **1** hammer fist per airtime.
+Anvil Drop level 6 is the one skill that gives her a second jump in the air.
 
 | Key | Base kit |
 | --- | --- |
@@ -42,8 +43,8 @@ Skyfall Breaker level 6 is the one skill that gives a second Skyfall after a cat
 | K | Iron guard: 5% through, 10 stamina a block, 6 Grit a block. Iron Catch, the parry: a minion attacker is seized into her hands, a mini or boss takes a 2x haymaker. While holding, K throws as J held does. |
 | L | The shared front dodge. |
 | Up | One low jump. Down with Up drops through a ledge. |
-| I | The selected ability, each with its own recharge: Bull Rush (25 stamina, 0.8 s; an armoured charge, 0.6x, a short shove and stun 0.4 s to each foe; held, 1.6 times as long; in the air, Skyfall Grab: catch, ride, slam 2.0x, ring 0.8x), Bellow (20 MP, 4x AP, pulls foes in, drags fliers down; held, 1.6 times the reach for 30 MP) or Taunt (free, 3 s cooldown, 24 Grit over two slaps). |
-| O | Switches the I rotation: Bull Rush, Bellow, Taunt, then the spell skills held. |
+| I | The selected ability, each with its own recharge: Bellow (20 MP, 4x AP, pulls foes in, drags fliers down; held, 1.6 times the reach for 30 MP) or Taunt (free, 3 s cooldown, 24 Grit over two slaps). |
+| O | Switches the I rotation: Bellow, Taunt, then the spell skills held. |
 | U | Quake Drop. |
 
 With no side held the throw picks itself.
@@ -71,13 +72,14 @@ The movement pass (11 November 2026) slowed the string from 35 to 45 frames and 
 | Taunt on O | O switches abilities in the contract | Taunt is the second base ability in the I rotation. |
 | Heavy Hands (`b_hands`) | Flat stat node | The Might charm. |
 | Thick Hide, Iron Plates, Second Wind (`i_hide`, `i_plates`, `i_wind`) | Tree nodes | Iron Hide passive. |
-| Bull Horns (`i_horns`) | Tree node | Bull Horns skill, now carrying up to three foes. |
+| Bull Horns (`i_horns`) | Tree node | Bull Horns skill, carrying up to three foes; gone with Bull Rush (next row). |
 | Iron Grip (`h_grip`) | Tree node | Crushing Grip levels 1 and 2. |
 | Wrecking Throw (`h_wreck`), Aftershock Suplex (`x_aftershock`) | Tree nodes | Wrecking Throw skill, level 1 and level 4. |
 | Rush Grab (`x_rushGrab`) | Fusion node | Iron Chain: a ranged way to bring a foe into her hands. |
 | Bellow (`t_bellow`, rank 1 from the start) | Rank gate | Base kit, no rank check. |
 | Titan Throw (`b_titan`) | Tree node | Titan Throw ultimate skill; since the moveset rework its tethers are Quake Drop's first level. |
 | Quake Drop (`b_quake`) | Tree node | Base special. |
+| Bull Rush on I, Skyfall Grab (I in the air), Bull Horns (`h_bullHorns`), Stampede (`h_stampede`) | The owner removed them on 14 November 2026: the rush carried her a long way on a long recharge, and until it ended she could use none of her other skills | Shoulder Check on the dodge and Anvil Drop on the jump, both short, with every other button ready when they end; Skyfall Breaker stays on the warp, which catches fliers on its own. |
 
 ## The 20 skills
 
@@ -88,27 +90,27 @@ The movement pass (11 November 2026) slowed the string from 35 to 45 frames and 
 | `h_counterGrab` | Iron Counter | attack | precise | K | `h_ironWall` |
 | `h_wreckingThrow` | Wrecking Throw | attack | timed | J | `h_giantSwing` |
 | `h_giantSwing` | Giant Swing | attack | easy | J | `h_ironChain` |
-| `h_bullHorns` | Bull Horns | movement | timed | I | `h_ironHide` |
-| `h_stampede` | Stampede | movement | easy | I | `h_shieldSister` |
-| `h_skyfall` | Skyfall Breaker | movement | precise | J (warp, and I in the air) | `h_counterGrab` |
-| `h_chainHaul` | Chain Haul | movement | timed | J (warp) | `h_bullHorns` |
+| `h_shoulderCheck` | Shoulder Check | movement | timed | L | `h_ironHide` |
+| `h_anvilDrop` | Anvil Drop | movement | easy | Up | `h_tremorStomp` |
+| `h_skyfall` | Skyfall Breaker | movement | precise | J (warp) | `h_counterGrab` |
+| `h_chainHaul` | Chain Haul | movement | timed | J (warp) | `h_anvilDrop` |
 | `h_ironHide` | Iron Hide | passive | easy | auto | `h_rustShards` |
 | `h_ironChain` | Iron Chain | spell | timed | I | `h_tremorStomp` |
-| `h_tremorStomp` | Tremor Stomp | spell | easy | I | `h_stampede` |
+| `h_tremorStomp` | Tremor Stomp | spell | easy | I | `h_anvilDrop` |
 | `h_ironWall` | Iron Wall | spell | precise | I | `h_ancestorFist` |
 | `h_bruise` | Bruising Knuckles | dot | easy | J | `h_haymaker` |
 | `h_fracture` | Crushing Grip | dot | timed | J | `h_wreckingThrow` |
 | `h_rustShards` | Rust Shards | dot | easy | auto | `h_ironHide` |
-| `h_shieldSister` | Shield-Sister | summon | easy | auto | `h_stampede` |
-| `h_spiritBear` | Spirit Bear | summon | timed | auto | `h_bullHorns` |
+| `h_shieldSister` | Shield-Sister | summon | easy | auto | `h_shoulderCheck` |
+| `h_spiritBear` | Spirit Bear | summon | timed | auto | `h_shoulderCheck` |
 | `h_ancestorFist` | Ancestor's Fist | summon | precise | auto | `h_skyfall` |
 | `h_quakeDrop` | Quake Drop | ultimate | timed | U | `h_ironHide` |
 
 Counts: attack 5, movement 4, spell 3, dot 3, summon 3, ultimate 1, passive 1.
 Risk: easy 8, timed 8, precise 4.
 
-Kit events she emits through the shared function: `grab`, `throw` (when a thrown or slammed foe lands), `armour` (a blow taken on a plate, in the rush, in the haymaker's wind-up or in Iron Wall), `counter` (Iron Counter, Iron Wall release, armoured counter).
-An armoured counter is a blow taken in the haymaker's wind-up, in the rush or in Iron Wall.
+Kit events she emits through the shared function: `grab`, `throw` (when a thrown or slammed foe lands, a Shoulder Check flip among them), `armour` (a blow taken on a plate, in the haymaker's wind-up or in Iron Wall), `counter` (Iron Counter, Iron Wall release, armoured counter).
+An armoured counter is a blow taken in the haymaker's wind-up or in Iron Wall.
 Her guard sends `armour` too: kind `block` for a blocked blow, and kind `parry` with `counter` for Iron Catch, so skills that answer an armoured counter answer a parry.
 
 Fury is the buff of her precise skills: all her damage up by the given share for 4 s; the highest share wins and a new one refreshes the time.
@@ -210,57 +212,64 @@ Evolution: **Cyclone** (partner `h_ironChain`). The swing lasts 2 s and she walk
 
 Build: `runSwing` in `hero/hulda/throws.ts`; the situational pick goes in the new throw chooser. The Cyclone walk needs the swing clip looped with her stride (`HULDA_STRIDE`).
 
-### h_bullHorns: Bull Horns
+### h_shoulderCheck: Shoulder Check
 
-movement, timed, I (Bull Rush). The rush picks foes up on her shoulder and slams them at the end.
-
-| Lv | Change | Card |
-| --- | --- | --- |
-| 1 | First minion rides her shoulder, slammed at the end for 1.0x | The rush lifts a foe and slams it. |
-| 2 | 1.6x | Harder slam. |
-| 3 | Carries up to 2 | Carry two foes. |
-| 4 | The slam rings 30 px, 0.8x, knocking foes down | The slam knocks down foes near it. |
-| 5 | Rush 0.32 to 0.4 s | Longer rush. |
-| 6 | Carries 3; minis and bosses are shoved along and take the slam | Carry three, shove big foes. |
-| 7 | The slam throws minions up | The slam throws foes up. |
-| 8 | Slam 6x, ring 40 px 2.5x | Slam +4.4x, bigger ring. |
-
-Evolution: **Juggernaut** (partner `h_ironHide`). No cap on foes carried, the rush runs twice as far and takes no damage, and the slam is a 60 px crater of 8x.
-
-Build: `hulda.carried` in `hero/hulda/rush.ts` becomes a list; `slamCarried` plus `slamRing`. The stacked carry needs a pose offset per carried foe; the shove reuses `pin` with the big foe at arm's length.
-
-### h_stampede: Stampede
-
-movement, easy, I (Bull Rush). The rush gets cheaper, longer and cracks the floor behind her.
+movement, timed, L (the shared front dodge). Her dodge leads with the iron pauldron: foes it passes through are shouldered aside, and later flipped over her shoulder into the floor behind her.
+Added on 14 November 2026 with Anvil Drop, when Bull Rush and its skills went: the dodge keeps its short reach and length, and every other button is ready the moment it ends.
 
 | Lv | Change | Card |
 | --- | --- | --- |
-| 1 | A cracked trail hits foes on it 0.3 s later for 0.3x | The rush leaves a cracked trail. |
-| 2 | Cost 25 to 15 stamina | Cheaper rush. |
-| 3 | The trail cracks a second time 0.4 s later | The trail strikes twice. |
-| 4 | Rush 40% further | Longer rush. |
-| 5 | Foes she passes are dragged 20 px along in her wake | The rush drags foes along. |
-| 6 | I in the skid starts a second rush, free | Press I in the skid for a free rush. |
-| 7 | The trail throws minions up | The trail throws foes up. |
-| 8 | Shoulder 1.5x, trail 1.2x | Shoulder and trail hit far harder. |
+| 1 | Each foe the dodge passes takes 0.8x and reels 0.4 s | Your dodge shoulders the foes it passes. |
+| 2 | 1.3x | Shoulder damage up. |
+| 3 | Minions passed are flipped and slammed into the floor behind her, 1.2x, lying stunned 0.8 s; a flip is a slam for Spirit Bear | Minions you pass are flipped and slammed behind you. |
+| 4 | Each foe passed gives 8 Grit | Each foe you pass gives Grit. |
+| 5 | 2.0x; each flip rings 24 px, 0.8x | Flips ring out; a harder shoulder. |
+| 6 | A perfect dodge fills a plate | A perfect dodge fills a plate. |
+| 7 | A dodge through a foe gives 25 stamina back, half its cost | Dodging through a foe gives half its stamina back. |
+| 8 | 4x, flip 2.5x | The shoulder and the flip hit far harder. |
 
-Evolution: **Thundering Herd** (partner `h_shieldSister`). The trail stays 3 s and keeps cracking every 0.5 s, and two shield-sisters charge beside each rush. An easy evolution: area and uptime.
+Evolution: **Battering Ram** (partner `h_ironHide`). Shoulder 6x, flip 4x with a 40 px ring at 2x, each foe passed gives a full plate of Grit, and a dodge through a foe gives all its stamina back.
+A timed evolution: area and uptime.
 
-Build: `runRush`; trail from `effects/quakeLine.ts` segments laid each ghost tick. Level 6 makes the Bull Rush tab ready during the skid (`rushAgainReady`); it is a second press of the same travel move and no combo input.
+Build: `skills/hulda/shoulderCheck.ts` answers the shared dodge's `dash` and `perfectDodge` events; the flip reuses `slamRing` and `throwPower`, so Crushing Grip's Fractures count on it.
+While she holds the skill her dodge plays the shoulder lean (`HULDA_CLIPS.shoulder`), the strides the shield-sisters charge in.
+
+### h_anvilDrop: Anvil Drop
+
+movement, easy, Up (her jump). She lands from her own jump like an anvil, and a shock runs out round her feet.
+Added on 14 November 2026 with Shoulder Check: the jump stays her short, low jump, the landing strikes on touchdown and she can act at once.
+
+| Lv | Change | Card |
+| --- | --- | --- |
+| 1 | Landing from her jump: foes within 24 px each way, up to 40 px above the floor, take 0.6x and reel 0.4 s | Your jump lands with a shock round you. |
+| 2 | 1.0x | Landing damage up. |
+| 3 | Jump 44 to 55 px | You jump higher. |
+| 4 | The landing throws minions up | The landing throws minions up. |
+| 5 | 40 px, 1.6x | A wider, harder landing. |
+| 6 | Up in the air hops once more, half the jump, once per airtime | Jump once more in the air. |
+| 7 | Fliers within 60 px of the landing are shaken 40 px down and reel 0.8 s, into the shock's reach | The landing shakes fliers down. |
+| 8 | 48 px, 3x | The landing hits far harder. |
+
+Evolution: **Mountain Fall** (partner `h_tremorStomp`). The landing reaches 72 px each way at 4.5x, and a landing that strikes fills a plate.
+An easy evolution: area and reliability.
+
+Build: `hero/hulda/anvilDrop.ts` watches the landing of her own jump (`hulda.leapt`, dropped when a warp or a hurt takes the jump over) and strikes with `slamRing`; the height and the hop are in `hero/hulda/jump.ts`, which also emits the `jump` event.
 
 ### h_skyfall: Skyfall Breaker
 
-movement, precise, J (the warp) and I in the air (Skyfall Grab). Catching a foe from the air is a hard read; it pays big.
-The warp's catch of a flier rides it down into the same slam, and from level 3 the warp rides a big foe it clamps on.
+movement, precise, J (the warp). Catching a foe from the air is a hard read; it pays big.
+The warp's catch of a flier rides it down into the Skyfall slam, and from level 3 the warp rides a big foe it clamps on.
+Until 14 November 2026 Bull Rush in the air (Skyfall Grab) caught foes too.
+The skill stays on the warp alone: the warp already caught fliers, rode big foes and made Comet Grab, so only the lunge of level 1 and the second grab of level 6 changed.
 
 | Lv | Change | Card |
 | --- | --- | --- |
-| 1 | Slam 2.5x, lunge 30% further | Longer lunge, harder slam. |
+| 1 | Slam 2.5x | A warp catch slams far harder. |
 | 2 | Slam 4x | Slam damage up. |
-| 3 | The warp or Skyfall Grab on a mini or boss: she rides its back 1 s, pounds twice for 2x, leaps off | The warp rides big foes and pounds them. |
+| 3 | The warp on a mini or boss: she rides its back 1 s, pounds twice for 2x, leaps off | The warp rides big foes and pounds them. |
 | 4 | The ride drags foes under her path into the slam | The dive drags foes into the slam. |
 | 5 | Ring 50 px, 1.5x | Bigger ring. |
-| 6 | A catch gives one more Skyfall Grab before she lands | Skyfall Grab again before you land. |
+| 6 | A catch gives a spent warp back at once | A catch gives the warp back. |
 | 7 | A catch gives Fury +30% and makes her blows break guards for 4 s | A catch gives Fury. |
 | 8 | Slam 20x, pounds 3x and three of them | Slam 20x, three pounds. |
 
@@ -269,6 +278,7 @@ Evolution: **Comet Grab** (partner `h_counterGrab`). A warp at a minion on the f
 Data since balance round 3: level 8 slam 46x, Comet Grab 65x. The slam and pounds strike only the caught foe, which is the precise payoff; dragged foes take only the ring, the skill's own area.
 
 Build: `hero/hulda/skyfall.ts` (`rideDown` and `mount` for the warp, called from `warpStyle.ts`); the ride pose kneels on the foe's back, both fists overhead, in a `ride` state.
+The warp given back is `refundWarp()` in the shared `hero/warp.ts`.
 
 ### h_ironHide: Iron Hide
 
@@ -323,7 +333,7 @@ spell, easy, I (15 MP, 3 s). A stomp sends a tremor along the floor round her.
 | 7 | Each stomp gives 15 Grit | The stomp gives Grit. |
 | 8 | 2.0x each tremor, 2.5 s | Stomp +1.1x, faster recharge. |
 
-Evolution: **Earthbreaker** (partner `h_stampede`). Each tremor runs wall to wall along every floor she stands on at 2.0x. An easy evolution: area.
+Evolution: **Earthbreaker** (partner `h_anvilDrop`). Each tremor runs wall to wall along every floor she stands on at 2.0x. An easy evolution: area.
 
 Build: new `skills/hulda/tremorStomp.ts`; rings from `effects/floorRing.ts` and `effects/shockwave.ts`; the flier drag from `bellow.ts`. Pose: a stomp clip from the Quake Drop hop without the fists raised.
 
@@ -418,9 +428,9 @@ summon, easy, auto (on a landed J blow, own cooldown). A spectral shield-sister 
 | 7 | Two sisters | Two sisters. |
 | 8 | 30%, each pass 1.2x, charge 120 px | Longer charges, more often. |
 
-Evolution: **Shieldwall** (partner `h_stampede`). Four sisters stay, charging every 0.5 s from both sides of the screen across the floor she stands on at 1.2x. An easy evolution: area.
+Evolution: **Shieldwall** (partner `h_shoulderCheck`). Four sisters stay, charging every 0.5 s from both sides of the screen across the floor she stands on at 1.2x. An easy evolution: area.
 
-Build: new `skills/hulda/shieldSister.ts`; drawn as a pale tinted copy of the rig in the Bull Rush pose (the afterimage path, `dropMoveGhost`) with a round shield; hit box logic from `runRush`.
+Build: new `skills/hulda/shieldSister.ts`; drawn as a pale tinted copy of the rig in her shoulder lean (`HULDA_CLIPS.shoulder`) with a round shield.
 
 ### h_spiritBear: Spirit Bear
 
@@ -434,10 +444,10 @@ summon, timed, auto (on `throw`, own cooldown). A spirit bear crashes down where
 | 4 | 50%, 2.5 s cooldown | More often. |
 | 5 | The bear roars as it lands, dragging foes within 50 px to it | The bear's roar drags foes in. |
 | 6 | Mauls swipe every foe within 24 px | Mauls hit every foe near. |
-| 7 | Stays 5 s; suplex, Skyfall and Bull Horns slams also call it | Slams call the bear too. |
+| 7 | Stays 5 s; suplexes, Skyfall slams and Shoulder Check flips also call it | Slams call the bear too. |
 | 8 | Drop 5x, mauls 1.2x | The bear hits far harder. |
 
-Evolution: **Bear Clan** (partner `h_bullHorns`). Two bears stay at her side for good, mauling at 1.5x, and each throw makes both drop on the landing.
+Evolution: **Bear Clan** (partner `h_shoulderCheck`). Two bears stay at her side for good, mauling at 1.5x, and each throw makes both drop on the landing.
 
 Build: new `skills/hulda/spiritBear.ts`; a new code-drawn bear (the largest art cost on her list: idle, drop, swipe and roar clips); the roar drag from `bellow.ts`.
 
@@ -477,7 +487,7 @@ Its numbers are the shared warp's (`WarpTune`), read by her warp's `tune`.
 | 7 | Three warps in a row, 7 MP each | Three warps in a row, for less MP. |
 | 8 | Arrival 4.5x, path 3x | The chain and the arrival hit far harder. |
 
-Evolution: **Wrecking Ball** (partner `h_bullHorns`). The arrival blow (6x) strikes every foe within 48 px round her, foes within 60 px reel and are dragged in, and a warp costs 5 MP. A timed evolution: area.
+Evolution: **Wrecking Ball** (partner `h_anvilDrop`). The arrival blow (6x) strikes every foe within 48 px round her, foes within 60 px reel and are dragged in, and a warp costs 5 MP. A timed evolution: area.
 
 Build: `tune`, `strike` and `arrived` in `hero/hulda/warpStyle.ts`; the path hits are the shared warp's.
 
@@ -516,8 +526,8 @@ DPS in AD per second (multiply by 12 for damage at the start of a run), the skil
 | Iron Counter | precise | 0.4 | 6.0 | 9.8 | 0.4 | 6.5 | 10 | Big foe, 0.2 counters/s; L8 18x (12x times 1.5) = 3.6, Fury +50% at 80% uptime = 2.4. |
 | Wrecking Throw | timed | 0.18 | 1.8 | 3.6 | 0.36 | 10.4 | 18 | 0.3 throws/s; L8 crowd 2 bursts on 4 foes at 3x, path on 3, chained bodies about 6x. |
 | Giant Swing | easy | 0 | 1.1 | 1.5 | 0.9 | 8.0 | 14 | 0.3 throws/s; needs 2 foes near; L8 3 turns at 1.2x on 5 foes plus the held one and the release ring. |
-| Bull Horns | timed | 0.4 | 2.4 | 4.0 | 0.4 | 10.2 | 18 | 0.4 rushes/s; L8 three carried at 6x and a 2.5x ring on 3. |
-| Stampede | easy | 0.1 | 2.0 | 2.6 | 0.5 | 7.9 | 14 | 0.4 rushes/s, 0.6 from L6; L8 shoulder +0.9x and trail 2 x 1.2x on 4 foes in the path. |
+| Shoulder Check | timed | 0.32 | 2.6 | 4.0 | 0.64 | 5.8 | 10.4 | 0.4 dodges through foes/s; L8 4x and a 2.5x flip on each foe passed, about 2 in a crowd, ring on 2 more. |
+| Anvil Drop | easy | 0.3 | 1.5 | 2.3 | 0.6 | 6.0 | 13.5 | 0.5 landings/s; L1 crowd 2 foes in 24 px, L8 4 in 48 px, evolved 6 in 72 px. |
 | Skyfall Breaker | precise | 0.1 | 6.0 | 10 | 0.2 | 7.5 | 13 | Big foe or flier, 0.2 catches/s; L8 +18x slam, 9x pounds = 5.4, Fury 0.6. |
 | Iron Hide | passive | 0 | 0 | 0.5 | 0 | 0 | 2 | Defence: L8 a blow on a plate takes 25%, five plates, 6% heal a break. |
 | Iron Chain | timed | 0.12 | 2.1 | 3.0 | 0.12 | 11 | 18 | 0.25 casts/s; one foe counts the 2x yank crush on a big foe; crowd 6 dragged at 3x plus 3 collisions, plus the throw it sets up. |
@@ -536,11 +546,12 @@ Checks against the contract:
 
 - Easy at L8, one foe: 1.1 to 2.4 (the area ones sit low on one foe and reach 7 to 8.4 on a crowd).
 - Timed at L8, one foe: 1.8 to 3.7, about 1.5 times easy; crowd 9.2 to 11, about 1.4 times easy.
-  Wrecking Throw and Bull Horns sit low on one foe on purpose: their target is a crowd.
+  Wrecking Throw sits low on one foe on purpose: its target is a crowd.
+- Movement at L8, against 0.8 of its band: Shoulder Check 2.6 on one foe (timed, about 3.0 asked) and Anvil Drop 6.0 on a crowd (easy, about 6 asked).
 - Precise at L8, one foe: 6.0 to 6.7, 2.5 to 2.8 times easy. Each needs Fury in the count; without a build they sit near 2 times.
 - Dot below attack at L1 to L4: Bruising Knuckles L4 0.5 against Knuckle Wave L4 0.72; Crushing Grip L4 0.43 against Wrecking Haymaker L4 0.87; Rust Shards L4 0.12. Above at L7 and L8: 3.8, 4.6 and 2.5 against 2.3 and 3.4.
-- L8 against L1, on the intended target: Knuckle Wave, Wrecking Haymaker, Wrecking Throw, Bull Horns, Tremor Stomp, Iron Wall and Iron Counter without Fury land at 6 to 10 times.
-  Skills whose level 1 is a small add-on to a base move run higher on the add-on alone (Skyfall Breaker, Stampede, Iron Chain, Giant Swing); measured on the whole move they are 8 to 12 times.
+- L8 against L1, on the intended target: Knuckle Wave, Wrecking Haymaker, Wrecking Throw, Shoulder Check, Anvil Drop, Tremor Stomp, Iron Wall and Iron Counter without Fury land at 6 to 10 times.
+  Skills whose level 1 is a small add-on to a base move run higher on the add-on alone (Skyfall Breaker, Iron Chain, Giant Swing); measured on the whole move they are 8 to 12 times.
   Dots and summons run 10 to 60 times, because the early level is weak on purpose and chance and count grow together (see Contract points).
   Quake Drop is budgeted per cast against the plain drop: about 6.5 times at level 8 and 16 evolved.
 
@@ -548,19 +559,19 @@ Checks against the contract:
 
 Three example builds of 8 and the three each would evolve.
 
-**Brawler** (J and the floor; easy to play): Knuckle Wave, Wrecking Haymaker, Bruising Knuckles, Shield-Sister, Stampede, Tremor Stomp, Iron Hide, Quake Drop.
-Evolve Knuckle Wave (Bruising Knuckles), Bruising Knuckles (Wrecking Haymaker) and Shield-Sister (Stampede).
-Thunder Knuckles spreads bruises down the floor, Shatter turns them into haymaker bursts, Shieldwall keeps the crowd moving into her fists.
+**Brawler** (J and the floor; easy to play): Knuckle Wave, Wrecking Haymaker, Bruising Knuckles, Shield-Sister, Anvil Drop, Tremor Stomp, Iron Hide, Quake Drop.
+Evolve Knuckle Wave (Bruising Knuckles), Bruising Knuckles (Wrecking Haymaker) and Tremor Stomp (Anvil Drop).
+Thunder Knuckles spreads bruises down the floor, Shatter turns them into haymaker bursts, Earthbreaker and her landings keep the floor shaking under the crowd.
 
-**Grappler** (holds and throws): Wrecking Throw, Giant Swing, Crushing Grip, Iron Chain, Chain Haul, Bull Horns, Spirit Bear, Iron Hide.
+**Grappler** (holds and throws): Wrecking Throw, Giant Swing, Crushing Grip, Iron Chain, Chain Haul, Shoulder Check, Spirit Bear, Iron Hide.
 Evolve Wrecking Throw (Giant Swing), Crushing Grip (Wrecking Throw) and Giant Swing (Iron Chain).
-Iron Chain and the chain warp fill her hands, Cyclone gathers the crowd, Bonebreaker and Human Cannonball turn every throw into a blast. Spirit Bear and Wrecking Ball are the next ready ones, which is where skips and banishes decide.
+Iron Chain and the chain warp fill her hands, Cyclone gathers the crowd, Bonebreaker and Human Cannonball turn every throw into a blast. Shoulder Check's flips are slams for the bear, and Spirit Bear (with Shoulder Check) and Battering Ram (with Iron Hide) are the next ready ones, which is where skips and banishes decide.
 
 **Iron Wall** (precise; the parry and armour): Iron Counter, Iron Wall, Ancestor's Fist, Skyfall Breaker, Rust Shards, Iron Hide, Wrecking Haymaker, Quake Drop.
 Evolve Iron Counter (Iron Wall), Iron Wall (Ancestor's Fist) and Ancestor's Fist (Skyfall Breaker).
 She meets blows on purpose: every parry and absorbed blow calls a fist, loads a wall and keeps Fury lit; Rust Shards and Iron Hide pay for the hits she takes. Highest damage on bosses, hard to play.
 
-The partner graph keeps each theme in a chain (Knuckle Wave, Bruising Knuckles, Wrecking Haymaker; Wrecking Throw, Giant Swing, Iron Chain, Tremor Stomp, Stampede, Shield-Sister; Iron Counter, Iron Wall, Ancestor's Fist, Skyfall Breaker), so a focused build has more ready evolutions than it can take, and Iron Hide links the armour skills across themes.
+The partner graph keeps each theme in a chain (Knuckle Wave, Bruising Knuckles, Wrecking Haymaker; Wrecking Throw, Giant Swing, Iron Chain, Tremor Stomp, Anvil Drop, Chain Haul; Shield-Sister, Spirit Bear, Shoulder Check, Iron Hide; Iron Counter, Iron Wall, Ancestor's Fist, Skyfall Breaker), so a focused build has more ready evolutions than it can take, and Iron Hide links the armour skills across themes.
 
 ## Contract points
 
@@ -572,7 +583,6 @@ Points where Hulda's design needs the contract or the framework to move; not cha
 - Events: she needs `grab`, `throw`, `armour` and `counter` added to the event list, or confirmation that kit-only names are allowed through the shared emit function.
 - The 6 to 10 times rule from level 1 to level 8 clashes with dots that are weak early by design and with summons whose chance, count and damage all grow. Suggest the rule applies to attack, movement, spell and passive skills, and dots and summons are judged at level 4 and level 8 only.
 - Precise budgets per second need rare, very large hits (12x to 30x AD) or a buff like Fury to reach 2.5 to 3 times easy. Confirm buffs count toward the budget; without them her precise skills sit near 2 times.
-- Bull Rush out of a landed blow's recovery stays: since the moveset rework it is an ability on I, which may cut a landed blow as every ability does.
 - The base throw picks itself (forward or suplex by where foes stand) when no side is held; since the moveset rework the side behind picks the suplex and the side ahead the forward throw, as the owner asked.
 
 ## As built
@@ -580,9 +590,11 @@ Points where Hulda's design needs the contract or the framework to move; not cha
 The skill data in `src/constants/characters/hulda/skills/` is the source of truth for numbers; the tables above are the first design.
 Changes made while building:
 
-- Balance review must-changes are in the data: Wrecking Haymaker L8 +10x (crack 3x, knock-down 2x); Iron Counter L1 8x and L8 45x, Executioner's Grip 120x; Skyfall Breaker L1 8x and L8 45x with 6x pounds, Comet Grab 120x; Iron Wall L1 7x and L8 50x a blow, Unbreakable Wall 130x with at most 3 fists a brace on Ancestor's Fist's cooldown; Ancestor's Fist L8 55x and Hand of the Mountain 150x; Bull Horns L8 slam 3.5x and ring 1.5x; Stampede L8 shoulder 0.8x and trail 0.6x; Crushing Grip L8 2.5x a second a stack for 8 s; Rust Shards L8 0.3x; Shield-Sister L8 0.8x a pass; Giant Swing gained a level 2 property (swung foes reel).
+- Balance review must-changes are in the data: Wrecking Haymaker L8 +10x (crack 3x, knock-down 2x); Iron Counter L1 8x and L8 45x, Executioner's Grip 120x; Skyfall Breaker L1 8x and L8 45x with 6x pounds, Comet Grab 120x; Iron Wall L1 7x and L8 50x a blow, Unbreakable Wall 130x with at most 3 fists a brace on Ancestor's Fist's cooldown; Ancestor's Fist L8 55x and Hand of the Mountain 150x; Crushing Grip L8 2.5x a second a stack for 8 s; Rust Shards L8 0.3x; Shield-Sister L8 0.8x a pass; Giant Swing gained a level 2 property (swung foes reel).
 - Suggestions taken: Wrecking Throw L8 path 3.5x and burst 4x. Titan Throw and Unbroken, measured here, were cut in the moveset rework; Quake Drop's per-cast totals are in its code comment.
 - Loops closed: flung bodies fling no further and emit no `throw` event; a broken plate heals at most once in 2 s whatever refills it; summons and ticks pass their skill id as source, so they emit no events.
 - Iron Hide's start Grit fills when the skill is taken, so a card taken mid-run still gives the plates.
 - Rust Shards' weaken softens blows on her while a rusted foe stands within 40 px of her.
 - Executioner's Grip's suplex skips the counter's throw doubling, so it stays at 120x.
+- Bull Rush, Skyfall Grab, Bull Horns and Stampede were removed on 14 November 2026 (see "What goes away"); Shoulder Check and Anvil Drop took their places, and Chain Haul, Tremor Stomp, Shield-Sister and Spirit Bear took new partners.
+  The new two are not yet measured in the balance room.

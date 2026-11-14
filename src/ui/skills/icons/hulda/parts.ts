@@ -119,3 +119,27 @@ export function chainLinks(s: S, x0: number, y0: number, x1: number, y1: number)
     }
   });
 }
+
+/** an iron anvil seen side on, its horn to the left: the face lit along the top, a narrow waist and a broad foot */
+export function anvil(s: S, x: number, y: number): void {
+  fill(s, () => {
+    s.poly(
+      [
+        [x - 6, y],
+        [x + 6, y],
+        [x + 6, y + 2.5],
+        [x + 2, y + 3],
+        [x + 2, y + 5],
+        [x + 4, y + 7],
+        [x - 4, y + 7],
+        [x - 2, y + 5],
+        [x - 2, y + 3],
+        [x - 3, y + 2.5],
+      ],
+      HC.steel,
+    );
+    seg(s, x - 5, y, x + 6, y, HC.steelGlint);
+    seg(s, x - 3, y + 7, x + 4, y + 7, HC.steelDeep);
+  });
+  fill(s, () => seg(s, x + 1, y + 3, x + 1, y + 5, HC.steelDark));
+}

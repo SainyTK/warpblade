@@ -10,6 +10,7 @@ import { LANDING } from "../../../constants/kael/motion";
 import type { Hero } from "../../../types/hero";
 import type { Pose } from "../../../types/pose";
 import { sampleKeys } from "../../../utils/sampleKeys";
+import { skillLevel } from "../../skills/query";
 import { clipPose } from "../clipPose";
 import { clipKey, handOver, watchHandover } from "../kael/handover";
 import { jumpClock } from "../kael/jumpClock";
@@ -20,7 +21,6 @@ import { carry, holding } from "./carry";
 import { currentBlow } from "./fists";
 import { huldaLandingPose, watchHuldaLanding } from "./landing";
 import { hulda } from "./memory";
-import { rushClipTime } from "./rushClock";
 import { settlePose, watchSettle } from "./settle";
 import { spellPose } from "./spellPose";
 import { swingClipTime } from "./swing";
@@ -70,11 +70,12 @@ function statePose(h: Hero, t: number, fresh: boolean, dt: number, wound: number
     case "toss":
       if (hulda.throwKind === "swing") return walkingSpin(h);
       return sampleKeys(THROW_CLIPS[hulda.throwKind].keys, h.st);
-    case "rush":
-      return sampleKeys(HULDA_CLIPS.rush.keys, rushClipTime(h.st));
     case "bellow":
     case "taunt":
       return sampleKeys(HULDA_CLIPS[h.state].keys, h.st);
+    case "dash":
+      if (!skillLevel("h_shoulderCheck")) return carry(clipPose(h, t));
+      return sampleKeys(HULDA_CLIPS.shoulder.keys, h.st % HULDA_CLIPS.shoulder.dur);
     case "chain":
     case "stomp":
     case "brace":

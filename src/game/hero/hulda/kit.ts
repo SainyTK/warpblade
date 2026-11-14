@@ -5,6 +5,7 @@ import { take, use } from "../../input";
 import { hero } from "../../state";
 import { resetMotion } from "../kael/motion";
 import { huldaCut, huldaMayAct } from "./act";
+import { watchAnvil } from "./anvilDrop";
 import { steadfast } from "./armour";
 import { runBellow } from "./bellow";
 import { clearClaims } from "./claims";
@@ -18,8 +19,6 @@ import { runBrace } from "./ironWall";
 import { pressJump } from "./jump";
 import { hulda, resetHulda } from "./memory";
 import { huldaPose } from "./pose";
-import { dropCarried, runRush } from "./rush";
-import { rushDrives } from "./rushClock";
 import { rustGuard } from "./rustGuard";
 import { resetSettle } from "./settle";
 import { ridesFoe, runRide, runSkyfall, skyfallDrives } from "./skyfall";
@@ -40,16 +39,11 @@ function tick(dt: number): void {
   hulda.chainCd = Math.max(0, hulda.chainCd - recharge);
   hulda.stompCd = Math.max(0, hulda.stompCd - recharge);
   hulda.wallCd = Math.max(0, hulda.wallCd - recharge);
-  hulda.rushCd = Math.max(0, hulda.rushCd - recharge);
   if (hero.state !== "fist") hulda.link = Math.max(0, hulda.link - dt);
   if (hero.state !== "fist" && hulda.link <= 0) hero.chain = 0;
-  if (hero.ground && hero.state !== "skyfall") {
-    hulda.airFisted = false;
-    hulda.airGrabbed = false;
-    hulda.bounced = false;
-  }
+  if (hero.ground && hero.state !== "skyfall") hulda.airFisted = false;
+  watchAnvil();
   watchGrip();
-  if (hulda.carried.length && (hero.state !== "rush" || hero.hp <= 0)) dropCarried();
 }
 
 function runState(dt: number): boolean {
@@ -71,9 +65,6 @@ function runState(dt: number): boolean {
       return true;
     case "skyfall":
       runSkyfall();
-      return true;
-    case "rush":
-      runRush(dt);
       return true;
     case "bellow":
       runBellow();
@@ -112,7 +103,7 @@ function readHolding(dir: number): void {
 /**
  * Hulda: bare fists and iron gauntlets. A short three-blow string; a warp that throws her chained gauntlet and hauls her
  * in already holding the foe; an iron guard whose parry catches the attacker; knees and throws while she holds a foe;
- * Bull Rush, Bellow, the taunt and her spell skills on I; and Grit plates that take blows for her.
+ * Bellow, the taunt and her spell skills on I; and Grit plates that take blows for her.
  */
 export const HULDA_KIT: HeroKit = {
   warp: HULDA_WARP,
@@ -140,15 +131,10 @@ export const HULDA_KIT: HeroKit = {
   damageScale: huldaDamageScale,
   steadfast,
   drivesMotion: () =>
-    rushDrives() ||
-    skyfallDrives() ||
-    ridesFoe() ||
-    fistSteps() ||
-    ((hero.state === "hold" || hero.state === "knee") && hero.ground),
+    skyfallDrives() || ridesFoe() || fistSteps() || ((hero.state === "hold" || hero.state === "knee") && hero.ground),
   gravityScale: () => (ridesFoe() ? 0 : 1),
   reset: () => {
     drop();
-    dropCarried();
     clearClaims();
     resetHulda();
     resetMotion();

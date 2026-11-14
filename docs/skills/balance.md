@@ -401,3 +401,10 @@ Skyfall Breaker's runs at 45 and 48 spread from 128 to 297 on the late target; 4
 - Sky Dance was not measured: in the room the air string ends after one whiff on ground foes, so the stomp never comes.
 - Warpath and Deep Heft on one foe still read near zero; the charge and the lunge carry her past the lone foe.
 - Rift Wound and Ember Brand on one foe are capped by the room's elite dying; the late target is the better read for damage over time.
+
+## Hulda without Bull Rush (14 November 2026)
+
+The owner removed Bull Rush and every skill tied to it: the charge carried her far on a long recharge and kept her from her other skills until it ended.
+The `h_bullHorns` and `h_stampede` rows above, the rush in the scripted player's Hulda routine and Skyfall Grab's drive for `h_skyfall` describe the game before that day.
+Skyfall Breaker now pays off only through the warp's catch, so its figures above, measured with Skyfall Grab every 5 s, overstate it on the late target.
+Her two new movement skills, Shoulder Check (`h_shoulderCheck`, on the dodge) and Anvil Drop (`h_anvilDrop`, on the jump), are not yet measured in the room; their design budgets are in `docs/skills/hulda.md`.
