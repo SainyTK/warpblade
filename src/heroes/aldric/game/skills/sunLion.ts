@@ -91,33 +91,36 @@ function summon(m: SkillMemory, life: number): void {
     );
 }
 
-/** a lion of light: a long body, a mane round its head, four legs, a tail */
+/** a lion of light, its outline dark gold: a long body lit along its back, a mane round its head, four striding
+ *  legs and a tail with a bright tuft */
 function drawLion(l: Lion): void {
   const k = Math.min(1, l.left / 0.5);
   const { x, y, face: f } = l;
-  const run = l.leap ? 1 : Math.abs(Math.sin(game.t * 9 + x));
-  polygon(
-    [
-      [x - 8 * f, y - 6],
-      [x + 5 * f, y - 8],
-      [x + 5 * f, y - 4],
-      [x - 8 * f, y - 3],
-    ],
-    DAWN_RAMP[4],
-    0.6 * k,
-  );
-  disc(x + 7 * f, y - 9, 3.4, DAWN_RAMP[3], 0.7 * k);
-  disc(x + 8 * f, y - 9, 2, DAWN_RAMP[5], 0.9 * k);
-  hairline(x + 9 * f, y - 10, x + 9.5 * f, y - 10, WHITE, k);
+  const run = l.leap ? 1 : Math.sin(game.t * 9 + x);
   for (const [lx, sw] of [
     [-6, run],
-    [-4, -run],
+    [-3.5, -run],
     [3, -run],
-    [5, run],
-  ] as const)
-    line(x + lx * f, y - 4, x + (lx + sw * 1.5) * f, y, DAWN_RAMP[4], 0.7 * k);
-  hairline(x - 8 * f, y - 6, x - 12 * f, y - 10, DAWN_RAMP[5], 0.7 * k);
-  glow(x, y - 6, 12, DAWN_RAMP[4], 0.3 * k);
+    [5.5, run],
+  ] as const) {
+    line(x + lx * f, y - 5, x + (lx + sw * 1.8) * f, y, DAWN_RAMP[1], k);
+    line(x + lx * f, y - 5, x + (lx + sw * 1.6) * f, y - 0.5, DAWN_RAMP[3], k);
+  }
+  const body: [number, number][] = [
+    [x - 9 * f, y - 8],
+    [x + 5 * f, y - 10],
+    [x + 6 * f, y - 4],
+    [x - 9 * f, y - 4],
+  ];
+  polygon(body, DAWN_RAMP[3], k);
+  hairline(x - 8 * f, y - 8.5, x + 4 * f, y - 10, DAWN_RAMP[5], k);
+  hairline(x - 9 * f, y - 7, x - 13 * f, y - 11, DAWN_RAMP[3], k);
+  disc(x - 13 * f, y - 11.5, 1.2, DAWN_RAMP[5], k);
+  disc(x + 7 * f, y - 10, 4.6, DAWN_RAMP[1], k);
+  disc(x + 7 * f, y - 10, 4, DAWN_RAMP[2], k);
+  disc(x + 8.5 * f, y - 10, 2.4, DAWN_RAMP[4], k);
+  hairline(x + 9 * f, y - 11, x + 9.5 * f, y - 11, WHITE, k);
+  glow(x, y - 7, 14, DAWN_RAMP[4], 0.35 * k);
 }
 
 /** Sun Lion: a foe falling may call a lion of light that walks with Aldric and pounces on foes; as Pride of Dawn three

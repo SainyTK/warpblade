@@ -46,7 +46,7 @@ export function castSanctuary(level: number): void {
   };
   raiseWard(ward);
   game.fx.push(createFloorRing(x, y, r, DAWN_RAMP, 0.5));
-  lights.add(x, y - r * 0.5, r + 20, DAWN_RAMP[5], 0.9, 0.4);
+  lights.add(x, y - r * 0.5, r + 20, DAWN_RAMP[5], 0.6, 0.3);
   shake(0.25, 3);
   sfx.ultimate(level);
   const effect: Effect = {
@@ -92,7 +92,7 @@ export function castSanctuary(level: number): void {
         const ang = (i / 10) * TAU + at.t * 2;
         fleck(at.x + Math.cos(ang) * r * 0.6, y - ((at.t * 20 + i * 7) % (r * SQUASH)), DAWN_RAMP[5], 0.7 * k);
       }
-      glow(at.x, y - r * 0.4, r, DAWN_RAMP[4], 0.3 * k);
+      glow(at.x, y - r * 0.4, r, DAWN_RAMP[4], 0.16 * k);
     },
   };
   game.fx.push(effect);

@@ -8,7 +8,7 @@ import { DAWN_RAMP } from "../../constants/light";
  */
 export function drawLightKnight(x: number, y: number, face: number, k: number, swing: number): void {
   place();
-  const a = 0.35 * k;
+  const a = 0.75 * k;
   polygon(
     [
       [x - 4 * face, y],
@@ -19,7 +19,7 @@ export function drawLightKnight(x: number, y: number, face: number, k: number, s
     DAWN_RAMP[3],
     a,
   );
-  disc(x, y - 22, 3.2, DAWN_RAMP[4], a + 0.15);
+  disc(x, y - 22, 3.2, DAWN_RAMP[4], k);
   hairline(x + face, y - 23, x + 3 * face, y - 23, WHITE, k);
   polygon(
     [
@@ -30,7 +30,7 @@ export function drawLightKnight(x: number, y: number, face: number, k: number, s
       [x + 3 * face, y - 13],
     ],
     DAWN_RAMP[5],
-    a + 0.25,
+    k,
   );
   const ang = -2.2 + swing * 2.9;
   const hx = x + 2 * face;

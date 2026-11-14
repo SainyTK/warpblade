@@ -54,7 +54,10 @@ export function createDawnLance(
       const k = 1 - o.t / LANCE.life;
       const tail = o.x - face * len;
       const dy = -spec.rise * len;
-      line(tail, o.y + dy, o.x, o.y, DAWN_RAMP[4], 0.9);
+      for (let w = -half * 0.5; w <= half * 0.5; w += 0.5)
+        line(tail, o.y + dy + w, o.x - face * Math.abs(w) * 2, o.y + w, DAWN_RAMP[w === 0 ? 5 : 4], 0.9);
+      line(o.x - face * 3, o.y - half * 0.6, o.x + face * 2, o.y, DAWN_RAMP[5]);
+      line(o.x - face * 3, o.y + half * 0.6, o.x + face * 2, o.y, DAWN_RAMP[5]);
       hairline(tail, o.y + dy - 0.5, o.x, o.y - 0.5, DAWN_RAMP[5]);
       hairline(o.x - face * len * 0.6, o.y + dy * 0.6, o.x + face * 2, o.y, WHITE);
       hairline(tail - face * 10, o.y + dy * 1.6, tail, o.y + dy, DAWN_RAMP[3], (u) => 0.6 * u);
