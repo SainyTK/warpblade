@@ -15,7 +15,9 @@ import { landed } from "./landed";
 import { zafirPose } from "./pose";
 import { readActions } from "./readActions";
 import { hitBonus, takenBonus } from "./skillHooks";
+import { slipInAir, slipPassed, slipStarted } from "./slip";
 import { resetZafirState, zafir } from "./state";
+import { keenWindow, shapeSpin } from "./stringSkills";
 import { ZAFIR_WARP } from "./warpStyle";
 import { drawRing, tickWhirl } from "./whirl";
 import { drawWounds, shedDrops } from "./wounds";
@@ -55,6 +57,10 @@ export const ZAFIR_KIT: HeroKit = {
   },
   pose: zafirPose,
   afterStrike,
+  shapeHit: shapeSpin,
+  keenWindow,
+  airDodge: slipInAir,
+  dodge: { started: slipStarted, passed: slipPassed },
   absorbHurt: () => false,
   hitBonus,
   takenBonus,

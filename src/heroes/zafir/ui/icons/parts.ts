@@ -38,20 +38,69 @@ export function scimitar(s: SpriteCanvas, x0: number, y0: number, x1: number, y1
   fill(s, () => s.dot(...at(0, 0), 0.6, ICON.saffron));
 }
 
-/** a ring of grains round (cx, cy), lying flat */
+/** a ring of sand round (cx, cy), tilted to lie half flat, its near half lit */
 export function sandRing(s: SpriteCanvas, cx: number, cy: number, r: number, n: number, c: Color = ICON.sand[1]): void {
   fill(s, () => {
-    for (let i = 0; i < n; i++) {
-      const a = (i / n) * Math.PI * 2;
-      s.dot(cx + Math.cos(a) * r, cy + Math.sin(a) * r * 0.4, 0.45, i % 3 ? c : ICON.sand[0]);
+    const steps = Math.max(n, Math.ceil(r * 6));
+    for (let i = 0; i < steps; i++) {
+      const a = (i / steps) * Math.PI * 2;
+      s.dot(cx + Math.cos(a) * r, cy + Math.sin(a) * r * 0.55, 0.6, Math.sin(a) > 0 ? c : ICON.sand[3]);
     }
+  });
+}
+
+/** a funnel of whirling sand from a wide top at `top` down to a narrow foot at `foot`, with dark turns across it */
+export function funnel(s: SpriteCanvas, cx: number, top: number, foot: number, wide: number, narrow: number): void {
+  fill(s, () => {
+    s.poly(
+      [
+        [cx - wide, top],
+        [cx + wide, top],
+        [cx + narrow, foot],
+        [cx - narrow, foot],
+      ],
+      ICON.sand[1],
+    );
+    s.shadeEdges(ICON.sand[1], ICON.sand[0], ICON.sand[3]);
+  });
+  fill(s, () => {
+    const turns = 4;
+    for (let i = 1; i < turns; i++) {
+      const y = top + ((foot - top) * i) / turns;
+      const w = wide + ((narrow - wide) * i) / turns;
+      s.stroke(cx - w + 0.5, y - 0.6, cx + w - 0.5, y + 0.6, 0.35, ICON.sand[3]);
+    }
+  });
+}
+
+/** a line of wind from (x0, y) to (x1, y), bright at its head */
+export function wind(s: SpriteCanvas, x0: number, x1: number, y: number, c: Color): void {
+  fill(s, () => {
+    s.stroke(x0, y + 0.5, x1, y + 0.5, 0.6, c);
+    s.set(x1, y, WHITE);
+  });
+}
+
+/** a shard of glass falling, its point down at (x, y) */
+export function shard(s: SpriteCanvas, x: number, y: number, h: number): void {
+  fill(s, () => {
+    s.poly(
+      [
+        [x, y],
+        [x + 1.3, y - h * 0.6],
+        [x, y - h],
+        [x - 1.3, y - h * 0.6],
+      ],
+      ICON.glass,
+    );
+    s.shadeEdges(ICON.glass, WHITE, ICON.spine);
   });
 }
 
 /** a few grains scattered round a point */
 export function grains(s: SpriteCanvas, pts: readonly (readonly [number, number])[], c: Color = ICON.sand[1]): void {
   fill(s, () => {
-    for (const [x, y] of pts) s.dot(x, y, 0.45, c);
+    for (const [x, y] of pts) s.dot(x, y, 0.6, c);
   });
 }
 

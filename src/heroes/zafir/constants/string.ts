@@ -28,5 +28,5 @@ export const STRING_FEEL = {
 export const WALK_THROUGH = 0.55;
 /** the cyclone hops this high and drifts at this speed with the walk held */
 export const CYCLONE_HOP = { rise: 16, drift: 40 } as const;
-/** the spinning descent: dropped into at this speed, and the ring it cuts on landing, each side */
-export const SPIN_DROP = { fall: 140, ring: 30 } as const;
+/** the spinning descent: dropped into at this speed, and the ring it cuts on landing: its reach each side and power */
+export const SPIN_DROP = { fall: 140, ring: 30, ringPower: 0.9 } as const;

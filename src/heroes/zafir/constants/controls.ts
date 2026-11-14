@@ -5,7 +5,7 @@ import { ZAFIR_ACCENT } from "./palette";
 export const ZAFIR_CONTROLS: HeroControls = {
   actions: {
     attack:
-      "Four spins that cut in front and behind, the same every time. Walk while you spin. The last spin throws foes up. In the air, a spinning descent. While the scimitar is thrown, call it back into a cut",
+      "Four spins that cut in front and behind; walk while you spin. The last throws foes up. In the air, a spinning descent. While the scimitar flies, call it back",
     warp: "Warp strike: throw the scimitar at the nearest foe ahead, warp to it and arrive spinning, cutting both sides (10 MP)",
     guard:
       "Guard: hold to raise a veil of sand against blows from the front. Press just as a blow lands to parry: you slip away and leave a mirage that bursts into sand blades",

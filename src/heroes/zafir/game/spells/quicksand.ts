@@ -13,6 +13,7 @@ import { GRAIN } from "../../constants/palette";
 import { QUICKSAND } from "../../constants/spells";
 import { createSpout } from "../effects/spout";
 import { sandSound } from "../sound";
+import { openWounds } from "../wounds";
 
 const ID = "za_quicksand";
 
@@ -23,9 +24,9 @@ const inPit = (e: Enemy, x: number, y: number, reach: number): boolean =>
 /**
  * Quicksand: a pit opens on the floor and holds every walker in it, pulling them to its middle and cutting them on its
  * own clock; it marks them to take more from everything and, at its top level, pulls them under for a moment. Evolved
- * as the Sinking Sea, it throws a sandspout up out of its middle each time it cuts.
+ * as the Sinking Sea, it throws a sandspout up out of its middle each time it cuts. Its numbers are Quicksand's.
  */
-function createPit(x: number, y: number, reach: number, life: number): Effect {
+export function createPit(x: number, y: number, reach: number, life: number): Effect {
   let t = 0;
   let clock = 0;
   const v = skillValues(ID);
@@ -43,6 +44,7 @@ function createPit(x: number, y: number, reach: number, life: number): Effect {
         dealDamage(e, progress.stats.ap * v.power, { fromX: x, source: "abilities" });
         if (v.mark) markFoe(e, ID, QUICKSAND.every * 2, v.mark);
         if (v.sink) e.stun = Math.max(e.stun, v.sink);
+        openWounds(e, v.wounds ?? 0);
       }
       if (cut && skillEvolved(ID))
         game.fx.push(createSpout(x, y, hero.face, { damage: progress.stats.ap * v.spout, range: 0.25, source: ID }));

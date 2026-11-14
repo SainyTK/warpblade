@@ -89,13 +89,15 @@ function createStorm(level: number, reach: number, life: number, cut: number): E
 
 /**
  * Sandstorm, Zafir's ultimate: a storm rises round him and follows him for a few seconds while he fights on, longer and
- * wider at each charge level. A foe that stays in it all the way takes `STORM_CUT.share` of the level's power.
+ * wider at each charge level. A foe that stays in the plain storm all the way takes `STORM_CUT.share` of the level's power.
  */
 export function castSandstorm(level: number): void {
   const v = ultimateValues();
-  const life = withCharms("duration", STORM_TIME[level - 1] * (v.time ?? 1));
+  const base = STORM_TIME[level - 1];
+  const life = withCharms("duration", base * (v.time ?? 1));
   const reach = withCharms("area", STORM_REACH[level - 1] * (v.reach ?? 1));
-  const cuts = life / STORM_CUT.every;
+  // a longer storm keeps each cut as hard, so its skill's longer storms deal more
+  const cuts = base / STORM_CUT.every;
   const cut = (ULT_LEVELS[level - 1].power * progress.stats.ad * STORM_CUT.share * (v.power ?? 1)) / cuts;
   game.fx.push(createStorm(level, reach, life, cut));
   if (v.twin) game.fx.push(createStorm(level, reach * 1.6, life, cut * v.twin));

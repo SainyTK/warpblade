@@ -3,12 +3,13 @@ import { dealDamage } from "../../../game/damage";
 import { enemyCenter } from "../../../game/enemies/enemy";
 import { feat } from "../../../game/feat";
 import { emitSkillEvent } from "../../../game/skills/events";
-import { skillValues, withCharms } from "../../../game/skills/query";
+import { skillEvolved, skillValues, withCharms } from "../../../game/skills/query";
 import { foesOnScreen } from "../../../game/skills/targets";
 import { game, hero, progress } from "../../../game/state";
 import { TAU } from "../../../utils/math";
 import { GRAIN, SAND_RAMP } from "../constants/palette";
 import { RING_LOOK, RING_TIERS, type RingTier, WHIRL } from "../constants/whirl";
+import { gritTaken } from "./skills/scouringSand";
 import { sandSound } from "./sound";
 import { zafir } from "./state";
 import { openWounds } from "./wounds";
@@ -25,6 +26,14 @@ export function ringTier(): RingTier | null {
 
 /** the ring's reach, widened by charms and Unbroken Whirl */
 const ringReach = (tier: RingTier): number => withCharms("area", tier.reach * (skillValues("za_unbroken").reach ?? 1));
+
+/** the least the Whirl drains to: the first ring with Eye of the Dune, and with Endless Turn while he spins */
+function whirlFloor(): number {
+  const first = tierFrom(RING_TIERS[0]);
+  if (skillEvolved("za_unbroken")) return first;
+  if (skillEvolved("za_whirling") && hero.state === "move") return Math.min(zafir.whirl, first);
+  return 0;
+}
 
 /** one of his own hits landed: the Whirl rises, and a tier reached sounds the gust */
 export function gainWhirl(amount: number): void {
@@ -47,7 +56,7 @@ function cut(tier: RingTier): void {
   for (const e of foesOnScreen()) {
     const [x, y] = enemyCenter(e);
     if (!inRing(x, y, reach)) continue;
-    dealDamage(e, progress.stats.ad * power, { fromX: hero.x, kx: Math.sign(x - hero.x) * 25 });
+    dealDamage(e, progress.stats.ad * power * (1 + gritTaken(e)), { fromX: hero.x, kx: Math.sign(x - hero.x) * 25 });
     openWounds(e, tier.wounds);
     zafir.runRingCuts++;
     feat({ kind: "heroCount", stat: "zafir.ringCuts", add: 1 });
@@ -60,7 +69,7 @@ function cut(tier: RingTier): void {
 export function tickWhirl(dt: number): void {
   zafir.whirlIdle += dt;
   const hold = skillValues("za_unbroken").hold ?? WHIRL.hold;
-  if (zafir.whirlIdle > hold) zafir.whirl = Math.max(0, zafir.whirl - WHIRL.decay * dt);
+  if (zafir.whirlIdle > hold) zafir.whirl = Math.max(whirlFloor(), zafir.whirl - WHIRL.decay * dt);
   const tier = ringTier();
   if (!tier || hero.hp <= 0) {
     zafir.ringClock = 0;

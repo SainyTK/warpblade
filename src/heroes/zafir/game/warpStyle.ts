@@ -7,7 +7,9 @@ import { boxAhead, boxBehind } from "../../../game/world";
 import type { Enemy } from "../../../types/enemy";
 import type { WarpStyle } from "../../../types/moveset";
 import { ARRIVAL } from "../constants/warp";
+import { RING_TIERS } from "../constants/whirl";
 import { RING_CUT } from "./moves/slashes";
+import { zafir } from "./state";
 import { gainWhirl } from "./whirl";
 import { openWounds } from "./wounds";
 
@@ -32,6 +34,7 @@ function strike(power: number, _foe: Enemy | null, sureCrit: boolean): void {
 function arrived(): void {
   const v = skillValues(SKILL);
   gainWhirl(ARRIVAL.whirl + (v.whirl ?? 0));
+  if (v.ring) zafir.whirl = Math.max(zafir.whirl, RING_TIERS[0].from);
   const reach = ARRIVAL.box[2] * (v.reach ?? 1);
   for (const e of foesOnScreen()) if (Math.abs(e.x - hero.x) <= reach) openWounds(e, ARRIVAL.wounds + (v.wounds ?? 0));
 }

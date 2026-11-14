@@ -15,6 +15,7 @@ const fresh = (): ZafirState => ({
   bladeOut: false,
   storm: 0,
   stormLevel: 1,
+  sides: 0,
   keenStreak: 0,
   runRingCuts: 0,
 });

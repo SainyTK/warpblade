@@ -7,6 +7,7 @@ import { dust } from "../../../../game/world";
 import type { MoveDef } from "../../../../types/move";
 import { SAND_RAMP } from "../../constants/palette";
 import { CYCLONE_HOP, STRING_CANCEL, STRING_FEEL } from "../../constants/string";
+import { cyclonePull } from "../stringSkills";
 import { heldSide, walkThrough } from "../walkThrough";
 import { CYCLONE_RING, HIGH_RING, LOW_RING, RING_CUT, RISING_RING } from "./slashes";
 
@@ -120,6 +121,7 @@ export const STRING_MOVES = {
     cancel: STRING_CANCEL.duneCyclone,
     enter: () => {
       hop.done = false;
+      cyclonePull();
     },
     step: cycloneStep,
     afterHit: cycloneSand,
@@ -128,7 +130,7 @@ export const STRING_MOVES = {
         at: onFrame(8),
         box: [-4, -48, 34, 4],
         power: 1.85,
-        kx: 30,
+        kx: 10,
         ky: -40,
         launch: 230,
         stun: 0.5,

@@ -30,6 +30,8 @@ export interface ZafirState {
   /** seconds left of the sandstorm that follows him, and its charge level */
   storm: number;
   stormLevel: number;
+  /** the sides of him the blow under way has cut: 1 in front, 2 behind, 3 both */
+  sides: number;
   /** Keen spins landed in a row, for Sirocco Timing's streak */
   keenStreak: number;
   /** foes cut by the ring and the storm this run, for his achievement */

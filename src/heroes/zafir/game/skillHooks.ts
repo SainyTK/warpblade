@@ -3,12 +3,9 @@ import { skillValues } from "../../../game/skills/query";
 import { hero } from "../../../game/state";
 import type { Enemy } from "../../../types/enemy";
 import type { OwnHit } from "../../../types/kit";
-import type { ZafirMoveId } from "../types/moves";
 import { zafir } from "./state";
+import { STRING_SPINS } from "./stringSkills";
 import { woundsOf } from "./wounds";
-
-/** the spins of the ground string, which Whirling Edge strengthens */
-const STRING: ReadonlySet<string> = new Set<ZafirMoveId>(["sweepTurn", "risingTurn", "twinTurn", "duneCyclone"]);
 
 /** a foe on the side he is not facing: the back of his spin */
 export const behindHim = (e: Enemy): boolean => Math.sign(e.x - hero.x) === -hero.face;
@@ -33,19 +30,23 @@ function siroccoBonus(): number {
 export function hitBonus(e: Enemy, hit: OwnHit): number {
   let bonus = 0;
   const move = hero.state === "move" ? hero.move : null;
-  if (move && STRING.has(move)) bonus += skillValues("za_whirling").bonus ?? 0;
+  if (move && STRING_SPINS.has(move)) bonus += skillValues("za_whirling").bonus ?? 0;
   if (hit.keen && move && payoffLands(movePayoff(), e)) bonus += siroccoBonus();
-  if (move === "duneCyclone") bonus += woundsOf(e) * (skillValues("za_veins").perWound ?? 0);
-  if (hit.melee && behindHim(e)) bonus += skillValues("za_twofaced").behind ?? 0;
+  const veins = skillValues("za_veins");
+  if (move === "duneCyclone" || (move === "twinTurn" && veins.twin)) bonus += woundsOf(e) * (veins.perWound ?? 0);
+  if (hit.melee && behindHim(e))
+    bonus += (skillValues("za_twofaced").behind ?? 0) + (skillValues("za_twofaced").backAll ?? 0);
   if (move === "spinDrop") bonus += skillValues("za_falling").air ?? 0;
   if (woundsOf(e)) bonus += skillValues("za_deep").blows ?? 0;
   return bonus;
 }
 
-/** extra damage a foe takes from every source: a bleeding foe, with Desert Thirst, more for each wound */
+/** extra damage a foe takes from every source: a bleeding foe, with Desert Thirst, more for each wound and more again
+ *  when it is low */
 export function takenBonus(e: Enemy): number {
   const n = woundsOf(e);
   const v = skillValues("za_thirst");
   if (!n || !v.taken) return 0;
-  return v.taken + n * (v.perWound ?? 0);
+  const low = e.hp < e.max / 3 ? (v.low ?? 0) : 0;
+  return v.taken + n * (v.perWound ?? 0) + low;
 }
