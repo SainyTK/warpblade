@@ -1,0 +1,55 @@
+/**
+ * Vesper's head, 24 by 22 image pixels, facing right in three-quarters: pale silver hair worn long, a crown lit with a
+ * glint, and a long fringe that falls over the front of her face and hides one eye; the other eye, large and violet,
+ * looks out beside it. Long locks hang behind her neck.
+ */
+export const VESPER_HEAD = [
+  "...........DDDD.........",
+  "........DDDdhhhDD.......",
+  "......DDdhhHHHHhhD......",
+  "....DDdhhHHHWWHHHhdD....",
+  "...DdhhHHHHWWHHHHHhhdD..",
+  "..DdhhHHHHHHHHHHHHHHhhD.",
+  ".DdhhHHHHHHHdHHHHHHHHhdD",
+  ".DdhHHHHHHHdhHHHHHHdHHhD",
+  "DdhhHHHHHHdhHHHHHdhHHHhD",
+  "DdhhHHHHHdhhHHHHdhHHHhdD",
+  "DdhdhHHhdhhHHHhdhHHHhhdD",
+  "DdhdhhhdhhhHHhdhHHHhhhdD",
+  "DdhdhdhhdhdhhLhdhHHhhdDD",
+  "DdhdhdhhdhhLsLsdhHhhhdD.",
+  "DdhdhdhhdSsLddddhHhhhdD.",
+  "DddhdhddSsLwwPPshHhhdD..",
+  "DdhdhdhdSsswIIPshHhdD...",
+  "DdhdhdhdSSsLIIIsshhdD...",
+  ".DdhdhdDSSssssssshdD....",
+  ".DdhdhdD.SSSssssmmD.....",
+  "..DdhdD...SSSssssSS.....",
+  "...DDD.....SSSSSSS......",
+] as const;
+
+/** the back of Vesper's head, for a spin: long hair in falling strands over the nape, the fringe's end at one side */
+export const VESPER_HEAD_BACK = [
+  "..........DDDDD.........",
+  ".......DDDddhhhdD.......",
+  ".....DDdhhdHhhdhhdD.....",
+  "...DDddhhdHHhWWhhdhD....",
+  "..DdhhhHHHHHWWhhdhhhD...",
+  ".DdhhHHHHHdhhhdhhhdhhD..",
+  "DdhhHHHHdHhhdhhhdhhhdhD.",
+  "DdhhHHHdHHhdhhhdhhhdhhD.",
+  "DdhhhHHHHHdhhhdhhhdhhhhD",
+  "DdhhhhHHHdhhhdhhhdhhhdhD",
+  "DdhhhhhhdhhhdhhhdhhhdhhD",
+  "DddhhhhhdhhhdhhhdhhddhhD",
+  "DddhhhhdhhhdhhhdhhdddhhD",
+  ".DDdhhhdhhdhhhdhhhddhhD.",
+  ".DDdhhhdhhdhhdhhhdddhhD.",
+  "..DdhhhdhdhhdhhdhdddhD..",
+  "..DDdhhhdhdhhdhdddhhD...",
+  "...DDdhhdhdhdhddhhDD....",
+  "....DDdhhdhdddhhdDD.....",
+  ".....DDdhdddhhdDD.......",
+  "......DDdhhhhDD.........",
+  ".......DDDDDD...........",
+] as const;
