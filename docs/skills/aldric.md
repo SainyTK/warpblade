@@ -463,3 +463,66 @@ Evolution **Dawn Citadel** (partner `al_resolve`): The dome walks with him, stan
 Evolved values added: follow 1, time 4.5, size 1.5.
 Values: each a share of the dome's own burn at the charge level: `power` the burns, `pull` the dome draws foes in, `cooldown` seconds, `charge` charging speed, `heal` share of max HP each burn heals, `time` seconds added, `pillars` a pillar falls on a foe inside at each burn, `size` multiplies its radius, `follow` the dome walks with him.
 Code: `ultimate/sanctuary.ts`.
+## Balance, measured
+
+Measured on 15 November 2026 by the method in `docs/skills/balance.md`, with a scripted player of Aldric's own: the string, the guard with two Guard bashes, a cast, a dodge through a foe, a jump string, a warp and the ultimate at charge level 3, each on a fixed beat of the game clock.
+The second round added the model's hard triggers through the shared guard's own function: a parry and a block answered by a Counterbash every 7 s.
+Figures are raw damage a second at hero level 1 (AD 10, AP 9) over 60 s after 5 s of warm-up, as the total of every source minus the base kit's total in the same room.
+One run per figure; repeat runs of a level 1 skill on the crowd spread by about 40 a second, which is the noise.
+
+Base kit: 128 to 132 on the crowd, 31 to 47 on the lone elite and 49 to 53 on the late target (Kael's reference: 146 on the crowd, 42 on one foe).
+
+First round, before tuning, added damage a second:
+
+| Skill | L1 crowd | L8 crowd | L8 one | Evolved crowd | Evolved one |
+| --- | --- | --- | --- | --- | --- |
+| `al_oath` | -19 | 45 | 46 | 59 | 40 |
+| `al_breaker` | -29 | 8 | 32 | 8 | 32 |
+| `al_retort` | -40 | 20 | 0 | 4 | 0 |
+| `al_verdict` | -28 | -19 | 12 | 7 | 41 |
+| `al_crest` | -4 | 34 | 33 | 117 | 28 |
+| `al_step` | 34 | 31 | 24 | 33 | 29 |
+| `al_bulwark` | 0 | 15 | 27 | 20 | 34 |
+| `al_skyfall` | -22 | -4 | 20 | 11 | 24 |
+| `al_lance` | -38 | 18 | 27 | 7 | 29 |
+| `al_mend` | -17 | 22 | 8 | -18 | 12 |
+| `al_rally` | 0 | 28 | 14 | 20 | 20 |
+| `al_brand` | 3 | -9 | 33 | 127 | 33 |
+| `al_penance` | -10 | 25 | 22 | 25 | 22 |
+| `al_dawn` | -5 | 20 | 21 | 32 | 20 |
+| `al_oathsworn` | 0 | 0 | 0 | 0 | 0 |
+| `al_lion` | 49 | 66 | 33 | 33 | 88 |
+| `al_falcon` | -3 | 125 | 69 | 225 | 61 |
+| `al_resolve` | -4 | -3 | 12 | 16 | 18 |
+| `al_vow` | 0 | 19 | 19 | -13 | 19 |
+| `al_sanctuary` | -2 | 52 | 37 | 99 | 54 |
+
+What changed, level 8 rows only: Oathblade power 1.6 to 1.8 and wave 0.9 to 1.2; Breaking Bash power 2.2 to 3 and shock 1 to 1.6; Crestfall ring 1.4 to 2.2; Skyfall landing 2.2 to 3; Dawn Lance 3.2 to 4.5; Rallying Cry 1.6 to 2.4; Sunbrand tick 0.24 to 0.4; Penance tick 0.3 to 0.5; Lingering Dawn burn 0.8 to 1.4.
+The three precise skills were scaled to the size of Kael's precise payoffs: Iron Retort's Counterbash 2 to 8 times and its wave 1.6 to 6, Verdict's sword 2.6 to 12 (level 1 0.8 to 1.5), and Oathsworn's cut 2.6 to 25 (level 1 1.2 to 4).
+
+After tuning, with the hard triggers driven:
+
+| Skill | L8 crowd | L8 one | L8 late | Evolved late |
+| --- | --- | --- | --- | --- |
+| `al_oath` | 42 | 47 | | |
+| `al_breaker` | 12 | 8 | | |
+| `al_crest` | 8 | 16 | | |
+| `al_skyfall` | -25 | 15 | | |
+| `al_lance` | 24 | 5 | | |
+| `al_rally` | 13 | 16 | | |
+| `al_brand` | 26 | 27 | | |
+| `al_penance` | 4 | 13 | | |
+| `al_dawn` | 19 | 30 | | |
+| `al_verdict` | 0 | 47 | 82 | 94 |
+| `al_retort` | 9 | 11 | 18 | 40 |
+| `al_oathsworn` | 25 | 20 | 74 | 77 |
+
+On a training dummy one parry with Oathsworn at level 8 deals 930 and evolved 2,325.
+
+### Still off
+
+- The crowd and the lone elite die and come back faster than Aldric's level 8 skills can show their worth, so most crowd and one-foe figures sit inside the noise and under their bands (easy 70, timed 112, precise 175 to 210). The late target dies to one big pull-off too, which caps the precise skills' figures.
+- The level 1 figures on the crowd are noise: their spread (about 40 a second) is larger than any level 1 skill.
+- Iron Retort and Oathsworn were driven at one Counterbash and one parry every 7 s; in play Aldric blocks far more often, so their real share is larger than the room reads.
+- Sanctuary was not measured per cast against the base special; its row is the design estimate.
+- A room that holds foes with enough HP to absorb level 8 skills, and repeat runs per figure, are needed before these numbers can be tuned further.
