@@ -513,7 +513,7 @@ After tuning, with the hard triggers driven:
 | `al_brand` | 26 | 27 | | |
 | `al_penance` | 4 | 13 | | |
 | `al_dawn` | 19 | 30 | | |
-| `al_verdict` | 0 | 47 | 82 | 94 |
+| `al_verdict` | | 47 | 82 | 94 |
 | `al_retort` | 9 | 11 | 18 | 40 |
 | `al_oathsworn` | 25 | 20 | 74 | 77 |
 
