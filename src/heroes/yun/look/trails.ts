@@ -3,8 +3,10 @@ import type { SpriteCanvas } from "../../../engine/sprite";
 import type { RigFrame, Vec } from "../../../types/rig";
 import { headCenter } from "../../../utils/poseFrame";
 
-/** where the long ends leave the topknot, from the middle of the head (facing right) */
+/** where the long ends leave the topknot, from the middle of the head (facing right), and the farthest the rope's first
+ *  point may be from it to join it: a rope not yet hung (a portrait, a fresh run) is drawn without the join */
 const KNOT: Vec = [-1.5, -8];
+const JOIN = 10;
 /** the sash: the first points of its rope, and its width at the belt */
 const SASH_POINTS = 5;
 
@@ -16,7 +18,9 @@ export function drawYunTrails(s: SpriteCanvas, rig: RigFrame): void {
   const [cx, cy] = headCenter(rig.pose);
   const mirror = rig.pose.mr >= 0.5 ? -1 : 1;
   const knot: Vec = [cx * mirror + KNOT[0] * mirror, cy + KNOT[1]];
-  const rope: Vec[] = [knot, ...rig.tail];
+  const first = rig.tail[0];
+  const joined = !!first && Math.hypot(first[0] - knot[0], first[1] - knot[1]) < JOIN;
+  const rope: Vec[] = joined ? [knot, ...rig.tail] : [...rig.tail];
   s.begin();
   for (let i = 1; i < rope.length; i++) {
     const [a, b] = [rope[i - 1], rope[i]];
