@@ -11,9 +11,9 @@ import { KAEL_SKIN } from "./look";
 export const KAEL: CharacterDef = {
   id: "kael",
   name: "Kael",
-  title: "The last warp knight",
+  title: "The warp knight",
   blurb:
-    "Throws his crystal sword and appears where it lands. A quick sword string, a parry that blinks him behind the attacker, and crystal magic.",
+    "A spell swordsman. He throws his crystal sword, appears where it lands, and casts spells into his sword string.",
   accent: "#7fe3ff",
   price: 0,
   special: { id: "crystalNova", name: "Crystal Nova" },

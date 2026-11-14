@@ -1,35 +1,35 @@
 /**
- * Kael's head, 24 by 22 image pixels, facing right in three-quarters: silver hair swept back in wedges with a glint on
- * the crown, bangs over the brow, one blue eye, the jaw in shadow.
+ * Kael's head, 24 by 22 image pixels, facing right in three-quarters: silver hair in spiked wedges with a glint on the
+ * crown, a fringe of strands over the brow, one large crystal blue eye, the jaw in shadow.
  */
 export const KAEL_HEAD = [
-  "..........DDDDD.........",
-  ".......DDDdhhhhdD.......",
-  ".....DDdhhhHHHHhhdD.....",
-  "...DDddhhHHHHWWHHhhD....",
-  "DDDdhhhHHHHHWWHHHHHhD...",
-  "...DDdhhHHHHHHHHHHHHhD..",
-  ".....DdhHHHHHHhHHHHHHhD.",
-  "..DDddhHHHHHHhHHHHHhHHhD",
-  "DDdhhhhHHHHHhHHHHhHHHHHh",
-  "..DDdhhhHHHhHHHhHHHhHHHh",
-  "....DdhhhhhhhHHhhHHhhHhh",
-  "....DddhhhhhhHHhhHHhhHhh",
-  "....DDdhhhdhhHhLhHhsHhsh",
-  "....DDddhdhhhLsLshsLssss",
-  ".....DDdhdSssLLssdddssss",
-  ".....DDddSsLsLssdwPPssss",
-  "......DDdSssssssswIPssss",
-  "......DDdSSssssssLIIssss",
+  "..........DD..DD........",
+  ".......DDdhDDdhD.D......",
+  ".....DDdhhhhHHhhdhD.....",
+  "...DDddhhHHHWWHHhhhD....",
+  "DDDdhhhHHHHWWHHHHHHhD...",
+  "..DDddhhHHHHHHHHHHHHhD..",
+  "....DdhhHHHHHdHHHHHHHhD.",
+  "..DDddhHHHHHdhHHHHHdHHhD",
+  "DDdhhhhHHHHdhHHHHdhHHHHh",
+  "..DDdhhhHHdhhHHHdhhHHHHh",
+  "....DdhhhhhhhHhhdhHhhHhh",
+  "....DddhhhhhhdhLdhhsdhhd",
+  "....DDdhhhdhhdLsLdssdhsd",
+  "....DDddhdhhhLssLsssdssd",
+  ".....DDdhdSssLLssswwwPss",
+  ".....DDddSsLsLsssswIIPss",
+  "......DDdSsssssssswIIPss",
+  "......DDdSSsssssssLsSsss",
   ".......DdSSsssssssssSss.",
   "........DdSSSssssssmmS..",
   ".........D.SSSsssssSS...",
   "...........SSSSSSSS.....",
 ] as const;
-/** the back of Kael's head, for a spin: hair swept back in wedges and strands, with the nape of the neck under it */
+/** the back of Kael's head, for a spin: spiked wedges and strands, with the nape of the neck under it */
 export const KAEL_HEAD_BACK = [
-  "..........DDDDD.........",
-  ".......DDDddhhhdD.......",
+  "..........DD..DD........",
+  ".......DDddDDdhD.D......",
   ".....DDdhhdHhhdhhdD.....",
   "...DDddhhdHHhWWhhdhD....",
   "DDDdhhhHHHHHWWhhdhhhD...",
