@@ -1,4 +1,4 @@
-import { fleck, glow, place } from "../../../engine/frame";
+import { fleck, glow, hairline, place, px } from "../../../engine/frame";
 import { dealDamage } from "../../../game/damage";
 import { enemyCenter } from "../../../game/enemies/enemy";
 import { feat } from "../../../game/feat";
@@ -98,8 +98,9 @@ export function drawRing(near: boolean): void {
     const x = hero.x + Math.cos(a) * reach;
     const y = cy + Math.sin(a) * reach * RING_LOOK.flat + Math.sin(a * 3 + game.t * 7) * 1.5;
     const c = GRAIN[(i + (front ? 0 : 2)) % GRAIN.length];
-    fleck(x, y, c);
-    fleck(x - Math.sin(a) * 1.5, y + Math.cos(a) * 0.5, c, 0.6);
+    hairline(x, y, x + Math.sin(a) * 3, y - Math.cos(a) * 0.6, GRAIN[front ? 2 : 3], 0.7);
+    if (front && i % 2 === 0) px(x, y, c);
+    else fleck(x, y, c);
     if (top && i % 2 === 0) fleck(x + 0.5, y - 1, GRAIN[0]);
   }
   if (near && top) glow(hero.x, cy, reach * 0.7, SAND_RAMP[4], 0.08);

@@ -8,9 +8,9 @@ const LEVELS = levelRows([
   { text: "New: the gale opens a wound on each foe.", values: { wounds: 1 } },
   { text: "New: the cone reaches 30% farther.", values: { reach: 1.3 } },
   { text: "New: walkers it hits stand held 1 s.", values: { halt: 1 } },
-  { text: "Power 1.4 to 2.6; recharge 4 to 3 s.", values: { power: 2.6, recharge: 3 } },
+  { text: "Power 1.4 to 3.5; recharge 4 to 3 s.", values: { power: 3.5, recharge: 3 } },
   { text: "New: the gale blows both ways.", values: { both: 1 } },
-  { text: "Power 2.6 to 4.5; two wounds.", values: { power: 4.5, wounds: 2 } },
+  { text: "Power 3.5 to 7; two wounds.", values: { power: 7, wounds: 2 } },
 ]);
 
 export const HOT_GALE: SkillDef = {

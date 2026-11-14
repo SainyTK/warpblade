@@ -11,7 +11,7 @@ const LEVELS = levelRows([
   { text: "Storm power +30% to +90%.", values: { power: 1.9 } },
   { text: "New: each cut opens two wounds.", values: { wounds: 1 } },
   { text: "New: the storm reaches 40% farther.", values: { reach: 1.4 } },
-  { text: "Storm power +90% to +430%.", values: { power: 5.3 } },
+  { text: "Storm power +90% to +300%.", values: { power: 4 } },
 ]);
 
 export const SANDSTORM: SkillDef = {

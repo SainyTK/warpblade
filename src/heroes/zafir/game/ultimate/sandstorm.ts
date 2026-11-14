@@ -1,5 +1,5 @@
 import { ULT_LEVELS } from "../../../../constants/ultimate";
-import { fleck, glow, place } from "../../../../engine/frame";
+import { fleck, glow, hairline, haze, place, px } from "../../../../engine/frame";
 import { dealDamage } from "../../../../game/damage";
 import { enemyCenter } from "../../../../game/enemies/enemy";
 import { ultimateValues } from "../../../../game/hero/ultimate";
@@ -45,16 +45,39 @@ function createStorm(level: number, reach: number, life: number, cut: number): E
   const draw = (near: boolean) => {
     place();
     const fade = Math.min(1, (life - t) / 0.4, t / 0.2);
+    // the body of the storm: bands of blown sand turning round him, the far side behind him
+    for (let band = 0; band < STORM_LOOK.bands; band++) {
+      const h = ((band + 0.5) / STORM_LOOK.bands) * STORM_LOOK.height;
+      const rr = reach * (0.55 + (0.45 * h) / STORM_LOOK.height);
+      const sway = Math.sin(t * 2.3 + band * 1.7) * 4;
+      haze(hero.x + sway, hero.y - h, rr, 8, GRAIN[near ? 1 : 3], (near ? 0.3 : 0.4) * fade);
+      // arcs of wind turning round the band
+      for (let arc = 0; arc < 3; arc++) {
+        const from = t * STORM_LOOK.spin * 1.3 + arc * 2.1 + band;
+        for (let step = 0; step < 10; step++) {
+          const a = from + step * 0.12;
+          if (Math.sin(a) > 0 !== near) continue;
+          px(
+            hero.x + sway + Math.cos(a) * rr,
+            hero.y - h + Math.sin(a) * rr * 0.25,
+            GRAIN[near ? 0 : 2],
+            fade * (0.4 + step * 0.06),
+          );
+        }
+      }
+    }
     for (const [h, r, phase, speed, shade] of grains) {
       const a = phase + t * STORM_LOOK.spin * speed;
       if (Math.sin(a) > 0 !== near) continue;
       const rr = reach * r * (0.6 + (0.4 * h) / STORM_LOOK.height);
       const x = hero.x + Math.cos(a) * rr;
       const y = hero.y - h + Math.sin(a) * rr * 0.25;
-      fleck(x, y, GRAIN[shade], fade);
-      fleck(x - Math.sin(a) * 1.5, y, GRAIN[shade], fade * 0.5);
+      // a grain and the streak it leaves, trailing against its turn
+      hairline(x, y, x + Math.sin(a) * 4, y - Math.cos(a), GRAIN[Math.min(GRAIN.length - 1, shade + 1)], fade * 0.7);
+      if (shade < 2) px(x, y, GRAIN[shade], fade);
+      else fleck(x, y, GRAIN[shade], fade);
     }
-    if (near) glow(hero.x, hero.y - STORM_LOOK.height * 0.5, reach, SAND_RAMP[3], 0.1 * fade);
+    if (near) glow(hero.x, hero.y - STORM_LOOK.height * 0.5, reach, SAND_RAMP[3], 0.14 * fade);
   };
   zafir.storm = life;
   zafir.stormLevel = level;

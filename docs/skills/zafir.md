@@ -59,10 +59,10 @@ Values: `bonus` added damage share on every spin, `reach` spin reach multiple, `
 | 2 | Spins +15% to +30%. | bonus 0.3 |
 | 3 | New: each spin throws a sand crescent out both sides. | crescent 0.35 |
 | 4 | New: spins reach 20% farther. | reach 1.2 |
-| 5 | Spins +30% to +40%; crescents 0.35 to 0.45. | bonus 0.4, crescent 0.45 |
+| 5 | Spins +30% to +35%; crescents 0.35 to 0.4. | bonus 0.35, crescent 0.4 |
 | 6 | New: the cyclone pulls foes in before it throws them up. | pull 1 |
 | 7 | New: crescents pierce every foe in their way. | pierce 1 |
-| 8 | Spins +40% to +55%; crescents 0.45 to 0.6. | bonus 0.55, crescent 0.6 |
+| 8 | Spins +35% to +45%; crescents 0.4 to 0.5. | bonus 0.45, crescent 0.5 |
 | Evolved: Endless Turn (with Unbroken Whirl) | At full Whirl every spin throws two crescents each way, and while you spin the ring never drops below its first turn. | double 1, hold 1 |
 
 ### Sirocco Timing (`za_sirocco`)
@@ -116,7 +116,7 @@ Values: `behind` added damage share on a foe behind him, `wounds` extra wounds a
 | 5 | Behind 35% to 55%. | behind 0.55 |
 | 6 | New: a spin that cuts both sides makes the next spin Keen. | keenBoth 1 |
 | 7 | New: cutting both sides opens a wound on every foe cut. | bothWounds 1 |
-| 8 | Behind 55% to 120%; 20 Whirl for both sides. | behind 1.2, both 20 |
+| 8 | Behind 55% to 90%; 20 Whirl for both sides. | behind 0.9, both 20 |
 | Evolved: Mirror Dance (with Dune Walk) | Foes behind you take your cuts as back attacks, half again as hard. | backAll 0.5 |
 
 ### Falling Dune (`za_falling`)
@@ -188,7 +188,7 @@ Values: `passCut` attack damage of the cut on each foe the dodge passes through,
 | 5 | New: a perfect dodge fills the Whirl to its top ring. | perfectWhirl 80 |
 | 6 | Cut 0.9 to 1.8. | passCut 1.8 |
 | 7 | New: dodge in the air. | air 1 |
-| 8 | Cut 1.8 to 3; the cloud blinds twice as long. | passCut 3, cloud 2.4 |
+| 8 | Cut 1.8 to 5; three wounds; the cloud blinds twice as long. | passCut 5, passWounds 3, cloud 2.4 |
 | Evolved: Mirage Slip (with Mirage Dancer) | Every dodge leaves a mirage where it started, which minions strike at and which bursts into sand blades. | mirage 1 |
 
 ### Hot Gale (`za_gale`)
@@ -204,9 +204,9 @@ Values: `power` ability power of the gale's cut, `recharge` seconds, `wounds` wo
 | 3 | New: the gale opens a wound on each foe. | wounds 1 |
 | 4 | New: the cone reaches 30% farther. | reach 1.3 |
 | 5 | New: walkers it hits stand held 1 s. | halt 1 |
-| 6 | Power 1.4 to 2.6; recharge 4 to 3 s. | power 2.6, recharge 3 |
+| 6 | Power 1.4 to 3.5; recharge 4 to 3 s. | power 3.5, recharge 3 |
 | 7 | New: the gale blows both ways. | both 1 |
-| 8 | Power 2.6 to 4.5; two wounds. | power 4.5, wounds 2 |
+| 8 | Power 3.5 to 7; two wounds. | power 7, wounds 2 |
 | Evolved: Simoom (with Deep Wounds) | Every open wound the gale meets bleeds out at once, for all it would have bled. | level 8 row |
 
 ### Glass Rain (`za_glass`)
@@ -260,7 +260,7 @@ Values: `per` attack damage each wound bleeds a tick, `every` seconds between ti
 | 5 | Bleed 0.2 to 0.28. | per 0.28 |
 | 6 | New: a foe that dies bleeding opens half its wounds on foes beside it. | spread 1 |
 | 7 | New: your blows deal 15% more to a bleeding foe. | blows 0.15 |
-| 8 | Bleed 0.28 to 0.4; up to 9 wounds. | per 0.4, most 9 |
+| 8 | Bleed 0.28 to 0.32; up to 9 wounds. | per 0.32, most 9 |
 | Evolved: Crimson Tide (with Opened Veins) | Wounds bleed twice as often and never close while the sand ring turns. | every 0.5, tide 1 |
 
 ### Scouring Sand (`za_scour`)
@@ -278,7 +278,7 @@ Values: `grit` attack damage each grit grinds a second, `gritMost` the most grit
 | 5 | New: the cyclone grinds in two grit; up to 6 grit. | cyclone 2, gritMost 6 |
 | 6 | Grit 0.15 to 0.25. | grit 0.25 |
 | 7 | New: a foe full of grit fuses to glass and shatters, 1.5 a grit. | fuse 1.5 |
-| 8 | Grit 0.25 to 0.6; shatter 1.5 to 4 a grit. | grit 0.6, fuse 4 |
+| 8 | Grit 0.25 to 1; shatter 1.5 to 6 a grit. | grit 1, fuse 6 |
 | Evolved: Glassing Wind (with Unbroken Whirl) | Every spin grinds grit in, and a shatter cuts every foe round it. | spin 1, splash 1 |
 
 ### Desert Thirst (`za_thirst`)
@@ -314,7 +314,7 @@ Values: `chance` a landed spin calls a wraith, `power` attack damage of each cut
 | 5 | Wraith 0.5 to 0.8. | power 0.8 |
 | 6 | New: two wraiths, one each way. | pair 1 |
 | 7 | New: the wraith drags foes along with it. | drag 1 |
-| 8 | Chance 25% to 45%; wraith 0.8 to 1.6. | chance 0.45, power 1.6 |
+| 8 | Chance 25% to 35%; wraith 0.8 to 1.1. | chance 0.35, power 1.1 |
 | Evolved: Wraith Caravan (with Dune Walk) | A sand wraith walks round you all the time, cutting every foe it passes. | escort 1 |
 
 ### Mirage Dancer (`za_mirage`)
@@ -332,8 +332,8 @@ Values: `chance` a parry calls a dancer, `power` attack damage of each spin on t
 | 5 | Dancer 0.7 to 1.8; it dances 2 s. | power 1.8, life 2 |
 | 6 | New: the dancer blinds the minions round it. | blind 1 |
 | 7 | New: two dancers, one each side of the attacker. | pair 1 |
-| 8 | A parry always calls them; dancer 1.8 to 3.5. | chance 1, power 3.5 |
-| Evolved: Court of Mirages (with Sand Slip) | The dancers' last spin bursts into sand blades, 10 times attack damage on the attacker. | burst 10 |
+| 8 | A parry always calls them; dancer 1.8 to 5. | chance 1, power 5 |
+| Evolved: Court of Mirages (with Sand Slip) | The dancers' last spin bursts into sand blades, 20 times attack damage on the attacker. | burst 20 |
 
 ### Desert Hawk (`za_hawk`)
 
@@ -404,6 +404,6 @@ Values: each a multiple of the storm's own: `power` its cuts, `cooldown` seconds
 | 5 | Storm power +30% to +90%. | power 1.9 |
 | 6 | New: each cut opens two wounds. | wounds 1 |
 | 7 | New: the storm reaches 40% farther. | reach 1.4 |
-| 8 | Storm power +90% to +430%. | power 5.3 |
+| 8 | Storm power +90% to +300%. | power 4 |
 | Evolved: Endless Sirocco (with Whirling Edge) | A second, wider storm turns round the first, and the storm lasts twice as long. | twin 1, time 2 |
 

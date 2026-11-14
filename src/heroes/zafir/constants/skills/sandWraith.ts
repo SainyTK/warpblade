@@ -13,7 +13,7 @@ const LEVELS = levelRows([
   { text: "Wraith 0.5 to 0.8.", values: { power: 0.8 } },
   { text: "New: two wraiths, one each way.", values: { pair: 1 } },
   { text: "New: the wraith drags foes along with it.", values: { drag: 1 } },
-  { text: "Chance 25% to 45%; wraith 0.8 to 1.6.", values: { chance: 0.45, power: 1.6 } },
+  { text: "Chance 25% to 35%; wraith 0.8 to 1.1.", values: { chance: 0.35, power: 1.1 } },
 ]);
 
 export const SAND_WRAITH: SkillDef = {

@@ -10,7 +10,10 @@ const LEVELS = levelRows([
   { text: "New: a perfect dodge fills the Whirl to its top ring.", values: { perfectWhirl: 80 } },
   { text: "Cut 0.9 to 1.8.", values: { passCut: 1.8 } },
   { text: "New: dodge in the air.", values: { air: 1 } },
-  { text: "Cut 1.8 to 3; the cloud blinds twice as long.", values: { passCut: 3, cloud: 2.4 } },
+  {
+    text: "Cut 1.8 to 5; three wounds; the cloud blinds twice as long.",
+    values: { passCut: 5, passWounds: 3, cloud: 2.4 },
+  },
 ]);
 
 export const SAND_SLIP: SkillDef = {

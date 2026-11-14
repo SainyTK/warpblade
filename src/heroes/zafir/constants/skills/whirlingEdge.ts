@@ -7,10 +7,10 @@ const LEVELS = levelRows([
   { text: "Spins +15% to +30%.", values: { bonus: 0.3 } },
   { text: "New: each spin throws a sand crescent out both sides.", values: { crescent: 0.35 } },
   { text: "New: spins reach 20% farther.", values: { reach: 1.2 } },
-  { text: "Spins +30% to +40%; crescents 0.35 to 0.45.", values: { bonus: 0.4, crescent: 0.45 } },
+  { text: "Spins +30% to +35%; crescents 0.35 to 0.4.", values: { bonus: 0.35, crescent: 0.4 } },
   { text: "New: the cyclone pulls foes in before it throws them up.", values: { pull: 1 } },
   { text: "New: crescents pierce every foe in their way.", values: { pierce: 1 } },
-  { text: "Spins +40% to +55%; crescents 0.45 to 0.6.", values: { bonus: 0.55, crescent: 0.6 } },
+  { text: "Spins +35% to +45%; crescents 0.4 to 0.5.", values: { bonus: 0.45, crescent: 0.5 } },
 ]);
 
 export const WHIRLING_EDGE: SkillDef = {

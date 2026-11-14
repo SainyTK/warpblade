@@ -10,7 +10,7 @@ const LEVELS = levelRows([
   { text: "New: the cyclone grinds in two grit; up to 6 grit.", values: { cyclone: 2, gritMost: 6 } },
   { text: "Grit 0.15 to 0.25.", values: { grit: 0.25 } },
   { text: "New: a foe full of grit fuses to glass and shatters, 1.5 a grit.", values: { fuse: 1.5 } },
-  { text: "Grit 0.25 to 0.6; shatter 1.5 to 4 a grit.", values: { grit: 0.6, fuse: 4 } },
+  { text: "Grit 0.25 to 1; shatter 1.5 to 6 a grit.", values: { grit: 1, fuse: 6 } },
 ]);
 
 export const SCOURING_SAND: SkillDef = {

@@ -13,7 +13,7 @@ const LEVELS = levelRows([
   { text: "Dancer 0.7 to 1.8; it dances 2 s.", values: { power: 1.8, life: 2 } },
   { text: "New: the dancer blinds the minions round it.", values: { blind: 1 } },
   { text: "New: two dancers, one each side of the attacker.", values: { pair: 1 } },
-  { text: "A parry always calls them; dancer 1.8 to 3.5.", values: { chance: 1, power: 3.5 } },
+  { text: "A parry always calls them; dancer 1.8 to 5.", values: { chance: 1, power: 5 } },
 ]);
 
 export const MIRAGE_DANCER: SkillDef = {
@@ -27,7 +27,7 @@ export const MIRAGE_DANCER: SkillDef = {
   evolution: {
     partner: "za_slip",
     name: "Court of Mirages",
-    text: "The dancers' last spin bursts into sand blades, 10 times attack damage on the attacker.",
-    row: evolvedRow(LEVELS[7], "Their last spin bursts for 10.", { burst: 10 }),
+    text: "The dancers' last spin bursts into sand blades, 20 times attack damage on the attacker.",
+    row: evolvedRow(LEVELS[7], "Their last spin bursts for 20.", { burst: 20 }),
   },
 };

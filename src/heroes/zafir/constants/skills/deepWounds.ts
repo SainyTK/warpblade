@@ -10,7 +10,7 @@ const LEVELS = levelRows([
   { text: "Bleed 0.2 to 0.28.", values: { per: 0.28 } },
   { text: "New: a foe that dies bleeding opens half its wounds on foes beside it.", values: { spread: 1 } },
   { text: "New: your blows deal 15% more to a bleeding foe.", values: { blows: 0.15 } },
-  { text: "Bleed 0.28 to 0.4; up to 9 wounds.", values: { per: 0.4, most: 9 } },
+  { text: "Bleed 0.28 to 0.32; up to 9 wounds.", values: { per: 0.32, most: 9 } },
 ]);
 
 export const DEEP_WOUNDS: SkillDef = {

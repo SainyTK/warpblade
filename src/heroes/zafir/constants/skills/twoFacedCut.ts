@@ -10,7 +10,7 @@ const LEVELS = levelRows([
   { text: "Behind 35% to 55%.", values: { behind: 0.55 } },
   { text: "New: a spin that cuts both sides makes the next spin Keen.", values: { keenBoth: 1 } },
   { text: "New: cutting both sides opens a wound on every foe cut.", values: { bothWounds: 1 } },
-  { text: "Behind 55% to 120%; 20 Whirl for both sides.", values: { behind: 1.2, both: 20 } },
+  { text: "Behind 55% to 90%; 20 Whirl for both sides.", values: { behind: 0.9, both: 20 } },
 ]);
 
 export const TWO_FACED_CUT: SkillDef = {
