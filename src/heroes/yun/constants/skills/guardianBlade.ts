@@ -9,11 +9,11 @@ const LEVELS = levelRows([
   },
   { text: "Chance 15% to 25%.", values: { chance: 0.25 } },
   { text: "New: each strike reaches two foes.", values: { targets: 2 } },
-  { text: "Strike power 0.4 to 0.6.", values: { power: 0.6 } },
+  { text: "Strike power 0.4 to 0.8.", values: { power: 0.8 } },
   { text: "New: two guardians at once.", values: { most: 2 } },
   { text: "Guardians stay 7 s and strike faster.", values: { life: 7, every: 0.6 } },
   { text: "New: strikes slow foes.", values: { chill: 0.8 } },
-  { text: "New: three guardians at once; power 0.8.", values: { most: 3, power: 0.8 } },
+  { text: "New: three guardians at once; power 1.2.", values: { most: 3, power: 1.2 } },
 ]);
 
 export const GUARDIAN_BLADE: SkillDef = {

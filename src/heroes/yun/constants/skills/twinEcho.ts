@@ -9,8 +9,8 @@ const LEVELS = levelRows([
   { text: "Echo power +60% to +100%.", values: { power: 2 } },
   { text: "New: each echo cuts again on its way back.", values: { back: 0.5 } },
   { text: "New: echoes slow foes for 1 s.", values: { chill: 1 } },
-  { text: "Echo power +100% to +150%.", values: { power: 2.5 } },
-  { text: "New: with no sword out, the jian thrusts an echo of its own.", values: { ghost: 1, power: 2.8 } },
+  { text: "Echo power +100% to +200%.", values: { power: 3 } },
+  { text: "New: with no sword out, the jian thrusts an echo of its own; +250%.", values: { ghost: 1, power: 3.5 } },
 ]);
 
 export const TWIN_ECHO: SkillDef = {

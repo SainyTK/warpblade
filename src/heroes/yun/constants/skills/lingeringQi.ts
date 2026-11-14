@@ -8,9 +8,9 @@ const LEVELS = levelRows([
   { text: "New: wounds stack to 6.", values: { max: 6 } },
   { text: "Wound damage 0.06 to 0.08.", values: { damage: 0.08 } },
   { text: "New: the string's own blows lay wounds too.", values: { blade: 1 } },
-  { text: "Wound damage 0.08 to 0.11.", values: { damage: 0.11 } },
+  { text: "Wound damage 0.08 to 0.16.", values: { damage: 0.16 } },
   { text: "New: wounded foes are slowed.", values: { chill: 0.6 } },
-  { text: "New: a foe that dies wounded passes its wounds on; damage 0.14.", values: { spread: 1, damage: 0.14 } },
+  { text: "New: a foe that dies wounded passes its wounds on; damage 0.24.", values: { spread: 1, damage: 0.24 } },
 ]);
 
 export const LINGERING_QI: SkillDef = {

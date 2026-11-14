@@ -9,11 +9,11 @@ const LEVELS = levelRows([
   },
   { text: "Chance 35% to 50%.", values: { chance: 0.5 } },
   { text: "New: the heron flies back too.", values: { back: 1 } },
-  { text: "Heron power 1 to 1.4.", values: { power: 1.4 } },
+  { text: "Heron power 1 to 1.6.", values: { power: 1.6 } },
   { text: "New: two herons, one high and one low.", values: { count: 2 } },
   { text: "Chance 50% to 70%.", values: { chance: 0.7 } },
   { text: "New: herons knock foes down.", values: { stun: 0.5 } },
-  { text: "New: Jade Rain calls herons too; power 1.8.", values: { ult: 1, power: 1.8 } },
+  { text: "New: Jade Rain calls herons too; power 2.6.", values: { ult: 1, power: 2.6 } },
 ]);
 
 export const JADE_HERON: SkillDef = {

@@ -8,9 +8,9 @@ const LEVELS = levelRows([
   { text: "New: dodging through a foe gives a spirit sword, once every 3 s.", values: { sword: 3 } },
   { text: "Cut power 0.9 to 1.2.", values: { cut: 1.2 } },
   { text: "New: a third of the dodge's stamina comes back.", values: { refund: 0.33 } },
-  { text: "Cut power 1.2 to 1.6.", values: { cut: 1.6 } },
+  { text: "Cut power 1.2 to 2.2.", values: { cut: 2.2 } },
   { text: "New: where the dodge ends a qi wave runs on ahead.", values: { wave: 1 } },
-  { text: "New: foes you dodge through are slowed 1.5 s; cut power 2.", values: { chill: 1.5, cut: 2 } },
+  { text: "New: foes you dodge through are slowed 1.5 s; cut power 3.5.", values: { chill: 1.5, cut: 3.5 } },
 ]);
 
 export const DRIFTING_LEAF: SkillDef = {

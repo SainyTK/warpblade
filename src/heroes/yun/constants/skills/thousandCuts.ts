@@ -8,9 +8,9 @@ const LEVELS = levelRows([
   { text: "New: wounds stack to 8.", values: { max: 8 } },
   { text: "Wound damage 0.07 to 0.09.", values: { damage: 0.09 } },
   { text: "New: Jade Rain lays wounds too.", values: { ult: 1 } },
-  { text: "Wound damage 0.09 to 0.12.", values: { damage: 0.12 } },
+  { text: "Wound damage 0.09 to 0.18.", values: { damage: 0.18 } },
   { text: "New: wounds last twice as long.", values: { duration: 6 } },
-  { text: "New: wounds bleed twice as fast; damage 0.14.", values: { every: 0.25, damage: 0.14 } },
+  { text: "New: wounds bleed twice as fast; damage 0.24.", values: { every: 0.25, damage: 0.24 } },
 ]);
 
 export const THOUSAND_CUTS: SkillDef = {

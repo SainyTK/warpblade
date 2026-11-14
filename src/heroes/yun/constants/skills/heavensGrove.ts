@@ -7,11 +7,11 @@ const LEVELS = levelRows([
   { text: "Jade Rain falls 30% harder.", values: { power: 1.3 } },
   { text: "Recharge 20 to 15 s; charges 30% faster.", values: { cooldown: 15, charge: 1.3 } },
   { text: "New: four swords fall on each foe.", values: { perFoe: 4 } },
-  { text: "Rain power +30% to +70%.", values: { power: 1.7 } },
+  { text: "Rain power x1.3 to x3.", values: { power: 3 } },
   { text: "New: the rain falls on 10 foes.", values: { foes: 10 } },
   { text: "New: the rain fills your spirit swords.", values: { fill: 1 } },
   { text: "New: a second rain falls a moment later at half power.", values: { again: 0.5 } },
-  { text: "Rain power +70% to +120%; five swords to a foe.", values: { power: 2.2, perFoe: 5 } },
+  { text: "Rain power x3 to x6; five swords to a foe.", values: { power: 6, perFoe: 5 } },
 ]);
 
 export const HEAVENS_GROVE: SkillDef = {

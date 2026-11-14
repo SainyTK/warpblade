@@ -40,5 +40,5 @@ export function castJadeRain(level: number): void {
   fall(foes, perFoe, each);
   if (v.again) game.fx.push(createDelayed(RAIN.againDelay, () => fall(foes, perFoe, each * v.again)));
   if (v.fill) fillSwords();
-  if (v.linger) game.fx.push(createLingeringRain(v.linger, each));
+  if (v.linger) game.fx.push(createLingeringRain(v.linger, each * RAIN.lingerShare));
 }

@@ -8,9 +8,9 @@ const LEVELS = levelRows([
   { text: "New: dodge in the air.", values: { airDodge: 1 } },
   { text: "Ring power 0.9 to 1.2; it reaches further.", values: { ring: 1.2, radius: 32 } },
   { text: "New: you fall even more slowly.", values: { float: 0.68 } },
-  { text: "New: landing from a jump sends qi waves both ways.", values: { land: 0.8 } },
-  { text: "Ring power 1.2 to 1.6; it reaches further.", values: { ring: 1.6, radius: 38 } },
-  { text: "New: a second jump gives a spirit sword, once every 3 s.", values: { sword: 3 } },
+  { text: "New: landing from a jump sends qi waves both ways.", values: { land: 1.5 } },
+  { text: "Ring power 1.2 to 2.4; it reaches further.", values: { ring: 2.4, radius: 38 } },
+  { text: "New: a second jump gives a spirit sword, once every 3 s; ring power 3.", values: { sword: 3, ring: 3 } },
 ]);
 
 export const CLOUD_STEP: SkillDef = {
