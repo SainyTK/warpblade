@@ -1,7 +1,7 @@
 import type { SourceId } from "../types/build";
 import type { RunReport, SourceResult } from "../types/run";
 import { isHeroSource } from "../utils/sources";
-import { heldSources, runSeconds } from "./damageLedger";
+import { heldSources } from "./damageLedger";
 import { character, game, progress } from "./state";
 
 /** a skill's level and whether it evolved, from the build the hero ends with; the hero's own sources have none */
@@ -14,7 +14,8 @@ function skillState(id: SourceId): Pick<SourceResult, "level" | "evolved"> {
 export function runReport(): RunReport {
   return {
     hero: character.id,
-    seconds: runSeconds(),
+    seconds: game.clock,
+    cleared: game.cleared,
     level: progress.level,
     kills: game.kills,
     ultimate: progress.ultimate,

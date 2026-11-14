@@ -345,6 +345,7 @@ export class HostRun implements CoopHooks {
       mode: game.mode,
       wave: game.wave,
       kills: game.kills,
+      clock: game.clock,
       banner: { ...game.banner },
       leader: leader ? { type: leader.type, rank: leader.rank, hp: leader.hp, max: leader.max } : null,
       choosing: game.mode === "pick" ? this.choosing() : [],

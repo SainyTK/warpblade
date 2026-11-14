@@ -5,12 +5,14 @@ import "../results/results.css";
 import { runAchievements } from "../../store/achievements";
 import { inRoom } from "../../store/coop";
 import { bank } from "../../store/meta";
+import { bestRun } from "../../store/records";
 import { unlockedThisRun } from "../../store/unlocks";
 import type { Achievement } from "../../types/achievement";
 import type { MenuView } from "../../types/menu";
 import type { RunOutcome } from "../../types/run";
 import { medalIcon } from "../achievements/medalIcon";
 import { coinAmount } from "../coinIcon";
+import { recordLine } from "../results/recordLine";
 import { runFacts } from "../results/runFacts";
 import { sourceTable } from "../results/sourceTable";
 import { foundList } from "../unlocks/foundList";
@@ -58,11 +60,13 @@ function earnedList(list: readonly Achievement[]): HTMLElement {
   return box;
 }
 
-/** how the last run ended: time, level and foes, the damage of every source, what it earned; then on to the start menu or the shop */
+/** how the last run ended: time, waves cleared, level and foes, the best run, the damage of every source, what it earned; then on to the start menu or the shop */
 export function resultScreen(): MenuView {
   const run = lastRun();
   const summary = document.createElement("dl");
   summary.className = "result";
+  const best = bestRun();
+  if (best && !inRoom()) summary.append(line("Best", recordLine(best, run.record ?? false)));
   summary.append(line("Coins earned", coinAmount(run.coins)), line("Bank", coinAmount(bank())));
   const list = document.createElement("nav");
   list.className = "menu-list";

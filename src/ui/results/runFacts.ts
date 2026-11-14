@@ -1,12 +1,13 @@
 import type { RunReport } from "../../types/run";
 import { minutesSeconds } from "../../utils/runReport";
 
-/** time survived, level reached and foes defeated, side by side */
+/** run time, waves cleared, level reached and foes defeated, side by side */
 export function runFacts(report: RunReport): HTMLElement {
   const box = document.createElement("dl");
   box.className = "run-facts";
   const facts: readonly [string, string][] = [
     ["Time", minutesSeconds(report.seconds)],
+    ["Waves cleared", String(report.cleared)],
     ["Level", String(report.level)],
     ["Foes defeated", String(report.kills)],
   ];

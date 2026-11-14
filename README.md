@@ -293,7 +293,7 @@ src/
   constants/       stage layout, palettes, poses and attack keyframes, tuning, key map, touch controller layout, waves, every hero's stats, numbers and skills, coin drops and the shop items
   utils/           pure helpers: math, color, seeded random, stats, experience, level-up picks, wave plan, shop prices and save parsing
   engine/          the pixel renderer: frame buffers and painter, particles, lights, sprite canvas
-  services/        Web Audio sound effects, saved options, best wave and shop progress in local storage, the Fullscreen API, vibration, the clipboard
+  services/        Web Audio sound effects, saved options, run records and shop progress in local storage, the Fullscreen API, vibration, the clipboard
     coop/          the PeerJS links of a co-op room's host and guests, and the game stream
   store/           the player's options, the coin bank, shop purchases, unlocked heroes and achievements kept between runs, achievement tracking, and the co-op room as the menu sees it
   game/            the simulation; beat.ts is the shared beat clock that keeps counting through hit-stop and slow motion

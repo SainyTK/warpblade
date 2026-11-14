@@ -30,6 +30,8 @@ export interface GuestHud {
   mode: GameMode;
   wave: number;
   kills: number;
+  /** the run clock */
+  clock: number;
   banner: { text: string; time: number };
   /** the boss or mini boss on the field, for the boss bar */
   leader: unknown | null;

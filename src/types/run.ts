@@ -22,8 +22,10 @@ export interface SourceResult {
 export interface RunReport {
   /** the hero's character id */
   hero: string;
-  /** seconds survived */
+  /** the run clock at the end */
   seconds: number;
+  /** waves cleared */
+  cleared: number;
   level: number;
   kills: number;
   ultimate: UltimateId;
@@ -37,4 +39,6 @@ export interface RunResult {
   coins: number;
   /** missing when a guest leaves a room mid-run, since the host kept the run */
   report?: RunReport;
+  /** a solo run that cleared more waves than any before, or as many in less time */
+  record?: boolean;
 }

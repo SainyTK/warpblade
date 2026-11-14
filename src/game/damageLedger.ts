@@ -28,9 +28,6 @@ export function recordDamage(source: SourceId, amount: number): void {
   else ledger.sources[source] = { damage: amount, since: HERO_SOURCES.has(source) ? ledger.start : game.t };
 }
 
-/** seconds since the run began */
-export const runSeconds = (): number => game.t - ledger.start;
-
 /** each source's damage and the seconds it has been held */
 export function heldSources(): { id: SourceId; damage: number; seconds: number }[] {
   return (Object.entries(ledger.sources) as [SourceId, Tally][]).map(([id, t]) => ({

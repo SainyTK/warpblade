@@ -5,7 +5,10 @@ import { ULT_LEVELS } from "../constants/ultimate";
 import { STAGE_WAVES } from "../constants/waves";
 import { canAffordUlt, ultRecharge } from "../game/hero/ultimate";
 import { game, hero, progress } from "../game/state";
+import { bestRun } from "../store/records";
 import { xpToNext } from "../utils/progression";
+import { clearText } from "../utils/records";
+import { minutesSeconds } from "../utils/runReport";
 import { updateAbilityTabs } from "./abilityTabs";
 import { updateBuildStrip } from "./buildStrip";
 import { updateCoinCount } from "./coinCount";
@@ -69,6 +72,7 @@ export function updateHud(): void {
   if (hero.denied.ult > ultDenied) ultTab.jolt();
   ultDenied = hero.denied.ult;
   const leader = game.enemies.find((e) => e.rank !== "minion");
+  const best = bestRun();
   const affordable = hero.ultCd > 0 ? 0 : ULT_LEVELS.filter((_, i) => canAffordUlt(i + 1)).length;
   const key = [
     Math.round(hero.hp),
@@ -87,7 +91,9 @@ export function updateHud(): void {
     affordable,
     game.wave,
     game.kills,
-    game.best,
+    Math.floor(game.clock),
+    best?.waves,
+    best?.seconds,
     leader ? Math.ceil(leader.hp) : -1,
     game.banner.text,
     game.banner.time > 0,
@@ -104,8 +110,8 @@ export function updateHud(): void {
   xp.style.width = need ? `${(progress.xp / need) * 100}%` : "100%";
   level.textContent = `LV ${progress.level}`;
   chain.innerHTML = pips(progress.comboLimit, (i) => i < hero.chain);
-  wave.textContent = `STAGE ${game.stage}  WAVE ${game.wave}/${STAGE_WAVES}`;
-  score.textContent = `${game.kills} DOWN${game.best ? `  BEST WAVE ${game.best}` : ""}`;
+  wave.textContent = `STAGE ${game.stage}  WAVE ${game.wave}/${STAGE_WAVES}  ${minutesSeconds(game.clock)}`;
+  score.textContent = `${game.kills} DOWN${best ? `  BEST ${clearText(best).toUpperCase()}` : ""}`;
   ultName.textContent = ULT_LABEL[progress.ultimate];
   ultPips.innerHTML = pips(ULT_LEVELS.length, (i) => i < affordable);
   boss.hidden = !leader;

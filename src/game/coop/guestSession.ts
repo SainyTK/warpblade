@@ -218,6 +218,7 @@ export class GuestSession {
     game.mode = hud.mode;
     game.wave = hud.wave;
     game.kills = hud.kills;
+    game.clock = hud.clock;
     game.banner = hud.banner;
     game.enemies = hud.leader ? [hud.leader as Enemy] : [];
     if (this.sentPicks >= 0 && (progress.picks !== this.sentPicks || game.mode !== "pick")) this.sentPicks = -1;

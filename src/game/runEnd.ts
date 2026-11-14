@@ -1,4 +1,5 @@
 import { track } from "../services/analytics";
+import { bestRun } from "../store/records";
 import type { RunOutcome, RunResult } from "../types/run";
 import { bySourceDamage } from "../utils/runReport";
 import { bankCoins } from "./coins";
@@ -25,7 +26,10 @@ export function endRun(fate: RunOutcome): void {
   if (room) return room.endRun(fate);
   const outcome = countedOutcome(fate);
   feat({ kind: "runEnd", outcome, wave: game.wave, hero: character.id });
-  const result = { outcome, wave: game.wave, coins: bankCoins(), report: runReport() };
+  // the best run is this one when its last clear is the record's: the same waves at the same time
+  const best = bestRun();
+  const record = game.cleared > 0 && best?.waves === game.cleared && best.seconds === game.clearedAt;
+  const result = { outcome, wave: game.wave, coins: bankCoins(), report: runReport(), record };
   resetRun("");
   hero.inv = 0;
   reportRun(result);

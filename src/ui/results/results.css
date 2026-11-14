@@ -1,4 +1,4 @@
-/* End of run: time, level and foes, then every damage source with a bar, then the coins and achievements. */
+/* End of run: time, waves cleared, level and foes, then every damage source with a bar, then the coins and achievements. */
 .menu[data-screen="result"] .menu-panel {
   width: min(560px, 100%);
 }
@@ -8,7 +8,7 @@
 }
 .run-facts {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 8px;
   width: 100%;
   margin: 0;
@@ -154,7 +154,26 @@ th.source {
   background: var(--gold);
 }
 
+/* The best run on the summary: its waves and time, and a mark when this run set it. */
+.result-record {
+  display: grid;
+  justify-items: end;
+  font-size: 15px;
+  text-align: right;
+}
+.result-record b {
+  font-family: var(--display);
+  font-size: 11px;
+  font-weight: 400;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--brass);
+}
+
 @media (max-width: 480px) {
+  .run-facts {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
   .run-facts dd {
     font-size: 18px;
   }

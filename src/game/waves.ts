@@ -2,7 +2,6 @@ import { ENEMIES } from "../constants/enemies";
 import { W } from "../constants/stage";
 import { ELITE, FINALE, OPENING_STAGGER, REFILL_DELAY, SPAWN, STAGE_WAVES } from "../constants/waves";
 import { sfx } from "../services/audio";
-import { saveBest } from "../services/bestScore";
 import type { EnemyType } from "../types/enemy";
 import type { Point } from "../types/world";
 import { eraOf } from "../utils/eras";
@@ -16,6 +15,7 @@ import { kindOf } from "./enemies/kinds";
 import { feat } from "./feat";
 import { endRun } from "./runEnd";
 import { game, hero, rng, showBanner } from "./state";
+import { clearWave } from "./waveClear";
 import { shake } from "./world";
 
 /** rifts opened and not yet let through their foe, so the next one keeps away from them too */
@@ -79,10 +79,6 @@ function startWave(): void {
   game.wave++;
   game.lull = "fight";
   feat({ kind: "waveReached", wave: game.wave });
-  if (game.wave > game.best) {
-    game.best = game.wave;
-    saveBest(game.best);
-  }
   const plan = wavePlan(game.wave);
   const room = coop();
   const foes = room ? room.scaleFoes(plan.stream) : plan.stream;
@@ -119,7 +115,7 @@ function updateFinale(dt: number): void {
   if (game.finale === "none") {
     game.finale = "quiet";
     game.waveTimer = FINALE.quiet;
-    showBanner(`Stage ${game.stage} clear`, FINALE.quiet);
+    showBanner(`Stage ${game.stage} clear  ${clearWave()}`, FINALE.quiet);
     sfx.levelUp();
     return;
   }

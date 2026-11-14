@@ -3,7 +3,9 @@ import { GAME_VERSION, SITE_PAGES } from "../../constants/sitePages";
 import { STAGE_WAVES } from "../../constants/waves";
 import { character, game, previewCharacter, progress } from "../../game/state";
 import { inRoom, roomView } from "../../store/coop";
+import { bestRun } from "../../store/records";
 import type { MenuContext, MenuScreen, MenuView } from "../../types/menu";
+import { clearText } from "../../utils/records";
 import { leaveRoom } from "./coopActions";
 import { leaveMenu, quitRun, restartRun } from "./menuActions";
 import { menuItem } from "./menuItem";
@@ -27,11 +29,12 @@ function footLink(href: string, label: string): HTMLAnchorElement {
   return link;
 }
 
-/** the best wave, then the patch notes, feedback, source and version as one line that wraps between items */
+/** the best run, then the patch notes, feedback, source and version as one line that wraps between items */
 function titleFooter(): HTMLElement {
   const footer = document.createElement("p");
   footer.className = "menu-foot";
-  if (game.best) footer.append(`Best wave ${game.best}. `);
+  const best = bestRun();
+  if (best) footer.append(`Best: ${clearText(best)}. `);
   const links = document.createElement("span");
   links.className = "menu-foot-links";
   const source = footLink(REPO_URL, "Source on GitHub");

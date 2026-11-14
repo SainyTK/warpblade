@@ -95,8 +95,11 @@ export interface GameState {
   waveTimer: number;
   stream: WaveStream;
   kills: number;
-  /** the furthest wave reached in this browser */
-  best: number;
+  /** real seconds of play this run: menus, skill picks and opened chests stop it */
+  clock: number;
+  /** waves cleared this run, and the run clock when the last of them was cleared */
+  cleared: number;
+  clearedAt: number;
   /** coins picked up this run, banked when it ends */
   coins: number;
   coinDrops: Coin[];

@@ -3,7 +3,8 @@ import { streamLeft } from "../utils/waves";
 import { coop } from "./coopHooks";
 import { feat } from "./feat";
 import { openPicks } from "./progress";
-import { character, game, hero } from "./state";
+import { character, game, hero, showBanner } from "./state";
+import { clearWave } from "./waveClear";
 
 /** no foe standing, no rift open and none of the wave's stream left to come */
 export const fightOver = (): boolean =>
@@ -13,6 +14,7 @@ export const fightOver = (): boolean =>
 export function endWave(): void {
   game.lull = "cleared";
   game.waveTimer = WAVE_PAUSE;
+  showBanner(`Wave ${game.wave} clear  ${clearWave()}`, PICK_DELAY + 0.6);
   feat({ kind: "waveCleared", wave: game.wave, hero: character.id });
 }
 
