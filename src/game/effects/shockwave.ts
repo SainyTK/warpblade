@@ -1,6 +1,6 @@
+import { SHOCKWAVE } from "../../constants/effectLook";
 import { WORLD_COLORS } from "../../constants/palette";
 import { W } from "../../constants/stage";
-import { QUAKE } from "../../constants/ysra/stance";
 import { fleck, glow, hairline, line, place, px } from "../../engine/frame";
 import type { Ramp } from "../../types/color";
 import type { Effect } from "../../types/effect";
@@ -16,18 +16,18 @@ import { boxHit } from "../world";
 const HUMP = [5, 4, 4, 3, 2, 2, 1] as const;
 
 /**
- * Vault Strike's shockwave: two fronts run out along the floor from where she landed, one each way. Each lifts a hump of floor,
+ * A shockwave: two fronts run out along the floor from where it starts, one each way. Each lifts a hump of floor,
  * leaves a glowing crack behind it and throws up chips of stone, and trips every foe on the floor it passes once.
  */
 export function createShockwave(x: number, y: number, damage: number, ramp: Ramp, range: number, stun: number): Effect {
   const struck = new Set<Enemy>();
-  const life = range / QUAKE.speed;
+  const life = range / SHOCKWAVE.speed;
   let t = 0;
-  const front = (side: number) => x + side * QUAKE.speed * t;
+  const front = (side: number) => x + side * SHOCKWAVE.speed * t;
   const hit = (side: number) => {
     const fx = front(side);
     for (const e of game.enemies) {
-      if (struck.has(e) || e.hp <= 0 || e.air || !boxHit([fx - 4, y - QUAKE.height, fx + 4, y + 1], enemyBox(e)))
+      if (struck.has(e) || e.hp <= 0 || e.air || !boxHit([fx - 4, y - SHOCKWAVE.height, fx + 4, y + 1], enemyBox(e)))
         continue;
       struck.add(e);
       dealDamage(e, damage, { fromX: x, kx: side * 50, stun, heavy: true });

@@ -4,3 +4,6 @@
  * seconds so the foe under it shows again; everything fades over its last `fade` seconds.
  */
 export const NUMBER_LOOK = { cell: 2, bigCell: 3, pop: 0.05, wordShow: 0.4, wordFade: 0.1, fade: 0.15 } as const;
+
+/** a shockwave along the floor: its fronts' pixels per second, and how high above the floor they hit */
+export const SHOCKWAVE = { speed: 230, height: 14 } as const;

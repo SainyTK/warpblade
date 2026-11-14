@@ -33,6 +33,6 @@ export function foesWithin(x: number, y: number, reach: number, skip: Enemy | nu
   });
 }
 
-/** the glaive moves and travel blows that count as heavy */
-const HEAVY = new Set(["vaultCrash", "counterThrust", "impale", "impaleTwist", "runningImpale"]);
-export const isHeavy = (move: string | null, diving: boolean): boolean => diving || (!!move && HEAVY.has(move));
+/** the glaive moves that count as heavy */
+const HEAVY = new Set(["counterThrust", "impale", "impaleTwist", "runningImpale"]);
+export const isHeavy = (move: string | null): boolean => !!move && HEAVY.has(move);

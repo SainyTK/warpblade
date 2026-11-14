@@ -1,15 +1,14 @@
 import type { GlaiveClipName, GlaiveMoveId } from "./glaive";
 import type { RiteId } from "./pyre";
-import type { StanceClipName, StanceMoveId } from "./stance";
 
-/** Ysra's combo moves: the glaive string and its variants, and the blows of her vault, dive and charge */
-export type YsraMoveId = GlaiveMoveId | StanceMoveId;
+/** Ysra's combo moves: the glaive string, its variants and her air reaps */
+export type YsraMoveId = GlaiveMoveId;
 /** Ysra's action clips, played by her moves */
-export type YsraClipName = GlaiveClipName | StanceClipName;
-/** her abilities on I: the pole vault, then her rites */
-export type YsraAbility = "vault" | RiteId;
+export type YsraClipName = GlaiveClipName;
+/** her abilities on I: her rites */
+export type YsraAbility = RiteId;
 /** states only Ysra enters; her kit runs and poses them */
-export type YsraState = "vault" | "dive" | "backstep" | "rite";
+export type YsraState = "backstep" | "rite";
 
 declare module "../skillBehavior" {
   /** Ysra's own skill events */
@@ -20,7 +19,5 @@ declare module "../skillBehavior" {
     spin: { x: number; y: number };
     /** Forge Altar lets a salamander out where it stands */
     altar: { x: number; y: number };
-    /** she landed out of a vault or a dive */
-    land: { x: number; y: number; from: "vault" | "dive" };
   }
 }

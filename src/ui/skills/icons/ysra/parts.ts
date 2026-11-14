@@ -5,7 +5,7 @@ import type { Color } from "../../../../types/color";
 import { WHITE } from "../../../../utils/color";
 import { fill } from "../parts";
 
-/** Small drawing parts for Ysra's 16 x 16 icons: her glaive, ember flames, foes, pillars, shades and the vault. */
+/** Small drawing parts for Ysra's 16 x 16 icons: her glaive, ember flames, foes, pillars and shades. */
 type S = SpriteCanvas;
 export const YC = YSRA_SKIN.colors;
 
@@ -136,18 +136,6 @@ export function heart(s: S, cx: number, cy: number, r: number, c: Color, light: 
       c,
     );
     s.set(cx - r * 0.6, cy - r * 0.5, light);
-  });
-}
-
-/** the arc of a vault: a dashed hop from (x0, y) over to (x1, y), peaking `rise` up */
-export function vaultArc(s: S, x0: number, x1: number, y: number, rise: number, c: Color = EMBER[4]): void {
-  fill(s, () => {
-    const n = Math.ceil(Math.abs(x1 - x0) * 1.5);
-    for (let k = 0; k <= n; k++) {
-      const u = k / n;
-      if (Math.floor(u * 12) % 3 === 2) continue;
-      s.set(Math.round(x0 + (x1 - x0) * u), Math.round(y - Math.sin(Math.PI * u) * rise), c);
-    }
   });
 }
 

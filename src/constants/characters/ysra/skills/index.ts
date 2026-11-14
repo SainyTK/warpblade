@@ -1,9 +1,8 @@
 import type { SkillDef } from "../../../../types/skill";
-import { ASHEN_WAKE_SKILL } from "./ashen";
 import { EMBER_BRAND } from "./brand";
 import { BRAZIER_SKILL } from "./brazier";
 import { COUNTER } from "./counter";
-import { FALLING_STAR } from "./dive";
+import { FIREWALK } from "./firewalk";
 import { SUN_HAWK } from "./hawk";
 import { IMPALE } from "./impale";
 import { EMBER_JAVELIN } from "./javelin";
@@ -11,11 +10,12 @@ import { KINDLING } from "./kindling";
 import { OVERHEAT_SKILL } from "./overheat";
 import { FLAME_PILLAR_SKILL } from "./pillar";
 import { PYRE_WAVE } from "./pyre";
+import { SUNREAP } from "./reap";
 import { SALAMANDER } from "./salamander";
 import { SEARING_EDGE } from "./searing";
 import { GLAIVE_SHADE } from "./shade";
 import { SKYHOOK } from "./skyhook";
-import { VAULT_STRIKE } from "./vault";
+import { SMOULDER } from "./smoulder";
 import { HAFT_WARD } from "./ward";
 import { WARPATH } from "./warpath";
 import { WINDMILL } from "./windmill";
@@ -27,14 +27,14 @@ export const YSRA_SKILLS: readonly SkillDef[] = [
   WINDMILL,
   COUNTER,
   SKYHOOK,
-  VAULT_STRIKE,
-  FALLING_STAR,
+  SUNREAP,
+  FIREWALK,
   WARPATH,
   FLAME_PILLAR_SKILL,
   BRAZIER_SKILL,
   OVERHEAT_SKILL,
   SEARING_EDGE,
-  ASHEN_WAKE_SKILL,
+  SMOULDER,
   EMBER_BRAND,
   GLAIVE_SHADE,
   SALAMANDER,

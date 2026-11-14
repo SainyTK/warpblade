@@ -4,7 +4,7 @@ import { enemyCenter } from "../../enemies/enemy";
 import { consumeStacks, markFoe } from "../../enemies/skillStatus";
 import { searing } from "../../hero/ysra/pyre/heat";
 import { burstEmbers } from "../../spells/rites/emberBurst";
-import { game, hero, progress } from "../../state";
+import { game, progress } from "../../state";
 import { skillValues } from "../query";
 import { attackerAt, foesWithin, isHeavy, memoryAs, SPREAD_LOCK } from "./memory";
 import { scorch, scorchOf } from "./scorch";
@@ -54,7 +54,7 @@ export const searingEdge: SkillBehavior = {
   on: {
     blow(memory, e) {
       if (!e.melee || e.source !== "attacks" || !searing()) return;
-      const heavy = isHeavy(e.move, hero.state === "dive");
+      const heavy = isHeavy(e.move);
       sear(memoryAs(memory), e.foe, heavy ? (skillValues(ID).heavy ?? 1) : 1);
     },
     parry(memory, { fromX }) {

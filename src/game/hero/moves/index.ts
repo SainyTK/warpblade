@@ -1,6 +1,5 @@
 import type { MoveDef, MoveId } from "../../../types/move";
 import { GLAIVE_MOVES } from "../ysra/glaive/moves";
-import { STANCE_MOVES } from "../ysra/stance/moves";
 import { AIR_MOVES } from "./air";
 import { CHAIN_MOVES } from "./chain";
 import { FINISHER_MOVES } from "./finishers";
@@ -12,5 +11,4 @@ export const MOVES: Record<MoveId, MoveDef> = {
   ...AIR_MOVES,
   ...FINISHER_MOVES,
   ...GLAIVE_MOVES,
-  ...STANCE_MOVES,
 };

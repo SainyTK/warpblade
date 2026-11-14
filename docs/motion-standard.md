@@ -15,7 +15,7 @@ The harness, filmstrips and numbers for the Kael rework are in the task log of T
 ## Clip time follows the physics
 
 A clip that goes with travel is timed from the same numbers as the travel.
-Ysra's vault times (`VAULT_TIMES` in `src/constants/ysra/stance.ts`) come from the vault's rise and gravity, so the landing key lands on the real landing.
+Ysra's backstep times (`BACKSTEP_TIMES` in `src/constants/ysra/stance.ts`) come from the hop's rise and gravity, so the skid key lands on the real landing.
 When the physics can run long or short, the state code steers the clip clock: it holds the airborne key until contact and jumps to the landing key on contact.
 A jump clip ends on the top of the arc, so its last key is reached when the rise stops, whatever cut the rise short.
 A held state (a brace, a charge) loops a middle segment of its clip and plays its reactions as segments that return to the loop.

@@ -4,26 +4,31 @@ import type { MoveDef, MoveHit } from "../../../../../types/move";
 import { skillValues } from "../../../../skills/query";
 import { lift } from "../../../lift";
 import { glaiveHit } from "../reach";
+import { reaped } from "../reap";
 import { G_AIR_REAP, G_AIR_RISE } from "../slashes";
 
-/** two air sweeps before she lands (Vault Strike): each throws the foe up with her */
-const reaps = (): boolean => (skillValues("y_vault").sweeps ?? 1) >= 2;
+/** two air sweeps before she lands (Firewalk): each throws the foe up with her */
+const reaps = (): boolean => (skillValues("y_firewalk").sweeps ?? 1) >= 2;
+/** Sunreap's numbers; empty when not held */
+const sunreap = () => skillValues("y_reap");
 
-/** an air sweep that throws the foe up with her once she may sweep twice */
+/** an air sweep: Sunreap sets its power, its sweep behind and its spike; it throws the foe up with her once she may
+ *  sweep twice */
 function reaping(hit: MoveHit): MoveHit {
-  const base = glaiveHit(hit);
-  return Object.defineProperty(base, "launch", {
-    get: () => (reaps() ? REAPER.launch : undefined),
-    enumerable: true,
+  return Object.defineProperties(glaiveHit(hit, { power: () => sunreap().power ?? hit.power }), {
+    launch: { get: () => (reaps() ? REAPER.launch : undefined), enumerable: true },
+    around: { get: () => !!sunreap().around, enumerable: true },
+    spike: { get: () => !!sunreap().spike, enumerable: true },
   });
 }
 
-/** a sweep that throws the foe up lifts her up after it */
-const rise = (): void => {
+/** after a sweep: Sunreap's fire, and a sweep that throws the foe up lifts her up after it */
+function afterReap(hits: number): void {
+  reaped(hits);
   if (reaps()) lift(REAPER.lift, false);
-};
+}
 
-/** her air game: one wide sweep before she lands, two with Vault Strike; she drops with the weight of the glaive */
+/** her air game: one wide sweep before she lands, two with Firewalk; she drops with the weight of the glaive */
 export const AIR_BLOWS = {
   airReap: {
     id: "airReap",
@@ -42,7 +47,7 @@ export const AIR_BLOWS = {
         feel: GLAIVE_FEEL.sweep,
       }),
     ],
-    afterHit: rise,
+    afterHit: afterReap,
   },
   airReapRise: {
     id: "airReapRise",
@@ -61,6 +66,6 @@ export const AIR_BLOWS = {
         feel: GLAIVE_FEEL.sweep,
       }),
     ],
-    afterHit: rise,
+    afterHit: afterReap,
   },
 } satisfies Record<string, MoveDef>;

@@ -6,7 +6,7 @@ import { FINISHER_CLIPS } from "./finishers";
 import { GROUND_CLIPS } from "./ground";
 import { SKILL_CLIPS } from "./skills";
 import { STRING_CLIPS } from "./string";
-import { GLAIVE_CLIPS, STANCE_CLIPS } from "./ysra";
+import { GLAIVE_CLIPS } from "./ysra";
 
 /**
  * Every keyed action: Kael's, then Ysra's. Every blow winds up the opposite way, snaps to a new silhouette on the hit frame,
@@ -20,7 +20,6 @@ export const CLIPS = {
   ...FINISHER_CLIPS,
   ...ACTION_CLIPS,
   ...GLAIVE_CLIPS,
-  ...STANCE_CLIPS,
 } satisfies Record<ClipName, ActionClip>;
 
 export { LOOPING_STATES, STATE_CLIPS } from "./states";

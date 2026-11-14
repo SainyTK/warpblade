@@ -1,11 +1,13 @@
 import type { SkillBehavior } from "../../../types/skillBehavior";
 import { emberBrand } from "./brand";
+import { firewalk } from "./firewalk";
 import { sunHawk } from "./hawk";
 import { impale } from "./impale";
 import { overheat } from "./overheat";
 import { salamander } from "./salamander";
 import { searingEdge } from "./searing";
 import { glaiveShade } from "./shade";
+import { smoulderSkill } from "./smoulder";
 import { haftWard } from "./ward";
 import { windmill } from "./windmill";
 
@@ -15,6 +17,8 @@ export const YSRA_SKILLS: Readonly<Record<string, SkillBehavior>> = {
   y_windmill: windmill,
   y_overheat: overheat,
   y_searing: searingEdge,
+  y_smoulder: smoulderSkill,
+  y_firewalk: firewalk,
   y_brand: emberBrand,
   y_shade: glaiveShade,
   y_salamander: salamander,

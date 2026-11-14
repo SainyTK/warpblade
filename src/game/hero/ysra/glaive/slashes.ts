@@ -36,3 +36,7 @@ export const G_AIR_REAP: SlashShape = { cx: 4, cy: -18, R: 30, sy: 0.8, rot: 0, 
 export const G_AIR_RISE: SlashShape = { cx: 6, cy: -18, R: 28, sy: 0.8, rot: 0, a0: 2, a1: -1.6, W: 9 };
 /** the wrench that tears the planted glaive free on a warp's arrival: from low ahead, up and back over her head */
 export const G_WRENCH: SlashShape = { cx: 8, cy: -18, R: 30, sy: 0.7, rot: 0.2, a0: 1.3, a1: -2, W: 9, hold: 0.06 };
+/** Firewalk: a quick flat cut across each foe the dodge passes, low behind it and out ahead at its middle */
+export const G_FIREWALK: SlashShape = { cx: 0, cy: -18, R: 16, sy: 0.35, rot: -0.1, a0: -2.7, a1: 0.5, W: 5 };
+/** Firewalk's sweep behind her as the dodge ends, drawn facing back: from over her shoulder down to the floor behind */
+export const G_TURN: SlashShape = { cx: 4, cy: -16, R: 30, sy: 0.5, rot: 0, a0: -1.6, a1: 1.2, W: 8, sweep: 0.06 };

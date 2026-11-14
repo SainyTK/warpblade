@@ -1,29 +1,9 @@
 import type { Enemy } from "../enemy";
-import type { Pose } from "../pose";
-
-/** blows thrown out of Ysra's vault */
-export type StanceMoveId = "vaultCrash";
-export type StanceClipName = "yVaultCrash";
 
 /** what Ysra's stance part remembers between frames */
 export interface StanceMemory {
-  /** the vault has left the floor; before this she is still planting the glaive */
-  launched: boolean;
-  /** the vault or dive has landed and she is in the landing crouch */
+  /** the backstep's hop has landed and she is in its skid */
   landed: boolean;
-  /** the vault under way is the high one (I held) */
-  high: boolean;
-  /** seconds before the vault can be cast again, and the length of its last recharge */
-  vaultCd: number;
-  vaultFull: number;
-  /** I was pressed on the vault in a backstep's hop: she vaults as soon as her feet touch the floor */
-  vaultNext: boolean;
-  /** the pose a starting vault crosses from, until its crossing frames have passed */
-  entry: Pose | null;
-  /** vaults thrown since she last stood on the floor */
-  airVaults: number;
-  /** dives used in this airtime */
-  dives: number;
   /** where she faced at the last tick, where she faced before her last turn, and seconds since that turn:
    *  a side held away that turned her just before the guard still counts as away */
   face: number;

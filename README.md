@@ -97,7 +97,6 @@ His crystal sword can be thrown, and wherever it lands, he follows.
   Her warp hurls the glaive like a javelin, and she wrenches it free from the foe in a burst of embers.
   Her guard is firm and cheap, a parry gives her Heat and makes `J` a counter thrust, and the side behind her held while she guards steps her back.
   Her blows build Heat, a second bar that pays for her fire rites on `I`, Flare and Cinder Lash from the start; MP pays only for her warp and her ultimate.
-  `I` also pole-vaults her over foes, and in the air the vault dives glaive first.
   Her ultimate is Pyre Wave, a wall of flame rolling ahead of her, and its skill makes it roll both ways, erupt and come again.
   Sable, the hooded hunter, fights at range with a repeating crossbow: `J` shoots a three-bolt string at the foe ahead, and an empty quiver reloads on `J`, or by hand with Down and `J`, with a perfect reload for a tap in the bright window.
   Her warp is a grapple that zips her away from the foe and fires a heavy bolt back, and the parry of her crossbow-stock guard, Point-Blank, kicks the attacker away and fills the quiver with primed bolts.

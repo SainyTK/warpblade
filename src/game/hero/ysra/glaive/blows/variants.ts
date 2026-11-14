@@ -3,7 +3,6 @@ import { GLAIVE_FEEL, GLAIVE_STRING, WARPATH_RUN } from "../../../../../constant
 import type { MoveDef } from "../../../../../types/move";
 import { skillLevel, skillValues } from "../../../../skills/query";
 import { hero } from "../../../../state";
-import { emitYsra } from "../../events";
 import { spendCounter } from "../../stance/stance";
 import { bowlOver } from "../bowl";
 import { counterLanded, counterTune } from "../counter";
@@ -72,10 +71,8 @@ const runHit = (at: number, second: boolean) =>
 /** she keeps the charge's speed through the running blows, then digs in */
 function runOn(t: number): void {
   const h = hero;
-  if (t < WARPATH_RUN.time) {
-    h.vx = h.face * WARPATH_RUN.speed;
-    emitYsra("travel", { x: h.x, y: h.y, from: "charge" });
-  } else h.vx *= WARPATH_RUN.brake;
+  if (t < WARPATH_RUN.time) h.vx = h.face * WARPATH_RUN.speed;
+  else h.vx *= WARPATH_RUN.brake;
 }
 
 /** the glaive's skill, counter and running blows */

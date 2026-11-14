@@ -1,7 +1,8 @@
 import { EMBER } from "../../../../constants/characters/ysra/look";
+import { WORLD_COLORS } from "../../../../constants/palette";
 import type { SpriteCanvas } from "../../../../engine/sprite";
 import { chevron, evolvedStar, fill } from "../parts";
-import { brand, ember, floor, foe, glaive, pillar, seg, vaultArc, YC } from "./parts";
+import { brand, ember, floor, foe, glaive, seg, YC } from "./parts";
 
 /** a row of three ember pips at (x, y), lit up to `lit`: the stacks of a burn */
 function pips(s: SpriteCanvas, x: number, y: number, lit: number): void {
@@ -40,22 +41,41 @@ export const BURN_ICONS: Record<string, (s: SpriteCanvas) => void> = {
     });
     evolvedStar(s);
   },
-  /** Ashen Wake: the vault's path, and fire left burning on the floor under it */
-  y_ashen: (s) => {
-    vaultArc(s, 1, 15, 9, 8);
-    floor(s, 0, 16, 15, EMBER[2]);
-    ember(s, 4, 15, 4);
-    ember(s, 8, 15, 5);
-    ember(s, 12, 15, 4);
+  /** Smoulder: a foe glowing through cracks, smoke curling up off it and embers rising */
+  y_smoulder: (s) => {
+    fill(s, () => {
+      seg(s, 5, 6, 4, 4, WORLD_COLORS.moonDark);
+      seg(s, 4, 4, 5, 2, WORLD_COLORS.moonRim);
+      seg(s, 11, 6, 12, 4, WORLD_COLORS.moonDark);
+      seg(s, 12, 4, 11, 1, WORLD_COLORS.moonRim);
+      s.set(8, 3, EMBER[5]);
+      s.set(14, 7, EMBER[4]);
+    });
+    foe(s, 8, 11, 4.5);
+    fill(s, () => {
+      seg(s, 6, 9, 8, 11, EMBER[4]);
+      seg(s, 8, 11, 7, 14, EMBER[3]);
+      seg(s, 10, 10, 11, 12, EMBER[4]);
+      s.set(8, 11, EMBER[5]);
+    });
   },
-  /** Scorched Earth: a landing, and every burning patch on the floor erupting as a pillar */
-  y_ashen_evo: (s) => {
-    floor(s, 0, 16, 15, EMBER[2]);
-    pillar(s, 2, 7, 1.6);
-    pillar(s, 6, 10, 1.6);
-    pillar(s, 10, 7, 1.6);
-    pillar(s, 14, 5, 1.6);
-    chevron(s, 4.5, 4.5, 0, 1, 2, EMBER[5]);
+  /** Ashfall: the smouldering foe bursting in a ring of flame, ash and embers thrown out of it */
+  y_smoulder_evo: (s) => {
+    fill(s, () => {
+      for (let k = 0; k < 8; k++) {
+        const a = (k / 8) * Math.PI * 2 + 0.2;
+        s.stroke(
+          7 + Math.cos(a) * 4,
+          10 + Math.sin(a) * 4,
+          7 + Math.cos(a) * 6.5,
+          10 + Math.sin(a) * 6.5,
+          0.5,
+          k % 2 ? WORLD_COLORS.moonRim : EMBER[4],
+        );
+      }
+    });
+    foe(s, 7, 10, 3.4);
+    ember(s, 7, 12, 6);
     evolvedStar(s);
   },
   /** Ember Brand: a foe marked with a glowing rune, its stacks above it */

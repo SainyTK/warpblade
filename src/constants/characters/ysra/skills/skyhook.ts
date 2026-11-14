@@ -28,9 +28,9 @@ export const SKYHOOK: SkillDef = {
   text: "The string's middle blow becomes a rising hook that drags flyers down to the floor.",
   levels,
   evolution: {
-    partner: "y_vault",
+    partner: "y_reap",
     name: "Heaven's Hook",
-    text: "Every flyer near you is hooked into one heap at your feet and slammed, and the vault recharges at once.",
+    text: "Every flyer near you is hooked into one heap at your feet and slammed.",
     row: evolved(levels, "Hook every flyer into a heap.", { heap: 100, heapPower: 12 }),
   },
 };

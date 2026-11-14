@@ -61,7 +61,8 @@ export function readSnapshot(page: Page): Promise<GameSnapshot> {
           label: tab.textContent ?? "",
           // a tab inside a hidden group (another hero's rites) is not on screen either
           visible: tab.checkVisibility(),
-          ready: !tab.classList.contains("wait"),
+          // recharged and paid for: a rite short of Heat or a spell short of MP is not ready either
+          ready: !tab.classList.contains("wait") && !tab.classList.contains("poor"),
           selected: tab.classList.contains("on"),
         })),
         ultVisible: Boolean(ult?.checkVisibility()),
