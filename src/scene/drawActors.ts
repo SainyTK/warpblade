@@ -1,5 +1,6 @@
 import { STAGGER } from "../constants/combat";
 import { HP_BAR, MOTE_COLORS, STUN_STAR, STUN_STAR_DIM } from "../constants/effectColors";
+import { HERO_CANVAS } from "../constants/hero";
 import { COIN_GOLD, ENEMY_COLORS, PAL } from "../constants/palette";
 import { MOTE_PIXELS } from "../constants/pickupPixels";
 import { ULT_LEVELS } from "../constants/ultimate";
@@ -21,7 +22,7 @@ import { bladeAngle } from "../utils/poseFrame";
 import { drawEliteGlow, drawEliteRing } from "./drawElite";
 import { foeSprite } from "./foeSprites";
 
-const heroSprite = detailCanvas(80, 76, 40, 62);
+const heroSprite = detailCanvas(HERO_CANVAS.w, HERO_CANVAS.h, HERO_CANVAS.ox, HERO_CANVAS.oy);
 /** how solid the hero shows on the off beats of the blink while a blow cannot land */
 const BLINK_ALPHA = 0.5;
 /** the minion HP bar: its width in art pixels, and how far the lit top row of the fill leans toward white */

@@ -34,5 +34,5 @@ export type HeroId = keyof typeof ROSTER;
  * stand-in (`CharacterDef.stub`), so one can never reach players; dev builds and the playtest harness show all nine.
  */
 export const CHARACTERS: readonly CharacterDef[] = Object.values<CharacterDef>(ROSTER).filter(
-  (c) => !(import.meta.env.PROD && c.stub),
+  (c) => !(import.meta.env?.PROD && c.stub),
 );

@@ -1,4 +1,4 @@
-import { POSES } from "../../constants/hero";
+import { HERO_CANVAS, POSES } from "../../constants/hero";
 import { detailCanvas } from "../../engine/sprite";
 import { PK } from "../../types/particle";
 import { lerp, TAU } from "../../utils/math";
@@ -8,7 +8,7 @@ import { drawHeroSprite } from "./look";
 import { skin } from "./skin";
 
 /** afterimages are drawn into their own canvas, then copied */
-export const ghostCanvas = detailCanvas(80, 76, 40, 62);
+export const ghostCanvas = detailCanvas(HERO_CANVAS.w, HERO_CANVAS.h, HERO_CANVAS.ox, HERO_CANVAS.oy);
 
 /** where a warp ends: no afterimage stands closer to it than `clear`, and the flare of light there */
 const ARRIVAL = { clear: 16, light: 28, strength: 0.3 } as const;

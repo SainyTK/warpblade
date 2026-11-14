@@ -167,6 +167,16 @@ export const KAEL_BLADE: BladeLook = {
 
 The hero screen portrait, the tiles, the stage sprite and the afterimages all come from the skin; nothing else needs to be drawn.
 
+Room to draw in, in pixels from the feet with the hero facing right:
+
+| Canvas | Behind | Ahead | Above the floor | Below |
+| --- | --- | --- | --- | --- |
+| the stage sprite and the afterimages (`HERO_CANVAS` in `src/constants/hero.ts`) | 56 | 56 | 78 | 18 |
+| the hero screen portrait and tile, drawn in the rest pose | 30 | 34 | 50 | 6 |
+| the thrown sword, from its point back along the blade | 40 | 40 | 40 | 40 |
+
+Anything drawn outside a canvas is cut off, so pose a long sword's rest so it fits the portrait.
+
 ## Clips and poses
 
 A clip is an `ActionClip` of keyed poses (`src/types/pose.ts`), written with `pose({...})` and `frame(n)` from `src/constants/hero.ts`.
@@ -348,6 +358,7 @@ The stats are saved with the player's other tracked stats.
 Kael's are in `constants/controls.ts`.
 `HeroModule.touch.art` returns the pixel face of each button as an `IconArt`, up to 13 by 13; reuse `JUMP`, `DODGE` and `NOVA` from `src/ui/touch/icons/sharedArt.ts` where the hero has nothing of its own.
 The touch layout and the keys are the same for every hero.
+A hero needs no CSS: the HUD meter, the ability tabs and the hero screen take their colours from the module.
 
 ## Run and playtest one hero
 

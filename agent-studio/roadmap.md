@@ -41,12 +41,14 @@ Patch 0.11.0 set the roster at nine sword heroes (the charter's Roster section),
 
 ## Shipped
 
-- 0.10.0 Red Oath: Brannoc the berserker (studio, hero sprint night seven, the tenth hero), which completes the hero sprint; the shared `hpFloor` hook and the HP bar's debt segment, and every hero's ability tabs wrapping together as one row.
-- 0.9.0 Keep Time: Jory the war drummer (studio, hero sprint night six), the shared beat clock, the Abyss Sovereign at wave 30 and what waits behind it (day work), combos that lock their target at four fifths pace with the hit counter (day work), and the full-detail graphics and speed pass (day work).
-- 0.8.0 Unseen: Tallis the gloam knife (studio, hero sprint night five), the shared foe awareness rule, the foe blind status, and foes in co-op going for a visible hero first.
-- 0.7.0 Lamplight: Wenna the lamplighter (studio, hero sprint night four, the summoner from the suggested order), the shared foe hold seam, the `noFlow` damage option, and kills through a guard counting for the blow's source.
-- 0.6.0 Borrowed Time: Mirel the hour keeper (studio, hero sprint night three), the shared time fields and foe stop status, every hero in their own rest pose in the menus, and the Anchor Pin fix for fliers level with a ledge (the 0.5.0 known issue).
-- 0.5.0 Long Chain: Orrin the chain dancer (studio, hero sprint night two), hero skills replacing relics with 20 skills per hero (day work), the growth rework with charms, chests, Flow, streaming waves, damage by source and the Codex (day work). The hero skills also shipped evolutions for every hero (Evolutions round two, Hulda's evolutions), and the Codex shipped the collection screen from Achievements round two.
-- 0.4.0 Iron Grip: Hulda the iron grappler (studio, hero sprint night one), Sable the hooded hunter (day work), achievements and coin unlocks for heroes (day work), the hero roster screen for up to ten heroes (day work).
-- 0.3.0 Side by Side: co-op rooms for up to four players (feedback 10), the low HP glow and wounded idle (feedback 8), Ysra's mobility and survival pass (feedback 9), detailed heroes and foes at 640 by 360, and a fresh hero at the start of every run.
-- 0.2.0 Evolutions: Sunflask, Glacier Bloom and Thunderhead for Kael, Pyre Colonnade for Ysra, the kept jump press and held-Up launcher, Rift Warden HP 900 to 720, coins +25 percent, and the load flash fix (feedback 4).
+Patches 0.4.0 to 0.10.0 each added a hero that carried no sword; patch 0.11.0 removed those heroes and the shared hooks only they used.
+
+- 0.10.0 Red Oath: the tenth hero, a berserker (studio, hero sprint night seven), which completed the hero sprint, and every hero's ability tabs wrapping together as one row.
+- 0.9.0 Keep Time: a war drummer (studio, hero sprint night six), the Abyss Sovereign at wave 30 and what waits behind it (day work), combos that lock their target at four fifths pace with the hit counter (day work), and the full-detail graphics and speed pass (day work).
+- 0.8.0 Unseen: a knife fighter who hid from foes (studio, hero sprint night five) and the foe blind status.
+- 0.7.0 Lamplight: a lamplighter who fought through summons (studio, hero sprint night four), the `noFlow` damage option, and kills through a guard counting for the blow's source.
+- 0.6.0 Borrowed Time: a time mage (studio, hero sprint night three), the shared time fields, every hero in their own rest pose in the menus, and a fix for fliers level with a ledge (the 0.5.0 known issue).
+- 0.5.0 Long Chain: a chain fighter (studio, hero sprint night two), hero skills replacing relics with 20 skills per hero (day work), the growth rework with charms, chests, Flow, streaming waves, damage by source and the Codex (day work).
+- 0.4.0 Iron Grip: a grappler (studio, hero sprint night one), a crossbow hunter (day work), achievements and coin unlocks for heroes (day work), the hero roster screen (day work).
+- 0.3.0 Side by Side: co-op rooms for up to four players (feedback 10), the low HP glow and wounded idle (feedback 8), detailed heroes and foes at 640 by 360, and a fresh hero at the start of every run.
+- 0.2.0 Evolutions: Sunflask, Glacier Bloom and Thunderhead for Kael, the kept jump press and held-Up launcher, Rift Warden HP 900 to 720, coins +25 percent, and the load flash fix (feedback 4).
