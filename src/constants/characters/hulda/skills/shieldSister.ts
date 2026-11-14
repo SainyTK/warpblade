@@ -43,7 +43,7 @@ export const SHIELD_SISTER: SkillDef = {
     },
   ],
   evolution: {
-    partner: "h_stampede",
+    partner: "h_shoulderCheck",
     name: "Shieldwall",
     text: "Four sisters stay for good, charging across the floor from both sides every half second.",
     row: {

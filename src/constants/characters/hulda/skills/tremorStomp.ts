@@ -43,7 +43,7 @@ export const TREMOR_STOMP: SkillDef = {
     },
   ],
   evolution: {
-    partner: "h_stampede",
+    partner: "h_anvilDrop",
     name: "Earthbreaker",
     text: "Both tremors run wall to wall along the floor you stand on.",
     row: {

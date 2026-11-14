@@ -55,6 +55,13 @@ export function spendWarpCharge(): void {
   if (hero.warpCd <= 0) hero.warpCd = warpCooldown();
 }
 
+/** a skill gives a spent warp back at once; with every charge back, the recharge stops */
+export function refundWarp(): void {
+  const max = maxCharges();
+  charges.left = Math.min(max, charges.left + 1);
+  if (charges.left >= max) hero.warpCd = 0;
+}
+
 /** a charge comes back each time the recharge runs out, until all are back */
 export function tickWarp(): void {
   const max = maxCharges();

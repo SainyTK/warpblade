@@ -1,6 +1,6 @@
 import type { SkillDef } from "../../../../types/skill";
 
-/** Spirit Bear. Design: docs/skills/hulda.md. Values: chance; cooldown: least seconds between calls; drop: attack damage of its landing; radius; stay: seconds it stays and mauls (0 none); maul: attack damage of a maul; every: seconds between mauls; roar: 1 its landing drags foes in; swipe: 1 mauls strike every foe near; slams: 1 Skyfall and Bull Horns slams call it too; clan: bears that stay for good (evolution) */
+/** Spirit Bear. Design: docs/skills/hulda.md. Values: chance; cooldown: least seconds between calls; drop: attack damage of its landing; radius; stay: seconds it stays and mauls (0 none); maul: attack damage of a maul; every: seconds between mauls; roar: 1 its landing drags foes in; swipe: 1 mauls strike every foe near; slams: 1 Skyfall slams and Shoulder Check flips call it too; clan: bears that stay for good (evolution) */
 export const SPIRIT_BEAR: SkillDef = {
   id: "h_spiritBear",
   name: "Spirit Bear",
@@ -139,7 +139,7 @@ export const SPIRIT_BEAR: SkillDef = {
     },
   ],
   evolution: {
-    partner: "h_bullHorns",
+    partner: "h_shoulderCheck",
     name: "Bear Clan",
     text: "Two bears stay at your side for good, and every throw makes both drop on the landing.",
     row: {

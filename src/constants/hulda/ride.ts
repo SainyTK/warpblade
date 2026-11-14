@@ -14,8 +14,5 @@ export const RIDE = {
   stop: 0.06,
 } as const;
 
-/** a catch with Skyfall Breaker's bounce: she springs back up this fast to catch again */
-export const SKY_BOUNCE = -240;
-
 /** Skyfall Breaker's dive drags foes it touches on the way down; its body box, from her feet */
 export const DIVE_BOX = [-8, -28, 10, 2] as const;

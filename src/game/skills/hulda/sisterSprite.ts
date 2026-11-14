@@ -1,6 +1,5 @@
 import { HULDA_CLIPS } from "../../../constants/clips/hulda/moves";
 import { frame } from "../../../constants/hero";
-import { RUSH } from "../../../constants/hulda/rush";
 import { SPIRIT } from "../../../constants/hulda/spirits";
 import { disc, ellipseRing, glow, place, px } from "../../../engine/frame";
 import { blit, detailCanvas } from "../../../engine/sprite";
@@ -11,12 +10,12 @@ import { heroLook } from "../../hero/look";
 
 const canvas = detailCanvas(80, 76, 40, 62);
 
-/** the two strides of the Bull Rush lean, drawn from the hero's own rig, for a sister to alternate as she charges */
+/** the two strides of her shoulder charge, drawn from the hero's own rig, for a sister to alternate as she charges */
 export function sisterFrames(): readonly [SpriteImage, SpriteImage] {
-  const keys = HULDA_CLIPS.rush.keys;
-  drawHero(canvas, sampleKeys(keys, RUSH.load + frame(2)), heroLook(3));
+  const keys = HULDA_CLIPS.shoulder.keys;
+  drawHero(canvas, sampleKeys(keys, 0), heroLook(3));
   const a = canvas.snapshot();
-  drawHero(canvas, sampleKeys(keys, RUSH.load + frame(5)), heroLook(3));
+  drawHero(canvas, sampleKeys(keys, frame(3)), heroLook(3));
   return [a, canvas.snapshot()];
 }
 

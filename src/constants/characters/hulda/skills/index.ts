@@ -1,7 +1,7 @@
 import type { SkillDef } from "../../../../types/skill";
 import { ANCESTORS_FIST } from "./ancestorFist";
+import { ANVIL_DROP } from "./anvilDrop";
 import { BRUISING_KNUCKLES } from "./bruise";
-import { BULL_HORNS } from "./bullHorns";
 import { CHAIN_HAUL } from "./chainHaul";
 import { IRON_COUNTER } from "./counterGrab";
 import { CRUSHING_GRIP } from "./fracture";
@@ -14,9 +14,9 @@ import { KNUCKLE_WAVE } from "./knuckleWave";
 import { QUAKE_DROP } from "./quakeDrop";
 import { RUST_SHARDS } from "./rustShards";
 import { SHIELD_SISTER } from "./shieldSister";
+import { SHOULDER_CHECK } from "./shoulderCheck";
 import { SKYFALL_BREAKER } from "./skyfall";
 import { SPIRIT_BEAR } from "./spiritBear";
-import { STAMPEDE } from "./stampede";
 import { TREMOR_STOMP } from "./tremorStomp";
 import { WRECKING_THROW } from "./wreckingThrow";
 
@@ -27,8 +27,8 @@ export const HULDA_SKILL_DEFS: readonly SkillDef[] = [
   IRON_COUNTER,
   WRECKING_THROW,
   GIANT_SWING,
-  BULL_HORNS,
-  STAMPEDE,
+  SHOULDER_CHECK,
+  ANVIL_DROP,
   SKYFALL_BREAKER,
   CHAIN_HAUL,
   IRON_HIDE,

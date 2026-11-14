@@ -43,7 +43,7 @@ export const CHAIN_HAUL: SkillDef = {
     },
   ],
   evolution: {
-    partner: "h_bullHorns",
+    partner: "h_anvilDrop",
     name: "Wrecking Ball",
     text: "You arrive like a wrecking ball: the arrival blow strikes every foe round you, and the warp costs far less.",
     row: {

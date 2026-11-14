@@ -120,13 +120,13 @@ export const TOUCH_TEXT: Record<KitId, Record<TouchButtonAction, TouchButtonText
     },
     cast: {
       label: "Ability",
-      hint: "Tap: Bull Rush (Skyfall Grab in the air), Bellow, the taunt or a spell skill. Hold: a longer rush, a wider Bellow",
+      hint: "Tap: Bellow, the taunt or a spell skill. Hold: a wider Bellow",
       accent: "#ffc2b8",
     },
     ultimate: SPECIAL,
     cycle: {
       label: "Switch",
-      hint: "Switch ability: Bull Rush, Bellow, the taunt and the spells you learn",
+      hint: "Switch ability: Bellow, the taunt and the spells you learn",
       accent: "#e0ac48",
     },
   },

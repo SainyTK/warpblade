@@ -9,17 +9,16 @@ import { game, hero, progress } from "../../state";
 import { hitStop } from "../../world";
 import { inHaymaker } from "./fists";
 import { inIron } from "./fury";
-import { gainGrit, plates, rushing } from "./grit";
+import { gainGrit, plates } from "./grit";
 import { braceTime, braceTook } from "./ironWall";
 import { hulda } from "./memory";
 
 /** the haymaker is winding up: armoured from its second frame until the blow lands */
 const windingUp = (): boolean => inHaymaker() && hero.st >= HAYMAKER_ARMOUR && hero.st < FISTS.haymaker.hit;
 
-/** what takes a blow she meant to take, or null: the rush, the haymaker's wind-up, Iron Wall's brace */
+/** what takes a blow she meant to take, or null: the haymaker's wind-up, Iron Wall's brace */
 function counterArmour(): ArmourKind | null {
   if (hero.state === "brace" && hero.st < braceTime()) return "brace";
-  if (rushing()) return "rush";
   if (windingUp()) return "windup";
   return null;
 }
@@ -57,8 +56,8 @@ function shrug(kind: ArmourKind | null): void {
 }
 
 /**
- * A blow has taken its HP and she still stands. Quake Drop's iron, the rush, the haymaker's wind-up and Iron Wall's brace
- * take it without spending a plate; otherwise a full plate breaks and she keeps her action. With neither, the blow hurts
+ * A blow has taken its HP and she still stands. Quake Drop's iron, the haymaker's wind-up and Iron Wall's brace take
+ * it without spending a plate; otherwise a full plate breaks and she keeps her action. With neither, the blow hurts
  * her as any hero, and earns Grit.
  */
 export function steadfast(): boolean {

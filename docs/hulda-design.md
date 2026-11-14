@@ -11,28 +11,28 @@ Her iron guard and her plates absorb blows; the shared dodge is her one way to s
 Every hero plays on the same buttons since the moveset rework of 13 November 2026 (`docs/moveset-design.md`); she plays them as a wrestler.
 
 - Kael throws his crystal sword and strikes as he lands; Hulda throws a chained gauntlet and lands with the foe already in her hands.
-  She walks slowest of all and has no run and no double jump.
+  She walks slowest of all and has no run, and only the Anvil Drop skill gives her a second, lower jump in the air.
   She fights with fists that reach 16 px ahead, and her key moves are holds and throws that move a foe's body.
 - Kael's parry cuts back at once; hers, Iron Catch, seizes the attacker, and her guard lets almost nothing through.
 - Her defence goes on beyond the guard: armour plates of Grit take blows from every side and break one plate per blow.
   Grit is never spent by a button: blows she takes spend it, and holding, throwing, blocking, taunting and getting hit build it.
-- Her travel is a charge along the floor through foes, Bull Rush on I, never over them.
+- Her travel is short: the chain warp hauls her to a foe and the shared dodge slips through one; nothing carries her far or keeps her from her other moves.
 - She has no projectile of her own; the only things she throws are her gauntlet on its chain and foes.
 
-The axes that differ: movement (a slow walk, an armoured charge, a low jump and an air grab dive), defence (an iron guard and armour plates), resource (Grit as armour), range (the shortest melee, the chain, and foes as projectiles) and the shape of her attacks (seize, then knee and throw by direction).
+The axes that differ: movement (a slow walk, a low jump and a warp that lands with a foe in her hands), defence (an iron guard and armour plates), resource (Grit as armour), range (the shortest melee, the chain, and foes as projectiles) and the shape of her attacks (seize, then knee and throw by direction).
 
 ## Controls
 
 | Key | Hulda |
 | --- | --- |
 | A / D | Walk. No run; a double tap does nothing |
-| W | One low, heavy jump (44 px). No double jump |
+| W | One low, heavy jump (44 px); with Anvil Drop it lands with a shock, and from its sixth level hops once more in the air |
 | S | With W, drop through a ledge |
 | J tapped | Fist string: jab, body hook, haymaker. In the air one hammer fist. While holding a foe, a knee |
 | J held | Chain warp: the gauntlet flies on its chain, she hauls herself in and lands holding the foe. While holding a foe, a throw |
 | K | Iron guard, held; Iron Catch, the parry, when pressed just as a blow lands. While holding a foe, a throw |
 | L | The shared front dodge |
-| I | The selected ability: Bull Rush (Skyfall Grab in the air), Bellow, the taunt or a spell skill; held, the wide form |
+| I | The selected ability: Bellow, the taunt or a spell skill; held, the wide form |
 | O | Switch to the next ability on I |
 | U | Quake Drop (shared charge and MP rules) |
 
@@ -50,7 +50,6 @@ It drains 4 a second once 4 seconds pass with no blow landed or taken.
 
 A blow on her with a full plate deals half its damage (40% with Iron Plates), breaks one plate with steel shards from her shoulder, and leaves her doing whatever she was doing, safe for 0.8 s, as long as after any hurt.
 With no full plate, a blow hurts her as it hurts any hero: the knockback, the hurt state and a dropped foe.
-During the Bull Rush every blow deals half and never flinches her, and spends no plate.
 The guard comes before the plates: a blocked blow spends stamina and never a plate.
 The haymaker's wind-up is armoured from its second frame until it lands.
 
@@ -109,11 +108,9 @@ Giant Swing also takes the place of a forward throw into a crowd.
 | Suplex | behind held, alone, or foes behind | lifted overhead, swung over her head and slammed 14 px behind her: 2.2x, heavy, stun 1.2 s, and a 30 px ring that hits the others for 0.8x |
 | Giant Swing | foes crowd her, with the skill | turns round her that strike every foe near her each turn, then a forward throw |
 
-Skyfall Grab is Bull Rush in the air, once per airtime: a lunge down and ahead with both hands.
-On a minion it catches it, rides it down at 300 px/s and slams it into the floor for 2.0x with a 34 px ring (0.8x, stun 1.0 s).
-The warp's catch of a flier rides it down the same way.
-This is how she deals with fliers.
-A whiff lands with a short recovery, and both landings call `travelEnded()`.
+The warp's catch of a flier rides it down at 300 px/s and slams it into the floor for 2.0x with a 34 px ring (0.8x, stun 1.0 s).
+This and Bellow, which drags fliers down to her fists, are how she deals with fliers.
+The landing calls `travelEnded()`.
 
 ## The iron guard and Iron Catch
 
@@ -125,18 +122,14 @@ A mini boss or boss is answered with a haymaker at 2x, its clip playing on from 
 The parry and the block also count as her armour for her skills (`armour` events of kind `parry` and `block`), so Ancestor's Fist answers a parry and Rust Shards sprays on a block.
 Her strong block pairs with a parry that wins position more than damage, until Iron Counter turns it into her hardest hit.
 
-## Bull Rush, Bellow and the taunt
+## Bellow and the taunt
 
-All three are base abilities on I, each with its own recharge (`slots.ts`); the shared bar casts the next ready one when the selected one recharges.
+Both are base abilities on I, each with its own recharge (`slots.ts`); the shared bar casts the next ready one when the selected one recharges.
+Both need her feet on the floor, so I in the air does nothing.
 
-Bull Rush: floor only, 25 stamina, a two-frame load, 0.32 s at 200 px/s times move speed, a six-frame skid, 0.8 s before the next.
-I held charges 1.6 times as long for 1.5 times the stamina.
-In the air the same ability is Skyfall Grab.
-She charges the way she is pushed when I is pressed, so I toward a foe behind her turns her first.
-Every foe she runs into takes 0.6x, a short 60 shove and a 0.4 s stun once per rush, and a guard breaks.
-Once she has run into a foe (one she did not lift onto her shoulder) and no other foe stands within 24 px ahead of her shoulder, the charge stops at its next stride key and the clip's own last stride and skid play from the same pose (`stopCharge` in `rushClock.ts`).
-She skids out 10 to 20 px past the foe and settles facing the way she charged, every time; to strike the foe behind her the player turns with A or D.
-Through a packed crowd she still runs the whole charge.
+Until 14 November 2026 a third base ability came first on I: Bull Rush, an armoured shoulder charge along the floor, with Skyfall Grab (a lunge that caught a flier and slammed it) in the air.
+The owner removed it with its two skills, Bull Horns and Stampede: the charge carried her a long way on a long recharge, and until it ended she could use none of her other skills.
+Their places in her 20 skills went to Shoulder Check, which makes the shared dodge shoulder and flip the foes it passes, and Anvil Drop, which makes her jump land with a shock (`docs/skills/hulda.md`).
 
 ## Balance check
 
@@ -172,6 +165,8 @@ After the moveset rework (13 November 2026) the mash bot falls on wave 5 with 18
 The skilled bot now holds J for the chain warp, which seizes the opening wave's moths out of the air and slams them, and casts Bull Rush and Bellow from I.
 It never guards, so a player who parries gets Iron Catch on top of these numbers.
 
+With Bull Rush removed (14 November 2026) the mash bot still falls on wave 5 with 18 kills, and the skilled bot falls on wave 10 with 50 kills, up from wave 9 with 36 kills; it now spends I on Bellow, whose pull keeps foes at her fists.
+
 ## Shop items and kit hooks
 
 - Vitality: her HP.
@@ -179,9 +174,9 @@ It never guards, so a player who parries gets Iron Catch on top of these numbers
 - Arcana: Bellow scales with `progress.stats.ap`.
 - Wellspring: Bellow and the ultimate spend MP.
 - Precision: every blow and throw goes through `dealDamage`, which rolls crits.
-- Light Boots: her walk, her walk while holding and the Bull Rush scale with `progress.stats.move`.
-- Endurance: the Bull Rush spends stamina.
-- Aftershock: the Bull Rush ending and each Skyfall Grab landing call `travelEnded()`.
+- Light Boots: her walk and her walk while holding scale with `progress.stats.move`, and the shared dodge with it.
+- Endurance: the shared dodge and her guard's blocks spend stamina, and Shoulder Check gives some back.
+- Aftershock: the shared dodge and warp, each Skyfall slam landing and each leap off a ridden foe call `travelEnded()`.
 - Lodestone and Head Start live in shared code.
 - Last Light: blows reach `hurtHero`, where Last Light answers a fatal one before her armour is asked.
 
@@ -199,7 +194,7 @@ Its levels also run the crack both ways from the first charge level, shake flier
 
 Her skin is ash-grey hair cropped to dark stubble at the sides with a lighter crest and a braid, a scar through the brow, deep brown skin, a dark leather harness with an iron pauldron, a crimson sash, wrapped trousers and iron-toed boots (`src/constants/characters/hulda/look.ts`).
 Both fists wear iron-banded gauntlets with wrapped wrists and knuckle studs, drawn with the arms (`src/game/hero/draw/gauntlets.ts`), and her rings, trails and sparks use a rust ramp.
-Her own clips cover the guard idle, every blow, the hammer fist, the hold, the knee, the three throws, Skyfall, the Skyfall ride, the spell clips, the rush, Bellow, the taunt, the charge pose, Quake Drop, and the shared moves: the gauntlet throw, the lean into the chain, the clamp on arriving and the iron guard with its block and catch (`src/constants/clips/`, `hulda/moveset.ts`).
+Her own clips cover the guard idle, every blow, the hammer fist, the hold, the knee, the three throws, the Skyfall ride down and slam, the ride on a big foe, the spell clips, the shoulder lean of Shoulder Check's dodge, Bellow, the taunt, the charge pose, Quake Drop, and the shared moves: the gauntlet throw, the lean into the chain, the clamp on arriving and the iron guard with its block and catch (`src/constants/clips/`, `hulda/moveset.ts`).
 The dodge is Kael's dash clip with her fists up.
 Blows wind up the other way, snap on the hit frame and settle back to the guard, so the string chains without a seam; the haymaker holds four calm frames before it snaps.
 Walk, jump, fall, hurt and death use the shared clips through Kael's jump clock and hand-overs with her fists up before her chin (`src/game/hero/hulda/carry.ts`), and her stride is 20 px, shorter and heavier than Kael's.
@@ -211,7 +206,7 @@ A broken plate shoves her shoulders back two pixels and gives her knees for eigh
 
 ## Code layout
 
-- `src/game/hero/hulda/`: the kit (`kit.ts`), when the shared moves may cut in (`act.ts`), the warp (`warpStyle.ts`), the guard and Iron Catch (`guardStyle.ts`), the abilities on I (`slots.ts`, with `castGate.ts`), memory registered per seat (`memory.ts`), Grit and the plates (`grit.ts`, `armour.ts`), the string (`fists.ts`), the hold (`hold.ts`), knees and throws (`throws.ts`), Skyfall (`skyfall.ts`), the slam ring (`slam.ts`), the rush, Bellow, the taunt, her jump, the pose and the carry layer, and the claims on held foes shared by every Hulda in a room (`claims.ts`).
+- `src/game/hero/hulda/`: the kit (`kit.ts`), when the shared moves may cut in (`act.ts`), the warp (`warpStyle.ts`), the guard and Iron Catch (`guardStyle.ts`), the abilities on I (`slots.ts`, with `castGate.ts`), memory registered per seat (`memory.ts`), Grit and the plates (`grit.ts`, `armour.ts`), the string (`fists.ts`), the hold (`hold.ts`), knees and throws (`throws.ts`), the Skyfall ride (`skyfall.ts`), the slam ring (`slam.ts`), Bellow, the taunt, her jump and Anvil Drop's landing (`anvilDrop.ts`), the pose and the carry layer, and the claims on held foes shared by every Hulda in a room (`claims.ts`).
 - `src/game/hero/hulda/effects/`: the thrown gauntlet, Quake Drop's tethers and her blow and slam effects.
 - `src/game/effects/thrownBody.ts`, `bellowRing.ts`, `quakeLine.ts` and `plateShards.ts`.
 - `src/game/ultimates/quakeDrop.ts`.

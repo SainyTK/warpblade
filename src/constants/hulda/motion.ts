@@ -1,6 +1,6 @@
 import { frame } from "../hero";
 
-/** her one low, heavy jump; she has no double jump */
+/** her low, heavy jump; only Anvil Drop raises it and gives her a hop in the air */
 export const HULDA_JUMP_RISE = 44;
 
 /** ground one full stride covers: shorter, heavier steps than Kael's, and she never runs */

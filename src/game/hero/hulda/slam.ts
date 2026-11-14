@@ -31,13 +31,14 @@ export interface Slam {
   shake: readonly [number, number];
 }
 
-/** a body driven into the floor: a ring that runs out along it, hurting every other foe it reaches, and dust */
+/** a body driven into the floor: a ring that runs out along it, hurting every other foe on that floor it reaches, and
+ *  dust */
 export function slamRing(s: Slam): number {
   let hits = 0;
   for (const e of game.enemies) {
     if (e === s.body || e.hp <= 0 || s.skip?.includes(e)) continue;
     const [cx, cy] = enemyCenter(e);
-    if (Math.abs(cx - s.x) > s.radius || cy < s.floor - 40) continue;
+    if (Math.abs(cx - s.x) > s.radius || cy < s.floor - 40 || cy > s.floor) continue;
     hits++;
     const minion = ENEMIES[e.type].launchable;
     dealDamage(e, progress.stats.ad * throwPower(e, s.power), {

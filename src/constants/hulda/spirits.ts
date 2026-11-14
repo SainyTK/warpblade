@@ -18,9 +18,6 @@ export const SISTER = {
   rest: 1,
   /** seconds she takes to fade in and out */
   fade: 0.15,
-  /** Thundering Herd: sisters beside each rush start this far back and charge this far */
-  herdBack: 60,
-  herdLength: 140,
 } as const;
 
 /** the spirit bear: its fall, its reach when it mauls, how far its roar reaches, its pace and how it fades */

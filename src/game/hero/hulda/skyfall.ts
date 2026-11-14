@@ -1,7 +1,7 @@
 import { ENEMIES } from "../../../constants/enemies";
 import { AFTERSHOCK_SUPLEX, SKYFALL } from "../../../constants/hulda/grab";
 import { GRIT } from "../../../constants/hulda/grit";
-import { DIVE_BOX, RIDE, SKY_BOUNCE } from "../../../constants/hulda/ride";
+import { DIVE_BOX, RIDE } from "../../../constants/hulda/ride";
 import { sfx } from "../../../services/audio";
 import type { Enemy } from "../../../types/enemy";
 import { dealDamage } from "../../damage";
@@ -14,7 +14,7 @@ import { game, hero, progress } from "../../state";
 import { boxAhead, boxHit, dust, hitStop, shake } from "../../world";
 import { setState, settle } from "../actions";
 import { travelEnded } from "../travelEnd";
-import { castGate } from "./castGate";
+import { refundWarp } from "../warp";
 import { claim, isClaimed, unclaim } from "./claims";
 import { gainFury } from "./fury";
 import { gainGrit } from "./grit";
@@ -24,53 +24,20 @@ import { slamRing } from "./slam";
 
 const ID = "h_skyfall";
 
-/** the clip holds this key while she is still in the air */
-export const SKYFALL_AIR = SKYFALL.lunge;
-
-/** the nearest live foe whose box meets this one ahead of her, held by nobody */
-function nearestIn(box: readonly [number, number, number, number], ok: (e: Enemy) => boolean): Enemy | null {
-  const [x0, y0, x1, y1] = box;
-  const zone = boxAhead(x0, y0, x1, y1);
-  let best: Enemy | null = null;
-  let near = Number.POSITIVE_INFINITY;
-  for (const e of game.enemies) {
-    if (e.hp <= 0 || !ok(e) || !boxHit(zone, enemyBox(e))) continue;
-    const d = Math.abs(enemyCenter(e)[0] - hero.x);
-    if (d < near) {
-      near = d;
-      best = e;
-    }
-  }
-  return best;
-}
-
-/** Skyfall Grab, Bull Rush in the air: a lunge down and ahead with both hands out, once per airtime */
-export function pressSkyfall(): boolean {
-  const h = hero;
-  if (h.ground || hulda.airGrabbed || !castGate(false)) return false;
-  hulda.airGrabbed = true;
-  hulda.landed = false;
-  hulda.struck = false;
-  hulda.dove = [];
-  h.vy = Math.max(h.vy, 40);
-  setState("skyfall");
-  sfx.swing(0.7);
-  return true;
-}
-
 /** a big foe Skyfall Breaker can ride, from level 3 */
 export const rideable = (e: Enemy): boolean =>
   skillValues(ID).ride === 1 && !ENEMIES[e.type].launchable && !isClaimed(e);
 
-/** a catch: Fury and a plate as the skill's level gives */
+/** a catch: the warp back, Fury and a plate as the skill's level gives */
 function caught(): void {
   const v = skillValues(ID);
+  if (v.refund) refundWarp();
   gainFury(v.fury ?? 0);
   if (v.plate) gainGrit(GRIT.plate);
   sfx.tone(160, 110, 0.08, "square", 0.06);
 }
 
-/** the hands meet a big foe, or the warp's gauntlet clamps on one: she lands on its back to pound it */
+/** the warp's gauntlet clamps on a big foe: she lands on its back to pound it */
 export function mount(e: Enemy): void {
   hulda.ridden = e;
   hulda.pounds = skillValues(ID).pounds;
@@ -85,14 +52,12 @@ export function mount(e: Enemy): void {
  * her hands and rides it down into the Skyfall slam.
  */
 export function rideDown(e: Enemy): void {
-  hulda.airGrabbed = true;
   hulda.landed = false;
   hulda.dove = [];
   take(e);
   hulda.struck = true;
   caught();
   setState("skyfall");
-  hero.st = SKYFALL_AIR;
 }
 
 /** foes her dive passes through are dragged down with her into the slam */
@@ -106,17 +71,6 @@ function drag(): void {
   hulda.dove.forEach((e, i) => {
     pin(e, 2 - (i % 3) * 6, 2 + Math.floor(i / 3) * 4);
   });
-}
-
-/** with the bounce, a catch springs her back up for one more Skyfall this airtime */
-function bounce(): boolean {
-  if (!skillValues(ID).again || hulda.bounced) return false;
-  hulda.bounced = true;
-  hulda.airGrabbed = false;
-  hero.vy = SKY_BOUNCE;
-  hero.ground = false;
-  setState("fall");
-  return true;
 }
 
 /** she drives the caught foe into the floor: a heavy slam and a ring that stuns every foe near it */
@@ -158,28 +112,12 @@ function slam(): void {
   emitSkillEvent({ type: "throw", foe: e, x: e.x, y: h.y, slam: true });
 }
 
-/** the hands reach this box: further with Skyfall Breaker */
-function reach(): readonly [number, number, number, number] {
-  const [x0, y0, x1, y1] = SKYFALL.box;
-  return [x0, y0, x1 * (skillValues(ID).lunge ?? 1), y1];
-}
-
-/** the lunge catches a foe for a few frames; caught, she rides it down fast; either way the landing settles her */
+/** caught, she rides the foe down fast and her landing slams it, then settles her */
 export function runSkyfall(): void {
   const h = hero;
   if (hulda.landed) {
-    if (h.st >= SKYFALL_AIR + (hulda.struck ? SKYFALL.slamRecover : SKYFALL.recover)) settle();
+    if (h.st >= SKYFALL.slamRecover) settle();
     return;
-  }
-  if (!hulda.held && !hulda.struck && h.st < SKYFALL.lunge) {
-    h.vx = h.face * 70;
-    const prey = nearestIn(reach(), (e) => canHold(e) || rideable(e));
-    if (prey && !ENEMIES[prey.type].launchable) return mount(prey);
-    if (prey) {
-      take(prey);
-      hulda.struck = true;
-      caught();
-    }
   }
   if (hulda.held) {
     h.vx = h.face * 30;
@@ -187,19 +125,14 @@ export function runSkyfall(): void {
     pin(hulda.held, 8, -2);
     if (skillValues(ID).drag) drag();
   }
-  if (!h.ground) {
-    h.st = Math.min(h.st, SKYFALL_AIR);
-    return;
-  }
+  h.st = 0;
+  if (!h.ground) return;
   hulda.landed = true;
-  h.st = SKYFALL_AIR;
   h.vx = 0;
   dust(h.x, h.y, 5);
-  const slammed = !!hulda.held;
-  if (slammed) slam();
+  if (hulda.held) slam();
   else sfx.tone(120, 80, 0.06, "square", 0.05);
   travelEnded();
-  if (slammed) bounce();
 }
 
 /** she kneels on the big foe's back and pounds it, then leaps off backward */
@@ -234,7 +167,7 @@ function pound(e: Enemy): void {
   sfx.hit(true, 0.6);
 }
 
-/** off its back, backward through the air; the bounce gives one more Skyfall */
+/** off its back, backward through the air */
 function leapOff(): void {
   const e = hulda.ridden;
   hulda.ridden = null;
@@ -244,14 +177,10 @@ function leapOff(): void {
   hero.ground = false;
   travelEnded();
   setState("fall");
-  if (skillValues(ID).again && !hulda.bounced) {
-    hulda.bounced = true;
-    hulda.airGrabbed = false;
-  }
 }
 
 /** she rides a big foe's back */
 export const ridesFoe = (): boolean => hero.state === "ride";
 
-/** the lunge and the ride steer her own speed */
+/** the ride down steers her own speed */
 export const skyfallDrives = (): boolean => hero.state === "skyfall" && !hulda.landed;
