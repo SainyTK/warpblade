@@ -7,7 +7,7 @@ The data rows are in `src/heroes/cerise/constants/skills/`, one file per skill, 
 
 ## Identity
 
-Cerise is the rose duelist: a five-blow string of thrusts on a thin line, Points earned by Keen timing and spent by the lunge, a weak block with the best parry in the roster, and a riposte chain kept going on the beat.
+Cerise is the duelist: a five-blow string of thrusts on a thin line, Points earned by Keen timing and spent by the lunge, a weak block with the best parry in the roster, and a riposte chain kept going on the beat.
 Her skills lean on those: Keen presses, ripostes, the lunge, the Rose mark from the warp, and pins.
 Every skill sits on a button the shared moveset already has, or runs on its own.
 
@@ -113,7 +113,7 @@ Attack, precise, J. Press J in the beat after a thrust lands: the Keen blow hits
 | --- | --- | --- |
 | 1 | Keen blows deal +150% damage. | bonus 1.5, window 0.1 |
 | 2 | Keen beat 0.10 to 0.15 s. | window 0.15 |
-| 3 | New: a Keen blow gives a second Point. | points 1 |
+| 3 | New: a Keen blow holds its foe in place for 0.4 s. | hold 0.4 |
 | 4 | New: Keen thrusts reach 16 px farther. | reach 16 |
 | 5 | Keen damage +150% to +400%. | bonus 4 |
 | 6 | New: each Keen blow in a row adds +25% to the next, up to +100%. | streak 0.25, streakCap 1 |
