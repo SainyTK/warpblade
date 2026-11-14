@@ -8,7 +8,7 @@ export const CERISE_CONTROLS: HeroControls = {
   actions: {
     attack: `Rapier string of five blows, ending in a lunge that spends every Point. Press again just as a thrust lands for a Keen hit and a Point. Just after a riposte lands, the next riposte`,
     warp: "Warp strike: throw the rapier at the nearest foe ahead, warp to it and thrust. The foe is marked: your blows hit it harder (10 MP)",
-    guard: `Guard: hold to block blows from the front; ${Math.round(CERISE_BLOCK.chip * 100)}% gets through. Press just as a blow lands to parry: a riposte at once, and up to ${RIPOSTE.links} more on the beat`,
+    guard: `Guard: hold to block blows from the front; ${Math.round(CERISE_BLOCK.chip * 100)}% gets through. Press just as a blow lands to parry: a riposte at once, and up to ${RIPOSTE.links - 1} more on the beat`,
     cast: `Cast the selected ability: Flurry (${ABILITY_COST.flurry} MP), Rose Line (${ABILITY_COST.line} MP) or a spell you learn. Each spends up to two Points for power`,
     castWide: "Wide form for half again the MP: a taller Flurry, a Rose Line both ways, a wider spell",
     cycle: "Switch ability: Flurry, Rose Line and the spells you learn",

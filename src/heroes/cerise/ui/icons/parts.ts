@@ -14,13 +14,13 @@ export function rapier(s: SpriteCanvas, x0: number, y0: number, x1: number, y1: 
   const ux = (x1 - x0) / L;
   const uy = (y1 - y0) / L;
   fill(s, () => {
-    s.stroke(x0 - ux * 2.5, y0 - uy * 2.5, x0, y0, 0.5, HC.hilt);
-    s.stroke(x0 + ux, y0 + uy, x1, y1, 0.45, HC.steelLight);
+    s.stroke(x0 - ux * 2.5, y0 - uy * 2.5, x0, y0, 0.75, HC.hilt);
+    s.stroke(x0 + ux, y0 + uy, x1, y1, 0.75, HC.steelLight);
     s.set(x1, y1, WHITE);
   });
   fill(s, () => {
-    s.stroke(x0 - uy * 2.2, y0 + ux * 2.2, x0 + uy * 2.2, y0 - ux * 2.2, 0.4, HC.steelLight);
-    s.stroke(x0 + uy * 2, y0 - ux * 2, x0 - ux * 2.4 + uy * 1.2, y0 - uy * 2.4 - ux * 1.2, 0.35, HC.steelLight);
+    s.stroke(x0 - uy * 2.2, y0 + ux * 2.2, x0 + uy * 2.2, y0 - ux * 2.2, 0.75, HC.steelLight);
+    s.stroke(x0 + uy * 2, y0 - ux * 2, x0 - ux * 2.4 + uy * 1.2, y0 - uy * 2.4 - ux * 1.2, 0.75, HC.steelLight);
     s.dot(x0, y0, 0.7, R[3]);
   });
 }
@@ -36,7 +36,7 @@ export function foe(s: SpriteCanvas, cx: number, cy: number, r: number): void {
 /** a thin streak along a thrust's line */
 export function streak(s: SpriteCanvas, x0: number, y: number, x1: number, c: Color = R[4]): void {
   fill(s, () => {
-    s.stroke(x0, y, x1, y, 0.45, c);
+    s.stroke(x0, y, x1, y, 0.75, c);
     s.set(x1, y, WHITE);
   });
 }
@@ -60,8 +60,17 @@ export function petal(s: SpriteCanvas, cx: number, cy: number, r: number, c: Col
 /** the rose mark's sigil: a small four-point star */
 export function sigil(s: SpriteCanvas, cx: number, cy: number, r: number): void {
   fill(s, () => {
-    s.stroke(cx - r, cy, cx + r, cy, 0.35, R[4]);
-    s.stroke(cx, cy - r, cx, cy + r, 0.35, R[4]);
+    s.stroke(cx - r, cy, cx + r, cy, 0.75, R[4]);
+    s.stroke(cx, cy - r, cx, cy + r, 0.75, R[4]);
+    s.set(cx, cy, WHITE);
+  });
+}
+
+/** a four-point star, bold enough for the 16 by 16 grid */
+export function star(s: SpriteCanvas, cx: number, cy: number, r: number, c: Color): void {
+  fill(s, () => {
+    s.stroke(cx - r, cy, cx + r, cy, 0.75, c);
+    s.stroke(cx, cy - r, cx, cy + r, 0.75, c);
     s.set(cx, cy, WHITE);
   });
 }
