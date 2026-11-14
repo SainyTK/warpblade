@@ -18,15 +18,14 @@ Patch 0.11.0 set the roster at nine sword heroes (the charter's Roster section),
 ## Small patch candidates
 
 - The Rift Warden at wave 20. On the 0.9.0 baseline Kael fell at the wave 20 start in 23.1 s with 0 kills. Before tuning, check whether the wave-20 start at level 14 matches a real run's level and build under the new growth curve and the slower pace.
-- A measuring room in the repo for skill balance (the method of `docs/skills/balance.md` as a playtest scenario with repeat runs and a tougher late target), then settle the eight new heroes' skills inside their bands. Over their bands in the hero agents' own rooms: Cerise's Measured Touch on a crowd, Calder's Point Blank on a crowd, Zafir's Deep Wounds and Sand Wraith; most of Yun's and Vesper's level 8 skills read under theirs. (pillar 3)
+- A measuring room in the repo for skill balance (the method of `docs/skills/balance.md` as a playtest scenario with repeat runs and a tougher late target), then settle the eight new heroes' skills inside their bands. Zafir's Sand Wraith read over its band in his own room, Cerise's Measured Touch and Calder's Point Blank sit just over the crowd cap after QA's cuts, Zafir's room figures predate his wound cut, and most of Yun's and Vesper's level 8 skills read under their bands. (pillar 3)
 - The ultimates per cast against their targets: Vesper's Dusk Waltz, Brynn's Crimson Fall and Yun's evolved Jade Rain read short in the hero agents' rooms. (pillar 1)
-- Skill pick cards at 844 by 390 overflow the screen on the left, and the hero screen hides the blurb at that size. (pillar 1)
-- Yun's ability tabs read "SW" as their cost, and his Sword Screen guard swords are hard to make out at 1280 by 720. (pillar 1)
+- Yun's Sword Screen guard swords are hard to make out at 1280 by 720. (pillar 1)
 - Measure each hero's mash and skilled bot runs and bring their death waves within two waves of each other.
 - The HUD at some desktop window sizes (also in 0.9.0): at 640 by 600 and 700 by 700 it sits partly above the screen, and at 600 by 540 the first tab row touches the pause button. A measured placement was tried in 0.10.0 and taken out because it moved the HUD over the stage on 360 by 640 phones. (pillar 1)
 - Check the shop prices against coins earned per run (see `docs/meta-progress.md`).
 - Measure the four evolutions' damage per cast with the 0.2.0 scenario scripts and even them out; Glacier Bloom is the weakest on paper.
-- Play each new hero in a co-op room: their state is kept per seat, and none has been played with two seats yet. (pillar 1, feedback 10)
+- Play Cerise, Vesper, Yun and Brynn in a co-op room: their state is kept per seat, and QA's co-op pairs covered only Saya, Zafir, Aldric and Calder. (pillar 1, feedback 10)
 - Tune `COOP_SCALING` once real rooms report results. (feedback 10)
 
 ## Later
@@ -47,7 +46,7 @@ Patch 0.11.0 set the roster at nine sword heroes (the charter's Roster section),
 
 Patches 0.4.0 to 0.10.0 each added a hero that carried no sword; patch 0.11.0 removed those heroes and the shared hooks only they used.
 
-- 0.11.0 Nine Blades: the sword roster at the owner's request, outside the nightly studio: eight sword heroes (Cerise, Aldric, Vesper, Saya, Yun, Brynn, Zafir and Calder), Kael's new look, the nine heroes without a sword removed with a refund of their price, every hero as its own module, the guard against a touching foe, and the hero sprint closed in the charter. Day work: one moveset for every hero with the floating crystals removed, the run clock and records, and touch play on iPhone and iPad.
+- 0.11.0 Nine Blades: the sword roster at the owner's request, outside the nightly studio: eight sword heroes (Cerise, Aldric, Vesper, Saya, Yun, Brynn, Zafir and Calder), Kael's new look, the nine heroes without a sword removed with a refund of their price, every hero as its own module, the guard against a touching foe, one set of words and a title of the same shape for every hero, and the hero sprint closed in the charter. Day work: one moveset for every hero with the floating crystals removed, the run clock and records, and touch play on iPhone and iPad.
 - 0.10.0 Red Oath: the tenth hero, a berserker (studio, hero sprint night seven), which completed the hero sprint, and every hero's ability tabs wrapping together as one row.
 - 0.9.0 Keep Time: a war drummer (studio, hero sprint night six), the Abyss Sovereign at wave 30 and what waits behind it (day work), combos that lock their target at four fifths pace with the hit counter (day work), and the full-detail graphics and speed pass (day work).
 - 0.8.0 Unseen: a knife fighter who hid from foes (studio, hero sprint night five) and the foe blind status.

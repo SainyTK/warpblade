@@ -7,8 +7,8 @@
   "intro": "Only Kael was fun to play, and only swords fit Warpblade's story, so the nine heroes who fought with other weapons have left the game. In their place come eight sword heroes, each built on the same moveset as Kael and each with one thing no other hero does, and Kael wears a new look with his play unchanged. Your coins, shop levels, options and records stay as they were, and if you bought a hero who left, the coins you paid come back to your bank once. Achievements that belonged to the heroes who left are no longer listed, and the coins they paid stay with you. The roster is now set at nine and the hero sprint is over, so class advancement is next in line.",
   "highlights": [
     {
-      "title": "Cerise, the rose duelist",
-      "text": "A rapier on one long thin line. Thrusts pressed on the beat earn Points, and the lunge that ends her string spends them all to pierce every foe on the line. Her parry answers with a riposte at once, and each J on the beat after a riposte lands is the next one, up to six. She is free from the start.",
+      "title": "Cerise, the duelist",
+      "text": "A rapier on one long thin line. Thrusts pressed on the beat earn Points, and the lunge that ends her combo spends them all to pierce every foe on the line. Her parry answers with a riposte at once, and each J on the beat after a riposte lands is the next one, up to six. She is free from the start.",
       "media": {
         "kind": "video",
         "file": "cerise-riposte.mp4",
@@ -19,7 +19,7 @@
       }
     },
     {
-      "title": "Aldric, captain of the dawn guard",
+      "title": "Aldric, the shield knight",
       "text": "He walks into foes behind a raised kite shield that lets nothing through, and J with the guard up bashes without lowering it. A bash just after a block is a Counterbash. Blocks and bashes fill Valor, and full Valor lights his sword with Radiance for 6 seconds. He costs 300 coins.",
       "media": {
         "kind": "video",
@@ -31,20 +31,20 @@
       }
     },
     {
-      "title": "Vesper, the dusk wanderer",
-      "text": "A long blade and a short one, so every press cuts twice. Each blow that lands adds Tempo, and each stack makes her string and her walk faster. Her string ends in a launch, and her air string is four presses long. She costs 400 coins.",
+      "title": "Vesper, the twin blade",
+      "text": "A long blade and a short one, so every press cuts twice. Each blow that lands adds Tempo, and each stack makes her combo and her walk faster. Her combo ends in a launch, and her air combo is four presses long. She costs 400 coins.",
       "media": {
         "kind": "video",
         "file": "vesper-tempo.mp4",
         "poster": "vesper-tempo.png",
-        "alt": "In the rain on wave 7, Vesper cuts a mire toad with her long pale blade and short dark blade, sends a tall violet crescent through the storm kites and follows them into the air with her air string. The hit counter climbs to 19 and her Tempo bar fills.",
+        "alt": "In the rain on wave 7, Vesper cuts a mire toad with her long pale blade and short dark blade, sends a tall violet crescent through the storm kites and follows them into the air with her air combo. The hit counter climbs to 19 and her Tempo bar fills.",
         "width": 640,
         "height": 360
       }
     },
     {
-      "title": "Saya, the quiet draw",
-      "text": "Each cut of her katana lands a little at once and stores the rest in the foe. When the blade clicks back into the scabbard, every foe she cut takes it all at once. A pause between strings fills Focus for a longer draw. She costs 550 coins.",
+      "title": "Saya, the quickdraw",
+      "text": "Each cut of her katana lands a little at once and stores the rest in the foe. When the blade clicks back into the scabbard, every foe she cut takes it all at once. A pause between combos fills Focus for a longer draw. She costs 550 coins.",
       "media": {
         "kind": "video",
         "file": "saya-sheathe.mp4",
@@ -55,7 +55,7 @@
       }
     },
     {
-      "title": "Yun, the wandering sword sage",
+      "title": "Yun, the sword sage",
       "text": "Up to four spirit swords hover behind him and repeat every blow as a thrust that reaches past his jian. Sword Stream sends them through the line and back, and Sword Lotus sets them spinning over the foes. Both spend swords and no MP. He costs 750 coins.",
       "media": {
         "kind": "video",
@@ -68,18 +68,18 @@
     },
     {
       "title": "Brynn, the heavy blade",
-      "text": "A small fighter with a greatsword as tall as she is. While she swings she wears armour: blows on her hurt less and never stop the swing. Her string ends in a slam with a shockwave, and full Heft turns that slam into a fissure along the floor. She costs 1000 coins.",
+      "text": "A small fighter with a greatsword as tall as she is. While she swings she wears armour: blows on her hurt less and never stop the swing. Her combo ends in a slam with a shockwave, and full Heft turns that slam into a fissure along the floor. She costs 1000 coins.",
       "media": {
         "kind": "video",
         "file": "brynn-greatsword.mp4",
         "poster": "brynn-greatsword.png",
-        "alt": "In the rain on wave 9, Brynn swings her crimson greatsword through mire toads and storm kites. She drives it into the floor for Quake, which rings out in crimson, and a heavy swing throws a crimson crescent through a toad for a crit of 221.",
+        "alt": "In the rain on wave 9, Brynn swings her crimson greatsword through mire toads and storm kites. She drives it into the floor for Quake, which rings out in crimson, and a Keen blow throws a crimson crescent through a toad for a crit of 221.",
         "width": 640,
         "height": 360
       }
     },
     {
-      "title": "Zafir, the dervish of the dunes",
+      "title": "Zafir, the dervish",
       "text": "He keeps walking while he spins, and every spin cuts in front and behind at once. Landed blows build Whirl, and from 40 a ring of sand turns round him and cuts what touches it. His cuts open wounds that bleed. He costs 1350 coins.",
       "media": {
         "kind": "video",
@@ -92,12 +92,12 @@
     },
     {
       "title": "Calder, the trigger blade",
-      "text": "His sword has a chamber of six rounds. Press J just as a blow lands and the next blow is a Trigger: a round goes off in the wound for a blast. An empty chamber reloads on the next J, and a reload pressed as the cylinder glints loads hot rounds. He costs 1800 coins.",
+      "text": "His sword has a chamber of six rounds. Press J again just after a blow lands and the next blow is a Trigger: a round goes off in the wound for a blast. An empty chamber reloads on the next J, and a reload pressed as the cylinder glints loads hot rounds. He costs 1800 coins.",
       "media": {
         "kind": "video",
         "file": "calder-trigger.mp4",
         "poster": "calder-trigger.png",
-        "alt": "At night on wave 12, Calder cuts into a pack of husks with his gun sword. His Triggers fire rounds into the wounds in green blasts, crits of 191, 174 and 185 among them, and the round count on his chamber bar drops from 6 to 3.",
+        "alt": "At night on wave 12, Calder cuts into a pack of husks with his gun sword. His Triggers fire rounds into the wounds in green blasts, and a run of blows lands crits of 105, 158, 162, 166 and 170 as the hit counter reaches 21 and his chamber bar drains to about half.",
         "width": 640,
         "height": 360
       }
@@ -115,12 +115,12 @@
     },
     {
       "title": "One moveset for every hero",
-      "text": "Every hero plays on the same buttons. J is the string, J held throws the sword and warps to the nearest foe ahead, K guards and parries, L dodges forward, I casts the next ready ability and I held its wide form, and U is the hero's one ultimate.",
+      "text": "Every hero plays on the same buttons. J is the combo, J held is the Warp strike to the nearest foe ahead, K guards and parries, L dodges forward, I casts the next ready ability and I held its wide form, and U is the hero's one ultimate.",
       "media": {
         "kind": "video",
         "file": "kael-moveset.mp4",
         "poster": "kael-moveset.png",
-        "alt": "In the sunlit ruins on wave 3, Kael holds J: his crystal sword flies across the ruins into a thornback and he warps to it, breaking its guard. He strings cuts into it for crits, takes a hit, raises his guard and dodges forward.",
+        "alt": "In the sunlit ruins on wave 3, Kael holds J: his crystal sword flies across the ruins into a thornback and he warps to it, breaking its guard. He lands a combo on it for crits, takes a hit, raises his guard and dodges forward.",
         "width": 640,
         "height": 360
       }
@@ -152,7 +152,7 @@
             },
             {
               "kind": "note",
-              "text": "J held: the shared warp. The arrival thrust sets a Rose mark for 4 seconds: her blows deal 25% more to that foe, and Keen blows 60% more on top."
+              "text": "J held: Warp strike. The arrival thrust sets a Rose mark for 4 seconds: her blows deal 25% more to that foe, and Keen hits 60% more on top."
             },
             {
               "kind": "note",
@@ -168,7 +168,7 @@
             },
             {
               "kind": "note",
-              "text": "Points (PT): up to 5. A Keen blow, a parry and each riposte that lands give one. The lunge spends every Point for +0.45 attack each and 10 px more reach, breaks guards at 3 and is a sure crit at 5. An ability spends up to 2 for 40% more power each."
+              "text": "Points (PT): up to 5. A Keen hit, a parry and each riposte that lands give one. The lunge spends every Point for +0.45 attack each and 10 px more reach, breaks guards at 3 and is a sure crit at 5. An ability spends up to 2 for 40% more power each."
             },
             {
               "kind": "note",
@@ -198,7 +198,7 @@
             },
             {
               "kind": "note",
-              "text": "J held: the shared warp. He lands shield first behind a Bulwark that takes the next blow within 2.5 seconds."
+              "text": "J held: Warp strike. He lands shield first behind a Bulwark that takes the next blow within 2.5 seconds."
             },
             {
               "kind": "note",
@@ -206,7 +206,7 @@
             },
             {
               "kind": "note",
-              "text": "I: Shield Rush (12 MP, 3 s), a 44 px shove forward, and Sunpillar (16 MP, 4.5 s), a pillar of light on the nearest foe ahead. An ability pressed mid-string goes off at once."
+              "text": "I: Shield Rush (12 MP, 3 s), a 44 px shove forward, and Sunpillar (16 MP, 4.5 s), a pillar of light on the nearest foe ahead. An ability pressed just after a blow lands goes off at once."
             },
             {
               "kind": "note",
@@ -226,7 +226,7 @@
           "name": "Vesper",
           "tag": "new",
           "summary": "A twin blade who gets faster with every blow that lands and keeps foes in the air.",
-          "context": "Her damage is a steady stream that rises while she keeps hitting. She has the fastest string in the roster and the longest air string.",
+          "context": "Her damage is a steady stream that rises while she keeps hitting. She has the fastest combo in the roster and the longest air combo.",
           "changes": [
             {
               "kind": "stat",
@@ -244,7 +244,7 @@
             },
             {
               "kind": "note",
-              "text": "J held: the shared warp. She throws the long blade, keeps the short one, and lands with a cross cut."
+              "text": "J held: Warp strike. She throws the long blade, keeps the short one, and lands with a cross cut."
             },
             {
               "kind": "note",
@@ -252,7 +252,7 @@
             },
             {
               "kind": "note",
-              "text": "I: Twin Crescent (10 MP, 3.5 s), two waves that cross ahead of her, and Stitch (12 MP, 5 s), quick cuts on up to 3 nearby foes that end where she started. Cast after a blow lands, the string goes on."
+              "text": "I: Twin Crescent (10 MP, 3.5 s), two waves that cross ahead of her, and Stitch (12 MP, 5 s), quick cuts on up to 3 nearby foes that end where she started. Cast just after a blow lands, the combo goes on."
             },
             {
               "kind": "note",
@@ -260,7 +260,7 @@
             },
             {
               "kind": "note",
-              "text": "Tempo (TP): up to 10 stacks. A blow that lands adds 1, a Keen blow 2, a warp 2 and a parry 3. Each stack makes her moves 3% faster and her walk 1.5% faster. At the top, short-blade blows send echo cuts. Stacks fall after 1.3 s without a hit, and a blow taken costs half."
+              "text": "Tempo (TP): up to 10 stacks. A blow that lands adds 1, a Keen hit 2, a Warp strike 2 and a parry 3. Each stack makes her moves 3% faster and her walk 1.5% faster. At the top, short-blade blows send echo cuts. Stacks fall after 1.3 s without a blow landing, and a blow taken costs half."
             },
             {
               "kind": "note",
@@ -290,7 +290,7 @@
             },
             {
               "kind": "note",
-              "text": "J held: the shared warp. She arrives past the foe with the blade drawn, stores most of the arrival cut a fifth larger, and sheathes."
+              "text": "J held: Warp strike. She arrives past the foe with the blade drawn, stores most of the arrival cut a fifth larger, and sheathes."
             },
             {
               "kind": "note",
@@ -298,7 +298,7 @@
             },
             {
               "kind": "note",
-              "text": "I: Brushline (12 MP, 3.5 s), a short dash cut along a line, and Moonrise (14 MP, 4.5 s), a rising draw and ink wave that launches. Each ends in a sheathe, so casting one mid-string cashes in the string's cuts."
+              "text": "I: Brushline (12 MP, 3.5 s), a short dash cut along a line, and Moonrise (14 MP, 4.5 s), a rising draw and ink wave that launches. Each ends in a sheathe, so casting one mid-combo cashes in the combo's cuts."
             },
             {
               "kind": "note",
@@ -318,7 +318,7 @@
           "name": "Yun",
           "tag": "new",
           "summary": "A sword sage whose spirit swords repeat his blows at range and fly out when he sends them.",
-          "context": "He fights at middle range: he builds swords with his string and parries, then spends them with his abilities.",
+          "context": "He fights at middle range: he builds swords with his combo and parries, then spends them with his abilities.",
           "changes": [
             {
               "kind": "stat",
@@ -336,7 +336,7 @@
             },
             {
               "kind": "note",
-              "text": "J held: the shared warp. He rides the thrown jian in, and each held sword strikes the foe once on arrival."
+              "text": "J held: Warp strike. He rides the thrown jian in, and each held sword strikes the foe once on arrival."
             },
             {
               "kind": "note",
@@ -344,7 +344,7 @@
             },
             {
               "kind": "note",
-              "text": "I: Sword Stream (1.2 s), every held sword flies 150 px along the line and back, and Sword Lotus (3.5 s), the swords spin over a spot ahead for 2.4 seconds. Both spend swords and cost no MP. Cast mid-string, the string stays open."
+              "text": "I: Sword Stream (1.2 s), every held sword flies 150 px along the line and back, and Sword Lotus (3.5 s), the swords spin over a spot ahead for 2.4 seconds. Both spend swords and cost no MP. Cast just after a blow lands, the combo stays open."
             },
             {
               "kind": "note",
@@ -363,7 +363,7 @@
         {
           "name": "Brynn",
           "tag": "new",
-          "summary": "A small fighter with a greatsword as tall as she is, who swings through hits and clears crowds with one wide blow.",
+          "summary": "A small fighter with a greatsword as tall as she is, who swings through blows and clears crowds with one wide blow.",
           "context": "Few presses, each one heavy. Her armour only works while she swings, so the guard and the dodge still matter.",
           "changes": [
             {
@@ -378,19 +378,19 @@
             },
             {
               "kind": "note",
-              "text": "J: Wide Sweep, Rising Heave, which throws foes up, and Anvil Slam, which drives them into the floor and sends a shockwave 70 px along it. During a swing she takes 60% of a blow's damage and is never interrupted. J pressed on the beat makes the next swing heavy: a sure crit, 30% more reach and a crimson wave. In the air, one Falling Slam."
+              "text": "J: Wide Sweep, Rising Heave, which throws foes up, and Anvil Slam, which drives them into the floor and sends a shockwave 70 px along it. During a swing she takes 60% of a blow's damage and is never interrupted. J pressed just after a blow lands makes the next swing a Keen blow: a sure crit, 30% more reach and a crimson wave. In the air, one Falling Slam."
             },
             {
               "kind": "note",
-              "text": "J held: the shared warp. The greatsword spins end over end, and she lands with an overhead chop and a small shock ring."
+              "text": "J held: Warp strike. The greatsword spins end over end, and she lands with an overhead chop and a small shock ring."
             },
             {
               "kind": "note",
-              "text": "K: the flat of the blade lets 10% through for 22 stamina. A parry answers with the Counter Cleave, a wide cleave in front and behind, and her next swing is heavy."
+              "text": "K: the flat of the blade lets 10% through for 22 stamina. A parry answers with the Counter Cleave, a wide cleave in front and behind, and her next swing is a Keen blow."
             },
             {
               "kind": "note",
-              "text": "I: Rend (14 MP, 4.5 s), a wave 170 px along the floor that throws foes up, and Quake (16 MP, 6 s), the blade driven into the floor to throw up every foe within 64 px. Cast mid-string, it hits 30% harder and the string goes on."
+              "text": "I: Rend (14 MP, 4.5 s), a wave 170 px along the floor that throws foes up, and Quake (16 MP, 6 s), the blade driven into the floor to throw up every foe within 64 px. Cast just after a blow lands, it hits 30% harder and the combo goes on."
             },
             {
               "kind": "note",
@@ -398,7 +398,7 @@
             },
             {
               "kind": "note",
-              "text": "Heft (HF): 0 to 100 in four cells. A string blow that lands adds 14, more on a crowd, a heavy swing 10 more and a parry 30. At 100 her next Anvil Slam is a Fissure that runs 170 px along the floor."
+              "text": "Heft (HF): 0 to 100 in four cells. A combo blow that lands adds 14, more on a crowd, a Keen blow 10 more and a parry 30. At 100 her next Anvil Slam is a Fissure that runs 170 px along the floor."
             },
             {
               "kind": "note",
@@ -428,7 +428,7 @@
             },
             {
               "kind": "note",
-              "text": "J held: the shared warp. He arrives spinning, cuts both sides, and opens a wound on every foe within 30 px."
+              "text": "J held: Warp strike. He arrives spinning, cuts both sides, and opens a wound on every foe within 30 px."
             },
             {
               "kind": "note",
@@ -436,7 +436,7 @@
             },
             {
               "kind": "note",
-              "text": "I: Sandspout (14 MP, 3.5 s), a small whirl that runs 126 px ahead and lifts foes, and the crescent throw (12 MP, 3 s), the scimitar flies out on a curve and back. Cast just after a blow lands, the string carries on."
+              "text": "I: Sandspout (14 MP, 3.5 s), a small whirl that runs 126 px ahead and lifts foes, and the crescent throw (12 MP, 3 s), the scimitar flies out on a curve and back. Cast just after a blow lands, the combo carries on."
             },
             {
               "kind": "note",
@@ -444,7 +444,7 @@
             },
             {
               "kind": "note",
-              "text": "Whirl (WH): 0 to 100. Each hit adds 7, a Keen spin 10 more, and it drains after 1.1 s without a hit. From 40 a ring of sand turns round him and cuts what touches it; from 80 it widens, cuts harder and opens wounds. Every hit opens a wound, up to 5, each bleeding 0.1 attack a second."
+              "text": "Whirl (WH): 0 to 100. Each blow that lands adds 7, a Keen hit 10 more, and it drains after 1.1 s without a blow landing. From 40 a ring of sand turns round him and cuts what touches it for 0.25 attack; from 80 it widens, cuts for 0.38 attack and opens wounds. Every blow opens a wound, up to 5, each bleeding 0.07 attack a second."
             },
             {
               "kind": "note",
@@ -470,7 +470,7 @@
             },
             {
               "kind": "note",
-              "text": "J: three heavy blows: Hew, Rip and Breaker, which knocks down. J pressed just as a blow lands makes the next blow a Trigger: a sure crit, and a round fires into the wound for a blast of 1.2 attack and 0.5 on foes within 18 px. In the air, Air hew and Drop cut."
+              "text": "J: three heavy blows: Hew, Rip and Breaker, which knocks down. J pressed just after a blow lands makes the next blow a Trigger: a sure crit, and a round fires into the wound for a blast of 1.2 attack and 0.5 on foes within 18 px. In the air, Air hew and Drop cut."
             },
             {
               "kind": "note",
@@ -478,7 +478,7 @@
             },
             {
               "kind": "note",
-              "text": "J held: the shared warp. With a round loaded, the arrival blow fires it."
+              "text": "J held: Warp strike. With a round loaded, the arrival blow fires it."
             },
             {
               "kind": "note",
@@ -531,7 +531,7 @@
         {
           "name": "Kael on the shared moveset",
           "tag": "rework",
-          "summary": "Kael's warp moves to J held, K becomes his guard and parry, every ability has a wide form, and Crystal Nova levels up through one skill.",
+          "summary": "Kael's Warp strike moves to J held, K becomes his guard and parry, every ability has a wide form, and Crystal Nova levels up through one skill.",
           "context": "The shared moveset gives every hero the same buttons, and Kael is the hero it was built from.",
           "changes": [
             {
@@ -560,7 +560,7 @@
             },
             {
               "kind": "note",
-              "text": "Crystal Aegis grows crystals on his guard, Mirror Knight answers a parry, Spellwarp lands the warp with the selected element, and Blink Step and Warpcraft now ride the warp on J."
+              "text": "Crystal Aegis grows crystals on his guard, Mirror Knight answers a parry, Spellwarp lands the Warp strike with the selected element, and Blink Step and Warpcraft now ride the Warp strike on J held."
             }
           ]
         },
@@ -592,7 +592,7 @@
           "media": {
             "kind": "image",
             "file": "hero-screen.png",
-            "alt": "The Choose a Hero screen with nine tiles in a row: Kael, Cerise, Aldric, Vesper, Saya, Yun, Brynn, Zafir and Calder. Cerise is in focus in a rose frame, and her panel shows her rapier stance, the title The rose duelist, her stat bars, Special: Rose Tempest and her blurb.",
+            "alt": "The Choose a Hero screen with nine tiles in a row: Kael, Cerise, Aldric, Vesper, Saya, Yun, Brynn, Zafir and Calder. Cerise is in focus in a rose frame, and her panel shows her rapier stance, the title The duelist, her stat bars, Ultimate: Rose Tempest and her blurb.",
             "width": 1280,
             "height": 720
           }
@@ -664,11 +664,11 @@
           "name": "One moveset for every hero",
           "tag": "rework",
           "summary": "Every hero plays on the same buttons, with the same warp, guard and dodge, and keeps one ultimate.",
-          "context": "Heroes that could not reach their foes fell behind the ones that could. A shared warp, guard and dodge give every hero the same reach and defence, and each hero's own play lives in its string, meter, parry reward, abilities and ultimate.",
+          "context": "Heroes that could not reach their foes fell behind the ones that could. A shared warp, guard and dodge give every hero the same reach and defence, and each hero's own play lives in its combo, meter, parry reward, abilities and ultimate.",
           "changes": [
             {
               "kind": "note",
-              "text": "J tapped plays the hero's string. Held for a quarter of a second, J throws the sword at the nearest foe ahead and warps to it for 10 MP, with a 2 second recharge."
+              "text": "J tapped plays the hero's combo. Held for a quarter of a second, J is the Warp strike: the hero throws the sword at the nearest foe ahead and warps to it for 10 MP, with a 2 second recharge."
             },
             {
               "kind": "note",
