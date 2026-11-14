@@ -2,8 +2,8 @@ import type { SayaAbility } from "./ability";
 
 declare module "../../../types/hero" {
   interface KitStates {
-    /** the parry's counter draw; Brushline's dash cut; Moonrise's rising draw; Silent Moon's stillness */
-    saya: "counter" | "line" | "rise" | "moon";
+    /** the parry's counter draw; Brushline's dash cut; Moonrise's rising draw; Silent Moon's stillness; Still Water */
+    saya: "counter" | "line" | "rise" | "moon" | "still";
   }
 }
 
@@ -19,7 +19,8 @@ export interface SayaState {
   /** seconds before each ability can be cast again, and the full length of each one's current wait */
   cd: Record<SayaAbility, number>;
   cdFull: Record<SayaAbility, number>;
-  /** the ability state under way is the wide form (I held) */
+  /** the ability under way, and whether it is the wide form (I held) */
+  casting: SayaAbility;
   wide: boolean;
   /** the state under way has struck its blow, made its dash or clicked the blade home */
   struck: boolean;
@@ -28,4 +29,8 @@ export interface SayaState {
   lineFrom: number;
   /** the current dash already earned a breath for a perfect dodge */
   perfectSeen: boolean;
+  /** seconds Calm Mind holds after Focus drops from full */
+  calmLeft: number;
+  /** the counter draw under way came out of Still Water */
+  stillCounter: boolean;
 }

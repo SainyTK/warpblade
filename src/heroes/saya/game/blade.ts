@@ -12,6 +12,7 @@ const DRAWN_STATES: ReadonlySet<HeroState> = new Set([
   "rise",
   "moon",
   "ultimate",
+  "cast",
 ]);
 
 /** her katana is out of the scabbard right now */

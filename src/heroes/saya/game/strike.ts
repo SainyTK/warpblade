@@ -1,40 +1,110 @@
-import { hero, progress } from "../../../game/state";
+import { DAMAGE } from "../../../constants/combat";
+import { KEEN } from "../../../constants/combo";
+import { skillValues, withCharms } from "../../../game/skills/query";
+import { game, hero, progress } from "../../../game/state";
 import type { Enemy } from "../../../types/enemy";
+import type { OwnHit } from "../../../types/kit";
 import type { MoveHit } from "../../../types/move";
+import { INK_CUT } from "../constants/skillLook";
+import { SKILL } from "../constants/skills/ids";
 import { STRING_POWER } from "../constants/string";
-import { drawReach, drawStore, gainBreath } from "./focus";
+import { calmBonus } from "./calm";
+import { cleanSheathe } from "./clean";
+import { createInkArc } from "./effects/inkArc";
+import { createInkCut } from "./effects/inkCut";
+import { drawReach, drawStore } from "./focus";
 import { STORE_ANGLE } from "./moves/slashes";
+import { saya } from "./state";
 import { releaseCuts, releasing, storeCut } from "./store";
 
-/** the moves that store a cut in each foe they strike, and what each stores */
-const STORING: Readonly<Record<string, number>> = {
-  drawCut: STRING_POWER.drawCut.store,
-  returnCut: STRING_POWER.returnCut.store,
-  airDraw: STRING_POWER.airDraw.store,
-};
+/** what each storing move stores, as a multiple of attack damage, with the skills that grow it */
+function storeOf(move: string): number {
+  if (move === "drawCut") {
+    const edge = skillValues(SKILL.edge);
+    const twice = saya.breathDraw && edge.breathStore ? edge.breathStore : 1;
+    return STRING_POWER.drawCut.store * drawStore() * (edge.store ?? 1) * twice;
+  }
+  if (move === "returnCut") return STRING_POWER.returnCut.store * (skillValues(SKILL.reverse).store ?? 1);
+  if (move === "airDraw") return STRING_POWER.airDraw.store * drawStore() * (skillValues(SKILL.falling).store ?? 1);
+  return 0;
+}
 
-/** a draw that spends a breath reaches farther: its box and its stroke grow */
+/** a blow as her skills shape it: a breath draw reaches farther, Honed Draw breaks guards and makes a breath draw a
+ *  sure crit, and Reverse Edge's return cut cuts behind and throws foes up */
 export function shapeHit(id: string, hit: MoveHit): MoveHit {
-  const more = id === "drawCut" || id === "airDraw" ? drawReach() : 0;
-  if (!more) return hit;
-  const [x0, y0, x1, y1] = hit.box;
-  const slash = hit.slash ? { ...hit.slash, R: hit.slash.R + more * 0.6, W: hit.slash.W + 2 } : undefined;
-  return { ...hit, box: [x0, y0, x1 + more, y1], slash };
+  if (id === "drawCut" || id === "airDraw") {
+    const edge = skillValues(SKILL.edge);
+    const more = drawReach() + (id === "drawCut" ? (edge.reach ?? 0) : 0);
+    const [x0, y0, x1, y1] = hit.box;
+    const slash = hit.slash && more ? { ...hit.slash, R: hit.slash.R + more * 0.6, W: hit.slash.W + 2 } : hit.slash;
+    const crit = hit.crit || (saya.breathDraw && !!edge.crit);
+    return { ...hit, box: [x0, y0, x1 + more, y1], slash, big: hit.big || (id === "drawCut" && !!edge.guard), crit };
+  }
+  if (id === "returnCut") {
+    const v = skillValues(SKILL.reverse);
+    return { ...hit, around: hit.around || !!v.behind, launch: v.launch ?? hit.launch };
+  }
+  return hit;
 }
 
-/** one of her own hits landed: a string blow stores its cut in the foe, unless the blow felled it */
+/** one of her own hits landed: a string blow stores its cut in the foe, and the thrown katana stores with Passing
+ *  Draw, unless the blow felled the foe */
 export function landed(e: Enemy, hit: { crit: boolean; kill: boolean }): void {
-  if (releasing() || hit.kill || hero.state !== "move" || !hero.move) return;
-  const store = STORING[hero.move];
-  if (!store) return;
-  const angle = STORE_ANGLE[hero.move as keyof typeof STORE_ANGLE];
-  storeCut(e, progress.stats.ad * store * (hero.move === "returnCut" ? 1 : drawStore()), angle);
+  if (releasing() || hit.kill) return;
+  const ad = progress.stats.ad;
+  if (hero.state === "throwWait") {
+    const path = skillValues(SKILL.pass).pathStore;
+    if (path) storeCut(e, ad * path, STORE_ANGLE.warp);
+    return;
+  }
+  if (hero.state !== "move" || !hero.move) return;
+  const store = storeOf(hero.move);
+  if (store) storeCut(e, ad * store, STORE_ANGLE[hero.move as keyof typeof STORE_ANGLE]);
 }
 
-/** the sheathe's click has struck: every stored cut releases in full; a clean sheathe makes them sure crits and gives a
- *  breath */
+/** extra damage on her own hits: Calm Mind, and Falling Moon's sure crit on foes in the air */
+export function hitBonus(e: Enemy, _hit: OwnHit): number {
+  const air = hero.move === "airDraw" && e.air && skillValues(SKILL.falling).airCrit ? DAMAGE.crit - 1 : 0;
+  return calmBonus() + air;
+}
+
+/** the Keen beat after a blow lands: wider with Clean Sheathe */
+export const keenWindow = (): number => skillValues(SKILL.clean).window ?? KEEN.window;
+
+/** Honed Draw's ink cut, sent ahead from a draw */
+function sendInkCut(): void {
+  const edge = skillValues(SKILL.edge);
+  if (!edge.wave || !(saya.breathDraw || edge.waveAlways)) return;
+  const ad = progress.stats.ad;
+  game.fx.push(
+    createInkCut({
+      ...INK_CUT,
+      x: hero.x + hero.face * 10,
+      y: hero.y - 18,
+      dir: hero.face,
+      now: 0,
+      store: ad * edge.wave,
+      source: "attacks",
+    }),
+  );
+}
+
+/** Reverse Edge's crescent, left where the return cut swept, or its ring round her */
+function leaveCrescent(): void {
+  const v = skillValues(SKILL.reverse);
+  if (!v.crescent) return;
+  const ad = progress.stats.ad;
+  const ring = !!v.ring;
+  const life = ring ? withCharms("duration", v.ring) : withCharms("duration", v.crescentTime);
+  game.fx.push(createInkArc({ life, now: ad * v.crescent, store: v.crescentStore ? ad * v.crescent : 0, ring }));
+}
+
+/** a blow is out: the draw may send its ink cut, the return cut may leave its crescent, and the sheathe's click
+ *  releases every stored cut, as a clean sheathe when J came in the Keen beat */
 export function afterStrike(id: string): void {
+  if (id === "drawCut") sendInkCut();
+  if (id === "returnCut") leaveCrescent();
   if (id !== "sheathe") return;
-  releaseCuts(true, hero.keen);
-  if (hero.keen) gainBreath();
+  if (hero.keen) cleanSheathe();
+  else releaseCuts(true);
 }

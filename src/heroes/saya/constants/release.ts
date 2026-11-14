@@ -13,7 +13,13 @@ export const RELEASE = {
   ky: -90,
   /** an early release only staggers */
   stagger: 0.35,
+  /** seconds a foe holding cuts stays slowed while Ink Flow slows it */
+  slow: 0.2,
 } as const;
 
-/** how the stored cuts look on a foe: the lines' length and how long a release's ink burst lasts */
-export const STORE_LOOK = { line: 9, burst: 0.4 } as const;
+/** how the stored cuts look on a foe: the lines' length, the most lines drawn on one foe and how long a release's ink
+ *  burst lasts */
+export const STORE_LOOK = { line: 9, lines: 4, burst: 0.4 } as const;
+
+/** a second release (Perfect Stillness, New Moon) follows the first after this many seconds */
+export const ECHO_DELAY = 0.25;

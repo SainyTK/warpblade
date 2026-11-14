@@ -1,3 +1,4 @@
+import { ACTION_CLIPS } from "../../../../constants/clips";
 import { frame, pose } from "../../../../constants/hero";
 import type { ActionClip } from "../../../../types/pose";
 import { BLADE_STATE } from "../blade";
@@ -286,6 +287,30 @@ export const KIT_CLIPS = {
       [frame(15), pose({ ...mouth, hy: -15, ffx: 4, ffy: -3, bfx: -3, bfy: -2 })],
       [BEATS.rise.click, pose({ ...click, hy: -15, ffx: 4, ffy: -3, bfx: -3, bfy: -2 }), "snap"],
       [BEATS.rise.end, pose({ ...rest, hy: -15, ffx: 3, ffy: -1, bfx: -4, bfy: -3, bs: sheathed })],
+    ],
+  },
+  /** a spell: the coil, a draw that sends the spell on the shared cast's hit, the flick and the click */
+  cast: {
+    dur: ACTION_CLIPS.cast.dur,
+    hit: ACTION_CLIPS.cast.hit,
+    keys: [
+      [0, coil],
+      [frame(4), pose({ ...coil, hy: -11, nx: 3, ny: -20.8, cb: 1.7 })],
+      [ACTION_CLIPS.cast.hit, pose({ ...pastCut, hy: -11.8, ny: -21.2, fy: -21, sa: -0.35 }), "snap"],
+      [frame(10), flick],
+      [frame(12), mouth],
+      [BEATS.cast.click, click, "snap"],
+      [ACTION_CLIPS.cast.dur, click],
+    ],
+  },
+  /** Still Water: low and still with the hand on the hilt, breathing once a second until a blow comes */
+  still: {
+    dur: frame(30),
+    hit: 0,
+    keys: [
+      [0, pose({ ...coil, hy: -11.8, ny: -21.6, cb: 1 })],
+      [frame(14), pose({ ...coil, hy: -11.6, ny: -21.9, cb: 0.8 })],
+      [frame(30), pose({ ...coil, hy: -11.8, ny: -21.6, cb: 1 })],
     ],
   },
   charge: {

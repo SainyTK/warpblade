@@ -20,5 +20,6 @@ export const STRING_FEEL = {
   airDraw: { stop: 0.08, shake: [0.14, 1.8], pitch: 0.95 },
 } as const satisfies Record<string, HitFeel>;
 
-/** the falling draw: one per airtime */
+/** the falling draw: one per airtime, and a second from this level of Falling Moon */
 export const AIR_DRAWS = 1;
+export const FALLING_SECOND = 4;

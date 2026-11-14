@@ -2,6 +2,7 @@ import { hero } from "../../../game/state";
 import { runLine } from "./brushline";
 import { runCounter } from "./counter";
 import { runRise } from "./moonrise";
+import { runCast, runStill } from "./spells";
 import { runMoon } from "./ultimate/silentMoon";
 import { runWarpArrival } from "./warpStyle";
 
@@ -20,6 +21,12 @@ export function runState(): boolean {
     case "moon":
       runMoon();
       return true;
+    case "still":
+      runStill();
+      return true;
+    case "cast":
+      runCast();
+      return false;
     case "warpStrike":
       runWarpArrival();
       return false;

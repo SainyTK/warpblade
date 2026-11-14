@@ -1,6 +1,6 @@
 import type { HeroModule } from "../../types/heroModule";
 import { hex } from "../../utils/color";
-import { ABILITY } from "./constants/abilities";
+import { ABILITY_TAB } from "./constants/abilities";
 import { SAYA_KIT } from "./game/kit";
 import { FOCUS_METER } from "./game/meter";
 import { SAYA_MOVES } from "./game/moves";
@@ -11,7 +11,7 @@ import { SAYA_SKILL_ICONS } from "./ui/icons";
 import { sayaArt } from "./ui/touchArt";
 
 /** the ability the touch buttons follow, its first one when none is selected yet */
-const abilityOf = (ability: string): SayaAbility => (ability in ABILITY ? (ability as SayaAbility) : "line");
+const abilityOf = (ability: string): SayaAbility => (ability in ABILITY_TAB ? (ability as SayaAbility) : "line");
 
 /**
  * Saya's code entry, read by the hero registry (src/heroes/index.ts): her kit, combo moves, skill code, ultimate,
@@ -24,8 +24,8 @@ export const SAYA_MODULE: HeroModule = {
   castUltimate: castSilentMoon,
   icons: SAYA_SKILL_ICONS,
   touch: {
-    art: (action, ability) => sayaArt(action, abilityOf(ability)),
-    tint: (ability) => hex(ABILITY[abilityOf(ability)].tint),
+    art: (action, ability, known) => sayaArt(action, abilityOf(ability), known),
+    tint: (ability) => hex(ABILITY_TAB[abilityOf(ability)].tint),
   },
   meter: FOCUS_METER,
 };

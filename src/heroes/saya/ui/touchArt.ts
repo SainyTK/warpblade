@@ -4,7 +4,7 @@ import type { TouchButtonAction } from "../../../types/touch";
 import { ICON_WHITE } from "../../../ui/touch/icons/iconArt";
 import { DODGE, JUMP } from "../../../ui/touch/icons/sharedArt";
 import { hex } from "../../../utils/color";
-import { ABILITY, SAYA_ABILITIES } from "../constants/abilities";
+import { ABILITY_ORDER, ABILITY_TAB } from "../constants/abilities";
 import type { SayaAbility } from "../types/ability";
 
 const STEEL = hex("#d4dbec");
@@ -78,6 +78,48 @@ const ABILITY_ART: Record<SayaAbility, IconArt> = {
     ],
     colors: { W: ICON_WHITE, K: INK },
   },
+  crescent: {
+    rows: [
+      "....WK...",
+      ".....WK..",
+      "......WK.",
+      "......WK.",
+      "......WK.",
+      "......WK.",
+      "......WK.",
+      ".....WK..",
+      "....WK...",
+    ],
+    colors: { W: ICON_WHITE, K: INK },
+  },
+  rain: {
+    rows: [
+      ".KKKKKKK.",
+      "KKKKKKKKK",
+      ".KKKKKKK.",
+      ".........",
+      ".W..W..W.",
+      ".K..K..K.",
+      "...W..W..",
+      "...K..K..",
+      ".........",
+    ],
+    colors: { W: ICON_WHITE, K: INK },
+  },
+  still: {
+    rows: [
+      ".........",
+      ".........",
+      ".........",
+      "....W....",
+      "...WMW...",
+      "....W....",
+      ".........",
+      "KKKKKKKKK",
+      ".IIIIIII.",
+    ],
+    colors: { W: ICON_WHITE, K: INK, M: MOON, I: hex("#12163a") },
+  },
 };
 
 /** the ultimate: a crescent moon crossed by ink lines */
@@ -96,30 +138,31 @@ const SILENT_MOON: IconArt = {
   colors: { M: MOON, W: ICON_WHITE, K: INK },
 };
 
-/** the switch button: a dot per ability round a ring, the selected one with a white core */
-function abilityRing(selected: SayaAbility): IconArt {
-  const rows = [
-    ".........",
-    "...A.....",
-    ".........",
-    ".........",
-    ".........",
-    ".........",
-    ".........",
-    ".....B...",
-    ".........",
-  ];
-  const keys = ["A", "B"] as const;
+/** where each ability's dot sits on the switch button, in rotation order round a ring */
+const RING_DOTS: readonly (readonly [number, number])[] = [
+  [4, 0],
+  [8, 3],
+  [6, 8],
+  [2, 8],
+  [0, 3],
+];
+const RING_KEYS = ["A", "B", "C", "D", "E"] as const;
+
+/** the switch button: a dot per ability she has round a ring, in its own colour, the selected one with a white core */
+function abilityRing(selected: SayaAbility, known: readonly string[]): IconArt {
+  const rows = Array.from({ length: 9 }, () => Array<string>(9).fill("."));
   const colors: Record<string, Color> = { W: ICON_WHITE };
-  SAYA_ABILITIES.forEach((a, i) => {
-    colors[keys[i]] = hex(ABILITY[a].tint);
+  ABILITY_ORDER.forEach((a, i) => {
+    colors[RING_KEYS[i]] = hex(ABILITY_TAB[a].tint);
+    if (!known.includes(a)) return;
+    const [x, y] = RING_DOTS[i];
+    rows[y][x] = a === selected ? "W" : RING_KEYS[i];
   });
-  const at = SAYA_ABILITIES.indexOf(selected);
-  return { rows: rows.map((r) => r.replace(keys[at], "W")), colors };
+  return { rows: rows.map((r) => r.join("")), colors };
 }
 
-/** Saya's button art, per action and selected ability */
-export function sayaArt(action: TouchButtonAction, ability: SayaAbility): IconArt {
+/** Saya's button art, per action, selected ability and the abilities she has */
+export function sayaArt(action: TouchButtonAction, ability: SayaAbility, known: readonly string[]): IconArt {
   switch (action) {
     case "attack":
       return KATANA;
@@ -132,7 +175,7 @@ export function sayaArt(action: TouchButtonAction, ability: SayaAbility): IconAr
     case "cast":
       return ABILITY_ART[ability];
     case "cycle":
-      return abilityRing(ability);
+      return abilityRing(ability, known);
     case "ultimate":
       return SILENT_MOON;
   }

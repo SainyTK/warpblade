@@ -5,15 +5,19 @@ import { hero } from "../../../game/state";
 import type { HeroKit } from "../../../types/kit";
 import { rechargeAbilities, SAYA_SLOTS } from "./abilities";
 import { lineDrives } from "./brushline";
+import { tickCalm } from "./calm";
 import { chooseMove } from "./chooseMove";
-import { tickFocus } from "./focus";
+import { SAYA_DODGE, sayaAirDodge } from "./dodge";
+import { breathWalk, tickFocus } from "./focus";
 import { SAYA_GUARD } from "./guardStyle";
 import { sayaPose } from "./pose";
 import { readActions } from "./readActions";
 import { runState } from "./runState";
+import { stillTakes } from "./spells";
 import { resetSayaState } from "./state";
 import { drawStoredCuts, resetStore, tickStore } from "./store";
-import { afterStrike, landed, shapeHit } from "./strike";
+import { afterStrike, hitBonus, keenWindow, landed, shapeHit } from "./strike";
+import { drawTrails, resetTrails, tickTrails } from "./trail";
 import { SAYA_WARP_STYLE } from "./warpStyle";
 
 /**
@@ -25,7 +29,9 @@ export const SAYA_KIT: HeroKit = {
   tick: (dt) => {
     rechargeAbilities(rechargeStep(dt));
     tickFocus(dt);
+    tickCalm(dt);
     tickStore(dt);
+    tickTrails(dt);
   },
   readActions,
   warp: SAYA_WARP_STYLE,
@@ -37,7 +43,13 @@ export const SAYA_KIT: HeroKit = {
   afterStrike,
   shapeHit,
   landed,
-  absorbHurt: () => false,
+  hitBonus,
+  keenWindow,
+  absorbHurt: (_dmg, fromX) => stillTakes(fromX),
+  dodge: SAYA_DODGE,
+  airDodge: sayaAirDodge,
+  walkSpeed: (speed) => speed * breathWalk(),
+  drawFloor: drawTrails,
   drawOver: drawStoredCuts,
   stride: (running) => (running ? STRIDE.run : STRIDE.walk),
   hurtScale: () => 1,
@@ -47,5 +59,6 @@ export const SAYA_KIT: HeroKit = {
     resetMotion();
     resetSayaState();
     resetStore();
+    resetTrails();
   },
 };

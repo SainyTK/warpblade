@@ -3,13 +3,17 @@ import { dealDamage } from "../../../game/damage";
 import { createImpact } from "../../../game/effects/impact";
 import { createSlash } from "../../../game/effects/slash";
 import { enemyBox, enemyCenter } from "../../../game/enemies/enemy";
+import { skillValues } from "../../../game/skills/query";
 import { game, hero, ponytail, progress, scarf } from "../../../game/state";
 import { boxBehind, boxHit, hitStop, shake } from "../../../game/world";
 import type { Enemy } from "../../../types/enemy";
 import type { WarpStyle } from "../../../types/moveset";
+import { SKILL } from "../constants/skills/ids";
 import { BEATS } from "../constants/timing";
 import { SAYA_WARP } from "../constants/warp";
+import { cleanSheathe } from "./clean";
 import { sheatheFlash } from "./effects/sheatheFlash";
+import { gainBreath } from "./focus";
 import { SLASHES, STORE_ANGLE } from "./moves/slashes";
 import { sayaSound } from "./sound";
 import { beginBeat, saya } from "./state";
@@ -41,7 +45,8 @@ function strike(power: number, foe: Enemy | null, sureCrit: boolean): void {
     const [cx, cy] = enemyCenter(e);
     game.fx.push(createImpact(cx, cy, -hero.face, true));
     dealDamage(e, ad * power * SAYA_WARP.now, { fromX: front, kx: -hero.face * 40, ky: -40, heavy: true, sureCrit });
-    storeCut(e, ad * power * (1 - SAYA_WARP.now) * SAYA_WARP.bonus, STORE_ANGLE.warp, "attacks", true);
+    const arrival = skillValues(SKILL.pass).arrival ?? 1;
+    storeCut(e, ad * power * (1 - SAYA_WARP.now) * SAYA_WARP.bonus * arrival, STORE_ANGLE.warp, "attacks", true);
   }
   hitStop(0.08);
   shake(0.14, 1.8);
@@ -53,8 +58,16 @@ export function runWarpArrival(): void {
   saya.clicked = true;
   sayaSound.click();
   sheatheFlash();
-  releaseCuts(true);
+  if (skillValues(SKILL.pass).clean) cleanSheathe();
+  else releaseCuts(true);
 }
 
-/** Saya's warp: she arrives past the foe with the blade drawn and stores the arrival cut for the click */
-export const SAYA_WARP_STYLE: WarpStyle = { strike };
+/** Saya's warp: she arrives past the foe with the blade drawn and stores the arrival cut for the click; Passing Draw
+ *  tunes it and makes each arrival give a breath */
+export const SAYA_WARP_STYLE: WarpStyle = {
+  strike,
+  arrived: () => {
+    if (skillValues(SKILL.pass).breath) gainBreath();
+  },
+  tune: () => skillValues(SKILL.pass),
+};

@@ -28,6 +28,8 @@ function ownClip(h: Hero): ActionClip | null {
       return saya.wide ? KIT_CLIPS.riseWide : KIT_CLIPS.rise;
     case "moon":
       return KIT_CLIPS.moon;
+    case "cast":
+      return KIT_CLIPS.cast;
     default:
       return null;
   }
@@ -48,6 +50,7 @@ function statePose(h: Hero, t: number, frame: MotionFrame): Pose {
   if (own) return sampleKeys(own.keys, h.st);
   if (h.state === "idle") return restPose(h, t);
   if (h.state === "guard") return sampleKeys(SAYA_GUARD_CLIP.keys, h.st);
+  if (h.state === "still") return sampleKeys(KIT_CLIPS.still.keys, h.st % KIT_CLIPS.still.dur);
   if (h.state === "charge") {
     const p = sampleKeys(KIT_CLIPS.charge.keys, h.st % KIT_CLIPS.charge.dur);
     return h.chargeLevel >= 3 && Math.floor(t * 30) % 2 ? { ...p, nx: p.nx + 0.5 } : p;

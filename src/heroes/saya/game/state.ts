@@ -6,13 +6,16 @@ const fresh = (): SayaState => ({
   rest: 0,
   spent: 0,
   breathDraw: false,
-  cd: { line: 0, rise: 0 },
-  cdFull: { line: 1, rise: 1 },
+  cd: { line: 0, rise: 0, crescent: 0, rain: 0, still: 0 },
+  cdFull: { line: 1, rise: 1, crescent: 1, rain: 1, still: 1 },
+  casting: "line",
   wide: false,
   struck: false,
   clicked: false,
   lineFrom: 0,
   perfectSeen: false,
+  calmLeft: 0,
+  stillCounter: false,
 });
 
 /** the one owner of what Saya's kit remembers between presses; a guest's HUD reads her Focus and recharges from it */

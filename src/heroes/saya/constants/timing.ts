@@ -15,6 +15,8 @@ export const BEATS = {
   lineWide: { dash: frame(3), stop: frame(6), back: frame(12), home: frame(15), click: frame(23), end: frame(28) },
   /** Moonrise: the rising draw on frame 5, the click at frame 17 */
   rise: { hit: frame(5), click: frame(17), end: frame(21) },
+  /** a spell: it leaves the blade on the shared cast's hit and the blade clicks home here, before the cast ends */
+  cast: { click: frame(13) },
   /** Silent Moon: she draws on frame 0, the lines cross the stage, she clicks the blade home on frame 27 */
   moon: { click: frame(27), end: frame(34) },
 } as const;

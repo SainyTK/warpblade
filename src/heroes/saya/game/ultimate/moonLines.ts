@@ -2,6 +2,7 @@ import { W } from "../../../../constants/stage";
 import { hairline, line, place } from "../../../../engine/frame";
 import { dealDamage } from "../../../../game/damage";
 import { enemyCenter } from "../../../../game/enemies/enemy";
+import { markFoe } from "../../../../game/enemies/skillStatus";
 import { skin } from "../../../../game/hero/skin";
 import { foesOnScreen } from "../../../../game/skills/targets";
 import { game, lights } from "../../../../game/state";
@@ -10,6 +11,8 @@ import type { Enemy } from "../../../../types/enemy";
 import { WHITE } from "../../../../utils/color";
 import { clamp } from "../../../../utils/math";
 import { SILENT_MOON } from "../../constants/moon";
+import { ECHO_DELAY } from "../../constants/release";
+import { SKILL } from "../../constants/skills/ids";
 import { BEATS } from "../../constants/timing";
 import { createInkBurst } from "../effects/inkBurst";
 
@@ -33,42 +36,54 @@ export function aimLines(count: number, angle: () => number, foes: readonly Enem
   });
 }
 
+/** what Silent Moon's skill adds to the burst: a damage-taken mark, and a second burst */
+export interface MoonExtra {
+  mark: number;
+  twice: boolean;
+}
+
+/** every foe on a line takes `blow` for each line through it, and is marked */
+function burstLines(lines: readonly MoonLine[], blow: number, extra: MoonExtra): void {
+  for (const e of foesOnScreen()) {
+    const [cx, cy] = enemyCenter(e);
+    const on = lines.filter((l) => off(l, cx, cy) < SILENT_MOON.width);
+    if (!on.length) continue;
+    game.fx.push(
+      createInkBurst(
+        cx,
+        cy,
+        on.map((l) => l.a),
+        true,
+      ),
+    );
+    const fromX = e.x + e.face * 10;
+    dealDamage(e, blow * on.length, { fromX, stun: SILENT_MOON.stun, ky: -60, heavy: true, source: "ultimate" });
+    if (extra.mark) markFoe(e, SKILL.moon, SILENT_MOON.markTime, extra.mark);
+  }
+}
+
 /**
  * Silent Moon's lines: drawn one after another across the stage while the foes stand still, then at the click every
- * line bursts, and each foe takes `blow` for every line through it.
+ * line bursts (twice as New Moon), and each foe takes `blow` for every line through it.
  */
-export function createMoonLines(lines: readonly MoonLine[], blow: number): Effect {
+export function createMoonLines(lines: readonly MoonLine[], blow: number, extra: MoonExtra): Effect {
   let t = 0;
   let burst = false;
+  let second = !extra.twice;
   const gap = SILENT_MOON.drawn / Math.max(1, lines.length);
   return {
     update(dt) {
       t += dt;
       if (!burst && t >= BEATS.moon.click) {
         burst = true;
-        for (const e of foesOnScreen()) {
-          const [cx, cy] = enemyCenter(e);
-          const on = lines.filter((l) => off(l, cx, cy) < SILENT_MOON.width);
-          if (!on.length) continue;
-          game.fx.push(
-            createInkBurst(
-              cx,
-              cy,
-              on.map((l) => l.a),
-              true,
-            ),
-          );
-          dealDamage(e, blow * on.length, {
-            fromX: e.x + e.face * 10,
-            stun: SILENT_MOON.stun,
-            ky: -60,
-            heavy: true,
-            source: "ultimate",
-          });
-        }
+        burstLines(lines, blow, extra);
         lights.add(W / 2, 90, 200, skin.ramp[5], 0.5, 0.3);
       }
-      return t < BEATS.moon.click + 0.35;
+      if (!second && t >= BEATS.moon.click + ECHO_DELAY) {
+        second = true;
+        burstLines(lines, blow, extra);
+      }
+      return t < BEATS.moon.click + ECHO_DELAY + 0.35;
     },
     draw() {
       place();

@@ -1,13 +1,20 @@
 import type { SayaAbility } from "../types/ability";
+import { SPELL } from "./spells";
 
-/** each ability's MP, recharge in seconds, tab label and the colour its tab lights in */
+/** her two base abilities' MP, recharge in seconds, tab label and the colour its tab lights in */
 export const ABILITY = {
   line: { cost: 12, recharge: 3.5, label: "LINE", tint: "#dfe5ff" },
   rise: { cost: 14, recharge: 4.5, label: "RISE", tint: "#8fa2ff" },
-} as const satisfies Record<SayaAbility, { cost: number; recharge: number; label: string; tint: string }>;
+} as const;
 
-/** the order O turns through her abilities */
-export const SAYA_ABILITIES: readonly SayaAbility[] = ["line", "rise"];
+/** every ability's MP before the wide form, tab label and tab colour */
+export const ABILITY_TAB: Readonly<Record<SayaAbility, { cost: number; label: string; tint: string }>> = {
+  ...ABILITY,
+  ...SPELL,
+};
+
+/** the order O turns through her abilities: Brushline, Moonrise, then the spells her skills teach */
+export const ABILITY_ORDER: readonly SayaAbility[] = ["line", "rise", "crescent", "rain", "still"];
 
 /** a wide form (I held) costs this many times the MP */
 export const WIDE_COST = 1.5;

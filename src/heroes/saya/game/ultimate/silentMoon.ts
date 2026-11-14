@@ -34,7 +34,7 @@ export function castSilentMoon(level: number): void {
   const count = SILENT_MOON.lines[level - 1] + (v.lines ?? 0);
   const lines = aimLines(count, () => rng.range(-SILENT_MOON.lean, SILENT_MOON.lean), foes);
   const blow = ULT_LEVELS[level - 1].power * progress.stats.ad * SILENT_MOON.share * (v.power ?? 1);
-  game.fx.push(createMoonLines(lines, blow));
+  game.fx.push(createMoonLines(lines, blow, { mark: v.mark ?? 0, twice: !!v.twice }));
 }
 
 /** the stillness under way: she holds the drawn blade, then clicks it home with the lines' burst */
@@ -43,7 +43,7 @@ export function runMoon(): void {
     saya.clicked = true;
     sayaSound.click();
     sheatheFlash();
-    releaseCuts(true);
+    releaseCuts(true, { factor: ultimateValues().stored ?? 1 });
   }
   if (hero.st >= BEATS.moon.end) settle();
 }

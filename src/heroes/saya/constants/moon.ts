@@ -15,4 +15,6 @@ export const SILENT_MOON = {
   stun: 0.7,
   /** how far a line leans from level, at most, in radians */
   lean: 0.7,
+  /** seconds the mark of its skill lasts */
+  markTime: 4,
 } as const;

@@ -1,10 +1,9 @@
 import { onFrame } from "../../../../constants/combo";
 import type { MoveDef } from "../../../../types/move";
 import { STRING_CANCEL, STRING_FEEL, STRING_POWER } from "../../constants/string";
-import { sheatheFlash } from "../effects/sheatheFlash";
 import { beginDraw } from "../focus";
+import { landDraw } from "../landing";
 import { sayaSound } from "../sound";
-import { releaseCuts } from "../store";
 import { SLASHES } from "./slashes";
 
 /** the falling draw: one per airtime, drawn as she drops; it drives a foe in the air down, and on landing the blade
@@ -34,10 +33,6 @@ export const AIR_MOVES = {
         feel: STRING_FEEL.airDraw,
       },
     ],
-    land: () => {
-      sayaSound.click();
-      sheatheFlash();
-      releaseCuts(true);
-    },
+    land: landDraw,
   },
 } satisfies Record<string, MoveDef>;
