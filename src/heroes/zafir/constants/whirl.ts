@@ -23,8 +23,8 @@ export interface RingTier {
   wounds: number;
 }
 export const RING_TIERS: readonly RingTier[] = [
-  { from: 40, reach: 26, every: 0.45, power: 0.3, wounds: 0 },
-  { from: 80, reach: 34, every: 0.4, power: 0.45, wounds: 1 },
+  { from: 40, reach: 26, every: 0.45, power: 0.25, wounds: 0 },
+  { from: 80, reach: 34, every: 0.4, power: 0.38, wounds: 1 },
 ];
 /** the ring's look: grains in it at each tier, how fast it turns, and how flat it lies */
 export const RING_LOOK = { grains: [10, 16], spin: 5, flat: 0.32, height: 16 } as const;

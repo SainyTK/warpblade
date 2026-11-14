@@ -1,7 +1,7 @@
 # Zafir, the dervish
 
 The eighth hero of the sword roster (patch 0.11.0).
-Id `zafir`, name Zafir (he/him), title "The dervish of the dunes".
+Id `zafir`, name Zafir (he/him), title "The dervish".
 Blurb: "Never stops moving. He walks through his spins, cuts both sides at once, leaves bleeding wounds and turns a ring of sand round himself."
 Price 1350 coins (the fixed roster price).
 Accent `#f2a03a`, saffron orange, his colour family for the menu, the sword light, slashes and effects (`SAND_RAMP` in `src/heroes/zafir/constants/palette.ts`).
@@ -67,14 +67,14 @@ After the cyclone's launch, a jump and J lands the descent on the foes he threw 
 
 - 0 to 100 (`WHIRL` in `constants/whirl.ts`). Each of his own hits that lands adds 7, a Keen spin 10 more.
 - It holds 1.1 s after his last hit, then drains 32 a second.
-- At 40 a ring of sand turns round his waist, 26 px out, and cuts each foe it touches every 0.45 s for 0.3 AD.
-- At 80 it widens to 34 px, cuts every 0.4 s for 0.45 AD and opens a wound with each cut; the bar glows.
+- At 40 a ring of sand turns round his waist, 26 px out, and cuts each foe it touches every 0.45 s for 0.25 AD.
+- At 80 it widens to 34 px, cuts every 0.4 s for 0.38 AD and opens a wound with each cut; the bar glows.
 - The ring's own cuts feed neither the Whirl nor the base wound, so it lives only while he keeps hitting.
 
 ### Wounds
 
 - Every one of his own hits opens a wound on the foe (a Keen spin two), up to 5 (`WOUND` in `constants/wounds.ts`).
-- Each wound bleeds 0.1 AD a second; the wounds close 3 s after the last one opened. The bleed counts with his attacks.
+- Each wound bleeds 0.07 AD a second; the wounds close 3 s after the last one opened. The bleed counts with his attacks.
 - Wounds show as red cuts on the foe, and a bleeding foe sheds drops.
 - His damage over time skills grow from them (Deep Wounds, Opened Veins, Desert Thirst, Hot Gale's evolution).
 
