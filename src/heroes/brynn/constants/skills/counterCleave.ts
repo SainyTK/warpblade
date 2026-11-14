@@ -15,9 +15,9 @@ const LEVELS = levelRows([
   { text: "Counter power +7 to +25; the crescent hits harder.", values: { power: 25, wave: 5 } },
 ]);
 
-export const COUNTER_EDGE: SkillDef = {
+export const COUNTER_CLEAVE: SkillDef = {
   id: "br_counter",
-  name: "Counter Edge",
+  name: "Counter Cleave",
   kind: "attack",
   risk: "precise",
   button: "K",

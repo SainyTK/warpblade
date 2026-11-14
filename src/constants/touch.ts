@@ -1,4 +1,5 @@
 import type { StickDirectionSpec, TouchButtonAction, TouchButtonSpec, TouchButtonText } from "../types/touch";
+import { COST } from "./combat";
 
 /**
  * The touch controller layout, the one source the controller and the Controls screen both read.
@@ -24,7 +25,7 @@ export const TOUCH_BUTTONS: readonly TouchButtonSpec[] = [
 export const SHARED_TOUCH_TEXT: Readonly<Record<TouchButtonAction, TouchButtonText>> = {
   attack: {
     label: "Attack",
-    hint: "Tap: attack. Hold: throw your weapon at the nearest foe ahead and warp to it (10 MP)",
+    hint: `Tap: attack. Hold: throw your sword at the nearest foe ahead and warp to it (${COST.warp} MP)`,
     accent: null,
   },
   up: { label: "Jump", hint: "Jump. Hold the stick down to drop through a ledge", accent: "#e8e6f6" },
@@ -44,11 +45,11 @@ export const SHARED_TOUCH_TEXT: Readonly<Record<TouchButtonAction, TouchButtonTe
     accent: null,
   },
   ultimate: {
-    label: "Special",
+    label: "Ultimate",
     hint: "Hold to charge, the ring fills one quarter per level. Let go to strike",
     accent: "#ff7ae0",
   },
-  cycle: { label: "Ability", hint: "Switch ability", accent: null },
+  cycle: { label: "Switch", hint: "Next ability", accent: null },
 };
 
 /** where the attack button's center sits, art pixels in from the bottom right corner of the safe area */

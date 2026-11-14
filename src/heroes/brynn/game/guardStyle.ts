@@ -14,10 +14,10 @@ import { addHeft } from "./heft";
 import { SLASH } from "./moves/slashes";
 import { brynn } from "./state";
 
-/** how far Counter Edge's crescent flies */
+/** how far Counter Cleave's crescent flies */
 const COUNTER_WAVE_REACH = 110;
 
-/** The Counter Cleave: a wide two-handed cleave in front and behind at once and a knockdown. Counter Edge's extra
+/** The Counter Cleave: a wide two-handed cleave in front and behind at once and a knockdown. Counter Cleave's extra
  *  power is a precise payoff: it lands on the foe nearest her, the one that struck, and every other foe takes the
  *  plain cleave. `share` is a block's half-power answer (Iron Answer). */
 function cleave(share: number): number {
@@ -53,7 +53,7 @@ function cleave(share: number): number {
   return hits;
 }
 
-/** the parry's answer: the Counter Cleave, Heft, a heavy next swing, and Counter Edge's harder swings after */
+/** the parry's answer: the Counter Cleave, Heft, a heavy next swing, and Counter Cleave's harder swings after */
 function parried(): void {
   const v = skillValues("br_counter");
   const hits = cleave(1);

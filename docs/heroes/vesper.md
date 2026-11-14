@@ -1,7 +1,7 @@
 # Vesper, the twin blade
 
 The fourth hero of the sword roster (patch 0.11.0).
-Id `vesper`, name Vesper (she/her), title "The dusk wanderer".
+Id `vesper`, name Vesper (she/her), title "The twin blade".
 Blurb: "A long blade for reach, a short one for speed. Every blow that lands quickens her, and she keeps foes in the air until the dusk takes them."
 Price 400 coins, accent `#b8a0ff` (violet dusk).
 Her module is `src/heroes/vesper/`, laid out as `docs/hero-module.md` describes; her skills are in `docs/skills/vesper.md`.

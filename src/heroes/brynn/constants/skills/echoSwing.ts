@@ -13,7 +13,7 @@ const LEVELS = levelRows([
   { text: "New: perfect dodges call it too.", values: { both: 1 } },
   { text: "Echo power 3 to 6 AD.", values: { power: 6 } },
   { text: "New: the echo swings twice.", values: { cuts: 2 } },
-  { text: "New: heavy swings call it 25% of the time.", values: { heavy: 0.25 } },
+  { text: "New: Keen blows call it 25% of the time.", values: { heavy: 0.25 } },
   { text: "Echo power 6 to 10 AD.", values: { power: 10 } },
   { text: "Echo power 10 to 30 AD.", values: { power: 30 } },
 ]);

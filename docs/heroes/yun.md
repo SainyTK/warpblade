@@ -1,8 +1,8 @@
 # Yun, the sword sage
 
 The sixth hero of the sword roster (patch 0.11.0).
-Id `yun`, name Yun (he/him), title "The wandering sword sage".
-Blurb: "A travelling sage with a straight jian and a long jade tassel. His cuts flow in circles, and spirit swords hover behind him to repeat every blow at range."
+Id `yun`, name Yun (he/him), title "The sword sage".
+Blurb: "A travelling sage with a straight jian. His cuts flow in circles, and spirit swords hover behind him to repeat every blow at range."
 Price: 750 coins, the sixth price on the roster's fixed list.
 Accent `#5fd6a4` (jade green). No other hero of the roster is green: Calder's phosphor green is a tracer colour on gunmetal, and Kael's cyan is a blue.
 

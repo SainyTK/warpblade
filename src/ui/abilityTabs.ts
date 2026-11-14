@@ -46,9 +46,7 @@ export function updateAbilityTabs(): void {
     const evolved = slot.evolved?.() ?? false;
     if (el.classList.contains("evolved") !== evolved) el.classList.toggle("evolved", evolved);
     el.classList.toggle("poor", !slot.affordable());
-    const cost = on ? slot.cost?.() : undefined;
-    const text = cost ? `${slot.label} ${cost}` : slot.label;
-    if (el.textContent !== text) el.textContent = text;
+    if (el.textContent !== slot.label) el.textContent = slot.label;
     tab.update(Math.min(1, slot.wait() / slot.full()));
   }
   const denied = Math.max(hero.denied.cast, hero.denied.mp);

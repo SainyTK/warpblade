@@ -39,7 +39,7 @@ function statBars(c: CharacterDef): HTMLElement {
 /** what the hero brings to a run besides stats: their special */
 function traits(c: CharacterDef): HTMLElement {
   const box = el("p", "hero-traits");
-  box.append(`Special: ${c.special.name}`);
+  box.append(`Ultimate: ${c.special.name}`);
   return box;
 }
 

@@ -1,4 +1,5 @@
 import type { HeldAction, InputAction, MenuCommand } from "../types/input";
+import { COST } from "./combat";
 
 export const KEYMAP: Record<string, InputAction> = {
   ArrowLeft: "left",
@@ -28,7 +29,7 @@ export const SHARED_ACTION_TEXT: Record<InputAction, string> = {
   up: "Jump. Press again in the air to jump again",
   down: "Hold and jump to drop through a ledge",
   attack: "Attack",
-  warp: "Warp: throw your weapon at the nearest foe ahead, warp to it and strike as you land (10 MP)",
+  warp: `Warp strike: throw your sword at the nearest foe ahead, warp to it and strike as you land (${COST.warp} MP)`,
   guard: "Guard: hold to block blows from the front. Press just as a blow lands to parry",
   dash: "Dodge forward. Nothing can touch you while you dodge, and each dodge spends stamina",
   run: "Run toward the side held",

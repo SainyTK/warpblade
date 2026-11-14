@@ -37,14 +37,14 @@ export function counterShot(attacker: Enemy | null): void {
   game.fx.push(createMuzzleFlash(mx, my, hero.face > 0 ? AIM_ANGLE : Math.PI - AIM_ANGLE));
   const foe = target(attacker);
   const [x, y] = foe ? enemyCenter(foe) : [mx + hero.face * 10, my];
-  const bonus = counterBonus(foe);
+  const bonus = counterBonus();
   const plain = progress.stats.ad * COUNTER_SHOT.power * roundPower();
   const struck = blastAt(foe, x, y, {
     damage: plain * bonus.power,
     splash: 0,
     reach: 0,
     kx: COUNTER_SHOT.kx,
-    stagger: COUNTER_SHOT.stagger,
+    stagger: COUNTER_SHOT.stagger + bonus.stagger,
     heavy: true,
     hot: calder.hot,
     big: true,
@@ -52,6 +52,6 @@ export function counterShot(attacker: Enemy | null): void {
   calder.recoil = RECOIL_TIME;
   loadRounds(COUNTER_SHOT.rounds + bonus.rounds);
   hero.keenNext = true;
-  afterCounterShot(foe, plain);
+  afterCounterShot(foe);
   emitSkillEvent({ type: "calderBlast", x, y, foes: struck, kind: "parry" });
 }

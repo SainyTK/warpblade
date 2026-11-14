@@ -11,7 +11,6 @@ interface ShotCost {
   affordable(wide: boolean): boolean;
   pay(wide: boolean): void;
   recharge(): number;
-  costText(): string;
   evolved(): boolean;
 }
 
@@ -25,7 +24,6 @@ function roundShot(a: "slug" | "scatter"): ShotCost {
       spendRounds(rounds(wide));
     },
     recharge: () => SHOT_RECHARGE[a] / progress.stats.haste,
-    costText: () => `${rounds(false)} RD`,
     evolved: () => false,
   };
 }
@@ -40,7 +38,6 @@ function shell(skill: string): ShotCost {
       hero.mp -= mp(wide);
     },
     recharge: () => (skillValues(skill).recharge ?? 1) / progress.stats.haste,
-    costText: () => `${Math.round(mp(false))} MP`,
     evolved: () => skillEvolved(skill),
   };
 }

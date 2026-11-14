@@ -137,7 +137,6 @@ export const YUN_SLOTS: readonly AbilitySlot[] = YUN_ABILITIES.map((a) => ({
   affordable: () => affordable(a),
   cast: (wide: boolean) => cast(a, wide),
   evolved: () => abilityEvolved(a),
-  cost: paidWithMp(a) ? undefined : () => "SW",
 }));
 
 /** the colour each ability lights the touch buttons in */

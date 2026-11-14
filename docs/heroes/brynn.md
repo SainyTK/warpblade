@@ -2,7 +2,7 @@
 
 The seventh hero of the sword roster (patch 0.11.0).
 Id `brynn`, name Brynn (she/her), title "The heavy blade".
-Blurb: "Small, loud, and carrying a sword as tall as she is. Her swings do not stop for anything, sweep a crowd off its feet and end in a slam that shakes the floor."
+Blurb: "Small, loud, and carrying a sword as tall as she is. Her swings stop for nothing and end in a slam that shakes the floor."
 Price: 1000 coins, the seventh price of the roster (`docs/achievements.md`).
 Accent `#ff4f5e` (crimson): the hero screen, the ability tabs, the HF bar, her slashes, rings and sparks.
 
@@ -28,7 +28,7 @@ The sword is Anvilheart: a broad slab of steel almost as tall as she is, with a 
 - Saya stores cuts that land when her blade is sheathed. Brynn's damage lands on the blow, all of it, and her payoff is the shockwave.
 - Yun sends spirit swords out to strike at range. Brynn reaches far only along the floor, with waves and fissures from her own blade.
 - Zafir keeps walking while he attacks and cuts both sides at once. Brynn plants her feet for every swing.
-- Calder fires rounds at the moment of impact and counts a chamber. Brynn's timing reward is a heavy swing, and her meter fills from hits and empties into one fissure.
+- Calder fires rounds at the moment of impact and counts a chamber. Brynn's timing reward is her Keen blow, wider and with a crescent, and her meter fills from hits and empties into one fissure.
 
 ## Stats
 
@@ -85,15 +85,15 @@ A blow her armour takes shows as a crimson flash on her pauldron.
 A bar under stamina, label HF, in four cells.
 
 - A string blow that lands adds 14, and 4 more for each foe past the first, up to 26 a blow.
-- A heavy swing that lands adds 10 more. A parry adds 30.
+- A Keen blow that lands adds 10 more. A parry adds 30.
 - After 3 seconds without a blow landing, Heft drains 15 a second.
 - Full Heft (100) lights the bar, and the next Anvil Slam is a Fissure: a crack runs 170 px along the floor ahead, 2.4 AD to every foe on it, and knocks them down. The Fissure spends the whole bar.
 
-### Heavy swings (Keen timing)
+### Keen blows
 
 The shared Keen rule, with Brynn's own window and payoff.
 J pressed within 0.14 s after a blow lands makes the next swing heavy.
-A heavy swing is a sure crit, reaches 30% farther ahead, and sends a crimson wave 90 px along its arc at 0.8 AD.
+Her Keen blow is a sure crit, reaches 30% farther ahead, and sends a crimson wave 90 px along its arc at 0.8 AD.
 J pressed before a blow has landed spoils it, so a slow, timed rhythm beats mashing.
 
 ### J held: the warp
@@ -134,7 +134,7 @@ The roster asks each hero for its own version of four of Kael's qualities.
 
 | Quality | Kael | Brynn |
 | --- | --- | --- |
-| Timing reward | Keen: a sure crit | Heavy swing: a sure crit, wider, a wave |
+| Timing reward | Keen: a sure crit | Keen: a sure crit, wider, a wave |
 | Parry follow-up | riposte and a counter blink on J | Counter Cleave at once, 30 Heft, next swing heavy |
 | String cancel into abilities | Spellblade: 1.5x, ends the combo | Carry: 1.3x, the string goes on |
 | After a launch | air string | the Anvil Slam catches and spikes the launched foes |

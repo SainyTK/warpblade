@@ -253,14 +253,14 @@ Values: `per` attack damage each wound bleeds a tick, `every` seconds between ti
 
 | Level | Card line | Values |
 | --- | --- | --- |
-| 1 | Wounds bleed 50% harder. | per 0.15 |
-| 2 | Bleed 0.15 to 0.2. | per 0.2 |
+| 1 | Wounds bleed 40% harder. | per 0.1 |
+| 2 | Bleed 0.1 to 0.13. | per 0.13 |
 | 3 | New: foes carry up to 7 wounds. | most 7 |
 | 4 | New: wounds stay open 5 s. | life 5 |
-| 5 | Bleed 0.2 to 0.28. | per 0.28 |
+| 5 | Bleed 0.13 to 0.17. | per 0.17 |
 | 6 | New: a foe that dies bleeding opens half its wounds on foes beside it. | spread 1 |
 | 7 | New: your blows deal 15% more to a bleeding foe. | blows 0.15 |
-| 8 | Bleed 0.28 to 0.32; up to 9 wounds. | per 0.32, most 9 |
+| 8 | Bleed 0.17 to 0.2; up to 9 wounds. | per 0.2, most 9 |
 | Evolved: Crimson Tide (with Opened Veins) | Wounds bleed twice as often and never close while the sand ring turns. | every 0.5, tide 1 |
 
 ### Scouring Sand (`za_scour`)
@@ -445,6 +445,10 @@ Base runs differ by about 20% from run to run on the crowd, so a skill within ab
 
 The table is the last full pass (after the second tuning step).
 A last step after it raised Sirocco Timing (300% to 500%, gust 3 to 4; measured above), Desert Noon (12 to 24), Court of Mirages (20 to 40), Desert Thirst (taken 25% to 35%, 9% to 12% a wound), Desert Hawk's level 8 dive (2.2 to 3.5) and Sandstorm (level 8 power 4 to 4.8, its evolution's second storm 1 to 1.5); those are not measured again.
+
+The roster review on the same day compared the nine heroes' bots: from wave 11 at level 12 the skilled bot took Zafir to wave 15 with 40 kills while the other eight reached waves 11 to 13 with 5 to 18.
+The wound bleed went from 0.1 to 0.07 AD, Deep Wounds' bleed rows from 0.15, 0.2, 0.28 and 0.32 to 0.1, 0.13, 0.17 and 0.2, and the sand ring's cuts from 0.3 and 0.45 AD to 0.25 and 0.38.
+The same bot then reached wave 13 with 25 kills; the room figures above predate this cut.
 
 ### Still off
 

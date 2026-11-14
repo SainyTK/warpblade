@@ -10,7 +10,7 @@ const LEVELS = levelRows([
     values: { chance: 0.25, power: 0.5, strikes: 3, count: 1, cooldown: 0.5 },
   },
   { text: "Chance 25% to 40%.", values: { chance: 0.4 } },
-  { text: "New: a heavy swing always throws one.", values: { heavyShard: 1 } },
+  { text: "New: a Keen blow always throws one.", values: { heavyShard: 1 } },
   { text: "New: a shard's strike marks the foe, +10% from her for 2 s; 5 strikes.", values: { strikes: 5, mark: 0.1 } },
   { text: "Power 0.5 to 0.9 AD.", values: { power: 0.9 } },
   { text: "New: two shards out at once.", values: { count: 2 } },

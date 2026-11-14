@@ -9,7 +9,7 @@ export const WOUND = {
   /** the most a foe carries */
   most: 5,
   /** each wound bleeds this multiple of attack damage per tick */
-  per: 0.1,
+  per: 0.07,
   every: 1,
   /** seconds the wounds stay open after the last one */
   life: 3,

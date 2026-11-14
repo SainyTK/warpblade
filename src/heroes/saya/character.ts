@@ -13,9 +13,9 @@ import { SAYA_SKIN } from "./look";
 export const SAYA: CharacterDef = {
   id: "saya",
   name: "Saya",
-  title: "The quiet draw",
+  title: "The quickdraw",
   blurb:
-    "Her katana stays in its lacquered scabbard until the moment it is needed. Every cut she makes waits in the foe, and all of them land at once when the blade clicks home.",
+    "Her katana rests in its scabbard until it is needed. Every cut waits in the foe, and all of them land at once when the blade clicks home.",
   accent: "#8fa2ff",
   price: 550,
   special: { id: "silentMoon", name: "Silent Moon" },

@@ -291,7 +291,7 @@ The string contract in `docs/combo-design.md` holds for every hero: the same str
 
 - `warp: WarpStyle` gives the shared warp its look and one small extra (`strike`, `arrived`, `tune`, `stat`, `drawThrown`). The numbers are shared.
 - `guard: GuardStyle` sets the block's `chip` and `blockCost` and the hero's parry reward (`parried`). The shared guard counts one block per touch and stays down after a break until K is pressed again.
-- `abilities: AbilitySlot[]` lists the abilities on I in the order O turns through them: each has an id, a tab label in capitals, `known`, `wait`, `full`, `affordable`, `cast(wide)`, and optionally a `tint` (any CSS colour), `evolved` and a `cost` text. The HUD tabs and the touch I and O buttons are built from this list.
+- `abilities: AbilitySlot[]` lists the abilities on I in the order O turns through them: each has an id, a tab label in capitals, `known`, `wait`, `full`, `affordable`, `cast(wide)`, and optionally a `tint` (any CSS colour) and `evolved`. The HUD tabs and the touch I and O buttons are built from this list.
 
 ### The ultimate
 

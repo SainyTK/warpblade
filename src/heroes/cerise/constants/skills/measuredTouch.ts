@@ -1,14 +1,14 @@
 import type { SkillDef } from "../../../../types/skill";
 import { evolvedRow, levelRows } from "../../../../utils/skillRows";
 
-/** values: `bonus` added damage of a Keen blow on the foe it pays off on, `window` the Keen beat in seconds, `points`
- *  extra Points a Keen move gives, `reach` px a Keen thrust reaches farther, `streak` added per Keen move in a row up to
+/** values: `bonus` added damage of a Keen blow on the foe it pays off on, `window` the Keen beat in seconds, `hold`
+ *  seconds a Keen move holds the foe it paid off on, `reach` px a Keen thrust reaches farther, `streak` added per Keen move in a row up to
  *  `streakCap`, `twin` power share of the second strike of a Keen lunge; evolved `star` AD of the rose star every
  *  `starEvery` Keen moves in a row, which gives `starPoints` */
 const LEVELS = levelRows([
   { text: "Keen blows deal +150% damage.", values: { bonus: 1.5, window: 0.1 } },
   { text: "Keen beat 0.10 to 0.15 s.", values: { window: 0.15 } },
-  { text: "New: a Keen blow gives a second Point.", values: { points: 1 } },
+  { text: "New: a Keen blow holds its foe in place for 0.4 s.", values: { hold: 0.4 } },
   { text: "New: Keen thrusts reach 16 px farther.", values: { reach: 16 } },
   { text: "Keen damage +150% to +400%.", values: { bonus: 4 } },
   { text: "New: each Keen blow in a row adds +25% to the next, up to +100%.", values: { streak: 0.25, streakCap: 1 } },

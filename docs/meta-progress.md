@@ -105,7 +105,6 @@ Coins also unlock heroes on the hero screen.
 Kael and Cerise are free.
 The other seven cost 300 (Aldric), 400 (Vesper), 550 (Saya), 750 (Yun), 1000 (Brynn), 1350 (Zafir) and 1800 (Calder), 6,150 coins in all.
 Each price is the hero's `CharacterDef.price`, and each is about 1.35 times the one before, rounded to the nearest 50.
-A hero that is still being built is left out of a production build and joins the hero screen when it is finished.
 The hero screen and what each price means in runs are in `docs/achievements.md`.
 
 ## Saving

@@ -1,11 +1,12 @@
+import { COST } from "../../../constants/combat";
 import type { HeroControls } from "../../../types/character";
 
 /** how the Controls screen and the touch controller describe Kael, over the shared lines */
 export const KAEL_CONTROLS: HeroControls = {
   actions: {
     attack:
-      "Sword combo of four hits, the same every time. Press again just as a blow lands for a Keen hit. Just after a parry, blink to the attacker's back and strike",
-    warp: "Warp strike: throw the sword at the nearest foe ahead and warp to it (10 MP)",
+      "Sword combo of four blows, the same every time. Press again just after a blow lands for a Keen hit. Just after a parry, blink to the attacker's back and strike",
+    warp: `Warp strike: throw the sword at the nearest foe ahead and warp to it (${COST.warp} MP)`,
     guard:
       "Guard: hold to block blows from the front. Press just as a blow lands to parry: a riposte cut, then Attack blinks you behind the attacker",
     cast: "Cast the selected ability: Crystal Lance, Crystal Burst or a spell you learn. If it is recharging, the next ready one goes",
@@ -16,7 +17,7 @@ export const KAEL_CONTROLS: HeroControls = {
   touch: {
     attack: {
       label: "Attack",
-      hint: "Tap: sword combo of four hits; tap again just as a blow lands for a Keen hit, or just after a parry to blink behind the attacker. Hold: throw the sword and warp to it (10 MP)",
+      hint: `Tap: sword combo of four blows; tap again just after a blow lands for a Keen hit, or just after a parry to blink behind the attacker. Hold: throw the sword and warp to it (${COST.warp} MP)`,
       accent: "#7fe3ff",
     },
     guard: {
@@ -29,6 +30,6 @@ export const KAEL_CONTROLS: HeroControls = {
       hint: "Tap to cast the selected ability; if it is recharging, the next ready one goes. Hold for its wide form, for half again the MP",
       accent: null,
     },
-    cycle: { label: "Ability", hint: "Switch ability: lance, burst and the spells you learn", accent: null },
+    cycle: { label: "Switch", hint: "Next ability: lance, burst and the spells you learn", accent: null },
   },
 };

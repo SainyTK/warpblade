@@ -12,9 +12,9 @@ import { YUN_SKIN } from "./look";
 export const YUN: CharacterDef = {
   id: "yun",
   name: "Yun",
-  title: "The wandering sword sage",
+  title: "The sword sage",
   blurb:
-    "A travelling sage with a straight jian and a long jade tassel. His cuts flow in circles, and spirit swords hover behind him to repeat every blow at range.",
+    "A travelling sage with a straight jian. His cuts flow in circles, and spirit swords hover behind him to repeat every blow at range.",
   accent: "#5fd6a4",
   price: 750,
   special: { id: "jadeRain", name: "Jade Rain" },

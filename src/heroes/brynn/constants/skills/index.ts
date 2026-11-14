@@ -2,7 +2,7 @@ import type { SkillDef } from "../../../../types/skill";
 import { ANVIL_WEIGHT } from "./anvilWeight";
 import { BELLOWS } from "./bellows";
 import { BRAND_PILLARS } from "./brandPillars";
-import { COUNTER_EDGE } from "./counterEdge";
+import { COUNTER_CLEAVE } from "./counterCleave";
 import { CRATER_LEAP } from "./craterLeap";
 import { CRIMSON_FALL } from "./crimsonFall";
 import { CRUSHING_WEIGHT } from "./crushingWeight";
@@ -26,7 +26,7 @@ export const BRYNN_SKILL_DEFS: readonly SkillDef[] = [
   WIDE_ARC,
   SKYWARD_HEAVE,
   ANVIL_WEIGHT,
-  COUNTER_EDGE,
+  COUNTER_CLEAVE,
   SPINNING_THROW,
   CRATER_LEAP,
   SHOULDER_CHARGE,

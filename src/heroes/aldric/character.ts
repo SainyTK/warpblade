@@ -13,7 +13,7 @@ import { ALDRIC_SKIN } from "./look";
 export const ALDRIC: CharacterDef = {
   id: "aldric",
   name: "Aldric",
-  title: "Captain of the dawn guard",
+  title: "The shield knight",
   blurb:
     "Walks into the fight behind a raised kite shield and bashes from behind it. Every blow he stops builds Valor, and full Valor lights his sword.",
   accent: DAWN_CSS,
