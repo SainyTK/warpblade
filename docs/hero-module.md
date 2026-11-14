@@ -53,7 +53,7 @@ src/heroes/kael/
     clips/                index.ts (KAEL_CLIPS), string.ts, ground.ts, air.ts, finishers.ts, skills.ts, wounded.ts
     skills/               index.ts (KAEL_SKILL_DEFS) and one file per skill
   types/                  moves.ts (move and clip names), spell.ts, state.ts
-  look/                   index.ts (KAEL_SKIN), colors.ts, head.ts, blade.ts
+  look/                   index.ts (KAEL_SKIN), colors.ts, head.ts, blade.ts, hair.ts, trails.ts, coat.ts, strap.ts, arm.ts
   game/                   kit.ts, pose.ts, readActions.ts, chooseMove.ts, warpStyle.ts, guardStyle.ts, spell.ts, state.ts, ...
     moves/                index.ts (KAEL_MOVES), chain.ts, air.ts, finishers.ts, skills.ts, slashes.ts
     spells/               bolt.ts, burst.ts, fire.ts, ice.ts, lightning.ts, ...
@@ -92,8 +92,8 @@ When no hero calls `stubCharacter`, `src/heroes/stub.ts` and the `stub` field ar
 export const KAEL: CharacterDef = {
   id: "kael",
   name: "Kael",
-  title: "The last warp knight",
-  blurb: "Throws his crystal sword and appears where it lands. ...",
+  title: "The warp knight",
+  blurb: "A spell swordsman. He throws his crystal sword, appears where it lands, ...",
   accent: "#7fe3ff",
   price: 0,
   special: { id: "crystalNova", name: "Crystal Nova" },
@@ -132,12 +132,12 @@ A skin fills these fields (`src/types/character.ts`, `src/types/rig.ts`):
 
 | Field | What it is | Kael |
 | --- | --- | --- |
-| `colors` | `HeroColors`, each material deep to glint | `{ ...BASE_HERO_COLORS }` in `look/colors.ts`; spread the base and set the materials that differ |
+| `colors` | `HeroColors`, each material deep to glint | `{ ...BASE_HERO_COLORS, ... }` in `look/colors.ts`: the base spread, with his own hair, iris and coat |
 | `head`, `headBack` | 24 by 22 image pixel rows, facing right and from behind; the letters are listed on `HeroSkin.head` | `look/head.ts` |
 | `blade` | the sword: `reach` in pixels from hand to tip, and `draw(s, hand, angle, state)` | `look/blade.ts`, the crystal longsword |
 | `offhand` | an item of the sword style: `held(s, hand, angle, front, rig)` in the far hand, `hip(s, rig)` at the hip | none |
-| `parts` | the hero's own drawing of a shared part: `trails`, `arm`, `leg`, `coatTails`, `torso`, `head` | none: he wears the shared parts |
-| `extras` | pieces the shared parts lack, each at a layer: `behind`, `underTorso`, `overTorso`, `overHead`, `front` | none |
+| `parts` | the hero's own drawing of a shared part: `trails`, `arm`, `leg`, `coatTails`, `torso`, `head` | `trails` (`look/trails.ts`), `arm` (`look/arm.ts`), `coatTails` (`look/coat.ts`); the rest are shared |
+| `extras` | pieces the shared parts lack, each at a layer: `behind`, `underTorso`, `overTorso`, `overHead`, `front` | his back hair and fringe (`look/hair.ts`) and his strap (`look/strap.ts`) |
 | `scarfAt` | where the scarf's rope hangs from: `"neck"` (default) or `"belt"` for a sash | neck |
 | `ramp`, `glow`, `sparks` | the colours of slashes, floor rings, afterimages, the warp line, the blade's light and hit sparks | `PAL.crystal`, `SPARKS.crystal` |
 
@@ -145,11 +145,11 @@ How the sword plugs in:
 
 ```ts
 export const KAEL_BLADE: BladeLook = {
-  reach: 17,
+  reach: 19,
   draw(s, hand, angle) {
     const at = heldAxis(hand, angle); // at(d, w): d pixels along the blade from the hand, w across it
     s.begin();
-    s.poly([at(2.4, -0.9), at(2.4, 1.1), at(15, 0.9), at(17, 0), at(15, -0.8)], HC.blade);
+    s.poly([at(3, -1.3), at(3, 1.4), at(15.6, 1.1), at(19, 0), at(16.6, -1.05)], HC.blade);
     s.commit();
     drawFitting(s, () => s.dot(...at(-3, 0), 0.85, HC.trim)); // a pommel in the trim colours
   },
