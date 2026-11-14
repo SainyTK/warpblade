@@ -1,0 +1,30 @@
+import type { SkillDef } from "../../../../types/skill";
+import { evolvedRow, levelRows } from "../../../../utils/skillRows";
+
+/** values: `ring` power of the qi ring a second jump sends, in attack damage, `radius` its reach in pixels, `airDodge` the front dodge works in the air, `float` gravity while falling, `land` power of the qi waves a landing from a jump sends both ways, `sword` seconds between spirit swords a second jump gives, `pull` the ring draws foes in */
+const LEVELS = levelRows([
+  { text: "A second jump sends a ring of qi round you.", values: { ring: 0.6, radius: 26 } },
+  { text: "Ring power 0.6 to 0.9.", values: { ring: 0.9 } },
+  { text: "New: dodge in the air.", values: { airDodge: 1 } },
+  { text: "Ring power 0.9 to 1.2; it reaches further.", values: { ring: 1.2, radius: 32 } },
+  { text: "New: you fall even more slowly.", values: { float: 0.68 } },
+  { text: "New: landing from a jump sends qi waves both ways.", values: { land: 1.5 } },
+  { text: "Ring power 1.2 to 2.4; it reaches further.", values: { ring: 2.4, radius: 38 } },
+  { text: "New: a second jump gives a spirit sword, once every 3 s; ring power 3.", values: { sword: 3, ring: 3 } },
+]);
+
+export const CLOUD_STEP: SkillDef = {
+  id: "yu_cloud",
+  name: "Cloud Step",
+  kind: "movement",
+  risk: "timed",
+  button: "jump",
+  text: "The second jump sends out a ring of qi, and you float, dodge in the air and land with waves.",
+  levels: LEVELS,
+  evolution: {
+    partner: "yu_drift",
+    name: "Cloud Walker",
+    text: "The ring draws foes in to you, and landing waves strike twice as hard.",
+    row: evolvedRow(LEVELS[7], "The ring pulls; landing waves x2.", { pull: 1, land: 1.6 }),
+  },
+};
