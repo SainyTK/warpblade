@@ -13,9 +13,9 @@ const LEVELS = levelRows([
   { text: "New: swallows pierce on to a second foe.", values: { pierce: 2 } },
   { text: "3 swallows.", values: { count: 3 } },
   { text: "New: swallows dive at foes on the floor too and throw them up.", values: { ground: 1 } },
-  { text: "Swallows 0.6 to 0.9; every launch sends them.", values: { power: 0.9, chance: 1 } },
+  { text: "Swallows 0.6 to 0.75; every launch sends them.", values: { power: 0.75, chance: 1 } },
   { text: "New: an air blow at the top of Tempo sends a swallow.", values: { airTop: 1 } },
-  { text: "4 swallows; 0.9 to 1.2.", values: { count: 4, power: 1.2 } },
+  { text: "4 swallows; 0.75 to 0.9.", values: { count: 4, power: 0.9 } },
 ]);
 
 export const NIGHT_SWALLOWS: SkillDef = {

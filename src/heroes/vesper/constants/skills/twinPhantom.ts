@@ -15,7 +15,7 @@ const LEVELS = levelRows([
   { text: "New: the phantom cuts from the foe's back.", values: { back: 1 } },
   { text: "5 cuts.", values: { cuts: 5 } },
   { text: "New: the phantom stays 3 s and cuts any foe near it.", values: { stay: 3 } },
-  { text: "Cuts 1.2 to 1.8.", values: { power: 1.8 } },
+  { text: "Cuts 1.2 to 1.5.", values: { power: 1.5 } },
 ]);
 
 export const TWIN_PHANTOM: SkillDef = {

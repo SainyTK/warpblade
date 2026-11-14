@@ -44,8 +44,13 @@ function createDance(foes: Enemy[], cutsEach: number, blow: number, delay: numbe
     update(dt) {
       o.t += dt;
       while (o.t >= o.next * WALTZ_CUTS.gap && o.next < order.length) {
-        const e = order[o.next++];
-        if (e.hp <= 0) continue;
+        const first = order[o.next++];
+        // a cut whose foe has already fallen goes to the nearest foe still standing in the dance
+        const e =
+          first.hp > 0
+            ? first
+            : foes.filter((f) => f.hp > 0).sort((a, b) => Math.abs(a.x - o.x) - Math.abs(b.x - o.x))[0];
+        if (!e) continue;
         const [x, y] = enemyCenter(e);
         const side = o.next % 2 ? 1 : -1;
         leaveAfterimages(o.x, o.y + 16, x - side * 10, e.y);

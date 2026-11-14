@@ -13,7 +13,7 @@ const LEVELS = levelRows([
   { text: "New: its cuts throw foes up.", values: { launch: 1 } },
   { text: "New: it closes with a cross on every foe it struck.", values: { finale: 0.6 } },
   { text: "New: you cannot be touched for 2 s after it.", values: { untouch: 2 } },
-  { text: "Power +80% to +110%; 2 more cuts.", values: { power: 2.1, cuts: 4, finale: 0.9 } },
+  { text: "Power +80% to +160%; 2 more cuts.", values: { power: 2.6, cuts: 4, finale: 0.9 } },
 ]);
 
 export const DUSK_WALTZ: SkillDef = {
