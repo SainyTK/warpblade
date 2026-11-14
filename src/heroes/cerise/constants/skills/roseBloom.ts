@@ -14,7 +14,7 @@ const LEVELS = levelRows([
   { text: "Bloom 1.6 to 3 AP.", values: { power: 3 } },
   { text: "New: a Point for every two foes struck.", values: { points: 1 } },
   { text: "Recharge 6 to 4 s.", values: { recharge: 4 } },
-  { text: "Bloom 3 to 6 AP; petals 0.3 to 0.8 AP a tick.", values: { power: 6, tick: 0.8 } },
+  { text: "Bloom 3 to 5 AP; petals 0.3 to 0.6 AP a tick.", values: { power: 5, tick: 0.6 } },
 ]);
 
 export const ROSE_BLOOM: SkillDef = {
@@ -28,7 +28,7 @@ export const ROSE_BLOOM: SkillDef = {
   evolution: {
     partner: "ce_petals",
     name: "Garden of Blades",
-    text: "The bloom bursts twice more, wider each time.",
-    row: evolvedRow(LEVELS[7], "Bursts twice more, wider each time.", { echoes: 2 }),
+    text: "The bloom bursts twice more at half strength, wider each time.",
+    row: evolvedRow(LEVELS[7], "Bursts twice more at half strength, wider each time.", { echoes: 2 }),
   },
 };

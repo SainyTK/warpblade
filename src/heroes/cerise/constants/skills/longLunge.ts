@@ -5,14 +5,14 @@ import { evolvedRow, levelRows } from "../../../../utils/skillRows";
  *  pins, `echo` share of the lunge a petal trail cuts again on its line, `perPoint` AD each Point adds; evolved
  *  `comet` share of the lunge a streak of rose light deals across the whole screen */
 const LEVELS = levelRows([
-  { text: "The lunge deals +50% damage.", values: { power: 0.5 } },
+  { text: "The lunge deals +30% damage.", values: { power: 0.3 } },
   { text: "New: the lunge reaches 20 px farther.", values: { reach: 20 } },
   { text: "New: the lunge breaks guards.", values: { guardBreak: 1 } },
-  { text: "Lunge damage +50% to +120%.", values: { power: 1.2 } },
+  { text: "Lunge damage +30% to +60%.", values: { power: 0.6 } },
   { text: "New: the lunge pins foes for 1.4 s.", values: { pin: 1.4 } },
   { text: "New: petals cut the lunge's line again a moment later.", values: { echo: 0.5 } },
-  { text: "New: each Point adds +0.7 AD to the lunge.", values: { perPoint: 0.7 } },
-  { text: "Lunge damage +120% to +300%.", values: { power: 3 } },
+  { text: "New: each Point adds +0.55 AD to the lunge.", values: { perPoint: 0.55 } },
+  { text: "Lunge damage +60% to +120%.", values: { power: 1.2 } },
 ]);
 
 export const LONG_LUNGE: SkillDef = {

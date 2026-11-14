@@ -11,11 +11,11 @@ const LEVELS = levelRows([
   },
   { text: "Chance 50% to 80%.", values: { chance: 0.8 } },
   { text: "New: up to two sentinels at once.", values: { most: 2 } },
-  { text: "Thrusts 0.8 to 1.6 AD; it stands 4 s.", values: { power: 1.6, time: 4 } },
+  { text: "Thrusts 0.8 to 1 AD; it stands 4 s.", values: { power: 1, time: 4 } },
   { text: "New: its thrusts pin foes.", values: { pin: 0.4 } },
   { text: "New: it reaches 40 to 60 px; chance 100%.", values: { reach: 60, chance: 1 } },
   { text: "New: it thrusts twice as often.", values: { every: 0.25 } },
-  { text: "Thrusts 1.6 to 4 AD; three at once.", values: { power: 4, most: 3 } },
+  { text: "Thrusts 1 to 1.5 AD; three at once.", values: { power: 1.5, most: 3 } },
 ]);
 
 export const THORN_SENTINEL: SkillDef = {

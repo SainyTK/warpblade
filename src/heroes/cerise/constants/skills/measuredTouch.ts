@@ -13,7 +13,7 @@ const LEVELS = levelRows([
   { text: "Keen damage +150% to +400%.", values: { bonus: 4 } },
   { text: "New: each Keen blow in a row adds +25% to the next, up to +100%.", values: { streak: 0.25, streakCap: 1 } },
   { text: "New: a Keen lunge strikes twice.", values: { twin: 1 } },
-  { text: "Keen damage +400% to +1400%.", values: { bonus: 14 } },
+  { text: "Keen damage +400% to +800%.", values: { bonus: 8 } },
 ]);
 
 export const MEASURED_TOUCH: SkillDef = {
@@ -29,7 +29,7 @@ export const MEASURED_TOUCH: SkillDef = {
     name: "Perfect Measure",
     text: "Every fourth Keen blow in a row bursts a gold rose star on the foe and gives 2 Points.",
     row: evolvedRow(LEVELS[7], "Every 4th Keen blow in a row: a rose star and 2 Points.", {
-      star: 260,
+      star: 150,
       starEvery: 4,
       starPoints: 2,
     }),

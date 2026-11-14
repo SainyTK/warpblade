@@ -11,11 +11,11 @@ const LEVELS = levelRows([
   },
   { text: "Chance 40% to 70%.", values: { chance: 0.7 } },
   { text: "New: a third blade.", values: { count: 3 } },
-  { text: "Darts 0.5 to 1 AD; chance 100%.", values: { power: 1, chance: 1 } },
+  { text: "Darts 0.5 to 0.6 AD; chance 100%.", values: { power: 0.6, chance: 1 } },
   { text: "New: darts leave a bleed.", values: { bleed: 0.2 } },
   { text: "New: blades stay 4 to 7 s.", values: { life: 7 } },
   { text: "New: blades dart twice as often.", values: { every: 0.3 } },
-  { text: "Darts 1 to 2.5 AD; 4 blades.", values: { power: 2.5, count: 4 } },
+  { text: "Darts 0.6 to 0.9 AD; 4 blades.", values: { power: 0.9, count: 4 } },
 ]);
 
 export const PETAL_BLADES: SkillDef = {

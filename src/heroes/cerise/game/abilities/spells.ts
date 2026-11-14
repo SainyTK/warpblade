@@ -20,6 +20,8 @@ import { gainPoints } from "../points";
 import { cerise } from "../state";
 import { beginCast } from "./cast";
 
+/** Garden of Blades: each echo bloom hits at this share and reaches this much wider than the one before */
+const BLOOM_ECHO = { power: 0.5, grow: 0.35 } as const;
 /** Rose Bloom throws foes up this fast from its third level */
 const BLOOM_LAUNCH = -220;
 
@@ -129,7 +131,7 @@ function bloomEcho(i: number): Effect {
       o.t += dt;
       if (!o.done && o.t >= 0.3 * i) {
         o.done = true;
-        bloom(power, wide, 1 + 0.35 * i);
+        bloom(power * BLOOM_ECHO.power, wide, 1 + BLOOM_ECHO.grow * i);
       }
       return !o.done;
     },

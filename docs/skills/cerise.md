@@ -228,15 +228,15 @@ Spell, precise, I. I: a short stance that parries the next blow for you and answ
 
 | Lv | Card line | Values |
 | --- | --- | --- |
-| 1 | I: for 0.4 s blows from the front are parried for you. | time 0.4, recharge 6 |
-| 2 | New: its ripostes deal +100% damage. | bonus 1 |
+| 1 | I: for 0.4 s the next blow from the front is parried for you. | time 0.4, recharge 6 |
+| 2 | New: its riposte deals +200% damage. | bonus 2 |
 | 3 | Stance 0.4 to 0.7 s. | time 0.7 |
 | 4 | New: blows from behind are parried too. | around 1 |
 | 5 | New: a parry in the stance gives 2 more Points. | points 2 |
 | 6 | Recharge 6 to 4 s. | recharge 4 |
 | 7 | New: a parry in the stance sends a Rose Line. | line 1 |
-| 8 | Riposte bonus +100% to +400%. | bonus 4 |
-| Evolved | Perfect Mirror: The stance lasts 1.2 s and its ripostes deal +800%. Partner: Riposte Chain at level 4. | time 1.2, bonus 8 |
+| 8 | Riposte bonus +200% to +800%. | bonus 8 |
+| Evolved | Perfect Mirror: The stance lasts 1.2 s and its riposte deals +1600%. Partner: Riposte Chain at level 4. | time 1.2, bonus 16 |
 
 #### `ce_thorns` Thorn Wounds
 
