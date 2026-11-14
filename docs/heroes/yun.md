@@ -112,6 +112,14 @@ Its skill, Heaven's Grove (`yu_rain`), adds more swords, a rain that keeps falli
 The blows of the string deal 0.95, 1.0, 1.15 and 2.1 times attack damage, 5.2 in all against Kael's 6.25.
 With two swords the echoes add 1.76 at range, and with four 3.52, so a held-up Yun out-damages Kael's string on a crowd at middle range and falls short of it point blank with no swords.
 
+## Skills, achievement and controls
+
+His 20 skills are in `docs/skills/yun.md`: five that reshape the string, the echo and the air string, three for the jump, the warp and the dodge, three more abilities on I (Sword Fan, Sword Cage and Qi Crescent, which costs MP so he has an ability with no sword out), qi wounds, bleeding cuts and jade needles over time, guardian blades, jade herons and his own shade as summons, two passives on the swords themselves, and Heaven's Grove for Jade Rain.
+His achievement, A Thousand Blades, asks for 300 spirit swords sent out by his abilities over every run (`yun.swordsSent`).
+His touch buttons show the jian, a screen of three swords for the guard, each ability's own face, a ring of dots for the switch and falling swords for Jade Rain.
+His Controls lines are in `src/heroes/yun/constants/controls.ts`.
+Every module-level state of his is per seat (`game/state.ts`), and the tassel's swing is part of it.
+
 ## How Yun differs from each of the other eight
 
 - Kael casts elemental spells into his string and blinks behind the attacker after a parry. Yun casts no elements; his ranged damage is the spirit swords, his abilities spend a resource he builds, and his cast keeps the string open.
