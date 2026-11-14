@@ -1,12 +1,14 @@
 import { createImpact } from "../../../game/effects/impact";
 import { sharedWarpStrike } from "../../../game/hero/warp";
 import { skillValues, withCharms } from "../../../game/skills/query";
-import { game, hero, lights } from "../../../game/state";
+import { game, hero, progress } from "../../../game/state";
 import type { Enemy } from "../../../types/enemy";
 import type { WarpStyle } from "../../../types/moveset";
 import { BULWARK } from "../constants/kit";
-import { DAWN_RAMP, DAWN_SPARKS } from "../constants/light";
-import { aldric } from "./state";
+import { DAWN_SPARKS } from "../constants/light";
+import { ARRIVAL_RING } from "../constants/skillNumbers";
+import { raiseBarrier } from "./barrier";
+import { createDelayedRing } from "./effects/delayedRing";
 
 /** the arrival: the shared blow, led by the shield striking first in a burst of sparks */
 function strike(power: number, foe: Enemy | null, sureCrit: boolean): void {
@@ -14,17 +16,23 @@ function strike(power: number, foe: Enemy | null, sureCrit: boolean): void {
   sharedWarpStrike(power, foe, sureCrit);
 }
 
-/** Bulwark: a barrier of light that takes the next blow, longer and stronger with Bulwark Arrival */
-function raiseBulwark(): void {
+/** after the blow: Bulwark goes up, and with Bulwark Arrival a ring of light runs out from where he landed */
+function arrived(): void {
   const v = skillValues("al_bulwark");
-  aldric.barrier = withCharms("duration", BULWARK.time + (v.time ?? 0));
-  aldric.barrierBlows = 1 + (v.blows ?? 0);
-  lights.add(hero.x, hero.y - 18, 30, DAWN_RAMP[4], 0.5, 0.25);
+  raiseBarrier(BULWARK.time + (v.time ?? 0), 1 + (v.blows ?? 0));
+  if (v.ring && hero.ground)
+    game.fx.push(
+      createDelayedRing(hero.x, hero.y, withCharms("area", ARRIVAL_RING), 0, progress.stats.ad * v.ring, {
+        kx: 50,
+        ky: -40,
+        stagger: 0.4,
+      }),
+    );
 }
 
 /** Aldric's warp: the arming sword thrown, and he lands shield first behind a Bulwark */
 export const ALDRIC_WARP: WarpStyle = {
   strike,
-  arrived: () => raiseBulwark(),
+  arrived,
   tune: () => skillValues("al_bulwark"),
 };

@@ -1,29 +1,54 @@
 import { GROUND } from "../../../../constants/stage";
 import { fleck, glow, hairline, place } from "../../../../engine/frame";
 import { dealDamage } from "../../../../game/damage";
+import { skillEvolved, skillValues } from "../../../../game/skills/query";
+import { game, hero, progress } from "../../../../game/state";
 import type { Effect } from "../../../../types/effect";
 import { grain } from "../../../../utils/grain";
+import { PILLAR } from "../../constants/abilities";
 import { DAWN_RAMP } from "../../constants/light";
+import { DAWN_PULSE } from "../../constants/skillNumbers";
+import { createSunPillar } from "../abilities/pillar";
 import { foesIn } from "../strike";
 
 /** seconds between burns */
 const EVERY = 0.5;
 
 /**
- * Lingering Dawn: a strip of light on the floor where a pillar fell. Foes standing in it burn every half second, and
- * motes of light rise from it until it fades.
+ * Burning light on the floor (Lingering Dawn and the skills that leave it): foes standing in it burn every half
+ * second, and with Lingering Dawn's later levels their feet are held, Aldric heals standing in it, and as High Noon
+ * a small pillar falls on a foe in it each second. Motes of light rise from it until it fades.
  */
 export function createDawnGround(x: number, width: number, time: number, perSecond: number): Effect {
   let t = 0;
   let next = EVERY;
+  let pulse = DAWN_PULSE.every;
   const half = width / 2;
   return {
     update(dt) {
       t += dt;
+      const v = skillValues("al_dawn");
+      const inside = foesIn([x - half, GROUND - 40, x + half, GROUND + 2], x);
+      if (v.halt) for (const e of inside) e.halt = Math.max(e.halt, dt * 2);
+      if (v.heal && hero.ground && Math.abs(hero.x - x) <= half)
+        hero.hp = Math.min(progress.stats.hp, hero.hp + progress.stats.hp * v.heal * dt);
       if (t >= next) {
         next += EVERY;
-        for (const e of foesIn([x - half, GROUND - 40, x + half, GROUND + 2], x))
-          dealDamage(e, perSecond * EVERY, { source: "al_dawn", dot: true, fromX: x });
+        for (const e of inside) dealDamage(e, perSecond * EVERY, { source: "al_dawn", dot: true, fromX: x });
+      }
+      pulse -= dt;
+      if (pulse <= 0 && skillEvolved("al_dawn") && inside.length) {
+        pulse = DAWN_PULSE.every;
+        game.fx.push(
+          createSunPillar({
+            x: inside[0].x,
+            delay: DAWN_PULSE.delay,
+            damage: progress.stats.ap * PILLAR.power * DAWN_PULSE.share * (v.pulse ?? 1),
+            stun: 0,
+            half: DAWN_PULSE.half,
+            source: "al_dawn",
+          }),
+        );
       }
       return t < time;
     },

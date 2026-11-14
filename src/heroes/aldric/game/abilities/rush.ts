@@ -2,12 +2,13 @@ import { createFloorRing } from "../../../../game/effects/floorRing";
 import { travelEnded } from "../../../../game/hero/travelEnd";
 import { objectMemory, rememberPerSeat } from "../../../../game/seatMemory";
 import { emitSkillEvent } from "../../../../game/skills/events";
-import { skillValues } from "../../../../game/skills/query";
+import { skillValues, withCharms } from "../../../../game/skills/query";
 import { game, hero, progress } from "../../../../game/state";
 import { boxAhead, dust, shake } from "../../../../game/world";
 import type { Enemy } from "../../../../types/enemy";
 import { RUSH } from "../../constants/abilities";
 import { DAWN_RAMP } from "../../constants/light";
+import { createDawnGround } from "../effects/dawnGround";
 import { aldric } from "../state";
 import { foesIn, foesNear, strikeEach } from "../strike";
 import "../../types/events";
@@ -43,6 +44,16 @@ function endRush(): void {
     game.fx.push(createFloorRing(hero.x + hero.face * 10, hero.y, r, DAWN_RAMP, 0.4));
     shake(0.14, 1.8);
   }
+  const dawn = skillValues("al_dawn");
+  if (dawn.rush)
+    game.fx.push(
+      createDawnGround(
+        hero.x + hero.face * 8,
+        withCharms("area", dawn.width),
+        withCharms("duration", dawn.time),
+        progress.stats.ap * dawn.burn,
+      ),
+    );
   emitSkillEvent({ type: "bash", foe: [...rush.struck][0] ?? null, hits: rush.struck.size });
   travelEnded();
 }

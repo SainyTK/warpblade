@@ -15,6 +15,8 @@ import { WHITE } from "../../../../utils/color";
 import { TAU } from "../../../../utils/math";
 import { SANCTUARY } from "../../constants/abilities";
 import { DAWN_RAMP, DAWN_SPARKS } from "../../constants/light";
+import { DOME_PILLAR } from "../../constants/skillNumbers";
+import { createSunPillar } from "../abilities/pillar";
 import { aldric } from "../state";
 
 /** the dome's centre stands this high above the floor, as a share of its radius */
@@ -61,6 +63,7 @@ export function castSanctuary(level: number): void {
           const pull = v.pull ? -Math.sign(ex - at.x) * 60 : 30 * Math.sign(ex - at.x);
           dealDamage(e, blow, { source: "ultimate", fromX: at.x, kx: pull, ky: -20, stagger: 0.3 });
         }
+        if (v.pillars) domePillar(at.x, r, blow);
         if (v.heal) hero.hp = Math.min(progress.stats.hp, hero.hp + progress.stats.hp * v.heal);
       }
       const alive = at.t < time;
@@ -93,6 +96,22 @@ export function castSanctuary(level: number): void {
     },
   };
   game.fx.push(effect);
+}
+
+/** Sanctuary's sixth level: a pillar falls on the first foe inside the dome at each burn */
+function domePillar(x: number, r: number, blow: number): void {
+  const foe = game.enemies.find((e) => e.hp > 0 && Math.abs(enemyCenter(e)[0] - x) <= r);
+  if (!foe) return;
+  game.fx.push(
+    createSunPillar({
+      x: enemyCenter(foe)[0],
+      delay: 0.1,
+      damage: blow * DOME_PILLAR.share,
+      stun: 0,
+      half: DOME_PILLAR.half,
+      source: "ultimate",
+    }),
+  );
 }
 
 /** he stands inside his dome */

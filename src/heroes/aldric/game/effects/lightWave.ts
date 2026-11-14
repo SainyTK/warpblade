@@ -22,6 +22,8 @@ export interface WaveSpec {
   kx?: number;
   /** the foe it stops at, when it does not pierce: false stops at the first */
   pierce: boolean;
+  /** climbs this many px for each px it flies */
+  rise?: number;
 }
 
 /**
@@ -29,13 +31,15 @@ export interface WaveSpec {
  * throw. It is light, not a sword blow, so guards do not stop it.
  */
 export function createLightWave(x: number, y: number, face: number, spec: WaveSpec): Effect {
-  const o = { x, travelled: 0, done: false };
+  const o = { x, y, travelled: 0, done: false };
   const struck = new Set<Enemy>();
   return {
     update(dt) {
       const step = spec.speed * dt;
       o.x += face * step;
       o.travelled += step;
+      o.y += (spec.rise ?? 0) * step;
+      const y = o.y;
       for (const e of game.enemies) {
         if (o.done || struck.has(e) || e.hp <= 0) continue;
         if (!boxHit([o.x - 3, y - spec.half, o.x + 3, y + spec.half], enemyBox(e))) continue;
@@ -49,6 +53,7 @@ export function createLightWave(x: number, y: number, face: number, spec: WaveSp
     draw() {
       place();
       const k = 1 - o.travelled / spec.reach;
+      const y = o.y;
       const rows = Math.round(spec.half * RES);
       for (let j = -rows; j <= rows; j++) {
         const v = j / rows;

@@ -5,7 +5,7 @@ import { createFloorRing } from "../../../../game/effects/floorRing";
 import { skin } from "../../../../game/hero/skin";
 import { travelEnded } from "../../../../game/hero/travelEnd";
 import { meleeHit } from "../../../../game/meleeHit";
-import { skillValues } from "../../../../game/skills/query";
+import { skillValues, withCharms } from "../../../../game/skills/query";
 import { game, hero } from "../../../../game/state";
 import { boxAhead, boxBehind, dust, newSwing, shake } from "../../../../game/world";
 import type { MoveDef } from "../../../../types/move";
@@ -19,6 +19,7 @@ import {
   STRING_FEEL,
 } from "../../constants/kit";
 import type { AldricMoveId } from "../../types/moves";
+import { skyfall } from "../skyfall";
 import { CREST, OATH, SKY } from "./slashes";
 
 /** Crest breaker meets the floor: a ring, dust and a jolt */
@@ -31,19 +32,21 @@ function crestImpact(): void {
 
 /** Shield fall lands: a ring of light where the shield strikes the floor knocks every foe near off its feet */
 function fallLanding(): void {
-  const ring = SHIELD_FALL.ring * (1 + (skillValues("al_skyfall").ring ?? 0));
+  const v = skillValues("al_skyfall");
+  const ring = withCharms("area", SHIELD_FALL.ring * (1 + (v.ring ?? 0)));
   game.fx.push(createFloorRing(hero.x, hero.y, ring, skin.ramp, 0.4));
   dust(hero.x, hero.y, 8);
   shake(0.18, 2.2);
   newSwing();
   const box: [number, number, number, number] = [-ring * 0.3, -18, ring, 4];
-  meleeHit([boxAhead(...box), boxBehind(...box)], {
-    power: SHIELD_FALL.power * (skillValues("al_skyfall").power ?? 1),
+  const hits = meleeHit([boxAhead(...box), boxBehind(...box)], {
+    power: SHIELD_FALL.power * (v.power ?? 1),
     kx: 60,
     ky: -60,
     stun: SHIELD_FALL.stun,
     big: true,
   });
+  skyfall(hits);
   travelEnded();
 }
 
@@ -151,7 +154,8 @@ export const ALDRIC_MOVES = {
     ],
     step: (t) => {
       hero.vx = 0;
-      hero.vy = t < SHIELD_FALL.tuck ? Math.min(hero.vy, -20) : SHIELD_FALL.dive;
+      hero.vy =
+        t < SHIELD_FALL.tuck ? Math.min(hero.vy, -20) : SHIELD_FALL.dive * (1 + (skillValues("al_skyfall").dive ?? 0));
     },
     land: fallLanding,
   },

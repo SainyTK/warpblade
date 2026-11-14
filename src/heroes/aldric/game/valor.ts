@@ -6,7 +6,10 @@ import { sfx } from "../../../services/audio";
 import { STAT } from "../constants/achievements";
 import { RADIANCE, VALOR } from "../constants/kit";
 import { DAWN_RAMP } from "../constants/light";
+import { RESOLVE_BARRIER, UNBROKEN_LEVEL } from "../constants/skillNumbers";
+import { raiseBarrier } from "./barrier";
 import { aldric } from "./state";
+import { castSanctuary } from "./ultimate/sanctuary";
 
 /** Radiance runs: his blows add light and throw waves */
 export const radiant = (): boolean => aldric.radiance > 0;
@@ -22,6 +25,9 @@ function kindle(): void {
   lights.add(hero.x, hero.y - 20, 48, DAWN_RAMP[5], 0.7, 0.35);
   sfx.chime(3);
   feat({ kind: "heroCount", stat: STAT.radiance, add: 1 });
+  const v = skillValues("al_resolve");
+  if (v.barrier) raiseBarrier(RESOLVE_BARRIER, 1);
+  if (v.dome) castSanctuary(UNBROKEN_LEVEL);
 }
 
 /** a deed adds Valor (more with Resolve); at full it kindles Radiance. While Radiance runs, Valor waits */
