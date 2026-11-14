@@ -16,7 +16,7 @@ const LEVELS = levelRows([
   },
   { text: "Return store +80% to +150%.", values: { store: 2.5 } },
   { text: "New: the crescent stores its cut and lasts 1 s.", values: { crescentStore: 1, crescentTime: 1 } },
-  { text: "Return store +150% to +250%; the crescent cuts harder.", values: { store: 3.5, crescent: 2 } },
+  { text: "Return store +150% to +160%; the crescent cuts harder.", values: { store: 2.6, crescent: 1 } },
 ]);
 
 export const REVERSE_EDGE: SkillDef = {

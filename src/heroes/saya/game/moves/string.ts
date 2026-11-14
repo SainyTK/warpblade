@@ -29,6 +29,7 @@ export const STRING_MOVES = {
         power: STRING_POWER.drawCut.now,
         kx: 8,
         ky: -10,
+        big: true,
         slash: SLASHES.draw,
         feel: STRING_FEEL.drawCut,
       },

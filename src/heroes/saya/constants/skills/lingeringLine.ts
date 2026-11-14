@@ -16,7 +16,7 @@ const LEVELS = levelRows([
   { text: "New: foes on the trail are slowed.", values: { slow: 1 } },
   { text: "Trail damage +60% to +150%; 4 s.", values: { damage: 1, time: 4 } },
   { text: "New: Focus fills twice as fast while she stands on her trail.", values: { focus: 2 } },
-  { text: "New: trail ticks store a small cut; damage +150% to +400%.", values: { damage: 2, store: 0.3 } },
+  { text: "New: trail ticks store a small cut; damage +150% to +200%.", values: { damage: 1.2, store: 0.3 } },
 ]);
 
 export const LINGERING_LINE: SkillDef = {

@@ -16,7 +16,7 @@ const LEVELS = levelRows([
   { text: "New: a second crescent flies low beside the first.", values: { pair: 1 } },
   { text: "Store +50% to +150%.", values: { store: 3 } },
   { text: "New: the crescent bursts where its flight ends.", values: { burst: 1.5 } },
-  { text: "Cut and store +100%.", values: { now: 1, store: 6 } },
+  { text: "Cut +40%; store +33%.", values: { now: 0.7, store: 4 } },
 ]);
 
 export const CRESCENT_WAVE: SkillDef = {

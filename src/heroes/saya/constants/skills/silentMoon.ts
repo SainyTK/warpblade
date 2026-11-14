@@ -10,11 +10,11 @@ const LEVELS = levelRows([
   { text: "Silent Moon's lines burst 30% harder.", values: { power: 1.3 } },
   { text: "Recharge 20 to 15 s; charges 30% faster.", values: { cooldown: 15, charge: 1.3 } },
   { text: "New: two more lines.", values: { lines: 2 } },
-  { text: "Power +30% to +80%.", values: { power: 1.8 } },
+  { text: "Power +30% to +40%.", values: { power: 1.4 } },
   { text: "New: its click releases stored cuts at double.", values: { stored: 2 } },
   { text: "New: foes it strikes take +30% damage for 4 s.", values: { mark: 0.3 } },
-  { text: "Power +80% to +150%.", values: { power: 2.5 } },
-  { text: "New: four more lines; power +150% to +250%.", values: { lines: 6, power: 3.5 } },
+  { text: "Power +40% to +50%.", values: { power: 1.5 } },
+  { text: "New: two more lines; power +50% to +60%.", values: { lines: 4, power: 1.6 } },
 ]);
 
 export const SILENT_MOON_SKILL: SkillDef = {

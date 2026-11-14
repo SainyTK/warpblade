@@ -29,8 +29,8 @@ function storeOf(move: string): number {
   return 0;
 }
 
-/** a blow as her skills shape it: a breath draw reaches farther, Honed Draw breaks guards and makes a breath draw a
- *  sure crit, and Reverse Edge's return cut cuts behind and throws foes up */
+/** a blow as her skills shape it: a breath draw reaches farther and with Honed Draw is a sure crit, Honed Draw makes
+ *  the return cut break guards, and Reverse Edge's return cut cuts behind and throws foes up */
 export function shapeHit(id: string, hit: MoveHit): MoveHit {
   if (id === "drawCut" || id === "airDraw") {
     const edge = skillValues(SKILL.edge);
@@ -38,11 +38,12 @@ export function shapeHit(id: string, hit: MoveHit): MoveHit {
     const [x0, y0, x1, y1] = hit.box;
     const slash = hit.slash && more ? { ...hit.slash, R: hit.slash.R + more * 0.6, W: hit.slash.W + 2 } : hit.slash;
     const crit = hit.crit || (saya.breathDraw && !!edge.crit);
-    return { ...hit, box: [x0, y0, x1 + more, y1], slash, big: hit.big || (id === "drawCut" && !!edge.guard), crit };
+    return { ...hit, box: [x0, y0, x1 + more, y1], slash, crit };
   }
   if (id === "returnCut") {
     const v = skillValues(SKILL.reverse);
-    return { ...hit, around: hit.around || !!v.behind, launch: v.launch ?? hit.launch };
+    const big = hit.big || !!skillValues(SKILL.edge).guard;
+    return { ...hit, around: hit.around || !!v.behind, launch: v.launch ?? hit.launch, big };
   }
   return hit;
 }

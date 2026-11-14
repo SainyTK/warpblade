@@ -1,5 +1,5 @@
 import { GROUND } from "../../../../constants/stage";
-import { circle, fleck, hairline, haze, place } from "../../../../engine/frame";
+import { circle, fleck, hairline, line, place } from "../../../../engine/frame";
 import { dealDamage } from "../../../../game/damage";
 import { enemyBox } from "../../../../game/enemies/enemy";
 import { skin } from "../../../../game/hero/skin";
@@ -91,15 +91,24 @@ export function createInkRain(o: RainSpec): Effect {
       place();
       const ramp = skin.ramp;
       const fade = clamp((o.time - t) / 0.3);
-      haze(x, top - 4, o.width / 2 + 6, 6, ramp[1], 0.75 * fade);
-      haze(x, top - 6, o.width / 2, 4, ramp[2], 0.6 * fade);
+      if (fade > 0) {
+        const half = o.width / 2;
+        for (let k = -half; k <= half; k += 7) {
+          const r = 3 + 2.5 * Math.abs(Math.sin(k * 0.7)) * Math.cos((k / half) * 1.2);
+          const y = top - 3 - r * 0.6 + Math.sin(k + t * 3) * 0.5;
+          circle(x + k, y, r, ramp[1], fade);
+          circle(x + k - 1, y - 1, r * 0.55, ramp[2], fade);
+          fleck(x + k - 1, y - r + 0.5, WHITE, fade);
+        }
+        hairline(x - half, top + 1, x + half, top + 1, ramp[3], 0.7 * fade);
+      }
       for (const d of drops) {
         if (d.big) {
           circle(d.x, d.y, 2.2, ramp[1]);
           fleck(d.x - 0.8, d.y - 1, WHITE);
         } else {
-          hairline(d.x, d.y - 3, d.x, d.y, ramp[1]);
-          fleck(d.x, d.y - 3, ramp[5]);
+          line(d.x, d.y - 3, d.x, d.y, ramp[1]);
+          fleck(d.x + 0.5, d.y - 3, WHITE);
         }
       }
     },

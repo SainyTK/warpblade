@@ -2,12 +2,12 @@ import type { SkillDef } from "../../../../types/skill";
 import { evolvedRow, levelRows } from "../../../../utils/skillRows";
 import { SKILL } from "./ids";
 
-/** values: `store` the factor on what draw cuts store, `reach` px they gain, `guard` they break guards, `wave` attack
+/** values: `store` the factor on what draw cuts store, `reach` px they gain, `guard` the return cut breaks guards, `wave` attack
  *  damage of the ink cut a breath draw sends ahead (stored in each foe it meets), `crit` a breath draw is a sure crit */
 const LEVELS = levelRows([
   { text: "Draw cuts store +40%.", values: { store: 1.4 } },
   { text: "New: draw cuts reach 8 px farther.", values: { reach: 8 } },
-  { text: "New: draw cuts break guards.", values: { guard: 1 } },
+  { text: "New: return cuts break guards too.", values: { guard: 1 } },
   { text: "Draw store +40% to +100%.", values: { store: 2 } },
   { text: "New: a draw with a breath sends an ink cut ahead that stores in each foe.", values: { wave: 1.2 } },
   { text: "Draw store +100% to +160%; reach 8 to 14 px.", values: { store: 2.6, reach: 14 } },
