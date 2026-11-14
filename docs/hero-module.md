@@ -196,6 +196,7 @@ export const kaelPose = (h: Hero, t: number): Pose => motionPose(h, t, statePose
 ```
 
 Call `resetMotion()` in the kit's `reset`.
+`motionPose` takes the hero's own jump crouch as an optional fourth argument: the pose the hero sinks into while a jump loads from a stand.
 `clipPose` (`src/game/hero/clipPose.ts`) plays the clip of the combo move under way from the hero's own `clips.actions`.
 
 ### The hero's own states

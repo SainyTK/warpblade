@@ -38,7 +38,7 @@ The load keeps the hero's speed, so a running jump goes as far as before, and th
 Nothing else starts during the load: a press of J, L or a skill waits in the input buffer and acts as soon as the hero is in the air.
 A hit or a fall off a ledge cancels the load.
 `src/game/hero/takeoff.ts` owns the load (`takeOff`, called by the shared `jump` in `src/game/hero/jump.ts`), and `loadPose` (`src/game/hero/motion/load.ts`) poses it for every hero.
-The load adds `LOAD_BEND` to the stand or the stride under way, so the feet keep their step and hold the floor.
+From a stand a hero with a crouch of its own sinks into it (the `crouch` passed to `motionPose`); every other load adds `LOAD_BEND` to the stand or the stride under way, so the feet keep their step and hold the floor.
 The jump's hand-over then crosses from the bend into the rise.
 The smoke check expects the hero off the floor 120 ms after W, so the load stays at two frames.
 
