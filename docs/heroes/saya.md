@@ -49,7 +49,7 @@ The silhouette reads from the high tail, the flared trousers and the long scabba
 
 Three presses, the same every time (`constants/string.ts`, `game/moves/string.ts`).
 
-1. Draw cut: her hand goes to the hilt and the blade leaves the scabbard in one level cut, the longest reach of her string.
+1. Draw cut: her hand goes to the hilt and the blade leaves the scabbard in one level cut, the longest reach of her string; it breaks a raised guard, so the cut it stores always lands.
 2. Return cut: the blade comes back up and across from the other side.
 3. Sheathe: she flicks the ink off the blade and slides it home; the click strikes a short blow ahead and releases every stored cut.
 
@@ -126,7 +126,7 @@ All in `src/heroes/saya/constants/`.
 | --- | --- |
 | Base stats | AD 11, AP 8, HP 95, MP 90, stamina 100, crit 8%, move 1.04 |
 | Growth per level | HP 1.0, MP 0.4 |
-| Draw cut | 0.55 AD at once, 1.35 AD stored, reach 38 px |
+| Draw cut | 0.55 AD at once, 1.35 AD stored, reach 38 px, breaks guards |
 | Return cut | 0.55 AD at once, 1.35 AD stored |
 | Sheathe | a 0.4 AD click, then the release, which knocks down |
 | Early release | 60% of the stored cuts |
@@ -147,6 +147,12 @@ All in `src/heroes/saya/constants/`.
 - Brynn swings through hits with armour and clears crowds with one wide blow. Saya has no armour; a crowd falls to her when she has cut each of them and sheathes once.
 - Zafir keeps walking while he spins and cuts both sides. Saya plants her feet for every blow and cuts only ahead, apart from Moonrise's wide form.
 - Calder fires rounds on impact and counts a chamber. Saya's resource refills by resting, and her timing reward is the clean sheathe.
+
+## Checks
+
+The bots on the finished kit reach wave 5 at level 6 with 16 kills (skilled) and wave 5 at level 5 with 15 kills (mash), against Kael's wave 5, level 6, 17 kills and wave 5, level 5, 14 kills on the same commit.
+From wave 11 her skilled runs at start levels 12, 13 and 14 reach waves 11, 14 and 12, and Kael's 12, 12 and 13.
+The skill measurements and their limits are in `docs/skills/saya.md`, "Balance".
 
 ## What I chose not to build
 
