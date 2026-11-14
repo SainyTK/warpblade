@@ -4,13 +4,21 @@ import type { RigFrame, Vec } from "../../../types/rig";
 
 /** the cape's width at the shoulder and how much it widens at each point of the rope */
 const CAPE = { top: 1.6, widen: 0.55 } as const;
+/** heavy cloth: the cape keeps this share of the rope's sway and falls at least this far per point */
+const HANG = { sway: 0.55, drop: 1.7 } as const;
+
+/** the rope weighed down: each point drawn back toward the anchor and below it, so the cape hangs and sways */
+function weighed(rope: readonly Vec[]): Vec[] {
+  const [ax, ay] = rope[0];
+  return rope.map(([x, y], i) => [ax + (x - ax) * HANG.sway, ay + Math.max((y - ay) * HANG.sway, i * HANG.drop)]);
+}
 
 /**
  * The half cape along the scarf's rope from the far shoulder: a cloth that widens as it falls, deep blue with a light
  * fold down it and a gold hem along its foot. Aldric's hair is short, so the ponytail's rope draws nothing.
  */
 export function drawCape(s: SpriteCanvas, rig: RigFrame): void {
-  const rope = rig.scarf;
+  const rope = weighed(rig.scarf);
   if (rope.length < 2) return;
   const left: Vec[] = [];
   const right: Vec[] = [];
