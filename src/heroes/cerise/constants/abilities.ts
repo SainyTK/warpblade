@@ -14,7 +14,7 @@ export const ABILITY_COST: Readonly<Record<CeriseAbility, number>> = {
   mirror: 12,
 };
 /** seconds before a base ability can be cast again; the spell skills take theirs from their level */
-export const BASE_RECHARGE = { flurry: 3, line: 4.5 } as const;
+export const BASE_RECHARGE = { flurry: 2.5, line: 4 } as const;
 /** I held: the wide form costs this much more MP */
 export const WIDE_COST = 1.5;
 
@@ -25,7 +25,7 @@ export const FLURRY = {
   perPoint: 2,
   start: 0.1,
   gap: 0.045,
-  power: 0.32,
+  power: 0.36,
   box: [-2, -30, 42, -6] as Box,
   wideBox: [-2, -52, 46, 2] as Box,
   lastKick: 160,
@@ -35,7 +35,7 @@ export const FLURRY = {
 } as const;
 
 /** Rose Line: a thin wave of rose light that runs the whole screen along her line, cutting each foe once */
-export const ROSE_LINE = { power: 2.2, speed: 620, half: 6, height: 18, release: 0.13, dur: 0.36 } as const;
+export const ROSE_LINE = { power: 2.4, speed: 620, half: 6, height: 18, release: 0.13, dur: 0.36 } as const;
 
 /** the colour of each ability: the glow at her hand, the HUD tab and the touch button rim */
 export const ABILITY_COLOR: Readonly<Record<CeriseAbility, Color>> = {

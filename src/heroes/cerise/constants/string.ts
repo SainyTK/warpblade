@@ -1,21 +1,21 @@
 import type { HitFeel } from "../../../types/move";
 import type { Box } from "../../../types/world";
 
-/** the thin line every thrust strikes along, from the feet facing right: 46 px ahead, 24 px tall round chest height */
-export const THRUST_BOX: Box = [-2, -31, 46, -7];
+/** the thin line every thrust strikes along, from the feet facing right: 46 px ahead, 30 px tall round chest height */
+export const THRUST_BOX: Box = [-2, -36, 46, -6];
 /** the rising thrust's line, a little taller as the point climbs */
-export const RISING_BOX: Box = [-2, -40, 42, -7];
+export const RISING_BOX: Box = [-2, -44, 42, -6];
 /** the long lunge's line before Points reach it farther */
 export const LUNGE_BOX: Box = [0, -32, 62, -4];
 
 /** power of each blow of the string, as multiples of attack damage */
 export const STRING_POWER = {
-  leadThrust: 0.62,
-  secondThrust: 0.62,
-  risingThrust: 0.7,
-  flickFirst: 0.36,
-  flickSecond: 0.42,
-  longLunge: 1.8,
+  leadThrust: 0.72,
+  secondThrust: 0.72,
+  risingThrust: 0.8,
+  flickFirst: 0.42,
+  flickSecond: 0.48,
+  longLunge: 2,
 } as const;
 
 /**
