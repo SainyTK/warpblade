@@ -61,7 +61,7 @@ Effects are rose: thrusts leave thin rose streaks with a white core, Keen thrust
 | Twin flick | 0.36 + 0.42 | 3 and 7 | two quick touches from the wrist |
 | Long lunge | 1.8, +0.45 a Point | 5 | a full lunge that pierces every foe on its line, pins them and ends the string |
 
-Each thrust reaches 46 px ahead on a line 16 px tall at chest height, the longest reach in the roster in the narrowest line.
+Each thrust reaches 46 px ahead on a line 24 px tall round chest height, the longest reach in the roster in the narrowest line (Kael's cuts are 36 px tall and reach 30 to 38).
 The lunge reaches 62 px, 10 px more for each Point it spends, and with five Points it is a sure crit.
 A thrust strikes on frame 4 and the string runs at about 0.27 real seconds from one blow to the next with J pressed on the beat, against Kael's 0.45, so the string's damage a second is a little under Kael's when mashed and far over it on the beat.
 The lunge closes the combo once its follow-through starts, so J starts the next string over its recovery.
