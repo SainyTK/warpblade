@@ -37,6 +37,49 @@ Every skill sits on a button the shared moveset already has, or runs on its own.
 - Counts: attack 5, movement 3, spell 3, dot 3, summon 3, passive 2, ultimate 1. Risk: easy 6, timed 9, precise 5.
 - "New" in a card line marks a level that adds a property; every skill has at least four.
 
+## Balance
+
+Measured on 15 November 2026 in a room after `docs/skills/balance.md`, built for this pass because the playtest harness has no shared room.
+The room starts at wave 2 with only the skill under test, keeps a crowd of four husks and two wisps (or one husk at three times its HP), refills a fallen foe 0.35 s later and keeps the hero's HP full.
+An in-page scripted player plays 5 s of warm-up and 30 s of measured play: it walks to the nearest foe and thrusts, makes 30% of follow-up presses Keen, guards just before a husk's swipe, casts a held spell first, dodges through a foe every 4 s, jumps and dives every 6 s, warps every 4 s at range and charges U every 10 s when paid for.
+Figures are damage a second added over the base kit, raw at hero level 1.
+
+Base kit in this room: Cerise 358 on the crowd and 133 on one foe; Kael, played by the same script, 163 and 92.
+Two base runs with different player seeds read 358 and 279 on the crowd, so differences under about 80 a second are noise.
+The room is not the one Kael's figures in `docs/skills/balance.md` came from, so compare these figures with each other and with the bands as ratios, not with Kael's table.
+
+| Skill | L1 crowd | L8 crowd | Evolved crowd | L8 one | Evolved one | Notes |
+| --- | --- | --- | --- | --- | --- | --- |
+| `ce_measure` | -46 | 745 | 758 | 228 | 784 | after tuning; one foe in the precise band; the crowd figure comes from the extra Points feeding full lunges |
+| `ce_riposte` | 0 | 0 | 0 | 0 | 0 | not measured: parries rare in the room |
+| `ce_lunge` | 60 | -11 | - | - | - | after tuning; lunges are rare in the room (a hit taken breaks the string) |
+| `ce_pin` | 0 | -6 | 89 | - | - | after tuning |
+| `ce_feint` | -140 | -157 | -130 | 169 | - | after tuning (one foe) |
+| `ce_markwarp` | 0 | 0 | 0 | - | - | not measured: the crowd stays in reach, so the player never warps |
+| `ce_step` | -35 | -125 | -92 | - | - | within noise |
+| `ce_dive` | -163 | -99 | -217 | - | - | within noise; the dive pulls her out of the string |
+| `ce_bloom` | -107 | -32 | 280 | - | - | after tuning |
+| `ce_needle` | -227 | -142 | -142 | - | - | casting it takes the place of Flurry and Rose Line casts in the script |
+| `ce_mirrorguard` | -113 | 214 | 675 | 33 | 11 | measured before the stance was cut to one answer; not re-measured |
+| `ce_thorns` | -97 | -127 | -114 | - | - | within noise |
+| `ce_weep` | 0 | 0 | 0 | - | - | not measured: no warps, so no marks |
+| `ce_curse` | 0 | 0 | 0 | 0 | 0 | not measured: parries rare in the room |
+| `ce_mirror` | 46 | -40 | -40 | 0 | 0 | not measured: parries and perfect dodges rare |
+| `ce_petals` | -98 | 89 | 327 | - | - | after tuning |
+| `ce_sentinel` | -28 | -77 | 420 | - | - | after tuning (L8); evolved measured before tuning |
+| `ce_poise` | -187 | -100 | -100 | - | - | within noise |
+| `ce_grace` | 0 | 0 | 0 | - | - | heals only; the room keeps HP full |
+| `ce_tempest` | -2 | 75 | 89 | 21 | 21 | U every 10 s; base ultimate reads 14 on the crowd, so level 8 is about 6 times it |
+
+Changes from the first measurement, data rows only: Measured Touch level 8 bonus 14 to 8 and its star 260 to 90, its seventh level's second strike on the paid-off foe only; Long Lunge power 0.5, 1.2, 3 to 0.3, 0.6, 1.2 and 0.7 to 0.55 a Point; Pinning Point's held bonus 0.3, 0.8, 2, 3 to 0.2, 0.4, 0.6, 1.2; Feint's open bonus 0.25, 0.5, 1.5 to 0.15, 0.25, 0.35 and its glass rapier 6 to 4 AD; Rose Bloom level 8 6 to 5 AP and evolved echoes at half strength; Petal Blades darts 1 and 2.5 to 0.6 and 0.9 AD and Rose Guard six blades to five; Thorn Sentinel 1.6 and 4 to 1 and 1.5 AD; Mirror Guard's stance takes one blow and its bonus lands on that riposte only.
+Before tuning: Measured Touch 1,269 crowd and 338 one at level 8; Long Lunge 426; Pinning Point 286; Feint 430 on one foe; Petal Blades 893 and 1,223 evolved; Thorn Sentinel 406; Rose Bloom 869 evolved; Mirror Guard 600 and 2,989 evolved (first stance code).
+
+Still off or unmeasured:
+
+- Measured Touch spills over the precise crowd cap (about 300) through Points and full lunges.
+- The parry skills (Riposte Chain, Wilting Curse, Mirror Blade), the mark skills (Rose Mark, Weeping Mark) and Grace need a room that drives parries and warps at the model's rates; they read zero here.
+- Rose Tempest was not measured per cast against the base special.
+
 ## The 20 skills
 
 | Id | Name | Kind | Risk | Button | Partner | Evolution |
@@ -75,8 +118,8 @@ Attack, precise, J. Press J in the beat after a thrust lands: the Keen blow hits
 | 5 | Keen damage +150% to +400%. | bonus 4 |
 | 6 | New: each Keen blow in a row adds +25% to the next, up to +100%. | streak 0.25, streakCap 1 |
 | 7 | New: a Keen lunge strikes twice. | twin 1 |
-| 8 | Keen damage +400% to +1400%. | bonus 14 |
-| Evolved | Perfect Measure: Every fourth Keen blow in a row bursts a gold rose star on the foe and gives 2 Points. Partner: Riposte Chain at level 4. | star 260, starEvery 4, starPoints 2 |
+| 8 | Keen damage +400% to +800%. | bonus 8 |
+| Evolved | Perfect Measure: Every fourth Keen blow in a row bursts a gold rose star on the foe and gives 2 Points. Partner: Riposte Chain at level 4. | star 90, starEvery 4, starPoints 2 |
 
 #### `ce_riposte` Riposte Chain
 
@@ -100,14 +143,14 @@ Attack, timed, J. The lunge at the end of the string hits harder and reaches far
 
 | Lv | Card line | Values |
 | --- | --- | --- |
-| 1 | The lunge deals +50% damage. | power 0.5 |
+| 1 | The lunge deals +30% damage. | power 0.3 |
 | 2 | New: the lunge reaches 20 px farther. | reach 20 |
 | 3 | New: the lunge breaks guards. | guardBreak 1 |
-| 4 | Lunge damage +50% to +120%. | power 1.2 |
+| 4 | Lunge damage +30% to +60%. | power 0.6 |
 | 5 | New: the lunge pins foes for 1.4 s. | pin 1.4 |
 | 6 | New: petals cut the lunge's line again a moment later. | echo 0.5 |
-| 7 | New: each Point adds +0.7 AD to the lunge. | perPoint 0.7 |
-| 8 | Lunge damage +120% to +300%. | power 3 |
+| 7 | New: each Point adds +0.55 AD to the lunge. | perPoint 0.55 |
+| 8 | Lunge damage +60% to +120%. | power 1.2 |
 | Evolved | Comet Lunge: The lunge sends a streak of rose light across the whole screen along its line. Partner: Needle Rain at level 4. | comet 1.5 |
 
 #### `ce_pin` Pinning Point
@@ -117,14 +160,14 @@ Attack, easy, J. Thrusts hold foes where they stand, and held foes take more.
 | Lv | Card line | Values |
 | --- | --- | --- |
 | 1 | Thrusts hold a walker's feet for 0.4 s. | halt 0.4 |
-| 2 | New: held and pinned foes take +30% from your blows. | held 0.3 |
+| 2 | New: held and pinned foes take +20% from your blows. | held 0.2 |
 | 3 | Hold 0.4 to 0.8 s. | halt 0.8 |
 | 4 | New: the rising thrust also cuts behind you. | behind 1 |
-| 5 | Held bonus +30% to +80%. | held 0.8 |
+| 5 | Held bonus +20% to +40%. | held 0.4 |
 | 6 | New: thrusts reach 8 px farther. | reach 8 |
 | 7 | New: Flurry's thrusts hold feet too. | flurryHalt 1 |
-| 8 | Held bonus +80% to +200%. | held 2 |
-| Evolved | Butterfly Pin: Every thrust pins its foe in place, and pinned foes take +300%. Partner: Thorn Wounds at level 4. | held 3, pinAll 0.5 |
+| 8 | Held bonus +40% to +60%. | held 0.6 |
+| Evolved | Butterfly Pin: Every thrust pins its foe in place, and pinned foes take +120%. Partner: Thorn Wounds at level 4. | held 1.2, pinAll 0.5 |
 
 #### `ce_feint` Feint
 
@@ -132,15 +175,15 @@ Attack, timed, J. The rising thrust is a feint that opens the foe to your next b
 
 | Lv | Card line | Values |
 | --- | --- | --- |
-| 1 | The rising thrust opens its foe: +25% from your blows for 2 s. | open 0.25, openTime 2 |
+| 1 | The rising thrust opens its foe: +15% from your blows for 2 s. | open 0.15, openTime 2 |
 | 2 | New: the rising thrust breaks guards. | guardBreak 1 |
-| 3 | Open bonus +25% to +50%. | open 0.5 |
+| 3 | Open bonus +15% to +25%. | open 0.25 |
 | 4 | New: a feint that lands gives a Point. | points 1 |
 | 5 | New: the feint turns the foe away from you. | turn 1 |
 | 6 | Open 2 to 3.5 s. | openTime 3.5 |
 | 7 | New: the feint also cuts behind you. | behind 1 |
-| 8 | Open bonus +50% to +150%. | open 1.5 |
-| Evolved | Phantom Feint: A glass rapier strikes every opened foe from behind. Partner: Mirror Blade at level 4. | phantom 6 |
+| 8 | Open bonus +25% to +35%. | open 0.35 |
+| Evolved | Phantom Feint: A glass rapier strikes every opened foe from behind. Partner: Mirror Blade at level 4. | phantom 4 |
 
 #### `ce_markwarp` Rose Mark
 
@@ -203,8 +246,8 @@ Spell, easy, I. I: a burst of petal blades round you that pushes foes off. Held,
 | 5 | Bloom 1.6 to 3 AP. | power 3 |
 | 6 | New: a Point for every two foes struck. | points 1 |
 | 7 | Recharge 6 to 4 s. | recharge 4 |
-| 8 | Bloom 3 to 6 AP; petals 0.3 to 0.8 AP a tick. | power 6, tick 0.8 |
-| Evolved | Garden of Blades: The bloom bursts twice more, wider each time. Partner: Petal Blades at level 4. | echoes 2 |
+| 8 | Bloom 3 to 5 AP; petals 0.3 to 0.6 AP a tick. | power 5, tick 0.6 |
+| Evolved | Garden of Blades: The bloom bursts twice more at half strength, wider each time. Partner: Petal Blades at level 4. | echoes 2 |
 
 #### `ce_needle` Needle Rain
 
@@ -311,12 +354,12 @@ Summon, easy, auto. Casting an ability can call petal blades that dart at foes r
 | 1 | An ability: 40% to call 2 petal blades that dart at foes for 4 s, 0.5 AD. | chance 0.4, count 2, power 0.5, every 0.6, life 4, cd 3 |
 | 2 | Chance 40% to 70%. | chance 0.7 |
 | 3 | New: a third blade. | count 3 |
-| 4 | Darts 0.5 to 1 AD; chance 100%. | chance 1, power 1 |
+| 4 | Darts 0.5 to 0.6 AD; chance 100%. | chance 1, power 0.6 |
 | 5 | New: darts leave a bleed. | bleed 0.2 |
 | 6 | New: blades stay 4 to 7 s. | life 7 |
 | 7 | New: blades dart twice as often. | every 0.3 |
-| 8 | Darts 1 to 2.5 AD; 4 blades. | count 4, power 2.5 |
-| Evolved | Rose Guard: Six petal blades circle you for good and dart at every foe that comes close. Partner: Rose Bloom at level 4. | count 6, orbit 1 |
+| 8 | Darts 0.6 to 0.9 AD; 4 blades. | count 4, power 0.9 |
+| Evolved | Rose Guard: Five petal blades circle you for good and dart at every foe that comes close. Partner: Rose Bloom at level 4. | count 5, orbit 1 |
 
 #### `ce_sentinel` Thorn Sentinel
 
@@ -327,11 +370,11 @@ Summon, timed, auto. The lunge can plant a rapier of light in the floor that kee
 | 1 | The lunge: 50% to plant a rapier of light that thrusts at foes near it for 3 s, 0.8 AD. | chance 0.5, time 3, power 0.8, every 0.5, reach 40, most 1 |
 | 2 | Chance 50% to 80%. | chance 0.8 |
 | 3 | New: up to two sentinels at once. | most 2 |
-| 4 | Thrusts 0.8 to 1.6 AD; it stands 4 s. | time 4, power 1.6 |
+| 4 | Thrusts 0.8 to 1 AD; it stands 4 s. | time 4, power 1 |
 | 5 | New: its thrusts pin foes. | pin 0.4 |
 | 6 | New: it reaches 40 to 60 px; chance 100%. | chance 1, reach 60 |
 | 7 | New: it thrusts twice as often. | every 0.25 |
-| 8 | Thrusts 1.6 to 4 AD; three at once. | power 4, most 3 |
+| 8 | Thrusts 1 to 1.5 AD; three at once. | power 1.5, most 3 |
 | Evolved | Thorn Garden: A sentinel bursts into petal blades when it fades, 6 AD round it. Partner: Long Lunge at level 4. | bloom 6 |
 
 #### `ce_poise` Poise
