@@ -79,6 +79,51 @@ const ABILITY_ART: Record<BrynnAbility, IconArt> = {
     ],
     colors: { W: ICON_WHITE, B: BRONZE, C: CRIMSON[4], D: CRIMSON[2] },
   },
+  /** a tall crimson crescent flying to the right */
+  arc: {
+    rows: [
+      "....CC...",
+      "......CW.",
+      ".......CW",
+      "D......CW",
+      ".D.....CW",
+      "D......CW",
+      ".......CW",
+      "......CW.",
+      "....CC...",
+    ],
+    colors: { W: ICON_WHITE, C: CRIMSON[4], D: CRIMSON[2] },
+  },
+  /** three pillars of fire rising from the floor, each taller */
+  pillars: {
+    rows: [
+      "........W",
+      ".....W..C",
+      ".....C..C",
+      "..W..C..C",
+      "..C..C..C",
+      "..C..C..C",
+      ".CCC.CC.C",
+      "DDDDDDDDD",
+      ".........",
+    ],
+    colors: { W: ICON_WHITE, C: CRIMSON[4], D: CRIMSON[2] },
+  },
+  /** a roar: rings of crimson round a centre */
+  cry: {
+    rows: [
+      "..C...C..",
+      ".C.....C.",
+      "C..D.D..C",
+      "C.D...D.C",
+      "C.D.W.D.C",
+      "C.D...D.C",
+      "C..D.D..C",
+      ".C.....C.",
+      "..C...C..",
+    ],
+    colors: { W: ICON_WHITE, C: CRIMSON[4], D: CRIMSON[2] },
+  },
 };
 
 /** Crimson Fall: one huge crescent coming down into the floor */

@@ -4,6 +4,7 @@ import { createGlint } from "../../../game/effects/flash";
 import { isFree, setState, settle } from "../../../game/hero/actions";
 import { comboOpen, endCombo } from "../../../game/hero/combo";
 import { emitSkillEvent } from "../../../game/skills/events";
+import { skillEvolved, skillLevel, skillValues } from "../../../game/skills/query";
 import { game, hero, lights, progress } from "../../../game/state";
 import { surfaceBelow } from "../../../game/world";
 import { sfx } from "../../../services/audio";
@@ -16,6 +17,8 @@ import {
   CARRY,
   QUAKE,
   REND,
+  SPELL_RECHARGE,
+  SPELL_SKILL,
   WIDE_COST,
 } from "../constants/abilities";
 import { BRYNN_ABILITY_CLIPS } from "../constants/clips/abilities";
@@ -23,10 +26,27 @@ import { CRIMSON } from "../constants/colors";
 import type { BrynnAbility } from "../types/ability";
 import { createFloorWave } from "./effects/floorWave";
 import { createQuake } from "./effects/quake";
+import { castArc, castCry, castPillars } from "./spells";
 import { brynn } from "./state";
 
-/** the state, and so the clip, each ability plays */
-const CLIP_STATE: Readonly<Record<BrynnAbility, "rend" | "quake">> = { rend: "rend", quake: "quake" };
+/** the state, and so the clip, each ability plays: a cut up out of the floor, or the blade driven down into it */
+const CLIP_STATE: Readonly<Record<BrynnAbility, "rend" | "quake">> = {
+  rend: "rend",
+  quake: "quake",
+  arc: "rend",
+  pillars: "quake",
+  cry: "quake",
+};
+
+/** a base ability, or a spell whose skill she holds */
+const knows = (a: BrynnAbility): boolean => a === "rend" || a === "quake" || skillLevel(SPELL_SKILL[a]) > 0;
+
+/** an ability's own recharge: fixed for the base ones, from the skill for the spells; ability haste shortens it */
+function recharge(a: BrynnAbility): number {
+  const own =
+    a === "rend" || a === "quake" ? BASE_RECHARGE[a] : (skillValues(SPELL_SKILL[a]).recharge ?? SPELL_RECHARGE);
+  return own / progress.stats.haste;
+}
 
 const castCost = (a: BrynnAbility, wide: boolean): number => ABILITY_COST[a] * (wide ? WIDE_COST : 1);
 
@@ -49,7 +69,7 @@ function cast(a: BrynnAbility, wide: boolean): boolean {
   if (h.mp < castCost(a, false)) return false;
   const full = wide && h.mp >= castCost(a, true);
   h.mp -= castCost(a, full);
-  brynn.cd[a] = BASE_RECHARGE[a] / progress.stats.haste;
+  brynn.cd[a] = recharge(a);
   brynn.cdFull[a] = brynn.cd[a];
   brynn.casting = a;
   brynn.wide = full;
@@ -70,11 +90,12 @@ function cast(a: BrynnAbility, wide: boolean): boolean {
 export const BRYNN_SLOTS: readonly AbilitySlot[] = BRYNN_ABILITIES.map((a) => ({
   id: a,
   label: ABILITY_TAB[a],
-  known: () => true,
+  known: () => knows(a),
   wait: () => brynn.cd[a],
   full: () => Math.max(0.01, brynn.cdFull[a]),
   affordable: () => hero.mp >= ABILITY_COST[a],
   cast: (wide: boolean) => cast(a, wide),
+  evolved: () => a !== "rend" && a !== "quake" && skillEvolved(SPELL_SKILL[a]),
 }));
 
 /** Rend: a crimson wave runs along the floor from the blade, both ways in its wide form */
@@ -117,6 +138,15 @@ function releaseQuake(power: number, wide: boolean): void {
   if (wide) game.fx.push(createQuake({ ...quake, damage: quake.damage * QUAKE.afterShare, delay: QUAKE.after }));
 }
 
+/** what each ability lets loose, at its power and in its wide form or not */
+const RELEASE: Readonly<Record<BrynnAbility, (power: number, wide: boolean) => void>> = {
+  rend: releaseRend,
+  quake: releaseQuake,
+  arc: castArc,
+  pillars: castPillars,
+  cry: castCry,
+};
+
 /** the ability leaves the blade */
 function release(): void {
   const h = hero;
@@ -124,8 +154,8 @@ function release(): void {
   const hy = h.y - 10;
   lights.add(hx, hy, 22, CRIMSON[4], 0.5, 0.2);
   game.fx.push(createGlint(hx, hy, CRIMSON[5]));
-  if (brynn.casting === "rend") releaseRend(brynn.power, brynn.wide);
-  else releaseQuake(brynn.power, brynn.wide);
+  const release = RELEASE[brynn.casting];
+  release(brynn.power, brynn.wide);
 }
 
 /** play the ability under way: let it loose on its hit frame, and at the end give back the carried string */

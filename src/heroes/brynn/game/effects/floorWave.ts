@@ -4,6 +4,7 @@ import { fleck, glow, hairline, place } from "../../../../engine/frame";
 import { dealDamage } from "../../../../game/damage";
 import { createImpact } from "../../../../game/effects/impact";
 import { enemyBox } from "../../../../game/enemies/enemy";
+import { emitSkillEvent } from "../../../../game/skills/events";
 import { game, particles, rng } from "../../../../game/state";
 import { boxHit } from "../../../../game/world";
 import type { SourceId } from "../../../../types/build";
@@ -14,6 +15,7 @@ import { WHITE } from "../../../../utils/color";
 import { grain } from "../../../../utils/grain";
 import { CRIMSON, CRIMSON_SPARKS } from "../../constants/colors";
 import { WAVE_LOOK, type WaveKind } from "../../constants/waves";
+import "../../types/events";
 
 /** what a floor wave does: where it starts, which way it runs, how far and fast, and what each foe it reaches takes */
 export interface FloorWave {
@@ -88,8 +90,10 @@ export function createFloorWave(w: FloorWave): Effect {
               size: rng.range(1, 2.4),
             },
           );
-        return front() > -10 && front() < W + 10;
+        if (front() > -10 && front() < W + 10) return true;
+        o.run = w.reach;
       }
+      if (o.done === 0) emitSkillEvent({ type: "floorWave", x0: w.x, x1: front(), y: w.y, kind: w.kind });
       o.done += dt;
       return o.done < look.crack + FADE;
     },

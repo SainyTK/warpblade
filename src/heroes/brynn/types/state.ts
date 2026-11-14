@@ -24,4 +24,10 @@ export interface BrynnState {
   carry: number;
   /** the next slam is a fissure (Heft was full when the slam started) */
   fissure: boolean;
+  /** heavy swings landed in a row, for Heavy Hands' streak */
+  heavyStreak: number;
+  /** swings left that hit harder after a parry (Counter Edge) */
+  afterParry: number;
+  /** seconds left of War Cry's buff */
+  cry: number;
 }

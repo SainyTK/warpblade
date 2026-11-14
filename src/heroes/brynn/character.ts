@@ -1,4 +1,5 @@
 import type { CharacterDef } from "../../types/character";
+import { BRYNN_ACHIEVEMENTS } from "./constants/achievements";
 import { BRYNN_CLIPS } from "./constants/clips";
 import { BRYNN_ACCENT } from "./constants/colors";
 import { BRYNN_CONTROLS } from "./constants/controls";
@@ -25,6 +26,6 @@ export const BRYNN: CharacterDef = {
   skin: BRYNN_SKIN,
   clips: BRYNN_CLIPS,
   controls: BRYNN_CONTROLS,
-  achievements: [],
+  achievements: BRYNN_ACHIEVEMENTS,
   sourceIcons: { attacks: "brynn_attacks", abilities: "brynn_abilities", ultimate: "brynn_ultimate" },
 };

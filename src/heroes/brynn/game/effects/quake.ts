@@ -20,6 +20,8 @@ export interface Quake {
   launch: number;
   height: number;
   source?: SourceId;
+  /** a foe it passes by: the one a crash comes from */
+  skip?: Enemy;
   onHit?: (e: Enemy) => void;
 }
 
@@ -55,7 +57,8 @@ export function createQuake(q: Quake): Effect {
         );
       shake(0.3, 3.5);
       for (const e of game.enemies) {
-        if (e.hp <= 0 || Math.abs(e.x - q.x) > q.reach || e.y < q.y - q.height || e.y > q.y + 6) continue;
+        if (e.hp <= 0 || e === q.skip || Math.abs(e.x - q.x) > q.reach || e.y < q.y - q.height || e.y > q.y + 6)
+          continue;
         dealDamage(e, q.damage, {
           fromX: q.x,
           kx: Math.sign(e.x - q.x) * 30,

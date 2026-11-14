@@ -13,6 +13,8 @@ import { BRYNN_HELD_CLIPS } from "../../constants/clips/held";
 import { CRIMSON, CRIMSON_SPARKS } from "../../constants/colors";
 import { FALL } from "../../constants/fall";
 import { createFloorWave } from "../effects/floorWave";
+import { later } from "../effects/later";
+import { createQuake } from "../effects/quake";
 
 /** the crescent's look: an arc as tall as the reach allows, round the point the blade comes down on */
 const crescent = (reach: number) => ({
@@ -29,30 +31,36 @@ const crescent = (reach: number) => ({
   ramp: CRIMSON,
 });
 
-/** the blade comes down: every foe in reach in front and behind, up to the crescent's height, is struck and knocked down */
-function fall(level: number): void {
+/**
+ * One crescent comes down on side `face`: every foe in reach in front and behind, up to the crescent's height, is
+ * struck and knocked down. `n` counts the crescents of one cast, each wider than the last with Sundered Sky.
+ */
+function fall(level: number, face: number, n: number): void {
   const v = ultimateValues();
   const h = hero;
-  const reach = FALL.reach[level - 1] * (1 + (v.reach ?? 0));
+  const reach = FALL.reach[level - 1] * (1 + (v.reach ?? 0)) * (1 + (v.widen ?? 0) * n);
   const damage = ULT_LEVELS[level - 1].power * progress.stats.ad * FALL.share * (v.power ?? 1);
-  game.fx.push(createSlash(h.x, h.y, h.face, crescent(reach)));
-  game.fx.push(createFloorRing(h.x + h.face * 20, h.y, reach, CRIMSON, 0.55));
-  game.fx.push(createFloorRing(h.x + h.face * 20, h.y, reach * 0.5, CRIMSON, 0.4));
-  lights.add(h.x + h.face * 20, h.y - 20, 80, CRIMSON[4], 1, 0.4);
-  dust(h.x + h.face * 24, h.y, 12, h.face);
+  game.fx.push(createSlash(h.x, h.y, face, crescent(reach)));
+  game.fx.push(createFloorRing(h.x + face * 20, h.y, reach, CRIMSON, 0.55));
+  game.fx.push(createFloorRing(h.x + face * 20, h.y, reach * 0.5, CRIMSON, 0.4));
+  lights.add(h.x + face * 20, h.y - 20, 80, CRIMSON[4], 1, 0.4);
+  dust(h.x + face * 24, h.y, 12, face);
   for (const e of game.enemies) {
-    if (e.hp <= 0 || Math.abs(e.x - h.x) > reach || e.y < h.y - FALL.height) continue;
-    const dir = Math.sign(e.x - h.x) || h.face;
-    dealDamage(e, damage, { fromX: h.x, kx: dir * 120, ky: -80, stun: FALL.stun, heavy: true, source: "ultimate" });
+    const gap = Math.abs(e.x - h.x);
+    if (e.hp <= 0 || gap > reach * (v.pull ? FALL.pull : 1) || e.y < h.y - FALL.height) continue;
+    const dir = Math.sign(e.x - h.x) || face;
+    // past the reach, the skill drags foes in toward her
+    const kx = gap > reach ? -dir * FALL.drag : dir * 120;
+    dealDamage(e, damage, { fromX: h.x, kx, ky: -80, stun: FALL.stun, heavy: true, source: "ultimate" });
     game.fx.push(createImpact(e.x, e.y - 10, dir, true, CRIMSON_SPARKS));
   }
-  if (v.fissures)
-    for (const face of [h.face, -h.face])
+  if (v.fissures && n === 0)
+    for (const side of [h.face, -h.face])
       game.fx.push(
         createFloorWave({
-          x: h.x + face * 16,
+          x: h.x + side * 16,
           y: h.y,
-          face,
+          face: side,
           reach: reach * 1.2,
           speed: 380,
           damage: damage * v.fissures,
@@ -66,17 +74,37 @@ function fall(level: number): void {
   sfx.boom();
 }
 
+/** after the first crescent: the others it brings (each turned the other way), and the aftershocks round her */
+function followUp(level: number): void {
+  const v = ultimateValues();
+  const h = hero;
+  for (let n = 1; n < (v.falls ?? 1); n++)
+    game.fx.push(later(n * FALL.next, () => fall(level, n % 2 ? -h.face : h.face, n)));
+  const blow = ULT_LEVELS[level - 1].power * progress.stats.ad * FALL.share * (v.power ?? 1);
+  for (let i = 1; i <= (v.quakes ?? 0); i++)
+    game.fx.push(
+      createQuake({
+        x: h.x,
+        y: h.y,
+        reach: FALL.reach[level - 1] * 0.6,
+        damage: blow * v.after,
+        delay: i * FALL.quakeEvery,
+        launch: -200,
+        height: FALL.height,
+        source: "ultimate",
+      }),
+    );
+}
+
 /** Crimson Fall waits for its clip's hit frame and for her feet, then falls */
 function createFall(level: number): Effect {
-  let done = false;
   const hit = BRYNN_HELD_CLIPS.ultimate.hit;
   return {
     update() {
-      if (done) return false;
       if (hero.state !== "ultimate") return false;
       if (hero.st < hit || (!hero.ground && hero.st < BRYNN_HELD_CLIPS.ultimate.dur - 0.1)) return true;
-      done = true;
-      fall(level);
+      fall(level, hero.face, 0);
+      followUp(level);
       return false;
     },
     draw() {},

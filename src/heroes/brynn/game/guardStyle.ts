@@ -1,33 +1,67 @@
 import { createSlash } from "../../../game/effects/slash";
 import { meleeHit } from "../../../game/meleeHit";
 import { emitSkillEvent } from "../../../game/skills/events";
+import { movePayoff, startMovePayoff } from "../../../game/skills/payoff";
 import { skillValues } from "../../../game/skills/query";
-import { game, hero } from "../../../game/state";
+import { game, hero, progress } from "../../../game/state";
 import { boxAhead, boxBehind, newSwing } from "../../../game/world";
 import type { GuardStyle } from "../../../types/moveset";
 import { BRYNN_BLOCK, COUNTER_CLEAVE } from "../constants/guard";
 import { HEFT } from "../constants/heft";
+import "../types/events";
+import { createCrescentWave } from "./effects/heavyWave";
 import { addHeft } from "./heft";
 import { SLASH } from "./moves/slashes";
+import { brynn } from "./state";
 
-/** the Counter Cleave: a wide two-handed cleave in front and behind at once, a knockdown, Heft, and a heavy next swing */
-function counterCleave(): void {
+/** how far Counter Edge's crescent flies */
+const COUNTER_WAVE_REACH = 110;
+
+/**
+ * The Counter Cleave: a wide two-handed cleave in front and behind at once and a knockdown. Counter Edge's extra power is
+ * a precise payoff: it lands on the foe nearest her, the one that struck, and every other foe takes the plain cleave.
+ * `share` is a block's half-power answer (Iron Answer).
+ */
+function cleave(share: number): number {
   const v = skillValues("br_counter");
   const [x0, y0, x1, y1] = COUNTER_CLEAVE.box;
   const reach = x1 + (v.reach ?? 0);
   newSwing();
+  startMovePayoff();
   game.fx.push(createSlash(hero.x, hero.y, hero.face, { ...SLASH.cleave, R: SLASH.cleave.R + (v.reach ?? 0) * 0.6 }));
   game.fx.push(createSlash(hero.x, hero.y, -hero.face, { ...SLASH.cleave, W: 9, R: 24 }));
+  const plain = COUNTER_CLEAVE.power * share;
   const hits = meleeHit([boxAhead(x0, y0, reach, y1), boxBehind(x0, y0, reach * 0.7, y1)], {
-    power: COUNTER_CLEAVE.power + (v.power ?? 0),
+    power: (COUNTER_CLEAVE.power + (v.power ?? 0)) * share,
+    plain,
     kx: 120,
     ky: -60,
     stun: COUNTER_CLEAVE.stun,
     big: true,
     sureCrit: !!v.crit,
   });
+  if (v.wave)
+    game.fx.push(
+      createCrescentWave({
+        x: hero.x + hero.face * 16,
+        y: hero.y - 18,
+        face: hero.face,
+        reach: COUNTER_WAVE_REACH,
+        damage: progress.stats.ad * v.wave * share,
+        payoff: movePayoff(),
+        scale: 1.3,
+      }),
+    );
+  return hits;
+}
+
+/** the parry's answer: the Counter Cleave, Heft, a heavy next swing, and Counter Edge's harder swings after */
+function parried(): void {
+  const v = skillValues("br_counter");
+  const hits = cleave(1);
   addHeft(HEFT.parry + (v.heft ?? 0));
   hero.keenNext = true;
+  brynn.afterParry = v.afterBlows ?? 0;
   emitSkillEvent({ type: "counterCleave", hits });
 }
 
@@ -39,5 +73,9 @@ export const BRYNN_GUARD: GuardStyle = {
   get blockCost() {
     return BRYNN_BLOCK.cost * (1 - (skillValues("br_ironskin").block ?? 0));
   },
-  parried: counterCleave,
+  blocked() {
+    const share = skillValues("br_counter").blockCleave;
+    if (share) cleave(share);
+  },
+  parried,
 };

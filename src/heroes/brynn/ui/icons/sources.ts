@@ -14,7 +14,7 @@ export const BRYNN_SOURCE_ICONS: Record<string, (s: SpriteCanvas) => void> = {
   /** Crimson Fall: one huge crescent coming down into the floor */
   brynn_ultimate: (s) => {
     floor(s);
-    heavyArc(s, 8, 9, 6, -2.8, 0.9, 1.4);
-    greatsword(s, 4, 3, 11, 13, 1);
+    heavyArc(s, 8, 10, 7, -2.9, 0.4, 1.6);
+    greatsword(s, 9, 2, 13, 12, 1.2);
   },
 };

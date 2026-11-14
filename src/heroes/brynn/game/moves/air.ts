@@ -12,11 +12,21 @@ import type { MoveDef } from "../../../../types/move";
 import { PK } from "../../../../types/particle";
 import { CRIMSON } from "../../constants/colors";
 import { AIR_SLAM, STRING_FEEL, STRING_POWER } from "../../constants/string";
+import { craterLanding } from "../craterLanding";
 import { heftForBlow } from "../heft";
 import { SLASH } from "./slashes";
 
 /** the falling slam drops at its dive speed once the tuck is over */
 const TUCK = frame(6);
+/** how hard Crater Leap drags foes in */
+const PULL = 160;
+
+/** Crater Leap: foes on the floor this close are dragged in toward where she lands */
+function pullIn(reach: number): void {
+  for (const e of game.enemies)
+    if (e.hp > 0 && !e.air && Math.abs(e.x - hero.x) < reach && Math.abs(e.y - hero.y) < 20)
+      e.vx -= Math.sign(e.x - hero.x) * PULL;
+}
 
 /** the falling slam lands: a ring each side knocks foes off their feet, and the landing ends a travel move */
 function slamLanding(): void {
@@ -40,15 +50,18 @@ function slamLanding(): void {
       },
     );
   shake(0.24, 3);
+  if (v.pull) pullIn(v.pull);
   const hits = meleeHit([boxAhead(-reach, -22, reach, 4)], {
     power: AIR_SLAM.ring + (v.ring ?? 0),
     kx: 80,
     ky: -60,
     stun: AIR_SLAM.stun,
+    launch: v.launch ? AIR_SLAM.launch : undefined,
     big: true,
     feel: STRING_FEEL.slam,
   });
   heftForBlow(hits, false);
+  craterLanding(reach);
   travelEnded();
 }
 

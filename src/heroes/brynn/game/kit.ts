@@ -9,6 +9,7 @@ import { BRYNN_ABILITY_CLIPS } from "../constants/clips/abilities";
 import { BRYNN_SLOTS, casting, rechargeAbilities, runAbility } from "./abilities";
 import { afterStrike } from "./afterStrike";
 import { hurtScale, steadfast } from "./armour";
+import { alwaysKeen, attackRate, damageScale, hitBonus, takenBonus } from "./bonus";
 import { chooseMove } from "./chooseMove";
 import { BRYNN_GUARD } from "./guardStyle";
 import { keenWindow } from "./heavy";
@@ -16,6 +17,8 @@ import { tickHeft } from "./heft";
 import { brynnPose } from "./pose";
 import { readActions } from "./readActions";
 import { shapeHit } from "./shapeHit";
+import { BRYNN_DODGE } from "./shoulderCharge";
+import { regainStamina } from "./stamina";
 import { brynn, resetBrynnState } from "./state";
 import { BRYNN_WARP } from "./warpStyle";
 
@@ -34,6 +37,8 @@ export const BRYNN_KIT: HeroKit = {
   tick: (dt) => {
     rechargeAbilities(rechargeStep(dt));
     tickHeft(dt);
+    brynn.cry = Math.max(0, brynn.cry - dt);
+    regainStamina(dt);
   },
   readActions,
   warp: BRYNN_WARP,
@@ -49,6 +54,12 @@ export const BRYNN_KIT: HeroKit = {
   afterStrike,
   shapeHit,
   keenWindow,
+  alwaysKeen,
+  attackRate,
+  damageScale,
+  hitBonus,
+  takenBonus,
+  dodge: BRYNN_DODGE,
   mayAct,
   cutForAction: () => {
     brynn.carry = 0;

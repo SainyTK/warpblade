@@ -10,7 +10,7 @@ const BRONZE = hex("#c48a3c");
 const GRIP = hex("#4c3322");
 
 /** Anvilheart from the grip at (x0, y0) to the point at (x1, y1): a broad slab, a crimson crystal, a heavy guard */
-export function greatsword(s: SpriteCanvas, x0: number, y0: number, x1: number, y1: number, width = 1.25): void {
+export function greatsword(s: SpriteCanvas, x0: number, y0: number, x1: number, y1: number, width = 1.6): void {
   const L = Math.hypot(x1 - x0, y1 - y0) || 1;
   const ux = (x1 - x0) / L;
   const uy = (y1 - y0) / L;
