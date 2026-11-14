@@ -75,10 +75,10 @@ Attack, precise, J. Press J just after a blow lands: the heavy swing that follow
 | 5 | Heavy bonus +150% to +350%. | bonus 3.5 |
 | 6 | New: each heavy swing in a row adds +30% to the next, up to +90%. | streak 0.3, streakCap 0.9 |
 | 7 | New: a heavy slam is a fissure from half Heft. | halfFissure 1 |
-| 8 | Heavy bonus +350% to +1200%; the crescent hits far harder. | bonus 12, wave 4 |
+| 8 | Heavy bonus +350% to +2000%; the crescent hits far harder. | bonus 20, wave 4 |
 
 Evolution **Mountain Hands** (partner `br_slam`): Every heavy swing also splits the floor with a fissure ahead of her.
-Evolved values: bonus 18, heavyFissure 0.8.
+Evolved values: bonus 30, heavyFissure 0.8.
 
 #### `br_cleave` Wide Arc
 
@@ -93,10 +93,10 @@ Attack, easy, J. The opening sweep reaches farther, cuts behind and drags the cr
 | 5 | Sweep power +0.4 to +1.2. | power 1.2 |
 | 6 | New: the sweep reaches flying foes overhead. | tall 1 |
 | 7 | New: foes it strikes take +25% for 2 s. | mark 0.25, markTime 2 |
-| 8 | Sweep power +1.2 to +3.2; reach +30 px. | power 3.2, reach 30 |
+| 8 | Sweep power +1.2 to +2.2; reach +30 px. | power 2.2, reach 30 |
 
 Evolution **Horizon Cleave** (partner `br_launch`): The sweep throws a crimson crescent both ways along its arc.
-Evolved values: wave 2.5.
+Evolved values: wave 1.
 
 #### `br_launch` Skyward Heave
 
@@ -125,11 +125,11 @@ Attack, timed, J. The slam's shockwave runs farther and harder, and fissures spl
 | 1 | The slam's shockwave hits harder. | wave 0.6 |
 | 2 | The shockwave runs 40% farther. | reach 0.4 |
 | 3 | New: the shockwave runs both ways. | both 1 |
-| 4 | Shockwave power +0.6 to +2. | wave 2 |
+| 4 | Shockwave power +0.6 to +1.2. | wave 1.2 |
 | 5 | New: foes it knocks down stay down 0.5 s longer. | stun 0.5 |
 | 6 | New: fissures run 40% farther. | fissureReach 0.4 |
 | 7 | New: fissures hit 1.5 AD harder. | fissure 1.5 |
-| 8 | Shockwave power +2 to +5; it runs twice as far. | wave 5, reach 1 |
+| 8 | Shockwave power +1.2 to +2.5; it runs 80% farther. | wave 2.5, reach 0.8 |
 
 Evolution **Split Earth** (partner `br_heavy`): Every slam is a fissure, and full Heft no longer needs spending on it.
 Evolved values: alwaysFissure 1.
@@ -143,11 +143,11 @@ Attack, precise, K. Parry: the Counter Cleave hits the attacker far harder.
 | 1 | The Counter Cleave hits the attacker 1.5 AD harder. | power 1.5 |
 | 2 | New: it reaches 12 px farther. | reach 12 |
 | 3 | New: it is a sure crit. | crit 1 |
-| 4 | Counter power +1.5 to +4. | power 4 |
+| 4 | Counter power +1.5 to +7. | power 7 |
 | 5 | New: a parry gives 20 more Heft. | heft 20 |
 | 6 | New: it throws a crescent ahead. | wave 2 |
 | 7 | New: her next 2 swings after a parry deal +50%. | after 0.5, afterBlows 2 |
-| 8 | Counter power +4 to +14; the crescent hits harder. | power 14, wave 5 |
+| 8 | Counter power +7 to +25; the crescent hits harder. | power 25, wave 5 |
 
 Evolution **Iron Answer** (partner `br_ironskin`): A block also answers with a Counter Cleave at half its power.
 Evolved values: blockCleave 0.5.
@@ -219,7 +219,7 @@ Spell, easy, I. An ability: throw a tall crimson crescent that cuts every foe al
 | 5 | Power 2 to 3.5 AP. | power 3.5 |
 | 6 | New: two crescents, one after the other. | count 2 |
 | 7 | New: crescents fly the whole screen. | reach 320 |
-| 8 | Power 3.5 to 7 AP; three crescents. | power 7, count 3 |
+| 8 | Power 3.5 to 5 AP; three crescents. | power 5, count 3 |
 
 Evolution **Crimson Moon** (partner `br_embers`): The crescents turn at the end of their flight and cut back through the line to her.
 Evolved values: back 1.
@@ -320,17 +320,17 @@ Summon, easy, auto. Kills may call a phantom greatsword down from the sky onto t
 
 | Lv | Card line | Values |
 | --- | --- | --- |
-| 1 | A kill may drop a phantom greatsword on the nearest foe. | chance 0.35, power 1.5, reach 18, count 1, cooldown 0.8 |
+| 1 | A kill may drop a phantom greatsword on the nearest foe. | chance 0.35, power 1, reach 18, count 1, cooldown 1.2 |
 | 2 | Chance 35% to 55%. | chance 0.55 |
 | 3 | New: the blade knocks foes round it down. | stun 0.6 |
-| 4 | Power 1.5 to 2.8 AD. | power 2.8 |
+| 4 | Power 1 to 1.6 AD. | power 1.6 |
 | 5 | New: two blades fall on two foes. | count 2 |
 | 6 | New: the blade throws foes up; its ring reaches 30 px. | reach 30, launch 1 |
-| 7 | New: a kill always drops one. | chance 1 |
-| 8 | Power 2.8 to 6 AD; three blades. | power 6, count 3 |
+| 7 | New: a kill drops one 3 times in 4. | chance 0.75 |
+| 8 | Power 1.6 to 2.6 AD. | power 2.6 |
 
-Evolution **Blade Rain** (partner `br_fall`): Blades keep falling on foes near her for 2 s after each kill.
-Evolved values: rain 2.
+Evolution **Blade Rain** (partner `br_fall`): Blades keep falling on foes near her for 1.5 s after a kill calls them.
+Evolved values: rain 1.5.
 
 #### `br_echo` Echo Swing
 
@@ -345,10 +345,10 @@ Summon, precise, auto. A parry calls a crimson echo of her behind the attacker t
 | 5 | New: the echo swings twice. | cuts 2 |
 | 6 | New: heavy swings call it 25% of the time. | heavy 0.25 |
 | 7 | Echo power 6 to 10 AD. | power 10 |
-| 8 | Echo power 10 to 18 AD. | power 18 |
+| 8 | Echo power 10 to 30 AD. | power 30 |
 
 Evolution **Twin Echo** (partner `br_counter`): Two echoes, one on each side, and each cleave hits half again as hard.
-Evolved values: power 27, twin 1.
+Evolved values: power 45, twin 1.
 
 #### `br_shard` Red Shard
 
@@ -421,6 +421,57 @@ Ultimate, timed, U. Crimson Fall grows: fissures, aftershocks and a second cresc
 
 Evolution **Sundered Sky** (partner `br_heavy`): Three crescents fall one after another, each wider than the last.
 Evolved values: power 3, falls 3, widen 0.35.
+
+## Balance
+
+Measured 15 November 2026 in a measuring room built for this hero to the method in `docs/skills/balance.md`: the run starts at wave 2 and hero level 1 with only the skill under test, the wave's stream is stopped, and the room keeps a crowd of six (four husks and two wisps) or one husk at three times its HP, refilled 0.35 s after a foe falls, with her HP kept full.
+A scripted player walks to the nearest foe and plays the string, pressing 30% of follow-ups in the heavy beat, casts the selected ability when it is ready, warps every 4 s at a distant foe, and makes a parry and a perfect dodge in turn every 7 s through the game's own functions.
+Each figure is damage a second over 30 to 40 s of game time, on her sources (`attacks`, `abilities`, `ultimate` and the skill's own id).
+The script lives in the task's scratch folder, outside the repo.
+
+The same room run with Kael read 81 a second on the crowd and 42 on one foe, against 146 and 42 in `docs/skills/balance.md`, so this room's figures are its own scale and only compare within it.
+Two runs of Brynn's base kit read 150 and 177 on the crowd and 74 and 119 on one foe: one run swings by 20 to 40%.
+
+| Skill | Target | Base kit | Level 8 | Evolved |
+| --- | --- | --- | --- | --- |
+| Heavy Hands | one | 74 to 119 | 114 at bonus 12 (before tuning) | 149 at bonus 18 (before tuning) |
+| Wide Arc | crowd | 150 to 177 | 284 at power 3.2 (before tuning) | 611 at wave 2.5 (before tuning) |
+| Skyward Heave | crowd | 150 to 177 | 277 | 225 |
+| Anvil Weight | crowd | 150 to 177 | 444 at wave 5 (before tuning) | 315 (before tuning) |
+| Counter Edge | one | 74 to 119 | 92 at power 14 (before tuning) | the same: Iron Answer needs blocks, which the room has none of |
+| Spinning Throw | one | 74 to 119 | 117 | 125 |
+| Ember Arc | crowd | 150 to 177 | 251 at power 7 (before tuning) | 251: the returning crescents flew off the stage before they turned, fixed since and not measured again |
+| Brand Pillars | crowd | 150 to 177 | 251 | 152 |
+| War Cry | crowd | 150 to 177 | no run | 271 |
+| Fault Lines | crowd | 150 to 177 | 297 (106 its own) | 297 (101 its own) |
+| Crushing Weight | one | 74 to 119 | 39 (23 its own) | 124 (57 its own) |
+| Falling Blade | crowd | 150 to 177 | 689 (392 its own, before tuning); 170 (73 its own) after | 1677 (before tuning); 126 (86 its own) after |
+| Echo Swing | one | 74 to 119 | 105 (42 its own, before tuning); 123 (110 its own) after | 126 (63 its own, before tuning); 178 (164 its own) after |
+| Red Shard | one | 74 to 119 | 98 (55 its own) | 235 (217 its own) |
+| Bellows | crowd | 150 to 177 | 137 | 267 |
+| Crimson Fall | crowd, cast every 10 s | 54 a second from the ultimate | 467 (8.7 times the base special) | 293 (5.4 times) |
+
+Tuning from those runs, in the data rows: Falling Blade's power, its seventh level's chance and its evolution's rain came down, and a rain no longer restarts while it falls; Wide Arc's last level and Horizon Cleave came down; Anvil Weight's shockwave came down; Ember Arc's last level came down; Heavy Hands (bonus 20, evolved 30), Counter Edge (25 at level 8) and Echo Swing (30, evolved 45) went up on the foe they are aimed at.
+
+### Still off or not measured
+
+- Crater Leap and Shoulder Charge read the same as the base kit in the first room, since its scripted player never jumped or dodged out of a free state; a second room that did jumped onto the ledges and stood out of reach, so its figures were not used. Both were seen working in play (stills and the build runs) and are unmeasured.
+- Counter Edge after tuning, Searing Edge at level 8, War Cry at level 8, Iron Skin (no damage of its own) and every level 1 figure but two were not measured.
+- Crimson Fall evolved read lower than level 8, which the overkill of a refilling crowd can explain; per cast it sits near the 6 times asked at level 8 and under the 15 times asked evolved.
+- Precise skills sit under the precise band on one foe at the model's trigger rates, as Kael's did before his round 2.
+
+## Bot runs
+
+Every run from the start menu in a fresh session, on this branch (`agent-studio/playtest`, one run each, deterministic).
+
+| Run | Wave | Level | Kills | Coins | Seconds |
+| --- | --- | --- | --- | --- | --- |
+| Kael, skilled | 5 | 6 | 17 | 27 | 100.5 |
+| Brynn, skilled | 5 | 6 | 18 | 29 | 96.4 |
+| Kael, mash | 5 | 5 | 14 | 28 | 94 |
+| Brynn, mash | 5 | 6 | 18 | 27 | 104.9 |
+| Kael, skilled from wave 11 at level 12 | 12 | 14 | 15 | 20 | 44.8 |
+| Brynn, skilled from wave 11 at level 12 | 13 | 15 | 18 | 24 | 75.3 |
 
 ## Where the code is
 

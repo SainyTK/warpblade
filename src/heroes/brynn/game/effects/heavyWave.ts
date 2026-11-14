@@ -12,6 +12,8 @@ import type { Enemy } from "../../../../types/enemy";
 import { WHITE } from "../../../../utils/color";
 import { CRIMSON, CRIMSON_SPARKS } from "../../constants/colors";
 
+/** a returning crescent turns this close to the stage's edge */
+const EDGE = 6;
 /** the crescent's half height, its bow, its thickness and its speed */
 const ARC = { half: 13, bow: 4, thick: 3, speed: 320 } as const;
 
@@ -44,7 +46,8 @@ export function createCrescentWave(c: CrescentWave): Effect {
   return {
     update(dt) {
       o.run += ARC.speed * dt * o.dir;
-      if (c.back && o.dir > 0 && o.run >= c.reach) {
+      const out = c.x + c.face * o.run;
+      if (c.back && o.dir > 0 && (o.run >= c.reach || out < EDGE || out > W - EDGE)) {
         o.dir = -1;
         struck = new Set<Enemy>();
       }
