@@ -3,7 +3,676 @@
   "files": {
     "includes": ["src/**", "index.html", "patches/index.html", "*.json", "*.ts", "!!agent-studio", "!!studio"]
   },
-  "formatter": { "indentStyle": "space", "indentWidth": 2, "lineWidth": 120 },
-  "linter": { "enabled": true, "rules": { "preset": "none" } },
-  "assist": { "actions": { "source": { "organizeImports": "on" } } }
+  "formatter": {
+    "indentStyle": "space",
+    "indentWidth": 2,
+    "lineWidth": 120
+  },
+  "linter": {
+    "enabled": true,
+    "rules": {
+      "preset": "none"
+    }
+  },
+  "assist": {
+    "actions": {
+      "source": {
+        "organizeImports": "on"
+      }
+    }
+  },
+  "overrides": [
+    {
+      "includes": ["src/**", "!src/heroes/**"],
+      "linter": {
+        "rules": {
+          "style": {
+            "noRestrictedImports": {
+              "level": "error",
+              "options": {
+                "patterns": [
+                  {
+                    "group": ["**/heroes/*/**"],
+                    "message": "Shared code reaches a hero only through the roster (src/heroes/roster.ts) and the hero registry (src/heroes/index.ts), never a file inside a hero's folder (docs/hero-module.md)."
+                  }
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "includes": ["src/heroes/roster.ts", "src/heroes/stub.ts", "src/rig/**"],
+      "linter": {
+        "rules": {
+          "style": {
+            "noRestrictedImports": {
+              "level": "error",
+              "options": {
+                "patterns": [
+                  {
+                    "group": ["**/game/**", "**/ui/**", "**/store/**", "**/scene/**", "**/services/**"],
+                    "message": "A hero's data (character.ts, constants, look, types) and the rig stay free of game state: they import constants, types, utils, the engine and the rig only, and no other hero's folder (docs/hero-module.md)."
+                  }
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "includes": ["src/heroes/kael/**"],
+      "linter": {
+        "rules": {
+          "style": {
+            "noRestrictedImports": {
+              "level": "error",
+              "options": {
+                "patterns": [
+                  {
+                    "group": [
+                      "**/cerise/**",
+                      "**/aldric/**",
+                      "**/vesper/**",
+                      "**/saya/**",
+                      "**/yun/**",
+                      "**/brynn/**",
+                      "**/zafir/**",
+                      "**/calder/**"
+                    ],
+                    "message": "A hero imports shared code and its own folder only, never a file inside another hero's folder (docs/hero-module.md)."
+                  }
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "includes": [
+        "src/heroes/kael/character.ts",
+        "src/heroes/kael/constants/**",
+        "src/heroes/kael/look/**",
+        "src/heroes/kael/types/**"
+      ],
+      "linter": {
+        "rules": {
+          "style": {
+            "noRestrictedImports": {
+              "level": "error",
+              "options": {
+                "patterns": [
+                  {
+                    "group": [
+                      "**/cerise/**",
+                      "**/aldric/**",
+                      "**/vesper/**",
+                      "**/saya/**",
+                      "**/yun/**",
+                      "**/brynn/**",
+                      "**/zafir/**",
+                      "**/calder/**",
+                      "**/game/**",
+                      "**/ui/**",
+                      "**/store/**",
+                      "**/scene/**",
+                      "**/services/**"
+                    ],
+                    "message": "A hero's data (character.ts, constants, look, types) and the rig stay free of game state: they import constants, types, utils, the engine and the rig only, and no other hero's folder (docs/hero-module.md)."
+                  }
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "includes": ["src/heroes/cerise/**"],
+      "linter": {
+        "rules": {
+          "style": {
+            "noRestrictedImports": {
+              "level": "error",
+              "options": {
+                "patterns": [
+                  {
+                    "group": [
+                      "**/kael/**",
+                      "**/aldric/**",
+                      "**/vesper/**",
+                      "**/saya/**",
+                      "**/yun/**",
+                      "**/brynn/**",
+                      "**/zafir/**",
+                      "**/calder/**"
+                    ],
+                    "message": "A hero imports shared code and its own folder only, never a file inside another hero's folder (docs/hero-module.md)."
+                  }
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "includes": [
+        "src/heroes/cerise/character.ts",
+        "src/heroes/cerise/constants/**",
+        "src/heroes/cerise/look/**",
+        "src/heroes/cerise/types/**"
+      ],
+      "linter": {
+        "rules": {
+          "style": {
+            "noRestrictedImports": {
+              "level": "error",
+              "options": {
+                "patterns": [
+                  {
+                    "group": [
+                      "**/kael/**",
+                      "**/aldric/**",
+                      "**/vesper/**",
+                      "**/saya/**",
+                      "**/yun/**",
+                      "**/brynn/**",
+                      "**/zafir/**",
+                      "**/calder/**",
+                      "**/game/**",
+                      "**/ui/**",
+                      "**/store/**",
+                      "**/scene/**",
+                      "**/services/**"
+                    ],
+                    "message": "A hero's data (character.ts, constants, look, types) and the rig stay free of game state: they import constants, types, utils, the engine and the rig only, and no other hero's folder (docs/hero-module.md)."
+                  }
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "includes": ["src/heroes/aldric/**"],
+      "linter": {
+        "rules": {
+          "style": {
+            "noRestrictedImports": {
+              "level": "error",
+              "options": {
+                "patterns": [
+                  {
+                    "group": [
+                      "**/kael/**",
+                      "**/cerise/**",
+                      "**/vesper/**",
+                      "**/saya/**",
+                      "**/yun/**",
+                      "**/brynn/**",
+                      "**/zafir/**",
+                      "**/calder/**"
+                    ],
+                    "message": "A hero imports shared code and its own folder only, never a file inside another hero's folder (docs/hero-module.md)."
+                  }
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "includes": [
+        "src/heroes/aldric/character.ts",
+        "src/heroes/aldric/constants/**",
+        "src/heroes/aldric/look/**",
+        "src/heroes/aldric/types/**"
+      ],
+      "linter": {
+        "rules": {
+          "style": {
+            "noRestrictedImports": {
+              "level": "error",
+              "options": {
+                "patterns": [
+                  {
+                    "group": [
+                      "**/kael/**",
+                      "**/cerise/**",
+                      "**/vesper/**",
+                      "**/saya/**",
+                      "**/yun/**",
+                      "**/brynn/**",
+                      "**/zafir/**",
+                      "**/calder/**",
+                      "**/game/**",
+                      "**/ui/**",
+                      "**/store/**",
+                      "**/scene/**",
+                      "**/services/**"
+                    ],
+                    "message": "A hero's data (character.ts, constants, look, types) and the rig stay free of game state: they import constants, types, utils, the engine and the rig only, and no other hero's folder (docs/hero-module.md)."
+                  }
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "includes": ["src/heroes/vesper/**"],
+      "linter": {
+        "rules": {
+          "style": {
+            "noRestrictedImports": {
+              "level": "error",
+              "options": {
+                "patterns": [
+                  {
+                    "group": [
+                      "**/kael/**",
+                      "**/cerise/**",
+                      "**/aldric/**",
+                      "**/saya/**",
+                      "**/yun/**",
+                      "**/brynn/**",
+                      "**/zafir/**",
+                      "**/calder/**"
+                    ],
+                    "message": "A hero imports shared code and its own folder only, never a file inside another hero's folder (docs/hero-module.md)."
+                  }
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "includes": [
+        "src/heroes/vesper/character.ts",
+        "src/heroes/vesper/constants/**",
+        "src/heroes/vesper/look/**",
+        "src/heroes/vesper/types/**"
+      ],
+      "linter": {
+        "rules": {
+          "style": {
+            "noRestrictedImports": {
+              "level": "error",
+              "options": {
+                "patterns": [
+                  {
+                    "group": [
+                      "**/kael/**",
+                      "**/cerise/**",
+                      "**/aldric/**",
+                      "**/saya/**",
+                      "**/yun/**",
+                      "**/brynn/**",
+                      "**/zafir/**",
+                      "**/calder/**",
+                      "**/game/**",
+                      "**/ui/**",
+                      "**/store/**",
+                      "**/scene/**",
+                      "**/services/**"
+                    ],
+                    "message": "A hero's data (character.ts, constants, look, types) and the rig stay free of game state: they import constants, types, utils, the engine and the rig only, and no other hero's folder (docs/hero-module.md)."
+                  }
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "includes": ["src/heroes/saya/**"],
+      "linter": {
+        "rules": {
+          "style": {
+            "noRestrictedImports": {
+              "level": "error",
+              "options": {
+                "patterns": [
+                  {
+                    "group": [
+                      "**/kael/**",
+                      "**/cerise/**",
+                      "**/aldric/**",
+                      "**/vesper/**",
+                      "**/yun/**",
+                      "**/brynn/**",
+                      "**/zafir/**",
+                      "**/calder/**"
+                    ],
+                    "message": "A hero imports shared code and its own folder only, never a file inside another hero's folder (docs/hero-module.md)."
+                  }
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "includes": [
+        "src/heroes/saya/character.ts",
+        "src/heroes/saya/constants/**",
+        "src/heroes/saya/look/**",
+        "src/heroes/saya/types/**"
+      ],
+      "linter": {
+        "rules": {
+          "style": {
+            "noRestrictedImports": {
+              "level": "error",
+              "options": {
+                "patterns": [
+                  {
+                    "group": [
+                      "**/kael/**",
+                      "**/cerise/**",
+                      "**/aldric/**",
+                      "**/vesper/**",
+                      "**/yun/**",
+                      "**/brynn/**",
+                      "**/zafir/**",
+                      "**/calder/**",
+                      "**/game/**",
+                      "**/ui/**",
+                      "**/store/**",
+                      "**/scene/**",
+                      "**/services/**"
+                    ],
+                    "message": "A hero's data (character.ts, constants, look, types) and the rig stay free of game state: they import constants, types, utils, the engine and the rig only, and no other hero's folder (docs/hero-module.md)."
+                  }
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "includes": ["src/heroes/yun/**"],
+      "linter": {
+        "rules": {
+          "style": {
+            "noRestrictedImports": {
+              "level": "error",
+              "options": {
+                "patterns": [
+                  {
+                    "group": [
+                      "**/kael/**",
+                      "**/cerise/**",
+                      "**/aldric/**",
+                      "**/vesper/**",
+                      "**/saya/**",
+                      "**/brynn/**",
+                      "**/zafir/**",
+                      "**/calder/**"
+                    ],
+                    "message": "A hero imports shared code and its own folder only, never a file inside another hero's folder (docs/hero-module.md)."
+                  }
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "includes": [
+        "src/heroes/yun/character.ts",
+        "src/heroes/yun/constants/**",
+        "src/heroes/yun/look/**",
+        "src/heroes/yun/types/**"
+      ],
+      "linter": {
+        "rules": {
+          "style": {
+            "noRestrictedImports": {
+              "level": "error",
+              "options": {
+                "patterns": [
+                  {
+                    "group": [
+                      "**/kael/**",
+                      "**/cerise/**",
+                      "**/aldric/**",
+                      "**/vesper/**",
+                      "**/saya/**",
+                      "**/brynn/**",
+                      "**/zafir/**",
+                      "**/calder/**",
+                      "**/game/**",
+                      "**/ui/**",
+                      "**/store/**",
+                      "**/scene/**",
+                      "**/services/**"
+                    ],
+                    "message": "A hero's data (character.ts, constants, look, types) and the rig stay free of game state: they import constants, types, utils, the engine and the rig only, and no other hero's folder (docs/hero-module.md)."
+                  }
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "includes": ["src/heroes/brynn/**"],
+      "linter": {
+        "rules": {
+          "style": {
+            "noRestrictedImports": {
+              "level": "error",
+              "options": {
+                "patterns": [
+                  {
+                    "group": [
+                      "**/kael/**",
+                      "**/cerise/**",
+                      "**/aldric/**",
+                      "**/vesper/**",
+                      "**/saya/**",
+                      "**/yun/**",
+                      "**/zafir/**",
+                      "**/calder/**"
+                    ],
+                    "message": "A hero imports shared code and its own folder only, never a file inside another hero's folder (docs/hero-module.md)."
+                  }
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "includes": [
+        "src/heroes/brynn/character.ts",
+        "src/heroes/brynn/constants/**",
+        "src/heroes/brynn/look/**",
+        "src/heroes/brynn/types/**"
+      ],
+      "linter": {
+        "rules": {
+          "style": {
+            "noRestrictedImports": {
+              "level": "error",
+              "options": {
+                "patterns": [
+                  {
+                    "group": [
+                      "**/kael/**",
+                      "**/cerise/**",
+                      "**/aldric/**",
+                      "**/vesper/**",
+                      "**/saya/**",
+                      "**/yun/**",
+                      "**/zafir/**",
+                      "**/calder/**",
+                      "**/game/**",
+                      "**/ui/**",
+                      "**/store/**",
+                      "**/scene/**",
+                      "**/services/**"
+                    ],
+                    "message": "A hero's data (character.ts, constants, look, types) and the rig stay free of game state: they import constants, types, utils, the engine and the rig only, and no other hero's folder (docs/hero-module.md)."
+                  }
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "includes": ["src/heroes/zafir/**"],
+      "linter": {
+        "rules": {
+          "style": {
+            "noRestrictedImports": {
+              "level": "error",
+              "options": {
+                "patterns": [
+                  {
+                    "group": [
+                      "**/kael/**",
+                      "**/cerise/**",
+                      "**/aldric/**",
+                      "**/vesper/**",
+                      "**/saya/**",
+                      "**/yun/**",
+                      "**/brynn/**",
+                      "**/calder/**"
+                    ],
+                    "message": "A hero imports shared code and its own folder only, never a file inside another hero's folder (docs/hero-module.md)."
+                  }
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "includes": [
+        "src/heroes/zafir/character.ts",
+        "src/heroes/zafir/constants/**",
+        "src/heroes/zafir/look/**",
+        "src/heroes/zafir/types/**"
+      ],
+      "linter": {
+        "rules": {
+          "style": {
+            "noRestrictedImports": {
+              "level": "error",
+              "options": {
+                "patterns": [
+                  {
+                    "group": [
+                      "**/kael/**",
+                      "**/cerise/**",
+                      "**/aldric/**",
+                      "**/vesper/**",
+                      "**/saya/**",
+                      "**/yun/**",
+                      "**/brynn/**",
+                      "**/calder/**",
+                      "**/game/**",
+                      "**/ui/**",
+                      "**/store/**",
+                      "**/scene/**",
+                      "**/services/**"
+                    ],
+                    "message": "A hero's data (character.ts, constants, look, types) and the rig stay free of game state: they import constants, types, utils, the engine and the rig only, and no other hero's folder (docs/hero-module.md)."
+                  }
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "includes": ["src/heroes/calder/**"],
+      "linter": {
+        "rules": {
+          "style": {
+            "noRestrictedImports": {
+              "level": "error",
+              "options": {
+                "patterns": [
+                  {
+                    "group": [
+                      "**/kael/**",
+                      "**/cerise/**",
+                      "**/aldric/**",
+                      "**/vesper/**",
+                      "**/saya/**",
+                      "**/yun/**",
+                      "**/brynn/**",
+                      "**/zafir/**"
+                    ],
+                    "message": "A hero imports shared code and its own folder only, never a file inside another hero's folder (docs/hero-module.md)."
+                  }
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "includes": [
+        "src/heroes/calder/character.ts",
+        "src/heroes/calder/constants/**",
+        "src/heroes/calder/look/**",
+        "src/heroes/calder/types/**"
+      ],
+      "linter": {
+        "rules": {
+          "style": {
+            "noRestrictedImports": {
+              "level": "error",
+              "options": {
+                "patterns": [
+                  {
+                    "group": [
+                      "**/kael/**",
+                      "**/cerise/**",
+                      "**/aldric/**",
+                      "**/vesper/**",
+                      "**/saya/**",
+                      "**/yun/**",
+                      "**/brynn/**",
+                      "**/zafir/**",
+                      "**/game/**",
+                      "**/ui/**",
+                      "**/store/**",
+                      "**/scene/**",
+                      "**/services/**"
+                    ],
+                    "message": "A hero's data (character.ts, constants, look, types) and the rig stay free of game state: they import constants, types, utils, the engine and the rig only, and no other hero's folder (docs/hero-module.md)."
+                  }
+                ]
+              }
+            }
+          }
+        }
+      }
+    }
+  ]
 }
