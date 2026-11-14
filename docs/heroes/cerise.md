@@ -55,14 +55,14 @@ Effects are rose: thrusts leave thin rose streaks with a white core, Keen thrust
 
 | Blow | Power (AD) | Hit frame | What it does |
 | --- | --- | --- | --- |
-| Lead thrust | 0.62 | 4 | a straight thrust at the chest from the back foot |
-| Second thrust | 0.62 | 4 | a step in and a thrust a little lower |
-| Rising thrust | 0.7 | 4 | a thrust from low that rises, staggering longer |
-| Twin flick | 0.36 + 0.42 | 3 and 7 | two quick touches from the wrist |
-| Long lunge | 1.8, +0.45 a Point | 5 | a full lunge that pierces every foe on its line, pins them and ends the string |
+| Lead thrust | 0.72 | 4 | a straight thrust at the chest from the back foot |
+| Second thrust | 0.72 | 4 | a step in and a thrust a little lower |
+| Rising thrust | 0.8 | 4 | a thrust from low that rises, staggering longer |
+| Twin flick | 0.42 + 0.48 | 3 and 7 | two quick touches from the wrist |
+| Long lunge | 2, +0.45 a Point | 5 | a full lunge that pierces every foe on its line, pins them and ends the string |
 
-Each thrust reaches 46 px ahead on a line 24 px tall round chest height, the longest reach in the roster in the narrowest line (Kael's cuts are 36 px tall and reach 30 to 38).
-The lunge reaches 62 px, 10 px more for each Point it spends, and with five Points it is a sure crit.
+Each thrust reaches 46 px ahead on a line 30 px tall round chest height, the longest reach in the roster in the narrowest line (Kael's cuts are 36 px tall and reach 30 to 38).
+The lunge reaches 62 px, 10 px more for each Point it spends; with three Points it breaks guards and with five it is a sure crit.
 A thrust strikes on frame 4 and the string runs at about 0.27 real seconds from one blow to the next with J pressed on the beat, against Kael's 0.45, so the string's damage a second is a little under Kael's when mashed and far over it on the beat.
 The lunge closes the combo once its follow-through starts, so J starts the next string over its recovery.
 
@@ -100,8 +100,8 @@ The mark is drawn as a small rose sigil over the foe.
 
 | Ability | Tab | MP | Recharge | Plain | Wide (I held, 1.5x MP) |
 | --- | --- | --- | --- | --- | --- |
-| Flurry | FLURRY | 10 | 3 s | seven quick thrusts in a narrow cone ahead, 0.32 AP each, the last one knocks back | eleven thrusts in a cone tall enough to reach flyers, the last one throws foes up |
-| Rose Line | LINE | 14 | 4.5 s | a thin wave of rose light runs across the whole screen on her line, 2.2 AP to each foe once | the line runs both ways, ahead and behind |
+| Flurry | FLURRY | 10 | 2.5 s | seven quick thrusts in a narrow cone ahead, 0.36 AP each, the last one knocks back | eleven thrusts in a cone tall enough to reach flyers, the last one throws foes up |
+| Rose Line | LINE | 14 | 4 s | a thin wave of rose light runs across the whole screen on her line, 2.4 AP to each foe once | the line runs both ways, ahead and behind |
 
 Each Point an ability spends (two at most) makes it 40% stronger, and Flurry adds two thrusts for each.
 
@@ -122,8 +122,8 @@ Her one ultimate skill, Rose Tempest, upgrades it.
 
 ## Numbers
 
-`base: { ad: 10, ap: 9, hp: 92, mp: 100, stamina: 100, crit: 0.08, move: 1.04, aspd: 1, haste: 1 }`, growth `{ hp: 1, mp: 0.45 }`, `comboHits: 5`.
-HP is a little under Kael's because her reach keeps foes off her; her crit is a little over his because Precision suits her.
+`base: { ad: 10, ap: 9, hp: 100, mp: 100, stamina: 100, crit: 0.08, move: 1.04, aspd: 1, haste: 1 }`, growth `{ hp: 1, mp: 0.45 }`, `comboHits: 5`.
+HP matches Kael's; her crit is a little over his because Precision suits her.
 Every value lives in `src/heroes/cerise/constants/`.
 
 The skill contract allows two to four blows for the new heroes; the director's roster asks for four or five thrusts ending in the lunge.
