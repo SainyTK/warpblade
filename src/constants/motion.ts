@@ -48,11 +48,8 @@ export const JUMP_CATCH_UP = 2.5;
  */
 export const LANDING = { from: 120, full: 380, dip: 2.5, dipFrames: 4, clipEnd: frame(7), cross: 2 } as const;
 
-/** the catch on a crystal: the feet swing this many pixels under the hand, once every `period` seconds, dying away over `settle` */
-export const HANG_SWING = { amplitude: 3, period: 0.7, settle: 0.45 } as const;
-
 /**
- * A walk, run or dash that stops on the spot, or Tallis rising out of his pool, settles onto the knees like a light
+ * A walk, run or dash that stops on the spot settles onto the knees like a light
  * landing, this deep on the landing clip's scale of 0 to 1, so the travel ends in a recovery.
  */
 export const STOP_DEPTH: Readonly<Record<string, number>> = { walk: 0.3, run: 0.55, dash: 0.75, rise: 0.45 };

@@ -5,8 +5,5 @@
  */
 export const NUMBER_LOOK = { cell: 2, bigCell: 3, pop: 0.05, wordShow: 0.4, wordFade: 0.1, fade: 0.15 } as const;
 
-/** a shockwave along the floor: its fronts' pixels per second, and how high above the floor they hit */
-export const SHOCKWAVE = { speed: 230, height: 14 } as const;
-
 /** seconds the sky stays lit after a flash: a lightning strike, or the ultimate let loose at its top level */
 export const SKY_FLASH = 0.16;

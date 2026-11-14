@@ -42,12 +42,6 @@ export function chestPoint(p: Pose): Vec {
   return [(p.hx + p.nx) / 2 + rx * p.cb, (p.hy + p.ny) / 2 + ry * p.cb];
 }
 
-/** the chest bend that puts the chest nearest this point, measured across the straight spine */
-export function chestBendToward(p: Pose, x: number, y: number): number {
-  const { rx, ry } = straightFrame(p);
-  return (x - (p.hx + p.nx) / 2) * rx + (y - (p.hy + p.ny) / 2) * ry;
-}
-
 /** the spine from the chest up to the neck: shoulders, head and scarf follow it */
 export function chestFrame(p: Pose): Frame {
   const [cx, cy] = chestPoint(p);

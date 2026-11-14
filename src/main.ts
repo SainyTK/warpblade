@@ -1,5 +1,5 @@
-// the heroes' kits load first: Ysra's kit reads its parts as it loads, and the combo engine those parts use reaches
-// back to the kits, so a part reached first by another path would not be ready yet
+// the hero registry loads first: every hero's code is entered through its module, and the shared engine those modules
+// use reaches back to the registry, so a hero's part reached first by another path would not be ready yet
 import "./game/hero/kits";
 import { MAX_FRAME, STEP } from "./constants/stage";
 import { frameDriver } from "./game/frameDriver";

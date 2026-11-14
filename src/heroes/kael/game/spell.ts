@@ -55,9 +55,6 @@ function recharge(a: KaelAbility): number {
     a === "lance" || a === "burst" ? BASE_RECHARGE[a] : (skillValues(ELEMENT_SKILL[a]).recharge ?? ELEMENT_RECHARGE);
   return own / progress.stats.haste;
 }
-/** share of the current wait an ability still has to recharge, 0 when ready */
-export const spellRecharge = (a: KaelAbility): number => kael.spellCd[a] / kael.spellCdFull[a];
-
 export function rechargeSpells(dt: number): void {
   const cd = kael.spellCd;
   for (const a of KAEL_ABILITIES) cd[a] = Math.max(0, cd[a] - dt);
