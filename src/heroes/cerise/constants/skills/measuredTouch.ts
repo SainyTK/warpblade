@@ -29,7 +29,7 @@ export const MEASURED_TOUCH: SkillDef = {
     name: "Perfect Measure",
     text: "Every fourth Keen blow in a row bursts a gold rose star on the foe and gives 2 Points.",
     row: evolvedRow(LEVELS[7], "Every 4th Keen blow in a row: a rose star and 2 Points.", {
-      star: 150,
+      star: 90,
       starEvery: 4,
       starPoints: 2,
     }),

@@ -1,6 +1,6 @@
 import { skillEvolved, skillValues } from "../../../game/skills/query";
 import { hero, progress } from "../../../game/state";
-import { LUNGE_POINTS, POINTS } from "../constants/points";
+import { POINTS } from "../constants/points";
 import { STRING_POWER } from "../constants/string";
 import type { CeriseMoveId } from "../types/moves";
 import { keenLungeAgain, perfectMeasure } from "./measure";
@@ -24,7 +24,6 @@ export function afterStrike(id: CeriseMoveId, hits: number): void {
   const mp = skillValues("ce_grace").mp ?? 0;
   if (mp) hero.mp = Math.min(progress.stats.mp, hero.mp + mp);
   cerise.keenStreak++;
-  if (id === "longLunge" && v.twin)
-    keenLungeAgain(STRING_POWER.longLunge * v.twin, cerise.lungePoints * LUNGE_POINTS.reach);
+  if (id === "longLunge" && v.twin) keenLungeAgain(STRING_POWER.longLunge * v.twin);
   if (skillEvolved("ce_measure")) perfectMeasure();
 }

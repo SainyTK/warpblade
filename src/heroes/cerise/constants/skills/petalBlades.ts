@@ -29,7 +29,7 @@ export const PETAL_BLADES: SkillDef = {
   evolution: {
     partner: "ce_bloom",
     name: "Rose Guard",
-    text: "Six petal blades circle you for good and dart at every foe that comes close.",
-    row: evolvedRow(LEVELS[7], "Six blades circle you for good.", { orbit: 1, count: 6 }),
+    text: "Five petal blades circle you for good and dart at every foe that comes close.",
+    row: evolvedRow(LEVELS[7], "Five blades circle you for good.", { orbit: 1, count: 5 }),
   },
 };
