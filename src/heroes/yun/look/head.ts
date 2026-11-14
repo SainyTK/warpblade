@@ -1,0 +1,53 @@
+/**
+ * Yun's head, 24 by 22 image pixels, facing right in three quarters: black hair with a green sheen drawn smooth over
+ * the crown and up into a topknot, a jade pin through the knot, a lock by the ear, and a large jade eye.
+ */
+export const YUN_HEAD = [
+  "...........DDDD.........",
+  "..........DdhHhD........",
+  ".......rrrDhHWHDrr......",
+  "..........DdhhdD........",
+  "......DDDDDDddDDDDD.....",
+  "....DDdhhhhHHHHHhhhDD...",
+  "...DdhhhHHHHHWWHHHHhhD..",
+  "..DdhhHHHHHHHHWHHHHHHhD.",
+  "..DdhhHHHhHHHHHHhHHHHHhD",
+  "..DdhhhHhHHHHHHhHHHHHHHh",
+  "...DdhhhhhhHHHhhHHHhHHhh",
+  "...DddhhhhhhhhhhhHhhHhhh",
+  "....DDdhhhdhhHhLhHhsHhsh",
+  "....DDddhdhhhLsLshsLssss",
+  ".....DDdhdSssLLssdddssss",
+  ".....DDddSsLsLssdwwPssss",
+  "......DDdSssssssswIPssss",
+  "......DDdSSssssssLIIssss",
+  ".......DdSSsssssssssSss.",
+  "........DdSSSssssssmmS..",
+  ".........D.SSSsssssSS...",
+  "...........SSSSSSSS.....",
+] as const;
+/** the back of Yun's head, for a spin: the topknot and its pin, the hair combed up to it in strands, and the nape */
+export const YUN_HEAD_BACK = [
+  "...........DDDD.........",
+  "..........DdhHhD........",
+  ".......rrrDhHWHDrr......",
+  "..........DdhhdD........",
+  "......DDDDDDddDDDDD.....",
+  "....DDdhhhhdhhhhdhhDD...",
+  "...DdhhhHdhhHWhhdhhhhD..",
+  "..DdhhHHdhhHHhhdhhhhhhD.",
+  "..DdhHHdhhHHhhdhhhdhhhhD",
+  "..DdhHHdhhHhhdhhhdhhhhdD",
+  "..DdhhdhhHhhdhhhdhhhhddD",
+  "...DdhdhhhhdhhhdhhhhddD.",
+  "...DddhhhhdhhhdhhhhdddD.",
+  "....DdhhhdhhhdhhhhdddD..",
+  "....DDdhhdhhdhhhddddD...",
+  ".....DDdhdhhdhhdddDD....",
+  "......DDddhdhddddDD.....",
+  ".......DDdddddddDD......",
+  ".........DDDDDDD........",
+  "..........SSSSS.........",
+  "..........SSSSSS........",
+  "...........SSSS.........",
+] as const;
