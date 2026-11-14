@@ -127,7 +127,7 @@ Code: `skills/ventBlast.ts`, called from `afterStrike.ts`.
 
 Attack, precise, K. The parry's counter shot hits far harder.
 
-Values: `power` added share of the counter shot, `rounds` more rounds a parry loads, `mark` damage taken for 4 s, `pierce` foes behind the target take the plain shot, `dodge` a perfect dodge fires the counter shot, `free` the next Trigger after a parry spends no round, `fill` a parry fills the chamber hot.
+Values: `power` added share of the counter shot, `rounds` more rounds a parry loads, `mark` damage taken for 4 s, `stagger` seconds the shot staggers longer, `dodge` a perfect dodge fires the counter shot, `free` the next Trigger after a parry spends no round, `fill` a parry fills the chamber.
 
 | Lv | Card line | Values |
 | --- | --- | --- |
@@ -135,12 +135,12 @@ Values: `power` added share of the counter shot, `rounds` more rounds a parry lo
 | 2 | New: a parry loads one more round. | rounds 1 |
 | 3 | New: the struck foe takes +15% from everything for 4 s. | mark 0.15 |
 | 4 | Counter shot +150% to +400%. | power 4 |
-| 5 | New: the shot pierces to the foes behind. | pierce 1 |
+| 5 | New: the struck foe reels 0.6 s longer. | stagger 0.6 |
 | 6 | New: a perfect dodge fires the counter shot too. | dodge 1 |
 | 7 | New: the next Trigger after a parry spends no round. | free 1 |
 | 8 | Counter shot +400% to +1600%. | power 16 |
 
-Evolution **Deadeye** (partner `ca_trigger`): A parry fills the chamber with hot rounds, and the counter shot hits half again as hard.
+Evolution **Deadeye** (partner `ca_trigger`): A parry fills the chamber, and the counter shot hits half again as hard.
 Evolved values added: fill 1, power 24.
 Code: `skills/pointBlank.ts`, `counterShot.ts`.
 
