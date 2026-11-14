@@ -1,7 +1,7 @@
 import type { Pose } from "./pose";
 
-/** what Kael's pose layer remembers between frames */
-export interface KaelMotion {
+/** what the motion layer every hero shares remembers between frames */
+export interface MotionMemory {
   /** the clip being shown: the state, and the move in it */
   clip: string;
   face: number;

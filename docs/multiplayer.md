@@ -16,22 +16,25 @@ PeerJS is the game's only runtime dependency besides the fonts, and it loads onl
 
 The host's browser runs the one simulation, with every player's hero in it.
 The game was written around a single hero held in module state (`hero`, `progress`, the hero's ropes, the input buffer and the kit parts' own memories).
-Rather than rewrite more than a hundred files to take a hero as an argument, each of those pieces registers itself as per-player memory (`src/game/seatMemory.ts`).
+Each of those pieces registers itself as per-player memory (`src/game/seatMemory.ts`), which avoided rewriting more than a hundred files to take a hero as an argument.
 The host keeps a copy of that memory for every player and swaps a player's copy in before running or drawing their hero (`src/game/coop/hostRun.ts`).
 Between steps the host's own hero is swapped in, so the host's keyboard, HUD and skill cards work exactly as in solo play.
 
 The shared game code asks a small set of hooks which hero to act on (`src/game/coopHooks.ts`):
 
-- each Jory in the room keeps his own beat clock and Groove in his seat memory, and his clock counts on through hit-stop and slow motion like the host's own; a room plays on under the pause menu, so the beat does too, and only the first Jory's tick sounds;
-- a guest Jory sees the beat about a one-way trip and a video frame late and his presses take another one-way trip back, so the host judges a guest's press within 0.14 s of the beat shifted later by that guest's round trip plus a video frame; the host measures each guest's round trip with a probe on every heartbeat, which the guest sends straight back, and uses 0.12 s until the first one returns;
-- each Brannoc in the room keeps his own debt, its fade, Frenzy, Berserk, the K and Hunt waits and the selected ability in his seat memory, so a guest's HP bar shows his own debt segment and his tabs his own abilities, and his Fury reads his own HP; his rings, crescents and summons are host-side effects like every hero's;
-- each foe acts against the nearest standing hero foes can see, and so do coins, orbs and pickups; a hero their kit hides (Tallis in his Veil or his pool) is passed over while any standing hero is in sight, and when every standing hero is hidden the nearest is chosen as before;
+- each foe acts against the nearest standing hero, and so do coins, orbs and pickups;
 - a foe's blow, shot or hazard strikes every standing hero it reaches, each one once;
-- every effect remembers the hero who made it, so a flask, a brazier or an ultimate keeps hitting and following for its owner;
+- every effect remembers the hero who made it, so a flask, a familiar or an ultimate keeps hitting and following for its owner;
 - the step runs each hero's update, afterimages and input ageing once per hero;
-- the scene draws each hero, their anchors and thrown sword, a ring in the player's colour on the floor under each one so two of the same hero can be told apart, and a P1 to P4 tag in the same colour over each one, stacked when heroes stand together.
+- the scene draws each hero and their thrown sword, a ring in the player's colour on the floor under each one so two of the same hero can be told apart, and a P1 to P4 tag in the same colour over each one, stacked when heroes stand together.
 
-A foe in Hulda's hands belongs to the hero holding it: a second Hulda cannot grab it, and the hold lapses a tenth of a second after its holder stops refreshing it, so a Hulda who falls or leaves the room lets go at once (`src/game/hero/hulda/claims.ts`).
+A hero's kit follows the same rule for its own state.
+Any module-level state of a hero or its pose is registered with `rememberPerSeat`, so two players on the same hero each keep their own resources, timers and selected ability.
+State a guest's HUD or touch buttons read (a meter, a charge, the selected ability) is sent to that guest with the rest of their hero's memory, so the guest's bars and tabs show their own hero.
+State a guest never reads, such as sprites, pixel arrays, foes and effect lists, is registered host-only (`objectMemory(state, true)`).
+Rings, projectiles and summons are host-side effects for every hero.
+A module variable that holds per-hero state and is not registered would be shared between the heroes of a room.
+The host also measures each guest's round trip with a probe on every heartbeat, and a kit that judges a press against a clock can read it from `heroInputLag()` (`src/game/coopHooks.ts`).
 
 Solo play sets no hooks, so every one of those call sites behaves as before, and no network code is loaded or run.
 
@@ -124,8 +127,8 @@ The pause menu in a room has Resume, Controls, Options and Leave room, and the g
   Mash bots spend 10% of play frozen alone and 25% with four Kaels; freezing only the striking hero and the foes it hit would need a step that runs heroes apart from the world.
 - Players are named P1 to P4; picking a name is left for later.
 - The foe scaling is a first guess that still needs tuning from real games with people.
-  Mash bots (walk to the nearest foe, press J, take the first card) in a room fall at wave 4 with one Kael and wave 5 with one Ysra, as in solo play.
-  Two Kaels reach waves 5 to 6, two Ysras waves 6 to 7, four Kaels waves 5 to 7, two Kaels with two Ysras waves 5 to 10 and four Ysras wave 10, three runs each.
-  A room of weak players is not overwhelmed by the day era: most four-player runs that end early fall to the wave 5 mini boss, the wave a lone Ysra bot also falls on.
+  Mash bots (walk to the nearest foe, press J, take the first card) in a room fall at wave 4 with one Kael, as in solo play.
+  Two Kaels reach waves 5 to 6 and four Kaels waves 5 to 7, three runs each.
+  A room of weak players is not overwhelmed by the day era: most four-player runs that end early fall to the wave 5 mini boss.
 - The host's hero choice must be made in the lobby before Start; heroes cannot change during a run.
 - A host who switches to another tab or app stalls the room for everyone until they come back. A phone may stop the heartbeat of a background tab altogether, and then the guests are let go after six seconds.

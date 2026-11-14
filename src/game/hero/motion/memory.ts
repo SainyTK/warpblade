@@ -1,8 +1,8 @@
 import { STAND } from "../../../constants/hero";
-import type { KaelMotion } from "../../../types/motion";
+import type { MotionMemory } from "../../../types/motion";
 import { objectMemory, rememberPerSeat } from "../../seatMemory";
 
-const fresh = (): KaelMotion => ({
+const fresh = (): MotionMemory => ({
   clip: "idle",
   face: 1,
   st: 0,
@@ -20,9 +20,9 @@ const fresh = (): KaelMotion => ({
   landDepth: 0,
 });
 
-/** the one owner of what Kael's pose layer remembers */
-export const motion: KaelMotion = fresh();
-// each co-op player's Kael keeps his own pose layer; only the host poses heroes
+/** the one owner of what the motion layer remembers */
+export const motion: MotionMemory = fresh();
+// each co-op player's hero keeps its own motion layer; only the host poses heroes
 rememberPerSeat(objectMemory(motion, true));
 
 /** a fresh run: standing, nothing to cross from */

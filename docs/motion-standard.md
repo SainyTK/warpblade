@@ -1,7 +1,7 @@
 # Motion standard
 
-The owner called Ysra's reworked movement "so smooth" and made it the standard for every hero.
-These are the rules behind it, measured on Ysra at 0ec91c0 and applied to Kael afterwards.
+The owner made smooth movement the standard for every hero.
+These are the rules behind it, measured in the real game and built into the motion layer every hero shares.
 Every hero shares one rig and one 30 fps animation clock, so the rules are stated in rig joints and animation frames.
 
 ## How smoothness is measured
@@ -15,7 +15,7 @@ The harness, filmstrips and numbers for the Kael rework are in the task log of T
 ## Clip time follows the physics
 
 A clip that goes with travel is timed from the same numbers as the travel.
-Ysra's backstep times (`BACKSTEP_TIMES` in `src/constants/ysra/stance.ts`) come from the hop's rise and gravity, so the skid key lands on the real landing.
+A kit's own backstep, for example, takes its key times from the hop's rise and gravity, so the skid key lands on the real landing.
 When the physics can run long or short, the state code steers the clip clock: it holds the airborne key until contact and jumps to the landing key on contact.
 A jump clip ends on the top of the arc, so its last key is reached when the rise stops, whatever cut the rise short.
 A held state (a brace, a charge) loops a middle segment of its clip and plays its reactions as segments that return to the loop.
@@ -23,7 +23,7 @@ A held state (a brace, a charge) loops a middle segment of its clip and plays it
 ## Weight before and after travel
 
 Travel starts with a load: a plant, a dip or a wind-up of at least two frames that moves the body against the travel.
-A blow shows its wind-up for at least one calm frame between the hand-over and the hit frame; Ysra holds four to six.
+A blow shows its wind-up for at least one calm frame between the hand-over and the hit frame; Kael's blows hold three.
 Travel ends with a recovery: the knees take the landing, the hips sink and rise back into the stand the next clip starts from.
 A landing is never a cut from the fall pose to the standing pose.
 The harder the fall, the deeper the landing, and a landing in a stride is a dip of the hips without stopping the feet.
@@ -37,9 +37,9 @@ A jump out of a blow's follow-through, out of a dash, a double jump and a hop in
 The load keeps the hero's speed, so a running jump goes as far as before, and the stride keeps stepping under the bend.
 Nothing else starts during the load: a press of J, L or a skill waits in the input buffer and acts as soon as the hero is in the air.
 A hit or a fall off a ledge cancels the load.
-`src/game/hero/takeoff.ts` owns the load (`takeOff` in each hero's jump press), and `loadPose` (`src/game/hero/kael/load.ts`) poses it for every hero.
-From a stand a hero with a crouch of its own sinks into it (Hulda's `JUMP_CROUCH`, Orrin's `TAKEOFF_CROUCH`, Mirel's `MIREL_CROUCH`, the squat Ysra's jump clip starts from); every other load adds `LOAD_BEND` to the stand or the stride.
-The jump's hand-over then crosses from the crouch into the rise.
+`src/game/hero/takeoff.ts` owns the load (`takeOff`, called by the shared `jump` in `src/game/hero/jump.ts`), and `loadPose` (`src/game/hero/motion/load.ts`) poses it for every hero.
+The load adds `LOAD_BEND` to the stand or the stride under way, so the feet keep their step and hold the floor.
+The jump's hand-over then crosses from the bend into the rise.
 The smoke check expects the hero off the floor 120 ms after W, so the load stays at two frames.
 
 ## Hand-overs
@@ -69,20 +69,27 @@ An idle breathes in under a pixel per frame.
 
 Walk and run clips are sampled by the ground covered, never by time.
 The planted foot sweeps back under the hips by as much floor as the hero covers while it is planted, so it holds the floor.
-The stride length is a constant next to the clip (`STRIDE` for Kael); a faster hero takes longer or quicker strides, never sliding ones.
+The stride length is a constant (`STRIDE` in `src/constants/motion.ts`), and a kit's `stride` hook returns the ground one stride covers; a faster hero takes longer or quicker strides, never sliding ones.
+
+## The shared motion layer
+
+The motion layer is shared at `src/game/hero/motion/`, and its numbers are in `src/constants/motion.ts`.
+Every hero's kit passes its pose through `motionPose(h, t, statePose)` from its `pose` hook, where `statePose` returns the clip the hero's state plays at this moment.
+The kit calls `resetMotion()` in its `reset` and samples its jump clip with `jumpClock` (`docs/hero-module.md`, "Clips and poses").
+So every hero shares the travel load, the landing, the stop settle, the stepping feet and the hand-overs.
+
+`jumpClock.ts` runs the jump clip on the rise, so the top key lands on the real apex of every jump, hop and double jump.
+`landing.ts` plays the landing clip (`SETTLE_CLIPS.land`) or a hip dip in a stride, scaled by the fall speed.
+The landing crosses from the fall over `LANDING.cross` frames, so the arms come down through the touchdown.
+`handover.ts` crosses every change of clip or facing, with lengths in `HANDOVER_FRAMES` and `TURN_FRAMES`.
+`travel.ts` gives every walk, run and dash from a stand a load: the hips drop and the chest leans in over the first frames (`TRAVEL_LOAD`).
+It also settles a walk, run or dash that stops on the spot onto the knees through the landing clip (`STOP_DEPTH`).
+`load.ts` poses the jump load.
 
 ## Where Kael meets it
 
-Kael's pose layer is `src/game/hero/kael/`: his kit's `pose` wraps the shared clips with the rules above, so Ysra's path is untouched.
-Sable, Tallis, Wenna, Orrin, Mirel, Jory and Brannoc pose through the same layer, so they share the travel load, the stop settle and the stepping feet.
-Jory's idle rides his beat instead of a clip clock: the near mallet rises through the second half of each beat and taps down on it, and his head nods on the beat in his idle, walk and run (`src/game/hero/jory/pose.ts`).
-Brannoc carries his great axe on the near shoulder through the shared walk, run, jump and fall, so it never cuts through his body, and while Bloodied his own heaving idle with the axe dragging takes the place of the shared wounded idle (`src/game/hero/brannoc/pose.ts`).
-`jumpClock.ts` runs the jump clip on the rise, so the top key lands on the real apex of every jump, hop and double jump.
-`landing.ts` plays the landing clip (`SETTLE_CLIPS.land`) or a hip dip in a stride, scaled by the fall speed.
-`handover.ts` crosses every change of clip or facing, with lengths in `HANDOVER_FRAMES` and `TURN_FRAMES` (`src/constants/kael/motion.ts`).
-His walk and run clips were rebuilt from a gait model, and the kit's `stride` hook samples them by ground covered.
-`travel.ts` gives every walk, run and dash from a stand a load (the hips drop and the chest leans in over the first frames, `TRAVEL_LOAD`), and settles a walk, run or dash that stops on the spot, and Tallis's rise out of his pool, onto the knees through the landing clip (`STOP_DEPTH`).
-The landing crosses from the fall over `LANDING.cross` frames, so the arms come down through the touchdown.
+Kael's `pose` (`src/heroes/kael/game/pose.ts`) plays the shared clips and his own through the layer.
+The shared walk and run clips were built from a gait model, and his kit's `stride` hook samples them by ground covered.
 His blows cross from the last pose over two frames (`HANDOVER_FRAMES.move`).
 The ground string and the air string are keyed with the wind-up reached by frame 2 and held to the strike on frame 5 (the smash on frame 7), and `onFrame` (`src/constants/combo.ts`) sets each blow's `at` so it is dealt on that key.
 The blows his skills put in the string and in the air (the sweep, the crescent turn, the phase cut, the hop cleave, Skybreaker, the whirlwind and the meteor drop) are keyed the same way, so every blow runs on the plain move clock.

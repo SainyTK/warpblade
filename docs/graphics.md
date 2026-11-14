@@ -28,6 +28,7 @@ Prefer the plate for anything that does not move.
 ## Sprites
 
 Heroes and foes are built from parts each time they are drawn, on a `detailCanvas` at image pixel detail (`src/engine/sprite.ts`).
+Every hero is drawn on the shared rig (`src/rig/`) from a pose and the hero's skin (`docs/hero-module.md`, "The look").
 A foe keeps its picture for about a thirtieth of a second of game time (`src/scene/foeSprites.ts`), and redraws at once when its state changes.
 A foe's draw function must not change game state, spawn particles or read the game's random stream.
 `drawShadows` puts a soft shadow under every foe and hero on the floor below it.

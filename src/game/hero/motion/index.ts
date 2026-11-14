@@ -21,10 +21,16 @@ export interface MotionFrame {
 /**
  * The motion layer every hero's pose goes through (docs/motion-standard.md): a load at the start of every walk, run,
  * dash and jump, the knees taking each landing and each stop, and every change of clip or facing crossed over a few
- * even frames instead of cut. `statePose` is the hero's own: the clip its state plays at this moment. A kit calls this
+ * even frames instead of cut. `statePose` is the hero's own: the clip its state plays at this moment. `crouch` is the
+ * hero's own crouch for a jump loading from a stand; left out, the shared bend is added to the stand. A kit calls this
  * from its `pose`, resets it with `resetMotion` in its `reset`, and samples its jump clip with `jumpClock`.
  */
-export function motionPose(h: Hero, t: number, statePose: (h: Hero, t: number, frame: MotionFrame) => Pose): Pose {
+export function motionPose(
+  h: Hero,
+  t: number,
+  statePose: (h: Hero, t: number, frame: MotionFrame) => Pose,
+  crouch?: Pose,
+): Pose {
   const m = motion;
   const dt = Math.max(0, t - m.t);
   m.t = t;
@@ -33,7 +39,7 @@ export function motionPose(h: Hero, t: number, statePose: (h: Hero, t: number, f
   m.st = h.st;
   const landed = watchLanding(h, t);
   watchTravel(h, t, m.clip);
-  const base = loadPose(travelPose(h, statePose(h, t, { fresh, dt }), t));
+  const base = loadPose(travelPose(h, statePose(h, t, { fresh, dt }), t), crouch);
   watchHandover(h, t, restarted, landed ? LANDING.cross : undefined);
   const p = handOver(landingPose(h, base, t), t);
   m.last = p;

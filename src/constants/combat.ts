@@ -40,7 +40,6 @@ export const WARP = {
   speed: 560,
   maxFlight: 0.6,
   reach: 180,
-  anchorReach: 220,
   fallback: 110,
   /** seconds before Kael can warp again, far shorter than any spell's */
   cooldown: 2,

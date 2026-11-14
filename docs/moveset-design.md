@@ -1,25 +1,25 @@
 # Moveset design: one layout for every hero
 
 The rework asked for on 13 November 2026 (task T-mac-253).
-Owner feedback: only Kael and Sable were strong enough to clear the stage, because both reach far (Kael's warp strike, Sable's bolts).
-Every hero now plays on the same buttons, with the reach and the defence the strong two had, and each hero still plays as their own.
+Owner feedback: only the heroes that reached far, such as Kael with his warp strike, were strong enough to clear the stage.
+Every hero now plays on the same buttons, with the same reach and the same defence, and each hero still plays as their own.
 
 ## The layout
 
 | Key | Action | Shared code |
 | --- | --- | --- |
 | J tapped | The hero's own string, the same as before | the kit |
-| J held | The warp move: throw the weapon, warp to it, strike on arrival | `src/game/hero/warp.ts` |
+| J held | The warp move: throw the sword, warp to it, strike on arrival | `src/game/hero/warp.ts` |
 | K | Guard, held; a parry (perfect guard) when pressed just as a blow lands | `src/game/hero/heroGuard.ts` |
 | L | The front dodge, Kael's dash, for everyone | `src/game/hero/dash.ts` |
 | I tapped | The selected ability; on a recharging one, the next ready one | `src/game/hero/abilityBar.ts` |
 | I held | The wide form of the selected ability, where it has one | `src/game/hero/abilityBar.ts` |
 | O | Switch ability by hand | `src/game/hero/abilityBar.ts` |
 | U | The hero's one ultimate, charged by holding | `src/game/hero/ultimate.ts` |
-| W, Up | Jump | the kit |
+| W, Up | Jump | the kit, with the shared `jump` in `src/game/hero/jump.ts` |
 
 `updateHero` reads presses in this order: the dodge, then the kit's own `readActions` (jump, J tapped, and any press its states take over), then the warp, guard, ability, switch and ultimate.
-A kit that needs a press first (Hulda's throw while she holds a foe) takes it in its own `readActions`, and the shared reader never sees it.
+A kit that needs a press first (Kael's counter on J just after a parry) takes it in its own `readActions`, and the shared reader never sees it.
 
 ## Tap and long press
 
@@ -36,12 +36,14 @@ Every hero's warp is the same move in numbers.
 The throw, the flight speed, the reach (`WARP.reach`), the cost (`COST.warp`, 10 MP), the recharge (`WARP.cooldown`, 2 seconds), the moment nothing can touch the hero, and the arrival blow's power (`WARP.power` plus a bonus for distance travelled) are shared.
 A kit's `WarpStyle` gives it its look and one small extra:
 
-- `drawThrown`: the weapon in flight.
-- `strike`: the arrival blow, when the hero's weapon strikes differently (a ranged hero's shot). It deals the `power` it is given, no more.
-- `arrived`: a small extra after the blow (a grab, a Wick, a Boom). The blow carries the power; the extra is flavour and utility.
+- `drawThrown`: the sword in flight. Left out, the hero's own blade drawing flies (`drawThrownBlade` in `src/game/effects/thrownWeapon.ts`), so the thrown sword matches the one held.
+- `strike`: the arrival blow, when the hero's sword strikes differently (Kael's thrust with Warpcraft). It deals the `power` it is given, no more.
+- `arrived`: a small extra after the blow (a second cut, a mark). The blow carries the power; the extra is flavour and utility.
 - `tune`: the numbers the hero's warp skill changes, read on every warp.
 - `stat: "ap"`: the warp grows with ability power, for a hero whose damage comes mostly from it, so every warp hits about as hard.
-- `ranged`: the throw goes away from the nearest foe, the hero lands at a safe distance and strikes that foe from there.
+
+The throw goes at the nearest foe ahead, and the hero lands beside it and strikes.
+With no foe in reach the sword flies to a point ahead (`WARP.fallback`).
 
 The arrival blow may be cut by a guard, a dodge or an ability once it has struck (`WARP.cut`).
 
@@ -49,10 +51,16 @@ The arrival blow may be cut by a guard, a dodge or an ability once it has struck
 
 Holding K keeps the guard up.
 It blocks blows from the front for stamina (`GuardStyle.blockCost`) and lets a share of the damage through (`GuardStyle.chip`).
-Out of stamina, the guard breaks and the blow lands.
 A blow from behind always lands.
 A blow that meets the guard within `HERO_GUARD.parryWindow` (0.15 seconds) of the press is a parry: nothing is taken, a minion attacker reels, the world slows a beat, MP and stamina come back, Flow rises, the `parry` skill event fires, and then the hero's own `GuardStyle.parried` reward fires.
 K still held when the hero becomes able again raises the guard with no parry window, so a parry always needs a fresh press.
+
+Three rules keep the guard fair (`src/game/hero/heroGuard.ts`):
+
+- One touch is one block. After a block or a parry, the same foe's blows stop on the guard for nothing for `HERO_GUARD.blockGap` (0.8 seconds, the time an open hero cannot be hurt again after a hit), so a foe pressed against the hero cannot drain the stamina bar in a moment.
+- A broken guard stays down until K is pressed again. Out of stamina, the guard breaks and the blow lands, and a K that is still held leaves the guard down.
+- A blow the hero could not have been hurt by costs nothing. While the hero's invulnerable frames run (the moments after a hit, a dodge), a blow stops on the guard with no stamina spent and no damage through.
+
 Guards differ by hero: how much they let through, what a block costs, and above all what a parry gives.
 
 ## Abilities on I

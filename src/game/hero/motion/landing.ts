@@ -8,7 +8,7 @@ import { blendPose, shiftPose } from "../../../utils/poseBlend";
 import { sampleKeys } from "../../../utils/sampleKeys";
 import { motion } from "./memory";
 
-/** watch for touchdown; true on the frame Kael lands from a fall worth bending the knees for */
+/** watch for touchdown; true on the frame the hero lands from a fall worth bending the knees for */
 export function watchLanding(h: Hero, t: number): boolean {
   const m = motion;
   if (!h.ground) {

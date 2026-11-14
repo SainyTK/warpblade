@@ -52,7 +52,7 @@ export const LANDING = { from: 120, full: 380, dip: 2.5, dipFrames: 4, clipEnd: 
  * A walk, run or dash that stops on the spot settles onto the knees like a light
  * landing, this deep on the landing clip's scale of 0 to 1, so the travel ends in a recovery.
  */
-export const STOP_DEPTH: Readonly<Record<string, number>> = { walk: 0.3, run: 0.55, dash: 0.75, rise: 0.45 };
+export const STOP_DEPTH: Readonly<Record<string, number>> = { walk: 0.3, run: 0.55, dash: 0.75 };
 
 /**
  * Travel from a stand starts with a load: the hips drop `dip` pixels and the chest leans `lean` pixels into it on the

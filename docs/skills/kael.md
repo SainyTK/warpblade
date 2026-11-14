@@ -56,7 +56,7 @@ Spellblade works on the wide form: held during an open combo, the wide form leav
 - Combo length never changes. Skills change hit 1 (Reaping Sweep), hit 3 (Phase Cut), hit 4 (Skybreaker, Keen Edge) or add effects to every hit.
 - When two skills claim the same hit: Phase Cut wins hit 3 over the crescent turn, and a Keen 4th hit is the hop cleave (Keen Edge level 7) over Skybreaker's launch.
 - Air string limit: 2 per jump in the base kit (wheel, scissor), 3 with Sky Dance (adds the stomp). A double jump adds no air hits.
-- Every skill blow holds a wind-up of at least three animation frames before its hit frame, like the plain string (`docs/combo-design.md`), and keeps the string's tempo; their timing and hit feel are in `src/constants/kael/skillBlows.ts`.
+- Every skill blow holds a wind-up of at least three animation frames before its hit frame, like the plain string (`docs/combo-design.md`), and keeps the string's tempo; their timing and hit feel are in `src/heroes/kael/constants/skillBlows.ts`.
 - The sweep strikes on frame 5 and its drag stops each foe at Kael's feet. The crescent turn cuts in front on frame 5 and behind on frame 10.
 - The phase cut coils for frames 2 to 4, passes through the foe between frames 4 and 5 and strikes it on frame 5 as Kael lands past it, still facing on; he turns to face it on frame 7, every time.
 - Skybreaker slides in through its crouch, strikes on frame 7, lifts Kael 40 px and throws the foe up at 330 px a second, low enough that the air string started in its follow-through reaches it. The hop cleave leaves the floor on frame 2 and lands on its hit, frame 8.
@@ -120,7 +120,8 @@ Spellblade works on the wide form: held during an open combo, the wide form leav
 | `k_nova` | Crystal Nova | ultimate | easy | U | `k_keen` | Supernova |
 
 Counts: attack 5, movement 5, spell 3, dot 3, summon 3, ultimate 1. Risk: easy 6, timed 10, precise 4.
-The Values column shows only the numbers a level changes; the data rows (`src/constants/characters/kael/skills/`) carry the whole state.
+The Values column shows only the numbers a level changes; the data rows (`src/heroes/kael/constants/skills/`) carry the whole state.
+In the Code lines, a bare file name is a file under `src/heroes/kael/game/`, and a path starting with `src/` is shared code or another part of Kael's folder.
 
 "New" in a card line marks a level that adds a property; the rest are number steps.
 Damage source: hits of Kael's own press (string blows, warp, blink, the parry's riposte and counter, dodge cuts, casts, ultimates) count as `attacks`, `abilities` or `ultimate` and build Flow; ticks, summons and anything that strikes on its own use the skill id and build no Flow.
@@ -142,7 +143,7 @@ Attack, precise, J. Press J in the beat after a blow lands: the Keen blow hits f
 
 Evolution **Peerless Edge** (partner `k_phase`): Every third Keen blow ends in a gold cross cut, and for 3 seconds every blow is Keen.
 Evolved values added: cross 330, crossEvery 3, free 3. The cross cut strikes only the foe the Keen move paid off on (precise payoff, balance round 3); it had a 15 AD ring in 50 px before.
-Code: `hero/kael/keen.ts` (window, wave, streak, Peerless Edge), `hero/kael/bonus.ts` (Keen bonus), `hero/kael/shapeHit.ts` (guard break, hop cleave), `utils/comboChoice.ts`.
+Code: `keen.ts` (window, wave, streak, Peerless Edge), `bonus.ts` (Keen bonus), `shapeHit.ts` (guard break, hop cleave), `chooseMove.ts`.
 
 #### `k_skyward` Skybreaker
 
@@ -161,7 +162,7 @@ Attack, timed, J. The last hit of the combo launches foes into the air instead o
 
 Evolution **Heavenfall** (partner `k_skydance`): At the top of each launch a crystal phantom spikes the foe back down into a shockwave.
 Evolved values added: spike 15, shockReach 60.
-Code: `utils/comboChoice.ts` (4th hit), `hero/kael/shapeHit.ts` (power, box), `hero/kael/bonus.ts` (airborne taken), `skills/kael/skybreaker.ts` (crash, Heavenfall).
+Code: `chooseMove.ts` (4th hit), `shapeHit.ts` (power, box), `bonus.ts` (airborne taken), `skills/skybreaker.ts` (crash, Heavenfall).
 
 #### `k_reap` Reaping Sweep
 
@@ -180,7 +181,7 @@ Attack, easy, J. The combo opens with a low sweep that trips foes and drags them
 
 Evolution **Crystal Harvest** (partner `k_splinters`): The sweep sends a crystal tide along the floor both ways that drags every foe it touches to Kael and lodges splinters.
 Evolved values added: tide 120, tideSplinters 3.
-Code: `utils/comboChoice.ts` (1st and 3rd hit), `hero/kael/shapeHit.ts` (power, reach, drag), `hero/kael/reap.ts` (flyers, Crystal Harvest tide), `hero/kael/bonus.ts` (tripped taken).
+Code: `chooseMove.ts` (1st and 3rd hit), `shapeHit.ts` (power, reach, drag), `reap.ts` (flyers, Crystal Harvest tide), `bonus.ts` (tripped taken).
 
 #### `k_phase` Phase Cut
 
@@ -199,7 +200,7 @@ Attack, timed, J. The third hit cuts through the foe and turns, so the finisher 
 
 Evolution **Phantom Passage** (partner `k_blink`): The phase cut runs through every foe within 160 px ahead, and the finisher strikes them all from behind.
 Evolved values added: reach 160, passage 1.
-Code: `hero/moves/finishers.ts` (pass, guard, Phantom Passage), `hero/kael/shapeHit.ts`, `hero/kael/afterStrike.ts` (back bonus window, afterimage), `hero/kael/bonus.ts`.
+Code: `moves/finishers.ts` (pass, guard, Phantom Passage), `shapeHit.ts`, `afterStrike.ts` (back bonus window, afterimage), `bonus.ts`.
 
 #### `k_warpcraft` Warpcraft
 
@@ -218,7 +219,7 @@ Movement, timed, J held. Warp Strike costs less, recharges faster and reaches fu
 
 Evolution **Rift Walker** (partner `k_passing`): Once every 4 seconds, after an arrival the sword leaps on to 3 more foes and Kael warps to each in turn.
 Evolved values added: chain 3, chainEvery 4.
-Code: `hero/warp.ts` (cost, recharge, charges, thrust, path cut, behind, Rift Walker chain).
+Code: `src/game/hero/warp.ts` (cost, recharge, charges, path cut), `warpStyle.ts` (thrust, behind, Rift Walker chain).
 
 #### `k_blink` Blink Step
 
@@ -238,7 +239,7 @@ Movement, timed, J held. Hold J during a combo to step through to the foe's back
 Evolution **Shadow Step** (partner `k_echo`): A phantom cuts from the near side as Kael blinks, and a blink that kills is free.
 Evolved values added: shadow 1.
 J held outside an open combo, or with no blink ready, is the plain warp.
-Code: `hero/readActions.ts` (J held in a combo), `hero/kael/blink.ts` (strike, lock, afterimage, Shadow Step).
+Code: `readActions.ts` (J held in a combo), `blink.ts` (strike, lock, afterimage, Shadow Step).
 
 #### `k_passing` Passing Cut
 
@@ -256,9 +257,9 @@ Movement, timed, L. The dodge cuts every foe it passes through.
 | 8 | Dodge cut power 1.4 to 4; rising cut 1 to 2. | cut 4, rising 2 |
 
 Evolution **Phantom Rush** (partner `k_skydance`): Crystal phantoms along the dodge's path cut again a moment later, and dodges cost half the stamina.
-The dodge on L is the one every hero shares (`hero/dash.ts`); Passing Cut is Kael's addition to it.
+The dodge on L is the one every hero shares (`src/game/hero/dash.ts`); Passing Cut is Kael's addition to it, through the kit's `dodge` hooks.
 Evolved values added: rush 3, staminaCost 0.5.
-Code: `hero/kael/passingCut.ts` (cuts, rising cut, refund, chill, Phantom Rush), `hero/stamina.ts` (half cost).
+Code: `passingCut.ts` (cuts, rising cut, refund, chill, Phantom Rush), `src/game/hero/stamina.ts` (half cost).
 
 #### `k_skydance` Sky Dance
 
@@ -277,7 +278,7 @@ Movement, timed, jump. One more attack in the air, ending in a stomp, and later 
 
 Evolution **Comet Dance** (partner `k_reap`): Air hits drop crystal shards on the foe below, and the stomp lands as a comet that draws foes in.
 Evolved values added: shard 1.5, comet 8, cometReach 90.
-Code: `skills/airLimit.ts` (air string), `hero/dash.ts` (air dash), `utils/comboChoice.ts` (whirl, meteor), `hero/moves/air.ts` (stomp, comet), `hero/gravityWell.ts`, `skills/kael/skyDance.ts` (Comet Dance shards).
+Code: `src/game/skills/airLimit.ts` (air string), `kit.ts` (air dash, through the `airDodge` hook), `chooseMove.ts` (whirl, meteor), `moves/air.ts` (stomp, comet), `gravityWell.ts`, `skills/skyDance.ts` (Comet Dance shards).
 
 #### `k_flame` Fire Flask
 
@@ -296,7 +297,7 @@ Spell, easy, I. Learn the fire spell: a flask that bursts and sets foes burning.
 
 Evolution **Sunflask** (partner `k_familiar`): The flask bursts, then three smaller flasks fly at nearby foes and burst on them.
 Evolved values added: children 3.
-Code: `spells/fire.ts`, `spells/floorFire.ts`, `spells/sunflask.ts`, `game/damage.ts` (ignition).
+Code: `spells/fire.ts`, `spells/floorFire.ts`, `spells/sunflask.ts`, `src/game/damage.ts` (ignition).
 
 #### `k_frost` Ice Spikes
 
@@ -315,7 +316,7 @@ Spell, timed, I. Learn the ice spell: a running line of spikes that freezes foes
 
 Evolution **Glacier Bloom** (partner `k_reap`): A second line runs behind Kael, and the last spike grows into a spire that bursts into freezing shards.
 Evolved values added: bloom 1, spire 3, bloomPower 1.5.
-Code: `spells/ice.ts`, `game/damage.ts` (shatter), `skills/kael/iceSpikes.ts` (death burst), `hero/kael/bonus.ts` (frozen taken).
+Code: `spells/ice.ts`, `src/game/damage.ts` (shatter), `skills/iceSpikes.ts` (death burst), `bonus.ts` (frozen taken).
 
 #### `k_volt` Lightning
 
@@ -334,7 +335,7 @@ Spell, easy, I. Learn the lightning spell: a bolt on a foe ahead that arcs on.
 
 Evolution **Thunderhead** (partner `k_static`): A storm cloud stays over the strike and calls down five more bolts that each arc to two foes.
 Evolved values added: cloud 5, cloudArcs 2.
-Code: `spells/bolt.ts`, `spells/thunderhead.ts`, `hero/kael/bonus.ts` (shocked taken).
+Code: `spells/bolt.ts`, `spells/thunderhead.ts`, `bonus.ts` (shocked taken).
 
 #### `k_splinters` Crystal Splinters
 
@@ -353,7 +354,7 @@ Dot, easy, auto. Sword blows lodge crystal splinters that bleed. Weak at first, 
 
 Evolution **Shatterstorm** (partner `k_keen`): The 4th hit and every Keen blow shatter the splinters in the foes they hit, cutting every foe around.
 Evolved values added: shatter 0.5, shatterReach 70.
-Code: `skills/kael/crystalSplinters.ts` on the shared stacks (`addStacks`).
+Code: `skills/crystalSplinters.ts` on the shared stacks (`addStacks`).
 
 #### `k_rift` Rift Wound
 
@@ -372,7 +373,7 @@ Dot, timed, auto. Warp strikes open rift wounds that drain the foe; each warp de
 
 Evolution **Rift Collapse** (partner `k_warpcraft`): A foe at full layers collapses: the wound's damage at once, doubled, and the rift pulls foes in and wounds them.
 Evolved values added: collapse 2, pull 60, give 3.
-Code: `skills/kael/riftWound.ts` on the shared stacks; `hero/kael/bonus.ts` (taken per layer).
+Code: `skills/riftWound.ts` on the shared stacks; `bonus.ts` (taken per layer).
 
 #### `k_static` Static Charge
 
@@ -391,7 +392,7 @@ Dot, timed, auto. Dodge through foes to charge them; they crackle, and your swor
 
 Evolution **Overload** (partner `k_passing`): Charge never runs out, and each dodge strikes up to 8 charged foes with lightning.
 Evolved values added: overload 3, overloadArcs 2, most 8, every 1.5.
-Code: `skills/kael/staticCharge.ts` on the shared stacks.
+Code: `skills/staticCharge.ts` on the shared stacks.
 
 #### `k_echo` Phantom Edge
 
@@ -410,7 +411,7 @@ Summon, precise, auto. A sword blow from behind may call a phantom of Kael that 
 
 Evolution **Phantom Host** (partner `k_mirror`): Phantoms come to any sword blow, no back blow needed, and stay on their foe repeating every blow.
 Evolved values added: host 1.
-Code: `skills/kael/phantomEdge.ts`, `effects/echo.ts`, `hero/phantom.ts`.
+Code: `skills/phantomEdge.ts`, `effects/echo.ts`, `phantom.ts`.
 
 #### `k_familiar` Crystal Familiar
 
@@ -429,7 +430,7 @@ Summon, easy, auto. Casting may call a crystal familiar that fires homing shards
 
 Evolution **Crystal Choir** (partner `k_volt`): Three familiars, always out, and every shard arcs to another foe.
 Evolved values added: every 0.8, most 3, choir 1.
-Code: `skills/kael/crystalFamiliar.ts` (rebuilt: cast trigger, AP shards).
+Code: `skills/crystalFamiliar.ts` (rebuilt: cast trigger, AP shards).
 
 #### `k_mirror` Mirror Knight
 
@@ -449,7 +450,7 @@ Summon, precise, auto. A parry or a perfect dodge calls a mirror knight that war
 Evolution **Perfect Reflection** (partner `k_keen`): A parry or a perfect dodge stops time while Kael and the knight strike the attacker and every foe near.
 Evolved values added: stay 8, reflect 150, reflectArea 15, reflectReach 120.
 After a parry the knight's first warp goes to the foe that struck, so it lands with Kael's counter.
-Code: `skills/kael/mirrorKnight.ts` (both triggers); Riposte after a parry in `hero/kael/guardStyle.ts`, after a perfect dodge in `hero/perfectDodge.ts`, its bonus in `meleeHit.ts` and `hero/kael/bonus.ts`.
+Code: `skills/mirrorKnight.ts` (both triggers); Riposte after a parry in `guardStyle.ts`, after a perfect dodge in `src/game/hero/perfectDodge.ts`, its bonus in `src/game/meleeHit.ts` and `bonus.ts`.
 
 #### `k_aegis` Crystal Aegis
 
@@ -472,7 +473,7 @@ Evolved values added: reflect 2, launch -260.
 The shatter's full blow lands on the attacker only; other foes in reach take 0.4 of it (`AEGIS_SPLASH`), the precise payoff rule.
 Level 1 shatters 3.6 AD at most, level 8 36 AD (6 crystals), about 10 times.
 The crystals circle Kael's sword hand, so the player sees what the next parry will spend.
-Code: `hero/kael/aegis.ts` (crystals, block cost and chip, shatter), `hero/kael/guardStyle.ts`.
+Code: `aegis.ts` (crystals, block cost and chip, shatter), `guardStyle.ts`.
 
 #### `k_spellwarp` Spellwarp
 
@@ -494,7 +495,7 @@ Evolution **Arcane Arrival** (partner `k_warpcraft`): Once every 3 seconds, a wa
 Evolved values added: arcaneEvery 3.
 The element is AP and lands on every arrival: the warp, Rift Walker's chained arrivals, Blink Step and the parry's counter.
 Crystal Lance and Crystal Burst give a plain crystal cut with no status.
-Code: `hero/kael/spellwarp.ts` (element, window, refund, Arcane Arrival), `hero/spell.ts` (Spellblade after a warp, `castFree`).
+Code: `spellwarp.ts` (element, window, refund, Arcane Arrival), `spell.ts` (Spellblade after a warp, `castFree`).
 
 #### `k_nova` Crystal Nova
 
@@ -518,22 +519,22 @@ Budget per foe the ring strikes, in ring blows: level 8 is 2 (ring) + 1 (echo) +
 Supernova is 6 (three rings) + 3.6, and its storm cuts foes within 70 px for 0.2 of a ring blow every 0.2 s, up to 4 more, about 13.6 before Keen volleys.
 Measured on the wave 5 boss with one charge: level 8 4.9 times the plain nova, Supernova 7.3 times while the boss stood outside the storm.
 The phantoms come from Phantom Legion, the stars from Starfall, the storm from Thousand Edges and Endless Edges.
-Code: `ultimates/crystalNova.ts`, `ultimates/nova/` (ring, phantoms, stars, edges, storm), `constants/kael/nova.ts`; recharge and charge speed in `hero/ultimate.ts`.
+Code: `ultimate/crystalNova.ts`, `ultimate/nova/` (ring, phantoms, stars, edges, storm), `src/heroes/kael/constants/nova.ts`; recharge and charge speed in `src/game/hero/ultimate.ts`.
 
 ## Balance
 
 The first draft counted far more triggers than an ordinary player makes.
-The numbers in the data follow the shared play model of the balance review of 7 November 2026 (all four heroes, one model) and its rules for every hero:
+The numbers in the data follow the shared play model of the balance review of 7 November 2026 and its rules for every hero:
 
 - G1: hits a skill deals on its own (summons, copies, ticks, bursts, shards) use the skill id as source and never call blow or cast events, so no summon calls another.
-- G2: copies (Phantom Edge, Mirror Knight, Shadow Step) repeat the move's own power (`skills/kael/copyPower.ts`) with only the base back, air and crit rules.
+- G2: copies (Phantom Edge, Mirror Knight, Shadow Step) repeat the move's own power (`src/heroes/kael/game/skills/copyPower.ts`) with only the base back, air and crit rules.
 - G3: damage-taken bonuses (airborne, tripped, frozen, shocked, rift layers) and a mark add into one sum capped at +100% (`DAMAGE.takenCap`).
 - G4: bonuses on Kael's own hits (Keen, Phase Cut's back bonus, Sky Dance's air bonus, Riposte) add into one sum; only crit, back and air multiply.
-- G5: anything spread by a death or a spread (splinters, rift layers, static charge, frozen bursts) cannot pass on again for 0.5 s (`skills/kael/spreadLock.ts`).
+- G5: anything spread by a death or a spread (splinters, rift layers, static charge, frozen bursts) cannot pass on again for 0.5 s (`src/heroes/kael/game/skills/spreadLock.ts`).
 - G6: every summon has its cooldown in its data (Phantom Edge 0.4 s, Crystal Familiar 1 s, Mirror Knight 1 s).
 
 Model rates for Kael (ordinary player): 0.43 strings started a second, 1.27 blows landed, 0.18 last hits, 0.22 Keen blows (0.29 with the wider window), a perfect dodge every 7 s, warp 0.25 a second (0.45 with Warpcraft), a dodge through foes 0.25 a second, about 0.12 casts a second per spell.
-Base Warp Strike is 1.8 AD (orchestrator decision), so the base kit sits near the other heroes.
+Base Warp Strike is 1.8 AD (orchestrator decision), the power of the warp every hero shares (`WARP.power`).
 
 Bands at level 8 in AD (or AP) per second on the intended target: easy 4.2, timed 6.7, precise 10.5 to 12.6; movement skills 0.8 of their band; dots 1.1 to 1.4 times the attack band of their risk.
 Ultimates are measured per cast against Crystal Nova at charge 3 (5.25 AD a foe): level 8 about 6 times, evolved about 15 times.
@@ -595,11 +596,14 @@ Sweep pulls foes in, the 4th hit launches them, the air string and stomp bring t
 
 ## Code map
 
-- Data: `src/constants/characters/kael/skills/` (one file per skill, rows built with `utils/skillRows.ts`).
-- Kit hooks into the shared loop, all optional and left out by the other heroes: `HeroKit.shapeHit`, `keenWindow`, `alwaysKeen` (in `combo.ts`), and `registerDamageHooks` (`game/damageHooks.ts`, read in `dealDamage`).
-- Kael's kit state for his skills: `src/game/hero/kael/state.ts` (Keen streak, blink recharge, phase window, Aegis crystals, Spellwarp window, Supernova's storm).
-- Guard and parry: `src/game/hero/kael/guardStyle.ts`, the counter in `kael/counter.ts`, Crystal Aegis in `kael/aegis.ts`, the guard clip in `src/constants/kael/guardClip.ts`.
-- Warp: `src/game/hero/kael/warpStyle.ts` (Warpcraft's thrust, Rift Walker, Spellwarp) on the shared `hero/warp.ts`.
-- Behaviors on their own: `src/game/skills/kael/`.
-- Abilities on I: `KAEL_SLOTS` in `src/game/hero/spell.ts` on the shared ability bar (Lance, Burst, then the element spells held), wide forms in `src/game/spells/` and `LANCE_FAN`, `WIDE_BURST`, `FIRE_WALL`, `ICE_FIELD` and `BOLT_CHAIN` in `src/constants/spells.ts`.
-- Icons: `src/ui/skills/icons/kael/` (every skill, every evolution, and Kael's three damage sources).
+Kael's folder is `src/heroes/kael/`, laid out as `docs/hero-module.md` describes: `character.ts` exports `KAEL` and `index.ts` exports `KAEL_MODULE`.
+
+- Data: `src/heroes/kael/constants/skills/` (one file per skill, rows built with `src/utils/skillRows.ts`).
+- Kit hooks into the shared loop, all optional: `HeroKit.shapeHit`, `keenWindow` and `alwaysKeen` (read in `src/game/hero/combo.ts`), `hitBonus` and `takenBonus` (`src/heroes/kael/game/bonus.ts`, read in `dealDamage`), `airDodge` and `dodge` (read in `src/game/hero/dash.ts`).
+- Kael's kit state for his skills: `src/heroes/kael/game/state.ts` (Keen streak, blink recharge, phase window, Aegis crystals, Spellwarp window, Supernova's storm).
+- Guard and parry: `src/heroes/kael/game/guardStyle.ts`, the counter in `counter.ts`, Crystal Aegis in `aegis.ts`, the guard clip in `src/heroes/kael/constants/guardClip.ts`.
+- Warp: `src/heroes/kael/game/warpStyle.ts` (Warpcraft's thrust, Rift Walker, Spellwarp) on the shared `src/game/hero/warp.ts`.
+- Behaviors on their own: `src/heroes/kael/game/skills/`, registered in `KAEL_SKILLS` (`HeroModule.skills`).
+- Abilities on I: `KAEL_SLOTS` in `src/heroes/kael/game/spell.ts` on the shared ability bar (Lance, Burst, then the element spells held), wide forms in `src/heroes/kael/game/spells/` and `LANCE_FAN`, `WIDE_BURST`, `FIRE_WALL`, `ICE_FIELD` and `BOLT_CHAIN` in `src/heroes/kael/constants/spells.ts`.
+- Ultimate: `castCrystalNova` in `src/heroes/kael/game/ultimate/crystalNova.ts` (`HeroModule.castUltimate`).
+- Icons: `src/heroes/kael/ui/icons/` (every skill, every evolution, and Kael's three damage sources), registered in `KAEL_SKILL_ICONS` (`HeroModule.icons`).

@@ -51,7 +51,7 @@ Skills are bought once, except Last Light with its three levels, and none of the
 
 - Lodestone (60): coins fly to the hero after 0.3 seconds, and foes drop another quarter of their base (a fraction left over is a chance at one more coin).
 - Aftershock (150, saved under the id `warpShock`): every travel move the hero ends sends a ring out from the hero that hits each foe within 40 art pixels for 0.8 times attack damage and stuns it briefly.
-  For Kael that is every dash and every warp, Blink Combo's included; for Ysra every vault, dive and backstep; for Sable every hop and slide; for Hulda every dodge and every warp, every Skyfall slam landing and every leap off a ridden foe; for Orrin every release of a swing, every landing out of a fling, every warp and every ledge pull; for Mirel the end of every Rewind and every landing out of a hover; for Wenna every Swap arrival; for Tallis every rise out of his shadow pool; for Jory the end of every Beat Step; for Brannoc every Hunt and Headlong landing.
+  For Kael that is every dodge and every warp, the blinks of Blink Step and his counter included.
 - Head Start (200): runs start at level 3 with two skill points, spent when wave 1 is cleared.
   A full run reaches about level 84, so level 3 is what wave 1 alone gives; the two picks are the whole head start.
 - Last Light (300, then 480 and 770): a fatal blow leaves the hero standing with half their HP, once per run for each of its three levels (`LAST_LIGHT_LEVELS`).
@@ -67,19 +67,13 @@ A new hero's kit keeps these promises, so every item works for it on day one:
 - Damage comes from `progress.stats.ad` (Honed Edge, Aftershock) and abilities scale with `progress.stats.ap` (Arcana).
   Every blow goes through `dealDamage`, which rolls `progress.stats.crit` (Precision).
 - The kit spends MP on the shared ultimate and may spend more of it on its own abilities (Wellspring).
-  A hero with a resource of its own, such as Ysra's Heat, still charges the ultimate from MP.
-- The kit spends stamina on its defence or travel, such as a dash, a block or a backstep (Endurance).
+  A hero with a resource of its own (`HeroModule.meter`) still charges the ultimate from MP.
+- The kit spends stamina on its defence or travel, such as the dodge, a block or a travel move of its own (Endurance).
 - Walking uses `progress.stats.move` through the shared physics; a move the kit drives itself scales with it where it makes sense (Light Boots).
 - Blows on the hero go through `hurtHero`, so Vitality's HP and Last Light apply.
 - The kit calls `travelEnded()` from `src/game/hero/travelEnd.ts` when each of its travel moves ends: a dash, a warp, a leap, a landing out of the air (Aftershock).
   Shop skills that answer a hero's movement hook in there, never into one kit's code.
 - Coins, levels, Head Start and the pick tools live in shared code and need nothing from the kit.
-
-For Tallis, the eighth hero: Vitality raises an HP bar well below the front-line heroes'; Honed Edge every knife blow, Rising Cut, Drop Stab and Gloaming; Arcana Hamstring, his spells, the ability power dots and Gloaming; Wellspring the MP his abilities and the ultimate spend; Precision every hit, on the highest base crit in the roster; Light Boots his walk, run, veiled walk and the pool's glide; Endurance the stamina his Sink spends; Aftershock rings out at every rise from the pool.
-
-For Jory, the ninth hero: Vitality raises his HP; Honed Edge every mallet blow, the Crash wave, Downstroke and Step Touch; Arcana Boom, Thunder Skin, his spells, the ability power dots and Drumroll; Wellspring the MP his abilities and the special spend; Precision every hit; Light Boots his walk, run and the length of Beat Step; Endurance the stamina Boom and Beat Step spend; Aftershock rings out at the end of every Beat Step.
-
-For Brannoc, the tenth hero: Vitality raises his HP, which is also what he spends on Frenzy and his abilities, so it buys him both life and power; Honed Edge every axe blow, the Hunt Chop, Hatchet Drop, Red Crescent and Last Cleave; Arcana War Cry, Red Crescent, his spells, the ability power dots and Last Cleave; Wellspring the MP Berserk spends; Precision every hit, and his crits win back twice the debt; Light Boots his walk, run and the speed of Hunt; Endurance the stamina Hunt spends; Aftershock rings out at every Hunt and Headlong landing; Lodestone, Head Start and Last Light work as for every hero, and Berserk's Deathless leaves Last Light unspent.
 
 A new item follows the same rule: it changes a shared stat or hooks into a shared event, and its text says what it does without naming a hero.
 Item ids are saved, so a renamed item keeps its id.
@@ -105,6 +99,15 @@ With the bonus, a run that reaches wave 8 to 10 earns about 60 to 80 coins, enou
 The first skill, Lodestone, takes about one good run, and Last Light about a run that reaches wave 20.
 Every stat at its top level costs 2585 coins and the four skills with all three levels of Last Light 1960, about 4550 in all, roughly twelve full clears or a few dozen ordinary runs.
 
+## Hero unlocks
+
+Coins also unlock heroes on the hero screen.
+Kael and Cerise are free.
+The other seven cost 300 (Aldric), 400 (Vesper), 550 (Saya), 750 (Yun), 1000 (Brynn), 1350 (Zafir) and 1800 (Calder), 6,150 coins in all.
+Each price is the hero's `CharacterDef.price`, and each is about 1.35 times the one before, rounded to the nearest 50.
+A hero that is still being built is left out of a production build and joins the hero screen when it is finished.
+The hero screen and what each price means in runs are in `docs/achievements.md`.
+
 ## Saving
 
 Meta progress is saved in local storage under `warpblade-meta-v1` (`src/services/metaStorage.ts`).
@@ -112,3 +115,4 @@ The version is part of the key, so a future change of shape starts from a fresh 
 `parseMeta` in `src/utils/metaSave.ts` keeps only known items within their level limits and a whole, positive coin count; anything missing, corrupt or not JSON starts fresh.
 `src/store/meta.ts` is the one owner of the bank and the bought levels, and saves on every change.
 The same save holds the heroes unlocked with coins, the achievements earned and the stats they track (see `docs/achievements.md`); a save from before those fields loads with none of them.
+A save that unlocked a hero no longer in the roster gets that hero's price back into the bank once.

@@ -6,7 +6,7 @@ import { clamp } from "../../../utils/math";
 import { blendPose } from "../../../utils/poseBlend";
 import { motion } from "./memory";
 
-/** the clip Kael shows: his state, and the move in it */
+/** the clip the hero shows: the state, and the move in it */
 export const clipKey = (h: Hero): string => (h.state === "move" ? `move:${h.move}` : h.state);
 
 /** the clips the hero stands or strides in on the floor; the feet step between them */
@@ -16,7 +16,7 @@ const STANDS = new Set(["idle", "walk", "run"]);
 const turned = (p: Pose): Pose => ({ ...p, mr: p.mr >= 0.5 ? 0 : 1 });
 
 /**
- * Start a hand-over when the clip changes, starts over or Kael turns: the pose shown last is where it crosses from.
+ * Start a hand-over when the clip changes, starts over or the hero turns: the pose shown last is where it crosses from.
  * `frames` overrides the state's own hand-over length.
  */
 export function watchHandover(h: Hero, t: number, restarted: boolean, frames?: number): void {

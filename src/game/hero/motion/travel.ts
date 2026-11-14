@@ -5,13 +5,13 @@ import type { Pose } from "../../../types/pose";
 import { objectMemory, rememberPerSeat } from "../../seatMemory";
 import { motion } from "./memory";
 
-/** when Kael last set off from a stand, and in what: a walk, a run or a dash */
+/** when the hero last set off from a stand, and in what: a walk, a run or a dash */
 const load = { at: Number.NEGATIVE_INFINITY, kind: "" };
-// each co-op player's Kael keeps his own; only the host poses heroes
+// each co-op player's hero keeps its own; only the host poses heroes
 rememberPerSeat(objectMemory(load, true));
 
 /**
- * Watch the change of clip from `last` to Kael's state: setting off from a stand marks a load, and a stride or dash
+ * Watch the change of clip from `last` to the hero's state: setting off from a stand marks a load, and a stride or dash
  * that stops on the spot settles onto the knees through the landing.
  */
 export function watchTravel(h: Hero, t: number, last: string): void {
