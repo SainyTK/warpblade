@@ -23,6 +23,7 @@ const fresh = (): CeriseState => ({
   keenStreak: 0,
   keenCount: 0,
   stance: 0,
+  stanceRiposte: false,
 });
 
 /** the one owner of what Cerise's kit remembers: Points, ability waits, the riposte chain and the ultimate under way */

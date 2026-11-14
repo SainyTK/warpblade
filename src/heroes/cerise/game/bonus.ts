@@ -24,7 +24,7 @@ export function hitBonus(e: Enemy, hit: OwnHit): number {
   let bonus = markBonus(e, hit.keen);
   if (hit.keen && hero.state === "move" && payoffLands(movePayoff(), e)) bonus += keenBonus();
   if (hero.state === "riposte") bonus += skillValues("ce_riposte").bonus ?? 0;
-  if (hero.state === "riposte" && cerise.stance > 0) bonus += skillValues("ce_mirrorguard").bonus ?? 0;
+  if (hero.state === "riposte" && cerise.stanceRiposte) bonus += skillValues("ce_mirrorguard").bonus ?? 0;
   if (hit.melee && (e.halt > 0 || e.pinned > 0)) bonus += skillValues("ce_pin").held ?? 0;
   bonus += openBonus(e);
   return bonus;

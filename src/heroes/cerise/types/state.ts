@@ -31,6 +31,7 @@ export interface CeriseState {
   /** Keen blows landed in a row */
   keenStreak: number;
   keenCount: number;
-  /** seconds left of Mirror Guard's stance */
+  /** seconds left of Mirror Guard's stance, and whether the riposte under way is the stance's answer */
   stance: number;
+  stanceRiposte: boolean;
 }

@@ -15,8 +15,8 @@ import { openRiposte } from "./riposte";
 import { cerise } from "./state";
 
 /**
- * A blow about to land: Mirror Guard's stance turns it aside like a parry and answers with a riposte chain. True when
- * the stance took it.
+ * A blow about to land: Mirror Guard's stance turns it aside like a parry and answers with a riposte, the stance's
+ * bonus on that first riposte only; the stance ends with it. True when the stance took it.
  */
 export function absorbHurt(_dmg: number, fromX: number): boolean {
   if (!stanceTakes(fromX)) return false;
@@ -32,6 +32,8 @@ export function absorbHurt(_dmg: number, fromX: number): boolean {
   emitSkillEvent({ type: "parry", fromX });
   if (v.line) releaseRoseLine(1, false);
   openRiposte();
+  cerise.stance = 0;
+  cerise.stanceRiposte = true;
   return true;
 }
 

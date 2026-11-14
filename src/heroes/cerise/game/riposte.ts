@@ -23,6 +23,7 @@ const beat = (): number => withCharms("duration", skillValues("ce_riposte").wind
 /** start one link of the chain: the first after a parry, then one for each J on the beat */
 function startLink(): void {
   cerise.links++;
+  cerise.stanceRiposte = false;
   cerise.ripNext = false;
   cerise.ripSpoiled = false;
   cerise.ripBeat = 0;
