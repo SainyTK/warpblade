@@ -9,12 +9,12 @@ const LEVELS = levelRows([
     text: "Learn Dusk Gale: a whirl runs along the floor and throws foes up.",
     values: { power: 1.6, launch: 240, life: 0.5, recharge: 4.5, ticks: 1 },
   },
-  { text: "Power 1.6 to 2.1.", values: { power: 2.1 } },
+  { text: "Power 1.6 to 2.6.", values: { power: 2.6 } },
   { text: "New: the gale turns back at the end of its run.", values: { back: 1 } },
-  { text: "Power 2.1 to 2.6; recharge 3.8 s.", values: { power: 2.6, recharge: 3.8 } },
+  { text: "Power 2.6 to 3.4; recharge 3.8 s.", values: { power: 3.4, recharge: 3.8 } },
   { text: "New: it cuts each foe three times and holds it up.", values: { ticks: 3 } },
   { text: "New: a gale runs each way.", values: { both: 1 } },
-  { text: "Power 2.6 to 3.2.", values: { power: 3.2 } },
+  { text: "Power 3.4 to 4.6.", values: { power: 4.6 } },
   { text: "New: it drags foes along with it.", values: { pull: 1 } },
 ]);
 

@@ -8,13 +8,13 @@ const LEVELS = levelRows([
     text: "Learn Falling Moon: a crescent moon falls ahead and bursts.",
     values: { power: 2, moons: 1, radius: 26, recharge: 5 },
   },
-  { text: "Burst 2 to 2.6.", values: { power: 2.6 } },
+  { text: "Burst 2 to 3.", values: { power: 3 } },
   { text: "New: two moons fall.", values: { moons: 2 } },
   { text: "New: the burst throws foes up; wider.", values: { launch: 1, radius: 32 } },
   { text: "New: the burst leaves a glow that burns 3 s.", values: { glow: 3 } },
-  { text: "Burst 2.6 to 3.4; recharge 4.2 s.", values: { power: 3.4, recharge: 4.2 } },
+  { text: "Burst 3 to 4.6; recharge 4.2 s.", values: { power: 4.6, recharge: 4.2 } },
   { text: "New: three moons fall.", values: { moons: 3 } },
-  { text: "Burst 3.4 to 4.2; recharge 3.5 s.", values: { power: 4.2, recharge: 3.5 } },
+  { text: "Burst 4.6 to 6; recharge 3.5 s.", values: { power: 6, recharge: 3.5 } },
 ]);
 
 export const FALLING_MOON: SkillDef = {
