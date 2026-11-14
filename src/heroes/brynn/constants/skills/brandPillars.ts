@@ -1,9 +1,9 @@
 import type { SkillDef } from "../../../../types/skill";
 import { evolvedRow, levelRows } from "../../../../utils/skillRows";
 
-/** values: `power` AP of each pillar, `count` pillars, `recharge` seconds, `gap` pixels between pillars, `burn` seconds
- *  foes burn, `stun` seconds foes lie down, `halt` seconds foes are held in place, `again` the line erupts a second time at this share, `third` and a third
- *  time at this share */
+/** values: `power` AP of each pillar, `count` pillars, `recharge` seconds, `gap` pixels between pillars, `burn`
+ *  seconds foes burn, `stun` seconds foes lie down, `halt` seconds foes are held in place, `again` the line erupts a
+ *  second time at this share, `third` and a third time at this share */
 const LEVELS = levelRows([
   {
     text: "Learn Brand Pillars: crimson pillars burst from the floor one after another ahead.",

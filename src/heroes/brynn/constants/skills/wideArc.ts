@@ -12,7 +12,7 @@ const LEVELS = levelRows([
   { text: "Sweep power +0.4 to +1.2.", values: { power: 1.2 } },
   { text: "New: the sweep reaches flying foes overhead.", values: { tall: 1 } },
   { text: "New: foes it strikes take +25% for 2 s.", values: { mark: 0.25, markTime: 2 } },
-  { text: "Sweep power +1.2 to +3.2; reach +30 px.", values: { power: 3.2, reach: 30 } },
+  { text: "Sweep power +1.2 to +2.2; reach +30 px.", values: { power: 2.2, reach: 30 } },
 ]);
 
 export const WIDE_ARC: SkillDef = {
@@ -27,6 +27,6 @@ export const WIDE_ARC: SkillDef = {
     partner: "br_launch",
     name: "Horizon Cleave",
     text: "The sweep throws a crimson crescent both ways along its arc.",
-    row: evolvedRow(LEVELS[7], "The sweep throws crescents both ways.", { wave: 2.5 }),
+    row: evolvedRow(LEVELS[7], "The sweep throws crescents both ways.", { wave: 1 }),
   },
 };

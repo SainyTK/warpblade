@@ -1,8 +1,8 @@
 import type { SkillDef } from "../../../../types/skill";
 import { evolvedRow, levelRows } from "../../../../utils/skillRows";
 
-/** values: `power` AP of each crescent, `recharge` seconds, `reach` pixels it flies, `size` how much bigger it is, `burn`
- *  seconds foes burn, `count` crescents thrown, `back` the crescents come back to her */
+/** values: `power` AP of each crescent, `recharge` seconds, `reach` pixels it flies, `size` how much bigger it is,
+ *  `burn` seconds foes burn, `count` crescents thrown, `back` the crescents come back to her */
 const LEVELS = levelRows([
   {
     text: "Learn Ember Arc: throw a tall crimson crescent along the line ahead.",
@@ -14,7 +14,7 @@ const LEVELS = levelRows([
   { text: "Power 2 to 3.5 AP.", values: { power: 3.5 } },
   { text: "New: two crescents, one after the other.", values: { count: 2 } },
   { text: "New: crescents fly the whole screen.", values: { reach: 320 } },
-  { text: "Power 3.5 to 7 AP; three crescents.", values: { power: 7, count: 3 } },
+  { text: "Power 3.5 to 5 AP; three crescents.", values: { power: 5, count: 3 } },
 ]);
 
 export const EMBER_ARC: SkillDef = {

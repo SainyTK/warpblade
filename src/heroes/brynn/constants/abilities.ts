@@ -39,7 +39,8 @@ export const QUAKE = {
 } as const;
 /** Ember Arc: the crescents fly this far apart in time, and its wide form's fan sits at these heights above the floor */
 export const ARC = { gap: 0.14, height: 18, fan: [8, 18, 30] } as const;
-/** Brand Pillars: each pillar bursts this long after the one before, throws foes up this fast, the next line comes after */
+/** Brand Pillars: each pillar bursts this long after the one before, throws foes up this fast, the next line comes
+ *  after */
 export const PILLARS = { every: 0.07, launch: -240, again: 0.5 } as const;
 /** War Cry: how hard the roar pushes foes and how long they reel */
 export const CRY = { push: 220, stagger: 0.8 } as const;

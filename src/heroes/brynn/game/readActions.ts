@@ -11,7 +11,8 @@ function doubleTap(dir: number): void {
   hero.face = dir;
 }
 
-/** Brynn's own presses: jump, a double tap to run, and J tapped for her string. The shared moveset is read by updateHero */
+/** Brynn's own presses: jump, a double tap to run, and J tapped for her string. The shared moveset is read by
+ *  updateHero */
 export function readActions(_dir: number, tap: number): void {
   use("up", jump);
   if (tap) doubleTap(tap);

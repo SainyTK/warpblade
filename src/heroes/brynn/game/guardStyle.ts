@@ -17,11 +17,9 @@ import { brynn } from "./state";
 /** how far Counter Edge's crescent flies */
 const COUNTER_WAVE_REACH = 110;
 
-/**
- * The Counter Cleave: a wide two-handed cleave in front and behind at once and a knockdown. Counter Edge's extra power is
- * a precise payoff: it lands on the foe nearest her, the one that struck, and every other foe takes the plain cleave.
- * `share` is a block's half-power answer (Iron Answer).
- */
+/** The Counter Cleave: a wide two-handed cleave in front and behind at once and a knockdown. Counter Edge's extra
+ *  power is a precise payoff: it lands on the foe nearest her, the one that struck, and every other foe takes the
+ *  plain cleave. `share` is a block's half-power answer (Iron Answer). */
 function cleave(share: number): number {
   const v = skillValues("br_counter");
   const [x0, y0, x1, y1] = COUNTER_CLEAVE.box;

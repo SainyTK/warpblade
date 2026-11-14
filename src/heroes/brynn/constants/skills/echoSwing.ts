@@ -1,9 +1,9 @@
 import type { SkillDef } from "../../../../types/skill";
 import { evolvedRow, levelRows } from "../../../../utils/skillRows";
 
-/** values: `power` AD of the echo's cleave on the foe it is aimed at, `chance` a parry or perfect dodge calls it, `both`
- *  perfect dodges call it too, `heavy` heavy swings call it at this chance, `cooldown` least seconds between calls,
- *  `cuts` cleaves it swings, `ring` foes beside the attacker take this share, `twin` echoes on both sides */
+/** values: `power` AD of the echo's cleave on the foe it is aimed at, `chance` a parry or perfect dodge calls it,
+ *  `both` perfect dodges call it too, `heavy` heavy swings call it at this chance, `cooldown` least seconds between
+ *  calls, `cuts` cleaves it swings, `ring` foes beside the attacker take this share, `twin` echoes on both sides */
 const LEVELS = levelRows([
   {
     text: "A parry may call a crimson echo of her that cleaves the attacker.",
@@ -15,7 +15,7 @@ const LEVELS = levelRows([
   { text: "New: the echo swings twice.", values: { cuts: 2 } },
   { text: "New: heavy swings call it 25% of the time.", values: { heavy: 0.25 } },
   { text: "Echo power 6 to 10 AD.", values: { power: 10 } },
-  { text: "Echo power 10 to 18 AD.", values: { power: 18 } },
+  { text: "Echo power 10 to 30 AD.", values: { power: 30 } },
 ]);
 
 export const ECHO_SWING: SkillDef = {
@@ -30,6 +30,6 @@ export const ECHO_SWING: SkillDef = {
     partner: "br_counter",
     name: "Twin Echo",
     text: "Two echoes, one on each side, and each cleave hits half again as hard.",
-    row: evolvedRow(LEVELS[7], "Two echoes, each half again as hard.", { twin: 1, power: 27 }),
+    row: evolvedRow(LEVELS[7], "Two echoes, each half again as hard.", { twin: 1, power: 45 }),
   },
 };

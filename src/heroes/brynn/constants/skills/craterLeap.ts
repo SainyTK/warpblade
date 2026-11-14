@@ -1,9 +1,9 @@
 import type { SkillDef } from "../../../../types/skill";
 import { evolvedRow, levelRows } from "../../../../utils/skillRows";
 
-/** values: `ring` added landing power (AD), `reach` added pixels each side, `waves` shockwaves both ways at this power
- *  (AD), `heft` Heft the landing gives, `launch` foes it strikes are thrown up, `pull` foes this close are dragged in first, `fissures` the landing cracks the floor
- *  both ways */
+/** values: `ring` added landing power (AD), `reach` added pixels each side, `waves` shockwaves both ways at this
+ *  power (AD), `heft` Heft the landing gives, `launch` foes it strikes are thrown up, `pull` foes this close are
+ *  dragged in first, `fissures` the landing cracks the floor both ways */
 const LEVELS = levelRows([
   { text: "The falling slam lands 0.8 AD harder.", values: { ring: 0.8 } },
   { text: "Its ring reaches 12 px farther.", values: { reach: 12 } },

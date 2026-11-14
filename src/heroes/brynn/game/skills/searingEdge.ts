@@ -8,7 +8,8 @@ import type { SkillBehavior } from "../../../../types/skillBehavior";
 import { CRIMSON } from "../../constants/colors";
 
 const ID = "br_embers";
-/** embers tick this often and last this long after the last one; the slam spreads them this far; a burst reaches this far */
+/** embers tick this often and last this long after the last one; the slam spreads them this far; a burst reaches this
+ *  far */
 const EMBERS = { every: 0.5, duration: 3, spread: 36, burst: 34 } as const;
 
 /** lay `n` embers on a foe at the skill's numbers */

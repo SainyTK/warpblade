@@ -16,7 +16,7 @@ const ID = "br_falling";
 /** how hard the blade throws foes up from its sixth level */
 const LAUNCH = -220;
 /** the phantom blade drops from this high in this long, is this wide and long, and stays planted this long after */
-const BLADE = { from: 90, fall: 0.22, half: 3, length: 34, stay: 0.3, rainEvery: 0.3 } as const;
+const BLADE = { from: 90, fall: 0.22, half: 3, length: 34, stay: 0.3, rainEvery: 0.5 } as const;
 
 /** a phantom greatsword falling point first onto the floor under `foe`, striking every foe round where it lands */
 function createBlade(foe: Enemy): Effect {
@@ -84,7 +84,8 @@ function drop(count: number): void {
   for (const foe of foes) game.fx.push(createBlade(foe));
 }
 
-/** Falling Blade: a kill may call phantom greatswords down onto the nearest foes; Blade Rain keeps them falling a while */
+/** Falling Blade: a kill may call phantom greatswords down onto the nearest foes; Blade Rain keeps them falling a
+ *  while */
 export const fallingBlade: SkillBehavior = {
   create: () => ({ cd: 0, rain: 0, next: 0 }),
   update(memory: SkillMemory, _state, dt) {
@@ -102,7 +103,7 @@ export const fallingBlade: SkillBehavior = {
       if ((memory.cd as number) > 0 || !rng.chance(v.chance)) return;
       memory.cd = v.cooldown;
       drop(Math.round(withCharms("amount", v.count)));
-      if (skillEvolved(ID)) memory.rain = withCharms("duration", v.rain);
+      if (skillEvolved(ID) && (memory.rain as number) <= 0) memory.rain = withCharms("duration", v.rain);
     },
   },
 };

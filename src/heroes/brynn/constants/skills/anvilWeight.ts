@@ -8,11 +8,11 @@ const LEVELS = levelRows([
   { text: "The slam's shockwave hits harder.", values: { wave: 0.6 } },
   { text: "The shockwave runs 40% farther.", values: { reach: 0.4 } },
   { text: "New: the shockwave runs both ways.", values: { both: 1 } },
-  { text: "Shockwave power +0.6 to +2.", values: { wave: 2 } },
+  { text: "Shockwave power +0.6 to +1.2.", values: { wave: 1.2 } },
   { text: "New: foes it knocks down stay down 0.5 s longer.", values: { stun: 0.5 } },
   { text: "New: fissures run 40% farther.", values: { fissureReach: 0.4 } },
   { text: "New: fissures hit 1.5 AD harder.", values: { fissure: 1.5 } },
-  { text: "Shockwave power +2 to +5; it runs twice as far.", values: { wave: 5, reach: 1 } },
+  { text: "Shockwave power +1.2 to +2.5; it runs 80% farther.", values: { wave: 2.5, reach: 0.8 } },
 ]);
 
 export const ANVIL_WEIGHT: SkillDef = {

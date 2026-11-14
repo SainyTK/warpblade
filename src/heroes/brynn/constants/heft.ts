@@ -1,8 +1,6 @@
-/**
- * Heft, Brynn's meter (HF): built by blows that land, spent whole by a fissure. `most` is full; a blow adds `blow` and
- * `perFoe` for each foe past the first up to `blowMost`; a heavy swing adds `heavy` more and a parry `parry`. After `wait`
- * seconds without a blow landing it drains `drain` a second.
- */
+/** Heft, Brynn's meter (HF): built by blows that land, spent whole by a fissure. `most` is full; a blow adds `blow`
+ *  and `perFoe` for each foe past the first up to `blowMost`; a heavy swing adds `heavy` more and a parry `parry`.
+ *  After `wait` seconds without a blow landing it drains `drain` a second. */
 export const HEFT = {
   most: 100,
   cells: 4,

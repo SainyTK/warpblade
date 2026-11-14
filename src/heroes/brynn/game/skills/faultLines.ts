@@ -14,7 +14,8 @@ const ID = "br_fault";
 /** a foe stands on a crack when its feet are this close to the floor; held foes stay held this long past each tick */
 const CRACK = { feet: 6, halt: 0.4, rings: 4 } as const;
 
-/** a burning crack along the floor from x0 to x1: it hurts every foe standing on it each tick, and may burst at the end */
+/** a burning crack along the floor from x0 to x1: it hurts every foe standing on it each tick, and may burst at the
+ *  end */
 function createCrack(x0: number, x1: number, y: number): Effect {
   const v = skillValues(ID);
   const life = withCharms("duration", v.time);
@@ -59,7 +60,8 @@ function createCrack(x0: number, x1: number, y: number): Effect {
   };
 }
 
-/** Fault Lines: each of her shockwaves (and, from its third level, fissures and Rend) leaves a burning crack where it ran */
+/** Fault Lines: each of her shockwaves (and, from its third level, fissures and Rend) leaves a burning crack where it
+ *  ran */
 export const faultLines: SkillBehavior = {
   create: () => ({}),
   on: {

@@ -1,9 +1,9 @@
 import type { SkillDef } from "../../../../types/skill";
 import { evolvedRow, levelRows } from "../../../../utils/skillRows";
 
-/** values: `chance` a landed string blow throws a shard, `power` AD a strike, `strikes` strikes a shard makes, `count`
- *  shards at a time, `mark` a struck foe takes this much more for a while, `pierce` a strike passes through, `cooldown` least seconds between shards, `orbit` shards circle
- *  her for good */
+/** values: `chance` a landed string blow throws a shard, `power` AD a strike, `strikes` strikes a shard makes,
+ *  `count` shards at a time, `mark` a struck foe takes this much more for a while, `pierce` a strike passes through,
+ *  `cooldown` least seconds between shards, `orbit` shards circle her for good */
 const LEVELS = levelRows([
   {
     text: "A blow may chip off a red shard of her crystal that darts at foes.",

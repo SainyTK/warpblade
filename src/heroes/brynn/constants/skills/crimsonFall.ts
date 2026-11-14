@@ -2,9 +2,9 @@ import { ULT_CHARGE } from "../../../../constants/ultimate";
 import type { SkillDef } from "../../../../types/skill";
 import { evolvedRow, levelRows } from "../../../../utils/skillRows";
 
-/** values: `power` the crescent's share of its own blow, `cooldown` seconds, `charge` charging speed, `reach` added share
- *  of reach, `pull` foes past the reach are dragged in, `fissures` fissures both ways at this share of the blow, `quakes` aftershocks round her, `after` each
- *  aftershock's share, `falls` crescents in all */
+/** values: `power` the crescent's share of its own blow, `cooldown` seconds, `charge` charging speed, `reach` added
+ *  share of reach, `pull` foes past the reach are dragged in, `fissures` fissures both ways at this share of the
+ *  blow, `quakes` aftershocks round her, `after` each aftershock's share, `falls` crescents in all */
 const LEVELS = levelRows([
   { text: "Crimson Fall hits 30% harder.", values: { power: 1.3 } },
   { text: "Recharge 20 to 15 s; charges 30% faster.", values: { cooldown: 15, charge: 1.3 } },

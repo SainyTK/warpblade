@@ -34,10 +34,8 @@ function slamImpact(): void {
   slamLanded(gx);
 }
 
-/**
- * Brynn's ground string: a wide sweep that staggers the whole arc, a rising heave that throws foes up, and the anvil slam
- * whose tall arc catches the launched foes, drives them into the floor and sends a shockwave along it.
- */
+/** Brynn's ground string: a wide sweep that staggers the whole arc, a rising heave that throws foes up, and the anvil
+ *  slam whose tall arc catches the launched foes, drives them into the floor and sends a shockwave along it. */
 export const STRING_MOVES = {
   sweep: {
     id: "sweep",

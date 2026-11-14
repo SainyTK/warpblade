@@ -1,9 +1,9 @@
 import type { SkillDef } from "../../../../types/skill";
 import { evolvedRow, levelRows } from "../../../../utils/skillRows";
 
-/** values: `power` the dodge's shoulder bash on each foe it passes (AD), `heft` Heft per foe, `wave` a shockwave ahead
- *  where the dodge ends at this power (AD), `stun` foes it passes are knocked down this long, `stamina` stamina back per
- *  foe, `trail` the dodge leaves a fissure behind at this power (AD) */
+/** values: `power` the dodge's shoulder bash on each foe it passes (AD), `heft` Heft per foe, `wave` a shockwave
+ *  ahead where the dodge ends at this power (AD), `stun` foes it passes are knocked down this long, `stamina`
+ *  stamina back per foe, `trail` the dodge leaves a fissure behind at this power (AD) */
 const LEVELS = levelRows([
   { text: "The dodge shoulders every foe it passes through.", values: { power: 0.8 } },
   { text: "New: each foe shouldered gives 8 Heft.", values: { heft: 8 } },

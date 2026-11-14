@@ -1,8 +1,8 @@
 import type { SkillDef } from "../../../../types/skill";
 import { evolvedRow, levelRows } from "../../../../utils/skillRows";
 
-/** values (the shared warp's tune): `cost` MP, `recharge` seconds, `charges`, `path` the spinning sword cuts each foe it
- *  passes at this power (AD), `strike` the arrival chop's power (AD), `ring` added pixels of the shock ring and
+/** values (the shared warp's tune): `cost` MP, `recharge` seconds, `charges`, `path` the spinning sword cuts each foe
+ *  it passes at this power (AD), `strike` the arrival chop's power (AD), `ring` added pixels of the shock ring and
  *  `ringPower` its added power (AD), `wheel` the sword keeps spinning where she lands for this many seconds */
 const LEVELS = levelRows([
   { text: "Warp costs 7 MP and recharges in 1.6 s.", values: { cost: 7, recharge: 1.6, charges: 1 } },

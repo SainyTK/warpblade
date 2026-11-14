@@ -2,8 +2,9 @@ import type { SkillDef } from "../../../../types/skill";
 import { evolvedRow, levelRows } from "../../../../utils/skillRows";
 
 /** values: `damage` AD a crush stack deals a tick, `max` stacks, `every` seconds between ticks, `time` seconds they
- *  last, `air` launched foes take stacks too, `spread` a crushed foe that falls passes its stacks on, `halt` crushed foes are held in place, `spike` a foe driven into the floor takes this many at once, `grind` the
- *  next slam on a crushed foe consumes its stacks for this much AD each */
+ *  last, `air` launched foes take stacks too, `spread` a crushed foe that falls passes its stacks on, `halt` crushed
+ *  foes are held in place, `spike` a foe driven into the floor takes this many at once, `grind` the next slam on a
+ *  crushed foe consumes its stacks for this much AD each */
 const LEVELS = levelRows([
   {
     text: "Foes she knocks down are crushed and bleed while they lie there.",

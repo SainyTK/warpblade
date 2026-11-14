@@ -2,8 +2,8 @@ import type { SkillDef } from "../../../../types/skill";
 import { evolvedRow, levelRows } from "../../../../utils/skillRows";
 
 /** values: `reach` pixels round her the roar knocks foes back, `heft` Heft it gives, `buff` her damage rises by this
- *  much for `time` seconds, `recharge` seconds, `power` AP the roar deals, `heal` share of max HP back, `stamina` stamina back a second while it lasts, `armour` she
- *  wears her armour the whole time */
+ *  much for `time` seconds, `recharge` seconds, `power` AP the roar deals, `heal` share of max HP back, `stamina`
+ *  stamina back a second while it lasts, `armour` she wears her armour the whole time */
 const LEVELS = levelRows([
   {
     text: "Learn War Cry: a roar knocks foes back and fills 25 Heft.",

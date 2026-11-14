@@ -21,11 +21,9 @@ function swinging(): boolean {
   return !last || h.st < last.at + ARMOUR.after;
 }
 
-/**
- * Brynn wears armour while she swings: from the first frame of a move until a moment after its last blow is out, and for
- * the whole of her abilities and Crimson Fall. War Cry at its seventh level keeps it on while the cry lasts, and Living
- * Anvil (Iron Skin evolved) while Heft is at half or more.
- */
+/** Brynn wears armour while she swings: from the first frame of a move until a moment after its last blow is out, and
+ *  for the whole of her abilities and Crimson Fall. War Cry at its seventh level keeps it on while the cry lasts, and
+ *  Living Anvil (Iron Skin evolved) while Heft is at half or more. */
 export function armoured(): boolean {
   if (swinging()) return true;
   if (hero.state === "dead") return false;

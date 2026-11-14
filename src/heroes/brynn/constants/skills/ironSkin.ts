@@ -1,8 +1,9 @@
 import type { SkillDef } from "../../../../types/skill";
 import { evolvedRow, levelRows } from "../../../../utils/skillRows";
 
-/** values: `armour` her armour takes this much more off a blow, `block` a block costs this share less stamina, `heft` and `mp`
- *  each blow her armour takes gives this much Heft and MP, `stamina` stamina back a second while armoured, `living` she wears her armour at all times while Heft is at half */
+/** values: `armour` her armour takes this much more off a blow, `block` a block costs this share less stamina, `heft`
+ *  and `mp` each blow her armour takes gives this much Heft and MP, `stamina` stamina back a second while armoured,
+ *  `living` she wears her armour at all times while Heft is at half */
 const LEVELS = levelRows([
   { text: "Her armour takes 10% more off each blow.", values: { armour: 0.1 }, stats: { hp: 10 } },
   {

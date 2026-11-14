@@ -24,8 +24,8 @@ export const HEAVE_LAUNCH = -300;
 /** the slam's shockwave along the floor ahead: how far it runs, how fast, its power, and how long it knocks foes down */
 export const SHOCKWAVE = { reach: 70, speed: 280, power: 0.9, stun: 0.6 } as const;
 
-/** the falling slam drops this fast once its tuck is over; its landing ring reaches this far each side at this power and
- *  knocks foes down this long, or throws them up this fast with Crater Leap */
+/** the falling slam drops this fast once its tuck is over; its landing ring reaches this far each side at this power
+ *  and knocks foes down this long, or throws them up this fast with Crater Leap */
 export const AIR_SLAM = { dive: 480, reach: 40, ring: 1, stun: 0.6, launch: -220 } as const;
 
 /** a heavy swing (Keen timing): its window after a blow lands, how much farther it reaches, and its crimson wave */

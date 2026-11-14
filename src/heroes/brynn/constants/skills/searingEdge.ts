@@ -1,9 +1,9 @@
 import type { SkillDef } from "../../../../types/skill";
 import { evolvedRow, levelRows } from "../../../../utils/skillRows";
 
-/** values: `damage` AD a stack burns each tick, `max` stacks a foe holds, `stacks` laid by each blow, `heavy` stacks a
- *  heavy swing lays, `taken` a foe with embers takes this much more, `slam` the slam spreads a foe's stacks to the foes round it, `burst` at most stacks a foe bursts
- *  for this much AD per stack */
+/** values: `damage` AD a stack burns each tick, `max` stacks a foe holds, `stacks` laid by each blow, `heavy` stacks
+ *  a heavy swing lays, `taken` a foe with embers takes this much more, `slam` the slam spreads a foe's stacks to the
+ *  foes round it, `burst` at most stacks a foe bursts for this much AD per stack */
 const LEVELS = levelRows([
   { text: "Her blows leave searing embers that burn foes.", values: { damage: 0.06, max: 4, stacks: 1, heavy: 1 } },
   { text: "Embers burn 0.06 to 0.1 AD a tick.", values: { damage: 0.1 } },

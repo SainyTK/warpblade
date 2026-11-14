@@ -2,8 +2,8 @@ import type { SkillDef } from "../../../../types/skill";
 import { evolvedRow, levelRows } from "../../../../utils/skillRows";
 
 /** values: `damage` AD a tick to each foe on a crack, `time` seconds a crack burns, `every` seconds between ticks,
- *  `chill` seconds foes on it are slowed, `halt` foes on it are held in place, `heft` Heft for each tick on a foe, `fissure` cracks from fissures and Rend burn too, `erupt` a crack bursts up at
- *  its end at this power (AD) */
+ *  `chill` seconds foes on it are slowed, `halt` foes on it are held in place, `heft` Heft for each tick on a foe,
+ *  `fissure` cracks from fissures and Rend burn too, `erupt` a crack bursts up at its end at this power (AD) */
 const LEVELS = levelRows([
   { text: "Her shockwaves leave burning cracks in the floor.", values: { damage: 0.15, time: 2, every: 0.5 } },
   { text: "New: foes walking over a crack are slowed; cracks burn 3 s.", values: { time: 3, chill: 0.6 } },

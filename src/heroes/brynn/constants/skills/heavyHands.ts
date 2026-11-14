@@ -16,7 +16,7 @@ const LEVELS = levelRows([
     values: { streak: 0.3, streakCap: 0.9 },
   },
   { text: "New: a heavy slam is a fissure from half Heft.", values: { halfFissure: 1 } },
-  { text: "Heavy bonus +350% to +1200%; the crescent hits far harder.", values: { bonus: 12, wave: 4 } },
+  { text: "Heavy bonus +350% to +2000%; the crescent hits far harder.", values: { bonus: 20, wave: 4 } },
 ]);
 
 export const HEAVY_HANDS: SkillDef = {
@@ -31,6 +31,6 @@ export const HEAVY_HANDS: SkillDef = {
     partner: "br_slam",
     name: "Mountain Hands",
     text: "Every heavy swing also splits the floor with a fissure ahead of her.",
-    row: evolvedRow(LEVELS[7], "Every heavy swing also sends a fissure.", { heavyFissure: 0.8, bonus: 18 }),
+    row: evolvedRow(LEVELS[7], "Every heavy swing also sends a fissure.", { heavyFissure: 0.8, bonus: 30 }),
   },
 };
