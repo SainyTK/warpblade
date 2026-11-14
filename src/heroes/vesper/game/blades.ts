@@ -1,5 +1,13 @@
 import type { VesperMoveId } from "../types/moves";
 
+/** the moves of the air string */
+export const AIR_MOVES: ReadonlySet<string> = new Set<VesperMoveId>([
+  "swallowCut",
+  "wingCut",
+  "twinWheel",
+  "nightfall",
+]);
+
 /** which blow of each move is the short blade's, by its place in the move */
 const SHORT_BLOW: Partial<Record<VesperMoveId, number>> = {
   duskCross: 1,

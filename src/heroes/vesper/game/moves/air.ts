@@ -15,6 +15,12 @@ import { nightfallLanded } from "../skills/airSkills";
 import { takeStruck } from "../struck";
 import { DIVE_A, DIVE_B, SWOOP, UNDERCUT, WHEEL_LONG, WHEEL_SHORT } from "./slashes";
 
+/** an air press leaves the ground string's count: the air string keeps its own (`airHits`), so the ground string never
+ *  caps it and an air press never closes a combo */
+const ownCount = (): void => {
+  hero.chain = 0;
+};
+
 /** the dive leaves its tuck on this frame */
 const TUCK = frame(5);
 /** the floor crescent of the dive's landing */
@@ -51,6 +57,7 @@ export const AIR_MOVES = {
     id: "swallowCut",
     name: "Swallow cut",
     clip: "swallowCut",
+    enter: ownCount,
     pitch: 1.15,
     cancel: AIR_CANCEL,
     hits: [
@@ -61,6 +68,7 @@ export const AIR_MOVES = {
     id: "wingCut",
     name: "Wing cut",
     clip: "wingCut",
+    enter: ownCount,
     pitch: 1.35,
     cancel: AIR_CANCEL,
     hits: [
@@ -79,6 +87,7 @@ export const AIR_MOVES = {
     id: "twinWheel",
     name: "Twin wheel",
     clip: "twinWheel",
+    enter: ownCount,
     pitch: 1.2,
     cancel: AIR_CANCEL,
     hits: [
@@ -110,6 +119,7 @@ export const AIR_MOVES = {
     id: "nightfall",
     name: "Nightfall",
     clip: "nightfall",
+    enter: ownCount,
     pitch: 0.7,
     falls: true,
     untilLanding: true,

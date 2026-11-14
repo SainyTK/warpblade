@@ -4,15 +4,13 @@ import { game, hero, progress } from "../../../../game/state";
 import type { Enemy } from "../../../../types/enemy";
 import { ECHO } from "../../constants/tempo";
 import { NIGHT_RAMP } from "../../look/colors";
+import { AIR_MOVES } from "../blades";
 import { createDuskWave } from "../effects/duskWave";
 import { createEchoCut } from "../effects/echoCut";
 import { gainTempo, tempoTop } from "../tempo";
 import { airBlowLanded } from "./airSkills";
 import { hexBloom } from "./duskSigil";
 import { keenAfterStrike } from "./keen";
-
-/** the moves of the air string */
-const AIR_MOVES: ReadonlySet<string> = new Set(["swallowCut", "wingCut", "twinWheel", "nightfall"]);
 
 /** a small wave of a string blow: Rising Edge's moonrise wave, Crossing Storm's waves */
 const WAVE = { speed: 230, life: 0.32, half: 7 } as const;

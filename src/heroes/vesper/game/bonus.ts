@@ -5,12 +5,9 @@ import { skillValues } from "../../../game/skills/query";
 import { hero } from "../../../game/state";
 import type { Enemy } from "../../../types/enemy";
 import type { OwnHit } from "../../../types/kit";
-import type { VesperMoveId } from "../types/moves";
+import { AIR_MOVES } from "./blades";
 import { twinBuff } from "./skills/twinPhantom";
 import { vesper } from "./state";
-
-/** the moves of the air string, which Sky Ribbon strengthens */
-const AIR_MOVES: ReadonlySet<string> = new Set<VesperMoveId>(["swallowCut", "wingCut", "twinWheel", "nightfall"]);
 
 /** what a Keen blow adds: Twin Keen's bonus and its streak */
 function keenBonus(): number {

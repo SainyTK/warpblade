@@ -15,9 +15,12 @@ import { DUSK_RAMP } from "../../look/colors";
 const ID = "ve_moon";
 /** a moon falls from this high, this fast, and lands this far ahead of her; more moons land this far apart */
 const FALL = { from: 70, speed: 380, ahead: 46, apart: 30 } as const;
+/** Eclipse draws in foes this many radii from a burst, this hard for each pixel away */
+const PULL = { reach: 1.8, strength: 6 } as const;
 
 /** a crescent moon falling onto a point and bursting there */
-function createMoon(x: number, delay: number, damage: number, radius: number, glowFor: number): Effect {
+function createMoon(x: number, delay: number, damage: number, radius: number, glowFor: number, pull: boolean): Effect {
+  const launch = !!skillValues(ID).launch;
   const floor = surfaceBelow(x, hero.y);
   const o = { y: floor - FALL.from, t: -delay, done: false };
   return {
@@ -29,11 +32,22 @@ function createMoon(x: number, delay: number, damage: number, radius: number, gl
       game.fx.push(createFloorRing(x, floor, radius, DUSK_RAMP, 0.45));
       lights.add(x, floor - 8, radius, DUSK_RAMP[4], 0.7, 0.3);
       shake(0.12, 1.6);
+      // Eclipse: foes near the burst are drawn in to its middle first
+      if (pull)
+        for (const e of game.enemies)
+          if (e.hp > 0 && Math.abs(e.x - x) <= radius * PULL.reach) e.vx += (x - e.x) * PULL.strength;
       for (const e of game.enemies) {
         if (e.hp <= 0) continue;
         const [ex, ey] = enemyCenter(e);
         if (Math.hypot(ex - x, (ey - floor) * 0.8) > radius) continue;
-        dealDamage(e, damage, { fromX: x, kx: Math.sign(ex - x) * 70, ky: -60, heavy: true, source: "abilities" });
+        dealDamage(e, damage, {
+          fromX: x,
+          kx: pull ? 0 : Math.sign(ex - x) * 70,
+          ky: -60,
+          launch: launch ? -220 : undefined,
+          heavy: true,
+          source: "abilities",
+        });
         game.fx.push(createImpact(ex, ey, Math.sign(ex - x) || 1, false, SPARKS.shadow));
         if (glowFor) addStacks(e, ID, { stacks: 1, max: 3, damage: damage * 0.1, every: 0.5, duration: glowFor });
       }
@@ -67,6 +81,6 @@ export function castMoon(power: number, wide: boolean): void {
   const damage = progress.stats.ap * v.power * power;
   for (let i = 0; i < count; i++) {
     const x = hero.x + hero.face * (FALL.ahead + i * FALL.apart);
-    game.fx.push(createMoon(x, i * 0.08, damage, radius, v.glow ?? 0));
+    game.fx.push(createMoon(x, i * 0.08, damage, radius, v.glow ?? 0, !!v.pull));
   }
 }

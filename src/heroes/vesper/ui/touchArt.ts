@@ -30,7 +30,7 @@ const BLADES: IconArt = {
     "..G..ED.S....",
     ".......S.....",
   ],
-  colors: { W: ICON_WHITE, P: PALE, V: VIOLET, S: SILVER, G: GRIP, E: VIOLET, D: DARK },
+  colors: { W: ICON_WHITE, P: PALE, V: VIOLET, S: SILVER, G: GRIP, E: VIOLET, D: SILVER },
 };
 
 /** the guard: both blades crossed in an X, a spark at the cross */
