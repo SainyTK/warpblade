@@ -11,7 +11,7 @@ const LEVELS = levelRows([
   { text: "Lance power 2.4; recharge 4 s.", values: { power: 2.4, recharge: 4 } },
   { text: "New: two lances a cast.", values: { count: 2 } },
   { text: "New: a lance bursts where it ends.", values: { burst: 26 } },
-  { text: "Lance power 2.4 to 3.2.", values: { power: 3.2 } },
+  { text: "Lance power 2.4 to 4.5.", values: { power: 4.5 } },
 ]);
 
 export const DAWN_LANCE: SkillDef = {

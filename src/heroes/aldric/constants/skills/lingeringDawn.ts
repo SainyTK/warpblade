@@ -10,7 +10,7 @@ const LEVELS = levelRows([
   { text: "It lasts 3 s and spreads wider.", values: { time: 3, width: 24 } },
   { text: "New: Crest breaker leaves it too.", values: { crest: 1 } },
   { text: "New: standing in it heals you 1% HP a second.", values: { heal: 0.01 } },
-  { text: "It burns almost three times as hard as at first.", values: { burn: 0.8 } },
+  { text: "It burns almost five times as hard as at first.", values: { burn: 1.4 } },
 ]);
 
 export const LINGERING_DAWN: SkillDef = {

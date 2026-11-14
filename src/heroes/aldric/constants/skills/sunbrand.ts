@@ -10,7 +10,7 @@ const LEVELS = levelRows([
   { text: "Brand burns harder still.", values: { tick: 0.16 } },
   { text: "New: Oath cut brands too.", values: { cut: 1 } },
   { text: "New: a branded foe takes 10% more from everything.", values: { bonus: 0.1 } },
-  { text: "Brand burns twice as hard as at first; 6 stacks.", values: { tick: 0.24, max: 6 } },
+  { text: "Brand burns five times as hard as at first; 6 stacks.", values: { tick: 0.4, max: 6 } },
 ]);
 
 export const SUNBRAND: SkillDef = {

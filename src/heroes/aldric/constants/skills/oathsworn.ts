@@ -5,15 +5,15 @@ import { evolvedRow, levelRows } from "../../../../utils/skillRows";
 const LEVELS = levelRows([
   {
     text: "A parry may call a knight of light (50%).",
-    values: { chance: 0.5, power: 1.2, cuts: 1, cooldown: 2, knights: 1 },
+    values: { chance: 0.5, power: 4, cuts: 1, cooldown: 2, knights: 1 },
   },
   { text: "Chance 50% to 80%.", values: { chance: 0.8 } },
   { text: "New: he cuts twice.", values: { cuts: 2 } },
   { text: "New: a Counterbash may call him too.", values: { counter: 1 } },
-  { text: "Cut power 1.2 to 1.8.", values: { power: 1.8 } },
+  { text: "Cut power 4 to 12.", values: { power: 12 } },
   { text: "New: his last cut knocks the foe down.", values: { stun: 0.8 } },
   { text: "New: he leaves a Bulwark on you.", values: { barrier: 1 } },
-  { text: "Cut power 2.6; every parry calls him.", values: { power: 2.6, chance: 1 } },
+  { text: "Cut power 25; every parry calls him.", values: { power: 25, chance: 1 } },
 ]);
 
 export const OATHSWORN: SkillDef = {

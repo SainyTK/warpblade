@@ -79,7 +79,7 @@ Attack, easy, J. The sword string hits harder, Crest breaker throws a wave of li
 | 5 | String blows +40%. | power 1.4 |
 | 6 | New: every blow of the string throws a wave. | waveAll 1 |
 | 7 | New: waves pass through foes. | pierce 1 |
-| 8 | String blows +60%; waves hit harder. | power 1.6, wave 0.9 |
+| 8 | String blows +80%; waves hit twice as hard. | power 1.8, wave 1.2 |
 
 Evolution **Sunblade** (partner `al_resolve`): Every blow of the string throws a great wave of light that passes through every foe.
 Evolved values added: wave 1.6, size 1.6.
@@ -99,7 +99,7 @@ Attack, timed, J. The string's Shield bash hits harder, marks the foe and sends 
 | 5 | Shield bash +80%. | power 1.8 |
 | 6 | New: Shield bash knocks the foe down. | stun 0.6 |
 | 7 | New: the mark rises to 25%. | mark 0.25 |
-| 8 | Shield bash +120%; a stronger shock. | power 2.2, shock 1 |
+| 8 | Shield bash +200%; a stronger shock. | power 3, shock 1.6 |
 
 Evolution **Shattering Bash** (partner `al_brand`): Shield bash bursts every Sunbrand on the foes it reaches, each stack a heavy hit.
 Evolved values added: shatter 1.2.
@@ -112,14 +112,14 @@ Attack, precise, K. The Counterbash, a Guard bash just after a block, hits harde
 
 | Lv | Card line | Values |
 | --- | --- | --- |
-| 1 | Counterbash +30%. | power 1.3 |
+| 1 | Counterbash +50%. | power 1.5 |
 | 2 | Counterbash comes up to 0.1 s later after a block. | window 0.1 |
 | 3 | New: a Counterbash gives back 15 stamina. | refund 15 |
-| 4 | New: it throws a wave of light at the foe. | wave 1 |
-| 5 | Counterbash +60%. | power 1.6 |
+| 4 | New: it throws a wave of light at the foe. | wave 2 |
+| 5 | Counterbash three times as hard. | power 3 |
 | 6 | New: it knocks the foe down. | stun 1 |
 | 7 | New: it adds 2 s to Radiance, or 10 Valor. | extend 2 |
-| 8 | Counterbash +100%; a heavier wave. | power 2, wave 1.6 |
+| 8 | Counterbash eight times as hard; a heavier wave. | power 8, wave 6 |
 
 Evolution **Retribution** (partner `al_vow`): The Counterbash strikes every foe in front of him at full power and its wave splits in three.
 Evolved values added: wide 1, waves 3.
@@ -132,14 +132,14 @@ Attack, precise, J. A Keen blow calls a sword of light down on the foe it struck
 
 | Lv | Card line | Values |
 | --- | --- | --- |
-| 1 | A Keen blow calls a sword of light on its foe. | power 0.8, swords 1 |
-| 2 | Sword of light 0.8 to 1.2. | power 1.2 |
+| 1 | A Keen blow calls a sword of light on its foe. | power 1.5, swords 1 |
+| 2 | Sword of light 1.5 to 2.5. | power 2.5 |
 | 3 | New: the foe takes 15% more for 3 s. | mark 0.15 |
 | 4 | New: a Counterbash calls it too. | counter 1 |
-| 5 | Sword of light 1.2 to 1.8. | power 1.8 |
+| 5 | Sword of light 2.5 to 5. | power 5 |
 | 6 | New: two swords fall. | swords 2 |
 | 7 | New: the Keen moment is 0.05 s longer. | keen 0.05 |
-| 8 | Sword of light 1.8 to 2.6. | power 2.6 |
+| 8 | Sword of light 5 to 12. | power 12 |
 
 Evolution **Final Verdict** (partner `al_lance`): Each sword of light lands with a pillar of dawn that strikes the foes around it.
 Evolved values added: pillar 1.6.
@@ -159,7 +159,7 @@ Attack, timed, J. Crest breaker sends a ring of light along the floor that knock
 | 5 | Ring reaches 42 px. | ring 42 |
 | 6 | New: a second ring follows. | echo 1 |
 | 7 | New: Crest breaker itself +40%. | crest 1.4 |
-| 8 | Ring power 0.9 to 1.4; reaches 50 px. | power 1.4, ring 50 |
+| 8 | Ring power 0.9 to 2.2; reaches 50 px. | power 2.2, ring 50 |
 
 Evolution **Dawnbreak** (partner `al_skyfall`): Crest breaker sends three rings across 80 px, each one knocking foes down.
 Evolved values added: ring 80, echo 2.
@@ -219,7 +219,7 @@ Movement, easy, Up. Shield fall hits harder and its ring reaches farther.
 | 5 | Landing reaches 60% farther. | ring 0.6 |
 | 6 | New: the landing leaves burning light for 2 s. | ground 2 |
 | 7 | New: a faster dive. | dive 0.4 |
-| 8 | Landing +120%. | power 2.2 |
+| 8 | Landing +200%. | power 3 |
 
 Evolution **Falling Sun** (partner `al_crest`): Shield fall brings a pillar of dawn down where he lands, and its ring reaches twice as far.
 Evolved values added: ring 1, pillar 1.
@@ -239,7 +239,7 @@ Spell, timed, I. A new ability: a lance of light thrown straight ahead. Held, th
 | 5 | Lance power 2.4; recharge 4 s. | power 2.4, recharge 4 |
 | 6 | New: two lances a cast. | count 2 |
 | 7 | New: a lance bursts where it ends. | burst 26 |
-| 8 | Lance power 2.4 to 3.2. | power 3.2 |
+| 8 | Lance power 2.4 to 4.5. | power 4.5 |
 
 Evolution **Spear of Morning** (partner `al_verdict`): A spear twice the size that passes through every foe and leaves each one taking 25% more.
 Evolved values added: pierce 99, mark 0.25.
@@ -278,7 +278,7 @@ Spell, easy, I. A new ability: a shout that throws foes back in a ring and fills
 | 5 | Ring power 1.2; 22 Valor. | power 1.2, valor 22 |
 | 6 | New: string blows 20% faster for 4 s. | haste 0.2 |
 | 7 | New: struck foes take 15% more for 4 s. | mark 0.15 |
-| 8 | Ring power 1.6; 35 Valor; recharge 6 s. | power 1.6, valor 35, recharge 6 |
+| 8 | Ring power 2.4; 35 Valor; recharge 6 s. | power 2.4, valor 35, recharge 6 |
 
 Evolution **War Cry** (partner `al_step`): The shout fills Valor to the full at once.
 Values: `radius` of the ring, `power` ability power of its blow, `valor` Valor it gives, `recharge` seconds, `blind` seconds struck foes are blinded, `extend` seconds it adds to Radiance, `haste` faster string blows for 4 s, `mark` extra damage struck foes take for 4 s.
@@ -297,7 +297,7 @@ Dot, timed, J. Every bash brands the foes it strikes with burning light that sta
 | 5 | Brand burns harder still. | tick 0.16 |
 | 6 | New: Oath cut brands too. | cut 1 |
 | 7 | New: a branded foe takes 10% more from everything. | bonus 0.1 |
-| 8 | Brand burns twice as hard as at first; 6 stacks. | tick 0.24, max 6 |
+| 8 | Brand burns five times as hard as at first; 6 stacks. | tick 0.4, max 6 |
 
 Evolution **Solar Brand** (partner `al_breaker`): A branded foe that falls bursts and brands every foe near it to the full.
 Evolved values added: spread 40.
@@ -317,7 +317,7 @@ Dot, easy, K. A foe whose blow you block burns with Penance. Grows with ability 
 | 5 | Burns harder; up to 6 stacks. | tick 0.2, max 6 |
 | 6 | New: each tick heals you 0.5 HP. | heal 0.5 |
 | 7 | New: foes near the attacker burn too. | spread 30 |
-| 8 | Burns three times as hard as at first; 8 stacks. | tick 0.3, max 8 |
+| 8 | Burns five times as hard as at first; 8 stacks. | tick 0.5, max 8 |
 
 Evolution **Atonement** (partner `al_mend`): When a foe's Penance fills it bursts, each stack a heavy hit.
 Evolved values added: burst 0.6.
@@ -337,7 +337,7 @@ Dot, easy, I. Sunpillar leaves burning light on the floor where it falls. Grows 
 | 5 | It lasts 3 s and spreads wider. | time 3, width 24 |
 | 6 | New: Crest breaker leaves it too. | crest 1 |
 | 7 | New: standing in it heals you 1% HP a second. | heal 0.01 |
-| 8 | It burns almost three times as hard as at first. | burn 0.8 |
+| 8 | It burns almost five times as hard as at first. | burn 1.4 |
 
 Evolution **High Noon** (partner `al_falcon`): The burning light calls a small pillar on a foe in it every second.
 Evolved values added: pulse 1.
@@ -350,14 +350,14 @@ Summon, precise, K. A parry may call a knight of light who cuts the attacker.
 
 | Lv | Card line | Values |
 | --- | --- | --- |
-| 1 | A parry may call a knight of light (50%). | chance 0.5, power 1.2, cuts 1, cooldown 2, knights 1 |
+| 1 | A parry may call a knight of light (50%). | chance 0.5, power 4, cuts 1, cooldown 2, knights 1 |
 | 2 | Chance 50% to 80%. | chance 0.8 |
 | 3 | New: he cuts twice. | cuts 2 |
 | 4 | New: a Counterbash may call him too. | counter 1 |
-| 5 | Cut power 1.2 to 1.8. | power 1.8 |
+| 5 | Cut power 4 to 12. | power 12 |
 | 6 | New: his last cut knocks the foe down. | stun 0.8 |
 | 7 | New: he leaves a Bulwark on you. | barrier 1 |
-| 8 | Cut power 2.6; every parry calls him. | power 2.6, chance 1 |
+| 8 | Cut power 25; every parry calls him. | power 25, chance 1 |
 
 Evolution **Honour Guard** (partner `al_bulwark`): Two knights answer, each cutting three times.
 Evolved values added: knights 2, cuts 3.

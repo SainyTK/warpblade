@@ -10,7 +10,7 @@ const LEVELS = levelRows([
   { text: "Burns harder; up to 6 stacks.", values: { tick: 0.2, max: 6 } },
   { text: "New: each tick heals you 0.5 HP.", values: { heal: 0.5 } },
   { text: "New: foes near the attacker burn too.", values: { spread: 30 } },
-  { text: "Burns three times as hard as at first; 8 stacks.", values: { tick: 0.3, max: 8 } },
+  { text: "Burns five times as hard as at first; 8 stacks.", values: { tick: 0.5, max: 8 } },
 ]);
 
 export const PENANCE: SkillDef = {

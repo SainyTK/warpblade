@@ -10,7 +10,7 @@ const LEVELS = levelRows([
   { text: "String blows +40%.", values: { power: 1.4 } },
   { text: "New: every blow of the string throws a wave.", values: { waveAll: 1 } },
   { text: "New: waves pass through foes.", values: { pierce: 1 } },
-  { text: "String blows +60%; waves hit harder.", values: { power: 1.6, wave: 0.9 } },
+  { text: "String blows +80%; waves hit twice as hard.", values: { power: 1.8, wave: 1.2 } },
 ]);
 
 export const OATHBLADE: SkillDef = {

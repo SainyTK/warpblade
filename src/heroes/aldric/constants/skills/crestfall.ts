@@ -10,7 +10,7 @@ const LEVELS = levelRows([
   { text: "Ring reaches 42 px.", values: { ring: 42 } },
   { text: "New: a second ring follows.", values: { echo: 1 } },
   { text: "New: Crest breaker itself +40%.", values: { crest: 1.4 } },
-  { text: "Ring power 0.9 to 1.4; reaches 50 px.", values: { power: 1.4, ring: 50 } },
+  { text: "Ring power 0.9 to 2.2; reaches 50 px.", values: { power: 2.2, ring: 50 } },
 ]);
 
 export const CRESTFALL: SkillDef = {

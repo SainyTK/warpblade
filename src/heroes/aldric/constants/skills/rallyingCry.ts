@@ -14,7 +14,7 @@ const LEVELS = levelRows([
   { text: "Ring power 1.2; 22 Valor.", values: { power: 1.2, valor: 22 } },
   { text: "New: string blows 20% faster for 4 s.", values: { haste: 0.2 } },
   { text: "New: struck foes take 15% more for 4 s.", values: { mark: 0.15 } },
-  { text: "Ring power 1.6; 35 Valor; recharge 6 s.", values: { power: 1.6, valor: 35, recharge: 6 } },
+  { text: "Ring power 2.4; 35 Valor; recharge 6 s.", values: { power: 2.4, valor: 35, recharge: 6 } },
 ]);
 
 export const RALLYING_CRY: SkillDef = {

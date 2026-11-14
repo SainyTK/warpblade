@@ -10,7 +10,7 @@ const LEVELS = levelRows([
   { text: "Shield bash +80%.", values: { power: 1.8 } },
   { text: "New: Shield bash knocks the foe down.", values: { stun: 0.6 } },
   { text: "New: the mark rises to 25%.", values: { mark: 0.25 } },
-  { text: "Shield bash +120%; a stronger shock.", values: { power: 2.2, shock: 1 } },
+  { text: "Shield bash +200%; a stronger shock.", values: { power: 3, shock: 1.6 } },
 ]);
 
 export const BREAKING_BASH: SkillDef = {

@@ -10,7 +10,7 @@ const LEVELS = levelRows([
   { text: "Landing reaches 60% farther.", values: { ring: 0.6 } },
   { text: "New: the landing leaves burning light for 2 s.", values: { ground: 2 } },
   { text: "New: a faster dive.", values: { dive: 0.4 } },
-  { text: "Landing +120%.", values: { power: 2.2 } },
+  { text: "Landing +200%.", values: { power: 3 } },
 ]);
 
 export const SKYFALL: SkillDef = {

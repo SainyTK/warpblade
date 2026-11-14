@@ -3,14 +3,14 @@ import { evolvedRow, levelRows } from "../../../../utils/skillRows";
 
 /** values: `power` multiplies the Counterbash, `window` seconds added to its moment after a block, `refund` stamina it gives back, `wave` attack damage of a wave of light at the foe it struck, `stun` seconds it knocks that foe down, `extend` seconds it adds to Radiance (or Valor when Radiance is out) */
 const LEVELS = levelRows([
-  { text: "Counterbash +30%.", values: { power: 1.3 } },
+  { text: "Counterbash +50%.", values: { power: 1.5 } },
   { text: "Counterbash comes up to 0.1 s later after a block.", values: { window: 0.1 } },
   { text: "New: a Counterbash gives back 15 stamina.", values: { refund: 15 } },
-  { text: "New: it throws a wave of light at the foe.", values: { wave: 1 } },
-  { text: "Counterbash +60%.", values: { power: 1.6 } },
+  { text: "New: it throws a wave of light at the foe.", values: { wave: 2 } },
+  { text: "Counterbash three times as hard.", values: { power: 3 } },
   { text: "New: it knocks the foe down.", values: { stun: 1 } },
   { text: "New: it adds 2 s to Radiance, or 10 Valor.", values: { extend: 2 } },
-  { text: "Counterbash +100%; a heavier wave.", values: { power: 2, wave: 1.6 } },
+  { text: "Counterbash eight times as hard; a heavier wave.", values: { power: 8, wave: 6 } },
 ]);
 
 export const IRON_RETORT: SkillDef = {

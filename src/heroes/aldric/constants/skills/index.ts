@@ -16,8 +16,8 @@ import { RESOLVE } from "./resolve";
 import { SANCTUARY } from "./sanctuary";
 import { SHIELD_STEP } from "./shieldStep";
 import { SKYFALL } from "./skyfall";
-import { SUNBRAND } from "./sunbrand";
 import { SUN_LION } from "./sunLion";
+import { SUNBRAND } from "./sunbrand";
 import { VERDICT } from "./verdict";
 
 /** Aldric's 20 skills. Design: docs/skills/aldric.md */
