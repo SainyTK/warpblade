@@ -69,6 +69,10 @@ The greatsword is held in both hands for every blow.
 The way to go on after a launch is the slam: the Rising Heave throws foes up just high enough that the Anvil Slam's tall arc catches them on the way down and drives them into the floor.
 The numbers are in `src/heroes/brynn/constants/string.ts` and the timing in the same file.
 
+Measured on a lone thornback with J pressed every 0.1 s, a blow lands 0.51 s after the one before, the slam 0.59 s after the heave, and the next string's sweep 0.67 s after the slam.
+Kael's string runs at 0.45, 0.5 and 0.6, so she is a little slower and each blow is worth more.
+In that run every blow landed on the same foe: the sweep's 0.8 s stagger outlasts the gap to the heave, and the heave's launch keeps the foe in the air until the slam catches it.
+
 ### Armour
 
 From the first frame of a swing until a moment after its last blow is out, Brynn wears armour: a blow on her takes 60% of its damage (`ARMOUR` in `src/heroes/brynn/constants/armour.ts`) and does not stop the swing, push her back or end the string.
@@ -115,6 +119,9 @@ Each has its own recharge, and none waits on another.
 
 Carry, her string cancel: I pressed once a blow of the string has landed casts the ability at once from the swing, 30% harder, and the string is kept, so the next J plays the next blow.
 
+Three more abilities join the row when their skills are held: Ember Arc (a tall crimson crescent along the line), Brand Pillars (pillars of crimson fire bursting from the floor in a line) and War Cry (a roar that pushes foes back, fills Heft and lifts her damage).
+Their numbers are in `docs/skills/brynn.md`.
+
 ### U: Crimson Fall
 
 She crouches, leaps with the sword overhead, and brings it down in one enormous crimson crescent.
@@ -131,6 +138,27 @@ The roster asks each hero for its own version of four of Kael's qualities.
 | Parry follow-up | riposte and a counter blink on J | Counter Cleave at once, 30 Heft, next swing heavy |
 | String cancel into abilities | Spellblade: 1.5x, ends the combo | Carry: 1.3x, the string goes on |
 | After a launch | air string | the Anvil Slam catches and spikes the launched foes |
+
+## Achievements
+
+| Name | Goal | Coins |
+| --- | --- | --- |
+| Groundbreaker | As Brynn, split the floor with 50 fissures | 60 |
+| Clean Sweep | As Brynn, strike 6 foes with one Wide Sweep | 40 |
+
+The kit counts `brynn.fissures` with a `heroCount` feat on every fissure and keeps the best `brynn.sweepCrowd` with a `heroBest` feat after every sweep (`src/heroes/brynn/constants/achievements.ts`).
+
+## Every shop item
+
+Honed Edge and Arcana feed her blows and abilities through `progress.stats.ad` and `ap`.
+Endurance pays for her dear block and the dodge, Wellspring for her abilities and Crimson Fall.
+Light Boots speed her walk through the shared physics, Vitality and Last Light act on every blow through `hurtHero`, and her armour only scales what reaches it.
+Aftershock answers the shared warp and dodge, and the Falling Slam's landing calls `travelEnded()`.
+
+## Co-op
+
+Her kit state (Heft, the recharges, the cast under way, the carried string, the heavy streak, the War Cry timer) is one object registered with `rememberPerSeat`, so each player on Brynn keeps their own HF bar.
+The dodge's start point for Battering Ram is host-only seat memory, and every wave, crack, shard and blade is a host-side effect.
 
 ## What I chose not to build
 

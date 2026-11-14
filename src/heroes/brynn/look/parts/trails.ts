@@ -3,8 +3,8 @@ import type { SpriteCanvas } from "../../../../engine/sprite";
 import type { RigFrame, Vec } from "../../../../types/rig";
 
 /** the headband's tails use the first points of the ponytail's rope; the sash the first points of the scarf's */
-const RIBBON_POINTS = 4;
-const SASH_POINTS = 6;
+const RIBBON_POINTS = 3;
+const SASH_POINTS = 5;
 
 /** a strip of crimson cloth along a rope, tapering, with a split end that splays as it flies */
 function drawStrip(s: SpriteCanvas, rope: readonly Vec[], n: number, width: number, split: number): void {
@@ -26,6 +26,6 @@ function drawStrip(s: SpriteCanvas, rope: readonly Vec[], n: number, width: numb
 
 /** the headband's two short tails from the knot at the back of her head, and the sash from her belt */
 export function drawBrynnTrails(s: SpriteCanvas, rig: RigFrame): void {
-  drawStrip(s, rig.tail, RIBBON_POINTS, 0.75, 0.9);
-  drawStrip(s, rig.scarf, SASH_POINTS, 1.05, 0.8);
+  drawStrip(s, rig.tail, RIBBON_POINTS, 0.9, 0.9);
+  drawStrip(s, rig.scarf, SASH_POINTS, 1.25, 0.9);
 }
