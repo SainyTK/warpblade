@@ -9,6 +9,8 @@ const HOST = "127.0.0.1";
 const START_TIMEOUT_MS = 30_000;
 const POLL_MS = 200;
 const STOP_GRACE_MS = 3_000;
+/** tries at starting the server, each on a fresh port */
+const START_ATTEMPTS = 3;
 /** keep this much of the server's output to explain a failure */
 const OUTPUT_KEEP = 4_000;
 
@@ -65,9 +67,8 @@ async function waitUntilServing(url: string, child: ChildProcess, output: () => 
   throw new Error(`Vite did not serve ${url} within ${START_TIMEOUT_MS / 1000} s:\n${output()}`);
 }
 
-/** the game's own Vite dev server on a free port, without hot reload, stopped when the command ends */
-export async function startDevServer(root: string): Promise<DevServer> {
-  const vite = ensureDependencies(root);
+/** one try at starting Vite on a port that was free a moment ago */
+async function startOnFreePort(vite: string, root: string): Promise<DevServer> {
   const port = await freePort(HOST);
   const args = ["--input-type=module", "-e", VITE_LAUNCHER, pathToFileURL(vite).href, root, String(port), HOST];
   const child = spawn(process.execPath, args, {
@@ -100,4 +101,22 @@ export async function startDevServer(root: string): Promise<DevServer> {
     throw error;
   }
   return { url, stop };
+}
+
+/**
+ * The game's own Vite dev server on a free port, without hot reload, stopped when the command ends. The port is free
+ * when it is picked and Vite is told to use that port or fail, so two commands running at once (in one worktree or in
+ * several) never share a server; when another process takes the port in between, the start is tried again on a new one.
+ */
+export async function startDevServer(root: string): Promise<DevServer> {
+  const vite = ensureDependencies(root);
+  let failure: unknown;
+  for (let attempt = 0; attempt < START_ATTEMPTS; attempt++) {
+    try {
+      return await startOnFreePort(vite, root);
+    } catch (error) {
+      failure = error;
+    }
+  }
+  throw failure;
 }

@@ -11,6 +11,7 @@ The exit code is 0 when the report says `ok`, 1 when a check or run failed, and 
 ## How it works
 
 Each command starts the game's own Vite dev server on a free port, from the game root given by `--root`.
+The port is picked by the system and Vite must use it or fail, so commands running at the same time, in one worktree or in several, each get their own server; a start that loses its port to another process is tried again on a new one.
 The default root is the repository the harness lives in, two levels above this folder.
 When that root has no `node_modules`, the harness runs `npm ci` there first.
 The server runs through Vite's JavaScript API with hot reload switched off, so edits other agents make while a command runs never reload the page mid-run.
