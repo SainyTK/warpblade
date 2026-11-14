@@ -1,9 +1,9 @@
-import { CHARACTERS } from "../../constants/characters";
 import { HOST_AWAY_MS, PING_MS, QUIET_LIMIT_MS, WAITING_FILL } from "../../constants/coop";
 import { STAND } from "../../constants/hero";
 import { VOLUME_STEPS } from "../../constants/settings";
 import { GAME_VERSION } from "../../constants/sitePages";
 import { MAX_FRAME } from "../../constants/stage";
+import { CHARACTERS } from "../../heroes/roster";
 import { type GuestLink, joinRoom } from "../../services/coop/guestLink";
 import { loadHeroChoice } from "../../services/heroChoice";
 import { recordFeat } from "../../store/achievements";

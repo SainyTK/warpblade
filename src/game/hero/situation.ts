@@ -3,7 +3,7 @@ import type { Enemy } from "../../types/enemy";
 import type { Situation } from "../../types/move";
 import { enemyBox } from "../enemies/enemy";
 import { game, hero, progress } from "../state";
-import { MOVES } from "./moves";
+import { moveDef } from "./kits";
 
 /** how far a foe is in front of Kael (negative behind), edge to edge, or null when it is out of his height band */
 function gapAhead(e: Enemy): number | null {
@@ -28,7 +28,7 @@ export function nearestGapAhead(): number {
 export function readSituation(): Situation {
   const h = hero;
   return {
-    ground: h.ground || (h.state === "move" && !!h.move && !!MOVES[h.move].hop),
+    ground: h.ground || (h.state === "move" && !!h.move && !!moveDef(h.move).hop),
     next: h.chain + 1,
     limit: progress.comboLimit,
     running: h.running && h.state === "run",

@@ -1,6 +1,6 @@
 import "./heroScreen.css";
-import { CHARACTERS } from "../../constants/characters";
 import { character, chooseCharacter, previewCharacter } from "../../game/state";
+import { CHARACTERS } from "../../heroes/roster";
 import { sfx } from "../../services/audio";
 import { saveHeroChoice } from "../../services/heroChoice";
 import { bank, buyHero, heroUnlocked } from "../../store/meta";
@@ -84,6 +84,9 @@ export function heroScreen(): MenuView {
   show(CHARACTERS.indexOf(character));
   // with a hero still to unlock, the bank takes the place of the keys
   const locked = CHARACTERS.some((c) => !heroUnlocked(c.id));
-  const subtitle = locked ? coinAmount(bank(), "bank") : "A D or arrows to look, J or Enter to begin";
+  const keys = matchMedia("(any-pointer: fine)").matches
+    ? "A D or arrows to look, J or Enter to begin"
+    : "Tap a hero to look, tap the panel to begin";
+  const subtitle = locked ? coinAmount(bank(), "bank") : keys;
   return { title: "Choose a hero", subtitle, content, focus: panel };
 }

@@ -1,0 +1,23 @@
+/** Yun's skill ids, as the kit's code reads them; the rows are in `constants/skills/` */
+export const SKILL = {
+  echo: "yu_echo",
+  flow: "yu_flow",
+  tide: "yu_tide",
+  crane: "yu_crane",
+  petal: "yu_petal",
+  cloud: "yu_cloud",
+  ride: "yu_ride",
+  drift: "yu_drift",
+  fan: "yu_fan",
+  cage: "yu_cage",
+  crescent: "yu_crescent",
+  wound: "yu_wound",
+  bleed: "yu_bleed",
+  needle: "yu_needle",
+  guardian: "yu_guardian",
+  heron: "yu_heron",
+  shade: "yu_shade",
+  breath: "yu_breath",
+  harmony: "yu_harmony",
+  rain: "yu_rain",
+} as const;

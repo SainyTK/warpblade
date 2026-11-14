@@ -10,9 +10,11 @@ export function goalProgress(a: { goal: Goal }, src: GoalSource): GoalProgress {
         ? src.stats.best[g.stat]
         : g.kind === "heroWave"
           ? (src.stats.heroWave[g.hero] ?? 0)
-          : g.kind === "shopLevels"
-            ? src.shopLevels
-            : src.heroesBought;
+          : g.kind === "hero"
+            ? (src.stats.hero[g.stat] ?? 0)
+            : g.kind === "shopLevels"
+              ? src.shopLevels
+              : src.heroesBought;
   return { have: Math.min(have, g.need), need: g.need };
 }
 
@@ -28,9 +30,3 @@ export const newlyMet = (list: readonly Achievement[], earned: ReadonlySet<strin
 /** a hidden achievement shows its name and goal once the one it waits on is earned */
 export const isRevealed = (a: Achievement, earned: ReadonlySet<string>): boolean =>
   !a.hiddenUntil || earned.has(a.hiddenUntil);
-
-/** the achievements that count: one for a hero only once that hero is in the game */
-export const availableAchievements = (
-  list: readonly Achievement[],
-  heroIds: readonly string[],
-): readonly Achievement[] => list.filter((a) => a.goal.kind !== "heroWave" || heroIds.includes(a.goal.hero));

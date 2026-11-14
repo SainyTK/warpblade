@@ -1,5 +1,4 @@
-import { CHARACTERS } from "../../constants/characters/index";
-import { HERO_SOURCE_ICONS } from "../../constants/damageSources";
+import { CHARACTERS } from "../../heroes/roster";
 import type { CharacterDef } from "../../types/character";
 import type { RunReport, SourceResult } from "../../types/run";
 import { skillOf } from "../../utils/skills";
@@ -24,6 +23,5 @@ export function sourceName(s: SourceResult, report: RunReport): string {
 export function sourceIcon(s: SourceResult, report: RunReport): string {
   const { id } = s;
   if (!isHeroSource(id)) return skillIcon(id, !!s.evolved);
-  const icons = HERO_SOURCE_ICONS[report.hero] ?? HERO_SOURCE_ICONS.kael;
-  return icons[id];
+  return (heroOf(report) ?? CHARACTERS[0]).sourceIcons[id];
 }

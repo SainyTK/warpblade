@@ -1,9 +1,8 @@
-import { AWARENESS } from "../../constants/awareness";
 import { TURN_DELAY } from "../../constants/combat";
 import { W } from "../../constants/stage";
 import type { Enemy } from "../../types/enemy";
 import { game, hero } from "../state";
-import { foeSees, heroHidden } from "./awareness";
+import { foeSees } from "./awareness";
 import { kindOf } from "./kinds";
 
 /** walkers this near, face to face, turn round so neither marches on the spot against the other; a walker this near the
@@ -32,10 +31,6 @@ function wander(e: Enemy): void {
   if (blocked || atWall) e.face = -e.face;
 }
 
-/** a mini boss turns slower toward a hero it can barely see */
-const turnDelay = (e: Enemy): number =>
-  TURN_DELAY[e.rank] * (e.rank === "mini" && heroHidden() ? AWARENESS.miniTurn : 1);
-
 /**
  * foes turn toward Kael only after he has been behind them for a moment, which opens them to back attacks; a foe that
  * cannot see the hero keeps its facing (game/enemies/awareness.ts)
@@ -48,7 +43,7 @@ export function turnToHero(e: Enemy, dt: number): void {
     return;
   }
   e.turn += dt;
-  if (e.turn < turnDelay(e)) return;
+  if (e.turn < TURN_DELAY[e.rank]) return;
   e.face = want;
   e.turn = 0;
 }

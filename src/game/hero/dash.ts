@@ -4,24 +4,24 @@ import type { Enemy } from "../../types/enemy";
 import { enemyBox } from "../enemies/enemy";
 import { objectMemory, rememberPerSeat } from "../seatMemory";
 import { emitSkillEvent } from "../skills/events";
-import { skillValues } from "../skills/query";
 import { game, hero, progress } from "../state";
 import { boxHit, heroBox } from "../world";
 import { setState, settle } from "./actions";
 import { dropDashGhost } from "./afterimages";
-import { cutPassed, endPassingCut, startPassingCut } from "./kael/passingCut";
+import { kit } from "./kits";
 import { cutForSharedAction, maySharedAct } from "./sharedCut";
 import { canPayDash, refuseDash, spendDashStamina } from "./stamina";
 import { travelEnded } from "./travelEnd";
 
 /**
  * L: the front dodge every hero shares, a short dash toward the side held that nothing can touch, paid with stamina. On
- * the ground only, until Kael's Sky Dance. It cancels a blow's follow-through, a cast and the guard.
+ * the ground only, unless the kit allows one in the air (`HeroKit.airDodge`). It cancels a blow's follow-through, a cast
+ * and the guard.
  */
 export function tryDash(dir: number): boolean {
   const h = hero;
   const air = !h.ground;
-  if (air && (!skillValues("k_skydance").airDash || h.airDashed)) return false;
+  if (air && (!kit().airDodge?.() || h.airDashed)) return false;
   if (!maySharedAct() && h.state !== "cast" && h.state !== "guard") return false;
   if (!canPayDash()) {
     refuseDash();
@@ -40,7 +40,7 @@ export function tryDash(dir: number): boolean {
   });
   sfx.dodge();
   passed.foes = [];
-  startPassingCut();
+  kit().dodge?.started?.();
   return true;
 }
 
@@ -48,13 +48,13 @@ export function tryDash(dir: number): boolean {
 const passed: { foes: Enemy[] } = { foes: [] };
 rememberPerSeat(objectMemory(passed, true));
 
-/** note the foes the dash passes through; with Passing Cut each is cut as Kael goes by */
+/** note the foes the dash passes through, and tell the kit of each as the hero goes by */
 function passThrough(): void {
   const box = heroBox();
   for (const e of game.enemies) {
     if (e.hp <= 0 || !boxHit(box, enemyBox(e)) || passed.foes.includes(e)) continue;
     passed.foes = [...passed.foes, e];
-    cutPassed(e);
+    kit().dodge?.passed?.(e);
   }
 }
 
@@ -68,7 +68,7 @@ export function runDash(dt: number): void {
   }
   if (h.st < HERO_MOVE.dashTime) return;
   emitSkillEvent({ type: "dash", dir: h.face, foes: passed.foes });
-  endPassingCut();
+  kit().dodge?.ended?.();
   h.vx *= 0.4;
   settle();
   travelEnded();

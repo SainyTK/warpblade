@@ -1,20 +1,15 @@
 import { SpriteCanvas } from "../../../engine/sprite";
 import type { Color } from "../../../types/color";
+import type { IconArt } from "../../../types/heroModule";
 import type { SpriteImage } from "../../../types/sprite";
 import { hex } from "../../../utils/color";
-
-/** Button icons as pixel rows, one character per pixel, "." empty; each gets a dark outline. */
-export interface IconArt {
-  rows: readonly string[];
-  colors: Record<string, Color>;
-}
 
 const OUTLINE = hex("#0a0612");
 export const ICON_WHITE = hex("#ffffff");
 
 const cache = new Map<string, SpriteImage>();
 
-/** pixel art with its outline, drawn once and kept under `key` */
+/** a button icon's pixel rows (one character per pixel, "." empty) with a dark outline, drawn once and kept under `key` */
 export function iconFrom(key: string, art: IconArt): SpriteImage {
   const hit = cache.get(key);
   if (hit) return hit;

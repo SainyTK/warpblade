@@ -21,12 +21,6 @@ const BEST_STATS: readonly BestStat[] = [
   "chestUpgrades",
   "runPerfects",
   "runSkillKills",
-  "swingKills",
-  "fieldKills",
-  "wickKills",
-  "backKills",
-  "crescendoSeconds",
-  "bloodiedKills",
 ];
 
 const isRecord = (v: unknown): v is Record<string, unknown> => typeof v === "object" && v !== null && !Array.isArray(v);
@@ -40,13 +34,23 @@ function counts<K extends string>(keys: readonly K[], raw: unknown): Record<K, n
 export const emptyTracked = (): TrackedStats => parseTracked(null);
 export const emptyRun = (): RunTally => ({ perfects: 0, skillKills: 0 });
 
+/** the whole, positive numbers of a saved record, by key */
+function wholeNumbers(raw: unknown): Record<string, number> {
+  const kept: Record<string, number> = {};
+  if (isRecord(raw)) for (const [key, value] of Object.entries(raw)) if (count(value)) kept[key] = count(value);
+  return kept;
+}
+
 /** read saved tracked stats, keeping known counters as whole, positive numbers; anything else starts at 0 */
 export function parseTracked(raw: unknown): TrackedStats {
   const saved = isRecord(raw) ? raw : {};
-  const heroWave: Record<string, number> = {};
-  if (isRecord(saved.heroWave))
-    for (const [hero, wave] of Object.entries(saved.heroWave)) if (count(wave)) heroWave[hero] = count(wave);
-  return { counts: counts(COUNT_STATS, saved.counts), best: counts(BEST_STATS, saved.best), heroWave, run: emptyRun() };
+  return {
+    counts: counts(COUNT_STATS, saved.counts),
+    best: counts(BEST_STATS, saved.best),
+    heroWave: wholeNumbers(saved.heroWave),
+    hero: wholeNumbers(saved.hero),
+    run: emptyRun(),
+  };
 }
 
 const raise = (now: number, to: number): number => Math.max(now, to);
@@ -56,6 +60,7 @@ export function applyFeat(s: TrackedStats, feat: Feat): TrackedStats {
   const c = { ...s.counts };
   const best = { ...s.best };
   const heroWave = { ...s.heroWave };
+  const hero = { ...s.hero };
   const run = { ...s.run };
   switch (feat.kind) {
     case "kill":
@@ -107,24 +112,12 @@ export function applyFeat(s: TrackedStats, feat: Feat): TrackedStats {
     case "flowFull":
       c.flowFulls++;
       break;
-    case "swingKills":
-      best.swingKills = raise(best.swingKills, feat.kills);
+    case "heroCount":
+      hero[feat.stat] = (hero[feat.stat] ?? 0) + Math.max(0, feat.add);
       break;
-    case "fieldKills":
-      best.fieldKills = raise(best.fieldKills, feat.kills);
-      break;
-    case "wickKills":
-      best.wickKills = raise(best.wickKills, feat.kills);
-      break;
-    case "backKills":
-      best.backKills = raise(best.backKills, feat.kills);
-      break;
-    case "crescendo":
-      best.crescendoSeconds = raise(best.crescendoSeconds, feat.seconds);
-      break;
-    case "bloodiedKills":
-      best.bloodiedKills = raise(best.bloodiedKills, feat.kills);
+    case "heroBest":
+      hero[feat.stat] = raise(hero[feat.stat] ?? 0, feat.value);
       break;
   }
-  return { counts: c, best, heroWave, run };
+  return { counts: c, best, heroWave, hero, run };
 }

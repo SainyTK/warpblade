@@ -1,8 +1,7 @@
 import { ACHIEVEMENTS } from "../constants/achievements";
-import { CHARACTERS } from "../constants/characters";
 import { isPlaytestSession } from "../services/playtestStart";
 import type { Achievement, Feat, GoalSource, TrackedStats } from "../types/achievement";
-import { availableAchievements, newlyMet } from "../utils/achievements";
+import { newlyMet } from "../utils/achievements";
 import { applyFeat, emptyRun } from "../utils/trackedStats";
 import { heroesBought, onMetaChange, saveAchievements, savedAchievements, savedTracked, shopLevels } from "./meta";
 
@@ -17,12 +16,7 @@ let sinceRunStart: Achievement[] = [];
 const listeners = new Set<(a: Achievement) => void>();
 const featListeners = new Set<() => void>();
 
-/** the achievements the game has now: one for a hero only once that hero is in */
-export const allAchievements = (): readonly Achievement[] =>
-  availableAchievements(
-    ACHIEVEMENTS,
-    CHARACTERS.map((c) => c.id),
-  );
+export const allAchievements = (): readonly Achievement[] => ACHIEVEMENTS;
 export const isEarned = (id: string): boolean => earned.has(id);
 export const earnedIds = (): ReadonlySet<string> => earned;
 export const goalSource = (): GoalSource => ({ stats, shopLevels: shopLevels(), heroesBought: heroesBought() });

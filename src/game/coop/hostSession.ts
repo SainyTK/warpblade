@@ -1,7 +1,7 @@
-import { CHARACTERS } from "../../constants/characters";
 import { HUD_RATE, MAX_PLAYERS, PING_MS, QUIET_LIMIT_MS, RTT_SMOOTHING } from "../../constants/coop";
 import { GAME_VERSION } from "../../constants/sitePages";
 import { MAX_FRAME, STEP } from "../../constants/stage";
+import { CHARACTERS } from "../../heroes/roster";
 import { sfx } from "../../services/audio";
 import { captureGame, type GameStream, tuneVideoSender } from "../../services/coop/gameStream";
 import { type HostLink, openRoom, RoomTaken } from "../../services/coop/hostLink";

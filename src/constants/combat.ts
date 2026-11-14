@@ -40,7 +40,6 @@ export const WARP = {
   speed: 560,
   maxFlight: 0.6,
   reach: 180,
-  anchorReach: 220,
   fallback: 110,
   /** seconds before Kael can warp again, far shorter than any spell's */
   cooldown: 2,
@@ -171,6 +170,11 @@ export const HERO_GUARD = {
   parryStamina: 25,
   /** nothing touches the hero this long after a parry, so the rest of a flurry passes */
   parryShield: 0.3,
+  /**
+   * after a block, the same foe's blows stop on the guard for nothing this long, so one touch is one block: a foe
+   * pressed against the guard costs a block as often as it could hurt an open hero (`HURT_INVULN`)
+   */
+  blockGap: HURT_INVULN,
   /** the hero slides back this fast off a blocked blow */
   pushback: 70,
   /** a blow from within this many pixels behind the hero's middle still counts as the front */

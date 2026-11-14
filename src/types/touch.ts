@@ -24,7 +24,7 @@ export interface TouchButtonText {
   label: string;
   /** what the button does on a touch screen, for the Controls screen */
   hint: string;
-  /** rim color, or null for the color of the selected element or rite */
+  /** rim color, or null for the color of the selected ability */
   accent: string | null;
 }
 
@@ -56,7 +56,4 @@ export interface ButtonLook {
   affordable: number;
   /** ultimate only: charge progress across the four levels, 0 to 4, or -1 when not charging */
   charge: number;
-  /** an HP cost, as a share of max HP, shown as a crimson stretch of the rim at the bottom whose length grows with the
-   *  cost (Brannoc); 0 for none */
-  costShare: number;
 }

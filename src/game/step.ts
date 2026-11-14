@@ -1,6 +1,5 @@
 import { PACE, STEP } from "../constants/stage";
 import { menuContext } from "../ui/menu/menuState";
-import { advanceBeats } from "./beat";
 import { game } from "./state";
 import { update, updateAmbience } from "./update";
 
@@ -9,7 +8,7 @@ function settleShake(rate: number): void {
   game.shake = Math.max(0, game.shake - STEP * rate);
 }
 
-/** one fixed 120 Hz step, which moves the fight on by PACE of its length: only the scenery moves behind the start menu, a skill pick, an opened chest and hit-stop freeze all but the shake; a hero's beat and the run clock run on through hit-stop */
+/** one fixed 120 Hz step, which moves the fight on by PACE of its length: only the scenery moves behind the start menu, a skill pick, an opened chest and hit-stop freeze all but the shake; the run clock runs on through hit-stop */
 export function stepGame(): void {
   if (menuContext() === "title") {
     updateAmbience(STEP);
@@ -21,7 +20,6 @@ export function stepGame(): void {
   }
   // the run clock counts real play time, hit-stop and slow motion included
   if (game.mode === "play") game.clock += STEP;
-  advanceBeats(STEP * PACE);
   if (game.freeze > 0) {
     game.freeze -= STEP;
     settleShake(0.5);

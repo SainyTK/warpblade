@@ -8,6 +8,12 @@ export const frame = (n: number): number => n / ANIM_FPS;
 /** limb lengths in pixels */
 export const BODY = { upperArm: 5.5, foreArm: 5.5, thigh: 7.5, shin: 7, bladeLength: 17 } as const;
 
+/**
+ * The canvas a hero is drawn into on the stage and for afterimages, in art pixels with the feet at (ox, oy): room for
+ * the longest sword held out at arm's length, 56 pixels to either side, 78 above the floor and 18 below.
+ */
+export const HERO_CANVAS = { w: 112, h: 96, ox: 56, oy: 78 } as const;
+
 /** where a hero stands when a run starts, in art pixels */
 export const HERO_START_X = 70;
 
@@ -32,8 +38,8 @@ export const STAND: Pose = {
   sa: 1.15,
   tw: 0,
   mr: 0,
-  dr: 0,
-  ah: 0,
+  oa: 1.15,
+  bs: 0,
 };
 /** a pose that changes only some joints of the standing pose */
 export const pose = (o: Partial<Pose>): Pose => ({ ...STAND, ...o });

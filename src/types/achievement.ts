@@ -17,25 +17,7 @@ export type CountStat =
   | "chests"
   | "flowFulls";
 /** the best a player has ever done; the `run` ones are the most in one run */
-export type BestStat =
-  | "wave"
-  | "combo"
-  | "skillLevel"
-  | "chestUpgrades"
-  | "runPerfects"
-  | "runSkillKills"
-  /** the most foes Orrin's swing kicks defeated in one swing, from latch to letting go */
-  | "swingKills"
-  /** the most foes defeated inside one of Mirel's Stillfields, from open to close */
-  | "fieldKills"
-  /** the most foes Wenna's Wicks defeated in one run */
-  | "wickKills"
-  /** the most foes Tallis defeated with blows from behind in one run */
-  | "backKills"
-  /** the longest Jory held Crescendo without a break, in whole seconds */
-  | "crescendoSeconds"
-  /** the most foes Brannoc defeated while Bloodied in one run */
-  | "bloodiedKills";
+export type BestStat = "wave" | "combo" | "skillLevel" | "chestUpgrades" | "runPerfects" | "runSkillKills";
 
 /** what the run in play has counted so far, for the goals met within one run */
 export interface RunTally {
@@ -50,6 +32,8 @@ export interface TrackedStats {
   best: Record<BestStat, number>;
   /** the highest wave cleared with each hero, by hero id */
   heroWave: Record<string, number>;
+  /** each hero's own counts and bests, by the stat names its achievements use (`<hero id>.<stat>`) */
+  hero: Record<string, number>;
   /** the run in play; a save never brings it back */
   run: RunTally;
 }
@@ -67,6 +51,8 @@ export type Goal =
   | { kind: "count"; stat: CountStat; need: number }
   | { kind: "best"; stat: BestStat; need: number }
   | { kind: "heroWave"; hero: string; need: number }
+  /** one of a hero's own stats, counted through the `heroCount` and `heroBest` feats */
+  | { kind: "hero"; stat: string; need: number }
   | { kind: "shopLevels"; need: number }
   | { kind: "heroesBought"; need: number };
 
@@ -105,9 +91,7 @@ export type Feat =
   | { kind: "evolved"; skill: string }
   | { kind: "chestOpened"; upgrades: number }
   | { kind: "flowFull" }
-  | { kind: "swingKills"; kills: number }
-  | { kind: "fieldKills"; kills: number }
-  | { kind: "wickKills"; kills: number }
-  | { kind: "backKills"; kills: number }
-  | { kind: "crescendo"; seconds: number }
-  | { kind: "bloodiedKills"; kills: number };
+  /** a hero's own stat grows by `add`: a lifetime count */
+  | { kind: "heroCount"; stat: string; add: number }
+  /** a hero's own stat reached `value`: the best ever is kept */
+  | { kind: "heroBest"; stat: string; value: number };

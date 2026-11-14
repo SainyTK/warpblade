@@ -1,7 +1,7 @@
-import { CLIPS } from "../constants/clips";
 import { STAGGER } from "../constants/combat";
 import { HP_BAR, MOTE_COLORS, STUN_STAR, STUN_STAR_DIM } from "../constants/effectColors";
-import { ABILITY_COLOR, COIN_GOLD, ENEMY_COLORS, PAL } from "../constants/palette";
+import { HERO_CANVAS } from "../constants/hero";
+import { COIN_GOLD, ENEMY_COLORS, PAL } from "../constants/palette";
 import { MOTE_PIXELS } from "../constants/pickupPixels";
 import { ULT_LEVELS } from "../constants/ultimate";
 import { ellipseRing, fleck, glow, glowLine, hairline, place, px } from "../engine/frame";
@@ -9,21 +9,20 @@ import { blit, detailCanvas } from "../engine/sprite";
 import { fineRing, stampPixels } from "../game/effects/fine";
 import { enemyBox, enemyCenter } from "../game/enemies/enemy";
 import { kindOf } from "../game/enemies/kinds";
-import { drawHero } from "../game/hero/drawHero";
 import { shownKit } from "../game/hero/kits";
-import { heroLook } from "../game/hero/look";
+import { drawHeroSprite } from "../game/hero/look";
 import { skin } from "../game/hero/skin";
 import { canAffordUlt } from "../game/hero/ultimate";
 import { game, hero } from "../game/state";
 import { fieldPace } from "../game/timeFields";
 import type { Enemy } from "../types/enemy";
-import { hex, mix, scale, WHITE } from "../utils/color";
+import { hex, mix, WHITE } from "../utils/color";
 import { clamp, TAU } from "../utils/math";
 import { bladeAngle } from "../utils/poseFrame";
 import { drawEliteGlow, drawEliteRing } from "./drawElite";
 import { foeSprite } from "./foeSprites";
 
-const heroSprite = detailCanvas(80, 76, 40, 62);
+const heroSprite = detailCanvas(HERO_CANVAS.w, HERO_CANVAS.h, HERO_CANVAS.ox, HERO_CANVAS.oy);
 /** how solid the hero shows on the off beats of the blink while a blow cannot land */
 const BLINK_ALPHA = 0.5;
 /** the minion HP bar: its width in art pixels, and how far the lit top row of the fill leans toward white */
@@ -44,8 +43,6 @@ const STAR_ARMS = [
 const HIT_FLASH = { peak: 0.6, rest: 0.3, life: 0.1 } as const;
 /** how far a struck hero flashes toward white, short of a flat white shape */
 const HERO_FLASH = 0.75;
-/** a foe stopped in time */
-const STOPPED_TINT = hex("#7aa0a0");
 /** ring colors for ultimate levels 3 and 4; levels 1 and 2 take the hero's own light */
 const HIGH_LEVEL_COLORS = [hex("#ffe26b"), hex("#ff7ae0")];
 const levelColor = (i: number) => (i < 2 ? skin.ramp[3 + i] : HIGH_LEVEL_COLORS[i - 2]);
@@ -74,9 +71,8 @@ function drawMinionBar(e: Enemy): void {
   }
 }
 
-/** a foe stopped in time is grey-teal; one inside a field that slows it is rimmed in teal */
+/** a foe inside a field that slows it is rimmed in teal */
 function timeTint(e: Enemy): { tint: number; amount: number } {
-  if (e.stopped > 0) return { tint: STOPPED_TINT, amount: 0.55 };
   const [cx, cy] = enemyCenter(e);
   return fieldPace(cx, cy, e.rank) < 1 ? { tint: PAL.hour[4], amount: 0.25 } : { tint: 0, amount: 0 };
 }
@@ -137,26 +133,6 @@ export function drawEnemies(): void {
   }
 }
 
-/** a rune ring turning at the casting hand while the spell gathers */
-function drawCastRing(hand: [number, number]): void {
-  const c = ABILITY_COLOR[hero.castAbility];
-  const k = clamp(hero.st / CLIPS.cast.hit);
-  const [cx, cy] = [hand[0] + 2, hand[1]];
-  const r = 3 + k * 4;
-  ellipseRing(cx, cy, r, r * 1.1, c, 0.8);
-  fineRing(cx, cy, r - 1.5, (r - 1.5) * 1.1, WHITE, k * 0.7);
-  fineRing(cx, cy, r + 1.5, (r + 1.5) * 1.1, scale(c, 0.6), 0.5);
-  // rune marks turning the other way around the ring: a white point with a short tail in the spell's color
-  for (let i = 0; i < 6; i++) {
-    const g = game.t * 6 + (i * TAU) / 6;
-    const d = 7 + k * 2;
-    fleck(cx + Math.cos(g) * d, cy + Math.sin(g) * d, WHITE, k * 1.5);
-    fleck(cx + Math.cos(g - 0.12) * d, cy + Math.sin(g - 0.12) * d, c, k);
-    fleck(cx + Math.cos(g - 0.24) * d, cy + Math.sin(g - 0.24) * d, c, k * 0.6);
-  }
-  glow(cx, cy, 18, c, 0.45 * k);
-}
-
 /** the ultimate gathering: a floor ring per level reached, motes drawn in, and pips for the levels the MP can pay for */
 function drawChargeRing(): void {
   place();
@@ -202,7 +178,7 @@ export function drawHeroLayer(): void {
   if (h.state === "charge") drawChargeRing();
   shownKit().drawBack?.();
   const flare = clamp((Math.abs(h.vx) / 115) * 3, 0, 3) + (h.ground ? 0 : 1.5);
-  h.hand = drawHero(heroSprite, h.pose, heroLook(flare));
+  h.hand = drawHeroSprite(heroSprite, h.pose, flare);
   const blink = h.inv > 0 && h.state !== "warpStrike" && h.state !== "ultimate" && Math.floor(game.t * 20) % 2 === 0;
   const struck = h.state === "hurt" && h.st < 0.06;
   const shown = shownKit().heroAlpha?.() ?? 1;
@@ -213,17 +189,17 @@ export function drawHeroLayer(): void {
       tintAmount: struck ? HERO_FLASH : 0,
       soft: blink,
     });
-  // the crystal blade gives off a faint light, brighter mid-swing
+  // the blade gives off a faint light in the hero's colour, brighter mid-swing
   place(h.x, h.y, h.face < 0);
   if (h.hasSword) {
     const [hx, hy] = h.hand;
     const angle = bladeAngle(h.pose);
     const ca = Math.cos(angle);
     const sn = Math.sin(angle);
+    const reach = skin.blade.reach;
     const k = h.state === "move" || h.state === "warpStrike" || h.state === "charge" ? 0.3 : 0.12;
-    glowLine(hx + ca * 3, hy + sn * 3, hx + ca * (skin.reach - 1), hy + sn * (skin.reach - 1), 6, skin.glow, k);
+    glowLine(hx + ca * 3, hy + sn * 3, hx + ca * (reach - 1), hy + sn * (reach - 1), 6, skin.glow, k);
   }
-  if (h.state === "cast" && h.st < CLIPS.cast.hit + 0.05) drawCastRing(h.hand);
   shownKit().draw?.();
 }
 

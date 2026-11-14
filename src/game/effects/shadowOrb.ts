@@ -26,7 +26,7 @@ export function createShadowOrb(x: number, y: number, vx: number, vy: number, da
   const uy = vy / speed;
   return {
     update(step) {
-      // a Stillfield slows the shot where it flies
+      // a time field slows the shot where it flies
       const dt = step * fieldPace(o.x, o.y);
       o.t += dt;
       o.x += vx * dt;

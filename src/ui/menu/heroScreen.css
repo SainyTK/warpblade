@@ -218,13 +218,13 @@
     align-self: start;
   }
 }
-/* a phone on its side: the stats move beside the name and the blurb gives way, so the panel fits above Back */
+/* a phone on its side: the stats move beside the name and the blurb runs under both, so the panel fits above Back */
 @media (max-height: 520px) {
   .menu[data-screen="hero"] .menu-panel {
     width: min(720px, 100%);
   }
   .hero-panel {
-    padding: 10px 14px;
+    padding: 8px 14px;
   }
   .hero-page {
     grid-template-columns: 128px minmax(0, 1fr) minmax(0, 1fr);
@@ -232,8 +232,9 @@
       "portrait name stats"
       "portrait title stats"
       "portrait traits stats"
-      "portrait lock stats";
-    grid-template-rows: auto auto auto 1fr;
+      "portrait blurb blurb"
+      "portrait lock lock";
+    grid-template-rows: auto auto auto auto 1fr;
     column-gap: 16px;
     row-gap: 4px;
   }
@@ -247,6 +248,7 @@
     margin: 0;
   }
   .hero-blurb {
-    display: none;
+    font-size: 11px;
+    line-height: 1.35;
   }
 }

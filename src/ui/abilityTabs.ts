@@ -11,9 +11,9 @@ import { createRechargeTab } from "./rechargeTab";
  * skill evolves, and the jolt of a refused press. The row is rebuilt when the hero changes.
  */
 const box = byId("abilityTabs");
-let built: { kit: string; tabs: { slot: AbilitySlot; el: HTMLElement; tab: ReturnType<typeof createRechargeTab> }[] } =
+let built: { hero: string; tabs: { slot: AbilitySlot; el: HTMLElement; tab: ReturnType<typeof createRechargeTab> }[] } =
   {
-    kit: "",
+    hero: "",
     tabs: [],
   };
 /** the deny flash time last seen; a rise means a new refused press */
@@ -22,7 +22,7 @@ let lastDenied = 0;
 function build(): void {
   box.replaceChildren();
   built = {
-    kit: character.kit,
+    hero: character.id,
     tabs: kit().abilities.map((slot) => {
       const el = document.createElement("span");
       el.className = "el ability";
@@ -35,7 +35,7 @@ function build(): void {
 }
 
 export function updateAbilityTabs(): void {
-  if (built.kit !== character.kit) build();
+  if (built.hero !== character.id) build();
   const selected = selectedSlot();
   for (const { slot, el, tab } of built.tabs) {
     const known = slot.known();
@@ -46,12 +46,10 @@ export function updateAbilityTabs(): void {
     const evolved = slot.evolved?.() ?? false;
     if (el.classList.contains("evolved") !== evolved) el.classList.toggle("evolved", evolved);
     el.classList.toggle("poor", !slot.affordable());
-    const cost = on ? slot.cost?.() : undefined;
-    const text = cost ? `${slot.label} ${cost}` : slot.label;
-    if (el.textContent !== text) el.textContent = text;
+    if (el.textContent !== slot.label) el.textContent = slot.label;
     tab.update(Math.min(1, slot.wait() / slot.full()));
   }
-  const denied = Math.max(hero.denied.cast, hero.denied.mp, hero.denied.hp);
+  const denied = Math.max(hero.denied.cast, hero.denied.mp);
   if (denied > lastDenied) built.tabs.find((t) => t.slot === selected)?.tab.jolt();
   lastDenied = denied;
 }

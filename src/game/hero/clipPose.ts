@@ -1,19 +1,20 @@
-import { CLIPS, LOOPING_STATES, STATE_CLIPS } from "../../constants/clips";
+import { ACTION_CLIPS, LOOPING_STATES, STATE_CLIPS } from "../../constants/clips";
 import { STAND } from "../../constants/hero";
 import type { Hero, StateClipName } from "../../types/hero";
 import type { Pose } from "../../types/pose";
 import { sampleKeys } from "../../utils/sampleKeys";
-import { MOVES } from "./moves";
+import { character } from "../state";
+import { moveDef } from "./kits";
 
 /** the shared clips: a move or action plays its clip, walk and run follow the stride, loops repeat */
 export function clipPose(h: Hero, t: number): Pose {
   switch (h.state) {
     case "move":
-      return h.move ? sampleKeys(CLIPS[MOVES[h.move].clip].keys, h.st) : STAND;
+      return h.move ? sampleKeys(character.clips.actions[moveDef(h.move).clip].keys, h.st) : STAND;
     case "cast":
     case "throw":
     case "warpStrike":
-      return sampleKeys(CLIPS[h.state].keys, h.st);
+      return sampleKeys(ACTION_CLIPS[h.state].keys, h.st);
     case "walk":
     case "run": {
       const clip = STATE_CLIPS[h.state];

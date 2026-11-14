@@ -1,25 +1,6 @@
-import type { ClipName } from "../../types/hero";
-import type { ActionClip } from "../../types/pose";
-import { ACTION_CLIPS } from "./actions";
-import { AIR_CLIPS } from "./air";
-import { FINISHER_CLIPS } from "./finishers";
-import { GROUND_CLIPS } from "./ground";
-import { SKILL_CLIPS } from "./skills";
-import { STRING_CLIPS } from "./string";
-import { GLAIVE_CLIPS } from "./ysra";
-
 /**
- * Every keyed action: Kael's, then Ysra's. Every blow winds up the opposite way, snaps to a new silhouette on the hit frame,
- * holds it a beat and follows through.
+ * The keyed clips every hero shares: the actions of the shared moveset (the cast, the throw and the warp's arrival)
+ * and the free and held states. A hero's own action clips are in its `CharacterDef.clips`.
  */
-export const CLIPS = {
-  ...STRING_CLIPS,
-  ...GROUND_CLIPS,
-  ...SKILL_CLIPS,
-  ...AIR_CLIPS,
-  ...FINISHER_CLIPS,
-  ...ACTION_CLIPS,
-  ...GLAIVE_CLIPS,
-} satisfies Record<ClipName, ActionClip>;
-
+export { ACTION_CLIPS } from "./actions";
 export { LOOPING_STATES, STATE_CLIPS } from "./states";

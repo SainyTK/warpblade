@@ -153,41 +153,37 @@ body {
     border-color: var(--hp);
   }
 }
-/* Ysra's Heat: a mark at half once Searing Edge is learned, a hotter fill above it, a blaze when full, white heat in Overheat */
-.bar.ht span {
-  color: var(--ember-hot);
+/* a hero's own meter (HeroMeter): the fill and label in the meter's own colour (--meter), notches between its cells
+   (--cell), a glow while lit, and a short figure after the bar */
+.bar.kit {
+  grid-template-columns: 22px 1fr auto;
 }
-.bar.ht .fill {
-  background: var(--ember);
-  box-shadow: 0 0 6px var(--ember);
+.bar.kit span,
+.bar.kit b {
+  color: var(--meter);
 }
-.bar.ht.searing .fill {
-  background: var(--ember-hot);
-  box-shadow: 0 0 8px var(--ember-hot);
+.bar.kit b {
+  font-weight: 400;
+  text-align: right;
 }
-.bar.ht.edge .track::after {
+.bar.kit .fill {
+  background: var(--meter);
+  box-shadow: 0 0 6px var(--meter);
+}
+.bar.kit.cells .track::after {
   content: "";
   position: absolute;
-  left: calc(50% - 1px);
-  top: -3px;
-  bottom: -3px;
-  width: 2px;
-  background: var(--text);
+  inset: 0;
+  background: repeating-linear-gradient(
+    to right,
+    transparent 0 calc(var(--cell) - 1px),
+    var(--night) calc(var(--cell) - 1px) var(--cell)
+  );
 }
-.bar.ht.full .fill,
-.bar.ht.overheat .fill {
-  animation: heat-blaze 240ms steps(1) infinite;
-}
-.bar.ht.overheat .fill {
-  background: var(--ember-white);
-}
-@keyframes heat-blaze {
-  50% {
-    background: var(--ember-white);
-    box-shadow:
-      0 0 10px var(--ember-hot),
-      0 -2px 6px var(--ember);
-  }
+.bar.kit.lit .fill {
+  box-shadow:
+    inset 0 1px 0 #fff,
+    0 0 10px var(--meter);
 }
 /* Flow: gold stacks with the damage multiplier after the bar; the bar glows when full */
 .bar.fl {
@@ -240,288 +236,6 @@ body {
   font-size: 7px;
   line-height: 8px;
   text-shadow: none;
-}
-/* Hulda's Grit: four iron plates (five or six with Iron Hide, set in --plate); full plates are bright steel with a lit top edge, the plate filling is a dim fill */
-.bar.gr span {
-  color: var(--rust);
-}
-.bar.gr .fill {
-  background: var(--iron-dim);
-}
-.bar.gr .plates {
-  position: absolute;
-  inset: 0 auto 0 0;
-  width: 0;
-  background: var(--iron);
-  box-shadow:
-    inset 0 1px 0 var(--iron-glint),
-    0 0 6px var(--rust);
-}
-.bar.gr .track::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: repeating-linear-gradient(
-    to right,
-    transparent 0 calc(var(--plate, 25%) - 1px),
-    var(--night) calc(var(--plate, 25%) - 1px) var(--plate, 25%)
-  );
-}
-/* a plate just broke: the track flashes rust */
-.bar.gr.broke .track {
-  border-color: var(--rust);
-  box-shadow: 0 0 8px var(--rust);
-}
-/* Orrin's Momentum: a brass fill, its top edge glinting once the bar is full */
-.bar.mo span {
-  color: var(--chain-brass);
-}
-.bar.mo .fill {
-  background: var(--chain-brass-dim);
-}
-.bar.mo.full .fill {
-  background: var(--chain-brass);
-  box-shadow:
-    inset 0 1px 0 var(--chain-brass-glint),
-    0 0 6px var(--chain-brass);
-}
-/* Mirel's Sand: a warm sand fill with a teal edge, a teal glow while her field holds it from refilling */
-.bar.sd span {
-  color: var(--hour-glint);
-}
-.bar.sd .fill {
-  background: var(--sand);
-  box-shadow: inset -1px 0 0 var(--hour-teal);
-}
-.bar.sd.held .fill {
-  background: var(--sand-dim);
-  box-shadow:
-    inset -1px 0 0 var(--hour-glint),
-    0 0 6px var(--hour-teal);
-}
-/* Wenna's Wax: a pale wax fill with a violet edge, and her Wicks lit out of her cap after the bar */
-.bar.wx {
-  grid-template-columns: 22px 1fr 30px;
-}
-.bar.wx span,
-.bar.wx b {
-  color: var(--lamp-glint);
-}
-.bar.wx b {
-  font-weight: 400;
-  text-align: right;
-}
-.bar.wx .fill {
-  background: var(--wax);
-  box-shadow:
-    inset -1px 0 0 var(--lamp-violet),
-    0 0 4px var(--lamp-violet);
-}
-.bar.wx.low .fill {
-  background: var(--wax-dim);
-}
-/* Tallis's Gloam: an ink fill with a rose edge that glows while he is Unseen and the bar refills, all rose while the Veil drains it */
-.bar.gl span {
-  color: var(--gloam-glint);
-}
-.bar.gl .fill {
-  background: var(--gloam-ink);
-  box-shadow: inset -1px 0 0 var(--gloam-rose);
-}
-.bar.gl.unseen .fill {
-  box-shadow:
-    inset -1px 0 0 var(--gloam-glint),
-    0 0 6px var(--gloam-rose);
-}
-.bar.gl.veil .fill {
-  background: var(--gloam-rose);
-  box-shadow:
-    inset 0 1px 0 var(--gloam-glint),
-    inset -1px 0 0 var(--gloam-glint);
-}
-/* Jory's Groove: twelve pips in three groups of four, lit in a cobalt that brightens with each tier and glows white-hot at
-   Crescendo; a lost pip blinks grey, and the lamp after the bar flashes on every beat */
-.bar.gv {
-  grid-template-columns: 22px 1fr 6px;
-}
-.bar.gv span {
-  color: var(--beat-pale);
-}
-.bar.gv .track {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr) 2px repeat(4, 1fr) 2px repeat(4, 1fr);
-  column-gap: 1px;
-  padding: 1px;
-  background: var(--hud-bg);
-}
-.bar.gv .track i {
-  background: var(--beat-deep);
-  opacity: 0.45;
-}
-.bar.gv .track i.gap {
-  background: none;
-}
-.bar.gv .track i.on {
-  opacity: 1;
-  background: var(--pip, var(--beat-low));
-}
-.bar.gv .track i.lost {
-  opacity: 1;
-  background: #8a8a96;
-}
-.bar.gv.t2 {
-  --pip: var(--beat);
-}
-.bar.gv.t3 {
-  --pip: var(--beat-pale);
-}
-.bar.gv.t4 {
-  --pip: var(--beat-hot);
-}
-.bar.gv.t4 .track i.on {
-  box-shadow: 0 0 4px var(--beat);
-}
-.bar.gv .lamp {
-  width: 6px;
-  height: 6px;
-  background: var(--beat-deep);
-  border: 1px solid var(--line);
-}
-.bar.gv .lamp.on {
-  background: var(--beat-hot);
-  box-shadow: 0 0 6px var(--beat);
-}
-/* Brannoc's debt: HP he spent and can win back, a crimson segment right after the HP fill. It brightens on a repay,
-   pulses slowly while it fades, and on a forfeit flashes white and breaks into four shards that drop out of the bar.
-   A one-pixel tick marks the Bloodied line. */
-.bar.hp .debt {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: var(--from, 0%);
-  width: var(--share, 0%);
-  background: var(--rage-low);
-  box-shadow: inset -1px 0 0 var(--rage-hot);
-  transition:
-    left 120ms linear,
-    width 120ms linear;
-}
-.bar.hp .debt.repay {
-  background: var(--rage);
-  box-shadow:
-    inset -1px 0 0 var(--rage-pale),
-    0 0 4px var(--rage);
-}
-.bar.hp .debt.fading {
-  animation: debt-fade 900ms steps(3) infinite;
-}
-@keyframes debt-fade {
-  50% {
-    background: var(--rage-deep);
-  }
-}
-.bar.hp .shards {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: var(--from, 0%);
-  width: var(--share, 0%);
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  pointer-events: none;
-}
-.bar.hp .shards i {
-  background: #fff;
-  animation: debt-shard 280ms steps(4) both;
-}
-.bar.hp .shards i:nth-child(2) {
-  animation-delay: 20ms;
-}
-.bar.hp .shards i:nth-child(3) {
-  animation-delay: 40ms;
-}
-.bar.hp .shards i:nth-child(4) {
-  animation-delay: 60ms;
-}
-@keyframes debt-shard {
-  0%,
-  28% {
-    background: #fff;
-    transform: none;
-    opacity: 1;
-  }
-  29% {
-    background: var(--rage-hot);
-  }
-  100% {
-    background: var(--rage);
-    transform: translateY(8px);
-    opacity: 0;
-  }
-}
-.bar.hp .tick {
-  position: absolute;
-  top: -2px;
-  bottom: -2px;
-  left: var(--at, 35%);
-  width: 1px;
-  background: var(--bone);
-  opacity: 0.7;
-}
-/* Sable's quiver: one notch per bolt; while she reloads the track shows the crank's progress and the bright window */
-.bar.qv span {
-  color: var(--jade);
-}
-.bar.qv .fill {
-  background: var(--jade);
-  box-shadow: 0 0 6px var(--jade);
-}
-.bar.qv .track::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: repeating-linear-gradient(
-    to right,
-    transparent 0 calc(var(--bolt-share, 12.5%) - 1px),
-    var(--night) calc(var(--bolt-share, 12.5%) - 1px) var(--bolt-share, 12.5%)
-  );
-}
-.bar.qv .window,
-.bar.qv .needle {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  display: none;
-}
-.bar.qv.reloading .fill {
-  background: var(--line);
-  box-shadow: none;
-}
-.bar.qv.reloading .track::after {
-  display: none;
-}
-.bar.qv.reloading .window {
-  display: block;
-  background: var(--jade-bright);
-  opacity: 0.55;
-}
-.bar.qv.reloading .needle {
-  display: block;
-  width: 2px;
-  margin-left: -1px;
-  background: #fff;
-}
-.bar.qv.jammed .window {
-  background: var(--hp);
-  opacity: 0.35;
-}
-.bar.qv.primed .fill {
-  background: var(--jade-bright);
-  box-shadow: 0 0 8px var(--jade-bright);
-}
-.bar.qv.perfect .track {
-  border-color: var(--jade-bright);
-  box-shadow: 0 0 8px var(--jade-bright);
 }
 .bar.xp span {
   color: var(--brass);
@@ -650,21 +364,18 @@ body {
   border-top-color: var(--gold);
 }
 /* a hero's tab group adds its tabs to the one row of tabs, so they wrap together and a lone tab never takes a row */
-.ability-tabs,
-.rite-tabs {
+.ability-tabs {
   display: contents;
 }
-.ability-tabs[hidden],
-.rite-tabs[hidden] {
+.ability-tabs[hidden] {
   display: none;
 }
-/* a tab keeps to one line, so a longer label (Brannoc's selected tab with its HP cost) never doubles the row's height */
-.rite-tabs .el {
+/* a tab keeps to one line, so a longer label (a selected tab with its cost) never doubles the row's height */
+.ability-tabs .el {
   white-space: nowrap;
 }
-/* Kael's ability tabs and every other hero's own tabs; each one's colour comes in as --tint */
-.el.on.ability,
-.el.on.rite {
+/* every hero's ability tabs; each one's colour comes in as --tint */
+.el.on.ability {
   color: var(--tint);
   border-color: var(--tint);
 }
@@ -691,9 +402,9 @@ body {
 .el.on.wait {
   color: var(--muted);
 }
-/* an ability Brannoc's HP cannot pay for right now: struck through in crimson */
+/* an ability or the warp the hero cannot pay for right now: struck through in red */
 .el.poor {
-  text-decoration: line-through var(--rage) 1px;
+  text-decoration: line-through var(--hp) 1px;
 }
 .el.wait::after {
   content: "";
@@ -1051,11 +762,23 @@ body[data-hud="outside"] .boss {
   width: min(300px, 100%);
   margin-top: 4px;
 }
-.menu-foot {
+/* the footer and the note sit over the scene: a dark edge keeps them readable on the floor */
+.menu-foot,
+.menu-note {
   margin: 0;
   font-size: 14px;
-  color: var(--muted);
   text-align: center;
+  text-shadow:
+    0 1px 0 var(--night),
+    0 0 4px var(--night),
+    0 0 8px var(--night);
+}
+.menu-foot {
+  color: var(--mist);
+}
+/* a one-time note on the start menu, such as a refund */
+.menu-note {
+  color: var(--gold);
 }
 .menu-foot-links {
   display: inline-flex;

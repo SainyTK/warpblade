@@ -1,5 +1,4 @@
 import type { Build } from "./build";
-import type { UltimateId } from "./skill";
 import type { Stats } from "./stats";
 
 /** One run's growth: it starts over when the hero falls. */
@@ -11,7 +10,7 @@ export interface Progress {
   /** derived from the level and the build's skills and charms */
   stats: Stats;
   /** the hero's special, or the ultimate an ultimate skill puts on U */
-  ultimate: UltimateId;
+  ultimate: string;
   /** the ground string's length, fixed per hero */
   comboLimit: number;
   /** air attacks before the hero lands */

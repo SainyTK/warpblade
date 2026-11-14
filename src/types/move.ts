@@ -1,25 +1,5 @@
 import type { SlashShape } from "./effect";
-import type { ClipName } from "./hero";
 import type { Box } from "./world";
-import type { YsraMoveId } from "./ysra";
-
-/** Kael's combo moves */
-export type KaelMoveId =
-  | "stepCut"
-  | "risingBackhand"
-  | "twinFang"
-  | "hopCleave"
-  | "crescentTurn"
-  | "smash"
-  | "sweep"
-  | "airWheel"
-  | "airScissor"
-  | "airStomp"
-  | "whirl"
-  | "meteor"
-  | "phaseCut"
-  | "skybreaker";
-export type MoveId = KaelMoveId | YsraMoveId;
 
 /** How a blow feels: hitstop and shake on contact, and the pitch of its hit sound. */
 export interface HitFeel {
@@ -67,10 +47,13 @@ export interface Stride {
   speed: number;
 }
 
+/** one combo move of a hero, played by the shared combo engine (src/game/hero/combo.ts) */
 export interface MoveDef {
-  id: MoveId;
+  /** the hero's own name for the move: its key in the hero's `HeroModule.moves` */
+  id: string;
   name: string;
-  clip: ClipName;
+  /** the action clip it plays: a key of the hero's `CharacterDef.clips.actions` */
+  clip: string;
   hits: readonly MoveHit[];
   /** ends the combo whatever its length */
   finisher?: boolean;

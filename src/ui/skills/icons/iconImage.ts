@@ -1,38 +1,30 @@
 import { SpriteCanvas } from "../../../engine/sprite";
+import { heroModule } from "../../../heroes";
+import { CHARACTERS } from "../../../heroes/roster";
 import { hex } from "../../../utils/color";
 import { spriteUrl } from "../../spriteUrl";
 import { BOON_ICONS } from "./boon";
-import { BRANNOC_ICONS } from "./brannoc/index";
 import { CHARM_ICONS } from "./charms";
-import { HULDA_ICONS } from "./hulda/index";
-import { JORY_ICONS } from "./jory/index";
-import { KAEL_SKILL_ICONS } from "./kael/index";
-import { MIREL_ICONS } from "./mirel/index";
-import { ORRIN_ICONS } from "./orrin/index";
-import { SABLE_ICONS } from "./sable/index";
 import { SHOP_ICONS } from "./shop";
-import { TALLIS_ICONS } from "./tallis/index";
-import { WENNA_ICONS } from "./wenna/index";
-import { YSRA_ICONS } from "./ysra/index";
 
 const SIZE = 16;
 const OUTLINE = hex("#0a0612");
-/** every icon by skill, boon or shop item id */
-const ICONS: Record<string, (s: SpriteCanvas) => void> = {
+/** the icons every hero shares, by boon, shop item or charm id */
+const SHARED_ICONS: Record<string, (s: SpriteCanvas) => void> = {
   ...BOON_ICONS,
   ...SHOP_ICONS,
-  ...YSRA_ICONS,
-  ...SABLE_ICONS,
-  ...HULDA_ICONS,
-  ...ORRIN_ICONS,
-  ...MIREL_ICONS,
-  ...WENNA_ICONS,
-  ...TALLIS_ICONS,
-  ...JORY_ICONS,
-  ...BRANNOC_ICONS,
   ...CHARM_ICONS,
-  ...KAEL_SKILL_ICONS,
 };
+/** an icon's drawing by id: a shared one, or one a hero's module brings (skills, evolved forms, damage sources) */
+function iconDrawing(id: string): ((s: SpriteCanvas) => void) | undefined {
+  if (id in SHARED_ICONS) return SHARED_ICONS[id];
+  for (const c of CHARACTERS) {
+    const draw = heroModule(c.id).icons[id];
+    if (draw) return draw;
+  }
+  return undefined;
+}
+
 const canvas = new SpriteCanvas(SIZE, SIZE, 0, 0);
 const cache = new Map<string, string>();
 
@@ -40,7 +32,7 @@ const cache = new Map<string, string>();
 export function iconUrl(id: string): string {
   const hit = cache.get(id);
   if (hit) return hit;
-  const draw = ICONS[id];
+  const draw = iconDrawing(id);
   if (!draw) throw new Error(`No icon for skill ${id}`);
   canvas.clear();
   draw(canvas);
@@ -51,4 +43,5 @@ export function iconUrl(id: string): string {
 }
 
 /** a skill's icon id: its evolved form's own (`<id>_evo`) when evolved and drawn, otherwise the skill's */
-export const skillIcon = (id: string, evolved: boolean): string => (evolved && `${id}_evo` in ICONS ? `${id}_evo` : id);
+export const skillIcon = (id: string, evolved: boolean): string =>
+  evolved && iconDrawing(`${id}_evo`) ? `${id}_evo` : id;

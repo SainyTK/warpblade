@@ -1,9 +1,9 @@
+import { SKY_FLASH } from "../constants/effectLook";
 import { beginFrame, composite, setShake } from "../engine/frame";
 import { drawChests } from "../game/build/chests";
 import { coop, eachHero } from "../game/coopHooks";
 import { shownKit } from "../game/hero/kits";
 import { drawSkills, drawSkillsBack } from "../game/skills/runtime";
-import { SKY_FLASH } from "../game/spells/lightning";
 import { game, hero, lights, particles, rng } from "../game/state";
 import { settings } from "../store/settings";
 import { drawEnemies, drawHeroLayer, drawPickups } from "./drawActors";

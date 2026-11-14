@@ -29,7 +29,7 @@ export function createVoidOrb(x: number, y: number, vx: number, vy: number, dama
   };
   return {
     update(step) {
-      // a Stillfield slows the shot where it flies
+      // a time field slows the shot where it flies
       const dt = step * fieldPace(o.x, o.y);
       o.t += dt;
       o.vy += ORB_GRAVITY * dt;

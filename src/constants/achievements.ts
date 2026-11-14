@@ -1,20 +1,22 @@
+import { CHARACTERS } from "../heroes/roster";
 import type { Achievement, AchievementGroup } from "../types/achievement";
+import type { CharacterDef } from "../types/character";
 
-/** clear wave 10 with a hero; every new hero adds one of these below with the same reward */
-function heroTrial(hero: string, heroName: string): Achievement {
+/** clear wave 10 with a hero: every hero in the roster has one, with the same reward */
+function heroTrial(c: CharacterDef): Achievement {
   return {
-    id: `trial-${hero}`,
-    name: `${heroName}'s Trial`,
-    text: `Clear wave 10 with ${heroName}.`,
+    id: `trial-${c.id}`,
+    name: `${c.name}'s Trial`,
+    text: `Clear wave 10 with ${c.name}.`,
     group: "Heroes",
-    goal: { kind: "heroWave", hero, need: 10 },
+    goal: { kind: "heroWave", hero: c.id, need: 10 },
     reward: 40,
   };
 }
 
 /**
- * Every achievement, in the order the Achievements page lists them within each group.
- * An achievement for a hero that is not in CHARACTERS yet is left out until the hero is.
+ * Every achievement, in the order the Achievements page lists them within each group: the shared ones, a trial for
+ * each hero in the roster, and each hero's own (`CharacterDef.achievements`).
  */
 export const ACHIEVEMENTS: readonly Achievement[] = [
   {
@@ -58,16 +60,7 @@ export const ACHIEVEMENTS: readonly Achievement[] = [
     reward: 300,
     hiddenUntil: "wave-20",
   },
-  heroTrial("kael", "Kael"),
-  heroTrial("ysra", "Ysra"),
-  heroTrial("sable", "Sable"),
-  heroTrial("hulda", "Hulda"),
-  heroTrial("orrin", "Orrin"),
-  heroTrial("mirel", "Mirel"),
-  heroTrial("wenna", "Wenna"),
-  heroTrial("tallis", "Tallis"),
-  heroTrial("jory", "Jory"),
-  heroTrial("brannoc", "Brannoc"),
+  ...CHARACTERS.map(heroTrial),
   {
     id: "kills-100",
     name: "Culling",
@@ -151,54 +144,7 @@ export const ACHIEVEMENTS: readonly Achievement[] = [
     goal: { kind: "count", stat: "evolutions", need: 1 },
     reward: 50,
   },
-  {
-    id: "full-swing",
-    name: "Full Swing",
-    text: "As Orrin, defeat 3 foes with swing kicks in one swing.",
-    group: "Skill",
-    goal: { kind: "best", stat: "swingKills", need: 3 },
-    reward: 60,
-  },
-  {
-    id: "hold-the-hour",
-    name: "Hold the Hour",
-    text: "As Mirel, defeat 5 foes inside one Stillfield.",
-    group: "Skill",
-    goal: { kind: "best", stat: "fieldKills", need: 5 },
-    reward: 60,
-  },
-  {
-    id: "many-hands",
-    name: "Many Hands",
-    text: "As Wenna, let your Wicks defeat 40 foes in one run.",
-    group: "Skill",
-    goal: { kind: "best", stat: "wickKills", need: 40 },
-    reward: 60,
-  },
-  {
-    id: "knife-in-the-dark",
-    name: "Knife in the Dark",
-    text: "As Tallis, defeat 30 foes with blows from behind in one run.",
-    group: "Skill",
-    goal: { kind: "best", stat: "backKills", need: 30 },
-    reward: 60,
-  },
-  {
-    id: "in-time",
-    name: "In Time",
-    text: "As Jory, hold Crescendo for 20 seconds in a row.",
-    group: "Skill",
-    goal: { kind: "best", stat: "crescendoSeconds", need: 20 },
-    reward: 60,
-  },
-  {
-    id: "on-the-edge",
-    name: "On the Edge",
-    text: "As Brannoc, defeat 30 foes while Bloodied in one run.",
-    group: "Skill",
-    goal: { kind: "best", stat: "bloodiedKills", need: 30 },
-    reward: 60,
-  },
+  ...CHARACTERS.flatMap((c) => c.achievements),
   {
     id: "banked-500",
     name: "Coin Purse",

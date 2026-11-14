@@ -21,7 +21,7 @@ export function createPollen(x: number, y: number, vx: number, damage: number): 
   const P = DC.pollen;
   return {
     update(step) {
-      // a Stillfield slows the shot where it flies
+      // a time field slows the shot where it flies
       const dt = step * fieldPace(o.x, o.y);
       o.t += dt;
       if (o.landed >= 0) {

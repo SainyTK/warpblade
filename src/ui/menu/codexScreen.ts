@@ -1,9 +1,9 @@
 import "../shop/shop.css";
 import "../achievements/achievements.css";
 import "../unlocks/unlocks.css";
-import { CHARACTERS } from "../../constants/characters/index";
 import { CHARMS } from "../../constants/charms";
 import { EVOLVE_PARTNER_LEVEL, SKILL_MAX_LEVEL } from "../../constants/growth";
+import { CHARACTERS } from "../../heroes/roster";
 import { charmUnlocked, isFound, knowsRecipe } from "../../store/unlocks";
 import type { CharmId } from "../../types/build";
 import type { CharacterDef } from "../../types/character";

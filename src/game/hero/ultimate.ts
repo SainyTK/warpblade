@@ -55,7 +55,7 @@ function release(): void {
   h.charge = 0;
   h.chargeLevel = 0;
   h.ultCd = ultCooldown();
-  castUltimate(progress.ultimate, level);
+  castUltimate(level);
   // the cast may set its own wait (an ultimate skill's cooldown); the display measures whichever it is
   h.ultFull = Math.max(h.ultCd, 0.01);
   emitSkillEvent({ type: "ultimate", level });

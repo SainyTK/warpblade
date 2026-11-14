@@ -17,7 +17,7 @@ const { ENEMIES } = await import(`${R}/src/constants/enemies`);
 const { ELITE } = await import(`${R}/src/constants/waves`);
 const { BOONS } = await import(`${R}/src/constants/boons`);
 const { CHARMS } = await import(`${R}/src/constants/charms`);
-const { CHARACTERS } = await import(`${R}/src/constants/characters`);
+const { CHARACTERS } = await import(`${R}/src/heroes/roster`);
 
 const WAVES = 30;
 // levels after each wave, collecting all experience

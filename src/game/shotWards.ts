@@ -1,7 +1,7 @@
 import type { Point } from "../types/world";
 
 /**
- * A ward that breaks foe projectiles: a circle round a point, held up by the effect that made it (Orrin's Whirlwall).
+ * A ward that breaks foe projectiles: a circle round a point, held up by the effect that made it (a spinning blade).
  * Each foe projectile asks `shotWarded` every step and is gone when it says yes; the ward answers with its own sparks.
  */
 export interface ShotWard {

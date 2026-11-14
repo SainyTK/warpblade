@@ -1,4 +1,5 @@
-import { drawHero } from '@game/game/hero/drawHero';
+import { KAEL } from '@game/heroes/kael/character';
+import { drawHero } from '@game/rig';
 import { detailCanvas } from '@game/engine/sprite';
 import type { Pose } from '@game/types/pose';
 import type { SpriteImage } from '@game/types/sprite';
@@ -40,7 +41,7 @@ export function heroSprite(
   ropes: { scarf: Point[]; tail: Point[] },
   flare = 0,
 ): SpriteImage {
-  drawHero(canvas, pose, {
+  drawHero(canvas, pose, KAEL.skin, {
     scarf: ropes.scarf.map(([x, y]) => [x, y]),
     tail: ropes.tail.map(([x, y]) => [x, y]),
     flare,

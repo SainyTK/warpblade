@@ -1,22 +1,21 @@
-import { POSES } from "../../constants/hero";
+import { HERO_CANVAS, POSES } from "../../constants/hero";
 import { detailCanvas } from "../../engine/sprite";
 import { PK } from "../../types/particle";
 import { lerp, TAU } from "../../utils/math";
 import { createWarpLine } from "../effects/warpLine";
 import { game, hero, lights, particles, rng } from "../state";
-import { drawHero } from "./drawHero";
-import { heroLook } from "./look";
+import { drawHeroSprite } from "./look";
 import { skin } from "./skin";
 
 /** afterimages are drawn into their own canvas, then copied */
-export const ghostCanvas = detailCanvas(80, 76, 40, 62);
+export const ghostCanvas = detailCanvas(HERO_CANVAS.w, HERO_CANVAS.h, HERO_CANVAS.ox, HERO_CANVAS.oy);
 
 /** where a warp ends: no afterimage stands closer to it than `clear`, and the flare of light there */
 const ARRIVAL = { clear: 16, light: 28, strength: 0.3 } as const;
 
 /** a line of fading copies of Kael from where he was to where he is going, and a streak of light between */
 export function leaveAfterimages(ox: number, oy: number, nx: number, ny: number): void {
-  drawHero(ghostCanvas, POSES.warpFly, heroLook(4));
+  drawHeroSprite(ghostCanvas, POSES.warpFly, 4);
   const snap = ghostCanvas.snapshot();
   const distance = Math.hypot(nx - ox, ny - oy);
   for (let i = 0; i < 5; i++) {
@@ -40,7 +39,7 @@ export function leaveAfterimages(ox: number, oy: number, nx: number, ny: number)
 
 /** one fading copy in the dash pose, dropped every few frames while dashing */
 export function dropDashGhost(): void {
-  drawHero(ghostCanvas, POSES.dodge, heroLook(4));
+  drawHeroSprite(ghostCanvas, POSES.dodge, 4);
   game.ghosts.push({ s: ghostCanvas.snapshot(), x: hero.x, y: hero.y, flip: hero.face < 0, life: 0.22, max: 0.22 });
   particles.spawn(
     PK.MOTE,
@@ -58,6 +57,6 @@ export function dropDashGhost(): void {
 
 /** one fading copy in the current pose, dropped every few frames while a fast move plays */
 export function dropMoveGhost(): void {
-  drawHero(ghostCanvas, hero.pose, heroLook(4));
+  drawHeroSprite(ghostCanvas, hero.pose, 4);
   game.ghosts.push({ s: ghostCanvas.snapshot(), x: hero.x, y: hero.y, flip: hero.face < 0, life: 0.16, max: 0.16 });
 }

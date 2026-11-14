@@ -1,4 +1,4 @@
-import { COIN_GOLD as G, KAEL_COLORS as HC, PAL } from "../../../constants/palette";
+import { COIN_GOLD as G, BASE_HERO_COLORS as HC, PAL } from "../../../constants/palette";
 import type { SpriteCanvas } from "../../../engine/sprite";
 import type { CharmId } from "../../../types/build";
 import { hex, WHITE } from "../../../utils/color";

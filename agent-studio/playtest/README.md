@@ -11,6 +11,7 @@ The exit code is 0 when the report says `ok`, 1 when a check or run failed, and 
 ## How it works
 
 Each command starts the game's own Vite dev server on a free port, from the game root given by `--root`.
+The port is picked by the system and Vite must use it or fail, so commands running at the same time, in one worktree or in several, each get their own server; a start that loses its port to another process is tried again on a new one.
 The default root is the repository the harness lives in, two levels above this folder.
 When that root has no `node_modules`, the harness runs `npm ci` there first.
 The server runs through Vite's JavaScript API with hot reload switched off, so edits other agents make while a command runs never reload the page mid-run.
@@ -53,7 +54,7 @@ Uncaught errors and console errors on those pages fail the check.
 Failed requests to other services, such as the feedback API when `wrangler dev` is not running, are listed in the detail and do not fail it.
 
 `--hero` takes any hero id the game has, or `all` (the default) for every hero found.
-Heroes are read at run time from `CHARACTERS` in `src/constants/characters/index.ts`, so new heroes are picked up without changes here.
+Heroes are read at run time from `CHARACTERS` in `src/heroes/roster.ts`, so every hero in the roster is picked up without changes here.
 
 Report fields: `command`, `ok`, `root`, `startedAt`, `wallSeconds`, `pageErrors`, `heroes`, and `checks`.
 Each check has `name`, `ok`, and when they apply `hero`, `skipped` and `detail`.
@@ -119,7 +120,7 @@ Import the harness types with an absolute path; type-only imports are dropped at
 ```ts
 import { openGame } from "<path to agent-studio>/playtest/index.ts";
 
-const session = await openGame({ hero: "ysra" });
+const session = await openGame({ hero: "kael" });
 ```
 
 `openGame({ root, hero, viewport, start })` starts a dev server and a browser, loads the game and, with `hero`, starts a run through the menu.
@@ -159,14 +160,14 @@ The GIF is 15 fps with a palette made for the clip and no dithering, and falls b
 The poster is the frame half a second in.
 The callback must let game time pass through `press`, `hold`, `advance` or `waitFor`.
 
-A scenario that films Ysra fighting:
+A scenario that films Kael fighting:
 
 ```ts
 import type { Session } from "/abs/path/agent-studio/playtest/index.ts";
 
 export default async (session: Session) => {
   await session.waitFor((s) => s.enemies.some((e) => e.hp > 0), 8000, "the first foes");
-  const clip = await session.record("/tmp/patch-12/ysra-fight", async () => {
+  const clip = await session.record("/tmp/patch-12/kael-fight", async () => {
     for (let i = 0; i < 16; i++) {
       const { hero, enemies } = await session.state();
       const foe = enemies.find((e) => e.hp > 0);
@@ -177,13 +178,13 @@ export default async (session: Session) => {
       }
     }
   });
-  const still = await session.still("/tmp/patch-12/ysra.png");
+  const still = await session.still("/tmp/patch-12/kael.png");
   return { clip, still };
 };
 ```
 
 ```sh
-npm run -s playtest -- scenario /tmp/patch-12/ysra.ts --hero ysra
+npm run -s playtest -- scenario /tmp/patch-12/kael.ts --hero kael
 ```
 
 ## Reaching later content

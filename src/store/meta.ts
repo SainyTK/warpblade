@@ -1,7 +1,8 @@
 import { ACHIEVEMENTS } from "../constants/achievements";
-import { HERO_PRICES } from "../constants/heroUnlocks";
+import { REMOVED_HERO_PRICES } from "../constants/removedHeroes";
 import { SHOP_ITEMS } from "../constants/shop";
 import { UNLOCKS } from "../constants/unlocks";
+import { CHARACTERS } from "../heroes/roster";
 import { loadBest } from "../services/bestScore";
 import { loadMeta, saveMeta } from "../services/metaStorage";
 import { isPlaytestSession } from "../services/playtestStart";
@@ -15,13 +16,16 @@ import { ALL_SKILLS } from "../utils/skills";
 
 /** The one owner of progress kept between runs: the coin bank and what the shop sold. Every change is saved here. */
 const meta: MetaSave = parseMeta(loadMeta(), SHOP_ITEMS, {
-  heroes: Object.keys(HERO_PRICES),
+  heroes: CHARACTERS.filter((c) => c.price > 0).map((c) => c.id),
+  removedHeroes: REMOVED_HERO_PRICES,
   achievements: ACHIEVEMENTS.map((a) => a.id),
   unlocks: UNLOCKS.map((u) => u.id),
   skills: ALL_SKILLS.map((s) => s.id),
 });
 // a save from before achievements kept its best wave under its own key: count it toward the wave goals
 meta.tracked.best.wave = Math.max(meta.tracked.best.wave, loadBest());
+// a refund just read is kept at once, so the save no longer lists the heroes it paid back
+if (meta.refund > 0) saveMeta(meta);
 const listeners = new Set<() => void>();
 /** in a co-op room the host plays every hero, each with what its own player bought; null is this browser's own */
 let worn: Record<string, number> | null = null;
@@ -64,13 +68,23 @@ export function buy(item: ShopItem): boolean {
 }
 
 /** the coins to unlock a hero, or null when the hero is free */
-export const heroPrice = (id: string): number | null => HERO_PRICES[id] ?? null;
+export const heroPrice = (id: string): number | null => CHARACTERS.find((c) => c.id === id)?.price || null;
 /** a free hero, one bought, or any hero in a playtest session */
 export const heroUnlocked = (id: string): boolean =>
   heroPrice(id) === null || meta.heroes.includes(id) || isPlaytestSession();
 export const heroesBought = (): number => meta.heroes.length;
 /** levels and skills bought in the shop, all counted */
 export const shopLevels = (): number => Object.values(meta.owned).reduce((sum, level) => sum + level, 0);
+
+/** coins given back for heroes that left the roster, still to be told to the player; 0 when there is none */
+export const heroRefund = (): number => meta.refund;
+
+/** the player has seen the refund: the start menu stops showing it */
+export function clearHeroRefund(): void {
+  if (meta.refund <= 0) return;
+  meta.refund = 0;
+  changed();
+}
 
 /** unlock a hero with coins; false when it is free, already unlocked or the bank is short */
 export function buyHero(id: string): boolean {

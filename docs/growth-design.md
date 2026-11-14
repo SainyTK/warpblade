@@ -66,7 +66,7 @@ Might applies to every hit centrally in `dealDamage`.
 
 - Experience for the next level: `15 + 10 x (level - 1)`, no level cap below 99. A full run reaches about level 80.
 - Picks still wait for the end of the wave (owner rule, 3 November 2026): each level banks a point, the cards open when the wave's last foe falls.
-- A pick deals 3 cards, 4 with luck. Cards are drawn without repeats by weight (`CARD_WEIGHT`): a skill not held yet 100, the next level of a held skill 6, a new charm its own weight (90, Multitude and Haste 50), a held charm's next level the same. Picks have no prerequisites; once the 8 skill slots are full no new skill is dealt, and once an ultimate skill is held no other ultimate skill is.
+- A pick deals 3 cards, 4 with luck. Cards are drawn without repeats by weight (`CARD_WEIGHT`): a skill not held yet 100, the next level of a held skill 9, a new charm its own weight (90, Multitude and Haste 50), a held charm's next level the same. Picks have no prerequisites; once the 8 skill slots are full no new skill is dealt, and once an ultimate skill is held no other ultimate skill is.
 - Every run starts with 2 rerolls, 2 skips and 1 banish; the shop sells more. Reroll deals new cards without the ones shown. Skip spends the point for nothing. Banish removes one card's skill or charm from the run and deals again.
 - When nothing is left to offer, Second Wind fills the cards.
 
@@ -133,6 +133,6 @@ The goals, their exact rules and the pacing are in `docs/unlocks.md`.
 ## Ownership while building
 
 - Core (build state, cards and pick screen, charms, hero growth, Flow, chests, shop, the skill framework): `src/game/build/`, `src/game/skills/`, `src/utils/build.ts`, `src/utils/cards.ts`, `src/ui/skills/`, `src/ui/chest/`, HUD.
-- Each hero's skills: `src/constants/characters/<hero>/skills/`, `src/game/skills/<hero>/`, `src/ui/skills/icons/<hero>/` (`docs/skill-design.md`).
+- Each hero's skills: `src/heroes/<id>/constants/skills/`, `src/heroes/<id>/game/skills/`, `src/heroes/<id>/ui/icons/` (`docs/skill-design.md`, `docs/hero-module.md`).
 - Waves: `src/utils/waves.ts`, `src/game/waves.ts`, `src/constants/waves.ts`, enemy spawning, elites, coins.
 - Results: `src/game/damageLedger.ts`, the `source` of every `dealDamage` call, damage numbers, the result screen.

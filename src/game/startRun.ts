@@ -3,7 +3,7 @@ import { STAGE_WAVES } from "../constants/waves";
 import { track } from "../services/analytics";
 import { readPlaytestStart } from "../services/playtestStart";
 import { startRunAchievements } from "../store/achievements";
-import { ownsSkill } from "../store/meta";
+import { clearHeroRefund, ownsSkill } from "../store/meta";
 import { startRunUnlocks } from "../store/unlocks";
 import { parseStartBuild } from "../utils/build";
 import { xpToReach } from "../utils/progression";
@@ -16,6 +16,7 @@ export function startRun(banner: string): void {
   resetRun(banner);
   startRunAchievements();
   startRunUnlocks();
+  clearHeroRefund();
   track("run_start", { hero: character.id, coop: false });
   if (ownsSkill("headStart")) gainXp(xpToReach(HEAD_START_LEVEL));
   const playtest = readPlaytestStart();

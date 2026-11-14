@@ -1,0 +1,770 @@
+{
+  "version": "0.11.0",
+  "kind": "big",
+  "date": "2026-11-15",
+  "title": "Nine Blades",
+  "tagline": "Every hero now fights with a sword. Eight sword heroes join Kael, Kael gets a new look, and the nine heroes who carried other weapons leave the game.",
+  "intro": "Only Kael was fun to play, and only swords fit Warpblade's story, so the nine heroes who fought with other weapons have left the game. In their place come eight sword heroes, each built on the same moveset as Kael and each with one thing no other hero does, and Kael wears a new look with his play unchanged. Your coins, shop levels, options and records stay as they were, and if you bought a hero who left, the coins you paid come back to your bank once. Achievements that belonged to the heroes who left are no longer listed, and the coins they paid stay with you. The roster is now set at nine and the hero sprint is over, so class advancement is next in line.",
+  "highlights": [
+    {
+      "title": "Cerise, the duelist",
+      "text": "A rapier on one long thin line. Thrusts pressed on the beat earn Points, and the lunge that ends her combo spends them all to pierce every foe on the line. Her parry answers with a riposte at once, and each J on the beat after a riposte lands is the next one, up to six. She is free from the start.",
+      "media": {
+        "kind": "video",
+        "file": "cerise-riposte.mp4",
+        "poster": "cerise-riposte.png",
+        "alt": "In the sunlit ruins on wave 3, Cerise thrusts her rapier at a thornback, whose guard stops the first touches, then lands a run of rose thrusts for crits. When a thornback charges her she parries, and her ripostes follow one after another for crits of 76 and 126 until it falls. She ends by leaping at the moths above.",
+        "width": 640,
+        "height": 360
+      }
+    },
+    {
+      "title": "Aldric, the shield knight",
+      "text": "He walks into foes behind a raised kite shield that lets nothing through, and J with the guard up bashes without lowering it. A bash just after a block is a Counterbash. Blocks and bashes fill Valor, and full Valor lights his sword with Radiance for 6 seconds. He costs 300 coins.",
+      "media": {
+        "kind": "video",
+        "file": "aldric-shield-wall.mp4",
+        "poster": "aldric-shield-wall.png",
+        "alt": "In the sunlit ruins on wave 3, Aldric raises his white kite shield and walks into a thornback behind it, bashing from behind the shield. A burst of white light breaks over the thornback as his blows crit for 101 and 65, and he jumps up to cut at the moths over the ledges.",
+        "width": 640,
+        "height": 360
+      }
+    },
+    {
+      "title": "Vesper, the twin blade",
+      "text": "A long blade and a short one, so every press cuts twice. Each blow that lands adds Tempo, and each stack makes her combo and her walk faster. Her combo ends in a launch, and her air combo is four presses long. She costs 400 coins.",
+      "media": {
+        "kind": "video",
+        "file": "vesper-tempo.mp4",
+        "poster": "vesper-tempo.png",
+        "alt": "In the rain on wave 7, Vesper cuts a mire toad with her long pale blade and short dark blade, sends a tall violet crescent through the storm kites and follows them into the air with her air combo. The hit counter climbs to 19 and her Tempo bar fills.",
+        "width": 640,
+        "height": 360
+      }
+    },
+    {
+      "title": "Saya, the quickdraw",
+      "text": "Each cut of her katana lands a little at once and stores the rest in the foe. When the blade clicks back into the scabbard, every foe she cut takes it all at once. A pause between combos fills Focus for a longer draw. She costs 550 coins.",
+      "media": {
+        "kind": "video",
+        "file": "saya-sheathe.mp4",
+        "poster": "saya-sheathe.png",
+        "alt": "At night on wave 12, Saya draws her katana into a pack of husks and wisps. Each time she sheathes, the cuts she stored burst on every foe she cut at once, crits of 136 and 69 among them, and she dashes through the line with Brushline, leaving white afterimages.",
+        "width": 640,
+        "height": 360
+      }
+    },
+    {
+      "title": "Yun, the sword sage",
+      "text": "Up to four spirit swords hover behind him and repeat every blow as a thrust that reaches past his jian. Sword Stream sends them through the line and back, and Sword Lotus sets them spinning over the foes. Both spend swords and no MP. He costs 750 coins.",
+      "media": {
+        "kind": "video",
+        "file": "yun-spirit-swords.mp4",
+        "poster": "yun-spirit-swords.png",
+        "alt": "At night on wave 11, Yun cuts into a pack of husks with his jian while thin jade spirit swords thrust past his blade. Crits of 75 and 93 rise over the husks and the hit counter reaches 19.",
+        "width": 640,
+        "height": 360
+      }
+    },
+    {
+      "title": "Brynn, the heavy blade",
+      "text": "A small fighter with a greatsword as tall as she is. While she swings she wears armour: blows on her hurt less and never stop the swing. Her combo ends in a slam with a shockwave, and full Heft turns that slam into a fissure along the floor. She costs 1000 coins.",
+      "media": {
+        "kind": "video",
+        "file": "brynn-greatsword.mp4",
+        "poster": "brynn-greatsword.png",
+        "alt": "In the rain on wave 9, Brynn swings her crimson greatsword through mire toads and storm kites. She drives it into the floor for Quake, which rings out in crimson, and a Keen blow throws a crimson crescent through a toad for a crit of 221.",
+        "width": 640,
+        "height": 360
+      }
+    },
+    {
+      "title": "Zafir, the dervish",
+      "text": "He keeps walking while he spins, and every spin cuts in front and behind at once. Landed blows build Whirl, and from 40 a ring of sand turns round him and cuts what touches it. His cuts open wounds that bleed. He costs 1350 coins.",
+      "media": {
+        "kind": "video",
+        "file": "zafir-whirl.mp4",
+        "poster": "zafir-whirl.png",
+        "alt": "At night on wave 13, Zafir spins his scimitar through a line of husks with foes on both sides, cutting front and back at once. A ring of sand turns round his waist and red wounds open on the husks.",
+        "width": 640,
+        "height": 360
+      }
+    },
+    {
+      "title": "Calder, the trigger blade",
+      "text": "His sword has a chamber of six rounds. Press J again just after a blow lands and the next blow is a Trigger: a round goes off in the wound for a blast. An empty chamber reloads on the next J, and a reload pressed as the cylinder glints loads hot rounds. He costs 1800 coins.",
+      "media": {
+        "kind": "video",
+        "file": "calder-trigger.mp4",
+        "poster": "calder-trigger.png",
+        "alt": "At night on wave 12, Calder cuts into a pack of husks with his gun sword. His Triggers fire rounds into the wounds in green blasts, and a run of blows lands crits of 105, 158, 162, 166 and 170 as the hit counter reaches 21 and his chamber bar drains to about half.",
+        "width": 640,
+        "height": 360
+      }
+    },
+    {
+      "title": "Kael's new look",
+      "text": "Kael keeps every move, number and timing. He now wears big silver hair with a long tied tail, a midnight blue long coat with a cyan-lined tail, a single pauldron, a split red scarf and a broader crystal longsword.",
+      "media": {
+        "kind": "image",
+        "file": "kael-before-after.png",
+        "alt": "Kael's portrait from the hero screen, 0.10.0 on the left and 0.11.0 on the right. Before: short white hair, a teal coat and a slim crystal sword. After: large silver spikes with a long tied tail, a midnight blue long coat with a single pauldron, a wider red scarf and a broader crystal longsword.",
+        "width": 1280,
+        "height": 720
+      }
+    },
+    {
+      "title": "One moveset for every hero",
+      "text": "Every hero plays on the same buttons. J is the combo, J held is the Warp strike to the nearest foe ahead, K guards and parries, L dodges forward, I casts the next ready ability and I held its wide form, and U is the hero's one ultimate.",
+      "media": {
+        "kind": "video",
+        "file": "kael-moveset.mp4",
+        "poster": "kael-moveset.png",
+        "alt": "In the sunlit ruins on wave 3, Kael holds J: his crystal sword flies across the ruins into a thornback and he warps to it, breaking its guard. He lands a combo on it for crits, takes a hit, raises his guard and dodges forward.",
+        "width": 640,
+        "height": 360
+      }
+    }
+  ],
+  "sections": [
+    {
+      "id": "heroes",
+      "entries": [
+        {
+          "name": "Cerise",
+          "tag": "new",
+          "summary": "A rapier duelist who pins one foe at a time on a long thin line and answers a parry with a chain of ripostes.",
+          "context": "Her block is weak and her parry is the best in the roster, so she rewards timing over mashing. Mashed she is weak, and played on the beat she is the deadliest hero against a single foe.",
+          "changes": [
+            {
+              "kind": "stat",
+              "label": "Price on the hero screen",
+              "before": "Not in the game",
+              "after": "Free"
+            },
+            {
+              "kind": "note",
+              "text": "Base stats: 100 HP, 10 attack, 9 ability power, 100 MP, 100 stamina, 8% crit, move 1.04."
+            },
+            {
+              "kind": "note",
+              "text": "J: five blows, the same every time: lead thrust, second thrust, rising thrust, twin flick and a long lunge. Each thrust reaches 46 px, the longest reach in the roster. In the air, one diving thrust per jump."
+            },
+            {
+              "kind": "note",
+              "text": "J held: Warp strike. The arrival thrust sets a Rose mark for 4 seconds: her blows deal 25% more to that foe, and Keen hits 60% more on top."
+            },
+            {
+              "kind": "note",
+              "text": "K: lets 45% of a blow through for 20 stamina. A parry answers with a riposte at once, and J on the beat after a riposte lands is the next one, up to six in a chain."
+            },
+            {
+              "kind": "note",
+              "text": "I: Flurry (10 MP, 2.5 s), seven quick thrusts in a narrow cone, and Rose Line (14 MP, 4 s), a thin wave across the whole screen. Held, each has a wide form for half again the MP."
+            },
+            {
+              "kind": "note",
+              "text": "U: Rose Tempest, a storm of ten thrusts and a lunge along her line."
+            },
+            {
+              "kind": "note",
+              "text": "Points (PT): up to 5. A Keen hit, a parry and each riposte that lands give one. The lunge spends every Point for +0.45 attack each and 10 px more reach, breaks guards at 3 and is a sure crit at 5. An ability spends up to 2 for 40% more power each."
+            },
+            {
+              "kind": "note",
+              "text": "Two achievements of her own: Unbroken Line (land 6 ripostes in one chain, 50 coins) and Hundred Answers (land 100 ripostes, 60 coins)."
+            }
+          ]
+        },
+        {
+          "name": "Aldric",
+          "tag": "new",
+          "summary": "A knight who fights from behind a raised shield, blocks almost anything and turns what he blocks into Valor.",
+          "context": "He is the safe hero: the best block in the roster, the slowest damage, and never helpless. He is the only hero who attacks and advances with his guard up.",
+          "changes": [
+            {
+              "kind": "stat",
+              "label": "Price on the hero screen",
+              "before": "Not in the game",
+              "after": "300 coins"
+            },
+            {
+              "kind": "note",
+              "text": "Base stats: 120 HP, 10 attack, 9 ability power, 90 MP, 110 stamina, 4% crit, move 0.95."
+            },
+            {
+              "kind": "note",
+              "text": "J: three blows: Oath cut, Shield bash, which breaks a foe's guard, and Crest breaker, an overhead that knocks down. In the air, Sky cut and then Shield fall, a plunge shield first."
+            },
+            {
+              "kind": "note",
+              "text": "J held: Warp strike. He lands shield first behind a Bulwark that takes the next blow within 2.5 seconds."
+            },
+            {
+              "kind": "note",
+              "text": "K: blocks every blow from the front with nothing let through, for 8 stamina, and he walks at 45% speed with the guard up. J with the guard up is a Guard bash; within 0.35 s of a block it is a Counterbash, a sure crit. A parry answers with a Stun bash."
+            },
+            {
+              "kind": "note",
+              "text": "I: Shield Rush (12 MP, 3 s), a 44 px shove forward, and Sunpillar (16 MP, 4.5 s), a pillar of light on the nearest foe ahead. An ability pressed just after a blow lands goes off at once."
+            },
+            {
+              "kind": "note",
+              "text": "U: Sanctuary, a dome of light that burns foes, breaks their shots and halves the damage he takes inside it."
+            },
+            {
+              "kind": "note",
+              "text": "Valor (VL): 0 to 100, filled by blocks, parries and bashes. At 100 it becomes Radiance: for 6 seconds his blows deal 35% more as light and each one throws a short wave."
+            },
+            {
+              "kind": "note",
+              "text": "Two achievements of his own: Bulwark (block 500 blows with your guard, 60 coins) and Dawnbringer (kindle Radiance 50 times, 60 coins)."
+            }
+          ]
+        },
+        {
+          "name": "Vesper",
+          "tag": "new",
+          "summary": "A twin blade who gets faster with every blow that lands and keeps foes in the air.",
+          "context": "Her damage is a steady stream that rises while she keeps hitting. She has the fastest combo in the roster and the longest air combo.",
+          "changes": [
+            {
+              "kind": "stat",
+              "label": "Price on the hero screen",
+              "before": "Not in the game",
+              "after": "400 coins"
+            },
+            {
+              "kind": "note",
+              "text": "Base stats: 92 HP, 10 attack, 9 ability power, 95 MP, 100 stamina, 6% crit, move 1.06, attack speed 1.05."
+            },
+            {
+              "kind": "note",
+              "text": "J: four presses, each a long-blade cut and a short-blade cut. The last press, Moonrise, throws the foe up and she leaps after it. In the air, four more presses ending in Nightfall, which spikes the foe and cuts both sides on landing."
+            },
+            {
+              "kind": "note",
+              "text": "J held: Warp strike. She throws the long blade, keeps the short one, and lands with a cross cut."
+            },
+            {
+              "kind": "note",
+              "text": "K: crossed blades let 25% through for 14 stamina. A parry turns the blow aside with the short blade, and for 1.4 seconds every blow of hers counts as from behind and breaks guards."
+            },
+            {
+              "kind": "note",
+              "text": "I: Twin Crescent (10 MP, 3.5 s), two waves that cross ahead of her, and Stitch (12 MP, 5 s), quick cuts on up to 3 nearby foes that end where she started. Cast just after a blow lands, the combo goes on."
+            },
+            {
+              "kind": "note",
+              "text": "U: Dusk Waltz, her afterimage dances through every foe in reach, with more cuts at high Tempo."
+            },
+            {
+              "kind": "note",
+              "text": "Tempo (TP): up to 10 stacks. A blow that lands adds 1, a Keen hit 2, a Warp strike 2 and a parry 3. Each stack makes her moves 3% faster and her walk 1.5% faster. At the top, short-blade blows send echo cuts. Stacks fall after 1.3 s without a blow landing, and a blow taken costs half."
+            },
+            {
+              "kind": "note",
+              "text": "One achievement of her own: Never Miss a Beat (reach the top of Tempo 40 times, 60 coins)."
+            }
+          ]
+        },
+        {
+          "name": "Saya",
+          "tag": "new",
+          "summary": "A quickdraw swordswoman whose cuts wait in the foe and land all at once when her katana clicks home.",
+          "context": "She fights in beats: draw, cut, sheathe, breathe. Her damage comes in bursts with a pause between, and the pause pays for the next draw.",
+          "changes": [
+            {
+              "kind": "stat",
+              "label": "Price on the hero screen",
+              "before": "Not in the game",
+              "after": "550 coins"
+            },
+            {
+              "kind": "note",
+              "text": "Base stats: 95 HP, 11 attack, 8 ability power, 90 MP, 100 stamina, 8% crit, move 1.04."
+            },
+            {
+              "kind": "note",
+              "text": "J: draw cut, return cut, sheathe. Each cut deals 0.55 attack at once and stores 1.35 in the foe; the draw cut breaks guards. The sheathe releases every stored cut on every foe she cut and knocks them down. A sheathe on the beat is a clean sheathe: every release crits. In the air, one falling draw that releases on landing."
+            },
+            {
+              "kind": "note",
+              "text": "J held: Warp strike. She arrives past the foe with the blade drawn, stores most of the arrival cut a fifth larger, and sheathes."
+            },
+            {
+              "kind": "note",
+              "text": "K: a scabbard block lets 25% through for 14 stamina. A parry is the counter draw, a sure crit of 3.4 attack, the hardest single hit any parry gives."
+            },
+            {
+              "kind": "note",
+              "text": "I: Brushline (12 MP, 3.5 s), a short dash cut along a line, and Moonrise (14 MP, 4.5 s), a rising draw and ink wave that launches. Each ends in a sheathe, so casting one mid-combo cashes in the combo's cuts."
+            },
+            {
+              "kind": "note",
+              "text": "U: Silent Moon. The foes on screen hold still, ink lines cross the stage, and every line bursts when she sheathes."
+            },
+            {
+              "kind": "note",
+              "text": "Focus (FO): 3 breaths. One fills every 1.4 s while the blade rests, and a parry, a perfect dodge or a clean sheathe gives one at once. A breath makes the next draw reach 14 px farther and store 1.6 times as much. Cuts never sheathed release at 60% once the blade rests."
+            },
+            {
+              "kind": "note",
+              "text": "One achievement of her own: One Stroke (release stored cuts on 6 foes with one sheathe, 60 coins)."
+            }
+          ]
+        },
+        {
+          "name": "Yun",
+          "tag": "new",
+          "summary": "A sword sage whose spirit swords repeat his blows at range and fly out when he sends them.",
+          "context": "He fights at middle range: he builds swords with his combo and parries, then spends them with his abilities.",
+          "changes": [
+            {
+              "kind": "stat",
+              "label": "Price on the hero screen",
+              "before": "Not in the game",
+              "after": "750 coins"
+            },
+            {
+              "kind": "note",
+              "text": "Base stats: 95 HP, 10 attack, 11 ability power, 100 MP, 100 stamina, 5% crit, move 1. His fall is floatier than other heroes'."
+            },
+            {
+              "kind": "note",
+              "text": "J: four flowing cuts, the last of which knocks down and gives a spirit sword. After each blow, every sword he holds thrusts ahead for 0.22 attack, reaching up to 64 px. In the air, two light cuts."
+            },
+            {
+              "kind": "note",
+              "text": "J held: Warp strike. He rides the thrown jian in, and each held sword strikes the foe once on arrival."
+            },
+            {
+              "kind": "note",
+              "text": "K: the swords fan out as a screen that lets 30% through for 14 stamina. A parry sends a qi wave 120 px ahead and gives a sword."
+            },
+            {
+              "kind": "note",
+              "text": "I: Sword Stream (1.2 s), every held sword flies 150 px along the line and back, and Sword Lotus (3.5 s), the swords spin over a spot ahead for 2.4 seconds. Both spend swords and cost no MP. Cast just after a blow lands, the combo stays open."
+            },
+            {
+              "kind": "note",
+              "text": "U: Jade Rain, up to 18 spirit swords fall on the foes on screen."
+            },
+            {
+              "kind": "note",
+              "text": "Spirit swords (SW): up to 4, starting at 2. While he holds fewer than 2, one comes back every 2.5 seconds."
+            },
+            {
+              "kind": "note",
+              "text": "One achievement of his own: A Thousand Blades (send out 300 spirit swords with Sword Stream and Sword Lotus, 60 coins)."
+            }
+          ]
+        },
+        {
+          "name": "Brynn",
+          "tag": "new",
+          "summary": "A small fighter with a greatsword as tall as she is, who swings through blows and clears crowds with one wide blow.",
+          "context": "Few presses, each one heavy. Her armour only works while she swings, so the guard and the dodge still matter.",
+          "changes": [
+            {
+              "kind": "stat",
+              "label": "Price on the hero screen",
+              "before": "Not in the game",
+              "after": "1000 coins"
+            },
+            {
+              "kind": "note",
+              "text": "Base stats: 115 HP, 12 attack, 9 ability power, 90 MP, 110 stamina, 5% crit, move 0.94."
+            },
+            {
+              "kind": "note",
+              "text": "J: Wide Sweep, Rising Heave, which throws foes up, and Anvil Slam, which drives them into the floor and sends a shockwave 70 px along it. During a swing she takes 60% of a blow's damage and is never interrupted. J pressed just after a blow lands makes the next swing a Keen blow: a sure crit, 30% more reach and a crimson wave. In the air, one Falling Slam."
+            },
+            {
+              "kind": "note",
+              "text": "J held: Warp strike. The greatsword spins end over end, and she lands with an overhead chop and a small shock ring."
+            },
+            {
+              "kind": "note",
+              "text": "K: the flat of the blade lets 10% through for 22 stamina. A parry answers with the Counter Cleave, a wide cleave in front and behind, and her next swing is a Keen blow."
+            },
+            {
+              "kind": "note",
+              "text": "I: Rend (14 MP, 4.5 s), a wave 170 px along the floor that throws foes up, and Quake (16 MP, 6 s), the blade driven into the floor to throw up every foe within 64 px. Cast just after a blow lands, it hits 30% harder and the combo goes on."
+            },
+            {
+              "kind": "note",
+              "text": "U: Crimson Fall, a leap and one enormous crimson crescent in front and behind."
+            },
+            {
+              "kind": "note",
+              "text": "Heft (HF): 0 to 100 in four cells. A combo blow that lands adds 14, more on a crowd, a Keen blow 10 more and a parry 30. At 100 her next Anvil Slam is a Fissure that runs 170 px along the floor."
+            },
+            {
+              "kind": "note",
+              "text": "Two achievements of her own: Groundbreaker (split the floor with 50 fissures, 60 coins) and Clean Sweep (strike 6 foes with one Wide Sweep, 40 coins)."
+            }
+          ]
+        },
+        {
+          "name": "Zafir",
+          "tag": "new",
+          "summary": "A desert blade dancer who walks while he spins, cuts both sides at once and leaves bleeding wounds.",
+          "context": "He is the answer to being surrounded. His Whirl and his sand ring live only while he keeps hitting.",
+          "changes": [
+            {
+              "kind": "stat",
+              "label": "Price on the hero screen",
+              "before": "Not in the game",
+              "after": "1350 coins"
+            },
+            {
+              "kind": "note",
+              "text": "Base stats: 105 HP, 10 attack, 9 ability power, 90 MP, 100 stamina, 5% crit, move 1.05."
+            },
+            {
+              "kind": "note",
+              "text": "J: four spins that each cut in front and behind, which he can walk through at 55% of his walk speed. The last, Dune cyclone, throws foes up on both sides. In the air, a spinning descent that ends in a ring of sand."
+            },
+            {
+              "kind": "note",
+              "text": "J held: Warp strike. He arrives spinning, cuts both sides, and opens a wound on every foe within 30 px."
+            },
+            {
+              "kind": "note",
+              "text": "K: a veil of sand lets 25% through for 14 stamina. A parry leaves a mirage where he stood; nearby minions lose sight of him and strike at it, and it bursts into sand blades."
+            },
+            {
+              "kind": "note",
+              "text": "I: Sandspout (14 MP, 3.5 s), a small whirl that runs 126 px ahead and lifts foes, and the crescent throw (12 MP, 3 s), the scimitar flies out on a curve and back. Cast just after a blow lands, the combo carries on."
+            },
+            {
+              "kind": "note",
+              "text": "U: Sandstorm, a storm that follows him for 3 to 6 seconds by charge level."
+            },
+            {
+              "kind": "note",
+              "text": "Whirl (WH): 0 to 100. Each blow that lands adds 7, a Keen hit 10 more, and it drains after 1.1 s without a blow landing. From 40 a ring of sand turns round him and cuts what touches it for 0.25 attack; from 80 it widens, cuts for 0.38 attack and opens wounds. Every blow opens a wound, up to 5, each bleeding 0.07 attack a second."
+            },
+            {
+              "kind": "note",
+              "text": "One achievement of his own: Eye of the Storm (let the sand ring cut foes 500 times, 80 coins)."
+            }
+          ]
+        },
+        {
+          "name": "Calder",
+          "tag": "new",
+          "summary": "A drifter with a gun sword who fires a round into the wound as the blade lands, and counts his rounds.",
+          "context": "Two moments ask for a press on the beat: the Trigger and the quick reload. Timing and ammunition are his whole game.",
+          "changes": [
+            {
+              "kind": "stat",
+              "label": "Price on the hero screen",
+              "before": "Not in the game",
+              "after": "1800 coins"
+            },
+            {
+              "kind": "note",
+              "text": "Base stats: 105 HP, 11 attack, 9 ability power, 90 MP, 100 stamina, 5% crit, move 0.97."
+            },
+            {
+              "kind": "note",
+              "text": "J: three heavy blows: Hew, Rip and Breaker, which knocks down. J pressed just after a blow lands makes the next blow a Trigger: a sure crit, and a round fires into the wound for a blast of 1.2 attack and 0.5 on foes within 18 px. In the air, Air hew and Drop cut."
+            },
+            {
+              "kind": "note",
+              "text": "J on an empty chamber reloads in 0.6 s. J pressed while the cylinder glints is a quick reload that loads hot rounds, whose blasts hit half again as hard."
+            },
+            {
+              "kind": "note",
+              "text": "J held: Warp strike. With a round loaded, the arrival blow fires it."
+            },
+            {
+              "kind": "note",
+              "text": "K: the blade's spine lets 25% through for 14 stamina. A parry is a point-blank counter shot that staggers the attacker, loads 2 rounds and makes the next J a Trigger."
+            },
+            {
+              "kind": "note",
+              "text": "I: Slug Shot (1 round, 3.5 s), a slug that pierces every foe in its line, and Scatter Blast (2 rounds, 5 s), a cone of pellets with a short hop back."
+            },
+            {
+              "kind": "note",
+              "text": "U: Cylinder Break, every round in the chamber goes into a run of exploding cuts, and the chamber reloads hot."
+            },
+            {
+              "kind": "note",
+              "text": "The chamber (RD): 6 rounds, one cell each. Triggers, the warp and the shots spend them; a reload fills it and a parry adds 2."
+            },
+            {
+              "kind": "note",
+              "text": "Two achievements of his own: Hot Hands (make 40 quick reloads, 60 coins) and Six for Six (land 6 Triggers in a row, 80 coins)."
+            }
+          ]
+        },
+        {
+          "name": "Kael's look",
+          "tag": "adjusted",
+          "summary": "Kael wears a new look in the style of the eight new heroes, and plays exactly as before.",
+          "context": "Every hero in the roster now shares one look: big stylised hair, layered outfits and a sword larger than life with a warp crystal in it. Kael is the warp knight the others are measured against, so only his look changed.",
+          "changes": [
+            {
+              "kind": "stat",
+              "label": "Hero screen title",
+              "before": "The last warp knight",
+              "after": "The warp knight"
+            },
+            {
+              "kind": "note",
+              "text": "Silver hair in four swept-back spikes with a long tied tail, a midnight blue long coat with a cyan-lined split tail and brass hems, a steel breastplate, a single pauldron with a crystal, and a strap across the chest with a crystal clasp."
+            },
+            {
+              "kind": "note",
+              "text": "His red scarf is wider and splits into two ends. The crystal longsword is longer and broader, with a brass guard that sweeps round the warp crystal, and the thrown sword in his warp matches it."
+            },
+            {
+              "kind": "note",
+              "text": "No pose, clip, number, timing or hitbox changed. The skilled and mash bots play his runs exactly as before the new look."
+            }
+          ]
+        },
+        {
+          "name": "Kael on the shared moveset",
+          "tag": "rework",
+          "summary": "Kael's Warp strike moves to J held, K becomes his guard and parry, every ability has a wide form, and Crystal Nova levels up through one skill.",
+          "context": "The shared moveset gives every hero the same buttons, and Kael is the hero it was built from.",
+          "changes": [
+            {
+              "kind": "stat",
+              "label": "Warp strike",
+              "before": "K",
+              "after": "J held"
+            },
+            {
+              "kind": "stat",
+              "label": "K",
+              "before": "Warp strike",
+              "after": "Guard: lets 20% through for 14 stamina, and a parry"
+            },
+            {
+              "kind": "note",
+              "text": "J right after a parry blinks him to the attacker's back for a counter."
+            },
+            {
+              "kind": "note",
+              "text": "I held casts a wide form for half again the MP: three lances, a burst that pulls foes in, a wall of fire, an ice field and a chain of bolts."
+            },
+            {
+              "kind": "note",
+              "text": "Thousand Edges, Phantom Legion and Starfall are gone as separate ultimates. The Crystal Nova skill levels his one ultimate: it draws foes in, calls phantoms, crystal stars and a storm of edges, and evolved as Supernova it bursts three times."
+            },
+            {
+              "kind": "note",
+              "text": "Crystal Aegis grows crystals on his guard, Mirror Knight answers a parry, Spellwarp lands the Warp strike with the selected element, and Blink Step and Warpcraft now ride the Warp strike on J held."
+            }
+          ]
+        },
+        {
+          "name": "The nine heroes who left",
+          "tag": "rework",
+          "summary": "Ysra, Sable, Hulda, Orrin, Mirel, Wenna, Tallis, Jory and Brannoc have left the game.",
+          "context": "Only Kael was fun to play, and only swords fit the story. Each of the nine carried another weapon: a glaive, a crossbow, a gauntlet, a chain, a staff, a lantern, knives, a drum and a great axe.",
+          "changes": [
+            {
+              "kind": "stat",
+              "label": "Heroes",
+              "before": "10",
+              "after": "9"
+            },
+            {
+              "kind": "note",
+              "text": "A hero you bought with coins comes back as coins: see Refund for heroes who left, under Systems."
+            },
+            {
+              "kind": "note",
+              "text": "Their skills, evolutions and achievements are gone with them. Coins those achievements paid stay in your bank."
+            },
+            {
+              "kind": "note",
+              "text": "If one of them was your last choice, the game picks Kael for you."
+            }
+          ],
+          "media": {
+            "kind": "image",
+            "file": "hero-screen.png",
+            "alt": "The Choose a Hero screen with nine tiles in a row: Kael, Cerise, Aldric, Vesper, Saya, Yun, Brynn, Zafir and Calder. Cerise is in focus in a rose frame, and her panel shows her rapier stance, the title The duelist, her stat bars, Ultimate: Rose Tempest and her blurb.",
+            "width": 1280,
+            "height": 720
+          }
+        }
+      ]
+    },
+    {
+      "id": "systems",
+      "entries": [
+        {
+          "name": "Refund for heroes who left",
+          "tag": "new",
+          "summary": "Every coin you paid for a hero who left goes back into your bank, once.",
+          "context": "Coins you earned should never vanish with a hero. The refund uses the price each hero had in 0.10.0.",
+          "changes": [
+            {
+              "kind": "note",
+              "text": "Refunds by hero: Sable 300, Hulda 400, Orrin 550, Mirel 750, Wenna 1000, Tallis 1350, Jory 1800 and Brannoc 2450 coins. Ysra was free, so she refunds nothing."
+            },
+            {
+              "kind": "note",
+              "text": "The start menu shows the coins you got back until your next run starts."
+            },
+            {
+              "kind": "note",
+              "text": "Your coins, shop levels, options, records and the heroes you still have stay as they were."
+            }
+          ]
+        },
+        {
+          "name": "Hero prices",
+          "tag": "adjusted",
+          "summary": "The eight new heroes take the old price ladder in roster order, and Cerise is free beside Kael.",
+          "context": "The ladder keeps each paid hero about 1.35 times the one before, and with nine heroes the top step of 2450 coins is gone.",
+          "changes": [
+            {
+              "kind": "note",
+              "text": "Kael and Cerise are free. Aldric costs 300, Vesper 400, Saya 550, Yun 750, Brynn 1000, Zafir 1350 and Calder 1800 coins."
+            },
+            {
+              "kind": "stat",
+              "label": "Every paid hero together",
+              "before": "8,600 coins",
+              "after": "6,150 coins"
+            }
+          ]
+        },
+        {
+          "name": "Guard against a touching foe",
+          "tag": "fix",
+          "summary": "A foe pressed against your guard costs one block per touch, so it can no longer drain your stamina in a moment.",
+          "context": "A foe that walked into a guarding hero could cost a block many times a second, and the guard broke almost at once. A guard that broke also came straight back up while K was held.",
+          "changes": [
+            {
+              "kind": "note",
+              "text": "After a block or a parry, the same foe's blows stop on the guard for free for 0.8 seconds, the time an open hero cannot be hurt again after a hit."
+            },
+            {
+              "kind": "note",
+              "text": "A broken guard stays down until you press K again."
+            },
+            {
+              "kind": "note",
+              "text": "A blow that could not have hurt you, in the moments after a hit or during a dodge, costs the guard nothing."
+            }
+          ]
+        },
+        {
+          "name": "One moveset for every hero",
+          "tag": "rework",
+          "summary": "Every hero plays on the same buttons, with the same warp, guard and dodge, and keeps one ultimate.",
+          "context": "Heroes that could not reach their foes fell behind the ones that could. A shared warp, guard and dodge give every hero the same reach and defence, and each hero's own play lives in its combo, meter, parry reward, abilities and ultimate.",
+          "changes": [
+            {
+              "kind": "note",
+              "text": "J tapped plays the hero's combo. Held for a quarter of a second, J is the Warp strike: the hero throws the sword at the nearest foe ahead and warps to it for 10 MP, with a 2 second recharge."
+            },
+            {
+              "kind": "note",
+              "text": "K held guards against blows from the front. Pressed within 0.15 seconds of a blow landing, it parries: nothing is taken, the attacker reels, MP and stamina come back, and the hero's own parry reward follows."
+            },
+            {
+              "kind": "note",
+              "text": "L is the same front dodge for every hero. I casts the selected ability, or the next ready one when it is recharging, and I held casts its wide form for half again the MP."
+            },
+            {
+              "kind": "note",
+              "text": "Each hero keeps the ultimate it starts with for the whole run, and one skill named after it upgrades it."
+            },
+            {
+              "kind": "note",
+              "text": "The floating crystals are gone, and with them the hang and the warp to a crystal."
+            }
+          ]
+        },
+        {
+          "name": "Run clock and records",
+          "tag": "new",
+          "summary": "The HUD shows how long the run has lasted, and the game keeps your most waves cleared and your fastest clear of each wave.",
+          "context": "A run had no time on screen and the game kept only the furthest wave reached. Clear times give every run something to beat.",
+          "changes": [
+            {
+              "kind": "note",
+              "text": "The run time sits beside the wave on the HUD, with your best run under it."
+            },
+            {
+              "kind": "note",
+              "text": "Each cleared wave shows its clear time on the banner, marked New best when it is your fastest clear of that wave."
+            },
+            {
+              "kind": "note",
+              "text": "The result screen shows your best run, marked New record when this run set it, and the start menu footer shows it too."
+            },
+            {
+              "kind": "note",
+              "text": "Only solo runs set records. The furthest wave from older versions still counts toward the wave achievements."
+            }
+          ]
+        },
+        {
+          "name": "Achievements",
+          "tag": "adjusted",
+          "summary": "Every hero has a trial, the new heroes bring achievements of their own, and the achievements of the heroes who left are gone.",
+          "context": "The list follows the roster: a trial for each of the nine heroes and the goals the eight new heroes set.",
+          "changes": [
+            {
+              "kind": "stat",
+              "label": "Achievements",
+              "before": "35, worth 2,570 coins",
+              "after": "40, worth 2,900 coins"
+            },
+            {
+              "kind": "note",
+              "text": "New: Unbroken Line and Hundred Answers for Cerise, Bulwark and Dawnbringer for Aldric, Never Miss a Beat for Vesper, One Stroke for Saya, A Thousand Blades for Yun, Groundbreaker and Clean Sweep for Brynn, Eye of the Storm for Zafir, and Hot Hands and Six for Six for Calder, with a trial for each new hero (clear wave 10, 40 coins)."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "bugfixes",
+      "entries": [
+        {
+          "name": "Touch play on iPhone and iPad",
+          "tag": "fix",
+          "summary": "Held touch buttons no longer zoom the page or open the magnifier, and a held stick keeps walking.",
+          "context": "Safari's own long-press gestures cancelled the finger on the controller.",
+          "changes": [
+            {
+              "kind": "note",
+              "text": "Pinch and double-tap zoom are blocked on the whole page."
+            },
+            {
+              "kind": "note",
+              "text": "A new thumb in the stick zone takes over from a stale one, and every held button and direction lets go once the last finger leaves the screen, so nothing stays stuck."
+            }
+          ]
+        },
+        {
+          "name": "Start menu footer",
+          "tag": "fix",
+          "summary": "The start menu's footer and its notes now read clearly against the floor of the scene behind them.",
+          "context": "The footer's text sat on the stage floor and was hard to read.",
+          "changes": [
+            {
+              "kind": "note",
+              "text": "The footer and the one-time notes, such as the refund, have a dark edge."
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "feedback": []
+}

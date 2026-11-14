@@ -1,42 +1,12 @@
-import type { BrannocState } from "./brannoc";
 import type { Projectile } from "./effect";
 import type { Enemy } from "./enemy";
-import type { HuldaState } from "./hulda";
-import type { JoryState } from "./jory";
-import type { MirelState } from "./mirel";
-import type { MoveId } from "./move";
-import type { OrrinState } from "./orrin";
 import type { Pose } from "./pose";
-import type { SableState } from "./sable";
-import type { KaelAbility } from "./spell";
-import type { TallisState } from "./tallis";
-import type { WennaState } from "./wenna";
-import type { YsraClipName, YsraState } from "./ysra";
 
-/** why a press was refused: the selected spell or the warp is still recharging, MP is short, or HP is (Brannoc) */
-export type DenyReason = "cast" | "warp" | "mp" | "ult" | "hp";
+/** why a press was refused: the selected spell or the warp is still recharging, or MP is short */
+export type DenyReason = "cast" | "warp" | "mp" | "ult";
 
-/** Kael's action clips */
-export type KaelClipName =
-  | "atk1"
-  | "atk2"
-  | "atk3"
-  | "sweep"
-  | "spin"
-  | "plunge"
-  | "twinFang"
-  | "hopCleave"
-  | "crescent"
-  | "airWheel"
-  | "airScissor"
-  | "airStomp"
-  | "phase"
-  | "skyRend"
-  | "cast"
-  | "throw"
-  | "warpStrike";
-export type ClipName = KaelClipName | YsraClipName;
-export type HeroState =
+/** the states the shared loop runs for every hero */
+export type SharedHeroState =
   | "move"
   | "cast"
   | "throw"
@@ -53,41 +23,25 @@ export type HeroState =
   | "hurt"
   | "dead"
   /** K held: the guard every hero shares */
-  | "guard"
-  | YsraState
-  | SableState
-  | HuldaState
-  | OrrinState
-  | MirelState
-  | WennaState
-  | TallisState
-  | JoryState
-  | BrannocState;
-/** the states posed by their own keyed clip; the rest play an action clip */
-export type StateClipName = Exclude<
-  HeroState,
-  | "move"
-  | "cast"
-  | "throw"
-  | "warpStrike"
-  | YsraState
-  | SableState
-  | HuldaState
-  | OrrinState
-  | MirelState
-  | WennaState
-  | TallisState
-  | JoryState
-  | BrannocState
->;
+  | "guard";
+
+/**
+ * The states each kit runs itself (`HeroKit.runState`), by hero id. A hero adds its own names from its own types file,
+ * without editing this one:
+ *
+ *   declare module "../../../types/hero" { interface KitStates { cerise: "lunge" | "riposte" } }
+ */
+export interface KitStates {}
+
+export type HeroState = SharedHeroState | KitStates[keyof KitStates];
+/** the shared states posed by their own keyed clip; the rest play an action clip */
+export type StateClipName = Exclude<SharedHeroState, "move" | "cast" | "throw" | "warpStrike">;
 
 /** Where a warp goes: an enemy, a floating crystal, or a point in the air. */
 export interface WarpTarget {
   x: number;
   y: number;
   enemy?: Enemy;
-  /** a ranged hero's throw away from a foe: the foe they strike once they land */
-  aim?: Enemy;
 }
 
 /** A verlet rope point. */
@@ -117,7 +71,7 @@ export interface Hero {
   drop: number;
   hasSword: boolean;
   hitDone: boolean;
-  /** the highest point Kael may rise to before he lands again, set by his last jump or a lift from the floor */
+  /** the highest point the hero may rise to before landing again, set by his last jump or a lift from the floor */
   liftTop: number;
   pose: Pose;
   /** where the near hand ended up in the last drawn frame, local pixels */
@@ -126,15 +80,15 @@ export interface Hero {
   sword: Projectile | null;
   warpTarget: WarpTarget | null;
   /** the combo move being played */
-  move: MoveId | null;
+  move: string | null;
   /** the combo move started last */
-  lastMove: MoveId | null;
+  lastMove: string | null;
   /** hits of the current move already dealt */
   hitIndex: number;
   /** moves in the current combo */
   chain: number;
   /** the next move, picked when the attack key was pressed */
-  queued: MoveId | null;
+  queued: string | null;
   /** time left to continue the combo after a move ends */
   link: number;
   /** pause after a finished combo */
@@ -154,18 +108,8 @@ export interface Hero {
   ultCd: number;
   /** the full length of the ultimate's current wait, for the recharge display: an ultimate skill may set its own */
   ultFull: number;
-  /** seconds before each of Kael's abilities can be cast again */
-  spellCd: Record<KaelAbility, number>;
-  /** the full length of each element's current wait, for the recharge display */
-  spellCdFull: Record<KaelAbility, number>;
-  /** the ability of the cast under way, fixed when the cast starts */
-  castAbility: KaelAbility;
-  /** the cast in progress is the wide form, from I held */
-  castWide: boolean;
   /** seconds left of the HUD flash after a refused press: a spell or the warp still recharging, or MP short */
   denied: Record<DenyReason, number>;
-  /** the spell is cast at once and stronger: Spellblade, I during a combo */
-  spellPower: number;
   lastHit: Enemy | null;
   /** seconds the ultimate key has been held */
   charge: number;
