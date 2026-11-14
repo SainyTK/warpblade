@@ -1,13 +1,13 @@
 import type { SkillDef } from "../../../../types/skill";
 import { evolvedRow, levelRows } from "../../../../utils/skillRows";
 
-/** values: `dps` AD a second a marked foe bleeds, `taken` added damage it takes from every source, `lineMark` Rose Line
+/** values: `dps` AD a second a marked foe bleeds, `taken` added damage it takes from every source, `refresh` her blows on a marked foe renew its mark, `lineMark` Rose Line
  *  marks every foe it cuts, `pass` a marked foe that falls passes the mark to the nearest foe; evolved `spread` share of
  *  the bleed every foe within 30 px of a marked foe takes */
 const LEVELS = levelRows([
   { text: "Marked foes bleed 0.4 AD a second.", values: { dps: 0.4 } },
   { text: "New: marked foes take +10% from every source.", values: { taken: 0.1 } },
-  { text: "Bleed 0.4 to 0.9 AD a second.", values: { dps: 0.9 } },
+  { text: "New: your blows keep a mark fresh; bleed 0.9 AD a second.", values: { dps: 0.9, refresh: 1 } },
   { text: "New: Rose Line marks every foe it cuts.", values: { lineMark: 1 } },
   { text: "Bleed 0.9 to 1.6 AD a second.", values: { dps: 1.6 } },
   { text: "New: a marked foe that falls passes its mark on.", values: { pass: 1 } },

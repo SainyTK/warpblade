@@ -3,7 +3,7 @@ import { evolvedRow, levelRows } from "../../../../utils/skillRows";
 
 /** values: `stacks` a parry lays on the attacker, `max`, `damage` AD a tick per stack, `duration` seconds, `linkStacks`
  *  a riposte link adds, `halt` seconds a cursed walker's feet are held, `burst` a cursed foe that falls curses foes
- *  within this many px; evolved `tear` AD per stack the last link of a chain tears out */
+ *  within this many px, `taken` added damage a cursed foe takes; evolved `tear` AD per stack the last link of a chain tears out */
 const LEVELS = levelRows([
   {
     text: "A parry curses the attacker: 3 stacks of 0.2 AD a tick.",
@@ -14,8 +14,8 @@ const LEVELS = levelRows([
   { text: "New: cursed walkers' feet are held for 1 s.", values: { halt: 1 } },
   { text: "A parry lays 3 to 5 stacks; up to 12.", values: { stacks: 5, max: 12 } },
   { text: "New: a cursed foe that falls curses the foes round it.", values: { burst: 40 } },
-  { text: "Curse 0.45 to 0.9 AD a tick, lasting 6 s.", values: { damage: 0.9, duration: 6 } },
-  { text: "Curse 0.9 to 1.8 AD a tick.", values: { damage: 1.8 } },
+  { text: "New: cursed foes take +20% from every source; it lasts 6 s.", values: { taken: 0.2, duration: 6 } },
+  { text: "Curse 0.45 to 1.8 AD a tick.", values: { damage: 1.8 } },
 ]);
 
 export const WILTING_CURSE: SkillDef = {

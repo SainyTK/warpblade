@@ -20,6 +20,9 @@ import { gainPoints } from "../points";
 import { cerise } from "../state";
 import { beginCast } from "./cast";
 
+/** Rose Bloom throws foes up this fast from its third level */
+const BLOOM_LAUNCH = -220;
+
 type Spell = Exclude<CeriseAbility, "flurry" | "line">;
 
 const values = (a: Spell): Readonly<Record<string, number>> => skillValues(ABILITY_SKILL[a]);
@@ -44,6 +47,7 @@ function bloom(power: number, wide: boolean, scale = 1): void {
       fromX: hero.x,
       kx: dir * (wide ? -160 : 200),
       ky: -60,
+      launch: v.launch ? BLOOM_LAUNCH : undefined,
       stagger: 0.4,
       source: "abilities",
     });

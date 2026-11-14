@@ -30,10 +30,11 @@ export function hitBonus(e: Enemy, hit: OwnHit): number {
   return bonus;
 }
 
-/** extra damage a foe takes from every source: bleeding from Thorn Wounds, marked with Weeping Mark */
+/** extra damage a foe takes from every source: bleeding from Thorn Wounds, marked with Weeping Mark, cursed */
 export function takenBonus(e: Enemy): number {
   let bonus = 0;
   if (stacksOf(e, "ce_thorns")) bonus += skillValues("ce_thorns").taken ?? 0;
   if (isMarked(e)) bonus += skillValues("ce_weep").taken ?? 0;
+  if (stacksOf(e, "ce_curse")) bonus += skillValues("ce_curse").taken ?? 0;
   return bonus;
 }

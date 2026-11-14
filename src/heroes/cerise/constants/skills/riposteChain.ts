@@ -2,13 +2,13 @@ import type { SkillDef } from "../../../../types/skill";
 import { evolvedRow, levelRows } from "../../../../utils/skillRows";
 
 /** values: `bonus` added damage of every riposte link, `window` the beat after a link in seconds, `mark` links set the
- *  Rose mark, `links` most links in a chain, `line` every this many links send a Rose Line of `linePower` AP,
+ *  Rose mark, `links` most links in a chain, `guardBreak` links break guards, `line` every this many links send a Rose Line of `linePower` AP,
  *  `parryPoints` Points a parry gives; evolved `fromBlock` a block starts the chain too */
 const LEVELS = levelRows([
   { text: "Riposte links deal +100% damage.", values: { bonus: 1 } },
   { text: "Riposte beat 0.22 to 0.3 s.", values: { window: 0.3 } },
   { text: "New: each riposte link sets the Rose mark.", values: { mark: 1 } },
-  { text: "Chain of 6 to 8 links.", values: { links: 8 } },
+  { text: "New: riposte links break guards; chains of up to 8 links.", values: { links: 8, guardBreak: 1 } },
   { text: "Riposte damage +100% to +300%.", values: { bonus: 3 } },
   { text: "New: every third link sends a Rose Line.", values: { line: 3, linePower: 1 } },
   { text: "New: a parry gives 2 Points.", values: { parryPoints: 2 } },

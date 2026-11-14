@@ -2,14 +2,14 @@ import type { SkillDef } from "../../../../types/skill";
 import { evolvedRow, levelRows } from "../../../../utils/skillRows";
 
 /** values: `power` AP of the bloom, `reach` px round her, `recharge` seconds, `linger` seconds petals stay, `tick` AP
- *  each tick of them, `heal` HP per foe struck, `points` a Point for every two foes struck; evolved `echoes` blooms */
+ *  each tick of them, `launch` it throws foes up, `heal` HP per foe struck, `points` a Point for every two foes struck; evolved `echoes` blooms */
 const LEVELS = levelRows([
   {
     text: "I: blades of petal burst round you, 1.6 AP, pushing foes off.",
     values: { power: 1.6, reach: 40, recharge: 6 },
   },
   { text: "New: petals linger 2 s and cut foes inside.", values: { linger: 2, tick: 0.3 } },
-  { text: "Reach 40 to 56 px.", values: { reach: 56 } },
+  { text: "New: the bloom throws foes up; reach 40 to 56 px.", values: { reach: 56, launch: 1 } },
   { text: "New: heals 3 HP for each foe struck.", values: { heal: 3 } },
   { text: "Bloom 1.6 to 3 AP.", values: { power: 3 } },
   { text: "New: a Point for every two foes struck.", values: { points: 1 } },

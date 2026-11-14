@@ -48,7 +48,7 @@ function strikeLink(): void {
     ky: 0,
     stagger: RIPOSTE.stagger,
     sureCrit: true,
-    big: cerise.links >= maxLinks(),
+    big: cerise.links >= maxLinks() || !!skillValues("ce_riposte").guardBreak,
     feel: STRING_FEEL.rising,
   });
   if (!hits) return;

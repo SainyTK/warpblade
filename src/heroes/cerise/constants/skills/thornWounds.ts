@@ -2,7 +2,7 @@ import type { SkillDef } from "../../../../types/skill";
 import { evolvedRow, levelRows } from "../../../../utils/skillRows";
 
 /** values: `damage` AD a tick per stack, `max` stacks, `duration` seconds, `lungeStacks` the lunge lays,
- *  `taken` added damage a bleeding foe takes, `riposteStacks` a riposte link lays; evolved `burst` AD per stack the
+ *  `taken` added damage a bleeding foe takes, `riposteStacks` a riposte link lays, `halt` seconds a thorn holds a walker's feet; evolved `burst` AD per stack the
  *  lunge tears out */
 const LEVELS = levelRows([
   { text: "Thrusts leave a bleeding thorn: 0.1 AD a tick, up to 4.", values: { damage: 0.1, max: 4, duration: 3 } },
@@ -11,7 +11,10 @@ const LEVELS = levelRows([
   { text: "Thorns 0.1 to 0.25 AD a tick.", values: { damage: 0.25 } },
   { text: "New: bleeding foes take +15% from every source.", values: { taken: 0.15 } },
   { text: "New: riposte links leave 2 thorns.", values: { riposteStacks: 2 } },
-  { text: "Up to 10 thorns, lasting 5 s.", values: { max: 10, duration: 5 } },
+  {
+    text: "New: a thorn holds a walker's feet 0.4 s; up to 10 thorns, lasting 5 s.",
+    values: { max: 10, duration: 5, halt: 0.4 },
+  },
   { text: "Thorns 0.25 to 0.7 AD a tick.", values: { damage: 0.7 } },
 ]);
 
