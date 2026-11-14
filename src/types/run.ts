@@ -1,5 +1,4 @@
 import type { SourceId } from "./build";
-import type { UltimateId } from "./skill";
 
 /**
  * how a run ended: the hero fell, cleared the stage (also when they fell to what comes after its last wave), defeated
@@ -28,7 +27,7 @@ export interface RunReport {
   cleared: number;
   level: number;
   kills: number;
-  ultimate: UltimateId;
+  ultimate: string;
   sources: SourceResult[];
 }
 

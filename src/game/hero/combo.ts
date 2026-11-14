@@ -1,39 +1,37 @@
-import { CLIPS } from "../../constants/clips";
 import { COMBO } from "../../constants/combat";
 import { KEEN, KEEN_RAMP, STRIKE_LEAD } from "../../constants/combo";
 import { sfx } from "../../services/audio";
-import type { MoveHit, MoveId } from "../../types/move";
+import type { MoveHit } from "../../types/move";
 import { createSlash } from "../effects/slash";
 import { wispsEvade } from "../enemies/evade";
 import { pressAge } from "../input";
 import { meleeHit } from "../meleeHit";
 import { startMovePayoff } from "../skills/payoff";
-import { game, hero, progress } from "../state";
+import { character, game, hero, progress } from "../state";
 import { boxAhead, boxBehind, newSwing } from "../world";
 import { isFree, setState, settle } from "./actions";
 import { dropMoveGhost } from "./afterimages";
-import { kit } from "./kits";
+import { kit, moveDef } from "./kits";
 import { lift } from "./lift";
-import { MOVES } from "./moves";
-import { advance, strideAt } from "./moves/advance";
 import { readSituation } from "./situation";
+import { advance, strideAt } from "./strides";
 
 /** seconds between afterimages of a fast move */
 const GHOST_EVERY = 0.03;
 
 /** the move J starts now, from the keys held, what Kael is doing and the foes around him; null when the combo cannot go on */
-export function pickMove(): MoveId | null {
+export function pickMove(): string | null {
   const h = hero;
   if (h.chain === 0 && h.comboCd > 0) return null;
   if (h.chain + 1 > progress.comboLimit) return null;
   return kit().chooseMove(readSituation());
 }
 
-const endsChain = (id: MoveId): boolean => !!MOVES[id].finisher || hero.chain >= progress.comboLimit;
+const endsChain = (id: string): boolean => !!moveDef(id).finisher || hero.chain >= progress.comboLimit;
 
-export function startMove(id: MoveId): void {
+export function startMove(id: string): void {
   const h = hero;
-  const m = MOVES[id];
+  const m = moveDef(id);
   h.chain++;
   if (!h.ground) h.airHits++;
   Object.assign(h, {
@@ -83,11 +81,11 @@ export function endMove(): void {
 
 /** a finisher with a cancel of its own closes the combo once its follow-through starts, so the next string's first
  *  blow may cut into its recovery, the cancel standing in for the combo cooldown */
-function closeFinisher(id: MoveId): void {
-  if (hero.chain > 0 && MOVES[id].cancel !== undefined && endsChain(id) && blowsDone()) endCombo(false);
+function closeFinisher(id: string): void {
+  if (hero.chain > 0 && moveDef(id).cancel !== undefined && endsChain(id) && blowsDone()) endCombo(false);
 }
 
-function strike(id: MoveId, raw: MoveHit): number {
+function strike(id: string, raw: MoveHit): number {
   const hit = kit().shapeHit?.(id, raw) ?? raw;
   newSwing();
   const slash = hit.slash && hero.keen ? { ...hit.slash, ramp: KEEN_RAMP } : hit.slash;
@@ -102,11 +100,11 @@ function strike(id: MoveId, raw: MoveHit): number {
 export function blowsDone(): boolean {
   const h = hero;
   if (h.state !== "move" || !h.move) return false;
-  const m = MOVES[h.move];
+  const m = moveDef(h.move);
   if (m.untilLanding || h.hitIndex < m.hits.length) return false;
   const last = m.hits[m.hits.length - 1];
   if (!last) return true;
-  if (h.moveHits === 0 && m.hits.length) return h.st >= CLIPS[m.clip].dur * COMBO.whiff;
+  if (h.moveHits === 0 && m.hits.length) return h.st >= character.clips.actions[m.clip].dur * COMBO.whiff;
   return h.st >= last.at + (m.cancel ?? COMBO.cancel);
 }
 
@@ -114,7 +112,7 @@ export function blowsDone(): boolean {
 function moveBody(dt: number): void {
   const h = hero;
   if (!h.move) return;
-  const m = MOVES[h.move];
+  const m = moveDef(h.move);
   // footwork owns Kael's ground speed: he stands still between strides, so he never slides into the foe
   const stride = strideAt(m, h.st);
   if (stride) advance(stride);
@@ -131,7 +129,7 @@ export function runMove(dt: number): void {
   const h = hero;
   if (!h.move) return settle();
   const id = h.move;
-  const m = MOVES[id];
+  const m = moveDef(id);
   m.step?.(h.st);
   moveBody(dt);
   while (h.hitIndex < m.hits.length && h.st >= m.hits[h.hitIndex].at - STRIKE_LEAD) {
@@ -150,7 +148,7 @@ export function runMove(dt: number): void {
     startMove(next);
     return;
   }
-  const over = m.untilLanding ? h.ground : h.st >= CLIPS[m.clip].dur;
+  const over = m.untilLanding ? h.ground : h.st >= character.clips.actions[m.clip].dur;
   if (!over) return;
   if (m.untilLanding) m.land?.();
   endMove();
@@ -160,7 +158,7 @@ export function runMove(dt: number): void {
 export function comboOpen(hits: number): boolean {
   const h = hero;
   if (h.chain < hits || h.chain >= progress.comboLimit) return false;
-  if (h.state === "move" && h.move) return h.hitIndex >= MOVES[h.move].hits.length;
+  if (h.state === "move" && h.move) return h.hitIndex >= moveDef(h.move).hits.length;
   return h.link > 0 && isFree();
 }
 
@@ -168,7 +166,7 @@ export function comboOpen(hits: number): boolean {
 function judgeTiming(): void {
   const h = hero;
   if (pressAge("attack") !== 0) return;
-  if (h.state === "move" && h.move && h.hitIndex < MOVES[h.move].hits.length) h.keenSpoiled = true;
+  if (h.state === "move" && h.move && h.hitIndex < moveDef(h.move).hits.length) h.keenSpoiled = true;
   else if (h.keenOpen > 0) h.keenNext = true;
 }
 

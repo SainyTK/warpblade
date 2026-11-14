@@ -1,80 +1,83 @@
 import type { HeroColors } from "../constants/palette";
+import type { Achievement } from "./achievement";
+import type { HeroSource } from "./build";
 import type { Color, Ramp } from "./color";
-import type { KitId } from "./kit";
-import type { SkillDef, UltimateId } from "./skill";
+import type { InputAction } from "./input";
+import type { ActionClip } from "./pose";
+import type { BladeLook, OffhandLook, RigExtra, RigParts } from "./rig";
+import type { SkillDef } from "./skill";
 import type { Stats } from "./stats";
+import type { StickDirectionSpec, TouchButtonAction, TouchButtonText } from "./touch";
 
-/** how a hero looks on the shared rig: colours, head rows, weapon and the light of their blows */
+/** how a hero looks on the shared rig: colours, head rows, the sword, and the hero's own parts */
 export interface HeroSkin {
   colors: HeroColors;
   /**
    * 24 by 22 image pixel rows facing right, and the back of the head for a spin: D d h H W hair deep to glint,
    * L s S m skin light to deep, w I P eye white, iris and pupil, r a streak in the scarf's light colour,
-   * K k c C a hood in the coat colours deep to light, v V its lining in the scarf colours
+   * K k c C the coat colours deep to light (a hood, a hat), v V the scarf colours (a lining, a band)
    */
   head: readonly string[];
   headBack: readonly string[];
-  weapon:
-    | "sword"
-    | "glaive"
-    | "crossbow"
-    | "gauntlets"
-    | "chain"
-    | "staff"
-    | "lampPole"
-    | "knives"
-    | "mallets"
-    | "greatAxe";
-  /** from the hand to the tip, in pixels */
-  reach: number;
+  /** the sword in the near hand */
+  blade: BladeLook;
+  /** an item in the far hand or at the hip: a shield, a short sword, a scabbard */
+  offhand?: OffhandLook;
+  /** the hero's own drawing of a shared rig part, in place of the shared one */
+  parts?: Partial<RigParts>;
+  /** pieces the shared parts do not have, each drawn at its layer */
+  extras?: readonly RigExtra[];
+  /** where the scarf's rope hangs from: the neck, or the belt for a sash; left out, the neck */
+  scarfAt?: "neck" | "belt";
   /** slashes, floor rings, afterimages and sparks, dark to bright, seven steps */
   ramp: Ramp;
   glow: Color;
   /** the sparks thrown where a blow lands, white to dark, four steps */
   sparks: Ramp;
-  /** one heavy braid in the hair colours hangs where the scarf and ponytail would */
-  braid?: boolean;
-  /** bare arms in the skin colours with wrapped wrists, in place of coat sleeves and bracers */
-  bareArms?: boolean;
-  /** the scarf's rope hangs from the belt as a sash, in place of the neck */
-  sash?: boolean;
-  /** the hair is gathered in a low bun held by two pins in the trim colours, with no ponytail and no scarf streamer */
-  bun?: boolean;
-  /** a hood drawn in the head rows covers the hair: its point hangs from the back of the head, with no ponytail or scarf */
-  hood?: boolean;
-  /** under a hood, a short scarf end still trails from the neck along the scarf's rope */
-  scarfEnd?: boolean;
-  /** the coat tails hang long as a cloak, lined in the scarf colours, with drips of the trim colour along the hem */
-  cloak?: boolean;
-  /** a leather satchel at the front of the hip in the glove colours, three candle tips in the trim colours showing */
-  satchel?: boolean;
-  /** cloth bands wound round the shins over the boots */
-  wraps?: boolean;
-  /** a headband in the scarf colours: its two short ends trail along the ponytail's rope, with no ponytail, and the
-   *  scarf's rope hangs from the belt as a sash */
-  headband?: boolean;
-  /** a war drum on a strap across the chest, worn at the hip and swung to the front by the pose's `dr` */
-  drum?: boolean;
-  /** a bare chest in the skin colours with pale scars, under a fur mantle across the shoulders in the coat colours, and a
-   *  short pelt behind the belt in place of coat tails */
-  bareChest?: boolean;
-  /** a wild mane: the ponytail's rope carries two thick braids in the hair colours, bound in the scarf colours, with no
-   *  scarf streamer */
-  mane?: boolean;
 }
 
+/** a hero's keyed clips: the actions its moves and states play, and its own versions of the shared states */
+export interface HeroClips {
+  /** action clips by the hero's own names: each combo move's `clip` names one of these */
+  actions: Readonly<Record<string, ActionClip>>;
+  /** the hero at rest: its first frame is the stand on the hero screen; left out, the shared stand */
+  idle?: ActionClip;
+}
+
+/** how the Controls screen and the touch controller describe one hero */
+export interface HeroControls {
+  /** what each action does for this hero, over the shared lines (`SHARED_ACTION_TEXT`) */
+  actions: Partial<Record<InputAction, string>>;
+  /** each touch button's label, hint and rim colour, over the shared ones (`SHARED_TOUCH_TEXT`) */
+  touch: Partial<Record<TouchButtonAction, TouchButtonText>>;
+  /** the stick's directions as the Controls screen lists them; left out, the shared list */
+  stick?: readonly StickDirectionSpec[];
+}
+
+/** the ultimate a hero holds on U for the whole run */
+export interface SpecialDef {
+  id: string;
+  /** as the hero screen writes it; the HUD shows it in capitals */
+  name: string;
+}
+
+/**
+ * One hero as data: everything the menus, the stores and the shared rig read without running the hero's code. The
+ * hero's code (kit, moves, skills, icons) is its `HeroModule`, registered in `src/heroes/index.ts` under the same id.
+ * This file and everything it imports must stay free of game state, so it may import constants, types, utils and the
+ * engine only.
+ */
 export interface CharacterDef {
   id: string;
-  /** whose controls, moves and states this hero plays with */
-  kit: KitId;
   name: string;
   /** shown under the name on the hero screen */
   title: string;
   blurb: string;
   /** the hero's colour in the menus, as a CSS colour: the frame and the stat bars on the hero screen */
   accent: string;
-  /** the ultimate on U from the start of a run; an ultimate skill upgrades or replaces it */
-  special: UltimateId;
+  /** coins to unlock the hero on the hero screen; 0 for a hero open from the start */
+  price: number;
+  special: SpecialDef;
   base: Stats;
   /** added per level after the first */
   growth: Partial<Stats>;
@@ -83,4 +86,12 @@ export interface CharacterDef {
   /** blows in the ground string for the whole run */
   comboHits: number;
   skin: HeroSkin;
+  clips: HeroClips;
+  controls: HeroControls;
+  /** the hero's own achievements; the trial for clearing wave 10 is added for every hero */
+  achievements: readonly Achievement[];
+  /** the icon id of each of the hero's own damage sources on the end of run screen */
+  sourceIcons: Readonly<Record<HeroSource, string>>;
+  /** this hero is a stand-in that plays as Kael until its own module is built; no stand-in may ship */
+  stub?: true;
 }

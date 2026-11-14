@@ -1,6 +1,6 @@
 import "./heroScreen.css";
-import { CHARACTERS } from "../../constants/characters";
 import { character, chooseCharacter, previewCharacter } from "../../game/state";
+import { CHARACTERS } from "../../heroes/roster";
 import { sfx } from "../../services/audio";
 import { saveHeroChoice } from "../../services/heroChoice";
 import { bank, buyHero, heroUnlocked } from "../../store/meta";

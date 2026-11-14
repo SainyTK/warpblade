@@ -1,10 +1,10 @@
-import { KAEL } from "../constants/characters/kael";
 import { AIR_STRING } from "../constants/combo";
 import { HERO_START_X } from "../constants/hero";
 import { GROUND, SEED } from "../constants/stage";
 import { ULT_COOLDOWN } from "../constants/ultimate";
 import { Lights } from "../engine/lights";
 import { Particles } from "../engine/particles";
+import { CHARACTERS } from "../heroes/roster";
 import { metaBonus, metaToolBonus } from "../store/meta";
 import type { CharacterDef } from "../types/character";
 import type { GameState } from "../types/game";
@@ -24,10 +24,10 @@ export const rng = new Rng(SEED);
 export const particles = new Particles(rng);
 export const lights = new Lights();
 /** the hero being played; chosen on the hero screen before a run, and fixed for the run */
-export let character: CharacterDef = KAEL;
+export let character: CharacterDef = CHARACTERS[0];
 /** the hero drawn on the stage: the one played, or in the menus the one looked at on the hero screen */
-export let shown: CharacterDef = KAEL;
-applySkin(KAEL.skin);
+export let shown: CharacterDef = character;
+applySkin(character.skin);
 
 /** play as this hero from the next run on: their look now, their stats and skills when the run starts */
 export function setCharacter(c: CharacterDef): void {
@@ -40,14 +40,14 @@ export function setCharacter(c: CharacterDef): void {
  *  frame of play has posed them */
 export function chooseCharacter(c: CharacterDef): void {
   setCharacter(c);
-  hero.pose = restPose(c.kit);
+  hero.pose = restPose(c);
 }
 
 /** show this hero behind a menu without choosing it: drawn with its own look and kit, standing in its rest pose */
 export function previewCharacter(c: CharacterDef): void {
   shown = c;
   applySkin(c.skin);
-  hero.pose = restPose(c.kit);
+  hero.pose = restPose(c);
 }
 
 export const game: GameState = {
@@ -89,7 +89,7 @@ export function freshProgress(): Progress {
     xp: 0,
     picks: 0,
     stats: computeStats(character, 1, [], metaBonus()),
-    ultimate: character.special,
+    ultimate: character.special.id,
     comboLimit: character.comboHits,
     airLimit: AIR_STRING.hits,
     build: freshBuild(metaToolBonus()),
@@ -121,7 +121,7 @@ export function freshHero(stats: Progress["stats"]): Hero {
     hasSword: true,
     hitDone: false,
     liftTop: GROUND,
-    pose: restPose(character.kit),
+    pose: restPose(character),
     hand: [6, -15],
     ghostTimer: 0,
     sword: null,
@@ -139,12 +139,7 @@ export function freshHero(stats: Progress["stats"]): Hero {
     warpCd: 0,
     ultCd: 0,
     ultFull: ULT_COOLDOWN,
-    spellCd: { lance: 0, burst: 0, fire: 0, ice: 0, volt: 0 },
-    spellCdFull: { lance: 1, burst: 1, fire: 1, ice: 1, volt: 1 },
-    castAbility: "lance",
-    castWide: false,
-    denied: { cast: 0, warp: 0, mp: 0, ult: 0, hp: 0 },
-    spellPower: 1,
+    denied: { cast: 0, warp: 0, mp: 0, ult: 0 },
     lastHit: null,
     charge: 0,
     chargeLevel: 0,

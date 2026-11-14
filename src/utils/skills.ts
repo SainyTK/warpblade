@@ -1,5 +1,5 @@
-import { CHARACTERS } from "../constants/characters/index";
 import { EVOLVE_PARTNER_LEVEL, SKILL_MAX_LEVEL } from "../constants/growth";
+import { CHARACTERS } from "../heroes/roster";
 import type { Build } from "../types/build";
 import type { CharacterDef } from "../types/character";
 import type { SkillDef, SkillLevel } from "../types/skill";

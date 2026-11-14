@@ -1,4 +1,4 @@
-import { CLIPS } from "../../constants/clips";
+import { ACTION_CLIPS } from "../../constants/clips";
 import { MP_REGEN } from "../../constants/combat";
 import { sfx } from "../../services/audio";
 import { rechargeStep } from "../build/recharge";
@@ -14,7 +14,6 @@ import { tickDenied } from "./deny";
 import { holdGuard, pressGuard, runGuard, tickGuard } from "./heroGuard";
 import { kit } from "./kits";
 import { moveHero } from "./physics";
-import { rechargeSpells, runCast } from "./spell";
 import { regenStamina } from "./stamina";
 import { tickTakeoff } from "./takeoff";
 import { readDoubleTap } from "./taps";
@@ -28,18 +27,17 @@ function runState(dt: number): void {
       runMove(dt);
       break;
     case "cast":
-      runCast();
-      if (h.st >= CLIPS.cast.dur) settle();
+      if (h.st >= ACTION_CLIPS.cast.dur) settle();
       break;
     case "throw":
-      if (h.st >= CLIPS.throw.hit) releaseWeapon();
+      if (h.st >= ACTION_CLIPS.throw.hit) releaseWeapon();
       break;
     case "throwWait":
       h.sword?.update(dt);
       if (h.sword?.done && h.warpTarget) doWarp(h.warpTarget);
       break;
     case "warpStrike":
-      if (h.st >= CLIPS.warpStrike.dur) settle();
+      if (h.st >= ACTION_CLIPS.warpStrike.dur) settle();
       break;
     case "dash":
       runDash(dt);
@@ -96,7 +94,6 @@ export function updateHero(dt: number): void {
   const recharge = rechargeStep(dt);
   h.warpCd = Math.max(0, h.warpCd - recharge);
   h.ultCd = Math.max(0, h.ultCd - recharge);
-  rechargeSpells(recharge);
   tickWarp();
   tickGuard(dt);
   tickDenied(dt);

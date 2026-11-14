@@ -3,7 +3,7 @@ export const GAME_MODULES = {
   state: "/src/game/state.ts",
   menuState: "/src/ui/menu/menuState.ts",
   runEnd: "/src/game/runEnd.ts",
-  characters: "/src/constants/characters/index.ts",
+  characters: "/src/heroes/roster.ts",
 } as const;
 export const SELECTORS = {
   stage: "#stage",

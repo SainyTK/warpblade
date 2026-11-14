@@ -31,8 +31,8 @@ export interface WarpStyle {
    */
   ranged?: boolean;
   /**
-   * The stat the warp's damage grows with: `ap` for a hero whose damage is mostly ability power (Wenna, Mirel), so
-   * every hero's warp hits about as hard. Left out, attack damage.
+   * The stat the warp's damage grows with: `ap` for a hero whose damage is mostly ability power, so every hero's warp
+   * hits about as hard. Left out, attack damage.
    */
   stat?: "ap";
   /** draws the thrown weapon at (x, y), pointing along `angle` (radians), `t` seconds into its flight */
@@ -43,7 +43,7 @@ export interface WarpStyle {
    * `power` already carries the `stat` share, so a kit deals it through `meleeHit` or as `power * progress.stats.ad`.
    */
   strike?(power: number, foe: Enemy | null, sureCrit: boolean): void;
-  /** after the arrival blow: the hero's own extra (a grab, a Wick, a Boom). Keep it small; the blow carries the power */
+  /** after the arrival blow: the hero's own extra (a second cut, a mark). Keep it small; the blow carries the power */
   arrived?(foe: Enemy | null): void;
   /** the hero's warp skills, read on every warp */
   tune?(): WarpTune;
@@ -66,7 +66,7 @@ export interface GuardStyle {
 
 /** one ability on I */
 export interface AbilitySlot {
-  /** the ability's id: the kit's own (`lance`, `smokeKnot`) or a spell skill's */
+  /** the ability's id: the kit's own (`lance`, `burst`) or a spell skill's */
   id: string;
   /** its HUD tab label, in capitals */
   label: string;
@@ -76,7 +76,7 @@ export interface AbilitySlot {
   wait(): number;
   /** the length of its current recharge, for the HUD's share; at least a little above 0 */
   full(): number;
-  /** the hero can pay for it now (MP, Heat, Sand, HP) */
+  /** the hero can pay for it now (MP, or the kit's own resource) */
   affordable(): boolean;
   /**
    * Cast it now; `wide` is a long press, which casts the wider form when the ability has one and the plain form
@@ -87,8 +87,6 @@ export interface AbilitySlot {
   tint?: string;
   /** its spell skill has evolved, for the HUD's gold edge */
   evolved?(): boolean;
-  /** what it costs, shown on its selected tab when the cost is not MP (Brannoc's HP) */
+  /** what it costs, shown on its selected tab when the cost is not MP (rounds, a stance gauge) */
   cost?(): string;
-  /** an HP cost as a share of max HP, 0 to 1, drawn as a crimson stretch of the touch I button's rim (Brannoc) */
-  costShare?(): number;
 }

@@ -1,7 +1,8 @@
+import type { IconArt } from "../../../types/heroModule";
 import type { SpriteImage } from "../../../types/sprite";
 import type { StickDirectionSpec } from "../../../types/touch";
 import { hex } from "../../../utils/color";
-import { ICON_WHITE, type IconArt, iconFrom } from "./iconArt";
+import { ICON_WHITE, iconFrom } from "./iconArt";
 
 /** arrows for the stick's directions, as the Controls screen shows them */
 const STICK_ARROWS: Record<StickDirectionSpec["direction"], IconArt> = {

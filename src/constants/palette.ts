@@ -1,5 +1,4 @@
 import type { Color, Ramp } from "../types/color";
-import type { KaelAbility } from "../types/spell";
 import { hex, ramp, WHITE } from "../utils/color";
 
 /** effect ramps, dark to bright */
@@ -9,29 +8,9 @@ export const PAL = {
   volt: ramp(["#2a1660", "#4b3bc4", "#6f8bff", "#a9c8ff", "#e2efff"]),
   shadow: ramp(["#120a1e", "#2a1640", "#4a2470", "#7a3cb0", "#b673e8", "#ecc8ff"]),
   heal: ramp(["#123a2a", "#1f7a4a", "#3fc06a", "#9cf0a0", "#e8ffe0"]),
-  /** Orrin's brass: the chain's tip flashes, its glow at full Momentum and the MO bar */
-  brass: ramp(["#3a2410", "#7a4e1a", "#c08a2e", "#e8b04a", "#ffe08a", "#fff6d0"]),
-  /** Mirel's clock teal: her echoes, the Stillfield, Rewind and the SD bar's edge */
+  /** the teal of slowed time: a foe inside a time field is rimmed in it */
   hour: ramp(["#0c1e24", "#163e44", "#24706c", "#3fb0a0", "#8ae6cf", "#e6fff6"]),
-  /** Wenna's lamp violet: Wick flames, the Flare, Swap, Kindle, the Quarry ring and the WX bar's edge */
-  wick: ramp(["#1a0f2e", "#3a1f5c", "#6a3aa0", "#a46ae0", "#d8b4ff", "#f8eeff"]),
-  /** Tallis's gloam, ink to dusk rose: the Veil's outline and wisps, the pool, his smears, the back-open chevron, the
-   *  GL bar's edge, Smoke Knot and Gloaming */
-  gloam: ramp(["#0c0a14", "#1e1830", "#3a2c4e", "#6e4a78", "#c06a9e", "#ffb8dc"]),
-  /** Jory's cobalt, deep to white-hot: the floor ring, Accents, Boom, the sound waves, Drumroll and the GV bar */
-  beat: ramp(["#0a0f2a", "#182a66", "#2c4fb0", "#5a82ff", "#a6c0ff", "#eef3ff"]),
-  /** Brannoc's crimson, clotted to pale: his smears, the debt segment, the motes, War Cry, Red Crescent and Berserk */
-  rage: ramp(["#1a0508", "#4a0c14", "#8e1424", "#d0283a", "#ff6a5a", "#ffd8c8"]),
 } as const;
-
-/** Jory's drum shell, oxblood lacquer deep to glint */
-export const DRUM = ramp(["#3a1210", "#7a2a24", "#a8443a", "#d07060"]);
-
-/** Mirel's falling sand, light and shade: the hourglass at her belt, the SD bar and the motes of her time magic */
-export const SAND = { light: hex("#e8d6a0"), shade: hex("#a8885a") } as const;
-
-/** Wenna's candle wax, deep to glint: Wick bodies, wax drips and the WX bar's fill */
-export const WAX = ramp(["#5a4a3a", "#a8947a", "#e8dcc4", "#fff8e8"]);
 
 /** spark colors, head to tail */
 export const SPARKS = {
@@ -41,12 +20,7 @@ export const SPARKS = {
   shadow: [hex("#ecc8ff"), hex("#b673e8"), hex("#7a3cb0"), hex("#4a2470")],
   ice: [WHITE, hex("#cbf1ff"), hex("#8fd3f2"), hex("#4f9bd4")],
   blood: [WHITE, hex("#ffd0d8"), hex("#e0405a"), hex("#7e1530")],
-  brass: [WHITE, hex("#fff6d0"), hex("#ffe08a"), hex("#c08a2e")],
   hour: [WHITE, hex("#e6fff6"), hex("#8ae6cf"), hex("#3fb0a0")],
-  wick: [hex("#f8eeff"), hex("#d8b4ff"), hex("#a46ae0"), hex("#6a3aa0")],
-  gloam: [hex("#ffe4f2"), hex("#ffb8dc"), hex("#c06a9e"), hex("#6e4a78")],
-  beat: [hex("#eef3ff"), hex("#a6c0ff"), hex("#5a82ff"), hex("#2c4fb0")],
-  rage: [hex("#ffd8c8"), hex("#ff6a5a"), hex("#d0283a"), hex("#8e1424")],
 } satisfies Record<string, Ramp>;
 
 /** white hot to smouldering, and fresh smoke to thin */
@@ -63,17 +37,12 @@ export const FIRE_RAMP = ramp([
 ]);
 export const SMOKE_RAMP = ramp(["#6e6478", "#544c60", "#3d3648", "#2a2532", "#1a171e"]);
 
-/** the colour of each of Kael's abilities: the glow at his hand, the HUD tab and the touch button rim */
-export const ABILITY_COLOR: Record<KaelAbility, Color> = {
-  lance: hex("#7fe3ff"),
-  burst: hex("#d8f4ff"),
-  fire: hex("#ff8a2a"),
-  ice: hex("#8fd3f2"),
-  volt: hex("#a9a0ff"),
-};
-
-/** Kael: silver hair, teal coat with brass trim, steel plates, red scarf, crystal sword. Each material runs deep to glint. */
-export const KAEL_COLORS = {
+/**
+ * The base hero palette: silver hair, teal coat with brass trim, steel plates, red scarf, crystal blade. Each material
+ * runs deep to glint. A hero's look starts from it and changes the materials that differ (`HeroSkin.colors`), and the
+ * figures in shared icons (shop, charms) are drawn in it.
+ */
+export const BASE_HERO_COLORS = {
   outline: hex("#0d0a16"),
   skinLight: hex("#ffe0c0"),
   skin: hex("#f0c8a0"),
@@ -116,9 +85,9 @@ export const KAEL_COLORS = {
   bladeDeep: hex("#1f5a96"),
   hilt: hex("#3a2630"),
 } as const;
-export type HeroColors = Record<keyof typeof KAEL_COLORS, Color>;
-/** the colours of the hero being played: Kael's until another is chosen (see game/hero/skin.ts) */
-export const HERO_COLORS: HeroColors = { ...KAEL_COLORS };
+export type HeroColors = Record<keyof typeof BASE_HERO_COLORS, Color>;
+/** the colours of the hero being drawn: `applySkin` (src/game/hero/skin.ts) fills them with a hero's own */
+export const HERO_COLORS: HeroColors = { ...BASE_HERO_COLORS };
 
 export const ENEMY_COLORS = {
   outline: hex("#0a0612"),

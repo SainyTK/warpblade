@@ -100,15 +100,10 @@ export interface Enemy {
   brace: number;
   /** its feet are held for this long (burning ground, a brand): a walker stops walking and does not hurt by touch */
   halt: number;
-  /** pinned to the floor for this long (Ysra's Impale and hook): held still; the damage it takes more is a mark */
+  /** pinned to the floor for this long: held still, whatever its own step asks for */
   pinned: number;
-  /** blinded for this long (Tallis's Smoke Knot): it neither turns nor starts a wind-up at a hero (game/enemies/awareness.ts) */
+  /** blinded for this long: it neither turns nor starts a wind-up at a hero (game/enemies/awareness.ts) */
   blind: number;
-  /** stopped in time for this long (Mirel's Stopped Clock and Hour of Stillness): it does not move, act or fall */
-  stopped: number;
-  /** damage it took while stopped, and the share of it that lands again as one hit when it restarts (0 for none) */
-  stopStore: number;
-  stopShare: number;
   /** free scratch values for a foe's own behavior: a target, a timer, a charge count */
   ax: number;
   ay: number;

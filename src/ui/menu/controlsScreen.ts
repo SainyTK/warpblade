@@ -1,7 +1,8 @@
-import { ACTION_TEXT, HOLD_ACTIONS, KEYMAP } from "../../constants/input";
+import { HOLD_ACTIONS, KEYMAP } from "../../constants/input";
 import { character } from "../../game/state";
 import type { HeldAction, InputAction } from "../../types/input";
 import type { MenuView } from "../../types/menu";
+import { actionText } from "../../utils/controls";
 import { keysByAction } from "../../utils/keymap";
 import { touchLegend } from "../touch/touchLegend";
 import { backItem } from "./backItem";
@@ -42,7 +43,7 @@ const isHeldAction = (a: InputAction): a is HeldAction => a in HOLD_ACTIONS;
 
 /** each action's keys and what it does; a key with a long press gets a second row for it, Hold J under J */
 function keyboardRows(): [HTMLElement, string][] {
-  const text = ACTION_TEXT[character.kit];
+  const text = actionText(character);
   return [...keysByAction(KEYMAP)].flatMap(([action, codes]): [HTMLElement, string][] => {
     const row: [HTMLElement, string] = [capsOf(codes, false), text[action]];
     if (!isHeldAction(action)) return [row];

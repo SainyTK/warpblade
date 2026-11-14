@@ -1,36 +1,12 @@
-import { KAEL } from "../../constants/characters/kael";
 import { HERO_COLORS } from "../../constants/palette";
 import type { HeroSkin } from "../../types/character";
 
-type Look = Omit<HeroSkin, "colors">;
-const look = (s: HeroSkin): Look => ({
-  head: s.head,
-  headBack: s.headBack,
-  weapon: s.weapon,
-  reach: s.reach,
-  ramp: s.ramp,
-  glow: s.glow,
-  sparks: s.sparks,
-  braid: s.braid ?? false,
-  bareArms: s.bareArms ?? false,
-  sash: s.sash ?? false,
-  bun: s.bun ?? false,
-  hood: s.hood ?? false,
-  scarfEnd: s.scarfEnd ?? false,
-  cloak: s.cloak ?? false,
-  satchel: s.satchel ?? false,
-  wraps: s.wraps ?? false,
-  drum: s.drum ?? false,
-  headband: s.headband ?? false,
-  bareChest: s.bareChest ?? false,
-  mane: s.mane ?? false,
-});
-
-/** the look of the hero being drawn, Kael's until another is chosen; the draw code reads this and HERO_COLORS every frame */
-export const skin: Look = look(KAEL.skin);
+/** the look of the hero being drawn; `applySkin` sets it and `HERO_COLORS` together, and the draw code reads both every
+ *  frame. The state module dresses the rig as the first hero before anything is drawn. */
+export let skin: HeroSkin;
 
 /** dress the rig as this hero */
 export function applySkin(s: HeroSkin): void {
   Object.assign(HERO_COLORS, s.colors);
-  Object.assign(skin, look(s));
+  skin = s;
 }

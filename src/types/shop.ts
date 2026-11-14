@@ -50,6 +50,8 @@ export interface MetaSave {
   owned: Record<string, number>;
   /** heroes unlocked with coins; free heroes are never listed */
   heroes: string[];
+  /** coins given back for heroes that left the roster, shown on the start menu until the next run begins */
+  refund: number;
   /** achievements earned, by id */
   achievements: string[];
   tracked: TrackedStats;

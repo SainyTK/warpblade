@@ -1,6 +1,5 @@
 import type { HeroSource, SourceId } from "./build";
 import type { Enemy } from "./enemy";
-import type { MoveId } from "./move";
 
 /**
  * Everything the hero did or took that a skill can answer, by event name, with each event's payload. Design:
@@ -17,7 +16,7 @@ export interface SkillEvents {
     damage: number;
     source: HeroSource;
     /** the combo move the blow belongs to; null outside a move (a bolt in flight, a spell, the ultimate) */
-    move: MoveId | null;
+    move: string | null;
     /** the last blow of the ground string (`chain` has reached `comboHits`) */
     finisher: boolean;
     /** a sword, glaive, kick or fist blow, as opposed to a bolt or a spell */

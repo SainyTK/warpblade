@@ -22,7 +22,7 @@ export function refreshProgress(): void {
   const build = progress.build;
   progress.stats = computeStats(character, progress.level, heldRows(character, build), metaBonus(), buildStats(build));
   // every hero keeps one ultimate all run; their ultimate skill upgrades it
-  progress.ultimate = character.special;
+  progress.ultimate = character.special.id;
   progress.comboLimit = character.comboHits;
   progress.airLimit = airLimit();
   hero.hp = Math.min(hero.hp, progress.stats.hp);

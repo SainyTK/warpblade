@@ -3,9 +3,11 @@ import { GAME_VERSION, SITE_PAGES } from "../../constants/sitePages";
 import { STAGE_WAVES } from "../../constants/waves";
 import { character, game, previewCharacter, progress } from "../../game/state";
 import { inRoom, roomView } from "../../store/coop";
+import { heroRefund } from "../../store/meta";
 import { bestRun } from "../../store/records";
 import type { MenuContext, MenuScreen, MenuView } from "../../types/menu";
 import { clearText } from "../../utils/records";
+import { coinAmount } from "../coinIcon";
 import { leaveRoom } from "./coopActions";
 import { leaveMenu, quitRun, restartRun } from "./menuActions";
 import { menuItem } from "./menuItem";
@@ -27,6 +29,14 @@ function footLink(href: string, label: string): HTMLAnchorElement {
     link.rel = "noopener";
   }
   return link;
+}
+
+/** coins given back for heroes that left the roster, shown until the next run begins */
+function refundNote(): HTMLElement {
+  const note = document.createElement("p");
+  note.className = "menu-note";
+  note.append("Refund for heroes that left the roster: ", coinAmount(heroRefund()));
+  return note;
 }
 
 /** the best run, then the patch notes, feedback, source and version as one line that wraps between items */
@@ -65,7 +75,9 @@ export function mainScreen(context: MenuContext): MenuView {
     );
     const content = document.createElement("div");
     content.className = "menu-main";
-    content.append(list, titleFooter());
+    content.append(list);
+    if (heroRefund() > 0) content.append(refundNote());
+    content.append(titleFooter());
     return { title: "Warpblade", subtitle: "Throw the sword. Become the sword.", content };
   }
   if (inRoom()) {

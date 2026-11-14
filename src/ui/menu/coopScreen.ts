@@ -1,7 +1,7 @@
 import "./coopScreen.css";
-import { CHARACTERS } from "../../constants/characters";
 import { MAX_PLAYERS, SEAT_COLORS } from "../../constants/coop";
 import { character, chooseCharacter } from "../../game/state";
+import { CHARACTERS } from "../../heroes/roster";
 import { copyText } from "../../services/clipboard";
 import { saveHeroChoice } from "../../services/heroChoice";
 import { roomView } from "../../store/coop";

@@ -1,47 +1,17 @@
-import type { HeroKit, KitId } from "../../types/kit";
+import { heroModule } from "../../heroes";
+import type { HeroModule } from "../../types/heroModule";
+import type { HeroKit } from "../../types/kit";
+import type { MoveDef } from "../../types/move";
 import { character, shown } from "../state";
-import { BRANNOC_KIT } from "./brannoc/kit";
-import { HULDA_KIT } from "./hulda/kit";
-import { JORY_KIT } from "./jory/kit";
-import { KAEL_KIT } from "./kael/kit";
-import { MIREL_KIT } from "./mirel/kit";
-import { ORRIN_KIT } from "./orrin/kit";
-import { SABLE_KIT } from "./sable/kit";
-import { TALLIS_KIT } from "./tallis/kit";
-import { WENNA_KIT } from "./wenna/kit";
-import { YSRA_KIT } from "./ysra/kit";
 
-/** the kit of the hero being played; looked up on each call so module load order never matters */
-export function kit(): HeroKit {
-  return kitOf(character.kit);
-}
+/** the code of the hero being played; looked up on each call so module load order never matters */
+export const heroCode = (): HeroModule => heroModule(character.id);
+
+/** the kit of the hero being played */
+export const kit = (): HeroKit => heroCode().kit;
 
 /** the kit of the hero drawn on the stage, which in the menus can be one only looked at on the hero screen */
-export function shownKit(): HeroKit {
-  return kitOf(shown.kit);
-}
+export const shownKit = (): HeroKit => heroModule(shown.id).kit;
 
-function kitOf(id: KitId): HeroKit {
-  switch (id) {
-    case "ysra":
-      return YSRA_KIT;
-    case "sable":
-      return SABLE_KIT;
-    case "hulda":
-      return HULDA_KIT;
-    case "orrin":
-      return ORRIN_KIT;
-    case "mirel":
-      return MIREL_KIT;
-    case "wenna":
-      return WENNA_KIT;
-    case "tallis":
-      return TALLIS_KIT;
-    case "jory":
-      return JORY_KIT;
-    case "brannoc":
-      return BRANNOC_KIT;
-    default:
-      return KAEL_KIT;
-  }
-}
+/** one of the combo moves of the hero being played, by its id */
+export const moveDef = (id: string): MoveDef => heroCode().moves[id];

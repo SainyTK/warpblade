@@ -19,8 +19,8 @@ export const POSE_KEYS = [
   "sa",
   "tw",
   "mr",
-  "dr",
-  "ah",
+  "oa",
+  "bs",
 ] as const;
 export type PoseKey = (typeof POSE_KEYS)[number];
 /**
@@ -30,9 +30,10 @@ export type PoseKey = (typeof POSE_KEYS)[number];
  * back, or toward the back when negative, hunching it. A neck far ahead of the hip is a body leaning flat into a lunge.
  * fe and be at 1 bend the near and far elbow the other way. fa and ba tilt the near and far foot in radians: positive
  * points the toes down, negative lifts them onto the heel.
- * tw at 1 turns Kael's back to the camera, mid-spin. mr at 1 draws the whole pose mirrored, facing behind him.
- * dr swings a drum worn at the hip round to the front of the belly, 0 at the hip to 1 in front (Jory's war drum).
- * ah at 1 turns a great axe's head to the other side of its haft, so its edge leads a backhand sweep (Brannoc's Reave).
+ * tw at 1 turns the hero's back to the camera, mid-spin. mr at 1 draws the whole pose mirrored, facing behind them.
+ * oa is the angle in radians of the item held in the far hand (a shield, a short sword), as sa is the sword's.
+ * bs is the hero's own blade state, read only by the hero's own sword and off-hand drawing: 0 unless its clips set it
+ * (a katana sheathed at 1, a chamber open, a shield raised).
  */
 export type Pose = Record<PoseKey, number>;
 /** [time, pose, "snap"]: snap holds the previous key and jumps on this one. */

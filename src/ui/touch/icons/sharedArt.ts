@@ -1,5 +1,6 @@
+import type { IconArt } from "../../../types/heroModule";
 import { hex } from "../../../utils/color";
-import { ICON_WHITE, type IconArt } from "./iconArt";
+import { ICON_WHITE } from "./iconArt";
 
 /** the front dodge looks the same for every hero: a chevron with speed lines */
 export const DODGE: IconArt = {

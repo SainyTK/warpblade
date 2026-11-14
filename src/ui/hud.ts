@@ -1,10 +1,9 @@
 import { STAMINA } from "../constants/combat";
 import { ENEMIES } from "../constants/enemies";
-import { ULT_LABEL } from "../constants/skillLabels";
 import { ULT_LEVELS } from "../constants/ultimate";
 import { STAGE_WAVES } from "../constants/waves";
 import { canAffordUlt, ultRecharge } from "../game/hero/ultimate";
-import { game, hero, progress } from "../game/state";
+import { character, game, hero, progress } from "../game/state";
 import { bestRun } from "../store/records";
 import { xpToNext } from "../utils/progression";
 import { clearText } from "../utils/records";
@@ -12,20 +11,12 @@ import { minutesSeconds } from "../utils/runReport";
 import { updateAbilityTabs } from "./abilityTabs";
 import { updateBuildStrip } from "./buildStrip";
 import { updateCoinCount } from "./coinCount";
-import { updateDebtBar } from "./debtBar";
 import { byId } from "./dom";
 import { updateFlowBar } from "./flowBar";
-import { updateGloamBar } from "./gloamBar";
-import { updateGritBar } from "./gritBar";
-import { updateGrooveBar } from "./grooveBar";
-import { updateHeatBar } from "./heatBar";
+import { updateHeroMeter } from "./heroMeter";
 import { updateHitCounter } from "./hitCounter";
-import { updateMomentumBar } from "./momentumBar";
-import { updateQuiverBar } from "./quiverBar";
 import { createRechargeTab } from "./rechargeTab";
-import { updateSandBar } from "./sandBar";
 import { updateWarpTab } from "./warpTab";
-import { updateWaxBar } from "./waxBar";
 
 const hp = byId("hpFill");
 const mp = byId("mpFill");
@@ -54,15 +45,7 @@ const pips = (n: number, lit: (i: number) => boolean): string =>
 /** sync the HTML overlay with the game, touching the DOM only when something shown has changed */
 export function updateHud(): void {
   updateAbilityTabs();
-  updateDebtBar();
-  updateHeatBar();
-  updateGritBar();
-  updateQuiverBar();
-  updateMomentumBar();
-  updateSandBar();
-  updateWaxBar();
-  updateGloamBar();
-  updateGrooveBar();
+  updateHeroMeter();
   updateFlowBar();
   updateHitCounter();
   updateBuildStrip();
@@ -87,7 +70,7 @@ export function updateHud(): void {
     progress.xp,
     progress.comboLimit,
     hero.chain,
-    progress.ultimate,
+    character.special.name,
     affordable,
     game.wave,
     game.kills,
@@ -112,7 +95,7 @@ export function updateHud(): void {
   chain.innerHTML = pips(progress.comboLimit, (i) => i < hero.chain);
   wave.textContent = `STAGE ${game.stage}  WAVE ${game.wave}/${STAGE_WAVES}  ${minutesSeconds(game.clock)}`;
   score.textContent = `${game.kills} DOWN${best ? `  BEST ${clearText(best).toUpperCase()}` : ""}`;
-  ultName.textContent = ULT_LABEL[progress.ultimate];
+  ultName.textContent = character.special.name.toUpperCase();
   ultPips.innerHTML = pips(ULT_LEVELS.length, (i) => i < affordable);
   boss.hidden = !leader;
   if (leader) {

@@ -1,7 +1,8 @@
-import { STICK_DIRECTIONS, TOUCH_BUTTONS, TOUCH_TEXT } from "../../constants/touch";
+import { TOUCH_BUTTONS } from "../../constants/touch";
 import { character } from "../../game/state";
 import type { ButtonLook } from "../../types/touch";
 import { hex } from "../../utils/color";
+import { stickDirections, touchText } from "../../utils/controls";
 import { buttonLook } from "./buttonLook";
 import { drawButtonFace } from "./drawButtonFace";
 import { stickIcon, touchIcon } from "./icons";
@@ -18,7 +19,6 @@ const STICK_LOOK: ButtonLook = {
   accent: hex("#9a94c4"),
   affordable: 0,
   charge: -1,
-  costShare: 0,
 };
 
 function face(draw: (canvas: PixelCanvas) => void): HTMLElement {
@@ -34,8 +34,8 @@ function face(draw: (canvas: PixelCanvas) => void): HTMLElement {
 /** each stick direction and each button with what it does for the chosen hero, drawn as on screen, for the Controls screen */
 export function touchLegend(): [HTMLElement, string][] {
   const selection = touchSelection();
-  const texts = TOUCH_TEXT[character.kit];
-  const stick = STICK_DIRECTIONS[character.kit].map((d): [HTMLElement, string] => [
+  const texts = touchText(character);
+  const stick = stickDirections(character).map((d): [HTMLElement, string] => [
     face((c) => drawButtonFace(c, STICK_LOOK, stickIcon(d.direction), false)),
     `Stick ${d.direction}: ${d.label}`,
   ]);

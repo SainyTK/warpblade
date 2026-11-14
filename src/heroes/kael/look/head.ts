@@ -1,0 +1,53 @@
+/**
+ * Kael's head, 24 by 22 image pixels, facing right in three-quarters: silver hair swept back in wedges with a glint on
+ * the crown, bangs over the brow, one blue eye, the jaw in shadow.
+ */
+export const KAEL_HEAD = [
+  "..........DDDDD.........",
+  ".......DDDdhhhhdD.......",
+  ".....DDdhhhHHHHhhdD.....",
+  "...DDddhhHHHHWWHHhhD....",
+  "DDDdhhhHHHHHWWHHHHHhD...",
+  "...DDdhhHHHHHHHHHHHHhD..",
+  ".....DdhHHHHHHhHHHHHHhD.",
+  "..DDddhHHHHHHhHHHHHhHHhD",
+  "DDdhhhhHHHHHhHHHHhHHHHHh",
+  "..DDdhhhHHHhHHHhHHHhHHHh",
+  "....DdhhhhhhhHHhhHHhhHhh",
+  "....DddhhhhhhHHhhHHhhHhh",
+  "....DDdhhhdhhHhLhHhsHhsh",
+  "....DDddhdhhhLsLshsLssss",
+  ".....DDdhdSssLLssdddssss",
+  ".....DDddSsLsLssdwPPssss",
+  "......DDdSssssssswIPssss",
+  "......DDdSSssssssLIIssss",
+  ".......DdSSsssssssssSss.",
+  "........DdSSSssssssmmS..",
+  ".........D.SSSsssssSS...",
+  "...........SSSSSSSS.....",
+] as const;
+/** the back of Kael's head, for a spin: hair swept back in wedges and strands, with the nape of the neck under it */
+export const KAEL_HEAD_BACK = [
+  "..........DDDDD.........",
+  ".......DDDddhhhdD.......",
+  ".....DDdhhdHhhdhhdD.....",
+  "...DDddhhdHHhWWhhdhD....",
+  "DDDdhhhHHHHHWWhhdhhhD...",
+  "...DDdhhHHHdhhhdhhhdhD..",
+  ".....DdhHHdHhhdhhhdhhhD.",
+  "..DDddhHHdHHhdhhhdhhhdhD",
+  "DDdhhhhHHHHHdhhhdhhhdhhh",
+  "..DDdhhhHHHdhhhdhhhdhhhd",
+  "....Ddhhhhdhhhdhhhdhhhdh",
+  "....DddhhhdhhhdhhhdhhddD",
+  "....DddhhdhhhdhhhdhhdddD",
+  "....DDdhhdhhdhhhdhhhddDD",
+  ".....DdhhdhhdhhdhhhdddD.",
+  ".....DDdhdhhdhhdhhdddDD.",
+  "......DddhdhdhhdhdddDD..",
+  "......DDddhdhdhdhddDD...",
+  ".......DDddhdddhddDD....",
+  ".........DDdddddDD......",
+  "...........DSSSSD.......",
+  "...........SSSSSS.......",
+] as const;

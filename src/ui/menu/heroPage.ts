@@ -1,4 +1,3 @@
-import { ULT_LABEL } from "../../constants/skillLabels";
 import { heroPrice, heroUnlocked, metaBonus } from "../../store/meta";
 import type { CharacterDef } from "../../types/character";
 import type { Stats } from "../../types/stats";
@@ -15,8 +14,6 @@ const STAT_BARS: readonly { label: string; value: (s: Stats) => number; full: nu
   { label: "MP", value: (s) => s.mp, full: 150 },
   { label: "Speed", value: (s) => s.move * s.aspd, full: 1.15 },
 ];
-
-const titleCase = (s: string): string => s.toLowerCase().replace(/\b\w/g, (m) => m.toUpperCase());
 
 const share = (value: number, full: number): string => `${Math.round(Math.min(1, value / full) * 100)}%`;
 
@@ -42,7 +39,7 @@ function statBars(c: CharacterDef): HTMLElement {
 /** what the hero brings to a run besides stats: their special */
 function traits(c: CharacterDef): HTMLElement {
   const box = el("p", "hero-traits");
-  box.append(`Special: ${titleCase(ULT_LABEL[c.special])}`);
+  box.append(`Special: ${c.special.name}`);
   return box;
 }
 

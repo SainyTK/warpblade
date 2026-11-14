@@ -10,7 +10,6 @@ import type { DamageTag } from "../types/game";
 import { buildStats } from "../utils/build";
 import { isHeroSource } from "../utils/sources";
 import { addFlow, flowDamage } from "./build/flow";
-import { hitBonus, takenBonus } from "./damageHooks";
 import { recordDamage } from "./damageLedger";
 import { createImpact } from "./effects/impact";
 import { launchEnemy } from "./enemies/airborne";
@@ -66,8 +65,8 @@ export function isBehind(e: Enemy, fromX: number): boolean {
   return side !== 0 && side !== e.face;
 }
 
-/** guarding kinds (husks from wave 3, brutes) hold up a guard while they walk, facing the blow; a staggered foe or one
- *  stopped in time cannot raise it, nor one that cannot see the hero (game/enemies/awareness.ts) */
+/** guarding kinds (husks from wave 3, brutes) hold up a guard while they walk, facing the blow; a staggered foe
+ *  cannot raise it, nor one that cannot see the hero (game/enemies/awareness.ts) */
 function guards(e: Enemy, o: HitOptions): boolean {
   if (!o.melee || o.curls || o.fromX === undefined) return false;
   const kind = kindOf(e.type);
@@ -79,7 +78,6 @@ function guards(e: Enemy, o: HitOptions): boolean {
     e.stagger <= 0 &&
     e.frozen <= 0 &&
     e.shock <= 0 &&
-    e.stopped <= 0 &&
     foeSees(e) &&
     !isBehind(e, o.fromX)
   );
@@ -154,8 +152,9 @@ export function dealDamage(e: Enemy, base: number, o: HitOptions = {}): HitResul
     dmg *= DAMAGE.crit;
     tag = "crit";
   }
-  if (isHeroSource(source) && !o.dot) dmg *= 1 + hitBonus(e, { back, keen: !!o.sureCrit, melee: !!o.melee });
-  dmg *= 1 + Math.min(DAMAGE.takenCap, takenBonus(e) + markBonus(e));
+  if (isHeroSource(source) && !o.dot)
+    dmg *= 1 + (kit().hitBonus?.(e, { back, keen: !!o.sureCrit, melee: !!o.melee }) ?? 0);
+  dmg *= 1 + Math.min(DAMAGE.takenCap, (kit().takenBonus?.(e) ?? 0) + markBonus(e));
   dmg *= kit().damageScale?.() ?? 1;
   const shatterShards = o.melee && o.heavy && e.frozen > 0 ? (skillValues("k_frost").shatter ?? 0) : 0;
   const shattering = shatterShards > 0;
@@ -168,8 +167,6 @@ export function dealDamage(e: Enemy, base: number, o: HitOptions = {}): HitResul
   const value = Math.max(1, Math.round(dmg));
   e.hp -= value;
   recordDamage(source, value);
-  // a foe stopped in time stores what it takes, to land again in part when it restarts
-  if (e.stopped > 0) e.stopStore += value;
   const fromHero = isHeroSource(source);
   if (!o.dot && fromHero && !o.noFlow) {
     addFlow(FLOW.perHit);

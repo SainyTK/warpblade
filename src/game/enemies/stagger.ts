@@ -22,7 +22,7 @@ function brace(e: Enemy): void {
  * air or knocked down is already out of the fight, so only the timer is kept. Mini bosses and bosses never stagger.
  */
 export function staggerFoe(e: Enemy, seconds: number): void {
-  if (seconds <= 0 || e.rank !== "minion" || e.brace > 0 || e.stopped > 0) return;
+  if (seconds <= 0 || e.rank !== "minion" || e.brace > 0) return;
   if (e.stagger <= 0 && e.staggerIdle > STAGGER.forget) e.staggerHits = 0;
   e.staggerHits++;
   e.staggerIdle = 0;

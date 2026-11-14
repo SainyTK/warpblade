@@ -4,14 +4,13 @@ import { approach, clamp } from "../../utils/math";
 import { hero, progress } from "../state";
 import { dust, surfaceBelow } from "../world";
 import { inFreeState } from "./actions";
-import { kit } from "./kits";
-import { MOVES } from "./moves";
-import { strideAt } from "./moves/advance";
+import { kit, moveDef } from "./kits";
+import { strideAt } from "./strides";
 
 /** casting, warping, charging and most air attacks hang in the air for a moment once Kael stops rising */
 function floats(): boolean {
   const st = hero.state;
-  if (st === "move") return !!hero.move && !MOVES[hero.move].falls;
+  if (st === "move") return !!hero.move && !moveDef(hero.move).falls;
   return (
     st === "throwWait" || st === "throw" || st === "warpStrike" || st === "cast" || st === "charge" || st === "ultimate"
   );
@@ -29,7 +28,7 @@ export function moveHero(dt: number, dir: number): void {
   const st = h.state;
   const shared = (h.running ? M.runSpeed : M.walkSpeed) * progress.stats.move;
   const speed = kit().walkSpeed?.(shared) ?? shared;
-  const m = st === "move" && h.move ? MOVES[h.move] : null;
+  const m = st === "move" && h.move ? moveDef(h.move) : null;
   const moveDriven = (!!m && (!!m.step || !!strideAt(m, h.st))) || kit().drivesMotion();
   if (inFreeState()) {
     h.vx = approach(h.vx, dir * speed, (h.ground ? M.groundAccel : M.airAccel) * dt);
