@@ -74,7 +74,8 @@ export function bindStick(ctl: TouchController, unit: () => number): () => void 
   const zone = ctl.stickZone;
   zone.addEventListener("pointerdown", (ev) => {
     ev.preventDefault();
-    if (pointer !== null) return;
+    // one thumb owns the stick: a new touch here means the old one lifted, even if its end never arrived
+    if (pointer !== null) reset();
     sfx.start();
     pointer = ev.pointerId;
     zone.setPointerCapture(ev.pointerId);
@@ -96,5 +97,6 @@ export function bindStick(ctl: TouchController, unit: () => number): () => void 
   };
   zone.addEventListener("pointerup", end);
   zone.addEventListener("pointercancel", end);
+  zone.addEventListener("lostpointercapture", end);
   return reset;
 }

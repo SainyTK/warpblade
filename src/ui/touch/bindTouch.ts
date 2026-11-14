@@ -11,6 +11,7 @@ import { buttonLook } from "./buttonLook";
 import type { TouchController } from "./controller";
 import { drawButtonFace } from "./drawButtonFace";
 import { touchIcon } from "./icons";
+import { guardPage, ownTouches } from "./ownTouches";
 import { selectionKey, touchSelection } from "./selection";
 import { dropAll } from "./touchInput";
 import { isTouchMode, watchTouchMode } from "./touchMode";
@@ -45,17 +46,21 @@ export function bindTouch(): void {
   };
   resize();
   addEventListener("resize", resize);
+  ownTouches(ctl.stickZone);
+  ownTouches(ctl.buttonZone);
   const resetStick = bindStick(ctl, () => unit);
   const buttons = bindButtons(ctl);
+  const reset = () => {
+    resetStick();
+    buttons.reset();
+    dropAll();
+  };
   watchTouchMode();
+  guardPage(reset);
   bound = {
     ctl,
     pressed: buttons.pressed,
-    reset: () => {
-      resetStick();
-      buttons.reset();
-      dropAll();
-    },
+    reset,
     faces: ctl.buttons.map(() => ""),
     shown: false,
     chargeLevel: 0,

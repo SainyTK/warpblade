@@ -81,9 +81,12 @@ export function bindButtons(ctl: TouchController): {
   zone.addEventListener("pointermove", (ev) => {
     if (fingers.has(ev.pointerId)) move(ev.pointerId, ev.clientX, ev.clientY, false);
   });
-  const end = (ev: PointerEvent) => lift(ev.pointerId);
+  const end = (ev: PointerEvent) => {
+    if (fingers.has(ev.pointerId)) lift(ev.pointerId);
+  };
   zone.addEventListener("pointerup", end);
   zone.addEventListener("pointercancel", end);
+  zone.addEventListener("lostpointercapture", end);
   return {
     pressed: () => pressed,
     reset: () => {
