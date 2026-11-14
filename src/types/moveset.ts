@@ -85,6 +85,4 @@ export interface AbilitySlot {
   tint?: string;
   /** its spell skill has evolved, for the HUD's gold edge */
   evolved?(): boolean;
-  /** what it costs, shown on its selected tab when the cost is not MP (rounds, a stance gauge) */
-  cost?(): string;
 }

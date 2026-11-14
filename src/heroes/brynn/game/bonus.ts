@@ -16,7 +16,7 @@ function heavyBonus(): number {
 
 /**
  * Extra damage one of Brynn's own hits deals from her skills, added together: a heavy swing on the foe it pays off on
- * (Heavy Hands, precise), a sword blow in the swings after a parry (Counter Edge).
+ * (Heavy Hands, precise), a sword blow in the swings after a parry (Counter Cleave).
  */
 export function hitBonus(e: Enemy, hit: OwnHit): number {
   let bonus = 0;

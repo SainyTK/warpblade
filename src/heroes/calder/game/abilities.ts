@@ -74,7 +74,6 @@ export const CALDER_SLOTS: readonly AbilitySlot[] = CALDER_ABILITIES.map((a) => 
   affordable: () => SHOTS[a].affordable(false),
   cast: (wide: boolean) => castShot(a, wide),
   evolved: () => SHOTS[a].evolved(),
-  cost: () => SHOTS[a].costText(),
 }));
 
 /** the recharges run down */

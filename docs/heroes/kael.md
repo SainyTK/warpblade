@@ -39,5 +39,5 @@ Every new part is drawn from the rig frame only, so the stage, the portrait and 
 ## Hero screen
 
 Title: "The warp knight".
-Blurb: "A spell swordsman. He throws his crystal sword, appears where it lands, and casts spells into his sword string."
+Blurb: "A spell swordsman. He throws his crystal sword, appears where it lands, and casts spells into his sword combo."
 He stands in the shared rest pose, and the longer sword still fits the portrait (its point ends inside the 6 pixels below the feet).

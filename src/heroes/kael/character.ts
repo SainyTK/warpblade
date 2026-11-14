@@ -13,7 +13,7 @@ export const KAEL: CharacterDef = {
   name: "Kael",
   title: "The warp knight",
   blurb:
-    "A spell swordsman. He throws his crystal sword, appears where it lands, and casts spells into his sword string.",
+    "A spell swordsman. He throws his crystal sword, appears where it lands, and casts spells into his sword combo.",
   accent: "#7fe3ff",
   price: 0,
   special: { id: "crystalNova", name: "Crystal Nova" },

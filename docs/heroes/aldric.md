@@ -1,7 +1,7 @@
-# Aldric, the dawn shield
+# Aldric, the shield knight
 
 The third hero of the sword roster (patch 0.11.0, task T-mac-260).
-Id `aldric`, name Aldric (he/him), title "Captain of the dawn guard".
+Id `aldric`, name Aldric (he/him), title "The shield knight".
 Price 300 coins (`CharacterDef.price`), the first paid hero.
 Accent `#ffe08a` (dawn gold), the gold-on-white family of the roster.
 His module is `src/heroes/aldric/`, his skills are in `docs/skills/aldric.md`.

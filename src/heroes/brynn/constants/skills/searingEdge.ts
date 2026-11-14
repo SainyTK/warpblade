@@ -7,7 +7,7 @@ import { evolvedRow, levelRows } from "../../../../utils/skillRows";
 const LEVELS = levelRows([
   { text: "Her blows leave searing embers that burn foes.", values: { damage: 0.06, max: 4, stacks: 1, heavy: 1 } },
   { text: "Embers burn 0.06 to 0.1 AD a tick.", values: { damage: 0.1 } },
-  { text: "New: a heavy swing lays 3 embers.", values: { heavy: 3 } },
+  { text: "New: a Keen blow lays 3 embers.", values: { heavy: 3 } },
   { text: "New: a foe with embers takes 15% more from her; it holds 8.", values: { max: 8, taken: 0.15 } },
   { text: "New: the slam spreads embers to the foes round its target.", values: { slam: 1 } },
   { text: "Embers burn 0.1 to 0.2 AD.", values: { damage: 0.2 } },

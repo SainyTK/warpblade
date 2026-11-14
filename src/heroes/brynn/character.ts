@@ -15,7 +15,7 @@ export const BRYNN: CharacterDef = {
   name: "Brynn",
   title: "The heavy blade",
   blurb:
-    "Small, loud, and carrying a sword as tall as she is. Her swings do not stop for anything, sweep a crowd off its feet and end in a slam that shakes the floor.",
+    "Small, loud, and carrying a sword as tall as she is. Her swings stop for nothing and end in a slam that shakes the floor.",
   accent: BRYNN_ACCENT,
   price: 1000,
   special: { id: "crimsonFall", name: "Crimson Fall" },

@@ -5,13 +5,13 @@ import { CERISE_CONTROLS } from "./constants/controls";
 import { CERISE_SKILL_DEFS } from "./constants/skills/index";
 import { CERISE_SKIN } from "./look";
 
-/** Cerise, the rose duelist: her data entry, read by the roster (src/heroes/roster.ts); her code entry is `index.ts` */
+/** Cerise, the duelist: her data entry, read by the roster (src/heroes/roster.ts); her code entry is `index.ts` */
 export const CERISE: CharacterDef = {
   id: "cerise",
   name: "Cerise",
-  title: "The rose duelist",
+  title: "The duelist",
   blurb:
-    "A young duelist with a rapier and a long reach. Quick thrusts on a thin line, a parry that answers at once, and ripostes that keep coming on the beat.",
+    "A young duelist with the longest reach. Quick thrusts on a thin line, and a parry that answers with ripostes on the beat.",
   accent: "#ff8fb0",
   price: 0,
   special: { id: "roseTempest", name: "Rose Tempest" },

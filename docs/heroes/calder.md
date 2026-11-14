@@ -2,7 +2,7 @@
 
 The ninth hero of the sword roster (patch 0.11.0).
 Id `calder`, name Calder (he/him), title "The trigger blade".
-Blurb: "A drifter who rebuilt a broken sword around a revolving chamber. He cuts, and as the blade bites he pulls the trigger. Six rounds, then a reload."
+Blurb: "A drifter who rebuilt a broken sword round a revolving chamber. He cuts, and as the blade bites he pulls the trigger. Six rounds, then a reload."
 Price: 1800 coins, the last price in the hero order (`docs/meta-progress.md`).
 Accent `#b4ff5a`, phosphor green.
 Kael is crystal cyan and Yun is jade green; phosphor green is the yellow side of green, so the three never read as one.

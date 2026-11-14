@@ -26,7 +26,7 @@ export interface BrynnState {
   fissure: boolean;
   /** heavy swings landed in a row, for Heavy Hands' streak */
   heavyStreak: number;
-  /** swings left that hit harder after a parry (Counter Edge) */
+  /** swings left that hit harder after a parry (Counter Cleave) */
   afterParry: number;
   /** seconds left of War Cry's buff */
   cry: number;

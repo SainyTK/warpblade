@@ -1,8 +1,8 @@
-# Saya, the quiet draw
+# Saya, the quickdraw
 
 The fifth hero of the sword roster (patch 0.11.0, task T-mac-260).
-Id `saya`, name Saya (she/her), title "The quiet draw".
-Blurb: "Her katana stays in its lacquered scabbard until the moment it is needed. Every cut she makes waits in the foe, and all of them land at once when the blade clicks home."
+Id `saya`, name Saya (she/her), title "The quickdraw".
+Blurb: "Her katana rests in its scabbard until it is needed. Every cut waits in the foe, and all of them land at once when the blade clicks home."
 Price 550 coins, the fifth price in roster order.
 Accent `#8fa2ff`, indigo light, the menu colour of her ink and moonlight.
 Her module is `src/heroes/saya/`, laid out as `docs/hero-module.md` describes; her skills are in `docs/skills/saya.md`.

@@ -13,7 +13,7 @@ import { VESPER_SKIN } from "./look";
 export const VESPER: CharacterDef = {
   id: "vesper",
   name: "Vesper",
-  title: "The dusk wanderer",
+  title: "The twin blade",
   blurb:
     "A long blade for reach, a short one for speed. Every blow that lands quickens her, and she keeps foes in the air until the dusk takes them.",
   accent: "#b8a0ff",

@@ -6,8 +6,8 @@ AD and AP mean her attack damage and ability power (12 and 9 at hero level 1, `B
 
 ## Identity
 
-Brynn is the heavy blade: three slow, wide blows with armour while she swings, Heft built by every blow that lands, heavy swings on the beat after a blow, a costly flat-blade guard whose parry is the Counter Cleave, and abilities that shake the floor.
-Her skills lean on what makes her different: the slam and its shockwave, the fissure full Heft makes, the launch the slam catches, heavy swings, the Counter Cleave and her armour.
+Brynn is the heavy blade: three slow, wide blows with armour while she swings, Heft built by every blow that lands, Keen blows that swing wider on the beat after a blow, a costly flat-blade guard whose parry is the Counter Cleave, and abilities that shake the floor.
+Her skills lean on what makes her different: the slam and its shockwave, the fissure full Heft makes, the launch the slam catches, Keen blows, the Counter Cleave and her armour.
 Every skill is on a single button press or runs on its own.
 
 ## Base kit (no skills)
@@ -20,7 +20,7 @@ Every skill is on a single button press or runs on its own.
 | J (air) | The Falling Slam, once per jump: 1.4 AD on the way down and a 40 px ring each side at 1.0 AD on landing. |
 | J held | The shared warp: Anvilheart spins to the foe, an overhead chop at the shared power and a 36 px shock ring at 0.3 AD. |
 | K | Guard on the flat of the blade: lets 10% through and costs 22 stamina. |
-| K (parry) | The shared parry, then the Counter Cleave at once: 2.4 AD in front and behind, a knockdown, 30 Heft, and a heavy next swing. |
+| K (parry) | The shared parry, then the Counter Cleave at once: 2.4 AD in front and behind, a knockdown, 30 Heft, and a Keen next swing. |
 | L | The shared dodge. |
 | I | Rend (14 MP, 4.5 s): a floor wave 170 px ahead, 2.4 AP, throws foes up. Quake (16 MP, 6 s): 1.9 AP within 64 px, throws foes up. |
 | I held | Rend both ways; Quake to 100 px with an aftershock at 60%. Half again the MP. |
@@ -45,7 +45,7 @@ Damage source: hits of her own presses (string blows and their waves, the Counte
 | `br_cleave` | Wide Arc | attack | easy | J | `br_launch` | Horizon Cleave |
 | `br_launch` | Skyward Heave | attack | timed | J | `br_cleave` | Meteor Heave |
 | `br_slam` | Anvil Weight | attack | timed | J | `br_heavy` | Split Earth |
-| `br_counter` | Counter Edge | attack | precise | K | `br_ironskin` | Iron Answer |
+| `br_counter` | Counter Cleave | attack | precise | K | `br_ironskin` | Iron Answer |
 | `br_spin` | Spinning Throw | movement | timed | J | `br_crater` | Iron Wheel |
 | `br_crater` | Crater Leap | movement | timed | Up | `br_spin` | Star Crater |
 | `br_charge` | Shoulder Charge | movement | timed | L | `br_cry` | Battering Ram |
@@ -64,20 +64,20 @@ Damage source: hits of her own presses (string blows and their waves, the Counte
 
 #### `br_heavy` Heavy Hands
 
-Attack, precise, J. Press J just after a blow lands: the heavy swing that follows hits far harder.
+Attack, precise, J. Press J just after a blow lands: the Keen blow hits far harder.
 
 | Lv | Card line | Values |
 | --- | --- | --- |
-| 1 | Heavy swings deal +150% to the foe they hit first. | bonus 1.5 |
-| 2 | The heavy beat lasts 0.14 to 0.18 s. | window 0.18 |
-| 3 | New: the crescent off a heavy swing flies farther and hits harder. | wave 0.6, waveReach 0.5 |
-| 4 | New: a heavy swing gives 10 more Heft. | heft 10 |
+| 1 | Keen blows deal +150% to the foe they hit first. | bonus 1.5 |
+| 2 | The Keen beat lasts 0.14 to 0.18 s. | window 0.18 |
+| 3 | New: the crescent off a Keen blow flies farther and hits harder. | wave 0.6, waveReach 0.5 |
+| 4 | New: a Keen blow gives 10 more Heft. | heft 10 |
 | 5 | Heavy bonus +150% to +350%. | bonus 3.5 |
-| 6 | New: each heavy swing in a row adds +30% to the next, up to +90%. | streak 0.3, streakCap 0.9 |
-| 7 | New: a heavy slam is a fissure from half Heft. | halfFissure 1 |
+| 6 | New: each Keen blow in a row adds +30% to the next, up to +90%. | streak 0.3, streakCap 0.9 |
+| 7 | New: a Keen slam is a fissure from half Heft. | halfFissure 1 |
 | 8 | Heavy bonus +350% to +2000%; the crescent hits far harder. | bonus 20, wave 4 |
 
-Evolution **Mountain Hands** (partner `br_slam`): Every heavy swing also splits the floor with a fissure ahead of her.
+Evolution **Mountain Hands** (partner `br_slam`): Every Keen blow also splits the floor with a fissure ahead of her.
 Evolved values: bonus 30, heavyFissure 0.8.
 
 #### `br_cleave` Wide Arc
@@ -134,7 +134,7 @@ Attack, timed, J. The slam's shockwave runs farther and harder, and fissures spl
 Evolution **Split Earth** (partner `br_heavy`): Every slam is a fissure, and full Heft no longer needs spending on it.
 Evolved values: alwaysFissure 1.
 
-#### `br_counter` Counter Edge
+#### `br_counter` Counter Cleave
 
 Attack, precise, K. Parry: the Counter Cleave hits the attacker far harder.
 
@@ -257,7 +257,7 @@ Spell, easy, I. An ability: a roar that knocks foes back, fills Heft and makes h
 | 7 | New: she is armoured the whole time. | armour 1 |
 | 8 | Roar 1 to 4 AP; Heft fills to full. | heft 100, power 4 |
 
-Evolution **Unbroken** (partner `br_bellows`): While the cry lasts every swing is heavy and she takes a third less.
+Evolution **Unbroken** (partner `br_bellows`): While the cry lasts every swing is Keen and she takes a third less.
 Evolved values: heavy 1, taken 0.33.
 
 #### `br_embers` Searing Edge
@@ -268,7 +268,7 @@ Dot, easy, auto. Her blows leave embers that burn foes, more with every blow.
 | --- | --- | --- |
 | 1 | Her blows leave searing embers that burn foes. | damage 0.06, max 4, stacks 1, heavy 1 |
 | 2 | Embers burn 0.06 to 0.1 AD a tick. | damage 0.1 |
-| 3 | New: a heavy swing lays 3 embers. | heavy 3 |
+| 3 | New: a Keen blow lays 3 embers. | heavy 3 |
 | 4 | New: a foe with embers takes 15% more from her; it holds 8. | max 8, taken 0.15 |
 | 5 | New: the slam spreads embers to the foes round its target. | slam 1 |
 | 6 | Embers burn 0.1 to 0.2 AD. | damage 0.2 |
@@ -343,7 +343,7 @@ Summon, precise, auto. A parry calls a crimson echo of her behind the attacker t
 | 3 | New: perfect dodges call it too. | both 1 |
 | 4 | Echo power 3 to 6 AD. | power 6 |
 | 5 | New: the echo swings twice. | cuts 2 |
-| 6 | New: heavy swings call it 25% of the time. | heavy 0.25 |
+| 6 | New: Keen blows call it 25% of the time. | heavy 0.25 |
 | 7 | Echo power 6 to 10 AD. | power 10 |
 | 8 | Echo power 10 to 30 AD. | power 30 |
 
@@ -358,7 +358,7 @@ Summon, timed, auto. Her blows chip red shards off the crystal in Anvilheart tha
 | --- | --- | --- |
 | 1 | A blow may chip off a red shard of her crystal that darts at foes. | chance 0.25, power 0.5, strikes 3, count 1, cooldown 0.5 |
 | 2 | Chance 25% to 40%. | chance 0.4 |
-| 3 | New: a heavy swing always throws one. | heavyShard 1 |
+| 3 | New: a Keen blow always throws one. | heavyShard 1 |
 | 4 | New: a shard's strike marks the foe, +10% from her for 2 s; 5 strikes. | strikes 5, mark 0.1 |
 | 5 | Power 0.5 to 0.9 AD. | power 0.9 |
 | 6 | New: two shards out at once. | count 2 |
@@ -425,7 +425,7 @@ Evolved values: power 3, falls 3, widen 0.35.
 ## Balance
 
 Measured 15 November 2026 in a measuring room built for this hero to the method in `docs/skills/balance.md`: the run starts at wave 2 and hero level 1 with only the skill under test, the wave's stream is stopped, and the room keeps a crowd of six (four husks and two wisps) or one husk at three times its HP, refilled 0.35 s after a foe falls, with her HP kept full.
-A scripted player walks to the nearest foe and plays the string, pressing 30% of follow-ups in the heavy beat, casts the selected ability when it is ready, warps every 4 s at a distant foe, and makes a parry and a perfect dodge in turn every 7 s through the game's own functions.
+A scripted player walks to the nearest foe and plays the string, pressing 30% of follow-ups in the Keen beat, casts the selected ability when it is ready, warps every 4 s at a distant foe, and makes a parry and a perfect dodge in turn every 7 s through the game's own functions.
 Each figure is damage a second over 30 to 40 s of game time, on her sources (`attacks`, `abilities`, `ultimate` and the skill's own id).
 The script lives in the task's scratch folder, outside the repo.
 
@@ -438,7 +438,7 @@ Two runs of Brynn's base kit read 150 and 177 on the crowd and 74 and 119 on one
 | Wide Arc | crowd | 150 to 177 | 284 at power 3.2 (before tuning) | 611 at wave 2.5 (before tuning) |
 | Skyward Heave | crowd | 150 to 177 | 277 | 225 |
 | Anvil Weight | crowd | 150 to 177 | 444 at wave 5 (before tuning) | 315 (before tuning) |
-| Counter Edge | one | 74 to 119 | 92 at power 14 (before tuning) | the same: Iron Answer needs blocks, which the room has none of |
+| Counter Cleave | one | 74 to 119 | 92 at power 14 (before tuning) | the same: Iron Answer needs blocks, which the room has none of |
 | Spinning Throw | one | 74 to 119 | 117 | 125 |
 | Ember Arc | crowd | 150 to 177 | 251 at power 7 (before tuning) | 251: the returning crescents flew off the stage before they turned, fixed since and not measured again |
 | Brand Pillars | crowd | 150 to 177 | 251 | 152 |
@@ -451,12 +451,12 @@ Two runs of Brynn's base kit read 150 and 177 on the crowd and 74 and 119 on one
 | Bellows | crowd | 150 to 177 | 137 | 267 |
 | Crimson Fall | crowd, cast every 10 s | 54 a second from the ultimate | 467 (8.7 times the base special) | 293 (5.4 times) |
 
-Tuning from those runs, in the data rows: Falling Blade's power, its seventh level's chance and its evolution's rain came down, and a rain no longer restarts while it falls; Wide Arc's last level and Horizon Cleave came down; Anvil Weight's shockwave came down; Ember Arc's last level came down; Heavy Hands (bonus 20, evolved 30), Counter Edge (25 at level 8) and Echo Swing (30, evolved 45) went up on the foe they are aimed at.
+Tuning from those runs, in the data rows: Falling Blade's power, its seventh level's chance and its evolution's rain came down, and a rain no longer restarts while it falls; Wide Arc's last level and Horizon Cleave came down; Anvil Weight's shockwave came down; Ember Arc's last level came down; Heavy Hands (bonus 20, evolved 30), Counter Cleave (25 at level 8) and Echo Swing (30, evolved 45) went up on the foe they are aimed at.
 
 ### Still off or not measured
 
 - Crater Leap and Shoulder Charge read the same as the base kit in the first room, since its scripted player never jumped or dodged out of a free state; a second room that did jumped onto the ledges and stood out of reach, so its figures were not used. Both were seen working in play (stills and the build runs) and are unmeasured.
-- Counter Edge after tuning, Searing Edge at level 8, War Cry at level 8, Iron Skin (no damage of its own) and every level 1 figure but two were not measured.
+- Counter Cleave after tuning, Searing Edge at level 8, War Cry at level 8, Iron Skin (no damage of its own) and every level 1 figure but two were not measured.
 - Crimson Fall evolved read lower than level 8, which the overkill of a refilling crowd can explain; per cast it sits near the 6 times asked at level 8 and under the 15 times asked evolved.
 - Precise skills sit under the precise band on one foe at the model's trigger rates, as Kael's did before his round 2.
 
@@ -481,7 +481,7 @@ Every run from the start menu in a fresh session, on this branch (`agent-studio/
 | Wide Arc | `game/shapeHit.ts` (the sweep), `game/skills/wideArc.ts` (the mark), `game/afterStrike.ts` (Horizon Cleave) |
 | Skyward Heave | `game/shapeHit.ts` (the heave), `game/bonus.ts` (airborne taken), `game/skills/skywardHeave.ts` (crash, Meteor Heave) |
 | Anvil Weight | `game/slam.ts` |
-| Counter Edge | `game/guardStyle.ts`, `game/bonus.ts` (the swings after a parry) |
+| Counter Cleave | `game/guardStyle.ts`, `game/bonus.ts` (the swings after a parry) |
 | Spinning Throw | the shared warp's tune in `game/warpStyle.ts`, `game/skills/spinningThrow.ts` (Iron Wheel) |
 | Crater Leap | `game/moves/air.ts`, `game/craterLanding.ts` |
 | Shoulder Charge | `game/shoulderCharge.ts` on the shared dodge's hooks |

@@ -32,7 +32,7 @@ export const WAR_CRY: SkillDef = {
   evolution: {
     partner: "br_bellows",
     name: "Unbroken",
-    text: "While the cry lasts every swing is heavy and she takes a third less.",
+    text: "While the cry lasts every swing is Keen and she takes a third less.",
     row: evolvedRow(LEVELS[7], "Every swing is heavy while it lasts.", { heavy: 1, taken: 0.33 }),
   },
 };

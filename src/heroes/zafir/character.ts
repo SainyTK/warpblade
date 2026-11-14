@@ -13,7 +13,7 @@ import { ZAFIR_SKIN } from "./look";
 export const ZAFIR: CharacterDef = {
   id: "zafir",
   name: "Zafir",
-  title: "The dervish of the dunes",
+  title: "The dervish",
   blurb:
     "Never stops moving. He walks through his spins, cuts both sides at once, leaves bleeding wounds and turns a ring of sand round himself.",
   accent: ZAFIR_ACCENT,

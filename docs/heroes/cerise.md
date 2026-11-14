@@ -1,8 +1,8 @@
-# Cerise, the rose duelist
+# Cerise, the duelist
 
 The second hero of the sword roster (patch 0.11.0).
-Id `cerise`, name Cerise (she/her), title "The rose duelist".
-Blurb: "A young duelist with a rapier and a long reach. Quick thrusts on a thin line, a parry that answers at once, and ripostes that keep coming on the beat."
+Id `cerise`, name Cerise (she/her), title "The duelist".
+Blurb: "A young duelist with the longest reach. Quick thrusts on a thin line, and a parry that answers with ripostes on the beat."
 Price 0: she is open from the start, with Kael.
 Accent `#ff8fb0` (rose pink), the colour of her menu tile, her ability tabs, her Points bar, her sword light and every effect she makes.
 
