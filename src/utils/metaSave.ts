@@ -18,7 +18,7 @@ const emptyMeta = (): MetaSave => ({
 
 /** the known ids from a saved list, once each; a save from before the list existed has none */
 const knownIds = (raw: unknown, known: readonly string[]): string[] =>
-  Array.isArray(raw) ? known.filter((id) => raw.includes(id)) : [];
+  Array.isArray(raw) ? [...new Set(known)].filter((id) => raw.includes(id)) : [];
 
 /** the coins a save gets back for the heroes it bought that have left the roster, by the price each cost */
 const refundFor = (raw: unknown, removed: Readonly<Record<string, number>>): number =>

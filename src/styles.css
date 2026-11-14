@@ -762,18 +762,23 @@ body[data-hud="outside"] .boss {
   width: min(300px, 100%);
   margin-top: 4px;
 }
-.menu-foot {
-  margin: 0;
-  font-size: 14px;
-  color: var(--muted);
-  text-align: center;
-}
-/* a one-time note on the start menu, such as a refund */
+/* the footer and the note sit over the scene: a dark edge keeps them readable on the floor */
+.menu-foot,
 .menu-note {
   margin: 0;
   font-size: 14px;
-  color: var(--gold);
   text-align: center;
+  text-shadow:
+    0 1px 0 var(--night),
+    0 0 4px var(--night),
+    0 0 8px var(--night);
+}
+.menu-foot {
+  color: var(--mist);
+}
+/* a one-time note on the start menu, such as a refund */
+.menu-note {
+  color: var(--gold);
 }
 .menu-foot-links {
   display: inline-flex;

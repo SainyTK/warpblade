@@ -37,7 +37,7 @@ Everything in Warpblade stays original.
 ## Design pillars
 
 1. Combat first. A change that makes fights more readable, more varied or more expressive beats one that adds menus.
-2. Every hero is a different game. New heroes and reworks must change movement, defence and resource, not only damage and colour.
+2. Every hero is a different game. Reworks must change movement, defence and resource, not only damage and colour.
 3. Every run is a different build. Picks, fusions and evolutions should create choices with real trade-offs.
 4. Always a next goal. Each big patch adds or extends something to unlock, collect or master.
 5. Pixel craft. Sprites and effects are drawn in code at 320 x 180 with the palettes, lights and particles already in the engine. No image files in the game.
@@ -55,7 +55,7 @@ A day with a headline turns that night's patch into a big patch with the day wor
 
 A big patch has one headline from this list, plus any small changes it needs:
 
-- a new hero
+- a new hero, only when the owner asks for one (see Roster)
 - a new stage or era
 - a new system (for example class advancement, evolutions, achievements and unlocks, a collection, run modifiers, a new mode)
 - a hero rework
@@ -69,29 +69,33 @@ A small patch has no new content.
 It holds bug fixes, balance changes, hero buffs and nerfs, item (shop and boon) buffs and nerfs, and skill buffs and nerfs.
 A small patch has between two and eight changes, and at least one of them answers a real problem: a bug, a bot measurement, or player feedback.
 
-## Hero sprint
+## Roster
 
-From 7 November 2026 the game grows to ten heroes, one new hero per night.
-The owner set this on 6 November 2026 and built the third hero, Sable, that day.
-While the game has fewer than ten heroes, every night is a big patch whose headline is a new hero the studio designs and builds that night.
-This overrides the three-day cadence and the rule against repeating a headline category.
-Day work with its own headline still ships that night, as extra highlights beside the new hero.
+The game has nine heroes: Kael, Cerise, Aldric, Vesper, Saya, Yun, Brynn, Zafir and Calder.
+The owner set this roster on 15 November 2026 and removed the nine heroes that did not carry a sword.
+Every hero holds a sword.
+An item that belongs to a sword style is fine beside it: a shield, a short sword, a scabbard.
+Magic, shots from a gun sword's chamber and spirit swords are fine too; no hero fights with a weapon that is not a sword.
+Every hero's look follows the heroes of Japanese role-playing games and stays original: no name, character, outfit, weapon design or move name is taken from any existing game.
+A new hero comes only when the owner asks for one, and the studio never removes a hero.
+The studio reworks, balances and extends the nine.
+Kael is the bar for fun: responsive sword strings, a warp that reaches, abilities with clear effects, readable hits.
+A hero rework keeps what the owner removed out of the game: long recharges, travel moves that carry the hero far and lock out other skills, attacks the game picks on its own, and attacks that turn the hero around.
 
-Every new hero must:
+Each hero is a self-contained module under `src/heroes/<id>/`, registered in the roster (`docs/hero-module.md`).
+Work on a hero stays inside its own folder.
 
-- Play completely differently from every hero already in the game: movement, defence, resource, range and the shape of its attacks. A new weapon on a familiar loop does not count.
-- Start locked and cost coins to unlock, more than the hero before it. The price goes in `src/constants/heroUnlocks.ts` by the rule written there.
-- Bring at least one achievement of its own (`src/constants/achievements.ts`, `docs/achievements.md`).
-- Get a real benefit from every shop item (`docs/meta-progress.md`).
-- Have its own 20 skills with eight levels and an evolution each (`docs/skill-design.md`), special and ultimates, code-drawn skill icons, its own look on the shared rig, and movement to `docs/motion-standard.md`.
-- Have its own menu colour, `accent` in its `CharacterDef`, which the hero screen uses for its tile, frame and stat bars; the hero screen needs no CSS per hero.
-- Work with the keyboard, the touch controller and the Controls screen, and in co-op (per-seat memory, `docs/multiplayer.md`).
-- Pass the playtest smoke check, with a mash bot death wave within two waves of the other heroes.
-- Have a design note in `docs/<hero>-design.md` that lists every hero already in the game and says how this one differs from each.
+Play styles already taken:
 
-Play styles already taken: Kael (warp swordsman, situational combos, warp teleport, MP spells), Ysra (planted glaive, guard and parry, backstep, Heat rites) and Sable (ranged hunter, aimed bolts, ammo and reload, spacing).
-Open directions to choose from, one per night, never two alike: a summoner who fights through minions, an unarmed grappler with throws and armour, a trapper who builds turrets and mines, a shadow assassin with stealth and back stabs, a tether fighter who swings on a chain, a time or gravity mage, a berserker who spends HP for power, a shield thrower, a fighter whose blows land on a rhythm.
-The director may pick another direction when it is more distinct than these.
+- Kael, crystal longsword: spell swordsman with a sword string, a warp and elemental spells.
+- Cerise, rapier: duelist with fast thrusts, lunges, a parry and riposte, and precision.
+- Aldric, arming sword and shield: knight with a real shield block, bashes, counters and light magic.
+- Vesper, long sword and short sword: twin blade with a long blade for reach, a short blade for speed and rising tempo.
+- Saya, katana with scabbard: quickdraw with a sheathed stance, draw cuts and cuts that land after she sheathes.
+- Yun, jian: sword sage with flowing cuts, sword qi waves and spirit swords that fly beside him.
+- Brynn, oversized greatsword: heavy blade with slow wide swings with armour, charged blows and shockwaves.
+- Zafir, scimitar: dervish with spinning cuts while moving, bleeding wounds, sand and wind.
+- Calder, gun sword: trigger blade with rounds fired at the moment of impact, shots and recoil moves.
 
 ## Secrets
 
