@@ -1,5 +1,4 @@
 import { createSlash } from "../../../game/effects/slash";
-import { drawThrownSword } from "../../../game/effects/thrownWeapon";
 import { sharedWarpStrike, warpSlash } from "../../../game/hero/warp";
 import { meleeHit } from "../../../game/meleeHit";
 import { skillValues } from "../../../game/skills/query";
@@ -8,6 +7,7 @@ import { boxAhead, boxBehind } from "../../../game/world";
 import type { Enemy } from "../../../types/enemy";
 import type { WarpStyle } from "../../../types/moveset";
 import { startChain } from "./blink";
+import { drawThrownSword } from "./effects/thrownSword";
 import { THRUST_SLASH } from "./moves/slashes";
 import { spellwarpArrived } from "./spellwarp";
 

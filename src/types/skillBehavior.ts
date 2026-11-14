@@ -3,10 +3,10 @@ import type { Enemy } from "./enemy";
 
 /**
  * Everything the hero did or took that a skill can answer, by event name, with each event's payload. Design:
- * docs/skill-design.md. The shared loop emits these; a kit adds its own events (a grab, a throw) by augmenting this
+ * docs/skill-design.md. The shared loop emits these; a kit adds its own events (a draw cut, a shot) by augmenting this
  * interface from its own types file, without editing this one:
  *
- *   declare module "../skillBehavior" { interface SkillEvents { grab: { foe: Enemy } } }
+ *   declare module "../../../types/skillBehavior" { interface SkillEvents { drawCut: { foe: Enemy } } }
  */
 export interface SkillEvents {
   /** one of the hero's own hits landed (not a damage over time tick): from J, an ability or the ultimate */
@@ -19,7 +19,7 @@ export interface SkillEvents {
     move: string | null;
     /** the last blow of the ground string (`chain` has reached `comboHits`) */
     finisher: boolean;
-    /** a sword, glaive, kick or fist blow, as opposed to a bolt or a spell */
+    /** a blow of the sword or the body, as opposed to a shot or a spell */
     melee: boolean;
     back: boolean;
     crit: boolean;
@@ -27,7 +27,7 @@ export interface SkillEvents {
     /** a Keen press: a sure crit */
     keen: boolean;
   };
-  /** an ability went off; `ability` is the kit's own id for it (Kael's element, Ysra's rite, `snare`, `bellow`) */
+  /** an ability went off; `ability` is the kit's own id for it (Kael's `lance`, `burst` or element) */
   cast: { ability: string };
   /** a dash ended, with the foes the hero passed through on the way */
   dash: { dir: number; foes: readonly Enemy[] };
@@ -68,7 +68,7 @@ export type SkillListener<K extends SkillEventType> = (
 
 /**
  * Code for a skill that acts on its own or answers events. Called once per hero who holds it, with that hero swapped
- * in (`hero`, `progress` and `character` are theirs). Registered in `src/game/skills/<hero>/index.ts`.
+ * in (`hero`, `progress` and `character` are theirs). Registered in the hero's `HeroModule.skills`.
  */
 export interface SkillBehavior {
   /** memory for a hero who has just taken the skill */

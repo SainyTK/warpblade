@@ -76,7 +76,7 @@ export function createMudGlob(
   };
   return {
     update(step) {
-      // a Stillfield slows the shot where it flies
+      // a time field slows the shot where it flies
       const dt = step * fieldPace(o.x, o.y);
       o.vy += GRAVITY * dt;
       o.x += o.vx * dt;

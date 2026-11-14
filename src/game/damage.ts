@@ -39,7 +39,7 @@ export interface HitOptions {
   heavy?: boolean;
   /** a sword blow: guards stop it unless it is heavy */
   melee?: boolean;
-  /** comes round a guard (the head of Orrin's chain at its tip): guards never stop it */
+  /** comes round a guard: guards never stop it */
   curls?: boolean;
   /** a minion staggers for this long: its action is cut and it cannot act */
   stagger?: number;
@@ -47,7 +47,7 @@ export interface HitOptions {
   sureCrit?: boolean;
   /** burning and other damage over time: no crits, no numbers in white */
   dot?: boolean;
-  /** a hit that builds no Flow though it counts for the hero's own source (Wenna's Wick bites) */
+  /** a hit that builds no Flow though it counts for the hero's own source (a summon's bite) */
   noFlow?: boolean;
   /** what dealt the hit, for the end of run screen: the hero's own blows when not given, a skill's id for a hit the
    *  skill deals on its own (it builds no Flow) */

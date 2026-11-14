@@ -34,10 +34,11 @@ export interface BladeLook {
   /** from the hand to the tip, in pixels: sword trails and afterimages follow it */
   reach: number;
   /**
-   * Draw the sword held in `hand`, pointing along `angle` (radians, the pose's `sa`). `rig.pose.bs` is the hero's own
-   * blade state for a sword that changes (a sheathed katana, an open chamber); 0 unless the hero's clips set it.
+   * Draw the sword held in `hand`, pointing along `angle` (radians, the pose's `sa`). `state` is the pose's `bs`, the
+   * hero's own blade state for a sword that changes (a katana half drawn, an open chamber): 0 unless the hero's clips
+   * set it, and 0 for the sword thrown in a warp. The same drawing serves the hand, the thrown sword and the portrait.
    */
-  draw(s: SpriteCanvas, hand: Vec, angle: number, rig: RigFrame): void;
+  draw(s: SpriteCanvas, hand: Vec, angle: number, state: number): void;
 }
 
 /** an item that belongs to a sword style, carried besides the sword: a shield, a short sword, a scabbard */

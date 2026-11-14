@@ -364,21 +364,18 @@ body {
   border-top-color: var(--gold);
 }
 /* a hero's tab group adds its tabs to the one row of tabs, so they wrap together and a lone tab never takes a row */
-.ability-tabs,
-.rite-tabs {
+.ability-tabs {
   display: contents;
 }
-.ability-tabs[hidden],
-.rite-tabs[hidden] {
+.ability-tabs[hidden] {
   display: none;
 }
 /* a tab keeps to one line, so a longer label (a selected tab with its cost) never doubles the row's height */
-.rite-tabs .el {
+.ability-tabs .el {
   white-space: nowrap;
 }
-/* Kael's ability tabs and every other hero's own tabs; each one's colour comes in as --tint */
-.el.on.ability,
-.el.on.rite {
+/* every hero's ability tabs; each one's colour comes in as --tint */
+.el.on.ability {
   color: var(--tint);
   border-color: var(--tint);
 }

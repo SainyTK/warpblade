@@ -42,8 +42,6 @@ export interface WarpTarget {
   x: number;
   y: number;
   enemy?: Enemy;
-  /** a ranged hero's throw away from a foe: the foe they strike once they land */
-  aim?: Enemy;
 }
 
 /** A verlet rope point. */

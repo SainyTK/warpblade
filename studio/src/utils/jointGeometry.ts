@@ -1,6 +1,5 @@
 import { BODY } from '@game/constants/hero';
-import { armReach } from '@game/game/hero/draw/arm';
-import { legReach, toePoint } from '@game/game/hero/draw/leg';
+import { armReach, legReach, toePoint } from '@game/rig';
 import type { Pose } from '@game/types/pose';
 import {
   atHip,

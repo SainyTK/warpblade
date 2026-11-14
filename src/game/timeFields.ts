@@ -2,9 +2,8 @@ import type { EnemyRank } from "../types/enemy";
 import type { Point } from "../types/world";
 
 /**
- * An area where time runs slow for foes and their shots: a circle round a point, held open by the effect that made it
- * (Mirel's Stillfield, the clock face of her special). Foes inside act at their rank's pace and foe shots fly at
- * `shot`; a pace of 1 leaves them alone and 0 stops them. Anything that slows foes or foe shots in an area reuses this.
+ * An area where time runs slow for foes and their shots: a circle round a point, held open by the effect that made it.
+ * Foes inside act at their rank's pace and foe shots fly at `shot`; a pace of 1 leaves them alone and 0 stops them. Anything that slows foes or foe shots in an area reuses this.
  */
 export interface TimeField {
   at(): Point;

@@ -26,17 +26,15 @@ export interface WarpTune {
 /** how one hero's warp move looks and what it adds; the throw, the flight, the recharge and the arrival blow are shared */
 export interface WarpStyle {
   /**
-   * A ranged hero throws away from the nearest foe, lands at a safe distance and strikes that foe from there with
-   * `strike`. Everyone else throws at the nearest foe ahead and lands beside it.
-   */
-  ranged?: boolean;
-  /**
    * The stat the warp's damage grows with: `ap` for a hero whose damage is mostly ability power, so every hero's warp
    * hits about as hard. Left out, attack damage.
    */
   stat?: "ap";
-  /** draws the thrown weapon at (x, y), pointing along `angle` (radians), `t` seconds into its flight */
-  drawThrown(x: number, y: number, angle: number, t: number): void;
+  /**
+   * Draws the thrown sword with its point at (x, y), pointing along `angle` (radians), `t` seconds into its flight.
+   * Left out, the hero's own blade drawing flies (`drawThrownBlade`), so the thrown sword always matches the one held.
+   */
+  drawThrown?(x: number, y: number, angle: number, t: number): void;
   /**
    * The arrival blow at `power` times attack damage on `foe` (the foe the throw was aimed at, null for a point); left
    * out, the shared blow: a slash in front that knocks the foe up and back. A kit that sets it deals the same power.

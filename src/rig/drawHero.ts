@@ -65,7 +65,7 @@ export function drawHero(s: SpriteCanvas, p: Pose, skin: HeroSkin, look: HeroLoo
     for (const extra of skin.extras ?? []) if (extra.layer === layer) extra.draw(s, rig);
   };
   const swordArm = () => {
-    if (look.sword) skin.blade.draw(s, hand, p.sa, rig);
+    if (look.sword) skin.blade.draw(s, hand, p.sa, p.bs);
     parts.arm(s, near, elbow, hand, !back, rig);
   };
   const farArm = (front: boolean) => {

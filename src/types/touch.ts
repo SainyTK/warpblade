@@ -24,7 +24,7 @@ export interface TouchButtonText {
   label: string;
   /** what the button does on a touch screen, for the Controls screen */
   hint: string;
-  /** rim color, or null for the color of the selected element or rite */
+  /** rim color, or null for the color of the selected ability */
   accent: string | null;
 }
 

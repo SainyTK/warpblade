@@ -37,7 +37,7 @@ export function createAcorn(x: number, y: number, tx: number, ty: number, flight
   };
   return {
     update(step) {
-      // a Stillfield slows the shot where it flies
+      // a time field slows the shot where it flies
       const dt = step * fieldPace(o.x, o.y);
       o.t += dt;
       o.x += vx * dt;
