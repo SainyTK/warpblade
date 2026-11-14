@@ -198,5 +198,5 @@ Keen Edge level 8 reads 208 on the late target (three runs), so Peerless Edge is
 
 The moveset rework of 13 November 2026 gave Kael the guard, the counter, the wide forms, Crystal Aegis and Spellwarp, and folded Phantom Legion and Starfall into Crystal Nova's skill.
 Those have not been through the room; their budgets are the design estimates in `docs/skills/kael.md`, "Balance".
-The eight heroes being built have not been measured.
-Each goes through the same room, against the bands above, when its skills are built.
+The eight sword heroes of patch 0.11.0 were each measured in a room of their own built to this method; their figures and what is still off are in each hero's skill note (`docs/skills/<id>.md`).
+Those rooms differ from this one and from each other, so their figures compare only within one hero.

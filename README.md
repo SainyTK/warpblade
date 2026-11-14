@@ -20,8 +20,10 @@
 The old city fell to the night a long time ago.
 Its towers still stand under the moon, and rifts keep opening between them.
 
-Kael is the last warp knight.
-His crystal sword can be thrown, and wherever it lands, he follows.
+The warp knights set a warp crystal into every sword they forged.
+Throw such a sword, and its bearer follows it to wherever it lands.
+Kael is the last of the knights, and eight other sword fighters now carry blades with a crystal in them, from a duelist's rapier to a drifter's gun sword.
+Nine heroes hold the night back together.
 
 <p align="center">
   <img src="docs/media/gameplay.gif" alt="Gameplay: a three-hit combo, a warp strike, then fire, ice and lightning spells against shadow creatures" width="100%">
@@ -79,7 +81,7 @@ His crystal sword can be thrown, and wherever it lands, he follows.
   Each ability has its own recharge, and casting one adds no wait to any other.
   When the selected one is recharging or cannot be paid for, `I` casts the next ready one and selects it; with none ready, the press is refused with a dull tick and a jolt of the tab.
   The HUD tabs dim while an ability recharges, and a bar along each tab fills back up.
-- **Coins and a shop.** Foes drop pixel coins that Kael picks up by touch, and any left behind fly to him after a moment.
+- **Coins and a shop.** Foes drop pixel coins that the hero picks up by touch, and any left behind fly to them after a moment.
   When a run ends, cleared or lost, its coins go to the bank and a result screen shows the wave reached and the coins earned.
   The Shop on the start menu sells stats in levels (HP, attack, ability power, MP, crit, move speed, stamina), more rerolls, skips and banishes for the cards, and four skills: Lodestone, Aftershock and Head Start, bought once, and Last Light, bought in three levels, each saving the hero from one more fatal blow per run.
   Everything bought applies to every run and every hero, on top of the level-up picks, and is saved in this browser.
@@ -88,22 +90,17 @@ His crystal sword can be thrown, and wherever it lands, he follows.
   The Achievements page on the start menu shows what each one asks, with a progress bar for those that count up, and the result screen names those a run earned.
   Kael and Cerise are free; every other hero is unlocked with coins on the hero screen, each one costing more than the last (see [docs/achievements.md](docs/achievements.md)).
 - **Nine sword heroes.** Start opens the hero screen, a roster of hero tiles over one panel for the hero in focus.
-  Every hero holds a sword:
-  - Kael: crystal longsword, warp knight.
-  - Cerise: rapier, duelist.
-  - Aldric: arming sword and shield, knight.
-  - Vesper: long sword and short sword, twin blade.
-  - Saya: katana with scabbard, quickdraw.
-  - Yun: jian, sword sage.
-  - Brynn: oversized greatsword, heavy blade.
-  - Zafir: scimitar, dervish.
-  - Calder: gun sword, trigger blade.
+  Every hero fights with a sword that carries a warp crystal, and each plays the shared moveset in their own way:
+  - Kael, the warp knight (crystal longsword): casts elemental spells into his sword combo.
+  - Cerise, the duelist (rapier): earns Points with Keen thrusts and chains ripostes after a parry.
+  - Aldric, the shield knight (arming sword and kite shield): walks in behind a shield that stops every blow and turns blocks into Valor.
+  - Vesper, the twin blade (long sword and short sword): gets faster with Tempo and keeps foes in the air.
+  - Saya, the quickdraw (katana with scabbard): stores her cuts in foes and releases them all when she sheathes.
+  - Yun, the sword sage (jian): spirit swords repeat his blows at range and fly out on his abilities.
+  - Brynn, the heavy blade (greatsword): swings through hits with armour and ends her combo in a shockwave.
+  - Zafir, the dervish (scimitar): walks through spins that cut both sides and leave bleeding wounds.
+  - Calder, the trigger blade (gun sword): fires a round into the wound on a Keen hit and counts the rounds in his chamber.
 
-  Kael is playable now.
-  He throws his crystal sword and appears where it lands; he is balanced, with a four-hit sword string, a double jump and Warp Strike on `J` held.
-  His guard lets a fifth of a blow through, and his parry cuts back at once and lets `J` blink him behind the attacker.
-  He starts with Crystal Lance and Crystal Burst on `I`, adds his element spells from picks, and his Crystal Nova skill grows his ultimate with phantoms, falling stars and a storm of edges.
-  The eight others are being built, and each joins the hero screen when it is finished.
   Kael and Cerise are open from the start, and the other seven are bought with coins.
   The hero behind the menu changes as you look through the cards, and the choice is saved in this browser.
 - **A 30-wave stage in five eras.** The sky and the foes change as the waves go on, and the scene dissolves into the next era between waves.
@@ -145,7 +142,7 @@ The table names Kael's moves, and the Controls screen lists each hero's own.
 | --- | --- |
 | `A` `D` or arrows | Walk. Tap a side twice and hold to run |
 | `W` or `Up` | Jump, the same height however long you hold it. Press again in the air to jump again. Hold `S` and jump to drop through a ledge |
-| `J` | Sword combo of four hits, the same every time. Press again just after a blow lands for a Keen hit. Just after a parry, blink behind the attacker and strike |
+| `J` | Sword combo of four blows, the same every time. Press again just after a blow lands for a Keen hit. Just after a parry, blink behind the attacker and strike |
 | `J` held | Warp strike: throw the sword at the nearest foe ahead and warp to it (10 MP) |
 | `K` | Guard: hold to block blows from the front. Press just as a blow lands to parry with a riposte cut |
 | `L` | Dodge forward. Nothing can touch you while you dodge, and each dodge spends stamina |
@@ -161,10 +158,10 @@ On phones and tablets a touch controller appears, in landscape or portrait, and 
 The stick on the left appears wherever your left thumb lands.
 Push it to walk, push it all the way to run, push up to jump and down for the down variants.
 The buttons on the right sit in an arc around a large Attack button: tap it to attack, and hold it to warp.
-Around it sit Jump, Dodge, Guard, an ability button that casts on a tap and casts the wide form on a hold, a button that switches ability, and Special.
+Around it sit Jump, Dodge, Guard, an ability button that casts on a tap and casts the wide form on a hold, Switch, and Ultimate.
 Each hero's buttons carry that hero's own names where they differ.
 Several fingers work at once, and a thumb can slide from one button to the next.
-Hold Special to charge it: its ring fills one quarter per level, and you strike when you let go.
+Hold Ultimate to charge it: its ring fills one quarter per level, and you strike when you let go.
 Buttons dim while their action lacks MP or stamina or waits on a cooldown, and phones that support it give a short vibration on each press.
 The page holds still under your fingers: double taps, pinches and long presses never zoom, select text or open a menu.
 
@@ -225,15 +222,15 @@ The rules I took from the references, and where they show up:
 - Choreograph in phases: gather, release with a white flash, spread, linger, fade. The lightning bolt marks its target before it strikes, and the ice spikes erupt one after another, stand, then shatter.
 - Give every blow an act. Each attack winds up the opposite way, snaps to a new silhouette on the hit frame, freezes the game for a few hundredths of a second on contact, shakes the screen and follows through (`src/heroes/kael/constants/clips/`).
 
-Kael is drawn from a small skeleton every frame (`src/rig/drawHero.ts`).
-His spine runs from hip to neck through a chest point that a pose can push forward or back, so he can lean flat into a lunge, arch under a raised blade or hunch into a wind-up.
-A pose can also turn his back to the camera or mirror him to face behind, which is how the spins read as spins.
+Every hero is drawn from a small skeleton every frame (`src/rig/drawHero.ts`).
+The spine runs from hip to neck through a chest point that a pose can push forward or back, so a hero can lean flat into a lunge, arch under a raised blade or hunch into a wind-up.
+A pose can also turn the hero's back to the camera or mirror them to face behind, which is how the spins read as spins.
 Arms and legs are placed by two-bone reach, each elbow can bend either way, and each boot tilts to point the toes or rock onto the heel.
 The heroes are drawn at the frame's finer grid: each part is lit from the top left with a light edge and a shadow edge, plate armour carries a glint, and the head is a 24 by 22 pixel portrait with a lit eye.
 Every hero shares this rig and differs by their skin: colours, head art, sword and any item in the off hand (`src/heroes/<id>/look/`).
 Each body part is outlined where it overlaps the one behind it, and the whole figure gets a dark outline.
 Every move, action and state is a keyed clip sampled at 30 frames a second, with a pose keyed on nearly every frame; idle, walk, run, charge and the throw wait loop (`src/constants/clips/` for the clips every hero shares, `src/heroes/<id>/constants/clips/` for a hero's own).
-His scarf and ponytail are verlet ropes, so they trail behind him as he runs and warps (`src/game/hero/chain.ts`).
+Scarves, hair tails, capes, sashes and tassels are verlet ropes, so they trail behind the hero as they run and warp (`src/game/hero/chain.ts`).
 
 The README images were captured from the game canvas when it was 320 by 180 and scaled up with nearest-neighbour, so they show the earlier, coarser heroes.
 
