@@ -25,7 +25,7 @@ function arrived(foe: Enemy | null): void {
     hot: calder.hot,
   });
   const [x, y] = enemyCenter(foe);
-  emitSkillEvent({ type: "calderBlast", x, y, foes: struck });
+  emitSkillEvent({ type: "calderBlast", x, y, foes: struck, kind: "warp" });
 }
 
 /** Calder's warp: the chamber sword thrown as drawn, and a round fired on arrival; Tracer Warp's numbers */

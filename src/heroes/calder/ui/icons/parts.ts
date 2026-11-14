@@ -66,8 +66,53 @@ export function blast(s: S, x: number, y: number, r: number, c: Color = ICON.gre
 /** a green tracer line from (x0, y0) to (x1, y1) with a white head */
 export function tracer(s: S, x0: number, y0: number, x1: number, y1: number): void {
   layer(s, () => {
-    s.stroke(x0, y0, x1, y1, 0.4, ICON.greenDark);
-    s.stroke((x0 + x1) / 2, (y0 + y1) / 2, x1, y1, 0.45, ICON.green);
+    s.stroke(x0, y0, x1, y1, 0.7, ICON.greenDark);
+    s.stroke((x0 + x1) / 2, (y0 + y1) / 2, x1, y1, 0.7, ICON.green);
     s.set(x1, y1, WHITE);
+  });
+}
+
+/** a foe's dark body round (x, y), with a pale eye */
+export function foe(s: S, x: number, y: number, r: number): void {
+  layer(s, () => {
+    s.dot(x, y, r, hex("#3d2a5c"));
+    s.set(x + r * 0.4, y - r * 0.3, hex("#ffd0ff"));
+  });
+}
+
+/** the floor along the bottom of the icon */
+export function floor(s: S, c: Color = ICON.greenDark): void {
+  layer(s, () => s.stroke(1, 14.5, 15, 14.5, 0.5, c));
+}
+
+/** green fire licking up from the floor between x0 and x1 */
+export function greenFire(s: S, x0: number, x1: number, h: number): void {
+  layer(s, () => {
+    for (let x = x0; x <= x1; x += 2) {
+      const t = h * (0.6 + 0.4 * Math.sin(x * 1.7));
+      s.stroke(x, 14, x, 14 - t, 0.6, ICON.greenDark);
+      s.stroke(x, 14, x, 14 - t * 0.6, 0.45, ICON.green);
+    }
+  });
+}
+
+/** Calder's figure with its feet at (x, y): spiky dark hair, a long coat flaring back, in `coat` */
+export function drifter(s: S, x: number, y: number, coat: Color, face = 1): void {
+  layer(s, () => {
+    s.poly(
+      [
+        [x - face * 1.5, y - 8],
+        [x + face * 1.5, y - 8],
+        [x + face * 2, y - 2],
+        [x - face * 3.5, y],
+      ],
+      coat,
+    );
+    s.stroke(x + face * 1, y - 2, x + face * 1.5, y, 0.6, ICON.grip);
+  });
+  layer(s, () => {
+    s.dot(x, y - 10, 1.8, hex("#e6b890"));
+    s.stroke(x - face * 2, y - 11.5, x + face * 1.5, y - 12, 0.7, hex("#2c2422"));
+    s.set(x - face * 1, y - 13, hex("#2c2422"));
   });
 }

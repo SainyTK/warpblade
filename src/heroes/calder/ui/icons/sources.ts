@@ -10,8 +10,8 @@ export const CALDER_SOURCE_ICONS: Record<string, (s: SpriteCanvas) => void> = {
   },
   /** his abilities: a slug flying ahead on its tracer */
   calder_abilities: (s) => {
-    tracer(s, 1, 9, 12, 9);
-    round(s, 13, 10, ICON.green);
+    tracer(s, 1, 8, 12, 8);
+    blast(s, 13, 8, 2.5);
   },
   /** his special: a ring of six rounds round a blast */
   calder_ultimate: (s) => {

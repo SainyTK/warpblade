@@ -33,6 +33,12 @@ function startReload(): void {
   calder.reloadQuick = false;
   setState("reload");
   calderSound.open();
+  // Spin Cycle: every reload is quick, and the cylinder snaps shut at once
+  if (skillValues("ca_speedload").auto) {
+    calder.reloadPressed = true;
+    calder.reloadQuick = true;
+    hero.st = RELOAD.loaded;
+  }
 }
 
 /**
@@ -66,7 +72,7 @@ export function runReload(dt: number): void {
     h.hitDone = true;
     fillChamber(calder.reloadQuick);
     calderSound.shut(calder.reloadQuick);
-    emitSkillEvent({ type: "calderReload", quick: calder.reloadQuick });
+    emitSkillEvent({ type: "calderReload", quick: calder.reloadQuick, ultimate: false });
   }
   if (h.st >= RELOAD.dur) settle();
 }

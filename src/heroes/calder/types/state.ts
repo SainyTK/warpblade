@@ -23,6 +23,13 @@ export interface CalderState {
   hopping: boolean;
   /** seconds of recoil kick still in the arms after a round goes off */
   recoil: number;
+  /** the next Trigger spends no round (Point Blank, after a parry) */
+  freeTrigger: boolean;
+  /** rounds fired since the last free one (Bottomless Drum) */
+  fired: number;
+  /** where the last warp's throw left from, for Green Line */
+  warpFromX: number;
+  warpFromY: number;
   /** Triggers landed in a row */
   triggerStreak: number;
   /** the ultimate under way: cuts in it and cuts dealt so far, and each cut's damage */

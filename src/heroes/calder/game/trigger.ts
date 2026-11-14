@@ -4,7 +4,7 @@ import { hero, progress } from "../../../game/state";
 import { RECOIL_TIME, TRIGGER } from "../constants/chamber";
 import { blastAt } from "./blastFoe";
 import { dryClick, roundPower, spendRounds } from "./chamber";
-import { triggerBonus } from "./skills/hairTrigger";
+import { afterTrigger, triggerBonus } from "./skills/hairTrigger";
 import { calderSound } from "./sound";
 import { calder } from "./state";
 
@@ -20,7 +20,9 @@ function woundPoint(): [number, number] {
  * recoil kicks through Calder's arms. On an empty chamber the hammer only clicks.
  */
 export function fireTrigger(): void {
-  if (!spendRounds(1)) {
+  const free = calder.freeTrigger;
+  calder.freeTrigger = false;
+  if (!free && !spendRounds(1)) {
     dryClick();
     calderSound.click();
     return;
@@ -40,6 +42,7 @@ export function fireTrigger(): void {
     hot: calder.hot || bonus.blast > 1,
   });
   calder.recoil = RECOIL_TIME;
+  afterTrigger(foe);
   emitSkillEvent({ type: "calderTrigger", foe, x, y });
-  emitSkillEvent({ type: "calderBlast", x, y, foes: struck });
+  emitSkillEvent({ type: "calderBlast", x, y, foes: struck, kind: "trigger" });
 }

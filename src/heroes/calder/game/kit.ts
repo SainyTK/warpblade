@@ -12,6 +12,9 @@ import { calderPose } from "./pose";
 import { readActions } from "./readActions";
 import { runReload } from "./reload";
 import { drawReloadGlint } from "./reloadGlint";
+import { drumBonus } from "./skills/drumCylinder";
+import { triggerWindow } from "./skills/hairTrigger";
+import { RECOIL_DODGE, recoilAirDodge } from "./skills/recoilDash";
 import { calder, resetCalderState, tickCalderState } from "./state";
 import { runCylinderBreak } from "./ultimate/cylinderBreak";
 import { CALDER_WARP } from "./warpStyle";
@@ -40,6 +43,10 @@ export const CALDER_KIT: HeroKit = {
     rechargeShots(rechargeStep(dt));
     tickCalderState(dt);
     if (hero.state !== "shot") calder.hopping = false;
+    if (hero.state === "throw") {
+      calder.warpFromX = hero.x;
+      calder.warpFromY = hero.y - 18;
+    }
   },
   readActions,
   warp: CALDER_WARP,
@@ -49,6 +56,10 @@ export const CALDER_KIT: HeroKit = {
   runState,
   pose: calderPose,
   afterStrike,
+  keenWindow: triggerWindow,
+  hitBonus: drumBonus,
+  airDodge: recoilAirDodge,
+  dodge: RECOIL_DODGE,
   absorbHurt: () => false,
   draw: drawReloadGlint,
   stride: (running) => (running ? STRIDE.run : STRIDE.walk),

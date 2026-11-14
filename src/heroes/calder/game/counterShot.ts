@@ -8,7 +8,7 @@ import { muzzlePoint } from "./aim";
 import { blastAt } from "./blastFoe";
 import { loadRounds, roundPower } from "./chamber";
 import { createMuzzleFlash } from "./effects/muzzleFlash";
-import { counterBonus } from "./skills/pointBlank";
+import { afterCounterShot, counterBonus } from "./skills/pointBlank";
 import { calder } from "./state";
 
 /** the sword's angle in the parry's aim key, where the round leaves the muzzle */
@@ -38,8 +38,9 @@ export function counterShot(attacker: Enemy | null): void {
   const foe = target(attacker);
   const [x, y] = foe ? enemyCenter(foe) : [mx + hero.face * 10, my];
   const bonus = counterBonus(foe);
+  const plain = progress.stats.ad * COUNTER_SHOT.power * roundPower();
   const struck = blastAt(foe, x, y, {
-    damage: progress.stats.ad * COUNTER_SHOT.power * roundPower() * bonus.power,
+    damage: plain * bonus.power,
     splash: 0,
     reach: 0,
     kx: COUNTER_SHOT.kx,
@@ -51,5 +52,6 @@ export function counterShot(attacker: Enemy | null): void {
   calder.recoil = RECOIL_TIME;
   loadRounds(COUNTER_SHOT.rounds + bonus.rounds);
   hero.keenNext = true;
-  emitSkillEvent({ type: "calderBlast", x, y, foes: struck });
+  afterCounterShot(foe, plain);
+  emitSkillEvent({ type: "calderBlast", x, y, foes: struck, kind: "parry" });
 }

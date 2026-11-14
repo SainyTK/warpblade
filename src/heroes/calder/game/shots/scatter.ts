@@ -32,6 +32,6 @@ export function scatterBlast(x: number, y: number, dir: number, damage: number, 
     game.fx.push(createImpact(...enemyCenter(e), dir, true, PHOSPHOR_SPARKS));
   }
   shake(0.18, 2.4);
-  emitSkillEvent({ type: "calderBlast", x, y, foes: struck });
+  emitSkillEvent({ type: "calderBlast", x, y, foes: struck, kind: "shot" });
   return struck;
 }

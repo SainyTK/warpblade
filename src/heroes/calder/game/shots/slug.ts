@@ -19,6 +19,8 @@ export interface SlugSpec {
   /** a Breaker Slug: larger, breaks guards and drives every foe it passes back */
   wide: boolean;
   source?: SourceId;
+  /** a breaching slug strikes only this foe and passes through the rest */
+  only?: Enemy;
 }
 
 /** how long the green tracer runs behind the slug, in pixels */
@@ -37,7 +39,13 @@ export function createSlug(x: number, y: number, face: number, spec: SlugSpec): 
       o.t += dt;
       o.x += face * SLUG.speed * dt;
       for (const e of game.enemies) {
-        if (struck.has(e) || e.hp <= 0 || !boxHit([o.x - 4, y - half, o.x + 4, y + half], enemyBox(e))) continue;
+        if (
+          struck.has(e) ||
+          e.hp <= 0 ||
+          (spec.only && e !== spec.only) ||
+          !boxHit([o.x - 4, y - half, o.x + 4, y + half], enemyBox(e))
+        )
+          continue;
         struck.add(e);
         dealDamage(e, spec.damage, {
           fromX: o.x - face * 10,
@@ -47,7 +55,7 @@ export function createSlug(x: number, y: number, face: number, spec: SlugSpec): 
           source: spec.source ?? "abilities",
         });
         game.fx.push(createImpact(o.x, y, face, spec.wide, PHOSPHOR_SPARKS));
-        emitSkillEvent({ type: "calderBlast", x: o.x, y, foes: [e] });
+        emitSkillEvent({ type: "calderBlast", x: o.x, y, foes: [e], kind: "shot" });
       }
       return o.t < SLUG.life && o.x > -TAIL && o.x < W + TAIL;
     },

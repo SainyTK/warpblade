@@ -53,7 +53,7 @@ function cut(i: number): void {
   const [x, y] = foes[0] ? enemyCenter(foes[0]) : [hero.x + hero.face * 22, hero.y - 18];
   roundBlast(x, y, hero.face, calder.hot, true);
   hitStop(0.04);
-  emitSkillEvent({ type: "calderBlast", x, y, foes });
+  emitSkillEvent({ type: "calderBlast", x, y, foes, kind: "ultimate" });
 }
 
 /**
@@ -67,7 +67,11 @@ export function castCylinderBreak(level: number): void {
   calder.breakCuts = BREAK_BASE_CUTS + rounds + (v.cuts ?? 0);
   calder.breakDone = 0;
   calder.breakBlow =
-    ULT_LEVELS[level - 1].power * progress.stats.ad * BREAK_SHARE * (v.power ?? 1) * (calder.hot ? HOT_BLAST : 1);
+    ULT_LEVELS[level - 1].power *
+    progress.stats.ad *
+    BREAK_SHARE *
+    (v.power ?? 1) *
+    (calder.hot || v.hot ? HOT_BLAST : 1);
   calder.breakReach = withCharms("area", BREAK_REACH[level - 1]);
   calder.rounds = 0;
   setState("cylinderBreak");
@@ -85,8 +89,9 @@ export function runCylinderBreak(): void {
   }
   if (!h.hitDone && calder.breakDone >= calder.breakCuts) {
     h.hitDone = true;
-    breakFinale(calder.breakBlow, calder.breakReach);
+    breakFinale(calder.breakBlow);
     fillChamber(true);
+    emitSkillEvent({ type: "calderReload", quick: true, ultimate: true });
   }
   if (h.st >= breakOver() + BREAK_END.dur) settle();
 }

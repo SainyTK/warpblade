@@ -1,14 +1,26 @@
-import { skillValues } from "../../../game/skills/query";
+import { skillEvolved, skillValues } from "../../../game/skills/query";
 import { CHAMBER_ROUNDS, CLICK_FLASH, HOT_BLAST } from "../constants/chamber";
 import { calder } from "./state";
 
 /** rounds a full chamber holds: six, and more with Drum Cylinder */
 export const chamberSize = (): number => CHAMBER_ROUNDS + (skillValues("ca_drum").rounds ?? 0);
 
+/** Bottomless Drum: every so many rounds fired, one comes back */
+function drumRefund(n: number): void {
+  if (!skillEvolved("ca_drum")) return;
+  const every = skillValues("ca_drum").freeEvery;
+  calder.fired += n;
+  while (calder.fired >= every) {
+    calder.fired -= every;
+    calder.rounds = Math.min(chamberSize(), calder.rounds + 1);
+  }
+}
+
 /** spend `n` rounds when the chamber holds them; an emptied chamber is no longer hot */
 export function spendRounds(n: number): boolean {
   if (calder.rounds < n) return false;
   calder.rounds -= n;
+  drumRefund(n);
   if (calder.rounds === 0) calder.hot = false;
   return true;
 }

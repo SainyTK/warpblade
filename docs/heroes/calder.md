@@ -67,7 +67,7 @@ Spend: a Trigger 1, the warp arrival 1, Slug Shot 1, Scatter Blast 2, Cylinder B
 | String | Hew 1.45 AD, Rip 1.5 AD, Breaker 2.8 AD (knocks down) |
 | Air | Air hew 1.6 AD, Drop cut 1.9 AD (spikes) |
 | Trigger blast | 1.2 AD on the struck foe, 0.5 AD within 18 px; hot rounds 1.5 times |
-| Reload | 0.6 s; quick reload window 0.18 to 0.3 s into it |
+| Reload | 0.6 s; quick reload window 0.16 to 0.3 s into it |
 | Warp extra | 0.35 AD blast on arrival with a round loaded, a fifth of the arrival blow |
 | Parry | counter shot 2 AD, staggers 1 s, +2 rounds, next J a Trigger |
 | Guard | chip 25%, 14 stamina a block |
