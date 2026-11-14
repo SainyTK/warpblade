@@ -1,0 +1,23 @@
+/** Saya's skill ids, by the name her code knows each one by */
+export const SKILL = {
+  edge: "sa_edge",
+  clean: "sa_clean",
+  reverse: "sa_reverse",
+  flow: "sa_flow",
+  falling: "sa_falling",
+  pass: "sa_pass",
+  step: "sa_step",
+  stroke: "sa_stroke",
+  crescent: "sa_crescent",
+  rain: "sa_rain",
+  still: "sa_still",
+  weep: "sa_weep",
+  stain: "sa_stain",
+  trail: "sa_trail",
+  crane: "sa_crane",
+  shade: "sa_shade",
+  paper: "sa_paper",
+  breath: "sa_breath",
+  calm: "sa_calm",
+  moon: "sa_moon",
+} as const;
