@@ -17,13 +17,14 @@ Patch 0.11.0 set the roster at nine sword heroes (the charter's Roster section),
 
 ## Small patch candidates
 
-- The Rift Warden at wave 20. On the 0.9.0 baseline Kael fell at the wave 20 start in 23.1 s with 0 kills. Before tuning, check whether the wave-20 start at level 14 matches a real run's level and build under the new growth curve and the slower pace.
+- After 0.11.1, rerun all bots and check how far heroes now reach past wave 5. In 0.11.1 Oakheart went to 320 HP and an 18 sweep, yet 0 of 18 ordinary runs cleared wave 5 (2 of 9 when started at wave 5, level 6), since heroes enter worn down and the root line, the moths and the acorns kill about as often as the sweep. Look next at the root line, the moth pressure in wave 5, or the HP heroes carry into the mini boss. Then measure the Bog Hulk at wave 10 the same way, since all nine heroes fight in melee against its frontal guard too. (pillar 1)
+- Check every hero's own ability states for the press loss Saya had in 0.11.0: a state longer than the 0.15 s press buffer with no `mayAct`. The 0.11.1 smoke check showed only Saya, but the smoke check presses each key once. (pillar 1)
+- The Rift Warden at wave 20. The wave 20 bot starts at level 14, which matches a run after wave 10, while `docs/growth-design.md` puts a real run at level 35 after wave 20. Ask the owner to start the wave 20 bot at about level 35 (`agent-studio/playtest` belongs to the owner) before the Warden is tuned.
 - A measuring room in the repo for skill balance (the method of `docs/skills/balance.md` as a playtest scenario with repeat runs and a tougher late target), then settle the eight new heroes' skills inside their bands. Zafir's Sand Wraith read over its band in his own room, Cerise's Measured Touch and Calder's Point Blank sit just over the crowd cap after QA's cuts, Zafir's room figures predate his wound cut, and most of Yun's and Vesper's level 8 skills read under their bands. (pillar 3)
 - The ultimates per cast against their targets: Vesper's Dusk Waltz, Brynn's Crimson Fall and Yun's evolved Jade Rain read short in the hero agents' rooms. (pillar 1)
-- Yun's Sword Screen guard swords are hard to make out at 1280 by 720. (pillar 1)
-- Measure each hero's mash and skilled bot runs and bring their death waves within two waves of each other.
+- Measure each hero's mash and skilled bot runs and bring their death waves within two waves of each other, after the Oakheart rerun above: every hero ended at wave 5, so the spread could not be read.
 - The HUD at some desktop window sizes (also in 0.9.0): at 640 by 600 and 700 by 700 it sits partly above the screen, and at 600 by 540 the first tab row touches the pause button. A measured placement was tried in 0.10.0 and taken out because it moved the HUD over the stage on 360 by 640 phones. (pillar 1)
-- Check the shop prices against coins earned per run (see `docs/meta-progress.md`).
+- Check the shop prices against coins earned per run (see `docs/meta-progress.md`), with the bot coins after 0.11.1 (baseline: 24 to 32 coins per run).
 - Measure the four evolutions' damage per cast with the 0.2.0 scenario scripts and even them out; Glacier Bloom is the weakest on paper.
 - Play Cerise, Vesper, Yun and Brynn in a co-op room: their state is kept per seat, and QA's co-op pairs covered only Saya, Zafir, Aldric and Calder. (pillar 1, feedback 10)
 - Tune `COOP_SCALING` once real rooms report results. (feedback 10)
@@ -46,6 +47,7 @@ Patch 0.11.0 set the roster at nine sword heroes (the charter's Roster section),
 
 Patches 0.4.0 to 0.10.0 each added a hero that carried no sword; patch 0.11.0 removed those heroes and the shared hooks only they used.
 
+- 0.11.1 Balance and fixes: shared actions cut Saya's Brushline, Moonrise and counter draw once they land, with no lost presses; Oakheart HP 400 to 320 and branch sweep 22 to 18; and Yun's Sword Screen drawn at full strength on an outlined jade plate with a white flash on a block.
 - 0.11.0 Nine Blades: the sword roster at the owner's request, outside the nightly studio: eight sword heroes (Cerise, Aldric, Vesper, Saya, Yun, Brynn, Zafir and Calder), Kael's new look, the nine heroes without a sword removed with a refund of their price, every hero as its own module, the guard against a touching foe, one set of words and a title of the same shape for every hero, and the hero sprint closed in the charter. Day work: one moveset for every hero with the floating crystals removed, the run clock and records, and touch play on iPhone and iPad.
 - 0.10.0 Red Oath: the tenth hero, a berserker (studio, hero sprint night seven), which completed the hero sprint, and every hero's ability tabs wrapping together as one row.
 - 0.9.0 Keep Time: a war drummer (studio, hero sprint night six), the Abyss Sovereign at wave 30 and what waits behind it (day work), combos that lock their target at four fifths pace with the hit counter (day work), and the full-detail graphics and speed pass (day work).
