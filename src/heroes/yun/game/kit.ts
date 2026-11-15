@@ -13,6 +13,7 @@ import { drawHeldSwords } from "./drawSwords";
 import { YUN_GUARD_STYLE } from "./guardStyle";
 import { yunPose } from "./pose";
 import { readActions } from "./readActions";
+import { tickScreen } from "./screen";
 import { shapeHit } from "./shapeHit";
 import { DRIFT_DODGE } from "./skills/driftingLeaf";
 import { keenWindow } from "./skills/flowingWater";
@@ -34,6 +35,7 @@ export const YUN_KIT: HeroKit = {
     rechargeAbilities(rechargeStep(dt));
     tickSwords(dt);
     swingTassel(dt);
+    tickScreen(dt);
     if (hero.ground) touchedFloor();
   },
   readActions,

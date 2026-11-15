@@ -1,6 +1,6 @@
 import { markFoe } from "../../../game/enemies/skillStatus";
 import { skillValues } from "../../../game/skills/query";
-import { progress } from "../../../game/state";
+import { hero, progress } from "../../../game/state";
 import type { Enemy } from "../../../types/enemy";
 import { STEP_MARK_TIME } from "../constants/skillLook";
 import { SKILL } from "../constants/skills/ids";
@@ -33,5 +33,5 @@ function ended(): void {
 /** her front dodge, as Shadow Step changes it */
 export const SAYA_DODGE = { passed, ended };
 
-/** a dodge in the air, with Shadow Step's sixth level */
-export const sayaAirDodge = (): boolean => !!skillValues(SKILL.step).air;
+/** a dodge in the air: out of Moonrise's rise, or anywhere with Shadow Step's sixth level */
+export const sayaAirDodge = (): boolean => hero.state === "rise" || !!skillValues(SKILL.step).air;

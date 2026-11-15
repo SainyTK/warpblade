@@ -1,0 +1,160 @@
+{
+  "version": "0.11.1",
+  "kind": "small",
+  "date": "2026-11-16",
+  "title": "Balance and fixes",
+  "tagline": "Saya's Brushline, Moonrise and counter draw no longer swallow your presses, Oakheart has less HP and a lighter branch sweep, and Yun's Sword Screen is easy to see.",
+  "intro": "Our playtest bots told us two things this week. Saya was the only hero who could not go from an ability straight into her ultimate, because her own moves threw away any press made while they played. And Oakheart, the wave 5 mini boss, stopped every one of the nine heroes, since all of them now fight at sword reach in front of its guard and branch sweep. This patch fixes Saya and takes a first, careful step on Oakheart, which still asks you to dodge its roots and acorns. Yun's Sword Screen was also too faint to read, so it now shows clearly whenever his guard is up.",
+  "highlights": [],
+  "sections": [
+    {
+      "id": "foes",
+      "entries": [
+        {
+          "name": "Oakheart",
+          "tag": "nerf",
+          "summary": "The wave 5 mini boss has a fifth less HP, and its branch sweep hits you less hard when you stand at sword reach.",
+          "context": "Every hero now fights in melee, right where Oakheart guards and sweeps, and in our bot runs it never fell once. This is a first step that keeps each value well inside our limit for one patch: heroes who reach Oakheart with their HP intact now beat it more often, while a run that arrives worn down will still find it hard, so we will look at the rest of wave 5 next.",
+          "changes": [
+            {
+              "kind": "stat",
+              "label": "Base HP",
+              "before": "400",
+              "after": "320"
+            },
+            {
+              "kind": "stat",
+              "label": "HP at wave 5",
+              "before": "1,922",
+              "after": "1,538"
+            },
+            {
+              "kind": "stat",
+              "label": "Branch sweep base damage",
+              "before": "22",
+              "after": "18"
+            },
+            {
+              "kind": "stat",
+              "label": "Branch sweep damage at wave 5",
+              "before": "26.4",
+              "after": "21.6"
+            },
+            {
+              "kind": "note",
+              "text": "The root line (20), the acorns (12), its guard, its wind-ups and its enraged pattern are unchanged."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "art",
+      "entries": [
+        {
+          "name": "Yun's Sword Screen",
+          "tag": "adjusted",
+          "summary": "When Yun guards, his Sword Screen now stands out clearly on every stage, even with no spirit sword held, and flashes white when it blocks a blow.",
+          "context": "His guard was drawn in thin, faint lines, so at 1280 by 720 it was hard to tell when it was up or when it had taken a blow. How much it blocks and what it costs stay the same.",
+          "changes": [
+            {
+              "kind": "stat",
+              "label": "Spirit swords in the screen",
+              "before": "Faint (body 64% strength, glow 24%)",
+              "after": "Full strength (body 95%, glow 45%)"
+            },
+            {
+              "kind": "stat",
+              "label": "Plate of light behind the screen",
+              "before": "None",
+              "after": "A jade oval with a pale rim inside a dark edge"
+            },
+            {
+              "kind": "stat",
+              "label": "A blocked blow",
+              "before": "The shared spark only",
+              "after": "The screen flashes white for 0.08 s and 3 jade flecks fly back toward the attacker"
+            },
+            {
+              "kind": "note",
+              "text": "The fan of swords behind his shoulders, Deflecting Qi, the 30% of damage a block lets through and the 14 stamina it costs are unchanged."
+            }
+          ],
+          "media": {
+            "kind": "image",
+            "file": "yun-sword-screen.png",
+            "alt": "Side by side at the same moment in wave 3 of the sunlit ruins, labelled 0.11.0 on the left and 0.11.1 on the right. Yun holds four spirit swords and guards while a thornback strikes him. On the left his guard is a few faint hairline swords that are hard to see against the bright stage. On the right the swords are drawn at full strength over an oval jade plate with a pale rim, and they flash white as the blow is blocked.",
+            "width": 1280,
+            "height": 720
+          }
+        }
+      ]
+    },
+    {
+      "id": "bugfixes",
+      "entries": [
+        {
+          "name": "Saya: presses during Brushline, Moonrise and the counter draw",
+          "tag": "fix",
+          "summary": "Press U, the Warp strike, L or an ability during Brushline, Moonrise or the counter draw and it now goes off as soon as the move has landed, with your stored cuts released first.",
+          "context": "Her moves last about 0.7 s and nothing could cut into them, while the game holds a press for only 0.15 s, so an early press was simply lost. Every other hero could already go from an ability into the ultimate. She now works like Brynn and Zafir: the shared actions may cut her moves once they have landed.",
+          "changes": [
+            {
+              "kind": "stat",
+              "label": "Brushline can be cut",
+              "before": "When it ends, at 0.73 s",
+              "after": "When the dash stops, at 0.20 s"
+            },
+            {
+              "kind": "stat",
+              "label": "Held Brushline can be cut",
+              "before": "When it ends, at 0.93 s",
+              "after": "When she is back, at 0.50 s"
+            },
+            {
+              "kind": "stat",
+              "label": "Moonrise can be cut",
+              "before": "When it ends, at 0.70 s",
+              "after": "When the rising draw is out, at 0.17 s"
+            },
+            {
+              "kind": "stat",
+              "label": "The counter draw can be cut",
+              "before": "When it ends, at 0.60 s",
+              "after": "When it has cut, at 0.07 s"
+            },
+            {
+              "kind": "note",
+              "text": "A Warp strike, dodge, ability or ultimate pressed earlier in the move waits for that moment, so none is lost."
+            },
+            {
+              "kind": "note",
+              "text": "If the cut comes before the blade clicks home, the click plays at once, so the stored cuts always release and Long Stroke still throws foes up."
+            },
+            {
+              "kind": "note",
+              "text": "K held through the move raises the guard at that moment. A tap of K early in the move is not kept, so a parry never comes later than you pressed it."
+            },
+            {
+              "kind": "note",
+              "text": "L now dodges in the air out of Moonrise's rise; before, an air dodge needed Shadow Step's sixth level."
+            },
+            {
+              "kind": "note",
+              "text": "The Brushline dash itself, Silent Moon and Still Water still cannot be cut. Damage, timings and Focus are unchanged when you do not cut."
+            }
+          ],
+          "media": {
+            "kind": "video",
+            "file": "saya-silent-moon.mp4",
+            "poster": "saya-silent-moon.png",
+            "alt": "In wave 3 of the sunlit ruins, Saya dashes with Brushline through two thornbacks standing side by side. Just as the dash stops, her blade clicks home and the stored cuts burst on both foes. Silent Moon starts at once: ink lines cross the stage through the thornbacks and a moth, then burst, and Saya stands with her blade drawn.",
+            "width": 640,
+            "height": 360
+          }
+        }
+      ]
+    }
+  ],
+  "feedback": []
+}

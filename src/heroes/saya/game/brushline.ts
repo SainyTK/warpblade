@@ -93,7 +93,7 @@ function endLeg(): void {
 }
 
 /** the click: every stored cut releases, and with Long Stroke's seventh level the line's foes are thrown up */
-function click(): void {
+export function clickLine(): void {
   saya.clicked = true;
   sayaSound.click();
   sheatheFlash();
@@ -114,8 +114,17 @@ export function runLine(): void {
     hero.inv = Math.max(hero.inv, 0.05);
     cutThrough();
   }
-  if (!saya.clicked && hero.st >= beats().click) click();
+  if (!saya.clicked && hero.st >= beats().click) clickLine();
   if (hero.st >= beats().end) settle();
+}
+
+/** a shared action may cut Brushline once the dash is over: the end of the dash, held the end of the way back */
+export const lineCuttable = (): boolean => hero.st >= (saya.wide ? BEATS.lineWide.home : BEATS.line.stop);
+
+/** a shared action cuts Brushline: a leg that has just run out is laid, and the click plays now if it has not */
+export function cutLine(): void {
+  if (pass.leg) endLeg();
+  if (!saya.clicked) clickLine();
 }
 
 /** Brushline drives her speed while a leg runs */

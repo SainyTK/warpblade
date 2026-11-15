@@ -29,11 +29,14 @@ export function runRise(): void {
       if (saya.wide) layTrail(h.x, h.x - h.face * MOONRISE.range, h.y);
     }
   }
-  if (!saya.clicked && h.st >= BEATS.rise.click) {
-    saya.clicked = true;
-    sayaSound.click();
-    sheatheFlash();
-    releaseCuts(true);
-  }
+  if (!saya.clicked && h.st >= BEATS.rise.click) clickRise();
   if (h.st >= BEATS.rise.end) settle();
+}
+
+/** Moonrise's click: the blade goes home and every stored cut releases */
+export function clickRise(): void {
+  saya.clicked = true;
+  sayaSound.click();
+  sheatheFlash();
+  releaseCuts(true);
 }

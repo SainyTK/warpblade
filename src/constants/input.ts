@@ -66,3 +66,6 @@ export const HOLD_STEPS = 30;
 export const HOLD_ACTIONS: Readonly<Record<HeldAction, InputAction>> = { attack: "warp", cast: "castWide" };
 /** presses that wait out a whole move: a jump pressed while a blow winds up or strikes jumps out of its follow-through */
 export const KEPT_DURING_MOVE: readonly InputAction[] = ["up"];
+/** the shared actions whose presses a kit can keep waiting until its own state may be cut; the guard is left out, since
+ *  a late tap would parry after the moment it was pressed for, and a held K raises the guard once the state allows */
+export const SHARED_CUT_PRESSES: readonly InputAction[] = ["dash", "warp", "cast", "castWide", "ultimate"];

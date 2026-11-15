@@ -53,6 +53,9 @@ export interface HeroKit {
   mayAct?(): boolean;
   /** a shared action is starting: the kit ends its own state (a string, a held foe, a hover) */
   cutForAction?(): void;
+  /** while true, presses of the shared actions wait past the input buffer, because the kit's own state will let them
+   *  cut it soon; left out, never */
+  holdsSharedPresses?(): boolean;
   /** a blow is about to land on the hero: true when the kit took it (a block or a parry) */
   absorbHurt(dmg: number, fromX: number): boolean;
   /** combo moves play this much faster on top of attack speed, right now */
