@@ -1,4 +1,4 @@
-import { haze, place } from "../../../engine/frame";
+import { ellipseRing, haze, place } from "../../../engine/frame";
 import { hero, particles, rng } from "../../../game/state";
 import { PK } from "../../../types/particle";
 import { SCREEN_LOOK, SPIRIT_LOOK } from "../constants/guard";
@@ -10,10 +10,15 @@ import { yun } from "./state";
 /** the middle of the Sword Screen, before him */
 const screenMiddle = (): [number, number] => [hero.x + hero.face * SCREEN.x, hero.y + SCREEN.y + SCREEN_LOOK.plateDy];
 
-/** the soft plate of jade light the screen stands on, drawn before its swords so the guard reads with none held */
+/** the plate of jade light the screen stands on, drawn before its swords so the guard reads with none held: a soft
+ *  bright core, a pale rim and a dark edge just outside it */
 export function drawScreenPlate(): void {
+  const [x, y] = screenMiddle();
+  const { plateRx: rx, plateRy: ry } = SCREEN_LOOK;
   place();
-  haze(...screenMiddle(), SCREEN_LOOK.plateRx, SCREEN_LOOK.plateRy, JADE[3], SCREEN_LOOK.plateA);
+  haze(x, y, rx, ry, JADE[4], SCREEN_LOOK.plateA);
+  ellipseRing(x, y, rx + 0.5, ry + 0.5, JADE[1], SCREEN_LOOK.edgeA);
+  ellipseRing(x, y, rx, ry, JADE[5], SCREEN_LOOK.rimA);
 }
 
 /** how the screen's swords draw now: white for a moment after a block */
