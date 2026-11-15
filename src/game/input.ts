@@ -1,4 +1,4 @@
-import { HOLD_ACTIONS, HOLD_STEPS, INPUT_BUFFER_STEPS, KEPT_DURING_MOVE } from "../constants/input";
+import { HOLD_ACTIONS, HOLD_STEPS, INPUT_BUFFER_STEPS } from "../constants/input";
 import type { HeldAction, InputAction } from "../types/input";
 import { rememberPerSeat } from "./seatMemory";
 
@@ -68,13 +68,12 @@ export function clearPresses(): void {
   holding.clear();
 }
 /**
- * Called once per simulation step: unused presses expire after the buffer, except the kept ones while a move plays, and a
- * tap-or-hold key held long enough becomes its long press.
+ * Called once per simulation step: unused presses expire after the buffer, except the `kept` ones, and a tap-or-hold key
+ * held long enough becomes its long press.
  */
-export function agePresses(moving: boolean): void {
+export function agePresses(kept: readonly InputAction[]): void {
   for (const [a, age] of pressed) {
-    const kept = moving && KEPT_DURING_MOVE.includes(a);
-    if (age >= INPUT_BUFFER_STEPS && !kept) pressed.delete(a);
+    if (age >= INPUT_BUFFER_STEPS && !kept.includes(a)) pressed.delete(a);
     else pressed.set(a, age + 1);
   }
   for (const [a, steps] of holding) {

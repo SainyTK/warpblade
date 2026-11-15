@@ -241,7 +241,7 @@ Optional hooks, each documented on `HeroKit`:
 | Hook | Use |
 | --- | --- |
 | `shapeHit`, `keenWindow`, `alwaysKeen`, `attackRate` | reshape a combo blow, the Keen timing and the string's speed |
-| `mayAct`, `cutForAction` | when shared actions may cut the kit's own state, and how the kit ends it |
+| `mayAct`, `cutForAction`, `holdsSharedPresses` | when shared actions may cut the kit's own state, how the kit ends it, and whether a shared press waits for that moment |
 | `walkSpeed`, `stride` | the walk speed and the ground one stride covers |
 | `damageScale`, `hitBonus`, `takenBonus` | a buff on every hit, a bonus on the hero's own hits, a bonus on what a foe takes |
 | `steadfast` | armour: the blow takes its HP with no flinch, knockback or lost combo |

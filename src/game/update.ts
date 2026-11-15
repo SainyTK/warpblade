@@ -10,6 +10,7 @@ import { updateCoins } from "./coins";
 import { coop, eachHero } from "./coopHooks";
 import { updateEnemies } from "./enemies/updateEnemies";
 import { celebrateEvolutions } from "./evolve";
+import { keptPresses } from "./hero/keptPresses";
 import { updateHero } from "./hero/updateHero";
 import { updateHitCount } from "./hitCount";
 import { agePresses } from "./input";
@@ -17,7 +18,7 @@ import { updateDanger } from "./lowHealth";
 import { updateNumbers } from "./numbers";
 import { updatePickups } from "./pickups";
 import { updateSkills } from "./skills/runtime";
-import { game, hero, lights, particles, rng } from "./state";
+import { game, lights, particles, rng } from "./state";
 import { updateWaves } from "./waves";
 import { updateXpOrbs } from "./xpOrbs";
 
@@ -104,5 +105,5 @@ export function update(dt: number): void {
   game.shake = Math.max(0, game.shake - dt);
   game.flash = Math.max(0, game.flash - dt);
   game.banner.time = Math.max(0, game.banner.time - dt);
-  eachHero(() => agePresses(hero.state === "move"));
+  eachHero(() => agePresses(keptPresses()));
 }

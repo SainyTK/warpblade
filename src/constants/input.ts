@@ -66,3 +66,5 @@ export const HOLD_STEPS = 30;
 export const HOLD_ACTIONS: Readonly<Record<HeldAction, InputAction>> = { attack: "warp", cast: "castWide" };
 /** presses that wait out a whole move: a jump pressed while a blow winds up or strikes jumps out of its follow-through */
 export const KEPT_DURING_MOVE: readonly InputAction[] = ["up"];
+/** the shared actions that may cut a hero's own state; a kit can keep their presses waiting until its state allows it */
+export const SHARED_CUT_PRESSES: readonly InputAction[] = ["dash", "warp", "guard", "cast", "castWide", "ultimate"];
