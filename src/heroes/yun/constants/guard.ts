@@ -10,7 +10,7 @@ export const SPIRIT_LOOK = {
 
 /** Sword Screen's look: the plate of light behind the fan (radii and strength), how long a blocked blow flashes the
  *  swords white, and the flecks thrown toward the attacker */
-export const SCREEN_LOOK = { plateRx: 12, plateRy: 18, plateA: 0.22, plateDy: 6, flash: 0.08, flecks: 3 } as const;
+export const SCREEN_LOOK = { plateRx: 12, plateRy: 18, plateA: 0.35, plateDy: 6, flash: 0.08, flecks: 3 } as const;
 
 /** Deflecting Qi: the parry's qi wave flies `reach` pixels at `speed` and cuts each foe once for `power` times attack
  *  damage */
