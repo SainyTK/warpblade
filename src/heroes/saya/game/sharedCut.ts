@@ -23,11 +23,10 @@ export function sayaMayAct(): boolean {
   }
 }
 
-/** while Brushline's dash, Moonrise's draw or the counter's cut is still coming, a shared press waits for it */
-export function sayaHoldsPresses(): boolean {
-  const own = hero.state === "line" || hero.state === "rise" || hero.state === "counter";
-  return own && !sayaMayAct();
-}
+/** through Brushline, Moonrise and the counter draw a shared press waits for the moment it may cut them; a press that can
+ *  cut is used at once, and one made before the blow lands is still there on the step after it */
+export const sayaHoldsPresses = (): boolean =>
+  hero.state === "line" || hero.state === "rise" || hero.state === "counter";
 
 /** a shared action cuts one of her states before its click: the click plays now, so no stored cut is lost */
 export function sayaCutForAction(): void {
