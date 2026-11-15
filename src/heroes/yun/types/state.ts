@@ -19,6 +19,8 @@ export interface YunState {
   dodgeSwordCd: number;
   /** an air cut has given its sword this jump (Petal Storm) */
   airSword: boolean;
+  /** seconds the Sword Screen still flashes white after a blocked blow */
+  screenFlash: number;
   /** the tassel's swing from straight down, radians, its speed, and where the pommel was last frame */
   tassel: number;
   tasselSpeed: number;

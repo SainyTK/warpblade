@@ -13,6 +13,7 @@ const fresh = (): YunState => ({
   keenSwordCd: 0,
   dodgeSwordCd: 0,
   airSword: false,
+  screenFlash: 0,
   tassel: 0,
   tasselSpeed: 0,
   pommelX: Number.NaN,
