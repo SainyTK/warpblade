@@ -58,12 +58,15 @@ export function runCounter(): void {
         if (e.hp > 0 && boxHit(box, enemyBox(e))) storeCut(e, progress.stats.ad * still.store, STORE_ANGLE.drawCut);
     }
   }
-  if (!saya.clicked && h.st >= BEATS.counter.click) {
-    saya.clicked = true;
-    sayaSound.click();
-    sheatheFlash();
-    if (still.clean) cleanSheathe();
-    else releaseCuts(true);
-  }
+  if (!saya.clicked && h.st >= BEATS.counter.click) clickCounter();
   if (h.st >= BEATS.counter.end) settle();
+}
+
+/** the counter draw's click: the blade goes home, a clean sheathe out of Still Water, else every stored cut releases */
+export function clickCounter(): void {
+  saya.clicked = true;
+  sayaSound.click();
+  sheatheFlash();
+  if (saya.stillCounter && skillValues(SKILL.still).clean) cleanSheathe();
+  else releaseCuts(true);
 }

@@ -13,6 +13,7 @@ import { SAYA_GUARD } from "./guardStyle";
 import { sayaPose } from "./pose";
 import { readActions } from "./readActions";
 import { runState } from "./runState";
+import { sayaCutForAction, sayaMayAct } from "./sharedCut";
 import { stillTakes } from "./spells";
 import { resetSayaState } from "./state";
 import { drawStoredCuts, resetStore, tickStore } from "./store";
@@ -45,6 +46,8 @@ export const SAYA_KIT: HeroKit = {
   landed,
   hitBonus,
   keenWindow,
+  mayAct: sayaMayAct,
+  cutForAction: sayaCutForAction,
   absorbHurt: (_dmg, fromX) => stillTakes(fromX),
   dodge: SAYA_DODGE,
   airDodge: sayaAirDodge,
