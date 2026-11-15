@@ -15,7 +15,7 @@ import { DAY_SPARKS, DAY_COLORS as DC } from "./colors";
 import { createRootSpike, type RootStrike } from "./rootSpike";
 
 /** Oakheart blows before wave scaling */
-export const OAK_HITS = { sweep: 22, root: 20, acorn: 12 } as const;
+export const OAK_HITS = { sweep: 18, root: 20, acorn: 12 } as const;
 /** wind-ups before wave scaling, and how long each blow holds */
 export const OAK_TIMES = { sweep: 0.6, root: 0.65, volley: 0.7, swing: 0.3, plant: 0.55, throw: 0.35 } as const;
 const REACH = 40;
