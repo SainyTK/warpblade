@@ -81,7 +81,7 @@ They cost no MP, so his MP goes to the warp and Jade Rain.
 
 ### Guard and parry
 
-- Sword Screen: the held swords fan out in front of him while he guards. A block lets 30% of the damage through and costs 14 stamina, both average for the roster.
+- Sword Screen: the held swords fan out in front of him at full strength on a soft plate of jade light, which shows the guard even with no sword held. A block lets 30% of the damage through and costs 14 stamina, both average for the roster, and flashes the screen white with jade flecks thrown back at the attacker.
 - Deflecting Qi, his parry: the shared parry, then a qi wave leaves his blade and flies 120 pixels ahead, cutting each foe once for 1.2 times attack damage, and a spirit sword joins him.
 
 ### Warp extra
