@@ -110,7 +110,8 @@ Both cost MP and have their own recharges, and either may cut into the string on
 An ability ends in a sheathe, so casting one mid-string cashes in the string's stored cuts at full value: that is her cancel rule.
 Her own moves may in turn be cut by the warp, the guard, the dodge, an ability or the ultimate once they have landed: Brushline once the dash stops (held, once she is back), Moonrise once its rising draw is out, and the counter draw once it has cut.
 A cut that comes before the click plays the click at once, so the stored cuts always release.
-A press of one of those actions made earlier waits until that moment, so nothing pressed during her abilities is lost.
+A warp, dodge, ability or ultimate pressed earlier waits until that moment, so none is lost.
+K held through it raises the guard at that moment; a tap of K made earlier is not kept, so a parry never comes later than it was pressed.
 The dodge also works in the air out of Moonrise's rise.
 The dash itself and Silent Moon cannot be cut.
 
