@@ -69,12 +69,14 @@ export function clearPresses(): void {
 }
 /**
  * Called once per simulation step: unused presses expire after the buffer, except the `kept` ones, and a tap-or-hold key
- * held long enough becomes its long press.
+ * held long enough becomes its long press. A kept press stays one step short of the buffer, so it is still there on the
+ * step after the state that kept it ends.
  */
 export function agePresses(kept: readonly InputAction[]): void {
   for (const [a, age] of pressed) {
-    if (age >= INPUT_BUFFER_STEPS && !kept.includes(a)) pressed.delete(a);
-    else pressed.set(a, age + 1);
+    const keep = kept.includes(a);
+    if (age >= INPUT_BUFFER_STEPS && !keep) pressed.delete(a);
+    else pressed.set(a, keep ? Math.min(age + 1, INPUT_BUFFER_STEPS - 1) : age + 1);
   }
   for (const [a, steps] of holding) {
     if (steps + 1 < HOLD_STEPS) {
@@ -86,7 +88,7 @@ export function agePresses(kept: readonly InputAction[]): void {
   }
 }
 export const isHeld = (a: InputAction): boolean => held.has(a);
-/** simulation steps since a waiting press, or -1 when none waits */
+/** simulation steps since a waiting press (a kept press stops one step short of the buffer), or -1 when none waits */
 export const pressAge = (a: InputAction): number => pressed.get(a) ?? -1;
 /** how far a tap-or-hold key is toward its long press, 0 to 1; 0 when it is up or already decided */
 export const holdShare = (a: HeldAction): number => (holding.get(a) ?? 0) / HOLD_STEPS;

@@ -61,6 +61,7 @@ export const BRYNN_KIT: HeroKit = {
   takenBonus,
   dodge: BRYNN_DODGE,
   mayAct,
+  holdsSharedPresses: casting,
   cutForAction: () => {
     brynn.carry = 0;
   },

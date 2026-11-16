@@ -9,17 +9,22 @@ import { calder } from "./state";
 interface ShotCost {
   known(): boolean;
   affordable(wide: boolean): boolean;
+  paidSoon(): boolean;
   pay(wide: boolean): void;
   recharge(): number;
   evolved(): boolean;
 }
 
-/** a base shot, paid in rounds from the chamber */
+/** the reload is under way and its rounds are not in yet: a round shot pressed now waits for them */
+const roundsComing = (): boolean => hero.state === "reload" && !hero.hitDone;
+
+/** a base shot, paid in rounds from the chamber; while a reload loads them, a press waits for the rounds */
 function roundShot(a: "slug" | "scatter"): ShotCost {
   const rounds = (wide: boolean): number => SHOT_ROUNDS[a][wide ? 1 : 0];
   return {
     known: () => true,
     affordable: (wide) => calder.rounds >= rounds(wide),
+    paidSoon: roundsComing,
     pay: (wide) => {
       spendRounds(rounds(wide));
     },
@@ -34,6 +39,7 @@ function shell(skill: string): ShotCost {
   return {
     known: () => skillLevel(skill) > 0,
     affordable: (wide) => hero.mp >= mp(wide),
+    paidSoon: () => false,
     pay: (wide) => {
       hero.mp -= mp(wide);
     },

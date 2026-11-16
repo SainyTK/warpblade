@@ -60,12 +60,15 @@ export function runCast(): void {
     if (saya.casting === "crescent") sendCrescents();
     if (saya.casting === "rain") sendRain();
   }
-  if (!saya.clicked && h.st >= BEATS.cast.click) {
-    saya.clicked = true;
-    sayaSound.click();
-    sheatheFlash();
-    releaseCuts(true);
-  }
+  if (!saya.clicked && h.st >= BEATS.cast.click) clickCast();
+}
+
+/** the spell's click: the blade goes home and every stored cut releases */
+export function clickCast(): void {
+  saya.clicked = true;
+  sayaSound.click();
+  sheatheFlash();
+  releaseCuts(true);
 }
 
 /** Still Water's ward round her, breaking foe shots, with the skill's seventh level */

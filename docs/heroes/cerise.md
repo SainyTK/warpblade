@@ -45,7 +45,7 @@ Effects are rose: thrusts leave thin rose streaks with a white core, Keen thrust
 | K (parry) | The shared parry, then a riposte at once (a sure crit) and a Point. |
 | J after a riposte | J pressed in the beat after a riposte lands is the next riposte, harder each time and a Point each, up to six in a chain. A J pressed before the riposte lands ends the chain after it. |
 | L | The shared dodge. |
-| I | Cast the selected ability. Pressed in an open string just after a blow lands, it goes off at once; pressed in the Keen beat, it also earns a Point. |
+| I | Cast the selected ability. Pressed in an open string just after a blow lands, it goes off at once; pressed in the Keen beat, it also earns a Point. Her spells (Rose Bloom, Needle Rain, Mirror Guard) may be cut by the warp, the guard, the dodge or the ultimate once they let loose, and a press made earlier waits for that moment; another ability waits until she is free. |
 | I held | The wide form of the selected ability for half again the MP. |
 | O | Switch ability. |
 | U | Rose Tempest, charged in four levels. |
@@ -104,6 +104,9 @@ The mark is drawn as a small rose sigil over the foe.
 | Rose Line | LINE | 14 | 4 s | a thin wave of rose light runs across the whole screen on her line, 2.4 AP to each foe once | the line runs both ways, ahead and behind |
 
 Each Point an ability spends (two at most) makes it 40% stronger, and Flurry adds two thrusts for each.
+
+The warp, the guard, the dodge or the ultimate may cut Flurry once its last thrust is out, Rose Line once the line has gone and a riposte once it has struck, and one pressed earlier waits for that moment.
+Another ability pressed during Flurry or Rose Line waits until she is free; after a riposte has struck it goes off at once.
 
 ### Ultimate: Rose Tempest
 

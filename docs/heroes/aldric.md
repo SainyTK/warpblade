@@ -37,6 +37,7 @@ At rest he stands with the shield grounded in front of his far leg and the sword
 - Responsive blows: each blow of the string winds up against itself, snaps on its hit frame and settles back to his guard. The string is three presses, a little slower than Kael's four.
 - Reach: the shared warp, plus Shield Rush, a short shove forward that carries foes with him.
 - A cancel rule between string and abilities: Shieldcast. An ability pressed in an open string skips its wind-up, and after the Shield bash it hits harder.
+- His abilities may in turn be cut by the warp, the guard, the dodge or the ultimate: Shield Rush once its travel is over, a call of light once the light has gone. A press made earlier waits for that moment; a tapped K is not kept, a held K raises the guard then. Another ability pressed meanwhile waits until he is free.
 - A parry follow-up: the Stun bash on the parry itself, and since the guard stays up, a Guard bash right after it.
 - A way to continue after a launch: Sky cut and Shield fall, which drives an airborne foe into the floor.
 - A timing reward of his own: the Counterbash, a Guard bash pressed just after a block, a sure critical hit worth twice the Valor. The shared Keen timing on J also holds.

@@ -22,6 +22,7 @@ import { drawAldric } from "./look";
 import { aldricPose } from "./pose";
 import { readActions } from "./readActions";
 import { shapeHit } from "./shapeHit";
+import { aldricCutForAction, aldricHoldsPresses, aldricMayAct } from "./sharedCut";
 import { brandBonus } from "./skillBonus";
 import { aldric, resetAldricState, tickAldricState } from "./state";
 import { SHIELD_STEP } from "./step";
@@ -101,9 +102,9 @@ export const ALDRIC_KIT: HeroKit = {
     (aldric.rally > 0 ? (skillValues("al_rally").haste ?? 0) : 0) +
     (radiant() ? (skillValues("al_resolve").haste ?? 0) : 0),
   walkSpeed: (speed) => (hero.state === "guard" ? guardWalkSpeed() : speed),
-  cutForAction: () => {
-    aldric.bashT = -1;
-  },
+  mayAct: aldricMayAct,
+  cutForAction: aldricCutForAction,
+  holdsSharedPresses: aldricHoldsPresses,
   draw: drawAldric,
   stride: (running) => (running ? STRIDE.run : STRIDE.walk),
   hurtScale: () => (inDome() ? SANCTUARY.taken : 1),

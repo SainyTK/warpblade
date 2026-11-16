@@ -108,7 +108,7 @@ A scabbard block: she holds the sheathed katana across her body in both hands.
 
 Both cost MP and have their own recharges, and either may cut into the string once a blow has landed.
 An ability ends in a sheathe, so casting one mid-string cashes in the string's stored cuts at full value: that is her cancel rule.
-Her own moves may in turn be cut by the warp, the guard, the dodge, an ability or the ultimate once they have landed: Brushline once the dash stops (held, once she is back), Moonrise once its rising draw is out, and the counter draw once it has cut.
+Her own moves may in turn be cut by the warp, the guard, the dodge, an ability or the ultimate once they have landed: Brushline once the dash stops (held, once she is back), Moonrise once its rising draw is out, the counter draw once it has cut, and a spell once it has left the blade.
 A cut that comes before the click plays the click at once, so the stored cuts always release.
 A warp, dodge, ability or ultimate pressed earlier waits until that moment, so none is lost.
 K held through it raises the guard at that moment; a tap of K made earlier is not kept, so a parry never comes later than it was pressed.

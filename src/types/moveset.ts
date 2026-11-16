@@ -76,6 +76,9 @@ export interface AbilitySlot {
   full(): number;
   /** the hero can pay for it now (MP, or the kit's own resource) */
   affordable(): boolean;
+  /** it cannot be paid for yet, but will be in a moment (rounds a reload is loading): I waits for it instead of being
+   *  refused; left out, never */
+  paidSoon?(): boolean;
   /**
    * Cast it now; `wide` is a long press, which casts the wider form when the ability has one and the plain form
    * otherwise. False when the hero cannot cast right now, which keeps the press waiting a moment.

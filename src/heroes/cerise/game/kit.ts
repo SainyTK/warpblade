@@ -3,6 +3,7 @@ import { STRIDE } from "../../../constants/motion";
 import { isFree } from "../../../game/hero/actions";
 import { blowsDone } from "../../../game/hero/combo";
 import { resetMotion } from "../../../game/hero/motion";
+import { castLanded } from "../../../game/hero/sharedCut";
 import { hero } from "../../../game/state";
 import type { HeroKit } from "../../../types/kit";
 import { CERISE_SLOTS, rechargeAbilities } from "./abilities";
@@ -28,12 +29,15 @@ import { cerise, resetCeriseState, tickCeriseState } from "./state";
 import { runTempest, tempestDrives } from "./tempest";
 import { CERISE_WARP } from "./warpStyle";
 
-/** her own state may be cut by a shared action now: a link once it has struck, a cast once it has let go */
+/** her own state may be cut by a shared action now: a link once it has struck, a cast (hers or the shared one) once it
+ *  has let go */
 function ownCut(): boolean {
   switch (hero.state) {
     case "riposte":
     case "lineCast":
       return hero.hitDone;
+    case "cast":
+      return castLanded();
     case "flurry":
       return cerise.flurryDone >= cerise.flurryCount;
     case "tempest":
@@ -42,6 +46,11 @@ function ownCut(): boolean {
       return isFree() || blowsDone();
   }
 }
+
+/** through her own states and the shared cast a shared press waits for the moment `ownCut` lets it cut them; Rose
+ *  Tempest holds nothing */
+const holdsPresses = (): boolean =>
+  hero.state === "riposte" || hero.state === "lineCast" || hero.state === "flurry" || hero.state === "cast";
 
 /** her own states, run by the kit; the shared cast lets a spell loose on its release and the shared runner ends it */
 function runState(): boolean {
@@ -92,6 +101,7 @@ export const CERISE_KIT: HeroKit = {
   shapeHit: (id, hit) => shapeHit(id as Parameters<typeof shapeHit>[0], hit),
   keenWindow,
   mayAct: ownCut,
+  holdsSharedPresses: holdsPresses,
   cutForAction: endRiposte,
   absorbHurt,
   hitBonus,

@@ -1,0 +1,231 @@
+{
+  "version": "0.11.2",
+  "kind": "small",
+  "date": "2026-11-17",
+  "title": "Kept presses",
+  "tagline": "A press made during an ability now waits for it and goes off as soon as the ability has landed, for every hero. Kael, Yun, Aldric, Vesper and Calder get the fix Saya got in 0.11.1.",
+  "intro": "The game holds a press for 0.15 s, but many abilities last half a second or more, and until now most of them could not be cut until they ended. So a U, a Warp strike or a guard pressed early in a spell, a Shield Rush or a shot was simply lost. Last patch we fixed this for Saya, and this week we went through every hero and found the same gap in most of them. Now each ability may be cut once it has done its work, and anything you press before that moment waits for it. Damage, costs, recharges and timings are unchanged when you press nothing.",
+  "highlights": [],
+  "sections": [
+    {
+      "id": "bugfixes",
+      "entries": [
+        {
+          "name": "Kael and Yun: presses during a spell",
+          "tag": "fix",
+          "summary": "Press U, the Warp strike or K while Kael or Yun is casting and it now goes off the moment the spell leaves his hand.",
+          "context": "Their spells play the shared cast, which lasts 0.48 s and could only be cut by the dodge, while a press is held for 0.15 s. A press in the first third of a second was lost. Kael is the hero every other hero is measured against, so this one mattered most.",
+          "changes": [
+            {
+              "kind": "stat",
+              "label": "The cast can be cut by the Warp strike, guard or ultimate",
+              "before": "When it ends, at 0.48 s",
+              "after": "When the spell leaves the hand, at 0.25 s"
+            },
+            {
+              "kind": "stat",
+              "label": "U pressed 0.1 s after I",
+              "before": "Lost",
+              "after": "The ultimate starts at 0.35 s"
+            },
+            {
+              "kind": "note",
+              "text": "A dodge, Warp strike, ability or ultimate pressed earlier in the cast waits for that moment. The dodge still cuts the cast at once, as before."
+            },
+            {
+              "kind": "note",
+              "text": "A K held through the cast raises the guard at 0.25 s. A tap of K early in the cast is not kept, so a parry never comes later than you pressed it."
+            },
+            {
+              "kind": "note",
+              "text": "A second ability pressed during the cast waits until he is free, then casts."
+            }
+          ],
+          "media": {
+            "kind": "video",
+            "file": "kael-crystal-nova.mp4",
+            "poster": "kael-crystal-nova.png",
+            "alt": "In the Sunlit Ruins, Kael faces two thornbacks and casts Crystal Lance. While the spell gathers at his chest he calls Crystal Nova, which bursts out in a ring of ice spikes on the same moment the lance leaves his hand. The lance cuts both thornbacks and Kael chases them with his sword.",
+            "width": 640,
+            "height": 360
+          }
+        },
+        {
+          "name": "Aldric: presses during Shield Rush and his calls of light",
+          "tag": "fix",
+          "summary": "Press U, the Warp strike, K or L during Shield Rush or Sunpillar and it now goes off as soon as the rush stops or the light has gone.",
+          "context": "Shield Rush lasts 0.50 s and a call of light 0.47 s, and nothing could cut either before it ended, so an early press was lost. The rush's travel itself still runs its course, so the shove always carries foes with him.",
+          "changes": [
+            {
+              "kind": "stat",
+              "label": "Shield Rush can be cut",
+              "before": "When it ends, at 0.50 s",
+              "after": "When the travel stops, at 0.28 s"
+            },
+            {
+              "kind": "stat",
+              "label": "A call of light can be cut",
+              "before": "When it ends, at 0.47 s",
+              "after": "When the light has gone, at 0.20 s"
+            },
+            {
+              "kind": "stat",
+              "label": "U pressed 0.1 s after Shield Rush",
+              "before": "Lost",
+              "after": "The ultimate starts at 0.38 s"
+            },
+            {
+              "kind": "note",
+              "text": "A Shield Rush that is cut stops where it is and does not slide on."
+            },
+            {
+              "kind": "note",
+              "text": "A K held through the move raises the guard at that moment; a tap of K early is not kept. A second ability waits until he is free."
+            },
+            {
+              "kind": "note",
+              "text": "Shieldcast, the wide forms, damage and costs are unchanged."
+            }
+          ]
+        },
+        {
+          "name": "Vesper: presses during Twin Crescent and Stitch",
+          "tag": "fix",
+          "summary": "Press U, the Warp strike, K or L during an ability and it now goes off once the blades are out, or as soon as the Stitch brings her back.",
+          "context": "Her woven abilities last 0.43 to 0.53 s with no way to cut them, and the Stitch dropped any press made before its last moment. While fixing this we also found that a second ability pressed during the Stitch could cut it mid-travel, leaving her out among the foes instead of back where she started.",
+          "changes": [
+            {
+              "kind": "stat",
+              "label": "Twin Crescent can be cut",
+              "before": "When it ends, at 0.43 s",
+              "after": "When the waves leave her hands, at 0.17 s"
+            },
+            {
+              "kind": "stat",
+              "label": "Held Twin Crescent can be cut",
+              "before": "When it ends, at 0.53 s",
+              "after": "When the waves leave her hands, at 0.23 s"
+            },
+            {
+              "kind": "stat",
+              "label": "U pressed 0.1 s after Twin Crescent",
+              "before": "Lost",
+              "after": "The ultimate starts at 0.26 s"
+            },
+            {
+              "kind": "stat",
+              "label": "U pressed during Stitch",
+              "before": "Lost",
+              "after": "The ultimate starts as she lands back"
+            },
+            {
+              "kind": "stat",
+              "label": "An ability pressed during Stitch",
+              "before": "Cut the Stitch mid-travel",
+              "after": "Waits until the Stitch brings her back, then casts"
+            },
+            {
+              "kind": "note",
+              "text": "A second ability woven into the string now waits until the first has left her hands, so it no longer replaces one that has not gone off yet."
+            },
+            {
+              "kind": "note",
+              "text": "Stitch still cannot be cut. When nothing cuts a woven ability, the string goes on after it as before. Tempo, damage and costs are unchanged."
+            }
+          ]
+        },
+        {
+          "name": "Calder: presses during shots and the reload",
+          "tag": "fix",
+          "summary": "Press U, the Warp strike, K or L during a shot or a reload and it now goes off once the rounds are out or in, and an I pressed during a reload fires as the rounds snap in.",
+          "context": "His shots last 0.47 to 0.63 s and the reload 0.60 s, and only another shot could cut the reload, so early presses were lost. Scatter Blast's hop back also locked out every other action for almost the whole shot.",
+          "changes": [
+            {
+              "kind": "stat",
+              "label": "A shot can be cut",
+              "before": "When it ends, at 0.47 to 0.63 s",
+              "after": "When the round leaves the muzzle, at 0.17 s"
+            },
+            {
+              "kind": "stat",
+              "label": "Twin Scatter can be cut",
+              "before": "When it ends",
+              "after": "When the back shot has fired, at 0.33 s"
+            },
+            {
+              "kind": "stat",
+              "label": "The reload can be cut by the Warp strike, guard, dodge or ultimate",
+              "before": "When it ends, at 0.60 s",
+              "after": "When the rounds are in, at 0.42 s"
+            },
+            {
+              "kind": "stat",
+              "label": "U pressed 0.1 s after Slug Shot or Scatter Blast",
+              "before": "Lost",
+              "after": "The ultimate starts at 0.26 s"
+            },
+            {
+              "kind": "stat",
+              "label": "I pressed during a reload, before the rounds are in",
+              "before": "Refused with a tick",
+              "after": "Waits and fires as the rounds snap in"
+            },
+            {
+              "kind": "note",
+              "text": "A cut during Scatter Blast's hop ends the hop where he is, as a landing would. A second shot waits until he is free."
+            },
+            {
+              "kind": "note",
+              "text": "The SLUG and SCATTER tabs stay struck through until the rounds are in. If you know a shell, I during a reload moves to the shell as before, and now fires it as the rounds snap in."
+            },
+            {
+              "kind": "note",
+              "text": "The quick reload window, rounds, damage, recoil, recharges and Cylinder Break are unchanged."
+            }
+          ]
+        },
+        {
+          "name": "Brynn, Cerise and Saya: presses during their abilities",
+          "tag": "fix",
+          "summary": "A press made early in Brynn's Rend and Quake, Cerise's Flurry, Rose Line, riposte and spells, or Saya's spells now waits and goes off when the move has landed.",
+          "context": "These moves could already be cut once they landed, but a press made before that moment expired after 0.15 s and was lost. Cerise's and Saya's spells play the same shared cast as Kael's, so they also get its new cut point.",
+          "changes": [
+            {
+              "kind": "stat",
+              "label": "Brynn: U pressed 0.1 s after Rend or Quake",
+              "before": "Lost",
+              "after": "The ultimate starts at 0.34 s (Rend) or 0.37 s (Quake)"
+            },
+            {
+              "kind": "stat",
+              "label": "Cerise: U pressed 0.1 s after Flurry",
+              "before": "Lost",
+              "after": "Rose Tempest starts at 0.51 s"
+            },
+            {
+              "kind": "stat",
+              "label": "Cerise's spells can be cut",
+              "before": "When the cast ends, at 0.48 s",
+              "after": "When the spell lets loose, at 0.25 s"
+            },
+            {
+              "kind": "stat",
+              "label": "Saya's spells can be cut",
+              "before": "When the cast ends",
+              "after": "When the spell has left the blade"
+            },
+            {
+              "kind": "note",
+              "text": "When a Saya spell is cut before her blade clicks home, the click plays at once, so her stored cuts still release at full value."
+            },
+            {
+              "kind": "note",
+              "text": "A second ability pressed during Rend, Quake, Flurry or Rose Line waits until the hero is free. After a riposte has struck, an ability still goes off at once."
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "feedback": []
+}

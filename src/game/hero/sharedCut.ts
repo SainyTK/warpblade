@@ -4,15 +4,18 @@ import { isFree } from "./actions";
 import { blowsDone, endCombo } from "./combo";
 import { kit } from "./kits";
 
+/** the shared cast has let its spell go: from then on a shared action may cut it */
+export const castLanded = (): boolean => hero.state === "cast" && hero.hitDone;
+
 /**
  * Whether a shared action (warp, guard, dodge, ability, ultimate) may start now, cutting what the hero is doing: the
- * warp's arrival blow once it has struck, else the kit's own rule, or by default when the hero is free or the current
- * blow of the shared string has landed.
+ * warp's arrival blow once it has struck, else the kit's own rule, or by default when the hero is free, the current
+ * blow of the shared string has landed, or the shared cast has let its spell go.
  */
 export function maySharedAct(): boolean {
   if (hero.state === "warpStrike") return hero.st >= WARP.cut;
   const own = kit().mayAct;
-  return own ? own() : isFree() || blowsDone();
+  return own ? own() : isFree() || blowsDone() || castLanded();
 }
 
 /** a shared action starts: the shared string ends and the kit ends its own state */

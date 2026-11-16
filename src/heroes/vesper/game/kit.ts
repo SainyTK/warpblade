@@ -13,6 +13,7 @@ import { VESPER_GUARD } from "./guardStyle";
 import { vesperPose } from "./pose";
 import { readActions } from "./readActions";
 import { shapeHit } from "./shapeHit";
+import { vesperHoldsPresses, vesperMayAct } from "./sharedCut";
 import { airDodge } from "./skills/ascendingStep";
 import { graceScale, graceWard, tickWard } from "./skills/grace";
 import { keenWindow } from "./skills/keen";
@@ -65,6 +66,8 @@ export const VESPER_KIT: HeroKit = {
   afterStrike,
   shapeHit,
   keenWindow,
+  mayAct: vesperMayAct,
+  holdsSharedPresses: vesperHoldsPresses,
   attackRate: () => 1 + vesper.tempo * TEMPO.speed,
   walkSpeed,
   absorbHurt: () => graceWard(),

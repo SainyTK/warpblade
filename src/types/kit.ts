@@ -48,13 +48,14 @@ export interface HeroKit {
   abilities: readonly AbilitySlot[];
   /**
    * The shared actions (warp, guard, dodge, ability, ultimate) may start now, cutting what the hero is doing; left out,
-   * when the hero is free or the current blow has landed
+   * when the hero is free, the current blow has landed or the shared cast has let its spell go (`castLanded`). A kit
+   * that enters the shared cast and sets its own rule lets the cast be cut once its spell has gone too
    */
   mayAct?(): boolean;
   /** a shared action is starting: the kit ends its own state (a string, a held foe, a hover) */
   cutForAction?(): void;
   /** while true, presses of the shared actions wait past the input buffer, because the kit's own state will let them
-   *  cut it soon; left out, never */
+   *  cut it soon; left out, only through the shared cast */
   holdsSharedPresses?(): boolean;
   /** a blow is about to land on the hero: true when the kit took it (a block or a parry) */
   absorbHurt(dmg: number, fromX: number): boolean;
