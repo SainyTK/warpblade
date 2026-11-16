@@ -53,8 +53,11 @@ export function rechargeAbilities(dt: number): void {
  *  still open, so I casts at once and the string goes on after */
 const weaveOpen = (): boolean => (hero.state === "move" && blowsDone()) || (hero.link > 0 && hero.chain > 0);
 
-/** I on an ability: from a free state, or woven into the string after a blow has landed */
+/** I on an ability: from a free state, or woven into the string after a blow has landed; never into the stitch, nor into
+ *  another ability before it has left her hands */
 function cast(a: VesperAbility, wideAsked: boolean): boolean {
+  if (hero.state === "stitch") return false;
+  if (hero.state === "weave" && !hero.hitDone) return false;
   const woven = weaveOpen();
   if (!woven && !isFree()) return false;
   if (hero.mp < cost(a, false)) return false;
