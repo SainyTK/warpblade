@@ -105,6 +105,8 @@ The mark is drawn as a small rose sigil over the foe.
 
 Each Point an ability spends (two at most) makes it 40% stronger, and Flurry adds two thrusts for each.
 
+A shared action may cut Flurry once its last thrust is out, Rose Line once the line has gone and a riposte once it has struck; a warp, dodge, ability or ultimate pressed earlier waits for that moment.
+
 ### Ultimate: Rose Tempest
 
 She plants her feet and drives a storm of thrusts into the foes ahead, then lunges along her line while a streak of rose light runs on ahead of her.

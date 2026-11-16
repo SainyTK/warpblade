@@ -47,6 +47,11 @@ function ownCut(): boolean {
   }
 }
 
+/** through her own states and the shared cast a shared press waits for the moment `ownCut` lets it cut them; Rose
+ *  Tempest holds nothing */
+const holdsPresses = (): boolean =>
+  hero.state === "riposte" || hero.state === "lineCast" || hero.state === "flurry" || hero.state === "cast";
+
 /** her own states, run by the kit; the shared cast lets a spell loose on its release and the shared runner ends it */
 function runState(): boolean {
   switch (hero.state) {
@@ -96,6 +101,7 @@ export const CERISE_KIT: HeroKit = {
   shapeHit: (id, hit) => shapeHit(id as Parameters<typeof shapeHit>[0], hit),
   keenWindow,
   mayAct: ownCut,
+  holdsSharedPresses: holdsPresses,
   cutForAction: endRiposte,
   absorbHurt,
   hitBonus,
