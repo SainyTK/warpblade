@@ -69,6 +69,15 @@ A kit lists its abilities in `HeroKit.abilities` (`AbilitySlot` in `src/types/mo
 Each ability has its own recharge, and casting one adds no wait to any other.
 I casts the selected one; when it is recharging or cannot be paid for, I casts the next ready one in order and selects it.
 `cast(wide)` returns false when the hero cannot cast right now, which keeps the press waiting a moment.
+
+## Cutting a move, and presses that wait
+
+A press is kept `INPUT_BUFFER_STEPS` (18 simulation steps, 0.15 seconds) until it can be used.
+The shared cast (`ACTION_CLIPS.cast`, 0.48 seconds) may be cut by the warp, the guard, an ability or the ultimate once its spell has left the hand on the clip's hit (0.25 seconds), and the dodge cuts it at any time (`castLanded` and `maySharedAct` in `src/game/hero/sharedCut.ts`).
+A kit sets the cut point of its own states with `HeroKit.mayAct`; a kit that also enters the shared cast lets it be cut at the same moment.
+A press of the dodge, the warp, I or U made before that moment waits for it (`keptPresses` in `src/game/hero/keptPresses.ts`, and `HeroKit.holdsSharedPresses` for a kit's own states), so it goes off as soon as the move may be cut.
+A kept press is still there on the step after the move ends, so a second ability pressed during a move that only a free hero may follow casts as the hero becomes free.
+A tapped K is not kept, so a parry never comes later than it was pressed; a K held through the move raises the guard at the cut point.
 The HUD's ability tabs (`src/ui/abilityTabs.ts`) and the touch I button read the same list, so every hero's tabs look and behave alike.
 
 ## The ultimate

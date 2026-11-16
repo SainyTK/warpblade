@@ -72,6 +72,7 @@ They cost no MP, so his MP goes to the warp and Jade Rain.
 
 - Sword Stream: every held sword flies out along the line ahead, 150 pixels, and back to him, cutting each foe once on the way out and once on the way back, for 0.8 times ability power a cut. Held: the swords fan out at three heights and fly 210 pixels. Recharge 1.2 seconds.
 - Sword Lotus: every held sword flies to a point 44 pixels ahead and spins there in a ring for 2.4 seconds, each sword cutting the foes it touches every 0.35 seconds for 0.3 times ability power. Held: the ring spins round Yun himself and follows him for 3 seconds, a little wider. Recharge 3.5 seconds.
+- His abilities that play the shared cast may be cut by the warp, the guard, the other ability or the ultimate once the swords have left his fingers, and a press made earlier waits for that moment.
 - Free Hand, his cancel rule: an ability pressed during an open string, after a blow has landed, leaves his sword fingers at once with no cast pose, and the string stays open, so the next J carries on with the next cut.
 
 ### Air string

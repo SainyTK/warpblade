@@ -50,6 +50,10 @@ Base abilities:
 - Twin Crescent (10 MP, 3.5 s): the long blade's wave and the short blade's wave leave her hands angled together and cross 38 px ahead, 1.3 AP each, each cutting a foe once. Held: a second, steeper pair crosses higher for fliers.
 - Stitch (12 MP, 5 s): she darts to up to 3 foes within 72 px, nearest first, cutting each for 1.1 AP, and comes back to where she started. She cannot be touched while it runs, and it ends within about a quarter of a second. Held: 5 foes within 110 px.
 
+A woven ability may be cut by the warp, the guard, the dodge, another ability or the ultimate once it has left her hands; the stitch cannot be cut and always brings her back first.
+A press made during either waits for that moment, or for the moment the stitch settles, so none is lost.
+When nothing cuts a woven ability, the string goes on after it as before.
+
 ## Tempo (TP)
 
 The meter under stamina, label TP, one cell a stack, glowing at the top (`constants/tempo.ts`).

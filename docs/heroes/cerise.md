@@ -45,7 +45,7 @@ Effects are rose: thrusts leave thin rose streaks with a white core, Keen thrust
 | K (parry) | The shared parry, then a riposte at once (a sure crit) and a Point. |
 | J after a riposte | J pressed in the beat after a riposte lands is the next riposte, harder each time and a Point each, up to six in a chain. A J pressed before the riposte lands ends the chain after it. |
 | L | The shared dodge. |
-| I | Cast the selected ability. Pressed in an open string just after a blow lands, it goes off at once; pressed in the Keen beat, it also earns a Point. |
+| I | Cast the selected ability. Pressed in an open string just after a blow lands, it goes off at once; pressed in the Keen beat, it also earns a Point. Her spells (Rose Bloom, Needle Rain, Mirror Guard) may be cut by a shared action once they let loose, and a press made earlier waits for that moment. |
 | I held | The wide form of the selected ability for half again the MP. |
 | O | Switch ability. |
 | U | Rose Tempest, charged in four levels. |
