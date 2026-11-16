@@ -14,12 +14,15 @@ interface ShotCost {
   evolved(): boolean;
 }
 
-/** a base shot, paid in rounds from the chamber */
+/** the reload is under way and its rounds are not in yet: a round shot pressed now waits for them */
+const roundsComing = (): boolean => hero.state === "reload" && !hero.hitDone;
+
+/** a base shot, paid in rounds from the chamber, or by the rounds the reload under way is about to load */
 function roundShot(a: "slug" | "scatter"): ShotCost {
   const rounds = (wide: boolean): number => SHOT_ROUNDS[a][wide ? 1 : 0];
   return {
     known: () => true,
-    affordable: (wide) => calder.rounds >= rounds(wide),
+    affordable: (wide) => calder.rounds >= rounds(wide) || roundsComing(),
     pay: (wide) => {
       spendRounds(rounds(wide));
     },

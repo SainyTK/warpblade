@@ -51,7 +51,9 @@ Calder's two shots are paid in rounds, his spell skills' shells in MP.
 A shot with too few rounds is not affordable and its tab dims, so I goes to the next ready ability and J reloads.
 The cancel rule between the string and the shots is the snap shot: I pressed once a blow has landed skips the aim, and the round leaves the barrel on the next frame.
 Past the moment the rounds are in, J cuts a reload short and goes straight into the string.
-A shot may be cut by the warp, the guard, the dodge, another shot or the ultimate once its rounds have left the muzzle (Twin Scatter's back shot included), and the reload once the rounds are in; a press made earlier waits for that moment.
+A shot may be cut by the warp, the guard, the dodge or the ultimate once its rounds have left the muzzle (Twin Scatter's back shot included), and the reload once the rounds are in; a press made earlier waits for that moment.
+Another shot pressed during a shot waits until he is free.
+A shot pressed during the reload before the rounds are in waits for them and fires as they snap in.
 A cut during Scatter Blast's hop ends the hop where he is, as a landing would, and the new move carries on from the air.
 The hop back is a travel move: it calls `travelEnded()` when it lands.
 
