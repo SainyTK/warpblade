@@ -78,6 +78,7 @@ export const CALDER_SLOTS: readonly AbilitySlot[] = CALDER_ABILITIES.map((a) => 
   wait: () => calder.shotCd[a],
   full: () => Math.max(0.01, calder.shotCdFull[a]),
   affordable: () => SHOTS[a].affordable(false),
+  paidSoon: () => SHOTS[a].paidSoon(),
   cast: (wide: boolean) => castShot(a, wide),
   evolved: () => SHOTS[a].evolved(),
 }));

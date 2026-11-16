@@ -57,12 +57,17 @@ function readySlot(): AbilitySlot | null {
   return null;
 }
 
-/** I pressed, or held to its long press (`wide`): cast the ready ability; with none ready the press is refused at once */
+/** an ability off its recharge that will be paid for in a moment, which a press of I waits for */
+const comingSoon = (s: AbilitySlot): boolean => s.known() && s.wait() <= 0 && !!s.paidSoon?.();
+
+/** I pressed, or held to its long press (`wide`): cast the ready ability; with none ready the press is refused at once,
+ *  unless one will be ready in a moment, when it waits */
 export function pressAbility(wide: boolean): boolean {
   const slot = readySlot();
   if (slot) return slot.cast(wide);
   const selected = selectedSlot();
   if (!selected) return true;
+  if (slots().some(comingSoon)) return false;
   deny(selected.wait() > 0 ? "cast" : "mp");
   return true;
 }
