@@ -118,6 +118,7 @@ Each has its own recharge, and none waits on another.
 | Quake | 16 MP | 6 s | she drives the blade into the floor; foes within 64 px take 1.9 AP and are thrown up | for 24 MP, 100 px, and an aftershock 0.4 s later at 60% |
 
 Carry, her string cancel: I pressed once a blow of the string has landed casts the ability at once from the swing, 30% harder, and the string is kept, so the next J plays the next blow.
+Rend and Quake may in turn be cut by the warp, the guard, the dodge, another ability or the ultimate once the blow has left the blade, and a press made earlier waits for that moment; a tapped K is not kept.
 
 Three more abilities join the row when their skills are held: Ember Arc (a tall crimson crescent along the line), Brand Pillars (pillars of crimson fire bursting from the floor in a line) and War Cry (a roar that pushes foes back, fills Heft and lifts her damage).
 Their numbers are in `docs/skills/brynn.md`.
