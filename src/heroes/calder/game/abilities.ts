@@ -34,9 +34,8 @@ const mayShoot = (): boolean => isFree() || blowsDone() || (hero.state === "relo
 /** the shot under way is Twin Scatter, which fires again behind */
 const twinScatter = (): boolean => calder.shotAbility === "scatter" && calder.shotWide;
 
-/** the shot under way has done its work: every round has left the muzzle and the recoil hop has landed */
-export const shotLanded = (): boolean =>
-  hero.state === "shot" && hero.hitDone && !calder.hopping && (!twinScatter() || calder.backFired);
+/** the shot under way has done its work: every round has left the muzzle */
+export const shotFired = (): boolean => hero.state === "shot" && hero.hitDone && (!twinScatter() || calder.backFired);
 
 /** I on `a`: pay for it, and fire it from a stance; cut into a blow's follow-through it is a snap shot that skips the aim */
 function castShot(a: CalderAbility, wide: boolean): boolean {
