@@ -17,6 +17,9 @@ import "../../types/events";
 const rush: { struck: Set<Enemy>; ended: boolean } = { struck: new Set(), ended: false };
 rememberPerSeat(objectMemory(rush, true));
 
+/** the rush's travel is over and its end has played */
+export const rushEnded = (): boolean => rush.ended;
+
 /** a rush starts: nothing struck yet */
 export function startRush(): void {
   rush.struck = new Set();
