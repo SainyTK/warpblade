@@ -5,7 +5,7 @@ import { travelEnded } from "../../../game/hero/travelEnd";
 import { emitSkillEvent } from "../../../game/skills/events";
 import { game, hero, progress } from "../../../game/state";
 import type { AbilitySlot } from "../../../types/moveset";
-import { RECOIL_TIME, RELOAD } from "../constants/chamber";
+import { RECOIL_TIME } from "../constants/chamber";
 import { CALDER_ACTION_CLIPS } from "../constants/clips";
 import { ABILITY_COLOR, CALDER_ABILITIES, SCATTER, SHOT_FIRE, SHOT_FIRE_BACK, SLUG } from "../constants/shots";
 import type { CalderAbility } from "../types/ability";
@@ -28,8 +28,15 @@ function shotClip(a: CalderAbility, wide: boolean): keyof typeof FIRE_ANGLE {
   return a === "slug" && wide ? "breakerSlug" : "slug";
 }
 
-/** a shot may start now: from a free stance, the follow-through of a blow (a snap shot), or a reload's last moments */
-const mayShoot = (): boolean => isFree() || blowsDone() || (hero.state === "reload" && hero.st >= RELOAD.loaded);
+/** a shot may start now: from a free stance, the follow-through of a blow (a snap shot), or a reload once the rounds are in */
+const mayShoot = (): boolean => isFree() || blowsDone() || (hero.state === "reload" && hero.hitDone);
+
+/** the shot under way is Twin Scatter, which fires again behind */
+const twinScatter = (): boolean => calder.shotAbility === "scatter" && calder.shotWide;
+
+/** the shot under way has done its work: every round has left the muzzle and the recoil hop has landed */
+export const shotLanded = (): boolean =>
+  hero.state === "shot" && hero.hitDone && !calder.hopping && (!twinScatter() || calder.backFired);
 
 /** I on `a`: pay for it, and fire it from a stance; cut into a blow's follow-through it is a snap shot that skips the aim */
 function castShot(a: CalderAbility, wide: boolean): boolean {
@@ -119,7 +126,7 @@ export function runShot(): void {
     fire(h.face);
     recoilHop();
   }
-  if (calder.shotAbility === "scatter" && calder.shotWide && !calder.backFired && h.st >= SHOT_FIRE_BACK) {
+  if (twinScatter() && !calder.backFired && h.st >= SHOT_FIRE_BACK) {
     calder.backFired = true;
     fire(-h.face);
   }
