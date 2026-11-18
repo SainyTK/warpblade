@@ -2,7 +2,7 @@ import { PAL } from "../../../constants/palette";
 import { GROUND } from "../../../constants/stage";
 import { drawShepherd } from "../night/drawShepherd";
 import { updateShepherd } from "../night/shepherd";
-import { KNEEL } from "../night/shepherdMoves";
+import { KNEEL, steadyShepherd } from "../night/shepherdMoves";
 import type { EnemyKind } from "./kind";
 
 export const shepherd: EnemyKind = {
@@ -17,4 +17,5 @@ export const shepherd: EnemyKind = {
   glow: { radius: 42, color: PAL.shadow[3], eyeY: -19 },
   guardFrom: 1,
   takes: (e, dmg) => (e.state === "burrow" ? dmg * KNEEL.taken : dmg),
+  steady: steadyShepherd,
 };

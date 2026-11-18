@@ -12,6 +12,10 @@ import { updateStatus } from "./status";
 /** a tripped or landed foe lies still and slides to a stop */
 function updateStunned(e: Enemy, dt: number): boolean {
   if (e.stun <= 0) return false;
+  if (kindOf(e.type).steady?.(e)) {
+    e.stun = 0;
+    return false;
+  }
   e.stun -= dt;
   e.vx -= e.vx * 5 * dt;
   e.x += e.vx * dt;

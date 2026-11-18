@@ -1,6 +1,6 @@
 import type { Enemy } from "../../../types/enemy";
 import { clamp, ease, lerp } from "../../../utils/math";
-import { AGAIN, SHEPHERD_DID, SHEPHERD_TIMES } from "./shepherdMoves";
+import { AGAIN, SHEPHERD_DID, SHEPHERD_TIMES, steadyShepherd } from "./shepherdMoves";
 
 export type Point = readonly [number, number];
 
@@ -259,7 +259,7 @@ function endOf(did: number): ShepherdPose {
 
 export function shepherdPose(e: Enemy, t: number): ShepherdPose {
   const time = t + e.seed;
-  if (e.stun > 0 || e.air) return LIMP;
+  if ((e.stun > 0 && !steadyShepherd(e)) || e.air) return LIMP;
   const settle = (to: ShepherdPose, from: ShepherdPose, seconds: number) =>
     blendPose(from, to, ease.outBack(clamp(e.st / seconds)));
   switch (e.state) {

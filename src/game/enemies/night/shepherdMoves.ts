@@ -1,3 +1,5 @@
+import type { Enemy } from "../../../types/enemy";
+
 export const SHEPHERD_HITS = { reap: 20, toll: 22, shard: 18 } as const;
 export const SHEPHERD_TIMES = {
   reap: 0.65,
@@ -29,3 +31,6 @@ export const FLOCK = { every: 12, first: 6, most: 2, side: 70, edge: 20, xpShare
 export const KNEEL = { at: 0.55, taken: 1.5 } as const;
 export const SHEPHERD_DID = { reap: 1, toll: 2, call: 3, moonfall: 4 } as const;
 export const AGAIN = 1;
+
+/** kneeling or rising: nothing knocks it down */
+export const steadyShepherd = (e: Enemy): boolean => e.state === "burrow" || e.state === "hop";
