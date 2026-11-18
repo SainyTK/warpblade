@@ -1,0 +1,269 @@
+{
+  "version": "0.12.0",
+  "kind": "big",
+  "date": "2026-11-18",
+  "title": "Gloam Shepherd",
+  "tagline": "Nightfall gets a boss of its own. The Gloam Shepherd replaces the Rift Brute at wave 15 and fights in two phases, with a kneel between them that rewards a hero who pushes it there.",
+  "intro": "Every era had a leader with its own body and its own pattern, except Nightfall, where the Rift Brute was a husk drawn larger with two moves. This patch gives wave 15 the Gloam Shepherd: a hooded herder of the husks with a bone crook and a lantern that holds a shard of moonlight. Every one of its attacks shows itself before it lands, so a player who reads it can take no damage at all. At just over half its HP it falls to one knee and takes heavier blows, then rises with a violet lantern and a faster pattern. Slaying it earns a new achievement, Shepherd's End. Your coins, shop levels, unlocked heroes, achievements and options carry over as they were.",
+  "highlights": [
+    {
+      "title": "The Gloam Shepherd",
+      "text": "At wave 15 the Gloam Shepherd steps out of a rift in the moonlit ruins, and the boss bar reads its name. It is tall, gaunt and hooded, with small horns, a bone crook taller than itself and an iron lantern that burns pale while it is in its first phase.",
+      "media": {
+        "kind": "image",
+        "file": "gloam-shepherd-arrives.png",
+        "alt": "Wave 15 in the moonlit ruins. Kael stands on the left facing the Gloam Shepherd, which has just stepped out of its rift on the right: a tall, hooded figure with small horns and a bone crook, holding up a pale lantern. The title WAVE 15: GLOAM SHEPHERD is across the middle, and the boss bar at the bottom reads GLOAM SHEPHERD.",
+        "width": 640,
+        "height": 360
+      }
+    },
+    {
+      "title": "Reap and Lantern Toll",
+      "text": "Up close it sweeps its crook low along the floor, so jump it, guard it or parry it. From further away it marks a pale ring on the floor under you and brings the lantern down on it, so step or dodge out of the ring before it bursts.",
+      "media": {
+        "kind": "video",
+        "file": "gloam-shepherd-reap-toll.mp4",
+        "poster": "gloam-shepherd-reap-toll.png",
+        "alt": "Aldric jumps as the Gloam Shepherd sweeps its crook low across the floor, and the crescent passes under him. He backs away, and a pale ring appears on the floor under him while the Shepherd lifts its lantern overhead. He steps out of the ring just before the lantern swings down and the ring bursts into light behind him.",
+        "width": 640,
+        "height": 360
+      }
+    },
+    {
+      "title": "Call the Flock",
+      "text": "Every so often it shakes its lantern overhead and two husks climb out of rifts on either side of you. It never calls more while two husks still stand.",
+      "media": {
+        "kind": "video",
+        "file": "gloam-shepherd-flock.mp4",
+        "poster": "gloam-shepherd-flock.png",
+        "alt": "The Gloam Shepherd raises its lantern high and shakes it. Two purple rifts open on either side of Aldric, and a horned husk climbs out of each one and closes in on him.",
+        "width": 640,
+        "height": 360
+      }
+    },
+    {
+      "title": "The kneel",
+      "text": "When it drops to 55% of its HP, whatever it was doing stops and it falls to one knee with its lantern on the floor. For a moment it attacks nothing and every blow does half again as much. Then it rises in a flare of light and starts its second phase.",
+      "media": {
+        "kind": "video",
+        "file": "gloam-shepherd-kneel.mp4",
+        "poster": "gloam-shepherd-kneel.png",
+        "alt": "Aldric strikes the Gloam Shepherd until it falls to one knee with its crook planted, while two husks wait to the side. He keeps hitting it, and the kneeling Shepherd takes larger damage numbers. It then rises with a burst of light, a white floor ring and a magenta ring, and starts its second phase.",
+        "width": 640,
+        "height": 360
+      }
+    },
+    {
+      "title": "Moonfall and the Lantern Procession",
+      "text": "With its lantern burning violet it walks faster, attacks sooner and reaps twice in a row. It calls down five shards of moonlight, each marked on the floor before it lands, and the Toll becomes the Lantern Procession, a row of three rings that burst one after another.",
+      "media": {
+        "kind": "video",
+        "file": "gloam-shepherd-moonfall-procession.mp4",
+        "poster": "gloam-shepherd-moonfall-procession.png",
+        "alt": "The Gloam Shepherd raises its lantern in both hands. Five small markers appear on the floor around Aldric and moon shards fall onto them one after another. Next it lays three magenta rings in a row under Aldric. He walks out of them, and the three rings burst in turn as the lantern comes down.",
+        "width": 640,
+        "height": 360
+      }
+    },
+    {
+      "title": "Shepherd's End",
+      "text": "A new achievement for slaying the Gloam Shepherd, worth 60 coins. It stays hidden until you have earned Night Watch.",
+      "media": {
+        "kind": "image",
+        "file": "shepherds-end.png",
+        "alt": "The moment the Gloam Shepherd falls. Aldric lands a 341 critical hit next to a husk, and a gold achievement banner at the top of the screen reads ACHIEVEMENT, Shepherd's End, 60 coins.",
+        "width": 1280,
+        "height": 720
+      }
+    }
+  ],
+  "sections": [
+    {
+      "id": "foes",
+      "entries": [
+        {
+          "name": "Gloam Shepherd",
+          "tag": "new",
+          "summary": "Wave 15 now ends with a two-phase boss whose every attack is marked or wound up before it lands.",
+          "context": "Nightfall was the only era without a leader of its own. We wanted a fight you learn by reading it, with a break in the middle that pays off pressing hard, in the spirit of the dungeon bosses that inspire our fights.",
+          "changes": [
+            {
+              "kind": "stat",
+              "label": "Wave 15 leader",
+              "before": "Rift Brute",
+              "after": "Gloam Shepherd"
+            },
+            {
+              "kind": "stat",
+              "label": "Base HP",
+              "before": "420 (Rift Brute)",
+              "after": "480"
+            },
+            {
+              "kind": "stat",
+              "label": "XP",
+              "before": "70 (Rift Brute)",
+              "after": "80"
+            },
+            {
+              "kind": "stat",
+              "label": "Coins",
+              "before": "8 (Rift Brute)",
+              "after": "10"
+            },
+            {
+              "kind": "note",
+              "text": "The Rift Brute leaves the game with its 22 damage swipe and its leap that slammed the floor 64 px around it for 26 damage. Wave 15 was its only appearance."
+            },
+            {
+              "kind": "note",
+              "text": "It is still a mini boss: it drops a chest, counts toward Giant Slayer and keeps wave 15's balance, and its frontal guard blocks sword blows while it walks, so blows from behind land."
+            },
+            {
+              "kind": "note",
+              "text": "It walks at 22 px a second, 30 in its second phase. After each move it recovers for 0.75 s, then waits 1.0 to 1.7 s, which drops to 65% of that in its second phase."
+            },
+            {
+              "kind": "note",
+              "text": "Damage and wind-up times below are base values. Like every foe, it hits harder and winds up faster as the waves go on."
+            },
+            {
+              "kind": "note",
+              "text": "It plays in co-op rooms: its blows, rings and shards hurt every hero in reach, and its husks come for everyone."
+            }
+          ],
+          "media": {
+            "kind": "image",
+            "file": "gloam-shepherd-arrives.png",
+            "alt": "Wave 15 in the moonlit ruins. Kael stands on the left facing the Gloam Shepherd, which has just stepped out of its rift on the right: a tall, hooded figure with small horns and a bone crook, holding up a pale lantern. The boss bar at the bottom reads GLOAM SHEPHERD.",
+            "width": 640,
+            "height": 360
+          }
+        },
+        {
+          "name": "Gloam Shepherd: first phase",
+          "tag": "new",
+          "summary": "Jump the low Reap, step out of the Toll's ring, and expect two husks every so often.",
+          "context": "Each move asks for a different answer: a jump or a guard up close, a step at range. We timed the Toll so a hero who starts moving when the ring appears always gets out.",
+          "changes": [
+            {
+              "kind": "note",
+              "text": "Reap, when you are within 46 px and on or near the floor: a 0.65 s wind-up, then the crook sweeps 54 px forward and up to 18 px above the floor for 20 damage. A hero in the air passes over it, and guard and parry work as on any frontal blow."
+            },
+            {
+              "kind": "note",
+              "text": "Lantern Toll, when you are up to 180 px away: a ring with an 18 px radius appears under you and stays there for a 0.9 s wind-up, then bursts up to 30 px above the floor for 22 damage."
+            },
+            {
+              "kind": "note",
+              "text": "Call the Flock: first ready 6 s into the fight, then every 12 s, and only while fewer than two husks stand. After a 0.6 s wind-up two husks come through rifts 70 px to either side of you."
+            }
+          ],
+          "media": {
+            "kind": "video",
+            "file": "gloam-shepherd-reap-toll.mp4",
+            "poster": "gloam-shepherd-reap-toll.png",
+            "alt": "Aldric jumps the Gloam Shepherd's low crook sweep, then steps out of a pale ring on the floor just before the lantern comes down and the ring bursts.",
+            "width": 640,
+            "height": 360
+          }
+        },
+        {
+          "name": "Gloam Shepherd: the kneel",
+          "tag": "new",
+          "summary": "At 55% HP it kneels for 1.6 s and takes 1.5 times damage from every hit.",
+          "context": "A boss that breaks under pressure gives you a moment to spend everything you have saved. The kneel happens once per fight.",
+          "changes": [
+            {
+              "kind": "note",
+              "text": "Crossing 55% HP cuts whatever it is doing. It kneels for 1.6 s with its guard down, attacks nothing and takes 1.5 times damage."
+            },
+            {
+              "kind": "note",
+              "text": "It rises over 0.4 s with a light pulse and a shake. Nothing can stagger, pin or knock it down while it kneels or rises."
+            }
+          ],
+          "media": {
+            "kind": "video",
+            "file": "gloam-shepherd-kneel.mp4",
+            "poster": "gloam-shepherd-kneel.png",
+            "alt": "The Gloam Shepherd falls to one knee and takes larger damage numbers from Aldric's blows, then rises with a burst of light and a magenta ring.",
+            "width": 640,
+            "height": 360
+          }
+        },
+        {
+          "name": "Gloam Shepherd: second phase",
+          "tag": "new",
+          "summary": "Below 55% HP it reaps twice, lays a row of three rings and calls down Moonfall.",
+          "context": "The second phase is faster and asks for the same reads under more pressure. Walking out of the Lantern Procession works in either direction, and a well timed jump clears it.",
+          "changes": [
+            {
+              "kind": "note",
+              "text": "Twin Reap: after the first Reap it turns to you and reaps again after a 0.38 s wind-up."
+            },
+            {
+              "kind": "note",
+              "text": "Lantern Procession: three rings 10 px apart, each 18 px in radius, with a 1.1 s wind-up. The ring under you bursts first, then the one on the Shepherd's side, then the far one, 0.1 s apart, for 22 damage each. You can be hit only once per Procession."
+            },
+            {
+              "kind": "note",
+              "text": "Moonfall, when you are more than 60 px away, 35% of the time: a 0.85 s wind-up, then five shards fall at your position and 32 and 64 px to either side, from the middle outward, 0.12 s apart. Each lands 0.55 s after a column marks its spot on the floor, in a 10 px wide column, for 18 damage. You can be hit by only one shard per cast."
+            },
+            {
+              "kind": "note",
+              "text": "Call the Flock works as in the first phase."
+            },
+            {
+              "kind": "note",
+              "text": "Known issue: with the rings this close together, the Procession can look like one wide ring with a widening burst. It plays as described above."
+            }
+          ],
+          "media": {
+            "kind": "video",
+            "file": "gloam-shepherd-moonfall-procession.mp4",
+            "poster": "gloam-shepherd-moonfall-procession.png",
+            "alt": "Moon shards fall onto five floor markers around Aldric, then three magenta rings burst in turn as he walks out of them.",
+            "width": 640,
+            "height": 360
+          }
+        }
+      ]
+    },
+    {
+      "id": "systems",
+      "entries": [
+        {
+          "name": "Achievements",
+          "tag": "adjusted",
+          "summary": "Shepherd's End is a new achievement for slaying the Gloam Shepherd.",
+          "context": "A new boss should come with a goal of its own. The game now counts how many of each foe you slay, so later bosses can have achievements of their own too.",
+          "changes": [
+            {
+              "kind": "stat",
+              "label": "Achievements",
+              "before": "40, worth 2,900 coins",
+              "after": "41, worth 2,960 coins"
+            },
+            {
+              "kind": "note",
+              "text": "Shepherd's End: slay the Gloam Shepherd, 60 coins, in the Foes group before Warden's End. It shows as ??? until Night Watch is earned."
+            },
+            {
+              "kind": "note",
+              "text": "Kills of each foe type are counted from this patch on. A save from 0.11.2 starts that count at zero and keeps everything else."
+            }
+          ],
+          "media": {
+            "kind": "image",
+            "file": "shepherds-end.png",
+            "alt": "A gold achievement banner at the top of the screen reads ACHIEVEMENT, Shepherd's End, 60 coins, as the Gloam Shepherd falls.",
+            "width": 1280,
+            "height": 720
+          }
+        }
+      ]
+    }
+  ],
+  "feedback": []
+}
