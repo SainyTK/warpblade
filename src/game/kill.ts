@@ -65,7 +65,7 @@ export function killEnemy(e: Enemy, source?: SourceId): void {
   const share = big ? 1 : burstShare();
   const many = (n: number): number => Math.max(1, Math.round(n * share));
   game.kills++;
-  feat({ kind: "kill", rank: e.rank, source });
+  feat({ kind: "kill", rank: e.rank, foe: e.type, source });
   if (source) emitSkillEvent({ type: "kill", foe: e, source });
   if (source) kit().onKill?.(e);
   const glow = big ? 0.9 : 0.5;

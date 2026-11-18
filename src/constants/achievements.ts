@@ -95,6 +95,15 @@ export const ACHIEVEMENTS: readonly Achievement[] = [
     reward: 40,
   },
   {
+    id: "shepherd",
+    name: "Shepherd's End",
+    text: "Slay the Gloam Shepherd.",
+    group: "Foes",
+    goal: { kind: "foeKills", foe: "shepherd", need: 1 },
+    reward: 60,
+    hiddenUntil: "wave-10",
+  },
+  {
     id: "warden",
     name: "Warden's End",
     text: "Slay the Rift Warden.",
