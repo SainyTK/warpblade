@@ -584,7 +584,7 @@ body[data-menu="title"] .banner {
   visibility: hidden;
 }
 
-/* On tall screens such as a phone held upright, the HUD and boss bar move out of the stage into the room around it. */
+/* When the HUD fits in the room above the stage, as on a phone held upright, it and the boss bar move out of the stage (fitStage). */
 body[data-hud="outside"] .hud {
   inset: auto 4px calc(100% + 16px) 4px;
 }
