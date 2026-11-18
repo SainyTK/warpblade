@@ -25,6 +25,7 @@ import {
   FLOCK,
   KNEEL,
   MOONFALL,
+  PROCESSION,
   REAP,
   SHEPHERD_COOLDOWN,
   SHEPHERD_DID,
@@ -72,11 +73,12 @@ function layMarks(e: Enemy): void {
   const strike = { struck: new Set<number>() };
   const windup = tollWindup(e) * waveScale(game.wave).windup;
   const side = Math.sign(hero.x - e.x) || e.face;
-  const offsets = enraged(e) ? [0, -TOLL.gap, TOLL.gap] : [0];
+  const { radius, shrink } = enraged(e) ? PROCESSION : TOLL;
+  const offsets = enraged(e) ? [0, -PROCESSION.gap, PROCESSION.gap] : [0];
   offsets.forEach((offset, i) => {
     const x = clamp(hero.x + side * offset, 10, W - 10);
     const damage = SHEPHERD_HITS.toll * e.power;
-    game.fx.push(createMoonMark({ owner: e, x, windup, delay: i * TOLL.beat, damage, look, strike }));
+    game.fx.push(createMoonMark({ owner: e, x, radius, shrink, windup, delay: i * TOLL.beat, damage, look, strike }));
   });
 }
 
