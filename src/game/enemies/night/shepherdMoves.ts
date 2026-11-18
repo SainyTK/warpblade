@@ -4,7 +4,7 @@ export const SHEPHERD_HITS = { reap: 20, toll: 22, shard: 18 } as const;
 export const SHEPHERD_TIMES = {
   reap: 0.65,
   again: 0.38,
-  toll: 0.75,
+  toll: 0.9,
   call: 0.6,
   moonfall: 0.85,
   swing: 0.3,
@@ -18,7 +18,7 @@ export const SHEPHERD_TIMES = {
 export const SHEPHERD_WALK = { speed: 22, enraged: 30, stop: 16 } as const;
 export const SHEPHERD_COOLDOWN = { least: 1.0, most: 1.7, enraged: 0.65 } as const;
 export const REAP = { range: 46, high: 24, reach: 54, behind: 6, height: 18 } as const;
-export const TOLL = { far: 180, radius: 22, height: 30, gap: 30, beat: 0.15 } as const;
+export const TOLL = { far: 180, radius: 18, height: 30, gap: 30, beat: 0.15 } as const;
 export const MOONFALL = {
   near: 60,
   chance: 0.35,
