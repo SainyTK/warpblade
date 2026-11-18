@@ -37,7 +37,7 @@ export interface Crook {
 export const CROOK_LENGTH = 58;
 const CHAIN = 7;
 const UP = -Math.PI / 2;
-const SETTLE = { wind: 0.22, again: 0.12, strike: 0.06, toll: 0.3, call: 0.25, moonfall: 0.35, kneel: 0.2 } as const;
+const SETTLE = { wind: 0.22, again: 0.12, toll: 0.3, call: 0.25, moonfall: 0.35, kneel: 0.2 } as const;
 const STRIDE = 6.4;
 const RECOVER_BLEND = 0.5;
 
@@ -238,15 +238,8 @@ function walkPose(time: number): ShepherdPose {
   };
 }
 
-function strikePose(
-  from: ShepherdPose,
-  hit: ShepherdPose,
-  follow: ShepherdPose,
-  st: number,
-  hold: number,
-): ShepherdPose {
-  if (st < SETTLE.strike) return blendPose(from, hit, ease.outCubic(st / SETTLE.strike));
-  return blendPose(hit, follow, ease.outCubic(clamp((st - SETTLE.strike) / Math.max(0.01, hold - SETTLE.strike))));
+function strikePose(hit: ShepherdPose, follow: ShepherdPose, st: number, hold: number): ShepherdPose {
+  return blendPose(hit, follow, ease.outCubic(clamp(st / hold)));
 }
 
 function endOf(did: number): ShepherdPose {
@@ -268,11 +261,11 @@ export function shepherdPose(e: Enemy, t: number): ShepherdPose {
     case "wind":
       return e.ax === AGAIN ? settle(REAP_WIND, REAP_FOLLOW, SETTLE.again) : settle(REAP_WIND, REST, SETTLE.wind);
     case "swipe":
-      return strikePose(REAP_WIND, REAP_STRIKE, REAP_FOLLOW, e.st, SHEPHERD_TIMES.swing);
+      return strikePose(REAP_STRIKE, REAP_FOLLOW, e.st, SHEPHERD_TIMES.swing);
     case "charge":
       return settle(TOLL_WIND, REST, SETTLE.toll);
     case "shoot":
-      return strikePose(TOLL_WIND, TOLL_STRIKE, TOLL_STRIKE, e.st, SHEPHERD_TIMES.tollHold);
+      return strikePose(TOLL_STRIKE, TOLL_STRIKE, e.st, SHEPHERD_TIMES.tollHold);
     case "summon": {
       const shaken = settle(CALL, REST, SETTLE.call);
       const rattle = clamp(e.st / SETTLE.call);
