@@ -19,7 +19,7 @@ Write these files:
    - `feedback`: every feedback item this patch addressed, with a neutral summary.
    - Use only media files that exist in `public/patches/<version>/`.
 2. `agent-studio/journal/<version>.md`: the director's memo, then a short "What shipped" list, each runtime dependency the developer report says was added and why, and the QA verdict summary. One sentence per line.
-3. `agent-studio/roadmap.md`: apply the plan's `roadmapNotes` and move shipped items to Shipped with the version.
+3. `agent-studio/roadmap.md`: apply the plan's `roadmapNotes`, add each minor issue left in the last QA verdict to Small patch candidates, and move shipped items to Shipped with the version.
 
 Style for everything players read: plain, warm, direct English.
 No em dashes, no hype words, no marketing.
