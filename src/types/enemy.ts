@@ -2,7 +2,7 @@
 export type EnemyType =
   | "wisp"
   | "husk"
-  | "brute"
+  | "shepherd"
   | "warden"
   | "thornback"
   | "moth"
@@ -41,7 +41,7 @@ export type EnemyRank = "minion" | "mini" | "boss";
 export interface Enemy {
   type: EnemyType;
   rank: EnemyRank;
-  /** wisp and warden: body center. husk and brute: feet. */
+  /** flyers: body center. walkers: feet. */
   x: number;
   y: number;
   vx: number;

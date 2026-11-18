@@ -1,5 +1,5 @@
 import type { SourceId } from "./build";
-import type { EnemyRank } from "./enemy";
+import type { EnemyRank, EnemyType } from "./enemy";
 import type { RunOutcome } from "./run";
 
 /** lifetime totals the achievements count up */
@@ -34,6 +34,8 @@ export interface TrackedStats {
   heroWave: Record<string, number>;
   /** each hero's own counts and bests, by the stat names its achievements use (`<hero id>.<stat>`) */
   hero: Record<string, number>;
+  /** foes slain, by foe type */
+  foes: Partial<Record<EnemyType, number>>;
   /** the run in play; a save never brings it back */
   run: RunTally;
 }
@@ -51,6 +53,7 @@ export type Goal =
   | { kind: "count"; stat: CountStat; need: number }
   | { kind: "best"; stat: BestStat; need: number }
   | { kind: "heroWave"; hero: string; need: number }
+  | { kind: "foeKills"; foe: EnemyType; need: number }
   /** one of a hero's own stats, counted through the `heroCount` and `heroBest` feats */
   | { kind: "hero"; stat: string; need: number }
   | { kind: "shopLevels"; need: number }
@@ -79,7 +82,7 @@ export interface GoalProgress {
 
 /** something that happened in play that an achievement or an unlock may count */
 export type Feat =
-  | { kind: "kill"; rank: EnemyRank; source?: SourceId }
+  | { kind: "kill"; rank: EnemyRank; foe: EnemyType; source?: SourceId }
   | { kind: "waveReached"; wave: number }
   | { kind: "waveCleared"; wave: number; hero: string }
   | { kind: "runEnd"; outcome: RunOutcome; wave: number; hero: string }

@@ -1,7 +1,7 @@
 import type { Enemy } from "../../../types/enemy";
 import { clamp, ease, lerp } from "../../../utils/math";
 
-/** How a husk or a brute holds itself in each state, in the husk's own art pixels with its feet at y 0, facing +x. */
+/** How a husk holds itself in each state, in the husk's own art pixels with its feet at y 0, facing +x. */
 export interface HuskPose {
   /** the near foot's x, and how far each foot is off the floor */
   nearFoot: number;
@@ -31,7 +31,7 @@ const SWIPE_HAND = [14, -7] as const;
 const RAISE = 0.22;
 const STRIKE = 0.07;
 /** steps a second, as the walk cycle's angle */
-const STRIDE = { husk: 6 * Math.PI, brute: 4 * Math.PI };
+const STRIDE = 6 * Math.PI;
 
 const between = (a: readonly [number, number], b: readonly [number, number], u: number): [number, number] => [
   lerp(a[0], b[0], u),
@@ -39,7 +39,6 @@ const between = (a: readonly [number, number], b: readonly [number, number], u: 
 ];
 
 export function huskPose(e: Enemy, t: number): HuskPose {
-  const brute = e.type === "brute";
   const limp = e.stun > 0 || e.air;
   const pose = {
     nearFoot: 3,
@@ -65,7 +64,7 @@ export function huskPose(e: Enemy, t: number): HuskPose {
     return pose;
   }
   if (e.state === "walk") {
-    const stride = (t + e.seed) * (brute ? STRIDE.brute : STRIDE.husk);
+    const stride = (t + e.seed) * STRIDE;
     const swing = Math.sin(stride);
     pose.nearFoot = 3 + swing * 1.4;
     pose.farFoot = -4 - swing * 1.4;
@@ -75,24 +74,12 @@ export function huskPose(e: Enemy, t: number): HuskPose {
     pose.hand = [8 - swing * 1.2, -6 - Math.abs(swing)];
     return pose;
   }
-  const crouched = e.state === "leap" && e.vy === 0;
-  if (e.state === "wind" || crouched) {
+  if (e.state === "wind") {
     const u = ease.outBack(clamp(e.st / RAISE));
     pose.hand = between(REST_HAND, RAISED_HAND, u);
     pose.lean = -2 * u;
     pose.spread = 1 + u;
     pose.heat = clamp(e.st / RAISE);
-    pose.crouch = crouched ? 3 * clamp(e.st / RAISE) : 0;
-    return pose;
-  }
-  if (e.state === "leap") {
-    pose.hand = [1, -28];
-    pose.spread = 2;
-    pose.heat = 1;
-    pose.nearLift = 3;
-    pose.farLift = 2;
-    pose.nearFoot = 4;
-    pose.lean = 1.5;
     return pose;
   }
   if (e.state === "swipe") {

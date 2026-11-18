@@ -1,5 +1,7 @@
 import { HERO_SOURCES } from "../constants/damageSources";
+import { ENEMIES } from "../constants/enemies";
 import type { BestStat, CountStat, Feat, RunTally, TrackedStats } from "../types/achievement";
+import type { EnemyType } from "../types/enemy";
 
 const COUNT_STATS: readonly CountStat[] = [
   "kills",
@@ -41,6 +43,15 @@ function wholeNumbers(raw: unknown): Record<string, number> {
   return kept;
 }
 
+const isFoe = (key: string): key is EnemyType => Object.hasOwn(ENEMIES, key);
+
+/** the kills of each foe type the game still has; a save from before foes were counted reads as none */
+function foeKills(raw: unknown): Partial<Record<EnemyType, number>> {
+  const kept: Partial<Record<EnemyType, number>> = {};
+  for (const [key, value] of Object.entries(wholeNumbers(raw))) if (isFoe(key)) kept[key] = value;
+  return kept;
+}
+
 /** read saved tracked stats, keeping known counters as whole, positive numbers; anything else starts at 0 */
 export function parseTracked(raw: unknown): TrackedStats {
   const saved = isRecord(raw) ? raw : {};
@@ -49,6 +60,7 @@ export function parseTracked(raw: unknown): TrackedStats {
     best: counts(BEST_STATS, saved.best),
     heroWave: wholeNumbers(saved.heroWave),
     hero: wholeNumbers(saved.hero),
+    foes: foeKills(saved.foes),
     run: emptyRun(),
   };
 }
@@ -61,10 +73,12 @@ export function applyFeat(s: TrackedStats, feat: Feat): TrackedStats {
   const best = { ...s.best };
   const heroWave = { ...s.heroWave };
   const hero = { ...s.hero };
+  const foes = { ...s.foes };
   const run = { ...s.run };
   switch (feat.kind) {
     case "kill":
       c.kills++;
+      foes[feat.foe] = (foes[feat.foe] ?? 0) + 1;
       if (feat.rank === "mini") c.miniKills++;
       if (feat.rank === "boss") c.bossKills++;
       if (feat.source && !HERO_SOURCES.has(feat.source)) {
@@ -119,5 +133,5 @@ export function applyFeat(s: TrackedStats, feat: Feat): TrackedStats {
       hero[feat.stat] = raise(hero[feat.stat] ?? 0, feat.value);
       break;
   }
-  return { counts: c, best, heroWave, hero, run };
+  return { counts: c, best, heroWave, hero, foes, run };
 }

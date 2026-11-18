@@ -35,6 +35,8 @@ export interface EnemyKind {
    * time. Left out, all of it.
    */
   takes?(e: Enemy, dmg: number, loud: boolean): number;
+  /** true while nothing can knock it down: a stun that lands then is dropped */
+  steady?(e: Enemy): boolean;
   /** MP orbs it drops, when not the rank's usual count */
   orbs?: number;
   /** chance of a heal orb, when not the usual 6% */

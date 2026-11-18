@@ -4,7 +4,7 @@ import type { EnemyType } from "../types/enemy";
 export const COIN_DROP: Record<EnemyType, number> = {
   wisp: 1,
   husk: 2,
-  brute: 8,
+  shepherd: 10,
   warden: 25,
   thornback: 2,
   moth: 1,

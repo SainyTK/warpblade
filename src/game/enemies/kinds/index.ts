@@ -6,8 +6,9 @@ import type { EnemyKind } from "./kind";
 import { maw } from "./maw";
 import { mire } from "./mire";
 import { moth } from "./moth";
-import { brute, husk, warden, wisp } from "./night";
+import { husk, warden, wisp } from "./night";
 import { oakheart } from "./oakheart";
+import { shepherd } from "./shepherd";
 import { sovereign } from "./sovereign";
 import { sprite } from "./sprite";
 import { stalker } from "./stalker";
@@ -19,7 +20,7 @@ import { unblinking } from "./unblinking";
 export const KINDS: Record<EnemyType, EnemyKind> = {
   wisp,
   husk,
-  brute,
+  shepherd,
   warden,
   thornback,
   moth,

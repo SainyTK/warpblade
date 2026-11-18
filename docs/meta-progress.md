@@ -7,7 +7,7 @@ Bought upgrades apply at the start of every run, on top of the level-up picks.
 
 ## Coins
 
-Every slain foe drops coins: a wisp 1, a husk 2, a Rift Brute 8 and the Rift Warden 25 (`COIN_DROP` in `src/constants/coins.ts`).
+Every slain foe drops coins: a wisp 1, a husk 2, the Gloam Shepherd 10 and the Rift Warden 25 (`COIN_DROP` in `src/constants/coins.ts`).
 Since waves stream a growing quota of foes, a minion drops only its share: a normal wave pays the coins of as many minions as a wave brought before (3, one more every third wave, 9 at most, `COIN_PAID_FOES`), spread over its whole quota (`coinShare` in `src/utils/coins.ts`).
 Mini bosses and the Warden drop their full count, and an elite drops twice its base (`ELITE.coins`).
 Since 0.2.0 every foe drops a quarter more on top of that (`COIN_BONUS`), and a fraction left over is a chance at one more coin.

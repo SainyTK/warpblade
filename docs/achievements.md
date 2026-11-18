@@ -38,7 +38,7 @@ The game reports what happens through `feat()` in `src/game/feat.ts`, called whe
 
 | Event | Where |
 | --- | --- |
-| A foe slain, with its rank | `killEnemy` in `src/game/kill.ts` |
+| A foe slain, with its rank and type | `killEnemy` in `src/game/kill.ts` |
 | A wave reached | `startWave` in `src/game/waves.ts` |
 | A wave cleared, with the hero | `endWave` in `src/game/endWave.ts` |
 | A run ended, cleared or fallen | `endRun` in `src/game/runEnd.ts` |
@@ -53,6 +53,7 @@ The same feats, and a few more, also feed the unlocks (`docs/unlocks.md`).
 Shop levels and heroes bought are read from the meta save, so buying in the shop or unlocking a hero is checked as soon as it happens.
 
 `applyFeat` in `src/utils/trackedStats.ts` turns an event into new stats, and the goal checks in `src/utils/achievements.ts` read those stats.
+Kills are also counted per foe type in `TrackedStats.foes`, and a `foeKills` goal names one foe type and the kills it needs; Shepherd's End is the first.
 Stats are saved at the end of each wave and run, and an earned achievement saves at once with its coins.
 Only solo runs count toward play goals; a co-op run counts the coins it banks.
 The studio's playtest bots set `warpblade-playtest` in local storage, and the dev build then unlocks every hero and tracks nothing.
@@ -60,6 +61,7 @@ The studio's playtest bots set `warpblade-playtest` in local storage, and the de
 ## Saving
 
 Unlocked heroes, earned achievements and the tracked stats are optional fields of the `warpblade-meta-v1` save: `heroes`, `achievements` and `tracked`.
+The kills per foe type are the optional `tracked.foes` record; a save from before 0.12.0 has none and counts from zero, and a foe type the game no longer has is dropped on load.
 A save from before them loads with its coins and shop levels, no heroes bought and nothing earned.
 `parseMeta` in `src/utils/metaSave.ts` keeps only the ids the game still has.
 A save that bought a hero no longer in the roster gets that hero's price back into the bank once (`REMOVED_HERO_PRICES` in `src/constants/removedHeroes.ts`), and the start menu shows the refund until the next run starts.
@@ -95,6 +97,7 @@ A save that bought a hero no longer in the roster gets that hero's price back in
 | Foes | Thinning the Night | Slay 3,000 foes | 80 | |
 | Foes | Endless Blade | Slay 15,000 foes | 200 | Thinning the Night |
 | Foes | Giant Slayer | Slay 10 mini bosses | 40 | |
+| Foes | Shepherd's End | Slay the Gloam Shepherd | 60 | Night Watch |
 | Foes | Warden's End | Slay the Rift Warden | 100 | Deep Rift |
 | Foes | Lights Out | Defeat The Unblinking | 500 | Warpblade |
 | Skill | Flowing Steel | Land the fifth move of a combo | 40 | |
@@ -121,7 +124,7 @@ A save that bought a hero no longer in the roster gets that hero's price back in
 The trials are built from the roster: `src/constants/achievements.ts` adds one for every hero in `CHARACTERS`, with the id `trial-<id>` and the same reward.
 Since waves stream their quota of foes (`docs/growth-design.md`), a full clear slays about 620 foes where it slew about 190, so the two larger kill goals went up from 1,000 and 5,000 to 3,000 and 15,000 to stay about as far off in runs.
 They keep their ids, `kills-1000` and `kills-5000`, so saves that earned them keep them.
-The 19 shared achievements pay 1,810 coins, each hero's trial 40 and the heroes' own 12 achievements 730, so the page lists 40 achievements that together pay 2,900 coins.
+The 20 shared achievements pay 1,870 coins, each hero's trial 40 and the heroes' own 12 achievements 730, so the page lists 41 achievements that together pay 2,960 coins.
 
 ## A hero's own achievements
 

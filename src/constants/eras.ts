@@ -21,7 +21,7 @@ export interface Era {
 export const ERAS: readonly Era[] = [
   { id: "day", name: "Sunlit Ruins", first: 1, last: 5, ground: "thornback", flyer: "moth", mini: "oakheart" },
   { id: "rain", name: "The Storm Rolls In", first: 6, last: 10, ground: "mire", flyer: "stormkite", mini: "boghulk" },
-  { id: "night", name: "Nightfall", first: 11, last: 15, ground: "husk", flyer: "wisp", mini: "brute" },
+  { id: "night", name: "Nightfall", first: 11, last: 15, ground: "husk", flyer: "wisp", mini: "shepherd" },
   {
     id: "twilight",
     name: "The Veil Thins",
@@ -29,7 +29,7 @@ export const ERAS: readonly Era[] = [
     last: 20,
     ground: "golem",
     flyer: "sprite",
-    mini: "brute",
+    mini: "shepherd",
     carry: { ground: "husk", flyer: "wisp" },
   },
   { id: "abyss", name: "The Abyss", first: 21, last: 30, ground: "stalker", flyer: "eye", mini: "maw" },

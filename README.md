@@ -85,7 +85,7 @@ Nine heroes hold the night back together.
   When a run ends, cleared or lost, its coins go to the bank and a result screen shows the wave reached and the coins earned.
   The Shop on the start menu sells stats in levels (HP, attack, ability power, MP, crit, move speed, stamina), more rerolls, skips and banishes for the cards, and four skills: Lodestone, Aftershock and Head Start, bought once, and Last Light, bought in three levels, each saving the hero from one more fatal blow per run.
   Everything bought applies to every run and every hero, on top of the level-up picks, and is saved in this browser.
-- **Achievements and hero unlocks.** Achievements track goals across runs: waves reached, a clear of wave 10 with each hero, foes slain, long combos, perfect dodges, evolutions, coins banked, the Rift Warden and The Unblinking.
+- **Achievements and hero unlocks.** Achievements track goals across runs: waves reached, a clear of wave 10 with each hero, foes slain, long combos, perfect dodges, evolutions, coins banked, the Gloam Shepherd, the Rift Warden and The Unblinking.
   Most pay coins, a few stay hidden as ??? until an earlier one is earned, and a small banner slides down when one is earned without stopping play.
   The Achievements page on the start menu shows what each one asks, with a progress bar for those that count up, and the result screen names those a run earned.
   Kael and Cerise are free; every other hero is unlocked with coins on the hero screen, each one costing more than the last (see [docs/achievements.md](docs/achievements.md)).
@@ -106,7 +106,9 @@ Nine heroes hold the night back together.
 - **A 30-wave stage in five eras.** The sky and the foes change as the waves go on, and the scene dissolves into the next era between waves.
   Waves 1 to 5 are a sunlit day with Thornbacks, Glimmer Moths and the Oakheart.
   Waves 6 to 10 bring clouds and rain with Mire Toads, Storm Kites and the Bog Hulk.
-  Waves 11 to 15 are night with horned husks, floating wisps and the Rift Brute.
+  Waves 11 to 15 are night with horned husks, floating wisps and the Gloam Shepherd.
+  The Shepherd reaps low across the floor, tolls its lantern down on rings it marks under you and calls husks out of the floor.
+  Past half its HP it falls to one knee and takes heavier blows, then rises with a violet lantern: it reaps twice, lays a row of rings and calls down shards of moonlight.
   Waves 16 to 20 turn the night magical, with Rune Golems and Prism Sprites taking over from the night's foes.
   Waves 21 to 30 are the darkest, with Void Stalkers, Abyss Eyes and the Abyss Maw.
   Waves 5, 10, 15 and 25 bring the era's mini boss, the Rift Warden waits at wave 20 and the Abyss Sovereign at wave 30.
