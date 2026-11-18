@@ -72,7 +72,7 @@ function layMarks(e: Enemy): void {
   const strike = { struck: new Set<number>() };
   const windup = tollWindup(e) * waveScale(game.wave).windup;
   const side = Math.sign(hero.x - e.x) || e.face;
-  const offsets = enraged(e) ? [-TOLL.gap, 0, TOLL.gap] : [0];
+  const offsets = enraged(e) ? [0, -TOLL.gap, TOLL.gap] : [0];
   offsets.forEach((offset, i) => {
     const x = clamp(hero.x + side * offset, 10, W - 10);
     const damage = SHEPHERD_HITS.toll * e.power;
