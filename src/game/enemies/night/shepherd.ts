@@ -32,6 +32,7 @@ import {
   SHEPHERD_TIMES,
   SHEPHERD_WALK,
   TOLL,
+  tollWindup,
 } from "./shepherdMoves";
 
 const RISE_PULSE = { radius: 90, strength: 0.9, life: 0.6, ring: 64 } as const;
@@ -69,7 +70,7 @@ function reap(e: Enemy): void {
 function layMarks(e: Enemy): void {
   const look = moonLook(enraged(e));
   const strike = { struck: new Set<number>() };
-  const windup = SHEPHERD_TIMES.toll * waveScale(game.wave).windup;
+  const windup = tollWindup(e) * waveScale(game.wave).windup;
   const side = Math.sign(hero.x - e.x) || e.face;
   const offsets = enraged(e) ? [-TOLL.gap, 0, TOLL.gap] : [0];
   offsets.forEach((offset, i) => {
@@ -194,7 +195,7 @@ export function updateShepherd(e: Enemy, dt: number, ts: number): void {
     }
   } else if (e.state === "charge") {
     e.vx = approach(e.vx, 0, 400 * dt);
-    if (e.st >= SHEPHERD_TIMES.toll * ws.windup) {
+    if (e.st >= tollWindup(e) * ws.windup) {
       Object.assign(e, { state: "shoot", st: 0 });
       toll(e);
     }
