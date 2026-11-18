@@ -2,6 +2,7 @@ import { H, W } from "../constants/stage";
 import { paintBackdrop } from "../scene/backdrop";
 import { onSceneChange } from "../scene/scenery";
 import type { Insets } from "../types/layout";
+import { hudPlace } from "../utils/hudPlace";
 import { stageLayout } from "../utils/stageLayout";
 import { sizeDangerGlow } from "./dangerGlow";
 import { byId } from "./dom";
@@ -10,6 +11,7 @@ const stage = byId("stage");
 const backdrop = byId<HTMLCanvasElement>("backdrop");
 /** an empty box padded by the safe area insets, measured to read them in pixels */
 const safeProbe = byId("safeArea");
+const hud = stage.querySelector<HTMLElement>(".hud");
 
 function safeInsets(): Insets {
   const s = getComputedStyle(safeProbe);
@@ -21,10 +23,14 @@ function safeInsets(): Insets {
   };
 }
 
-/** with this many CSS pixels free above the stage, the HUD moves out of the game into that room */
-const HUD_ROOM = 120;
-
 const px = (devicePx: number, dpr: number): string => `${devicePx / dpr}px`;
+
+/** the HUD's height laid out above the stage, where it is wider than inside and its tabs may wrap differently */
+function outsideHeight(): number {
+  if (!hud) return Number.POSITIVE_INFINITY;
+  document.body.dataset.hud = "outside";
+  return hud.getBoundingClientRect().height;
+}
 
 /**
  * Fill the screen: the stage at the largest whole-number scale that fits, so every art pixel is the same square,
@@ -35,7 +41,8 @@ export function fitStage(): void {
   let painted = "";
   const fit = () => {
     const dpr = window.devicePixelRatio || 1;
-    const layout = stageLayout({ w: W, h: H }, { w: window.innerWidth, h: window.innerHeight }, safeInsets(), dpr);
+    const safe = safeInsets();
+    const layout = stageLayout({ w: W, h: H }, { w: window.innerWidth, h: window.innerHeight }, safe, dpr);
     const { scale, cols, rows } = layout;
     Object.assign(stage.style, {
       left: px(layout.stageX, dpr),
@@ -57,7 +64,7 @@ export function fitStage(): void {
       (layout.backdropY - layout.stageY) / dpr,
       scale / dpr,
     );
-    document.body.dataset.hud = layout.stageY / dpr >= HUD_ROOM ? "outside" : "inside";
+    document.body.dataset.hud = hudPlace(layout.stageY / dpr, safe.top, outsideHeight());
     const key = [cols, rows, layout.artLeft, layout.artTop].join();
     if (!ctx || key === painted) return;
     painted = key;
@@ -83,6 +90,9 @@ export function fitStage(): void {
     fit();
   });
   addEventListener("resize", fit);
+  // a run starting or a hero's tabs changing resizes the HUD, which may then fit above the stage or no longer fit;
+  // the fit waits a frame, since moving the HUD resizes it again inside the observer
+  if (hud) new ResizeObserver(() => requestAnimationFrame(fit)).observe(hud);
   document.addEventListener("fullscreenchange", fit);
   watchDensity();
   fit();
