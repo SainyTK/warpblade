@@ -65,7 +65,7 @@ export function isBehind(e: Enemy, fromX: number): boolean {
   return side !== 0 && side !== e.face;
 }
 
-/** guarding kinds (husks from wave 3, brutes) hold up a guard while they walk, facing the blow; a staggered foe
+/** guarding kinds (husks from wave 3, mini bosses) hold up a guard while they walk, facing the blow; a staggered foe
  *  cannot raise it, nor one that cannot see the hero (game/enemies/awareness.ts) */
 function guards(e: Enemy, o: HitOptions): boolean {
   if (!o.melee || o.curls || o.fromX === undefined) return false;

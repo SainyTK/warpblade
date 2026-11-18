@@ -28,3 +28,8 @@ export const CLOAK_LINING = hex("#5a1f6e");
 export const HALO = ramp(["#6a2cb0", "#b673e8", "#f0d8ff"]);
 /** bone gold on the Warden's crown tips and mask trim */
 export const CROWN_TRIM = hex("#e8c890");
+export const MOON = ramp(["#2c2f6e", "#5a66c8", "#b4c0ff", "#e6eaff", "#ffffff"]);
+export const BONE = ramp(["#3a2a24", "#6e5440", "#a8885e", "#e8c890"]);
+export const IRON = ramp(["#120e1a", "#2a2436", "#4a4258", "#7a7088"]);
+export const MOON_SPARKS = [MOON[4], MOON[3], MOON[2], MOON[1]];
+export const FIRE_SPARKS = [INNER_FIRE[4], INNER_FIRE[3], INNER_FIRE[2], INNER_FIRE[1]];

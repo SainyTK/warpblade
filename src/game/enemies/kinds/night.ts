@@ -2,7 +2,6 @@ import { GUARD } from "../../../constants/combat";
 import { PAL } from "../../../constants/palette";
 import { GROUND } from "../../../constants/stage";
 import { rng } from "../../state";
-import { updateBrute } from "../brute";
 import { drawHusk } from "../drawHusk";
 import { drawWarden } from "../drawWarden";
 import { drawWisp } from "../drawWisp";
@@ -11,7 +10,7 @@ import { updateWarden } from "../warden";
 import { updateWisp } from "../wisp";
 import type { EnemyKind } from "./kind";
 
-/** the shadow creatures of the night ruins and the Rift Warden */
+/** the shadow creatures of the night ruins and the Rift Warden; the Gloam Shepherd has its own file */
 
 export const wisp: EnemyKind = {
   flies: true,
@@ -39,19 +38,6 @@ export const husk: EnemyKind = {
   guardFrom: GUARD.fromWave,
   orbs: 2,
   heartChance: 0.2,
-};
-
-export const brute: EnemyKind = {
-  flies: false,
-  box: (e) => [e.x - 13, e.y - 40, e.x + 13, e.y],
-  center: (e) => [e.x, e.y - 20],
-  rest: "walk",
-  firstCooldown: () => 1,
-  rift: { height: 26, y: () => GROUND, riftY: () => GROUND - 22 },
-  update: updateBrute,
-  draw: drawHusk,
-  glow: { radius: 40, color: PAL.shadow[3], eyeY: -6 },
-  guardFrom: 1,
 };
 
 export const warden: EnemyKind = {

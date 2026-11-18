@@ -114,7 +114,7 @@ export const ENEMY_AIR = {
 /** foes take this long to turn around once the hero is behind them */
 export const TURN_DELAY = { minion: 0.45, mini: 0.7, boss: 0.9 } as const;
 
-/** Husks (from wave 3) and brutes block sword blows from the front while they walk. */
+/** Husks (from wave 3) and mini bosses block sword blows from the front while they walk. */
 export const GUARD = {
   fromWave: 3,
   /** share of the damage a blocked blow still does */
