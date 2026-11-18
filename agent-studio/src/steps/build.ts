@@ -12,12 +12,12 @@ const DEVELOPER_OWNS = (path: string) =>
   !path.startsWith("src/content/patches/") &&
   !path.startsWith("public/patches/");
 
-/** what the developer is asked to do with QA's issues: fix them all, or take out what is still broken */
+/** what the developer is asked to do with QA's blocking issues: fix them, or take out what is still broken */
 type Pass = "build" | "fix" | "cut";
 
 const FOLLOW_UP: Record<Exclude<Pass, "build">, string> = {
   fix:
-    "QA raised the issues below. Fix every one of them now, blockers and majors first, then the minor ones and the suggestions, " +
+    "QA found the blocking issues below. Fix every one of them now, blockers first, and leave everything else as it is, " +
     "check again, commit, and answer with an updated report.",
   cut:
     "QA still finds the blocking issues below after every round of fixes, and the patch ships tonight. Take out the changes " +
@@ -32,7 +32,8 @@ async function develop(
   issues: QaReport | null,
 ): Promise<{ report: DevReport; session: string | null }> {
   const { files, ctx } = night;
-  const extra = pass === "build" || !issues ? "" : `${FOLLOW_UP[pass]}\n\n${JSON.stringify(issues.issues, null, 2)}`;
+  const extra =
+    pass === "build" || !issues ? "" : `${FOLLOW_UP[pass]}\n\n${JSON.stringify(blockingIssues(issues), null, 2)}`;
   const prompt = resume
     ? extra
     : await promptFor(
@@ -73,9 +74,16 @@ async function qa(night: Night, round: number): Promise<QaReport> {
 
 const blocking = (report: QaReport) => report.issues.some((i) => i.severity !== "minor") || report.verdict === "fail";
 
-/** build the plan, then let QA check it. Every issue QA raises, minor ones included, goes back to the developer at once,
-    for up to MAX_FIX_ROUNDS rounds; then the patch ships with the minor issues left. A blocking issue left after the
-    last round gets one cut round that takes the broken part out, and the night fails only if QA still blocks after it.
+/** the issues that hold the patch back; a failed verdict with only minor issues sends them all */
+const blockingIssues = (report: QaReport) => {
+  const serious = report.issues.filter((i) => i.severity !== "minor");
+  return serious.length ? serious : report.issues;
+};
+
+/** build the plan, then let QA check it. The patch ships as soon as QA finds nothing blocking, with any minor issues
+    left for the patch notes and the roadmap (owner decision, 18 November 2026: minor fixes cost a round each and
+    brought in new majors). Blocking issues go back to the developer for up to MAX_FIX_ROUNDS rounds; one still left
+    gets one cut round that takes the broken part out, and the night fails only if QA still blocks after it.
     A resumed night with the developer's report saved starts at QA; its fix rounds start a new developer session */
 export async function buildAndVerify(night: Night, built: DevReport | null): Promise<{ dev: DevReport; qa: QaReport }> {
   let { report, session } = built ? { report: built, session: null } : await develop(night, null, "build", null);
@@ -83,14 +91,13 @@ export async function buildAndVerify(night: Night, built: DevReport | null): Pro
   let cut = false;
   for (let round = 0; ; round++) {
     const verdict = await qa(night, round);
-    const blocked = blocking(verdict);
-    if (!verdict.issues.length || (!blocked && (fixes >= MAX_FIX_ROUNDS || cut))) return { dev: report, qa: verdict };
-    if (blocked && cut) {
+    if (!blocking(verdict)) return { dev: report, qa: verdict };
+    if (cut) {
       throw new Error(
         `QA still blocks the patch after ${fixes} rounds of fixes and the cut round; see ${night.files.qa(round)}`,
       );
     }
-    if (fixes < MAX_FIX_ROUNDS && !cut) {
+    if (fixes < MAX_FIX_ROUNDS) {
       fixes++;
       ({ report, session } = await develop(night, session, "fix", verdict));
       continue;
