@@ -1,0 +1,126 @@
+{
+  "version": "0.12.1",
+  "kind": "small",
+  "date": "2026-11-19",
+  "title": "Balance and fixes",
+  "tagline": "Oakheart has a quarter less HP and a lighter root line, the Lantern Procession shows its three rings, and the HUD stays on screen in small desktop windows.",
+  "intro": "Oakheart, the wave 5 mini boss, still ends almost every run, two patches after we first eased it. This patch takes the largest step our rules allow: a quarter off its HP and a lighter root line, with its guard and every wind-up left as they are. We also fixed two things we listed as known issues. The Gloam Shepherd's Lantern Procession now looks like the three rings it always was, and the HUD no longer runs off the top of the window at sizes like 640 by 600. Phones keep the HUD exactly where it was.",
+  "highlights": [],
+  "sections": [
+    {
+      "id": "foes",
+      "entries": [
+        {
+          "name": "Oakheart",
+          "tag": "nerf",
+          "summary": "The wave 5 mini boss has a quarter less HP, and its root line hits you less hard when you keep your distance.",
+          "context": "In our bot runs most heroes reached wave 5 in good shape and still lost their whole bar to Oakheart, often to the root line while circling behind its guard. After this change, 5 of 9 heroes started at wave 5 with a level 6 hero beat it, up from 2. Runs from the start still mostly end there, so if wave 5 stays a wall, its guard is the next thing we look at.",
+          "changes": [
+            {
+              "kind": "stat",
+              "label": "Base HP",
+              "before": "320",
+              "after": "240"
+            },
+            {
+              "kind": "stat",
+              "label": "HP at wave 5",
+              "before": "1,538",
+              "after": "1,153"
+            },
+            {
+              "kind": "stat",
+              "label": "Root line base damage",
+              "before": "20",
+              "after": "16"
+            },
+            {
+              "kind": "stat",
+              "label": "Root line damage at wave 5",
+              "before": "24",
+              "after": "19.2"
+            },
+            {
+              "kind": "note",
+              "text": "The branch sweep (18), the acorns (12), its guard, its wind-ups, its enraged pattern, and the XP and coins it drops are unchanged."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "bugfixes",
+      "entries": [
+        {
+          "name": "Gloam Shepherd: Lantern Procession",
+          "tag": "fix",
+          "summary": "In the Shepherd's second phase, the Lantern Procession now shows three small rings side by side, so you can see which one bursts next.",
+          "context": "The three rings overlapped so much that they looked like one wide ring with a widening burst, which we listed as a known issue in 0.12.0. Each ring is now smaller and they cover exactly the same floor as before, so the attack is no harder or easier.",
+          "changes": [
+            {
+              "kind": "stat",
+              "label": "Radius of each Procession ring",
+              "before": "18 px",
+              "after": "9 px"
+            },
+            {
+              "kind": "stat",
+              "label": "Space between ring centres",
+              "before": "10 px",
+              "after": "19 px"
+            },
+            {
+              "kind": "note",
+              "text": "The rings still cover 28 px each way from where you stood, with a thin dark seam between them."
+            },
+            {
+              "kind": "note",
+              "text": "The burst order (under you, then the Shepherd's side, then the far side, 0.1 s apart), the 1.1 s wind-up, 22 damage and one hit per Procession are unchanged. The first phase Lantern Toll looks exactly as before."
+            }
+          ],
+          "media": {
+            "kind": "image",
+            "file": "lantern-procession-rings.png",
+            "alt": "Two labelled frames of the same moment at wave 15, 0.12.0 on the left and 0.12.1 on the right. Aldric jumps clear of the Gloam Shepherd's phase 2 Lantern Procession near the end of its wind-up. On the left the violet marks on the floor overlap into one wide ring. On the right the same stretch of floor shows three small separate violet rings side by side.",
+            "width": 1280,
+            "height": 396
+          }
+        },
+        {
+          "name": "HUD in small desktop windows",
+          "tag": "fix",
+          "summary": "In windows such as 640 by 600 and 700 by 700, the whole HUD is now on screen, and at 600 by 540 it no longer touches the pause button.",
+          "context": "The HUD moved above the stage whenever there was 120 px of room there, even when the HUD itself was taller than that. It now measures itself and moves above the stage only when it fits there in full. Known issue since 0.9.0.",
+          "changes": [
+            {
+              "kind": "stat",
+              "label": "When the HUD moves above the stage",
+              "before": "When 120 px are free above the stage",
+              "after": "When the whole HUD fits between the pause button and the stage"
+            },
+            {
+              "kind": "note",
+              "text": "In windows where it does not fit, such as 640 by 600, 700 by 700, 800 by 600 and 1280 by 1024, the HUD sits over the top of the stage, fully visible."
+            },
+            {
+              "kind": "note",
+              "text": "Phones, tablets and landscape phones show the HUD exactly where they did before."
+            },
+            {
+              "kind": "note",
+              "text": "Known issue: at some window sizes, such as 600 by 540, the HUD can move into the stage once during a run when your build strip grows."
+            }
+          ],
+          "media": {
+            "kind": "image",
+            "file": "hud-small-window.png",
+            "alt": "Two labelled full-window captures of the same wave 1 moment in a 640 by 600 window, 0.12.0 on the left and 0.12.1 on the right. Kael's crystals hit a flying foe. On the left the HUD runs off the top of the window: the HP bar and the ability tabs are cut off. On the right the whole HUD, with the HP, MP and stamina bars and the WARP, LANCE and BURST tabs, sits inside the stage, clear of the pause button.",
+            "width": 1280,
+            "height": 636
+          }
+        }
+      ]
+    }
+  ],
+  "feedback": []
+}

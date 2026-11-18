@@ -20,3 +20,6 @@ export interface StageLayout {
   backdropX: number;
   backdropY: number;
 }
+
+/** the HUD sits over the top of the stage, or above the stage in the room the screen leaves there */
+export type HudPlace = "inside" | "outside";

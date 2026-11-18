@@ -12,7 +12,7 @@ import { boxHit, heroBox, shake } from "../../world";
 import type { MoonLook, MoonStrike } from "./moonLook";
 import { TOLL } from "./shepherdMoves";
 
-const MARK = { far: 10, flat: 0.24, hurts: 0.1, fade: 0.42, fizzle: 0.25, near: 0.75 } as const;
+const MARK = { flat: 0.24, hurts: 0.1, fade: 0.42, fizzle: 0.25, near: 0.75, spread: 7 / 9, haze: 14 / 9 } as const;
 const ARMING = "charge";
 const STRIKING = "shoot";
 
@@ -21,6 +21,8 @@ type Stage = "arming" | "fired" | "fizzle";
 export interface MarkPlan {
   owner: Enemy;
   x: number;
+  radius: number;
+  shrink: number;
   windup: number;
   delay: number;
   damage: number;
@@ -30,10 +32,10 @@ export interface MarkPlan {
 
 function drawArming(p: MarkPlan, k: number, t: number): void {
   const { x, look } = p;
-  const R = TOLL.radius;
+  const R = p.radius;
   const near = k > MARK.near;
   const blink = near && Math.floor(t * 18) % 2 === 0;
-  const r = R + (1 - k) * MARK.far;
+  const r = R + (1 - k) * p.shrink;
   ellipseRing(x, GROUND, R, R * MARK.flat, look.ramp[1], 0.5 + 0.3 * k);
   ellipseRing(x, GROUND, r, r * MARK.flat, look.ramp[2], 0.4 + 0.5 * k, -1);
   ellipseRing(x, GROUND, r, r * MARK.flat, blink ? WHITE : near ? look.ramp[4] : look.ramp[3], 0.6 + 0.4 * k, 1);
@@ -47,7 +49,7 @@ function drawArming(p: MarkPlan, k: number, t: number): void {
 
 function drawBurst(p: MarkPlan, k: number): void {
   const { x, look } = p;
-  const R = TOLL.radius;
+  const R = p.radius;
   const width = Math.round(R * (0.55 + 0.25 * (1 - k)));
   const tall = TOLL.height * (0.6 + 0.4 * k);
   for (let o = -width; o <= width; o++) {
@@ -57,9 +59,10 @@ function drawBurst(p: MarkPlan, k: number): void {
     line(x + o, GROUND, x + o, top, c, (u) => k * (1 - u) * (1 - edge * 0.5));
   }
   if (k > 0.8) ellipseRing(x, GROUND, R + 2, (R + 2) * MARK.flat, WHITE, 1);
-  ellipseRing(x, GROUND, R + (1 - k) * 14, (R + (1 - k) * 14) * MARK.flat, look.ramp[3], k);
+  const spread = R + (1 - k) * R * MARK.spread;
+  ellipseRing(x, GROUND, spread, spread * MARK.flat, look.ramp[3], k);
   hairline(x - R, GROUND, x + R, GROUND, look.ramp[4], k);
-  glow(x, GROUND - tall * 0.4, R + 10, look.ramp[3], 0.55 * k);
+  glow(x, GROUND - tall * 0.4, R * MARK.haze, look.ramp[3], 0.55 * k);
 }
 
 function burst(p: MarkPlan): void {
@@ -69,7 +72,7 @@ function burst(p: MarkPlan): void {
   for (let i = 0; i < 12; i++)
     particles.spawn(
       PK.SPARK,
-      p.x + rng.range(-TOLL.radius, TOLL.radius) * 0.7,
+      p.x + rng.range(-p.radius, p.radius) * 0.7,
       GROUND - 1,
       rng.range(-50, 50),
       -rng.range(80, 200),
@@ -106,7 +109,7 @@ export function createMoonMark(p: MarkPlan): Effect {
         eachStanding(() => {
           const slot = heroSlot();
           if (p.strike.struck.has(slot)) return;
-          if (!boxHit([p.x - TOLL.radius, GROUND - TOLL.height, p.x + TOLL.radius, GROUND], heroBox())) return;
+          if (!boxHit([p.x - p.radius, GROUND - TOLL.height, p.x + p.radius, GROUND], heroBox())) return;
           p.strike.struck.add(slot);
           hurtHero(p.damage, p.x);
         });

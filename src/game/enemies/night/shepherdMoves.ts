@@ -19,7 +19,9 @@ export const SHEPHERD_TIMES = {
 export const SHEPHERD_WALK = { speed: 22, enraged: 30, stop: 16 } as const;
 export const SHEPHERD_COOLDOWN = { least: 1.0, most: 1.7, enraged: 0.65 } as const;
 export const REAP = { range: 46, high: 24, reach: 54, behind: 6, height: 18 } as const;
-export const TOLL = { far: 180, radius: 18, height: 30, gap: 10, beat: 0.1 } as const;
+export const TOLL = { far: 180, radius: 18, shrink: 10, height: 30, beat: 0.1 } as const;
+/** the three rings of phase 2 sit side by side over the same floor as one ring of 28 px each way */
+export const PROCESSION = { radius: 9, gap: 19, shrink: 5 } as const;
 export const MOONFALL = {
   near: 60,
   chance: 0.35,
