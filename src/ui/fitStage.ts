@@ -111,9 +111,18 @@ export function fitStage(): void {
     fit();
   });
   addEventListener("resize", fit);
-  // a run starting with another hero resizes the HUD, which may then fit above the stage or no longer fit;
+  // a run starting with another hero resizes the HUD and its rows, which may then fit above the stage or no longer fit;
   // the fit waits a frame, since moving the HUD resizes it again inside the observer
-  if (hud) new ResizeObserver(() => requestAnimationFrame(fit)).observe(hud);
+  if (hud) {
+    const resized = new ResizeObserver(() => requestAnimationFrame(fit));
+    for (const box of [hud, ...hud.querySelectorAll(".tab-reserve, .build-reserve, .ult")]) resized.observe(box);
+  }
+  // a new hero's tabs and ultimate change the widest rows even where they take no room, as over the stage or in a row
+  // that may not wrap, so the place is chosen again before the frame is drawn
+  const rewritten = new MutationObserver(fit);
+  for (const id of ["abilityReserve", "ultName"]) {
+    rewritten.observe(byId(id), { childList: true, characterData: true, subtree: true });
+  }
   document.addEventListener("fullscreenchange", fit);
   // the HUD's rows are measured in its pixel fonts, which may still be loading at the first fit
   document.fonts.addEventListener("loadingdone", fit);
