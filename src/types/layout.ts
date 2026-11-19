@@ -21,5 +21,14 @@ export interface StageLayout {
   backdropY: number;
 }
 
-/** the HUD sits over the top of the stage, or above the stage in the room the screen leaves there */
-export type HudPlace = "inside" | "outside";
+/**
+ * the HUD sits over the top of the stage, or above the stage in the room the screen leaves there: in full under the
+ * pause button, or compact on either side of it
+ */
+export type HudPlace = "inside" | "compact" | "outside";
+
+/** the HUD's height in CSS pixels in each layout above the stage, at its largest in the run */
+export interface HudHeights {
+  outside: number;
+  compact: number;
+}

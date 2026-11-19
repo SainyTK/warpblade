@@ -121,6 +121,8 @@ Nine heroes hold the night back together.
   A fallen player is down until the wave is cleared, then rises with half HP; the run ends when everyone is down at once.
   The host's browser runs the game and streams it to the others over WebRTC; [docs/multiplayer.md](docs/multiplayer.md) has the design and its limits.
 - **Plays anywhere.** The game fills the whole screen at a whole-number pixel scale, with the scene continued to every edge. Keyboard on desktop, a pixel touch controller on phones and tablets, no install.
+  When the window leaves room above the stage, the HUD moves out of the fight: in full on a phone held upright, or compact on either side of the pause button in a small desktop window.
+  It keeps room for a full build and every tab, so only a change of window or hero can move it, never a pick.
 
 <table>
   <tr>

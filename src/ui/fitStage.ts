@@ -1,7 +1,8 @@
+import { HUD_PLACE } from "../constants/hudPlace";
 import { H, W } from "../constants/stage";
 import { paintBackdrop } from "../scene/backdrop";
 import { onSceneChange } from "../scene/scenery";
-import type { Insets } from "../types/layout";
+import type { HudPlace, Insets } from "../types/layout";
 import { hudPlace } from "../utils/hudPlace";
 import { stageLayout } from "../utils/stageLayout";
 import { sizeDangerGlow } from "./dangerGlow";
@@ -25,11 +26,29 @@ function safeInsets(): Insets {
 
 const px = (devicePx: number, dpr: number): string => `${devicePx / dpr}px`;
 
-/** the HUD's height laid out above the stage, where it is wider than inside and its tabs may wrap differently */
-function outsideHeight(): number {
+/**
+ * The HUD's height laid out in one place above the stage, where it is wider than inside and its tabs may wrap
+ * differently. The HUD keeps room for a full build strip and every tab the hero can learn, so this is its largest
+ * height in the run and a pick never moves it.
+ */
+function heightAt(place: HudPlace): number {
   if (!hud) return Number.POSITIVE_INFINITY;
-  document.body.dataset.hud = "outside";
+  document.body.dataset.hud = place;
+  if (place === "compact" && !rowsInHalves(hud)) return Number.POSITIVE_INFINITY;
   return hud.getBoundingClientRect().height;
+}
+
+/**
+ * Every row of the compact HUD stays inside its half of the window, which a narrow window may not leave room for.
+ * Offsets ignore a tab's jolt and are whole pixels, so each edge may be a rounding pixel out.
+ */
+function rowsInHalves(box: HTMLElement): boolean {
+  return [...box.querySelectorAll<HTMLElement>(".right > *, .build-reserve > *")].every((row) => {
+    const half = row.closest<HTMLElement>(".bars, .right");
+    if (!half) return true;
+    const left = row.offsetLeft - half.offsetLeft;
+    return left >= -HUD_PLACE.rounding && left + row.offsetWidth <= half.offsetWidth + HUD_PLACE.rounding;
+  });
 }
 
 /**
@@ -64,7 +83,9 @@ export function fitStage(): void {
       (layout.backdropY - layout.stageY) / dpr,
       scale / dpr,
     );
-    document.body.dataset.hud = hudPlace(layout.stageY / dpr, safe.top, outsideHeight());
+    document.documentElement.style.setProperty("--stage-top", px(layout.stageY, dpr));
+    const heights = { outside: heightAt("outside"), compact: heightAt("compact") };
+    document.body.dataset.hud = hudPlace(layout.stageY / dpr, safe.top, heights);
     const key = [cols, rows, layout.artLeft, layout.artTop].join();
     if (!ctx || key === painted) return;
     painted = key;
@@ -90,10 +111,21 @@ export function fitStage(): void {
     fit();
   });
   addEventListener("resize", fit);
-  // a run starting or a hero's tabs changing resizes the HUD, which may then fit above the stage or no longer fit;
+  // a run starting with another hero resizes the HUD and its rows, which may then fit above the stage or no longer fit;
   // the fit waits a frame, since moving the HUD resizes it again inside the observer
-  if (hud) new ResizeObserver(() => requestAnimationFrame(fit)).observe(hud);
+  if (hud) {
+    const resized = new ResizeObserver(() => requestAnimationFrame(fit));
+    for (const box of [hud, ...hud.querySelectorAll(".tab-reserve, .build-reserve, .ult")]) resized.observe(box);
+  }
+  // a new hero's tabs and ultimate change the widest rows even where they take no room, as over the stage or in a row
+  // that may not wrap, so the place is chosen again before the frame is drawn
+  const rewritten = new MutationObserver(fit);
+  for (const id of ["abilityReserve", "ultName"]) {
+    rewritten.observe(byId(id), { childList: true, characterData: true, subtree: true });
+  }
   document.addEventListener("fullscreenchange", fit);
+  // the HUD's rows are measured in its pixel fonts, which may still be loading at the first fit
+  document.fonts.addEventListener("loadingdone", fit);
   watchDensity();
   fit();
 }

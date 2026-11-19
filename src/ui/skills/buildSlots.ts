@@ -1,6 +1,6 @@
 import "./buildSlots.css";
 import { CHARMS } from "../../constants/charms";
-import { SKILL_SLOTS } from "../../constants/growth";
+import { CHARM_SLOTS, SKILL_SLOTS } from "../../constants/growth";
 import { character } from "../../game/state";
 import { charmSlots } from "../../store/unlocks";
 import type { Build, CharmId } from "../../types/build";
@@ -66,6 +66,9 @@ export function heldSlots(build: Build): HTMLElement[] {
   const { skills, charms } = held(build);
   return [row("skill", skills, 0), row("charm", charms, 0)].filter((line) => line.childElementCount);
 }
+
+/** every slot a run can fill, all free, for the HUD to keep room for its fullest strip */
+export const allSlots = (): HTMLElement[] => [row("skill", [], SKILL_SLOTS), row("charm", [], CHARM_SLOTS)];
 
 /** a key that changes whenever the slots would show something else */
 export const buildKey = (build: Build): string =>

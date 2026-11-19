@@ -33,17 +33,26 @@
           <div class="bar kit" id="kitBar" hidden><span id="kitLabel"></span><div class="track"><div class="fill" id="kitFill"></div></div><b id="kitText"></b></div>
           <div class="bar fl" id="flowBar"><span>FL</span><div class="track"><div class="fill" id="flowFill"></div></div><b id="flowMult">x1.0</b></div>
           <div class="bar xp"><span id="level">LV 1</span><div class="track"><div class="fill" id="xpFill"></div></div></div>
-          <div class="chain-row"><span class="label">COMBO</span><span class="pips" id="chain"></span></div>
-          <div class="build-strip" id="buildStrip" aria-label="Relics and charms"></div>
+          <div class="tray">
+            <div class="chain-row"><span class="label">COMBO</span><span class="pips" id="chain"></span></div>
+            <div class="build-box">
+              <div class="build-strip" id="buildStrip" aria-label="Relics and charms"></div>
+              <div class="build-strip build-reserve" id="buildReserve" aria-hidden="true"></div>
+            </div>
+          </div>
         </div>
         <div class="right">
           <div class="elements">
             <span class="el warp" id="warpTab">WARP</span>
             <span class="ability-tabs" id="abilityTabs"></span>
           </div>
+          <div class="tab-reserve" aria-hidden="true">
+            <span class="el warp">WARP</span>
+            <span class="ability-tabs" id="abilityReserve"></span>
+          </div>
           <div class="score" id="wave">STAGE 1 WAVE 0/30</div>
           <div class="score coin-count" id="coinCount"></div>
-          <div class="score" id="score">0 DOWN</div>
+          <div class="score" id="score"><span id="downCount">0 DOWN</span><span class="best-run" id="bestRun"></span></div>
           <div class="ult"><span id="ultName"></span><span class="pips" id="ultPips"></span></div>
         </div>
       </div>

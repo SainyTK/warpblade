@@ -1,12 +1,16 @@
 import { HUD_PLACE } from "../constants/hudPlace";
-import type { HudPlace } from "../types/layout";
+import type { HudHeights, HudPlace } from "../types/layout";
 
 /**
- * Above the stage when the HUD, laid out there, fits between the pause button and the stage's top edge; in CSS pixels.
+ * Where the HUD goes, from its height in each layout above the stage, in CSS pixels.
+ * The full HUD sits above when it fits between the pause button and the stage's top edge; the compact HUD sits beside
+ * the pause button, so it needs only the room from the button's top down to the stage.
  * The pause button sits at the safe area's top or 8 px down, whichever is lower.
  */
-export function hudPlace(stageTop: number, safeTop: number, hudHeight: number): HudPlace {
-  const pauseBottom = Math.max(HUD_PLACE.pauseTop, safeTop) + HUD_PLACE.pause;
-  const needed = pauseBottom + HUD_PLACE.belowPause + hudHeight + HUD_PLACE.aboveStage;
-  return needed <= stageTop ? "outside" : "inside";
+export function hudPlace(stageTop: number, safeTop: number, heights: HudHeights): HudPlace {
+  const pauseTop = Math.max(HUD_PLACE.pauseTop, safeTop);
+  const outside = pauseTop + HUD_PLACE.pause + HUD_PLACE.belowPause + heights.outside + HUD_PLACE.aboveStage;
+  if (outside <= stageTop) return "outside";
+  const compact = pauseTop + heights.compact + HUD_PLACE.aboveStage;
+  return compact <= stageTop ? "compact" : "inside";
 }
