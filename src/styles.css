@@ -67,7 +67,16 @@ body {
   display: none;
 }
 
+/* the HUD's sizes: these, and the layouts below that make it smaller, set them */
 .hud {
+  --hud-text: 12px;
+  --hud-note: 11px;
+  --hud-track: 8px;
+  --hud-pip: 6px;
+  --hud-label: 22px;
+  --hud-level: 34px;
+  --hud-figure: 30px;
+  --hud-tab-pad: 1px 7px;
   position: absolute;
   inset: 10px 12px auto 12px;
   display: flex;
@@ -93,14 +102,14 @@ body {
 }
 .bar {
   display: grid;
-  grid-template-columns: 22px 1fr;
+  grid-template-columns: var(--hud-label) 1fr;
   align-items: center;
   gap: 6px;
-  font-size: 12px;
+  font-size: var(--hud-text);
   letter-spacing: 0.08em;
 }
 .bar .track {
-  height: 8px;
+  height: var(--hud-track);
   background: var(--hud-bg);
   border: 1px solid var(--line);
   position: relative;
@@ -187,7 +196,7 @@ body {
 }
 /* Flow: gold stacks with the damage multiplier after the bar; the bar glows when full */
 .bar.fl {
-  grid-template-columns: 22px 1fr 30px;
+  grid-template-columns: var(--hud-label) 1fr var(--hud-figure);
 }
 .bar.fl span,
 .bar.fl b {
@@ -248,13 +257,13 @@ body {
   background: var(--brass);
 }
 .bar.xp {
-  grid-template-columns: 34px 1fr;
+  grid-template-columns: var(--hud-level) 1fr;
 }
 .chain-row {
   display: flex;
   align-items: center;
   gap: 6px;
-  font-size: 11px;
+  font-size: var(--hud-note);
   letter-spacing: 0.08em;
   color: var(--muted);
 }
@@ -263,8 +272,8 @@ body {
   gap: 3px;
 }
 .pips i {
-  width: 6px;
-  height: 6px;
+  width: var(--hud-pip);
+  height: var(--hud-pip);
   border: 1px solid var(--line);
   background: var(--hud-bg);
 }
@@ -277,7 +286,7 @@ body {
   display: flex;
   align-items: center;
   gap: 6px;
-  font-size: 11px;
+  font-size: var(--hud-note);
   letter-spacing: 0.06em;
   color: var(--mist);
 }
@@ -351,8 +360,8 @@ body {
   gap: 4px;
 }
 .el {
-  font-size: 12px;
-  padding: 1px 7px;
+  font-size: var(--hud-text);
+  padding: var(--hud-tab-pad);
   border: 1px solid var(--line);
   color: var(--muted);
   background: var(--hud-bg);
@@ -443,7 +452,7 @@ body {
 }
 .score {
   white-space: pre;
-  font-size: 12px;
+  font-size: var(--hud-text);
   color: var(--mist);
   letter-spacing: 0.08em;
   font-variant-numeric: tabular-nums;
@@ -990,41 +999,23 @@ body[data-hud="outside"] .boss {
 
 @media (max-width: 600px) {
   .hud {
+    --hud-text: 10px;
+    --hud-note: 10px;
+    --hud-track: 5px;
+    --hud-pip: 4px;
+    --hud-label: 16px;
+    --hud-level: 30px;
+    --hud-figure: 24px;
+    --hud-tab-pad: 0 4px;
     inset: 6px 8px auto 8px;
-  }
-  .bar {
-    font-size: 10px;
-    grid-template-columns: 16px 1fr;
-  }
-  .bar .track {
-    height: 5px;
-  }
-  .el,
-  .score,
-  .chain-row,
-  .ult,
-  .boss {
-    font-size: 10px;
-  }
-  .bar.xp {
-    grid-template-columns: 30px 1fr;
-  }
-  .bar.fl {
-    grid-template-columns: 16px 1fr 24px;
   }
   #score,
   .chain-row .label {
     display: none;
   }
-  .pips i {
-    width: 4px;
-    height: 4px;
-  }
   .boss {
     bottom: 6px;
-  }
-  .el {
-    padding: 0 4px;
+    font-size: 10px;
   }
 }
 @media (prefers-reduced-motion: reduce) {
