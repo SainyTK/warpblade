@@ -625,9 +625,75 @@ body[data-menu="title"] .banner {
 body[data-hud="outside"] .hud {
   inset: auto 4px calc(100% + 16px) 4px;
 }
-body[data-hud="outside"] .boss {
+body[data-hud="outside"] .boss,
+body[data-hud="compact"] .boss {
   top: calc(100% + 16px);
   bottom: auto;
+}
+/* In a small desktop window the full HUD does not fit above the stage but a compact one does (fitStage): the bars in
+   two columns on the left, the tabs and counts on the right, with the middle of the window kept for the pause button. */
+body[data-hud="compact"] .hud {
+  --hud-text: 10px;
+  --hud-note: 10px;
+  --hud-track: 5px;
+  --hud-pip: 4px;
+  --hud-label: 16px;
+  --hud-level: 30px;
+  --hud-figure: 24px;
+  --hud-tab-pad: 0 3px;
+  --hud-half: calc(50vw - 31px);
+  position: fixed;
+  inset: max(8px, env(safe-area-inset-top, 0px)) max(12px, env(safe-area-inset-right, 0px)) auto
+    max(12px, env(safe-area-inset-left, 0px));
+  gap: 0;
+  line-height: 12px;
+}
+body[data-hud="compact"] .bars {
+  grid-template-columns: repeat(2, minmax(0, 150px));
+  grid-template-rows: repeat(3, auto);
+  grid-auto-flow: column;
+  gap: 3px 10px;
+  width: calc(var(--hud-half) - max(12px, env(safe-area-inset-left, 0px)));
+}
+body[data-hud="compact"] .tray {
+  grid-area: 4 / 1 / 5 / -1;
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  margin-top: 1px;
+}
+body[data-hud="compact"] .chain-row {
+  height: 18px;
+}
+body[data-hud="compact"] .chain-row .label {
+  display: none;
+}
+body[data-hud="compact"] .build-strip {
+  gap: 2px 6px;
+  margin-top: 0;
+}
+body[data-hud="compact"] .right {
+  flex: none;
+  grid-template-columns: auto auto;
+  justify-content: end;
+  gap: 4px 10px;
+  width: calc(var(--hud-half) - max(12px, env(safe-area-inset-right, 0px)));
+  max-width: none;
+}
+body[data-hud="compact"] .elements,
+body[data-hud="compact"] .tab-reserve {
+  grid-column: 1 / -1;
+  flex-wrap: nowrap;
+  gap: 2px;
+}
+body[data-hud="compact"] .el.warp {
+  margin-right: 4px;
+}
+body[data-hud="compact"] #score {
+  display: block;
+}
+body[data-hud="compact"] .best-run {
+  display: none;
 }
 
 /* Menu: a pixel panel over the frozen game, or the title over the living scene before a run. */

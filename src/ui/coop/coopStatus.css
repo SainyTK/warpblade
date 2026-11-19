@@ -49,3 +49,10 @@
   gap: 8px;
   max-width: calc(100vw - 16px);
 }
+/* the compact HUD takes the room on either side of the pause button, so the line moves to the top of the stage */
+body[data-hud="compact"] .coop-status {
+  top: calc(var(--stage-top) + 8px);
+  flex-direction: row;
+  gap: 8px;
+  max-width: calc(100vw - 16px);
+}
