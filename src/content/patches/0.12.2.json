@@ -1,0 +1,130 @@
+{
+  "version": "0.12.2",
+  "kind": "small",
+  "date": "2026-11-20",
+  "title": "HUD above the stage",
+  "tagline": "In small desktop windows the HUD now sits above the stage on either side of the pause button, so it no longer covers the top of the fight. It also stays in one place for the whole run.",
+  "intro": "Since 0.12.1, in desktop windows such as 640 by 600 and 800 by 600, the HUD sat over the top of the stage and hid flying foes, while the room above the stage stayed empty. This patch adds a compact HUD that fits in that room, beside the pause button. We also fixed the known issue from 0.12.1 where the HUD could jump into the stage once during a run when your build grew. Wave 5 is still the hardest wall in the game, and we know it. Our rules let us change Oakheart again from 0.13.1, and we want a clean measure of last patch's change before we touch it.",
+  "highlights": [],
+  "sections": [
+    {
+      "id": "systems",
+      "entries": [
+        {
+          "name": "Compact HUD",
+          "tag": "adjusted",
+          "summary": "In small desktop windows the HUD now sits above the stage on either side of the pause button, and the whole fight area is clear.",
+          "context": "In windows such as 640 by 600 the full HUD did not fit above the stage, so it sat over the top of the fight and covered moths and Storm Kites, while 120 px of room above the stage went unused. The compact HUD fits in that room. Readable fights come first.",
+          "changes": [
+            {
+              "kind": "stat",
+              "label": "Where the HUD sits when the full HUD does not fit above the stage",
+              "before": "Over the top of the stage",
+              "after": "Compact, above the stage on either side of the pause button, when that fits"
+            },
+            {
+              "kind": "stat",
+              "label": "HUD over the stage at 640 by 600",
+              "before": "Top 135 to 159 px of the 360 px stage",
+              "after": "None"
+            },
+            {
+              "kind": "stat",
+              "label": "HUD text in these windows",
+              "before": "12 px",
+              "after": "10 px"
+            },
+            {
+              "kind": "stat",
+              "label": "HUD bars in these windows",
+              "before": "8 px tall",
+              "after": "5 px tall"
+            },
+            {
+              "kind": "stat",
+              "label": "HUD pips in these windows",
+              "before": "6 px",
+              "after": "4 px"
+            },
+            {
+              "kind": "note",
+              "text": "On the left: HP, MP and ST in one column, your hero's meter, FL and LV in a second, with the combo pips and your skills and charms under them. On the right: your tabs, then the stage, wave and coins, then the down count and your ultimate."
+            },
+            {
+              "kind": "note",
+              "text": "The compact HUD is at most 90 px tall, even with a full build and every tab. It has the same colours, recharge bars and glows as before, and the sizes phones already use."
+            },
+            {
+              "kind": "note",
+              "text": "A boss's health bar moves below the stage. The co-op status line moves to the top of the stage. The COMBO label and your best run record are hidden to save room, as on phones."
+            },
+            {
+              "kind": "note",
+              "text": "Windows that now use it include 640 by 600, 700 by 700, 800 by 600, 1024 by 768, 1180 by 820, 1280 by 1024 and 1440 by 900. Phones held upright and tablets keep the full HUD above the stage, and landscape phones and wide windows keep it over the stage."
+            },
+            {
+              "kind": "note",
+              "text": "Known issue: in large windows such as 1280 by 1024 the compact HUD keeps its small phone size, though there is room for more."
+            }
+          ],
+          "media": {
+            "kind": "image",
+            "file": "hud-above-stage.png",
+            "alt": "Two labelled full-window captures of the same moment in a 640 by 600 window, 0.12.1 on the left and 0.12.2 on the right. Kael swings his sword on the ground while a moth flies high and a purple crystal rises on the right. On the left, the HUD covers the top of the stage: bars, ability tabs and wave text, with the moth hidden behind the FL bar. On the right, the whole HUD sits in the band above the stage on either side of the pause button. The moth and the sky are clear.",
+            "width": 1280,
+            "height": 636
+          }
+        }
+      ]
+    },
+    {
+      "id": "bugfixes",
+      "entries": [
+        {
+          "name": "HUD moving during a run",
+          "tag": "fix",
+          "summary": "The HUD now picks its place when a run starts and keeps it, so a pick can no longer move it into the stage mid-fight.",
+          "context": "At some window sizes, such as 600 by 540, the HUD started above the stage and jumped into it once when your build strip grew at a pick. We listed it as a known issue in 0.12.1. The HUD now keeps room for its fullest size from the start, so nothing a run adds can push it out.",
+          "changes": [
+            {
+              "kind": "stat",
+              "label": "What can move the HUD",
+              "before": "A change of window or hero, or the build strip growing at a pick",
+              "after": "Only a change of window size, pixel density, fullscreen or hero"
+            },
+            {
+              "kind": "stat",
+              "label": "Room kept for the build strip",
+              "before": "The slots you hold",
+              "after": "All 8 skill slots and 5 charm slots"
+            },
+            {
+              "kind": "stat",
+              "label": "Room kept for ability tabs",
+              "before": "The tabs you have learned",
+              "after": "Every tab your hero can learn"
+            },
+            {
+              "kind": "stat",
+              "label": "HUD top on a phone held upright, 390 by 844",
+              "before": "210 px",
+              "after": "163 px"
+            },
+            {
+              "kind": "note",
+              "text": "On a phone held upright, the room kept for a full build shows as an empty band under the bars early in a run. On the smallest phones, such as 320 by 568, the HUD now stays over the top of the stage for the whole run."
+            }
+          ],
+          "media": {
+            "kind": "image",
+            "file": "hud-above-stage-boss.png",
+            "alt": "Wave 5 in an 800 by 600 window. Brynn swings her greatsword at Oakheart, and a red slash arc sweeps across the ground while damage numbers rise from the boss. Above the stage, the HUD shows her bars with the hero meter, a full row of skills and charms, the WARP, REND, QUAKE and CRY tabs, and the Crimson Fall ultimate. Oakheart's health bar sits below the floor, and nothing covers the fight.",
+            "width": 800,
+            "height": 600
+          }
+        }
+      ]
+    }
+  ],
+  "feedback": []
+}
