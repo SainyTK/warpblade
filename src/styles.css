@@ -246,6 +246,22 @@ body {
   line-height: 8px;
   text-shadow: none;
 }
+/* the chain row and the strip: two rows of the bars column, or one line in the compact HUD */
+.tray {
+  display: contents;
+}
+/* the strip lies over an unseen one with every slot a run can fill, so the HUD keeps the room of a full build and a
+   pick never moves it */
+.build-box {
+  display: grid;
+  min-width: 0;
+}
+.build-box > .build-strip {
+  grid-area: 1 / 1;
+}
+.build-reserve {
+  visibility: hidden;
+}
 .bar.xp span {
   color: var(--brass);
   white-space: nowrap;
@@ -353,11 +369,23 @@ body {
   flex: 1;
   min-width: 0;
 }
-.elements {
+/* the tabs lie over an unseen row of every tab the hero can learn, so the HUD keeps their room before a pick shows them */
+.elements,
+.tab-reserve {
+  grid-area: 1 / 1;
+  align-self: start;
   display: flex;
   flex-wrap: wrap;
   justify-content: flex-end;
   gap: 4px;
+}
+.tab-reserve {
+  visibility: hidden;
+}
+/* over the stage the HUD's place never depends on its height, so it keeps no room and lays out as it always has */
+body[data-hud="inside"] .tab-reserve,
+body[data-hud="inside"] .build-reserve {
+  display: none;
 }
 .el {
   font-size: var(--hud-text);

@@ -25,7 +25,11 @@ function safeInsets(): Insets {
 
 const px = (devicePx: number, dpr: number): string => `${devicePx / dpr}px`;
 
-/** the HUD's height laid out above the stage, where it is wider than inside and its tabs may wrap differently */
+/**
+ * The HUD's height laid out above the stage, where it is wider than inside and its tabs may wrap differently. The HUD
+ * keeps room for a full build strip and every tab the hero can learn, so this is its largest height in the run and a
+ * pick never moves it.
+ */
 function outsideHeight(): number {
   if (!hud) return Number.POSITIVE_INFINITY;
   document.body.dataset.hud = "outside";
@@ -90,7 +94,7 @@ export function fitStage(): void {
     fit();
   });
   addEventListener("resize", fit);
-  // a run starting or a hero's tabs changing resizes the HUD, which may then fit above the stage or no longer fit;
+  // a run starting with another hero resizes the HUD, which may then fit above the stage or no longer fit;
   // the fit waits a frame, since moving the HUD resizes it again inside the observer
   if (hud) new ResizeObserver(() => requestAnimationFrame(fit)).observe(hud);
   document.addEventListener("fullscreenchange", fit);
