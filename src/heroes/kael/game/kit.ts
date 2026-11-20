@@ -14,6 +14,7 @@ import { KAEL_GUARD } from "./guardStyle";
 import { alwaysKeen, keenWindow } from "./keen";
 import { cutPassed, endPassingCut, startPassingCut } from "./passingCut";
 import { kaelPose } from "./pose";
+import { drawShards } from "./prism/shards";
 import { readActions } from "./readActions";
 import { shapeHit } from "./shapeHit";
 import { drawCast, KAEL_SLOTS, rechargeSpells, runCast } from "./spell";
@@ -50,6 +51,7 @@ export const KAEL_KIT: HeroKit = {
   airDodge: () => !!skillValues("k_skydance").airDash,
   dodge: { started: startPassingCut, passed: cutPassed, ended: endPassingCut },
   draw: () => {
+    drawShards();
     drawCast();
     drawAegis();
     drawCounter();

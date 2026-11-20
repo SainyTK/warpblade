@@ -1,5 +1,6 @@
 import type { Situation } from "../../../types/move";
 import type { KaelMoveId } from "../types/moves";
+import { isPrism } from "./prism/job";
 
 /** the ground string in order, before its last hit; the last hit a combo allows is always a finisher */
 export const GROUND_CHAIN: readonly KaelMoveId[] = ["stepCut", "risingBackhand", "twinFang"];
@@ -22,18 +23,21 @@ function airMove(s: Situation): KaelMoveId | null {
   return id === "airStomp" && level(s, "k_skydance") >= SKY_DANCE.meteor ? "meteor" : id;
 }
 
-/** the last hit: a Keen hop cleave with Keen Edge, the launch with Skybreaker, otherwise the falling smash */
+/** the last hit: a Keen hop cleave with Keen Edge, the launch with Skybreaker, otherwise the falling smash, or as the
+ *  Prism Knight Shatterfall */
 function finisher(s: Situation): KaelMoveId {
   if (s.keen && level(s, "k_keen") >= CLEAVE_FROM) return "hopCleave";
   if (level(s, "k_skyward")) return "skybreaker";
-  return "smash";
+  return isPrism() ? "shatterfall" : "smash";
 }
 
-/** a plain hit of the string as Kael's skills change it: the sweep opens it, the phase cut or crescent turn is its 3rd */
+/** a plain hit of the string as Kael's skills change it: the sweep opens it, the phase cut or crescent turn is its 3rd,
+ *  and as the Prism Knight his 3rd is Prism Thrust when no skill takes its place */
 function stringHit(s: Situation): KaelMoveId {
   if (s.next === 1 && level(s, "k_reap")) return "sweep";
   if (s.next === 3 && level(s, "k_phase")) return "phaseCut";
   if (s.next === 3 && level(s, "k_reap") >= CRESCENT_FROM) return "crescentTurn";
+  if (s.next === 3 && isPrism()) return "prismThrust";
   return GROUND_CHAIN[Math.min(s.next, GROUND_CHAIN.length) - 1];
 }
 

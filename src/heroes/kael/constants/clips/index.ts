@@ -4,6 +4,7 @@ import type { KaelClipName } from "../../types/moves";
 import { AIR_CLIPS } from "./air";
 import { FINISHER_CLIPS } from "./finishers";
 import { GROUND_CLIPS } from "./ground";
+import { PRISM_CLIPS } from "./prism";
 import { SKILL_CLIPS } from "./skills";
 import { STRING_CLIPS } from "./string";
 
@@ -17,6 +18,7 @@ export const KAEL_ACTION_CLIPS = {
   ...SKILL_CLIPS,
   ...AIR_CLIPS,
   ...FINISHER_CLIPS,
+  ...PRISM_CLIPS,
 } satisfies Record<KaelClipName, ActionClip>;
 
 /** Kael's clips as the roster reads them: his moves' actions; he rests in the shared idle */

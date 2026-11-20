@@ -13,7 +13,9 @@ export type KaelMoveId =
   | "whirl"
   | "meteor"
   | "phaseCut"
-  | "skybreaker";
+  | "skybreaker"
+  | "prismThrust"
+  | "shatterfall";
 
 /** the action clips Kael's moves play */
 export type KaelClipName =
@@ -30,4 +32,6 @@ export type KaelClipName =
   | "airScissor"
   | "airStomp"
   | "phase"
-  | "skyRend";
+  | "skyRend"
+  | "prismThrust"
+  | "shatterfall";

@@ -3,12 +3,15 @@ import type { KaelMoveId } from "../../types/moves";
 import { AIR_MOVES } from "./air";
 import { CHAIN_MOVES } from "./chain";
 import { FINISHER_MOVES } from "./finishers";
+import { PRISM_MOVES } from "./prism";
 import { SKILL_MOVES } from "./skills";
 
-/** every combo move of Kael by id: the ground string, the skill moves, the air string and the finishers */
+/** every combo move of Kael by id: the ground string, the skill moves, the air string, the finishers and the Prism
+ *  Knight's blows */
 export const KAEL_MOVES: Record<KaelMoveId, MoveDef> = {
   ...CHAIN_MOVES,
   ...SKILL_MOVES,
   ...AIR_MOVES,
   ...FINISHER_MOVES,
+  ...PRISM_MOVES,
 };

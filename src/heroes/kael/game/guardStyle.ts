@@ -2,15 +2,17 @@ import { warpSlash } from "../../../game/hero/warp";
 import { meleeHit } from "../../../game/meleeHit";
 import { skillValues, withCharms } from "../../../game/skills/query";
 import { hero } from "../../../game/state";
-import { boxAhead, newSwing } from "../../../game/world";
+import { boxAhead, newSwing, struckThisSwing } from "../../../game/world";
 import type { Enemy } from "../../../types/enemy";
 import type { GuardStyle } from "../../../types/moveset";
 import { RIPOSTE } from "../constants/guard";
 import { aegisBlockCost, aegisBlocked, aegisChip, aegisParried } from "./aegis";
 import { openCounter } from "./counter";
+import { lodgeShard } from "./prism/shards";
 
 /** Kael's sword guard: a light block that Crystal Aegis hardens, and a parry that cuts straight back, primes his next
- *  blows and opens a counter: J tapped in the next moment blinks him to the attacker's back */
+ *  blows and opens a counter: J tapped in the next moment blinks him to the attacker's back. As the Prism Knight the
+ *  riposte lodges a shard in the attacker */
 export const KAEL_GUARD: GuardStyle = {
   get chip() {
     return aegisChip();
@@ -25,6 +27,7 @@ export const KAEL_GUARD: GuardStyle = {
     newSwing();
     warpSlash();
     meleeHit([boxAhead(-4, -40, 30, 2)], { power: RIPOSTE.power, kx: 140, ky: -60, big: true, sureCrit: true });
+    if (foe && struckThisSwing(foe)) lodgeShard(foe);
     hero.keenNext = true;
     // Mirror Knight's Riposte, when held, can last longer and cover more blows than the parry's own
     const mirror = skillValues("k_mirror");

@@ -7,12 +7,13 @@ import { createSlash } from "../../../../game/effects/slash";
 import { lift } from "../../../../game/hero/lift";
 import { skin } from "../../../../game/hero/skin";
 import { objectMemory, rememberPerSeat } from "../../../../game/seatMemory";
-import { game, hero, particles, rng } from "../../../../game/state";
+import { game, hero, particles, progress, rng } from "../../../../game/state";
 import { dust, shake } from "../../../../game/world";
 import type { MoveDef } from "../../../../types/move";
 import { PK } from "../../../../types/particle";
 import { HOP_CLEAVE, SKILL_CANCEL, SKILL_FEEL } from "../../constants/skillBlows";
 import { STRING_CANCEL, STRING_FEEL } from "../../constants/string";
+import { shatterShards } from "../prism/shards";
 import { CLEAVE, CROSS, FLAT_BACK, FLAT_FRONT, RISING, STAB } from "./slashes";
 
 /** the smash lands: a second crescent, and on the floor a ring, dust and rubble */
@@ -67,8 +68,10 @@ function hopStep(t: number): void {
   lift(HOP_RISE, false);
 }
 
-/** the hop cleave comes down: a small ring and dust where the blade meets the floor */
+/** the hop cleave comes down: a small ring and dust where the blade meets the floor, and as the Prism Knight's
+ *  finisher it shatters every shard nearby */
 function cleaveImpact(): void {
+  if (hero.chain >= progress.comboLimit) shatterShards();
   const gx = hero.x + hero.face * 18;
   game.fx.push(createFloorRing(gx, hero.y, 18, skin.ramp, 0.25));
   dust(gx, hero.y, 4, hero.face);

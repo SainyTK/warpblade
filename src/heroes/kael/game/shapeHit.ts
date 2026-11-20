@@ -53,7 +53,7 @@ export function shapeHit(id: KaelMoveId, hit: MoveHit): MoveHit {
   else if (id === "phaseCut") shaped = phaseCut(hit);
   else if (id === "hopCleave" && hero.chain >= progress.comboLimit)
     shaped = { ...hit, power: skillValues("k_keen").cleave, stun: 0.8 };
-  if (kael.passage && id === "smash") shaped = passageFinish(shaped);
+  if (kael.passage && (id === "smash" || id === "shatterfall")) shaped = passageFinish(shaped);
   if (hero.keen && skillValues("k_keen").guardBreak) shaped = { ...shaped, big: true };
   return shaped;
 }
