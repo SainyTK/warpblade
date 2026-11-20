@@ -1,19 +1,29 @@
 import { HEAD_START_LEVEL } from "../constants/shopSkills";
 import { STAGE_WAVES } from "../constants/waves";
 import { track } from "../services/analytics";
-import { isPlaytestSession, readPlaytestStart } from "../services/playtestStart";
+import { isPlaytestSession, readPlaytestJob, readPlaytestStart } from "../services/playtestStart";
 import { startRunAchievements } from "../store/achievements";
+import { chosenJob } from "../store/jobs";
 import { clearHeroRefund, ownsSkill } from "../store/meta";
 import { startRunUnlocks } from "../store/unlocks";
 import { parseStartBuild } from "../utils/build";
+import { findJob } from "../utils/jobs";
 import { xpToReach } from "../utils/progression";
 import { beginAdventure, isAdventure, startAdventureAt } from "./adventure";
 import { gainXp, openPicks, refreshGrowing } from "./progress";
 import { resetRun } from "./run";
-import { character, game, progress, rng } from "./state";
+import { character, game, progress, rng, setCharacter } from "./state";
 
-/** a fresh run with everything bought in the shop: stats come in through the progress, Head Start's levels here */
+/** the job a solo run plays: a dev build's `?job=` when the hero has that job, otherwise the one chosen */
+function runJob(): string | null {
+  const asked = findJob(character, readPlaytestJob());
+  return asked ? asked.id : chosenJob(character.id);
+}
+
+/** a fresh solo run with everything bought in the shop: the chosen job, stats through the progress, Head Start's levels
+ *  here */
 export function startRun(banner: string): void {
+  setCharacter(character, runJob());
   resetRun(banner);
   startRunAchievements();
   startRunUnlocks();

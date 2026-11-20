@@ -1,6 +1,6 @@
 import "./unlocks.css";
 import type { Discovery } from "../../types/unlock";
-import { discoveryName } from "../../utils/unlocks";
+import { DISCOVERY_LABEL, discoveryName } from "../../utils/unlocks";
 import { discoveryIconUrl, iconImage } from "./unlockIcon";
 
 /** at most this many finds are named; the rest are counted */
@@ -16,7 +16,7 @@ export function foundList(list: readonly Discovery[]): HTMLElement {
     const name = document.createElement("span");
     name.textContent = discoveryName(d);
     const kind = document.createElement("small");
-    kind.textContent = d.type === "recipe" ? "Recipe" : "Found";
+    kind.textContent = DISCOVERY_LABEL[d.type].list;
     row.append(iconImage(discoveryIconUrl(d)), name, kind);
     box.append(row);
   }

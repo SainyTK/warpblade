@@ -10,6 +10,8 @@ export const PAL = {
   heal: ramp(["#123a2a", "#1f7a4a", "#3fc06a", "#9cf0a0", "#e8ffe0"]),
   /** the teal of slowed time: a foe inside a time field is rimmed in it */
   hour: ramp(["#0c1e24", "#163e44", "#24706c", "#3fb0a0", "#8ae6cf", "#e6fff6"]),
+  /** prism light: deep violet through periwinkle to white */
+  prism: ramp(["#2a1660", "#4b3bc4", "#7a6cff", "#a9c8ff", "#d8e8ff", "#f2f6ff", "#ffffff"]),
 } as const;
 
 /** spark colors, head to tail */
@@ -21,6 +23,7 @@ export const SPARKS = {
   ice: [WHITE, hex("#cbf1ff"), hex("#8fd3f2"), hex("#4f9bd4")],
   blood: [WHITE, hex("#ffd0d8"), hex("#e0405a"), hex("#7e1530")],
   hour: [WHITE, hex("#e6fff6"), hex("#8ae6cf"), hex("#3fb0a0")],
+  prism: [WHITE, hex("#d8e8ff"), hex("#a9c8ff"), hex("#7a6cff")],
 } satisfies Record<string, Ramp>;
 
 /** white hot to smouldering, and fresh smoke to thin */

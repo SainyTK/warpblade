@@ -1,10 +1,13 @@
+import { chosenJob } from "../../store/jobs";
 import { heroPrice, heroUnlocked, metaBonus } from "../../store/meta";
 import type { CharacterDef } from "../../types/character";
 import type { Stats } from "../../types/stats";
+import { jobBlurb, jobTitle } from "../../utils/jobs";
 import { computeStats } from "../../utils/stats";
 import { el } from "../dom";
 import { type HeroLock, heroLock } from "./heroLock";
 import { heroPortrait } from "./heroPortrait";
+import { jobRow } from "./jobRow";
 
 /** each stat as a share of this, for the bars; full is about the strongest hero with every shop level bought */
 const STAT_BARS: readonly { label: string; value: (s: Stats) => number; full: number }[] = [
@@ -47,22 +50,44 @@ export interface HeroPage {
   root: HTMLElement;
   /** the padlock and price, for a hero still to unlock */
   lock: HeroLock | null;
+  /** the job row's entry, for a hero with jobs */
+  jobs: HTMLElement | null;
 }
 
-/** everything the hero screen tells about one hero: portrait, name, stats, traits, and the price while locked */
-export function heroPage(c: CharacterDef): HeroPage {
+/**
+ * everything the hero screen tells about one hero: portrait, name, title, stats, the job row for a hero with jobs,
+ * traits, blurb, and the price while locked. The portrait, title and blurb follow the chosen job, and `changed` hears of
+ * each new choice.
+ */
+export function heroPage(c: CharacterDef, changed: (job: string | null) => void): HeroPage {
   const root = el("section", "hero-page");
   root.style.setProperty("--accent", c.accent);
   const img = el("img", "hero-portrait");
-  img.src = heroPortrait(c);
-  img.alt = `${c.name}, ${c.title.toLowerCase()}`;
+  const title = el("span", "hero-title");
+  const blurb = el("p", "hero-blurb");
+  const wear = (job: string | null): void => {
+    img.src = heroPortrait(c, job);
+    img.alt = `${c.name}, ${jobTitle(c, job).toLowerCase()}`;
+    title.textContent = jobTitle(c, job);
+    blurb.textContent = jobBlurb(c, job);
+  };
+  wear(chosenJob(c.id));
   const name = el("strong", "hero-name", c.name);
-  root.append(img, name, el("span", "hero-title", c.title), statBars(c), traits(c), el("p", "hero-blurb", c.blurb));
+  root.append(img, name, title, statBars(c));
+  const row = c.jobs?.length
+    ? jobRow(c, (job) => {
+        wear(job);
+        changed(job);
+      })
+    : null;
+  if (row) root.append(row.root);
+  root.append(traits(c), blurb);
+  const jobs = row?.entry ?? null;
   const price = heroPrice(c.id);
-  if (price === null || heroUnlocked(c.id)) return { root, lock: null };
+  if (price === null || heroUnlocked(c.id)) return { root, lock: null, jobs };
   root.dataset.locked = "";
   img.alt = `${c.name}, locked`;
   const lock = heroLock(price);
   root.append(lock.root);
-  return { root, lock };
+  return { root, lock, jobs };
 }

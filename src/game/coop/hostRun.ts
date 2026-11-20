@@ -68,6 +68,8 @@ export class HostRun implements CoopHooks {
     }));
     this.home = this.seats[0];
     this.current = this.home;
+    // every seat plays its hero's own job, the host's included
+    setCharacter(this.home.character);
     for (const seat of this.seats) if (seat !== this.home) seat.saved = freshSaved();
     setCoopHooks(this);
     for (const seat of this.seats) {

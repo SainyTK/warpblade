@@ -6,9 +6,12 @@ import { slotIconUrl } from "./slotIcon";
 export const targetIconUrl = (t: UnlockTarget): string =>
   t.type === "charm" ? iconUrl(`charm_${t.id}`) : slotIconUrl();
 
-/** the icon of something found: the unlock's, or the evolution's for a recipe */
-export const discoveryIconUrl = (d: Discovery): string =>
-  d.type === "unlock" ? targetIconUrl(d.unlock.target) : iconUrl(skillIcon(d.skill, true));
+/** the icon of something found: the unlock's, the evolution's for a recipe, or the job's */
+export function discoveryIconUrl(d: Discovery): string {
+  if (d.type === "unlock") return targetIconUrl(d.unlock.target);
+  if (d.type === "job") return iconUrl(d.job.icon);
+  return iconUrl(skillIcon(d.skill, true));
+}
 
 /** a 16 by 16 icon image, scaled by its CSS */
 export function iconImage(url: string, cls = ""): HTMLImageElement {

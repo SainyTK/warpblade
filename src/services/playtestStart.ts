@@ -19,6 +19,12 @@ export function readPlaytestStart(): PlaytestStart | null {
   return { section, wave, level: positiveInt(params.get("level")) ?? 1, build: params.get("build") };
 }
 
+/** the job a dev build starts the run in with `?job=`, beside `?wave=` and `?level=`; null in production builds */
+export function readPlaytestJob(): string | null {
+  if (!import.meta.env.DEV) return null;
+  return new URLSearchParams(location.search).get("job");
+}
+
 /** set by the studio's playtest harness before the page loads */
 const PLAYTEST_KEY = "warpblade-playtest";
 

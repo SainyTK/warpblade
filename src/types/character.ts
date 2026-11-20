@@ -3,6 +3,7 @@ import type { Achievement } from "./achievement";
 import type { HeroSource } from "./build";
 import type { Color, Ramp } from "./color";
 import type { InputAction } from "./input";
+import type { JobDef } from "./job";
 import type { ActionClip } from "./pose";
 import type { BladeLook, OffhandLook, RigExtra, RigParts } from "./rig";
 import type { SkillDef } from "./skill";
@@ -92,4 +93,8 @@ export interface CharacterDef {
   achievements: readonly Achievement[];
   /** the icon id of each of the hero's own damage sources on the end of run screen */
   sourceIcons: Readonly<Record<HeroSource, string>>;
+  /** the name of the hero's own job on the hero screen's job row; read only for a hero with `jobs` */
+  baseJob?: string;
+  /** the jobs the hero can grow into besides their own (docs/hero-module.md, Jobs); left out, the hero has one job */
+  jobs?: readonly JobDef[];
 }

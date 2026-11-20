@@ -1,5 +1,6 @@
 import { HOLD_ACTIONS, KEYMAP } from "../../constants/input";
 import { isAdventure } from "../../game/adventure";
+import { heroJob } from "../../game/hero/job";
 import { character } from "../../game/state";
 import { inRoom } from "../../store/coop";
 import type { HeldAction, InputAction } from "../../types/input";
@@ -45,7 +46,7 @@ const isHeldAction = (a: InputAction): a is HeldAction => a in HOLD_ACTIONS;
 
 /** each action's keys and what it does; a key with a long press gets a second row for it, Hold J under J */
 function keyboardRows(adventure: boolean): [HTMLElement, string][] {
-  const text = actionText(character);
+  const text = actionText(character, heroJob());
   if (adventure) {
     text.up = "Jump or double jump. Jump upward along a wall or hold away to kick off.";
     text.down = "Drop through a ledge.";

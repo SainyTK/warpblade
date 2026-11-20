@@ -2,8 +2,9 @@ import { REPO_URL } from "../../constants/feedback";
 import { GAME_VERSION, SITE_PAGES } from "../../constants/sitePages";
 import { STAGE_WAVES } from "../../constants/waves";
 import { isAdventure, stageProgress } from "../../game/adventure";
-import { character, game, previewCharacter, progress } from "../../game/state";
+import { character, chooseCharacter, game, progress } from "../../game/state";
 import { inRoom, roomView } from "../../store/coop";
+import { chosenJob } from "../../store/jobs";
 import { heroRefund } from "../../store/meta";
 import type { MenuContext, MenuScreen, MenuView } from "../../types/menu";
 import { stageProgressText } from "../../utils/runReport";
@@ -58,8 +59,9 @@ export function mainScreen(context: MenuContext): MenuView {
   list.className = "menu-list";
   list.setAttribute("aria-label", context === "title" ? "Start menu" : "Pause menu");
   if (context === "title") {
-    // a hero only looked at on the hero screen goes back to the one chosen
-    previewCharacter(character);
+    // a hero only looked at on the hero screen goes back to the one chosen, in the job chosen for them; a room plays
+    // every hero's own job
+    chooseCharacter(character, inRoom() ? null : chosenJob(character.id));
     // while in a room, its lobby takes the place of a solo start
     if (inRoom()) list.append(screenItem(`Room ${roomView().code}`, "coop"));
     else list.append(screenItem("Start stage", "hero"), screenItem("Co-op", "coop"));
