@@ -1,6 +1,6 @@
 # Unlocks and the Codex
 
-Charms, charm slots and evolution recipes are found over many runs.
+Charms, charm slots, evolution recipes and hero jobs are found over many runs.
 A new player starts with a small set of charms, and every other charm and the extra charm slots open when their goals are met.
 Every hero's 20 skills can be dealt from the first run (`docs/skill-design.md`); what stays hidden is how they evolve.
 The game keeps most of it a mystery: the Codex shows a cryptic hint for what is still locked, a few secret entries show only ???, and a skill's evolution partner stays hidden until the player has made that evolution once.
@@ -31,6 +31,13 @@ The exact goals below are what the game hides.
 
 A skill kill is a kill whose last hit came from a skill's own source (a summon, a projectile it launched, damage over time), not from the hero's own presses.
 
+Hero jobs (`docs/hero-module.md`, Jobs) are found the same way, from each job's own `unlock` on its hero's `CharacterDef.jobs`.
+They show on the hero screen, not in the Codex: a locked job's chip carries the padlock and its hint, which says plainly what to do.
+
+| Job | Goal | Hint the hero screen shows |
+| --- | --- | --- |
+| Kael's Prism Knight (`job-kael-prism`) | Defeat Oakheart with Kael (clear wave 5 with him) | Defeat Oakheart with Kael. |
+
 ## Pacing
 
 Early runs that die around waves 4 to 8 should find Resonance and Persistence, and often Swiftness.
@@ -48,7 +55,7 @@ Recipes are kept by skill id, so skill ids are unique across heroes.
 ## Tracking
 
 Unlocks use the achievement machinery (`docs/achievements.md`): `feat()` reports the event, `applyFeat` turns it into tracked stats, and an unlock's goal is a `Goal` read from those stats, like an achievement's.
-`src/store/unlocks.ts` checks the goals after every feat and owns what is found, the known recipes and what was found since the run began (`unlockedThisRun()`).
+`src/store/unlocks.ts` checks the goals of the unlocks and of every hero job after every feat, and once as the game loads, and owns what is found, the known recipes and what was found since the run began (`unlockedThisRun()`).
 The pure checks are in `src/utils/unlocks.ts`.
 
 Feats the unlocks read:
@@ -70,13 +77,14 @@ A playtest session (`warpblade-playtest`) has everything found and every recipe 
 
 ## Saving
 
-The `warpblade-meta-v1` save keeps `unlocks` (found unlock ids) and `recipes` (skill ids whose evolution was made).
+The `warpblade-meta-v1` save keeps `unlocks` (found unlock ids, job unlock ids included) and `recipes` (skill ids whose evolution was made).
+The job chosen for each hero is kept apart, under `warpblade-jobs` (`{ "kael": "prism" }`, `src/services/jobChoice.ts`); a saved job that is locked or unknown plays as the hero's own job.
 Loading keeps only ids the game still has, so a save from the relic version loads with its relic unlocks and relic recipes dropped and its charm unlocks kept.
 Tracked stats the game no longer counts are dropped the same way.
 
 ## Where the player sees them
 
-- A banner in the achievement style, in crystal, with the found thing's icon, when something is found in play or a recipe is learned.
+- A banner in the achievement style, in crystal, with the found thing's icon, when something is found in play or a recipe is learned; a job's reads "New job" over its name.
 - The end of run screen lists what the run found, under the achievements it earned.
 - The Codex on the start menu, next to Achievements: each hero's skills with each skill's evolution under it, the charms and the extra charm slots.
   A skill always shows its icon, name and text.

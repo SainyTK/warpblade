@@ -33,9 +33,20 @@ export function unlockText(t: UnlockTarget): string {
   return `Carry ${t.number} charms in a run.`;
 }
 
-/** the name of a discovery for the toast and the end of run list: the unlock's, or the evolution's for a recipe */
-export const discoveryName = (d: Discovery): string =>
-  d.type === "unlock" ? unlockName(d.unlock.target) : (findSkill(d.skill)?.evolution.name ?? "");
+/** the name of a discovery for the toast and the end of run list: the unlock's, the evolution's for a recipe, or the
+ *  job's */
+export function discoveryName(d: Discovery): string {
+  if (d.type === "unlock") return unlockName(d.unlock.target);
+  if (d.type === "job") return d.job.name;
+  return findSkill(d.skill)?.evolution.name ?? "";
+}
+
+/** what kind of find a discovery is, as the toast and the end of run list label it */
+export const DISCOVERY_LABEL: Readonly<Record<Discovery["type"], { toast: string; list: string }>> = {
+  unlock: { toast: "Found", list: "Found" },
+  recipe: { toast: "Recipe learned", list: "Recipe" },
+  job: { toast: "New job", list: "New job" },
+};
 
 /** the unlock that opens a charm; none for one a new player starts with */
 export const unlockOf = (id: CharmId): Unlock | undefined =>

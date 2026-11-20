@@ -1,6 +1,7 @@
 import type { CharacterDef } from "../../types/character";
 import { KAEL_CLIPS } from "./constants/clips";
 import { KAEL_CONTROLS } from "./constants/controls";
+import { KAEL_BASE_JOB, KAEL_JOBS } from "./constants/jobs";
 import { KAEL_SKILL_DEFS } from "./constants/skills/index";
 import { KAEL_SKIN } from "./look";
 
@@ -26,4 +27,6 @@ export const KAEL: CharacterDef = {
   controls: KAEL_CONTROLS,
   achievements: [],
   sourceIcons: { attacks: "kael_attacks", abilities: "kael_abilities", ultimate: "kael_ultimate" },
+  baseJob: KAEL_BASE_JOB,
+  jobs: KAEL_JOBS,
 };

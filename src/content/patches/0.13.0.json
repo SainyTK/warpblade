@@ -1,0 +1,363 @@
+{
+  "version": "0.13.0",
+  "kind": "big",
+  "date": "2026-11-21",
+  "title": "Prism Knight",
+  "tagline": "Heroes can now grow a second job, and Kael is the first. Defeat Oakheart with him to open the Prism Knight: a new look, a string that lodges prism shards and breaks them, and prism beams on Crystal Nova.",
+  "intro": "Growing a hero into a new job is one of the oldest joys of the games that shaped Warpblade's fighting, and this patch brings it in. Kael goes first: beat Oakheart with him in a solo run and the Prism Knight opens on the hero screen. The Prism Knight plays on the same buttons with the same warp, skills and stats, but the end of his string asks you to set foes up with prism shards and then break them all at once. The Warp Knight stays exactly as you know him, so this is a second way to play Kael and you can switch between them at any time. This patch also ships the side-scrolling adventure the owner built yesterday, which now carries every solo run. Your coins, shop levels, unlocked heroes, achievements and options carry over as they were.",
+  "highlights": [
+    {
+      "title": "Class advancement",
+      "text": "A hero with more than one job now has a JOB row on the hero screen, under the stat bars. Kael's row holds his own job, the Warp Knight, and the Prism Knight. A locked job shows a padlock and what opens it: \"Defeat Oakheart with Kael.\"",
+      "media": {
+        "kind": "image",
+        "file": "kael-job-row-locked.png",
+        "alt": "The Choose a hero screen in a new profile with Kael's panel selected. Under his stats, the Job row has Warp Knight filled in and Prism Knight dimmed with a padlock. The hint below reads 'Defeat Oakheart with Kael.'",
+        "width": 1280,
+        "height": 720
+      }
+    },
+    {
+      "title": "The Prism Knight",
+      "text": "The warp knight who set his crystal into his own guard. He wears a pale violet coat, a violet scarf, silver trim and a crystal pauldron on his sword shoulder, and his trails, warp line and hit sparks all turn to prism light.",
+      "media": {
+        "kind": "image",
+        "file": "kael-warp-vs-prism-knight.png",
+        "alt": "Two close-ups of Kael in the same idle pose in the Sunlit Ruins. On the left, labelled Warp Knight, he wears a navy coat, red scarf and gold trim with an ice-blue blade. On the right, labelled Prism Knight, he wears a pale violet coat, violet scarf, silver trim and a crystal pauldron on his sword shoulder, and his blade has a violet sheen.",
+        "width": 1280,
+        "height": 360
+      }
+    },
+    {
+      "title": "Prism Thrust and Shatterfall",
+      "text": "His third blow becomes Prism Thrust, a long lunge that lodges a prism shard in every foe it strikes. His finisher becomes Shatterfall, an overhead cut into the floor that knocks the foe down and shatters every shard nearby for extra damage.",
+      "media": {
+        "kind": "video",
+        "file": "prism-thrust-shatterfall.mp4",
+        "poster": "prism-thrust-shatterfall.png",
+        "alt": "In the Sunlit Ruins, the Prism Knight runs his string into a thornback while moths circle overhead. His third blow, Prism Thrust, lodges a violet prism shard in the thornback. Motes gather on his blade, and Shatterfall's falling crescent shatters the shard in a white flash, adding its own damage number and killing the thornback.",
+        "width": 640,
+        "height": 360
+      }
+    },
+    {
+      "title": "Crystal Nova's prism beams",
+      "text": "Crystal Nova keeps its name and every value. As the Prism Knight it also fires six prism beams from Kael's chest right after the ring, and every foe a beam crosses takes damage and a shard.",
+      "media": {
+        "kind": "video",
+        "file": "crystal-nova-prism-beams.mp4",
+        "poster": "crystal-nova-prism-beams.png",
+        "alt": "The Prism Knight charges Crystal Nova to level 4 as two thornbacks and two moths come out of their rifts. When he releases, the ring of ice crystals bursts along the floor and six prism beams fire diagonally across the screen. Large damage numbers rise over every foe, and the wave is cleared.",
+        "width": 640,
+        "height": 360
+      }
+    },
+    {
+      "title": "New job: Prism Knight",
+      "text": "Defeat Oakheart with Kael in a solo run and a crystal banner announces the new job. The run result lists it with everything else the run found. If your save has already beaten Oakheart with Kael, the Prism Knight is waiting for you the first time you load the game.",
+      "media": {
+        "kind": "image",
+        "file": "new-job-banner.png",
+        "alt": "A solo run in the Sunlit Ruins just after Kael lands the final blow on Oakheart. The boss bursts into purple smoke beside a treasure chest, 'Gate open' shows in the middle of the stage, and a crystal banner at the top reads 'New job: Prism Knight'.",
+        "width": 1280,
+        "height": 720
+      }
+    }
+  ],
+  "sections": [
+    {
+      "id": "heroes",
+      "entries": [
+        {
+          "name": "Kael: the Prism Knight",
+          "tag": "new",
+          "summary": "Kael's second job fights on the same buttons, with a new look and a string built around prism shards.",
+          "context": "Heroes in the games that inspire our fights grow by changing jobs, and that change should alter how a hero plays as well as how they look. The Prism Knight keeps Kael's warp, dodge, guard, abilities, stats and skills, and changes the end of his string and his ultimate.",
+          "changes": [
+            {
+              "kind": "stat",
+              "label": "Jobs",
+              "before": "Warp Knight",
+              "after": "Warp Knight, Prism Knight"
+            },
+            {
+              "kind": "stat",
+              "label": "Coat, scarf and trim",
+              "before": "Navy coat, red scarf, gold trim",
+              "after": "Pale violet coat, violet scarf, silver trim, pale blue eyes"
+            },
+            {
+              "kind": "note",
+              "text": "A crystal pauldron of three faceted plates sits on his sword shoulder and follows the upper arm."
+            },
+            {
+              "kind": "note",
+              "text": "A new prism colour, from deep violet through periwinkle to white, colours his blade, trails, warp line, afterimages and hit sparks."
+            },
+            {
+              "kind": "note",
+              "text": "Hero screen title: \"The prism knight\". Blurb: \"The warp knight who set his crystal into his own guard. His blade lodges prism shards in foes, and his finishers break them.\""
+            },
+            {
+              "kind": "note",
+              "text": "The Attack and Guard lines on the Controls screen and the touch Attack and Guard hints say what the shards do. Every other line is Kael's own."
+            },
+            {
+              "kind": "note",
+              "text": "Known issue: the pauldron is small, and on the pale coat it can be hard to see at game scale. The coat, scarf and blade carry most of the new look for now."
+            }
+          ],
+          "media": {
+            "kind": "image",
+            "file": "kael-warp-vs-prism-knight.png",
+            "alt": "Kael in the same idle pose as the Warp Knight on the left and the Prism Knight on the right, showing the pale violet coat, violet scarf, silver trim and crystal pauldron of the new job.",
+            "width": 1280,
+            "height": 360
+          }
+        },
+        {
+          "name": "Prism shards",
+          "tag": "new",
+          "summary": "As the Prism Knight, several of Kael's blows lodge prism shards in foes, up to three each, and his finishers break them for extra damage.",
+          "context": "We wanted the job to reward setting a foe up before the big blow lands. Shards show on the foe and blink before they fade, so you always know what your finisher will break.",
+          "changes": [
+            {
+              "kind": "note",
+              "text": "A foe holds at most 3 shards, drawn as small crystal diamonds across its chest. Each new shard resets the timer, and 6 s after the newest one they all fall away. They blink through their last second."
+            },
+            {
+              "kind": "note",
+              "text": "One shard is lodged by Prism Thrust in each foe it strikes, by Warp Strike's arrival blow in its target, by the parry's riposte cut in the attacker, and by each prism beam of Crystal Nova in each foe it crosses."
+            },
+            {
+              "kind": "note",
+              "text": "Any finisher of the ground string shatters them: Shatterfall, and also Keen Edge's hop cleave and Skybreaker when those skills take the finisher's place."
+            },
+            {
+              "kind": "stat",
+              "label": "Shatter damage",
+              "before": "None",
+              "after": "0.55 x attack per shard, in one hit of his attacks that can crit"
+            },
+            {
+              "kind": "stat",
+              "label": "Shatter reach",
+              "before": "None",
+              "after": "Every foe within 56 px of the finisher's impact, 22 px ahead of Kael at his feet"
+            },
+            {
+              "kind": "note",
+              "text": "Each shard bursts with a white flash, prism flecks and a light, and each foe rings once with a high glassy tone."
+            },
+            {
+              "kind": "note",
+              "text": "Oakheart's front guard blocks many Prism Thrusts, so shards build more slowly on it. Warp Strike and the parry are good ways to get them in."
+            }
+          ],
+          "media": {
+            "kind": "video",
+            "file": "prism-thrust-shatterfall.mp4",
+            "poster": "prism-thrust-shatterfall.png",
+            "alt": "The Prism Knight's Prism Thrust lodges a violet shard in a thornback, then Shatterfall shatters it in a white flash with its own damage number.",
+            "width": 640,
+            "height": 360
+          }
+        },
+        {
+          "name": "Kael's string as the Prism Knight",
+          "tag": "new",
+          "summary": "The step cut and rising backhand stay; the third blow becomes Prism Thrust and the finisher becomes Shatterfall.",
+          "context": "Without shards the Prism Knight's end of the string deals a little less than the Warp Knight's, and with the shard from his own thrust it deals a little more. The job should be a different way to play, so it trades some raw damage for a payoff you build toward.",
+          "changes": [
+            {
+              "kind": "stat",
+              "label": "3rd blow",
+              "before": "Twin Fang, two hits of 0.75 and 0.85 x attack (1.6 in all)",
+              "after": "Prism Thrust, one hit of 1.5 x attack that lodges a shard"
+            },
+            {
+              "kind": "stat",
+              "label": "3rd blow reach",
+              "before": "36 to 38 px ahead",
+              "after": "44 px ahead"
+            },
+            {
+              "kind": "note",
+              "text": "Prism Thrust draws the blade back to the hip, lunges forward 120 px a second with the arm fully out, holds the reach, then recoils to guard. Another press can cut in 0.1 s after it lands."
+            },
+            {
+              "kind": "stat",
+              "label": "Finisher",
+              "before": "Falling smash, 2.35 x attack",
+              "after": "Shatterfall, 2.1 x attack, plus the shatter"
+            },
+            {
+              "kind": "stat",
+              "label": "Finisher knockback",
+              "before": "60 forward, 60 up",
+              "after": "50 forward, 60 up"
+            },
+            {
+              "kind": "note",
+              "text": "Shatterfall keeps the smash's knockdown, 0.8 s stun and wall bounce. He rises onto his toes as four prism motes gather on the blade tip, cuts straight down into the floor with a prism crescent and floor ring, holds the point in the floor for a moment, then rises."
+            },
+            {
+              "kind": "stat",
+              "label": "3rd blow and finisher on one foe",
+              "before": "3.95 x attack",
+              "after": "3.6 x attack with no shards, 4.15 with the thrust's shard, up to 5.25 with three shards"
+            },
+            {
+              "kind": "note",
+              "text": "Skills that change the string still win over the job: Reaping Sweep (level 5) and Phase Cut take the 3rd blow, and Keen Edge's hop cleave and Skybreaker take the finisher. Phantom Passage works on Shatterfall as it does on the smash."
+            }
+          ]
+        },
+        {
+          "name": "Crystal Nova",
+          "tag": "adjusted",
+          "summary": "As the Prism Knight, Crystal Nova also fires six prism beams that deal damage and lodge shards.",
+          "context": "A new job should leave its mark on the ultimate too. We kept the name, the charge, the cost and every skill value, so your Crystal Nova builds work the same in both jobs.",
+          "changes": [
+            {
+              "kind": "stat",
+              "label": "Prism beams (Prism Knight only)",
+              "before": "None",
+              "after": "6 beams, each dealing 0.2 x the ring's blow once to each foe it crosses and lodging a shard"
+            },
+            {
+              "kind": "note",
+              "text": "The beams fire from Kael's chest 0.12 s after the ring bursts, level and at 35 degrees up and down to each side. Each reaches 1.5 x the ring's radius, grows out over 0.08 s, holds for 0.1 s and fades over 0.25 s."
+            },
+            {
+              "kind": "note",
+              "text": "The Warp Knight's Crystal Nova is unchanged."
+            },
+            {
+              "kind": "note",
+              "text": "Known issue: the level beams run at chest height and pass over short foes standing on the floor, such as thornbacks and mires. They still strike foes the ring throws into the air and taller foes."
+            }
+          ],
+          "media": {
+            "kind": "video",
+            "file": "crystal-nova-prism-beams.mp4",
+            "poster": "crystal-nova-prism-beams.png",
+            "alt": "A level 4 Crystal Nova as the Prism Knight: the ring of ice crystals bursts along the floor and six prism beams fire across the screen, with damage numbers over every foe.",
+            "width": 640,
+            "height": 360
+          }
+        }
+      ]
+    },
+    {
+      "id": "stages",
+      "entries": [
+        {
+          "name": "The side-scrolling adventure",
+          "tag": "rework",
+          "summary": "A solo run is now one long journey to the right through the eras, with a boss room at the end of each approach.",
+          "context": "The owner rebuilt the solo stage yesterday so a run feels like a trip through a themed dungeon, with routes to choose and a boss waiting at the end of each part. Co-op rooms keep the arena for now.",
+          "changes": [
+            {
+              "kind": "stat",
+              "label": "Solo stage",
+              "before": "30 waves in one arena",
+              "after": "One continuous stage heading right, with seven boss rooms and an exit"
+            },
+            {
+              "kind": "note",
+              "text": "Each approach has floor patrols and flying foes guarding different routes through stairs, towers, ledges and climbable walls. You can pass them by, but defeating them earns experience and helps your grade."
+            },
+            {
+              "kind": "note",
+              "text": "At the end of each approach a gate closes behind you and the boss steps out of a rift. When it falls, \"Gate open\" shows and the way on opens. Oakheart, the Bog Hulk, the Gloam Shepherd, the Rift Warden, the Abyss Maw and the Abyss Sovereign each hold a room, and something waits after the last one."
+            },
+            {
+              "kind": "note",
+              "text": "Spike traps glow before they rise, so you can jump them or take another route. They deal 13 damage near the start, rising to about 22 near the exit."
+            },
+            {
+              "kind": "note",
+              "text": "Each approach has a mentor, and where they stand can change between runs. Press E beside them to spend your skill points."
+            },
+            {
+              "kind": "note",
+              "text": "Solo results show a grade from E to S. Defeating more bosses raises an unfinished run from E to B, a clear earns A, and S asks for a clear on pace with nearly every foe defeated."
+            },
+            {
+              "kind": "note",
+              "text": "Platform movement: Jump during a dash carries its speed into the air, Down on a ledge drops through it, and holding toward a wall lets you slide, climb or kick off."
+            }
+          ],
+          "media": {
+            "kind": "video",
+            "file": "adventure-boss-gate.mp4",
+            "poster": "adventure-boss-gate.png",
+            "alt": "Kael heads right through the Sunlit Ruins, jumping from ledge to ledge above a patrol of thornbacks and a strip of floor spikes, and cutting down moths in midair. He drops into the boss room, a violet gate closes behind him, the name Oakheart appears, and Oakheart steps out of a rift.",
+            "width": 640,
+            "height": 360
+          }
+        }
+      ]
+    },
+    {
+      "id": "systems",
+      "entries": [
+        {
+          "name": "Jobs",
+          "tag": "new",
+          "summary": "Heroes can grow into further jobs, chosen on the hero screen and opened through goals.",
+          "context": "Every big patch should give you something new to reach for. Jobs open through play, and once a job is open you can switch freely between it and the hero's own job.",
+          "changes": [
+            {
+              "kind": "note",
+              "text": "A hero with jobs shows a JOB row under the stat bars, one chip per job. The chosen chip is filled with the job's colour. A locked chip is dimmed with a padlock and its hint, and cannot be chosen."
+            },
+            {
+              "kind": "note",
+              "text": "Keyboard: S or Down moves from the panel to the job row, A and D or the arrows change the job, and J or Enter starts the run. Touch and mouse: tap a chip, then the panel."
+            },
+            {
+              "kind": "note",
+              "text": "Changing the job changes the portrait, the roster tile, the hero behind the menu, the title and the blurb at once."
+            },
+            {
+              "kind": "stat",
+              "label": "Prism Knight unlock",
+              "before": "None",
+              "after": "Defeat Oakheart with Kael in a solo run"
+            },
+            {
+              "kind": "note",
+              "text": "A new job is announced with a crystal banner, \"New job\" over its name, and listed on the run result. A save that has already beaten Oakheart with Kael opens the Prism Knight on first load, without a banner."
+            },
+            {
+              "kind": "note",
+              "text": "Your chosen job is remembered for each hero in this browser. Coins, shop levels, unlocked heroes, achievements and options are untouched."
+            },
+            {
+              "kind": "note",
+              "text": "Jobs are for solo runs in this patch. Co-op rooms play every hero's own job, and the lobby has no job row."
+            },
+            {
+              "kind": "note",
+              "text": "Known issue: after choosing the Prism Knight in solo, the hero behind the co-op lobby still wears the Prism Knight's look, though the room plays the Warp Knight."
+            },
+            {
+              "kind": "note",
+              "text": "Heroes without jobs show no job row, and their hero screen looks as before."
+            }
+          ],
+          "media": {
+            "kind": "image",
+            "file": "kael-job-row-prism-knight.png",
+            "alt": "The Choose a hero screen with Kael's Prism Knight chip filled in violet. The portrait shows Kael in a pale violet coat and violet scarf, the title reads 'The prism knight', and the blurb says his blade lodges prism shards in foes and his finishers break them.",
+            "width": 1280,
+            "height": 720
+          }
+        }
+      ]
+    }
+  ],
+  "feedback": []
+}

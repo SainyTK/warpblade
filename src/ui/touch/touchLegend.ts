@@ -1,4 +1,5 @@
 import { TOUCH_BUTTONS } from "../../constants/touch";
+import { heroJob } from "../../game/hero/job";
 import { character } from "../../game/state";
 import type { ButtonLook } from "../../types/touch";
 import { hex } from "../../utils/color";
@@ -34,8 +35,8 @@ function face(draw: (canvas: PixelCanvas) => void): HTMLElement {
 /** each stick direction and each button with what it does for the chosen hero, drawn as on screen, for the Controls screen */
 export function touchLegend(adventure: boolean): [HTMLElement, string][] {
   const selection = touchSelection();
-  const texts = touchText(character);
-  const stick = stickDirections(character).map((d): [HTMLElement, string] => [
+  const texts = touchText(character, heroJob());
+  const stick = stickDirections(character, heroJob()).map((d): [HTMLElement, string] => [
     face((c) => drawButtonFace(c, STICK_LOOK, stickIcon(d.direction), false)),
     `Stick ${d.direction}: ${adventure && d.direction === "down" ? "Drop through a ledge" : d.label}`,
   ]);

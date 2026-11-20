@@ -3,6 +3,7 @@ import { character, chooseCharacter, previewCharacter } from "../../game/state";
 import { CHARACTERS } from "../../heroes/roster";
 import { sfx } from "../../services/audio";
 import { saveHeroChoice } from "../../services/heroChoice";
+import { chosenJob } from "../../store/jobs";
 import { bank, buyHero, heroUnlocked } from "../../store/meta";
 import type { CharacterDef } from "../../types/character";
 import type { MenuView } from "../../types/menu";
@@ -10,6 +11,7 @@ import { coinAmount } from "../coinIcon";
 import { el } from "../dom";
 import { backItem } from "./backItem";
 import { type HeroPage, heroPage } from "./heroPage";
+import { heroPortrait } from "./heroPortrait";
 import { heroTile } from "./heroTile";
 import { startGame } from "./menuActions";
 import { focusEntry, onAdjust } from "./menuNav";
@@ -18,9 +20,9 @@ import { focusEntry, onAdjust } from "./menuNav";
  * A press on the panel: an unlocked hero starts the run. For a locked one the first press asks again, the second one
  * unlocks with coins and makes the hero the choice, and a press the bank cannot pay for is refused with a shake. The run never starts with a locked hero.
  */
-function act(panel: HTMLButtonElement, c: CharacterDef, page: HeroPage): void {
+function act(panel: HTMLElement, c: CharacterDef, page: HeroPage): void {
   if (!page.lock) {
-    chooseCharacter(c);
+    chooseCharacter(c, chosenJob(c.id));
     saveHeroChoice(c.id);
     startGame();
     return;
@@ -36,16 +38,28 @@ function act(panel: HTMLButtonElement, c: CharacterDef, page: HeroPage): void {
     return;
   }
   // the hero just bought becomes the choice, so the screen redraws on them, ready to start
-  chooseCharacter(c);
+  chooseCharacter(c, chosenJob(c.id));
   saveHeroChoice(c.id);
   if (buyHero(c.id)) sfx.learn();
 }
 
-/** after Start: a roster of every hero over one panel for the hero in focus, starting at the one chosen last */
+/**
+ * after Start: a roster of every hero over one panel for the hero in focus, starting at the one chosen last. A hero with
+ * jobs has a job row in the panel, the entry after the panel itself: a new job shows on the portrait, the tile and the
+ * hero behind the menu at once, and a press on the row starts the run as the panel does.
+ */
 export function heroScreen(): MenuView {
-  const pages = CHARACTERS.map(heroPage);
-  const panel = el("button", "hero-panel");
-  panel.type = "button";
+  const pages = CHARACTERS.map((c, i) =>
+    heroPage(c, (job) => {
+      const face = tiles[i].querySelector<HTMLImageElement>(".hero-face");
+      if (face) face.src = heroPortrait(c, job);
+      previewCharacter(c, job);
+    }),
+  );
+  // the panel holds the job row's chips, so it is a button by role, since a button may not hold buttons
+  const panel = el("div", "hero-panel");
+  panel.tabIndex = 0;
+  panel.setAttribute("role", "button");
   panel.dataset.nav = "";
   panel.append(...pages.map((p) => p.root));
   const content = el("div", "menu-main hero-screen");
@@ -59,14 +73,16 @@ export function heroScreen(): MenuView {
     disarm();
     tiles[at].removeAttribute("aria-current");
     pages[at].root.removeAttribute("data-shown");
+    pages[at].jobs?.removeAttribute("data-nav");
     at = i;
     const c = CHARACTERS[i];
     tiles[i].setAttribute("aria-current", "true");
     pages[i].root.dataset.shown = "";
+    pages[i].jobs?.setAttribute("data-nav", "");
     panel.dataset.hero = c.id;
     content.style.setProperty("--accent", c.accent);
-    // the hero behind the menu changes to the one in focus, in that hero's own rest pose
-    previewCharacter(c);
+    // the hero behind the menu changes to the one in focus, in the job chosen for them and their own rest pose
+    previewCharacter(c, chosenJob(c.id));
   };
   const tiles = CHARACTERS.map((_, i) =>
     heroTile(CHARACTERS[i], () => {

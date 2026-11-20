@@ -10,6 +10,7 @@ import type { TrackedStats } from "../types/achievement";
 import type { PickToolKey } from "../types/build";
 import type { MetaSave, ShopItem, SkillId } from "../types/shop";
 import type { Stats } from "../types/stats";
+import { jobUnlockIds } from "../utils/jobs";
 import { parseMeta } from "../utils/metaSave";
 import { metaStats, metaTools, nextPrice } from "../utils/shop";
 import { ALL_SKILLS } from "../utils/skills";
@@ -19,7 +20,7 @@ const meta: MetaSave = parseMeta(loadMeta(), SHOP_ITEMS, {
   heroes: CHARACTERS.filter((c) => c.price > 0).map((c) => c.id),
   removedHeroes: REMOVED_HERO_PRICES,
   achievements: ACHIEVEMENTS.map((a) => a.id),
-  unlocks: UNLOCKS.map((u) => u.id),
+  unlocks: [...UNLOCKS.map((u) => u.id), ...jobUnlockIds(CHARACTERS)],
   skills: ALL_SKILLS.map((s) => s.id),
 });
 // a save from before achievements kept its best wave under its own key: count it toward the wave goals

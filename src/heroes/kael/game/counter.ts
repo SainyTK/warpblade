@@ -12,8 +12,14 @@ import type { Enemy } from "../../../types/enemy";
 import { WHITE } from "../../../utils/color";
 import { COUNTER, COUNTER_MARK } from "../constants/guard";
 
-/** the counter a parry opens: the foe it strikes and the seconds left to press J. Holds a foe, so only the host keeps it */
-const counter: { foe: Enemy | null; left: number; t: number } = { foe: null, left: 0, t: 0 };
+/** the counter a parry opens: the foe it strikes and the seconds left to press J, and whether its blink is landing
+ *  now. Holds a foe, so only the host keeps it */
+const counter: { foe: Enemy | null; left: number; t: number; striking: boolean } = {
+  foe: null,
+  left: 0,
+  t: 0,
+  striking: false,
+};
 rememberPerSeat(objectMemory(counter, true));
 
 /** the counter's foe while it is still open and the foe still stands */
@@ -52,9 +58,14 @@ export function pressCounter(): boolean {
   game.fx.push(createWarpLine(hero.x, hero.y - 18, to.x, to.y - 18));
   arrive(to.x, to.y, e);
   hero.face = -to.side;
+  counter.striking = true;
   strikeOnArrival(COUNTER.power, e, true);
+  counter.striking = false;
   return true;
 }
+
+/** the arrival under way is the counter's blink, not a warp */
+export const counterStriking = (): boolean => counter.striking;
 
 /** a gold mark at the attacker's back while the counter is open, where Kael will land */
 export function drawCounter(): void {

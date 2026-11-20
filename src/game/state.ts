@@ -11,11 +11,13 @@ import type { GameState } from "../types/game";
 import type { Hero } from "../types/hero";
 import type { Progress } from "../types/progress";
 import { freshBuild } from "../utils/build";
+import { jobSkin } from "../utils/jobs";
 import { restPose } from "../utils/restPose";
 import { Rng } from "../utils/rng";
 import { computeStats } from "../utils/stats";
 import { emptyStream } from "../utils/waves";
 import { Chain } from "./hero/chain";
+import { setHeroJob } from "./hero/job";
 import { applySkin } from "./hero/skin";
 import { objectMemory, rememberPerSeat } from "./seatMemory";
 
@@ -29,24 +31,27 @@ export let character: CharacterDef = CHARACTERS[0];
 export let shown: CharacterDef = character;
 applySkin(character.skin);
 
-/** play as this hero from the next run on: their look now, their stats and skills when the run starts */
-export function setCharacter(c: CharacterDef): void {
+/** play as this hero in this job (null for their own) from the next run on: their look now, their stats and skills
+ *  when the run starts */
+export function setCharacter(c: CharacterDef, job: string | null = null): void {
   character = c;
   shown = c;
-  applySkin(c.skin);
+  setHeroJob(job);
+  applySkin(jobSkin(c, job));
 }
 
 /** choose this hero from a menu: as `setCharacter`, and standing at rest, since the menus show the hero before any
  *  frame of play has posed them */
-export function chooseCharacter(c: CharacterDef): void {
-  setCharacter(c);
+export function chooseCharacter(c: CharacterDef, job: string | null = null): void {
+  setCharacter(c, job);
   hero.pose = restPose(c);
 }
 
-/** show this hero behind a menu without choosing it: drawn with its own look and kit, standing in its rest pose */
-export function previewCharacter(c: CharacterDef): void {
+/** show this hero in this job behind a menu without choosing it: drawn with that look and the hero's kit, standing in
+ *  its rest pose */
+export function previewCharacter(c: CharacterDef, job: string | null = null): void {
   shown = c;
-  applySkin(c.skin);
+  applySkin(jobSkin(c, job));
   hero.pose = restPose(c);
 }
 

@@ -9,6 +9,12 @@ import { createNovaRing } from "./nova/ring";
 import { novaStars } from "./nova/stars";
 import { createNovaStorm } from "./nova/storm";
 
+/** a charge level's blow before the skill's power: the share of the level's power the special deals, times attack */
+const novaBlow = (level: number): number => ULT_LEVELS[level - 1].power * progress.stats.ad * NOVA_SHARE;
+
+/** the first ring's blow on each foe at a charge level, with the skill's power */
+export const ringBlow = (level: number): number => novaBlow(level) * (ultimateValues().power ?? 1);
+
 /** what Crystal Nova's skill adds once the first ring has struck: phantoms, stars and the storm of edges on its foes */
 function followUp(struck: readonly Enemy[], blow: number, v: Readonly<Record<string, number>>): void {
   if (v.phantoms) game.fx.push(createNovaPhantoms(struck, v.phantoms, blow * v.phantom));
@@ -26,9 +32,9 @@ export function castCrystalNova(level: number): void {
   const x = hero.x;
   const y = hero.y - 16;
   const reach = NOVA_RADIUS[level - 1];
-  const blow = ULT_LEVELS[level - 1].power * progress.stats.ad * NOVA_SHARE;
+  const blow = novaBlow(level);
   const pull = !!v.pull;
-  const first = { x, y, reach, damage: blow * (v.power ?? 1), level, pull, delay: 0 };
+  const first = { x, y, reach, damage: ringBlow(level), level, pull, delay: 0 };
   game.fx.push(createNovaRing({ ...first, done: (struck) => followUp(struck, blow, v) }));
   for (let i = 1; i <= (v.echoes ?? 0); i++)
     game.fx.push(

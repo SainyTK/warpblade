@@ -7,10 +7,11 @@ Order inside a list is priority order.
 ## Next big patches
 
 Patch 0.11.0 set the roster at nine sword heroes (the charter's Roster section), and big patches keep the charter's three-day cadence.
-0.13.0 on 21 November is due as a big patch, since 0.12.0 shipped on 18 November.
-0.12.0 was a new-boss headline, so a new-system headline keeps the rotation, and class advancement is first in line.
+The next big patch is due on 24 November, since 0.13.0 shipped on 21 November.
+0.13.0 was a new-system headline (class advancement), so the next big patch should rotate to another kind unless players ask for more jobs.
 
-- New system: class advancement. A hero unlocks a second job that changes part of the combo, the special and the look. Ship the system and its unlock in one patch with one or two heroes, then add more heroes in later patches. The unlock must be reachable, for example the hero's Trial (wave 10), since a stage clear is out of reach in every measured run. First in line, since the roster is now fixed. (Grand Chase, pillars 2 and 4)
+- New system: class advancement round two. A second job for two more heroes, Cerise and Aldric suggested, since their parry and shield give a job room to change defence. Each gets its own look, 3rd blow and finisher, mark and ultimate addition, opened by defeating Oakheart with that hero. First in line for the next new-system headline. (Grand Chase, pillars 2 and 4)
+- Job choice in co-op rooms: the lobby and host session carry the job id beside the hero id; job state is already per seat. (pillar 4, feedback 10)
 - Co-op round two: player names, rejoining a run, a guest joining between waves, hit-stop that freezes only the striking hero and its foes, and client-side prediction for the guest's own hero. (pillars 1 and 4, feedback 10)
 - Achievements round two: per-hero mastery achievements now that heroes have trials, and achievements that unlock shop items or a stage. (Vampire Survivors, pillar 4)
 - New stage: a second stage with its own eras, platforms and hazards, unlocked by clearing the first. (Grand Chase dungeons, pillar 4)
@@ -35,10 +36,18 @@ Patch 0.11.0 set the roster at nine sword heroes (the charter's Roster section),
 - Measure the four evolutions' damage per cast with the 0.2.0 scenario scripts and even them out; Glacier Bloom is the weakest on paper.
 - Play Cerise, Vesper, Yun and Brynn in a co-op room: their state is kept per seat, and QA's co-op pairs covered only Saya, Zafir, Aldric and Calder. (pillar 1, feedback 10)
 - Tune `COOP_SCALING` once real rooms report results. (feedback 10)
+- Measure the Prism Knight against the Warp Knight once the owner lets the bot choose a job (a skilled run each from wave 5, level 6). The job aims at equal clear rates, not higher ones. (pillars 2 and 3)
+- The owner's side-scrolling adventure (8aa5370) now drives every bot number. Recheck the wave 5 figures under it before the Oakheart change allowed from 0.13.1, and note the skilled bot's hpLostByWave for wave 5 (87 to 126 HP across the eight heroes who fell there). (pillar 1)
+- Crystal Nova's level prism beam (QA, 0.13.0). It runs at chest height, 18 art px above the floor, and only strikes a foe whose center is within 7.5 px of the line, so it passes over grounded thornbacks and mires, the first two eras' walkers. Lower it or widen its reach for short foes. (pillar 1)
+- The co-op lobby shows the Prism Knight's look (QA, 0.13.0). With the Prism Knight chosen in solo, the hero behind the lobby wears the pale violet coat while the room plays the Warp Knight. Show the base job in the lobby until co-op carries the job.
+- The Prism Knight's pauldron (QA, 0.13.0). At about 4 by 5 px in the arm part it barely reads on the pale coat at game scale; give it more contrast or size without it reading as a chest plate. (pillar 5)
+- Prism shards on Oakheart (QA, 0.13.0). Its front guard blocks many Prism Thrusts, so shards build slowly on the boss the job is tied to (2 of 5 three-blow strings lodged one in the run sampled). Look at this together with the Oakheart guard change allowed from 0.13.1. (pillar 1)
+- Verify what 0.13.0 could not (QA, 0.13.0): a full co-op room with a real guest over PeerJS, and the run result's "New job" entry after a real Oakheart kill.
 
 ## Later
 
 - Each sword hero: its own walk and run from a gait model, and Kael his own rest stance in the menus. (pillar 5)
+- A third job per hero, opened by the hero's Trial (defeat the Bog Hulk), once most heroes have a second job. (Grand Chase, pillar 4)
 
 ## Heroes and shared code
 
@@ -51,11 +60,13 @@ Patch 0.11.0 set the roster at nine sword heroes (the charter's Roster section),
 - Engine note: `src/game/enemies/awareness.ts` (`foeSees`) and the foe `blind` status are the shared hooks for anything that blinds foes.
 - Engine note: `takes` on an `EnemyKind` is the shared hook for a foe's damage taken windows (the Gloam Shepherd's kneel), and `steady` keeps a foe from being stunned while it must stay up.
 - Engine note: the `foeKills` goal kind with `TrackedStats.foes` is the shared way to make an achievement for one foe.
+- Engine note: `JobDef` on `CharacterDef.jobs` and `heroJob()` are the shared hooks for a hero's jobs; a job's look and moves live in the hero's own folder.
 
 ## Shipped
 
 Patches 0.4.0 to 0.10.0 each added a hero that carried no sword; patch 0.11.0 removed those heroes and the shared hooks only they used.
 
+- 0.13.0 Prism Knight: class advancement with jobs on the hero screen, opened through goals and kept per hero, and Kael's second job, the Prism Knight, opened by defeating Oakheart with him, with its own look, prism shards, Prism Thrust, Shatterfall and prism beams on Crystal Nova. Day work: the side-scrolling solo adventure with seven boss rooms, patrols, spike traps, mentors and an E to S grade.
 - 0.12.2 HUD above the stage: a compact HUD layout above the stage in small desktop windows (640 by 600, 700 by 700, 800 by 600, 1280 by 1024), and the HUD's place no longer changes during a run.
 - 0.12.1 Balance and fixes: Oakheart HP 320 to 240 and root line 20 to 16; the Lantern Procession drawn as three separate rings over the same band; and the HUD moves above the stage only when its measured height fits there, which fixes the cut-off HUD in small desktop windows (the known issue since 0.9.0).
 - 0.12.0 Gloam Shepherd: a two-phase boss of Nightfall at wave 15 with a kneel between its phases, replacing the Rift Brute, and the Shepherd's End achievement with kills tracked per foe type.

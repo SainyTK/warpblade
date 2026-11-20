@@ -1,5 +1,6 @@
 import type { Goal } from "./achievement";
 import type { CharmId } from "./build";
+import type { HeroJob } from "./job";
 
 /** what an unlock opens: a charm to be dealt, or one more charm slot */
 export type UnlockTarget = { type: "charm"; id: CharmId } | { type: "slot"; number: SlotNumber };
@@ -18,5 +19,8 @@ export interface Unlock {
   secret?: boolean;
 }
 
-/** something found in a run: an unlock, or the recipe of a skill evolution made for the first time */
-export type Discovery = { type: "unlock"; unlock: Unlock } | { type: "recipe"; skill: string };
+/** something found in a run: an unlock, the recipe of a skill evolution made for the first time, or a hero's job */
+export type Discovery =
+  | { type: "unlock"; unlock: Unlock }
+  | { type: "recipe"; skill: string }
+  | ({ type: "job" } & HeroJob);

@@ -1,14 +1,17 @@
 import { CHARM_SLOTS } from "../constants/growth";
+import { CHARACTERS } from "../heroes/roster";
 import { isPlaytestSession } from "../services/playtestStart";
 import type { CharmId } from "../types/build";
 import type { Discovery } from "../types/unlock";
+import { isMet } from "../utils/achievements";
+import { allJobs } from "../utils/jobs";
 import { charmOpen, newlyFound, slotCount } from "../utils/unlocks";
 import { goalSource, onFeat } from "./achievements";
 import { savedRecipes, savedUnlocks, saveUnlocks } from "./meta";
 
 /**
- * The one owner of discovery across runs: which charms and charm slots are found, which skill evolutions are known,
- * and what was found since the last run began. Goals are checked after every feat the achievements count, so only solo
+ * The one owner of discovery across runs: which charms, charm slots and hero jobs are found, which skill evolutions are
+ * known, and what was found since the last run began. Goals are checked after every feat the achievements count, so only solo
  * runs find things. A playtest session has everything and knows every recipe, and finds nothing.
  */
 let found = new Set(savedUnlocks());
@@ -43,23 +46,24 @@ export function startRunUnlocks(): void {
   sinceRunStart = [];
 }
 
-/** listen for each charm, slot or recipe as it is found */
+/** listen for each charm, slot, recipe or job as it is found */
 export function onDiscovery(listener: (d: Discovery) => void): () => void {
   listeners.add(listener);
   return () => listeners.delete(listener);
 }
 
-/** find every unlock whose goal is met */
+/** find every unlock and every hero job whose goal is met */
 function check(): void {
   if (isPlaytestSession()) return;
-  const met = newlyFound(found, goalSource());
-  if (!met.length) return;
-  found = new Set([...found, ...met.map((u) => u.id)]);
-  saveUnlocks(
-    met.map((u) => u.id),
-    [],
-  );
+  const src = goalSource();
+  const met = newlyFound(found, src);
+  const jobs = allJobs(CHARACTERS).filter((j) => !found.has(j.job.unlock.id) && isMet(j.job.unlock, src));
+  if (!met.length && !jobs.length) return;
+  const ids = [...met.map((u) => u.id), ...jobs.map((j) => j.job.unlock.id)];
+  found = new Set([...found, ...ids]);
+  saveUnlocks(ids, []);
   for (const unlock of met) discover({ type: "unlock", unlock });
+  for (const j of jobs) discover({ type: "job", ...j });
 }
 onFeat(check);
 // a save from before unlocks can already meet goals, such as a wave long since reached

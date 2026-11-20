@@ -7,8 +7,10 @@ import { boxAhead, boxBehind } from "../../../game/world";
 import type { Enemy } from "../../../types/enemy";
 import type { WarpStyle } from "../../../types/moveset";
 import { startChain } from "./blink";
+import { counterStriking } from "./counter";
 import { drawThrownSword } from "./effects/thrownSword";
 import { THRUST_SLASH } from "./moves/slashes";
+import { lodgeShard } from "./prism/shards";
 import { spellwarpArrived } from "./spellwarp";
 
 const SKILL = "k_warpcraft";
@@ -26,11 +28,12 @@ function strike(power: number, foe: Enemy | null, sureCrit: boolean): void {
 }
 
 /** Kael's warp: the crystal sword thrown, a crystal to hang from with Up held, Warpcraft's numbers, Rift Walker's chain
- *  and Spellwarp's element on arrival */
+ *  and Spellwarp's element on arrival, and as the Prism Knight a shard in the foe he arrives at */
 export const KAEL_WARP: WarpStyle = {
   drawThrown: drawThrownSword,
   strike,
   arrived: (foe) => {
+    if (!counterStriking()) lodgeShard(foe);
     startChain(foe);
     spellwarpArrived(foe);
   },

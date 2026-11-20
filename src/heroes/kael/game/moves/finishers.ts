@@ -14,6 +14,7 @@ import type { MoveDef } from "../../../../types/move";
 import { lerp } from "../../../../utils/math";
 import { PHASE, SKILL_CANCEL, SKILL_FEEL, SKYBREAKER } from "../../constants/skillBlows";
 import { STRING_CANCEL } from "../../constants/string";
+import { shatterShards } from "../prism/shards";
 import { kael } from "../state";
 import { UPPERCUT } from "./slashes";
 
@@ -113,8 +114,10 @@ export const FINISHER_MOVES = {
       },
     ],
     strides: [{ from: frame(3), to: frame(7), speed: SKYBREAKER.step }],
-    // Kael rises with the foe off the blow itself, so the crouch before it stays on the floor
+    // Kael rises with the foe off the blow itself, so the crouch before it stays on the floor; as the Prism Knight's
+    // finisher it first shatters every shard nearby
     afterHit: () => {
+      shatterShards();
       lift(SKYBREAKER.rise, false);
       game.fx.push(createSlash(hero.x, hero.y, hero.face, { ...UPPERCUT, R: 20, W: 5, t0: 0.02 }));
     },

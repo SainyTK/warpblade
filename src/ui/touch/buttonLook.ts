@@ -1,6 +1,7 @@
 import { STAMINA } from "../../constants/combat";
 import { ULT_LEVELS } from "../../constants/ultimate";
 import { selectedSlot } from "../../game/hero/abilityBar";
+import { heroJob } from "../../game/hero/job";
 import { canPayDash } from "../../game/hero/stamina";
 import { canAffordUlt, ultRecharge } from "../../game/hero/ultimate";
 import { warpReady, warpRecharge } from "../../game/hero/warp";
@@ -25,7 +26,7 @@ function chargeProgress(): number {
  * recharge (J held), the dodge its stamina, the guard whether stamina is left, I the ability it would cast, U the charge.
  */
 export function buttonLook(spec: TouchButtonSpec, pressed: boolean): ButtonLook {
-  const text = touchText(character)[spec.action];
+  const text = touchText(character, heroJob())[spec.action];
   const accent = text.accent ? hex(text.accent) : selectionTint(touchSelection());
   const look: ButtonLook = { pressed, ready: true, cooldown: 0, accent, affordable: 0, charge: -1 };
   switch (spec.action) {

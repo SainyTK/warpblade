@@ -104,6 +104,13 @@ Nine heroes hold the night back together.
 
   Kael and Cerise are open from the start, and the other seven are bought with coins.
   The hero behind the menu changes as you look through the cards, and the choice is saved in this browser.
+  A hero with a second job has a JOB row under the stat bars: a locked job shows a padlock and what opens it, and the chosen job sets the portrait, the title and the hero behind the menu.
+- **Class advancement.** A hero can grow a second job with its own look, its own end to the string and a new edge on their ultimate.
+  Kael is the first: defeat Oakheart with him in a solo run and the Prism Knight opens on the hero screen.
+  The Prism Knight wears a pale violet coat with a crystal pauldron and fights in prism light.
+  His third blow becomes Prism Thrust, a long lunge that lodges a prism shard in the foe, and his finisher becomes Shatterfall, an overhead cut into the floor that shatters every shard nearby for extra damage.
+  His warp, his parry's riposte and his Crystal Nova, which now also fires six prism beams, lodge shards too.
+  The Warp Knight, Kael's own job, plays as before, and co-op rooms play every hero's own job.
 - **One continuous solo stage.** Head right through five eras, past patrols, platforms and climbable walls.
   Defeat Oakheart, the Bog Hulk, the Gloam Shepherd, the Rift Warden, the Abyss Maw, the Abyss Sovereign and The Unblinking to reach the exit.
   Each boss closes the room until it falls.
@@ -174,6 +181,7 @@ The page holds still under your fingers: double taps, pinches and long presses n
 
 The game opens on a start menu with Start, Co-op, Shop, Achievements, Codex, Controls and Options.
 Start opens the hero screen: pick a hero with `A` `D` or the arrows and begin with `J` or `Enter`.
+For a hero with jobs, `S` or Down moves to the job row, where `A` `D` or the arrows change the job and `J` or `Enter` begins; on touch, tap a job's chip, then the panel.
 In the Shop, pick an item once to see "Buy?" and again to buy it; a locked hero on the hero screen asks the same way before it is unlocked.
 When a run ends, the start menu opens on its result, with Continue and Shop.
 Pausing adds Resume, Restart run and Quit run, and freezes the game until you resume.
