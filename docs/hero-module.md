@@ -53,6 +53,7 @@ src/heroes/kael/
     skills/               index.ts (KAEL_SKILL_DEFS) and one file per skill
   types/                  moves.ts (move and clip names), spell.ts, state.ts
   look/                   index.ts (KAEL_SKIN), colors.ts, head.ts, blade.ts, hair.ts, trails.ts, coat.ts, strap.ts, arm.ts
+    prism/                the Prism Knight's look: index.ts (PRISM_SKIN), colors.ts, pauldron.ts
   game/                   kit.ts, pose.ts, readActions.ts, chooseMove.ts, warpStyle.ts, guardStyle.ts, spell.ts, state.ts, ...
     moves/                index.ts (KAEL_MOVES), chain.ts, air.ts, finishers.ts, skills.ts, slashes.ts
     spells/               bolt.ts, burst.ts, fire.ts, ice.ts, lightning.ts, ...
@@ -114,6 +115,7 @@ export const KAEL: CharacterDef = {
 | `controls` | the hero's lines on the Controls screen and the touch controller, over the shared ones |
 | `achievements` | the hero's own achievements; the trial for clearing wave 10 is added for every hero by `src/constants/achievements.ts` |
 | `sourceIcons` | the icon id of the hero's attacks, abilities and ultimate on the end of run screen |
+| `baseJob`, `jobs` | optional: the name of the hero's own job and the jobs they can grow into (next to last section, Jobs) |
 
 ## The look: `HeroSkin`
 
@@ -352,11 +354,43 @@ Kael's are in `constants/controls.ts`.
 The touch layout and the keys are the same for every hero.
 A hero needs no CSS: the HUD meter, the ability tabs and the hero screen take their colours from the module.
 
+## Jobs
+
+A hero can grow into further jobs (class advancement).
+A job is the same hero on the same buttons, with the same stats, skills, warp, guard, dodge, abilities and ultimate, and with their own look, Controls lines and the moves the hero's kit plays while it is chosen.
+Kael's Prism Knight is the worked example (`docs/heroes/kael.md`).
+
+The data goes on the hero's `CharacterDef`:
+
+- `baseJob`: the name of the hero's own job on the job row, such as "Warp Knight".
+- `jobs`: a list of `JobDef` (`src/types/job.ts`): `id`, `name`, `title` and `blurb` for the hero screen, `accent` for its chip, a whole `skin` in place of the hero's, `controls` over the hero's own lines, `unlock` (`id`, a `Goal`, and the hint the locked chip shows) and `icon`, an icon id from the hero's `HeroModule.icons` for the banner and the run result.
+
+A hero without `jobs` has one job and shows no job row.
+Job unlock ids start with `job-<hero id>-` and are found like the charm unlocks (`docs/unlocks.md`), so only solo runs open them and a playtest session has every job open.
+
+Where a job lives in the hero's folder:
+
+| Part | Kael's Prism Knight |
+| --- | --- |
+| the `JobDef` list | `constants/jobs.ts` |
+| the look | `look/prism/`: colours over the hero's and any parts or extras of its own |
+| numbers and Controls lines | `constants/prism.ts`, `constants/prismControls.ts` |
+| clips | `constants/clips/prism.ts`, added to the hero's `clips.actions` |
+| moves | `game/moves/prism.ts`, added to the hero's `moves` |
+| what the job changes in play | `game/prism/` and the ultimate's wrapper `game/ultimate/castUltimate.ts` |
+| icon | `ui/icons/job.ts` |
+
+In play the kit asks which job is fighting with `heroJob()` (`src/game/hero/job.ts`): null for the hero's own job, otherwise the job's id.
+It is set when a solo run starts, from the job chosen on the hero screen (or `?job=<id>` on the dev server), and it is per seat and always null in a co-op room.
+The kit reads it wherever the job differs: `chooseMove` picks the job's blows, effects check it before they act.
+The shared code reads only the data: the look on the stage and the portrait come from `jobSkin`, and the Controls screen and the touch controller from `jobControls` (`src/utils/jobs.ts`).
+The choice per hero is owned by `src/store/jobs.ts` and kept under `warpblade-jobs`.
+
 ## Run and playtest one hero
 
 The dev server: `npx vite --port <port> --strictPort`, then open `http://localhost:<port>/`.
 A hero that costs coins is locked in a normal browser; run `localStorage.setItem("warpblade-playtest", "1")` in the console and reload to unlock every hero (dev builds only; achievements are not tracked while it is set).
-`?wave=N&level=L&build=<skill id>:8,evolve:<skill id>,might:5` starts a run late with skills held.
+`?wave=N&level=L&build=<skill id>:8,evolve:<skill id>,might:5` starts a run late with skills held, and `&job=<job id>` starts it in one of the hero's jobs.
 
 The playtest harness (`agent-studio/playtest/README.md`) reads the roster at run time and needs no entry per hero:
 
