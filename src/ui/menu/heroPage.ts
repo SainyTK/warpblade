@@ -80,7 +80,10 @@ export function heroPage(c: CharacterDef, changed: (job: string | null) => void)
         changed(job);
       })
     : null;
-  if (row) root.append(row.root);
+  if (row) {
+    root.dataset.jobs = "";
+    root.append(row.root);
+  }
   root.append(traits(c), blurb);
   const jobs = row?.entry ?? null;
   const price = heroPrice(c.id);
