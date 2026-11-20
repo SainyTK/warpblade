@@ -17,9 +17,9 @@ const MIST = Array.from({ length: 7 }, (_, i) => ({
 /** the era's own light (sun, moon, fireflies, aurora) and the flickering braziers */
 export function drawAmbientLight(): void {
   const t = game.t;
-  const { def, k } = scene();
+  const { def, k, arena } = scene();
   place();
-  if (def.braziers > 0)
+  if (arena && def.braziers > 0)
     for (const b of BRAZIERS)
       glow(
         b.x,
@@ -28,15 +28,15 @@ export function drawAmbientLight(): void {
         WC.brazierGlow,
         (0.32 + Math.sin(t * 9 + b.x) * 0.04) * def.braziers,
       );
-  def.ambient?.(t, k);
+  def.ambient?.(t, k, arena);
 }
 
 /** the era's weather in front of the fight: rain, petals, motes, ash */
 export function drawWeather(): void {
-  const { def, k } = scene();
+  const { def, k, arena } = scene();
   if (!def.weather) return;
   place();
-  def.weather(game.t, k);
+  def.weather(game.t, k, arena);
 }
 
 /** the era's lightning, as a whole-screen flash from 0 to 1 */

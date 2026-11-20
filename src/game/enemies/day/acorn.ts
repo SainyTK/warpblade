@@ -1,9 +1,9 @@
-import { W } from "../../../constants/stage";
 import { place } from "../../../engine/frame";
 import { sfx } from "../../../services/audio";
 import type { Effect } from "../../../types/effect";
 import { PK } from "../../../types/particle";
 import { TAU } from "../../../utils/math";
+import { stageLeft, stageRight } from "../../adventure";
 import { eachStanding } from "../../coopHooks";
 import { hurtHero } from "../../hurtHero";
 import { shotWarded } from "../../shotWards";
@@ -65,7 +65,7 @@ export function createAcorn(x: number, y: number, tx: number, ty: number, flight
         burst();
         return false;
       }
-      return o.x > -10 && o.x < W + 10;
+      return o.x > stageLeft() - 10 && o.x < stageRight() + 10;
     },
     drawBack() {
       place();

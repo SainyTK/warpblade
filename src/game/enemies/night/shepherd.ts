@@ -1,10 +1,11 @@
-import { GROUND, W } from "../../../constants/stage";
+import { GROUND } from "../../../constants/stage";
 import { sfx } from "../../../services/audio";
 import type { Enemy } from "../../../types/enemy";
 import { PK } from "../../../types/particle";
 import { WHITE } from "../../../utils/color";
-import { approach, clamp } from "../../../utils/math";
+import { approach } from "../../../utils/math";
 import { waveScale } from "../../../utils/progression";
+import { clampStageX, stageThreat } from "../../adventure";
 import { eachStanding } from "../../coopHooks";
 import { createFloorRing } from "../../effects/floorRing";
 import { createRift } from "../../effects/rift";
@@ -76,7 +77,7 @@ function layMarks(e: Enemy): void {
   const { radius, shrink } = enraged(e) ? PROCESSION : TOLL;
   const offsets = enraged(e) ? [0, -PROCESSION.gap, PROCESSION.gap] : [0];
   offsets.forEach((offset, i) => {
-    const x = clamp(hero.x + side * offset, 10, W - 10);
+    const x = clampStageX(hero.x + side * offset, 10);
     const damage = SHEPHERD_HITS.toll * e.power;
     game.fx.push(createMoonMark({ owner: e, x, radius, shrink, windup, delay: i * TOLL.beat, damage, look, strike }));
   });
@@ -93,7 +94,7 @@ function moonfall(e: Enemy): void {
   const look = moonLook(enraged(e));
   const strike = { struck: new Set<number>() };
   MOONFALL.offsets.forEach((offset, i) => {
-    const x = clamp(hero.x + offset, 8, W - 8);
+    const x = clampStageX(hero.x + offset, 8);
     game.fx.push(createMoonShard({ x, delay: i * MOONFALL.beat, damage: SHEPHERD_HITS.shard * e.power, look, strike }));
   });
   const [lx, ly] = lanternPoint(e);
@@ -105,11 +106,11 @@ function callFlock(e: Enemy): void {
   const husks = game.enemies.filter((m) => m.type === "husk" && m.hp > 0).length;
   const rift = kindOf("husk").rift;
   for (let i = 0; i < Math.min(FLOCK.most, FLOCK.most - husks); i++) {
-    const x = clamp(hero.x + (i ? FLOCK.side : -FLOCK.side), FLOCK.edge, W - FLOCK.edge);
+    const x = clampStageX(hero.x + (i ? FLOCK.side : -FLOCK.side), FLOCK.edge);
     const y = rift.y();
     game.fx.push(
       createRift(x, rift.riftY(y), rift.height, i * 0.2, () =>
-        game.enemies.push(makeEnemy("husk", x, y, game.wave, FLOCK.xpShare)),
+        game.enemies.push(makeEnemy("husk", x, y, stageThreat(game.wave), FLOCK.xpShare)),
       ),
     );
   }
@@ -231,7 +232,7 @@ export function updateShepherd(e: Enemy, dt: number, ts: number): void {
     Object.assign(e, { state: "walk", st: 0, n: 0, ax: 0, cd });
   }
   if (e.state !== "walk") e.vx -= e.vx * 4 * dt;
-  e.x = clamp(e.x + e.vx * dt, 14, W - 14);
+  e.x = clampStageX(e.x + e.vx * dt, 14);
   e.y = GROUND;
   if (rng.chance(0.12 * ts))
     particles.spawn(PK.EMBER, e.x + rng.range(-8, 8), e.y - rng.range(6, 40), 0, -10, rng.range(0.5, 1), {

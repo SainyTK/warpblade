@@ -91,7 +91,7 @@ const DRIP_GRAVITY = 420;
 let clock = 0;
 
 /** spawn splashes at a rate that grows with the storm */
-export function updateRain(dt: number, k: number): void {
+export function updateRain(dt: number, k: number, arena: boolean): void {
   clock += dt;
   for (const s of SPLASHES) s.t += dt;
   let n = dt * lerp(26, 90, k);
@@ -100,10 +100,10 @@ export function updateRain(dt: number, k: number): void {
     n--;
     const s = SPLASHES[next];
     next = (next + 1) % SPLASHES.length;
-    const slab = r.chance(0.28) ? PLATFORMS[r.int(0, PLATFORMS.length - 1)] : null;
+    const slab = arena && r.chance(0.28) ? PLATFORMS[r.int(0, PLATFORMS.length - 1)] : null;
     s.x = slab ? r.range(slab.x0 + 1, slab.x1 - 1) : r.range(0, W);
     s.y = slab ? slab.y : GROUND + r.range(0, 3);
-    s.ring = !slab && inPuddle(s.x);
+    s.ring = arena && !slab && inPuddle(s.x);
     s.t = 0;
   }
 }
@@ -119,8 +119,9 @@ function ripple(x: number, y: number, rx: number, ry: number, a: number): void {
 }
 
 /** splashes as a little crown of two flying beads, rings where they land in a puddle, and the drips */
-export function drawSplashes(): void {
+export function drawSplashes(arena: boolean): void {
   for (const s of SPLASHES) {
+    if (!arena && (s.ring || s.y < GROUND)) continue;
     if (s.ring) {
       if (s.t >= RING_LIFE) continue;
       const u = s.t / RING_LIFE;
@@ -138,6 +139,7 @@ export function drawSplashes(): void {
     fleck(s.x - 2 - u * 5, s.y - 0.5 - h * 0.5, RC.drop, a);
     fleck(s.x + 2.5 + u * 5, s.y - 0.5 - h * 0.5, RC.drop, a);
   }
+  if (!arena) return;
   for (const d of DRIPS) {
     const cyc = (clock + d.phase) % d.period;
     const hang = d.period * 0.55;

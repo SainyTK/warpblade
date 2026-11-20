@@ -1,6 +1,6 @@
 import { TURN_DELAY } from "../../constants/combat";
-import { W } from "../../constants/stage";
 import type { Enemy } from "../../types/enemy";
+import { stageLeft, stageRight } from "../adventure";
 import { game, hero } from "../state";
 import { foeSees } from "./awareness";
 import { kindOf } from "./kinds";
@@ -27,7 +27,7 @@ function wander(e: Enemy): void {
       Math.abs(o.x - e.x) < MEET &&
       Math.abs(o.y - e.y) < 8,
   );
-  const atWall = (e.face < 0 && e.x <= EDGE) || (e.face > 0 && e.x >= W - EDGE);
+  const atWall = (e.face < 0 && e.x <= stageLeft() + EDGE) || (e.face > 0 && e.x >= stageRight() - EDGE);
   if (blocked || atWall) e.face = -e.face;
 }
 

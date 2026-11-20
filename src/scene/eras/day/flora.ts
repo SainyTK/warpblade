@@ -206,10 +206,14 @@ export function paintFlora(paint: PlatePaint, r: Rng, P: ScenePalette, spans: re
   const stalks: Stalk[] = [];
   clearSharedPlants(paint);
   ivy(paint, r, spans, G);
-  hangingVines(paint, r, G);
+  if (paint.arena) hangingVines(paint, r, G);
   const floor: Lip = { x0: 0, x1: FW - 1, iy: GROUND * RES };
   for (let n = 0; n < PEBBLES; n++) pebble(paint, r, r.int(4, FW - 10), floor.iy - 1, P);
   meadow(paint, r, floor, G, stalks);
-  for (const p of PLATFORMS) meadow(paint, r, { x0: (p.x0 + 1) * RES, x1: p.x1 * RES - 1, iy: p.y * RES }, G, stalks);
+  if (paint.arena) {
+    for (const p of PLATFORMS) {
+      meadow(paint, r, { x0: (p.x0 + 1) * RES, x1: p.x1 * RES - 1, iy: p.y * RES }, G, stalks);
+    }
+  }
   return stalks;
 }

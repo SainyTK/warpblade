@@ -57,13 +57,15 @@ Nine heroes hold the night back together.
   Each dodge spends 50, half of Kael's bar, so two dodges in a row leave him out of breath until it refills, and every blow the guard blocks costs some more.
   It comes back after a short pause, slower while the hero attacks, and a perfect dodge or a parry gives some back.
 - **Hero skills.** Every hero has 20 skills of their own, each with eight levels and an evolution: attacks, movement, spells, damage over time, summons and one ultimate skill.
-  Every level up gives a point, and when a wave's last foe falls the fight pauses on a pick of three cards for each point, four with luck.
+  In solo play, level-ups bank skill points without pausing the game.
+  Talk to a mentor to spend each point on one of three cards, or four with luck.
   A card offers a new skill, the next level of a held skill, or a charm, each with its own pixel icon.
   A build holds up to 8 skills and 3 charms at first, and every run starts with 2 rerolls, 2 skips and 1 banish to steer the cards.
   If too few cards are left, Second Wind fills the rest and restores all HP and MP.
 - **Charms.** Charms multiply one stat for every source at once: Might for damage, Haste for cooldowns, Vigor for HP, Insight for experience, and more that are found over many runs.
-- **Chests and evolutions.** Elites with a gold ring, mini bosses and the wave 20 Warden drop chests; touching one opens it.
-  A chest raises held skills and charms, sometimes three or five at once, and from wave 8 it evolves a skill at level 8 whose partner skill is held at level 4 or more.
+- **Chests and evolutions.** Elites with a gold ring and bosses before The Unblinking drop chests in solo play.
+  Touch a chest to open it.
+  A chest raises held skills and charms, sometimes three or five at once, and from the Bog Hulk onward it can evolve a skill at level 8 whose partner skill is held at level 4 or more.
   Kael's Fire Flask evolves with Crystal Familiar into Sunflask.
   A card says "Evolves with ???" until the player has made that evolution once.
 - **Flow.** Every hit of the hero's own adds a stack of Flow, up to 25, each one +4% damage on every source, so a full bar doubles it; a perfect dodge adds five, and getting hurt halves it.
@@ -72,9 +74,7 @@ Nine heroes hold the night back together.
   After a strike the ultimate recharges for 20 seconds, less with some ultimate skills, and its row on the HUD dims with a bar filling under it.
   Each hero has one ultimate skill, named after their ultimate, that upgrades it level by level and evolves it into a bigger form, such as Supernova for Crystal Nova.
 - **Experience to pick up.** Slain foes drop lime orbs of experience that bounce on the floor. Walk over them to collect them; any left behind fly to the hero after 4 seconds, or in a room to the nearest standing hero.
-  Attack and ability power grow 2.5% with every level, compounding, and a full run reaches about level 84.
-- **Streaming waves.** Each wave has a quota of foes, from 3 at wave 1 to 62 at wave 30, that stream in through rifts until the quota is spent.
-  From wave 3 every third wave brings an elite halfway through: a tougher foe of the era with a gold ring that drops a chest.
+  Attack and ability power grow 2.5% with every level, compounding.
 - **Damage by source.** The result screen lists every source of damage with its level, total damage and damage per second: the hero's attacks, abilities and ultimate, and each skill that strikes on its own.
 - **The Codex.** The Codex on the start menu lists every hero's skills and evolutions and every charm, with the ones still locked shown as silhouettes with a short hint, and a few as ???.
 - **Abilities on `I`.** Each hero turns through their abilities with `O`: their base ones and every spell skill they hold, such as Kael's Fire Flask that sets the floor burning, his Ice Spikes that freeze and his Lightning that arcs to a second foe.
@@ -82,10 +82,11 @@ Nine heroes hold the night back together.
   When the selected one is recharging or cannot be paid for, `I` casts the next ready one and selects it; with none ready, the press is refused with a dull tick and a jolt of the tab.
   The HUD tabs dim while an ability recharges, and a bar along each tab fills back up.
 - **Coins and a shop.** Foes drop pixel coins that the hero picks up by touch, and any left behind fly to them after a moment.
-  When a run ends, cleared or lost, its coins go to the bank and a result screen shows the wave reached and the coins earned.
+  When a run ends, cleared or lost, its coins go to the bank.
+  The solo results show a grade from E to S, stage progress, bosses defeated, enemies defeated, time and damage dealt.
   The Shop on the start menu sells stats in levels (HP, attack, ability power, MP, crit, move speed, stamina), more rerolls, skips and banishes for the cards, and four skills: Lodestone, Aftershock and Head Start, bought once, and Last Light, bought in three levels, each saving the hero from one more fatal blow per run.
   Everything bought applies to every run and every hero, on top of the level-up picks, and is saved in this browser.
-- **Achievements and hero unlocks.** Achievements track goals across runs: waves reached, a clear of wave 10 with each hero, foes slain, long combos, perfect dodges, evolutions, coins banked, the Gloam Shepherd, the Rift Warden and The Unblinking.
+- **Achievements and hero unlocks.** Achievements track goals across runs: bosses reached, a Bog Hulk victory with each hero, foes slain, long combos, perfect dodges, evolutions, coins banked, the Gloam Shepherd, the Rift Warden and The Unblinking.
   Most pay coins, a few stay hidden as ??? until an earlier one is earned, and a small banner slides down when one is earned without stopping play.
   The Achievements page on the start menu shows what each one asks, with a progress bar for those that count up, and the result screen names those a run earned.
   Kael and Cerise are free; every other hero is unlocked with coins on the hero screen, each one costing more than the last (see [docs/achievements.md](docs/achievements.md)).
@@ -103,20 +104,20 @@ Nine heroes hold the night back together.
 
   Kael and Cerise are open from the start, and the other seven are bought with coins.
   The hero behind the menu changes as you look through the cards, and the choice is saved in this browser.
-- **A 30-wave stage in five eras.** The sky and the foes change as the waves go on, and the scene dissolves into the next era between waves.
-  Waves 1 to 5 are a sunlit day with Thornbacks, Glimmer Moths and the Oakheart.
-  Waves 6 to 10 bring clouds and rain with Mire Toads, Storm Kites and the Bog Hulk.
-  Waves 11 to 15 are night with horned husks, floating wisps and the Gloam Shepherd.
-  The Shepherd reaps low across the floor, tolls its lantern down on rings it marks under you and calls husks out of the floor.
-  Past half its HP it falls to one knee and takes heavier blows, then rises with a violet lantern: it reaps twice, lays a row of rings and calls down shards of moonlight.
-  Waves 16 to 20 turn the night magical, with Rune Golems and Prism Sprites taking over from the night's foes.
-  Waves 21 to 30 are the darkest, with Void Stalkers, Abyss Eyes and the Abyss Maw.
-  Waves 5, 10, 15 and 25 bring the era's mini boss, the Rift Warden waits at wave 20 and the Abyss Sovereign at wave 30.
-  When the Sovereign falls, The Unblinking comes through: a great eye that every hit reaches and none seems to matter to.
-  Its lances, tears and gaze hit far harder than anything before it.
+- **One continuous solo stage.** Head right through five eras, past patrols, platforms and climbable walls.
+  Defeat Oakheart, the Bog Hulk, the Gloam Shepherd, the Rift Warden, the Abyss Maw, the Abyss Sovereign and The Unblinking to reach the exit.
+  Each boss closes the room until it falls.
+  You can pass regular enemies, but defeating them earns experience and helps your grade.
+  Floor patrols and flying enemies guard different routes through stairs, towers and upper ledges.
+  Spike traps glow before they rise, so you can jump over them or take another route.
+  Each approach has a mentor whose location can change between runs.
+- **Platform movement.** Press Jump during a dash to carry its speed into the air.
+  Press Down on a ledge to drop through it.
+  Hold toward a wall to slide or hold Jump into it to climb.
+  Jump at the wall to rise along it, or steer away as you jump to kick off.
 - **Co-op for up to four.** Co-op on the start menu hosts a room in your browser, and friends join with its five-letter code or an invite link.
   Each player picks a hero, the same hero twice is fine, and a P1 to P4 tag in the player's colour floats over each hero.
-  Waves bring more and tougher foes for each extra player.
+  Co-op keeps the 30-wave arena, with more and tougher foes for each extra player.
   Experience is shared, but every player chooses their own skill cards when a wave is cleared and banks their own coins.
   A fallen player is down until the wave is cleared, then rises with half HP; the run ends when everyone is down at once.
   The host's browser runs the game and streams it to the others over WebRTC; [docs/multiplayer.md](docs/multiplayer.md) has the design and its limits.
@@ -145,7 +146,9 @@ The table names Kael's moves, and the Controls screen lists each hero's own.
 | Key | Action |
 | --- | --- |
 | `A` `D` or arrows | Walk. Tap a side twice and hold to run |
-| `W` or `Up` | Jump, the same height however long you hold it. Press again in the air to jump again. Hold `S` and jump to drop through a ledge |
+| `W` or `Up` | Jump or double jump. Jump upward along a wall or steer away to kick off |
+| `S` or `Down` | Drop through a ledge in solo play. In co-op, hold and jump to drop |
+| `E` | Talk to a mentor in solo play |
 | `J` | Sword combo of four blows, the same every time. Press again just after a blow lands for a Keen hit. Just after a parry, blink behind the attacker and strike |
 | `J` held | Warp strike: throw the sword at the nearest foe ahead and warp to it (10 MP) |
 | `K` | Guard: hold to block blows from the front. Press just as a blow lands to parry with a riposte cut |
@@ -179,9 +182,10 @@ The Controls screen lists every key from the game's key map, and on touch screen
 Options holds sound, volume, screen shake, damage numbers, vibration on devices that can vibrate, and fullscreen, saved in this browser.
 
 Each level up gives a skill point.
-When a wave's last foe falls with points waiting, the game pauses and offers three cards for each point.
+In solo play, press `E` or tap Talk near a mentor to open skill choices.
+Leave to keep any points you have not spent.
+In co-op it pauses for pending skill points after a wave.
 Choose with `A` `D` or the arrows and learn with `J` or `Enter`, press `1` to `3`, or click or tap a card.
-Points left when the last wave of the stage falls are not spent, since the stage ends there.
 
 ## Patch notes and feedback
 
@@ -209,7 +213,7 @@ To pose Kael, draw effects and hand them to Claude Code agents, run the local [s
 This game is also my sandbox for learning how to make pixel art and effects that look good.
 There are no image files in the game: the hero, the enemies, the stage and every effect are drawn pixel by pixel at runtime.
 
-The stage is 320 by 180 art pixels, scaled up by a whole number so every pixel stays square.
+The viewport is 320 by 180 art pixels, scaled up by a whole number so every pixel stays square.
 The frame itself is drawn at twice that, 640 by 360, so the heroes and the effects can carry detail half an art pixel fine.
 The stage, the foes and the text keep whole art pixels.
 Around the stage, the sky, ridge and stone floor are continued on the same pixel grid and fade out at the edges, so there is no frame.

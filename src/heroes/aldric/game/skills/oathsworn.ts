@@ -1,5 +1,6 @@
 import { HERO_GUARD } from "../../../../constants/combat";
-import { GROUND, W } from "../../../../constants/stage";
+import { GROUND } from "../../../../constants/stage";
+import { clampStageX } from "../../../../game/adventure";
 import { dealDamage } from "../../../../game/damage";
 import { createImpact } from "../../../../game/effects/impact";
 import { createSlash } from "../../../../game/effects/slash";
@@ -10,7 +11,6 @@ import { game, hero, progress, rng } from "../../../../game/state";
 import type { Effect } from "../../../../types/effect";
 import type { Enemy } from "../../../../types/enemy";
 import type { SkillBehavior, SkillMemory } from "../../../../types/skillBehavior";
-import { clamp } from "../../../../utils/math";
 import { DAWN_RAMP, DAWN_SPARKS } from "../../constants/light";
 import { OATHSWORN } from "../../constants/skillNumbers";
 import { raiseBarrier } from "../barrier";
@@ -26,7 +26,7 @@ function createKnight(foe: Enemy, side: number): Effect {
   const cuts = v.cuts ?? 1;
   const payoff = createPayoff();
   const [fx] = enemyCenter(foe);
-  const x = clamp(fx + side * 14, 8, W - 8);
+  const x = clampStageX(fx + side * 14, 8);
   const y = walks(foe) ? foe.y : Math.min(GROUND, foe.y + 18);
   const face = -side;
   let t = 0;

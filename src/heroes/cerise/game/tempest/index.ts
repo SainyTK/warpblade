@@ -1,5 +1,5 @@
-import { W } from "../../../../constants/stage";
 import { ULT_LEVELS } from "../../../../constants/ultimate";
+import { clampStageX } from "../../../../game/adventure";
 import { createSlash } from "../../../../game/effects/slash";
 import { setState, settle } from "../../../../game/hero/actions";
 import { travelEnded } from "../../../../game/hero/travelEnd";
@@ -7,7 +7,6 @@ import { ultimateValues } from "../../../../game/hero/ultimate";
 import { game, hero, lights, progress } from "../../../../game/state";
 import { boxAhead, newSwing, shake } from "../../../../game/world";
 import { sfx } from "../../../../services/audio";
-import { clamp } from "../../../../utils/math";
 import { TEMPEST } from "../../constants/tempest";
 import { ROSE_RAMP } from "../../look/rose";
 import { createRoseLine } from "../effects/roseLine";
@@ -58,7 +57,7 @@ function lunge(): void {
   const reach = TEMPEST.reach[cerise.tempestLevel - 1] * (v.reach ?? 1);
   const damage = levelDamage() * TEMPEST.lunge * (v.power ?? 1) * (v.lunge ?? 1);
   const y = hero.y - 17;
-  const end = clamp(hero.x + hero.face * reach, -8, W + 8);
+  const end = clampStageX(hero.x + hero.face * reach, -8);
   game.fx.push(createRoseLine(hero.x, y, hero.face, damage, "ultimate", undefined, end));
   if (v.behind) game.fx.push(createRoseLine(hero.x, y, -hero.face, damage * v.behind, "ultimate", undefined));
   hero.vx = hero.face * TEMPEST.speed;

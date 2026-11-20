@@ -1,9 +1,10 @@
-import { GROUND, W } from "../../../constants/stage";
-import { fleck, glow, hairline, place, polygon } from "../../../engine/frame";
+import { GROUND } from "../../../constants/stage";
+import { fleck, glow, hairline, place, polygon, toScreenX, toScreenY } from "../../../engine/frame";
 import type { Color } from "../../../types/color";
 import type { Effect } from "../../../types/effect";
 import { PK } from "../../../types/particle";
 import { mix, scale, WHITE } from "../../../utils/color";
+import { stageLeft, stageRight } from "../../adventure";
 import { eachStanding } from "../../coopHooks";
 import { hurtHero } from "../../hurtHero";
 import { shotWarded } from "../../shotWards";
@@ -53,7 +54,7 @@ export function createPrismShard(x: number, y: number, vx: number, vy: number, d
         burst(5);
         return false;
       }
-      if (o.y >= GROUND - 1 || o.y < -8 || o.x < -6 || o.x > W + 6 || o.t > 3) {
+      if (o.y >= GROUND - 1 || o.y < -8 || o.x < stageLeft() - 6 || o.x > stageRight() + 6 || o.t > 3) {
         if (o.y >= GROUND - 1) burst(4);
         return false;
       }
@@ -73,7 +74,7 @@ export function createPrismShard(x: number, y: number, vx: number, vy: number, d
       hairline(...at(-SLIVER.streak * 0.6, -0.5), ...at(SLIVER.waist, -1), shade, (u) => u * 0.6);
       // the sliver: one face catching the light, the other in its own color, a white spine and point
       polygon([[tx, ty], at(SLIVER.waist, SLIVER.half), [bx, by], at(SLIVER.waist, -SLIVER.half)], (sx, sy = 0) =>
-        (sx - o.x) * -uy + (sy - o.y) * ux < 0 === ux > 0 ? lit : hue,
+        (sx - toScreenX(o.x)) * -uy + (sy - toScreenY(o.y)) * ux < 0 === ux > 0 ? lit : hue,
       );
       hairline(...at(SLIVER.waist - 1, 0), tx, ty, WHITE);
       fleck(tx, ty, WHITE);

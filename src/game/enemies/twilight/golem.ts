@@ -1,9 +1,10 @@
-import { GROUND, W } from "../../../constants/stage";
+import { GROUND } from "../../../constants/stage";
 import { sfx } from "../../../services/audio";
 import type { Enemy } from "../../../types/enemy";
 import { PK } from "../../../types/particle";
-import { approach, clamp } from "../../../utils/math";
+import { approach } from "../../../utils/math";
 import { waveScale } from "../../../utils/progression";
+import { clampStageX } from "../../adventure";
 import { eachStanding } from "../../coopHooks";
 import { createFloorRing } from "../../effects/floorRing";
 import { createImpact } from "../../effects/impact";
@@ -74,7 +75,7 @@ export function updateGolem(e: Enemy, dt: number, ts: number): void {
     }
   } else if (e.st >= 0.75) Object.assign(e, { state: "walk", st: 0, n: 0, cd: rng.range(1.3, 2.3) * ws.cooldown });
   if (e.state !== "walk") e.vx -= e.vx * 5 * dt;
-  e.x = clamp(e.x + e.vx * dt, 10, W - 10);
+  e.x = clampStageX(e.x + e.vx * dt, 10);
   e.y = GROUND;
   if (rng.chance(0.05 * ts))
     particles.spawn(PK.EMBER, e.x + rng.range(-7, 7), e.y - rng.range(6, 18), 0, -8, rng.range(0.4, 0.8), {

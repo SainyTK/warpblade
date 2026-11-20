@@ -1,12 +1,12 @@
 import { REPO_URL } from "../../constants/feedback";
 import { GAME_VERSION, SITE_PAGES } from "../../constants/sitePages";
 import { STAGE_WAVES } from "../../constants/waves";
+import { isAdventure, stageProgress } from "../../game/adventure";
 import { character, game, previewCharacter, progress } from "../../game/state";
 import { inRoom, roomView } from "../../store/coop";
 import { heroRefund } from "../../store/meta";
-import { bestRun } from "../../store/records";
 import type { MenuContext, MenuScreen, MenuView } from "../../types/menu";
-import { clearText } from "../../utils/records";
+import { stageProgressText } from "../../utils/runReport";
 import { coinAmount } from "../coinIcon";
 import { leaveRoom } from "./coopActions";
 import { leaveMenu, quitRun, restartRun } from "./menuActions";
@@ -39,12 +39,9 @@ function refundNote(): HTMLElement {
   return note;
 }
 
-/** the best run, then the patch notes, feedback, source and version as one line that wraps between items */
 function titleFooter(): HTMLElement {
   const footer = document.createElement("p");
   footer.className = "menu-foot";
-  const best = bestRun();
-  if (best) footer.append(`Best: ${clearText(best)}. `);
   const links = document.createElement("span");
   links.className = "menu-foot-links";
   const source = footLink(REPO_URL, "Source on GitHub");
@@ -65,7 +62,7 @@ export function mainScreen(context: MenuContext): MenuView {
     previewCharacter(character);
     // while in a room, its lobby takes the place of a solo start
     if (inRoom()) list.append(screenItem(`Room ${roomView().code}`, "coop"));
-    else list.append(screenItem("Start", "hero"), screenItem("Co-op", "coop"));
+    else list.append(screenItem("Start stage", "hero"), screenItem("Co-op", "coop"));
     list.append(
       screenItem("Shop", "shop"),
       screenItem("Achievements", "achievements"),
@@ -78,7 +75,7 @@ export function mainScreen(context: MenuContext): MenuView {
     content.append(list);
     if (heroRefund() > 0) content.append(refundNote());
     content.append(titleFooter());
-    return { title: "Warpblade", subtitle: "Throw the sword. Become the sword.", content };
+    return { title: "Warpblade", subtitle: "Defeat the bosses and reach the exit.", content };
   }
   if (inRoom()) {
     // a room plays on under this menu
@@ -103,7 +100,9 @@ export function mainScreen(context: MenuContext): MenuView {
   );
   return {
     title: "Paused",
-    subtitle: `Wave ${game.wave} of ${STAGE_WAVES}, level ${progress.level}`,
+    subtitle: isAdventure()
+      ? stageProgressText(stageProgress().distance)
+      : `Wave ${game.wave} of ${STAGE_WAVES}, level ${progress.level}`,
     content: list,
   };
 }

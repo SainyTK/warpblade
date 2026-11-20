@@ -2,7 +2,7 @@ import { ACTION_CLIPS } from "../../constants/clips";
 import { MP_REGEN } from "../../constants/combat";
 import { sfx } from "../../services/audio";
 import { rechargeStep } from "../build/recharge";
-import { isHeld, take, use } from "../input";
+import { horizontalDirection, take, use } from "../input";
 import { endRun } from "../runEnd";
 import { hero, progress } from "../state";
 import { cycleAbility, pressAbility } from "./abilityBar";
@@ -17,6 +17,7 @@ import { moveHero } from "./physics";
 import { regenStamina } from "./stamina";
 import { tickTakeoff } from "./takeoff";
 import { readDoubleTap } from "./taps";
+import { readPlatformDrop } from "./traversal";
 import { runCharge, runUltimate, startCharge } from "./ultimate";
 import { doWarp, pressWarp, releaseWeapon, tickWarp } from "./warp";
 
@@ -68,6 +69,7 @@ function runState(dt: number): void {
  */
 function readActions(dir: number, tap: number): void {
   use("dash", () => tryDash(dir));
+  readPlatformDrop();
   kit().readActions(dir, tap);
   use("warp", pressWarp);
   use("guard", pressGuard);
@@ -86,7 +88,7 @@ function clockRate(): number {
 
 export function updateHero(dt: number): void {
   const h = hero;
-  const dir = (isHeld("right") ? 1 : 0) - (isHeld("left") ? 1 : 0);
+  const dir = horizontalDirection();
   const tap = readDoubleTap(dir);
   h.st += dt * clockRate();
   h.inv = Math.max(0, h.inv - dt);

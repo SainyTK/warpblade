@@ -114,6 +114,7 @@ export function paintGrowths(paint: PlatePaint, P: ScenePalette, k: number): Cry
     paintCluster(paint, g.x * RES, (y + 1) * RES, g.size * size, g.x, style);
     lights.push({ x: g.x, y: y - 2, radius: LIGHT_RADIUS.roof, color: tonesOf(g)[2] });
   }
+  if (!paint.arena) return lights;
   for (const g of HANGING) {
     const size = sizeAt(k, g.from);
     if (size <= 0) continue;

@@ -1,6 +1,7 @@
 import { KEEN_RAMP } from "../../../constants/combo";
-import { GROUND, W } from "../../../constants/stage";
+import { GROUND } from "../../../constants/stage";
 import { glow, place, sparkle } from "../../../engine/frame";
+import { clampStageX } from "../../../game/adventure";
 import { createWarpLine } from "../../../game/effects/warpLine";
 import { enemyBox, walks } from "../../../game/enemies/enemy";
 import { cutForSharedAction } from "../../../game/hero/sharedCut";
@@ -9,7 +10,6 @@ import { objectMemory, rememberPerSeat } from "../../../game/seatMemory";
 import { game, hero } from "../../../game/state";
 import type { Enemy } from "../../../types/enemy";
 import { WHITE } from "../../../utils/color";
-import { clamp } from "../../../utils/math";
 import { COUNTER, COUNTER_MARK } from "../constants/guard";
 
 /** the counter a parry opens: the foe it strikes and the seconds left to press J. Holds a foe, so only the host keeps it */
@@ -23,7 +23,7 @@ const openFoe = (): Enemy | null => (counter.left > 0 && counter.foe && counter.
 function behind(e: Enemy): { x: number; y: number; side: number } {
   const box = enemyBox(e);
   const side = Math.sign(e.x - hero.x) || hero.face;
-  const x = clamp(side > 0 ? box[2] + COUNTER_MARK.gap : box[0] - COUNTER_MARK.gap, 8, W - 8);
+  const x = clampStageX(side > 0 ? box[2] + COUNTER_MARK.gap : box[0] - COUNTER_MARK.gap, 8);
   const y = walks(e) ? e.y : Math.min(GROUND, e.y + 18);
   return { x, y, side };
 }

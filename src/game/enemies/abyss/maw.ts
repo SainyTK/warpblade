@@ -1,9 +1,10 @@
-import { GROUND, W } from "../../../constants/stage";
+import { GROUND } from "../../../constants/stage";
 import { sfx } from "../../../services/audio";
 import type { Enemy } from "../../../types/enemy";
 import { PK } from "../../../types/particle";
-import { approach, clamp, TAU } from "../../../utils/math";
+import { approach, TAU } from "../../../utils/math";
 import { waveScale } from "../../../utils/progression";
+import { clampStageX } from "../../adventure";
 import { eachStanding } from "../../coopHooks";
 import { createFloorRing } from "../../effects/floorRing";
 import { createImpact } from "../../effects/impact";
@@ -42,7 +43,7 @@ function spit(e: Enemy, enraged: boolean): void {
   const mx = e.x + e.face * 22;
   const my = e.y - 18;
   for (let i = 0; i < n; i++) {
-    const land = clamp(hero.x + (i - (n - 1) / 2) * 26, 8, W - 8);
+    const land = clampStageX(hero.x + (i - (n - 1) / 2) * 26, 8);
     const vy = -150 + i * 10;
     // the flight time down to the floor, so the glob comes down on its landing spot
     const time = (-vy + Math.sqrt(vy * vy + 2 * ORB_GRAVITY * (GROUND - 2 - my))) / ORB_GRAVITY;
@@ -125,7 +126,7 @@ export function updateMaw(e: Enemy, dt: number, ts: number): void {
       cd: rng.range(1, 1.8) * (enraged ? 0.65 : 1) * ws.cooldown,
     });
   if (e.state !== "walk" && e.state !== "lunge") e.vx -= e.vx * 4 * dt;
-  e.x = clamp(e.x + e.vx * dt, 16, W - 16);
+  e.x = clampStageX(e.x + e.vx * dt, 16);
   e.y = GROUND;
   if (rng.chance(0.2 * ts))
     particles.spawn(PK.EMBER, e.x + rng.range(-14, 14), e.y - rng.range(8, 34), 0, -12, rng.range(0.5, 1), {

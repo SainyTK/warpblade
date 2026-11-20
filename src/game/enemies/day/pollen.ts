@@ -1,8 +1,9 @@
-import { GROUND, W } from "../../../constants/stage";
+import { GROUND } from "../../../constants/stage";
 import { place } from "../../../engine/frame";
 import type { Effect } from "../../../types/effect";
 import { PK } from "../../../types/particle";
 import { TAU } from "../../../utils/math";
+import { stageLeft, stageRight } from "../../adventure";
 import { eachStanding } from "../../coopHooks";
 import { hurtHero } from "../../hurtHero";
 import { shotWarded } from "../../shotWards";
@@ -52,7 +53,7 @@ export function createPollen(x: number, y: number, vx: number, damage: number): 
         }
         return false;
       }
-      if (o.y >= GROUND - 3 || o.x < -8 || o.x > W + 8 || o.t > 6) o.landed = 0;
+      if (o.y >= GROUND - 3 || o.x < stageLeft() - 8 || o.x > stageRight() + 8 || o.t > 6) o.landed = 0;
       return true;
     },
     draw() {

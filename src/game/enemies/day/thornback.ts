@@ -1,9 +1,10 @@
-import { GROUND, W } from "../../../constants/stage";
+import { GROUND } from "../../../constants/stage";
 import { sfx } from "../../../services/audio";
 import type { Enemy } from "../../../types/enemy";
 import { PK } from "../../../types/particle";
-import { approach, clamp } from "../../../utils/math";
+import { approach } from "../../../utils/math";
 import { waveScale } from "../../../utils/progression";
+import { clampStageX, stageLeft, stageRight } from "../../adventure";
 import { eachStanding } from "../../coopHooks";
 import { hurtHero } from "../../hurtHero";
 import { game, hero, particles, rng } from "../../state";
@@ -48,7 +49,7 @@ export function updateThornback(e: Enemy, dt: number, ts: number): void {
         hurtHero(THORN_HITS.charge * e.power, e.x - e.face * 10);
       }
     });
-    const wall = (e.face < 0 && e.x <= 12) || (e.face > 0 && e.x >= W - 12);
+    const wall = (e.face < 0 && e.x <= stageLeft() + 12) || (e.face > 0 && e.x >= stageRight() - 12);
     if (wall || Math.abs(e.x - e.ax) >= CHARGE.reach) {
       Object.assign(e, { state: "recover", st: 0, vx: wall ? -e.face * 40 : e.vx * 0.5 });
       if (wall) {
@@ -72,7 +73,7 @@ export function updateThornback(e: Enemy, dt: number, ts: number): void {
   } else if (e.st >= CHARGE.recover)
     Object.assign(e, { state: "walk", st: 0, cd: rng.range(1, 1.8) * waveScale(game.wave).cooldown });
   if (e.state !== "walk" && e.state !== "lunge") e.vx -= e.vx * 4 * dt;
-  e.x = clamp(e.x + e.vx * dt, 10, W - 10);
+  e.x = clampStageX(e.x + e.vx * dt, 10);
   e.y = GROUND;
   if (rng.chance(0.06 * ts))
     particles.spawn(PK.EMBER, e.x + rng.range(-6, 6), e.y - rng.range(6, 14), 0, -10, rng.range(0.4, 0.8), {

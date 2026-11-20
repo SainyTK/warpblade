@@ -1,11 +1,12 @@
 import { ENEMY_HITS } from "../../constants/enemies";
 import { PAL, SPARKS } from "../../constants/palette";
-import { GROUND, W } from "../../constants/stage";
+import { GROUND } from "../../constants/stage";
 import { sfx } from "../../services/audio";
 import type { Enemy } from "../../types/enemy";
 import { PK } from "../../types/particle";
-import { approach, clamp } from "../../utils/math";
+import { approach } from "../../utils/math";
 import { waveScale } from "../../utils/progression";
+import { clampStageX } from "../adventure";
 import { eachStanding } from "../coopHooks";
 import { createSlash } from "../effects/slash";
 import { hurtHero } from "../hurtHero";
@@ -51,7 +52,7 @@ export function updateHusk(e: Enemy, dt: number, ts: number): void {
   } else if (e.st >= 0.7)
     Object.assign(e, { state: "walk", st: 0, cd: rng.range(0.8, 1.6) * waveScale(game.wave).cooldown });
   if (e.state !== "walk") e.vx -= e.vx * 4 * dt;
-  e.x = clamp(e.x + e.vx * dt, 10, W - 10);
+  e.x = clampStageX(e.x + e.vx * dt, 10);
   e.y = GROUND;
   if (rng.chance(0.08 * ts))
     particles.spawn(PK.EMBER, e.x + rng.range(-6, 6), e.y - rng.range(6, 22), 0, -10, rng.range(0.4, 0.8), {

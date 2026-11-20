@@ -1,6 +1,6 @@
 import { GLYPH, GLYPHS } from "../constants/font";
 import { RES } from "../constants/stage";
-import { putImage, shakeOffset } from "../engine/frame";
+import { projectX, projectY, putImage } from "../engine/frame";
 import type { Color } from "../types/color";
 
 /** the glyph rows from this one down take the darker ink, so a figure reads as lit from above */
@@ -50,9 +50,8 @@ export function drawFineText(
   cell: number,
   a = 1,
 ): void {
-  const [shx, shy] = shakeOffset();
-  const left = Math.round((x + shx) * RES - (fineTextWidth(text, cell) * RES) / 2);
-  const top = Math.round((y + shy) * RES);
+  const left = Math.round(projectX(x) * RES - (fineTextWidth(text, cell) * RES) / 2);
+  const top = Math.round(projectY(y) * RES);
   stamp(text, left, top, cell, 1, () => edge, a);
   stamp(text, left, top, cell, 0, (row) => (row >= SHADE_FROM ? shade : ink), a);
 }

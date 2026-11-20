@@ -1,4 +1,4 @@
-import { W } from "../../../../../constants/stage";
+import { clampStageX } from "../../../../../game/adventure";
 import { dealDamage } from "../../../../../game/damage";
 import { createImpact } from "../../../../../game/effects/impact";
 import { createSlash } from "../../../../../game/effects/slash";
@@ -8,7 +8,6 @@ import { game, hero } from "../../../../../game/state";
 import { sfx } from "../../../../../services/audio";
 import type { Effect } from "../../../../../types/effect";
 import type { Enemy } from "../../../../../types/enemy";
-import { clamp } from "../../../../../utils/math";
 import { NOVA_PHANTOM } from "../../../constants/nova";
 import { showPhantom } from "../../phantom";
 
@@ -28,7 +27,7 @@ interface Phantom {
 function behind(foe: Enemy, at: number): Phantom {
   const box = enemyBox(foe);
   const side = -foe.face || 1;
-  const x = clamp(side > 0 ? box[2] + 8 : box[0] - 8, 8, W - 8);
+  const x = clampStageX(side > 0 ? box[2] + 8 : box[0] - 8, 8);
   const y = walks(foe) ? foe.y : enemyCenter(foe)[1] + 18;
   return { foe, at, x, y, face: -side, shown: false, cuts: 0 };
 }

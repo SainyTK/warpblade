@@ -20,6 +20,7 @@ export type InputAction =
   /** a one-shot press that counts as a double tap toward the held side, from the touch stick */
   | "run"
   | "mute"
+  | "interact"
   | "pause"
   | "fullscreen";
 

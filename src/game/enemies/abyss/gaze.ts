@@ -1,4 +1,4 @@
-import { GROUND, W } from "../../../constants/stage";
+import { GROUND } from "../../../constants/stage";
 import { fleck, glow, glowLine, hairline, line, place, sparkle } from "../../../engine/frame";
 import { sfx } from "../../../services/audio";
 import type { Effect } from "../../../types/effect";
@@ -7,6 +7,7 @@ import { PK } from "../../../types/particle";
 import { WHITE } from "../../../utils/color";
 import { grain } from "../../../utils/grain";
 import { clamp, TAU } from "../../../utils/math";
+import { stageBounds } from "../../adventure";
 import { eachStanding, heroSlot } from "../../coopHooks";
 import { hurtHero } from "../../hurtHero";
 import { game, hero, particles, rng } from "../../state";
@@ -55,7 +56,9 @@ function shutEye(e: Enemy): void {
 /** one gaze of the eye `e`, from its warning to the wall's far edge; it ends the eye's `charge` and `volley` states itself */
 export function createGaze(e: Enemy, damage: number): Effect {
   const dir = e.side;
-  const from = dir > 0 ? -GAZE.half : W + GAZE.half;
+  const { left, right } = stageBounds();
+  const edge = dir > 0 ? left : right;
+  const from = edge - dir * GAZE.half;
   let t = 0;
   let x = from;
   /** heroes the wall has reached, by seat, and whether it found any of them */
@@ -70,7 +73,7 @@ export function createGaze(e: Enemy, damage: number): Effect {
         Object.assign(e, { state: "volley", st: 0 });
         sfx.lunge();
       }
-      x = from + dir * ((t - GAZE.warn) / GAZE.cross) * (W + GAZE.half * 2);
+      x = from + dir * ((t - GAZE.warn) / GAZE.cross) * (right - left + GAZE.half * 2);
       eachStanding(() => {
         if (reached.has(heroSlot()) || (x - hero.x) * dir < 0) return;
         reached.add(heroSlot());
@@ -94,13 +97,13 @@ export function createGaze(e: Enemy, damage: number): Effect {
     drawBack() {
       place();
       const [px, py] = unblinkingPupil(e, game.t);
-      if (t < GAZE.warn) drawSightFan(px, py, dir > 0 ? 0 : W, 0.1 + 0.25 * (t / GAZE.warn));
+      if (t < GAZE.warn) drawSightFan(px, py, edge, 0.1 + 0.25 * (t / GAZE.warn));
       else drawSightFan(px, py, x, 0.35 * fadeOut(t));
     },
     draw() {
       place();
       const [px, py] = unblinkingPupil(e, game.t);
-      if (t < GAZE.warn) drawGathering(px, py, dir, t);
+      if (t < GAZE.warn) drawGathering(px, py, edge, dir, t);
       else drawWall(px, py, x, dir, fadeOut(t));
     },
   };
@@ -128,9 +131,8 @@ function drawSightFan(px: number, py: number, x: number, a: number): void {
 }
 
 /** sight gathers at the edge the wall will come from: a throbbing curtain that thickens and brightens, motes rising through it */
-function drawGathering(px: number, py: number, dir: number, t: number): void {
+function drawGathering(px: number, py: number, ex: number, dir: number, t: number): void {
   const k = t / GAZE.warn;
-  const ex = dir > 0 ? 0 : W;
   const beats = THROB.from * t + ((THROB.to - THROB.from) * t * t) / (2 * GAZE.warn);
   const throb = 0.5 + 0.5 * Math.cos(beats * TAU);
   const band = 1 + CURTAIN.band * k;

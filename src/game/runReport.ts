@@ -1,6 +1,8 @@
 import type { SourceId } from "../types/build";
-import type { RunReport, SourceResult } from "../types/run";
+import type { RunOutcome, RunReport, SourceResult, StageResult } from "../types/run";
 import { isHeroSource } from "../utils/sources";
+import { stageGrade } from "../utils/stageGrade";
+import { stageProgress } from "./adventure";
 import { heldSources } from "./damageLedger";
 import { character, game, progress } from "./state";
 
@@ -20,5 +22,16 @@ export function runReport(): RunReport {
     kills: game.kills,
     ultimate: progress.ultimate,
     sources: heldSources().map((s) => ({ ...s, ...skillState(s.id) })),
+  };
+}
+
+export function stageResult(report: RunReport, outcome: RunOutcome): StageResult {
+  const stage = stageProgress();
+  return {
+    bossesDefeated: stage.bossesDefeated,
+    bossesTotal: stage.bossesTotal,
+    distance: stage.distance,
+    damage: report.sources.reduce((total, source) => total + source.damage, 0),
+    grade: stageGrade({ ...stage, cleared: outcome === "clear" || outcome === "beyond", seconds: report.seconds }),
   };
 }

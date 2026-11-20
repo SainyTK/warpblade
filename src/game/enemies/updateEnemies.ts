@@ -1,9 +1,10 @@
 import type { Enemy } from "../../types/enemy";
+import { containPatrol, waitsOnPerch } from "../adventure";
 import { coop } from "../coopHooks";
 import { game } from "../state";
 import { fieldPace } from "../timeFields";
 import { updateAirborne } from "./airborne";
-import { enemyCenter } from "./enemy";
+import { enemyCenter, walks } from "./enemy";
 import { kindOf } from "./kinds";
 import { separateFoes } from "./separate";
 import { updateStagger } from "./stagger";
@@ -23,27 +24,33 @@ function updateStunned(e: Enemy, dt: number): boolean {
   return true;
 }
 
-export function updateEnemies(dt: number): void {
+function updateEnemy(e: Enemy, dt: number): void {
   const room = coop();
+  room?.nearest(e.x, e.y);
+  const status = updateStatus(e, dt);
+  if (e.hp <= 0 || waitsOnPerch(e)) return;
+  room?.nearest(e.x, e.y);
+  const [cx, cy] = enemyCenter(e);
+  const ts = status * fieldPace(cx, cy, e.rank);
+  const sdt = dt * ts;
+  const staggered = updateStagger(e, sdt);
+  if (updateAirborne(e, sdt) || updateStunned(e, sdt) || staggered) return;
+  e.st += sdt;
+  e.cd -= sdt;
+  const heldAt = e.x;
+  kindOf(e.type).update(e, sdt, ts);
+  if (e.pinned > 0) {
+    e.x = heldAt;
+    e.vx = 0;
+  }
+}
+
+export function updateEnemies(dt: number): void {
   for (const e of game.enemies) {
-    room?.nearest(e.x, e.y);
-    const status = updateStatus(e, dt);
-    if (e.hp <= 0) continue;
-    // a burn tick acts for the hero who lit the foe; the foe itself goes for the nearest
-    room?.nearest(e.x, e.y);
-    const [cx, cy] = enemyCenter(e);
-    const ts = status * fieldPace(cx, cy, e.rank);
-    const sdt = dt * ts;
-    const staggered = updateStagger(e, sdt);
-    if (updateAirborne(e, sdt) || updateStunned(e, sdt) || staggered) continue;
-    e.st += sdt;
-    e.cd -= sdt;
-    const heldAt = e.x;
-    kindOf(e.type).update(e, sdt, ts);
-    // a pinned foe stays where it is held, whatever its own step asked for: no walk, charge or lunge carries it off
-    if (e.pinned > 0) {
-      e.x = heldAt;
-      e.vx = 0;
+    const previousX = e.x;
+    updateEnemy(e, dt);
+    if (e.hp > 0 && walks(e)) {
+      containPatrol(e, previousX);
     }
   }
   game.enemies = game.enemies.filter((e) => e.hp > 0);

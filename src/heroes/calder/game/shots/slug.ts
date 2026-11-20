@@ -1,5 +1,6 @@
-import { RES, W } from "../../../../constants/stage";
+import { RES } from "../../../../constants/stage";
 import { fleck, glow, hairline, place } from "../../../../engine/frame";
+import { stageLeft, stageRight } from "../../../../game/adventure";
 import { dealDamage } from "../../../../game/damage";
 import { createImpact } from "../../../../game/effects/impact";
 import { enemyBox } from "../../../../game/enemies/enemy";
@@ -57,7 +58,7 @@ export function createSlug(x: number, y: number, face: number, spec: SlugSpec): 
         game.fx.push(createImpact(o.x, y, face, spec.wide, PHOSPHOR_SPARKS));
         emitSkillEvent({ type: "calderBlast", x: o.x, y, foes: [e], kind: "shot" });
       }
-      return o.t < SLUG.life && o.x > -TAIL && o.x < W + TAIL;
+      return o.t < SLUG.life && o.x > stageLeft() - TAIL && o.x < stageRight() + TAIL;
     },
     draw() {
       place();

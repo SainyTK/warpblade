@@ -7,7 +7,7 @@ function heroTrial(c: CharacterDef): Achievement {
   return {
     id: `trial-${c.id}`,
     name: `${c.name}'s Trial`,
-    text: `Clear wave 10 with ${c.name}.`,
+    text: `Defeat the Bog Hulk with ${c.name}.`,
     group: "Heroes",
     goal: { kind: "heroWave", hero: c.id, need: 10 },
     reward: 40,
@@ -22,7 +22,7 @@ export const ACHIEVEMENTS: readonly Achievement[] = [
   {
     id: "wave-5",
     name: "Into the Rift",
-    text: "Reach wave 5.",
+    text: "Reach Oakheart.",
     group: "Waves",
     goal: { kind: "best", stat: "wave", need: 5 },
     reward: 15,
@@ -30,7 +30,7 @@ export const ACHIEVEMENTS: readonly Achievement[] = [
   {
     id: "wave-10",
     name: "Night Watch",
-    text: "Reach wave 10.",
+    text: "Reach the Bog Hulk.",
     group: "Waves",
     goal: { kind: "best", stat: "wave", need: 10 },
     reward: 30,
@@ -38,7 +38,7 @@ export const ACHIEVEMENTS: readonly Achievement[] = [
   {
     id: "wave-15",
     name: "Deep Rift",
-    text: "Reach wave 15.",
+    text: "Reach the Gloam Shepherd.",
     group: "Waves",
     goal: { kind: "best", stat: "wave", need: 15 },
     reward: 60,
@@ -46,7 +46,7 @@ export const ACHIEVEMENTS: readonly Achievement[] = [
   {
     id: "wave-20",
     name: "Last Era",
-    text: "Reach wave 20.",
+    text: "Reach the Rift Warden.",
     group: "Waves",
     goal: { kind: "best", stat: "wave", need: 20 },
     reward: 100,
@@ -54,7 +54,7 @@ export const ACHIEVEMENTS: readonly Achievement[] = [
   {
     id: "stage-clear",
     name: "Warpblade",
-    text: "Clear all 30 waves of the stage.",
+    text: "Clear the stage.",
     group: "Waves",
     goal: { kind: "count", stat: "clears", need: 1 },
     reward: 300,

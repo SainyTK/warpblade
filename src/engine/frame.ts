@@ -17,23 +17,28 @@ export const BAYER = [0, 8, 2, 10, 12, 4, 14, 6, 3, 11, 1, 9, 15, 7, 13, 5].map(
 export const bayerAt = (x: number, y: number): number => BAYER[((y & 3) << 2) | (x & 3)];
 
 /** Drawing happens in local coordinates placed at (tx, ty), mirrored when fx is -1; shx, shy is the screen shake. */
-const placement = { tx: 0, ty: 0, fx: 1, shx: 0, shy: 0 };
+const placement = { tx: 0, ty: 0, fx: 1, shx: 0, shy: 0, cameraX: 0 };
 export function setShake(x: number, y: number): void {
   placement.shx = x;
   placement.shy = y;
 }
 export const shakeOffset = (): readonly [number, number] => [placement.shx, placement.shy];
+export function setCameraX(x: number): void {
+  placement.cameraX = Math.round(x * RES) / RES;
+}
+export const projectX = (x: number): number => x + placement.shx - placement.cameraX;
+export const projectY = (y: number): number => y + placement.shy;
 export function place(x = 0, y = 0, flip = false): void {
-  placement.tx = x + placement.shx;
-  placement.ty = y + placement.shy;
+  placement.tx = x;
+  placement.ty = y;
   placement.fx = flip ? -1 : 1;
 }
 /** local to screen, in art pixels */
-export const toScreenX = (x: number): number => placement.tx + x * placement.fx;
-export const toScreenY = (y: number): number => placement.ty + y;
+export const toScreenX = (x: number): number => projectX(placement.tx) + x * placement.fx;
+export const toScreenY = (y: number): number => projectY(placement.ty) + y;
 /** screen image pixel back to local art pixels, at the image pixel's center */
-const localX = (ix: number): number => ((ix + 0.5) / RES - placement.tx) * placement.fx;
-const localY = (iy: number): number => (iy + 0.5) / RES - placement.ty;
+const localX = (ix: number): number => ((ix + 0.5) / RES - toScreenX(0)) * placement.fx;
+const localY = (iy: number): number => (iy + 0.5) / RES - toScreenY(0);
 
 const paint = (c: Paint, u: number, v?: number): Color => (typeof c === "function" ? c(u, v) : c);
 const alpha = (a: Alpha, u: number): number => (typeof a === "function" ? a(u) : a);
@@ -176,8 +181,8 @@ export function haze(x: number, y: number, rx: number, ry: number, c: Color, a: 
  */
 export function castShadow(x: number, y: number, rx: number, ry: number, k: number): void {
   if (k <= 0.01 || rx <= 0 || ry <= 0) return;
-  const cx = (x + placement.shx) * RES;
-  const top = Math.round((y + placement.shy) * RES);
+  const cx = projectX(x) * RES;
+  const top = Math.round(projectY(y) * RES);
   const irx = rx * RES;
   const iry = ry * RES;
   const x0 = Math.max(0, Math.floor(cx - irx));
@@ -214,7 +219,7 @@ export function polygon(points: readonly (readonly [number, number])[], c: Paint
     }
     xs.sort((m, n) => m - n);
     for (let k = 0; k + 1 < xs.length; k += 2)
-      for (let x = Math.ceil(xs[k] - 0.5); x <= Math.floor(xs[k + 1] - 0.5); x++)
+      for (let x = Math.max(0, Math.ceil(xs[k] - 0.5)); x <= Math.min(FW - 1, Math.floor(xs[k + 1] - 0.5)); x++)
         putImage(x, y, paint(c, x / RES, y / RES), a);
   }
 }

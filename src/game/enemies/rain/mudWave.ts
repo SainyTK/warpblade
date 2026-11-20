@@ -1,7 +1,8 @@
-import { GROUND, W } from "../../../constants/stage";
+import { GROUND } from "../../../constants/stage";
 import { fleck, glow, hairline, line, place, px } from "../../../engine/frame";
 import type { Effect } from "../../../types/effect";
 import { PK } from "../../../types/particle";
+import { stageLeft, stageRight } from "../../adventure";
 import { eachStanding, heroSlot } from "../../coopHooks";
 import { hurtHero } from "../../hurtHero";
 import { particles, rng } from "../../state";
@@ -33,7 +34,7 @@ export function createMudWave(x: number, dir: number, damage: number, delay = 0)
         particles.spawn(PK.SPARK, o.x + dir * 2, GROUND - h, dir * rng.range(10, 50), -rng.range(30, 90), 0.3, {
           sparks: MUD_SPARKS,
         });
-      return o.x > -12 && o.x < W + 12;
+      return o.x > stageLeft() - 12 && o.x < stageRight() + 12;
     },
     draw() {
       if (o.t < 0) return;

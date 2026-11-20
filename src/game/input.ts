@@ -88,6 +88,7 @@ export function agePresses(kept: readonly InputAction[]): void {
   }
 }
 export const isHeld = (a: InputAction): boolean => held.has(a);
+export const horizontalDirection = (): number => Number(isHeld("right")) - Number(isHeld("left"));
 /** simulation steps since a waiting press (a kept press stops one step short of the buffer), or -1 when none waits */
 export const pressAge = (a: InputAction): number => pressed.get(a) ?? -1;
 /** how far a tap-or-hold key is toward its long press, 0 to 1; 0 when it is up or already decided */

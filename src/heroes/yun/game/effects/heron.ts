@@ -1,5 +1,5 @@
-import { W } from "../../../../constants/stage";
 import { fleck, glow, hairline, place } from "../../../../engine/frame";
+import { stageLeft, stageRight } from "../../../../game/adventure";
 import { dealDamage } from "../../../../game/damage";
 import { createImpact } from "../../../../game/effects/impact";
 import { enemyBox, enemyCenter } from "../../../../game/enemies/enemy";
@@ -56,7 +56,7 @@ export function createHeron(o: HeronFlight): Effect {
         p.flown = 0;
         struck = new Set();
       }
-      return p.flown < o.reach && p.x > -20 && p.x < W + 20;
+      return p.flown < o.reach && p.x > stageLeft() - 20 && p.x < stageRight() + 20;
     },
     draw() {
       place();

@@ -1,4 +1,4 @@
-import { W } from "../../../../constants/stage";
+import { stageLeft, stageRight } from "../../../../game/adventure";
 import { enemyBox } from "../../../../game/enemies/enemy";
 import { game, particles, rng } from "../../../../game/state";
 import { boxHit, surfaceBelow } from "../../../../game/world";
@@ -36,6 +36,6 @@ export function flyFlask(o: Flask, dt: number): void {
 export function flaskBurst(o: Flask, dt: number, half: number): number | null {
   const hit = game.enemies.some((e) => boxHit(enemyBox(e), [o.x - half, o.y - half, o.x + half, o.y + half]));
   const floor = surfaceBelow(o.x, o.y - o.vy * dt - 1);
-  if (hit || (o.vy > 0 && o.y >= floor) || o.x < 4 || o.x > W - 4) return Math.min(o.y, floor);
+  if (hit || (o.vy > 0 && o.y >= floor) || o.x < stageLeft() + 4 || o.x > stageRight() - 4) return Math.min(o.y, floor);
   return null;
 }

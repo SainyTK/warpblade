@@ -118,6 +118,8 @@ export function freshHero(stats: Progress["stats"]): Hero {
     inv: 0,
     jumps: 0,
     drop: 0,
+    droppedPlatform: null,
+    travelMomentum: 0,
     hasSword: true,
     hitDone: false,
     liftTop: GROUND,

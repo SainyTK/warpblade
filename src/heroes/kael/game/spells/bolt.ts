@@ -1,10 +1,9 @@
-import { W } from "../../../../constants/stage";
+import { clampStageX } from "../../../../game/adventure";
 import { enemyCenter } from "../../../../game/enemies/enemy";
 import { skillEvolved, skillValues, withCharms } from "../../../../game/skills/query";
 import { game, progress } from "../../../../game/state";
 import { surfaceBelow } from "../../../../game/world";
 import type { Enemy } from "../../../../types/enemy";
-import { clamp } from "../../../../utils/math";
 import { BOLT_CHAIN } from "../../constants/spells";
 import { createLightning, type LightningOptions } from "./lightning";
 import { createThunderhead } from "./thunderhead";
@@ -47,7 +46,7 @@ export function castBolt(x: number, y: number, face: number, power: number, wide
   const v = skillValues(SKILL);
   const ap = progress.stats.ap * power;
   const target = foeOnSide(x, face);
-  const markX = clamp(x + face * 80, 10, W - 10);
+  const markX = clampStageX(x + face * 80, 10);
   const point: [number, number] = [markX, surfaceBelow(markX, y)];
   const o: LightningOptions = {
     damage: v.power * ap,

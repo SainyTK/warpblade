@@ -1,6 +1,6 @@
 import { PAL, SPARKS } from "../../../../constants/palette";
-import { W } from "../../../../constants/stage";
 import { glow, hairline, place, sparkle } from "../../../../engine/frame";
+import { stageLeft, stageRight } from "../../../../game/adventure";
 import { dealDamage } from "../../../../game/damage";
 import { createFloorRing } from "../../../../game/effects/floorRing";
 import { createImpact } from "../../../../game/effects/impact";
@@ -58,7 +58,7 @@ function spikeLine(x: number, y: number, dir: number, heights: readonly number[]
   const line: Spike[] = [];
   for (let i = 0; i < heights.length; i++) {
     const sx = x + dir * (SPACING.start + i * SPACING.gap);
-    if (sx < 6 || sx > W - 6) break;
+    if (sx < stageLeft() + 6 || sx > stageRight() - 6) break;
     line.push({
       x: sx,
       base: surfaceBelow(sx, y),

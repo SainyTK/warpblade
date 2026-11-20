@@ -1,11 +1,12 @@
 import { ENEMY_HITS } from "../../constants/enemies";
 import { SPARKS } from "../../constants/palette";
-import { GROUND, W } from "../../constants/stage";
+import { GROUND } from "../../constants/stage";
 import { sfx } from "../../services/audio";
 import type { Enemy } from "../../types/enemy";
 import { PK } from "../../types/particle";
 import { eraOf } from "../../utils/eras";
 import { approach, clamp } from "../../utils/math";
+import { clampStageX, stageThreat } from "../adventure";
 import { eachStanding } from "../coopHooks";
 import { createRift } from "../effects/rift";
 import { createShadowOrb } from "../effects/shadowOrb";
@@ -41,9 +42,11 @@ function summon(): void {
   const flyer = eraOf(game.wave).flyer;
   const minions = game.enemies.filter((m) => m.type === flyer).length;
   for (let i = 0; i < Math.min(2, MAX_SUMMONS - minions); i++) {
-    const x = clamp(hero.x + (i ? 70 : -70), 20, W - 20);
+    const x = clampStageX(hero.x + (i ? 70 : -70), 20);
     const y = rng.range(50, 90);
-    game.fx.push(createRift(x, y, 11, i * 0.2, () => game.enemies.push(makeEnemy(flyer, x, y, game.wave, 0.25))));
+    game.fx.push(
+      createRift(x, y, 11, i * 0.2, () => game.enemies.push(makeEnemy(flyer, x, y, stageThreat(game.wave), 0.25))),
+    );
   }
 }
 
@@ -54,7 +57,7 @@ export function updateWarden(e: Enemy, dt: number, ts: number): void {
   const dx = hero.x - e.x;
   if (e.state === "drift") {
     turnToHero(e, dt);
-    const tx = clamp(hero.x - e.side * 80, 30, W - 30);
+    const tx = clampStageX(hero.x - e.side * 80, 30);
     const ty = 54 + Math.sin(game.t * 1.3 + e.seed) * 10;
     e.vx = approach(e.vx, clamp((tx - e.x) * 1.2, -60, 60), 150 * dt);
     e.vy = approach(e.vy, clamp((ty - e.y) * 1.2, -40, 40), 150 * dt);
@@ -90,7 +93,7 @@ export function updateWarden(e: Enemy, dt: number, ts: number): void {
     e.vx -= e.vx * 1.5 * dt;
     e.vy -= e.vy * 1.5 * dt;
   }
-  e.x = clamp(e.x + e.vx * dt, 20, W - 20);
+  e.x = clampStageX(e.x + e.vx * dt, 20);
   e.y = clamp(e.y + e.vy * dt, 26, GROUND - 22);
   if (rng.chance(0.4 * ts))
     particles.spawn(

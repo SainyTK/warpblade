@@ -1,6 +1,7 @@
 import { KEEN_RAMP } from "../../../../constants/combo";
 import { PAL } from "../../../../constants/palette";
-import { GROUND, W } from "../../../../constants/stage";
+import { GROUND } from "../../../../constants/stage";
+import { clampStageX } from "../../../../game/adventure";
 import { dealDamage } from "../../../../game/damage";
 import { createFloorRing } from "../../../../game/effects/floorRing";
 import { createImpact } from "../../../../game/effects/impact";
@@ -15,7 +16,6 @@ import { sfx } from "../../../../services/audio";
 import type { Enemy } from "../../../../types/enemy";
 import type { SkillBehavior, SkillMemory } from "../../../../types/skillBehavior";
 import { WHITE } from "../../../../utils/color";
-import { clamp } from "../../../../utils/math";
 import type { KaelMoveId } from "../../types/moves";
 import { createEcho } from "../effects/echo";
 import { showPhantom } from "../phantom";
@@ -48,7 +48,7 @@ function warpStrike(m: KnightMemory, foe: Enemy): void {
   const v = skillValues(ID);
   const box = enemyBox(foe);
   const side = Math.sign(foe.x - m.x) || hero.face;
-  const x = clamp(side > 0 ? box[2] + 9 : box[0] - 9, 8, W - 8);
+  const x = clampStageX(side > 0 ? box[2] + 9 : box[0] - 9, 8);
   const y = walks(foe) ? foe.y : Math.min(GROUND, enemyCenter(foe)[1] + 18);
   game.fx.push(createWarpLine(m.x, m.y - 18, x, y - 18));
   showPhantom(x, y, -side, KNIGHT.show);

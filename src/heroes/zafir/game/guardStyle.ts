@@ -1,9 +1,9 @@
-import { W } from "../../../constants/stage";
+import { clampStageX } from "../../../game/adventure";
+import { moveHeroX } from "../../../game/hero/terrain";
 import { skillEvolved, skillValues } from "../../../game/skills/query";
 import { hero } from "../../../game/state";
 import type { Enemy } from "../../../types/enemy";
 import type { GuardStyle } from "../../../types/moveset";
-import { clamp } from "../../../utils/math";
 import { MIRAGE, SAND_VEIL } from "../constants/guard";
 import { sandBurst } from "./effects/spout";
 import { leaveMirage } from "./mirage";
@@ -33,8 +33,8 @@ export const ZAFIR_GUARD: GuardStyle = {
   },
   parried() {
     leaveMirage(hero.x, hero.y);
-    if (skillEvolved("za_veil")) leaveMirage(clamp(hero.x + hero.face * MIRAGE.slip * 2, 8, W - 8), hero.y);
-    hero.x = clamp(hero.x - hero.face * MIRAGE.slip, 8, W - 8);
+    if (skillEvolved("za_veil")) leaveMirage(clampStageX(hero.x + hero.face * MIRAGE.slip * 2, 8), hero.y);
+    hero.x = moveHeroX(hero.x, hero.y, hero.x - hero.face * MIRAGE.slip);
     hero.keenNext = true;
   },
 };

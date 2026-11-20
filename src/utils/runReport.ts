@@ -36,3 +36,5 @@ export function minutesSeconds(seconds: number): string {
   const whole = Math.floor(seconds);
   return `${Math.floor(whole / 60)}:${String(whole % 60).padStart(2, "0")}`;
 }
+
+export const stageProgressText = (distance: number): string => `Stage ${Math.floor(distance * 100)}%`;

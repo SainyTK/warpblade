@@ -31,13 +31,17 @@ export interface RunReport {
   sources: SourceResult[];
 }
 
-/** what the result screen shows after a run */
-export interface RunResult {
-  outcome: RunOutcome;
-  wave: number;
-  coins: number;
-  /** missing when a guest leaves a room mid-run, since the host kept the run */
-  report?: RunReport;
-  /** a solo run that cleared more waves than any before, or as many in less time */
-  record?: boolean;
+export type StageGrade = "E" | "D" | "C" | "B" | "A" | "S";
+
+export interface StageResult {
+  bossesDefeated: number;
+  bossesTotal: number;
+  distance: number;
+  damage: number;
+  grade: StageGrade;
 }
+
+export type RunResult = { outcome: RunOutcome; coins: number } & (
+  | { stage: StageResult; report: RunReport; wave?: never }
+  | { stage?: never; report?: RunReport; wave: number }
+);

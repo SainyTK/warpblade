@@ -1,9 +1,10 @@
 import { PAL, SPARKS } from "../../constants/palette";
-import { GROUND, W } from "../../constants/stage";
+import { GROUND } from "../../constants/stage";
 import { circle, fleck, glow, place, px } from "../../engine/frame";
 import type { Effect } from "../../types/effect";
 import { PK } from "../../types/particle";
 import { WHITE } from "../../utils/color";
+import { stageLeft, stageRight } from "../adventure";
 import { eachStanding } from "../coopHooks";
 import { hurtHero } from "../hurtHero";
 import { shotWarded } from "../shotWards";
@@ -42,7 +43,7 @@ export function createShadowOrb(x: number, y: number, vx: number, vy: number, da
         hurtHero(damage, o.x);
       });
       if (struck) return false;
-      if (o.y >= GROUND - 2 || o.x < -6 || o.x > W + 6 || o.t > 4) {
+      if (o.y >= GROUND - 2 || o.x < stageLeft() - 6 || o.x > stageRight() + 6 || o.t > 4) {
         if (o.y >= GROUND - 2) game.fx.push(createImpact(o.x, GROUND - 3, 1, false, SPARKS.shadow));
         return false;
       }

@@ -115,7 +115,7 @@ function fork(p: Path, a: number): void {
 }
 
 /** the strike's light on the scene: the bellies of the clouds around it, the tower edges and the wet lips that face it */
-function lightScene(x: number, y: number, pulse: number, flash: number): void {
+function lightScene(x: number, y: number, pulse: number, flash: number, arena: boolean): void {
   glow(x, y, 56, RC.boltGlow, flash * 1.1);
   for (const [dx, dy, r] of CLOUD_LIGHTS) glow(x + dx, y + dy, r, RC.boltGlow, flash * 0.7);
   if (pulse < RIM_FROM) return;
@@ -123,6 +123,7 @@ function lightScene(x: number, y: number, pulse: number, flash: number): void {
   rim(TOWER_EDGES.left, x, -1, 0.25, a);
   rim(TOWER_EDGES.right, x, 1, 0.75, a);
   hairline(0, GROUND + 0.25, W, GROUND + 0.25, RC.boltCore, a * 0.6);
+  if (!arena) return;
   for (const p of PLATFORMS) hairline(p.x0, p.y + 0.25, p.x1 + 1, p.y + 0.25, RC.boltCore, a * 0.6);
 }
 
@@ -138,13 +139,13 @@ function rim(edges: readonly number[], x: number, side: number, inset: number, a
 }
 
 /** the forked bolt in the far sky for a few frames, and the light it throws on the clouds, the towers and the wet stone */
-export function drawLightning(t: number, k: number): void {
+export function drawLightning(t: number, k: number, arena: boolean): void {
   const s = strike(t, k);
   if (!s) return;
   if (s.slot !== cached) build(s.slot);
   const [x0, y0] = bolt[0];
   const flash = lightningFlash(t, k);
-  lightScene(x0, y0, flash / peak(k), flash);
+  lightScene(x0, y0, flash / peak(k), flash, arena);
   const a = s.age;
   if (a > BOLT_LIFE || (a > 0.07 && a < 0.12)) return;
   const f = 1 - a / BOLT_LIFE;

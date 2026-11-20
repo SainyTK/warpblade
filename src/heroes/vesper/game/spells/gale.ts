@@ -1,5 +1,5 @@
-import { W } from "../../../../constants/stage";
 import { fleck, glow, hairline, place } from "../../../../engine/frame";
+import { stageLeft, stageRight } from "../../../../game/adventure";
 import { dealDamage } from "../../../../game/damage";
 import { enemyBox } from "../../../../game/enemies/enemy";
 import { skillEvolved, skillValues, withCharms } from "../../../../game/skills/query";
@@ -68,7 +68,7 @@ function createGust(x: number, y: number, face: number, power: number): Effect {
         g.stood = true;
         g.stand = withCharms("duration", v.stand);
       }
-      return (g.t < life || g.stand > 0) && g.x > -10 && g.x < W + 10;
+      return (g.t < life || g.stand > 0) && g.x > stageLeft() - 10 && g.x < stageRight() + 10;
     },
     draw() {
       place();

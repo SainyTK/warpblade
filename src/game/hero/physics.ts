@@ -1,11 +1,12 @@
 import { HERO_MOVE as M } from "../../constants/combat";
-import { GROUND, PLATFORMS, W } from "../../constants/stage";
-import { approach, clamp } from "../../utils/math";
+import { approach } from "../../utils/math";
 import { hero, progress } from "../state";
-import { dust, surfaceBelow } from "../world";
+import { dust } from "../world";
 import { inFreeState } from "./actions";
 import { kit, moveDef } from "./kits";
 import { strideAt } from "./strides";
+import { landingAt, moveHeroX, wallSide } from "./terrain";
+import { gripWall } from "./traversal";
 
 /** casting, warping, charging and most air attacks hang in the air for a moment once Kael stops rising */
 function floats(): boolean {
@@ -19,7 +20,16 @@ function floats(): boolean {
 function land(): void {
   const h = hero;
   if (!h.ground && h.vy > 220) dust(h.x, h.y, 5);
-  Object.assign(h, { vy: 0, ground: true, jumps: 0, airHits: 0, airDashed: false, whirled: false });
+  Object.assign(h, {
+    vy: 0,
+    ground: true,
+    jumps: 0,
+    airHits: 0,
+    airDashed: false,
+    whirled: false,
+    droppedPlatform: null,
+    travelMomentum: 0,
+  });
 }
 
 /** walk, or run after a double tap; gravity; floors and ledges */
@@ -31,33 +41,39 @@ export function moveHero(dt: number, dir: number): void {
   const m = st === "move" && h.move ? moveDef(h.move) : null;
   const moveDriven = (!!m && (!!m.step || !!strideAt(m, h.st))) || kit().drivesMotion();
   if (inFreeState()) {
-    h.vx = approach(h.vx, dir * speed, (h.ground ? M.groundAccel : M.airAccel) * dt);
-    if (dir) h.face = dir;
-  } else if (st !== "dash" && !moveDriven) h.vx = approach(h.vx, 0, (h.ground ? 800 : 300) * dt);
+    if (h.travelMomentum > 0) {
+      h.travelMomentum = Math.max(0, h.travelMomentum - dt);
+    } else {
+      h.vx = approach(h.vx, dir * speed, (h.ground ? M.groundAccel : M.airAccel) * dt);
+      if (dir) h.face = dir;
+    }
+  } else {
+    h.travelMomentum = 0;
+    if (st !== "dash" && !moveDriven) h.vx = approach(h.vx, 0, (h.ground ? 800 : 300) * dt);
+  }
   // a rise keeps full gravity, so nothing done mid-jump carries Kael above the jump's own height
   const hang = floats() && !h.ground && h.vy >= 0;
   const g = (st === "dash" ? 0 : hang ? 0.3 : 1) * kit().gravityScale();
   h.vy = Math.min(M.maxFall, h.vy + M.gravity * g * dt);
   if (hang && h.vy > 60) h.vy = 60;
   if (st === "dash") h.vy = 0;
-  h.x = clamp(h.x + h.vx * dt, 8, W - 8);
-  const ny = h.y + h.vy * dt;
-  let landed = false;
-  if (h.vy >= 0) {
-    if (ny >= GROUND) {
-      h.y = GROUND;
-      landed = true;
-    } else if (h.drop <= 0)
-      for (const p of PLATFORMS)
-        if (h.x >= p.x0 - 3 && h.x <= p.x1 + 3 && h.y <= p.y + 0.01 && ny >= p.y) {
-          h.y = p.y;
-          landed = true;
-          break;
-        }
+  const nx = h.x + h.vx * dt;
+  h.x = moveHeroX(h.x, h.y, nx);
+  if (h.x !== nx && h.vx && wallSide(h.x, h.y) === Math.sign(h.vx)) {
+    h.vx = 0;
+    h.travelMomentum = 0;
   }
-  if (landed) return land();
+  gripWall(dir);
+  const ny = h.y + h.vy * dt;
+  const floor = h.vy >= 0 ? landingAt(h.x, h.y, ny, h.drop, h.droppedPlatform) : null;
+  if (floor !== null) {
+    h.y = floor;
+    land();
+    return;
+  }
   h.y = ny;
-  if (h.ground && (surfaceBelow(h.x, h.y) > h.y + 0.5 || h.drop > 0 || h.vy !== 0)) {
+  if (h.droppedPlatform && h.y > h.droppedPlatform.y + 1) h.droppedPlatform = null;
+  if (h.ground) {
     h.ground = false;
     h.jumps = Math.max(h.jumps, 1);
   }

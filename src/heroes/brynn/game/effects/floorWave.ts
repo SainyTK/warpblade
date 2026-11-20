@@ -1,6 +1,7 @@
 import { WORLD_COLORS } from "../../../../constants/palette";
-import { RES, W } from "../../../../constants/stage";
+import { RES } from "../../../../constants/stage";
 import { fleck, glow, hairline, place } from "../../../../engine/frame";
+import { stageLeft, stageRight } from "../../../../game/adventure";
 import { dealDamage } from "../../../../game/damage";
 import { createImpact } from "../../../../game/effects/impact";
 import { enemyBox } from "../../../../game/enemies/enemy";
@@ -90,7 +91,7 @@ export function createFloorWave(w: FloorWave): Effect {
               size: rng.range(1, 2.4),
             },
           );
-        if (front() > -10 && front() < W + 10) return true;
+        if (front() > stageLeft() - 10 && front() < stageRight() + 10) return true;
         o.run = w.reach;
       }
       if (o.done === 0) emitSkillEvent({ type: "floorWave", x0: w.x, x1: front(), y: w.y, kind: w.kind });

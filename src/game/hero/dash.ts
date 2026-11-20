@@ -13,6 +13,8 @@ import { cutForSharedAction, maySharedAct } from "./sharedCut";
 import { canPayDash, refuseDash, spendDashStamina } from "./stamina";
 import { travelEnded } from "./travelEnd";
 
+const DASH_JUMP_MOMENTUM = 0.17;
+
 /**
  * L: the front dodge every hero shares, a short dash toward the side held that nothing can touch, paid with stamina. On
  * the ground only, unless the kit allows one in the air (`HeroKit.airDodge`). It cancels a blow's follow-through, a cast
@@ -66,10 +68,19 @@ export function runDash(dt: number): void {
     h.ghostTimer = 0.045;
     dropDashGhost();
   }
-  if (h.st < HERO_MOVE.dashTime) return;
-  emitSkillEvent({ type: "dash", dir: h.face, foes: passed.foes });
+  if (h.st >= HERO_MOVE.dashTime) finishDash(0.4);
+}
+
+function finishDash(speedShare: number): void {
+  emitSkillEvent({ type: "dash", dir: hero.face, foes: passed.foes });
   kit().dodge?.ended?.();
-  h.vx *= 0.4;
+  hero.vx *= speedShare;
   settle();
   travelEnded();
+}
+
+export function carryDashIntoJump(): void {
+  passThrough();
+  finishDash(1);
+  hero.travelMomentum = DASH_JUMP_MOMENTUM;
 }

@@ -32,19 +32,29 @@ function face(draw: (canvas: PixelCanvas) => void): HTMLElement {
 }
 
 /** each stick direction and each button with what it does for the chosen hero, drawn as on screen, for the Controls screen */
-export function touchLegend(): [HTMLElement, string][] {
+export function touchLegend(adventure: boolean): [HTMLElement, string][] {
   const selection = touchSelection();
   const texts = touchText(character);
   const stick = stickDirections(character).map((d): [HTMLElement, string] => [
     face((c) => drawButtonFace(c, STICK_LOOK, stickIcon(d.direction), false)),
-    `Stick ${d.direction}: ${d.label}`,
+    `Stick ${d.direction}: ${adventure && d.direction === "down" ? "Drop through a ledge" : d.label}`,
   ]);
   const buttons = TOUCH_BUTTONS.map((spec): [HTMLElement, string] => {
     const look = { ...buttonLook(spec, false), ready: true, cooldown: 0, affordable: 4, charge: -1 };
+    const text = texts[spec.action];
+    let hint = text.hint;
+    if (adventure && spec.action === "up") {
+      hint = "Tap again to double jump. Jump upward along a wall or steer away to kick off.";
+    }
+    if (adventure && spec.action === "dash") hint = `${hint}. Jump during the dodge to keep your speed.`;
     return [
       face((c) => drawButtonFace(c, look, touchIcon(spec.action, selection), spec.action === "ultimate")),
-      `${texts[spec.action].label}: ${texts[spec.action].hint}`,
+      `${text.label}: ${hint}`,
     ];
   });
-  return [...stick, ...buttons];
+  if (!adventure) return [...stick, ...buttons];
+  const talk = document.createElement("span");
+  talk.className = "cap";
+  talk.textContent = "Talk";
+  return [...stick, ...buttons, [talk, "Tap Talk by a mentor to spend skill points."]];
 }

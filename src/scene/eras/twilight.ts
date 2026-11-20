@@ -53,18 +53,19 @@ export const twilight: SceneDef = {
     paintRunes(paint, k, horizon);
     crystalLights = paintGrowths(paint, P, k);
   },
-  ambient(t, k) {
+  ambient(t, k, arena) {
     place();
     glow(MOON.x, MOON.y, 60, mix(WC.moonGlow, MOON_HALO, k), 0.26);
     if (k >= PLANET_FROM) glow(PLANET_AT.x, PLANET_AT.y, 18, PLANET_LIGHT, 0.2 * k);
     drawVeilLight(t, k);
     drawGrowthLight(t, k, crystalLights);
-    drawFlames(t, k);
+    if (arena) drawFlames(t, k);
     drawFireflies(t, Math.round(12 * (1 - 0.6 * k)));
     drawMotes(t, k);
     for (let i = 0; i < 6; i++) if (Math.sin(t * 3 + i * 2.1) > 0.85) px((i * 97) % W, (i * 23) % 100, WHITE);
   },
-  update(_dt, k) {
+  update(_dt, k, arena) {
+    if (!arena) return;
     const sparks = EMBERS[Math.round(k * 4)];
     for (const b of BRAZIERS)
       if (rng.chance(0.04))

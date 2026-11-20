@@ -1,12 +1,13 @@
 import { KILL_BURST } from "../constants/kill";
 import { PAL } from "../constants/palette";
-import { STAGE_WAVES } from "../constants/waves";
+import { FINALE, STAGE_WAVES } from "../constants/waves";
 import { sfx } from "../services/audio";
 import type { SourceId } from "../types/build";
 import type { Enemy } from "../types/enemy";
 import { PK } from "../types/particle";
 import { WHITE } from "../utils/color";
 import { TAU } from "../utils/math";
+import { isAdventure, recordStageKill } from "./adventure";
 import { dropChest } from "./build/chests";
 import { dropCoins } from "./coins";
 import { endWaveOnLastKill } from "./endWave";
@@ -50,7 +51,9 @@ function lightShare(k: number): number {
 
 /** elites, mini bosses and the boss of any wave but the last leave a chest */
 const leavesChest = (e: Enemy): boolean =>
-  e.elite || e.rank === "mini" || (e.rank === "boss" && game.wave < STAGE_WAVES);
+  e.elite ||
+  e.rank === "mini" ||
+  (e.rank === "boss" && (isAdventure() ? e.type !== FINALE.foe : game.wave < STAGE_WAVES));
 
 /**
  * a dark burst of smoke and motes, orbs that fly back to Kael, experience orbs and coins to pick up, a chest from an
@@ -65,6 +68,7 @@ export function killEnemy(e: Enemy, source?: SourceId): void {
   const share = big ? 1 : burstShare();
   const many = (n: number): number => Math.max(1, Math.round(n * share));
   game.kills++;
+  recordStageKill(e);
   feat({ kind: "kill", rank: e.rank, foe: e.type, source });
   if (source) emitSkillEvent({ type: "kill", foe: e, source });
   if (source) kit().onKill?.(e);
@@ -117,5 +121,7 @@ export function killEnemy(e: Enemy, source?: SourceId): void {
   if (big) shake(0.5, 4);
   sfx.death();
   dropXp(e.xp, x, y);
-  endWaveOnLastKill();
+  if (!isAdventure()) {
+    endWaveOnLastKill();
+  }
 }

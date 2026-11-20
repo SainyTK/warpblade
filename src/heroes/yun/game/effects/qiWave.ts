@@ -1,5 +1,6 @@
-import { RES, W } from "../../../../constants/stage";
+import { RES } from "../../../../constants/stage";
 import { fleck, glow, hairline, place } from "../../../../engine/frame";
+import { stageLeft, stageRight } from "../../../../game/adventure";
 import { dealDamage } from "../../../../game/damage";
 import { createImpact } from "../../../../game/effects/impact";
 import { enemyBox } from "../../../../game/enemies/enemy";
@@ -63,7 +64,7 @@ export function createQiWave(x: number, y: number, face: number, shape: QiWaveSh
         });
         game.fx.push(createImpact(o.x, y, face, false, JADE_SPARKS));
       }
-      return o.t < life && o.x > -10 && o.x < W + 10;
+      return o.t < life && o.x > stageLeft() - 10 && o.x < stageRight() + 10;
     },
     draw() {
       place();

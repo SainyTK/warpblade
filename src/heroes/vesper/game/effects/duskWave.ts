@@ -1,5 +1,6 @@
-import { RES, W } from "../../../../constants/stage";
+import { RES } from "../../../../constants/stage";
 import { fleck, glow, hairline, place } from "../../../../engine/frame";
+import { stageLeft, stageRight } from "../../../../game/adventure";
 import { dealDamage } from "../../../../game/damage";
 import { createImpact } from "../../../../game/effects/impact";
 import { enemyBox } from "../../../../game/enemies/enemy";
@@ -66,7 +67,7 @@ export function createDuskWave(w: DuskWave): Effect {
         cuts++;
         if (w.most && cuts >= w.most) return false;
       }
-      return o.t < w.life && o.x > -10 && o.x < W + 10;
+      return o.t < w.life && o.x > stageLeft() - 10 && o.x < stageRight() + 10;
     },
     draw() {
       place();

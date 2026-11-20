@@ -1,4 +1,4 @@
-import { W } from "../../../../constants/stage";
+import { clampStageX } from "../../../../game/adventure";
 import { dealDamage } from "../../../../game/damage";
 import { createSlash } from "../../../../game/effects/slash";
 import { enemyCenter } from "../../../../game/enemies/enemy";
@@ -10,7 +10,6 @@ import { nearestFoe } from "../../../../game/skills/targets";
 import { game, hero, progress, rng } from "../../../../game/state";
 import type { Enemy } from "../../../../types/enemy";
 import type { SkillBehavior, SkillMemory } from "../../../../types/skillBehavior";
-import { clamp } from "../../../../utils/math";
 import { SAYA_POSES } from "../../constants/clips/poses";
 import { SHADE_LOOK } from "../../constants/skillLook";
 import { SKILL } from "../../constants/skills/ids";
@@ -62,7 +61,7 @@ function draw(s: Shade): void {
   const v = skillValues(SKILL.shade);
   const ad = progress.stats.ad;
   const [cx] = enemyCenter(s.foe);
-  const x = clamp(cx + s.side * SHADE_LOOK.gap, 8, W - 8);
+  const x = clampStageX(cx + s.side * SHADE_LOOK.gap, 8);
   const face = -s.side;
   drawHeroSprite(ghostCanvas, DRAW_POSE, 0);
   game.ghosts.push({

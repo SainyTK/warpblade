@@ -1,8 +1,9 @@
 import { WORLD_COLORS } from "../constants/palette";
-import { GROUND, PLATFORMS } from "../constants/stage";
+import { GROUND } from "../constants/stage";
 import type { Enemy } from "../types/enemy";
 import { PK } from "../types/particle";
 import type { Box } from "../types/world";
+import { stagePlatforms, stageWalls } from "./adventure";
 import { heroSlot } from "./coopHooks";
 import { game, hero, particles, rng } from "./state";
 
@@ -11,7 +12,16 @@ const REDUCED_MOTION = matchMedia("(prefers-reduced-motion: reduce)").matches;
 /** the top of the highest floor at x that is at or below y */
 export function surfaceBelow(x: number, y: number): number {
   let best = GROUND;
-  for (const p of PLATFORMS) if (x >= p.x0 && x <= p.x1 && p.y >= y - 2 && p.y < best) best = p.y;
+  for (const p of stagePlatforms()) {
+    if (x >= p.x0 && x <= p.x1 && p.y >= y - 2 && p.y < best) {
+      best = p.y;
+    }
+  }
+  for (const wall of stageWalls()) {
+    if (x >= wall.x0 && x <= wall.x1 && wall.y >= y - 2 && wall.y < best) {
+      best = wall.y;
+    }
+  }
   return best;
 }
 export const boxHit = (a: Box, b: Box): boolean => a[0] < b[2] && a[2] > b[0] && a[1] < b[3] && a[3] > b[1];

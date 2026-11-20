@@ -1,7 +1,6 @@
 import { COIN_BONUS, COIN_DROP, COIN_MOTION as M } from "../constants/coins";
 import { COIN_GOLD } from "../constants/palette";
 import { LODESTONE_BONUS } from "../constants/shopSkills";
-import { W } from "../constants/stage";
 import { ELITE } from "../constants/waves";
 import { sfx } from "../services/audio";
 import { addCoins, ownsSkill } from "../store/meta";
@@ -9,7 +8,7 @@ import type { Enemy } from "../types/enemy";
 import type { Coin } from "../types/game";
 import { PK } from "../types/particle";
 import { coinDrop, coinShare } from "../utils/coins";
-import { clamp } from "../utils/math";
+import { clampStageX } from "./adventure";
 import { coop } from "./coopHooks";
 import { feat } from "./feat";
 import { game, hero, particles, rng } from "./state";
@@ -37,7 +36,7 @@ type Motion = Readonly<Record<"gravity" | "bounce" | "pullAccel" | "pullSpeed", 
 export function fall(c: Loose, dt: number, m: Motion = M): void {
   if (c.rest) return;
   c.vy += m.gravity * dt;
-  c.x = clamp(c.x + c.vx * dt, 4, W - 4);
+  c.x = clampStageX(c.x + c.vx * dt, 4);
   c.y += c.vy * dt;
   const floor = surfaceBelow(c.x, c.y - c.vy * dt) - 1;
   if (c.vy > 0 && c.y >= floor) {

@@ -1,8 +1,9 @@
-import { W } from "../../../constants/stage";
+import { stageLeft, stageRight } from "../../../game/adventure";
 import { dealDamage } from "../../../game/damage";
 import { createImpact } from "../../../game/effects/impact";
 import { createSlash } from "../../../game/effects/slash";
 import { enemyBox, enemyCenter } from "../../../game/enemies/enemy";
+import { safeHeroDestination } from "../../../game/hero/terrain";
 import { skillValues } from "../../../game/skills/query";
 import { game, hero, ponytail, progress, scarf } from "../../../game/state";
 import { boxBehind, boxHit, hitStop, shake } from "../../../game/world";
@@ -23,10 +24,12 @@ import { releaseCuts, storeCut } from "./store";
 function passBeyond(foe: Enemy): void {
   const [ex] = enemyCenter(foe);
   const x = ex + hero.face * SAYA_WARP.past;
-  if (x < 8 || x > W - 8) return;
-  scarf.shift(x - hero.x, 0);
-  ponytail.shift(x - hero.x, 0);
-  hero.x = x;
+  if (x < stageLeft() + 8 || x > stageRight() - 8) return;
+  const point = safeHeroDestination(x, hero.y);
+  scarf.shift(point.x - hero.x, point.y - hero.y);
+  ponytail.shift(point.x - hero.x, point.y - hero.y);
+  hero.x = point.x;
+  hero.y = point.y;
 }
 
 /**

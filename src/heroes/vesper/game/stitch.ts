@@ -1,16 +1,15 @@
-import { W } from "../../../constants/stage";
 import { dealDamage } from "../../../game/damage";
 import { createImpact } from "../../../game/effects/impact";
 import { createSlash } from "../../../game/effects/slash";
 import { enemyCenter } from "../../../game/enemies/enemy";
 import { settle } from "../../../game/hero/actions";
 import { leaveAfterimages } from "../../../game/hero/afterimages";
+import { safeHeroDestination } from "../../../game/hero/terrain";
 import { travelEnded } from "../../../game/hero/travelEnd";
 import { objectMemory, rememberPerSeat } from "../../../game/seatMemory";
 import { game, hero, ponytail, progress, scarf } from "../../../game/state";
 import { surfaceBelow } from "../../../game/world";
 import type { Enemy } from "../../../types/enemy";
-import { clamp } from "../../../utils/math";
 import { STITCH } from "../constants/abilities";
 import { DUSK_SPARKS } from "../look/colors";
 import { ARRIVE_A, ARRIVE_B } from "./moves/slashes";
@@ -41,12 +40,12 @@ export function stitchTargets(reach: number, most: number): Enemy[] {
 
 /** she appears at a point, her afterimages and ropes following */
 function stepTo(x: number, y: number): void {
-  const nx = clamp(x, 8, W - 8);
-  leaveAfterimages(hero.x, hero.y, nx, y);
-  scarf.shift(nx - hero.x, y - hero.y);
-  ponytail.shift(nx - hero.x, y - hero.y);
+  const { x: nx, y: ny } = safeHeroDestination(x, y);
+  leaveAfterimages(hero.x, hero.y, nx, ny);
+  scarf.shift(nx - hero.x, ny - hero.y);
+  ponytail.shift(nx - hero.x, ny - hero.y);
   hero.x = nx;
-  hero.y = y;
+  hero.y = ny;
   hero.vx = 0;
   hero.vy = 0;
 }

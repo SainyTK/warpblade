@@ -1,9 +1,10 @@
-import { GROUND, W } from "../../../constants/stage";
+import { GROUND } from "../../../constants/stage";
 import { sfx } from "../../../services/audio";
 import type { Enemy } from "../../../types/enemy";
 import { PK } from "../../../types/particle";
-import { approach, clamp } from "../../../utils/math";
+import { approach } from "../../../utils/math";
 import { waveScale } from "../../../utils/progression";
+import { clampStageX } from "../../adventure";
 import { eachStanding } from "../../coopHooks";
 import { createFloorRing } from "../../effects/floorRing";
 import { createImpact } from "../../effects/impact";
@@ -51,7 +52,7 @@ function cleave(e: Enemy): void {
 function riftStep(e: Enemy): void {
   game.fx.push(createFloorRing(e.x, GROUND, 26, VOID, 0.4));
   const side = hero.face || 1;
-  e.x = clamp(hero.x - side * RIFT_STEP.behind, 24, W - 24);
+  e.x = clampStageX(hero.x - side * RIFT_STEP.behind, 24);
   e.face = Math.sign(hero.x - e.x) || side;
   game.fx.push(createFloorRing(e.x, GROUND, 26, VOID, 0.4));
   sfx.warp();
@@ -61,7 +62,7 @@ function riftStep(e: Enemy): void {
 function callPillars(e: Enemy): void {
   const n = enragedNow(e) ? CALL.enraged : CALL.count;
   for (let i = 0; i < n; i++) {
-    const x = clamp(hero.x + (i - (n - 1) / 2) * CALL.gap + rng.range(-5, 5), 10, W - 10);
+    const x = clampStageX(hero.x + (i - (n - 1) / 2) * CALL.gap + rng.range(-5, 5), 10);
     game.fx.push(createVoidPillar(x, i * CALL.beat, ABYSS_HITS.sovereignPillar * e.power));
   }
   sfx.cast();
@@ -146,7 +147,7 @@ export function updateSovereign(e: Enemy, dt: number, ts: number): void {
       cd: rng.range(0.9, 1.6) * (enraged ? 0.6 : 1) * ws.cooldown,
     });
   if (e.state !== "walk") e.vx -= e.vx * 5 * dt;
-  e.x = clamp(e.x + e.vx * dt, 20, W - 20);
+  e.x = clampStageX(e.x + e.vx * dt, 20);
   e.y = GROUND;
   if (rng.chance((enraged ? 0.14 : 0.07) * ts))
     particles.spawn(PK.EMBER, e.x + rng.range(-12, 12), e.y - rng.range(10, 52), 0, -14, rng.range(0.5, 1), {

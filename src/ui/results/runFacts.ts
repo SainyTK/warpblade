@@ -1,16 +1,28 @@
-import type { RunReport } from "../../types/run";
-import { minutesSeconds } from "../../utils/runReport";
+import type { RunReport, StageResult } from "../../types/run";
+import { minutesSeconds, shortNumber } from "../../utils/runReport";
 
-/** run time, waves cleared, level reached and foes defeated, side by side */
-export function runFacts(report: RunReport): HTMLElement {
+type Fact = readonly [label: string, value: string];
+
+function runStats(report: RunReport, stage?: StageResult): readonly Fact[] {
+  const time: Fact = ["Time", minutesSeconds(report.seconds)];
+  const level: Fact = ["Level", String(report.level)];
+  const foes: Fact = ["Foes defeated", String(report.kills)];
+  if (!stage) return [time, ["Waves cleared", String(report.cleared)], level, foes];
+  return [
+    ["Grade", stage.grade],
+    ["Bosses defeated", `${stage.bossesDefeated}/${stage.bossesTotal}`],
+    time,
+    ["Damage dealt", shortNumber(stage.damage)],
+    foes,
+    level,
+  ];
+}
+
+export function runFacts(report: RunReport, stage?: StageResult): HTMLElement {
   const box = document.createElement("dl");
   box.className = "run-facts";
-  const facts: readonly [string, string][] = [
-    ["Time", minutesSeconds(report.seconds)],
-    ["Waves cleared", String(report.cleared)],
-    ["Level", String(report.level)],
-    ["Foes defeated", String(report.kills)],
-  ];
+  if (stage) box.classList.add("stage-facts");
+  const facts = runStats(report, stage);
   for (const [label, value] of facts) {
     const fact = document.createElement("div");
     const dt = document.createElement("dt");

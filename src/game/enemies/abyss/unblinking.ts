@@ -1,9 +1,10 @@
-import { GROUND, W } from "../../../constants/stage";
+import { GROUND } from "../../../constants/stage";
 import { sfx } from "../../../services/audio";
 import type { Enemy } from "../../../types/enemy";
 import { PK } from "../../../types/particle";
 import { approach, clamp } from "../../../utils/math";
 import { waveScale } from "../../../utils/progression";
+import { clampStageX, stageLeft, stageRight } from "../../adventure";
 import { game, hero, particles, rng } from "../../state";
 import { ABYSS_HITS, VOID_SPARKS } from "./colors";
 import { createGaze } from "./gaze";
@@ -33,7 +34,7 @@ export const UNBLINKING_SHUT_SHARE = 0.03;
 function burnLances(e: Enemy): void {
   const n = e.phase === 2 ? LANCES.enraged : LANCES.count;
   for (let i = 0; i < n; i++) {
-    const x = clamp(hero.x + (i - (n - 1) / 2) * LANCES.gap, 6, W - 6);
+    const x = clampStageX(hero.x + (i - (n - 1) / 2) * LANCES.gap, 6);
     game.fx.push(createSightLance(e, x, i * LANCES.beat, ABYSS_HITS.unblinkingLance * e.power));
   }
   sfx.chime(0);
@@ -44,7 +45,7 @@ function weep(e: Enemy): void {
   const n = e.phase === 2 ? TEARS.enraged : TEARS.count;
   const y = e.y + 12;
   for (let i = 0; i < n; i++) {
-    const land = clamp(hero.x + (i - (n - 1) / 2) * TEARS.gap + rng.range(-6, 6), 8, W - 8);
+    const land = clampStageX(hero.x + (i - (n - 1) / 2) * TEARS.gap + rng.range(-6, 6), 8);
     const vy = TEARS.rise - i * 12;
     // the flight time down to the floor, so the glob comes down on its landing spot
     const time = (-vy + Math.sqrt(vy * vy + 2 * ORB_GRAVITY * (GROUND - 2 - y))) / ORB_GRAVITY;
@@ -81,7 +82,7 @@ export function updateUnblinking(e: Enemy, dt: number, ts: number): void {
   const dx = hero.x - e.x;
   if (e.state === "drift") {
     e.face = Math.sign(dx) || e.face;
-    const tx = clamp(hero.x - e.side * HOVER.side, 50, W - 50);
+    const tx = clampStageX(hero.x - e.side * HOVER.side, 50);
     const ty = HOVER.y + Math.sin(game.t * 1.1 + e.seed) * HOVER.bob;
     e.vx = approach(e.vx, clamp((tx - e.x) * 1.1, -45, 45), 120 * dt);
     e.vy = approach(e.vy, clamp((ty - e.y) * 1.6, -60, 60), 200 * dt);
@@ -98,7 +99,7 @@ export function updateUnblinking(e: Enemy, dt: number, ts: number): void {
     if (e.st >= 1) Object.assign(e, { state: "recover", st: 0 });
   } else if (e.state === "charge" || e.state === "volley") {
     // the gaze itself runs in gaze.ts, which also ends these states; the eye holds still over the middle of the stage
-    e.vx = approach(e.vx, clamp((W / 2 - e.x) * 1.5, -60, 60), 200 * dt);
+    e.vx = approach(e.vx, clamp(((stageLeft() + stageRight()) / 2 - e.x) * 1.5, -60, 60), 200 * dt);
     e.vy = approach(e.vy, clamp((HOVER.y - 8 - e.y) * 2, -60, 60), 200 * dt);
   } else if (e.state === "blink") {
     e.vx = approach(e.vx, 0, 300 * dt);
@@ -118,7 +119,7 @@ export function updateUnblinking(e: Enemy, dt: number, ts: number): void {
     e.vx -= e.vx * 1.5 * dt;
     e.vy -= e.vy * 1.5 * dt;
   }
-  e.x = clamp(e.x + e.vx * dt, 30, W - 30);
+  e.x = clampStageX(e.x + e.vx * dt, 30);
   e.y = clamp(e.y + e.vy * dt, 30, HOVER.floor);
   if (e.state !== "blink" && rng.chance(0.5 * ts))
     particles.spawn(

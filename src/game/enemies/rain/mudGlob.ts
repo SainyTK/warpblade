@@ -1,8 +1,9 @@
-import { GROUND, W } from "../../../constants/stage";
+import { GROUND } from "../../../constants/stage";
 import { circle, ellipseRing, fleck, glow, hairline, line, place, px } from "../../../engine/frame";
 import type { Effect } from "../../../types/effect";
 import { PK } from "../../../types/particle";
 import { clamp } from "../../../utils/math";
+import { clampStageX, stageLeft, stageRight } from "../../adventure";
 import { eachStanding, heroSlot } from "../../coopHooks";
 import { hurtHero } from "../../hurtHero";
 import { shotWarded } from "../../shotWards";
@@ -71,7 +72,7 @@ export function createMudGlob(
   const o = {
     x,
     y,
-    vx: (clamp(tx, 8, W - 8) - x) / flight,
+    vx: (clampStageX(tx, 8) - x) / flight,
     vy: (GROUND - y - 0.5 * GRAVITY * flight * flight) / flight,
   };
   return {
@@ -101,7 +102,7 @@ export function createMudGlob(
         if (puddle !== null) game.fx.push(createMudPuddle(o.x, puddle));
         return false;
       }
-      return o.x > -10 && o.x < W + 10;
+      return o.x > stageLeft() - 10 && o.x < stageRight() + 10;
     },
     draw() {
       place();
@@ -120,7 +121,7 @@ export function createMudGlob(
       fleck(o.x - 0.75, o.y - 1.5, C.wetSky);
       fleck(o.x + 0.75, o.y + 0.75, C.wart);
       // where it will land, so Kael can step away
-      const mark = clamp(tx, 8, W - 8);
+      const mark = clampStageX(tx, 8);
       ellipseRing(mark, GROUND, 5, 1.3, C.wart, 0.5);
       hairline(mark - 1.5, GROUND, mark + 1.5, GROUND, C.wartHot, 0.8);
       glow(o.x, o.y, 8, C.wart, 0.15);

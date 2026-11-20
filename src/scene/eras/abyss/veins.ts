@@ -125,8 +125,9 @@ function paintCracks(p: PlatePaint, r: Rng, k: number): void {
     const x = Math.round(((i + r.range(0.1, 0.9)) / n) * W);
     const hue = hueAt(i);
     vein(p, r, x * RES, (GROUND + 2) * RES, Math.PI / 2, (r.range(7, 13) + k * 9) * RES, hue, CRACK, FLOOR);
-    pulses.push({ x, y: GROUND + 4, c: hue.glow, phase: r.range(0, 6) });
+    if (p.arena) pulses.push({ x, y: GROUND + 4, c: hue.glow, phase: r.range(0, 6) });
   }
+  if (!p.arena) return;
   for (const slab of PLATFORMS) {
     const m = 1 + Math.round(k * 2);
     for (let i = 0; i < m; i++) {

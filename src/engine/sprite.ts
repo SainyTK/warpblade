@@ -2,7 +2,7 @@ import { FH, FW, RES } from "../constants/stage";
 import type { Color } from "../types/color";
 import type { SpriteBox, SpriteImage } from "../types/sprite";
 import { mix, scale } from "../utils/color";
-import { blendImage, color, putImage, shakeOffset } from "./frame";
+import { blendImage, color, projectX, projectY, putImage } from "./frame";
 
 /** where a part overlaps an earlier one, the pixel beside its edge darkens to this much of the part's colour */
 const INNER_LINE = 0.45;
@@ -316,11 +316,10 @@ export interface BlitOptions {
  */
 export function blit(s: SpriteImage, x: number, y: number, flip: boolean, o: BlitOptions = {}): void {
   const { alpha = 1, tint = 0, tintAmount = 0, soft = false, lean = 0 } = o;
-  const [shx, shy] = shakeOffset();
   const k = Math.max(1, Math.round(RES / s.res));
   const step = RES / k;
-  const bx = Math.floor((x + shx) * step) * k;
-  const by = Math.floor((y + shy) * step) * k;
+  const bx = Math.floor(projectX(x) * step) * k;
+  const by = Math.floor(projectY(y) * step) * k;
   const box = s.box ?? { x0: 0, y0: 0, x1: s.w - 1, y1: s.h - 1 };
   if (k === 1 && alpha >= 1 && tintAmount <= 0 && !soft && !lean) {
     blitPlain(s, box, bx, by, flip);
@@ -378,11 +377,10 @@ export function blitRing(
   width: number,
   col: (ix: number, iy: number) => Color,
 ): void {
-  const [shx, shy] = shakeOffset();
   const k = Math.max(1, Math.round(RES / s.res));
   const step = RES / k;
-  const bx = Math.floor((x + shx) * step) * k;
-  const by = Math.floor((y + shy) * step) * k;
+  const bx = Math.floor(projectX(x) * step) * k;
+  const by = Math.floor(projectY(y) * step) * k;
   const box = s.box ?? { x0: 0, y0: 0, x1: s.w - 1, y1: s.h - 1 };
   const filled = (i: number, j: number): boolean => i >= 0 && j >= 0 && i < s.w && j < s.h && s.d[j * s.w + i] !== 0;
   const near = (i: number, j: number): boolean => {

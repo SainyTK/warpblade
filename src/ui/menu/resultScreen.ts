@@ -5,14 +5,13 @@ import "../results/results.css";
 import { runAchievements } from "../../store/achievements";
 import { inRoom } from "../../store/coop";
 import { bank } from "../../store/meta";
-import { bestRun } from "../../store/records";
 import { unlockedThisRun } from "../../store/unlocks";
 import type { Achievement } from "../../types/achievement";
 import type { MenuView } from "../../types/menu";
 import type { RunOutcome } from "../../types/run";
+import { stageProgressText } from "../../utils/runReport";
 import { medalIcon } from "../achievements/medalIcon";
 import { coinAmount } from "../coinIcon";
-import { recordLine } from "../results/recordLine";
 import { runFacts } from "../results/runFacts";
 import { sourceTable } from "../results/sourceTable";
 import { foundList } from "../unlocks/foundList";
@@ -60,13 +59,10 @@ function earnedList(list: readonly Achievement[]): HTMLElement {
   return box;
 }
 
-/** how the last run ended: time, waves cleared, level and foes, the best run, the damage of every source, what it earned; then on to the start menu or the shop */
 export function resultScreen(): MenuView {
   const run = lastRun();
   const summary = document.createElement("dl");
   summary.className = "result";
-  const best = bestRun();
-  if (best && !inRoom()) summary.append(line("Best", recordLine(best, run.record ?? false)));
   summary.append(line("Coins earned", coinAmount(run.coins)), line("Bank", coinAmount(bank())));
   const list = document.createElement("nav");
   list.className = "menu-list";
@@ -80,7 +76,7 @@ export function resultScreen(): MenuView {
   const scroll = document.createElement("div");
   scroll.className = "menu-scroll result-body";
   const earned = inRoom() ? [] : runAchievements();
-  if (run.report) scroll.append(runFacts(run.report));
+  if (run.report) scroll.append(runFacts(run.report, run.stage));
   if (run.report?.sources.length) scroll.append(sourceTable(run.report));
   scroll.append(summary);
   if (earned.length) scroll.append(earnedList(earned));
@@ -90,8 +86,8 @@ export function resultScreen(): MenuView {
   content.className = "menu-sub";
   content.append(scroll, list);
   return {
-    title: RESULT_TITLES[run.outcome],
-    subtitle: `Wave ${run.wave} of ${STAGE_WAVES}`,
+    title: run.stage && run.outcome === "beyond" ? RESULT_TITLES.clear : RESULT_TITLES[run.outcome],
+    subtitle: run.stage ? stageProgressText(run.stage.distance) : `Wave ${run.wave} of ${STAGE_WAVES}`,
     content,
   };
 }

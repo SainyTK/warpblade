@@ -1,10 +1,11 @@
 import { PAL } from "../../../constants/palette";
-import { GROUND, W } from "../../../constants/stage";
+import { GROUND } from "../../../constants/stage";
 import { sfx } from "../../../services/audio";
 import type { Enemy } from "../../../types/enemy";
 import { PK } from "../../../types/particle";
-import { approach, clamp } from "../../../utils/math";
+import { approach } from "../../../utils/math";
 import { waveScale } from "../../../utils/progression";
+import { clampStageX } from "../../adventure";
 import { eachStanding } from "../../coopHooks";
 import { createFloorRing } from "../../effects/floorRing";
 import { hurtHero } from "../../hurtHero";
@@ -42,7 +43,7 @@ function slam(e: Enemy): void {
 function lob(e: Enemy): void {
   const spread = enraged(e) ? [-36, -12, 12, 36] : [-26, 0, 26];
   spread.forEach((off, i) => {
-    const tx = clamp(hero.x + off, 12, W - 12);
+    const tx = clampStageX(hero.x + off, 12);
     game.fx.push(createMudGlob(e.x - e.face * 4, e.y - 44, tx, 0.85 + i * 0.08, RAIN_HITS.hulkGlob * e.power, null));
   });
   sfx.swing(0.5);
@@ -92,7 +93,7 @@ export function updateBoghulk(e: Enemy, dt: number, ts: number): void {
   } else if (e.st >= 0.75)
     Object.assign(e, { state: "walk", st: 0, cd: rng.range(1, 1.8) * (enraged(e) ? 0.7 : 1) * scale.cooldown });
   if (e.state !== "walk") e.vx -= e.vx * 4 * dt;
-  e.x = clamp(e.x + e.vx * dt, 16, W - 16);
+  e.x = clampStageX(e.x + e.vx * dt, 16);
   e.y = GROUND;
   if (rng.chance(0.12 * ts))
     particles.spawn(PK.SPARK, e.x + rng.range(-12, 12), e.y - rng.range(10, 30), 0, 20, rng.range(0.3, 0.6), {

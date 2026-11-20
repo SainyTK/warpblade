@@ -1,7 +1,9 @@
 import { HOLD_ACTIONS, KEYMAP } from "../../constants/input";
+import { isAdventure } from "../../game/adventure";
 import { character } from "../../game/state";
+import { inRoom } from "../../store/coop";
 import type { HeldAction, InputAction } from "../../types/input";
-import type { MenuView } from "../../types/menu";
+import type { MenuContext, MenuView } from "../../types/menu";
 import { actionText } from "../../utils/controls";
 import { keysByAction } from "../../utils/keymap";
 import { touchLegend } from "../touch/touchLegend";
@@ -42,9 +44,15 @@ function capsOf(codes: readonly string[], hold: boolean): HTMLElement {
 const isHeldAction = (a: InputAction): a is HeldAction => a in HOLD_ACTIONS;
 
 /** each action's keys and what it does; a key with a long press gets a second row for it, Hold J under J */
-function keyboardRows(): [HTMLElement, string][] {
+function keyboardRows(adventure: boolean): [HTMLElement, string][] {
   const text = actionText(character);
+  if (adventure) {
+    text.up = "Jump or double jump. Jump upward along a wall or hold away to kick off.";
+    text.down = "Drop through a ledge.";
+    text.dash = `${text.dash}. Jump during the dodge to keep your speed.`;
+  }
   return [...keysByAction(KEYMAP)].flatMap(([action, codes]): [HTMLElement, string][] => {
+    if (!adventure && action === "interact") return [];
     const row: [HTMLElement, string] = [capsOf(codes, false), text[action]];
     if (!isHeldAction(action)) return [row];
     return [row, [capsOf(codes, true), text[HOLD_ACTIONS[action]]]];
@@ -52,13 +60,14 @@ function keyboardRows(): [HTMLElement, string][] {
 }
 
 /** every action with its keys from the key map, and on touch screens the on-screen buttons, as the chosen hero plays them */
-export function controlsScreen(): MenuView {
+export function controlsScreen(context: MenuContext): MenuView {
   const coarse = matchMedia("(any-pointer: coarse)").matches;
   const keyboard = !coarse || matchMedia("(any-pointer: fine)").matches;
+  const adventure = !inRoom() && (context === "title" || isAdventure());
   const scroll = document.createElement("div");
   scroll.className = "menu-scroll";
-  if (coarse) scroll.append(section("Touch", touchLegend()));
-  if (keyboard) scroll.append(section("Keyboard", keyboardRows()));
+  if (coarse) scroll.append(section("Touch", touchLegend(adventure)));
+  if (keyboard) scroll.append(section("Keyboard", keyboardRows(adventure)));
   const content = document.createElement("div");
   content.className = "menu-sub";
   content.append(scroll, backItem());

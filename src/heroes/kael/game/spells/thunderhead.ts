@@ -1,6 +1,6 @@
 import { PAL } from "../../../../constants/palette";
-import { W } from "../../../../constants/stage";
 import { circle, glow, place } from "../../../../engine/frame";
+import { clampStageX } from "../../../../game/adventure";
 import { enemyCenter } from "../../../../game/enemies/enemy";
 import { game } from "../../../../game/state";
 import { surfaceBelow } from "../../../../game/world";
@@ -47,7 +47,7 @@ export function createThunderhead(x: number, ap: number, bolts: number, arcs: nu
   const V = PAL.volt;
   const strikes = Array.from({ length: bolts }, (_, i) => T.gap * (i + 1));
   const last = strikes[strikes.length - 1] ?? 0;
-  const cloud = { x: clamp(x, T.margin, W - T.margin), y: T.y };
+  const cloud = { x: clampStageX(x, T.margin), y: T.y };
   // seconds since the main strike: the cloud gathers once it lands
   let t = -STRIKE;
   let called = 0;
@@ -74,7 +74,7 @@ export function createThunderhead(x: number, ap: number, bolts: number, arcs: nu
       const foe = nearestFoe(cloud.x);
       if (foe) {
         const dx = enemyCenter(foe)[0] - cloud.x;
-        cloud.x = clamp(cloud.x + Math.sign(dx) * Math.min(Math.abs(dx), T.drift * dt), T.margin, W - T.margin);
+        cloud.x = clampStageX(cloud.x + Math.sign(dx) * Math.min(Math.abs(dx), T.drift * dt), T.margin);
       }
       // each bolt is called a crackle early, so it lands on its beat
       if (called < strikes.length && t >= strikes[called] - STRIKE) {

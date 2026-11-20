@@ -1,7 +1,8 @@
-import { GROUND, W } from "../../../constants/stage";
+import { GROUND } from "../../../constants/stage";
 import { circle, fleck, glow, hairline, place } from "../../../engine/frame";
 import type { Effect } from "../../../types/effect";
 import { PK } from "../../../types/particle";
+import { stageLeft, stageRight } from "../../adventure";
 import { eachStanding } from "../../coopHooks";
 import { createFloorRing } from "../../effects/floorRing";
 import { hurtHero } from "../../hurtHero";
@@ -53,7 +54,7 @@ export function createVoidOrb(x: number, y: number, vx: number, vy: number, dama
         burst();
         return false;
       }
-      return o.x > -6 && o.x < W + 6 && o.t < 4;
+      return o.x > stageLeft() - 6 && o.x < stageRight() + 6 && o.t < 4;
     },
     draw() {
       place();

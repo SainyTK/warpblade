@@ -1,18 +1,24 @@
 import { SKY_FLASH } from "../constants/effectLook";
-import { beginFrame, composite, setShake } from "../engine/frame";
+import { beginFrame, composite, setCameraX, setShake } from "../engine/frame";
+import { stageCameraX } from "../game/adventure";
 import { drawChests } from "../game/build/chests";
 import { coop, eachHero } from "../game/coopHooks";
 import { shownKit } from "../game/hero/kits";
 import { drawSkills, drawSkillsBack } from "../game/skills/runtime";
 import { game, hero, lights, particles, rng } from "../game/state";
 import { settings } from "../store/settings";
+import { adventureBackdrop } from "./adventureBackdrop";
+import { drawAdventureTerrain } from "./adventureTerrain";
 import { drawEnemies, drawHeroLayer, drawPickups } from "./drawActors";
 import { drawAmbientLight, drawMist, drawWeather, sceneFlash } from "./drawAmbience";
 import { drawCoins } from "./drawCoins";
+import { drawMentor } from "./drawMentor";
 import { drawNumbers } from "./drawNumbers";
 import { drawShadows } from "./drawShadows";
+import { drawSpikes } from "./drawSpikes";
 import { drawXpOrbs } from "./drawXpOrbs";
-import { sceneBackground } from "./scenery";
+import { paletteAt } from "./eras/sceneDef";
+import { scene, sceneBackground } from "./scenery";
 
 const SHAKE_FULL = 0.25;
 const FLASH_STRENGTH = 70;
@@ -22,8 +28,18 @@ export function renderScene(out: Uint8ClampedArray): void {
   const s = game.shake > 0 && settings.shake ? game.shake / SHAKE_FULL : 0;
   setShake(Math.round(rng.range(-game.amp, game.amp) * s), Math.round(rng.range(-game.amp, game.amp) * s));
   if (game.shake <= 0) game.amp = 0;
-  beginFrame(sceneBackground());
+  setCameraX(0);
+  const { def, k, arena } = scene();
+  const cameraX = arena ? 0 : stageCameraX();
+  const palette = paletteAt(def, k);
+  const background = sceneBackground();
+  beginFrame(arena ? background : adventureBackdrop(background, cameraX, palette));
   drawAmbientLight();
+  setCameraX(cameraX);
+  if (!arena) {
+    drawAdventureTerrain(cameraX, game.t, palette);
+    drawSpikes(cameraX, game.t);
+  }
   const room = coop();
   for (const f of game.fx) {
     room?.owner(f);
@@ -33,6 +49,7 @@ export function renderScene(out: Uint8ClampedArray): void {
   drawSkillsBack();
   drawChests();
   drawShadows();
+  if (!arena) drawMentor(cameraX, game.t);
   eachHero(() => shownKit().drawFloor?.());
   drawEnemies();
   room?.drawUnderlay();
@@ -47,11 +64,14 @@ export function renderScene(out: Uint8ClampedArray): void {
   drawPickups();
   drawCoins();
   drawXpOrbs();
+  setCameraX(0);
   drawWeather();
   drawMist();
+  setCameraX(cameraX);
   lights.draw();
   drawNumbers();
   eachHero(() => shownKit().drawOver?.());
+  setCameraX(0);
   room?.drawOverlay();
   const bolt = game.flash > 0 ? game.flash / SKY_FLASH : 0;
   composite(out, Math.min(1, bolt + sceneFlash()) * FLASH_STRENGTH);

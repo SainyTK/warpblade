@@ -1,9 +1,9 @@
 import { ENEMY_AIR, STAGGER } from "../../constants/combat";
 import { SPARKS } from "../../constants/palette";
-import { GROUND, W } from "../../constants/stage";
+import { GROUND } from "../../constants/stage";
 import { sfx } from "../../services/audio";
 import type { Enemy } from "../../types/enemy";
-import { clamp } from "../../utils/math";
+import { clampStageX } from "../adventure";
 import { createImpact } from "../effects/impact";
 import { game, hero } from "../state";
 import { enemyCenter } from "./enemy";
@@ -53,7 +53,7 @@ export function updateStagger(e: Enemy, dt: number): boolean {
     return false;
   }
   e.vx -= e.vx * STAGGER.friction * dt;
-  e.x = clamp(e.x + e.vx * dt, 10, W - 10);
+  e.x = clampStageX(e.x + e.vx * dt, 10);
   if (kindOf(e.type).flies) e.vy -= e.vy * STAGGER.friction * dt;
   else e.vy = e.y < GROUND ? e.vy + ENEMY_AIR.gravity * dt : 0;
   e.y += e.vy * dt;

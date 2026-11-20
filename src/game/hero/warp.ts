@@ -1,10 +1,10 @@
 import { COST, WARP } from "../../constants/combat";
-import { GROUND, W } from "../../constants/stage";
+import { GROUND } from "../../constants/stage";
 import { sfx } from "../../services/audio";
 import type { Enemy } from "../../types/enemy";
 import type { WarpTarget } from "../../types/hero";
 import type { WarpTune } from "../../types/moveset";
-import { clamp } from "../../utils/math";
+import { isAdventure } from "../adventure";
 import { dealDamage } from "../damage";
 import { createImpact } from "../effects/impact";
 import { createSlash } from "../effects/slash";
@@ -21,6 +21,7 @@ import { leaveAfterimages } from "./afterimages";
 import { deny } from "./deny";
 import { kit } from "./kits";
 import { cutForSharedAction, maySharedAct } from "./sharedCut";
+import { clampHeroX, landingAt, safeHeroDestination } from "./terrain";
 import { travelEnded } from "./travelEnd";
 
 /**
@@ -99,7 +100,7 @@ export function findWarpTarget(): WarpTarget {
     const [x, y] = enemyCenter(foe);
     return { enemy: foe, x, y };
   }
-  return { x: clamp(hero.x + hero.face * WARP.fallback, 12, W - 12), y: hero.y - 18 };
+  return { x: clampHeroX(hero.x + hero.face * WARP.fallback, 12), y: hero.y - 18 };
 }
 
 /** J held: throw if a warp is ready and paid for; a press while it recharges or short of MP is refused at once */
@@ -148,15 +149,25 @@ export function releaseWeapon(): void {
   setState("throwWait");
 }
 
-/** the hero appears at (nx, ny); `told` lets the skills hear of it, which a chained arrival does not */
-export function arrive(nx: number, ny: number, foe: Enemy | null, told = true): void {
+export function arrive(x: number, y: number, foe: Enemy | null, told = true): void {
+  const adventure = isAdventure();
+  const { x: nx, y: ny } = adventure ? safeHeroDestination(x, y) : { x, y };
   const ox = hero.x;
   const oy = hero.y;
   leaveAfterimages(ox, oy, nx, ny);
   scarf.shift(nx - ox, ny - oy);
   ponytail.shift(nx - ox, ny - oy);
-  Object.assign(hero, { x: nx, y: ny, vx: 0, vy: 0, sword: null, hasSword: true });
-  hero.ground = Math.abs(ny - surfaceBelow(nx, ny - 1)) < 0.5;
+  Object.assign(hero, {
+    x: nx,
+    y: ny,
+    vx: 0,
+    vy: 0,
+    sword: null,
+    hasSword: true,
+    droppedPlatform: null,
+    travelMomentum: 0,
+  });
+  hero.ground = adventure ? landingAt(nx, ny, ny, 0, null) !== null : Math.abs(ny - surfaceBelow(nx, ny - 1)) < 0.5;
   sfx.warp();
   travelEnded();
   if (told) emitSkillEvent({ type: "warp", x: nx, y: ny, foe });
@@ -197,7 +208,7 @@ export function warpPower(distance: number): number {
 export function besideFoe(enemy: Enemy, from: number): [number, number] {
   const [ex, ey] = enemyCenter(enemy);
   hero.face = Math.sign(ex - from) || hero.face;
-  return [clamp(ex - hero.face * 13, 8, W - 8), Math.min(walks(enemy) ? enemy.y : ey + 18, GROUND)];
+  return [clampHeroX(ex - hero.face * 13), Math.min(walks(enemy) ? enemy.y : ey + 18, GROUND)];
 }
 
 /** the hero warps beside a foe and strikes it, harder the farther they came */
@@ -206,7 +217,7 @@ export function warpBeside(enemy: Enemy, told: boolean): void {
   const oy = hero.y;
   const [nx, ny] = besideFoe(enemy, ox);
   arrive(nx, ny, enemy, told);
-  strikeOnArrival(warpPower(Math.hypot(nx - ox, ny - oy)), enemy);
+  strikeOnArrival(warpPower(Math.hypot(hero.x - ox, hero.y - oy)), enemy);
 }
 
 /** the hero appears where the weapon landed: beside a foe and striking, or at a point */
@@ -218,9 +229,9 @@ export function doWarp(target: WarpTarget): void {
   }
   const ox = hero.x;
   const oy = hero.y;
-  const nx = clamp(hero.sword?.x ?? target.x, 8, W - 8);
+  const nx = clampHeroX(hero.sword?.x ?? target.x);
   const ny = Math.min((hero.sword?.y ?? target.y) + 18, GROUND);
   arrive(nx, ny, enemy);
   // a warp to a point still lands its blow, harder the farther the hero travelled
-  strikeOnArrival(warpPower(Math.hypot(nx - ox, ny - oy)), null);
+  strikeOnArrival(warpPower(Math.hypot(hero.x - ox, hero.y - oy)), null);
 }

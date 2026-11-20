@@ -2,6 +2,7 @@ import { PERFECT } from "../constants/combat";
 import { BRAZIERS } from "../constants/stage";
 import { scene, updateScenery } from "../scene/scenery";
 import { PF, PK } from "../types/particle";
+import { isAdventure, updateAdventure } from "./adventure";
 import { updateBlazes } from "./blazes";
 import { updateChests } from "./build/chests";
 import { updateFlow } from "./build/flow";
@@ -23,6 +24,7 @@ import { updateWaves } from "./waves";
 import { updateXpOrbs } from "./xpOrbs";
 
 function feedBraziers(): void {
+  if (isAdventure()) return;
   const heat = scene().def.braziers;
   if (heat <= 0) return;
   for (const b of BRAZIERS) {
@@ -94,7 +96,11 @@ export function update(dt: number): void {
   updateCoins(dt);
   updateXpOrbs(dt);
   coop()?.anyStanding();
-  updateWaves(dt);
+  if (isAdventure()) {
+    updateAdventure(dt);
+  } else {
+    updateWaves(dt);
+  }
   updateEffects(world);
   eachHero(() => ageGhosts(dt));
   updateBlazes(world);

@@ -1,7 +1,7 @@
-import { W } from "../../../constants/stage";
 import type { Enemy } from "../../../types/enemy";
 import { grain } from "../../../utils/grain";
 import { clamp, ease, lerp } from "../../../utils/math";
+import { stageBounds } from "../../adventure";
 import { hero } from "../../state";
 import { GAZE } from "./gaze";
 import { LANCE } from "./sightLance";
@@ -80,9 +80,10 @@ function lookAt(e: Enemy, tx: number, ty: number): [number, number] {
 
 /** the gaze's wall: where it is now, or where it will come from while the gaze gathers */
 function wallX(e: Enemy): number {
-  const from = e.side > 0 ? -GAZE.half : W + GAZE.half;
+  const { left, right } = stageBounds();
+  const from = (e.side > 0 ? left : right) - e.side * GAZE.half;
   if (e.state !== "volley") return from;
-  return from + e.side * clamp(e.st / GAZE.cross) * (W + GAZE.half * 2);
+  return from + e.side * clamp(e.st / GAZE.cross) * (right - left + GAZE.half * 2);
 }
 
 function awake(e: Enemy, time: number): UnblinkingPose {

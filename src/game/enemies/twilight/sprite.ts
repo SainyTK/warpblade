@@ -1,9 +1,10 @@
-import { GROUND, W } from "../../../constants/stage";
+import { GROUND } from "../../../constants/stage";
 import { sfx } from "../../../services/audio";
 import type { Enemy } from "../../../types/enemy";
 import { PK } from "../../../types/particle";
 import { approach, clamp, TAU } from "../../../utils/math";
 import { waveScale } from "../../../utils/progression";
+import { clampStageX } from "../../adventure";
 import { game, hero, particles, rng } from "../../state";
 import { foeSees } from "../awareness";
 import { PRISM } from "./colors";
@@ -70,7 +71,7 @@ export function updateSprite(e: Enemy, dt: number, ts: number): void {
         state: "blink",
         st: 0,
         n: 0,
-        ax: clamp(hx + side * rng.range(42, 66), 12, W - 12),
+        ax: clampStageX(hx + side * rng.range(42, 66), 12),
         ay: clamp(hy - rng.range(12, 34), 22, GROUND - 24),
       });
       sparkleBurst(e.x, e.y);
@@ -117,7 +118,7 @@ export function updateSprite(e: Enemy, dt: number, ts: number): void {
     });
   e.vx -= e.vx * 2 * dt;
   e.vy -= e.vy * 2 * dt;
-  e.x = clamp(e.x + e.vx * dt, 10, W - 10);
+  e.x = clampStageX(e.x + e.vx * dt, 10);
   e.y = clamp(e.y + e.vy * dt, 20, GROUND - 10);
   if (e.state !== "blink" && rng.chance(0.12 * ts))
     particles.spawn(PK.EMBER, e.x + rng.range(-4, 4), e.y + 3, 0, rng.range(4, 12), rng.range(0.3, 0.6), {

@@ -34,27 +34,28 @@ export const rain: SceneDef = {
     paintVeils(paint, r, k, P);
     paintTowers(paint, r, P);
     paintMist(paint, P);
-    paintFloor(paint, r, BRAZIER_FIRE);
-    paintSlabs(paint, r, P, BRAZIER_FIRE);
+    paintFloor(paint, r, paint.arena ? BRAZIER_FIRE : 0);
+    if (paint.arena) paintSlabs(paint, r, P, BRAZIER_FIRE);
   },
-  ambient(t, k) {
+  ambient(t, k, arena) {
     place();
     if (k < 1) glow(SUN.x, SUN.y, 70, RC.sunGlow, 0.1 * (1 - k));
     // the braziers sputter in the wet, their light catching and dropping
-    for (const b of BRAZIERS) {
+    for (const b of arena ? BRAZIERS : []) {
       const sputter = Math.max(0, Math.sin(t * 7.3 + b.x) * Math.sin(t * 2.9 + b.x * 0.3));
       glow(b.x, b.y - 8, 18, WC.brazierGlow, 0.12 * sputter);
     }
-    drawLightning(t, k);
-    drawPuddleLight(lightningFlash(t, k) / 0.32, k);
+    drawLightning(t, k, arena);
+    if (arena) drawPuddleLight(lightningFlash(t, k) / 0.32, k);
   },
-  weather(t, k) {
+  weather(t, k, arena) {
     drawRain(t, k);
-    drawRunoff(t, k);
-    drawSplashes();
+    if (arena) drawRunoff(t, k);
+    drawSplashes(arena);
   },
-  update(dt, k) {
-    updateRain(dt, k);
+  update(dt, k, arena) {
+    updateRain(dt, k, arena);
+    if (!arena) return;
     // the rain hisses on the coals and sends up wisps of steam
     for (const b of BRAZIERS)
       if (steam.chance(dt * lerp(1.2, 3, k)))

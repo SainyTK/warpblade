@@ -1,6 +1,7 @@
 import { PAL, SPARKS } from "../../../../constants/palette";
-import { RES, W } from "../../../../constants/stage";
+import { RES } from "../../../../constants/stage";
 import { fleck, glow, hairline, place } from "../../../../engine/frame";
+import { stageLeft, stageRight } from "../../../../game/adventure";
 import { dealDamage } from "../../../../game/damage";
 import { createImpact } from "../../../../game/effects/impact";
 import { enemyBox } from "../../../../game/enemies/enemy";
@@ -53,7 +54,7 @@ export function createCrystalWave(
         dealDamage(e, damage, { fromX: o.x - face * 8, kx: face * 60, source });
         game.fx.push(createImpact(o.x, y, face, false, SPARKS.crystal));
       }
-      return o.t < LIFE && o.x > -10 && o.x < W + 10;
+      return o.t < LIFE && o.x > stageLeft() - 10 && o.x < stageRight() + 10;
     },
     draw() {
       place();

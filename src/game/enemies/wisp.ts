@@ -1,11 +1,12 @@
 import { ENEMY_HITS } from "../../constants/enemies";
 import { SPARKS } from "../../constants/palette";
-import { GROUND, W } from "../../constants/stage";
+import { GROUND } from "../../constants/stage";
 import { sfx } from "../../services/audio";
 import type { Enemy } from "../../types/enemy";
 import { PK } from "../../types/particle";
 import { approach, clamp } from "../../utils/math";
 import { waveScale } from "../../utils/progression";
+import { clampStageX } from "../adventure";
 import { eachStanding } from "../coopHooks";
 import { hurtHero } from "../hurtHero";
 import { game, hero, particles, rng } from "../state";
@@ -50,7 +51,7 @@ export function updateWisp(e: Enemy, dt: number, ts: number): void {
     e.vx -= e.vx * 2 * dt;
     e.vy -= e.vy * 2 * dt;
   }
-  e.x = clamp(e.x + e.vx * dt, 10, W - 10);
+  e.x = clampStageX(e.x + e.vx * dt, 10);
   e.y = clamp(e.y + e.vy * dt, 20, GROUND - 10);
   if (rng.chance(0.15 * ts))
     particles.spawn(

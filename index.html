@@ -24,6 +24,7 @@
 
     <main class="stage" id="stage">
       <canvas id="game" width="320" height="180" tabindex="0" aria-label="Warpblade game. Open the menu with Escape or P, or the pause button, to see the controls."></canvas>
+      <button class="mentor-prompt" id="mentorPrompt" type="button" aria-label="Talk to mentor" hidden>Talk <kbd></kbd></button>
       <canvas class="danger-glow" id="dangerGlow" aria-hidden="true" hidden></canvas>
       <div class="hud">
         <div class="bars">
@@ -50,7 +51,7 @@
             <span class="el warp">WARP</span>
             <span class="ability-tabs" id="abilityReserve"></span>
           </div>
-          <div class="score" id="wave">STAGE 1 WAVE 0/30</div>
+          <div class="score" id="wave">STAGE 0%</div>
           <div class="score coin-count" id="coinCount"></div>
           <div class="score" id="score"><span id="downCount">0 DOWN</span><span class="best-run" id="bestRun"></span></div>
           <div class="ult"><span id="ultName"></span><span class="pips" id="ultPips"></span></div>

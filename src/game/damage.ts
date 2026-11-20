@@ -9,6 +9,7 @@ import type { Enemy } from "../types/enemy";
 import type { DamageTag } from "../types/game";
 import { buildStats } from "../utils/build";
 import { isHeroSource } from "../utils/sources";
+import { recordStageDamage } from "./adventure";
 import { addFlow, flowDamage } from "./build/flow";
 import { recordDamage } from "./damageLedger";
 import { createImpact } from "./effects/impact";
@@ -86,6 +87,7 @@ function guards(e: Enemy, o: HitOptions): boolean {
 /** a blocked blow: a little chip damage and sparks */
 function block(e: Enemy, base: number, source: SourceId): HitResult {
   const value = Math.max(1, Math.round(base * GUARD.chip));
+  recordStageDamage(e, value);
   e.hp -= value;
   recordDamage(source, value);
   popNumber(e, value, "block", false, !HERO_SOURCES.has(source));
@@ -165,6 +167,7 @@ export function dealDamage(e: Enemy, base: number, o: HitOptions = {}): HitResul
   dmg *= buildDamage();
   dmg = kindOf(e.type).takes?.(e, dmg, !o.dot && isHeroSource(source)) ?? dmg;
   const value = Math.max(1, Math.round(dmg));
+  recordStageDamage(e, value);
   e.hp -= value;
   recordDamage(source, value);
   const fromHero = isHeroSource(source);

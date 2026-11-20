@@ -1,13 +1,13 @@
 import { track } from "../services/analytics";
-import { bestRun } from "../store/records";
 import type { RunOutcome, RunResult } from "../types/run";
 import { bySourceDamage } from "../utils/runReport";
+import { isAdventure } from "./adventure";
 import { bankCoins } from "./coins";
 import { coop } from "./coopHooks";
 import { feat } from "./feat";
 import { countedOutcome } from "./finale";
 import { resetRun } from "./run";
-import { runReport } from "./runReport";
+import { runReport, stageResult } from "./runReport";
 import { character, game, hero } from "./state";
 
 /** The end of the last run, for the result screen. */
@@ -20,28 +20,31 @@ export function onRunEnd(listener: (result: RunResult) => void): void {
   listeners.add(listener);
 }
 
-/** Kael fell or cleared the stage: bank the coins, set the stage fresh behind the menu and report how far he got */
 export function endRun(fate: RunOutcome): void {
   const room = coop();
   if (room) return room.endRun(fate);
-  const outcome = countedOutcome(fate);
+  const adventure = isAdventure();
+  const outcome = adventure ? fate : countedOutcome(fate);
   feat({ kind: "runEnd", outcome, wave: game.wave, hero: character.id });
-  // the best run is this one when its last clear is the record's: the same waves at the same time
-  const best = bestRun();
-  const record = game.cleared > 0 && best?.waves === game.cleared && best.seconds === game.clearedAt;
-  const result = { outcome, wave: game.wave, coins: bankCoins(), report: runReport(), record };
+  const report = runReport();
+  const coins = bankCoins();
+  const result: RunResult = adventure
+    ? { outcome, stage: stageResult(report, outcome), coins, report }
+    : { outcome, wave: game.wave, coins, report };
   resetRun("");
   hero.inv = 0;
   reportRun(result);
 }
 
-/** run_end's fields: how far the run went and, when the run was kept, the level, foes defeated and the source that did the most damage */
 function runEndParams(result: RunResult): Record<string, string | number> {
-  const params = { hero: character.id, outcome: result.outcome, wave: result.wave, coins: result.coins };
-  const { report } = result;
-  if (!report) return params;
+  const { outcome, coins, report, stage } = result;
+  const params = { hero: report?.hero ?? character.id, outcome, coins };
+  const run: Record<string, string | number> = stage
+    ? { grade: stage.grade, bosses: stage.bossesDefeated, distance: stage.distance, damage: stage.damage }
+    : { wave: result.wave };
+  if (!report) return { ...params, ...run };
   const top = bySourceDamage(report.sources)[0]?.id ?? "none";
-  return { ...params, level: report.level, kills: report.kills, top };
+  return { ...params, ...run, level: report.level, kills: report.kills, top };
 }
 
 /** show a finished run's result; a co-op room reports its own runs here */

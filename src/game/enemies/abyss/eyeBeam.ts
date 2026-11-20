@@ -1,4 +1,4 @@
-import { GROUND, W } from "../../../constants/stage";
+import { GROUND } from "../../../constants/stage";
 import { ellipseRing, glow, glowLine, hairline, line, place, px, sparkle } from "../../../engine/frame";
 import type { Effect } from "../../../types/effect";
 import type { Enemy } from "../../../types/enemy";
@@ -6,6 +6,7 @@ import { PK } from "../../../types/particle";
 import { WHITE } from "../../../utils/color";
 import { grain } from "../../../utils/grain";
 import { clamp } from "../../../utils/math";
+import { stageLeft, stageRight } from "../../adventure";
 import { eachStanding, heroSlot } from "../../coopHooks";
 import { hurtHero } from "../../hurtHero";
 import { game, particles, rng } from "../../state";
@@ -24,8 +25,8 @@ const FORKS = { count: 5, rate: 40 };
 function rayEnd(x: number, y: number, ux: number, uy: number): [number, number] {
   let len = REACH;
   if (uy > 0.01) len = Math.min(len, (GROUND - 1 - y) / uy);
-  if (ux > 0.01) len = Math.min(len, (W + 4 - x) / ux);
-  if (ux < -0.01) len = Math.min(len, (-4 - x) / ux);
+  if (ux > 0.01) len = Math.min(len, (stageRight() + 4 - x) / ux);
+  if (ux < -0.01) len = Math.min(len, (stageLeft() - 4 - x) / ux);
   return [x + ux * len, y + uy * len];
 }
 

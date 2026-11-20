@@ -1,6 +1,7 @@
 import { HERO_START_X } from "../constants/hero";
 import { GROUND } from "../constants/stage";
 import { emptyStream } from "../utils/waves";
+import { resetAdventure } from "./adventure";
 import { clearChests } from "./build/chests";
 import { bankCoins } from "./coins";
 import { resetLedger } from "./damageLedger";
@@ -20,6 +21,7 @@ import { clearFields } from "./timeFields";
 /** after a fall, a cleared stage or a restart from the menu: Kael starts over at level 1 from wave 1 */
 export function resetRun(banner = "Rise again"): void {
   bankCoins();
+  resetAdventure();
   resetProgress();
   resetLedger();
   forgetSkills();

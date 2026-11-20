@@ -1,10 +1,11 @@
-import { GROUND, W } from "../../../constants/stage";
+import { GROUND } from "../../../constants/stage";
 import { fleck, glow, hairline, line, place, polygon, px } from "../../../engine/frame";
 import { sfx } from "../../../services/audio";
 import type { Effect } from "../../../types/effect";
 import { PK } from "../../../types/particle";
 import { WHITE } from "../../../utils/color";
 import { clamp } from "../../../utils/math";
+import { stageLeft, stageRight } from "../../adventure";
 import { eachStanding, heroSlot } from "../../coopHooks";
 import { hurtHero } from "../../hurtHero";
 import { particles, rng } from "../../state";
@@ -77,7 +78,9 @@ function drawSpike(x: number, h: number, lean: number): void {
  * turn. Each crack glows before its spike comes, so Kael can jump the row or dash through it. The row hits once.
  */
 export function createVoidSpikes(x0: number, dir: number, count: number, damage: number): Effect {
-  const xs = Array.from({ length: count }, (_, i) => x0 + dir * i * GAP).filter((x) => x > 4 && x < W - 4);
+  const xs = Array.from({ length: count }, (_, i) => x0 + dir * i * GAP).filter(
+    (x) => x > stageLeft() + 4 && x < stageRight() - 4,
+  );
   const life = (xs.length - 1) * DELAY + SPIKE.warn + SPIKE.up + SPIKE.hold + SPIKE.down;
   let t = 0;
   const hit = new Set<number>();

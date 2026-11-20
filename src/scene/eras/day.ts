@@ -131,7 +131,7 @@ export const day: SceneDef = {
     const stalks = paintDayDetail(paint, r, k, colors, P, { picture: artPicture, windows });
     setStalks(stalks, { foot: P.vine, stem: P.moss, tip: P.mossTip });
   },
-  ambient(t, k) {
+  ambient(t, k, arena) {
     place();
     const sun = sunAt(k);
     glow(sun.x, sun.y, 64, colors.halo, 0.22 + k * 0.06);
@@ -139,8 +139,10 @@ export const day: SceneDef = {
     drawDriftingClouds(t, colors);
     drawBirds(t);
     drawButterflies(t);
-    drawStalks(t);
-    for (const [cx, cy] of CRACKS) glow(cx + 3, cy, 9, RIFT, 0.18 + Math.sin(t * 1.4 + cx) * 0.06);
+    if (arena) {
+      drawStalks(t);
+      for (const [cx, cy] of CRACKS) glow(cx + 3, cy, 9, RIFT, 0.18 + Math.sin(t * 1.4 + cx) * 0.06);
+    }
   },
   weather: drawSeedsAndMotes,
 };

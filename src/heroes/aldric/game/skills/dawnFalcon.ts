@@ -1,5 +1,5 @@
-import { W } from "../../../../constants/stage";
 import { glow, hairline, place, polygon } from "../../../../engine/frame";
+import { stageLeft, stageRight } from "../../../../game/adventure";
 import { dealDamage } from "../../../../game/damage";
 import { createImpact } from "../../../../game/effects/impact";
 import { enemyBox } from "../../../../game/enemies/enemy";
@@ -48,7 +48,7 @@ function createFalcon(x0: number, y0: number, face: number, passes: number, dela
             duration: FALCON.burnTime,
           });
       }
-      if (o.travelled >= FALCON.reach || o.x < -8 || o.x > W + 8) {
+      if (o.travelled >= FALCON.reach || o.x < stageLeft() - 8 || o.x > stageRight() + 8) {
         o.pass++;
         o.travelled = 0;
         o.dir = -o.dir;

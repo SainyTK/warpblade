@@ -58,11 +58,11 @@ export interface SceneDef {
   /** how strongly the braziers burn and glow, 0 for cold ones; the night uses 1 */
   braziers: number;
   /** each frame, light behind the actors: glows, fireflies, twinkling stars. Use engine/frame drawing after place() */
-  ambient?(t: number, k: number): void;
+  ambient?(t: number, k: number, arena: boolean): void;
   /** each frame, in front of the actors and particles but behind the mist: rain, petals, motes, falling ash */
-  weather?(t: number, k: number): void;
+  weather?(t: number, k: number, arena: boolean): void;
   /** each simulation step, also behind the start menu: spawn particles such as rain splashes */
-  update?(dt: number, k: number): void;
+  update?(dt: number, k: number, arena: boolean): void;
   /** a whole-screen cold flash, 0 to 1, for lightning */
   flash?(t: number, k: number): number;
   /** how much the floor mist shows, 0 to 1; the night uses 1 */

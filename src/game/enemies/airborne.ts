@@ -1,8 +1,8 @@
 import { ENEMY_AIR, JUGGLE_LIMIT } from "../../constants/combat";
 import { ENEMIES } from "../../constants/enemies";
-import { GROUND, W } from "../../constants/stage";
+import { GROUND } from "../../constants/stage";
 import type { Enemy } from "../../types/enemy";
-import { clamp } from "../../utils/math";
+import { clampStageX } from "../adventure";
 import { dust, shake } from "../world";
 import { kindOf } from "./kinds";
 
@@ -22,7 +22,7 @@ export function updateAirborne(e: Enemy, dt: number): boolean {
   const flies = kindOf(e.type).flies;
   e.vy += ENEMY_AIR.gravity * dt * (flies ? 0.8 : 1);
   e.vx -= e.vx * 1.5 * dt;
-  e.x = clamp(e.x + e.vx * dt, 10, W - 10);
+  e.x = clampStageX(e.x + e.vx * dt, 10);
   e.y += e.vy * dt;
   if (e.y < 14) {
     e.y = 14;

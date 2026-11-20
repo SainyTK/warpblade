@@ -1,5 +1,6 @@
 import "./pickDialog.css";
 import { BOONS } from "../../constants/boons";
+import { stageRunId } from "../../game/adventure";
 import { cardView } from "../../game/build/cardView";
 import { clearPresses, releaseAll } from "../../game/input";
 import { answerPick } from "../../game/progress";
@@ -36,6 +37,11 @@ const build = dialog.querySelector(".level-up-build") as HTMLElement;
 const cards = dialog.querySelector(".level-up-cards") as HTMLElement;
 const tools = createPickTools(useTool);
 cards.after(tools.root);
+const leave = el("button", "pick-tool");
+leave.type = "button";
+leave.textContent = "Leave";
+leave.hidden = true;
+tools.root.append(leave);
 
 /** where the cards come from and where an answer goes: solo play acts at once, a co-op room may send it to the host */
 export interface PickSource {
@@ -63,7 +69,20 @@ let dealtFor = "";
 /** what the tools and slots last showed */
 let shownBuild = "";
 
-const pickKey = (): string => `${game.wave}:${progress.level}:${progress.picks}`;
+const mentorRunId = (): number | null => (source === SOLO ? stageRunId() : null);
+
+function pickKey(): string {
+  const id = mentorRunId();
+  return id !== null ? `mentor:${id}` : `${game.wave}:${progress.level}:${progress.picks}`;
+}
+
+function describePick(): void {
+  const mentor = mentorRunId() !== null;
+  title.textContent = mentor ? "Upgrade skills" : `Wave ${game.wave} clear`;
+  const more = progress.picks - 1;
+  sub.textContent = more > 0 ? `Choose one. ${more} more pick${more === 1 ? "" : "s"} after this.` : "Choose one.";
+  leave.hidden = !mentor;
+}
 
 const locked = (): boolean => performance.now() - shownAt < INPUT_LOCK_MS;
 
@@ -90,9 +109,7 @@ function showBuild(): void {
 function deal(without: readonly string[] = []): void {
   dealt = dealCards(character, cardView(), rng, cardCount(buildStats(progress.build).luck, rng), BOONS, without);
   banishing = false;
-  title.textContent = `Wave ${game.wave} clear`;
-  const more = progress.picks - 1;
-  sub.textContent = more > 0 ? `Choose one. ${more} more pick${more === 1 ? "" : "s"} after this.` : "Choose one.";
+  describePick();
   cards.dataset.count = String(dealt.length);
   cards.replaceChildren(...dealt.map((card, i) => pickCard(cardFace(character, card, progress.build), i)));
   dealtFor = pickKey();
@@ -108,7 +125,16 @@ function close(): void {
   clearPresses();
 }
 
-/** the answer is given: the next pick is dealt, or the game plays on */
+function leaveMentor(): void {
+  if (mentorRunId() === null || game.mode !== "pick") return;
+  game.mode = "play";
+  if (banishing) {
+    banishing = false;
+    showBuild();
+  }
+  close();
+}
+
 function answer(a: PickAnswer<Card>, without: readonly string[] = []): void {
   dealtFor = "";
   source.answer(a);
@@ -144,6 +170,7 @@ function useTool(tool: PickTool): void {
 }
 
 const KEYS: Record<string, () => void> = {
+  Escape: leaveMentor,
   ArrowLeft: () => select(selected - 1),
   ArrowUp: () => select(selected - 1),
   KeyA: () => select(selected - 1),
@@ -174,7 +201,11 @@ export function bindPickDialog(): void {
     const card = (ev.target as HTMLElement).closest<HTMLElement>(".pick");
     if (card && ev.pointerType === "mouse") select(Number(card.dataset.index));
   });
-  dialog.addEventListener("cancel", (ev) => ev.preventDefault());
+  leave.addEventListener("click", leaveMentor);
+  dialog.addEventListener("cancel", (ev) => {
+    ev.preventDefault();
+    leaveMentor();
+  });
   dialog.addEventListener("keydown", (ev) => {
     const run = KEYS[ev.code];
     if (!run) return;
@@ -191,6 +222,7 @@ export function syncPickDialog(): void {
   releaseAll();
   dialog.showModal();
   if (dealtFor !== pickKey()) return deal();
+  describePick();
   shownAt = performance.now();
   select(selected);
 }

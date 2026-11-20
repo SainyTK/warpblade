@@ -1,5 +1,5 @@
-import { W } from "../../../../constants/stage";
 import { glow, place } from "../../../../engine/frame";
+import { stageLeft, stageRight } from "../../../../game/adventure";
 import type { Ramp } from "../../../../types/color";
 import type { Effect } from "../../../../types/effect";
 import { grain } from "../../../../utils/grain";
@@ -23,7 +23,7 @@ export function createCrystalRow(x: number, floor: number, R: Ramp, look: Crysta
   const crystal = (side: number, i: number) => {
     const d = look.start + i * look.gap;
     const cx = x + side * d;
-    if (cx < 2 || cx > W - 2) return;
+    if (cx < stageLeft() + 2 || cx > stageRight() - 2) return;
     // the front eases out the same way the ring that calls the row does
     const at = look.grow * (1 - Math.cbrt(1 - Math.min(1, d / look.reach)));
     const u = t - at;

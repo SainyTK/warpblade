@@ -1,9 +1,10 @@
-import { GROUND, W } from "../../../constants/stage";
+import { GROUND } from "../../../constants/stage";
 import { sfx } from "../../../services/audio";
 import type { Enemy } from "../../../types/enemy";
 import { PK } from "../../../types/particle";
-import { approach, clamp } from "../../../utils/math";
+import { approach } from "../../../utils/math";
 import { waveScale } from "../../../utils/progression";
+import { clampStageX } from "../../adventure";
 import { eachStanding } from "../../coopHooks";
 import { createFloorRing } from "../../effects/floorRing";
 import { createSlash } from "../../effects/slash";
@@ -99,7 +100,7 @@ export function updateStalker(e: Enemy, dt: number, ts: number): void {
     if (e.st >= RISE) Object.assign(e, { state: "recover", st: 0 });
   } else if (e.st >= 0.7) Object.assign(e, { state: "walk", st: 0, n: 0, cd: rng.range(0.9, 1.7) * ws.cooldown });
   if (e.state !== "walk" && e.state !== "burrow") e.vx -= e.vx * 4 * dt;
-  e.x = clamp(e.x + e.vx * dt, 10, W - 10);
+  e.x = clampStageX(e.x + e.vx * dt, 10);
   e.y = GROUND;
   if (!sunk(e) && rng.chance(0.08 * ts))
     particles.spawn(PK.EMBER, e.x + rng.range(-6, 6), e.y - rng.range(6, 18), 0, -10, rng.range(0.4, 0.8), {

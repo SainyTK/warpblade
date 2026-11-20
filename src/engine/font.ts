@@ -1,14 +1,13 @@
 import { GLYPH, GLYPHS } from "../constants/font";
 import type { Color } from "../types/color";
-import { putScreen, shakeOffset } from "./frame";
+import { projectX, projectY, putScreen } from "./frame";
 
 export const textWidth = (text: string, scale = 1): number => (text.length * (GLYPH.w + GLYPH.gap) - GLYPH.gap) * scale;
 
 /** pixel text centered on x with its top at y, each ink pixel scaled up, ringed by a dark outline */
 export function drawText(text: string, x: number, y: number, c: Color, outline: Color, scale = 1, a = 1): void {
-  const [shx, shy] = shakeOffset();
-  const left = Math.round(x - textWidth(text, scale) / 2) + shx;
-  const top = Math.round(y) + shy;
+  const left = Math.round(projectX(x) - textWidth(text, scale) / 2);
+  const top = Math.round(projectY(y));
   const ink = (fn: (sx: number, sy: number) => void) => {
     for (let i = 0; i < text.length; i++) {
       const g = GLYPHS[text[i]];

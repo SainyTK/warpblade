@@ -64,12 +64,12 @@ export const abyss: SceneDef = {
   braziers: 0,
   mist: 0.7,
   detail: (paint, _r, k) => paintAbyss(paint, paletteAt(k), k),
-  ambient(t, k) {
+  ambient(t, k, arena) {
     drawEclipseLight(t, k);
     drawTearLight(t, k);
     drawChunks(t);
     drawVeinLight(t, k);
-    drawVoidFlames(t);
+    if (arena) drawVoidFlames(t);
   },
   weather: drawAsh,
 };

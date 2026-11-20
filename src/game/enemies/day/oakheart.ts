@@ -1,9 +1,10 @@
-import { GROUND, W } from "../../../constants/stage";
+import { GROUND } from "../../../constants/stage";
 import { sfx } from "../../../services/audio";
 import type { Enemy } from "../../../types/enemy";
 import { PK } from "../../../types/particle";
-import { approach, clamp } from "../../../utils/math";
+import { approach } from "../../../utils/math";
 import { waveScale } from "../../../utils/progression";
+import { clampStageX, stageLeft, stageRight } from "../../adventure";
 import { eachStanding } from "../../coopHooks";
 import { createSlash } from "../../effects/slash";
 import { hurtHero } from "../../hurtHero";
@@ -64,7 +65,7 @@ function plantRoots(e: Enemy, enraged: boolean): void {
   let i = 0;
   for (let d = 22; d <= span; d += ROOT_STEP) {
     const x = e.x + dir * d;
-    if (x < 6 || x > W - 6) break;
+    if (x < stageLeft() + 6 || x > stageRight() - 6) break;
     game.fx.push(createRootSpike(x, mark + i * 0.07, OAK_HITS.root * e.power, strike, dir * 0.5));
     i++;
   }
@@ -78,7 +79,7 @@ function plantRoots(e: Enemy, enraged: boolean): void {
 function lobAcorns(e: Enemy, enraged: boolean): void {
   const n = enraged ? 4 : 3;
   for (let i = 0; i < n; i++) {
-    const tx = clamp(hero.x + (i - (n - 1) / 2) * 20, 8, W - 8);
+    const tx = clampStageX(hero.x + (i - (n - 1) / 2) * 20, 8);
     const ty = surfaceBelow(tx, hero.y - 2);
     game.fx.push(createAcorn(e.x + e.face * 4, e.y - 36, tx, ty, 0.85 + i * 0.08, OAK_HITS.acorn * e.power));
   }
@@ -145,7 +146,7 @@ export function updateOakheart(e: Enemy, dt: number, ts: number): void {
       cd: rng.range(1, 1.8) * (enraged ? 0.65 : 1) * waveScale(game.wave).cooldown,
     });
   if (e.state !== "walk") e.vx -= e.vx * 4 * dt;
-  e.x = clamp(e.x + e.vx * dt, 14, W - 14);
+  e.x = clampStageX(e.x + e.vx * dt, 14);
   e.y = GROUND;
   if (rng.chance(0.15 * ts))
     particles.spawn(PK.EMBER, e.x + rng.range(-8, 8), e.y - rng.range(12, 30), 0, -10, rng.range(0.5, 1), {

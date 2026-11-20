@@ -1,16 +1,17 @@
 import { onFrame, PHANTOM_RAMP } from "../../../../constants/combo";
 import { frame } from "../../../../constants/hero";
-import { W } from "../../../../constants/stage";
+import { clampStageX } from "../../../../game/adventure";
 import { createSlash } from "../../../../game/effects/slash";
 import { enemyCenter } from "../../../../game/enemies/enemy";
 import { leaveAfterimages } from "../../../../game/hero/afterimages";
 import { lift } from "../../../../game/hero/lift";
+import { moveHeroX } from "../../../../game/hero/terrain";
 import { objectMemory, rememberPerSeat } from "../../../../game/seatMemory";
 import { skillEvolved, skillValues, withCharms } from "../../../../game/skills/query";
 import { game, hero } from "../../../../game/state";
 import type { Enemy } from "../../../../types/enemy";
 import type { MoveDef } from "../../../../types/move";
-import { clamp, lerp } from "../../../../utils/math";
+import { lerp } from "../../../../utils/math";
 import { PHASE, SKILL_CANCEL, SKILL_FEEL, SKYBREAKER } from "../../constants/skillBlows";
 import { STRING_CANCEL } from "../../constants/string";
 import { kael } from "../state";
@@ -46,7 +47,7 @@ function startPass(): void {
   const ahead = phaseFoe(withCharms("area", v.reach ?? 80), kael.passage);
   const past = ahead ? ahead.x + hero.face * (Math.abs(enemyCenter(ahead)[0] - ahead.x) + 18) : hero.x + hero.face * 50;
   phase.from = hero.x;
-  phase.to = clamp(past, 10, W - 10);
+  phase.to = clampStageX(past, 10);
   phase.passed = true;
   leaveAfterimages(phase.from, hero.y, phase.to, hero.y);
 }
@@ -58,7 +59,8 @@ function phaseStep(t: number): void {
   hero.vx = 0;
   if (t < PHASE.from) return;
   if (!phase.passed) startPass();
-  hero.x = lerp(phase.from, phase.to, Math.min(1, (t - PHASE.from) / (PHASE.to - PHASE.from)));
+  const x = lerp(phase.from, phase.to, Math.min(1, (t - PHASE.from) / (PHASE.to - PHASE.from)));
+  hero.x = moveHeroX(hero.x, hero.y, x);
   if (phase.turned || t < PHASE.turn) return;
   phase.turned = true;
   hero.face = -hero.face;

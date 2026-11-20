@@ -1,7 +1,9 @@
 import { FH, FN, FW } from "../constants/stage";
 import { STAGE_WAVES } from "../constants/waves";
 import { bayerAt } from "../engine/frame";
+import { isAdventure } from "../game/adventure";
 import { game } from "../game/state";
+import { menuContext } from "../ui/menu/menuState";
 import { eraOf, eraProgress } from "../utils/eras";
 import { clamp } from "../utils/math";
 import { buildBackground } from "./background";
@@ -15,6 +17,7 @@ interface Look {
   key: string;
   def: SceneDef;
   k: number;
+  arena: boolean;
   bg: Uint32Array;
   /** the layer of each art pixel of bg */
   layers: Uint8Array;
@@ -26,10 +29,12 @@ export function sceneWave(): number {
   return clamp(wave, 1, STAGE_WAVES);
 }
 
-function lookFor(wave: number): Omit<Look, "bg" | "layers"> {
+const usesArena = (): boolean => menuContext() === "title" || !isAdventure();
+
+function lookFor(wave: number, arena: boolean): Omit<Look, "bg" | "layers"> {
   const era = eraOf(wave);
   const k = eraProgress(wave);
-  return { key: `${era.id}:${k}`, def: SCENES[era.id], k };
+  return { key: `${era.id}:${k}:${arena}`, def: SCENES[era.id], k, arena };
 }
 
 let current: Look | null = null;
@@ -44,43 +49,48 @@ export function onSceneChange(fn: () => void): void {
 }
 
 /** the scene being shown now */
-export function scene(): { def: SceneDef; k: number } {
-  if (!current) refresh();
-  const c = current as Look;
-  return { def: c.def, k: c.k };
+export function scene(): Pick<Look, "def" | "k" | "arena"> {
+  const { def, k, arena } = layout();
+  return { def, k, arena };
 }
 
 /** the finished static picture of the scene being shown, at full detail, with the layer of each art pixel */
 export function scenePlate(): { plate: Uint32Array; layers: Uint8Array } {
-  if (!current) refresh();
-  const c = current as Look;
+  const c = layout();
   return { plate: c.bg, layers: c.layers };
 }
 
 /** rebuild the background when the wave's look differs from the one shown, and start the dissolve */
-function refresh(): void {
-  const next = lookFor(sceneWave());
+function refresh(arena: boolean): void {
+  const next = lookFor(sceneWave(), arena);
   if (current && current.key === next.key) return;
-  previous = current ? sceneBackground().slice() : null;
-  const first = !current;
-  const built = buildBackground(next.def, next.k);
+  previous = current?.arena === arena ? dissolved(current).slice() : null;
+  const built = buildBackground(next.def, next.k, arena);
   current = { ...next, bg: built.plate, layers: built.layers };
-  fade = first ? 1 : 0;
+  fade = previous ? 0 : 1;
   for (const fn of listeners) fn();
 }
 
 /** one step of the scenery: change the look when the wave asks for it, run the dissolve and the era's own motion */
 export function updateScenery(dt: number): void {
-  refresh();
+  refresh(usesArena());
   fade = Math.min(1, fade + dt / DISSOLVE);
   const c = current as Look;
-  c.def.update?.(dt, c.k);
+  c.def.update?.(dt, c.k, c.arena);
 }
 
 /** the static picture this frame: during a dissolve, the old one breaks up into the new in a Bayer pattern */
 export function sceneBackground(): Uint32Array {
-  if (!current) refresh();
-  const c = current as Look;
+  return dissolved(layout());
+}
+
+function layout(): Look {
+  const arena = usesArena();
+  if (current?.arena !== arena) refresh(arena);
+  return current as Look;
+}
+
+function dissolved(c: Look): Uint32Array {
   if (fade >= 1 || !previous) return c.bg;
   for (let y = 0, i = 0; y < FH; y++)
     for (let x = 0; x < FW; x++, i++) mixed[i] = fade > bayerAt(x, y) ? c.bg[i] : previous[i];

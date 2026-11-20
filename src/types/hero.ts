@@ -1,6 +1,7 @@
 import type { Projectile } from "./effect";
 import type { Enemy } from "./enemy";
 import type { Pose } from "./pose";
+import type { Platform } from "./world";
 
 /** why a press was refused: the selected spell or the warp is still recharging, or MP is short */
 export type DenyReason = "cast" | "warp" | "mp" | "ult";
@@ -69,6 +70,8 @@ export interface Hero {
   inv: number;
   jumps: number;
   drop: number;
+  droppedPlatform: Platform | null;
+  travelMomentum: number;
   hasSword: boolean;
   hitDone: boolean;
   /** the highest point the hero may rise to before landing again, set by his last jump or a lift from the floor */

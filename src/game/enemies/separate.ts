@@ -1,7 +1,6 @@
 import { SEPARATION as S } from "../../constants/enemies";
-import { W } from "../../constants/stage";
 import type { Enemy } from "../../types/enemy";
-import { clamp } from "../../utils/math";
+import { clampStageX } from "../adventure";
 import { game } from "../state";
 import { kindOf } from "./kinds";
 
@@ -35,8 +34,8 @@ export function separateFoes(dt: number): void {
       const push = S.speed * (1 - d / S.gap) * dt;
       const ux = d > 0.01 ? dx / d : a.seed < b.seed ? 1 : -1;
       const uy = d > 0.01 ? dy / d : 0;
-      a.x = clamp(a.x - ux * push, S.wall, W - S.wall);
-      b.x = clamp(b.x + ux * push, S.wall, W - S.wall);
+      a.x = clampStageX(a.x - ux * push, S.wall);
+      b.x = clampStageX(b.x + ux * push, S.wall);
       a.y -= uy * push;
       b.y += uy * push;
     }

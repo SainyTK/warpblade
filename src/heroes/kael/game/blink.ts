@@ -1,6 +1,7 @@
 import { BLINK_COST, WARP } from "../../../constants/combat";
 import { PHANTOM_RAMP } from "../../../constants/combo";
-import { GROUND, W } from "../../../constants/stage";
+import { GROUND } from "../../../constants/stage";
+import { clampStageX } from "../../../game/adventure";
 import { dealDamage } from "../../../game/damage";
 import { createSlash } from "../../../game/effects/slash";
 import { enemyBox, enemyCenter, walks } from "../../../game/enemies/enemy";
@@ -9,7 +10,6 @@ import { objectMemory, rememberPerSeat } from "../../../game/seatMemory";
 import { skillEvolved, skillValues, withCharms } from "../../../game/skills/query";
 import { game, hero, progress } from "../../../game/state";
 import type { Enemy } from "../../../types/enemy";
-import { clamp } from "../../../utils/math";
 import { createEcho } from "./effects/echo";
 import { showPhantom } from "./phantom";
 import { kael } from "./state";
@@ -81,7 +81,7 @@ function afterimageCut(x: number, y: number, face: number, damage: number): void
 /** Shadow Step: a phantom of Kael on the near side cuts the foe as he strikes from its back */
 function shadowStrike(e: Enemy, side: number, damage: number): void {
   const box = enemyBox(e);
-  const x = clamp(side > 0 ? box[0] - 9 : box[2] + 9, 8, W - 8);
+  const x = clampStageX(side > 0 ? box[0] - 9 : box[2] + 9, 8);
   showPhantom(x, walks(e) ? e.y : Math.min(GROUND, e.y + 18), side, 0.35);
   game.fx.push(createEcho(e, damage, side, "k_blink"));
 }
@@ -97,7 +97,7 @@ export function blink(keen: boolean): boolean {
   else spendWarpCharge();
   const box = enemyBox(e);
   const side = Math.sign(e.x - hero.x) || hero.face;
-  const nx = clamp(side > 0 ? box[2] + 9 : box[0] - 9, 8, W - 8);
+  const nx = clampStageX(side > 0 ? box[2] + 9 : box[0] - 9, 8);
   const ny = walks(e) ? e.y : Math.min(GROUND, e.y + 18);
   if (v.after) afterimageCut(hero.x, hero.y, side, progress.stats.ad * v.after);
   arrive(nx, ny, e);

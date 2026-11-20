@@ -2,15 +2,15 @@ import { CHEST_ROWS } from "../../constants/chest";
 import { CHEST_PIXEL_COLORS, CHEST_PIXELS } from "../../constants/chestPixels";
 import { CHEST_MOTION as M } from "../../constants/growth";
 import { COIN_GOLD } from "../../constants/palette";
-import { GROUND, W } from "../../constants/stage";
+import { GROUND } from "../../constants/stage";
 import { glow, place, sparkle } from "../../engine/frame";
 import { sfx } from "../../services/audio";
 import type { ChestReward } from "../../types/build";
 import { PK } from "../../types/particle";
 import { buildStats } from "../../utils/build";
 import { rollChest } from "../../utils/chests";
-import { clamp } from "../../utils/math";
 import { skillOf } from "../../utils/skills";
+import { clampStageX } from "../adventure";
 import { eachStanding } from "../coopHooks";
 import { stampPixels } from "../effects/fine";
 import { queueEvolution } from "../evolve";
@@ -36,7 +36,7 @@ const HALF_W = Math.floor(CHEST_ROWS[0].length / 2);
 
 export function dropChest(x: number, y: number): void {
   chests.push({
-    x: clamp(Math.round(x), HALF_W + 4, W - HALF_W - 4),
+    x: clampStageX(Math.round(x), HALF_W + 4),
     y,
     vy: -M.pop,
     t: 0,

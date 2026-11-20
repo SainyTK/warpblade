@@ -86,6 +86,7 @@ function paintGrass(paint: PlatePaint): void {
     const tall = Math.round(BLADES.low + grain(ix, 13) * (BLADES.high - BLADES.low) * (0.35 + 0.65 * tuft));
     blade(paint, ix, floor, tall, Math.floor(grain(ix, 29) * 3) - 1);
   }
+  if (!paint.arena) return;
   for (const p of PLATFORMS)
     for (let ix = p.x0 * RES + 2; ix < p.x1 * RES; ix++) {
       if (grain(ix, p.y + 5) > BLADES.slabShare) continue;
@@ -114,7 +115,7 @@ function paintVines(paint: PlatePaint): void {
 
 export function paintFloor(paint: PlatePaint): void {
   paintLips(paint);
-  paintFirelight(paint);
+  if (paint.arena) paintFirelight(paint);
   paintVines(paint);
   paintGrass(paint);
 }

@@ -1,5 +1,5 @@
-import { W } from "../../../../constants/stage";
 import { glow, hairline, line, place } from "../../../../engine/frame";
+import { stageLeft, stageRight } from "../../../../game/adventure";
 import { enemyBox } from "../../../../game/enemies/enemy";
 import { game } from "../../../../game/state";
 import { boxHit } from "../../../../game/world";
@@ -45,7 +45,7 @@ export function createDawnLance(
         o.left--;
         spec.hit(e, o.x, o.y);
       }
-      const alive = o.left > 0 && o.t < LANCE.life && o.x > -10 && o.x < W + 10;
+      const alive = o.left > 0 && o.t < LANCE.life && o.x > stageLeft() - 10 && o.x < stageRight() + 10;
       if (!alive) spec.end?.(o.x, o.y);
       return alive;
     },

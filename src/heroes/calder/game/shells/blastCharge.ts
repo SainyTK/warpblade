@@ -1,12 +1,11 @@
-import { W } from "../../../../constants/stage";
 import { fleck, glow, place } from "../../../../engine/frame";
+import { clampStageX } from "../../../../game/adventure";
 import { enemyCenter } from "../../../../game/enemies/enemy";
 import { skillEvolved, skillValues, withCharms } from "../../../../game/skills/query";
 import { game, hero, progress } from "../../../../game/state";
 import { surfaceBelow } from "../../../../game/world";
 import type { Effect } from "../../../../types/effect";
 import { WHITE } from "../../../../utils/color";
-import { clamp } from "../../../../utils/math";
 import { ABILITY_COLOR, CHARGE } from "../../constants/shots";
 import { blastAt } from "../blastFoe";
 
@@ -78,7 +77,7 @@ export function fireBlastCharge(_x: number, _y: number, dir: number, wide: boole
   const v = skillValues(SKILL);
   const count = (v.count ?? 1) + (wide ? 2 : 0) + (skillEvolved(SKILL) ? 2 : 0);
   for (let i = 0; i < count; i++) {
-    const x = clamp(hero.x + dir * (CHARGE.throw + i * CHARGE.gap), EDGE, W - EDGE);
+    const x = clampStageX(hero.x + dir * (CHARGE.throw + i * CHARGE.gap), EDGE);
     game.fx.push(createCharge(x, surfaceBelow(x, hero.y - 4), i * 0.06));
   }
 }

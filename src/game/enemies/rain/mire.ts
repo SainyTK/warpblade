@@ -1,10 +1,11 @@
 import { SPARKS } from "../../../constants/palette";
-import { GROUND, W } from "../../../constants/stage";
+import { GROUND } from "../../../constants/stage";
 import { sfx } from "../../../services/audio";
 import type { Enemy } from "../../../types/enemy";
 import { PK } from "../../../types/particle";
 import { approach, clamp } from "../../../utils/math";
 import { waveScale } from "../../../utils/progression";
+import { clampStageX } from "../../adventure";
 import { eachStanding } from "../../coopHooks";
 import { hurtHero } from "../../hurtHero";
 import { game, hero, particles, rng } from "../../state";
@@ -91,7 +92,7 @@ export function updateMire(e: Enemy, dt: number, ts: number): void {
     if (e.st >= 0.25) Object.assign(e, { state: "recover", st: 0 });
   } else if (e.st >= 0.55) Object.assign(e, { state: "walk", st: 0, cd: rng.range(1, 1.8) * scale.cooldown });
   if (e.state !== "hop") e.vx -= e.vx * 4 * dt;
-  e.x = clamp(e.x + e.vx * dt, 10, W - 10);
+  e.x = clampStageX(e.x + e.vx * dt, 10);
   if (e.state !== "hop") e.y = GROUND;
   if (rng.chance(0.04 * ts))
     particles.spawn(PK.EMBER, e.x + rng.range(-6, 6), e.y - rng.range(4, 12), 0, -8, rng.range(0.3, 0.6), {

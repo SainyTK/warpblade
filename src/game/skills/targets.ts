@@ -1,11 +1,11 @@
-import { W } from "../../constants/stage";
 import type { Enemy } from "../../types/enemy";
+import { stageLeft, stageRight } from "../adventure";
 import { enemyBox, enemyCenter } from "../enemies/enemy";
 import { game } from "../state";
 
 /** foes still standing, with their middle inside the stage by at least this much */
 export function foesOnScreen(margin = 4): Enemy[] {
-  return game.enemies.filter((e) => e.hp > 0 && e.x > margin && e.x < W - margin);
+  return game.enemies.filter((e) => e.hp > 0 && e.x > stageLeft() + margin && e.x < stageRight() - margin);
 }
 
 /** squared distance from a point to a foe's middle */

@@ -1,8 +1,9 @@
-import { GROUND, W } from "../../../constants/stage";
-import { fleck, glow, glowLine, hairline, place, polygon, px } from "../../../engine/frame";
+import { GROUND } from "../../../constants/stage";
+import { fleck, glow, glowLine, hairline, place, polygon, px, toScreenX, toScreenY } from "../../../engine/frame";
 import type { Effect } from "../../../types/effect";
 import { PK } from "../../../types/particle";
 import { WHITE } from "../../../utils/color";
+import { stageLeft, stageRight } from "../../adventure";
 import { eachStanding, heroSlot } from "../../coopHooks";
 import { hurtHero } from "../../hurtHero";
 import { particles, rng } from "../../state";
@@ -39,7 +40,7 @@ export function createRuneWave(x0: number, dir: number, damage: number): Effect 
         particles.spawn(PK.EMBER, w.x + rng.range(-2, 2), GROUND - rng.range(1, 6), dir * 10, -rng.range(14, 30), 0.5, {
           sparks: RUNE_SPARKS,
         });
-      const end = Math.abs(w.x - x0) > REACH || w.x < -4 || w.x > W + 4;
+      const end = Math.abs(w.x - x0) > REACH || w.x < stageLeft() - 4 || w.x > stageRight() + 4;
       return !end;
     },
     draw() {
@@ -70,8 +71,8 @@ export function createRuneWave(x0: number, dir: number, damage: number): Effect 
       polygon(
         outline,
         (sx, sy = 0) => {
-          const behind = ((w.x - sx) * dir) / TRAIL;
-          const up = (GROUND - sy) / CREST.height;
+          const behind = ((toScreenX(w.x) - sx) * dir) / TRAIL;
+          const up = (toScreenY(GROUND) - sy) / CREST.height;
           return RUNE_RAMP[Math.min(4, Math.max(1, 1 + Math.floor((1 - behind) * 2.4 + up * 1.6 - 0.6)))];
         },
         fade,

@@ -1,9 +1,10 @@
-import { GROUND, W } from "../../../constants/stage";
+import { GROUND } from "../../../constants/stage";
 import { sfx } from "../../../services/audio";
 import type { Enemy } from "../../../types/enemy";
 import { PK } from "../../../types/particle";
 import { approach, clamp } from "../../../utils/math";
 import { waveScale } from "../../../utils/progression";
+import { clampStageX } from "../../adventure";
 import { game, hero, particles, rng } from "../../state";
 import { facesHero, turnToHero } from "../facing";
 import { RAIN_HITS, STORM_SPARKS } from "./colors";
@@ -64,7 +65,7 @@ export function updateStormkite(e: Enemy, dt: number, ts: number): void {
     e.vx -= e.vx * 2 * dt;
     e.vy -= e.vy * 2 * dt;
   }
-  e.x = clamp(e.x + e.vx * dt, 10, W - 10);
+  e.x = clampStageX(e.x + e.vx * dt, 10);
   e.y = clamp(e.y + e.vy * dt, 20, GROUND - 10);
   if (rng.chance(0.08 * ts))
     particles.spawn(PK.SPARK, e.x + rng.range(-5, 5), e.y + rng.range(6, 14), rng.range(-10, 10), 15, 0.25, {

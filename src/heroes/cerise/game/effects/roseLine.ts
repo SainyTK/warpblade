@@ -1,5 +1,5 @@
-import { W } from "../../../../constants/stage";
 import { fleck, glowLine, hairline, line, place } from "../../../../engine/frame";
+import { stageLeft, stageRight } from "../../../../game/adventure";
 import { dealDamage } from "../../../../game/damage";
 import { createImpact } from "../../../../game/effects/impact";
 import { enemyBox, enemyCenter } from "../../../../game/enemies/enemy";
@@ -33,7 +33,7 @@ export function createRoseLine(
 ): Effect {
   const o = { head: x, t: 0, out: 0 };
   const struck = new Set<Enemy>();
-  const end = stop ?? (face > 0 ? W + 8 : -8);
+  const end = stop ?? (face > 0 ? stageRight() + 8 : stageLeft() - 8);
   return {
     update(dt) {
       o.t += dt;

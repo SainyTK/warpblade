@@ -1,5 +1,6 @@
-import { RES, W } from "../../../../constants/stage";
+import { RES } from "../../../../constants/stage";
 import { fleck, glow, place } from "../../../../engine/frame";
+import { stageLeft, stageRight } from "../../../../game/adventure";
 import { dealDamage } from "../../../../game/damage";
 import { createImpact } from "../../../../game/effects/impact";
 import { enemyBox } from "../../../../game/enemies/enemy";
@@ -47,7 +48,7 @@ export function createCrescentWave(c: CrescentWave): Effect {
     update(dt) {
       o.run += ARC.speed * dt * o.dir;
       const out = c.x + c.face * o.run;
-      if (c.back && o.dir > 0 && (o.run >= c.reach || out < EDGE || out > W - EDGE)) {
+      if (c.back && o.dir > 0 && (o.run >= c.reach || out < stageLeft() + EDGE || out > stageRight() - EDGE)) {
         o.dir = -1;
         struck = new Set<Enemy>();
       }
@@ -61,7 +62,7 @@ export function createCrescentWave(c: CrescentWave): Effect {
         c.onHit?.(e);
       }
       if (o.dir < 0) return o.run > 0;
-      return o.run < c.reach && x > -10 && x < W + 10;
+      return o.run < c.reach && x > stageLeft() - 10 && x < stageRight() + 10;
     },
     draw() {
       place();

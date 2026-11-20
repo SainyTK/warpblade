@@ -2,12 +2,14 @@ import { STAMINA } from "../constants/combat";
 import { ENEMIES } from "../constants/enemies";
 import { ULT_LEVELS } from "../constants/ultimate";
 import { STAGE_WAVES } from "../constants/waves";
+import { isAdventure, stageProgress } from "../game/adventure";
 import { canAffordUlt, ultRecharge } from "../game/hero/ultimate";
 import { character, game, hero, progress } from "../game/state";
+import { inRoom } from "../store/coop";
 import { bestRun } from "../store/records";
 import { xpToNext } from "../utils/progression";
 import { clearText } from "../utils/records";
-import { minutesSeconds } from "../utils/runReport";
+import { minutesSeconds, stageProgressText } from "../utils/runReport";
 import { updateAbilityTabs } from "./abilityTabs";
 import { updateBuildStrip } from "./buildStrip";
 import { updateCoinCount } from "./coinCount";
@@ -26,7 +28,7 @@ const staminaBar = byId("stBar");
 const xp = byId("xpFill");
 const level = byId("level");
 const chain = byId("chain");
-const wave = byId("wave");
+const stageStatus = byId("wave");
 const downCount = byId("downCount");
 const bestRecord = byId("bestRun");
 const ultRow = byId("ultName").parentElement as HTMLElement;
@@ -56,7 +58,13 @@ export function updateHud(): void {
   if (hero.denied.ult > ultDenied) ultTab.jolt();
   ultDenied = hero.denied.ult;
   const leader = game.enemies.find((e) => e.rank !== "minion");
-  const best = bestRun();
+  const room = inRoom();
+  const waveMode = room || (!isAdventure() && game.wave > 0);
+  const best = room ? bestRun() : null;
+  const status = waveMode
+    ? `STAGE ${game.stage}  WAVE ${game.wave}/${STAGE_WAVES}`
+    : stageProgressText(stageProgress().distance).toUpperCase();
+  const time = minutesSeconds(game.clock);
   const affordable = hero.ultCd > 0 ? 0 : ULT_LEVELS.filter((_, i) => canAffordUlt(i + 1)).length;
   const key = [
     Math.round(hero.hp),
@@ -73,11 +81,12 @@ export function updateHud(): void {
     hero.chain,
     character.special.name,
     affordable,
-    game.wave,
+    status,
     game.kills,
-    Math.floor(game.clock),
+    time,
     best?.waves,
     best?.seconds,
+    leader?.type,
     leader ? Math.ceil(leader.hp) : -1,
     game.banner.text,
     game.banner.time > 0,
@@ -94,7 +103,7 @@ export function updateHud(): void {
   xp.style.width = need ? `${(progress.xp / need) * 100}%` : "100%";
   level.textContent = `LV ${progress.level}`;
   chain.innerHTML = pips(progress.comboLimit, (i) => i < hero.chain);
-  wave.textContent = `STAGE ${game.stage}  WAVE ${game.wave}/${STAGE_WAVES}  ${minutesSeconds(game.clock)}`;
+  stageStatus.textContent = `${status}  ${time}`;
   downCount.textContent = `${game.kills} DOWN`;
   bestRecord.textContent = best ? `  BEST ${clearText(best).toUpperCase()}` : "";
   ultName.textContent = character.special.name.toUpperCase();
