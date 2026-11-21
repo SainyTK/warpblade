@@ -1,32 +1,41 @@
 import type { SkillDef } from "../../../../types/skill";
-import { evolvedRow, levelRows } from "../../../../utils/skillRows";
+import { evolvedRow } from "../../../../utils/skillRows";
+import { drillLevels, type NativeStep } from "./drillLevels";
 
-/** values: `hold` seconds more Tempo holds before it falls, `keep` share of a blow's Tempo loss she keeps, `most` stacks
- *  added to the top, `topMove` walk speed more at the top, `topMp` MP for reaching the top, `topKeep` a blow at the top
- *  costs no Tempo, `floor` (evolved) share of the top Tempo never falls below */
-const LEVELS = levelRows([
-  { text: "Tempo holds 0.5 s longer before it falls.", values: { hold: 0.5 } },
-  { text: "A blow taken costs a quarter of your Tempo, not half.", values: { keep: 0.5 } },
-  { text: "New: Tempo's top is 12.", values: { most: 2 } },
-  { text: "New: at the top of Tempo you move 10% faster.", values: { topMove: 0.1 } },
-  { text: "Tempo holds 1 s longer.", values: { hold: 1 } },
-  { text: "New: reaching the top of Tempo gives back 6 MP.", values: { topMp: 6 } },
-  { text: "New: a blow taken at the top of Tempo costs none.", values: { topKeep: 1 } },
-  { text: "Tempo's top 12 to 14.", values: { most: 4 } },
+const NATIVE: readonly NativeStep[] = [
+  { values: { hold: 0.5 } },
+  { values: { keep: 0.5 } },
+  { values: { most: 2 } },
+  { values: { topMove: 0.1 } },
+  { values: { hold: 1 } },
+  { values: { topMp: 6 } },
+  { values: { topKeep: 1 } },
+  { values: { most: 4 } },
+];
+
+const LEVELS = drillLevels(NATIVE, [
+  { text: "A landed cut takes 0.15 s off the warp recharge.", drill: { warp: 0.15 } },
+  { text: "New: a warp arrival takes 0.6 s off a spell preparing.", drill: { prepare: 0.6 } },
+  { text: "New: an arrival recharges the dash.", drill: { dash: 1 } },
+  { text: "0.25 s a landed cut.", drill: { warp: 0.25 } },
+  { text: "New: a landed moonrise recharges the warp.", drill: { finisher: 1 } },
+  { text: "An arrival takes 1.2 s off a preparation.", drill: { prepare: 1.2 } },
+  { text: "New: infused blades hold 1 more hit.", drill: { infusion: 1 } },
+  { text: "0.4 s a landed cut; 2 s off a preparation.", drill: { warp: 0.4, prepare: 2 } },
 ]);
 
 export const UNBROKEN_RHYTHM: SkillDef = {
   id: "ve_rhythm",
   name: "Unbroken Rhythm",
-  kind: "passive",
+  kind: "movement",
   risk: "easy",
-  button: "auto",
-  text: "Your Tempo lasts longer, rises higher and is harder to lose.",
+  button: "L",
+  text: "Landed cuts shorten the warp's recharge, and arrivals speed up your spells.",
   levels: LEVELS,
   evolution: {
     partner: "ve_slip",
     name: "Perpetual Tempo",
-    text: "Your Tempo never falls below half its top.",
-    row: evolvedRow(LEVELS[7], "Tempo never falls below half.", { floor: 0.5 }),
+    text: "Every warp arrival readies the selected spell at once.",
+    row: evolvedRow(LEVELS[7], "Every arrival readies the spell.", { floor: 0.5 }),
   },
 };

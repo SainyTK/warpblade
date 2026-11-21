@@ -1,16 +1,27 @@
 import type { SkillDef } from "../../../../types/skill";
-import { evolvedRow, levelRows } from "../../../../utils/skillRows";
+import { evolvedRow } from "../../../../utils/skillRows";
+import { drillLevels, drillValues, type Numbers } from "./drillLevels";
 
-/** values: `behind` added damage share on a foe behind him, `wounds` extra wounds a cut behind opens, `both` Whirl a spin adds when it cuts both sides at once, `keenBoth` that spin makes the next one Keen, `bothWounds` it opens a wound on every foe it cut, `backAll` foes behind him take his cuts as back attacks */
-const LEVELS = levelRows([
-  { text: "Spins deal 20% more to foes behind you.", values: { behind: 0.2 } },
-  { text: "Behind 20% to 35%.", values: { behind: 0.35 } },
-  { text: "New: a cut behind you opens an extra wound.", values: { wounds: 1 } },
-  { text: "New: a spin that cuts both sides at once adds 10 Whirl.", values: { both: 10 } },
-  { text: "Behind 35% to 55%.", values: { behind: 0.55 } },
-  { text: "New: a spin that cuts both sides makes the next spin Keen.", values: { keenBoth: 1 } },
-  { text: "New: cutting both sides opens a wound on every foe cut.", values: { bothWounds: 1 } },
-  { text: "Behind 55% to 90%; 20 Whirl for both sides.", values: { behind: 0.9, both: 20 } },
+const NATIVE: readonly Numbers[] = [
+  { behind: 0.2 },
+  { behind: 0.35 },
+  { wounds: 1 },
+  { both: 10 },
+  { behind: 0.55 },
+  { keenBoth: 1 },
+  { bothWounds: 1 },
+  { behind: 0.9, both: 20 },
+];
+
+const LEVELS = drillLevels(NATIVE, [
+  { text: "The rising turn deals +35%; cuts behind you deal +20%.", drill: { second: 0.35 } },
+  { text: "Cuts behind you +20% to +35%." },
+  { text: "New: a cut behind you opens an extra wound.", drill: { wounds: 1 } },
+  { text: "Rising turn +35% to +70%.", drill: { second: 0.7 } },
+  { text: "New: the rising turn staggers; cuts behind +35% to +55%.", drill: { stagger: 0.4 } },
+  { text: "Rising turn +70% to +150%.", drill: { second: 1.5 } },
+  { text: "New: the rising turn blinds minions for 1 s.", drill: { blind: 1 } },
+  { text: "Rising turn +150% to +350%; cuts behind +55% to +90%.", drill: { second: 3.5 } },
 ]);
 
 export const TWO_FACED_CUT: SkillDef = {
@@ -19,12 +30,15 @@ export const TWO_FACED_CUT: SkillDef = {
   kind: "attack",
   risk: "timed",
   button: "J",
-  text: "Your spins hit harder on foes behind you, and cutting both sides at once pays off.",
+  text: "The rising turn, the second slash, hits harder, and every cut behind you hits harder too.",
   levels: LEVELS,
   evolution: {
     partner: "za_dune",
     name: "Mirror Dance",
-    text: "Foes behind you take your cuts as back attacks, half again as hard.",
-    row: evolvedRow(LEVELS[7], "Foes behind you take back attacks.", { backAll: 0.5 }),
+    text: "Every rising turn throws a mirror ring behind you that cuts every foe there for twice attack damage, and cuts behind you deal 50% more.",
+    row: evolvedRow(LEVELS[7], "A mirror ring behind you after every rising turn.", {
+      backAll: 0.5,
+      ...drillValues({ mirror: 2 }),
+    }),
   },
 };

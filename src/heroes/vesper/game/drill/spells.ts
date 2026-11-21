@@ -1,0 +1,47 @@
+import type { DrillSpell } from "../../../../types/drill";
+import { duskGale, duskThread, moonLift } from "./statuses";
+
+export const VESPER_SPELLS: readonly DrillSpell[] = [
+  {
+    id: "moon",
+    name: "Falling Moon",
+    color: 0xb8a0ff,
+    core: 0xf4eeff,
+    damage: 40,
+    speed: null,
+    delay: 0.14,
+    range: 120,
+    radius: 24,
+    look: "flame",
+    freeze: 0,
+    status: moonLift,
+  },
+  {
+    id: "gale",
+    name: "Dusk Gale",
+    color: 0x8f9cff,
+    core: 0xe2e8ff,
+    damage: 28,
+    speed: 196,
+    delay: 0,
+    range: 140,
+    radius: 18,
+    look: "shard",
+    freeze: 0,
+    status: duskGale,
+  },
+  {
+    id: "thread",
+    name: "Dusk Thread",
+    color: 0xd890ff,
+    core: 0xfbe6ff,
+    damage: 34,
+    speed: null,
+    delay: 0.08,
+    range: 150,
+    radius: 16,
+    look: "spark",
+    freeze: 0,
+    status: duskThread,
+  },
+];

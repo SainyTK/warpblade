@@ -113,6 +113,49 @@ export interface DrillPoses {
   skillCut: Pose;
 }
 
+export interface DrillMotion {
+  run: number;
+  groundAccel: number;
+  groundBrake: number;
+  airAccel: number;
+  airBrake: number;
+  riseGravity: number;
+  fallGravity: number;
+  rise: number;
+  release: number;
+  fall: number;
+  dash: number;
+  dashBurst: number;
+  dashTime: number;
+  dashRecovery: number;
+  dashJump: number;
+  wallSlide: number;
+  wallKick: number;
+  wallLock: number;
+  jumpGrace: number;
+  buffer: number;
+}
+
+export type DrillPoseId =
+  | "stance"
+  | "breathe"
+  | "brake"
+  | "low"
+  | "touchdown"
+  | "dash"
+  | "airDash"
+  | "rise"
+  | "leap"
+  | "kick"
+  | "fall"
+  | "wall"
+  | "spell";
+
+export interface DrillLocomotion {
+  poses: Partial<Record<DrillPoseId, Pose>>;
+  run?(stride: number): Pose;
+}
+
 export interface DrillModifiers {
   strikeDamage: number;
   finisherDamage: number;
@@ -147,6 +190,7 @@ export interface DrillHooks {
   released?(cast: SkillCast): void;
   tick?(dt: number): void;
   draw?(): void;
+  drawBack?(): void;
   reset?(): void;
 }
 
@@ -163,6 +207,8 @@ export interface DrillProfile {
   drawCutIn?(ctx: CanvasRenderingContext2D, cast: SkillCast, portrait: HTMLImageElement): void;
   text: Readonly<Partial<Record<InputAction, string>>>;
   modifiers(): DrillModifiers;
+  motion?: Partial<DrillMotion>;
+  locomotion?: DrillLocomotion;
   hooks?: DrillHooks;
   motion?: Partial<DrillMotion>;
   poses?: Partial<DrillPoses>;

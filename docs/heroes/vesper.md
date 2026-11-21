@@ -73,6 +73,21 @@ Each foe takes 75% of the charge level's power, the same budget as Crystal Nova,
 She stands faint where she was while her afterimage dances, and the dance leaves a trail of afterimages from foe to foe.
 Its skill is Dusk Waltz (`ve_waltz`).
 
+## On the drill engine
+
+Solo Adventure runs play Vesper on the shared drill engine through `VESPER_DRILL` (`src/heroes/vesper/game/drill/index.ts`); the wave arena and co-op keep the native kit above.
+Her drill skills are in `docs/skills/vesper.md`, "Drill set".
+
+- Movement (`constants/drill/motion.ts`): a little quicker on the ground (run 118 to the shared 110), a higher and floatier jump (rise 344, lighter gravity, more air control), a faster dash and air dash, a stronger wall kick and a slower wall slide.
+- Poses (`constants/drill/poses.ts`, `game/drill/locomotion/run.ts`): her own stance, breath, brake, landing, dash (sampled from her dodge clip), air dash, rise, leap, wall kick, fall, wall slide and spell pose, and her own run on the shared fitted feet, with the long blade trailing low behind her and the short blade reverse-gripped in the pumping far hand.
+- Cuts (`constants/drill/strikes.ts`, sampled from her clips): the dusk cross, the rising pair and the moonrise, which throws foes up and lifts her after them when it lands.
+  The air cut is the swallow cut, and an air cut on a foe in the air keeps it up.
+- Warp strike: the shared throw with her own long blade and a dusk cross as she lands; the enhanced parry window is 0.26 s.
+- Spells (`game/drill/spells.ts`): Falling Moon (a moon on the nearest foe ahead that throws it up), Dusk Gale (a travelling gust that lays gale stacks, pushes and staggers) and Dusk Thread (a quick thread to the nearest foe ahead that marks it to take 15% more and draws it in).
+  An infused cut applies the spell's status and leaves a 0.3 AD night echo on the foe.
+- Charged tiers (`constants/drill/tiers.ts`, `game/drill/release.ts`): Dusk Waltz I throws a pair of crossing dusk waves ahead, II strikes both sides and sends waves both ways, III sends her afterimage dancing through the foes ahead with two cuts each, and IV dances three cuts through every foe around and sends waves both ways.
+  The cut-in is her generated portrait in a violet panel with drifting crescents (`ui/cutIn.ts`).
+
 ## Numbers
 
 `base: { ad: 10, ap: 9, hp: 92, mp: 95, stamina: 100, crit: 0.06, move: 1.06, aspd: 1.05, haste: 1 }`, growth `{ hp: 1, mp: 0.45 }`, `comboHits: 4`.
