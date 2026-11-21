@@ -28,6 +28,8 @@ export interface EnemyKind {
   glow: { radius: number; color: Color; eyeY: number };
   /** blocks frontal sword blows while in its rest state, from this wave on */
   guardFrom?: number;
+  /** true while this foe may raise its guard; left out, always */
+  guarding?(e: Enemy): boolean;
   /** slips away from swings while in its rest state, like a wisp */
   evades?: boolean;
   /**
