@@ -10,6 +10,7 @@ import { cutBehind } from "./backCut";
 import { resetLater, tickLater } from "./later";
 import { releaseSandstorm } from "./release";
 import { ZAFIR_DRILL_SKILLS } from "./skills";
+import { keenSwing } from "./strike";
 import { twinTurn } from "./twinTurn";
 
 const PREFIX = "drill.";
@@ -39,8 +40,9 @@ export function zafirModifiers(neutral: DrillModifiers): DrillModifiers {
 }
 
 function landCut(foe: Enemy, infusion: DrillSpell | null): void {
-  openWounds(foe, WOUND.cut);
-  gainWhirl(WHIRL.perHit);
+  const keen = keenSwing();
+  openWounds(foe, keen ? WOUND.keen : WOUND.cut);
+  gainWhirl(WHIRL.perHit + (keen ? WHIRL.keen : 0));
   for (const [skill, state] of held()) {
     skill.swordHit?.(foe, infusion, state);
   }

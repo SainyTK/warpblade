@@ -4,8 +4,10 @@ import type { DrillProfile } from "../../../../types/drill";
 import type { Pose } from "../../../../types/pose";
 import { sampleKeys } from "../../../../utils/sampleKeys";
 import { grip, shouldered } from "../clips/grip";
+import { BRYNN_HELD_CLIPS } from "../clips/held";
 import { BRYNN_READY } from "../clips/key";
 import { BRYNN_LOCOMOTION } from "../clips/locomotion";
+import { BRYNN_WARP_POSES } from "./warp";
 
 function upperBody(phase: number): Pose {
   const { keys, dur } = BRYNN_LOCOMOTION.run;
@@ -116,6 +118,7 @@ export const BRYNN_BODY: Pick<DrillProfile, "motion" | "poses"> = {
     landing: 1.35,
   },
   poses: {
+    ...BRYNN_WARP_POSES,
     run,
     stance: STANCE,
     breathe: { ...STANCE, hy: -11.6, ny: -21.6, fy: STANCE.fy + 0.6, by: STANCE.by + 0.6, cb: 0.45 },
@@ -178,6 +181,7 @@ export const BRYNN_BODY: Pick<DrillProfile, "motion" | "poses"> = {
     spell: shouldered(
       pose({ hx: -2, hy: -12, cb: 0.4, nx: 1.5, ny: -22, bx: 15, by: -19, be: 0, ffx: 8, bfx: -7, ba: 0.3 }),
     ),
+    skillWindup: BRYNN_HELD_CLIPS.charge.keys[0][1],
     skillCut: grip({ hx: 3, hy: -8.5, cb: 1.4, nx: 9, ny: -17, fx: 17, fy: -8, sa: 1.05, ffx: 12, bfx: -9, ba: 0.6 }),
   },
 };

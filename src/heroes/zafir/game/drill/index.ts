@@ -2,6 +2,7 @@ import { NEUTRAL_MODIFIERS } from "../../../../drill";
 import { drawThrownBlade } from "../../../../game/effects/thrownWeapon";
 import { loadGeneratedHeroPortrait } from "../../../../generatedHeroArt";
 import type { DrillProfile } from "../../../../types/drill";
+import { ZAFIR_COMBAT_POSES } from "../../constants/drill/combatPoses";
 import { ZAFIR_POSES } from "../../constants/drill/locomotion";
 import { ZAFIR_MOTION } from "../../constants/drill/motion";
 import { ZAFIR_STRIKES } from "../../constants/drill/strikes";
@@ -31,6 +32,7 @@ export const ZAFIR_DRILL: DrillProfile = {
   },
   modifiers: () => zafirModifiers(NEUTRAL_MODIFIERS),
   motion: ZAFIR_MOTION,
-  poses: { ...ZAFIR_POSES, run: zafirRunPose },
+  poses: { ...ZAFIR_POSES, ...ZAFIR_COMBAT_POSES, run: zafirRunPose },
+  art: "zafir",
   hooks: ZAFIR_DRILL_HOOKS,
 };

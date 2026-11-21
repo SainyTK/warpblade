@@ -30,4 +30,5 @@ export const BRYNN_DRILL: DrillProfile = {
   modifiers: () => brynnModifiers(NEUTRAL_MODIFIERS),
   hooks: BRYNN_DRILL_HOOKS,
   ...BRYNN_BODY,
+  art: "brynn",
 };

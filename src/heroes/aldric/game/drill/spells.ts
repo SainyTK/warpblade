@@ -20,6 +20,7 @@ function mendingLight(_foe: Enemy): void {
 export const ALDRIC_SPELLS: readonly DrillSpell[] = [
   {
     id: "lance",
+    art: "spell1",
     name: "Dawn Lance",
     color: 0xffd463,
     core: 0xfffbe8,
@@ -34,6 +35,7 @@ export const ALDRIC_SPELLS: readonly DrillSpell[] = [
   },
   {
     id: "pillar",
+    art: "spell2",
     name: "Sunpillar",
     color: 0xffb53d,
     core: 0xfff3c4,
@@ -48,6 +50,7 @@ export const ALDRIC_SPELLS: readonly DrillSpell[] = [
   },
   {
     id: "mend",
+    art: "spell3",
     name: "Mending Light",
     color: 0xfff0b0,
     core: 0xffffff,

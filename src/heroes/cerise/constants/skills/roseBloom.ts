@@ -40,7 +40,7 @@ export const ROSE_BLOOM: SkillDef = {
   evolution: {
     partner: "ce_petals",
     name: "Full Bloom",
-    text: "The bloom bursts twice more at half strength, wider each time.",
+    text: "The bloom bursts on every foe within 60 px and binds them.",
     row: evolvedRow(LEVELS[7], "The bloom bursts on every foe within 60 px.", {
       ...drillValues({ full: 60 }),
       echoes: 2,

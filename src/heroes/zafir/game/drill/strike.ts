@@ -49,4 +49,6 @@ export function pullFoe(foe: Enemy, distance: number): void {
 
 export const swingKind = () => drillFighter()?.swing?.kind ?? null;
 
+export const keenSwing = (): boolean => !!drillFighter()?.swing?.keen;
+
 export const arriving = (): boolean => drillFighter()?.warp?.phase === "arrival";

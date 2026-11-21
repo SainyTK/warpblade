@@ -3,7 +3,9 @@ import { pose } from "../../../../constants/hero";
 import { fitRunFeet } from "../../../../drill";
 import type { DrillPoses } from "../../../../types/drill";
 import { clamp, TAU } from "../../../../utils/math";
+import { sampleKeys } from "../../../../utils/sampleKeys";
 import { YUN_READY } from "../../constants/clips/ready";
+import { YUN_WARP_CLIPS } from "../../constants/drill/warp";
 
 const RUN_TOE_OFF = 0.46;
 
@@ -161,16 +163,7 @@ export const YUN_POSES: Partial<DrillPoses> = {
   parryContact: PARRY_CONTACT,
   parryReturn: { ...PARRY_CONTACT, hx: 2, nx: 6, fx: 15, fy: -14, ...rearHand(-6, -20), sa: 0.35 },
   spell: pose({ hx: -1, hy: -13, nx: 2, ny: -23, fx: -4, fy: -17, ...frontHand(15, -21), ffx: 7, bfx: -6, sa: -1.3 }),
-  skillCut: pose({
-    hx: 2,
-    hy: -12,
-    nx: 5,
-    ny: -22,
-    fx: -1,
-    fy: -31,
-    ...frontHand(14, -17),
-    ffx: 9,
-    bfx: -8,
-    sa: -1.57,
-  }),
+  warpThrow: (age) => sampleKeys(YUN_WARP_CLIPS.throw.keys, age),
+  warpFlight: (age) => sampleKeys(YUN_WARP_CLIPS.flight.keys, age % YUN_WARP_CLIPS.flight.dur),
+  warpArrival: (age) => sampleKeys(YUN_WARP_CLIPS.arrival.keys, age),
 };

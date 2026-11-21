@@ -1,7 +1,7 @@
 import { pose } from "../../../../constants/hero";
 import type { DrillMotion, DrillPoses } from "../../../../types/drill";
 import { SHIELD_UP, STANCE } from "../clips/key";
-import { GUARD_HOLD } from "../clips/rest";
+import { ALDRIC_CHARGE, GUARD_HOLD } from "../clips/rest";
 
 const LOW = pose({
   ...SHIELD_UP,
@@ -141,6 +141,7 @@ export const ALDRIC_POSES: Partial<DrillPoses> = {
   parryContact: PUNCH,
   parryReturn: pose({ ...GUARD_HOLD, hx: 0.5, nx: 3, bx: 11.5, by: -18.5, ffx: 7.5 }),
   spell: pose({ ...SHIELD_UP, hy: -13, nx: 1, ny: -23.5, fx: 4, fy: -33, sa: -1.57, bx: 10, by: -17, ffx: 5, bfx: -5 }),
+  skillWindup: ALDRIC_CHARGE.keys[0][1],
   skillCut: pose({
     ...SHIELD_UP,
     oa: 1.6,

@@ -2,7 +2,9 @@ import { pose } from "../../../../constants/hero";
 import { fitRunFeet } from "../../../../drill";
 import type { DrillPoses } from "../../../../types/drill";
 import { clamp, smooth, TAU } from "../../../../utils/math";
+import { sampleKeys } from "../../../../utils/sampleKeys";
 import { EN_GARDE } from "../../constants/clips/base";
+import { CERISE_ARRIVE, CERISE_THROW, CERISE_WAIT } from "../../constants/clips/warp";
 
 const RUN_TOE_OFF = 0.46;
 
@@ -299,4 +301,7 @@ export const CERISE_POSES: Partial<DrillPoses> = {
   parryReturn: PARRY_RETURN,
   spell: SPELL,
   skillCut: SKILL,
+  warpThrow: (age) => sampleKeys(CERISE_THROW.keys, age),
+  warpFlight: (age) => sampleKeys(CERISE_WAIT.keys, age % CERISE_WAIT.dur),
+  warpArrival: (age) => sampleKeys(CERISE_ARRIVE.keys, age),
 };

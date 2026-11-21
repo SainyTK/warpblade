@@ -1,5 +1,5 @@
 import { GROUND } from "../../../../constants/stage";
-import { drillFighter } from "../../../../drill";
+import { nativeOrDrill } from "../../../../drill";
 import { glow, glowLine, hairline, line, place } from "../../../../engine/frame";
 import { dealDamage } from "../../../../game/damage";
 import { createFloorRing } from "../../../../game/effects/floorRing";
@@ -50,49 +50,67 @@ function fade(s: Sentinel): void {
       dealDamage(e, progress.stats.ad * skillValues(SOURCE).bloom, { fromX: s.x, kx: 0, source: SOURCE });
 }
 
-/** Thorn Sentinel: the lunge can plant a rapier of light in the floor that keeps thrusting at foes near it */
-export const thornSentinel: SkillBehavior = {
+function plant(m: SkillMemory): void {
+  const v = skillValues(SOURCE);
+  if (!rng.chance(v.chance)) return;
+  const x = hero.x + hero.face * PLANT.ahead;
+  const y = Math.min(GROUND, surfaceBelow(x, hero.y - 4));
+  const kept = list(m).slice(Math.max(0, list(m).length - (v.most - 1)));
+  m.list = [...kept, { x, y, left: withCharms("duration", v.time), next: 0.15, flash: 0, face: hero.face }];
+}
+
+function tend(m: SkillMemory, dt: number): void {
+  const v = skillValues(SOURCE);
+  for (const s of list(m)) {
+    s.left -= dt;
+    s.next -= dt;
+    s.flash = Math.max(0, s.flash - dt);
+    if (s.next <= 0) {
+      s.next = withCharms("cooldown", v.every);
+      thrust(s);
+    }
+    if (s.left <= 0) fade(s);
+  }
+  m.list = list(m).filter((s) => s.left > 0);
+}
+
+function drawSentinels(m: SkillMemory): void {
+  place();
+  for (const s of list(m)) {
+    const k = Math.min(1, s.left * 3);
+    const top = s.y - PLANT.height;
+    const tip = s.flash > 0 ? s.x + s.face * 18 : s.x;
+    line(s.x, s.y, s.x, top, ROSE_RAMP[3], 0.8 * k);
+    hairline(s.x, s.y - 2, s.x, top, ROSE_RAMP[6], k);
+    line(s.x - 3, top, s.x + 3, top, ROSE_RAMP[5], k);
+    if (s.flash > 0) glowLine(s.x, top + 4, tip, top + 4, 3, ROSE_RAMP[4], 0.5);
+    glow(s.x, top, 6, ROSE_RAMP[3], 0.3 * k);
+  }
+}
+
+const native: SkillBehavior = {
   create: () => ({ list: [], swing: -1 }),
-  update(m, _state, dt) {
-    const v = skillValues(SOURCE);
-    for (const s of list(m)) {
-      s.left -= dt;
-      s.next -= dt;
-      s.flash = Math.max(0, s.flash - dt);
-      if (s.next <= 0) {
-        s.next = withCharms("cooldown", v.every);
-        thrust(s);
-      }
-      if (s.left <= 0) fade(s);
-    }
-    m.list = list(m).filter((s) => s.left > 0);
-  },
-  drawBack(m) {
-    place();
-    for (const s of list(m)) {
-      const k = Math.min(1, s.left * 3);
-      const top = s.y - PLANT.height;
-      const tip = s.flash > 0 ? s.x + s.face * 18 : s.x;
-      line(s.x, s.y, s.x, top, ROSE_RAMP[3], 0.8 * k);
-      hairline(s.x, s.y - 2, s.x, top, ROSE_RAMP[6], k);
-      line(s.x - 3, top, s.x + 3, top, ROSE_RAMP[5], k);
-      if (s.flash > 0) glowLine(s.x, top + 4, tip, top + 4, 3, ROSE_RAMP[4], 0.5);
-      glow(s.x, top, 6, ROSE_RAMP[3], 0.3 * k);
-    }
-  },
+  update: (m, _state, dt) => tend(m, dt),
+  drawBack: drawSentinels,
   on: {
     blow(m, event) {
-      const drillSwing = drillFighter()?.swing;
-      const lunge = event.move === "longLunge" || drillSwing?.kind === "third";
-      const swing = drillSwing ?? hero.swing;
-      if (!lunge || !event.finisher || m.swing === swing) return;
-      m.swing = swing;
-      const v = skillValues(SOURCE);
-      if (!rng.chance(v.chance)) return;
-      const x = hero.x + hero.face * PLANT.ahead;
-      const y = Math.min(GROUND, surfaceBelow(x, hero.y - 4));
-      const kept = list(m).slice(Math.max(0, list(m).length - (v.most - 1)));
-      m.list = [...kept, { x, y, left: withCharms("duration", v.time), next: 0.15, flash: 0, face: hero.face }];
+      if (event.move !== "longLunge" || !event.finisher || m.swing === hero.swing) return;
+      m.swing = hero.swing;
+      plant(m);
     },
   },
 };
+
+const drill: SkillBehavior = {
+  create: () => ({ list: [] }),
+  update: (m, _state, dt) => tend(m, dt),
+  drawBack: drawSentinels,
+  on: {
+    slash(m, event) {
+      if (event.strike === "third" && event.landed) plant(m);
+    },
+  },
+};
+
+/** Thorn Sentinel: the lunge can plant a rapier of light in the floor that keeps thrusting at foes */
+export const thornSentinel: SkillBehavior = nativeOrDrill(native, drill);

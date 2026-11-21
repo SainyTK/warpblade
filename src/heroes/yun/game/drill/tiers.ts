@@ -5,8 +5,8 @@ import { drawJadeRain } from "./tierArt";
 const [first, second, third, fourth] = YUN_TIER_DATA;
 
 export const YUN_TIERS: DrillProfile["tiers"] = [
-  { ...first, drawStrike: drawJadeRain },
-  { ...second, drawStrike: drawJadeRain },
-  { ...third, drawStrike: drawJadeRain },
-  { ...fourth, drawStrike: drawJadeRain },
+  { ...first, art: "tier1", drawStrike: drawJadeRain },
+  { ...second, art: "tier2", drawStrike: drawJadeRain },
+  { ...third, art: "tier3", drawStrike: drawJadeRain },
+  { ...fourth, art: "tier4", drawStrike: drawJadeRain },
 ];

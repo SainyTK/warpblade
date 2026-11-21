@@ -31,6 +31,7 @@ export const YUN_SPELLS: readonly DrillSpell[] = [
     look: "shard",
     freeze: 0,
     status: cutDown,
+    art: "spell1",
     drawBolt: drawStreamBolt,
   },
   {
@@ -46,6 +47,7 @@ export const YUN_SPELLS: readonly DrillSpell[] = [
     look: "spark",
     freeze: 0,
     status: holdFeet,
+    art: "spell3",
     drawImpact: drawLotusImpact,
   },
   {
@@ -61,6 +63,7 @@ export const YUN_SPELLS: readonly DrillSpell[] = [
     look: "flame",
     freeze: 0,
     status: markQi,
+    art: "spell2",
     drawBolt: drawCrescentBolt,
   },
 ];

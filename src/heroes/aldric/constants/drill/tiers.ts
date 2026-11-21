@@ -1,10 +1,21 @@
+import { frame } from "../../../../constants/hero";
 import type { DrillProfile } from "../../../../types/drill";
+import { sampleKeys } from "../../../../utils/sampleKeys";
+import { ALDRIC_ACTION_CLIPS } from "../clips";
+
+const { call: CALL, crestBreaker: CREST, plant: PLANT } = ALDRIC_ACTION_CLIPS;
+const LOWERED = sampleKeys(CALL.keys, CALL.hit - frame(1));
+const RAISED = sampleKeys(CALL.keys, CALL.hit);
+const CREST_LOAD = sampleKeys(CREST.keys, CREST.hit - frame(1));
+const CREST_CUT = sampleKeys(CREST.keys, CREST.hit);
+const PLANTED = sampleKeys(PLANT.keys, 0);
 
 export const ALDRIC_TIERS: DrillProfile["tiers"] = [
   {
     look: "crescent",
     around: false,
     level: 1,
+    art: "tier1",
     name: "Dawn Ward",
     threshold: 0.46,
     damage: 34,
@@ -18,6 +29,7 @@ export const ALDRIC_TIERS: DrillProfile["tiers"] = [
     look: "spires",
     around: false,
     level: 2,
+    art: "tier2",
     name: "Sunpillar Rank",
     threshold: 0.86,
     damage: 68,
@@ -26,11 +38,14 @@ export const ALDRIC_TIERS: DrillProfile["tiers"] = [
     intro: 0.43,
     duration: 1.08,
     color: 0xffb53d,
+    windup: LOWERED,
+    cut: RAISED,
   },
   {
     look: "rift",
     around: false,
     level: 3,
+    art: "tier3",
     name: "Noon Verdict",
     threshold: 1.27,
     damage: 112,
@@ -39,11 +54,14 @@ export const ALDRIC_TIERS: DrillProfile["tiers"] = [
     intro: 0.51,
     duration: 1.22,
     color: 0xfff0b0,
+    windup: CREST_LOAD,
+    cut: CREST_CUT,
   },
   {
     look: "nova",
     around: true,
     level: 4,
+    art: "tier4",
     name: "Sanctuary",
     threshold: 1.72,
     damage: 180,
@@ -52,5 +70,6 @@ export const ALDRIC_TIERS: DrillProfile["tiers"] = [
     intro: 0.64,
     duration: 1.52,
     color: 0xfffbe8,
+    cut: PLANTED,
   },
 ];

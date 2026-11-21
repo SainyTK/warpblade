@@ -7,6 +7,7 @@ import { bindWithBloom, markWithRose, staggerWithFlurry } from "./statuses";
 export const CERISE_SPELLS: readonly DrillSpell[] = [
   {
     id: "line",
+    art: "spell1",
     name: "Rose Line",
     color: 0xff8fb0,
     core: 0xffe1eb,
@@ -23,6 +24,7 @@ export const CERISE_SPELLS: readonly DrillSpell[] = [
   },
   {
     id: "flurry",
+    art: "spell2",
     name: "Flurry",
     color: 0xff5f8f,
     core: 0xffc2d6,
@@ -38,6 +40,7 @@ export const CERISE_SPELLS: readonly DrillSpell[] = [
   },
   {
     id: "bloom",
+    art: "spell3",
     name: "Rose Bloom",
     color: 0xc23a6e,
     core: 0xffa9c6,

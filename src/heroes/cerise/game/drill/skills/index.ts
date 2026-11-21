@@ -14,6 +14,8 @@ import { ROSE_MARK_DRILL } from "./roseMark";
 import { ROSE_TEMPEST_DRILL } from "./roseTempest";
 import { SWALLOW_DIVE_DRILL } from "./swallowDive";
 import { THORN_WOUNDS_DRILL } from "./thornWounds";
+import { WEEPING_MARK_DRILL } from "./weepingMark";
+import { WILTING_CURSE_DRILL } from "./wiltingCurse";
 
 export const CERISE_DRILL_SKILLS: readonly CeriseDrillSkill[] = [
   MEASURED_TOUCH_DRILL,
@@ -30,5 +32,7 @@ export const CERISE_DRILL_SKILLS: readonly CeriseDrillSkill[] = [
   NEEDLE_RAIN_DRILL,
   ROSE_BLOOM_DRILL,
   THORN_WOUNDS_DRILL,
+  WEEPING_MARK_DRILL,
+  WILTING_CURSE_DRILL,
   ROSE_TEMPEST_DRILL,
 ];

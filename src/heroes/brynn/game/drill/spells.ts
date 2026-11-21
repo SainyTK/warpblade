@@ -26,6 +26,7 @@ function brand(foe: Enemy): void {
 export const BRYNN_SPELLS: readonly DrillSpell[] = [
   {
     id: "rend",
+    art: "spell1",
     name: "Rend",
     color: 0xdc3442,
     core: 0xffc2ae,
@@ -40,6 +41,7 @@ export const BRYNN_SPELLS: readonly DrillSpell[] = [
   },
   {
     id: "quake",
+    art: "spell2",
     name: "Quake",
     color: 0xb0603a,
     core: 0xffd2a0,
@@ -54,6 +56,7 @@ export const BRYNN_SPELLS: readonly DrillSpell[] = [
   },
   {
     id: "arc",
+    art: "spell3",
     name: "Ember Arc",
     color: 0xff7a2e,
     core: 0xfff0b8,

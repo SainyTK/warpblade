@@ -1,3 +1,4 @@
+import { usesDrill } from "../../../drill";
 import { stacksOf } from "../../../game/enemies/skillStatus";
 import { movePayoff, payoffLands } from "../../../game/skills/payoff";
 import { skillValues } from "../../../game/skills/query";
@@ -22,6 +23,7 @@ function keenBonus(): number {
  */
 export function hitBonus(e: Enemy, hit: OwnHit): number {
   let bonus = markBonus(e, hit.keen);
+  if (usesDrill()) return bonus;
   if (hit.keen && hero.state === "move" && payoffLands(movePayoff(), e)) bonus += keenBonus();
   if (hero.state === "riposte") bonus += skillValues("ce_riposte").bonus ?? 0;
   if (hero.state === "riposte" && cerise.stanceRiposte) bonus += skillValues("ce_mirrorguard").bonus ?? 0;
@@ -33,7 +35,7 @@ export function hitBonus(e: Enemy, hit: OwnHit): number {
 /** extra damage a foe takes from every source: bleeding from Thorn Wounds, marked with Weeping Mark, cursed */
 export function takenBonus(e: Enemy): number {
   let bonus = 0;
-  if (stacksOf(e, "ce_thorns")) bonus += skillValues("ce_thorns").taken ?? 0;
+  if (!usesDrill() && stacksOf(e, "ce_thorns")) bonus += skillValues("ce_thorns").taken ?? 0;
   if (isMarked(e)) bonus += skillValues("ce_weep").taken ?? 0;
   if (stacksOf(e, "ce_curse")) bonus += skillValues("ce_curse").taken ?? 0;
   return bonus;

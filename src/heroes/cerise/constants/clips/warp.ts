@@ -104,3 +104,28 @@ export const CERISE_ARRIVE: ActionClip = {
     [ARRIVE.dur, EN_GARDE],
   ],
 };
+
+const HELD = pose({
+  ...EN_GARDE,
+  hx: 1.6,
+  nx: 4.6,
+  ny: -22.5,
+  cb: 0.6,
+  fx: 15.5,
+  fy: -20.5,
+  sa: -0.08,
+  bx: -8,
+  by: -18,
+  ffx: 8,
+});
+
+/** the wait while the rapier flies: the throwing arm still out along the line, breathing with it */
+export const CERISE_WAIT: ActionClip = {
+  dur: frame(24),
+  hit: 0,
+  keys: [
+    [0, HELD],
+    [frame(12), pose({ ...HELD, hy: -12.6, ny: -22.1, fx: 15, fy: -20, sa: -0.05, by: -17.6 })],
+    [frame(24), HELD],
+  ],
+};

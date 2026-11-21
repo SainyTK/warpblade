@@ -41,7 +41,7 @@ export const THORN_WOUNDS: SkillDef = {
   evolution: {
     partner: "ce_pin",
     name: "Thorn Burst",
-    text: "The lunge tears every thorn out at once for 2.5 AD each.",
+    text: "The lunge tears every thorn out at once for 1 AD each.",
     row: evolvedRow(LEVELS[7], "The lunge bursts thorns, 1 AD each.", {
       ...drillValues({ burst: 1 }),
       burst: 2.5,

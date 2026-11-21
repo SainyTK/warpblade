@@ -10,6 +10,7 @@ import { drawAldricCutIn } from "../../ui/cutIn";
 import { ALDRIC_DRILL_HOOKS, aldricModifiers } from "./hooks";
 import { aldricRun } from "./run";
 import { ALDRIC_SPELLS } from "./spells";
+import { ALDRIC_WARP_POSES } from "./warp";
 
 export const ALDRIC_DRILL: DrillProfile = {
   strikes: ALDRIC_STRIKES,
@@ -47,5 +48,6 @@ export const ALDRIC_DRILL: DrillProfile = {
   modifiers: () => aldricModifiers(NEUTRAL_MODIFIERS),
   hooks: ALDRIC_DRILL_HOOKS,
   motion: ALDRIC_MOTION,
-  poses: { ...ALDRIC_POSES, run: aldricRun },
+  poses: { ...ALDRIC_POSES, ...ALDRIC_WARP_POSES, run: aldricRun },
+  art: "aldric",
 };

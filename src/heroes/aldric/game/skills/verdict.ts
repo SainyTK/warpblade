@@ -1,3 +1,4 @@
+import { nativeOrDrill } from "../../../../drill";
 import { glow, hairline, line, place } from "../../../../engine/frame";
 import { dealDamage } from "../../../../game/damage";
 import { createImpact } from "../../../../game/effects/impact";
@@ -73,8 +74,9 @@ function call(m: SkillMemory, foe: Enemy | null): void {
   for (let i = 0; i < swords; i++) game.fx.push(createVerdictSword(foe, i * VERDICT.gap));
 }
 
-/** Verdict: a Keen blow of his own (and with its fourth level a Counterbash) calls swords of light down on its foe */
-export const verdict: SkillBehavior = {
+/** Verdict: a Keen blow of his own (and with its fourth level a Counterbash) calls swords of light down on its foe; on
+ *  the drill the Sky cut calls them through the drill hooks */
+export const verdict: SkillBehavior = nativeOrDrill({
   create: () => ({ swing: -1 }),
   on: {
     blow(m, ev) {
@@ -84,4 +86,4 @@ export const verdict: SkillBehavior = {
       if (ev.counter && skillValues(ID).counter) call(m, ev.foe);
     },
   },
-};
+});

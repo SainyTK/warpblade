@@ -31,4 +31,5 @@ export const CERISE_DRILL: DrillProfile = {
   hooks: CERISE_DRILL_HOOKS,
   motion: { run: 118, groundAccel: 3500, dash: 292, dashRecovery: 0.23, rise: 338, fallGravity: 1150, wallKick: 184 },
   poses: CERISE_POSES,
+  art: "cerise",
 };

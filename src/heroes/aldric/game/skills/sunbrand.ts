@@ -1,3 +1,4 @@
+import { nativeOrDrill } from "../../../../drill";
 import { createGlint } from "../../../../game/effects/flash";
 import { enemyCenter } from "../../../../game/enemies/enemy";
 import { addStacks, stacksOf } from "../../../../game/enemies/skillStatus";
@@ -18,23 +19,38 @@ export const brand = (e: Enemy | null): void => {
   if (e && e.hp > 0) addStacks(e, ID, brandSpec(skillValues(ID)));
 };
 
+/** Solar Brand: a branded foe that falls brands every foe near it to the full */
+function spreadBrand(foe: Enemy): void {
+  if (stacksOf(foe, ID) <= 0) return;
+  const [x, y] = enemyCenter(foe);
+  const spec = brandSpec(skillValues(ID));
+  for (const e of foesNear(x, y, BRAND_SPREAD)) addStacks(e, ID, { ...spec, stacks: spec.max });
+  game.fx.push(createGlint(x, y, DAWN_RAMP[5], 1));
+}
+
 /** Sunbrand: bashes brand the foes they strike (and Oath cut from its sixth level); as Solar Brand a branded foe that
- *  falls brands every foe near it to the full */
-export const sunbrand: SkillBehavior = {
-  create: () => ({}),
-  on: {
-    bash(_m, ev) {
-      brand(ev.foe);
-    },
-    blow(_m, ev) {
-      if (ev.move === "oathCut" && skillValues(ID).cut) brand(ev.foe);
-    },
-    kill(_m, ev, state) {
-      if (!state.evolved || stacksOf(ev.foe, ID) <= 0) return;
-      const [x, y] = enemyCenter(ev.foe);
-      const spec = brandSpec(skillValues(ID));
-      for (const e of foesNear(x, y, BRAND_SPREAD)) addStacks(e, ID, { ...spec, stacks: spec.max });
-      game.fx.push(createGlint(x, y, DAWN_RAMP[5], 1));
+ *  falls brands every foe near it to the full. On the drill the Shield bash and Oath cut brand through the drill hooks */
+export const sunbrand: SkillBehavior = nativeOrDrill(
+  {
+    create: () => ({}),
+    on: {
+      bash(_m, ev) {
+        brand(ev.foe);
+      },
+      blow(_m, ev) {
+        if (ev.move === "oathCut" && skillValues(ID).cut) brand(ev.foe);
+      },
+      kill(_m, ev, state) {
+        if (state.evolved) spreadBrand(ev.foe);
+      },
     },
   },
-};
+  {
+    create: () => ({}),
+    on: {
+      kill(_m, ev, state) {
+        if (state.evolved) spreadBrand(ev.foe);
+      },
+    },
+  },
+);

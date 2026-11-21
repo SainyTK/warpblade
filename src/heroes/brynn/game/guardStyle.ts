@@ -1,3 +1,4 @@
+import { usesDrill } from "../../../drill";
 import { createSlash } from "../../../game/effects/slash";
 import { meleeHit } from "../../../game/meleeHit";
 import { emitSkillEvent } from "../../../game/skills/events";
@@ -63,17 +64,20 @@ function parried(): void {
   emitSkillEvent({ type: "counterCleave", hits });
 }
 
-/** the flat of the blade: a strong block at a high price in stamina; the parry answers with the Counter Cleave */
+/** the flat of the blade: a strong block at a high price in stamina; the parry answers with the Counter Cleave. On the
+ *  drill the guard is the shared one and Counter Cleave's drill levels answer it */
 export const BRYNN_GUARD: GuardStyle = {
   get chip() {
     return BRYNN_BLOCK.chip;
   },
   get blockCost() {
-    return BRYNN_BLOCK.cost * (1 - (skillValues("br_ironskin").block ?? 0));
+    return BRYNN_BLOCK.cost * (1 - (usesDrill() ? 0 : (skillValues("br_ironskin").block ?? 0)));
   },
   blocked() {
     const share = skillValues("br_counter").blockCleave;
-    if (share) cleave(share);
+    if (share && !usesDrill()) cleave(share);
   },
-  parried,
+  parried() {
+    if (!usesDrill()) parried();
+  },
 };

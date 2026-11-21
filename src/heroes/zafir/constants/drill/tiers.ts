@@ -1,10 +1,18 @@
+import { frame } from "../../../../constants/hero";
 import type { DrillProfile } from "../../../../types/drill";
+import { sampleKeys } from "../../../../utils/sampleKeys";
+import { ARRIVAL } from "../clips";
+
+const SWEEP = sampleKeys(ARRIVAL.keys, frame(4));
+const TURNED_SWEEP = { ...SWEEP, mr: 1 };
 
 export const ZAFIR_TIERS: DrillProfile["tiers"] = [
   {
     look: "crescent",
     around: true,
     level: 1,
+    cut: SWEEP,
+    art: "tier1",
     name: "Sandstorm I",
     threshold: 0.46,
     damage: 30,
@@ -18,6 +26,8 @@ export const ZAFIR_TIERS: DrillProfile["tiers"] = [
     look: "spires",
     around: true,
     level: 2,
+    cut: TURNED_SWEEP,
+    art: "tier2",
     name: "Sandstorm II",
     threshold: 0.86,
     damage: 60,
@@ -31,6 +41,7 @@ export const ZAFIR_TIERS: DrillProfile["tiers"] = [
     look: "rift",
     around: true,
     level: 3,
+    art: "tier3",
     name: "Sandstorm III",
     threshold: 1.27,
     damage: 98,
@@ -44,6 +55,7 @@ export const ZAFIR_TIERS: DrillProfile["tiers"] = [
     look: "nova",
     around: true,
     level: 4,
+    art: "tier4",
     name: "Sandstorm IV",
     threshold: 1.72,
     damage: 160,

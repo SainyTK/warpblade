@@ -32,4 +32,5 @@ export const YUN_DRILL: DrillProfile = {
   hooks: YUN_DRILL_HOOKS,
   motion: YUN_MOTION,
   poses: YUN_POSES,
+  art: "yun",
 };

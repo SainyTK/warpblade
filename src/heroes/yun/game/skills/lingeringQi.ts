@@ -39,11 +39,15 @@ export const lingeringQi: SkillBehavior = {
       if (e.melee && e.move && skillValues(SKILL.wound).blade) woundFoe(e.foe);
     },
     kill(_m, e) {
-      if (!skillValues(SKILL.wound).spread) return;
-      const n = stacksOf(e.foe, SKILL.wound);
-      if (!n) return;
-      const next = nearestFoe(e.foe.x, e.foe.y, [e.foe]);
-      if (next) woundFoe(next, n);
+      passWounds(e.foe);
     },
   },
 };
+
+export function passWounds(foe: Enemy): void {
+  if (!skillValues(SKILL.wound).spread) return;
+  const n = stacksOf(foe, SKILL.wound);
+  if (!n) return;
+  const next = nearestFoe(foe.x, foe.y, [foe]);
+  if (next) woundFoe(next, n);
+}

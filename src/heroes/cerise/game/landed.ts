@@ -1,3 +1,4 @@
+import { usesDrill } from "../../../drill";
 import { dealDamage } from "../../../game/damage";
 import { addStacks, consumeStacks } from "../../../game/enemies/skillStatus";
 import { skillEvolved, skillValues } from "../../../game/skills/query";
@@ -57,9 +58,10 @@ export function landed(e: Enemy, _hit: { crit: boolean; kill: boolean }): void {
   if (e.hp <= 0) return;
   const blade = hero.state === "move" || hero.state === "riposte";
   if (!blade) return;
+  if (skillValues("ce_weep").refresh && isMarked(e)) roseMark(e);
+  if (usesDrill()) return;
   pins(e);
   thorns(e);
   pinning(e);
   if (hero.move === "risingThrust") feint(e);
-  if (skillValues("ce_weep").refresh && isMarked(e)) roseMark(e);
 }

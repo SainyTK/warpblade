@@ -22,6 +22,7 @@ function scour(foe: Enemy): void {
 export const ZAFIR_SPELLS: readonly DrillSpell[] = [
   {
     id: "spout",
+    art: "spell1",
     name: "Sandspout",
     color: 0xe0a84a,
     core: 0xfff0c8,
@@ -36,6 +37,7 @@ export const ZAFIR_SPELLS: readonly DrillSpell[] = [
   },
   {
     id: "crescent",
+    art: "spell2",
     name: "Crescent",
     color: 0xf8b84a,
     core: 0xfffbe8,
@@ -50,6 +52,7 @@ export const ZAFIR_SPELLS: readonly DrillSpell[] = [
   },
   {
     id: "glass",
+    art: "spell3",
     name: "Glass Rain",
     color: 0x9ee0d8,
     core: 0xeafffb,

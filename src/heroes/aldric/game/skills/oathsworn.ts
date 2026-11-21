@@ -1,5 +1,6 @@
 import { HERO_GUARD } from "../../../../constants/combat";
 import { GROUND } from "../../../../constants/stage";
+import { nativeOrDrill } from "../../../../drill";
 import { clampStageX } from "../../../../game/adventure";
 import { dealDamage } from "../../../../game/damage";
 import { createImpact } from "../../../../game/effects/impact";
@@ -86,9 +87,7 @@ function answer(m: SkillMemory, foe: Enemy | null, sure = false): void {
   if (v.barrier) raiseBarrier(OATHSWORN.barrier, 1);
 }
 
-/** Oathsworn: a parry (and from its fourth level a block or a Counterbash) may call a knight of light who cuts the attacker; as
- *  Honour Guard two answer, and with Twin Bulwark every warp arrival calls them */
-export const oathsworn: SkillBehavior = {
+const native: SkillBehavior = {
   create: () => ({ cd: 0 }),
   update(m, _s, dt) {
     m.cd = Math.max(0, (m.cd as number) - dt);
@@ -108,3 +107,11 @@ export const oathsworn: SkillBehavior = {
     },
   },
 };
+
+/** Oathsworn: a parry (and from its fourth level a block or a Counterbash) may call a knight of light who cuts the
+ *  attacker; as Honour Guard two answer, and with Twin Bulwark every warp arrival calls them. On the drill Twin
+ *  Bulwark recharges the warp instead, so arrivals call no knights */
+export const oathsworn: SkillBehavior = nativeOrDrill(native, {
+  ...native,
+  on: { parry: native.on?.parry, block: native.on?.block },
+});

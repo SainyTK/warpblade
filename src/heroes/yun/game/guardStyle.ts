@@ -1,3 +1,4 @@
+import { usesDrill } from "../../../drill";
 import { createSlash } from "../../../game/effects/slash";
 import { game, hero, progress } from "../../../game/state";
 import type { GuardStyle } from "../../../types/moveset";
@@ -11,12 +12,14 @@ import { gainSwords } from "./swords";
 const FLICK = { cx: 8, cy: -22, R: 18, sy: 0.6, rot: 0, a0: -1.6, a1: 0.4, W: 6, trail: 0.18 } as const;
 
 /** Sword Screen: the held spirit swords fan out before him as a screen, an average block that flashes white when it
- *  holds a blow. Deflecting Qi, his parry: a qi wave leaves the blade and runs ahead, and a spirit sword joins him */
+ *  holds a blow. Deflecting Qi, his parry: a qi wave leaves the blade and runs ahead, and a spirit sword joins him;
+ *  on the drill the parry is the shared one and Crane's Reach adds the wave */
 export const YUN_GUARD_STYLE: GuardStyle = {
   chip: YUN_GUARD.chip,
   blockCost: YUN_GUARD.blockCost,
   blocked: screenBlocked,
   parried() {
+    if (usesDrill()) return;
     game.fx.push(createSlash(hero.x, hero.y, hero.face, FLICK));
     game.fx.push(
       createQiWave(hero.x + hero.face * 10, hero.y - 20, hero.face, {
