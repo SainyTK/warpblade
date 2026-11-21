@@ -5,6 +5,7 @@ import { boxHit, heroBox } from "../game/world";
 import { sfx } from "../services/audio";
 import type { Fighter } from "../types/drill";
 import type { Enemy } from "../types/enemy";
+import { drillProfile } from "./selection";
 
 export function createDashEvents() {
   let face = 0;
@@ -27,6 +28,7 @@ export function createDashEvents() {
       }
     }
     if (!active) {
+      drillProfile()?.hooks?.dashed?.([...foes]);
       emitSkillEvent({ type: "dash", dir: face, foes: [...foes] });
       face = 0;
       foes.clear();

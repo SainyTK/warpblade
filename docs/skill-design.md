@@ -109,6 +109,43 @@ Taking one early costs the player early power for a much stronger late game.
 A summon has a trigger and a chance; levels raise the chance, the supporter's damage, duration, count or give it a new move.
 A summon never fires more than its own internal cooldown allows, so attack speed does not break it.
 
+## Drill baseline
+
+Every hero on the shared drill engine (`src/drill`, `docs/hero-module.md`, "The drill engine") keeps exactly 20 skills, and each skill upgrades one drill mechanic.
+Kael's set (`docs/skills/kael.md`, "Drill set") is the worked example every other hero copies.
+
+### Skills per mechanic
+
+| Mechanic | Skills | Kind | Kael |
+| --- | --- | --- | --- |
+| Slash chain (J) | 4 | `attack` | one per slash of the chain (first, second, third) and one for the air slash |
+| Guard and parry (K) | 1 | `attack` | Crystal Aegis |
+| Warp strike and dash (L or Shift) | 4 | `movement` | Warpcraft, Blink Step, Passing Cut, Spellwarp |
+| Jump, wall kick and air (Space) | 1 | `movement` | Sky Dance |
+| Prepared spells and infusion (I) | 3 | `spell` | one per spell of the set |
+| Damage over time | 3 | `dot` | any trigger: slashes, warp, dash |
+| Summons | 3 | `summon` | any trigger: back hits, casts, parries |
+| Charged tiers (held J) | 1 | `ultimate` | upgrades all four tiers |
+
+The `kind` least counts of "The 20 skills" above still hold.
+The base kit is the drill with no skill: every spell of the set is known from the start, so spell skills upgrade a spell and never unlock one.
+
+### How a skill plugs in
+
+- Numbers the engine owns change through `DrillProfile.modifiers()`: the hero folds every held skill into one `DrillModifiers` (start from `NEUTRAL_MODIFIERS`, so a hero with no skill plays exactly as its profile).
+- Effects on top of a hit go through `DrillProfile.hooks`: `swordHit` (a slash, warp strike or infused hit struck a foe), `slashed` (a slash or warp strike was let loose), `spellHit` (a spell blast struck a foe), `dashed` (the foes a dash passed), `released` (a charged tier struck) and `tick`.
+- The engine also emits the skill events `slash`, `prepare`, `infuse`, `cast`, `warp`, `dash`, `jump`, `ultimate`, `blow`, `kill` and `hurt`, so a `SkillBehavior` that answers events works under the drill unchanged.
+- A skill row keeps the numbers the hero's native kit reads and adds the drill's own under a `drill.` prefix, so the same skill id works in both kits; Kael's `drillLevels` (`src/heroes/kael/constants/skills/drillLevels.ts`) builds such rows.
+- The card text describes the drill, the controller every solo Adventure plays; the native kit reads only its own numbers.
+
+### Levels and evolutions
+
+- Level 1 gives the skill's one idea on its mechanic.
+- Levels 2, 3, 5 and 7 each add a new property: a status (stagger, chill, freeze, burn, shock), a second trigger, another hit, or more of a count the engine owns (air slashes, air dashes, infusion hits).
+- Levels 4, 6 and 8 are number steps; level 8 is about 6 to 10 times level 1 on its intended target.
+- An evolution keeps the skill's mechanic and adds one strong new behaviour: a follow-up hit, a wider reach, a timer that makes every press count as the strong one, or a free recharge.
+- Partners stay inside the hero and pair a mechanic with a neighbour (a slash skill with another slash or movement skill, a spell with a summon or a damage over time skill).
+
 ## Evolution
 
 - A skill at level 8 with its partner owned at level 4 or more (`EVOLVE_PARTNER_LEVEL`) is ready.

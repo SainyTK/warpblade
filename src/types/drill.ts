@@ -90,6 +90,8 @@ export interface SkillCast {
 }
 
 export interface DrillHooks {
+  spellHit?(foe: Enemy, spell: DrillSpell): void;
+  dashed?(foes: readonly Enemy[]): void;
   swordHit?(foe: Enemy, infusion: DrillSpell | null): void;
   slashed?(strike: DrillStrikeId | "warp", landed: boolean): void;
   released?(cast: SkillCast): void;

@@ -1,17 +1,27 @@
 import type { SkillDef } from "../../../../types/skill";
-import { evolvedRow, levelRows } from "../../../../utils/skillRows";
+import { evolvedRow } from "../../../../utils/skillRows";
+import { drillLevels, drillValues, type NativeStep } from "./drillLevels";
 
-/** values: `power` of the blink strike, `keep` the combo goes on, `keen` a blink in the Keen beat is a sure crit, `lock`
- *  seconds the foe cannot turn, `recharge` its own wait, `after` power of the afterimage's cut */
-const LEVELS = levelRows([
-  { text: "J held during a combo blinks behind the foe and strikes.", values: { power: 1.8 } },
-  { text: "New: the combo goes on after the blink.", values: { keep: 1 } },
-  { text: "Blink strike power 1.8 to 2.8.", values: { power: 2.8 } },
-  { text: "New: a blink in the Keen beat is a sure crit.", values: { keen: 1 } },
-  { text: "New: the foe cannot turn for 1.2 s.", values: { lock: 1.2 } },
-  { text: "New: the blink has its own 1.2 s recharge.", values: { recharge: 1.2 } },
-  { text: "New: an afterimage cuts where Kael stood.", values: { after: 1.2 } },
-  { text: "Blink strike power 2.8 to 7; the foe cannot turn for 2 s.", values: { power: 7, lock: 2 } },
+const NATIVE: readonly NativeStep[] = [
+  { values: { power: 1.8 } },
+  { values: { keep: 1 } },
+  { values: { power: 2.8 } },
+  { values: { keen: 1 } },
+  { values: { lock: 1.2 } },
+  { values: { recharge: 1.2 } },
+  { values: { after: 1.2 } },
+  { values: { power: 7, lock: 2 } },
+];
+
+const LEVELS = drillLevels(NATIVE, [
+  { text: "Kael is untouchable while dashing.", drill: { inv: 0.05 } },
+  { text: "New: one more air dash.", drill: { airDashes: 1 } },
+  { text: "New: an air dash restores the air slash.", drill: { refresh: 1 } },
+  { text: "New: a cut flashes where each dash began, 0.6 AD.", drill: { after: 0.6 } },
+  { text: "Afterimage cut 0.6 to 1.2 AD.", drill: { after: 1.2 } },
+  { text: "New: a third air dash.", drill: { airDashes: 2 } },
+  { text: "Untouchable a moment longer after each dash.", drill: { inv: 0.12 } },
+  { text: "Afterimage cut 1.2 to 3 AD.", drill: { after: 3 } },
 ]);
 
 export const BLINK_STEP: SkillDef = {
@@ -19,13 +29,16 @@ export const BLINK_STEP: SkillDef = {
   name: "Blink Step",
   kind: "movement",
   risk: "timed",
-  button: "J",
-  text: "Hold J during a combo to step through to the foe's back and strike, with no sword throw.",
+  button: "L",
+  text: "Dashes make Kael untouchable and leave a cutting afterimage, and he gains air dashes.",
   levels: LEVELS,
   evolution: {
     partner: "k_echo",
     name: "Shadow Step",
-    text: "A phantom cuts from the near side as Kael blinks, and a blink that kills is free.",
-    row: evolvedRow(LEVELS[7], "A phantom strikes with every blink; kills refund it.", { shadow: 1 }),
+    text: "Each afterimage cuts twice and reaches twice as far.",
+    row: evolvedRow(LEVELS[7], "Afterimages cut twice, twice as wide.", {
+      ...drillValues({ shadow: 48 }),
+      shadow: 1,
+    }),
   },
 };

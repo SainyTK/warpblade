@@ -11,7 +11,7 @@ const LEVELS = levelRows([
   },
   { text: "A foe holds 3 to 5 splinters.", values: { max: 5 } },
   { text: "Splinters bleed twice as fast.", values: { per: 0.1 } },
-  { text: "New: the 4th hit lodges 3 at once.", values: { finisher: 3 } },
+  { text: "New: the last hit of the chain lodges 3 at once.", values: { finisher: 3 } },
   { text: "New: a foe full of splinters passes them to foes beside it.", values: { spread: 1 } },
   { text: "New: a crit lodges 2; a foe holds 8.", values: { crit: 2, max: 8 } },
   { text: "New: a foe that dies fires its splinters at foes near it.", values: { burst: 0.5 } },
@@ -29,7 +29,7 @@ export const CRYSTAL_SPLINTERS: SkillDef = {
   evolution: {
     partner: "k_keen",
     name: "Shatterstorm",
-    text: "The 4th hit and every Keen blow shatter the splinters in the foes they hit, cutting every foe around.",
+    text: "The last hit of the chain shatter the splinters in the foes they hit, cutting every foe around.",
     row: evolvedRow(LEVELS[7], "Finishers and Keen blows shatter splinters.", { shatter: 0.5, shatterReach: 70 }),
   },
 };

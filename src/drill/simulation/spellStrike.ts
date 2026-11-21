@@ -22,6 +22,7 @@ function damageArea(session: Session, { spell, x, y }: ElementImpact): void {
     if (strikeEnemy(session.profile, enemy, spell.damage * spellDamage, x, "abilities")) {
       freezeEnemy(enemy, spell.freeze);
       spell.status?.(enemy);
+      session.profile.hooks?.spellHit?.(enemy, spell);
     }
   }
 }

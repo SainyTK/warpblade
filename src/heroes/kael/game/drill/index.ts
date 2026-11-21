@@ -3,6 +3,7 @@ import type { DrillProfile } from "../../../../types/drill";
 import { KAEL_SPELLS } from "../../constants/drill/spells";
 import { KAEL_STRIKES } from "../../constants/drill/strikes";
 import { KAEL_TIERS } from "../../constants/drill/tiers";
+import { KAEL_DRILL_HOOKS, kaelModifiers } from "./hooks";
 import { drawThrownSword } from "./thrownSword";
 
 export const KAEL_DRILL: DrillProfile = {
@@ -19,5 +20,6 @@ export const KAEL_DRILL: DrillProfile = {
     cycle: "Cycle Fire, Ice and Thunder before preparing a spell.",
     cast: "Prepare the selected spell. Press again when ready to cast, or press during a slash to infuse the sword.",
   },
-  modifiers: () => NEUTRAL_MODIFIERS,
+  modifiers: () => kaelModifiers(NEUTRAL_MODIFIERS),
+  hooks: KAEL_DRILL_HOOKS,
 };

@@ -1,21 +1,29 @@
 import type { SkillDef } from "../../../../types/skill";
-import { evolvedRow, levelRows } from "../../../../utils/skillRows";
+import { evolvedRow } from "../../../../utils/skillRows";
+import { drillLevels, drillValues, type NativeStep } from "./drillLevels";
 
-/** values: `power` per spike (ability power), `spikes`, `freeze` seconds, `recharge`, `chill` seconds foes beside the
- *  line are slowed, `shatter` attack power of the shards when a heavy blow breaks a frozen foe, `frozenBonus` damage
- *  frozen foes take, `burst` ability power of a frozen foe's death burst */
-const LEVELS = levelRows([
+const NATIVE: readonly NativeStep[] = [
   {
-    text: "I sends a running line of ice spikes that freezes foes.",
     values: { power: 1.6, spikes: 4, freeze: 0.8, recharge: 9 },
   },
-  { text: "Spikes 4 to 6.", values: { spikes: 6 } },
-  { text: "Spike power 1.6 to 2.4; freezes longer.", values: { power: 2.4, freeze: 1.4 } },
-  { text: "New: a heavy blow on a frozen foe shatters it.", values: { shatter: 0.8 } },
-  { text: "New: foes beside the line are slowed; recharge 6.5 s.", values: { chill: 2, recharge: 6.5 } },
-  { text: "New: frozen foes take +25% damage.", values: { frozenBonus: 0.25 } },
-  { text: "New: a frozen foe that dies bursts and freezes others.", values: { burst: 1 } },
-  { text: "Spike power 2.4 to 7; shards far stronger.", values: { power: 7, shatter: 3.5 } },
+  { values: { spikes: 6 } },
+  { values: { power: 2.4, freeze: 1.4 } },
+  { values: { shatter: 0.8 } },
+  { values: { chill: 2, recharge: 6.5 } },
+  { values: { frozenBonus: 0.25 } },
+  { values: { burst: 1 } },
+  { values: { power: 7, shatter: 3.5 } },
+];
+
+const LEVELS = drillLevels(NATIVE, [
+  { text: "Ice freezes foes 0.5 s longer.", drill: { freeze: 0.5 } },
+  { text: "New: a slash on a frozen foe shatters it for 1 AD.", drill: { shatter: 1 } },
+  { text: "New: ice hits 0.4 AD harder.", drill: { spike: 0.4 } },
+  { text: "Freeze 1 s longer; shatter 2 AD.", drill: { freeze: 1, shatter: 2 } },
+  { text: "New: ice chills the foes around.", drill: { chill: 2 } },
+  { text: "New: a shatter splashes foes near for 0.8 AD.", drill: { splash: 0.8 } },
+  { text: "Shatter 4 AD; splash 1.5 AD.", drill: { shatter: 4, splash: 1.5 } },
+  { text: "Freeze 1.5 s longer; shatter 7 AD.", drill: { freeze: 1.5, shatter: 7 } },
 ]);
 
 export const ICE_SPIKES: SkillDef = {
@@ -24,12 +32,17 @@ export const ICE_SPIKES: SkillDef = {
   kind: "spell",
   risk: "timed",
   button: "I",
-  text: "Learn the ice spell: a running line of spikes that freezes foes.",
+  text: "Ice freezes longer, and a slash shatters a frozen foe.",
   levels: LEVELS,
   evolution: {
     partner: "k_reap",
     name: "Glacier Bloom",
-    text: "A second line runs behind Kael, and the last spike grows into a spire that bursts into freezing shards.",
-    row: evolvedRow(LEVELS[7], "A line behind, and a great spire at the end.", { bloom: 1, spire: 3, bloomPower: 1.5 }),
+    text: "A shatter freezes the foes it splashes.",
+    row: evolvedRow(LEVELS[7], "Shatters freeze the foes they splash.", {
+      ...drillValues({ bloom: 1.5 }),
+      bloom: 1,
+      spire: 3,
+      bloomPower: 1.5,
+    }),
   },
 };
