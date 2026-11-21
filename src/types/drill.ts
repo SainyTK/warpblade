@@ -63,6 +63,8 @@ export interface DrillTier {
   color: number;
   look: DrillTierLook;
   around: boolean;
+  windup?: Pose;
+  cut?: Pose;
   drawStrike?(cast: SkillCast, progress: number, fade: number): void;
 }
 
