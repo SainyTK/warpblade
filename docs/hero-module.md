@@ -402,6 +402,8 @@ export interface DrillProfile {
   text: Readonly<Partial<Record<InputAction, string>>>;
   modifiers(): DrillModifiers;
   hooks?: DrillHooks;
+  motion?: Partial<DrillMotion>;
+  poses?: Partial<DrillPoses>;
 }
 ```
 
@@ -409,15 +411,17 @@ export interface DrillProfile {
 | --- | --- |
 | `strikes` | `first`, `second`, `third` and `air`: timing (`hit`, `duration`), `reach`, `height`, forward `step`, `next` in the chain, `damage` as a multiple of one plain slash, `finisher`, the four `poses` the slash blends through and the trail `arc` |
 | `attack` | the drill's damage unit; every damage number in the profile is divided by it and multiplied by the hero's AD (slashes) or AP (spells, tiers). Kael and Cerise use 10 |
-| `spells` | the spell set in O order: `id` (also the touch art id and the `cast` event's ability), `name` (the HUD tab), `color`, `core`, `damage`, `radius`, `range`, `speed` (a travelling bolt) or `null` with a `delay` (strikes the nearest foe ahead), `look` (`flame`, `shard` or `spark`), `freeze` seconds and an optional `status(foe)` that both the spell and every infused hit apply |
+| `spells` | the spell set in O order: `id` (also the touch art id and the `cast` event's ability), `name` (the HUD tab), `color`, `core`, `damage`, `radius`, `range`, `speed` (a travelling bolt) or `null` with a `delay` (strikes the nearest foe ahead), `look` (`flame`, `shard` or `spark`), `freeze` seconds, an optional `status(foe)` that both the spell and every infused hit apply, and optional `drawBolt` and `drawImpact` that replace the shared look |
 | `known()` | the spells known now; skills that unlock a spell filter here |
-| `tiers` | four charged tiers: `name`, `threshold` seconds, `damage`, `reach`, `height`, `intro` (cut-in time before the strike), `duration`, `color`, `look` (`crescent`, `spires`, `rift`, `nova`) and `around` for a strike on both sides |
+| `tiers` | four charged tiers: `name`, `threshold` seconds, `damage`, `reach`, `height`, `intro` (cut-in time before the strike), `duration`, `color`, `look` (`crescent`, `spires`, `rift`, `nova`), `around` for a strike on both sides, and an optional `drawStrike(cast, progress, fade)` that replaces the look |
 | `warpSlash` | the slash drawn as the warp strike lands |
 | `enhancedParry` | seconds the enhanced parry window stays open |
 | `drawThrown` | the weapon in flight during the warp; `drawThrownBlade` (`src/game/effects/thrownWeapon.ts`) draws the hero's own skin blade |
 | `portrait`, `drawCutIn` | the cut-in image (a URL, or an async loader such as `loadGeneratedHeroPortrait`) and an optional own cut-in style; without one the shared Kael style is used |
 | `text` | the hero's Controls lines over the shared drill lines (`src/drill/controlText.ts`) |
 | `modifiers()` | the numbers the hero's skills change, read every step (next section) |
+| `motion` | movement numbers over the shared `MOTION` (`src/drill/constants.ts`): run speed, jump rise and gravity, dash speed and time, wall kick; leave out what the hero shares with Kael |
+| `poses` | locomotion poses over the shared ones (`src/drill/view/poses/`): `stance`, `breathe`, `run(phase)`, `brake`, `low`, `touchdown`, `dash`, `airDash`, `rise`, `leap`, `kick`, `fall`, `wall`, `guard`, `airGuard`, `parryContact`, `parryReturn`, `spell` and `skillCut`, so each hero has its own silhouette in every state |
 | `hooks` | `swordHit(foe, infusion)`, `slashed(strike, landed)`, `released(cast)`, `tick(dt)`, `draw()`, `reset()` for anything the shared engine does not do |
 
 Poses for strikes use `pose()` from `src/constants/hero.ts` and the stance and hand helpers in `src/constants/drillPose.ts` (`DRILL_STANCE`, `frontHand`, `rearHand`), so strike data can live in the hero's `constants/` folder.
