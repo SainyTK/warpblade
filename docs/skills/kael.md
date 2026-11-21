@@ -26,17 +26,19 @@ Drill code: `src/heroes/kael/game/drill/skills/` (one file per redesigned skill)
 | `k_flame` | Fire Flask | Fire | Fire sets foes burning | harder fire, knock, a flare on slashing burning foes, wider blasts, two flasks | Sunflask (`k_familiar`): each blast throws three more |
 | `k_frost` | Ice Spikes | Ice | Ice freezes longer | a slash shatters a frozen foe, chill, a shatter splash | Glacier Bloom (`k_reap`): a shatter freezes what it splashes |
 | `k_volt` | Lightning | Thunder | Thunder arcs to one more foe | an extra bolt, shock, more arcs (up to 4), thunder-infused slashes arc | Thunderhead (`k_static`): Thunder strikes twice |
-| `k_splinters` | Crystal Splinters | dot on slashes | as in the native kit | the chain's last hit lodges three | Shatterstorm (`k_keen`) |
+| `k_splinters` | Crystal Splinters | dot on slashes | as in the native kit | the chain's last hit lodges three | Shatterstorm (`k_keen`): the chain's last hit and every Keen blow shatter the splinters |
 | `k_rift` | Rift Wound | dot on the warp | as in the native kit | the chain's last hit adds a layer | Rift Collapse (`k_warpcraft`) |
 | `k_static` | Static Charge | dot on the dash | foes the dash passes are charged | as in the native kit | Overload (`k_passing`): every dash strikes the charged foes |
 | `k_echo` | Phantom Edge | summon on back hits | as in the native kit | as in the native kit | Phantom Host (`k_mirror`) |
 | `k_familiar` | Crystal Familiar | summon on casts | as in the native kit | as in the native kit | Crystal Choir (`k_volt`) |
-| `k_mirror` | Mirror Knight | summon on parries | as in the native kit | as in the native kit | as in the native kit |
+| `k_mirror` | Mirror Knight | summon on parries and perfect dodges | as in the native kit | as in the native kit | as in the native kit |
 | `k_nova` | Crystal Nova | the four charged tiers | charged skills +30% | a pull, faster charge, an echo strike, more reach, up to +250% | Supernova (`k_keen`): every charged skill bursts twice more |
 
 Count by mechanic: 4 slash skills, 1 guard skill, 4 warp and dash skills, 1 jump skill, 3 spell skills, 3 damage over time, 3 summons, 1 charged-tier skill.
 Effects that exist only in the drill (the `drill.` numbers) do nothing in the native kit.
-A perfect dodge does not exist in the drill, so Static Charge's perfect dodge level and Mirror Knight's perfect dodge trigger only fire in the native kit; the parry triggers work in both.
+The drill fires the shared perfect dodge once per dash that avoids a real hit, so Static Charge level 7 and Mirror Knight's perfect dodge trigger work there as in the native kit, and a perfect dodge primes Mirror Knight's Riposte like a parry does (`game/skills/mirrorKnight.ts` through `nativeOrDrill`).
+A drill Keen blow (J pressed within 0.1 s after a slash lands) is a sure crit with `keen` set on its `blow` event, so Shatterstorm shatters on it.
+Keen Edge's native Keen bonus (`bonus`, `streak`) stays in the native kit; the drill's Keen Edge upgrades the third slash instead.
 
 ## Identity
 

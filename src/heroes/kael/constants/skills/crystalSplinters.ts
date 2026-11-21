@@ -29,7 +29,7 @@ export const CRYSTAL_SPLINTERS: SkillDef = {
   evolution: {
     partner: "k_keen",
     name: "Shatterstorm",
-    text: "The last hit of the chain shatter the splinters in the foes they hit, cutting every foe around.",
+    text: "The last hit of the chain and every Keen blow shatter the splinters in the foes they hit, cutting every foe around.",
     row: evolvedRow(LEVELS[7], "Finishers and Keen blows shatter splinters.", { shatter: 0.5, shatterReach: 70 }),
   },
 };
