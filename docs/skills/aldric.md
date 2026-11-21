@@ -28,16 +28,17 @@ Drill code: `src/heroes/aldric/game/drill/skills/` (one file per redesigned skil
 | `al_mend` | Mending Light | Mending Light | heals 1% more per foe | a push, burning dawn light, a harder blast, more healing | Absolution (`al_penance`): the light lays full Penance |
 | `al_rally` | High Sun | Sunpillar | Sunpillar stuns 0.4 s longer | a second and a third pillar, harder pillars, light burn | Zenith (`al_falcon`): every pillar strikes twice |
 | `al_brand` | Sunbrand | dot on slashes | the Shield bash brands foes | Sunpillar and Oath cut brand too, the native numbers | Solar Brand (`al_breaker`), as in the native kit |
-| `al_penance` | Penance | dot on blocks and parries | as in the native kit | as in the native kit | Atonement (`al_mend`) |
+| `al_penance` | Penance | dot on blocks and parries | blocked attackers burn | harder burns, a parry lays the most, a Shield bash that lands lays a stack, healing ticks, a spread | Atonement (`al_mend`) |
 | `al_dawn` | Lingering Dawn | dot on Sunpillar | Sunpillar leaves burning light | a warp arrival and Crest breaker leave it too, the native numbers | High Noon (`al_falcon`) |
-| `al_oathsworn` | Oathsworn | summon on parries | as in the native kit | as in the native kit | Honour Guard (`al_bulwark`) |
+| `al_oathsworn` | Oathsworn | summon on parries | a parry may call a knight of light | more cuts, a block may call him too, a knockdown, a Bulwark | Honour Guard (`al_bulwark`) |
 | `al_lion` | Sun Lion | summon on kills | as in the native kit | as in the native kit | Pride of Dawn (`al_oath`) |
-| `al_falcon` | Dawn Falcon | summon on casts | as in the native kit | as in the native kit | Sunbird (`al_dawn`) |
+| `al_falcon` | Dawn Falcon | summon on casts | a cast may send a falcon of light | more chance, a swoop back, a mark, two falcons, a parry may send one too | Sunbird (`al_dawn`) |
 | `al_sanctuary` | Sanctuary | the four charged tiers | charged skills +30% | a pull, faster charge, an echo, more reach, healing, up to +250% | Dawn Citadel (`al_resolve`): every charged skill bursts twice more |
 
 Count by mechanic: 4 slash skills, 1 guard skill, 4 warp and dash skills, 1 jump skill, 3 spell skills, 3 damage over time, 3 summons, 1 charged-tier skill.
 Effects that exist only in the drill (the `drill.` numbers) do nothing in the native kit.
-Counterbash and Shield Rush triggers of the native rows fire only in the native kit.
+Every level's card text works under the drill; the Counterbash, Guard bash and Shield Rush numbers of the native rows add to them only in the native kit.
+Under the drill, Bulwark and Aldric's other timers run down through the profile's `tick` hook.
 
 ## Identity
 

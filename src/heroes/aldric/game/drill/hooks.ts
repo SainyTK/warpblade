@@ -1,6 +1,7 @@
 import { skillEvolved, skillLevel, skillValues } from "../../../../game/skills/query";
 import type { DrillHooks, DrillModifiers } from "../../../../types/drill";
 import type { AldricDrillSkill, DrillSkillState } from "../../types/drillSkill";
+import { tickAldricState } from "../state";
 import { resetLater, tickLater } from "./later";
 import { releaseSanctuary } from "./release";
 import { ALDRIC_DRILL_SKILLS } from "./skills";
@@ -59,6 +60,7 @@ export const ALDRIC_DRILL_HOOKS: DrillHooks = {
   },
   tick: (dt) => {
     tickLater(dt);
+    tickAldricState(dt);
     for (const [skill, state] of held()) {
       skill.tick?.(dt, state);
     }

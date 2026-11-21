@@ -9,6 +9,7 @@ import { IRON_VOW_DRILL } from "./ironVow";
 import { LINGERING_DAWN_DRILL } from "./lingeringDawn";
 import { MENDING_LIGHT_DRILL } from "./mendingLight";
 import { OATHBLADE_DRILL } from "./oathblade";
+import { PENANCE_DRILL } from "./penance";
 import { RESOLVE_DRILL } from "./resolve";
 import { SANCTUARY_DRILL } from "./sanctuary";
 import { SHIELD_STEP_DRILL } from "./shieldStep";
@@ -32,5 +33,6 @@ export const ALDRIC_DRILL_SKILLS: readonly AldricDrillSkill[] = [
   HIGH_SUN_DRILL,
   SUNBRAND_DRILL,
   LINGERING_DAWN_DRILL,
+  PENANCE_DRILL,
   SANCTUARY_DRILL,
 ];

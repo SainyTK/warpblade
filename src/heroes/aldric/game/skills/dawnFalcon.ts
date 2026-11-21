@@ -88,7 +88,7 @@ function send(m: SkillMemory, evolved: boolean): void {
     game.fx.push(createFalcon(hero.x, hero.y - 30 - i * 6, hero.face, v.passes ?? 1, i * 0.12, evolved));
 }
 
-/** Dawn Falcon: an ability cast (and from its seventh level a Counterbash) may send falcons of light through the foes
+/** Dawn Falcon: an ability cast (and from its seventh level a parry or a Counterbash) may send falcons of light through the foes
  *  ahead; as Sunbird they swoop three times and set foes burning */
 export const dawnFalcon: SkillBehavior = {
   create: () => ({ cd: 0 }),
@@ -98,6 +98,9 @@ export const dawnFalcon: SkillBehavior = {
   on: {
     cast(m, _ev, { evolved }) {
       send(m, evolved);
+    },
+    parry(m, _ev, { evolved }) {
+      if (skillValues(ID).counter) send(m, evolved);
     },
     guardBash(m, ev, { evolved }) {
       if (ev.counter && skillValues(ID).counter) send(m, evolved);
