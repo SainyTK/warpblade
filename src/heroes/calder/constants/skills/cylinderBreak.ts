@@ -1,4 +1,3 @@
-import { ULT_CHARGE } from "../../../../constants/ultimate";
 import type { SkillDef } from "../../../../types/skill";
 import { evolvedRow, levelRows } from "../../../../utils/skillRows";
 import { drillValues, withDrill } from "./drillLevels";
@@ -32,7 +31,7 @@ export const CYLINDER_BREAK: SkillDef = {
   kind: "ultimate",
   risk: "easy",
   button: "U",
-  text: `Cylinder Break grows: more cuts, foes drawn in, and a breaching shot to end the run. Grows with attack damage. ${ULT_CHARGE}`,
+  text: "Breach Cut, Buckshot Wall, Green Line and Cylinder Break, the four charged skills on held J, hit harder.",
   levels: DRILL_LEVELS,
   evolution: {
     partner: "ca_trigger",
