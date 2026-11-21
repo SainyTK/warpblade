@@ -402,6 +402,8 @@ export interface DrillProfile {
   text: Readonly<Partial<Record<InputAction, string>>>;
   modifiers(): DrillModifiers;
   hooks?: DrillHooks;
+  motion?: Partial<DrillMotion>;
+  poses?: Partial<DrillPoses>;
 }
 ```
 
@@ -409,16 +411,18 @@ export interface DrillProfile {
 | --- | --- |
 | `strikes` | `first`, `second`, `third` and `air`: timing (`hit`, `duration`), `reach`, `height`, forward `step`, `next` in the chain, `damage` as a multiple of one plain slash, `finisher`, the four `poses` the slash blends through and the trail `arc` |
 | `attack` | the drill's damage unit; every damage number in the profile is divided by it and multiplied by the hero's AD (slashes) or AP (spells, tiers). Kael and Cerise use 10 |
-| `spells` | the spell set in O order: `id` (also the touch art id and the `cast` event's ability), `name` (the HUD tab), `color`, `core`, `damage`, `radius`, `range`, `speed` (a travelling bolt) or `null` with a `delay` (strikes the nearest foe ahead), `look` (`flame`, `shard` or `spark`), `freeze` seconds and an optional `status(foe)` that both the spell and every infused hit apply |
+| `spells` | the spell set in O order: `id` (also the touch art id and the `cast` event's ability), `name` (the HUD tab), `color`, `core`, `damage`, `radius`, `range`, `speed` (a travelling bolt) or `null` with a `delay` (strikes the nearest foe ahead), `look` (`flame`, `shard` or `spark`), `freeze` seconds, an optional `status(foe)` that both the spell and every infused hit apply, and optional `drawBolt` and `drawBlast` in place of the shared look |
 | `known()` | the spells known now; skills that unlock a spell filter here |
-| `tiers` | four charged tiers: `name`, `threshold` seconds, `damage`, `reach`, `height`, `intro` (cut-in time before the strike), `duration`, `color`, `look` (`crescent`, `spires`, `rift`, `nova`) and `around` for a strike on both sides |
+| `tiers` | four charged tiers: `name`, `threshold` seconds, `damage`, `reach`, `height`, `intro` (cut-in time before the strike), `duration`, `color`, `look` (`crescent`, `spires`, `rift`, `nova`), `around` for a strike on both sides, and optional `pose` and `draw(cast, progress, fade)` in place of the shared ones |
 | `warpSlash` | the slash drawn as the warp strike lands |
 | `enhancedParry` | seconds the enhanced parry window stays open |
 | `drawThrown` | the weapon in flight during the warp; `drawThrownBlade` (`src/game/effects/thrownWeapon.ts`) draws the hero's own skin blade |
 | `portrait`, `drawCutIn` | the cut-in image (a URL, or an async loader such as `loadGeneratedHeroPortrait`) and an optional own cut-in style; without one the shared Kael style is used |
 | `text` | the hero's Controls lines over the shared drill lines (`src/drill/controlText.ts`) |
 | `modifiers()` | the numbers the hero's skills change, read every step (next section) |
-| `hooks` | `swordHit(foe, infusion)`, `slashed(strike, landed)`, `released(cast)`, `tick(dt)`, `draw()`, `reset()` for anything the shared engine does not do |
+| `hooks` | `swordHit(foe, infusion)`, `slashed(strike, landed)`, `spellHit(foe, spell)`, `dashed(foes)`, `released(cast)`, `tick(dt)`, `draw()`, `reset()` for anything the shared engine does not do |
+| `motion` | optional movement numbers over the shared `MOTION` (run, jump, gravity, dash, wall kick) |
+| `poses` | optional locomotion poses over the shared ones (`DrillPoses`): `stance`, `breathe`, `run(phase)` (build it with `fitRunFeet`), `brake`, `low`, `touchdown`, `dash`, `airDash`, `rise`, `leap`, `fall`, `wall`, `kick`, `guard`, `airGuard`, `stagger`, `parryContact`, `parryReturn`, `spell`, `skill` |
 
 Poses for strikes use `pose()` from `src/constants/hero.ts` and the stance and hand helpers in `src/constants/drillPose.ts` (`DRILL_STANCE`, `frontHand`, `rearHand`), so strike data can live in the hero's `constants/` folder.
 A hero whose native clips already have the right shapes can sample them, as Cerise does with `sampleKeys`.
@@ -457,13 +461,18 @@ Nothing in `src/drill/`, `src/ui/` or any other hero needs to change.
 
 ### Worked example: Cerise
 
-Cerise keeps her rapier, Rose Mark, Rose Tempest and her portrait, in five small files.
+Cerise keeps her rapier, Rose Mark, Rose Tempest and her portrait, and owns every look the engine draws for her.
 
 - `constants/drill/strikes.ts` samples her `thrust1`, `thrust2` and `lunge` clips for the three ground slashes and `airThrust` for the air slash, with flat narrow arcs for thrusts and a longer, harder lunge as the finisher.
-- `constants/drill/tiers.ts` names the tiers Rose Tempest I to IV in rose colours, the last one striking all around.
-- `game/drill/spells.ts` turns her base abilities into the spell set: Rose Line, a fast travelling `shard`, and Flurry, a quick `flame` burst on the nearest foe ahead; both apply Rose Mark through `status`, so an infused hit is her Rose Edge.
-- `game/drill/release.ts` is the `released` hook: each tier also sends a Rose Line streak along her line, both ways for the fourth.
-- `game/drill/index.ts` is the profile: `drawThrownBlade` for the thrown rapier, `loadGeneratedHeroPortrait("cerise")` with her rose cut-in (`ui/cutIn.ts`), her Controls lines, and `tick: tickMarks` so her marks age while her native kit is not ticking.
+- `game/drill/poses.ts` is her `poses`: a fencer's upright run built with `fitRunFeet` over her own upper body, and her own stance, jump, dash, wall, kick, landing, guard, parry, spell and charged poses.
+  `motion` on the profile makes her a little quicker and lighter than Kael.
+- `game/drill/spells.ts` is her set of three spells: Rose Line, a fast needle that sets Rose Mark; Flurry, a burst of thrusts on the nearest foe ahead that staggers; and Rose Bloom, a slow spinning bud that binds the foe.
+  Each spell's `status` (`game/drill/statuses.ts`) is also what an infused hit applies, so an infused thrust is her Rose Edge, and each draws through its own `drawBolt` and `drawBlast` in `game/drill/looks/`.
+- `game/drill/tiers.ts` names the tiers Rose Thrust, Rising Rose, Thorn Gale and Rose Tempest, each with its own `pose` and `draw`; the last strikes all around.
+- `game/drill/release.ts` is part of the `released` hook: each tier also sends a Rose Line streak along her line, both ways for the fourth.
+- `game/drill/index.ts` is the profile: `drawThrownBlade` for the thrown rapier, `loadGeneratedHeroPortrait("cerise")` with her rose cut-in (`ui/cutIn.ts`), her Controls lines, `modifiers` and `hooks` built from her 20 drill skills (`game/drill/skills/`, `game/drill/hooks.ts`).
+
+Calder (`src/heroes/calder/game/drill/`) is the third example: heavier `motion`, his own poses, three shells with their own looks, and rounds fired by the third cut and the warp that emit his native skill events, so his DoT and summon skills work on the drill unchanged.
 
 ## Jobs
 
