@@ -22,11 +22,16 @@ type Grain = readonly [height: number, radius: number, phase: number, speed: num
  * The storm that follows Zafir: every `STORM_CUT.every` it cuts each foe inside it, drags it a little toward him and
  * opens a wound. Its skill makes it larger, longer and harder, adds blades of glass and, evolved, a second storm.
  */
-function createStorm(level: number, reach: number, life: number, cut: number): Effect {
+export interface StormTraits {
+  grains: number;
+  wounds: number;
+  blind: boolean;
+}
+
+export function createStorm(level: number, reach: number, life: number, cut: number, traits: StormTraits): Effect {
   let t = 0;
   let clock = 0;
-  const v = ultimateValues();
-  const grains: Grain[] = Array.from({ length: STORM_LOOK.grains * (v.grains ?? 1) }, () => [
+  const grains: Grain[] = Array.from({ length: STORM_LOOK.grains * traits.grains }, () => [
     rng.range(0, STORM_LOOK.height),
     rng.range(0.35, 1),
     rng.range(0, TAU),
@@ -38,8 +43,8 @@ function createStorm(level: number, reach: number, life: number, cut: number): E
       const [ex, ey] = enemyCenter(e);
       if (Math.abs(ex - hero.x) > reach || ey < hero.y - STORM_LOOK.height - 10 || ey > hero.y + 6) continue;
       dealDamage(e, cut, { fromX: hero.x, kx: Math.sign(hero.x - ex) * STORM_CUT.pull, source: "ultimate" });
-      openWounds(e, STORM_CUT.wounds + (v.wounds ?? 0));
-      if (v.blind && e.rank === "minion") e.blind = Math.max(e.blind, STORM_CUT.every * 2);
+      openWounds(e, STORM_CUT.wounds + traits.wounds);
+      if (traits.blind && e.rank === "minion") e.blind = Math.max(e.blind, STORM_CUT.every * 2);
     }
   };
   const draw = (near: boolean) => {
@@ -122,7 +127,8 @@ export function castSandstorm(level: number): void {
   // a longer storm keeps each cut as hard, so its skill's longer storms deal more
   const cuts = base / STORM_CUT.every;
   const cut = (ULT_LEVELS[level - 1].power * progress.stats.ad * STORM_CUT.share * (v.power ?? 1)) / cuts;
-  game.fx.push(createStorm(level, reach, life, cut));
-  if (v.twin) game.fx.push(createStorm(level, reach * 1.6, life, cut * v.twin));
+  const traits = { grains: v.grains ?? 1, wounds: v.wounds ?? 0, blind: !!v.blind };
+  game.fx.push(createStorm(level, reach, life, cut, traits));
+  if (v.twin) game.fx.push(createStorm(level, reach * 1.6, life, cut * v.twin, traits));
   sandSound.gust(0.18);
 }

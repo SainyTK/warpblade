@@ -1,19 +1,27 @@
 import type { SkillDef } from "../../../../types/skill";
-import { evolvedRow, levelRows } from "../../../../utils/skillRows";
+import { evolvedRow } from "../../../../utils/skillRows";
+import { drillLevels, drillValues, type Numbers } from "./drillLevels";
 
-/** values: `power` ability power of each cut, `life` seconds the pit lasts, `recharge` seconds, `reach` its width multiple, `mark` share more damage foes in it take, `sink` seconds each cut knocks them down, `wounds` wounds each cut opens, `spout` ability power of the sandspout the Sinking Sea throws up on each cut */
-const LEVELS = levelRows([
-  {
-    text: "Learn Quicksand: a pit ahead holds walkers and pulls them in.",
-    values: { power: 0.35, life: 2, recharge: 5 },
-  },
-  { text: "Power 0.35 to 0.5; it lasts 2.5 s.", values: { power: 0.5, life: 2.5 } },
-  { text: "New: the pit is a third wider.", values: { reach: 1.33 } },
-  { text: "New: foes in the pit take 15% more from everything.", values: { mark: 0.15 } },
-  { text: "Power 0.5 to 0.7; it lasts 3 s.", values: { power: 0.7, life: 3 } },
-  { text: "New: each cut pulls foes under for a moment.", values: { sink: 0.3 } },
-  { text: "New: each cut opens a wound.", values: { wounds: 1 } },
-  { text: "Power 0.7 to 1.5; foes in it take 25% more.", values: { power: 1.5, mark: 0.25 } },
+const NATIVE: readonly Numbers[] = [
+  { power: 0.35, life: 2, recharge: 5 },
+  { power: 0.5, life: 2.5 },
+  { reach: 1.33 },
+  { mark: 0.15 },
+  { power: 0.7, life: 3 },
+  { sink: 0.3 },
+  { wounds: 1 },
+  { power: 1.5, mark: 0.25 },
+];
+
+const LEVELS = drillLevels(NATIVE, [
+  { text: "Sandspout holds the foes it hits for 0.5 s.", drill: { halt: 0.5 } },
+  { text: "New: Sandspout cuts 0.6 harder.", drill: { power: 0.6 } },
+  { text: "New: Sandspout opens two more wounds.", drill: { wounds: 2 } },
+  { text: "Sandspout cut 0.6 to 1.2.", drill: { power: 1.2 } },
+  { text: "New: a sunk foe drags the foes beside it down too.", drill: { drag: 1 } },
+  { text: "Sandspout cut 1.2 to 2.4; holds 0.5 to 1 s.", drill: { power: 2.4, halt: 1 } },
+  { text: "New: a second spout follows the first.", drill: { twin: 1 } },
+  { text: "Sandspout cut 2.4 to 5.", drill: { power: 5 } },
 ]);
 
 export const QUICKSAND_SKILL: SkillDef = {
@@ -22,12 +30,12 @@ export const QUICKSAND_SKILL: SkillDef = {
   kind: "spell",
   risk: "easy",
   button: "I",
-  text: "Learn Quicksand on I: a pit opens ahead that holds walkers, pulls them in and cuts them. Held, under your own feet and wider.",
+  text: "Sandspout sinks what it catches: it hits harder, holds foes in place and opens more wounds.",
   levels: LEVELS,
   evolution: {
     partner: "za_falling",
     name: "Sinking Sea",
-    text: "Each cut of the pit throws a sandspout up out of its middle.",
-    row: evolvedRow(LEVELS[7], "Each cut throws up a sandspout.", { spout: 0.6 }),
+    text: "Every Sandspout hit raises a whirl of sand that runs on through the foes behind.",
+    row: evolvedRow(LEVELS[7], "Each hit raises a whirl that runs on.", { spout: 0.6, ...drillValues({ sea: 1.5 }) }),
   },
 };

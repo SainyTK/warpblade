@@ -127,6 +127,19 @@ It cuts every foe in it every 0.25 s, drags it a little toward him and opens a w
 A foe that stays in it the whole time takes 1.1 times the level's power in attack damage (Crystal Nova's ring deals 0.75 times once).
 The storm's own skill, Sandstorm (`za_storm`), makes it larger, longer and harder and adds a second storm when evolved.
 
+## The drill kit
+
+Solo Adventure runs Zafir on the shared drill engine through `ZAFIR_DRILL` (`src/heroes/zafir/game/drill/index.ts`).
+His movement numbers (`constants/drill/motion.ts`) make him the quickest on the roster: a faster run and acceleration and a snappier dash.
+His own poses (`constants/drill/locomotion.ts`) keep the scimitar laid back over his shoulders with the other hand on the sash at rest, and the dash is a low spinning turn with his back to the camera.
+His run (`game/drill/runPose.ts`) is fitted to the shared reference trace with the blade trailing low behind him.
+The chain is three spins sampled from his native clips (`constants/drill/strikes.ts`): the sweep turn, the rising turn and the twin turn, plus the spinning descent in the air.
+Every spin also cuts behind him at 75%, and the twin turn adds a high ring 0.1 s after the low one.
+Every cut opens a wound and feeds the Whirl, so the sand ring still turns round him.
+The warp arrives in a full ring, and the enhanced parry stays open 0.25 s; a parry still leaves his mirage.
+His spells are Sandspout (slows and opens a wound), Crescent (opens two wounds) and Glass Rain (blinds minions and holds feet); each status also rides on infused hits.
+Held J charges Sandstorm I to IV, every tier striking both sides, with sand crescents, sandspouts and, from the third tier, a storm that follows him; his cut-in (`ui/cutIn.ts`) shows his portrait over blown sand.
+
 ## Numbers
 
 `base: { ad: 10, ap: 9, hp: 105, mp: 90, stamina: 100, crit: 0.05, move: 1.05, aspd: 1, haste: 1 }`, growth `{ hp: 1.15, mp: 0.4 }`, `comboHits: 4`.
