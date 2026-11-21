@@ -17,3 +17,5 @@ export { NEUTRAL_MODIFIERS } from "./modifiers";
 export { drillProfile, heroDrill, usesDrill } from "./selection";
 export { chargedTier } from "./simulation";
 export { drawCutIn } from "./view/cutIn";
+export { fitRunFeet, RUN_STRIDE, RUN_TOE_OFF } from "./view/runFoot";
+export { cyclePhase } from "./view/runTrace";
