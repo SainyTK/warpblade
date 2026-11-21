@@ -1,4 +1,5 @@
 import { GROUND } from "../../../../constants/stage";
+import { drillFighter } from "../../../../drill";
 import { glow, glowLine, hairline, line, place } from "../../../../engine/frame";
 import { dealDamage } from "../../../../game/damage";
 import { createFloorRing } from "../../../../game/effects/floorRing";
@@ -81,8 +82,11 @@ export const thornSentinel: SkillBehavior = {
   },
   on: {
     blow(m, event) {
-      if (event.move !== "longLunge" || !event.finisher || m.swing === hero.swing) return;
-      m.swing = hero.swing;
+      const drillSwing = drillFighter()?.swing;
+      const lunge = event.move === "longLunge" || drillSwing?.kind === "third";
+      const swing = drillSwing ?? hero.swing;
+      if (!lunge || !event.finisher || m.swing === swing) return;
+      m.swing = swing;
       const v = skillValues(SOURCE);
       if (!rng.chance(v.chance)) return;
       const x = hero.x + hero.face * PLANT.ahead;
