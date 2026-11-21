@@ -422,7 +422,7 @@ export interface DrillProfile {
 | `modifiers()` | the numbers the hero's skills change, read every step (next section) |
 | `motion` | the hero's own movement numbers over the shared `MOTION` (run speed, jump rise, gravity, dash, wall kick); the session resolves them once when it starts |
 | `locomotion` | the hero's own `poses` by id (`stance`, `breathe`, `brake`, `low`, `touchdown`, `dash`, `airDash`, `rise`, `leap`, `kick`, `fall`, `wall`, `spell`) and an optional `run(stride)` cycle; any pose left out uses the shared one, so Kael keeps the shared set |
-| `hooks` | `swordHit(foe, infusion)`, `slashed(strike, landed)`, `released(cast)`, `tick(dt)`, `draw()`, `reset()` for anything the shared engine does not do |
+| `hooks` | `swordHit(foe, infusion)`, `slashed(strike, landed)`, `released(cast)`, `tick(dt)`, `draw()`, `drawBack()` (behind the hero), `reset()` for anything the shared engine does not do |
 
 Poses for strikes use `pose()` from `src/constants/hero.ts` and the stance and hand helpers in `src/constants/drillPose.ts` (`DRILL_STANCE`, `frontHand`, `rearHand`), so strike data can live in the hero's `constants/` folder.
 A hero whose native clips already have the right shapes can sample them, as Cerise does with `sampleKeys`.

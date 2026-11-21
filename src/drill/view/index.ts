@@ -38,6 +38,7 @@ export function createDrillView(profile: DrillProfile) {
       }
       drawSkillDarkness(current.fighter.skillCast, cameraX);
       drawSkillCharge(current);
+      current.profile.hooks?.drawBack?.();
       trail.draw();
       if (current.warpTrace) {
         drawWarpTrace(current.warpTrace);

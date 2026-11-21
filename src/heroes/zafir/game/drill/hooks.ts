@@ -4,7 +4,7 @@ import type { Enemy } from "../../../../types/enemy";
 import { WHIRL } from "../../constants/whirl";
 import { WOUND } from "../../constants/wounds";
 import type { DrillSkillState, ZafirDrillSkill } from "../../types/drillSkill";
-import { gainWhirl, tickWhirl } from "../whirl";
+import { drawRing, gainWhirl, tickWhirl } from "../whirl";
 import { openWounds, shedDrops } from "../wounds";
 import { cutBehind } from "./backCut";
 import { resetLater, tickLater } from "./later";
@@ -82,6 +82,7 @@ export const ZAFIR_DRILL_HOOKS: DrillHooks = {
       skill.released?.(cast, state);
     }
   },
+  drawBack: () => drawRing(false),
   tick: (dt) => {
     tickLater(dt);
     tickWhirl(dt);

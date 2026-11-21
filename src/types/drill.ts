@@ -140,6 +140,7 @@ export interface DrillHooks {
   released?(cast: SkillCast): void;
   tick?(dt: number): void;
   draw?(): void;
+  drawBack?(): void;
   reset?(): void;
 }
 
