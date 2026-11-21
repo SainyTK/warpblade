@@ -124,6 +124,40 @@ The foes on screen are held still, ink lines cross the stage through them one af
 A foe takes a burst for each line through it, and its stored cuts release with the lines.
 Higher charge levels draw more lines and hit harder; her one ultimate skill, Silent Moon, adds to it.
 
+## On the drill engine
+
+Every solo Adventure plays Saya on the shared drill engine (`docs/hero-module.md`, "The drill engine").
+Her profile is `SAYA_DRILL` in `src/heroes/saya/game/drill/index.ts`; co-op and the wave arena keep the native kit below.
+
+Movement is the shared model with lighter, quicker numbers (`constants/drill/motion.ts`): run 118, rise 338, a shorter and faster dash (300 for 0.14 s), dash-jump 232 and wall kick 184.
+Her own poses (`constants/drill/poses.ts`, `game/drill/run.ts`) keep the katana sheathed with the sword hand on the hilt in every stance, run, jump, dash, wall and landing pose, and the guard holds the sheathed blade across her body.
+
+The chain (`constants/drill/strikes.ts`) samples her native clips:
+
+1. Draw cut: the longest reach, a level ink crescent out of a deep lunge.
+2. Return cut: the blade whips up and back across, standing tall.
+3. Sheathe: a low lunge as the blade clicks home; it strikes and releases every stored cut.
+
+Every first, second, air and warp hit stores a share of AD in the foe (`constants/drill/store.ts`), and an infused hit stores a share of AP.
+The sheathe releases them all at once through her native store (`game/store.ts`), so her release skills (Weeping Cut, Ink Stain, Ink Crane, Paper Blades, Ink Shade) work unchanged.
+When the blade rests with cuts still waiting, they release at the early share, as in the native kit.
+The slashes and the warp slash use her ink ramp.
+
+Spells on I, in O order (`game/drill/spells.ts`), each with its own drawn look:
+
+- Crescent Wave: a travelling ink crescent; its hit stores a cut.
+- Ink Rain: a cloud gathers over the nearest foe ahead and rains ink; it holds the foe's feet.
+- Still Water: ripples on the nearest foe close by; it freezes and chills.
+
+Charged tiers (Silent Moon, held J), each with its own wind-up and cut pose (`constants/drill/tiers.ts`) and drawn strike (`game/drill/effects/tierArt.ts`):
+
+1. Quickdraw: one long level draw across 70 px.
+2. Crescent Edge: a rising cut that throws a tall ink crescent moon.
+3. Thousand Lines: she passes through a field of crossed ink lines over 150 px; every stored cut releases.
+4. Silent Moon: a moon rises behind her, ink lines fall on both sides, and she clicks the blade home; every stored cut releases.
+
+Every release shows her cut-in (`ui/cutIn.ts`): an ink brush band with a crescent and her generated bust portrait (`ui/art/cut-in.webp`, source and prompt in `ui/art/source/`).
+
 ## Numbers
 
 All in `src/heroes/saya/constants/`.
