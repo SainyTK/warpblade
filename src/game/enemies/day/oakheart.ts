@@ -16,11 +16,39 @@ import { DAY_SPARKS, DAY_COLORS as DC } from "./colors";
 import { createRootSpike, type RootStrike } from "./rootSpike";
 
 /** Oakheart blows before wave scaling */
-export const OAK_HITS = { sweep: 18, root: 16, acorn: 12 } as const;
+export const OAK_HITS = { sweep: 14, root: 16, acorn: 12 } as const;
 /** wind-ups before wave scaling, and how long each blow holds */
 export const OAK_TIMES = { sweep: 0.6, root: 0.65, volley: 0.7, swing: 0.3, plant: 0.55, throw: 0.35 } as const;
+/** how much longer Oakheart rests between attacks before it is enraged; enraged it rests 0.65 of the base */
+const OAK_CALM_REST = 1.25;
+/** below this share of its HP Oakheart is enraged: it attacks faster and drops its guard */
+export const OAK_ENRAGE = 0.5;
 const REACH = 40;
 const ROOT_STEP = 17;
+/** the bright end of the leaf ramp, so the burst reads against the crown and the sky */
+const BURST_LEAVES = DC.leaf.slice(2);
+/** the Oakheart whose bark has already split, so the burst shows once */
+const split = new WeakSet<Enemy>();
+
+/** the moment it first falls under half HP: leaves burst from the crown and the ground shakes */
+function splitBark(e: Enemy): void {
+  split.add(e);
+  for (let i = 0; i < 10; i++)
+    particles.spawn(
+      PK.SHARD,
+      e.x + rng.range(-12, 12),
+      e.y - rng.range(36, 42),
+      rng.range(-110, 110),
+      -rng.range(80, 150),
+      rng.range(0.5, 0.9),
+      {
+        col: rng.pick(BURST_LEAVES),
+        size: 3,
+      },
+    );
+  shake(0.2, 2);
+  sfx.block();
+}
 
 function sweep(e: Enemy): void {
   game.fx.push(
@@ -89,7 +117,8 @@ function lobAcorns(e: Enemy, enraged: boolean): void {
 /** Oakheart, the old oak of the ruins: it sweeps a branch when Kael is close, sends roots along the floor when he keeps away, and lobs acorns when he climbs or when it is hurt */
 export function updateOakheart(e: Enemy, dt: number, ts: number): void {
   const dx = hero.x - e.x;
-  const enraged = e.hp < e.max * 0.5;
+  const enraged = e.hp < e.max * OAK_ENRAGE;
+  if (enraged && !split.has(e)) splitBark(e);
   const w = waveScale(game.wave).windup;
   if (e.state === "walk") {
     turnToHero(e, dt);
@@ -143,7 +172,7 @@ export function updateOakheart(e: Enemy, dt: number, ts: number): void {
     Object.assign(e, {
       state: "walk",
       st: 0,
-      cd: rng.range(1, 1.8) * (enraged ? 0.65 : 1) * waveScale(game.wave).cooldown,
+      cd: rng.range(1, 1.8) * (enraged ? 0.65 : OAK_CALM_REST) * waveScale(game.wave).cooldown,
     });
   if (e.state !== "walk") e.vx -= e.vx * 4 * dt;
   e.x = clampStageX(e.x + e.vx * dt, 14);

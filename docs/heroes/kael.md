@@ -63,6 +63,7 @@ The data is `KAEL_JOBS` in `constants/jobs.ts`; the job id is `PRISM_JOB` in `co
 - Eye: `#a9c8ff`.
 - Blade: the same crystal longsword with its fill in the prism ramp.
 - Pauldron: three faceted crystal plates on the sword shoulder, overlapping down the arm like scales, the top one widest, each lit from the top left with a white glint and outlined where it overlaps.
+  The three are rimmed together with a one-pixel outline in `PAL.prism[1]` (`#4b3bc4`), so they stand apart from the pale coat.
   It is drawn with the sword arm (`look/prism/pauldron.ts`) so the arm never covers it, and the plates follow the upper arm halfway, so a raised arm still reads as a shoulder.
 - Effects: `PAL.prism` (`#2a1660` to `#ffffff`) and `SPARKS.prism`, so trails, the warp line and hit sparks turn prism.
 
@@ -115,7 +116,8 @@ As the Prism Knight it adds six prism beams (`game/ultimate/nova/beams.ts`, numb
 - 0.12 seconds after the first ring bursts, from Kael's chest, at 0, 35 and -35 degrees to each side;
 - each 1.5 times the ring's radius long and 3 art pixels wide, growing over 0.08 seconds, holding 0.1 and thinning away over 0.25;
 - a white core, the prism ramp at the edges, a light along the length and a white star at each tip;
-- each foe a beam crosses takes 0.2 times the ring's blow once from that beam, as his ultimate, and gets a shard.
+- each foe a beam crosses takes 0.2 times the ring's blow once from that beam, as his ultimate, and gets a shard;
+- a beam crosses a foe when it passes within 6 art pixels plus half its width of the foe's hit box (`segmentToBox` in `src/utils/segmentToBox.ts`), so the level beams strike grounded walkers below the line.
 
 The beams are added in `castKaelUltimate` (`game/ultimate/castUltimate.ts`), so the Warp Knight's Crystal Nova is unchanged.
 
@@ -126,3 +128,4 @@ The Attack and Guard lines on the Controls screen and the touch controller say w
 ### Co-op
 
 Rooms play the Warp Knight for every seat in this version, and the lobby has no job row.
+While the player is in a room, Kael behind the menus wears the Warp Knight's look; leaving the room puts the job chosen for solo play back on.

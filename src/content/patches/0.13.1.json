@@ -1,0 +1,177 @@
+{
+  "version": "0.13.1",
+  "kind": "small",
+  "date": "2026-11-22",
+  "title": "Wave 5 and the Prism Knight",
+  "tagline": "Oakheart drops its guard when it falls under half HP and is easier to survive before that. The Prism Knight's beams, co-op lobby look and pauldron are fixed.",
+  "intro": "Oakheart has ended most runs at wave 5 for weeks, and two HP cuts did not change that. This patch takes its front guard away for the second half of the fight, with a burst of leaves when the bark splits. Our test runs showed most heroes fell before they ever reached that half, so we also eased the first half: less HP, a lighter branch sweep and a longer rest between attacks. The other three changes close the known issues the Prism Knight shipped with in 0.13.0.",
+  "highlights": [],
+  "sections": [
+    {
+      "id": "foes",
+      "entries": [
+        {
+          "name": "Oakheart",
+          "tag": "nerf",
+          "summary": "Once the wave 5 mini boss falls under half HP its bark splits and it stops blocking your frontal blows, and its first half hits less often and less hard.",
+          "context": "In our bot runs from the start of a run, 1 of 9 heroes got past wave 5, and the rest fell in Oakheart's first half, mostly to its branch sweep. Dropping the guard alone could not help them, so we eased the first half too and left its enraged attacks as they were. With all of it, 4 of 9 skilled bot runs get past wave 5 (Brynn, Zafir, Calder and Vesper), and 8 of 9 heroes started at wave 5 with a level 6 hero beat it, up from 5.",
+          "changes": [
+            {
+              "kind": "stat",
+              "label": "Front guard",
+              "before": "The whole fight",
+              "after": "Only while it has half its HP or more"
+            },
+            {
+              "kind": "stat",
+              "label": "Base HP",
+              "before": "240",
+              "after": "200"
+            },
+            {
+              "kind": "stat",
+              "label": "HP at wave 5",
+              "before": "1,153",
+              "after": "961"
+            },
+            {
+              "kind": "stat",
+              "label": "Branch sweep base damage",
+              "before": "18",
+              "after": "14"
+            },
+            {
+              "kind": "stat",
+              "label": "Branch sweep damage at wave 5",
+              "before": "21.6",
+              "after": "16.8"
+            },
+            {
+              "kind": "stat",
+              "label": "Rest between attacks above half HP, before wave scaling",
+              "before": "1 to 1.8 s",
+              "after": "1.25 to 2.25 s"
+            },
+            {
+              "kind": "note",
+              "text": "The moment it falls under half HP, leaves burst from its crown and the screen shakes. This happens once per Oakheart."
+            },
+            {
+              "kind": "note",
+              "text": "Under half HP it still enrages and attacks faster, as before. Prism Thrust is no longer blocked in that half, so prism shards build on it."
+            },
+            {
+              "kind": "note",
+              "text": "The root line (16), the acorns (12), every wind-up, its enraged rest, and the XP and coins it drops are unchanged. No other foe's guard changes."
+            },
+            {
+              "kind": "note",
+              "text": "Known issue: the leaf burst is brief and easy to miss in a busy fight, and Oakheart looks the same after it."
+            }
+          ],
+          "media": {
+            "kind": "video",
+            "file": "oakheart-bark-split.mp4",
+            "poster": "oakheart-bark-split.png",
+            "alt": "Brynn runs up to Oakheart at wave 5 and strikes it from the front. Its bark guard stops the first blows, which show grey BLOCK numbers. A critical hit for 83 takes it under half HP: green leaf shards burst from its crown and the screen shakes. After its counter swipe, Brynn's next frontal string lands in full for 29, 44 and 54.",
+            "width": 640,
+            "height": 360
+          }
+        }
+      ]
+    },
+    {
+      "id": "art",
+      "entries": [
+        {
+          "name": "Kael, Prism Knight: crystal pauldron",
+          "tag": "adjusted",
+          "summary": "The Prism Knight's crystal pauldron now stands out from his pale coat.",
+          "context": "At game scale the pauldron blended into the coat, which we listed as a known issue in 0.13.0. A rim from the job's own deep violet gives it contrast, and a little more width helps it read without turning it into a chest plate.",
+          "changes": [
+            {
+              "kind": "stat",
+              "label": "Outline around the three plates",
+              "before": "None",
+              "after": "1 px of deep violet"
+            },
+            {
+              "kind": "stat",
+              "label": "Plate widths, top to bottom",
+              "before": "2.6, 3.2 and 3.8 px",
+              "after": "3.2, 3.8 and 4.4 px"
+            },
+            {
+              "kind": "note",
+              "text": "The plates keep their length, place, lit and shaded faces and white glint, and still sit only on the sword arm."
+            }
+          ],
+          "media": {
+            "kind": "image",
+            "file": "prism-knight-pauldron.png",
+            "alt": "Side-by-side close-up of Kael as the Prism Knight in his idle pose, labelled 0.13.0 on the left and 0.13.1 on the right. On the left the crystal pauldron on his front arm blends into the pale violet coat. On the right its three wider plates have a dark violet outline and stand out clearly.",
+            "width": 1280,
+            "height": 360
+          }
+        }
+      ]
+    },
+    {
+      "id": "bugfixes",
+      "entries": [
+        {
+          "name": "Kael, Prism Knight: Crystal Nova's prism beams",
+          "tag": "fix",
+          "summary": "The level prism beams now strike grounded Thornbacks and Mire Toads instead of flying over them.",
+          "context": "The beams fire from Kael's chest and only struck a foe whose middle was close to the line, so short walkers on the floor were missed even when the beam crossed them on screen. Known issue since 0.13.0. A beam now strikes any foe whose body it touches.",
+          "changes": [
+            {
+              "kind": "stat",
+              "label": "A beam strikes a foe when it passes within 7.5 px of",
+              "before": "The foe's middle",
+              "after": "Any part of the foe's body"
+            },
+            {
+              "kind": "note",
+              "text": "The beams' look, angles, reach, timing, damage (0.2 times the ring's blow) and one hit per beam per foe are unchanged. The Warp Knight's Crystal Nova is unchanged."
+            }
+          ],
+          "media": {
+            "kind": "video",
+            "file": "crystal-nova-level-beams.mp4",
+            "poster": "crystal-nova-level-beams.png",
+            "alt": "Kael as the Prism Knight stands between two mires on the rainy ruins floor at wave 7 and releases Crystal Nova. The level prism beams shoot out at chest height to both sides and strike both mires, past the nova's ring, with damage numbers of 10 and 9, leaving violet crystal shards on them.",
+            "width": 640,
+            "height": 360
+          }
+        },
+        {
+          "name": "Co-op lobby look",
+          "tag": "fix",
+          "summary": "In a co-op room, Kael behind the menus now wears the Warp Knight's look, the job the room plays.",
+          "context": "With the Prism Knight chosen for solo play, the lobby showed his pale violet coat while the room plays the Warp Knight. Known issue since 0.13.0.",
+          "changes": [
+            {
+              "kind": "stat",
+              "label": "Kael's look while hosting or joining a room",
+              "before": "The job chosen for solo play",
+              "after": "The Warp Knight"
+            },
+            {
+              "kind": "note",
+              "text": "When you leave the room, or it fails to connect, the job you chose for solo play comes back. Your saved job choice is never changed."
+            }
+          ],
+          "media": {
+            "kind": "image",
+            "file": "coop-lobby-warp-knight.png",
+            "alt": "A hosted co-op room lobby showing Kael as host in slot P1 and three open slots. The Prism Knight was chosen on the solo hero screen first, yet Kael behind the lobby wears the Warp Knight's navy coat and red scarf, the look the room actually plays.",
+            "width": 1280,
+            "height": 720
+          }
+        }
+      ]
+    }
+  ],
+  "feedback": []
+}
