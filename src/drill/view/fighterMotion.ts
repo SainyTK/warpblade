@@ -1,8 +1,8 @@
-import { DRILL_STANCE } from "../../constants/drillPose";
 import type { DrillProfile, Fighter } from "../../types/drill";
 import type { Pose } from "../../types/pose";
 import { clamp, smooth } from "../../utils/math";
 import { blendPose } from "../../utils/poseBlend";
+import { drillBody } from "../body";
 import { BRAKING_TIME, LANDING_TIME, locomotionPose, type Motion, motionOf } from "./locomotion";
 import { RUN_PUSH_PHASE, RUN_STRIDE } from "./runPose";
 import { spellReleasePose } from "./spellReleasePose";
@@ -21,7 +21,7 @@ export function createFighterMotion() {
   let previousFace: Fighter["face"] | undefined;
   let previousSpeed = 0;
   let fallSpeed = 0;
-  let from = DRILL_STANCE;
+  let from: Pose | undefined;
 
   return (profile: DrillProfile, h: Fighter, currentPose: Pose, dt: number) => {
     const landed = h.grounded && !wasGrounded;
@@ -31,7 +31,7 @@ export function createFighterMotion() {
     } else if (landed) {
       landForce = clamp(fallSpeed / 240);
       contactX = h.x;
-      landing = landForce > 0 ? LANDING_TIME : 0;
+      landing = landForce > 0 ? LANDING_TIME * drillBody(profile).landing : 0;
     } else {
       landing = Math.max(0, landing - dt);
     }
@@ -67,15 +67,15 @@ export function createFighterMotion() {
     const target = h.swing
       ? swordPose(profile, h.swing)
       : h.spellRelease
-        ? spellReleasePose(h)
-        : locomotionPose(h, motion, age, stride, landForce);
+        ? spellReleasePose(profile, h)
+        : locomotionPose(profile, h, motion, age, stride, landForce);
     const footPlacement =
       motion === "land" ? clamp((contactX - h.x) * h.face, -5, 5) * (1 - smooth(0.04, 0.078, age)) : 0;
     const pose = footPlacement
       ? { ...target, ffx: target.ffx + footPlacement, bfx: target.bfx + footPlacement }
       : target;
     return {
-      pose: age < handover ? blendPose(from, pose, smooth(0, handover, age)) : pose,
+      pose: age < handover ? blendPose(from ?? drillBody(profile).poses.stance, pose, smooth(0, handover, age)) : pose,
       landForce: landed ? landForce : 0,
       groundDashStart: changed && motion === "dash" && h.grounded,
     };

@@ -402,6 +402,7 @@ export interface DrillProfile {
   text: Readonly<Partial<Record<InputAction, string>>>;
   modifiers(): DrillModifiers;
   hooks?: DrillHooks;
+  body?: DrillBody;
 }
 ```
 
@@ -418,6 +419,7 @@ export interface DrillProfile {
 | `portrait`, `drawCutIn` | the cut-in image (a URL, or an async loader such as `loadGeneratedHeroPortrait`) and an optional own cut-in style; without one the shared Kael style is used |
 | `text` | the hero's Controls lines over the shared drill lines (`src/drill/controlText.ts`) |
 | `modifiers()` | the numbers the hero's skills change, read every step (next section) |
+| `body` | optional: the hero's own locomotion, guard, spell and charged-skill poses (`poses`, any of `DrillBodyPose`), a `run(phase)` cycle, movement numbers over `MOTION` (`motion`) and a `landing` time share; anything left out uses Kael's (`src/drill/body/`) |
 | `hooks` | `swordHit(foe, infusion)`, `slashed(strike, landed)`, `released(cast)`, `tick(dt)`, `draw()`, `reset()` for anything the shared engine does not do |
 
 Poses for strikes use `pose()` from `src/constants/hero.ts` and the stance and hand helpers in `src/constants/drillPose.ts` (`DRILL_STANCE`, `frontHand`, `rearHand`), so strike data can live in the hero's `constants/` folder.

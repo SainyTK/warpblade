@@ -63,6 +63,63 @@ export interface DrillTier {
   around: boolean;
 }
 
+export type DrillBodyPose =
+  | "stance"
+  | "breathe"
+  | "brake"
+  | "low"
+  | "touchdown"
+  | "dash"
+  | "airDash"
+  | "rise"
+  | "leap"
+  | "kick"
+  | "fall"
+  | "wall"
+  | "guard"
+  | "airGuard"
+  | "parryContact"
+  | "parryReturn"
+  | "spell"
+  | "skillCut";
+
+export interface DrillMotion {
+  run: number;
+  groundAccel: number;
+  groundBrake: number;
+  airAccel: number;
+  airBrake: number;
+  riseGravity: number;
+  fallGravity: number;
+  rise: number;
+  release: number;
+  fall: number;
+  dash: number;
+  dashBurst: number;
+  dashTime: number;
+  dashRecovery: number;
+  dashJump: number;
+  wallSlide: number;
+  wallKick: number;
+  wallLock: number;
+  jumpGrace: number;
+  buffer: number;
+}
+
+export interface DrillBody {
+  poses?: Readonly<Partial<Record<DrillBodyPose, Pose>>>;
+  run?(phase: number): Pose;
+  motion?: Readonly<Partial<DrillMotion>>;
+  landing?: number;
+}
+
+export interface ResolvedDrillBody {
+  poses: Readonly<Record<DrillBodyPose, Pose>>;
+  run(phase: number): Pose;
+  motion: Readonly<DrillMotion>;
+  landing: number;
+}
+
 export interface DrillModifiers {
   strikeDamage: number;
   finisherDamage: number;
@@ -114,6 +171,7 @@ export interface DrillProfile {
   text: Readonly<Partial<Record<InputAction, string>>>;
   modifiers(): DrillModifiers;
   hooks?: DrillHooks;
+  body?: DrillBody;
 }
 
 export interface DrillInput {
