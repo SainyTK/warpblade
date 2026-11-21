@@ -1,5 +1,6 @@
 import type { SkillDef } from "../../../../types/skill";
 import { evolvedRow, levelRows } from "../../../../utils/skillRows";
+import { drillValues, withDrill } from "./drillLevels";
 
 /** values: `power` attack damage of the round behind, `cut` attack damage to foes passed through, `stamina` given back per foe passed, `air` dodge in the air, `end` attack damage of a blast ahead as it ends, `trail` attack damage of each blast left along the path */
 const LEVELS = levelRows([
@@ -13,18 +14,32 @@ const LEVELS = levelRows([
   { text: "Round 4, cut 3, blast 4.", values: { power: 4, cut: 3, end: 4 } },
 ]);
 
+const DRILL_LEVELS = withDrill(LEVELS, [
+  { text: "Dashing through foes fires a round into each.", drill: { round: 0.4 } },
+  { text: "New: the rounds pop foes up.", drill: { launch: 1 } },
+  { text: "New: one more air dash.", drill: { airDashes: 1 } },
+  { text: "Round 0.4 to 0.8 AD.", drill: { round: 0.8 } },
+  { text: "New: an air dash through a foe gives the air dash back.", drill: { refund: 1 } },
+  { text: "Round 0.8 to 1.6 AD.", drill: { round: 1.6 } },
+  { text: "New: the rounds are hot.", drill: { hot: 1 } },
+  { text: "Round 1.6 to 3.2 AD.", drill: { round: 3.2 } },
+]);
+
 export const RECOIL_DASH: SkillDef = {
   id: "ca_recoil",
   name: "Recoil Dash",
   kind: "movement",
   risk: "timed",
   button: "L",
-  text: "The dodge fires a round behind you as it starts.",
-  levels: LEVELS,
+  text: "Dashing through foes fires a round into each.",
+  levels: DRILL_LEVELS,
   evolution: {
     partner: "ca_vent",
     name: "Backfire Rush",
-    text: "The dodge leaves a line of blasts along its path.",
-    row: evolvedRow(LEVELS[7], "Blasts along the whole path.", { trail: 2.5 }),
+    text: "Every dash ends with a backfire blast behind.",
+    row: evolvedRow(DRILL_LEVELS[7], "Every dash backfires behind.", {
+      ...drillValues({ backfire: 3 }),
+      trail: 2.5,
+    }),
   },
 };

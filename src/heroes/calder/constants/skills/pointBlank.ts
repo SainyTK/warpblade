@@ -1,5 +1,6 @@
 import type { SkillDef } from "../../../../types/skill";
 import { evolvedRow, levelRows } from "../../../../utils/skillRows";
+import { withDrill } from "./drillLevels";
 
 /** values: `power` added share of the counter shot, `rounds` more rounds a parry loads, `mark` damage taken for 4 s, `stagger` seconds the shot staggers longer, `dodge` a perfect dodge fires the counter shot, `free` the next Trigger after a parry spends no round, `fill` a parry fills the chamber */
 const LEVELS = levelRows([
@@ -13,18 +14,32 @@ const LEVELS = levelRows([
   { text: "Counter shot +400% to +1600%.", values: { power: 16 } },
 ]);
 
+const DRILL_LEVELS = withDrill(LEVELS, [
+  { text: "Parry window +30%.", drill: { window: 0.3 } },
+  { text: "New: a parry fires a heavy counter round at the attacker.", drill: { counter: 1.5 } },
+  { text: "New: a block fires a light round back.", drill: { block: 0.5 } },
+  { text: "Parry window +60%; counter 3 AD.", drill: { window: 0.6, counter: 3 } },
+  { text: "New: the counter staggers for 1 s.", drill: { stagger: 1 } },
+  { text: "Counter 3 to 6 AD.", drill: { counter: 6 } },
+  { text: "New: the counter round is hot.", drill: { hot: 1 } },
+  { text: "Counter 6 to 12 AD.", drill: { counter: 12 } },
+]);
+
 export const POINT_BLANK: SkillDef = {
   id: "ca_pointblank",
   name: "Point Blank",
   kind: "attack",
   risk: "precise",
   button: "K",
-  text: "The parry's counter shot hits far harder.",
-  levels: LEVELS,
+  text: "A wider parry, and a parry answers with a heavy round.",
+  levels: DRILL_LEVELS,
   evolution: {
     partner: "ca_trigger",
     name: "Deadeye",
-    text: "A parry fills the chamber, and the counter shot hits half again as hard.",
-    row: evolvedRow(LEVELS[7], "A parry fills the chamber; the shot hits harder.", { fill: 1, power: 24 }),
+    text: "A parry's counter also fires into every foe in a line ahead.",
+    row: evolvedRow(DRILL_LEVELS[7], "Counters fire down the whole line.", {
+      fill: 1,
+      power: 24,
+    }),
   },
 };

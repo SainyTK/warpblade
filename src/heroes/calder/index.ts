@@ -1,5 +1,6 @@
 import type { HeroModule } from "../../types/heroModule";
 import { ABILITY_COLOR, CALDER_ABILITIES } from "./constants/shots";
+import { CALDER_DRILL } from "./game/drill";
 import { CALDER_KIT } from "./game/kit";
 import { CALDER_METER } from "./game/meter";
 import { CALDER_MOVES } from "./game/moves";
@@ -28,4 +29,5 @@ export const CALDER_MODULE: HeroModule = {
     tint: (ability) => ABILITY_COLOR[isAbility(ability) ? ability : "slug"],
   },
   meter: CALDER_METER,
+  drill: CALDER_DRILL,
 };
