@@ -193,6 +193,9 @@ export interface Swing {
   kind: DrillStrikeId;
   age: number;
   chain: boolean;
+  landed: boolean;
+  keen: boolean;
+  keenNext: boolean;
   followUp: FollowUp | null;
 }
 

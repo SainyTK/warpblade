@@ -2,6 +2,7 @@ export {
   ageFrozenDrill,
   cancelDrillCharge,
   defendWithDrill,
+  dodgeWithDrill,
   drillFighter,
   drillParries,
   drillSession,

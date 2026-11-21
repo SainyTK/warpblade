@@ -1,6 +1,6 @@
 import { HURT_INVULN } from "../constants/combat";
 import { SPARKS } from "../constants/palette";
-import { hurtDrill, usesDrill } from "../drill";
+import { dodgeWithDrill, hurtDrill, usesDrill } from "../drill";
 import { sfx } from "../services/audio";
 import { hurtFlow } from "./build/flow";
 import { coop, heroSlot } from "./coopHooks";
@@ -19,7 +19,9 @@ export function hurtHero(dmg: number, fromX: number): void {
   if (guardTakes(dmg, fromX)) return;
   if (kit().absorbHurt(dmg, fromX)) return;
   if (heroGuarded()) {
-    perfectDodge();
+    if (!usesDrill() || !dodgeWithDrill()) {
+      perfectDodge();
+    }
     return;
   }
   const taken = Math.round(dmg * kit().hurtScale());

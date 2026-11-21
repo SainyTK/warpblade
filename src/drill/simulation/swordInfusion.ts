@@ -12,11 +12,18 @@ export function infuseSword(session: Session, spell: DrillSpell): void {
   emitSkillEvent({ type: "infuse", spell: spell.id });
 }
 
-export function hitWithSword(session: Session, enemy: Enemy, face: Side, damage: number, finisher = false): boolean {
+export function hitWithSword(
+  session: Session,
+  enemy: Enemy,
+  face: Side,
+  damage: number,
+  finisher = false,
+  keen = false,
+): boolean {
   const { fighter, profile, modifiers } = session;
   const spell = fighter.swordInfusion?.spell ?? null;
   const bonus = spell ? Math.ceil((spell.damage * modifiers.spellDamage) / INFUSION_HITS) : 0;
-  if (!strikeEnemy(profile, enemy, damage + bonus, fighter.x, "attacks", finisher, finisher)) {
+  if (!strikeEnemy(profile, enemy, damage + bonus, fighter.x, "attacks", finisher, finisher, keen)) {
     return false;
   }
   if (spell) {

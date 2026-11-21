@@ -1,3 +1,4 @@
+import { KEEN } from "../constants/combo";
 import type { DrillMotion } from "../types/drill";
 
 export const TARGET_RADIUS = 6;
@@ -35,4 +36,5 @@ export const INFUSION_HITS = 3;
 export const SPELL_SELECTION_CUE = 0.9;
 export const SPELL_RELEASE_RECOVERY = 0.19;
 export const SPELL_IMPACT_TIME = 0.38;
+export const KEEN_WINDOW = KEEN.window;
 export const CHARGE_START = 0.2;

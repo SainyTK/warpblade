@@ -13,6 +13,7 @@ import type { HeroState } from "../types/hero";
 import { DEFENSE } from "./constants";
 import { createDashEvents } from "./dashEvents";
 import { readDrillInput } from "./input";
+import { perfectDrillDodge } from "./perfectDodge";
 import { drillProfile } from "./selection";
 import { ageDrillCues, createSession, defend, stepSession } from "./simulation";
 import { createDrillView } from "./view";
@@ -53,6 +54,10 @@ export function defendWithDrill(): void {
   }
   const h = session.fighter;
   defend(session, h.face === 1 ? -1 : 1);
+}
+
+export function dodgeWithDrill(): boolean {
+  return session ? perfectDrillDodge(session.fighter) : false;
 }
 
 export function hurtDrill(fromX: number): void {

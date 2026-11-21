@@ -1,10 +1,11 @@
+import { cue } from "../../game/cue";
 import { emitSkillEvent } from "../../game/skills/events";
 import { game } from "../../game/state";
 import { hitStop } from "../../game/world";
 import { sfx } from "../../services/audio";
 import type { DrillProfile, DrillStrikeId, Session, Swing } from "../../types/drill";
 import { smooth } from "../../utils/math";
-import { TARGET_RADIUS } from "../constants";
+import { KEEN_WINDOW, TARGET_RADIUS } from "../constants";
 import { executeFollowUp } from "./followUp";
 import { hitWithSword, spendSwordBonuses } from "./swordInfusion";
 
@@ -22,7 +23,8 @@ export function strikeTravel(profile: DrillProfile, { kind, age }: Swing, dt: nu
   return (distance(age + dt) - distance(age)) / dt;
 }
 
-function impact(session: Session, kind: DrillStrikeId): void {
+function impact(session: Session, swing: Swing): void {
+  const { kind, keen } = swing;
   const { fighter: h, profile, modifiers } = session;
   const strike = profile.strikes[kind];
   const reach = strike.reach * modifiers.strikeReach;
@@ -33,7 +35,7 @@ function impact(session: Session, kind: DrillStrikeId): void {
     const dx = (enemy.x - h.x) * h.face;
     const dy = enemy.y - h.y;
     if (dx >= -TARGET_RADIUS && dx <= reach + TARGET_RADIUS && Math.abs(dy) <= strike.height) {
-      if (hitWithSword(session, enemy, h.face, damage, strike.finisher)) {
+      if (hitWithSword(session, enemy, h.face, damage, strike.finisher, keen)) {
         landed = true;
       }
     }
@@ -42,13 +44,14 @@ function impact(session: Session, kind: DrillStrikeId): void {
   session.releasedStrike = { x: h.x, y: h.y, face: h.face, kind, element, landed };
   profile.hooks?.slashed?.(kind, landed);
   emitSkillEvent({ type: "slash", strike: kind, landed, element: element?.id ?? null });
+  swing.landed = landed;
   if (landed) {
     hitStop(HIT_STOP);
     spendSwordBonuses(h);
   }
 }
 
-function beginSwing(session: Session, groundStrike: DrillStrikeId): void {
+function beginSwing(session: Session, groundStrike: DrillStrikeId, keen = false): void {
   const h = session.fighter;
   if (!h.grounded && h.airSlashes > session.modifiers.airSlashes) {
     h.swing = null;
@@ -62,7 +65,18 @@ function beginSwing(session: Session, groundStrike: DrillStrikeId): void {
     h.airSlashes++;
   }
   sfx.swing();
-  h.swing = { kind: h.grounded ? groundStrike : "air", age: 0, chain: false, followUp: null };
+  h.swing = {
+    kind: h.grounded ? groundStrike : "air",
+    age: 0,
+    chain: false,
+    landed: false,
+    keen: keen && h.grounded,
+    keenNext: false,
+    followUp: null,
+  };
+  if (h.swing.keen) {
+    cue(h.x, h.y - 36, "keen");
+  }
 }
 
 export function fight(session: Session, dt: number): void {
@@ -76,18 +90,20 @@ export function fight(session: Session, dt: number): void {
     const before = swing.age;
     swing.age += dt;
     if (before < strike.hit && swing.age >= strike.hit) {
-      impact(session, swing.kind);
+      impact(session, swing);
     }
     if (swing.followUp && canInterrupt(profile, swing)) {
       executeFollowUp(session, swing.followUp);
       return;
     }
     if (h.attackBuffer > 0 && strike.next && !swing.chain && swing.age >= strike.hit * 0.65) {
+      const pressedAt = swing.age - (session.motion.buffer - h.attackBuffer);
       swing.chain = true;
+      swing.keenNext = swing.landed && pressedAt >= strike.hit && pressedAt <= strike.hit + KEEN_WINDOW;
       h.attackBuffer = 0;
     }
     if (strike.next && swing.chain && swing.age >= strike.duration * 0.71) {
-      beginSwing(session, strike.next);
+      beginSwing(session, strike.next, swing.keenNext);
     } else if (swing.age >= strike.duration) {
       h.swing = null;
     }

@@ -13,6 +13,7 @@ export function strikeEnemy(
   source: HeroSource,
   heavy = false,
   finisher = false,
+  keen = false,
 ): boolean {
   if (enemy.hp <= 0) {
     return false;
@@ -26,6 +27,7 @@ export function strikeEnemy(
       melee: source === "attacks",
       heavy: heavy || (source === "attacks" && hero.riposte > 0),
       finisher,
+      sureCrit: keen,
     }) === "hit"
   );
 }
