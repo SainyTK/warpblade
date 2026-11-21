@@ -1031,6 +1031,23 @@ body[data-hud="compact"] .best-run {
   .right {
     max-width: calc(50% - 32px);
   }
+  body[data-hud="inside"] .hud {
+    --hud-text: 10px;
+    --hud-note: 10px;
+    --hud-tab-pad: 0 4px;
+    position: fixed;
+    inset: max(8px, env(safe-area-inset-top, 0px)) max(12px, env(safe-area-inset-right, 0px)) auto
+      max(12px, env(safe-area-inset-left, 0px));
+  }
+  body[data-hud="inside"] .elements {
+    gap: 2px;
+  }
+  body[data-hud="inside"] .el {
+    letter-spacing: 0.02em;
+  }
+  body[data-hud="inside"] .el.warp {
+    margin-right: 3px;
+  }
   .menu {
     padding-block: max(8px, env(safe-area-inset-top, 0px)) max(8px, env(safe-area-inset-bottom, 0px));
   }
