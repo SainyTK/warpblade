@@ -22,6 +22,7 @@ export interface HeroSkin {
   headBack: readonly string[];
   /** the sword in the near hand */
   blade: BladeLook;
+  bladeDisplay?: (state: number) => "drawn" | "sheathed" | "heldSheathed";
   /** an item in the far hand or at the hip: a shield, a short sword, a scabbard */
   offhand?: OffhandLook;
   /** the hero's own drawing of a shared rig part, in place of the shared one */

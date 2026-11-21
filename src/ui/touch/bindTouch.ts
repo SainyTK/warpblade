@@ -1,3 +1,5 @@
+import { tempestLevel, usesCeriseDrill } from "../../heroes";
+import { chargedTier, drillFighter, usesKaelDrill } from "../../kaelDrill";
 import "./touch.css";
 import { HAPTIC_MS, TOUCH_SCALE } from "../../constants/touch";
 import { hero } from "../../game/state";
@@ -79,17 +81,34 @@ export function syncTouch(fighting: boolean): void {
     if (!show) b.reset();
   }
   if (!show) return;
-  const level = hero.state === "charge" ? hero.chargeLevel : 0;
+  const drill = usesKaelDrill();
+  const cerise = usesCeriseDrill();
+  const level = drill
+    ? (chargedTier(drillFighter()?.chargeHeldFor ?? 0)?.level ?? 0)
+    : cerise
+      ? tempestLevel()
+      : hero.state === "charge"
+        ? hero.chargeLevel
+        : 0;
   if (level > b.chargeLevel) haptics.pulse(HAPTIC_MS.chargeLevel);
   b.chargeLevel = level;
   const pressed = b.pressed();
   const selection = touchSelection();
   b.ctl.buttons.forEach((button, i) => {
-    const look = buttonLook(button.spec, pressed.has(button.spec.action));
+    const { action } = button.spec;
+    const hidden = (drill || cerise) && action === "ultimate";
+    if (button.el.hidden !== hidden) {
+      button.el.hidden = hidden;
+    }
+    if (hidden) {
+      return;
+    }
+    const charge = drill || cerise ? action === "attack" : action === "ultimate";
+    const look = buttonLook(button.spec, pressed.has(action));
     look.cooldown = Math.ceil(look.cooldown * COOLDOWN_STEPS) / COOLDOWN_STEPS;
-    const key = `${selectionKey(selection)}|${Object.values(look).join("|")}`;
+    const key = `${selectionKey(selection)}|${charge}|${Object.values(look).join("|")}`;
     if (key === b.faces[i]) return;
     b.faces[i] = key;
-    drawButtonFace(button.face, look, touchIcon(button.spec.action, selection), button.spec.action === "ultimate");
+    drawButtonFace(button.face, look, touchIcon(action, selection), charge);
   });
 }

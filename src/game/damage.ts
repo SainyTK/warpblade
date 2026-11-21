@@ -46,6 +46,7 @@ export interface HitOptions {
   stagger?: number;
   /** a Keen blow: always a critical hit */
   sureCrit?: boolean;
+  finisher?: boolean;
   /** burning and other damage over time: no crits, no numbers in white */
   dot?: boolean;
   /** a hit that builds no Flow though it counts for the hero's own source (a summon's bite) */
@@ -196,14 +197,14 @@ export function dealDamage(e: Enemy, base: number, o: HitOptions = {}): HitResul
   if (o.stagger) staggerFoe(e, o.stagger);
   if (o.heavy && e.state === "wind" && def.rank === "minion") Object.assign(e, { state: "recover", st: 0 });
   if (!o.dot && isHeroSource(source)) {
-    kit().landed?.(e, { crit, kill: e.hp <= 0 });
+    kit().landed?.(e, { crit, kill: e.hp <= 0, source, melee: !!o.melee });
     emitSkillEvent({
       type: "blow",
       foe: e,
       damage: value,
       source,
       move: source === "attacks" ? hero.move : null,
-      finisher: source === "attacks" && hero.chain >= progress.comboLimit,
+      finisher: source === "attacks" && (o.finisher ?? hero.chain >= progress.comboLimit),
       melee: !!o.melee,
       back,
       crit,

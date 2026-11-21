@@ -1,4 +1,5 @@
 import type { HeroSkin } from "../../../types/character";
+import { BLADE_STATE, bladeStateOf } from "../constants/blade";
 import { SAYA_BLADE } from "./blade";
 import { SAYA_COLORS } from "./colors";
 import { drawSayaTrails } from "./hair";
@@ -20,6 +21,13 @@ export const SAYA_SKIN: HeroSkin = {
   head: SAYA_HEAD,
   headBack: SAYA_HEAD_BACK,
   blade: SAYA_BLADE,
+  bladeDisplay(state) {
+    const kind = bladeStateOf(state);
+    if (kind === BLADE_STATE.held) {
+      return "heldSheathed";
+    }
+    return kind === BLADE_STATE.sheathed ? "sheathed" : "drawn";
+  },
   offhand: SAYA_SCABBARD,
   scarfAt: "belt",
   parts: {

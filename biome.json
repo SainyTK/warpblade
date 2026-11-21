@@ -1,7 +1,16 @@
 {
   "$schema": "./node_modules/@biomejs/biome/configuration_schema.json",
   "files": {
-    "includes": ["src/**", "index.html", "patches/index.html", "*.json", "*.ts", "!!agent-studio", "!!studio"]
+    "includes": [
+      "src/**",
+      "index.html",
+      "patches/index.html",
+      "kael-comparison/**",
+      "*.json",
+      "*.ts",
+      "!!agent-studio",
+      "!!studio"
+    ]
   },
   "formatter": {
     "indentStyle": "space",

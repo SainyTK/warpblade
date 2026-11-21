@@ -25,3 +25,5 @@ export const CERISE_MODULE: HeroModule = {
   },
   meter: POINTS_METER,
 };
+
+export * from "./game/adventure";

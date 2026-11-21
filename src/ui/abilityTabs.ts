@@ -1,6 +1,8 @@
 import { selectedSlot } from "../game/hero/abilityBar";
 import { kit } from "../game/hero/kits";
 import { character, hero } from "../game/state";
+import { preparationShare, usesCeriseDrill } from "../heroes";
+import { drillFighter, SPELL_ORDER, SPELLS, usesKaelDrill } from "../kaelDrill";
 import type { AbilitySlot } from "../types/moveset";
 import { byId } from "./dom";
 import { createRechargeTab } from "./rechargeTab";
@@ -21,20 +23,20 @@ let built: { hero: string; tabs: { slot: AbilitySlot; el: HTMLElement; tab: Retu
 /** the deny flash time last seen; a rise means a new refused press */
 let lastDenied = 0;
 
-function tabEl(slot: AbilitySlot): HTMLElement {
+function tabEl(label: string): HTMLElement {
   const el = document.createElement("span");
   el.className = "el ability";
-  el.textContent = slot.label;
+  el.textContent = label;
   return el;
 }
 
 function build(): void {
   box.replaceChildren();
-  reserve.replaceChildren(...kit().abilities.map(tabEl));
+  reserve.replaceChildren(...kit().abilities.map((slot) => tabEl(slot.label)));
   built = {
     hero: character.id,
     tabs: kit().abilities.map((slot) => {
-      const el = tabEl(slot);
+      const el = tabEl(slot.label);
       el.style.setProperty("--tint", slot.tint ?? character.accent);
       box.append(el);
       return { slot, el, tab: createRechargeTab(el) };
@@ -42,9 +44,36 @@ function build(): void {
   };
 }
 
+let drillTabs: Array<{ el: HTMLElement; tab: ReturnType<typeof createRechargeTab> }> = [];
+
+function updateDrillTabs(): void {
+  if (built.hero !== "kael-drill") {
+    const elements = SPELL_ORDER.map((kind) => tabEl(SPELLS[kind].name.toUpperCase()));
+    reserve.replaceChildren(...elements.map((el) => el.cloneNode(true)));
+    box.replaceChildren(...elements);
+    drillTabs = elements.map((el, i) => {
+      el.style.setProperty("--tint", `#${SPELLS[SPELL_ORDER[i]].color.toString(16).padStart(6, "0")}`);
+      return { el, tab: createRechargeTab(el) };
+    });
+    built = { hero: "kael-drill", tabs: [] };
+  }
+  const book = drillFighter()?.spellBook;
+  const preparation = book?.preparation;
+  drillTabs.forEach(({ el, tab }, i) => {
+    const selected = SPELL_ORDER[i] === (book?.selected ?? SPELL_ORDER[0]);
+    el.classList.toggle("on", selected);
+    tab.update(selected && preparation && preparation.duration > 0 ? preparation.remaining / preparation.duration : 0);
+  });
+}
+
 export function updateAbilityTabs(): void {
+  if (usesKaelDrill()) {
+    updateDrillTabs();
+    return;
+  }
   if (built.hero !== character.id) build();
   const selected = selectedSlot();
+  const prep = usesCeriseDrill() ? preparationShare() : null;
   for (const { slot, el, tab } of built.tabs) {
     const known = slot.known();
     if (el.hidden === known) el.hidden = !known;
@@ -54,8 +83,10 @@ export function updateAbilityTabs(): void {
     const evolved = slot.evolved?.() ?? false;
     if (el.classList.contains("evolved") !== evolved) el.classList.toggle("evolved", evolved);
     el.classList.toggle("poor", !slot.affordable());
-    if (el.textContent !== slot.label) el.textContent = slot.label;
-    tab.update(Math.min(1, slot.wait() / slot.full()));
+    const preparation = on ? prep : null;
+    const label = preparation === null ? slot.label : `${slot.label} ${preparation > 0 ? "PREPARING" : "READY"}`;
+    if (el.textContent !== label) el.textContent = label;
+    tab.update(preparation ?? Math.min(1, slot.wait() / slot.full()));
   }
   const denied = Math.max(hero.denied.cast, hero.denied.mp);
   if (denied > lastDenied) built.tabs.find((t) => t.slot === selected)?.tab.jolt();

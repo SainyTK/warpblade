@@ -1,5 +1,6 @@
 import { HERO_START_X } from "../constants/hero";
 import { GROUND } from "../constants/stage";
+import { resetDrill } from "../kaelDrill";
 import { emptyStream } from "../utils/waves";
 import { resetAdventure } from "./adventure";
 import { clearChests } from "./build/chests";
@@ -22,6 +23,7 @@ import { clearFields } from "./timeFields";
 export function resetRun(banner = "Rise again"): void {
   bankCoins();
   resetAdventure();
+  resetDrill();
   resetProgress();
   resetLedger();
   forgetSkills();

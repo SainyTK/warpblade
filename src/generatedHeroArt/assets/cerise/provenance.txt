@@ -1,0 +1,6 @@
+Generated with the built-in Codex image_gen tool on 2026-11-21 using src/kaelSprite/kael-parts.png as an attached style and proportion reference.
+Prompt: Create a transparent independent-parts sheet for Cerise, a female action-JRPG duelist, matching the reference's chibi-adjacent proportions, expressive large eye, three-quarter head facing right, thick dark contours, hard-edged cel shading, clustered highlights, material shapes and limited colors.
+Cerise has light skin, cherry-red hair with swept fringe, green eyes, a long cherry side ponytail tied with a rose ribbon, a white fencing coat with rose collar, silver buttons and plum sash, white sleeves, rose cuffs, white gloves, plum breeches, black riding boots with silver cuffs and white coat tails with rose lining.
+Her downward rapier has a dark grip, swept silver guard and rose crystal.
+The sheet contains separate front and back heads and torsos, limbs, right-facing foot, coat tails, ponytail and rapier, without a scarf.
+Atlas tiles were cropped and scaled from the generated source, and the portrait is the same generated front head.

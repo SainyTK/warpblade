@@ -6,10 +6,12 @@ import { resetMotion } from "../../../game/hero/motion";
 import { castLanded } from "../../../game/hero/sharedCut";
 import { hero } from "../../../game/state";
 import type { HeroKit } from "../../../types/kit";
+import { ABILITY_COLOR } from "../constants/abilities";
 import { CERISE_SLOTS, rechargeAbilities } from "./abilities";
 import { runFlurry } from "./abilities/flurry";
 import { runLineCast } from "./abilities/roseLine";
 import { releaseSpell } from "./abilities/spells";
+import { drawInfusion, drawTempestCharge, resetCeriseDrill, showCutIn } from "./adventure";
 import { afterStrike } from "./afterStrike";
 import { hitBonus, takenBonus } from "./bonus";
 import { chooseMove } from "./chooseMove";
@@ -71,6 +73,7 @@ function runState(): boolean {
       if (!hero.hitDone && hero.st >= ACTION_CLIPS.cast.hit) {
         hero.hitDone = true;
         releaseSpell();
+        if (cerise.castAbility) showCutIn(ABILITY_COLOR[cerise.castAbility], 0.42);
       }
       return false;
     default:
@@ -109,7 +112,9 @@ export const CERISE_KIT: HeroKit = {
   takenBonus,
   landed,
   dodge: dodgeHooks,
+  drawBack: drawTempestCharge,
   draw: () => {
+    drawInfusion();
     drawMarks();
     drawStance();
   },
@@ -119,6 +124,7 @@ export const CERISE_KIT: HeroKit = {
   gravityScale: () => 1,
   reset: () => {
     resetMotion();
+    resetCeriseDrill();
     resetCeriseState();
     resetMarks();
     resetFeint();

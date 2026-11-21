@@ -3,6 +3,7 @@
  * (`HeroSkin`, src/types/character.ts) fills it from its own folder: head rows, the sword, an off-hand item, its own
  * versions of the shared parts and extra pieces. The shared parts and the helpers a hero's drawing needs are here.
  */
+export { type HeroArtPainter, registerHeroArt } from "./alternateArt";
 export { armReach, drawArm } from "./arm";
 export { type Along, drawFitting, heldAxis } from "./blade";
 export { drawCoatTails } from "./coatTails";

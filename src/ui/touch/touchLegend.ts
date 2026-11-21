@@ -1,6 +1,8 @@
 import { TOUCH_BUTTONS } from "../../constants/touch";
 import { heroJob } from "../../game/hero/job";
 import { character } from "../../game/state";
+import { CERISE_DRILL_TEXT, isCerise } from "../../heroes";
+import { DRILL_ACTION_TEXT, isBaseKael } from "../../kaelDrill";
 import type { ButtonLook } from "../../types/touch";
 import { hex } from "../../utils/color";
 import { stickDirections, touchText } from "../../utils/controls";
@@ -34,25 +36,48 @@ function face(draw: (canvas: PixelCanvas) => void): HTMLElement {
 
 /** each stick direction and each button with what it does for the chosen hero, drawn as on screen, for the Controls screen */
 export function touchLegend(adventure: boolean): [HTMLElement, string][] {
-  const selection = touchSelection();
+  const drill = adventure && isBaseKael();
+  const cerise = adventure && isCerise();
+  const selection = touchSelection(drill);
   const texts = touchText(character, heroJob());
   const stick = stickDirections(character, heroJob()).map((d): [HTMLElement, string] => [
     face((c) => drawButtonFace(c, STICK_LOOK, stickIcon(d.direction), false)),
     `Stick ${d.direction}: ${adventure && d.direction === "down" ? "Drop through a ledge" : d.label}`,
   ]);
-  const buttons = TOUCH_BUTTONS.map((spec): [HTMLElement, string] => {
-    const look = { ...buttonLook(spec, false), ready: true, cooldown: 0, affordable: 4, charge: -1 };
-    const text = texts[spec.action];
-    let hint = text.hint;
-    if (adventure && spec.action === "up") {
-      hint = "Tap again to double jump. Jump upward along a wall or steer away to kick off.";
-    }
-    if (adventure && spec.action === "dash") hint = `${hint}. Jump during the dodge to keep your speed.`;
-    return [
-      face((c) => drawButtonFace(c, look, touchIcon(spec.action, selection), spec.action === "ultimate")),
-      `${text.label}: ${hint}`,
-    ];
-  });
+  const buttons = TOUCH_BUTTONS.filter(({ action }) => !(drill || cerise) || action !== "ultimate").map(
+    (spec): [HTMLElement, string] => {
+      const look = { ...buttonLook(spec, false), ready: true, cooldown: 0, affordable: 4, charge: -1 };
+      const text = texts[spec.action];
+      let hint = text.hint;
+      if (adventure && spec.action === "up") {
+        hint = "Tap again to double jump. Jump upward along a wall or steer away to kick off.";
+      }
+      if (adventure && spec.action === "dash") hint = `${hint}. Jump during the dodge to keep your speed.`;
+      if (drill) {
+        hint =
+          spec.action === "attack"
+            ? `${DRILL_ACTION_TEXT.attack} ${DRILL_ACTION_TEXT.ultimate}`
+            : (DRILL_ACTION_TEXT[spec.action as keyof typeof DRILL_ACTION_TEXT] ?? hint);
+      }
+      if (cerise) {
+        hint =
+          spec.action === "attack"
+            ? `${CERISE_DRILL_TEXT.attack} ${CERISE_DRILL_TEXT.ultimate}`
+            : (CERISE_DRILL_TEXT[spec.action] ?? hint);
+      }
+      return [
+        face((c) =>
+          drawButtonFace(
+            c,
+            look,
+            touchIcon(spec.action, selection),
+            drill || cerise ? spec.action === "attack" : spec.action === "ultimate",
+          ),
+        ),
+        `${text.label}: ${hint}`,
+      ];
+    },
+  );
   if (!adventure) return [...stick, ...buttons];
   const talk = document.createElement("span");
   talk.className = "cap";

@@ -20,10 +20,10 @@ const DASH_JUMP_MOMENTUM = 0.17;
  * the ground only, unless the kit allows one in the air (`HeroKit.airDodge`). It cancels a blow's follow-through, a cast
  * and the guard.
  */
-export function tryDash(dir: number): boolean {
+export function tryDash(dir: number, airDodge?: boolean): boolean {
   const h = hero;
   const air = !h.ground;
-  if (air && (!kit().airDodge?.() || h.airDashed)) return false;
+  if (air && (!(airDodge ?? kit().airDodge?.()) || h.airDashed)) return false;
   if (!maySharedAct() && h.state !== "cast" && h.state !== "guard") return false;
   if (!canPayDash()) {
     refuseDash();
@@ -60,7 +60,7 @@ function passThrough(): void {
   }
 }
 
-export function runDash(dt: number): void {
+export function runDash(dt: number, duration: number = HERO_MOVE.dashTime): void {
   const h = hero;
   passThrough();
   h.ghostTimer -= dt;
@@ -68,7 +68,7 @@ export function runDash(dt: number): void {
     h.ghostTimer = 0.045;
     dropDashGhost();
   }
-  if (h.st >= HERO_MOVE.dashTime) finishDash(0.4);
+  if (h.st >= duration) finishDash(0.4);
 }
 
 function finishDash(speedShare: number): void {
