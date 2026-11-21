@@ -1,7 +1,8 @@
 import { H, W } from "../../constants/stage";
 import { disc, ellipseRing, fleck, glow, glowLine, hairline, place, polygon } from "../../engine/frame";
-import type { SkillCast } from "../../types/drill";
+import type { DrillProfile, SkillCast } from "../../types/drill";
 import { clamp, ease, smooth, TAU } from "../../utils/math";
+import { drawTierArt } from "./effectArt";
 
 const WHITE = 0xfaffff;
 
@@ -132,7 +133,7 @@ function nova(reach: number, color: number, u: number, fade: number): void {
   }
 }
 
-export function drawSkillImpact(cast: SkillCast | null): void {
+export function drawSkillImpact(profile: DrillProfile, cast: SkillCast | null): void {
   if (!cast) return;
   const { x, y, face, age, tier } = cast;
   place(x, y, face < 0);
@@ -144,6 +145,8 @@ export function drawSkillImpact(cast: SkillCast | null): void {
   } else {
     const u = clamp((age - intro) / (duration - intro));
     const fade = 1 - smooth(0.16, 1, u);
+    drawTierArt(profile, cast, u, fade);
+    place(x, y, face < 0);
     if (tier.drawStrike) {
       tier.drawStrike(cast, u, fade);
       place();

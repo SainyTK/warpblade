@@ -1,3 +1,4 @@
+import type { EffectHero, EffectSlot } from "../effectArt";
 import type { SlashShape } from "./effect";
 import type { Enemy } from "./enemy";
 import type { InputAction } from "./input";
@@ -47,6 +48,7 @@ export interface DrillSpell {
   look: DrillSpellLook;
   freeze: number;
   status?(foe: Enemy): void;
+  art?: EffectSlot;
   drawBolt?(bolt: ElementProjectile): void;
   drawImpact?(impact: ElementImpact): void;
 }
@@ -63,6 +65,7 @@ export interface DrillTier {
   color: number;
   look: DrillTierLook;
   around: boolean;
+  art?: EffectSlot;
   windup?: Pose;
   cut?: Pose;
   drawStrike?(cast: SkillCast, progress: number, fade: number): void;
@@ -172,6 +175,7 @@ export interface DrillProfile {
   modifiers(): DrillModifiers;
   motion?: Partial<DrillMotion>;
   poses?: Partial<DrillPoses>;
+  art?: EffectHero;
   hooks?: DrillHooks;
 }
 

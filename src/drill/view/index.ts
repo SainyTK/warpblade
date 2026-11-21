@@ -7,6 +7,7 @@ import { drawEnhancedGuard } from "./chainEffects";
 import { drawCutIn, loadPortrait } from "./cutIn";
 import { createDashTrail } from "./dashTrail";
 import { drawDefenseCue } from "./defenseCue";
+import { drawBoltArt, drawImpactArt } from "./effectArt";
 import { createFighterMotion } from "./fighterMotion";
 import { drillPoses } from "./poses";
 import { drawSkillCharge } from "./skillCharge";
@@ -66,18 +67,20 @@ export function createDrillView(profile: DrillProfile) {
       if (fighter.warp?.phase === "flight") {
         drawFlyingSword(profile, fighter.warp.weapon, true);
       } else {
-        drawInfusedBlade(fighter, pose, hand, reach, null);
+        drawInfusedBlade(profile, fighter, pose, hand, reach, null);
       }
       drawReadySpell(fighter, pose);
       drawEnhancedGuard(current);
       slashes.draw();
       for (const bolt of elementProjectiles) {
+        drawBoltArt(profile, bolt);
         drawElementProjectile(bolt);
       }
       for (const impact of elementImpacts) {
+        drawImpactArt(profile, impact);
         drawElementImpact(impact);
       }
-      drawSkillImpact(fighter.skillCast);
+      drawSkillImpact(profile, fighter.skillCast);
       drawDefenseCue(defenseCue);
       drawSpellPreparation(fighter, cameraX);
       profile.hooks?.draw?.();

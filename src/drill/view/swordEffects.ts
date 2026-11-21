@@ -1,11 +1,12 @@
 import { glow, glowLine, hairline, place, sparkle } from "../../engine/frame";
 import type { Ramp } from "../../types/color";
-import type { DrillSpell, Fighter } from "../../types/drill";
+import type { DrillProfile, DrillSpell, Fighter } from "../../types/drill";
 import type { Pose } from "../../types/pose";
 import type { Vec } from "../../types/rig";
 import { mix } from "../../utils/color";
 import { clamp } from "../../utils/math";
 import { bladeAngle } from "../../utils/poseFrame";
+import { drawInfusionArt } from "./effectArt";
 import { infusionBladePoint } from "./infusionContact";
 
 export function swordElementRamp({ color, core }: DrillSpell): Ramp {
@@ -29,7 +30,14 @@ function drawTransfer(hand: Vec, angle: number, reach: number, { color, core }: 
   sparkle(x, y, 2 + progress * 2.1, color, core, power);
 }
 
-export function drawInfusedBlade(h: Fighter, pose: Pose, hand: Vec, reach: number, transfer: number | null): void {
+export function drawInfusedBlade(
+  profile: DrillProfile,
+  h: Fighter,
+  pose: Pose,
+  hand: Vec,
+  reach: number,
+  transfer: number | null,
+): void {
   if (!h.swordInfusion || h.warp?.phase === "flight") {
     return;
   }
@@ -42,6 +50,7 @@ export function drawInfusedBlade(h: Fighter, pose: Pose, hand: Vec, reach: numbe
   const tipX = handX + dx * (reach - 1);
   const tipY = handY + dy * (reach - 1);
   const pulse = 0.79 + Math.sin(age * 19) * 0.18;
+  drawInfusionArt(profile, h, hand, angle, reach);
   const bloom = transfer === null ? 0.74 : 0.49;
   place(h.x, h.y, h.face < 0);
   glowLine(handX + dx * 4, handY + dy * 4, tipX, tipY, 5, color, bloom * pulse);
