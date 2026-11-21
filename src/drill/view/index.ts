@@ -30,7 +30,7 @@ export function createDrillView(profile: DrillProfile) {
       current = session;
       slashes.step(session, dt);
       stamp = trail.step(session.fighter.dashTime > 0, dt) || stamp;
-      return motion(session.profile, session.fighter, pose, dt);
+      return motion(session, pose, dt);
     },
     drawBack(cameraX: number): void {
       if (!current) {

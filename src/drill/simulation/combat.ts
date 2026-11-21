@@ -4,7 +4,7 @@ import { hitStop } from "../../game/world";
 import { sfx } from "../../services/audio";
 import type { DrillProfile, DrillStrikeId, Session, Swing } from "../../types/drill";
 import { smooth } from "../../utils/math";
-import { MOTION, TARGET_RADIUS } from "../constants";
+import { TARGET_RADIUS } from "../constants";
 import { executeFollowUp } from "./followUp";
 import { hitWithSword, spendSwordBonuses } from "./swordInfusion";
 
@@ -93,7 +93,7 @@ export function fight(session: Session, dt: number): void {
     }
     return;
   }
-  if (h.attackBuffer > 0 && h.dashTime <= MOTION.dashTime - DASH_ATTACK_DELAY) {
+  if (h.attackBuffer > 0 && h.dashTime <= session.motion.dashTime - DASH_ATTACK_DELAY) {
     h.attackBuffer = 0;
     beginSwing(session, "first");
   }

@@ -17,6 +17,7 @@ export function createSession(profile: DrillProfile, x: number, y: number): Sess
   const modifiers = profile.modifiers();
   return {
     profile,
+    motion: { ...MOTION, ...profile.motion },
     modifiers,
     fighter: {
       x,

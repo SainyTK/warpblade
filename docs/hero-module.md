@@ -401,6 +401,8 @@ export interface DrillProfile {
   drawCutIn?(ctx: CanvasRenderingContext2D, cast: SkillCast, portrait: HTMLImageElement): void;
   text: Readonly<Partial<Record<InputAction, string>>>;
   modifiers(): DrillModifiers;
+  motion?: Partial<DrillMotion>;
+  locomotion?: DrillLocomotion;
   hooks?: DrillHooks;
 }
 ```
@@ -418,6 +420,8 @@ export interface DrillProfile {
 | `portrait`, `drawCutIn` | the cut-in image (a URL, or an async loader such as `loadGeneratedHeroPortrait`) and an optional own cut-in style; without one the shared Kael style is used |
 | `text` | the hero's Controls lines over the shared drill lines (`src/drill/controlText.ts`) |
 | `modifiers()` | the numbers the hero's skills change, read every step (next section) |
+| `motion` | the hero's own movement numbers over the shared `MOTION` (run speed, jump rise, gravity, dash, wall kick); the session resolves them once when it starts |
+| `locomotion` | the hero's own `poses` by id (`stance`, `breathe`, `brake`, `low`, `touchdown`, `dash`, `airDash`, `rise`, `leap`, `kick`, `fall`, `wall`, `spell`) and an optional `run(stride)` cycle; any pose left out uses the shared one, so Kael keeps the shared set |
 | `hooks` | `swordHit(foe, infusion)`, `slashed(strike, landed)`, `released(cast)`, `tick(dt)`, `draw()`, `reset()` for anything the shared engine does not do |
 
 Poses for strikes use `pose()` from `src/constants/hero.ts` and the stance and hand helpers in `src/constants/drillPose.ts` (`DRILL_STANCE`, `frontHand`, `rearHand`), so strike data can live in the hero's `constants/` folder.
