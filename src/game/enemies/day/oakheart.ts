@@ -23,6 +23,8 @@ export const OAK_TIMES = { sweep: 0.6, root: 0.65, volley: 0.7, swing: 0.3, plan
 export const OAK_ENRAGE = 0.5;
 const REACH = 40;
 const ROOT_STEP = 17;
+/** the bright end of the leaf ramp, so the burst reads against the crown and the sky */
+const BURST_LEAVES = DC.leaf.slice(2);
 /** the Oakheart whose bark has already split, so the burst shows once */
 const split = new WeakSet<Enemy>();
 
@@ -32,14 +34,14 @@ function splitBark(e: Enemy): void {
   for (let i = 0; i < 10; i++)
     particles.spawn(
       PK.SHARD,
-      e.x + rng.range(-10, 10),
-      e.y - rng.range(28, 38),
-      rng.range(-70, 70),
-      -rng.range(40, 100),
+      e.x + rng.range(-12, 12),
+      e.y - rng.range(36, 42),
+      rng.range(-110, 110),
+      -rng.range(80, 150),
       rng.range(0.5, 0.9),
       {
-        col: rng.pick(DC.leaf),
-        size: 1.2,
+        col: rng.pick(BURST_LEAVES),
+        size: 3,
       },
     );
   shake(0.2, 2);
