@@ -17,6 +17,7 @@ export function createSession(profile: DrillProfile, x: number, y: number): Sess
   const modifiers = profile.modifiers();
   return {
     profile,
+    motion: { ...MOTION, ...profile.motion },
     modifiers,
     fighter: {
       x,
@@ -59,8 +60,8 @@ export function createSession(profile: DrillProfile, x: number, y: number): Sess
   };
 }
 
-function buffer(pressed: boolean, remaining: number, dt: number): number {
-  return pressed ? MOTION.buffer : Math.max(0, remaining - dt);
+function buffer(window: number, pressed: boolean, remaining: number, dt: number): number {
+  return pressed ? window : Math.max(0, remaining - dt);
 }
 
 export function ageDrillCues(session: Session, dt: number): void {
@@ -92,9 +93,10 @@ export function stepSession(session: Session, input: DrillInput, dt: number): vo
     if (!warpLocksActions(h)) {
       readSpellBook(session, input);
     }
-    h.jumpBuffer = buffer(input.jump, h.jumpBuffer, dt);
-    h.dashBuffer = h.dashReadyIn === 0 && !h.swing?.followUp ? buffer(dashPress, h.dashBuffer, dt) : 0;
-    h.attackBuffer = buffer(input.attack, h.attackBuffer, dt);
+    h.jumpBuffer = buffer(session.motion.buffer, input.jump, h.jumpBuffer, dt);
+    h.dashBuffer =
+      h.dashReadyIn === 0 && !h.swing?.followUp ? buffer(session.motion.buffer, dashPress, h.dashBuffer, dt) : 0;
+    h.attackBuffer = buffer(session.motion.buffer, input.attack, h.attackBuffer, dt);
   }
   tickSpellRelease(h, dt);
   tickSpellStrikes(session, dt);

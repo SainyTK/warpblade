@@ -8,6 +8,7 @@ import { drawCutIn, loadPortrait } from "./cutIn";
 import { createDashTrail } from "./dashTrail";
 import { drawDefenseCue } from "./defenseCue";
 import { createFighterMotion } from "./fighterMotion";
+import { drillPoses } from "./poses";
 import { drawSkillCharge } from "./skillCharge";
 import { drawSkillDarkness, drawSkillImpact } from "./skillImpact";
 import { createSlashView } from "./slash";
@@ -19,7 +20,7 @@ import { drawFlyingSword, drawWarpGhosts, drawWarpTrace } from "./warpEffects";
 
 export function createDrillView(profile: DrillProfile) {
   const portrait = loadPortrait(profile);
-  const motion = createFighterMotion();
+  const motion = createFighterMotion(drillPoses(profile));
   const slashes = createSlashView();
   const trail = createDashTrail();
   let current: Session | undefined;
@@ -30,7 +31,7 @@ export function createDrillView(profile: DrillProfile) {
       current = session;
       slashes.step(session, dt);
       stamp = trail.step(session.fighter.dashTime > 0, dt) || stamp;
-      return motion(session.profile, session.fighter, pose, dt);
+      return motion(session, pose, dt);
     },
     drawBack(cameraX: number): void {
       if (!current) {

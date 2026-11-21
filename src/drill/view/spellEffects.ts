@@ -4,7 +4,12 @@ import type { DrillSpell, ElementImpact, ElementProjectile } from "../../types/d
 import { clamp, ease, smooth, TAU } from "../../utils/math";
 import { SPELL_IMPACT_TIME } from "../constants";
 
-export function drawElementProjectile({ spell, x, y, face, distance }: ElementProjectile): void {
+export function drawElementProjectile(bolt: ElementProjectile): void {
+  const { spell, x, y, face, distance } = bolt;
+  if (spell.drawBolt) {
+    spell.drawBolt(bolt);
+    return;
+  }
   const { color, core } = spell;
   place(x, y, face < 0);
   glow(0, 0, 16, color, 0.63);
@@ -121,6 +126,10 @@ function thunder(spell: DrillSpell, age: number): void {
 
 export function drawElementImpact(blast: ElementImpact): void {
   const { x, y, spell, age, face, fromSword } = blast;
+  if (spell.drawImpact) {
+    spell.drawImpact(blast);
+    return;
+  }
   place(x, y, face < 0);
   if (spell.speed === null && spell.look === "spark" && !fromSword) {
     thunder(spell, age);
