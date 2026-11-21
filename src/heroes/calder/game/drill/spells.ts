@@ -56,7 +56,7 @@ export const CALDER_SPELLS: readonly DrillSpell[] = [
     freeze: 0,
     status: burn,
     drawBolt: drawShellBolt,
-    drawBlast: drawShellBlast,
+    drawImpact: drawShellBlast,
   },
   {
     id: "chain",
@@ -72,7 +72,7 @@ export const CALDER_SPELLS: readonly DrillSpell[] = [
     freeze: 0,
     status: arc,
     drawBolt: drawChainBolt,
-    drawBlast: drawChainBlast,
+    drawImpact: drawChainBlast,
   },
   {
     id: "charge",
@@ -88,6 +88,6 @@ export const CALDER_SPELLS: readonly DrillSpell[] = [
     freeze: 0,
     status: breach,
     drawBolt: drawChargeBolt,
-    drawBlast: drawChargeBlast,
+    drawImpact: drawChargeBlast,
   },
 ];

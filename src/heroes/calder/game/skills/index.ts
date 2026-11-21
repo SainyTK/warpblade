@@ -1,9 +1,9 @@
+import { nativeOrDrill } from "../../../../drill";
 import type { SkillBehavior } from "../../../../types/skillBehavior";
 import { pointBlankDrill } from "../drill/skills/pointBlank";
 import { blastJump } from "./blastJump";
 import { drumCylinder } from "./drumCylinder";
 import { hotBrass } from "./hotBrass";
-import { nativeOrDrill } from "./nativeOrDrill";
 import { pointBlank } from "./pointBlank";
 import { ricochet } from "./ricochet";
 import { scorchRounds } from "./scorchRounds";

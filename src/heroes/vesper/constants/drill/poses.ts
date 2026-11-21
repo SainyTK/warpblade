@@ -1,5 +1,4 @@
-import type { DrillPoseId } from "../../../../types/drill";
-import type { Pose } from "../../../../types/pose";
+import type { DrillPoses } from "../../../../types/drill";
 import { sampleKeys } from "../../../../utils/sampleKeys";
 import { ACTION_CLIPS_OF_VESPER } from "../clips/actions";
 import { vp } from "../clips/stance";
@@ -192,7 +191,7 @@ const SPELL = vp({
   bfx: -6,
 });
 
-export const VESPER_POSES: Readonly<Partial<Record<DrillPoseId, Pose>>> = {
+export const VESPER_POSES: Partial<DrillPoses> = {
   stance: STANCE,
   breathe: BREATHE,
   brake: BRAKE,

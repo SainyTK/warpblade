@@ -1,7 +1,6 @@
 import { frontHand, rearHand } from "../../../../constants/drillPose";
 import { pose } from "../../../../constants/hero";
-import type { DrillPoseId } from "../../../../types/drill";
-import type { Pose } from "../../../../types/pose";
+import type { DrillPoses } from "../../../../types/drill";
 
 const SHOULDER_BLADE = { fx: 2.5, fy: -21, sa: 2.95 };
 const SASH_HAND = rearHand(-1.5, -13.5);
@@ -177,7 +176,7 @@ const SPELL = pose({
   ba: 0.3,
 });
 
-export const ZAFIR_POSES: Readonly<Record<DrillPoseId, Pose>> = {
+export const ZAFIR_POSES: Partial<DrillPoses> = {
   stance: STANCE,
   breathe: BREATHE,
   brake: BRAKE,

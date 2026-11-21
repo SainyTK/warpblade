@@ -1,6 +1,6 @@
 import { pose } from "../../../../constants/hero";
 import { fitRunFeet } from "../../../../drill";
-import type { DrillBody } from "../../../../types/drill";
+import type { DrillProfile } from "../../../../types/drill";
 import type { Pose } from "../../../../types/pose";
 import { sampleKeys } from "../../../../utils/sampleKeys";
 import { grip, shouldered } from "../clips/grip";
@@ -101,7 +101,7 @@ const PARRY_CONTACT = grip({
   ba: 0.5,
 });
 
-export const BRYNN_BODY: DrillBody = {
+export const BRYNN_BODY: Pick<DrillProfile, "motion" | "poses"> = {
   motion: {
     run: 100,
     groundAccel: 2500,
@@ -113,10 +113,10 @@ export const BRYNN_BODY: DrillBody = {
     dashJump: 206,
     wallKick: 166,
     wallSlide: 70,
+    landing: 1.35,
   },
-  landing: 1.35,
-  run,
   poses: {
+    run,
     stance: STANCE,
     breathe: { ...STANCE, hy: -11.6, ny: -21.6, fy: STANCE.fy + 0.6, by: STANCE.by + 0.6, cb: 0.45 },
     brake: grip({

@@ -1,4 +1,3 @@
-import { POSES } from "../../constants/hero";
 import type { DrillPoses, SkillCast } from "../../types/drill";
 import type { Pose } from "../../types/pose";
 import { smooth } from "../../utils/math";
@@ -10,9 +9,9 @@ export function skillPose(cast: SkillCast | null, poses: DrillPoses, grounded: b
     return stance;
   }
   const { age, tier } = cast;
-  const raised = blendPose(stance, tier.windup ?? POSES.release, smooth(0, tier.intro * 0.78, age));
+  const raised = blendPose(stance, tier.windup ?? poses.skillWindup, smooth(0, tier.intro * 0.78, age));
   const casting =
-    tier.look === "nova"
+    tier.look === "nova" && !tier.cut
       ? blendPose(raised, stance, smooth(tier.intro + 0.18, tier.duration, age))
       : age < tier.intro
         ? raised

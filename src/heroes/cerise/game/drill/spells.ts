@@ -19,7 +19,7 @@ export const CERISE_SPELLS: readonly DrillSpell[] = [
     freeze: 0,
     status: markWithRose,
     drawBolt: drawRoseLineBolt,
-    drawBlast: drawRoseLineBlast,
+    drawImpact: drawRoseLineBlast,
   },
   {
     id: "flurry",
@@ -34,7 +34,7 @@ export const CERISE_SPELLS: readonly DrillSpell[] = [
     look: "flame",
     freeze: 0,
     status: staggerWithFlurry,
-    drawBlast: drawFlurryBlast,
+    drawImpact: drawFlurryBlast,
   },
   {
     id: "bloom",
@@ -50,6 +50,6 @@ export const CERISE_SPELLS: readonly DrillSpell[] = [
     freeze: 0,
     status: bindWithBloom,
     drawBolt: drawRoseBloomBolt,
-    drawBlast: drawRoseBloomBlast,
+    drawImpact: drawRoseBloomBlast,
   },
 ];

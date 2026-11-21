@@ -5,8 +5,8 @@ import { drawBreachCut, drawBuckshotWall, drawCylinderBreak, drawGreenLine } fro
 const [breach, buckshot, line, cylinder] = CALDER_TIERS;
 
 export const CALDER_DRILL_TIERS: DrillProfile["tiers"] = [
-  { ...breach, draw: drawBreachCut },
-  { ...buckshot, draw: drawBuckshotWall },
-  { ...line, draw: drawGreenLine },
-  { ...cylinder, draw: drawCylinderBreak },
+  { ...breach, drawStrike: drawBreachCut },
+  { ...buckshot, drawStrike: drawBuckshotWall },
+  { ...line, drawStrike: drawGreenLine },
+  { ...cylinder, drawStrike: drawCylinderBreak },
 ];

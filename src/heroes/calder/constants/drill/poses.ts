@@ -31,7 +31,7 @@ const runUpperBody = (phase: number) => {
 
 export const calderRunUpperBody = runUpperBody;
 
-export const CALDER_POSES: Omit<DrillPoses, "run"> = {
+export const CALDER_POSES: Partial<DrillPoses> = {
   stance: STANCE,
   breathe: BREATHE,
   brake: pose({
@@ -281,7 +281,7 @@ export const CALDER_POSES: Omit<DrillPoses, "run"> = {
     bfx: -7,
     ba: 0.25,
   }),
-  skill: pose({
+  skillCut: pose({
     hx: 3,
     hy: -8,
     nx: 10,

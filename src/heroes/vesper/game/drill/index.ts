@@ -44,6 +44,6 @@ export const VESPER_DRILL: DrillProfile = {
   },
   modifiers: () => vesperModifiers(NEUTRAL_MODIFIERS),
   motion: VESPER_MOTION,
-  locomotion: { poses: VESPER_POSES, run: vesperRun },
+  poses: { ...VESPER_POSES, run: vesperRun },
   hooks: VESPER_DRILL_HOOKS,
 };

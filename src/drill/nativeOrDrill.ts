@@ -1,5 +1,5 @@
-import { usesDrill } from "../../../../drill";
-import type { SkillBehavior, SkillEvents } from "../../../../types/skillBehavior";
+import type { SkillBehavior, SkillEvents } from "../types/skillBehavior";
+import { usesDrill } from "./selection";
 
 const IDLE: SkillBehavior = { create: () => ({}) };
 
@@ -36,4 +36,8 @@ export function nativeOrDrill(native: SkillBehavior, drill: SkillBehavior = IDLE
       ]),
     ),
   };
+}
+
+export function drillOnly(drill: SkillBehavior): SkillBehavior {
+  return nativeOrDrill(IDLE, drill);
 }

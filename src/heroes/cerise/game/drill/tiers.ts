@@ -5,8 +5,8 @@ import { drawRisingRose, drawRoseTempest, drawRoseThrust, drawThornGale } from "
 const [thrust, rising, gale, tempest] = CERISE_TIER_DATA;
 
 export const CERISE_TIERS: DrillProfile["tiers"] = [
-  { ...thrust, draw: drawRoseThrust },
-  { ...rising, draw: drawRisingRose },
-  { ...gale, draw: drawThornGale },
-  { ...tempest, draw: drawRoseTempest },
+  { ...thrust, drawStrike: drawRoseThrust },
+  { ...rising, drawStrike: drawRisingRose },
+  { ...gale, drawStrike: drawThornGale },
+  { ...tempest, drawStrike: drawRoseTempest },
 ];

@@ -83,7 +83,7 @@ export const CERISE_TIER_DATA: DrillProfile["tiers"] = [
     intro: 0.36,
     duration: 0.87,
     color: 0xff8fb0,
-    pose: THRUST,
+    cut: THRUST,
   },
   {
     look: "spires",
@@ -97,7 +97,7 @@ export const CERISE_TIER_DATA: DrillProfile["tiers"] = [
     intro: 0.43,
     duration: 1.08,
     color: 0xffa9c6,
-    pose: RISING,
+    cut: RISING,
   },
   {
     look: "rift",
@@ -111,7 +111,7 @@ export const CERISE_TIER_DATA: DrillProfile["tiers"] = [
     intro: 0.51,
     duration: 1.22,
     color: 0xff6f9c,
-    pose: GALE,
+    cut: GALE,
   },
   {
     look: "nova",
@@ -125,6 +125,6 @@ export const CERISE_TIER_DATA: DrillProfile["tiers"] = [
     intro: 0.64,
     duration: 1.52,
     color: 0xffe1eb,
-    pose: SALUTE,
+    cut: SALUTE,
   },
 ];

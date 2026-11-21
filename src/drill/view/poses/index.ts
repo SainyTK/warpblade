@@ -1,7 +1,8 @@
 import { DRILL_STANCE, frontHand, rearHand } from "../../../constants/drillPose";
-import { pose } from "../../../constants/hero";
+import { POSES, pose } from "../../../constants/hero";
 import type { DrillPoses, DrillProfile } from "../../../types/drill";
 import { runPose } from "../runPose";
+import { warpArrivalPose, warpFlightPose, warpThrowPose } from "../warpPose";
 
 const BREATHE = { ...DRILL_STANCE, hy: -12.8, ny: -23, by: -15, fy: -15.8 };
 const BRAKE = pose({
@@ -152,6 +153,19 @@ const SPELL = pose({
 
 const CUT = pose({ hx: 3, hy: -11, nx: 8, ny: -20, fx: 15, fy: -15, ...frontHand(1, -17), ffx: 10, bfx: -8, sa: 0.32 });
 
+const STAGGER = pose({
+  hx: -5,
+  hy: -11,
+  nx: -8,
+  ny: -20,
+  fx: 5,
+  fy: -13,
+  ...rearHand(-10, -15),
+  ffx: 7,
+  bfx: -8,
+  sa: 0.7,
+});
+
 const DEFAULT_POSES: DrillPoses = {
   stance: DRILL_STANCE,
   breathe: BREATHE,
@@ -168,10 +182,15 @@ const DEFAULT_POSES: DrillPoses = {
   wall: WALL,
   guard: GUARD,
   airGuard: AIR_GUARD,
+  stagger: STAGGER,
   parryContact: PARRY_CONTACT,
   parryReturn: PARRY_RETURN,
   spell: SPELL,
+  skillWindup: POSES.release,
   skillCut: CUT,
+  warpThrow: warpThrowPose,
+  warpFlight: warpFlightPose,
+  warpArrival: warpArrivalPose,
 };
 
 export function drillPoses(profile: DrillProfile): DrillPoses {

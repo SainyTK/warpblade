@@ -1,4 +1,4 @@
-import type { DrillPoses, Fighter } from "../../types/drill";
+import type { DrillMotion, DrillPoses, Fighter } from "../../types/drill";
 import type { Pose } from "../../types/pose";
 import { clamp, ease, smooth } from "../../utils/math";
 import { blendPose } from "../../utils/poseBlend";
@@ -45,7 +45,7 @@ export function motionOf(h: Fighter, landing: number, braking: boolean): Motion 
 export function locomotionPose(
   h: Fighter,
   poses: DrillPoses,
-  rise: number,
+  numbers: DrillMotion,
   motion: Motion,
   age: number,
   stride: number,
@@ -53,7 +53,7 @@ export function locomotionPose(
 ): Pose {
   switch (motion) {
     case "warp":
-      return h.warp ? warpPose(h.warp) : poses.stance;
+      return h.warp ? warpPose(h.warp, poses) : poses.stance;
     case "skill":
       return skillPose(h.skillCast, poses, h.grounded);
     case "parry":
@@ -70,16 +70,24 @@ export function locomotionPose(
     case "dash":
       return h.airDashActive ? poses.airDash : poses.dash;
     case "jump":
-      return blendPose(h.jumpBoost ? poses.leap : poses.rise, poses.fall, clamp(1 + h.vy / rise) ** 2 * 0.62);
+      return blendPose(h.jumpBoost ? poses.leap : poses.rise, poses.fall, clamp(1 + h.vy / numbers.rise) ** 2 * 0.62);
     case "fall":
-      return blendPose(h.jumpBoost ? poses.leap : poses.rise, poses.fall, 0.62 + 0.38 * smooth(0, rise * 0.6, h.vy));
+      return blendPose(
+        h.jumpBoost ? poses.leap : poses.rise,
+        poses.fall,
+        0.62 + 0.38 * smooth(0, numbers.rise * 0.6, h.vy),
+      );
     case "kick":
       return poses.kick;
     case "wall":
       return poses.wall;
     case "land": {
       const compression = blendPose(poses.touchdown, poses.low, landForce * smooth(0, 0.038, age));
-      return blendPose(compression, poses.stance, ease.outCubic(smooth(0.038, LANDING_TIME, age)));
+      return blendPose(
+        compression,
+        poses.stance,
+        ease.outCubic(smooth(0.038 * numbers.landing, LANDING_TIME * numbers.landing, age)),
+      );
     }
     default:
       return poses.stance;

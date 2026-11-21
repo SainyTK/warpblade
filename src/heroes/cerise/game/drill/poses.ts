@@ -298,5 +298,5 @@ export const CERISE_POSES: Partial<DrillPoses> = {
   parryContact: PARRY_CONTACT,
   parryReturn: PARRY_RETURN,
   spell: SPELL,
-  skill: SKILL,
+  skillCut: SKILL,
 };

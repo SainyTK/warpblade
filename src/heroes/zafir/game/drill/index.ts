@@ -31,6 +31,6 @@ export const ZAFIR_DRILL: DrillProfile = {
   },
   modifiers: () => zafirModifiers(NEUTRAL_MODIFIERS),
   motion: ZAFIR_MOTION,
-  locomotion: { poses: ZAFIR_POSES, run: zafirRunPose },
+  poses: { ...ZAFIR_POSES, run: zafirRunPose },
   hooks: ZAFIR_DRILL_HOOKS,
 };

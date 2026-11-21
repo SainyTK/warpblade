@@ -25,6 +25,7 @@ export const MOTION: DrillMotion = {
   wallLock: 0.11,
   jumpGrace: 0.075,
   buffer: 0.11,
+  landing: 1,
 };
 
 export const DASH_LOCKOUT = MOTION.dashTime + MOTION.dashRecovery;

@@ -31,7 +31,7 @@ export function createFighterMotion(poses: DrillPoses) {
     } else if (landed) {
       landForce = clamp(fallSpeed / 240);
       contactX = h.x;
-      landing = landForce > 0 ? LANDING_TIME : 0;
+      landing = landForce > 0 ? LANDING_TIME * session.motion.landing : 0;
     } else {
       landing = Math.max(0, landing - dt);
     }
@@ -68,7 +68,7 @@ export function createFighterMotion(poses: DrillPoses) {
       ? swordPose(session.profile, h.swing, poses.stance)
       : h.spellRelease
         ? spellReleasePose(h, poses)
-        : locomotionPose(h, poses, session.motion.rise, motion, age, stride, landForce);
+        : locomotionPose(h, poses, session.motion, motion, age, stride, landForce);
     const footPlacement =
       motion === "land" ? clamp((contactX - h.x) * h.face, -5, 5) * (1 - smooth(0.04, 0.078, age)) : 0;
     const pose = footPlacement

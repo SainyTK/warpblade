@@ -14,7 +14,7 @@ export const CALDER_TIERS: DrillProfile["tiers"] = [
     intro: 0.34,
     duration: 0.86,
     color: 0x9ae05a,
-    pose: pose({
+    cut: pose({
       hx: 3,
       hy: -8,
       nx: 10,
@@ -42,7 +42,7 @@ export const CALDER_TIERS: DrillProfile["tiers"] = [
     intro: 0.42,
     duration: 1.06,
     color: 0xb4ff5a,
-    pose: pose({
+    cut: pose({
       hx: -3,
       hy: -11,
       nx: -1,
@@ -71,7 +71,7 @@ export const CALDER_TIERS: DrillProfile["tiers"] = [
     intro: 0.5,
     duration: 1.2,
     color: 0xdcffa8,
-    pose: pose({
+    cut: pose({
       hx: -2,
       hy: -12,
       nx: 0,
@@ -99,7 +99,7 @@ export const CALDER_TIERS: DrillProfile["tiers"] = [
     intro: 0.62,
     duration: 1.5,
     color: 0xffe066,
-    pose: pose({
+    cut: pose({
       hx: 1,
       hy: -7,
       nx: 6,

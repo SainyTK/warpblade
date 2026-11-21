@@ -1,6 +1,5 @@
 import { pose } from "../../../../constants/hero";
-import type { DrillBodyPose, DrillMotion } from "../../../../types/drill";
-import type { Pose } from "../../../../types/pose";
+import type { DrillMotion, DrillPoses } from "../../../../types/drill";
 import { SHIELD_UP, STANCE } from "../clips/key";
 import { GUARD_HOLD } from "../clips/rest";
 
@@ -59,7 +58,7 @@ const LEAP = pose({
 });
 const PUNCH = pose({ ...GUARD_HOLD, hx: 1.5, nx: 5, ny: -23, bx: 14, by: -19, oa: 1.4, ffx: 9 });
 
-export const ALDRIC_POSES: Readonly<Partial<Record<DrillBodyPose, Pose>>> = {
+export const ALDRIC_POSES: Partial<DrillPoses> = {
   stance: pose({ ...STANCE, bx: 10, by: -17, sa: 0.95, fy: -15 }),
   breathe: pose({ ...STANCE, sa: 0.98, bx: 10, hy: -13, ny: -22.8, by: -16.4, fy: -15.5 }),
   brake: pose({
@@ -167,6 +166,5 @@ export const ALDRIC_MOTION: Readonly<Partial<DrillMotion>> = {
   dashJump: 205,
   wallKick: 168,
   fallGravity: 1260,
+  landing: 1.25,
 };
-
-export const ALDRIC_LANDING = 1.25;
