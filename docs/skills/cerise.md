@@ -5,6 +5,39 @@ Her design note is `docs/heroes/cerise.md`.
 AD and AP mean her attack damage (10 at hero level 1) and ability power (9).
 The data rows are in `src/heroes/cerise/constants/skills/`, one file per skill, and the tables below are written from them.
 
+## Drill set
+
+Solo Adventure runs base Cerise on the shared drill engine (`src/drill`), and all 20 skills are offered there, each upgrading one drill mechanic (`docs/skill-design.md`, "Drill baseline").
+The rows keep the numbers her native kit reads (co-op, the wave arena) and add the drill's under a `drill.` prefix (`constants/skills/drillRows.ts`), so the card text is the drill's and the sections after this one still describe the native kit.
+Drill code: `src/heroes/cerise/game/drill/skills/`, one file per redesigned skill, folded into `CERISE_DRILL` by `game/drill/hooks.ts`.
+
+| Id | Name | Mechanic | Level 1 | Levels 2 to 8 | Evolution (partner) |
+| --- | --- | --- | --- | --- | --- |
+| `ce_measure` | Measured Touch | first thrust | the first thrust strikes again, 0.6 AD | a sure crit, a 0.4 s hold, the Rose mark, a second touch, up to 4 AD | Perfect Measure (`ce_riposte`): every first thrust calls a glass rapier, 4 AD |
+| `ce_feint` | Feint | second thrust | opens the foe, +15% for 2 s | stagger, readies the dash, a cut behind, up to +50% for 3.5 s | Phantom Feint (`ce_mirror`): a glass rapier strikes the opened foe from behind |
+| `ce_lunge` | Long Lunge | third thrust | the lunge +40% | a pin, a Rose Line streak, stagger, a twin streak, up to +300% | Comet Lunge (`ce_needle`): a lunge that lands readies the warp and the dash |
+| `ce_pin` | Pinning Point | air thrust | pins 0.6 s and strikes again, 0.5 AD | two more air thrusts, pinned foes take +20%, up to 4 AD and 1.5 s | Butterfly Pin (`ce_thorns`): each air thrust skewers the foes below, 3 AD |
+| `ce_riposte` | Riposte Chain | guard and parry | parry window +50%; a parry ripostes the foe ahead, 1.5 AD sure crit | the Rose mark, readies the dash and an air dash, a piercing riposte, up to 8 AD and +100% window | Endless Riposte (`ce_measure`): 2 s of thrusts +100% after a parry |
+| `ce_markwarp` | Rose Mark | warp strike | warp +30%, the arrival sets the Rose mark | recharge down to -45%, stagger, a pierce behind, restores an air dash and the air thrust, up to +250% | Crimson Seal (`ce_lunge`): the arrival marks every foe within 70 px |
+| `ce_step` | Passing Touch | dash | dashing through foes cuts them, 0.8 AD | stagger, a dash through a foe readies the dash, the Rose mark, a thrust at the end, up to 5 AD | Petal Step (`ce_measure`): each cut strikes twice more at 50% |
+| `ce_poise` | Poise | dash and air dash | one more air dash | untouchable dashes, an air dash restores the air thrust, up to three more air dashes, the thrust after a dash up to +200% | Perfect Poise (`ce_lunge`): every dash readies the warp |
+| `ce_grace` | Grace | warp and infusion | the arrival infuses the selected spell for 1 hit | faster preparation (up to 45%), heals on arrival, longer infusions, the arrival shortens a preparation, infused hits heal | Rose Grace (`ce_riposte`): every arrival readies the selected spell |
+| `ce_dive` | Swallow Dive | jump, wall kick, air | one more air thrust | a cutting wall kick, a stomp after an air thrust, one more air dash, a pinning stomp, up to 5 AD | Swallow Storm (`ce_step`): the stomp reaches 70 px and draws foes in |
+| `ce_mirrorguard` | Mirror Guard | Rose Line | Rose Line strikes again, 1 AP | a mirrored line, +15% taken, Rose Edge strikes, two more mirrored lines, up to 8 AP | Perfect Mirror (`ce_riposte`): Rose Line marks every foe within 50 px |
+| `ce_needle` | Needle Rain | Flurry | Flurry rains 3 needles, 0.8 AP each | longer stagger, 5 then 7 needles, pinning needles, Rose Edge needles, up to 4 AP | Starneedle Rain (`ce_markwarp`): Flurry strikes twice |
+| `ce_bloom` | Rose Bloom | Rose Bloom | the bloom strikes again, 1.2 AP | a bleed, a lingering petal ring, a longer bind, a launch and Rose Edge strikes, up to 8 AP | Full Bloom (`ce_petals`): the bloom bursts on every foe within 60 px |
+| `ce_thorns` | Thorn Wounds | dot on thrusts | a bleeding thorn a thrust, up to 4 | more thorns, the lunge leaves 3 then 5, Rose Edge hits leave 2 more, up to 0.6 AD a tick | Thorn Burst (`ce_pin`): the lunge bursts every thorn for 1 AD each |
+| `ce_weep` | Weeping Mark | dot on the Rose mark | as in the native kit | as in the native kit | as in the native kit |
+| `ce_curse` | Wilting Curse | dot on parries | as in the native kit | as in the native kit | as in the native kit |
+| `ce_mirror` | Mirror Blade | summon on parries | as in the native kit | as in the native kit | as in the native kit |
+| `ce_petals` | Petal Blades | summon on casts | as in the native kit | as in the native kit | as in the native kit |
+| `ce_sentinel` | Thorn Sentinel | summon on the lunge | as in the native kit; the drill's third thrust plants it | as in the native kit | as in the native kit |
+| `ce_tempest` | Rose Tempest | the four charged tiers | charged skills +30% | the Rose mark on every foe in reach, faster charge, an echo streak, a pull and more reach, up to +250% | Rose Storm (`ce_measure`): four more streaks, two each way |
+
+Count by mechanic: 4 thrust skills, 1 guard skill, 4 warp and dash skills, 1 jump skill, 3 spell skills, 3 damage over time, 3 summons, 1 charged-tier skill.
+Poise and Grace moved from `passive` to `movement` for the drill split.
+Native-only effects (a perfect dodge, Points, riposte links) do nothing in the drill; parries, casts and the lunge trigger the native summons and curses in both.
+
 ## Identity
 
 Cerise is the duelist: a five-blow string of thrusts on a thin line, Points earned by Keen timing and spent by the lunge, a weak block with the best parry in the roster, and a riposte chain kept going on the beat.

@@ -33,6 +33,49 @@ Her guard is the fencer's line: the blade raised point up across her face, the o
 
 Effects are rose: thrusts leave thin rose streaks with a white core, Keen thrusts turn gold as for every hero, Points show as rose pips, and her mark is a small rose sigil over a foe.
 
+## On the drill engine
+
+Every solo Adventure plays base Cerise on the shared drill engine (`src/drill`, `docs/hero-module.md`, "The drill engine").
+Her profile is `src/heroes/cerise/game/drill/index.ts`, registered as `drill: CERISE_DRILL` on her module.
+The native kit described below still plays in co-op and the wave arena.
+
+### Movement
+
+She runs on the shared drill model with lighter numbers than Kael: run 118 against 110, a quicker dash (292) with a shorter recovery (0.23 s), a slightly higher jump (rise 338) and a softer fall (1150).
+Her poses are her own (`game/drill/poses.ts`).
+The run is fitted to the shared reference trace with `fitRunFeet` over a fencer's upper body: the torso upright, the rapier held forward at chest height with its point toward the foe, and the off hand on her hip.
+The stance is her en garde, the rise lifts the point up, the dash and dash-jump are a flying lunge with the blade fully extended, the fall points the rapier down and forward with the off hand up, and the wall and kick poses keep the point toward the foe.
+Guard is the fencer's line with the blade raised across her face, and the parry flicks the point up and returns it straight out for the riposte.
+
+### Chain and follow-ups
+
+The three ground strikes sample her `thrust1`, `thrust2` and `lunge` clips, and the air strike samples `airThrust` (`constants/drill/strikes.ts`).
+Arcs are flat and narrow; the lunge is the longer, harder finisher.
+The warp strike throws the rapier and lands as a straight thrust; the enhanced parry window is 0.25 s.
+
+### Spells
+
+I prepares the selected spell for 3 seconds, I again casts it, I during a thrust is Rose Edge (the spell rides the next three hits that land), and O cycles the set while nothing is prepared.
+The set is in `game/drill/spells.ts`, with its own looks in `game/drill/looks/` and statuses in `game/drill/statuses.ts`.
+
+| Spell | How it flies | Status (also on Rose Edge hits) | Look |
+| --- | --- | --- | --- |
+| Rose Line | a fast needle of rose light, 300 px a second, 160 px | the Rose mark | a long white-cored needle trailing three petals; the hit opens a five-petal rose with a cross glint |
+| Flurry | strikes the nearest foe ahead after 0.08 s | a 0.24 s stagger | seven thrust streaks converge on the foe, with petals scattering |
+| Rose Bloom | a slow spinning rose bud, 150 px a second, 120 px | binds the foe in place for 0.8 s | a thorned bud with a leaf trail; the hit raises a ring of thorns and leaves |
+
+### Charged skills
+
+J held charges through the four tiers on the shared thresholds, and release uses the highest reached with her face cut-in (`ui/cutIn.ts`).
+Each tier has its own pose (`constants/drill/tiers.ts`) and its own look (`game/drill/looks/tempest.ts`); every release also sends a Rose Line streak along her line (`game/drill/release.ts`), both ways for the fourth.
+
+| Tier | Name | Pose | Look |
+| --- | --- | --- | --- |
+| 1 | Rose Thrust | a deep low lunge, the blade level | one long needle with petals along it |
+| 2 | Rising Rose | a rising thrust, the point high | a fan of three needles rising, petals lifting |
+| 3 | Thorn Gale | a flying lunge close to the floor | a tunnel of turning petals and thorn lines across her line |
+| 4 | Rose Tempest | the salute, blade straight up | a rose of three turning petal rings round her and a column of light, striking both sides |
+
 ## Base kit by button
 
 | Key | Cerise |
