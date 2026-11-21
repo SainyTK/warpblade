@@ -4,6 +4,40 @@ Brynn's part of the skill contract (`docs/skill-design.md`).
 Her kit, numbers and look are in `docs/heroes/brynn.md`.
 AD and AP mean her attack damage and ability power (12 and 9 at hero level 1, `BRYNN.base`).
 
+## Drill set
+
+Solo Adventure runs base Brynn on the shared drill engine (`src/drill`).
+All 20 skills are offered there and each one upgrades a drill mechanic; the reward pool has no filter.
+The rows keep the numbers the native kit reads (the wave arena, co-op) under their old keys and add the drill's under `drill.`, so the sections after this one still describe her native kit, and the card text is the drill's.
+Drill code: `src/heroes/brynn/game/drill/skills/` (one file per redesigned skill), folded into `BRYNN_DRILL` by `game/drill/hooks.ts`.
+
+| Id | Name | Mechanic | Level 1 | Levels 2 to 8 | Evolution (partner) |
+| --- | --- | --- | --- | --- | --- |
+| `br_cleave` | Wide Arc | first slash | an extra 0.4 AD cut | stagger, a drag, a cut behind, burn, up to 3 AD | Horizon Cleave (`br_launch`): crescents both ways |
+| `br_launch` | Skyward Heave | second slash | the heave throws foes up | +0.4 to +2.6 AD on foes in the air, up to two more air slashes, stagger | Skyfall (`br_cleave`): thrown foes crash down for 2 AD |
+| `br_slam` | Anvil Weight | third slash | a 0.8 AD shockwave along the floor | finisher +30% to +200%, both ways, stagger, a second wave, up to 5 AD | Split Earth (`br_heavy`): pillars rise ahead of every slam |
+| `br_heavy` | Heavy Hands | air slash | an extra 0.4 AD cut | up to two more air slashes, a spike, a landing ring, up to 3.5 AD | Meteor Hands (`br_slam`): every air slash quakes the floor below |
+| `br_counter` | Counter Cleave | guard and parry | a parry cleaves foes in front for 1.2 AD | a 30% longer parry window, stagger, sure crits, a shockwave, up to 8 AD | Iron Answer (`br_ironskin`): a block cleaves at half power |
+| `br_spin` | Spinning Throw | warp strike | recharge -15%, damage +30% | an arrival shock ring, refreshed air dash and air slash, stagger, recharge -45%, damage +200% | Anvil Drop (`br_crater`): every arrival quakes the floor |
+| `br_charge` | Shoulder Charge | dash | the dash shoulders foes for 0.8 AD | stagger, knockback, an air dash, burn, up to 5.5 AD | Battering Ram (`br_cry`): a shouldering dash ends in a floor wave |
+| `br_ironskin` | Iron Skin | dash and air dash | untouchable while dashing | untouchable after a dash and a warp, up to two more air dashes, the air dash restores the air slash | Living Anvil (`br_cry`): every dash leaves a shock ring |
+| `br_cry` | War Cry | warp and infusion | an arrival infuses the blade for 1 hit | faster preparation (up to 40%), longer infusions, an arrival shortens a preparation, 2 hits | Battle Roar (`br_bellows`): every arrival readies the selected spell |
+| `br_crater` | Crater Leap | jump, wall kick, air | a hard landing rings foes for 0.8 AD | a shoving wall kick, an air dash, an air slash, a wider ring that throws foes up, up to 4 AD | Crater Pull (`br_spin`): the landing drags foes in and splits fissures |
+| `br_arc` | Ember Arc | Ember Arc | burns 1.5 s longer | wider blasts, a flare on slashing burning foes, an extra blast up to 3.5 AD, a crescent with each cast | Wildfire Arc (`br_embers`): each hit sends a crescent on |
+| `br_pillars` | Brand Pillars | Quake | two pillars rise where Quake strikes | three then five pillars, longer stagger, wider quakes, burning pillars, up to 3 AD | Aftershock (`br_fault`): Quake strikes again after 0.5 s |
+| `br_bellows` | Bloodletter | Rend | Rend lays 2 more bleed stacks | a blast, a slash opens bleeding wounds, Rend splits into two then three shards, up to 4 AD | Red Tide (`br_crush`): Rend runs a floor wave on |
+| `br_embers` | Searing Edge | dot on slashes | as in the native kit | as in the native kit | as in the native kit |
+| `br_crush` | Crushing Weight | dot on the second and third slash | the heave lays one crush stack, the slam two | as in the native kit | as in the native kit |
+| `br_fault` | Fault Lines | dot on shockwaves and fissures | as in the native kit | as in the native kit | as in the native kit |
+| `br_echo` | Echo Swing | summon on parries | as in the native kit | as in the native kit | as in the native kit |
+| `br_falling` | Falling Blade | summon on kills | as in the native kit | as in the native kit | as in the native kit |
+| `br_shard` | Red Shard | summon on blows | as in the native kit | as in the native kit | as in the native kit |
+| `br_fall` | Crimson Fall | the four charged tiers | charged skills +30% | faster charge, a pull, more reach, an echo strike, up to +250% | Crimson Cataclysm (`br_heavy`): every charged skill shakes twice more |
+
+Count by mechanic: 4 slash skills, 1 guard skill, 4 warp and dash skills, 1 jump skill, 3 spell skills, 3 damage over time, 3 summons, 1 charged-tier skill.
+Effects that exist only in the drill (the `drill.` numbers) do nothing in the native kit.
+Keen timing, Heft and armour do not exist in the drill, so native levels that read them only fire in the native kit.
+
 ## Identity
 
 Brynn is the heavy blade: three slow, wide blows with armour while she swings, Heft built by every blow that lands, Keen blows that swing wider on the beat after a blow, a costly flat-blade guard whose parry is the Counter Cleave, and abilities that shake the floor.

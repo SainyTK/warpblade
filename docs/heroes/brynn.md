@@ -30,6 +30,21 @@ The sword is Anvilheart: a broad slab of steel almost as tall as she is, with a 
 - Zafir keeps walking while he attacks and cuts both sides at once. Brynn plants her feet for every swing.
 - Calder fires rounds at the moment of impact and counts a chamber. Brynn's timing reward is her Keen blow, wider and with a crescent, and her meter fills from hits and empties into one fissure.
 
+## On the drill engine
+
+Solo Adventure runs base Brynn on the shared drill engine; the wave arena and co-op keep the native kit below.
+Her profile is `BRYNN_DRILL` in `src/heroes/brynn/game/drill/index.ts`.
+
+- Body (`constants/drill/body.ts`): a low two-handed ready stance, her shouldered run sampled from her native run clip and fitted to the drill stride, a skid brake with the blade dragged behind, a shoulder-charge dash, the blade overhead in a dash-jump and a fall, a deep landing, the flat of the blade as guard and a heavy cleave as the parry answer.
+  She runs at 100 (Kael 110), jumps lower, falls faster and lands 35% longer.
+- Chain (`constants/drill/strikes.ts`): Wide Sweep, Rising Heave and Anvil Slam sampled from her native string clips, slower than Kael's, and the Falling Slam in the air.
+  The warp throws Anvilheart end over end and lands in an overhead chop.
+- Spells (`game/drill/spells.ts`): Rend, a fast crimson shard that bleeds; Quake, a burst on the nearest foe ahead that staggers and lifts; Ember Arc, a travelling flame that burns.
+  An infused slash applies the same status.
+- Charged tiers (`constants/drill/tiers.ts`, `game/drill/release.ts`): Crimson Fall I Cleave (a crescent wave), II Fault (a fissure ahead), III Rupture (fissures both ways and pillars), IV Worldsplitter (a quake, fissures and pillars both ways).
+  Each release shows her cut-in, a tilted crimson band with cracks (`ui/cutIn.ts`).
+- Skills: `docs/skills/brynn.md`, "Drill set".
+
 ## Stats
 
 `base: { ad: 12, ap: 9, hp: 115, mp: 90, stamina: 110, crit: 0.05, move: 0.94, aspd: 1, haste: 1 }`, growth `{ hp: 1.3, mp: 0.4 }`, `comboHits: 3`.
