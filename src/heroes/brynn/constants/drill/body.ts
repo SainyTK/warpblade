@@ -1,4 +1,5 @@
 import { pose } from "../../../../constants/hero";
+import { fitRunFeet } from "../../../../drill";
 import type { DrillBody } from "../../../../types/drill";
 import type { Pose } from "../../../../types/pose";
 import { sampleKeys } from "../../../../utils/sampleKeys";
@@ -6,21 +7,18 @@ import { grip, shouldered } from "../clips/grip";
 import { BRYNN_READY } from "../clips/key";
 import { BRYNN_LOCOMOTION } from "../clips/locomotion";
 
-const DRILL_STRIDE = 38;
-const NATIVE_STRIDE = 44;
-const STRIDE_FIT = DRILL_STRIDE / NATIVE_STRIDE;
-
-function run(phase: number): Pose {
+function upperBody(phase: number): Pose {
   const { keys, dur } = BRYNN_LOCOMOTION.run;
   const p = sampleKeys(keys, phase * dur);
-  return {
-    ...p,
-    hy: p.hy + 0.8,
-    ny: p.ny + 0.9,
-    ffx: p.hx + (p.ffx - p.hx) * STRIDE_FIT,
-    bfx: p.hx + (p.bfx - p.hx) * STRIDE_FIT,
-  };
+  return { ...p, hy: p.hy + 0.8, ny: p.ny + 0.9 };
 }
+
+let fitted: ((phase: number) => Pose) | undefined;
+
+const run = (phase: number): Pose => {
+  fitted ??= fitRunFeet(upperBody);
+  return fitted(phase);
+};
 
 const STANCE = grip({ ...BRYNN_READY, hy: -12.2, ny: -22.3, ffx: 6.5, bfx: -6.5, ba: 0.3 });
 const LOW = grip({ hx: 0, hy: -7.5, cb: 1, nx: 4, ny: -16.5, fx: 10, fy: -9, sa: 1.25, ffx: 8, bfx: -8.5, ba: 0.5 });
