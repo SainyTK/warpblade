@@ -19,10 +19,8 @@ import { createRootSpike, type RootStrike } from "./rootSpike";
 export const OAK_HITS = { sweep: 18, root: 16, acorn: 12 } as const;
 /** wind-ups before wave scaling, and how long each blow holds */
 export const OAK_TIMES = { sweep: 0.6, root: 0.65, volley: 0.7, swing: 0.3, plant: 0.55, throw: 0.35 } as const;
-/** below this share of its HP Oakheart is enraged: it attacks faster */
+/** below this share of its HP Oakheart is enraged: it attacks faster and drops its guard */
 export const OAK_ENRAGE = 0.5;
-/** below this share of its HP Oakheart's bark has split: it holds up no guard */
-export const OAK_BARK = 0.75;
 const REACH = 40;
 const ROOT_STEP = 17;
 /** the bright end of the leaf ramp, so the burst reads against the crown and the sky */
@@ -30,7 +28,7 @@ const BURST_LEAVES = DC.leaf.slice(2);
 /** the Oakheart whose bark has already split, so the burst shows once */
 const split = new WeakSet<Enemy>();
 
-/** the moment its HP first falls under `OAK_BARK`: leaves burst from the crown and the ground shakes */
+/** the moment it first falls under half HP: leaves burst from the crown and the ground shakes */
 function splitBark(e: Enemy): void {
   split.add(e);
   for (let i = 0; i < 10; i++)
@@ -118,7 +116,7 @@ function lobAcorns(e: Enemy, enraged: boolean): void {
 export function updateOakheart(e: Enemy, dt: number, ts: number): void {
   const dx = hero.x - e.x;
   const enraged = e.hp < e.max * OAK_ENRAGE;
-  if (e.hp < e.max * OAK_BARK && !split.has(e)) splitBark(e);
+  if (enraged && !split.has(e)) splitBark(e);
   const w = waveScale(game.wave).windup;
   if (e.state === "walk") {
     turnToHero(e, dt);
