@@ -11,10 +11,10 @@ import { boxAhead, dust, newSwing, shake } from "../../../../game/world";
 import type { MoveDef } from "../../../../types/move";
 import { PK } from "../../../../types/particle";
 import { CRIMSON } from "../../constants/colors";
+import { SLASH } from "../../constants/slashes";
 import { AIR_SLAM, STRING_FEEL, STRING_POWER } from "../../constants/string";
 import { craterLanding } from "../craterLanding";
 import { heftForBlow } from "../heft";
-import { SLASH } from "./slashes";
 
 /** the falling slam drops at its dive speed once the tuck is over */
 const TUCK = frame(6);

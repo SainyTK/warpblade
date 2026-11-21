@@ -9,9 +9,9 @@ import type { GuardStyle } from "../../../types/moveset";
 import { BRYNN_BLOCK, COUNTER_CLEAVE } from "../constants/guard";
 import { HEFT } from "../constants/heft";
 import "../types/events";
+import { SLASH } from "../constants/slashes";
 import { createCrescentWave } from "./effects/heavyWave";
 import { addHeft } from "./heft";
-import { SLASH } from "./moves/slashes";
 import { brynn } from "./state";
 
 /** how far Counter Cleave's crescent flies */

@@ -1,6 +1,7 @@
 import type { HeroModule } from "../../types/heroModule";
 import { hex } from "../../utils/color";
 import { BRYNN_ACCENT } from "./constants/colors";
+import { BRYNN_DRILL } from "./game/drill";
 import { BRYNN_KIT } from "./game/kit";
 import { BRYNN_METER } from "./game/meter";
 import { BRYNN_MOVES } from "./game/moves";
@@ -19,4 +20,5 @@ export const BRYNN_MODULE: HeroModule = {
   icons: BRYNN_ICONS,
   touch: { art: brynnArt, tint: () => hex(BRYNN_ACCENT) },
   meter: BRYNN_METER,
+  drill: BRYNN_DRILL,
 };

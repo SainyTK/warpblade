@@ -8,8 +8,8 @@ import { game, hero } from "../../../game/state";
 import { boxAhead, newSwing } from "../../../game/world";
 import type { WarpStyle } from "../../../types/moveset";
 import { CRIMSON } from "../constants/colors";
+import { SLASH } from "../constants/slashes";
 import { ARRIVAL_RING, THROWN_SPIN } from "../constants/warp";
-import { SLASH } from "./moves/slashes";
 
 /** half of Anvilheart's length from the point, the middle it spins round */
 const MIDDLE = 15;

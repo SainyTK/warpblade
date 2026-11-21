@@ -1,4 +1,4 @@
-import type { SlashShape } from "../../../../types/effect";
+import type { SlashShape } from "../../../types/effect";
 
 /** the slash shapes of Brynn's blows, in local pixels facing right: wide and heavy, as long as her blade */
 export const SLASH = {
