@@ -4,6 +4,39 @@ Yun's part of the sword roster (`docs/skill-design.md`), with his design note in
 Numbers are the values in `src/heroes/yun/constants/`.
 AD and AP mean Yun's attack damage and ability power (10 and 11 at hero level 1, `YUN.base`).
 
+## Drill set
+
+Solo Adventure runs base Yun on the shared drill engine; all 20 skills are offered there, each upgrading one drill mechanic, to the contract in `docs/skill-design.md` ("Drill baseline").
+The rows keep the numbers the native kit reads, so the sections after this one still describe the native kit, and the card text is the drill's.
+Drill code: `src/heroes/yun/game/drill/skills/`, folded into `YUN_DRILL` by `game/drill/hooks.ts`; the drill numbers sit under a `drill.` prefix (`constants/skills/drill.ts`).
+
+| Id | Name | Mechanic | Level 1 | Levels 2 to 8 | Evolution (partner) |
+| --- | --- | --- | --- | --- | --- |
+| `yu_flow` | Flowing Water | first cut | a landed Willow Cut sends a qi wave | stagger, a wave behind, +15% reach on every cut, a second wave, up to 6 AD | Still Water (`yu_echo`): waves run 160 px and hold feet |
+| `yu_echo` | Twin Echo | second cut | Crane Wheel sends 2 spirit swords thrusting | Willow Cut echoed, a cut on the way back, four swords, every cut echoed, up to 2.6 AD | Myriad Echo (`yu_breath`): echoes always crit and reach 110 px |
+| `yu_tide` | High Tide | third cut | Returning Tide runs a floor crescent | knockdown, finisher +30% to +120%, a launch, a second crescent, up to 7 AD | Spring Tide (`yu_bleed`): crescents both ways |
+| `yu_petal` | Petal Storm | air cut | one more air cut | cutting petals below, air dash back, two more air cuts, stagger, up to 4.5 AD | Blossom Fall (`yu_cloud`): landing sends crescents both ways |
+| `yu_crane` | Crane's Reach | guard and parry | parry window +40% | a parry wave, a block wave, window +80%, held feet, up to 8 AD | White Crane (`yu_tide`): three parry waves |
+| `yu_ride` | Sword Riding | warp strike | recharge -15%, damage +30% | spirit swords follow the arrival, air dash and cut back, four swords, recharge -40%, damage +200% | Riding the Wind (`yu_echo`): every 4 s an arrival recharges the warp |
+| `yu_drift` | Drifting Leaf | dash | dashing through foes cuts them | stagger, a dash through a foe recharges it, one more air dash, a damage mark, up to 6 AD | Leaf on the Wind (`yu_cloud`): two cuts |
+| `yu_harmony` | Harmony | warp and infusion | an arrival fills the jian for 1 hit | faster preparation (up to 50%), longer infusions, an arrival shortens a preparation | Perfect Harmony (`yu_breath`): every arrival readies the art |
+| `yu_breath` | Sage's Breath | dash and air dash | one more air dash | the air dash restores air cuts, a qi ring at each dash end, two more air dashes, stagger, up to 5 AD | Sword Sea (`yu_guardian`): air dashes send three swords |
+| `yu_cloud` | Cloud Step | jump, wall kick, air | one more air cut | a cutting wall kick, a landing ring, one more air dash, two more air cuts, up to 7 AD | Cloud Walker (`yu_drift`): a 70 px landing ring that holds feet |
+| `yu_fan` | Sword Fan | Sword Stream | Stream +0.5 AP | piercing, knockback, three more swords, preparation -25%, up to +4.5 AP | Peacock Fan (`yu_guardian`): eight more swords |
+| `yu_cage` | Sword Cage | Sword Lotus | longer hold, +0.4 AP | a pull, a damage mark, a second cut, a pin, up to +4 AP | Jade Prison (`yu_needle`): three more cuts |
+| `yu_crescent` | Qi Crescent | Qi Crescent | Crescent +0.5 AP | a wave on past the foe, stagger, waves from crescent-filled cuts, a launch, up to +4.5 AP | Moon Crescent (`yu_tide`): crescents split in two |
+| `yu_wound` | Lingering Qi | dot on cuts | cuts and infused hits lay qi wounds | as in the native kit; level 5 lets sword arts lay wounds | Qi Burst (`yu_fan`) |
+| `yu_bleed` | Thousand Cuts | dot on sword arts | as in the native kit (ability cuts are the arts) | as in the native kit | Thousand Petals (`yu_crescent`), native kit only |
+| `yu_needle` | Jade Needle | dot on parries | as in the native kit | as in the native kit | Acupuncture (`yu_flow`) |
+| `yu_guardian` | Guardian Blade | summon on landed blows | as in the native kit | as in the native kit | Heavenly Guard (`yu_breath`) |
+| `yu_heron` | Jade Heron | summon on casts | as in the native kit | as in the native kit; level 8 answers Jade Rain | Heron Flight (`yu_fan`) |
+| `yu_shade` | Sage's Shade | summon on parries | as in the native kit | as in the native kit | Many Shades (`yu_needle`) |
+| `yu_rain` | Heaven's Grove | the four Jade Rain tiers | Jade Rain +30% | swords on every foe, faster charge, +25% reach, a lingering rain, up to +250% | Endless Rain (`yu_heron`): the rain keeps falling 4 s |
+
+Count by mechanic: 4 cut skills, 1 guard skill, 4 warp and dash skills, 1 jump skill, 3 sword-art skills, 3 damage over time, 3 summons, 1 charged-tier skill.
+Harmony and Sage's Breath were passives on the spirit swords and are movement skills now; Crane's Reach moved from the string to the guard.
+The drill has no perfect dodge and no Keen blow, so Jade Needle's Keen and perfect dodge levels and Sage's Shade's perfect dodge level fire only in the native kit, as does Thousand Petals.
+
 ## Identity
 
 Yun is the sword sage: a flowing string of circular cuts, spirit swords that hover behind him and repeat each blow as a thrust at range, and abilities that send the swords out.
