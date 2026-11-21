@@ -1,5 +1,6 @@
 import type { SkillDef } from "../../../../types/skill";
 import { evolvedRow, levelRows } from "../../../../utils/skillRows";
+import { drillRows, drillValues } from "./drillRows";
 import { SKILL } from "./ids";
 
 /** values: `store` attack damage stored in each foe the dodge passes through, `sheathe` the dodge's end is a sheathe,
@@ -16,18 +17,32 @@ const LEVELS = levelRows([
   { text: "Stored cut +150% to +300%.", values: { store: 4 } },
 ]);
 
+const DRILL = drillRows(LEVELS, [
+  { text: "Untouchable while dashing.", drill: { inv: 0.16 } },
+  { text: "New: one more air dash.", drill: { airDashes: 1 } },
+  { text: "New: the air dash restores the air slash.", drill: { refresh: 1 } },
+  { text: "New: an afterimage cuts where the dash began for 1x AD.", drill: { after: 1 } },
+  { text: "Afterimage 1x to 2x AD.", drill: { after: 2 } },
+  { text: "New: a third air dash.", drill: { airDashes: 2 } },
+  { text: "New: the afterimage stores its cut too.", drill: { afterStore: 1 } },
+  { text: "Afterimage 2x to 5x AD.", drill: { after: 5 } },
+]);
+
 export const SHADOW_STEP: SkillDef = {
   id: SKILL.step,
   name: "Shadow Step",
   kind: "movement",
   risk: "timed",
   button: "L",
-  text: "L: dodge through foes to store a cut in each, then sheathe as you stop.",
-  levels: LEVELS,
+  text: "She cannot be hit while dashing, and gains air dashes and an afterimage cut.",
+  levels: DRILL,
   evolution: {
     partner: SKILL.pass,
     name: "Ghost Passage",
-    text: "Every foe the dodge passes through is cut twice, and the dodge's sheathe is clean.",
-    row: evolvedRow(LEVELS[7], "Foes dodged through are cut twice; the sheathe is clean.", { twice: 1 }),
+    text: "Afterimages cut twice, twice as wide.",
+    row: evolvedRow(DRILL[7], "Afterimages cut twice, twice as wide.", {
+      ...drillValues({ shadow: 48 }),
+      twice: 1,
+    }),
   },
 };

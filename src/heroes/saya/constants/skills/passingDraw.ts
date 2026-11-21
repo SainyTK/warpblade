@@ -1,5 +1,6 @@
 import type { SkillDef } from "../../../../types/skill";
 import { evolvedRow, levelRows } from "../../../../utils/skillRows";
+import { drillRows, drillValues } from "./drillRows";
 import { SKILL } from "./ids";
 
 /** values (the warp's tune): `path` attack damage to foes the thrown katana passes, `pathStore` attack damage it stores
@@ -16,18 +17,34 @@ const LEVELS = levelRows([
   { text: "New: the arrival stores twice as much.", values: { arrival: 2 } },
 ]);
 
+const DRILL = drillRows(LEVELS, [
+  { text: "Warp recharge -15%, damage +30%.", drill: { cooldown: 0.85, damage: 0.3 } },
+  { text: "New: the arrival stores twice as much.", drill: { store: 2 } },
+  { text: "New: the arrival restores the air dash and air slash.", drill: { refresh: 1 } },
+  { text: "Recharge -25%, damage +80%.", drill: { cooldown: 0.75, damage: 0.8 } },
+  { text: "New: the arrival cuts every foe within 30 px for 1.2x AD.", drill: { sweep: 1.2 } },
+  { text: "Recharge -35%, damage +150%.", drill: { cooldown: 0.65, damage: 1.5 } },
+  { text: "New: a beat after the arrival, every stored cut releases.", drill: { release: 1 } },
+  { text: "Recharge -40%, damage +250%; the sweep doubles.", drill: { cooldown: 0.6, damage: 2.5, sweep: 2.4 } },
+]);
+
 export const PASSING_DRAW: SkillDef = {
   id: SKILL.pass,
   name: "Passing Draw",
   kind: "movement",
   risk: "timed",
-  button: "J",
-  text: "J held: the thrown katana cuts what it passes, and the warp comes back sooner.",
-  levels: LEVELS,
+  button: "L",
+  text: "The warp strike recharges faster, hits harder and stores more.",
+  levels: DRILL,
   evolution: {
     partner: SKILL.step,
     name: "Thousand Paces",
-    text: "Warps cost no MP and recharge in 1 second, and every arrival's click is a clean sheathe.",
-    row: evolvedRow(LEVELS[7], "Free warps every 1 s; each click is clean.", { cost: 0, recharge: 1, clean: 1 }),
+    text: "Once every 3 seconds an arrival recharges the warp at once.",
+    row: evolvedRow(DRILL[7], "Every 3 s an arrival recharges the warp.", {
+      ...drillValues({ reset: 3 }),
+      cost: 0,
+      recharge: 1,
+      clean: 1,
+    }),
   },
 };

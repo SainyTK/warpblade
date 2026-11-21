@@ -1,0 +1,152 @@
+import { pose } from "../../../../constants/hero";
+import type { DrillTier } from "../../../../types/drill";
+import { BLADE_STATE } from "../blade";
+import { SAYA_POSES } from "../clips/poses";
+
+const { drawn, sheathed } = BLADE_STATE;
+
+const COIL_DEEP = pose({
+  ...SAYA_POSES.coil,
+  hx: -2.6,
+  hy: -9.6,
+  cb: 2.2,
+  nx: 3.6,
+  ny: -18.6,
+  ffx: 9,
+  bfx: -8,
+  ba: 0.6,
+});
+const LONG_DRAW = pose({
+  hx: 8,
+  hy: -9,
+  cb: 1.2,
+  nx: 12,
+  ny: -18,
+  fx: 24,
+  fy: -17,
+  sa: 0,
+  bx: -6,
+  by: -14,
+  ffx: 18,
+  bfx: -10,
+  bfy: -0.5,
+  ba: 0.9,
+  bs: drawn,
+});
+const MOON_ARC = pose({
+  hx: 1,
+  hy: -14,
+  cb: -1.2,
+  nx: 2,
+  ny: -24.6,
+  fx: 12,
+  fy: -31,
+  sa: -1.2,
+  bx: -5,
+  by: -16,
+  ffx: 9,
+  ffy: -2,
+  bfx: -6,
+  fa: 0.4,
+  bs: drawn,
+});
+const PASSING = pose({
+  hx: 10,
+  hy: -8,
+  cb: 2.4,
+  nx: 15,
+  ny: -15.6,
+  fx: 4,
+  fy: -12,
+  sa: 3.1,
+  bx: 6,
+  by: -11,
+  ffx: 20,
+  bfx: -8,
+  bfy: -1,
+  ba: 1.1,
+  bs: drawn,
+});
+const STILL_CLICK = pose({ ...SAYA_POSES.click, hy: -14.2, ny: -24.4, cb: -0.6, fx: 6, fy: -15.6, bs: sheathed });
+const SKY_HOLD = pose({
+  hx: 0,
+  hy: -14,
+  cb: -0.4,
+  nx: 0.6,
+  ny: -24.4,
+  fx: 3,
+  fy: -33,
+  sa: -1.57,
+  bx: 4,
+  by: -15,
+  ffx: 5,
+  bfx: -5,
+  bs: drawn,
+});
+
+export const SAYA_TIER_POSES = { COIL_DEEP, LONG_DRAW, MOON_ARC, PASSING, STILL_CLICK, SKY_HOLD };
+
+type TierData = Omit<DrillTier, "drawStrike">;
+
+export const SAYA_TIER_DATA: readonly [TierData, TierData, TierData, TierData] = [
+  {
+    look: "crescent",
+    around: false,
+    level: 1,
+    name: "Quickdraw",
+    threshold: 0.46,
+    damage: 36,
+    reach: 70,
+    height: 20,
+    intro: 0.34,
+    duration: 0.82,
+    color: 0xdfe5ff,
+    windup: COIL_DEEP,
+    cut: LONG_DRAW,
+  },
+  {
+    look: "crescent",
+    around: false,
+    level: 2,
+    name: "Crescent Edge",
+    threshold: 0.86,
+    damage: 70,
+    reach: 100,
+    height: 34,
+    intro: 0.42,
+    duration: 1.04,
+    color: 0xb4c0ff,
+    windup: COIL_DEEP,
+    cut: MOON_ARC,
+  },
+  {
+    look: "rift",
+    around: false,
+    level: 3,
+    name: "Thousand Lines",
+    threshold: 1.27,
+    damage: 116,
+    reach: 150,
+    height: 40,
+    intro: 0.5,
+    duration: 1.24,
+    color: 0x8fa2ff,
+    windup: COIL_DEEP,
+    cut: PASSING,
+  },
+  {
+    look: "rift",
+    around: true,
+    level: 4,
+    name: "Silent Moon",
+    threshold: 1.72,
+    damage: 184,
+    reach: 190,
+    height: 110,
+    intro: 0.64,
+    duration: 1.56,
+    color: 0xffffff,
+    windup: SKY_HOLD,
+    cut: STILL_CLICK,
+  },
+];

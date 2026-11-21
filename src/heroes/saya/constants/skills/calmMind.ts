@@ -1,5 +1,6 @@
 import type { SkillDef } from "../../../../types/skill";
 import { evolvedRow, levelRows } from "../../../../utils/skillRows";
+import { drillRows, drillValues } from "./drillRows";
 import { SKILL } from "./ids";
 
 /** values: while Focus is full (or `need` breaths from short of full) her hits deal `bonus` more; `chip` the factor on
@@ -15,18 +16,34 @@ const LEVELS = levelRows([
   { text: "New: bonus +30% to +50%, and calm holds 1 s after it breaks.", values: { bonus: 0.5, hold: 1 } },
 ]);
 
+const DRILL = drillRows(LEVELS, [
+  { text: "The parry window is 40% longer.", drill: { window: 1.4 } },
+  { text: "New: a parry releases every stored cut.", drill: { release: 1 } },
+  { text: "New: a parry draws the blade at the attacker for 2x AD, a sure critical hit.", drill: { counter: 2 } },
+  { text: "Parry window 40% to 70% longer.", drill: { window: 1.7 } },
+  { text: "New: a block stores a 1x AD cut in the attacker.", drill: { blockStore: 1 } },
+  { text: "Counter draw 2x to 4x AD.", drill: { counter: 4 } },
+  { text: "New: a parry restores 10 MP.", drill: { mp: 10 } },
+  { text: "Counter draw 4x to 8x AD; the window doubles.", drill: { counter: 8, window: 2 } },
+]);
+
 export const CALM_MIND: SkillDef = {
   id: SKILL.calm,
   name: "Calm Mind",
-  kind: "passive",
+  kind: "attack",
   risk: "timed",
-  button: "auto",
-  text: "While her Focus is full she is calm: her hits deal more and her guard holds better.",
-  levels: LEVELS,
+  button: "K",
+  text: "A wider parry, and a parry draws the blade at the attacker.",
+  levels: DRILL,
   evolution: {
     partner: SKILL.breath,
     name: "Empty Mind",
-    text: "Calm holds for 3 seconds after Focus drops, and the bonus doubles.",
-    row: evolvedRow(LEVELS[7], "Calm holds 3 s after it breaks; bonus doubled.", { hold: 3, bonus: 1, release: 1.2 }),
+    text: "For 3 seconds after a parry every slash is a sure critical hit.",
+    row: evolvedRow(DRILL[7], "3 s of sure critical slashes after a parry.", {
+      ...drillValues({ focus: 3 }),
+      hold: 3,
+      bonus: 1,
+      release: 1.2,
+    }),
   },
 };

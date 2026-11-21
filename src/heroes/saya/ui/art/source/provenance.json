@@ -1,0 +1,11 @@
+{
+  "generator": "Codex CLI built-in image generation",
+  "styleReference": [
+    "src/generatedHeroArt/assets/saya/portrait.png",
+    "src/generatedHeroArt/assets/saya/atlas.png",
+    "public/kael-drill/kael-portrait.webp"
+  ],
+  "source": "cut-in-source.png",
+  "prompt": "Head-and-shoulders JRPG bust of Saya, three-quarter view facing right, hard-edged cel shading, gripping the katana hilt at her shoulder as she draws, plain white background.",
+  "cutIn": "../cut-in.webp: white background flood-filled to transparent, resized to 672 px, WebP."
+}

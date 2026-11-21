@@ -1,5 +1,6 @@
 import type { SkillDef } from "../../../../types/skill";
 import { evolvedRow, levelRows } from "../../../../utils/skillRows";
+import { drillRows, drillValues } from "./drillRows";
 import { SKILL } from "./ids";
 
 /** values: `store` the factor on what the falling draw stores, `ring` attack damage of the ring its landing sends
@@ -16,19 +17,31 @@ const LEVELS = levelRows([
   { text: "New: the landing throws the foes near her up.", values: { lift: 220 } },
 ]);
 
+const DRILL = drillRows(LEVELS, [
+  { text: "One more air slash per jump.", drill: { air: 1 } },
+  { text: "New: the air slash drives foes down.", drill: { drive: 1 } },
+  { text: "Air slash +50%.", drill: { power: 0.5 } },
+  { text: "New: landing after an air slash releases every stored cut.", drill: { land: 1 } },
+  { text: "Air slash +50% to +100%.", drill: { power: 1 } },
+  { text: "New: a third air slash per jump.", drill: { air: 2 } },
+  { text: "New: the landing sends an ink ring for 1.2x AD.", drill: { ring: 1.2 } },
+  { text: "Air slash +100% to +250%; the ring doubles.", drill: { power: 2.5, ring: 2.4 } },
+]);
+
 export const FALLING_MOON: SkillDef = {
   id: SKILL.falling,
   name: "Falling Moon",
   kind: "attack",
   risk: "timed",
   button: "jump",
-  text: "The falling draw stores more, and its landing cuts along the floor.",
-  levels: LEVELS,
+  text: "More air slashes, and landing after one releases her stored cuts.",
+  levels: DRILL,
   evolution: {
     partner: SKILL.pass,
     name: "Moonfall",
-    text: "The landing's ring and release reach every foe within 60 px, and the ring hits three times as hard.",
-    row: evolvedRow(LEVELS[7], "The landing ring reaches 60 px and hits three times as hard.", {
+    text: "The landing after an air slash crashes down for 4x AD around her and knocks foes down.",
+    row: evolvedRow(DRILL[7], "The landing crashes for 4x AD and knocks foes down.", {
+      ...drillValues({ crash: 4 }),
       ring: 6,
       ringReach: 60,
     }),

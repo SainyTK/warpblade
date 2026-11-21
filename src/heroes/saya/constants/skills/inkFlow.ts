@@ -1,5 +1,6 @@
 import type { SkillDef } from "../../../../types/skill";
 import { evolvedRow, levelRows } from "../../../../utils/skillRows";
+import { drillRows, drillValues } from "./drillRows";
 import { SKILL } from "./ids";
 
 /** values: `perLine` added to a release for each cut stored in the foe past the first, `slow` foes holding cuts walk
@@ -16,18 +17,33 @@ const LEVELS = levelRows([
   { text: "Per cut +45% to +80%.", values: { perLine: 0.8 } },
 ]);
 
+const DRILL = drillRows(LEVELS, [
+  { text: "A warp arrival infuses the blade for 1 hit.", drill: { charge: 1 } },
+  { text: "Preparation 15% faster.", drill: { preparation: 0.85 } },
+  { text: "New: infusions last 1 more hit.", drill: { infusion: 1 } },
+  { text: "New: an arrival shortens a preparation by 1 s.", drill: { hasten: 1 } },
+  { text: "Preparation 15% to 30% faster.", drill: { preparation: 0.7 } },
+  { text: "New: an arrival infuses for 2 hits.", drill: { charge: 2 } },
+  { text: "New: infusions last 2 more hits.", drill: { infusion: 2 } },
+  { text: "Preparation 30% to 45% faster.", drill: { preparation: 0.55 } },
+]);
+
 export const INK_FLOW: SkillDef = {
   id: SKILL.flow,
   name: "Ink Flow",
-  kind: "attack",
+  kind: "movement",
   risk: "timed",
-  button: "auto",
-  text: "Each cut stored in a foe makes its release hit harder. Store many, then sheathe.",
-  levels: LEVELS,
+  button: "L",
+  text: "A warp arrival pours ink into the blade, and spells prepare faster.",
+  levels: DRILL,
   evolution: {
     partner: SKILL.reverse,
     name: "Spreading Ink",
-    text: "A release splashes in full onto every foe within 40 px.",
-    row: evolvedRow(LEVELS[7], "Releases splash in full within 40 px.", { splash: 1, reach: 40 }),
+    text: "Every warp arrival readies the selected spell at once.",
+    row: evolvedRow(DRILL[7], "Every arrival readies the selected spell.", {
+      ...drillValues({ ready: 1 }),
+      splash: 1,
+      reach: 40,
+    }),
   },
 };
