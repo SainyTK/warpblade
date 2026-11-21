@@ -1,18 +1,27 @@
 import type { SkillDef } from "../../../../types/skill";
-import { evolvedRow, levelRows } from "../../../../utils/skillRows";
+import { evolvedRow } from "../../../../utils/skillRows";
+import { drillLevels, drillValues, type NativeStep } from "./drillLevels";
 
-/** values: `riposte` the parry's second cut in attack damage, `open` seconds the foes stay opened, `openBonus` opened foes
- *  take this much more, `parryTop` a parry fills Tempo, `around` the cut sweeps both sides, `blockCut` a block cuts back in
- *  attack damage, `spin` and `spinPower` (evolved) the spin's cuts and their attack damage */
-const LEVELS = levelRows([
-  { text: "A parry adds a cut for 2 times attack damage.", values: { riposte: 2 } },
-  { text: "The foes stay opened 1.4 to 2 s.", values: { open: 2 } },
-  { text: "New: opened foes take 30% more from your blows.", values: { openBonus: 0.3 } },
-  { text: "The parry's cut 2 to 4.", values: { riposte: 4 } },
-  { text: "New: a parry fills Tempo to the top.", values: { parryTop: 1 } },
-  { text: "New: the parry's cut sweeps both sides.", values: { around: 1 } },
-  { text: "Opened foes take 30% to 60% more.", values: { openBonus: 0.6 } },
-  { text: "New: a block cuts back too.", values: { blockCut: 1 } },
+const NATIVE: readonly NativeStep[] = [
+  { values: { riposte: 2 } },
+  { values: { open: 2 } },
+  { values: { openBonus: 0.3 } },
+  { values: { riposte: 4 } },
+  { values: { parryTop: 1 } },
+  { values: { around: 1 } },
+  { values: { openBonus: 0.6 } },
+  { values: { blockCut: 1 } },
+];
+
+const LEVELS = drillLevels(NATIVE, [
+  { text: "The parry window is 40% longer.", drill: { window: 1.4 } },
+  { text: "New: a parry cuts the nearest foe for 1 AD, a sure crit.", drill: { cut: 1 } },
+  { text: "New: the parry cut staggers.", drill: { stagger: 0.6 } },
+  { text: "Parry cut 2 AD.", drill: { cut: 2 } },
+  { text: "New: a parry recharges the warp and the air dash.", drill: { warp: 1 } },
+  { text: "Window 70% longer; parry cut 3.2 AD.", drill: { window: 1.7, cut: 3.2 } },
+  { text: "New: the parry cut hits every foe within 50 px.", drill: { wide: 1 } },
+  { text: "Parry cut 6.5 AD.", drill: { cut: 6.5 } },
 ]);
 
 export const TURNING_BLADE: SkillDef = {
@@ -21,12 +30,16 @@ export const TURNING_BLADE: SkillDef = {
   kind: "attack",
   risk: "precise",
   button: "K",
-  text: "Your parry cuts harder and leaves the foes open longer.",
+  text: "A longer parry window, and a parry turns into a short-blade cut.",
   levels: LEVELS,
   evolution: {
     partner: "ve_keen",
     name: "Whirling Mirror",
-    text: "A parry sends both blades spinning round you: 6 cuts on every foe close by.",
-    row: evolvedRow(LEVELS[7], "A parry spins both blades round you.", { spin: 6, spinPower: 0.9 }),
+    text: "A parry also spins both blades in a ring of night cuts, 3 AD to every foe within 60 px.",
+    row: evolvedRow(LEVELS[7], "A parry spins a ring of cuts.", {
+      spin: 6,
+      spinPower: 0.9,
+      ...drillValues({ spin: 60, spinPower: 3 }),
+    }),
   },
 };

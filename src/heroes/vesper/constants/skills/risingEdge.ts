@@ -1,18 +1,27 @@
 import type { SkillDef } from "../../../../types/skill";
-import { evolvedRow, levelRows } from "../../../../utils/skillRows";
+import { evolvedRow } from "../../../../utils/skillRows";
+import { drillLevels, drillValues, type NativeStep } from "./drillLevels";
 
-/** values: `perStack` string damage per Tempo stack, `reach` pixels the long blade reaches farther at the top of Tempo,
- *  `wave` the moonrise's wave in attack damage, `echo` echo cuts' share more, `heavyTop` blows at the top break guards,
- *  `allEcho` (evolved) every blow at the top echoes */
-const LEVELS = levelRows([
-  { text: "Each Tempo stack adds 2% to your string blows.", values: { perStack: 0.02 } },
-  { text: "3% a stack.", values: { perStack: 0.03 } },
-  { text: "New: at the top of Tempo the long blade reaches 8 px farther.", values: { reach: 8 } },
-  { text: "4% a stack.", values: { perStack: 0.04 } },
-  { text: "New: the moonrise sends a dusk wave ahead.", values: { wave: 1.2 } },
-  { text: "New: echo cuts hit 50% harder.", values: { echo: 0.5 } },
-  { text: "5% a stack; the wave 1.2 to 1.8.", values: { perStack: 0.05, wave: 1.8 } },
-  { text: "New: blows at the top of Tempo break guards; 6% a stack.", values: { heavyTop: 1, perStack: 0.06 } },
+const NATIVE: readonly NativeStep[] = [
+  { values: { perStack: 0.02 } },
+  { values: { perStack: 0.03 } },
+  { values: { reach: 8 } },
+  { values: { perStack: 0.04 } },
+  { values: { wave: 1.2 } },
+  { values: { echo: 0.5 } },
+  { values: { perStack: 0.05, wave: 1.8 } },
+  { values: { heavyTop: 1, perStack: 0.06 } },
+];
+
+const LEVELS = drillLevels(NATIVE, [
+  { text: "The first cut deals 0.3 AD more.", drill: { bonus: 0.3 } },
+  { text: "New: the first cut leaves a night echo of 0.3 AD.", drill: { echo: 0.3 } },
+  { text: "New: the first cut staggers.", drill: { stagger: 0.3 } },
+  { text: "First cut +0.6 AD; echo 0.5 AD.", drill: { bonus: 0.6, echo: 0.5 } },
+  { text: "New: every cut reaches 12% farther.", drill: { reach: 0.12 } },
+  { text: "First cut +1.1 AD; echo 0.8 AD.", drill: { bonus: 1.1, echo: 0.8 } },
+  { text: "New: the echo strikes twice.", drill: { twice: 1 } },
+  { text: "First cut +2.2 AD; echo 1.4 AD.", drill: { bonus: 2.2, echo: 1.4 } },
 ]);
 
 export const RISING_EDGE: SkillDef = {
@@ -21,12 +30,16 @@ export const RISING_EDGE: SkillDef = {
   kind: "attack",
   risk: "timed",
   button: "J",
-  text: "Your string blows hit harder for every Tempo stack you hold.",
+  text: "The dusk cross, your first cut, bites deeper and leaves night echoes.",
   levels: LEVELS,
   evolution: {
     partner: "ve_rhythm",
     name: "Crescendo",
-    text: "At the top of Tempo the long blade's blows echo too, and each stack adds 7%.",
-    row: evolvedRow(LEVELS[7], "Long blows echo at the top; 7% a stack.", { allEcho: 1, perStack: 0.07 }),
+    text: "Every dusk cross also throws a pair of crossing dusk waves ahead for 1.5 AD each.",
+    row: evolvedRow(LEVELS[7], "The first cut throws crossing waves.", {
+      allEcho: 1,
+      perStack: 0.07,
+      ...drillValues({ wave: 1.5 }),
+    }),
   },
 };

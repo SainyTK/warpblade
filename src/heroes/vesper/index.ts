@@ -1,5 +1,6 @@
 import type { HeroModule } from "../../types/heroModule";
 import { ABILITY_COLOR } from "./constants/abilities";
+import { VESPER_DRILL } from "./game/drill";
 import { VESPER_KIT } from "./game/kit";
 import { TEMPO_METER } from "./game/meter";
 import { VESPER_MOVES } from "./game/moves";
@@ -24,4 +25,5 @@ export const VESPER_MODULE: HeroModule = {
     tint: (ability) => ABILITY_COLOR[(ability || "crescent") as VesperAbility],
   },
   meter: TEMPO_METER,
+  drill: VESPER_DRILL,
 };
