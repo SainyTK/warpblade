@@ -5,7 +5,8 @@ import { skillValues } from "../../../../game/skills/query";
 import { game, hero, progress } from "../../../../game/state";
 import { boxAhead, newSwing } from "../../../../game/world";
 import { sfx } from "../../../../services/audio";
-import { FLURRY } from "../../constants/abilities";
+import { ABILITY_COLOR, FLURRY } from "../../constants/abilities";
+import { showCutIn } from "../adventure";
 import { THRUST } from "../moves/slashes";
 import { cerise } from "../state";
 import { pointStrike } from "../strike";
@@ -44,6 +45,7 @@ function flurryThrust(i: number, last: boolean): void {
 export function runFlurry(): void {
   const h = hero;
   while (cerise.flurryDone < cerise.flurryCount && h.st >= FLURRY.start + cerise.flurryDone * FLURRY.gap) {
+    if (cerise.flurryDone === 0) showCutIn(ABILITY_COLOR.flurry, 0.42);
     flurryThrust(cerise.flurryDone, cerise.flurryDone === cerise.flurryCount - 1);
     cerise.flurryDone++;
   }

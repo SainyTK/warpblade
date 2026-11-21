@@ -37,7 +37,7 @@ const LIGHT_FEEL: HitFeel = { stop: 0.07, shake: [0.12, 1.5], pitch: 1 };
 const BIG_FEEL: HitFeel = { stop: 0.13, shake: [0.2, 2.5], pitch: 1 };
 
 /** a sword blow landed during Riposte: one blow fewer left of it */
-function spendRiposte(): void {
+export function spendRiposte(): void {
   hero.riposteBlows--;
   if (hero.riposteBlows <= 0) hero.riposte = 0;
 }

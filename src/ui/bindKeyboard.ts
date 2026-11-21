@@ -1,9 +1,12 @@
 import { KEYMAP, MENU_KEYMAP } from "../constants/input";
 import { press, release, releaseAll } from "../game/input";
 import { game, showBanner } from "../game/state";
+import { usesCeriseDrill } from "../heroes";
+import { DRILL_KEYMAP, usesKaelDrill } from "../kaelDrill";
 import { sfx } from "../services/audio";
 import { toggleFullscreen } from "../services/fullscreen";
 import { settings, toggleSound } from "../store/settings";
+import type { InputAction } from "../types/input";
 import { menuCommand } from "./menu/bindMenu";
 import { pauseGame } from "./menu/menuActions";
 import { isMenuOpen } from "./menu/menuState";
@@ -13,11 +16,12 @@ const TYPING_EXITS = ["Enter", "Escape", "ArrowUp", "ArrowDown"];
 
 /** M and F work everywhere; the menu gets its own keys while open; the level-up pick handles its keys itself */
 export function bindKeyboard(): void {
+  const down = new Map<string, InputAction>();
   addEventListener("keydown", (ev) => {
     sfx.start();
     // typing in a box, such as a room code, types; only Enter, Escape and the arrows still move through the menu
     if (ev.target instanceof HTMLInputElement && !TYPING_EXITS.includes(ev.code)) return;
-    const action = KEYMAP[ev.code];
+    const action = (usesKaelDrill() || usesCeriseDrill() ? DRILL_KEYMAP : KEYMAP)[ev.code];
     if (action === "mute" || action === "fullscreen") {
       ev.preventDefault();
       if (ev.repeat) return;
@@ -45,15 +49,20 @@ export function bindKeyboard(): void {
     if (game.mode === "pick" || game.mode === "chest") return;
     ev.preventDefault();
     if (ev.repeat) return;
+    down.set(ev.code, action);
     press(action);
   });
   // a button activated by keyboard would click again on Space's key up
   addEventListener("keyup", (ev) => {
     if (isMenuOpen() && ev.code === "Space") ev.preventDefault();
-    const action = KEYMAP[ev.code];
-    if (action) release(action);
+    const action = down.get(ev.code);
+    down.delete(ev.code);
+    if (action && ![...down.values()].includes(action)) {
+      release(action);
+    }
   });
   addEventListener("blur", () => {
+    down.clear();
     releaseAll();
     pauseGame();
   });

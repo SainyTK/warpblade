@@ -1,5 +1,6 @@
 import { HEAD_START_LEVEL } from "../constants/shopSkills";
 import { STAGE_WAVES } from "../constants/waves";
+import { drillRewardPool } from "../kaelDrill";
 import { track } from "../services/analytics";
 import { isPlaytestSession, readPlaytestJob, readPlaytestStart } from "../services/playtestStart";
 import { startRunAchievements } from "../store/achievements";
@@ -40,7 +41,7 @@ export function startRun(banner: string): void {
   if (!playtest) return;
   if (playtest.level > progress.level) gainXp(xpToReach(playtest.level) - xpToReach(progress.level));
   if (playtest.build) {
-    Object.assign(progress.build, parseStartBuild(playtest.build, character));
+    Object.assign(progress.build, parseStartBuild(playtest.build, drillRewardPool(character)));
     refreshGrowing();
   }
   if (!isAdventure()) openPicks();

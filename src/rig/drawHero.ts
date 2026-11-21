@@ -4,6 +4,7 @@ import type { HeroSkin } from "../types/character";
 import type { Pose } from "../types/pose";
 import type { RigFrame, RigLayer, RigParts, Vec } from "../types/rig";
 import { atHip, farShoulder, isElbowFlipped, isMirrored, isTurned, nearShoulder } from "../utils/poseFrame";
+import { alternateHeroArt } from "./alternateArt";
 import { armReach, drawArm } from "./arm";
 import { drawCoatTails } from "./coatTails";
 import { drawHead } from "./head";
@@ -20,6 +21,7 @@ export interface HeroLook {
   flare: number;
   /** the sword is in the hand */
   sword: boolean;
+  turnLegs?: boolean;
 }
 
 /** the shared parts: Kael's first look, in the colours of whoever wears them */
@@ -39,6 +41,10 @@ const sharedParts = (skin: HeroSkin): RigParts => ({
  * drawing. Returns where the near hand ended up, as drawn.
  */
 export function drawHero(s: SpriteCanvas, p: Pose, skin: HeroSkin, look: HeroLook): Vec {
+  const alternate = alternateHeroArt(skin);
+  if (alternate) {
+    return alternate(s, p, look);
+  }
   const back = isTurned(p);
   const mirrored = isMirrored(p);
   const flip = (q: Vec): Vec => [-q[0], q[1]];
@@ -77,9 +83,12 @@ export function drawHero(s: SpriteCanvas, p: Pose, skin: HeroSkin, look: HeroLoo
   extras("behind");
   if (back) swordArm();
   else farArm(false);
-  parts.leg(s, atHip(p, -1.5, 0), [p.bfx, p.bfy], p.ba, true, rig);
+  const reverseLegs = back && look.turnLegs;
+  const forwardLeg = (behind: boolean) => parts.leg(s, atHip(p, 1.5, 0), [p.ffx, p.ffy], p.fa, behind, rig);
+  const trailingLeg = (behind: boolean) => parts.leg(s, atHip(p, -1.5, 0), [p.bfx, p.bfy], p.ba, behind, rig);
+  (reverseLegs ? forwardLeg : trailingLeg)(true);
   parts.coatTails(s, rig);
-  parts.leg(s, atHip(p, 1.5, 0), [p.ffx, p.ffy], p.fa, false, rig);
+  (reverseLegs ? trailingLeg : forwardLeg)(false);
   skin.offhand?.hip?.(s, rig);
   extras("underTorso");
   parts.torso(s, rig);

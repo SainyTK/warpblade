@@ -1,4 +1,5 @@
 import { PACE, STEP } from "../constants/stage";
+import { ageFrozenDrill, usesKaelDrill } from "../kaelDrill";
 import { menuContext } from "../ui/menu/menuState";
 import { game } from "./state";
 import { update, updateAmbience } from "./update";
@@ -22,6 +23,9 @@ export function stepGame(): void {
   if (game.mode === "play") game.clock += STEP;
   if (game.freeze > 0) {
     game.freeze -= STEP;
+    if (usesKaelDrill()) {
+      ageFrozenDrill(STEP);
+    }
     settleShake(0.5);
     return;
   }

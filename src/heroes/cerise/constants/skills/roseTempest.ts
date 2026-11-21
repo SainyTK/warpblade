@@ -1,4 +1,3 @@
-import { ULT_CHARGE } from "../../../../constants/ultimate";
 import type { SkillDef } from "../../../../types/skill";
 import { evolvedRow, levelRows } from "../../../../utils/skillRows";
 
@@ -22,7 +21,7 @@ export const ROSE_TEMPEST: SkillDef = {
   kind: "ultimate",
   risk: "easy",
   button: "U",
-  text: `Rose Tempest grows: more thrusts, marks, a streak behind you. Grows with attack damage. ${ULT_CHARGE}`,
+  text: `Rose Tempest grows: more thrusts, marks, a streak behind you. Grows with attack damage. Higher charge levels cost more MP. Level 4 spends a full bar.`,
   levels: LEVELS,
   evolution: {
     partner: "ce_measure",

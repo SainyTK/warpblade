@@ -2,6 +2,8 @@ import { HOLD_ACTIONS, KEYMAP } from "../../constants/input";
 import { isAdventure } from "../../game/adventure";
 import { heroJob } from "../../game/hero/job";
 import { character } from "../../game/state";
+import { CERISE_DRILL_TEXT, isCerise } from "../../heroes";
+import { DRILL_ACTION_TEXT, DRILL_KEYMAP, isBaseKael } from "../../kaelDrill";
 import { inRoom } from "../../store/coop";
 import type { HeldAction, InputAction } from "../../types/input";
 import type { MenuContext, MenuView } from "../../types/menu";
@@ -38,7 +40,7 @@ function capsOf(codes: readonly string[], hold: boolean): HTMLElement {
     word.textContent = "Hold";
     caps.append(word);
   }
-  caps.append(...codes.map(keycap));
+  caps.append(...codes.filter((code) => code !== "ShiftRight").map(keycap));
   return caps;
 }
 
@@ -46,18 +48,28 @@ const isHeldAction = (a: InputAction): a is HeldAction => a in HOLD_ACTIONS;
 
 /** each action's keys and what it does; a key with a long press gets a second row for it, Hold J under J */
 function keyboardRows(adventure: boolean): [HTMLElement, string][] {
+  const drill = adventure && isBaseKael();
+  const cerise = adventure && isCerise();
   const text = actionText(character, heroJob());
   if (adventure) {
     text.up = "Jump or double jump. Jump upward along a wall or hold away to kick off.";
     text.down = "Drop through a ledge.";
     text.dash = `${text.dash}. Jump during the dodge to keep your speed.`;
   }
-  return [...keysByAction(KEYMAP)].flatMap(([action, codes]): [HTMLElement, string][] => {
-    if (!adventure && action === "interact") return [];
-    const row: [HTMLElement, string] = [capsOf(codes, false), text[action]];
-    if (!isHeldAction(action)) return [row];
-    return [row, [capsOf(codes, true), text[HOLD_ACTIONS[action]]]];
-  });
+  if (drill) Object.assign(text, DRILL_ACTION_TEXT);
+  if (cerise) Object.assign(text, CERISE_DRILL_TEXT);
+  return [...keysByAction(drill || cerise ? DRILL_KEYMAP : KEYMAP)].flatMap(
+    ([action, codes]): [HTMLElement, string][] => {
+      if (!adventure && action === "interact") return [];
+      const row: [HTMLElement, string] = [capsOf(codes, false), text[action]];
+      if (drill || cerise) {
+        if (action === "ultimate") return [];
+        return action === "attack" ? [row, [capsOf(codes, true), text.ultimate]] : [row];
+      }
+      if (!isHeldAction(action)) return [row];
+      return [row, [capsOf(codes, true), text[HOLD_ACTIONS[action]]]];
+    },
+  );
 }
 
 /** every action with its keys from the key map, and on touch screens the on-screen buttons, as the chosen hero plays them */

@@ -75,7 +75,7 @@ export function bindButtons(ctl: TouchController): {
     ev.preventDefault();
     sfx.start();
     zone.setPointerCapture(ev.pointerId);
-    targets = ctl.buttons.map(targetOf);
+    targets = ctl.buttons.filter((button) => !button.el.hidden).map(targetOf);
     move(ev.pointerId, ev.clientX, ev.clientY, true);
   });
   zone.addEventListener("pointermove", (ev) => {

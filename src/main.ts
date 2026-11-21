@@ -5,6 +5,7 @@ import { MAX_FRAME, STEP } from "./constants/stage";
 import { frameDriver } from "./game/frameDriver";
 import { chooseCharacter, game } from "./game/state";
 import { stepGame } from "./game/step";
+import { preloadGeneratedRoster } from "./generatedHeroArt";
 import { CHARACTERS } from "./heroes/roster";
 import { startAnalytics } from "./services/analytics";
 import { loadHeroChoice } from "./services/heroChoice";
@@ -27,6 +28,7 @@ import { bindPickDialog, syncPickDialog } from "./ui/skills/pickDialog";
 import { bindTouch, syncTouch } from "./ui/touch/bindTouch";
 import { bindDiscoveryToasts } from "./ui/unlocks/discoveryToast";
 
+await preloadGeneratedRoster(CHARACTERS);
 startAnalytics();
 const firstHero = CHARACTERS.find((c) => c.id === loadHeroChoice() && heroUnlocked(c.id)) ?? CHARACTERS[0];
 chooseCharacter(firstHero, chosenJob(firstHero.id));

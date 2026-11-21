@@ -29,6 +29,11 @@ export function animateHero(dt: number): void {
       });
   }
   h.pose = heroPose(h, game.t);
+  animateRopes(dt);
+}
+
+export function animateRopes(dt: number): void {
+  const h = hero;
   // the scarf hangs off the neck (a sash off the belt) and the ponytail off the back of the head, blown back by a breeze
   // and by speed
   const p = h.pose;

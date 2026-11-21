@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Kael | Warpblade Art Lab</title>
+    <link rel="stylesheet" href="/kael-comparison/styles.css" />
+  </head>
+  <body>
+    <main>
+      <header class="masthead">
+        <a href="/">Warpblade</a>
+        <span>Art lab</span>
+      </header>
+      <h1>Kael</h1>
+      <form class="controls" aria-label="Comparison controls">
+        <label>Move<select id="move"></select></label>
+        <label>View<select id="view"><option value="1">Game scale</option><option value="1.5">Close-up</option></select></label>
+        <label>Motion<select id="motion"><option value="revised">Revised</option><option value="previous">Previous</option></select></label>
+        <label>Pure JS art<select id="art"><option value="refined">Refined</option><option value="original">Original</option></select></label>
+        <label>Speed<select id="speed"><option value="1">Normal</option><option value="0.5">Half speed</option></select></label>
+      </form>
+      <div class="comparison">
+        <section aria-labelledby="js-title">
+          <h2 id="js-title">Pure JS</h2>
+          <div class="stage"><canvas id="procedural" aria-label="Kael drawn in JavaScript"></canvas></div>
+        </section>
+        <section aria-labelledby="sprite-title">
+          <h2 id="sprite-title">Codex sprite + rig</h2>
+          <div class="stage"><canvas id="sprite" aria-label="Kael with Codex image art on the rig"></canvas><p id="sprite-status" role="status">Loading sprite</p></div>
+        </section>
+      </div>
+      <div class="transport">
+        <button id="play" type="button">Pause</button>
+        <label for="timeline" class="sr-only">Animation frame</label>
+        <input id="timeline" type="range" min="0" max="1" value="0" />
+        <output id="frame" for="timeline"></output>
+      </div>
+      <div class="inspection">
+        <label><input id="rig" type="checkbox" /> Show rig</label>
+        <span id="beat" hidden></span>
+      </div>
+    </main>
+    <script type="module" src="/kael-comparison/main.ts"></script>
+  </body>
+</html>

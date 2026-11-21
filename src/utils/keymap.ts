@@ -12,6 +12,8 @@ const NAMES: Record<string, string> = {
   ArrowRight: "Right",
   Escape: "Esc",
   Space: "Space",
+  ShiftLeft: "Shift",
+  ShiftRight: "Shift",
   Enter: "Enter",
 };
 

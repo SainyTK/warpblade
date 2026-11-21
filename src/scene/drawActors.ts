@@ -6,6 +6,7 @@ import { MOTE_PIXELS } from "../constants/pickupPixels";
 import { ULT_LEVELS } from "../constants/ultimate";
 import { ellipseRing, fleck, glow, glowLine, hairline, place, px } from "../engine/frame";
 import { blit, detailCanvas } from "../engine/sprite";
+import { stageCameraX } from "../game/adventure";
 import { fineRing, stampPixels } from "../game/effects/fine";
 import { enemyBox, enemyCenter } from "../game/enemies/enemy";
 import { kindOf } from "../game/enemies/kinds";
@@ -15,6 +16,7 @@ import { skin } from "../game/hero/skin";
 import { canAffordUlt } from "../game/hero/ultimate";
 import { game, hero } from "../game/state";
 import { fieldPace } from "../game/timeFields";
+import { drillView, usesKaelDrill } from "../kaelDrill";
 import type { Enemy } from "../types/enemy";
 import { hex, mix, WHITE } from "../utils/color";
 import { clamp, TAU } from "../utils/math";
@@ -176,7 +178,12 @@ export function drawHeroLayer(): void {
     glow(g.x, g.y - 18, 14, skin.glow, 0.12 * k);
   }
   if (h.state === "charge") drawChargeRing();
-  shownKit().drawBack?.();
+  const drill = usesKaelDrill() ? drillView() : undefined;
+  if (drill) {
+    drill.drawBack(stageCameraX());
+  } else {
+    shownKit().drawBack?.();
+  }
   const flare = clamp((Math.abs(h.vx) / 115) * 3, 0, 3) + (h.ground ? 0 : 1.5);
   h.hand = drawHeroSprite(heroSprite, h.pose, flare);
   const blink = h.inv > 0 && h.state !== "warpStrike" && h.state !== "ultimate" && Math.floor(game.t * 20) % 2 === 0;
@@ -199,6 +206,9 @@ export function drawHeroLayer(): void {
     const reach = skin.blade.reach;
     const k = h.state === "move" || h.state === "warpStrike" || h.state === "charge" ? 0.3 : 0.12;
     glowLine(hx + ca * 3, hy + sn * 3, hx + ca * (reach - 1), hy + sn * (reach - 1), 6, skin.glow, k);
+  }
+  if (drill) {
+    drill.drawFront(heroSprite, h.pose, h.hand, skin.blade.reach, stageCameraX());
   }
   shownKit().draw?.();
 }

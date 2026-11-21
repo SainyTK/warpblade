@@ -1,5 +1,7 @@
 import { FH, FW } from "../constants/stage";
+import { drillView, usesKaelDrill } from "../kaelDrill";
 import { renderScene } from "../scene/renderScene";
+import { drawCeriseCutIn } from "./ceriseCutIn";
 import { byId } from "./dom";
 
 /** The canvas the game is drawn on, at the frame size; CSS scales it to the screen. */
@@ -13,7 +15,13 @@ const image = ctx.createImageData(FW, FH);
 /** draw the scene as it stands now */
 export function paintScene(): void {
   renderScene(image.data);
-  ctx?.putImageData(image, 0, 0);
+  if (!ctx) return;
+  ctx.putImageData(image, 0, 0);
+  if (usesKaelDrill()) {
+    drillView()?.drawPortrait(ctx);
+  } else {
+    drawCeriseCutIn(ctx);
+  }
 }
 
 /** cover the whole canvas in one colour */

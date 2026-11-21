@@ -1,4 +1,6 @@
 import { HOLD_ACTIONS, HOLD_STEPS, INPUT_BUFFER_STEPS } from "../constants/input";
+import { cancelTempestHold, releaseTempestHold, startTempestHold, usesCeriseDrill } from "../heroes";
+import { cancelDrillCharge, usesKaelDrill } from "../kaelDrill";
 import type { HeldAction, InputAction } from "../types/input";
 import { rememberPerSeat } from "./seatMemory";
 
@@ -42,7 +44,9 @@ export function watchInput(listener: ((action: InputAction, down: boolean) => vo
 
 export function press(a: InputAction): void {
   if (!held.has(a)) {
-    if (isHoldAction(a)) holding.set(a, 0);
+    const cerise = usesCeriseDrill();
+    if (cerise && a === "attack") startTempestHold();
+    if (isHoldAction(a) && !usesKaelDrill() && !cerise) holding.set(a, 0);
     else pressed.set(a, 0);
   }
   held.add(a);
@@ -54,10 +58,13 @@ export function release(a: InputAction): void {
     holding.delete(a);
     pressed.set(a, 0);
   }
+  if (a === "attack" && held.has(a) && usesCeriseDrill()) releaseTempestHold();
   held.delete(a);
   watcher?.(a, false);
 }
 export function releaseAll(): void {
+  cancelDrillCharge();
+  cancelTempestHold();
   if (watcher) for (const a of held) watcher(a, false);
   held.clear();
   holding.clear();
@@ -66,6 +73,7 @@ export function releaseAll(): void {
 export function clearPresses(): void {
   pressed.clear();
   holding.clear();
+  cancelTempestHold();
 }
 /**
  * Called once per simulation step: unused presses expire after the buffer, except the `kept` ones, and a tap-or-hold key
