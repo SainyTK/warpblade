@@ -360,14 +360,14 @@ A hero needs no CSS: the HUD meter, the ability tabs and the hero screen take th
 Every hero moves and fights on one shared controller, the drill engine in `src/drill/`.
 A hero plugs into it with a `DrillProfile` (`src/types/drill.ts`) on its `HeroModule.drill`.
 The engine runs the movement, the slash chain, the follow-ups, the guard, the spell book, the infusion and the charged tiers; the profile says what those look like and how hard they hit for one hero.
-Kael (`src/heroes/kael/game/drill/`) is the reference and Cerise (`src/heroes/cerise/game/drill/`) is the second worked example.
+Kael (`src/heroes/kael/game/drill/`) is the reference and the only profile with no overrides; all nine heroes are on it, and Cerise (`src/heroes/cerise/game/drill/`) is the worked example below.
 
 ### When the engine runs
 
 The engine runs for a hero whose module has a `drill` profile, in every solo run (solo runs are always the Adventure), while the hero plays their own job.
 `drillProfile()` in `src/drill/selection.ts` is the one gate.
 A job such as Kael's Prism Knight keeps the hero's native kit, and so does every co-op room and the playtest wave arena (`localStorage["warpblade-playtest"]` without `?section=`), since the engine keeps one session for the hero in play and is not per seat yet.
-A hero without a profile keeps the native kit everywhere until its phase 2 profile lands.
+A hero without a profile keeps the native kit everywhere.
 
 While it runs, `updateDrill` (`src/drill/adventure.ts`) replaces the shared hero loop, and the HUD, the ability tabs, the warp tab, the touch buttons, the keyboard map, the Controls screen and the touch legend read only the profile and the live session.
 The hero's native meter is hidden, the U button is hidden, and J held charges the tiers.
@@ -376,14 +376,17 @@ The hero's native meter is hidden, the U button is hidden, and J held charges th
 
 The numbers live in `src/drill/constants.ts` and are the same for every hero.
 
-- Movement (`MOTION`): direct run, buffered variable-height jump with coyote time, wall slide and wall kick, ground dash and one air dash, dash-jump that carries the dash speed.
+- Movement (`MOTION`, which a profile's `motion` tunes): direct run, buffered variable-height jump with coyote time, wall slide and wall kick, ground dash and one air dash, dash-jump that carries the dash speed.
 - Slash chain: three ground slashes and one air slash per jump, chained by pressing J during the swing.
+- Keen blow: J pressed within `KEEN_WINDOW` (0.1 seconds) after a ground slash landed a hit makes the next slash Keen; it shows the KEEN cue and its hits are sure crits, so the `blow` event carries `keen: true`.
+- Perfect dodge: the first real hit a dash avoids gives the shared perfect dodge reward (`rewardPerfectDodge`: Flow, slow motion, MP and stamina, the PERFECT cue and the `perfectDodge` event), once per dash (`src/drill/perfectDodge.ts`).
 - Follow-ups: L (dash) during a slash queues the warp strike; K during a ground slash queues the enhanced parry.
 - Guard: K held blocks from the front, a press just before impact parries (`DEFENSE.parryWindow`).
 - Spells: I prepares the selected spell for 3 seconds (`SPELL_PREPARATION`), the next I once it is ready casts it, and I during a slash pours it into the weapon for 3 landed hits (`INFUSION_HITS`); O cycles the known spells while nothing is prepared.
 - Charged tiers: J held past `CHARGE_START` shows the charge; release uses the highest of the four tiers reached and plays the face cut-in.
 
-The engine emits these skill events on top of the shared ones: `slash` (strike, landed, element), `prepare` (spell), `infuse` (spell), `cast` (the spell id), `warp`, `dash`, `jump`, `ultimate` (the tier level), plus `blow` and `kill` from the shared damage code.
+The engine emits these skill events on top of the shared ones: `slash` (strike, landed, element), `prepare` (spell), `infuse` (spell), `cast` (the spell id), `warp`, `dash`, `jump`, `ultimate` (the tier level), `perfectDodge`, `parry` and `block`, plus `blow` (with `keen`) and `kill` from the shared damage code.
+A meter of the hero's own, such as Vesper's Tempo, is fed from these events in the hero's folder.
 
 ### The profile
 
@@ -401,9 +404,10 @@ export interface DrillProfile {
   drawCutIn?(ctx: CanvasRenderingContext2D, cast: SkillCast, portrait: HTMLImageElement): void;
   text: Readonly<Partial<Record<InputAction, string>>>;
   modifiers(): DrillModifiers;
-  hooks?: DrillHooks;
   motion?: Partial<DrillMotion>;
   poses?: Partial<DrillPoses>;
+  art?: EffectHero;
+  hooks?: DrillHooks;
 }
 ```
 
@@ -411,18 +415,19 @@ export interface DrillProfile {
 | --- | --- |
 | `strikes` | `first`, `second`, `third` and `air`: timing (`hit`, `duration`), `reach`, `height`, forward `step`, `next` in the chain, `damage` as a multiple of one plain slash, `finisher`, the four `poses` the slash blends through and the trail `arc` |
 | `attack` | the drill's damage unit; every damage number in the profile is divided by it and multiplied by the hero's AD (slashes) or AP (spells, tiers). Kael and Cerise use 10 |
-| `spells` | the spell set in O order: `id` (also the touch art id and the `cast` event's ability), `name` (the HUD tab), `color`, `core`, `damage`, `radius`, `range`, `speed` (a travelling bolt) or `null` with a `delay` (strikes the nearest foe ahead), `look` (`flame`, `shard` or `spark`), `freeze` seconds, an optional `status(foe)` that both the spell and every infused hit apply, and optional `drawBolt` and `drawImpact` that replace the shared look |
+| `spells` | the spell set in O order: `id` (also the touch art id and the `cast` event's ability), `name` (the HUD tab), `color`, `core`, `damage`, `radius`, `range`, `speed` (a travelling bolt) or `null` with a `delay` (strikes the nearest foe ahead), `look` (`flame`, `shard` or `spark`), `freeze` seconds, an optional `status(foe)` that both the spell and every infused hit apply, optional `drawBolt` and `drawImpact` that replace the shared look, and an optional effect sprite `art` slot |
 | `known()` | the spells known now; skills that unlock a spell filter here |
-| `tiers` | four charged tiers: `name`, `threshold` seconds, `damage`, `reach`, `height`, `intro` (cut-in time before the strike), `duration`, `color`, `look` (`crescent`, `spires`, `rift`, `nova`), `around` for a strike on both sides, and an optional `drawStrike(cast, progress, fade)` that replaces the look |
+| `tiers` | four charged tiers: `name`, `threshold` seconds, `damage`, `reach`, `height`, `intro` (cut-in time before the strike), `duration`, `color`, `look` (`crescent`, `spires`, `rift`, `nova`), `around` for a strike on both sides, optional `windup` and `cut` body poses for this tier, an optional `drawStrike(cast, progress, fade)` that replaces the look, and an optional effect sprite `art` slot |
 | `warpSlash` | the slash drawn as the warp strike lands |
 | `enhancedParry` | seconds the enhanced parry window stays open |
 | `drawThrown` | the weapon in flight during the warp; `drawThrownBlade` (`src/game/effects/thrownWeapon.ts`) draws the hero's own skin blade |
 | `portrait`, `drawCutIn` | the cut-in image (a URL, or an async loader such as `loadGeneratedHeroPortrait`) and an optional own cut-in style; without one the shared Kael style is used |
 | `text` | the hero's Controls lines over the shared drill lines (`src/drill/controlText.ts`) |
 | `modifiers()` | the numbers the hero's skills change, read every step (next section) |
-| `motion` | movement numbers over the shared `MOTION` (`src/drill/constants.ts`): run speed, jump rise and gravity, dash speed and time, wall kick; leave out what the hero shares with Kael |
-| `poses` | locomotion poses over the shared ones (`src/drill/view/poses/`): `stance`, `breathe`, `run(phase)`, `brake`, `low`, `touchdown`, `dash`, `airDash`, `rise`, `leap`, `kick`, `fall`, `wall`, `guard`, `airGuard`, `parryContact`, `parryReturn`, `spell` and `skillCut`, so each hero has its own silhouette in every state |
-| `hooks` | `swordHit(foe, infusion)`, `slashed(strike, landed)`, `released(cast)`, `tick(dt)`, `draw()`, `reset()` for anything the shared engine does not do |
+| `motion` | movement numbers over the shared `MOTION` (`src/drill/constants.ts`): run speed, jump rise and gravity, dash speed and time, wall kick, and `landing`, which scales how long the landing recovery takes; leave out what the hero shares with Kael. The engine resolves it once into `session.motion` |
+| `poses` | body poses over the shared ones (`src/drill/view/poses/`): `stance`, `breathe`, `run(phase)`, `brake`, `low`, `touchdown`, `dash`, `airDash`, `rise`, `leap`, `kick`, `fall`, `wall`, `guard`, `airGuard`, `stagger`, `parryContact`, `parryReturn`, `spell` (the release), `skillWindup` and `skillCut` (the tiers, unless a tier sets its own `windup` or `cut`), and `warpThrow(age)`, `warpFlight(age)` and `warpArrival(age)` for the three warp phases, so each hero has its own silhouette in every state |
+| `art` | the hero's effect atlas in `src/effectArt/`; with it the engine stamps each spell's `art` sprite under its bolt and impact, the hero's `infusion` sprite along the infused weapon, and each tier's `art` sprite under its strike (scaled in, held, faded, with an additive flash). The hero's own draw hooks and the shared particles draw on top. Kael has none |
+| `hooks` | `spellHit(foe, spell)`, `dashed(foes)`, `swordHit(foe, infusion)`, `slashed(strike, landed)`, `released(cast)`, `tick(dt)`, `drawBack()`, `draw()`, `reset()` for anything the shared engine does not do |
 
 Poses for strikes use `pose()` from `src/constants/hero.ts` and the stance and hand helpers in `src/constants/drillPose.ts` (`DRILL_STANCE`, `frontHand`, `rearHand`), so strike data can live in the hero's `constants/` folder.
 A hero whose native clips already have the right shapes can sample them, as Cerise does with `sampleKeys`.
@@ -443,9 +448,11 @@ With no skill held the hero plays exactly as its profile says.
 | `tierDamage`, `tierReach`, `chargeRate` | the charged tiers |
 
 Anything a modifier cannot express goes in a `SkillBehavior` that answers the engine's events, or in a profile hook.
+A native `SkillBehavior` that the drill code replaces is wrapped once in the hero's skill table with `nativeOrDrill(native, drill?)` from `src/drill`, which runs the native behaviour off the drill and the optional drill one on it; `drillOnly(drill)` is a behaviour that only answers on the drill.
+No skill file checks `usesDrill()` itself.
 The skill contract for drill heroes is in `docs/skill-design.md`.
 
-### Adding a hero in phase 2
+### Adding a hero
 
 Everything goes in the hero's own folder; the registration line is `drill: <ID>_DRILL` in the hero's `index.ts` (`HeroModule`).
 Nothing in `src/drill/`, `src/ui/` or any other hero needs to change.
@@ -453,7 +460,7 @@ Nothing in `src/drill/`, `src/ui/` or any other hero needs to change.
 1. Strike data in `constants/drill/strikes.ts`: the four strikes with poses and arcs.
 2. Tier data in `constants/drill/tiers.ts`: four tiers named for the hero's ultimate.
 3. Spells in `game/drill/spells.ts` (in `game/` when a `status` calls game code), one entry per ability the hero keeps on I.
-4. The profile in `game/drill/index.ts`, with `drawThrown`, `portrait` and optional `drawCutIn` (the cut-in itself in `ui/`), `text`, `modifiers` and `hooks`.
+4. The profile in `game/drill/index.ts`, with `drawThrown`, `portrait` and optional `drawCutIn` (the cut-in itself in `ui/`), `text`, `modifiers`, `motion`, `poses`, `art` and `hooks`.
 5. `drill: <ID>_DRILL` on the hero's `HeroModule`.
 6. Skills to the drill contract in `docs/skill-design.md`, with `modifiers()` built from them.
 7. The touch button art already follows the selected spell's `id` through `HeroModule.touch.art`; give each spell an id the hero's art knows.
