@@ -1,11 +1,4 @@
 import type { SkillLevel } from "../../../../types/skill";
-import type { Stats } from "../../../../types/stats";
-import { levelRows } from "../../../../utils/skillRows";
-
-export interface NativeStep {
-  values?: Readonly<Record<string, number>>;
-  stats?: Partial<Stats>;
-}
 
 export interface DrillStep {
   text: string;
@@ -15,11 +8,10 @@ export interface DrillStep {
 export const drillValues = (drill: Readonly<Record<string, number>>): Record<string, number> =>
   Object.fromEntries(Object.entries(drill).map(([key, value]) => [`drill.${key}`, value]));
 
-export const drillLevels = (native: readonly NativeStep[], drill: readonly DrillStep[]): SkillLevel[] =>
-  levelRows(
-    drill.map((step, i) => ({
-      text: step.text,
-      values: { ...native[i]?.values, ...drillValues(step.drill) },
-      stats: native[i]?.stats,
-    })),
-  );
+export function onDrill(native: readonly SkillLevel[], steps: readonly DrillStep[]): SkillLevel[] {
+  let carried: Record<string, number> = {};
+  return native.map((row, i) => {
+    carried = { ...carried, ...drillValues(steps[i].drill) };
+    return { ...row, text: steps[i].text, values: { ...row.values, ...carried } };
+  });
+}

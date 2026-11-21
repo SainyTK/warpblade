@@ -65,3 +65,9 @@ export const ALDRIC_DRILL_HOOKS: DrillHooks = {
   },
   reset: resetLater,
 };
+
+export function guardHeld(kind: "parried" | "blocked", fromX: number): void {
+  for (const [skill, state] of held()) {
+    skill[kind]?.(fromX, state);
+  }
+}

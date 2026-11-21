@@ -20,7 +20,7 @@ const ID = "al_verdict";
 const DROP = 44;
 
 /** a sword of light that drops point first onto the foe and strikes it, marking it; as Final Verdict with a pillar */
-function createVerdictSword(foe: Enemy, delay: number): Effect {
+export function createVerdictSword(foe: Enemy, delay: number): Effect {
   let t = -delay;
   let struck = false;
   const [x0] = enemyCenter(foe);

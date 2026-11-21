@@ -17,4 +17,6 @@ export interface AldricDrillSkill {
   dashed?(foes: readonly Enemy[], skill: DrillSkillState): void;
   released?(cast: SkillCast, skill: DrillSkillState): void;
   tick?(dt: number, skill: DrillSkillState): void;
+  parried?(fromX: number, skill: DrillSkillState): void;
+  blocked?(fromX: number, skill: DrillSkillState): void;
 }

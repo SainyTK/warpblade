@@ -30,7 +30,7 @@ function attackerAt(fromX: number): Enemy | null {
 }
 
 /** lay `stacks` of Penance on a foe; as Atonement, full Penance bursts */
-function lay(e: Enemy, stacks: number): void {
+export function lay(e: Enemy, stacks: number): void {
   const v = skillValues(ID);
   addStacks(e, ID, {
     stacks,

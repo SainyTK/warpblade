@@ -14,7 +14,7 @@ import "../../types/events";
 const ID = "al_brand";
 
 /** brand a foe: one stack more, up to the most */
-const brand = (e: Enemy | null): void => {
+export const brand = (e: Enemy | null): void => {
   if (e && e.hp > 0) addStacks(e, ID, brandSpec(skillValues(ID)));
 };
 
