@@ -10,10 +10,12 @@ export {
   resetDrill,
   updateDrill,
 } from "./adventure";
-export { DASH_LOCKOUT, SPELL_PREPARATION } from "./constants";
+export { DASH_LOCKOUT, MOTION, SPELL_IMPACT_TIME, SPELL_PREPARATION } from "./constants";
 export { drillActionText } from "./controlText";
 export { DRILL_KEYMAP } from "./input";
 export { NEUTRAL_MODIFIERS } from "./modifiers";
 export { drillProfile, heroDrill, usesDrill } from "./selection";
 export { chargedTier } from "./simulation";
 export { drawCutIn } from "./view/cutIn";
+export { DEFAULT_POSES } from "./view/defaultPoses";
+export { fitRunFeet } from "./view/runFoot";

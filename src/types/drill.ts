@@ -47,6 +47,8 @@ export interface DrillSpell {
   look: DrillSpellLook;
   freeze: number;
   status?(foe: Enemy): void;
+  drawBolt?(bolt: ElementProjectile): void;
+  drawBlast?(blast: ElementImpact): void;
 }
 
 export interface DrillTier {
@@ -61,6 +63,54 @@ export interface DrillTier {
   color: number;
   look: DrillTierLook;
   around: boolean;
+  pose?: Pose;
+  draw?(cast: SkillCast, progress: number, fade: number): void;
+}
+
+export interface DrillMotion {
+  run: number;
+  groundAccel: number;
+  groundBrake: number;
+  airAccel: number;
+  airBrake: number;
+  riseGravity: number;
+  fallGravity: number;
+  rise: number;
+  release: number;
+  fall: number;
+  dash: number;
+  dashBurst: number;
+  dashTime: number;
+  dashRecovery: number;
+  dashJump: number;
+  wallSlide: number;
+  wallKick: number;
+  wallLock: number;
+  jumpGrace: number;
+  buffer: number;
+}
+
+export interface DrillPoses {
+  stance: Pose;
+  breathe: Pose;
+  run(phase: number): Pose;
+  brake: Pose;
+  low: Pose;
+  touchdown: Pose;
+  dash: Pose;
+  airDash: Pose;
+  rise: Pose;
+  leap: Pose;
+  fall: Pose;
+  wall: Pose;
+  kick: Pose;
+  guard: Pose;
+  airGuard: Pose;
+  stagger: Pose;
+  parryContact: Pose;
+  parryReturn: Pose;
+  spell: Pose;
+  skill: Pose;
 }
 
 export interface DrillModifiers {
@@ -114,6 +164,8 @@ export interface DrillProfile {
   text: Readonly<Partial<Record<InputAction, string>>>;
   modifiers(): DrillModifiers;
   hooks?: DrillHooks;
+  motion?: Partial<DrillMotion>;
+  poses?: Partial<DrillPoses>;
 }
 
 export interface DrillInput {

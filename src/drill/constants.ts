@@ -1,8 +1,9 @@
+import type { DrillMotion } from "../types/drill";
 export const TARGET_RADIUS = 6;
 export const SPELL_HEIGHT = 15;
 export const DEFENSE = { parryWindow: 0.12, parryPoseTime: 0.19, cueLife: 0.31, stun: 0.22 };
 
-export const MOTION = {
+export const MOTION: DrillMotion = {
   run: 110,
   groundAccel: 3200,
   groundBrake: 3800,

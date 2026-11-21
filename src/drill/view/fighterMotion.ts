@@ -1,9 +1,9 @@
-import { DRILL_STANCE } from "../../constants/drillPose";
 import type { DrillProfile, Fighter } from "../../types/drill";
 import type { Pose } from "../../types/pose";
 import { clamp, smooth } from "../../utils/math";
 import { blendPose } from "../../utils/poseBlend";
 import { BRAKING_TIME, LANDING_TIME, locomotionPose, type Motion, motionOf } from "./locomotion";
+import { drillPoses } from "./poses";
 import { RUN_PUSH_PHASE, RUN_STRIDE } from "./runPose";
 import { spellReleasePose } from "./spellReleasePose";
 import { swordPose } from "./swordPose";
@@ -21,7 +21,7 @@ export function createFighterMotion() {
   let previousFace: Fighter["face"] | undefined;
   let previousSpeed = 0;
   let fallSpeed = 0;
-  let from = DRILL_STANCE;
+  let from: Pose | undefined;
 
   return (profile: DrillProfile, h: Fighter, currentPose: Pose, dt: number) => {
     const landed = h.grounded && !wasGrounded;
@@ -67,15 +67,15 @@ export function createFighterMotion() {
     const target = h.swing
       ? swordPose(profile, h.swing)
       : h.spellRelease
-        ? spellReleasePose(h)
-        : locomotionPose(h, motion, age, stride, landForce);
+        ? spellReleasePose(h, drillPoses(profile))
+        : locomotionPose(profile, h, motion, age, stride, landForce);
     const footPlacement =
       motion === "land" ? clamp((contactX - h.x) * h.face, -5, 5) * (1 - smooth(0.04, 0.078, age)) : 0;
     const pose = footPlacement
       ? { ...target, ffx: target.ffx + footPlacement, bfx: target.bfx + footPlacement }
       : target;
     return {
-      pose: age < handover ? blendPose(from, pose, smooth(0, handover, age)) : pose,
+      pose: age < handover ? blendPose(from ?? drillPoses(profile).stance, pose, smooth(0, handover, age)) : pose,
       landForce: landed ? landForce : 0,
       groundDashStart: changed && motion === "dash" && h.grounded,
     };

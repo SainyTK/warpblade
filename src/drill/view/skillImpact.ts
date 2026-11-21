@@ -144,6 +144,11 @@ export function drawSkillImpact(cast: SkillCast | null): void {
   } else {
     const u = clamp((age - intro) / (duration - intro));
     const fade = 1 - smooth(0.16, 1, u);
+    if (tier.draw) {
+      tier.draw(cast, u, fade);
+      place();
+      return;
+    }
     switch (tier.look) {
       case "crescent":
         crescent(reach, color, u, fade);
