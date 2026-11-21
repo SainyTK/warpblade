@@ -1,7 +1,7 @@
 import { GUARD_TIMES, HERO_GUARD, STAMINA } from "../../constants/combat";
 import { FLOW } from "../../constants/growth";
 import { SPARKS } from "../../constants/palette";
-import { DEFENSE as DRILL_DEFENSE, defendWithDrill, drillFighter, usesKaelDrill } from "../../kaelDrill";
+import { defendWithDrill, drillParries, drillSession, usesDrill } from "../../drill";
 import { sfx } from "../../services/audio";
 import type { Enemy } from "../../types/enemy";
 import { addFlow } from "../build/flow";
@@ -43,32 +43,28 @@ interface Blocked {
  * Seconds the guard has been up, seconds left in which nothing touches the hero after a parry, whether the guard broke
  * and waits for a fresh press, and the foes it has just blocked.
  */
-const guard: { up: number; shield: number; broken: boolean; enhanced: boolean; blocked: readonly Blocked[] } = {
+const guard: { up: number; shield: number; broken: boolean; blocked: readonly Blocked[] } = {
   up: 0,
   shield: 0,
   broken: false,
-  enhanced: false,
   blocked: [],
 };
 rememberPerSeat(objectMemory(guard, true));
 
 /** raise the guard, cutting a blow's follow-through like the dodge does; `fresh` opens the parry window */
-function raise(fresh: boolean, opening = 0): boolean {
+function raise(fresh: boolean): boolean {
   if (hero.state === "guard") return true;
   if (!maySharedAct()) return false;
   cutForSharedAction();
   hero.running = false;
   guard.broken = false;
-  guard.enhanced = opening < 0;
-  guard.up = fresh ? opening : HERO_GUARD.parryWindow;
+  guard.up = fresh ? 0 : HERO_GUARD.parryWindow;
   setState("guard");
   return true;
 }
 
 /** K pressed: raise the guard with its parry window open */
 export const pressGuard = (): boolean => raise(true);
-
-export const pressEnhancedGuard = (duration: number): boolean => raise(true, HERO_GUARD.parryWindow - duration);
 
 /**
  * K still held once the hero is able again (the press came during a move): the guard goes up, with no parry window. A
@@ -83,7 +79,7 @@ export function holdGuard(): void {
 export function runGuard(dt: number): void {
   const h = hero;
   guard.up += dt;
-  if (!isHeld("guard") && (!guard.enhanced || guard.up >= HERO_GUARD.parryWindow)) return settle();
+  if (!isHeld("guard")) return settle();
   h.vx *= 0.8;
   h.staminaWait = Math.max(h.staminaWait, STAMINA.delay);
   const t = GUARD_TIMES;
@@ -190,20 +186,16 @@ function parry(fromX: number, foe: Enemy | null): void {
 export function guardTakes(dmg: number, fromX: number): boolean {
   const h = hero;
   if (guard.shield > 0) return true;
-  const drill = usesKaelDrill() ? drillFighter() : undefined;
-  if (drill ? drill.guardAge === null : h.state !== "guard") return false;
+  const drill = usesDrill() ? drillSession() : undefined;
+  if (drill ? drill.fighter.guardAge === null : h.state !== "guard") return false;
   if ((fromX - h.x) * h.face < -HERO_GUARD.frontSlack) return false;
   if (h.inv > 0) return true;
   const foe = attackerAt(fromX);
   if (justBlocked(foe)) return true;
-  if (
-    drill
-      ? drill.enhancedGuard > 0 || (drill.guardAge ?? Infinity) <= DRILL_DEFENSE.parryWindow
-      : guard.up < HERO_GUARD.parryWindow
-  ) {
+  if (drill ? drillParries(drill) : guard.up < HERO_GUARD.parryWindow) {
     if (drill) {
-      if (drill.enhancedGuard > 0 && foe?.rank === "minion") {
-        foe.vx += drill.face * HERO_GUARD.pushback;
+      if (drill.fighter.enhancedGuard > 0 && foe?.rank === "minion") {
+        foe.vx += drill.fighter.face * HERO_GUARD.pushback;
       }
       defendWithDrill();
     }
@@ -224,7 +216,6 @@ export const parryOpen = (): boolean => hero.state === "guard" && guard.up < HER
 export function resetGuard(): void {
   guard.up = 0;
   guard.shield = 0;
-  guard.enhanced = false;
   guard.broken = false;
   guard.blocked = [];
 }

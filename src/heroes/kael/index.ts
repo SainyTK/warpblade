@@ -1,5 +1,6 @@
 import type { HeroModule } from "../../types/heroModule";
 import { ABILITY_COLOR } from "./constants/spells";
+import { KAEL_DRILL } from "./game/drill";
 import { KAEL_KIT } from "./game/kit";
 import { KAEL_MOVES } from "./game/moves";
 import { KAEL_SKILLS } from "./game/skills";
@@ -22,4 +23,5 @@ export const KAEL_MODULE: HeroModule = {
     art: (action, ability, known) => kaelArt(action, ability as KaelAbility, known as KaelAbility[]),
     tint: (ability) => ABILITY_COLOR[(ability || "lance") as KaelAbility],
   },
+  drill: KAEL_DRILL,
 };

@@ -1,9 +1,9 @@
+import { usesDrill } from "../../../drill";
 import { warpSlash } from "../../../game/hero/warp";
 import { meleeHit } from "../../../game/meleeHit";
 import { skillValues, withCharms } from "../../../game/skills/query";
 import { hero } from "../../../game/state";
 import { boxAhead, newSwing, struckThisSwing } from "../../../game/world";
-import { usesKaelDrill } from "../../../kaelDrill";
 import type { Enemy } from "../../../types/enemy";
 import type { GuardStyle } from "../../../types/moveset";
 import { RIPOSTE } from "../constants/guard";
@@ -25,7 +25,7 @@ export const KAEL_GUARD: GuardStyle = {
     aegisBlocked(foe);
   },
   parried(_fromX: number, foe: Enemy | null) {
-    const drill = usesKaelDrill();
+    const drill = usesDrill();
     if (!drill) {
       newSwing();
       warpSlash();

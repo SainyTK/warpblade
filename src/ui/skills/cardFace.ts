@@ -2,7 +2,6 @@ import { BOONS } from "../../constants/boons";
 import { CHARMS } from "../../constants/charms";
 import { SKILL_MAX_LEVEL } from "../../constants/growth";
 import { BOON_KIND, CHARM_KIND, KIND_LABEL, RISK_LABEL } from "../../constants/skillLabels";
-import { drillRewardPool, drillSkillText } from "../../kaelDrill";
 import { knowsRecipe } from "../../store/unlocks";
 import type { Build, Card, CharmId } from "../../types/build";
 import type { CharacterDef } from "../../types/character";
@@ -59,8 +58,8 @@ function skillFace(c: CharacterDef, id: string, level: number, build: Build): Ca
     name: def.name,
     line: skillLine(level),
     pips: { total: SKILL_MAX_LEVEL, had: level - 1 },
-    text: drillSkillText(level === 1 ? def.text : def.levels[level - 1].text, def),
-    notes: skillOf(drillRewardPool(c), def.evolution.partner) ? [evolutionNote(c, def, build)] : [],
+    text: level === 1 ? def.text : def.levels[level - 1].text,
+    notes: [evolutionNote(c, def, build)],
     isNew: level === 1,
   };
 }

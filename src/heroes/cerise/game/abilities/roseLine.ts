@@ -3,9 +3,8 @@ import { skillValues } from "../../../../game/skills/query";
 import { game, hero, lights, progress } from "../../../../game/state";
 import { shake } from "../../../../game/world";
 import { sfx } from "../../../../services/audio";
-import { ABILITY_COLOR, ROSE_LINE } from "../../constants/abilities";
+import { ROSE_LINE } from "../../constants/abilities";
 import { ROSE_RAMP } from "../../look/rose";
-import { showCutIn } from "../adventure";
 import { createRoseLine } from "../effects/roseLine";
 import { roseMark } from "../mark";
 import { cerise } from "../state";
@@ -29,7 +28,6 @@ export function runLineCast(): void {
   if (!h.hitDone && h.st >= ROSE_LINE.release) {
     h.hitDone = true;
     releaseRoseLine(cerise.castPower, cerise.castWide);
-    showCutIn(ABILITY_COLOR.line, 0.42);
   }
   if (h.st >= ROSE_LINE.dur) settle();
 }

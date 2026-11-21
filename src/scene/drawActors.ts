@@ -4,6 +4,7 @@ import { HERO_CANVAS } from "../constants/hero";
 import { COIN_GOLD, ENEMY_COLORS, PAL } from "../constants/palette";
 import { MOTE_PIXELS } from "../constants/pickupPixels";
 import { ULT_LEVELS } from "../constants/ultimate";
+import { drillView, usesDrill } from "../drill";
 import { ellipseRing, fleck, glow, glowLine, hairline, place, px } from "../engine/frame";
 import { blit, detailCanvas } from "../engine/sprite";
 import { stageCameraX } from "../game/adventure";
@@ -16,7 +17,6 @@ import { skin } from "../game/hero/skin";
 import { canAffordUlt } from "../game/hero/ultimate";
 import { game, hero } from "../game/state";
 import { fieldPace } from "../game/timeFields";
-import { drillView, usesKaelDrill } from "../kaelDrill";
 import type { Enemy } from "../types/enemy";
 import { hex, mix, WHITE } from "../utils/color";
 import { clamp, TAU } from "../utils/math";
@@ -178,7 +178,7 @@ export function drawHeroLayer(): void {
     glow(g.x, g.y - 18, 14, skin.glow, 0.12 * k);
   }
   if (h.state === "charge") drawChargeRing();
-  const drill = usesKaelDrill() ? drillView() : undefined;
+  const drill = usesDrill() ? drillView() : undefined;
   if (drill) {
     drill.drawBack(stageCameraX());
   } else {

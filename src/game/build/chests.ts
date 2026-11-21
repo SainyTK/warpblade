@@ -4,7 +4,6 @@ import { CHEST_MOTION as M } from "../../constants/growth";
 import { COIN_GOLD } from "../../constants/palette";
 import { GROUND } from "../../constants/stage";
 import { glow, place, sparkle } from "../../engine/frame";
-import { drillRewardPool } from "../../kaelDrill";
 import { sfx } from "../../services/audio";
 import type { ChestReward } from "../../types/build";
 import { PK } from "../../types/particle";
@@ -69,13 +68,7 @@ function grant(rewards: readonly ChestReward[]): void {
 /** the hero in play opens a chest: a burst of gold, the rewards are theirs, and the game waits on the chest screen */
 function open(c: Chest): void {
   c.opened = true;
-  const rewards = rollChest(
-    drillRewardPool(character),
-    progress.build,
-    game.wave,
-    buildStats(progress.build).luck,
-    rng,
-  );
+  const rewards = rollChest(character, progress.build, game.wave, buildStats(progress.build).luck, rng);
   grant(rewards);
   progress.build.chest = rewards;
   feat({ kind: "chestOpened", upgrades: rewards.filter((r) => r.type === "skill" || r.type === "charm").length });

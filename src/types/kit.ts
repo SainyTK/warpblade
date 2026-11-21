@@ -1,4 +1,3 @@
-import type { SourceId } from "./build";
 import type { Enemy } from "./enemy";
 import type { Hero } from "./hero";
 import type { MoveHit, Situation } from "./move";
@@ -103,7 +102,7 @@ export interface HeroKit {
    * One of the hero's own hits landed on a foe (not damage over time, not a skill's own hit): `crit` it was a critical
    * hit, `kill` it felled the foe. Left out, nothing happens.
    */
-  landed?(e: Enemy, hit: { crit: boolean; kill: boolean; source: SourceId; melee: boolean }): void;
+  landed?(e: Enemy, hit: { crit: boolean; kill: boolean }): void;
   /** a fresh run */
   reset(): void;
 }

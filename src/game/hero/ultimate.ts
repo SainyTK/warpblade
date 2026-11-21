@@ -45,8 +45,9 @@ export function startCharge(): boolean {
   return true;
 }
 
-export function releaseUltimate(level: number): void {
+function release(): void {
   const h = hero;
+  const level = h.chargeLevel;
   const cost = ULT_LEVELS[level - 1].cost;
   h.mp = Number.isFinite(cost) ? h.mp - cost : 0;
   setState("ultimate");
@@ -63,7 +64,7 @@ export function releaseUltimate(level: number): void {
 /** hold U to climb the levels the MP bar can pay for, release to strike */
 export function runCharge(dt: number): void {
   const h = hero;
-  if (!isHeld("ultimate")) return releaseUltimate(h.chargeLevel);
+  if (!isHeld("ultimate")) return release();
   h.charge += dt * (ultimateValues().charge ?? 1);
   let level = 1;
   for (let i = 1; i < ULT_LEVELS.length; i++) if (h.charge >= ULT_LEVELS[i].at && canAffordUlt(i + 1)) level = i + 1;

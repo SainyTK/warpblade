@@ -1,4 +1,3 @@
-import { drillRewardPool } from "../../kaelDrill";
 import "./pickDialog.css";
 import { BOONS } from "../../constants/boons";
 import { stageRunId } from "../../game/adventure";
@@ -108,14 +107,7 @@ function showBuild(): void {
 
 /** deal fresh cards for the oldest waiting pick and lay them out; `without` are left out, as after a reroll */
 function deal(without: readonly string[] = []): void {
-  dealt = dealCards(
-    drillRewardPool(character),
-    cardView(),
-    rng,
-    cardCount(buildStats(progress.build).luck, rng),
-    BOONS,
-    without,
-  );
+  dealt = dealCards(character, cardView(), rng, cardCount(buildStats(progress.build).luck, rng), BOONS, without);
   banishing = false;
   describePick();
   cards.dataset.count = String(dealt.length);

@@ -1,9 +1,9 @@
 import { STRIDE } from "../../../constants/motion";
+import { usesDrill } from "../../../drill";
 import { rechargeStep } from "../../../game/build/recharge";
 import { resetMotion } from "../../../game/hero/motion";
 import { skillValues } from "../../../game/skills/query";
 import { hero } from "../../../game/state";
-import { usesKaelDrill } from "../../../kaelDrill";
 import type { HeroKit } from "../../../types/kit";
 import { drawAegis } from "./aegis";
 import { afterStrike } from "./afterStrike";
@@ -52,7 +52,7 @@ export const KAEL_KIT: HeroKit = {
   airDodge: () => !!skillValues("k_skydance").airDash,
   dodge: { started: startPassingCut, passed: cutPassed, ended: endPassingCut },
   draw: () => {
-    if (usesKaelDrill()) {
+    if (usesDrill()) {
       drawAegis();
       return;
     }

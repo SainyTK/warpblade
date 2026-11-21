@@ -1,7 +1,7 @@
 import { WARP } from "../constants/combat";
+import { usesDrill } from "../drill";
 import { warpCost, warpRecharge } from "../game/hero/warp";
 import { hero } from "../game/state";
-import { usesKaelDrill } from "../kaelDrill";
 import { byId } from "./dom";
 import { createRechargeTab } from "./rechargeTab";
 
@@ -15,7 +15,7 @@ const tab = createRechargeTab(el);
 let lastDenied = 0;
 
 export function updateWarpTab(): void {
-  const drill = usesKaelDrill();
+  const drill = usesDrill();
   tab.update(Math.min(1, drill ? hero.warpCd / WARP.cooldown : warpRecharge()));
   el.classList.toggle("poor", !drill && hero.mp < warpCost());
   if (hero.denied.warp > lastDenied) tab.jolt();

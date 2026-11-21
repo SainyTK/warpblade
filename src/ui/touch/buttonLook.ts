@@ -1,13 +1,12 @@
 import { STAMINA } from "../../constants/combat";
 import { ULT_LEVELS } from "../../constants/ultimate";
+import { DASH_LOCKOUT, drillSession, usesDrill } from "../../drill";
 import { selectedSlot } from "../../game/hero/abilityBar";
 import { heroJob } from "../../game/hero/job";
 import { canPayDash } from "../../game/hero/stamina";
 import { canAffordUlt, ultRecharge } from "../../game/hero/ultimate";
 import { warpReady, warpRecharge } from "../../game/hero/warp";
 import { character, hero } from "../../game/state";
-import { preparationShare, tempestProgress, usesCeriseDrill } from "../../heroes";
-import { DASH_LOCKOUT, drillFighter, SKILL_TIERS, usesKaelDrill } from "../../kaelDrill";
 import type { ButtonLook, TouchButtonSpec } from "../../types/touch";
 import { hex } from "../../utils/color";
 import { touchText } from "../../utils/controls";
@@ -31,31 +30,33 @@ export function buttonLook(spec: TouchButtonSpec, pressed: boolean): ButtonLook 
   const text = touchText(character, heroJob())[spec.action];
   const accent = text.accent ? hex(text.accent) : selectionTint(touchSelection());
   const look: ButtonLook = { pressed, ready: true, cooldown: 0, accent, affordable: 0, charge: -1 };
-  if (usesKaelDrill()) {
-    const fighter = drillFighter();
+  const session = usesDrill() ? drillSession() : undefined;
+  if (session) {
+    const { fighter, profile } = session;
+    const tiers = profile.tiers;
     switch (spec.action) {
       case "attack": {
-        const held = fighter?.chargeHeldFor;
-        if (held !== undefined && held !== null) {
-          const next = SKILL_TIERS.findIndex((tier) => held < tier.threshold);
-          const from = SKILL_TIERS[next - 1]?.threshold ?? 0;
-          look.charge = next < 0 ? SKILL_TIERS.length : next + (held - from) / (SKILL_TIERS[next].threshold - from);
+        const held = fighter.chargeHeldFor;
+        if (held !== null) {
+          const next = tiers.findIndex((tier) => held < tier.threshold);
+          const from = tiers[next - 1]?.threshold ?? 0;
+          look.charge = next < 0 ? tiers.length : next + (held - from) / (tiers[next].threshold - from);
         }
-        look.affordable = SKILL_TIERS.length;
+        look.affordable = tiers.length;
         break;
       }
       case "dash":
-        look.cooldown = (fighter?.dashReadyIn ?? 0) / DASH_LOCKOUT;
-        look.ready = look.cooldown === 0 || (fighter?.warpReadyIn === 0 && !!fighter.swing);
+        look.cooldown = fighter.dashReadyIn / DASH_LOCKOUT;
+        look.ready = look.cooldown === 0 || (fighter.warpReadyIn === 0 && !!fighter.swing);
         break;
       case "cast": {
-        const prep = fighter?.spellBook.preparation;
+        const prep = fighter.spellBook.preparation;
         look.cooldown = prep && prep.duration > 0 ? prep.remaining / prep.duration : 0;
         look.ready = look.cooldown === 0;
         break;
       }
       case "cycle":
-        look.ready = !fighter?.spellBook.preparation;
+        look.ready = !fighter.spellBook.preparation;
         break;
       case "guard":
         look.ready = hero.stamina > 0;
@@ -64,15 +65,8 @@ export function buttonLook(spec: TouchButtonSpec, pressed: boolean): ButtonLook 
     }
     return look;
   }
-  const cerise = usesCeriseDrill();
   switch (spec.action) {
     case "attack":
-      if (cerise) {
-        look.cooldown = ultRecharge();
-        look.affordable = hero.ultCd > 0 ? 0 : ULT_LEVELS.filter((_, i) => canAffordUlt(i + 1)).length;
-        look.charge = tempestProgress();
-        break;
-      }
       look.cooldown = warpReady() ? 0 : warpRecharge();
       break;
     case "dash":
@@ -85,14 +79,9 @@ export function buttonLook(spec: TouchButtonSpec, pressed: boolean): ButtonLook 
     case "cast": {
       const slot = selectedSlot();
       look.ready = !!slot && slot.wait() <= 0 && slot.affordable();
-      const prep = cerise ? preparationShare() : null;
-      look.ready &&= !prep;
-      look.cooldown = prep ?? (slot ? Math.min(1, slot.wait() / slot.full()) : 0);
+      look.cooldown = slot ? Math.min(1, slot.wait() / slot.full()) : 0;
       break;
     }
-    case "cycle":
-      if (cerise) look.ready = preparationShare() === null;
-      break;
     case "ultimate":
       look.cooldown = ultRecharge();
       look.affordable = !hero.ultCd ? ULT_LEVELS.filter((_, i) => canAffordUlt(i + 1)).length : 0;

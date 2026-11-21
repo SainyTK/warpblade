@@ -1,6 +1,6 @@
 import { HURT_INVULN } from "../constants/combat";
 import { SPARKS } from "../constants/palette";
-import { hurtDrill, usesKaelDrill } from "../kaelDrill";
+import { hurtDrill, usesDrill } from "../drill";
 import { sfx } from "../services/audio";
 import { hurtFlow } from "./build/flow";
 import { coop, heroSlot } from "./coopHooks";
@@ -38,7 +38,7 @@ export function hurtHero(dmg: number, fromX: number): void {
   Object.assign(hero, { move: null, queued: null, chain: 0, link: 0, charge: 0, chargeLevel: 0 });
   hero.state = hero.hp > 0 ? "hurt" : "dead";
   hero.st = 0;
-  if (usesKaelDrill()) {
+  if (usesDrill()) {
     hurtDrill(fromX);
   }
   game.fx.push(createImpact(hero.x, hero.y - 18, dir, false, SPARKS.blood));

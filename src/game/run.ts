@@ -1,6 +1,6 @@
 import { HERO_START_X } from "../constants/hero";
 import { GROUND } from "../constants/stage";
-import { resetDrill } from "../kaelDrill";
+import { resetDrill } from "../drill";
 import { emptyStream } from "../utils/waves";
 import { resetAdventure } from "./adventure";
 import { clearChests } from "./build/chests";

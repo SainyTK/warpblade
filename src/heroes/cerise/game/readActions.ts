@@ -17,10 +17,6 @@ function doubleTap(dir: number): void {
 export function readActions(_dir: number, tap: number): void {
   use("up", jump);
   if (tap) doubleTap(tap);
-  readAttack();
-}
-
-export function readAttack(): void {
   use("attack", pressRiposte);
   use("attack", pressAttack);
 }

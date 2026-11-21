@@ -13,12 +13,6 @@ import { cerise } from "../state";
 /** an ability's MP, more for its wide form */
 export const castCost = (a: CeriseAbility, wide: boolean): number => ABILITY_COST[a] * (wide ? WIDE_COST : 1);
 
-export function payAbility(a: CeriseAbility, wide: boolean, recharge: number): void {
-  hero.mp -= castCost(a, wide);
-  cerise.abilityCd[a] = recharge / progress.stats.haste;
-  cerise.abilityFull[a] = cerise.abilityCd[a];
-}
-
 /** I may cut in at once: in an open string after a blow has landed, or after a riposte link has struck */
 const instant = (): boolean => comboOpen(1) || (hero.state === "riposte" && hero.hitDone);
 
@@ -40,7 +34,9 @@ export function beginCast(a: CeriseAbility, wide: boolean, plan: CastPlan, recha
   if (hero.mp < castCost(a, false)) return false;
   const paidWide = wide && hero.mp >= castCost(a, true);
   if (hero.keenOpen > 0) gainPoints(POINTS.keen);
-  payAbility(a, paidWide, recharge);
+  hero.mp -= castCost(a, paidWide);
+  cerise.abilityCd[a] = recharge / progress.stats.haste;
+  cerise.abilityFull[a] = cerise.abilityCd[a];
   cerise.castAbility = a;
   cerise.castWide = paidWide;
   cerise.castSpent = spendPoints(ABILITY_POINTS.most);

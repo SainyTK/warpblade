@@ -1,0 +1,43 @@
+import type { DrillSpell } from "../../../../types/drill";
+
+export const KAEL_SPELLS: readonly DrillSpell[] = [
+  {
+    id: "fire",
+    name: "Fire",
+    color: 0xff713c,
+    core: 0xffefad,
+    damage: 32,
+    speed: 208,
+    delay: 0,
+    range: 125,
+    radius: 23,
+    look: "flame",
+    freeze: 0,
+  },
+  {
+    id: "ice",
+    name: "Ice",
+    color: 0x70eaff,
+    core: 0xe9fcff,
+    damage: 24,
+    speed: 168,
+    delay: 0,
+    range: 124,
+    radius: 15,
+    look: "shard",
+    freeze: 1.65,
+  },
+  {
+    id: "volt",
+    name: "Thunder",
+    color: 0xdab6ff,
+    core: 0xfff3a6,
+    damage: 48,
+    speed: null,
+    delay: 0.105,
+    range: 145,
+    radius: 20,
+    look: "spark",
+    freeze: 0,
+  },
+];

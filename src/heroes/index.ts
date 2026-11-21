@@ -29,21 +29,3 @@ const HERO_MODULES: Readonly<Record<HeroId, HeroModule>> = {
 
 /** the code of the hero with this id */
 export const heroModule = (id: string): HeroModule => HERO_MODULES[id as HeroId];
-
-export {
-  CERISE_DRILL_TEXT,
-  cancelTempestHold,
-  ceriseCutIn,
-  fall as ceriseFall,
-  isCerise,
-  land as ceriseLand,
-  preparationShare,
-  readCeriseDrill,
-  releaseTempestHold,
-  runDrillDash,
-  startTempestHold,
-  steer as steerCerise,
-  tempestLevel,
-  tempestProgress,
-  usesCeriseDrill,
-} from "./cerise";
