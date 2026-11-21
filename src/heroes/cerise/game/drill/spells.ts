@@ -1,5 +1,8 @@
 import type { DrillSpell } from "../../../../types/drill";
-import { roseMark } from "../mark";
+import { drawFlurryBlast } from "./looks/flurry";
+import { drawRoseBloomBlast, drawRoseBloomBolt } from "./looks/roseBloom";
+import { drawRoseLineBlast, drawRoseLineBolt } from "./looks/roseLine";
+import { bindWithBloom, markWithRose, staggerWithFlurry } from "./statuses";
 
 export const CERISE_SPELLS: readonly DrillSpell[] = [
   {
@@ -8,13 +11,15 @@ export const CERISE_SPELLS: readonly DrillSpell[] = [
     color: 0xff8fb0,
     core: 0xffe1eb,
     damage: 30,
-    speed: 260,
+    speed: 300,
     delay: 0,
-    range: 150,
+    range: 160,
     radius: 14,
     look: "shard",
     freeze: 0,
-    status: roseMark,
+    status: markWithRose,
+    drawBolt: drawRoseLineBolt,
+    drawBlast: drawRoseLineBlast,
   },
   {
     id: "flurry",
@@ -25,9 +30,26 @@ export const CERISE_SPELLS: readonly DrillSpell[] = [
     speed: null,
     delay: 0.08,
     range: 70,
-    radius: 22,
+    radius: 24,
     look: "flame",
     freeze: 0,
-    status: roseMark,
+    status: staggerWithFlurry,
+    drawBlast: drawFlurryBlast,
+  },
+  {
+    id: "bloom",
+    name: "Rose Bloom",
+    color: 0xc23a6e,
+    core: 0xffa9c6,
+    damage: 38,
+    speed: 150,
+    delay: 0,
+    range: 120,
+    radius: 26,
+    look: "flame",
+    freeze: 0,
+    status: bindWithBloom,
+    drawBolt: drawRoseBloomBolt,
+    drawBlast: drawRoseBloomBlast,
   },
 ];

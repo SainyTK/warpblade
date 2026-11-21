@@ -5,6 +5,39 @@ Numbers are the values in `src/heroes/calder/constants/skills/`; the card lines 
 AD and AP mean Calder's attack damage and ability power (11 and 9 at hero level 1, `CALDER.base`).
 The design note is `docs/heroes/calder.md`.
 
+
+## Drill set
+
+Solo Adventure runs base Calder on the shared drill engine and all 20 skills upgrade a drill mechanic (`docs/skill-design.md`, "Drill baseline").
+Rows keep the native numbers and add the drill's under `drill.` (`constants/skills/drillLevels.ts`); drill code is in `src/heroes/calder/game/drill/skills/`.
+The native behaviours of the redesigned skills run only outside the drill (`game/skills/nativeOrDrill.ts`).
+The DoT and summon skills answer the rounds the drill fires, so they keep their native rows.
+
+| Id | Name | Mechanic | Level 1 | Levels 2 to 8 | Evolution (partner) |
+| --- | --- | --- | --- | --- | --- |
+| `ca_trigger` | Hair Trigger | first slash | the first cut fires a round | stagger, hot rounds, the second cut fires too, a mark, round up to 4 AD | Dead Center (`ca_speedload`): every round-firing cut fires twice |
+| `ca_vent` | Vent Blast | second slash | the second cut vents a blast ahead | knockback, burn, reach, a vent behind, up to 5 AD | Furnace Vent (`ca_brass`): every cut vents |
+| `ca_breech` | Breech Slam | third slash | third cut +50% | a floor quake, stagger, a second hot round, reach 70, up to +400% | Faultline (`ca_blastjump`): a fault line bursts four times ahead |
+| `ca_ricochet` | Ricochet | air slash | air cuts fire a round | ricochets, one more air cut, stagger, up to 4 AD | Pinball (`ca_tracer`): six ricochets |
+| `ca_pointblank` | Point Blank | guard and parry | parry window +30% | a parry counter round, block rounds, stagger, hot counter, up to 12 AD | Deadeye (`ca_trigger`): counters fire down the line |
+| `ca_recoil` | Recoil Dash | dash | dashing through foes fires rounds | pop-up, an air dash, air dash refund, hot rounds, up to 3.2 AD | Backfire Rush (`ca_vent`): a blast behind each dash |
+| `ca_tracer` | Tracer Warp | warp strike | recharge -15%, damage +30% | a cutting tracer, stagger, air refresh, recharge -45%, damage +300% | Green Line (`ca_ricochet`): the tracer fires a round into each foe |
+| `ca_speedload` | Speed Loader | warp and shells | an arrival loads the selected shell for 1 hit | faster loading up to 50%, an arrival shortens loading, more hits, an arrival burst | Spin Cycle (`ca_drum`): every arrival readies the shell |
+| `ca_drum` | Drum Cylinder | dash and air dash | one more air dash | untouchable dashes, air dash restores the air cut, up to 3 more air dashes, a live round left behind | Bottomless Drum (`ca_speedload`): every dash recharges the warp |
+| `ca_blastjump` | Blast Jump | jump and air | one more air cut | a floor blast on jumps, stagger, an air dash, a third air cut, up to 5 AD | Skyshot (`ca_breech`): hard landings blast 70 px |
+| `ca_flare` | Phosphor Shell | Phosphor Shell | +50% and burns | spreading fire, flares on burning foes, a second shell, up to +500% | Greenfire Barrage (`ca_scorch`): each blast throws three more |
+| `ca_chainshot` | Chain Shot | Chain Shot | +50% and one more arc | longer shock, more arcs, arcing infused cuts, stagger, up to +500% | Reaper Chain (`ca_ricochet`): strikes twice |
+| `ca_charge` | Blast Charge | Blast Charge | +50% and throws foes | guard break, a second charge, stagger, charges planted by infused cuts, up to +500% | Demolition (`ca_tracer`): four hot rounds round the blast |
+| `ca_shrapnel` | Shrapnel | dot on every round | as in the native kit | as in the native kit | as in the native kit |
+| `ca_scorch` | Scorch Rounds | dot on the trigger round | as in the native kit | as in the native kit | as in the native kit |
+| `ca_brass` | Hot Brass | dot on every sixth round | as in the native kit | as in the native kit | as in the native kit |
+| `ca_turret` | Spare Barrel | summon on parries | as in the native kit | as in the native kit | as in the native kit |
+| `ca_double` | Smoke Double | summon on trigger rounds | as in the native kit | as in the native kit | as in the native kit |
+| `ca_hound` | Scrap Hound | summon on kills | as in the native kit | as in the native kit | as in the native kit |
+| `ca_break` | Cylinder Break | the four charged tiers | charged skills +30% | faster charge, extra hot rounds, reach, stagger, up to +250% | Last Cylinder (`ca_trigger`): two more bursts |
+
+Count by mechanic: 4 slash skills, 1 guard skill, 4 warp and dash skills, 1 jump skill, 3 spell skills, 3 damage over time, 3 summons, 1 charged-tier skill.
+
 ## Identity
 
 Calder is the trigger blade: a heavy three-blow string, a round fired into the wound on the beat (the Trigger), a chamber of six rounds that reloads on J, a parry that answers with a counter shot, and shots on I.

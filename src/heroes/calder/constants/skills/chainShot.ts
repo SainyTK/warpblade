@@ -1,5 +1,6 @@
 import type { SkillDef } from "../../../../types/skill";
 import { evolvedRow, levelRows } from "../../../../utils/skillRows";
+import { withDrill } from "./drillLevels";
 
 /** values: `cost` MP, `recharge` seconds, `power` ability power of a strike, `drag` foes are dragged along, `twice` each foe is struck twice, `wrap` seconds a struck foe is held fast */
 const LEVELS = levelRows([
@@ -13,18 +14,31 @@ const LEVELS = levelRows([
   { text: "Power 5 to 14.", values: { power: 14 } },
 ]);
 
+const DRILL_LEVELS = withDrill(LEVELS, [
+  { text: "Chain Shot +50% and arcs to one more foe.", drill: { bonus: 0.5, arcs: 1 } },
+  { text: "New: shock lasts 2 s.", drill: { shock: 1 } },
+  { text: "New: arcs to two more foes.", drill: { arcs: 2 } },
+  { text: "Chain Shot +50% to +120%.", drill: { bonus: 1.2 } },
+  { text: "New: cuts with Chain Shot loaded arc too.", drill: { infusedArc: 1 } },
+  { text: "Chain Shot +250%; three arcs.", drill: { bonus: 2.5, arcs: 3 } },
+  { text: "New: arcs stagger.", drill: { stagger: 0.3 } },
+  { text: "Chain Shot +250% to +500%.", drill: { bonus: 5 } },
+]);
+
 export const CHAIN_SHOT: SkillDef = {
   id: "ca_chainshot",
   name: "Chain Shot",
   kind: "spell",
   risk: "timed",
   button: "I",
-  text: "Learn Chain Shot: two weights on a chain spin through every foe in a line.",
-  levels: LEVELS,
+  text: "Chain Shot hits harder and arcs on to more foes.",
+  levels: DRILL_LEVELS,
   evolution: {
     partner: "ca_ricochet",
     name: "Reaper Chain",
-    text: "The chain comes back to you and strikes every foe again on the way.",
-    row: evolvedRow(LEVELS[7], "The chain comes back, striking again.", { power: 10 }),
+    text: "Chain Shot strikes twice.",
+    row: evolvedRow(DRILL_LEVELS[7], "Chain Shot strikes twice.", {
+      power: 10,
+    }),
   },
 };
