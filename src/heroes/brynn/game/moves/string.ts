@@ -7,9 +7,9 @@ import { dust, shake } from "../../../../game/world";
 import type { MoveDef } from "../../../../types/move";
 import { PK } from "../../../../types/particle";
 import { CRIMSON } from "../../constants/colors";
+import { SLASH } from "../../constants/slashes";
 import { HEAVE_LAUNCH, STRING_CANCEL, STRING_FEEL, STRING_POWER } from "../../constants/string";
 import { slamLanded } from "../slam";
-import { SLASH } from "./slashes";
 
 /** the slam meets the floor: a ring, dust and rubble where the blade lands, then its shockwave or fissure */
 function slamImpact(): void {

@@ -1,4 +1,5 @@
 import type { SkillBehavior } from "../../../../types/skillBehavior";
+import { drillGuardEvents } from "../drill/guardEvents";
 import { dawnFalcon } from "./dawnFalcon";
 import { oathsworn } from "./oathsworn";
 import { penance } from "./penance";
@@ -14,4 +15,5 @@ export const ALDRIC_SKILLS: Readonly<Record<string, SkillBehavior>> = {
   al_oathsworn: oathsworn,
   al_lion: sunLion,
   al_falcon: dawnFalcon,
+  al_retort: drillGuardEvents,
 };

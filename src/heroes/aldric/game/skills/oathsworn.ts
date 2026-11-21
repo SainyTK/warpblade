@@ -86,7 +86,7 @@ function answer(m: SkillMemory, foe: Enemy | null, sure = false): void {
   if (v.barrier) raiseBarrier(OATHSWORN.barrier, 1);
 }
 
-/** Oathsworn: a parry (and from its fourth level a Counterbash) may call a knight of light who cuts the attacker; as
+/** Oathsworn: a parry (and from its fourth level a block or a Counterbash) may call a knight of light who cuts the attacker; as
  *  Honour Guard two answer, and with Twin Bulwark every warp arrival calls them */
 export const oathsworn: SkillBehavior = {
   create: () => ({ cd: 0 }),
@@ -96,6 +96,9 @@ export const oathsworn: SkillBehavior = {
   on: {
     parry(m, ev) {
       answer(m, attackerAt(ev.fromX));
+    },
+    block(m, ev) {
+      if (skillValues(ID).counter) answer(m, attackerAt(ev.fromX));
     },
     guardBash(m, ev) {
       if (ev.counter && skillValues(ID).counter) answer(m, ev.foe);

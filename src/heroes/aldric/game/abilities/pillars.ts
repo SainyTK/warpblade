@@ -23,7 +23,7 @@ function foeAhead(): Enemy | null {
 }
 
 /** Lingering Dawn: a pillar leaves light on the floor that burns foes standing in it */
-function linger(x: number): void {
+export function linger(x: number): void {
   const v = skillValues("al_dawn");
   if (!v.burn) return;
   game.fx.push(
