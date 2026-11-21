@@ -43,6 +43,16 @@ At rest he stands with the shield grounded in front of his far leg and the sword
 - A timing reward of his own: the Counterbash, a Guard bash pressed just after a block, a sure critical hit worth twice the Valor. The shared Keen timing on J also holds.
 - Short recharges: Shield Rush 3 s, Sunpillar 4.5 s, the Guard bash 0.4 s. Nothing locks him out of the rest of the kit.
 
+## On the drill engine
+
+Solo Adventure runs Aldric on the shared drill engine through `ALDRIC_DRILL` (`src/heroes/aldric/game/drill/`).
+
+- Body: his own stance with the kite shield carried forward and the sword low, a shield-first run over the shared run legs, a shield-first dash, his own jump, wall, landing, guard and shield-punch parry poses (`constants/drill/body.ts`). He runs at 100 (Kael 110), jumps a little lower, falls harder and lands 25% longer.
+- Chain: Oath cut, Shield bash (a short shove behind the shield) and Crest breaker, with Sky cut in the air, sampled from his native clips with the shield pushed forward (`constants/drill/strikes.ts`).
+- Spells: Dawn Lance (a fast gold shard that marks the foe, +15% damage taken for 3 s), Sunpillar (a column on the nearest foe ahead that staggers) and Mending Light (a short burst that heals him 1.5% HP per foe). Each status also rides on infused hits.
+- Charged tiers: Dawn Ward (two piercing light waves), Sunpillar Rank (three pillars ahead), Noon Verdict (a beam that marks and staggers) and Sanctuary (all around; heals 12% HP and leaves burning dawn light), each with his sunburst face cut-in (`ui/cutIn.ts`).
+- Skills: the drill set in `docs/skills/aldric.md`.
+
 ## The meter: Valor
 
 A bar labelled VL under stamina, in gold, from 0 to 100.

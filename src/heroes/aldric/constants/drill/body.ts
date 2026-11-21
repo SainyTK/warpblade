@@ -60,8 +60,8 @@ const LEAP = pose({
 const PUNCH = pose({ ...GUARD_HOLD, hx: 1.5, nx: 5, ny: -23, bx: 14, by: -19, oa: 1.4, ffx: 9 });
 
 export const ALDRIC_POSES: Readonly<Partial<Record<DrillBodyPose, Pose>>> = {
-  stance: pose({ ...STANCE, bx: 10, by: -17 }),
-  breathe: pose({ ...STANCE, bx: 10, hy: -13, ny: -22.8, by: -16.4, fy: -15.5 }),
+  stance: pose({ ...STANCE, bx: 10, by: -17, sa: 0.95, fy: -15 }),
+  breathe: pose({ ...STANCE, sa: 0.98, bx: 10, hy: -13, ny: -22.8, by: -16.4, fy: -15.5 }),
   brake: pose({
     ...SHIELD_UP,
     oa: 1.35,
@@ -137,8 +137,8 @@ export const ALDRIC_POSES: Readonly<Partial<Record<DrillBodyPose, Pose>>> = {
     bfy: -1,
     fa: -0.68,
   }),
-  guard: pose({ ...GUARD_HOLD, bx: 11, by: -18.5 }),
-  airGuard: pose({ ...GUARD_HOLD, bx: 11, by: -18.5, ffy: -5, bfy: -4, fa: 0.23, ba: 0.55 }),
+  guard: pose({ ...GUARD_HOLD, bx: 11, by: -18.5, fx: 1, fy: -14, sa: 2.3 }),
+  airGuard: pose({ ...GUARD_HOLD, bx: 11, by: -18.5, fx: 1, fy: -14, sa: 2.3, ffy: -5, bfy: -4, fa: 0.23, ba: 0.55 }),
   parryContact: PUNCH,
   parryReturn: pose({ ...GUARD_HOLD, hx: 0.5, nx: 3, bx: 11.5, by: -18.5, ffx: 7.5 }),
   spell: pose({ ...SHIELD_UP, hy: -13, nx: 1, ny: -23.5, fx: 4, fy: -33, sa: -1.57, bx: 10, by: -17, ffx: 5, bfx: -5 }),

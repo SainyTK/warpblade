@@ -5,6 +5,40 @@ The rows are in `src/heroes/aldric/constants/skills/`, one file per skill; this 
 AD and AP mean Aldric's attack damage and ability power (10 and 9 at hero level 1, `ALDRIC.base`).
 His design note is `docs/heroes/aldric.md`.
 
+## Drill set
+
+Solo Adventure runs base Aldric on the shared drill engine (`src/drill`).
+All 20 skills are offered there and each one upgrades a drill mechanic; the reward pool has no filter.
+The rows keep the numbers the native kit reads (the wave arena, co-op), so the sections after this one still describe Aldric's native kit, and the card text is the drill's.
+Drill code: `src/heroes/aldric/game/drill/skills/` (one file per redesigned skill), folded into `ALDRIC_DRILL` by `game/drill/hooks.ts`; the drill numbers sit under `drill.` in each row, built by `constants/skills/drillLevels.ts`.
+
+| Id | Name | Mechanic | Level 1 | Levels 2 to 8 | Evolution (partner) |
+| --- | --- | --- | --- | --- | --- |
+| `al_oath` | Oathblade | first slash | Oath cut adds a light cut of 0.5 AD | a cut behind, a light wave, piercing waves, stagger, up to 4 AD | Sunblade (`al_resolve`): every blow of the chain throws a piercing wave |
+| `al_breaker` | Breaking Bash | second slash | the Shield bash staggers 0.5 s | knock back, a shock behind the foe, an extra blow, a 15% mark, up to 5 AD | Shattering Bash (`al_brand`): the shock bursts Sunbrand stacks |
+| `al_crest` | Crestfall | third slash | Crest breaker +50% | knock down, a floor ring, a pillar on the foe, a wider ring, up to +350% | Dawnbreak (`al_skyfall`): three pillars in a row ahead |
+| `al_verdict` | Verdict | air slash | one more Sky cut per jump | swords of light on the foe (up to 3), a light cut, a third Sky cut | Final Verdict (`al_lance`): every ground blow calls a sword |
+| `al_retort` | Iron Retort | guard and parry | parry window +30% | a shield strike on the attacker, blocks hit back, stagger, the parry readies the warp, up to 8 AD | Retribution (`al_vow`): a parry throws waves both ways |
+| `al_step` | Shield Step | dash | dashing through foes bashes them | stagger, one more air dash, warp recharge per foe, knock away, up to 5 AD | Phalanx Step (`al_rally`): every dash ends in a ring |
+| `al_bulwark` | Bulwark Arrival | warp strike | warp strike +30% | an arrival ring, healing, faster recharge, stagger, refreshed air dash and slashes, up to +250% | Twin Bulwark (`al_oathsworn`): every 4 s an arrival recharges the warp |
+| `al_vow` | Iron Vow | warp and infusion | an arrival infuses the sword for 1 hit | faster preparation (up to 45%), longer infusions, an arrival shortens a preparation, an arrival burst | Iron Fortress (`al_retort`): every arrival readies the selected spell |
+| `al_resolve` | Resolve | dash and air dash | one more air dash | the air dash restores the air slash, healing dashes, a harder blow after a dash, 0.3 s untouchable | Unbroken (`al_sanctuary`): dashes lay burning dawn light |
+| `al_skyfall` | Skyfall | jump, wall kick, air | one more air slash | a cutting wall kick, a shield slam on landing after a Sky cut, one more air dash, a third air slash | Falling Sun (`al_crest`): the slam calls a pillar |
+| `al_lance` | Dawn Lance | Dawn Lance | the lance strikes 0.6 AP harder | light burn, a deeper mark, a burst, two lances, up to 5 AP | Spear of Morning (`al_verdict`): each lance calls a sword of light |
+| `al_mend` | Mending Light | Mending Light | heals 1% more per foe | a push, burning dawn light, a harder blast, more healing | Absolution (`al_penance`): the light lays full Penance |
+| `al_rally` | High Sun | Sunpillar | Sunpillar stuns 0.4 s longer | a second and a third pillar, harder pillars, light burn | Zenith (`al_falcon`): every pillar strikes twice |
+| `al_brand` | Sunbrand | dot on slashes | the Shield bash brands foes | Sunpillar and Oath cut brand too, the native numbers | Solar Brand (`al_breaker`), as in the native kit |
+| `al_penance` | Penance | dot on blocks and parries | as in the native kit | as in the native kit | Atonement (`al_mend`) |
+| `al_dawn` | Lingering Dawn | dot on Sunpillar | Sunpillar leaves burning light | a warp arrival and Crest breaker leave it too, the native numbers | High Noon (`al_falcon`) |
+| `al_oathsworn` | Oathsworn | summon on parries | as in the native kit | as in the native kit | Honour Guard (`al_bulwark`) |
+| `al_lion` | Sun Lion | summon on kills | as in the native kit | as in the native kit | Pride of Dawn (`al_oath`) |
+| `al_falcon` | Dawn Falcon | summon on casts | as in the native kit | as in the native kit | Sunbird (`al_dawn`) |
+| `al_sanctuary` | Sanctuary | the four charged tiers | charged skills +30% | a pull, faster charge, an echo, more reach, healing, up to +250% | Dawn Citadel (`al_resolve`): every charged skill bursts twice more |
+
+Count by mechanic: 4 slash skills, 1 guard skill, 4 warp and dash skills, 1 jump skill, 3 spell skills, 3 damage over time, 3 summons, 1 charged-tier skill.
+Effects that exist only in the drill (the `drill.` numbers) do nothing in the native kit.
+Counterbash and Shield Rush triggers of the native rows fire only in the native kit.
+
 ## Identity
 
 Aldric fights from behind a raised shield: he walks into foes with the guard up, bashes from behind it and turns every blow he stops into Valor, which lights his sword at full.
@@ -49,15 +83,15 @@ The ability order is Shield Rush, Sunpillar, Dawn Lance, Mending Light, Rallying
 | `al_skyfall` | Skyfall | movement | easy | Up | `al_crest` | Falling Sun |
 | `al_lance` | Dawn Lance | spell | timed | I | `al_verdict` | Spear of Morning |
 | `al_mend` | Mending Light | spell | easy | I | `al_penance` | Absolution |
-| `al_rally` | Rallying Cry | spell | easy | I | `al_step` | War Cry |
+| `al_rally` | High Sun | spell | easy | I | `al_falcon` | Zenith |
 | `al_brand` | Sunbrand | dot | timed | J | `al_breaker` | Solar Brand |
 | `al_penance` | Penance | dot | easy | K | `al_mend` | Atonement |
 | `al_dawn` | Lingering Dawn | dot | easy | I | `al_falcon` | High Noon |
 | `al_oathsworn` | Oathsworn | summon | precise | K | `al_bulwark` | Honour Guard |
 | `al_lion` | Sun Lion | summon | easy | auto (kill) | `al_oath` | Pride of Dawn |
 | `al_falcon` | Dawn Falcon | summon | timed | auto (cast) | `al_dawn` | Sunbird |
-| `al_resolve` | Resolve | passive | easy | auto | `al_sanctuary` | Unbroken |
-| `al_vow` | Iron Vow | passive | easy | K | `al_retort` | Iron Fortress |
+| `al_resolve` | Resolve | movement | easy | L | `al_sanctuary` | Unbroken |
+| `al_vow` | Iron Vow | movement | easy | L | `al_retort` | Iron Fortress |
 | `al_sanctuary` | Sanctuary | ultimate | easy | U | `al_resolve` | Dawn Citadel |
 
 Counts: attack 5, movement 3, spell 3, dot 3, summon 3, passive 2, ultimate 1. Risk: easy 10, timed 7, precise 3.
