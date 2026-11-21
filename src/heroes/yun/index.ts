@@ -1,6 +1,7 @@
 import type { HeroModule } from "../../types/heroModule";
 import { YUN_ABILITIES } from "./constants/abilities";
 import { abilityColor } from "./game/abilities";
+import { YUN_DRILL } from "./game/drill";
 import { YUN_KIT } from "./game/kit";
 import { YUN_METER } from "./game/meter";
 import { YUN_MOVES } from "./game/moves";
@@ -29,4 +30,5 @@ export const YUN_MODULE: HeroModule = {
     tint: (ability) => abilityColor(asAbility(ability)),
   },
   meter: YUN_METER,
+  drill: YUN_DRILL,
 };

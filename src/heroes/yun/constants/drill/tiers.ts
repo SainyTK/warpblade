@@ -1,0 +1,58 @@
+import type { DrillTier } from "../../../../types/drill";
+
+type TierData = Omit<DrillTier, "drawStrike">;
+
+export const YUN_TIER_DATA: readonly [TierData, TierData, TierData, TierData] = [
+  {
+    look: "crescent",
+    around: false,
+    level: 1,
+    name: "Jade Rain I",
+    threshold: 0.46,
+    damage: 34,
+    reach: 64,
+    height: 30,
+    intro: 0.36,
+    duration: 0.9,
+    color: 0x5fd6a4,
+  },
+  {
+    look: "spires",
+    around: false,
+    level: 2,
+    name: "Jade Rain II",
+    threshold: 0.86,
+    damage: 68,
+    reach: 100,
+    height: 40,
+    intro: 0.43,
+    duration: 1.1,
+    color: 0x8ef0c6,
+  },
+  {
+    look: "rift",
+    around: true,
+    level: 3,
+    name: "Jade Rain III",
+    threshold: 1.27,
+    damage: 112,
+    reach: 130,
+    height: 60,
+    intro: 0.51,
+    duration: 1.28,
+    color: 0x3fc493,
+  },
+  {
+    look: "nova",
+    around: true,
+    level: 4,
+    name: "Jade Rain IV",
+    threshold: 1.72,
+    damage: 180,
+    reach: 190,
+    height: 115,
+    intro: 0.64,
+    duration: 1.56,
+    color: 0xdcfff0,
+  },
+];
