@@ -16,9 +16,11 @@ import { DAY_SPARKS, DAY_COLORS as DC } from "./colors";
 import { createRootSpike, type RootStrike } from "./rootSpike";
 
 /** Oakheart blows before wave scaling */
-export const OAK_HITS = { sweep: 18, root: 16, acorn: 12 } as const;
+export const OAK_HITS = { sweep: 14, root: 16, acorn: 12 } as const;
 /** wind-ups before wave scaling, and how long each blow holds */
 export const OAK_TIMES = { sweep: 0.6, root: 0.65, volley: 0.7, swing: 0.3, plant: 0.55, throw: 0.35 } as const;
+/** how much longer Oakheart rests between attacks before it is enraged; enraged it rests 0.65 of the base */
+const OAK_CALM_REST = 1.25;
 /** below this share of its HP Oakheart is enraged: it attacks faster and drops its guard */
 export const OAK_ENRAGE = 0.5;
 const REACH = 40;
@@ -170,7 +172,7 @@ export function updateOakheart(e: Enemy, dt: number, ts: number): void {
     Object.assign(e, {
       state: "walk",
       st: 0,
-      cd: rng.range(1, 1.8) * (enraged ? 0.65 : 1) * waveScale(game.wave).cooldown,
+      cd: rng.range(1, 1.8) * (enraged ? 0.65 : OAK_CALM_REST) * waveScale(game.wave).cooldown,
     });
   if (e.state !== "walk") e.vx -= e.vx * 4 * dt;
   e.x = clampStageX(e.x + e.vx * dt, 14);
