@@ -29,24 +29,50 @@ const ROOT_STEP = 17;
 const BURST_LEAVES = DC.leaf.slice(2);
 /** the Oakheart whose bark has already split, so the burst shows once */
 const split = new WeakSet<Enemy>();
+const SPLIT_BURST = { leaves: 16, chips: 8, sparks: 6 } as const;
 
 /** the moment it first falls under half HP: leaves burst from the crown and the ground shakes */
 function splitBark(e: Enemy): void {
   split.add(e);
-  for (let i = 0; i < 10; i++)
+  for (let i = 0; i < SPLIT_BURST.leaves; i++)
     particles.spawn(
       PK.SHARD,
       e.x + rng.range(-12, 12),
       e.y - rng.range(36, 42),
       rng.range(-110, 110),
       -rng.range(80, 150),
-      rng.range(0.5, 0.9),
+      rng.range(0.7, 1.2),
       {
         col: rng.pick(BURST_LEAVES),
         size: 3,
       },
     );
-  shake(0.2, 2);
+  for (let i = 0; i < SPLIT_BURST.chips; i++)
+    particles.spawn(
+      PK.SHARD,
+      e.x + e.face * rng.range(-2, 0),
+      e.y - rng.range(16, 28),
+      rng.pick([-1, 1]) * rng.range(60, 140),
+      -rng.range(40, 100),
+      rng.range(0.5, 0.8),
+      {
+        col: rng.pick(DAY_SPARKS.bark),
+        size: 2,
+      },
+    );
+  for (let i = 0; i < SPLIT_BURST.sparks; i++)
+    particles.spawn(
+      PK.EMBER,
+      e.x + e.face * rng.range(-2, 0),
+      e.y - rng.range(16, 28),
+      rng.range(-50, 50),
+      -rng.range(20, 70),
+      rng.range(0.5, 0.9),
+      {
+        sparks: DAY_SPARKS.rift,
+      },
+    );
+  shake(0.3, 3);
   sfx.block();
 }
 

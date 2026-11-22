@@ -1,5 +1,6 @@
 import { RES } from "../../../constants/stage";
 import { detailCanvas, type SpriteCanvas } from "../../../engine/sprite";
+import type { Color } from "../../../types/color";
 import type { Enemy } from "../../../types/enemy";
 import { mix, WHITE } from "../../../utils/color";
 import { grain } from "../../../utils/grain";
@@ -8,7 +9,7 @@ import { pointInPolygon } from "../../../utils/pointInPolygon";
 import { waveScale } from "../../../utils/progression";
 import { game } from "../../state";
 import { DAY_COLORS as DC } from "./colors";
-import { OAK_TIMES } from "./oakheart";
+import { OAK_ENRAGE, OAK_TIMES } from "./oakheart";
 import { glowEye } from "./paint";
 
 const canvas = detailCanvas(76, 62, 38, 54);
@@ -43,9 +44,9 @@ const CROWN: readonly (readonly [number, number, number])[] = [
 /** acorns hanging in the crown */
 const ACORNS: readonly Pt[] = [
   [-12, -28],
-  [-2, -27],
   [12, -29],
 ];
+const ACORN_LOST_TO_SPLIT: Pt = [-2, -27];
 /** bark grooves running down the trunk: x, top, bottom */
 const GROOVES: readonly (readonly [number, number, number])[] = [
   [-6, -26, -6],
@@ -57,12 +58,40 @@ const GROOVES: readonly (readonly [number, number, number])[] = [
 ];
 /** moss clinging to its shoulders and roots: x, y, radius */
 const MOSS: readonly (readonly [number, number, number])[] = [
-  [-7.5, -27.5, 1.6],
-  [-5, -28, 1.1],
   [-9.2, -25.5, 1],
   [-8.8, -4.2, 1],
   [-7.6, -3.2, 0.7],
   [8.6, -21, 0.9],
+];
+const MOSS_LOST_TO_SPLIT: readonly (readonly [number, number, number])[] = [
+  [-7.5, -27.5, 1.6],
+  [-5, -28, 1.1],
+];
+const SPLIT: readonly Pt[] = [
+  [-1, -28],
+  [-1, -25.5],
+  [-2, -25],
+  [-2, -22],
+  [-1, -21.5],
+  [-1, -19],
+  [0, -18.5],
+  [0, -16],
+];
+const SPLIT_HOT_KINKS: readonly Pt[] = [
+  [-2, -25],
+  [0, -18.5],
+];
+const SPLIT_LIT_LIP = { x: -3, from: -25, to: -22.5 } as const;
+const SPLIT_SHADOW_LIP = { x: -0.5, from: -21.5, to: -19 } as const;
+const SPLIT_BRANCHES: readonly (readonly [Pt, Pt])[] = [
+  [
+    [-2, -24],
+    [-4, -23],
+  ],
+  [
+    [-1, -20],
+    [0.5, -19],
+  ],
 ];
 /** rift veins spreading from the heart: points from the knothole outward */
 const VEINS: readonly (readonly Pt[])[] = [
@@ -141,6 +170,29 @@ function heatOf(e: Enemy, t: number): number {
   return 0.25 + Math.sin(t * 2 + e.seed) * 0.15;
 }
 
+function splitTrunk(s: SpriteCanvas, drop: number, core: Color): void {
+  s.begin();
+  for (let i = 1; i < SPLIT.length; i++) {
+    const [x0, y0] = SPLIT[i - 1];
+    const [x1, y1] = SPLIT[i];
+    s.hairline(x0 - 0.5, y0 + drop, x1 - 0.5, y1 + drop, DC.barkDeep);
+    s.hairline(x0, y0 + drop, x1, y1 + drop, DC.barkDeep);
+  }
+  s.hairline(SPLIT_LIT_LIP.x, SPLIT_LIT_LIP.from + drop, SPLIT_LIT_LIP.x, SPLIT_LIT_LIP.to + drop, B[4]);
+  s.hairline(SPLIT_SHADOW_LIP.x, SPLIT_SHADOW_LIP.from + drop, SPLIT_SHADOW_LIP.x, SPLIT_SHADOW_LIP.to + drop, B[0]);
+  for (const [[x0, y0], [x1, y1]] of SPLIT_BRANCHES) s.hairline(x0, y0 + drop, x1, y1 + drop, DC.crack);
+  for (let i = 1; i < SPLIT.length; i++) {
+    const [x0, y0] = SPLIT[i - 1];
+    const [x1, y1] = SPLIT[i];
+    s.hairline(x0 - 0.5, y0 + drop, x1 - 0.5, y1 + drop, core);
+  }
+  for (const [x, y] of SPLIT_HOT_KINKS) {
+    s.set(x - 0.5, y + drop, DC.crackHot);
+    s.set(x, y + drop, DC.crackHot);
+  }
+  s.commit(false);
+}
+
 /** a branch arm from the shoulder to a hand of twig fingers, lit on top; the far arm a shade darker */
 function arm(s: SpriteCanvas, sx: number, sy: number, hand: Pt, lit: boolean): void {
   const [hx, hy] = hand;
@@ -208,6 +260,9 @@ export function drawOakheart(e: Enemy, t: number): SpriteCanvas {
   // each clump of the crown rises and settles in its own time, half an art pixel, so the leaves seem to stir
   const rustle = (clump: number): number => Math.round(Math.sin(time * SWAY.crown + clump * 1.9)) / RES;
   const blinking = e.state === "walk" && time % BLINK.every < BLINK.shut;
+  const barkSplit = e.hp < e.max * OAK_ENRAGE;
+  const moss = barkSplit ? MOSS : [...MOSS_LOST_TO_SPLIT, ...MOSS];
+  const acorns = barkSplit ? ACORNS : [ACORNS[0], ACORN_LOST_TO_SPLIT, ACORNS[1]];
   s.clear();
   // the far root leg and the far branch arm, in shadow
   root(s, -4, -6, -step, false);
@@ -240,7 +295,7 @@ export function drawOakheart(e: Enemy, t: number): SpriteCanvas {
   s.set(-8.5, -25.5 + drop, DC.barkGlint);
   s.commit();
   s.begin();
-  for (const [x, y, r] of MOSS) {
+  for (const [x, y, r] of moss) {
     s.dot(x, y + drop, r, DC.moss);
   }
   s.shadeEdges(DC.moss, DC.mossLit, DC.mossDark);
@@ -283,6 +338,7 @@ export function drawOakheart(e: Enemy, t: number): SpriteCanvas {
       s.stroke(x0, y0 + drop, x1, y1 + drop, 0.25, hot ? DC.crackHot : DC.crack);
     }
   s.commit(false);
+  if (barkSplit) splitTrunk(s, drop, glowCol);
   // the leafy crown, clump by clump, shaking before it throws
   const cy = drop + (e.state === "charge" ? -1 : 0);
   s.begin();
@@ -315,7 +371,7 @@ export function drawOakheart(e: Enemy, t: number): SpriteCanvas {
   });
   if (e.state !== "shoot") {
     s.begin();
-    for (const [x, y] of ACORNS) {
+    for (const [x, y] of acorns) {
       const ax = x + shiver + Math.round(Math.sin(time * SWAY.acorns + x)) / RES;
       const ay = y + cy;
       s.dot(ax + 0.5, ay + 1.6, 1.1, DC.acorn);
