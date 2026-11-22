@@ -42,10 +42,12 @@ export const twilight: SceneDef = {
     const veil = veilAt(k);
     const horizon = P.sky[P.sky.length - 1];
     paintSky(paint, P, veil, haloAt(k));
-    paintMoon(paint);
+    if (paint.bodies) paintMoon(paint);
     paintTears(paint, r, k);
-    paintMoonRing(paint, k);
-    paintPlanet(paint, k);
+    if (paint.bodies) {
+      paintMoonRing(paint, k);
+      paintPlanet(paint, k);
+    }
     paintIslands(paint, k, horizon);
     paintTowerStone(paint, P, veil);
     paintSlabLight(paint, veil);

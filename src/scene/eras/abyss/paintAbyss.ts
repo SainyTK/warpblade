@@ -29,13 +29,13 @@ const OPEN_SKY = [LAYER.sky, LAYER.celestial] as const;
 let tear: TearPath = tearPath(0, new Rng(SEEDS.tear));
 
 /** the whole sky as a picture of its own, far to near, so it can also show through where a tower top is torn away */
-function paintHeavens(P: ScenePalette, k: number): PlatePaint {
+function paintHeavens(P: ScenePalette, k: number, bodies: boolean): PlatePaint {
   // a layer map of zeros: every pixel of this picture is open sky
-  const sky = new PlatePaint(new Uint32Array(FN), new Uint8Array(N));
+  const sky = new PlatePaint(new Uint32Array(FN), new Uint8Array(N), true, bodies);
   paintSkyBands(sky, P);
   paintNebula(sky);
   paintStars(sky, new Rng(SEEDS.stars), P);
-  paintEclipse(sky, new Rng(SEEDS.eclipse), k);
+  if (bodies) paintEclipse(sky, new Rng(SEEDS.eclipse), k);
   paintTear(sky, tear, new Rng(SEEDS.branches), k);
   paintFarRuins(sky, new Rng(SEEDS.farRuins), P, k);
   paintTendrils(sky, new Rng(SEEDS.tendrils), k);
@@ -48,7 +48,7 @@ function paintHeavens(P: ScenePalette, k: number): PlatePaint {
  */
 export function paintAbyss(p: PlatePaint, P: ScenePalette, k: number): void {
   tear = tearPath(k, new Rng(SEEDS.tear));
-  const sky = paintHeavens(P, k);
+  const sky = paintHeavens(P, k, p.bodies);
   for (let iy = 0; iy < SKY_ROWS; iy++) {
     for (let ix = 0; ix < FW; ix++) {
       p.put(ix, iy, sky.get(ix, iy), OPEN_SKY);

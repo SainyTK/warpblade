@@ -90,12 +90,12 @@ function paintClouds(sky: Uint32Array, r: Rng, k: number, C: SkyColors): void {
 }
 
 /** the whole sky as it would look with nothing in front of it, one color per image pixel */
-export function paintSkyPicture(r: Rng, k: number, C: SkyColors, P: ScenePalette): Uint32Array {
+export function paintSkyPicture(r: Rng, k: number, C: SkyColors, P: ScenePalette, bodies: boolean): Uint32Array {
   const sky = new Uint32Array(FN);
   for (let iy = 0; iy < FH; iy++)
     for (let ix = 0; ix < FW; ix++) sky[iy * FW + ix] = skyBandAt((iy + 0.5) / RES, bayerAt(ix, iy), P);
   paintMountains(sky, C);
-  paintSun(sky, k, C);
+  if (bodies) paintSun(sky, k, C);
   paintClouds(sky, r, k, C);
   return sky;
 }
