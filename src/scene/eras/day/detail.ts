@@ -49,7 +49,7 @@ export function paintDayDetail(
   P: ScenePalette,
   art: DayArt,
 ): Stalk[] {
-  const sky = paintSkyPicture(r, k, C, P);
+  const sky = paintSkyPicture(r, k, C, P, paint.bodies);
   showSky(paint, sky, art.picture, P);
   paintHills(paint, r, P);
   paintTowers(paint, r, P, sky, art.windows);

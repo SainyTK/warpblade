@@ -99,7 +99,7 @@ export function paintSky(paint: PlatePaint, P: ScenePalette, veil: number, haloC
         g += cg(c) * a;
         b += cb(c) * a;
       }
-      if (fromMoon < HALO.reach) {
+      if (paint.bodies && fromMoon < HALO.reach) {
         const h = (1 - Math.max(0, fromMoon) / HALO.reach) ** 2 * HALO.strength;
         r += (cr(haloColor) - r) * h;
         g += (cg(haloColor) - g) * h;

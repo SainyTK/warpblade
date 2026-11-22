@@ -1,0 +1,192 @@
+{
+  "version": "0.13.2",
+  "kind": "small",
+  "date": "2026-11-23",
+  "title": "Oakheart's split bark and fixes",
+  "tagline": "Oakheart now shows for the rest of the fight that its guard is gone, with a bigger burst at the moment it breaks. The sky beside the stage loses its second sun, and the compact HUD keeps a full build on one line.",
+  "intro": "Since 0.13.1, Oakheart drops its guard when it falls under half HP, and that moment decides the wave 5 fight. The leaf burst that marked it was easy to miss under the hit flash, and the tree looked the same afterwards. This patch gives the moment a bigger burst and leaves a glowing split in the trunk until the fight ends. We also closed two older visual bugs: a second sun in the sky beside the stage, and the compact HUD wrapping charms onto a second row. No numbers that change how a fight plays have moved.",
+  "highlights": [],
+  "sections": [
+    {
+      "id": "foes",
+      "entries": [
+        {
+          "name": "Oakheart",
+          "tag": "adjusted",
+          "summary": "When the wave 5 mini boss falls under half HP, a bigger burst marks the moment, and a glowing violet split stays in its trunk so you can see its guard is gone.",
+          "context": "In 0.13.1 we listed the leaf burst as a known issue: 10 pale leaves fired under the hit flash and damage numbers, and a player who missed them had no way to tell the guard was down. The split is read from Oakheart's HP, so it also shows for co-op guests and in the adventure's Oakheart room.",
+          "changes": [
+            {
+              "kind": "stat",
+              "label": "Look under half HP",
+              "before": "The same as above half HP",
+              "after": "A jagged violet split down the trunk from the crown to the heart, and one acorn fewer in the crown"
+            },
+            {
+              "kind": "note",
+              "text": "The split glows with the heart, so it flares in every wind-up."
+            },
+            {
+              "kind": "stat",
+              "label": "Leaves in the burst",
+              "before": "10",
+              "after": "16"
+            },
+            {
+              "kind": "stat",
+              "label": "How long the leaves last",
+              "before": "0.5 to 0.9 s",
+              "after": "0.7 to 1.2 s"
+            },
+            {
+              "kind": "stat",
+              "label": "Bark chips from the split",
+              "before": "None",
+              "after": "8"
+            },
+            {
+              "kind": "stat",
+              "label": "Violet rift sparks from the split",
+              "before": "None",
+              "after": "6"
+            },
+            {
+              "kind": "stat",
+              "label": "Screen shake",
+              "before": "0.2 s, strength 2",
+              "after": "0.3 s, strength 3"
+            },
+            {
+              "kind": "note",
+              "text": "The burst still plays once per Oakheart. Its HP, guard, attacks, wind-ups, rests and drops are unchanged."
+            },
+            {
+              "kind": "note",
+              "text": "Known issue: the split is one art pixel wide and sits close to the rift veins, so from across the stage the lost acorn is the easier sign to spot."
+            }
+          ],
+          "media": {
+            "kind": "video",
+            "file": "oakheart-lasting-split.mp4",
+            "poster": "oakheart-lasting-split.png",
+            "alt": "Kael fights Oakheart on the sunny ruins floor at wave 5. He leaps over the tree and slashes its back for 86, 61 and 40. The last blow takes it under half HP: leaves burst from its crown, bark chips and violet sparks fly from its trunk, and a glowing violet crack splits the trunk from the crown down to the heart. Kael steps back, and the crack stays lit as Oakheart winds up and lobs acorns.",
+            "width": 640,
+            "height": 360
+          }
+        }
+      ]
+    },
+    {
+      "id": "art",
+      "entries": [
+        {
+          "name": "Oakheart before and after the split",
+          "tag": "adjusted",
+          "summary": "A close look at Oakheart in a wind-up on each side of half HP.",
+          "context": "The split is small at game scale, so this close-up shows what to look for: the violet crack down the trunk and the missing middle acorn.",
+          "changes": [
+            {
+              "kind": "stat",
+              "label": "Acorns in the crown",
+              "before": "3 the whole fight",
+              "after": "3 above half HP, 2 below"
+            }
+          ],
+          "media": {
+            "kind": "image",
+            "file": "oakheart-split-compare.png",
+            "alt": "Two close-ups of Oakheart side by side, both taken as it raises one arm to wind up a charge. The left one, labelled Above half HP, shows whole bark and three acorns in its crown. The right one, labelled Below half HP, shows a jagged crack glowing violet down the front of its trunk from the crown to the heart and only two acorns.",
+            "width": 1280,
+            "height": 720
+          }
+        }
+      ]
+    },
+    {
+      "id": "bugfixes",
+      "entries": [
+        {
+          "name": "The sky beside the stage",
+          "tag": "fix",
+          "summary": "The backdrop around the stage no longer shows a second sun or moon, and the sky above the stage fades out smoothly with no hard line.",
+          "context": "In tall or wide windows the world beyond the stage is a mirror of the stage's own picture, so a sun near the stage's edge was mirrored into it. It also showed a lighter band with a hard edge at the stage's top line. Both have been open since 0.12.1. The code is shared by every era, so every era is fixed.",
+          "changes": [
+            {
+              "kind": "stat",
+              "label": "Sun, moon or eclipse beside the stage",
+              "before": "A mirrored second copy at some window sizes",
+              "after": "None: it shows once, on the stage"
+            },
+            {
+              "kind": "stat",
+              "label": "Sky above the stage",
+              "before": "A lighter band with a hard edge at the stage's top line",
+              "after": "Rises out of the stage's top rows and fades into the era's high sky"
+            },
+            {
+              "kind": "note",
+              "text": "Beside the stage, the backdrop now blends into a copy of the scene without its sun, moons, rings and halos over 32 art pixels. The tall light shaft above the twilight stage is now a short, soft glow."
+            },
+            {
+              "kind": "note",
+              "text": "The stage itself and the adventure's backdrop are unchanged."
+            }
+          ],
+          "media": {
+            "kind": "image",
+            "file": "day-backdrop-one-sun.png",
+            "alt": "The whole game window at wave 1 in the day era, in a tall window where the backdrop shows around the stage, the same moment shown twice. On the left, labelled 0.13.1, a second dimmer sun sits in the backdrop just right of the stage, next to the real sun inside it. On the right, labelled 0.13.2, there is only the stage's own sun, and the sky beside the stage fades out smoothly with no hard line at the stage's top edge.",
+            "width": 1200,
+            "height": 540
+          }
+        },
+        {
+          "name": "Compact HUD build strip",
+          "tag": "fix",
+          "summary": "In small desktop windows, the skills and charms of a full build now stay on one line under the bars.",
+          "context": "At 640 by 600 and 700 by 700, a full build of 8 skills and 5 charms pushed the charms onto a second row. It fit, but it looked like the layout had broken. The slots now close up, and in the narrowest windows shrink, only as far as they need to.",
+          "changes": [
+            {
+              "kind": "stat",
+              "label": "Full build at 640 by 600 and 700 by 700",
+              "before": "Charms on a second row",
+              "after": "One line"
+            },
+            {
+              "kind": "stat",
+              "label": "Gap between slots when the HUD is under 295 px wide (about 640 by 600)",
+              "before": "2 px",
+              "after": "None"
+            },
+            {
+              "kind": "stat",
+              "label": "Slots when the HUD is under 273 px wide (windows about 524 to 631 px wide)",
+              "before": "18 px with 16 px icons",
+              "after": "14 px with 12 px icons"
+            },
+            {
+              "kind": "note",
+              "text": "Because the compact HUD is shorter now, some small, short windows (about 524 to 676 px wide) show it above the stage where they used to show the HUD inside the stage. Every window that had the compact HUD before keeps it."
+            },
+            {
+              "kind": "note",
+              "text": "The full HUD, the pick screen and the phone layout are unchanged."
+            },
+            {
+              "kind": "note",
+              "text": "Known issue: in the narrowest windows the 12 px icons lose some detail and the level badges cover much of each icon. At 640 px wide the slots touch and each badge overlaps its neighbour's corner."
+            }
+          ],
+          "media": {
+            "kind": "image",
+            "file": "compact-hud-one-line.png",
+            "alt": "The top of a 640 by 600 window during wave 2 with Kael holding a full build of 8 skills and 5 charms, shown twice. On top, labelled 0.13.1, the skills fill one row under the HP, MP and stamina bars and the five charms wrap onto a second row. Below, labelled 0.13.2, all 13 slots fit on one line under the bars.",
+            "width": 1280,
+            "height": 416
+          }
+        }
+      ]
+    }
+  ],
+  "feedback": []
+}

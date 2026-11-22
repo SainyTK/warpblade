@@ -21,6 +21,9 @@ Drawing order is in `src/scene/renderScene.ts`: static scene, ambient light, eff
 `src/scene/background.ts` paints the scene part by part in art pixels and notes each pixel's layer (`LAYER` in `src/scene/plate.ts`): sky, celestial, ridge, tower, ground, slab, prop.
 `developPlate` turns that picture into the full detail plate: Scale2x half steps on slopes and curves, sky bands dithered on the image grid, haze on the ridge and towers toward the horizon color, and weathering on stone.
 The world beyond the stage (`src/scene/backdrop.ts`) mirrors this plate outward without its slabs and braziers, so whatever an era paints continues past the edge.
+A little way out it turns into a second plate built without bodies (`buildBackground(def, k, arena, false)`), so the sun or moon shows only once, on the stage.
+An era leaves its sun, moons, rings and their light out of its `sky` hook and its detail when `PlatePaint.bodies` is false.
+Above the stage the sky rises out of the stage's top rows and fades into the era's top sky band.
 An era then paints fine detail on the plate through `SceneDef.detail`, with a `PlatePaint` that can hold a write to chosen layers.
 The plate is built once when the wave's look changes, so anything static costs nothing per frame.
 Prefer the plate for anything that does not move.
