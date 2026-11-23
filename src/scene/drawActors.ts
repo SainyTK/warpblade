@@ -125,7 +125,7 @@ export function drawEnemies(): void {
     blit(s, at, e.y, e.face < 0, { tint, tintAmount, lean });
     place();
     const [cx, cy] = enemyCenter(e);
-    glow(cx, cy, kind.glow.radius, kind.glow.color, winding ? 0.5 : 0.22);
+    glow(cx, cy, kind.glowRadius?.(e) ?? kind.glow.radius, kind.glow.color, winding ? 0.5 : 0.22);
     if (e.elite) drawEliteGlow(e);
     if (winding) glow(cx + e.face * 3, cy + kind.glow.eyeY, 8, ENEMY_COLORS.eyeGlow, 0.6);
     drawMinionBar(e);
