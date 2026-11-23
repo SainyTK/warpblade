@@ -104,6 +104,15 @@ export const ACHIEVEMENTS: readonly Achievement[] = [
     hiddenUntil: "wave-10",
   },
   {
+    id: "boghulk",
+    name: "Bog Breaker",
+    text: "Slay the Bog Hulk 5 times.",
+    group: "Foes",
+    goal: { kind: "foeKills", foe: "boghulk", need: 5 },
+    reward: 50,
+    hiddenUntil: "wave-10",
+  },
+  {
     id: "warden",
     name: "Warden's End",
     text: "Slay the Rift Warden.",
