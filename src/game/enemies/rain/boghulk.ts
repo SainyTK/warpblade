@@ -138,14 +138,16 @@ function rise(e: Enemy): void {
   sfx.boom();
 }
 
-function rushReady(e: Enemy, dx: number): boolean {
-  const far = Math.abs(dx);
-  return enraged(e) && e.ay <= 0 && hero.ground && far >= RUSH.near && far <= RUSH.far && rng.chance(RUSH.chance);
-}
+const rushStop = (e: Enemy): number => clampStageX(e.x + e.face * RUSH.length, 16);
+
+const rushDue = (e: Enemy): boolean => enraged(e) && e.ay <= 0;
+const rushRoomy = (e: Enemy): boolean => Math.abs(rushStop(e) - e.x) >= RUSH.shortest;
+const rushReady = (e: Enemy): boolean => rushDue(e) && hero.ground && rushRoomy(e);
+const wading = (e: Enemy): boolean => rushDue(e) && !rushRoomy(e) && e.ax < RUSH.wade;
 
 function windRush(e: Enemy): void {
   const windup = HULK_WINDUP.rush * waveScale(game.wave).windup;
-  const stop = clampStageX(e.x + e.face * RUSH.length, 16);
+  const stop = rushStop(e);
   const path: RushPath = {
     owner: e,
     from: e.x + e.face * RUSH.slideHalfWidth,
@@ -218,7 +220,7 @@ function slide(e: Enemy, dt: number): void {
 }
 
 function choose(e: Enemy, dx: number): void {
-  if (rushReady(e, dx)) windRush(e);
+  if (rushReady(e)) windRush(e);
   else if (Math.abs(dx) < HULK_REACH.near) Object.assign(e, { state: "wind", st: 0 });
   else if (Math.abs(dx) < HULK_REACH.wave && hero.ground && rng.chance(HULK_REACH.waveChance))
     Object.assign(e, { state: "charge", st: 0 });
@@ -228,7 +230,7 @@ function choose(e: Enemy, dx: number): void {
 function rest(e: Enemy): void {
   const share = enraged(e) ? HULK_COOLDOWN.enraged : 1;
   const cd = rng.range(HULK_COOLDOWN.least, HULK_COOLDOWN.most) * share * waveScale(game.wave).cooldown;
-  Object.assign(e, { state: "walk", st: 0, n: 0, cd });
+  Object.assign(e, { state: "walk", st: 0, n: 0, ax: 0, cd });
 }
 
 function idleParticles(e: Enemy, ts: number): void {
@@ -264,8 +266,11 @@ export function updateBoghulk(e: Enemy, dt: number, ts: number): void {
   if (e.state === "walk") {
     turnToHero(e, dt);
     const speed = enraged(e) ? HULK_WALK.enraged : HULK_WALK.speed;
-    e.vx = approach(e.vx, Math.abs(dx) > HULK_WALK.stop ? e.face * speed : 0, 140 * dt);
-    if (e.cd <= 0 && facesHero(e) && hero.state !== "dead") choose(e, dx);
+    const back = wading(e);
+    if (back) e.ax += dt;
+    const goal = back ? -e.face * speed : Math.abs(dx) > HULK_WALK.stop ? e.face * speed : 0;
+    e.vx = approach(e.vx, goal, 140 * dt);
+    if (!back && e.cd <= 0 && facesHero(e) && hero.state !== "dead") choose(e, dx);
   } else if (e.state === "wind") {
     e.vx = approach(e.vx, 0, 400 * dt);
     if (e.st >= HULK_WINDUP.slam * fast * scale.windup) {
@@ -299,7 +304,7 @@ export function updateBoghulk(e: Enemy, dt: number, ts: number): void {
   } else if (e.state === "hop") {
     Object.assign(e, { vx: 0, pinned: 0, halt: 0 });
     if (e.st >= HULK_TIMES.rise) {
-      Object.assign(e, { state: "walk", st: 0, n: 0, cd: HULK_TIMES.afterRise * scale.cooldown });
+      Object.assign(e, { state: "walk", st: 0, n: 0, ax: 0, cd: HULK_TIMES.afterRise * scale.cooldown });
       e.ay = RUSH.first;
     }
   } else if (e.state === "swipe" || e.state === "shoot") {

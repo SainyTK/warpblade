@@ -20,9 +20,8 @@ export const RISE = {
   embers: 8,
 } as const;
 export const RUSH = {
-  near: 60,
-  far: 170,
-  chance: 0.5,
+  shortest: 40,
+  wade: 1.2,
   first: 2,
   every: 7,
   length: 150,
