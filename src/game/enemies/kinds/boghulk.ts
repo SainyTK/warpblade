@@ -2,18 +2,25 @@ import { GROUND } from "../../../constants/stage";
 import { updateBoghulk } from "../rain/boghulk";
 import { RAIN_FOES } from "../rain/colors";
 import { drawBoghulk } from "../rain/drawBoghulk";
+import { cracked, HULK_GLOW, hulkTakes, lying, RUSH, steadyHulk } from "../rain/hulkMoves";
 import type { EnemyKind } from "./kind";
 
-/** the Bog Hulk, mini boss of the rain: slams the floor up close, rolls mud waves at mid range and lobs globs from afar */
 export const boghulk: EnemyKind = {
   flies: false,
-  box: (e) => [e.x - 15, e.y - 34, e.x + 15, e.y],
-  center: (e) => [e.x, e.y - 17],
+  box: (e) =>
+    lying(e)
+      ? [e.x - RUSH.slideHalfWidth, e.y - RUSH.slideHeight, e.x + RUSH.slideHalfWidth, e.y]
+      : [e.x - 15, e.y - 34, e.x + 15, e.y],
+  center: (e) => (lying(e) ? [e.x, e.y - RUSH.slideHeight / 2] : [e.x, e.y - 17]),
   rest: "walk",
   firstCooldown: () => 1.2,
   rift: { height: 24, y: () => GROUND, riftY: () => GROUND - 20 },
   update: updateBoghulk,
   draw: drawBoghulk,
-  glow: { radius: 40, color: RAIN_FOES.wart, eyeY: -5 },
+  glow: { radius: HULK_GLOW.calm, color: RAIN_FOES.wart, eyeY: -5 },
+  glowRadius: (e) => (cracked(e) ? HULK_GLOW.enraged : HULK_GLOW.calm),
   guardFrom: 1,
+  guarding: (e) => !steadyHulk(e),
+  takes: hulkTakes,
+  steady: steadyHulk,
 };

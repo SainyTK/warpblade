@@ -48,12 +48,18 @@ export class SpriteCanvas implements SpriteImage {
     this.box = { x0: 0, y0: 0, x1: w - 1, y1: h - 1 };
   }
   clear(): void {
+    this.shift(0, 0);
     const { w, d, box } = this;
     if (box.x1 >= box.x0) for (let y = box.y0; y <= box.y1; y++) d.fill(0, y * w + box.x0, y * w + box.x1 + 1);
     box.x0 = this.w;
     box.y0 = this.h;
     box.x1 = -1;
     box.y1 = -1;
+  }
+  /** erase every finished pixel below local y, for a body sunk into the floor */
+  clipBelow(y: number): void {
+    const from = Math.max(0, Math.ceil(y * this.res + this.oy));
+    if (from < this.h) this.d.fill(0, from * this.w);
   }
   /** grow the image's box to take in this one, clamped to the canvas */
   private grow(x0: number, y0: number, x1: number, y1: number): void {
@@ -80,8 +86,15 @@ export class SpriteCanvas implements SpriteImage {
     if (iy < this.y0) this.y0 = iy;
     if (iy > this.y1) this.y1 = iy;
   }
-  private imageX = (x: number): number => x * this.res + this.ox;
-  private imageY = (y: number): number => y * this.res + this.oy;
+  private shiftX = 0;
+  private shiftY = 0;
+  /** move every shape that follows by this many local pixels, until the next shift or clear */
+  shift(dx: number, dy: number): void {
+    this.shiftX = dx;
+    this.shiftY = dy;
+  }
+  private imageX = (x: number): number => (x + this.shiftX) * this.res + this.ox;
+  private imageY = (y: number): number => (y + this.shiftY) * this.res + this.oy;
   /** the image pixel under this local point: at res 2 a single set is half a local pixel wide */
   set(x: number, y: number, c: Color): void {
     this.put(Math.floor(this.imageX(x)), Math.floor(this.imageY(y)), c);

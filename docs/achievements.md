@@ -98,6 +98,7 @@ A save that bought a hero no longer in the roster gets that hero's price back in
 | Foes | Endless Blade | Slay 15,000 foes | 200 | Thinning the Night |
 | Foes | Giant Slayer | Slay 10 mini bosses | 40 | |
 | Foes | Shepherd's End | Slay the Gloam Shepherd | 60 | Night Watch |
+| Foes | Bog Breaker | Slay the Bog Hulk 5 times | 50 | Night Watch |
 | Foes | Warden's End | Slay the Rift Warden | 100 | Deep Rift |
 | Foes | Lights Out | Defeat The Unblinking | 500 | Warpblade |
 | Skill | Flowing Steel | Land the fifth move of a combo | 40 | |
@@ -124,7 +125,7 @@ A save that bought a hero no longer in the roster gets that hero's price back in
 The trials are built from the roster: `src/constants/achievements.ts` adds one for every hero in `CHARACTERS`, with the id `trial-<id>` and the same reward.
 Since waves stream their quota of foes (`docs/growth-design.md`), a full clear slays about 620 foes where it slew about 190, so the two larger kill goals went up from 1,000 and 5,000 to 3,000 and 15,000 to stay about as far off in runs.
 They keep their ids, `kills-1000` and `kills-5000`, so saves that earned them keep them.
-The 20 shared achievements pay 1,870 coins, each hero's trial 40 and the heroes' own 12 achievements 730, so the page lists 41 achievements that together pay 2,960 coins.
+The 21 shared achievements pay 1,920 coins, each hero's trial 40 and the heroes' own 12 achievements 730, so the page lists 42 achievements that together pay 3,010 coins.
 
 ## A hero's own achievements
 

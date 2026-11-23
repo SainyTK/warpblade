@@ -43,7 +43,7 @@ A foe's draw function must not change game state, spawn particles or read the ga
 - `disc`, `shade` with `soft`: true blends, for smoke, mist and vapour.
 - `glow`, `glowLine`, `sparkle` and the `Lights` list: light.
 - `Particles` (`src/engine/particles.ts`): sparks, motes, streaks, flakes, vapour, dust, smoke, fire, brands, embers, shards, stars.
-- `SpriteCanvas`: `dot`, `stroke`, `taper`, `poly`, `block`, `hairline`, `pixels`, `shadeEdges`, `commit`, `outline`.
+- `SpriteCanvas`: `dot`, `stroke`, `taper`, `poly`, `block`, `hairline`, `pixels`, `shadeEdges`, `commit`, `outline`, `shift` (move the shapes that follow, for a body that leans or sinks as one) and `clipBelow` (erase what sank under the floor).
 
 ## What makes it look good
 
