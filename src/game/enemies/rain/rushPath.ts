@@ -6,6 +6,7 @@ export interface RushPath {
   to: number;
   dir: number;
   windup: number;
+  struck: Set<number>;
 }
 
 const current = new WeakMap<Enemy, RushPath>();

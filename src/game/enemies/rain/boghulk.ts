@@ -38,7 +38,6 @@ import { createRushStreak } from "./rushStreak";
 
 const lit = new WeakSet<Enemy>();
 const paths = new WeakMap<Enemy, RushPath>();
-const struck = new WeakMap<RushPath, Set<number>>();
 
 const enraged = (e: Enemy): boolean => e.phase === 2;
 
@@ -153,6 +152,7 @@ function windRush(e: Enemy): void {
     to: stop + e.face * RUSH.slideHalfWidth,
     dir: e.face,
     windup,
+    struck: new Set(),
   };
   paths.set(e, path);
   beginRush(path);
@@ -163,10 +163,8 @@ function windRush(e: Enemy): void {
 function launchRush(e: Enemy): void {
   const path = paths.get(e);
   Object.assign(e, { state: "lunge", st: 0, vx: 0 });
-  if (path) {
-    struck.set(path, new Set());
-    game.fx.push(createRushStreak(path));
-  }
+  e.ay = RUSH.every + RUSH.most;
+  if (path) game.fx.push(createRushStreak(path));
   shake(0.12, 1.5);
   sfx.swing(0.5);
 }
@@ -176,7 +174,7 @@ function slide(e: Enemy, dt: number): void {
   const left = e.ax - e.x;
   const done = Math.abs(left) <= Math.abs(step) || e.st >= RUSH.most || Math.sign(left) !== e.face;
   e.x = done ? e.ax : e.x + step;
-  const hit = struck.get(paths.get(e) as RushPath);
+  const hit = paths.get(e)?.struck;
   const box = [e.x - RUSH.slideHalfWidth, e.y - RUSH.slideHeight, e.x + RUSH.slideHalfWidth, e.y] as const;
   eachStanding(() => {
     if (!hit || hit.has(heroSlot()) || !boxHit(box, heroBox())) return;
