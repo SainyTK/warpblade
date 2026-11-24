@@ -1,0 +1,156 @@
+{
+  "version": "0.14.1",
+  "kind": "small",
+  "date": "2026-11-25",
+  "title": "Fair randomness and fixes",
+  "tagline": "Effects now use their own random numbers, so your screen's frame rate and the sparks on it can no longer change what a foe does. The Bog Rush path mark reads on phones, and the compact HUD's level badges stay inside their slots.",
+  "intro": "Warpblade uses random numbers for two very different jobs: deciding what foes do, what drops and which cards you are dealt, and making sparks, mud and screen shake look alive. Until tonight both jobs drew from the same supply. That meant a burst of leaves, or a screen that paints 120 frames a second where another paints 60, could change what a foe did next. This patch gives effects their own random numbers, so fights depend only on how you play. We also fixed two things that were hard to read: the Bog Rush's floor mark on phones, and the level badges in the compact HUD. No numbers that change how a fight plays have moved.",
+  "highlights": [],
+  "sections": [
+    {
+      "id": "foes",
+      "entries": [
+        {
+          "name": "Bog Rush path mark",
+          "tag": "fix",
+          "summary": "The violet path the Bog Hulk marks before its Rush is longer, outlined and brighter, and it flashes near-white just before the Hulk launches.",
+          "context": "We shipped 0.14.0 with a known issue: on a phone one art pixel is about one screen pixel, so the thin dashes were hard to see, and a close-range Rush started them right under your hero's feet. The mark is the move's promise of where the slide will go, so it has to read on every screen.",
+          "changes": [
+            {
+              "kind": "stat",
+              "label": "Dashes",
+              "before": "2 art px long every 6 px, in two rows",
+              "after": "4 art px long every 8 px, in three rows with a dark violet outline under them"
+            },
+            {
+              "kind": "stat",
+              "label": "Strength at the start of the wind-up",
+              "before": "30 percent, rising to 90 percent",
+              "after": "55 percent, rising to 90 percent, with the outline at full strength from the first frame"
+            },
+            {
+              "kind": "stat",
+              "label": "End post",
+              "before": "4 art px tall, 1 px wide",
+              "after": "8 art px tall, 2 px wide, with a bright 3 px cap and a dark violet outline on its far side"
+            },
+            {
+              "kind": "stat",
+              "label": "End post glow radius",
+              "before": "8 art px",
+              "after": "12 art px"
+            },
+            {
+              "kind": "stat",
+              "label": "Last 0.25 s of the wind-up",
+              "before": "No change",
+              "after": "The top row of every dash and the post's cap flash near-white at full strength"
+            },
+            {
+              "kind": "note",
+              "text": "The mark still draws over your hero, so the dashes under a close hero's boots stay visible."
+            },
+            {
+              "kind": "note",
+              "text": "The path's length and place, the wind-up (0.9 s, 0.8 s at wave 10), the slide, its hit box and its damage are unchanged."
+            },
+            {
+              "kind": "note",
+              "text": "Known issue: the rain era's floor mist lies over a few pixels of the flash row. The flash still reads clearly brighter than the rest of the wind-up."
+            }
+          ],
+          "media": {
+            "kind": "image",
+            "file": "bog-rush-mark-phone.png",
+            "alt": "Two stacked crops of the rain-era floor at phone size, labelled 0.14.0 on top and 0.14.1 below. In each, Kael stands just in front of the cracked Bog Hulk a split second before it launches its Rush, with the violet path mark running left from the Hulk to an end post at the screen edge. In 0.14.0 the dashes are short, thin and faint against the dark floor. In 0.14.1 they are longer with a dark outline, the top row flashes near-white across the floor and under Kael's boots, and the end post stands twice as tall.",
+            "width": 1280,
+            "height": 620
+          }
+        }
+      ]
+    },
+    {
+      "id": "bugfixes",
+      "entries": [
+        {
+          "name": "Effects and the game's random numbers",
+          "tag": "fix",
+          "summary": "What foes do, what drops and which cards you are dealt no longer depend on your screen's frame rate, a dropped frame or how many effects are on screen.",
+          "context": "The game steps at a fixed rate but paints once per screen frame, and every painted frame drew the screen shake from the same random numbers that steer foes. So a 120 Hz screen, a stutter or a burst of sparks could change the next attack. Effects now draw from their own generator, and a check in our build stops drawing code from reaching the play one.",
+          "changes": [
+            {
+              "kind": "stat",
+              "label": "Screen shake",
+              "before": "Drawn from the play random numbers once per painted frame",
+              "after": "Drawn from the effects generator"
+            },
+            {
+              "kind": "stat",
+              "label": "Sparks, mud, embers, smoke, dust, afterimages, damage number jitter and light flicker",
+              "before": "Drawn from the play random numbers",
+              "after": "Drawn from the effects generator"
+            },
+            {
+              "kind": "stat",
+              "label": "Burning chunks from Kael's Fire Flask and Sunflask when the screen already holds 1,800 particles",
+              "before": "Not thrown, so no blaze lit",
+              "after": "Always thrown, and each one lights its blaze where it lands"
+            },
+            {
+              "kind": "note",
+              "text": "Foe choices, cooldowns, spawns, hit and crit chances, drops, coins, XP, chests and level-up cards stay on the play random numbers. Where a burning chunk flies stays there too, since its blaze deals damage."
+            },
+            {
+              "kind": "note",
+              "text": "Vesper's Dusk Current no longer reads the play random numbers while it is drawn."
+            },
+            {
+              "kind": "note",
+              "text": "Every effect looks and moves as before. Your coins, shop items, options and co-op rooms are unchanged."
+            }
+          ]
+        },
+        {
+          "name": "Compact HUD level badges",
+          "tag": "fix",
+          "summary": "In small desktop windows, each skill's level badge now sits inside its own slot, so a full build reads as separate icons.",
+          "context": "We shipped 0.13.2 with a known issue: in the narrowest compact windows the badges covered much of each icon, and at 640 px wide each badge overlapped its neighbour's corner. The HUD is where you read your build mid-run, so the icons and their levels need to read apart.",
+          "changes": [
+            {
+              "kind": "stat",
+              "label": "Badge place when the HUD is under 295 px wide (about 640 by 600)",
+              "before": "3 px past the slot's bottom-right corner, over the next slot",
+              "after": "Inside the slot's bottom-right corner"
+            },
+            {
+              "kind": "stat",
+              "label": "Badge size when the HUD is under 273 px wide (windows about 524 to 631 px wide)",
+              "before": "At least 8 by 8 px with 7 px text, over about half the icon",
+              "after": "6 by 6 px over the icon's bottom-right quarter, with 8 px text"
+            },
+            {
+              "kind": "note",
+              "text": "We kept 8 px text in the smallest badges because the HUD's pixel font blurs its digits at 6 and 7 px."
+            },
+            {
+              "kind": "note",
+              "text": "Slot sizes, gaps, the HUD's place, the full HUD, the phone layout and the pick screen are unchanged."
+            },
+            {
+              "kind": "note",
+              "text": "Known issue: in the narrowest windows a level 1 badge looks slightly soft. Other digits are crisp."
+            }
+          ],
+          "media": {
+            "kind": "image",
+            "file": "compact-hud-badges.png",
+            "alt": "Four stacked close-ups of the compact HUD's build strip with Kael holding 8 skills and 5 charms, labelled 0.14.0 and 0.14.1 at 560 px wide, then 0.14.0 and 0.14.1 at 640 px wide. In 0.14.0 each orange or green level badge pokes past the bottom-right corner of its icon into the next slot. In 0.14.1 every badge sits inside its own slot's bottom-right corner, so the icons and level numbers read separately.",
+            "width": 1280,
+            "height": 652
+          }
+        }
+      ]
+    }
+  ],
+  "feedback": []
+}
