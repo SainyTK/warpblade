@@ -75,7 +75,8 @@ src/heroes/kael/
 - Ids must be unique across heroes: every skill id starts with the hero's own prefix (`k_` for Kael; use the first letters of the id, such as `ce_`, `al_`, `ve_`, `sa_`, `yu_`, `br_`, `za_`, `ca_`), every icon id is a skill id or starts with `<id>_`, every achievement id starts with `<id>-`, and every hero stat starts with `<id>.`.
 - Move ids and clip names are looked up in the hero's own tables, so they need no prefix.
 - Any module-level state of the hero or its pose is per seat for co-op: register it with `rememberPerSeat` (`src/game/seatMemory.ts`, `docs/multiplayer.md`). Keep sprites, pixel arrays, foes and effect lists `hostOnly`.
-- A draw function never changes game state and never reads the game `rng`.
+- A draw function never changes game state and never reads the play generator `rng`.
+- Draws that only reach the picture (particle spawns, light flicker, jitter, fields only `draw()` reads) use `fxRng`; draws that play reads (AI, procs, cooldowns, aims, damage, anything that moves a hit box) use `rng`.
 - Numbers live in the hero's `constants/`, and any text that shows a number reads the constant.
 
 ## The data entry: `CharacterDef`
