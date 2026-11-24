@@ -10,7 +10,7 @@ import { clampStageX } from "../../adventure";
 import { eachStanding, heroSlot } from "../../coopHooks";
 import { createFloorRing } from "../../effects/floorRing";
 import { hurtHero } from "../../hurtHero";
-import { game, hero, lights, particles, rng } from "../../state";
+import { fxRng, game, hero, lights, particles, rng } from "../../state";
 import { boxHit, dust, heroBox, shake } from "../../world";
 import { facesHero, turnToHero } from "../facing";
 import { MUD_SPARKS, RAIN_FOES, STORM_SPARKS, STORM_VOLT, WATER_SPARKS } from "./colors";
@@ -47,9 +47,17 @@ function slam(e: Enemy): void {
   dust(x - 6, GROUND, 6, -1);
   dust(x + 6, GROUND, 6, 1);
   for (let i = 0; i < 12; i++)
-    particles.spawn(PK.SPARK, x + rng.range(-12, 12), GROUND - 2, rng.range(-120, 120), -rng.range(80, 200), 0.5, {
-      sparks: MUD_SPARKS,
-    });
+    particles.spawn(
+      PK.SPARK,
+      x + fxRng.range(-12, 12),
+      GROUND - 2,
+      fxRng.range(-120, 120),
+      -fxRng.range(80, 200),
+      0.5,
+      {
+        sparks: MUD_SPARKS,
+      },
+    );
   shake(0.3, 3);
   sfx.boom();
   const { slam: reach, slamHeight: tall } = HULK_REACH;
@@ -87,9 +95,17 @@ function sink(e: Enemy): void {
     });
   }
   for (let i = 0; i < 6; i++)
-    particles.spawn(PK.SPARK, e.x + rng.range(-14, 14), GROUND - 3, rng.range(-70, 70), -rng.range(110, 190), 0.5, {
-      sparks: WATER_SPARKS,
-    });
+    particles.spawn(
+      PK.SPARK,
+      e.x + fxRng.range(-14, 14),
+      GROUND - 3,
+      fxRng.range(-70, 70),
+      -fxRng.range(110, 190),
+      0.5,
+      {
+        sparks: WATER_SPARKS,
+      },
+    );
   dust(e.x - 10, GROUND, 6, -1);
   dust(e.x + 10, GROUND, 6, 1);
   shake(0.15, 2);
@@ -98,7 +114,7 @@ function sink(e: Enemy): void {
 function bubble(e: Enemy, dt: number): void {
   const every = SINKING.bubbleEvery;
   if (Math.floor(e.st / every) === Math.floor((e.st - dt) / every)) return;
-  particles.spawn(PK.SPARK, e.x + rng.range(-14, 14), GROUND - 1, 0, -rng.range(20, 40), rng.range(0.4, 0.7), {
+  particles.spawn(PK.SPARK, e.x + fxRng.range(-14, 14), GROUND - 1, 0, -fxRng.range(20, 40), fxRng.range(0.4, 0.7), {
     sparks: WATER_SPARKS,
   });
 }
@@ -112,24 +128,24 @@ function rise(e: Enemy): void {
   for (let i = 0; i < RISE.chunks; i++)
     particles.spawn(
       PK.SHARD,
-      e.x + rng.range(-12, 12),
-      e.y - rng.range(6, 26),
-      rng.range(-130, 130),
-      -rng.range(90, 220),
-      rng.range(0.5, 0.9),
+      e.x + fxRng.range(-12, 12),
+      e.y - fxRng.range(6, 26),
+      fxRng.range(-130, 130),
+      -fxRng.range(90, 220),
+      fxRng.range(0.5, 0.9),
       {
-        col: rng.pick(MUD_SPARKS),
-        size: rng.range(2, 3),
+        col: fxRng.pick(MUD_SPARKS),
+        size: fxRng.range(2, 3),
       },
     );
   for (let i = 0; i < RISE.embers; i++)
     particles.spawn(
       PK.EMBER,
-      e.x + rng.range(-8, 8),
+      e.x + fxRng.range(-8, 8),
       chestY,
-      rng.range(-80, 80),
-      -rng.range(40, 140),
-      rng.range(0.5, 0.9),
+      fxRng.range(-80, 80),
+      -fxRng.range(40, 140),
+      fxRng.range(0.5, 0.9),
       {
         sparks: STORM_SPARKS,
       },
@@ -188,17 +204,25 @@ function slide(e: Enemy, dt: number): void {
       PK.SPARK,
       e.x + e.face * (RUSH.slideHalfWidth + 2),
       GROUND - 2,
-      e.face * rng.range(60, 160),
-      -rng.range(40, 120),
+      e.face * fxRng.range(60, 160),
+      -fxRng.range(40, 120),
       0.4,
       {
         sparks: MUD_SPARKS,
       },
     );
-  if (rng.chance(0.6))
-    particles.spawn(PK.SPARK, e.x + rng.range(-10, 10), GROUND - 1, rng.range(-40, 40), -rng.range(50, 110), 0.4, {
-      sparks: WATER_SPARKS,
-    });
+  if (fxRng.chance(0.6))
+    particles.spawn(
+      PK.SPARK,
+      e.x + fxRng.range(-10, 10),
+      GROUND - 1,
+      fxRng.range(-40, 40),
+      -fxRng.range(50, 110),
+      0.4,
+      {
+        sparks: WATER_SPARKS,
+      },
+    );
   if (done) {
     Object.assign(e, { state: "recover", st: 0, vx: 0, n: STUCK_AFTER_RUSH });
     e.ay = RUSH.every;
@@ -207,8 +231,8 @@ function slide(e: Enemy, dt: number): void {
         PK.SPARK,
         e.x + e.face * RUSH.slideHalfWidth,
         GROUND - 2,
-        rng.range(-60, 90) * e.face,
-        -rng.range(60, 140),
+        fxRng.range(-60, 90) * e.face,
+        -fxRng.range(60, 140),
         0.45,
         {
           sparks: MUD_SPARKS,
@@ -235,18 +259,18 @@ function rest(e: Enemy): void {
 
 function idleParticles(e: Enemy, ts: number): void {
   if (e.state === "burrow") return;
-  if (rng.chance(0.12 * ts))
-    particles.spawn(PK.SPARK, e.x + rng.range(-12, 12), e.y - rng.range(10, 30), 0, 20, rng.range(0.3, 0.6), {
+  if (fxRng.chance(0.12 * ts))
+    particles.spawn(PK.SPARK, e.x + fxRng.range(-12, 12), e.y - fxRng.range(10, 30), 0, 20, fxRng.range(0.3, 0.6), {
       sparks: MUD_SPARKS,
     });
-  if (cracked(e) && rng.chance(0.3 * ts))
+  if (cracked(e) && fxRng.chance(0.3 * ts))
     particles.spawn(
       PK.EMBER,
-      e.x + rng.range(-12, 6),
-      e.y - rng.range(10, 30),
-      rng.range(-10, 10),
-      -rng.range(15, 40),
-      rng.range(0.4, 0.8),
+      e.x + fxRng.range(-12, 6),
+      e.y - fxRng.range(10, 30),
+      fxRng.range(-10, 10),
+      -fxRng.range(15, 40),
+      fxRng.range(0.4, 0.8),
       {
         sparks: STORM_SPARKS,
       },

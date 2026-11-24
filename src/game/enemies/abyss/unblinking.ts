@@ -5,7 +5,7 @@ import { PK } from "../../../types/particle";
 import { approach, clamp } from "../../../utils/math";
 import { waveScale } from "../../../utils/progression";
 import { clampStageX, stageLeft, stageRight } from "../../adventure";
-import { game, hero, particles, rng } from "../../state";
+import { fxRng, game, hero, particles, rng } from "../../state";
 import { ABYSS_HITS, VOID_SPARKS } from "./colors";
 import { createGaze } from "./gaze";
 import { createSightLance, LANCE } from "./sightLance";
@@ -121,14 +121,14 @@ export function updateUnblinking(e: Enemy, dt: number, ts: number): void {
   }
   e.x = clampStageX(e.x + e.vx * dt, 30);
   e.y = clamp(e.y + e.vy * dt, 30, HOVER.floor);
-  if (e.state !== "blink" && rng.chance(0.5 * ts))
+  if (e.state !== "blink" && fxRng.chance(0.5 * ts))
     particles.spawn(
       PK.EMBER,
-      e.x + rng.range(-22, 22),
-      e.y + rng.range(-16, 16),
-      rng.range(-10, 10),
-      rng.range(4, 16),
-      rng.range(0.5, 1),
+      e.x + fxRng.range(-22, 22),
+      e.y + fxRng.range(-16, 16),
+      fxRng.range(-10, 10),
+      fxRng.range(4, 16),
+      fxRng.range(0.5, 1),
       { sparks: VOID_SPARKS },
     );
 }

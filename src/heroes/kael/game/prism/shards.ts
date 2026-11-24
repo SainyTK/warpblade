@@ -3,7 +3,7 @@ import { place, sparkle } from "../../../../engine/frame";
 import { dealDamage } from "../../../../game/damage";
 import { enemyCenter } from "../../../../game/enemies/enemy";
 import { addStacks, consumeStacks, stacksOf } from "../../../../game/enemies/skillStatus";
-import { game, hero, lights, particles, progress, rng } from "../../../../game/state";
+import { fxRng, game, hero, lights, particles, progress } from "../../../../game/state";
 import { struckThisSwing } from "../../../../game/world";
 import type { Effect } from "../../../../types/effect";
 import type { Enemy } from "../../../../types/enemy";
@@ -54,11 +54,11 @@ function flash(x: number, y: number): Effect {
 function burst(x: number, y: number): void {
   game.fx.push(flash(x, y));
   const [least, most] = SHATTER.flecks;
-  const n = rng.int(least, most);
+  const n = fxRng.int(least, most);
   for (let i = 0; i < n; i++)
-    particles.spawn(PK.SHARD, x, y, rng.range(-90, 90), rng.range(-150, -30), rng.range(0.3, 0.6), {
-      col: rng.pick(SPARKS.prism),
-      size: rng.range(1, 2),
+    particles.spawn(PK.SHARD, x, y, fxRng.range(-90, 90), fxRng.range(-150, -30), fxRng.range(0.3, 0.6), {
+      col: fxRng.pick(SPARKS.prism),
+      size: fxRng.range(1, 2),
     });
   lights.add(x, y, 14, PAL.prism[3], 0.8, SHATTER.light);
 }

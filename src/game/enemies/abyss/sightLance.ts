@@ -9,7 +9,7 @@ import { grain } from "../../../utils/grain";
 import { clamp } from "../../../utils/math";
 import { eachStanding, heroSlot } from "../../coopHooks";
 import { hurtHero } from "../../hurtHero";
-import { game, particles, rng } from "../../state";
+import { fxRng, game, particles } from "../../state";
 import { heroBox } from "../../world";
 import { VOID, VOID_SPARKS } from "./colors";
 import { unblinkingPupil } from "./unblinkingPose";
@@ -51,8 +51,8 @@ export function createSightLance(e: Enemy, tx: number, delay: number, damage: nu
           hit.add(heroSlot());
           hurtHero(damage, e.x);
         });
-      if (rng.chance(0.8))
-        particles.spawn(PK.SPARK, tx, ty, rng.range(-60, 60), rng.range(-90, -20), 0.2, { sparks: VOID_SPARKS });
+      if (fxRng.chance(0.8))
+        particles.spawn(PK.SPARK, tx, ty, fxRng.range(-60, 60), fxRng.range(-90, -20), 0.2, { sparks: VOID_SPARKS });
       return t < LANCE.warn + LANCE.burn;
     },
     draw() {

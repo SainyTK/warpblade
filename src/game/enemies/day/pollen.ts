@@ -7,7 +7,7 @@ import { stageLeft, stageRight } from "../../adventure";
 import { eachStanding } from "../../coopHooks";
 import { hurtHero } from "../../hurtHero";
 import { shotWarded } from "../../shotWards";
-import { particles, rng } from "../../state";
+import { fxRng, particles, rng } from "../../state";
 import { fieldPace } from "../../timeFields";
 import { boxHit, heroBox } from "../../world";
 import { DAY_SPARKS, DAY_COLORS as DC } from "./colors";
@@ -33,11 +33,19 @@ export function createPollen(x: number, y: number, vx: number, damage: number): 
       o.y += FALL * Math.min(1, 0.4 + o.t) * dt;
       // a ward (Whirlwall) breaks the shot
       if (shotWarded(o.x, o.y)) return false;
-      if (rng.chance(0.15))
-        particles.spawn(PK.MOTE, o.x + rng.range(-3, 3), o.y, rng.range(-6, 6), rng.range(4, 12), rng.range(0.3, 0.6), {
-          col: rng.chance(0.5) ? P[2] : DC.pollenPink,
-          size: 0.5,
-        });
+      if (fxRng.chance(0.15))
+        particles.spawn(
+          PK.MOTE,
+          o.x + fxRng.range(-3, 3),
+          o.y,
+          fxRng.range(-6, 6),
+          fxRng.range(4, 12),
+          fxRng.range(0.3, 0.6),
+          {
+            col: fxRng.chance(0.5) ? P[2] : DC.pollenPink,
+            size: 0.5,
+          },
+        );
       let struck = false;
       eachStanding(() => {
         if (struck || !boxHit([o.x - 4, o.y - 4, o.x + 4, o.y + 4], heroBox())) return;
@@ -46,8 +54,8 @@ export function createPollen(x: number, y: number, vx: number, damage: number): 
       });
       if (struck) {
         for (let i = 0; i < 8; i++) {
-          const a = rng.range(0, TAU);
-          particles.spawn(PK.SPARK, o.x, o.y, Math.cos(a) * 50, Math.sin(a) * 50, rng.range(0.2, 0.4), {
+          const a = fxRng.range(0, TAU);
+          particles.spawn(PK.SPARK, o.x, o.y, Math.cos(a) * 50, Math.sin(a) * 50, fxRng.range(0.2, 0.4), {
             sparks: DAY_SPARKS.pollen,
           });
         }

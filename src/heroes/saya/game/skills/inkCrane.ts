@@ -5,7 +5,7 @@ import { enemyCenter } from "../../../../game/enemies/enemy";
 import { skin } from "../../../../game/hero/skin";
 import { skillValues } from "../../../../game/skills/query";
 import { nearestFoe, touches } from "../../../../game/skills/targets";
-import { game, progress, rng } from "../../../../game/state";
+import { fxRng, game, progress, rng } from "../../../../game/state";
 import type { Enemy } from "../../../../types/enemy";
 import type { SkillBehavior, SkillMemory } from "../../../../types/skillBehavior";
 import { WHITE } from "../../../../utils/color";
@@ -43,7 +43,7 @@ function fold(mem: CraneMemory, x: number, y: number, turns: number): void {
     cuts: turns,
     cut: [],
     age: 0,
-    flap: rng.range(0, 6),
+    flap: fxRng.range(0, 6),
   });
 }
 

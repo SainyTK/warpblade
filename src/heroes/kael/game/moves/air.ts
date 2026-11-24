@@ -7,7 +7,7 @@ import { createSlash } from "../../../../game/effects/slash";
 import { skin } from "../../../../game/hero/skin";
 import { meleeHit } from "../../../../game/meleeHit";
 import { skillEvolved, skillValues, withCharms } from "../../../../game/skills/query";
-import { game, hero, lights, particles, rng } from "../../../../game/state";
+import { fxRng, game, hero, lights, particles } from "../../../../game/state";
 import { boxAhead, dust, newSwing, shake } from "../../../../game/world";
 import type { MoveDef } from "../../../../types/move";
 import { PK } from "../../../../types/particle";
@@ -39,12 +39,12 @@ function cometLanding(): boolean {
       PK.SHARD,
       hero.x,
       hero.y - 2,
-      side * rng.range(40, 200),
-      rng.range(-220, -80),
-      rng.range(0.4, 0.9),
+      side * fxRng.range(40, 200),
+      fxRng.range(-220, -80),
+      fxRng.range(0.4, 0.9),
       {
-        col: rng.pick(PAL.crystal.slice(3)),
-        size: rng.range(1.5, 3),
+        col: fxRng.pick(PAL.crystal.slice(3)),
+        size: fxRng.range(1.5, 3),
       },
     );
   }
@@ -105,12 +105,12 @@ function stompLanding(): void {
       PK.SHARD,
       hero.x,
       hero.y - 1,
-      side * rng.range(30, 130),
-      rng.range(-170, -60),
-      rng.range(0.4, 0.8),
+      side * fxRng.range(30, 130),
+      fxRng.range(-170, -60),
+      fxRng.range(0.4, 0.8),
       {
         col: WORLD_COLORS.rubble,
-        size: rng.range(1.5, 3),
+        size: fxRng.range(1.5, 3),
       },
     );
   }

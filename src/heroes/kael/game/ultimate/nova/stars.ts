@@ -4,7 +4,7 @@ import { dealDamage } from "../../../../../game/damage";
 import { createFloorRing } from "../../../../../game/effects/floorRing";
 import { createImpact } from "../../../../../game/effects/impact";
 import { enemyCenter } from "../../../../../game/enemies/enemy";
-import { game, lights, particles, rng } from "../../../../../game/state";
+import { fxRng, game, lights, particles, rng } from "../../../../../game/state";
 import { shake } from "../../../../../game/world";
 import { sfx } from "../../../../../services/audio";
 import type { Effect } from "../../../../../types/effect";
@@ -22,11 +22,11 @@ function land(x: number, y: number, damage: number): void {
   lights.add(x, y, 12, WHITE, 0.9, 0.08);
   game.fx.push(createFloorRing(x, y + 6, NOVA_STARS.reach + 4, C, 0.25));
   for (let i = 0; i < 8; i++) {
-    const a = rng.range(0, TAU);
-    const sp = rng.range(60, 140);
-    particles.spawn(PK.SHARD, x, y, Math.cos(a) * sp, Math.sin(a) * sp - 40, rng.range(0.3, 0.5), {
-      col: rng.pick(C.slice(3)),
-      size: rng.range(1, 2),
+    const a = fxRng.range(0, TAU);
+    const sp = fxRng.range(60, 140);
+    particles.spawn(PK.SHARD, x, y, Math.cos(a) * sp, Math.sin(a) * sp - 40, fxRng.range(0.3, 0.5), {
+      col: fxRng.pick(C.slice(3)),
+      size: fxRng.range(1, 2),
     });
   }
   for (const e of game.enemies) {
@@ -34,7 +34,7 @@ function land(x: number, y: number, damage: number): void {
     const [ex, ey] = enemyCenter(e);
     if (Math.hypot(ex - x, ey - y) > NOVA_STARS.reach + 8) continue;
     dealDamage(e, damage, { fromX: x, kx: 0, ky: -60, heavy: true, source: "ultimate" });
-    game.fx.push(createImpact(ex, ey, rng.chance(0.5) ? 1 : -1, false, SPARKS.crystal));
+    game.fx.push(createImpact(ex, ey, fxRng.chance(0.5) ? 1 : -1, false, SPARKS.crystal));
   }
   shake(0.08, 1.2);
   sfx.shatter();
@@ -56,8 +56,8 @@ function createStar(foe: Enemy, delay: number, damage: number): Effect {
       }
       o.x += o.vx * dt;
       o.y += o.vy * dt;
-      if (rng.chance(0.6))
-        particles.spawn(PK.STREAK, o.x, o.y, -o.vx * 0.1, -o.vy * 0.1, rng.range(0.1, 0.2), { col: C[4] });
+      if (fxRng.chance(0.6))
+        particles.spawn(PK.STREAK, o.x, o.y, -o.vx * 0.1, -o.vy * 0.1, fxRng.range(0.1, 0.2), { col: C[4] });
       if (o.y < ey) return true;
       land(o.x, o.y, damage);
       return false;

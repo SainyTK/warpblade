@@ -3,7 +3,7 @@ import { PAL, SPARKS } from "../../constants/palette";
 import type { Enemy } from "../../types/enemy";
 import { PK } from "../../types/particle";
 import { dealDamage } from "../damage";
-import { particles, progress, rng } from "../state";
+import { fxRng, particles, progress } from "../state";
 import { actAsBurner } from "./burn";
 import { enemyCenter } from "./enemy";
 import { updateSkillStatus } from "./skillStatus";
@@ -27,17 +27,17 @@ export function updateStatus(e: Enemy, dt: number): number {
   const [cx, cy] = enemyCenter(e);
   if (e.burn > 0) {
     e.burn -= dt;
-    if (rng.chance(0.3))
+    if (fxRng.chance(0.3))
       particles.spawn(
         PK.FIRE,
-        cx + rng.range(-5, 5),
-        cy + rng.range(-4, 6),
-        rng.range(-8, 8),
+        cx + fxRng.range(-5, 5),
+        cy + fxRng.range(-4, 6),
+        fxRng.range(-8, 8),
         -20,
-        rng.range(0.2, 0.4),
+        fxRng.range(0.2, 0.4),
         {
           col: 0,
-          size: rng.range(1, 1.8),
+          size: fxRng.range(1, 1.8),
         },
       );
     e.burnTick -= dt;
@@ -47,20 +47,20 @@ export function updateStatus(e: Enemy, dt: number): number {
       dealDamage(e, progress.stats.ap * BURN_POWER, { dot: true, source: "abilities" });
     }
   }
-  if (e.shock > 0 && rng.chance(0.25))
+  if (e.shock > 0 && fxRng.chance(0.25))
     particles.spawn(
       PK.SPARK,
-      cx + rng.range(-6, 6),
-      cy + rng.range(-6, 6),
-      rng.range(-60, 60),
-      rng.range(-60, 20),
+      cx + fxRng.range(-6, 6),
+      cy + fxRng.range(-6, 6),
+      fxRng.range(-60, 60),
+      fxRng.range(-60, 20),
       0.1,
       {
         sparks: SPARKS.volt,
       },
     );
-  if (e.chill > 0 && rng.chance(0.08))
-    particles.spawn(PK.FLAKE, cx + rng.range(-6, 6), cy + rng.range(-8, 4), 0, 10, rng.range(0.4, 0.7), {
+  if (e.chill > 0 && fxRng.chance(0.08))
+    particles.spawn(PK.FLAKE, cx + fxRng.range(-6, 6), cy + fxRng.range(-8, 4), 0, 10, fxRng.range(0.4, 0.7), {
       col: PAL.ice[4],
     });
   return e.shock > 0 ? 0 : e.frozen > 0 ? 0.3 : e.chill > 0 ? CHILL_PACE : 1;

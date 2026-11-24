@@ -6,7 +6,7 @@ import { enemyCenter } from "../../../../game/enemies/enemy";
 import { addStacks, consumeStacks, stacksOf } from "../../../../game/enemies/skillStatus";
 import { skillValues, withCharms } from "../../../../game/skills/query";
 import { foesOnScreen } from "../../../../game/skills/targets";
-import { game, particles, progress, rng } from "../../../../game/state";
+import { fxRng, game, particles, progress } from "../../../../game/state";
 import type { Enemy } from "../../../../types/enemy";
 import { PK } from "../../../../types/particle";
 import type { SkillBehavior, SkillMemory } from "../../../../types/skillBehavior";
@@ -50,11 +50,11 @@ export function lodge(e: Enemy, n: number): void {
 /** a burst of crystal flecks from a foe */
 function flecks(x: number, y: number, n: number): void {
   for (let i = 0; i < n; i++) {
-    const a = rng.range(0, TAU);
-    const sp = rng.range(60, 180);
-    particles.spawn(PK.SHARD, x, y, Math.cos(a) * sp, Math.sin(a) * sp, rng.range(0.2, 0.45), {
-      col: rng.pick(PAL.crystal.slice(3)),
-      size: rng.range(1, 2),
+    const a = fxRng.range(0, TAU);
+    const sp = fxRng.range(60, 180);
+    particles.spawn(PK.SHARD, x, y, Math.cos(a) * sp, Math.sin(a) * sp, fxRng.range(0.2, 0.45), {
+      col: fxRng.pick(PAL.crystal.slice(3)),
+      size: fxRng.range(1, 2),
     });
   }
 }

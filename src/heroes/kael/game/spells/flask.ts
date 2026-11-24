@@ -1,6 +1,6 @@
 import { stageLeft, stageRight } from "../../../../game/adventure";
 import { enemyBox } from "../../../../game/enemies/enemy";
-import { game, particles, rng } from "../../../../game/state";
+import { fxRng, game, particles } from "../../../../game/state";
 import { boxHit, surfaceBelow } from "../../../../game/world";
 import type { Flask } from "../../../../types/effect";
 import { PF, PK } from "../../../../types/particle";
@@ -11,15 +11,15 @@ export function trailFlask(o: Flask, n: number, size: number): void {
   for (let i = 0; i < n; i++)
     particles.spawn(
       PK.FIRE,
-      o.x + rng.range(-1, 1),
-      o.y + rng.range(-1, 1),
-      -o.vx * 0.15 + rng.range(-10, 10),
+      o.x + fxRng.range(-1, 1),
+      o.y + fxRng.range(-1, 1),
+      -o.vx * 0.15 + fxRng.range(-10, 10),
       -o.vy * 0.1 - 10,
-      rng.range(0.15, 0.3),
+      fxRng.range(0.15, 0.3),
       {
         col: 0,
-        size: rng.range(size * 0.6, size),
-        flag: rng.chance(0.25) ? PF.SMOKES : 0,
+        size: fxRng.range(size * 0.6, size),
+        flag: fxRng.chance(0.25) ? PF.SMOKES : 0,
       },
     );
 }

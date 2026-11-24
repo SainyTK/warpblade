@@ -5,7 +5,7 @@ import { PK } from "../../../types/particle";
 import { approach, clamp, TAU } from "../../../utils/math";
 import { waveScale } from "../../../utils/progression";
 import { clampStageX } from "../../adventure";
-import { game, hero, particles, rng } from "../../state";
+import { fxRng, game, hero, particles, rng } from "../../state";
 import { foeSees } from "../awareness";
 import { DAY_COLORS as DC } from "./colors";
 import { createPollen } from "./pollen";
@@ -20,9 +20,9 @@ function shed(e: Enemy): void {
   for (const side of [-1, 1])
     game.fx.push(createPollen(e.x + side * 3, e.y + 4, toward + side * SHED.drift * 0.5, MOTH_HITS.pollen * e.power));
   for (let i = 0; i < 10; i++) {
-    const a = rng.range(0, TAU);
-    particles.spawn(PK.MOTE, e.x, e.y, Math.cos(a) * 40, Math.sin(a) * 40, rng.range(0.3, 0.5), {
-      col: rng.pick(DC.pollen),
+    const a = fxRng.range(0, TAU);
+    particles.spawn(PK.MOTE, e.x, e.y, Math.cos(a) * 40, Math.sin(a) * 40, fxRng.range(0.3, 0.5), {
+      col: fxRng.pick(DC.pollen),
       size: 0.6,
     });
   }
@@ -46,8 +46,8 @@ export function updateMoth(e: Enemy, dt: number, ts: number): void {
   } else if (e.state === "wind") {
     e.vx = approach(e.vx, 0, 200 * dt);
     e.vy = approach(e.vy, -6, 200 * dt);
-    if (rng.chance(0.6 * ts)) {
-      const a = rng.range(0, TAU);
+    if (fxRng.chance(0.6 * ts)) {
+      const a = fxRng.range(0, TAU);
       particles.spawn(
         PK.MOTE,
         e.x + Math.cos(a) * 9,
@@ -56,7 +56,7 @@ export function updateMoth(e: Enemy, dt: number, ts: number): void {
         -Math.sin(a) * 30,
         0.25,
         {
-          col: rng.chance(0.6) ? DC.pollen[2] : DC.pollenPink,
+          col: fxRng.chance(0.6) ? DC.pollen[2] : DC.pollenPink,
           size: 0.5,
         },
       );
@@ -83,9 +83,17 @@ export function updateMoth(e: Enemy, dt: number, ts: number): void {
   e.vy -= e.vy * 2 * dt;
   e.x = clampStageX(e.x + e.vx * dt, 10);
   e.y = clamp(e.y + e.vy * dt, 20, GROUND - 10);
-  if (rng.chance(0.12 * ts))
-    particles.spawn(PK.MOTE, e.x + rng.range(-5, 5), e.y + 3, rng.range(-4, 4), rng.range(6, 14), rng.range(0.4, 0.8), {
-      col: rng.chance(0.7) ? DC.pollen[2] : DC.pollenPink,
-      size: 0.5,
-    });
+  if (fxRng.chance(0.12 * ts))
+    particles.spawn(
+      PK.MOTE,
+      e.x + fxRng.range(-5, 5),
+      e.y + 3,
+      fxRng.range(-4, 4),
+      fxRng.range(6, 14),
+      fxRng.range(0.4, 0.8),
+      {
+        col: fxRng.chance(0.7) ? DC.pollen[2] : DC.pollenPink,
+        size: 0.5,
+      },
+    );
 }

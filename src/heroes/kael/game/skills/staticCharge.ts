@@ -3,7 +3,7 @@ import { enemyCenter } from "../../../../game/enemies/enemy";
 import { addStacks, stacksOf } from "../../../../game/enemies/skillStatus";
 import { skillEvolved, skillValues, withCharms } from "../../../../game/skills/query";
 import { foesOnScreen } from "../../../../game/skills/targets";
-import { game, hero, particles, progress, rng } from "../../../../game/state";
+import { fxRng, game, hero, particles, progress } from "../../../../game/state";
 import type { Enemy } from "../../../../types/enemy";
 import { PK } from "../../../../types/particle";
 import type { SkillBehavior, SkillMemory } from "../../../../types/skillBehavior";
@@ -82,14 +82,14 @@ export const staticCharge: SkillBehavior = {
     m.overloadT = Math.max(0, m.overloadT - dt);
     for (const [e] of m.boltAt) if (e.hp <= 0) m.boltAt.delete(e);
     for (const e of foesOnScreen()) {
-      if (!charged(e) || !rng.chance(0.2)) continue;
+      if (!charged(e) || !fxRng.chance(0.2)) continue;
       const [x, y] = enemyCenter(e);
       particles.spawn(
         PK.SPARK,
-        x + rng.range(-6, 6),
-        y + rng.range(-8, 8),
-        rng.range(-50, 50),
-        rng.range(-60, 10),
+        x + fxRng.range(-6, 6),
+        y + fxRng.range(-8, 8),
+        fxRng.range(-50, 50),
+        fxRng.range(-60, 10),
         0.1,
         {
           sparks: SPARKS.volt,

@@ -7,7 +7,7 @@ import { WHITE } from "../../../utils/color";
 import { clamp } from "../../../utils/math";
 import { eachStanding, heroSlot } from "../../coopHooks";
 import { hurtHero } from "../../hurtHero";
-import { particles, rng } from "../../state";
+import { fxRng, particles } from "../../state";
 import { boxHit, heroBox, shake } from "../../world";
 import { AC, VOID, VOID_SPARKS } from "./colors";
 
@@ -130,9 +130,17 @@ export function createVoidPillar(x: number, delay: number, damage: number): Effe
         shake(0.12, 2);
         sfx.thunder();
         for (let i = 0; i < 8; i++)
-          particles.spawn(PK.SPARK, x + rng.range(-6, 6), GROUND - 1, rng.range(-80, 80), rng.range(-170, -50), 0.35, {
-            sparks: VOID_SPARKS,
-          });
+          particles.spawn(
+            PK.SPARK,
+            x + fxRng.range(-6, 6),
+            GROUND - 1,
+            fxRng.range(-80, 80),
+            fxRng.range(-170, -50),
+            0.35,
+            {
+              sparks: VOID_SPARKS,
+            },
+          );
       }
       if (t < PILLAR.warn + PILLAR.hurts)
         eachStanding(() => {

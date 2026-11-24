@@ -6,7 +6,7 @@ import { createFloorRing } from "../../../../game/effects/floorRing";
 import { travelEnded } from "../../../../game/hero/travelEnd";
 import { meleeHit } from "../../../../game/meleeHit";
 import { skillValues, withCharms } from "../../../../game/skills/query";
-import { game, hero, particles, rng } from "../../../../game/state";
+import { fxRng, game, hero, particles } from "../../../../game/state";
 import { boxAhead, dust, newSwing, shake } from "../../../../game/world";
 import type { MoveDef } from "../../../../types/move";
 import { PK } from "../../../../types/particle";
@@ -41,12 +41,12 @@ function slamLanding(): void {
       PK.SHARD,
       hero.x,
       hero.y - 1,
-      (i % 2 ? 1 : -1) * rng.range(30, 130),
-      rng.range(-170, -60),
-      rng.range(0.4, 0.8),
+      (i % 2 ? 1 : -1) * fxRng.range(30, 130),
+      fxRng.range(-170, -60),
+      fxRng.range(0.4, 0.8),
       {
         col: WORLD_COLORS.rubble,
-        size: rng.range(1.5, 3),
+        size: fxRng.range(1.5, 3),
       },
     );
   shake(0.24, 3);

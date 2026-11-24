@@ -7,7 +7,7 @@ import { enemyCenter } from "../../../../game/enemies/enemy";
 import { addStacks, consumeStacks, stacksOf } from "../../../../game/enemies/skillStatus";
 import { skillValues, withCharms } from "../../../../game/skills/query";
 import { foesOnScreen } from "../../../../game/skills/targets";
-import { game, lights, particles, progress, rng } from "../../../../game/state";
+import { fxRng, game, lights, particles, progress } from "../../../../game/state";
 import { shake } from "../../../../game/world";
 import type { Enemy } from "../../../../types/enemy";
 import { PK } from "../../../../types/particle";
@@ -49,13 +49,13 @@ function wound(m: RiftMemory, e: Enemy, n: number, spreads: boolean): void {
   for (let i = 0; i < 6; i++)
     particles.spawn(
       PK.STREAK,
-      x + rng.range(-8, 8),
-      y + rng.range(-10, 10),
+      x + fxRng.range(-8, 8),
+      y + fxRng.range(-10, 10),
       0,
-      -rng.range(10, 30),
-      rng.range(0.2, 0.4),
+      -fxRng.range(10, 30),
+      fxRng.range(0.2, 0.4),
       {
-        col: rng.pick([PAL.shadow[4], PAL.shadow[5]]),
+        col: fxRng.pick([PAL.shadow[4], PAL.shadow[5]]),
       },
     );
   if (v.spread && spreads && !isLocked(m.lock, e)) {

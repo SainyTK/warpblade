@@ -7,7 +7,7 @@ import { WHITE } from "../../../utils/color";
 import { clamp } from "../../../utils/math";
 import { eachStanding, heroSlot } from "../../coopHooks";
 import { hurtHero } from "../../hurtHero";
-import { lights, particles, rng } from "../../state";
+import { fxRng, lights, particles } from "../../state";
 import { boxHit, heroBox, shake } from "../../world";
 import type { MoonLook, MoonStrike } from "./moonLook";
 import { TOLL } from "./shepherdMoves";
@@ -72,11 +72,11 @@ function burst(p: MarkPlan): void {
   for (let i = 0; i < 12; i++)
     particles.spawn(
       PK.SPARK,
-      p.x + rng.range(-p.radius, p.radius) * 0.7,
+      p.x + fxRng.range(-p.radius, p.radius) * 0.7,
       GROUND - 1,
-      rng.range(-50, 50),
-      -rng.range(80, 200),
-      rng.range(0.25, 0.5),
+      fxRng.range(-50, 50),
+      -fxRng.range(80, 200),
+      fxRng.range(0.25, 0.5),
       { sparks: p.look.sparks },
     );
 }

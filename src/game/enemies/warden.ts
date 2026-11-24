@@ -11,7 +11,7 @@ import { eachStanding } from "../coopHooks";
 import { createRift } from "../effects/rift";
 import { createShadowOrb } from "../effects/shadowOrb";
 import { hurtHero } from "../hurtHero";
-import { game, hero, particles, rng } from "../state";
+import { fxRng, game, hero, particles, rng } from "../state";
 import { boxHit, heroBox } from "../world";
 import { enemyBox, makeEnemy } from "./enemy";
 import { turnToHero } from "./facing";
@@ -95,14 +95,14 @@ export function updateWarden(e: Enemy, dt: number, ts: number): void {
   }
   e.x = clampStageX(e.x + e.vx * dt, 20);
   e.y = clamp(e.y + e.vy * dt, 26, GROUND - 22);
-  if (rng.chance(0.4 * ts))
+  if (fxRng.chance(0.4 * ts))
     particles.spawn(
       PK.EMBER,
-      e.x + rng.range(-12, 12),
-      e.y + rng.range(6, 14),
-      rng.range(-8, 8),
-      rng.range(-10, 10),
-      rng.range(0.5, 1),
+      e.x + fxRng.range(-12, 12),
+      e.y + fxRng.range(6, 14),
+      fxRng.range(-8, 8),
+      fxRng.range(-10, 10),
+      fxRng.range(0.5, 1),
       {
         sparks: SPARKS.shadow,
       },

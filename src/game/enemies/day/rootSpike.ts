@@ -4,7 +4,7 @@ import type { Effect } from "../../../types/effect";
 import { PK } from "../../../types/particle";
 import { eachStanding, heroSlot } from "../../coopHooks";
 import { hurtHero } from "../../hurtHero";
-import { particles, rng } from "../../state";
+import { fxRng, particles, rng } from "../../state";
 import { boxHit, dust, heroBox, shake } from "../../world";
 import { DAY_SPARKS } from "./colors";
 import { drawRoot, drawRootWarning } from "./drawRootSpike";
@@ -33,7 +33,7 @@ export function createRootSpike(x: number, mark: number, dmg: number, strike: Ro
     update(dt) {
       t += dt;
       if (t < mark) {
-        if (rng.chance(0.08)) dust(x + rng.range(-3, 3), GROUND, 1);
+        if (fxRng.chance(0.08)) dust(x + fxRng.range(-3, 3), GROUND, 1);
         return true;
       }
       if (!burst) {
@@ -41,9 +41,9 @@ export function createRootSpike(x: number, mark: number, dmg: number, strike: Ro
         dust(x, GROUND, 4);
         shake(0.08, 1);
         for (let i = 0; i < 5; i++)
-          particles.spawn(PK.SHARD, x, GROUND - 2, rng.range(-60, 60), -rng.range(60, 140), rng.range(0.3, 0.6), {
+          particles.spawn(PK.SHARD, x, GROUND - 2, fxRng.range(-60, 60), -fxRng.range(60, 140), fxRng.range(0.3, 0.6), {
             col: DAY_SPARKS.bark[2],
-            size: rng.range(1, 2),
+            size: fxRng.range(1, 2),
           });
       }
       const h = height();

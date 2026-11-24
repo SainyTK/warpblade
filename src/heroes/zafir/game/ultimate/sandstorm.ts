@@ -5,7 +5,7 @@ import { enemyCenter } from "../../../../game/enemies/enemy";
 import { ultimateValues } from "../../../../game/hero/ultimate";
 import { withCharms } from "../../../../game/skills/query";
 import { foesOnScreen } from "../../../../game/skills/targets";
-import { game, hero, particles, progress, rng } from "../../../../game/state";
+import { fxRng, game, hero, particles, progress } from "../../../../game/state";
 import type { Effect } from "../../../../types/effect";
 import { PK } from "../../../../types/particle";
 import { TAU } from "../../../../utils/math";
@@ -27,11 +27,11 @@ function createStorm(level: number, reach: number, life: number, cut: number): E
   let clock = 0;
   const v = ultimateValues();
   const grains: Grain[] = Array.from({ length: STORM_LOOK.grains * (v.grains ?? 1) }, () => [
-    rng.range(0, STORM_LOOK.height),
-    rng.range(0.35, 1),
-    rng.range(0, TAU),
-    rng.range(0.7, 1.3),
-    rng.int(0, GRAIN.length - 1),
+    fxRng.range(0, STORM_LOOK.height),
+    fxRng.range(0.35, 1),
+    fxRng.range(0, TAU),
+    fxRng.range(0.7, 1.3),
+    fxRng.int(0, GRAIN.length - 1),
   ]);
   const strike = () => {
     for (const e of foesOnScreen()) {
@@ -90,13 +90,13 @@ function createStorm(level: number, reach: number, life: number, cut: number): E
         clock = STORM_CUT.every;
         strike();
       }
-      if (rng.chance(0.7))
+      if (fxRng.chance(0.7))
         particles.spawn(
           PK.DUST,
-          hero.x + rng.range(-reach, reach),
+          hero.x + fxRng.range(-reach, reach),
           hero.y - 1,
-          rng.range(-40, 40),
-          -rng.range(10, 40),
+          fxRng.range(-40, 40),
+          -fxRng.range(10, 40),
           0.6,
           {
             col: GRAIN[3],

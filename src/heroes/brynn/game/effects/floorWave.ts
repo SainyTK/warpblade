@@ -6,7 +6,7 @@ import { dealDamage } from "../../../../game/damage";
 import { createImpact } from "../../../../game/effects/impact";
 import { enemyBox } from "../../../../game/enemies/enemy";
 import { emitSkillEvent } from "../../../../game/skills/events";
-import { game, particles, rng } from "../../../../game/state";
+import { fxRng, game, particles } from "../../../../game/state";
 import { boxHit } from "../../../../game/world";
 import type { SourceId } from "../../../../types/build";
 import type { Effect } from "../../../../types/effect";
@@ -78,17 +78,17 @@ export function createFloorWave(w: FloorWave): Effect {
       if (o.run < w.reach) {
         o.run = Math.min(w.reach, o.run + w.speed * dt);
         strike();
-        if (rng.chance(look.rubble))
+        if (fxRng.chance(look.rubble))
           particles.spawn(
             PK.SHARD,
             front(),
             w.y - 1,
-            w.face * rng.range(10, 60),
-            rng.range(-150, -60),
-            rng.range(0.3, 0.6),
+            w.face * fxRng.range(10, 60),
+            fxRng.range(-150, -60),
+            fxRng.range(0.3, 0.6),
             {
               col: WORLD_COLORS.rubble,
-              size: rng.range(1, 2.4),
+              size: fxRng.range(1, 2.4),
             },
           );
         if (front() > stageLeft() - 10 && front() < stageRight() + 10) return true;

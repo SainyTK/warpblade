@@ -8,7 +8,7 @@ import { stageLeft, stageRight } from "../../adventure";
 import { eachStanding } from "../../coopHooks";
 import { hurtHero } from "../../hurtHero";
 import { shotWarded } from "../../shotWards";
-import { game, particles, rng } from "../../state";
+import { fxRng, game, particles } from "../../state";
 import { fieldPace } from "../../timeFields";
 import { boxHit, heroBox } from "../../world";
 import { PRISM_SPARKS } from "./colors";
@@ -29,7 +29,7 @@ export function createPrismShard(x: number, y: number, vx: number, vy: number, d
   const burst = (n: number) => {
     game.fx.push(createPrismFlash(o.x, o.y, hue, SHATTER));
     for (let i = 0; i < n; i++)
-      particles.spawn(PK.SPARK, o.x, o.y, rng.range(-90, 90), rng.range(-110, 20), rng.range(0.1, 0.25), {
+      particles.spawn(PK.SPARK, o.x, o.y, fxRng.range(-90, 90), fxRng.range(-110, 20), fxRng.range(0.1, 0.25), {
         sparks: PRISM_SPARKS,
       });
   };
@@ -42,8 +42,8 @@ export function createPrismShard(x: number, y: number, vx: number, vy: number, d
       o.y += vy * dt;
       // a ward (Whirlwall) breaks the shot
       if (shotWarded(o.x, o.y)) return false;
-      if (rng.chance(0.35))
-        particles.spawn(PK.MOTE, o.x, o.y, -vx * 0.1, -vy * 0.1, rng.range(0.15, 0.3), { col: hue, size: 0.5 });
+      if (fxRng.chance(0.35))
+        particles.spawn(PK.MOTE, o.x, o.y, -vx * 0.1, -vy * 0.1, fxRng.range(0.15, 0.3), { col: hue, size: 0.5 });
       let struck = false;
       eachStanding(() => {
         if (struck || !boxHit([o.x - 2, o.y - 2, o.x + 2, o.y + 2], heroBox())) return;
