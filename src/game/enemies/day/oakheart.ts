@@ -8,7 +8,7 @@ import { clampStageX, stageLeft, stageRight } from "../../adventure";
 import { eachStanding } from "../../coopHooks";
 import { createSlash } from "../../effects/slash";
 import { hurtHero } from "../../hurtHero";
-import { game, hero, particles, rng } from "../../state";
+import { fxRng, game, hero, particles, rng } from "../../state";
 import { boxHit, dust, heroBox, shake, surfaceBelow } from "../../world";
 import { facesHero, turnToHero } from "../facing";
 import { createAcorn } from "./acorn";
@@ -37,37 +37,37 @@ function splitBark(e: Enemy): void {
   for (let i = 0; i < SPLIT_BURST.leaves; i++)
     particles.spawn(
       PK.SHARD,
-      e.x + rng.range(-12, 12),
-      e.y - rng.range(36, 42),
-      rng.range(-110, 110),
-      -rng.range(80, 150),
-      rng.range(0.7, 1.2),
+      e.x + fxRng.range(-12, 12),
+      e.y - fxRng.range(36, 42),
+      fxRng.range(-110, 110),
+      -fxRng.range(80, 150),
+      fxRng.range(0.7, 1.2),
       {
-        col: rng.pick(BURST_LEAVES),
+        col: fxRng.pick(BURST_LEAVES),
         size: 3,
       },
     );
   for (let i = 0; i < SPLIT_BURST.chips; i++)
     particles.spawn(
       PK.SHARD,
-      e.x + e.face * rng.range(-2, 0),
-      e.y - rng.range(16, 28),
-      rng.pick([-1, 1]) * rng.range(60, 140),
-      -rng.range(40, 100),
-      rng.range(0.5, 0.8),
+      e.x + e.face * fxRng.range(-2, 0),
+      e.y - fxRng.range(16, 28),
+      fxRng.pick([-1, 1]) * fxRng.range(60, 140),
+      -fxRng.range(40, 100),
+      fxRng.range(0.5, 0.8),
       {
-        col: rng.pick(DAY_SPARKS.bark),
+        col: fxRng.pick(DAY_SPARKS.bark),
         size: 2,
       },
     );
   for (let i = 0; i < SPLIT_BURST.sparks; i++)
     particles.spawn(
       PK.EMBER,
-      e.x + e.face * rng.range(-2, 0),
-      e.y - rng.range(16, 28),
-      rng.range(-50, 50),
-      -rng.range(20, 70),
-      rng.range(0.5, 0.9),
+      e.x + e.face * fxRng.range(-2, 0),
+      e.y - fxRng.range(16, 28),
+      fxRng.range(-50, 50),
+      -fxRng.range(20, 70),
+      fxRng.range(0.5, 0.9),
       {
         sparks: DAY_SPARKS.rift,
       },
@@ -97,13 +97,13 @@ function sweep(e: Enemy): void {
   for (let i = 0; i < 6; i++)
     particles.spawn(
       PK.SHARD,
-      e.x + e.face * rng.range(10, 30),
-      e.y - rng.range(14, 34),
-      e.face * rng.range(40, 100),
-      -rng.range(10, 60),
-      rng.range(0.5, 0.9),
+      e.x + e.face * fxRng.range(10, 30),
+      e.y - fxRng.range(14, 34),
+      e.face * fxRng.range(40, 100),
+      -fxRng.range(10, 60),
+      fxRng.range(0.5, 0.9),
       {
-        col: rng.pick(DC.leaf),
+        col: fxRng.pick(DC.leaf),
         size: 1.2,
       },
     );
@@ -166,7 +166,7 @@ export function updateOakheart(e: Enemy, dt: number, ts: number): void {
   } else if (e.state === "charge") {
     // arms raised, then driven into the floor
     e.vx = approach(e.vx, 0, 400 * dt);
-    if (rng.chance(0.3 * ts)) dust(e.x + rng.range(-12, 12), GROUND, 1);
+    if (fxRng.chance(0.3 * ts)) dust(e.x + fxRng.range(-12, 12), GROUND, 1);
     if (e.st >= OAK_TIMES.root * w) {
       Object.assign(e, { state: "burrow", st: 0 });
       plantRoots(e, enraged);
@@ -175,16 +175,16 @@ export function updateOakheart(e: Enemy, dt: number, ts: number): void {
     if (e.st >= OAK_TIMES.plant) Object.assign(e, { state: "recover", st: 0 });
   } else if (e.state === "volley") {
     e.vx = approach(e.vx, 0, 400 * dt);
-    if (rng.chance(0.4 * ts))
+    if (fxRng.chance(0.4 * ts))
       particles.spawn(
         PK.SHARD,
-        e.x + rng.range(-12, 12),
-        e.y - rng.range(30, 40),
-        rng.range(-20, 20),
-        -rng.range(10, 40),
-        rng.range(0.4, 0.8),
+        e.x + fxRng.range(-12, 12),
+        e.y - fxRng.range(30, 40),
+        fxRng.range(-20, 20),
+        -fxRng.range(10, 40),
+        fxRng.range(0.4, 0.8),
         {
-          col: rng.pick(DC.leaf),
+          col: fxRng.pick(DC.leaf),
           size: 1,
         },
       );
@@ -203,20 +203,20 @@ export function updateOakheart(e: Enemy, dt: number, ts: number): void {
   if (e.state !== "walk") e.vx -= e.vx * 4 * dt;
   e.x = clampStageX(e.x + e.vx * dt, 14);
   e.y = GROUND;
-  if (rng.chance(0.15 * ts))
-    particles.spawn(PK.EMBER, e.x + rng.range(-8, 8), e.y - rng.range(12, 30), 0, -10, rng.range(0.5, 1), {
+  if (fxRng.chance(0.15 * ts))
+    particles.spawn(PK.EMBER, e.x + fxRng.range(-8, 8), e.y - fxRng.range(12, 30), 0, -10, fxRng.range(0.5, 1), {
       sparks: DAY_SPARKS.rift,
     });
-  if (rng.chance(0.03 * ts))
+  if (fxRng.chance(0.03 * ts))
     particles.spawn(
       PK.SHARD,
-      e.x + rng.range(-12, 12),
-      e.y - rng.range(32, 40),
-      rng.range(-10, 10),
-      rng.range(0, 10),
-      rng.range(0.8, 1.4),
+      e.x + fxRng.range(-12, 12),
+      e.y - fxRng.range(32, 40),
+      fxRng.range(-10, 10),
+      fxRng.range(0, 10),
+      fxRng.range(0.8, 1.4),
       {
-        col: DC.leaf[rng.int(1, 3)],
+        col: DC.leaf[fxRng.int(1, 3)],
         size: 1,
       },
     );

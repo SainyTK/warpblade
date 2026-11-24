@@ -3,7 +3,7 @@ import { dealDamage } from "../../../../game/damage";
 import { enemyCenter } from "../../../../game/enemies/enemy";
 import { withCharms } from "../../../../game/skills/query";
 import { foesOnScreen } from "../../../../game/skills/targets";
-import { particles, rng } from "../../../../game/state";
+import { fxRng, particles } from "../../../../game/state";
 import type { Effect } from "../../../../types/effect";
 import type { Enemy } from "../../../../types/enemy";
 import { PK } from "../../../../types/particle";
@@ -57,8 +57,8 @@ export function createSpout(x0: number, y: number, dir: number, spec: SpoutSpec)
     update(dt) {
       t += dt;
       x += dir * SPOUT.speed * dt;
-      if (rng.chance(0.5))
-        particles.spawn(PK.DUST, x + rng.range(-4, 4), y - 1, -dir * rng.range(10, 30), -rng.range(5, 20), 0.4, {
+      if (fxRng.chance(0.5))
+        particles.spawn(PK.DUST, x + fxRng.range(-4, 4), y - 1, -dir * fxRng.range(10, 30), -fxRng.range(5, 20), 0.4, {
           col: GRAIN[3],
           size: 1.4,
         });
@@ -77,11 +77,11 @@ export function createSpout(x0: number, y: number, dir: number, spec: SpoutSpec)
 /** a ring of sand thrown up where a spout or the mirage bursts */
 export function sandBurst(x: number, y: number, n: number): void {
   for (let i = 0; i < n; i++) {
-    const a = rng.range(0, TAU);
-    const sp = rng.range(40, 140);
-    particles.spawn(PK.SHARD, x, y, Math.cos(a) * sp, Math.sin(a) * sp - 40, rng.range(0.25, 0.5), {
-      col: rng.pick(GRAIN),
-      size: rng.range(0.8, 1.6),
+    const a = fxRng.range(0, TAU);
+    const sp = fxRng.range(40, 140);
+    particles.spawn(PK.SHARD, x, y, Math.cos(a) * sp, Math.sin(a) * sp - 40, fxRng.range(0.25, 0.5), {
+      col: fxRng.pick(GRAIN),
+      size: fxRng.range(0.8, 1.6),
     });
   }
 }

@@ -7,7 +7,7 @@ import { eachStanding } from "../../coopHooks";
 import { createFloorRing } from "../../effects/floorRing";
 import { hurtHero } from "../../hurtHero";
 import { shotWarded } from "../../shotWards";
-import { game, particles, rng } from "../../state";
+import { fxRng, game, particles } from "../../state";
 import { fieldPace } from "../../timeFields";
 import { boxHit, heroBox } from "../../world";
 import { VOID, VOID_SPARKS } from "./colors";
@@ -24,7 +24,7 @@ export function createVoidOrb(x: number, y: number, vx: number, vy: number, dama
   const burst = () => {
     game.fx.push(createFloorRing(o.x, GROUND, 12, VOID, 0.3));
     for (let i = 0; i < 6; i++)
-      particles.spawn(PK.SPARK, o.x, Math.min(o.y, GROUND - 1), rng.range(-70, 70), rng.range(-120, -20), 0.25, {
+      particles.spawn(PK.SPARK, o.x, Math.min(o.y, GROUND - 1), fxRng.range(-70, 70), fxRng.range(-120, -20), 0.25, {
         sparks: VOID_SPARKS,
       });
   };
@@ -38,8 +38,8 @@ export function createVoidOrb(x: number, y: number, vx: number, vy: number, dama
       o.y += o.vy * dt;
       // a ward (Whirlwall) breaks the shot
       if (shotWarded(o.x, o.y)) return false;
-      if (rng.chance(0.5))
-        particles.spawn(PK.EMBER, o.x, o.y, -vx * 0.1, -o.vy * 0.1, rng.range(0.2, 0.4), { sparks: VOID_SPARKS });
+      if (fxRng.chance(0.5))
+        particles.spawn(PK.EMBER, o.x, o.y, -vx * 0.1, -o.vy * 0.1, fxRng.range(0.2, 0.4), { sparks: VOID_SPARKS });
       let struck = false;
       eachStanding(() => {
         if (struck || !boxHit([o.x - 3, o.y - 3, o.x + 3, o.y + 3], heroBox())) return;

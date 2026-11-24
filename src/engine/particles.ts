@@ -46,7 +46,7 @@ export class Particles {
     return this.list.length;
   }
   spawn(k: ParticleKind, x: number, y: number, vx: number, vy: number, life: number, o: SpawnOptions = {}): void {
-    if (this.list.length >= MAX_PARTICLES) return;
+    if (this.list.length >= MAX_PARTICLES && k !== PK.BRAND) return;
     const R = this.rng;
     this.list.push({
       k,

@@ -7,7 +7,7 @@ import { clampStageX, stageLeft, stageRight } from "../../adventure";
 import { eachStanding, heroSlot } from "../../coopHooks";
 import { hurtHero } from "../../hurtHero";
 import { shotWarded } from "../../shotWards";
-import { game, hero, particles, rng } from "../../state";
+import { fxRng, game, hero, particles } from "../../state";
 import { fieldPace } from "../../timeFields";
 import { boxHit, dust, heroBox } from "../../world";
 import { RAIN_FOES as C, MUD_SPARKS } from "./colors";
@@ -34,10 +34,10 @@ export function createMudPuddle(x: number, damage: number): Effect {
           hurtHero(damage, x);
         }
       });
-      if (rng.chance(dt * 3))
-        particles.spawn(PK.DUST, x + rng.range(-6, 6), GROUND - 1, 0, -rng.range(3, 8), 0.5, {
+      if (fxRng.chance(dt * 3))
+        particles.spawn(PK.DUST, x + fxRng.range(-6, 6), GROUND - 1, 0, -fxRng.range(3, 8), 0.5, {
           col: C.mudLight,
-          size: rng.range(1, 2),
+          size: fxRng.range(1, 2),
         });
       return t < PUDDLE_LIFE;
     },
@@ -84,8 +84,8 @@ export function createMudGlob(
       o.y += o.vy * dt;
       // a ward (Whirlwall) breaks the shot
       if (shotWarded(o.x, o.y)) return false;
-      if (rng.chance(0.3))
-        particles.spawn(PK.SPARK, o.x, o.y, -o.vx * 0.1, 0, rng.range(0.1, 0.25), { sparks: MUD_SPARKS });
+      if (fxRng.chance(0.3))
+        particles.spawn(PK.SPARK, o.x, o.y, -o.vx * 0.1, 0, fxRng.range(0.1, 0.25), { sparks: MUD_SPARKS });
       let struck = false;
       eachStanding(() => {
         if (struck || !boxHit([o.x - 3, o.y - 3, o.x + 3, o.y + 3], heroBox())) return;
@@ -96,9 +96,17 @@ export function createMudGlob(
       if (o.y >= GROUND - 1) {
         dust(o.x, GROUND, 4);
         for (let i = 0; i < 6; i++)
-          particles.spawn(PK.SPARK, o.x, GROUND - 2, rng.range(-90, 90), -rng.range(60, 150), rng.range(0.2, 0.4), {
-            sparks: MUD_SPARKS,
-          });
+          particles.spawn(
+            PK.SPARK,
+            o.x,
+            GROUND - 2,
+            fxRng.range(-90, 90),
+            -fxRng.range(60, 150),
+            fxRng.range(0.2, 0.4),
+            {
+              sparks: MUD_SPARKS,
+            },
+          );
         if (puddle !== null) game.fx.push(createMudPuddle(o.x, puddle));
         return false;
       }

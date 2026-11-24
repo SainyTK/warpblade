@@ -9,7 +9,7 @@ import { eachStanding } from "../../coopHooks";
 import { createFloorRing } from "../../effects/floorRing";
 import { createSlash } from "../../effects/slash";
 import { hurtHero } from "../../hurtHero";
-import { game, hero, particles, rng } from "../../state";
+import { fxRng, game, hero, particles, rng } from "../../state";
 import { boxHit, dust, heroBox } from "../../world";
 import { foeSees } from "../awareness";
 import { enemyBox } from "../enemy";
@@ -46,7 +46,7 @@ function rise(e: Enemy): void {
   dust(e.x - 3, GROUND, 4, -1);
   dust(e.x + 3, GROUND, 4, 1);
   for (let i = 0; i < 8; i++)
-    particles.spawn(PK.SPARK, e.x + rng.range(-6, 6), GROUND - 1, rng.range(-50, 50), rng.range(-170, -80), 0.3, {
+    particles.spawn(PK.SPARK, e.x + fxRng.range(-6, 6), GROUND - 1, fxRng.range(-50, 50), fxRng.range(-170, -80), 0.3, {
       sparks: VOID_SPARKS,
     });
   eachStanding(() => {
@@ -82,8 +82,8 @@ export function updateStalker(e: Enemy, dt: number, ts: number): void {
     } else {
       e.face = Math.sign(dx) || e.face;
       e.vx = approach(e.vx, Math.sign(dx) * 95, 400 * dt);
-      if (rng.chance(0.4 * ts))
-        particles.spawn(PK.EMBER, e.x + rng.range(-6, 6), GROUND - 1, -e.vx * 0.2, -rng.range(6, 20), 0.4, {
+      if (fxRng.chance(0.4 * ts))
+        particles.spawn(PK.EMBER, e.x + fxRng.range(-6, 6), GROUND - 1, -e.vx * 0.2, -fxRng.range(6, 20), 0.4, {
           sparks: VOID_SPARKS,
         });
       if (Math.abs(dx) < 4 || e.st >= GLIDE || hero.state === "dead")
@@ -91,8 +91,8 @@ export function updateStalker(e: Enemy, dt: number, ts: number): void {
     }
   } else if (e.state === "charge") {
     e.vx = 0;
-    if (rng.chance(0.6 * ts))
-      particles.spawn(PK.SPARK, e.x + rng.range(-8, 8), GROUND - 1, 0, -rng.range(30, 70), 0.2, {
+    if (fxRng.chance(0.6 * ts))
+      particles.spawn(PK.SPARK, e.x + fxRng.range(-8, 8), GROUND - 1, 0, -fxRng.range(30, 70), 0.2, {
         sparks: VOID_SPARKS,
       });
     if (e.st >= 0.65 * ws.windup) rise(e);
@@ -102,8 +102,8 @@ export function updateStalker(e: Enemy, dt: number, ts: number): void {
   if (e.state !== "walk" && e.state !== "burrow") e.vx -= e.vx * 4 * dt;
   e.x = clampStageX(e.x + e.vx * dt, 10);
   e.y = GROUND;
-  if (!sunk(e) && rng.chance(0.08 * ts))
-    particles.spawn(PK.EMBER, e.x + rng.range(-6, 6), e.y - rng.range(6, 18), 0, -10, rng.range(0.4, 0.8), {
+  if (!sunk(e) && fxRng.chance(0.08 * ts))
+    particles.spawn(PK.EMBER, e.x + fxRng.range(-6, 6), e.y - fxRng.range(6, 18), 0, -10, fxRng.range(0.4, 0.8), {
       sparks: VOID_SPARKS,
     });
   eachStanding(() => {

@@ -4,7 +4,7 @@ import { dealDamage } from "../../../../../game/damage";
 import { fineRing } from "../../../../../game/effects/fine";
 import { createImpact } from "../../../../../game/effects/impact";
 import { enemyCenter } from "../../../../../game/enemies/enemy";
-import { game, hero, particles, rng } from "../../../../../game/state";
+import { fxRng, game, hero, particles } from "../../../../../game/state";
 import { surfaceBelow } from "../../../../../game/world";
 import type { Effect } from "../../../../../types/effect";
 import type { Enemy } from "../../../../../types/enemy";
@@ -35,11 +35,11 @@ export interface NovaRing {
 /** shards thrown out as the ring bursts, more at higher charge */
 function burstShards(x: number, y: number, level: number): void {
   for (let i = 0; i < 20 + level * 10; i++) {
-    const a = rng.range(0, TAU);
-    const sp = rng.range(80, 140 + level * 50);
-    particles.spawn(PK.SHARD, x, y, Math.cos(a) * sp, Math.sin(a) * sp * 0.6, rng.range(0.4, 0.8), {
-      col: rng.pick(C.slice(3)),
-      size: rng.range(1, 2.5),
+    const a = fxRng.range(0, TAU);
+    const sp = fxRng.range(80, 140 + level * 50);
+    particles.spawn(PK.SHARD, x, y, Math.cos(a) * sp, Math.sin(a) * sp * 0.6, fxRng.range(0.4, 0.8), {
+      col: fxRng.pick(C.slice(3)),
+      size: fxRng.range(1, 2.5),
     });
   }
 }

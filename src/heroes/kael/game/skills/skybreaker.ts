@@ -7,7 +7,7 @@ import { createSlash } from "../../../../game/effects/slash";
 import { enemyCenter } from "../../../../game/enemies/enemy";
 import { skillValues, withCharms } from "../../../../game/skills/query";
 import { foesOnScreen } from "../../../../game/skills/targets";
-import { game, particles, progress, rng } from "../../../../game/state";
+import { fxRng, game, particles, progress } from "../../../../game/state";
 import { dust, shake } from "../../../../game/world";
 import { sfx } from "../../../../services/audio";
 import type { Enemy } from "../../../../types/enemy";
@@ -50,9 +50,9 @@ function crash(e: Enemy, evolved: boolean): void {
   dust(x - 6, GROUND, 5, -1);
   dust(x + 6, GROUND, 5, 1);
   for (let i = 0; i < 6; i++)
-    particles.spawn(PK.SHARD, x, GROUND - 2, rng.range(-120, 120), rng.range(-160, -60), rng.range(0.3, 0.6), {
-      col: rng.pick(PAL.crystal.slice(2)),
-      size: rng.range(1, 2.4),
+    particles.spawn(PK.SHARD, x, GROUND - 2, fxRng.range(-120, 120), fxRng.range(-160, -60), fxRng.range(0.3, 0.6), {
+      col: fxRng.pick(PAL.crystal.slice(2)),
+      size: fxRng.range(1, 2.4),
     });
   shake(evolved ? 0.25 : 0.15, evolved ? 3 : 2);
   for (const f of foesOnScreen()) {

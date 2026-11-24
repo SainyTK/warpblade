@@ -10,7 +10,7 @@ import { clamp, TAU } from "../../../utils/math";
 import { stageBounds } from "../../adventure";
 import { eachStanding, heroSlot } from "../../coopHooks";
 import { hurtHero } from "../../hurtHero";
-import { game, hero, particles, rng } from "../../state";
+import { fxRng, game, hero, particles } from "../../state";
 import { shake } from "../../world";
 import { VOID, VOID_SPARKS } from "./colors";
 import { unblinkingPupil } from "./unblinkingPose";
@@ -42,10 +42,10 @@ function shutEye(e: Enemy): void {
   for (let i = 0; i < 14; i++)
     particles.spawn(
       PK.SPARK,
-      e.x + rng.range(-18, 18),
-      e.y + rng.range(-10, 10),
-      rng.range(-90, 90),
-      rng.range(-120, 40),
+      e.x + fxRng.range(-18, 18),
+      e.y + fxRng.range(-10, 10),
+      fxRng.range(-90, 90),
+      fxRng.range(-120, 40),
       0.5,
       {
         sparks: VOID_SPARKS,
@@ -81,8 +81,8 @@ export function createGaze(e: Enemy, damage: number): Effect {
         found = true;
         hurtHero(damage, x - dir * 8);
       });
-      if (rng.chance(0.7))
-        particles.spawn(PK.SPARK, x, GROUND - 1, rng.range(-30, 30), rng.range(-80, -20), 0.25, {
+      if (fxRng.chance(0.7))
+        particles.spawn(PK.SPARK, x, GROUND - 1, fxRng.range(-30, 30), fxRng.range(-80, -20), 0.25, {
           sparks: VOID_SPARKS,
         });
       if (t < GAZE.warn + GAZE.cross) return true;

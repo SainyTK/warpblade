@@ -5,7 +5,7 @@ import { PK } from "../../../types/particle";
 import { approach, clamp } from "../../../utils/math";
 import { waveScale } from "../../../utils/progression";
 import { clampStageX } from "../../adventure";
-import { game, hero, particles, rng } from "../../state";
+import { fxRng, game, hero, particles, rng } from "../../state";
 import { foeSees } from "../awareness";
 import { ABYSS_HITS, VOID_SPARKS } from "./colors";
 import { BEAM, createEyeBeam } from "./eyeBeam";
@@ -49,8 +49,8 @@ export function updateEye(e: Enemy, dt: number, ts: number): void {
       e.n = LOCKED;
       sfx.chime(3);
     }
-    if (rng.chance(0.4 * ts))
-      particles.spawn(PK.MOTE, e.x + rng.range(-9, 9), e.y + rng.range(-9, 9), 0, 0, 0.2, {
+    if (fxRng.chance(0.4 * ts))
+      particles.spawn(PK.MOTE, e.x + fxRng.range(-9, 9), e.y + fxRng.range(-9, 9), 0, 0, 0.2, {
         col: VOID_SPARKS[1],
         size: 0.5,
       });
@@ -72,8 +72,8 @@ export function updateEye(e: Enemy, dt: number, ts: number): void {
   e.vy -= e.vy * 2 * dt;
   e.x = clampStageX(e.x + e.vx * dt, 10);
   e.y = clamp(e.y + e.vy * dt, 20, GROUND - 10);
-  if (rng.chance(0.12 * ts))
-    particles.spawn(PK.EMBER, e.x + rng.range(-4, 4), e.y + 5, 0, rng.range(4, 12), rng.range(0.3, 0.6), {
+  if (fxRng.chance(0.12 * ts))
+    particles.spawn(PK.EMBER, e.x + fxRng.range(-4, 4), e.y + 5, 0, fxRng.range(4, 12), fxRng.range(0.3, 0.6), {
       sparks: VOID_SPARKS,
     });
 }

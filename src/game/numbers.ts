@@ -7,7 +7,7 @@ import type { Enemy } from "../types/enemy";
 import type { DamageNumber, DamageTag } from "../types/game";
 import { numberFigure } from "../utils/numberFigure";
 import { enemyBox } from "./enemies/enemy";
-import { game, rng } from "./state";
+import { fxRng, game } from "./state";
 
 /** a number over the same foe, of the same kind, size and loudness, that popped within the merge window: crits only join crits */
 const mergeable = (n: DamageNumber, e: Enemy, tag: DamageTag, big: boolean, quiet: boolean): boolean =>
@@ -34,7 +34,7 @@ export function popNumber(e: Enemy, value: number, tag: DamageTag, big: boolean,
   }
   makeRoom();
   const box = enemyBox(e);
-  const x = (box[0] + box[2]) / 2 + rng.range(-4, 4);
+  const x = (box[0] + box[2]) / 2 + fxRng.range(-4, 4);
   const shape = { x, value, tag, big, quiet };
   game.numbers.push({
     x,

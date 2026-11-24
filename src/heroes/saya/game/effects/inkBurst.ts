@@ -1,6 +1,6 @@
 import { circle, fleck, hairline, line, place } from "../../../../engine/frame";
 import { skin } from "../../../../game/hero/skin";
-import { lights, rng } from "../../../../game/state";
+import { fxRng, lights } from "../../../../game/state";
 import type { Effect } from "../../../../types/effect";
 import { WHITE } from "../../../../utils/color";
 import { clamp, ease, TAU } from "../../../../utils/math";
@@ -20,9 +20,9 @@ interface Drop {
  */
 export function createInkBurst(x: number, y: number, angles: readonly number[], big: boolean): Effect {
   const drops: Drop[] = Array.from({ length: big ? 9 : 5 }, () => ({
-    a: rng.range(0, TAU),
-    speed: rng.range(14, big ? 34 : 24),
-    r: rng.range(0.7, 1.6),
+    a: fxRng.range(0, TAU),
+    speed: fxRng.range(14, big ? 34 : 24),
+    r: fxRng.range(0.7, 1.6),
   }));
   const ramp = skin.ramp;
   lights.add(x, y, big ? 30 : 20, ramp[4], big ? 0.5 : 0.35, 0.2);

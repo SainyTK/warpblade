@@ -7,7 +7,7 @@ import { waveScale } from "../../../utils/progression";
 import { clampStageX, stageLeft, stageRight } from "../../adventure";
 import { eachStanding } from "../../coopHooks";
 import { hurtHero } from "../../hurtHero";
-import { game, hero, particles, rng } from "../../state";
+import { fxRng, game, hero, particles, rng } from "../../state";
 import { boxHit, dust, heroBox, shake } from "../../world";
 import { foeSees } from "../awareness";
 import { enemyBox } from "../enemy";
@@ -42,7 +42,7 @@ export function updateThornback(e: Enemy, dt: number, ts: number): void {
     Object.assign(e, { state: "recover", st: 0, vx: 0 });
   } else if (e.state === "lunge") {
     e.vx = e.face * CHARGE.speed;
-    if (rng.chance(0.5 * ts)) dust(e.x - e.face * 8, GROUND, 1, -e.face);
+    if (fxRng.chance(0.5 * ts)) dust(e.x - e.face * 8, GROUND, 1, -e.face);
     eachStanding(() => {
       if (e.n === 0 && boxHit(enemyBox(e), heroBox())) {
         e.n = 1;
@@ -59,13 +59,13 @@ export function updateThornback(e: Enemy, dt: number, ts: number): void {
           particles.spawn(
             PK.SHARD,
             e.x + e.face * 8,
-            GROUND - rng.range(4, 12),
-            -e.face * rng.range(30, 90),
-            -rng.range(40, 120),
-            rng.range(0.4, 0.7),
+            GROUND - fxRng.range(4, 12),
+            -e.face * fxRng.range(30, 90),
+            -fxRng.range(40, 120),
+            fxRng.range(0.4, 0.7),
             {
               col: DAY_SPARKS.bark[1],
-              size: rng.range(1.5, 2.5),
+              size: fxRng.range(1.5, 2.5),
             },
           );
       }
@@ -75,8 +75,8 @@ export function updateThornback(e: Enemy, dt: number, ts: number): void {
   if (e.state !== "walk" && e.state !== "lunge") e.vx -= e.vx * 4 * dt;
   e.x = clampStageX(e.x + e.vx * dt, 10);
   e.y = GROUND;
-  if (rng.chance(0.06 * ts))
-    particles.spawn(PK.EMBER, e.x + rng.range(-6, 6), e.y - rng.range(6, 14), 0, -10, rng.range(0.4, 0.8), {
+  if (fxRng.chance(0.06 * ts))
+    particles.spawn(PK.EMBER, e.x + fxRng.range(-6, 6), e.y - fxRng.range(6, 14), 0, -10, fxRng.range(0.4, 0.8), {
       sparks: DAY_SPARKS.rift,
     });
   eachStanding(() => {

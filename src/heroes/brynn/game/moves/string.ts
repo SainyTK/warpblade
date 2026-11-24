@@ -2,7 +2,7 @@ import { onFrame } from "../../../../constants/combo";
 import { frame } from "../../../../constants/hero";
 import { WORLD_COLORS } from "../../../../constants/palette";
 import { createFloorRing } from "../../../../game/effects/floorRing";
-import { game, hero, particles, rng } from "../../../../game/state";
+import { fxRng, game, hero, particles } from "../../../../game/state";
 import { dust, shake } from "../../../../game/world";
 import type { MoveDef } from "../../../../types/move";
 import { PK } from "../../../../types/particle";
@@ -22,12 +22,12 @@ function slamImpact(): void {
       PK.SHARD,
       gx,
       hero.y - 1,
-      hero.face * rng.range(10, 110),
-      rng.range(-200, -70),
-      rng.range(0.5, 0.9),
+      hero.face * fxRng.range(10, 110),
+      fxRng.range(-200, -70),
+      fxRng.range(0.5, 0.9),
       {
         col: WORLD_COLORS.rubble,
-        size: rng.range(1.5, 3),
+        size: fxRng.range(1.5, 3),
       },
     );
   shake(0.24, 3);

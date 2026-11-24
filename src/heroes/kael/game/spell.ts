@@ -5,7 +5,7 @@ import { isFree, setState } from "../../../game/hero/actions";
 import { comboOpen, endCombo } from "../../../game/hero/combo";
 import { emitSkillEvent } from "../../../game/skills/events";
 import { skillEvolved, skillLevel, skillValues } from "../../../game/skills/query";
-import { game, hero, lights, particles, progress, rng } from "../../../game/state";
+import { fxRng, game, hero, lights, particles, progress } from "../../../game/state";
 import { sfx } from "../../../services/audio";
 import type { Enemy } from "../../../types/enemy";
 import type { AbilitySlot } from "../../../types/moveset";
@@ -171,16 +171,16 @@ export function runCast(): void {
   const c = ABILITY_COLOR[a];
   const hx = h.x + h.face * h.hand[0];
   const hy = h.y + h.hand[1];
-  if (h.st < ACTION_CLIPS.cast.hit && rng.chance(0.6)) {
-    const angle = rng.range(0, TAU);
-    const d = rng.range(14, 26);
+  if (h.st < ACTION_CLIPS.cast.hit && fxRng.chance(0.6)) {
+    const angle = fxRng.range(0, TAU);
+    const d = fxRng.range(14, 26);
     particles.spawn(
       PK.STREAK,
       hx + Math.cos(angle) * d,
       hy + Math.sin(angle) * d,
       -Math.cos(angle) * 35,
       -Math.sin(angle) * 35,
-      rng.range(0.12, 0.18),
+      fxRng.range(0.12, 0.18),
       { col: c },
     );
   }

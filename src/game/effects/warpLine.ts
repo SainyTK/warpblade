@@ -4,7 +4,7 @@ import { PK } from "../../types/particle";
 import { WHITE } from "../../utils/color";
 import { ease, lerp } from "../../utils/math";
 import { skin } from "../hero/skin";
-import { particles, rng } from "../state";
+import { fxRng, particles } from "../state";
 
 /** how far along the line, from its collapsing end, the full width head begins */
 const HEAD_FROM = 0.55;
@@ -13,16 +13,16 @@ const HEAD_FROM = 0.55;
 export function createWarpLine(x0: number, y0: number, x1: number, y1: number): Effect {
   const life = 0.32;
   for (let i = 0; i < 18; i++) {
-    const u = rng.next();
+    const u = fxRng.next();
     particles.spawn(
       PK.MOTE,
       lerp(x0, x1, u),
-      lerp(y0, y1, u) + rng.range(-6, 6),
-      rng.range(-30, 30),
-      rng.range(-40, 10),
-      rng.range(0.25, 0.55),
+      lerp(y0, y1, u) + fxRng.range(-6, 6),
+      fxRng.range(-30, 30),
+      fxRng.range(-40, 10),
+      fxRng.range(0.25, 0.55),
       {
-        col: rng.pick(skin.ramp.slice(3)),
+        col: fxRng.pick(skin.ramp.slice(3)),
         size: 0.7,
       },
     );

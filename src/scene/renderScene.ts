@@ -5,7 +5,7 @@ import { drawChests } from "../game/build/chests";
 import { coop, eachHero } from "../game/coopHooks";
 import { shownKit } from "../game/hero/kits";
 import { drawSkills, drawSkillsBack } from "../game/skills/runtime";
-import { game, hero, lights, particles, rng } from "../game/state";
+import { fxRng, game, hero, lights, particles } from "../game/state";
 import { settings } from "../store/settings";
 import { adventureBackdrop } from "./adventureBackdrop";
 import { drawAdventureTerrain } from "./adventureTerrain";
@@ -26,7 +26,7 @@ const FLASH_STRENGTH = 70;
 /** draw one frame back to front into RGBA bytes */
 export function renderScene(out: Uint8ClampedArray): void {
   const s = game.shake > 0 && settings.shake ? game.shake / SHAKE_FULL : 0;
-  setShake(Math.round(rng.range(-game.amp, game.amp) * s), Math.round(rng.range(-game.amp, game.amp) * s));
+  setShake(Math.round(fxRng.range(-game.amp, game.amp) * s), Math.round(fxRng.range(-game.amp, game.amp) * s));
   if (game.shake <= 0) game.amp = 0;
   setCameraX(0);
   const { def, k, arena } = scene();

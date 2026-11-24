@@ -16,7 +16,7 @@ import { stampPixels } from "../effects/fine";
 import { queueEvolution } from "../evolve";
 import { feat } from "../feat";
 import { refreshGrowing } from "../progress";
-import { character, game, hero, lights, particles, progress, rng } from "../state";
+import { character, fxRng, game, hero, lights, particles, progress, rng } from "../state";
 import { evolveSkill, raiseCharm, raiseSkill } from "./raise";
 
 /** Chests: dropped by elites, mini bosses and the wave 20 boss; touching one opens it for the hero who touched it. */
@@ -76,14 +76,14 @@ function open(c: Chest): void {
   for (let i = 0; i < 16; i++)
     particles.spawn(
       PK.STAR,
-      c.x + rng.range(-6, 6),
-      c.y - rng.range(2, 9),
-      rng.range(-30, 30),
-      -rng.range(30, 80),
-      rng.range(0.4, 0.8),
+      c.x + fxRng.range(-6, 6),
+      c.y - fxRng.range(2, 9),
+      fxRng.range(-30, 30),
+      -fxRng.range(30, 80),
+      fxRng.range(0.4, 0.8),
       {
-        col: rng.pick([COIN_GOLD[3], COIN_GOLD[4]]),
-        size: rng.range(1, 2.5),
+        col: fxRng.pick([COIN_GOLD[3], COIN_GOLD[4]]),
+        size: fxRng.range(1, 2.5),
       },
     );
   sfx.levelUp();

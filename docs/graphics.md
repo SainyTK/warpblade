@@ -33,7 +33,12 @@ Prefer the plate for anything that does not move.
 Heroes and foes are built from parts each time they are drawn, on a `detailCanvas` at image pixel detail (`src/engine/sprite.ts`).
 Every hero is drawn on the shared rig (`src/rig/`) from a pose and the hero's skin (`docs/hero-module.md`, "The look").
 A foe keeps its picture for about a thirtieth of a second of game time (`src/scene/foeSprites.ts`), and redraws at once when its state changes.
-A foe's draw function must not change game state, spawn particles or read the game's random stream.
+A foe's draw function must not change game state, spawn particles or read the play generator `rng`.
+The game keeps two seeded generators in `src/game/state.ts`.
+`rng` is for play only: AI choices, cooldowns, spawns, hit and crit chances, drops, pickups and level-up cards.
+`fxRng` is for every draw whose value only reaches the picture: particle spawns, the screen shake, light flicker, afterimage and damage number jitter, and effect fields that only `draw()` reads.
+So adding, removing or repainting an effect never changes a fight, and the screen's frame rate never changes what a foe does.
+`npm run lint` forbids importing `rng` anywhere under `src/scene/`.
 `drawShadows` puts a soft shadow under every foe and hero on the floor below it.
 
 ## Drawing tools
@@ -43,6 +48,7 @@ A foe's draw function must not change game state, spawn particles or read the ga
 - `disc`, `shade` with `soft`: true blends, for smoke, mist and vapour.
 - `glow`, `glowLine`, `sparkle` and the `Lights` list: light.
 - `Particles` (`src/engine/particles.ts`): sparks, motes, streaks, flakes, vapour, dust, smoke, fire, brands, embers, shards, stars.
+  Its own draws come from `fxRng`. A brand (a burning chunk) is play, since it lights a damaging blaze where it lands: spawn it with `rng`, and it is never dropped at the particle cap.
 - `SpriteCanvas`: `dot`, `stroke`, `taper`, `poly`, `block`, `hairline`, `pixels`, `shadeEdges`, `commit`, `outline`, `shift` (move the shapes that follow, for a body that leans or sinks as one) and `clipBelow` (erase what sank under the floor).
 
 ## What makes it look good

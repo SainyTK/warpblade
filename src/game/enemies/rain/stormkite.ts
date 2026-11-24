@@ -5,7 +5,7 @@ import { PK } from "../../../types/particle";
 import { approach, clamp } from "../../../utils/math";
 import { waveScale } from "../../../utils/progression";
 import { clampStageX } from "../../adventure";
-import { game, hero, particles, rng } from "../../state";
+import { fxRng, game, hero, particles, rng } from "../../state";
 import { facesHero, turnToHero } from "../facing";
 import { RAIN_HITS, STORM_SPARKS } from "./colors";
 import { createStormBolt, createStormMark } from "./stormBolt";
@@ -43,8 +43,8 @@ export function updateStormkite(e: Enemy, dt: number, ts: number): void {
     e.vx = approach(e.vx, 0, 400 * dt);
     e.vy = approach(e.vy, 0, 400 * dt);
     e.x = approach(e.x, e.ax, 30 * dt);
-    if (rng.chance(dt * 30))
-      particles.spawn(PK.SPARK, e.x + rng.range(-6, 6), e.y + rng.range(-4, 6), 0, rng.range(20, 60), 0.15, {
+    if (fxRng.chance(dt * 30))
+      particles.spawn(PK.SPARK, e.x + fxRng.range(-6, 6), e.y + fxRng.range(-4, 6), 0, fxRng.range(20, 60), 0.15, {
         sparks: STORM_SPARKS,
       });
     if (e.st >= KITE_WINDUP * scale.windup) {
@@ -67,8 +67,8 @@ export function updateStormkite(e: Enemy, dt: number, ts: number): void {
   }
   e.x = clampStageX(e.x + e.vx * dt, 10);
   e.y = clamp(e.y + e.vy * dt, 20, GROUND - 10);
-  if (rng.chance(0.08 * ts))
-    particles.spawn(PK.SPARK, e.x + rng.range(-5, 5), e.y + rng.range(6, 14), rng.range(-10, 10), 15, 0.25, {
+  if (fxRng.chance(0.08 * ts))
+    particles.spawn(PK.SPARK, e.x + fxRng.range(-5, 5), e.y + fxRng.range(6, 14), fxRng.range(-10, 10), 15, 0.25, {
       sparks: STORM_SPARKS,
     });
 }

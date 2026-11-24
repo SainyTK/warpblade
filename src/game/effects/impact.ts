@@ -5,7 +5,7 @@ import { PK } from "../../types/particle";
 import { WHITE } from "../../utils/color";
 import { ease, TAU } from "../../utils/math";
 import { skin } from "../hero/skin";
-import { lights, particles, rng } from "../state";
+import { fxRng, lights, particles } from "../state";
 import { fineRing, ray } from "./fine";
 
 /** seconds the star takes to open, and how long the whole hit shows, plain and big */
@@ -22,7 +22,7 @@ const RING_UNTIL = 0.65;
  * opens and breaks up, sparks thrown forward and a light that flares and dies; the hero's own sparks unless given
  */
 export function createImpact(x: number, y: number, dir: number, big: boolean, sparks: Ramp = skin.sparks): Effect {
-  const R = rng;
+  const R = fxRng;
   const count = big ? 7 : 5;
   const spikes = Array.from({ length: count }, (_, i) => ({
     a: (i / count) * TAU + R.range(-0.3, 0.3) + (dir < 0 ? Math.PI : 0),

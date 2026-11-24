@@ -5,7 +5,7 @@ import { enemyCenter } from "../../../../game/enemies/enemy";
 import { ghostCanvas } from "../../../../game/hero/afterimages";
 import { drawHeroSprite } from "../../../../game/hero/look";
 import { skillEvolved, skillValues } from "../../../../game/skills/query";
-import { game, hero, particles, progress, rng } from "../../../../game/state";
+import { fxRng, game, hero, particles, progress, rng } from "../../../../game/state";
 import type { Effect } from "../../../../types/effect";
 import type { Enemy } from "../../../../types/enemy";
 import { PK } from "../../../../types/particle";
@@ -44,11 +44,11 @@ function createDouble(foe: Enemy, side: number): Effect {
   for (let i = 0; i < 8; i++)
     particles.spawn(
       PK.SMOKE,
-      x + rng.range(-5, 5),
-      y - rng.range(2, 28),
-      rng.range(-10, 10),
-      rng.range(-20, -5),
-      rng.range(0.4, 0.8),
+      x + fxRng.range(-5, 5),
+      y - fxRng.range(2, 28),
+      fxRng.range(-10, 10),
+      fxRng.range(-20, -5),
+      fxRng.range(0.4, 0.8),
       {
         col: GUNSMOKE,
       },
