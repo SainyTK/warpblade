@@ -27,6 +27,7 @@ export {
   stageProgress,
   stageRight,
   stageRunId,
+  stageStatus,
   stageThreat,
   stageWalls,
 } from "./trail";

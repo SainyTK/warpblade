@@ -3,7 +3,7 @@ import { ENEMIES } from "../constants/enemies";
 import { ULT_LEVELS } from "../constants/ultimate";
 import { STAGE_WAVES } from "../constants/waves";
 import { chargedTier, drillSession, usesDrill } from "../drill";
-import { isAdventure, stageProgress } from "../game/adventure";
+import { isAdventure, stageStatus as stageLine } from "../game/adventure";
 import { canAffordUlt, ultRecharge } from "../game/hero/ultimate";
 import { character, game, hero, progress } from "../game/state";
 import { isTraining } from "../game/training";
@@ -11,7 +11,7 @@ import { inRoom } from "../store/coop";
 import { bestRun } from "../store/records";
 import { xpToNext } from "../utils/progression";
 import { clearText } from "../utils/records";
-import { minutesSeconds, stageProgressText } from "../utils/runReport";
+import { minutesSeconds } from "../utils/runReport";
 import { updateAbilityTabs } from "./abilityTabs";
 import { updateBuildStrip } from "./buildStrip";
 import { updateCoinCount } from "./coinCount";
@@ -72,7 +72,7 @@ export function updateHud(): void {
     ? "TRAINING GROUND"
     : waveMode
       ? `STAGE ${game.stage}  WAVE ${game.wave}/${STAGE_WAVES}`
-      : stageProgressText(stageProgress().distance).toUpperCase();
+      : stageLine().toUpperCase();
   const time = minutesSeconds(game.clock);
   const affordable = drill
     ? (tier?.level ?? 0)

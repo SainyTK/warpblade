@@ -11,7 +11,7 @@ export const BLAZE = {
   stacksPerRank: 1 / 3,
   every: 0.5,
   duration: 3,
-  wildfireRank: 12,
+  wildfireRank: 20,
   wildfireShare: 0.3,
   wildfireRadius: 34,
 } as const;
@@ -24,7 +24,7 @@ export const FROST = {
   freeze: 0.7,
   frozenTaken: 0.1,
   frozenTakenPerRank: 0.02,
-  shatterRank: 12,
+  shatterRank: 20,
   shatterShare: 0.25,
   shatterRadius: 40,
 } as const;
@@ -36,7 +36,7 @@ export const STORM = {
   sharePerRank: 0.02,
   ranksPerTarget: 8,
   reach: 72,
-  overchargeRank: 12,
+  overchargeRank: 20,
 } as const;
 
 export const VENOM = {
@@ -46,7 +46,7 @@ export const VENOM = {
   tickShare: 0.01,
   every: 1,
   duration: 5,
-  plagueRank: 12,
+  plagueRank: 20,
   plagueShare: 0.5,
   plagueRadius: 46,
 } as const;
@@ -58,7 +58,7 @@ export const VOID = {
   share: 0.5,
   sharePerRank: 0.02,
   delay: 0.22,
-  riftRank: 16,
+  riftRank: 24,
 } as const;
 
 export const ELEMENT_STATS = {
@@ -71,7 +71,7 @@ export const ELEMENT_STATS = {
   venomCrit: 0.005,
 } as const;
 
-export const FUSION_RANK = 8;
+export const FUSION_RANK = 12;
 
 export type FusionId =
   | "thermalShock"

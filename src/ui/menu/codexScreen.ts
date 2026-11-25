@@ -3,7 +3,17 @@ import "../achievements/achievements.css";
 import "../unlocks/unlocks.css";
 import { ELEMENT_ORDER, ELEMENTS } from "../../constants/elements";
 import { EVOLVE_PARTNER_LEVEL, SKILL_MAX_LEVEL } from "../../constants/growth";
-import { FUSION_RANK, FUSIONS, type FusionDef } from "../../constants/resonance";
+import {
+  BLAZE,
+  ELEMENT_STATS,
+  FROST,
+  FUSION_RANK,
+  FUSIONS,
+  type FusionDef,
+  STORM,
+  VENOM,
+  VOID,
+} from "../../constants/resonance";
 import { CHARACTERS } from "../../heroes/roster";
 import { ARTS } from "../../stages/arts";
 import { knowsFusion, knowsRecipe } from "../../store/unlocks";
@@ -37,12 +47,11 @@ function evolutionEntry(c: CharacterDef, s: SkillDef): CodexEntry {
 }
 
 const ELEMENT_TEXT = {
-  blaze: "Hits burn. Burning foes explode at rank 12. Each rank widens skill areas.",
-  frost:
-    "Hits chill and then freeze. Frozen foes take more. Chilled foes shatter at rank 12. Each rank lengthens skill effects.",
-  storm: "Hits may arc to nearby foes. More foes every 8 ranks, sure crits at rank 12. Each rank shortens cooldowns.",
-  venom: "Hits poison. Each poison stack makes the foe take more from everything. Poison spreads on death at rank 12.",
-  void: "Hits may echo a moment later. Echoes repeat twice at rank 16. Every 8 ranks adds one more projectile or summon.",
+  blaze: `Hits burn. Burning foes explode at rank ${BLAZE.wildfireRank}. Each rank widens skill areas.`,
+  frost: `Hits chill, then freeze. Frozen foes take more. Chilled foes shatter at rank ${FROST.shatterRank}. Each rank lengthens skill effects.`,
+  storm: `Hits may arc to nearby foes, one more every ${STORM.ranksPerTarget} ranks, with sure crits at rank ${STORM.overchargeRank}. Each rank shortens cooldowns.`,
+  venom: `Hits poison. Each poison stack makes the foe take more from everything. Poison spreads on death at rank ${VENOM.plagueRank}.`,
+  void: `Hits may echo a moment later, twice from rank ${VOID.riftRank}. Every ${ELEMENT_STATS.voidAmountRanks} ranks adds a projectile or summon.`,
 } as const;
 
 const elementEntry = (id: (typeof ELEMENT_ORDER)[number]): CodexEntry => ({

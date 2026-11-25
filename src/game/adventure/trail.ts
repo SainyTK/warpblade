@@ -112,6 +112,11 @@ export const earnedArtsOrder = (): ArtId[] =>
     const art = STAGES[id].grantsArt;
     return art ? [art] : [];
   });
+export function stageStatus(): string {
+  if (!trail) return "";
+  const areas = trail.route.areas.length;
+  return `${trail.route.stage.name} ${Math.min(trail.area + 1, areas)}/${areas}`;
+}
 export const stageCameraX = (): number => trail?.camera ?? 0;
 export function stageAreaShare(): number {
   const areas = trail?.route.areas.length ?? 1;
