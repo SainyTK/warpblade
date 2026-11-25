@@ -18,8 +18,9 @@ export function openSurge(area: RouteArea): Surge | null {
   if (!run || area.room.kind !== "surge") return null;
   const stage = run.route.stage;
   const kinds = area.room.foes ?? [stage.ground, stage.flyer];
-  const count = Math.round(area.room.count * (1 + SURGE.countPerThreat * area.threat));
-  const cap = Math.min(SURGE.mostCap, Math.round(area.room.cap + SURGE.capPerThreat * area.threat));
+  const growth = Math.max(0, area.threat - SURGE.growsFromThreat);
+  const count = Math.round(area.room.count * (1 + SURGE.countPerThreat * growth));
+  const cap = Math.min(SURGE.mostCap, Math.round(area.room.cap + SURGE.capPerThreat * growth));
   const surge: Surge = { foes: surgeFoes(kinds, count), sent: 0, cap, refills: [] };
   for (let i = 0; i < Math.min(surge.cap, surge.foes.length); i++) surge.refills.push(i * SURGE.opening);
   return surge;
