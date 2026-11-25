@@ -10,6 +10,7 @@ export {
   clearedStages,
   currentStage,
   earnedArtsOrder,
+  facingFinale,
   isAdventure,
   overPit,
   recordStageDamage,

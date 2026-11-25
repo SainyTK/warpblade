@@ -174,3 +174,8 @@ export function recordStageKill(enemy: Enemy): void {
   if (!trail?.authored.delete(enemy)) return;
   trail.foesDefeated++;
 }
+
+export function facingFinale(finale: string): boolean {
+  const area = trail?.route.areas[trail.area];
+  return trail?.gate !== null && area?.room.kind === "boss" && area.room.foe === finale;
+}

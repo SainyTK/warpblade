@@ -1,7 +1,8 @@
+import { FINALE } from "../constants/waves";
 import { track } from "../services/analytics";
 import type { RunOutcome, RunResult } from "../types/run";
 import { bySourceDamage } from "../utils/runReport";
-import { isAdventure } from "./adventure";
+import { facingFinale, isAdventure } from "./adventure";
 import { bankCoins } from "./coins";
 import { coop } from "./coopHooks";
 import { feat } from "./feat";
@@ -27,7 +28,7 @@ export function endRun(fate: RunOutcome): void {
   if (room) return room.endRun(fate);
   if (isTraining()) return startRun("Rise again");
   const adventure = isAdventure();
-  const outcome = adventure ? fate : countedOutcome(fate);
+  const outcome = adventure ? (fate === "fallen" && facingFinale(FINALE.foe) ? "clear" : fate) : countedOutcome(fate);
   feat({ kind: "runEnd", outcome, wave: game.wave, hero: character.id });
   const report = runReport();
   const coins = bankCoins();
