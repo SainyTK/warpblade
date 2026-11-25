@@ -10,13 +10,16 @@ import { clamp } from "../../utils/math";
 import { SPELL_HEIGHT, SPELL_IMPACT_TIME, TARGET_RADIUS } from "../constants";
 import { freezeEnemy, strikeEnemy } from "./enemyContact";
 
+const BOLT_REACH = 6;
+
 function damageArea(session: Session, { spell, x, y }: ElementImpact): void {
   const { spellDamage, spellArea } = session.modifiers;
   const radius = withBuild("area", spell.radius * spellArea);
   const centerY = spell.speed === null ? y - SPELL_HEIGHT : y;
+  const reach = spell.speed === null ? Math.max(BOLT_REACH, radius) : BOLT_REACH;
   for (const enemy of game.enemies) {
     const [left, top, right, bottom] = enemyBox(enemy);
-    if (x + radius < left || x - radius > right || centerY + 6 < top || centerY - 6 > bottom) {
+    if (x + radius < left || x - radius > right || centerY + reach < top || centerY - reach > bottom) {
       continue;
     }
     const scale = spell.damageScale?.(enemy) ?? 1;
