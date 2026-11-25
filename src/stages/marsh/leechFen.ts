@@ -3,7 +3,7 @@ import { flyer, ledge, pit, site, surge, walker } from "../geometry";
 
 export const leechFen: Approach = {
   rise: 1,
-  room: surge(35, 9, ["bogleech", "bogleech", "mire", "stormkite"]),
+  room: surge(32, 9, ["bogleech", "bogleech", "mire", "stormkite"]),
   parSeconds: 72,
   length: 1020,
   slabs: [

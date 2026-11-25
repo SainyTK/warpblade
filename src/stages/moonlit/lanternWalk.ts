@@ -3,7 +3,7 @@ import { flyer, ledge, pit, site, surge, walker } from "../geometry";
 
 export const lanternWalk: Approach = {
   rise: 1,
-  room: surge(35, 9, ["lanternshade", "lanternshade", "husk", "wisp"]),
+  room: surge(32, 9, ["lanternshade", "husk", "husk", "wisp"]),
   parSeconds: 72,
   length: 1040,
   slabs: [

@@ -3,7 +3,7 @@ import { flyer, ledge, pit, site, surge, walker } from "../geometry";
 
 export const reedwade: Approach = {
   rise: 0,
-  room: surge(40, 10),
+  room: surge(36, 10, ["mire", "mire", "mire", "stormkite"]),
   parSeconds: 75,
   length: 960,
   slabs: [

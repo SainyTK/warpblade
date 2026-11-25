@@ -3,7 +3,7 @@ import { flyer, ledge, pit, site, surge, walker } from "../geometry";
 
 export const graveRow: Approach = {
   rise: 0,
-  room: surge(40, 10),
+  room: surge(36, 10, ["husk", "husk", "wisp"]),
   parSeconds: 75,
   length: 980,
   slabs: [
