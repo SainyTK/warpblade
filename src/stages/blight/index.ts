@@ -1,5 +1,6 @@
 import type { StageDef } from "../../types/campaign";
-import { blightApproach, blightSummit } from "./layout";
+import { blightHazard } from "./hazard";
+import { BLIGHT_AREAS } from "./layout";
 
 export const blight: StageDef = {
   id: "blight",
@@ -12,5 +13,6 @@ export const blight: StageDef = {
   boss: "sporeheart",
   grantsArt: "sporeburst",
   weakTo: "riftlance",
-  areas: [blightApproach, blightSummit],
+  areas: BLIGHT_AREAS,
+  hazard: blightHazard,
 };
