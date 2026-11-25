@@ -35,6 +35,7 @@ export const REVERSE_EDGE: SkillDef = {
   id: SKILL.reverse,
   name: "Reverse Edge",
   kind: "attack",
+  element: "frost",
   risk: "easy",
   button: "J",
   text: "The return cut, the second of the chain, also cuts the foes behind her.",

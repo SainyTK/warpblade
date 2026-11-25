@@ -1,14 +1,15 @@
 import { FLOW } from "../../constants/growth";
-import { buildStats, flowMultiplier } from "../../utils/build";
+import { flowMultiplier } from "../../utils/build";
 import { feat } from "../feat";
 import { progress } from "../state";
+import { currentBuildStats } from "./stats";
 
 /** Flow: the hero's own hits build stacks that multiply every source; time without a hit drains them, a hurt halves them */
 export const flowDamage = (): number => flowMultiplier(progress.build.flow);
 
 export function addFlow(stacks: number): void {
   const b = progress.build;
-  const cap = buildStats(b).flowCap;
+  const cap = currentBuildStats().flowCap;
   const was = b.flow;
   b.flow = Math.min(cap, b.flow + stacks);
   b.flowIdle = 0;

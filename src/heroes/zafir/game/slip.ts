@@ -1,6 +1,6 @@
 import { fleck, place } from "../../../engine/frame";
 import { dealDamage } from "../../../game/damage";
-import { skillEvolved, skillValues, withCharms } from "../../../game/skills/query";
+import { skillEvolved, skillValues, withBuild } from "../../../game/skills/query";
 import { foesOnScreen } from "../../../game/skills/targets";
 import { game, hero, progress } from "../../../game/state";
 import type { Effect } from "../../../types/effect";
@@ -17,9 +17,9 @@ const CLOUD = { reach: 22, life: 0.7 } as const;
 /** a cloud of sand hanging where the dodge started: minions in it are blinded */
 function createCloud(x: number, y: number, blind: number): Effect {
   let t = 0;
-  const reach = withCharms("area", CLOUD.reach);
+  const reach = withBuild("area", CLOUD.reach);
   for (const e of foesOnScreen())
-    if (e.rank === "minion" && Math.abs(e.x - x) <= reach) e.blind = Math.max(e.blind, withCharms("duration", blind));
+    if (e.rank === "minion" && Math.abs(e.x - x) <= reach) e.blind = Math.max(e.blind, withBuild("duration", blind));
   return {
     update(dt) {
       t += dt;

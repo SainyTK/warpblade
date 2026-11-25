@@ -3,7 +3,7 @@ import { dealDamage } from "../../../../game/damage";
 import { createImpact } from "../../../../game/effects/impact";
 import { enemyCenter } from "../../../../game/enemies/enemy";
 import { markFoe } from "../../../../game/enemies/skillStatus";
-import { skillValues, withCharms } from "../../../../game/skills/query";
+import { skillValues, withBuild } from "../../../../game/skills/query";
 import { game, hero, progress } from "../../../../game/state";
 import type { Effect } from "../../../../types/effect";
 import type { Enemy } from "../../../../types/enemy";
@@ -63,8 +63,8 @@ function createThread(foe: Enemy, damage: number): Effect {
  */
 export function castThread(power: number, wide: boolean): boolean {
   const v = skillValues(ID);
-  const reach = withCharms("area", v.reach);
-  const most = withCharms("amount", v.foes) + (wide ? 2 : 0);
+  const reach = withBuild("area", v.reach);
+  const most = withBuild("amount", v.foes) + (wide ? 2 : 0);
   const foes = game.enemies
     .filter((e) => e.hp > 0 && Math.sign(e.x - hero.x) !== -hero.face && Math.abs(e.x - hero.x) <= reach)
     .sort((a, b) => Math.abs(a.x - hero.x) - Math.abs(b.x - hero.x))

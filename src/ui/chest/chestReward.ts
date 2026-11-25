@@ -1,7 +1,7 @@
 import { BOONS } from "../../constants/boons";
-import { CHARMS } from "../../constants/charms";
 import { SKILL_MAX_LEVEL } from "../../constants/growth";
 import { character } from "../../game/state";
+import { ARTS } from "../../stages/arts";
 import type { ChestReward } from "../../types/build";
 import { skillOf } from "../../utils/skills";
 import { el } from "../dom";
@@ -27,13 +27,13 @@ function rewardFace(r: ChestReward): { kind: string; icon: string; name: string;
       line: `Level ${r.level} of ${SKILL_MAX_LEVEL}. ${def?.levels[r.level - 1].text ?? ""}`,
     };
   }
-  if (r.type === "charm") {
-    const def = CHARMS[r.id];
+  if (r.type === "art") {
+    const art = ARTS[r.id];
     return {
-      kind: "charm",
-      icon: `charm_${r.id}`,
-      name: def.name,
-      line: `Level ${r.level} of ${def.maxLevel}. ${def.text}`,
+      kind: "art",
+      icon: `art_${r.id}`,
+      name: art.name,
+      line: `Level ${r.level} of ${art.levels.length}. ${art.levels[r.level - 1].cardText}`,
     };
   }
   const wind = BOONS[0];

@@ -29,6 +29,7 @@ export const SHIELD_STEP: SkillDef = {
   id: "al_step",
   name: "Shield Step",
   kind: "movement",
+  element: "frost",
   risk: "timed",
   button: "L",
   text: "Dashing through foes bashes them with the shield.",

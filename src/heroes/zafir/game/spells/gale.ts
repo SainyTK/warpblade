@@ -2,7 +2,7 @@ import { fleck, glow, place } from "../../../../engine/frame";
 import { dealDamage } from "../../../../game/damage";
 import { enemyCenter } from "../../../../game/enemies/enemy";
 import { consumeStacks } from "../../../../game/enemies/skillStatus";
-import { skillEvolved, skillValues, withCharms } from "../../../../game/skills/query";
+import { skillEvolved, skillValues, withBuild } from "../../../../game/skills/query";
 import { foesOnScreen } from "../../../../game/skills/targets";
 import { fxRng, game, hero, progress } from "../../../../game/state";
 import type { Effect } from "../../../../types/effect";
@@ -57,7 +57,7 @@ function createGust(x: number, y: number, dir: number, reach: number, spread: nu
  *  wide form, or level 7, blows both ways; evolved as Simoom, every wound it meets bleeds out at once */
 export function castGale(wide: boolean): void {
   const v = skillValues(ID);
-  const reach = withCharms("area", GALE.reach * (v.reach ?? 1));
+  const reach = withBuild("area", GALE.reach * (v.reach ?? 1));
   const spread = GALE.spread * (v.reach ?? 1);
   const y = hero.y - 16;
   const dirs = wide || v.both ? [hero.face, -hero.face] : [hero.face];
@@ -69,7 +69,7 @@ export function castGale(wide: boolean): void {
       if (skillEvolved(ID)) bleedOut(e);
       dealDamage(e, progress.stats.ap * v.power, { fromX: hero.x, kx: dir * GALE.push, source: "abilities" });
       openWounds(e, v.wounds ?? 0);
-      if (v.halt) e.halt = Math.max(e.halt, withCharms("duration", v.halt));
+      if (v.halt) e.halt = Math.max(e.halt, withBuild("duration", v.halt));
     }
   }
   sandSound.gust(0.14);

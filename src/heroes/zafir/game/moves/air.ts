@@ -1,7 +1,7 @@
 import { onFrame } from "../../../../constants/combo";
 import { createFloorRing } from "../../../../game/effects/floorRing";
 import { meleeHit } from "../../../../game/meleeHit";
-import { skillEvolved, skillValues, withCharms } from "../../../../game/skills/query";
+import { skillEvolved, skillValues, withBuild } from "../../../../game/skills/query";
 import { foesOnScreen } from "../../../../game/skills/targets";
 import { game, hero } from "../../../../game/state";
 import { boxAhead, boxBehind, dust, newSwing } from "../../../../game/world";
@@ -30,7 +30,7 @@ const dropCut = (frame: number): MoveHit => ({
 function landRing(): void {
   const v = skillValues("za_falling");
   newSwing();
-  const r = withCharms("area", SPIN_DROP.ring * (v.ringReach ?? 1));
+  const r = withBuild("area", SPIN_DROP.ring * (v.ringReach ?? 1));
   const struck = meleeHit([boxAhead(-4, -20, r, 2), boxBehind(-4, -20, r, 2)], {
     power: SPIN_DROP.ringPower * (v.ringPower ?? 1),
     kx: 60,

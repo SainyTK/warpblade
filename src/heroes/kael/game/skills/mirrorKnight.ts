@@ -9,7 +9,7 @@ import { createImpact } from "../../../../game/effects/impact";
 import { createSlash } from "../../../../game/effects/slash";
 import { createWarpLine } from "../../../../game/effects/warpLine";
 import { enemyBox, enemyCenter, walks } from "../../../../game/enemies/enemy";
-import { skillValues, withCharms } from "../../../../game/skills/query";
+import { skillValues, withBuild } from "../../../../game/skills/query";
 import { foesOnScreen } from "../../../../game/skills/targets";
 import { game, hero, lights, progress } from "../../../../game/state";
 import { hitStop, shake } from "../../../../game/world";
@@ -73,7 +73,7 @@ function warpStrike(m: KnightMemory, foe: Enemy): void {
 /** Perfect Reflection: the world stands still while Kael and the knight strike the attacker and every foe near */
 function reflect(): void {
   const v = skillValues(ID);
-  const reach = withCharms("area", v.reflectReach);
+  const reach = withBuild("area", v.reflectReach);
   const foes = foesOnScreen().filter((e) => Math.abs(enemyCenter(e)[0] - hero.x) <= reach);
   const attacker = foes.sort((a, b) => Math.abs(a.x - hero.x) - Math.abs(b.x - hero.x))[0];
   game.slow = Math.max(game.slow, REFLECT_SLOW);
@@ -111,8 +111,8 @@ function attackerNear(fromX: number): Enemy | null {
 function summon(m: KnightMemory, evolved: boolean, attacker: Enemy | null): void {
   const v = skillValues(ID);
   if (m.cd > 0) return;
-  m.cd = withCharms("cooldown", v.cooldown);
-  if (v.stay) m.stay = withCharms("duration", v.stay);
+  m.cd = withBuild("cooldown", v.cooldown);
+  if (v.stay) m.stay = withBuild("duration", v.stay);
   if (evolved) {
     reflect();
     return;

@@ -29,6 +29,7 @@ export const RESOLVE: SkillDef = {
   id: "al_resolve",
   name: "Resolve",
   kind: "movement",
+  element: "frost",
   risk: "easy",
   button: "L",
   text: "More air dashes, healing dashes and a harder blow after each dash.",

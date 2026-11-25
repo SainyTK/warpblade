@@ -29,6 +29,7 @@ export const VERDICT: SkillDef = {
   id: "al_verdict",
   name: "Verdict",
   kind: "attack",
+  element: "storm",
   risk: "precise",
   button: "J",
   text: "More Sky cuts in the air, and each one that lands calls swords of light down on its foe.",

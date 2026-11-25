@@ -2,7 +2,7 @@ import { feat } from "../../../game/feat";
 import { isFree, setState, settle } from "../../../game/hero/actions";
 import { endCombo } from "../../../game/hero/combo";
 import { emitSkillEvent } from "../../../game/skills/events";
-import { skillValues, withCharms } from "../../../game/skills/query";
+import { skillValues, withBuild } from "../../../game/skills/query";
 import { hero } from "../../../game/state";
 import { CALDER_STAT } from "../constants/achievements";
 import { RELOAD } from "../constants/chamber";
@@ -12,7 +12,7 @@ import { calder } from "./state";
 
 /** the quick reload window, wider with Speed Loader */
 export function quickWindow(): [number, number] {
-  const widen = withCharms("duration", skillValues("ca_speedload").window ?? 0);
+  const widen = withBuild("duration", skillValues("ca_speedload").window ?? 0);
   return [RELOAD.quickFrom - widen / 2, RELOAD.quickTo + widen / 2];
 }
 

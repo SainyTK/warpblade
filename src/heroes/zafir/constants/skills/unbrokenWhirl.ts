@@ -31,6 +31,7 @@ export const UNBROKEN_WHIRL: SkillDef = {
   id: "za_unbroken",
   name: "Unbroken Whirl",
   kind: "movement",
+  element: "storm",
   risk: "easy",
   button: "L",
   text: "The warp feeds the Whirl and the blade: an arrival fills the Whirl and pours the selected spell into the scimitar.",

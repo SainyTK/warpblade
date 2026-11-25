@@ -2,7 +2,7 @@ import { usesDrill } from "../../../drill";
 import { glow, place, sparkle } from "../../../engine/frame";
 import { enemyBox, enemyCenter } from "../../../game/enemies/enemy";
 import { objectMemory, rememberPerSeat } from "../../../game/seatMemory";
-import { skillValues, withCharms } from "../../../game/skills/query";
+import { skillValues, withBuild } from "../../../game/skills/query";
 import type { Enemy } from "../../../types/enemy";
 import { MARK, MARK_LOOK } from "../constants/mark";
 import { ROSE_RAMP } from "../look/rose";
@@ -19,7 +19,7 @@ function markNumbers(): { time: number; bonus: number; keen: number } {
 }
 
 export function roseMark(foe: Enemy): void {
-  const time = withCharms("duration", markNumbers().time);
+  const time = withBuild("duration", markNumbers().time);
   marks.list = [...marks.list.filter((m) => m.foe !== foe), { foe, left: time }];
 }
 

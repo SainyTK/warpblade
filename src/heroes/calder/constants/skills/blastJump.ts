@@ -29,6 +29,7 @@ export const BLAST_JUMP: SkillDef = {
   id: "ca_blastjump",
   name: "Blast Jump",
   kind: "movement",
+  element: "blaze",
   risk: "timed",
   button: "jump",
   text: "One more air cut, and jumps blast off the floor.",

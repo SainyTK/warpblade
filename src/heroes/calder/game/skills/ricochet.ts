@@ -1,7 +1,7 @@
 import { dealDamage } from "../../../../game/damage";
 import { createImpact } from "../../../../game/effects/impact";
 import { enemyCenter } from "../../../../game/enemies/enemy";
-import { skillEvolved, skillValues, withCharms } from "../../../../game/skills/query";
+import { skillEvolved, skillValues, withBuild } from "../../../../game/skills/query";
 import { game, progress } from "../../../../game/state";
 import type { Enemy } from "../../../../types/enemy";
 import type { SkillBehavior } from "../../../../types/skillBehavior";
@@ -41,7 +41,7 @@ export const ricochet: SkillBehavior = {
     calderBlast(_m, event) {
       if (!event.foes.length || !ricochets(event.kind)) return;
       const v = skillValues(SKILL);
-      const range = withCharms("area", v.range);
+      const range = withBuild("area", v.range);
       const struck = [...event.foes];
       let [x, y] = [event.x, event.y];
       for (let i = 0; i < v.bounces; i++) {

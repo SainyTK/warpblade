@@ -29,6 +29,7 @@ export const DRUM_CYLINDER: SkillDef = {
   id: "ca_drum",
   name: "Drum Cylinder",
   kind: "movement",
+  element: "storm",
   risk: "easy",
   button: "L",
   text: "More air dashes, and dashes that leave rounds behind.",

@@ -1,7 +1,7 @@
 import { fleck, glow, place } from "../../../../engine/frame";
 import { dealDamage } from "../../../../game/damage";
 import { enemyCenter } from "../../../../game/enemies/enemy";
-import { withCharms } from "../../../../game/skills/query";
+import { withBuild } from "../../../../game/skills/query";
 import { foesOnScreen } from "../../../../game/skills/targets";
 import { fxRng, particles } from "../../../../game/state";
 import type { Effect } from "../../../../types/effect";
@@ -27,7 +27,7 @@ export function createSpout(x0: number, y: number, dir: number, spec: SpoutSpec)
   let t = 0;
   let x = x0;
   const life = SPOUT.life * spec.range;
-  const reach = withCharms("area", SPOUT.reach);
+  const reach = withBuild("area", SPOUT.reach);
   const next = new Map<Enemy, number>();
   const strike = (e: Enemy) => {
     const first = !next.has(e);

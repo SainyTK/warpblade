@@ -1,7 +1,7 @@
 import { fleck, glow, place } from "../../../../engine/frame";
 import { dealDamage } from "../../../../game/damage";
 import { createFloorRing } from "../../../../game/effects/floorRing";
-import { skillEvolved, skillValues, withCharms } from "../../../../game/skills/query";
+import { skillEvolved, skillValues, withBuild } from "../../../../game/skills/query";
 import { game, progress } from "../../../../game/state";
 import type { Effect } from "../../../../types/effect";
 import type { SkillBehavior } from "../../../../types/skillBehavior";
@@ -18,7 +18,7 @@ const CRACK = { feet: 6, halt: 0.4, rings: 4 } as const;
  *  end */
 function createCrack(x0: number, x1: number, y: number): Effect {
   const v = skillValues(ID);
-  const life = withCharms("duration", v.time);
+  const life = withBuild("duration", v.time);
   const a = Math.min(x0, x1);
   const b = Math.max(x0, x1);
   const seed = Math.floor(a * 7 + y);

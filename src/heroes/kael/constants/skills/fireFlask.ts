@@ -30,6 +30,7 @@ export const FIRE_FLASK: SkillDef = {
   id: "k_flame",
   name: "Fire Flask",
   kind: "spell",
+  element: "blaze",
   risk: "easy",
   button: "I",
   text: "Fire sets foes burning, and the sword makes burning foes flare.",

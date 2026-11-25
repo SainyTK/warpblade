@@ -28,6 +28,7 @@ export const HOT_GALE: SkillDef = {
   id: "za_gale",
   name: "Hot Gale",
   kind: "spell",
+  element: "blaze",
   risk: "easy",
   button: "I",
   text: "The crescent rides a hot gale: it hits harder, comes back for a second cut and bleeds what it touches.",

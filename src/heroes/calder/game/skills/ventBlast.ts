@@ -1,7 +1,7 @@
 import { dealDamage } from "../../../../game/damage";
 import { createBlastCore } from "../../../../game/effects/flash";
 import { enemyBox } from "../../../../game/enemies/enemy";
-import { skillEvolved, skillValues, withCharms } from "../../../../game/skills/query";
+import { skillEvolved, skillValues, withBuild } from "../../../../game/skills/query";
 import { fxRng, game, hero, particles, progress } from "../../../../game/state";
 import { boxAhead, boxBehind, boxHit } from "../../../../game/world";
 import { PK } from "../../../../types/particle";
@@ -45,7 +45,7 @@ export function vent(): void {
   const v = skillValues(SKILL);
   if (!v.power || (!hero.ground && !v.air)) return;
   const damage = progress.stats.ad * v.power;
-  const reach = withCharms("area", skillEvolved(SKILL) ? VENT.ring : v.reach);
+  const reach = withBuild("area", skillEvolved(SKILL) ? VENT.ring : v.reach);
   puff(hero.x - hero.face * 6, hero.y - 18, -hero.face);
   strike(boxBehind(0, VENT.top, reach, 2), damage, -hero.face);
   if (skillEvolved(SKILL)) strike(boxAhead(0, VENT.top, reach, 2), damage, hero.face);

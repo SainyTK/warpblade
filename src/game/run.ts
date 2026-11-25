@@ -14,6 +14,7 @@ import { resetWarp } from "./hero/warp";
 import { resetWound } from "./hero/wound";
 import { resetDanger } from "./lowHealth";
 import { resetProgress } from "./progress";
+import { resetResonance } from "./resonance";
 import { clearWards } from "./shotWards";
 import { forgetSkills } from "./skills/runtime";
 import { freshHero, game, hero, ponytail, progress, scarf, showBanner } from "./state";
@@ -28,6 +29,7 @@ export function resetRun(banner = "Rise again"): void {
   resetDrill();
   resetProgress();
   resetLedger();
+  resetResonance();
   forgetSkills();
   clearChests();
   clearWards();

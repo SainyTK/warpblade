@@ -4,7 +4,7 @@ import { dealDamage } from "../../../../game/damage";
 import { createImpact } from "../../../../game/effects/impact";
 import { enemyCenter } from "../../../../game/enemies/enemy";
 import { markFoe } from "../../../../game/enemies/skillStatus";
-import { skillEvolved, skillValues, withCharms } from "../../../../game/skills/query";
+import { skillEvolved, skillValues, withBuild } from "../../../../game/skills/query";
 import { game, hero, progress } from "../../../../game/state";
 import type { Effect } from "../../../../types/effect";
 import type { Enemy } from "../../../../types/enemy";
@@ -35,7 +35,7 @@ export function createVerdictSword(foe: Enemy, delay: number): Effect {
       if (foe.hp > 0) {
         dealDamage(foe, progress.stats.ad * v.power, { source: ID, fromX: hero.x, ky: -20, heavy: true });
         game.fx.push(createImpact(x, y, hero.face, true, DAWN_SPARKS));
-        if (v.mark) markFoe(foe, ID, withCharms("duration", VERDICT.mark), v.mark);
+        if (v.mark) markFoe(foe, ID, withBuild("duration", VERDICT.mark), v.mark);
       }
       if (skillEvolved(ID))
         game.fx.push(
@@ -70,7 +70,7 @@ export function createVerdictSword(foe: Enemy, delay: number): Effect {
 function call(m: SkillMemory, foe: Enemy | null): void {
   if (!foe || foe.hp <= 0 || m.swing === hero.swing) return;
   m.swing = hero.swing;
-  const swords = withCharms("amount", skillValues(ID).swords ?? 1);
+  const swords = withBuild("amount", skillValues(ID).swords ?? 1);
   for (let i = 0; i < swords; i++) game.fx.push(createVerdictSword(foe, i * VERDICT.gap));
 }
 

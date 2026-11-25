@@ -4,7 +4,7 @@ import { createImpact } from "../../../game/effects/impact";
 import { createSlash } from "../../../game/effects/slash";
 import { enemyCenter } from "../../../game/enemies/enemy";
 import { movePayoff } from "../../../game/skills/payoff";
-import { skillEvolved, skillValues, withCharms } from "../../../game/skills/query";
+import { skillEvolved, skillValues, withBuild } from "../../../game/skills/query";
 import { game, hero, lights, progress } from "../../../game/state";
 import { hitStop, shake } from "../../../game/world";
 import { sfx } from "../../../services/audio";
@@ -53,7 +53,7 @@ function crossCut(): void {
   hitStop(0.14);
   shake(0.35, 4);
   sfx.chime(4);
-  kael.freeKeen = withCharms("duration", v.free);
+  kael.freeKeen = withBuild("duration", v.free);
   kael.keenCount = 0;
 }
 

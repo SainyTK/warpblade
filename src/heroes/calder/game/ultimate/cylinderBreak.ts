@@ -6,7 +6,7 @@ import { enemyCenter } from "../../../../game/enemies/enemy";
 import { setState, settle } from "../../../../game/hero/actions";
 import { ultimateValues } from "../../../../game/hero/ultimate";
 import { emitSkillEvent } from "../../../../game/skills/events";
-import { withCharms } from "../../../../game/skills/query";
+import { withBuild } from "../../../../game/skills/query";
 import { game, hero, progress } from "../../../../game/state";
 import { hitStop } from "../../../../game/world";
 import type { Enemy } from "../../../../types/enemy";
@@ -72,7 +72,7 @@ export function castCylinderBreak(level: number): void {
     BREAK_SHARE *
     (v.power ?? 1) *
     (calder.hot || v.hot ? HOT_BLAST : 1);
-  calder.breakReach = withCharms("area", BREAK_REACH[level - 1]);
+  calder.breakReach = withBuild("area", BREAK_REACH[level - 1]);
   calder.rounds = 0;
   setState("cylinderBreak");
   hero.vx = 0;

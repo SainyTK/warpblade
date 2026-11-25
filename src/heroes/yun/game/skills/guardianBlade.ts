@@ -1,7 +1,7 @@
 import { dealDamage } from "../../../../game/damage";
 import { createImpact } from "../../../../game/effects/impact";
 import { enemyCenter } from "../../../../game/enemies/enemy";
-import { skillValues, withCharms } from "../../../../game/skills/query";
+import { skillValues, withBuild } from "../../../../game/skills/query";
 import { distance2 } from "../../../../game/skills/targets";
 import { game, hero, progress, rng } from "../../../../game/state";
 import type { Enemy } from "../../../../types/enemy";
@@ -71,7 +71,7 @@ export const guardianBlade: SkillBehavior = {
       const v = skillValues(SKILL.guardian);
       if (state.evolved || m.cd > 0 || m.guards.length >= v.most || !rng.chance(v.chance)) return;
       m.cd = v.cooldown;
-      m.guards.push({ left: withCharms("duration", v.life), angle: rng.range(0, TAU), next: 0.2, dive: 0, at: null });
+      m.guards.push({ left: withBuild("duration", v.life), angle: rng.range(0, TAU), next: 0.2, dive: 0, at: null });
     },
   },
 };

@@ -32,6 +32,7 @@ export const HEAVY_HANDS: SkillDef = {
   id: "br_heavy",
   name: "Heavy Hands",
   kind: "attack",
+  element: "frost",
   risk: "precise",
   button: "J",
   text: "The air slash, Falling Slam, hits harder and comes more often.",

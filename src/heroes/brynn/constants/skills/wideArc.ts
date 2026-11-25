@@ -29,6 +29,7 @@ export const WIDE_ARC: SkillDef = {
   id: "br_cleave",
   name: "Wide Arc",
   kind: "attack",
+  element: "blaze",
   risk: "easy",
   button: "J",
   text: "The first slash, Wide Sweep, cuts harder and drags the crowd into the chain.",

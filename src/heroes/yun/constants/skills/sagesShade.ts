@@ -29,6 +29,7 @@ export const SAGES_SHADE: SkillDef = {
   id: "yu_shade",
   name: "Sage's Shade",
   kind: "summon",
+  element: "void",
   risk: "precise",
   button: "K",
   text: "A parry calls your shade behind the attacker for a heavy cut.",

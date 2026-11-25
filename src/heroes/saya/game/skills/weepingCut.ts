@@ -1,7 +1,7 @@
 import { dealDamage } from "../../../../game/damage";
 import { enemyCenter } from "../../../../game/enemies/enemy";
 import { addStacks, consumeStacks, stacksOf } from "../../../../game/enemies/skillStatus";
-import { skillValues, withCharms } from "../../../../game/skills/query";
+import { skillValues, withBuild } from "../../../../game/skills/query";
 import { game, progress } from "../../../../game/state";
 import type { Enemy } from "../../../../types/enemy";
 import type { SkillBehavior } from "../../../../types/skillBehavior";
@@ -13,7 +13,7 @@ import { createInkBurst } from "../effects/inkBurst";
 function bleed(e: Enemy, stacks: number): void {
   const v = skillValues(SKILL.weep);
   const spec = { stacks, max: v.max, damage: progress.stats.ad * v.damage, every: v.every };
-  addStacks(e, SKILL.weep, { ...spec, duration: withCharms("duration", v.time) });
+  addStacks(e, SKILL.weep, { ...spec, duration: withBuild("duration", v.time) });
 }
 
 /** Weeping Cut: a release leaves its foes bleeding; as Weeping Moon a foe with enough stacks bursts them first */

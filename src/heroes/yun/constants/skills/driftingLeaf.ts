@@ -29,6 +29,7 @@ export const DRIFTING_LEAF: SkillDef = {
   id: "yu_drift",
   name: "Drifting Leaf",
   kind: "movement",
+  element: "venom",
   risk: "easy",
   button: "L",
   text: "Dashing through foes cuts them.",

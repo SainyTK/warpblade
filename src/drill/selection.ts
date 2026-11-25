@@ -2,7 +2,7 @@ import { isAdventure } from "../game/adventure";
 import { heroJob } from "../game/hero/job";
 import { character } from "../game/state";
 import { isTraining } from "../game/training";
-import { heroModule } from "../heroes";
+import { heroModule } from "../heroes/registry";
 import type { DrillProfile } from "../types/drill";
 
 export const heroDrill = (): DrillProfile | undefined =>

@@ -1,5 +1,5 @@
 import { moveDef } from "../../../../game/hero/kits";
-import { skillEvolved, skillValues, withCharms } from "../../../../game/skills/query";
+import { skillEvolved, skillValues, withBuild } from "../../../../game/skills/query";
 import { game, hero, progress } from "../../../../game/state";
 import type { Enemy } from "../../../../types/enemy";
 import { ECHO } from "../../constants/tempo";
@@ -50,7 +50,7 @@ function stormAfterStrike(short: boolean): void {
   const both = skillEvolved("ve_storm");
   if (short && !both) return;
   const damage = progress.stats.ad * v.wave;
-  const pierce = withCharms("amount", v.pierce ?? 1);
+  const pierce = withBuild("amount", v.pierce ?? 1);
   sendWave(hero.face, damage, pierce, !!v.waveTempo, short);
   if (both) sendWave(-hero.face, damage, pierce, !!v.waveTempo, short);
 }

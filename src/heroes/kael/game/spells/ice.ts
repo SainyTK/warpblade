@@ -5,7 +5,7 @@ import { dealDamage } from "../../../../game/damage";
 import { createFloorRing } from "../../../../game/effects/floorRing";
 import { createImpact } from "../../../../game/effects/impact";
 import { enemyBox, enemyCenter } from "../../../../game/enemies/enemy";
-import { skillEvolved, skillValues, withCharms } from "../../../../game/skills/query";
+import { skillEvolved, skillValues, withBuild } from "../../../../game/skills/query";
 import { fxRng, game, lights, particles, progress } from "../../../../game/state";
 import { boxHit, shake, surfaceBelow } from "../../../../game/world";
 import { sfx } from "../../../../services/audio";
@@ -128,7 +128,7 @@ function chillBeside(s: Spike, seconds: number): void {
 /** Ice Spikes held: frost spreads over the floor round Kael and slows every foe on it */
 function frostField(x: number, y: number): void {
   const f = ICE_FIELD;
-  const reach = withCharms("area", f.reach);
+  const reach = withBuild("area", f.reach);
   game.fx.push(createFloorRing(x, y, reach, PAL.ice, 0.6));
   game.fx.push(createFloorRing(x, y, reach * 0.6, PAL.ice, 0.5, 0.7));
   for (let k = 0; k < 24; k++)
@@ -146,7 +146,7 @@ function frostField(x: number, y: number): void {
     );
   for (const e of game.enemies)
     if (e.hp > 0 && Math.abs(enemyCenter(e)[0] - x) <= reach)
-      e.chill = Math.max(e.chill, withCharms("duration", f.chill));
+      e.chill = Math.max(e.chill, withBuild("duration", f.chill));
 }
 
 /** a row of crystal spikes erupting one after another along the floor, freezing what they touch, then shattering; held,
@@ -156,8 +156,8 @@ export function castIce(x: number, y: number, face: number, power: number, wide:
   const v = skillValues(SKILL);
   const bloom = skillEvolved(SKILL);
   const damage = v.power * progress.stats.ap * power * (bloom ? v.bloomPower : 1);
-  const freeze = withCharms("duration", v.freeze);
-  const heights = heightsOf(Math.round(withCharms("amount", v.spikes)));
+  const freeze = withBuild("duration", v.freeze);
+  const heights = heightsOf(Math.round(withBuild("amount", v.spikes)));
   const spikes = spikeLine(x, y, face, heights);
   if (bloom) {
     const crown = spikes[spikes.length - 1];
@@ -243,7 +243,7 @@ export function castIce(x: number, y: number, face: number, power: number, wide:
             e.frozen = Math.max(e.frozen, freeze);
             game.fx.push(createImpact(s.x, s.base - s.h * 0.6, s.dir, false, SPARKS.ice));
           }
-        if (v.chill && !s.chilled && u >= 0.1) chillBeside(s, withCharms("duration", v.chill));
+        if (v.chill && !s.chilled && u >= 0.1) chillBeside(s, withBuild("duration", v.chill));
         if (!s.gone && u > s.stand) shatter(s, i);
       });
       return t < end;

@@ -35,6 +35,7 @@ export const WAR_CRY: SkillDef = {
   id: "br_cry",
   name: "War Cry",
   kind: "movement",
+  element: "blaze",
   risk: "easy",
   button: "J",
   text: "A warp arrival roars and pours the selected spell into the blade.",

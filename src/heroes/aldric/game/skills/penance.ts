@@ -3,7 +3,7 @@ import { dealDamage } from "../../../../game/damage";
 import { createGlint } from "../../../../game/effects/flash";
 import { enemyCenter } from "../../../../game/enemies/enemy";
 import { addStacks, consumeStacks, stacksOf } from "../../../../game/enemies/skillStatus";
-import { skillEvolved, skillValues, withCharms } from "../../../../game/skills/query";
+import { skillEvolved, skillValues, withBuild } from "../../../../game/skills/query";
 import { game, hero, progress } from "../../../../game/state";
 import type { Enemy } from "../../../../types/enemy";
 import type { SkillBehavior, SkillMemory } from "../../../../types/skillBehavior";
@@ -37,7 +37,7 @@ export function lay(e: Enemy, stacks: number): void {
     max: v.max,
     damage: progress.stats.ap * v.tick,
     every: PENANCE.every,
-    duration: withCharms("duration", PENANCE.time),
+    duration: withBuild("duration", PENANCE.time),
   });
   if (!skillEvolved(ID) || stacksOf(e, ID) < v.max) return;
   const n = consumeStacks(e, ID);

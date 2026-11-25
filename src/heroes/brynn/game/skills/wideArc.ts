@@ -1,5 +1,5 @@
 import { markFoe } from "../../../../game/enemies/skillStatus";
-import { skillValues, withCharms } from "../../../../game/skills/query";
+import { skillValues, withBuild } from "../../../../game/skills/query";
 import type { SkillBehavior } from "../../../../types/skillBehavior";
 
 const ID = "br_cleave";
@@ -12,7 +12,7 @@ export const wideArc: SkillBehavior = {
     blow(_m, e) {
       const v = skillValues(ID);
       if (e.move !== "sweep" || !v.mark) return;
-      markFoe(e.foe, ID, withCharms("duration", v.markTime), v.mark);
+      markFoe(e.foe, ID, withBuild("duration", v.markTime), v.mark);
     },
   },
 };

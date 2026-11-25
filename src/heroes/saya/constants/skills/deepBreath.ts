@@ -31,6 +31,7 @@ export const DEEP_BREATH: SkillDef = {
   id: SKILL.breath,
   name: "Feather Step",
   kind: "movement",
+  element: "frost",
   risk: "easy",
   button: "jump",
   text: "Wall kicks and dash-jumps cut, and she gains air dashes and air slashes.",

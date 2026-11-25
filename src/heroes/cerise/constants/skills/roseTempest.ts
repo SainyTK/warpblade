@@ -31,6 +31,7 @@ export const ROSE_TEMPEST: SkillDef = {
   id: "ce_tempest",
   name: "Rose Tempest",
   kind: "ultimate",
+  element: "venom",
   risk: "easy",
   button: "U",
   text: "The four Rose Tempest charged skills on held J hit harder.",

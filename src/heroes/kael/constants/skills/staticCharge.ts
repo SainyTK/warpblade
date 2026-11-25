@@ -19,6 +19,7 @@ export const STATIC_CHARGE: SkillDef = {
   id: "k_static",
   name: "Static Charge",
   kind: "dot",
+  element: "storm",
   risk: "timed",
   button: "auto",
   text: "Dash through foes to charge them; they crackle, and your sword sets them off.",

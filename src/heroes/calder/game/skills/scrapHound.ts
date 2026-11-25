@@ -2,7 +2,7 @@ import { fleck, place } from "../../../../engine/frame";
 import { dealDamage } from "../../../../game/damage";
 import { enemyCenter } from "../../../../game/enemies/enemy";
 import { staggerFoe } from "../../../../game/enemies/stagger";
-import { skillEvolved, skillValues, withCharms } from "../../../../game/skills/query";
+import { skillEvolved, skillValues, withBuild } from "../../../../game/skills/query";
 import { nearestFoe } from "../../../../game/skills/targets";
 import { hero, progress, rng } from "../../../../game/state";
 import { surfaceBelow } from "../../../../game/world";
@@ -42,11 +42,11 @@ function call(m: HoundMemory): void {
     y: hero.y,
     vy: 0,
     face: hero.face,
-    left: withCharms("duration", v.life),
+    left: withBuild("duration", v.life),
     next: 0,
     step: 0,
   });
-  while (m.hounds.length > withCharms("amount", v.most)) m.hounds.shift();
+  while (m.hounds.length > withBuild("amount", v.most)) m.hounds.shift();
 }
 
 /** a hound runs at the nearest foe on the floor and bites it; with none near it trots back to Calder's heel */

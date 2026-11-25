@@ -35,6 +35,7 @@ export const LINGERING_LINE: SkillDef = {
   id: SKILL.trail,
   name: "Lingering Line",
   kind: "dot",
+  element: "venom",
   risk: "timed",
   button: "I",
   text: "Infused hits leave a bleeding ink line in the foe.",

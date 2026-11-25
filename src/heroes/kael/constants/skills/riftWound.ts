@@ -19,6 +19,7 @@ export const RIFT_WOUND: SkillDef = {
   id: "k_rift",
   name: "Rift Wound",
   kind: "dot",
+  element: "venom",
   risk: "timed",
   button: "auto",
   text: "Warp strikes open rift wounds that drain the foe; each warp deepens them.",

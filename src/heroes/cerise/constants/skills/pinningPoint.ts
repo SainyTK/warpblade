@@ -31,6 +31,7 @@ export const PINNING_POINT: SkillDef = {
   id: "ce_pin",
   name: "Pinning Point",
   kind: "attack",
+  element: "frost",
   risk: "easy",
   button: "J",
   text: "The air thrust pins its foe and strikes again.",

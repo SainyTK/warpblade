@@ -5,7 +5,7 @@ import { createFloorRing } from "../../../../game/effects/floorRing";
 import { skin } from "../../../../game/hero/skin";
 import { travelEnded } from "../../../../game/hero/travelEnd";
 import { meleeHit } from "../../../../game/meleeHit";
-import { skillValues, withCharms } from "../../../../game/skills/query";
+import { skillValues, withBuild } from "../../../../game/skills/query";
 import { game, hero } from "../../../../game/state";
 import { boxAhead, boxBehind, dust, newSwing, shake } from "../../../../game/world";
 import type { MoveDef } from "../../../../types/move";
@@ -33,7 +33,7 @@ function crestImpact(): void {
 /** Shield fall lands: a ring of light where the shield strikes the floor knocks every foe near off its feet */
 function fallLanding(): void {
   const v = skillValues("al_skyfall");
-  const ring = withCharms("area", SHIELD_FALL.ring * (1 + (v.ring ?? 0)));
+  const ring = withBuild("area", SHIELD_FALL.ring * (1 + (v.ring ?? 0)));
   game.fx.push(createFloorRing(hero.x, hero.y, ring, skin.ramp, 0.4));
   dust(hero.x, hero.y, 8);
   shake(0.18, 2.2);

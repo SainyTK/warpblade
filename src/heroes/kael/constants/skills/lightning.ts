@@ -30,6 +30,7 @@ export const LIGHTNING: SkillDef = {
   id: "k_volt",
   name: "Lightning",
   kind: "spell",
+  element: "storm",
   risk: "easy",
   button: "I",
   text: "Thunder arcs on to more foes, and thunder-infused slashes arc too.",

@@ -29,6 +29,7 @@ export const IRON_RETORT: SkillDef = {
   id: "al_retort",
   name: "Iron Retort",
   kind: "attack",
+  element: "storm",
   risk: "precise",
   button: "K",
   text: "A longer parry window, and the parry strikes back with the shield.",

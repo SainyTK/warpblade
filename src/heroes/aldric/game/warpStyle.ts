@@ -1,6 +1,6 @@
 import { createImpact } from "../../../game/effects/impact";
 import { sharedWarpStrike } from "../../../game/hero/warp";
-import { skillValues, withCharms } from "../../../game/skills/query";
+import { skillValues, withBuild } from "../../../game/skills/query";
 import { game, hero, progress } from "../../../game/state";
 import type { Enemy } from "../../../types/enemy";
 import type { WarpStyle } from "../../../types/moveset";
@@ -22,7 +22,7 @@ function arrived(): void {
   raiseBarrier(BULWARK.time + (v.time ?? 0), 1 + (v.blows ?? 0));
   if (v.ring && hero.ground)
     game.fx.push(
-      createDelayedRing(hero.x, hero.y, withCharms("area", ARRIVAL_RING), 0, progress.stats.ad * v.ring, {
+      createDelayedRing(hero.x, hero.y, withBuild("area", ARRIVAL_RING), 0, progress.stats.ad * v.ring, {
         kx: 50,
         ky: -40,
         stagger: 0.4,

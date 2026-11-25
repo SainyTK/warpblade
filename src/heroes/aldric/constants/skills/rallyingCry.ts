@@ -33,6 +33,7 @@ export const RALLYING_CRY: SkillDef = {
   id: "al_rally",
   name: "High Sun",
   kind: "spell",
+  element: "blaze",
   risk: "easy",
   button: "I",
   text: "Sunpillar stuns longer, strikes harder, burns and falls in a row.",

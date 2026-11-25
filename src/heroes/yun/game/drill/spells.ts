@@ -1,6 +1,6 @@
 import { markFoe } from "../../../../game/enemies/skillStatus";
 import { staggerFoe } from "../../../../game/enemies/stagger";
-import { withCharms } from "../../../../game/skills/query";
+import { withBuild } from "../../../../game/skills/query";
 import type { DrillSpell } from "../../../../types/drill";
 import type { Enemy } from "../../../../types/enemy";
 import { SKILL } from "../../constants/skillIds";
@@ -12,10 +12,10 @@ const QI_MARK = { seconds: 3, bonus: 0.2 };
 
 const cutDown = (foe: Enemy): void => staggerFoe(foe, STREAM_STAGGER);
 const holdFeet = (foe: Enemy): void => {
-  foe.halt = Math.max(foe.halt, withCharms("duration", LOTUS_HALT));
+  foe.halt = Math.max(foe.halt, withBuild("duration", LOTUS_HALT));
 };
 const markQi = (foe: Enemy): void =>
-  markFoe(foe, SKILL.crescent, withCharms("duration", QI_MARK.seconds), QI_MARK.bonus);
+  markFoe(foe, SKILL.crescent, withBuild("duration", QI_MARK.seconds), QI_MARK.bonus);
 
 export const YUN_SPELLS: readonly DrillSpell[] = [
   {

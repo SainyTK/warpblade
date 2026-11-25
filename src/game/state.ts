@@ -12,6 +12,7 @@ import type { Hero } from "../types/hero";
 import type { Progress } from "../types/progress";
 import { freshBuild } from "../utils/build";
 import { jobSkin } from "../utils/jobs";
+import { emptyRanks } from "../utils/resonance";
 import { restPose } from "../utils/restPose";
 import { Rng } from "../utils/rng";
 import { computeStats } from "../utils/stats";
@@ -99,6 +100,8 @@ export function freshProgress(): Progress {
     comboLimit: character.comboHits,
     airLimit: AIR_STRING.hits,
     build: freshBuild(metaToolBonus()),
+    resonance: emptyRanks(),
+    fusions: [],
   };
 }
 export const progress: Progress = freshProgress();

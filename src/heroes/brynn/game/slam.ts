@@ -1,5 +1,5 @@
 import { feat } from "../../../game/feat";
-import { skillValues, withCharms } from "../../../game/skills/query";
+import { skillValues, withBuild } from "../../../game/skills/query";
 import { game, hero, lights, progress } from "../../../game/state";
 import { hitStop, shake, struckThisSwing } from "../../../game/world";
 import { sfx } from "../../../services/audio";
@@ -27,7 +27,7 @@ export function slamLanded(gx: number): void {
   if (brynn.fissure) {
     brynn.fissure = false;
     if (!v.alwaysFissure) spendHeft();
-    const reach = withCharms("area", FISSURE.reach * (1 + (v.fissureReach ?? 0)));
+    const reach = withBuild("area", FISSURE.reach * (1 + (v.fissureReach ?? 0)));
     const damage = progress.stats.ad * (FISSURE.power + (v.fissure ?? 0));
     for (const face of v.both ? [hero.face, -hero.face] : [hero.face])
       game.fx.push(
@@ -51,7 +51,7 @@ export function slamLanded(gx: number): void {
     feat({ kind: "heroCount", stat: BRYNN_STATS.fissures, add: 1 });
     return;
   }
-  const reach = withCharms("area", SHOCKWAVE.reach * (1 + (v.reach ?? 0)));
+  const reach = withBuild("area", SHOCKWAVE.reach * (1 + (v.reach ?? 0)));
   const damage = progress.stats.ad * (SHOCKWAVE.power + (v.wave ?? 0));
   const struck = slammed();
   for (const face of v.both ? [hero.face, -hero.face] : [hero.face])

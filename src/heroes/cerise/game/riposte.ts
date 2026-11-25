@@ -3,7 +3,7 @@ import { feat } from "../../../game/feat";
 import { setState, settle } from "../../../game/hero/actions";
 import { meleeHit } from "../../../game/meleeHit";
 import { emitSkillEvent } from "../../../game/skills/events";
-import { skillValues, withCharms } from "../../../game/skills/query";
+import { skillValues, withBuild } from "../../../game/skills/query";
 import { game, hero } from "../../../game/state";
 import { boxAhead, newSwing } from "../../../game/world";
 import { sfx } from "../../../services/audio";
@@ -18,7 +18,7 @@ import { cerise } from "./state";
 /** the most links a chain may run: six, more with Riposte Chain */
 const maxLinks = (): number => skillValues("ce_riposte").links ?? RIPOSTE.links;
 /** the beat after a link lands in which J is the next link */
-const beat = (): number => withCharms("duration", skillValues("ce_riposte").window ?? RIPOSTE.beat);
+const beat = (): number => withBuild("duration", skillValues("ce_riposte").window ?? RIPOSTE.beat);
 
 /** start one link of the chain: the first after a parry, then one for each J on the beat */
 function startLink(): void {

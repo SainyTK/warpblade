@@ -1,5 +1,6 @@
+import { currentBuildStats } from "../game/build/stats";
 import { progress } from "../game/state";
-import { buildStats, flowMultiplier } from "../utils/build";
+import { flowMultiplier } from "../utils/build";
 import { byId } from "./dom";
 
 /** Flow: the stacks the hero's own hits have built, and the damage multiplier they give */
@@ -11,7 +12,7 @@ let last = "";
 export function updateFlowBar(): void {
   const b = progress.build;
   const stacks = Math.ceil(b.flow);
-  const cap = buildStats(b).flowCap;
+  const cap = currentBuildStats().flowCap;
   const key = `${stacks}/${cap}`;
   if (key === last) return;
   last = key;

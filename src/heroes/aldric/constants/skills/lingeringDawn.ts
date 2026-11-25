@@ -29,6 +29,7 @@ export const LINGERING_DAWN: SkillDef = {
   id: "al_dawn",
   name: "Lingering Dawn",
   kind: "dot",
+  element: "blaze",
   risk: "easy",
   button: "I",
   text: "Sunpillar leaves burning light on the floor where it falls. Grows with ability power.",

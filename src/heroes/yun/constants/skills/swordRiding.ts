@@ -29,6 +29,7 @@ export const SWORD_RIDING: SkillDef = {
   id: "yu_ride",
   name: "Sword Riding",
   kind: "movement",
+  element: "storm",
   risk: "timed",
   button: "J",
   text: "The warp strike recharges faster and hits harder, and spirit swords follow you in.",

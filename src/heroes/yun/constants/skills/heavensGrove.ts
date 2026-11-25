@@ -30,6 +30,7 @@ export const HEAVENS_GROVE: SkillDef = {
   id: "yu_rain",
   name: "Heaven's Grove",
   kind: "ultimate",
+  element: "venom",
   risk: "easy",
   button: "U",
   text: `Jade Rain grows: more swords on more foes, a second rain, and your swords back. Grows with attack damage. ${ULT_CHARGE}`,

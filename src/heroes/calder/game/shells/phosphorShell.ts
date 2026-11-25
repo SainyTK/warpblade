@@ -2,7 +2,7 @@ import { fleck, glow, place } from "../../../../engine/frame";
 import { dealDamage } from "../../../../game/damage";
 import { enemyBox, enemyCenter } from "../../../../game/enemies/enemy";
 import { addStacks } from "../../../../game/enemies/skillStatus";
-import { skillValues, withCharms } from "../../../../game/skills/query";
+import { skillValues, withBuild } from "../../../../game/skills/query";
 import { game, progress, rng } from "../../../../game/state";
 import { boxHit, surfaceBelow } from "../../../../game/world";
 import type { Effect } from "../../../../types/effect";
@@ -59,7 +59,7 @@ function createFirePool(x: number, y: number, reach: number, time: number): Effe
 /** the shell bursts where it lands: a blast that strikes foes around it, then the pool */
 function burst(x: number, y: number, power: number): void {
   const v = skillValues(SKILL);
-  const reach = withCharms("area", v.radius);
+  const reach = withBuild("area", v.radius);
   roundBlast(x, y - 4, 1, false, true);
   for (const e of game.enemies) {
     if (e.hp <= 0) continue;
@@ -72,7 +72,7 @@ function burst(x: number, y: number, power: number): void {
       source: "abilities",
     });
   }
-  game.fx.push(createFirePool(x, y, reach, withCharms("duration", v.time)));
+  game.fx.push(createFirePool(x, y, reach, withBuild("duration", v.time)));
 }
 
 /** one shell in flight: it arcs under gravity and bursts on the floor or on the first foe it meets */

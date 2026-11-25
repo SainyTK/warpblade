@@ -28,6 +28,7 @@ export const WHIRLING_EDGE: SkillDef = {
   id: "za_whirling",
   name: "Whirling Edge",
   kind: "attack",
+  element: "storm",
   risk: "easy",
   button: "J",
   text: "The sweep turn, the first slash of the chain, hits harder and throws sand crescents out both sides.",

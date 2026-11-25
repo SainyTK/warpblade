@@ -1,5 +1,5 @@
 import { markFoe } from "../../../../game/enemies/skillStatus";
-import { skillValues, withCharms } from "../../../../game/skills/query";
+import { skillValues, withBuild } from "../../../../game/skills/query";
 import { nearestFoe } from "../../../../game/skills/targets";
 import { game, hero, progress } from "../../../../game/state";
 import type { SkillBehavior } from "../../../../types/skillBehavior";
@@ -26,7 +26,7 @@ function callShade(reward: ShadeReward): void {
       source: SKILL.shade,
       done: () => {
         reward(v);
-        if (v.mark) markFoe(foe, SKILL.shade, withCharms("duration", MARK_TIME), v.mark);
+        if (v.mark) markFoe(foe, SKILL.shade, withBuild("duration", MARK_TIME), v.mark);
       },
     }),
   );

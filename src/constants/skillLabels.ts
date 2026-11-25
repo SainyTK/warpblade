@@ -12,5 +12,4 @@ export const KIND_LABEL: Record<SkillKind, string> = {
 export const RISK_LABEL: Record<SkillRisk, string> = { easy: "Easy", timed: "Timed", precise: "Precise" };
 /** the kind line of a boon card */
 export const BOON_KIND = "Boon";
-/** the path line of charm cards */
-export const CHARM_KIND = "Charm";
+export const ART_KIND = "Rift Art";

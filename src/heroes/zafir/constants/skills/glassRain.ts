@@ -28,6 +28,7 @@ export const GLASS_RAIN: SkillDef = {
   id: "za_glass",
   name: "Glass Rain",
   kind: "spell",
+  element: "frost",
   risk: "timed",
   button: "I",
   text: "Glass Rain scours harder: longer blindness, shards that rain on the foes round the target, and quicker preparation.",

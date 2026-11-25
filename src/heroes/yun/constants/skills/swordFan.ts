@@ -32,6 +32,7 @@ export const SWORD_FAN: SkillDef = {
   id: "yu_fan",
   name: "Sword Fan",
   kind: "spell",
+  element: "storm",
   risk: "easy",
   button: "I",
   text: "Sword Stream cuts harder and fans out into more spirit swords.",

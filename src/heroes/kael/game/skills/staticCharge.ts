@@ -1,7 +1,7 @@
 import { SPARKS } from "../../../../constants/palette";
 import { enemyCenter } from "../../../../game/enemies/enemy";
 import { addStacks, stacksOf } from "../../../../game/enemies/skillStatus";
-import { skillEvolved, skillValues, withCharms } from "../../../../game/skills/query";
+import { skillEvolved, skillValues, withBuild } from "../../../../game/skills/query";
 import { foesOnScreen } from "../../../../game/skills/targets";
 import { fxRng, game, hero, particles, progress } from "../../../../game/state";
 import type { Enemy } from "../../../../types/enemy";
@@ -34,7 +34,7 @@ function charge(e: Enemy): void {
     max: 1,
     damage: progress.stats.ap * v.tick * STATIC.every,
     every: STATIC.every,
-    duration: skillEvolved(ID) ? STATIC.forever : withCharms("duration", v.life),
+    duration: skillEvolved(ID) ? STATIC.forever : withBuild("duration", v.life),
   });
 }
 
@@ -61,7 +61,7 @@ function contagion(m: StaticMemory): void {
 function overload(m: StaticMemory): void {
   const v = skillValues(ID);
   if (m.overloadT > 0) return;
-  m.overloadT = withCharms("cooldown", v.every);
+  m.overloadT = withBuild("cooldown", v.every);
   const ap = progress.stats.ap;
   foesOnScreen()
     .filter(charged)

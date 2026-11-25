@@ -28,6 +28,7 @@ export const SKY_RIBBON: SkillDef = {
   id: "ve_sky",
   name: "Sky Ribbon",
   kind: "attack",
+  element: "storm",
   risk: "timed",
   button: "J",
   text: "One more air cut per jump, and air cuts hit harder.",

@@ -28,6 +28,7 @@ export const SIROCCO_TIMING: SkillDef = {
   id: "za_sirocco",
   name: "Sirocco Descent",
   kind: "attack",
+  element: "blaze",
   risk: "timed",
   button: "J",
   text: "The spinning descent, the air slash, hits harder, comes more often and sends hot gusts along the floor.",

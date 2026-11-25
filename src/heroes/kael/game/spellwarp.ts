@@ -4,7 +4,7 @@ import { ignite } from "../../../game/enemies/burn";
 import { enemyCenter } from "../../../game/enemies/enemy";
 import { selectedSlot } from "../../../game/hero/abilityBar";
 import { isFree } from "../../../game/hero/actions";
-import { skillEvolved, skillLevel, skillValues, withCharms } from "../../../game/skills/query";
+import { skillEvolved, skillLevel, skillValues, withBuild } from "../../../game/skills/query";
 import { game, hero, lights, progress } from "../../../game/state";
 import type { Enemy } from "../../../types/enemy";
 import { ABILITY_COLOR } from "../constants/spells";
@@ -26,9 +26,9 @@ function strikeWith(a: KaelAbility, e: Enemy, damage: number, v: Readonly<Record
   const [ex, ey] = enemyCenter(e);
   dealDamage(e, damage, { fromX: hero.x, kx: hero.face * 40, ky: -30, source: "abilities" });
   game.fx.push(createImpact(ex, ey, hero.face, false, SPELLWARP_SPARKS[a]));
-  if (a === "fire") ignite(e, withCharms("duration", v.burn));
-  if (a === "ice") e.chill = Math.max(e.chill, withCharms("duration", v.chill));
-  if (a === "volt") e.shock = Math.max(e.shock, withCharms("duration", v.shock));
+  if (a === "fire") ignite(e, withBuild("duration", v.burn));
+  if (a === "ice") e.chill = Math.max(e.chill, withBuild("duration", v.chill));
+  if (a === "volt") e.shock = Math.max(e.shock, withBuild("duration", v.shock));
 }
 
 /**
@@ -40,12 +40,12 @@ export function spellwarpArrived(foe: Enemy | null): void {
   if (!skillLevel(SKILL)) return;
   const v = skillValues(SKILL);
   const a = selectedAbility();
-  if (v.window) kael.spellwarp = withCharms("duration", v.window);
+  if (v.window) kael.spellwarp = withBuild("duration", v.window);
   if (!a) return;
   if (foe) {
     const [fx, fy] = enemyCenter(foe);
     lights.add(fx, fy, 30, ABILITY_COLOR[a], 0.7, 0.25);
-    const reach = v.reach ? withCharms("area", v.reach) : 0;
+    const reach = v.reach ? withBuild("area", v.reach) : 0;
     const damage = progress.stats.ap * v.power;
     for (const e of game.enemies) {
       if (e.hp <= 0) continue;
@@ -55,7 +55,7 @@ export function spellwarpArrived(foe: Enemy | null): void {
   }
   if (v.refund) kael.spellCd[a] = Math.max(0, kael.spellCd[a] - v.refund);
   if (!skillEvolved(SKILL) || kael.arcaneCd > 0) return;
-  kael.arcaneCd = withCharms("cooldown", v.arcaneEvery);
+  kael.arcaneCd = withBuild("cooldown", v.arcaneEvery);
   castFree(a, ARCANE_SHARE);
 }
 

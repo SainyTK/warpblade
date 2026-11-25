@@ -1,5 +1,5 @@
 import { clampHeroX, landingAt, moveHeroX, oneWayAt, wallSide } from "../../game/hero/terrain";
-import { withCharms } from "../../game/skills/query";
+import { withBuild } from "../../game/skills/query";
 import { progress } from "../../game/state";
 import type { Direction, DrillInput, DrillMotion, Fighter, Session, Side } from "../../types/drill";
 import { approach } from "../../utils/math";
@@ -45,7 +45,7 @@ function dash(h: Fighter, face: Side, motion: DrillMotion): void {
   h.face = face;
   h.dashBuffer = 0;
   h.dashTime = motion.dashTime;
-  h.dashReadyIn = motion.dashTime + withCharms("cooldown", motion.dashRecovery);
+  h.dashReadyIn = motion.dashTime + withBuild("cooldown", motion.dashRecovery);
   h.airDashActive = !h.grounded;
   h.jumpBoost = false;
   if (h.airDashActive) {

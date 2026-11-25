@@ -28,6 +28,7 @@ export const PASSING_CUT: SkillDef = {
   id: "k_passing",
   name: "Passing Cut",
   kind: "movement",
+  element: "void",
   risk: "timed",
   button: "L",
   text: "Dashing through foes cuts every foe passed.",

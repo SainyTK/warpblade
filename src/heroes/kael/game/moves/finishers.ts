@@ -7,7 +7,7 @@ import { leaveAfterimages } from "../../../../game/hero/afterimages";
 import { lift } from "../../../../game/hero/lift";
 import { moveHeroX } from "../../../../game/hero/terrain";
 import { objectMemory, rememberPerSeat } from "../../../../game/seatMemory";
-import { skillEvolved, skillValues, withCharms } from "../../../../game/skills/query";
+import { skillEvolved, skillValues, withBuild } from "../../../../game/skills/query";
 import { game, hero } from "../../../../game/state";
 import type { Enemy } from "../../../../types/enemy";
 import type { MoveDef } from "../../../../types/move";
@@ -45,7 +45,7 @@ function phaseEnter(): void {
 /** the coil is over: the pass is aimed past the foe ahead as it stands now, and the afterimages trail along it */
 function startPass(): void {
   const v = skillValues("k_phase");
-  const ahead = phaseFoe(withCharms("area", v.reach ?? 80), kael.passage);
+  const ahead = phaseFoe(withBuild("area", v.reach ?? 80), kael.passage);
   const past = ahead ? ahead.x + hero.face * (Math.abs(enemyCenter(ahead)[0] - ahead.x) + 18) : hero.x + hero.face * 50;
   phase.from = hero.x;
   phase.to = clampStageX(past, 10);

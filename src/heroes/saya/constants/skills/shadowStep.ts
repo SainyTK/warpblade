@@ -32,6 +32,7 @@ export const SHADOW_STEP: SkillDef = {
   id: SKILL.step,
   name: "Shadow Step",
   kind: "movement",
+  element: "void",
   risk: "timed",
   button: "L",
   text: "She cannot be hit while dashing, and gains air dashes and an afterimage cut.",

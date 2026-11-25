@@ -29,6 +29,7 @@ export const HIGH_TIDE: SkillDef = {
   id: "yu_tide",
   name: "High Tide",
   kind: "attack",
+  element: "frost",
   risk: "timed",
   button: "J",
   text: "Returning Tide, the third cut, runs a qi crescent along the floor.",

@@ -4,7 +4,7 @@ import { dealDamage } from "../../../../game/damage";
 import { createImpact } from "../../../../game/effects/impact";
 import { enemyCenter } from "../../../../game/enemies/enemy";
 import { addStacks, consumeStacks, stacksOf } from "../../../../game/enemies/skillStatus";
-import { skillValues, withCharms } from "../../../../game/skills/query";
+import { skillValues, withBuild } from "../../../../game/skills/query";
 import { foesOnScreen } from "../../../../game/skills/targets";
 import { fxRng, game, particles, progress } from "../../../../game/state";
 import type { Enemy } from "../../../../types/enemy";
@@ -43,7 +43,7 @@ export function lodge(e: Enemy, n: number): void {
     max: Math.round(v.max),
     damage: progress.stats.ad * v.per * SPLINTER.every,
     every: SPLINTER.every,
-    duration: withCharms("duration", v.life),
+    duration: withBuild("duration", v.life),
   });
 }
 
@@ -65,7 +65,7 @@ function shatter(e: Enemy): void {
   if (!n) return;
   const v = skillValues(ID);
   const [x, y] = enemyCenter(e);
-  const reach = withCharms("area", v.shatterReach);
+  const reach = withBuild("area", v.shatterReach);
   flecks(x, y, 6 + n * 2);
   game.fx.push(createImpact(x, y, 1, true, SPARKS.crystal));
   const damage = progress.stats.ad * v.shatter * n;

@@ -29,6 +29,7 @@ export const SKYWARD_HEAVE: SkillDef = {
   id: "br_launch",
   name: "Skyward Heave",
   kind: "attack",
+  element: "storm",
   risk: "timed",
   button: "J",
   text: "The second slash, Rising Heave, throws foes up for the slam and the air slash.",

@@ -1,7 +1,7 @@
 import { KEEN } from "../../../../constants/combo";
 import { markFoe } from "../../../../game/enemies/skillStatus";
 import { movePayoff, payoffLands } from "../../../../game/skills/payoff";
-import { skillEvolved, skillValues, withCharms } from "../../../../game/skills/query";
+import { skillEvolved, skillValues, withBuild } from "../../../../game/skills/query";
 import { game, hero, progress } from "../../../../game/state";
 import type { Enemy } from "../../../../types/enemy";
 import { muzzlePoint } from "../aim";
@@ -41,7 +41,7 @@ export function triggerBonus(foe: Enemy | null): TriggerBonus {
 export function afterTrigger(foe: Enemy | null): void {
   const v = skillValues(SKILL);
   if (!foe || !v.bonus || !payoffLands(movePayoff(), foe)) return;
-  if (v.mark) markFoe(foe, SKILL, withCharms("duration", v.markTime), v.mark);
+  if (v.mark) markFoe(foe, SKILL, withBuild("duration", v.markTime), v.mark);
   if (!skillEvolved(SKILL)) return;
   loadRounds(v.refund);
   if (calder.triggerStreak % v.breachEvery !== 0 || foe.hp <= 0) return;

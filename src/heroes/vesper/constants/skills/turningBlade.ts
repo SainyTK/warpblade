@@ -28,6 +28,7 @@ export const TURNING_BLADE: SkillDef = {
   id: "ve_turn",
   name: "Turning Blade",
   kind: "attack",
+  element: "frost",
   risk: "precise",
   button: "K",
   text: "A longer parry window, and a parry turns into a short-blade cut.",

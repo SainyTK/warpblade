@@ -1,5 +1,6 @@
-import { buildStats, type CharmedStat, charmed } from "../../utils/build";
+import { type BuildStat, scaledByBuild } from "../../utils/build";
 import { skillOf, skillRow } from "../../utils/skills";
+import { currentBuildStats } from "../build/stats";
 import { character, progress } from "../state";
 
 /** the hero in play's level of a skill: 1 to 8, or 0 when not held */
@@ -20,5 +21,4 @@ export function skillValues(id: string): Readonly<Record<string, number>> {
 
 /** a skill's number with the hero in play's charms applied: Multitude adds to `amount`; Reach, Persistence,
  *  Swiftness and Haste multiply `area`, `duration`, `speed` and `cooldown` */
-export const withCharms = (stat: CharmedStat, value: number): number =>
-  charmed(stat, value, buildStats(progress.build));
+export const withBuild = (stat: BuildStat, value: number): number => scaledByBuild(stat, value, currentBuildStats());

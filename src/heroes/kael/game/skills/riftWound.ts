@@ -5,7 +5,7 @@ import { createFloorRing } from "../../../../game/effects/floorRing";
 import { createImpact } from "../../../../game/effects/impact";
 import { enemyCenter } from "../../../../game/enemies/enemy";
 import { addStacks, consumeStacks, stacksOf } from "../../../../game/enemies/skillStatus";
-import { skillValues, withCharms } from "../../../../game/skills/query";
+import { skillValues, withBuild } from "../../../../game/skills/query";
 import { foesOnScreen } from "../../../../game/skills/targets";
 import { fxRng, game, lights, particles, progress } from "../../../../game/state";
 import { shake } from "../../../../game/world";
@@ -36,7 +36,7 @@ const entryOf = (e: Enemy) => e.stacks.find((s) => s.source === ID);
 /** add `n` layers to a foe's wound; a new layer can spread to its nearest neighbour, and a full one can collapse */
 function wound(m: RiftMemory, e: Enemy, n: number, spreads: boolean): void {
   const v = skillValues(ID);
-  const life = withCharms("duration", v.life);
+  const life = withBuild("duration", v.life);
   addStacks(e, ID, {
     stacks: n,
     max: Math.round(v.max),

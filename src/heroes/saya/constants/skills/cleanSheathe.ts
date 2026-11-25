@@ -32,6 +32,7 @@ export const CLEAN_SHEATHE: SkillDef = {
   id: SKILL.clean,
   name: "Clean Sheathe",
   kind: "attack",
+  element: "frost",
   risk: "precise",
   button: "J",
   text: "The sheathe, the last of the chain, hits harder and its release pays more.",

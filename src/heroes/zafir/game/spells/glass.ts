@@ -2,7 +2,7 @@ import { fleck, glow, place } from "../../../../engine/frame";
 import { dealDamage } from "../../../../game/damage";
 import { createImpact } from "../../../../game/effects/impact";
 import { enemyCenter } from "../../../../game/enemies/enemy";
-import { skillEvolved, skillValues, withCharms } from "../../../../game/skills/query";
+import { skillEvolved, skillValues, withBuild } from "../../../../game/skills/query";
 import { foesOnScreen, touches } from "../../../../game/skills/targets";
 import { game, hero, progress, rng } from "../../../../game/state";
 import { surfaceBelow } from "../../../../game/world";
@@ -25,7 +25,7 @@ function createShard(x: number, delay: number, damage: number): Effect {
   const shatter = () => {
     done = true;
     const v = skillValues(ID);
-    const reach = withCharms("area", GLASS.reach + (v.splash ?? 0));
+    const reach = withBuild("area", GLASS.reach + (v.splash ?? 0));
     for (const e of foesOnScreen()) {
       if (!touches(e, x, y, reach)) continue;
       dealDamage(e, damage, { fromX: x, kx: Math.sign(e.x - x) * 30, source: "abilities" });
@@ -71,7 +71,7 @@ function targets(n: number, dir: number, from: number, to: number, aim: boolean)
  *  twice the ground; evolved as Glass Storm, a second rain follows round him */
 export function castGlass(wide: boolean): void {
   const v = skillValues(ID);
-  const n = Math.round(withCharms("amount", v.shards)) * (wide ? 2 : 1);
+  const n = Math.round(withBuild("amount", v.shards)) * (wide ? 2 : 1);
   const to = GLASS.to * (wide ? 1.6 : 1);
   const damage = progress.stats.ap * v.power;
   const xs = targets(n, hero.face, GLASS.from, to, !!v.aim);

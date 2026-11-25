@@ -2,7 +2,7 @@ import { FEEL } from "../../../constants/combo";
 import { createFloorRing } from "../../../game/effects/floorRing";
 import { skin } from "../../../game/hero/skin";
 import { meleeHit } from "../../../game/meleeHit";
-import { skillValues, withCharms } from "../../../game/skills/query";
+import { skillValues, withBuild } from "../../../game/skills/query";
 import { game, hero, progress } from "../../../game/state";
 import { boxAhead, newSwing } from "../../../game/world";
 import { ROSE_LINE } from "../constants/abilities";
@@ -15,7 +15,7 @@ const LAND_REACH = 30;
 export function diveLanded(): void {
   const v = skillValues("ce_dive");
   if (!v.land) return;
-  const reach = withCharms("area", LAND_REACH + (v.ring ?? 0));
+  const reach = withBuild("area", LAND_REACH + (v.ring ?? 0));
   newSwing();
   game.fx.push(createFloorRing(hero.x, hero.y, reach, skin.ramp, 0.35));
   meleeHit([boxAhead(-reach, -22, reach, 4)], {

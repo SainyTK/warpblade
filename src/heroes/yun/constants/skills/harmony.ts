@@ -29,6 +29,7 @@ export const HARMONY: SkillDef = {
   id: "yu_harmony",
   name: "Harmony",
   kind: "movement",
+  element: "void",
   risk: "timed",
   button: "L",
   text: "The warp and the sword arts move as one: arrivals fill the jian, and arts prepare faster.",

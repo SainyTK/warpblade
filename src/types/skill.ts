@@ -1,3 +1,4 @@
+import type { ElementId } from "./campaign";
 import type { Stats } from "./stats";
 
 /** what a skill is, for its card colour and the contract's least counts per hero (docs/skill-design.md) */
@@ -35,6 +36,7 @@ export interface SkillDef {
   id: string;
   name: string;
   kind: SkillKind;
+  element: ElementId;
   risk: SkillRisk;
   button: SkillButton;
   /** what the skill does, shown on the card of a skill not held yet */

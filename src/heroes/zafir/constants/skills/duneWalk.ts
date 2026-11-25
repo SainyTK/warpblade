@@ -28,6 +28,7 @@ export const DUNE_WALK: SkillDef = {
   id: "za_dune",
   name: "Dune Walk",
   kind: "movement",
+  element: "blaze",
   risk: "easy",
   button: "L",
   text: "Dashing through foes cuts them, and stepping through your slashes leaves a trail of sand that cuts.",

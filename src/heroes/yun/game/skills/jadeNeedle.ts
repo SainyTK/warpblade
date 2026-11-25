@@ -2,7 +2,7 @@ import { dealDamage } from "../../../../game/damage";
 import { createImpact } from "../../../../game/effects/impact";
 import { enemyCenter } from "../../../../game/enemies/enemy";
 import { addStacks, consumeStacks, markFoe, stacksOf } from "../../../../game/enemies/skillStatus";
-import { skillEvolved, skillLevel, skillValues, withCharms } from "../../../../game/skills/query";
+import { skillEvolved, skillLevel, skillValues, withBuild } from "../../../../game/skills/query";
 import { nearestFoe } from "../../../../game/skills/targets";
 import { game, hero, progress } from "../../../../game/state";
 import type { Enemy } from "../../../../types/enemy";
@@ -24,9 +24,9 @@ export function needleFoe(e: Enemy | null): void {
     max: v.max,
     damage: progress.stats.ad * v.damage,
     every: NEEDLE.every,
-    duration: withCharms("duration", NEEDLE.duration),
+    duration: withBuild("duration", NEEDLE.duration),
   });
-  if (v.mark) markFoe(e, SKILL.needle, withCharms("duration", NEEDLE.mark), v.mark);
+  if (v.mark) markFoe(e, SKILL.needle, withBuild("duration", NEEDLE.mark), v.mark);
   if (!skillEvolved(SKILL.needle) || stacksOf(e, SKILL.needle) < v.max) return;
   const n = consumeStacks(e, SKILL.needle);
   dealDamage(e, progress.stats.ad * v.burst * n, { source: SKILL.needle, kx: 0, ky: -30 });

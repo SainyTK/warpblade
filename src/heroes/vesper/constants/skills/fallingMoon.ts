@@ -28,6 +28,7 @@ export const FALLING_MOON: SkillDef = {
   id: "ve_moon",
   name: "Falling Moon",
   kind: "spell",
+  element: "frost",
   risk: "easy",
   button: "I",
   text: "Falling Moon strikes harder and drops more moons.",

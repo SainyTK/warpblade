@@ -29,6 +29,7 @@ export const RECOIL_DASH: SkillDef = {
   id: "ca_recoil",
   name: "Recoil Dash",
   kind: "movement",
+  element: "storm",
   risk: "timed",
   button: "L",
   text: "Dashing through foes fires a round into each.",

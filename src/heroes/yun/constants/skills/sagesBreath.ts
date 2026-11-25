@@ -29,6 +29,7 @@ export const SAGES_BREATH: SkillDef = {
   id: "yu_breath",
   name: "Sage's Breath",
   kind: "movement",
+  element: "frost",
   risk: "easy",
   button: "L",
   text: "More air dashes, and each dash ends in a ring of qi.",

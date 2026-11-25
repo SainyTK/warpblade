@@ -23,6 +23,7 @@ export const CRYSTAL_AEGIS: SkillDef = {
   id: "k_aegis",
   name: "Crystal Aegis",
   kind: "attack",
+  element: "frost",
   risk: "precise",
   button: "K",
   text: "Every blow Kael blocks sets a crystal in his guard, and his next parry shatters them all at the attacker.",

@@ -35,6 +35,7 @@ export const STILL_WATER: SkillDef = {
   id: SKILL.still,
   name: "Still Water",
   kind: "spell",
+  element: "frost",
   risk: "timed",
   button: "I",
   text: "Still Water holds foes longer and hits harder.",

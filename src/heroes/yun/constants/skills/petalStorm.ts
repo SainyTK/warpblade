@@ -29,6 +29,7 @@ export const PETAL_STORM: SkillDef = {
   id: "yu_petal",
   name: "Petal Storm",
   kind: "attack",
+  element: "storm",
   risk: "timed",
   button: "J",
   text: "More air cuts, and each one that lands scatters cutting petals below.",

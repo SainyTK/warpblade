@@ -1,10 +1,10 @@
 import { SpriteCanvas } from "../../../engine/sprite";
-import { heroModule } from "../../../heroes";
+import { heroModule } from "../../../heroes/registry";
 import { CHARACTERS } from "../../../heroes/roster";
 import { hex } from "../../../utils/color";
 import { spriteUrl } from "../../spriteUrl";
 import { BOON_ICONS } from "./boon";
-import { CHARM_ICONS } from "./charms";
+import { ART_ICONS, ELEMENT_ICONS } from "./elements";
 import { SHOP_ICONS } from "./shop";
 
 const SIZE = 16;
@@ -13,7 +13,8 @@ const OUTLINE = hex("#0a0612");
 const SHARED_ICONS: Record<string, (s: SpriteCanvas) => void> = {
   ...BOON_ICONS,
   ...SHOP_ICONS,
-  ...CHARM_ICONS,
+  ...ELEMENT_ICONS,
+  ...ART_ICONS,
 };
 /** an icon's drawing by id: a shared one, or one a hero's module brings (skills, evolved forms, damage sources) */
 function iconDrawing(id: string): ((s: SpriteCanvas) => void) | undefined {

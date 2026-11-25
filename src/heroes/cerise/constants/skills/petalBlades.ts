@@ -22,6 +22,7 @@ export const PETAL_BLADES: SkillDef = {
   id: "ce_petals",
   name: "Petal Blades",
   kind: "summon",
+  element: "venom",
   risk: "easy",
   button: "auto",
   text: "Casting a spell can call petal blades that dart at foes round you.",

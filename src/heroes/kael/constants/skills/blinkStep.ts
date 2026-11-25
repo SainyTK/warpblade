@@ -28,6 +28,7 @@ export const BLINK_STEP: SkillDef = {
   id: "k_blink",
   name: "Blink Step",
   kind: "movement",
+  element: "void",
   risk: "timed",
   button: "L",
   text: "Dashes make Kael untouchable and leave a cutting afterimage, and he gains air dashes.",

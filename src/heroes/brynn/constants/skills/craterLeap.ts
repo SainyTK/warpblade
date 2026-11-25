@@ -29,6 +29,7 @@ export const CRATER_LEAP: SkillDef = {
   id: "br_crater",
   name: "Crater Leap",
   kind: "movement",
+  element: "storm",
   risk: "timed",
   button: "jump",
   text: "A hard landing from a jump craters the floor round her.",

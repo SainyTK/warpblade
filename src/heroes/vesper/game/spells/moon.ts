@@ -5,7 +5,7 @@ import { createFloorRing } from "../../../../game/effects/floorRing";
 import { createImpact } from "../../../../game/effects/impact";
 import { enemyCenter } from "../../../../game/enemies/enemy";
 import { addStacks } from "../../../../game/enemies/skillStatus";
-import { skillValues, withCharms } from "../../../../game/skills/query";
+import { skillValues, withBuild } from "../../../../game/skills/query";
 import { game, hero, lights, progress } from "../../../../game/state";
 import { shake, surfaceBelow } from "../../../../game/world";
 import type { Effect } from "../../../../types/effect";
@@ -76,8 +76,8 @@ function createMoon(x: number, delay: number, damage: number, radius: number, gl
  */
 export function castMoon(power: number, wide: boolean): void {
   const v = skillValues(ID);
-  const count = withCharms("amount", v.moons) * (wide ? 2 : 1);
-  const radius = withCharms("area", v.radius);
+  const count = withBuild("amount", v.moons) * (wide ? 2 : 1);
+  const radius = withBuild("area", v.radius);
   const damage = progress.stats.ap * v.power * power;
   for (let i = 0; i < count; i++) {
     const x = hero.x + hero.face * (FALL.ahead + i * FALL.apart);

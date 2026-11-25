@@ -23,6 +23,7 @@ export const PAPER_BLADES: SkillDef = {
   id: SKILL.paper,
   name: "Paper Blades",
   kind: "summon",
+  element: "storm",
   risk: "easy",
   button: "auto",
   text: "A foe that falls may leave a paper blade that circles her and cuts.",

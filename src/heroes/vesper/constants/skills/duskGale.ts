@@ -28,6 +28,7 @@ export const DUSK_GALE: SkillDef = {
   id: "ve_gale",
   name: "Dusk Gale",
   kind: "spell",
+  element: "storm",
   risk: "timed",
   button: "I",
   text: "Dusk Gale hits harder and blows in more gusts.",

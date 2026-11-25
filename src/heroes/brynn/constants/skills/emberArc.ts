@@ -32,6 +32,7 @@ export const EMBER_ARC: SkillDef = {
   id: "br_arc",
   name: "Ember Arc",
   kind: "spell",
+  element: "blaze",
   risk: "easy",
   button: "I",
   text: "Ember Arc burns longer and blasts what it hits.",

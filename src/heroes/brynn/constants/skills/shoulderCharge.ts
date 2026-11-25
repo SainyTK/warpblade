@@ -29,6 +29,7 @@ export const SHOULDER_CHARGE: SkillDef = {
   id: "br_charge",
   name: "Shoulder Charge",
   kind: "movement",
+  element: "storm",
   risk: "timed",
   button: "L",
   text: "The dash shoulders every foe it passes through.",

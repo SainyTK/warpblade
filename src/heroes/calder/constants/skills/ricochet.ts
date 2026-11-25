@@ -29,6 +29,7 @@ export const RICOCHET: SkillDef = {
   id: "ca_ricochet",
   name: "Ricochet",
   kind: "attack",
+  element: "void",
   risk: "timed",
   button: "J",
   text: "Air cuts fire a round that ricochets on to other foes.",

@@ -29,6 +29,7 @@ export const SUNBRAND: SkillDef = {
   id: "al_brand",
   name: "Sunbrand",
   kind: "dot",
+  element: "blaze",
   risk: "timed",
   button: "J",
   text: "Every bash brands the foes it strikes with burning light that stacks.",

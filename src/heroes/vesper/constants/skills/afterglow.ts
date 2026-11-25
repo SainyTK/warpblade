@@ -28,6 +28,7 @@ export const AFTERGLOW: SkillDef = {
   id: "ve_glow",
   name: "Afterglow",
   kind: "dot",
+  element: "blaze",
   risk: "timed",
   button: "auto",
   text: "Foes your dash passes glow with dusk that burns each tick.",

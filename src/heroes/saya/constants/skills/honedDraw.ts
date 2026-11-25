@@ -31,6 +31,7 @@ export const HONED_DRAW: SkillDef = {
   id: SKILL.edge,
   name: "Honed Draw",
   kind: "attack",
+  element: "storm",
   risk: "timed",
   button: "J",
   text: "The draw cut, the first of the chain, hits harder and stores more in the foe.",

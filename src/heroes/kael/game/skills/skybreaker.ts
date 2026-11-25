@@ -5,7 +5,7 @@ import { dealDamage } from "../../../../game/damage";
 import { createFloorRing } from "../../../../game/effects/floorRing";
 import { createSlash } from "../../../../game/effects/slash";
 import { enemyCenter } from "../../../../game/enemies/enemy";
-import { skillValues, withCharms } from "../../../../game/skills/query";
+import { skillValues, withBuild } from "../../../../game/skills/query";
 import { foesOnScreen } from "../../../../game/skills/targets";
 import { fxRng, game, particles, progress } from "../../../../game/state";
 import { dust, shake } from "../../../../game/world";
@@ -45,7 +45,7 @@ function spike(e: Enemy): void {
 function crash(e: Enemy, evolved: boolean): void {
   const v = skillValues(ID);
   const x = e.x;
-  const reach = withCharms("area", evolved ? Math.max(v.crashReach, v.shockReach) : v.crashReach);
+  const reach = withBuild("area", evolved ? Math.max(v.crashReach, v.shockReach) : v.crashReach);
   game.fx.push(createFloorRing(x, GROUND, reach, evolved ? PAL.crystal : PAL.shadow, 0.4));
   dust(x - 6, GROUND, 5, -1);
   dust(x + 6, GROUND, 5, 1);

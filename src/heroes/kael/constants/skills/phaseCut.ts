@@ -28,6 +28,7 @@ export const PHASE_CUT: SkillDef = {
   id: "k_phase",
   name: "Phase Cut",
   kind: "attack",
+  element: "void",
   risk: "timed",
   button: "J",
   text: "When the second slash lands, Kael phases through the foe, so the third slash strikes its back.",

@@ -32,6 +32,7 @@ export const BLAST_CHARGE: SkillDef = {
   id: "ca_charge",
   name: "Blast Charge",
   kind: "spell",
+  element: "blaze",
   risk: "timed",
   button: "I",
   text: "Blast Charge hits harder and throws foes.",

@@ -29,6 +29,7 @@ export const ANVIL_WEIGHT: SkillDef = {
   id: "br_slam",
   name: "Anvil Weight",
   kind: "attack",
+  element: "storm",
   risk: "timed",
   button: "J",
   text: "The third slash, Anvil Slam, sends a shockwave along the floor.",

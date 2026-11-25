@@ -29,6 +29,7 @@ export const OATHBLADE: SkillDef = {
   id: "al_oath",
   name: "Oathblade",
   kind: "attack",
+  element: "void",
   risk: "easy",
   button: "J",
   text: "Oath cut, the first blow of the chain, adds a cut of light and later throws waves.",

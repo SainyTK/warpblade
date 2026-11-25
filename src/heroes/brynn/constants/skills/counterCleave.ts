@@ -29,6 +29,7 @@ export const COUNTER_CLEAVE: SkillDef = {
   id: "br_counter",
   name: "Counter Cleave",
   kind: "attack",
+  element: "frost",
   risk: "precise",
   button: "K",
   text: "A parry answers with a heavy cleave on every foe in front of her.",

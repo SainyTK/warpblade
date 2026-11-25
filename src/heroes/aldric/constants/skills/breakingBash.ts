@@ -29,6 +29,7 @@ export const BREAKING_BASH: SkillDef = {
   id: "al_breaker",
   name: "Breaking Bash",
   kind: "attack",
+  element: "storm",
   risk: "timed",
   button: "J",
   text: "The Shield bash, the second blow of the chain, staggers, shocks the foes behind and leaves them open.",

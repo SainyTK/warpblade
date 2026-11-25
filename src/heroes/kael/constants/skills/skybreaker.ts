@@ -28,6 +28,7 @@ export const SKYBREAKER: SkillDef = {
   id: "k_skyward",
   name: "Skybreaker",
   kind: "attack",
+  element: "storm",
   risk: "timed",
   button: "J",
   text: "The third slash launches foes, and air slashes hit harder and spike them down.",

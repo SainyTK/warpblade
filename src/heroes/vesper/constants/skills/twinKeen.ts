@@ -28,6 +28,7 @@ export const TWIN_KEEN: SkillDef = {
   id: "ve_keen",
   name: "Twin Keen",
   kind: "attack",
+  element: "frost",
   risk: "precise",
   button: "J",
   text: "The rising pair, your second cut, is followed by a quick short-blade cut.",

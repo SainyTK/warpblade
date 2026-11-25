@@ -3,7 +3,7 @@ import { fleck, glow, hairline, haze, place, px } from "../../../../engine/frame
 import { dealDamage } from "../../../../game/damage";
 import { enemyCenter } from "../../../../game/enemies/enemy";
 import { ultimateValues } from "../../../../game/hero/ultimate";
-import { withCharms } from "../../../../game/skills/query";
+import { withBuild } from "../../../../game/skills/query";
 import { foesOnScreen } from "../../../../game/skills/targets";
 import { fxRng, game, hero, particles, progress } from "../../../../game/state";
 import type { Effect } from "../../../../types/effect";
@@ -122,8 +122,8 @@ export function createStorm(level: number, reach: number, life: number, cut: num
 export function castSandstorm(level: number): void {
   const v = ultimateValues();
   const base = STORM_TIME[level - 1];
-  const life = withCharms("duration", base * (v.time ?? 1));
-  const reach = withCharms("area", STORM_REACH[level - 1] * (v.reach ?? 1));
+  const life = withBuild("duration", base * (v.time ?? 1));
+  const reach = withBuild("area", STORM_REACH[level - 1] * (v.reach ?? 1));
   // a longer storm keeps each cut as hard, so its skill's longer storms deal more
   const cuts = base / STORM_CUT.every;
   const cut = (ULT_LEVELS[level - 1].power * progress.stats.ad * STORM_CUT.share * (v.power ?? 1)) / cuts;

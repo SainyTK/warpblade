@@ -28,6 +28,7 @@ export const SANDSTORM: SkillDef = {
   id: "za_storm",
   name: "Sandstorm",
   kind: "ultimate",
+  element: "storm",
   risk: "easy",
   button: "J",
   text: "The four Sandstorm tiers hit harder, charge faster, reach farther and leave the storm turning longer.",

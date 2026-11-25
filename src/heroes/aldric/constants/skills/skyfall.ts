@@ -32,6 +32,7 @@ export const SKYFALL: SkillDef = {
   id: "al_skyfall",
   name: "Skyfall",
   kind: "movement",
+  element: "storm",
   risk: "easy",
   button: "jump",
   text: "More air slashes, a cutting wall kick, and a shield slam where you land.",

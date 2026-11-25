@@ -20,6 +20,7 @@ export const OATHSWORN: SkillDef = {
   id: "al_oathsworn",
   name: "Oathsworn",
   kind: "summon",
+  element: "void",
   risk: "precise",
   button: "K",
   text: "A parry may call a knight of light who cuts the attacker.",

@@ -29,6 +29,7 @@ export const SANCTUARY: SkillDef = {
   id: "al_sanctuary",
   name: "Sanctuary",
   kind: "ultimate",
+  element: "void",
   risk: "easy",
   button: "U",
   text: "The four charged skills hit harder, draw foes in, charge faster and echo.",

@@ -28,6 +28,7 @@ export const DUSK_WALTZ: SkillDef = {
   id: "ve_waltz",
   name: "Dusk Waltz",
   kind: "ultimate",
+  element: "void",
   risk: "easy",
   button: "U",
   text: "Dusk Waltz, the four charged tiers, grows: harder, faster to charge, with more dancing cuts.",

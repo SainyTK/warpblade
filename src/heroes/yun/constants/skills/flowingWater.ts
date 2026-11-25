@@ -29,6 +29,7 @@ export const FLOWING_WATER: SkillDef = {
   id: "yu_flow",
   name: "Flowing Water",
   kind: "attack",
+  element: "frost",
   risk: "precise",
   button: "J",
   text: "Willow Cut, the first cut, sends a qi wave ahead.",

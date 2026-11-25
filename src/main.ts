@@ -1,6 +1,4 @@
-// the hero registry loads first: every hero's code is entered through its module, and the shared engine those modules
-// use reaches back to the registry, so a hero's part reached first by another path would not be ready yet
-import "./game/hero/kits";
+import "./heroes";
 import { MAX_FRAME, STEP } from "./constants/stage";
 import { frameDriver } from "./game/frameDriver";
 import { chooseCharacter, game } from "./game/state";

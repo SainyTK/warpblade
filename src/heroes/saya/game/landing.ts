@@ -3,7 +3,7 @@ import { createFloorRing } from "../../../game/effects/floorRing";
 import { launchEnemy } from "../../../game/enemies/airborne";
 import { walks } from "../../../game/enemies/enemy";
 import { skin } from "../../../game/hero/skin";
-import { skillValues, withCharms } from "../../../game/skills/query";
+import { skillValues, withBuild } from "../../../game/skills/query";
 import { game, hero, progress } from "../../../game/state";
 import { SKILL } from "../constants/skills/ids";
 import { sheatheFlash } from "./effects/sheatheFlash";
@@ -15,7 +15,7 @@ import { releaseCuts } from "./store";
 function landingRing(): void {
   const v = skillValues(SKILL.falling);
   if (!v.ring) return;
-  const reach = withCharms("area", v.ringReach);
+  const reach = withBuild("area", v.ringReach);
   game.fx.push(createFloorRing(hero.x, hero.y, reach, skin.ramp, 0.3));
   for (const e of game.enemies) {
     if (e.hp <= 0 || !walks(e) || e.air || Math.abs(e.x - hero.x) > reach) continue;

@@ -1,7 +1,6 @@
 import { ACHIEVEMENTS } from "../constants/achievements";
 import { REMOVED_HERO_PRICES } from "../constants/removedHeroes";
 import { SHOP_ITEMS } from "../constants/shop";
-import { UNLOCKS } from "../constants/unlocks";
 import { CHARACTERS } from "../heroes/roster";
 import { loadBest } from "../services/bestScore";
 import { loadMeta, saveMeta } from "../services/metaStorage";
@@ -20,7 +19,7 @@ const meta: MetaSave = parseMeta(loadMeta(), SHOP_ITEMS, {
   heroes: CHARACTERS.filter((c) => c.price > 0).map((c) => c.id),
   removedHeroes: REMOVED_HERO_PRICES,
   achievements: ACHIEVEMENTS.map((a) => a.id),
-  unlocks: [...UNLOCKS.map((u) => u.id), ...jobUnlockIds(CHARACTERS)],
+  unlocks: jobUnlockIds(CHARACTERS),
   skills: ALL_SKILLS.map((s) => s.id),
 });
 // a save from before achievements kept its best wave under its own key: count it toward the wave goals

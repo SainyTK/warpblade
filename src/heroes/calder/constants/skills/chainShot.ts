@@ -29,6 +29,7 @@ export const CHAIN_SHOT: SkillDef = {
   id: "ca_chainshot",
   name: "Chain Shot",
   kind: "spell",
+  element: "storm",
   risk: "timed",
   button: "I",
   text: "Chain Shot hits harder and arcs on to more foes.",

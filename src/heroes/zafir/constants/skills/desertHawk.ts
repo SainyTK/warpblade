@@ -20,6 +20,7 @@ export const DESERT_HAWK: SkillDef = {
   id: "za_hawk",
   name: "Desert Hawk",
   kind: "summon",
+  element: "storm",
   risk: "timed",
   button: "auto",
   text: "A foe you fell may call a desert hawk that dives on the nearest foe and opens its wounds.",

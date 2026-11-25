@@ -1,4 +1,4 @@
-import { skillEvolved, skillValues, withCharms } from "../../../../game/skills/query";
+import { skillEvolved, skillValues, withBuild } from "../../../../game/skills/query";
 import { hero, progress } from "../../../../game/state";
 import type { Enemy } from "../../../../types/enemy";
 import type { SkillBehavior } from "../../../../types/skillBehavior";
@@ -16,7 +16,7 @@ const LANDING = 34;
 export function dropLanded(): void {
   const v = skillValues(SKILL);
   if (!v.drop) return;
-  floorShock(hero.x, hero.y, { damage: progress.stats.ad * v.drop, reach: withCharms("area", LANDING), stun: v.stun });
+  floorShock(hero.x, hero.y, { damage: progress.stats.ad * v.drop, reach: withBuild("area", LANDING), stun: v.stun });
 }
 
 /** Skyshot: an air blow that struck a foe fires a round down into it */
@@ -40,7 +40,7 @@ export const blastJump: SkillBehavior = {
       if (!event.air) return;
       const v = skillValues(SKILL);
       const y = hero.y + UNDER.below;
-      const reach = withCharms("area", UNDER.reach);
+      const reach = withBuild("area", UNDER.reach);
       blastAt(null, hero.x, y, {
         damage: 0,
         splash: progress.stats.ad * v.power,

@@ -1,5 +1,5 @@
 import { COMBO } from "../../../constants/combat";
-import { skillEvolved, skillValues, withCharms } from "../../../game/skills/query";
+import { skillEvolved, skillValues, withBuild } from "../../../game/skills/query";
 import { hero } from "../../../game/state";
 import type { MoveHit } from "../../../types/move";
 import { SKILL } from "../constants/skillIds";
@@ -20,7 +20,7 @@ function crane(id: YunMoveId, hit: MoveHit): MoveHit {
     skillEvolved(SKILL.crane) || (id === "craneWheel" && !!v.behind) || (finisher && !!v.tideBehind) || !!hit.around;
   return {
     ...hit,
-    box: [x0, y0, x1 + withCharms("area", v.reach), y1],
+    box: [x0, y0, x1 + withBuild("area", v.reach), y1],
     power: hit.power * (v.power ?? 1),
     stagger: (hit.stagger ?? COMBO.stagger) * (v.stagger ?? 1),
     kx: v.pull && !finisher ? PULL_KX : hit.kx,

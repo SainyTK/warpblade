@@ -32,6 +32,7 @@ export const FALLING_MOON: SkillDef = {
   id: SKILL.falling,
   name: "Falling Moon",
   kind: "attack",
+  element: "void",
   risk: "timed",
   button: "jump",
   text: "More air slashes, and landing after one releases her stored cuts.",

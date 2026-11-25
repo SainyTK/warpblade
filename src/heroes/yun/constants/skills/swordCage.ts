@@ -32,6 +32,7 @@ export const SWORD_CAGE: SkillDef = {
   id: "yu_cage",
   name: "Sword Cage",
   kind: "spell",
+  element: "storm",
   risk: "timed",
   button: "I",
   text: "Sword Lotus holds foes longer and cuts again.",

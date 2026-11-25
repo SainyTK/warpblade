@@ -1,5 +1,5 @@
 import { dealDamage } from "../../game/damage";
-import { withCharms } from "../../game/skills/query";
+import { withBuild } from "../../game/skills/query";
 import { hero, progress } from "../../game/state";
 import type { HeroSource } from "../../types/build";
 import type { DrillProfile } from "../../types/drill";
@@ -34,6 +34,6 @@ export function strikeEnemy(
 
 export function freezeEnemy(enemy: Enemy, duration: number): void {
   if (enemy.hp > 0 && duration > 0) {
-    enemy.frozen = Math.max(enemy.frozen, withCharms("duration", duration));
+    enemy.frozen = Math.max(enemy.frozen, withBuild("duration", duration));
   }
 }

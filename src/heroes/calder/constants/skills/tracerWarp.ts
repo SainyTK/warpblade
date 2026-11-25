@@ -29,6 +29,7 @@ export const TRACER_WARP: SkillDef = {
   id: "ca_tracer",
   name: "Tracer Warp",
   kind: "movement",
+  element: "void",
   risk: "timed",
   button: "L",
   text: "A faster, harder warp strike that leaves a cutting tracer.",

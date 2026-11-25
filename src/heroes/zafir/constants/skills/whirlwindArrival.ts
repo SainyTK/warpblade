@@ -31,6 +31,7 @@ export const WHIRLWIND_ARRIVAL: SkillDef = {
   id: "za_arrival",
   name: "Whirlwind Arrival",
   kind: "movement",
+  element: "storm",
   risk: "timed",
   button: "L",
   text: "The warp strike recharges sooner and hits harder, and the arrival spins a ring of sand round you.",

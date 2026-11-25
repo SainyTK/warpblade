@@ -28,6 +28,7 @@ export const WANDERERS_GRACE: SkillDef = {
   id: "ve_grace",
   name: "Wanderer's Grace",
   kind: "movement",
+  element: "frost",
   risk: "easy",
   button: "L",
   text: "Untouchable while dashing, with more air dashes and a dusk shade left behind.",

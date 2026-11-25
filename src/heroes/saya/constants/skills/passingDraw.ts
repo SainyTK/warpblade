@@ -32,6 +32,7 @@ export const PASSING_DRAW: SkillDef = {
   id: SKILL.pass,
   name: "Passing Draw",
   kind: "movement",
+  element: "storm",
   risk: "timed",
   button: "L",
   text: "The warp strike recharges faster, hits harder and stores more.",

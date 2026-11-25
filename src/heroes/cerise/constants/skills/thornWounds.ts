@@ -34,6 +34,7 @@ export const THORN_WOUNDS: SkillDef = {
   id: "ce_thorns",
   name: "Thorn Wounds",
   kind: "dot",
+  element: "venom",
   risk: "easy",
   button: "auto",
   text: "Thrusts leave bleeding thorns.",

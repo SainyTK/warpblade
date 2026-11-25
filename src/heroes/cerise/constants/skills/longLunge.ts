@@ -31,6 +31,7 @@ export const LONG_LUNGE: SkillDef = {
   id: "ce_lunge",
   name: "Long Lunge",
   kind: "attack",
+  element: "storm",
   risk: "timed",
   button: "J",
   text: "The lunge that ends the chain hits harder and pins.",

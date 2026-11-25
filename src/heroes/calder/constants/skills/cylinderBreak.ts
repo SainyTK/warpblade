@@ -29,6 +29,7 @@ export const CYLINDER_BREAK: SkillDef = {
   id: "ca_break",
   name: "Cylinder Break",
   kind: "ultimate",
+  element: "blaze",
   risk: "easy",
   button: "U",
   text: "Breach Cut, Buckshot Wall, Green Line and Cylinder Break, the four charged skills on held J, hit harder.",

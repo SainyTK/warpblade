@@ -33,6 +33,7 @@ export const IRON_SKIN: SkillDef = {
   id: "br_ironskin",
   name: "Iron Skin",
   kind: "movement",
+  element: "frost",
   risk: "easy",
   button: "L",
   text: "Her dash and air dash cannot be hurt, and she gets more air dashes.",

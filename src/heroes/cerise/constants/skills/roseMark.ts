@@ -32,6 +32,7 @@ export const ROSE_MARK: SkillDef = {
   id: "ce_markwarp",
   name: "Rose Mark",
   kind: "movement",
+  element: "void",
   risk: "timed",
   button: "J",
   text: "The warp strike hits harder, recharges sooner and sets the Rose mark.",

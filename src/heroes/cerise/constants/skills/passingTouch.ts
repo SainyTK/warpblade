@@ -31,6 +31,7 @@ export const PASSING_TOUCH: SkillDef = {
   id: "ce_step",
   name: "Passing Touch",
   kind: "movement",
+  element: "void",
   risk: "timed",
   button: "L",
   text: "Dashing through foes cuts them.",

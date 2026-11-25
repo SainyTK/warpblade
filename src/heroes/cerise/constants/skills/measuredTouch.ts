@@ -32,6 +32,7 @@ export const MEASURED_TOUCH: SkillDef = {
   id: "ce_measure",
   name: "Measured Touch",
   kind: "attack",
+  element: "frost",
   risk: "precise",
   button: "J",
   text: "The first thrust of the chain is a measured touch that strikes again.",

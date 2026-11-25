@@ -17,6 +17,7 @@ export const JADE_NEEDLE: SkillDef = {
   id: "yu_needle",
   name: "Jade Needle",
   kind: "dot",
+  element: "venom",
   risk: "precise",
   button: "K",
   text: "A parry lodges jade needles in the attacker that bleed qi.",

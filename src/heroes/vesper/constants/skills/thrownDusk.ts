@@ -28,6 +28,7 @@ export const THROWN_DUSK: SkillDef = {
   id: "ve_warp",
   name: "Thrown Dusk",
   kind: "movement",
+  element: "void",
   risk: "timed",
   button: "L",
   text: "The warp strike recharges faster and hits harder, and the arrival cuts in a cross.",

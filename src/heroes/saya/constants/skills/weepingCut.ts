@@ -21,6 +21,7 @@ export const WEEPING_CUT: SkillDef = {
   id: SKILL.weep,
   name: "Weeping Cut",
   kind: "dot",
+  element: "venom",
   risk: "easy",
   button: "auto",
   text: "Released cuts keep weeping: the foe bleeds for a while after each release.",

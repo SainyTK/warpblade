@@ -28,6 +28,7 @@ export const SAND_VEIL_SKILL: SkillDef = {
   id: "za_veil",
   name: "Sand Veil",
   kind: "attack",
+  element: "void",
   risk: "timed",
   button: "K",
   text: "Your veil of sand parries more easily, blocks more for less, blinds attackers, and your mirage bursts wider and harder.",

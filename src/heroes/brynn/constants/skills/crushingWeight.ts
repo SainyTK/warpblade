@@ -26,6 +26,7 @@ export const CRUSHING_WEIGHT: SkillDef = {
   id: "br_crush",
   name: "Crushing Weight",
   kind: "dot",
+  element: "frost",
   risk: "timed",
   button: "auto",
   text: "Her second and third slashes crush foes, and crushed foes bleed.",

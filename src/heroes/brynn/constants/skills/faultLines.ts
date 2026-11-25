@@ -19,6 +19,7 @@ export const FAULT_LINES: SkillDef = {
   id: "br_fault",
   name: "Fault Lines",
   kind: "dot",
+  element: "storm",
   risk: "timed",
   button: "auto",
   text: "Her shockwaves and fissures leave burning cracks in the floor.",

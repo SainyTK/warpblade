@@ -7,7 +7,7 @@ import { enemyBox, enemyCenter } from "../../../../game/enemies/enemy";
 import { refundStamina } from "../../../../game/hero/stamina";
 import { meleeHit } from "../../../../game/meleeHit";
 import { objectMemory, rememberPerSeat } from "../../../../game/seatMemory";
-import { skillEvolved, skillLevel, skillValues, withCharms } from "../../../../game/skills/query";
+import { skillEvolved, skillLevel, skillValues, withBuild } from "../../../../game/skills/query";
 import { fxRng, game, hero, progress } from "../../../../game/state";
 import { boxAhead, boxHit, newSwing } from "../../../../game/world";
 import type { Effect } from "../../../../types/effect";
@@ -92,7 +92,7 @@ function ended(): void {
   }
   if (skillEvolved(ID))
     game.fx.push(
-      createCurrent(path.from, hero.x, hero.y, withCharms("duration", v.current), progress.stats.ad * v.currentPower),
+      createCurrent(path.from, hero.x, hero.y, withBuild("duration", v.current), progress.stats.ad * v.currentPower),
     );
 }
 

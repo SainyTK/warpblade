@@ -34,6 +34,7 @@ export const RIPOSTE_CHAIN: SkillDef = {
   id: "ce_riposte",
   name: "Riposte Chain",
   kind: "attack",
+  element: "storm",
   risk: "precise",
   button: "K",
   text: "A parry answers at once with a riposte, and the parry window grows.",

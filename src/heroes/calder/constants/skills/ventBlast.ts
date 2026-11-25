@@ -29,6 +29,7 @@ export const VENT_BLAST: SkillDef = {
   id: "ca_vent",
   name: "Vent Blast",
   kind: "attack",
+  element: "frost",
   risk: "easy",
   button: "J",
   text: "The second cut vents a blast from the chamber ahead.",

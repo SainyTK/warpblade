@@ -3,7 +3,7 @@ import { dealDamage } from "../../../../game/damage";
 import { createImpact } from "../../../../game/effects/impact";
 import { enemyCenter } from "../../../../game/enemies/enemy";
 import { addStacks } from "../../../../game/enemies/skillStatus";
-import { skillEvolved, skillValues, withCharms } from "../../../../game/skills/query";
+import { skillEvolved, skillValues, withBuild } from "../../../../game/skills/query";
 import { nearestFoe } from "../../../../game/skills/targets";
 import { game, hero, progress, rng } from "../../../../game/state";
 import type { SkillBehavior, SkillMemory } from "../../../../types/skillBehavior";
@@ -23,7 +23,7 @@ interface Blades {
 const blades = (m: SkillMemory): Blades => m as unknown as Blades;
 
 /** how many blades circle her now */
-const count = (): number => Math.round(withCharms("amount", skillValues(SOURCE).count));
+const count = (): number => Math.round(withBuild("amount", skillValues(SOURCE).count));
 
 /** one dart from a blade at the nearest foe in reach */
 function dart(): void {
@@ -50,7 +50,7 @@ export const petalBlades: SkillBehavior = {
     b.left -= dt;
     b.next -= dt;
     if (b.next > 0) return;
-    b.next = withCharms("cooldown", skillValues(SOURCE).every);
+    b.next = withBuild("cooldown", skillValues(SOURCE).every);
     for (let i = 0; i < count(); i++) dart();
   },
   draw(m) {
@@ -72,7 +72,7 @@ export const petalBlades: SkillBehavior = {
       const b = blades(m);
       const v = skillValues(SOURCE);
       if (skillEvolved(SOURCE) || b.cd > 0 || !rng.chance(v.chance)) return;
-      b.left = withCharms("duration", v.life);
+      b.left = withBuild("duration", v.life);
       b.next = 0;
       b.cd = v.cd;
     },

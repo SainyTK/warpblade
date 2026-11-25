@@ -28,6 +28,7 @@ export const TWO_FACED_CUT: SkillDef = {
   id: "za_twofaced",
   name: "Two-Faced Cut",
   kind: "attack",
+  element: "void",
   risk: "timed",
   button: "J",
   text: "The rising turn, the second slash, hits harder, and every cut behind you hits harder too.",

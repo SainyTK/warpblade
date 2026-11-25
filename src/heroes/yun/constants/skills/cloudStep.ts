@@ -29,6 +29,7 @@ export const CLOUD_STEP: SkillDef = {
   id: "yu_cloud",
   name: "Cloud Step",
   kind: "movement",
+  element: "storm",
   risk: "timed",
   button: "jump",
   text: "More air cuts, cutting wall kicks and a qi ring where you land.",

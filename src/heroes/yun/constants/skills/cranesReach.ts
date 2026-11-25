@@ -29,6 +29,7 @@ export const CRANES_REACH: SkillDef = {
   id: "yu_crane",
   name: "Crane's Reach",
   kind: "attack",
+  element: "frost",
   risk: "easy",
   button: "K",
   text: "A wider parry window, and parries send a qi wave at the attacker.",

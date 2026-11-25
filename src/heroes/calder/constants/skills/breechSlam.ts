@@ -29,6 +29,7 @@ export const BREECH_SLAM: SkillDef = {
   id: "ca_breech",
   name: "Breech Slam",
   kind: "attack",
+  element: "storm",
   risk: "timed",
   button: "J",
   text: "The third cut slams down hard enough to shake the floor.",

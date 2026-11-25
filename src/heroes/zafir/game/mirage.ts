@@ -7,7 +7,7 @@ import { createSlash } from "../../../game/effects/slash";
 import { enemyCenter } from "../../../game/enemies/enemy";
 import { drawHeroSprite } from "../../../game/hero/look";
 import { emitSkillEvent } from "../../../game/skills/events";
-import { skillValues, withCharms } from "../../../game/skills/query";
+import { skillValues, withBuild } from "../../../game/skills/query";
 import { foesOnScreen } from "../../../game/skills/targets";
 import { game, hero, progress } from "../../../game/state";
 import type { Effect } from "../../../types/effect";
@@ -24,7 +24,7 @@ const mirageCanvas = detailCanvas(HERO_CANVAS.w, HERO_CANVAS.h, HERO_CANVAS.ox, 
 /** the mirage bursts into sand blades round where it stood */
 function burst(x: number, y: number): void {
   const veil = skillValues("za_veil");
-  const reach = withCharms("area", MIRAGE.reach * (veil.mirageReach ?? 1));
+  const reach = withBuild("area", MIRAGE.reach * (veil.mirageReach ?? 1));
   const power = MIRAGE.power + (veil.miragePower ?? 0);
   for (const e of foesOnScreen()) {
     const [ex, ey] = enemyCenter(e);
@@ -45,7 +45,7 @@ function burst(x: number, y: number): void {
  */
 export function leaveMirage(x: number, y: number): void {
   const veil = skillValues("za_veil");
-  const reach = withCharms("area", MIRAGE.reach * (veil.mirageReach ?? 1));
+  const reach = withBuild("area", MIRAGE.reach * (veil.mirageReach ?? 1));
   for (const e of foesOnScreen())
     if (e.rank === "minion" && Math.abs(e.x - x) <= reach) e.blind = Math.max(e.blind, MIRAGE.blind);
   drawHeroSprite(mirageCanvas, hero.pose, 2);

@@ -56,8 +56,8 @@
   animation: chest-rise 260ms steps(5) both;
   animation-delay: var(--delay, 0ms);
 }
-.chest-reward[data-kind="charm"] {
-  --accent: var(--jade);
+.chest-reward[data-kind="art"] {
+  --accent: var(--crystal);
   --accent-dark: #0e3424;
 }
 .chest-reward[data-kind="heal"] {

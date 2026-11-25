@@ -30,6 +30,7 @@ export const ICE_SPIKES: SkillDef = {
   id: "k_frost",
   name: "Ice Spikes",
   kind: "spell",
+  element: "frost",
   risk: "timed",
   button: "I",
   text: "Ice freezes longer, and a slash shatters a frozen foe.",

@@ -33,6 +33,7 @@ export const MENDING_LIGHT: SkillDef = {
   id: "al_mend",
   name: "Mending Light",
   kind: "spell",
+  element: "void",
   risk: "easy",
   button: "I",
   text: "Mending Light heals more, pushes foes away and leaves burning light.",

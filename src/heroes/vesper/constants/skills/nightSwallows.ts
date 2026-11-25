@@ -22,6 +22,7 @@ export const NIGHT_SWALLOWS: SkillDef = {
   id: "ve_swallow",
   name: "Night Swallows",
   kind: "summon",
+  element: "storm",
   risk: "easy",
   button: "auto",
   text: "Throwing a foe up may send dusk swallows diving at foes in the air.",

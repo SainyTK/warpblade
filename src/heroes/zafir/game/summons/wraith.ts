@@ -1,6 +1,6 @@
 import { fleck, place } from "../../../../engine/frame";
 import { dealDamage } from "../../../../game/damage";
-import { skillValues, withCharms } from "../../../../game/skills/query";
+import { skillValues, withBuild } from "../../../../game/skills/query";
 import { foesOnScreen } from "../../../../game/skills/targets";
 import { game, progress } from "../../../../game/state";
 import type { Effect } from "../../../../types/effect";
@@ -30,7 +30,7 @@ export function drawWraith(x: number, y: number, t: number, dir: number, fade: n
 /** cut every foe a wraith at (x, y) touches that it has not cut on this pass */
 export function wraithCut(x: number, y: number, dir: number, struck: Set<Enemy>, power: number): void {
   const v = skillValues(ID);
-  const reach = withCharms("area", WRAITH.reach);
+  const reach = withBuild("area", WRAITH.reach);
   for (const e of foesOnScreen()) {
     if (struck.has(e) || Math.abs(e.x - x) > reach || e.y < y - WRAITH.height - 8 || e.y > y + 4) continue;
     struck.add(e);
@@ -48,7 +48,7 @@ export function sendWraith(x0: number, y: number, dir: number): void {
   let back = !!v.back;
   let gone = 0;
   let struck = new Set<Enemy>();
-  const range = withCharms("area", WRAITH.range);
+  const range = withBuild("area", WRAITH.range);
   const fx: Effect = {
     update(dt) {
       t += dt;

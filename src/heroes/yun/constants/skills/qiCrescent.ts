@@ -32,6 +32,7 @@ export const QI_CRESCENT: SkillDef = {
   id: "yu_crescent",
   name: "Qi Crescent",
   kind: "spell",
+  element: "void",
   risk: "timed",
   button: "I",
   text: "Qi Crescent cuts harder and carries on past its target.",

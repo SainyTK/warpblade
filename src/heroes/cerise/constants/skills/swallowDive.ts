@@ -31,6 +31,7 @@ export const SWALLOW_DIVE: SkillDef = {
   id: "ce_dive",
   name: "Swallow Dive",
   kind: "movement",
+  element: "storm",
   risk: "timed",
   button: "jump",
   text: "More air thrusts, a cutting wall kick and a stomp after an air thrust.",

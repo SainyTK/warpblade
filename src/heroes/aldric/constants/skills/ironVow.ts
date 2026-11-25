@@ -32,6 +32,7 @@ export const IRON_VOW: SkillDef = {
   id: "al_vow",
   name: "Iron Vow",
   kind: "movement",
+  element: "frost",
   risk: "easy",
   button: "L",
   text: "Each warp arrival pours the selected spell into the sword, and spells prepare faster.",

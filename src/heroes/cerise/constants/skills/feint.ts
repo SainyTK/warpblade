@@ -31,6 +31,7 @@ export const FEINT: SkillDef = {
   id: "ce_feint",
   name: "Feint",
   kind: "attack",
+  element: "void",
   risk: "timed",
   button: "J",
   text: "The second thrust is a feint that opens the foe to your next blows.",

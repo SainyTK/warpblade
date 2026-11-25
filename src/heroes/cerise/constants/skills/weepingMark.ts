@@ -31,6 +31,7 @@ export const WEEPING_MARK: SkillDef = {
   id: "ce_weep",
   name: "Weeping Mark",
   kind: "dot",
+  element: "venom",
   risk: "timed",
   button: "auto",
   text: "Foes carrying your Rose mark bleed.",

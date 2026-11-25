@@ -29,6 +29,7 @@ export const POINT_BLANK: SkillDef = {
   id: "ca_pointblank",
   name: "Point Blank",
   kind: "attack",
+  element: "storm",
   risk: "precise",
   button: "K",
   text: "A wider parry, and a parry answers with a heavy round.",

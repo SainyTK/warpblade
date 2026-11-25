@@ -28,6 +28,7 @@ export const ASCENDING_STEP: SkillDef = {
   id: "ve_ascend",
   name: "Ascending Step",
   kind: "movement",
+  element: "storm",
   risk: "timed",
   button: "jump",
   text: "More air dashes, and the wall kick cuts what it passes.",

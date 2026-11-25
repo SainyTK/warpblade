@@ -3,7 +3,7 @@ import { WARP } from "../../constants/combat";
 import { enemyCenter } from "../../game/enemies/enemy";
 import { clampHeroX, landingAt, safeHeroDestination } from "../../game/hero/terrain";
 import { emitSkillEvent } from "../../game/skills/events";
-import { withCharms } from "../../game/skills/query";
+import { withBuild } from "../../game/skills/query";
 import { game } from "../../game/state";
 import { hitStop } from "../../game/world";
 import { sfx } from "../../services/audio";
@@ -37,7 +37,7 @@ export function startWarpStrike(session: Session): void {
   if (Math.abs(target.x - h.x) > 2) {
     h.face = target.x < h.x ? -1 : 1;
   }
-  h.warpReadyIn = withCharms("cooldown", WARP.cooldown * session.modifiers.warpCooldown);
+  h.warpReadyIn = withBuild("cooldown", WARP.cooldown * session.modifiers.warpCooldown);
   h.warp = { phase: "throw", age: 0, target };
   h.dashTime = 0;
   h.airDashActive = false;

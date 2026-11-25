@@ -10,7 +10,8 @@ Kael (`src/heroes/kael/`) is the worked example; every hook below shows how he f
 | File | Layer | What it holds |
 | --- | --- | --- |
 | `src/heroes/roster.ts` | data | `ROSTER`, every hero's `CharacterDef` by id in hero screen order, `CHARACTERS` and the `HeroId` type |
-| `src/heroes/index.ts` | code | `heroModule(id)`, every hero's `HeroModule` by id |
+| `src/heroes/index.ts` | code | every hero's `HeroModule` by id, placed in the registry as it loads |
+| `src/heroes/registry.ts` | code | `heroModule(id)`, the only way shared code reads a hero's code |
 
 The nine heroes are registered in both files in this order: kael, cerise, aldric, vesper, saya, yun, brynn, zafir, calder.
 A new hero adds one line to each file; everything else lives in the hero's own folders.
@@ -21,6 +22,8 @@ Each hero has two entry files, one per layer:
 - `src/heroes/<id>/index.ts` exports the hero's `HeroModule` (`src/types/heroModule.ts`): the kit, the moves, the skill code, the ultimate, the icons, the touch art and the meter.
 
 The two layers exist because the data is read while modules load (the save, the achievements, the first frame's skin) and the code reaches back into the game.
+Shared code imports `heroModule` from `src/heroes/registry.ts` and never imports `src/heroes/index.ts` (`npm run lint` enforces it).
+The app entry imports `src/heroes` once, so every hero module loads after the shared code it uses, and a hero module may call shared code while it loads.
 Keep the export names the roster imports: `<ID>` from `character.ts` and `<ID>_MODULE` from `index.ts` (`KAEL` and `KAEL_MODULE`, `CERISE` and `CERISE_MODULE`).
 
 ## What a hero owns

@@ -22,6 +22,7 @@ export const PHANTOM_EDGE: SkillDef = {
   id: "k_echo",
   name: "Phantom Edge",
   kind: "summon",
+  element: "void",
   risk: "precise",
   button: "auto",
   text: "A sword blow from behind may call a phantom of Kael that repeats the blow.",

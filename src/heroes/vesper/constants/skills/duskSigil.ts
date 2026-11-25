@@ -28,6 +28,7 @@ export const DUSK_SIGIL: SkillDef = {
   id: "ve_hex",
   name: "Dusk Sigil",
   kind: "dot",
+  element: "venom",
   risk: "easy",
   button: "auto",
   text: "Your cuts lay dusk sigils that cut the foe on each tick.",

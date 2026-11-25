@@ -33,6 +33,7 @@ export const CRIMSON_FALL: SkillDef = {
   id: "br_fall",
   name: "Crimson Fall",
   kind: "ultimate",
+  element: "venom",
   risk: "timed",
   button: "J",
   text: `Crimson Fall grows: fissures, aftershocks and a second crescent join it. Grows with attack damage. ${ULT_CHARGE}`,

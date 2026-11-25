@@ -30,6 +30,7 @@ export const NEEDLE_RAIN: SkillDef = {
   id: "ce_needle",
   name: "Needle Rain",
   kind: "spell",
+  element: "storm",
   risk: "timed",
   button: "I",
   text: "Flurry calls needles of light down on its foe.",

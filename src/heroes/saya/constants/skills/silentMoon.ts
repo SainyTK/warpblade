@@ -33,6 +33,7 @@ export const SILENT_MOON_SKILL: SkillDef = {
   id: SKILL.moon,
   name: "Silent Moon",
   kind: "ultimate",
+  element: "void",
   risk: "easy",
   button: "U",
   text: `Silent Moon grows: more lines, harder bursts, and its click doubles stored cuts. Grows with attack damage. ${ULT_CHARGE}`,

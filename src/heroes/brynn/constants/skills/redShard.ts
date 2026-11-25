@@ -22,6 +22,7 @@ export const RED_SHARD: SkillDef = {
   id: "br_shard",
   name: "Red Shard",
   kind: "summon",
+  element: "venom",
   risk: "timed",
   button: "auto",
   text: "Her blows chip red shards off the crystal in Anvilheart that dart at foes on their own.",

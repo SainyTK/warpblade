@@ -29,6 +29,7 @@ export const LINGERING_QI: SkillDef = {
   id: "yu_wound",
   name: "Lingering Qi",
   kind: "dot",
+  element: "void",
   risk: "easy",
   button: "auto",
   text: "Your cuts leave qi wounds that cut foes over time.",

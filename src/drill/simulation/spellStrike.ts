@@ -1,7 +1,7 @@
 import { stageBounds } from "../../game/adventure";
 import { enemyBox } from "../../game/enemies/enemy";
 import { emitSkillEvent } from "../../game/skills/events";
-import { withCharms } from "../../game/skills/query";
+import { withBuild } from "../../game/skills/query";
 import { game } from "../../game/state";
 import { surfaceBelow } from "../../game/world";
 import { sfx } from "../../services/audio";
@@ -12,7 +12,7 @@ import { freezeEnemy, strikeEnemy } from "./enemyContact";
 
 function damageArea(session: Session, { spell, x, y }: ElementImpact): void {
   const { spellDamage, spellArea } = session.modifiers;
-  const radius = withCharms("area", spell.radius * spellArea);
+  const radius = withBuild("area", spell.radius * spellArea);
   const centerY = spell.speed === null ? y - SPELL_HEIGHT : y;
   for (const enemy of game.enemies) {
     const [left, top, right, bottom] = enemyBox(enemy);
@@ -62,7 +62,7 @@ export function launchSpell(session: Session, spell: DrillSpell): void {
 
 function travel(session: Session, bolt: ElementProjectile, dt: number): boolean {
   const { speed, range } = bolt.spell;
-  const step = Math.min(withCharms("speed", speed ?? 0) * dt, range - bolt.distance);
+  const step = Math.min(withBuild("speed", speed ?? 0) * dt, range - bolt.distance);
   const previous = bolt.x;
   const { left, right } = stageBounds();
   bolt.x = clamp(previous + bolt.face * step, left, right);

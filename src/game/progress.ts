@@ -1,17 +1,21 @@
 import { MAX_LEVEL } from "../constants/growth";
 import { PAL } from "../constants/palette";
 import { LEVEL_UP_RESTORE } from "../constants/progression";
+import { FUSIONS, type FusionId } from "../constants/resonance";
 import { sfx } from "../services/audio";
+import { ARTS } from "../stages/arts";
 import { metaBonus } from "../store/meta";
+import { learnFusion } from "../store/unlocks";
 import type { Card } from "../types/build";
 import { PK } from "../types/particle";
 import type { PickAnswer } from "../types/pick";
-import { buildStats } from "../utils/build";
 import { cardKey } from "../utils/cards";
 import { xpToNext } from "../utils/progression";
+import { activeFusions, resonanceRanks, resonanceStats } from "../utils/resonance";
 import { heldRows } from "../utils/skills";
 import { computeStats } from "../utils/stats";
-import { raiseCharm, raiseSkill } from "./build/raise";
+import { raiseArt, raiseSkill } from "./build/raise";
+import { currentBuildStats } from "./build/stats";
 import { createFloorRing } from "./effects/floorRing";
 import { forgetEvolutions } from "./evolve";
 import { airLimit } from "./skills/airLimit";
@@ -20,7 +24,12 @@ import { character, freshProgress, fxRng, game, hero, lights, particles, progres
 /** recompute everything derived from the level and the build, keeping HP and MP inside the new maxima */
 export function refreshProgress(): void {
   const build = progress.build;
-  progress.stats = computeStats(character, progress.level, heldRows(character, build), metaBonus(), buildStats(build));
+  progress.resonance = resonanceRanks(build, character, ARTS);
+  const fusions = activeFusions(progress.resonance);
+  for (const id of fusions) if (!progress.fusions.includes(id)) announceFusion(id);
+  progress.fusions = fusions;
+  const stats = resonanceStats(progress.resonance);
+  progress.stats = computeStats(character, progress.level, heldRows(character, build), metaBonus(), stats);
   // every hero keeps one ultimate all run; their ultimate skill upgrades it
   progress.ultimate = character.special.id;
   progress.comboLimit = character.comboHits;
@@ -28,6 +37,11 @@ export function refreshProgress(): void {
   hero.hp = Math.min(hero.hp, progress.stats.hp);
   hero.mp = Math.min(hero.mp, progress.stats.mp);
   hero.stamina = Math.min(hero.stamina, progress.stats.stamina);
+}
+
+function announceFusion(id: FusionId): void {
+  learnFusion(id);
+  showBanner(`Fusion: ${FUSIONS.find((f) => f.id === id)?.name ?? id}`, 2);
 }
 
 function celebrateLevel(): void {
@@ -71,7 +85,7 @@ export function gainXp(amount: number): void {
 
 /** experience from play: Insight adds to it */
 export function earnXp(amount: number): void {
-  gainXp(amount * buildStats(progress.build).growth);
+  gainXp(amount * currentBuildStats().growth);
 }
 
 /** a cleared wave: the game pauses on a pick for every point waiting, if any */
@@ -113,7 +127,7 @@ function choosePick(card: Card): void {
   if (card.type === "boon") takeBoon();
   else {
     if (card.type === "skill") raiseSkill(card.id);
-    else raiseCharm(card.id);
+    else raiseArt(card.id);
     refreshGrowing();
   }
   spendPick();

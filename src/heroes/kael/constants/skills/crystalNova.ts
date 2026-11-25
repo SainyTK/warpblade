@@ -28,6 +28,7 @@ export const CRYSTAL_NOVA: SkillDef = {
   id: "k_nova",
   name: "Crystal Nova",
   kind: "ultimate",
+  element: "frost",
   risk: "easy",
   button: "J",
   text: "The four charged skills on held J hit harder, reach further and charge faster.",

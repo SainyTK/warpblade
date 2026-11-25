@@ -32,6 +32,7 @@ export const INK_FLOW: SkillDef = {
   id: SKILL.flow,
   name: "Ink Flow",
   kind: "movement",
+  element: "void",
   risk: "timed",
   button: "L",
   text: "A warp arrival pours ink into the blade, and spells prepare faster.",

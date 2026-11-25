@@ -1,9 +1,13 @@
+import { ELEMENTS } from "../../constants/elements";
 import { CHARACTERS } from "../../heroes/roster";
+import type { ElementId } from "../../types/campaign";
 import type { CharacterDef } from "../../types/character";
 import type { RunReport, SourceResult } from "../../types/run";
 import { skillOf } from "../../utils/skills";
 import { isHeroSource } from "../../utils/sources";
 import { skillIcon } from "../skills/icons/iconImage";
+
+const isElement = (id: string): id is ElementId => id in ELEMENTS;
 
 const heroOf = (report: RunReport): CharacterDef | undefined => CHARACTERS.find((c) => c.id === report.hero);
 
@@ -11,6 +15,7 @@ const heroOf = (report: RunReport): CharacterDef | undefined => CHARACTERS.find(
 export function sourceName(s: SourceResult, report: RunReport): string {
   const { id } = s;
   const hero = heroOf(report);
+  if (isElement(id)) return `${ELEMENTS[id].name} resonance`;
   if (!isHeroSource(id)) {
     const def = hero && skillOf(hero, id);
     return (s.evolved ? def?.evolution.name : def?.name) ?? id;
@@ -22,6 +27,7 @@ export function sourceName(s: SourceResult, report: RunReport): string {
 /** the icon id of a source: the hero's own kit icons, or the skill's (evolved art once evolved) */
 export function sourceIcon(s: SourceResult, report: RunReport): string {
   const { id } = s;
+  if (isElement(id)) return `el_${id}`;
   if (!isHeroSource(id)) return skillIcon(id, !!s.evolved);
   return (heroOf(report) ?? CHARACTERS[0]).sourceIcons[id];
 }

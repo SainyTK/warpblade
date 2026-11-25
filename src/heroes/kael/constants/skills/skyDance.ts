@@ -28,6 +28,7 @@ export const SKY_DANCE: SkillDef = {
   id: "k_skydance",
   name: "Sky Dance",
   kind: "movement",
+  element: "storm",
   risk: "timed",
   button: "jump",
   text: "One more air slash, wall kicks that cut, and a stomp after air slashes.",

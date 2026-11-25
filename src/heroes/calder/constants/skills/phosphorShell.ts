@@ -32,6 +32,7 @@ export const PHOSPHOR_SHELL: SkillDef = {
   id: "ca_flare",
   name: "Phosphor Shell",
   kind: "spell",
+  element: "blaze",
   risk: "easy",
   button: "I",
   text: "Phosphor Shell hits harder and its green fire spreads.",

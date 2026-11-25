@@ -4,7 +4,7 @@ import { dealDamage } from "../../../game/damage";
 import { createFloorRing } from "../../../game/effects/floorRing";
 import { createImpact } from "../../../game/effects/impact";
 import { enemyCenter } from "../../../game/enemies/enemy";
-import { skillEvolved, skillLevel, skillValues, withCharms } from "../../../game/skills/query";
+import { skillEvolved, skillLevel, skillValues, withBuild } from "../../../game/skills/query";
 import { fxRng, game, hero, lights, particles, progress } from "../../../game/state";
 import { hitStop, shake } from "../../../game/world";
 import { sfx } from "../../../services/audio";
@@ -40,7 +40,7 @@ export function aegisBlocked(foe: Enemy | null): void {
 function shatter(foe: Enemy, plates: number): void {
   const v = skillValues(SKILL);
   const [x, y] = enemyCenter(foe);
-  const reach = withCharms("area", v.reach);
+  const reach = withBuild("area", v.reach);
   const blow = progress.stats.ad * v.shard * plates;
   game.fx.push(createFloorRing(x, foe.y, reach, C, 0.35));
   lights.add(x, y, reach + 10, C[4], 0.9, 0.3);
@@ -60,7 +60,7 @@ function shatter(foe: Enemy, plates: number): void {
     const dir = Math.sign(ex - hero.x) || hero.face;
     const damage = e === foe ? blow : blow * AEGIS_SPLASH;
     dealDamage(e, damage, { fromX: hero.x, kx: dir * 90, ky: -60, launch, heavy: true });
-    if (v.freeze) e.frozen = Math.max(e.frozen, withCharms("duration", v.freeze));
+    if (v.freeze) e.frozen = Math.max(e.frozen, withBuild("duration", v.freeze));
     game.fx.push(createImpact(ex, ey, dir, true, SPARKS.crystal));
   }
   hitStop(0.08);

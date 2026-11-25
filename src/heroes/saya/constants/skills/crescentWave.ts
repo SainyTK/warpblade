@@ -35,6 +35,7 @@ export const CRESCENT_WAVE: SkillDef = {
   id: SKILL.crescent,
   name: "Crescent Wave",
   kind: "spell",
+  element: "void",
   risk: "easy",
   button: "I",
   text: "Crescent Wave hits harder and stores a cut in every foe it strikes.",

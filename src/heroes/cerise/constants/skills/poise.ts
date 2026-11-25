@@ -30,6 +30,7 @@ export const POISE: SkillDef = {
   id: "ce_poise",
   name: "Poise",
   kind: "movement",
+  element: "frost",
   risk: "easy",
   button: "L",
   text: "More air dashes, an untouchable dash, and a stronger thrust after it.",

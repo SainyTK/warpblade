@@ -29,6 +29,7 @@ export const CRESTFALL: SkillDef = {
   id: "al_crest",
   name: "Crestfall",
   kind: "attack",
+  element: "blaze",
   risk: "timed",
   button: "J",
   text: "Crest breaker, the last blow of the chain, hits far harder, knocks down and shakes the floor.",

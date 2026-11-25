@@ -2,7 +2,7 @@ import { fleck, glow, hairline, place } from "../../../../engine/frame";
 import { stageLeft, stageRight } from "../../../../game/adventure";
 import { dealDamage } from "../../../../game/damage";
 import { enemyBox } from "../../../../game/enemies/enemy";
-import { skillEvolved, skillValues, withCharms } from "../../../../game/skills/query";
+import { skillEvolved, skillValues, withBuild } from "../../../../game/skills/query";
 import { game, hero, progress } from "../../../../game/state";
 import { boxHit } from "../../../../game/world";
 import type { Effect } from "../../../../types/effect";
@@ -29,7 +29,7 @@ interface Gust {
 /** one gust of the gale running along the floor */
 function createGust(x: number, y: number, face: number, power: number): Effect {
   const v = skillValues(ID);
-  const life = withCharms("duration", v.life);
+  const life = withBuild("duration", v.life);
   const g: Gust = { x, y, face, t: 0, turned: false, stand: 0, stood: false, cuts: new Map() };
   const damage = progress.stats.ap * v.power * power;
   const strike = (e: Enemy) => {
@@ -66,7 +66,7 @@ function createGust(x: number, y: number, face: number, power: number): Effect {
       }
       if (g.t >= life && !g.stood && skillEvolved(ID)) {
         g.stood = true;
-        g.stand = withCharms("duration", v.stand);
+        g.stand = withBuild("duration", v.stand);
       }
       return (g.t < life || g.stand > 0) && g.x > stageLeft() - 10 && g.x < stageRight() + 10;
     },

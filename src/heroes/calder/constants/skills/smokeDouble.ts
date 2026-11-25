@@ -20,6 +20,7 @@ export const SMOKE_DOUBLE: SkillDef = {
   id: "ca_double",
   name: "Smoke Double",
   kind: "summon",
+  element: "void",
   risk: "precise",
   button: "auto",
   text: "A Trigger may leave a double of gunsmoke that fires the same round again.",

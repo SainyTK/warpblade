@@ -1,5 +1,5 @@
 import { stacksOf } from "../../../../game/enemies/skillStatus";
-import { skillValues, withCharms } from "../../../../game/skills/query";
+import { skillValues, withBuild } from "../../../../game/skills/query";
 import { foesOnScreen } from "../../../../game/skills/targets";
 import type { SkillBehavior } from "../../../../types/skillBehavior";
 import { WOUND, WOUND_SOURCE } from "../../constants/wounds";
@@ -16,7 +16,7 @@ export const deepWounds: SkillBehavior = {
   create: () => ({}),
   update(_memory, state) {
     if (!state.evolved || !ringTier()) return;
-    const life = withCharms("duration", skillValues(ID).life ?? WOUND.life);
+    const life = withBuild("duration", skillValues(ID).life ?? WOUND.life);
     for (const e of foesOnScreen()) {
       const entry = e.stacks.find((s) => s.source === WOUND_SOURCE);
       if (entry) entry.left = Math.max(entry.left, life);

@@ -28,6 +28,7 @@ export const SAND_WRAITH: SkillDef = {
   id: "za_wraith",
   name: "Sand Wraith",
   kind: "summon",
+  element: "void",
   risk: "easy",
   button: "auto",
   text: "A slash that lands may call a sand wraith that whirls through the foes ahead.",

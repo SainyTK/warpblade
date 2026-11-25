@@ -15,6 +15,7 @@ import { enemyCenter } from "./enemies/enemy";
 import { kindOf } from "./enemies/kinds";
 import { feat } from "./feat";
 import { kit } from "./hero/kits";
+import { resonateDeath } from "./resonance";
 import { emitSkillEvent } from "./skills/events";
 import { fxRng, game, lights, particles, rng } from "./state";
 import { isTraining } from "./training";
@@ -61,6 +62,7 @@ const leavesChest = (e: Enemy): boolean =>
  * elite or a boss, and the wave's end when it was the last foe
  */
 export function killEnemy(e: Enemy, source?: SourceId): void {
+  resonateDeath(e);
   const [x, y] = enemyCenter(e);
   const S = PAL.shadow;
   const big = e.rank !== "minion" || e.elite;

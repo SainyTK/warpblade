@@ -3,7 +3,7 @@ import { dealDamage } from "../../../../game/damage";
 import { createImpact } from "../../../../game/effects/impact";
 import { enemyCenter } from "../../../../game/enemies/enemy";
 import { refundStamina } from "../../../../game/hero/stamina";
-import { skillEvolved, skillLevel, skillValues, withCharms } from "../../../../game/skills/query";
+import { skillEvolved, skillLevel, skillValues, withBuild } from "../../../../game/skills/query";
 import { game, hero, progress } from "../../../../game/state";
 import type { Enemy } from "../../../../types/enemy";
 import type { HeroKit } from "../../../../types/kit";
@@ -23,7 +23,7 @@ function passed(e: Enemy): void {
   const cuts = skillEvolved(SKILL.drift) ? 2 : 1;
   for (let i = 0; i < cuts; i++) dealDamage(e, progress.stats.ad * v.cut, { fromX: hero.x, kx: 0, ky: -20 });
   game.fx.push(createImpact(...enemyCenter(e), hero.face, false, JADE_SPARKS));
-  if (v.chill) e.chill = Math.max(e.chill, withCharms("duration", v.chill));
+  if (v.chill) e.chill = Math.max(e.chill, withBuild("duration", v.chill));
   if (v.sword && yun.dodgeSwordCd <= 0) {
     yun.dodgeSwordCd = v.sword;
     gainSwords(1);
@@ -40,7 +40,7 @@ function ended(): void {
   for (const face of ways)
     game.fx.push(
       createQiWave(hero.x + face * 8, hero.y - 16, face, {
-        reach: withCharms("area", END_WAVE.reach),
+        reach: withBuild("area", END_WAVE.reach),
         speed: END_WAVE.speed,
         damage: progress.stats.ad * END_WAVE.power * v.wave,
         half: END_WAVE.half,

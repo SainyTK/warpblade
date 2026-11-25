@@ -3,7 +3,7 @@ import { dealDamage } from "../../../../game/damage";
 import { createImpact } from "../../../../game/effects/impact";
 import { enemyCenter } from "../../../../game/enemies/enemy";
 import { markFoe } from "../../../../game/enemies/skillStatus";
-import { skillEvolved, skillValues, withCharms } from "../../../../game/skills/query";
+import { skillEvolved, skillValues, withBuild } from "../../../../game/skills/query";
 import { nearestFoe } from "../../../../game/skills/targets";
 import { game, hero, progress, rng } from "../../../../game/state";
 import type { Enemy } from "../../../../types/enemy";
@@ -57,7 +57,7 @@ function strike(s: Shard, foe: Enemy): void {
   const dir = Math.sign(foe.x - s.x) || 1;
   dealDamage(foe, progress.stats.ad * v.power, { fromX: s.x, kx: dir * 30, source: ID });
   game.fx.push(createImpact(s.x, s.y, dir, false, CRIMSON_SPARKS));
-  if (v.mark) markFoe(foe, ID, withCharms("duration", MARK_TIME), v.mark);
+  if (v.mark) markFoe(foe, ID, withBuild("duration", MARK_TIME), v.mark);
   if (!v.pierce) return;
   const next = nearestFoe(foe.x, foe.y - 10, [foe]);
   if (next && Math.abs(next.x - foe.x) < 30)
@@ -115,7 +115,7 @@ export const redShard: SkillBehavior = {
     blow(m, e) {
       const v = skillValues(ID);
       if (!e.move || (m.cd as number) > 0) return;
-      if (shardsOf(m).filter((s) => !s.halo).length >= withCharms("amount", v.count)) return;
+      if (shardsOf(m).filter((s) => !s.halo).length >= withBuild("amount", v.count)) return;
       if (!(e.keen && v.heavyShard) && !rng.chance(v.chance)) return;
       m.cd = v.cooldown;
       chip(m, false);

@@ -28,6 +28,7 @@ export const RISING_EDGE: SkillDef = {
   id: "ve_edge",
   name: "Rising Edge",
   kind: "attack",
+  element: "storm",
   risk: "timed",
   button: "J",
   text: "The dusk cross, your first cut, bites deeper and leaves night echoes.",

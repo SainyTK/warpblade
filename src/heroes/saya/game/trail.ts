@@ -3,7 +3,7 @@ import { dealDamage } from "../../../game/damage";
 import { enemyBox, enemyCenter } from "../../../game/enemies/enemy";
 import { skin } from "../../../game/hero/skin";
 import { objectMemory, rememberPerSeat } from "../../../game/seatMemory";
-import { skillLevel, skillValues, withCharms } from "../../../game/skills/query";
+import { skillLevel, skillValues, withBuild } from "../../../game/skills/query";
 import { foesOnScreen } from "../../../game/skills/targets";
 import { hero, progress } from "../../../game/state";
 import type { Enemy } from "../../../types/enemy";
@@ -32,7 +32,7 @@ rememberPerSeat(objectMemory(trails, true));
 export function layTrail(x0: number, x1: number, y: number): void {
   const v = skillValues(SKILL.trail);
   if (!v.time) return;
-  const life = withCharms("duration", v.time);
+  const life = withBuild("duration", v.time);
   const [a, b] = x0 < x1 ? [x0, x1] : [x1, x0];
   trails.list = [...trails.list, { x0: a, x1: b, y, left: life, life, next: 0 }];
 }

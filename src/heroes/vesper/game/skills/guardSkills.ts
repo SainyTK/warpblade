@@ -2,7 +2,7 @@ import { dealDamage } from "../../../../game/damage";
 import { createSlash } from "../../../../game/effects/slash";
 import { enemyCenter } from "../../../../game/enemies/enemy";
 import { meleeHit } from "../../../../game/meleeHit";
-import { skillEvolved, skillValues, withCharms } from "../../../../game/skills/query";
+import { skillEvolved, skillValues, withBuild } from "../../../../game/skills/query";
 import { game, hero, progress } from "../../../../game/state";
 import { boxAhead, boxBehind, newSwing } from "../../../../game/world";
 import type { Effect } from "../../../../types/effect";
@@ -68,7 +68,7 @@ export function parrySkills(_foe: Enemy | null): void {
     const boxes = v.around ? [boxAhead(-4, -38, 30, 2), boxBehind(-4, -38, 30, 2)] : [boxAhead(-4, -38, 30, 2)];
     meleeHit(boxes, { power: v.riposte, kx: 80, ky: -60, big: true, sureCrit: true });
   }
-  if (v.open) vesper.opened = Math.max(vesper.opened, withCharms("duration", v.open));
+  if (v.open) vesper.opened = Math.max(vesper.opened, withBuild("duration", v.open));
   if (v.parryTop) gainTempo(tempoMost());
   if (skillEvolved(ID)) game.fx.push(createSpin(v.spin, progress.stats.ad * v.spinPower));
 }

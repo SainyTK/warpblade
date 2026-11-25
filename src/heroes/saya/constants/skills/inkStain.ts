@@ -20,6 +20,7 @@ export const INK_STAIN: SkillDef = {
   id: SKILL.stain,
   name: "Ink Stain",
   kind: "dot",
+  element: "venom",
   risk: "timed",
   button: "auto",
   text: "A cut waiting in a foe stains it: the foe takes a share of it every second until the sheathe.",

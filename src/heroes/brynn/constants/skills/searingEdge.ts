@@ -19,6 +19,7 @@ export const SEARING_EDGE: SkillDef = {
   id: "br_embers",
   name: "Searing Edge",
   kind: "dot",
+  element: "blaze",
   risk: "easy",
   button: "auto",
   text: "Her slashes lay searing embers that burn foes.",

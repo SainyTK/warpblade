@@ -27,6 +27,16 @@
   --iron: #b4bcc4;
   --pink: #ff7ae0;
   --danger: #b0405a;
+  --blaze: #ff8a2a;
+  --blaze-dark: #3a1a0c;
+  --frost: #8fd3f2;
+  --frost-dark: #102a48;
+  --storm: #ffe066;
+  --storm-dark: #3a3010;
+  --venom: #9fe05a;
+  --venom-dark: #1c3410;
+  --void: #b4a8ff;
+  --void-dark: #241a52;
   --hud-bg: rgba(8, 6, 18, 0.75);
   --display: "Silkscreen", ui-monospace, monospace;
   --ui: "Pixelify Sans", ui-monospace, monospace;

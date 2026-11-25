@@ -28,6 +28,7 @@ export const UNBROKEN_RHYTHM: SkillDef = {
   id: "ve_rhythm",
   name: "Unbroken Rhythm",
   kind: "movement",
+  element: "blaze",
   risk: "easy",
   button: "L",
   text: "Landed cuts shorten the warp's recharge, and arrivals speed up your spells.",

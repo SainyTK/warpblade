@@ -22,6 +22,7 @@ export const THORN_SENTINEL: SkillDef = {
   id: "ce_sentinel",
   name: "Thorn Sentinel",
   kind: "summon",
+  element: "venom",
   risk: "timed",
   button: "auto",
   text: "The lunge can plant a rapier of light in the floor that keeps thrusting at foes.",

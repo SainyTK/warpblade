@@ -28,6 +28,7 @@ export const QUICKSAND_SKILL: SkillDef = {
   id: "za_quicksand",
   name: "Quicksand",
   kind: "spell",
+  element: "venom",
   risk: "easy",
   button: "I",
   text: "Sandspout sinks what it catches: it hits harder, holds foes in place and opens more wounds.",

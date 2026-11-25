@@ -1,4 +1,4 @@
-import { skillEvolved, skillValues, withCharms } from "../../../../game/skills/query";
+import { skillEvolved, skillValues, withBuild } from "../../../../game/skills/query";
 import { explode } from "../../../../game/spells/explosion";
 import { game, progress } from "../../../../game/state";
 import { surfaceBelow } from "../../../../game/world";
@@ -25,7 +25,7 @@ function createFlask(x: number, y: number, face: number, speed: number, blast: B
   const o: Flask = { x, y, vx: face * FLASK_THROW.vx * speed, vy: FLASK_THROW.vy, t: 0 };
   const v = skillValues(SKILL);
   const evolved = skillEvolved(SKILL);
-  const floor = v.floor ? withCharms("duration", v.floor) : 0;
+  const floor = v.floor ? withBuild("duration", v.floor) : 0;
   const floorDamage = progress.stats.ap * FLOOR.power;
   return {
     update(dt) {
@@ -60,9 +60,9 @@ function raiseWall(x: number, floor: number, burst: number): void {
 export function castFire(x: number, y: number, face: number, power: number, wide: boolean): void {
   const v = skillValues(SKILL);
   const blast: Blast = {
-    radius: withCharms("area", v.radius),
+    radius: withBuild("area", v.radius),
     damage: v.power * progress.stats.ap * power,
-    burn: withCharms("duration", v.burn),
+    burn: withBuild("duration", v.burn),
     stun: v.stun,
     source: "abilities",
   };

@@ -29,6 +29,7 @@ export const BULWARK_ARRIVAL: SkillDef = {
   id: "al_bulwark",
   name: "Bulwark Arrival",
   kind: "movement",
+  element: "storm",
   risk: "timed",
   button: "J",
   text: "The warp strike hits harder, recharges faster and lands in a ring of light.",

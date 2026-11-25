@@ -28,6 +28,7 @@ export const DUSK_THREAD: SkillDef = {
   id: "ve_thread",
   name: "Dusk Thread",
   kind: "spell",
+  element: "void",
   risk: "timed",
   button: "I",
   text: "Dusk Thread hits harder and runs on to more foes.",

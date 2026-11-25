@@ -22,6 +22,7 @@ export const MIRROR_BLADE: SkillDef = {
   id: "ce_mirror",
   name: "Mirror Blade",
   kind: "summon",
+  element: "void",
   risk: "precise",
   button: "auto",
   text: "A parry or a perfect dodge can call a glass rapier that lunges through the foe.",

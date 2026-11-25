@@ -32,6 +32,7 @@ export const BRAND_PILLARS: SkillDef = {
   id: "br_pillars",
   name: "Brand Pillars",
   kind: "spell",
+  element: "blaze",
   risk: "timed",
   button: "I",
   text: "Quake raises crimson pillars under the foe it shakes.",

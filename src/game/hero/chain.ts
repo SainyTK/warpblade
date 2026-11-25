@@ -20,7 +20,7 @@ export class Chain {
       q.py += dy;
     }
   }
-  step(ax: number, ay: number, dt: number, wind: number): void {
+  step(ax: number, ay: number, dt: number, wind: number, floor = Number.POSITIVE_INFINITY): void {
     const p = this.points;
     if (!this.ready) {
       for (const q of p) Object.assign(q, { x: ax, y: ay, px: ax, py: ay });
@@ -54,5 +54,12 @@ export class Chain {
           b.y -= dy * f * 0.5;
         }
       }
+    for (let i = 1; i < p.length; i++) {
+      const q = p[i];
+      if (q.y > floor) {
+        q.y = floor;
+        q.py = floor;
+      }
+    }
   }
 }

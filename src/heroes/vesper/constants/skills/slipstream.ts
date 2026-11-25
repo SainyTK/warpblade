@@ -28,6 +28,7 @@ export const SLIPSTREAM: SkillDef = {
   id: "ve_slip",
   name: "Slipstream",
   kind: "movement",
+  element: "frost",
   risk: "timed",
   button: "L",
   text: "Dashing through foes cuts them.",

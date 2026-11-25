@@ -1,4 +1,4 @@
-import { withCharms } from "../../../../game/skills/query";
+import { withBuild } from "../../../../game/skills/query";
 import type { DrillSpell } from "../../../../types/drill";
 import type { Enemy } from "../../../../types/enemy";
 import { SPELL_STATUS } from "../../constants/drill/spells";
@@ -6,7 +6,7 @@ import { openWounds } from "../wounds";
 import { blindMinion } from "./strike";
 
 function sink(foe: Enemy): void {
-  foe.chill = Math.max(foe.chill, withCharms("duration", SPELL_STATUS.spout.slow));
+  foe.chill = Math.max(foe.chill, withBuild("duration", SPELL_STATUS.spout.slow));
   openWounds(foe, SPELL_STATUS.spout.wounds);
 }
 
@@ -15,7 +15,7 @@ function bleed(foe: Enemy): void {
 }
 
 function scour(foe: Enemy): void {
-  blindMinion(foe, withCharms("duration", SPELL_STATUS.glass.blind));
+  blindMinion(foe, withBuild("duration", SPELL_STATUS.glass.blind));
   foe.halt = Math.max(foe.halt, SPELL_STATUS.glass.halt);
 }
 

@@ -33,6 +33,7 @@ export const ROSE_BLOOM: SkillDef = {
   id: "ce_bloom",
   name: "Rose Bloom",
   kind: "spell",
+  element: "venom",
   risk: "easy",
   button: "I",
   text: "Rose Bloom strikes harder and leaves a ring of cutting petals.",

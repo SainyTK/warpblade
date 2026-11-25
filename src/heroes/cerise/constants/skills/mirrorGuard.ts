@@ -30,6 +30,7 @@ export const MIRROR_GUARD: SkillDef = {
   id: "ce_mirrorguard",
   name: "Mirror Guard",
   kind: "spell",
+  element: "frost",
   risk: "precise",
   button: "I",
   text: "Rose Line strikes harder and its light mirrors back from the foe it hits.",

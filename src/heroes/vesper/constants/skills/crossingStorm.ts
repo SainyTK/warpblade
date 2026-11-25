@@ -28,6 +28,7 @@ export const CROSSING_STORM: SkillDef = {
   id: "ve_storm",
   name: "Crossing Storm",
   kind: "attack",
+  element: "storm",
   risk: "easy",
   button: "J",
   text: "The moonrise, your third cut, hits harder and sends crossing dusk waves.",

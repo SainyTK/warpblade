@@ -5,7 +5,7 @@ import { WORLD_COLORS } from "../../../../constants/palette";
 import { createFloorRing } from "../../../../game/effects/floorRing";
 import { travelEnded } from "../../../../game/hero/travelEnd";
 import { meleeHit } from "../../../../game/meleeHit";
-import { skillValues, withCharms } from "../../../../game/skills/query";
+import { skillValues, withBuild } from "../../../../game/skills/query";
 import { fxRng, game, hero, particles } from "../../../../game/state";
 import { boxAhead, dust, newSwing, shake } from "../../../../game/world";
 import type { MoveDef } from "../../../../types/move";
@@ -32,7 +32,7 @@ function pullIn(reach: number): void {
 function slamLanding(): void {
   newSwing();
   const v = skillValues("br_crater");
-  const reach = withCharms("area", AIR_SLAM.reach + (v.reach ?? 0));
+  const reach = withBuild("area", AIR_SLAM.reach + (v.reach ?? 0));
   game.fx.push(createFloorRing(hero.x, hero.y, reach, CRIMSON, 0.4));
   dust(hero.x - 6, hero.y, 7, -1);
   dust(hero.x + 6, hero.y, 7, 1);

@@ -19,6 +19,7 @@ export const FALLING_NIGHT: SkillDef = {
   id: "ve_night",
   name: "Falling Night",
   kind: "dot",
+  element: "void",
   risk: "timed",
   button: "auto",
   text: "Foes you strike in the air carry night that keeps cutting them.",

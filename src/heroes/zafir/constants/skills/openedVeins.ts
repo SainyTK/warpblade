@@ -28,6 +28,7 @@ export const OPENED_VEINS: SkillDef = {
   id: "za_veins",
   name: "Opened Veins",
   kind: "attack",
+  element: "venom",
   risk: "timed",
   button: "J",
   text: "The twin turn, the chain's finisher, hits harder for each wound on the foe, then tears the wounds open.",

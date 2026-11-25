@@ -6,7 +6,7 @@ import { createFloorRing } from "../../../../game/effects/floorRing";
 import { createSlash } from "../../../../game/effects/slash";
 import { skin } from "../../../../game/hero/skin";
 import { meleeHit } from "../../../../game/meleeHit";
-import { skillEvolved, skillValues, withCharms } from "../../../../game/skills/query";
+import { skillEvolved, skillValues, withBuild } from "../../../../game/skills/query";
 import { fxRng, game, hero, lights, particles } from "../../../../game/state";
 import { boxAhead, dust, newSwing, shake } from "../../../../game/world";
 import type { MoveDef } from "../../../../types/move";
@@ -23,13 +23,13 @@ const METEOR = { reach: 46, drift: 30 } as const;
 const SKILL = "k_skydance";
 /** the stomp's power and reach on each side, from Sky Dance */
 const stompPower = (): number => skillValues(SKILL).stomp ?? 2.2;
-const stompReach = (base: number): number => Math.max(base, withCharms("area", skillValues(SKILL).stompReach ?? base));
+const stompReach = (base: number): number => Math.max(base, withBuild("area", skillValues(SKILL).stompReach ?? base));
 
 /** Comet Dance: the landing is a comet, a wide crystal ring that strikes hard and draws foes in to its middle */
 function cometLanding(): boolean {
   if (!skillEvolved(SKILL)) return false;
   const v = skillValues(SKILL);
-  const reach = withCharms("area", v.cometReach);
+  const reach = withBuild("area", v.cometReach);
   game.fx.push(createFloorRing(hero.x, hero.y, reach, PAL.crystal, 0.55));
   game.fx.push(createFloorRing(hero.x, hero.y, reach * 0.6, skin.ramp, 0.4));
   lights.add(hero.x, hero.y - 10, reach, PAL.crystal[4], 0.9, 0.4);

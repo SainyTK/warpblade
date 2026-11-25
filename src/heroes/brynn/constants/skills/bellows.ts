@@ -29,6 +29,7 @@ export const BELLOWS: SkillDef = {
   id: "br_bellows",
   name: "Bloodletter",
   kind: "spell",
+  element: "venom",
   risk: "timed",
   button: "I",
   text: "Rend cuts deeper bleeding wounds.",

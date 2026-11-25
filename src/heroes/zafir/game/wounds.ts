@@ -1,7 +1,7 @@
 import { fleck, hairline, place } from "../../../engine/frame";
 import { enemyCenter } from "../../../game/enemies/enemy";
 import { addStacks, stacksOf } from "../../../game/enemies/skillStatus";
-import { skillValues, withCharms } from "../../../game/skills/query";
+import { skillValues, withBuild } from "../../../game/skills/query";
 import { foesOnScreen } from "../../../game/skills/targets";
 import { fxRng, game, particles, progress } from "../../../game/state";
 import type { Enemy } from "../../../types/enemy";
@@ -21,7 +21,7 @@ export function openWounds(e: Enemy, n: number): void {
     max: woundMost(),
     damage: progress.stats.ad * (deep.per ?? WOUND.per),
     every: deep.every ?? WOUND.every,
-    duration: withCharms("duration", deep.life ?? WOUND.life),
+    duration: withBuild("duration", deep.life ?? WOUND.life),
   });
 }
 

@@ -29,6 +29,7 @@ export const PENANCE: SkillDef = {
   id: "al_penance",
   name: "Penance",
   kind: "dot",
+  element: "venom",
   risk: "easy",
   button: "K",
   text: "A foe whose blow you block burns with Penance. Grows with ability power.",

@@ -28,6 +28,7 @@ export const SAND_SLIP: SkillDef = {
   id: "za_slip",
   name: "Sand Slip",
   kind: "movement",
+  element: "storm",
   risk: "timed",
   button: "L",
   text: "More air dashes, a dash nothing can touch, and a cloud of sand that blinds the foes you slip past.",

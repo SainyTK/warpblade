@@ -32,6 +32,7 @@ export const LONG_STROKE: SkillDef = {
   id: SKILL.stroke,
   name: "Long Stroke",
   kind: "movement",
+  element: "storm",
   risk: "easy",
   button: "L",
   text: "Dashing through foes cuts them like a brush stroke.",

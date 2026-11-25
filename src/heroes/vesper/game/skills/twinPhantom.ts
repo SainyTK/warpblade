@@ -2,7 +2,7 @@ import { dealDamage } from "../../../../game/damage";
 import { createSlash } from "../../../../game/effects/slash";
 import { enemyCenter } from "../../../../game/enemies/enemy";
 import { objectMemory, rememberPerSeat } from "../../../../game/seatMemory";
-import { skillEvolved, skillValues, withCharms } from "../../../../game/skills/query";
+import { skillEvolved, skillValues, withBuild } from "../../../../game/skills/query";
 import { nearestFoe } from "../../../../game/skills/targets";
 import { game, hero, progress, rng } from "../../../../game/state";
 import type { Enemy } from "../../../../types/enemy";
@@ -56,7 +56,7 @@ export const twinBuff = (): number => (out.count > 0 && skillEvolved(ID) ? skill
 function call(m: TwinMemory): void {
   const v = skillValues(ID);
   if (m.cd > 0 || !rng.chance(v.chance)) return;
-  m.cd = withCharms("cooldown", TWIN.cooldown);
+  m.cd = withBuild("cooldown", TWIN.cooldown);
   const foe = nearestFoe(hero.x, hero.y - 16);
   if (!foe) return;
   const n = skillEvolved(ID) ? 2 : 1;
@@ -67,9 +67,9 @@ function call(m: TwinMemory): void {
       y: foe.y,
       face: -side,
       foe,
-      cuts: withCharms("amount", v.cuts),
+      cuts: withBuild("amount", v.cuts),
       next: 0.1,
-      left: withCharms("duration", v.stay ?? TWIN.life),
+      left: withBuild("duration", v.stay ?? TWIN.life),
     });
   }
 }

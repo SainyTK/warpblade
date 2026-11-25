@@ -29,6 +29,7 @@ export const SPEED_LOADER: SkillDef = {
   id: "ca_speedload",
   name: "Speed Loader",
   kind: "movement",
+  element: "frost",
   risk: "timed",
   button: "L",
   text: "A warp arrival loads the selected shell into the blade.",

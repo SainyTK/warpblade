@@ -29,6 +29,7 @@ export const HAIR_TRIGGER: SkillDef = {
   id: "ca_trigger",
   name: "Hair Trigger",
   kind: "attack",
+  element: "storm",
   risk: "precise",
   button: "J",
   text: "The first cut fires a round into the wound.",

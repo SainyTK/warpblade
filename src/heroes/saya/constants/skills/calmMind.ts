@@ -31,6 +31,7 @@ export const CALM_MIND: SkillDef = {
   id: SKILL.calm,
   name: "Calm Mind",
   kind: "attack",
+  element: "frost",
   risk: "timed",
   button: "K",
   text: "A wider parry, and a parry draws the blade at the attacker.",

@@ -1,7 +1,6 @@
-import { CHARMS } from "../../constants/charms";
 import { SKILL_MAX_LEVEL } from "../../constants/growth";
 import { learnRecipe } from "../../store/unlocks";
-import type { CharmId } from "../../types/build";
+import type { ArtId } from "../../types/campaign";
 import { skillOf } from "../../utils/skills";
 import { feat } from "../feat";
 import { character, progress } from "../state";
@@ -15,10 +14,11 @@ export function raiseSkill(id: string): void {
   if (level === 1 && skillOf(character, id)?.kind === "ultimate") feat({ kind: "ultimateLearned" });
 }
 
-/** a charm is taken at level 1 or goes up a level, up to its top */
-export function raiseCharm(id: CharmId): void {
-  const charms = progress.build.charms;
-  charms[id] = Math.min(CHARMS[id].maxLevel, (charms[id] ?? 0) + 1);
+export const ART_MAX_LEVEL = 5;
+
+export function raiseArt(id: ArtId): void {
+  const arts = progress.build.arts;
+  arts[id] = Math.min(ART_MAX_LEVEL, (arts[id] ?? 0) + 1);
 }
 
 /** a skill takes its evolved form for the rest of the run, and its partner is known from then on */

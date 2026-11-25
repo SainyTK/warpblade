@@ -20,6 +20,7 @@ export const DAWN_FALCON: SkillDef = {
   id: "al_falcon",
   name: "Dawn Falcon",
   kind: "summon",
+  element: "blaze",
   risk: "timed",
   button: "auto",
   text: "Casting an ability may send a falcon of light swooping through the foes ahead.",

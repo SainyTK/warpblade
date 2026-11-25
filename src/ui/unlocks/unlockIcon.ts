@@ -1,14 +1,14 @@
-import type { Discovery, UnlockTarget } from "../../types/unlock";
+import { FUSIONS } from "../../constants/resonance";
+import type { Discovery } from "../../types/unlock";
+import { elementIcon } from "../skills/icons/elements";
 import { iconUrl, skillIcon } from "../skills/icons/iconImage";
-import { slotIconUrl } from "./slotIcon";
-
-/** the icon of a charm or a charm slot */
-export const targetIconUrl = (t: UnlockTarget): string =>
-  t.type === "charm" ? iconUrl(`charm_${t.id}`) : slotIconUrl();
 
 /** the icon of something found: the unlock's, the evolution's for a recipe, or the job's */
 export function discoveryIconUrl(d: Discovery): string {
-  if (d.type === "unlock") return targetIconUrl(d.unlock.target);
+  if (d.type === "fusion") {
+    const fusion = FUSIONS.find((f) => f.id === d.id);
+    return iconUrl(elementIcon(fusion?.pair[0] ?? "void"));
+  }
   if (d.type === "job") return iconUrl(d.job.icon);
   return iconUrl(skillIcon(d.skill, true));
 }

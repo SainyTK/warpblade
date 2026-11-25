@@ -2,7 +2,7 @@ import { fleck, glow, hairline, place } from "../../../../engine/frame";
 import { dealDamage } from "../../../../game/damage";
 import { createImpact } from "../../../../game/effects/impact";
 import { enemyBox } from "../../../../game/enemies/enemy";
-import { skillEvolved, skillValues, withCharms } from "../../../../game/skills/query";
+import { skillEvolved, skillValues, withBuild } from "../../../../game/skills/query";
 import { game, hero, progress } from "../../../../game/state";
 import { boxHit } from "../../../../game/world";
 import type { Effect } from "../../../../types/effect";
@@ -24,8 +24,8 @@ function createChain(x: number, y: number, face: number, back: boolean): Effect 
   const o = { x, t: 0, out: true };
   const struck = new Map<Enemy, number>();
   const per = v.twice ? 2 : 1;
-  const life = withCharms("duration", CHAIN.life);
-  const half = withCharms("area", CHAIN.half);
+  const life = withBuild("duration", CHAIN.life);
+  const half = withBuild("area", CHAIN.half);
   return {
     update(dt) {
       o.t += dt;

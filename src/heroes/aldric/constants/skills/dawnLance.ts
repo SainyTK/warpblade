@@ -30,6 +30,7 @@ export const DAWN_LANCE: SkillDef = {
   id: "al_lance",
   name: "Dawn Lance",
   kind: "spell",
+  element: "blaze",
   risk: "timed",
   button: "I",
   text: "Dawn Lance strikes harder, burns, marks deeper and bursts.",

@@ -28,6 +28,7 @@ export const FALLING_DUNE: SkillDef = {
   id: "za_falling",
   name: "Falling Dune",
   kind: "movement",
+  element: "blaze",
   risk: "timed",
   button: "jump",
   text: "More air slashes and air dashes, and landing after an air slash throws a ring of sand both ways.",

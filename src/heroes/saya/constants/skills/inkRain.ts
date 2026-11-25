@@ -35,6 +35,7 @@ export const INK_RAIN: SkillDef = {
   id: SKILL.rain,
   name: "Ink Rain",
   kind: "spell",
+  element: "void",
   risk: "easy",
   button: "I",
   text: "Ink Rain hits harder, holds foes longer and marks them.",

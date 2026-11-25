@@ -2,7 +2,7 @@ import { dealDamage } from "../../../game/damage";
 import { createFloorRing } from "../../../game/effects/floorRing";
 import { createImpact } from "../../../game/effects/impact";
 import { ignite } from "../../../game/enemies/burn";
-import { skillEvolved, skillValues, withCharms } from "../../../game/skills/query";
+import { skillEvolved, skillValues, withBuild } from "../../../game/skills/query";
 import { game, hero, lights, progress } from "../../../game/state";
 import { shake, surfaceBelow } from "../../../game/world";
 import { ARC, CRY, PILLARS } from "../constants/abilities";
@@ -35,7 +35,7 @@ export function castArc(power: number, wide: boolean): void {
       }),
     );
   const heights = wide ? ARC.fan : [ARC.height];
-  for (let i = 0; i < withCharms("amount", v.count); i++)
+  for (let i = 0; i < withBuild("amount", v.count); i++)
     game.fx.push(later(i * ARC.gap, () => heights.forEach(throwOne)));
 }
 
@@ -51,7 +51,7 @@ export function castPillars(power: number, wide: boolean): void {
           x: hero.x + face * 6,
           y,
           face,
-          count: Math.round(withCharms("amount", v.count)),
+          count: Math.round(withBuild("amount", v.count)),
           gap: v.gap,
           every: PILLARS.every,
           delay: i * PILLARS.again,
@@ -68,7 +68,7 @@ export function castPillars(power: number, wide: boolean): void {
 /** War Cry: a roar that knocks every foe in reach back and makes them reel, fills Heft, heals, and lifts her damage */
 export function castCry(power: number, wide: boolean): void {
   const v = skillValues("br_cry");
-  const reach = withCharms("area", v.reach) * (wide ? 1.5 : 1);
+  const reach = withBuild("area", v.reach) * (wide ? 1.5 : 1);
   game.fx.push(createFloorRing(hero.x, hero.y, reach, CRIMSON, 0.5));
   game.fx.push(createFloorRing(hero.x, hero.y, reach * 0.6, CRIMSON, 0.35));
   lights.add(hero.x, hero.y - 20, reach, CRIMSON[4], 0.8, 0.35);
@@ -87,5 +87,5 @@ export function castCry(power: number, wide: boolean): void {
   }
   addHeft(Math.min(v.heft, HEFT.most));
   if (v.heal) hero.hp = Math.min(progress.stats.hp, hero.hp + progress.stats.hp * v.heal);
-  brynn.cry = withCharms("duration", v.time);
+  brynn.cry = withBuild("duration", v.time);
 }

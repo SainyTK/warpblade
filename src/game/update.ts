@@ -18,6 +18,7 @@ import { agePresses } from "./input";
 import { updateDanger } from "./lowHealth";
 import { updateNumbers } from "./numbers";
 import { updatePickups } from "./pickups";
+import { updateResonance } from "./resonance";
 import { updateSkills } from "./skills/runtime";
 import { fxRng, game, lights, particles } from "./state";
 import { isTraining, updateTraining } from "./training";
@@ -92,6 +93,7 @@ export function update(dt: number): void {
   });
   updateSkills(world);
   updateEnemies(world);
+  updateResonance(world);
   updatePickups(dt);
   updateChests(dt);
   updateCoins(dt);

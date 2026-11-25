@@ -5,7 +5,7 @@ import { dealDamage } from "../../../../game/damage";
 import { createFloorRing } from "../../../../game/effects/floorRing";
 import { createImpact } from "../../../../game/effects/impact";
 import { enemyCenter } from "../../../../game/enemies/enemy";
-import { skillEvolved, skillValues, withCharms } from "../../../../game/skills/query";
+import { skillEvolved, skillValues, withBuild } from "../../../../game/skills/query";
 import { touches } from "../../../../game/skills/targets";
 import { game, hero, progress, rng } from "../../../../game/state";
 import { surfaceBelow } from "../../../../game/world";
@@ -30,7 +30,7 @@ const list = (m: SkillMemory): Sentinel[] => m.list as Sentinel[];
 /** a sentinel thrusts at the nearest foe in its reach */
 function thrust(s: Sentinel): void {
   const v = skillValues(SOURCE);
-  const reach = withCharms("area", v.reach);
+  const reach = withBuild("area", v.reach);
   const foe = game.enemies.find((e) => e.hp > 0 && touches(e, s.x, s.y - PLANT.height, reach));
   if (!foe) return;
   const [ex, ey] = enemyCenter(foe);
@@ -56,7 +56,7 @@ function plant(m: SkillMemory): void {
   const x = hero.x + hero.face * PLANT.ahead;
   const y = Math.min(GROUND, surfaceBelow(x, hero.y - 4));
   const kept = list(m).slice(Math.max(0, list(m).length - (v.most - 1)));
-  m.list = [...kept, { x, y, left: withCharms("duration", v.time), next: 0.15, flash: 0, face: hero.face }];
+  m.list = [...kept, { x, y, left: withBuild("duration", v.time), next: 0.15, flash: 0, face: hero.face }];
 }
 
 function tend(m: SkillMemory, dt: number): void {
@@ -66,7 +66,7 @@ function tend(m: SkillMemory, dt: number): void {
     s.next -= dt;
     s.flash = Math.max(0, s.flash - dt);
     if (s.next <= 0) {
-      s.next = withCharms("cooldown", v.every);
+      s.next = withBuild("cooldown", v.every);
       thrust(s);
     }
     if (s.left <= 0) fade(s);

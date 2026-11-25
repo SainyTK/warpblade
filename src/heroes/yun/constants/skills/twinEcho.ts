@@ -32,6 +32,7 @@ export const TWIN_ECHO: SkillDef = {
   id: "yu_echo",
   name: "Twin Echo",
   kind: "attack",
+  element: "void",
   risk: "easy",
   button: "J",
   text: "Crane Wheel, the second cut, sends your spirit swords thrusting ahead.",

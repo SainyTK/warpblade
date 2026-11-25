@@ -29,6 +29,7 @@ export const SPINNING_THROW: SkillDef = {
   id: "br_spin",
   name: "Spinning Throw",
   kind: "movement",
+  element: "void",
   risk: "timed",
   button: "J",
   text: "The warp strike recharges sooner, hits harder and lands with a shock ring.",

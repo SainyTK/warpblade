@@ -37,6 +37,7 @@ export const GRACE: SkillDef = {
   id: "ce_grace",
   name: "Grace",
   kind: "movement",
+  element: "frost",
   risk: "timed",
   button: "L",
   text: "The warp's arrival pours the selected spell into the rapier and heals you.",

@@ -34,6 +34,7 @@ export const WILTING_CURSE: SkillDef = {
   id: "ce_curse",
   name: "Wilting Curse",
   kind: "dot",
+  element: "venom",
   risk: "precise",
   button: "auto",
   text: "A parry curses the attacker, and the curse eats at it.",

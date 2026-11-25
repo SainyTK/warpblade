@@ -20,6 +20,7 @@ export const SCRAP_HOUND: SkillDef = {
   id: "ca_hound",
   name: "Scrap Hound",
   kind: "summon",
+  element: "venom",
   risk: "easy",
   button: "auto",
   text: "A foe falling may call a clockwork hound that runs down and bites the nearest foe.",

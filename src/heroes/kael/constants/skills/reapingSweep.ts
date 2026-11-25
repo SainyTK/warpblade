@@ -30,6 +30,7 @@ export const REAPING_SWEEP: SkillDef = {
   id: "k_reap",
   name: "Reaping Sweep",
   kind: "attack",
+  element: "blaze",
   risk: "easy",
   button: "J",
   text: "The first slash sweeps and drags foes into the chain.",

@@ -28,6 +28,7 @@ export const KEEN_EDGE: SkillDef = {
   id: "k_keen",
   name: "Keen Edge",
   kind: "attack",
+  element: "storm",
   risk: "precise",
   button: "J",
   text: "The third slash of the chain is Keen: it hits far harder.",

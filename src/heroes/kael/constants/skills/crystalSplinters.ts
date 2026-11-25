@@ -22,6 +22,7 @@ export const CRYSTAL_SPLINTERS: SkillDef = {
   id: "k_splinters",
   name: "Crystal Splinters",
   kind: "dot",
+  element: "frost",
   risk: "easy",
   button: "auto",
   text: "Sword blows lodge crystal splinters that bleed. Weak at first, a crowd shredder late.",

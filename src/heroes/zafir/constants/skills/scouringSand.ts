@@ -28,6 +28,7 @@ export const SCOURING_SAND: SkillDef = {
   id: "za_scour",
   name: "Scouring Sand",
   kind: "dot",
+  element: "blaze",
   risk: "timed",
   button: "auto",
   text: "The sand ring grinds grit into foes that bleeds on its own; full of grit, they fuse to glass and shatter.",

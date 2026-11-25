@@ -2,7 +2,7 @@ import { createFloorRing } from "../../../../game/effects/floorRing";
 import { travelEnded } from "../../../../game/hero/travelEnd";
 import { objectMemory, rememberPerSeat } from "../../../../game/seatMemory";
 import { emitSkillEvent } from "../../../../game/skills/events";
-import { skillValues, withCharms } from "../../../../game/skills/query";
+import { skillValues, withBuild } from "../../../../game/skills/query";
 import { game, hero, progress } from "../../../../game/state";
 import { boxAhead, dust, shake } from "../../../../game/world";
 import type { Enemy } from "../../../../types/enemy";
@@ -52,8 +52,8 @@ function endRush(): void {
     game.fx.push(
       createDawnGround(
         hero.x + hero.face * 8,
-        withCharms("area", dawn.width),
-        withCharms("duration", dawn.time),
+        withBuild("area", dawn.width),
+        withBuild("duration", dawn.time),
         progress.stats.ap * dawn.burn,
       ),
     );

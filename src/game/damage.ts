@@ -7,10 +7,10 @@ import { sfx } from "../services/audio";
 import type { SourceId } from "../types/build";
 import type { Enemy } from "../types/enemy";
 import type { DamageTag } from "../types/game";
-import { buildStats } from "../utils/build";
 import { isHeroSource } from "../utils/sources";
 import { recordStageDamage } from "./adventure";
 import { addFlow, flowDamage } from "./build/flow";
+import { currentBuildStats } from "./build/stats";
 import { recordDamage } from "./damageLedger";
 import { createImpact } from "./effects/impact";
 import { launchEnemy } from "./enemies/airborne";
@@ -23,6 +23,7 @@ import { kit } from "./hero/kits";
 import { countHit } from "./hitCount";
 import { killEnemy } from "./kill";
 import { popNumber } from "./numbers";
+import { resonanceTaken, resonate } from "./resonance";
 import { emitSkillEvent } from "./skills/events";
 import { skillValues } from "./skills/query";
 import { explode } from "./spells/explosion";
@@ -51,6 +52,7 @@ export interface HitOptions {
   dot?: boolean;
   /** a hit that builds no Flow though it counts for the hero's own source (a summon's bite) */
   noFlow?: boolean;
+  proc?: number;
   /** what dealt the hit, for the end of run screen: the hero's own blows when not given, a skill's id for a hit the
    *  skill deals on its own (it builds no Flow) */
   source?: SourceId;
@@ -59,7 +61,7 @@ export interface HitOptions {
 export type HitResult = "hit" | "blocked";
 
 /** Might and Flow multiply every hit, whatever its source */
-const buildDamage = (): number => buildStats(progress.build).might * flowDamage();
+const buildDamage = (): number => currentBuildStats().might * flowDamage();
 
 /** a foe struck from the side it is not facing */
 export function isBehind(e: Enemy, fromX: number): boolean {
@@ -166,7 +168,7 @@ export function dealDamage(e: Enemy, base: number, o: HitOptions = {}): HitResul
     dmg *= 2;
     tag = "shatter";
   }
-  dmg *= buildDamage();
+  dmg *= buildDamage() * resonanceTaken(e);
   dmg = kindOf(e.type).takes?.(e, dmg, !o.dot && isHeroSource(source)) ?? dmg;
   const value = Math.max(1, Math.round(dmg));
   recordStageDamage(e, value);
@@ -213,6 +215,7 @@ export function dealDamage(e: Enemy, base: number, o: HitOptions = {}): HitResul
       keen: !!o.sureCrit,
     });
   }
+  if (!o.dot) resonate({ foe: e, damage: value, source, depth: o.proc ?? 0 });
   if (e.hp <= 0) killEnemy(e, source);
   return "hit";
 }

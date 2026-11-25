@@ -30,6 +30,7 @@ export const SPELLWARP: SkillDef = {
   id: "k_spellwarp",
   name: "Spellwarp",
   kind: "movement",
+  element: "void",
   risk: "timed",
   button: "L",
   text: "Warp Strike pours the selected spell into the sword, and spells are prepared faster.",
