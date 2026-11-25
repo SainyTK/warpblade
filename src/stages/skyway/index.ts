@@ -1,10 +1,11 @@
 import type { StageDef } from "../../types/campaign";
-import { skywayApproach, skywaySummit } from "./layout";
+import { skywayHazard } from "./hazard";
+import { brokenBridges, floatingIslands, roost } from "./layout";
 
 export const skyway: StageDef = {
   id: "skyway",
   name: "Thunderhead Skyway",
-  mapBlurb: "Bridges of stone above the storm.",
+  mapBlurb: "Broken bridges above a sea of storm.",
   kind: "rift",
   era: "skyway",
   ground: "skyguard",
@@ -12,5 +13,6 @@ export const skyway: StageDef = {
   boss: "tempestroc",
   grantsArt: "galecall",
   weakTo: "rimefang",
-  areas: [skywayApproach, skywaySummit],
+  areas: [brokenBridges, floatingIslands, roost],
+  hazard: skywayHazard,
 };
