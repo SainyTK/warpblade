@@ -47,10 +47,14 @@ function weakNote(stage: StageDef): string {
 }
 
 const PORTRAIT_BOX = 84;
+const PORTRAIT_WIDE = 190;
+const PORTRAIT_MOST = 3;
+const PORTRAIT_STEP = 0.5;
 
 function fitPortrait(img: HTMLImageElement): void {
   const tall = img.naturalHeight;
-  const scale = tall * 2 <= PORTRAIT_BOX ? 2 : tall <= PORTRAIT_BOX ? 1 : PORTRAIT_BOX / tall;
+  const fit = Math.min(PORTRAIT_BOX / tall, PORTRAIT_WIDE / img.naturalWidth, PORTRAIT_MOST);
+  const scale = Math.max(PORTRAIT_STEP, Math.floor(fit / PORTRAIT_STEP) * PORTRAIT_STEP);
   img.style.width = `${img.naturalWidth * scale}px`;
   img.style.height = `${tall * scale}px`;
 }
