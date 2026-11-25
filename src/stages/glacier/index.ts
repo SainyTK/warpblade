@@ -1,5 +1,6 @@
 import type { StageDef } from "../../types/campaign";
-import { glacierApproach, glacierSummit } from "./layout";
+import { glacierHazard } from "./hazard";
+import { frozenCorridor, icicleCavern, lynxDen } from "./layout";
 
 export const glacier: StageDef = {
   id: "glacier",
@@ -12,5 +13,6 @@ export const glacier: StageDef = {
   boss: "rimeclaw",
   grantsArt: "rimefang",
   weakTo: "forgeflare",
-  areas: [glacierApproach, glacierSummit],
+  areas: [frozenCorridor, icicleCavern, lynxDen],
+  hazard: glacierHazard,
 };

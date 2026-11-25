@@ -1,13 +1,13 @@
 import type { EnemyKind } from "../../../game/enemies/kinds/kind";
-import { husk } from "../../../game/enemies/kinds/night";
-import { oakheart } from "../../../game/enemies/kinds/oakheart";
-import { sprite } from "../../../game/enemies/kinds/sprite";
-import { stalker } from "../../../game/enemies/kinds/stalker";
 import type { StageFoeType } from "../../../types/enemy";
+import { cryomancer } from "./cryomancer/kind";
+import { rimeclaw } from "./rimeclaw/kind";
+import { rimehound } from "./rimehound/kind";
+import { shardling } from "./shardling/kind";
 
 export const GLACIER_KINDS = {
-  rimehound: stalker,
-  shardling: sprite,
-  cryomancer: husk,
-  rimeclaw: oakheart,
+  rimehound,
+  shardling,
+  cryomancer,
+  rimeclaw,
 } satisfies Partial<Record<StageFoeType, EnemyKind>>;
