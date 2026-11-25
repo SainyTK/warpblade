@@ -74,7 +74,7 @@ export function updateShardling(e: Enemy, dt: number, ts: number): void {
       Object.assign(e, {
         state: "drift",
         st: 0,
-        cd: rng.range(1.5, 2.5) * scale.cooldown,
+        cd: rng.range(2, 3.2) * scale.cooldown,
         side: rng.chance(0.5) ? 1 : -1,
       });
   }

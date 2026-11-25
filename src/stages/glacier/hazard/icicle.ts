@@ -5,13 +5,14 @@ import { sfx } from "../../../services/audio";
 import { PK } from "../../../types/particle";
 import { GLACIER as G } from "../colors";
 
-export const ICICLE = { length: 20, half: 4.2, gravity: 760, shake: 0.7, hitHalf: 3 } as const;
+export const ICICLE = { length: 26, half: 5.4, gravity: 760, shake: 0.7, hitHalf: 3 } as const;
 
 export function drawIcicle(x: number, top: number, grown: number, tremble: number): void {
   if (grown <= 0) return;
   const len = ICICLE.length * grown;
   const half = ICICLE.half * Math.min(1, grown * 1.4);
   place(x + tremble, top);
+  glow(0, len * 0.5, 12, G.ice[5], 0.18 * grown);
   polygon(
     [
       [-half, 0],

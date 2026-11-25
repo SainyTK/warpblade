@@ -6,8 +6,8 @@ import { clamp, smooth } from "../../../utils/math";
 import { GLACIER as G } from "../colors";
 import { SLICK_STRIPS } from "./spots";
 
-const GRIP = 0.1;
-const SHEET = 2;
+const GRIP = 0.05;
+const SHEET = 4;
 const FORM = 0.35;
 
 interface Patch {
@@ -58,24 +58,25 @@ export function updateSlick(dt: number): void {
 
 function sheet(x0: number, x1: number, t: number, strength: number): void {
   const width = x1 - x0;
-  shade(x0, GROUND - 0.5, x1, GROUND + SHEET, (x, y, out) => {
+  shade(x0, GROUND - 1, x1, GROUND + SHEET, (x, y, out) => {
     const u = x - x0;
     const v = y - GROUND;
     const edge = Math.min(u, width - u);
     if (edge < 0 || edge < (1 - strength) * width * 0.5) return;
-    const shine = (((x * 0.7 - y * 2 - t * 9) % 14) + 14) % 14;
-    if (v < 0) {
-      out.c = edge > 2 ? G.ice[7] : G.ice[6];
-      return;
-    }
-    out.c = shine < 1.4 ? G.glint : v < 1 ? G.ice[6] : G.ice[4];
-    out.a = edge < 1.5 ? 0.6 : 1;
+    if (v < -0.5 && edge < 1.5) return;
+    const shine = (((x * 0.8 - y * 2.5 - t * 12) % 16) + 16) % 16;
+    if (v < 0) out.c = G.ice[6];
+    else if (shine < 1.2) out.c = G.glint;
+    else if (shine < 2.6) out.c = G.ice[3];
+    else if (v < 1) out.c = G.ice[5];
+    else if (v > SHEET - 0.6) out.c = G.ice[2];
+    else out.c = G.ice[4];
   });
-  for (let i = 0; i < Math.floor(width / 12); i++) {
+  for (let i = 0; i < Math.floor(width / 10); i++) {
     const at = (t * 0.6 + i * 0.37) % 1;
-    fleck(x0 + ((i * 12 + 5) % width), GROUND - 0.5, G.glint, Math.sin(at * Math.PI) * strength);
+    fleck(x0 + ((i * 10 + 5) % width), GROUND - 1.5, G.glint, Math.sin(at * Math.PI) * strength);
   }
-  glow(x0 + width / 2, GROUND, width * 0.35, G.ice[6], 0.08 * strength);
+  glow(x0 + width / 2, GROUND, width * 0.4, G.ice[6], 0.16 * strength);
 }
 
 export function drawSlick(cameraX: number, t: number): void {
