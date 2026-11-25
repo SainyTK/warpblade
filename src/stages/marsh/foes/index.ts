@@ -1,7 +1,7 @@
 import type { EnemyKind } from "../../../game/enemies/kinds/kind";
-import { mire } from "../../../game/enemies/kinds/mire";
 import type { StageFoeType } from "../../../types/enemy";
+import { bogleech } from "./bogleech";
 
 export const MARSH_KINDS = {
-  bogleech: mire,
+  bogleech,
 } satisfies Partial<Record<StageFoeType, EnemyKind>>;

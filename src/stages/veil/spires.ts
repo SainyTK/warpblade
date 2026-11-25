@@ -1,8 +1,8 @@
 import type { Approach } from "../../types/campaign";
 import { boss, flyer, ledge, site, walker } from "../geometry";
 
-export const veil: Approach = {
-  rise: 0,
+export const spires: Approach = {
+  rise: 2,
   room: boss("warden"),
   parSeconds: 95,
   length: 866,
@@ -38,6 +38,7 @@ export const veil: Approach = {
     flyer(650, 56),
     flyer(724, 33),
     walker(737, true),
+    walker(780, false, "riftknight"),
     flyer(806, 83, "wisp"),
     walker(838),
   ],

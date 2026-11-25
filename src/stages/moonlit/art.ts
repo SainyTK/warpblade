@@ -1,4 +1,8 @@
+import { ignite } from "../../game/enemies/burn";
 import type { ArtDef } from "../../types/art";
+import { drawGloamImpact } from "./artLook";
+
+const BURN = { base: 1.5, perLevel: 0.5 } as const;
 
 export const gloamlantern: ArtDef = {
   id: "gloamlantern",
@@ -9,7 +13,7 @@ export const gloamlantern: ArtDef = {
   look: "flame",
   levels: [
     {
-      cardText: "A ghost flame that bursts on the foe ahead.",
+      cardText: "A ghost lantern drops and burns the foe ahead.",
       damageTimesAttack: 4.0,
       radius: 22,
       range: 130,
@@ -18,7 +22,7 @@ export const gloamlantern: ArtDef = {
       freeze: 0,
     },
     {
-      cardText: "More damage and a wider burst.",
+      cardText: "More damage, a wider blaze.",
       damageTimesAttack: 5.0,
       radius: 25,
       range: 140,
@@ -26,9 +30,9 @@ export const gloamlantern: ArtDef = {
       delay: 0.12,
       freeze: 0,
     },
-    { cardText: "More damage.", damageTimesAttack: 6.4, radius: 28, range: 150, speed: null, delay: 0.12, freeze: 0 },
+    { cardText: "Burns longer.", damageTimesAttack: 6.4, radius: 28, range: 150, speed: null, delay: 0.12, freeze: 0 },
     {
-      cardText: "A wider burst and more damage.",
+      cardText: "A wider blaze, longer burn.",
       damageTimesAttack: 8.0,
       radius: 32,
       range: 160,
@@ -37,7 +41,7 @@ export const gloamlantern: ArtDef = {
       freeze: 0,
     },
     {
-      cardText: "Its full power.",
+      cardText: "Full flame: the longest burn.",
       damageTimesAttack: 11.0,
       radius: 38,
       range: 175,
@@ -46,4 +50,8 @@ export const gloamlantern: ArtDef = {
       freeze: 0,
     },
   ],
+  status(foe, level) {
+    ignite(foe, BURN.base + BURN.perLevel * level);
+  },
+  drawImpact: drawGloamImpact,
 };

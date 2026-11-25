@@ -1,5 +1,10 @@
 import type { StageDef } from "../../types/campaign";
-import { nightfall } from "./layout";
+import { graveRow } from "./graveRow";
+import { createMoonlitHazard } from "./hazard";
+import { lanternWalk } from "./lanternWalk";
+import { nightfall } from "./nightfall";
+
+const AREAS = [graveRow, lanternWalk, nightfall] as const;
 
 export const moonlit: StageDef = {
   id: "moonlit",
@@ -12,5 +17,6 @@ export const moonlit: StageDef = {
   boss: "shepherd",
   grantsArt: "gloamlantern",
   weakTo: "inkwave",
-  areas: [nightfall],
+  areas: AREAS,
+  hazard: createMoonlitHazard(AREAS),
 };

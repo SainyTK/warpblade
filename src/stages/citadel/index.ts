@@ -1,4 +1,5 @@
 import type { StageDef } from "../../types/campaign";
+import { breach } from "./breach";
 import { depths } from "./depths";
 import { lastWatch } from "./last-watch";
 import { threshold } from "./threshold";
@@ -12,5 +13,5 @@ export const citadel: StageDef = {
   ground: "stalker",
   flyer: "eye",
   boss: "unblinking",
-  areas: [threshold, depths, lastWatch],
+  areas: [threshold, breach, depths, lastWatch],
 };

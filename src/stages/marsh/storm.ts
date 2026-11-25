@@ -1,11 +1,11 @@
 import type { Approach } from "../../types/campaign";
-import { boss, flyer, ledge, site, walker } from "../geometry";
+import { boss, flyer, ledge, pit, site, walker } from "../geometry";
 
 export const storm: Approach = {
-  rise: 0,
+  rise: 2,
   room: boss("boghulk"),
   parSeconds: 66,
-  length: 790,
+  length: 880,
   slabs: [
     ledge(118, 173, 117),
     ledge(195, 260, 87),
@@ -17,6 +17,8 @@ export const storm: Approach = {
     ledge(589, 647, 102),
     ledge(638, 702, 62),
     ledge(715, 754, 108),
+    ledge(772, 830, 78),
+    ledge(806, 862, 120),
   ],
   walls: [ledge(192, 224, 129), ledge(438, 477, 122), ledge(664, 705, 125)],
   arenaSlabs: [ledge(45, 107, 121), ledge(132, 190, 82), ledge(224, 276, 119)],
@@ -37,7 +39,10 @@ export const storm: Approach = {
     flyer(676, 48),
     walker(735, true),
     walker(775),
+    walker(830, false, "bogleech"),
+    flyer(850, 58),
   ],
   mentorSites: [site(142, 117), site(344, 60)],
   spikes: [ledge(235, 270), ledge(601, 630, 102)],
+  pits: [pit(788, 810)],
 };

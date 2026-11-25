@@ -1,5 +1,10 @@
 import type { StageDef } from "../../types/campaign";
-import { veil as veilLayout } from "./layout";
+import { brokenStair } from "./brokenStair";
+import { createVeilHazard } from "./hazard";
+import { shardSteps } from "./shardSteps";
+import { spires } from "./spires";
+
+const AREAS = [shardSteps, brokenStair, spires] as const;
 
 export const veil: StageDef = {
   id: "veil",
@@ -12,5 +17,6 @@ export const veil: StageDef = {
   boss: "warden",
   grantsArt: "riftlance",
   weakTo: "gloamlantern",
-  areas: [veilLayout],
+  areas: AREAS,
+  hazard: createVeilHazard(AREAS),
 };

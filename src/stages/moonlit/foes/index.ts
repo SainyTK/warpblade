@@ -1,7 +1,7 @@
 import type { EnemyKind } from "../../../game/enemies/kinds/kind";
-import { wisp } from "../../../game/enemies/kinds/night";
 import type { StageFoeType } from "../../../types/enemy";
+import { lanternshade } from "./lanternshade";
 
 export const MOONLIT_KINDS = {
-  lanternshade: wisp,
+  lanternshade,
 } satisfies Partial<Record<StageFoeType, EnemyKind>>;
