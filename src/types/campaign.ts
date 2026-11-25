@@ -72,4 +72,5 @@ export interface StageDef {
   weakTo?: ArtId;
   areas: readonly [Approach, ...Approach[]];
   hazard?: StageHazard;
+  foeDamage?: number;
 }

@@ -11,5 +11,6 @@ export const prologue: StageDef = {
   ground: "thornback",
   flyer: "moth",
   boss: "oakheart",
+  foeDamage: 0.6,
   areas: [firstSteps, sunlit],
 };
