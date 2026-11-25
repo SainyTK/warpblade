@@ -115,3 +115,46 @@
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
+@media (max-height: 520px) {
+  .stage-map {
+    padding: 8px 12px;
+  }
+  .stage-map[open] {
+    gap: 8px;
+  }
+  .stage-map-head h2 {
+    font-size: 20px;
+  }
+  .stage-map-sub {
+    font-size: 12px;
+  }
+  .stage-map-grid {
+    grid-template-columns: repeat(4, minmax(0, 200px));
+    gap: 8px;
+  }
+  .stage-card {
+    grid-template-rows: 40px auto auto 12px;
+    row-gap: 2px;
+    padding: 6px 6px 8px;
+  }
+  .stage-card-boss {
+    max-height: 40px;
+    object-fit: contain;
+  }
+  .stage-card-name {
+    margin-top: 2px;
+    font-size: 11px;
+  }
+  .stage-card-foe {
+    font-size: 11px;
+  }
+  .stage-card-art {
+    display: none;
+  }
+  .stage-card-note {
+    font-size: 10px;
+  }
+  .stage-map .level-up-hint {
+    display: none;
+  }
+}
