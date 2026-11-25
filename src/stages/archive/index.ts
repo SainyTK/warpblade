@@ -1,5 +1,6 @@
 import type { StageDef } from "../../types/campaign";
-import { archiveApproach, archiveSummit } from "./layout";
+import { inkTides } from "./hazard";
+import { readingHalls, sunkenRotunda, theStacks } from "./layout";
 
 export const archive: StageDef = {
   id: "archive",
@@ -12,5 +13,6 @@ export const archive: StageDef = {
   boss: "pagewyrm",
   grantsArt: "inkwave",
   weakTo: "galecall",
-  areas: [archiveApproach, archiveSummit],
+  areas: [readingHalls, theStacks, sunkenRotunda],
+  hazard: inkTides,
 };
