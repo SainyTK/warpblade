@@ -147,7 +147,7 @@ export function overPit(x: number): boolean {
   return false;
 }
 
-const STAGE_COUNT = RIFT_STAGES.length + 2;
+const stageCount = (): number => RIFT_STAGES.length + 2;
 
 export function stageProgress() {
   const route = trail?.route;
@@ -155,11 +155,11 @@ export function stageProgress() {
   const done = trail?.cleared.length ?? 0;
   return {
     bossesDefeated: trail?.bossesDefeated ?? 0,
-    bossesTotal: STAGE_COUNT,
+    bossesTotal: stageCount(),
     foesDefeated: trail?.foesDefeated ?? 0,
     foesTotal: trail?.foesTotal ?? 1,
     damageCoverage: clamp((trail?.damage ?? 0) / (trail?.foesTotal ?? 1)),
-    distance: clamp((done + through) / STAGE_COUNT),
+    distance: clamp((done + through) / stageCount()),
     parSeconds: trail?.parTotal ?? 0,
   };
 }

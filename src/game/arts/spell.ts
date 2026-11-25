@@ -9,13 +9,11 @@ import { staggerFoe } from "../enemies/stagger";
 const WEAKNESS = { damage: 3, stagger: 0.5 } as const;
 const cache = new Map<string, DrillSpell>();
 
-const weakBosses = new Map<ArtId, string>(
-  Object.values(STAGES).flatMap((stage) => (stage.weakTo ? [[stage.weakTo, stage.boss] as const] : [])),
-);
+const weakBoss = (id: ArtId): string | undefined => Object.values(STAGES).find((stage) => stage.weakTo === id)?.boss;
 
 function weakness(id: ArtId) {
   return (foe: Enemy): number => {
-    if (weakBosses.get(id) !== foe.type) return 1;
+    if (weakBoss(id) !== foe.type) return 1;
     staggerFoe(foe, WEAKNESS.stagger);
     return WEAKNESS.damage;
   };
