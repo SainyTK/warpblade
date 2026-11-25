@@ -1,0 +1,65 @@
+import type { Approach } from "../../types/campaign";
+import { boss, flyer, ledge, pit, site, surge, walker } from "../geometry";
+
+export const glacierApproach: Approach = {
+  rise: 0,
+  room: surge(36, 9),
+  parSeconds: 70,
+  length: 742,
+  slabs: [
+    ledge(105, 163, 123),
+    ledge(166, 225, 83),
+    ledge(252, 307, 100),
+    ledge(369, 419, 77),
+    ledge(518, 566, 124),
+    ledge(635, 693, 117),
+  ],
+  walls: [ledge(207, 250, 116), ledge(479, 510, 123)],
+  arenaSlabs: [ledge(55, 112, 111), ledge(215, 273, 116)],
+  patrol: [
+    walker(116),
+    flyer(151, 106),
+    walker(193),
+    flyer(266, 83),
+    walker(281, false, "cryomancer"),
+    flyer(405, 62),
+    walker(455),
+    flyer(593, 74),
+    walker(621, true),
+    walker(713),
+  ],
+  mentorSites: [site(190, 83), site(335)],
+  spikes: [],
+  pits: [pit(320, 352)],
+};
+
+export const glacierSummit: Approach = {
+  rise: 1,
+  room: boss("rimeclaw"),
+  parSeconds: 90,
+  length: 820,
+  slabs: [
+    ledge(110, 170, 118),
+    ledge(190, 250, 86),
+    ledge(300, 360, 60),
+    ledge(420, 480, 96),
+    ledge(560, 620, 112),
+    ledge(660, 720, 80),
+  ],
+  walls: [ledge(260, 290, 120), ledge(520, 548, 110)],
+  arenaSlabs: [ledge(55, 112, 111), ledge(215, 273, 116)],
+  patrol: [
+    walker(130),
+    flyer(200, 70),
+    walker(240, false, "cryomancer"),
+    flyer(330, 40),
+    walker(400),
+    flyer(470, 80),
+    walker(600, false, "cryomancer"),
+    flyer(690, 60),
+    walker(760, true),
+  ],
+  mentorSites: [site(220, 86), site(450)],
+  spikes: [],
+  pits: [pit(372, 404), pit(630, 652)],
+};

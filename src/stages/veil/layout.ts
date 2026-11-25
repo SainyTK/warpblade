@@ -1,11 +1,10 @@
-import { BOSSES } from "../../../constants/waves";
-import { type Approach, flyer, ledge, site, walker } from "./geometry";
+import type { Approach } from "../../types/campaign";
+import { boss, flyer, ledge, site, walker } from "../geometry";
 
 export const veil: Approach = {
-  tier: 20,
-  threat: 7,
-  boss: BOSSES[20],
-  par: 95,
+  rise: 0,
+  room: boss("warden"),
+  parSeconds: 95,
   length: 866,
   slabs: [
     ledge(99, 157, 119),
@@ -21,7 +20,7 @@ export const veil: Approach = {
     ledge(765, 826, 100),
   ],
   walls: [ledge(165, 198, 99), ledge(411, 453, 122), ledge(666, 705, 125)],
-  arena: [ledge(52, 115, 113), ledge(211, 274, 113)],
+  arenaSlabs: [ledge(52, 115, 113), ledge(211, 274, 113)],
   patrol: [
     walker(114, false, "husk"),
     flyer(145, 101, "wisp"),

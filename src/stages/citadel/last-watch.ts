@@ -1,11 +1,10 @@
-import { FINALE, STAGE_WAVES } from "../../../constants/waves";
-import { type Approach, flyer, ledge, site, walker } from "./geometry";
+import type { Approach } from "../../types/campaign";
+import { boss, flyer, ledge, site, walker } from "../geometry";
 
 export const lastWatch: Approach = {
-  tier: STAGE_WAVES,
-  threat: 13,
-  boss: FINALE.foe,
-  par: 130,
+  rise: 4,
+  room: boss("unblinking"),
+  parSeconds: 130,
   length: 997,
   slabs: [
     ledge(107, 161, 121),
@@ -26,7 +25,7 @@ export const lastWatch: Approach = {
     ledge(914, 965, 91),
   ],
   walls: [ledge(182, 211, 126), ledge(488, 531, 74), ledge(805, 846, 125)],
-  arena: [],
+  arenaSlabs: [],
   patrol: [
     walker(113),
     flyer(149, 104),

@@ -1,3 +1,4 @@
+import { knownSpells } from "../../game/arts";
 import { emitSkillEvent } from "../../game/skills/events";
 import { sfx } from "../../services/audio";
 import type { DrillInput, DrillProfile, Fighter, Session, SpellBook } from "../../types/drill";
@@ -31,7 +32,7 @@ export function tickSpellRelease(h: Fighter, dt: number): void {
 
 function cycle(session: Session): void {
   const book = session.fighter.spellBook;
-  const known = session.profile.known();
+  const known = knownSpells(session.profile);
   if (known.length < 2) {
     return;
   }
@@ -44,6 +45,7 @@ function cycle(session: Session): void {
 export function readSpellBook(session: Session, input: DrillInput): void {
   const h = session.fighter;
   const book = h.spellBook;
+  book.selected = knownSpells(session.profile).find((spell) => spell.id === book.selected.id) ?? book.selected;
   if (input.cycle && !book.preparation) {
     cycle(session);
   }

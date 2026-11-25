@@ -45,7 +45,7 @@ export function bindKeyboard(): void {
       if (!ev.repeat) pauseGame();
       return;
     }
-    if (game.mode === "pick" || game.mode === "chest") return;
+    if (game.mode === "pick" || game.mode === "chest" || game.mode === "map") return;
     ev.preventDefault();
     if (ev.repeat) return;
     down.set(ev.code, action);

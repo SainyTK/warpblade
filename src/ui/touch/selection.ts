@@ -1,4 +1,5 @@
 import { drillSession, usesDrill } from "../../drill";
+import { knownSpells } from "../../game/arts";
 import { selectedSlot } from "../../game/hero/abilityBar";
 import { heroCode, kit } from "../../game/hero/kits";
 import { character } from "../../game/state";
@@ -17,7 +18,7 @@ export function touchSelection(
 ): TouchSelection {
   if (profile) {
     const selected = (usesDrill() ? drillSession()?.fighter.spellBook.selected : undefined) ?? profile.spells[0];
-    return { hero: character.id, ability: selected.id, known: profile.known().map((spell) => spell.id) };
+    return { hero: character.id, ability: selected.id, known: knownSpells(profile).map((spell) => spell.id) };
   }
   return {
     hero: character.id,

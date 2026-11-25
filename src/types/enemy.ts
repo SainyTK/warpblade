@@ -16,7 +16,33 @@ export type EnemyType =
   | "eye"
   | "maw"
   | "sovereign"
-  | "unblinking";
+  | "unblinking"
+  | StageFoeType;
+
+export type StageFoeType =
+  | "bogleech"
+  | "lanternshade"
+  | "riftknight"
+  | "slagling"
+  | "emberbat"
+  | "forgeguard"
+  | "cindersmith"
+  | "rimehound"
+  | "shardling"
+  | "cryomancer"
+  | "rimeclaw"
+  | "galehawk"
+  | "sparkjelly"
+  | "skyguard"
+  | "tempestroc"
+  | "rotcrawler"
+  | "sporepuff"
+  | "spitbloom"
+  | "sporeheart"
+  | "inkling"
+  | "pagewing"
+  | "tomeguard"
+  | "pagewyrm";
 export type EnemyState =
   | "drift"
   | "walk"

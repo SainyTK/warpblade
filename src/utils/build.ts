@@ -7,6 +7,7 @@ import type { CharacterDef } from "../types/character";
 export function freshBuild(extra: Partial<Record<PickToolKey, number>> = {}): Build {
   return {
     skills: {},
+    arts: {},
     charms: {},
     evolved: [],
     banished: [],

@@ -19,7 +19,8 @@ function damageArea(session: Session, { spell, x, y }: ElementImpact): void {
     if (x + radius < left || x - radius > right || centerY + 6 < top || centerY - 6 > bottom) {
       continue;
     }
-    if (strikeEnemy(session.profile, enemy, spell.damage * spellDamage, x, "abilities")) {
+    const scale = spell.damageScale?.(enemy) ?? 1;
+    if (strikeEnemy(session.profile, enemy, spell.damage * spellDamage * scale, x, "abilities")) {
       freezeEnemy(enemy, spell.freeze);
       spell.status?.(enemy);
       session.profile.hooks?.spellHit?.(enemy, spell);
@@ -30,6 +31,7 @@ function damageArea(session: Session, { spell, x, y }: ElementImpact): void {
 function impact(session: Session, spell: DrillSpell, x: number, y: number, face: Side): void {
   const blast: ElementImpact = { spell, x, y, face, age: 0, fromSword: false };
   session.elementImpacts.push(blast);
+  spell.burst?.(x, y);
   if (spell.speed !== null) {
     damageArea(session, blast);
   }

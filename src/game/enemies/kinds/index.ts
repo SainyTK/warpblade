@@ -1,3 +1,4 @@
+import { STAGE_KINDS } from "../../../stages/foeKinds";
 import type { EnemyType } from "../../../types/enemy";
 import { boghulk } from "./boghulk";
 import { eye } from "./eye";
@@ -35,6 +36,7 @@ export const KINDS: Record<EnemyType, EnemyKind> = {
   maw,
   sovereign,
   unblinking,
+  ...STAGE_KINDS,
 };
 
 export const kindOf = (type: EnemyType): EnemyKind => KINDS[type];

@@ -1,11 +1,10 @@
-import { BOSSES, STAGE_WAVES } from "../../../constants/waves";
-import { type Approach, flyer, ledge, site, walker } from "./geometry";
+import type { Approach } from "../../types/campaign";
+import { boss, flyer, ledge, site, walker } from "../geometry";
 
 export const depths: Approach = {
-  tier: STAGE_WAVES,
-  threat: 11,
-  boss: BOSSES[STAGE_WAVES],
-  par: 108,
+  rise: 2,
+  room: boss("sovereign"),
+  parSeconds: 108,
   length: 947,
   slabs: [
     ledge(106, 166, 119),
@@ -24,7 +23,7 @@ export const depths: Approach = {
     ledge(857, 911, 121),
   ],
   walls: [ledge(166, 191, 132), ledge(478, 522, 108), ledge(765, 799, 127)],
-  arena: [ledge(83, 143, 110), ledge(183, 241, 104)],
+  arenaSlabs: [ledge(83, 143, 110), ledge(183, 241, 104)],
   patrol: [
     walker(109),
     flyer(148, 102),

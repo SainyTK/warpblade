@@ -1,11 +1,10 @@
-import { eraOf } from "../../../utils/eras";
-import { type Approach, flyer, ledge, site, walker } from "./geometry";
+import type { Approach } from "../../types/campaign";
+import { boss, flyer, ledge, site, walker } from "../geometry";
 
 export const storm: Approach = {
-  tier: 10,
-  threat: 3,
-  boss: eraOf(10).mini,
-  par: 66,
+  rise: 0,
+  room: boss("boghulk"),
+  parSeconds: 66,
   length: 790,
   slabs: [
     ledge(118, 173, 117),
@@ -20,7 +19,7 @@ export const storm: Approach = {
     ledge(715, 754, 108),
   ],
   walls: [ledge(192, 224, 129), ledge(438, 477, 122), ledge(664, 705, 125)],
-  arena: [ledge(45, 107, 121), ledge(132, 190, 82), ledge(224, 276, 119)],
+  arenaSlabs: [ledge(45, 107, 121), ledge(132, 190, 82), ledge(224, 276, 119)],
   patrol: [
     walker(105),
     flyer(156, 100),

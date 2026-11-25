@@ -50,6 +50,8 @@ export interface DrillSpell {
   look: DrillSpellLook;
   freeze: number;
   status?(foe: Enemy): void;
+  damageScale?(foe: Enemy): number;
+  burst?(x: number, y: number): void;
   art?: EffectSlot;
   drawBolt?(bolt: ElementProjectile): void;
   drawImpact?(impact: ElementImpact): void;

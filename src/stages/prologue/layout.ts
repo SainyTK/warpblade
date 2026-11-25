@@ -1,11 +1,10 @@
-import { eraOf } from "../../../utils/eras";
-import { type Approach, flyer, ledge, site, walker } from "./geometry";
+import type { Approach } from "../../types/campaign";
+import { boss, flyer, ledge, site, walker } from "../geometry";
 
 export const sunlit: Approach = {
-  tier: 5,
-  threat: 1,
-  boss: eraOf(5).mini,
-  par: 54,
+  rise: 0,
+  room: boss("oakheart"),
+  parSeconds: 54,
   length: 742,
   slabs: [
     ledge(105, 163, 123),
@@ -19,7 +18,7 @@ export const sunlit: Approach = {
     ledge(635, 693, 117),
   ],
   walls: [ledge(207, 250, 116), ledge(479, 510, 123)],
-  arena: [ledge(55, 112, 111), ledge(215, 273, 116)],
+  arenaSlabs: [ledge(55, 112, 111), ledge(215, 273, 116)],
   patrol: [
     walker(116),
     flyer(151, 106),

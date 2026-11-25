@@ -1,11 +1,10 @@
-import { eraOf } from "../../../utils/eras";
-import { type Approach, flyer, ledge, site, walker } from "./geometry";
+import type { Approach } from "../../types/campaign";
+import { boss, flyer, ledge, site, walker } from "../geometry";
 
 export const nightfall: Approach = {
-  tier: 15,
-  threat: 5,
-  boss: eraOf(15).mini,
-  par: 73,
+  rise: 0,
+  room: boss("shepherd"),
+  parSeconds: 73,
   length: 824,
   slabs: [
     ledge(113, 176, 120),
@@ -21,7 +20,7 @@ export const nightfall: Approach = {
     ledge(718, 789, 113),
   ],
   walls: [ledge(266, 310, 100), ledge(624, 673, 129)],
-  arena: [ledge(44, 101, 112), ledge(131, 186, 77), ledge(217, 268, 116)],
+  arenaSlabs: [ledge(44, 101, 112), ledge(131, 186, 77), ledge(217, 268, 116)],
   patrol: [
     walker(105),
     walker(151),

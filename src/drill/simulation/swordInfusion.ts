@@ -22,7 +22,9 @@ export function hitWithSword(
 ): boolean {
   const { fighter, profile, modifiers } = session;
   const spell = fighter.swordInfusion?.spell ?? null;
-  const bonus = spell ? Math.ceil((spell.damage * modifiers.spellDamage) / INFUSION_HITS) : 0;
+  const bonus = spell
+    ? Math.ceil(((spell.damage * modifiers.spellDamage) / INFUSION_HITS) * (spell.damageScale?.(enemy) ?? 1))
+    : 0;
   if (!strikeEnemy(profile, enemy, damage + bonus, fighter.x, "attacks", finisher, finisher, keen)) {
     return false;
   }

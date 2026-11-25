@@ -1,8 +1,9 @@
 import { ENEMY_AIR, JUGGLE_LIMIT } from "../../constants/combat";
 import { ENEMIES } from "../../constants/enemies";
-import { GROUND } from "../../constants/stage";
+import { GROUND, H } from "../../constants/stage";
 import type { Enemy } from "../../types/enemy";
-import { clampStageX } from "../adventure";
+import { clampStageX, overPit } from "../adventure";
+import { killEnemy } from "../kill";
 import { dust, shake } from "../world";
 import { kindOf } from "./kinds";
 
@@ -28,7 +29,12 @@ export function updateAirborne(e: Enemy, dt: number): boolean {
     e.y = 14;
     e.vy = Math.max(e.vy, 0);
   }
-  const floor = flies ? GROUND - 8 : GROUND;
+  const floor = overPit(e.x) && !flies ? Infinity : flies ? GROUND - 8 : GROUND;
+  if (e.y > H + 30) {
+    e.hp = 0;
+    killEnemy(e, "attacks");
+    return true;
+  }
   if (e.y >= floor && e.vy > 0) {
     e.y = floor;
     if (e.vy > ENEMY_AIR.spike * 0.75) {

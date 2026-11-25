@@ -1,6 +1,6 @@
 import { SKY_FLASH } from "../constants/effectLook";
 import { beginFrame, composite, setCameraX, setShake } from "../engine/frame";
-import { stageCameraX } from "../game/adventure";
+import { drawStageHazardBack, drawStageHazardFront, stageCameraX } from "../game/adventure";
 import { drawChests } from "../game/build/chests";
 import { coop, eachHero } from "../game/coopHooks";
 import { shownKit } from "../game/hero/kits";
@@ -14,6 +14,7 @@ import { drawAmbientLight, drawMist, drawWeather, sceneFlash } from "./drawAmbie
 import { drawCoins } from "./drawCoins";
 import { drawMentor } from "./drawMentor";
 import { drawNumbers } from "./drawNumbers";
+import { drawPits } from "./drawPits";
 import { drawShadows } from "./drawShadows";
 import { drawSpikes } from "./drawSpikes";
 import { drawXpOrbs } from "./drawXpOrbs";
@@ -37,8 +38,10 @@ export function renderScene(out: Uint8ClampedArray): void {
   drawAmbientLight();
   setCameraX(cameraX);
   if (!arena) {
+    drawPits(cameraX, palette, game.t);
     drawAdventureTerrain(cameraX, game.t, palette);
     drawSpikes(cameraX, game.t);
+    drawStageHazardBack(cameraX, game.t);
   }
   const room = coop();
   for (const f of game.fx) {
@@ -64,6 +67,7 @@ export function renderScene(out: Uint8ClampedArray): void {
   drawPickups();
   drawCoins();
   drawXpOrbs();
+  if (!arena) drawStageHazardFront(cameraX, game.t);
   setCameraX(0);
   drawWeather();
   drawMist();

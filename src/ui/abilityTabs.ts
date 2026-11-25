@@ -1,4 +1,5 @@
 import { drillSession, usesDrill } from "../drill";
+import { knownSpells } from "../game/arts";
 import { selectedSlot } from "../game/hero/abilityBar";
 import { kit } from "../game/hero/kits";
 import { character, hero } from "../game/state";
@@ -48,25 +49,26 @@ let drillTabs: Array<{ spell: DrillSpell; el: HTMLElement; tab: ReturnType<typeo
 
 function updateDrillTabs(session: Session): void {
   const { profile, fighter } = session;
-  if (built.hero !== `drill:${character.id}`) {
-    const elements = profile.spells.map((spell) => tabEl(spell.name.toUpperCase()));
+  const known = knownSpells(profile);
+  const key = `drill:${character.id}:${known.map((spell) => `${spell.id}${spell.damage}`).join()}`;
+  if (built.hero !== key) {
+    const elements = known.map((spell) => tabEl(spell.name.toUpperCase()));
     reserve.replaceChildren(...elements.map((el) => el.cloneNode(true)));
     box.replaceChildren(...elements);
-    drillTabs = profile.spells.map((spell, i) => {
+    drillTabs = known.map((spell, i) => {
       const el = elements[i];
       el.style.setProperty("--tint", `#${spell.color.toString(16).padStart(6, "0")}`);
       return { spell, el, tab: createRechargeTab(el) };
     });
-    built = { hero: `drill:${character.id}`, tabs: [] };
+    built = { hero: key, tabs: [] };
   }
   const { selected, preparation } = fighter.spellBook;
-  const known = profile.known();
   for (const { spell, el, tab } of drillTabs) {
     const hidden = !known.includes(spell);
     if (el.hidden !== hidden) {
       el.hidden = hidden;
     }
-    const on = spell === selected;
+    const on = spell.id === selected.id;
     el.classList.toggle("on", on);
     tab.update(on && preparation && preparation.duration > 0 ? preparation.remaining / preparation.duration : 0);
   }

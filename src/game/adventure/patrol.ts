@@ -2,7 +2,7 @@ import { GROUND } from "../../constants/stage";
 import type { Enemy } from "../../types/enemy";
 import type { Platform } from "../../types/world";
 import { hero } from "../state";
-import { stageWalls, trail } from "./trail";
+import { stagePits, stageWalls, trail } from "./trail";
 
 const CLEARANCE = 8;
 const PERCH_HEIGHT = 64;
@@ -34,6 +34,9 @@ export function containPatrol(e: Enemy, previousX: number): void {
   let x = e.x;
   for (const wall of stageWalls()) {
     if (e.y > wall.y) x = wallLimit(wall, previousX, x);
+  }
+  if (e.y >= GROUND - 0.5) {
+    for (const gap of stagePits()) x = wallLimit(gap, previousX, x);
   }
   if (x === e.x) return;
   e.x = x;

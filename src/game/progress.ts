@@ -75,8 +75,16 @@ export function earnXp(amount: number): void {
 }
 
 /** a cleared wave: the game pauses on a pick for every point waiting, if any */
-export function openPicks(): void {
-  if (progress.picks > 0 && game.mode === "play") game.mode = "pick";
+let afterPicks: "play" | "map" = "play";
+
+export function openPicks(from: "play" | "map" = "play"): void {
+  if (progress.picks <= 0 || game.mode !== from) return;
+  afterPicks = from;
+  game.mode = "pick";
+}
+
+export function leavePicks(): void {
+  if (game.mode === "pick") game.mode = afterPicks;
 }
 
 /** recompute after something grew: a higher maximum also fills by what it adds */
@@ -97,7 +105,7 @@ function takeBoon(): void {
 /** one point is spent; the game plays on once none is left */
 function spendPick(): void {
   progress.picks = Math.max(0, progress.picks - 1);
-  if (!progress.picks && game.mode === "pick") game.mode = "play";
+  if (!progress.picks) leavePicks();
 }
 
 /** spend one point on a card */

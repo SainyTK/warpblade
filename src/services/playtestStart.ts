@@ -1,4 +1,6 @@
 export interface PlaytestStart {
+  stage: string | null;
+  cleared: number;
   section: number | null;
   wave: number | null;
   level: number;
@@ -15,8 +17,16 @@ export function readPlaytestStart(): PlaytestStart | null {
   const params = new URLSearchParams(location.search);
   const wave = positiveInt(params.get("wave"));
   const section = positiveInt(params.get("section"));
-  if (!wave && !section) return null;
-  return { section, wave, level: positiveInt(params.get("level")) ?? 1, build: params.get("build") };
+  const stage = params.get("stage");
+  if (!wave && !section && !stage) return null;
+  return {
+    stage,
+    cleared: positiveInt(params.get("cleared")) ?? 0,
+    section,
+    wave,
+    level: positiveInt(params.get("level")) ?? 1,
+    build: params.get("build"),
+  };
 }
 
 /** the job a dev build starts the run in with `?job=`, beside `?wave=` and `?level=`; null in production builds */

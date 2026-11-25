@@ -3,7 +3,7 @@ import { BOONS } from "../../constants/boons";
 import { stageRunId } from "../../game/adventure";
 import { cardView } from "../../game/build/cardView";
 import { clearPresses, releaseAll } from "../../game/input";
-import { answerPick } from "../../game/progress";
+import { answerPick, leavePicks } from "../../game/progress";
 import { character, game, progress, rng } from "../../game/state";
 import { sfx } from "../../services/audio";
 import type { Card } from "../../types/build";
@@ -127,7 +127,7 @@ function close(): void {
 
 function leaveMentor(): void {
   if (mentorRunId() === null || game.mode !== "pick") return;
-  game.mode = "play";
+  leavePicks();
   if (banishing) {
     banishing = false;
     showBuild();

@@ -1,3 +1,4 @@
+import type { ArtId } from "./campaign";
 /** charms: passives that multiply a stat for every source */
 export type CharmId =
   | "might"
@@ -60,6 +61,7 @@ export type PickToolKey = "rerolls" | "skips" | "banishes";
 export interface Build {
   /** held skills by id, at levels 1 to 8 */
   skills: Record<string, number>;
+  arts: Partial<Record<ArtId, number>>;
   charms: Partial<Record<CharmId, number>>;
   /** skills in their evolved form */
   evolved: string[];

@@ -1,3 +1,4 @@
+import { STAGE_FOE_DEFS } from "../stages/foeDefs";
 import type { EnemyRank, EnemyType } from "../types/enemy";
 
 export interface EnemyDef {
@@ -34,6 +35,7 @@ export const ENEMIES: Record<EnemyType, EnemyDef> = {
   // the boss of wave 30, and what comes after it
   sovereign: { rank: "boss", hp: 800, xp: 300, weight: 1, launchable: false, name: "Abyss Sovereign" },
   unblinking: { rank: "boss", hp: 90000, xp: 400, weight: 1, launchable: false, name: "The Unblinking" },
+  ...STAGE_FOE_DEFS,
 };
 
 /** contact and attack damage before wave scaling */

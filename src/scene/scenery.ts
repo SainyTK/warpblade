@@ -1,7 +1,7 @@
 import { FH, FN, FW } from "../constants/stage";
 import { STAGE_WAVES } from "../constants/waves";
 import { bayerAt } from "../engine/frame";
-import { isAdventure } from "../game/adventure";
+import { currentStage, isAdventure, stageAreaShare } from "../game/adventure";
 import { game } from "../game/state";
 import { menuContext } from "../ui/menu/menuState";
 import { eraOf, eraProgress } from "../utils/eras";
@@ -33,6 +33,11 @@ export function sceneWave(): number {
 const usesArena = (): boolean => menuContext() === "title" || !isAdventure();
 
 function lookFor(wave: number, arena: boolean): Omit<Look, "bg" | "layers" | "bodiless"> {
+  const stage = arena ? null : currentStage();
+  if (stage) {
+    const k = stageAreaShare();
+    return { key: `${stage.era}:${k}:${arena}`, def: SCENES[stage.era], k, arena };
+  }
   const era = eraOf(wave);
   const k = eraProgress(wave);
   return { key: `${era.id}:${k}:${arena}`, def: SCENES[era.id], k, arena };

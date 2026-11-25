@@ -1,11 +1,10 @@
-import { eraOf } from "../../../utils/eras";
-import { type Approach, flyer, ledge, site, walker } from "./geometry";
+import type { Approach } from "../../types/campaign";
+import { boss, flyer, ledge, site, walker } from "../geometry";
 
 export const threshold: Approach = {
-  tier: 25,
-  threat: 9,
-  boss: eraOf(25).mini,
-  par: 85,
+  rise: 0,
+  room: boss("maw"),
+  parSeconds: 85,
   length: 908,
   slabs: [
     ledge(105, 174, 119),
@@ -25,7 +24,7 @@ export const threshold: Approach = {
     ledge(804, 867, 108),
   ],
   walls: [ledge(236, 270, 80), ledge(605, 643, 130), ledge(751, 791, 117)],
-  arena: [ledge(44, 99, 113), ledge(223, 275, 113)],
+  arenaSlabs: [ledge(44, 99, 113), ledge(223, 275, 113)],
   patrol: [
     walker(109, false, "golem"),
     flyer(151, 104, "sprite"),

@@ -1,4 +1,10 @@
-import type { EnemyType } from "../types/enemy";
+import { STAGE_FOE_DEFS } from "../stages/foeDefs";
+import type { EnemyRank, EnemyType } from "../types/enemy";
+
+const RANK_COINS: Record<EnemyRank, number> = { minion: 2, mini: 10, boss: 25 };
+const STAGE_COINS = Object.fromEntries(
+  Object.entries(STAGE_FOE_DEFS).map(([type, def]) => [type, RANK_COINS[def.rank]]),
+) as Record<keyof typeof STAGE_FOE_DEFS, number>;
 
 /** coins each foe drops; the basis for these numbers is in docs/meta-progress.md */
 export const COIN_DROP: Record<EnemyType, number> = {
@@ -19,6 +25,7 @@ export const COIN_DROP: Record<EnemyType, number> = {
   maw: 9,
   sovereign: 40,
   unblinking: 60,
+  ...STAGE_COINS,
 };
 
 /**
