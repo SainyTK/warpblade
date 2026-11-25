@@ -13,9 +13,9 @@ export const SURGE = {
   opening: 0.2,
   heroGap: 48,
   eliteEvery: 18,
-  capPerThreat: 0.7,
+  capPerThreat: 0.8,
   mostCap: 30,
-  countPerThreat: 0.05,
+  countPerThreat: 0.02,
   reachableY: 100,
   stragglerSink: 18,
 } as const;

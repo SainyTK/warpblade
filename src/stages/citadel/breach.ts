@@ -22,7 +22,7 @@ const EVERY_ERA: readonly EnemyType[] = [
 
 export const breach: Approach = {
   rise: 1,
-  room: surge(60, 14, EVERY_ERA),
+  room: surge(45, 14, EVERY_ERA),
   parSeconds: 110,
   length: 1040,
   slabs: [
