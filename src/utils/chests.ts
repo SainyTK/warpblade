@@ -17,14 +17,7 @@ function upgradeCount(luck: number, rng: Rng, least: number): number {
  * What a chest gives: from `CHEST.evolveFromWave` it evolves a ready skill; otherwise it raises random held skills and
  * charms below their top level, one at a time, and heals fully when nothing can be raised.
  */
-export function rollChest(
-  c: CharacterDef,
-  b: Build,
-  wave: number,
-  luck: number,
-  rng: Rng,
-  least = 1,
-): ChestReward[] {
+export function rollChest(c: CharacterDef, b: Build, wave: number, luck: number, rng: Rng, least = 1): ChestReward[] {
   const ready = readyEvolutions(c, b);
   if (wave >= CHEST.evolveFromWave && ready.length) return [{ type: "evolve", id: rng.pick(ready) }];
   const skills: Record<string, number> = { ...b.skills };
