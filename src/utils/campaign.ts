@@ -11,3 +11,5 @@ export function openStages(riftStages: readonly StageId[], cleared: readonly Sta
   const left = riftStages.filter((id) => !cleared.includes(id));
   return left.length ? left : ["citadel"];
 }
+
+export const stageHpScale = (riftsCleared: number): number => CAMPAIGN_THREAT.hpPerRiftCleared ** riftsCleared;

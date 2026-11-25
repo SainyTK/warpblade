@@ -48,6 +48,8 @@ function sendFoe(surge: Surge, area: RouteArea): void {
     createRift(x, rift.riftY(y), rift.height, 0, () => {
       const enemy = makeEnemy(type, x, y, area.threat, STAGE_XP);
       enemy.power *= trail?.route.stage.foeDamage ?? 1;
+      enemy.max = Math.round(enemy.max * area.hpScale);
+      enemy.hp = enemy.max;
       if (elite) {
         Object.assign(enemy, { elite, max: Math.round(enemy.max * ELITE.hp), xp: Math.round(enemy.xp * ELITE.xp) });
         enemy.hp = enemy.max;

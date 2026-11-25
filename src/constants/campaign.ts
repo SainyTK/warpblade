@@ -1,8 +1,9 @@
 export const CAMPAIGN_THREAT = {
   prologue: 1,
   firstRift: 3,
-  perRiftCleared: 2.2,
-  citadel: 21,
+  perRiftCleared: 2.6,
+  citadel: 25,
+  hpPerRiftCleared: 1.14,
 } as const;
 
 export const PIT_FALL = { hpShare: 0.15, below: 40, invulnerable: 1.4 } as const;

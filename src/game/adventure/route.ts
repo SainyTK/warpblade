@@ -6,7 +6,7 @@ import type { Platform, Point } from "../../types/world";
 const EXIT_CORRIDOR = 150;
 const RUN_PACE = 48;
 export const GATE_ENTRY = 20;
-export const STAGE_XP = 1.65;
+export const STAGE_XP = 1.05;
 export const SPAWN_LEAD = 84;
 
 export interface RouteFoe extends Point {
@@ -16,6 +16,7 @@ export interface RouteFoe extends Point {
 
 export interface RouteArea {
   threat: number;
+  hpScale: number;
   room: GateRoom;
   parSeconds: number;
   start: number;
@@ -49,13 +50,14 @@ const foeType = (stage: StageDef, patrol: Patrol): EnemyType =>
 
 const roomFoes = (room: GateRoom): number => (room.kind === "boss" ? 1 : room.count);
 
-export function buildRoute(stage: StageDef, baseThreat: number): Route {
+export function buildRoute(stage: StageDef, baseThreat: number, hpScale: number): Route {
   let start = 0;
   const areas = stage.areas.map((approach): RouteArea => {
     const entrance = start + approach.length;
     const exit = entrance + W;
     const area: RouteArea = {
       threat: baseThreat + approach.rise,
+      hpScale,
       room: approach.room,
       parSeconds: approach.parSeconds,
       start,

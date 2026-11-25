@@ -368,6 +368,7 @@ body {
   gap: 6px;
   flex: 1;
   min-width: 0;
+  max-width: calc(50% - 32px);
 }
 /* the tabs lie over an unseen row of every tab the hero can learn, so the HUD keeps their room before a pick shows them */
 .elements,

@@ -4,7 +4,7 @@ import { RIFT_STAGES, STAGES } from "../../stages";
 import type { ArtId, StageId } from "../../types/campaign";
 import type { Enemy, EnemyType } from "../../types/enemy";
 import type { Platform, Point } from "../../types/world";
-import { stageBaseThreat } from "../../utils/campaign";
+import { stageBaseThreat, stageHpScale } from "../../utils/campaign";
 import { clamp } from "../../utils/math";
 import type { Rng } from "../../utils/rng";
 import { buildRoute, type Route } from "./route";
@@ -53,7 +53,8 @@ function riftsCleared(cleared: readonly StageId[]): number {
 
 export function routeFor(id: StageId, cleared: readonly StageId[]): Route {
   const stage = STAGES[id];
-  return buildRoute(stage, stageBaseThreat(stage, riftsCleared(cleared)));
+  const rifts = riftsCleared(cleared);
+  return buildRoute(stage, stageBaseThreat(stage, rifts), stageHpScale(rifts));
 }
 
 export function beginAdventure(random: Rng, first: StageId = "prologue", cleared: readonly StageId[] = []): void {

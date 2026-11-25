@@ -38,6 +38,8 @@ const waveFor = (threat: number): number => clamp(Math.round(threat), 1, 30);
 function addFoe(run: Trail, area: RouteArea, type: EnemyType, x: number, y: number, elite = false) {
   const enemy = makeEnemy(type, x, y, area.threat, STAGE_XP);
   enemy.power *= trail?.route.stage.foeDamage ?? 1;
+  enemy.max = Math.round(enemy.max * area.hpScale);
+  enemy.hp = enemy.max;
   if (elite) {
     Object.assign(enemy, { elite, max: Math.round(enemy.max * ELITE.hp), xp: Math.round(enemy.xp * ELITE.xp) });
     enemy.hp = enemy.max;
