@@ -1,13 +1,13 @@
-import { golem } from "../../../game/enemies/kinds/golem";
 import type { EnemyKind } from "../../../game/enemies/kinds/kind";
-import { wisp } from "../../../game/enemies/kinds/night";
-import { shepherd } from "../../../game/enemies/kinds/shepherd";
-import { stalker } from "../../../game/enemies/kinds/stalker";
 import type { StageFoeType } from "../../../types/enemy";
+import { inkling } from "./inkling/kind";
+import { pagewing } from "./pagewing/kind";
+import { pagewyrm } from "./pagewyrm/kind";
+import { tomeguard } from "./tomeguard/kind";
 
 export const ARCHIVE_KINDS = {
-  inkling: stalker,
-  pagewing: wisp,
-  tomeguard: golem,
-  pagewyrm: shepherd,
+  inkling,
+  pagewing,
+  tomeguard,
+  pagewyrm,
 } satisfies Partial<Record<StageFoeType, EnemyKind>>;
