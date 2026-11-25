@@ -6,7 +6,7 @@ import type { Platform, Point } from "../../types/world";
 const EXIT_CORRIDOR = 150;
 const RUN_PACE = 48;
 export const GATE_ENTRY = 20;
-export const STAGE_XP = 1.05;
+export const STAGE_XP = 0.9;
 export const SPAWN_LEAD = 84;
 
 export interface RouteFoe extends Point {
