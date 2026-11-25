@@ -1,6 +1,6 @@
 import type { Enemy } from "../../../types/enemy";
 
-export const HULK_HITS = { slam: 22, wave: 18, glob: 14, rush: 20 } as const;
+export const HULK_HITS = { slam: 18, wave: 14, glob: 11, rush: 20 } as const;
 export const HULK_WINDUP = { slam: 0.65, wave: 0.7, globs: 0.8, rush: 0.9 } as const;
 export const HULK_TIMES = { strike: 0.35, recover: 0.75, sink: 1.6, rise: 0.45, stuck: 1.1, afterRise: 0.5 } as const;
 export const HULK_WALK = { speed: 18, enraged: 26, stop: 12 } as const;
