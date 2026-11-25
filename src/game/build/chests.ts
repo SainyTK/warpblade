@@ -28,13 +28,14 @@ interface Chest {
   t: number;
   bounced: boolean;
   opened: boolean;
+  least: number;
 }
 
 /** the chests on the field; the field is shared, so a room keeps one list */
 let chests: Chest[] = [];
 const HALF_W = Math.floor(CHEST_ROWS[0].length / 2);
 
-export function dropChest(x: number, y: number): void {
+export function dropChest(x: number, y: number, least = 1): void {
   chests.push({
     x: clampStageX(Math.round(x), HALF_W + 4),
     y,
@@ -42,6 +43,7 @@ export function dropChest(x: number, y: number): void {
     t: 0,
     bounced: false,
     opened: false,
+    least,
   });
 }
 
@@ -68,7 +70,7 @@ function grant(rewards: readonly ChestReward[]): void {
 /** the hero in play opens a chest: a burst of gold, the rewards are theirs, and the game waits on the chest screen */
 function open(c: Chest): void {
   c.opened = true;
-  const rewards = rollChest(character, progress.build, game.wave, currentBuildStats().luck, rng);
+  const rewards = rollChest(character, progress.build, game.wave, currentBuildStats().luck, rng, c.least);
   grant(rewards);
   progress.build.chest = rewards;
   feat({ kind: "chestOpened", upgrades: rewards.filter((r) => r.type === "skill" || r.type === "art").length });

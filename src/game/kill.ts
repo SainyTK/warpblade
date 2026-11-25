@@ -52,6 +52,8 @@ function lightShare(k: number): number {
 }
 
 /** elites, mini bosses and the boss of any wave but the last leave a chest */
+const BOSS_CHEST_LEAST = 3;
+
 const leavesChest = (e: Enemy): boolean =>
   e.elite ||
   e.rank === "mini" ||
@@ -120,7 +122,7 @@ export function killEnemy(e: Enemy, source?: SourceId): void {
   for (let i = 0; i < hearts; i++) game.pickups.push({ x, y, vx: rng.range(-50, 50), vy: -150, t: 0, kind: "hp" });
   if (!isTraining()) {
     dropCoins(e, x, y);
-    if (leavesChest(e)) dropChest(x, y);
+    if (leavesChest(e)) dropChest(x, y, e.rank === "boss" ? BOSS_CHEST_LEAST : 1);
     dropXp(e.xp, x, y);
   }
   if (big) shake(0.5, 4);
