@@ -5,7 +5,6 @@ import { createRift } from "../effects/rift";
 import { makeEnemy } from "../enemies/enemy";
 import { kindOf } from "../enemies/kinds";
 import { game, hero } from "../state";
-import { markPerch } from "./patrol";
 import { type RouteArea, STAGE_XP } from "./route";
 import { type Surge, trail } from "./trail";
 
@@ -52,13 +51,20 @@ function sendFoe(surge: Surge, area: RouteArea): void {
         enemy.hp = enemy.max;
       }
       trail?.authored.add(enemy);
-      markPerch(enemy);
       game.enemies.push(enemy);
     }),
   );
 }
 
+function drawStragglersDown(dt: number): void {
+  for (const enemy of game.enemies) {
+    if (enemy.hp <= 0 || enemy.air || !kindOf(enemy.type).flies || enemy.y >= SURGE.reachableY) continue;
+    enemy.y = Math.min(SURGE.reachableY, enemy.y + SURGE.stragglerSink * dt);
+  }
+}
+
 export function updateSurge(surge: Surge, area: RouteArea, dt: number): boolean {
+  if (surge.sent >= surge.foes.length) drawStragglersDown(dt);
   const standing = game.enemies.filter((e) => e.hp > 0).length + game.fx.filter((f) => f.rift).length;
   const left = surge.foes.length - surge.sent;
   const free = Math.min(surge.cap - standing - surge.refills.length, left - surge.refills.length);

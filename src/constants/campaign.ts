@@ -16,6 +16,8 @@ export const SURGE = {
   capPerThreat: 0.7,
   mostCap: 30,
   countPerThreat: 0.05,
+  reachableY: 100,
+  stragglerSink: 18,
 } as const;
 
 export const MAP_HEAL = 1;
