@@ -1,9 +1,9 @@
-import { glow, hairline, place } from "../../engine/frame";
+import { glow, glowLine, hairline, place } from "../../engine/frame";
 import type { Color } from "../../types/color";
 import type { Effect } from "../../types/effect";
 import { fxRng, game, lights } from "../state";
 
-const ARC_LIFE = 0.16;
+const ARC_LIFE = 0.24;
 const ECHO_LIFE = 0.28;
 const ARC_STEPS = 5;
 const ARC_JAG = 5;
@@ -19,7 +19,7 @@ export function pushArc(x0: number, y0: number, x1: number, y1: number, color: C
   }
   points.push([x1, y1]);
   let life = ARC_LIFE;
-  lights.add(x1, y1, 16, color, 0.5, ARC_LIFE);
+  lights.add(x1, y1, 22, color, 0.7, ARC_LIFE);
   const arc: Effect = {
     update(dt) {
       life -= dt;
@@ -31,6 +31,7 @@ export function pushArc(x0: number, y0: number, x1: number, y1: number, color: C
       for (let i = 1; i < points.length; i++) {
         const [ax, ay] = points[i - 1];
         const [bx, by] = points[i];
+        glowLine(ax, ay, bx, by, 5, color, 0.5 * a);
         hairline(ax, ay, bx, by, color, a);
         hairline(ax, ay - 0.5, bx, by - 0.5, core, a);
       }
