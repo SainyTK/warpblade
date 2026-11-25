@@ -59,13 +59,18 @@ Nine heroes hold the night back together.
 - **Hero skills.** Every hero has 20 skills of their own, each with eight levels and an evolution: attacks, movement, spells, damage over time, summons and one ultimate skill.
   In solo play, level-ups bank skill points without pausing the game.
   Talk to a mentor to spend each point on one of three cards, or four with luck.
-  A card offers a new skill, the next level of a held skill, or a charm, each with its own pixel icon.
-  A build holds up to 8 skills and 3 charms at first, and every run starts with 2 rerolls, 2 skips and 1 banish to steer the cards.
+  A card offers a new skill, the next level of a held skill, or the next level of a Rift Art, each with its own pixel icon.
+  A build holds up to 8 skills, and every run starts with 2 rerolls, 2 skips and 1 banish to steer the cards.
   If too few cards are left, Second Wind fills the rest and restores all HP and MP.
-- **Charms.** Charms multiply one stat for every source at once: Might for damage, Haste for cooldowns, Vigor for HP, Insight for experience, and more that are found over many runs.
+- **Resonance.** Every skill and every Rift Art belongs to one of five elements: Blaze, Frost, Storm, Venom and Void.
+  An element's rank is the sum of the levels you hold in it, and every rank adds to what each of your hits does: Blaze burns, Frost chills and freezes, Storm arcs to nearby foes, Venom poisons and makes foes take more from everything, and Void echoes a hit a moment later.
+  Arcs and echoes are hits too, so they can burn, poison and arc again, and a build that leans into two or three elements grows much faster than one spread thin.
+  At rank 20 an element gains a finishing power, such as Wildfire for Blaze, where burning foes explode when they fall.
+- **Fusions.** Two elements at rank 12 or more fuse into one of ten Fusions, such as Plasma (Blaze and Storm: arcs set foes burning) or Thunder Echo (Storm and Void: every echo arcs).
+  A card that would complete a Fusion says so, and a Fusion's name stays ??? until you have made it once.
 - **Chests and evolutions.** Elites with a gold ring and bosses before The Unblinking drop chests in solo play.
   Touch a chest to open it.
-  A chest raises held skills and charms, sometimes three or five at once, and from the Bog Hulk onward it can evolve a skill at level 8 whose partner skill is held at level 4 or more.
+  A chest raises held skills and Rift Arts, sometimes three or five at once, and from the Bog Hulk onward it can evolve a skill at level 8 whose partner skill is held at level 4 or more.
   Kael's Fire Flask evolves with Crystal Familiar into Sunflask.
   A card says "Evolves with ???" until the player has made that evolution once.
 - **Flow.** Every hit of the hero's own adds a stack of Flow, up to 25, each one +4% damage on every source, so a full bar doubles it; a perfect dodge adds five, and getting hurt halves it.
@@ -76,7 +81,7 @@ Nine heroes hold the night back together.
 - **Experience to pick up.** Slain foes drop lime orbs of experience that bounce on the floor. Walk over them to collect them; any left behind fly to the hero after 4 seconds, or in a room to the nearest standing hero.
   Attack and ability power grow 2.5% with every level, compounding.
 - **Damage by source.** The result screen lists every source of damage with its level, total damage and damage per second: the hero's attacks, abilities and ultimate, and each skill that strikes on its own.
-- **The Codex.** The Codex on the start menu lists every hero's skills and evolutions and every charm, with the ones still locked shown as silhouettes with a short hint, and a few as ???.
+- **The Codex.** The Codex on the start menu lists the five elements, the Fusions, the Rift Arts and every hero's skills and evolutions, with Fusions and evolutions not yet made shown as silhouettes with their recipe or ???.
 - **Abilities on `I`.** Each hero turns through their abilities with `O`: their base ones and every spell skill they hold, such as Kael's Fire Flask that sets the floor burning, his Ice Spikes that freeze and his Lightning that arcs to a second foe.
   Each ability has its own recharge, and casting one adds no wait to any other.
   When the selected one is recharging or cannot be paid for, `I` casts the next ready one and selects it; with none ready, the press is refused with a dull tick and a jolt of the tab.
@@ -111,14 +116,19 @@ Nine heroes hold the night back together.
   His third blow becomes Prism Thrust, a long lunge that lodges a prism shard in the foe, and his finisher becomes Shatterfall, an overhead cut into the floor that shatters every shard nearby for extra damage.
   His warp, his parry's riposte and his Crystal Nova, which now also fires six prism beams, lodge shards too.
   The Warp Knight, Kael's own job, plays as before, and co-op rooms play every hero's own job.
-- **One continuous solo stage.** Head right through five eras, past patrols, platforms and climbable walls.
-  Defeat Oakheart, the Bog Hulk, the Gloam Shepherd, the Rift Warden, the Abyss Maw, the Abyss Sovereign and The Unblinking to reach the exit.
-  Each boss closes the room until it falls.
-  At half HP the Bog Hulk sinks into the bog, where blows hit it harder, then rises cracked with rift light and adds the Bog Rush: a belly slide along a path marked on the floor that a jump or a dodge clears, after which it lies stuck in the mud.
+- **A Rift campaign of about 30 minutes.** A solo run starts in the Sunlit Ruins, where Oakheart guards the first rift.
+  Then the Rift Map opens: eight Rift stages, played in any order you choose, each with its own place, foes, hazard and boss.
+  Storm Marsh (the Bog Hulk), Cinder Foundry (the Cinder Smith), Frostglass Caverns (Rimeclaw), Thunderhead Skyway (the Tempest Roc), Drowned Archive (the Pagewyrm), Moonlit Ruins (the Gloam Shepherd), Veil Spires (the Rift Warden) and Blightroot Hollow (Sporeheart).
+  Each stage is three areas, and each area ends in a locked room: a Rift Surge, where rifts keep opening until a crowd of foes has come through, or the stage's boss.
+  Stages grow harder with every rift you seal, and your HP and MP fill when you enter one.
+  When all eight are sealed, the Abyss Citadel opens: the Abyss Maw, the biggest Surge of the run, the Abyss Sovereign, and what waits after it.
+- **Rift Arts.** Every Rift stage's boss leaves its Art behind, a spell every hero can prepare with `I` and cast, or press during a slash to set into the sword.
+  Each boss is weak to one other stage's Art, which hits it three times as hard and staggers it, so the order you take the stages in matters.
+  Arts level up from cards and chests, and count twice toward their element's Resonance.
+- **Stage hazards and pits.** Lava vents, falling icicles, wind gusts, poison pools, ink tides, mud vents, grave hands and rift tears, each warned before it strikes.
+  Falling into a pit costs some HP and sets you back on firm ground, and foes knocked into one are gone.
   You can pass regular enemies, but defeating them earns experience and helps your grade.
-  Floor patrols and flying enemies guard different routes through stairs, towers and upper ledges.
-  Spike traps glow before they rise, so you can jump over them or take another route.
-  Each approach has a mentor whose location can change between runs.
+  Talk to a mentor in an area, or choose Upgrade skills on the Rift Map, to spend your skill points.
 - **Platform movement.** Press Jump during a dash to carry its speed into the air.
   Press Down on a ledge to drop through it.
   Hold toward a wall to slide or hold Jump into it to climb.
