@@ -1,5 +1,6 @@
 import type { StageDef } from "../../types/campaign";
-import { foundryApproach, foundrySummit } from "./layout";
+import { foundryVents } from "./hazard";
+import { catwalks, furnaceHalls, smithy } from "./layout";
 
 export const foundry: StageDef = {
   id: "foundry",
@@ -12,5 +13,6 @@ export const foundry: StageDef = {
   boss: "cindersmith",
   grantsArt: "forgeflare",
   weakTo: "mirespit",
-  areas: [foundryApproach, foundrySummit],
+  areas: [catwalks, furnaceHalls, smithy],
+  hazard: foundryVents,
 };
