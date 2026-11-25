@@ -1,5 +1,10 @@
 import type { StageDef } from "../../types/campaign";
-import { storm } from "./layout";
+import { createMarshHazard } from "./hazard";
+import { leechFen } from "./leechFen";
+import { reedwade } from "./reedwade";
+import { storm } from "./storm";
+
+const AREAS = [reedwade, leechFen, storm] as const;
 
 export const marsh: StageDef = {
   id: "marsh",
@@ -12,5 +17,6 @@ export const marsh: StageDef = {
   boss: "boghulk",
   grantsArt: "mirespit",
   weakTo: "sporeburst",
-  areas: [storm],
+  areas: AREAS,
+  hazard: createMarshHazard(AREAS),
 };

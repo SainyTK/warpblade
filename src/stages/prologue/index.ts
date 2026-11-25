@@ -1,5 +1,6 @@
 import type { StageDef } from "../../types/campaign";
-import { sunlit } from "./layout";
+import { firstSteps } from "./firstSteps";
+import { sunlit } from "./sunlit";
 
 export const prologue: StageDef = {
   id: "prologue",
@@ -10,5 +11,5 @@ export const prologue: StageDef = {
   ground: "thornback",
   flyer: "moth",
   boss: "oakheart",
-  areas: [sunlit],
+  areas: [firstSteps, sunlit],
 };
