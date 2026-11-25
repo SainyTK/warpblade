@@ -11,7 +11,7 @@ export const XP_CURVE = { base: 15, step: 10 } as const;
 export const MAX_LEVEL = 99;
 /** attack damage and ability power multiply by this every level */
 export const HERO_LEVEL_POWER = 1.025;
-export const CARD_WEIGHT = { newSkill: 100, skillLevel: 14, artLevel: 45 } as const;
+export const CARD_WEIGHT = { newSkill: 100, skillLevel: 14, artLevel: 45, resonancePull: 0.03 } as const;
 export const PICK_COUNT = 3;
 /** a run's rerolls, skips and banishes before the shop adds more */
 export const PICK_TOOLS = { rerolls: 2, skips: 2, banishes: 1 } as const;

@@ -4,6 +4,7 @@ import type { Build, Card } from "../types/build";
 import type { ArtId } from "../types/campaign";
 import type { CharacterDef } from "../types/character";
 import type { Boon } from "../types/skill";
+import { resonanceRanks } from "./resonance";
 import type { Rng } from "./rng";
 
 /** what a deal reads from the hero's build and the player's unlocks */
@@ -36,10 +37,12 @@ function skillCards(c: CharacterDef, b: Build): Weighted[] {
   const out: Weighted[] = [];
   const full = skillCount(b) >= SKILL_SLOTS;
   const ultimate = holdsUltimate(c, b);
+  const ranks = resonanceRanks(b, c, ARTS);
   for (const s of c.skills) {
     const level = b.skills[s.id] ?? 0;
     if (level >= SKILL_MAX_LEVEL || (!level && (full || (s.kind === "ultimate" && ultimate)))) continue;
-    const weight = level ? CARD_WEIGHT.skillLevel : CARD_WEIGHT.newSkill;
+    const pull = 1 + CARD_WEIGHT.resonancePull * ranks[s.element];
+    const weight = (level ? CARD_WEIGHT.skillLevel : CARD_WEIGHT.newSkill) * pull;
     out.push({ card: { type: "skill", id: s.id, level: level + 1 }, weight });
   }
   return out;

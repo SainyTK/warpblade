@@ -134,3 +134,11 @@ export const FUSIONS: readonly FusionDef[] = [
     text: "Each poison stack on a foe raises the echo chance.",
   },
 ];
+
+export const RESONANCE_MILESTONES: readonly { element: ElementId; rank: number; name: string }[] = [
+  { element: "blaze", rank: BLAZE.wildfireRank, name: "Wildfire" },
+  { element: "frost", rank: FROST.shatterRank, name: "Shatter" },
+  { element: "storm", rank: STORM.overchargeRank, name: "Overcharge" },
+  { element: "venom", rank: VENOM.plagueRank, name: "Plague" },
+  { element: "void", rank: VOID.riftRank, name: "Rift Echo" },
+];

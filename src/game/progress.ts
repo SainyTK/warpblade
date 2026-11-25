@@ -1,7 +1,8 @@
+import { ELEMENTS } from "../constants/elements";
 import { MAX_LEVEL } from "../constants/growth";
 import { PAL } from "../constants/palette";
 import { LEVEL_UP_RESTORE } from "../constants/progression";
-import { FUSIONS, type FusionId } from "../constants/resonance";
+import { FUSIONS, type FusionId, RESONANCE_MILESTONES } from "../constants/resonance";
 import { sfx } from "../services/audio";
 import { ARTS } from "../stages/arts";
 import { metaBonus } from "../store/meta";
@@ -11,7 +12,7 @@ import { PK } from "../types/particle";
 import type { PickAnswer } from "../types/pick";
 import { cardKey } from "../utils/cards";
 import { xpToNext } from "../utils/progression";
-import { activeFusions, resonanceRanks, resonanceStats } from "../utils/resonance";
+import { activeFusions, type Ranks, resonanceRanks, resonanceStats } from "../utils/resonance";
 import { heldRows } from "../utils/skills";
 import { computeStats } from "../utils/stats";
 import { raiseArt, raiseSkill } from "./build/raise";
@@ -24,7 +25,9 @@ import { character, freshProgress, fxRng, game, hero, lights, particles, progres
 /** recompute everything derived from the level and the build, keeping HP and MP inside the new maxima */
 export function refreshProgress(): void {
   const build = progress.build;
+  const before = progress.resonance;
   progress.resonance = resonanceRanks(build, character, ARTS);
+  announceMilestones(before, progress.resonance);
   const fusions = activeFusions(progress.resonance);
   for (const id of fusions) if (!progress.fusions.includes(id)) announceFusion(id);
   progress.fusions = fusions;
@@ -37,6 +40,13 @@ export function refreshProgress(): void {
   hero.hp = Math.min(hero.hp, progress.stats.hp);
   hero.mp = Math.min(hero.mp, progress.stats.mp);
   hero.stamina = Math.min(hero.stamina, progress.stats.stamina);
+}
+
+function announceMilestones(before: Ranks, after: Ranks): void {
+  for (const milestone of RESONANCE_MILESTONES) {
+    if (before[milestone.element] < milestone.rank && after[milestone.element] >= milestone.rank)
+      showBanner(`${ELEMENTS[milestone.element].name} ${milestone.rank}: ${milestone.name}`, 2);
+  }
 }
 
 function announceFusion(id: FusionId): void {
