@@ -4,6 +4,7 @@ export const CAMPAIGN_THREAT = {
   perRiftCleared: 2.6,
   citadel: 25,
   hpPerRiftCleared: 1.14,
+  citadelExtraRifts: 4,
 } as const;
 
 export const PIT_FALL = { hpShare: 0.15, below: 40, invulnerable: 1.4 } as const;

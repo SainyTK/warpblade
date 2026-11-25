@@ -54,7 +54,7 @@ function riftsCleared(cleared: readonly StageId[]): number {
 export function routeFor(id: StageId, cleared: readonly StageId[]): Route {
   const stage = STAGES[id];
   const rifts = riftsCleared(cleared);
-  return buildRoute(stage, stageBaseThreat(stage, rifts), stageHpScale(rifts));
+  return buildRoute(stage, stageBaseThreat(stage, rifts), stageHpScale(stage, rifts));
 }
 
 export function beginAdventure(random: Rng, first: StageId = "prologue", cleared: readonly StageId[] = []): void {
