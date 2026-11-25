@@ -252,7 +252,7 @@ function choose(e: Enemy, dx: number): void {
 }
 
 function rest(e: Enemy): void {
-  const share = enraged(e) ? HULK_COOLDOWN.enraged : 1;
+  const share = enraged(e) ? HULK_COOLDOWN.enraged : HULK_COOLDOWN.calm;
   const cd = rng.range(HULK_COOLDOWN.least, HULK_COOLDOWN.most) * share * waveScale(game.wave).cooldown;
   Object.assign(e, { state: "walk", st: 0, n: 0, ax: 0, cd });
 }

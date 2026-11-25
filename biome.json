@@ -76,6 +76,9 @@
                 }
               }
             }
+          },
+          "performance": {
+            "noNamespaceImport": "error"
           }
         }
       }
