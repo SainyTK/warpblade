@@ -7,7 +7,7 @@ import { fxRng, game, hero, particles } from "../../game/state";
 import type { Approach, StageHazard } from "../../types/campaign";
 import { PK } from "../../types/particle";
 import { clamp, smooth } from "../../utils/math";
-import { floorSites } from "./floorSites";
+import { floorSites } from "../floorSites";
 import { LEECH_COLORS as C, LEECH_SPARKS } from "./foes/leechColors";
 
 const VENT = {

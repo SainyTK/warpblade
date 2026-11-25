@@ -1,6 +1,6 @@
-import { GROUND, W } from "../../constants/stage";
-import type { Approach } from "../../types/campaign";
-import type { Platform } from "../../types/world";
+import { GROUND, W } from "../constants/stage";
+import type { Approach } from "../types/campaign";
+import type { Platform } from "../types/world";
 
 const ENTRY_CLEAR = 96;
 const ROOM_CLEAR = 40;

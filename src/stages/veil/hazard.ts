@@ -8,7 +8,7 @@ import { boxHit, heroBox } from "../../game/world";
 import type { Approach, StageHazard } from "../../types/campaign";
 import { PK } from "../../types/particle";
 import { clamp } from "../../utils/math";
-import { floorSites } from "../marsh/floorSites";
+import { floorSites } from "../floorSites";
 import { KNIGHT_COLORS as C, SHARD_SPARKS } from "./foes/knightColors";
 
 const TEAR = { spacing: 190, phase: 110, half: 6, height: 30, period: 3.4, charge: 0.85, zap: 0.28 } as const;

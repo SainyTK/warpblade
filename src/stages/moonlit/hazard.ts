@@ -9,7 +9,7 @@ import { fxRng, game, hero, particles } from "../../game/state";
 import type { Approach, StageHazard } from "../../types/campaign";
 import { PK } from "../../types/particle";
 import { clamp, ease } from "../../utils/math";
-import { floorSites } from "../marsh/floorSites";
+import { floorSites } from "../floorSites";
 
 const GRAVE = { spacing: 170, phase: 70, sense: 24, reach: 10, rise: 0.75, grasp: 0.45, sink: 0.4, rest: 2.2 } as const;
 const HIT = { base: 9, extra: 6 } as const;
