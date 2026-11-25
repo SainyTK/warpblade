@@ -1,29 +1,28 @@
 import { Redo2, Undo2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import type { SaveStatus } from '@/hooks/useAutosave';
-import { useSketchLibrary } from '@/hooks/useSketchLibrary';
 import { cn } from '@/lib/utils';
-import { useSketchStore } from '@/store/sketchStore';
+import { useMotionStore } from '@/store/motionStore';
+import type { SaveStatus } from '@/types/studio';
 
 const SAVE_LABEL: Record<SaveStatus, string> = {
   saved: 'Saved',
   saving: 'Saving',
   failed: 'Not saved',
+  reloaded: 'Reloaded from disk',
 };
 
-/** Undo, redo and whether the sketch is saved. */
+/** Whether the open clip's draft is saved, and undo and redo. */
 export function HistoryButtons() {
-  const { status } = useSketchLibrary();
-  const { past, future, undo, redo } = useSketchStore();
+  const { past, future, undo, redo, saveStatus } = useMotionStore();
   return (
     <div className="flex items-center gap-1">
       <span
         className={cn(
           'mr-1 text-xs',
-          status === 'failed' ? 'text-destructive' : 'text-muted-foreground',
+          saveStatus === 'failed' ? 'text-destructive' : 'text-muted-foreground',
         )}
       >
-        {SAVE_LABEL[status]}
+        {SAVE_LABEL[saveStatus]}
       </span>
       <Button variant="ghost" size="icon" aria-label="Undo" disabled={!past.length} onClick={undo}>
         <Undo2 />

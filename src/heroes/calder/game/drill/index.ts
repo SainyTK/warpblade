@@ -2,6 +2,7 @@ import { fitRunFeet, NEUTRAL_MODIFIERS } from "../../../../drill";
 import { drawThrownBlade } from "../../../../game/effects/thrownWeapon";
 import { loadGeneratedHeroPortrait } from "../../../../generatedHeroArt";
 import type { DrillProfile } from "../../../../types/drill";
+import { heroClips } from "../../../motion";
 import { CALDER_MOTION } from "../../constants/drill/motion";
 import { CALDER_POSES, calderRunUpperBody } from "../../constants/drill/poses";
 import { CALDER_STRIKES } from "../../constants/drill/strikes";
@@ -32,4 +33,5 @@ export const CALDER_DRILL: DrillProfile = {
   hooks: CALDER_DRILL_HOOKS,
   motion: CALDER_MOTION,
   poses: { ...CALDER_POSES, run: fitRunFeet(calderRunUpperBody) },
+  clips: heroClips("calder"),
 };

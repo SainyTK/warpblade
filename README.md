@@ -214,7 +214,7 @@ Other commands: `npm run build`, `npm run preview`, `npm run typecheck`, `npm ru
 The stack is TypeScript, Vite and Biome.
 The only runtime dependencies are three web fonts and [PeerJS](https://peerjs.com), which loads only when a player hosts or joins a room.
 
-To pose Kael, draw effects and hand them to Claude Code agents, run the local [studio](studio/README.md).
+To pose every frame of every hero's moves, run the local [studio](studio/README.md).
 
 ## How the pixels are made
 
@@ -282,7 +282,7 @@ src/
     achievements/  an achievement row, its trophy, the earned banner and their styles
     coop/          the co-op line under the pause button
     shop/          one shop row and the shop's styles
-studio/            a local tool to pose Kael with the game's rig, draw effects and send them to agents (see studio/README.md)
+studio/            a local tool to pose every frame of every hero's motion clips (see studio/README.md)
 docs/
   hero-module.md   how to add a hero: the files it owns, every hook and the checks it must pass
   moveset-design.md the layout every hero shares: the warp, guard and parry, dodge, abilities and ultimate

@@ -1,6 +1,7 @@
 import { NEUTRAL_MODIFIERS } from "../../../../drill";
 import { loadGeneratedHeroPortrait } from "../../../../generatedHeroArt";
 import type { DrillProfile } from "../../../../types/drill";
+import { heroClips } from "../../../motion";
 import { BRYNN_BODY } from "../../constants/drill/body";
 import { BRYNN_STRIKES } from "../../constants/drill/strikes";
 import { BRYNN_TIERS } from "../../constants/drill/tiers";
@@ -31,4 +32,5 @@ export const BRYNN_DRILL: DrillProfile = {
   hooks: BRYNN_DRILL_HOOKS,
   ...BRYNN_BODY,
   art: "brynn",
+  clips: heroClips("brynn"),
 };

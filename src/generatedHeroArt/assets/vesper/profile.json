@@ -1,7 +1,9 @@
 {
-  "weaponGrip": [13, 11],
+  "trails": {
+    "scarfTail": [16.73, 17.09, 18.59, 18.04, 16.3, 14.61, 12.57, 11.65, 15.96, 18.78, 21.23]
+  },
+  "headScale": 1.12,
+  "weaponGrip": [13.0, 12.0],
   "weaponTipY": 94,
-  "weaponWidth": 13,
-  "offhandAnchor": [0.5, 0.22],
-  "headOffset": [-0.6, 1.75]
+  "offhandAnchor": [0.5, 0.22]
 }

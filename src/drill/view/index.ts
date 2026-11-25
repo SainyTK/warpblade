@@ -3,13 +3,14 @@ import type { DrillProfile, Session } from "../../types/drill";
 import type { Pose } from "../../types/pose";
 import type { Vec } from "../../types/rig";
 import type { SpriteImage } from "../../types/sprite";
+import { drillMotion } from "../constants";
 import { drawEnhancedGuard } from "./chainEffects";
+import { drillClips } from "./clips";
 import { drawCutIn, loadPortrait } from "./cutIn";
 import { createDashTrail } from "./dashTrail";
 import { drawDefenseCue } from "./defenseCue";
 import { drawBoltArt, drawImpactArt } from "./effectArt";
 import { createFighterMotion } from "./fighterMotion";
-import { drillPoses } from "./poses";
 import { drawSkillCharge } from "./skillCharge";
 import { drawSkillDarkness, drawSkillImpact } from "./skillImpact";
 import { createSlashView } from "./slash";
@@ -21,7 +22,7 @@ import { drawFlyingSword, drawWarpGhosts, drawWarpTrace } from "./warpEffects";
 
 export function createDrillView(profile: DrillProfile) {
   const portrait = loadPortrait(profile);
-  const motion = createFighterMotion(drillPoses(profile));
+  const motion = createFighterMotion(drillClips(profile, drillMotion(profile)));
   const slashes = createSlashView();
   const trail = createDashTrail();
   let current: Session | undefined;

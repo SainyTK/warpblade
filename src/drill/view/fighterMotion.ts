@@ -1,13 +1,14 @@
-import type { DrillPoses, Fighter, Session } from "../../types/drill";
+import { clipStart, clipThrough } from "../../motionClips";
+import type { DrillClips, Fighter, Session } from "../../types/drill";
 import type { Pose } from "../../types/pose";
 import { clamp, smooth } from "../../utils/math";
 import { blendPose } from "../../utils/poseBlend";
-import { BRAKING_TIME, LANDING_TIME, locomotionPose, type Motion, motionOf } from "./locomotion";
+import { BRAKING_TIME, LANDING_TIME } from "./clips";
+import { locomotionPose, type Motion, motionOf } from "./locomotion";
 import { RUN_PUSH_PHASE, RUN_STRIDE } from "./runPose";
 import { spellReleasePose } from "./spellReleasePose";
-import { swordPose } from "./swordPose";
 
-export function createFighterMotion(poses: DrillPoses) {
+export function createFighterMotion(clips: DrillClips) {
   let motion: Motion = "idle";
   let age = 0;
   let stride = RUN_PUSH_PHASE;
@@ -20,7 +21,7 @@ export function createFighterMotion(poses: DrillPoses) {
   let previousFace: Fighter["face"] | undefined;
   let previousSpeed = 0;
   let fallSpeed = 0;
-  let from = poses.stance;
+  let from = clipStart(clips.idle);
 
   return (session: Session, currentPose: Pose, dt: number) => {
     const h = session.fighter;
@@ -65,10 +66,10 @@ export function createFighterMotion(poses: DrillPoses) {
     previousSpeed = speed;
     const handover = motion === "parry" || motion === "land" ? 0 : motion === "idle" || motion === "run" ? 0.05 : 0.023;
     const target = h.swing
-      ? swordPose(session.profile, h.swing, poses.stance)
+      ? clipThrough(clips.strikes[h.swing.kind], h.swing.age / session.profile.strikes[h.swing.kind].duration)
       : h.spellRelease
-        ? spellReleasePose(h, poses)
-        : locomotionPose(h, poses, session.motion, motion, age, stride, landForce);
+        ? spellReleasePose(h, clips)
+        : locomotionPose(h, clips, session.motion, motion, age, stride, landForce);
     const footPlacement =
       motion === "land" ? clamp((contactX - h.x) * h.face, -5, 5) * (1 - smooth(0.04, 0.078, age)) : 0;
     const pose = footPlacement

@@ -2,13 +2,15 @@ import type { EffectHero, EffectSlot } from "../effectArt";
 import type { SlashShape } from "./effect";
 import type { Enemy } from "./enemy";
 import type { InputAction } from "./input";
+import type { DrillClips, DrillStrikeId } from "./motionClip";
 import type { Pose } from "./pose";
 import type { Vec } from "./rig";
 import type { Platform } from "./world";
 
+export type { DrillClips, DrillStrikeId, PoseClip } from "./motionClip";
+
 export type Side = -1 | 1;
 export type Direction = Side | 0;
-export type DrillStrikeId = "first" | "second" | "third" | "air";
 export type FollowUp = "warp" | "enhancedParry";
 
 export interface DrillStrikePoses {
@@ -28,7 +30,7 @@ export interface DrillStrike {
   next: DrillStrikeId | null;
   damage: number;
   finisher: boolean;
-  poses: DrillStrikePoses;
+  poses?: DrillStrikePoses;
   arc: Omit<SlashShape, "R">;
 }
 
@@ -175,6 +177,7 @@ export interface DrillProfile {
   modifiers(): DrillModifiers;
   motion?: Partial<DrillMotion>;
   poses?: Partial<DrillPoses>;
+  clips?: Partial<DrillClips>;
   art?: EffectHero;
   hooks?: DrillHooks;
 }

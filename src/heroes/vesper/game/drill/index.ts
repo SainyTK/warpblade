@@ -2,6 +2,7 @@ import { NEUTRAL_MODIFIERS } from "../../../../drill";
 import { drawThrownBlade } from "../../../../game/effects/thrownWeapon";
 import { loadGeneratedHeroPortrait } from "../../../../generatedHeroArt";
 import type { DrillProfile } from "../../../../types/drill";
+import { heroClips } from "../../../motion";
 import { VESPER_MOTION } from "../../constants/drill/motion";
 import { VESPER_POSES } from "../../constants/drill/poses";
 import { VESPER_STRIKES } from "../../constants/drill/strikes";
@@ -46,4 +47,5 @@ export const VESPER_DRILL: DrillProfile = {
   motion: VESPER_MOTION,
   poses: { ...VESPER_POSES, run: vesperRun },
   hooks: VESPER_DRILL_HOOKS,
+  clips: heroClips("vesper"),
 };

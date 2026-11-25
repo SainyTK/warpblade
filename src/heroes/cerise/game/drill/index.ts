@@ -2,6 +2,7 @@ import { NEUTRAL_MODIFIERS } from "../../../../drill";
 import { drawThrownBlade } from "../../../../game/effects/thrownWeapon";
 import { loadGeneratedHeroPortrait } from "../../../../generatedHeroArt";
 import type { DrillProfile } from "../../../../types/drill";
+import { heroClips } from "../../../motion";
 import { CERISE_STRIKES } from "../../constants/drill/strikes";
 import { drawCeriseCutIn } from "../../ui/cutIn";
 import { CERISE_DRILL_HOOKS, ceriseModifiers } from "./hooks";
@@ -32,4 +33,5 @@ export const CERISE_DRILL: DrillProfile = {
   motion: { run: 118, groundAccel: 3500, dash: 292, dashRecovery: 0.23, rise: 338, fallGravity: 1150, wallKick: 184 },
   poses: CERISE_POSES,
   art: "cerise",
+  clips: heroClips("cerise"),
 };

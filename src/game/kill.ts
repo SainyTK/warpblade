@@ -17,6 +17,7 @@ import { feat } from "./feat";
 import { kit } from "./hero/kits";
 import { emitSkillEvent } from "./skills/events";
 import { game, lights, particles, rng } from "./state";
+import { isTraining } from "./training";
 import { shake } from "./world";
 import { dropXp } from "./xpOrbs";
 
@@ -116,12 +117,14 @@ export function killEnemy(e: Enemy, source?: SourceId): void {
     game.pickups.push({ x, y, vx: R.range(-70, 70), vy: R.range(-140, -60), t: 0, kind: "mp" });
   const hearts = big ? HEARTS.big : R.chance(kind.heartChance ?? HEARTS.other) ? 1 : 0;
   for (let i = 0; i < hearts; i++) game.pickups.push({ x, y, vx: R.range(-50, 50), vy: -150, t: 0, kind: "hp" });
-  dropCoins(e, x, y);
-  if (leavesChest(e)) dropChest(x, y);
+  if (!isTraining()) {
+    dropCoins(e, x, y);
+    if (leavesChest(e)) dropChest(x, y);
+    dropXp(e.xp, x, y);
+  }
   if (big) shake(0.5, 4);
   sfx.death();
-  dropXp(e.xp, x, y);
-  if (!isAdventure()) {
+  if (!isAdventure() && !isTraining()) {
     endWaveOnLastKill();
   }
 }

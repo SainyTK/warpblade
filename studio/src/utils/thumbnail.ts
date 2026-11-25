@@ -1,34 +1,15 @@
-import type { Pose } from '@game/types/pose';
-import { ORIGIN_X, ORIGIN_Y } from '@/constants/stage';
+import { RES } from '@game/constants/stage';
+import type { SpriteImage } from '@game/types/sprite';
+import { STAGE_COLORS, THUMB } from '@/constants/stage';
 import type { Raster } from '@/types/studio';
-import { cropRaster } from './crop';
-import { stageRaster, stillHero } from './stageRaster';
+import { blitSprite, putArt, raster } from './raster';
 
-/** Thumbnails show this much of the stage around Kael's feet. */
-const THUMB = { w: 48, h: 56, above: 48 } as const;
-/** Thumbnails are drawn at this scale. */
-export const THUMB_SCALE = 2;
-
-/** A small picture of a snapshot or an effect frame, centred on where Kael stands. */
-export function thumbnail(
-  hero: { pose: Pose; root: { x: number; y: number } } | null,
-  pixels: Readonly<Record<string, number>> | null,
-  heroAlpha = 1,
-): Raster {
-  const root = hero?.root ?? { x: 0, y: 0 };
-  const full = stageRaster({
-    hero: hero ? stillHero(hero.pose, hero.root) : null,
-    heroAlpha,
-    onions: [],
-    pixels,
-    pixelOnions: [],
-    grid: false,
-    background: true,
-  });
-  return cropRaster(full, {
-    x: ORIGIN_X + Math.round(root.x) - THUMB.w / 2,
-    y: ORIGIN_Y + Math.round(root.y) - THUMB.above,
-    w: THUMB.w,
-    h: THUMB.h,
-  });
+/** A small picture of a drawn hero, centred on their feet over the ground line. */
+export function thumbnail(sprite: SpriteImage): Raster {
+  const r = raster(THUMB.w, THUMB.h, STAGE_COLORS.background, RES);
+  for (let x = 0; x < THUMB.w; x++) {
+    putArt(r, x, THUMB.above, STAGE_COLORS.ground);
+  }
+  blitSprite(r, sprite, THUMB.w / 2, THUMB.above);
+  return r;
 }

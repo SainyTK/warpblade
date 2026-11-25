@@ -8,7 +8,9 @@ export type GeneratedHeroArt = (ctx: CanvasRenderingContext2D, pose: Pose, look:
 export interface SpriteProfile {
   weaponGrip: Vec;
   weaponTipY: number;
-  weaponWidth: number;
-  offhandAnchor?: Vec;
+  weaponReach?: number;
+  headScale?: number;
   headOffset?: Vec;
+  offhandAnchor?: Vec;
+  trails: { scarfTail?: readonly number[]; ponytail?: readonly number[] };
 }

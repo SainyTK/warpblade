@@ -1,30 +1,37 @@
-import { useEffect, useState } from 'react';
-import { saveSketch } from '@/services/sketchApi';
-import { useSketchStore } from '@/store/sketchStore';
+import { useEffect } from 'react';
+import { SAVE_DELAY_MS } from '@/constants/stage';
+import { saveDraft } from '@/services/draftApi';
+import { useMotionStore } from '@/store/motionStore';
 
-const SAVE_DELAY_MS = 600;
-
-export type SaveStatus = 'saved' | 'saving' | 'failed';
-
-/** Saves the open sketch shortly after each change. */
-export function useAutosave(onSaved: () => void): SaveStatus {
-  const sketch = useSketchStore((state) => state.sketch);
-  const revision = useSketchStore((state) => state.revision);
-  const [status, setStatus] = useState<SaveStatus>('saved');
+/** Saves the open clip's draft shortly after each change, and at once when another clip is opened. */
+export function useAutosave(): void {
+  const motion = useMotionStore((state) => state.motion);
+  const revision = useMotionStore((state) => state.revision);
+  const setSaveStatus = useMotionStore((state) => state.setSaveStatus);
+  const sending = useMotionStore((state) => state.sending);
   useEffect(() => {
-    if (!sketch || revision === 0) {
+    if (revision === 0) {
       return;
     }
-    setStatus('saving');
-    const timer = setTimeout(() => {
-      saveSketch(sketch)
-        .then(() => {
-          setStatus('saved');
-          onSaved();
-        })
-        .catch(() => setStatus('failed'));
-    }, SAVE_DELAY_MS);
-    return () => clearTimeout(timer);
-  }, [sketch, revision, onSaved]);
-  return status;
+    let saved = false;
+    const save = () => {
+      const draft = useMotionStore.getState().drafts[motion];
+      if (saved || !draft) {
+        return;
+      }
+      saved = true;
+      setSaveStatus('saving');
+      sending(motion, draft);
+      saveDraft(motion, draft)
+        .then(() => setSaveStatus('saved'))
+        .catch(() => setSaveStatus('failed'));
+    };
+    const timer = setTimeout(save, SAVE_DELAY_MS);
+    return () => {
+      clearTimeout(timer);
+      if (useMotionStore.getState().motion !== motion) {
+        save();
+      }
+    };
+  }, [motion, revision, setSaveStatus, sending]);
 }

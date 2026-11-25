@@ -9,7 +9,7 @@ interface RasterCanvasProps {
   className?: string;
 }
 
-/** A raster drawn at whole-pixel scale with crisp pixels. */
+/** A raster drawn `scale` screen pixels to an art pixel, with crisp pixels. */
 export function RasterCanvas({ raster, scale, className }: RasterCanvasProps) {
   const ref = useRef<HTMLCanvasElement>(null);
   useEffect(() => {
@@ -21,7 +21,7 @@ export function RasterCanvas({ raster, scale, className }: RasterCanvasProps) {
       width={raster.w}
       height={raster.h}
       className={cn('[image-rendering:pixelated]', className)}
-      style={{ width: raster.w * scale, height: raster.h * scale }}
+      style={{ width: (raster.w * scale) / raster.res, height: (raster.h * scale) / raster.res }}
     />
   );
 }

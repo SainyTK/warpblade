@@ -1,19 +1,20 @@
+import type { Pose } from '@game/types/pose';
 import { type PointerEvent, useRef, useState } from 'react';
 import { HANDLE_REACH, JOINT_HANDLES, type JointHandle, RIG_BONES } from '@/constants/joints';
 import { stagePoint, useOverlayCanvas } from '@/hooks/useOverlayCanvas';
 import { usePoseEditor } from '@/hooks/usePoseEditor';
 import { useEditorStore } from '@/store/editorStore';
 import type { Point } from '@/types/studio';
-import { type Dragged, dragHandle, handlePoint } from '@/utils/jointGeometry';
+import { dragHandle, handlePoint } from '@/utils/jointGeometry';
 
 interface Drag {
   handle: JointHandle;
-  start: Dragged;
+  start: Pose;
 }
 
 /**
- * The rig's handles over Kael: drag a joint, the sword tip, the feet, the chest to bend the spine, a toe to tilt the
- * foot, or an elbow across the arm to flip its bend. Shift-drag the hip to carry the upper body.
+ * The rig's handles over Kael: drag a joint, the sword tip, the chest to bend the spine, a toe to tilt the foot, or an
+ * elbow across the arm to flip its bend. Shift-drag the hip to carry the upper body.
  */
 export function RigOverlay({ scale }: { scale: number }) {
   const editor = usePoseEditor();
@@ -21,7 +22,7 @@ export function RigOverlay({ scale }: { scale: number }) {
   const [hover, setHover] = useState<string | null>(null);
   const drag = useRef<Drag | null>(null);
   const points = new Map<string, Point>(
-    JOINT_HANDLES.map((handle) => [handle.id, handlePoint(handle, editor.pose, editor.root)]),
+    JOINT_HANDLES.map((handle) => [handle.id, handlePoint(handle, editor.pose)]),
   );
 
   const canvas = useOverlayCanvas(scale, (context) => {
@@ -45,15 +46,7 @@ export function RigOverlay({ scale }: { scale: number }) {
       const active = hover === handle.id || drag.current?.handle.id === handle.id;
       const radius = (active ? 6 : handle.minor ? 3 : 4.5) / scale;
       context.beginPath();
-      if (handle.kind === 'root') {
-        context.moveTo(x, y - radius);
-        context.lineTo(x + radius, y);
-        context.lineTo(x, y + radius);
-        context.lineTo(x - radius, y);
-        context.closePath();
-      } else {
-        context.arc(x, y, radius, 0, Math.PI * 2);
-      }
+      context.arc(x, y, radius, 0, Math.PI * 2);
       context.fillStyle = handle.color;
       context.globalAlpha = handle.far ? 0.75 : 0.95;
       context.fill();
@@ -93,7 +86,7 @@ export function RigOverlay({ scale }: { scale: number }) {
     }
     event.currentTarget.setPointerCapture(event.pointerId);
     editor.beginGesture();
-    drag.current = { handle, start: { pose: editor.pose, root: editor.root } };
+    drag.current = { handle, start: editor.pose };
   };
 
   const onPointerMove = (event: PointerEvent<HTMLCanvasElement>) => {
@@ -106,8 +99,7 @@ export function RigOverlay({ scale }: { scale: number }) {
       setHover(playing ? null : (nearest(point)?.id ?? null));
       return;
     }
-    const next = dragHandle(active.handle, active.start, point, event.shiftKey);
-    editor.setPose(next.pose, next.root, false);
+    editor.setPose(dragHandle(active.handle, active.start, point, event.shiftKey), false);
   };
 
   const onPointerUp = () => {

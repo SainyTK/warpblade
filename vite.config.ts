@@ -1,7 +1,10 @@
+import { fileURLToPath } from "node:url";
 import { defineConfig } from "vite";
 import pkg from "./package.json" with { type: "json" };
+import { motionLive } from "./studio/server/vite/motionLive";
 
 export default defineConfig({
+  plugins: [motionLive(fileURLToPath(new URL(".", import.meta.url)))],
   define: { __APP_VERSION__: JSON.stringify(pkg.version) },
   build: {
     target: "es2022",
@@ -12,7 +15,6 @@ export default defineConfig({
       input: {
         game: "index.html",
         patches: "patches/index.html",
-        kaelComparison: "kael-comparison/index.html",
       },
     },
   },

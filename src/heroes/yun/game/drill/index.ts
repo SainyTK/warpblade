@@ -1,6 +1,7 @@
 import { NEUTRAL_MODIFIERS } from "../../../../drill";
 import { loadGeneratedHeroPortrait } from "../../../../generatedHeroArt";
 import type { DrillProfile } from "../../../../types/drill";
+import { heroClips } from "../../../motion";
 import { YUN_MOTION } from "../../constants/drill/motion";
 import { YUN_STRIKES } from "../../constants/drill/strikes";
 import { drawYunCutIn } from "../../ui/cutIn";
@@ -33,4 +34,5 @@ export const YUN_DRILL: DrillProfile = {
   motion: YUN_MOTION,
   poses: YUN_POSES,
   art: "yun",
+  clips: heroClips("yun"),
 };

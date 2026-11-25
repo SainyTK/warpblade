@@ -14,12 +14,11 @@ interface HandleBase {
 }
 
 /**
- * A draggable point of the rig: a joint with its pose keys, the sword tip, the feet (root travel), the chest (spine
- * bend), an elbow (dragged across the arm to flip its bend) or a toe (the foot angle).
+ * A draggable point of the rig: a joint with its pose keys, the sword tip, the chest (spine bend), an elbow (dragged
+ * across the arm to flip its bend) or a toe (the foot angle).
  */
 export type JointHandle = HandleBase &
   (
-    | { kind: 'root' }
     | { kind: 'joint'; x: PoseKey; y: PoseKey }
     | { kind: 'sword' }
     | { kind: 'chest' }
@@ -33,7 +32,6 @@ const BODY = '#e6e4f0';
 
 /** Drawn back to front, so near handles sit on top. */
 export const JOINT_HANDLES: readonly JointHandle[] = [
-  { id: 'root', label: 'Feet', kind: 'root', far: false, minor: false, color: '#ffc23d' },
   {
     id: 'hip',
     label: 'Hip',

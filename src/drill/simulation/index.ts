@@ -1,5 +1,5 @@
 import type { DrillInput, DrillProfile, Session } from "../../types/drill";
-import { MOTION } from "../constants";
+import { drillMotion } from "../constants";
 import { tickSkill, trackChargePress } from "./chargedSkill";
 import { canInterrupt, fight } from "./combat";
 import { ageDefenseCue, readGuard } from "./defense";
@@ -17,7 +17,7 @@ export function createSession(profile: DrillProfile, x: number, y: number): Sess
   const modifiers = profile.modifiers();
   return {
     profile,
-    motion: { ...MOTION, ...profile.motion },
+    motion: drillMotion(profile),
     modifiers,
     fighter: {
       x,

@@ -1,5 +1,5 @@
 import { KEEN } from "../constants/combo";
-import type { DrillMotion } from "../types/drill";
+import type { DrillMotion, DrillProfile } from "../types/drill";
 
 export const TARGET_RADIUS = 6;
 export const SPELL_HEIGHT = 15;
@@ -28,6 +28,8 @@ export const MOTION: DrillMotion = {
   buffer: 0.11,
   landing: 1,
 };
+
+export const drillMotion = (profile: DrillProfile): DrillMotion => ({ ...MOTION, ...profile.motion });
 
 export const DASH_LOCKOUT = MOTION.dashTime + MOTION.dashRecovery;
 export const WARP_TRACE_LIFE = 0.32;

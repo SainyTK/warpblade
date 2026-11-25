@@ -20,6 +20,7 @@ import { updateNumbers } from "./numbers";
 import { updatePickups } from "./pickups";
 import { updateSkills } from "./skills/runtime";
 import { game, lights, particles, rng } from "./state";
+import { isTraining, updateTraining } from "./training";
 import { updateWaves } from "./waves";
 import { updateXpOrbs } from "./xpOrbs";
 
@@ -98,6 +99,8 @@ export function update(dt: number): void {
   coop()?.anyStanding();
   if (isAdventure()) {
     updateAdventure(dt);
+  } else if (isTraining()) {
+    updateTraining();
   } else {
     updateWaves(dt);
   }

@@ -22,8 +22,6 @@ import {
 import { ORIGIN_X, ORIGIN_Y } from '@/constants/stage';
 import type { Point } from '@/types/studio';
 
-type Root = { x: number; y: number };
-
 const snap = (value: number, step: number): number => Math.round(value / step) * step;
 
 /** An arm's shoulder and the hand it reaches for, as the game draws it. */
@@ -52,21 +50,19 @@ function ankle(pose: Pose, side: Side): Point {
 const swordHand = (pose: Pose): Point => armJoints(pose, 'near', elbowFlipped(pose, 'near'))[1];
 
 /** Local (unmirrored) pose point to stage art pixels. */
-function toStage(pose: Pose, root: Root, [x, y]: Point): Point {
-  return [ORIGIN_X + root.x + (isMirrored(pose) ? -x : x), ORIGIN_Y + root.y + y];
+function toStage(pose: Pose, [x, y]: Point): Point {
+  return [ORIGIN_X + (isMirrored(pose) ? -x : x), ORIGIN_Y + y];
 }
 
 /** Stage art pixels to a local (unmirrored) pose point. */
-function toLocal(pose: Pose, root: Root, [x, y]: Point): Point {
-  const lx = x - ORIGIN_X - root.x;
-  return [isMirrored(pose) ? -lx : lx, y - ORIGIN_Y - root.y];
+function toLocal(pose: Pose, [x, y]: Point): Point {
+  const lx = x - ORIGIN_X;
+  return [isMirrored(pose) ? -lx : lx, y - ORIGIN_Y];
 }
 
 /** Where a handle sits, in local pose pixels. */
 function localPoint(handle: JointHandle, pose: Pose): Point {
   switch (handle.kind) {
-    case 'root':
-      return [0, 0];
     case 'joint':
       return [pose[handle.x], pose[handle.y]];
     case 'sword': {
@@ -83,13 +79,8 @@ function localPoint(handle: JointHandle, pose: Pose): Point {
 }
 
 /** Where a handle sits on the stage, in art pixels. */
-export function handlePoint(handle: JointHandle, pose: Pose, root: Root): Point {
-  return toStage(pose, root, localPoint(handle, pose));
-}
-
-export interface Dragged {
-  pose: Pose;
-  root: Root;
+export function handlePoint(handle: JointHandle, pose: Pose): Point {
+  return toStage(pose, localPoint(handle, pose));
 }
 
 /** The hip moved to x, y with the whole upper body (neck and both hands) carried along. */
@@ -113,47 +104,35 @@ function carryHip(pose: Pose, x: number, y: number): Pose {
  * The pose after dragging a handle to a stage point. With `carry`, dragging the hip moves the whole upper body
  * with it, so a crouch or a lean keeps the arms in place on the body.
  */
-export function dragHandle(
-  handle: JointHandle,
-  start: Dragged,
-  to: Point,
-  carry: boolean,
-): Dragged {
-  const { pose, root } = start;
-  if (handle.kind === 'root') {
-    return {
-      pose,
-      root: { x: Math.round(to[0] - ORIGIN_X), y: Math.min(0, Math.round(to[1] - ORIGIN_Y)) },
-    };
-  }
-  const [lx, ly] = toLocal(pose, root, to);
+export function dragHandle(handle: JointHandle, pose: Pose, to: Point, carry: boolean): Pose {
+  const [lx, ly] = toLocal(pose, to);
   switch (handle.kind) {
     case 'sword': {
       const [hx, hy] = swordHand(pose);
-      return { pose: { ...pose, sa: snap(Math.atan2(ly - hy, lx - hx), ANGLE_SNAP) }, root };
+      return { ...pose, sa: snap(Math.atan2(ly - hy, lx - hx), ANGLE_SNAP) };
     }
     case 'chest':
-      return { pose: { ...pose, cb: snap(chestBendToward(pose, lx, ly), JOINT_SNAP) }, root };
+      return { ...pose, cb: snap(chestBendToward(pose, lx, ly), JOINT_SNAP) };
     case 'elbow': {
       const usual = armJoints(pose, handle.side, false)[0];
       const flipped = armJoints(pose, handle.side, true)[0];
       const flip =
         Math.hypot(flipped[0] - lx, flipped[1] - ly) < Math.hypot(usual[0] - lx, usual[1] - ly);
-      return { pose: { ...pose, [ELBOW_KEY[handle.side]]: flip ? 1 : 0 }, root };
+      return { ...pose, [ELBOW_KEY[handle.side]]: flip ? 1 : 0 };
     }
     case 'toe': {
       const [ax, ay] = ankle(pose, handle.side);
       const angle = Math.atan2(ly - (ay + 0.4), lx - ax);
       const tilt = snap(Math.min(TOE_RANGE, Math.max(-TOE_RANGE, angle)), ANGLE_SNAP);
-      return { pose: { ...pose, [TOE_KEY[handle.side]]: tilt }, root };
+      return { ...pose, [TOE_KEY[handle.side]]: tilt };
     }
     case 'joint': {
       const x = snap(lx, JOINT_SNAP);
       const y = snap(ly, JOINT_SNAP);
       if (carry && handle.id === 'hip') {
-        return { pose: carryHip(pose, x, y), root };
+        return carryHip(pose, x, y);
       }
-      return { pose: { ...pose, [handle.x]: x, [handle.y]: y }, root };
+      return { ...pose, [handle.x]: x, [handle.y]: y };
     }
   }
 }

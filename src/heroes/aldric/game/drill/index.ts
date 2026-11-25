@@ -2,6 +2,7 @@ import { NEUTRAL_MODIFIERS } from "../../../../drill";
 import { drawThrownBlade } from "../../../../game/effects/thrownWeapon";
 import { loadGeneratedHeroPortrait } from "../../../../generatedHeroArt";
 import type { DrillProfile } from "../../../../types/drill";
+import { heroClips } from "../../../motion";
 import { ALDRIC_MOTION, ALDRIC_POSES } from "../../constants/drill/body";
 import { ALDRIC_STRIKES } from "../../constants/drill/strikes";
 import { ALDRIC_TIERS } from "../../constants/drill/tiers";
@@ -50,4 +51,5 @@ export const ALDRIC_DRILL: DrillProfile = {
   motion: ALDRIC_MOTION,
   poses: { ...ALDRIC_POSES, ...ALDRIC_WARP_POSES, run: aldricRun },
   art: "aldric",
+  clips: heroClips("aldric"),
 };

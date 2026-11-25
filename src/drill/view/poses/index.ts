@@ -1,8 +1,9 @@
+import { ACTION_CLIPS, STATE_CLIPS } from "../../../constants/clips";
 import { DRILL_STANCE, frontHand, rearHand } from "../../../constants/drillPose";
 import { POSES, pose } from "../../../constants/hero";
 import type { DrillPoses, DrillProfile } from "../../../types/drill";
+import { sampleKeys } from "../../../utils/sampleKeys";
 import { runPose } from "../runPose";
-import { warpArrivalPose, warpFlightPose, warpThrowPose } from "../warpPose";
 
 const BREATHE = { ...DRILL_STANCE, hy: -12.8, ny: -23, by: -15, fy: -15.8 };
 const BRAKE = pose({
@@ -188,9 +189,9 @@ const DEFAULT_POSES: DrillPoses = {
   spell: SPELL,
   skillWindup: POSES.release,
   skillCut: CUT,
-  warpThrow: warpThrowPose,
-  warpFlight: warpFlightPose,
-  warpArrival: warpArrivalPose,
+  warpThrow: (age) => sampleKeys(ACTION_CLIPS.throw.keys, age),
+  warpFlight: (age) => sampleKeys(STATE_CLIPS.throwWait.keys, age),
+  warpArrival: (age) => sampleKeys(ACTION_CLIPS.warpStrike.keys, age),
 };
 
 export function drillPoses(profile: DrillProfile): DrillPoses {

@@ -156,7 +156,7 @@ Charged tiers (Silent Moon, held J), each with its own wind-up and cut pose (`co
 3. Thousand Lines: she passes through a field of crossed ink lines over 150 px; every stored cut releases.
 4. Silent Moon: a moon rises behind her, ink lines fall on both sides, and she clicks the blade home; every stored cut releases.
 
-Every release shows her cut-in (`ui/cutIn.ts`): an ink brush band with a crescent and her generated bust portrait (`ui/art/cut-in.webp`, source and prompt in `ui/art/source/`).
+Every release shows her cut-in (`ui/cutIn.ts`): an ink brush band with a crescent and her generated bust portrait (`src/generatedHeroArt/assets/saya/portrait.webp`).
 
 ## Numbers
 

@@ -1,7 +1,9 @@
-import type { DrillMotion, DrillPoses, Fighter } from "../../types/drill";
+import { ANIM_FPS } from "../../constants/hero";
+import { clipAt, clipStart, clipThrough, loopPose } from "../../motionClips";
+import type { DrillClips, DrillMotion, Fighter } from "../../types/drill";
 import type { Pose } from "../../types/pose";
-import { clamp, ease, smooth } from "../../utils/math";
 import { blendPose } from "../../utils/poseBlend";
+import { airProgress, brakeSpan, dashSpan, kickSpan, landRecovery, landSpan } from "./clips";
 import { guardPose, parryPose } from "./guardPose";
 import { skillPose } from "./skillPose";
 import { warpPose } from "./warpPose";
@@ -44,55 +46,46 @@ export function motionOf(h: Fighter, landing: number, braking: boolean): Motion 
 
 export function locomotionPose(
   h: Fighter,
-  poses: DrillPoses,
+  clips: DrillClips,
   numbers: DrillMotion,
   motion: Motion,
   age: number,
   stride: number,
   landForce: number,
 ): Pose {
+  const stance = clipStart(clips.idle);
   switch (motion) {
     case "warp":
-      return h.warp ? warpPose(h.warp, poses) : poses.stance;
+      return h.warp ? warpPose(h.warp, clips) : stance;
     case "skill":
-      return skillPose(h.skillCast, poses, h.grounded);
+      return skillPose(h.skillCast, clips, h.grounded);
     case "parry":
-      return parryPose(h, poses);
+      return parryPose(h, clips);
     case "stun":
     case "guard":
-      return guardPose(h, poses);
+      return guardPose(h, clips, age);
     case "run":
-      return poses.run(stride);
+      return loopPose(clips.run, stride * clips.run.frames.length);
     case "brake":
-      return blendPose(poses.brake, poses.stance, smooth(0.025, BRAKING_TIME, age));
+      return clipThrough(clips.brake, age / brakeSpan());
     case "idle":
-      return blendPose(poses.stance, poses.breathe, (1 - Math.cos(age * 4.6)) * 0.5);
+      return loopPose(clips.idle, age * ANIM_FPS);
     case "dash":
-      return h.airDashActive ? poses.airDash : poses.dash;
+      return clipThrough(h.airDashActive ? clips.airDash : clips.dash, age / dashSpan(numbers));
     case "jump":
-      return blendPose(h.jumpBoost ? poses.leap : poses.rise, poses.fall, clamp(1 + h.vy / numbers.rise) ** 2 * 0.62);
-    case "fall":
-      return blendPose(
-        h.jumpBoost ? poses.leap : poses.rise,
-        poses.fall,
-        0.62 + 0.38 * smooth(0, numbers.rise * 0.6, h.vy),
-      );
+    case "fall": {
+      const clip = h.jumpBoost ? clips.dashJump : clips.jump;
+      return clipThrough(clip, airProgress(h.vy, numbers));
+    }
     case "kick":
-      return poses.kick;
+      return clipThrough(clips.kick, age / kickSpan(numbers));
     case "wall":
-      return poses.wall;
+      return clipAt(clips.wall, age);
     case "land": {
-      const compression = blendPose(poses.touchdown, poses.low, landForce * smooth(0, 0.038, age));
-      return blendPose(
-        compression,
-        poses.stance,
-        ease.outCubic(smooth(0.038 * numbers.landing, LANDING_TIME * numbers.landing, age)),
-      );
+      const soft = blendPose(clipStart(clips.land), stance, landRecovery(age, numbers.landing));
+      return blendPose(soft, clipThrough(clips.land, age / landSpan(numbers)), landForce);
     }
     default:
-      return poses.stance;
+      return stance;
   }
 }
-
-export const BRAKING_TIME = 0.104;
-export const LANDING_TIME = 0.118;

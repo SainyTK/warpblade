@@ -1,8 +1,8 @@
 # Warpblade Studio
 
-A local tool for sketching Kael's moves and effects, then handing the sketch to a Claude Code agent that builds it into the game.
+A local tool for posing every frame of every hero's moves.
 
-The studio draws Kael with the game's own code (`drawHero`, the rope physics, `sampleKeys`), so a pose in the studio looks and moves exactly as it will in the game.
+The studio draws each hero with the game's own code and art (`drawHero`, the rope physics, the hero's sprite), at the game's detail, so a pose in the studio looks exactly as it will in the game.
 Nothing here ships with the game: the Vite build at the repository root does not include `studio/`.
 
 ## Run it
@@ -14,62 +14,67 @@ npm run dev
 ```
 
 Open http://127.0.0.1:5280.
-The page talks to a small server on port 5281, which saves sketches and runs the agents.
+The page talks to a small server on port 5281, which saves the drafts.
+The same port serves the game's training ground at http://127.0.0.1:5280/training/, for Play.
 
 Other commands: `npm run typecheck`, `npm run lint`, `npm run format`.
 
-Agents run through the local CLIProxyAPI proxy (`http://127.0.0.1:8317`, key in `~/.config/cliproxyapi/client-key`) with the Claude Code executable at `~/.local/bin/claude`, the same setup as the SuperU PWA Chat page.
-The model list comes from the proxy.
-When the proxy is down, the build dialog says so and no agent starts.
+## Use it
 
-## Motion
+- Pick the hero at the top. The same move stays open, so Run on Kael becomes Run on Saya. A yellow dot in the list marks a hero with edits.
+- The left column shows every move the hero has, each playing on a loop. Click one to open it. A yellow dot marks a move with edits the game does not have yet.
+- The stage and the gallery play every move at the speed the game plays it: run takes one stride (38 px) per loop at full speed, brake, land, dash, wall kick and the slashes last as long as those states do, and the rest play at 30 frames a second. A run clip is one stride, two steps; more frames add detail, not length.
+- The stage shows the frame at the playhead, with the frames before (red) and after (blue) as onion skins. The strip under it has every frame of the move; the red tag marks the frame the blow lands.
+- Drag the handles on the hero: hip, chest (bends the spine), neck, both hands, both feet, both toes (tilt the foot), both elbows (drag across the arm to flip the bend) and the sword tip. Shift-drag the hip to carry the upper body with it.
+- The right column has the same pose as numbers and switches, Snap to this frame (the game jumps to it without blending in), and Copy, Paste and Reset (back to the game's pose for that frame). Revert to the game puts the whole move back.
+- Keys: Left and Right step frames, Space plays, Ctrl+Z and Ctrl+Shift+Z undo and redo, Ctrl+C and Ctrl+V copy and paste a pose.
 
-- Drag the handles on Kael: hip, neck, both hands, both feet, the sword tip, and the yellow diamond at his feet, which moves him through the air or along the ground.
-  Shift-drag the hip to carry the whole upper body with it.
-- The small handles bend the body: the chest handle arches or hunches the spine, a toe handle tilts that foot, and dragging an elbow across its arm flips which way it bends.
-  The Pose panel has the same values as numbers and switches.
-- **Snapshot** (or `S`) keeps the pose at the playhead and moves on by the gap (3 frames by default) with a copy to pose next.
-  On a snapshot, edits change it in place. Between snapshots, the first edit starts a draft that the next Snapshot keeps.
-- **Snap to this pose** holds the previous pose and jumps to this one, as the game's `"snap"` keyframes do. **Hit frame** marks when the blow lands.
-- **Start from** loads any of the game's clips as snapshots (every move and action, and the states such as idle, walk, run, jump and hurt), or applies one of its named poses. Undo brings back what was there.
-- Play loops the motion at the game's 30 frames a second. Onion skin shows the snapshots before (red) and after (blue).
+Every edit saves as a draft of that move a moment later.
 
-## Effect
+**Play** opens the picked hero on the game's training ground in a new tab, with every saved draft in place of the game's moves.
+The tab follows each save, so a pose edited in the studio shows up in the next swing without a reload.
+The training ground has a husk and a wisp that stand again after they fall; a fallen hero starts over at once, and nothing is saved to the game.
 
-- Draw at the game's pixel scale with the pencil (`B`), eraser (`E`), line (`L`), fill (`G`) and color picker (`I`, or Alt-click).
-- The colors are the game's own ramps, named as the code names them (`PAL.crystal`, `FIRE_RAMP` and so on).
-- Each drawn frame starts at a frame of the timeline and holds for a number of frames. Painting where there is none makes one.
-  **Copy last** starts from the previous drawing. Kael shows faintly behind, in his pose at that frame.
+## Work on several moves at once
 
-## Agents
+Several people or agents can work on different moves in one checkout, each in their own tab.
+Nothing reloads a page when a move changes on disk:
 
-**Build with an agent** sends the open sketch with your instruction.
-Pick the model, the permission mode (Auto by default, as in PWA Chat) and where the agent works:
+- When a draft changes on disk (an agent writes it, or another tab saves it), every studio tab picks it up. If that move is open, the stage shows the new frames and the header says Reloaded from disk; undo goes back to what you had.
+- When a move is applied to the game, the game's dev server swaps that one clip in the running game, and the studio updates its yellow dots. Neither page reloads.
+- To play drafts in the game before applying them, use Play, or open the game with `?drafts=` and the moves, such as `http://127.0.0.1:5280/training/?drafts=run,brake` (`?drafts=all` for every draft). That tab plays the drafts of those moves for the hero in play and follows each save, and every other move plays as the game has it.
 
-- **New worktree**: a fresh git worktree from `main` at `~/orca/workspaces/warpblade/studio-<name>` on branch `<git user>/studio-<name>`, with packages installed and SuperU activated. The agent commits there and does not merge or push.
-- **This checkout**: the repository the studio runs from. The agent does not commit.
+## Hand the edits to Claude
 
-The agent gets a brief (`brief.md`) and the sketch's files: contact sheets of the snapshots, every frame and the drawn frames, the motion as a ready-to-paste clip in the game's format, the drawn frames as pixel rows, and the sketch itself.
-The job panel streams the agent's work, asks you for approvals it needs, and takes follow-up messages.
-**Play this build** starts the game from the job's folder on a free port.
+**Copy for Claude** lists the edited moves, with the open one ticked.
+**Copy selected** copies a note for the ticked moves, and **Copy all** for every edited move: where each draft is and the command that applies them.
+Paste it into the chat.
 
-Agents keep running while the page is closed. Restarting the studio server ends them; a follow-up message resumes the same Claude Code session.
+Claude, or anyone, applies the drafts to the game from `studio/`:
+
+```sh
+npm run apply-motion -- kael/strikes/first saya/run
+```
+
+With no move named, it writes every draft that differs from the game.
+Each move is named `<hero>/<move>`.
+It writes `src/heroes/<hero>/motion/<move>.json` (the format is in `docs/hero-module.md`, Motion clips), and the running game swaps that clip in without reloading.
+Once a move is applied, its yellow dot goes away.
 
 ## Where things are kept
 
-Sketches and jobs are in `studio/.data/` (git-ignored): `sketches/<id>.json`, and per job `job.json`, `timeline.json`, `exports/` and `media/`.
+Drafts are in `studio/.data/drafts/` (git-ignored), one JSON file per move under a folder per hero, such as `saya/strikes/first.json`.
 
 ## Code
 
-The agent server is ported from the SuperU PWA Chat service (the Agent SDK run, the live timeline, approvals and the event stream), and the job timeline UI from its Chat page components.
-
 ```text
-shared/      types and pure helpers used by the page and the server (the sketch, the API, the clip source)
-server/      the loopback API: sketches, jobs, worktrees, game previews and the Claude Code runs
+shared/      the draft type, used by the page and the server
+server/      the loopback API that saves drafts, apply-motion, and the Vite plugins (vite/): the game's dev server under /training/, and the one the studio and the game
+             use to send changed clips and drafts to open pages
 src/
-  constants/ stage size, joints, swatches from the game palette, tools
-  utils/     pure helpers: sampling, rig geometry, painting, the stage picture, thumbnails
-  services/  calls to the server, the exported contact sheets
-  store/     the open sketch with undo, and the editor state
-  hooks/ providers/ components/ pages/
+  constants/ stage size, joints, every hero's moves and their groups
+  utils/     pure helpers: rig geometry, ropes, the stage picture, thumbnails, clip edits
+  services/  calls to the server, the clipboard, loading the hero art
+  store/     the open move with undo and every draft, and the editor state
+  hooks/ components/ pages/
 ```

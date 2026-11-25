@@ -1,20 +1,11 @@
-import type { DrillPoses, SkillCast } from "../../types/drill";
+import { clipAt, clipStart } from "../../motionClips";
+import type { DrillClips, SkillCast } from "../../types/drill";
 import type { Pose } from "../../types/pose";
-import { smooth } from "../../utils/math";
-import { blendPose } from "../../utils/poseBlend";
 
-export function skillPose(cast: SkillCast | null, poses: DrillPoses, grounded: boolean): Pose {
-  const { stance } = poses;
+export function skillPose(cast: SkillCast | null, clips: DrillClips, grounded: boolean): Pose {
   if (!cast) {
-    return stance;
+    return clipStart(clips.idle);
   }
-  const { age, tier } = cast;
-  const raised = blendPose(stance, tier.windup ?? poses.skillWindup, smooth(0, tier.intro * 0.78, age));
-  const casting =
-    tier.look === "nova" && !tier.cut
-      ? blendPose(raised, stance, smooth(tier.intro + 0.18, tier.duration, age))
-      : age < tier.intro
-        ? raised
-        : blendPose(tier.cut ?? poses.skillCut, stance, smooth(tier.intro + 0.2, tier.duration, age));
+  const casting = clipAt(clips.tiers[cast.tier.level - 1], cast.age);
   return grounded ? casting : { ...casting, ffy: -5, bfy: -8, fa: 0.34, ba: 0.5 };
 }

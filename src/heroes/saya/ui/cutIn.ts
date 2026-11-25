@@ -2,8 +2,6 @@ import { FH, FW } from "../../../constants/stage";
 import type { SkillCast } from "../../../types/drill";
 import { clamp, ease, smooth } from "../../../utils/math";
 
-export const SAYA_CUT_IN_URL = new URL("./art/cut-in.webp", import.meta.url).href;
-
 const INK = "#070915";
 const INDIGO = "#1d2453";
 

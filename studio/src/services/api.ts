@@ -11,5 +11,5 @@ export async function request<T>(path: string, init: RequestInit = {}): Promise<
   return body;
 }
 
-export const send = <T>(path: string, method: 'POST' | 'PUT' | 'DELETE', body?: unknown) =>
+export const send = <T>(path: string, method: 'PUT', body?: unknown) =>
   request<T>(path, { method, body: body === undefined ? undefined : JSON.stringify(body) });

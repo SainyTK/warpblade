@@ -8,7 +8,9 @@ import { feat } from "./feat";
 import { countedOutcome } from "./finale";
 import { resetRun } from "./run";
 import { runReport, stageResult } from "./runReport";
+import { startRun } from "./startRun";
 import { character, game, hero } from "./state";
+import { isTraining } from "./training";
 
 /** The end of the last run, for the result screen. */
 let last: RunResult = { outcome: "fallen", wave: 0, coins: 0 };
@@ -23,6 +25,7 @@ export function onRunEnd(listener: (result: RunResult) => void): void {
 export function endRun(fate: RunOutcome): void {
   const room = coop();
   if (room) return room.endRun(fate);
+  if (isTraining()) return startRun("Rise again");
   const adventure = isAdventure();
   const outcome = adventure ? fate : countedOutcome(fate);
   feat({ kind: "runEnd", outcome, wave: game.wave, hero: character.id });

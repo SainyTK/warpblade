@@ -1,7 +1,7 @@
 import type { SpriteCanvas } from "../engine/sprite";
-import { outlineKaelSprite } from "../kaelSprite";
 import type { HeroArtPainter } from "../rig";
 import type { HeroSkin } from "../types/character";
+import { outlineHeroSprite } from "./sprite";
 import type { GeneratedHeroArt } from "./types";
 
 const ALPHA = 96;
@@ -32,7 +32,7 @@ export function createGeneratedPainter(skin: HeroSkin, art: GeneratedHeroArt): H
     const hand = art(ctx, pose, look, skin);
     ctx.resetTransform();
     const pixels = ctx.getImageData(0, 0, w, h);
-    outlineKaelSprite(pixels);
+    outlineHeroSprite(pixels);
     sprite.clear();
     sprite.begin();
     for (let y = 0; y < h; y++) {

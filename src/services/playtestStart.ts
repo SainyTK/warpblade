@@ -25,6 +25,11 @@ export function readPlaytestJob(): string | null {
   return new URLSearchParams(location.search).get("job");
 }
 
+export function readTrainingHero(): string | null {
+  if (!import.meta.env.DEV) return null;
+  return new URLSearchParams(location.search).get("training");
+}
+
 /** set by the studio's playtest harness before the page loads */
 const PLAYTEST_KEY = "warpblade-playtest";
 
@@ -34,6 +39,7 @@ const PLAYTEST_KEY = "warpblade-playtest";
  */
 export function isPlaytestSession(): boolean {
   if (!import.meta.env.DEV) return false;
+  if (readTrainingHero() !== null) return true;
   try {
     return localStorage.getItem(PLAYTEST_KEY) === "1";
   } catch {

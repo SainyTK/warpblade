@@ -6,6 +6,7 @@ import { chargedTier, drillSession, usesDrill } from "../drill";
 import { isAdventure, stageProgress } from "../game/adventure";
 import { canAffordUlt, ultRecharge } from "../game/hero/ultimate";
 import { character, game, hero, progress } from "../game/state";
+import { isTraining } from "../game/training";
 import { inRoom } from "../store/coop";
 import { bestRun } from "../store/records";
 import { xpToNext } from "../utils/progression";
@@ -65,11 +66,13 @@ export function updateHud(): void {
   ultDenied = hero.denied.ult;
   const leader = game.enemies.find((e) => e.rank !== "minion");
   const room = inRoom();
-  const waveMode = room || (!isAdventure() && game.wave > 0);
+  const waveMode = room || (!isAdventure() && !isTraining() && game.wave > 0);
   const best = room ? bestRun() : null;
-  const status = waveMode
-    ? `STAGE ${game.stage}  WAVE ${game.wave}/${STAGE_WAVES}`
-    : stageProgressText(stageProgress().distance).toUpperCase();
+  const status = isTraining()
+    ? "TRAINING GROUND"
+    : waveMode
+      ? `STAGE ${game.stage}  WAVE ${game.wave}/${STAGE_WAVES}`
+      : stageProgressText(stageProgress().distance).toUpperCase();
   const time = minutesSeconds(game.clock);
   const affordable = drill
     ? (tier?.level ?? 0)
