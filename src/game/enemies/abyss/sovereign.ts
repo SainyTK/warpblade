@@ -9,7 +9,7 @@ import { eachStanding } from "../../coopHooks";
 import { createFloorRing } from "../../effects/floorRing";
 import { createImpact } from "../../effects/impact";
 import { hurtHero } from "../../hurtHero";
-import { game, hero, particles, rng } from "../../state";
+import { fxRng, game, hero, particles, rng } from "../../state";
 import { boxHit, dust, heroBox, shake } from "../../world";
 import { facesHero, turnToHero } from "../facing";
 import { ABYSS_HITS, VOID, VOID_SPARKS } from "./colors";
@@ -149,8 +149,8 @@ export function updateSovereign(e: Enemy, dt: number, ts: number): void {
   if (e.state !== "walk") e.vx -= e.vx * 5 * dt;
   e.x = clampStageX(e.x + e.vx * dt, 20);
   e.y = GROUND;
-  if (rng.chance((enraged ? 0.14 : 0.07) * ts))
-    particles.spawn(PK.EMBER, e.x + rng.range(-12, 12), e.y - rng.range(10, 52), 0, -14, rng.range(0.5, 1), {
+  if (fxRng.chance((enraged ? 0.14 : 0.07) * ts))
+    particles.spawn(PK.EMBER, e.x + fxRng.range(-12, 12), e.y - fxRng.range(10, 52), 0, -14, fxRng.range(0.5, 1), {
       sparks: VOID_SPARKS,
     });
 }

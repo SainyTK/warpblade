@@ -8,7 +8,7 @@ import { refundStamina } from "../../../../game/hero/stamina";
 import { meleeHit } from "../../../../game/meleeHit";
 import { objectMemory, rememberPerSeat } from "../../../../game/seatMemory";
 import { skillEvolved, skillLevel, skillValues, withCharms } from "../../../../game/skills/query";
-import { game, hero, progress, rng } from "../../../../game/state";
+import { fxRng, game, hero, progress } from "../../../../game/state";
 import { boxAhead, boxHit, newSwing } from "../../../../game/world";
 import type { Effect } from "../../../../types/effect";
 import type { Enemy } from "../../../../types/enemy";
@@ -47,7 +47,7 @@ function createCurrent(x0: number, x1: number, y: number, life: number, damage: 
       for (let x = l; x <= r; x += 1 / RES) {
         const wave = Math.sin(x * 0.4 + o.t * 12) * 1.5;
         fleck(x, y - 2 + wave, DUSK_RAMP[4], k * 0.8);
-        if (rng.chance(0.04)) fleck(x, y - 4 - rng.range(0, CURRENT.tall) * k, DUSK_RAMP[5], k);
+        if (fxRng.chance(0.04)) fleck(x, y - 4 - fxRng.range(0, CURRENT.tall) * k, DUSK_RAMP[5], k);
       }
     },
   };

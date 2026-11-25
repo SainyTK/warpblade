@@ -8,7 +8,7 @@ import { PK } from "../../types/particle";
 import { WHITE } from "../../utils/color";
 import { enemyCenter } from "../enemies/enemy";
 import { skin } from "../hero/skin";
-import { particles, rng } from "../state";
+import { fxRng, particles } from "../state";
 
 /** how far apart the wake's two outer threads open at its old end */
 const WAKE_SPREAD = 2;
@@ -42,14 +42,14 @@ export function createThrownWeapon(
       angle = Math.atan2(dy, dx);
       trail.push([s.x, s.y]);
       if (trail.length > 9) trail.shift();
-      if (rng.chance(0.4))
+      if (fxRng.chance(0.4))
         particles.spawn(
           PK.MOTE,
           s.x,
           s.y,
-          -Math.cos(angle) * 40 + rng.range(-15, 15),
-          -Math.sin(angle) * 40 + rng.range(-15, 15),
-          rng.range(0.15, 0.3),
+          -Math.cos(angle) * 40 + fxRng.range(-15, 15),
+          -Math.sin(angle) * 40 + fxRng.range(-15, 15),
+          fxRng.range(0.15, 0.3),
           {
             col: skin.ramp[4],
             size: 0.5,

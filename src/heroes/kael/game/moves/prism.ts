@@ -2,7 +2,7 @@ import { onFrame } from "../../../../constants/combo";
 import { frame } from "../../../../constants/hero";
 import { PAL, WORLD_COLORS } from "../../../../constants/palette";
 import { createFloorRing } from "../../../../game/effects/floorRing";
-import { game, hero, particles, rng } from "../../../../game/state";
+import { fxRng, game, hero, particles } from "../../../../game/state";
 import { dust } from "../../../../game/world";
 import type { MoveDef } from "../../../../types/move";
 import { PK } from "../../../../types/particle";
@@ -30,12 +30,12 @@ function shatterfallImpact(): void {
       PK.SHARD,
       gx,
       hero.y - 1,
-      hero.face * rng.range(20, 100),
-      rng.range(-160, -60),
-      rng.range(0.4, 0.8),
+      hero.face * fxRng.range(20, 100),
+      fxRng.range(-160, -60),
+      fxRng.range(0.4, 0.8),
       {
         col: WORLD_COLORS.rubble,
-        size: rng.range(1.5, 2.5),
+        size: fxRng.range(1.5, 2.5),
       },
     );
 }

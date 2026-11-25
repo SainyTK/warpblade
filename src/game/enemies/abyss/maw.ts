@@ -9,7 +9,7 @@ import { eachStanding } from "../../coopHooks";
 import { createFloorRing } from "../../effects/floorRing";
 import { createImpact } from "../../effects/impact";
 import { hurtHero } from "../../hurtHero";
-import { game, hero, particles, rng } from "../../state";
+import { fxRng, game, hero, particles, rng } from "../../state";
 import { boxHit, dust, heroBox, shake } from "../../world";
 import { facesHero, turnToHero } from "../facing";
 import { ABYSS_HITS, AC, VOID, VOID_SPARKS } from "./colors";
@@ -59,10 +59,18 @@ function slam(e: Enemy, enraged: boolean): void {
   dust(fx - 6, GROUND, 6, -1);
   dust(fx + 6, GROUND, 6, 1);
   for (let i = 0; i < 8; i++)
-    particles.spawn(PK.SHARD, fx + rng.range(-10, 10), GROUND - 1, rng.range(-90, 90), rng.range(-180, -70), 0.7, {
-      col: AC.bodyLight,
-      size: rng.range(1.5, 2.5),
-    });
+    particles.spawn(
+      PK.SHARD,
+      fx + fxRng.range(-10, 10),
+      GROUND - 1,
+      fxRng.range(-90, 90),
+      fxRng.range(-180, -70),
+      0.7,
+      {
+        col: AC.bodyLight,
+        size: fxRng.range(1.5, 2.5),
+      },
+    );
   shake(0.3, 3.5);
   sfx.boom();
 }
@@ -90,8 +98,8 @@ export function updateMaw(e: Enemy, dt: number, ts: number): void {
     if (e.st >= 0.24) Object.assign(e, { state: "recover", st: 0, n: MAW_DID.bite });
   } else if (e.state === "charge") {
     e.vx = approach(e.vx, 0, 400 * dt);
-    if (rng.chance(0.7 * ts)) {
-      const a = rng.range(0, TAU);
+    if (fxRng.chance(0.7 * ts)) {
+      const a = fxRng.range(0, TAU);
       const mx = e.x + e.face * 20;
       particles.spawn(
         PK.MOTE,
@@ -128,8 +136,8 @@ export function updateMaw(e: Enemy, dt: number, ts: number): void {
   if (e.state !== "walk" && e.state !== "lunge") e.vx -= e.vx * 4 * dt;
   e.x = clampStageX(e.x + e.vx * dt, 16);
   e.y = GROUND;
-  if (rng.chance(0.2 * ts))
-    particles.spawn(PK.EMBER, e.x + rng.range(-14, 14), e.y - rng.range(8, 34), 0, -12, rng.range(0.5, 1), {
+  if (fxRng.chance(0.2 * ts))
+    particles.spawn(PK.EMBER, e.x + fxRng.range(-14, 14), e.y - fxRng.range(8, 34), 0, -12, fxRng.range(0.5, 1), {
       sparks: VOID_SPARKS,
     });
 }

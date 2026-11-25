@@ -4,7 +4,7 @@ import type { Effect } from "../../types/effect";
 import { PK } from "../../types/particle";
 import { grain } from "../../utils/grain";
 import { ease, TAU } from "../../utils/math";
-import { game, lights, particles, rng } from "../state";
+import { fxRng, game, lights, particles } from "../state";
 
 const OPEN_AT = 0.45;
 /**
@@ -25,18 +25,18 @@ export function createRift(x: number, y: number, height: number, delay: number, 
     update(dt) {
       t += dt;
       if (t < 0) return true;
-      if (t < OPEN_AT && rng.chance(0.5)) {
-        const a = rng.range(0, TAU);
-        const d = rng.range(16, 30);
+      if (t < OPEN_AT && fxRng.chance(0.5)) {
+        const a = fxRng.range(0, TAU);
+        const d = fxRng.range(16, 30);
         particles.spawn(
           PK.STREAK,
           x + Math.cos(a) * d,
           y + Math.sin(a) * d,
           -Math.cos(a) * 30,
           -Math.sin(a) * 30,
-          rng.range(0.12, 0.2),
+          fxRng.range(0.12, 0.2),
           {
-            col: rng.pick([S[4], S[5]]),
+            col: fxRng.pick([S[4], S[5]]),
           },
         );
       }
@@ -48,12 +48,12 @@ export function createRift(x: number, y: number, height: number, delay: number, 
           particles.spawn(
             PK.MOTE,
             x,
-            y + rng.range(-height, height) * 0.6,
-            rng.range(-80, 80),
-            rng.range(-50, 50),
-            rng.range(0.3, 0.6),
+            y + fxRng.range(-height, height) * 0.6,
+            fxRng.range(-80, 80),
+            fxRng.range(-50, 50),
+            fxRng.range(0.3, 0.6),
             {
-              col: rng.pick([S[3], S[4], S[5]]),
+              col: fxRng.pick([S[3], S[4], S[5]]),
               size: 0.7,
             },
           );

@@ -2,7 +2,7 @@ import { WORLD_COLORS } from "../../../../constants/palette";
 import { dealDamage } from "../../../../game/damage";
 import { createFloorRing } from "../../../../game/effects/floorRing";
 import { createImpact } from "../../../../game/effects/impact";
-import { game, lights, particles, rng } from "../../../../game/state";
+import { fxRng, game, lights, particles } from "../../../../game/state";
 import { dust, shake } from "../../../../game/world";
 import type { SourceId } from "../../../../types/build";
 import type { Effect } from "../../../../types/effect";
@@ -45,14 +45,14 @@ export function createQuake(q: Quake): Effect {
       for (let i = 0; i < 12; i++)
         particles.spawn(
           PK.SHARD,
-          q.x + rng.range(-q.reach, q.reach) * 0.8,
+          q.x + fxRng.range(-q.reach, q.reach) * 0.8,
           q.y - 1,
-          rng.range(-30, 30),
-          rng.range(-220, -90),
-          rng.range(0.4, 0.8),
+          fxRng.range(-30, 30),
+          fxRng.range(-220, -90),
+          fxRng.range(0.4, 0.8),
           {
             col: i % 3 ? WORLD_COLORS.rubble : CRIMSON[3],
-            size: rng.range(1.2, 2.8),
+            size: fxRng.range(1.2, 2.8),
           },
         );
       shake(0.3, 3.5);

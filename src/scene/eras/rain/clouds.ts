@@ -92,7 +92,7 @@ export function paintClouds(paint: PlatePaint, k: number): void {
         const seam = (step - whole - 0.5) * SEAM + 0.5;
         let c = ramp[Math.min(ramp.length - 1, seam > th ? whole + 1 : whole)];
         const sun = clamp(1 - Math.hypot(x - SUN.x, (y - SUN.y) * 1.3) / SUN.r) * (1 - k);
-        if (sun > 0) c = mix(c, RC.sunHaze, sun * sun * SUN_HAZE);
+        if (sun > 0 && paint.bodies) c = mix(c, RC.sunHaze, sun * sun * SUN_HAZE);
         paint.put(ix, iy, c);
         break;
       }

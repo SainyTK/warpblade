@@ -86,7 +86,7 @@ Nine heroes hold the night back together.
   The solo results show a grade from E to S, stage progress, bosses defeated, enemies defeated, time and damage dealt.
   The Shop on the start menu sells stats in levels (HP, attack, ability power, MP, crit, move speed, stamina), more rerolls, skips and banishes for the cards, and four skills: Lodestone, Aftershock and Head Start, bought once, and Last Light, bought in three levels, each saving the hero from one more fatal blow per run.
   Everything bought applies to every run and every hero, on top of the level-up picks, and is saved in this browser.
-- **Achievements and hero unlocks.** Achievements track goals across runs: bosses reached, a Bog Hulk victory with each hero, foes slain, long combos, perfect dodges, evolutions, coins banked, the Gloam Shepherd, the Rift Warden and The Unblinking.
+- **Achievements and hero unlocks.** Achievements track goals across runs: bosses reached, a Bog Hulk victory with each hero, foes slain, long combos, perfect dodges, evolutions, coins banked, the Gloam Shepherd, five Bog Hulk kills, the Rift Warden and The Unblinking.
   Most pay coins, a few stay hidden as ??? until an earlier one is earned, and a small banner slides down when one is earned without stopping play.
   The Achievements page on the start menu shows what each one asks, with a progress bar for those that count up, and the result screen names those a run earned.
   Kael and Cerise are free; every other hero is unlocked with coins on the hero screen, each one costing more than the last (see [docs/achievements.md](docs/achievements.md)).
@@ -114,6 +114,7 @@ Nine heroes hold the night back together.
 - **One continuous solo stage.** Head right through five eras, past patrols, platforms and climbable walls.
   Defeat Oakheart, the Bog Hulk, the Gloam Shepherd, the Rift Warden, the Abyss Maw, the Abyss Sovereign and The Unblinking to reach the exit.
   Each boss closes the room until it falls.
+  At half HP the Bog Hulk sinks into the bog, where blows hit it harder, then rises cracked with rift light and adds the Bog Rush: a belly slide along a path marked on the floor that a jump or a dodge clears, after which it lies stuck in the mud.
   You can pass regular enemies, but defeating them earns experience and helps your grade.
   Floor patrols and flying enemies guard different routes through stairs, towers and upper ledges.
   Spike traps glow before they rise, so you can jump over them or take another route.

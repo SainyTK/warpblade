@@ -4,7 +4,7 @@ import { enemyCenter } from "../../../../game/enemies/enemy";
 import { consumeStacks } from "../../../../game/enemies/skillStatus";
 import { skillEvolved, skillValues, withCharms } from "../../../../game/skills/query";
 import { foesOnScreen } from "../../../../game/skills/targets";
-import { game, hero, progress, rng } from "../../../../game/state";
+import { fxRng, game, hero, progress } from "../../../../game/state";
 import type { Effect } from "../../../../types/effect";
 import { GRAIN, SAND_RAMP } from "../../constants/palette";
 import { GALE } from "../../constants/spells";
@@ -32,7 +32,7 @@ function bleedOut(e: (typeof game.enemies)[number]): void {
 /** the visible gust: streaks of hot air and grains running out along the cone */
 function createGust(x: number, y: number, dir: number, reach: number, spread: number): Effect {
   let t = 0;
-  const seeds = Array.from({ length: 28 }, () => [rng.range(0, 1), rng.range(-1, 1), rng.range(0.6, 1)] as const);
+  const seeds = Array.from({ length: 28 }, () => [fxRng.range(0, 1), fxRng.range(-1, 1), fxRng.range(0.6, 1)] as const);
   return {
     update(dt) {
       t += dt;

@@ -105,7 +105,12 @@ function braziers(bg: Uint32Array, P: ScenePalette): void {
  * The static scene of one era at progress k, built when the wave changes: painted part by part in art pixels, each
  * part's pixels noted in a layer map, then developed into the frame's full detail, where the era adds its fine detail.
  */
-export function buildBackground(def: SceneDef, k: number, arena = true): { plate: Uint32Array; layers: Uint8Array } {
+export function buildBackground(
+  def: SceneDef,
+  k: number,
+  arena = true,
+  bodies = true,
+): { plate: Uint32Array; layers: Uint8Array } {
   const bg = new Uint32Array(N);
   const layers = new Uint8Array(N);
   const before = new Uint32Array(N);
@@ -118,7 +123,7 @@ export function buildBackground(def: SceneDef, k: number, arena = true): { plate
   const P = paletteAt(def, k);
   sky(bg, P, starsAt(def, k));
   part(LAYER.sky);
-  def.sky?.(bg, new Rng(SEEDS.sky), k);
+  if (bodies) def.sky?.(bg, new Rng(SEEDS.sky), k);
   part(LAYER.celestial);
   ridge(bg, P);
   part(LAYER.ridge);
@@ -135,6 +140,6 @@ export function buildBackground(def: SceneDef, k: number, arena = true): { plate
   def.decorate?.(bg, new Rng(SEEDS.decorate), k);
   painted((i) => (layers[i] |= DECORATED));
   const plate = developPlate(bg, layers, P);
-  def.detail?.(new PlatePaint(plate, layers, arena), new Rng(SEEDS.detail), k);
+  def.detail?.(new PlatePaint(plate, layers, arena, bodies), new Rng(SEEDS.detail), k);
   return { plate, layers };
 }

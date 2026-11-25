@@ -9,7 +9,7 @@ import { clamp } from "../../../utils/math";
 import { stageLeft, stageRight } from "../../adventure";
 import { eachStanding, heroSlot } from "../../coopHooks";
 import { hurtHero } from "../../hurtHero";
-import { game, particles, rng } from "../../state";
+import { fxRng, game, particles } from "../../state";
 import { heroBox } from "../../world";
 import { VOID, VOID_SPARKS } from "./colors";
 
@@ -59,8 +59,8 @@ export function createEyeBeam(e: Enemy, damage: number): Effect {
         hit.add(heroSlot());
         hurtHero(damage, e.x);
       });
-      if (rng.chance(0.8))
-        particles.spawn(PK.SPARK, x1, Math.min(y1, GROUND - 1), rng.range(-60, 60), rng.range(-90, -20), 0.2, {
+      if (fxRng.chance(0.8))
+        particles.spawn(PK.SPARK, x1, Math.min(y1, GROUND - 1), fxRng.range(-60, 60), fxRng.range(-90, -20), 0.2, {
           sparks: VOID_SPARKS,
         });
       return t < BEAM.life;

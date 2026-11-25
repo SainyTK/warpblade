@@ -3,7 +3,7 @@ import { dealDamage } from "../../../../game/damage";
 import { createFloorRing } from "../../../../game/effects/floorRing";
 import { createImpact } from "../../../../game/effects/impact";
 import { enemyCenter } from "../../../../game/enemies/enemy";
-import { game, hero, lights, particles, progress, rng } from "../../../../game/state";
+import { fxRng, game, hero, lights, particles, progress } from "../../../../game/state";
 import { shake, surfaceBelow } from "../../../../game/world";
 import { sfx } from "../../../../services/audio";
 import { PK } from "../../../../types/particle";
@@ -25,9 +25,9 @@ export function castBurst(power: number, wide: boolean): void {
   lights.add(x, y, reach, PAL.crystal[4], 0.5, 0.3);
   const shards = wide ? 30 : 18;
   for (let i = 0; i < shards; i++) {
-    const a = (i / shards) * TAU + rng.range(-0.15, 0.15);
+    const a = (i / shards) * TAU + fxRng.range(-0.15, 0.15);
     // held, the shards are drawn back in toward Kael
-    const sp = rng.range(120, 200) * (wide ? -0.6 : 1);
+    const sp = fxRng.range(120, 200) * (wide ? -0.6 : 1);
     const from = wide ? reach * 0.9 : 0;
     particles.spawn(
       PK.SHARD,
@@ -35,8 +35,8 @@ export function castBurst(power: number, wide: boolean): void {
       y + Math.sin(a) * from * 0.6,
       Math.cos(a) * sp,
       Math.sin(a) * sp * 0.6,
-      rng.range(0.25, 0.45),
-      { col: rng.pick(PAL.crystal.slice(3)), size: rng.range(1, 2.2) },
+      fxRng.range(0.25, 0.45),
+      { col: fxRng.pick(PAL.crystal.slice(3)), size: fxRng.range(1, 2.2) },
     );
   }
   const damage = progress.stats.ap * BURST.power * power;

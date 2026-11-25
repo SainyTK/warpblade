@@ -1,7 +1,7 @@
 import { GROUND } from "../../../constants/stage";
 import { DAY_COLORS } from "../day/colors";
 import { drawOakheart } from "../day/drawOakheart";
-import { updateOakheart } from "../day/oakheart";
+import { OAK_ENRAGE, updateOakheart } from "../day/oakheart";
 import type { EnemyKind } from "./kind";
 
 /** Oakheart, the day's mini boss: an old oak that sweeps a branch up close, breaks the floor with roots, and lobs acorns */
@@ -16,4 +16,5 @@ export const oakheart: EnemyKind = {
   draw: drawOakheart,
   glow: { radius: 36, color: DAY_COLORS.crack, eyeY: -5 },
   guardFrom: 1,
+  guarding: (e) => e.hp >= e.max * OAK_ENRAGE,
 };

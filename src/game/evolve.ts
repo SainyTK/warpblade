@@ -4,7 +4,7 @@ import { sfx } from "../services/audio";
 import { PK } from "../types/particle";
 import { createFloorRing } from "./effects/floorRing";
 import { objectMemory, rememberPerSeat } from "./seatMemory";
-import { game, hero, lights, particles, rng, showBanner } from "./state";
+import { fxRng, game, hero, lights, particles, showBanner } from "./state";
 
 /** names of evolutions gained in a pick or a chest still open, celebrated once play resumes */
 const pending: { waiting: string[] } = { waiting: [] };
@@ -25,14 +25,14 @@ function celebrate(name: string): void {
   for (let i = 0; i < C.stars; i++)
     particles.spawn(
       PK.STAR,
-      hero.x + rng.range(-10, 10),
-      hero.y - rng.range(0, 30),
+      hero.x + fxRng.range(-10, 10),
+      hero.y - fxRng.range(0, 30),
       0,
-      -rng.range(20, 60),
-      rng.range(0.5, 1),
+      -fxRng.range(20, 60),
+      fxRng.range(0.5, 1),
       {
-        col: rng.pick([COIN_GOLD[3], COIN_GOLD[4]]),
-        size: rng.range(1, 2.5),
+        col: fxRng.pick([COIN_GOLD[3], COIN_GOLD[4]]),
+        size: fxRng.range(1, 2.5),
       },
     );
   showBanner(name, C.banner);

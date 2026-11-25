@@ -10,7 +10,7 @@ import { clampStageX } from "../adventure";
 import { eachStanding } from "../coopHooks";
 import { createSlash } from "../effects/slash";
 import { hurtHero } from "../hurtHero";
-import { game, hero, particles, rng } from "../state";
+import { fxRng, game, hero, particles, rng } from "../state";
 import { boxHit, heroBox } from "../world";
 import { foeSees } from "./awareness";
 import { enemyBox } from "./enemy";
@@ -54,8 +54,8 @@ export function updateHusk(e: Enemy, dt: number, ts: number): void {
   if (e.state !== "walk") e.vx -= e.vx * 4 * dt;
   e.x = clampStageX(e.x + e.vx * dt, 10);
   e.y = GROUND;
-  if (rng.chance(0.08 * ts))
-    particles.spawn(PK.EMBER, e.x + rng.range(-6, 6), e.y - rng.range(6, 22), 0, -10, rng.range(0.4, 0.8), {
+  if (fxRng.chance(0.08 * ts))
+    particles.spawn(PK.EMBER, e.x + fxRng.range(-6, 6), e.y - fxRng.range(6, 22), 0, -10, fxRng.range(0.4, 0.8), {
       sparks: SPARKS.shadow,
     });
   // a husk whose feet are held does not hurt by touch

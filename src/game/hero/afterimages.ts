@@ -3,7 +3,7 @@ import { detailCanvas } from "../../engine/sprite";
 import { PK } from "../../types/particle";
 import { lerp, TAU } from "../../utils/math";
 import { createWarpLine } from "../effects/warpLine";
-import { game, hero, lights, particles, rng } from "../state";
+import { fxRng, game, hero, lights, particles } from "../state";
 import { drawHeroSprite } from "./look";
 import { skin } from "./skin";
 
@@ -27,10 +27,10 @@ export function leaveAfterimages(ox: number, oy: number, nx: number, ny: number)
   }
   game.fx.push(createWarpLine(ox, oy - 18, nx, ny - 18));
   for (let i = 0; i < 12; i++) {
-    const a = rng.range(0, TAU);
-    const sp = rng.range(30, 120);
-    particles.spawn(PK.MOTE, ox, oy - 18, Math.cos(a) * sp, Math.sin(a) * sp, rng.range(0.2, 0.45), {
-      col: rng.pick(skin.ramp.slice(3)),
+    const a = fxRng.range(0, TAU);
+    const sp = fxRng.range(30, 120);
+    particles.spawn(PK.MOTE, ox, oy - 18, Math.cos(a) * sp, Math.sin(a) * sp, fxRng.range(0.2, 0.45), {
+      col: fxRng.pick(skin.ramp.slice(3)),
       size: 0.6,
     });
   }
@@ -44,12 +44,12 @@ export function dropDashGhost(): void {
   particles.spawn(
     PK.MOTE,
     hero.x,
-    hero.y - rng.range(6, 26),
-    -hero.face * rng.range(20, 60),
-    rng.range(-20, 20),
-    rng.range(0.2, 0.4),
+    hero.y - fxRng.range(6, 26),
+    -hero.face * fxRng.range(20, 60),
+    fxRng.range(-20, 20),
+    fxRng.range(0.2, 0.4),
     {
-      col: skin.ramp[rng.int(3, 5)],
+      col: skin.ramp[fxRng.int(3, 5)],
       size: 0.6,
     },
   );

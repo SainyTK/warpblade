@@ -5,7 +5,7 @@ import { PK } from "../../../types/particle";
 import { stageLeft, stageRight } from "../../adventure";
 import { eachStanding, heroSlot } from "../../coopHooks";
 import { hurtHero } from "../../hurtHero";
-import { particles, rng } from "../../state";
+import { fxRng, particles } from "../../state";
 import { boxHit, heroBox } from "../../world";
 import { RAIN_FOES as C, MUD_SPARKS } from "./colors";
 
@@ -30,8 +30,8 @@ export function createMudWave(x: number, dir: number, damage: number, delay = 0)
         bit.add(heroSlot());
         hurtHero(damage, o.x - dir * 10);
       });
-      if (rng.chance(0.5))
-        particles.spawn(PK.SPARK, o.x + dir * 2, GROUND - h, dir * rng.range(10, 50), -rng.range(30, 90), 0.3, {
+      if (fxRng.chance(0.5))
+        particles.spawn(PK.SPARK, o.x + dir * 2, GROUND - h, dir * fxRng.range(10, 50), -fxRng.range(30, 90), 0.3, {
           sparks: MUD_SPARKS,
         });
       return o.x > stageLeft() - 12 && o.x < stageRight() + 12;

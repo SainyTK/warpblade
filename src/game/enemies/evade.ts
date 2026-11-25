@@ -4,7 +4,7 @@ import { sfx } from "../../services/audio";
 import { PK } from "../../types/particle";
 import { TAU } from "../../utils/math";
 import { cue } from "../cue";
-import { game, hero, particles, rng } from "../state";
+import { fxRng, game, hero, particles, rng } from "../state";
 import { kindOf } from "./kinds";
 
 /** a swing begins: a drifting wisp in its path may slip away, more often in later waves */
@@ -22,8 +22,8 @@ export function wispsEvade(): void {
     e.vy = -50;
     cue(e.x, e.y - 12, "evade");
     for (let i = 0; i < 8; i++) {
-      const a = rng.range(0, TAU);
-      particles.spawn(PK.MOTE, e.x, e.y, Math.cos(a) * 60, Math.sin(a) * 60, rng.range(0.2, 0.4), {
+      const a = fxRng.range(0, TAU);
+      particles.spawn(PK.MOTE, e.x, e.y, Math.cos(a) * 60, Math.sin(a) * 60, fxRng.range(0.2, 0.4), {
         col: PAL.shadow[4],
         size: 0.7,
       });

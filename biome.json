@@ -49,6 +49,44 @@
       }
     },
     {
+      "includes": ["src/scene/**"],
+      "linter": {
+        "rules": {
+          "style": {
+            "noRestrictedImports": {
+              "level": "error",
+              "options": {
+                "patterns": [
+                  {
+                    "group": ["**/heroes/*/**"],
+                    "message": "Shared code reaches a hero only through the roster (src/heroes/roster.ts) and the hero registry (src/heroes/index.ts), never a file inside a hero's folder (docs/hero-module.md)."
+                  }
+                ],
+                "paths": {
+                  "../game/state": {
+                    "importNames": ["rng"],
+                    "message": "Scene drawing reads fxRng for effects and never the play generator rng (docs/graphics.md)."
+                  },
+                  "../../game/state": {
+                    "importNames": ["rng"],
+                    "message": "Scene drawing reads fxRng for effects and never the play generator rng (docs/graphics.md)."
+                  },
+                  "../../../game/state": {
+                    "importNames": ["rng"],
+                    "message": "Scene drawing reads fxRng for effects and never the play generator rng (docs/graphics.md)."
+                  },
+                  "../../../../game/state": {
+                    "importNames": ["rng"],
+                    "message": "Scene drawing reads fxRng for effects and never the play generator rng (docs/graphics.md)."
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    {
       "includes": ["src/heroes/roster.ts", "src/heroes/stub.ts", "src/rig/**"],
       "linter": {
         "rules": {

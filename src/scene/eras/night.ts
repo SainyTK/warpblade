@@ -103,7 +103,7 @@ export const night: SceneDef = {
   sky: (bg) => drawMoon(bg),
   detail(paint, r) {
     sky.stars = paintSky(paint, r, NIGHT_PALETTE);
-    paintMoon(paint);
+    if (paint.bodies) paintMoon(paint);
     paintTowers(paint, r, NIGHT_PALETTE);
     paintFloor(paint);
   },

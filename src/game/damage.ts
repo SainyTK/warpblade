@@ -72,6 +72,7 @@ export function isBehind(e: Enemy, fromX: number): boolean {
 function guards(e: Enemy, o: HitOptions): boolean {
   if (!o.melee || o.curls || o.fromX === undefined) return false;
   const kind = kindOf(e.type);
+  if (kind.guarding && !kind.guarding(e)) return false;
   if (kind.guardFrom === undefined || game.wave < kind.guardFrom) return false;
   return (
     e.state === kind.rest &&

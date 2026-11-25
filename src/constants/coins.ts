@@ -11,7 +11,7 @@ export const COIN_DROP: Record<EnemyType, number> = {
   oakheart: 8,
   mire: 2,
   stormkite: 1,
-  boghulk: 8,
+  boghulk: 10,
   golem: 2,
   sprite: 1,
   stalker: 2,

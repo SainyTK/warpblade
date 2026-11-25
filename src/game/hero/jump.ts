@@ -6,7 +6,7 @@ import { isAdventure } from "../adventure";
 import { createFloorRing } from "../effects/floorRing";
 import { horizontalDirection, isHeld, pressAge } from "../input";
 import { emitSkillEvent } from "../skills/events";
-import { game, hero, particles, rng } from "../state";
+import { fxRng, game, hero, particles } from "../state";
 import { dust } from "../world";
 import { isFree, setState } from "./actions";
 import { blowsDone, endMove } from "./combo";
@@ -23,9 +23,17 @@ function doubleJumpBurst(): void {
   const h = hero;
   game.fx.push(createFloorRing(h.x, h.y, 14, skin.ramp, 0.3, 0.3));
   for (let i = 0; i < 8; i++)
-    particles.spawn(PK.FLAKE, h.x + rng.range(-6, 6), h.y, rng.range(-40, 40), rng.range(10, 50), rng.range(0.3, 0.6), {
-      col: skin.ramp[rng.int(4, 6)],
-    });
+    particles.spawn(
+      PK.FLAKE,
+      h.x + fxRng.range(-6, 6),
+      h.y,
+      fxRng.range(-40, 40),
+      fxRng.range(10, 50),
+      fxRng.range(0.3, 0.6),
+      {
+        col: skin.ramp[fxRng.int(4, 6)],
+      },
+    );
   sfx.doubleJump();
 }
 

@@ -5,7 +5,7 @@ import { PK } from "../../../types/particle";
 import { approach, clamp, TAU } from "../../../utils/math";
 import { waveScale } from "../../../utils/progression";
 import { clampStageX } from "../../adventure";
-import { game, hero, particles, rng } from "../../state";
+import { fxRng, game, hero, particles, rng } from "../../state";
 import { foeSees } from "../awareness";
 import { PRISM } from "./colors";
 import { createPrismFlash } from "./prismFlash";
@@ -22,9 +22,9 @@ const MUZZLE = 10;
 
 function sparkleBurst(x: number, y: number): void {
   for (let i = 0; i < 9; i++) {
-    const a = (i / 9) * TAU + rng.range(-0.2, 0.2);
-    const sp = rng.range(30, 70);
-    particles.spawn(PK.MOTE, x, y, Math.cos(a) * sp, Math.sin(a) * sp, rng.range(0.2, 0.4), {
+    const a = (i / 9) * TAU + fxRng.range(-0.2, 0.2);
+    const sp = fxRng.range(30, 70);
+    particles.spawn(PK.MOTE, x, y, Math.cos(a) * sp, Math.sin(a) * sp, fxRng.range(0.2, 0.4), {
       col: PRISM[i % PRISM.length],
       size: 0.6,
     });
@@ -88,8 +88,8 @@ export function updateSprite(e: Enemy, dt: number, ts: number): void {
   } else if (e.state === "wind") {
     e.vx = approach(e.vx, 0, 300 * dt);
     e.vy = approach(e.vy, 0, 300 * dt);
-    if (rng.chance(0.5 * ts)) {
-      const a = rng.range(0, TAU);
+    if (fxRng.chance(0.5 * ts)) {
+      const a = fxRng.range(0, TAU);
       particles.spawn(
         PK.MOTE,
         e.x + Math.cos(a) * 10,
@@ -98,7 +98,7 @@ export function updateSprite(e: Enemy, dt: number, ts: number): void {
         -Math.sin(a) * 50,
         0.2,
         {
-          col: rng.pick(PRISM),
+          col: fxRng.pick(PRISM),
           size: 0.5,
         },
       );
@@ -120,8 +120,8 @@ export function updateSprite(e: Enemy, dt: number, ts: number): void {
   e.vy -= e.vy * 2 * dt;
   e.x = clampStageX(e.x + e.vx * dt, 10);
   e.y = clamp(e.y + e.vy * dt, 20, GROUND - 10);
-  if (e.state !== "blink" && rng.chance(0.12 * ts))
-    particles.spawn(PK.EMBER, e.x + rng.range(-4, 4), e.y + 3, 0, rng.range(4, 12), rng.range(0.3, 0.6), {
+  if (e.state !== "blink" && fxRng.chance(0.12 * ts))
+    particles.spawn(PK.EMBER, e.x + fxRng.range(-4, 4), e.y + 3, 0, fxRng.range(4, 12), fxRng.range(0.3, 0.6), {
       sparks: [PRISM[0], PRISM[1], PRISM[3]],
     });
 }

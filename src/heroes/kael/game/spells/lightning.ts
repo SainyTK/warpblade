@@ -6,7 +6,7 @@ import { dealDamage } from "../../../../game/damage";
 import { fineRing } from "../../../../game/effects/fine";
 import { createFloorRing } from "../../../../game/effects/floorRing";
 import { enemyCenter } from "../../../../game/enemies/enemy";
-import { game, lights, particles, rng } from "../../../../game/state";
+import { fxRng, game, lights, particles } from "../../../../game/state";
 import { hitStop, shake, surfaceBelow } from "../../../../game/world";
 import { sfx } from "../../../../services/audio";
 import type { SourceId } from "../../../../types/build";
@@ -62,7 +62,7 @@ export function boltPath(x0: number, y0: number, x1: number, y1: number, displac
       const [ax, ay] = pts[i - 1];
       const [bx, by] = pts[i];
       const L = Math.hypot(bx - ax, by - ay) || 1;
-      const off = rng.range(-disp, disp);
+      const off = fxRng.range(-disp, disp);
       next.push([(ax + bx) / 2 + ((by - ay) / L) * off, (ay + by) / 2 - ((bx - ax) / L) * off], pts[i]);
     }
     pts = next;
@@ -101,10 +101,10 @@ export function createLightning(target: Enemy | null, point: readonly [number, n
   let forks: Path[] = [];
   const arcs: { x: number; y: number; pts: Path }[] = [];
   const build = () => {
-    path = boltPath(tx + rng.range(-16, 16), o.fromY ?? -4, tx, ty, 16, 5);
+    path = boltPath(tx + fxRng.range(-16, 16), o.fromY ?? -4, tx, ty, 16, 5);
     forks = Array.from({ length: 3 }, () => {
-      const [fx, fy] = path[rng.int(6, path.length - 6)];
-      return boltPath(fx, fy, fx + rng.range(-24, 24), fy + rng.range(12, 30), 7, 3);
+      const [fx, fy] = path[fxRng.int(6, path.length - 6)];
+      return boltPath(fx, fy, fx + fxRng.range(-24, 24), fy + fxRng.range(12, 30), 7, 3);
     });
     for (const arc of arcs) arc.pts = boltPath(tx, ty, arc.x, arc.y, 10, 4);
   };
@@ -116,36 +116,36 @@ export function createLightning(target: Enemy | null, point: readonly [number, n
     lights.add(tx, ty, 14, WHITE, STRIKE_LIGHT.core * k, 0.1);
     lights.add(tx, ground, 44, V[2], STRIKE_LIGHT.floor * k, 0.6);
     for (let i = 0; i < 26; i++) {
-      const a = rng.range(Math.PI, TAU);
-      const sp = rng.range(140, 420);
-      particles.spawn(PK.SPARK, tx, ty, Math.cos(a) * sp, Math.sin(a) * sp, rng.range(0.2, 0.55), {
+      const a = fxRng.range(Math.PI, TAU);
+      const sp = fxRng.range(140, 420);
+      particles.spawn(PK.SPARK, tx, ty, Math.cos(a) * sp, Math.sin(a) * sp, fxRng.range(0.2, 0.55), {
         sparks: SPARKS.volt,
       });
     }
     for (let i = 0; i < 5; i++)
       particles.spawn(
         PK.STAR,
-        tx + rng.range(-14, 14),
-        ty - rng.range(0, 20),
-        rng.range(-20, 20),
-        rng.range(-30, 0),
-        rng.range(0.4, 0.8),
+        tx + fxRng.range(-14, 14),
+        ty - fxRng.range(0, 20),
+        fxRng.range(-20, 20),
+        fxRng.range(-30, 0),
+        fxRng.range(0.4, 0.8),
         {
           col: V[3],
-          size: rng.range(1.5, 3),
+          size: fxRng.range(1.5, 3),
         },
       );
     for (let i = 0; i < 4; i++)
       particles.spawn(
         PK.SMOKE,
-        tx + rng.range(-6, 6),
+        tx + fxRng.range(-6, 6),
         ground - 2,
-        rng.range(-10, 10),
-        -rng.range(5, 15),
-        rng.range(0.8, 1.4),
+        fxRng.range(-10, 10),
+        -fxRng.range(5, 15),
+        fxRng.range(0.8, 1.4),
         {
           col: 0,
-          size: rng.range(3, 5),
+          size: fxRng.range(3, 5),
         },
       );
     game.fx.push(createFloorRing(tx, ground, 36, V, 0.4));
@@ -174,14 +174,14 @@ export function createLightning(target: Enemy | null, point: readonly [number, n
     update(dt) {
       t += dt;
       if (t < 0) return true;
-      if (t < STRIKE && rng.chance(0.4))
+      if (t < STRIKE && fxRng.chance(0.4))
         particles.spawn(
           PK.SPARK,
-          tx + rng.range(-6, 6),
-          ty + rng.range(-6, 6),
-          rng.range(-60, 60),
-          rng.range(-90, 0),
-          rng.range(0.08, 0.16),
+          tx + fxRng.range(-6, 6),
+          ty + fxRng.range(-6, 6),
+          fxRng.range(-60, 60),
+          fxRng.range(-90, 0),
+          fxRng.range(0.08, 0.16),
           {
             sparks: SPARKS.volt,
           },

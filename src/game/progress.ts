@@ -15,7 +15,7 @@ import { raiseCharm, raiseSkill } from "./build/raise";
 import { createFloorRing } from "./effects/floorRing";
 import { forgetEvolutions } from "./evolve";
 import { airLimit } from "./skills/airLimit";
-import { character, freshProgress, game, hero, lights, particles, progress, rng, showBanner } from "./state";
+import { character, freshProgress, fxRng, game, hero, lights, particles, progress, showBanner } from "./state";
 
 /** recompute everything derived from the level and the build, keeping HP and MP inside the new maxima */
 export function refreshProgress(): void {
@@ -36,14 +36,14 @@ function celebrateLevel(): void {
   for (let i = 0; i < 18; i++)
     particles.spawn(
       PK.STAR,
-      hero.x + rng.range(-10, 10),
-      hero.y - rng.range(0, 30),
+      hero.x + fxRng.range(-10, 10),
+      hero.y - fxRng.range(0, 30),
       0,
-      -rng.range(20, 60),
-      rng.range(0.5, 1),
+      -fxRng.range(20, 60),
+      fxRng.range(0.5, 1),
       {
-        col: rng.pick([PAL.heal[3], PAL.heal[4]]),
-        size: rng.range(1, 2.5),
+        col: fxRng.pick([PAL.heal[3], PAL.heal[4]]),
+        size: fxRng.range(1, 2.5),
       },
     );
   sfx.levelUp();

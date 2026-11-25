@@ -46,7 +46,7 @@ export interface SceneDef {
   stars: number | ((k: number) => number);
   /** lit window chance in the towers, 0 to 1; the night uses 0.5 */
   windows: number;
-  /** static: drawn over the sky, before the ridge and towers (sun, moon, clouds, aurora, a rift in the sky) */
+  /** static: the sun or moon drawn over the sky, before the ridge and towers; left out of the picture without bodies */
   sky?(bg: Uint32Array, r: Rng, k: number): void;
   /** static: drawn last, over the floor and slabs (puddles, crystals, cracks, roots) */
   decorate?(bg: Uint32Array, r: Rng, k: number): void;

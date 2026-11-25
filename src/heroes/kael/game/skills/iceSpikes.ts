@@ -4,7 +4,7 @@ import { createImpact } from "../../../../game/effects/impact";
 import { enemyCenter } from "../../../../game/enemies/enemy";
 import { skillValues } from "../../../../game/skills/query";
 import { foesOnScreen } from "../../../../game/skills/targets";
-import { game, particles, progress, rng } from "../../../../game/state";
+import { fxRng, game, particles, progress } from "../../../../game/state";
 import { sfx } from "../../../../services/audio";
 import { PK } from "../../../../types/particle";
 import type { SkillBehavior, SkillMemory } from "../../../../types/skillBehavior";
@@ -36,9 +36,9 @@ export const iceSpikes: SkillBehavior = {
       const [x, y] = enemyCenter(ev.foe);
       for (let i = 0; i < 12; i++) {
         const a = (i / 12) * TAU;
-        particles.spawn(PK.SHARD, x, y, Math.cos(a) * rng.range(90, 180), Math.sin(a) * rng.range(90, 180), 0.5, {
-          col: rng.pick(PAL.ice.slice(3)),
-          size: rng.range(1.5, 3),
+        particles.spawn(PK.SHARD, x, y, Math.cos(a) * fxRng.range(90, 180), Math.sin(a) * fxRng.range(90, 180), 0.5, {
+          col: fxRng.pick(PAL.ice.slice(3)),
+          size: fxRng.range(1.5, 3),
         });
       }
       game.fx.push(createImpact(x, y, 1, true, SPARKS.ice));

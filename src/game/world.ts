@@ -5,7 +5,7 @@ import { PK } from "../types/particle";
 import type { Box } from "../types/world";
 import { stagePlatforms, stageWalls } from "./adventure";
 import { heroSlot } from "./coopHooks";
-import { game, hero, particles, rng } from "./state";
+import { fxRng, game, hero, particles } from "./state";
 
 const REDUCED_MOTION = matchMedia("(prefers-reduced-motion: reduce)").matches;
 
@@ -57,7 +57,7 @@ export function hitStop(time: number): void {
   game.freeze = Math.max(game.freeze, time);
 }
 export function dust(x: number, y: number, n: number, dir = 0): void {
-  const R = rng;
+  const R = fxRng;
   for (let i = 0; i < n; i++)
     particles.spawn(
       PK.DUST,

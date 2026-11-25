@@ -10,7 +10,7 @@ import { createBlastCore } from "../effects/flash";
 import { createFloorRing } from "../effects/floorRing";
 import { markBurner } from "../enemies/burn";
 import { enemyCenter } from "../enemies/enemy";
-import { game, lights, particles, rng } from "../state";
+import { fxRng, game, lights, particles, rng } from "../state";
 import { dust, hitStop, shake } from "../world";
 
 /** the shake and hit-stop of a full-size burst */
@@ -24,37 +24,36 @@ const BLAST_LIGHT = { radius: 70, color: hex("#ff8a2a"), strength: 0.5, core: 12
 export function explode(x: number, y: number, blast: Blast): void {
   const { radius, damage, burn } = blast;
   const brands = blast.brands ?? FULL.brands;
-  const R = rng;
   const k = radius / 42;
   lights.add(x, y - 6, BLAST_LIGHT.radius * k, BLAST_LIGHT.color, BLAST_LIGHT.strength, 0.6);
   lights.add(x, y - 6, BLAST_LIGHT.core, WHITE, BLAST_LIGHT.coreStrength, 0.12);
   for (let i = 0; i < 30 * k; i++) {
-    const a = R.range(Math.PI, TAU) + R.range(-0.4, 0.4);
-    const sp = R.range(30, 150) * k;
-    const flag = R.chance(0.7) ? PF.SMOKES | (R.chance(0.4) ? PF.BIG : 0) : 0;
-    particles.spawn(PK.FIRE, x, y - 4, Math.cos(a) * sp, Math.sin(a) * sp * 0.8, R.range(0.3, 0.7), {
+    const a = fxRng.range(Math.PI, TAU) + fxRng.range(-0.4, 0.4);
+    const sp = fxRng.range(30, 150) * k;
+    const flag = fxRng.chance(0.7) ? PF.SMOKES | (fxRng.chance(0.4) ? PF.BIG : 0) : 0;
+    particles.spawn(PK.FIRE, x, y - 4, Math.cos(a) * sp, Math.sin(a) * sp * 0.8, fxRng.range(0.3, 0.7), {
       col: 0,
-      size: R.range(2, 3.6),
+      size: fxRng.range(2, 3.6),
       flag,
     });
   }
   for (let i = 0; i < 20; i++) {
-    const a = R.range(Math.PI * 1.05, Math.PI * 1.95);
-    const sp = R.range(160, 400);
-    particles.spawn(PK.SPARK, x, y - 4, Math.cos(a) * sp, Math.sin(a) * sp, R.range(0.25, 0.7));
+    const a = fxRng.range(Math.PI * 1.05, Math.PI * 1.95);
+    const sp = fxRng.range(160, 400);
+    particles.spawn(PK.SPARK, x, y - 4, Math.cos(a) * sp, Math.sin(a) * sp, fxRng.range(0.25, 0.7));
   }
   for (let i = 0; i < brands; i++)
-    particles.spawn(PK.BRAND, x, Math.min(y - 6, GROUND - 6), R.range(-130, 130), R.range(-240, -130), 3);
+    particles.spawn(PK.BRAND, x, Math.min(y - 6, GROUND - 6), rng.range(-130, 130), rng.range(-240, -130), 3);
   for (let i = 0; i < 8; i++)
     particles.spawn(
       PK.EMBER,
-      x + R.range(-10, 10),
-      y - R.range(2, 14),
-      R.range(-30, 30),
-      R.range(-60, -20),
-      R.range(0.8, 1.6),
+      x + fxRng.range(-10, 10),
+      y - fxRng.range(2, 14),
+      fxRng.range(-30, 30),
+      fxRng.range(-60, -20),
+      fxRng.range(0.8, 1.6),
       {
-        delay: R.range(0.1, 0.4),
+        delay: fxRng.range(0.1, 0.4),
       },
     );
   dust(x, y, 8);

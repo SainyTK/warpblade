@@ -6,7 +6,7 @@ import { WHITE } from "../../../utils/color";
 import { stageLeft, stageRight } from "../../adventure";
 import { eachStanding, heroSlot } from "../../coopHooks";
 import { hurtHero } from "../../hurtHero";
-import { particles, rng } from "../../state";
+import { fxRng, particles } from "../../state";
 import { boxHit, heroBox } from "../../world";
 import { RUNE_RAMP, RUNE_SPARKS } from "./colors";
 
@@ -36,10 +36,18 @@ export function createRuneWave(x0: number, dir: number, damage: number): Effect 
         w.struck.add(heroSlot());
         hurtHero(damage, w.x - dir * 10);
       });
-      if (rng.chance(0.45))
-        particles.spawn(PK.EMBER, w.x + rng.range(-2, 2), GROUND - rng.range(1, 6), dir * 10, -rng.range(14, 30), 0.5, {
-          sparks: RUNE_SPARKS,
-        });
+      if (fxRng.chance(0.45))
+        particles.spawn(
+          PK.EMBER,
+          w.x + fxRng.range(-2, 2),
+          GROUND - fxRng.range(1, 6),
+          dir * 10,
+          -fxRng.range(14, 30),
+          0.5,
+          {
+            sparks: RUNE_SPARKS,
+          },
+        );
       const end = Math.abs(w.x - x0) > REACH || w.x < stageLeft() - 4 || w.x > stageRight() + 4;
       return !end;
     },

@@ -1,5 +1,5 @@
 import { createBlastCore } from "../../../../game/effects/flash";
-import { game, lights, particles, rng } from "../../../../game/state";
+import { fxRng, game, lights, particles } from "../../../../game/state";
 import { shake } from "../../../../game/world";
 import { PK } from "../../../../types/particle";
 import { GUNSMOKE, HOT_RAMP, PHOSPHOR } from "../../constants/colors";
@@ -20,17 +20,17 @@ export function roundBlast(x: number, y: number, dir: number, hot: boolean, heav
   const look = heavy ? LOOK.heavy : LOOK.light;
   game.fx.push(createBlastCore(x, y, ramp[4]));
   for (let i = 0; i < look.sparks; i++)
-    particles.spawn(PK.SPARK, x, y, dir * rng.range(40, 180), rng.range(-120, 60), rng.range(0.12, 0.3), {
-      col: ramp[rng.int(4, 6)],
+    particles.spawn(PK.SPARK, x, y, dir * fxRng.range(40, 180), fxRng.range(-120, 60), fxRng.range(0.12, 0.3), {
+      col: ramp[fxRng.int(4, 6)],
     });
   for (let i = 0; i < look.smoke; i++)
     particles.spawn(
       PK.SMOKE,
-      x + rng.range(-3, 3),
-      y + rng.range(-3, 3),
-      dir * rng.range(5, 20),
-      rng.range(-25, -8),
-      rng.range(0.4, 0.7),
+      x + fxRng.range(-3, 3),
+      y + fxRng.range(-3, 3),
+      dir * fxRng.range(5, 20),
+      fxRng.range(-25, -8),
+      fxRng.range(0.4, 0.7),
       {
         col: GUNSMOKE,
       },

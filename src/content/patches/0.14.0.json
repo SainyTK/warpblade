@@ -1,0 +1,236 @@
+{
+  "version": "0.14.0",
+  "kind": "big",
+  "date": "2026-11-24",
+  "title": "Bog Rush",
+  "tagline": "The Bog Hulk at wave 10 is now a two-phase boss. At half HP it sinks into the bog, rises cracked with violet rift light, and adds the Bog Rush, a belly slide you jump or dodge and then punish.",
+  "intro": "The Bog Hulk is where many runs end now that Oakheart is easier, and it was the last early boss with only one phase. This patch gives it a real break in the middle of the fight and a second phase with its own look and move. At half HP it sinks into the bog, where your blows hit it harder, then bursts back up and starts using the Bog Rush. The Rush marks its whole path on the floor before it slides, so a well-timed jump or dodge leaves it lying stuck in the mud for you to strike. Its first phase, its HP and the heroes' Trials are the same as before, and a new achievement, Bog Breaker, gives you a reason to come back to it. Your coins, shop levels, unlocked heroes, jobs, achievements and options carry over as they were.",
+  "highlights": [
+    {
+      "title": "The Sinking",
+      "text": "The first time the Bog Hulk falls to half HP, whatever it was winding up is dropped and it sinks into the bog in a splash of mud and water. For 1.6 s it attacks nothing, raises no guard, cannot be knocked down and takes 1.5 times the damage from every blow. Keep hitting.",
+      "media": {
+        "kind": "video",
+        "file": "bog-hulk-sinking.mp4",
+        "poster": "bog-hulk-sinking.png",
+        "alt": "Kael slashes the Bog Hulk at wave 10 until its health falls to half. The Hulk drops low into the bog with a splash of mud and water, and Kael dashes clear. He then comes back and keeps striking the sunken Hulk while large damage numbers pop up.",
+        "width": 640,
+        "height": 360
+      }
+    },
+    {
+      "title": "The Rise",
+      "text": "Bubbles rise and its rift motes pulse just before it comes back up. It bursts out of the floor with a ring of mud, a violet ring and flash, flying mud and embers. The Rise itself deals no damage. In its second phase the mossy hood is gone, violet cracks glow across its body, two of its four reeds remain, and its glow grows.",
+      "media": {
+        "kind": "video",
+        "file": "bog-hulk-rise.mp4",
+        "poster": "bog-hulk-rise.png",
+        "alt": "The sunken Bog Hulk bursts back up in a flash of violet light, with a glowing ring on the floor and mud flying out. Kael watches from a few steps away. The Hulk now stands without its mossy hood, with glowing violet cracks across its body and only two reeds on its back, and it walks toward Kael.",
+        "width": 640,
+        "height": 360
+      }
+    },
+    {
+      "title": "Bog Rush",
+      "text": "In its second phase the Bog Hulk rears back while a row of violet dashes marks the full length of its slide on the floor. Then it throws itself forward on its belly along the mark. It slides low, so a jump carries you over it, and a dodge or a perfect guard works as for any hit. When the slide ends it lies stuck in the mud for 1.1 s, open from every side.",
+      "media": {
+        "kind": "video",
+        "file": "bog-rush.mp4",
+        "poster": "bog-rush.png",
+        "alt": "In its second phase the cracked Bog Hulk rears back while a row of violet dashes marks a path along the floor toward Kael. It throws itself forward on its belly, spraying mud. Kael jumps, the Hulk slides underneath him, and it ends up lying stuck in the mud. Kael lands, turns and lands critical hits on it while a dark wet streak fades along its path.",
+        "width": 640,
+        "height": 360
+      }
+    },
+    {
+      "title": "Bog Breaker",
+      "text": "A new achievement in the Foes group, beside Shepherd's End: slay the Bog Hulk 5 times for 50 coins. Bog Hulk kills from before this patch count toward it.",
+      "media": {
+        "kind": "image",
+        "file": "bog-breaker.png",
+        "alt": "The moment Kael defeats the Bog Hulk at wave 10. An Achievement banner at the top reads Bog Breaker, 50 coins, and WAVE 10 CLEAR shows in the middle of the stage as the rain era fades toward night.",
+        "width": 1280,
+        "height": 720
+      }
+    }
+  ],
+  "sections": [
+    {
+      "id": "foes",
+      "entries": [
+        {
+          "name": "Bog Hulk",
+          "tag": "rework",
+          "summary": "At half HP the Bog Hulk sinks into the bog, takes extra damage for a moment, then rises into a second phase with a new look.",
+          "context": "The Bog Hulk ended the most bot runs last night, and it was the last early boss whose fight did not change shape halfway. A short window where it is open and takes more damage rewards heroes who keep pressing across the half-HP line, the same way the Gloam Shepherd's kneel does.",
+          "changes": [
+            {
+              "kind": "stat",
+              "label": "At half HP",
+              "before": "Enrages where it stands",
+              "after": "Drops any wind-up, sinks into the bog for 1.6 s, then rises over 0.45 s into phase 2"
+            },
+            {
+              "kind": "stat",
+              "label": "Damage taken while sinking",
+              "before": "None (no such state)",
+              "after": "1.5 x from every source"
+            },
+            {
+              "kind": "stat",
+              "label": "Guard, stuns and knockdowns while sinking and rising",
+              "before": "None (no such state)",
+              "after": "No guard, and stuns and knockdowns do not take hold"
+            },
+            {
+              "kind": "note",
+              "text": "The Rise deals no damage and pushes nothing, and the Bog Hulk waits a moment before its first attack in phase 2."
+            },
+            {
+              "kind": "stat",
+              "label": "Look below half HP",
+              "before": "Mossy hood and four reeds, the same as above half HP",
+              "after": "No hood, three violet cracks across its body, two reeds with dark heads, brighter eyes"
+            },
+            {
+              "kind": "stat",
+              "label": "Glow radius below half HP",
+              "before": "40 px",
+              "after": "52 px"
+            },
+            {
+              "kind": "note",
+              "text": "The cracks flare and light up while it gathers any attack, and embers drift up from them."
+            },
+            {
+              "kind": "note",
+              "text": "Phase 2 keeps the old enraged numbers: walk 26 px/s, wind-ups at 0.75 x, rests at 0.7 x, two mud waves and four globs. Phase 1 is unchanged, and so are its HP, XP and frontal guard."
+            },
+            {
+              "kind": "stat",
+              "label": "Coins dropped",
+              "before": "8",
+              "after": "10 (12 or 13 in your run with the coin bonus every drop gets)"
+            },
+            {
+              "kind": "note",
+              "text": "The Bog Hulk's room in the solo adventure plays both phases too."
+            }
+          ],
+          "media": {
+            "kind": "image",
+            "file": "bog-hulk-phases.png",
+            "alt": "Two close-ups of the Bog Hulk walking toward Kael in the rain, side by side. On the left, labelled Phase 1, it has a mossy green hood and four cattail reeds. On the right, labelled Phase 2, the moss is gone, jagged violet cracks glow across its back, and only two dark reeds remain.",
+            "width": 1280,
+            "height": 360
+          }
+        },
+        {
+          "name": "Bog Rush",
+          "tag": "new",
+          "summary": "A new phase 2 move: a marked belly slide you jump or dodge, after which the Bog Hulk lies stuck and open.",
+          "context": "We wanted a boss move you answer with a jump and that pays you back for it. The full path shows on the floor from the first frame of the wind-up, so you always know where it will stop. It comes on a timer at any distance, so every phase 2 that lasts a few seconds shows it.",
+          "changes": [
+            {
+              "kind": "stat",
+              "label": "When it comes",
+              "before": "None",
+              "after": "2 s after the Rise, then at least 7 s after each slide ends, whenever you are on the ground"
+            },
+            {
+              "kind": "stat",
+              "label": "Wind-up",
+              "before": "None",
+              "after": "0.9 s, shortened by the wave like every foe's wind-up (0.8 s at wave 10)"
+            },
+            {
+              "kind": "stat",
+              "label": "Slide",
+              "before": "None",
+              "after": "150 px at 170 px/s, stopping short at a wall"
+            },
+            {
+              "kind": "stat",
+              "label": "Damage",
+              "before": "None",
+              "after": "20 base, scaled by the wave (29 HP at wave 10), once per hero per Rush"
+            },
+            {
+              "kind": "stat",
+              "label": "Hit box while sliding and stuck",
+              "before": "30 px wide, 34 px tall standing",
+              "after": "36 px wide, 16 px tall, low enough to jump over"
+            },
+            {
+              "kind": "stat",
+              "label": "Stuck after the slide",
+              "before": "None",
+              "after": "1.1 s, no attacks and no guard"
+            },
+            {
+              "kind": "note",
+              "text": "From close range it slides right through you along the same marked path. Jump or dodge during the wind-up while it rears back; a jump started in the last half of the wind-up clears it."
+            },
+            {
+              "kind": "note",
+              "text": "If a wall leaves it less than 40 px to slide, it wades back a few steps while still facing you, for up to 1.2 s, then starts the Rush."
+            },
+            {
+              "kind": "note",
+              "text": "A dark wet streak marks its path and fades over 1.5 s. It does no damage."
+            },
+            {
+              "kind": "note",
+              "text": "Known issue: on phones the violet dashes are thin and can sit under your hero's feet at close range. Its rear-back pose is the clearer warning for now."
+            }
+          ],
+          "media": {
+            "kind": "video",
+            "file": "bog-rush.mp4",
+            "poster": "bog-rush.png",
+            "alt": "The cracked Bog Hulk rears back over a row of violet dashes, slides on its belly under Kael's jump, and lies stuck in the mud while Kael strikes it.",
+            "width": 640,
+            "height": 360
+          }
+        }
+      ]
+    },
+    {
+      "id": "systems",
+      "entries": [
+        {
+          "name": "Bog Breaker",
+          "tag": "new",
+          "summary": "A new Foes achievement for slaying the Bog Hulk 5 times.",
+          "context": "Many of you already hold every hero's Trial at the Bog Hulk, so its new fight needed a goal of its own. It stays hidden as ??? until Night Watch is earned, like Shepherd's End.",
+          "changes": [
+            {
+              "kind": "stat",
+              "label": "Reward",
+              "before": "None",
+              "after": "50 coins"
+            },
+            {
+              "kind": "stat",
+              "label": "Achievements",
+              "before": "41, paying 2,960 coins in all",
+              "after": "42, paying 3,010 coins in all"
+            },
+            {
+              "kind": "note",
+              "text": "The count uses the Bog Hulk kills your save already tracks, so it may be closer than you think."
+            }
+          ],
+          "media": {
+            "kind": "image",
+            "file": "bog-breaker.png",
+            "alt": "The Bog Breaker achievement banner, 50 coins, at the moment Kael defeats the Bog Hulk at wave 10.",
+            "width": 1280,
+            "height": 720
+          }
+        }
+      ]
+    }
+  ],
+  "feedback": []
+}
