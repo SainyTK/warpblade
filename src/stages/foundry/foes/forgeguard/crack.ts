@@ -42,7 +42,7 @@ function warning(c: CrackLine, k: number, t: number): void {
 
 function drawJet(x: number, h: number, age: number): void {
   const w = 1 + h / CRACK.height;
-  for (let y = 0; y < h; y++) {
+  for (let y = 0; y < h; y += 0.5) {
     const u = y / h;
     const sway = Math.sin(age * 40 + y * 0.6 + x) * 0.6 * u;
     const c = u < 0.25 ? FORGE.molten[5] : u < 0.55 ? FORGE.molten[4] : u < 0.8 ? FORGE.molten[3] : FORGE.molten[2];

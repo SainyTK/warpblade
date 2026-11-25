@@ -30,7 +30,7 @@ function crack(x: number, y: number, reach: number, k: number): void {
 }
 
 function column(x: number, y: number, half: number, h: number, age: number): void {
-  for (let v = 0; v < h; v++) {
+  for (let v = 0; v < h; v += 0.5) {
     const u = v / h;
     const sway = Math.sin(age * 40 + v * 0.5) * 0.7 * u;
     const w = half * (1 - u * 0.35) + Math.sin(v * 0.9 + age * 30) * 0.4;

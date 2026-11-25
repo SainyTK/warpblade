@@ -3,7 +3,7 @@ import { boss, flyer, ledge, pit, site, surge, walker } from "../geometry";
 
 export const catwalks: Approach = {
   rise: 0,
-  room: surge(40, 10),
+  room: surge(36, 10),
   parSeconds: 66,
   length: 980,
   slabs: [
@@ -45,7 +45,7 @@ export const catwalks: Approach = {
 
 export const furnaceHalls: Approach = {
   rise: 1,
-  room: surge(30, 8, ["forgeguard", "slagling"]),
+  room: surge(26, 8, ["forgeguard", "slagling"]),
   parSeconds: 72,
   length: 1060,
   slabs: [

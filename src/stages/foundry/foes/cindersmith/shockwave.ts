@@ -11,6 +11,7 @@ import { PK } from "../../../../types/particle";
 import { clamp } from "../../../../utils/math";
 import { FORGE, FORGE_SPARKS } from "../../colors";
 
+const CREST = 22;
 const WAVE = { speed: 165, height: 9, half: 5, life: 1.5 } as const;
 
 export function createShockwave(x: number, dir: number, damage: number): Effect {
@@ -51,14 +52,15 @@ export function createShockwave(x: number, dir: number, damage: number): Effect 
     draw() {
       place();
       const h = WAVE.height * clamp(t / 0.08) * clamp((WAVE.life - t) / 0.3);
-      for (let i = 0; i < 12; i++) {
-        const back = i * 2;
+      for (let back = 0; back < CREST; back += 0.5) {
         const bx = front - dir * back;
-        const k = 1 - i / 12;
-        const hh = h * k * (0.6 + 0.4 * Math.sin(i * 1.7 + t * 30));
-        const c = i < 2 ? FORGE.molten[5] : i < 5 ? FORGE.molten[4] : i < 8 ? FORGE.molten[3] : FORGE.molten[2];
-        hairline(bx, GROUND, bx, GROUND - hh, c);
-        hairline(bx - dir * 0.5, GROUND, bx - dir * 0.5, GROUND - hh * 0.7, FORGE.molten[2]);
+        const k = 1 - back / CREST;
+        const rise = back < 3 ? 0.75 + back * 0.08 : k * 1.05;
+        const hh = h * rise * (0.85 + 0.15 * Math.sin(back * 0.9 + t * 30));
+        if (hh < 0.5) continue;
+        hairline(bx, GROUND, bx, GROUND - hh, FORGE.molten[2]);
+        hairline(bx, GROUND - hh * 0.55, bx, GROUND - hh, FORGE.molten[3]);
+        hairline(bx, GROUND - hh * 0.85, bx, GROUND - hh, back < 4 ? FORGE.molten[5] : FORGE.molten[4]);
       }
       px(front, GROUND - h, FORGE.molten[4]);
       fleck(front + dir, GROUND - h - 1, FORGE.molten[5]);

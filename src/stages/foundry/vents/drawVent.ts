@@ -48,7 +48,7 @@ export function drawVentWarning(x: number, v: VentState, t: number): void {
 export function drawVentJet(x: number, v: VentState, t: number): void {
   const h = v.height;
   if (h < 1) return;
-  for (let y = 0; y < h; y++) {
+  for (let y = 0; y < h; y += 0.5) {
     const u = y / h;
     const sway = Math.sin(t * 34 + y * 0.35) * 0.8 * u;
     const w = 3.2 - u * 1.2 + Math.sin(t * 50 + y) * 0.35;
