@@ -104,6 +104,13 @@ function nearbyFoes(from: Enemy, reach: number, count: number): Enemy[] {
     .map(({ other }) => other);
 }
 
+function arcColor(target: Enemy): number {
+  if (fused("superconductor") && chilled(target)) return COLOR.frost;
+  if (fused("plasma")) return COLOR.blaze;
+  if (fused("neurotoxin")) return COLOR.venom;
+  return COLOR.storm;
+}
+
 function stormArcs(e: Enemy, damage: number, depth: number, forced: boolean): void {
   const r = rank("storm");
   if (r <= 0) return;
@@ -113,7 +120,7 @@ function stormArcs(e: Enemy, damage: number, depth: number, forced: boolean): vo
   const [cx, cy] = enemyCenter(e);
   for (const target of targets) {
     const [tx, ty] = enemyCenter(target);
-    pushArc(cx, cy, tx, ty, COLOR.storm, WHITE_CORE);
+    pushArc(cx, cy, tx, ty, arcColor(target), WHITE_CORE);
     const boost = fused("superconductor") && chilled(target) ? 2 : 1;
     const share = (STORM.share + STORM.sharePerRank * r) * boost;
     dealDamage(target, damage * share, {
