@@ -8,7 +8,7 @@ import { BLIGHT } from "../colors";
 import { circleTouchesHero, drawSporeCloud, type Exposure, exposure, linger, POISON_TONES } from "../spores";
 import { CLOUD_SITES } from "./sites";
 
-const CLOUD = { radius: 12, hit: 6, grace: 0.3, notice: 46, speed: 0.35 } as const;
+const CLOUD = { radius: 12, hit: 5, grace: 0.3, notice: 46, speed: 0.35 } as const;
 
 const touches: Exposure[] = CLOUD_SITES.map(() => exposure(CLOUD.grace));
 const alert = CLOUD_SITES.map(() => 0);

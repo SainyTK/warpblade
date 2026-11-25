@@ -8,7 +8,7 @@ import { BLIGHT } from "../colors";
 import { drawPoolSurface, type Exposure, exposure, linger, strikeOnce } from "../spores";
 import { POOL_SITES } from "./sites";
 
-export const POOL = { cycle: 3.4, heave: 0.8, plume: 0.55, height: 34, tick: 4, plumeHit: 8, grace: 0.3 } as const;
+export const POOL = { cycle: 3.4, heave: 0.8, plume: 0.55, height: 34, tick: 3, plumeHit: 7, grace: 0.3 } as const;
 const FEET = 3;
 
 interface PoolState {

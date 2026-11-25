@@ -17,7 +17,7 @@ const drift = (x: number, y: number, span: number): DriftSite => ({ x, y, span }
 
 export const rootTunnel: Approach = {
   rise: 0,
-  room: surge(40, 10),
+  room: surge(36, 10),
   parSeconds: 60,
   length: 980,
   slabs: [
@@ -58,7 +58,7 @@ export const rootTunnel: Approach = {
 
 export const fungalMarsh: Approach = {
   rise: 1,
-  room: surge(35, 9, ["rotcrawler", "spitbloom"]),
+  room: surge(32, 9, ["rotcrawler", "spitbloom", "rotcrawler"]),
   parSeconds: 70,
   length: 1050,
   slabs: [

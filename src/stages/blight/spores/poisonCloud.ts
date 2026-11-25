@@ -17,7 +17,7 @@ export const POISON_TONES: CloudTones = {
 
 const GROW = 0.25;
 const FADE = 0.6;
-const GRACE = 0.22;
+const GRACE = 0.32;
 
 export function createPoisonCloud(x: number, y: number, radius: number, life: number, damage: number): Effect {
   const seed = fxRng.range(0, TAU);

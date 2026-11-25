@@ -10,8 +10,8 @@ import { waveScale } from "../../../../utils/progression";
 import { BLIGHT } from "../../colors";
 import { createPoisonCloud } from "../../spores";
 
-export const PUFF_HITS = { cloud: 7 } as const;
-export const PUFF = { swell: 0.65, provoked: 0.35, spent: 2.2, near: 34, drift: 34 } as const;
+export const PUFF_HITS = { cloud: 6 } as const;
+export const PUFF = { swell: 0.65, provoked: 0.55, spent: 2.2, near: 34, drift: 34 } as const;
 const CLOUD = { radius: 15, life: 2.6 } as const;
 const DEATH_CLOUD = { radius: 12, life: 1.8 } as const;
 
