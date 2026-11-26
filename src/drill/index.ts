@@ -18,6 +18,7 @@ export { NEUTRAL_MODIFIERS } from "./modifiers";
 export { drillOnly, nativeOrDrill } from "./nativeOrDrill";
 export { drillProfile, heroDrill, usesDrill } from "./selection";
 export { chargedTier } from "./simulation";
+export { swingTouches } from "./simulation/swingArea";
 export { clipSpans } from "./view/clips";
 export { drawCutIn } from "./view/cutIn";
 export { fitRunFeet, RUN_TOE_OFF } from "./view/runFoot";

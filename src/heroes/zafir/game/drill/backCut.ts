@@ -1,5 +1,5 @@
 import { WARP } from "../../../../constants/combat";
-import { drillSession } from "../../../../drill";
+import { drillSession, swingTouches } from "../../../../drill";
 import { dealDamage } from "../../../../game/damage";
 import { enemyCenter } from "../../../../game/enemies/enemy";
 import { game, progress } from "../../../../game/state";
@@ -26,8 +26,7 @@ export function cutBehind(kind: DrillStrikeId | "warp", land: Land): boolean {
   const infusion = h.swordInfusion?.spell ?? null;
   let landed = false;
   for (const foe of game.enemies) {
-    const back = (h.x - foe.x) * h.face;
-    if (foe.hp <= 0 || back <= EDGE || back > reach + EDGE || Math.abs(foe.y - h.y) > height) {
+    if (foe.hp <= 0 || !swingTouches(foe, h.x - h.face * EDGE, h.x - h.face * (reach + EDGE), h.y, height)) {
       continue;
     }
     const hit = dealDamage(foe, progress.stats.ad * power * BEHIND_SHARE, {

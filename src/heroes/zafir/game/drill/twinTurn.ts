@@ -1,4 +1,4 @@
-import { drillSession } from "../../../../drill";
+import { drillSession, swingTouches } from "../../../../drill";
 import { dealDamage } from "../../../../game/damage";
 import { createSlash } from "../../../../game/effects/slash";
 import { game, progress } from "../../../../game/state";
@@ -22,7 +22,7 @@ export function twinTurn(land: Land): void {
     const power = strike.damage * modifiers.strikeDamage * modifiers.finisherDamage * TWIN_TURN.share;
     const infusion = h.swordInfusion?.spell ?? null;
     for (const foe of game.enemies) {
-      if (foe.hp <= 0 || Math.abs(foe.x - h.x) > reach + 6 || Math.abs(foe.y - h.y) > strike.height + 8) {
+      if (foe.hp <= 0 || !swingTouches(foe, h.x - reach - 6, h.x + reach + 6, h.y, strike.height + 8)) {
         continue;
       }
       const hit = dealDamage(foe, progress.stats.ad * power, { fromX: h.x, source: "attacks", melee: true });

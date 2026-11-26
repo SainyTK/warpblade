@@ -7,6 +7,7 @@ import type { DrillProfile, DrillStrikeId, Session, Swing } from "../../types/dr
 import { smooth } from "../../utils/math";
 import { KEEN_WINDOW, TARGET_RADIUS } from "../constants";
 import { executeFollowUp } from "./followUp";
+import { swingTouches } from "./swingArea";
 import { hitWithSword, spendSwordBonuses } from "./swordInfusion";
 
 const HIT_STOP = 0.042;
@@ -31,10 +32,10 @@ function impact(session: Session, swing: Swing): void {
   const damage =
     profile.attack * strike.damage * modifiers.strikeDamage * (strike.finisher ? modifiers.finisherDamage : 1);
   let landed = false;
+  const near = h.x - h.face * TARGET_RADIUS;
+  const far = h.x + h.face * (reach + TARGET_RADIUS);
   for (const enemy of game.enemies) {
-    const dx = (enemy.x - h.x) * h.face;
-    const dy = enemy.y - h.y;
-    if (dx >= -TARGET_RADIUS && dx <= reach + TARGET_RADIUS && Math.abs(dy) <= strike.height) {
+    if (swingTouches(enemy, near, far, h.y, strike.height)) {
       if (hitWithSword(session, enemy, h.face, damage, strike.finisher, keen)) {
         landed = true;
       }
