@@ -1,0 +1,52 @@
+{
+  "imagePixelsPerArtPixel": 2,
+  "frames": [
+    [0, 0, 112, 100, 56, 86],
+    [112, 0, 112, 100, 56, 86],
+    [224, 0, 112, 100, 56, 86],
+    [336, 0, 112, 100, 56, 86],
+    [448, 0, 112, 100, 56, 86]
+  ],
+  "clips": {
+    "idle": {
+      "frames": [0],
+      "fps": 5,
+      "loop": true
+    },
+    "walk": {
+      "frames": [0, 1],
+      "fps": 5,
+      "loop": true
+    },
+    "wind": {
+      "frames": [2],
+      "fps": 5,
+      "loop": false
+    },
+    "shoot": {
+      "frames": [3],
+      "fps": 5,
+      "loop": false
+    },
+    "charge": {
+      "frames": [2],
+      "fps": 5,
+      "loop": false
+    },
+    "swipe": {
+      "frames": [3],
+      "fps": 5,
+      "loop": false
+    },
+    "recover": {
+      "frames": [0],
+      "fps": 5,
+      "loop": false
+    },
+    "hurt": {
+      "frames": [4],
+      "fps": 5,
+      "loop": false
+    }
+  }
+}

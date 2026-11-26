@@ -1,0 +1,180 @@
+{
+  "imagePixelsPerArtPixel": 2,
+  "frames": [
+    [0, 0, 248, 208, 124, 196],
+    [248, 0, 248, 208, 124, 196],
+    [496, 0, 248, 208, 124, 196],
+    [744, 0, 248, 208, 124, 196],
+    [992, 0, 248, 208, 124, 196],
+    [1240, 0, 248, 208, 124, 196],
+    [1488, 0, 248, 208, 124, 196],
+    [1736, 0, 248, 208, 124, 196]
+  ],
+  "clips": {
+    "idle": {
+      "frames": [1],
+      "fps": 5,
+      "loop": true
+    },
+    "walk": {
+      "frames": [1],
+      "fps": 5,
+      "loop": true
+    },
+    "wind": {
+      "frames": [3],
+      "fps": 5,
+      "loop": false
+    },
+    "swipe": {
+      "frames": [2],
+      "fps": 5,
+      "loop": false
+    },
+    "volley": {
+      "frames": [3],
+      "fps": 5,
+      "loop": false
+    },
+    "shoot": {
+      "frames": [3],
+      "fps": 5,
+      "loop": false
+    },
+    "charge": {
+      "frames": [3],
+      "fps": 5,
+      "loop": false
+    },
+    "burrow": {
+      "frames": [1],
+      "fps": 5,
+      "loop": false
+    },
+    "summon": {
+      "frames": [2],
+      "fps": 5,
+      "loop": false
+    },
+    "hop": {
+      "frames": [2],
+      "fps": 5,
+      "loop": false
+    },
+    "leap": {
+      "frames": [0],
+      "fps": 5,
+      "loop": false
+    },
+    "lunge": {
+      "frames": [2],
+      "fps": 5,
+      "loop": false
+    },
+    "beam": {
+      "frames": [0],
+      "fps": 5,
+      "loop": false
+    },
+    "dive": {
+      "frames": [2],
+      "fps": 5,
+      "loop": false
+    },
+    "blink": {
+      "frames": [3],
+      "fps": 5,
+      "loop": false
+    },
+    "recover": {
+      "frames": [1],
+      "fps": 5,
+      "loop": false
+    },
+    "hurt": {
+      "frames": [0],
+      "fps": 5,
+      "loop": false
+    },
+    "idle@2": {
+      "frames": [5],
+      "fps": 5,
+      "loop": true
+    },
+    "walk@2": {
+      "frames": [5],
+      "fps": 5,
+      "loop": true
+    },
+    "wind@2": {
+      "frames": [7],
+      "fps": 5,
+      "loop": false
+    },
+    "swipe@2": {
+      "frames": [6],
+      "fps": 5,
+      "loop": false
+    },
+    "volley@2": {
+      "frames": [7],
+      "fps": 5,
+      "loop": false
+    },
+    "shoot@2": {
+      "frames": [7],
+      "fps": 5,
+      "loop": false
+    },
+    "charge@2": {
+      "frames": [7],
+      "fps": 5,
+      "loop": false
+    },
+    "burrow@2": {
+      "frames": [5],
+      "fps": 5,
+      "loop": false
+    },
+    "summon@2": {
+      "frames": [6],
+      "fps": 5,
+      "loop": false
+    },
+    "hop@2": {
+      "frames": [6],
+      "fps": 5,
+      "loop": false
+    },
+    "leap@2": {
+      "frames": [4],
+      "fps": 5,
+      "loop": false
+    },
+    "lunge@2": {
+      "frames": [6],
+      "fps": 5,
+      "loop": false
+    },
+    "beam@2": {
+      "frames": [4],
+      "fps": 5,
+      "loop": false
+    },
+    "dive@2": {
+      "frames": [6],
+      "fps": 5,
+      "loop": false
+    },
+    "blink@2": {
+      "frames": [7],
+      "fps": 5,
+      "loop": false
+    },
+    "recover@2": {
+      "frames": [5],
+      "fps": 5,
+      "loop": false
+    }
+  }
+}
