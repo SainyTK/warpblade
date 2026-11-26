@@ -1,3 +1,4 @@
+import { PACT } from "../../../../constants/vitals";
 import type { SkillDef } from "../../../../types/skill";
 import { evolvedRow } from "../../../../utils/skillRows";
 import { drillLevels, drillValues, type NativeStep } from "./drillLevels";
@@ -17,13 +18,13 @@ const NATIVE: readonly NativeStep[] = [
 
 const LEVELS = drillLevels(NATIVE, [
   { text: "An arrival infuses the sword with the selected spell for 1 hit.", drill: { charge: 1 } },
-  { text: "Spell preparation 15% faster.", drill: { preparation: 0.85 } },
-  { text: "New: an arrival cuts 1 s off a spell being prepared.", drill: { hasten: 1 } },
+  { text: "Spell cooldowns 15% shorter.", drill: { preparation: 0.85 } },
+  { text: "New: an arrival takes 1 s off every spell cooldown.", drill: { hasten: 1 } },
   { text: "New: every infusion lasts 1 more hit.", drill: { infusion: 1 } },
   { text: "New: the arrival bursts with the selected spell.", drill: { burst: 0.6 } },
-  { text: "Arrival infusion 1 to 2 hits; preparation 30% faster.", drill: { charge: 2, preparation: 0.7 } },
+  { text: "Arrival infusion 1 to 2 hits; spell cooldowns 30% shorter.", drill: { charge: 2, preparation: 0.7 } },
   { text: "Infusions last 2 more hits; a stronger burst.", drill: { infusion: 2, burst: 1 } },
-  { text: "Preparation 45% faster; the burst doubles.", drill: { preparation: 0.55, burst: 2 } },
+  { text: "Spell cooldowns 45% shorter; the burst doubles.", drill: { preparation: 0.55, burst: 2 } },
 ]);
 
 export const SPELLWARP: SkillDef = {
@@ -33,7 +34,8 @@ export const SPELLWARP: SkillDef = {
   element: "void",
   risk: "timed",
   button: "L",
-  text: "Warp Strike pours the selected spell into the sword, and spells are prepared faster.",
+  pact: PACT.focus,
+  text: "Warp Strike pours the selected spell into the sword, and spell cooldowns are shorter.",
   levels: LEVELS,
   evolution: {
     partner: "k_warpcraft",

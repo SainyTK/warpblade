@@ -1,5 +1,6 @@
+import { deny } from "../../game/hero/deny";
 import type { DrillInput, Fighter, FollowUp, Session } from "../../types/drill";
-import { startWarpStrike } from "./warpStrike";
+import { startWarpStrike, warpLocksActions } from "./warpStrike";
 
 export function queueFollowUp(h: Fighter, input: DrillInput): void {
   const swing = h.swing;
@@ -9,9 +10,24 @@ export function queueFollowUp(h: Fighter, input: DrillInput): void {
   const groundSlash = h.grounded && swing.kind !== "air";
   if (groundSlash && input.guard) {
     swing.followUp = "enhancedParry";
-  } else if (input.dash && h.warpReadyIn === 0) {
-    swing.followUp = "warp";
   }
+}
+
+export function readWarp(session: Session, input: DrillInput): void {
+  const h = session.fighter;
+  if (!input.warp || h.stun > 0 || warpLocksActions(h)) {
+    return;
+  }
+  if (h.warpReadyIn > 0) {
+    deny("warp");
+    return;
+  }
+  if (h.swing) {
+    h.swing.followUp = "warp";
+    return;
+  }
+  h.spellRelease = null;
+  startWarpStrike(session);
 }
 
 export function executeFollowUp(session: Session, kind: FollowUp): void {

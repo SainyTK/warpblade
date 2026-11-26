@@ -18,7 +18,7 @@ const LEVELS = drillLevels(NATIVE, [
   { text: "New: Glass Rain cuts 0.6 harder.", drill: { power: 0.6 } },
   { text: "New: two shards fall on the foes nearest the target.", drill: { shards: 2 } },
   { text: "Glass Rain cut 0.6 to 1.2.", drill: { power: 1.2 } },
-  { text: "New: spells prepare 20% faster.", drill: { preparation: 0.8 } },
+  { text: "New: spell cooldowns 20% shorter.", drill: { preparation: 0.8 } },
   { text: "Glass Rain cut 1.2 to 2.4; four shards.", drill: { power: 2.4, shards: 4 } },
   { text: "New: a glass-infused hit sprays shards on the foes beside it.", drill: { spray: 0.6 } },
   { text: "Glass Rain cut 2.4 to 5; blind 2 s longer.", drill: { power: 5, blind: 2 } },
@@ -31,7 +31,7 @@ export const GLASS_RAIN: SkillDef = {
   element: "frost",
   risk: "timed",
   button: "I",
-  text: "Glass Rain scours harder: longer blindness, shards that rain on the foes round the target, and quicker preparation.",
+  text: "Glass Rain scours harder: longer blindness, shards that rain on the foes round the target, and shorter spell cooldowns.",
   levels: LEVELS,
   evolution: {
     partner: "za_gale",

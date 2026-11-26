@@ -1,3 +1,4 @@
+import { PACT } from "../../../../constants/vitals";
 import type { SkillDef } from "../../../../types/skill";
 import { evolvedRow } from "../../../../utils/skillRows";
 import { drillLevels, drillValues } from "./drillLevels";
@@ -36,6 +37,7 @@ export const IRON_SKIN: SkillDef = {
   element: "frost",
   risk: "easy",
   button: "L",
+  pact: PACT.mending,
   text: "Her dash and air dash cannot be hurt, and she gets more air dashes.",
   levels: LEVELS,
   evolution: {

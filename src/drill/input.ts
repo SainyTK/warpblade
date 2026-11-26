@@ -8,6 +8,7 @@ export const DRILL_KEYMAP: Readonly<Record<string, InputAction>> = {
   Space: "up",
   ShiftLeft: "dash",
   ShiftRight: "dash",
+  KeyU: "warp",
 };
 
 export function readDrillInput(): DrillInput {
@@ -21,6 +22,7 @@ export function readDrillInput(): DrillInput {
     attackHeld: isHeld("attack"),
     cast: take("cast"),
     cycle: take("cycle"),
+    warp: take("warp"),
     guardHeld: isHeld("guard"),
     guard: take("guard"),
     drop: take("down"),

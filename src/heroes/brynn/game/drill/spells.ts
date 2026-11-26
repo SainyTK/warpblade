@@ -37,6 +37,8 @@ export const BRYNN_SPELLS: readonly DrillSpell[] = [
     radius: 16,
     look: "shard",
     freeze: 0,
+    cooldown: 1.6,
+    mp: 8,
     status: bleed,
   },
   {
@@ -52,6 +54,8 @@ export const BRYNN_SPELLS: readonly DrillSpell[] = [
     radius: 26,
     look: "spark",
     freeze: 0,
+    cooldown: 2.8,
+    mp: 12,
     status: shake,
   },
   {
@@ -67,6 +71,8 @@ export const BRYNN_SPELLS: readonly DrillSpell[] = [
     radius: 22,
     look: "flame",
     freeze: 0,
+    cooldown: 2.2,
+    mp: 10,
     status: brand,
   },
 ];

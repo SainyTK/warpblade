@@ -16,6 +16,7 @@ import { kindOf } from "./enemies/kinds";
 import { feat } from "./feat";
 import { kit } from "./hero/kits";
 import { resonateDeath } from "./resonance";
+import { dropShards } from "./shards";
 import { emitSkillEvent } from "./skills/events";
 import { fxRng, game, lights, particles, rng } from "./state";
 import { isTraining } from "./training";
@@ -124,6 +125,7 @@ export function killEnemy(e: Enemy, source?: SourceId): void {
     dropCoins(e, x, y);
     if (leavesChest(e)) dropChest(x, y, e.rank === "boss" ? BOSS_CHEST_LEAST : 1);
     dropXp(e.xp, x, y);
+    dropShards(e, x, y);
   }
   if (big) shake(0.5, 4);
   sfx.death();

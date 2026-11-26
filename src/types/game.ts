@@ -36,6 +36,17 @@ export interface XpOrb {
   rest: boolean;
   done?: boolean;
 }
+export type ShardKind = "heart" | "mana";
+export interface Shard {
+  x: number;
+  y: number;
+  vx: number;
+  vy: number;
+  t: number;
+  kind: ShardKind;
+  rest: boolean;
+  done?: boolean;
+}
 /** an afterimage left by a warp or a dash */
 export interface Ghost {
   s: SpriteImage;
@@ -55,7 +66,7 @@ export interface Blaze {
 }
 export type DamageTag = "normal" | "crit" | "back" | "air" | "burn" | "block" | "break" | "shatter";
 /** a word that pops without a number */
-export type CueWord = "evade" | "perfect" | "keen" | "parry" | "broken";
+export type CueWord = "evade" | "perfect" | "keen" | "parry" | "broken" | "noMp" | "notReady";
 /** a number that pops out of a struck foe */
 export interface DamageNumber {
   x: number;
@@ -104,6 +115,7 @@ export interface GameState {
   coins: number;
   coinDrops: Coin[];
   xpOrbs: XpOrb[];
+  shards: Shard[];
   /** the stage's end: its last boss still to fall, the quiet after it fell, or the fight with what came after */
   finale: "none" | "quiet" | "beyond";
   /** times Last Light has saved the hero this run */

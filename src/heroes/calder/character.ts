@@ -20,7 +20,6 @@ export const CALDER: CharacterDef = {
   price: 1800,
   special: { id: "cylinderBreak", name: "Cylinder Break" },
   base: { ad: 11, ap: 9, hp: 105, mp: 90, stamina: 100, crit: 0.05, move: 0.97, aspd: 1, haste: 1 },
-  growth: { ad: 0, ap: 0, hp: 1.15, mp: 0.4 },
   skills: CALDER_SKILL_DEFS,
   comboHits: 3,
   skin: CALDER_SKIN,

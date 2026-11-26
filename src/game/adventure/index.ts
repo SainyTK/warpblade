@@ -4,6 +4,7 @@ export { nearbyMentor, stageMentor } from "./mentor";
 export { containPatrol, waitsOnPerch } from "./patrol";
 export { enemyOverPit } from "./pits";
 export { stageSpikes } from "./spikes";
+export { surgeEnding } from "./surge";
 export {
   beginAdventure,
   clampStageX,

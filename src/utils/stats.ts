@@ -6,18 +6,18 @@ import type { StatKey, Stats } from "../types/stats";
 
 export const STAT_KEYS: readonly StatKey[] = ["ad", "ap", "hp", "mp", "stamina", "crit", "move", "aspd", "haste"];
 
-/** base plus growth plus flat skill and shop bonuses, each total multiplied by the skill percentages; attack damage and
+/** base plus flat skill, shop and shard bonuses, each total multiplied by the skill percentages; attack damage and
  *  ability power then compound with the level, and the build's charms fold into HP, crit and move speed */
 export function computeStats(
   c: CharacterDef,
   level: number,
-  rows: readonly SkillLevel[] = [],
+  rows: readonly Pick<SkillLevel, "stats" | "scale">[] = [],
   bonus: Partial<Stats> = {},
   build?: BuildStats,
 ): Stats {
   const flat = { ...c.base };
   const pct: Stats = { ad: 1, ap: 1, hp: 1, mp: 1, stamina: 1, crit: 1, move: 1, aspd: 1, haste: 1 };
-  for (const k of STAT_KEYS) flat[k] += (c.growth[k] ?? 0) * (level - 1) + (bonus[k] ?? 0);
+  for (const k of STAT_KEYS) flat[k] += bonus[k] ?? 0;
   for (const row of rows) {
     for (const k of STAT_KEYS) {
       flat[k] += row.stats?.[k] ?? 0;

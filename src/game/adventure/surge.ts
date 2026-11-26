@@ -82,3 +82,9 @@ export function updateSurge(surge: Surge, area: RouteArea, dt: number): boolean 
 
 export const surgeLeft = (surge: Surge): number =>
   surge.foes.length - surge.sent + game.enemies.filter((e) => e.hp > 0).length;
+
+export function surgeEnding(): boolean {
+  const surge = trail?.surge;
+  if (!surge || surge.sent < surge.foes.length || surge.refills.length > 0) return false;
+  return game.enemies.every((e) => e.hp <= 0) && !game.fx.some((f) => f.rift);
+}

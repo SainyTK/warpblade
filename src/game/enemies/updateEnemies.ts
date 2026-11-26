@@ -1,5 +1,6 @@
 import type { Enemy } from "../../types/enemy";
 import { containPatrol, waitsOnPerch } from "../adventure";
+import { bossHeld } from "../bossFight";
 import { coop } from "../coopHooks";
 import { game } from "../state";
 import { fieldPace } from "../timeFields";
@@ -28,7 +29,7 @@ function updateEnemy(e: Enemy, dt: number): void {
   const room = coop();
   room?.nearest(e.x, e.y);
   const status = updateStatus(e, dt);
-  if (e.hp <= 0 || waitsOnPerch(e)) return;
+  if (e.hp <= 0 || waitsOnPerch(e) || bossHeld(e)) return;
   room?.nearest(e.x, e.y);
   const [cx, cy] = enemyCenter(e);
   const ts = status * fieldPace(cx, cy, e.rank);

@@ -19,7 +19,6 @@ export const YUN: CharacterDef = {
   price: 750,
   special: { id: "jadeRain", name: "Jade Rain" },
   base: { ad: 10, ap: 11, hp: 95, mp: 100, stamina: 100, crit: 0.05, move: 1, aspd: 1, haste: 1 },
-  growth: { ad: 0, ap: 0, hp: 1.05, mp: 0.45 },
   skills: YUN_SKILL_DEFS,
   comboHits: 4,
   skin: YUN_SKIN,

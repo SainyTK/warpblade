@@ -44,7 +44,6 @@ export interface SkillEvents {
   hurt: { damage: number; fromX: number };
   ultimate: { level: number };
   slash: { strike: string; landed: boolean; element: string | null };
-  prepare: { spell: string };
   infuse: { spell: string };
 }
 

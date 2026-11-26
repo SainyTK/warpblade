@@ -6,7 +6,7 @@ export const NEUTRAL_MODIFIERS: DrillModifiers = {
   strikeReach: 1,
   spellDamage: 1,
   spellArea: 1,
-  preparation: 1,
+  spellCooldown: 1,
   infusionHits: 0,
   warpDamage: 1,
   warpCooldown: 1,

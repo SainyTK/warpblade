@@ -43,8 +43,8 @@ export const ALDRIC_DRILL: DrillProfile = {
       "Hold the kite shield up to block from the front. Tap just before impact to parry with a shield punch. Press during a ground blow for an enhanced parry.",
     ultimate:
       "Hold to charge through Dawn Ward, Sunpillar Rank, Noon Verdict and Sanctuary. Release to use the highest reached.",
-    cast: "Prepare the selected light spell. Press again when ready to cast, or press during a blow to pour it into the sword.",
-    cycle: "Cycle Dawn Lance, Sunpillar and Mending Light before preparing one.",
+    cast: "Cast the selected light spell at once, or the next ready one. During a blow, pour it into the sword.",
+    cycle: "Select the next of Dawn Lance, Sunpillar and Mending Light.",
   },
   modifiers: () => aldricModifiers(NEUTRAL_MODIFIERS),
   hooks: ALDRIC_DRILL_HOOKS,

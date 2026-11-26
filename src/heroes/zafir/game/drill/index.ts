@@ -28,8 +28,8 @@ export const ZAFIR_DRILL: DrillProfile = {
     attack:
       "Spin the scimitar. Press again during the spin to chain up to three: the sweep turn, the rising turn and the twin turn. Every spin cuts in front and behind. In the air, a spinning descent.",
     ultimate: "Hold to charge Sandstorm through four levels. Release to use the highest level reached.",
-    cast: "Prepare the selected spell. Press again when ready to cast, or press during a spin to pour it into the scimitar for three hits.",
-    cycle: "Cycle Sandspout, Crescent and Glass Rain before preparing one.",
+    cast: "Cast the selected spell at once, or the next ready one. During a spin, pour it into the scimitar for three hits.",
+    cycle: "Select the next of Sandspout, Crescent and Glass Rain.",
   },
   modifiers: () => zafirModifiers(NEUTRAL_MODIFIERS),
   motion: ZAFIR_MOTION,

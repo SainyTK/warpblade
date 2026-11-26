@@ -1,3 +1,4 @@
+import { PACT } from "../../../../constants/vitals";
 import type { SkillDef } from "../../../../types/skill";
 import { evolvedRow, levelRows } from "../../../../utils/skillRows";
 import { drillValues, onDrill } from "./drillLevels";
@@ -32,6 +33,7 @@ export const RESOLVE: SkillDef = {
   element: "frost",
   risk: "easy",
   button: "L",
+  pact: PACT.mending,
   text: "More air dashes, healing dashes and a harder blow after each dash.",
   levels: LEVELS,
   evolution: {

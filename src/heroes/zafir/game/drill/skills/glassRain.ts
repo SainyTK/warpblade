@@ -14,7 +14,7 @@ const seen = new WeakSet<ElementImpact>();
 export const GLASS_RAIN_DRILL: ZafirDrillSkill = {
   id: ID,
   modify(m, { values }) {
-    m.preparation *= values.preparation ?? 1;
+    m.spellCooldown *= values.preparation ?? 1;
   },
   spellHit(foe, spell, { values }) {
     if (spell.id !== "glass") {

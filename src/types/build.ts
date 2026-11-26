@@ -22,8 +22,6 @@ export interface BuildStats {
   growth: number;
   /** max HP */
   vigor: number;
-  /** HP per second */
-  regen: number;
   /** added to crit chance */
   crit: number;
   /** move speed */

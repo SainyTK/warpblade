@@ -1,3 +1,4 @@
+import { PACT } from "../../../../constants/vitals";
 import type { SkillDef } from "../../../../types/skill";
 import { evolvedRow } from "../../../../utils/skillRows";
 import { drillLevels, type NativeStep } from "./drillLevels";
@@ -31,6 +32,7 @@ export const WANDERERS_GRACE: SkillDef = {
   element: "frost",
   risk: "easy",
   button: "L",
+  pact: PACT.mending,
   text: "Untouchable while dashing, with more air dashes and a dusk shade left behind.",
   levels: LEVELS,
   evolution: {

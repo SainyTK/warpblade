@@ -1,3 +1,4 @@
+import { PACT } from "../../../../constants/vitals";
 import type { SkillDef } from "../../../../types/skill";
 import { evolvedRow } from "../../../../utils/skillRows";
 import { drillLevels, drillValues, type Numbers } from "./drillLevels";
@@ -31,6 +32,7 @@ export const OPENED_VEINS: SkillDef = {
   element: "venom",
   risk: "timed",
   button: "J",
+  pact: PACT.blood,
   text: "The twin turn, the chain's finisher, hits harder for each wound on the foe, then tears the wounds open.",
   levels: LEVELS,
   evolution: {

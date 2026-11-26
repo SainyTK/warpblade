@@ -52,6 +52,8 @@ export const SHARED_TOUCH_TEXT: Readonly<Record<TouchButtonAction, TouchButtonTe
   cycle: { label: "Switch", hint: "Next ability", accent: null },
 };
 
+export const DRILL_WARP_ACCENT = 0x7fe3ff;
+
 /** where the attack button's center sits, art pixels in from the bottom right corner of the safe area */
 export const CLUSTER_ANCHOR = { right: 22, bottom: 20 } as const;
 

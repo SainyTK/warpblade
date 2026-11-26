@@ -1,3 +1,4 @@
+import { PACT } from "../../../../constants/vitals";
 import type { SkillDef } from "../../../../types/skill";
 import { evolvedRow, levelRows } from "../../../../utils/skillRows";
 import { drillEvolved, onDrill } from "./drill";
@@ -16,13 +17,13 @@ const LEVELS = levelRows([
 
 const DRILL_LEVELS = onDrill(LEVELS, [
   { text: "A warp arrival fills the jian with the selected art for 1 hit.", drill: { infuse: 1 } },
-  { text: "Preparation -20%.", drill: { preparation: 0.8 } },
+  { text: "Spell cooldowns -20%.", drill: { preparation: 0.8 } },
   { text: "New: infusions last 1 more hit.", drill: { infusionHits: 1 } },
-  { text: "Preparation -30%.", drill: { preparation: 0.7 } },
-  { text: "New: an arrival shortens a preparation by 1 s.", drill: { shorten: 1 } },
-  { text: "Preparation -40%; arrivals fill 2 hits.", drill: { preparation: 0.6, infuse: 2 } },
+  { text: "Spell cooldowns -30%.", drill: { preparation: 0.7 } },
+  { text: "New: an arrival takes 1 s off every spell cooldown.", drill: { shorten: 1 } },
+  { text: "Spell cooldowns -40%; arrivals fill 2 hits.", drill: { preparation: 0.6, infuse: 2 } },
   { text: "New: infusions last 2 more hits.", drill: { infusionHits: 2 } },
-  { text: "Preparation -50%; arrivals fill 3 hits.", drill: { preparation: 0.5, infuse: 3 } },
+  { text: "Spell cooldowns -50%; arrivals fill 3 hits.", drill: { preparation: 0.5, infuse: 3 } },
 ]);
 
 export const HARMONY: SkillDef = {
@@ -32,7 +33,8 @@ export const HARMONY: SkillDef = {
   element: "void",
   risk: "timed",
   button: "L",
-  text: "The warp and the sword arts move as one: arrivals fill the jian, and arts prepare faster.",
+  pact: PACT.mending,
+  text: "The warp and the sword arts move as one: arrivals fill the jian, and art cooldowns are shorter.",
   levels: DRILL_LEVELS,
   evolution: {
     partner: "yu_breath",

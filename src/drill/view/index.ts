@@ -5,6 +5,7 @@ import type { Vec } from "../../types/rig";
 import type { SpriteImage } from "../../types/sprite";
 import { drillMotion } from "../constants";
 import { drawEnhancedGuard } from "./chainEffects";
+import { drawChargeBar } from "./chargeBar";
 import { drillClips } from "./clips";
 import { drawCutIn, loadPortrait } from "./cutIn";
 import { createDashTrail } from "./dashTrail";
@@ -15,8 +16,7 @@ import { drawSkillCharge } from "./skillCharge";
 import { drawSkillDarkness, drawSkillImpact } from "./skillImpact";
 import { createSlashView } from "./slash";
 import { drawElementImpact, drawElementProjectile } from "./spellEffects";
-import { drawReadySpell } from "./spellHand";
-import { drawSpellPreparation } from "./spellPreparation";
+import { drawSpellSelection } from "./spellSelection";
 import { drawInfusedBlade } from "./swordEffects";
 import { drawFlyingSword, drawWarpGhosts, drawWarpTrace } from "./warpEffects";
 
@@ -47,6 +47,11 @@ export function createDrillView(profile: DrillProfile) {
         drawWarpTrace(current.warpTrace);
       }
     },
+    drawOver(cameraX: number): void {
+      if (current) {
+        drawChargeBar(current, cameraX);
+      }
+    },
     drawPortrait(ctx: CanvasRenderingContext2D): void {
       const cast = current?.fighter.skillCast;
       if (current && cast) {
@@ -70,7 +75,6 @@ export function createDrillView(profile: DrillProfile) {
       } else {
         drawInfusedBlade(profile, fighter, pose, hand, reach, null);
       }
-      drawReadySpell(fighter, pose);
       drawEnhancedGuard(current);
       slashes.draw();
       for (const bolt of elementProjectiles) {
@@ -83,7 +87,7 @@ export function createDrillView(profile: DrillProfile) {
       }
       drawSkillImpact(profile, fighter.skillCast);
       drawDefenseCue(defenseCue);
-      drawSpellPreparation(fighter, cameraX);
+      drawSpellSelection(fighter, cameraX);
       profile.hooks?.draw?.();
       place();
     },

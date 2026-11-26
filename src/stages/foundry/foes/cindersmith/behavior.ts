@@ -119,6 +119,10 @@ function smash(e: Enemy): void {
 
 function throwIngots(e: Enemy): void {
   Object.assign(e, { state: "shoot", st: 0 });
+  ingotVolley(e);
+}
+
+export function ingotVolley(e: Enemy): void {
   const count = enraged(e) ? 4 : 3;
   for (let i = 0; i < count; i++) {
     const spread = (i - (count - 1) / 2) * 30;

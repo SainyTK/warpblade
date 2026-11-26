@@ -1,4 +1,4 @@
-import { chargedTier, drillSession, usesDrill } from "../../drill";
+import { drillSession, payableTier, usesDrill } from "../../drill";
 import "./touch.css";
 import { HAPTIC_MS, TOUCH_SCALE } from "../../constants/touch";
 import { hero } from "../../game/state";
@@ -83,7 +83,7 @@ export function syncTouch(fighting: boolean): void {
   const session = usesDrill() ? drillSession() : undefined;
   const drill = session !== undefined;
   const level = session
-    ? (chargedTier(session.profile, session.fighter.chargeHeldFor ?? 0)?.level ?? 0)
+    ? (payableTier(session.profile, session.fighter.chargeHeldFor ?? 0)?.level ?? 0)
     : hero.state === "charge"
       ? hero.chargeLevel
       : 0;
@@ -93,19 +93,12 @@ export function syncTouch(fighting: boolean): void {
   const selection = touchSelection();
   b.ctl.buttons.forEach((button, i) => {
     const { action } = button.spec;
-    const hidden = drill && action === "ultimate";
-    if (button.el.hidden !== hidden) {
-      button.el.hidden = hidden;
-    }
-    if (hidden) {
-      return;
-    }
     const charge = drill ? action === "attack" : action === "ultimate";
     const look = buttonLook(button.spec, pressed.has(action));
     look.cooldown = Math.ceil(look.cooldown * COOLDOWN_STEPS) / COOLDOWN_STEPS;
-    const key = `${selectionKey(selection)}|${charge}|${Object.values(look).join("|")}`;
+    const key = `${selectionKey(selection)}|${drill}|${charge}|${Object.values(look).join("|")}`;
     if (key === b.faces[i]) return;
     b.faces[i] = key;
-    drawButtonFace(button.face, look, touchIcon(action, selection), charge);
+    drawButtonFace(button.face, look, touchIcon(action, selection, drill), charge);
   });
 }

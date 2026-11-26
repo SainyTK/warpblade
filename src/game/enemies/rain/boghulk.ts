@@ -68,7 +68,7 @@ function slam(e: Enemy): void {
   });
 }
 
-function lob(e: Enemy): void {
+export function lob(e: Enemy): void {
   const spread = enraged(e) ? HULK_GLOBS.enraged : HULK_GLOBS.calm;
   spread.forEach((off, i) => {
     const tx = clampStageX(hero.x + off, 12);

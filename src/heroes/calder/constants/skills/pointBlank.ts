@@ -1,3 +1,4 @@
+import { PACT } from "../../../../constants/vitals";
 import type { SkillDef } from "../../../../types/skill";
 import { evolvedRow, levelRows } from "../../../../utils/skillRows";
 import { withDrill } from "./drillLevels";
@@ -32,6 +33,7 @@ export const POINT_BLANK: SkillDef = {
   element: "storm",
   risk: "precise",
   button: "K",
+  pact: PACT.blood,
   text: "A wider parry, and a parry answers with a heavy round.",
   levels: DRILL_LEVELS,
   evolution: {

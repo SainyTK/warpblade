@@ -3,6 +3,7 @@ export {
   cancelDrillCharge,
   defendWithDrill,
   dodgeWithDrill,
+  drawDrillOver,
   drillFighter,
   drillParries,
   drillSession,
@@ -11,13 +12,24 @@ export {
   resetDrill,
   updateDrill,
 } from "./adventure";
-export { DASH_LOCKOUT, drillMotion, SPELL_IMPACT_TIME, SPELL_PREPARATION } from "./constants";
-export { drillActionText } from "./controlText";
+export { DASH_LOCKOUT, drillMotion, SPELL_IMPACT_TIME } from "./constants";
+export { DRILL_WARP_LABEL, drillActionText } from "./controlText";
 export { DRILL_KEYMAP } from "./input";
 export { NEUTRAL_MODIFIERS } from "./modifiers";
 export { drillOnly, nativeOrDrill } from "./nativeOrDrill";
 export { drillProfile, heroDrill, usesDrill } from "./selection";
-export { chargedTier } from "./simulation";
+export {
+  canPaySpell,
+  canPayTier,
+  chargedTier,
+  hastenSpells,
+  payableTier,
+  readySpell,
+  rechargeLeft,
+  spellReady,
+  spellRecharge,
+  tierMp,
+} from "./simulation";
 export { swingTouches } from "./simulation/swingArea";
 export { clipSpans } from "./view/clips";
 export { drawCutIn } from "./view/cutIn";

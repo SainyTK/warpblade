@@ -1,3 +1,4 @@
+import { PACT } from "../../../../constants/vitals";
 import type { SkillDef } from "../../../../types/skill";
 import { evolvedRow, levelRows } from "../../../../utils/skillRows";
 
@@ -20,6 +21,7 @@ export const THOUSAND_CUTS: SkillDef = {
   element: "venom",
   risk: "timed",
   button: "auto",
+  pact: PACT.blood,
   text: "Your abilities' cuts leave bleeding wounds.",
   levels: LEVELS,
   evolution: {

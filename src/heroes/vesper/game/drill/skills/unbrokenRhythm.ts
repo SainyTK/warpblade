@@ -1,4 +1,4 @@
-import { drillFighter, drillSession, SPELL_PREPARATION } from "../../../../../drill";
+import { drillFighter, drillSession, hastenSpells, readySpell } from "../../../../../drill";
 import { hero } from "../../../../../game/state";
 import type { VesperDrillSkill } from "../../../types/drillSkill";
 
@@ -18,9 +18,9 @@ export const UNBROKEN_RHYTHM_DRILL: VesperDrillSkill = {
     if (strike === "warp") {
       const book = session.fighter.spellBook;
       if (evolved) {
-        book.preparation = { remaining: 0, duration: SPELL_PREPARATION, readyAge: book.preparation?.readyAge ?? 0 };
-      } else if (book.preparation) {
-        book.preparation.remaining = Math.max(0, book.preparation.remaining - (values.prepare ?? 0));
+        readySpell(book, book.selected);
+      } else {
+        hastenSpells(book, values.prepare ?? 0);
       }
       if (values.dash) {
         h.dashReadyIn = 0;

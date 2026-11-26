@@ -20,6 +20,8 @@ export const NUMBER_INK: Record<DamageTag | CueWord, number> = {
   keen: hex("#ffd76b"),
   parry: hex("#ffd27a"),
   broken: hex("#ff6a5a"),
+  noMp: hex("#7fb8ff"),
+  notReady: hex("#b8b2d8"),
 };
 /** numbers of a skill's own hits in duller inks of the same hues */
 export const NUMBER_INK_QUIET: Partial<Record<DamageTag | CueWord, number>> = {
@@ -71,4 +73,17 @@ export const CHEST_DETAIL = {
   plank: hex("#6e4020"),
   rivet: hex("#fff3c0"),
   keyhole: hex("#3a2208"),
+} as const;
+
+const shard = (rp: readonly number[], twinkle: boolean): PixelColors => ({
+  d: rp[1],
+  l: rp[2],
+  L: twinkle ? rp[4] : rp[3],
+  H: rp[4],
+  W: twinkle ? 0xffffff : rp[5],
+});
+
+export const SHARD_COLORS = {
+  heart: [shard(PAL.heart, false), shard(PAL.heart, true)],
+  mana: [shard(PAL.crystal, false), shard(PAL.crystal, true)],
 } as const;

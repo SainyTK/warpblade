@@ -5,6 +5,7 @@ import type { ArtId } from "../../types/campaign";
 import type { DrillSpell } from "../../types/drill";
 import type { Enemy } from "../../types/enemy";
 import { staggerFoe } from "../enemies/stagger";
+import { ART_CASTING } from "./casting";
 
 const WEAKNESS = { damage: 3, stagger: 0.5 } as const;
 const cache = new Map<string, DrillSpell>();
@@ -36,6 +37,8 @@ export function artSpell(art: ArtDef, level: number, attack: number, hero: strin
     delay: row.delay,
     look: art.look,
     freeze: row.freeze,
+    cooldown: ART_CASTING[art.id].cooldown,
+    mp: ART_CASTING[art.id].mp,
     status: art.status ? (foe) => art.status?.(foe, level) : undefined,
     damageScale: weakness(art.id),
     burst: art.burst ? (x, y) => art.burst?.(x, y, level) : undefined,

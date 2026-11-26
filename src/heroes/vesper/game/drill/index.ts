@@ -40,8 +40,8 @@ export const VESPER_DRILL: DrillProfile = {
     attack:
       "Cut with both blades. Press again during the cut to chain the dusk cross, the rising pair and the moonrise, which throws foes up and lifts you after them.",
     ultimate: "Hold to charge Dusk Waltz through four levels. Release to use the highest level reached.",
-    cast: "Prepare the selected spell. Press again when ready to cast, or press during a cut to pour it into the blades for three hits that each leave a night echo.",
-    cycle: "Cycle Falling Moon, Dusk Gale and Dusk Thread before preparing one.",
+    cast: "Cast the selected spell at once, or the next ready one. During a cut, pour it into the blades for three hits that each leave a night echo.",
+    cycle: "Select the next of Falling Moon, Dusk Gale and Dusk Thread.",
   },
   modifiers: () => vesperModifiers(NEUTRAL_MODIFIERS),
   motion: VESPER_MOTION,

@@ -17,7 +17,7 @@ import { DEFENSE } from "./constants";
 import { createDashEvents } from "./dashEvents";
 import { readDrillInput } from "./input";
 import { perfectDrillDodge } from "./perfectDodge";
-import { drillProfile } from "./selection";
+import { drillProfile, usesDrill } from "./selection";
 import { ageDrillCues, createSession, defend, stepSession } from "./simulation";
 import { createDrillView } from "./view";
 
@@ -35,6 +35,12 @@ export function resetDrill(): void {
 export const drillFighter = (): Fighter | undefined => session?.fighter;
 export const drillSession = (): Session | undefined => session;
 export const drillView = (): ReturnType<typeof createDrillView> | undefined => view;
+
+export function drawDrillOver(cameraX: number): void {
+  if (usesDrill()) {
+    view?.drawOver(cameraX);
+  }
+}
 
 export function ageFrozenDrill(dt: number): void {
   if (session) {

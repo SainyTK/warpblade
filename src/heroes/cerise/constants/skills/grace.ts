@@ -21,14 +21,14 @@ const LEVELS = withDrill(NATIVE, [
     text: "The warp's arrival infuses the rapier with the selected spell for 1 hit.",
     drill: { infuse: 1, preparation: 0, hits: 0 },
   },
-  { text: "Spell preparation 15% faster.", drill: { preparation: 0.15 } },
+  { text: "Spell cooldowns 15% shorter.", drill: { preparation: 0.15 } },
   { text: "New: the arrival heals 3 HP.", drill: { heal: 3 } },
   { text: "Infusions last 1 more hit.", drill: { hits: 1 } },
-  { text: "New: the arrival shortens a preparation by 1 s.", drill: { hasten: 1 } },
-  { text: "Preparation 30% faster; the arrival heals 6 HP.", drill: { preparation: 0.3, heal: 6 } },
+  { text: "New: the arrival takes 1 s off every spell cooldown.", drill: { hasten: 1 } },
+  { text: "Spell cooldowns 30% shorter; the arrival heals 6 HP.", drill: { preparation: 0.3, heal: 6 } },
   { text: "New: infused hits heal 1 HP.", drill: { infusedHeal: 1 } },
   {
-    text: "Preparation 45% faster; infusions last 2 more hits; arrival infusion 2 hits.",
+    text: "Spell cooldowns 45% shorter; infusions last 2 more hits; arrival infusion 2 hits.",
     drill: { preparation: 0.45, hits: 2, infuse: 2 },
   },
 ]);

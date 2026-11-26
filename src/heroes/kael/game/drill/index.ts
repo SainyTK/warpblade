@@ -19,8 +19,8 @@ export const KAEL_DRILL: DrillProfile = {
   drawThrown: drawThrownSword,
   portrait: () => loadGeneratedHeroPortrait("kael"),
   text: {
-    cycle: "Cycle Fire, Ice and Thunder before preparing a spell.",
-    cast: "Prepare the selected spell. Press again when ready to cast, or press during a slash to infuse the sword.",
+    cycle: "Select the next of Fire, Ice and Thunder.",
+    cast: "Cast the selected spell at once, or the next ready one. During a slash, infuse the sword with it.",
   },
   modifiers: () => kaelModifiers(NEUTRAL_MODIFIERS),
   hooks: KAEL_DRILL_HOOKS,

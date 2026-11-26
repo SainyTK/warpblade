@@ -1,6 +1,8 @@
 import { SKY_FLASH } from "../constants/effectLook";
+import { drawDrillOver } from "../drill";
 import { beginFrame, composite, setCameraX, setShake } from "../engine/frame";
 import { drawStageHazardBack, drawStageHazardFront, stageCameraX } from "../game/adventure";
+import { drawBossArenaBack, drawBossArenaFront } from "../game/bossFight";
 import { drawChests } from "../game/build/chests";
 import { coop, eachHero } from "../game/coopHooks";
 import { shownKit } from "../game/hero/kits";
@@ -16,6 +18,7 @@ import { drawMentor } from "./drawMentor";
 import { drawNumbers } from "./drawNumbers";
 import { drawPits } from "./drawPits";
 import { drawShadows } from "./drawShadows";
+import { drawShards } from "./drawShards";
 import { drawSpikes } from "./drawSpikes";
 import { drawXpOrbs } from "./drawXpOrbs";
 import { paletteAt } from "./eras/sceneDef";
@@ -42,6 +45,7 @@ export function renderScene(out: Uint8ClampedArray): void {
     drawAdventureTerrain(cameraX, game.t, palette);
     drawSpikes(cameraX, game.t);
     drawStageHazardBack(cameraX, game.t);
+    drawBossArenaBack();
   }
   const room = coop();
   for (const f of game.fx) {
@@ -67,13 +71,16 @@ export function renderScene(out: Uint8ClampedArray): void {
   drawPickups();
   drawCoins();
   drawXpOrbs();
+  drawShards();
   if (!arena) drawStageHazardFront(cameraX, game.t);
   setCameraX(0);
   drawWeather();
   drawMist();
   setCameraX(cameraX);
   lights.draw();
+  if (!arena) drawBossArenaFront();
   drawNumbers();
+  drawDrillOver(cameraX);
   eachHero(() => shownKit().drawOver?.());
   setCameraX(0);
   room?.drawOverlay();

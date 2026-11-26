@@ -2,8 +2,9 @@ import { STAMINA } from "../constants/combat";
 import { ENEMIES } from "../constants/enemies";
 import { ULT_LEVELS } from "../constants/ultimate";
 import { STAGE_WAVES } from "../constants/waves";
-import { chargedTier, drillSession, usesDrill } from "../drill";
+import { canPayTier, drillSession, payableTier, rechargeLeft, usesDrill } from "../drill";
 import { isAdventure, stageStatus as stageLine } from "../game/adventure";
+import { bossBarView, bossCardView } from "../game/bossFight";
 import { canAffordUlt, ultRecharge } from "../game/hero/ultimate";
 import { character, game, hero, progress } from "../game/state";
 import { isTraining } from "../game/training";
@@ -13,6 +14,7 @@ import { xpToNext } from "../utils/progression";
 import { clearText } from "../utils/records";
 import { minutesSeconds } from "../utils/runReport";
 import { updateAbilityTabs } from "./abilityTabs";
+import { updateBossCard } from "./bossCard";
 import { updateBuildStrip } from "./buildStrip";
 import { updateCoinCount } from "./coinCount";
 import { byId } from "./dom";
@@ -20,6 +22,7 @@ import { updateFlowBar } from "./flowBar";
 import { updateHeroMeter } from "./heroMeter";
 import { updateHitCounter } from "./hitCounter";
 import { createRechargeTab } from "./rechargeTab";
+import { updateVitalBars } from "./vitalBars";
 import { updateWarpTab } from "./warpTab";
 
 const hp = byId("hpFill");
@@ -41,6 +44,7 @@ const ultPips = byId("ultPips");
 const boss = byId("boss");
 const bossName = byId("bossName");
 const bossFill = byId("bossFill");
+const bossMarks = byId("bossMarks");
 const banner = byId("banner");
 let last = "";
 
@@ -56,15 +60,18 @@ export function updateHud(): void {
   updateBuildStrip();
   updateWarpTab();
   updateCoinCount();
+  updateVitalBars();
+  updateBossCard();
   const session = usesDrill() ? drillSession() : undefined;
   const drill = session !== undefined;
   const fighter = session?.fighter;
-  const tier = session && (fighter?.skillCast?.tier ?? chargedTier(session.profile, fighter?.chargeHeldFor ?? 0));
+  const tier = session && (fighter?.skillCast?.tier ?? payableTier(session.profile, fighter?.chargeHeldFor ?? 0));
   const ultimateName = drill ? (tier?.name ?? "Charged skill") : character.special.name;
-  ultTab.update(drill ? 0 : ultRecharge());
+  ultTab.update(fighter ? rechargeLeft(fighter.chargeRecharge) : ultRecharge());
   if (hero.denied.ult > ultDenied) ultTab.jolt();
   ultDenied = hero.denied.ult;
   const leader = game.enemies.find((e) => e.rank !== "minion");
+  const bar = leader ? bossBarView(leader) : null;
   const room = inRoom();
   const waveMode = room || (!isAdventure() && !isTraining() && game.wave > 0);
   const best = room ? bestRun() : null;
@@ -74,8 +81,9 @@ export function updateHud(): void {
       ? `STAGE ${game.stage}  WAVE ${game.wave}/${STAGE_WAVES}`
       : stageLine().toUpperCase();
   const time = minutesSeconds(game.clock);
-  const affordable = drill
-    ? (tier?.level ?? 0)
+  const affordable = session
+    ? (tier?.level ??
+      (session.fighter.chargeRecharge.remaining > 0 ? 0 : session.profile.tiers.filter(canPayTier).length))
     : hero.ultCd > 0
       ? 0
       : ULT_LEVELS.filter((_, i) => canAffordUlt(i + 1)).length;
@@ -104,6 +112,9 @@ export function updateHud(): void {
     best?.seconds,
     leader?.type,
     leader ? Math.ceil(leader.hp) : -1,
+    bar?.marks.join(":"),
+    bar?.phase,
+    bar?.shielded,
     game.banner.text,
     game.banner.time > 0,
   ].join();
@@ -129,6 +140,9 @@ export function updateHud(): void {
     bossName.textContent = ENEMIES[leader.type].name.toUpperCase();
     bossFill.style.width = `${(Math.max(0, leader.hp) / leader.max) * 100}%`;
   }
+  boss.classList.toggle("enraged", (bar?.phase ?? 1) > 1);
+  boss.classList.toggle("shielded", !!bar?.shielded);
+  bossMarks.innerHTML = (bar?.marks ?? []).map((m) => `<i style="left:${m * 100}%"></i>`).join("");
   banner.textContent = game.banner.text;
-  banner.classList.toggle("show", game.banner.time > 0);
+  banner.classList.toggle("show", game.banner.time > 0 && !bossCardView());
 }

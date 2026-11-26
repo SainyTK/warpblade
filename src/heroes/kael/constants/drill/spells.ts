@@ -13,6 +13,8 @@ export const KAEL_SPELLS: readonly DrillSpell[] = [
     radius: 23,
     look: "flame",
     freeze: 0,
+    cooldown: 1.6,
+    mp: 8,
   },
   {
     id: "ice",
@@ -26,6 +28,8 @@ export const KAEL_SPELLS: readonly DrillSpell[] = [
     radius: 15,
     look: "shard",
     freeze: 1.65,
+    cooldown: 2.4,
+    mp: 9,
   },
   {
     id: "volt",
@@ -39,5 +43,7 @@ export const KAEL_SPELLS: readonly DrillSpell[] = [
     radius: 20,
     look: "spark",
     freeze: 0,
+    cooldown: 2.8,
+    mp: 12,
   },
 ];

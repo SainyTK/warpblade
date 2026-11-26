@@ -20,7 +20,7 @@ const LEVELS = drillLevels(NATIVE, [
   { text: "Thread +0.8 AD.", drill: { bonus: 0.8 } },
   { text: "New: the thread runs on to 2 more foes.", drill: { arcs: 2 } },
   { text: "Thread +1.4 AD.", drill: { bonus: 1.4 } },
-  { text: "New: every spell prepares 25% faster.", drill: { preparation: 0.75 } },
+  { text: "New: every spell cooldown is 25% shorter.", drill: { preparation: 0.75 } },
   { text: "Thread +2.8 AD; 3 more foes.", drill: { bonus: 2.8, arcs: 3 } },
 ]);
 

@@ -20,10 +20,10 @@ const LEVELS = drillLevels(NATIVE, [
     text: "New: an arrival infuses the scimitar with the selected spell for 1 hit; the ring turns from 10 less Whirl.",
     drill: { infuse: 1 },
   },
-  { text: "New: the ring reaches 20% farther; spells prepare 15% faster.", drill: { preparation: 0.85 } },
+  { text: "New: the ring reaches 20% farther; spell cooldowns 15% shorter.", drill: { preparation: 0.85 } },
   { text: "Arrival infusion 1 to 2 hits; the Whirl holds 2.2 s.", drill: { infuse: 2 } },
-  { text: "New: an arrival cuts 1 s off a spell being prepared; the ring cuts 0.1 harder.", drill: { shorten: 1 } },
-  { text: "Spells prepare 15% to 30% faster; the ring 35% farther, fills 50% faster.", drill: { preparation: 0.7 } },
+  { text: "New: an arrival takes 1 s off every spell cooldown; the ring cuts 0.1 harder.", drill: { shorten: 1 } },
+  { text: "Spell cooldowns 15% to 30% shorter; the ring 35% farther, fills 50% faster.", drill: { preparation: 0.7 } },
   { text: "Arrival infusion 2 to 3 hits; the ring cuts harder and turns from 20 less Whirl.", drill: { infuse: 3 } },
 ]);
 

@@ -25,8 +25,8 @@ export const CERISE_DRILL: DrillProfile = {
     attack: "Thrust with the rapier. Press again during the thrust to chain up to three, the last a lunge.",
     ultimate:
       "Hold to charge Rose Tempest: Rose Thrust, Rising Rose, Thorn Gale, then Rose Tempest itself. Release to use the highest reached.",
-    cast: "Prepare the selected spell. Press again when ready to cast, or press during a thrust for Rose Edge: the next three hits carry the spell.",
-    cycle: "Cycle Rose Line, Flurry and Rose Bloom before preparing one.",
+    cast: "Cast the selected spell at once, or the next ready one. During a thrust, Rose Edge: the next three hits carry the spell.",
+    cycle: "Select the next of Rose Line, Flurry and Rose Bloom.",
   },
   modifiers: () => ceriseModifiers(NEUTRAL_MODIFIERS),
   hooks: CERISE_DRILL_HOOKS,

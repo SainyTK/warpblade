@@ -45,4 +45,5 @@ export interface EnemyKind {
   orbs?: number;
   /** chance of a heal orb, when not the usual 6% */
   heartChance?: number;
+  artVariant?(e: Enemy): string | null;
 }
