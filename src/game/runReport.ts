@@ -1,8 +1,10 @@
+import { RIFT_STAGES, STAGES } from "../stages";
+import { recordCampaignRun } from "../store/campaignRecords";
 import type { SourceId } from "../types/build";
 import type { RunOutcome, RunReport, SourceResult, StageResult } from "../types/run";
 import { isHeroSource } from "../utils/sources";
 import { stageGrade } from "../utils/stageGrade";
-import { stageProgress } from "./adventure";
+import { clearedStages, stageProgress, stageStatus } from "./adventure";
 import { heldSources } from "./damageLedger";
 import { character, game, progress } from "./state";
 
@@ -27,11 +29,21 @@ export function runReport(): RunReport {
 
 export function stageResult(report: RunReport, outcome: RunOutcome): StageResult {
   const stage = stageProgress();
+  const cleared = outcome === "clear" || outcome === "beyond";
+  const damage = Math.round(report.sources.reduce((total, source) => total + source.damage, 0));
+  const grade = stageGrade({ ...stage, cleared, seconds: report.seconds });
+  const sealed = clearedStages().filter((id) => STAGES[id].kind === "rift").length;
+  const beaten = recordCampaignRun({ sealed, cleared, seconds: report.seconds, grade, damage, level: report.level });
   return {
     bossesDefeated: stage.bossesDefeated,
     bossesTotal: stage.bossesTotal,
     distance: stage.distance,
-    damage: report.sources.reduce((total, source) => total + source.damage, 0),
-    grade: stageGrade({ ...stage, cleared: outcome === "clear" || outcome === "beyond", seconds: report.seconds }),
+    damage,
+    grade,
+    sealed,
+    sealedTotal: RIFT_STAGES.length,
+    cleared,
+    where: stageStatus(),
+    beaten,
   };
 }

@@ -186,7 +186,12 @@ export function drawHeroLayer(): void {
   }
   const flare = clamp((Math.abs(h.vx) / 115) * 3, 0, 3) + (h.ground ? 0 : 1.5);
   h.hand = drawHeroSprite(heroSprite, h.pose, flare);
-  const blink = h.inv > 0 && h.state !== "warpStrike" && h.state !== "ultimate" && Math.floor(game.t * 20) % 2 === 0;
+  const blink =
+    h.inv > 0 &&
+    h.state !== "warpStrike" &&
+    h.state !== "ultimate" &&
+    h.state !== "dead" &&
+    Math.floor(game.t * 20) % 2 === 0;
   const struck = h.state === "hurt" && h.st < 0.06;
   const shown = shownKit().heroAlpha?.() ?? 1;
   if (shown > 0)

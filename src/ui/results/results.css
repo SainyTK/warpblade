@@ -185,3 +185,42 @@ th.source {
     height: 24px;
   }
 }
+
+.campaign-best {
+  width: 100%;
+  border-collapse: collapse;
+  font-variant-numeric: tabular-nums;
+}
+.campaign-best caption {
+  margin-bottom: 6px;
+  font-family: var(--display);
+  font-size: 14px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--brass);
+  text-align: left;
+}
+.campaign-best tr {
+  border-top: 2px solid var(--line);
+}
+.campaign-best th {
+  padding: 4px 0;
+  font-family: var(--ui);
+  font-weight: 400;
+  font-size: 14px;
+  color: var(--mist);
+  text-align: left;
+}
+.campaign-best td {
+  padding: 4px 0 4px 12px;
+  font-family: var(--ui);
+  font-weight: 600;
+  font-size: 15px;
+  color: var(--text);
+  text-align: right;
+}
+.campaign-best .campaign-new {
+  width: 96px;
+  font-size: 12px;
+  color: var(--gold);
+}

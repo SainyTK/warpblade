@@ -1,15 +1,18 @@
+import { STATE_CLIPS } from "../constants/clips";
 import { MP_REGEN } from "../constants/combat";
 import { setState } from "../game/hero/actions";
 import { animateRopes } from "../game/hero/animate";
 import { tickDenied } from "../game/hero/deny";
 import { tickGuard } from "../game/hero/heroGuard";
 import { regenStamina } from "../game/hero/stamina";
+import { landingAt, moveHeroX } from "../game/hero/terrain";
 import { endRun } from "../game/runEnd";
 import { emitSkillEvent } from "../game/skills/events";
 import { hero, ponytail, progress, scarf } from "../game/state";
 import { dust } from "../game/world";
 import type { Fighter, Session } from "../types/drill";
 import type { HeroState } from "../types/hero";
+import { sampleKeys } from "../utils/sampleKeys";
 import { DEFENSE } from "./constants";
 import { createDashEvents } from "./dashEvents";
 import { readDrillInput } from "./input";
@@ -98,6 +101,26 @@ function stateOf(h: Fighter): HeroState {
   return Math.abs(h.vx) > 15 ? "run" : "idle";
 }
 
+const FALLEN_FOR = 2.4;
+const DEAD_FALL = { gravity: 520, friction: 6, fastest: 260 } as const;
+
+function fallDead(dt: number): void {
+  hero.vy = Math.min(DEAD_FALL.fastest, hero.vy + DEAD_FALL.gravity * dt);
+  hero.vx -= hero.vx * Math.min(1, DEAD_FALL.friction * dt);
+  hero.x = moveHeroX(hero.x, hero.y, hero.x + hero.vx * dt);
+  const nextY = hero.y + hero.vy * dt;
+  const floor = hero.vy >= 0 ? landingAt(hero.x, hero.y, nextY, 0, null) : null;
+  if (floor === null) {
+    hero.y = nextY;
+  } else {
+    hero.y = floor;
+    hero.vy = 0;
+    hero.ground = true;
+  }
+  hero.pose = sampleKeys(STATE_CLIPS.dead.keys, hero.st);
+  animateRopes(dt);
+}
+
 export function updateDrill(dt: number, worldDt: number): void {
   const profile = drillProfile();
   if (!profile) {
@@ -112,7 +135,8 @@ export function updateDrill(dt: number, worldDt: number): void {
   h.y = hero.y;
   hero.st += dt;
   if (hero.state === "dead") {
-    if (hero.st >= 2.4) {
+    fallDead(dt);
+    if (hero.st >= FALLEN_FOR) {
       endRun("fallen");
     }
     return;

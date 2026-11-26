@@ -1,4 +1,5 @@
 import type { SourceId } from "./build";
+import type { CampaignRecordKey } from "./records";
 
 /**
  * how a run ended: the hero fell, cleared the stage (also when they fell to what comes after its last wave), defeated
@@ -39,6 +40,11 @@ export interface StageResult {
   distance: number;
   damage: number;
   grade: StageGrade;
+  sealed: number;
+  sealedTotal: number;
+  cleared: boolean;
+  where: string;
+  beaten: readonly CampaignRecordKey[];
 }
 
 export type RunResult = { outcome: RunOutcome; coins: number } & (
