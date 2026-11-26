@@ -97,7 +97,7 @@ function begin(e: Enemy, move: HeartMove): void {
   }
 }
 
-function lobBombs(e: Enemy): void {
+export function lobBombs(e: Enemy): void {
   const n = e.phase === 2 ? 5 : 3;
   for (let i = 0; i < n; i++) {
     const spread = (i - (n - 1) / 2) * 30 + rng.range(-5, 5);

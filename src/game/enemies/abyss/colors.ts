@@ -75,6 +75,7 @@ export const ABYSS_HITS = {
   mawBite: 22,
   mawOrb: 12,
   mawSlam: 24,
+  mawWell: 20,
   sovereignCleave: 30,
   sovereignPillar: 24,
   sovereignSpikes: 26,

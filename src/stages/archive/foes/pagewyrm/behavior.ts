@@ -139,7 +139,7 @@ function erupt(e: Enemy): void {
   enter(e, "recover");
 }
 
-function storm(e: Enemy): void {
+export function pageStorm(e: Enemy): void {
   const pose = wyrmPose(e, game.t);
   const [hx, hy] = pose.main.head;
   const x = e.x + e.face * hx;
@@ -237,7 +237,7 @@ export function updatePagewyrm(e: Enemy, dt: number): void {
     case "charge":
       if (e.st >= WYRM.storm.wind * windup()) {
         enter(e, "shoot");
-        storm(e);
+        pageStorm(e);
       }
       break;
     case "shoot":

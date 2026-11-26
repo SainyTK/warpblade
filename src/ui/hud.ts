@@ -4,6 +4,7 @@ import { ULT_LEVELS } from "../constants/ultimate";
 import { STAGE_WAVES } from "../constants/waves";
 import { canPayTier, drillSession, payableTier, rechargeLeft, usesDrill } from "../drill";
 import { isAdventure, stageStatus as stageLine } from "../game/adventure";
+import { bossBarView } from "../game/bossFight";
 import { canAffordUlt, ultRecharge } from "../game/hero/ultimate";
 import { character, game, hero, progress } from "../game/state";
 import { isTraining } from "../game/training";
@@ -13,6 +14,7 @@ import { xpToNext } from "../utils/progression";
 import { clearText } from "../utils/records";
 import { minutesSeconds } from "../utils/runReport";
 import { updateAbilityTabs } from "./abilityTabs";
+import { updateBossCard } from "./bossCard";
 import { updateBuildStrip } from "./buildStrip";
 import { updateCoinCount } from "./coinCount";
 import { byId } from "./dom";
@@ -42,6 +44,7 @@ const ultPips = byId("ultPips");
 const boss = byId("boss");
 const bossName = byId("bossName");
 const bossFill = byId("bossFill");
+const bossMarks = byId("bossMarks");
 const banner = byId("banner");
 let last = "";
 
@@ -58,6 +61,7 @@ export function updateHud(): void {
   updateWarpTab();
   updateCoinCount();
   updateVitalBars();
+  updateBossCard();
   const session = usesDrill() ? drillSession() : undefined;
   const drill = session !== undefined;
   const fighter = session?.fighter;
@@ -67,6 +71,7 @@ export function updateHud(): void {
   if (hero.denied.ult > ultDenied) ultTab.jolt();
   ultDenied = hero.denied.ult;
   const leader = game.enemies.find((e) => e.rank !== "minion");
+  const bar = leader ? bossBarView(leader) : null;
   const room = inRoom();
   const waveMode = room || (!isAdventure() && !isTraining() && game.wave > 0);
   const best = room ? bestRun() : null;
@@ -107,6 +112,9 @@ export function updateHud(): void {
     best?.seconds,
     leader?.type,
     leader ? Math.ceil(leader.hp) : -1,
+    bar?.marks.join(":"),
+    bar?.phase,
+    bar?.shielded,
     game.banner.text,
     game.banner.time > 0,
   ].join();
@@ -132,6 +140,9 @@ export function updateHud(): void {
     bossName.textContent = ENEMIES[leader.type].name.toUpperCase();
     bossFill.style.width = `${(Math.max(0, leader.hp) / leader.max) * 100}%`;
   }
+  boss.classList.toggle("enraged", (bar?.phase ?? 1) > 1);
+  boss.classList.toggle("shielded", !!bar?.shielded);
+  bossMarks.innerHTML = (bar?.marks ?? []).map((m) => `<i style="left:${m * 100}%"></i>`).join("");
   banner.textContent = game.banner.text;
   banner.classList.toggle("show", game.banner.time > 0);
 }
