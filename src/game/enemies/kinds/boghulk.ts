@@ -17,6 +17,7 @@ export const boghulk: EnemyKind = {
   rift: { height: 24, y: () => GROUND, riftY: () => GROUND - 20 },
   update: updateBoghulk,
   draw: drawBoghulk,
+  artVariant: (e) => (e.state === "recover" && lying(e) && e.stagger <= 0 && e.stun <= 0 && !e.air ? "rush" : null),
   glow: { radius: HULK_GLOW.calm, color: RAIN_FOES.wart, eyeY: -5 },
   glowRadius: (e) => (cracked(e) ? HULK_GLOW.enraged : HULK_GLOW.calm),
   guardFrom: 1,

@@ -143,6 +143,16 @@
       "frames": [5],
       "fps": 6,
       "loop": false
+    },
+    "rush/recover": {
+      "frames": [12],
+      "fps": 6,
+      "loop": false
+    },
+    "rush/recover@2": {
+      "frames": [14],
+      "fps": 6,
+      "loop": false
     }
   }
 }
