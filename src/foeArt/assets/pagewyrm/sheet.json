@@ -152,7 +152,7 @@
       "loop": false
     },
     "hurt": {
-      "frames": [0],
+      "frames": [16],
       "fps": 7,
       "loop": false
     }
