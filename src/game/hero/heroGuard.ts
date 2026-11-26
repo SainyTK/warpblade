@@ -174,7 +174,7 @@ function parry(fromX: number, foe: Enemy | null): void {
   lights.add(h.x + h.face * 8, h.y - 20, 44, skin.ramp[4], 0.8, 0.3);
   hitStop(0.09);
   shake(0.15, 2);
-  sfx.perfect();
+  sfx.parry();
   emitSkillEvent({ type: "parry", fromX });
   kit().guard.parried(fromX, foe);
 }

@@ -110,6 +110,7 @@ function openBossRoom(run: Trail, area: RouteArea, foe: EnemyType): void {
     createRift(x, rift.riftY(y), rift.height, 0, () => {
       const boss = addFoe(run, area, foe, x, y);
       run.boss = boss;
+      sfx.bossRoar();
       if (epic) bossArrived(boss, ENEMIES[foe].name);
     }),
   );
@@ -127,6 +128,7 @@ function openRoom(run: Trail, area: RouteArea): void {
   }
   run.surge = openSurge(area);
   showBanner("Rift surge", BOSS_WARNING);
+  sfx.surge();
 }
 
 function finishStage(run: Trail): void {
@@ -146,9 +148,13 @@ function clearRoom(run: Trail, area: RouteArea): void {
   game.cleared++;
   game.clearedAt = game.clock;
   feat({ kind: "waveCleared", wave: game.wave, hero: character.id });
-  if (last) finishStage(run);
-  else showBanner("Gate open", BOSS_WARNING);
-  sfx.levelUp();
+  if (last) {
+    finishStage(run);
+    sfx.levelUp();
+    return;
+  }
+  showBanner("Gate open", BOSS_WARNING);
+  sfx.gate();
 }
 
 function roomCleared(run: Trail, area: RouteArea, dt: number): boolean {
@@ -162,6 +168,7 @@ function reachExit(run: Trail): void {
   const final = run.route.stage.kind === "citadel";
   game.waveTimer = final ? CLEAR_DELAY : STAGE_CLEAR_DELAY;
   showBanner(final ? "Campaign clear" : "Stage clear", game.waveTimer);
+  sfx.stageClear();
 }
 
 function advanceRoute(run: Trail, dt: number): void {

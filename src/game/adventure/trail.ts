@@ -107,6 +107,7 @@ export function loadStage(id: StageId): void {
 export const stageRunId = (): number | null => trail?.id ?? null;
 export const isAdventure = (): boolean => trail !== null;
 export const currentStage = () => trail?.route.stage ?? null;
+export const stageBoss = (): Enemy | null => trail?.boss ?? null;
 export const clearedStages = (): readonly StageId[] => trail?.cleared ?? [];
 export const earnedArtsOrder = (): ArtId[] =>
   (trail?.cleared ?? []).flatMap((id) => {

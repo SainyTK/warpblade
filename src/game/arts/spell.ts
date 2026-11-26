@@ -36,6 +36,7 @@ export function artSpell(art: ArtDef, level: number, attack: number, hero: strin
     speed: row.speed,
     delay: row.delay,
     look: art.look,
+    element: art.element,
     freeze: row.freeze,
     cooldown: ART_CASTING[art.id].cooldown,
     mp: ART_CASTING[art.id].mp,

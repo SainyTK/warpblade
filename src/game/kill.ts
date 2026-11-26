@@ -7,7 +7,7 @@ import type { Enemy } from "../types/enemy";
 import { PK } from "../types/particle";
 import { WHITE } from "../utils/color";
 import { TAU } from "../utils/math";
-import { isAdventure, recordStageKill } from "./adventure";
+import { isAdventure, recordStageKill, stageBoss } from "./adventure";
 import { dropChest } from "./build/chests";
 import { dropCoins } from "./coins";
 import { endWaveOnLastKill } from "./endWave";
@@ -128,7 +128,8 @@ export function killEnemy(e: Enemy, source?: SourceId): void {
     dropShards(e, x, y);
   }
   if (big) shake(0.5, 4);
-  sfx.death();
+  if (e.rank === "boss" || e === stageBoss()) sfx.bossDefeat();
+  else sfx.death();
   if (!isAdventure() && !isTraining()) {
     endWaveOnLastKill();
   }

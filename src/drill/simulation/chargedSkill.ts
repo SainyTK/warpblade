@@ -84,7 +84,12 @@ export function tickSkill(session: Session, input: DrillInput, dt: number): void
     return;
   }
   if (input.attackHeld) {
+    const before = chargedTier(session.profile, h.chargeHeldFor);
     h.chargeHeldFor += dt * session.modifiers.chargeRate;
+    const reached = chargedTier(session.profile, h.chargeHeldFor);
+    if (reached && reached !== before) {
+      sfx.chargeStep(reached.level);
+    }
     return;
   }
   const held = h.chargeHeldFor;

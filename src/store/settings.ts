@@ -1,5 +1,5 @@
 import { DEFAULT_SETTINGS, VOLUME_STEPS } from "../constants/settings";
-import { sfx } from "../services/audio";
+import { setAudioMix } from "../services/audio";
 import { haptics } from "../services/haptics";
 import { loadSettings, saveSettings } from "../services/settingsStorage";
 import type { Settings } from "../types/settings";
@@ -10,8 +10,7 @@ export const settings: Settings = mergeSettings(DEFAULT_SETTINGS, loadSettings()
 const listeners = new Set<() => void>();
 
 function apply(): void {
-  sfx.enabled = settings.sound;
-  sfx.setVolume(settings.volume / VOLUME_STEPS);
+  setAudioMix({ on: settings.sound, volume: settings.volume / VOLUME_STEPS, music: settings.music / VOLUME_STEPS });
   haptics.enabled = settings.vibration;
 }
 

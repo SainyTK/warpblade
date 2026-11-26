@@ -2,11 +2,13 @@ import "./heroes";
 import { MAX_FRAME, STEP } from "./constants/stage";
 import { preloadFoeArt } from "./foeArt";
 import { frameDriver } from "./game/frameDriver";
+import { musicTrack } from "./game/musicTrack";
 import { chooseCharacter, game } from "./game/state";
 import { stepGame } from "./game/step";
 import { preloadGeneratedRoster } from "./generatedHeroArt";
 import { CHARACTERS } from "./heroes/roster";
 import { startAnalytics } from "./services/analytics";
+import { playMusic } from "./services/audio";
 import { loadHeroChoice } from "./services/heroChoice";
 import { readTrainingHero } from "./services/playtestStart";
 import { chosenJob } from "./store/jobs";
@@ -73,6 +75,7 @@ function soloFrame(now: number): void {
   syncChestDialog();
   syncStageMap();
   syncTouch(!isMenuOpen() && game.mode === "play");
+  playMusic(musicTrack(menuContext() === "title"));
 }
 
 /** a co-op room runs its own frames while it is open; solo play picks up with a fresh clock when it closes */
