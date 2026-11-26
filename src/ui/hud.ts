@@ -20,6 +20,7 @@ import { updateFlowBar } from "./flowBar";
 import { updateHeroMeter } from "./heroMeter";
 import { updateHitCounter } from "./hitCounter";
 import { createRechargeTab } from "./rechargeTab";
+import { updateVitalBars } from "./vitalBars";
 import { updateWarpTab } from "./warpTab";
 
 const hp = byId("hpFill");
@@ -56,6 +57,7 @@ export function updateHud(): void {
   updateBuildStrip();
   updateWarpTab();
   updateCoinCount();
+  updateVitalBars();
   const session = usesDrill() ? drillSession() : undefined;
   const drill = session !== undefined;
   const fighter = session?.fighter;

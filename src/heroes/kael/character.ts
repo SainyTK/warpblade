@@ -19,7 +19,6 @@ export const KAEL: CharacterDef = {
   price: 0,
   special: { id: "crystalNova", name: "Crystal Nova" },
   base: { ad: 10, ap: 10, hp: 100, mp: 100, stamina: 100, crit: 0.05, move: 1, aspd: 1, haste: 1 },
-  growth: { ad: 0, ap: 0, hp: 1.1, mp: 0.45 },
   skills: KAEL_SKILL_DEFS,
   comboHits: 4,
   skin: KAEL_SKIN,

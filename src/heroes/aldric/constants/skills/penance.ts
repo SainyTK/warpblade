@@ -1,3 +1,4 @@
+import { PACT } from "../../../../constants/vitals";
 import type { SkillDef } from "../../../../types/skill";
 import { evolvedRow, levelRows } from "../../../../utils/skillRows";
 import { onDrill } from "./drillLevels";
@@ -32,6 +33,7 @@ export const PENANCE: SkillDef = {
   element: "venom",
   risk: "easy",
   button: "K",
+  pact: PACT.blood,
   text: "A foe whose blow you block burns with Penance. Grows with ability power.",
   levels: LEVELS,
   evolution: {

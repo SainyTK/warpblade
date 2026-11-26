@@ -25,3 +25,30 @@ export const XP_ORB_PIXELS = ["...l...", "..lHl..", ".lHWLl.", "lHWLLld", ".lLLl
 
 /** a mana or heal mote: a small round bead */
 export const MOTE_PIXELS = [".lll.", "lHWLl", "lWLLd", "lLLLd", ".ddd."] as const;
+
+export const SHARD_PIXELS = {
+  heart: [
+    ".dll...lld.",
+    "dlHHl.lLLld",
+    "lHWWLlLLLLd",
+    "lHWLLlLLLLd",
+    "lLLLlLLLLLd",
+    ".lLlLLLLLd.",
+    "..llLLLLd..",
+    "...lLLLd...",
+    "....lLd....",
+    ".....d.....",
+  ],
+  mana: [
+    "....l....",
+    "...lHl...",
+    "..lHWLl..",
+    ".lHWLLLd.",
+    "lHWLLLLLd",
+    "lLLLLLLLd",
+    ".lLLLLLd.",
+    "..lLLLd..",
+    "...lLd...",
+    "....d....",
+  ],
+} as const;

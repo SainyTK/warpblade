@@ -120,6 +120,36 @@ body {
   width: 100%;
   transition: width 120ms linear;
 }
+.bar .lane {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  min-width: 0;
+}
+.bar .lane .track {
+  flex: 0 1 calc(var(--span, 1) * 100%);
+  min-width: 0;
+  transition: flex-basis 300ms ease-out;
+}
+.bar .lane b {
+  flex: none;
+  font-weight: 400;
+}
+.bar .lane b.drain {
+  color: var(--rust);
+}
+.bar .lane b.regen {
+  color: var(--heal);
+}
+.bar.grew .track {
+  animation: bar-grew 600ms ease-out;
+}
+@keyframes bar-grew {
+  0% {
+    border-color: var(--text);
+    box-shadow: 0 0 8px var(--text);
+  }
+}
 .bar.hp span {
   color: var(--hp);
 }

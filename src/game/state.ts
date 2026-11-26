@@ -77,6 +77,7 @@ export const game: GameState = {
   coins: 0,
   coinDrops: [],
   xpOrbs: [],
+  shards: [],
   finale: "none",
   revives: 0,
   enemies: [],
@@ -102,6 +103,10 @@ export function freshProgress(): Progress {
     build: freshBuild(metaToolBonus()),
     resonance: emptyRanks(),
     fusions: [],
+    heartShards: 0,
+    manaShards: 0,
+    hpPerSecond: 0,
+    mpPerSecond: 0,
   };
 }
 export const progress: Progress = freshProgress();

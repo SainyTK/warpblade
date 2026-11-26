@@ -6,7 +6,7 @@ import { isAdventure, updateAdventure } from "./adventure";
 import { updateBlazes } from "./blazes";
 import { updateChests } from "./build/chests";
 import { updateFlow } from "./build/flow";
-import { regenVigor } from "./build/vigor";
+import { tickVitals } from "./build/vitals";
 import { updateCoins } from "./coins";
 import { coop, eachHero } from "./coopHooks";
 import { updateEnemies } from "./enemies/updateEnemies";
@@ -19,6 +19,7 @@ import { updateDanger } from "./lowHealth";
 import { updateNumbers } from "./numbers";
 import { updatePickups } from "./pickups";
 import { updateResonance } from "./resonance";
+import { updateShards } from "./shards";
 import { updateSkills } from "./skills/runtime";
 import { fxRng, game, lights, particles } from "./state";
 import { isTraining, updateTraining } from "./training";
@@ -89,7 +90,7 @@ export function update(dt: number): void {
   eachHero(() => {
     updateFlow(dt);
     updateHitCount(dt);
-    regenVigor(dt);
+    tickVitals(dt);
   });
   updateSkills(world);
   updateEnemies(world);
@@ -98,6 +99,7 @@ export function update(dt: number): void {
   updateChests(dt);
   updateCoins(dt);
   updateXpOrbs(dt);
+  updateShards(dt);
   coop()?.anyStanding();
   if (isAdventure()) {
     updateAdventure(dt);

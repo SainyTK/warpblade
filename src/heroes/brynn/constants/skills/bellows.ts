@@ -1,3 +1,4 @@
+import { PACT } from "../../../../constants/vitals";
 import type { SkillDef } from "../../../../types/skill";
 import { evolvedRow } from "../../../../utils/skillRows";
 import { drillLevels, drillValues } from "./drillLevels";
@@ -32,6 +33,7 @@ export const BELLOWS: SkillDef = {
   element: "venom",
   risk: "timed",
   button: "I",
+  pact: PACT.blood,
   text: "Rend cuts deeper bleeding wounds.",
   levels: LEVELS,
   evolution: {

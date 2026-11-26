@@ -1,3 +1,4 @@
+import { PACT } from "../../../../constants/vitals";
 import type { SkillDef } from "../../../../types/skill";
 import { evolvedRow, levelRows } from "../../../../utils/skillRows";
 
@@ -22,6 +23,7 @@ export const FALLING_NIGHT: SkillDef = {
   element: "void",
   risk: "timed",
   button: "auto",
+  pact: PACT.blood,
   text: "Foes you strike in the air carry night that keeps cutting them.",
   levels: LEVELS,
   evolution: {

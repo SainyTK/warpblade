@@ -43,7 +43,6 @@ export function resonanceStats(ranks: Ranks): BuildStats {
     luck: 1,
     growth: 1,
     vigor: 1,
-    regen: 0,
     crit: ELEMENT_STATS.venomCrit * ranks.venom,
     move: 1,
     flowCap: FLOW.cap,

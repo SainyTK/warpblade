@@ -30,6 +30,12 @@ export interface SkillEvolution {
   row: SkillLevel;
 }
 
+export interface SkillPact {
+  hp?: number;
+  mp?: number;
+  power?: number;
+}
+
 /** one of a hero's 20 skills. Design: docs/skill-design.md */
 export interface SkillDef {
   /** unique across every hero, since recipes and damage sources are kept by id */
@@ -44,6 +50,7 @@ export interface SkillDef {
   /** levels 1 to 8, index 0 is level 1 */
   levels: readonly SkillLevel[];
   evolution: SkillEvolution;
+  pact?: SkillPact;
 }
 
 /** a small reward offered when too few skills are left to fill the cards, so a pick always gives something */

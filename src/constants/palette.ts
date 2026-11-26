@@ -12,6 +12,7 @@ export const PAL = {
   hour: ramp(["#0c1e24", "#163e44", "#24706c", "#3fb0a0", "#8ae6cf", "#e6fff6"]),
   /** prism light: deep violet through periwinkle to white */
   prism: ramp(["#2a1660", "#4b3bc4", "#7a6cff", "#a9c8ff", "#d8e8ff", "#f2f6ff", "#ffffff"]),
+  heart: ramp(["#3a0a18", "#7e1530", "#c9283f", "#e0405a", "#ff9aa8", "#ffe4e8"]),
 } as const;
 
 /** spark colors, head to tail */

@@ -1,3 +1,4 @@
+import { PACT } from "../../../../constants/vitals";
 import type { SkillDef } from "../../../../types/skill";
 import { evolvedRow, levelRows } from "../../../../utils/skillRows";
 import { SKILL } from "./ids";
@@ -24,6 +25,7 @@ export const WEEPING_CUT: SkillDef = {
   element: "venom",
   risk: "easy",
   button: "auto",
+  pact: PACT.blood,
   text: "Released cuts keep weeping: the foe bleeds for a while after each release.",
   levels: LEVELS,
   evolution: {

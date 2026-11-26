@@ -20,7 +20,6 @@ export const ALDRIC: CharacterDef = {
   price: 300,
   special: { id: "sanctuary", name: "Sanctuary" },
   base: { ad: 10, ap: 9, hp: 120, mp: 90, stamina: 110, crit: 0.04, move: 0.95, aspd: 1, haste: 1 },
-  growth: { ad: 0, ap: 0, hp: 1.3, mp: 0.4 },
   skills: ALDRIC_SKILL_DEFS,
   comboHits: 3,
   skin: ALDRIC_SKIN,

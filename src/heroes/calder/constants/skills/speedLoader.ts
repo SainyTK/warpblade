@@ -1,3 +1,4 @@
+import { PACT } from "../../../../constants/vitals";
 import type { SkillDef } from "../../../../types/skill";
 import { evolvedRow, levelRows } from "../../../../utils/skillRows";
 import { withDrill } from "./drillLevels";
@@ -32,6 +33,7 @@ export const SPEED_LOADER: SkillDef = {
   element: "frost",
   risk: "timed",
   button: "L",
+  pact: PACT.focus,
   text: "A warp arrival loads the selected shell into the blade.",
   levels: DRILL_LEVELS,
   evolution: {

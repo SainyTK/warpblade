@@ -16,6 +16,7 @@ import { drawMentor } from "./drawMentor";
 import { drawNumbers } from "./drawNumbers";
 import { drawPits } from "./drawPits";
 import { drawShadows } from "./drawShadows";
+import { drawShards } from "./drawShards";
 import { drawSpikes } from "./drawSpikes";
 import { drawXpOrbs } from "./drawXpOrbs";
 import { paletteAt } from "./eras/sceneDef";
@@ -67,6 +68,7 @@ export function renderScene(out: Uint8ClampedArray): void {
   drawPickups();
   drawCoins();
   drawXpOrbs();
+  drawShards();
   if (!arena) drawStageHazardFront(cameraX, game.t);
   setCameraX(0);
   drawWeather();

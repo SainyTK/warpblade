@@ -9,6 +9,7 @@ import type { Build, Card } from "../../types/build";
 import type { ArtId, ElementId } from "../../types/campaign";
 import type { CharacterDef } from "../../types/character";
 import type { SkillDef } from "../../types/skill";
+import { pactAt, rateFigure } from "../../utils/pacts";
 import { type Ranks, resonanceRanks } from "../../utils/resonance";
 import { skillOf } from "../../utils/skills";
 import { skillIcon } from "./icons/iconImage";
@@ -16,7 +17,7 @@ import { skillIcon } from "./icons/iconImage";
 /** a line under a card's text: an evolution whose partner the hero holds (gold), or one still to find */
 export interface CardNote {
   text: string;
-  tone: "recipe" | "partner" | "resonance" | "fusion";
+  tone: "recipe" | "partner" | "resonance" | "fusion" | "drain" | "regen" | "power";
 }
 
 /** what a card shows, whatever it offers */
@@ -54,6 +55,35 @@ function resonanceNotes(element: ElementId, gain: number, ranks: Ranks): CardNot
   return notes;
 }
 
+const stepText = (from: string, to: string): string => (from === to ? to : `${from} to ${to}`);
+
+function rateNote(label: string, before: number, after: number): CardNote | null {
+  if (!after) return null;
+  const from = before && Math.sign(before) === Math.sign(after) ? rateFigure(before) : "";
+  const verb = after < 0 ? "Drains" : "Regains";
+  const amount = from ? stepText(from, rateFigure(after)) : rateFigure(after);
+  return { text: `${verb} ${amount} ${label}/s`, tone: after < 0 ? "drain" : "regen" };
+}
+
+const percent = (share: number): string => `${share > 0 ? "+" : "-"}${Math.round(Math.abs(share) * 100)}%`;
+
+function powerNote(before: number, after: number): CardNote | null {
+  if (!after) return null;
+  const amount =
+    before && Math.sign(before) === Math.sign(after) ? stepText(percent(before), percent(after)) : percent(after);
+  return { text: `${amount} power`, tone: after > 0 ? "power" : "drain" };
+}
+
+function pactNotes(def: SkillDef, level: number): CardNote[] {
+  const before = pactAt(def.pact, level - 1);
+  const after = pactAt(def.pact, level);
+  return [
+    powerNote(before.power, after.power),
+    rateNote("HP", before.hp, after.hp),
+    rateNote("MP", before.mp, after.mp),
+  ].filter((note): note is CardNote => note !== null);
+}
+
 /** the level line of a skill card: new, or the step it takes */
 const skillLine = (level: number): string => (level === 1 ? "New skill" : `Level ${level - 1} to ${level}`);
 
@@ -78,7 +108,7 @@ function skillFace(c: CharacterDef, id: string, level: number, build: Build): Ca
     line: skillLine(level),
     pips: { total: SKILL_MAX_LEVEL, had: level - 1 },
     text: level === 1 ? def.text : def.levels[level - 1].text,
-    notes: [...resonanceNotes(def.element, 1, ranks), evolutionNote(c, def, build)],
+    notes: [...pactNotes(def, level), ...resonanceNotes(def.element, 1, ranks), evolutionNote(c, def, build)],
     isNew: level === 1,
   };
 }

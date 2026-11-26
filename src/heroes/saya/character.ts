@@ -20,7 +20,6 @@ export const SAYA: CharacterDef = {
   price: 550,
   special: { id: "silentMoon", name: "Silent Moon" },
   base: { ad: 11, ap: 8, hp: 95, mp: 90, stamina: 100, crit: 0.08, move: 1.04, aspd: 1, haste: 1 },
-  growth: { ad: 0, ap: 0, hp: 1, mp: 0.4 },
   skills: SAYA_SKILL_DEFS,
   comboHits: 3,
   skin: SAYA_SKIN,

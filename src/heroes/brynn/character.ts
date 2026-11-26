@@ -20,7 +20,6 @@ export const BRYNN: CharacterDef = {
   price: 1000,
   special: { id: "crimsonFall", name: "Crimson Fall" },
   base: { ad: 12, ap: 9, hp: 115, mp: 90, stamina: 110, crit: 0.05, move: 0.94, aspd: 1, haste: 1 },
-  growth: { ad: 0, ap: 0, hp: 1.3, mp: 0.4 },
   skills: BRYNN_SKILL_DEFS,
   comboHits: 3,
   skin: BRYNN_SKIN,
