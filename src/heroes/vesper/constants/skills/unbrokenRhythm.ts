@@ -15,13 +15,13 @@ const NATIVE: readonly NativeStep[] = [
 
 const LEVELS = drillLevels(NATIVE, [
   { text: "A landed cut takes 0.15 s off the warp recharge.", drill: { warp: 0.15 } },
-  { text: "New: a warp arrival takes 0.6 s off a spell preparing.", drill: { prepare: 0.6 } },
+  { text: "New: a warp arrival takes 0.6 s off every spell cooldown.", drill: { prepare: 0.6 } },
   { text: "New: an arrival recharges the dash.", drill: { dash: 1 } },
   { text: "0.25 s a landed cut.", drill: { warp: 0.25 } },
   { text: "New: a landed moonrise recharges the warp.", drill: { finisher: 1 } },
-  { text: "An arrival takes 1.2 s off a preparation.", drill: { prepare: 1.2 } },
+  { text: "An arrival takes 1.2 s off every spell cooldown.", drill: { prepare: 1.2 } },
   { text: "New: infused blades hold 1 more hit.", drill: { infusion: 1 } },
-  { text: "0.4 s a landed cut; 2 s off a preparation.", drill: { warp: 0.4, prepare: 2 } },
+  { text: "0.4 s a landed cut; 2 s off every spell cooldown.", drill: { warp: 0.4, prepare: 2 } },
 ]);
 
 export const UNBROKEN_RHYTHM: SkillDef = {

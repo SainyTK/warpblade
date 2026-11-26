@@ -40,8 +40,8 @@ export const SAYA_DRILL: DrillProfile = {
     attack:
       "Draw, return cut, sheathe. Each cut stores ink in the foe; the sheathe's click releases every stored cut at once.",
     ultimate: "Hold to charge Silent Moon through four levels. Release to use the highest level reached.",
-    cast: "Prepare the selected spell. Press again when ready to cast, or press during a cut to ink the blade.",
-    cycle: "Cycle Crescent Wave, Ink Rain and Still Water before preparing one.",
+    cast: "Cast the selected spell at once, or the next ready one. During a cut, ink the blade with it.",
+    cycle: "Select the next of Crescent Wave, Ink Rain and Still Water.",
   },
   modifiers: () => sayaModifiers(NEUTRAL_MODIFIERS),
   hooks: SAYA_DRILL_HOOKS,

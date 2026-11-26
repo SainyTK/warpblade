@@ -33,6 +33,8 @@ export const ZAFIR_SPELLS: readonly DrillSpell[] = [
     radius: 18,
     look: "flame",
     freeze: 0,
+    cooldown: 1.6,
+    mp: 8,
     status: sink,
   },
   {
@@ -48,6 +50,8 @@ export const ZAFIR_SPELLS: readonly DrillSpell[] = [
     radius: 13,
     look: "shard",
     freeze: 0,
+    cooldown: 1.4,
+    mp: 7,
     status: bleed,
   },
   {
@@ -63,6 +67,8 @@ export const ZAFIR_SPELLS: readonly DrillSpell[] = [
     radius: 22,
     look: "spark",
     freeze: 0,
+    cooldown: 2.8,
+    mp: 12,
     status: scour,
   },
 ];

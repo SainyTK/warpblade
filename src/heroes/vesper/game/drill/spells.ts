@@ -14,6 +14,8 @@ export const VESPER_SPELLS: readonly DrillSpell[] = [
     radius: 24,
     look: "flame",
     freeze: 0,
+    cooldown: 2.6,
+    mp: 11,
     status: moonLift,
   },
   {
@@ -28,6 +30,8 @@ export const VESPER_SPELLS: readonly DrillSpell[] = [
     radius: 18,
     look: "shard",
     freeze: 0,
+    cooldown: 1.6,
+    mp: 8,
     status: duskGale,
   },
   {
@@ -42,6 +46,8 @@ export const VESPER_SPELLS: readonly DrillSpell[] = [
     radius: 16,
     look: "spark",
     freeze: 0,
+    cooldown: 2.2,
+    mp: 10,
     status: duskThread,
   },
 ];

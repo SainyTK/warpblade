@@ -1,6 +1,17 @@
-import { STAMINA } from "../../constants/combat";
+import { STAMINA, WARP } from "../../constants/combat";
+import { DRILL_WARP_ACCENT } from "../../constants/touch";
 import { ULT_LEVELS } from "../../constants/ultimate";
-import { DASH_LOCKOUT, drillSession, usesDrill } from "../../drill";
+import {
+  canPaySpell,
+  canPayTier,
+  DASH_LOCKOUT,
+  drillSession,
+  rechargeLeft,
+  spellReady,
+  spellRecharge,
+  usesDrill,
+} from "../../drill";
+import { knownSpells } from "../../game/arts";
 import { selectedSlot } from "../../game/hero/abilityBar";
 import { heroJob } from "../../game/hero/job";
 import { canPayDash } from "../../game/hero/stamina";
@@ -42,21 +53,26 @@ export function buttonLook(spec: TouchButtonSpec, pressed: boolean): ButtonLook 
           const from = tiers[next - 1]?.threshold ?? 0;
           look.charge = next < 0 ? tiers.length : next + (held - from) / (tiers[next].threshold - from);
         }
-        look.affordable = tiers.length;
+        look.affordable = fighter.chargeRecharge.remaining > 0 ? 0 : tiers.filter(canPayTier).length;
         break;
       }
       case "dash":
         look.cooldown = fighter.dashReadyIn / DASH_LOCKOUT;
-        look.ready = look.cooldown === 0 || (fighter.warpReadyIn === 0 && !!fighter.swing);
-        break;
-      case "cast": {
-        const prep = fighter.spellBook.preparation;
-        look.cooldown = prep && prep.duration > 0 ? prep.remaining / prep.duration : 0;
         look.ready = look.cooldown === 0;
         break;
+      case "cast": {
+        const book = fighter.spellBook;
+        const payable = knownSpells(profile).filter(canPaySpell);
+        look.ready = payable.some((spell) => spellReady(book, spell));
+        look.cooldown = look.ready
+          ? 0
+          : Math.min(1, ...payable.map((spell) => rechargeLeft(spellRecharge(book, spell))));
+        break;
       }
-      case "cycle":
-        look.ready = !fighter.spellBook.preparation;
+      case "ultimate":
+        look.accent = DRILL_WARP_ACCENT;
+        look.cooldown = Math.min(1, fighter.warpReadyIn / WARP.cooldown);
+        look.ready = look.cooldown === 0;
         break;
       case "guard":
         look.ready = hero.stamina > 0;

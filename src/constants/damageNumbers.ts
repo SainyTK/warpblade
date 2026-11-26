@@ -37,6 +37,8 @@ export const NUMBER_WORDS: Readonly<Record<DamageTag | CueWord, string>> = {
   keen: "KEEN",
   parry: "PARRY",
   broken: "GUARD BROKEN",
+  noMp: "NO MP",
+  notReady: "NOT READY",
 };
 /** how far above a number its word sits */
 export const WORD_LIFT = 7;

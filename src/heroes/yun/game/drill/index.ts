@@ -26,8 +26,8 @@ export const YUN_DRILL: DrillProfile = {
     attack:
       "Cut with the jian. Press again during the cut to flow into the next, up to three: Willow Cut, Crane Wheel, Returning Tide.",
     ultimate: "Hold to charge Jade Rain through four levels. Release to call down the highest level reached.",
-    cast: "Prepare the selected sword art. Press again when ready to send it, or press during a cut to fill the jian with it for the next three hits.",
-    cycle: "Cycle Sword Stream, Sword Lotus and Qi Crescent before preparing one.",
+    cast: "Send the selected sword art at once, or the next ready one. During a cut, fill the jian with it for the next three hits.",
+    cycle: "Select the next of Sword Stream, Sword Lotus and Qi Crescent.",
   },
   modifiers: () => yunModifiers(NEUTRAL_MODIFIERS),
   hooks: YUN_DRILL_HOOKS,

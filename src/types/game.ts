@@ -55,7 +55,7 @@ export interface Blaze {
 }
 export type DamageTag = "normal" | "crit" | "back" | "air" | "burn" | "block" | "break" | "shatter";
 /** a word that pops without a number */
-export type CueWord = "evade" | "perfect" | "keen" | "parry" | "broken";
+export type CueWord = "evade" | "perfect" | "keen" | "parry" | "broken" | "noMp" | "notReady";
 /** a number that pops out of a struck foe */
 export interface DamageNumber {
   x: number;

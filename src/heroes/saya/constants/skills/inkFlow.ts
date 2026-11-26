@@ -19,13 +19,13 @@ const LEVELS = levelRows([
 
 const DRILL = drillRows(LEVELS, [
   { text: "A warp arrival infuses the blade for 1 hit.", drill: { charge: 1 } },
-  { text: "Preparation 15% faster.", drill: { preparation: 0.85 } },
+  { text: "Spell cooldowns 15% shorter.", drill: { preparation: 0.85 } },
   { text: "New: infusions last 1 more hit.", drill: { infusion: 1 } },
-  { text: "New: an arrival shortens a preparation by 1 s.", drill: { hasten: 1 } },
-  { text: "Preparation 15% to 30% faster.", drill: { preparation: 0.7 } },
+  { text: "New: an arrival takes 1 s off every spell cooldown.", drill: { hasten: 1 } },
+  { text: "Spell cooldowns 15% to 30% shorter.", drill: { preparation: 0.7 } },
   { text: "New: an arrival infuses for 2 hits.", drill: { charge: 2 } },
   { text: "New: infusions last 2 more hits.", drill: { infusion: 2 } },
-  { text: "Preparation 30% to 45% faster.", drill: { preparation: 0.55 } },
+  { text: "Spell cooldowns 30% to 45% shorter.", drill: { preparation: 0.55 } },
 ]);
 
 export const INK_FLOW: SkillDef = {
@@ -35,7 +35,7 @@ export const INK_FLOW: SkillDef = {
   element: "void",
   risk: "timed",
   button: "L",
-  text: "A warp arrival pours ink into the blade, and spells prepare faster.",
+  text: "A warp arrival pours ink into the blade, and spell cooldowns are shorter.",
   levels: DRILL,
   evolution: {
     partner: SKILL.reverse,

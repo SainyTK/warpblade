@@ -24,7 +24,7 @@ const DRILL_LEVELS = onDrill(LEVELS, [
   { text: "Stream bonus 1.2 AP.", drill: { bonus: 1.2 } },
   { text: "New: casting Stream sends 3 more swords at three heights for 0.6 AP.", drill: { fan: 3, swordPower: 0.6 } },
   { text: "Stream bonus 2.2 AP; swords 1.2 AP.", drill: { bonus: 2.2, swordPower: 1.2 } },
-  { text: "New: preparation -25%.", drill: { preparation: 0.75 } },
+  { text: "New: spell cooldowns -25%.", drill: { preparation: 0.75 } },
   { text: "Stream bonus 4.5 AP; swords 2.4 AP.", drill: { bonus: 4.5, swordPower: 2.4 } },
 ]);
 

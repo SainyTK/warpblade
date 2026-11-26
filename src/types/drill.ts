@@ -49,6 +49,8 @@ export interface DrillSpell {
   delay: number;
   look: DrillSpellLook;
   freeze: number;
+  cooldown: number;
+  mp: number;
   status?(foe: Enemy): void;
   damageScale?(foe: Enemy): number;
   burst?(x: number, y: number): void;
@@ -132,7 +134,7 @@ export interface DrillModifiers {
   strikeReach: number;
   spellDamage: number;
   spellArea: number;
-  preparation: number;
+  spellCooldown: number;
   infusionHits: number;
   warpDamage: number;
   warpCooldown: number;
@@ -193,6 +195,7 @@ export interface DrillInput {
   attackHeld: boolean;
   cast: boolean;
   cycle: boolean;
+  warp: boolean;
   guardHeld: boolean;
   guard: boolean;
   drop: boolean;
@@ -212,15 +215,14 @@ export interface SpellRelease {
   life: number;
 }
 
-export interface SpellPreparation {
+export interface Recharge {
   remaining: number;
   duration: number;
-  readyAge: number;
 }
 
 export interface SpellBook {
   selected: DrillSpell;
-  preparation: SpellPreparation | null;
+  recharges: Record<string, Recharge>;
   selectionCue: number;
 }
 
@@ -258,6 +260,7 @@ export interface Fighter {
   enhancedGuard: number;
   spellRelease: SpellRelease | null;
   chargeHeldFor: number | null;
+  chargeRecharge: Recharge;
   skillCast: SkillCast | null;
   spellBook: SpellBook;
   swordInfusion: SwordInfusion | null;

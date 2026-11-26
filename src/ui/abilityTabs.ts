@@ -1,4 +1,4 @@
-import { drillSession, usesDrill } from "../drill";
+import { canPaySpell, drillSession, rechargeLeft, spellRecharge, usesDrill } from "../drill";
 import { knownSpells } from "../game/arts";
 import { selectedSlot } from "../game/hero/abilityBar";
 import { kit } from "../game/hero/kits";
@@ -62,16 +62,25 @@ function updateDrillTabs(session: Session): void {
     });
     built = { hero: key, tabs: [] };
   }
-  const { selected, preparation } = fighter.spellBook;
+  const book = fighter.spellBook;
   for (const { spell, el, tab } of drillTabs) {
     const hidden = !known.includes(spell);
     if (el.hidden !== hidden) {
       el.hidden = hidden;
     }
-    const on = spell.id === selected.id;
-    el.classList.toggle("on", on);
-    tab.update(on && preparation && preparation.duration > 0 ? preparation.remaining / preparation.duration : 0);
+    el.classList.toggle("on", spell.id === book.selected.id);
+    el.classList.toggle("poor", !canPaySpell(spell));
+    tab.update(rechargeLeft(spellRecharge(book, spell)));
   }
+  joltOnDenial(() => drillTabs.find(({ spell }) => spell.id === book.selected.id)?.tab);
+}
+
+function joltOnDenial(selectedTab: () => ReturnType<typeof createRechargeTab> | undefined): void {
+  const denied = Math.max(hero.denied.cast, hero.denied.mp);
+  if (denied > lastDenied) {
+    selectedTab()?.jolt();
+  }
+  lastDenied = denied;
 }
 
 export function updateAbilityTabs(): void {
@@ -94,7 +103,5 @@ export function updateAbilityTabs(): void {
     if (el.textContent !== slot.label) el.textContent = slot.label;
     tab.update(Math.min(1, slot.wait() / slot.full()));
   }
-  const denied = Math.max(hero.denied.cast, hero.denied.mp);
-  if (denied > lastDenied) built.tabs.find((t) => t.slot === selected)?.tab.jolt();
-  lastDenied = denied;
+  joltOnDenial(() => built.tabs.find((t) => t.slot === selected)?.tab);
 }

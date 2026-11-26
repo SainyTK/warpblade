@@ -23,11 +23,11 @@ export const CALDER_DRILL: DrillProfile = {
   text: {
     attack:
       "Cut with the trigger blade. Press again during the cut to chain up to three; the third fires a round into the wound.",
-    dash: "Dash; during a cut, throw the blade and warp to it, firing a round as you land.",
+    warp: "Throw the blade at the nearest foe ahead and warp to it, firing a round as you land.",
     ultimate:
       "Hold to charge through Breach Cut, Buckshot Wall, Green Line and Cylinder Break. Release to use the highest reached.",
-    cast: "Load the selected shell. Press again when loaded to fire it, or press during a cut to load it into the blade for the next hits.",
-    cycle: "Cycle Phosphor Shell, Chain Shot and Blast Charge before loading one.",
+    cast: "Fire the selected shell at once, or the next ready one. During a cut, load it into the blade for the next hits.",
+    cycle: "Select the next of Phosphor Shell, Chain Shot and Blast Charge.",
   },
   modifiers: () => calderModifiers(NEUTRAL_MODIFIERS),
   hooks: CALDER_DRILL_HOOKS,

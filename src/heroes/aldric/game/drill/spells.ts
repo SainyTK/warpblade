@@ -31,6 +31,8 @@ export const ALDRIC_SPELLS: readonly DrillSpell[] = [
     radius: 15,
     look: "shard",
     freeze: 0,
+    cooldown: 1.6,
+    mp: 8,
     status: lanceMark,
   },
   {
@@ -46,6 +48,8 @@ export const ALDRIC_SPELLS: readonly DrillSpell[] = [
     radius: 22,
     look: "spark",
     freeze: 0,
+    cooldown: 2.8,
+    mp: 12,
     status: pillarStun,
   },
   {
@@ -61,6 +65,8 @@ export const ALDRIC_SPELLS: readonly DrillSpell[] = [
     radius: 30,
     look: "flame",
     freeze: 0,
+    cooldown: 3.2,
+    mp: 10,
     status: mendingLight,
   },
 ];

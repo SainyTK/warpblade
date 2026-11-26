@@ -1,4 +1,5 @@
 import { SKY_FLASH } from "../constants/effectLook";
+import { drawDrillOver } from "../drill";
 import { beginFrame, composite, setCameraX, setShake } from "../engine/frame";
 import { drawStageHazardBack, drawStageHazardFront, stageCameraX } from "../game/adventure";
 import { drawChests } from "../game/build/chests";
@@ -74,6 +75,7 @@ export function renderScene(out: Uint8ClampedArray): void {
   setCameraX(cameraX);
   lights.draw();
   drawNumbers();
+  drawDrillOver(cameraX);
   eachHero(() => shownKit().drawOver?.());
   setCameraX(0);
   room?.drawOverlay();

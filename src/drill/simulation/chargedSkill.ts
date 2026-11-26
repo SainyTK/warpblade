@@ -1,8 +1,13 @@
+import { cue } from "../../game/cue";
+import { deny } from "../../game/hero/deny";
 import { emitSkillEvent } from "../../game/skills/events";
-import { game } from "../../game/state";
+import { withBuild } from "../../game/skills/query";
+import { game, hero } from "../../game/state";
 import { sfx } from "../../services/audio";
 import type { DrillInput, DrillProfile, DrillTier, Fighter, Session, SkillCast } from "../../types/drill";
+import { CHARGE_PRICE, CHARGE_REFUSED_CUE_LIFT } from "../constants";
 import { strikeEnemy } from "./enemyContact";
+import { startRecharge } from "./recharge";
 
 export function chargedTier(profile: DrillProfile, heldFor: number): DrillTier | undefined {
   let tier: DrillTier | undefined;
@@ -12,6 +17,27 @@ export function chargedTier(profile: DrillProfile, heldFor: number): DrillTier |
     }
   }
   return tier;
+}
+
+export const tierMp = (tier: DrillTier): number => CHARGE_PRICE.mp[tier.level - 1];
+
+export const tierCooldown = (tier: DrillTier): number => CHARGE_PRICE.cooldown[tier.level - 1];
+
+export const canPayTier = (tier: DrillTier): boolean => hero.mp >= tierMp(tier);
+
+export function payableTier(profile: DrillProfile, heldFor: number): DrillTier | undefined {
+  let tier: DrillTier | undefined;
+  for (const option of profile.tiers) {
+    if (heldFor >= option.threshold && canPayTier(option)) {
+      tier = option;
+    }
+  }
+  return tier;
+}
+
+function refuseCharge(h: Fighter, reason: "mp" | "ult"): void {
+  deny(reason);
+  cue(h.x, h.y - CHARGE_REFUSED_CUE_LIFT, reason === "mp" ? "noMp" : "notReady");
 }
 
 export function trackChargePress(h: Fighter, input: DrillInput): void {
@@ -61,19 +87,31 @@ export function tickSkill(session: Session, input: DrillInput, dt: number): void
     h.chargeHeldFor += dt * session.modifiers.chargeRate;
     return;
   }
-  const tier = chargedTier(session.profile, h.chargeHeldFor);
+  const held = h.chargeHeldFor;
   h.chargeHeldFor = null;
-  if (tier) {
-    h.skillCast = { tier, age: 0, x: h.x, y: h.y, face: h.face };
-    h.vx = 0;
-    h.dashTime = 0;
-    h.airDashActive = false;
-    h.jumpBoost = false;
-    h.swing = null;
-    h.warp = null;
-    h.guardAge = null;
-    h.parryAge = null;
-    h.enhancedGuard = 0;
-    h.spellRelease = null;
+  if (!chargedTier(session.profile, held)) {
+    return;
   }
+  if (h.chargeRecharge.remaining > 0) {
+    refuseCharge(h, "ult");
+    return;
+  }
+  const tier = payableTier(session.profile, held);
+  if (!tier) {
+    refuseCharge(h, "mp");
+    return;
+  }
+  hero.mp -= tierMp(tier);
+  startRecharge(h.chargeRecharge, withBuild("cooldown", tierCooldown(tier)));
+  h.skillCast = { tier, age: 0, x: h.x, y: h.y, face: h.face };
+  h.vx = 0;
+  h.dashTime = 0;
+  h.airDashActive = false;
+  h.jumpBoost = false;
+  h.swing = null;
+  h.warp = null;
+  h.guardAge = null;
+  h.parryAge = null;
+  h.enhancedGuard = 0;
+  h.spellRelease = null;
 }
