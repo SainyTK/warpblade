@@ -1,3 +1,4 @@
+import { kindOf } from "../game/enemies/kinds";
 import type { Enemy, EnemyType } from "../types/enemy";
 import type { SpriteImage } from "../types/sprite";
 import { decodeSheet } from "./decode";
@@ -38,18 +39,23 @@ export async function preloadFoeArt(): Promise<void> {
 
 export const hasFoeArt = (type: EnemyType): boolean => loaded.has(type);
 
+function withVariant(variant: string | null, names: readonly (string | null)[]): (string | null)[] {
+  if (!variant) return [...names];
+  return [...names.map((name) => (name ? `${variant}/${name}` : null)), ...names];
+}
+
 function clipFor(e: Enemy, sheet: FoeArtSheet): { clip: FoeArtClip; age: number } | null {
   const hurt = e.stagger > 0 || e.stun > 0 || e.air;
-  const names = [
+  const names = withVariant(kindOf(e.type).artVariant?.(e) ?? null, [
     hurt ? HURT_CLIP : null,
     e.phase > 1 ? `${e.state}${PHASE_SUFFIX}` : null,
     e.state,
     e.phase > 1 ? `${DEFAULT_CLIP}${PHASE_SUFFIX}` : null,
     DEFAULT_CLIP,
-  ];
+  ]);
   for (const name of names) {
     if (name && sheet.clips[name])
-      return { clip: sheet.clips[name], age: name === DEFAULT_CLIP ? e.seed + e.st : e.st };
+      return { clip: sheet.clips[name], age: name.endsWith(DEFAULT_CLIP) ? e.seed + e.st : e.st };
   }
   return null;
 }
