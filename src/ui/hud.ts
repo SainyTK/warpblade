@@ -4,7 +4,7 @@ import { ULT_LEVELS } from "../constants/ultimate";
 import { STAGE_WAVES } from "../constants/waves";
 import { canPayTier, drillSession, payableTier, rechargeLeft, usesDrill } from "../drill";
 import { isAdventure, stageStatus as stageLine } from "../game/adventure";
-import { bossBarView } from "../game/bossFight";
+import { bossBarView, bossCardView } from "../game/bossFight";
 import { canAffordUlt, ultRecharge } from "../game/hero/ultimate";
 import { character, game, hero, progress } from "../game/state";
 import { isTraining } from "../game/training";
@@ -144,5 +144,5 @@ export function updateHud(): void {
   boss.classList.toggle("shielded", !!bar?.shielded);
   bossMarks.innerHTML = (bar?.marks ?? []).map((m) => `<i style="left:${m * 100}%"></i>`).join("");
   banner.textContent = game.banner.text;
-  banner.classList.toggle("show", game.banner.time > 0);
+  banner.classList.toggle("show", game.banner.time > 0 && !bossCardView());
 }
