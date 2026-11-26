@@ -1,0 +1,36 @@
+{
+  "imagePixelsPerArtPixel": 2,
+  "frames": [[0, 0, 92, 80, 46, 40], [92, 0, 92, 80, 46, 40], [184, 0, 92, 80, 46, 40], [276, 0, 92, 80, 46, 40]],
+  "clips": {
+    "idle": {
+      "frames": [0, 1, 0, 2],
+      "fps": 5,
+      "loop": true
+    },
+    "drift": {
+      "frames": [0, 1, 0, 2],
+      "fps": 5,
+      "loop": true
+    },
+    "wind": {
+      "frames": [1],
+      "fps": 5,
+      "loop": false
+    },
+    "shoot": {
+      "frames": [3],
+      "fps": 5,
+      "loop": false
+    },
+    "recover": {
+      "frames": [2, 0],
+      "fps": 5,
+      "loop": false
+    },
+    "hurt": {
+      "frames": [2],
+      "fps": 5,
+      "loop": false
+    }
+  }
+}
