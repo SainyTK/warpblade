@@ -1,0 +1,67 @@
+{
+  "imagePixelsPerArtPixel": 2,
+  "frames": [
+    [0, 0, 128, 92, 64, 80],
+    [128, 0, 128, 92, 64, 80],
+    [256, 0, 128, 92, 64, 80],
+    [384, 0, 128, 92, 64, 80],
+    [512, 0, 128, 92, 64, 80],
+    [640, 0, 128, 92, 64, 80],
+    [768, 0, 128, 92, 64, 80],
+    [896, 0, 128, 92, 64, 80],
+    [1024, 0, 128, 92, 64, 80],
+    [1152, 0, 128, 92, 64, 80]
+  ],
+  "clips": {
+    "idle": {
+      "frames": [0],
+      "fps": 5,
+      "loop": true
+    },
+    "walk": {
+      "frames": [0, 3],
+      "fps": 5,
+      "loop": true
+    },
+    "wind": {
+      "frames": [1],
+      "fps": 5,
+      "loop": false
+    },
+    "lunge": {
+      "frames": [2],
+      "fps": 5,
+      "loop": false
+    },
+    "swipe": {
+      "frames": [9],
+      "fps": 5,
+      "loop": false
+    },
+    "recover": {
+      "frames": [3],
+      "fps": 5,
+      "loop": false
+    },
+    "hurt": {
+      "frames": [3],
+      "fps": 5,
+      "loop": false
+    },
+    "burrow": {
+      "frames": [4, 5, 6, 7],
+      "fps": 5,
+      "loop": false
+    },
+    "ambush/wind": {
+      "frames": [6, 5],
+      "fps": 5,
+      "loop": false
+    },
+    "ambush/lunge": {
+      "frames": [8],
+      "fps": 5,
+      "loop": false
+    }
+  }
+}

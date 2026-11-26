@@ -4,7 +4,7 @@ import { FORGE } from "../../colors";
 import { updateSlagling } from "./behavior";
 import { slagTakes } from "./death";
 import { drawSlagling } from "./draw";
-import { slagScale } from "./size";
+import { isSmall, slagScale } from "./size";
 
 export const slaglingKind: EnemyKind = {
   flies: false,
@@ -15,6 +15,7 @@ export const slaglingKind: EnemyKind = {
   },
   center: (e) => [e.x, e.y - e.ay - 6 * slagScale(e)],
   rest: "walk",
+  artVariant: (e) => (isSmall(e) ? "small" : null),
   firstCooldown: () => 1.1,
   rift: { height: 12, y: () => GROUND, riftY: () => GROUND - 10 },
   update: updateSlagling,

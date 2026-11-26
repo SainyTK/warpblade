@@ -3,13 +3,14 @@ import type { EnemyKind } from "../../../game/enemies/kinds/kind";
 import { rng } from "../../../game/state";
 import { drawBogleech } from "./drawBogleech";
 import { LEECH_COLORS } from "./leechColors";
-import { buried, leechBox, leechCenter, updateBogleech } from "./leechMoves";
+import { buried, erupting, leechBox, leechCenter, updateBogleech } from "./leechMoves";
 
 export const bogleech: EnemyKind = {
   flies: false,
   box: leechBox,
   center: leechCenter,
   rest: "walk",
+  artVariant: (e) => (buried(e) || erupting(e) ? "ambush" : null),
   firstCooldown: () => rng.range(0.8, 1.4),
   rift: { height: 10, y: () => GROUND, riftY: () => GROUND - 8 },
   update: updateBogleech,
