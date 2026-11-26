@@ -4,13 +4,13 @@
 
 <p align="center">
   <b>Throw the sword. Become the sword.</b><br>
-  A pixel art action game where every sprite and every spark is drawn by code.
+  A pixel art action platformer: seal eight rifts in any order, then break into the Citadel.
 </p>
 
 <p align="center">
   <a href="https://warpblade.sainytk.com"><img alt="Play in your browser" src="https://img.shields.io/badge/%E2%96%B6%20PLAY-warpblade.sainytk.com-7fe3ff?style=for-the-badge&labelColor=0c0a18"></a>
   <a href="LICENSE"><img alt="MIT License" src="https://img.shields.io/badge/LICENSE-MIT-e0ac48?style=for-the-badge&labelColor=0c0a18"></a>
-  <img alt="No image files" src="https://img.shields.io/badge/ASSETS-0%20image%20files-b4a8ff?style=for-the-badge&labelColor=0c0a18">
+  <img alt="A 30 minute campaign" src="https://img.shields.io/badge/CAMPAIGN-about%2030%20minutes-b4a8ff?style=for-the-badge&labelColor=0c0a18">
 </p>
 
 ---
@@ -23,75 +23,143 @@ Its towers still stand under the moon, and rifts keep opening between them.
 The warp knights set a warp crystal into every sword they forged.
 Throw such a sword, and its bearer follows it to wherever it lands.
 Kael is the last of the knights, and eight other sword fighters now carry blades with a crystal in them, from a duelist's rapier to a drifter's gun sword.
-Nine heroes hold the night back together.
+Eight rifts have torn open across the land, each guarded by a lord that came through it, and behind them all waits the Abyss Citadel.
 
 <p align="center">
-  <img src="docs/media/gameplay.gif" alt="Gameplay: a three-hit combo, a warp strike, then fire, ice and lightning spells against shadow creatures" width="100%">
+  <img src="docs/media/gameplay.gif" alt="Gameplay: Kael tears through a Rift Surge in the Abyss Citadel as Storm arcs and Void echoes chain from foe to foe" width="100%">
+</p>
+
+## The Rift campaign
+
+A solo run is one campaign of about 30 minutes.
+It starts in the Sunlit Ruins, where Oakheart guards the first rift.
+Then the Rift Map opens, and you choose which of the eight Rift stages to take next.
+
+<p align="center">
+  <img src="docs/media/rift-map.png" alt="The Rift Map: eight Rift stages with their bosses, one already sealed" width="100%">
+</p>
+
+| Stage | Boss | Its Rift Art |
+| --- | --- | --- |
+| Storm Marsh | Bog Hulk | Mire Spit (Venom) |
+| Cinder Foundry | The Cinder Smith | Forge Flare (Blaze) |
+| Frostglass Caverns | Rimeclaw | Rime Fang (Frost) |
+| Thunderhead Skyway | Tempest Roc | Gale Call (Storm) |
+| Drowned Archive | The Pagewyrm | Ink Tide (Void) |
+| Moonlit Ruins | Gloam Shepherd | Gloam Lantern (Blaze) |
+| Veil Spires | Rift Warden | Rift Lance (Storm) |
+| Blightroot Hollow | Sporeheart | Spore Burst (Venom) |
+
+Each stage has its own place, three foes of its own, a hazard and a two-phase boss.
+A stage is three areas, and each area ends in a locked room: a Rift Surge, where rifts keep opening until a crowd of foes has come through, or the stage's boss.
+Every rift you seal makes the next stage harder, and your HP and MP fill when you enter one.
+Every boss leaves its Rift Art behind, and each boss is weak to another stage's Art, so the order you choose matters.
+When all eight rifts are sealed, the Abyss Citadel opens: the Abyss Maw, the biggest Surge of the run, the Abyss Sovereign, and what waits after it.
+
+<table>
+  <tr>
+    <td><img src="docs/media/stage-foundry.png" alt="Cinder Foundry: a forge city in a volcano, with lava falls, lava pits and a Forgeguard"></td>
+    <td><img src="docs/media/boss-rimeclaw.png" alt="Aldric fights Rimeclaw, the frost lynx of Frostglass Caverns"></td>
+  </tr>
+  <tr>
+    <td align="center">Cinder Foundry</td>
+    <td align="center">Rimeclaw, Frostglass Caverns</td>
+  </tr>
+  <tr>
+    <td><img src="docs/media/boss-tempest-roc.png" alt="Yun faces the Tempest Roc on a stone bridge above the storm"></td>
+    <td><img src="docs/media/boss-pagewyrm.png" alt="Zafir cuts at the Pagewyrm in the Drowned Archive"></td>
+  </tr>
+  <tr>
+    <td align="center">Tempest Roc, Thunderhead Skyway</td>
+    <td align="center">The Pagewyrm, Drowned Archive</td>
+  </tr>
+  <tr>
+    <td><img src="docs/media/stage-blight.png" alt="Brynn in Blightroot Hollow among glowing spores and roots"></td>
+    <td><img src="docs/media/stage-veil.png" alt="Calder fights a Rift Surge of Rune Golems in Veil Spires"></td>
+  </tr>
+  <tr>
+    <td align="center">Blightroot Hollow</td>
+    <td align="center">A Rift Surge in Veil Spires</td>
+  </tr>
+</table>
+
+## Growth: Resonance and Fusions
+
+Every level up gives a skill point.
+Spend points with a mentor in an area, or with Upgrade skills on the Rift Map, on one of three cards: a new skill, the next level of a held skill, or the next level of a Rift Art.
+
+Every skill and every Rift Art belongs to one of five elements: Blaze, Frost, Storm, Venom and Void.
+An element's rank is the sum of the levels you hold in it, and every rank adds to every hit you land:
+
+- Blaze burns.
+- Frost chills, then freezes, and frozen foes take more.
+- Storm arcs to nearby foes.
+- Venom poisons, and every poison stack makes the foe take more from everything.
+- Void echoes the hit a moment later.
+
+Arcs and echoes are hits too, so they burn, poison and arc again.
+A build that leans into two or three elements multiplies its damage, and by the Citadel a good build fills the screen.
+Two elements at rank 12 fuse into one of ten Fusions, such as Plasma (Blaze and Storm: arcs set foes burning) or Thunder Echo (Storm and Void: every echo arcs).
+At rank 20 an element gains a finishing power, such as Wildfire, where burning foes explode when they fall.
+A card says what it adds to your Resonance and when it would complete a Fusion; a Fusion's name stays ??? until you make it once.
+
+<table>
+  <tr>
+    <td><img src="docs/media/cards.png" alt="Skill cards coloured by element, each showing the Resonance it adds"></td>
+    <td><img src="docs/media/shot-surge.png" alt="A late build in the Abyss Citadel: arcs, echoes and five-figure hits across a Rift Surge"></td>
+  </tr>
+  <tr>
+    <td align="center">Cards and Resonance</td>
+    <td align="center">A late build in a Citadel Surge</td>
+  </tr>
+</table>
+
+When a run ends, cleared or fallen, the result screen shows your grade, rifts sealed, time, damage, foes defeated and level, the damage of every source, and your best runs: most rifts sealed, fastest clear, best grade, most damage and highest level.
+From there, play again, go back to the main menu or visit the Shop.
+
+<p align="center">
+  <img src="docs/media/result.png" alt="The result screen: run stats, best runs with new records marked, and Play again, Main menu and Shop" width="70%">
 </p>
 
 ## Features
 
 - **One moveset for every hero.** Every hero plays on the same buttons and fills them with their own moves.
-  Tap `J` for the hero's string, and hold it for a quarter of a second to warp: the hero throws their sword at the nearest foe ahead, follows it and strikes on arrival, with the same numbers and the same 10 MP for every hero.
-  Hold `K` to guard against blows from the front, and press it just as a blow lands to parry, with a reward of the hero's own.
-  `L` is the same front dodge for everyone.
-  `I` casts the selected ability, `I` held casts its wide form where it has one, and `O` switches ability.
-  `U` is the hero's one ultimate.
-- **A full kit from the first second.** Every hero starts a run with every button already doing something.
-  Kael has his four-hit sword string, a double jump, Warp Strike on a long press of `J` (throw the sword at a foe and appear beside it mid-swing, harder the farther he travels, 10 MP), a sword guard on `K` whose parry cuts back and lets `J` blink him behind the attacker, the dodge on `L`, and two crystal abilities on `I`, Crystal Lance and Crystal Burst, each with a wide form on a long press.
-- **Fixed combo strings.** Each hero's ground string has a fixed length for the whole run, and Kael's has four hits.
-  Kael's string is a step-in cut, a rising backhand, a twin-fang double stab and a falling smash that knocks the foe down, and each one moves his whole body while his feet stay planted.
-  Skills change what the hits do, never how many there are.
-- **Combos that play the same every time.** Each press of J plays one whole blow with a wind-up, a strike that holds through the hit and a follow-through, in the same order wherever the foes stand, and heavy blows bounce foes off the edge of the stage.
-  Air attacks are their own moves: a wheel slash that circles Kael's whole body, a scissor cut that lays him back and sweeps the blade under his feet, and a stomp that drops him feet first and knocks nearby foes down.
-  Kael has two air attacks per jump, the wheel slash and the scissor cut; the Sky Dance skill adds the stomp.
+  `J` chains up to three ground slashes and a jump slash, and held, it charges four tiers of the hero's charged skill (Kael's Crystal Crescent, Rift Spires, Astral Rift and Crystal Nova).
+  `L` dashes on the ground or once in the air; jump out of a ground dash to carry its speed, and press `L` during a slash to throw the sword and warp strike the foe ahead.
+  `K` guards from the front, a tap just before a blow lands parries it and reflects the blow, and `K` during a slash opens an enhanced parry.
+  `I` prepares the selected spell, and a second `I` casts it once it is ready, or sets it into the sword during a slash for the next three hits.
+  `O` cycles the spells: the hero's own three, then every Rift Art earned.
+- **Combos that play the same every time.** Each press of J plays one whole blow with a wind-up, a strike that holds through the hit and a follow-through, in the same order wherever the foes stand.
+  A swing hits every foe its arc passes through, flyers at head height included.
 - **Keen timing.** Press J just after a blow lands and the next one is a sure critical hit with a gold slash.
-  Pressing before the blow lands spoils it, so rhythm beats mashing.
 - **Positioning pays.** Hits from behind deal 1.5 times the damage and foes in the air take double, with the numbers popping out of every hit.
 - **Low health warning.** At a quarter of HP or less, a faint red light glows in from the edges of the screen, and under a tenth it grows wider and beats like a heart. It fades in and out as HP drops or comes back.
-  A hurt hero stands wounded when idle: Kael hunches over his sword planted in the floor, short of breath.
-- **Fights that need skill.** Husks block blows from the front and strike back, wisps slip away from swings, and missed swings leave you open.
-  Press `K` just as a blow lands to parry it: the hero takes nothing, a minion attacker reels, the world slows for a beat, and MP, stamina and Flow come back.
-  Dodge through an attack at the last moment for a perfect dodge and slow motion.
+  A fallen hero drops to one knee on the planted sword before the result screen opens.
+- **Fights that need skill.** Many foes guard from the front, flyers dive and shoot, and every attack has a wind-up you can read.
+  Parry a blow to take nothing and turn it back, or dash through it at the last moment for a perfect dodge and slow motion.
 - **Stamina.** The green stamina bar pays for dodges and blocks.
   Each dodge spends 50, half of Kael's bar, so two dodges in a row leave him out of breath until it refills, and every blow the guard blocks costs some more.
   It comes back after a short pause, slower while the hero attacks, and a perfect dodge or a parry gives some back.
-- **Hero skills.** Every hero has 20 skills of their own, each with eight levels and an evolution: attacks, movement, spells, damage over time, summons and one ultimate skill.
+- **Hero skills.** Every hero has 20 skills of their own, each with eight levels, an element and an evolution: attacks, movement, spells, damage over time, summons and one skill that upgrades the charged skill.
   In solo play, level-ups bank skill points without pausing the game.
-  Talk to a mentor to spend each point on one of three cards, or four with luck.
-  A card offers a new skill, the next level of a held skill, or the next level of a Rift Art, each with its own pixel icon.
   A build holds up to 8 skills, and every run starts with 2 rerolls, 2 skips and 1 banish to steer the cards.
   If too few cards are left, Second Wind fills the rest and restores all HP and MP.
-- **Resonance.** Every skill and every Rift Art belongs to one of five elements: Blaze, Frost, Storm, Venom and Void.
-  An element's rank is the sum of the levels you hold in it, and every rank adds to what each of your hits does: Blaze burns, Frost chills and freezes, Storm arcs to nearby foes, Venom poisons and makes foes take more from everything, and Void echoes a hit a moment later.
-  Arcs and echoes are hits too, so they can burn, poison and arc again, and a build that leans into two or three elements grows much faster than one spread thin.
-  At rank 20 an element gains a finishing power, such as Wildfire for Blaze, where burning foes explode when they fall.
-- **Fusions.** Two elements at rank 12 or more fuse into one of ten Fusions, such as Plasma (Blaze and Storm: arcs set foes burning) or Thunder Echo (Storm and Void: every echo arcs).
-  A card that would complete a Fusion says so, and a Fusion's name stays ??? until you have made it once.
 - **Chests and evolutions.** Elites with a gold ring and bosses before The Unblinking drop chests in solo play.
   Touch a chest to open it.
-  A chest raises held skills and Rift Arts, sometimes three or five at once, and from the Bog Hulk onward it can evolve a skill at level 8 whose partner skill is held at level 4 or more.
+  A chest raises held skills and Rift Arts, sometimes three or five at once, and a stage boss's chest always raises at least three.
+  Later in the campaign a chest can evolve a skill at level 8 whose partner skill is held at level 4 or more.
   Kael's Fire Flask evolves with Crystal Familiar into Sunflask.
   A card says "Evolves with ???" until the player has made that evolution once.
 - **Flow.** Every hit of the hero's own adds a stack of Flow, up to 25, each one +4% damage on every source, so a full bar doubles it; a perfect dodge adds five, and getting hurt halves it.
-- **Charged ultimates.** Every hero has one ultimate on `U` for the whole run, and Kael's is Crystal Nova.
-  Hold U through four levels; level 4 spends a full MP bar.
-  After a strike the ultimate recharges for 20 seconds, less with some ultimate skills, and its row on the HUD dims with a bar filling under it.
-  Each hero has one ultimate skill, named after their ultimate, that upgrades it level by level and evolves it into a bigger form, such as Supernova for Crystal Nova.
 - **Experience to pick up.** Slain foes drop lime orbs of experience that bounce on the floor. Walk over them to collect them; any left behind fly to the hero after 4 seconds, or in a room to the nearest standing hero.
   Attack and ability power grow 2.5% with every level, compounding.
-- **Damage by source.** The result screen lists every source of damage with its level, total damage and damage per second: the hero's attacks, abilities and ultimate, and each skill that strikes on its own.
+- **Damage by source.** The result screen lists every source of damage with its level, total damage and damage per second: the hero's attacks, abilities and ultimate, each skill that strikes on its own, and each element's Resonance.
 - **The Codex.** The Codex on the start menu lists the five elements, the Fusions, the Rift Arts and every hero's skills and evolutions, with Fusions and evolutions not yet made shown as silhouettes with their recipe or ???.
-- **Abilities on `I`.** Each hero turns through their abilities with `O`: their base ones and every spell skill they hold, such as Kael's Fire Flask that sets the floor burning, his Ice Spikes that freeze and his Lightning that arcs to a second foe.
-  Each ability has its own recharge, and casting one adds no wait to any other.
-  When the selected one is recharging or cannot be paid for, `I` casts the next ready one and selects it; with none ready, the press is refused with a dull tick and a jolt of the tab.
-  The HUD tabs dim while an ability recharges, and a bar along each tab fills back up.
 - **Coins and a shop.** Foes drop pixel coins that the hero picks up by touch, and any left behind fly to them after a moment.
   When a run ends, cleared or lost, its coins go to the bank.
-  The solo results show a grade from E to S, stage progress, bosses defeated, enemies defeated, time and damage dealt.
   The Shop on the start menu sells stats in levels (HP, attack, ability power, MP, crit, move speed, stamina), more rerolls, skips and banishes for the cards, and four skills: Lodestone, Aftershock and Head Start, bought once, and Last Light, bought in three levels, each saving the hero from one more fatal blow per run.
   Everything bought applies to every run and every hero, on top of the level-up picks, and is saved in this browser.
-- **Achievements and hero unlocks.** Achievements track goals across runs: bosses reached, a Bog Hulk victory with each hero, foes slain, long combos, perfect dodges, evolutions, coins banked, the Gloam Shepherd, five Bog Hulk kills, the Rift Warden and The Unblinking.
+- **Achievements and hero unlocks.** Achievements track goals across runs: bosses reached and beaten, foes slain, long combos, perfect dodges, evolutions, coins banked and The Unblinking.
   Most pay coins, a few stay hidden as ??? until an earlier one is earned, and a small banner slides down when one is earned without stopping play.
   The Achievements page on the start menu shows what each one asks, with a progress bar for those that count up, and the result screen names those a run earned.
   Kael and Cerise are free; every other hero is unlocked with coins on the hero screen, each one costing more than the last (see [docs/achievements.md](docs/achievements.md)).
@@ -116,68 +184,46 @@ Nine heroes hold the night back together.
   His third blow becomes Prism Thrust, a long lunge that lodges a prism shard in the foe, and his finisher becomes Shatterfall, an overhead cut into the floor that shatters every shard nearby for extra damage.
   His warp, his parry's riposte and his Crystal Nova, which now also fires six prism beams, lodge shards too.
   The Warp Knight, Kael's own job, plays as before, and co-op rooms play every hero's own job.
-- **A Rift campaign of about 30 minutes.** A solo run starts in the Sunlit Ruins, where Oakheart guards the first rift.
-  Then the Rift Map opens: eight Rift stages, played in any order you choose, each with its own place, foes, hazard and boss.
-  Storm Marsh (the Bog Hulk), Cinder Foundry (the Cinder Smith), Frostglass Caverns (Rimeclaw), Thunderhead Skyway (the Tempest Roc), Drowned Archive (the Pagewyrm), Moonlit Ruins (the Gloam Shepherd), Veil Spires (the Rift Warden) and Blightroot Hollow (Sporeheart).
-  Each stage is three areas, and each area ends in a locked room: a Rift Surge, where rifts keep opening until a crowd of foes has come through, or the stage's boss.
-  Stages grow harder with every rift you seal, and your HP and MP fill when you enter one.
-  When all eight are sealed, the Abyss Citadel opens: the Abyss Maw, the biggest Surge of the run, the Abyss Sovereign, and what waits after it.
-- **Rift Arts.** Every Rift stage's boss leaves its Art behind, a spell every hero can prepare with `I` and cast, or press during a slash to set into the sword.
-  Each boss is weak to one other stage's Art, which hits it three times as hard and staggers it, so the order you take the stages in matters.
-  Arts level up from cards and chests, and count twice toward their element's Resonance.
+  The campaign plays every hero's own job.
 - **Stage hazards and pits.** Lava vents, falling icicles, wind gusts, poison pools, ink tides, mud vents, grave hands and rift tears, each warned before it strikes.
   Falling into a pit costs some HP and sets you back on firm ground, and foes knocked into one are gone.
   You can pass regular enemies, but defeating them earns experience and helps your grade.
-  Talk to a mentor in an area, or choose Upgrade skills on the Rift Map, to spend your skill points.
 - **Platform movement.** Press Jump during a dash to carry its speed into the air.
   Press Down on a ledge to drop through it.
   Hold toward a wall to slide or hold Jump into it to climb.
   Jump at the wall to rise along it, or steer away as you jump to kick off.
 - **Co-op for up to four.** Co-op on the start menu hosts a room in your browser, and friends join with its five-letter code or an invite link.
   Each player picks a hero, the same hero twice is fine, and a P1 to P4 tag in the player's colour floats over each hero.
-  Co-op keeps the 30-wave arena, with more and tougher foes for each extra player.
+  Co-op keeps the 30-wave arena and the classic moveset, with more and tougher foes for each extra player.
   Experience is shared, but every player chooses their own skill cards when a wave is cleared and banks their own coins.
   A fallen player is down until the wave is cleared, then rises with half HP; the run ends when everyone is down at once.
   The host's browser runs the game and streams it to the others over WebRTC; [docs/multiplayer.md](docs/multiplayer.md) has the design and its limits.
 - **Plays anywhere.** The game fills the whole screen at a whole-number pixel scale, with the scene continued to every edge. Keyboard on desktop, a pixel touch controller on phones and tablets, no install.
   When the window leaves room above the stage, the HUD moves out of the fight: in full on a phone held upright, or compact on either side of the pause button in a small desktop window.
-  It keeps room for a full build and every tab, so only a change of window or hero can move it, never a pick.
-
-<table>
-  <tr>
-    <td><img src="docs/media/shot-fire.png" alt="A fire flask bursts into flame and sparks"></td>
-    <td><img src="docs/media/shot-ice.png" alt="Ice spikes erupt along the floor"></td>
-    <td><img src="docs/media/shot-warp.png" alt="Kael in mid-air after a warp"></td>
-  </tr>
-  <tr>
-    <td align="center">Fire</td>
-    <td align="center">Ice</td>
-    <td align="center">Warp</td>
-  </tr>
-</table>
+  The spell tabs wrap into rows right of the pause button, so every Rift Art fits.
 
 ## Controls
 
-Every hero plays on the same keys.
-The table names Kael's moves, and the Controls screen lists each hero's own.
+Every hero plays on the same keys in the campaign.
 
 | Key | Action |
 | --- | --- |
-| `A` `D` or arrows | Walk. Tap a side twice and hold to run |
-| `W` or `Up` | Jump or double jump. Jump upward along a wall or steer away to kick off |
-| `S` or `Down` | Drop through a ledge in solo play. In co-op, hold and jump to drop |
-| `E` | Talk to a mentor in solo play |
-| `J` | Sword combo of four blows, the same every time. Press again just after a blow lands for a Keen hit. Just after a parry, blink behind the attacker and strike |
-| `J` held | Warp strike: throw the sword at the nearest foe ahead and warp to it (10 MP) |
-| `K` | Guard: hold to block blows from the front. Press just as a blow lands to parry with a riposte cut |
-| `L` | Dodge forward. Nothing can touch you while you dodge, and each dodge spends stamina |
-| `I` | Cast the selected ability: Crystal Lance, Crystal Burst or a spell you learn. If it is recharging, the next ready one goes |
-| `I` held | Cast the wide form of the selected ability, for half again the MP |
-| `O` | Switch to the next ability |
-| `U` | Hold to charge the ultimate, release to strike |
+| `A` `D` or arrows | Run |
+| `W`, `Up` or `Space` | Jump; hold to jump higher. Press while sliding on a wall to kick away |
+| `S` or `Down` | Drop through a ledge |
+| `E` | Talk to a mentor to spend skill points; on the Rift Map, Upgrade skills |
+| `J` | Slash: up to three ground slashes, one in the air. Press again just after a blow lands for a Keen hit |
+| `J` held | Charge the hero's charged skill through four tiers, release to strike |
+| `L` or `Shift` | Dash on the ground or once in the air. During a slash, warp strike the foe ahead |
+| `K` | Guard: hold to block from the front, tap just before a blow lands to parry. During a slash, an enhanced parry |
+| `I` | Prepare the selected spell or Rift Art, press again when it is ready to cast. During a slash, set it into the sword |
+| `O` | Switch to the next spell or Rift Art |
 | `M` | Sound on or off |
 | `Esc` or `P` | Pause and open the menu |
 | `F` | Fullscreen on or off |
+
+Co-op rooms keep the classic moveset: `J` held warps, `L` dodges, `I` casts at once, and `U` charges the ultimate.
+The Controls screen lists every key of the mode you are in.
 
 On phones and tablets a touch controller appears, in landscape or portrait, and hides again when you press a key.
 The stick on the left appears wherever your left thumb lands.
@@ -190,18 +236,19 @@ Hold Ultimate to charge it: its ring fills one quarter per level, and you strike
 Buttons dim while their action lacks MP or stamina or waits on a cooldown, and phones that support it give a short vibration on each press.
 The page holds still under your fingers: double taps, pinches and long presses never zoom, select text or open a menu.
 
-The game opens on a start menu with Start, Co-op, Shop, Achievements, Codex, Controls and Options.
+The game opens on a start menu with Start, Co-op, Shop, Achievements, Codex, Controls and Options, and your best campaign once you have one.
 Start opens the hero screen: pick a hero with `A` `D` or the arrows and begin with `J` or `Enter`.
 For a hero with jobs, `S` or Down moves to the job row, where `A` `D` or the arrows change the job and `J` or `Enter` begins; on touch, tap a job's chip, then the panel.
 In the Shop, pick an item once to see "Buy?" and again to buy it; a locked hero on the hero screen asks the same way before it is unlocked.
-When a run ends, the start menu opens on its result, with Continue and Shop.
+When a run ends, its result opens with Play again, Main menu and Shop.
 Pausing adds Resume, Restart run and Quit run, and freezes the game until you resume.
 Move through the menu with the arrow keys or `W` `S`, pick with `J` or `Enter`, and go back with `Esc`; the mouse and touch work too.
 The Controls screen lists every key from the game's key map, and on touch screens the stick and buttons as they look on screen.
 Options holds sound, volume, screen shake, damage numbers, vibration on devices that can vibrate, and fullscreen, saved in this browser.
 
 Each level up gives a skill point.
-In solo play, press `E` or tap Talk near a mentor to open skill choices.
+In solo play, press `E` or tap Talk near a mentor, or press `E` on the Rift Map, to open skill choices.
+On the Rift Map, choose a stage with `A` `D` `W` `S` or the arrows and enter it with `J` or `Enter`.
 Leave to keep any points you have not spent.
 In co-op it pauses for pending skill points after a wave.
 Choose with `A` `D` or the arrows and learn with `J` or `Enter`, press `1` to `3`, or click or tap a card.
@@ -230,7 +277,8 @@ To pose every frame of every hero's moves, run the local [studio](studio/README.
 ## How the pixels are made
 
 This game is also my sandbox for learning how to make pixel art and effects that look good.
-There are no image files in the game: the hero, the enemies, the stage and every effect are drawn pixel by pixel at runtime.
+Every stage, every foe and boss, the HUD and most effects are drawn pixel by pixel at runtime.
+The heroes and some of their skill effects come from generated art atlases (`src/generatedHeroArt/`, `src/effectArt/`), posed on the same rig the code-drawn heroes use, which stays as the fallback.
 
 The viewport is 320 by 180 art pixels, scaled up by a whole number so every pixel stays square.
 The frame itself is drawn at twice that, 640 by 360, so the heroes and the effects can carry detail half an art pixel fine.
@@ -259,7 +307,7 @@ Each body part is outlined where it overlaps the one behind it, and the whole fi
 Every move, action and state is a keyed clip sampled at 30 frames a second, with a pose keyed on nearly every frame; idle, walk, run, charge and the throw wait loop (`src/constants/clips/` for the clips every hero shares, `src/heroes/<id>/constants/clips/` for a hero's own).
 Scarves, hair tails, capes, sashes and tassels are verlet ropes, so they trail behind the hero as they run and warp (`src/game/hero/chain.ts`).
 
-The README images were captured from the game canvas when it was 320 by 180 and scaled up with nearest-neighbour, so they show the earlier, coarser heroes.
+The README images are captured from the game in a 1280 by 720 window, at four times the art pixels.
 
 ## Project layout
 
@@ -272,7 +320,9 @@ src/
   engine/          the pixel renderer: frame buffers and painter, particles, lights, sprite canvas
   rig/             the rig every hero is drawn on: pure drawing from a pose and a hero's skin
   heroes/          the roster, and one folder per hero with its stats, look, clips, kit, moves, skills, ultimate, icons and touch art (see docs/hero-module.md)
-  services/        Web Audio sound effects, saved options, run records and shop progress in local storage, the Fullscreen API, vibration, the clipboard
+  stages/          one folder per campaign stage: its layout, scene, foes, boss, Rift Art and hazard, and the registries that read them
+  drill/           the campaign's movement and combat engine every hero plays on: slashes, dash and warp strike, guard and parry, spells and infusion, charged skills
+  services/        Web Audio sound effects, saved options, run and campaign records and shop progress in local storage, the Fullscreen API, vibration, the clipboard
     coop/          the PeerJS links of a co-op room's host and guests, and the game stream
   store/           the player's options, the coin bank, shop purchases, unlocked heroes and achievements kept between runs, achievement tracking, and the co-op room as the menu sees it
   game/            the simulation
@@ -284,12 +334,16 @@ src/
     spells/        the explosion that spells share
     ultimates/     the cast every ultimate goes through
     skills/        the skill runtime: events, queries, targeting and precise payoffs
+    adventure/     the campaign: the route of a stage, locked rooms, Rift Surges, pits, hazards and the move between stages
+    arts/          Rift Arts as spells in every hero's spellbook, their levels and the boss weaknesses
+    resonance/     element procs on every hit, their effects and Fusions
   scene/           background, the backdrop around the stage, the order layers are drawn in, and the dissolve between eras
     eras/          one scene per era: palette, sky, decorations, weather and lighting
   site/            the patch notes page and its shared header and shell
   content/patches/ one JSON file per patch, read by the patch notes page
   ui/              HUD, level-up pick, menu, keyboard input, touch controller, stage sizing
     menu/          start and pause menu: main, Shop, Achievements, Co-op and its lobby, run result, Controls and Options screens
+    map/           the Rift Map between stages
     achievements/  an achievement row, its trophy, the earned banner and their styles
     coop/          the co-op line under the pause button
     shop/          one shop row and the shop's styles
@@ -302,6 +356,7 @@ docs/
   achievements.md  the achievements, how they are tracked, hero unlock prices and how a hero adds its own
   motion-standard.md the rules every hero's animation follows
   pick-pacing.md   when picks come, how long the skill pool lasts and Second Wind after it
+  growth-design.md in-run growth: experience, cards, Resonance, Fusions, Flow and chests
   multiplayer.md   co-op rooms: who runs the game, what crosses the network, downs, picks, coins and what is left for later
   media/           README banner, gameplay GIF and screenshots
 ```
