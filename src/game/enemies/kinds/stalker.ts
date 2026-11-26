@@ -1,7 +1,7 @@
 import { GROUND } from "../../../constants/stage";
 import { VOID } from "../abyss/colors";
 import { drawStalker } from "../abyss/drawStalker";
-import { sunk, updateStalker } from "../abyss/stalker";
+import { SINK, sunk, updateStalker } from "../abyss/stalker";
 import type { EnemyKind } from "./kind";
 
 /** the Void Stalker of the abyss: a lean hound that claws up close and glides under the floor to rise beneath Kael */
@@ -14,6 +14,7 @@ export const stalker: EnemyKind = {
   rift: { height: 16, y: () => GROUND, riftY: () => GROUND - 12 },
   update: updateStalker,
   draw: drawStalker,
+  artAge: (e) => (e.state === "burrow" ? Math.max(Number.EPSILON, e.st + (e.n !== 0 ? SINK : 0)) : e.st),
   glow: { radius: 16, color: VOID[3], eyeY: -5 },
   orbs: 2,
   heartChance: 0.2,
