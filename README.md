@@ -254,7 +254,7 @@ When a run ends, its result opens with Play again, Main menu and Shop.
 Pausing adds Resume, Restart run and Quit run, and freezes the game until you resume.
 Move through the menu with the arrow keys or `W` `S`, pick with `J` or `Enter`, and go back with `Esc`; the mouse and touch work too.
 The Controls screen lists every key from the game's key map, and on touch screens the stick and buttons as they look on screen.
-Options holds sound, volume, screen shake, damage numbers, vibration on devices that can vibrate, and fullscreen, saved in this browser.
+Options holds sound, volume, music volume, screen shake, damage numbers, vibration on devices that can vibrate, and fullscreen, saved in this browser.
 
 Each level up gives a skill point.
 In solo play, press `E` or tap Talk near a mentor, or press `E` on the Rift Map, to open skill choices.
@@ -332,7 +332,7 @@ src/
   heroes/          the roster, and one folder per hero with its stats, look, clips, kit, moves, skills, ultimate, icons and touch art (see docs/hero-module.md)
   stages/          one folder per campaign stage: its layout, scene, foes, boss, Rift Art and hazard, and the registries that read them
   drill/           the campaign's movement and combat engine every hero plays on: slashes, dash and warp strike, guard and parry, spells and infusion, charged skills
-  services/        Web Audio sound effects, saved options, run and campaign records and shop progress in local storage, the Fullscreen API, vibration, the clipboard
+  services/        sound effects and music on Web Audio, saved options, run and campaign records and shop progress in local storage, the Fullscreen API, vibration, the clipboard
     coop/          the PeerJS links of a co-op room's host and guests, and the game stream
   store/           the player's options, the coin bank, shop purchases, unlocked heroes and achievements kept between runs, achievement tracking, and the co-op room as the menu sees it
   game/            the simulation
@@ -370,6 +370,14 @@ docs/
   multiplayer.md   co-op rooms: who runs the game, what crosses the network, downs, picks, coins and what is left for later
   media/           README banner, gameplay GIF and screenshots
 ```
+
+## Sound credits
+
+Every sound effect and music loop comes from free CC0 packs.
+[public/audio/CREDITS.txt](public/audio/CREDITS.txt) lists the source file, pack, author and link for each one.
+
+- Sound effects: [The Essential Retro Video Game Sound Effects Collection](https://opengameart.org/content/512-sound-effects-8-bit-style) by Juhani Junkala, [Impact Sounds](https://kenney.nl/assets/impact-sounds), [Interface Sounds](https://kenney.nl/assets/interface-sounds) and [RPG Audio](https://kenney.nl/assets/rpg-audio) by Kenney, [80 CC0 RPG SFX](https://opengameart.org/content/80-cc0-rpg-sfx), [80 CC0 creature SFX](https://opengameart.org/content/80-cc0-creature-sfx) and [40 CC0 water / splash / slime SFX](https://opengameart.org/content/40-cc0-water-splash-slime-sfx) by rubberduck, and the [Swishes Sound Pack](https://opengameart.org/content/swishes-sound-pack) by artisticdude.
+- Music: [4 Chiptunes (Adventure)](https://opengameart.org/content/4-chiptunes-adventure) and [5 Chiptunes (Action)](https://opengameart.org/content/5-chiptunes-action) by Juhani Junkala.
 
 ## References
 

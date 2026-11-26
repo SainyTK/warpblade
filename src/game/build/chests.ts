@@ -88,7 +88,7 @@ function open(c: Chest): void {
         size: fxRng.range(1, 2.5),
       },
     );
-  sfx.levelUp();
+  sfx.chest();
   game.mode = "chest";
 }
 

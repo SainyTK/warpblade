@@ -1,5 +1,6 @@
 import { ELEMENTS } from "../../constants/elements";
 import { BLAZE, FROST, PROC_DEPTH, STORM, VENOM, VOID } from "../../constants/resonance";
+import { sfx } from "../../services/audio";
 import type { SourceId } from "../../types/build";
 import type { ElementId } from "../../types/campaign";
 import type { Enemy } from "../../types/enemy";
@@ -75,7 +76,9 @@ function frostHit(e: Enemy): void {
     return;
   }
   frostHits.set(e, 0);
-  if (e.rank === "minion") e.frozen = Math.max(e.frozen, FROST.freeze);
+  if (e.rank !== "minion") return;
+  e.frozen = Math.max(e.frozen, FROST.freeze);
+  sfx.resonance("frost");
 }
 
 function venomHit(e: Enemy, damage: number, times = 1): void {
@@ -118,6 +121,7 @@ function stormArcs(e: Enemy, damage: number, depth: number, forced: boolean): vo
   const extra = fused("plasma") && burning(e) ? 1 : 0;
   const targets = nearbyFoes(e, STORM.reach, 1 + Math.floor(r / STORM.ranksPerTarget) + extra);
   const [cx, cy] = enemyCenter(e);
+  if (targets.length) sfx.resonance("storm");
   for (const target of targets) {
     const [tx, ty] = enemyCenter(target);
     pushArc(cx, cy, tx, ty, arcColor(target), WHITE_CORE);
@@ -173,6 +177,7 @@ function landEcho(echo: PendingEcho): void {
   if (foe.hp <= 0) return;
   const [x, y] = enemyCenter(foe);
   pushEcho(x, y, COLOR.void);
+  sfx.resonance("void");
   if (fused("hellfire")) blazeStacks(foe, damage, 3);
   if (fused("stasis") && foe.rank === "minion") foe.frozen = Math.max(foe.frozen, FROST.freeze * 0.5);
   dealDamage(foe, damage, { source: "void", fromX: x, proc: depth });
@@ -193,6 +198,7 @@ export function updateResonance(dt: number): void {
 function burst(e: Enemy, share: number, radius: number, element: ElementId): void {
   const [cx, cy] = enemyCenter(e);
   game.fx.push(createImpact(cx, cy, 1, true, [COLOR[element], COLOR[element], WHITE_CORE]));
+  sfx.resonance(element);
   for (const other of nearbyFoes(e, radius, 12)) {
     dealDamage(other, e.max * share, { source: element, fromX: cx, proc: PROC_DEPTH });
     if (element === "venom") venomHit(other, e.max * 0.05, Math.ceil(stacksOf(e, "venom") * VENOM.plagueShare));

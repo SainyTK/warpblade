@@ -1,0 +1,75 @@
+{
+  "imagePixelsPerArtPixel": 2,
+  "frames": [
+    [0, 0, 80, 88, 40, 76],
+    [80, 0, 80, 88, 40, 76],
+    [160, 0, 80, 88, 40, 76],
+    [240, 0, 80, 88, 40, 76],
+    [320, 0, 80, 88, 40, 76],
+    [400, 0, 80, 88, 40, 76],
+    [480, 0, 80, 88, 40, 76],
+    [560, 0, 80, 88, 40, 76]
+  ],
+  "clips": {
+    "idle": {
+      "frames": [0],
+      "fps": 5,
+      "loop": true
+    },
+    "walk": {
+      "frames": [0, 1],
+      "fps": 5,
+      "loop": true
+    },
+    "wind": {
+      "frames": [0],
+      "fps": 5,
+      "loop": false
+    },
+    "lunge": {
+      "frames": [1],
+      "fps": 5,
+      "loop": false
+    },
+    "recover": {
+      "frames": [0],
+      "fps": 5,
+      "loop": false
+    },
+    "hurt": {
+      "frames": [3],
+      "fps": 5,
+      "loop": false
+    },
+    "small/idle": {
+      "frames": [4],
+      "fps": 5,
+      "loop": true
+    },
+    "small/walk": {
+      "frames": [4, 5],
+      "fps": 5,
+      "loop": true
+    },
+    "small/wind": {
+      "frames": [4],
+      "fps": 5,
+      "loop": false
+    },
+    "small/lunge": {
+      "frames": [5],
+      "fps": 5,
+      "loop": false
+    },
+    "small/recover": {
+      "frames": [4],
+      "fps": 5,
+      "loop": false
+    },
+    "small/hurt": {
+      "frames": [7],
+      "fps": 5,
+      "loop": false
+    }
+  }
+}

@@ -322,20 +322,25 @@ export interface BlitOptions {
   soft?: boolean;
   /** tip the sprite over: each row above the feet is shifted this many image pixels further along x */
   lean?: number;
+  squash?: number;
 }
 /**
  * draw a sprite with its feet at (x, y), in art pixels. Each sprite pixel covers RES / s.res image pixels a side:
  * a classic sprite keeps its art pixel blocks, a detailed one lands pixel for pixel, placed to the half art pixel.
  */
 export function blit(s: SpriteImage, x: number, y: number, flip: boolean, o: BlitOptions = {}): void {
-  const { alpha = 1, tint = 0, tintAmount = 0, soft = false, lean = 0 } = o;
+  const { alpha = 1, tint = 0, tintAmount = 0, soft = false, lean = 0, squash = 0 } = o;
   const k = Math.max(1, Math.round(RES / s.res));
   const step = RES / k;
   const bx = Math.floor(projectX(x) * step) * k;
   const by = Math.floor(projectY(y) * step) * k;
   const box = s.box ?? { x0: 0, y0: 0, x1: s.w - 1, y1: s.h - 1 };
-  if (k === 1 && alpha >= 1 && tintAmount <= 0 && !soft && !lean) {
+  if (k === 1 && alpha >= 1 && tintAmount <= 0 && !soft && !lean && !squash) {
     blitPlain(s, box, bx, by, flip);
+    return;
+  }
+  if (squash) {
+    blitSquashed(s, box, bx, by, flip, k, { tint, tintAmount, lean, squash });
     return;
   }
   for (let j = box.y0; j <= box.y1; j++) {
@@ -351,6 +356,35 @@ export function blit(s: SpriteImage, x: number, y: number, flip: boolean, o: Bli
           if (soft) blendImage(ix + u, iy + v, col, alpha);
           else putImage(ix + u, iy + v, col, alpha);
         }
+    }
+  }
+}
+
+function blitSquashed(
+  s: SpriteImage,
+  box: SpriteBox,
+  bx: number,
+  by: number,
+  flip: boolean,
+  k: number,
+  { tint, tintAmount, lean, squash }: Required<Pick<BlitOptions, "tint" | "tintAmount" | "lean" | "squash">>,
+): void {
+  const sy = 1 - squash;
+  const sx = 1 + squash * 0.6;
+  const top = Math.floor((box.y0 - s.oy) * k * sy);
+  const bottom = (box.y1 - s.oy + 1) * k;
+  const left = Math.floor((box.x0 - s.ox) * k * sx);
+  const right = Math.ceil((box.x1 - s.ox + 1) * k * sx);
+  for (let v = top; v < bottom; v++) {
+    const j = s.oy + Math.floor(v / (k * sy));
+    if (j < box.y0 || j > box.y1) continue;
+    const tip = Math.round(lean * (s.oy - j));
+    for (let u = left; u < right; u++) {
+      const i = s.ox + Math.floor(u / (k * sx));
+      if (i < box.x0 || i > box.x1) continue;
+      const c = s.d[j * s.w + i];
+      if (!c) continue;
+      putImage((flip ? bx - u + k - 1 : bx + u) + tip, by + v, tintAmount > 0 ? mix(c, tint, tintAmount) : c);
     }
   }
 }

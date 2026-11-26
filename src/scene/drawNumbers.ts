@@ -1,6 +1,8 @@
-import { NUMBER_WORDS, WORD_LIFT } from "../constants/damageNumbers";
+import { DAMAGE_NUMBERS, NUMBER_WORDS, WORD_LIFT } from "../constants/damageNumbers";
 import { FEEDBACK_EDGE, NUMBER_INK, NUMBER_INK_QUIET } from "../constants/effectColors";
 import { NUMBER_LOOK as L } from "../constants/effectLook";
+import { GLYPH } from "../constants/font";
+import { RES } from "../constants/stage";
 import { game } from "../game/state";
 import { settings } from "../store/settings";
 import type { DamageNumber } from "../types/game";
@@ -13,13 +15,14 @@ const SHADE = 0.78;
 
 /** a hero's own number pops white for a moment, then settles into its ink */
 function drawFigure(n: DamageNumber, a: number): void {
-  const popping = !n.quiet && n.age < L.pop;
+  const popping = !n.quiet && n.kick > DAMAGE_NUMBERS.kick - L.pop;
   const ink = n.quiet ? (NUMBER_INK_QUIET[n.tag] ?? NUMBER_INK[n.tag]) : NUMBER_INK[n.tag];
-  const cell = n.big ? L.bigCell : L.cell;
+  const grow = Math.round((n.punch * n.kick) / DAMAGE_NUMBERS.kick);
+  const cell = (n.big ? L.bigCell : L.cell) + grow;
   drawFineText(
     numberFigure(n.value),
     n.x,
-    n.y,
+    n.y - (grow * GLYPH.h) / (2 * RES),
     popping ? WHITE : ink,
     popping ? ink : scale(ink, SHADE),
     FEEDBACK_EDGE,

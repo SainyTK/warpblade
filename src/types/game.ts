@@ -82,6 +82,8 @@ export interface DamageNumber {
   /** the foe it pops over, so later hits on it merge in; none for a word */
   foe: Enemy | null;
   life: number;
+  kick: number;
+  punch: number;
 }
 /** play runs the simulation; pick pauses it while Kael chooses a skill when a wave is cleared with skill points waiting;
  *  chest pauses it while an opened chest shows what it gave; clear is the end of the stage */

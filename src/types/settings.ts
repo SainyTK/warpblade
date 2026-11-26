@@ -3,6 +3,7 @@ export interface Settings {
   sound: boolean;
   /** 0 to VOLUME_STEPS */
   volume: number;
+  music: number;
   shake: boolean;
   damageNumbers: boolean;
   /** short vibrations from the touch controller */

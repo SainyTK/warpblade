@@ -7,7 +7,9 @@ import { surfaceBelow } from "../../game/world";
 import { sfx } from "../../services/audio";
 import type { DrillSpell, ElementImpact, ElementProjectile, Session, Side } from "../../types/drill";
 import { clamp } from "../../utils/math";
+import { spellElement } from "../../utils/spellElement";
 import { SPELL_HEIGHT, SPELL_IMPACT_TIME, TARGET_RADIUS } from "../constants";
+import { sparkRamp } from "../sparkRamp";
 import { freezeEnemy, strikeEnemy } from "./enemyContact";
 
 const BOLT_REACH = 6;
@@ -17,13 +19,16 @@ function damageArea(session: Session, { spell, x, y }: ElementImpact): void {
   const radius = withBuild("area", spell.radius * spellArea);
   const centerY = spell.speed === null ? y - SPELL_HEIGHT : y;
   const reach = spell.speed === null ? Math.max(BOLT_REACH, radius) : BOLT_REACH;
+  const look = { sparks: sparkRamp(spell.color, spell.core), spell: true };
   for (const enemy of game.enemies) {
     const [left, top, right, bottom] = enemyBox(enemy);
     if (x + radius < left || x - radius > right || centerY + reach < top || centerY - reach > bottom) {
       continue;
     }
     const scale = spell.damageScale?.(enemy) ?? 1;
-    if (strikeEnemy(session.profile, enemy, spell.damage * spellDamage * scale, x, "abilities")) {
+    if (
+      strikeEnemy(session.profile, enemy, spell.damage * spellDamage * scale, x, "abilities", false, false, false, look)
+    ) {
       freezeEnemy(enemy, spell.freeze);
       spell.status?.(enemy);
       session.profile.hooks?.spellHit?.(enemy, spell);
@@ -43,7 +48,7 @@ function impact(session: Session, spell: DrillSpell, x: number, y: number, face:
 export function launchSpell(session: Session, spell: DrillSpell): void {
   const h = session.fighter;
   const { x, y, face } = h;
-  sfx.cast();
+  sfx.spell(spellElement(spell));
   emitSkillEvent({ type: "cast", ability: spell.id });
   if (spell.speed !== null) {
     session.elementProjectiles.push({ spell, x: x + face * 8, y: y - SPELL_HEIGHT, face, distance: 0 });

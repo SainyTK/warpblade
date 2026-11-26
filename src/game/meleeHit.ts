@@ -1,5 +1,4 @@
 import { COMBO, GUARD, MP_PER_HIT } from "../constants/combat";
-import { sfx } from "../services/audio";
 import type { Enemy } from "../types/enemy";
 import type { HitFeel } from "../types/move";
 import type { Box } from "../types/world";
@@ -90,7 +89,6 @@ export function meleeHit(boxes: readonly Box[], blow: Blow): number {
     const feel = blow.feel ?? (blow.big ? BIG_FEEL : LIGHT_FEEL);
     hitStop(riposte ? Math.max(feel.stop, BIG_FEEL.stop) : feel.stop);
     shake(feel.shake[0], feel.shake[1]);
-    sfx.hit(!!blow.big || riposte, feel.pitch);
     if (!hero.ground) hero.vy = Math.min(hero.vy, -40);
     feat({ kind: "comboHit", moves: hero.chain });
   } else if (blocked) hitStop(0.04);

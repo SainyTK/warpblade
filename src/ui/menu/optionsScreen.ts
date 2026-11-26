@@ -5,13 +5,14 @@ import type { MenuView } from "../../types/menu";
 import { backItem } from "./backItem";
 import { levelRow, toggleRow } from "./optionRow";
 
-/** sound, volume, screen shake, damage numbers, vibration where the device has it, and fullscreen; every change is saved at once */
+/** sound, volume, music, screen shake, damage numbers, vibration where the device has it, and fullscreen; every change is saved at once */
 export function optionsScreen(): MenuView {
   const list = document.createElement("div");
   list.className = "menu-list options";
   list.append(
     toggleRow("Sound", settings.sound, (on) => setSetting("sound", on)),
     levelRow("Volume", settings.volume, VOLUME_STEPS, (level) => setSetting("volume", level)),
+    levelRow("Music", settings.music, VOLUME_STEPS, (level) => setSetting("music", level)),
     toggleRow("Screen shake", settings.shake, (on) => setSetting("shake", on)),
     toggleRow("Damage numbers", settings.damageNumbers, (on) => setSetting("damageNumbers", on)),
   );

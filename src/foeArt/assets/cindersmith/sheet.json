@@ -1,0 +1,149 @@
+{
+  "imagePixelsPerArtPixel": 2,
+  "frames": [
+    [0, 0, 248, 232, 128, 216],
+    [248, 0, 248, 232, 128, 216],
+    [496, 0, 248, 232, 128, 216],
+    [744, 0, 248, 232, 128, 216],
+    [992, 0, 248, 232, 128, 216],
+    [1240, 0, 248, 232, 128, 216],
+    [1488, 0, 248, 232, 128, 216],
+    [1736, 0, 248, 232, 128, 216],
+    [1984, 0, 248, 232, 128, 216],
+    [2232, 0, 248, 232, 128, 216],
+    [2480, 0, 248, 232, 128, 216],
+    [2728, 0, 248, 232, 128, 216],
+    [2976, 0, 248, 232, 128, 216],
+    [3224, 0, 248, 232, 128, 216],
+    [3472, 0, 248, 232, 128, 216],
+    [3720, 0, 248, 232, 128, 216],
+    [3968, 0, 248, 232, 128, 216]
+  ],
+  "clips": {
+    "idle": {
+      "frames": [0],
+      "fps": 5,
+      "loop": true
+    },
+    "walk": {
+      "frames": [0],
+      "fps": 5,
+      "loop": true
+    },
+    "charge": {
+      "frames": [1],
+      "fps": 5,
+      "loop": false
+    },
+    "swipe": {
+      "frames": [2],
+      "fps": 5,
+      "loop": false
+    },
+    "volley": {
+      "frames": [3],
+      "fps": 5,
+      "loop": false
+    },
+    "shoot": {
+      "frames": [5],
+      "fps": 5,
+      "loop": false
+    },
+    "wind": {
+      "frames": [0],
+      "fps": 5,
+      "loop": false
+    },
+    "beam": {
+      "frames": [4],
+      "fps": 5,
+      "loop": false
+    },
+    "summon": {
+      "frames": [3],
+      "fps": 5,
+      "loop": false
+    },
+    "hop": {
+      "frames": [6],
+      "fps": 5,
+      "loop": false
+    },
+    "burrow": {
+      "frames": [7],
+      "fps": 5,
+      "loop": false
+    },
+    "recover": {
+      "frames": [2, 0],
+      "fps": 5,
+      "loop": false
+    },
+    "hurt": {
+      "frames": [16],
+      "fps": 5,
+      "loop": false
+    },
+    "idle@2": {
+      "frames": [8],
+      "fps": 5,
+      "loop": true
+    },
+    "walk@2": {
+      "frames": [8],
+      "fps": 5,
+      "loop": true
+    },
+    "charge@2": {
+      "frames": [9],
+      "fps": 5,
+      "loop": false
+    },
+    "swipe@2": {
+      "frames": [10],
+      "fps": 5,
+      "loop": false
+    },
+    "volley@2": {
+      "frames": [11],
+      "fps": 5,
+      "loop": false
+    },
+    "shoot@2": {
+      "frames": [13],
+      "fps": 5,
+      "loop": false
+    },
+    "wind@2": {
+      "frames": [8],
+      "fps": 5,
+      "loop": false
+    },
+    "beam@2": {
+      "frames": [12],
+      "fps": 5,
+      "loop": false
+    },
+    "summon@2": {
+      "frames": [11],
+      "fps": 5,
+      "loop": false
+    },
+    "hop@2": {
+      "frames": [14],
+      "fps": 5,
+      "loop": false
+    },
+    "burrow@2": {
+      "frames": [15],
+      "fps": 5,
+      "loop": false
+    },
+    "recover@2": {
+      "frames": [10, 8],
+      "fps": 5,
+      "loop": false
+    }
+  }
+}

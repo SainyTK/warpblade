@@ -1,3 +1,4 @@
+import { FOE_MATERIAL } from "../constants/audio";
 import { DAMAGE, ENEMY_AIR, GUARD, IGNITION_RADIUS, JUGGLE_LIMIT, SHATTER_REACH } from "../constants/combat";
 import { HERO_SOURCES } from "../constants/damageSources";
 import { ENEMIES } from "../constants/enemies";
@@ -7,6 +8,7 @@ import { sfx } from "../services/audio";
 import type { SourceId } from "../types/build";
 import type { Enemy } from "../types/enemy";
 import type { DamageTag } from "../types/game";
+import type { HitLook } from "../types/hit";
 import { isHeroSource } from "../utils/sources";
 import { recordStageDamage } from "./adventure";
 import { bossDeflects } from "./bossFight";
@@ -22,6 +24,7 @@ import { markBonus } from "./enemies/skillStatus";
 import { staggerFoe } from "./enemies/stagger";
 import { kit } from "./hero/kits";
 import { countHit } from "./hitCount";
+import { landHit } from "./hitFeel";
 import { killEnemy } from "./kill";
 import { popNumber } from "./numbers";
 import { resonanceTaken, resonate } from "./resonance";
@@ -57,6 +60,7 @@ export interface HitOptions {
   /** what dealt the hit, for the end of run screen: the hero's own blows when not given, a skill's id for a hit the
    *  skill deals on its own (it builds no Flow) */
   source?: SourceId;
+  look?: HitLook;
 }
 /** what a blow did: landed, or stopped by a guard */
 export type HitResult = "hit" | "blocked";
@@ -183,9 +187,11 @@ export function dealDamage(e: Enemy, base: number, o: HitOptions = {}): HitResul
   }
   e.flash = 0.1;
   e.guardHits = 0;
+  if (o.melee && fromHero) sfx.strike(FOE_MATERIAL[e.type] ?? "flesh", !!o.heavy || !!o.finisher, crit);
   // a skill's own hit is quiet and never drawn big, so a crowd of them does not drown out the hero's own
   const quiet = !fromHero;
-  popNumber(e, value, tag, !quiet && (crit || shattering || (back && e.air)), quiet);
+  popNumber(e, value, tag, !quiet && (crit || shattering || (back && e.air)), quiet, !!o.heavy || !!o.finisher);
+  if (!o.dot) landHit(e, { look: o.look, crit, heavy: !!o.heavy || !!o.finisher, fromX: o.fromX });
   if (shattering) shatter(e, shatterShards, source);
   e.vx += (o.kx ?? 0) * (1 - def.weight);
   if (o.spike && e.air) e.vy = ENEMY_AIR.spike;

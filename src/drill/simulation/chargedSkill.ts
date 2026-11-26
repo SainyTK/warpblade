@@ -6,6 +6,7 @@ import { game, hero } from "../../game/state";
 import { sfx } from "../../services/audio";
 import type { DrillInput, DrillProfile, DrillTier, Fighter, Session, SkillCast } from "../../types/drill";
 import { CHARGE_PRICE, CHARGE_REFUSED_CUE_LIFT } from "../constants";
+import { sparkRamp } from "../sparkRamp";
 import { strikeEnemy } from "./enemyContact";
 import { startRecharge } from "./recharge";
 
@@ -51,13 +52,14 @@ function releaseSkill(session: Session, cast: SkillCast): void {
   const { tierDamage, tierReach } = session.modifiers;
   sfx.ultimate(tier.level);
   emitSkillEvent({ type: "ultimate", level: tier.level });
+  const look = { sparks: sparkRamp(tier.color), heavy: true };
   for (const enemy of game.enemies) {
     const delta = enemy.x - x;
     const reach = tier.around ? Math.abs(delta) : delta * face;
     if (reach < -5 || reach > tier.reach * tierReach || Math.abs(enemy.y - y) > tier.height) {
       continue;
     }
-    strikeEnemy(session.profile, enemy, tier.damage * tierDamage, x, "ultimate", true);
+    strikeEnemy(session.profile, enemy, tier.damage * tierDamage, x, "ultimate", true, false, false, look);
   }
   session.profile.hooks?.released?.(cast);
 }
@@ -84,7 +86,12 @@ export function tickSkill(session: Session, input: DrillInput, dt: number): void
     return;
   }
   if (input.attackHeld) {
+    const before = chargedTier(session.profile, h.chargeHeldFor);
     h.chargeHeldFor += dt * session.modifiers.chargeRate;
+    const reached = chargedTier(session.profile, h.chargeHeldFor);
+    if (reached && reached !== before) {
+      sfx.chargeStep(reached.level);
+    }
     return;
   }
   const held = h.chargeHeldFor;

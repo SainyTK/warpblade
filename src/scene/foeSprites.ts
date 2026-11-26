@@ -44,7 +44,7 @@ export function foeSprite(e: Enemy): SpriteImage {
   let h = held.get(e);
   const pose = poseOf(e);
   if (h && h.pose === pose && t >= h.at && t - h.at < HOLD) return h.image;
-  const drawn = foeArtImage(e, t) ?? kindOf(e.type).draw(e, t);
+  const drawn = foeArtImage(e) ?? kindOf(e.type).draw(e, t);
   if (!h) {
     const empty = { x0: 0, y0: 0, x1: -1, y1: -1 };
     h = {

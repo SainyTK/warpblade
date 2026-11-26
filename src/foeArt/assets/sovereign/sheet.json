@@ -1,0 +1,108 @@
+{
+  "imagePixelsPerArtPixel": 2,
+  "frames": [
+    [0, 0, 272, 208, 136, 200],
+    [272, 0, 272, 208, 136, 200],
+    [544, 0, 272, 208, 136, 200],
+    [816, 0, 272, 208, 136, 200],
+    [1088, 0, 272, 208, 136, 200],
+    [1360, 0, 272, 208, 136, 200],
+    [1632, 0, 272, 208, 136, 200],
+    [1904, 0, 272, 208, 136, 200],
+    [2176, 0, 272, 208, 136, 200],
+    [2448, 0, 272, 208, 136, 200],
+    [2720, 0, 272, 208, 136, 200],
+    [2992, 0, 272, 208, 136, 200],
+    [3264, 0, 272, 208, 136, 200],
+    [3536, 0, 272, 208, 136, 200],
+    [3808, 0, 272, 208, 136, 200],
+    [4080, 0, 272, 208, 136, 200]
+  ],
+  "clips": {
+    "idle": {
+      "frames": [0],
+      "fps": 6,
+      "loop": true
+    },
+    "idle@2": {
+      "frames": [6],
+      "fps": 6,
+      "loop": true
+    },
+    "walk": {
+      "frames": [0, 1],
+      "fps": 6,
+      "loop": true
+    },
+    "walk@2": {
+      "frames": [6, 7],
+      "fps": 6,
+      "loop": true
+    },
+    "wind": {
+      "frames": [2],
+      "fps": 6,
+      "loop": false
+    },
+    "wind@2": {
+      "frames": [8],
+      "fps": 6,
+      "loop": false
+    },
+    "swipe": {
+      "frames": [3],
+      "fps": 6,
+      "loop": false
+    },
+    "swipe@2": {
+      "frames": [9],
+      "fps": 6,
+      "loop": false
+    },
+    "summon": {
+      "frames": [2],
+      "fps": 6,
+      "loop": false
+    },
+    "summon@2": {
+      "frames": [8],
+      "fps": 6,
+      "loop": false
+    },
+    "volley": {
+      "frames": [2],
+      "fps": 6,
+      "loop": false
+    },
+    "volley@2": {
+      "frames": [8],
+      "fps": 6,
+      "loop": false
+    },
+    "recover": {
+      "frames": [4],
+      "fps": 6,
+      "loop": false
+    },
+    "recover@2": {
+      "frames": [10],
+      "fps": 6,
+      "loop": false
+    },
+    "hurt": {
+      "frames": [5],
+      "fps": 6,
+      "loop": false
+    },
+    "blink": {
+      "frames": [0, 12, 13, 12, 0],
+      "fps": 7.14,
+      "loop": false
+    },
+    "blink@2": {
+      "frames": [6, 14, 15, 14, 6],
+      "fps": 7.14,
+      "loop": false
+    }
+  }
+}

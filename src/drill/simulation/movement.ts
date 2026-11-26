@@ -1,6 +1,8 @@
+import { LAND_SOUND_SPEED } from "../../constants/audio";
 import { clampHeroX, landingAt, moveHeroX, oneWayAt, wallSide } from "../../game/hero/terrain";
 import { withBuild } from "../../game/skills/query";
 import { progress } from "../../game/state";
+import { sfx } from "../../services/audio";
 import type { Direction, DrillInput, DrillMotion, Fighter, Session, Side } from "../../types/drill";
 import { approach } from "../../utils/math";
 import { strikeTravel } from "./combat";
@@ -26,6 +28,7 @@ function jump(h: Fighter, wall: Direction, motion: DrillMotion): void {
   h.grounded = false;
   h.jumpBoost = boosted;
   h.vy = -motion.rise;
+  sfx.jump();
   h.swing = null;
   h.warp = null;
   h.parryAge = null;
@@ -96,6 +99,9 @@ function steer(session: Session, dir: Direction, dt: number): void {
 
 function land(session: Session, y: number): void {
   const h = session.fighter;
+  if (h.vy > LAND_SOUND_SPEED) {
+    sfx.land();
+  }
   h.y = y;
   h.vy = 0;
   h.grounded = true;
