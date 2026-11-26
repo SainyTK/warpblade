@@ -1,0 +1,94 @@
+{
+  "imagePixelsPerArtPixel": 2,
+  "frames": [
+    [0, 0, 152, 152, 76, 68],
+    [152, 0, 152, 152, 76, 68],
+    [304, 0, 152, 152, 76, 68],
+    [456, 0, 152, 152, 76, 68],
+    [608, 0, 152, 152, 76, 68],
+    [760, 0, 152, 152, 76, 68],
+    [912, 0, 152, 152, 76, 68],
+    [1064, 0, 152, 152, 76, 68],
+    [1216, 0, 152, 152, 76, 68],
+    [1368, 0, 152, 152, 76, 68],
+    [1520, 0, 152, 152, 76, 68],
+    [1672, 0, 152, 152, 76, 68]
+  ],
+  "clips": {
+    "idle": {
+      "frames": [0],
+      "fps": 6,
+      "loop": true
+    },
+    "idle@2": {
+      "frames": [6],
+      "fps": 6,
+      "loop": true
+    },
+    "drift": {
+      "frames": [0, 1],
+      "fps": 6,
+      "loop": true
+    },
+    "drift@2": {
+      "frames": [6, 7],
+      "fps": 6,
+      "loop": true
+    },
+    "wind": {
+      "frames": [2],
+      "fps": 6,
+      "loop": false
+    },
+    "wind@2": {
+      "frames": [8],
+      "fps": 6,
+      "loop": false
+    },
+    "volley": {
+      "frames": [3],
+      "fps": 6,
+      "loop": false
+    },
+    "volley@2": {
+      "frames": [9],
+      "fps": 6,
+      "loop": false
+    },
+    "summon": {
+      "frames": [1],
+      "fps": 6,
+      "loop": false
+    },
+    "summon@2": {
+      "frames": [7],
+      "fps": 6,
+      "loop": false
+    },
+    "dive": {
+      "frames": [4],
+      "fps": 6,
+      "loop": false
+    },
+    "dive@2": {
+      "frames": [10],
+      "fps": 6,
+      "loop": false
+    },
+    "recover": {
+      "frames": [0],
+      "fps": 6,
+      "loop": false
+    },
+    "recover@2": {
+      "frames": [6],
+      "fps": 6,
+      "loop": false
+    },
+    "hurt": {
+      "frames": [5],
+      "fps": 6,
+      "loop": false
+    }
+  }
+}
