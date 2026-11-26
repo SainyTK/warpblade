@@ -4,7 +4,7 @@ import type { SourceId } from "../types/build";
 import type { RunOutcome, RunReport, SourceResult, StageResult } from "../types/run";
 import { isHeroSource } from "../utils/sources";
 import { stageGrade } from "../utils/stageGrade";
-import { clearedStages, stageProgress, stageStatus } from "./adventure";
+import { clearedStages, stageProgress, stageWhere } from "./adventure";
 import { heldSources } from "./damageLedger";
 import { character, game, progress } from "./state";
 
@@ -43,7 +43,7 @@ export function stageResult(report: RunReport, outcome: RunOutcome): StageResult
     sealed,
     sealedTotal: RIFT_STAGES.length,
     cleared,
-    where: stageStatus(),
+    where: stageWhere(),
     beaten,
   };
 }

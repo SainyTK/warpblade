@@ -78,7 +78,7 @@ export function mainScreen(context: MenuContext): MenuView {
     chooseCharacter(character, inRoom() ? null : chosenJob(character.id));
     // while in a room, its lobby takes the place of a solo start
     if (inRoom()) list.append(screenItem(`Room ${roomView().code}`, "coop"));
-    else list.append(screenItem("Start campaign", "hero"), screenItem("Co-op", "coop"));
+    else list.append(screenItem("Start", "hero"), screenItem("Co-op", "coop"));
     list.append(
       screenItem("Shop", "shop"),
       screenItem("Achievements", "achievements"),

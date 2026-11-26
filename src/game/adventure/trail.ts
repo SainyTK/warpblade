@@ -113,6 +113,12 @@ export const earnedArtsOrder = (): ArtId[] =>
     const art = STAGES[id].grantsArt;
     return art ? [art] : [];
   });
+export function stageWhere(): string {
+  if (!trail) return "";
+  const areas = trail.route.areas.length;
+  return `${trail.route.stage.name}, area ${Math.min(trail.area + 1, areas)} of ${areas}`;
+}
+
 export function stageStatus(): string {
   if (!trail) return "";
   const areas = trail.route.areas.length;

@@ -31,4 +31,5 @@ export {
   stageStatus,
   stageThreat,
   stageWalls,
+  stageWhere,
 } from "./trail";
