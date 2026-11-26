@@ -2,7 +2,7 @@ import { dealDamage } from "../../../../game/damage";
 import { createImpact } from "../../../../game/effects/impact";
 import { enemyCenter } from "../../../../game/enemies/enemy";
 import { addStacks, consumeStacks, stacksOf } from "../../../../game/enemies/skillStatus";
-import { skillEvolved, skillLevel, skillValues, withCharms } from "../../../../game/skills/query";
+import { skillEvolved, skillLevel, skillValues, withBuild } from "../../../../game/skills/query";
 import { nearestFoe } from "../../../../game/skills/targets";
 import { game, hero, progress } from "../../../../game/state";
 import type { Enemy } from "../../../../types/enemy";
@@ -20,10 +20,10 @@ export function laySigils(e: Enemy, n: number): void {
   const v = skillValues(ID);
   addStacks(e, ID, {
     stacks: n,
-    max: withCharms("amount", v.max),
+    max: withBuild("amount", v.max),
     damage: progress.stats.ad * v.damage,
     every: SIGIL.every,
-    duration: withCharms("duration", v.duration),
+    duration: withBuild("duration", v.duration),
   });
 }
 

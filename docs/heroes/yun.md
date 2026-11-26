@@ -113,6 +113,34 @@ Its skill, Heaven's Grove (`yu_rain`), adds more swords, a rain that keeps falli
 The blows of the string deal 0.95, 1.0, 1.15 and 2.1 times attack damage, 5.2 in all against Kael's 6.25.
 With two swords the echoes add 1.76 at range, and with four 3.52, so a held-up Yun out-damages Kael's string on a crowd at middle range and falls short of it point blank with no swords.
 
+## On the drill engine
+
+Solo Adventure runs base Yun on the shared drill engine (`src/drill`, `docs/hero-module.md`, "The drill engine").
+His profile is `YUN_DRILL` in `src/heroes/yun/game/drill/index.ts`; co-op and the wave arena keep the native kit described above.
+
+Movement (`constants/drill/motion.ts`): a measured sage.
+He runs at 104 against Kael's 110, his rise and fall gravity are lower (800 and 860) and his falls cap at 300, so his jump hangs longer and lands softly.
+His dash is a little slower and longer (262 for 0.18 s), and his wall slide is slower.
+
+Poses (`game/drill/poses.ts`): his ready stance with the jian low and the sword fingers raised is his stand.
+His run keeps the fitted feet of the shared run trace with his own upper body: upright, the jian trailing low behind, the sword fingers held before his chest.
+He rises like a crane with one knee high and his arms spread, leaps from a dash with the jian levelled ahead, glides low through a dash with the blade trailing, guards with the jian upright and parries in a circle.
+
+The chain samples his native clips: Willow Cut (a level cut from high behind), Crane Wheel (the turn on the spot into a flat cut) and Returning Tide (the high circle down into a long arc), with Drifting Cut as the air cut.
+The warp throws the jian with its tassel streaming (`game/drill/thrownJian.ts`).
+
+Sword arts on I (`game/drill/spells.ts`, drawn in `game/drill/spellArt.ts`), no elements:
+
+| Art | Shape | Status (also on infused hits) |
+| --- | --- | --- |
+| Sword Stream | three spirit swords fly ahead in a line, 150 px | staggers |
+| Sword Lotus | a ring of spinning swords strikes the nearest foe ahead | holds the foe's feet 1.2 s |
+| Qi Crescent | a tall jade crescent flies 175 px | qi mark: +20% damage taken for 3 s |
+
+Charged tiers on J held (`constants/drill/tiers.ts`, drawn in `game/drill/tierArt.ts`): Jade Rain I to IV, at the shared thresholds.
+I drops one great spirit sword ahead, II a line of five, III eight on both sides, IV sixteen across the stage.
+Each release plays his cut-in (`ui/cutIn.ts`): his generated portrait on a jade panel with falling swords.
+
 ## Skills, achievement and controls
 
 His 20 skills are in `docs/skills/yun.md`: five that reshape the string, the echo and the air string, three for the jump, the warp and the dodge, three more abilities on I (Sword Fan, Sword Cage and Qi Crescent, which costs MP so he has an ability with no sword out), qi wounds, bleeding cuts and jade needles over time, guardian blades, jade herons and his own shade as summons, two passives on the swords themselves, and Heaven's Grove for Jade Rain.

@@ -112,3 +112,13 @@ Rounds leave green tracer light; blasts are white at the core, lime in the body 
 - No ammunition on MP: the chamber is the only round count. Spell skills' shells are MP, so Wellspring helps and the chamber stays simple.
 - No ranged string: every J blow is a sword cut. Shots are the abilities, the parry and the Trigger blast.
 - No charge-up blows: J held is the shared warp.
+
+## On the drill
+
+Solo Adventure runs put base Calder on the shared drill engine (`docs/hero-module.md`, "The drill engine"); the native kit above still plays in co-op and the wave arena.
+His profile is `CALDER_DRILL` in `src/heroes/calder/game/drill/`, with data in `constants/drill/`.
+
+- Movement: a little heavier than Kael (run 100, harder fall, shorter jump and dash), with his own poses in `constants/drill/poses.ts`: the blade rides his shoulder through a fitted run, he shoulder-charges in the dash and lands deep.
+- Chain: Hew, Rip and Breaker sampled from his native clips; the third cut and the warp arrival fire a round into the struck foe (`game/drill/round.ts`), which emits `calderBlast` and `calderTrigger`, and every sixth round emits `calderReload`, so his native DoT and summon skills answer the drill.
+- Spells: Phosphor Shell (a slow brass shell that sets foes burning), Chain Shot (fast chained balls that shock and arc to one more foe) and Blast Charge (a charge stuck on the nearest foe ahead that blows after a short fuse and staggers), each with its own look in `game/drill/looks/`; the blade loaded with a shell is his infused hit.
+- Charged tiers: Breach Cut, Buckshot Wall, Green Line and Cylinder Break, each with its own pose and draw, and extra rounds on release (`game/drill/release.ts`); the cut-in uses his generated portrait.

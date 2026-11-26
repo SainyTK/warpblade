@@ -1,7 +1,7 @@
 import { fleck, glow, hairline, place } from "../../../../engine/frame";
 import { dealDamage } from "../../../../game/damage";
 import { enemyCenter } from "../../../../game/enemies/enemy";
-import { skillEvolved, skillValues, withCharms } from "../../../../game/skills/query";
+import { skillEvolved, skillValues, withBuild } from "../../../../game/skills/query";
 import { touches } from "../../../../game/skills/targets";
 import { game, hero, progress, rng } from "../../../../game/state";
 import type { Enemy } from "../../../../types/enemy";
@@ -73,7 +73,7 @@ function fly(b: Swallow, dt: number): boolean {
     const want = Math.atan2(ty - b.y, tx - b.x) - now;
     const turn = Math.atan2(Math.sin(want), Math.cos(want));
     const a = now + Math.max(-BIRD.turn * dt, Math.min(BIRD.turn * dt, turn));
-    const speed = withCharms("speed", BIRD.speed);
+    const speed = withBuild("speed", BIRD.speed);
     b.vx = Math.cos(a) * speed;
     b.vy = Math.sin(a) * speed;
   }
@@ -133,13 +133,13 @@ export const nightSwallows: SkillBehavior = {
       const m = memoryOf(memory);
       const v = skillValues(ID);
       if (m.cd > 0 || !rng.chance(v.chance)) return;
-      m.cd = withCharms("cooldown", v.cooldown);
-      send(m, withCharms("amount", skillEvolved(ID) ? v.storm : v.count));
+      m.cd = withBuild("cooldown", v.cooldown);
+      send(m, withBuild("amount", skillEvolved(ID) ? v.storm : v.count));
     },
     blow(memory, ev) {
       if (!skillValues(ID).airTop || !tempoTop() || hero.ground || ev.source !== "attacks") return;
       const m = memoryOf(memory);
-      if (m.birds.length < withCharms("amount", skillValues(ID).count) * 2) send(m, 1);
+      if (m.birds.length < withBuild("amount", skillValues(ID).count) * 2) send(m, 1);
     },
   },
 };

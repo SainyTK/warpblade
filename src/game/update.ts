@@ -18,8 +18,10 @@ import { agePresses } from "./input";
 import { updateDanger } from "./lowHealth";
 import { updateNumbers } from "./numbers";
 import { updatePickups } from "./pickups";
+import { updateResonance } from "./resonance";
 import { updateSkills } from "./skills/runtime";
-import { game, lights, particles, rng } from "./state";
+import { fxRng, game, lights, particles } from "./state";
+import { isTraining, updateTraining } from "./training";
 import { updateWaves } from "./waves";
 import { updateXpOrbs } from "./xpOrbs";
 
@@ -28,22 +30,22 @@ function feedBraziers(): void {
   const heat = scene().def.braziers;
   if (heat <= 0) return;
   for (const b of BRAZIERS) {
-    if (rng.chance(0.6 * heat))
+    if (fxRng.chance(0.6 * heat))
       particles.spawn(
         PK.FIRE,
-        b.x + rng.range(-2, 2),
+        b.x + fxRng.range(-2, 2),
         b.y - 7,
-        rng.range(-4, 4),
-        -rng.range(8, 20),
-        rng.range(0.2, 0.45),
+        fxRng.range(-4, 4),
+        -fxRng.range(8, 20),
+        fxRng.range(0.2, 0.45),
         {
           col: 0,
-          size: rng.range(1, 1.9),
-          flag: rng.chance(0.12) ? PF.SMOKES : 0,
+          size: fxRng.range(1, 1.9),
+          flag: fxRng.chance(0.12) ? PF.SMOKES : 0,
         },
       );
-    if (rng.chance(0.03))
-      particles.spawn(PK.EMBER, b.x, b.y - 10, rng.range(-10, 10), -rng.range(20, 40), rng.range(0.8, 1.6));
+    if (fxRng.chance(0.03))
+      particles.spawn(PK.EMBER, b.x, b.y - 10, fxRng.range(-10, 10), -fxRng.range(20, 40), fxRng.range(0.8, 1.6));
   }
 }
 
@@ -91,6 +93,7 @@ export function update(dt: number): void {
   });
   updateSkills(world);
   updateEnemies(world);
+  updateResonance(world);
   updatePickups(dt);
   updateChests(dt);
   updateCoins(dt);
@@ -98,6 +101,8 @@ export function update(dt: number): void {
   coop()?.anyStanding();
   if (isAdventure()) {
     updateAdventure(dt);
+  } else if (isTraining()) {
+    updateTraining();
   } else {
     updateWaves(dt);
   }

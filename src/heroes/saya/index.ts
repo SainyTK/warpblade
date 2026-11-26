@@ -1,6 +1,7 @@
 import type { HeroModule } from "../../types/heroModule";
 import { hex } from "../../utils/color";
 import { ABILITY_TAB } from "./constants/abilities";
+import { SAYA_DRILL } from "./game/drill";
 import { SAYA_KIT } from "./game/kit";
 import { FOCUS_METER } from "./game/meter";
 import { SAYA_MOVES } from "./game/moves";
@@ -28,4 +29,5 @@ export const SAYA_MODULE: HeroModule = {
     tint: (ability) => hex(ABILITY_TAB[abilityOf(ability)].tint),
   },
   meter: FOCUS_METER,
+  drill: SAYA_DRILL,
 };

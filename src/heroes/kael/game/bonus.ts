@@ -1,3 +1,4 @@
+import { usesDrill } from "../../../drill";
 import { stacksOf } from "../../../game/enemies/skillStatus";
 import { movePayoff, payoffLands } from "../../../game/skills/payoff";
 import { skillValues } from "../../../game/skills/query";
@@ -31,7 +32,7 @@ function keenBonus(): number {
  */
 export function hitBonus(e: Enemy, hit: OwnHit): number {
   let bonus = 0;
-  if (hit.keen && payoffLands(movePayoff(), e)) bonus += keenBonus();
+  if (hit.keen && !usesDrill() && payoffLands(movePayoff(), e)) bonus += keenBonus();
   if (hit.back && kael.phaseBack > 0) bonus += skillValues("k_phase").back ?? 0;
   if (hero.move && AIR_MOVES.has(hero.move as KaelMoveId)) bonus += skillValues("k_skydance").airBonus ?? 0;
   if (hit.melee && hero.riposte > 0) bonus += (skillValues("k_mirror").riposte ?? 1) - 1;

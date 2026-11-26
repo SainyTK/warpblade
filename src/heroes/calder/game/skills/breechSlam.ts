@@ -1,5 +1,5 @@
 import { W } from "../../../../constants/stage";
-import { skillEvolved, skillValues, withCharms } from "../../../../game/skills/query";
+import { skillEvolved, skillValues, withBuild } from "../../../../game/skills/query";
 import { game, hero, progress } from "../../../../game/state";
 import type { Effect } from "../../../../types/effect";
 import { floorShock } from "./floorShock";
@@ -39,7 +39,7 @@ function createSecondShock(x: number, y: number, reach: number): Effect {
 export function breakerLanded(x: number): void {
   const v = skillValues(SKILL);
   if (!v.power || !hero.ground) return;
-  const reach = withCharms("area", v.reach);
+  const reach = withBuild("area", v.reach);
   shock(x, hero.y, reach);
   if (v.second) game.fx.push(createSecondShock(x, hero.y, reach * SECOND.grow));
   if (skillEvolved(SKILL)) floorShock(x, hero.y, { damage: progress.stats.ad * v.fissure, reach: W, stun: v.stun });

@@ -26,9 +26,10 @@ export const CRUSHING_WEIGHT: SkillDef = {
   id: "br_crush",
   name: "Crushing Weight",
   kind: "dot",
+  element: "frost",
   risk: "timed",
   button: "auto",
-  text: "Foes she knocks down or throws up are crushed and bleed over time.",
+  text: "Her second and third slashes crush foes, and crushed foes bleed.",
   levels: LEVELS,
   evolution: {
     partner: "br_launch",

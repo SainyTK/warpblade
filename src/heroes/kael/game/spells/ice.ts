@@ -5,8 +5,8 @@ import { dealDamage } from "../../../../game/damage";
 import { createFloorRing } from "../../../../game/effects/floorRing";
 import { createImpact } from "../../../../game/effects/impact";
 import { enemyBox, enemyCenter } from "../../../../game/enemies/enemy";
-import { skillEvolved, skillValues, withCharms } from "../../../../game/skills/query";
-import { game, lights, particles, progress, rng } from "../../../../game/state";
+import { skillEvolved, skillValues, withBuild } from "../../../../game/skills/query";
+import { fxRng, game, lights, particles, progress } from "../../../../game/state";
 import { boxHit, shake, surfaceBelow } from "../../../../game/world";
 import { sfx } from "../../../../services/audio";
 import type { Ramp } from "../../../../types/color";
@@ -63,7 +63,7 @@ function spikeLine(x: number, y: number, dir: number, heights: readonly number[]
       x: sx,
       base: surfaceBelow(sx, y),
       h: heights[i],
-      lean: dir * rng.range(0.5, 2.5),
+      lean: dir * fxRng.range(0.5, 2.5),
       delay: i * STAGGER,
       dir,
       stand: STAND,
@@ -98,11 +98,11 @@ function burstSpire(s: Spike, power: number): void {
   lights.add(s.x, cy, b.light, I[4], 1, 0.3);
   lights.add(s.x, cy, 16, WHITE, 0.9, 0.1);
   for (let k = 0; k < b.shards; k++) {
-    const a = (k / b.shards) * TAU + rng.range(-0.2, 0.2);
-    const sp = rng.range(120, 220);
-    particles.spawn(PK.SHARD, s.x, cy, Math.cos(a) * sp, Math.sin(a) * sp, rng.range(0.5, 0.9), {
-      col: rng.pick([I[3], I[4], I[5]]),
-      size: rng.range(2, 4),
+    const a = (k / b.shards) * TAU + fxRng.range(-0.2, 0.2);
+    const sp = fxRng.range(120, 220);
+    particles.spawn(PK.SHARD, s.x, cy, Math.cos(a) * sp, Math.sin(a) * sp, fxRng.range(0.5, 0.9), {
+      col: fxRng.pick([I[3], I[4], I[5]]),
+      size: fxRng.range(2, 4),
     });
   }
   const damage = (skillValues(SKILL).spire ?? b.power) * progress.stats.ap * power;
@@ -128,25 +128,25 @@ function chillBeside(s: Spike, seconds: number): void {
 /** Ice Spikes held: frost spreads over the floor round Kael and slows every foe on it */
 function frostField(x: number, y: number): void {
   const f = ICE_FIELD;
-  const reach = withCharms("area", f.reach);
+  const reach = withBuild("area", f.reach);
   game.fx.push(createFloorRing(x, y, reach, PAL.ice, 0.6));
   game.fx.push(createFloorRing(x, y, reach * 0.6, PAL.ice, 0.5, 0.7));
   for (let k = 0; k < 24; k++)
     particles.spawn(
       PK.FLAKE,
-      x + rng.range(-reach, reach),
-      y - rng.range(0, 30),
-      rng.range(-20, 20),
-      rng.range(-30, 0),
-      rng.range(0.6, 1.2),
+      x + fxRng.range(-reach, reach),
+      y - fxRng.range(0, 30),
+      fxRng.range(-20, 20),
+      fxRng.range(-30, 0),
+      fxRng.range(0.6, 1.2),
       {
-        col: rng.pick([PAL.ice[4], PAL.ice[5]]),
-        size: rng.range(1, 2),
+        col: fxRng.pick([PAL.ice[4], PAL.ice[5]]),
+        size: fxRng.range(1, 2),
       },
     );
   for (const e of game.enemies)
     if (e.hp > 0 && Math.abs(enemyCenter(e)[0] - x) <= reach)
-      e.chill = Math.max(e.chill, withCharms("duration", f.chill));
+      e.chill = Math.max(e.chill, withBuild("duration", f.chill));
 }
 
 /** a row of crystal spikes erupting one after another along the floor, freezing what they touch, then shattering; held,
@@ -156,8 +156,8 @@ export function castIce(x: number, y: number, face: number, power: number, wide:
   const v = skillValues(SKILL);
   const bloom = skillEvolved(SKILL);
   const damage = v.power * progress.stats.ap * power * (bloom ? v.bloomPower : 1);
-  const freeze = withCharms("duration", v.freeze);
-  const heights = heightsOf(Math.round(withCharms("amount", v.spikes)));
+  const freeze = withBuild("duration", v.freeze);
+  const heights = heightsOf(Math.round(withBuild("amount", v.spikes)));
   const spikes = spikeLine(x, y, face, heights);
   if (bloom) {
     const crown = spikes[spikes.length - 1];
@@ -176,25 +176,25 @@ export function castIce(x: number, y: number, face: number, power: number, wide:
     for (let k = 0; k < 6; k++)
       particles.spawn(
         PK.FLAKE,
-        s.x + rng.range(-5, 5),
-        s.base - rng.range(0, s.h),
-        rng.range(-30, 30),
-        rng.range(-60, -10),
-        rng.range(0.5, 1.1),
+        s.x + fxRng.range(-5, 5),
+        s.base - fxRng.range(0, s.h),
+        fxRng.range(-30, 30),
+        fxRng.range(-60, -10),
+        fxRng.range(0.5, 1.1),
         {
-          col: rng.pick([I[4], I[5]]),
-          size: rng.range(1, 2),
+          col: fxRng.pick([I[4], I[5]]),
+          size: fxRng.range(1, 2),
         },
       );
     for (let k = 0; k < 3; k++)
       particles.spawn(
         PK.VAPOUR,
-        s.x + rng.range(-6, 6),
+        s.x + fxRng.range(-6, 6),
         s.base - 3,
-        rng.range(-12, 12),
-        -rng.range(2, 8),
-        rng.range(0.8, 1.4),
-        { col: I[4], size: rng.range(4, 7) },
+        fxRng.range(-12, 12),
+        -fxRng.range(2, 8),
+        fxRng.range(0.8, 1.4),
+        { col: I[4], size: fxRng.range(4, 7) },
       );
     if (s.dir === face) sfx.chime(i);
     shake(0.06, 1);
@@ -204,24 +204,24 @@ export function castIce(x: number, y: number, face: number, power: number, wide:
     for (let k = 0; k < 8; k++)
       particles.spawn(
         PK.SHARD,
-        s.x + rng.range(-3, 3),
-        s.base - rng.range(2, s.h),
-        rng.range(-90, 90),
-        rng.range(-200, -60),
-        rng.range(0.6, 1.2),
+        s.x + fxRng.range(-3, 3),
+        s.base - fxRng.range(2, s.h),
+        fxRng.range(-90, 90),
+        fxRng.range(-200, -60),
+        fxRng.range(0.6, 1.2),
         {
-          col: rng.pick([I[3], I[4], I[5]]),
-          size: rng.range(2, 4),
+          col: fxRng.pick([I[3], I[4], I[5]]),
+          size: fxRng.range(2, 4),
         },
       );
     for (let k = 0; k < 4; k++)
       particles.spawn(
         PK.FLAKE,
         s.x,
-        s.base - rng.range(2, s.h),
-        rng.range(-40, 40),
-        rng.range(-50, 0),
-        rng.range(0.5, 1),
+        s.base - fxRng.range(2, s.h),
+        fxRng.range(-40, 40),
+        fxRng.range(-50, 0),
+        fxRng.range(0.5, 1),
         { col: I[5], size: 1.5 },
       );
     if (i === 0) sfx.shatter();
@@ -243,7 +243,7 @@ export function castIce(x: number, y: number, face: number, power: number, wide:
             e.frozen = Math.max(e.frozen, freeze);
             game.fx.push(createImpact(s.x, s.base - s.h * 0.6, s.dir, false, SPARKS.ice));
           }
-        if (v.chill && !s.chilled && u >= 0.1) chillBeside(s, withCharms("duration", v.chill));
+        if (v.chill && !s.chilled && u >= 0.1) chillBeside(s, withBuild("duration", v.chill));
         if (!s.gone && u > s.stand) shatter(s, i);
       });
       return t < end;

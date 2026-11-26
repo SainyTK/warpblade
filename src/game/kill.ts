@@ -15,8 +15,10 @@ import { enemyCenter } from "./enemies/enemy";
 import { kindOf } from "./enemies/kinds";
 import { feat } from "./feat";
 import { kit } from "./hero/kits";
+import { resonateDeath } from "./resonance";
 import { emitSkillEvent } from "./skills/events";
-import { game, lights, particles, rng } from "./state";
+import { fxRng, game, lights, particles, rng } from "./state";
+import { isTraining } from "./training";
 import { shake } from "./world";
 import { dropXp } from "./xpOrbs";
 
@@ -50,6 +52,8 @@ function lightShare(k: number): number {
 }
 
 /** elites, mini bosses and the boss of any wave but the last leave a chest */
+const BOSS_CHEST_LEAST = 3;
+
 const leavesChest = (e: Enemy): boolean =>
   e.elite ||
   e.rank === "mini" ||
@@ -60,9 +64,9 @@ const leavesChest = (e: Enemy): boolean =>
  * elite or a boss, and the wave's end when it was the last foe
  */
 export function killEnemy(e: Enemy, source?: SourceId): void {
+  resonateDeath(e);
   const [x, y] = enemyCenter(e);
   const S = PAL.shadow;
-  const R = rng;
   const big = e.rank !== "minion" || e.elite;
   // a crowd falling at once shares one burst's worth of light and particles
   const share = big ? 1 : burstShare();
@@ -77,51 +81,53 @@ export function killEnemy(e: Enemy, source?: SourceId): void {
   if (shine > 0) lights.add(x, y, big ? 110 : 56 * Math.sqrt(share), S[4], glow * shine, big ? 0.9 : 0.5);
   if (share === 1 && shine > 0) lights.add(x, y, 18, WHITE, 0.8 * shine, 0.1);
   for (let i = 0; i < (big ? 48 : many(16)); i++) {
-    const a = R.range(0, TAU);
-    const sp = R.range(40, big ? 260 : 160);
-    particles.spawn(PK.MOTE, x, y, Math.cos(a) * sp, Math.sin(a) * sp, R.range(0.3, 0.7), {
-      col: R.pick([S[3], S[4], S[5]]),
+    const a = fxRng.range(0, TAU);
+    const sp = fxRng.range(40, big ? 260 : 160);
+    particles.spawn(PK.MOTE, x, y, Math.cos(a) * sp, Math.sin(a) * sp, fxRng.range(0.3, 0.7), {
+      col: fxRng.pick([S[3], S[4], S[5]]),
       size: 0.8,
     });
   }
   for (let i = 0; i < (big ? 18 : many(7)); i++)
     particles.spawn(
       PK.SMOKE,
-      x + R.range(-5, 5),
-      y + R.range(-5, 5),
-      R.range(-25, 25),
-      R.range(-30, 0),
-      R.range(0.8, 1.5),
+      x + fxRng.range(-5, 5),
+      y + fxRng.range(-5, 5),
+      fxRng.range(-25, 25),
+      fxRng.range(-30, 0),
+      fxRng.range(0.8, 1.5),
       {
         col: S[2],
-        size: R.range(3, big ? 8 : 5.5),
+        size: fxRng.range(3, big ? 8 : 5.5),
       },
     );
   for (let i = 0; i < many(4); i++)
     particles.spawn(
       PK.STAR,
-      x + R.range(-8, 8),
-      y + R.range(-8, 8),
-      R.range(-30, 30),
-      R.range(-50, -10),
-      R.range(0.4, 0.9),
+      x + fxRng.range(-8, 8),
+      y + fxRng.range(-8, 8),
+      fxRng.range(-30, 30),
+      fxRng.range(-50, -10),
+      fxRng.range(0.4, 0.9),
       {
         col: S[5],
-        size: R.range(0.5, 2.5),
+        size: fxRng.range(0.5, 2.5),
       },
     );
   const kind = kindOf(e.type);
   const orbs = kind.orbs ?? ORBS[e.rank];
   for (let i = 0; i < orbs; i++)
-    game.pickups.push({ x, y, vx: R.range(-70, 70), vy: R.range(-140, -60), t: 0, kind: "mp" });
-  const hearts = big ? HEARTS.big : R.chance(kind.heartChance ?? HEARTS.other) ? 1 : 0;
-  for (let i = 0; i < hearts; i++) game.pickups.push({ x, y, vx: R.range(-50, 50), vy: -150, t: 0, kind: "hp" });
-  dropCoins(e, x, y);
-  if (leavesChest(e)) dropChest(x, y);
+    game.pickups.push({ x, y, vx: rng.range(-70, 70), vy: rng.range(-140, -60), t: 0, kind: "mp" });
+  const hearts = big ? HEARTS.big : rng.chance(kind.heartChance ?? HEARTS.other) ? 1 : 0;
+  for (let i = 0; i < hearts; i++) game.pickups.push({ x, y, vx: rng.range(-50, 50), vy: -150, t: 0, kind: "hp" });
+  if (!isTraining()) {
+    dropCoins(e, x, y);
+    if (leavesChest(e)) dropChest(x, y, e.rank === "boss" ? BOSS_CHEST_LEAST : 1);
+    dropXp(e.xp, x, y);
+  }
   if (big) shake(0.5, 4);
   sfx.death();
-  dropXp(e.xp, x, y);
-  if (!isAdventure()) {
+  if (!isAdventure() && !isTraining()) {
     endWaveOnLastKill();
   }
 }

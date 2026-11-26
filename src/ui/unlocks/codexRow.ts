@@ -1,4 +1,3 @@
-import type { Unlock } from "../../types/unlock";
 import { iconImage } from "./unlockIcon";
 
 function span(cls: string, text = ""): HTMLSpanElement {
@@ -13,19 +12,6 @@ export type CodexEntry =
   | { state: "found"; icon: string; name: string; text: string; recipe?: string }
   | { state: "locked"; icon: string; hint: string }
   | { state: "secret" };
-
-/** a row for a found thing, or for an unlock still to find: its silhouette and hint, or ??? while secret */
-export function entryOf(
-  unlock: Unlock | undefined,
-  found: boolean,
-  icon: string,
-  name: string,
-  text: string,
-): CodexEntry {
-  if (found || !unlock) return { state: "found", icon, name, text };
-  if (unlock.secret) return { state: "secret" };
-  return { state: "locked", icon, hint: unlock.hint };
-}
 
 /**
  * One entry of the Codex, laid out like a shop row. An evolution sits under its skill, indented. Arrows and the gamepad

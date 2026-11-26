@@ -17,6 +17,7 @@ export const SCORCH_ROUNDS: SkillDef = {
   id: "ca_scorch",
   name: "Scorch Rounds",
   kind: "dot",
+  element: "blaze",
   risk: "timed",
   button: "auto",
   text: "A Trigger's round sets the struck foe burning green.",

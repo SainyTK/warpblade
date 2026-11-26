@@ -19,9 +19,10 @@ export const SEARING_EDGE: SkillDef = {
   id: "br_embers",
   name: "Searing Edge",
   kind: "dot",
+  element: "blaze",
   risk: "easy",
   button: "auto",
-  text: "Her blows leave embers that burn foes, more with every blow.",
+  text: "Her slashes lay searing embers that burn foes.",
   levels: LEVELS,
   evolution: {
     partner: "br_arc",

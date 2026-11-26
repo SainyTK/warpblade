@@ -1,5 +1,6 @@
 import type { SkillDef } from "../../../../types/skill";
 import { evolvedRow, levelRows } from "../../../../utils/skillRows";
+import { drillRows, drillValues } from "./drillRows";
 import { SKILL } from "./ids";
 
 /** values: `drop` ability power each drop deals, `store` ability power it stores, `time` s the rain falls, `width` px
@@ -19,18 +20,34 @@ const LEVELS = levelRows([
   { text: "Drop cut and store +150%.", values: { drop: 0.6, store: 1.5 } },
 ]);
 
+const DRILL = drillRows(LEVELS, [
+  { text: "Ink Rain holds foes 0.5 s longer.", drill: { hold: 0.5 } },
+  { text: "Ink Rain +40%.", drill: { power: 0.4 } },
+  { text: "New: Ink Rain marks foes: they take 15% more damage for 3 s.", drill: { mark: 0.15 } },
+  { text: "Ink Rain +40% to +90%.", drill: { power: 0.9 } },
+  { text: "New: a second shower falls a beat later for 50%.", drill: { second: 0.5 } },
+  { text: "Ink Rain +90% to +160%.", drill: { power: 1.6 } },
+  { text: "New: the mark grows to 30%.", drill: { mark: 0.3 } },
+  { text: "Ink Rain +160% to +320%.", drill: { power: 3.2 } },
+]);
+
 export const INK_RAIN: SkillDef = {
   id: SKILL.rain,
   name: "Ink Rain",
   kind: "spell",
+  element: "void",
   risk: "easy",
   button: "I",
-  text: "An ability on I: a cloud of ink rains on the foes ahead, each drop storing a small cut. Held, it falls twice as long.",
-  levels: LEVELS,
+  text: "Ink Rain hits harder, holds foes longer and marks them.",
+  levels: DRILL,
   evolution: {
     partner: SKILL.stain,
     name: "Monsoon",
-    text: "Two clouds rain at once, one each side of her, and every drop stores twice.",
-    row: evolvedRow(LEVELS[7], "Two clouds; each drop stores twice.", { clouds: 2, store: 3 }),
+    text: "Ink Rain keeps falling: three more showers.",
+    row: evolvedRow(DRILL[7], "Three more showers.", {
+      ...drillValues({ showers: 3 }),
+      clouds: 2,
+      store: 3,
+    }),
   },
 };

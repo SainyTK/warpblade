@@ -1,5 +1,6 @@
 import type { HeroModule } from "../../types/heroModule";
 import { ABILITY_COLOR } from "./constants/abilities";
+import { CERISE_DRILL } from "./game/drill";
 import { CERISE_KIT } from "./game/kit";
 import { POINTS_METER } from "./game/meter";
 import { CERISE_MOVES } from "./game/moves";
@@ -24,6 +25,5 @@ export const CERISE_MODULE: HeroModule = {
     tint: (ability) => ABILITY_COLOR[(ability || "flurry") as CeriseAbility] ?? ABILITY_COLOR.flurry,
   },
   meter: POINTS_METER,
+  drill: CERISE_DRILL,
 };
-
-export * from "./game/adventure";

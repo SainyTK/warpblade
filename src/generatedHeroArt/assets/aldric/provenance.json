@@ -1,8 +1,0 @@
-{
-  "generator": "built-in image_gen",
-  "styleReference": "src/kaelSprite/kael-parts.png",
-  "source": "source-sheet.png",
-  "prompt": "Transparent separated Aldric sprite parts in the reference anime action JRPG style: fair skin, swept blond hair, blue eye, silver-blue plate, white tabard, navy hose, deep blue gold-hemmed half cape and downward arming sword.",
-  "portrait": "Cropped from the front head of source-sheet.png.",
-  "offhand": "Retained from previous built-in image_gen sheet; normalized attachment anchor [0.65, 0.06]."
-}

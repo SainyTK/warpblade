@@ -1,8 +1,8 @@
 import { dealDamage } from "../../../../game/damage";
 import { createBlastCore } from "../../../../game/effects/flash";
 import { enemyBox } from "../../../../game/enemies/enemy";
-import { skillEvolved, skillValues, withCharms } from "../../../../game/skills/query";
-import { game, hero, particles, progress, rng } from "../../../../game/state";
+import { skillEvolved, skillValues, withBuild } from "../../../../game/skills/query";
+import { fxRng, game, hero, particles, progress } from "../../../../game/state";
 import { boxAhead, boxBehind, boxHit } from "../../../../game/world";
 import { PK } from "../../../../types/particle";
 import type { Box } from "../../../../types/world";
@@ -17,7 +17,7 @@ const VENT = { top: -36, push: 140, stagger: 0.4, burnStacks: 1, burnMax: 5, rin
 function puff(x: number, y: number, dir: number): void {
   game.fx.push(createBlastCore(x, y, PHOSPHOR[4]));
   for (let i = 0; i < 3; i++)
-    particles.spawn(PK.SMOKE, x, y, dir * rng.range(20, 50), rng.range(-20, -5), rng.range(0.4, 0.6), {
+    particles.spawn(PK.SMOKE, x, y, dir * fxRng.range(20, 50), fxRng.range(-20, -5), fxRng.range(0.4, 0.6), {
       col: GUNSMOKE,
     });
 }
@@ -45,7 +45,7 @@ export function vent(): void {
   const v = skillValues(SKILL);
   if (!v.power || (!hero.ground && !v.air)) return;
   const damage = progress.stats.ad * v.power;
-  const reach = withCharms("area", skillEvolved(SKILL) ? VENT.ring : v.reach);
+  const reach = withBuild("area", skillEvolved(SKILL) ? VENT.ring : v.reach);
   puff(hero.x - hero.face * 6, hero.y - 18, -hero.face);
   strike(boxBehind(0, VENT.top, reach, 2), damage, -hero.face);
   if (skillEvolved(SKILL)) strike(boxAhead(0, VENT.top, reach, 2), damage, hero.face);

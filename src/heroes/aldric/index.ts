@@ -2,6 +2,7 @@ import type { HeroModule } from "../../types/heroModule";
 import { hex } from "../../utils/color";
 import { ABILITY_TAB } from "./constants/abilities";
 import { DAWN_CSS } from "./constants/light";
+import { ALDRIC_DRILL } from "./game/drill";
 import { ALDRIC_KIT } from "./game/kit";
 import { ALDRIC_MOVES } from "./game/moves";
 import { ALDRIC_SKILLS } from "./game/skills";
@@ -28,4 +29,5 @@ export const ALDRIC_MODULE: HeroModule = {
     share: valorShare,
     lit: radiant,
   },
+  drill: ALDRIC_DRILL,
 };

@@ -1,7 +1,7 @@
 import { WORLD_COLORS as WC } from "../../constants/palette";
 import { BRAZIERS, MOON, W } from "../../constants/stage";
 import { glow, place, px } from "../../engine/frame";
-import { particles, rng } from "../../game/state";
+import { fxRng, particles } from "../../game/state";
 import { PK } from "../../types/particle";
 import { mix, WHITE } from "../../utils/color";
 import { drawFireflies, drawMoon } from "./night";
@@ -42,10 +42,12 @@ export const twilight: SceneDef = {
     const veil = veilAt(k);
     const horizon = P.sky[P.sky.length - 1];
     paintSky(paint, P, veil, haloAt(k));
-    paintMoon(paint);
+    if (paint.bodies) paintMoon(paint);
     paintTears(paint, r, k);
-    paintMoonRing(paint, k);
-    paintPlanet(paint, k);
+    if (paint.bodies) {
+      paintMoonRing(paint, k);
+      paintPlanet(paint, k);
+    }
     paintIslands(paint, k, horizon);
     paintTowerStone(paint, P, veil);
     paintSlabLight(paint, veil);
@@ -68,8 +70,8 @@ export const twilight: SceneDef = {
     if (!arena) return;
     const sparks = EMBERS[Math.round(k * 4)];
     for (const b of BRAZIERS)
-      if (rng.chance(0.04))
-        particles.spawn(PK.EMBER, b.x, b.y - 12, rng.range(-10, 10), -rng.range(20, 40), rng.range(0.8, 1.6), {
+      if (fxRng.chance(0.04))
+        particles.spawn(PK.EMBER, b.x, b.y - 12, fxRng.range(-10, 10), -fxRng.range(20, 40), fxRng.range(0.8, 1.6), {
           sparks,
         });
   },

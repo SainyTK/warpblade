@@ -1,19 +1,29 @@
 import "../shop/shop.css";
 import "../achievements/achievements.css";
 import "../unlocks/unlocks.css";
-import { CHARMS } from "../../constants/charms";
+import { ELEMENT_ORDER, ELEMENTS } from "../../constants/elements";
 import { EVOLVE_PARTNER_LEVEL, SKILL_MAX_LEVEL } from "../../constants/growth";
+import {
+  BLAZE,
+  ELEMENT_STATS,
+  FROST,
+  FUSION_RANK,
+  FUSIONS,
+  type FusionDef,
+  STORM,
+  VENOM,
+  VOID,
+} from "../../constants/resonance";
 import { CHARACTERS } from "../../heroes/roster";
-import { charmUnlocked, isFound, knowsRecipe } from "../../store/unlocks";
-import type { CharmId } from "../../types/build";
+import { ARTS } from "../../stages/arts";
+import { knowsFusion, knowsRecipe } from "../../store/unlocks";
+import type { ArtId } from "../../types/campaign";
 import type { CharacterDef } from "../../types/character";
 import type { MenuView } from "../../types/menu";
 import type { SkillDef } from "../../types/skill";
 import { skillOf } from "../../utils/skills";
-import { slotUnlocks, unlockName, unlockOf, unlockText } from "../../utils/unlocks";
 import { iconUrl, skillIcon } from "../skills/icons/iconImage";
-import { type CodexEntry, codexRow, entryOf } from "../unlocks/codexRow";
-import { targetIconUrl } from "../unlocks/unlockIcon";
+import { type CodexEntry, codexRow } from "../unlocks/codexRow";
 import { backItem } from "./backItem";
 
 function section(heading: string, rows: readonly HTMLElement[]): HTMLElement {
@@ -36,10 +46,34 @@ function evolutionEntry(c: CharacterDef, s: SkillDef): CodexEntry {
   return { state: "found", icon, name: s.evolution.name, text: s.evolution.text, recipe };
 }
 
-const charmEntry = (id: CharmId): CodexEntry => {
-  const c = CHARMS[id];
-  return entryOf(unlockOf(id), charmUnlocked(id), iconUrl(`charm_${id}`), c.name, c.text);
-};
+const ELEMENT_TEXT = {
+  blaze: `Hits burn. Burning foes explode at rank ${BLAZE.wildfireRank}. Each rank widens skill areas.`,
+  frost: `Hits chill, then freeze. Frozen foes take more. Chilled foes shatter at rank ${FROST.shatterRank}. Each rank lengthens skill effects.`,
+  storm: `Hits may arc to nearby foes, one more every ${STORM.ranksPerTarget} ranks, with sure crits at rank ${STORM.overchargeRank}. Each rank shortens cooldowns.`,
+  venom: `Hits poison. Each poison stack makes the foe take more from everything. Poison spreads on death at rank ${VENOM.plagueRank}.`,
+  void: `Hits may echo a moment later, twice from rank ${VOID.riftRank}. Every ${ELEMENT_STATS.voidAmountRanks} ranks adds a projectile or summon.`,
+} as const;
+
+const elementEntry = (id: (typeof ELEMENT_ORDER)[number]): CodexEntry => ({
+  state: "found",
+  icon: iconUrl(`el_${id}`),
+  name: ELEMENTS[id].name,
+  text: ELEMENT_TEXT[id],
+});
+
+function fusionEntry(f: FusionDef): CodexEntry {
+  const icon = iconUrl(`el_${f.pair[0]}`);
+  const recipe = `${ELEMENTS[f.pair[0]].name} ${FUSION_RANK} and ${ELEMENTS[f.pair[1]].name} ${FUSION_RANK}`;
+  if (!knowsFusion(f.id)) return { state: "locked", icon, hint: recipe };
+  return { state: "found", icon, name: f.name, text: f.text, recipe };
+}
+
+const artEntry = (id: ArtId): CodexEntry => ({
+  state: "found",
+  icon: iconUrl(`art_${id}`),
+  name: ARTS[id].name,
+  text: `${ELEMENTS[ARTS[id].element].name}. ${ARTS[id].levels[0].cardText}`,
+});
 
 /** each skill of a hero with its evolution under it */
 function heroRows(c: CharacterDef): { skills: HTMLElement[]; evolutions: HTMLElement[] } {
@@ -60,18 +94,18 @@ function heroRows(c: CharacterDef): { skills: HTMLElement[]; evolutions: HTMLEle
  */
 export function codexScreen(): MenuView {
   const heroes = CHARACTERS.map((c) => ({ c, rows: heroRows(c) }));
-  const charms = (Object.keys(CHARMS) as CharmId[]).map((id) => codexRow(charmEntry(id)));
-  const slots = slotUnlocks().map((u) =>
-    codexRow(entryOf(u, isFound(u.id), targetIconUrl(u.target), unlockName(u.target), unlockText(u.target))),
-  );
+  const elements = ELEMENT_ORDER.map((id) => codexRow(elementEntry(id)));
+  const fusions = FUSIONS.map((f) => codexRow(fusionEntry(f)));
+  const arts = (Object.keys(ARTS) as ArtId[]).map((id) => codexRow(artEntry(id)));
   const scroll = document.createElement("div");
   scroll.className = "menu-scroll shop";
   scroll.append(
+    section("Resonance", elements),
+    section("Fusions", fusions),
+    section("Rift Arts", arts),
     ...heroes.map(({ c, rows }) => section(`${c.name}'s skills`, rows.skills)),
-    section("Charms", charms),
-    section("Charm slots", slots),
   );
-  const counted = [...heroes.flatMap(({ rows }) => rows.evolutions), ...charms, ...slots];
+  const counted = [...heroes.flatMap(({ rows }) => rows.evolutions), ...fusions];
   const count = counted.filter((row) => row.dataset.state === "found").length;
   const content = document.createElement("div");
   content.className = "menu-sub";

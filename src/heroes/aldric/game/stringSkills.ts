@@ -1,6 +1,6 @@
 import { consumeStacks, markFoe } from "../../../game/enemies/skillStatus";
 import { emitSkillEvent } from "../../../game/skills/events";
-import { skillEvolved, skillValues, withCharms } from "../../../game/skills/query";
+import { skillEvolved, skillValues, withBuild } from "../../../game/skills/query";
 import { game, hero, progress } from "../../../game/state";
 import { boxAhead } from "../../../game/world";
 import { CREST_RING, OATH_WAVE } from "../constants/skillNumbers";
@@ -21,7 +21,7 @@ function oathWave(id: AldricMoveId): void {
   game.fx.push(
     createLightWave(hero.x + hero.face * 12, hero.y - 18, hero.face, {
       speed: OATH_WAVE.speed,
-      reach: withCharms("area", OATH_WAVE.reach * size),
+      reach: withBuild("area", OATH_WAVE.reach * size),
       half: OATH_WAVE.half * size,
       damage: progress.stats.ad * v.wave,
       pierce: !!v.pierce || skillEvolved("al_oath"),
@@ -35,9 +35,9 @@ function breakingBash(): void {
   const v = skillValues("al_breaker");
   const foe = hero.lastHit;
   if (v.valor) gainValor(v.valor);
-  if (foe && v.mark) markFoe(foe, "al_breaker", withCharms("duration", 3), v.mark);
+  if (foe && v.mark) markFoe(foe, "al_breaker", withBuild("duration", 3), v.mark);
   if (foe && v.shock) {
-    const reach = withCharms("area", v.shockReach);
+    const reach = withBuild("area", v.shockReach);
     const behind = foesIn(boxAhead(0, -36, 27 + reach, 0), foe.x).filter(
       (e) => e !== foe && (e.x - foe.x) * hero.face > 0,
     );
@@ -61,14 +61,14 @@ function crestRings(): void {
     game.fx.push(
       createDawnGround(
         hero.x + hero.face * 18,
-        withCharms("area", d.width),
-        withCharms("duration", d.time),
+        withBuild("area", d.width),
+        withBuild("duration", d.time),
         progress.stats.ap * d.burn,
       ),
     );
   }
   if (!v.ring) return;
-  const r = withCharms("area", v.ring);
+  const r = withBuild("area", v.ring);
   const gx = hero.x + hero.face * 18;
   for (let i = 0; i <= (v.echo ?? 0); i++)
     game.fx.push(

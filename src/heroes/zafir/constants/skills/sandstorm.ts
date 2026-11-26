@@ -1,31 +1,46 @@
-import { ULT_CHARGE } from "../../../../constants/ultimate";
 import type { SkillDef } from "../../../../types/skill";
-import { evolvedRow, levelRows } from "../../../../utils/skillRows";
+import { evolvedRow } from "../../../../utils/skillRows";
+import { drillLevels, drillValues, type Numbers } from "./drillLevels";
 
-/** values: each a multiple of the storm's own: `power` its cuts, `cooldown` seconds, `charge` charging speed, `time` how long it lasts (its cuts keep their strength), `grains` its look, `blind` minions in it cannot see him, `wounds` more wounds a cut opens, `reach` its reach, `twin` evolved, a second storm this hard turns round the first */
-const LEVELS = levelRows([
-  { text: "The storm cuts 30% harder.", values: { power: 1.3 } },
-  { text: "Recharge 20 to 15 s; charges 30% faster.", values: { cooldown: 15, charge: 1.3 } },
-  { text: "New: the storm lasts half again as long.", values: { time: 1.5, grains: 1.5 } },
-  { text: "New: minions inside it cannot see you.", values: { blind: 1 } },
-  { text: "Storm power +30% to +90%.", values: { power: 1.9 } },
-  { text: "New: each cut opens two wounds.", values: { wounds: 1 } },
-  { text: "New: the storm reaches 40% farther.", values: { reach: 1.4 } },
-  { text: "Storm power +90% to +380%.", values: { power: 4.8 } },
+const NATIVE: readonly Numbers[] = [
+  { power: 1.3 },
+  { cooldown: 15, charge: 1.3 },
+  { time: 1.5, grains: 1.5 },
+  { blind: 1 },
+  { power: 1.9 },
+  { wounds: 1 },
+  { reach: 1.4 },
+  { power: 4.8 },
+];
+
+const LEVELS = drillLevels(NATIVE, [
+  { text: "Sandstorm tiers deal +30%.", drill: { damage: 1.3 } },
+  { text: "New: the tiers charge 25% faster.", drill: { charge: 1.25 } },
+  { text: "New: the storm of the high tiers lasts half again as long.", drill: { storm: 0.5 } },
+  { text: "Tiers +30% to +70%.", drill: { damage: 1.7 } },
+  { text: "New: minions inside the storm cannot see you.", drill: { blind: 1 } },
+  { text: "New: the tiers reach 30% farther.", drill: { reach: 1.3 } },
+  { text: "New: every foe a tier strikes bleeds two wounds.", drill: { wounds: 2 } },
+  { text: "Tiers +70% to +250%.", drill: { damage: 3.5 } },
 ]);
 
 export const SANDSTORM: SkillDef = {
   id: "za_storm",
   name: "Sandstorm",
   kind: "ultimate",
+  element: "storm",
   risk: "easy",
-  button: "U",
-  text: `Sandstorm grows: it cuts harder, lasts longer, blinds minions, opens more wounds and reaches farther. Grows with attack damage. ${ULT_CHARGE}`,
+  button: "J",
+  text: "The four Sandstorm tiers hit harder, charge faster, reach farther and leave the storm turning longer.",
   levels: LEVELS,
   evolution: {
     partner: "za_whirling",
     name: "Endless Sirocco",
-    text: "A second, wider storm turns round the first, and the storm lasts twice as long.",
-    row: evolvedRow(LEVELS[7], "A second, wider storm; twice as long.", { twin: 1.5, time: 2 }),
+    text: "Every tier from the third raises a second, wider storm, and every storm lasts twice as long.",
+    row: evolvedRow(LEVELS[7], "A second, wider storm; twice as long.", {
+      twin: 1.5,
+      time: 2,
+      ...drillValues({ twin: 1, storm: 1.5 }),
+    }),
   },
 };

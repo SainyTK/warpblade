@@ -1,33 +1,42 @@
 import type { SkillDef } from "../../../../types/skill";
-import { evolvedRow, levelRows } from "../../../../utils/skillRows";
+import { evolvedRow } from "../../../../utils/skillRows";
+import { drillLevels, drillValues, type Numbers } from "./drillLevels";
 
-/** values: `passCut` attack damage of the cut on each foe the dodge passes through, `passWounds` wounds it opens, `cloud` seconds the sand cloud the dodge leaves blinds minions, `perfectWhirl` Whirl a perfect dodge fills to, `air` the dodge works in the air, `mirage` every dodge leaves a mirage */
-const LEVELS = levelRows([
-  { text: "A dodge through a foe cuts it.", values: { passCut: 0.6 } },
-  { text: "Cut 0.6 to 0.9.", values: { passCut: 0.9 } },
-  { text: "New: the cut opens two wounds.", values: { passWounds: 2 } },
-  { text: "New: a dodge leaves a cloud of sand that blinds minions in it.", values: { cloud: 1.2 } },
-  { text: "New: a perfect dodge fills the Whirl to its top ring.", values: { perfectWhirl: 80 } },
-  { text: "Cut 0.9 to 1.8.", values: { passCut: 1.8 } },
-  { text: "New: dodge in the air.", values: { air: 1 } },
-  {
-    text: "Cut 1.8 to 5; three wounds; the cloud blinds twice as long.",
-    values: { passCut: 5, passWounds: 3, cloud: 2.4 },
-  },
+const NATIVE: readonly Numbers[] = [
+  { passCut: 0.6 },
+  { passCut: 0.9 },
+  { passWounds: 2 },
+  { cloud: 1.2 },
+  { perfectWhirl: 80 },
+  { passCut: 1.8 },
+  { air: 1 },
+  { passCut: 5, passWounds: 3, cloud: 2.4 },
+];
+
+const LEVELS = drillLevels(NATIVE, [
+  { text: "One more air dash.", drill: { airDashes: 1 } },
+  { text: "New: foes you dash past are blinded 1 s.", drill: { cloud: 1 } },
+  { text: "New: nothing can hurt you while you dash.", drill: { untouchable: 1 } },
+  { text: "Blind 1 to 1.5 s.", drill: { cloud: 1.5 } },
+  { text: "New: a second extra air dash.", drill: { airDashes: 2 } },
+  { text: "New: a dash past a foe recharges the dash.", drill: { refresh: 1 } },
+  { text: "New: foes you dash past bleed a wound; blind 1.5 to 2.2 s.", drill: { wounds: 1, cloud: 2.2 } },
+  { text: "New: a third extra air dash.", drill: { airDashes: 3 } },
 ]);
 
 export const SAND_SLIP: SkillDef = {
   id: "za_slip",
   name: "Sand Slip",
   kind: "movement",
+  element: "storm",
   risk: "timed",
   button: "L",
-  text: "A dodge through a foe cuts it and opens wounds, and leaves a cloud of sand behind.",
+  text: "More air dashes, a dash nothing can touch, and a cloud of sand that blinds the foes you slip past.",
   levels: LEVELS,
   evolution: {
     partner: "za_mirage",
     name: "Mirage Slip",
-    text: "Every dodge leaves a mirage where it started, which minions strike at and which bursts into sand blades.",
-    row: evolvedRow(LEVELS[7], "Every dodge leaves a mirage.", { mirage: 1 }),
+    text: "A dash past foes leaves a mirage where it started, which minions strike at and which bursts into sand blades.",
+    row: evolvedRow(LEVELS[7], "Dashes past foes leave a mirage.", { mirage: 1, ...drillValues({ mirage: 1 }) }),
   },
 };

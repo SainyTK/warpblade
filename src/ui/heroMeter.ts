@@ -1,3 +1,4 @@
+import { usesDrill } from "../drill";
 import { heroCode } from "../game/hero/kits";
 import { byId } from "./dom";
 
@@ -12,7 +13,7 @@ const text = byId("kitText");
 let last = "";
 
 export function updateHeroMeter(): void {
-  const meter = heroCode().meter;
+  const meter = usesDrill() ? undefined : heroCode().meter;
   if (bar.hidden === !!meter) bar.hidden = !meter;
   if (!meter) return;
   const share = Math.max(0, Math.min(1, meter.share()));

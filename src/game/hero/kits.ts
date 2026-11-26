@@ -1,4 +1,4 @@
-import { heroModule } from "../../heroes";
+import { heroModule } from "../../heroes/registry";
 import type { HeroModule } from "../../types/heroModule";
 import type { HeroKit } from "../../types/kit";
 import type { MoveDef } from "../../types/move";

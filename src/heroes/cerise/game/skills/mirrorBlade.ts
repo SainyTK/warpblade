@@ -1,3 +1,4 @@
+import { staggerFoe } from "../../../../game/enemies/stagger";
 import { skillEvolved, skillValues } from "../../../../game/skills/query";
 import { nearestFoe } from "../../../../game/skills/targets";
 import { game, hero, progress, rng } from "../../../../game/state";
@@ -6,17 +7,16 @@ import type { SkillBehavior, SkillMemory } from "../../../../types/skillBehavior
 import { foeAt } from "../abilities/spells";
 import { createGlassRapier } from "../effects/glassRapier";
 import { roseMark } from "../mark";
-import { gainPoints } from "../points";
 
 const SOURCE = "ce_mirror";
 /** seconds before the rapiers can be called again, so a flurry of parries cannot stack them */
 const COOLDOWN = 0.6;
 
-/** what a glass rapier does past its damage: the mark and a Point, from their levels */
+/** what a glass rapier does past its damage: the mark and a stagger, from their levels */
 function struck(e: Enemy): void {
   const v = skillValues(SOURCE);
   if (v.mark) roseMark(e);
-  if (v.points) gainPoints(v.points);
+  if (v.stagger) staggerFoe(e, v.stagger);
 }
 
 /** call the rapiers on a foe: from behind it, then back through it with the third level */

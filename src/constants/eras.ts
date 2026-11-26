@@ -1,10 +1,11 @@
 import type { EnemyType } from "../types/enemy";
 
 /** the five looks of the stage, in the order a run passes through them */
-export type EraId = "day" | "rain" | "night" | "twilight" | "abyss";
+export type ArenaEraId = "day" | "rain" | "night" | "twilight" | "abyss";
+export type EraId = ArenaEraId | "foundry" | "glacier" | "skyway" | "blight" | "archive";
 
 export interface Era {
-  id: EraId;
+  id: ArenaEraId;
   /** shown in the banner of the era's first wave */
   name: string;
   first: number;

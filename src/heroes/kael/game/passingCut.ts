@@ -7,7 +7,7 @@ import { enemyBox, enemyCenter } from "../../../game/enemies/enemy";
 import { refundStamina } from "../../../game/hero/stamina";
 import { meleeHit } from "../../../game/meleeHit";
 import { objectMemory, rememberPerSeat } from "../../../game/seatMemory";
-import { skillEvolved, skillValues, withCharms } from "../../../game/skills/query";
+import { skillEvolved, skillValues, withBuild } from "../../../game/skills/query";
 import { game, hero, progress } from "../../../game/state";
 import { boxAhead, newSwing } from "../../../game/world";
 import type { Effect } from "../../../types/effect";
@@ -38,7 +38,7 @@ export function cutPassed(e: Enemy): void {
   game.fx.push(createImpact(ex, ey, hero.face, perfect > 1, SPARKS.crystal));
   dealDamage(e, progress.stats.ad * v.cut * perfect, { fromX: hero.x - hero.face * 10, kx: hero.face * 30, ky: -20 });
   if (v.refund) refundStamina(v.refund);
-  if (v.chill) e.chill = Math.max(e.chill, withCharms("duration", v.chill));
+  if (v.chill) e.chill = Math.max(e.chill, withBuild("duration", v.chill));
 }
 
 /** the dash ends: a rising cut on the foe ahead, and with Phantom Rush phantoms along the path that cut again */

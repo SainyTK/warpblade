@@ -1,4 +1,4 @@
-/* Held skills and charms in their slots: the pick screen's row and the HUD's strip share these. */
+/* Held skills, Resonance and Arts in their slots: the pick screen's row and the HUD's strip share these. */
 .build-row {
   display: inline-flex;
   gap: 4px;
@@ -14,8 +14,11 @@
   border: 2px solid var(--slot-accent);
   box-shadow: inset 0 0 0 2px var(--panel);
 }
-.build-slot[data-kind="charm"] {
-  --slot-accent: var(--jade);
+.build-slot[data-kind="art"] {
+  --slot-accent: var(--crystal);
+}
+.build-slot[data-kind="element"] {
+  --slot-accent: var(--mist);
 }
 .build-slot[data-evolved] {
   --slot-accent: var(--gold);

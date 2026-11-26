@@ -1,7 +1,7 @@
 import { dealDamage } from "../../../../game/damage";
 import { createSlash } from "../../../../game/effects/slash";
 import { enemyBox, enemyCenter } from "../../../../game/enemies/enemy";
-import { skillEvolved, skillValues, withCharms } from "../../../../game/skills/query";
+import { skillEvolved, skillValues, withBuild } from "../../../../game/skills/query";
 import { game, progress, rng } from "../../../../game/state";
 import { boxHit } from "../../../../game/world";
 import type { Enemy } from "../../../../types/enemy";
@@ -85,7 +85,7 @@ export const duskShade: SkillBehavior = {
       const v = skillValues(ID);
       const always = skillEvolved(ID) && tempoTop();
       if (m.cd > 0 || (!always && !rng.chance(v.chance))) return;
-      m.cd = withCharms("cooldown", v.cooldown);
+      m.cd = withBuild("cooldown", v.cooldown);
       const side = rng.chance(0.5) ? 1 : -1;
       m.shades.push(shadeAt(ev.foe, side));
       if (v.pair) m.shades.push(shadeAt(ev.foe, -side));

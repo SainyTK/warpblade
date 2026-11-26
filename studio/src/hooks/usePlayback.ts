@@ -1,32 +1,29 @@
-import { ANIM_FPS } from '@game/constants/hero';
 import { useEffect } from 'react';
 import { useEditorStore } from '@/store/editorStore';
-import { useLastFrame } from './useTimelineLength';
+import { useMotionStore } from '@/store/motionStore';
+import { framesPerSecond } from '@/utils/clipTiming';
+import { useOpenMotion } from './useOpenMotion';
 
-/** While playing, steps the playhead at the game's 30 frames a second and loops over the sketch. */
+/** While playing, steps the playhead at the speed the game plays the clip, looping over it. */
 export function usePlayback(): void {
   const playing = useEditorStore((state) => state.playing);
-  const last = useLastFrame();
+  const count = useMotionStore((state) => state.current.frames.length);
+  const fps = framesPerSecond(useOpenMotion(), count);
   useEffect(() => {
     if (!playing) {
       return;
     }
+    const start = performance.now();
+    const base = useEditorStore.getState().frame;
     let raf = 0;
-    let start = performance.now();
-    let base = useEditorStore.getState().frame;
     const tick = (now: number) => {
-      let frame = base + Math.floor(((now - start) / 1000) * ANIM_FPS);
-      if (frame > last) {
-        start = now;
-        base = 0;
-        frame = 0;
-      }
+      const frame = (base + Math.floor(((now - start) / 1000) * fps)) % count;
       if (frame !== useEditorStore.getState().frame) {
-        useEditorStore.getState().set({ frame, draft: null });
+        useEditorStore.getState().set({ frame });
       }
       raf = requestAnimationFrame(tick);
     };
     raf = requestAnimationFrame(tick);
     return () => cancelAnimationFrame(raf);
-  }, [playing, last]);
+  }, [playing, count, fps]);
 }

@@ -8,7 +8,7 @@ import { waveScale } from "../../../utils/progression";
 import { clampStageX } from "../../adventure";
 import { eachStanding } from "../../coopHooks";
 import { hurtHero } from "../../hurtHero";
-import { game, hero, particles, rng } from "../../state";
+import { fxRng, game, hero, particles, rng } from "../../state";
 import { boxHit, dust, heroBox } from "../../world";
 import { foeSees } from "../awareness";
 import { enemyBox } from "../enemy";
@@ -54,9 +54,17 @@ export function updateMire(e: Enemy, dt: number, ts: number): void {
       Object.assign(e, { y: GROUND, vy: 0, vx: e.vx * 0.2, state: "walk", st: 0 });
       dust(e.x, GROUND, 3);
       for (let i = 0; i < 3; i++)
-        particles.spawn(PK.SPARK, e.x + rng.range(-5, 5), GROUND - 1, rng.range(-50, 50), -rng.range(40, 90), 0.25, {
-          sparks: WATER_SPARKS,
-        });
+        particles.spawn(
+          PK.SPARK,
+          e.x + fxRng.range(-5, 5),
+          GROUND - 1,
+          fxRng.range(-50, 50),
+          -fxRng.range(40, 90),
+          0.25,
+          {
+            sparks: WATER_SPARKS,
+          },
+        );
     }
   } else if (e.state === "wind") {
     e.vx = approach(e.vx, 0, 400 * dt);
@@ -94,8 +102,8 @@ export function updateMire(e: Enemy, dt: number, ts: number): void {
   if (e.state !== "hop") e.vx -= e.vx * 4 * dt;
   e.x = clampStageX(e.x + e.vx * dt, 10);
   if (e.state !== "hop") e.y = GROUND;
-  if (rng.chance(0.04 * ts))
-    particles.spawn(PK.EMBER, e.x + rng.range(-6, 6), e.y - rng.range(4, 12), 0, -8, rng.range(0.3, 0.6), {
+  if (fxRng.chance(0.04 * ts))
+    particles.spawn(PK.EMBER, e.x + fxRng.range(-6, 6), e.y - fxRng.range(4, 12), 0, -8, fxRng.range(0.3, 0.6), {
       sparks: SPARKS.shadow,
     });
   eachStanding(() => {

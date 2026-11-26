@@ -1,0 +1,60 @@
+import type { ArtDef } from "../../types/art";
+import { drawGaleImpact, galeBurst } from "./gale";
+
+export const galecall: ArtDef = {
+  id: "galecall",
+  name: "Gale Call",
+  element: "storm",
+  color: 0xa8e4ff,
+  core: 0xffffff,
+  look: "spark",
+  levels: [
+    {
+      cardText: "Thunder falls on the foe ahead and blows foes back.",
+      damageTimesAttack: 4.0,
+      radius: 22,
+      range: 130,
+      speed: null,
+      delay: 0.08,
+      freeze: 0,
+    },
+    {
+      cardText: "More damage and a stronger gust.",
+      damageTimesAttack: 5.0,
+      radius: 25,
+      range: 140,
+      speed: null,
+      delay: 0.08,
+      freeze: 0,
+    },
+    {
+      cardText: "More damage and a wider gust.",
+      damageTimesAttack: 6.4,
+      radius: 28,
+      range: 150,
+      speed: null,
+      delay: 0.08,
+      freeze: 0,
+    },
+    {
+      cardText: "A wider strike and more damage.",
+      damageTimesAttack: 8.0,
+      radius: 32,
+      range: 160,
+      speed: null,
+      delay: 0.08,
+      freeze: 0,
+    },
+    {
+      cardText: "A storm's full fury.",
+      damageTimesAttack: 11.0,
+      radius: 38,
+      range: 175,
+      speed: null,
+      delay: 0.08,
+      freeze: 0,
+    },
+  ],
+  burst: galeBurst,
+  drawImpact: drawGaleImpact,
+};

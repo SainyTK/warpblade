@@ -1,0 +1,48 @@
+import type { DrillStrike, DrillStrikeId } from "../../../../types/drill";
+
+export const KAEL_STRIKES: Readonly<Record<DrillStrikeId, DrillStrike>> = {
+  first: {
+    hit: 0.075,
+    duration: 0.29,
+    reach: 32,
+    height: 14,
+    step: 3,
+    next: "second",
+    damage: 1,
+    finisher: false,
+    arc: { cx: 5, cy: -19, sy: 0.82, rot: -0.19, a0: -1.63, a1: 1.14, W: 12 },
+  },
+  second: {
+    hit: 0.075,
+    duration: 0.25,
+    reach: 34,
+    height: 14,
+    step: 0,
+    next: "third",
+    damage: 1,
+    finisher: false,
+    arc: { cx: 0, cy: -15, sy: 0.23, rot: -0.06, a0: -0.22, a1: 3.38, W: 8, sweep: 0.036 },
+  },
+  third: {
+    hit: 0.117,
+    duration: 0.37,
+    reach: 35,
+    height: 14,
+    step: 11,
+    next: null,
+    damage: 1.6,
+    finisher: true,
+    arc: { cx: 3, cy: -23, sy: 0.72, rot: 0.13, a0: -3.12, a1: 0.91, W: 13, hold: 0.055 },
+  },
+  air: {
+    hit: 0.058,
+    duration: 0.25,
+    reach: 32,
+    height: 22,
+    step: 0,
+    next: null,
+    damage: 1,
+    finisher: false,
+    arc: { cx: 5, cy: -16, sy: 0.9, rot: -0.1, a0: -1.88, a1: 1.32, W: 10, sweep: 0.038, trail: 0.11 },
+  },
+};

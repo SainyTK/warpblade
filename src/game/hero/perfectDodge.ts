@@ -6,7 +6,7 @@ import { cue } from "../cue";
 import { createFloorRing } from "../effects/floorRing";
 import { feat } from "../feat";
 import { emitSkillEvent } from "../skills/events";
-import { skillValues, withCharms } from "../skills/query";
+import { skillValues, withBuild } from "../skills/query";
 import { game, hero, lights, progress } from "../state";
 import { skin } from "./skin";
 import { refundStamina } from "./stamina";
@@ -35,7 +35,7 @@ export function perfectDodge(): void {
   rewardPerfectDodge();
   const mirror = skillValues("k_mirror");
   if (mirror.riposte) {
-    h.riposte = withCharms("duration", mirror.ripTime);
+    h.riposte = withBuild("duration", mirror.ripTime);
     h.riposteBlows = mirror.ripBlows;
   }
   game.fx.push(createFloorRing(h.x, h.y, 28, skin.ramp, 0.4));

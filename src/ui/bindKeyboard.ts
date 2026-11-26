@@ -1,8 +1,7 @@
 import { KEYMAP, MENU_KEYMAP } from "../constants/input";
+import { DRILL_KEYMAP, usesDrill } from "../drill";
 import { press, release, releaseAll } from "../game/input";
 import { game, showBanner } from "../game/state";
-import { usesCeriseDrill } from "../heroes";
-import { DRILL_KEYMAP, usesKaelDrill } from "../kaelDrill";
 import { sfx } from "../services/audio";
 import { toggleFullscreen } from "../services/fullscreen";
 import { settings, toggleSound } from "../store/settings";
@@ -21,7 +20,7 @@ export function bindKeyboard(): void {
     sfx.start();
     // typing in a box, such as a room code, types; only Enter, Escape and the arrows still move through the menu
     if (ev.target instanceof HTMLInputElement && !TYPING_EXITS.includes(ev.code)) return;
-    const action = (usesKaelDrill() || usesCeriseDrill() ? DRILL_KEYMAP : KEYMAP)[ev.code];
+    const action = (usesDrill() ? DRILL_KEYMAP : KEYMAP)[ev.code];
     if (action === "mute" || action === "fullscreen") {
       ev.preventDefault();
       if (ev.repeat) return;
@@ -46,7 +45,7 @@ export function bindKeyboard(): void {
       if (!ev.repeat) pauseGame();
       return;
     }
-    if (game.mode === "pick" || game.mode === "chest") return;
+    if (game.mode === "pick" || game.mode === "chest" || game.mode === "map") return;
     ev.preventDefault();
     if (ev.repeat) return;
     down.set(ev.code, action);

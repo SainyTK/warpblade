@@ -7,7 +7,7 @@ import { createSlash } from "../../../game/effects/slash";
 import { enemyBox, enemyCenter, walks } from "../../../game/enemies/enemy";
 import { arrive, spendWarpCharge, strikeOnArrival, warpBeside, warpCost } from "../../../game/hero/warp";
 import { objectMemory, rememberPerSeat } from "../../../game/seatMemory";
-import { skillEvolved, skillValues, withCharms } from "../../../game/skills/query";
+import { skillEvolved, skillValues, withBuild } from "../../../game/skills/query";
 import { game, hero, progress } from "../../../game/state";
 import type { Enemy } from "../../../types/enemy";
 import { createEcho } from "./effects/echo";
@@ -41,7 +41,7 @@ rememberPerSeat(objectMemory(chain, true));
 export function startChain(first: Enemy | null): void {
   const v = skillValues("k_warpcraft");
   if (!first || !skillEvolved("k_warpcraft") || kael.chainCd > 0) return;
-  kael.chainCd = withCharms("cooldown", v.chainEvery);
+  kael.chainCd = withBuild("cooldown", v.chainEvery);
   chain.foes = game.enemies
     .filter((e) => e !== first && e.hp > 0 && Math.abs(e.x - hero.x) < WARP.reach)
     .sort((a, b) => Math.abs(a.x - hero.x) - Math.abs(b.x - hero.x))
@@ -93,7 +93,7 @@ export function blink(keen: boolean): boolean {
   const e = blinkTarget();
   if (!e) return false;
   hero.mp -= warpCost() * BLINK_COST;
-  if (v.recharge) kael.blinkCd = withCharms("cooldown", v.recharge);
+  if (v.recharge) kael.blinkCd = withBuild("cooldown", v.recharge);
   else spendWarpCharge();
   const box = enemyBox(e);
   const side = Math.sign(e.x - hero.x) || hero.face;
@@ -102,7 +102,7 @@ export function blink(keen: boolean): boolean {
   if (v.after) afterimageCut(hero.x, hero.y, side, progress.stats.ad * v.after);
   arrive(nx, ny, e);
   hero.face = -side;
-  if (v.lock) e.turn = -withCharms("duration", v.lock);
+  if (v.lock) e.turn = -withBuild("duration", v.lock);
   if (skillEvolved("k_blink")) shadowStrike(e, side, progress.stats.ad * v.power);
   strikeOnArrival(v.power, e, keen && !!v.keen);
   if (e.hp <= 0 && skillEvolved("k_blink")) {

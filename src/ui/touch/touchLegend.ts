@@ -1,8 +1,7 @@
 import { TOUCH_BUTTONS } from "../../constants/touch";
+import { drillActionText, heroDrill } from "../../drill";
 import { heroJob } from "../../game/hero/job";
 import { character } from "../../game/state";
-import { CERISE_DRILL_TEXT, isCerise } from "../../heroes";
-import { DRILL_ACTION_TEXT, isBaseKael } from "../../kaelDrill";
 import type { ButtonLook } from "../../types/touch";
 import { hex } from "../../utils/color";
 import { stickDirections, touchText } from "../../utils/controls";
@@ -36,15 +35,16 @@ function face(draw: (canvas: PixelCanvas) => void): HTMLElement {
 
 /** each stick direction and each button with what it does for the chosen hero, drawn as on screen, for the Controls screen */
 export function touchLegend(adventure: boolean): [HTMLElement, string][] {
-  const drill = adventure && isBaseKael();
-  const cerise = adventure && isCerise();
-  const selection = touchSelection(drill);
+  const profile = adventure ? heroDrill() : undefined;
+  const drillText = profile ? drillActionText(profile) : undefined;
+  const drill = drillText !== undefined;
+  const selection = touchSelection(profile);
   const texts = touchText(character, heroJob());
   const stick = stickDirections(character, heroJob()).map((d): [HTMLElement, string] => [
     face((c) => drawButtonFace(c, STICK_LOOK, stickIcon(d.direction), false)),
     `Stick ${d.direction}: ${adventure && d.direction === "down" ? "Drop through a ledge" : d.label}`,
   ]);
-  const buttons = TOUCH_BUTTONS.filter(({ action }) => !(drill || cerise) || action !== "ultimate").map(
+  const buttons = TOUCH_BUTTONS.filter(({ action }) => !drill || action !== "ultimate").map(
     (spec): [HTMLElement, string] => {
       const look = { ...buttonLook(spec, false), ready: true, cooldown: 0, affordable: 4, charge: -1 };
       const text = texts[spec.action];
@@ -53,17 +53,9 @@ export function touchLegend(adventure: boolean): [HTMLElement, string][] {
         hint = "Tap again to double jump. Jump upward along a wall or steer away to kick off.";
       }
       if (adventure && spec.action === "dash") hint = `${hint}. Jump during the dodge to keep your speed.`;
-      if (drill) {
+      if (drillText) {
         hint =
-          spec.action === "attack"
-            ? `${DRILL_ACTION_TEXT.attack} ${DRILL_ACTION_TEXT.ultimate}`
-            : (DRILL_ACTION_TEXT[spec.action as keyof typeof DRILL_ACTION_TEXT] ?? hint);
-      }
-      if (cerise) {
-        hint =
-          spec.action === "attack"
-            ? `${CERISE_DRILL_TEXT.attack} ${CERISE_DRILL_TEXT.ultimate}`
-            : (CERISE_DRILL_TEXT[spec.action] ?? hint);
+          spec.action === "attack" ? `${drillText.attack} ${drillText.ultimate}` : (drillText[spec.action] ?? hint);
       }
       return [
         face((c) =>
@@ -71,7 +63,7 @@ export function touchLegend(adventure: boolean): [HTMLElement, string][] {
             c,
             look,
             touchIcon(spec.action, selection),
-            drill || cerise ? spec.action === "attack" : spec.action === "ultimate",
+            drill ? spec.action === "attack" : spec.action === "ultimate",
           ),
         ),
         `${text.label}: ${hint}`,

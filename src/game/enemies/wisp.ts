@@ -9,7 +9,7 @@ import { waveScale } from "../../utils/progression";
 import { clampStageX } from "../adventure";
 import { eachStanding } from "../coopHooks";
 import { hurtHero } from "../hurtHero";
-import { game, hero, particles, rng } from "../state";
+import { fxRng, game, hero, particles, rng } from "../state";
 import { boxHit, heroBox } from "../world";
 import { enemyBox } from "./enemy";
 import { facesHero, turnToHero } from "./facing";
@@ -53,14 +53,14 @@ export function updateWisp(e: Enemy, dt: number, ts: number): void {
   }
   e.x = clampStageX(e.x + e.vx * dt, 10);
   e.y = clamp(e.y + e.vy * dt, 20, GROUND - 10);
-  if (rng.chance(0.15 * ts))
+  if (fxRng.chance(0.15 * ts))
     particles.spawn(
       PK.EMBER,
-      e.x + rng.range(-3, 3),
+      e.x + fxRng.range(-3, 3),
       e.y + 5,
-      rng.range(-6, 6),
-      rng.range(-10, 6),
-      rng.range(0.4, 0.8),
+      fxRng.range(-6, 6),
+      fxRng.range(-10, 6),
+      fxRng.range(0.4, 0.8),
       {
         sparks: SPARKS.shadow,
       },

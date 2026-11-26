@@ -1,4 +1,4 @@
-import { skillValues, withCharms } from "../../../../game/skills/query";
+import { skillValues, withBuild } from "../../../../game/skills/query";
 import { game, hero, progress } from "../../../../game/state";
 import { CRESCENT } from "../../constants/abilities";
 import { SKILL } from "../../constants/skillIds";
@@ -15,7 +15,7 @@ export function castCrescent(wide: boolean): void {
   const v = skillValues(SKILL.crescent);
   let given = false;
   const shape: QiWaveShape = {
-    reach: withCharms("area", v.reach),
+    reach: withBuild("area", v.reach),
     speed: CRESCENT.speed,
     damage: progress.stats.ap * v.power,
     half: CRESCENT.half * (v.tall ?? 1),

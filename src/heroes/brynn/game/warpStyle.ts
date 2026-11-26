@@ -3,13 +3,13 @@ import { createSlash } from "../../../game/effects/slash";
 import { drawThrownBlade } from "../../../game/effects/thrownWeapon";
 import { warpSlash } from "../../../game/hero/warp";
 import { meleeHit } from "../../../game/meleeHit";
-import { skillValues, withCharms } from "../../../game/skills/query";
+import { skillValues, withBuild } from "../../../game/skills/query";
 import { game, hero } from "../../../game/state";
 import { boxAhead, newSwing } from "../../../game/world";
 import type { WarpStyle } from "../../../types/moveset";
 import { CRIMSON } from "../constants/colors";
+import { SLASH } from "../constants/slashes";
 import { ARRIVAL_RING, THROWN_SPIN } from "../constants/warp";
-import { SLASH } from "./moves/slashes";
 
 /** half of Anvilheart's length from the point, the middle it spins round */
 const MIDDLE = 15;
@@ -32,7 +32,7 @@ function strike(power: number, _foe: unknown, sureCrit: boolean): void {
 /** after the chop: a small shock ring round her knocks foes off their feet */
 function arrived(): void {
   const v = skillValues("br_spin");
-  const reach = withCharms("area", ARRIVAL_RING.reach + (v.ring ?? 0));
+  const reach = withBuild("area", ARRIVAL_RING.reach + (v.ring ?? 0));
   newSwing();
   game.fx.push(createFloorRing(hero.x, hero.y, reach, CRIMSON, 0.35));
   meleeHit([boxAhead(-reach, -24, reach, 4)], {

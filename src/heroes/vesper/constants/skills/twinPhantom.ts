@@ -22,6 +22,7 @@ export const TWIN_PHANTOM: SkillDef = {
   id: "ve_twin",
   name: "Twin Phantom",
   kind: "summon",
+  element: "void",
   risk: "precise",
   button: "auto",
   text: "A parry or perfect dodge calls a phantom of you to cut the nearest foe.",

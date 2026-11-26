@@ -1,34 +1,47 @@
 import type { SkillDef } from "../../../../types/skill";
-import { evolvedRow, levelRows } from "../../../../utils/skillRows";
+import { evolvedRow } from "../../../../utils/skillRows";
+import { drillLevels, drillValues, type NativeStep } from "./drillLevels";
 
-/** values: `power` ability power of a moon's burst, `moons` moons a cast, `radius` the burst's reach, `recharge` seconds,
- *  `launch` the burst throws foes up, `glow` seconds a burst's glow burns; evolved, `pull` draws foes to each burst */
-const LEVELS = levelRows([
-  {
-    text: "Learn Falling Moon: a crescent moon falls ahead and bursts.",
-    values: { power: 2, moons: 1, radius: 26, recharge: 5 },
-  },
-  { text: "Burst 2 to 3.", values: { power: 3 } },
-  { text: "New: two moons fall.", values: { moons: 2 } },
-  { text: "New: the burst throws foes up; wider.", values: { launch: 1, radius: 32 } },
-  { text: "New: the burst leaves a glow that burns 3 s.", values: { glow: 3 } },
-  { text: "Burst 3 to 4.6; recharge 4.2 s.", values: { power: 4.6, recharge: 4.2 } },
-  { text: "New: three moons fall.", values: { moons: 3 } },
-  { text: "Burst 4.6 to 6; recharge 3.5 s.", values: { power: 6, recharge: 3.5 } },
+const NATIVE: readonly NativeStep[] = [
+  { values: { power: 2, moons: 1, radius: 26, recharge: 5 } },
+  { values: { power: 3 } },
+  { values: { moons: 2 } },
+  { values: { launch: 1, radius: 32 } },
+  { values: { glow: 3 } },
+  { values: { power: 4.6, recharge: 4.2 } },
+  { values: { moons: 3 } },
+  { values: { power: 6, recharge: 3.5 } },
+];
+
+const LEVELS = drillLevels(NATIVE, [
+  { text: "Falling Moon deals 0.4 AD more.", drill: { bonus: 0.4 } },
+  { text: "New: a second moon falls on the same spot for 0.5 AD.", drill: { second: 0.5 } },
+  { text: "New: the moon staggers.", drill: { stagger: 0.4 } },
+  { text: "Moon +0.8 AD; second moon 1 AD.", drill: { bonus: 0.8, second: 1 } },
+  { text: "New: the moon draws in foes within 50 px.", drill: { pull: 50 } },
+  { text: "Moon +1.4 AD; second moon 1.7 AD.", drill: { bonus: 1.4, second: 1.7 } },
+  { text: "New: a moon-infused cut drops a small moon for 0.8 AD.", drill: { small: 0.8 } },
+  { text: "Moon +2.8 AD; second moon 3.2 AD.", drill: { bonus: 2.8, second: 3.2, small: 1.6 } },
 ]);
 
 export const FALLING_MOON: SkillDef = {
   id: "ve_moon",
   name: "Falling Moon",
   kind: "spell",
+  element: "frost",
   risk: "easy",
   button: "I",
-  text: "An ability: crescent moons fall ahead of you and burst on the crowd.",
+  text: "Falling Moon strikes harder and drops more moons.",
   levels: LEVELS,
   evolution: {
     partner: "ve_hex",
     name: "Eclipse",
-    text: "Five moons fall in a wider row, and each burst draws foes in to its middle.",
-    row: evolvedRow(LEVELS[7], "Five moons; each burst draws foes in.", { moons: 5, pull: 1, radius: 36 }),
+    text: "Each moon brings an eclipse: three more moons fall around it for 1.8 AD each.",
+    row: evolvedRow(LEVELS[7], "Three more moons fall around each.", {
+      moons: 5,
+      pull: 1,
+      radius: 36,
+      ...drillValues({ eclipse: 1.8 }),
+    }),
   },
 };

@@ -1,11 +1,11 @@
 import { SKY_FLASH } from "../constants/effectLook";
 import { beginFrame, composite, setCameraX, setShake } from "../engine/frame";
-import { stageCameraX } from "../game/adventure";
+import { drawStageHazardBack, drawStageHazardFront, stageCameraX } from "../game/adventure";
 import { drawChests } from "../game/build/chests";
 import { coop, eachHero } from "../game/coopHooks";
 import { shownKit } from "../game/hero/kits";
 import { drawSkills, drawSkillsBack } from "../game/skills/runtime";
-import { game, hero, lights, particles, rng } from "../game/state";
+import { fxRng, game, hero, lights, particles } from "../game/state";
 import { settings } from "../store/settings";
 import { adventureBackdrop } from "./adventureBackdrop";
 import { drawAdventureTerrain } from "./adventureTerrain";
@@ -14,6 +14,7 @@ import { drawAmbientLight, drawMist, drawWeather, sceneFlash } from "./drawAmbie
 import { drawCoins } from "./drawCoins";
 import { drawMentor } from "./drawMentor";
 import { drawNumbers } from "./drawNumbers";
+import { drawPits } from "./drawPits";
 import { drawShadows } from "./drawShadows";
 import { drawSpikes } from "./drawSpikes";
 import { drawXpOrbs } from "./drawXpOrbs";
@@ -26,7 +27,7 @@ const FLASH_STRENGTH = 70;
 /** draw one frame back to front into RGBA bytes */
 export function renderScene(out: Uint8ClampedArray): void {
   const s = game.shake > 0 && settings.shake ? game.shake / SHAKE_FULL : 0;
-  setShake(Math.round(rng.range(-game.amp, game.amp) * s), Math.round(rng.range(-game.amp, game.amp) * s));
+  setShake(Math.round(fxRng.range(-game.amp, game.amp) * s), Math.round(fxRng.range(-game.amp, game.amp) * s));
   if (game.shake <= 0) game.amp = 0;
   setCameraX(0);
   const { def, k, arena } = scene();
@@ -37,8 +38,10 @@ export function renderScene(out: Uint8ClampedArray): void {
   drawAmbientLight();
   setCameraX(cameraX);
   if (!arena) {
+    drawPits(cameraX, palette, game.t);
     drawAdventureTerrain(cameraX, game.t, palette);
     drawSpikes(cameraX, game.t);
+    drawStageHazardBack(cameraX, game.t);
   }
   const room = coop();
   for (const f of game.fx) {
@@ -64,6 +67,7 @@ export function renderScene(out: Uint8ClampedArray): void {
   drawPickups();
   drawCoins();
   drawXpOrbs();
+  if (!arena) drawStageHazardFront(cameraX, game.t);
   setCameraX(0);
   drawWeather();
   drawMist();

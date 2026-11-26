@@ -1,32 +1,42 @@
 import type { SkillDef } from "../../../../types/skill";
-import { evolvedRow, levelRows } from "../../../../utils/skillRows";
+import { evolvedRow } from "../../../../utils/skillRows";
+import { drillLevels, drillValues, type NativeStep } from "./drillLevels";
 
-/** values: `airBonus` air blows' damage more, `lift` an airborne foe she strikes keeps rising this fast, `waves` the
- *  nightfall's floor waves in attack damage, `feather` a feather at the top of Tempo in attack damage, `diveBonus` the
- *  nightfall's damage more, `ribbon` (evolved) the ribbon in attack damage */
-const LEVELS = levelRows([
-  { text: "Air blows deal 20% more.", values: { airBonus: 0.2 } },
-  { text: "30% more.", values: { airBonus: 0.3 } },
-  { text: "New: foes you strike in the air keep rising.", values: { lift: 70 } },
-  { text: "40% more.", values: { airBonus: 0.4 } },
-  { text: "New: the nightfall's landing sends a wave along the floor each way.", values: { waves: 1 } },
-  { text: "New: air blows at the top of Tempo throw a dusk feather at one more foe.", values: { feather: 0.6 } },
-  { text: "55% more; waves 1 to 1.6.", values: { airBonus: 0.55, waves: 1.6 } },
-  { text: "New: the nightfall hits 50% harder.", values: { diveBonus: 0.5 } },
+const NATIVE: readonly NativeStep[] = [
+  { values: { airBonus: 0.2 } },
+  { values: { airBonus: 0.3 } },
+  { values: { lift: 70 } },
+  { values: { airBonus: 0.4 } },
+  { values: { waves: 1 } },
+  { values: { feather: 0.6 } },
+  { values: { airBonus: 0.55, waves: 1.6 } },
+  { values: { diveBonus: 0.5 } },
+];
+
+const LEVELS = drillLevels(NATIVE, [
+  { text: "One more air cut per jump.", drill: { air: 1 } },
+  { text: "New: air cuts deal 0.3 AD more.", drill: { bonus: 0.3 } },
+  { text: "Air cuts +0.6 AD.", drill: { bonus: 0.6 } },
+  { text: "Air cuts +0.9 AD.", drill: { bonus: 0.9 } },
+  { text: "New: a second extra air cut per jump.", drill: { air: 2 } },
+  { text: "Air cuts +1.4 AD.", drill: { bonus: 1.4 } },
+  { text: "New: an air cut on a foe in the air leaves a 0.8 AD night echo.", drill: { echo: 0.8 } },
+  { text: "Three extra air cuts; air cuts +2.4 AD.", drill: { air: 3, bonus: 2.4 } },
 ]);
 
 export const SKY_RIBBON: SkillDef = {
   id: "ve_sky",
   name: "Sky Ribbon",
   kind: "attack",
+  element: "storm",
   risk: "timed",
   button: "J",
-  text: "Your air string hits harder and keeps foes up longer.",
+  text: "One more air cut per jump, and air cuts hit harder.",
   levels: LEVELS,
   evolution: {
     partner: "ve_ascend",
     name: "Heaven's Ribbon",
-    text: "Every air blow sends a ribbon of night both ways that cuts every foe on its line.",
-    row: evolvedRow(LEVELS[7], "Every air blow sends ribbons both ways.", { ribbon: 0.8 }),
+    text: "Each air cut also sends a dusk wave diving down ahead for 2 AD.",
+    row: evolvedRow(LEVELS[7], "Air cuts send a diving wave.", { ribbon: 0.8, ...drillValues({ ribbon: 2 }) }),
   },
 };

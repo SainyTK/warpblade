@@ -10,7 +10,7 @@ import { foeAt } from "../abilities/spells";
 const SOURCE = "ce_curse";
 
 /** lay `n` stacks of the curse on a foe, and hold a walker's feet from the fourth level */
-function curse(e: Enemy, n: number): void {
+export function curse(e: Enemy, n: number): void {
   const v = skillValues(SOURCE);
   addStacks(e, SOURCE, {
     stacks: n,

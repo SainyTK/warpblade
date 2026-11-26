@@ -17,6 +17,7 @@ export const SHRAPNEL: SkillDef = {
   id: "ca_shrapnel",
   name: "Shrapnel",
   kind: "dot",
+  element: "venom",
   risk: "easy",
   button: "auto",
   text: "Every round's blast leaves shrapnel that bleeds the foes it struck.",

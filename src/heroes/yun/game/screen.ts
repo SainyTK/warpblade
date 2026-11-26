@@ -1,5 +1,5 @@
 import { haze, place } from "../../../engine/frame";
-import { hero, particles, rng } from "../../../game/state";
+import { fxRng, hero, particles } from "../../../game/state";
 import { PK } from "../../../types/particle";
 import { SCREEN_LOOK, SPIRIT_LOOK } from "../constants/guard";
 import { SCREEN } from "../constants/swords";
@@ -33,10 +33,10 @@ export function screenBlocked(fromX: number): void {
     particles.spawn(
       PK.SPARK,
       x,
-      y + rng.range(-8, 8),
-      dir * rng.range(60, 140),
-      rng.range(-90, -20),
-      rng.range(0.15, 0.3),
+      y + fxRng.range(-8, 8),
+      dir * fxRng.range(60, 140),
+      fxRng.range(-90, -20),
+      fxRng.range(0.15, 0.3),
       {
         col: JADE[4 + (i % 2)],
       },

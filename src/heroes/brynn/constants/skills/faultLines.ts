@@ -19,9 +19,10 @@ export const FAULT_LINES: SkillDef = {
   id: "br_fault",
   name: "Fault Lines",
   kind: "dot",
+  element: "storm",
   risk: "timed",
   button: "auto",
-  text: "Shockwaves leave burning cracks in the floor that hurt foes standing on them.",
+  text: "Her shockwaves and fissures leave burning cracks in the floor.",
   levels: LEVELS,
   evolution: {
     partner: "br_slam",

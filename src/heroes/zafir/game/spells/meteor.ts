@@ -1,4 +1,4 @@
-import { skillValues, withCharms } from "../../../../game/skills/query";
+import { skillValues, withBuild } from "../../../../game/skills/query";
 import { game, hero, progress } from "../../../../game/state";
 import { SPOUT } from "../../constants/abilities";
 import { QUICKSAND } from "../../constants/spells";
@@ -13,6 +13,6 @@ export function meteorDune(): void {
   const pit = skillValues("za_quicksand");
   if (!pit.life) return;
   game.fx.push(
-    createPit(hero.x, hero.y, withCharms("area", QUICKSAND.reach * (pit.reach ?? 1)), withCharms("duration", pit.life)),
+    createPit(hero.x, hero.y, withBuild("area", QUICKSAND.reach * (pit.reach ?? 1)), withBuild("duration", pit.life)),
   );
 }

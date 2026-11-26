@@ -3,7 +3,7 @@ import { dealDamage } from "../../../../game/damage";
 import { createImpact } from "../../../../game/effects/impact";
 import { enemyCenter } from "../../../../game/enemies/enemy";
 import { skin } from "../../../../game/hero/skin";
-import { skillValues, withCharms } from "../../../../game/skills/query";
+import { skillValues, withBuild } from "../../../../game/skills/query";
 import { nearestFoe, touches } from "../../../../game/skills/targets";
 import { game, hero, progress, rng } from "../../../../game/state";
 import type { Enemy } from "../../../../types/enemy";
@@ -38,7 +38,7 @@ function fold(mem: PaperMemory, chance: number): void {
   if (mem.blades.length >= v.most || !rng.chance(chance)) return;
   mem.blades.push({
     phase: rng.range(0, TAU),
-    left: withCharms("duration", v.time),
+    left: withBuild("duration", v.time),
     hit: new Map(),
     x: hero.x,
     y: hero.y - 18,

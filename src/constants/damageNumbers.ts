@@ -34,6 +34,7 @@ export const NUMBER_WORDS: Readonly<Record<DamageTag | CueWord, string>> = {
   shatter: "SHATTER",
   evade: "EVADE",
   perfect: "PERFECT",
+  keen: "KEEN",
   parry: "PARRY",
   broken: "GUARD BROKEN",
 };

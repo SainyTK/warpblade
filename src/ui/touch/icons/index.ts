@@ -1,4 +1,4 @@
-import { heroModule } from "../../../heroes";
+import { heroModule } from "../../../heroes/registry";
 import type { SpriteImage } from "../../../types/sprite";
 import type { TouchButtonAction } from "../../../types/touch";
 import { selectionKey, type TouchSelection } from "../selection";

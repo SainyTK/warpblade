@@ -2,7 +2,7 @@ import { glow, hairline, place, polygon } from "../../../../engine/frame";
 import { dealDamage } from "../../../../game/damage";
 import { createFloorRing } from "../../../../game/effects/floorRing";
 import { createImpact } from "../../../../game/effects/impact";
-import { skillEvolved, skillValues, withCharms } from "../../../../game/skills/query";
+import { skillEvolved, skillValues, withBuild } from "../../../../game/skills/query";
 import { foesOnScreen } from "../../../../game/skills/targets";
 import { game, hero, progress, rng } from "../../../../game/state";
 import { shake, surfaceBelow } from "../../../../game/world";
@@ -30,7 +30,7 @@ function createBlade(foe: Enemy): Effect {
       t += dt;
       if (!landed && t >= BLADE.fall) {
         landed = true;
-        const reach = withCharms("area", v.reach);
+        const reach = withBuild("area", v.reach);
         game.fx.push(createFloorRing(x, y, reach, CRIMSON, 0.35));
         shake(0.12, 1.6);
         for (const e of game.enemies) {
@@ -102,8 +102,8 @@ export const fallingBlade: SkillBehavior = {
       const v = skillValues(ID);
       if ((memory.cd as number) > 0 || !rng.chance(v.chance)) return;
       memory.cd = v.cooldown;
-      drop(Math.round(withCharms("amount", v.count)));
-      if (skillEvolved(ID) && (memory.rain as number) <= 0) memory.rain = withCharms("duration", v.rain);
+      drop(Math.round(withBuild("amount", v.count)));
+      if (skillEvolved(ID) && (memory.rain as number) <= 0) memory.rain = withBuild("duration", v.rain);
     },
   },
 };

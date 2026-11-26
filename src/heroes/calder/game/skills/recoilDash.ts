@@ -3,7 +3,7 @@ import { createImpact } from "../../../../game/effects/impact";
 import { enemyCenter } from "../../../../game/enemies/enemy";
 import { refundStamina } from "../../../../game/hero/stamina";
 import { objectMemory, rememberPerSeat } from "../../../../game/seatMemory";
-import { skillEvolved, skillValues, withCharms } from "../../../../game/skills/query";
+import { skillEvolved, skillValues, withBuild } from "../../../../game/skills/query";
 import { game, hero, progress } from "../../../../game/state";
 import type { Enemy } from "../../../../types/enemy";
 import { PHOSPHOR_SPARKS } from "../../constants/colors";
@@ -23,7 +23,7 @@ function round(x: number, power: number, dir: number): void {
   blastAt(null, x, hero.y - 16, {
     damage: 0,
     splash: progress.stats.ad * power,
-    reach: withCharms("area", DODGE_ROUND.reach),
+    reach: withBuild("area", DODGE_ROUND.reach),
     kx: dir * 100,
     hot: false,
     big: true,

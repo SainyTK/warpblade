@@ -31,6 +31,7 @@ export const MIRROR_KNIGHT: SkillDef = {
   id: "k_mirror",
   name: "Mirror Knight",
   kind: "summon",
+  element: "void",
   risk: "precise",
   button: "auto",
   text: "A parry or a perfect dodge calls a mirror knight that warp-strikes the attacker first, then the nearest foes.",

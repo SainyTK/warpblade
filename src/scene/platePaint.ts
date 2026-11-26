@@ -13,6 +13,7 @@ export class PlatePaint {
     readonly plate: Uint32Array,
     private readonly layers: Uint8Array,
     readonly arena = true,
+    readonly bodies = true,
   ) {}
   private inside(ix: number, iy: number): boolean {
     return ix >= 0 && iy >= 0 && ix < FW && iy < FH;

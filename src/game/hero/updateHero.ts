@@ -1,8 +1,7 @@
 import { ACTION_CLIPS } from "../../constants/clips";
 import { MP_REGEN } from "../../constants/combat";
 import { PACE } from "../../constants/stage";
-import { readCeriseDrill, runDrillDash, usesCeriseDrill } from "../../heroes";
-import { updateDrill, usesKaelDrill } from "../../kaelDrill";
+import { updateDrill, usesDrill } from "../../drill";
 import { sfx } from "../../services/audio";
 import { rechargeStep } from "../build/recharge";
 import { horizontalDirection, take, use } from "../input";
@@ -44,8 +43,7 @@ function runState(dt: number): void {
       if (h.st >= ACTION_CLIPS.warpStrike.dur) settle();
       break;
     case "dash":
-      if (usesCeriseDrill()) runDrillDash(dt / PACE);
-      else runDash(dt);
+      runDash(dt);
       break;
     case "guard":
       runGuard(dt);
@@ -91,15 +89,14 @@ function clockRate(): number {
 }
 
 export function updateHero(dt: number): void {
-  if (usesKaelDrill()) {
+  if (usesDrill()) {
     updateDrill(dt / PACE, dt);
     return;
   }
   const h = hero;
   const dir = horizontalDirection();
-  const cerise = usesCeriseDrill();
-  const tap = cerise ? 0 : readDoubleTap(dir);
-  h.st += (cerise && h.state === "dash" ? dt / PACE : dt) * clockRate();
+  const tap = readDoubleTap(dir);
+  h.st += dt * clockRate();
   h.inv = Math.max(0, h.inv - dt);
   h.drop = Math.max(0, h.drop - dt);
   const recharge = rechargeStep(dt);
@@ -116,8 +113,7 @@ export function updateHero(dt: number): void {
   if (h.running && dir !== h.face) h.running = false;
   if (h.state !== "dead") {
     h.mp = Math.min(progress.stats.mp, h.mp + MP_REGEN * dt);
-    if (cerise) readCeriseDrill(dir, dt / PACE);
-    else readActions(dir, tap);
+    readActions(dir, tap);
   }
   if (!kit().runState(dt)) runState(dt);
   moveHero(dt, dir);

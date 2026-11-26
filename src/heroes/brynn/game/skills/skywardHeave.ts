@@ -1,4 +1,4 @@
-import { skillEvolved, skillValues, withCharms } from "../../../../game/skills/query";
+import { skillEvolved, skillValues, withBuild } from "../../../../game/skills/query";
 import { game, progress } from "../../../../game/state";
 import { surfaceBelow } from "../../../../game/world";
 import type { SkillBehavior } from "../../../../types/skillBehavior";
@@ -24,7 +24,7 @@ export const skywardHeave: SkillBehavior = {
         createQuake({
           x,
           y,
-          reach: withCharms("area", CRASH.reach),
+          reach: withBuild("area", CRASH.reach),
           damage: progress.stats.ad * v.crash,
           delay: CRASH.delay,
           launch: 0,

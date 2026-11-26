@@ -20,6 +20,7 @@ export const GUARDIAN_BLADE: SkillDef = {
   id: "yu_guardian",
   name: "Guardian Blade",
   kind: "summon",
+  element: "void",
   risk: "easy",
   button: "auto",
   text: "A landed blow may call a guardian blade that circles you and strikes foes near.",

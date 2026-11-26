@@ -10,7 +10,8 @@ Kael (`src/heroes/kael/`) is the worked example; every hook below shows how he f
 | File | Layer | What it holds |
 | --- | --- | --- |
 | `src/heroes/roster.ts` | data | `ROSTER`, every hero's `CharacterDef` by id in hero screen order, `CHARACTERS` and the `HeroId` type |
-| `src/heroes/index.ts` | code | `heroModule(id)`, every hero's `HeroModule` by id |
+| `src/heroes/index.ts` | code | every hero's `HeroModule` by id, placed in the registry as it loads |
+| `src/heroes/registry.ts` | code | `heroModule(id)`, the only way shared code reads a hero's code |
 
 The nine heroes are registered in both files in this order: kael, cerise, aldric, vesper, saya, yun, brynn, zafir, calder.
 A new hero adds one line to each file; everything else lives in the hero's own folders.
@@ -21,6 +22,8 @@ Each hero has two entry files, one per layer:
 - `src/heroes/<id>/index.ts` exports the hero's `HeroModule` (`src/types/heroModule.ts`): the kit, the moves, the skill code, the ultimate, the icons, the touch art and the meter.
 
 The two layers exist because the data is read while modules load (the save, the achievements, the first frame's skin) and the code reaches back into the game.
+Shared code imports `heroModule` from `src/heroes/registry.ts` and never imports `src/heroes/index.ts` (`npm run lint` enforces it).
+The app entry imports `src/heroes` once, so every hero module loads after the shared code it uses, and a hero module may call shared code while it loads.
 Keep the export names the roster imports: `<ID>` from `character.ts` and `<ID>_MODULE` from `index.ts` (`KAEL` and `KAEL_MODULE`, `CERISE` and `CERISE_MODULE`).
 
 ## What a hero owns
@@ -75,7 +78,8 @@ src/heroes/kael/
 - Ids must be unique across heroes: every skill id starts with the hero's own prefix (`k_` for Kael; use the first letters of the id, such as `ce_`, `al_`, `ve_`, `sa_`, `yu_`, `br_`, `za_`, `ca_`), every icon id is a skill id or starts with `<id>_`, every achievement id starts with `<id>-`, and every hero stat starts with `<id>.`.
 - Move ids and clip names are looked up in the hero's own tables, so they need no prefix.
 - Any module-level state of the hero or its pose is per seat for co-op: register it with `rememberPerSeat` (`src/game/seatMemory.ts`, `docs/multiplayer.md`). Keep sprites, pixel arrays, foes and effect lists `hostOnly`.
-- A draw function never changes game state and never reads the game `rng`.
+- A draw function never changes game state and never reads the play generator `rng`.
+- Draws that only reach the picture (particle spawns, light flicker, jitter, fields only `draw()` reads) use `fxRng`; draws that play reads (AI, procs, cooldowns, aims, damage, anything that moves a hit box) use `rng`.
 - Numbers live in the hero's `constants/`, and any text that shows a number reads the constant.
 
 ## The data entry: `CharacterDef`
@@ -170,6 +174,14 @@ Room to draw in, in pixels from the feet with the hero facing right:
 
 Anything drawn outside a canvas is cut off, so pose a long sword's rest so it fits the portrait.
 
+### Generated art
+
+On the stage the skin's drawing is replaced by generated art when the hero has it, in `src/generatedHeroArt/assets/<id>/`.
+`atlas.png` holds the rig parts in one shared 265 by 112 layout (`sprite/atlas.ts`), `offhand.png` an optional shield, dagger or scabbard, and `portrait.webp` the cut-in bust.
+`profile.json` gives the weapon grip and tip, the head scale, and the rest centre of each cloth trail row; `weaponReach` overrides the blade's reach for the sprite.
+Every hero is drawn by the same renderer (`sprite/index.ts`): bones that shear along the arm and leg, filled joints, and a scarf and ponytail meshed along their ropes.
+A missing trail in the profile is not drawn.
+
 ## Clips and poses
 
 A clip is an `ActionClip` of keyed poses (`src/types/pose.ts`), written with `pose({...})` and `frame(n)` from `src/constants/hero.ts`.
@@ -233,6 +245,7 @@ export const KAEL_MODULE: HeroModule = {
 | `icons` | 16 by 16 icon drawings by id: every skill id, `<skill id>_evo` for evolved forms, and the three `sourceIcons` |
 | `touch` | `art(action, ability, known)`, the face of each touch button, and `tint(ability)`, the rim colour of buttons that follow the selected ability |
 | `meter` | optional: the hero's own bar on the HUD |
+| `drill` | optional: the hero's `DrillProfile`, which puts the hero on the shared drill engine in solo runs (The drill engine, below) |
 
 ### The kit
 
@@ -354,6 +367,168 @@ Kael's are in `constants/controls.ts`.
 The touch layout and the keys are the same for every hero.
 A hero needs no CSS: the HUD meter, the ability tabs and the hero screen take their colours from the module.
 
+## The drill engine
+
+Every hero moves and fights on one shared controller, the drill engine in `src/drill/`.
+A hero plugs into it with a `DrillProfile` (`src/types/drill.ts`) on its `HeroModule.drill`.
+The engine runs the movement, the slash chain, the follow-ups, the guard, the spell book, the infusion and the charged tiers; the profile says what those look like and how hard they hit for one hero.
+Kael (`src/heroes/kael/game/drill/`) is the reference and the only profile with no overrides; all nine heroes are on it, and Cerise (`src/heroes/cerise/game/drill/`) is the worked example below.
+
+### When the engine runs
+
+The engine runs for a hero whose module has a `drill` profile, in every solo run (solo runs are always the Adventure) and on the training ground, while the hero plays their own job.
+`drillProfile()` in `src/drill/selection.ts` is the one gate.
+A job such as Kael's Prism Knight keeps the hero's native kit, and so does every co-op room and the playtest wave arena (`localStorage["warpblade-playtest"]` without `?section=`), since the engine keeps one session for the hero in play and is not per seat yet.
+A hero without a profile keeps the native kit everywhere.
+
+While it runs, `updateDrill` (`src/drill/adventure.ts`) replaces the shared hero loop, and the HUD, the ability tabs, the warp tab, the touch buttons, the keyboard map, the Controls screen and the touch legend read only the profile and the live session.
+The hero's native meter is hidden, the U button is hidden, and J held charges the tiers.
+
+### What the engine does for every hero
+
+The numbers live in `src/drill/constants.ts` and are the same for every hero.
+
+- Movement (`MOTION`, which a profile's `motion` tunes): direct run, buffered variable-height jump with coyote time, wall slide and wall kick, ground dash and one air dash, dash-jump that carries the dash speed.
+- Slash chain: three ground slashes and one air slash per jump, chained by pressing J during the swing.
+- Keen blow: J pressed within `KEEN_WINDOW` (0.1 seconds) after a ground slash landed a hit makes the next slash Keen; it shows the KEEN cue and its hits are sure crits, so the `blow` event carries `keen: true`.
+- Perfect dodge: the first real hit a dash avoids gives the shared perfect dodge reward (`rewardPerfectDodge`: Flow, slow motion, MP and stamina, the PERFECT cue and the `perfectDodge` event), once per dash (`src/drill/perfectDodge.ts`).
+- Follow-ups: L (dash) during a slash queues the warp strike; K during a ground slash queues the enhanced parry.
+- Guard: K held blocks from the front, a press just before impact parries (`DEFENSE.parryWindow`).
+- Spells: I prepares the selected spell for 3 seconds (`SPELL_PREPARATION`), the next I once it is ready casts it, and I during a slash pours it into the weapon for 3 landed hits (`INFUSION_HITS`); O cycles the known spells while nothing is prepared.
+- Charged tiers: J held past `CHARGE_START` shows the charge; release uses the highest of the four tiers reached and plays the face cut-in.
+
+The engine emits these skill events on top of the shared ones: `slash` (strike, landed, element), `prepare` (spell), `infuse` (spell), `cast` (the spell id), `warp`, `dash`, `jump`, `ultimate` (the tier level), `perfectDodge`, `parry` and `block`, plus `blow` (with `keen`) and `kill` from the shared damage code.
+A meter of the hero's own, such as Vesper's Tempo, is fed from these events in the hero's folder.
+
+### The profile
+
+```ts
+export interface DrillProfile {
+  strikes: Readonly<Record<DrillStrikeId, DrillStrike>>;
+  attack: number;
+  spells: readonly DrillSpell[];
+  known(): readonly DrillSpell[];
+  tiers: readonly [DrillTier, DrillTier, DrillTier, DrillTier];
+  warpSlash: SlashShape;
+  enhancedParry: number;
+  drawThrown(x: number, y: number, angle: number): void;
+  portrait: string | (() => Promise<string | undefined>);
+  drawCutIn?(ctx: CanvasRenderingContext2D, cast: SkillCast, portrait: HTMLImageElement): void;
+  text: Readonly<Partial<Record<InputAction, string>>>;
+  modifiers(): DrillModifiers;
+  motion?: Partial<DrillMotion>;
+  poses?: Partial<DrillPoses>;
+  clips?: Partial<DrillClips>;
+  art?: EffectHero;
+  hooks?: DrillHooks;
+}
+```
+
+| Field | What it holds |
+| --- | --- |
+| `strikes` | `first`, `second`, `third` and `air`: timing (`hit`, `duration`), `reach`, `height`, forward `step`, `next` in the chain, `damage` as a multiple of one plain slash, `finisher`, the four `poses` the slash blends through (left out when `clips.strikes` gives the frames) and the trail `arc` |
+| `attack` | the drill's damage unit; every damage number in the profile is divided by it and multiplied by the hero's AD (slashes) or AP (spells, tiers). Kael and Cerise use 10 |
+| `spells` | the spell set in O order: `id` (also the touch art id and the `cast` event's ability), `name` (the HUD tab), `color`, `core`, `damage`, `radius`, `range`, `speed` (a travelling bolt) or `null` with a `delay` (strikes the nearest foe ahead), `look` (`flame`, `shard` or `spark`), `freeze` seconds, an optional `status(foe)` that both the spell and every infused hit apply, optional `drawBolt` and `drawImpact` that replace the shared look, and an optional effect sprite `art` slot |
+| `known()` | the spells known now; skills that unlock a spell filter here |
+| `tiers` | four charged tiers: `name`, `threshold` seconds, `damage`, `reach`, `height`, `intro` (cut-in time before the strike), `duration`, `color`, `look` (`crescent`, `spires`, `rift`, `nova`), `around` for a strike on both sides, optional `windup` and `cut` body poses for this tier, an optional `drawStrike(cast, progress, fade)` that replaces the look, and an optional effect sprite `art` slot |
+| `warpSlash` | the slash drawn as the warp strike lands |
+| `enhancedParry` | seconds the enhanced parry window stays open |
+| `drawThrown` | the weapon in flight during the warp; `drawThrownBlade` (`src/game/effects/thrownWeapon.ts`) draws the hero's own skin blade |
+| `portrait`, `drawCutIn` | the cut-in image (a URL, or an async loader such as `loadGeneratedHeroPortrait`) and an optional own cut-in style; without one the shared Kael style is used |
+| `text` | the hero's Controls lines over the shared drill lines (`src/drill/controlText.ts`) |
+| `modifiers()` | the numbers the hero's skills change, read every step (next section) |
+| `motion` | movement numbers over the shared `MOTION` (`src/drill/constants.ts`): run speed, jump rise and gravity, dash speed and time, wall kick, and `landing`, which scales how long the landing recovery takes; leave out what the hero shares with Kael. The engine resolves it once into `session.motion` |
+| `poses` | body poses over the shared ones (`src/drill/view/poses/`): `stance`, `breathe`, `run(phase)`, `brake`, `low`, `touchdown`, `dash`, `airDash`, `rise`, `leap`, `kick`, `fall`, `wall`, `guard`, `airGuard`, `stagger`, `parryContact`, `parryReturn`, `spell` (the release), `skillWindup` and `skillCut` (the tiers, unless a tier sets its own `windup` or `cut`), and `warpThrow(age)`, `warpFlight(age)` and `warpArrival(age)` for the three warp phases, so each hero has its own silhouette in every state |
+| `clips` | motion clips, one pose per animation frame, that replace what the engine would bake from `poses`, `strikes` and `tiers` (next section) |
+| `art` | the hero's effect atlas in `src/effectArt/`; with it the engine stamps each spell's `art` sprite under its bolt and impact, the hero's `infusion` sprite along the infused weapon, and each tier's `art` sprite under its strike (scaled in, held, faded, with an additive flash). The hero's own draw hooks and the shared particles draw on top. Kael has none |
+| `hooks` | `spellHit(foe, spell)`, `dashed(foes)`, `swordHit(foe, infusion)`, `slashed(strike, landed)`, `released(cast)`, `tick(dt)`, `drawBack()`, `draw()`, `reset()` for anything the shared engine does not do |
+
+Poses for strikes use `pose()` from `src/constants/hero.ts` and the stance and hand helpers in `src/constants/drillPose.ts` (`DRILL_STANCE`, `frontHand`, `rearHand`), so strike data can live in the hero's `constants/` folder.
+A hero whose native clips already have the right shapes can sample them, as Cerise does with `sampleKeys`.
+
+### Motion clips
+
+The engine draws every drill hero from motion clips (`DrillClips`, `src/types/motionClip.ts`): a list of poses, one per animation frame at 30 a second, and `snaps`, the frames the game jumps to without blending in from the frame before.
+Between two frames the game blends the poses, so a 60 Hz step halfway between frames shows a pose halfway between them.
+The clip set is `idle`, `run`, `brake`, `jump`, `dashJump`, `land`, `dash`, `airDash`, `kick`, `wall`, `guard`, `airGuard`, `stagger`, `parry`, `spell`, `warpThrow`, `warpFlight`, `warpArrival`, `strikes/first`, `strikes/second`, `strikes/third`, `strikes/air` and `tiers/1` to `tiers/4`.
+
+What drives each clip:
+
+- `idle` loops in time.
+- `run` loops over one stride (two steps, 38 art pixels), so its frames follow the feet at any speed.
+- `jump` and `dashJump` (after a dash jump) run from takeoff at the first frame, through the top of the jump, to the fall at the last frame, picked by vertical speed: the frames before the top are the rise, and the rest are the first part of the fall.
+- `brake`, `land`, `dash`, `airDash`, `kick` and the `strikes` are spread over the time the hero is in that state (the brake, the landing, the dash, the wall kick's lock, the strike's `duration`), from the first frame to the last, so more frames add detail and leave the timing alone.
+- `land` is a hard landing; a soft one blends its first frame back to the idle stance, weighted by how hard the hero landed.
+- `parry` is played from a guard, and recovers to whatever the hero was doing before.
+- `tiers/<n>` play from the start of the cut-in; in the air the feet tuck.
+- Every other clip plays in time from the moment the hero enters that state and holds its last frame, so a one-frame clip such as `guard` is a still pose.
+
+The idle stance is the first frame of `idle`.
+A hero without `clips` gets them baked from its `poses`, `strikes` and `tiers` (`src/drill/view/clips/`); a hero can give some clips and leave the rest baked.
+
+Every hero gives all of them as JSON, one file per clip in `src/heroes/<id>/motion/` (`strikes/first.json` and so on).
+`src/heroes/motion.ts` loads every hero's files, and a hero's drill profile takes its set with `clips: heroClips("<id>")`.
+Warpblade Studio (`studio/`) edits these files; a new hero's first set can be baked from its `poses`, `strikes` and `tiers` and written out with `formatClip`:
+
+```json
+{
+  "snaps": [11],
+  "frames": [
+    { "hx": -1, "hy": -12, "cb": 0, "nx": 1, "ny": -22, ... },
+    ...
+  ]
+}
+```
+
+Each frame lists all the pose keys; `snaps` is left out when empty.
+The game refuses to start on a missing clip, an unknown file, a missing key or a snap outside the frames, and names the file.
+Biome leaves these files unformatted so each frame stays on one line.
+Edit them by hand, or frame by frame in Warpblade Studio (`studio/README.md`), whose drafts `npm run apply-motion` writes back.
+
+### Skills on the engine
+
+`modifiers()` returns `DrillModifiers`: shares that multiply (1 changes nothing) and counts that add (0 changes nothing).
+Start from `NEUTRAL_MODIFIERS` (`src/drill`) and fold in each held skill with `skillValues`, `skillLevel` and `skillEvolved` (`src/game/skills/query.ts`).
+With no skill held the hero plays exactly as its profile says.
+
+| Modifier | Upgrades |
+| --- | --- |
+| `strikeDamage`, `finisherDamage`, `strikeReach`, `airSlashes` | the slash chain |
+| `spellDamage`, `spellArea`, `preparation`, `infusionHits` | prepared spells and infusion |
+| `warpDamage`, `warpCooldown` | the warp strike |
+| `parryWindow` | guard and parry |
+| `airDashes` | movement |
+| `tierDamage`, `tierReach`, `chargeRate` | the charged tiers |
+
+Anything a modifier cannot express goes in a `SkillBehavior` that answers the engine's events, or in a profile hook.
+A native `SkillBehavior` that the drill code replaces is wrapped once in the hero's skill table with `nativeOrDrill(native, drill?)` from `src/drill`, which runs the native behaviour off the drill and the optional drill one on it; `drillOnly(drill)` is a behaviour that only answers on the drill.
+No skill file checks `usesDrill()` itself.
+The skill contract for drill heroes is in `docs/skill-design.md`.
+
+### Adding a hero
+
+Everything goes in the hero's own folder; the registration line is `drill: <ID>_DRILL` in the hero's `index.ts` (`HeroModule`).
+Nothing in `src/drill/`, `src/ui/` or any other hero needs to change.
+
+1. Strike data in `constants/drill/strikes.ts`: the four strikes with poses and arcs.
+2. Tier data in `constants/drill/tiers.ts`: four tiers named for the hero's ultimate.
+3. Spells in `game/drill/spells.ts` (in `game/` when a `status` calls game code), one entry per ability the hero keeps on I.
+4. The profile in `game/drill/index.ts`, with `drawThrown`, `portrait` and optional `drawCutIn` (the cut-in itself in `ui/`), `text`, `modifiers`, `motion`, `poses`, `art` and `hooks`.
+5. `drill: <ID>_DRILL` on the hero's `HeroModule`.
+6. Skills to the drill contract in `docs/skill-design.md`, with `modifiers()` built from them.
+7. The touch button art already follows the selected spell's `id` through `HeroModule.touch.art`; give each spell an id the hero's art knows.
+8. Check in a browser: a solo run through the menus, run, jump, wall kick, air dash, dash-jump, the chain, warp strike, enhanced parry, each spell prepared and cast, infusion, all four tiers with the cut-in, a level-up pick, and 390 px with touch.
+
+### Worked example: Cerise
+
+Cerise keeps her rapier, Rose Mark, Rose Tempest and her portrait, in five small files.
+
+- `constants/drill/strikes.ts` samples her `thrust1`, `thrust2` and `lunge` clips for the three ground slashes and `airThrust` for the air slash, with flat narrow arcs for thrusts and a longer, harder lunge as the finisher.
+- `constants/drill/tiers.ts` names the tiers Rose Tempest I to IV in rose colours, the last one striking all around.
+- `game/drill/spells.ts` turns her base abilities into the spell set: Rose Line, a fast travelling `shard`, and Flurry, a quick `flame` burst on the nearest foe ahead; both apply Rose Mark through `status`, so an infused hit is her Rose Edge.
+- `game/drill/release.ts` is the `released` hook: each tier also sends a Rose Line streak along her line, both ways for the fourth.
+- `game/drill/index.ts` is the profile: `drawThrownBlade` for the thrown rapier, `loadGeneratedHeroPortrait("cerise")` with her rose cut-in (`ui/cutIn.ts`), her Controls lines, and `tick: tickMarks` so her marks age while her native kit is not ticking.
+
 ## Jobs
 
 A hero can grow into further jobs (class advancement).
@@ -391,6 +566,9 @@ The choice per hero is owned by `src/store/jobs.ts` and kept under `warpblade-jo
 The dev server: `npx vite --port <port> --strictPort`, then open `http://localhost:<port>/`.
 A hero that costs coins is locked in a normal browser; run `localStorage.setItem("warpblade-playtest", "1")` in the console and reload to unlock every hero (dev builds only; achievements are not tracked while it is set).
 `?wave=N&level=L&build=<skill id>:8,evolve:<skill id>,might:5` starts a run late with skills held, and `&job=<job id>` starts it in one of the hero's jobs.
+`?training=<hero id>` skips the menu and drops that hero on the training ground (`src/game/training/`): the arena with no waves, a husk and a wisp that stand again 0.9 seconds after they fall, no coins, chests or experience, and a fresh start when the hero falls.
+It counts as a playtest session, so nothing is saved.
+Add `&drafts=all` to play every studio draft of every hero and follow each save, or `&drafts=run,strikes/first` for only those moves.
 
 The playtest harness (`agent-studio/playtest/README.md`) reads the roster at run time and needs no entry per hero:
 

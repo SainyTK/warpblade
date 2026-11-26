@@ -22,6 +22,7 @@ export const INK_CRANE: SkillDef = {
   id: SKILL.crane,
   name: "Ink Crane",
   kind: "summon",
+  element: "void",
   risk: "easy",
   button: "auto",
   text: "When stored cuts release, an ink crane may fold itself from the splash and fly at a foe.",

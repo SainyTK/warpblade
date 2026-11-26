@@ -6,6 +6,49 @@ Rows live in `src/heroes/zafir/constants/skills/`, one file per skill; code path
 Icons are in `src/heroes/zafir/ui/icons/` (`skills.ts`, and `evolved.ts` for every evolution).
 Numbers in the rows are multiples of attack damage (AD) or ability power (AP) as each skill's values say.
 
+## Drill set
+
+Solo Adventure runs Zafir on the shared drill engine (`src/drill`).
+All 20 skills are offered there and each one upgrades a drill mechanic.
+The rows keep the numbers the native kit reads (the wave arena, co-op), so the sections after this one still describe his native kit, and the card text is the drill's.
+Drill code: `src/heroes/zafir/game/drill/skills/` (one file per skill with drill code), folded into `ZAFIR_DRILL` by `game/drill/hooks.ts`.
+
+Base drill kit: three spins (sweep turn, rising turn, twin turn) and a spinning descent in the air.
+Every spin also cuts behind him at 75% (`game/drill/backCut.ts`), and the twin turn adds a second high ring 0.1 s after its first (`game/drill/twinTurn.ts`).
+Every cut opens a wound and feeds the Whirl, so the sand ring turns under the drill too.
+Spells: Sandspout (a travelling whirl that slows and opens a wound), Crescent (a fast thrown crescent that opens two wounds) and Glass Rain (a burst on the nearest foe ahead that blinds minions and holds feet).
+Charged tiers: Sandstorm I to IV, each striking both sides, with crescents, sandspouts and from the third tier a storm that follows him (`game/drill/release.ts`).
+
+| Id | Name | Mechanic | Level 1 | Levels 2 to 8 | Evolution (partner) |
+| --- | --- | --- | --- | --- | --- |
+| `za_whirling` | Whirling Edge | first slash | sweep turn +40% | crescents both ways, drag, piercing crescents, up to +400% | Endless Turn (`za_unbroken`): two crescents each way, slashes reach 25% farther |
+| `za_twofaced` | Two-Faced Cut | second slash and back cuts | rising turn +35%, back cuts +20% | extra wound behind, stagger, blind, up to +350% and back +90% | Mirror Dance (`za_dune`): a mirror ring behind after each rising turn |
+| `za_veins` | Opened Veins | third slash | twin turn +12% per wound | two more wounds, tear, stagger, splash, up to +100% per wound | Red Wind (`za_deep`): every slash tears a wound open |
+| `za_sirocco` | Sirocco Descent | air slash | air slash +50% | up to three air slashes, a hot gust along the floor, a wound, up to +500% | Desert Noon (`za_mirage`): a ring of noon light on every landed air slash |
+| `za_veil` | Sand Veil | guard and parry | parry window +30%, cheaper blocks | blinding blocks, wider and harder mirage, Whirl on block, window up to +100% | Wall of Dunes (`za_slip`): two mirages |
+| `za_arrival` | Whirlwind Arrival | warp strike | recharge -15%, damage +30% | wounds round him, stagger, a sand ring, blind, recharge -40%, damage +300% | Dust Devil Step (`za_sirocco`): a small storm after every arrival |
+| `za_slip` | Sand Slip | dash and air dash | one more air dash | blinding dash, untouchable dash, dash refresh, wounds, up to three extra air dashes | Mirage Slip (`za_mirage`): a mirage where the dash began |
+| `za_dune` | Dune Walk | dash | a dash through foes cuts them | wounds, the native sand trail during slashes, stagger, Whirl, cut up to 5 | Shifting Sands (`za_twofaced`): a crescent each way as a dash ends |
+| `za_unbroken` | Unbroken Whirl | warp and infusion | an arrival adds 30 Whirl | arrival infusion up to 3 hits, faster preparation, an arrival shortens a preparation, a stronger ring | Eye of the Dune (`za_whirling`): arrivals ready the selected spell |
+| `za_falling` | Falling Dune | jump and air | one more air slash | a landing ring after air slashes, one more air dash, stagger, a third air slash | Meteor Dune (`za_quicksand`): the landing throws a sandspout each way |
+| `za_quicksand` | Quicksand | Sandspout | the spout holds foes 0.5 s | harder cuts, wounds, drags neighbours down, a second spout | Sinking Sea (`za_falling`): each hit raises a whirl that runs on |
+| `za_gale` | Hot Gale | Crescent | the crescent cuts harder | a return cut, a gust on crescent-infused hits, longer infusions, stagger | Simoom (`za_deep`): crescent hits tear every wound open |
+| `za_glass` | Glass Rain | Glass Rain | blinds 1 s longer | harder, shards on nearby foes, faster preparation, infused sprays | Glass Storm (`za_gale`): a second blast behind him |
+| `za_deep` | Deep Wounds | dot on every cut | as in the native kit | as in the native kit | Crimson Tide (`za_veins`) |
+| `za_scour` | Scouring Sand | dot on the ring | as in the native kit | the twin turn grinds two grit | Glassing Wind (`za_unbroken`): every slash grinds grit |
+| `za_thirst` | Desert Thirst | dot on bleeding foes | as in the native kit | as in the native kit | Thirst of the Hawk (`za_hawk`) |
+| `za_wraith` | Sand Wraith | summon on landed slashes | a landed slash may call a wraith | as in the native kit | Wraith Caravan (`za_dune`) |
+| `za_mirage` | Mirage Dancer | summon on parries | as in the native kit | as in the native kit | Court of Mirages (`za_slip`) |
+| `za_hawk` | Desert Hawk | summon on kills | as in the native kit | as in the native kit | Sky of Hawks (`za_thirst`) |
+| `za_storm` | Sandstorm | the four charged tiers | tiers +30% | faster charge, a longer storm, blind, reach, wounds, up to +250% | Endless Sirocco (`za_whirling`): a second, wider storm, twice as long |
+
+Count by mechanic: 4 slash skills, 1 guard skill, 4 warp and dash skills, 1 jump skill, 3 spell skills, 3 damage over time, 3 summons, 1 charged-tier skill.
+Kinds: attack 5, movement 5, spell 3, dot 3, summon 3, ultimate 1.
+Sirocco Timing is now Sirocco Descent, Sand Veil moved from passive to attack, and Unbroken Whirl moved from passive to movement.
+Effects that exist only in the drill (the `drill.` numbers) do nothing in the native kit.
+Some native numbers also act in the drill, and the drill card text names them: Two-Faced Cut's bonus on foes behind him, Sand Veil's block and mirage numbers, Dune Walk's trail, Unbroken Whirl's ring numbers, and the damage over time and summon skills.
+A perfect dodge does not exist in the drill, so Mirage Dancer's perfect dodge level fires only in the native kit.
+
 ## Base kit (no skills)
 
 | Button | What it does |
@@ -24,12 +67,12 @@ Numbers in the rows are multiples of attack damage (AD) or ability power (AP) as
 | Skill | Id | Kind | Risk | Button | Partner | Evolution |
 | --- | --- | --- | --- | --- | --- | --- |
 | Whirling Edge | `za_whirling` | attack | easy | J | Unbroken Whirl | Endless Turn |
-| Sirocco Timing | `za_sirocco` | attack | precise | J | Mirage Dancer | Desert Noon |
+| Sirocco Descent | `za_sirocco` | attack | timed | J | Mirage Dancer | Desert Noon |
 | Opened Veins | `za_veins` | attack | timed | J | Deep Wounds | Red Wind |
 | Two-Faced Cut | `za_twofaced` | attack | timed | J | Dune Walk | Mirror Dance |
-| Falling Dune | `za_falling` | attack | timed | jump | Quicksand | Meteor Dune |
-| Dune Walk | `za_dune` | movement | easy | J | Two-Faced Cut | Shifting Sands |
-| Whirlwind Arrival | `za_arrival` | movement | timed | J | Sirocco Timing | Dust Devil Step |
+| Falling Dune | `za_falling` | movement | timed | jump | Quicksand | Meteor Dune |
+| Dune Walk | `za_dune` | movement | easy | L | Two-Faced Cut | Shifting Sands |
+| Whirlwind Arrival | `za_arrival` | movement | timed | L | Sirocco Timing | Dust Devil Step |
 | Sand Slip | `za_slip` | movement | timed | L | Mirage Dancer | Mirage Slip |
 | Hot Gale | `za_gale` | spell | easy | I | Deep Wounds | Simoom |
 | Glass Rain | `za_glass` | spell | timed | I | Hot Gale | Glass Storm |
@@ -40,11 +83,11 @@ Numbers in the rows are multiples of attack damage (AD) or ability power (AP) as
 | Sand Wraith | `za_wraith` | summon | easy | auto | Dune Walk | Wraith Caravan |
 | Mirage Dancer | `za_mirage` | summon | precise | K | Sand Slip | Court of Mirages |
 | Desert Hawk | `za_hawk` | summon | timed | auto | Desert Thirst | Sky of Hawks |
-| Unbroken Whirl | `za_unbroken` | passive | easy | auto | Whirling Edge | Eye of the Dune |
-| Sand Veil | `za_veil` | passive | timed | K | Sand Slip | Wall of Dunes |
+| Unbroken Whirl | `za_unbroken` | movement | easy | L | Whirling Edge | Eye of the Dune |
+| Sand Veil | `za_veil` | attack | timed | K | Sand Slip | Wall of Dunes |
 | Sandstorm | `za_storm` | ultimate | easy | U | Whirling Edge | Endless Sirocco |
 
-Kinds: attack 5, movement 3, spell 3, dot 3, summon 3, passive 2, ultimate 1.
+Kinds: attack 5, movement 5, spell 3, dot 3, summon 3, ultimate 1.
 Every kind meets its least count (attack 4, movement 3, spell 3, damage over time 3, summon 3, ultimate 1).
 
 ### Whirling Edge (`za_whirling`)
@@ -65,7 +108,7 @@ Values: `bonus` added damage share on every spin, `reach` spin reach multiple, `
 | 8 | Spins +35% to +45%; crescents 0.4 to 0.5. | bonus 0.45, crescent 0.5 |
 | Evolved: Endless Turn (with Unbroken Whirl) | At full Whirl every spin throws two crescents each way, and while you spin the ring never drops below its first turn. | double 1, hold 1 |
 
-### Sirocco Timing (`za_sirocco`)
+### Sirocco Descent (`za_sirocco`)
 
 Attack, precise, on J. A Keen spin hits much harder on the foe it reaches first, then sends a hot gust after it.
 Code: kit: `game/stringSkills.ts` (gust, Desert Noon, `keenWindow`), `game/skillHooks.ts`.

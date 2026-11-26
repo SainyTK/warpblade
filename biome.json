@@ -1,16 +1,7 @@
 {
   "$schema": "./node_modules/@biomejs/biome/configuration_schema.json",
   "files": {
-    "includes": [
-      "src/**",
-      "index.html",
-      "patches/index.html",
-      "kael-comparison/**",
-      "*.json",
-      "*.ts",
-      "!!agent-studio",
-      "!!studio"
-    ]
+    "includes": ["src/**", "index.html", "patches/index.html", "*.json", "*.ts", "!!agent-studio", "!!studio"]
   },
   "formatter": {
     "indentStyle": "space",
@@ -32,6 +23,12 @@
   },
   "overrides": [
     {
+      "includes": ["src/heroes/*/motion/**"],
+      "formatter": {
+        "enabled": false
+      }
+    },
+    {
       "includes": ["src/**", "!src/heroes/**"],
       "linter": {
         "rules": {
@@ -42,11 +39,84 @@
                 "patterns": [
                   {
                     "group": ["**/heroes/*/**"],
-                    "message": "Shared code reaches a hero only through the roster (src/heroes/roster.ts) and the hero registry (src/heroes/index.ts), never a file inside a hero's folder (docs/hero-module.md)."
+                    "message": "Shared code reaches a hero only through the roster (src/heroes/roster.ts) and the hero registry (src/heroes/registry.ts), never a file inside a hero's folder (docs/hero-module.md)."
                   }
-                ]
+                ],
+                "paths": {
+                  "../heroes": {
+                    "message": "Shared code reads hero code through heroModule from src/heroes/registry.ts and never imports the hero modules, so no shared module loads a hero while it loads itself (docs/hero-module.md)."
+                  },
+                  "../../heroes": {
+                    "message": "Shared code reads hero code through heroModule from src/heroes/registry.ts and never imports the hero modules, so no shared module loads a hero while it loads itself (docs/hero-module.md)."
+                  },
+                  "../../../heroes": {
+                    "message": "Shared code reads hero code through heroModule from src/heroes/registry.ts and never imports the hero modules, so no shared module loads a hero while it loads itself (docs/hero-module.md)."
+                  },
+                  "../../../../heroes": {
+                    "message": "Shared code reads hero code through heroModule from src/heroes/registry.ts and never imports the hero modules, so no shared module loads a hero while it loads itself (docs/hero-module.md)."
+                  },
+                  "../../../../../heroes": {
+                    "message": "Shared code reads hero code through heroModule from src/heroes/registry.ts and never imports the hero modules, so no shared module loads a hero while it loads itself (docs/hero-module.md)."
+                  }
+                }
               }
             }
+          }
+        }
+      }
+    },
+    {
+      "includes": ["src/scene/**"],
+      "linter": {
+        "rules": {
+          "style": {
+            "noRestrictedImports": {
+              "level": "error",
+              "options": {
+                "patterns": [
+                  {
+                    "group": ["**/heroes/*/**"],
+                    "message": "Shared code reaches a hero only through the roster (src/heroes/roster.ts) and the hero registry (src/heroes/registry.ts), never a file inside a hero's folder (docs/hero-module.md)."
+                  }
+                ],
+                "paths": {
+                  "../game/state": {
+                    "importNames": ["rng"],
+                    "message": "Scene drawing reads fxRng for effects and never the play generator rng (docs/graphics.md)."
+                  },
+                  "../../game/state": {
+                    "importNames": ["rng"],
+                    "message": "Scene drawing reads fxRng for effects and never the play generator rng (docs/graphics.md)."
+                  },
+                  "../../../game/state": {
+                    "importNames": ["rng"],
+                    "message": "Scene drawing reads fxRng for effects and never the play generator rng (docs/graphics.md)."
+                  },
+                  "../../../../game/state": {
+                    "importNames": ["rng"],
+                    "message": "Scene drawing reads fxRng for effects and never the play generator rng (docs/graphics.md)."
+                  },
+                  "../heroes": {
+                    "message": "Shared code reads hero code through heroModule from src/heroes/registry.ts and never imports the hero modules, so no shared module loads a hero while it loads itself (docs/hero-module.md)."
+                  },
+                  "../../heroes": {
+                    "message": "Shared code reads hero code through heroModule from src/heroes/registry.ts and never imports the hero modules, so no shared module loads a hero while it loads itself (docs/hero-module.md)."
+                  },
+                  "../../../heroes": {
+                    "message": "Shared code reads hero code through heroModule from src/heroes/registry.ts and never imports the hero modules, so no shared module loads a hero while it loads itself (docs/hero-module.md)."
+                  },
+                  "../../../../heroes": {
+                    "message": "Shared code reads hero code through heroModule from src/heroes/registry.ts and never imports the hero modules, so no shared module loads a hero while it loads itself (docs/hero-module.md)."
+                  },
+                  "../../../../../heroes": {
+                    "message": "Shared code reads hero code through heroModule from src/heroes/registry.ts and never imports the hero modules, so no shared module loads a hero while it loads itself (docs/hero-module.md)."
+                  }
+                }
+              }
+            }
+          },
+          "performance": {
+            "noNamespaceImport": "error"
           }
         }
       }

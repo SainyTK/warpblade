@@ -1,6 +1,6 @@
 import { enemyCenter } from "../../../../game/enemies/enemy";
 import { addStacks } from "../../../../game/enemies/skillStatus";
-import { skillValues, withCharms } from "../../../../game/skills/query";
+import { skillValues, withBuild } from "../../../../game/skills/query";
 import { game, hero, progress } from "../../../../game/state";
 import type { Enemy } from "../../../../types/enemy";
 import { PILLAR } from "../../constants/abilities";
@@ -23,11 +23,11 @@ function foeAhead(): Enemy | null {
 }
 
 /** Lingering Dawn: a pillar leaves light on the floor that burns foes standing in it */
-function linger(x: number): void {
+export function linger(x: number): void {
   const v = skillValues("al_dawn");
   if (!v.burn) return;
   game.fx.push(
-    createDawnGround(x, withCharms("area", v.width), withCharms("duration", v.time), progress.stats.ap * v.burn),
+    createDawnGround(x, withBuild("area", v.width), withBuild("duration", v.time), progress.stats.ap * v.burn),
   );
 }
 
@@ -61,5 +61,5 @@ export const brandSpec = (v: Readonly<Record<string, number>>) => ({
   max: v.max ?? 3,
   damage: progress.stats.ad * (v.tick ?? 0),
   every: 0.5,
-  duration: withCharms("duration", v.time ?? 3),
+  duration: withBuild("duration", v.time ?? 3),
 });

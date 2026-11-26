@@ -2,7 +2,7 @@ import { fleck, place } from "../../../../engine/frame";
 import { dealDamage } from "../../../../game/damage";
 import { walks } from "../../../../game/enemies/enemy";
 import { markFoe } from "../../../../game/enemies/skillStatus";
-import { skillEvolved, skillValues, withCharms } from "../../../../game/skills/query";
+import { skillEvolved, skillValues, withBuild } from "../../../../game/skills/query";
 import { foesOnScreen } from "../../../../game/skills/targets";
 import { game, hero, progress } from "../../../../game/state";
 import { surfaceBelow } from "../../../../game/world";
@@ -69,7 +69,7 @@ export function castQuicksand(wide: boolean): void {
   const v = skillValues(ID);
   const x = hero.x + (wide ? 0 : hero.face * QUICKSAND.ahead);
   const y = hero.ground ? hero.y : surfaceBelow(hero.x, hero.y);
-  const reach = withCharms("area", QUICKSAND.reach * (v.reach ?? 1) * (wide ? 1.5 : 1));
-  game.fx.push(createPit(x, y, reach, withCharms("duration", v.life)));
+  const reach = withBuild("area", QUICKSAND.reach * (v.reach ?? 1) * (wide ? 1.5 : 1));
+  game.fx.push(createPit(x, y, reach, withBuild("duration", v.life)));
   sandSound.hiss(0.1);
 }

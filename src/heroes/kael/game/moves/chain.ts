@@ -7,7 +7,7 @@ import { createSlash } from "../../../../game/effects/slash";
 import { lift } from "../../../../game/hero/lift";
 import { skin } from "../../../../game/hero/skin";
 import { objectMemory, rememberPerSeat } from "../../../../game/seatMemory";
-import { game, hero, particles, progress, rng } from "../../../../game/state";
+import { fxRng, game, hero, particles, progress } from "../../../../game/state";
 import { dust, shake } from "../../../../game/world";
 import type { MoveDef } from "../../../../types/move";
 import { PK } from "../../../../types/particle";
@@ -44,12 +44,12 @@ function smashImpact(): void {
       PK.SHARD,
       gx,
       hero.y - 1,
-      hero.face * rng.range(20, 120),
-      rng.range(-180, -60),
-      rng.range(0.5, 0.9),
+      hero.face * fxRng.range(20, 120),
+      fxRng.range(-180, -60),
+      fxRng.range(0.5, 0.9),
       {
         col: WORLD_COLORS.rubble,
-        size: rng.range(1.5, 3),
+        size: fxRng.range(1.5, 3),
       },
     );
   shake(0.2, 2);

@@ -2,19 +2,20 @@ import { PAL } from "../../../../../constants/palette";
 import { glowLine, line, place, polygon, sparkle } from "../../../../../engine/frame";
 import { dealDamage } from "../../../../../game/damage";
 import { createImpact } from "../../../../../game/effects/impact";
-import { enemyCenter } from "../../../../../game/enemies/enemy";
+import { enemyBox, enemyCenter } from "../../../../../game/enemies/enemy";
 import { game, hero } from "../../../../../game/state";
 import type { Effect } from "../../../../../types/effect";
 import type { Enemy } from "../../../../../types/enemy";
 import type { Vec } from "../../../../../types/rig";
 import { WHITE } from "../../../../../utils/color";
 import { ease } from "../../../../../utils/math";
+import { segmentToBox } from "../../../../../utils/segmentToBox";
 import { NOVA_RADIUS } from "../../../constants/nova";
 import { PRISM_BEAMS as B } from "../../../constants/prism";
 import { lodgeShard } from "../../prism/shards";
 
 const P = PAL.prism;
-/** a foe counts as crossed when its middle is this close to the beam, besides the beam's own half width */
+/** a foe counts as crossed when its hit box is this close to the beam, besides the beam's own half width */
 const BODY = 6;
 
 /** each beam's way out from the chest: the angles on both sides, mirrored */
@@ -24,14 +25,6 @@ const DIRECTIONS: readonly Vec[] = [1, -1].flatMap((side) =>
     return [side * Math.cos(a), -Math.sin(a)];
   }),
 );
-
-/** how far a point lies from the segment from a to b */
-function distanceToSegment(p: Vec, a: Vec, b: Vec): number {
-  const dx = b[0] - a[0];
-  const dy = b[1] - a[1];
-  const u = Math.max(0, Math.min(1, ((p[0] - a[0]) * dx + (p[1] - a[1]) * dy) / (dx * dx + dy * dy || 1)));
-  return Math.hypot(p[0] - a[0] - dx * u, p[1] - a[1] - dy * u);
-}
 
 /**
  * The Prism Knight's addition to Crystal Nova: a moment after the ring, six prism beams shoot out of Kael's chest, level
@@ -51,9 +44,9 @@ export function createPrismBeams(level: number, blow: number): Effect {
       const tip = tipOf(d);
       for (const e of game.enemies) {
         if (e.hp <= 0 || struck[i].has(e)) continue;
-        const center = enemyCenter(e);
-        if (distanceToSegment(center, from, tip) > BODY + B.width / 2) continue;
+        if (segmentToBox(from, tip, enemyBox(e)) > BODY + B.width / 2) continue;
         struck[i].add(e);
+        const center = enemyCenter(e);
         dealDamage(e, blow * B.share, { fromX: from[0], kx: d[0] * 40, source: "ultimate" });
         lodgeShard(e);
         game.fx.push(createImpact(center[0], center[1], Math.sign(d[0]), false));

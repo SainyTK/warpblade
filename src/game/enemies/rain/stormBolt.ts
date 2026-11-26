@@ -8,7 +8,7 @@ import { clamp } from "../../../utils/math";
 import { Rng } from "../../../utils/rng";
 import { eachStanding, heroSlot } from "../../coopHooks";
 import { hurtHero } from "../../hurtHero";
-import { game, particles, rng } from "../../state";
+import { fxRng, game, particles } from "../../state";
 import { boxHit, heroBox } from "../../world";
 import { STORM_SPARKS, STORM_VOLT as V } from "./colors";
 
@@ -55,12 +55,12 @@ export function createStormMark(e: Enemy, windup: number): Effect {
 export function createStormBolt(x: number, y: number, damage: number): Effect {
   let t = 0;
   const bit = new Set<number>();
-  const R = new Rng(Math.floor(x * 31 + y * 7 + rng.next() * 1000));
+  const R = new Rng(Math.floor(x * 31 + y * 7 + fxRng.next() * 1000));
   const pts: [number, number][] = [[x, y]];
   for (let py = y + 6; py < GROUND; py += 6) pts.push([x + R.range(-3, 3), py]);
   pts.push([x, GROUND]);
   for (let i = 0; i < 8; i++)
-    particles.spawn(PK.SPARK, x + rng.range(-3, 3), GROUND - 1, rng.range(-90, 90), -rng.range(50, 140), 0.3, {
+    particles.spawn(PK.SPARK, x + fxRng.range(-3, 3), GROUND - 1, fxRng.range(-90, 90), -fxRng.range(50, 140), 0.3, {
       sparks: STORM_SPARKS,
     });
   return {

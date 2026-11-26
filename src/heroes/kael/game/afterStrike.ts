@@ -1,4 +1,4 @@
-import { skillValues, withCharms } from "../../../game/skills/query";
+import { skillValues, withBuild } from "../../../game/skills/query";
 import { game, hero, progress } from "../../../game/state";
 import type { KaelMoveId } from "../types/moves";
 import { createEcho } from "./effects/echo";
@@ -20,7 +20,7 @@ export function afterStrike(id: KaelMoveId, hits: number): void {
 /** Phase Cut: back attacks hit harder for a while, and an afterimage repeats the cut on the foe */
 function afterPhase(hits: number): void {
   const v = skillValues("k_phase");
-  if (v.backTime) kael.phaseBack = withCharms("duration", v.backTime);
+  if (v.backTime) kael.phaseBack = withBuild("duration", v.backTime);
   const foe = hero.lastHit;
   if (!v.echo || !hits || !foe || foe.hp <= 0) return;
   // Kael lands past the foe still facing on, so the echo cuts it back toward where he came from

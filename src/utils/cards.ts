@@ -1,20 +1,15 @@
-import { CHARMS } from "../constants/charms";
 import { CARD_WEIGHT, PICK_COUNT, SKILL_MAX_LEVEL, SKILL_SLOTS } from "../constants/growth";
-import type { Build, Card, CharmId } from "../types/build";
+import { ARTS } from "../stages/arts";
+import type { Build, Card } from "../types/build";
+import type { ArtId } from "../types/campaign";
 import type { CharacterDef } from "../types/character";
 import type { Boon } from "../types/skill";
+import { resonanceRanks } from "./resonance";
 import type { Rng } from "./rng";
-
-/** what the player has unlocked across runs: the charms that may be dealt and the charm slots they have */
-export interface CardUnlocks {
-  charm(id: CharmId): boolean;
-  charmSlots: number;
-}
 
 /** what a deal reads from the hero's build and the player's unlocks */
 export interface CardView {
   build: Build;
-  unlocks: CardUnlocks;
 }
 
 /** a card offered with its weight in the draw */
@@ -23,13 +18,12 @@ interface Weighted {
   weight: number;
 }
 
-export const CHARM_IDS = Object.keys(CHARMS) as CharmId[];
+const ART_MAX_LEVEL = 5;
 
 /** what a card offers, the same for every level of it: `skill:<id>`, `charm:might`, `boon:<id>` */
 export const cardKey = (card: Card): string => `${card.type}:${card.id}`;
 
 const skillCount = (b: Build): number => Object.keys(b.skills).length;
-const charmCount = (b: Build): number => Object.keys(b.charms).length;
 
 /** an ultimate skill held already: no other is dealt */
 const holdsUltimate = (c: CharacterDef, b: Build): boolean =>
@@ -43,31 +37,29 @@ function skillCards(c: CharacterDef, b: Build): Weighted[] {
   const out: Weighted[] = [];
   const full = skillCount(b) >= SKILL_SLOTS;
   const ultimate = holdsUltimate(c, b);
+  const ranks = resonanceRanks(b, c, ARTS);
   for (const s of c.skills) {
     const level = b.skills[s.id] ?? 0;
     if (level >= SKILL_MAX_LEVEL || (!level && (full || (s.kind === "ultimate" && ultimate)))) continue;
-    const weight = level ? CARD_WEIGHT.skillLevel : CARD_WEIGHT.newSkill;
+    const pull = 1 + CARD_WEIGHT.resonancePull * ranks[s.element];
+    const weight = (level ? CARD_WEIGHT.skillLevel : CARD_WEIGHT.newSkill) * pull;
     out.push({ card: { type: "skill", id: s.id, level: level + 1 }, weight });
   }
   return out;
 }
 
-/** charms that can be dealt: a new unlocked one while a slot is free, a held one below its top level */
-function charmCards(b: Build, u: CardUnlocks): Weighted[] {
+function artCards(b: Build): Weighted[] {
   const out: Weighted[] = [];
-  for (const id of CHARM_IDS) {
-    const level = b.charms[id] ?? 0;
-    const def = CHARMS[id];
-    if (level >= def.maxLevel || (!level && (!u.charm(id) || charmCount(b) >= u.charmSlots))) continue;
-    const weight = def.weight * (level ? CARD_WEIGHT.ownedCharm : 1);
-    out.push({ card: { type: "charm", id, level: level + 1 }, weight });
+  for (const [id, level] of Object.entries(b.arts) as [ArtId, number][]) {
+    if (!level || level >= ART_MAX_LEVEL || !(id in ARTS)) continue;
+    out.push({ card: { type: "art", id, level: level + 1 }, weight: CARD_WEIGHT.artLevel });
   }
   return out;
 }
 
 /** every skill or charm card that may be dealt now, banished ones left out */
 export function availableCards(c: CharacterDef, v: CardView): Card[] {
-  return [...skillCards(c, v.build), ...charmCards(v.build, v.unlocks)]
+  return [...skillCards(c, v.build), ...artCards(v.build)]
     .map((w) => w.card)
     .filter((card) => !v.build.banished.includes(cardKey(card)));
 }
@@ -109,7 +101,7 @@ export function dealCards(
     const key = cardKey(w.card);
     return !v.build.banished.includes(key) && !without.includes(key);
   };
-  const pool = [...skillCards(c, v.build), ...charmCards(v.build, v.unlocks)].filter(open);
+  const pool = [...skillCards(c, v.build), ...artCards(v.build)].filter(open);
   const fill = boons.map((boon): Card => ({ type: "boon", id: boon.id }));
   return [...drawWeighted(pool, count, rng), ...fill].slice(0, count);
 }

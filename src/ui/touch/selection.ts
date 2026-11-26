@@ -1,8 +1,10 @@
+import { drillSession, usesDrill } from "../../drill";
+import { knownSpells } from "../../game/arts";
 import { selectedSlot } from "../../game/hero/abilityBar";
 import { heroCode, kit } from "../../game/hero/kits";
 import { character } from "../../game/state";
-import { drillFighter, SPELL_ORDER, SPELLS, usesKaelDrill } from "../../kaelDrill";
 import type { Color } from "../../types/color";
+import type { DrillProfile } from "../../types/drill";
 
 /** what the cast and cycle buttons show: the hero, their selected ability on I and the abilities they know */
 export interface TouchSelection {
@@ -11,12 +13,12 @@ export interface TouchSelection {
   known: readonly string[];
 }
 
-const drillIcon = (kind: (typeof SPELL_ORDER)[number]): string => (kind === "thunder" ? "volt" : kind);
-
-export function touchSelection(drill = usesKaelDrill()): TouchSelection {
-  if (drill) {
-    const kind = drillFighter()?.spellBook.selected ?? SPELL_ORDER[0];
-    return { hero: character.id, ability: drillIcon(kind), known: SPELL_ORDER.map(drillIcon) };
+export function touchSelection(
+  profile: DrillProfile | undefined = usesDrill() ? drillSession()?.profile : undefined,
+): TouchSelection {
+  if (profile) {
+    const selected = (usesDrill() ? drillSession()?.fighter.spellBook.selected : undefined) ?? profile.spells[0];
+    return { hero: character.id, ability: selected.id, known: knownSpells(profile).map((spell) => spell.id) };
   }
   return {
     hero: character.id,
@@ -32,6 +34,4 @@ export const selectionKey = (s: TouchSelection): string => `${s.hero}:${s.abilit
 
 /** the rim colour of buttons without an accent of their own: the hero's colour for the selected ability */
 export const selectionTint = (s: TouchSelection): Color =>
-  usesKaelDrill()
-    ? SPELLS[drillFighter()?.spellBook.selected ?? SPELL_ORDER[0]].color
-    : heroCode().touch.tint(s.ability);
+  (usesDrill() ? drillSession()?.fighter.spellBook.selected.color : undefined) ?? heroCode().touch.tint(s.ability);

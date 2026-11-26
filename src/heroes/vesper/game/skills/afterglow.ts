@@ -4,7 +4,7 @@ import { createFloorRing } from "../../../../game/effects/floorRing";
 import { createImpact } from "../../../../game/effects/impact";
 import { enemyCenter } from "../../../../game/enemies/enemy";
 import { addStacks, stacksOf } from "../../../../game/enemies/skillStatus";
-import { skillValues, withCharms } from "../../../../game/skills/query";
+import { skillValues, withBuild } from "../../../../game/skills/query";
 import { game, hero, progress } from "../../../../game/state";
 import type { Enemy } from "../../../../types/enemy";
 import type { SkillBehavior } from "../../../../types/skillBehavior";
@@ -22,10 +22,10 @@ function layGlow(e: Enemy, n: number): void {
   const v = skillValues(ID);
   addStacks(e, ID, {
     stacks: n,
-    max: withCharms("amount", v.max),
+    max: withBuild("amount", v.max),
     damage: progress.stats.ad * v.damage,
     every: GLOW.every,
-    duration: withCharms("duration", GLOW.duration),
+    duration: withBuild("duration", GLOW.duration),
   });
 }
 

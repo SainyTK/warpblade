@@ -11,7 +11,7 @@ import { createFloorRing } from "../../effects/floorRing";
 import { createRift } from "../../effects/rift";
 import { createSlash } from "../../effects/slash";
 import { hurtHero } from "../../hurtHero";
-import { game, hero, lights, particles, rng } from "../../state";
+import { fxRng, game, hero, lights, particles, rng } from "../../state";
 import { boxHit, dust, heroBox, shake } from "../../world";
 import { makeEnemy } from "../enemy";
 import { facesHero, turnToHero } from "../facing";
@@ -131,7 +131,7 @@ function rise(e: Enemy): void {
   lights.add(x, y, 18, WHITE, 0.9, 0.15);
   game.fx.push(createFloorRing(e.x, GROUND, RISE_PULSE.ring, INNER_FIRE, 0.55));
   for (let i = 0; i < 16; i++)
-    particles.spawn(PK.EMBER, x, y, rng.range(-90, 90), rng.range(-120, 20), rng.range(0.4, 0.9), {
+    particles.spawn(PK.EMBER, x, y, fxRng.range(-90, 90), fxRng.range(-120, 20), fxRng.range(0.4, 0.9), {
       sparks: moonLook(true).sparks,
     });
   shake(0.4, 3);
@@ -234,14 +234,22 @@ export function updateShepherd(e: Enemy, dt: number, ts: number): void {
   if (e.state !== "walk") e.vx -= e.vx * 4 * dt;
   e.x = clampStageX(e.x + e.vx * dt, 14);
   e.y = GROUND;
-  if (rng.chance(0.12 * ts))
-    particles.spawn(PK.EMBER, e.x + rng.range(-8, 8), e.y - rng.range(6, 40), 0, -10, rng.range(0.5, 1), {
+  if (fxRng.chance(0.12 * ts))
+    particles.spawn(PK.EMBER, e.x + fxRng.range(-8, 8), e.y - fxRng.range(6, 40), 0, -10, fxRng.range(0.5, 1), {
       sparks: moonLook(false).sparks,
     });
-  if (enraged(e) && e.state !== "burrow" && rng.chance(0.35 * ts)) {
+  if (enraged(e) && e.state !== "burrow" && fxRng.chance(0.35 * ts)) {
     const [lx, ly] = lanternPoint(e);
-    particles.spawn(PK.EMBER, lx + rng.range(-2, 2), ly, rng.range(-12, 12), -rng.range(15, 40), rng.range(0.4, 0.9), {
-      sparks: moonLook(true).sparks,
-    });
+    particles.spawn(
+      PK.EMBER,
+      lx + fxRng.range(-2, 2),
+      ly,
+      fxRng.range(-12, 12),
+      -fxRng.range(15, 40),
+      fxRng.range(0.4, 0.9),
+      {
+        sparks: moonLook(true).sparks,
+      },
+    );
   }
 }

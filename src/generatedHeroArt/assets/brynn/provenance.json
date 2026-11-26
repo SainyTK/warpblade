@@ -1,7 +1,0 @@
-{
-  "generator": "built-in image_gen",
-  "styleReference": "src/kaelSprite/kael-parts.png",
-  "source": "source-sheet.png",
-  "portrait": "Cropped from the front head of source-sheet.png.",
-  "notes": "The sheet includes a wrapped off arm; the production atlas has one shared arm set and uses the armored arm. Brynn has no separate held offhand equipment."
-}

@@ -1,5 +1,4 @@
 import type { HeroMeter } from "../../../types/heroModule";
-import { ROSE_EDGE, roseEdgeSwings } from "./adventure";
 import { pointCap } from "./points";
 import { cerise } from "./state";
 
@@ -11,8 +10,4 @@ export const POINTS_METER: HeroMeter = {
   cells: pointCap,
   lit: () => cerise.points >= pointCap(),
   flash: () => cerise.pointFlash > 0,
-  text: () => {
-    const swings = roseEdgeSwings();
-    return swings ? `${ROSE_EDGE}: ${swings}` : "";
-  },
 };

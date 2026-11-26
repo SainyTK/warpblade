@@ -23,6 +23,7 @@ export const SHADE: SkillDef = {
   id: SKILL.shade,
   name: "Ink Shade",
   kind: "summon",
+  element: "void",
   risk: "precise",
   button: "K",
   text: "A parry or a perfect dodge may leave an ink shade of her that draws once on the nearest foe.",

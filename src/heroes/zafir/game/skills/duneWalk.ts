@@ -1,7 +1,7 @@
 import { fleck, place } from "../../../../engine/frame";
 import { dealDamage } from "../../../../game/damage";
 import { walks } from "../../../../game/enemies/enemy";
-import { skillValues, withCharms } from "../../../../game/skills/query";
+import { skillValues, withBuild } from "../../../../game/skills/query";
 import { foesOnScreen } from "../../../../game/skills/targets";
 import { hero, progress } from "../../../../game/state";
 import type { Enemy } from "../../../../types/enemy";
@@ -46,9 +46,9 @@ export const duneWalk: SkillBehavior = {
     const walking = hero.state === "move" && hero.ground && Math.abs(hero.vx) > 8;
     if (walking && m.drop <= 0) {
       m.drop = TRAIL.every;
-      m.patches.push({ x: hero.x, y: hero.y, left: withCharms("duration", TRAIL.life * (v.trailLife ?? 1)) });
+      m.patches.push({ x: hero.x, y: hero.y, left: withBuild("duration", TRAIL.life * (v.trailLife ?? 1)) });
     }
-    const half = withCharms("area", TRAIL.half * (v.trailWide ?? 1));
+    const half = withBuild("area", TRAIL.half * (v.trailWide ?? 1));
     for (const e of foesOnScreen()) {
       if ((m.next.get(e) ?? 0) > m.t || !m.patches.some((p) => onPatch(e, p, half))) continue;
       m.next.set(e, m.t + TRAIL.cut);

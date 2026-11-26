@@ -3,7 +3,7 @@ import { dealDamage } from "../../../game/damage";
 import { createSlash } from "../../../game/effects/slash";
 import { enemyCenter } from "../../../game/enemies/enemy";
 import { movePayoff } from "../../../game/skills/payoff";
-import { skillEvolved, skillValues, withCharms } from "../../../game/skills/query";
+import { skillEvolved, skillValues, withBuild } from "../../../game/skills/query";
 import { foesOnScreen } from "../../../game/skills/targets";
 import { game, hero, lights, progress } from "../../../game/state";
 import { hitStop, shake } from "../../../game/world";
@@ -59,7 +59,7 @@ function throwCrescents(): void {
           y: hero.y - 14 - i * 8,
           dir,
           damage: progress.stats.ad * v.crescent,
-          range: withCharms("area", CRESCENT_RANGE),
+          range: withBuild("area", CRESCENT_RANGE),
           pierce: !!v.pierce,
           wounds: 0,
         }),

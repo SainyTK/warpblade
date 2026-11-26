@@ -1,5 +1,6 @@
 import type { SkillDef } from "../../../../types/skill";
 import { evolvedRow, levelRows } from "../../../../utils/skillRows";
+import { drillEvolved, onDrill } from "./drill";
 
 /** values: `bonus` extra damage while it holds, `heal` HP a second while it holds, `short` it holds with one sword short, `guard` share less damage taken while it holds, `tide` Returning Tide gives a sword even when it misses */
 const LEVELS = levelRows([
@@ -13,18 +14,35 @@ const LEVELS = levelRows([
   { text: "New: Returning Tide gives a sword even when it misses; bonus 25%.", values: { tide: 1, bonus: 0.25 } },
 ]);
 
+const DRILL_LEVELS = onDrill(LEVELS, [
+  { text: "A warp arrival fills the jian with the selected art for 1 hit.", drill: { infuse: 1 } },
+  { text: "Preparation -20%.", drill: { preparation: 0.8 } },
+  { text: "New: infusions last 1 more hit.", drill: { infusionHits: 1 } },
+  { text: "Preparation -30%.", drill: { preparation: 0.7 } },
+  { text: "New: an arrival shortens a preparation by 1 s.", drill: { shorten: 1 } },
+  { text: "Preparation -40%; arrivals fill 2 hits.", drill: { preparation: 0.6, infuse: 2 } },
+  { text: "New: infusions last 2 more hits.", drill: { infusionHits: 2 } },
+  { text: "Preparation -50%; arrivals fill 3 hits.", drill: { preparation: 0.5, infuse: 3 } },
+]);
+
 export const HARMONY: SkillDef = {
   id: "yu_harmony",
   name: "Harmony",
-  kind: "passive",
+  kind: "movement",
+  element: "void",
   risk: "timed",
-  button: "auto",
-  text: "With every spirit sword held you deal more damage, heal and take less.",
-  levels: LEVELS,
+  button: "L",
+  text: "The warp and the sword arts move as one: arrivals fill the jian, and arts prepare faster.",
+  levels: DRILL_LEVELS,
   evolution: {
     partner: "yu_breath",
     name: "Perfect Harmony",
-    text: "Harmony deals 40% more damage and heals 3 HP a second.",
-    row: evolvedRow(LEVELS[7], "Bonus 40%; 3 HP a second.", { bonus: 0.4, heal: 3 }),
+    text: "Every arrival readies the selected sword art at once.",
+    row: drillEvolved(
+      DRILL_LEVELS[7],
+      evolvedRow(LEVELS[7], "Bonus 40%; 3 HP a second.", { bonus: 0.4, heal: 3 }),
+      "Every arrival readies the art.",
+      {},
+    ),
   },
 };

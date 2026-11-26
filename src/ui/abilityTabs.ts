@@ -1,8 +1,9 @@
+import { drillSession, usesDrill } from "../drill";
+import { knownSpells } from "../game/arts";
 import { selectedSlot } from "../game/hero/abilityBar";
 import { kit } from "../game/hero/kits";
 import { character, hero } from "../game/state";
-import { preparationShare, usesCeriseDrill } from "../heroes";
-import { drillFighter, SPELL_ORDER, SPELLS, usesKaelDrill } from "../kaelDrill";
+import type { DrillSpell, Session } from "../types/drill";
 import type { AbilitySlot } from "../types/moveset";
 import { byId } from "./dom";
 import { createRechargeTab } from "./rechargeTab";
@@ -44,36 +45,43 @@ function build(): void {
   };
 }
 
-let drillTabs: Array<{ el: HTMLElement; tab: ReturnType<typeof createRechargeTab> }> = [];
+let drillTabs: Array<{ spell: DrillSpell; el: HTMLElement; tab: ReturnType<typeof createRechargeTab> }> = [];
 
-function updateDrillTabs(): void {
-  if (built.hero !== "kael-drill") {
-    const elements = SPELL_ORDER.map((kind) => tabEl(SPELLS[kind].name.toUpperCase()));
+function updateDrillTabs(session: Session): void {
+  const { profile, fighter } = session;
+  const known = knownSpells(profile);
+  const key = `drill:${character.id}:${known.map((spell) => `${spell.id}${spell.damage}`).join()}`;
+  if (built.hero !== key) {
+    const elements = known.map((spell) => tabEl(spell.name.toUpperCase()));
     reserve.replaceChildren(...elements.map((el) => el.cloneNode(true)));
     box.replaceChildren(...elements);
-    drillTabs = elements.map((el, i) => {
-      el.style.setProperty("--tint", `#${SPELLS[SPELL_ORDER[i]].color.toString(16).padStart(6, "0")}`);
-      return { el, tab: createRechargeTab(el) };
+    drillTabs = known.map((spell, i) => {
+      const el = elements[i];
+      el.style.setProperty("--tint", `#${spell.color.toString(16).padStart(6, "0")}`);
+      return { spell, el, tab: createRechargeTab(el) };
     });
-    built = { hero: "kael-drill", tabs: [] };
+    built = { hero: key, tabs: [] };
   }
-  const book = drillFighter()?.spellBook;
-  const preparation = book?.preparation;
-  drillTabs.forEach(({ el, tab }, i) => {
-    const selected = SPELL_ORDER[i] === (book?.selected ?? SPELL_ORDER[0]);
-    el.classList.toggle("on", selected);
-    tab.update(selected && preparation && preparation.duration > 0 ? preparation.remaining / preparation.duration : 0);
-  });
+  const { selected, preparation } = fighter.spellBook;
+  for (const { spell, el, tab } of drillTabs) {
+    const hidden = !known.includes(spell);
+    if (el.hidden !== hidden) {
+      el.hidden = hidden;
+    }
+    const on = spell.id === selected.id;
+    el.classList.toggle("on", on);
+    tab.update(on && preparation && preparation.duration > 0 ? preparation.remaining / preparation.duration : 0);
+  }
 }
 
 export function updateAbilityTabs(): void {
-  if (usesKaelDrill()) {
-    updateDrillTabs();
+  const session = drillSession();
+  if (session && usesDrill()) {
+    updateDrillTabs(session);
     return;
   }
   if (built.hero !== character.id) build();
   const selected = selectedSlot();
-  const prep = usesCeriseDrill() ? preparationShare() : null;
   for (const { slot, el, tab } of built.tabs) {
     const known = slot.known();
     if (el.hidden === known) el.hidden = !known;
@@ -83,10 +91,8 @@ export function updateAbilityTabs(): void {
     const evolved = slot.evolved?.() ?? false;
     if (el.classList.contains("evolved") !== evolved) el.classList.toggle("evolved", evolved);
     el.classList.toggle("poor", !slot.affordable());
-    const preparation = on ? prep : null;
-    const label = preparation === null ? slot.label : `${slot.label} ${preparation > 0 ? "PREPARING" : "READY"}`;
-    if (el.textContent !== label) el.textContent = label;
-    tab.update(preparation ?? Math.min(1, slot.wait() / slot.full()));
+    if (el.textContent !== slot.label) el.textContent = slot.label;
+    tab.update(Math.min(1, slot.wait() / slot.full()));
   }
   const denied = Math.max(hero.denied.cast, hero.denied.mp);
   if (denied > lastDenied) built.tabs.find((t) => t.slot === selected)?.tab.jolt();

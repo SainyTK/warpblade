@@ -1,7 +1,7 @@
 import { setState } from "../../../game/hero/actions";
 import { cutForSharedAction, maySharedAct } from "../../../game/hero/sharedCut";
 import { emitSkillEvent } from "../../../game/skills/events";
-import { skillEvolved, skillLevel, skillValues, withCharms } from "../../../game/skills/query";
+import { skillEvolved, skillLevel, skillValues, withBuild } from "../../../game/skills/query";
 import { hero, progress } from "../../../game/state";
 import type { HeroState } from "../../../types/hero";
 import type { AbilitySlot } from "../../../types/moveset";
@@ -44,7 +44,7 @@ function recharge(a: SayaAbility): number {
     : a === "line"
       ? (skillValues(SKILL.stroke).recharge ?? ABILITY.line.recharge)
       : ABILITY.rise.recharge;
-  return withCharms("cooldown", own) / progress.stats.haste;
+  return withBuild("cooldown", own) / progress.stats.haste;
 }
 
 export function rechargeAbilities(dt: number): void {

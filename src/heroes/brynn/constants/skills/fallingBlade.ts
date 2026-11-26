@@ -22,6 +22,7 @@ export const FALLING_BLADE: SkillDef = {
   id: "br_falling",
   name: "Falling Blade",
   kind: "summon",
+  element: "void",
   risk: "easy",
   button: "auto",
   text: "Kills may call a phantom greatsword down from the sky onto the next foe.",

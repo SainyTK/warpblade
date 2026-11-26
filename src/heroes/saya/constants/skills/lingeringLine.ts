@@ -1,5 +1,6 @@
 import type { SkillDef } from "../../../../types/skill";
 import { evolvedRow, levelRows } from "../../../../utils/skillRows";
+import { drillRows, drillValues } from "./drillRows";
 import { SKILL } from "./ids";
 
 /** values: Brushline's stroke stays `time` s as a trail whose foes take `damage` ability power every `every` s; `rise`
@@ -19,18 +20,34 @@ const LEVELS = levelRows([
   { text: "New: trail ticks store a small cut; damage +150% to +200%.", values: { damage: 1.2, store: 0.3 } },
 ]);
 
+const DRILL = drillRows(LEVELS, [
+  { text: "Infused hits leave a bleeding ink line: 0.3x AP every 0.5 s for 3 s.", drill: { bleed: 0.3, time: 3 } },
+  { text: "The bleed lasts 3 to 4 s.", drill: { time: 4 } },
+  { text: "New: the bleed stacks up to 3 times.", drill: { stacks: 3 } },
+  { text: "Bleed +60%.", drill: { bleed: 0.5 } },
+  { text: "New: every slash stores 40% more.", drill: { store: 0.4 } },
+  { text: "Bleed +60% to +150%.", drill: { bleed: 0.75 } },
+  { text: "New: the bleed stacks up to 5 times.", drill: { stacks: 5 } },
+  { text: "Bleed +150% to +250%.", drill: { bleed: 1.05 } },
+]);
+
 export const LINGERING_LINE: SkillDef = {
   id: SKILL.trail,
   name: "Lingering Line",
   kind: "dot",
+  element: "venom",
   risk: "timed",
   button: "I",
-  text: "Brushline's ink stays on the floor and burns the foes that stand in it.",
-  levels: LEVELS,
+  text: "Infused hits leave a bleeding ink line in the foe.",
+  levels: DRILL,
   evolution: {
     partner: SKILL.stroke,
     name: "Ink Sea",
-    text: "Trails are twice as wide, and every release adds 1.5 ability power to each foe on a trail.",
-    row: evolvedRow(LEVELS[7], "Twice as wide; releases burst on the trail.", { wide: 2, burst: 1.5 }),
+    text: "Every slash leaves the bleeding ink line, infused or not.",
+    row: evolvedRow(DRILL[7], "Every slash leaves the ink line.", {
+      ...drillValues({ always: 1 }),
+      wide: 2,
+      burst: 1.5,
+    }),
   },
 };

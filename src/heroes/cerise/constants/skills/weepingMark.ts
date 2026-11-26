@@ -1,10 +1,11 @@
 import type { SkillDef } from "../../../../types/skill";
 import { evolvedRow, levelRows } from "../../../../utils/skillRows";
+import { withDrill } from "./drillRows";
 
 /** values: `dps` AD a second a marked foe bleeds, `taken` added damage it takes from every source, `refresh` her blows on a marked foe renew its mark, `lineMark` Rose Line
  *  marks every foe it cuts, `pass` a marked foe that falls passes the mark to the nearest foe; evolved `spread` share of
  *  the bleed every foe within 30 px of a marked foe takes */
-const LEVELS = levelRows([
+const NATIVE = levelRows([
   { text: "Marked foes bleed 0.4 AD a second.", values: { dps: 0.4 } },
   { text: "New: marked foes take +10% from every source.", values: { taken: 0.1 } },
   { text: "New: your blows keep a mark fresh; bleed 0.9 AD a second.", values: { dps: 0.9, refresh: 1 } },
@@ -15,10 +16,22 @@ const LEVELS = levelRows([
   { text: "Bleed 1.6 to 3.5 AD a second.", values: { dps: 3.5 } },
 ]);
 
+const LEVELS = withDrill(NATIVE, [
+  { text: "Marked foes bleed 0.4 AD a second.", drill: {} },
+  { text: "New: marked foes take +10% from every source.", drill: {} },
+  { text: "New: your blows keep a mark fresh; bleed 0.9 AD a second.", drill: {} },
+  { text: "New: every spell sets the Rose mark.", drill: { spells: 1 } },
+  { text: "Bleed 0.9 to 1.6 AD a second.", drill: {} },
+  { text: "New: a marked foe that falls passes its mark on.", drill: {} },
+  { text: "Marked foes take +10% to +25%.", drill: {} },
+  { text: "Bleed 1.6 to 3.5 AD a second.", drill: {} },
+]);
+
 export const WEEPING_MARK: SkillDef = {
   id: "ce_weep",
   name: "Weeping Mark",
   kind: "dot",
+  element: "venom",
   risk: "timed",
   button: "auto",
   text: "Foes carrying your Rose mark bleed.",

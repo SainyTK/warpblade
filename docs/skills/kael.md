@@ -4,6 +4,42 @@ Kael's part of the skill rework (`docs/skill-design.md`).
 This is a working design: numbers are starting values for the constants files.
 AD and AP mean Kael's attack damage and ability power (both 10 at hero level 1, `KAEL.base`).
 
+## Drill set
+
+Solo Adventure runs base Kael on the shared drill engine (`src/drill`).
+All 20 skills are offered there and each one upgrades a drill mechanic; the reward pool has no filter.
+The rows keep the numbers the native kit reads (Prism Knight, the wave arena, co-op), so the sections after this one still describe Kael's native kit, and the card text is the drill's.
+Drill code: `src/heroes/kael/game/drill/skills/` (one file per redesigned skill), folded into `KAEL_DRILL` by `game/drill/hooks.ts`.
+
+| Id | Name | Mechanic | Level 1 | Levels 2 to 8 | Evolution (partner) |
+| --- | --- | --- | --- | --- | --- |
+| `k_keen` | Keen Edge | third slash | third slash +50% | stagger, crystal wave, a sure crit on the second slash, a twin wave, up to +300% | Peerless Edge (`k_phase`): every third finisher throws a cross wave, then 3 s of finisher slashes |
+| `k_skyward` | Skybreaker | third slash and air slash | the third slash launches foes | air slashes +30% to +100%, a spike on foes in the air, launch and spike damage | Heavenfall (`k_skydance`): a spike crashes on the foes below and stuns them |
+| `k_reap` | Reaping Sweep | first slash | the first slash drags foes in | a cut, a trip, +15% to +30% reach on every slash, a cut behind, chill | Crystal Harvest (`k_splinters`): the sweep reaps foes up to 140 px ahead |
+| `k_phase` | Phase Cut | second slash | the second slash phases Kael behind the foe | a phase cut, untouchable through the phase, a bonus third slash after a phase | Phantom Passage (`k_blink`): the phase runs through every foe up to 160 px ahead |
+| `k_aegis` | Crystal Aegis | guard and parry | blocks set crystals, a parry shatters them | as in the native kit | Diamond Aegis (`k_mirror`) |
+| `k_warpcraft` | Warpcraft | warp strike | recharge -15%, damage +30% | an arrival blast, refreshed air dash and air slash, stagger, recharge -40%, damage +200% | Rift Walker (`k_passing`): every 4 s an arrival recharges the warp |
+| `k_blink` | Blink Step | dash and air dash | untouchable while dashing | more air dashes (up to 3), the air dash restores the air slash, an afterimage cut | Shadow Step (`k_echo`): afterimages cut twice, twice as wide |
+| `k_passing` | Passing Cut | dash | dashing through foes cuts them | stagger, a dash through a foe recharges the dash, sure crits, larger cuts | Phantom Rush (`k_skydance`): a phantom repeats each cut at 60% |
+| `k_spellwarp` | Spellwarp | warp and infusion | an arrival infuses the sword for 1 hit | faster preparation (up to 45%), an arrival shortens a preparation, longer infusions, an arrival burst | Arcane Arrival (`k_warpcraft`): every arrival readies the selected spell |
+| `k_skydance` | Sky Dance | jump, wall kick, air | one more air slash | a cutting wall kick, a stomp after air slashes, one more air dash, a third air slash | Comet Dance (`k_reap`): the stomp reaches 70 px and draws foes in |
+| `k_flame` | Fire Flask | Fire | Fire sets foes burning | harder fire, knock, a flare on slashing burning foes, wider blasts, two flasks | Sunflask (`k_familiar`): each blast throws three more |
+| `k_frost` | Ice Spikes | Ice | Ice freezes longer | a slash shatters a frozen foe, chill, a shatter splash | Glacier Bloom (`k_reap`): a shatter freezes what it splashes |
+| `k_volt` | Lightning | Thunder | Thunder arcs to one more foe | an extra bolt, shock, more arcs (up to 4), thunder-infused slashes arc | Thunderhead (`k_static`): Thunder strikes twice |
+| `k_splinters` | Crystal Splinters | dot on slashes | as in the native kit | the chain's last hit lodges three | Shatterstorm (`k_keen`): the chain's last hit and every Keen blow shatter the splinters |
+| `k_rift` | Rift Wound | dot on the warp | as in the native kit | the chain's last hit adds a layer | Rift Collapse (`k_warpcraft`) |
+| `k_static` | Static Charge | dot on the dash | foes the dash passes are charged | as in the native kit | Overload (`k_passing`): every dash strikes the charged foes |
+| `k_echo` | Phantom Edge | summon on back hits | as in the native kit | as in the native kit | Phantom Host (`k_mirror`) |
+| `k_familiar` | Crystal Familiar | summon on casts | as in the native kit | as in the native kit | Crystal Choir (`k_volt`) |
+| `k_mirror` | Mirror Knight | summon on parries and perfect dodges | as in the native kit | as in the native kit | as in the native kit |
+| `k_nova` | Crystal Nova | the four charged tiers | charged skills +30% | a pull, faster charge, an echo strike, more reach, up to +250% | Supernova (`k_keen`): every charged skill bursts twice more |
+
+Count by mechanic: 4 slash skills, 1 guard skill, 4 warp and dash skills, 1 jump skill, 3 spell skills, 3 damage over time, 3 summons, 1 charged-tier skill.
+Effects that exist only in the drill (the `drill.` numbers) do nothing in the native kit.
+The drill fires the shared perfect dodge once per dash that avoids a real hit, so Static Charge level 7 and Mirror Knight's perfect dodge trigger work there as in the native kit, and a perfect dodge primes Mirror Knight's Riposte like a parry does (`game/skills/mirrorKnight.ts` through `nativeOrDrill`).
+A drill Keen blow (J pressed within 0.1 s after a slash lands) is a sure crit with `keen` set on its `blow` event, so Shatterstorm shatters on it.
+Keen Edge's native Keen bonus (`bonus`, `streak`) stays in the native kit; the drill's Keen Edge upgrades the third slash instead.
+
 ## Identity
 
 Kael is the warp knight: a sword string that plays the same every time, a thrown sword he appears beside, a sword guard whose parry blinks him behind the attacker, and crystal magic.

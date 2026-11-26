@@ -1,9 +1,9 @@
 import { SPARKS } from "../../../../constants/palette";
 import { enemyCenter } from "../../../../game/enemies/enemy";
 import { addStacks, stacksOf } from "../../../../game/enemies/skillStatus";
-import { skillEvolved, skillValues, withCharms } from "../../../../game/skills/query";
+import { skillEvolved, skillValues, withBuild } from "../../../../game/skills/query";
 import { foesOnScreen } from "../../../../game/skills/targets";
-import { game, hero, particles, progress, rng } from "../../../../game/state";
+import { fxRng, game, hero, particles, progress } from "../../../../game/state";
 import type { Enemy } from "../../../../types/enemy";
 import { PK } from "../../../../types/particle";
 import type { SkillBehavior, SkillMemory } from "../../../../types/skillBehavior";
@@ -34,7 +34,7 @@ function charge(e: Enemy): void {
     max: 1,
     damage: progress.stats.ap * v.tick * STATIC.every,
     every: STATIC.every,
-    duration: skillEvolved(ID) ? STATIC.forever : withCharms("duration", v.life),
+    duration: skillEvolved(ID) ? STATIC.forever : withBuild("duration", v.life),
   });
 }
 
@@ -61,7 +61,7 @@ function contagion(m: StaticMemory): void {
 function overload(m: StaticMemory): void {
   const v = skillValues(ID);
   if (m.overloadT > 0) return;
-  m.overloadT = withCharms("cooldown", v.every);
+  m.overloadT = withBuild("cooldown", v.every);
   const ap = progress.stats.ap;
   foesOnScreen()
     .filter(charged)
@@ -82,14 +82,14 @@ export const staticCharge: SkillBehavior = {
     m.overloadT = Math.max(0, m.overloadT - dt);
     for (const [e] of m.boltAt) if (e.hp <= 0) m.boltAt.delete(e);
     for (const e of foesOnScreen()) {
-      if (!charged(e) || !rng.chance(0.2)) continue;
+      if (!charged(e) || !fxRng.chance(0.2)) continue;
       const [x, y] = enemyCenter(e);
       particles.spawn(
         PK.SPARK,
-        x + rng.range(-6, 6),
-        y + rng.range(-8, 8),
-        rng.range(-50, 50),
-        rng.range(-60, 10),
+        x + fxRng.range(-6, 6),
+        y + fxRng.range(-8, 8),
+        fxRng.range(-50, 50),
+        fxRng.range(-60, 10),
         0.1,
         {
           sparks: SPARKS.volt,

@@ -1,4 +1,4 @@
-import { skillEvolved, skillValues, withCharms } from "../../../../game/skills/query";
+import { skillEvolved, skillValues, withBuild } from "../../../../game/skills/query";
 import { game, hero, progress } from "../../../../game/state";
 import { FAN, STREAM } from "../../constants/abilities";
 import { SKILL } from "../../constants/skillIds";
@@ -16,7 +16,7 @@ function conjured(): SwordPlace {
  */
 export function castFan(places: readonly SwordPlace[], wide: boolean): void {
   const v = skillValues(SKILL.fan);
-  const swords = [...places, ...Array.from({ length: withCharms("amount", v.extra ?? 0) }, conjured)];
+  const swords = [...places, ...Array.from({ length: withBuild("amount", v.extra ?? 0) }, conjured)];
   const around = skillEvolved(SKILL.fan);
   swords.forEach((from, i) => {
     const rise = FAN.rises[i % FAN.rises.length] * (wide ? FAN.wide : 1);
@@ -24,7 +24,7 @@ export function castFan(places: readonly SwordPlace[], wide: boolean): void {
       createStreamSword({
         from,
         delay: i * STREAM.gap * 0.5,
-        reach: withCharms("area", v.reach),
+        reach: withBuild("area", v.reach),
         rise,
         damage: progress.stats.ap * v.power,
         source: "abilities",

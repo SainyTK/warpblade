@@ -35,7 +35,7 @@ export function quitRun(): void {
  * A room plays on under the menu, and its players may still pause while anyone picks, to leave the room
  */
 export function pauseGame(): void {
-  if (isMenuOpen() || ((game.mode === "pick" || game.mode === "chest") && !inRoom())) return;
+  if (isMenuOpen() || ((game.mode === "pick" || game.mode === "chest" || game.mode === "map") && !inRoom())) return;
   releaseAll();
   openMenu("pause");
 }

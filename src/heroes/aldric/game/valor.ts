@@ -1,6 +1,6 @@
 import { createFloorRing } from "../../../game/effects/floorRing";
 import { feat } from "../../../game/feat";
-import { skillValues, withCharms } from "../../../game/skills/query";
+import { skillValues, withBuild } from "../../../game/skills/query";
 import { game, hero, lights } from "../../../game/state";
 import { sfx } from "../../../services/audio";
 import { STAT } from "../constants/achievements";
@@ -15,7 +15,7 @@ import { castSanctuary } from "./ultimate/sanctuary";
 export const radiant = (): boolean => aldric.radiance > 0;
 
 /** how long Radiance runs, with Resolve */
-const radianceTime = (): number => withCharms("duration", RADIANCE.time + (skillValues("al_resolve").radiance ?? 0));
+const radianceTime = (): number => withBuild("duration", RADIANCE.time + (skillValues("al_resolve").radiance ?? 0));
 
 /** Valor at full empties into Radiance: a ring of light, a flare and the sword lit */
 function kindle(): void {

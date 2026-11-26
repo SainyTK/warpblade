@@ -1,6 +1,6 @@
 import { DAMAGE } from "../../../constants/combat";
 import { KEEN } from "../../../constants/combo";
-import { skillValues, withCharms } from "../../../game/skills/query";
+import { skillValues, withBuild } from "../../../game/skills/query";
 import { game, hero, progress } from "../../../game/state";
 import type { Enemy } from "../../../types/enemy";
 import type { OwnHit } from "../../../types/kit";
@@ -96,7 +96,7 @@ function leaveCrescent(): void {
   if (!v.crescent) return;
   const ad = progress.stats.ad;
   const ring = !!v.ring;
-  const life = ring ? withCharms("duration", v.ring) : withCharms("duration", v.crescentTime);
+  const life = ring ? withBuild("duration", v.ring) : withBuild("duration", v.crescentTime);
   game.fx.push(createInkArc({ life, now: ad * v.crescent, store: v.crescentStore ? ad * v.crescent : 0, ring }));
 }
 

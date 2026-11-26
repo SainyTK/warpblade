@@ -20,6 +20,7 @@ export const JADE_HERON: SkillDef = {
   id: "yu_heron",
   name: "Jade Heron",
   kind: "summon",
+  element: "venom",
   risk: "timed",
   button: "auto",
   text: "Casting may call a jade heron that flies through the line ahead.",

@@ -5,6 +5,42 @@ The rows are in `src/heroes/vesper/constants/skills/`, the code in `src/heroes/v
 AD and AP mean her attack damage and ability power (10 and 9 at hero level 1).
 Her kit and numbers are in `docs/heroes/vesper.md`.
 
+## Drill set
+
+Solo Adventure runs base Vesper on the shared drill engine (`src/drill`).
+All 20 skills are offered there and each one upgrades a drill mechanic; the reward pool has no filter.
+The rows keep the numbers the native kit reads (the wave arena and co-op), so the sections after this one still describe her native kit, and the card text is the drill's.
+Drill code: `src/heroes/vesper/game/drill/skills/` (one file per redesigned skill), folded into `VESPER_DRILL` by `game/drill/hooks.ts`.
+The native code of the redesigned skills that answer events (Ascending Step, Dusk Sigil, Afterglow, Unbroken Rhythm, Wanderer's Grace) is quiet while the drill runs (`game/skills/nativeOnly.ts`).
+
+| Id | Name | Mechanic | Level 1 | Levels 2 to 8 | Evolution (partner) |
+| --- | --- | --- | --- | --- | --- |
+| `ve_edge` | Rising Edge | first cut (dusk cross) | +0.3 AD | a night echo, stagger, +12% reach on every cut, a second echo, up to +2.2 AD | Crescendo (`ve_rhythm`): the first cut throws crossing dusk waves |
+| `ve_keen` | Twin Keen | second cut (rising pair) | a 0.35 AD short-blade cut follows | sure crits, a pop up, a 15% mark, a second follow cut, up to 2.4 AD | Perfect Pair (`ve_turn`): every foe within 60 px is cut twice |
+| `ve_storm` | Crossing Storm | third cut (moonrise) | +40% | crossing waves, a higher launch, waves both ways, stagger, up to +250% | Thousand Crossings (`ve_shade`): four wave pairs and an echo on each foe |
+| `ve_sky` | Sky Ribbon | air cut | one more air cut | harder air cuts, a second and third extra air cut, a night echo on foes in the air | Heaven's Ribbon (`ve_ascend`): each air cut sends a diving wave |
+| `ve_turn` | Turning Blade | guard and parry | parry window +40% | a parry cut, stagger, warp and air dash recharge, a wide cut, up to 6.5 AD | Whirling Mirror (`ve_keen`): a ring of night cuts |
+| `ve_warp` | Thrown Dusk | warp strike | recharge -15%, damage +30% | an arrival cross cut, refreshed air dash and air cuts, stagger, recharge -40%, damage +200% | Twin Throw (`ve_thread`): the arrival cut strikes twice |
+| `ve_slip` | Slipstream | dash | dashing through foes cuts them | stagger, a dash refund, a night echo, one more air dash, up to 3.2 AD | Dusk Current (`ve_rhythm`): a dash through foes throws waves |
+| `ve_grace` | Wanderer's Grace | dash and air dash | untouchable while dashing | more air dashes (up to 3), the air dash restores the air cuts, a dusk shade cut, HP as in the native kit | Dusk Ward (`ve_twin`): shades cut twice, twice as wide |
+| `ve_rhythm` | Unbroken Rhythm | warp and spells | a landed cut shortens the warp recharge | an arrival shortens a preparation, recharges the dash, a moonrise recharges the warp, one more infused hit | Perpetual Tempo (`ve_slip`): every arrival readies the selected spell |
+| `ve_ascend` | Ascending Step | jump, wall kick, air | one more air dash | a cutting wall kick, a jump cut, launches, one more air cut | Moonlit Steps (`ve_sky`): the cuts reach 56 px |
+| `ve_moon` | Falling Moon | Falling Moon | +0.4 AD | a second moon, stagger, a pull, small moons from moon-infused cuts, up to +2.8 AD | Eclipse (`ve_hex`): three more moons around each |
+| `ve_gale` | Dusk Gale | Dusk Gale | +0.4 AD | a second gust, wider blasts, a gust behind, up to +3.2 AD | Twilight Cyclone (`ve_sky`): gale hits lift the foes near |
+| `ve_thread` | Dusk Thread | Dusk Thread | +0.4 AD | runs on to more foes (up to 3), stagger, faster preparation, up to +2.8 AD | Fate Thread (`ve_warp`): a thread hit recharges the warp |
+| `ve_hex` | Dusk Sigil | dot on cuts | landed cuts lay sigils | warp lays 3, sigils jump, the moonrise blooms them, infused cuts lay more | Sigil Bloom (`ve_moon`): Falling Moon blooms the sigils |
+| `ve_night` | Falling Night | dot on air blows | as in the native kit | as in the native kit; drill launches count | Starless Night (`ve_sky`) |
+| `ve_glow` | Afterglow | dot on the dash | foes the dash passes glow | the warp lays more, a burst on death, spells lay it | Dusk Fire (`ve_edge`): each dash flares every afterglow |
+| `ve_shade` | Dusk Shade | summon on blows | as in the native kit | as in the native kit | Shade Troupe (`ve_storm`) |
+| `ve_swallow` | Night Swallows | summon on launches | as in the native kit; the moonrise, Falling Moon and air juggles launch | as in the native kit | Swallow Storm (`ve_night`) |
+| `ve_twin` | Twin Phantom | summon on parries | as in the native kit | as in the native kit | Mirror Dance (`ve_turn`) |
+| `ve_waltz` | Dusk Waltz | the four charged tiers | tiers +30% | dancing afterimage cuts, faster charge, reach, a pull, up to +250% | Endless Waltz (`ve_rhythm`): each tier dances twice |
+
+Count by mechanic: 4 slash skills, 1 guard skill, 4 warp and dash skills, 1 jump skill, 3 spell skills, 3 damage over time, 3 summons, 1 charged-tier skill.
+Kinds: attack 5, movement 5, spell 3, dot 3, summon 3, ultimate 1.
+Effects that exist only in the drill (the `drill.` numbers) do nothing in the native kit.
+Tempo does not run in the drill, so the native levels of Dusk Shade and Night Swallows that read the top of Tempo only fire in the native kit, and a perfect dodge does not exist in the drill, so Twin Phantom's perfect dodge trigger is native only.
+
 ## Identity
 
 Vesper is the twin blade: a string of paired blows that grows faster with Tempo, the longest air string of the nine, a parry that opens the foes, and abilities she weaves into the string.
@@ -44,7 +80,7 @@ The air presses keep their own count, so the ground string never caps them.
 | `ve_storm` | Crossing Storm | attack | easy | J | `ve_shade` | Thousand Crossings |
 | `ve_turn` | Turning Blade | attack | precise | K | `ve_keen` | Whirling Mirror |
 | `ve_ascend` | Ascending Step | movement | timed | jump | `ve_sky` | Moonlit Steps |
-| `ve_warp` | Thrown Dusk | movement | timed | J held | `ve_thread` | Twin Throw |
+| `ve_warp` | Thrown Dusk | movement | timed | L | `ve_thread` | Twin Throw |
 | `ve_slip` | Slipstream | movement | timed | L | `ve_rhythm` | Dusk Current |
 | `ve_moon` | Falling Moon | spell | easy | I | `ve_hex` | Eclipse |
 | `ve_gale` | Dusk Gale | spell | timed | I | `ve_sky` | Twilight Cyclone |
@@ -56,10 +92,10 @@ The air presses keep their own count, so the ground string never caps them.
 | `ve_swallow` | Night Swallows | summon | easy | auto (launch) | `ve_night` | Swallow Storm |
 | `ve_twin` | Twin Phantom | summon | precise | auto (parry or perfect dodge) | `ve_turn` | Mirror Dance |
 | `ve_waltz` | Dusk Waltz | ultimate | easy | U | `ve_rhythm` | Endless Waltz |
-| `ve_rhythm` | Unbroken Rhythm | passive | easy | auto | `ve_slip` | Perpetual Tempo |
-| `ve_grace` | Wanderer's Grace | passive | easy | auto | `ve_twin` | Dusk Ward |
+| `ve_rhythm` | Unbroken Rhythm | movement | easy | L | `ve_slip` | Perpetual Tempo |
+| `ve_grace` | Wanderer's Grace | movement | easy | L | `ve_twin` | Dusk Ward |
 
-Kinds: attack 5, movement 3, spell 3, dot 3, summon 3, ultimate 1, passive 2.
+Kinds: attack 5, movement 5, spell 3, dot 3, summon 3, ultimate 1.
 Every skill has at least four level ups that add a new property (marked New on the card).
 
 ## Each skill

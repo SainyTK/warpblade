@@ -87,7 +87,7 @@
   background: var(--night);
 }
 
-/* The build so far: skill slots and charm slots, filled and free. */
+/* The build so far: skill slots, Resonance and Arts. */
 .level-up-build {
   display: flex;
   flex-wrap: wrap;
@@ -179,42 +179,30 @@
     transform 90ms steps(2),
     border-color 90ms steps(2);
 }
-/* A skill card takes the colour of its kind; charms jade, boons green. */
-.pick[data-branch="attack"] {
-  --accent: var(--brass);
-  --accent-dark: #3a2a10;
+/* A card takes the colour of its element; boons green. */
+.pick[data-branch="blaze"] {
+  --accent: var(--blaze);
+  --accent-dark: var(--blaze-dark);
 }
-.pick[data-branch="movement"] {
-  --accent: var(--volt);
-  --accent-dark: #241a52;
+.pick[data-branch="frost"] {
+  --accent: var(--frost);
+  --accent-dark: var(--frost-dark);
 }
-.pick[data-branch="spell"] {
-  --accent: var(--crystal);
-  --accent-dark: #102a48;
+.pick[data-branch="storm"] {
+  --accent: var(--storm);
+  --accent-dark: var(--storm-dark);
 }
-.pick[data-branch="dot"] {
-  --accent: var(--fire);
-  --accent-dark: #3a1a0c;
+.pick[data-branch="venom"] {
+  --accent: var(--venom);
+  --accent-dark: var(--venom-dark);
 }
-.pick[data-branch="summon"] {
-  --accent: #b8e05a;
-  --accent-dark: #26340e;
-}
-.pick[data-branch="passive"] {
-  --accent: var(--iron);
-  --accent-dark: #262a36;
-}
-.pick[data-branch="ultimate"] {
-  --accent: var(--pink);
-  --accent-dark: #3a1438;
+.pick[data-branch="void"] {
+  --accent: var(--void);
+  --accent-dark: var(--void-dark);
 }
 .pick[data-branch="boon"] {
   --accent: var(--heal);
   --accent-dark: #123a2a;
-}
-.pick[data-branch="charm"] {
-  --accent: var(--jade);
-  --accent-dark: #0e3424;
 }
 /* Banishing: every card turns rust red, and Second Wind, which cannot be banished, steps back. */
 .level-up.banishing .pick {
@@ -538,4 +526,10 @@
     animation: none;
     transition: none;
   }
+}
+.pick-note.pick-resonance {
+  color: var(--accent);
+}
+.pick-note.pick-fusion {
+  color: var(--gold);
 }

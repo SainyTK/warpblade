@@ -4,8 +4,8 @@ import { dealDamage } from "../../../game/damage";
 import { createFloorRing } from "../../../game/effects/floorRing";
 import { createImpact } from "../../../game/effects/impact";
 import { enemyCenter } from "../../../game/enemies/enemy";
-import { skillEvolved, skillLevel, skillValues, withCharms } from "../../../game/skills/query";
-import { game, hero, lights, particles, progress, rng } from "../../../game/state";
+import { skillEvolved, skillLevel, skillValues, withBuild } from "../../../game/skills/query";
+import { fxRng, game, hero, lights, particles, progress } from "../../../game/state";
 import { hitStop, shake } from "../../../game/world";
 import { sfx } from "../../../services/audio";
 import type { Enemy } from "../../../types/enemy";
@@ -40,16 +40,16 @@ export function aegisBlocked(foe: Enemy | null): void {
 function shatter(foe: Enemy, plates: number): void {
   const v = skillValues(SKILL);
   const [x, y] = enemyCenter(foe);
-  const reach = withCharms("area", v.reach);
+  const reach = withBuild("area", v.reach);
   const blow = progress.stats.ad * v.shard * plates;
   game.fx.push(createFloorRing(x, foe.y, reach, C, 0.35));
   lights.add(x, y, reach + 10, C[4], 0.9, 0.3);
   for (let i = 0; i < plates * AEGIS_LOOK.shards; i++) {
-    const a = rng.range(0, TAU);
-    const sp = rng.range(90, 200);
-    particles.spawn(PK.SHARD, x, y, Math.cos(a) * sp, Math.sin(a) * sp * 0.7, rng.range(0.3, 0.6), {
-      col: rng.pick(C.slice(3)),
-      size: rng.range(1.2, 2.6),
+    const a = fxRng.range(0, TAU);
+    const sp = fxRng.range(90, 200);
+    particles.spawn(PK.SHARD, x, y, Math.cos(a) * sp, Math.sin(a) * sp * 0.7, fxRng.range(0.3, 0.6), {
+      col: fxRng.pick(C.slice(3)),
+      size: fxRng.range(1.2, 2.6),
     });
   }
   const launch = skillEvolved(SKILL) ? v.launch : undefined;
@@ -60,7 +60,7 @@ function shatter(foe: Enemy, plates: number): void {
     const dir = Math.sign(ex - hero.x) || hero.face;
     const damage = e === foe ? blow : blow * AEGIS_SPLASH;
     dealDamage(e, damage, { fromX: hero.x, kx: dir * 90, ky: -60, launch, heavy: true });
-    if (v.freeze) e.frozen = Math.max(e.frozen, withCharms("duration", v.freeze));
+    if (v.freeze) e.frozen = Math.max(e.frozen, withBuild("duration", v.freeze));
     game.fx.push(createImpact(ex, ey, dir, true, SPARKS.crystal));
   }
   hitStop(0.08);

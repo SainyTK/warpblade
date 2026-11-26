@@ -1,12 +1,13 @@
 import { HERO_GUARD } from "../../../../constants/combat";
 import { GROUND } from "../../../../constants/stage";
+import { nativeOrDrill } from "../../../../drill";
 import { clampStageX } from "../../../../game/adventure";
 import { dealDamage } from "../../../../game/damage";
 import { createImpact } from "../../../../game/effects/impact";
 import { createSlash } from "../../../../game/effects/slash";
 import { enemyCenter, walks } from "../../../../game/enemies/enemy";
 import { createPayoff, payoffLands } from "../../../../game/skills/payoff";
-import { skillEvolved, skillValues, withCharms } from "../../../../game/skills/query";
+import { skillEvolved, skillValues, withBuild } from "../../../../game/skills/query";
 import { game, hero, progress, rng } from "../../../../game/state";
 import type { Effect } from "../../../../types/effect";
 import type { Enemy } from "../../../../types/enemy";
@@ -79,16 +80,14 @@ function answer(m: SkillMemory, foe: Enemy | null, sure = false): void {
   const v = skillValues(ID);
   if (!foe || foe.hp <= 0) return;
   if (!sure && ((m.cd as number) > 0 || !rng.chance(v.chance))) return;
-  m.cd = withCharms("cooldown", v.cooldown);
-  const knights = withCharms("amount", v.knights ?? 1);
+  m.cd = withBuild("cooldown", v.cooldown);
+  const knights = withBuild("amount", v.knights ?? 1);
   const away = Math.sign(foe.x - hero.x) || hero.face;
   for (let i = 0; i < knights; i++) game.fx.push(createKnight(foe, i % 2 === 0 ? away : -away));
   if (v.barrier) raiseBarrier(OATHSWORN.barrier, 1);
 }
 
-/** Oathsworn: a parry (and from its fourth level a Counterbash) may call a knight of light who cuts the attacker; as
- *  Honour Guard two answer, and with Twin Bulwark every warp arrival calls them */
-export const oathsworn: SkillBehavior = {
+const native: SkillBehavior = {
   create: () => ({ cd: 0 }),
   update(m, _s, dt) {
     m.cd = Math.max(0, (m.cd as number) - dt);
@@ -96,6 +95,9 @@ export const oathsworn: SkillBehavior = {
   on: {
     parry(m, ev) {
       answer(m, attackerAt(ev.fromX));
+    },
+    block(m, ev) {
+      if (skillValues(ID).counter) answer(m, attackerAt(ev.fromX));
     },
     guardBash(m, ev) {
       if (ev.counter && skillValues(ID).counter) answer(m, ev.foe);
@@ -105,3 +107,11 @@ export const oathsworn: SkillBehavior = {
     },
   },
 };
+
+/** Oathsworn: a parry (and from its fourth level a block or a Counterbash) may call a knight of light who cuts the
+ *  attacker; as Honour Guard two answer, and with Twin Bulwark every warp arrival calls them. On the drill Twin
+ *  Bulwark recharges the warp instead, so arrivals call no knights */
+export const oathsworn: SkillBehavior = nativeOrDrill(native, {
+  ...native,
+  on: { parry: native.on?.parry, block: native.on?.block },
+});

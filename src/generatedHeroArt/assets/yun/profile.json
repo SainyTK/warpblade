@@ -1,5 +1,8 @@
 {
-  "weaponGrip": [12, 15],
-  "weaponTipY": 94,
-  "weaponWidth": 9
+  "trails": {
+    "ponytail": [14.12, 14.12, 14.87, 15.28, 13.9, 15.4, 15.74, 15.21, 21.18, 18.76, 15.94]
+  },
+  "headScale": 1.12,
+  "weaponGrip": [12.5, 14.4],
+  "weaponTipY": 94
 }

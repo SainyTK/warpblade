@@ -6,8 +6,8 @@ import { createFloorRing } from "../../../../game/effects/floorRing";
 import { createSlash } from "../../../../game/effects/slash";
 import { skin } from "../../../../game/hero/skin";
 import { meleeHit } from "../../../../game/meleeHit";
-import { skillEvolved, skillValues, withCharms } from "../../../../game/skills/query";
-import { game, hero, lights, particles, rng } from "../../../../game/state";
+import { skillEvolved, skillValues, withBuild } from "../../../../game/skills/query";
+import { fxRng, game, hero, lights, particles } from "../../../../game/state";
 import { boxAhead, dust, newSwing, shake } from "../../../../game/world";
 import type { MoveDef } from "../../../../types/move";
 import { PK } from "../../../../types/particle";
@@ -23,13 +23,13 @@ const METEOR = { reach: 46, drift: 30 } as const;
 const SKILL = "k_skydance";
 /** the stomp's power and reach on each side, from Sky Dance */
 const stompPower = (): number => skillValues(SKILL).stomp ?? 2.2;
-const stompReach = (base: number): number => Math.max(base, withCharms("area", skillValues(SKILL).stompReach ?? base));
+const stompReach = (base: number): number => Math.max(base, withBuild("area", skillValues(SKILL).stompReach ?? base));
 
 /** Comet Dance: the landing is a comet, a wide crystal ring that strikes hard and draws foes in to its middle */
 function cometLanding(): boolean {
   if (!skillEvolved(SKILL)) return false;
   const v = skillValues(SKILL);
-  const reach = withCharms("area", v.cometReach);
+  const reach = withBuild("area", v.cometReach);
   game.fx.push(createFloorRing(hero.x, hero.y, reach, PAL.crystal, 0.55));
   game.fx.push(createFloorRing(hero.x, hero.y, reach * 0.6, skin.ramp, 0.4));
   lights.add(hero.x, hero.y - 10, reach, PAL.crystal[4], 0.9, 0.4);
@@ -39,12 +39,12 @@ function cometLanding(): boolean {
       PK.SHARD,
       hero.x,
       hero.y - 2,
-      side * rng.range(40, 200),
-      rng.range(-220, -80),
-      rng.range(0.4, 0.9),
+      side * fxRng.range(40, 200),
+      fxRng.range(-220, -80),
+      fxRng.range(0.4, 0.9),
       {
-        col: rng.pick(PAL.crystal.slice(3)),
-        size: rng.range(1.5, 3),
+        col: fxRng.pick(PAL.crystal.slice(3)),
+        size: fxRng.range(1.5, 3),
       },
     );
   }
@@ -105,12 +105,12 @@ function stompLanding(): void {
       PK.SHARD,
       hero.x,
       hero.y - 1,
-      side * rng.range(30, 130),
-      rng.range(-170, -60),
-      rng.range(0.4, 0.8),
+      side * fxRng.range(30, 130),
+      fxRng.range(-170, -60),
+      fxRng.range(0.4, 0.8),
       {
         col: WORLD_COLORS.rubble,
-        size: rng.range(1.5, 3),
+        size: fxRng.range(1.5, 3),
       },
     );
   }

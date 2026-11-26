@@ -1,9 +1,9 @@
 import { fleck, hairline, place } from "../../../engine/frame";
 import { enemyCenter } from "../../../game/enemies/enemy";
 import { addStacks, stacksOf } from "../../../game/enemies/skillStatus";
-import { skillValues, withCharms } from "../../../game/skills/query";
+import { skillValues, withBuild } from "../../../game/skills/query";
 import { foesOnScreen } from "../../../game/skills/targets";
-import { game, particles, progress, rng } from "../../../game/state";
+import { fxRng, game, particles, progress } from "../../../game/state";
 import type { Enemy } from "../../../types/enemy";
 import { PK } from "../../../types/particle";
 import { WOUND_RED } from "../constants/palette";
@@ -21,23 +21,31 @@ export function openWounds(e: Enemy, n: number): void {
     max: woundMost(),
     damage: progress.stats.ad * (deep.per ?? WOUND.per),
     every: deep.every ?? WOUND.every,
-    duration: withCharms("duration", deep.life ?? WOUND.life),
+    duration: withBuild("duration", deep.life ?? WOUND.life),
   });
 }
 
 /** how many wounds a foe has open */
 export const woundsOf = (e: Enemy): number => stacksOf(e, WOUND_SOURCE);
 
-/** a bleeding foe sheds a drop now and then, more the more wounds it has; drops are play, so they step with the game */
+/** a bleeding foe sheds a drop now and then, more the more wounds it has; drops spawn in the game step, never in a draw */
 export function shedDrops(): void {
   for (const e of foesOnScreen()) {
     const n = woundsOf(e);
-    if (!n || !rng.chance(0.04 * n)) continue;
+    if (!n || !fxRng.chance(0.04 * n)) continue;
     const [x, y] = enemyCenter(e);
-    particles.spawn(PK.SHARD, x + rng.range(-4, 4), y + rng.range(-3, 3), rng.range(-15, 15), rng.range(-30, 0), 0.45, {
-      col: rng.pick(WOUND_RED.slice(1)),
-      size: rng.range(0.8, 1.4),
-    });
+    particles.spawn(
+      PK.SHARD,
+      x + fxRng.range(-4, 4),
+      y + fxRng.range(-3, 3),
+      fxRng.range(-15, 15),
+      fxRng.range(-30, 0),
+      0.45,
+      {
+        col: fxRng.pick(WOUND_RED.slice(1)),
+        size: fxRng.range(0.8, 1.4),
+      },
+    );
   }
 }
 

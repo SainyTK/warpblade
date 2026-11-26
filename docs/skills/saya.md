@@ -4,6 +4,39 @@ Saya's 20 skills, to the contract in `docs/skill-design.md`.
 Her design note is `docs/heroes/saya.md`.
 AD and AP mean Saya's attack damage and ability power (11 and 8 at hero level 1, `SAYA.base`).
 
+## Drill set
+
+Solo Adventure runs Saya on the shared drill engine, and all 20 skills upgrade a drill mechanic, to the baseline in `docs/skill-design.md` ("Drill baseline").
+Rows keep the native numbers and add the drill's under `drill.`; card text describes the drill.
+Drill code: `src/heroes/saya/game/drill/skills/`, folded into `SAYA_DRILL` by `game/drill/hooks.ts`.
+Three skills change job on the drill: Ink Flow becomes the warp and infusion skill, Calm Mind the guard skill, and Deep Breath becomes Feather Step, the jump skill.
+
+| Id | Name | Mechanic | Level 1 | Levels 2 to 8 | Evolution (partner) |
+| --- | --- | --- | --- | --- | --- |
+| `sa_edge` | Honed Draw | first slash | draw cut +40%, stores +40% | stagger, an ink cut ahead, sure crit, +15% reach on every slash, up to +300% | Moonlit Draw (`sa_clean`): a twin ink cut and an instant release |
+| `sa_reverse` | Reverse Edge | second slash | also cuts behind | launch, +50% to +250%, the cut behind stores, chill, pulls foes to her front | Full Circle (`sa_flow`): cuts all around twice |
+| `sa_clean` | Clean Sheathe | third slash | sheathe +50%, release +20% | sure crit release, stagger, MP per foe, a 40% second release, up to +300% and +120% | Perfect Stillness (`sa_edge`): every sheathe releases twice in full |
+| `sa_falling` | Falling Moon | air slash | one more air slash | drives foes down, +50% to +250%, landing releases, a third air slash, a landing ring | Moonfall (`sa_pass`): the landing crashes for 4x AD |
+| `sa_calm` | Calm Mind | guard and parry | parry window +40% | a parry releases, a counter draw of 2x to 8x AD, a block stores, 10 MP | Empty Mind (`sa_breath`): 3 s of sure critical slashes after a parry |
+| `sa_pass` | Passing Draw | warp strike | recharge -15%, damage +30% | double store, refreshed air dash and slash, a 30 px sweep, a release a beat later, up to -40% and +250% | Thousand Paces (`sa_step`): every 3 s an arrival recharges the warp |
+| `sa_step` | Shadow Step | dash and air dash | untouchable while dashing | up to 3 air dashes, the air dash restores the air slash, an afterimage cut that stores | Ghost Passage (`sa_pass`): afterimages cut twice, twice as wide |
+| `sa_stroke` | Long Stroke | dash | dashing through foes cuts them | stores, stagger, an ink stroke on the floor, a dash recharge, up to 6x AD | Ink Horizon (`sa_trail`): the cut reaches 60 px past her |
+| `sa_flow` | Ink Flow | warp and infusion | an arrival infuses for 1 hit | faster preparation (up to 45%), longer infusions, an arrival shortens a preparation | Spreading Ink (`sa_reverse`): every arrival readies the selected spell |
+| `sa_breath` | Feather Step | jump, wall kick, air | a wall kick cuts | an air dash, a cutting dash-jump, an air slash, a wall kick restores the air dash, up to 7x AD | Boundless Breath (`sa_calm`): every jump sends a storing ink crescent |
+| `sa_crescent` | Crescent Wave | Crescent Wave | stores 1x AP | +40% to +320%, stagger, infused hits store more, chill | Tide Moon (`sa_rain`): a hit calls a shower of Ink Rain |
+| `sa_rain` | Ink Rain | Ink Rain | holds foes 0.5 s longer | +40% to +320%, a 15% to 30% mark, a second shower | Monsoon (`sa_stain`): three more showers |
+| `sa_still` | Still Water | Still Water | stills 0.6 s longer | +40% to +320%, MP per foe, releases stored cuts, stores 1x AP | Mirror Lake (`sa_shade`): its release is full and sure critical |
+| `sa_weep` | Weeping Cut | dot on releases | as in the native kit | as in the native kit | as in the native kit |
+| `sa_stain` | Ink Stain | dot on stored cuts | as in the native kit | as in the native kit | as in the native kit |
+| `sa_trail` | Lingering Line | dot on infused hits | infused hits bleed 0.3x AP | longer, stacks up to 5, every slash stores more, up to 1.05x AP | Ink Sea (`sa_stroke`): every slash leaves the line |
+| `sa_crane` | Ink Crane | summon on releases | as in the native kit | as in the native kit | as in the native kit |
+| `sa_shade` | Ink Shade | summon on parries | as in the native kit | as in the native kit | as in the native kit |
+| `sa_paper` | Paper Blades | summon on kills and releases | as in the native kit | as in the native kit | as in the native kit |
+| `sa_moon` | Silent Moon | the four charged tiers | charged skills +30% | faster charge, tiers store cuts, +20% reach, tiers 1 and 2 also release, up to +250% | New Moon (`sa_clean`): every charged skill releases twice |
+
+Count by mechanic: 4 slash skills, 1 guard skill, 4 warp and dash skills, 1 jump skill, 3 spell skills, 3 damage over time, 3 summons, 1 charged-tier skill.
+The perfect dodge does not exist in the drill, so Ink Shade's perfect dodge trigger only fires in the native kit.
+
 ## Identity
 
 Saya is the quickdraw: her cuts store damage in the foe, and her sheathe releases all of it at once.

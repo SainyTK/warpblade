@@ -1,15 +1,15 @@
-import { drillRewardPool } from "../../kaelDrill";
+import { currentBuildStats } from "../../game/build/stats";
 import "./pickDialog.css";
 import { BOONS } from "../../constants/boons";
 import { stageRunId } from "../../game/adventure";
 import { cardView } from "../../game/build/cardView";
 import { clearPresses, releaseAll } from "../../game/input";
-import { answerPick } from "../../game/progress";
+import { answerPick, leavePicks } from "../../game/progress";
 import { character, game, progress, rng } from "../../game/state";
 import { sfx } from "../../services/audio";
 import type { Card } from "../../types/build";
 import type { PickAnswer } from "../../types/pick";
-import { buildStats } from "../../utils/build";
+
 import { cardCount, cardKey, dealCards } from "../../utils/cards";
 import { el } from "../dom";
 import { buildKey, buildSlots } from "./buildSlots";
@@ -108,14 +108,7 @@ function showBuild(): void {
 
 /** deal fresh cards for the oldest waiting pick and lay them out; `without` are left out, as after a reroll */
 function deal(without: readonly string[] = []): void {
-  dealt = dealCards(
-    drillRewardPool(character),
-    cardView(),
-    rng,
-    cardCount(buildStats(progress.build).luck, rng),
-    BOONS,
-    without,
-  );
+  dealt = dealCards(character, cardView(), rng, cardCount(currentBuildStats().luck, rng), BOONS, without);
   banishing = false;
   describePick();
   cards.dataset.count = String(dealt.length);
@@ -135,7 +128,7 @@ function close(): void {
 
 function leaveMentor(): void {
   if (mentorRunId() === null || game.mode !== "pick") return;
-  game.mode = "play";
+  leavePicks();
   if (banishing) {
     banishing = false;
     showBuild();

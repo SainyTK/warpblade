@@ -1,12 +1,12 @@
 import type { SkillDef } from "../../../../types/skill";
 import { evolvedRow, levelRows } from "../../../../utils/skillRows";
 
-/** values: `chance` an ability calls the petals, `count` blades, `power` AD each dart, `every` seconds between darts,
+/** values: `chance` a spell calls the petals, `count` blades, `power` AD each dart, `every` seconds between darts,
  *  `life` seconds they stay, `bleed` a dart lays a Thorn Wounds-like bleed of this AD a tick, `cd` seconds before
  *  they can come again; evolved `orbit` blades stay round her for good */
 const LEVELS = levelRows([
   {
-    text: "An ability: 40% to call 2 petal blades that dart at foes for 4 s, 0.5 AD.",
+    text: "A spell: 40% to call 2 petal blades that dart at foes for 4 s, 0.5 AD.",
     values: { chance: 0.4, count: 2, power: 0.5, every: 0.6, life: 4, cd: 3 },
   },
   { text: "Chance 40% to 70%.", values: { chance: 0.7 } },
@@ -22,9 +22,10 @@ export const PETAL_BLADES: SkillDef = {
   id: "ce_petals",
   name: "Petal Blades",
   kind: "summon",
+  element: "venom",
   risk: "easy",
   button: "auto",
-  text: "Casting an ability can call petal blades that dart at foes round you.",
+  text: "Casting a spell can call petal blades that dart at foes round you.",
   levels: LEVELS,
   evolution: {
     partner: "ce_bloom",

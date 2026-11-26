@@ -27,3 +27,4 @@ export const BRAZIERS: readonly Point[] = [
 ];
 export const MOON: Point & { r: number } = { x: 252, y: 38, r: 15 };
 export const SEED = 20261031;
+export const FX_SEED = 20261125;

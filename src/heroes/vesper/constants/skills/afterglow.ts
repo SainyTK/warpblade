@@ -1,32 +1,42 @@
 import type { SkillDef } from "../../../../types/skill";
-import { evolvedRow, levelRows } from "../../../../utils/skillRows";
+import { evolvedRow } from "../../../../utils/skillRows";
+import { drillLevels, type NativeStep } from "./drillLevels";
 
-/** values: `damage` attack damage a stack deals each tick (every 0.5 s), `max` stacks, `from` Tempo stacks from which it
- *  is laid (the top when unset), `burst` a fallen foe's burst in attack damage, `topRing` pixels round her that reaching
- *  the top lays it; evolved, it flares every second at the top */
-const LEVELS = levelRows([
-  { text: "At the top of Tempo your blows leave an afterglow that burns.", values: { damage: 0.1, max: 3 } },
-  { text: "Afterglow 0.1 to 0.15.", values: { damage: 0.15 } },
-  { text: "New: afterglow is laid from 7 Tempo.", values: { from: 7 } },
-  { text: "Up to 5 on a foe.", values: { max: 5 } },
-  { text: "New: a foe that falls with afterglow bursts on foes near it.", values: { burst: 1 } },
-  { text: "Afterglow 0.15 to 0.24; laid from 5 Tempo.", values: { damage: 0.24, from: 5 } },
-  { text: "New: reaching the top of Tempo lays it on every foe near you.", values: { topRing: 60 } },
-  { text: "Afterglow 0.24 to 0.34; burst 1 to 1.6.", values: { damage: 0.34, burst: 1.6 } },
+const NATIVE: readonly NativeStep[] = [
+  { values: { damage: 0.1, max: 3 } },
+  { values: { damage: 0.15 } },
+  { values: { from: 7 } },
+  { values: { max: 5 } },
+  { values: { burst: 1 } },
+  { values: { damage: 0.24, from: 5 } },
+  { values: { topRing: 60 } },
+  { values: { damage: 0.34, burst: 1.6 } },
+];
+
+const LEVELS = drillLevels(NATIVE, [
+  { text: "A dash lays afterglow on foes it passes: 0.08 AD each 0.5 s, up to 3.", drill: { damage: 0.08, max: 3 } },
+  { text: "New: a warp arrival lays 2 on foes within 40 px.", drill: { warp: 2 } },
+  { text: "Afterglow 0.13 AD; up to 4.", drill: { damage: 0.13, max: 4 } },
+  { text: "New: a glowing foe that falls bursts for 0.8 AD within 36 px.", drill: { burst: 0.8 } },
+  { text: "Afterglow 0.2 AD.", drill: { damage: 0.2 } },
+  { text: "New: spell hits lay afterglow too.", drill: { spells: 1 } },
+  { text: "Afterglow 0.3 AD; up to 6; burst 1.6 AD.", drill: { damage: 0.3, max: 6, burst: 1.6 } },
+  { text: "Afterglow 0.5 AD; burst 3 AD.", drill: { damage: 0.5, burst: 3 } },
 ]);
 
 export const AFTERGLOW: SkillDef = {
   id: "ve_glow",
   name: "Afterglow",
   kind: "dot",
+  element: "blaze",
   risk: "timed",
   button: "auto",
-  text: "High Tempo makes your blows leave a violet afterglow that burns on.",
+  text: "Foes your dash passes glow with dusk that burns each tick.",
   levels: LEVELS,
   evolution: {
     partner: "ve_edge",
     name: "Dusk Fire",
-    text: "Every second you hold the top of Tempo, all afterglow on screen flares for three ticks at once.",
-    row: evolvedRow(LEVELS[7], "Afterglow flares each second at the top.", {}),
+    text: "Every dash flares all afterglow on the stage, three ticks at once.",
+    row: evolvedRow(LEVELS[7], "Each dash flares every afterglow.", {}),
   },
 };

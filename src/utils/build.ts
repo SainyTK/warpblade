@@ -1,13 +1,15 @@
-import { CHARM_STEP, CHARMS } from "../constants/charms";
 import { FLOW, PICK_TOOLS, SKILL_MAX_LEVEL, SKILL_SLOTS } from "../constants/growth";
-import type { Build, BuildStats, CharmId, PickToolKey } from "../types/build";
+import { ARTS } from "../stages/arts";
+import type { Build, BuildStats, PickToolKey } from "../types/build";
+import type { ArtId } from "../types/campaign";
 import type { CharacterDef } from "../types/character";
+import { resonanceRanks, resonanceStats } from "./resonance";
 
 /** a build with nothing in it, and the run's pick tools with what the shop adds */
 export function freshBuild(extra: Partial<Record<PickToolKey, number>> = {}): Build {
   return {
     skills: {},
-    charms: {},
+    arts: {},
     evolved: [],
     banished: [],
     rerolls: PICK_TOOLS.rerolls + (extra.rerolls ?? 0),
@@ -19,31 +21,13 @@ export function freshBuild(extra: Partial<Record<PickToolKey, number>> = {}): Bu
   };
 }
 
-/** the multipliers a build's charms give every source */
-export function buildStats(b: Build): BuildStats {
-  const lv = (id: keyof Build["charms"]): number => b.charms[id] ?? 0;
-  return {
-    might: 1 + CHARM_STEP.might * lv("might"),
-    cooldown: 1 - CHARM_STEP.haste * lv("haste"),
-    amount: CHARM_STEP.multitude * lv("multitude"),
-    area: 1 + CHARM_STEP.reach * lv("reach"),
-    duration: 1 + CHARM_STEP.persistence * lv("persistence"),
-    speed: 1 + CHARM_STEP.swiftness * lv("swiftness"),
-    luck: 1 + CHARM_STEP.fortune * lv("fortune"),
-    growth: 1 + CHARM_STEP.insight * lv("insight"),
-    vigor: CHARM_STEP.vigor ** lv("vigor"),
-    regen: CHARM_STEP.vigorRegen * lv("vigor"),
-    crit: CHARM_STEP.fortuneCrit * lv("fortune"),
-    move: 1 + CHARM_STEP.swiftnessMove * lv("swiftness"),
-    flowCap: Math.round(FLOW.cap * (1 + CHARM_STEP.resonance * lv("resonance"))),
-  };
-}
+const ART_LEVELS = 5;
 
-/** the charm stats a skill's own numbers take: Multitude adds to amounts, the others multiply */
-export type CharmedStat = "amount" | "area" | "duration" | "speed" | "cooldown";
+export const buildStats = (b: Build, c: CharacterDef): BuildStats => resonanceStats(resonanceRanks(b, c, ARTS));
 
-/** a skill's number with the build's charms applied: `amount` adds Multitude, the rest multiply */
-export function charmed(stat: CharmedStat, value: number, s: BuildStats): number {
+export type BuildStat = "amount" | "area" | "duration" | "speed" | "cooldown";
+
+export function scaledByBuild(stat: BuildStat, value: number, s: BuildStats): number {
   if (stat === "amount") return value + s.amount;
   return value * s[stat];
 }
@@ -52,15 +36,15 @@ export function charmed(stat: CharmedStat, value: number, s: BuildStats): number
 export const flowMultiplier = (stacks: number): number => 1 + FLOW.perStack * stacks;
 
 /** the skills, charms and evolutions a build starts with */
-export type StartBuild = Pick<Build, "skills" | "charms" | "evolved">;
+export type StartBuild = Pick<Build, "skills" | "arts" | "evolved">;
 
-const isCharm = (id: string): id is CharmId => id in CHARMS;
+const isArt = (id: string): id is ArtId => id in ARTS;
 
 /** a build written as `<skill id>:8,evolve:<skill id>,might:5`: the hero's skills and charms at their levels (kept
  *  inside each one's range, at most `SKILL_SLOTS` skills), and skills taken at their top level in their evolved form;
  *  unknown names are skipped */
 export function parseStartBuild(text: string, c: CharacterDef): StartBuild {
-  const out: StartBuild = { skills: {}, charms: {}, evolved: [] };
+  const out: StartBuild = { skills: {}, arts: {}, evolved: [] };
   const isSkill = (id: string): boolean => c.skills.some((s) => s.id === id);
   const room = (id: string): boolean => id in out.skills || Object.keys(out.skills).length < SKILL_SLOTS;
   for (const part of text.split(",")) {
@@ -70,7 +54,7 @@ export function parseStartBuild(text: string, c: CharacterDef): StartBuild {
       out.skills[value] = SKILL_MAX_LEVEL;
       if (!out.evolved.includes(value)) out.evolved.push(value);
     } else if (isSkill(id) && room(id)) out.skills[id] = Math.min(SKILL_MAX_LEVEL, level);
-    else if (isCharm(id)) out.charms[id] = Math.min(CHARMS[id].maxLevel, level);
+    else if (isArt(id)) out.arts[id] = Math.min(ART_LEVELS, level);
   }
   return out;
 }

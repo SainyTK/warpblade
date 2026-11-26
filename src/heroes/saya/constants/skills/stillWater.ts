@@ -1,5 +1,6 @@
 import type { SkillDef } from "../../../../types/skill";
 import { evolvedRow, levelRows } from "../../../../utils/skillRows";
+import { drillRows, drillValues } from "./drillRows";
 import { SKILL } from "./ids";
 
 /** values: `time` s she stands still, `recharge` s, `store` attack damage the counter draw stores in every foe ahead,
@@ -19,18 +20,34 @@ const LEVELS = levelRows([
   { text: "Stillness 1.1 to 1.5 s; counter draw +150%.", values: { time: 1.5, power: 2.5 } },
 ]);
 
+const DRILL = drillRows(LEVELS, [
+  { text: "Still Water stills foes 0.6 s longer.", drill: { freeze: 0.6 } },
+  { text: "Still Water +40%.", drill: { power: 0.4 } },
+  { text: "New: Still Water restores 6 MP per foe.", drill: { mp: 6 } },
+  { text: "Still Water +40% to +90%.", drill: { power: 0.9 } },
+  { text: "New: Still Water releases every stored cut.", drill: { release: 1 } },
+  { text: "Still Water +90% to +160%.", drill: { power: 1.6 } },
+  { text: "New: Still Water stores 1x AP in each foe.", drill: { store: 1 } },
+  { text: "Still Water +160% to +320%.", drill: { power: 3.2 } },
+]);
+
 export const STILL_WATER: SkillDef = {
   id: SKILL.still,
   name: "Still Water",
   kind: "spell",
+  element: "frost",
   risk: "timed",
   button: "I",
-  text: "An ability on I: she waits with her hand on the hilt, and the first blow that comes meets a counter draw. Held, it also catches blows from behind.",
-  levels: LEVELS,
+  text: "Still Water holds foes longer and hits harder.",
+  levels: DRILL,
   evolution: {
     partner: SKILL.shade,
     name: "Mirror Lake",
-    text: "Still Water waits up to 3 seconds for its blow and catches blows from behind.",
-    row: evolvedRow(LEVELS[7], "Waits up to 3 s; catches blows from behind.", { time: 3, behind: 1 }),
+    text: "Still Water's release is in full and every cut is a sure critical hit.",
+    row: evolvedRow(DRILL[7], "Its release is full and sure critical.", {
+      ...drillValues({ clean: 1 }),
+      time: 3,
+      behind: 1,
+    }),
   },
 };

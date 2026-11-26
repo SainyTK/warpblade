@@ -1,6 +1,6 @@
 import { AIR_STRING } from "../constants/combo";
 import { HERO_START_X } from "../constants/hero";
-import { GROUND, SEED } from "../constants/stage";
+import { FX_SEED, GROUND, SEED } from "../constants/stage";
 import { ULT_COOLDOWN } from "../constants/ultimate";
 import { Lights } from "../engine/lights";
 import { Particles } from "../engine/particles";
@@ -12,6 +12,7 @@ import type { Hero } from "../types/hero";
 import type { Progress } from "../types/progress";
 import { freshBuild } from "../utils/build";
 import { jobSkin } from "../utils/jobs";
+import { emptyRanks } from "../utils/resonance";
 import { restPose } from "../utils/restPose";
 import { Rng } from "../utils/rng";
 import { computeStats } from "../utils/stats";
@@ -23,7 +24,8 @@ import { objectMemory, rememberPerSeat } from "./seatMemory";
 
 /** The one owner of everything that changes while playing. */
 export const rng = new Rng(SEED);
-export const particles = new Particles(rng);
+export const fxRng = new Rng(FX_SEED);
+export const particles = new Particles(fxRng);
 export const lights = new Lights();
 /** the hero being played; chosen on the hero screen before a run, and fixed for the run */
 export let character: CharacterDef = CHARACTERS[0];
@@ -98,6 +100,8 @@ export function freshProgress(): Progress {
     comboLimit: character.comboHits,
     airLimit: AIR_STRING.hits,
     build: freshBuild(metaToolBonus()),
+    resonance: emptyRanks(),
+    fusions: [],
   };
 }
 export const progress: Progress = freshProgress();

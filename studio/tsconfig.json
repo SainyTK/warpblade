@@ -15,5 +15,5 @@
     "types": ["vite/client"],
     "paths": { "@/*": ["./src/*"], "@game/*": ["../src/*"], "@shared/*": ["./shared/*"] }
   },
-  "include": ["src", "shared", "vite.config.ts"]
+  "include": ["src", "shared", "vite.config.ts", "../src/heroes/*/types", "../src/vite-env.d.ts"]
 }

@@ -1,6 +1,6 @@
 import { HERO_START_X } from "../constants/hero";
 import { GROUND } from "../constants/stage";
-import { resetDrill } from "../kaelDrill";
+import { resetDrill } from "../drill";
 import { emptyStream } from "../utils/waves";
 import { resetAdventure } from "./adventure";
 import { clearChests } from "./build/chests";
@@ -14,18 +14,22 @@ import { resetWarp } from "./hero/warp";
 import { resetWound } from "./hero/wound";
 import { resetDanger } from "./lowHealth";
 import { resetProgress } from "./progress";
+import { resetResonance } from "./resonance";
 import { clearWards } from "./shotWards";
 import { forgetSkills } from "./skills/runtime";
 import { freshHero, game, hero, ponytail, progress, scarf, showBanner } from "./state";
 import { clearFields } from "./timeFields";
+import { resetTraining } from "./training";
 
 /** after a fall, a cleared stage or a restart from the menu: Kael starts over at level 1 from wave 1 */
 export function resetRun(banner = "Rise again"): void {
   bankCoins();
   resetAdventure();
+  resetTraining();
   resetDrill();
   resetProgress();
   resetLedger();
+  resetResonance();
   forgetSkills();
   clearChests();
   clearWards();

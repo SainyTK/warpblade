@@ -1,5 +1,6 @@
 import type { SkillDef } from "../../../../types/skill";
 import { evolvedRow, levelRows } from "../../../../utils/skillRows";
+import { drillEvolved, onDrill } from "./drill";
 
 /** values: `cut` attack damage of the cut on each foe dodged through, `sword` seconds between spirit swords a dodge through a foe gives, `refund` share of the dodge's stamina given back, `wave` power of the qi wave sent where the dodge ends, `chill` seconds foes dodged through are slowed, `twice` the cut lands twice and the wave runs both ways */
 const LEVELS = levelRows([
@@ -13,18 +14,35 @@ const LEVELS = levelRows([
   { text: "New: foes you dodge through are slowed 1.5 s; cut power 3.5.", values: { chill: 1.5, cut: 3.5 } },
 ]);
 
+const DRILL_LEVELS = onDrill(LEVELS, [
+  { text: "Dashing through a foe cuts it for 0.8 AD.", drill: { cut: 0.8 } },
+  { text: "New: dash cuts stagger.", drill: { stagger: 0.4 } },
+  { text: "New: a dash through a foe recharges the dash.", drill: { refund: 1 } },
+  { text: "Cut 0.8 to 1.6 AD.", drill: { cut: 1.6 } },
+  { text: "New: one more air dash.", drill: { airDashes: 1 } },
+  { text: "Cut 3 AD.", drill: { cut: 3 } },
+  { text: "New: cut foes take 15% more damage for 3 s.", drill: { mark: 0.15 } },
+  { text: "Cut 6 AD.", drill: { cut: 6 } },
+]);
+
 export const DRIFTING_LEAF: SkillDef = {
   id: "yu_drift",
   name: "Drifting Leaf",
   kind: "movement",
+  element: "venom",
   risk: "easy",
   button: "L",
-  text: "Spirit swords cut every foe you dodge through, and the dodge brings swords, waves and slows.",
-  levels: LEVELS,
+  text: "Dashing through foes cuts them.",
+  levels: DRILL_LEVELS,
   evolution: {
     partner: "yu_cloud",
     name: "Leaf on the Wind",
-    text: "The cut lands twice and the wave runs both ways.",
-    row: evolvedRow(LEVELS[7], "Two cuts; waves both ways.", { twice: 1 }),
+    text: "Each dash cuts twice.",
+    row: drillEvolved(
+      DRILL_LEVELS[7],
+      evolvedRow(LEVELS[7], "Two cuts; waves both ways.", { twice: 1 }),
+      "Dash cuts land twice.",
+      {},
+    ),
   },
 };

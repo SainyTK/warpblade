@@ -22,6 +22,7 @@ export const CRYSTAL_FAMILIAR: SkillDef = {
   id: "k_familiar",
   name: "Crystal Familiar",
   kind: "summon",
+  element: "frost",
   risk: "easy",
   button: "auto",
   text: "Casting may call a crystal familiar that fires homing shards.",

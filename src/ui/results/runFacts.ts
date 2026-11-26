@@ -10,7 +10,7 @@ function runStats(report: RunReport, stage?: StageResult): readonly Fact[] {
   if (!stage) return [time, ["Waves cleared", String(report.cleared)], level, foes];
   return [
     ["Grade", stage.grade],
-    ["Bosses defeated", `${stage.bossesDefeated}/${stage.bossesTotal}`],
+    ["Rifts sealed", `${stage.sealed}/${stage.sealedTotal}`],
     time,
     ["Damage dealt", shortNumber(stage.damage)],
     foes,

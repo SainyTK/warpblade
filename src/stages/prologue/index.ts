@@ -1,0 +1,16 @@
+import type { StageDef } from "../../types/campaign";
+import { firstSteps } from "./firstSteps";
+import { sunlit } from "./sunlit";
+
+export const prologue: StageDef = {
+  id: "prologue",
+  name: "Sunlit Ruins",
+  mapBlurb: "Where the first rift opened.",
+  kind: "prologue",
+  era: "day",
+  ground: "thornback",
+  flyer: "moth",
+  boss: "oakheart",
+  foeDamage: 0.6,
+  areas: [firstSteps, sunlit],
+};

@@ -1,4 +1,4 @@
-import { skillEvolved, skillValues, withCharms } from "../../../game/skills/query";
+import { skillEvolved, skillValues, withBuild } from "../../../game/skills/query";
 import { game, hero, progress } from "../../../game/state";
 import { PILLAR } from "../constants/abilities";
 import { SKYFALL } from "../constants/skillNumbers";
@@ -16,8 +16,8 @@ export function skyfall(hits: number): void {
     game.fx.push(
       createDawnGround(
         hero.x,
-        withCharms("area", SKYFALL.groundWidth),
-        withCharms("duration", v.ground),
+        withBuild("area", SKYFALL.groundWidth),
+        withBuild("duration", v.ground),
         progress.stats.ap * SKYFALL.burn,
       ),
     );

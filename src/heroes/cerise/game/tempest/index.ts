@@ -6,11 +6,9 @@ import { travelEnded } from "../../../../game/hero/travelEnd";
 import { ultimateValues } from "../../../../game/hero/ultimate";
 import { game, hero, lights, progress } from "../../../../game/state";
 import { boxAhead, newSwing, shake } from "../../../../game/world";
-import { SKILL_TIERS } from "../../../../kaelDrill/skillTiers";
 import { sfx } from "../../../../services/audio";
 import { TEMPEST } from "../../constants/tempest";
 import { ROSE_RAMP } from "../../look/rose";
-import { showCutIn } from "../adventure";
 import { createRoseLine } from "../effects/roseLine";
 import { roseMark } from "../mark";
 import { THRUST } from "../moves/slashes";
@@ -26,7 +24,6 @@ const levelDamage = (): number => ULT_LEVELS[cerise.tempestLevel - 1].power * pr
  * and, evolved, a second storm at the end of the lunge.
  */
 export function castRoseTempest(level: number): void {
-  showCutIn(ROSE_RAMP[Math.min(6, level + 2)], SKILL_TIERS[level - 1].intro);
   cerise.tempestLevel = level;
   cerise.tempestThrusts = 0;
   cerise.tempestLunged = false;

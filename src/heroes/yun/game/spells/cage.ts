@@ -1,6 +1,6 @@
 import { GROUND } from "../../../../constants/stage";
 import { markFoe } from "../../../../game/enemies/skillStatus";
-import { skillValues, withCharms } from "../../../../game/skills/query";
+import { skillValues, withBuild } from "../../../../game/skills/query";
 import { game, hero, progress } from "../../../../game/state";
 import type { Enemy } from "../../../../types/enemy";
 import { CAGE } from "../../constants/abilities";
@@ -11,7 +11,7 @@ import type { SwordPlace } from "../hover";
 
 /** the foes ahead within reach, nearest first */
 function foesAhead(n: number): Enemy[] {
-  const reach = withCharms("area", CAGE.reach);
+  const reach = withBuild("area", CAGE.reach);
   return game.enemies
     .filter((e) => e.hp > 0 && (e.x - hero.x) * hero.face > -4 && Math.abs(e.x - hero.x) < reach)
     .sort((a, b) => Math.abs(a.x - hero.x) - Math.abs(b.x - hero.x))
@@ -35,8 +35,8 @@ export function castCage(places: readonly SwordPlace[], _wide: boolean): void {
   }
   const each = Math.max(1, Math.ceil(places.length / foes.length)) + (v.extra ?? 0);
   foes.forEach((foe, f) => {
-    foe.pinned = Math.max(foe.pinned, withCharms("duration", v.pin));
-    if (v.mark) markFoe(foe, SKILL.cage, withCharms("duration", v.pin), v.mark);
+    foe.pinned = Math.max(foe.pinned, withBuild("duration", v.pin));
+    if (v.mark) markFoe(foe, SKILL.cage, withBuild("duration", v.pin), v.mark);
     for (let i = 0; i < each; i++)
       game.fx.push(
         createRainSword(

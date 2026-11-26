@@ -21,6 +21,7 @@ export const DUSK_SHADE: SkillDef = {
   id: "ve_shade",
   name: "Dusk Shade",
   kind: "summon",
+  element: "void",
   risk: "easy",
   button: "auto",
   text: "Your blows may call a shade of you that dashes through the foe.",

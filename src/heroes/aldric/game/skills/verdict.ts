@@ -1,9 +1,10 @@
+import { nativeOrDrill } from "../../../../drill";
 import { glow, hairline, line, place } from "../../../../engine/frame";
 import { dealDamage } from "../../../../game/damage";
 import { createImpact } from "../../../../game/effects/impact";
 import { enemyCenter } from "../../../../game/enemies/enemy";
 import { markFoe } from "../../../../game/enemies/skillStatus";
-import { skillEvolved, skillValues, withCharms } from "../../../../game/skills/query";
+import { skillEvolved, skillValues, withBuild } from "../../../../game/skills/query";
 import { game, hero, progress } from "../../../../game/state";
 import type { Effect } from "../../../../types/effect";
 import type { Enemy } from "../../../../types/enemy";
@@ -20,7 +21,7 @@ const ID = "al_verdict";
 const DROP = 44;
 
 /** a sword of light that drops point first onto the foe and strikes it, marking it; as Final Verdict with a pillar */
-function createVerdictSword(foe: Enemy, delay: number): Effect {
+export function createVerdictSword(foe: Enemy, delay: number): Effect {
   let t = -delay;
   let struck = false;
   const [x0] = enemyCenter(foe);
@@ -34,7 +35,7 @@ function createVerdictSword(foe: Enemy, delay: number): Effect {
       if (foe.hp > 0) {
         dealDamage(foe, progress.stats.ad * v.power, { source: ID, fromX: hero.x, ky: -20, heavy: true });
         game.fx.push(createImpact(x, y, hero.face, true, DAWN_SPARKS));
-        if (v.mark) markFoe(foe, ID, withCharms("duration", VERDICT.mark), v.mark);
+        if (v.mark) markFoe(foe, ID, withBuild("duration", VERDICT.mark), v.mark);
       }
       if (skillEvolved(ID))
         game.fx.push(
@@ -69,12 +70,13 @@ function createVerdictSword(foe: Enemy, delay: number): Effect {
 function call(m: SkillMemory, foe: Enemy | null): void {
   if (!foe || foe.hp <= 0 || m.swing === hero.swing) return;
   m.swing = hero.swing;
-  const swords = withCharms("amount", skillValues(ID).swords ?? 1);
+  const swords = withBuild("amount", skillValues(ID).swords ?? 1);
   for (let i = 0; i < swords; i++) game.fx.push(createVerdictSword(foe, i * VERDICT.gap));
 }
 
-/** Verdict: a Keen blow of his own (and with its fourth level a Counterbash) calls swords of light down on its foe */
-export const verdict: SkillBehavior = {
+/** Verdict: a Keen blow of his own (and with its fourth level a Counterbash) calls swords of light down on its foe; on
+ *  the drill the Sky cut calls them through the drill hooks */
+export const verdict: SkillBehavior = nativeOrDrill({
   create: () => ({ swing: -1 }),
   on: {
     blow(m, ev) {
@@ -84,4 +86,4 @@ export const verdict: SkillBehavior = {
       if (ev.counter && skillValues(ID).counter) call(m, ev.foe);
     },
   },
-};
+});

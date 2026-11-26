@@ -1,3 +1,4 @@
+import { usesDrill } from "../../../drill";
 import { skillValues } from "../../../game/skills/query";
 import type { Enemy } from "../../../types/enemy";
 import type { GuardStyle } from "../../../types/moveset";
@@ -13,15 +14,16 @@ import { openRiposte } from "./riposte";
  */
 export const CERISE_GUARD: GuardStyle = {
   get chip() {
-    return CERISE_BLOCK.chip - (skillValues("ce_grace").chip ?? 0);
+    return CERISE_BLOCK.chip - (usesDrill() ? 0 : (skillValues("ce_grace").chip ?? 0));
   },
   get blockCost() {
-    return CERISE_BLOCK.cost - (skillValues("ce_grace").cost ?? 0);
+    return CERISE_BLOCK.cost - (usesDrill() ? 0 : (skillValues("ce_grace").cost ?? 0));
   },
   blocked(_fromX: number, _foe: Enemy | null) {
-    if (skillValues("ce_riposte").fromBlock) openRiposte();
+    if (!usesDrill() && skillValues("ce_riposte").fromBlock) openRiposte();
   },
   parried(_fromX: number, _foe: Enemy | null) {
+    if (usesDrill()) return;
     gainPoints(skillValues("ce_riposte").parryPoints ?? POINTS.parry);
     openRiposte();
   },

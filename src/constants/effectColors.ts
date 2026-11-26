@@ -17,6 +17,7 @@ export const NUMBER_INK: Record<DamageTag | CueWord, number> = {
   shatter: hex("#cbf1ff"),
   evade: hex("#b673e8"),
   perfect: hex("#a8ecff"),
+  keen: hex("#ffd76b"),
   parry: hex("#ffd27a"),
   broken: hex("#ff6a5a"),
 };

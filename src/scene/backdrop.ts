@@ -1,8 +1,8 @@
 import { FW, H, RES, W } from "../constants/stage";
 import { bayerAt } from "../engine/frame";
 import type { Color } from "../types/color";
-import { cb, cg, cr, rgb, scale } from "../utils/color";
-import { clamp } from "../utils/math";
+import { cb, cg, cr, mix, rgb, scale } from "../utils/color";
+import { clamp, smooth } from "../utils/math";
 import { paletteAt } from "./eras/sceneDef";
 import { LAYER, LAYER_MASK } from "./plate";
 import { scene, scenePlate } from "./scenery";
@@ -14,8 +14,12 @@ const DIM = 0.55;
 const FADE = 48;
 /** below the stage the stone fades into the night over this many art pixels */
 const DEPTH_FADE = 96;
-/** the sky above the stage continues from the stage's top row, each column averaged over this many art pixels either side */
+const JOIN_SPAN = 2;
+const JOIN_ROWS = 4;
+const RISE = 24;
+const SKY_RISE = 72;
 const TOP_BLUR = 48;
+const BODIES_FADE = 32;
 /** a slab or brazier mirrored beyond the stage would look like somewhere to stand, so what is this far above it shows in its place */
 const SLAB_SKIP = 14;
 
@@ -26,24 +30,24 @@ function mirrored(x: number): number {
   return m < W ? m : period - 1 - m;
 }
 
-/** the stage's top row smoothed along x, one color per art column */
-function topRow(plate: Uint32Array): Color[] {
-  const row: Color[] = [];
-  for (let x = 0; x < W; x++) {
-    let r = 0;
-    let g = 0;
-    let b = 0;
-    let n = 0;
-    for (let d = -TOP_BLUR; d <= TOP_BLUR; d++) {
-      const c = plate[clamp(x + d, 0, W - 1) * RES];
+function meanOfTopRows(plate: Uint32Array, x0: number, x1: number, rows: number): Color {
+  let r = 0;
+  let g = 0;
+  let b = 0;
+  let n = 0;
+  for (let y = 0; y < rows * RES; y++)
+    for (let x = x0; x <= x1; x++) {
+      const c = plate[y * FW + clamp(x, 0, W - 1) * RES];
       r += cr(c);
       g += cg(c);
       b += cb(c);
       n++;
     }
-    row.push(rgb(r / n, g / n, b / n));
-  }
-  return row;
+  return rgb(r / n, g / n, b / n);
+}
+
+function topRowsPerColumn(plate: Uint32Array, span: number, rows: number): Color[] {
+  return Array.from({ length: W }, (_, x) => meanOfTopRows(plate, x - span, x + span, rows));
 }
 
 /**
@@ -54,23 +58,32 @@ function topRow(plate: Uint32Array): Color[] {
 export function paintBackdrop(out: ImageData, left: number, top: number): void {
   const { width, height, data } = out;
   const { def, k } = scene();
-  const { plate, layers } = scenePlate();
+  const { plate, layers, bodiless } = scenePlate();
   const P = paletteAt(def, k);
-  const above = topRow(plate);
+  const join = {
+    lit: topRowsPerColumn(plate, JOIN_SPAN, JOIN_ROWS),
+    bare: topRowsPerColumn(bodiless, JOIN_SPAN, JOIN_ROWS),
+  };
+  const above = topRowsPerColumn(bodiless, TOP_BLUR, 1);
   const standing = (x: number, y: number): boolean => {
     const layer = layers[y * W + x] & LAYER_MASK;
     return layer === LAYER.slab || layer === LAYER.prop;
   };
   const worldAt = (wx: number, wy: number): Color => {
     const x = mirrored(wx);
-    if (wy < 0) return above[x];
+    const bare = smooth(0, BODIES_FADE, Math.max(0, -wx, wx - W + 1));
+    if (wy < 0) {
+      const sky = mix(above[x], P.sky[0], smooth(0, SKY_RISE, -wy));
+      return mix(mix(join.lit[x], join.bare[x], bare), sky, smooth(0, RISE, -wy));
+    }
     if (wy >= H) {
       const fade = clamp((wy - H) / DEPTH_FADE);
       return fade > bayerAt(wx, wy) ? P.sky[0] : scale(groundAt(wx, wy, P), floorToneAt(wx, wy));
     }
     let y = wy;
     while (y >= SLAB_SKIP && standing(x, y)) y -= SLAB_SKIP;
-    return plate[y * RES * FW + x * RES];
+    const i = y * RES * FW + x * RES;
+    return bare > 0 ? mix(plate[i], bodiless[i], bare) : plate[i];
   };
   for (let y = 0; y < height; y++)
     for (let x = 0; x < width; x++) {

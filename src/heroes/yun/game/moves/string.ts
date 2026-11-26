@@ -2,7 +2,7 @@ import { onFrame } from "../../../../constants/combo";
 import { frame } from "../../../../constants/hero";
 import { createFloorRing } from "../../../../game/effects/floorRing";
 import { skin } from "../../../../game/hero/skin";
-import { skillEvolved, skillValues, withCharms } from "../../../../game/skills/query";
+import { skillEvolved, skillValues, withBuild } from "../../../../game/skills/query";
 import { game, hero, progress } from "../../../../game/state";
 import { dust, shake } from "../../../../game/world";
 import type { MoveDef } from "../../../../types/move";
@@ -25,7 +25,7 @@ function tideImpact(hits: number): void {
   }
   const half = TIDE_WAVE.half * (v.tall ?? 1);
   const crescent = {
-    reach: TIDE_WAVE.reach + withCharms("area", v.reach ?? 0),
+    reach: TIDE_WAVE.reach + withBuild("area", v.reach ?? 0),
     speed: TIDE_WAVE.speed,
     damage: progress.stats.ad * TIDE_WAVE.power * (v.wave ?? 1),
     half,

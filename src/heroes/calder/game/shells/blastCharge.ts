@@ -1,7 +1,7 @@
 import { fleck, glow, place } from "../../../../engine/frame";
 import { clampStageX } from "../../../../game/adventure";
 import { enemyCenter } from "../../../../game/enemies/enemy";
-import { skillEvolved, skillValues, withCharms } from "../../../../game/skills/query";
+import { skillEvolved, skillValues, withBuild } from "../../../../game/skills/query";
 import { game, hero, progress } from "../../../../game/state";
 import { surfaceBelow } from "../../../../game/world";
 import type { Effect } from "../../../../types/effect";
@@ -17,8 +17,8 @@ const EDGE = 6;
 function createCharge(x: number, y: number, delay: number): Effect {
   const v = skillValues(SKILL);
   const o = { t: -delay, echo: -1 };
-  const fuse = withCharms("duration", v.fuse);
-  const reach = withCharms("area", v.radius);
+  const fuse = withBuild("duration", v.fuse);
+  const reach = withBuild("area", v.radius);
   const blow = (scale: number): void => {
     if (v.pull)
       for (const e of game.enemies) {

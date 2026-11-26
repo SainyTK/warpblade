@@ -1,3 +1,4 @@
+import { nativeOrDrill } from "../../../../drill";
 import type { SkillBehavior } from "../../../../types/skillBehavior";
 import { deepWounds } from "./deepWounds";
 import { desertHawk } from "./desertHawk";
@@ -13,7 +14,7 @@ import { scouringSand } from "./scouringSand";
 export const ZAFIR_SKILLS: Readonly<Record<string, SkillBehavior>> = {
   za_veins: openedVeins,
   za_dune: duneWalk,
-  za_slip: sandSlip,
+  za_slip: nativeOrDrill(sandSlip),
   za_deep: deepWounds,
   za_scour: scouringSand,
   za_thirst: desertThirst,

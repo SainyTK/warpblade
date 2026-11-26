@@ -17,6 +17,7 @@ export const THOUSAND_CUTS: SkillDef = {
   id: "yu_bleed",
   name: "Thousand Cuts",
   kind: "dot",
+  element: "venom",
   risk: "timed",
   button: "auto",
   text: "Your abilities' cuts leave bleeding wounds.",

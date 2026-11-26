@@ -1,6 +1,7 @@
 import { KEEN_RAMP } from "../../../../constants/combo";
 import { PAL } from "../../../../constants/palette";
 import { GROUND } from "../../../../constants/stage";
+import { nativeOrDrill } from "../../../../drill";
 import { clampStageX } from "../../../../game/adventure";
 import { dealDamage } from "../../../../game/damage";
 import { createFloorRing } from "../../../../game/effects/floorRing";
@@ -8,7 +9,7 @@ import { createImpact } from "../../../../game/effects/impact";
 import { createSlash } from "../../../../game/effects/slash";
 import { createWarpLine } from "../../../../game/effects/warpLine";
 import { enemyBox, enemyCenter, walks } from "../../../../game/enemies/enemy";
-import { skillValues, withCharms } from "../../../../game/skills/query";
+import { skillValues, withBuild } from "../../../../game/skills/query";
 import { foesOnScreen } from "../../../../game/skills/targets";
 import { game, hero, lights, progress } from "../../../../game/state";
 import { hitStop, shake } from "../../../../game/world";
@@ -19,6 +20,7 @@ import { WHITE } from "../../../../utils/color";
 import type { KaelMoveId } from "../../types/moves";
 import { createEcho } from "../effects/echo";
 import { showPhantom } from "../phantom";
+import { holdRiposte } from "../riposte";
 import { copyPower } from "./copyPower";
 
 const ID = "k_mirror";
@@ -71,7 +73,7 @@ function warpStrike(m: KnightMemory, foe: Enemy): void {
 /** Perfect Reflection: the world stands still while Kael and the knight strike the attacker and every foe near */
 function reflect(): void {
   const v = skillValues(ID);
-  const reach = withCharms("area", v.reflectReach);
+  const reach = withBuild("area", v.reflectReach);
   const foes = foesOnScreen().filter((e) => Math.abs(enemyCenter(e)[0] - hero.x) <= reach);
   const attacker = foes.sort((a, b) => Math.abs(a.x - hero.x) - Math.abs(b.x - hero.x))[0];
   game.slow = Math.max(game.slow, REFLECT_SLOW);
@@ -109,8 +111,8 @@ function attackerNear(fromX: number): Enemy | null {
 function summon(m: KnightMemory, evolved: boolean, attacker: Enemy | null): void {
   const v = skillValues(ID);
   if (m.cd > 0) return;
-  m.cd = withCharms("cooldown", v.cooldown);
-  if (v.stay) m.stay = withCharms("duration", v.stay);
+  m.cd = withBuild("cooldown", v.cooldown);
+  if (v.stay) m.stay = withBuild("duration", v.stay);
   if (evolved) {
     reflect();
     return;
@@ -126,7 +128,7 @@ function summon(m: KnightMemory, evolved: boolean, attacker: Enemy | null): void
 
 /** Mirror Knight: a parry or a perfect dodge calls a mirror knight that warp-strikes the nearest foes; later it stays and copies
  *  Kael's blows; as Perfect Reflection the world stands still while both strike everything near */
-export const mirrorKnight: SkillBehavior = {
+const knight: SkillBehavior = {
   create: () => ({ cd: 0, queue: [], next: 0, x: 0, y: 0, stay: 0 }),
   update(memory, _state, dt) {
     const m = memoryOf(memory);
@@ -158,3 +160,16 @@ export const mirrorKnight: SkillBehavior = {
     },
   },
 };
+
+const drillKnight: SkillBehavior = {
+  ...knight,
+  on: {
+    ...knight.on,
+    perfectDodge(memory, ev, state) {
+      holdRiposte(0, 0);
+      knight.on?.perfectDodge?.(memory, ev, state);
+    },
+  },
+};
+
+export const mirrorKnight: SkillBehavior = nativeOrDrill(knight, drillKnight);

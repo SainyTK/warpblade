@@ -4,9 +4,9 @@ import { dealDamage } from "../../../../game/damage";
 import { createImpact } from "../../../../game/effects/impact";
 import { enemyCenter } from "../../../../game/enemies/enemy";
 import { addStacks, consumeStacks, stacksOf } from "../../../../game/enemies/skillStatus";
-import { skillValues, withCharms } from "../../../../game/skills/query";
+import { skillValues, withBuild } from "../../../../game/skills/query";
 import { foesOnScreen } from "../../../../game/skills/targets";
-import { game, particles, progress, rng } from "../../../../game/state";
+import { fxRng, game, particles, progress } from "../../../../game/state";
 import type { Enemy } from "../../../../types/enemy";
 import { PK } from "../../../../types/particle";
 import type { SkillBehavior, SkillMemory } from "../../../../types/skillBehavior";
@@ -43,18 +43,18 @@ export function lodge(e: Enemy, n: number): void {
     max: Math.round(v.max),
     damage: progress.stats.ad * v.per * SPLINTER.every,
     every: SPLINTER.every,
-    duration: withCharms("duration", v.life),
+    duration: withBuild("duration", v.life),
   });
 }
 
 /** a burst of crystal flecks from a foe */
 function flecks(x: number, y: number, n: number): void {
   for (let i = 0; i < n; i++) {
-    const a = rng.range(0, TAU);
-    const sp = rng.range(60, 180);
-    particles.spawn(PK.SHARD, x, y, Math.cos(a) * sp, Math.sin(a) * sp, rng.range(0.2, 0.45), {
-      col: rng.pick(PAL.crystal.slice(3)),
-      size: rng.range(1, 2),
+    const a = fxRng.range(0, TAU);
+    const sp = fxRng.range(60, 180);
+    particles.spawn(PK.SHARD, x, y, Math.cos(a) * sp, Math.sin(a) * sp, fxRng.range(0.2, 0.45), {
+      col: fxRng.pick(PAL.crystal.slice(3)),
+      size: fxRng.range(1, 2),
     });
   }
 }
@@ -65,7 +65,7 @@ function shatter(e: Enemy): void {
   if (!n) return;
   const v = skillValues(ID);
   const [x, y] = enemyCenter(e);
-  const reach = withCharms("area", v.shatterReach);
+  const reach = withBuild("area", v.shatterReach);
   flecks(x, y, 6 + n * 2);
   game.fx.push(createImpact(x, y, 1, true, SPARKS.crystal));
   const damage = progress.stats.ad * v.shatter * n;

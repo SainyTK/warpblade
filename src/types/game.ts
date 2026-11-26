@@ -55,7 +55,7 @@ export interface Blaze {
 }
 export type DamageTag = "normal" | "crit" | "back" | "air" | "burn" | "block" | "break" | "shatter";
 /** a word that pops without a number */
-export type CueWord = "evade" | "perfect" | "parry" | "broken";
+export type CueWord = "evade" | "perfect" | "keen" | "parry" | "broken";
 /** a number that pops out of a struck foe */
 export interface DamageNumber {
   x: number;
@@ -74,7 +74,7 @@ export interface DamageNumber {
 }
 /** play runs the simulation; pick pauses it while Kael chooses a skill when a wave is cleared with skill points waiting;
  *  chest pauses it while an opened chest shows what it gave; clear is the end of the stage */
-export type GameMode = "play" | "pick" | "chest" | "clear";
+export type GameMode = "play" | "pick" | "chest" | "clear" | "map";
 
 export interface GameState {
   mode: GameMode;

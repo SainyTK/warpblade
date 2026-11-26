@@ -1,4 +1,4 @@
-import { skillEvolved, skillValues, withCharms } from "../../../game/skills/query";
+import { skillEvolved, skillValues, withBuild } from "../../../game/skills/query";
 import { game, progress } from "../../../game/state";
 import type { Enemy } from "../../../types/enemy";
 import type { WarpStyle, WarpTune } from "../../../types/moveset";
@@ -15,7 +15,7 @@ import { settleTassel } from "./tassel";
 /** the foes the arrival swords strike: the one he reached, and with Sword Riding at level 8 the foes near it */
 function marks(foe: Enemy, spread: number): Enemy[] {
   if (!spread) return [foe];
-  const reach = withCharms("area", spread);
+  const reach = withBuild("area", spread);
   return [foe, ...game.enemies.filter((e) => e !== foe && e.hp > 0 && Math.abs(e.x - foe.x) < reach)];
 }
 

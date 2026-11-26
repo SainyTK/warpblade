@@ -22,6 +22,7 @@ export const ECHO_SWING: SkillDef = {
   id: "br_echo",
   name: "Echo Swing",
   kind: "summon",
+  element: "void",
   risk: "precise",
   button: "auto",
   text: "A parry calls a crimson echo of her behind the attacker that brings down a heavy cleave.",

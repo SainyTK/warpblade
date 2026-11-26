@@ -4,7 +4,7 @@ import { dealDamage } from "../../../../game/damage";
 import { createImpact } from "../../../../game/effects/impact";
 import { enemyCenter, walks } from "../../../../game/enemies/enemy";
 import { markFoe } from "../../../../game/enemies/skillStatus";
-import { skillValues, withCharms } from "../../../../game/skills/query";
+import { skillValues, withBuild } from "../../../../game/skills/query";
 import { nearestFoe } from "../../../../game/skills/targets";
 import { game, hero, progress, rng } from "../../../../game/state";
 import type { Enemy } from "../../../../types/enemy";
@@ -42,7 +42,7 @@ function land(l: Lion, foe: Enemy): void {
     stun: v.stun ?? 0,
   });
   game.fx.push(createImpact(...enemyCenter(foe), l.face, false, DAWN_SPARKS));
-  if (v.mark) markFoe(foe, ID, withCharms("duration", LION.mark), v.mark);
+  if (v.mark) markFoe(foe, ID, withBuild("duration", LION.mark), v.mark);
 }
 
 /** a lion walks after Aldric, and pounces on the nearest foe in reach when it is ready */
@@ -63,7 +63,7 @@ function step(l: Lion, dt: number, i: number): void {
   }
   const foe = nearestFoe(l.x, l.y - 6);
   if (foe && Math.abs(foe.x - l.x) < LION.reach && walks(foe) && l.next <= 0) {
-    l.next = withCharms("cooldown", skillValues(ID).every);
+    l.next = withBuild("cooldown", skillValues(ID).every);
     l.face = Math.sign(foe.x - l.x) || l.face;
     l.leap = { foe, fromX: l.x, t: 0 };
     return;
@@ -83,7 +83,7 @@ function summon(m: SkillMemory, life: number): void {
   lionsOf(m).push(l);
   if (v.roar)
     game.fx.push(
-      createDelayedRing(l.x, GROUND, withCharms("area", LION.roar), 0, progress.stats.ad * v.roar, {
+      createDelayedRing(l.x, GROUND, withBuild("area", LION.roar), 0, progress.stats.ad * v.roar, {
         kx: 50,
         ky: -30,
         source: ID,
@@ -142,10 +142,10 @@ export const sunLion: SkillBehavior = {
     kill(m, _ev, { evolved }) {
       const v = skillValues(ID);
       if (evolved || (m.cd as number) > 0 || !rng.chance(v.chance)) return;
-      m.cd = withCharms("cooldown", v.cooldown);
-      const life = withCharms("duration", v.life);
+      m.cd = withBuild("cooldown", v.cooldown);
+      const life = withBuild("duration", v.life);
       const lions = lionsOf(m);
-      if (lions.length < withCharms("amount", v.most)) summon(m, life);
+      if (lions.length < withBuild("amount", v.most)) summon(m, life);
       else lions.sort((a, b) => a.left - b.left)[0].left = life;
     },
   },

@@ -1,8 +1,9 @@
 import type { SkillDef } from "../../../../types/skill";
 import { evolvedRow, levelRows } from "../../../../utils/skillRows";
+import { drillValues, onDrill } from "./drillLevels";
 
 /** values: `time` seconds added to Bulwark, `blows` more blows it takes, `recharge` seconds the warp takes to come back, `ring` attack damage of a ring of light on arrival, `strike` the arrival blow's power, `cost` MP a warp costs, `shatter` attack damage of a burst when Bulwark breaks, `charges` warps in a row */
-const LEVELS = levelRows([
+const NATIVE = levelRows([
   { text: "Bulwark lasts 1.5 s longer.", values: { time: 1.5 } },
   { text: "Warp recharge 2 to 1.6 s.", values: { recharge: 1.6 } },
   { text: "New: the arrival sends out a ring of light.", values: { ring: 0.8 } },
@@ -13,18 +14,34 @@ const LEVELS = levelRows([
   { text: "New: two warps in a row.", values: { charges: 2 } },
 ]);
 
+const LEVELS = onDrill(NATIVE, [
+  { text: "Warp strike +30%.", drill: { damage: 0.3, cooldown: 1 } },
+  { text: "New: the arrival bursts in a 30 px ring of light, 0.8 attack.", drill: { blast: 30, blastPower: 0.8 } },
+  { text: "New: each arrival heals 2% HP.", drill: { heal: 0.02 } },
+  { text: "Warp strike +30% to +70%; recharge 15% faster.", drill: { damage: 0.7, cooldown: 0.85 } },
+  { text: "New: the arrival ring staggers.", drill: { stagger: 0.6 } },
+  { text: "Ring 0.8 to 1.8.", drill: { blastPower: 1.8 } },
+  { text: "New: the arrival restores the air dash and the air slashes.", drill: { refresh: 1 } },
+  { text: "Warp strike +70% to +250%; recharge 40% faster.", drill: { damage: 2.5, cooldown: 0.6 } },
+]);
+
 export const BULWARK_ARRIVAL: SkillDef = {
   id: "al_bulwark",
   name: "Bulwark Arrival",
   kind: "movement",
+  element: "storm",
   risk: "timed",
   button: "J",
-  text: "The warp's Bulwark lasts longer and takes more, the warp comes back sooner, and the arrival rings with light.",
+  text: "The warp strike hits harder, recharges faster and lands in a ring of light.",
   levels: LEVELS,
   evolution: {
     partner: "al_oathsworn",
     name: "Twin Bulwark",
-    text: "Every arrival calls an Oathsworn knight to cut beside him, and Bulwark takes three blows.",
-    row: evolvedRow(LEVELS[7], "Arrival calls a knight; Bulwark takes 3.", { blows: 2, knight: 1 }),
+    text: "Every 4 s an arrival recharges the warp at once.",
+    row: evolvedRow(LEVELS[7], "Every 4 s an arrival recharges the warp.", {
+      ...drillValues({ every: 4 }),
+      blows: 2,
+      knight: 1,
+    }),
   },
 };

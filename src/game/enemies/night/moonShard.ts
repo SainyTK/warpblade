@@ -6,7 +6,7 @@ import { WHITE } from "../../../utils/color";
 import { clamp } from "../../../utils/math";
 import { eachStanding, heroSlot } from "../../coopHooks";
 import { hurtHero } from "../../hurtHero";
-import { lights, particles, rng } from "../../state";
+import { fxRng, lights, particles } from "../../state";
 import { boxHit, dust, heroBox, shake } from "../../world";
 import type { MoonLook, MoonStrike } from "./moonLook";
 import { MOONFALL } from "./shepherdMoves";
@@ -54,12 +54,12 @@ function drawFalling(p: ShardPlan, y: number): void {
 
 function shatter(p: ShardPlan): void {
   for (let i = 0; i < 8; i++)
-    particles.spawn(PK.SHARD, p.x, GROUND - 1, rng.range(-90, 90), -rng.range(60, 160), rng.range(0.35, 0.7), {
-      col: rng.pick([p.look.ramp[3], p.look.ramp[4], p.look.ramp[2]]),
-      size: rng.range(1, 2),
+    particles.spawn(PK.SHARD, p.x, GROUND - 1, fxRng.range(-90, 90), -fxRng.range(60, 160), fxRng.range(0.35, 0.7), {
+      col: fxRng.pick([p.look.ramp[3], p.look.ramp[4], p.look.ramp[2]]),
+      size: fxRng.range(1, 2),
     });
   for (let i = 0; i < 5; i++)
-    particles.spawn(PK.MOTE, p.x + rng.range(-3, 3), GROUND - 2, rng.range(-30, 30), -rng.range(20, 60), 0.5, {
+    particles.spawn(PK.MOTE, p.x + fxRng.range(-3, 3), GROUND - 2, fxRng.range(-30, 30), -fxRng.range(20, 60), 0.5, {
       col: p.look.ramp[4],
       size: 0.8,
     });

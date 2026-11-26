@@ -8,7 +8,7 @@ import { clamp } from "../../../utils/math";
 import { stageLeft, stageRight } from "../../adventure";
 import { eachStanding, heroSlot } from "../../coopHooks";
 import { hurtHero } from "../../hurtHero";
-import { particles, rng } from "../../state";
+import { fxRng, particles } from "../../state";
 import { boxHit, heroBox } from "../../world";
 import { AC, VOID, VOID_SPARKS } from "./colors";
 
@@ -101,9 +101,17 @@ export function createVoidSpikes(x0: number, dir: number, count: number, damage:
         const was = before - i * DELAY;
         if (u >= SPIKE.warn && was < SPIKE.warn) {
           for (let k = 0; k < 4; k++)
-            particles.spawn(PK.SPARK, x + rng.range(-3, 3), GROUND - 1, rng.range(-40, 40), rng.range(-160, -60), 0.3, {
-              sparks: VOID_SPARKS,
-            });
+            particles.spawn(
+              PK.SPARK,
+              x + fxRng.range(-3, 3),
+              GROUND - 1,
+              fxRng.range(-40, 40),
+              fxRng.range(-160, -60),
+              0.3,
+              {
+                sparks: VOID_SPARKS,
+              },
+            );
           if (i % 2 === 0) sfx.swing(0.3);
         }
         const h = rise(u) * HEIGHT;

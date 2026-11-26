@@ -1,7 +1,7 @@
 import { ECHO_DELAY } from "../../../../constants/combat";
 import { GROUND } from "../../../../constants/stage";
 import { enemyBox, enemyCenter, walks } from "../../../../game/enemies/enemy";
-import { skillValues, withCharms } from "../../../../game/skills/query";
+import { skillValues, withBuild } from "../../../../game/skills/query";
 import { game, hero, progress, rng } from "../../../../game/state";
 import type { Enemy } from "../../../../types/enemy";
 import type { SkillBehavior, SkillMemory } from "../../../../types/skillBehavior";
@@ -64,9 +64,9 @@ export const phantomEdge: SkillBehavior = {
         return;
       }
       if (!(ev.back || state.evolved) || m.cd > 0 || !rng.chance(v.chance)) return;
-      m.cd = withCharms("cooldown", v.cooldown);
+      m.cd = withBuild("cooldown", v.cooldown);
       if (m.phantoms.length >= v.most) m.phantoms.shift();
-      if (v.stay) m.phantoms.push({ foe: ev.foe, left: withCharms("duration", v.stay) });
+      if (v.stay) m.phantoms.push({ foe: ev.foe, left: withBuild("duration", v.stay) });
       repeat(ev.foe, power);
     },
   },

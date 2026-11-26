@@ -1,6 +1,6 @@
 import { refundStamina } from "../../../game/hero/stamina";
 import { objectMemory, rememberPerSeat } from "../../../game/seatMemory";
-import { skillEvolved, skillValues, withCharms } from "../../../game/skills/query";
+import { skillEvolved, skillValues, withBuild } from "../../../game/skills/query";
 import { game, hero, progress } from "../../../game/state";
 import type { Enemy } from "../../../types/enemy";
 import { STEP } from "../constants/skillNumbers";
@@ -43,7 +43,7 @@ function ended(): void {
   if (v.barrier) raiseBarrier(STEP.barrier, evolved ? 2 : 1);
   if (evolved)
     game.fx.push(
-      createDelayedRing(hero.x, hero.y, withCharms("area", STEP.ring), 0, progress.stats.ad * v.ring, {
+      createDelayedRing(hero.x, hero.y, withBuild("area", STEP.ring), 0, progress.stats.ad * v.ring, {
         kx: 80,
         ky: -50,
         heavy: true,

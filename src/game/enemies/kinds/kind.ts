@@ -26,8 +26,12 @@ export interface EnemyKind {
   draw(e: Enemy, t: number): SpriteImage;
   /** the soft glow around it and the eye flare while it winds up */
   glow: { radius: number; color: Color; eyeY: number };
+  /** the glow's radius right now, for a foe whose glow grows over the fight; left out, glow.radius */
+  glowRadius?(e: Enemy): number;
   /** blocks frontal sword blows while in its rest state, from this wave on */
   guardFrom?: number;
+  /** true while this foe may raise its guard; left out, always */
+  guarding?(e: Enemy): boolean;
   /** slips away from swings while in its rest state, like a wisp */
   evades?: boolean;
   /**

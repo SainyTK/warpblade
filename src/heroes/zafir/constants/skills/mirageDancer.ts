@@ -20,6 +20,7 @@ export const MIRAGE_DANCER: SkillDef = {
   id: "za_mirage",
   name: "Mirage Dancer",
   kind: "summon",
+  element: "void",
   risk: "precise",
   button: "K",
   text: "A parry may call a mirage dancer beside the attacker that spins through it and the foes round it.",

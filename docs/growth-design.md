@@ -10,7 +10,8 @@ Numbers here are starting values; balance changes them in the constants files, n
 ## Words
 
 - **Skill**: one of a hero's 20 skills, levels 1 to 8, then one evolution with a partner skill. The contract is `docs/skill-design.md`.
-- **Charm**: a passive that multiplies a stat for every source at once (Might, Haste). Levels 1 to 5 (Multitude 1 to 2).
+- **Resonance**: an element's rank, from the skills and Arts held in it.
+- **Rift Art**: the spell a Rift stage's boss leaves; levels 1 to 5.
 - **Card**: one choice in a pick. A card offers a new skill, a held skill's next level, a new charm or a charm's next level.
 - **Build**: the skills, charms and evolutions a hero holds in a run. It lives in `progress.build` and resets with the run.
 - **Chest**: dropped by elites, mini bosses and the wave 20 boss. Opening it raises held skills and charms, or evolves a skill.
@@ -28,22 +29,25 @@ Relics were removed on 7 November 2026 (`docs/skill-design.md`); their growth id
 A skill's own hits (a summon, a projectile it launches on its own, damage over time) read the shared multipliers through `withCharms` (`src/game/skills/query.ts`): Multitude adds to amounts; Reach, Persistence, Swiftness and Haste multiply area, duration, speed and cooldowns.
 Might applies to every hit centrally in `dealDamage`.
 
-## Charms
+## Resonance and Fusions
 
-`src/constants/charms.ts`.
+Charms were removed on 25 November 2026: growth comes only from skills and Rift Arts.
+Every skill and every Art has one of five elements (`SkillDef.element`, `ArtDef.element`).
+An element's rank is the sum of held skill levels in it, plus 3 for an evolved skill, plus 2 per Art level (`RESONANCE_WEIGHT` in `src/constants/resonance.ts`).
+Ranks are worked out in `refreshProgress` into `progress.resonance`, and the active Fusions into `progress.fusions`.
 
-| Id | Charm | Per level | Max level |
-| --- | --- | --- | --- |
-| `might` | Might | +10% damage, every source | 5 |
-| `haste` | Haste | -8% skill cooldowns, also spell, rite, ultimate and warp recharge | 5 |
-| `multitude` | Multitude | +1 amount for skills that fire or summon several | 2 |
-| `reach` | Reach | +10% skill area | 5 |
-| `persistence` | Persistence | +10% skill duration | 5 |
-| `swiftness` | Swiftness | +10% skill projectile speed, +4% move speed | 5 |
-| `fortune` | Fortune | +10% luck: a 4th card at `1 - 1/luck`, better chests, +2% crit | 5 |
-| `vigor` | Vigor | Max HP x1.15, +0.2 HP per second | 5 |
-| `insight` | Insight | +8% experience | 5 |
-| `resonance` | Resonance | Flow holds 20% more stacks | 5 |
+Every hit that is not damage over time resonates (`src/game/resonance/`):
+
+- Blaze lays burn stacks worth a share of the hit; at rank 20 burning foes explode when they fall.
+- Frost chills, then freezes a minion after a number of hits that falls with rank; frozen foes take more; at rank 20 chilled foes shatter when they fall.
+- Storm may arc to nearby foes for a share of the hit, to one more foe every 8 ranks, with sure crits from rank 20.
+- Venom lays poison stacks; each makes the foe take 1.5% more from every source; at rank 20 poison spreads on death.
+- Void may echo the hit a moment later; from rank 24 it echoes twice.
+
+Arcs and echoes are hits that resonate again, up to `PROC_DEPTH`, which is where the multiplying growth comes from.
+Each element also bends one build stat the skills read through `withBuild`: Blaze area, Frost duration, Storm cooldowns and projectile speed, Void amounts, Venom crit.
+Two elements at rank 12 (`FUSION_RANK`) make one of ten Fusions (`FUSIONS`), each a rule that links the two procs.
+A Fusion's name stays ??? on cards and in the Codex until the player has made it once.
 
 ## Hero growth
 

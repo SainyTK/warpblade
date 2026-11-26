@@ -7,7 +7,7 @@ import { stageLeft, stageRight } from "../../adventure";
 import { eachStanding } from "../../coopHooks";
 import { hurtHero } from "../../hurtHero";
 import { shotWarded } from "../../shotWards";
-import { hero, particles, rng } from "../../state";
+import { fxRng, hero, particles } from "../../state";
 import { fieldPace } from "../../timeFields";
 import { boxHit, heroBox } from "../../world";
 import { DAY_SPARKS, DAY_COLORS as DC } from "./colors";
@@ -18,18 +18,18 @@ const SPLASH = { reach: 10, height: 14 } as const;
 
 /** an acorn the Oakheart lobs at (tx, ty): a shrinking ring marks where it will land; it bursts there, or on Kael if it meets him first */
 export function createAcorn(x: number, y: number, tx: number, ty: number, flight: number, dmg: number): Effect {
-  const o = { x, y, t: 0, spin: rng.range(0, TAU) };
+  const o = { x, y, t: 0, spin: fxRng.range(0, TAU) };
   const vx = (tx - x) / flight;
   let vy = (ty - y - 0.5 * GRAVITY * flight * flight) / flight;
   const burst = (): void => {
     for (let i = 0; i < 9; i++) {
-      const a = rng.range(Math.PI, TAU);
-      particles.spawn(PK.SPARK, o.x, o.y - 1, Math.cos(a) * 70, Math.sin(a) * 70, rng.range(0.2, 0.4), {
+      const a = fxRng.range(Math.PI, TAU);
+      particles.spawn(PK.SPARK, o.x, o.y - 1, Math.cos(a) * 70, Math.sin(a) * 70, fxRng.range(0.2, 0.4), {
         sparks: DAY_SPARKS.bark,
       });
     }
     for (let i = 0; i < 3; i++)
-      particles.spawn(PK.SHARD, o.x, o.y - 2, rng.range(-50, 50), -rng.range(50, 110), rng.range(0.4, 0.7), {
+      particles.spawn(PK.SHARD, o.x, o.y - 2, fxRng.range(-50, 50), -fxRng.range(50, 110), fxRng.range(0.4, 0.7), {
         col: DC.acorn,
         size: 1.5,
       });

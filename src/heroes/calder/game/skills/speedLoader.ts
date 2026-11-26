@@ -2,7 +2,7 @@ import { dealDamage } from "../../../../game/damage";
 import { createFloorRing } from "../../../../game/effects/floorRing";
 import { createSlash } from "../../../../game/effects/slash";
 import { enemyCenter } from "../../../../game/enemies/enemy";
-import { skillValues, withCharms } from "../../../../game/skills/query";
+import { skillValues, withBuild } from "../../../../game/skills/query";
 import { game, hero, progress } from "../../../../game/state";
 import type { SkillBehavior } from "../../../../types/skillBehavior";
 import { HOT_RAMP, PHOSPHOR } from "../../constants/colors";
@@ -17,7 +17,7 @@ const RING_SLASH = { cx: 0, cy: -16, R: 18, sy: 0.3, rot: 0, a0: 0, a1: 6.2, W: 
 /** the closing cylinder throws a cutting ring round Calder, pushing foes away or, as Spin Cycle, drawing them in */
 function ring(): void {
   const v = skillValues(SKILL);
-  const reach = withCharms("area", v.reach);
+  const reach = withBuild("area", v.reach);
   game.fx.push(createSlash(hero.x, hero.y, hero.face, { ...RING_SLASH, R: reach * 0.8, ramp: PHOSPHOR }));
   game.fx.push(createFloorRing(hero.x, hero.y, reach, PHOSPHOR, 0.3));
   for (const e of game.enemies) {
@@ -49,7 +49,7 @@ export const speedLoader: SkillBehavior = {
         blastAt(null, hero.x, hero.y - 16, {
           damage: 0,
           splash: progress.stats.ad * v.burst,
-          reach: withCharms("area", RING.burst),
+          reach: withBuild("area", RING.burst),
           kx: 120,
           hot: true,
           big: true,

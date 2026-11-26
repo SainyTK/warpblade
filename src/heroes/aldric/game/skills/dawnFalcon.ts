@@ -4,7 +4,7 @@ import { dealDamage } from "../../../../game/damage";
 import { createImpact } from "../../../../game/effects/impact";
 import { enemyBox } from "../../../../game/enemies/enemy";
 import { addStacks, markFoe } from "../../../../game/enemies/skillStatus";
-import { skillValues, withCharms } from "../../../../game/skills/query";
+import { skillValues, withBuild } from "../../../../game/skills/query";
 import { game, hero, progress, rng } from "../../../../game/state";
 import { boxHit } from "../../../../game/world";
 import type { Effect } from "../../../../types/effect";
@@ -38,7 +38,7 @@ function createFalcon(x0: number, y0: number, face: number, passes: number, dela
         struck.add(e);
         dealDamage(e, progress.stats.ad * v.power, { source: ID, fromX: o.x - o.dir * 6, kx: o.dir * 30, ky: -20 });
         game.fx.push(createImpact(o.x, o.y, o.dir, false, DAWN_SPARKS));
-        if (v.mark) markFoe(e, ID, withCharms("duration", FALCON.mark), v.mark);
+        if (v.mark) markFoe(e, ID, withBuild("duration", FALCON.mark), v.mark);
         if (evolved)
           addStacks(e, ID, {
             stacks: 1,
@@ -82,13 +82,13 @@ function createFalcon(x0: number, y0: number, face: number, passes: number, dela
 function send(m: SkillMemory, evolved: boolean): void {
   const v = skillValues(ID);
   if ((m.cd as number) > 0 || !rng.chance(v.chance)) return;
-  m.cd = withCharms("cooldown", v.cooldown);
-  const count = withCharms("amount", v.count ?? 1);
+  m.cd = withBuild("cooldown", v.cooldown);
+  const count = withBuild("amount", v.count ?? 1);
   for (let i = 0; i < count; i++)
     game.fx.push(createFalcon(hero.x, hero.y - 30 - i * 6, hero.face, v.passes ?? 1, i * 0.12, evolved));
 }
 
-/** Dawn Falcon: an ability cast (and from its seventh level a Counterbash) may send falcons of light through the foes
+/** Dawn Falcon: an ability cast (and from its seventh level a parry or a Counterbash) may send falcons of light through the foes
  *  ahead; as Sunbird they swoop three times and set foes burning */
 export const dawnFalcon: SkillBehavior = {
   create: () => ({ cd: 0 }),
@@ -98,6 +98,9 @@ export const dawnFalcon: SkillBehavior = {
   on: {
     cast(m, _ev, { evolved }) {
       send(m, evolved);
+    },
+    parry(m, _ev, { evolved }) {
+      if (skillValues(ID).counter) send(m, evolved);
     },
     guardBash(m, ev, { evolved }) {
       if (ev.counter && skillValues(ID).counter) send(m, evolved);

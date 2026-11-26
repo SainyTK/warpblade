@@ -1,26 +1,38 @@
+import { ELEMENTS } from "../constants/elements";
 import { MAX_LEVEL } from "../constants/growth";
 import { PAL } from "../constants/palette";
 import { LEVEL_UP_RESTORE } from "../constants/progression";
+import { FUSIONS, type FusionId, RESONANCE_MILESTONES } from "../constants/resonance";
 import { sfx } from "../services/audio";
+import { ARTS } from "../stages/arts";
 import { metaBonus } from "../store/meta";
+import { learnFusion } from "../store/unlocks";
 import type { Card } from "../types/build";
 import { PK } from "../types/particle";
 import type { PickAnswer } from "../types/pick";
-import { buildStats } from "../utils/build";
 import { cardKey } from "../utils/cards";
 import { xpToNext } from "../utils/progression";
+import { activeFusions, type Ranks, resonanceRanks, resonanceStats } from "../utils/resonance";
 import { heldRows } from "../utils/skills";
 import { computeStats } from "../utils/stats";
-import { raiseCharm, raiseSkill } from "./build/raise";
+import { raiseArt, raiseSkill } from "./build/raise";
+import { currentBuildStats } from "./build/stats";
 import { createFloorRing } from "./effects/floorRing";
 import { forgetEvolutions } from "./evolve";
 import { airLimit } from "./skills/airLimit";
-import { character, freshProgress, game, hero, lights, particles, progress, rng, showBanner } from "./state";
+import { character, freshProgress, fxRng, game, hero, lights, particles, progress, showBanner } from "./state";
 
 /** recompute everything derived from the level and the build, keeping HP and MP inside the new maxima */
 export function refreshProgress(): void {
   const build = progress.build;
-  progress.stats = computeStats(character, progress.level, heldRows(character, build), metaBonus(), buildStats(build));
+  const before = progress.resonance;
+  progress.resonance = resonanceRanks(build, character, ARTS);
+  announceMilestones(before, progress.resonance);
+  const fusions = activeFusions(progress.resonance);
+  for (const id of fusions) if (!progress.fusions.includes(id)) announceFusion(id);
+  progress.fusions = fusions;
+  const stats = resonanceStats(progress.resonance);
+  progress.stats = computeStats(character, progress.level, heldRows(character, build), metaBonus(), stats);
   // every hero keeps one ultimate all run; their ultimate skill upgrades it
   progress.ultimate = character.special.id;
   progress.comboLimit = character.comboHits;
@@ -30,20 +42,32 @@ export function refreshProgress(): void {
   hero.stamina = Math.min(hero.stamina, progress.stats.stamina);
 }
 
+function announceMilestones(before: Ranks, after: Ranks): void {
+  for (const milestone of RESONANCE_MILESTONES) {
+    if (before[milestone.element] < milestone.rank && after[milestone.element] >= milestone.rank)
+      showBanner(`${ELEMENTS[milestone.element].name} ${milestone.rank}: ${milestone.name}`, 2);
+  }
+}
+
+function announceFusion(id: FusionId): void {
+  learnFusion(id);
+  showBanner(`Fusion: ${FUSIONS.find((f) => f.id === id)?.name ?? id}`, 2);
+}
+
 function celebrateLevel(): void {
   game.fx.push(createFloorRing(hero.x, hero.y, 34, PAL.heal, 0.6));
   lights.add(hero.x, hero.y - 18, 60, PAL.heal[3], 0.8, 0.6);
   for (let i = 0; i < 18; i++)
     particles.spawn(
       PK.STAR,
-      hero.x + rng.range(-10, 10),
-      hero.y - rng.range(0, 30),
+      hero.x + fxRng.range(-10, 10),
+      hero.y - fxRng.range(0, 30),
       0,
-      -rng.range(20, 60),
-      rng.range(0.5, 1),
+      -fxRng.range(20, 60),
+      fxRng.range(0.5, 1),
       {
-        col: rng.pick([PAL.heal[3], PAL.heal[4]]),
-        size: rng.range(1, 2.5),
+        col: fxRng.pick([PAL.heal[3], PAL.heal[4]]),
+        size: fxRng.range(1, 2.5),
       },
     );
   sfx.levelUp();
@@ -71,12 +95,20 @@ export function gainXp(amount: number): void {
 
 /** experience from play: Insight adds to it */
 export function earnXp(amount: number): void {
-  gainXp(amount * buildStats(progress.build).growth);
+  gainXp(amount * currentBuildStats().growth);
 }
 
 /** a cleared wave: the game pauses on a pick for every point waiting, if any */
-export function openPicks(): void {
-  if (progress.picks > 0 && game.mode === "play") game.mode = "pick";
+let afterPicks: "play" | "map" = "play";
+
+export function openPicks(from: "play" | "map" = "play"): void {
+  if (progress.picks <= 0 || game.mode !== from) return;
+  afterPicks = from;
+  game.mode = "pick";
+}
+
+export function leavePicks(): void {
+  if (game.mode === "pick") game.mode = afterPicks;
 }
 
 /** recompute after something grew: a higher maximum also fills by what it adds */
@@ -97,7 +129,7 @@ function takeBoon(): void {
 /** one point is spent; the game plays on once none is left */
 function spendPick(): void {
   progress.picks = Math.max(0, progress.picks - 1);
-  if (!progress.picks && game.mode === "pick") game.mode = "play";
+  if (!progress.picks) leavePicks();
 }
 
 /** spend one point on a card */
@@ -105,7 +137,7 @@ function choosePick(card: Card): void {
   if (card.type === "boon") takeBoon();
   else {
     if (card.type === "skill") raiseSkill(card.id);
-    else raiseCharm(card.id);
+    else raiseArt(card.id);
     refreshGrowing();
   }
   spendPick();

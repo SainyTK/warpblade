@@ -1,5 +1,5 @@
 import { dealDamage } from "../../../../game/damage";
-import { skillValues, withCharms } from "../../../../game/skills/query";
+import { skillValues, withBuild } from "../../../../game/skills/query";
 import { distance2 } from "../../../../game/skills/targets";
 import { game, hero, progress } from "../../../../game/state";
 import type { SkillBehavior, SkillMemory } from "../../../../types/skillBehavior";
@@ -22,7 +22,7 @@ const PULL = 120;
 /** the second jump: a ring of qi round him cuts every foe it reaches */
 function ring(m: Memory): void {
   const v = skillValues(SKILL.cloud);
-  const radius = withCharms("area", v.radius);
+  const radius = withBuild("area", v.radius);
   const cy = hero.y - 14;
   game.fx.push(createQiRing(hero.x, cy, radius));
   for (const e of game.enemies) {
@@ -43,7 +43,7 @@ function land(): void {
   for (const face of [-1, 1])
     game.fx.push(
       createQiWave(hero.x + face * 6, hero.y - 6, face, {
-        reach: withCharms("area", LAND_WAVE.reach),
+        reach: withBuild("area", LAND_WAVE.reach),
         speed: LAND_WAVE.speed,
         damage: progress.stats.ad * v.land,
         half: LAND_WAVE.half,

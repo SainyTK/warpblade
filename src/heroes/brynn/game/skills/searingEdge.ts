@@ -1,7 +1,7 @@
 import { dealDamage } from "../../../../game/damage";
 import { createFloorRing } from "../../../../game/effects/floorRing";
 import { addStacks, consumeStacks, stacksOf } from "../../../../game/enemies/skillStatus";
-import { skillEvolved, skillValues, withCharms } from "../../../../game/skills/query";
+import { skillEvolved, skillValues, withBuild } from "../../../../game/skills/query";
 import { game, progress } from "../../../../game/state";
 import type { Enemy } from "../../../../types/enemy";
 import type { SkillBehavior } from "../../../../types/skillBehavior";
@@ -17,10 +17,10 @@ function lay(foe: Enemy, n: number): void {
   const v = skillValues(ID);
   addStacks(foe, ID, {
     stacks: n,
-    max: withCharms("amount", v.max),
+    max: withBuild("amount", v.max),
     damage: progress.stats.ad * v.damage,
     every: EMBERS.every,
-    duration: withCharms("duration", EMBERS.duration),
+    duration: withBuild("duration", EMBERS.duration),
   });
 }
 
@@ -49,7 +49,7 @@ export const searingEdge: SkillBehavior = {
         for (const other of game.enemies)
           if (other !== e.foe && other.hp > 0 && Math.abs(other.x - e.foe.x) < EMBERS.spread) lay(other, held);
       }
-      if (skillEvolved(ID) && stacksOf(e.foe, ID) >= withCharms("amount", v.max)) burst(e.foe);
+      if (skillEvolved(ID) && stacksOf(e.foe, ID) >= withBuild("amount", v.max)) burst(e.foe);
     },
   },
 };

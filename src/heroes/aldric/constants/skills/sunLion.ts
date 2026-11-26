@@ -20,6 +20,7 @@ export const SUN_LION: SkillDef = {
   id: "al_lion",
   name: "Sun Lion",
   kind: "summon",
+  element: "blaze",
   risk: "easy",
   button: "auto",
   text: "A foe falling may call a lion of light that pounces on foes.",

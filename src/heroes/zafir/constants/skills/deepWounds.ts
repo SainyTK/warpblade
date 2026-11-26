@@ -17,6 +17,7 @@ export const DEEP_WOUNDS: SkillDef = {
   id: "za_deep",
   name: "Deep Wounds",
   kind: "dot",
+  element: "venom",
   risk: "easy",
   button: "auto",
   text: "Your wounds bleed harder, go deeper and stay open longer.",

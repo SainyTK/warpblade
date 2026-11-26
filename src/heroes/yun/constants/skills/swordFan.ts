@@ -1,5 +1,6 @@
 import type { SkillDef } from "../../../../types/skill";
 import { evolvedRow, levelRows } from "../../../../utils/skillRows";
+import { drillEvolved, onDrill } from "./drill";
 
 /** values: `power` ability power of each sword's cut, `reach` pixels the fan flies, `extra` swords conjured for each fan besides the ones held, `recharge` seconds, `back` the swords return through foes, `stun` seconds foes cut are knocked down, `around` half the fan flies behind */
 const LEVELS = levelRows([
@@ -16,18 +17,35 @@ const LEVELS = levelRows([
   { text: "New: foes the fan cuts are knocked down; power 1.7.", values: { stun: 0.5, power: 1.7 } },
 ]);
 
+const DRILL_LEVELS = onDrill(LEVELS, [
+  { text: "Sword Stream cuts for +0.5 AP more.", drill: { bonus: 0.5 } },
+  { text: "New: the Stream's cut also strikes foes just behind its target.", drill: { pierce: 1 } },
+  { text: "New: the Stream knocks foes back.", drill: { knock: 1 } },
+  { text: "Stream bonus 1.2 AP.", drill: { bonus: 1.2 } },
+  { text: "New: casting Stream sends 3 more swords at three heights for 0.6 AP.", drill: { fan: 3, swordPower: 0.6 } },
+  { text: "Stream bonus 2.2 AP; swords 1.2 AP.", drill: { bonus: 2.2, swordPower: 1.2 } },
+  { text: "New: preparation -25%.", drill: { preparation: 0.75 } },
+  { text: "Stream bonus 4.5 AP; swords 2.4 AP.", drill: { bonus: 4.5, swordPower: 2.4 } },
+]);
+
 export const SWORD_FAN: SkillDef = {
   id: "yu_fan",
   name: "Sword Fan",
   kind: "spell",
+  element: "storm",
   risk: "easy",
   button: "I",
-  text: "Learn Sword Fan: send your spirit swords out in a fan that cuts everything ahead.",
-  levels: LEVELS,
+  text: "Sword Stream cuts harder and fans out into more spirit swords.",
+  levels: DRILL_LEVELS,
   evolution: {
     partner: "yu_guardian",
     name: "Peacock Fan",
-    text: "The fan opens all round you, with twice as many conjured swords.",
-    row: evolvedRow(LEVELS[7], "A full circle; 4 conjured swords.", { around: 1, extra: 4 }),
+    text: "Every Stream fans out into eight extra swords.",
+    row: drillEvolved(
+      DRILL_LEVELS[7],
+      evolvedRow(LEVELS[7], "A full circle; 4 conjured swords.", { around: 1, extra: 4 }),
+      "Stream fans eight swords.",
+      { peacock: 8 },
+    ),
   },
 };

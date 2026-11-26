@@ -9,7 +9,7 @@ import { eachStanding } from "../../coopHooks";
 import { createFloorRing } from "../../effects/floorRing";
 import { createImpact } from "../../effects/impact";
 import { hurtHero } from "../../hurtHero";
-import { game, hero, particles, rng } from "../../state";
+import { fxRng, game, hero, particles, rng } from "../../state";
 import { boxHit, dust, heroBox, shake } from "../../world";
 import { foeSees } from "../awareness";
 import { enemyBox } from "../enemy";
@@ -33,9 +33,9 @@ function slam(e: Enemy): void {
   dust(fx - 4, GROUND, 4, -1);
   dust(fx + 4, GROUND, 4, 1);
   for (let i = 0; i < 6; i++)
-    particles.spawn(PK.SHARD, fx + rng.range(-6, 6), GROUND - 1, rng.range(-70, 70), rng.range(-150, -60), 0.6, {
+    particles.spawn(PK.SHARD, fx + fxRng.range(-6, 6), GROUND - 1, fxRng.range(-70, 70), fxRng.range(-150, -60), 0.6, {
       col: TC.stoneLight,
-      size: rng.range(1.5, 2.5),
+      size: fxRng.range(1.5, 2.5),
     });
   shake(0.2, 2.5);
   sfx.boom();
@@ -67,8 +67,10 @@ export function updateGolem(e: Enemy, dt: number, ts: number): void {
     if (e.st >= 0.22) Object.assign(e, { state: "recover", st: 0, n: 0 });
   } else if (e.state === "charge") {
     e.vx = approach(e.vx, 0, 400 * dt);
-    if (rng.chance(0.3 * ts))
-      particles.spawn(PK.EMBER, e.x + rng.range(-8, 8), e.y - rng.range(4, 20), 0, -20, 0.4, { sparks: RUNE_SPARKS });
+    if (fxRng.chance(0.3 * ts))
+      particles.spawn(PK.EMBER, e.x + fxRng.range(-8, 8), e.y - fxRng.range(4, 20), 0, -20, 0.4, {
+        sparks: RUNE_SPARKS,
+      });
     if (e.st >= 0.8 * ws.windup) {
       Object.assign(e, { state: "recover", st: -0.2, n: SLAMMED });
       slam(e);
@@ -77,8 +79,8 @@ export function updateGolem(e: Enemy, dt: number, ts: number): void {
   if (e.state !== "walk") e.vx -= e.vx * 5 * dt;
   e.x = clampStageX(e.x + e.vx * dt, 10);
   e.y = GROUND;
-  if (rng.chance(0.05 * ts))
-    particles.spawn(PK.EMBER, e.x + rng.range(-7, 7), e.y - rng.range(6, 18), 0, -8, rng.range(0.4, 0.8), {
+  if (fxRng.chance(0.05 * ts))
+    particles.spawn(PK.EMBER, e.x + fxRng.range(-7, 7), e.y - fxRng.range(6, 18), 0, -8, fxRng.range(0.4, 0.8), {
       sparks: RUNE_SPARKS,
     });
   eachStanding(() => {

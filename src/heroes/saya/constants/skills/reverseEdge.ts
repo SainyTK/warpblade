@@ -1,5 +1,6 @@
 import type { SkillDef } from "../../../../types/skill";
 import { evolvedRow, levelRows } from "../../../../utils/skillRows";
+import { drillRows, drillValues } from "./drillRows";
 import { SKILL } from "./ids";
 
 /** values: `store` the factor on what the return cut stores, `behind` it also cuts behind, `launch` it throws foes up
@@ -19,18 +20,33 @@ const LEVELS = levelRows([
   { text: "Return store +150% to +160%; the crescent cuts harder.", values: { store: 2.6, crescent: 1 } },
 ]);
 
+const DRILL = drillRows(LEVELS, [
+  { text: "The return cut also cuts behind her for 0.8x AD.", drill: { behind: 0.8 } },
+  { text: "New: the return cut throws foes up.", drill: { launch: 1 } },
+  { text: "Return cut +50%.", drill: { second: 0.5 } },
+  { text: "New: the cut behind stores 1x AD in each foe.", drill: { behindStore: 1 } },
+  { text: "New: the return cut chills.", drill: { chill: 1.2 } },
+  { text: "Return cut +50% to +120%.", drill: { second: 1.2 } },
+  { text: "New: foes cut behind are pulled to her front.", drill: { pull: 1 } },
+  { text: "Return cut +120% to +250%; the cut behind doubles.", drill: { second: 2.5, behind: 1.6 } },
+]);
+
 export const REVERSE_EDGE: SkillDef = {
   id: SKILL.reverse,
   name: "Reverse Edge",
   kind: "attack",
+  element: "frost",
   risk: "easy",
   button: "J",
-  text: "The return cut stores more, then cuts behind her too and leaves an ink crescent.",
-  levels: LEVELS,
+  text: "The return cut, the second of the chain, also cuts the foes behind her.",
+  levels: DRILL,
   evolution: {
     partner: SKILL.flow,
     name: "Full Circle",
-    text: "The return cut's crescent becomes a ring of ink that turns round her for 2 seconds.",
-    row: evolvedRow(LEVELS[7], "The crescent turns round you as a ring for 2 s.", { ring: 2 }),
+    text: "The return cut becomes a full circle: it cuts all around her twice.",
+    row: evolvedRow(DRILL[7], "The return cut cuts all around twice.", {
+      ...drillValues({ circle: 1 }),
+      ring: 2,
+    }),
   },
 };

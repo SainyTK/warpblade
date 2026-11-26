@@ -1,4 +1,4 @@
-import { skillValues, withCharms } from "../../../game/skills/query";
+import { skillValues, withBuild } from "../../../game/skills/query";
 import { hero, progress } from "../../../game/state";
 import type { MoveHit } from "../../../types/move";
 import type { Box } from "../../../types/world";
@@ -27,7 +27,7 @@ function launch(hit: MoveHit): MoveHit {
 /** the 1st hit: Reaping Sweep's low sweep */
 function sweep(hit: MoveHit): MoveHit {
   const v = skillValues("k_reap");
-  const reach = withCharms("area", v.reach);
+  const reach = withBuild("area", v.reach);
   return { ...hit, power: v.power, box: [-2, -16, reach, 2], kx: -v.drag * DRAG_KICK, around: !!v.behind };
 }
 

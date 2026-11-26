@@ -2,7 +2,7 @@ import { dealDamage } from "../../../../game/damage";
 import { createImpact } from "../../../../game/effects/impact";
 import { enemyCenter } from "../../../../game/enemies/enemy";
 import { addStacks, consumeStacks, stacksOf } from "../../../../game/enemies/skillStatus";
-import { skillEvolved, skillLevel, skillValues, withCharms } from "../../../../game/skills/query";
+import { skillEvolved, skillLevel, skillValues, withBuild } from "../../../../game/skills/query";
 import { nearestFoe } from "../../../../game/skills/targets";
 import { game, progress } from "../../../../game/state";
 import type { Enemy } from "../../../../types/enemy";
@@ -22,7 +22,7 @@ export function woundFoe(e: Enemy, stacks = 1): void {
     max: v.max,
     damage: progress.stats.ad * v.damage,
     every: TICK.every,
-    duration: withCharms("duration", TICK.duration),
+    duration: withBuild("duration", TICK.duration),
   });
   if (v.chill) e.chill = Math.max(e.chill, v.chill);
   if (!skillEvolved(SKILL.wound) || stacksOf(e, SKILL.wound) < v.max) return;
@@ -39,11 +39,15 @@ export const lingeringQi: SkillBehavior = {
       if (e.melee && e.move && skillValues(SKILL.wound).blade) woundFoe(e.foe);
     },
     kill(_m, e) {
-      if (!skillValues(SKILL.wound).spread) return;
-      const n = stacksOf(e.foe, SKILL.wound);
-      if (!n) return;
-      const next = nearestFoe(e.foe.x, e.foe.y, [e.foe]);
-      if (next) woundFoe(next, n);
+      passWounds(e.foe);
     },
   },
 };
+
+export function passWounds(foe: Enemy): void {
+  if (!skillValues(SKILL.wound).spread) return;
+  const n = stacksOf(foe, SKILL.wound);
+  if (!n) return;
+  const next = nearestFoe(foe.x, foe.y, [foe]);
+  if (next) woundFoe(next, n);
+}

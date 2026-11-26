@@ -1,35 +1,42 @@
 import type { SkillDef } from "../../../../types/skill";
-import { evolvedRow, levelRows } from "../../../../utils/skillRows";
+import { evolvedRow } from "../../../../utils/skillRows";
+import { drillLevels, drillValues, type NativeStep } from "./drillLevels";
 
-/** values: `power` ability power, `launch` how fast it throws foes up, `life` seconds it runs, `recharge` seconds, `back`
- *  it turns back, `ticks` cuts on one foe, `both` one gale each way, `pull` it drags foes along, `stand` (evolved) seconds
- *  it stands and juggles */
-const LEVELS = levelRows([
-  {
-    text: "Learn Dusk Gale: a whirl runs along the floor and throws foes up.",
-    values: { power: 1.6, launch: 240, life: 0.5, recharge: 4.5, ticks: 1 },
-  },
-  { text: "Power 1.6 to 2.6.", values: { power: 2.6 } },
-  { text: "New: the gale turns back at the end of its run.", values: { back: 1 } },
-  { text: "Power 2.6 to 3.4; recharge 3.8 s.", values: { power: 3.4, recharge: 3.8 } },
-  { text: "New: it cuts each foe three times and holds it up.", values: { ticks: 3 } },
-  { text: "New: a gale runs each way.", values: { both: 1 } },
-  { text: "Power 3.4 to 4.6.", values: { power: 4.6 } },
-  { text: "New: it drags foes along with it.", values: { pull: 1 } },
+const NATIVE: readonly NativeStep[] = [
+  { values: { power: 1.6, launch: 240, life: 0.5, recharge: 4.5, ticks: 1 } },
+  { values: { power: 2.6 } },
+  { values: { back: 1 } },
+  { values: { power: 3.4, recharge: 3.8 } },
+  { values: { ticks: 3 } },
+  { values: { both: 1 } },
+  { values: { power: 4.6 } },
+  { values: { pull: 1 } },
+];
+
+const LEVELS = drillLevels(NATIVE, [
+  { text: "Dusk Gale deals 0.4 AD more.", drill: { bonus: 0.4 } },
+  { text: "New: a second gust flies above the first.", drill: { gusts: 1 } },
+  { text: "Gale +0.7 AD.", drill: { bonus: 0.7 } },
+  { text: "New: gale blasts are 25% wider.", drill: { area: 0.25 } },
+  { text: "Gale +1.2 AD.", drill: { bonus: 1.2 } },
+  { text: "New: a gust also flies behind you.", drill: { gusts: 2, behind: 1 } },
+  { text: "Gale +1.8 AD; blasts 40% wider.", drill: { bonus: 1.8, area: 0.4 } },
+  { text: "Gale +3.2 AD.", drill: { bonus: 3.2 } },
 ]);
 
 export const DUSK_GALE: SkillDef = {
   id: "ve_gale",
   name: "Dusk Gale",
   kind: "spell",
+  element: "storm",
   risk: "timed",
   button: "I",
-  text: "An ability: a whirl of dusk runs along the floor and throws foes into the air.",
+  text: "Dusk Gale hits harder and blows in more gusts.",
   levels: LEVELS,
   evolution: {
     partner: "ve_sky",
     name: "Twilight Cyclone",
-    text: "At the end of its run the gale stands for 2 s and keeps juggling every foe in it.",
-    row: evolvedRow(LEVELS[7], "The gale stands 2 s and juggles foes.", { stand: 2 }),
+    text: "A gale hit lifts the foe and every foe within 40 px into the air and cuts them.",
+    row: evolvedRow(LEVELS[7], "Gale hits lift foes near.", { stand: 2, ...drillValues({ lift: 200 }) }),
   },
 };

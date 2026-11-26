@@ -1,5 +1,6 @@
 import type { SkillDef } from "../../../../types/skill";
 import { evolvedRow, levelRows } from "../../../../utils/skillRows";
+import { withDrill } from "./drillLevels";
 
 /** values: `bonus` added share of a Trigger's blast on the struck foe, `window` seconds after a blow lands that J is a Trigger, `guardBreak`, `stagger` seconds, `streak` added per Trigger in a row up to `streakCap`, `twin` a Trigger on Breaker fires a second round, `mark` damage taken for `markTime` seconds */
 const LEVELS = levelRows([
@@ -13,19 +14,31 @@ const LEVELS = levelRows([
   { text: "Bonus +600% to +5000%.", values: { bonus: 50 } },
 ]);
 
+const DRILL_LEVELS = withDrill(LEVELS, [
+  { text: "The first cut fires a round into the wound.", drill: { round: 0.5 } },
+  { text: "New: the round staggers the foe.", drill: { stagger: 0.3 } },
+  { text: "New: the round is hot: gold, half again as strong.", drill: { hot: 1 } },
+  { text: "Round 0.5 to 1 AD.", drill: { round: 1 } },
+  { text: "New: the second cut fires a round too.", drill: { second: 1 } },
+  { text: "Round 1 to 2 AD.", drill: { round: 2 } },
+  { text: "New: a struck foe takes +20% from everything for 3 s.", drill: { mark: 0.2 } },
+  { text: "Round 2 to 4 AD.", drill: { round: 4 } },
+]);
+
 export const HAIR_TRIGGER: SkillDef = {
   id: "ca_trigger",
   name: "Hair Trigger",
   kind: "attack",
+  element: "storm",
   risk: "precise",
   button: "J",
-  text: "A Trigger's round hits far harder on the foe the blow struck.",
-  levels: LEVELS,
+  text: "The first cut fires a round into the wound.",
+  levels: DRILL_LEVELS,
   evolution: {
     partner: "ca_speedload",
     name: "Dead Center",
-    text: "A Trigger gives its round back, and every third Trigger in a row sends a breaching slug through the foe.",
-    row: evolvedRow(LEVELS[7], "A Trigger gives its round back; every third, a breaching slug.", {
+    text: "Every cut that fires a round fires two.",
+    row: evolvedRow(DRILL_LEVELS[7], "Every round-firing cut fires twice.", {
       refund: 1,
       breachEvery: 3,
       breach: 60,

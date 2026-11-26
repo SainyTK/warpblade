@@ -1,7 +1,7 @@
 import { FH, FN, FW } from "../constants/stage";
 import { STAGE_WAVES } from "../constants/waves";
 import { bayerAt } from "../engine/frame";
-import { isAdventure } from "../game/adventure";
+import { currentStage, isAdventure, stageAreaShare } from "../game/adventure";
 import { game } from "../game/state";
 import { menuContext } from "../ui/menu/menuState";
 import { eraOf, eraProgress } from "../utils/eras";
@@ -21,6 +21,7 @@ interface Look {
   bg: Uint32Array;
   /** the layer of each art pixel of bg */
   layers: Uint8Array;
+  bodiless: Uint32Array | null;
 }
 
 /** the wave whose look the stage wears: the one being fought, or during the lull the one about to come */
@@ -31,7 +32,12 @@ export function sceneWave(): number {
 
 const usesArena = (): boolean => menuContext() === "title" || !isAdventure();
 
-function lookFor(wave: number, arena: boolean): Omit<Look, "bg" | "layers"> {
+function lookFor(wave: number, arena: boolean): Omit<Look, "bg" | "layers" | "bodiless"> {
+  const stage = arena ? null : currentStage();
+  if (stage) {
+    const k = stageAreaShare();
+    return { key: `${stage.era}:${k}:${arena}`, def: SCENES[stage.era], k, arena };
+  }
   const era = eraOf(wave);
   const k = eraProgress(wave);
   return { key: `${era.id}:${k}:${arena}`, def: SCENES[era.id], k, arena };
@@ -55,9 +61,10 @@ export function scene(): Pick<Look, "def" | "k" | "arena"> {
 }
 
 /** the finished static picture of the scene being shown, at full detail, with the layer of each art pixel */
-export function scenePlate(): { plate: Uint32Array; layers: Uint8Array } {
+export function scenePlate(): { plate: Uint32Array; layers: Uint8Array; bodiless: Uint32Array } {
   const c = layout();
-  return { plate: c.bg, layers: c.layers };
+  c.bodiless ??= buildBackground(c.def, c.k, c.arena, false).plate;
+  return { plate: c.bg, layers: c.layers, bodiless: c.bodiless };
 }
 
 /** rebuild the background when the wave's look differs from the one shown, and start the dissolve */
@@ -66,7 +73,7 @@ function refresh(arena: boolean): void {
   if (current && current.key === next.key) return;
   previous = current?.arena === arena ? dissolved(current).slice() : null;
   const built = buildBackground(next.def, next.k, arena);
-  current = { ...next, bg: built.plate, layers: built.layers };
+  current = { ...next, bg: built.plate, layers: built.layers, bodiless: null };
   fade = previous ? 0 : 1;
   for (const fn of listeners) fn();
 }

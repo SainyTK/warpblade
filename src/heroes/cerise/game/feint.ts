@@ -1,5 +1,5 @@
 import { objectMemory, rememberPerSeat } from "../../../game/seatMemory";
-import { skillValues, withCharms } from "../../../game/skills/query";
+import { skillValues, withBuild } from "../../../game/skills/query";
 import { game, hero, progress } from "../../../game/state";
 import type { Enemy } from "../../../types/enemy";
 import { createGlassRapier } from "./effects/glassRapier";
@@ -14,7 +14,7 @@ rememberPerSeat(objectMemory(opened, true));
 export function feint(e: Enemy): void {
   const v = skillValues("ce_feint");
   if (!v.open) return;
-  opened.list = [...opened.list.filter((o) => o.foe !== e), { foe: e, left: withCharms("duration", v.openTime) }];
+  opened.list = [...opened.list.filter((o) => o.foe !== e), { foe: e, left: withBuild("duration", v.openTime) }];
   if (v.turn && e.rank === "minion") e.face = Math.sign(e.x - hero.x) || e.face;
   if (v.points) gainPoints(v.points);
   if (v.phantom) {

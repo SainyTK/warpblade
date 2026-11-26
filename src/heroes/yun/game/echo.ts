@@ -1,4 +1,4 @@
-import { skillEvolved, skillValues, withCharms } from "../../../game/skills/query";
+import { skillEvolved, skillValues, withBuild } from "../../../game/skills/query";
 import { game, hero } from "../../../game/state";
 import { SKILL } from "../constants/skillIds";
 import { ECHO } from "../constants/swords";
@@ -23,7 +23,7 @@ function jianPlace(): SwordPlace {
  */
 export function echoBlow(keen: boolean, times = 1): void {
   const v = skillValues(SKILL.echo);
-  const reach = (ECHO.far + withCharms("area", v.reach ?? 0)) * (keen ? ECHO.keenReach : 1);
+  const reach = (ECHO.far + withBuild("area", v.reach ?? 0)) * (keen ? ECHO.keenReach : 1);
   const thrusts = times * (skillEvolved(SKILL.echo) ? 2 : 1);
   const shape = {
     reach,

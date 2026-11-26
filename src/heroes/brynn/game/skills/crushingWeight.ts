@@ -1,7 +1,7 @@
 import { dealDamage } from "../../../../game/damage";
 import { createImpact } from "../../../../game/effects/impact";
 import { addStacks, consumeStacks, stacksOf } from "../../../../game/enemies/skillStatus";
-import { skillEvolved, skillValues, withCharms } from "../../../../game/skills/query";
+import { skillEvolved, skillValues, withBuild } from "../../../../game/skills/query";
 import { game, progress } from "../../../../game/state";
 import type { Enemy } from "../../../../types/enemy";
 import type { SkillBehavior } from "../../../../types/skillBehavior";
@@ -16,10 +16,10 @@ function crush(foe: Enemy, n: number): void {
   const v = skillValues(ID);
   addStacks(foe, ID, {
     stacks: n,
-    max: withCharms("amount", v.max),
+    max: withBuild("amount", v.max),
     damage: progress.stats.ad * v.damage,
     every: v.every,
-    duration: withCharms("duration", v.time),
+    duration: withBuild("duration", v.time),
   });
   if (v.halt) foe.halt = Math.max(foe.halt, v.every);
 }

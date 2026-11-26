@@ -1,11 +1,10 @@
+import { usesDrill } from "../../../drill";
 import { dealDamage } from "../../../game/damage";
 import { addStacks, consumeStacks } from "../../../game/enemies/skillStatus";
 import { skillEvolved, skillValues } from "../../../game/skills/query";
 import { hero, progress } from "../../../game/state";
-import type { SourceId } from "../../../types/build";
 import type { Enemy } from "../../../types/enemy";
 import { DIVE, LUNGE } from "../constants/string";
-import { infuseThrust } from "./adventure";
 import { feint } from "./feint";
 import { isMarked, roseMark } from "./mark";
 import { gainPoints } from "./points";
@@ -55,14 +54,14 @@ function pins(e: Enemy): void {
 }
 
 /** one of Cerise's own blows landed on a foe: pins, thorns, holds, the feint and a renewed mark, by what struck it */
-export function landed(e: Enemy, hit: { source: SourceId; melee: boolean }): void {
-  if (hero.state === "move" && hero.move && hit.source === "attacks" && hit.melee) infuseThrust(e);
+export function landed(e: Enemy, _hit: { crit: boolean; kill: boolean }): void {
   if (e.hp <= 0) return;
   const blade = hero.state === "move" || hero.state === "riposte";
   if (!blade) return;
+  if (skillValues("ce_weep").refresh && isMarked(e)) roseMark(e);
+  if (usesDrill()) return;
   pins(e);
   thorns(e);
   pinning(e);
   if (hero.move === "risingThrust") feint(e);
-  if (skillValues("ce_weep").refresh && isMarked(e)) roseMark(e);
 }

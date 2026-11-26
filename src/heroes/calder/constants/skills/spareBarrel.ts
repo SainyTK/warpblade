@@ -20,6 +20,7 @@ export const SPARE_BARREL: SkillDef = {
   id: "ca_turret",
   name: "Spare Barrel",
   kind: "summon",
+  element: "frost",
   risk: "precise",
   button: "K",
   text: "A parry may plant a spare barrel on legs that shoots the nearest foe.",

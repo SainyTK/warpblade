@@ -1,33 +1,42 @@
 import type { SkillDef } from "../../../../types/skill";
-import { evolvedRow, levelRows } from "../../../../utils/skillRows";
+import { evolvedRow } from "../../../../utils/skillRows";
+import { drillLevels, drillValues, type Numbers } from "./drillLevels";
 
-/** values: `shards` shards a cast drops, `power` ability power of each, `recharge` seconds, `splash` pixels added to a shard's shatter, `aim` shards fall on the nearest foes ahead, `wounds` wounds a shard opens */
-const LEVELS = levelRows([
-  {
-    text: "Learn Glass Rain: shards of glass fall on the ground ahead.",
-    values: { shards: 3, power: 0.9, recharge: 4.5 },
-  },
-  { text: "Power 0.9 to 1.2.", values: { power: 1.2 } },
-  { text: "New: shards shatter wider.", values: { splash: 6 } },
-  { text: "New: a fourth shard.", values: { shards: 4 } },
-  { text: "Power 1.2 to 2.", values: { power: 2 } },
-  { text: "New: shards fall on the nearest foes ahead.", values: { aim: 1 } },
-  { text: "New: each shard opens a wound; five shards.", values: { wounds: 1, shards: 5 } },
-  { text: "Power 2 to 4; recharge 4.5 to 3.5 s.", values: { power: 4, recharge: 3.5 } },
+const NATIVE: readonly Numbers[] = [
+  { shards: 3, power: 0.9, recharge: 4.5 },
+  { power: 1.2 },
+  { splash: 6 },
+  { shards: 4 },
+  { power: 2 },
+  { aim: 1 },
+  { wounds: 1, shards: 5 },
+  { power: 4, recharge: 3.5 },
+];
+
+const LEVELS = drillLevels(NATIVE, [
+  { text: "Glass Rain blinds 1 s longer.", drill: { blind: 1 } },
+  { text: "New: Glass Rain cuts 0.6 harder.", drill: { power: 0.6 } },
+  { text: "New: two shards fall on the foes nearest the target.", drill: { shards: 2 } },
+  { text: "Glass Rain cut 0.6 to 1.2.", drill: { power: 1.2 } },
+  { text: "New: spells prepare 20% faster.", drill: { preparation: 0.8 } },
+  { text: "Glass Rain cut 1.2 to 2.4; four shards.", drill: { power: 2.4, shards: 4 } },
+  { text: "New: a glass-infused hit sprays shards on the foes beside it.", drill: { spray: 0.6 } },
+  { text: "Glass Rain cut 2.4 to 5; blind 2 s longer.", drill: { power: 5, blind: 2 } },
 ]);
 
 export const GLASS_RAIN: SkillDef = {
   id: "za_glass",
   name: "Glass Rain",
   kind: "spell",
+  element: "frost",
   risk: "timed",
   button: "I",
-  text: "Learn Glass Rain on I: shards of fused sand fall on the ground ahead and shatter on what they meet. Held, twice as many over twice the ground.",
+  text: "Glass Rain scours harder: longer blindness, shards that rain on the foes round the target, and quicker preparation.",
   levels: LEVELS,
   evolution: {
     partner: "za_gale",
     name: "Glass Storm",
-    text: "A second rain falls behind you on the nearest foes there.",
-    row: evolvedRow(LEVELS[7], "A second rain falls behind you.", {}),
+    text: "Every glass blast also strikes the nearest foe behind you.",
+    row: evolvedRow(LEVELS[7], "A second blast behind you.", { ...drillValues({ behind: 1 }) }),
   },
 };

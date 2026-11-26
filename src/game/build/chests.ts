@@ -4,11 +4,9 @@ import { CHEST_MOTION as M } from "../../constants/growth";
 import { COIN_GOLD } from "../../constants/palette";
 import { GROUND } from "../../constants/stage";
 import { glow, place, sparkle } from "../../engine/frame";
-import { drillRewardPool } from "../../kaelDrill";
 import { sfx } from "../../services/audio";
 import type { ChestReward } from "../../types/build";
 import { PK } from "../../types/particle";
-import { buildStats } from "../../utils/build";
 import { rollChest } from "../../utils/chests";
 import { skillOf } from "../../utils/skills";
 import { clampStageX } from "../adventure";
@@ -17,8 +15,9 @@ import { stampPixels } from "../effects/fine";
 import { queueEvolution } from "../evolve";
 import { feat } from "../feat";
 import { refreshGrowing } from "../progress";
-import { character, game, hero, lights, particles, progress, rng } from "../state";
-import { evolveSkill, raiseCharm, raiseSkill } from "./raise";
+import { character, fxRng, game, hero, lights, particles, progress, rng } from "../state";
+import { evolveSkill, raiseArt, raiseSkill } from "./raise";
+import { currentBuildStats } from "./stats";
 
 /** Chests: dropped by elites, mini bosses and the wave 20 boss; touching one opens it for the hero who touched it. */
 interface Chest {
@@ -29,13 +28,14 @@ interface Chest {
   t: number;
   bounced: boolean;
   opened: boolean;
+  least: number;
 }
 
 /** the chests on the field; the field is shared, so a room keeps one list */
 let chests: Chest[] = [];
 const HALF_W = Math.floor(CHEST_ROWS[0].length / 2);
 
-export function dropChest(x: number, y: number): void {
+export function dropChest(x: number, y: number, least = 1): void {
   chests.push({
     x: clampStageX(Math.round(x), HALF_W + 4),
     y,
@@ -43,6 +43,7 @@ export function dropChest(x: number, y: number): void {
     t: 0,
     bounced: false,
     opened: false,
+    least,
   });
 }
 
@@ -57,7 +58,7 @@ function grant(rewards: readonly ChestReward[]): void {
       evolveSkill(r.id);
       queueEvolution(skillOf(character, r.id)?.evolution.name ?? "");
     } else if (r.type === "skill") raiseSkill(r.id);
-    else if (r.type === "charm") raiseCharm(r.id);
+    else if (r.type === "art") raiseArt(r.id);
   }
   refreshGrowing();
   if (rewards.some((r) => r.type === "heal")) {
@@ -69,28 +70,22 @@ function grant(rewards: readonly ChestReward[]): void {
 /** the hero in play opens a chest: a burst of gold, the rewards are theirs, and the game waits on the chest screen */
 function open(c: Chest): void {
   c.opened = true;
-  const rewards = rollChest(
-    drillRewardPool(character),
-    progress.build,
-    game.wave,
-    buildStats(progress.build).luck,
-    rng,
-  );
+  const rewards = rollChest(character, progress.build, game.wave, currentBuildStats().luck, rng, c.least);
   grant(rewards);
   progress.build.chest = rewards;
-  feat({ kind: "chestOpened", upgrades: rewards.filter((r) => r.type === "skill" || r.type === "charm").length });
+  feat({ kind: "chestOpened", upgrades: rewards.filter((r) => r.type === "skill" || r.type === "art").length });
   lights.add(c.x, c.y - 6, 70, COIN_GOLD[3], 1, 0.5);
   for (let i = 0; i < 16; i++)
     particles.spawn(
       PK.STAR,
-      c.x + rng.range(-6, 6),
-      c.y - rng.range(2, 9),
-      rng.range(-30, 30),
-      -rng.range(30, 80),
-      rng.range(0.4, 0.8),
+      c.x + fxRng.range(-6, 6),
+      c.y - fxRng.range(2, 9),
+      fxRng.range(-30, 30),
+      -fxRng.range(30, 80),
+      fxRng.range(0.4, 0.8),
       {
-        col: rng.pick([COIN_GOLD[3], COIN_GOLD[4]]),
-        size: rng.range(1, 2.5),
+        col: fxRng.pick([COIN_GOLD[3], COIN_GOLD[4]]),
+        size: fxRng.range(1, 2.5),
       },
     );
   sfx.levelUp();

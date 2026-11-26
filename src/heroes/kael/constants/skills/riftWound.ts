@@ -7,7 +7,7 @@ import { evolvedRow, levelRows } from "../../../../utils/skillRows";
 const LEVELS = levelRows([
   { text: "A warp strike opens a rift wound that drains the foe.", values: { per: 0.2, max: 3, life: 4 } },
   { text: "New: wounded foes are slowed; the wound lasts 6 s.", values: { slow: 1, life: 6 } },
-  { text: "New: the 4th hit of a string adds a layer.", values: { finisher: 1 } },
+  { text: "New: the last hit of the chain adds a layer.", values: { finisher: 1 } },
   { text: "Each layer drains 0.2 to 0.5 a second.", values: { per: 0.5 } },
   { text: "New: each new layer also opens on the nearest foe.", values: { spread: 1 } },
   { text: "Up to 5 layers; each drains far more.", values: { max: 5, per: 1.2 } },
@@ -19,6 +19,7 @@ export const RIFT_WOUND: SkillDef = {
   id: "k_rift",
   name: "Rift Wound",
   kind: "dot",
+  element: "venom",
   risk: "timed",
   button: "auto",
   text: "Warp strikes open rift wounds that drain the foe; each warp deepens them.",

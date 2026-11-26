@@ -1,32 +1,42 @@
 import type { SkillDef } from "../../../../types/skill";
-import { evolvedRow, levelRows } from "../../../../utils/skillRows";
+import { evolvedRow } from "../../../../utils/skillRows";
+import { drillLevels, drillValues, type NativeStep } from "./drillLevels";
 
-/** values: `bonus` damage a Keen blow adds on the foe it pays off on, `window` seconds of the Keen window, `streak` more
- *  for each Keen move in a row up to `streakCap`, `echoKeen` a Keen move's echo cut in attack damage, `keenTop` a Keen
- *  moonrise fills Tempo, `mp` MP a Keen move gives, `cross` (evolved) the gold cross cut in attack damage */
-const LEVELS = levelRows([
-  { text: "A Keen blow deals 40% more.", values: { bonus: 0.4 } },
-  { text: "Keen window 0.10 to 0.14 s.", values: { window: 0.14 } },
-  { text: "New: each Keen move in a row adds 10% more, up to 40%.", values: { streak: 0.1, streakCap: 0.4 } },
-  { text: "Keen bonus 40% to 70%.", values: { bonus: 0.7 } },
-  { text: "New: a Keen move sends an echo cut at its foe.", values: { echoKeen: 0.8 } },
-  { text: "New: a Keen moonrise fills Tempo to the top.", values: { keenTop: 1 } },
-  { text: "Keen bonus 70% to 100%; the streak up to 60%.", values: { bonus: 1, streakCap: 0.6 } },
-  { text: "New: a Keen move gives back 3 MP.", values: { mp: 3 } },
+const NATIVE: readonly NativeStep[] = [
+  { values: { bonus: 0.4 } },
+  { values: { window: 0.14 } },
+  { values: { streak: 0.1, streakCap: 0.4 } },
+  { values: { bonus: 0.7 } },
+  { values: { echoKeen: 0.8 } },
+  { values: { keenTop: 1 } },
+  { values: { bonus: 1, streakCap: 0.6 } },
+  { values: { mp: 3 } },
+];
+
+const LEVELS = drillLevels(NATIVE, [
+  { text: "The second cut adds a short-blade cut of 0.35 AD.", drill: { follow: 0.35 } },
+  { text: "New: the short-blade cut is a sure crit.", drill: { crit: 1 } },
+  { text: "New: the second cut pops the foe up.", drill: { lift: 150 } },
+  { text: "Short-blade cut 0.7 AD.", drill: { follow: 0.7 } },
+  { text: "New: the second cut marks the foe to take 15% more for 2 s.", drill: { mark: 0.15 } },
+  { text: "Short-blade cut 1.2 AD.", drill: { follow: 1.2 } },
+  { text: "New: a second short-blade cut follows.", drill: { again: 1 } },
+  { text: "Short-blade cut 2.4 AD; mark 25%.", drill: { follow: 2.4, mark: 0.25 } },
 ]);
 
 export const TWIN_KEEN: SkillDef = {
   id: "ve_keen",
   name: "Twin Keen",
   kind: "attack",
+  element: "frost",
   risk: "precise",
   button: "J",
-  text: "Keen blows, pressed just as a blow lands, hit much harder on their foe.",
+  text: "The rising pair, your second cut, is followed by a quick short-blade cut.",
   levels: LEVELS,
   evolution: {
     partner: "ve_turn",
     name: "Perfect Pair",
-    text: "A Keen move cuts its foe again at once with both blades in gold, 3 times attack damage.",
-    row: evolvedRow(LEVELS[7], "A Keen move adds a gold cross cut.", { cross: 3 }),
+    text: "A landed rising pair cuts every foe within 60 px twice with sure crits.",
+    row: evolvedRow(LEVELS[7], "The pair cuts every foe near twice.", { cross: 3, ...drillValues({ pair: 60 }) }),
   },
 };

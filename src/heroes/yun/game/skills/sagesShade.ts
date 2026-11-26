@@ -1,5 +1,5 @@
 import { markFoe } from "../../../../game/enemies/skillStatus";
-import { skillValues, withCharms } from "../../../../game/skills/query";
+import { skillValues, withBuild } from "../../../../game/skills/query";
 import { nearestFoe } from "../../../../game/skills/targets";
 import { game, hero, progress } from "../../../../game/state";
 import type { SkillBehavior } from "../../../../types/skillBehavior";
@@ -11,8 +11,10 @@ import { gainSwords } from "../swords";
 const SHADE_REACH = 70;
 const MARK_TIME = 3;
 
+type ShadeReward = (values: Readonly<Record<string, number>>) => void;
+
 /** the shade steps out behind the foe nearest Yun and cuts it; its whole payoff is on that one foe */
-function callShade(): void {
+function callShade(reward: ShadeReward): void {
   const foe = nearestFoe(hero.x, hero.y - 16);
   if (!foe || Math.abs(foe.x - hero.x) > SHADE_REACH) return;
   const v = skillValues(SKILL.shade);
@@ -23,22 +25,27 @@ function callShade(): void {
       damage: progress.stats.ad * v.power,
       source: SKILL.shade,
       done: () => {
-        if (v.sword) gainSwords(1);
-        if (v.mark) markFoe(foe, SKILL.shade, withCharms("duration", MARK_TIME), v.mark);
+        reward(v);
+        if (v.mark) markFoe(foe, SKILL.shade, withBuild("duration", MARK_TIME), v.mark);
       },
     }),
   );
 }
 
-/** Sage's Shade: a parry, and from level 3 a perfect dodge, calls a shade of Yun behind the foe for heavy cuts */
-export const sagesShade: SkillBehavior = {
+/** Sage's Shade: a parry, and from level 3 a perfect dodge, calls a shade of Yun behind the foe for heavy cuts; its
+ *  last cut pays `reward` */
+export const shadeAnswering = (reward: ShadeReward): SkillBehavior => ({
   create: () => ({}),
   on: {
     parry() {
-      callShade();
+      callShade(reward);
     },
     perfectDodge() {
-      if (skillValues(SKILL.shade).dodge) callShade();
+      if (skillValues(SKILL.shade).dodge) callShade(reward);
     },
   },
-};
+});
+
+export const sagesShade = shadeAnswering((v) => {
+  if (v.sword) gainSwords(1);
+});

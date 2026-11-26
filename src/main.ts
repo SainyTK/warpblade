@@ -1,6 +1,4 @@
-// the hero registry loads first: every hero's code is entered through its module, and the shared engine those modules
-// use reaches back to the registry, so a hero's part reached first by another path would not be ready yet
-import "./game/hero/kits";
+import "./heroes";
 import { MAX_FRAME, STEP } from "./constants/stage";
 import { frameDriver } from "./game/frameDriver";
 import { chooseCharacter, game } from "./game/state";
@@ -9,6 +7,7 @@ import { preloadGeneratedRoster } from "./generatedHeroArt";
 import { CHARACTERS } from "./heroes/roster";
 import { startAnalytics } from "./services/analytics";
 import { loadHeroChoice } from "./services/heroChoice";
+import { readTrainingHero } from "./services/playtestStart";
 import { chosenJob } from "./store/jobs";
 import { heroUnlocked } from "./store/meta";
 import { bindAchievementToasts } from "./ui/achievements/achievementToast";
@@ -19,9 +18,12 @@ import { drawDangerGlow } from "./ui/dangerGlow";
 import { fitStage } from "./ui/fitStage";
 import { paintScene } from "./ui/gameCanvas";
 import { updateHud } from "./ui/hud";
+import { bindStageMap, syncStageMap } from "./ui/map/stageMap";
 import { bindMentorPrompt, syncMentorPrompt } from "./ui/mentorPrompt";
 import { bindMenu } from "./ui/menu/bindMenu";
+import { bindRoomLook } from "./ui/menu/bindRoomLook";
 import { joinFromInvite } from "./ui/menu/joinFromInvite";
+import { startGame } from "./ui/menu/menuActions";
 import { isMenuOpen, menuContext, openMenu } from "./ui/menu/menuState";
 import { preventZoom } from "./ui/preventZoom";
 import { bindPickDialog, syncPickDialog } from "./ui/skills/pickDialog";
@@ -30,8 +32,10 @@ import { bindDiscoveryToasts } from "./ui/unlocks/discoveryToast";
 
 await preloadGeneratedRoster(CHARACTERS);
 startAnalytics();
-const firstHero = CHARACTERS.find((c) => c.id === loadHeroChoice() && heroUnlocked(c.id)) ?? CHARACTERS[0];
-chooseCharacter(firstHero, chosenJob(firstHero.id));
+const trainingHero = CHARACTERS.find((c) => c.id === readTrainingHero());
+const firstHero =
+  trainingHero ?? CHARACTERS.find((c) => c.id === loadHeroChoice() && heroUnlocked(c.id)) ?? CHARACTERS[0];
+chooseCharacter(firstHero, trainingHero ? null : chosenJob(firstHero.id));
 preventZoom();
 fitStage();
 bindKeyboard();
@@ -40,10 +44,13 @@ bindPauseButton();
 bindMentorPrompt();
 bindPickDialog();
 bindChestDialog();
+bindStageMap();
+bindRoomLook();
 bindMenu();
 bindAchievementToasts();
 bindDiscoveryToasts();
-openMenu("title");
+if (trainingHero) startGame();
+else openMenu("title");
 joinFromInvite();
 
 // the pause menu stops time and the picture outright, so nothing piles up to catch up on when the game resumes
@@ -63,6 +70,7 @@ function soloFrame(now: number): void {
   updateHud();
   syncPickDialog();
   syncChestDialog();
+  syncStageMap();
   syncTouch(!isMenuOpen() && game.mode === "play");
 }
 

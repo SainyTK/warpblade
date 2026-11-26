@@ -1,34 +1,47 @@
 import type { SkillDef } from "../../../../types/skill";
-import { evolvedRow, levelRows } from "../../../../utils/skillRows";
+import { evolvedRow } from "../../../../utils/skillRows";
+import { drillLevels, drillValues, type NativeStep } from "./drillLevels";
 
-/** values: `power` of the burst (ability power), `radius`, `burn` seconds, `recharge`, `stun` seconds the burst knocks
- *  foes down, `floor` seconds the floor burns, `ignite` power of a burning foe's explosion when thrown, `flasks` */
-const LEVELS = levelRows([
+const NATIVE: readonly NativeStep[] = [
   {
-    text: "I throws a flask that bursts and sets foes burning.",
     values: { power: 1.6, radius: 34, burn: 1.5, recharge: 10, flasks: 1 },
   },
-  { text: "New: the burst knocks foes down.", values: { stun: 0.5 } },
-  { text: "New: the burst leaves the floor burning.", values: { floor: 2 } },
-  { text: "Burst power 1.6 to 2.4; recharge 10 to 7 s.", values: { power: 2.4, recharge: 7, burn: 3 } },
-  { text: "New: a burning foe thrown up or down explodes.", values: { ignite: 2 } },
-  { text: "Burst radius 34 to 50 px.", values: { radius: 50 } },
-  { text: "New: two flasks at once.", values: { flasks: 2 } },
-  { text: "Burst power 2.4 to 4; burns longer.", values: { power: 4, burn: 4 } },
+  { values: { stun: 0.5 } },
+  { values: { floor: 2 } },
+  { values: { power: 2.4, recharge: 7, burn: 3 } },
+  { values: { ignite: 2 } },
+  { values: { radius: 50 } },
+  { values: { flasks: 2 } },
+  { values: { power: 4, burn: 4 } },
+];
+
+const LEVELS = drillLevels(NATIVE, [
+  { text: "Fire sets foes burning for 2 s.", drill: { burn: 2 } },
+  { text: "New: fire hits 0.5 AD harder.", drill: { blast: 0.5 } },
+  { text: "New: fire knocks foes off balance.", drill: { knock: 0.4 } },
+  { text: "Burns 2 to 4 s; fire 1 AD harder.", drill: { burn: 4, blast: 1 } },
+  { text: "New: a slash on a burning foe flares around it for 0.6 AD.", drill: { flare: 0.6 } },
+  { text: "Every spell blast is 20% wider.", drill: { area: 0.2 } },
+  { text: "New: Fire throws two flasks.", drill: { flasks: 1 } },
+  { text: "Fire 2.5 AD harder; flare 1.5 AD.", drill: { blast: 2.5, flare: 1.5 } },
 ]);
 
 export const FIRE_FLASK: SkillDef = {
   id: "k_flame",
   name: "Fire Flask",
   kind: "spell",
+  element: "blaze",
   risk: "easy",
   button: "I",
-  text: "Learn the fire spell: a flask that bursts and sets foes burning.",
+  text: "Fire sets foes burning, and the sword makes burning foes flare.",
   levels: LEVELS,
   evolution: {
     partner: "k_familiar",
     name: "Sunflask",
-    text: "The flask bursts, then three smaller flasks fly at nearby foes and burst on them.",
-    row: evolvedRow(LEVELS[7], "Each burst throws three more flasks.", { children: 3 }),
+    text: "Each fire blast throws three smaller blasts at the foes near it.",
+    row: evolvedRow(LEVELS[7], "Each fire blast throws three more.", {
+      ...drillValues({ children: 3 }),
+      children: 3,
+    }),
   },
 };

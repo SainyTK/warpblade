@@ -2,7 +2,7 @@ import { dealDamage } from "../../../../game/damage";
 import { createImpact } from "../../../../game/effects/impact";
 import { enemyBox, enemyCenter } from "../../../../game/enemies/enemy";
 import { emitSkillEvent } from "../../../../game/skills/events";
-import { game, hero, particles, rng } from "../../../../game/state";
+import { fxRng, game, hero, particles } from "../../../../game/state";
 import { boxAhead, boxBehind, boxHit, shake } from "../../../../game/world";
 import type { Enemy } from "../../../../types/enemy";
 import { PK } from "../../../../types/particle";
@@ -17,10 +17,10 @@ import { roundBlast } from "../effects/roundBlast";
 export function scatterBlast(x: number, y: number, dir: number, damage: number, reach = SCATTER.reach): Enemy[] {
   roundBlast(x, y, dir, false, true);
   for (let i = 0; i < SCATTER.pellets; i++) {
-    const a = rng.range(-0.45, 0.45);
-    const sp = rng.range(260, 420);
-    particles.spawn(PK.STREAK, x, y, dir * Math.cos(a) * sp, Math.sin(a) * sp, rng.range(0.08, 0.14), {
-      col: PHOSPHOR[rng.int(4, 6)],
+    const a = fxRng.range(-0.45, 0.45);
+    const sp = fxRng.range(260, 420);
+    particles.spawn(PK.STREAK, x, y, dir * Math.cos(a) * sp, Math.sin(a) * sp, fxRng.range(0.08, 0.14), {
+      col: PHOSPHOR[fxRng.int(4, 6)],
     });
   }
   const half = SCATTER.height / 2;

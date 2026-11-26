@@ -2,7 +2,7 @@ import { fleck, glow, hairline, place } from "../../../../engine/frame";
 import { dealDamage } from "../../../../game/damage";
 import { enemyCenter } from "../../../../game/enemies/enemy";
 import { staggerFoe } from "../../../../game/enemies/stagger";
-import { skillValues, withCharms } from "../../../../game/skills/query";
+import { skillValues, withBuild } from "../../../../game/skills/query";
 import { nearestFoe } from "../../../../game/skills/targets";
 import { game, hero, progress, rng } from "../../../../game/state";
 import { surfaceBelow } from "../../../../game/world";
@@ -40,11 +40,11 @@ function plant(m: BarrelMemory): void {
   m.barrels.push({
     x,
     y: surfaceBelow(x, hero.y - 4),
-    left: withCharms("duration", v.life),
+    left: withBuild("duration", v.life),
     next: 0.15,
     face: hero.face,
   });
-  while (m.barrels.length > withCharms("amount", v.most)) m.barrels.shift();
+  while (m.barrels.length > withBuild("amount", v.most)) m.barrels.shift();
 }
 
 /** one shot of a barrel at the nearest foe: a tracer, the hit, a pierce through foes on the line and a splash */

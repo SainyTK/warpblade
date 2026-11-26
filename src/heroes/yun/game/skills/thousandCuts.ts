@@ -1,6 +1,6 @@
 import { dealDamage } from "../../../../game/damage";
 import { addStacks, consumeStacks } from "../../../../game/enemies/skillStatus";
-import { skillEvolved, skillLevel, skillValues, withCharms } from "../../../../game/skills/query";
+import { skillEvolved, skillLevel, skillValues, withBuild } from "../../../../game/skills/query";
 import { game, progress } from "../../../../game/state";
 import type { SkillBehavior } from "../../../../types/skillBehavior";
 import { SKILL } from "../../constants/skillIds";
@@ -17,7 +17,7 @@ export const thousandCuts: SkillBehavior = {
         max: v.max,
         damage: progress.stats.ap * v.damage,
         every: v.every,
-        duration: withCharms("duration", v.duration),
+        duration: withBuild("duration", v.duration),
       });
     },
   },
@@ -27,7 +27,7 @@ export const thousandCuts: SkillBehavior = {
 export function lotusEnded(): void {
   if (!skillLevel(SKILL.bleed) || !skillEvolved(SKILL.bleed)) return;
   const v = skillValues(SKILL.bleed);
-  const left = (progress.stats.ap * v.damage * withCharms("duration", v.duration)) / v.every;
+  const left = (progress.stats.ap * v.damage * withBuild("duration", v.duration)) / v.every;
   for (const e of game.enemies) {
     if (e.hp <= 0) continue;
     const n = consumeStacks(e, SKILL.bleed);

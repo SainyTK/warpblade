@@ -1,7 +1,7 @@
 import { ACTION_CLIPS } from "../../../constants/clips";
 import { settle } from "../../../game/hero/actions";
 import { lowerWard, raiseWard, type ShotWard } from "../../../game/shotWards";
-import { skillValues, withCharms } from "../../../game/skills/query";
+import { skillValues, withBuild } from "../../../game/skills/query";
 import { game, hero, progress } from "../../../game/state";
 import { SKILL } from "../constants/skills/ids";
 import { CRESCENT, RAIN, STILL } from "../constants/spells";
@@ -26,7 +26,7 @@ function sendCrescents(): void {
     tall: v.tall,
     now: ap * v.now,
     store: ap * v.store,
-    slow: v.slow ? withCharms("duration", v.slow) : 0,
+    slow: v.slow ? withBuild("duration", v.slow) : 0,
     launch: v.launch ?? 0,
     burst: v.burst ? ap * v.burst : 0,
   };
@@ -39,8 +39,8 @@ function sendRain(): void {
   const v = skillValues(SKILL.rain);
   const ap = progress.stats.ap;
   const spec = {
-    width: withCharms("area", v.width),
-    time: withCharms("duration", v.time) * (saya.wide ? 2 : 1),
+    width: withBuild("area", v.width),
+    time: withBuild("duration", v.time) * (saya.wide ? 2 : 1),
     drop: ap * v.drop,
     store: ap * v.store,
     stagger: v.stagger ?? 0,
@@ -86,7 +86,7 @@ export function runStill(): void {
     if (v.breath) gainBreath();
     if (v.ward) raiseWard(ward);
   }
-  if (hero.st >= withCharms("duration", v.time)) endStill();
+  if (hero.st >= withBuild("duration", v.time)) endStill();
 }
 
 /** Still Water ends, with or without a blow */

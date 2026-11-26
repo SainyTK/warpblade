@@ -1,3 +1,5 @@
+import type { FusionId } from "../constants/resonance";
+import type { Ranks } from "../utils/resonance";
 import type { Build } from "./build";
 import type { Stats } from "./stats";
 
@@ -17,4 +19,6 @@ export interface Progress {
   airLimit: number;
   /** skills, charms, Flow and the pick tools of this run */
   build: Build;
+  resonance: Ranks;
+  fusions: FusionId[];
 }

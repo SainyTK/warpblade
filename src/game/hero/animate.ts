@@ -42,6 +42,7 @@ export function animateRopes(dt: number): void {
   const [kx, ky] = sash ? sashAnchor(p) : scarfAnchor(p);
   const [tx, ty] = tailAnchor(p);
   // a sash at the belt hangs heavier than a scarf at the neck: it takes half the breeze
-  scarf.step(h.x + h.face * kx, h.y + ky, dt, sash ? wind * 0.5 : wind);
-  ponytail.step(h.x + h.face * tx, h.y + ty, dt, wind * 0.6);
+  const floor = h.ground ? h.y : Number.POSITIVE_INFINITY;
+  scarf.step(h.x + h.face * kx, h.y + ky, dt, sash ? wind * 0.5 : wind, floor);
+  ponytail.step(h.x + h.face * tx, h.y + ty, dt, wind * 0.6, floor);
 }

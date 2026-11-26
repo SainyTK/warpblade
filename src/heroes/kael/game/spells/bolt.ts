@@ -1,6 +1,6 @@
 import { clampStageX } from "../../../../game/adventure";
 import { enemyCenter } from "../../../../game/enemies/enemy";
-import { skillEvolved, skillValues, withCharms } from "../../../../game/skills/query";
+import { skillEvolved, skillValues, withBuild } from "../../../../game/skills/query";
 import { game, progress } from "../../../../game/state";
 import { surfaceBelow } from "../../../../game/world";
 import type { Enemy } from "../../../../types/enemy";
@@ -51,7 +51,7 @@ export function castBolt(x: number, y: number, face: number, power: number, wide
   const o: LightningOptions = {
     damage: v.power * ap,
     arcDamage: v.arcPower * ap,
-    arcs: Math.round(withCharms("amount", v.arcs)),
+    arcs: Math.round(withBuild("amount", v.arcs)),
     shock: SHOCK,
     stun: v.stun,
     source: "abilities",

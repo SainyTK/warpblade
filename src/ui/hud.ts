@@ -2,16 +2,16 @@ import { STAMINA } from "../constants/combat";
 import { ENEMIES } from "../constants/enemies";
 import { ULT_LEVELS } from "../constants/ultimate";
 import { STAGE_WAVES } from "../constants/waves";
-import { isAdventure, stageProgress } from "../game/adventure";
+import { chargedTier, drillSession, usesDrill } from "../drill";
+import { isAdventure, stageStatus as stageLine } from "../game/adventure";
 import { canAffordUlt, ultRecharge } from "../game/hero/ultimate";
 import { character, game, hero, progress } from "../game/state";
-import { tempestLevel, tempestProgress, usesCeriseDrill } from "../heroes";
-import { chargedTier, drillFighter, SKILL_TIERS, usesKaelDrill } from "../kaelDrill";
+import { isTraining } from "../game/training";
 import { inRoom } from "../store/coop";
 import { bestRun } from "../store/records";
 import { xpToNext } from "../utils/progression";
 import { clearText } from "../utils/records";
-import { minutesSeconds, stageProgressText } from "../utils/runReport";
+import { minutesSeconds } from "../utils/runReport";
 import { updateAbilityTabs } from "./abilityTabs";
 import { updateBuildStrip } from "./buildStrip";
 import { updateCoinCount } from "./coinCount";
@@ -56,30 +56,32 @@ export function updateHud(): void {
   updateBuildStrip();
   updateWarpTab();
   updateCoinCount();
-  const drill = usesKaelDrill();
-  const fighter = drill ? drillFighter() : undefined;
-  const tier = fighter?.skillCast?.tier ?? chargedTier(fighter?.chargeHeldFor ?? 0);
+  const session = usesDrill() ? drillSession() : undefined;
+  const drill = session !== undefined;
+  const fighter = session?.fighter;
+  const tier = session && (fighter?.skillCast?.tier ?? chargedTier(session.profile, fighter?.chargeHeldFor ?? 0));
   const ultimateName = drill ? (tier?.name ?? "Charged skill") : character.special.name;
   ultTab.update(drill ? 0 : ultRecharge());
   if (hero.denied.ult > ultDenied) ultTab.jolt();
   ultDenied = hero.denied.ult;
   const leader = game.enemies.find((e) => e.rank !== "minion");
   const room = inRoom();
-  const waveMode = room || (!isAdventure() && game.wave > 0);
+  const waveMode = room || (!isAdventure() && !isTraining() && game.wave > 0);
   const best = room ? bestRun() : null;
-  const status = waveMode
-    ? `STAGE ${game.stage}  WAVE ${game.wave}/${STAGE_WAVES}`
-    : stageProgressText(stageProgress().distance).toUpperCase();
+  const status = isTraining()
+    ? "TRAINING GROUND"
+    : waveMode
+      ? `STAGE ${game.stage}  WAVE ${game.wave}/${STAGE_WAVES}`
+      : stageLine().toUpperCase();
   const time = minutesSeconds(game.clock);
-  const charging = usesCeriseDrill() && tempestProgress() >= 0;
-  const affordable = charging
-    ? tempestLevel()
-    : drill
-      ? (tier?.level ?? 0)
-      : hero.ultCd > 0
-        ? 0
-        : ULT_LEVELS.filter((_, i) => canAffordUlt(i + 1)).length;
-  const comboLimit = drill ? 3 : progress.comboLimit;
+  const affordable = drill
+    ? (tier?.level ?? 0)
+    : hero.ultCd > 0
+      ? 0
+      : ULT_LEVELS.filter((_, i) => canAffordUlt(i + 1)).length;
+  const comboLimit = session
+    ? Object.values(session.profile.strikes).filter((strike) => strike.next !== null).length + 1
+    : progress.comboLimit;
   const key = [
     Math.round(hero.hp),
     Math.round(hero.mp),
@@ -121,7 +123,7 @@ export function updateHud(): void {
   downCount.textContent = `${game.kills} DOWN`;
   bestRecord.textContent = best ? `  BEST ${clearText(best).toUpperCase()}` : "";
   ultName.textContent = ultimateName.toUpperCase();
-  ultPips.innerHTML = pips(drill ? SKILL_TIERS.length : ULT_LEVELS.length, (i) => i < affordable);
+  ultPips.innerHTML = pips(session ? session.profile.tiers.length : ULT_LEVELS.length, (i) => i < affordable);
   boss.hidden = !leader;
   if (leader) {
     bossName.textContent = ENEMIES[leader.type].name.toUpperCase();

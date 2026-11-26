@@ -17,6 +17,7 @@ export const DESERT_THIRST: SkillDef = {
   id: "za_thirst",
   name: "Desert Thirst",
   kind: "dot",
+  element: "venom",
   risk: "timed",
   button: "auto",
   text: "Bleeding foes take more from everything, more for each wound; felling them gives back HP.",

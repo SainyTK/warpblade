@@ -1,19 +1,22 @@
 import { BOONS } from "../../constants/boons";
-import { CHARMS } from "../../constants/charms";
+import { ELEMENTS } from "../../constants/elements";
 import { SKILL_MAX_LEVEL } from "../../constants/growth";
-import { BOON_KIND, CHARM_KIND, KIND_LABEL, RISK_LABEL } from "../../constants/skillLabels";
-import { drillRewardPool, drillSkillText } from "../../kaelDrill";
-import { knowsRecipe } from "../../store/unlocks";
-import type { Build, Card, CharmId } from "../../types/build";
+import { FUSION_RANK, FUSIONS } from "../../constants/resonance";
+import { ART_KIND, BOON_KIND, KIND_LABEL, RISK_LABEL } from "../../constants/skillLabels";
+import { ARTS } from "../../stages/arts";
+import { knowsFusion, knowsRecipe } from "../../store/unlocks";
+import type { Build, Card } from "../../types/build";
+import type { ArtId, ElementId } from "../../types/campaign";
 import type { CharacterDef } from "../../types/character";
 import type { SkillDef } from "../../types/skill";
+import { type Ranks, resonanceRanks } from "../../utils/resonance";
 import { skillOf } from "../../utils/skills";
 import { skillIcon } from "./icons/iconImage";
 
 /** a line under a card's text: an evolution whose partner the hero holds (gold), or one still to find */
 export interface CardNote {
   text: string;
-  tone: "recipe" | "partner";
+  tone: "recipe" | "partner" | "resonance" | "fusion";
 }
 
 /** what a card shows, whatever it offers */
@@ -34,8 +37,22 @@ export interface CardFace {
   isNew: boolean;
 }
 
-/** the level line of a charm card */
-const charmLine = (level: number, top: number): string => (level === 1 ? "New charm" : `Level ${level} of ${top}`);
+const ART_MAX_LEVEL = 5;
+
+const artLine = (level: number): string => `Level ${level - 1} to ${level}`;
+
+function resonanceNotes(element: ElementId, gain: number, ranks: Ranks): CardNote[] {
+  const before = ranks[element];
+  const after = before + gain;
+  const notes: CardNote[] = [{ text: `${ELEMENTS[element].name} ${before} to ${after}`, tone: "resonance" }];
+  for (const fusion of FUSIONS) {
+    if (!fusion.pair.includes(element)) continue;
+    const other = fusion.pair[0] === element ? fusion.pair[1] : fusion.pair[0];
+    if (before >= FUSION_RANK || after < FUSION_RANK || ranks[other] < FUSION_RANK) continue;
+    notes.push({ text: `Fusion: ${knowsFusion(fusion.id) ? fusion.name : "???"}`, tone: "fusion" });
+  }
+  return notes;
+}
 
 /** the level line of a skill card: new, or the step it takes */
 const skillLine = (level: number): string => (level === 1 ? "New skill" : `Level ${level - 1} to ${level}`);
@@ -51,39 +68,40 @@ export function evolutionNote(c: CharacterDef, def: SkillDef, build: Build): Car
 function skillFace(c: CharacterDef, id: string, level: number, build: Build): CardFace {
   const def = skillOf(c, id);
   if (!def) throw new Error(`No skill ${id} for ${c.name}`);
+  const ranks = resonanceRanks(build, c, ARTS);
   return {
-    branch: def.kind,
+    branch: def.element,
     kind: def.kind,
-    path: `${KIND_LABEL[def.kind]}, ${RISK_LABEL[def.risk].toLowerCase()}`,
+    path: `${ELEMENTS[def.element].name} ${KIND_LABEL[def.kind].toLowerCase()}, ${RISK_LABEL[def.risk].toLowerCase()}`,
     icon: skillIcon(id, false),
     name: def.name,
     line: skillLine(level),
     pips: { total: SKILL_MAX_LEVEL, had: level - 1 },
-    text: drillSkillText(level === 1 ? def.text : def.levels[level - 1].text, def),
-    notes: skillOf(drillRewardPool(c), def.evolution.partner) ? [evolutionNote(c, def, build)] : [],
+    text: level === 1 ? def.text : def.levels[level - 1].text,
+    notes: [...resonanceNotes(def.element, 1, ranks), evolutionNote(c, def, build)],
     isNew: level === 1,
   };
 }
 
-function charmFace(id: CharmId, level: number): CardFace {
-  const def = CHARMS[id];
+function artFace(c: CharacterDef, id: ArtId, level: number, build: Build): CardFace {
+  const art = ARTS[id];
   return {
-    branch: "charm",
-    path: CHARM_KIND,
-    icon: `charm_${id}`,
-    name: def.name,
-    line: charmLine(level, def.maxLevel),
-    pips: def.maxLevel > 1 ? { total: def.maxLevel, had: level - 1 } : undefined,
-    text: def.text,
-    notes: [],
-    isNew: level === 1,
+    branch: art.element,
+    path: `${ELEMENTS[art.element].name} ${ART_KIND.toLowerCase()}`,
+    icon: `art_${id}`,
+    name: art.name,
+    line: artLine(level),
+    pips: { total: ART_MAX_LEVEL, had: level - 1 },
+    text: art.levels[level - 1].cardText,
+    notes: resonanceNotes(art.element, 2, resonanceRanks(build, c, ARTS)),
+    isNew: false,
   };
 }
 
 /** what one card shows, from the hero's skills and build */
 export function cardFace(c: CharacterDef, card: Card, build: Build): CardFace {
   if (card.type === "skill") return skillFace(c, card.id, card.level, build);
-  if (card.type === "charm") return charmFace(card.id, card.level);
+  if (card.type === "art") return artFace(c, card.id, card.level, build);
   const boon = BOONS.find((b) => b.id === card.id) ?? BOONS[0];
   return { branch: "boon", path: BOON_KIND, icon: boon.id, name: boon.name, text: boon.text, notes: [], isNew: false };
 }

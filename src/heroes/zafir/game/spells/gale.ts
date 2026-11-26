@@ -2,9 +2,9 @@ import { fleck, glow, place } from "../../../../engine/frame";
 import { dealDamage } from "../../../../game/damage";
 import { enemyCenter } from "../../../../game/enemies/enemy";
 import { consumeStacks } from "../../../../game/enemies/skillStatus";
-import { skillEvolved, skillValues, withCharms } from "../../../../game/skills/query";
+import { skillEvolved, skillValues, withBuild } from "../../../../game/skills/query";
 import { foesOnScreen } from "../../../../game/skills/targets";
-import { game, hero, progress, rng } from "../../../../game/state";
+import { fxRng, game, hero, progress } from "../../../../game/state";
 import type { Effect } from "../../../../types/effect";
 import { GRAIN, SAND_RAMP } from "../../constants/palette";
 import { GALE } from "../../constants/spells";
@@ -32,7 +32,7 @@ function bleedOut(e: (typeof game.enemies)[number]): void {
 /** the visible gust: streaks of hot air and grains running out along the cone */
 function createGust(x: number, y: number, dir: number, reach: number, spread: number): Effect {
   let t = 0;
-  const seeds = Array.from({ length: 28 }, () => [rng.range(0, 1), rng.range(-1, 1), rng.range(0.6, 1)] as const);
+  const seeds = Array.from({ length: 28 }, () => [fxRng.range(0, 1), fxRng.range(-1, 1), fxRng.range(0.6, 1)] as const);
   return {
     update(dt) {
       t += dt;
@@ -57,7 +57,7 @@ function createGust(x: number, y: number, dir: number, reach: number, spread: nu
  *  wide form, or level 7, blows both ways; evolved as Simoom, every wound it meets bleeds out at once */
 export function castGale(wide: boolean): void {
   const v = skillValues(ID);
-  const reach = withCharms("area", GALE.reach * (v.reach ?? 1));
+  const reach = withBuild("area", GALE.reach * (v.reach ?? 1));
   const spread = GALE.spread * (v.reach ?? 1);
   const y = hero.y - 16;
   const dirs = wide || v.both ? [hero.face, -hero.face] : [hero.face];
@@ -69,7 +69,7 @@ export function castGale(wide: boolean): void {
       if (skillEvolved(ID)) bleedOut(e);
       dealDamage(e, progress.stats.ap * v.power, { fromX: hero.x, kx: dir * GALE.push, source: "abilities" });
       openWounds(e, v.wounds ?? 0);
-      if (v.halt) e.halt = Math.max(e.halt, withCharms("duration", v.halt));
+      if (v.halt) e.halt = Math.max(e.halt, withBuild("duration", v.halt));
     }
   }
   sandSound.gust(0.14);

@@ -3,7 +3,7 @@ import { createGlint } from "../../../../game/effects/flash";
 import { createFloorRing } from "../../../../game/effects/floorRing";
 import { createImpact } from "../../../../game/effects/impact";
 import { addStacks, markFoe } from "../../../../game/enemies/skillStatus";
-import { skillEvolved, skillValues, withCharms } from "../../../../game/skills/query";
+import { skillEvolved, skillValues, withBuild } from "../../../../game/skills/query";
 import { game, hero, lights, progress } from "../../../../game/state";
 import { shake } from "../../../../game/world";
 import { sfx } from "../../../../services/audio";
@@ -24,7 +24,7 @@ export function castLance(power: number, wide: boolean): void {
   const hx = hero.x + hero.face * 12;
   const hy = hero.y - 20;
   const rises = wide ? SPELLS.lanceFan : [0];
-  const count = withCharms("amount", v.count ?? 1);
+  const count = withBuild("amount", v.count ?? 1);
   for (const rise of rises)
     for (let i = 0; i < count; i++)
       game.fx.push(
@@ -64,8 +64,8 @@ export function castMend(power: number, wide: boolean): void {
   const grow = wide ? SPELLS.mendWide : 1;
   const heal = progress.stats.hp * (v.heal ?? 0) * grow;
   hero.hp = Math.min(progress.stats.hp, hero.hp + heal);
-  aldric.mending = withCharms("duration", v.regen ? SPELLS.regenTime : 0);
-  const r = withCharms("area", (v.ring ?? 0) * grow);
+  aldric.mending = withBuild("duration", v.regen ? SPELLS.regenTime : 0);
+  const r = withBuild("area", (v.ring ?? 0) * grow);
   const hit = strikeEach(foesNear(hero.x, hero.y - 16, r), progress.stats.ap * (v.power ?? 0) * power, {
     fromX: hero.x,
     kx: 60,
@@ -90,7 +90,7 @@ export function castMend(power: number, wide: boolean): void {
 /** Rallying Cry: a shout that throws foes back in a ring and fills Valor; held, a wider ring */
 export function castRally(power: number, wide: boolean): void {
   const v = skillValues("al_rally");
-  const r = withCharms("area", (v.radius ?? 0) * (wide ? SPELLS.rallyWide : 1));
+  const r = withBuild("area", (v.radius ?? 0) * (wide ? SPELLS.rallyWide : 1));
   const hit = strikeEach(foesNear(hero.x, hero.y - 16, r), progress.stats.ap * (v.power ?? 0) * power, {
     fromX: hero.x,
     kx: 140,
@@ -104,7 +104,7 @@ export function castRally(power: number, wide: boolean): void {
     if (v.mark) markFoe(e, "al_rally", 4, v.mark);
   }
   if (v.extend && radiant()) aldric.radiance += v.extend;
-  if (v.haste) aldric.rally = withCharms("duration", SPELLS.rallyTime);
+  if (v.haste) aldric.rally = withBuild("duration", SPELLS.rallyTime);
   if (skillEvolved("al_rally")) gainValor(999);
   else gainValor(v.valor ?? 0);
   game.fx.push(createFloorRing(hero.x, hero.y, r, DAWN_RAMP, 0.4));

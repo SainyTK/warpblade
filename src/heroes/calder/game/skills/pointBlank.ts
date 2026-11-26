@@ -1,5 +1,5 @@
 import { markFoe } from "../../../../game/enemies/skillStatus";
-import { skillEvolved, skillValues, withCharms } from "../../../../game/skills/query";
+import { skillEvolved, skillValues, withBuild } from "../../../../game/skills/query";
 import type { Enemy } from "../../../../types/enemy";
 import type { SkillBehavior } from "../../../../types/skillBehavior";
 import { fillChamber } from "../chamber";
@@ -23,7 +23,7 @@ export function counterBonus(): { power: number; rounds: number; stagger: number
 /** After the counter shot: Point Blank marks the foe, makes the next Trigger free, and as Deadeye fills the chamber */
 export function afterCounterShot(foe: Enemy | null): void {
   const v = skillValues(SKILL);
-  if (foe && v.mark) markFoe(foe, SKILL, withCharms("duration", MARK_TIME), v.mark);
+  if (foe && v.mark) markFoe(foe, SKILL, withBuild("duration", MARK_TIME), v.mark);
   if (v.free) calder.freeTrigger = true;
   if (skillEvolved(SKILL)) fillChamber(calder.hot);
 }

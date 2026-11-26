@@ -1,13 +1,15 @@
 import { REPO_URL } from "../../constants/feedback";
 import { GAME_VERSION, SITE_PAGES } from "../../constants/sitePages";
 import { STAGE_WAVES } from "../../constants/waves";
-import { isAdventure, stageProgress } from "../../game/adventure";
+import { isAdventure, stageStatus } from "../../game/adventure";
 import { character, chooseCharacter, game, progress } from "../../game/state";
+import { RIFT_STAGES } from "../../stages";
+import { campaignRecords } from "../../store/campaignRecords";
 import { inRoom, roomView } from "../../store/coop";
 import { chosenJob } from "../../store/jobs";
 import { heroRefund } from "../../store/meta";
 import type { MenuContext, MenuScreen, MenuView } from "../../types/menu";
-import { stageProgressText } from "../../utils/runReport";
+import { minutesSeconds } from "../../utils/runReport";
 import { coinAmount } from "../coinIcon";
 import { leaveRoom } from "./coopActions";
 import { leaveMenu, quitRun, restartRun } from "./menuActions";
@@ -40,6 +42,18 @@ function refundNote(): HTMLElement {
   return note;
 }
 
+function bestNote(): HTMLElement | null {
+  const best = campaignRecords();
+  if (best.mostSealed === 0 && best.fastestClear === null) return null;
+  const note = document.createElement("p");
+  note.className = "menu-note";
+  note.textContent =
+    best.fastestClear === null
+      ? `Best: ${best.mostSealed} of ${RIFT_STAGES.length} rifts sealed`
+      : `Best clear: ${minutesSeconds(best.fastestClear)}, grade ${best.bestGrade ?? "E"}`;
+  return note;
+}
+
 function titleFooter(): HTMLElement {
   const footer = document.createElement("p");
   footer.className = "menu-foot";
@@ -64,7 +78,7 @@ export function mainScreen(context: MenuContext): MenuView {
     chooseCharacter(character, inRoom() ? null : chosenJob(character.id));
     // while in a room, its lobby takes the place of a solo start
     if (inRoom()) list.append(screenItem(`Room ${roomView().code}`, "coop"));
-    else list.append(screenItem("Start stage", "hero"), screenItem("Co-op", "coop"));
+    else list.append(screenItem("Start", "hero"), screenItem("Co-op", "coop"));
     list.append(
       screenItem("Shop", "shop"),
       screenItem("Achievements", "achievements"),
@@ -75,9 +89,11 @@ export function mainScreen(context: MenuContext): MenuView {
     const content = document.createElement("div");
     content.className = "menu-main";
     content.append(list);
+    const best = bestNote();
+    if (best) content.append(best);
     if (heroRefund() > 0) content.append(refundNote());
     content.append(titleFooter());
-    return { title: "Warpblade", subtitle: "Defeat the bosses and reach the exit.", content };
+    return { title: "Warpblade", subtitle: "Seal the eight rifts, then break into the Citadel.", content };
   }
   if (inRoom()) {
     // a room plays on under this menu
@@ -103,7 +119,7 @@ export function mainScreen(context: MenuContext): MenuView {
   return {
     title: "Paused",
     subtitle: isAdventure()
-      ? stageProgressText(stageProgress().distance)
+      ? `${stageStatus()}, level ${progress.level}`
       : `Wave ${game.wave} of ${STAGE_WAVES}, level ${progress.level}`,
     content: list,
   };

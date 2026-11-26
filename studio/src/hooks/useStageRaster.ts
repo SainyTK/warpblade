@@ -1,48 +1,28 @@
 import { useMemo } from 'react';
 import { ONION } from '@/constants/stage';
 import { useEditorStore } from '@/store/editorStore';
-import { useSketchStore } from '@/store/sketchStore';
+import { useMotionStore } from '@/store/motionStore';
 import type { Raster } from '@/types/studio';
-import { celAt, neighbours } from '@/utils/frames';
 import { stageRaster } from '@/utils/stageRaster';
-import { useStageHero } from './useStageHero';
+import { useClipLayers } from './useClipLayers';
+import { useOpenHero } from './useOpenHero';
 
-/** The stage picture at the playhead for the current mode. */
+/** The stage picture at the playhead, with the frames before and after as onion skins while paused. */
 export function useStageRaster(): Raster {
-  const sketch = useSketchStore((state) => state.sketch);
-  const { mode, frame, onion, grid, underlay, playing } = useEditorStore();
-  const hero = useStageHero(frame);
+  const frames = useMotionStore((state) => state.current.frames);
+  const { frame, onion, grid, playing } = useEditorStore();
+  const layers = useClipLayers();
+  const { skin } = useOpenHero();
   return useMemo(() => {
-    const keys = sketch?.motion.keys ?? [];
-    const cels = sketch?.effect.cels ?? [];
-    const cel = celAt(cels, frame);
-    const showOnion = onion && !playing;
-    if (mode === 'motion') {
-      const { before, after } = neighbours(keys, frame);
-      return stageRaster({
-        hero,
-        heroAlpha: 1,
-        onions: showOnion
-          ? [
-              ...(before ? [{ pose: before.pose, root: before.root, tint: ONION.before }] : []),
-              ...(after ? [{ pose: after.pose, root: after.root, tint: ONION.after }] : []),
-            ]
-          : [],
-        pixels: cel?.pixels ?? null,
-        pixelOnions: [],
-        grid,
-        background: true,
-      });
-    }
-    const previous = neighbours(cels, cel?.frame ?? frame).before;
-    return stageRaster({
-      hero: underlay ? hero : null,
-      heroAlpha: 0.4,
-      onions: [],
-      pixels: cel?.pixels ?? null,
-      pixelOnions: showOnion && previous ? [{ pixels: previous.pixels, tint: ONION.before }] : [],
-      grid,
-      background: true,
-    });
-  }, [sketch, mode, frame, onion, grid, underlay, playing, hero]);
+    const before = frames[frame - 1];
+    const after = frames[frame + 1];
+    const onions =
+      onion && !playing
+        ? [
+            ...(before ? [{ pose: before, tint: ONION.before }] : []),
+            ...(after ? [{ pose: after, tint: ONION.after }] : []),
+          ]
+        : [];
+    return stageRaster({ skin, hero: layers[frame] ?? layers.at(-1) ?? null, onions, grid });
+  }, [skin, frames, frame, onion, grid, playing, layers]);
 }

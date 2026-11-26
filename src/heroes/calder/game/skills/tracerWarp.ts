@@ -1,7 +1,7 @@
 import { glowLine, hairline, place } from "../../../../engine/frame";
 import { dealDamage } from "../../../../game/damage";
 import { enemyBox } from "../../../../game/enemies/enemy";
-import { skillEvolved, skillValues, withCharms } from "../../../../game/skills/query";
+import { skillEvolved, skillValues, withBuild } from "../../../../game/skills/query";
 import { game, progress } from "../../../../game/state";
 import type { Effect } from "../../../../types/effect";
 import type { SkillBehavior } from "../../../../types/skillBehavior";
@@ -24,7 +24,7 @@ function nearSegment(cx: number, cy: number, x0: number, y0: number, x1: number,
 /** Green Line: the tracer's line stays burning on the warp's path and strikes every foe on it */
 function createGreenLine(x0: number, y0: number, x1: number, y1: number): Effect {
   const o = { t: 0, tick: 0 };
-  const life = withCharms("duration", LINE.life);
+  const life = withBuild("duration", LINE.life);
   return {
     update(dt) {
       o.t += dt;

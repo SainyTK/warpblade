@@ -1,6 +1,6 @@
 import { fleck, glow, place } from "../../../../engine/frame";
 import { dealDamage } from "../../../../game/damage";
-import { skillEvolved, skillValues, withCharms } from "../../../../game/skills/query";
+import { skillEvolved, skillValues, withBuild } from "../../../../game/skills/query";
 import { game, hero, progress } from "../../../../game/state";
 import type { Effect } from "../../../../types/effect";
 import type { Enemy } from "../../../../types/enemy";
@@ -16,8 +16,8 @@ const WHEEL = { radius: 30, every: 0.3, spin: 14 } as const;
 /** Iron Wheel: a crimson wheel of blade where she landed, cutting every foe in it now and then */
 function createWheel(x: number, y: number): Effect {
   const v = skillValues(ID);
-  const life = withCharms("duration", v.wheel);
-  const radius = withCharms("area", WHEEL.radius);
+  const life = withBuild("duration", v.wheel);
+  const radius = withBuild("area", WHEEL.radius);
   const last = new Map<Enemy, number>();
   let t = 0;
   return {

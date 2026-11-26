@@ -5,16 +5,16 @@ import { WORLD_COLORS } from "../../../../constants/palette";
 import { createFloorRing } from "../../../../game/effects/floorRing";
 import { travelEnded } from "../../../../game/hero/travelEnd";
 import { meleeHit } from "../../../../game/meleeHit";
-import { skillValues, withCharms } from "../../../../game/skills/query";
-import { game, hero, particles, rng } from "../../../../game/state";
+import { skillValues, withBuild } from "../../../../game/skills/query";
+import { fxRng, game, hero, particles } from "../../../../game/state";
 import { boxAhead, dust, newSwing, shake } from "../../../../game/world";
 import type { MoveDef } from "../../../../types/move";
 import { PK } from "../../../../types/particle";
 import { CRIMSON } from "../../constants/colors";
+import { SLASH } from "../../constants/slashes";
 import { AIR_SLAM, STRING_FEEL, STRING_POWER } from "../../constants/string";
 import { craterLanding } from "../craterLanding";
 import { heftForBlow } from "../heft";
-import { SLASH } from "./slashes";
 
 /** the falling slam drops at its dive speed once the tuck is over */
 const TUCK = frame(6);
@@ -32,7 +32,7 @@ function pullIn(reach: number): void {
 function slamLanding(): void {
   newSwing();
   const v = skillValues("br_crater");
-  const reach = withCharms("area", AIR_SLAM.reach + (v.reach ?? 0));
+  const reach = withBuild("area", AIR_SLAM.reach + (v.reach ?? 0));
   game.fx.push(createFloorRing(hero.x, hero.y, reach, CRIMSON, 0.4));
   dust(hero.x - 6, hero.y, 7, -1);
   dust(hero.x + 6, hero.y, 7, 1);
@@ -41,12 +41,12 @@ function slamLanding(): void {
       PK.SHARD,
       hero.x,
       hero.y - 1,
-      (i % 2 ? 1 : -1) * rng.range(30, 130),
-      rng.range(-170, -60),
-      rng.range(0.4, 0.8),
+      (i % 2 ? 1 : -1) * fxRng.range(30, 130),
+      fxRng.range(-170, -60),
+      fxRng.range(0.4, 0.8),
       {
         col: WORLD_COLORS.rubble,
-        size: rng.range(1.5, 3),
+        size: fxRng.range(1.5, 3),
       },
     );
   shake(0.24, 3);

@@ -3,7 +3,7 @@ import { dealDamage } from "../../../../game/damage";
 import { createImpact } from "../../../../game/effects/impact";
 import { enemyCenter } from "../../../../game/enemies/enemy";
 import { addStacks, consumeStacks, stacksOf } from "../../../../game/enemies/skillStatus";
-import { skillValues, withCharms } from "../../../../game/skills/query";
+import { skillValues, withBuild } from "../../../../game/skills/query";
 import { foesOnScreen } from "../../../../game/skills/targets";
 import { game, progress } from "../../../../game/state";
 import type { Enemy } from "../../../../types/enemy";
@@ -28,7 +28,7 @@ export function grind(e: Enemy, n: number): void {
     max: v.gritMost,
     damage: progress.stats.ad * v.grit * GRIT.every,
     every: GRIT.every,
-    duration: withCharms("duration", GRIT.life),
+    duration: withBuild("duration", GRIT.life),
   });
   if (stacksOf(e, ID) < v.gritMost) return;
   if (v.gritHalt) e.halt = Math.max(e.halt, v.gritHalt);

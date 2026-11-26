@@ -1,29 +1,8 @@
-/** charms: passives that multiply a stat for every source */
-export type CharmId =
-  | "might"
-  | "haste"
-  | "multitude"
-  | "reach"
-  | "persistence"
-  | "swiftness"
-  | "fortune"
-  | "vigor"
-  | "insight"
-  | "resonance";
+import type { ArtId } from "./campaign";
 /** the hero's own presses: their blows, their abilities and their ultimate */
 export type HeroSource = "attacks" | "abilities" | "ultimate";
 /** what dealt a hit, for the end of run screen: one of the hero's own presses, or a skill's id for a hit it dealt on its own */
 export type SourceId = HeroSource | (string & {});
-
-export interface CharmDef {
-  id: CharmId;
-  name: string;
-  /** what one level gives, shown on the card */
-  text: string;
-  maxLevel: number;
-  /** card weight; owned charms count `CARD_WEIGHT.ownedCharm` times */
-  weight: number;
-}
 
 /** the multipliers the build gives every source; 1 (or 0 for counts) is no change */
 export interface BuildStats {
@@ -60,7 +39,7 @@ export type PickToolKey = "rerolls" | "skips" | "banishes";
 export interface Build {
   /** held skills by id, at levels 1 to 8 */
   skills: Record<string, number>;
-  charms: Partial<Record<CharmId, number>>;
+  arts: Partial<Record<ArtId, number>>;
   /** skills in their evolved form */
   evolved: string[];
   /** banished card keys (`skill:<id>`, `charm:might`), never dealt again this run */
@@ -78,12 +57,12 @@ export interface Build {
 /** one card of a pick: a skill or charm at the level it reaches, or a boon */
 export type Card =
   | { type: "skill"; id: string; level: number }
-  | { type: "charm"; id: CharmId; level: number }
+  | { type: "art"; id: ArtId; level: number }
   | { type: "boon"; id: string };
 
 /** what one chest gave */
 export type ChestReward =
   | { type: "evolve"; id: string }
   | { type: "skill"; id: string; level: number }
-  | { type: "charm"; id: CharmId; level: number }
+  | { type: "art"; id: ArtId; level: number }
   | { type: "heal" };

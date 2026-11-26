@@ -3,7 +3,7 @@ import { dealDamage } from "../../../../game/damage";
 import { createFloorRing } from "../../../../game/effects/floorRing";
 import { enemyCenter } from "../../../../game/enemies/enemy";
 import { addStacks } from "../../../../game/enemies/skillStatus";
-import { skillEvolved, skillValues, withCharms } from "../../../../game/skills/query";
+import { skillEvolved, skillValues, withBuild } from "../../../../game/skills/query";
 import { touches } from "../../../../game/skills/targets";
 import { game, hero, lights, progress } from "../../../../game/state";
 import { shake } from "../../../../game/world";
@@ -35,7 +35,7 @@ export const spellRecharge = (a: CeriseAbility): number => values(a as Spell).re
 /** Rose Bloom: blades of petal burst out round her, pushing foes off (held: twice as wide, pulling them in) */
 function bloom(power: number, wide: boolean, scale = 1): void {
   const v = values("bloom");
-  const reach = withCharms("area", v.reach) * (wide ? 1.6 : 1) * scale;
+  const reach = withBuild("area", v.reach) * (wide ? 1.6 : 1) * scale;
   const y = hero.y - 14;
   game.fx.push(createFloorRing(hero.x, hero.y, reach, ROSE_RAMP, 0.45));
   lights.add(hero.x, y, reach, ROSE_RAMP[4], 0.7, 0.3);
@@ -56,7 +56,7 @@ function bloom(power: number, wide: boolean, scale = 1): void {
   }
   if (v.linger)
     game.fx.push(
-      createPetalRing(hero.x, y, reach, withCharms("duration", v.linger), progress.stats.ap * v.tick, "ce_bloom"),
+      createPetalRing(hero.x, y, reach, withBuild("duration", v.linger), progress.stats.ap * v.tick, "ce_bloom"),
     );
   if (v.heal && struck) hero.hp = Math.min(progress.stats.hp, hero.hp + v.heal * struck);
   if (v.points && struck >= 2) gainPoints(Math.floor(struck / 2));
@@ -73,7 +73,7 @@ function needleHit(e: Enemy): void {
 /** where each needle of a rain falls: in a row along her line, each pulled onto a foe near it with Needle Rain */
 function rainPoints(dir: number): number[] {
   const v = values("needle");
-  const n = Math.round(withCharms("amount", v.needles));
+  const n = Math.round(withBuild("amount", v.needles));
   return Array.from({ length: n }, (_, i) => {
     const x = hero.x + dir * (24 + i * 18);
     if (!v.home) return x;
@@ -99,7 +99,7 @@ function needles(power: number, wide: boolean): void {
 /** Mirror Guard: for a moment every blow from the front (from both sides later) is turned into a riposte */
 function mirror(): void {
   const v = values("mirror");
-  cerise.stance = withCharms("duration", v.time);
+  cerise.stance = withBuild("duration", v.time);
   lights.add(hero.x, hero.y - 18, 30, ROSE_RAMP[5], 0.6, 0.25);
   sfx.chime(5);
 }

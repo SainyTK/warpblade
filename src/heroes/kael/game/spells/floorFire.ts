@@ -3,7 +3,7 @@ import { place } from "../../../../engine/frame";
 import { dealDamage } from "../../../../game/damage";
 import { ignite } from "../../../../game/enemies/burn";
 import { enemyBox } from "../../../../game/enemies/enemy";
-import { game, particles, rng } from "../../../../game/state";
+import { fxRng, game, particles } from "../../../../game/state";
 import { boxHit } from "../../../../game/world";
 import type { SourceId } from "../../../../types/build";
 import type { Effect } from "../../../../types/effect";
@@ -52,8 +52,8 @@ export function createFloorFire(
             ignite(e, FIRE.burn);
           }
       }
-      if (rng.chance(wall ? 0.5 : 0.15))
-        particles.spawn(PK.EMBER, cx + rng.range(-w, w), cy - 1, 0, -rng.range(15, wall ? 70 : 35), 0.6, {});
+      if (fxRng.chance(wall ? 0.5 : 0.15))
+        particles.spawn(PK.EMBER, cx + fxRng.range(-w, w), cy - 1, 0, -fxRng.range(15, wall ? 70 : 35), 0.6, {});
       return t < life;
     },
     drawBack() {

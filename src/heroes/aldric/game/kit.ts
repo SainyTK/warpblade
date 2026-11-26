@@ -3,7 +3,7 @@ import { STRIDE } from "../../../constants/motion";
 import { rechargeStep } from "../../../game/build/recharge";
 import { createImpact } from "../../../game/effects/impact";
 import { resetMotion } from "../../../game/hero/motion";
-import { skillValues, withCharms } from "../../../game/skills/query";
+import { skillValues, withBuild } from "../../../game/skills/query";
 import { game, hero, lights, progress } from "../../../game/state";
 import { sfx } from "../../../services/audio";
 import type { HeroKit } from "../../../types/kit";
@@ -51,7 +51,7 @@ function shatter(): void {
   const v = skillValues("al_bulwark").shatter;
   if (!v) return;
   game.fx.push(
-    createDelayedRing(hero.x, hero.y, withCharms("area", SHATTER_RING), 0, progress.stats.ad * v, {
+    createDelayedRing(hero.x, hero.y, withBuild("area", SHATTER_RING), 0, progress.stats.ad * v, {
       kx: 90,
       ky: -50,
       heavy: true,

@@ -3,7 +3,7 @@ import { dealDamage } from "../../../game/damage";
 import { enemyCenter } from "../../../game/enemies/enemy";
 import { feat } from "../../../game/feat";
 import { emitSkillEvent } from "../../../game/skills/events";
-import { skillEvolved, skillValues, withCharms } from "../../../game/skills/query";
+import { skillEvolved, skillValues, withBuild } from "../../../game/skills/query";
 import { foesOnScreen } from "../../../game/skills/targets";
 import { game, hero, progress } from "../../../game/state";
 import { TAU } from "../../../utils/math";
@@ -25,7 +25,7 @@ export function ringTier(): RingTier | null {
 }
 
 /** the ring's reach, widened by charms and Unbroken Whirl */
-const ringReach = (tier: RingTier): number => withCharms("area", tier.reach * (skillValues("za_unbroken").reach ?? 1));
+const ringReach = (tier: RingTier): number => withBuild("area", tier.reach * (skillValues("za_unbroken").reach ?? 1));
 
 /** the least the Whirl drains to: the first ring with Eye of the Dune, and with Endless Turn while he spins */
 function whirlFloor(): number {

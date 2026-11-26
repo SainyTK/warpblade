@@ -3,7 +3,7 @@ import { fleck, glow, hairline, place, polygon, px } from "../../../../engine/fr
 import { dealDamage } from "../../../../game/damage";
 import { ignite } from "../../../../game/enemies/burn";
 import { enemyCenter } from "../../../../game/enemies/enemy";
-import { skillValues, withCharms } from "../../../../game/skills/query";
+import { skillValues, withBuild } from "../../../../game/skills/query";
 import { nearestFoe, touches } from "../../../../game/skills/targets";
 import { game, hero, progress, rng } from "../../../../game/state";
 import type { Enemy } from "../../../../types/enemy";
@@ -105,7 +105,7 @@ function strike(s: Shard, foe: Enemy, evolved: boolean): void {
 function fly(s: Shard, dt: number, evolved: boolean): boolean {
   s.life -= dt;
   if (!s.target || s.target.hp <= 0) s.target = nearestFoe(s.x, s.y, s.struck);
-  const speed = withCharms("speed", SHARD.speed);
+  const speed = withBuild("speed", SHARD.speed);
   if (s.target) {
     const [tx, ty] = enemyCenter(s.target);
     const now = Math.atan2(s.vy, s.vx);
@@ -151,9 +151,9 @@ function answerCast(m: FamiliarMemory, evolved: boolean): void {
   if (evolved) return;
   if (v.volley) for (const f of m.familiars) for (let i = 0; i < v.volley; i++) fire(m, f);
   if (m.cd > 0 || !rng.chance(v.chance)) return;
-  m.cd = withCharms("cooldown", v.cooldown);
-  const life = withCharms("duration", v.life);
-  if (m.familiars.length < withCharms("amount", v.most)) m.familiars.push(newFamiliar(life));
+  m.cd = withBuild("cooldown", v.cooldown);
+  const life = withBuild("duration", v.life);
+  if (m.familiars.length < withBuild("amount", v.most)) m.familiars.push(newFamiliar(life));
   else m.familiars.sort((a, b) => a.left - b.left)[0].left = life;
 }
 
@@ -212,7 +212,7 @@ export const crystalFamiliar: SkillBehavior = {
       f.left -= dt;
       f.fire -= dt;
       if (f.fire > 0) continue;
-      f.fire = withCharms("cooldown", v.every);
+      f.fire = withBuild("cooldown", v.every);
       fire(m, f);
     }
     m.familiars = m.familiars.filter((f) => f.left > 0);

@@ -21,6 +21,9 @@ Drawing order is in `src/scene/renderScene.ts`: static scene, ambient light, eff
 `src/scene/background.ts` paints the scene part by part in art pixels and notes each pixel's layer (`LAYER` in `src/scene/plate.ts`): sky, celestial, ridge, tower, ground, slab, prop.
 `developPlate` turns that picture into the full detail plate: Scale2x half steps on slopes and curves, sky bands dithered on the image grid, haze on the ridge and towers toward the horizon color, and weathering on stone.
 The world beyond the stage (`src/scene/backdrop.ts`) mirrors this plate outward without its slabs and braziers, so whatever an era paints continues past the edge.
+A little way out it turns into a second plate built without bodies (`buildBackground(def, k, arena, false)`), so the sun or moon shows only once, on the stage.
+An era leaves its sun, moons, rings and their light out of its `sky` hook and its detail when `PlatePaint.bodies` is false.
+Above the stage the sky rises out of the stage's top rows and fades into the era's top sky band.
 An era then paints fine detail on the plate through `SceneDef.detail`, with a `PlatePaint` that can hold a write to chosen layers.
 The plate is built once when the wave's look changes, so anything static costs nothing per frame.
 Prefer the plate for anything that does not move.
@@ -30,7 +33,12 @@ Prefer the plate for anything that does not move.
 Heroes and foes are built from parts each time they are drawn, on a `detailCanvas` at image pixel detail (`src/engine/sprite.ts`).
 Every hero is drawn on the shared rig (`src/rig/`) from a pose and the hero's skin (`docs/hero-module.md`, "The look").
 A foe keeps its picture for about a thirtieth of a second of game time (`src/scene/foeSprites.ts`), and redraws at once when its state changes.
-A foe's draw function must not change game state, spawn particles or read the game's random stream.
+A foe's draw function must not change game state, spawn particles or read the play generator `rng`.
+The game keeps two seeded generators in `src/game/state.ts`.
+`rng` is for play only: AI choices, cooldowns, spawns, hit and crit chances, drops, pickups and level-up cards.
+`fxRng` is for every draw whose value only reaches the picture: particle spawns, the screen shake, light flicker, afterimage and damage number jitter, and effect fields that only `draw()` reads.
+So adding, removing or repainting an effect never changes a fight, and the screen's frame rate never changes what a foe does.
+`npm run lint` forbids importing `rng` anywhere under `src/scene/`, and forbids namespace imports (`import * as`) there so no import can reach it another way.
 `drawShadows` puts a soft shadow under every foe and hero on the floor below it.
 
 ## Drawing tools
@@ -40,7 +48,8 @@ A foe's draw function must not change game state, spawn particles or read the ga
 - `disc`, `shade` with `soft`: true blends, for smoke, mist and vapour.
 - `glow`, `glowLine`, `sparkle` and the `Lights` list: light.
 - `Particles` (`src/engine/particles.ts`): sparks, motes, streaks, flakes, vapour, dust, smoke, fire, brands, embers, shards, stars.
-- `SpriteCanvas`: `dot`, `stroke`, `taper`, `poly`, `block`, `hairline`, `pixels`, `shadeEdges`, `commit`, `outline`.
+  Its own draws come from `fxRng`. A brand (a burning chunk) is play, since it lights a damaging blaze where it lands: spawn it with `rng`, and it is never dropped at the particle cap.
+- `SpriteCanvas`: `dot`, `stroke`, `taper`, `poly`, `block`, `hairline`, `pixels`, `shadeEdges`, `commit`, `outline`, `shift` (move the shapes that follow, for a body that leans or sinks as one) and `clipBelow` (erase what sank under the floor).
 
 ## What makes it look good
 

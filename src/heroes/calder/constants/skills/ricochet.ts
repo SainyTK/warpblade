@@ -1,5 +1,6 @@
 import type { SkillDef } from "../../../../types/skill";
 import { evolvedRow, levelRows } from "../../../../utils/skillRows";
+import { drillValues, withDrill } from "./drillLevels";
 
 /** values: `power` attack damage of a ricochet, `range` pixels it can jump, `bounces` how many, `stagger` seconds, `more` rounds from the warp and the parry ricochet too, `every` every round ricochets, `grow` each bounce hits this much harder */
 const LEVELS = levelRows([
@@ -13,18 +14,35 @@ const LEVELS = levelRows([
   { text: "Ricochet power 1.8 to 4.", values: { power: 4 } },
 ]);
 
+const DRILL_LEVELS = withDrill(LEVELS, [
+  { text: "Air cuts fire a round into the foe.", drill: { round: 0.5 } },
+  { text: "New: the round ricochets to one more foe.", drill: { bounces: 1 } },
+  { text: "New: one more air cut per jump.", drill: { air: 1 } },
+  { text: "Round 0.5 to 1 AD.", drill: { round: 1 } },
+  { text: "New: two ricochets.", drill: { bounces: 2 } },
+  { text: "Round 1 to 2 AD.", drill: { round: 2 } },
+  { text: "New: ricochets stagger.", drill: { stagger: 0.3 } },
+  { text: "Round 2 to 4 AD.", drill: { round: 4 } },
+]);
+
 export const RICOCHET: SkillDef = {
   id: "ca_ricochet",
   name: "Ricochet",
   kind: "attack",
+  element: "void",
   risk: "timed",
-  button: "auto",
-  text: "A Trigger's round ricochets on to another foe nearby.",
-  levels: LEVELS,
+  button: "J",
+  text: "Air cuts fire a round that ricochets on to other foes.",
+  levels: DRILL_LEVELS,
   evolution: {
     partner: "ca_tracer",
     name: "Pinball",
-    text: "Every round you fire ricochets six times, each bounce harder than the last.",
-    row: evolvedRow(LEVELS[7], "Every round ricochets six times, growing.", { every: 1, bounces: 6, grow: 0.15 }),
+    text: "Air rounds ricochet six times.",
+    row: evolvedRow(DRILL_LEVELS[7], "Air rounds ricochet six times.", {
+      ...drillValues({ bounces: 6 }),
+      every: 1,
+      bounces: 6,
+      grow: 0.15,
+    }),
   },
 };

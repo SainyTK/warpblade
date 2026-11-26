@@ -4,6 +4,7 @@ import { HERO_CANVAS } from "../constants/hero";
 import { COIN_GOLD, ENEMY_COLORS, PAL } from "../constants/palette";
 import { MOTE_PIXELS } from "../constants/pickupPixels";
 import { ULT_LEVELS } from "../constants/ultimate";
+import { drillView, usesDrill } from "../drill";
 import { ellipseRing, fleck, glow, glowLine, hairline, place, px } from "../engine/frame";
 import { blit, detailCanvas } from "../engine/sprite";
 import { stageCameraX } from "../game/adventure";
@@ -16,7 +17,6 @@ import { skin } from "../game/hero/skin";
 import { canAffordUlt } from "../game/hero/ultimate";
 import { game, hero } from "../game/state";
 import { fieldPace } from "../game/timeFields";
-import { drillView, usesKaelDrill } from "../kaelDrill";
 import type { Enemy } from "../types/enemy";
 import { hex, mix, WHITE } from "../utils/color";
 import { clamp, TAU } from "../utils/math";
@@ -127,7 +127,7 @@ export function drawEnemies(): void {
     blit(s, at, e.y, e.face < 0, { tint, tintAmount, lean });
     place();
     const [cx, cy] = enemyCenter(e);
-    glow(cx, cy, kind.glow.radius, kind.glow.color, winding ? 0.5 : 0.22);
+    glow(cx, cy, kind.glowRadius?.(e) ?? kind.glow.radius, kind.glow.color, winding ? 0.5 : 0.22);
     if (e.elite) drawEliteGlow(e);
     if (winding) glow(cx + e.face * 3, cy + kind.glow.eyeY, 8, ENEMY_COLORS.eyeGlow, 0.6);
     drawMinionBar(e);
@@ -178,7 +178,7 @@ export function drawHeroLayer(): void {
     glow(g.x, g.y - 18, 14, skin.glow, 0.12 * k);
   }
   if (h.state === "charge") drawChargeRing();
-  const drill = usesKaelDrill() ? drillView() : undefined;
+  const drill = usesDrill() ? drillView() : undefined;
   if (drill) {
     drill.drawBack(stageCameraX());
   } else {
@@ -186,7 +186,12 @@ export function drawHeroLayer(): void {
   }
   const flare = clamp((Math.abs(h.vx) / 115) * 3, 0, 3) + (h.ground ? 0 : 1.5);
   h.hand = drawHeroSprite(heroSprite, h.pose, flare);
-  const blink = h.inv > 0 && h.state !== "warpStrike" && h.state !== "ultimate" && Math.floor(game.t * 20) % 2 === 0;
+  const blink =
+    h.inv > 0 &&
+    h.state !== "warpStrike" &&
+    h.state !== "ultimate" &&
+    h.state !== "dead" &&
+    Math.floor(game.t * 20) % 2 === 0;
   const struck = h.state === "hurt" && h.st < 0.06;
   const shown = shownKit().heroAlpha?.() ?? 1;
   if (shown > 0)

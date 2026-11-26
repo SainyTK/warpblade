@@ -17,6 +17,7 @@ export const HOT_BRASS: SkillDef = {
   id: "ca_brass",
   name: "Hot Brass",
   kind: "dot",
+  element: "blaze",
   risk: "easy",
   button: "auto",
   text: "A reload flings hot casings at foes nearby, burning them.",

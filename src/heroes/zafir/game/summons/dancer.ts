@@ -3,7 +3,7 @@ import { blit, detailCanvas } from "../../../../engine/sprite";
 import { dealDamage } from "../../../../game/damage";
 import { createSlash } from "../../../../game/effects/slash";
 import { drawHeroSprite } from "../../../../game/hero/look";
-import { skillEvolved, skillValues, withCharms } from "../../../../game/skills/query";
+import { skillEvolved, skillValues, withBuild } from "../../../../game/skills/query";
 import { foesOnScreen } from "../../../../game/skills/targets";
 import { game, progress } from "../../../../game/state";
 import type { Effect } from "../../../../types/effect";
@@ -33,7 +33,7 @@ function snapshots(): SpriteImage[] {
 /** one spin of a dancer at (x, y): the attacker takes the payoff, every other foe round it the plain cut */
 function spin(x: number, y: number, target: Enemy, last: boolean): void {
   const v = skillValues(ID);
-  const reach = withCharms("area", DANCE.reach);
+  const reach = withBuild("area", DANCE.reach);
   game.fx.push(createSlash(x, y, 1, { ...RING_CUT, R: reach, ramp: SAND_RAMP }));
   for (const e of foesOnScreen()) {
     if (Math.abs(e.x - x) > reach || Math.abs(e.y - y) > 30) continue;
@@ -50,7 +50,7 @@ function spin(x: number, y: number, target: Enemy, last: boolean): void {
 export function callDancer(target: Enemy, side: number): void {
   const v = skillValues(ID);
   const images = snapshots();
-  const life = withCharms("duration", v.life);
+  const life = withBuild("duration", v.life);
   const x = target.x + side * 14;
   const y = target.y;
   let t = 0;

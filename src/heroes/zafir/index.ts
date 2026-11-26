@@ -1,5 +1,6 @@
 import type { HeroModule } from "../../types/heroModule";
 import { ABILITY_COLOR } from "./constants/abilities";
+import { ZAFIR_DRILL } from "./game/drill";
 import { ZAFIR_KIT } from "./game/kit";
 import { WHIRL_METER } from "./game/meter";
 import { ZAFIR_MOVES } from "./game/moves";
@@ -24,4 +25,5 @@ export const ZAFIR_MODULE: HeroModule = {
     tint: (ability) => ABILITY_COLOR[(ability || "spout") as ZafirAbility],
   },
   meter: WHIRL_METER,
+  drill: ZAFIR_DRILL,
 };

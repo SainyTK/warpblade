@@ -6,7 +6,7 @@ import { dealDamage } from "../../../game/damage";
 import { launchEnemy } from "../../../game/enemies/airborne";
 import { enemyBox } from "../../../game/enemies/enemy";
 import { kindOf } from "../../../game/enemies/kinds";
-import { skillEvolved, skillLevel, skillValues, withCharms } from "../../../game/skills/query";
+import { skillEvolved, skillLevel, skillValues, withBuild } from "../../../game/skills/query";
 import { game, hero, progress } from "../../../game/state";
 import { shake, struckThisSwing } from "../../../game/world";
 import type { Effect } from "../../../types/effect";
@@ -28,12 +28,12 @@ const TIDE_CREST = { count: 5, gap: 6, height: 11, drop: 1.8 } as const;
 export function afterSweep(): void {
   stopAtFeet();
   const v = skillValues(SKILL);
-  const reach = withCharms("area", v.reach);
+  const reach = withBuild("area", v.reach);
   if (v.flyers)
     for (const e of game.enemies)
       if (e.hp > 0 && kindOf(e.type).flies && Math.abs(e.x - hero.x) <= reach && hero.y - e.y <= FLYER_HEIGHT)
         pullDown(e);
-  if (skillEvolved(SKILL)) game.fx.push(createTide(hero.x, hero.y, withCharms("area", v.tide)));
+  if (skillEvolved(SKILL)) game.fx.push(createTide(hero.x, hero.y, withBuild("area", v.tide)));
 }
 
 /** every foe the sweep struck slides in no closer than `SWEEP_DRAG.feet` from Kael (or than it stood), so the drag

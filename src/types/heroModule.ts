@@ -1,5 +1,6 @@
 import type { SpriteCanvas } from "../engine/sprite";
 import type { Color } from "./color";
+import type { DrillProfile } from "./drill";
 import type { HeroKit } from "./kit";
 import type { MoveDef } from "./move";
 import type { SkillBehavior } from "./skillBehavior";
@@ -56,4 +57,5 @@ export interface HeroModule {
   icons: Readonly<Record<string, (s: SpriteCanvas) => void>>;
   touch: HeroTouchLook;
   meter?: HeroMeter;
+  drill?: DrillProfile;
 }

@@ -1,30 +1,45 @@
 import type { SkillDef } from "../../../../types/skill";
-import { evolvedRow, levelRows } from "../../../../utils/skillRows";
+import { evolvedRow } from "../../../../utils/skillRows";
+import { drillLevels, drillValues, type Numbers } from "./drillLevels";
 
-/** values: `air` added damage share of the descent, `ringReach` reach multiple of the landing ring, `descents` descents per jump, `ringLaunch` the landing ring throws foes up this fast, `ringWounds` wounds the ring opens, `ringPower` its power multiple, `meteor` the landing raises a sandspout each way and a pit of quicksand */
-const LEVELS = levelRows([
-  { text: "The spinning descent deals 25% more.", values: { air: 0.25 } },
-  { text: "Descent +25% to +45%.", values: { air: 0.45 } },
-  { text: "New: the landing ring reaches half again as far.", values: { ringReach: 1.5 } },
-  { text: "New: two descents per jump.", values: { descents: 2 } },
-  { text: "Descent +45% to +70%.", values: { air: 0.7 } },
-  { text: "New: the landing ring throws foes up.", values: { ringLaunch: 220 } },
-  { text: "New: the landing ring opens two wounds.", values: { ringWounds: 2 } },
-  { text: "Descent +70% to +90%; the ring hits half again as hard.", values: { air: 0.9, ringPower: 1.5 } },
+const NATIVE: readonly Numbers[] = [
+  { air: 0.25 },
+  { air: 0.45 },
+  { ringReach: 1.5 },
+  { descents: 2 },
+  { air: 0.7 },
+  { ringLaunch: 220 },
+  { ringWounds: 2 },
+  { air: 0.9, ringPower: 1.5 },
+];
+
+const LEVELS = drillLevels(NATIVE, [
+  { text: "One more air slash per jump.", drill: { slashes: 1 } },
+  { text: "New: landing after an air slash throws a sand ring 30 px each way.", drill: { ring: 0.8 } },
+  { text: "Landing ring 0.8 to 1.4.", drill: { ring: 1.4 } },
+  { text: "New: one more air dash.", drill: { airDashes: 1 } },
+  { text: "New: the landing ring knocks foes off balance.", drill: { stagger: 0.5 } },
+  { text: "Landing ring 1.4 to 3; it reaches 45 px.", drill: { ring: 3, reach: 45 } },
+  { text: "New: a third air slash per jump.", drill: { slashes: 2 } },
+  { text: "Landing ring 3 to 7.", drill: { ring: 7 } },
 ]);
 
 export const FALLING_DUNE: SkillDef = {
   id: "za_falling",
   name: "Falling Dune",
-  kind: "attack",
+  kind: "movement",
+  element: "blaze",
   risk: "timed",
   button: "jump",
-  text: "The spinning descent hits harder and lands in a wider ring that throws foes up.",
+  text: "More air slashes and air dashes, and landing after an air slash throws a ring of sand both ways.",
   levels: LEVELS,
   evolution: {
     partner: "za_quicksand",
     name: "Meteor Dune",
-    text: "The landing throws up a sandspout each way and leaves a pit of quicksand under you.",
-    row: evolvedRow(LEVELS[7], "Landing: a spout each way and quicksand.", { meteor: 1 }),
+    text: "The landing ring also throws up a sandspout each way.",
+    row: evolvedRow(LEVELS[7], "The landing throws a sandspout each way.", {
+      meteor: 1,
+      ...drillValues({ spouts: 1 }),
+    }),
   },
 };
