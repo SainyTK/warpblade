@@ -1,7 +1,6 @@
 import { cue } from "../../game/cue";
 import { emitSkillEvent } from "../../game/skills/events";
 import { game } from "../../game/state";
-import { hitStop } from "../../game/world";
 import { sfx } from "../../services/audio";
 import type { DrillProfile, DrillStrikeId, Session, Swing } from "../../types/drill";
 import { smooth } from "../../utils/math";
@@ -10,7 +9,6 @@ import { executeFollowUp } from "./followUp";
 import { swingTouches } from "./swingArea";
 import { hitWithSword, spendSwordBonuses } from "./swordInfusion";
 
-const HIT_STOP = 0.042;
 const CANCEL_AFTER_HIT = 0.033;
 const DASH_ATTACK_DELAY = 0.04;
 
@@ -47,7 +45,6 @@ function impact(session: Session, swing: Swing): void {
   emitSkillEvent({ type: "slash", strike: kind, landed, element: element?.id ?? null });
   swing.landed = landed;
   if (landed) {
-    hitStop(HIT_STOP);
     spendSwordBonuses(h);
   }
 }

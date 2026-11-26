@@ -2,6 +2,7 @@ import { emitSkillEvent } from "../../game/skills/events";
 import { game } from "../../game/state";
 import { sfx } from "../../services/audio";
 import type { DrillInput, DrillProfile, DrillTier, Fighter, Session, SkillCast } from "../../types/drill";
+import { sparkRamp } from "../sparkRamp";
 import { strikeEnemy } from "./enemyContact";
 
 export function chargedTier(profile: DrillProfile, heldFor: number): DrillTier | undefined {
@@ -25,13 +26,14 @@ function releaseSkill(session: Session, cast: SkillCast): void {
   const { tierDamage, tierReach } = session.modifiers;
   sfx.ultimate(tier.level);
   emitSkillEvent({ type: "ultimate", level: tier.level });
+  const look = { sparks: sparkRamp(tier.color), heavy: true };
   for (const enemy of game.enemies) {
     const delta = enemy.x - x;
     const reach = tier.around ? Math.abs(delta) : delta * face;
     if (reach < -5 || reach > tier.reach * tierReach || Math.abs(enemy.y - y) > tier.height) {
       continue;
     }
-    strikeEnemy(session.profile, enemy, tier.damage * tierDamage, x, "ultimate", true);
+    strikeEnemy(session.profile, enemy, tier.damage * tierDamage, x, "ultimate", true, false, false, look);
   }
   session.profile.hooks?.released?.(cast);
 }

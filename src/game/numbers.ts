@@ -1,4 +1,4 @@
-import { DAMAGE_NUMBERS as N, NUMBER_WORDS, WORD_LIFT } from "../constants/damageNumbers";
+import { DAMAGE_NUMBERS as N, NUMBER_PUNCH, NUMBER_WORDS, WORD_LIFT } from "../constants/damageNumbers";
 import { NUMBER_LOOK } from "../constants/effectLook";
 import { GLYPH } from "../constants/font";
 import { RES } from "../constants/stage";
@@ -25,17 +25,20 @@ function makeRoom(): void {
  * A hit's number over the foe. Hits of one kind on the same foe within a moment add into one number, so a stream of
  * small hits reads as one growing figure, and crits stay apart from plain hits. Quiet numbers are for a skill's own hits: smaller, slower and dimmer than the hero's own.
  */
-export function popNumber(e: Enemy, value: number, tag: DamageTag, big: boolean, quiet: boolean): void {
+export function popNumber(e: Enemy, value: number, tag: DamageTag, big: boolean, quiet: boolean, heavy = false): void {
+  const punch = quiet ? NUMBER_PUNCH.quiet : big ? NUMBER_PUNCH.big : heavy ? NUMBER_PUNCH.heavy : NUMBER_PUNCH.plain;
   const into = game.numbers.find((n) => mergeable(n, e, tag, big, quiet));
   if (into) {
     into.value += value;
     into.life = big ? N.bigLife : N.life;
+    into.kick = N.kick;
+    into.punch = Math.max(into.punch, punch);
     return;
   }
   makeRoom();
   const box = enemyBox(e);
   const x = (box[0] + box[2]) / 2 + fxRng.range(-4, 4);
-  const shape = { x, value, tag, big, quiet };
+  const shape = { x, value, tag, big, quiet, punch };
   game.numbers.push({
     x,
     y: freeY(shape, box[1] - 2),
@@ -47,14 +50,16 @@ export function popNumber(e: Enemy, value: number, tag: DamageTag, big: boolean,
     quiet,
     foe: e,
     life: big ? N.bigLife : N.life,
+    kick: N.kick,
+    punch,
   });
 }
 
-type NumberShape = Pick<DamageNumber, "x" | "value" | "tag" | "big" | "quiet">;
+type NumberShape = Pick<DamageNumber, "x" | "value" | "tag" | "big" | "quiet" | "punch">;
 
 /** the art pixels a number covers with its word, as left, top, right, bottom */
 function numberRect(n: NumberShape, y: number): [number, number, number, number] {
-  const scale = (n.big ? NUMBER_LOOK.bigCell : NUMBER_LOOK.cell) / RES;
+  const scale = ((n.big ? NUMBER_LOOK.bigCell : NUMBER_LOOK.cell) + n.punch) / RES;
   const word = n.value && !n.quiet ? NUMBER_WORDS[n.tag] : "";
   const w = Math.max(textWidth(n.value ? numberFigure(n.value) : NUMBER_WORDS[n.tag], scale), textWidth(word));
   const top = word ? y - WORD_LIFT : y;
@@ -76,6 +81,7 @@ export function updateNumbers(dt: number): void {
   for (const n of game.numbers) {
     n.life -= dt;
     n.age += dt;
+    n.kick = Math.max(0, n.kick - dt);
     n.y += n.vy * dt;
     n.vy = Math.min(0, n.vy + 110 * dt);
   }

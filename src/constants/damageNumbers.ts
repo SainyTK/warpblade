@@ -20,7 +20,10 @@ export const DAMAGE_NUMBERS = {
   quietRise: -32,
   /** from this value on a number is drawn in thousands, as 123K */
   thousandsFrom: 100_000,
+  kick: 0.09,
 } as const;
+
+export const NUMBER_PUNCH = { quiet: 0, plain: 0, heavy: 1, big: 1 } as const;
 
 /** the word drawn over each kind of number; plain and burn hits carry none */
 export const NUMBER_WORDS: Readonly<Record<DamageTag | CueWord, string>> = {

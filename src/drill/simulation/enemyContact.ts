@@ -4,6 +4,7 @@ import { hero, progress } from "../../game/state";
 import type { HeroSource } from "../../types/build";
 import type { DrillProfile } from "../../types/drill";
 import type { Enemy } from "../../types/enemy";
+import type { HitLook } from "../../types/hit";
 
 export function strikeEnemy(
   profile: DrillProfile,
@@ -14,6 +15,7 @@ export function strikeEnemy(
   heavy = false,
   finisher = false,
   keen = false,
+  look?: HitLook,
 ): boolean {
   if (enemy.hp <= 0) {
     return false;
@@ -28,6 +30,7 @@ export function strikeEnemy(
       heavy: heavy || (source === "attacks" && hero.riposte > 0),
       finisher,
       sureCrit: keen,
+      look,
     }) === "hit"
   );
 }

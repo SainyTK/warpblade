@@ -5,7 +5,6 @@ import { clampHeroX, landingAt, safeHeroDestination } from "../../game/hero/terr
 import { emitSkillEvent } from "../../game/skills/events";
 import { withBuild } from "../../game/skills/query";
 import { game } from "../../game/state";
-import { hitStop } from "../../game/world";
 import { sfx } from "../../services/audio";
 import type { ActiveWarp, Fighter, Session, WarpTarget } from "../../types/drill";
 import { TARGET_RADIUS, WARP_TRACE_LIFE } from "../constants";
@@ -78,7 +77,13 @@ function arrive(session: Session, { target, weapon }: Extract<ActiveWarp, { phas
   for (const foe of game.enemies) {
     const dx = (foe.x - h.x) * h.face;
     const dy = enemyCenter(foe)[1] - h.y;
-    if (dx >= -6 && dx <= 30 + TARGET_RADIUS && dy >= -40 && dy <= 2 && hitWithSword(session, foe, h.face, damage)) {
+    if (
+      dx >= -6 &&
+      dx <= 30 + TARGET_RADIUS &&
+      dy >= -40 &&
+      dy <= 2 &&
+      hitWithSword(session, foe, h.face, damage, false, false, true)
+    ) {
       landed = true;
     }
   }
@@ -93,7 +98,6 @@ function arrive(session: Session, { target, weapon }: Extract<ActiveWarp, { phas
   session.profile.hooks?.slashed?.("warp", landed);
   emitSkillEvent({ type: "warp", x: h.x, y: h.y, foe: enemy?.hp ? enemy : null });
   if (landed) {
-    hitStop(0.056);
     spendSwordBonuses(h);
   }
 }

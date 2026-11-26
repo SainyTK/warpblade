@@ -1,10 +1,12 @@
 import { enemyCenter } from "../../game/enemies/enemy";
+import { skin } from "../../game/hero/skin";
 import { spendRiposte } from "../../game/meleeHit";
 import { emitSkillEvent } from "../../game/skills/events";
 import { hero } from "../../game/state";
 import type { DrillSpell, Fighter, Session, Side } from "../../types/drill";
 import type { Enemy } from "../../types/enemy";
 import { INFUSION_HITS } from "../constants";
+import { sparkRamp } from "../sparkRamp";
 import { freezeEnemy, strikeEnemy } from "./enemyContact";
 
 export function infuseSword(session: Session, spell: DrillSpell): void {
@@ -19,13 +21,15 @@ export function hitWithSword(
   damage: number,
   finisher = false,
   keen = false,
+  heavy = finisher,
 ): boolean {
   const { fighter, profile, modifiers } = session;
   const spell = fighter.swordInfusion?.spell ?? null;
   const bonus = spell
     ? Math.ceil(((spell.damage * modifiers.spellDamage) / INFUSION_HITS) * (spell.damageScale?.(enemy) ?? 1))
     : 0;
-  if (!strikeEnemy(profile, enemy, damage + bonus, fighter.x, "attacks", finisher, finisher, keen)) {
+  const look = { sparks: spell ? sparkRamp(spell.color, spell.core) : skin.sparks, heavy };
+  if (!strikeEnemy(profile, enemy, damage + bonus, fighter.x, "attacks", finisher, finisher, keen, look)) {
     return false;
   }
   if (spell) {

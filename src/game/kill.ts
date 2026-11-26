@@ -1,3 +1,4 @@
+import { BIG_KILL } from "../constants/hitFeel";
 import { KILL_BURST } from "../constants/kill";
 import { PAL } from "../constants/palette";
 import { FINALE, STAGE_WAVES } from "../constants/waves";
@@ -10,6 +11,7 @@ import { TAU } from "../utils/math";
 import { isAdventure, recordStageKill } from "./adventure";
 import { dropChest } from "./build/chests";
 import { dropCoins } from "./coins";
+import { createKillBurst } from "./effects/killBurst";
 import { endWaveOnLastKill } from "./endWave";
 import { enemyCenter } from "./enemies/enemy";
 import { kindOf } from "./enemies/kinds";
@@ -19,7 +21,7 @@ import { resonateDeath } from "./resonance";
 import { emitSkillEvent } from "./skills/events";
 import { fxRng, game, lights, particles, rng } from "./state";
 import { isTraining } from "./training";
-import { shake } from "./world";
+import { hitStop, shake } from "./world";
 import { dropXp } from "./xpOrbs";
 
 /** MP orbs by rank; half the first numbers, so MP comes back mostly from sword hits */
@@ -125,7 +127,11 @@ export function killEnemy(e: Enemy, source?: SourceId): void {
     if (leavesChest(e)) dropChest(x, y, e.rank === "boss" ? BOSS_CHEST_LEAST : 1);
     dropXp(e.xp, x, y);
   }
-  if (big) shake(0.5, 4);
+  if (big) {
+    shake(0.5, 4);
+    hitStop(e.rank === "boss" ? BIG_KILL.bossStop : BIG_KILL.stop);
+    game.fx.push(createKillBurst(x, y, e.rank === "boss", S));
+  }
   sfx.death();
   if (!isAdventure() && !isTraining()) {
     endWaveOnLastKill();
