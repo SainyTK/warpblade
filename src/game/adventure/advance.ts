@@ -5,11 +5,13 @@ import { ELITE } from "../../constants/waves";
 import { sfx } from "../../services/audio";
 import { RIFT_STAGES, STAGES } from "../../stages";
 import { ARTS } from "../../stages/arts";
+import type { BossCard } from "../../types/bossFight";
 import type { StageId } from "../../types/campaign";
 import type { EnemyType } from "../../types/enemy";
 import { openStages } from "../../utils/campaign";
 import { clamp } from "../../utils/math";
 import { earnArt } from "../arts";
+import { bossArrived, bossFightSettled, openBossFight, resetBossFight, updateBossFight } from "../bossFight";
 import { createRift } from "../effects/rift";
 import { makeEnemy } from "../enemies/enemy";
 import { kindOf } from "../enemies/kinds";
@@ -72,6 +74,7 @@ export function startAdventureAt(section: number): void {
   trail.safeX = hero.x;
   game.wave = waveFor(area.threat);
   game.lull = "fight";
+  resetBossFight();
   resetStageHazard();
   announceStage(trail);
 }
@@ -91,14 +94,23 @@ export function enterStage(id: StageId): void {
   startAdventureAt(1);
 }
 
+function finaleCard(run: Trail, foe: EnemyType): BossCard {
+  const art = run.route.stage.grantsArt;
+  if (art) return { label: "Rift Art", name: ARTS[art].name, sub: "", tone: "art" };
+  return { label: "", name: ENEMIES[foe].name, sub: "Vanquished", tone: "fallen" };
+}
+
 function openBossRoom(run: Trail, area: RouteArea, foe: EnemyType): void {
-  showBanner(ENEMIES[foe].name, BOSS_WARNING);
+  const epic = openBossFight(foe, finaleCard(run, foe));
+  if (!epic) showBanner(ENEMIES[foe].name, BOSS_WARNING);
   const rift = kindOf(foe).rift;
   const x = area.exit - W * 0.26;
   const y = rift.y();
   game.fx.push(
     createRift(x, rift.riftY(y), rift.height, 0, () => {
-      run.boss = addFoe(run, area, foe, x, y);
+      const boss = addFoe(run, area, foe, x, y);
+      run.boss = boss;
+      if (epic) bossArrived(boss, ENEMIES[foe].name);
     }),
   );
 }
@@ -120,10 +132,7 @@ function openRoom(run: Trail, area: RouteArea): void {
 function finishStage(run: Trail): void {
   const stage = run.route.stage;
   if (!run.cleared.includes(stage.id)) run.cleared.push(stage.id);
-  if (stage.grantsArt) {
-    earnArt(stage.grantsArt);
-    showBanner(`New Art: ${ARTS[stage.grantsArt].name}`, BOSS_WARNING);
-  }
+  if (stage.grantsArt) earnArt(stage.grantsArt);
 }
 
 function clearRoom(run: Trail, area: RouteArea): void {
@@ -143,7 +152,7 @@ function clearRoom(run: Trail, area: RouteArea): void {
 }
 
 function roomCleared(run: Trail, area: RouteArea, dt: number): boolean {
-  if (area.room.kind === "boss") return !!run.boss && run.boss.hp <= 0;
+  if (area.room.kind === "boss") return !!run.boss && run.boss.hp <= 0 && bossFightSettled();
   return !!run.surge && updateSurge(run.surge, area, dt);
 }
 
@@ -191,6 +200,7 @@ export function updateAdventure(dt: number): void {
   trail.camera += (target - trail.camera) * (1 - Math.exp(-CAMERA_FOLLOW * dt));
   updateSpikes();
   updateStageHazard(dt);
+  updateBossFight(dt);
   if (hero.state === "dead") return;
   if (game.mode === "clear") {
     game.waveTimer -= dt;

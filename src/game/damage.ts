@@ -9,6 +9,7 @@ import type { Enemy } from "../types/enemy";
 import type { DamageTag } from "../types/game";
 import { isHeroSource } from "../utils/sources";
 import { recordStageDamage } from "./adventure";
+import { bossDeflects } from "./bossFight";
 import { addFlow, flowDamage } from "./build/flow";
 import { currentBuildStats } from "./build/stats";
 import { recordDamage } from "./damageLedger";
@@ -130,6 +131,7 @@ function ignition(e: Enemy, source: SourceId): void {
 /** Apply a hit: back attacks deal 1.5x, airborne foes take 2x, crits 1.75x, all stacking. Guards stop light sword blows. */
 export function dealDamage(e: Enemy, base: number, o: HitOptions = {}): HitResult {
   if (e.hp <= 0) return "hit";
+  if (bossDeflects(e)) return "blocked";
   const def = ENEMIES[e.type];
   const source = o.source ?? "attacks";
   let tag: DamageTag = o.dot ? "burn" : "normal";

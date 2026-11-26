@@ -14,13 +14,16 @@ import { boxHit, dust, heroBox, shake } from "../../world";
 import { facesHero, turnToHero } from "../facing";
 import { ABYSS_HITS, AC, VOID, VOID_SPARKS } from "./colors";
 import { createVoidOrb, ORB_GRAVITY } from "./voidOrb";
+import { createVoidPillar } from "./voidPillar";
 import { createVoidSpikes } from "./voidSpikes";
 
 const BITE_RANGE = 40;
 /** the wind-ups, as shares of the wave's wind-up scale */
-export const MAW_WINDUP = { bite: 0.65, spit: 0.75, rear: 0.85 } as const;
+export const MAW_WINDUP = { bite: 0.65, spit: 0.75, rear: 0.85, well: 0.8 } as const;
+const WELL = { calm: [0, -40, 40], enraged: [0, -30, 30, -60, 60], beat: 0.12, hold: 0.5 } as const;
 /** e.n through a recovery: what it just did, so the sprite holds the right pose */
 export const MAW_DID = { bite: 1, spit: 2, slam: 3 } as const;
+export const MAW_ENRAGE = 0.5;
 
 function bite(e: Enemy): void {
   Object.assign(e, { state: "lunge", st: 0, vx: e.face * 150 });
@@ -38,7 +41,7 @@ function chomp(e: Enemy): void {
 }
 
 /** a fan of void globs lobbed to land around Kael, more of them once it is enraged */
-function spit(e: Enemy, enraged: boolean): void {
+export function spit(e: Enemy, enraged: boolean): void {
   const n = enraged ? 5 : 3;
   const mx = e.x + e.face * 22;
   const my = e.y - 18;
@@ -50,6 +53,15 @@ function spit(e: Enemy, enraged: boolean): void {
     game.fx.push(createVoidOrb(mx, my, (land - mx) / time, vy, ABYSS_HITS.mawOrb * e.power));
   }
   sfx.boom();
+}
+
+function openWell(e: Enemy, enraged: boolean): void {
+  const spots = enraged ? WELL.enraged : WELL.calm;
+  spots.forEach((off, i) => {
+    const x = clampStageX(hero.x + off, 10);
+    game.fx.push(createVoidPillar(x, i * WELL.beat, ABYSS_HITS.mawWell * e.power));
+  });
+  sfx.cast();
 }
 
 function slam(e: Enemy, enraged: boolean): void {
@@ -81,14 +93,19 @@ function slam(e: Enemy, enraged: boolean): void {
  */
 export function updateMaw(e: Enemy, dt: number, ts: number): void {
   const dx = hero.x - e.x;
-  const enraged = e.hp < e.max * 0.5;
+  if (e.phase === 1 && e.hp < e.max * MAW_ENRAGE) e.phase = 2;
+  const enraged = e.phase === 2;
   const ws = waveScale(game.wave);
   if (e.state === "walk") {
     turnToHero(e, dt);
     e.vx = approach(e.vx, Math.abs(dx) > 12 ? e.face * (enraged ? 30 : 20) : 0, 140 * dt);
     if (e.cd <= 0 && facesHero(e) && hero.state !== "dead") {
       if (Math.abs(dx) < BITE_RANGE) Object.assign(e, { state: "wind", st: 0 });
-      else if (Math.abs(dx) < 200) Object.assign(e, { state: rng.chance(0.5) ? "charge" : "volley", st: 0 });
+      else {
+        const roll = rng.next();
+        const state = roll < 0.35 ? "charge" : roll < 0.7 ? "volley" : "summon";
+        Object.assign(e, { state, st: 0 });
+      }
     }
   } else if (e.state === "wind") {
     e.vx = approach(e.vx, -e.face * 10, 300 * dt);
@@ -120,6 +137,15 @@ export function updateMaw(e: Enemy, dt: number, ts: number): void {
     }
   } else if (e.state === "shoot") {
     if (e.st >= 0.35) Object.assign(e, { state: "recover", st: 0, n: MAW_DID.spit });
+  } else if (e.state === "summon") {
+    e.vx = approach(e.vx, 0, 400 * dt);
+    if (fxRng.chance(0.5 * ts))
+      particles.spawn(PK.MOTE, e.x + fxRng.range(-14, 14), GROUND - 1, 0, -fxRng.range(30, 70), 0.4, {
+        col: VOID[4],
+        size: 0.7,
+      });
+    if (e.st >= MAW_WINDUP.well * ws.windup && e.st - dt < MAW_WINDUP.well * ws.windup) openWell(e, enraged);
+    if (e.st >= MAW_WINDUP.well * ws.windup + WELL.hold) Object.assign(e, { state: "recover", st: 0, n: 0 });
   } else if (e.state === "volley") {
     e.vx = approach(e.vx, 0, 400 * dt);
     if (e.st >= MAW_WINDUP.rear * ws.windup) {

@@ -31,6 +31,7 @@ export const SOVEREIGN_DID = { cleave: 1, call: 2, rend: 3 } as const;
 /** e.ax while it winds up or swings a cleave: 1 when this is the second of an enraged pair */
 export const AGAIN = 1;
 
+export const SOVEREIGN_ENRAGE = 0.5;
 const enragedNow = (e: Enemy): boolean => e.phase === 2;
 
 /** the blade comes round: everything in front of it, floor to crown, is cut once */
@@ -59,7 +60,7 @@ function riftStep(e: Enemy): void {
 }
 
 /** pillars of void light come down in a row centered on the hero, one after another */
-function callPillars(e: Enemy): void {
+export function callPillars(e: Enemy): void {
   const n = enragedNow(e) ? CALL.enraged : CALL.count;
   for (let i = 0; i < n; i++) {
     const x = clampStageX(hero.x + (i - (n - 1) / 2) * CALL.gap + rng.range(-5, 5), 10);
@@ -77,14 +78,14 @@ function rend(e: Enemy): void {
   sfx.boom();
 }
 
-/** what it does next from a walk: a cleave up close, else a rift step, a call of pillars or, enraged, a rend */
+/** what it does next from a walk: a cleave up close, else a rift step, a call of pillars or a rend */
 function chooseAction(e: Enemy, dx: number): void {
   if (Math.abs(dx) < CLEAVE.range && facesHero(e)) {
     Object.assign(e, { state: "wind", st: 0, ax: 0 });
     return;
   }
   const roll = rng.next();
-  const state = roll < 0.4 ? "blink" : roll < 0.75 || !enragedNow(e) ? "summon" : "volley";
+  const state = roll < 0.35 ? "blink" : roll < (enragedNow(e) ? 0.65 : 0.72) ? "summon" : "volley";
   Object.assign(e, { state, st: 0, ax: 0 });
 }
 
@@ -95,7 +96,7 @@ function chooseAction(e: Enemy, dx: number): void {
  * calls more pillars, and drives its blade into the floor to send spikes out both ways.
  */
 export function updateSovereign(e: Enemy, dt: number, ts: number): void {
-  if (e.phase === 1 && e.hp < e.max * 0.5) {
+  if (e.phase === 1 && e.hp < e.max * SOVEREIGN_ENRAGE) {
     e.phase = 2;
     shake(0.4, 3);
     sfx.boom();

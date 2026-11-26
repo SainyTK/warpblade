@@ -5,21 +5,23 @@ import { sfx } from "../../services/audio";
 import type { Enemy } from "../../types/enemy";
 import { PK } from "../../types/particle";
 import { eraOf } from "../../utils/eras";
-import { approach, clamp } from "../../utils/math";
+import { approach, clamp, TAU } from "../../utils/math";
 import { clampStageX, stageThreat } from "../adventure";
 import { eachStanding } from "../coopHooks";
 import { createRift } from "../effects/rift";
 import { createShadowOrb } from "../effects/shadowOrb";
 import { hurtHero } from "../hurtHero";
-import { fxRng, game, hero, particles, rng } from "../state";
+import { fxRng, game, hero, lights, particles, rng } from "../state";
 import { boxHit, heroBox } from "../world";
 import { enemyBox, makeEnemy } from "./enemy";
 import { turnToHero } from "./facing";
 
 const ORB_SPEED = 115;
 const MAX_SUMMONS = 4;
+export const WARDEN_ENRAGE = 0.5;
+const RING = { orbs: 10, speed: 72, windup: 0.85, again: 0.4, hold: 0.6 } as const;
 
-function fireVolley(e: Enemy): void {
+export function fireVolley(e: Enemy): void {
   const n = e.phase === 2 ? 5 : 3;
   const base = Math.atan2(hero.y - 16 - e.y, hero.x - e.x);
   for (let i = 0; i < n; i++) {
@@ -37,6 +39,26 @@ function fireVolley(e: Enemy): void {
   sfx.cast();
 }
 
+function orbRing(e: Enemy, turn: number): void {
+  for (let i = 0; i < RING.orbs; i++) {
+    const a = ((i + turn) / RING.orbs) * TAU;
+    const vx = Math.cos(a) * RING.speed;
+    const vy = Math.sin(a) * RING.speed;
+    game.fx.push(createShadowOrb(e.x, e.y, vx, vy, ENEMY_HITS.wardenOrb * e.power));
+  }
+  lights.add(e.x, e.y, 50, SPARKS.shadow[2], 0.8, 0.3);
+  sfx.boom();
+}
+
+function gather(e: Enemy, dt: number): void {
+  if (!fxRng.chance(dt * 40)) return;
+  const a = fxRng.range(0, TAU);
+  const d = fxRng.range(22, 34);
+  particles.spawn(PK.EMBER, e.x + Math.cos(a) * d, e.y + Math.sin(a) * d, -Math.cos(a) * 70, -Math.sin(a) * 70, 0.35, {
+    sparks: SPARKS.shadow,
+  });
+}
+
 function summon(): void {
   // the warden calls the flyers of the era it fights in
   const flyer = eraOf(game.wave).flyer;
@@ -52,7 +74,7 @@ function summon(): void {
 
 /** The Rift Warden hovers above the floor: it fires shadow orbs, calls wisps through rifts and dives at Kael. */
 export function updateWarden(e: Enemy, dt: number, ts: number): void {
-  if (e.phase === 1 && e.hp < e.max * 0.5) e.phase = 2;
+  if (e.phase === 1 && e.hp < e.max * WARDEN_ENRAGE) e.phase = 2;
   const fast = e.phase === 2 ? 0.7 : 1;
   const dx = hero.x - e.x;
   if (e.state === "drift") {
@@ -63,7 +85,7 @@ export function updateWarden(e: Enemy, dt: number, ts: number): void {
     e.vy = approach(e.vy, clamp((ty - e.y) * 1.2, -40, 40), 150 * dt);
     if (e.cd <= 0 && hero.state !== "dead") {
       const roll = rng.next();
-      const state = roll < 0.45 ? "volley" : roll < 0.7 ? "summon" : "wind";
+      const state = roll < 0.35 ? "volley" : roll < 0.55 ? "summon" : roll < 0.78 ? "wind" : "beam";
       Object.assign(e, { state, st: 0 });
     }
   } else if (e.state === "volley") {
@@ -75,6 +97,14 @@ export function updateWarden(e: Enemy, dt: number, ts: number): void {
     e.vx = approach(e.vx, 0, 200 * dt);
     if (e.st >= 0.5 && e.st - dt < 0.5) summon();
     if (e.st >= 1) Object.assign(e, { state: "recover", st: 0 });
+  } else if (e.state === "beam") {
+    e.vx = approach(e.vx, 0, 200 * dt);
+    e.vy = approach(e.vy, 0, 200 * dt);
+    gather(e, dt);
+    const at = RING.windup * fast;
+    if (e.st >= at && e.st - dt < at) orbRing(e, 0);
+    if (e.phase === 2 && e.st >= at + RING.again && e.st - dt < at + RING.again) orbRing(e, 0.5);
+    if (e.st >= at + RING.again + RING.hold) Object.assign(e, { state: "recover", st: 0 });
   } else if (e.state === "wind") {
     e.vx = approach(e.vx, -Math.sign(dx) * 25, 200 * dt);
     if (e.st >= 0.55 * fast) {

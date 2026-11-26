@@ -94,7 +94,7 @@ function rest(e: Enemy): void {
   Object.assign(e, { state: "drift", st: 0, n: 0, cd });
 }
 
-function release(e: Enemy): void {
+export function releaseFeathers(e: Enemy): void {
   const count = stormy(e) ? FEATHERS.storm : FEATHERS.calm;
   const sx = e.x + e.face * 6;
   const sy = e.y - 4;
@@ -208,7 +208,7 @@ export function updateTempestroc(e: Enemy, dt: number, ts: number): void {
   } else if (e.state === "volley") {
     hover(e, dt, ROC_HOVER.height - 6);
     if (e.st >= windupOf(e, "volley")) {
-      release(e);
+      releaseFeathers(e);
       Object.assign(e, { state: "shoot", st: 0 });
     }
   } else if (e.state === "shoot") {

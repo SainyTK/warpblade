@@ -90,7 +90,7 @@ function toll(e: Enemy): void {
   sfx.boom();
 }
 
-function moonfall(e: Enemy): void {
+export function moonfall(e: Enemy): void {
   const look = moonLook(enraged(e));
   const strike = { struck: new Set<number>() };
   MOONFALL.offsets.forEach((offset, i) => {

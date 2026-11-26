@@ -1,6 +1,7 @@
 import { SKY_FLASH } from "../constants/effectLook";
 import { beginFrame, composite, setCameraX, setShake } from "../engine/frame";
 import { drawStageHazardBack, drawStageHazardFront, stageCameraX } from "../game/adventure";
+import { drawBossArenaBack, drawBossArenaFront } from "../game/bossFight";
 import { drawChests } from "../game/build/chests";
 import { coop, eachHero } from "../game/coopHooks";
 import { shownKit } from "../game/hero/kits";
@@ -42,6 +43,7 @@ export function renderScene(out: Uint8ClampedArray): void {
     drawAdventureTerrain(cameraX, game.t, palette);
     drawSpikes(cameraX, game.t);
     drawStageHazardBack(cameraX, game.t);
+    drawBossArenaBack();
   }
   const room = coop();
   for (const f of game.fx) {
@@ -73,6 +75,7 @@ export function renderScene(out: Uint8ClampedArray): void {
   drawMist();
   setCameraX(cameraX);
   lights.draw();
+  if (!arena) drawBossArenaFront();
   drawNumbers();
   eachHero(() => shownKit().drawOver?.());
   setCameraX(0);
