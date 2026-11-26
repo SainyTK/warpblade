@@ -21,4 +21,8 @@ export interface Progress {
   build: Build;
   resonance: Ranks;
   fusions: FusionId[];
+  heartShards: number;
+  manaShards: number;
+  hpPerSecond: number;
+  mpPerSecond: number;
 }

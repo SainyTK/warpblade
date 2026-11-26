@@ -1,3 +1,4 @@
+import { PACT } from "../../../../constants/vitals";
 import type { SkillDef } from "../../../../types/skill";
 import { evolvedRow, levelRows } from "../../../../utils/skillRows";
 import { drillEvolved, onDrill } from "./drill";
@@ -32,6 +33,7 @@ export const HARMONY: SkillDef = {
   element: "void",
   risk: "timed",
   button: "L",
+  pact: PACT.mending,
   text: "The warp and the sword arts move as one: arrivals fill the jian, and art cooldowns are shorter.",
   levels: DRILL_LEVELS,
   evolution: {

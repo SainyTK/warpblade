@@ -20,7 +20,6 @@ export const ZAFIR: CharacterDef = {
   price: 1350,
   special: { id: "sandstorm", name: "Sandstorm" },
   base: { ad: 10, ap: 9, hp: 105, mp: 90, stamina: 100, crit: 0.05, move: 1.05, aspd: 1, haste: 1 },
-  growth: { ad: 0, ap: 0, hp: 1.15, mp: 0.4 },
   skills: ZAFIR_SKILL_DEFS,
   comboHits: 4,
   skin: ZAFIR_SKIN,

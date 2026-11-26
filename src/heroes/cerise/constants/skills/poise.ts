@@ -1,3 +1,4 @@
+import { PACT } from "../../../../constants/vitals";
 import type { SkillDef } from "../../../../types/skill";
 import { evolvedRow, levelRows } from "../../../../utils/skillRows";
 import { drillValues, withDrill } from "./drillRows";
@@ -33,6 +34,7 @@ export const POISE: SkillDef = {
   element: "frost",
   risk: "easy",
   button: "L",
+  pact: PACT.mending,
   text: "More air dashes, an untouchable dash, and a stronger thrust after it.",
   levels: LEVELS,
   evolution: {

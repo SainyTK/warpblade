@@ -16,7 +16,6 @@ export const CERISE: CharacterDef = {
   price: 0,
   special: { id: "roseTempest", name: "Rose Tempest" },
   base: { ad: 10, ap: 9, hp: 100, mp: 100, stamina: 100, crit: 0.08, move: 1.04, aspd: 1, haste: 1 },
-  growth: { ad: 0, ap: 0, hp: 1, mp: 0.45 },
   skills: CERISE_SKILL_DEFS,
   comboHits: 5,
   skin: CERISE_SKIN,

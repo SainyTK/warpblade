@@ -1,3 +1,4 @@
+import { PACT } from "../../../../constants/vitals";
 import type { SkillDef } from "../../../../types/skill";
 import { evolvedRow, levelRows } from "../../../../utils/skillRows";
 import { drillRows, drillValues } from "./drillRows";
@@ -38,6 +39,7 @@ export const STILL_WATER: SkillDef = {
   element: "frost",
   risk: "timed",
   button: "I",
+  pact: PACT.focus,
   text: "Still Water holds foes longer and hits harder.",
   levels: DRILL,
   evolution: {

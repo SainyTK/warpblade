@@ -1,3 +1,4 @@
+import { PACT } from "../../../../constants/vitals";
 import type { SkillDef } from "../../../../types/skill";
 import { evolvedRow, levelRows } from "../../../../utils/skillRows";
 
@@ -22,6 +23,7 @@ export const RIFT_WOUND: SkillDef = {
   element: "venom",
   risk: "timed",
   button: "auto",
+  pact: PACT.blood,
   text: "Warp strikes open rift wounds that drain the foe; each warp deepens them.",
   levels: LEVELS,
   evolution: {

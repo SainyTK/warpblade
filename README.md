@@ -155,7 +155,12 @@ From there, play again, go back to the main menu or visit the Shop.
   A card says "Evolves with ???" until the player has made that evolution once.
 - **Flow.** Every hit of the hero's own adds a stack of Flow, up to 25, each one +4% damage on every source, so a full bar doubles it; a perfect dodge adds five, and getting hurt halves it.
 - **Experience to pick up.** Slain foes drop lime orbs of experience that bounce on the floor. Walk over them to collect them; any left behind fly to the hero after 4 seconds, or in a room to the nearest standing hero.
-  Attack and ability power grow 2.5% with every level, compounding.
+  Attack and ability power grow 2.5% with every level, compounding; levels leave max HP and MP as they are.
+- **Heart Shards and Mana Shards.** Max HP and MP grow only from shards: every boss drops a Heart Shard (+3 max HP) and a Mana Shard (+2 max MP), the last foe of a Rift Surge drops a Heart Shard, and elites sometimes drop one.
+  Walk over a shard to take it; the HP and MP bars grow longer as shards come in.
+- **Drain and regeneration.** Two skills of every hero carry a price: one adds power but drains HP every second, the other regains HP at the cost of MP, or MP at the cost of power.
+  The card shows the drain in red and the regeneration in green, and the HUD shows the net HP a second next to the HP bar.
+  A drain never takes the last point of HP.
 - **Damage by source.** The result screen lists every source of damage with its level, total damage and damage per second: the hero's attacks, abilities and ultimate, each skill that strikes on its own, and each element's Resonance.
 - **The Codex.** The Codex on the start menu lists the five elements, the Fusions, the Rift Arts and every hero's skills and evolutions, with Fusions and evolutions not yet made shown as silhouettes with their recipe or ???.
 - **Coins and a shop.** Foes drop pixel coins that the hero picks up by touch, and any left behind fly to them after a moment.

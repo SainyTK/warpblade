@@ -81,8 +81,6 @@ export interface CharacterDef {
   price: number;
   special: SpecialDef;
   base: Stats;
-  /** added per level after the first */
-  growth: Partial<Stats>;
   /** the hero's 20 skills (docs/skill-design.md) */
   skills: readonly SkillDef[];
   /** blows in the ground string for the whole run */

@@ -94,7 +94,6 @@ export const KAEL: CharacterDef = {
   price: 0,
   special: { id: "crystalNova", name: "Crystal Nova" },
   base: { ad: 10, ap: 10, hp: 100, mp: 100, stamina: 100, crit: 0.05, move: 1, aspd: 1, haste: 1 },
-  growth: { ad: 0, ap: 0, hp: 1.1, mp: 0.45 },
   skills: KAEL_SKILL_DEFS,
   comboHits: 4,
   skin: KAEL_SKIN,
@@ -111,7 +110,7 @@ export const KAEL: CharacterDef = {
 | `accent` | the hero's menu colour: its tile, frame and stat bars on the hero screen, and its ability tabs unless a tab sets a tint; the hero screen needs no CSS per hero |
 | `price` | coins to unlock; 0 is open from the start. The prices are fixed: kael 0, cerise 0, aldric 300, vesper 400, saya 550, yun 750, brynn 1000, zafir 1350, calder 1800 |
 | `special` | the ultimate on U: `name` shows on the HUD in capitals and on the hero screen; `id` goes into the run report |
-| `base`, `growth` | stats at level 1 and per level (`src/utils/stats.ts`) |
+| `base` | stats at level 1; levels add power only (`src/utils/stats.ts`) |
 | `skills` | the hero's 20 `SkillDef`s (`docs/skill-design.md`) |
 | `comboHits` | blows in the ground string for the whole run |
 | `skin` | the look on the rig (next section) |

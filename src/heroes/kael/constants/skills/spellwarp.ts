@@ -1,3 +1,4 @@
+import { PACT } from "../../../../constants/vitals";
 import type { SkillDef } from "../../../../types/skill";
 import { evolvedRow } from "../../../../utils/skillRows";
 import { drillLevels, drillValues, type NativeStep } from "./drillLevels";
@@ -33,6 +34,7 @@ export const SPELLWARP: SkillDef = {
   element: "void",
   risk: "timed",
   button: "L",
+  pact: PACT.focus,
   text: "Warp Strike pours the selected spell into the sword, and spell cooldowns are shorter.",
   levels: LEVELS,
   evolution: {

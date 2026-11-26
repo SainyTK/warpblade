@@ -533,3 +533,12 @@
 .pick-note.pick-fusion {
   color: var(--gold);
 }
+.pick-note.pick-drain {
+  color: var(--rust);
+}
+.pick-note.pick-regen {
+  color: var(--heal);
+}
+.pick-note.pick-power {
+  color: var(--gold);
+}

@@ -1,3 +1,4 @@
+import { PACT } from "../../../../constants/vitals";
 import type { SkillDef } from "../../../../types/skill";
 import { evolvedRow, levelRows } from "../../../../utils/skillRows";
 import { drillValues, withDrill } from "./drillRows";
@@ -37,6 +38,7 @@ export const THORN_WOUNDS: SkillDef = {
   element: "venom",
   risk: "easy",
   button: "auto",
+  pact: PACT.blood,
   text: "Thrusts leave bleeding thorns.",
   levels: LEVELS,
   evolution: {

@@ -74,3 +74,16 @@ export const CHEST_DETAIL = {
   rivet: hex("#fff3c0"),
   keyhole: hex("#3a2208"),
 } as const;
+
+const shard = (rp: readonly number[], twinkle: boolean): PixelColors => ({
+  d: rp[1],
+  l: rp[2],
+  L: twinkle ? rp[4] : rp[3],
+  H: rp[4],
+  W: twinkle ? 0xffffff : rp[5],
+});
+
+export const SHARD_COLORS = {
+  heart: [shard(PAL.heart, false), shard(PAL.heart, true)],
+  mana: [shard(PAL.crystal, false), shard(PAL.crystal, true)],
+} as const;

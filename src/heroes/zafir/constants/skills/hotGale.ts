@@ -1,3 +1,4 @@
+import { PACT } from "../../../../constants/vitals";
 import type { SkillDef } from "../../../../types/skill";
 import { evolvedRow } from "../../../../utils/skillRows";
 import { drillLevels, drillValues, type Numbers } from "./drillLevels";
@@ -31,6 +32,7 @@ export const HOT_GALE: SkillDef = {
   element: "blaze",
   risk: "easy",
   button: "I",
+  pact: PACT.focus,
   text: "The crescent rides a hot gale: it hits harder, comes back for a second cut and bleeds what it touches.",
   levels: LEVELS,
   evolution: {

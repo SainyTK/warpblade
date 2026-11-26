@@ -36,6 +36,17 @@ export interface XpOrb {
   rest: boolean;
   done?: boolean;
 }
+export type ShardKind = "heart" | "mana";
+export interface Shard {
+  x: number;
+  y: number;
+  vx: number;
+  vy: number;
+  t: number;
+  kind: ShardKind;
+  rest: boolean;
+  done?: boolean;
+}
 /** an afterimage left by a warp or a dash */
 export interface Ghost {
   s: SpriteImage;
@@ -104,6 +115,7 @@ export interface GameState {
   coins: number;
   coinDrops: Coin[];
   xpOrbs: XpOrb[];
+  shards: Shard[];
   /** the stage's end: its last boss still to fall, the quiet after it fell, or the fight with what came after */
   finale: "none" | "quiet" | "beyond";
   /** times Last Light has saved the hero this run */

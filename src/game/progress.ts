@@ -11,8 +11,10 @@ import type { Card } from "../types/build";
 import { PK } from "../types/particle";
 import type { PickAnswer } from "../types/pick";
 import { cardKey } from "../utils/cards";
+import { pactTotals } from "../utils/pacts";
 import { xpToNext } from "../utils/progression";
 import { activeFusions, type Ranks, resonanceRanks, resonanceStats } from "../utils/resonance";
+import { withShards } from "../utils/shards";
 import { heldRows } from "../utils/skills";
 import { computeStats } from "../utils/stats";
 import { raiseArt, raiseSkill } from "./build/raise";
@@ -32,7 +34,12 @@ export function refreshProgress(): void {
   for (const id of fusions) if (!progress.fusions.includes(id)) announceFusion(id);
   progress.fusions = fusions;
   const stats = resonanceStats(progress.resonance);
-  progress.stats = computeStats(character, progress.level, heldRows(character, build), metaBonus(), stats);
+  const pact = pactTotals(character, build);
+  const rows = [...heldRows(character, build), { scale: { ad: pact.power, ap: pact.power } }];
+  const bonus = withShards(metaBonus(), progress.heartShards, progress.manaShards);
+  progress.stats = computeStats(character, progress.level, rows, bonus, stats);
+  progress.hpPerSecond = pact.hp;
+  progress.mpPerSecond = pact.mp;
   // every hero keeps one ultimate all run; their ultimate skill upgrades it
   progress.ultimate = character.special.id;
   progress.comboLimit = character.comboHits;
@@ -83,10 +90,9 @@ export function gainXp(amount: number): void {
   }
   if (progress.level >= MAX_LEVEL) progress.xp = 0;
   if (progress.level === from) return;
-  const before = progress.stats;
   const restore = LEVEL_UP_RESTORE * (progress.level - from);
   refreshProgress();
-  hero.hp = Math.min(progress.stats.hp, hero.hp + (progress.stats.hp - before.hp) + progress.stats.hp * restore);
+  hero.hp = Math.min(progress.stats.hp, hero.hp + progress.stats.hp * restore);
   hero.mp = Math.min(progress.stats.mp, hero.mp + progress.stats.mp * restore);
   showBanner(`Level ${progress.level}`, 1.4);
   celebrateLevel();

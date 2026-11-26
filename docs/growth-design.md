@@ -51,11 +51,62 @@ A Fusion's name stays ??? on cards and in the Codex until the player has made it
 
 ## Hero growth
 
-- Attack damage and ability power grow by `HERO_LEVEL_POWER` (x1.025) per level, compounding, instead of a flat amount. The heroes' `growth.ad` and `growth.ap` are 0; HP, MP keep their flat growth.
-- HP and MP growth per level are about a fifth of what they were, so about 84 levels end near the old totals of 19 levels.
-- A level up restores 5% of HP and MP (`LEVEL_UP_RESTORE`), so a level heals a little.
+- Attack damage and ability power grow by `HERO_LEVEL_POWER` (x1.025) per level, compounding.
+- Levels no longer raise max HP or MP (owner rule, 26 November 2026). Max HP and MP grow only from shards, below.
+- A level up restores 8% of max HP and MP (`LEVEL_UP_RESTORE`), so a level heals a little.
 - The ground string's length is fixed per hero (`CharacterDef.comboHits`); it no longer grows with the level.
-- Shop stats stay flat.
+- Shop stats stay flat and are the base the shards add to.
+
+## Heart Shards and Mana Shards
+
+`SHARD_GAIN`, `SHARD_DROP` and `SHARD_MOTION` in `src/constants/vitals.ts`, the drops in `src/game/shards.ts`.
+
+- A Heart Shard adds 3 max HP for the run; a Mana Shard adds 2 max MP. The new room fills at once.
+- Every boss and mini boss drops one of each. The last foe of a Rift Surge, or of a wave in wave mode, drops a Heart Shard.
+- An elite drops each kind with a 10% chance; any other foe with a 0.15% chance. Training drops none.
+- Shards pop out, fall and bounce, and are picked up by touch. Any left lying fly to the nearest standing hero after 7 seconds, so none is lost.
+- Picking one up shows a banner ("Heart Shard +3 max HP", with the player's tag in a room), a ring and a burst in the shard's colour, and the bar flashes.
+- The HP and MP bars start at 60% of their width and grow to full as shards come in: full at 36 Heart Shards and 21 Mana Shards (`VITAL_BAR`).
+- The shard counts live in `progress`, so each player in a room keeps their own.
+
+Tuning: a full campaign (Prologue, 8 Rift stages, the Citadel) has 12 boss rooms, 18 Surges, about 75 elites and 1,165 other foes.
+That comes to about 39 Heart Shards (+117 HP) and 21 Mana Shards (+42 MP) on average.
+The old per level growth (1 to 1.3 HP and 0.4 to 0.45 MP a level) gave about +110 HP and +41 MP by the campaign's end, where the experience reaches about level 99.
+A player who collects most shards ends near those totals.
+
+## Pacts: drain and regeneration
+
+A skill may carry a pact (`SkillDef.pact`): HP a second, MP a second and a share of attack and ability power, each per skill level, so level 8 (or the evolution) carries 8 times the level 1 amount.
+The three pacts are `PACT` in `src/constants/vitals.ts`:
+
+| Pact | Per level | At level 8 |
+| --- | --- | --- |
+| Blood | -0.4 HP/s, +6% power | -3.2 HP/s, +48% power |
+| Mending | +0.3 HP/s, -0.25 MP/s | +2.4 HP/s, -2 MP/s |
+| Focus | +0.35 MP/s, -3% power | +2.8 MP/s, -24% power |
+
+Each hero has one Blood skill and one Mending or Focus skill:
+
+| Hero | Blood | Mending or Focus |
+| --- | --- | --- |
+| Aldric | Penance | Resolve (Mending) |
+| Brynn | Bloodletter | Iron Skin (Mending) |
+| Calder | Point Blank | Speed Loader (Focus) |
+| Cerise | Thorn Wounds | Poise (Mending) |
+| Kael | Rift Wound | Spellwarp (Focus) |
+| Saya | Weeping Cut | Still Water (Focus) |
+| Vesper | Falling Night | Wanderer's Grace (Mending) |
+| Yun | Thousand Cuts | Harmony (Mending) |
+| Zafir | Opened Veins | Hot Gale (Focus) |
+
+Rules:
+
+- Pacts add up across held skills into `progress.hpPerSecond` and `progress.mpPerSecond` and a power share on attack damage and ability power (`refreshProgress`).
+- Drain never kills: HP drain stops at 1 HP (`DRAIN_FLOOR`). A hero at 1 HP still falls to the next blow. MP drain stops at 0.
+- Regeneration stops at max. The rates run only while the hero stands and the game plays.
+- A card shows the pact at the level it reaches: power in gold, a drain in red ("Drains 1.2 to 1.6 HP/s"), a regeneration in green ("Regains 0.7 to 1 MP/s").
+- The HUD shows the net HP a second after the HP bar when it is not zero, red for a drain and green for regeneration.
+- Resonance does not touch pacts.
 
 ## Flow
 

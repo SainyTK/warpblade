@@ -20,7 +20,6 @@ export const VESPER: CharacterDef = {
   price: 400,
   special: { id: "duskWaltz", name: "Dusk Waltz" },
   base: { ad: 10, ap: 9, hp: 92, mp: 95, stamina: 100, crit: 0.06, move: 1.06, aspd: 1.05, haste: 1 },
-  growth: { ad: 0, ap: 0, hp: 1, mp: 0.45 },
   skills: VESPER_SKILL_DEFS,
   comboHits: 4,
   skin: VESPER_SKIN,
