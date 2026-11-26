@@ -1,3 +1,4 @@
+import { FOE_MATERIAL } from "../constants/audio";
 import { DAMAGE, ENEMY_AIR, GUARD, IGNITION_RADIUS, JUGGLE_LIMIT, SHATTER_REACH } from "../constants/combat";
 import { HERO_SOURCES } from "../constants/damageSources";
 import { ENEMIES } from "../constants/enemies";
@@ -181,6 +182,7 @@ export function dealDamage(e: Enemy, base: number, o: HitOptions = {}): HitResul
   }
   e.flash = 0.1;
   e.guardHits = 0;
+  if (o.melee && fromHero) sfx.strike(FOE_MATERIAL[e.type] ?? "flesh", !!o.heavy || !!o.finisher, crit);
   // a skill's own hit is quiet and never drawn big, so a crowd of them does not drown out the hero's own
   const quiet = !fromHero;
   popNumber(e, value, tag, !quiet && (crit || shattering || (back && e.air)), quiet);

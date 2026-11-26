@@ -9,10 +9,14 @@ export function mergeSettings(
 ): Settings {
   const flag = (key: "sound" | "shake" | "damageNumbers" | "vibration"): boolean =>
     typeof saved[key] === "boolean" ? saved[key] : defaults[key];
-  const volume = typeof saved.volume === "number" ? Math.round(clamp(saved.volume, 0, steps)) : defaults.volume;
+  const level = (key: "volume" | "music"): number => {
+    const value = saved[key];
+    return typeof value === "number" ? Math.round(clamp(value, 0, steps)) : defaults[key];
+  };
   return {
     sound: flag("sound"),
-    volume,
+    volume: level("volume"),
+    music: level("music"),
     shake: flag("shake"),
     damageNumbers: flag("damageNumbers"),
     vibration: flag("vibration"),

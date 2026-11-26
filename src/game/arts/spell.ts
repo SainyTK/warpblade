@@ -35,6 +35,7 @@ export function artSpell(art: ArtDef, level: number, attack: number, hero: strin
     speed: row.speed,
     delay: row.delay,
     look: art.look,
+    element: art.element,
     freeze: row.freeze,
     status: art.status ? (foe) => art.status?.(foe, level) : undefined,
     damageScale: weakness(art.id),

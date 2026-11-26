@@ -1,3 +1,4 @@
+import { sfx } from "../../services/audio";
 import type { MenuCommand } from "../../types/input";
 
 /** Moving through a menu screen: the entries marked data-nav, in document order. */
@@ -26,15 +27,20 @@ export function runMenuCommand(body: HTMLElement, command: MenuCommand, repeat: 
     const step = command === "up" ? -1 : 1;
     const scroller = body.querySelector<HTMLElement>(".menu-scroll");
     if (list.length === 1 && scroller) scroller.scrollBy({ top: step * SCROLL_STEP });
+    sfx.menuMove();
     focusEntry(list[here < 0 ? 0 : (here + step + list.length) % list.length]);
     return;
   }
   if (command === "left" || command === "right") {
-    if (current) adjusters.get(current)?.(command === "left" ? -1 : 1);
+    const adjust = current && adjusters.get(current);
+    if (!adjust) return;
+    sfx.menuMove();
+    adjust(command === "left" ? -1 : 1);
     return;
   }
   if (repeat) return;
   if (command === "select") {
+    if (current) sfx.menuConfirm();
     current?.click();
     return;
   }

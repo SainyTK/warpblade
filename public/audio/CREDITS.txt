@@ -1,0 +1,312 @@
+Warpblade sound credits
+
+Every sound and music file in this folder comes from a free asset pack released under CC0 1.0 (public domain dedication, https://creativecommons.org/publicdomain/zero/1.0/).
+Credit is not required by the licence; it is given here as thanks.
+The files were trimmed, made mono, loudness-matched and re-encoded as Ogg Opus for the game.
+
+Packs
+
+The Essential Retro Video Game Sound Effects Collection [512 sounds]
+  Author: Juhani Junkala (subspaceaudio)
+  Source: https://opengameart.org/content/512-sound-effects-8-bit-style
+  Licence: CC0 1.0
+
+Swishes Sound Pack
+  Author: artisticdude
+  Source: https://opengameart.org/content/swishes-sound-pack
+  Licence: CC0 1.0
+
+80 CC0 RPG SFX
+  Author: rubberduck
+  Source: https://opengameart.org/content/80-cc0-rpg-sfx
+  Licence: CC0 1.0
+
+80 CC0 creature SFX
+  Author: rubberduck
+  Source: https://opengameart.org/content/80-cc0-creature-sfx
+  Licence: CC0 1.0
+
+40 CC0 water / splash / slime SFX
+  Author: rubberduck
+  Source: https://opengameart.org/content/40-cc0-water-splash-slime-sfx
+  Licence: CC0 1.0
+
+Impact Sounds
+  Author: Kenney
+  Source: https://kenney.nl/assets/impact-sounds
+  Licence: CC0 1.0
+
+Interface Sounds
+  Author: Kenney
+  Source: https://kenney.nl/assets/interface-sounds
+  Licence: CC0 1.0
+
+RPG Audio
+  Author: Kenney
+  Source: https://kenney.nl/assets/rpg-audio
+  Licence: CC0 1.0
+
+4 Chiptunes (Adventure)
+  Author: Juhani Junkala (subspaceaudio)
+  Source: https://opengameart.org/content/4-chiptunes-adventure
+  Licence: CC0 1.0
+
+5 Chiptunes (Action)
+  Author: Juhani Junkala (subspaceaudio)
+  Source: https://opengameart.org/content/5-chiptunes-action
+  Licence: CC0 1.0
+
+Files
+
+sfx/swing-1.ogg
+  From: swish-1.wav in Swishes Sound Pack by artisticdude
+  Source: https://opengameart.org/content/swishes-sound-pack
+  Licence: CC0 1.0
+sfx/swing-2.ogg
+  From: swish-5.wav in Swishes Sound Pack by artisticdude
+  Source: https://opengameart.org/content/swishes-sound-pack
+  Licence: CC0 1.0
+sfx/swing-3.ogg
+  From: swish-6.wav in Swishes Sound Pack by artisticdude
+  Source: https://opengameart.org/content/swishes-sound-pack
+  Licence: CC0 1.0
+sfx/swing-heavy-1.ogg
+  From: blade_01.ogg in 80 CC0 RPG SFX by rubberduck
+  Source: https://opengameart.org/content/80-cc0-rpg-sfx
+  Licence: CC0 1.0
+sfx/swing-heavy-2.ogg
+  From: blade_02.ogg in 80 CC0 RPG SFX by rubberduck
+  Source: https://opengameart.org/content/80-cc0-rpg-sfx
+  Licence: CC0 1.0
+sfx/hit-flesh-1.ogg
+  From: impactPunch_medium_000.ogg in Impact Sounds by Kenney
+  Source: https://kenney.nl/assets/impact-sounds
+  Licence: CC0 1.0
+sfx/hit-flesh-2.ogg
+  From: impactPunch_medium_001.ogg in Impact Sounds by Kenney
+  Source: https://kenney.nl/assets/impact-sounds
+  Licence: CC0 1.0
+sfx/hit-flesh-3.ogg
+  From: impactPunch_medium_002.ogg in Impact Sounds by Kenney
+  Source: https://kenney.nl/assets/impact-sounds
+  Licence: CC0 1.0
+sfx/hit-heavy-1.ogg
+  From: impactPunch_heavy_000.ogg in Impact Sounds by Kenney
+  Source: https://kenney.nl/assets/impact-sounds
+  Licence: CC0 1.0
+sfx/hit-heavy-2.ogg
+  From: impactPunch_heavy_001.ogg in Impact Sounds by Kenney
+  Source: https://kenney.nl/assets/impact-sounds
+  Licence: CC0 1.0
+sfx/hit-armour-1.ogg
+  From: impactPlate_medium_000.ogg in Impact Sounds by Kenney
+  Source: https://kenney.nl/assets/impact-sounds
+  Licence: CC0 1.0
+sfx/hit-armour-2.ogg
+  From: impactPlate_medium_001.ogg in Impact Sounds by Kenney
+  Source: https://kenney.nl/assets/impact-sounds
+  Licence: CC0 1.0
+sfx/hit-slime-1.ogg
+  From: slime_01.ogg in 40 CC0 water / splash / slime SFX by rubberduck
+  Source: https://opengameart.org/content/40-cc0-water-splash-slime-sfx
+  Licence: CC0 1.0
+sfx/hit-slime-2.ogg
+  From: slime_03.ogg in 40 CC0 water / splash / slime SFX by rubberduck
+  Source: https://opengameart.org/content/40-cc0-water-splash-slime-sfx
+  Licence: CC0 1.0
+sfx/crit.ogg
+  From: sfx_wpn_sword2.wav in The Essential Retro Video Game Sound Effects Collection [512 sounds] by Juhani Junkala (subspaceaudio)
+  Source: https://opengameart.org/content/512-sound-effects-8-bit-style
+  Licence: CC0 1.0
+sfx/keen.ogg
+  From: glass_001.ogg in Interface Sounds by Kenney
+  Source: https://kenney.nl/assets/interface-sounds
+  Licence: CC0 1.0
+sfx/warp.ogg
+  From: sfx_movement_portal5.wav in The Essential Retro Video Game Sound Effects Collection [512 sounds] by Juhani Junkala (subspaceaudio)
+  Source: https://opengameart.org/content/512-sound-effects-8-bit-style
+  Licence: CC0 1.0
+sfx/dash.ogg
+  From: swish-9.wav in Swishes Sound Pack by artisticdude
+  Source: https://opengameart.org/content/swishes-sound-pack
+  Licence: CC0 1.0
+sfx/jump.ogg
+  From: sfx_movement_jump5.wav in The Essential Retro Video Game Sound Effects Collection [512 sounds] by Juhani Junkala (subspaceaudio)
+  Source: https://opengameart.org/content/512-sound-effects-8-bit-style
+  Licence: CC0 1.0
+sfx/jump-double.ogg
+  From: sfx_movement_jump1.wav in The Essential Retro Video Game Sound Effects Collection [512 sounds] by Juhani Junkala (subspaceaudio)
+  Source: https://opengameart.org/content/512-sound-effects-8-bit-style
+  Licence: CC0 1.0
+sfx/land.ogg
+  From: footstep_concrete_000.ogg in Impact Sounds by Kenney
+  Source: https://kenney.nl/assets/impact-sounds
+  Licence: CC0 1.0
+sfx/block-1.ogg
+  From: impactMetal_light_000.ogg in Impact Sounds by Kenney
+  Source: https://kenney.nl/assets/impact-sounds
+  Licence: CC0 1.0
+sfx/block-2.ogg
+  From: impactMetal_light_001.ogg in Impact Sounds by Kenney
+  Source: https://kenney.nl/assets/impact-sounds
+  Licence: CC0 1.0
+sfx/parry.ogg
+  From: impactBell_heavy_000.ogg in Impact Sounds by Kenney
+  Source: https://kenney.nl/assets/impact-sounds
+  Licence: CC0 1.0
+sfx/hurt.ogg
+  From: sfx_sounds_damage2.wav in The Essential Retro Video Game Sound Effects Collection [512 sounds] by Juhani Junkala (subspaceaudio)
+  Source: https://opengameart.org/content/512-sound-effects-8-bit-style
+  Licence: CC0 1.0
+sfx/defeat.ogg
+  From: sfx_sounds_negative2.wav in The Essential Retro Video Game Sound Effects Collection [512 sounds] by Juhani Junkala (subspaceaudio)
+  Source: https://opengameart.org/content/512-sound-effects-8-bit-style
+  Licence: CC0 1.0
+sfx/foe-death.ogg
+  From: sfx_exp_shortest_soft1.wav in The Essential Retro Video Game Sound Effects Collection [512 sounds] by Juhani Junkala (subspaceaudio)
+  Source: https://opengameart.org/content/512-sound-effects-8-bit-style
+  Licence: CC0 1.0
+sfx/spell-fire.ogg
+  From: spell_fire_06.ogg in 80 CC0 RPG SFX by rubberduck
+  Source: https://opengameart.org/content/80-cc0-rpg-sfx
+  Licence: CC0 1.0
+sfx/spell-ice.ogg
+  From: impactGlass_medium_000.ogg in Impact Sounds by Kenney
+  Source: https://kenney.nl/assets/impact-sounds
+  Licence: CC0 1.0
+sfx/spell-lightning.ogg
+  From: sfx_wpn_laser5.wav in The Essential Retro Video Game Sound Effects Collection [512 sounds] by Juhani Junkala (subspaceaudio)
+  Source: https://opengameart.org/content/512-sound-effects-8-bit-style
+  Licence: CC0 1.0
+sfx/spell-venom.ogg
+  From: spit_01.ogg in 80 CC0 creature SFX by rubberduck
+  Source: https://opengameart.org/content/80-cc0-creature-sfx
+  Licence: CC0 1.0
+sfx/spell-void.ogg
+  From: sfx_movement_portal3.wav in The Essential Retro Video Game Sound Effects Collection [512 sounds] by Juhani Junkala (subspaceaudio)
+  Source: https://opengameart.org/content/512-sound-effects-8-bit-style
+  Licence: CC0 1.0
+sfx/cast.ogg
+  From: spell_01.ogg in 80 CC0 RPG SFX by rubberduck
+  Source: https://opengameart.org/content/80-cc0-rpg-sfx
+  Licence: CC0 1.0
+sfx/resonance.ogg
+  From: sfx_sounds_Blip7.wav in The Essential Retro Video Game Sound Effects Collection [512 sounds] by Juhani Junkala (subspaceaudio)
+  Source: https://opengameart.org/content/512-sound-effects-8-bit-style
+  Licence: CC0 1.0
+sfx/charge-step.ogg
+  From: sfx_sounds_powerup2.wav in The Essential Retro Video Game Sound Effects Collection [512 sounds] by Juhani Junkala (subspaceaudio)
+  Source: https://opengameart.org/content/512-sound-effects-8-bit-style
+  Licence: CC0 1.0
+sfx/charge-release.ogg
+  From: sfx_exp_medium1.wav in The Essential Retro Video Game Sound Effects Collection [512 sounds] by Juhani Junkala (subspaceaudio)
+  Source: https://opengameart.org/content/512-sound-effects-8-bit-style
+  Licence: CC0 1.0
+sfx/boom-1.ogg
+  From: sfx_exp_short_hard1.wav in The Essential Retro Video Game Sound Effects Collection [512 sounds] by Juhani Junkala (subspaceaudio)
+  Source: https://opengameart.org/content/512-sound-effects-8-bit-style
+  Licence: CC0 1.0
+sfx/boom-2.ogg
+  From: sfx_exp_short_soft1.wav in The Essential Retro Video Game Sound Effects Collection [512 sounds] by Juhani Junkala (subspaceaudio)
+  Source: https://opengameart.org/content/512-sound-effects-8-bit-style
+  Licence: CC0 1.0
+sfx/thunder.ogg
+  From: sfx_exp_double1.wav in The Essential Retro Video Game Sound Effects Collection [512 sounds] by Juhani Junkala (subspaceaudio)
+  Source: https://opengameart.org/content/512-sound-effects-8-bit-style
+  Licence: CC0 1.0
+sfx/shatter.ogg
+  From: impactGlass_heavy_000.ogg in Impact Sounds by Kenney
+  Source: https://kenney.nl/assets/impact-sounds
+  Licence: CC0 1.0
+sfx/level-up.ogg
+  From: sfx_sounds_fanfare3.wav in The Essential Retro Video Game Sound Effects Collection [512 sounds] by Juhani Junkala (subspaceaudio)
+  Source: https://opengameart.org/content/512-sound-effects-8-bit-style
+  Licence: CC0 1.0
+sfx/learn.ogg
+  From: sfx_sounds_powerup3.wav in The Essential Retro Video Game Sound Effects Collection [512 sounds] by Juhani Junkala (subspaceaudio)
+  Source: https://opengameart.org/content/512-sound-effects-8-bit-style
+  Licence: CC0 1.0
+sfx/pickup.ogg
+  From: sfx_sounds_high1.wav in The Essential Retro Video Game Sound Effects Collection [512 sounds] by Juhani Junkala (subspaceaudio)
+  Source: https://opengameart.org/content/512-sound-effects-8-bit-style
+  Licence: CC0 1.0
+sfx/coin.ogg
+  From: sfx_coin_single3.wav in The Essential Retro Video Game Sound Effects Collection [512 sounds] by Juhani Junkala (subspaceaudio)
+  Source: https://opengameart.org/content/512-sound-effects-8-bit-style
+  Licence: CC0 1.0
+sfx/chest.ogg
+  From: sfx_coin_cluster3.wav in The Essential Retro Video Game Sound Effects Collection [512 sounds] by Juhani Junkala (subspaceaudio)
+  Source: https://opengameart.org/content/512-sound-effects-8-bit-style
+  Licence: CC0 1.0
+sfx/boss-roar.ogg
+  From: creature_roar_01.ogg in 80 CC0 RPG SFX by rubberduck
+  Source: https://opengameart.org/content/80-cc0-rpg-sfx
+  Licence: CC0 1.0
+sfx/boss-defeat.ogg
+  From: sfx_exp_long1.wav in The Essential Retro Video Game Sound Effects Collection [512 sounds] by Juhani Junkala (subspaceaudio)
+  Source: https://opengameart.org/content/512-sound-effects-8-bit-style
+  Licence: CC0 1.0
+sfx/surge.ogg
+  From: sfx_movement_portal6.wav in The Essential Retro Video Game Sound Effects Collection [512 sounds] by Juhani Junkala (subspaceaudio)
+  Source: https://opengameart.org/content/512-sound-effects-8-bit-style
+  Licence: CC0 1.0
+sfx/gate.ogg
+  From: stones_01.ogg in 80 CC0 RPG SFX by rubberduck
+  Source: https://opengameart.org/content/80-cc0-rpg-sfx
+  Licence: CC0 1.0
+sfx/stage-clear.ogg
+  From: sfx_sounds_fanfare1.wav in The Essential Retro Video Game Sound Effects Collection [512 sounds] by Juhani Junkala (subspaceaudio)
+  Source: https://opengameart.org/content/512-sound-effects-8-bit-style
+  Licence: CC0 1.0
+sfx/map-select.ogg
+  From: sfx_menu_select1.wav in The Essential Retro Video Game Sound Effects Collection [512 sounds] by Juhani Junkala (subspaceaudio)
+  Source: https://opengameart.org/content/512-sound-effects-8-bit-style
+  Licence: CC0 1.0
+sfx/menu-move.ogg
+  From: sfx_menu_move4.wav in The Essential Retro Video Game Sound Effects Collection [512 sounds] by Juhani Junkala (subspaceaudio)
+  Source: https://opengameart.org/content/512-sound-effects-8-bit-style
+  Licence: CC0 1.0
+sfx/menu-confirm.ogg
+  From: sfx_menu_select2.wav in The Essential Retro Video Game Sound Effects Collection [512 sounds] by Juhani Junkala (subspaceaudio)
+  Source: https://opengameart.org/content/512-sound-effects-8-bit-style
+  Licence: CC0 1.0
+sfx/denied.ogg
+  From: sfx_sounds_error2.wav in The Essential Retro Video Game Sound Effects Collection [512 sounds] by Juhani Junkala (subspaceaudio)
+  Source: https://opengameart.org/content/512-sound-effects-8-bit-style
+  Licence: CC0 1.0
+sfx/perfect.ogg
+  From: sfx_sound_bling.wav in The Essential Retro Video Game Sound Effects Collection [512 sounds] by Juhani Junkala (subspaceaudio)
+  Source: https://opengameart.org/content/512-sound-effects-8-bit-style
+  Licence: CC0 1.0
+sfx/lunge.ogg
+  From: swish-7.wav in Swishes Sound Pack by artisticdude
+  Source: https://opengameart.org/content/swishes-sound-pack
+  Licence: CC0 1.0
+sfx/tired.ogg
+  From: cloth1.ogg in RPG Audio by Kenney
+  Source: https://kenney.nl/assets/rpg-audio
+  Licence: CC0 1.0
+music/map.ogg
+  From: Juhani Junkala [Chiptune Adventures] 4. Stage Select.ogg in 4 Chiptunes (Adventure) by Juhani Junkala (subspaceaudio)
+  Source: https://opengameart.org/content/4-chiptunes-adventure
+  Licence: CC0 1.0
+music/stage-1.ogg
+  From: Juhani Junkala [Chiptune Adventures] 1. Stage 1.ogg in 4 Chiptunes (Adventure) by Juhani Junkala (subspaceaudio)
+  Source: https://opengameart.org/content/4-chiptunes-adventure
+  Licence: CC0 1.0
+music/stage-2.ogg
+  From: Juhani Junkala [Chiptune Adventures] 2. Stage 2.ogg in 4 Chiptunes (Adventure) by Juhani Junkala (subspaceaudio)
+  Source: https://opengameart.org/content/4-chiptunes-adventure
+  Licence: CC0 1.0
+music/stage-3.ogg
+  From: Juhani Junkala [Retro Game Music Pack] Level 1.wav in 5 Chiptunes (Action) by Juhani Junkala (subspaceaudio)
+  Source: https://opengameart.org/content/5-chiptunes-action
+  Licence: CC0 1.0
+music/stage-4.ogg
+  From: Juhani Junkala [Retro Game Music Pack] Level 2.wav in 5 Chiptunes (Action) by Juhani Junkala (subspaceaudio)
+  Source: https://opengameart.org/content/5-chiptunes-action
+  Licence: CC0 1.0
+music/boss.ogg
+  From: Juhani Junkala [Chiptune Adventures] 3. Boss Fight.ogg in 4 Chiptunes (Adventure) by Juhani Junkala (subspaceaudio)
+  Source: https://opengameart.org/content/4-chiptunes-adventure
+  Licence: CC0 1.0

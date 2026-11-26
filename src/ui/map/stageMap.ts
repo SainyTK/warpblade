@@ -124,7 +124,7 @@ function close(): void {
 function enter(index: number): void {
   const id = shown[index];
   if (!id || locked() || !mapChoices().includes(id)) return;
-  sfx.learn();
+  sfx.mapSelect();
   close();
   enterStage(id);
 }
@@ -135,15 +135,20 @@ function goUpgrade(): void {
   openPicks("map");
 }
 
+function step(by: number): void {
+  sfx.menuMove();
+  select(selected + by);
+}
+
 const KEYS: Record<string, () => void> = {
-  ArrowLeft: () => select(selected - 1),
-  KeyA: () => select(selected - 1),
-  ArrowRight: () => select(selected + 1),
-  KeyD: () => select(selected + 1),
-  ArrowUp: () => select(selected - COLUMNS),
-  KeyW: () => select(selected - COLUMNS),
-  ArrowDown: () => select(selected + COLUMNS),
-  KeyS: () => select(selected + COLUMNS),
+  ArrowLeft: () => step(-1),
+  KeyA: () => step(-1),
+  ArrowRight: () => step(1),
+  KeyD: () => step(1),
+  ArrowUp: () => step(-COLUMNS),
+  KeyW: () => step(-COLUMNS),
+  ArrowDown: () => step(COLUMNS),
+  KeyS: () => step(COLUMNS),
   KeyJ: () => enter(selected),
   Enter: () => enter(selected),
   Space: () => enter(selected),

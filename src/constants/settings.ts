@@ -6,6 +6,7 @@ export const VOLUME_STEPS = 10;
 export const DEFAULT_SETTINGS: Settings = {
   sound: true,
   volume: 9,
+  music: 6,
   shake: true,
   damageNumbers: true,
   vibration: true,

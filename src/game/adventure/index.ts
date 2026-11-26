@@ -17,6 +17,7 @@ export {
   recordStageKill,
   resetAdventure,
   stageAreaShare,
+  stageBoss,
   stageBounds,
   stageCameraX,
   stageExitX,

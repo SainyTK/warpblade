@@ -1,4 +1,5 @@
 import type { EffectHero, EffectSlot } from "../effectArt";
+import type { ElementId } from "./campaign";
 import type { SlashShape } from "./effect";
 import type { Enemy } from "./enemy";
 import type { InputAction } from "./input";
@@ -48,6 +49,7 @@ export interface DrillSpell {
   speed: number | null;
   delay: number;
   look: DrillSpellLook;
+  element?: ElementId;
   freeze: number;
   status?(foe: Enemy): void;
   damageScale?(foe: Enemy): number;

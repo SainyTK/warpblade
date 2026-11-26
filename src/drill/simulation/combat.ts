@@ -65,9 +65,14 @@ function beginSwing(session: Session, groundStrike: DrillStrikeId, keen = false)
   if (!h.grounded) {
     h.airSlashes++;
   }
-  sfx.swing();
+  const kind = h.grounded ? groundStrike : "air";
+  if (session.profile.strikes[kind].finisher) {
+    sfx.swingHeavy();
+  } else {
+    sfx.swing();
+  }
   h.swing = {
-    kind: h.grounded ? groundStrike : "air",
+    kind,
     age: 0,
     chain: false,
     landed: false,
@@ -76,6 +81,7 @@ function beginSwing(session: Session, groundStrike: DrillStrikeId, keen = false)
     followUp: null,
   };
   if (h.swing.keen) {
+    sfx.chime(2);
     cue(h.x, h.y - 36, "keen");
   }
 }

@@ -7,6 +7,7 @@ import { surfaceBelow } from "../../game/world";
 import { sfx } from "../../services/audio";
 import type { DrillSpell, ElementImpact, ElementProjectile, Session, Side } from "../../types/drill";
 import { clamp } from "../../utils/math";
+import { spellElement } from "../../utils/spellElement";
 import { SPELL_HEIGHT, SPELL_IMPACT_TIME, TARGET_RADIUS } from "../constants";
 import { freezeEnemy, strikeEnemy } from "./enemyContact";
 
@@ -43,7 +44,7 @@ function impact(session: Session, spell: DrillSpell, x: number, y: number, face:
 export function launchSpell(session: Session, spell: DrillSpell): void {
   const h = session.fighter;
   const { x, y, face } = h;
-  sfx.cast();
+  sfx.spell(spellElement(spell));
   emitSkillEvent({ type: "cast", ability: spell.id });
   if (spell.speed !== null) {
     session.elementProjectiles.push({ spell, x: x + face * 8, y: y - SPELL_HEIGHT, face, distance: 0 });
