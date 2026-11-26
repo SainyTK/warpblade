@@ -20,6 +20,8 @@ export const NUMBER_INK: Record<DamageTag | CueWord, number> = {
   keen: hex("#ffd76b"),
   parry: hex("#ffd27a"),
   broken: hex("#ff6a5a"),
+  noMp: hex("#7fb8ff"),
+  notReady: hex("#b8b2d8"),
 };
 /** numbers of a skill's own hits in duller inks of the same hues */
 export const NUMBER_INK_QUIET: Partial<Record<DamageTag | CueWord, number>> = {

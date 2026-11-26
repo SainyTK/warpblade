@@ -2,7 +2,7 @@ import { ellipseRing, fleck, glow, hairline, place, sparkle } from "../../engine
 import type { Fighter, Session } from "../../types/drill";
 import { TAU } from "../../utils/math";
 import { CHARGE_START } from "../constants";
-import { chargedTier } from "../simulation";
+import { payableTier } from "../simulation";
 
 const AURAS = {
   warmup: { radius: 11, motes: 4, rings: 0, strength: 0.3 },
@@ -17,7 +17,7 @@ export function drawSkillCharge({ profile, fighter }: Session): void {
   if (chargeHeldFor === null || chargeHeldFor < CHARGE_START) {
     return;
   }
-  const tier = chargedTier(profile, chargeHeldFor);
+  const tier = fighter.chargeRecharge.remaining > 0 ? undefined : payableTier(profile, chargeHeldFor);
   const kind = tier?.look ?? "warmup";
   const color = tier?.color ?? 0xb5d5ff;
   const { radius, motes, rings, strength } = AURAS[kind];

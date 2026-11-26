@@ -25,8 +25,8 @@ export const BRYNN_DRILL: DrillProfile = {
     attack:
       "Swing Anvilheart. Press again during the swing to chain Wide Sweep, Rising Heave and Anvil Slam. In the air, the Falling Slam.",
     ultimate: "Hold to charge Crimson Fall through four levels. Release to use the highest level reached.",
-    cast: "Prepare the selected spell. Press again when ready to cast, or press during a swing to pour it into the blade for three hits.",
-    cycle: "Cycle Rend, Quake and Ember Arc before preparing one.",
+    cast: "Cast the selected spell at once, or the next ready one. During a swing, pour it into the blade for three hits.",
+    cycle: "Select the next of Rend, Quake and Ember Arc.",
   },
   modifiers: () => brynnModifiers(NEUTRAL_MODIFIERS),
   hooks: BRYNN_DRILL_HOOKS,

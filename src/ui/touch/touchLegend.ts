@@ -1,5 +1,5 @@
-import { TOUCH_BUTTONS } from "../../constants/touch";
-import { drillActionText, heroDrill } from "../../drill";
+import { DRILL_WARP_ACCENT, TOUCH_BUTTONS } from "../../constants/touch";
+import { DRILL_WARP_LABEL, drillActionText, heroDrill } from "../../drill";
 import { heroJob } from "../../game/hero/job";
 import { character } from "../../game/state";
 import type { ButtonLook } from "../../types/touch";
@@ -44,32 +44,35 @@ export function touchLegend(adventure: boolean): [HTMLElement, string][] {
     face((c) => drawButtonFace(c, STICK_LOOK, stickIcon(d.direction), false)),
     `Stick ${d.direction}: ${adventure && d.direction === "down" ? "Drop through a ledge" : d.label}`,
   ]);
-  const buttons = TOUCH_BUTTONS.filter(({ action }) => !drill || action !== "ultimate").map(
-    (spec): [HTMLElement, string] => {
-      const look = { ...buttonLook(spec, false), ready: true, cooldown: 0, affordable: 4, charge: -1 };
-      const text = texts[spec.action];
-      let hint = text.hint;
-      if (adventure && spec.action === "up") {
-        hint = "Tap again to double jump. Jump upward along a wall or steer away to kick off.";
-      }
-      if (adventure && spec.action === "dash") hint = `${hint}. Jump during the dodge to keep your speed.`;
-      if (drillText) {
-        hint =
-          spec.action === "attack" ? `${drillText.attack} ${drillText.ultimate}` : (drillText[spec.action] ?? hint);
-      }
-      return [
-        face((c) =>
-          drawButtonFace(
-            c,
-            look,
-            touchIcon(spec.action, selection),
-            drill ? spec.action === "attack" : spec.action === "ultimate",
-          ),
+  const buttons = TOUCH_BUTTONS.map((spec): [HTMLElement, string] => {
+    const look = { ...buttonLook(spec, false), ready: true, cooldown: 0, affordable: 4, charge: -1 };
+    const text = texts[spec.action];
+    let hint = text.hint;
+    if (adventure && spec.action === "up") {
+      hint = "Tap again to double jump. Jump upward along a wall or steer away to kick off.";
+    }
+    if (adventure && spec.action === "dash") hint = `${hint}. Jump during the dodge to keep your speed.`;
+    let label = text.label;
+    if (drillText) {
+      hint = spec.action === "attack" ? `${drillText.attack} ${drillText.ultimate}` : (drillText[spec.action] ?? hint);
+    }
+    if (drillText && spec.action === "ultimate") {
+      look.accent = DRILL_WARP_ACCENT;
+      label = DRILL_WARP_LABEL;
+      hint = drillText.warp ?? hint;
+    }
+    return [
+      face((c) =>
+        drawButtonFace(
+          c,
+          look,
+          touchIcon(spec.action, selection, drill),
+          drill ? spec.action === "attack" : spec.action === "ultimate",
         ),
-        `${text.label}: ${hint}`,
-      ];
-    },
-  );
+      ),
+      `${label}: ${hint}`,
+    ];
+  });
   if (!adventure) return [...stick, ...buttons];
   const talk = document.createElement("span");
   talk.className = "cap";

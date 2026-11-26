@@ -12,7 +12,7 @@ const ARC = 70;
 export const DUSK_THREAD_DRILL: VesperDrillSkill = {
   id: ID,
   modify(m, { values }) {
-    m.preparation *= values.preparation ?? 1;
+    m.spellCooldown *= values.preparation ?? 1;
   },
   spellHit(foe, spell, { values, evolved }) {
     if (spell.id !== "thread") {

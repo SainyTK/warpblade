@@ -1,4 +1,4 @@
-import { drillSession } from "../../../../../drill";
+import { drillSession, hastenSpells, readySpell } from "../../../../../drill";
 import type { AldricDrillSkill } from "../../../types/drillSkill";
 import { foesNear } from "../../strike";
 import { abilityStrike } from "../strike";
@@ -8,7 +8,7 @@ const ID = "al_vow";
 export const IRON_VOW_DRILL: AldricDrillSkill = {
   id: ID,
   modify(m, { values }) {
-    m.preparation *= values.preparation;
+    m.spellCooldown *= values.preparation;
     m.infusionHits += values.infusion ?? 0;
   },
   slashed(strike, _landed, { values, evolved }) {
@@ -21,11 +21,11 @@ export const IRON_VOW_DRILL: AldricDrillSkill = {
     if (!h.swordInfusion && values.charge) {
       h.swordInfusion = { spell: book.selected, remainingHits: values.charge, age: 0 };
     }
-    if (book.preparation && values.hasten) {
-      book.preparation.remaining = Math.max(0, book.preparation.remaining - values.hasten);
+    if (values.hasten) {
+      hastenSpells(book, values.hasten);
     }
-    if (evolved && !book.preparation) {
-      book.preparation = { duration: 0, remaining: 0, readyAge: 0 };
+    if (evolved) {
+      readySpell(book, book.selected);
     }
     if (values.burst) {
       const spell = book.selected;

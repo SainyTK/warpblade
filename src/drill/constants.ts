@@ -33,10 +33,14 @@ export const drillMotion = (profile: DrillProfile): DrillMotion => ({ ...MOTION,
 
 export const DASH_LOCKOUT = MOTION.dashTime + MOTION.dashRecovery;
 export const WARP_TRACE_LIFE = 0.32;
-export const SPELL_PREPARATION = 3;
 export const INFUSION_HITS = 3;
 export const SPELL_SELECTION_CUE = 0.9;
 export const SPELL_RELEASE_RECOVERY = 0.19;
 export const SPELL_IMPACT_TIME = 0.38;
 export const KEEN_WINDOW = KEEN.window;
 export const CHARGE_START = 0.2;
+export const CHARGE_PRICE = {
+  mp: [8, 16, 26, 38],
+  cooldown: [1.6, 3, 4.6, 6.5],
+} as const;
+export const CHARGE_REFUSED_CUE_LIFT = 44;

@@ -125,9 +125,12 @@ From there, play again, go back to the main menu or visit the Shop.
 
 - **One moveset for every hero.** Every hero plays on the same buttons and fills them with their own moves.
   `J` chains up to three ground slashes and a jump slash, and held, it charges four tiers of the hero's charged skill (Kael's Crystal Crescent, Rift Spires, Astral Rift and Crystal Nova).
-  `L` dashes on the ground or once in the air; jump out of a ground dash to carry its speed, and press `L` during a slash to throw the sword and warp strike the foe ahead.
+  A bar over the hero fills through the four tier marks and names the tier reached; each tier costs more MP and recharges longer.
+  `L` dashes on the ground or once in the air; jump out of a ground dash to carry its speed.
+  `U` throws the sword and warp strikes the nearest foe ahead whenever it is ready.
   `K` guards from the front, a tap just before a blow lands parries it and reflects the blow, and `K` during a slash opens an enhanced parry.
-  `I` prepares the selected spell, and a second `I` casts it once it is ready, or sets it into the sword during a slash for the next three hits.
+  `I` casts the selected spell at once; every spell and Rift Art has its own cooldown and MP cost, and when the selected one is recharging or MP is short, `I` casts the next ready one, so pressing it fast fires several spells in a row.
+  `I` during a slash sets the spell into the sword for the next three hits, and that also spends its cooldown and MP.
   `O` cycles the spells: the hero's own three, then every Rift Art earned.
 - **Combos that play the same every time.** Each press of J plays one whole blow with a wind-up, a strike that holds through the hit and a follow-through, in the same order wherever the foes stand.
   A swing hits every foe its arc passes through, flyers at head height included.
@@ -213,10 +216,11 @@ Every hero plays on the same keys in the campaign.
 | `S` or `Down` | Drop through a ledge |
 | `E` | Talk to a mentor to spend skill points; on the Rift Map, Upgrade skills |
 | `J` | Slash: up to three ground slashes, one in the air. Press again just after a blow lands for a Keen hit |
-| `J` held | Charge the hero's charged skill through four tiers, release to strike |
-| `L` or `Shift` | Dash on the ground or once in the air. During a slash, warp strike the foe ahead |
+| `J` held | Charge the hero's charged skill through four tiers, release to strike. Each tier costs more MP and has its own cooldown |
+| `L` or `Shift` | Dash on the ground or once in the air |
+| `U` | Throw the sword and warp strike the nearest foe ahead |
 | `K` | Guard: hold to block from the front, tap just before a blow lands to parry. During a slash, an enhanced parry |
-| `I` | Prepare the selected spell or Rift Art, press again when it is ready to cast. During a slash, set it into the sword |
+| `I` | Cast the selected spell or Rift Art, or the next ready one when it is recharging or MP is short. During a slash, set it into the sword |
 | `O` | Switch to the next spell or Rift Art |
 | `M` | Sound on or off |
 | `Esc` or `P` | Pause and open the menu |
@@ -230,6 +234,7 @@ The stick on the left appears wherever your left thumb lands.
 Push it to walk, push it all the way to run, push up to jump and down for the down variants.
 The buttons on the right sit in an arc around a large Attack button: tap it to attack, and hold it to warp.
 Around it sit Jump, Dodge, Guard, an ability button that casts on a tap and casts the wide form on a hold, Switch, and Ultimate.
+In the campaign, holding Attack charges the charged skill, the ability button casts the next ready spell, and the Ultimate button becomes Warp.
 Each hero's buttons carry that hero's own names where they differ.
 Several fingers work at once, and a thumb can slide from one button to the next.
 Hold Ultimate to charge it: its ring fills one quarter per level, and you strike when you let go.

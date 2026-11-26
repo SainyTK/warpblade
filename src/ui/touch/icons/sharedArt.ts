@@ -18,6 +18,21 @@ export const DODGE: IconArt = {
   colors: { W: ICON_WHITE, V: hex("#b4a8ff") },
 };
 
+export const WARP_STRIKE: IconArt = {
+  rows: [
+    ".......WW",
+    "......WCW",
+    ".....WCW.",
+    "C...WCW..",
+    ".C.WCW...",
+    "..GWW....",
+    ".CGG.....",
+    "C..CC....",
+    "...C.C...",
+  ],
+  colors: { W: ICON_WHITE, C: hex("#7fe3ff"), G: hex("#b4a8ff") },
+};
+
 /** the jump and the ultimate look the same for every hero */
 export const JUMP: IconArt = {
   rows: ["....W....", "...WWW...", "..WW.WW..", ".WW...WW.", "....M....", "...MMM...", "..MM.MM..", ".MM...MM."],

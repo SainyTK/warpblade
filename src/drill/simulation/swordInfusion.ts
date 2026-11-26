@@ -1,7 +1,8 @@
+import { MP_PER_HIT } from "../../constants/combat";
 import { enemyCenter } from "../../game/enemies/enemy";
 import { spendRiposte } from "../../game/meleeHit";
 import { emitSkillEvent } from "../../game/skills/events";
-import { hero } from "../../game/state";
+import { hero, progress } from "../../game/state";
 import type { DrillSpell, Fighter, Session, Side } from "../../types/drill";
 import type { Enemy } from "../../types/enemy";
 import { INFUSION_HITS } from "../constants";
@@ -28,6 +29,7 @@ export function hitWithSword(
   if (!strikeEnemy(profile, enemy, damage + bonus, fighter.x, "attacks", finisher, finisher, keen)) {
     return false;
   }
+  hero.mp = Math.min(progress.stats.mp, hero.mp + MP_PER_HIT);
   if (spell) {
     const [x, y] = enemyCenter(enemy);
     session.elementImpacts.push({ spell, x, y, face, age: 0, fromSword: true });

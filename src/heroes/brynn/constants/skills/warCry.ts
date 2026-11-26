@@ -21,12 +21,12 @@ const LEVELS = drillLevels(
   ],
   [
     { text: "A warp arrival infuses the blade with the selected spell for 1 hit.", drill: { hits: 1 } },
-    { text: "New: spells prepare 15% faster.", drill: { prepare: 0.85 } },
+    { text: "New: spell cooldowns 15% shorter.", drill: { prepare: 0.85 } },
     { text: "New: infusions last one hit longer.", drill: { infusion: 1 } },
-    { text: "Spells prepare 25% faster.", drill: { prepare: 0.75 } },
-    { text: "New: an arrival takes 1 s off a preparation.", drill: { hasten: 1 } },
+    { text: "Spell cooldowns 25% shorter.", drill: { prepare: 0.75 } },
+    { text: "New: an arrival takes 1 s off every spell cooldown.", drill: { hasten: 1 } },
     { text: "The arrival infuses for 2 hits.", drill: { hits: 2 } },
-    { text: "Spells prepare 40% faster.", drill: { prepare: 0.6 } },
+    { text: "Spell cooldowns 40% shorter.", drill: { prepare: 0.6 } },
     { text: "Infusions last two hits longer; the arrival takes 2 s off.", drill: { infusion: 2, hasten: 2 } },
   ],
 );

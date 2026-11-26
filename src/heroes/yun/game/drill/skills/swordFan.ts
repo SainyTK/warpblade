@@ -13,7 +13,7 @@ const fan = { release: null as object | null };
 export const SWORD_FAN_DRILL: YunDrillSkill = {
   id: ID,
   modify(m, { values }) {
-    m.preparation *= values.preparation ?? 1;
+    m.spellCooldown *= values.preparation ?? 1;
   },
   spellHit(foe, spell, { values }) {
     if (spell.id !== "stream") {

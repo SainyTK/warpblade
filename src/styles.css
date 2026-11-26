@@ -311,7 +311,7 @@ body {
 }
 /* the ultimate recharges for longer than anything else: the row dims with a bar filling under it */
 .ult.wait {
-  color: var(--line);
+  color: var(--muted);
 }
 .ult.wait::after {
   content: "";
@@ -443,6 +443,7 @@ body[data-hud="inside"] .build-reserve {
 /* an ability or the warp the hero cannot pay for right now: struck through in red */
 .el.poor {
   text-decoration: line-through var(--hp) 1px;
+  opacity: 0.5;
 }
 .el.wait::after {
   content: "";

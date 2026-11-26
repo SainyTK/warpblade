@@ -2,7 +2,7 @@ import { STAMINA } from "../constants/combat";
 import { ENEMIES } from "../constants/enemies";
 import { ULT_LEVELS } from "../constants/ultimate";
 import { STAGE_WAVES } from "../constants/waves";
-import { chargedTier, drillSession, usesDrill } from "../drill";
+import { canPayTier, drillSession, payableTier, rechargeLeft, usesDrill } from "../drill";
 import { isAdventure, stageStatus as stageLine } from "../game/adventure";
 import { canAffordUlt, ultRecharge } from "../game/hero/ultimate";
 import { character, game, hero, progress } from "../game/state";
@@ -59,9 +59,9 @@ export function updateHud(): void {
   const session = usesDrill() ? drillSession() : undefined;
   const drill = session !== undefined;
   const fighter = session?.fighter;
-  const tier = session && (fighter?.skillCast?.tier ?? chargedTier(session.profile, fighter?.chargeHeldFor ?? 0));
+  const tier = session && (fighter?.skillCast?.tier ?? payableTier(session.profile, fighter?.chargeHeldFor ?? 0));
   const ultimateName = drill ? (tier?.name ?? "Charged skill") : character.special.name;
-  ultTab.update(drill ? 0 : ultRecharge());
+  ultTab.update(fighter ? rechargeLeft(fighter.chargeRecharge) : ultRecharge());
   if (hero.denied.ult > ultDenied) ultTab.jolt();
   ultDenied = hero.denied.ult;
   const leader = game.enemies.find((e) => e.rank !== "minion");
@@ -74,8 +74,9 @@ export function updateHud(): void {
       ? `STAGE ${game.stage}  WAVE ${game.wave}/${STAGE_WAVES}`
       : stageLine().toUpperCase();
   const time = minutesSeconds(game.clock);
-  const affordable = drill
-    ? (tier?.level ?? 0)
+  const affordable = session
+    ? (tier?.level ??
+      (session.fighter.chargeRecharge.remaining > 0 ? 0 : session.profile.tiers.filter(canPayTier).length))
     : hero.ultCd > 0
       ? 0
       : ULT_LEVELS.filter((_, i) => canAffordUlt(i + 1)).length;

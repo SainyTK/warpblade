@@ -2,6 +2,7 @@ import { HAPTIC_MS } from "../../constants/touch";
 import { sfx } from "../../services/audio";
 import { haptics } from "../../services/haptics";
 import type { TouchButtonAction } from "../../types/touch";
+import { buttonAction } from "./buttonAction";
 import type { TouchButton, TouchController } from "./controller";
 import { drop, hold } from "./touchInput";
 
@@ -55,9 +56,9 @@ export function bindButtons(ctl: TouchController): {
     const before = fingers.get(pointerId) ?? null;
     const now = hitTest(targets, x, y);
     if (now === before && !first) return;
-    if (before) drop(source(pointerId), before);
+    if (before) drop(source(pointerId), buttonAction(before));
     if (now) {
-      hold(source(pointerId), now);
+      hold(source(pointerId), buttonAction(now));
       haptics.pulse(first ? HAPTIC_MS.press : HAPTIC_MS.slide);
     }
     fingers.set(pointerId, now);
@@ -65,7 +66,7 @@ export function bindButtons(ctl: TouchController): {
   };
   const lift = (pointerId: number) => {
     const action = fingers.get(pointerId);
-    if (action) drop(source(pointerId), action);
+    if (action) drop(source(pointerId), buttonAction(action));
     fingers.delete(pointerId);
     sync();
   };

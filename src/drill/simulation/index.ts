@@ -3,15 +3,18 @@ import { drillMotion } from "../constants";
 import { tickSkill, trackChargePress } from "./chargedSkill";
 import { canInterrupt, fight } from "./combat";
 import { ageDefenseCue, readGuard } from "./defense";
-import { queueFollowUp } from "./followUp";
+import { queueFollowUp, readWarp } from "./followUp";
 import { move } from "./movement";
+import { idleRecharge, tickRecharge } from "./recharge";
 import { createSpellBook, readSpellBook, tickSpellBook, tickSpellRelease } from "./spellBook";
 import { tickSpellStrikes } from "./spellStrike";
 import { tickWarpStrike, warpLocksActions } from "./warpStrike";
 
-export { chargedTier } from "./chargedSkill";
+export { canPayTier, chargedTier, payableTier, tierMp } from "./chargedSkill";
 export { canInterrupt } from "./combat";
 export { defend } from "./defense";
+export { rechargeLeft } from "./recharge";
+export { canPaySpell, hastenSpells, readySpell, spellReady, spellRecharge } from "./spellBook";
 
 export function createSession(profile: DrillProfile, x: number, y: number): Session {
   const modifiers = profile.modifiers();
@@ -47,6 +50,7 @@ export function createSession(profile: DrillProfile, x: number, y: number): Sess
       enhancedGuard: 0,
       spellRelease: null,
       chargeHeldFor: null,
+      chargeRecharge: idleRecharge(),
       skillCast: null,
       spellBook: createSpellBook(profile),
       swordInfusion: null,
@@ -67,6 +71,7 @@ function buffer(window: number, pressed: boolean, remaining: number, dt: number)
 export function ageDrillCues(session: Session, dt: number): void {
   const h = session.fighter;
   tickSpellBook(h.spellBook, dt);
+  tickRecharge(h.chargeRecharge, dt);
   if (h.swordInfusion) {
     h.swordInfusion.age += dt;
   }
@@ -93,6 +98,7 @@ export function stepSession(session: Session, input: DrillInput, dt: number): vo
     if (!warpLocksActions(h)) {
       readSpellBook(session, input);
     }
+    readWarp(session, input);
     h.jumpBuffer = buffer(session.motion.buffer, input.jump, h.jumpBuffer, dt);
     h.dashBuffer =
       h.dashReadyIn === 0 && !h.swing?.followUp ? buffer(session.motion.buffer, dashPress, h.dashBuffer, dt) : 0;
