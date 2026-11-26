@@ -1,0 +1,14 @@
+{
+  "height": 76,
+  "imagePixelsPerArtPixel": 2,
+  "pad": 2,
+  "portrait": "portrait-1.png",
+  "poses": {
+    "idle": { "source": "body-3.png", "lantern": [60, 200, 262, 600], "waist": 900, "crystal": [160, 440] },
+    "talk": { "source": "talk-3.png", "lantern": [70, 195, 255, 595], "waist": 880, "crystal": [168, 432] }
+  },
+  "clips": {
+    "idle": { "fps": 3, "breath": [0, 0, 1, 1, 1, 0], "swing": [0, 2, 3, 2, 0, -2] },
+    "talk": { "fps": 3, "breath": [0, 1, 1, 0], "swing": [0, 1, 0, -1] }
+  }
+}

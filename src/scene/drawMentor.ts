@@ -1,6 +1,10 @@
 import { W } from "../constants/stage";
 import { castShadow, fleck, glow, hairline, place, polygon, px } from "../engine/frame";
+import { blit } from "../engine/sprite";
 import { nearbyMentor, stageMentor } from "../game/adventure";
+import { game, hero } from "../game/state";
+import { type MentorPose, mentorFrame } from "../mentorArt";
+import type { Point } from "../types/world";
 import { rgb } from "../utils/color";
 
 const INK = rgb(26, 23, 37);
@@ -10,6 +14,12 @@ const LEATHER = rgb(107, 65, 52);
 const FACE = rgb(212, 166, 114);
 const GOLD = rgb(245, 195, 101);
 const SPARK = rgb(255, 235, 180);
+const CRYSTAL = rgb(170, 140, 255);
+const PROCEDURAL_MARKER_Y = -39;
+const MARKER_GAP = 5;
+
+let pose: MentorPose = "idle";
+let poseSince = 0;
 
 const OUTLINE = [
   [-11, -1],
@@ -53,7 +63,29 @@ const MASK = [
 export function drawMentor(cameraX: number, time: number): void {
   const mentor = stageMentor();
   if (!mentor || mentor.x < cameraX - 22 || mentor.x > cameraX + W + 22) return;
+  const near = nearbyMentor() !== null;
+  const next: MentorPose = near || game.mode === "pick" ? "talk" : "idle";
+  if (next !== pose) {
+    pose = next;
+    poseSince = time;
+  }
   castShadow(mentor.x, mentor.y, 12, 2.5, 0.45);
+  const markerY = drawArt(mentor, time) ?? drawProcedural(mentor, time);
+  if (!near) drawMarker(time, markerY);
+}
+
+function drawArt(mentor: Point, time: number): number | null {
+  const frame = mentorFrame(pose, time - poseSince);
+  if (!frame) return null;
+  const flip = hero.x < mentor.x;
+  blit(frame.image, mentor.x, mentor.y, flip);
+  place(mentor.x, mentor.y, flip);
+  glow(frame.crystalX, frame.crystalY, 10, CRYSTAL, 0.2 + Math.sin(time * 2.4) * 0.05);
+  place(mentor.x, mentor.y);
+  return -frame.image.oy / frame.image.res - MARKER_GAP;
+}
+
+function drawProcedural(mentor: Point, time: number): number {
   place(mentor.x, mentor.y);
   polygon(OUTLINE, INK);
   polygon(ROBE, CLOAK);
@@ -68,11 +100,11 @@ export function drawMentor(cameraX: number, time: number): void {
   px(10, -23, GOLD);
   px(11, -24, SPARK);
   glow(11, -24, 12, GOLD, 0.26 + Math.sin(time * 5) * 0.05);
-  if (!nearbyMentor()) drawMarker(time);
+  return PROCEDURAL_MARKER_Y;
 }
 
-function drawMarker(time: number): void {
-  const y = -39 + Math.sin(time * 3) * 1.4;
+function drawMarker(time: number, top: number): void {
+  const y = top + Math.sin(time * 3) * 1.4;
   polygon(
     [
       [0, y - 3],

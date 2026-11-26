@@ -4,6 +4,7 @@ import type { SpriteImage } from "../types/sprite";
 import { decodeSheet } from "./decode";
 import type { FoeArtClip, FoeArtSheet } from "./types";
 
+export { decodeSheet } from "./decode";
 export type { FoeArtClip, FoeArtSheet } from "./types";
 
 const atlases = import.meta.glob<string>("./assets/*/atlas.png", { eager: true, query: "?url", import: "default" });
