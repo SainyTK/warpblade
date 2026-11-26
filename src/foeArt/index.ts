@@ -46,7 +46,9 @@ function withVariant(variant: string | null, names: readonly (string | null)[]):
 
 function clipFor(e: Enemy, sheet: FoeArtSheet): { clip: FoeArtClip; age: number } | null {
   const hurt = e.stagger > 0 || e.stun > 0 || e.air;
-  const names = withVariant(kindOf(e.type).artVariant?.(e) ?? null, [
+  const kind = kindOf(e.type);
+  const age = kind.artAge?.(e) ?? e.st;
+  const names = withVariant(kind.artVariant?.(e) ?? null, [
     hurt ? HURT_CLIP : null,
     e.phase > 1 ? `${e.state}${PHASE_SUFFIX}` : null,
     e.state,
@@ -55,7 +57,7 @@ function clipFor(e: Enemy, sheet: FoeArtSheet): { clip: FoeArtClip; age: number 
   ]);
   for (const name of names) {
     if (name && sheet.clips[name])
-      return { clip: sheet.clips[name], age: name.endsWith(DEFAULT_CLIP) ? e.seed + e.st : e.st };
+      return { clip: sheet.clips[name], age: name.endsWith(DEFAULT_CLIP) ? e.seed + age : age };
   }
   return null;
 }

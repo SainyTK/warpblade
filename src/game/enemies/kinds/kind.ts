@@ -46,4 +46,5 @@ export interface EnemyKind {
   /** chance of a heal orb, when not the usual 6% */
   heartChance?: number;
   artVariant?(e: Enemy): string | null;
+  artAge?(e: Enemy): number;
 }
