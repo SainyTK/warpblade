@@ -1,5 +1,6 @@
 import "./heroes";
 import { MAX_FRAME, STEP } from "./constants/stage";
+import { preloadFoeArt } from "./foeArt";
 import { frameDriver } from "./game/frameDriver";
 import { chooseCharacter, game } from "./game/state";
 import { stepGame } from "./game/step";
@@ -30,7 +31,7 @@ import { bindPickDialog, syncPickDialog } from "./ui/skills/pickDialog";
 import { bindTouch, syncTouch } from "./ui/touch/bindTouch";
 import { bindDiscoveryToasts } from "./ui/unlocks/discoveryToast";
 
-await preloadGeneratedRoster(CHARACTERS);
+await Promise.all([preloadGeneratedRoster(CHARACTERS), preloadFoeArt()]);
 startAnalytics();
 const trainingHero = CHARACTERS.find((c) => c.id === readTrainingHero());
 const firstHero =

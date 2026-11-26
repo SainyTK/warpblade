@@ -1,4 +1,5 @@
 import { STEP } from "../constants/stage";
+import { foeArtImage } from "../foeArt";
 import { kindOf } from "../game/enemies/kinds";
 import { game } from "../game/state";
 import type { Enemy } from "../types/enemy";
@@ -34,7 +35,8 @@ function keep(to: Held["image"], from: SpriteImage): void {
   to.box = { ...box };
 }
 
-const poseOf = (e: Enemy): string => `${e.state}:${e.stun > 0}:${Boolean(e.air)}:${e.frozen > 0}:${e.stagger > 0}`;
+const poseOf = (e: Enemy): string =>
+  `${e.state}:${e.stun > 0}:${Boolean(e.air)}:${e.frozen > 0}:${e.stagger > 0}:${e.phase}`;
 
 /** the foe's picture to show this frame */
 export function foeSprite(e: Enemy): SpriteImage {
@@ -42,7 +44,7 @@ export function foeSprite(e: Enemy): SpriteImage {
   let h = held.get(e);
   const pose = poseOf(e);
   if (h && h.pose === pose && t >= h.at && t - h.at < HOLD) return h.image;
-  const drawn = kindOf(e.type).draw(e, t);
+  const drawn = foeArtImage(e, t) ?? kindOf(e.type).draw(e, t);
   if (!h) {
     const empty = { x0: 0, y0: 0, x1: -1, y1: -1 };
     h = {
