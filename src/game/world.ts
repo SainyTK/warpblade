@@ -7,7 +7,7 @@ import { stagePlatforms, stageWalls } from "./adventure";
 import { heroSlot } from "./coopHooks";
 import { fxRng, game, hero, particles } from "./state";
 
-const REDUCED_MOTION = matchMedia("(prefers-reduced-motion: reduce)").matches;
+export const REDUCED_MOTION = matchMedia("(prefers-reduced-motion: reduce)").matches;
 
 /** the top of the highest floor at x that is at or below y */
 export function surfaceBelow(x: number, y: number): number {

@@ -1,3 +1,4 @@
+import type { HitWeight } from "./hit";
 /** night foes, the bosses, and the foes of each era: day, rain, twilight and abyss */
 export type EnemyType =
   | "wisp"
@@ -81,6 +82,7 @@ export interface Enemy {
   /** how long the hero has been on the side it is not facing */
   turn: number;
   flash: number;
+  struck: HitWeight;
   frozen: number;
   burn: number;
   burnTick: number;

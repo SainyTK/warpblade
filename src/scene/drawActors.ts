@@ -1,6 +1,7 @@
 import { STAGGER } from "../constants/combat";
 import { HP_BAR, MOTE_COLORS, STUN_STAR, STUN_STAR_DIM } from "../constants/effectColors";
 import { HERO_CANVAS } from "../constants/hero";
+import { HIT_WEIGHTS, REDUCED_SQUASH, SQUASH_BY_RANK } from "../constants/hitFeel";
 import { COIN_GOLD, ENEMY_COLORS, PAL } from "../constants/palette";
 import { MOTE_PIXELS } from "../constants/pickupPixels";
 import { ULT_LEVELS } from "../constants/ultimate";
@@ -17,6 +18,7 @@ import { skin } from "../game/hero/skin";
 import { canAffordUlt } from "../game/hero/ultimate";
 import { game, hero } from "../game/state";
 import { fieldPace } from "../game/timeFields";
+import { REDUCED_MOTION } from "../game/world";
 import type { Enemy } from "../types/enemy";
 import { hex, mix, WHITE } from "../utils/color";
 import { clamp, TAU } from "../utils/math";
@@ -42,7 +44,7 @@ const STAR_ARMS = [
  * a struck foe flashes toward white: nearly white on the blow, easing back over the flash, and never a flat white
  * shape, so its outline and markings stay readable through a hit-stop
  */
-const HIT_FLASH = { peak: 0.6, rest: 0.3, life: 0.1 } as const;
+const HIT_FLASH = { rest: 0.3, life: 0.1 } as const;
 /** how far a struck hero flashes toward white, short of a flat white shape */
 const HERO_FLASH = 0.75;
 /** ring colors for ultimate levels 3 and 4; levels 1 and 2 take the hero's own light */
@@ -109,7 +111,10 @@ export function drawEnemies(): void {
     const tremble = winding ? (Math.floor(game.t * 30) % 2 ? 1 : -1) : 0;
     // a struck foe is knocked away from the hero and eases back while its hit flash lasts
     const away = Math.sign(e.x - hero.x) || 1;
-    const recoil = away * STAGGER.kick * clamp(e.flash / HIT_FLASH.life);
+    const struckFeel = HIT_WEIGHTS[e.struck];
+    const blow = clamp(e.flash / HIT_FLASH.life);
+    const recoil = away * STAGGER.kick * struckFeel.recoil * blow;
+    const squash = struckFeel.squash * SQUASH_BY_RANK[e.rank] * blow * blow * (REDUCED_MOTION ? REDUCED_SQUASH : 1);
     // a staggered foe tips back from the blow and rights itself as the stagger runs out
     const down = e.stun > 0 && !e.air && e.rank === "minion" && !kind.flies;
     const lean = down
@@ -121,10 +126,10 @@ export function drawEnemies(): void {
     const time = timeTint(e);
     const tint =
       e.flash > 0 ? WHITE : e.frozen > 0 ? PAL.ice[4] : time.amount ? time.tint : e.chill > 0 ? PAL.ice[3] : 0;
-    const struck = HIT_FLASH.rest + (HIT_FLASH.peak - HIT_FLASH.rest) * clamp(e.flash / HIT_FLASH.life);
+    const struck = HIT_FLASH.rest + (struckFeel.flash - HIT_FLASH.rest) * blow;
     const tintAmount = e.flash > 0 ? struck : e.frozen > 0 ? 0.5 : time.amount ? time.amount : e.chill > 0 ? 0.3 : 0;
     if (e.elite) drawEliteRing(e, s, at);
-    blit(s, at, e.y, e.face < 0, { tint, tintAmount, lean });
+    blit(s, at, e.y, e.face < 0, { tint, tintAmount, lean, squash });
     place();
     const [cx, cy] = enemyCenter(e);
     glow(cx, cy, kind.glowRadius?.(e) ?? kind.glow.radius, kind.glow.color, winding ? 0.5 : 0.22);
