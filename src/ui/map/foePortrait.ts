@@ -27,7 +27,7 @@ export function foePortrait(type: EnemyType): string {
   if (known) return known;
   const foe = makeEnemy(type, 0, 0, 1);
   foe.face = -1;
-  const sprite = foeArtImage(foe, 0.4) ?? kindOf(type).draw(foe, 0.4);
+  const sprite = foeArtImage(foe) ?? kindOf(type).draw(foe, 0.4);
   const box = bounds(sprite);
   const out = document.createElement("canvas");
   out.width = box.x1 - box.x0 + 1;

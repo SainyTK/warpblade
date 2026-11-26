@@ -62,13 +62,13 @@ function clipFor(e: Enemy, sheet: FoeArtSheet): { clip: FoeArtClip; age: number 
   return null;
 }
 
-export function foeArtImage(e: Enemy, t: number): SpriteImage | null {
+export function foeArtImage(e: Enemy): SpriteImage | null {
   const art = loaded.get(e.type);
   if (!art) return null;
   const chosen = clipFor(e, art.sheet);
   if (!chosen) return null;
   const { clip, age } = chosen;
-  const step = Math.floor(Math.max(0, age || t) * clip.fps);
+  const step = Math.floor(Math.max(0, age) * clip.fps);
   const at = clip.loop ? step % clip.frames.length : Math.min(step, clip.frames.length - 1);
   return art.frames[clip.frames[at]] ?? null;
 }
