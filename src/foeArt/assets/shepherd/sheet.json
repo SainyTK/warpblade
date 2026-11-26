@@ -1,0 +1,144 @@
+{
+  "imagePixelsPerArtPixel": 2,
+  "frames": [
+    [0, 0, 300, 180, 150, 164],
+    [300, 0, 300, 180, 150, 164],
+    [600, 0, 300, 180, 150, 164],
+    [900, 0, 300, 180, 150, 164],
+    [1200, 0, 300, 180, 150, 164],
+    [1500, 0, 300, 180, 150, 164],
+    [1800, 0, 300, 180, 150, 164],
+    [2100, 0, 300, 180, 150, 164],
+    [2400, 0, 300, 180, 150, 164],
+    [2700, 0, 300, 180, 150, 164],
+    [3000, 0, 300, 180, 150, 164],
+    [3300, 0, 300, 180, 150, 164]
+  ],
+  "clips": {
+    "idle": {
+      "frames": [0],
+      "fps": 6,
+      "loop": true
+    },
+    "idle@2": {
+      "frames": [6],
+      "fps": 6,
+      "loop": true
+    },
+    "walk": {
+      "frames": [0, 1],
+      "fps": 6,
+      "loop": true
+    },
+    "walk@2": {
+      "frames": [6, 7],
+      "fps": 6,
+      "loop": true
+    },
+    "wind": {
+      "frames": [2],
+      "fps": 6,
+      "loop": false
+    },
+    "wind@2": {
+      "frames": [8],
+      "fps": 6,
+      "loop": false
+    },
+    "swipe": {
+      "frames": [3],
+      "fps": 6,
+      "loop": false
+    },
+    "swipe@2": {
+      "frames": [9],
+      "fps": 6,
+      "loop": false
+    },
+    "charge": {
+      "frames": [2],
+      "fps": 6,
+      "loop": false
+    },
+    "charge@2": {
+      "frames": [8],
+      "fps": 6,
+      "loop": false
+    },
+    "beam": {
+      "frames": [3],
+      "fps": 6,
+      "loop": false
+    },
+    "beam@2": {
+      "frames": [9],
+      "fps": 6,
+      "loop": false
+    },
+    "volley": {
+      "frames": [2],
+      "fps": 6,
+      "loop": false
+    },
+    "volley@2": {
+      "frames": [8],
+      "fps": 6,
+      "loop": false
+    },
+    "shoot": {
+      "frames": [3],
+      "fps": 6,
+      "loop": false
+    },
+    "shoot@2": {
+      "frames": [9],
+      "fps": 6,
+      "loop": false
+    },
+    "summon": {
+      "frames": [4],
+      "fps": 6,
+      "loop": false
+    },
+    "summon@2": {
+      "frames": [10],
+      "fps": 6,
+      "loop": false
+    },
+    "burrow": {
+      "frames": [5],
+      "fps": 6,
+      "loop": false
+    },
+    "burrow@2": {
+      "frames": [11],
+      "fps": 6,
+      "loop": false
+    },
+    "hop": {
+      "frames": [4],
+      "fps": 6,
+      "loop": false
+    },
+    "hop@2": {
+      "frames": [10],
+      "fps": 6,
+      "loop": false
+    },
+    "recover": {
+      "frames": [0],
+      "fps": 6,
+      "loop": false
+    },
+    "recover@2": {
+      "frames": [6],
+      "fps": 6,
+      "loop": false
+    },
+    "hurt": {
+      "frames": [5],
+      "fps": 6,
+      "loop": false
+    }
+  }
+}
