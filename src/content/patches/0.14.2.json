@@ -1,0 +1,147 @@
+{
+  "version": "0.14.2",
+  "kind": "small",
+  "date": "2026-11-26",
+  "title": "Oakheart and the Bog Hulk ease up",
+  "tagline": "Oakheart rests longer between attacks, and the Bog Hulk rests longer before it sinks, hits softer and has less HP, so the two era leaders that end most runs leave room to fight back. The level 1 badge in the narrowest compact HUD is crisp again.",
+  "intro": "Since 0.14.1 our bot runs are clean enough to trust, and they pointed at two walls. At wave 5 most heroes fell to Oakheart before it was even enraged, and at wave 10 no hero at level 12 beat the Bog Hulk, most of them before it ever sank into the bog. So this patch gives both of them longer rests between attacks, and takes some weight off the Hulk's blows and HP. Both stay fights you have to read: in our bots about a third of the heroes now get past each one. We also closed two items left open in 0.14.1: a soft level 1 badge in the compact HUD and a gap in a check that keeps effects from changing fights.",
+  "highlights": [],
+  "sections": [
+    {
+      "id": "foes",
+      "entries": [
+        {
+          "name": "Oakheart",
+          "tag": "nerf",
+          "summary": "Oakheart waits longer between attacks in both halves of the fight, so you have more time to land a string after each blow.",
+          "context": "Five of nine heroes fell at wave 5 in our skilled bot runs, and the ones we traced died while Oakheart still had over half its HP, before it enrages. A longer enraged rest alone could not reach them, so the rest above half HP grows too. In our bots 3 to 4 of 9 skilled heroes now get past wave 5 across three seeds, up from 2.",
+          "changes": [
+            {
+              "kind": "stat",
+              "label": "Rest between attacks above half HP, before wave scaling",
+              "before": "1.25 to 2.25 s",
+              "after": "1.5 to 2.7 s"
+            },
+            {
+              "kind": "stat",
+              "label": "Rest between attacks under half HP (enraged), before wave scaling",
+              "before": "0.65 to 1.17 s",
+              "after": "0.8 to 1.44 s"
+            },
+            {
+              "kind": "note",
+              "text": "HP, the branch sweep, root line and acorn damage, the wind-ups, the guard drop under half HP and the split bark are unchanged. The adventure's Oakheart room gets the same rests."
+            }
+          ]
+        },
+        {
+          "name": "Bog Hulk",
+          "tag": "nerf",
+          "summary": "Before it sinks, the Bog Hulk rests longer between attacks, and its slam, mud waves and globs hit softer, so a hero who reads the wind-ups can take it to the Sinking.",
+          "context": "At wave 10, level 12, eight of nine heroes in our bots fell before the Hulk ever sank, with half or more of its HP left, and none of them saw a Bog Rush. The fight was lost in its first phase, so that is where the changes go. In our bots 3 of 9 skilled heroes at level 12 now clear wave 10, up from none.",
+          "changes": [
+            {
+              "kind": "stat",
+              "label": "Rest between attacks before it sinks, before wave scaling",
+              "before": "1 to 1.8 s",
+              "after": "1.25 to 2.25 s"
+            },
+            {
+              "kind": "stat",
+              "label": "Slam base damage",
+              "before": "22",
+              "after": "18"
+            },
+            {
+              "kind": "stat",
+              "label": "Mud wave base damage",
+              "before": "18",
+              "after": "14"
+            },
+            {
+              "kind": "stat",
+              "label": "Mud glob base damage",
+              "before": "14",
+              "after": "11"
+            },
+            {
+              "kind": "stat",
+              "label": "Slam, mud wave and mud glob damage at wave 10",
+              "before": "31.9, 26.1 and 20.3",
+              "after": "26.1, 20.3 and 16"
+            },
+            {
+              "kind": "stat",
+              "label": "Base HP",
+              "before": "430",
+              "after": "350"
+            },
+            {
+              "kind": "stat",
+              "label": "HP at wave 10",
+              "before": "3,724",
+              "after": "3,031"
+            },
+            {
+              "kind": "note",
+              "text": "After it rises cracked, the Hulk rests as briefly as before. The Bog Rush damage, the wind-ups, walk speeds, reach, the Sinking and the Rise are unchanged."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "bugfixes",
+      "entries": [
+        {
+          "name": "Compact HUD level 1 badge",
+          "tag": "fix",
+          "summary": "In the narrowest compact HUD, a skill or charm at level 1 now shows its badge as sharp as every other level.",
+          "context": "We shipped 0.14.1 with this as a known issue. The HUD's pixel font draws its 1 one pixel narrower than the other digits, so centring it put it on half a pixel and blurred it. The badge now has a fixed width and its digit sits against the right edge.",
+          "changes": [
+            {
+              "kind": "stat",
+              "label": "Level 1 badge when the HUD is under 273 px wide",
+              "before": "Soft, on half a pixel",
+              "after": "Crisp, on whole pixels"
+            },
+            {
+              "kind": "note",
+              "text": "The badge's 6 by 6 px size, its 8 px text, its place in the slot's corner and every other HUD layout are unchanged."
+            },
+            {
+              "kind": "note",
+              "text": "Known issue: in windows 640 px wide and up, the compact HUD's badges can still look slightly soft."
+            }
+          ],
+          "media": {
+            "kind": "image",
+            "file": "compact-hud-level-badges.png",
+            "alt": "Two stacked close-ups of the compact HUD's build strip at 560 px wide, labelled 0.14.1 on top and 0.14.2 below, with Kael holding 8 skills and 5 charms at levels 1 to 8. In 0.14.1 the two level 1 badges, on the fifth skill and the third charm, look blurred and dimmer than the other digits. In 0.14.2 both 1s are as sharp and dark as the rest.",
+            "width": 1280,
+            "height": 312
+          }
+        },
+        {
+          "name": "Effects and the game's random numbers",
+          "tag": "fix",
+          "summary": "The check that keeps drawing code away from the random numbers that steer foes now also catches a second way of reaching them.",
+          "context": "In 0.14.1 we gave effects their own random numbers and added a check so drawing code could not reach the play ones. That check caught one form of import and missed another. Closing the gap keeps sparks and shake from ever changing what a foe does.",
+          "changes": [
+            {
+              "kind": "stat",
+              "label": "Ways the check stops drawing code from reaching the play random numbers",
+              "before": "Importing them by name",
+              "after": "Importing them by name, or importing the whole game state at once"
+            },
+            {
+              "kind": "note",
+              "text": "Nothing you see or play changes."
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "feedback": []
+}

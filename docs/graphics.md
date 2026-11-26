@@ -38,7 +38,7 @@ The game keeps two seeded generators in `src/game/state.ts`.
 `rng` is for play only: AI choices, cooldowns, spawns, hit and crit chances, drops, pickups and level-up cards.
 `fxRng` is for every draw whose value only reaches the picture: particle spawns, the screen shake, light flicker, afterimage and damage number jitter, and effect fields that only `draw()` reads.
 So adding, removing or repainting an effect never changes a fight, and the screen's frame rate never changes what a foe does.
-`npm run lint` forbids importing `rng` anywhere under `src/scene/`.
+`npm run lint` forbids importing `rng` anywhere under `src/scene/`, and forbids namespace imports (`import * as`) there so no import can reach it another way.
 `drawShadows` puts a soft shadow under every foe and hero on the floor below it.
 
 ## Drawing tools

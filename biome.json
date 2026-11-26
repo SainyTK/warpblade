@@ -114,6 +114,9 @@
                 }
               }
             }
+          },
+          "performance": {
+            "noNamespaceImport": "error"
           }
         }
       }

@@ -24,7 +24,7 @@ export const ENEMIES: Record<EnemyType, EnemyDef> = {
   // rain, waves 6 to 10
   mire: { rank: "minion", hp: 70, xp: 14, weight: 0.5, launchable: true, name: "Mire Toad" },
   stormkite: { rank: "minion", hp: 34, xp: 9, weight: 0, launchable: true, name: "Storm Kite" },
-  boghulk: { rank: "mini", hp: 430, xp: 72, weight: 0.85, launchable: false, name: "Bog Hulk" },
+  boghulk: { rank: "mini", hp: 350, xp: 72, weight: 0.85, launchable: false, name: "Bog Hulk" },
   // twilight, waves 16 to 20
   golem: { rank: "minion", hp: 80, xp: 15, weight: 0.6, launchable: true, name: "Rune Golem" },
   sprite: { rank: "minion", hp: 36, xp: 10, weight: 0, launchable: true, name: "Prism Sprite" },
