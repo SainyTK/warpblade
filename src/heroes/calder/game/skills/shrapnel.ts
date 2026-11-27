@@ -7,6 +7,7 @@ import { game, progress } from "../../../../game/state";
 import type { Enemy } from "../../../../types/enemy";
 import type { SkillBehavior } from "../../../../types/skillBehavior";
 import { roundBlast } from "../effects/roundBlast";
+import { calderFx } from "../skillFx";
 import { layStacks } from "./stacks";
 
 const SKILL = "ca_shrapnel";
@@ -24,6 +25,7 @@ function detonate(e: Enemy): void {
   const n = consumeStacks(e, SKILL);
   const [x, y] = enemyCenter(e);
   roundBlast(x, y, 1, true, true);
+  calderFx(SKILL, "burst", { x, y, reach: STORM_REACH * 0.3 }, { damage: progress.stats.ad * v.burst * n });
   for (const o of game.enemies) {
     if (o.hp <= 0) continue;
     const [ox, oy] = enemyCenter(o);
@@ -39,6 +41,11 @@ export const shrapnel: SkillBehavior = {
   on: {
     calderBlast(_m, event) {
       const v = skillValues(SKILL);
+      const first = event.foes.find((e) => e.hp > 0);
+      if (first) {
+        const [fx, fy] = enemyCenter(first);
+        calderFx(SKILL, "mark", { x: fx, y: fy }, { damage: progress.stats.ad * v.damage * v.stacks * 6, quiet: true });
+      }
       for (const e of event.foes) {
         if (e.hp <= 0) continue;
         if (skillEvolved(SKILL) && stacksOf(e, SKILL) >= v.at) detonate(e);
@@ -49,8 +56,10 @@ export const shrapnel: SkillBehavior = {
       const v = skillValues(SKILL);
       if (!v.rip || !event.finisher || event.foe.hp <= 0) return;
       const n = consumeStacks(event.foe, SKILL);
-      if (n)
-        dealDamage(event.foe, progress.stats.ad * v.rip * n, { fromX: event.foe.x, kx: 0, ky: -40, source: SKILL });
+      if (!n) return;
+      const [rx, ry] = enemyCenter(event.foe);
+      calderFx(SKILL, "burst", { x: rx, y: ry, reach: 10 }, { damage: progress.stats.ad * v.rip * n });
+      dealDamage(event.foe, progress.stats.ad * v.rip * n, { fromX: event.foe.x, kx: 0, ky: -40, source: SKILL });
     },
     kill(_m, event) {
       const n = stacksOf(event.foe, SKILL);

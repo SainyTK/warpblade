@@ -8,6 +8,7 @@ import type { SkillBehavior } from "../../../../types/skillBehavior";
 import { PHOSPHOR } from "../../constants/colors";
 import { loadRounds } from "../chamber";
 import { calder } from "../state";
+import { tracerFx } from "../tracerFx";
 
 const SKILL = "ca_tracer";
 /** Green Line: how long the line burns, how often it strikes, and how close to it a foe must be */
@@ -56,6 +57,8 @@ export const tracerWarp: SkillBehavior = {
     warp(_m, event) {
       const v = skillValues(SKILL);
       if (v.load) loadRounds(v.load);
+      const damage = progress.stats.ad * ((v.line ?? 0) + (v.damage ?? 0) + 0.6);
+      tracerFx(calder.warpFromX, calder.warpFromY, event.x, event.y - 18, damage);
       if (skillEvolved(SKILL)) game.fx.push(createGreenLine(calder.warpFromX, calder.warpFromY, event.x, event.y - 18));
     },
   },

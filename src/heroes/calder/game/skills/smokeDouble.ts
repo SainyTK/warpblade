@@ -14,10 +14,12 @@ import { HOT_BLAST, TRIGGER } from "../../constants/chamber";
 import { GUNSMOKE, PHOSPHOR } from "../../constants/colors";
 import { blastFoe } from "../blastFoe";
 import { SLASHES } from "../moves/slashes";
+import { calderFx } from "../skillFx";
 
 const ID = "ca_double";
 /** the double stands this far from the foe on Calder's side of it, and fires its rounds this far apart */
 const DOUBLE = { gap: 14, first: 0.22, between: 0.16, life: 0.45 } as const;
+const SIGIL_HIGH = 34;
 
 interface DoubleMemory {
   cd: number;
@@ -25,13 +27,21 @@ interface DoubleMemory {
 const memoryOf = (m: SkillMemory): DoubleMemory => m as unknown as DoubleMemory;
 
 /** a double of gunsmoke beside the foe: it rises in smoke, cuts, fires its rounds into the foe and drifts away */
-function createDouble(foe: Enemy, side: number): Effect {
+function createDouble(foe: Enemy, side: number, lead: boolean): Effect {
   const v = skillValues(ID);
   const o = { t: 0, fired: 0 };
   const [fx] = enemyCenter(foe);
   const x = fx - side * DOUBLE.gap;
   const y = foe.y;
   const shots = v.shots;
+  const volley = progress.stats.ad * TRIGGER.blast * v.power * shots;
+  calderFx(ID, "mark", { x, y: y - SIGIL_HIGH, face: side, reach: 6 }, { damage: volley, quiet: !lead });
+  calderFx(
+    ID,
+    "trail",
+    { x, y: y - 16, face: side, toX: fx, toY: y - 16 },
+    { damage: volley, quiet: true, delay: DOUBLE.first },
+  );
   drawHeroSprite(ghostCanvas, POSES.dodge, 0);
   game.ghosts.push({
     s: ghostCanvas.snapshot(),
@@ -64,6 +74,13 @@ function createDouble(foe: Enemy, side: number): Effect {
         o.fired++;
         if (foe.hp <= 0) return false;
         const hot = !!v.hot || skillEvolved(ID);
+        const [bx, by] = enemyCenter(foe);
+        calderFx(
+          ID,
+          "burst",
+          { x: bx - side * 7, y: by, face: side, reach: 6 },
+          { damage: progress.stats.ad * v.power, quiet: true },
+        );
         blastFoe(foe, {
           damage: progress.stats.ad * TRIGGER.blast * v.power * (hot ? HOT_BLAST : 1),
           splash: v.splash ? progress.stats.ad * v.splash : 0,
@@ -92,8 +109,8 @@ export const smokeDouble: SkillBehavior = {
       const v = skillValues(ID);
       if (!event.foe || event.foe.hp <= 0 || m.cd > 0 || !rng.chance(v.chance)) return;
       m.cd = v.cooldown;
-      game.fx.push(createDouble(event.foe, hero.face));
-      if (v.doubles > 1) game.fx.push(createDouble(event.foe, -hero.face));
+      game.fx.push(createDouble(event.foe, hero.face, true));
+      if (v.doubles > 1) game.fx.push(createDouble(event.foe, -hero.face, false));
     },
   },
 };

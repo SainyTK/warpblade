@@ -4,7 +4,7 @@ import { hero, progress } from "../../../game/state";
 import { RECOIL_TIME, TRIGGER } from "../constants/chamber";
 import { blastAt } from "./blastFoe";
 import { dryClick, roundPower, spendRounds } from "./chamber";
-import { afterTrigger, triggerBonus } from "./skills/hairTrigger";
+import { afterTrigger, triggerBonus, triggerFx } from "./skills/hairTrigger";
 import { calderSound } from "./sound";
 import { calder } from "./state";
 
@@ -42,6 +42,7 @@ export function fireTrigger(): void {
     hot: calder.hot || bonus.blast > 1,
   });
   calder.recoil = RECOIL_TIME;
+  triggerFx(x, y, ad * TRIGGER.blast * power * bonus.blast);
   afterTrigger(foe);
   emitSkillEvent({ type: "calderTrigger", foe, x, y });
   emitSkillEvent({ type: "calderBlast", x, y, foes: struck, kind: "trigger" });

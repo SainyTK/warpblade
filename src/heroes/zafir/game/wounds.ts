@@ -1,16 +1,31 @@
 import { fleck, hairline, place } from "../../../engine/frame";
 import { enemyCenter } from "../../../game/enemies/enemy";
 import { addStacks, stacksOf } from "../../../game/enemies/skillStatus";
-import { skillValues, withBuild } from "../../../game/skills/query";
+import { skillEvolved, skillLevel, skillValues, withBuild } from "../../../game/skills/query";
 import { foesOnScreen } from "../../../game/skills/targets";
 import { fxRng, game, particles, progress } from "../../../game/state";
 import type { Enemy } from "../../../types/enemy";
 import { PK } from "../../../types/particle";
 import { WOUND_RED } from "../constants/palette";
 import { WOUND, WOUND_SOURCE } from "../constants/wounds";
+import { zafirFx } from "./skillFx";
 
 /** the most wounds a foe carries: the base, or Deep Wounds' */
 export const woundMost = (): number => skillValues("za_deep").most ?? WOUND.most;
+
+const DEEP_GAP = 0.6;
+const deepShown = new WeakMap<Enemy, number>();
+
+/** Deep Wounds: a foe's wounds opening deeper shows as a bleeding mark on it, at most once in a while per foe */
+function deepMark(e: Enemy, deep: Readonly<Record<string, number>>): void {
+  if (!skillLevel("za_deep") || (deepShown.get(e) ?? -1) > game.t) return;
+  deepShown.set(e, game.t + DEEP_GAP);
+  const [x, y] = enemyCenter(e);
+  const ticks = (deep.life ?? WOUND.life) / (deep.every ?? WOUND.every);
+  const damage = progress.stats.ad * (deep.per ?? WOUND.per) * ticks * woundsOf(e);
+  const shape = skillEvolved("za_deep") ? "burst" : "mark";
+  zafirFx("za_deep", shape, { x, y, reach: 8 + woundsOf(e) }, { mark: "bleed", damage });
+}
 
 /** open `n` wounds on a foe; each bleeds on its own, Deep Wounds bleeds them harder and longer */
 export function openWounds(e: Enemy, n: number): void {
@@ -23,6 +38,7 @@ export function openWounds(e: Enemy, n: number): void {
     every: deep.every ?? WOUND.every,
     duration: withBuild("duration", deep.life ?? WOUND.life),
   });
+  deepMark(e, deep);
 }
 
 /** how many wounds a foe has open */

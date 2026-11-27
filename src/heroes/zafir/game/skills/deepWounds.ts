@@ -1,8 +1,11 @@
+import { enemyCenter } from "../../../../game/enemies/enemy";
 import { stacksOf } from "../../../../game/enemies/skillStatus";
 import { skillValues, withBuild } from "../../../../game/skills/query";
 import { foesOnScreen } from "../../../../game/skills/targets";
+import { progress } from "../../../../game/state";
 import type { SkillBehavior } from "../../../../types/skillBehavior";
 import { WOUND, WOUND_SOURCE } from "../../constants/wounds";
+import { zafirFx } from "../skillFx";
 import { ringTier } from "../whirl";
 import { openWounds } from "../wounds";
 
@@ -28,6 +31,8 @@ export const deepWounds: SkillBehavior = {
       const n = Math.ceil(stacksOf(ev.foe, WOUND_SOURCE) / 2);
       if (!n) return;
       for (const f of foesOnScreen()) if (f !== ev.foe && Math.abs(f.x - ev.foe.x) <= SPREAD_REACH) openWounds(f, n);
+      const [x, y] = enemyCenter(ev.foe);
+      zafirFx(ID, "burst", { x, y, reach: SPREAD_REACH * 0.5 }, { mark: "bleed", damage: progress.stats.ad * n });
     },
   },
 };

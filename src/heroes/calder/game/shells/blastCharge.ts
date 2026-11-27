@@ -8,6 +8,7 @@ import type { Effect } from "../../../../types/effect";
 import { WHITE } from "../../../../utils/color";
 import { ABILITY_COLOR, CHARGE } from "../../constants/shots";
 import { blastAt } from "../blastFoe";
+import { calderFx } from "../skillFx";
 
 const SKILL = "ca_charge";
 /** a charge lands no nearer the stage edge than this */
@@ -25,6 +26,9 @@ function createCharge(x: number, y: number, delay: number): Effect {
         const [ex] = enemyCenter(e);
         if (e.hp > 0 && Math.abs(ex - x) < reach * 1.8) e.vx += Math.sign(x - ex) * CHARGE.pull;
       }
+    const damage = progress.stats.ap * v.power * scale;
+    calderFx(SKILL, "burst", { x, y: y - 6, reach: Math.min(10, reach * 0.4) }, { damage, quiet: scale < 1 });
+    if (skillEvolved(SKILL)) calderFx(SKILL, "pillar", { x, y, reach: 30 }, { damage, quiet: true, delay: 0.04 });
     blastAt(null, x, y - 6, {
       damage: 0,
       splash: progress.stats.ap * v.power * scale,

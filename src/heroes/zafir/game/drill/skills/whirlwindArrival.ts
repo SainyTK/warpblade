@@ -2,6 +2,7 @@ import { staggerFoe } from "../../../../../game/enemies/stagger";
 import { game, progress } from "../../../../../game/state";
 import type { ZafirDrillSkill } from "../../../types/drillSkill";
 import { sandBurst } from "../../effects/spout";
+import { zafirFx } from "../../skillFx";
 import { createStorm } from "../../ultimate/sandstorm";
 import { openWounds } from "../../wounds";
 import { arriving, blindMinion, fighterAt, foesAround, skillStrike } from "../strike";
@@ -25,6 +26,9 @@ export const WHIRLWIND_ARRIVAL_DRILL: ZafirDrillSkill = {
     if (strike !== "warp") {
       return;
     }
+    const at = fighterAt();
+    const vortex = { x: at.x, y: at.y, face: at.face, reach: values.ring ? AROUND.ring * 0.7 : 16 };
+    zafirFx(ID, "nova", vortex, { damage: progress.stats.ad * (values.ring || values.damage) });
     for (const foe of foesAround(AROUND.wounds, AROUND.height)) {
       openWounds(foe, values.wounds ?? 0);
     }
@@ -37,6 +41,7 @@ export const WHIRLWIND_ARRIVAL_DRILL: ZafirDrillSkill = {
       sandBurst(x, y - 8, 12);
     }
     if (evolved) {
+      zafirFx(ID, "pillar", { x: at.x, y: at.y, face: at.face, reach: DEVIL.reach }, { quiet: true, delay: 0.05 });
       game.fx.push(
         createStorm(1, DEVIL.reach, values.storm, progress.stats.ad * DEVIL.cut, {
           grains: 0.6,

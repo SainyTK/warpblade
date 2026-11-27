@@ -1,7 +1,10 @@
 import { drillSession } from "../../../../../drill";
 import { enemyCenter } from "../../../../../game/enemies/enemy";
 import { staggerFoe } from "../../../../../game/enemies/stagger";
+import { progress } from "../../../../../game/state";
+import { surfaceBelow } from "../../../../../game/world";
 import type { CalderDrillSkill } from "../../../types/drillSkill";
+import { calderFx } from "../../skillFx";
 import { later } from "../later";
 import { fireRound } from "../round";
 import { skillStrike } from "../strike";
@@ -24,6 +27,11 @@ export const BLAST_CHARGE_DRILL: CalderDrillSkill = {
     }
     const session = drillSession();
     const [x, y] = enemyCenter(foe);
+    const boom = progress.stats.ap * (spell.damage / 10 + values.bonus * 5);
+    calderFx(ID, "burst", { x, y, reach: 10 }, { damage: boom });
+    if (evolved) {
+      calderFx(ID, "pillar", { x, y: surfaceBelow(x, y), reach: 34 }, { damage: boom, quiet: true, delay: 0.05 });
+    }
     if (values.second && session && !values.chained) {
       const other = foesNear(x, y, 90, [foe])[0];
       if (other) {

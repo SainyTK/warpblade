@@ -1,8 +1,10 @@
 import { drillSession } from "../../../../../drill";
 import { enemyCenter } from "../../../../../game/enemies/enemy";
-import { game } from "../../../../../game/state";
+import { game, progress } from "../../../../../game/state";
+import { surfaceBelow } from "../../../../../game/world";
 import type { ElementImpact } from "../../../../../types/drill";
 import type { ZafirDrillSkill } from "../../../types/drillSkill";
+import { zafirFx } from "../../skillFx";
 import { blindMinion, fighterAt, foesNear, spellStrike } from "../strike";
 
 const ID = "za_glass";
@@ -44,11 +46,15 @@ export const GLASS_RAIN_DRILL: ZafirDrillSkill = {
         continue;
       }
       seen.add(blast);
+      const floor = surfaceBelow(blast.x, blast.y - 4);
+      const rain = { x: blast.x, y: floor, reach: 16 };
+      zafirFx(ID, "spikes", rain, { damage: progress.stats.ap * (blast.spell.damage / 10 + (values.power ?? 0)) });
       const shards = foesNear(blast.x, blast.y - 12, SHARD_REACH).slice(0, values.shards ?? 0);
       for (const foe of shards) {
         const [x, y] = enemyCenter(foe);
         session.elementImpacts.push({ ...blast, x, y, fromSword: true });
         spellStrike(foe, blast.spell.damage / 20, ID);
+        zafirFx(ID, "burst", { x, y, reach: 8 }, { quiet: true, delay: 0.04 });
       }
       if (evolved && values.behind) {
         const { x, face } = fighterAt();
@@ -57,6 +63,8 @@ export const GLASS_RAIN_DRILL: ZafirDrillSkill = {
           const [bx, by] = enemyCenter(back);
           session.elementImpacts.push({ ...blast, x: bx, y: by, fromSword: true });
           spellStrike(back, blast.spell.damage / 10, ID);
+          const storm = { x: bx, y: back.y, face: -face, reach: 16 };
+          zafirFx(ID, "spikes", storm, { damage: progress.stats.ap * (blast.spell.damage / 10), delay: 0.06 });
           blindMinion(back, values.blind + 1.4);
         }
       }

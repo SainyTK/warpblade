@@ -8,6 +8,7 @@ import { game, hero, progress } from "../../../../game/state";
 import type { Enemy } from "../../../../types/enemy";
 import { PHOSPHOR_SPARKS } from "../../constants/colors";
 import { blastAt } from "../blastFoe";
+import { calderFx } from "../skillFx";
 
 const SKILL = "ca_recoil";
 /** the reach of the rounds the dodge fires, how far behind and ahead they go off, and the gap between Backfire Rush's
@@ -34,7 +35,10 @@ function round(x: number, power: number, dir: number): void {
 function started(): void {
   dash.fromX = hero.x;
   const v = skillValues(SKILL);
-  if (v.power) round(hero.x - hero.face * DODGE_ROUND.behind, v.power, -hero.face);
+  if (!v.power) return;
+  round(hero.x - hero.face * DODGE_ROUND.behind, v.power, -hero.face);
+  const kick = { x: hero.x - hero.face * DODGE_ROUND.behind, y: hero.y - 16, face: -hero.face, reach: 10 };
+  calderFx(SKILL, "burst", kick, { damage: progress.stats.ad * v.power, quiet: true });
 }
 
 /** the dodge passes through a foe: a cut, and stamina back */
@@ -51,9 +55,21 @@ function passed(e: Enemy): void {
 function ended(): void {
   const v = skillValues(SKILL);
   if (v.end) round(hero.x + hero.face * DODGE_ROUND.ahead, v.end, hero.face);
+  const y = hero.y - 15;
+  const streak = { x: dash.fromX, y, face: hero.face, toX: hero.x + hero.face * DODGE_ROUND.ahead, toY: y };
+  if (v.power) calderFx(SKILL, "trail", streak, { damage: progress.stats.ad * ((v.end ?? 0) + v.power) });
   if (!skillEvolved(SKILL)) return;
   const n = Math.floor(Math.abs(hero.x - dash.fromX) / DODGE_ROUND.gap);
-  for (let i = 1; i <= n; i++) round(dash.fromX + hero.face * i * DODGE_ROUND.gap, v.trail, hero.face);
+  for (let i = 1; i <= n; i++) {
+    const x = dash.fromX + hero.face * i * DODGE_ROUND.gap;
+    round(x, v.trail, hero.face);
+    calderFx(
+      SKILL,
+      "burst",
+      { x, y, face: hero.face, reach: 12 },
+      { damage: progress.stats.ad * v.trail, quiet: true, delay: i * 0.04 },
+    );
+  }
 }
 
 /** the dodge's hooks for the kit */

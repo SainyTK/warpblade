@@ -11,6 +11,7 @@ import { hex } from "../../../../utils/color";
 import { PHOSPHOR } from "../../constants/colors";
 import { createMuzzleFlash } from "../effects/muzzleFlash";
 import { createTracerLine } from "../effects/tracerLine";
+import { calderFx } from "../skillFx";
 
 const ID = "ca_turret";
 /** how far a barrel sees, how high its muzzle sits, and how far behind Calder it is planted */
@@ -24,6 +25,7 @@ interface Barrel {
   left: number;
   next: number;
   face: number;
+  fired: boolean;
 }
 interface BarrelMemory {
   cd: number;
@@ -37,12 +39,15 @@ function plant(m: BarrelMemory): void {
   if (m.cd > 0 || !rng.chance(v.chance)) return;
   m.cd = v.cooldown;
   const x = hero.x - hero.face * BARREL.behind;
+  const at = { x, y: surfaceBelow(x, hero.y - 4) - BARREL.muzzle, face: hero.face, reach: 8 };
+  calderFx(ID, "mark", at, { damage: progress.stats.ad * v.power, quiet: true });
   m.barrels.push({
     x,
     y: surfaceBelow(x, hero.y - 4),
     left: withBuild("duration", v.life),
     next: 0.15,
     face: hero.face,
+    fired: false,
   });
   while (m.barrels.length > withBuild("amount", v.most)) m.barrels.shift();
 }
@@ -59,6 +64,11 @@ function shoot(b: Barrel): void {
   const angle = Math.atan2(fy - my, fx - b.x);
   game.fx.push(createMuzzleFlash(b.x + b.face * 3, my, angle));
   game.fx.push(createTracerLine(b.x + b.face * 3, my, fx, fy));
+  const shot = { x: b.x + b.face * 3, y: my, face: b.face, toX: fx, toY: fy };
+  const first = !b.fired;
+  b.fired = true;
+  calderFx(ID, "trail", shot, { damage: progress.stats.ad * v.power * 3, quiet: !first });
+  calderFx(ID, "burst", { x: fx, y: fy, face: b.face, reach: 7 }, { damage: progress.stats.ad * v.power, quiet: true });
   const damage = progress.stats.ad * v.power;
   dealDamage(foe, damage, { fromX: b.x, kx: b.face * 30, ky: -10, source: ID });
   if (v.stagger && foe.rank === "minion") staggerFoe(foe, v.stagger);

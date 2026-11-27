@@ -1,6 +1,8 @@
 import { enemyCenter } from "../../../../../game/enemies/enemy";
+import { hero, progress } from "../../../../../game/state";
 import type { Enemy } from "../../../../../types/enemy";
 import type { CalderDrillSkill } from "../../../types/drillSkill";
+import { calderFx } from "../../skillFx";
 import { later } from "../later";
 import { fireRound } from "../round";
 import { foesNear } from "../targets";
@@ -15,6 +17,10 @@ function bounce(from: Enemy, left: number, hit: Enemy[], values: Readonly<Record
     return;
   }
   hit.push(next);
+  const [fx, fy] = enemyCenter(from);
+  const [nx, ny] = enemyCenter(next);
+  const jump = { x: fx, y: fy, face: Math.sign(nx - fx) || 1, toX: nx, toY: ny };
+  calderFx(ID, "trail", jump, { damage: progress.stats.ad * values.round * 0.7, quiet: hit.length > 2, delay: 0.06 });
   later(0.06, () => {
     fireRound(
       next,
@@ -36,6 +42,13 @@ export const RICOCHET_DRILL: CalderDrillSkill = {
       return;
     }
     fireRound(foe, { power: values.round, kind: "shot", stagger: values.stagger, source: ID });
+    const [x, y] = enemyCenter(foe);
+    calderFx(
+      ID,
+      "burst",
+      { x, y, face: hero.face, reach: 7 },
+      { damage: progress.stats.ad * values.round, quiet: true },
+    );
     bounce(foe, values.bounces ?? 0, [foe], values);
   },
 };

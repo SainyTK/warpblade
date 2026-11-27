@@ -1,13 +1,14 @@
 import { onFrame } from "../../../../constants/combo";
 import { createFloorRing } from "../../../../game/effects/floorRing";
 import { meleeHit } from "../../../../game/meleeHit";
-import { skillEvolved, skillValues, withBuild } from "../../../../game/skills/query";
+import { skillEvolved, skillLevel, skillValues, withBuild } from "../../../../game/skills/query";
 import { foesOnScreen } from "../../../../game/skills/targets";
-import { game, hero } from "../../../../game/state";
+import { game, hero, progress } from "../../../../game/state";
 import { boxAhead, boxBehind, dust, newSwing } from "../../../../game/world";
 import type { MoveDef, MoveHit } from "../../../../types/move";
 import { SAND_RAMP } from "../../constants/palette";
 import { SPIN_DROP, STRING_FEEL } from "../../constants/string";
+import { zafirFx } from "../skillFx";
 import { meteorDune } from "../spells/meteor";
 import { walkThrough } from "../walkThrough";
 import { openWounds } from "../wounds";
@@ -43,6 +44,10 @@ function landRing(): void {
   if (struck && v.ringWounds)
     for (const e of foesOnScreen()) if (Math.abs(e.x - hero.x) <= r) openWounds(e, v.ringWounds);
   game.fx.push(createFloorRing(hero.x, hero.y, r, SAND_RAMP, 0.35));
+  if (skillLevel("za_falling")) {
+    const ring = { x: hero.x, y: hero.y, face: hero.face, reach: r * 0.7 };
+    zafirFx("za_falling", "nova", ring, { damage: progress.stats.ad * SPIN_DROP.ringPower * (v.ringPower ?? 1) });
+  }
   dust(hero.x - 8, hero.y, 4, -1);
   dust(hero.x + 8, hero.y, 4, 1);
   if (skillEvolved("za_falling")) meteorDune();

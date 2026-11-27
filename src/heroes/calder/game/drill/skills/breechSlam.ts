@@ -1,8 +1,9 @@
 import { staggerFoe } from "../../../../../game/enemies/stagger";
-import { game, hero } from "../../../../../game/state";
-import { shake } from "../../../../../game/world";
+import { game, hero, progress } from "../../../../../game/state";
+import { shake, surfaceBelow } from "../../../../../game/world";
 import type { CalderDrillSkill } from "../../../types/drillSkill";
 import { roundBlast } from "../../effects/roundBlast";
+import { calderFx } from "../../skillFx";
 import { later } from "../later";
 import { fireRound } from "../round";
 import { skillStrike } from "../strike";
@@ -21,6 +22,10 @@ export const BREECH_SLAM_DRILL: CalderDrillSkill = {
       return;
     }
     const x = hero.x + hero.face * 22;
+    const floor = surfaceBelow(x, hero.y - 2);
+    const slam = progress.stats.ad * ((values.quake ?? 0) + values.finisher + 1);
+    calderFx(ID, "spikes", { x, y: floor, face: hero.face, reach: (values.reach || 40) * 0.5 }, { damage: slam });
+    calderFx(ID, "pillar", { x, y: floor, face: hero.face, reach: 22 }, { damage: slam, quiet: true });
     if (values.quake) {
       shake(0.12, 2);
       for (const foe of foesNear(x, hero.y - 8, values.reach || 40)) {
@@ -39,6 +44,11 @@ export const BREECH_SLAM_DRILL: CalderDrillSkill = {
         later(i * 0.06, () => {
           const fx = hero.x + hero.face * (22 + i * 28);
           roundBlast(fx, hero.y - 4, hero.face, true, false);
+          const fault = { x: fx, y: surfaceBelow(fx, hero.y - 2), face: hero.face, reach: 26 };
+          calderFx(ID, i === 4 ? "pillar" : "spikes", fault, {
+            damage: progress.stats.ad * values.fault,
+            quiet: i < 4,
+          });
           for (const hit of game.enemies.filter(
             (e) => e.hp > 0 && Math.abs(e.x - fx) < 16 && Math.abs(e.y - hero.y) < 20,
           )) {

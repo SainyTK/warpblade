@@ -10,6 +10,7 @@ import type { Effect } from "../../../../types/effect";
 import { WHITE } from "../../../../utils/color";
 import { GRAIN } from "../../constants/palette";
 import { GLASS } from "../../constants/spells";
+import { zafirFx } from "../skillFx";
 import { openWounds } from "../wounds";
 
 const ID = "za_glass";
@@ -32,6 +33,7 @@ function createShard(x: number, delay: number, damage: number): Effect {
       openWounds(e, v.wounds ?? 0);
     }
     game.fx.push(createImpact(x, y, 1, false, [WHITE, ...GLASS_LOOK.slice(1)]));
+    zafirFx(ID, "burst", { x, y: y - 3, reach: 7 }, { damage, quiet: true });
   };
   return {
     update(dt) {
@@ -76,7 +78,13 @@ export function castGlass(wide: boolean): void {
   const damage = progress.stats.ap * v.power;
   const xs = targets(n, hero.face, GLASS.from, to, !!v.aim);
   xs.forEach((x, i) => game.fx.push(createShard(x, i * GLASS.gap, damage)));
+  const mid = xs.reduce((sum, x) => sum + x, 0) / Math.max(1, xs.length);
+  const rain = { x: mid, y: surfaceBelow(mid, hero.y - 1), face: hero.face, reach: (to - GLASS.from) * 0.3 };
+  zafirFx(ID, "spikes", rain, { damage: damage * n, delay: GLASS.height / GLASS.fall });
   if (!skillEvolved(ID)) return;
+  const back = hero.x - hero.face * (GLASS.from + to) * 0.5;
+  const storm = { x: back, y: surfaceBelow(back, hero.y - 1), face: -hero.face, reach: (to - GLASS.from) * 0.3 };
+  zafirFx(ID, "spikes", storm, { damage: damage * n, delay: 0.35 + GLASS.height / GLASS.fall });
   const round = targets(n, -hero.face, GLASS.from, to, true);
   round.forEach((x, i) => game.fx.push(createShard(x, 0.35 + i * GLASS.gap, damage)));
 }

@@ -11,6 +11,7 @@ import type { SkillBehavior } from "../../../../types/skillBehavior";
 import { WHITE } from "../../../../utils/color";
 import { TAU } from "../../../../utils/math";
 import { GRAIN } from "../../constants/palette";
+import { zafirFx } from "../skillFx";
 import { STRING_SPINS } from "../stringSkills";
 
 const ID = "za_scour";
@@ -30,7 +31,11 @@ export function grind(e: Enemy, n: number): void {
     every: GRIT.every,
     duration: withBuild("duration", GRIT.life),
   });
-  if (stacksOf(e, ID) < v.gritMost) return;
+  const [x, y] = enemyCenter(e);
+  const full = stacksOf(e, ID) >= v.gritMost;
+  const grit = progress.stats.ad * v.grit * GRIT.life * n;
+  zafirFx(ID, "mark", { x, y, reach: 6 + stacksOf(e, ID) }, { damage: grit, quiet: !full });
+  if (!full) return;
   if (v.gritHalt) e.halt = Math.max(e.halt, v.gritHalt);
   if (v.fuse) shatter(e, v);
 }
@@ -45,6 +50,7 @@ function shatter(e: Enemy, v: Readonly<Record<string, number>>): void {
     for (const f of foesOnScreen())
       if (f !== e && Math.abs(f.x - x) <= GRIT.splash) dealDamage(f, damage * 0.5, { fromX: x, source: ID });
   game.fx.push(createImpact(x, y, 1, true, [...FUSED]));
+  zafirFx(ID, "burst", { x, y, reach: v.splash ? GRIT.splash * 0.6 : 12 }, { damage });
 }
 
 /** the ring cuts gritted foes harder, from level 4 */

@@ -1,12 +1,13 @@
 import { fleck, place } from "../../../../engine/frame";
 import { dealDamage } from "../../../../game/damage";
-import { skillValues, withBuild } from "../../../../game/skills/query";
+import { skillEvolved, skillValues, withBuild } from "../../../../game/skills/query";
 import { foesOnScreen } from "../../../../game/skills/targets";
-import { game, progress } from "../../../../game/state";
+import { game, hero, progress } from "../../../../game/state";
 import type { Effect } from "../../../../types/effect";
 import type { Enemy } from "../../../../types/enemy";
 import { hex } from "../../../../utils/color";
 import { GRAIN } from "../../constants/palette";
+import { zafirFx } from "../skillFx";
 import { openWounds } from "../wounds";
 
 const ID = "za_wraith";
@@ -42,6 +43,9 @@ export function wraithCut(x: number, y: number, dir: number, struck: Set<Enemy>,
 /** a sand wraith whirls along the floor from (x, y) toward `dir`, and from level 4 turns back and cuts again */
 export function sendWraith(x0: number, y: number, dir: number): void {
   const v = skillValues(ID);
+  const crest = { x: x0, y, face: dir, reach: withBuild("area", WRAITH.range) * 0.35 };
+  zafirFx(ID, "wave", crest, { damage: progress.stats.ad * v.power * (v.back ? 2 : 1), quiet: dir !== hero.face });
+  if (skillEvolved(ID) && dir === hero.face) zafirFx(ID, "pillar", { x: x0, y, face: dir, reach: 30 }, { quiet: true });
   let x = x0;
   let t = 0;
   let way = dir;

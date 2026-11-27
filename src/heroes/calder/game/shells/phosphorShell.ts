@@ -10,6 +10,7 @@ import { grain } from "../../../../utils/grain";
 import { PHOSPHOR } from "../../constants/colors";
 import { FLARE } from "../../constants/shots";
 import { roundBlast } from "../effects/roundBlast";
+import { calderFx } from "../skillFx";
 
 const SKILL = "ca_flare";
 
@@ -57,10 +58,16 @@ function createFirePool(x: number, y: number, reach: number, time: number): Effe
 }
 
 /** the shell bursts where it lands: a blast that strikes foes around it, then the pool */
-function burst(x: number, y: number, power: number): void {
+function burst(x: number, y: number, power: number, lead: boolean): void {
   const v = skillValues(SKILL);
   const reach = withBuild("area", v.radius);
   roundBlast(x, y - 4, 1, false, true);
+  calderFx(
+    SKILL,
+    "burst",
+    { x, y: y - 4, reach: Math.min(7, reach * 0.3) },
+    { damage: progress.stats.ap * v.power * power, quiet: !lead },
+  );
   for (const e of game.enemies) {
     if (e.hp <= 0) continue;
     const [ex, ey] = enemyCenter(e);
@@ -76,7 +83,7 @@ function burst(x: number, y: number, power: number): void {
 }
 
 /** one shell in flight: it arcs under gravity and bursts on the floor or on the first foe it meets */
-function createShell(x: number, y: number, vx: number, power: number): Effect {
+function createShell(x: number, y: number, vx: number, power: number, lead: boolean): Effect {
   const o = { x, y, vx, vy: FLARE.vy, t: 0 };
   return {
     update(dt) {
@@ -87,7 +94,7 @@ function createShell(x: number, y: number, vx: number, power: number): Effect {
       const floor = surfaceBelow(o.x, o.y - 2);
       const hit = game.enemies.some((e) => e.hp > 0 && boxHit([o.x - 2, o.y - 2, o.x + 2, o.y + 2], enemyBox(e)));
       if (o.y < floor && !hit) return o.t < 2;
-      burst(o.x, Math.min(o.y, floor), power);
+      burst(o.x, Math.min(o.y, floor), power, lead);
       return false;
     },
     draw() {
@@ -106,6 +113,6 @@ export function firePhosphorShell(x: number, y: number, dir: number, wide: boole
   const count = (v.shells ?? 1) + (wide ? 2 : 0);
   for (let i = 0; i < count; i++) {
     const spread = count > 1 ? (i / (count - 1)) * FLARE.spread : 0;
-    game.fx.push(createShell(x, y, dir * (FLARE.vx * 0.7 + spread * 2 + rng.range(-5, 5)), 1));
+    game.fx.push(createShell(x, y, dir * (FLARE.vx * 0.7 + spread * 2 + rng.range(-5, 5)), 1, i === 0));
   }
 }

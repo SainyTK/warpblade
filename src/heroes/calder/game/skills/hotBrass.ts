@@ -8,6 +8,7 @@ import type { Effect } from "../../../../types/effect";
 import type { Enemy } from "../../../../types/enemy";
 import type { SkillBehavior } from "../../../../types/skillBehavior";
 import { HOT_RAMP } from "../../constants/colors";
+import { calderFx } from "../skillFx";
 import { layStacks } from "./stacks";
 
 const SKILL = "ca_brass";
@@ -15,7 +16,7 @@ const SKILL = "ca_brass";
 const FLIGHT = { time: 0.3, arc: 18, max: 6 } as const;
 
 /** one hot casing flung from the cylinder in an arc onto a foe */
-function createCasing(x0: number, y0: number, foe: Enemy, delay: number): Effect {
+function createCasing(x0: number, y0: number, foe: Enemy, delay: number, lead: boolean): Effect {
   const o = { t: -delay, x: x0, y: y0 };
   return {
     update(dt) {
@@ -29,6 +30,13 @@ function createCasing(x0: number, y0: number, foe: Enemy, delay: number): Effect
       if (foe.hp <= 0) return false;
       const v = skillValues(SKILL);
       layStacks(foe, SKILL, 1, progress.stats.ad * v.damage, FLIGHT.max);
+      const burn = progress.stats.ad * v.damage * (lead ? FLIGHT.max * 6 : 1);
+      calderFx(
+        SKILL,
+        "burst",
+        { x: fx, y: fy, face: Math.sign(fx - x0) || 1, reach: lead ? 9 : 4 },
+        { damage: burn, quiet: !lead },
+      );
       if (v.stagger && foe.rank === "minion") staggerFoe(foe, v.stagger);
       return false;
     },
@@ -58,7 +66,7 @@ export const hotBrass: SkillBehavior = {
       if (!foes.length) return;
       const n = v.casings * (event.quick && v.quick ? 2 : 1);
       for (let i = 0; i < n; i++)
-        game.fx.push(createCasing(hero.x, hero.y - 20, foes[i % foes.length], i * 0.03 + rng.range(0, 0.02)));
+        game.fx.push(createCasing(hero.x, hero.y - 20, foes[i % foes.length], i * 0.03 + rng.range(0, 0.02), i === 0));
     },
   },
 };

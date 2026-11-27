@@ -7,6 +7,7 @@ import type { Enemy } from "../../../../types/enemy";
 import { muzzlePoint } from "../aim";
 import { loadRounds } from "../chamber";
 import { createSlug } from "../shots/slug";
+import { calderFx } from "../skillFx";
 import { calder } from "../state";
 
 const SKILL = "ca_trigger";
@@ -34,6 +35,13 @@ export function triggerBonus(foe: Enemy | null): TriggerBonus {
   return { blast: 1 + v.bonus + streak, heavy: !!v.guardBreak, stagger: v.stagger };
 }
 
+export function triggerFx(x: number, y: number, damage: number): void {
+  if (!skillValues(SKILL).bonus) return;
+  const cut = { x: hero.x + hero.face * 16, y: hero.y - 18, face: hero.face, reach: 14 };
+  calderFx(SKILL, "slash", cut, { damage });
+  calderFx(SKILL, "burst", { x, y, face: hero.face, reach: 7 }, { damage, quiet: true, delay: 0.04 });
+}
+
 /**
  * After a Trigger's blast: Hair Trigger marks the foe it paid off on; Dead Center gives the round back, and every third
  * Trigger in a row sends a breaching slug through that foe alone.
@@ -46,6 +54,8 @@ export function afterTrigger(foe: Enemy | null): void {
   loadRounds(v.refund);
   if (calder.triggerStreak % v.breachEvery !== 0 || foe.hp <= 0) return;
   const [x, y] = muzzlePoint(hero.face > 0 ? BREACH_ANGLE : Math.PI - BREACH_ANGLE);
+  const line = { x, y, face: hero.face, toX: x + hero.face * 180, toY: y };
+  calderFx(SKILL, "trail", line, { damage: progress.stats.ad * v.breach });
   game.fx.push(
     createSlug(x, y, hero.face, { damage: progress.stats.ad * v.breach, wide: true, only: foe, source: "attacks" }),
   );

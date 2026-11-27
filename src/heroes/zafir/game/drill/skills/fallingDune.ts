@@ -3,6 +3,7 @@ import { staggerFoe } from "../../../../../game/enemies/stagger";
 import { game, progress } from "../../../../../game/state";
 import type { ZafirDrillSkill } from "../../../types/drillSkill";
 import { createSpout, sandBurst } from "../../effects/spout";
+import { zafirFx } from "../../skillFx";
 import { foesAround, skillStrike } from "../strike";
 
 const ID = "za_falling";
@@ -29,10 +30,16 @@ export const FALLING_DUNE_DRILL: ZafirDrillSkill = {
       return;
     }
     air.slashed = false;
+    const reach = values.reach ?? RING.reach;
+    const ring = { x: h.x, y: h.y, face: h.face, reach: values.ring ? reach * 0.7 : 10 };
+    zafirFx(ID, "nova", ring, { damage: progress.stats.ad * (values.ring || 0.5) });
+    if (evolved) {
+      zafirFx(ID, "pillar", { x: h.x, y: h.y, face: h.face, reach: 30 }, { quiet: true, delay: 0.04 });
+    }
     if (!values.ring) {
       return;
     }
-    for (const foe of foesAround(values.reach ?? RING.reach, RING.height)) {
+    for (const foe of foesAround(reach, RING.height)) {
       skillStrike(foe, values.ring, ID);
       if (values.stagger) {
         staggerFoe(foe, values.stagger);

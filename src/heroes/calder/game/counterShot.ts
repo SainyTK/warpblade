@@ -8,7 +8,7 @@ import { muzzlePoint } from "./aim";
 import { blastAt } from "./blastFoe";
 import { loadRounds, roundPower } from "./chamber";
 import { createMuzzleFlash } from "./effects/muzzleFlash";
-import { afterCounterShot, counterBonus } from "./skills/pointBlank";
+import { afterCounterShot, counterBonus, counterFx } from "./skills/pointBlank";
 import { calder } from "./state";
 
 /** the sword's angle in the parry's aim key, where the round leaves the muzzle */
@@ -50,6 +50,7 @@ export function counterShot(attacker: Enemy | null): void {
     big: true,
   });
   calder.recoil = RECOIL_TIME;
+  counterFx(x, y, plain * bonus.power);
   loadRounds(COUNTER_SHOT.rounds + bonus.rounds);
   hero.keenNext = true;
   afterCounterShot(foe);

@@ -9,6 +9,7 @@ import type { Effect } from "../../../../types/effect";
 import type { Enemy } from "../../../../types/enemy";
 import { PHOSPHOR_SPARKS } from "../../constants/colors";
 import { ABILITY_COLOR, CHAIN } from "../../constants/shots";
+import { calderFx } from "../skillFx";
 
 const SKILL = "ca_chainshot";
 /** the chain's half length, and how fast it turns */
@@ -21,7 +22,7 @@ const SPIN = { half: 6, rate: 22 } as const;
  */
 function createChain(x: number, y: number, face: number, back: boolean): Effect {
   const v = skillValues(SKILL);
-  const o = { x, t: 0, out: true };
+  const o = { x, t: 0, out: true, struck: 0 };
   const struck = new Map<Enemy, number>();
   const per = v.twice ? 2 : 1;
   const life = withBuild("duration", CHAIN.life);
@@ -51,6 +52,9 @@ function createChain(x: number, y: number, face: number, back: boolean): Effect 
         });
         if (v.wrap) e.halt = Math.max(e.halt, v.wrap);
         game.fx.push(createImpact(o.x, y, dir, false, PHOSPHOR_SPARKS));
+        o.struck++;
+        const link = { x: o.x - dir * 10, y, face: dir, toX: o.x + dir * 4, toY: y };
+        calderFx(SKILL, "bolt", link, { damage: progress.stats.ap * v.power, quiet: o.struck > 1 });
       }
       if (!o.out && Math.abs(o.x - hero.x) < 6) return false;
       return o.t < life * 2.5;

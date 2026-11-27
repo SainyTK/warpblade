@@ -12,6 +12,7 @@ import type { SpriteImage } from "../../../../types/sprite";
 import { STRING_CLIPS } from "../../constants/clips/string";
 import { SAND_RAMP } from "../../constants/palette";
 import { RING_CUT } from "../moves/slashes";
+import { zafirFx } from "../skillFx";
 import { openWounds } from "../wounds";
 
 const ID = "za_mirage";
@@ -31,10 +32,12 @@ function snapshots(): SpriteImage[] {
 }
 
 /** one spin of a dancer at (x, y): the attacker takes the payoff, every other foe round it the plain cut */
-function spin(x: number, y: number, target: Enemy, last: boolean): void {
+function spin(x: number, y: number, target: Enemy, last: boolean, lead: boolean): void {
   const v = skillValues(ID);
   const reach = withBuild("area", DANCE.reach);
   game.fx.push(createSlash(x, y, 1, { ...RING_CUT, R: reach, ramp: SAND_RAMP }));
+  if (last && lead && skillEvolved(ID))
+    zafirFx(ID, "burst", { x: target.x, y: target.y - 16, reach: 16 }, { damage: progress.stats.ad * v.burst });
   for (const e of foesOnScreen()) {
     if (Math.abs(e.x - x) > reach || Math.abs(e.y - y) > 30) continue;
     const power = e === target ? v.power : v.plain;
@@ -47,20 +50,24 @@ function spin(x: number, y: number, target: Enemy, last: boolean): void {
 }
 
 /** a mirage dancer beside `target`, on the side `side`, spinning through it and the foes round it for its life */
-export function callDancer(target: Enemy, side: number): void {
+export function callDancer(target: Enemy, side: number, lead: boolean): void {
   const v = skillValues(ID);
   const images = snapshots();
   const life = withBuild("duration", v.life);
   const x = target.x + side * 14;
   const y = target.y;
+  if (lead) {
+    const crest = { x: x + side * 6, y, face: side, reach: DANCE.reach * 0.6 };
+    zafirFx(ID, "wave", crest, { damage: progress.stats.ad * v.power * (life / DANCE.every) });
+  }
   let t = 0;
-  let next = 0;
+  let next = lead ? 0 : DANCE.every / 2;
   const fx: Effect = {
     update(dt) {
       t += dt;
       if (t >= next) {
         next += DANCE.every;
-        spin(x, y, target, next > life);
+        spin(x, y, target, next > life, lead);
       }
       return t < life;
     },

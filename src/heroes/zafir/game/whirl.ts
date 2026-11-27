@@ -1,14 +1,16 @@
+import { usesDrill } from "../../../drill";
 import { fleck, glow, hairline, place, px } from "../../../engine/frame";
 import { dealDamage } from "../../../game/damage";
 import { enemyCenter } from "../../../game/enemies/enemy";
 import { feat } from "../../../game/feat";
 import { emitSkillEvent } from "../../../game/skills/events";
-import { skillEvolved, skillValues, withBuild } from "../../../game/skills/query";
+import { skillEvolved, skillLevel, skillValues, withBuild } from "../../../game/skills/query";
 import { foesOnScreen } from "../../../game/skills/targets";
 import { game, hero, progress } from "../../../game/state";
 import { TAU } from "../../../utils/math";
 import { GRAIN, SAND_RAMP } from "../constants/palette";
 import { RING_LOOK, RING_TIERS, type RingTier, WHIRL } from "../constants/whirl";
+import { zafirFx } from "./skillFx";
 import { gritTaken } from "./skills/scouringSand";
 import { sandSound } from "./sound";
 import { zafir } from "./state";
@@ -35,12 +37,24 @@ function whirlFloor(): number {
   return 0;
 }
 
+/** Unbroken Whirl: the ring rising to a new tier bursts out round him */
+function unbrokenRing(tier: RingTier): void {
+  const ring = { x: hero.x, y: hero.y, face: hero.face, reach: ringReach(tier) * 0.7 };
+  const power = tier.power + (skillValues("za_unbroken").power ?? 0);
+  zafirFx("za_unbroken", "nova", ring, { damage: progress.stats.ad * power * 4 });
+  if (skillEvolved("za_unbroken"))
+    zafirFx("za_unbroken", "pillar", { x: hero.x, y: hero.y, reach: 26 }, { quiet: true });
+}
+
 /** one of his own hits landed: the Whirl rises, and a tier reached sounds the gust */
 export function gainWhirl(amount: number): void {
   const before = ringTier();
   zafir.whirl = Math.min(WHIRL.most, zafir.whirl + amount * (skillValues("za_unbroken").gain ?? 1));
   zafir.whirlIdle = 0;
-  if (ringTier() !== before) sandSound.gust(0.08);
+  const after = ringTier();
+  if (after === before) return;
+  sandSound.gust(0.08);
+  if (after && skillLevel("za_unbroken") && !usesDrill()) unbrokenRing(after);
 }
 
 /** a foe the ring touches: level with it round his waist, within its reach */

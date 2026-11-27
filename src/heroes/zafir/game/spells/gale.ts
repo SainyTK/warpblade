@@ -9,6 +9,7 @@ import type { Effect } from "../../../../types/effect";
 import { GRAIN, SAND_RAMP } from "../../constants/palette";
 import { GALE } from "../../constants/spells";
 import { WOUND, WOUND_SOURCE } from "../../constants/wounds";
+import { zafirFx } from "../skillFx";
 import { sandSound } from "../sound";
 import { openWounds } from "../wounds";
 
@@ -61,8 +62,10 @@ export function castGale(wide: boolean): void {
   const spread = GALE.spread * (v.reach ?? 1);
   const y = hero.y - 16;
   const dirs = wide || v.both ? [hero.face, -hero.face] : [hero.face];
-  for (const dir of dirs) {
+  for (const [i, dir] of dirs.entries()) {
     game.fx.push(createGust(hero.x, y, dir, reach, spread));
+    const crescent = { x: hero.x + dir * 6, y, face: dir, reach: reach * 0.3 };
+    zafirFx(ID, "slash", crescent, { damage: progress.stats.ap * v.power, quiet: i > 0 });
     for (const e of foesOnScreen()) {
       const [ex, ey] = enemyCenter(e);
       if (!inCone(ex, ey, hero.x, y, dir, reach, spread)) continue;
