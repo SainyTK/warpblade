@@ -7,6 +7,7 @@ import { CRATER_LEAP_DRILL } from "./craterLeap";
 import { CRIMSON_FALL_DRILL } from "./crimsonFall";
 import { CRUSHING_WEIGHT_DRILL } from "./crushingWeight";
 import { EMBER_ARC_DRILL } from "./emberArc";
+import { FAULT_LINES_DRILL } from "./faultLines";
 import { HEAVY_HANDS_DRILL } from "./heavyHands";
 import { IRON_SKIN_DRILL } from "./ironSkin";
 import { SHOULDER_CHARGE_DRILL } from "./shoulderCharge";
@@ -30,5 +31,6 @@ export const BRYNN_DRILL_SKILLS: readonly BrynnDrillSkill[] = [
   BRAND_PILLARS_DRILL,
   BLOODLETTER_DRILL,
   CRUSHING_WEIGHT_DRILL,
+  FAULT_LINES_DRILL,
   CRIMSON_FALL_DRILL,
 ];

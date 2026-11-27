@@ -2,6 +2,7 @@ import type { SkillDef } from "../../../../types/skill";
 import { ANVIL_WEIGHT } from "./anvilWeight";
 import { BELLOWS } from "./bellows";
 import { BRAND_PILLARS } from "./brandPillars";
+import { CINDER_EDGE } from "./cinderEdge";
 import { COUNTER_CLEAVE } from "./counterCleave";
 import { CRATER_LEAP } from "./craterLeap";
 import { CRIMSON_FALL } from "./crimsonFall";
@@ -10,10 +11,9 @@ import { ECHO_SWING } from "./echoSwing";
 import { EMBER_ARC } from "./emberArc";
 import { FALLING_BLADE } from "./fallingBlade";
 import { FAULT_LINES } from "./faultLines";
+import { HEART_SPLINTER } from "./heartSplinter";
 import { HEAVY_HANDS } from "./heavyHands";
 import { IRON_SKIN } from "./ironSkin";
-import { RED_SHARD } from "./redShard";
-import { SEARING_EDGE } from "./searingEdge";
 import { SHOULDER_CHARGE } from "./shoulderCharge";
 import { SKYWARD_HEAVE } from "./skywardHeave";
 import { SPINNING_THROW } from "./spinningThrow";
@@ -33,12 +33,12 @@ export const BRYNN_SKILL_DEFS: readonly SkillDef[] = [
   EMBER_ARC,
   BRAND_PILLARS,
   WAR_CRY,
-  SEARING_EDGE,
+  CINDER_EDGE,
   FAULT_LINES,
   CRUSHING_WEIGHT,
   FALLING_BLADE,
   ECHO_SWING,
-  RED_SHARD,
+  HEART_SPLINTER,
   IRON_SKIN,
   BELLOWS,
   CRIMSON_FALL,

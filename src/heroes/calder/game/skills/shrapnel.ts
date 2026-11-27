@@ -32,7 +32,7 @@ function detonate(e: Enemy): void {
   }
 }
 
-/** Shrapnel: every round's blast leaves bleeding shrapnel in the foes it struck; Breaker tears it out, a fallen foe's
+/** Shrapnel: every round's blast leaves bleeding shrapnel in the foes it struck; the third cut tears it out, a fallen foe's
  *  passes on, and Shrapnel Storm detonates a full load */
 export const shrapnel: SkillBehavior = {
   create: () => ({}),
@@ -47,7 +47,7 @@ export const shrapnel: SkillBehavior = {
     },
     blow(_m, event) {
       const v = skillValues(SKILL);
-      if (!v.rip || event.move !== "breaker" || event.foe.hp <= 0) return;
+      if (!v.rip || !event.finisher || event.foe.hp <= 0) return;
       const n = consumeStacks(event.foe, SKILL);
       if (n)
         dealDamage(event.foe, progress.stats.ad * v.rip * n, { fromX: event.foe.x, kx: 0, ky: -40, source: SKILL });

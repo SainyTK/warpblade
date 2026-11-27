@@ -11,7 +11,6 @@ import type { Effect } from "../../../../types/effect";
 import type { Enemy } from "../../../../types/enemy";
 import type { SkillBehavior, SkillMemory } from "../../../../types/skillBehavior";
 import { CRIMSON, CRIMSON_SPARKS } from "../../constants/colors";
-import "../../types/events";
 import { showEcho } from "../phantom";
 
 const ID = "br_echo";
@@ -96,9 +95,9 @@ export const echoSwing: SkillBehavior = {
     perfectDodge(memory, e) {
       if (skillValues(ID).both) call(memory, e.at, skillValues(ID).chance);
     },
-    heavy(memory) {
+    blow(memory, e) {
       const v = skillValues(ID);
-      if (v.heavy) call(memory, hero.x + hero.face * 20, v.heavy);
+      if (v.heavy && e.keen && e.melee) call(memory, e.foe.x, v.heavy);
     },
   },
 };

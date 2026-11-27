@@ -29,7 +29,7 @@ export const DUSK_SHADE: SkillDef = {
   evolution: {
     partner: "ve_storm",
     name: "Shade Troupe",
-    text: "At the top of Tempo every blow calls a shade, as often as its wait allows.",
-    row: evolvedRow(LEVELS[7], "At the top of Tempo every blow calls a shade.", {}),
+    text: "Every blow calls a shade, as often as its wait allows.",
+    row: evolvedRow(LEVELS[7], "Every blow calls a shade.", {}),
   },
 };

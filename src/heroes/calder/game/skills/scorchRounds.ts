@@ -27,7 +27,7 @@ function consume(e: Enemy): boolean {
   return true;
 }
 
-/** Scorch Rounds: a Trigger's round sets its foe burning green; the splash and the shots burn from levels 3 and 4, the
+/** Scorch Rounds: a Trigger's round sets its foe burning green; the splash and every other round burn from levels 3 and 4, the
  *  fire spreads from a fallen foe, and Phosphor Heart consumes a hot fire in a burst */
 export const scorchRounds: SkillBehavior = {
   create: () => ({}),
@@ -38,8 +38,8 @@ export const scorchRounds: SkillBehavior = {
     calderBlast(_m, event) {
       const v = skillValues(SKILL);
       const splash = event.kind === "trigger" && v.splash;
-      const shot = event.kind === "shot" && v.shots;
-      if (!splash && !shot) return;
+      const other = event.kind !== "trigger" && v.shots;
+      if (!splash && !other) return;
       for (const e of event.foes.slice(splash ? 1 : 0)) if (e.hp > 0) burn(e);
     },
     kill(_m, event) {

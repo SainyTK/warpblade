@@ -39,13 +39,13 @@ export const crushingWeight: SkillBehavior = {
       const v = skillValues(ID);
       const foe = e.foe;
       if (foe.hp <= 0) return;
-      if (e.move === "slam" && skillEvolved(ID) && stacksOf(foe, ID)) {
+      if (e.finisher && skillEvolved(ID) && stacksOf(foe, ID)) {
         const n = consumeStacks(foe, ID);
         dealDamage(foe, progress.stats.ad * v.grind * n, { fromX: foe.x, source: ID });
         game.fx.push(createImpact(foe.x, foe.y - 8, 1, true, CRIMSON_SPARKS));
         return;
       }
-      if (e.move === "slam" && e.airborne && v.spike) crush(foe, v.spike);
+      if (e.finisher && e.airborne && v.spike) crush(foe, v.spike);
       else if ((foe.stun > 0 && !foe.air) || (foe.air && v.air)) crush(foe, 1);
     },
   },

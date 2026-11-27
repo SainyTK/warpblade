@@ -34,7 +34,7 @@ export const ROSE_MARK: SkillDef = {
   kind: "movement",
   element: "void",
   risk: "timed",
-  button: "J",
+  button: "U",
   text: "The warp strike hits harder, recharges sooner and sets the Rose mark.",
   levels: LEVELS,
   evolution: {

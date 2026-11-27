@@ -21,7 +21,7 @@ const EXTRA: Record<string, (s: SpriteCanvas) => void> = {
   br_arc: (s) => heavyArc(s, 11, 8, 4, 1.8, 4.4, 0.8),
   br_pillars: (s) => crest(s, 15, 12, 2),
   br_cry: (s) => heavyArc(s, 8, 8, 7.5, 0, 6.2, 0.3),
-  br_embers: (s) => heavyArc(s, 12, 10, 3, 0, 6.2, 0.5),
+  br_cinder: (s) => heavyArc(s, 11, 10, 4, 0, 6.2, 0.5),
   br_fault: (s) => crest(s, 9, 10, 3),
   br_crush: (s) => fill(s, () => s.stroke(3, 12, 13, 12, 0.5, CRIMSON[5])),
   br_falling: (s) =>
@@ -30,7 +30,7 @@ const EXTRA: Record<string, (s: SpriteCanvas) => void> = {
       s.stroke(13, 4, 13, 9, 0.6, CRIMSON[3]);
     }),
   br_echo: (s) => fill(s, () => s.dot(2, 7, 1.6, CRIMSON[2])),
-  br_shard: (s) => heavyArc(s, 8, 9, 6, 0, 6.2, 0.25),
+  br_splinter: (s) => heavyArc(s, 8, 9, 6, 0, 6.2, 0.25),
   br_ironskin: (s) => fill(s, () => s.set(10, 8, CRIMSON[5])),
   br_bellows: (s) => fill(s, () => s.block(11, 4, WHITE, 3, 3)),
   br_fall: (s) => heavyArc(s, 8, 10, 4.5, -2.9, 0.4, 1),

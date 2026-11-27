@@ -21,5 +21,8 @@ export const CRUSHING_WEIGHT_DRILL: BrynnDrillSkill = {
       every: v.every,
       duration: v.time,
     });
+    if (v.halt) {
+      foe.halt = Math.max(foe.halt, v.every);
+    }
   },
 };

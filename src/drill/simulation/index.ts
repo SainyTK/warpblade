@@ -1,6 +1,7 @@
 import type { DrillInput, DrillProfile, Session } from "../../types/drill";
 import { drillMotion } from "../constants";
 import { tickSkill, trackChargePress } from "./chargedSkill";
+import { withChargeRank } from "./chargeRank";
 import { canInterrupt, fight } from "./combat";
 import { ageDefenseCue, readGuard } from "./defense";
 import { queueFollowUp, readWarp } from "./followUp";
@@ -17,7 +18,7 @@ export { rechargeLeft } from "./recharge";
 export { canPaySpell, hastenSpells, readySpell, spellReady, spellRecharge } from "./spellBook";
 
 export function createSession(profile: DrillProfile, x: number, y: number): Session {
-  const modifiers = profile.modifiers();
+  const modifiers = withChargeRank(profile.modifiers());
   return {
     profile,
     motion: drillMotion(profile),
@@ -80,7 +81,7 @@ export function ageDrillCues(session: Session, dt: number): void {
 
 export function stepSession(session: Session, input: DrillInput, dt: number): void {
   const h = session.fighter;
-  session.modifiers = session.profile.modifiers();
+  session.modifiers = withChargeRank(session.profile.modifiers());
   session.releasedStrike = null;
   ageDrillCues(session, dt);
   trackChargePress(h, input);

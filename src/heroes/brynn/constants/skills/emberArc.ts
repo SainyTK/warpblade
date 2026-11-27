@@ -38,9 +38,9 @@ export const EMBER_ARC: SkillDef = {
   text: "Ember Arc burns longer and blasts what it hits.",
   levels: LEVELS,
   evolution: {
-    partner: "br_embers",
+    partner: "br_cinder",
     name: "Wildfire Arc",
-    text: "The crescents turn at the end of their flight and cut back through the line to her.",
+    text: "Each foe Ember Arc hits sends a crimson crescent on along the line.",
     row: evolvedRow(LEVELS[7], "Each hit sends a crescent on.", {
       ...drillValues({ chain: 1.5 }),
       back: 1,

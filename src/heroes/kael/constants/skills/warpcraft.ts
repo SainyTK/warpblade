@@ -30,7 +30,7 @@ export const WARPCRAFT: SkillDef = {
   kind: "movement",
   element: "void",
   risk: "timed",
-  button: "L",
+  button: "U",
   text: "Warp Strike recharges faster and hits harder, and its arrival blasts the foes around.",
   levels: LEVELS,
   evolution: {

@@ -20,23 +20,25 @@ Drill code: `src/heroes/cerise/game/drill/skills/`, one file per redesigned skil
 | `ce_riposte` | Riposte Chain | guard and parry | parry window +50%; a parry ripostes the foe ahead, 1.5 AD sure crit | the Rose mark, readies the dash and an air dash, a piercing riposte, up to 8 AD and +100% window | Endless Riposte (`ce_measure`): 2 s of thrusts +100% after a parry |
 | `ce_markwarp` | Rose Mark | warp strike | warp +30%, the arrival sets the Rose mark | recharge down to -45%, stagger, a pierce behind, restores an air dash and the air thrust, up to +250% | Crimson Seal (`ce_lunge`): the arrival marks every foe within 70 px |
 | `ce_step` | Passing Touch | dash | dashing through foes cuts them, 0.8 AD | stagger, a dash through a foe readies the dash, the Rose mark, a thrust at the end, up to 5 AD | Petal Step (`ce_measure`): each cut strikes twice more at 50% |
-| `ce_poise` | Poise | dash and air dash | one more air dash | untouchable dashes, an air dash restores the air thrust, up to three more air dashes, the thrust after a dash up to +200% | Perfect Poise (`ce_lunge`): every dash readies the warp |
+| `ce_poise` | Poise | dash and air dash | one more air dash, crit chance +4% | untouchable dashes, an air dash restores the air thrust, up to three more air dashes, the thrust after a dash up to +200%, crit chance up to +20% | Perfect Poise (`ce_lunge`): every dash readies the warp |
 | `ce_grace` | Grace | warp and infusion | the arrival infuses the selected spell for 1 hit | faster preparation (up to 45%), heals on arrival, longer infusions, the arrival shortens a preparation, infused hits heal | Rose Grace (`ce_riposte`): every arrival readies the selected spell |
 | `ce_dive` | Swallow Dive | jump, wall kick, air | one more air thrust | a cutting wall kick, a stomp after an air thrust, one more air dash, a pinning stomp, up to 5 AD | Swallow Storm (`ce_step`): the stomp reaches 70 px and draws foes in |
 | `ce_mirrorguard` | Mirror Guard | Rose Line | Rose Line strikes again, 1 AP | a mirrored line, +15% taken, Rose Edge strikes, two more mirrored lines, up to 8 AP | Perfect Mirror (`ce_riposte`): Rose Line marks every foe within 50 px |
 | `ce_needle` | Needle Rain | Flurry | Flurry rains 3 needles, 0.8 AP each | longer stagger, 5 then 7 needles, pinning needles, Rose Edge needles, up to 4 AP | Starneedle Rain (`ce_markwarp`): Flurry strikes twice |
 | `ce_bloom` | Rose Bloom | Rose Bloom | the bloom strikes again, 1.2 AP | a bleed, a lingering petal ring, a longer bind, a launch and Rose Edge strikes, up to 8 AP | Full Bloom (`ce_petals`): the bloom bursts on every foe within 60 px |
 | `ce_thorns` | Thorn Wounds | dot on thrusts | a bleeding thorn a thrust, up to 4 | more thorns, the lunge leaves 3 then 5, Rose Edge hits leave 2 more, up to 0.6 AD a tick | Thorn Burst (`ce_pin`): the lunge bursts every thorn for 1 AD each |
-| `ce_weep` | Weeping Mark | dot on the Rose mark | as in the native kit | as in the native kit | as in the native kit |
-| `ce_curse` | Wilting Curse | dot on parries | as in the native kit | as in the native kit | as in the native kit |
-| `ce_mirror` | Mirror Blade | summon on parries | as in the native kit | as in the native kit | as in the native kit |
-| `ce_petals` | Petal Blades | summon on casts | as in the native kit | as in the native kit | as in the native kit |
-| `ce_sentinel` | Thorn Sentinel | summon on the lunge | as in the native kit; the drill's third thrust plants it | as in the native kit | as in the native kit |
+| `ce_weep` | Weeping Mark | dot on the Rose mark | marked foes bleed 0.4 AD a second | +10% then +25% taken, blows keep the mark fresh, every spell marks, the mark passes on a kill, up to 3.5 AD a second | Crimson Weep (`ce_markwarp`): the bleed spills onto foes near it at half |
+| `ce_curse` | Wilting Curse | dot on parries | a parry lays 3 stacks, 0.2 AD a tick | each thrust on a cursed foe adds a stack, held feet, 5 stacks up to 12, a curse burst on a kill, +20% taken, up to 1.8 AD | Last Petal (`ce_riposte`): the lunge tears the curse out, 3 AD a stack |
+| `ce_mirror` | Mirror Blade | summon on parries and perfect dodges | 50% to call a glass rapier, 4 AD | sure call, a lunge back, the Rose mark, two rapiers, stagger, up to 20 AD | Hall of Mirrors (`ce_feint`): rapiers keep lunging for 2 s |
+| `ce_petals` | Petal Blades | summon on casts | 40% to call 2 petal blades for 4 s, 0.5 AD | sure call, a third blade, a bleed, 7 s, faster darts, up to 4 blades at 0.9 AD | Rose Guard (`ce_bloom`): five blades circle her for good |
+| `ce_sentinel` | Thorn Sentinel | summon on the third thrust | 50% to plant a rapier of light for 3 s, 0.8 AD a thrust | sure plant, two then three at once, pinning thrusts, more reach, faster thrusts, up to 1.5 AD | Thorn Garden (`ce_lunge`): it bursts for 6 AD when it fades |
 | `ce_tempest` | Rose Tempest | the four charged tiers | charged skills +30% | the Rose mark on every foe in reach, faster charge, an echo streak, a pull and more reach, up to +250% | Rose Storm (`ce_measure`): four more streaks, two each way |
 
 Count by mechanic: 4 thrust skills, 1 guard skill, 4 warp and dash skills, 1 jump skill, 3 spell skills, 3 damage over time, 3 summons, 1 charged-tier skill.
 Poise and Grace moved from `passive` to `movement` for the drill split.
-Native-only effects (a perfect dodge, Points, riposte links) do nothing in the drill; parries, casts and the lunge trigger the native summons and curses in both.
+Native-only effects (Points, riposte links, the native string's moves) do nothing in the drill.
+Parries, perfect dodges (a dash through a blow), casts and the third thrust trigger the summons and curses in both.
+Weeping Mark and Wilting Curse keep their native rows and swap one level each for a drill property (every spell marks; thrusts deepen the curse).
 
 ## Identity
 
@@ -67,7 +69,7 @@ Every skill sits on a button the shared moveset already has, or runs on its own.
 - Combo length never changes (`comboHits: 5`).
 - Precise payoffs follow `docs/skill-design.md`: Measured Touch's Keen bonus lands only on the foe the Keen move paid off on, and Perfect Measure's star only on that foe.
 - Damage source: her own presses (string, ripostes, warp, dodge thrust, abilities, ultimate, dive landing) count as `attacks`, `abilities` or `ultimate` and build Flow; bleeds, curses and summons use the skill's id and build none.
-- Counts: attack 5, movement 3, spell 3, dot 3, summon 3, passive 2, ultimate 1. Risk: easy 6, timed 9, precise 5.
+- Counts: attack 5, movement 5, spell 3, dot 3, summon 3, ultimate 1. Risk: easy 6, timed 9, precise 5.
 - "New" in a card line marks a level that adds a property; every skill has at least four.
 
 ## Balance
@@ -122,21 +124,21 @@ Still off or unmeasured:
 | `ce_lunge` | Long Lunge | attack | timed | J | `ce_needle` | Comet Lunge |
 | `ce_pin` | Pinning Point | attack | easy | J | `ce_thorns` | Butterfly Pin |
 | `ce_feint` | Feint | attack | timed | J | `ce_mirror` | Phantom Feint |
-| `ce_markwarp` | Rose Mark | movement | timed | J | `ce_lunge` | Crimson Seal |
+| `ce_markwarp` | Rose Mark | movement | timed | U | `ce_lunge` | Crimson Seal |
 | `ce_step` | Passing Touch | movement | timed | L | `ce_measure` | Petal Step |
 | `ce_dive` | Swallow Dive | movement | timed | jump | `ce_step` | Swallow Storm |
-| `ce_bloom` | Rose Bloom | spell | easy | I | `ce_petals` | Garden of Blades |
+| `ce_bloom` | Rose Bloom | spell | easy | I | `ce_petals` | Full Bloom |
 | `ce_needle` | Needle Rain | spell | timed | I | `ce_markwarp` | Starneedle Rain |
 | `ce_mirrorguard` | Mirror Guard | spell | precise | I | `ce_riposte` | Perfect Mirror |
-| `ce_thorns` | Thorn Wounds | dot | easy | auto | `ce_pin` | Bloodrose |
+| `ce_thorns` | Thorn Wounds | dot | easy | auto | `ce_pin` | Thorn Burst |
 | `ce_weep` | Weeping Mark | dot | timed | auto | `ce_markwarp` | Crimson Weep |
 | `ce_curse` | Wilting Curse | dot | precise | auto | `ce_riposte` | Last Petal |
 | `ce_mirror` | Mirror Blade | summon | precise | auto | `ce_feint` | Hall of Mirrors |
 | `ce_petals` | Petal Blades | summon | easy | auto | `ce_bloom` | Rose Guard |
 | `ce_sentinel` | Thorn Sentinel | summon | timed | auto | `ce_lunge` | Thorn Garden |
-| `ce_poise` | Poise | passive | easy | auto | `ce_lunge` | Perfect Poise |
-| `ce_grace` | Grace | passive | timed | K | `ce_riposte` | Rose Grace |
-| `ce_tempest` | Rose Tempest | ultimate | easy | U | `ce_measure` | Thousand Roses |
+| `ce_poise` | Poise | movement | easy | L | `ce_lunge` | Perfect Poise |
+| `ce_grace` | Grace | movement | timed | U | `ce_riposte` | Rose Grace |
+| `ce_tempest` | Rose Tempest | ultimate | easy | J | `ce_measure` | Rose Storm |
 
 #### `ce_measure` Measured Touch
 

@@ -1,5 +1,5 @@
 import { ELEMENT_ORDER } from "../constants/elements";
-import { FLOW } from "../constants/growth";
+import { ATTUNEMENT, FLOW, MASTERY } from "../constants/growth";
 import { ELEMENT_STATS, FUSION_RANK, FUSIONS, type FusionId, RESONANCE_WEIGHT } from "../constants/resonance";
 import type { ArtDef } from "../types/art";
 import type { Build, BuildStats } from "../types/build";
@@ -17,6 +17,10 @@ export function resonanceRanks(b: Build, c: CharacterDef, arts: Readonly<Record<
     if (!level) continue;
     ranks[skill.element] += level * RESONANCE_WEIGHT.skillLevel;
     if (b.evolved.includes(skill.id)) ranks[skill.element] += RESONANCE_WEIGHT.evolved;
+    ranks[skill.element] += (b.mastery[skill.id] ?? 0) * MASTERY.resonance;
+  }
+  for (const [element, level] of Object.entries(b.attunement) as [ElementId, number][]) {
+    ranks[element] += level * ATTUNEMENT.resonance;
   }
   for (const [id, level] of Object.entries(b.arts) as [ArtId, number][]) {
     ranks[arts[id].element] += level * RESONANCE_WEIGHT.artLevel;

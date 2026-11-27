@@ -20,8 +20,8 @@ Numbers here are starting values; balance changes them in the constants files, n
 
 ## Slots
 
-- 8 skill slots from the first run (`SKILL_SLOTS`) and 5 charm slots at most (`CHARM_SLOTS`), 3 of them open at the start (`docs/unlocks.md`).
-- A new skill or charm is only offered while a slot is free.
+- Skill slots open with the hero level (`SKILL_SLOT_LEVELS`): 4 at the start, the 5th at level 15, the 6th at 30, the 7th at 45 and the 8th at 60.
+- A new skill is only offered while an open slot is free.
 
 ## Skills
 
@@ -119,11 +119,49 @@ Rules:
 
 ## Experience and picks
 
-- Experience for the next level: `15 + 10 x (level - 1)`, no level cap below 99. A full run reaches about level 80.
-- Picks still wait for the end of the wave (owner rule, 3 November 2026): each level banks a point, the cards open when the wave's last foe falls.
-- A pick deals 3 cards, 4 with luck. Cards are drawn without repeats by weight (`CARD_WEIGHT`): a skill not held yet 100, the next level of a held skill 9, a new charm its own weight (90, Multitude and Haste 50), a held charm's next level the same. Picks have no prerequisites; once the 8 skill slots are full no new skill is dealt, and once an ultimate skill is held no other ultimate skill is.
-- Every run starts with 2 rerolls, 2 skips and 1 banish; the shop sells more. Reroll deals new cards without the ones shown. Skip spends the point for nothing. Banish removes one card's skill or charm from the run and deals again.
+- Picks still wait for the end of the wave in co-op; in solo they bank and are spent with a mentor or on the map.
+- A pick deals 3 cards, 4 with luck, drawn without repeats by weight (`CARD_WEIGHT`).
+- Picks have no prerequisites; once an ultimate skill is held no other ultimate skill is dealt.
+- Every run starts with 2 rerolls, 2 skips and 1 banish. Reroll deals new cards without the ones shown. Skip spends the point for nothing. Banish removes one card from the run and deals again.
 - When nothing is left to offer, Second Wind fills the cards.
+
+## Pick budget
+
+One stage runs from level 1 to 99 (`docs/pick-pacing.md`).
+A level up gives a pick every level up to 30, then every second level, plus a milestone pick at 50, 75 and 99 (`PICK_SCHEDULE`, `picksAtLevel` in `src/utils/cardSupply.ts`).
+
+| Levels | Picks | Open slots | What the cards offer |
+| --- | --- | --- | --- |
+| 2 to 15 | 14 | 4, 5th at 15 | new skills, then their levels |
+| 16 to 30 | 15 | 5, 6th at 30 | a new skill per slot, levels, first masteries |
+| 31 to 50 | 11 | 6, 7th at 45 | levels, masteries, charge ranks |
+| 51 to 79 | 15 | 7, 8th at 60 | levels, masteries |
+| 80 to 99 | 11 | 8 | masteries, charge ranks, attunements |
+| Total | 66 | | |
+
+Card kinds and their supply:
+
+| Card | Weight | Levels | When it is dealt |
+| --- | --- | --- | --- |
+| New skill | 100 | 1 | an open slot is free and the skill is available |
+| Skill level | 14 | 2 to 8 | the skill is held below level 8 |
+| Mastery | 10 | 4 per skill | the skill is at level 8, evolved or not; each level adds +5% attack and ability power and +2 Resonance in its element |
+| Deeper Charge | 10 | 6 | solo play; each rank makes the charged skill (held J) deal +15% and charge 6% faster |
+| Attunement | 8 | 3 per element | the hero ranks in that element; each level adds +3 Resonance |
+| Rift Art level | 45 | 2 to 5 | an Art is held |
+| Honing | 2 | no top | always: Whetstone (+4% attack), Focus (+4% ability power), Keen Eye (+1.5% crit) |
+
+Supply at level 99: 8 skills give 64 levels and 32 masteries, plus 6 charge ranks and up to 15 attunements, about 115 cards for 66 picks.
+With only 5 skills open (a new player), 40 levels, 20 masteries, 6 charge ranks and the attunements still cover the 66 picks; Honing never runs out, so Second Wind only fills a fourth card.
+Rift Arts are not counted, since they no longer carry between stages.
+A chest can also raise a mastery level.
+
+The skill pool takes an availability filter: `CardView.isAvailable(skillId)` in `src/utils/cards.ts`, all skills when not given, so meta unlocks can lock skills without touching the deal.
+
+Checked with `docs/growth-review/skill-sim.mts`: 500 stages per hero, a greedy player, chests at levels 15, 45, 70, 85 and 99.
+Load it through the dev server (`await import("/docs/growth-review/skill-sim.mts")` in the browser console) and read `PICK_BUDGET`.
+Every hero, with all 20 skills or the first 5 only, gets 66 picks and never lands on Second Wind or Honing for want of cards.
+With 20 skills the last 20 levels still offer skill levels and masteries; with 5 skills they offer masteries, charge ranks and attunements.
 
 ## Skill cards and evolutions
 

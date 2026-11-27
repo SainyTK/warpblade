@@ -7,6 +7,7 @@ import { DUSK_SIGIL_DRILL } from "./duskSigil";
 import { DUSK_THREAD_DRILL } from "./duskThread";
 import { DUSK_WALTZ_DRILL } from "./duskWaltz";
 import { FALLING_MOON_DRILL } from "./fallingMoon";
+import { FALLING_NIGHT_DRILL } from "./fallingNight";
 import { RISING_EDGE_DRILL } from "./risingEdge";
 import { SKY_RIBBON_DRILL } from "./skyRibbon";
 import { SLIPSTREAM_DRILL } from "./slipstream";
@@ -31,6 +32,7 @@ export const VESPER_DRILL_SKILLS: readonly VesperDrillSkill[] = [
   DUSK_GALE_DRILL,
   DUSK_THREAD_DRILL,
   DUSK_SIGIL_DRILL,
+  FALLING_NIGHT_DRILL,
   AFTERGLOW_DRILL,
   DUSK_WALTZ_DRILL,
 ];

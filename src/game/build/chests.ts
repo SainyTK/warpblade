@@ -16,7 +16,7 @@ import { queueEvolution } from "../evolve";
 import { feat } from "../feat";
 import { refreshGrowing } from "../progress";
 import { character, fxRng, game, hero, lights, particles, progress, rng } from "../state";
-import { evolveSkill, raiseArt, raiseSkill } from "./raise";
+import { evolveSkill, raiseArt, raiseMastery, raiseSkill } from "./raise";
 import { currentBuildStats } from "./stats";
 
 /** Chests: dropped by elites, mini bosses and the wave 20 boss; touching one opens it for the hero who touched it. */
@@ -59,6 +59,7 @@ function grant(rewards: readonly ChestReward[]): void {
       queueEvolution(skillOf(character, r.id)?.evolution.name ?? "");
     } else if (r.type === "skill") raiseSkill(r.id);
     else if (r.type === "art") raiseArt(r.id);
+    else if (r.type === "mastery") raiseMastery(r.id);
   }
   refreshGrowing();
   if (rewards.some((r) => r.type === "heal")) {

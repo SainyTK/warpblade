@@ -43,7 +43,7 @@ export const IRON_SKIN: SkillDef = {
   evolution: {
     partner: "br_cry",
     name: "Living Anvil",
-    text: "While Heft is at half or more she wears her armour at all times.",
+    text: "Every dash leaves a shock ring round her.",
     row: evolvedRow(LEVELS[7], "Every dash leaves a shock ring.", {
       ...drillValues({ ring: 1.5 }),
       living: 1,

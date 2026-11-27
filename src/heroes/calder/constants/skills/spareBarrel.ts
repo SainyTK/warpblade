@@ -12,7 +12,7 @@ const LEVELS = levelRows([
   { text: "Shot 0.6 to 1.5; stands 6 s.", values: { power: 1.5, life: 6 } },
   { text: "New: two barrels at once.", values: { most: 2 } },
   { text: "New: its shots stagger the foe.", values: { stagger: 0.2 } },
-  { text: "New: a perfect dodge plants one too.", values: { dodge: 1 } },
+  { text: "New: dashing through a blow plants one too.", values: { dodge: 1 } },
   { text: "Shot 1.5 to 4; always plants.", values: { power: 4, chance: 1 } },
 ]);
 

@@ -4,7 +4,7 @@ import { evolvedRow, levelRows } from "../../../../utils/skillRows";
 
 /** values: `damage` ability power a wound deals each tick per stack, `max` stacks, `ult` Jade Rain lays wounds too, `duration` seconds the wounds last, `every` seconds between ticks, `burst` when a lotus ends, foes take this share of their wounds' remaining damage at once */
 const LEVELS = levelRows([
-  { text: "Ability cuts leave bleeding wounds.", values: { damage: 0.05, max: 4, duration: 3, every: 0.5 } },
+  { text: "Sword art cuts leave bleeding wounds.", values: { damage: 0.05, max: 4, duration: 3, every: 0.5 } },
   { text: "Wound damage 0.05 to 0.07.", values: { damage: 0.07 } },
   { text: "New: wounds stack to 8.", values: { max: 8 } },
   { text: "Wound damage 0.07 to 0.09.", values: { damage: 0.09 } },
@@ -22,7 +22,7 @@ export const THOUSAND_CUTS: SkillDef = {
   risk: "timed",
   button: "auto",
   pact: PACT.blood,
-  text: "Your abilities' cuts leave bleeding wounds.",
+  text: "Your sword arts' cuts leave bleeding wounds.",
   levels: LEVELS,
   evolution: {
     partner: "yu_crescent",

@@ -1,3 +1,4 @@
+import { usesDrill } from "../../../../drill";
 import { dealDamage } from "../../../../game/damage";
 import { createSlash } from "../../../../game/effects/slash";
 import { enemyBox, enemyCenter } from "../../../../game/enemies/enemy";
@@ -66,7 +67,7 @@ function dash(s: Shade, dt: number): boolean {
 
 /**
  * Dusk Shade: a blow of hers may call a shade that dashes through its foe with a cross cut; levels make it cut its whole
- * line, turn back and come in pairs, and as Shade Troupe a shade comes with every blow at the top of Tempo.
+ * line, turn back and come in pairs, and as Shade Troupe a shade comes with every blow (at the top of Tempo in the native kit).
  */
 export const duskShade: SkillBehavior = {
   create: () => ({ cd: 0, shades: [] }),
@@ -83,7 +84,7 @@ export const duskShade: SkillBehavior = {
       if (ev.source !== "attacks") return;
       const m = memoryOf(memory);
       const v = skillValues(ID);
-      const always = skillEvolved(ID) && tempoTop();
+      const always = skillEvolved(ID) && (usesDrill() || tempoTop());
       if (m.cd > 0 || (!always && !rng.chance(v.chance))) return;
       m.cd = withBuild("cooldown", v.cooldown);
       const side = rng.chance(0.5) ? 1 : -1;

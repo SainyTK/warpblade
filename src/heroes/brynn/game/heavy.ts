@@ -1,9 +1,7 @@
-import { emitSkillEvent } from "../../../game/skills/events";
 import { skillValues } from "../../../game/skills/query";
 import { game, hero, progress } from "../../../game/state";
 import { FISSURE } from "../constants/heft";
 import { HEAVY } from "../constants/string";
-import "../types/events";
 import { createFloorWave } from "./effects/floorWave";
 import { createCrescentWave } from "./effects/heavyWave";
 import { brynn } from "./state";
@@ -28,7 +26,7 @@ function heavyFissure(share: number): void {
 }
 
 /** a heavy swing landed: a crimson crescent flies off the blade along the swing's line, the streak grows */
-export function heavyLanded(hits: number): void {
+export function heavyLanded(): void {
   const v = skillValues("br_heavy");
   brynn.heavyStreak++;
   game.fx.push(
@@ -42,5 +40,4 @@ export function heavyLanded(hits: number): void {
     }),
   );
   if (v.heavyFissure && hero.ground) heavyFissure(v.heavyFissure);
-  emitSkillEvent({ type: "heavy", hits });
 }

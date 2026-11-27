@@ -2,8 +2,8 @@ import type { SkillDef } from "../../../../types/skill";
 import { evolvedRow, levelRows } from "../../../../utils/skillRows";
 
 /** values: `chance` a launch sends swallows, `count` swallows, `power` attack damage each, `cooldown` least seconds
- *  between flights, `pierce` foes one strikes, `ground` they dive at foes on the floor too, `airTop` an air blow at the top
- *  of Tempo sends one, `storm` (evolved) swallows a launch sends */
+ *  between flights, `pierce` foes one strikes, `ground` they dive at foes on the floor too, `airTop` an air blow sends one
+ *  (at the top of Tempo in the native kit), `storm` (evolved) swallows a launch sends */
 const LEVELS = levelRows([
   {
     text: "A launch may send 2 dusk swallows at foes in the air.",
@@ -14,7 +14,7 @@ const LEVELS = levelRows([
   { text: "3 swallows.", values: { count: 3 } },
   { text: "New: swallows dive at foes on the floor too and throw them up.", values: { ground: 1 } },
   { text: "Swallows 0.6 to 0.75; every launch sends them.", values: { power: 0.75, chance: 1 } },
-  { text: "New: an air blow at the top of Tempo sends a swallow.", values: { airTop: 1 } },
+  { text: "New: a cut that lands while you are in the air sends a swallow.", values: { airTop: 1 } },
   { text: "4 swallows; 0.75 to 0.9.", values: { count: 4, power: 0.9 } },
 ]);
 

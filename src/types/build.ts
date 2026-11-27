@@ -1,4 +1,5 @@
-import type { ArtId } from "./campaign";
+import type { ArtId, ElementId } from "./campaign";
+import type { Stats } from "./stats";
 /** the hero's own presses: their blows, their abilities and their ultimate */
 export type HeroSource = "attacks" | "abilities" | "ultimate";
 /** what dealt a hit, for the end of run screen: one of the hero's own presses, or a skill's id for a hit it dealt on its own */
@@ -40,6 +41,10 @@ export interface Build {
   arts: Partial<Record<ArtId, number>>;
   /** skills in their evolved form */
   evolved: string[];
+  mastery: Record<string, number>;
+  chargeRank: number;
+  attunement: Partial<Record<ElementId, number>>;
+  honing: Partial<Record<HoningId, number>>;
   /** banished card keys (`skill:<id>`, `charm:might`), never dealt again this run */
   banished: string[];
   rerolls: number;
@@ -56,11 +61,26 @@ export interface Build {
 export type Card =
   | { type: "skill"; id: string; level: number }
   | { type: "art"; id: ArtId; level: number }
+  | { type: "mastery"; id: string; level: number }
+  | { type: "charge"; id: "rank"; level: number }
+  | { type: "attunement"; id: ElementId; level: number }
+  | { type: "honing"; id: HoningId; level: number }
   | { type: "boon"; id: string };
+
+export type HoningId = "whetstone" | "focus" | "keenEye";
+
+export interface HoningDef {
+  name: string;
+  text: string;
+  icon: string;
+  stats?: Partial<Stats>;
+  scale?: Partial<Stats>;
+}
 
 /** what one chest gave */
 export type ChestReward =
   | { type: "evolve"; id: string }
   | { type: "skill"; id: string; level: number }
   | { type: "art"; id: ArtId; level: number }
+  | { type: "mastery"; id: string; level: number }
   | { type: "heal" };

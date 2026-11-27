@@ -11,7 +11,8 @@ Solo Adventure runs base Vesper on the shared drill engine (`src/drill`).
 All 20 skills are offered there and each one upgrades a drill mechanic; the reward pool has no filter.
 The rows keep the numbers the native kit reads (the wave arena and co-op), so the sections after this one still describe her native kit, and the card text is the drill's.
 Drill code: `src/heroes/vesper/game/drill/skills/` (one file per redesigned skill), folded into `VESPER_DRILL` by `game/drill/hooks.ts`.
-The native code of the redesigned skills that answer events (Ascending Step, Dusk Sigil, Afterglow, Unbroken Rhythm, Wanderer's Grace) is quiet while the drill runs (`game/skills/nativeOnly.ts`).
+The native code of the redesigned skills that answer events (Ascending Step, Dusk Sigil, Afterglow, Unbroken Rhythm, Wanderer's Grace) is quiet while the drill runs (`nativeOrDrill` in `game/skills/index.ts`).
+Falling Night, Dusk Shade, Night Swallows and Twin Phantom answer shared events that fire in the drill (`blow`, `launch`, `parry`, `perfectDodge`), so their native code runs in both kits.
 
 | Id | Name | Mechanic | Level 1 | Levels 2 to 8 | Evolution (partner) |
 | --- | --- | --- | --- | --- | --- |
@@ -29,17 +30,20 @@ The native code of the redesigned skills that answer events (Ascending Step, Dus
 | `ve_gale` | Dusk Gale | Dusk Gale | +0.4 AD | a second gust, wider blasts, a gust behind, up to +3.2 AD | Twilight Cyclone (`ve_sky`): gale hits lift the foes near |
 | `ve_thread` | Dusk Thread | Dusk Thread | +0.4 AD | runs on to more foes (up to 3), stagger, faster preparation, up to +2.8 AD | Fate Thread (`ve_warp`): a thread hit recharges the warp |
 | `ve_hex` | Dusk Sigil | dot on cuts | landed cuts lay sigils | warp lays 3, sigils jump, the moonrise blooms them, infused cuts lay more | Sigil Bloom (`ve_moon`): Falling Moon blooms the sigils |
-| `ve_night` | Falling Night | dot on air blows | as in the native kit | as in the native kit; drill launches count | Starless Night (`ve_sky`) |
+| `ve_night` | Falling Night | dot on air blows | blows on foes in the air lay night | the moonrise lays 2, a 20% air bonus, launches lay 2, up to 8 at 0.3 AD | Starless Night (`ve_sky`): the moonrise takes all the night at once |
 | `ve_glow` | Afterglow | dot on the dash | foes the dash passes glow | the warp lays more, a burst on death, spells lay it | Dusk Fire (`ve_edge`): each dash flares every afterglow |
-| `ve_shade` | Dusk Shade | summon on blows | as in the native kit | as in the native kit | Shade Troupe (`ve_storm`) |
-| `ve_swallow` | Night Swallows | summon on launches | as in the native kit; the moonrise, Falling Moon and air juggles launch | as in the native kit | Swallow Storm (`ve_night`) |
-| `ve_twin` | Twin Phantom | summon on parries | as in the native kit | as in the native kit | Mirror Dance (`ve_turn`) |
+| `ve_shade` | Dusk Shade | summon on blows | a blow may call a shade | its whole line, a turn back, pairs, up to 2.2 AD | Shade Troupe (`ve_storm`): every blow calls a shade |
+| `ve_swallow` | Night Swallows | summon on launches | a launch may send 2 swallows; the moonrise, Falling Moon and air juggles launch | pierce, dives at foes on the floor, a swallow on cuts in the air, 4 swallows | Swallow Storm (`ve_night`): six swallows at every launch |
+| `ve_twin` | Twin Phantom | summon on parries | a parry or perfect dodge may call a phantom | a launch, back cuts, 5 cuts, a 3 s stay | Mirror Dance (`ve_turn`): two phantoms, blows +30% while out |
 | `ve_waltz` | Dusk Waltz | the four charged tiers | tiers +30% | dancing afterimage cuts, faster charge, reach, a pull, up to +250% | Endless Waltz (`ve_rhythm`): each tier dances twice |
 
 Count by mechanic: 4 slash skills, 1 guard skill, 4 warp and dash skills, 1 jump skill, 3 spell skills, 3 damage over time, 3 summons, 1 charged-tier skill.
 Kinds: attack 5, movement 5, spell 3, dot 3, summon 3, ultimate 1.
 Effects that exist only in the drill (the `drill.` numbers) do nothing in the native kit.
-Tempo does not run in the drill, so the native levels of Dusk Shade and Night Swallows that read the top of Tempo only fire in the native kit, and a perfect dodge does not exist in the drill, so Twin Phantom's perfect dodge trigger is native only.
+Tempo does not run in the drill.
+In the drill Shade Troupe calls a shade with every blow and Night Swallows' level 7 sends a swallow on any cut in the air; the native kit keeps both at the top of Tempo.
+Falling Night's level 3 and Starless Night act on the moonrise in the drill (`game/drill/skills/fallingNight.ts`) and on the nightfall's landing in the native kit.
+A perfect dodge in the drill is a blow met during a dash, so Twin Phantom's perfect dodge trigger works in both kits.
 
 ## Identity
 
@@ -302,13 +306,13 @@ Foes you strike in the air carry night that keeps cutting them.
 | --- | --- |
 | 1 | Blows on foes in the air lay night that cuts as it burns. |
 | 2 | Night 0.08 to 0.12. |
-| 3 | New: the nightfall's landing lays 2 night on each foe it cuts. |
+| 3 | New: the moonrise lays 2 night on each foe it cuts. |
 | 4 | Up to 6 night on a foe. |
 | 5 | New: a foe with night takes 20% more while in the air. |
 | 6 | Night 0.12 to 0.2; it lasts 5 s. |
 | 7 | New: a launch lays 2 night. |
 | 8 | Night 0.2 to 0.3; up to 8. |
-| Evolved | Starless Night, with `ve_sky` at level 4 or more: The nightfall's landing takes all the night on each foe it cuts, each stack a blow of 0.8 times attack damage. |
+| Evolved | Starless Night, with `ve_sky` at level 4 or more: The moonrise takes all the night on each foe it cuts, each stack a blow of 0.8 times attack damage. |
 
 ### Afterglow (`ve_glow`)
 
@@ -340,7 +344,7 @@ Your blows may call a shade of you that dashes through the foe.
 | 6 | Chance 35%; a shade every 0.6 s at most. |
 | 7 | New: shades come in pairs, one from each side. |
 | 8 | Cut 1.5 to 2.2. |
-| Evolved | Shade Troupe, with `ve_storm` at level 4 or more: At the top of Tempo every blow calls a shade, as often as its wait allows. |
+| Evolved | Shade Troupe, with `ve_storm` at level 4 or more: Every blow calls a shade, as often as its wait allows. |
 
 ### Night Swallows (`ve_swallow`)
 
@@ -354,7 +358,7 @@ Throwing a foe up may send dusk swallows diving at foes in the air.
 | 4 | 3 swallows. |
 | 5 | New: swallows dive at foes on the floor too and throw them up. |
 | 6 | Swallows 0.6 to 0.75; every launch sends them. |
-| 7 | New: an air blow at the top of Tempo sends a swallow. |
+| 7 | New: a cut that lands while you are in the air sends a swallow. |
 | 8 | 4 swallows; 0.75 to 0.9. |
 | Evolved | Swallow Storm, with `ve_night` at level 4 or more: Six swallows circle you and dive at every launch. |
 

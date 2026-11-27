@@ -2,7 +2,7 @@ import { enemyCenter } from "../../../../game/enemies/enemy";
 import { hero } from "../../../../game/state";
 import type { SkillCast } from "../../../../types/drill";
 import { later } from "./later";
-import { fireRound } from "./round";
+import { breakChamber, fireRound } from "./round";
 import { foesAhead, foesNear } from "./targets";
 
 const ROUND_SHARE = 0.06;
@@ -19,6 +19,7 @@ export function releaseRounds({ tier, x, y }: SkillCast): void {
         fireRound(foe, { power, kind: "ultimate", hot: true, big: i === 5 }, at),
       );
     }
+    later(tier.intro * 0.1 + 6 * 0.07, breakChamber);
     return;
   }
   const foes = foesAhead(tier.reach).slice(0, tier.level === 1 ? 1 : 6);

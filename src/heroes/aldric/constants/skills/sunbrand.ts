@@ -32,7 +32,7 @@ export const SUNBRAND: SkillDef = {
   element: "blaze",
   risk: "timed",
   button: "J",
-  text: "Every bash brands the foes it strikes with burning light that stacks.",
+  text: "The Shield bash brands the foes it strikes with burning light that stacks.",
   levels: LEVELS,
   evolution: {
     partner: "al_breaker",

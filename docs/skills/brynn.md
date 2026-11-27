@@ -23,20 +23,22 @@ Drill code: `src/heroes/brynn/game/drill/skills/` (one file per redesigned skill
 | `br_ironskin` | Iron Skin | dash and air dash | untouchable while dashing | untouchable after a dash and a warp, up to two more air dashes, the air dash restores the air slash | Living Anvil (`br_cry`): every dash leaves a shock ring |
 | `br_cry` | War Cry | warp and infusion | an arrival infuses the blade for 1 hit | faster preparation (up to 40%), longer infusions, an arrival shortens a preparation, 2 hits | Battle Roar (`br_bellows`): every arrival readies the selected spell |
 | `br_crater` | Crater Leap | jump, wall kick, air | a hard landing rings foes for 0.8 AD | a shoving wall kick, an air dash, an air slash, a wider ring that throws foes up, up to 4 AD | Crater Pull (`br_spin`): the landing drags foes in and splits fissures |
-| `br_arc` | Ember Arc | Ember Arc | burns 1.5 s longer | wider blasts, a flare on slashing burning foes, an extra blast up to 3.5 AD, a crescent with each cast | Wildfire Arc (`br_embers`): each hit sends a crescent on |
+| `br_arc` | Ember Arc | Ember Arc | burns 1.5 s longer | wider blasts, a flare on slashing burning foes, an extra blast up to 3.5 AD, a crescent with each cast | Wildfire Arc (`br_cinder`): each hit sends a crescent on |
 | `br_pillars` | Brand Pillars | Quake | two pillars rise where Quake strikes | three then five pillars, longer stagger, wider quakes, burning pillars, up to 3 AD | Aftershock (`br_fault`): Quake strikes again after 0.5 s |
 | `br_bellows` | Bloodletter | Rend | Rend lays 2 more bleed stacks | a blast, a slash opens bleeding wounds, Rend splits into two then three shards, up to 4 AD | Red Tide (`br_crush`): Rend runs a floor wave on |
-| `br_embers` | Searing Edge | dot on slashes | as in the native kit | as in the native kit | as in the native kit |
-| `br_crush` | Crushing Weight | dot on the second and third slash | the heave lays one crush stack, the slam two | as in the native kit | as in the native kit |
-| `br_fault` | Fault Lines | dot on shockwaves and fissures | as in the native kit | as in the native kit | as in the native kit |
-| `br_echo` | Echo Swing | summon on parries | as in the native kit | as in the native kit | as in the native kit |
+| `br_cinder` | Cinder Edge | dot on slashes and dashes | each slash lays an ember (0.06 AD a tick, 4 at most) | the third slash lays 3, the third slash spreads them, a dash lays 2, each slash 2, up to 0.45 AD and 12 | Forge Heart (`br_arc`): a foe full of embers bursts |
+| `br_crush` | Crushing Weight | dot on the second and third slash | the heave lays one crush stack, the slam two | blows on foes in the air crush, the third slash on a foe in the air lays 3, a kill passes the stacks on, crushed foes are held | Grindstone (`br_launch`): the third slash grinds out every stack |
+| `br_fault` | Fault Lines | dot on the third slash and floor waves | the third slash leaves a 60 px burning crack ahead, and so do shockwaves | slowed, fissures crack too, held in place, 90 px, both ways, up to 1.1 AD a tick | Rift Floor (`br_slam`): a crack bursts up as it burns out |
+| `br_echo` | Echo Swing | summon on parries | as in the native kit | perfect dodges and Keen blows call it too; the rest as in the native kit | as in the native kit |
 | `br_falling` | Falling Blade | summon on kills | as in the native kit | as in the native kit | as in the native kit |
-| `br_shard` | Red Shard | summon on blows | as in the native kit | as in the native kit | as in the native kit |
+| `br_splinter` | Heart Splinter | summon on warp strikes | a warp strike may leave a red splinter that darts at foes | the third slash chips one, a mark, two per warp, pierce, up to 2 AD and four out | Crimson Halo (`br_heavy`): four splinters circle her for good |
 | `br_fall` | Crimson Fall | the four charged tiers | charged skills +30% | faster charge, a pull, more reach, an echo strike, up to +250% | Crimson Cataclysm (`br_heavy`): every charged skill shakes twice more |
 
 Count by mechanic: 4 slash skills, 1 guard skill, 4 warp and dash skills, 1 jump skill, 3 spell skills, 3 damage over time, 3 summons, 1 charged-tier skill.
 Effects that exist only in the drill (the `drill.` numbers) do nothing in the native kit.
-Keen timing, Heft and armour do not exist in the drill, so native levels that read them only fire in the native kit.
+Heft and armour do not exist in the drill, so native levels that read them only fire in the native kit.
+Cinder Edge, Crushing Weight, Echo Swing, Falling Blade and Heart Splinter answer shared events (`blow` with its `finisher`, `keen` and `airborne` flags, `dash`, `warp`, `parry`, `perfectDodge`, `kill`), so the same code runs in both kits.
+Their card text describes the drill.
 
 ## Identity
 
@@ -68,33 +70,35 @@ Ember Arc and Brand Pillars play Rend's cut and Quake's plunge as their casts; W
 
 ## The 20 skills
 
-Counts: attack 5, movement 3, spell 3, dot 3, summon 3, passive 2, ultimate 1. Risk: easy 6, timed 11, precise 3.
+Counts: attack 5, movement 5, spell 3, dot 3, summon 3, ultimate 1.
+Risk: easy 6, timed 11, precise 3.
+The sections below keep the native level tables; where a skill's drill card differs, the Drill set table above and the data rows hold the drill's.
 The Values column shows only the numbers a level changes; the data rows (`src/heroes/brynn/constants/skills/`) carry the whole state.
 "New" in a card line marks a level that adds a property; the rest are number steps.
 Damage source: hits of her own presses (string blows and their waves, the Counter Cleave, the dodge's shoulder, the abilities, Crimson Fall) count as `attacks`, `abilities` or `ultimate` and build Flow; embers, cracks, crush, falling blades, echoes, shards, crashes and the Iron Wheel use the skill id and build no Flow.
 
 | Id | Name | Kind | Risk | Button | Partner | Evolution |
 | --- | --- | --- | --- | --- | --- | --- |
-| `br_heavy` | Heavy Hands | attack | precise | J | `br_slam` | Mountain Hands |
+| `br_heavy` | Heavy Hands | attack | precise | J | `br_slam` | Meteor Hands |
 | `br_cleave` | Wide Arc | attack | easy | J | `br_launch` | Horizon Cleave |
-| `br_launch` | Skyward Heave | attack | timed | J | `br_cleave` | Meteor Heave |
+| `br_launch` | Skyward Heave | attack | timed | J | `br_cleave` | Skyfall |
 | `br_slam` | Anvil Weight | attack | timed | J | `br_heavy` | Split Earth |
 | `br_counter` | Counter Cleave | attack | precise | K | `br_ironskin` | Iron Answer |
-| `br_spin` | Spinning Throw | movement | timed | J | `br_crater` | Iron Wheel |
-| `br_crater` | Crater Leap | movement | timed | Up | `br_spin` | Star Crater |
+| `br_spin` | Spinning Throw | movement | timed | J | `br_crater` | Anvil Drop |
+| `br_crater` | Crater Leap | movement | timed | jump | `br_spin` | Crater Pull |
 | `br_charge` | Shoulder Charge | movement | timed | L | `br_cry` | Battering Ram |
-| `br_arc` | Ember Arc | spell | easy | I | `br_embers` | Crimson Moon |
-| `br_pillars` | Brand Pillars | spell | timed | I | `br_fault` | Pillar Forest |
-| `br_cry` | War Cry | spell | easy | I | `br_bellows` | Unbroken |
-| `br_embers` | Searing Edge | dot | easy | auto | `br_arc` | Forge Heart |
+| `br_arc` | Ember Arc | spell | easy | I | `br_cinder` | Wildfire Arc |
+| `br_pillars` | Brand Pillars | spell | timed | I | `br_fault` | Aftershock |
+| `br_cry` | War Cry | movement | easy | J | `br_bellows` | Battle Roar |
+| `br_cinder` | Cinder Edge | dot | easy | auto | `br_arc` | Forge Heart |
 | `br_fault` | Fault Lines | dot | timed | auto | `br_slam` | Rift Floor |
 | `br_crush` | Crushing Weight | dot | timed | auto | `br_launch` | Grindstone |
 | `br_falling` | Falling Blade | summon | easy | auto | `br_fall` | Blade Rain |
 | `br_echo` | Echo Swing | summon | precise | auto | `br_counter` | Twin Echo |
-| `br_shard` | Red Shard | summon | timed | auto | `br_heavy` | Shard Halo |
-| `br_ironskin` | Iron Skin | passive | easy | auto | `br_cry` | Living Anvil |
-| `br_bellows` | Bellows | passive | timed | auto | `br_crush` | Furnace |
-| `br_fall` | Crimson Fall | ultimate | timed | U | `br_heavy` | Sundered Sky |
+| `br_splinter` | Heart Splinter | summon | timed | auto | `br_heavy` | Crimson Halo |
+| `br_ironskin` | Iron Skin | movement | easy | L | `br_cry` | Living Anvil |
+| `br_bellows` | Bloodletter | spell | timed | I | `br_crush` | Red Tide |
+| `br_fall` | Crimson Fall | ultimate | timed | J | `br_heavy` | Crimson Cataclysm |
 
 #### `br_heavy` Heavy Hands
 
@@ -111,8 +115,8 @@ Attack, precise, J. Press J just after a blow lands: the Keen blow hits far hard
 | 7 | New: a Keen slam is a fissure from half Heft. | halfFissure 1 |
 | 8 | Heavy bonus +350% to +2000%; the crescent hits far harder. | bonus 20, wave 4 |
 
-Evolution **Mountain Hands** (partner `br_slam`): Every Keen blow also splits the floor with a fissure ahead of her.
-Evolved values: bonus 30, heavyFissure 0.8.
+Evolution **Meteor Hands** (partner `br_slam`): Every air slash quakes the floor below her and throws foes up.
+Evolved values: drill.quake 1.5 (native: bonus 30, heavyFissure 0.8).
 
 #### `br_cleave` Wide Arc
 
@@ -255,8 +259,8 @@ Spell, easy, I. An ability: throw a tall crimson crescent that cuts every foe al
 | 7 | New: crescents fly the whole screen. | reach 320 |
 | 8 | Power 3.5 to 5 AP; three crescents. | power 5, count 3 |
 
-Evolution **Crimson Moon** (partner `br_embers`): The crescents turn at the end of their flight and cut back through the line to her.
-Evolved values: back 1.
+Evolution **Wildfire Arc** (partner `br_cinder`): Each foe Ember Arc hits sends a crimson crescent on along the line.
+Evolved values: drill.chain 1.5 (native: back 1).
 
 #### `br_pillars` Brand Pillars
 
@@ -273,8 +277,8 @@ Spell, timed, I. An ability: crimson pillars burst out of the floor in a line ah
 | 7 | New: the line erupts again a moment later. | again 0.6 |
 | 8 | Power 2.2 to 4.4 AP; the second line as hard. | power 4.4, again 1 |
 
-Evolution **Pillar Forest** (partner `br_fault`): The line erupts three times, and the last time twice as hard.
-Evolved values: third 2.
+Evolution **Aftershock** (partner `br_fault`): Quake strikes again half a second later where it struck.
+Evolved values: drill.again 1 (native: again 1, third 2).
 
 #### `br_cry` War Cry
 
@@ -291,40 +295,45 @@ Spell, easy, I. An ability: a roar that knocks foes back, fills Heft and makes h
 | 7 | New: she is armoured the whole time. | armour 1 |
 | 8 | Roar 1 to 4 AP; Heft fills to full. | heft 100, power 4 |
 
-Evolution **Unbroken** (partner `br_bellows`): While the cry lasts every swing is Keen and she takes a third less.
-Evolved values: heavy 1, taken 0.33.
+Evolution **Battle Roar** (partner `br_bellows`): Every warp arrival readies the selected spell at once.
+Evolved values: drill.ready 1 (native: heavy 1, taken 0.33).
 
-#### `br_embers` Searing Edge
+#### `br_cinder` Cinder Edge
 
-Dot, easy, auto. Her blows leave embers that burn foes, more with every blow.
+Dot, easy, auto. Her slashes lay searing embers, and the third slash lays the most.
+It replaced Searing Edge (`br_embers`), which laid embers only on blows of a native combo move, so it never fired in the drill.
+It answers the shared `blow` event (a sword blow, with the third slash as the finisher) and the `dash` event, so it runs in both kits.
 
 | Lv | Card line | Values |
 | --- | --- | --- |
-| 1 | Her blows leave searing embers that burn foes. | damage 0.06, max 4, stacks 1, heavy 1 |
-| 2 | Embers burn 0.06 to 0.1 AD a tick. | damage 0.1 |
-| 3 | New: a Keen blow lays 3 embers. | heavy 3 |
-| 4 | New: a foe with embers takes 15% more from her; it holds 8. | max 8, taken 0.15 |
-| 5 | New: the slam spreads embers to the foes round its target. | slam 1 |
-| 6 | Embers burn 0.1 to 0.2 AD. | damage 0.2 |
-| 7 | New: each blow lays 2 embers; a foe holds 12. | max 12, stacks 2 |
-| 8 | Embers burn 0.2 to 0.4 AD. | damage 0.4 |
+| 1 | Her slashes lay searing embers that burn foes. | damage 0.06, max 4, stacks 1, finisher 1 |
+| 2 | New: the third slash lays 3 embers. | finisher 3 |
+| 3 | New: the third slash spreads a foe's embers to the foes beside it. | spread 1 |
+| 4 | Embers burn 0.06 to 0.12 AD a tick; a foe holds 8. | damage 0.12, max 8 |
+| 5 | New: a dash lays 2 embers on each foe it passes through. | dash 2 |
+| 6 | Embers burn 0.12 to 0.22 AD. | damage 0.22 |
+| 7 | New: each slash lays 2 embers; a foe holds 12. | stacks 2, max 12 |
+| 8 | Embers burn 0.22 to 0.45 AD. | damage 0.45 |
 
 Evolution **Forge Heart** (partner `br_arc`): A foe filled with embers bursts into a crimson blast that burns those round it.
-Evolved values: burst 1.2.
+Evolved values: burst 0.5 AD per ember.
+A full foe at level 8 burns 12 times 0.45 AD a tick against 4 times 0.06 at level 1, about 22 times.
 
 #### `br_fault` Fault Lines
 
-Dot, timed, auto. Shockwaves leave burning cracks in the floor that hurt foes standing on them.
+Dot, timed, auto. The third slash and her shockwaves leave burning cracks in the floor that hurt foes standing on them.
+In the drill only other skills made shockwaves, so on its own it did nothing until a charged tier made a fissure; the third slash now cracks the floor itself (`game/drill/skills/faultLines.ts`, `drill.reach` and `drill.both`).
+The table shows the drill card; values without the `drill.` prefix are shared with the native kit.
 
 | Lv | Card line | Values |
 | --- | --- | --- |
-| 1 | Her shockwaves leave burning cracks in the floor. | damage 0.15, time 2, every 0.5 |
+| 1 | The third slash and her shockwaves leave burning cracks in the floor. | damage 0.15, time 2, every 0.5, drill.reach 60 |
 | 2 | New: foes walking over a crack are slowed; cracks burn 3 s. | time 3, chill 0.6 |
-| 3 | New: fissures and Rend leave burning cracks too. | fissure 1 |
+| 3 | New: fissures leave burning cracks too. | fissure 1 |
 | 4 | Cracks burn 0.15 to 0.3 AD a tick. | damage 0.3 |
 | 5 | New: foes on a crack are held in place. | halt 1 |
-| 6 | New: each tick on a foe gives 2 Heft; ticks every 0.35 s. | every 0.35, heft 2 |
-| 7 | Cracks burn 0.3 to 0.6 AD; they last 4 s. | damage 0.6, time 4 |
+| 6 | Cracks tick every 0.35 s; the third slash cracks 90 px. | every 0.35, heft 2 (native only), drill.reach 90 |
+| 7 | New: the third slash cracks both ways; cracks burn 0.6 AD for 4 s. | damage 0.6, time 4, drill.both 1 |
 | 8 | Cracks burn 0.6 to 1.1 AD. | damage 1.1 |
 
 Evolution **Rift Floor** (partner `br_slam`): When a crack burns out, it bursts up along its whole length.
@@ -332,20 +341,21 @@ Evolved values: erupt 4.
 
 #### `br_crush` Crushing Weight
 
-Dot, timed, auto. Foes she knocks down or throws up are crushed and bleed over time.
+Dot, timed, auto. Her second and third slashes crush foes, and crushed foes bleed.
+The spike and Grindstone read the `blow` event's finisher flag (the slam natively, the third slash in the drill); they read the native `slam` move before, which the drill never sets.
 
 | Lv | Card line | Values |
 | --- | --- | --- |
-| 1 | Foes she knocks down are crushed and bleed while they lie there. | damage 0.12, max 3, every 0.5, time 2 |
+| 1 | Her second and third slashes crush foes, and crushed foes bleed. | damage 0.12, max 3, every 0.5, time 2 |
 | 2 | Crush 0.12 to 0.2 AD a tick. | damage 0.2 |
-| 3 | New: launched foes are crushed too. | air 1 |
+| 3 | New: her blows crush foes in the air too. | air 1 |
 | 4 | A foe holds 6 stacks; they last 3 s and tick every 0.35 s. | max 6, every 0.35, time 3 |
-| 5 | New: a foe driven into the floor takes 3 stacks at once. | spike 3 |
+| 5 | New: the third slash on a foe in the air lays 3 stacks at once. | spike 3 |
 | 6 | New: a crushed foe that falls passes its stacks to the foes round it; crush 0.4 AD. | damage 0.4, spread 1 |
 | 7 | New: crushed foes are held in place while they bleed. | halt 1 |
 | 8 | Crush 0.4 to 0.8 AD; a foe holds 10. | damage 0.8, max 10 |
 
-Evolution **Grindstone** (partner `br_launch`): Her next slam on a crushed foe grinds all its stacks out at once.
+Evolution **Grindstone** (partner `br_launch`): Her third slash on a crushed foe grinds all its stacks out at once.
 Evolved values: grind 1.5.
 
 #### `br_falling` Falling Blade
@@ -369,6 +379,7 @@ Evolved values: rain 1.5.
 #### `br_echo` Echo Swing
 
 Summon, precise, auto. A parry calls a crimson echo of her behind the attacker that brings down a heavy cleave.
+Its sixth level answers a Keen sword blow through the shared `blow` event; it answered the native kit's own heavy-swing event before, which the drill never sent.
 
 | Lv | Card line | Values |
 | --- | --- | --- |
@@ -384,23 +395,26 @@ Summon, precise, auto. A parry calls a crimson echo of her behind the attacker t
 Evolution **Twin Echo** (partner `br_counter`): Two echoes, one on each side, and each cleave hits half again as hard.
 Evolved values: power 45, twin 1.
 
-#### `br_shard` Red Shard
+#### `br_splinter` Heart Splinter
 
-Summon, timed, auto. Her blows chip red shards off the crystal in Anvilheart that dart at foes on their own.
+Summon, timed, auto. A warp strike splinters the crystal in Anvilheart, and the red splinters dart at foes on their own.
+It replaced Red Shard (`br_shard`), which chipped shards only on blows of a native combo move, so it never fired in the drill.
+It answers the shared `warp` event and the `blow` event's finisher flag, so it runs in both kits.
 
 | Lv | Card line | Values |
 | --- | --- | --- |
-| 1 | A blow may chip off a red shard of her crystal that darts at foes. | chance 0.25, power 0.5, strikes 3, count 1, cooldown 0.5 |
-| 2 | Chance 25% to 40%. | chance 0.4 |
-| 3 | New: a Keen blow always throws one. | heavyShard 1 |
-| 4 | New: a shard's strike marks the foe, +10% from her for 2 s; 5 strikes. | strikes 5, mark 0.1 |
-| 5 | Power 0.5 to 0.9 AD. | power 0.9 |
-| 6 | New: two shards out at once. | count 2 |
-| 7 | New: shard strikes pass through to a second foe. | pierce 1 |
-| 8 | Power 0.9 to 1.8 AD; three shards. | power 1.8, count 3 |
+| 1 | A warp strike may leave a red splinter that darts at foes. | chance 0.6, warp 1, power 0.5, strikes 3, count 2, cooldown 0.5 |
+| 2 | New: the third slash may chip one off too. | finisher 0.3 |
+| 3 | New: a splinter's strike marks the foe, +10% from her for 2 s. | mark 0.1 |
+| 4 | Power 0.5 to 0.9 AD; 5 strikes each. | power 0.9, strikes 5 |
+| 5 | New: a warp strike leaves two splinters. | warp 2 |
+| 6 | Power 0.9 to 1.4 AD; every warp strike leaves them. | power 1.4, chance 1 |
+| 7 | New: splinter strikes pass through to a second foe. | pierce 1 |
+| 8 | Power 1.4 to 2 AD; four out at once. | power 2, count 4 |
 
-Evolution **Shard Halo** (partner `br_heavy`): Four shards circle her for good and dart out at every foe near her.
+Evolution **Crimson Halo** (partner `br_heavy`): Four splinters circle her for good and dart out at every foe near her.
 Evolved values: count 4, orbit 1.
+One warp strike is worth 0.6 times 3 strikes of 0.5 AD at level 1 and 2 splinters of 5 strikes of 2 AD at level 8, about 22 times.
 
 #### `br_ironskin` Iron Skin
 
@@ -417,8 +431,8 @@ Passive, easy, auto. Her armour stops more of each blow, and she stands longer.
 | 7 | Armour takes 20% to 35% more. | armour 0.35 |
 | 8 | Max HP +40 to +60; a block costs 40% less. | block 0.4, max hp +60 |
 
-Evolution **Living Anvil** (partner `br_cry`): While Heft is at half or more she wears her armour at all times.
-Evolved values: living 1.
+Evolution **Living Anvil** (partner `br_cry`): Every dash leaves a shock ring round her.
+Evolved values: drill.ring 1.5 (native: living 1).
 
 #### `br_bellows` Bellows
 
@@ -440,7 +454,7 @@ Evolved values: keep 0.5.
 
 #### `br_fall` Crimson Fall
 
-Ultimate, timed, U. Crimson Fall grows: fissures, aftershocks and a second crescent join it. Grows with attack damage. Hold U to charge up to four levels, release to strike. Higher levels cost more MP; level 4 spends a full bar.
+Ultimate, timed, J held. The four tiers of Crimson Fall on held J hit harder, reach farther and charge faster.
 
 | Lv | Card line | Values |
 | --- | --- | --- |
@@ -481,7 +495,6 @@ Two runs of Brynn's base kit read 150 and 177 on the crowd and 74 and 119 on one
 | Crushing Weight | one | 74 to 119 | 39 (23 its own) | 124 (57 its own) |
 | Falling Blade | crowd | 150 to 177 | 689 (392 its own, before tuning); 170 (73 its own) after | 1677 (before tuning); 126 (86 its own) after |
 | Echo Swing | one | 74 to 119 | 105 (42 its own, before tuning); 123 (110 its own) after | 126 (63 its own, before tuning); 178 (164 its own) after |
-| Red Shard | one | 74 to 119 | 98 (55 its own) | 235 (217 its own) |
 | Bellows | crowd | 150 to 177 | 137 | 267 |
 | Crimson Fall | crowd, cast every 10 s | 54 a second from the ultimate | 467 (8.7 times the base special) | 293 (5.4 times) |
 
@@ -490,7 +503,7 @@ Tuning from those runs, in the data rows: Falling Blade's power, its seventh lev
 ### Still off or not measured
 
 - Crater Leap and Shoulder Charge read the same as the base kit in the first room, since its scripted player never jumped or dodged out of a free state; a second room that did jumped onto the ledges and stood out of reach, so its figures were not used. Both were seen working in play (stills and the build runs) and are unmeasured.
-- Counter Cleave after tuning, Searing Edge at level 8, War Cry at level 8, Iron Skin (no damage of its own) and every level 1 figure but two were not measured.
+- Counter Cleave after tuning, War Cry at level 8, Iron Skin (no damage of its own), Cinder Edge, Heart Splinter and every level 1 figure but two were not measured.
 - Crimson Fall evolved read lower than level 8, which the overkill of a refilling crowd can explain; per cast it sits near the 6 times asked at level 8 and under the 15 times asked evolved.
 - Precise skills sit under the precise band on one foe at the model's trigger rates, as Kael's did before his round 2.
 
@@ -520,8 +533,8 @@ Every run from the start menu in a fresh session, on this branch (`agent-studio/
 | Crater Leap | `game/moves/air.ts`, `game/craterLanding.ts` |
 | Shoulder Charge | `game/shoulderCharge.ts` on the shared dodge's hooks |
 | Ember Arc, Brand Pillars, War Cry | `game/spells.ts`, `game/abilities.ts`, `game/effects/pillars.ts`, `game/effects/heavyWave.ts` |
-| Searing Edge, Fault Lines, Crushing Weight | `game/skills/searingEdge.ts`, `faultLines.ts`, `crushingWeight.ts` |
-| Falling Blade, Echo Swing, Red Shard | `game/skills/fallingBlade.ts`, `echoSwing.ts`, `redShard.ts` |
+| Cinder Edge, Fault Lines, Crushing Weight | `game/skills/cinderEdge.ts`, `faultLines.ts`, `crushingWeight.ts`, `game/effects/crack.ts`, `game/drill/skills/faultLines.ts`, `game/drill/skills/crushingWeight.ts` |
+| Falling Blade, Echo Swing, Heart Splinter | `game/skills/fallingBlade.ts`, `echoSwing.ts`, `heartSplinter.ts` |
 | Iron Skin, Bellows | `game/armour.ts`, `game/heft.ts`, `game/stamina.ts`, `game/bonus.ts` |
 | Crimson Fall | `game/ultimate/crimsonFall.ts` |
 
