@@ -23,15 +23,4 @@ export const STAGES: Readonly<Record<StageId, StageDef>> = {
   citadel,
 };
 
-export const RIFT_STAGES: readonly StageId[] = [
-  "marsh",
-  "foundry",
-  "glacier",
-  "skyway",
-  "archive",
-  "moonlit",
-  "veil",
-  "blight",
-];
-
 export const stageDef = (id: StageId): StageDef => STAGES[id];
