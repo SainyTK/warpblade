@@ -1,4 +1,5 @@
 import { PAL } from "../constants/palette";
+import { LYING_PICKUP_LIFT, XP_ORB_PIXELS } from "../constants/pickupPixels";
 import { XP_ORB_MOTION as M, XP_ORB } from "../constants/progression";
 import { sfx } from "../services/audio";
 import type { XpOrb } from "../types/game";
@@ -8,6 +9,7 @@ import { fall, home } from "./coins";
 import { coop } from "./coopHooks";
 import { earnXp } from "./progress";
 import { game, hero, particles, rng } from "./state";
+import { spriteTouchesHero } from "./world";
 
 /** the orb lying nearest a point */
 function nearestOrb(x: number, y: number): XpOrb {
@@ -46,7 +48,8 @@ export function updateXpOrbs(dt: number): void {
     const d = Math.hypot(dx, dy) || 1;
     if (o.t >= M.pull && hero.state !== "dead") home(o, dx, dy, d, dt, M);
     else fall(o, dt, M);
-    if (o.t < M.settle || d > M.reach || hero.state === "dead") continue;
+    const touched = spriteTouchesHero(o.x, o.y - LYING_PICKUP_LIFT, XP_ORB_PIXELS);
+    if ((!touched && d > M.reach) || hero.state === "dead") continue;
     o.done = true;
     gained += o.value;
     particles.spawn(PK.STAR, o.x, o.y, 0, -12, 0.3, { col: PAL.heal[4], size: 2 });

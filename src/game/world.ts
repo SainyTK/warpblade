@@ -1,5 +1,5 @@
 import { WORLD_COLORS } from "../constants/palette";
-import { GROUND } from "../constants/stage";
+import { GROUND, RES } from "../constants/stage";
 import type { Enemy } from "../types/enemy";
 import { PK } from "../types/particle";
 import type { Box } from "../types/world";
@@ -26,6 +26,11 @@ export function surfaceBelow(x: number, y: number): number {
 }
 export const boxHit = (a: Box, b: Box): boolean => a[0] < b[2] && a[2] > b[0] && a[1] < b[3] && a[3] > b[1];
 export const heroBox = (): Box => [hero.x - 5, hero.y - 32, hero.x + 5, hero.y];
+export function spriteTouchesHero(centerX: number, centerY: number, pixelRows: readonly string[]): boolean {
+  const halfW = pixelRows[0].length / RES / 2;
+  const halfH = pixelRows.length / RES / 2;
+  return boxHit([centerX - halfW, centerY - halfH, centerX + halfW, centerY + halfH], heroBox());
+}
 /** a box in front of the hero, in pixels from the feet as if facing right */
 export function boxAhead(x0: number, y0: number, x1: number, y1: number): Box {
   return hero.face > 0

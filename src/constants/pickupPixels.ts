@@ -25,6 +25,9 @@ export const XP_ORB_PIXELS = ["...l...", "..lHl..", ".lHWLl.", "lHWLLld", ".lLLl
 
 /** a mana or heal mote: a small round bead */
 export const MOTE_PIXELS = [".lll.", "lHWLl", "lWLLd", "lLLLd", ".ddd."] as const;
+export const MOTE_DRAW_SHIFT = 1;
+export const LYING_PICKUP_LIFT = 0.5;
+export const SHARD_LIFT = 5;
 
 export const SHARD_PIXELS = {
   heart: [

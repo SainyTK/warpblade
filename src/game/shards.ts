@@ -1,4 +1,5 @@
 import { PAL } from "../constants/palette";
+import { SHARD_LIFT, SHARD_PIXELS } from "../constants/pickupPixels";
 import { SHARD_MOTION as M, SHARD_DROP, SHARD_GAIN, SHARD_NAME } from "../constants/vitals";
 import { sfx } from "../services/audio";
 import type { Enemy } from "../types/enemy";
@@ -11,6 +12,7 @@ import { createFloorRing } from "./effects/floorRing";
 import { fightOver } from "./endWave";
 import { refreshGrowing } from "./progress";
 import { fxRng, game, hero, lights, particles, progress, rng, showBanner } from "./state";
+import { spriteTouchesHero } from "./world";
 
 const SHARD_RAMP = { heart: PAL.heart, mana: PAL.crystal } as const;
 
@@ -65,7 +67,8 @@ export function updateShards(dt: number): void {
     const d = Math.hypot(dx, dy) || 1;
     if (s.t >= M.pull && hero.state !== "dead") home(s, dx, dy, d, dt, M);
     else fall(s, dt, M);
-    if (s.t < M.settle || d > M.reach || hero.state === "dead") continue;
+    const touched = spriteTouchesHero(s.x, s.y - SHARD_LIFT, SHARD_PIXELS[s.kind]);
+    if ((!touched && d > M.reach) || hero.state === "dead") continue;
     s.done = true;
     gainShard(s);
   }
