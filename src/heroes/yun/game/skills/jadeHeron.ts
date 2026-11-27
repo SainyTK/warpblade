@@ -3,6 +3,7 @@ import { game, hero, progress, rng } from "../../../../game/state";
 import type { SkillBehavior, SkillMemory } from "../../../../types/skillBehavior";
 import { SKILL } from "../../constants/skillIds";
 import { createHeron } from "../effects/heron";
+import { HERON, yunFx } from "../fx";
 
 interface Memory extends SkillMemory {
   cd: number;
@@ -16,6 +17,14 @@ function call(m: Memory): void {
   const v = skillValues(SKILL.heron);
   if (m.cd > 0 || !rng.chance(v.chance)) return;
   m.cd = v.cooldown;
+  const at = {
+    x: hero.x + hero.face * 6,
+    y: hero.y - 22,
+    face: hero.face,
+    toX: hero.x + hero.face * REACH * 0.5,
+    toY: hero.y - 22,
+  };
+  yunFx(SKILL.heron, "trail", at, { damage: progress.stats.ad * v.power * v.count, signature: HERON });
   for (let i = 0; i < v.count; i++)
     game.fx.push(
       createHeron({

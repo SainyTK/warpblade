@@ -1,8 +1,9 @@
 import { skillEvolved, skillValues, withBuild } from "../../../game/skills/query";
-import { game, hero } from "../../../game/state";
+import { game, hero, progress } from "../../../game/state";
 import { SKILL } from "../constants/skillIds";
 import { ECHO } from "../constants/swords";
 import { createEchoThrust } from "./effects/echoThrust";
+import { isLead, VOLLEY, yunFx } from "./fx";
 import { hoverPlace, type SwordPlace } from "./hover";
 import { woundFoe } from "./skills/lingeringQi";
 import { yun } from "./state";
@@ -44,4 +45,8 @@ export function echoBlow(keen: boolean, times = 1): void {
   };
   for (let i = 0; i < yun.swords; i++) if (yun.away[i] <= 0) send(hoverPlace(i), i, i);
   if (!order && v.ghost) send(jianPlace(), 0, null);
+  if (!order) return;
+  const at = { x: hero.x, y: hero.y - 22, face: hero.face, toX: hero.x + hero.face * reach, toY: hero.y - 22 };
+  const damage = progress.stats.ad * shape.power * order;
+  yunFx(SKILL.echo, "trail", at, { damage, quiet: !isLead(SKILL.echo), signature: VOLLEY });
 }

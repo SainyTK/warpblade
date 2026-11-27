@@ -9,6 +9,7 @@ import type { Enemy } from "../../../../types/enemy";
 import type { SkillBehavior } from "../../../../types/skillBehavior";
 import { SKILL } from "../../constants/skillIds";
 import { JADE_SPARKS } from "../../look";
+import { isLead, RIBBON, yunFx } from "../fx";
 
 /** a wound ticks this often and lasts this long after the last one was laid */
 const TICK = { every: 0.5, duration: 4 } as const;
@@ -25,9 +26,18 @@ export function woundFoe(e: Enemy, stacks = 1): void {
     duration: withBuild("duration", TICK.duration),
   });
   if (v.chill) e.chill = Math.max(e.chill, v.chill);
+  const [cx, cy] = enemyCenter(e);
+  const laid = progress.stats.ad * v.damage * stacksOf(e, SKILL.wound) * (TICK.duration / TICK.every);
+  yunFx(SKILL.wound, "mark", { x: cx, y: cy }, { damage: laid, quiet: !isLead(SKILL.wound), signature: RIBBON });
   if (!skillEvolved(SKILL.wound) || stacksOf(e, SKILL.wound) < v.max) return;
   const n = consumeStacks(e, SKILL.wound);
   dealDamage(e, progress.stats.ad * v.burst * n, { source: SKILL.wound, kx: 0, ky: -20 });
+  yunFx(
+    SKILL.wound,
+    "burst",
+    { x: cx, y: cy, reach: 12 },
+    { damage: progress.stats.ad * v.burst * n, signature: RIBBON },
+  );
   game.fx.push(createImpact(...enemyCenter(e), 1, true, JADE_SPARKS));
 }
 

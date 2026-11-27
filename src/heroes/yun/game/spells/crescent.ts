@@ -5,6 +5,7 @@ import { SKILL } from "../../constants/skillIds";
 import { TIDE_WAVE } from "../../constants/string";
 import { createDelayed } from "../effects/delayed";
 import { createQiWave, type QiWaveShape } from "../effects/qiWave";
+import { CRESCENTS, yunFx } from "../fx";
 import { gainSwords } from "../swords";
 
 /**
@@ -32,6 +33,8 @@ export function castCrescent(wide: boolean): void {
     const x = hero.x + face * 10;
     const y = hero.y - 4 - shape.half;
     game.fx.push(createQiWave(x, y, face, shape));
+    const at = { x, y: hero.y - 18, face, reach: 18 * (v.tall ?? 1) };
+    yunFx(SKILL.crescent, "slash", at, { damage: shape.damage, quiet: face !== hero.face, signature: CRESCENTS });
     if (v.twin) game.fx.push(createDelayed(TIDE_WAVE.twinDelay, () => game.fx.push(createQiWave(x, y, face, shape))));
   }
 }

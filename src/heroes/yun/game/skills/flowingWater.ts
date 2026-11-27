@@ -5,6 +5,7 @@ import { game, hero, progress } from "../../../../game/state";
 import type { Enemy } from "../../../../types/enemy";
 import { SKILL } from "../../constants/skillIds";
 import { createQiWave } from "../effects/qiWave";
+import { CRESCENTS, yunFx } from "../fx";
 import { yun } from "../state";
 import { gainSwords } from "../swords";
 
@@ -26,6 +27,8 @@ export function keenLanded(foe: Enemy | null): void {
     gainSwords(1);
   }
   if (v.lift && foe?.air) foe.vy = Math.min(foe.vy, -LIFT);
+  const at = { x: hero.x + hero.face * 10, y: hero.y - 20, face: hero.face, reach: 18 };
+  yunFx(SKILL.flow, "slash", at, { damage: progress.stats.ad * (v.wave ?? 1) * (v.waves ?? 1), signature: CRESCENTS });
   if (!v.wave) return;
   const payoff = createPayoff();
   for (let i = 0; i < (v.waves ?? 1); i++)

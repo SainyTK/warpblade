@@ -1,6 +1,8 @@
 import { drillFighter } from "../../../../../drill";
 import { staggerFoe } from "../../../../../game/enemies/stagger";
+import { progress } from "../../../../../game/state";
 import type { YunDrillSkill } from "../../../types/drillSkill";
+import { PETALS, yunFx } from "../../fx";
 import { foesNear, skillStrike } from "../strike";
 import { sendWave } from "./qiWave";
 
@@ -19,6 +21,8 @@ export const PETAL_STORM_DRILL: YunDrillSkill = {
       return;
     }
     dance.slashed = true;
+    const at = { x: h.x + h.face * 12, y: h.y - 8, face: h.face, reach: 16 };
+    yunFx(ID, "slash", at, { damage: progress.stats.ad * (values.petal ?? 1), quiet: !landed, signature: PETALS });
     if (!landed) {
       return;
     }
@@ -38,6 +42,12 @@ export const PETAL_STORM_DRILL: YunDrillSkill = {
       return;
     }
     if (h.grounded && !dance.grounded && dance.slashed && evolved) {
+      yunFx(
+        ID,
+        "nova",
+        { x: h.x, y: h.y, face: h.face, reach: 40 },
+        { damage: progress.stats.ad * values.bloom * 2, signature: PETALS },
+      );
       for (const face of [-1, 1]) {
         sendWave({ x: h.x, y: h.y - 6, face, reach: 110, power: values.bloom, source: ID });
       }

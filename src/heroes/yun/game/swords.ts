@@ -1,7 +1,8 @@
 import { skillValues } from "../../../game/skills/query";
-import { game } from "../../../game/state";
+import { game, hero } from "../../../game/state";
 import { SKILL } from "../constants/skillIds";
 import { SPIRIT } from "../constants/swords";
+import { BREATH, yunFx } from "./fx";
 import { yun } from "./state";
 
 /** the most spirit swords he can hold now: Sage's Breath adds to it */
@@ -25,6 +26,7 @@ export function tickSwords(dt: number): void {
   if (yun.regen > 0) return;
   yun.regen = regenTime();
   yun.swords++;
+  yunFx(SKILL.breath, "burst", { x: hero.x, y: hero.y - 4, face: hero.face, reach: 8 }, { signature: BREATH });
 }
 
 /** spirit swords join him, up to the most he can hold */

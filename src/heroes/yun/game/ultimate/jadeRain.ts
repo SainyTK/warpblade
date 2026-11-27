@@ -4,9 +4,11 @@ import { ultimateValues } from "../../../../game/hero/ultimate";
 import { foesOnScreen } from "../../../../game/skills/targets";
 import { game, hero, progress } from "../../../../game/state";
 import { RAIN } from "../../constants/rain";
+import { SKILL } from "../../constants/skillIds";
 import { createDelayed } from "../effects/delayed";
 import { createLingeringRain } from "../effects/lingeringRain";
 import { createRainSword, type RainMark } from "../effects/rainSword";
+import { RAIN as RAIN_FX, yunFx } from "../fx";
 import { fillSwords } from "../swords";
 
 /** the side each of a foe's swords slants in from, so they converge on it */
@@ -20,6 +22,16 @@ function fall(foes: number, perFoe: number, each: number): void {
   const marks: RainMark[] = near.length
     ? near.map((foe) => ({ foe }))
     : RAIN.empty.map((d) => ({ x: hero.x + hero.face * d, y: Math.min(hero.y, GROUND) }));
+  marks.slice(0, 4).forEach((mark, f) => {
+    const x = "foe" in mark ? mark.foe.x : mark.x;
+    const y = "foe" in mark ? mark.foe.y : mark.y;
+    yunFx(
+      SKILL.rain,
+      "pillar",
+      { x, y: Math.min(y, GROUND), reach: 40 },
+      { damage: each * perFoe, quiet: f > 0, delay: 0.1 + f * 0.05, signature: RAIN_FX },
+    );
+  });
   marks.forEach((mark, f) => {
     for (let i = 0; i < perFoe; i++)
       game.fx.push(createRainSword(mark, (f + i * marks.length) * RAIN.gap, LEANS[i % LEANS.length], each, "ultimate"));

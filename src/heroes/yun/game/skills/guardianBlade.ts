@@ -10,6 +10,7 @@ import { TAU } from "../../../../utils/math";
 import { SKILL } from "../../constants/skillIds";
 import { JADE_SPARKS } from "../../look";
 import { drawSpiritSword } from "../art/spiritSword";
+import { isLead, ORBIT, yunFx } from "../fx";
 
 /** a guardian blade: seconds left, its place on the circle and seconds to its next strike */
 interface Guardian {
@@ -26,13 +27,13 @@ interface Memory extends SkillMemory {
 }
 
 /** the circle the guardians keep round him, their spin, how far they reach to strike, and a dive's length */
-const ORBIT = { radius: 16, height: -20, spin: 2.6, reach: 44, dive: 0.12 } as const;
+const ORBIT_AT = { radius: 16, height: -20, spin: 2.6, reach: 44, dive: 0.12 } as const;
 
 const where = (g: Guardian): [number, number] => {
-  const [ox, oy] = [hero.x + Math.cos(g.angle) * ORBIT.radius, hero.y + ORBIT.height + Math.sin(g.angle) * 6];
+  const [ox, oy] = [hero.x + Math.cos(g.angle) * ORBIT_AT.radius, hero.y + ORBIT_AT.height + Math.sin(g.angle) * 6];
   if (!g.at || g.dive <= 0) return [ox, oy];
   const [ex, ey] = enemyCenter(g.at);
-  const u = 1 - g.dive / ORBIT.dive;
+  const u = 1 - g.dive / ORBIT_AT.dive;
   return [ox + (ex - ox) * u, oy + (ey - oy) * u];
 };
 
@@ -44,11 +45,18 @@ export const guardianBlade: SkillBehavior = {
     const m = memory as Memory;
     const v = skillValues(SKILL.guardian);
     m.cd = Math.max(0, m.cd - dt);
+    if (state.evolved && m.guards.length < v.most)
+      yunFx(
+        SKILL.guardian,
+        "mark",
+        { x: hero.x, y: hero.y + ORBIT_AT.height, face: hero.face },
+        { damage: progress.stats.ad * v.power * v.most * 3, signature: ORBIT },
+      );
     if (state.evolved)
       while (m.guards.length < v.most)
         m.guards.push({ left: 1, angle: rng.range(0, TAU), next: v.every, dive: 0, at: null });
     for (const g of m.guards) {
-      g.angle += ORBIT.spin * dt;
+      g.angle += ORBIT_AT.spin * dt;
       g.dive = Math.max(0, g.dive - dt);
       if (!state.evolved) g.left -= dt;
       g.next -= dt;
@@ -72,6 +80,12 @@ export const guardianBlade: SkillBehavior = {
       if (state.evolved || m.cd > 0 || m.guards.length >= v.most || !rng.chance(v.chance)) return;
       m.cd = v.cooldown;
       m.guards.push({ left: withBuild("duration", v.life), angle: rng.range(0, TAU), next: 0.2, dive: 0, at: null });
+      yunFx(
+        SKILL.guardian,
+        "mark",
+        { x: hero.x, y: hero.y + ORBIT_AT.height, face: hero.face },
+        { damage: progress.stats.ad * v.power * 3, signature: ORBIT },
+      );
     },
   },
 };
@@ -79,7 +93,7 @@ export const guardianBlade: SkillBehavior = {
 /** the guardian dives at the foes nearest him within reach */
 function strike(g: Guardian, v: Readonly<Record<string, number>>): void {
   const near = game.enemies
-    .filter((e) => e.hp > 0 && distance2(e, hero.x, hero.y - 16) < ORBIT.reach ** 2)
+    .filter((e) => e.hp > 0 && distance2(e, hero.x, hero.y - 16) < ORBIT_AT.reach ** 2)
     .sort((a, b) => distance2(a, hero.x, hero.y) - distance2(b, hero.x, hero.y))
     .slice(0, v.targets);
   for (const e of near) {
@@ -90,7 +104,15 @@ function strike(g: Guardian, v: Readonly<Record<string, number>>): void {
     });
     if (v.chill) e.chill = Math.max(e.chill, v.chill);
     game.fx.push(createImpact(...enemyCenter(e), Math.sign(e.x - hero.x) || 1, false, JADE_SPARKS));
+    const [ex, ey] = enemyCenter(e);
+    const face = Math.sign(e.x - hero.x) || 1;
+    yunFx(
+      SKILL.guardian,
+      "slash",
+      { x: ex - face * 6, y: ey, face, reach: 12 },
+      { damage: progress.stats.ad * v.power, quiet: !isLead(SKILL.guardian) },
+    );
   }
   g.at = near[0] ?? null;
-  if (g.at) g.dive = ORBIT.dive;
+  if (g.at) g.dive = ORBIT_AT.dive;
 }

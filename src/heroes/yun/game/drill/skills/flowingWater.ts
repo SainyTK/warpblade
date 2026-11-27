@@ -1,5 +1,7 @@
 import { drillFighter } from "../../../../../drill";
+import { progress } from "../../../../../game/state";
 import type { YunDrillSkill } from "../../../types/drillSkill";
+import { CRESCENTS, yunFx } from "../../fx";
 import { sendWave } from "./qiWave";
 
 const ID = "yu_flow";
@@ -17,11 +19,25 @@ export const FLOWING_WATER_DRILL: YunDrillSkill = {
     const reach = evolved ? values.still : values.reach;
     const stun = evolved ? values.halt : (values.stagger ?? 0);
     sendWave({ x: h.x, y: h.y - 16, face: h.face, reach, power: values.wave, source: ID, stun });
+    const at = { x: h.x + h.face * 8, y: h.y - 16, face: h.face, reach: 18 };
+    yunFx(ID, "slash", at, { damage: progress.stats.ad * values.wave, signature: CRESCENTS });
     if (values.behind) {
       sendWave({ x: h.x, y: h.y - 16, face: -h.face, reach: reach * 0.6, power: values.wave * 0.5, source: ID });
+      yunFx(
+        ID,
+        "slash",
+        { x: h.x - h.face * 8, y: h.y - 16, face: -h.face, reach: 14 },
+        { quiet: true, signature: CRESCENTS },
+      );
     }
     if (values.twin) {
       sendWave({ x: h.x, y: h.y - 28, face: h.face, reach, power: values.wave * 0.6, source: ID });
+      yunFx(
+        ID,
+        "slash",
+        { x: h.x + h.face * 8, y: h.y - 30, face: h.face, reach: 14 },
+        { quiet: true, delay: 0.06, signature: CRESCENTS },
+      );
     }
   },
 };

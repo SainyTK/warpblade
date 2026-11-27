@@ -3,6 +3,7 @@ import { game, hero, progress } from "../../../../game/state";
 import { FAN, STREAM } from "../../constants/abilities";
 import { SKILL } from "../../constants/skillIds";
 import { createStreamSword } from "../effects/stream";
+import { FAN as FAN_FX, yunFx } from "../fx";
 import type { SwordPlace } from "../hover";
 
 /** where a conjured sword appears: at his sword fingers */
@@ -18,6 +19,8 @@ export function castFan(places: readonly SwordPlace[], wide: boolean): void {
   const v = skillValues(SKILL.fan);
   const swords = [...places, ...Array.from({ length: withBuild("amount", v.extra ?? 0) }, conjured)];
   const around = skillEvolved(SKILL.fan);
+  const at = { x: hero.x + hero.face * 6, y: hero.y - 18, face: hero.face, reach: 10 };
+  yunFx(SKILL.fan, "burst", at, { damage: progress.stats.ap * v.power * swords.length, signature: FAN_FX });
   swords.forEach((from, i) => {
     const rise = FAN.rises[i % FAN.rises.length] * (wide ? FAN.wide : 1);
     game.fx.push(

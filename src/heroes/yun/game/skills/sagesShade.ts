@@ -1,3 +1,4 @@
+import { walks } from "../../../../game/enemies/enemy";
 import { markFoe } from "../../../../game/enemies/skillStatus";
 import { skillValues, withBuild } from "../../../../game/skills/query";
 import { nearestFoe } from "../../../../game/skills/targets";
@@ -5,6 +6,7 @@ import { game, hero, progress } from "../../../../game/state";
 import type { SkillBehavior } from "../../../../types/skillBehavior";
 import { SKILL } from "../../constants/skillIds";
 import { createShade } from "../effects/shade";
+import { SHADE, yunFx } from "../fx";
 import { gainSwords } from "../swords";
 
 /** how far the answered foe may be, and how long the shade's mark lasts */
@@ -18,6 +20,14 @@ function callShade(reward: ShadeReward): void {
   const foe = nearestFoe(hero.x, hero.y - 16);
   if (!foe || Math.abs(foe.x - hero.x) > SHADE_REACH) return;
   const v = skillValues(SKILL.shade);
+  const side = Math.sign(foe.x - hero.x) || hero.face;
+  const at = { x: foe.x + side * 12, y: walks(foe) ? foe.y : hero.y, face: -side, reach: 20 };
+  yunFx(
+    SKILL.shade,
+    "slash",
+    { ...at, y: at.y - 16 },
+    { damage: progress.stats.ad * v.power * v.cuts, signature: SHADE },
+  );
   game.fx.push(
     createShade({
       foe,

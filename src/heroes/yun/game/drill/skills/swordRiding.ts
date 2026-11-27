@@ -4,6 +4,7 @@ import { nearestFoe } from "../../../../../game/skills/targets";
 import { game, hero, progress } from "../../../../../game/state";
 import type { YunDrillSkill } from "../../../types/drillSkill";
 import { createArrivalSword } from "../../effects/arrivalSword";
+import { RAIN, VOLLEY, yunFx } from "../../fx";
 
 const ID = "yu_ride";
 const REACH = 60;
@@ -25,8 +26,16 @@ export const SWORD_RIDING_DRILL: YunDrillSkill = {
       return;
     }
     const foe = nearestFoe(h.x, h.y - 16);
+    const ride = { x: h.x - h.face * 50, y: h.y - 18, face: h.face, toX: h.x, toY: h.y - 18 };
+    yunFx(ID, "trail", ride, { damage: progress.stats.ad * (1 + values.damage), signature: VOLLEY });
     if (values.swords && foe && Math.abs(foe.x - h.x) < REACH) {
       const [, ey] = enemyCenter(foe);
+      yunFx(
+        ID,
+        "pillar",
+        { x: foe.x, y: foe.air ? ey + 10 : foe.y, reach: 30 },
+        { damage: progress.stats.ad * values.power * values.swords, delay: 0.05, signature: RAIN },
+      );
       for (let i = 0; i < values.swords; i++) {
         const fromX = h.x - h.face * (8 + i * 5);
         game.fx.push(createArrivalSword(foe, fromX, ey - 26 - i * 4, i * GAP, progress.stats.ad * values.power));
