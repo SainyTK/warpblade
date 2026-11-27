@@ -1,5 +1,5 @@
 import type { EnemyKind } from "../../../game/enemies/kinds/kind";
-import type { StageFoeType } from "../../../types/enemy";
+import type { ArchiveFoe } from "./ids";
 import { inkling } from "./inkling/kind";
 import { pagewing } from "./pagewing/kind";
 import { pagewyrm } from "./pagewyrm/kind";
@@ -10,4 +10,4 @@ export const ARCHIVE_KINDS = {
   pagewing,
   tomeguard,
   pagewyrm,
-} satisfies Partial<Record<StageFoeType, EnemyKind>>;
+} satisfies Record<ArchiveFoe, EnemyKind>;

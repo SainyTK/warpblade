@@ -1,5 +1,5 @@
 import type { EnemyKind } from "../../../game/enemies/kinds/kind";
-import type { StageFoeType } from "../../../types/enemy";
+import type { BlightFoe } from "./ids";
 import { rotcrawler } from "./rotcrawler/kind";
 import { spitbloom } from "./spitbloom/kind";
 import { sporeheart } from "./sporeheart/kind";
@@ -10,4 +10,4 @@ export const BLIGHT_KINDS = {
   sporepuff,
   spitbloom,
   sporeheart,
-} satisfies Partial<Record<StageFoeType, EnemyKind>>;
+} satisfies Record<BlightFoe, EnemyKind>;

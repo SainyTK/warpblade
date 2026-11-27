@@ -1,7 +1,7 @@
 import type { EnemyKind } from "../../../game/enemies/kinds/kind";
-import type { StageFoeType } from "../../../types/enemy";
+import type { VeilFoe } from "./ids";
 import { riftknight } from "./riftknight";
 
 export const VEIL_KINDS = {
   riftknight,
-} satisfies Partial<Record<StageFoeType, EnemyKind>>;
+} satisfies Record<VeilFoe, EnemyKind>;

@@ -1,6 +1,6 @@
 import type { EnemyKind } from "../../../game/enemies/kinds/kind";
-import type { StageFoeType } from "../../../types/enemy";
 import { cryomancer } from "./cryomancer/kind";
+import type { GlacierFoe } from "./ids";
 import { rimeclaw } from "./rimeclaw/kind";
 import { rimehound } from "./rimehound/kind";
 import { shardling } from "./shardling/kind";
@@ -10,4 +10,4 @@ export const GLACIER_KINDS = {
   shardling,
   cryomancer,
   rimeclaw,
-} satisfies Partial<Record<StageFoeType, EnemyKind>>;
+} satisfies Record<GlacierFoe, EnemyKind>;

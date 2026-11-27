@@ -1,3 +1,13 @@
+import type { ArchiveFoe } from "../stages/archive/foes/ids";
+import type { BlightFoe } from "../stages/blight/foes/ids";
+import type { CitadelFoe } from "../stages/citadel/foes/ids";
+import type { FoundryFoe } from "../stages/foundry/foes/ids";
+import type { GlacierFoe } from "../stages/glacier/foes/ids";
+import type { MarshFoe } from "../stages/marsh/foes/ids";
+import type { MoonlitFoe } from "../stages/moonlit/foes/ids";
+import type { PrologueFoe } from "../stages/prologue/foes/ids";
+import type { SkywayFoe } from "../stages/skyway/foes/ids";
+import type { VeilFoe } from "../stages/veil/foes/ids";
 import type { HitWeight } from "./hit";
 /** night foes, the bosses, and the foes of each era: day, rain, twilight and abyss */
 export type EnemyType =
@@ -21,29 +31,16 @@ export type EnemyType =
   | StageFoeType;
 
 export type StageFoeType =
-  | "bogleech"
-  | "lanternshade"
-  | "riftknight"
-  | "slagling"
-  | "emberbat"
-  | "forgeguard"
-  | "cindersmith"
-  | "rimehound"
-  | "shardling"
-  | "cryomancer"
-  | "rimeclaw"
-  | "galehawk"
-  | "sparkjelly"
-  | "skyguard"
-  | "tempestroc"
-  | "rotcrawler"
-  | "sporepuff"
-  | "spitbloom"
-  | "sporeheart"
-  | "inkling"
-  | "pagewing"
-  | "tomeguard"
-  | "pagewyrm";
+  | PrologueFoe
+  | MarshFoe
+  | MoonlitFoe
+  | VeilFoe
+  | FoundryFoe
+  | GlacierFoe
+  | SkywayFoe
+  | BlightFoe
+  | ArchiveFoe
+  | CitadelFoe;
 export type EnemyState =
   | "drift"
   | "walk"
