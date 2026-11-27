@@ -3,7 +3,7 @@ import { HP_BAR, MOTE_COLORS, STUN_STAR, STUN_STAR_DIM } from "../constants/effe
 import { HERO_CANVAS } from "../constants/hero";
 import { HIT_WEIGHTS, REDUCED_SQUASH, SQUASH_BY_RANK } from "../constants/hitFeel";
 import { COIN_GOLD, ENEMY_COLORS, PAL } from "../constants/palette";
-import { MOTE_PIXELS } from "../constants/pickupPixels";
+import { MOTE_DRAW_SHIFT, MOTE_PIXELS } from "../constants/pickupPixels";
 import { ULT_LEVELS } from "../constants/ultimate";
 import { drillView, usesDrill } from "../drill";
 import { ellipseRing, fleck, glow, glowLine, hairline, place, px } from "../engine/frame";
@@ -228,8 +228,8 @@ export function drawPickups(): void {
   for (const o of game.pickups) {
     const rp = o.kind === "mp" ? PAL.crystal : PAL.heal;
     const twinkle = Math.sin(game.t * 20 + o.x) > 0;
-    const x = o.x + 1;
-    const y = o.y + 1;
+    const x = o.x + MOTE_DRAW_SHIFT;
+    const y = o.y + MOTE_DRAW_SHIFT;
     hairline(x - o.vx * 0.05, y - o.vy * 0.05, x, y, rp[2], (u) => u);
     stampPixels(MOTE_PIXELS, x, y, MOTE_COLORS[o.kind][twinkle ? 1 : 0]);
     glow(x, y, 8, rp[3], 0.45);

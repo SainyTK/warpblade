@@ -11,7 +11,6 @@ export const SHARD_DROP = {
 export const SHARD_MOTION = {
   gravity: 420,
   bounce: 0.35,
-  settle: 0.5,
   pull: 7,
   reach: 13,
   pullAccel: 700,

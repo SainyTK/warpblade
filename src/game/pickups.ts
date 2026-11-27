@@ -1,11 +1,14 @@
 import { PAL } from "../constants/palette";
+import { MOTE_DRAW_SHIFT, MOTE_PIXELS } from "../constants/pickupPixels";
 import { sfx } from "../services/audio";
 import { PK } from "../types/particle";
 import { coop } from "./coopHooks";
 import { game, hero, particles, progress } from "./state";
+import { spriteTouchesHero } from "./world";
 
 const HOMING_DELAY = 0.35;
 const RESTORE = { mp: 7, hp: 8 } as const;
+const HOMED_REACH = 8;
 
 /** orbs burst out, slow down, then home in on Kael's chest */
 export function updatePickups(dt: number): void {
@@ -30,7 +33,8 @@ export function updatePickups(dt: number): void {
     }
     o.x += o.vx * dt;
     o.y += o.vy * dt;
-    if (o.t > HOMING_DELAY && d < 8 && hero.state !== "dead") {
+    const touched = spriteTouchesHero(o.x + MOTE_DRAW_SHIFT, o.y + MOTE_DRAW_SHIFT, MOTE_PIXELS);
+    if ((touched || d < HOMED_REACH) && hero.state !== "dead") {
       o.done = true;
       if (o.kind === "mp") hero.mp = Math.min(progress.stats.mp, hero.mp + RESTORE.mp);
       else hero.hp = Math.min(progress.stats.hp, hero.hp + RESTORE.hp);
