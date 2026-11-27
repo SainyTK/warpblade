@@ -7,6 +7,7 @@ import { game, hero, progress } from "../../../../game/state";
 import type { SkillBehavior } from "../../../../types/skillBehavior";
 import { HOT_RAMP, PHOSPHOR } from "../../constants/colors";
 import { blastAt } from "../blastFoe";
+import { calderFx, calderRing } from "../skillFx";
 
 const SKILL = "ca_speedload";
 /** the ring's push or pull and stagger, and the reach of the quick reload's hot blast */
@@ -18,6 +19,12 @@ const RING_SLASH = { cx: 0, cy: -16, R: 18, sy: 0.3, rot: 0, a0: 0, a1: 6.2, W: 
 function ring(): void {
   const v = skillValues(SKILL);
   const reach = withBuild("area", v.reach);
+  calderRing(
+    SKILL,
+    "spikes",
+    { x: hero.x, y: hero.y, face: hero.face, reach: reach * 0.45 },
+    { damage: progress.stats.ad * v.ring },
+  );
   game.fx.push(createSlash(hero.x, hero.y, hero.face, { ...RING_SLASH, R: reach * 0.8, ramp: PHOSPHOR }));
   game.fx.push(createFloorRing(hero.x, hero.y, reach, PHOSPHOR, 0.3));
   for (const e of game.enemies) {
@@ -45,6 +52,10 @@ export const speedLoader: SkillBehavior = {
       if (v.ring) ring();
       if (!event.quick) return;
       if (v.mp) hero.mp = Math.min(progress.stats.mp, hero.mp + v.mp);
+      if (v.burst) {
+        const burst = { x: hero.x, y: hero.y - 16, face: hero.face, reach: 14 };
+        calderFx(SKILL, "burst", burst, { damage: progress.stats.ad * v.burst, quiet: !!v.ring });
+      }
       if (v.burst)
         blastAt(null, hero.x, hero.y - 16, {
           damage: 0,

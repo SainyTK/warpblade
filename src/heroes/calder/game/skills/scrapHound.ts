@@ -10,6 +10,7 @@ import type { SkillBehavior, SkillMemory } from "../../../../types/skillBehavior
 import { hex } from "../../../../utils/color";
 import { PHOSPHOR } from "../../constants/colors";
 import { blastAt } from "../blastFoe";
+import { calderFx, calderRing } from "../skillFx";
 
 const ID = "ca_hound";
 /** a hound's run speed, how close it bites from, how far it strays from Calder when no foe is near, its blast reach */
@@ -37,6 +38,8 @@ const memoryOf = (m: SkillMemory): HoundMemory => m as unknown as HoundMemory;
 
 function call(m: HoundMemory): void {
   const v = skillValues(ID);
+  const at = { x: hero.x, y: hero.y, face: hero.face, reach: 16 };
+  calderRing(ID, "wave", at, { damage: progress.stats.ad * v.power * 4 });
   m.hounds.push({
     x: hero.x,
     y: hero.y,
@@ -70,6 +73,7 @@ function run(h: Hound, dt: number): void {
   h.next -= dt;
   if (!foe || Math.abs(gap) > HOUND.bite || Math.abs(h.y - 4 - ty) > HOUND.reach || h.next > 0) return;
   h.next = v.every;
+  calderFx(ID, "burst", { x: tx, y: ty, face: h.face, reach: 6 }, { damage: progress.stats.ad * v.power, quiet: true });
   dealDamage(foe, progress.stats.ad * v.power, { fromX: h.x, kx: h.face * 20, ky: -10, source: ID });
   if (v.stagger && foe.rank === "minion") staggerFoe(foe, v.stagger);
 }
@@ -89,6 +93,9 @@ export const scrapHound: SkillBehavior = {
     for (const h of m.hounds) {
       h.left -= dt;
       run(h, dt);
+      if (h.left <= 0 && v.boom) {
+        calderFx(ID, "burst", { x: h.x, y: h.y - 4, reach: HOUND.boom * 0.5 }, { damage: progress.stats.ad * v.boom });
+      }
       if (h.left <= 0 && v.boom)
         blastAt(null, h.x, h.y - 4, {
           damage: 0,

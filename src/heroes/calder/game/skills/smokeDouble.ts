@@ -14,6 +14,7 @@ import { HOT_BLAST, TRIGGER } from "../../constants/chamber";
 import { GUNSMOKE, PHOSPHOR } from "../../constants/colors";
 import { blastFoe } from "../blastFoe";
 import { SLASHES } from "../moves/slashes";
+import { calderFx } from "../skillFx";
 
 const ID = "ca_double";
 /** the double stands this far from the foe on Calder's side of it, and fires its rounds this far apart */
@@ -32,6 +33,14 @@ function createDouble(foe: Enemy, side: number): Effect {
   const x = fx - side * DOUBLE.gap;
   const y = foe.y;
   const shots = v.shots;
+  const volley = progress.stats.ad * TRIGGER.blast * v.power * shots;
+  calderFx(ID, "mark", { x, y: y - 16, face: side, reach: 12 }, { damage: volley });
+  calderFx(
+    ID,
+    "trail",
+    { x, y: y - 16, face: side, toX: fx, toY: y - 16 },
+    { damage: volley, quiet: true, delay: DOUBLE.first },
+  );
   drawHeroSprite(ghostCanvas, POSES.dodge, 0);
   game.ghosts.push({
     s: ghostCanvas.snapshot(),
@@ -64,6 +73,13 @@ function createDouble(foe: Enemy, side: number): Effect {
         o.fired++;
         if (foe.hp <= 0) return false;
         const hot = !!v.hot || skillEvolved(ID);
+        const [bx, by] = enemyCenter(foe);
+        calderFx(
+          ID,
+          "burst",
+          { x: bx, y: by, face: side, reach: 9 },
+          { damage: progress.stats.ad * v.power, quiet: true },
+        );
         blastFoe(foe, {
           damage: progress.stats.ad * TRIGGER.blast * v.power * (hot ? HOT_BLAST : 1),
           splash: v.splash ? progress.stats.ad * v.splash : 0,

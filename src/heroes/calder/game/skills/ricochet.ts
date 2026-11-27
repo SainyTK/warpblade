@@ -8,6 +8,7 @@ import type { SkillBehavior } from "../../../../types/skillBehavior";
 import { PHOSPHOR_SPARKS } from "../../constants/colors";
 import type { CalderRound } from "../../types/events";
 import { createTracerLine } from "../effects/tracerLine";
+import { calderFx } from "../skillFx";
 
 const SKILL = "ca_ricochet";
 
@@ -52,6 +53,8 @@ export const ricochet: SkillBehavior = {
         game.fx.push(createTracerLine(x, y, ex, ey));
         game.fx.push(createImpact(ex, ey, Math.sign(ex - x) || 1, false, PHOSPHOR_SPARKS));
         const damage = progress.stats.ad * v.power * (1 + (v.grow ?? 0) * i);
+        const jump = { x, y, face: Math.sign(ex - x) || 1, toX: ex, toY: ey };
+        calderFx(SKILL, "trail", jump, { damage, quiet: i > 0 });
         dealDamage(e, damage, { fromX: x, kx: Math.sign(ex - x) * 40, ky: -20, stagger: v.stagger, source: SKILL });
         [x, y] = [ex, ey];
       }

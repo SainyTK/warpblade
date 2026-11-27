@@ -7,6 +7,7 @@ import type { Effect } from "../../../../types/effect";
 import type { SkillBehavior } from "../../../../types/skillBehavior";
 import { PHOSPHOR } from "../../constants/colors";
 import { loadRounds } from "../chamber";
+import { calderFx } from "../skillFx";
 import { calder } from "../state";
 
 const SKILL = "ca_tracer";
@@ -56,6 +57,14 @@ export const tracerWarp: SkillBehavior = {
     warp(_m, event) {
       const v = skillValues(SKILL);
       if (v.load) loadRounds(v.load);
+      const line = { x: calder.warpFromX, y: calder.warpFromY, face: Math.sign(event.x - calder.warpFromX) || 1 };
+      const to = { toX: event.x, toY: event.y - 18 };
+      calderFx(
+        SKILL,
+        "trail",
+        { ...line, ...to },
+        { damage: progress.stats.ad * ((v.line ?? 0) + (v.damage ?? 0) + 0.6) },
+      );
       if (skillEvolved(SKILL)) game.fx.push(createGreenLine(calder.warpFromX, calder.warpFromY, event.x, event.y - 18));
     },
   },

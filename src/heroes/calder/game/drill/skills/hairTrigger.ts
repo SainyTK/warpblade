@@ -1,5 +1,8 @@
+import { enemyCenter } from "../../../../../game/enemies/enemy";
 import { markFoe } from "../../../../../game/enemies/skillStatus";
+import { hero, progress } from "../../../../../game/state";
 import type { CalderDrillSkill } from "../../../types/drillSkill";
+import { calderFx } from "../../skillFx";
 import { fireRound } from "../round";
 import { struckThisSwing } from "../trigger";
 
@@ -13,6 +16,11 @@ export const HAIR_TRIGGER_DRILL: CalderDrillSkill = {
       return;
     }
     const shots = evolved ? 2 : 1;
+    const damage = progress.stats.ad * values.round * shots;
+    const cut = { x: hero.x + hero.face * 16, y: hero.y - 18, face: hero.face, reach: 14 };
+    calderFx(ID, "slash", cut, { damage });
+    const [x, y] = enemyCenter(foe);
+    calderFx(ID, "burst", { x, y, face: hero.face, reach: 7 }, { damage, quiet: true, delay: 0.04 });
     for (let i = 0; i < shots; i++) {
       fireRound(foe, { power: values.round, kind: "trigger", hot: !!values.hot, stagger: values.stagger, source: ID });
     }

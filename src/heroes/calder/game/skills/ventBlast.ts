@@ -7,6 +7,7 @@ import { boxAhead, boxBehind, boxHit } from "../../../../game/world";
 import { PK } from "../../../../types/particle";
 import type { Box } from "../../../../types/world";
 import { GUNSMOKE, PHOSPHOR } from "../../constants/colors";
+import { calderFx, calderRing } from "../skillFx";
 import { layStacks } from "./stacks";
 
 const SKILL = "ca_vent";
@@ -47,6 +48,16 @@ export function vent(): void {
   const damage = progress.stats.ad * v.power;
   const reach = withBuild("area", skillEvolved(SKILL) ? VENT.ring : v.reach);
   puff(hero.x - hero.face * 6, hero.y - 18, -hero.face);
+  const y = hero.y - 16;
+  const back = { x: hero.x - hero.face * 20, y, face: -hero.face, toX: hero.x - hero.face * reach, toY: y };
+  calderFx(SKILL, "trail", back, { damage });
+  if (skillEvolved(SKILL)) {
+    calderRing(SKILL, "wave", { x: hero.x, y: hero.y, face: hero.face, reach: reach * 0.6 }, { damage, quiet: true });
+  }
+  if (skillEvolved(SKILL) || v.front) {
+    const front = { x: hero.x + hero.face * 20, y, face: hero.face, toX: hero.x + hero.face * reach, toY: y };
+    calderFx(SKILL, "trail", front, { damage: damage * (v.front ?? 1), quiet: true });
+  }
   strike(boxBehind(0, VENT.top, reach, 2), damage, -hero.face);
   if (skillEvolved(SKILL)) strike(boxAhead(0, VENT.top, reach, 2), damage, hero.face);
   else if (v.front) strike(boxAhead(0, VENT.top, reach, 2), damage * v.front, hero.face);

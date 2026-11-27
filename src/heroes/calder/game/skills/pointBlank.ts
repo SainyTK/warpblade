@@ -1,9 +1,11 @@
 import { markFoe } from "../../../../game/enemies/skillStatus";
 import { skillEvolved, skillValues, withBuild } from "../../../../game/skills/query";
+import { hero } from "../../../../game/state";
 import type { Enemy } from "../../../../types/enemy";
 import type { SkillBehavior } from "../../../../types/skillBehavior";
 import { fillChamber } from "../chamber";
 import { counterShot } from "../counterShot";
+import { calderFx } from "../skillFx";
 import { calder } from "../state";
 
 const SKILL = "ca_pointblank";
@@ -18,6 +20,14 @@ export function counterBonus(): { power: number; rounds: number; stagger: number
     rounds: (v.rounds ?? 0) + (skillValues("ca_drum").parry ?? 0),
     stagger: v.stagger ?? 0,
   };
+}
+
+export function counterFx(x: number, y: number, damage: number): void {
+  if (!skillValues(SKILL).power && !skillValues(SKILL).rounds) return;
+  calderFx(SKILL, "burst", { x, y, face: hero.face, reach: 9 }, { damage });
+  if (!skillEvolved(SKILL)) return;
+  const line = { x: hero.x + hero.face * 12, y, face: hero.face, toX: x + hero.face * 60, toY: y };
+  calderFx(SKILL, "trail", line, { damage, quiet: true });
 }
 
 /** After the counter shot: Point Blank marks the foe, makes the next Trigger free, and as Deadeye fills the chamber */

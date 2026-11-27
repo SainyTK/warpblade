@@ -17,8 +17,11 @@ import { BREAK_BASE_CUTS, BREAK_FIRST, BREAK_GAP, BREAK_REACH, BREAK_SHARE } fro
 import { fillChamber } from "../chamber";
 import { roundBlast } from "../effects/roundBlast";
 import { SLASHES } from "../moves/slashes";
+import { calderFx, calderRing } from "../skillFx";
 import { calder } from "../state";
 import { breakFinale } from "./finale";
+
+const BREAK_ID = "ca_break";
 
 /** when cut `i` lands, in seconds into the state */
 export const cutTime = (i: number): number => BREAK_FIRST + i * BREAK_GAP;
@@ -52,6 +55,12 @@ function cut(i: number): void {
   }
   const [x, y] = foes[0] ? enemyCenter(foes[0]) : [hero.x + hero.face * 22, hero.y - 18];
   roundBlast(x, y, hero.face, calder.hot, true);
+  const last = i === calder.breakCuts - 1;
+  if (i === 0 || last) {
+    const ring = { x: hero.x, y: hero.y, face: hero.face, reach: calder.breakReach * (last ? 0.7 : 0.45) };
+    calderRing(BREAK_ID, "wave", ring, { damage: calder.breakBlow * (last ? calder.breakCuts : 1) });
+  }
+  calderFx(BREAK_ID, "burst", { x, y, face: hero.face, reach: 14 }, { damage: calder.breakBlow, quiet: !last });
   hitStop(0.04);
   emitSkillEvent({ type: "calderBlast", x, y, foes, kind: "ultimate" });
 }

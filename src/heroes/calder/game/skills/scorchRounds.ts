@@ -8,6 +8,7 @@ import { game, progress } from "../../../../game/state";
 import type { Enemy } from "../../../../types/enemy";
 import type { SkillBehavior } from "../../../../types/skillBehavior";
 import { PHOSPHOR } from "../../constants/colors";
+import { calderFx } from "../skillFx";
 import { layStacks } from "./stacks";
 
 const SKILL = "ca_scorch";
@@ -23,6 +24,9 @@ function consume(e: Enemy): boolean {
   if (!skillEvolved(SKILL) || stacksOf(e, SKILL) < v.at) return false;
   const n = consumeStacks(e, SKILL);
   game.fx.push(createBlastCore(...enemyCenter(e), PHOSPHOR[5]));
+  const [x, y] = enemyCenter(e);
+  calderFx(SKILL, "burst", { x, y, reach: 10 }, { damage: progress.stats.ad * v.consume * n });
+  calderFx(SKILL, "pillar", { x, y: e.y, reach: 30 }, { damage: progress.stats.ad * v.consume * n, quiet: true });
   dealDamage(e, progress.stats.ad * v.consume * n, { fromX: e.x, kx: 0, ky: -60, source: SKILL });
   return true;
 }
@@ -33,7 +37,12 @@ export const scorchRounds: SkillBehavior = {
   create: () => ({}),
   on: {
     calderTrigger(_m, event) {
-      if (event.foe && event.foe.hp > 0 && !consume(event.foe)) burn(event.foe);
+      if (!event.foe || event.foe.hp <= 0 || consume(event.foe)) return;
+      burn(event.foe);
+      const v = skillValues(SKILL);
+      const [x, y] = enemyCenter(event.foe);
+      const n = stacksOf(event.foe, SKILL);
+      calderFx(SKILL, "mark", { x, y }, { damage: progress.stats.ad * v.damage * n * 6 });
     },
     calderBlast(_m, event) {
       const v = skillValues(SKILL);

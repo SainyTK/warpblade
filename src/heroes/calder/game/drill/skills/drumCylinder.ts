@@ -1,6 +1,8 @@
 import { drillFighter } from "../../../../../drill";
-import { hero } from "../../../../../game/state";
+import { hero, progress } from "../../../../../game/state";
+import { surfaceBelow } from "../../../../../game/world";
 import type { CalderDrillSkill } from "../../../types/drillSkill";
+import { calderFx, calderRing } from "../../skillFx";
 import { later } from "../later";
 import { fireRound } from "../round";
 import { foesNear } from "../targets";
@@ -26,6 +28,8 @@ export const DRUM_CYLINDER_DRILL: CalderDrillSkill = {
     if (!started) {
       return;
     }
+    const spin = { x: hero.x, y: surfaceBelow(hero.x, hero.y - 2), face: hero.face, reach: 18 };
+    calderRing(ID, "wave", spin, { damage: progress.stats.ad * (values.mine ?? 0.5) * (evolved ? 2 : 1) });
     if (h.airDashActive && values.airCut) {
       h.airSlashes = 0;
     }
@@ -37,6 +41,7 @@ export const DRUM_CYLINDER_DRILL: CalderDrillSkill = {
       const y = hero.y - 10;
       later(0.3, () => {
         const foes = foesNear(x, y, 26);
+        calderFx(ID, "burst", { x, y, reach: 10 }, { damage: progress.stats.ad * values.mine, quiet: true });
         fireRound(foes[0] ?? null, { power: values.mine, kind: "shot", source: ID }, [x, y]);
       });
     }
