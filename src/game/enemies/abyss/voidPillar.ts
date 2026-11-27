@@ -9,7 +9,7 @@ import { eachStanding, heroSlot } from "../../coopHooks";
 import { hurtHero } from "../../hurtHero";
 import { fxRng, particles } from "../../state";
 import { boxHit, heroBox, shake } from "../../world";
-import { AC, VOID, VOID_SPARKS } from "./colors";
+import { type StrikeLook, VOID_LOOK } from "./strikeLook";
 
 /** a pillar: a ring warns on the floor, then the light comes down, can hurt for a moment, and thins away */
 export const PILLAR = { warn: 0.8, hurts: 0.14, fade: 0.26, half: 8 } as const;
@@ -26,14 +26,14 @@ const FLASH = 0.18;
 const SPLASH = { out: 7, up: 6 } as const;
 
 /** the opening on the floor that warns of a pillar: a ring tightening onto it, a dark lens with a hot seam, motes */
-function drawWarning(x: number, k: number, t: number): void {
+function drawWarning(x: number, k: number, t: number, look: StrikeLook): void {
   const half = PILLAR.half;
   const near = k > ABOUT_TO;
   const blink = near && Math.floor(t * 20) % 2 === 0;
   // the ring closes on the spot, its front half brighter than the back
   const r = half + (1 - k) * RING.far;
-  ellipseRing(x, GROUND, r, r * RING.flat, VOID[2], 0.5 + 0.5 * k, -1);
-  ellipseRing(x, GROUND, r, r * RING.flat, near ? VOID[4] : VOID[3], 0.6 + 0.4 * k, 1);
+  ellipseRing(x, GROUND, r, r * RING.flat, look.ramp[2], 0.5 + 0.5 * k, -1);
+  ellipseRing(x, GROUND, r, r * RING.flat, near ? look.ramp[4] : look.ramp[3], 0.6 + 0.4 * k, 1);
   // the floor opens: a dark lens the pillar's width, a seam of light splitting along its middle
   const lens = half * (0.4 + 0.6 * k);
   polygon(
@@ -45,25 +45,25 @@ function drawWarning(x: number, k: number, t: number): void {
       [x + lens * 0.5, GROUND + 1],
       [x - lens * 0.5, GROUND + 1],
     ],
-    AC.outline,
+    look.outline,
   );
-  ellipseRing(x, GROUND, lens, lens * RING.flat, VOID[3], 0.8);
+  ellipseRing(x, GROUND, lens, lens * RING.flat, look.ramp[3], 0.8);
   const seam = lens * k;
-  hairline(x - seam, GROUND, x + seam, GROUND, blink ? WHITE : near ? VOID[5] : VOID[4]);
+  hairline(x - seam, GROUND, x + seam, GROUND, blink ? WHITE : near ? look.ramp[5] : look.ramp[4]);
   // motes of light rise out of it, faster and brighter as it nears
   for (let m = 0; m < 4; m++) {
     const lift = (k * 2.6 + m * 0.29) % 1;
-    fleck(x + (m - 1.5) * lens * 0.45, GROUND - 1 - lift * (6 + k * 10), VOID[4], (1 - lift) * k);
+    fleck(x + (m - 1.5) * lens * 0.45, GROUND - 1 - lift * (6 + k * 10), look.ramp[4], (1 - lift) * k);
   }
   // a thread of light already marks the pillar's line, broken until it is about to strike
-  hairline(x, 0, x, GROUND, VOID[3], (u) => (near || Math.sin(u * 60 - t * 24) > 0.2 ? 0.25 + 0.4 * k : 0));
-  if (near) hairline(x + 0.5, 0, x + 0.5, GROUND, VOID[2], 0.5);
+  hairline(x, 0, x, GROUND, look.ramp[3], (u) => (near || Math.sin(u * 60 - t * 24) > 0.2 ? 0.25 + 0.4 * k : 0));
+  if (near) hairline(x + 0.5, 0, x + 0.5, GROUND, look.ramp[2], 0.5);
   // and the sky tears open over it
   const tear = SKY_TEAR.start + (SKY_TEAR.open - SKY_TEAR.start) * k;
-  line(x - tear, 0, x + tear, 0, VOID[2], 0.6 + 0.4 * k);
-  hairline(x - tear * 0.6, 1, x + tear * 0.6, 1, near ? VOID[5] : VOID[4], 0.7);
-  glow(x, GROUND - 2, 10 + 6 * k, VOID[3], 0.2 + 0.3 * k);
-  glow(x, 1, 6 + 4 * k, VOID[3], 0.2 + 0.3 * k);
+  line(x - tear, 0, x + tear, 0, look.ramp[2], 0.6 + 0.4 * k);
+  hairline(x - tear * 0.6, 1, x + tear * 0.6, 1, near ? look.ramp[5] : look.ramp[4], 0.7);
+  glow(x, GROUND - 2, 10 + 6 * k, look.ramp[3], 0.2 + 0.3 * k);
+  glow(x, 1, 6 + 4 * k, look.ramp[3], 0.2 + 0.3 * k);
 }
 
 /**
@@ -71,26 +71,27 @@ function drawWarning(x: number, k: number, t: number): void {
  * heart, crimson to its edges, a broken fringe flickering along each side, a flash around it on the first frames and a
  * splash of light at its foot. It thins from the edges in and breaks into streaks as it fades.
  */
-function drawStrike(x: number, k: number, t: number): void {
+function drawStrike(x: number, k: number, t: number, look: StrikeLook): void {
   const flash = k > 1 - FLASH;
   const half = Math.max(1, Math.round(PILLAR.half * (0.2 + 0.8 * k ** 1.2)));
   const broken = k < 0.6;
-  if (flash) line(x - half - 2, 0, x - half - 2, GROUND, VOID[4], 0.5);
-  if (flash) line(x + half + 2, 0, x + half + 2, GROUND, VOID[4], 0.5);
+  if (flash) line(x - half - 2, 0, x - half - 2, GROUND, look.ramp[4], 0.5);
+  if (flash) line(x + half + 2, 0, x + half + 2, GROUND, look.ramp[4], 0.5);
   for (let o = -half - 1; o <= half + 1; o++) {
     const edge = Math.abs(o) / half;
     if (edge > 1) {
       // the fringe: a broken crimson edge that crawls
-      line(x + o, 0, x + o, GROUND, VOID[2], (u) => (Math.sin(u * 47 + t * 31 + o * 2.3) > 0.1 ? 0.9 : 0));
+      line(x + o, 0, x + o, GROUND, look.ramp[2], (u) => (Math.sin(u * 47 + t * 31 + o * 2.3) > 0.1 ? 0.9 : 0));
       continue;
     }
-    const c = Math.abs(o) <= (k > 0.5 ? 1 : 0) ? WHITE : edge < 0.45 ? VOID[5] : edge < 0.8 ? VOID[4] : VOID[3];
+    const c =
+      Math.abs(o) <= (k > 0.5 ? 1 : 0) ? WHITE : edge < 0.45 ? look.ramp[5] : edge < 0.8 ? look.ramp[4] : look.ramp[3];
     // fading, the column breaks into streaks that run down it over a thin crimson veil
     if (!broken || o === 0) {
       line(x + o, 0, x + o, GROUND, c);
       continue;
     }
-    line(x + o, 0, x + o, GROUND, VOID[3], 0.45);
+    line(x + o, 0, x + o, GROUND, look.ramp[3], 0.45);
     line(x + o, 0, x + o, GROUND, c, (u) => (Math.sin(u * 38 - t * 50 + o * 1.7) > 0.6 - k ? 1 : 0));
   }
   // the splash at its foot: tongues of light thrown out along the floor either way, and a white pool under it
@@ -103,22 +104,22 @@ function drawStrike(x: number, k: number, t: number): void {
         [x + side * (half + out * 0.5), GROUND - SPLASH.up * k],
         [x + side * (half - 1), GROUND - 2],
       ],
-      VOID[4],
+      look.ramp[4],
       0.5 + 0.5 * k,
     );
-    px(x + side * (half + out), GROUND - SPLASH.up * k * 0.4 - 1, VOID[5], k);
+    px(x + side * (half + out), GROUND - SPLASH.up * k * 0.4 - 1, look.ramp[5], k);
   }
   line(x - half - 1, GROUND, x + half + 1, GROUND, WHITE, k);
-  ellipseRing(x, GROUND, PILLAR.half + (1 - k) * 14, 3 + (1 - k) * 2, VOID[5], k);
-  glowLine(x, 0, x, GROUND, 12 + 8 * k, VOID[3], 0.6 * k);
-  glow(x, GROUND - 3, 22, VOID[5], 0.6 * k);
+  ellipseRing(x, GROUND, PILLAR.half + (1 - k) * 14, 3 + (1 - k) * 2, look.ramp[5], k);
+  glowLine(x, 0, x, GROUND, 12 + 8 * k, look.ramp[3], 0.6 * k);
+  glow(x, GROUND - 3, 22, look.ramp[5], 0.6 * k);
 }
 
 /**
  * One pillar of void light the Abyss Sovereign calls down. After `delay` a ring opens on the floor at x and tightens
  * for the warning; then the pillar strikes from the sky to the floor, once, on any hero standing in it at any height.
  */
-export function createVoidPillar(x: number, delay: number, damage: number): Effect {
+export function createVoidPillar(x: number, delay: number, damage: number, look: StrikeLook = VOID_LOOK): Effect {
   let t = -delay;
   const hit = new Set<number>();
   return {
@@ -138,7 +139,7 @@ export function createVoidPillar(x: number, delay: number, damage: number): Effe
             fxRng.range(-170, -50),
             0.35,
             {
-              sparks: VOID_SPARKS,
+              sparks: look.sparks,
             },
           );
       }
@@ -153,8 +154,8 @@ export function createVoidPillar(x: number, delay: number, damage: number): Effe
     draw() {
       if (t < 0) return;
       place();
-      if (t < PILLAR.warn) drawWarning(x, t / PILLAR.warn, t);
-      else drawStrike(x, 1 - clamp((t - PILLAR.warn) / PILLAR.fade), t);
+      if (t < PILLAR.warn) drawWarning(x, t / PILLAR.warn, t, look);
+      else drawStrike(x, 1 - clamp((t - PILLAR.warn) / PILLAR.fade), t, look);
     },
   };
 }

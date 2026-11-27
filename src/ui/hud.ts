@@ -45,11 +45,21 @@ const boss = byId("boss");
 const bossName = byId("bossName");
 const bossFill = byId("bossFill");
 const bossMarks = byId("bossMarks");
+const bossEnrage = byId("bossEnrage");
+const bossPoise = byId("bossPoise");
+const bossPoiseFill = byId("bossPoiseFill");
 const banner = byId("banner");
 let last = "";
 
 const pips = (n: number, lit: (i: number) => boolean): string =>
   Array.from({ length: n }, (_, i) => `<i class="${lit(i) ? "on" : ""}"></i>`).join("");
+
+const ENRAGE_WARNING = 30;
+
+function enrageText(left: number | null): string {
+  if (left === null || left > ENRAGE_WARNING) return "";
+  return left <= 0 ? "ENRAGED" : minutesSeconds(left);
+}
 
 /** sync the HTML overlay with the game, touching the DOM only when something shown has changed */
 export function updateHud(): void {
@@ -115,6 +125,9 @@ export function updateHud(): void {
     bar?.marks.join(":"),
     bar?.phase,
     bar?.shielded,
+    bar ? Math.round(bar.poise * 40) : -1,
+    bar?.broken,
+    bar?.enrageIn === null || bar?.enrageIn === undefined ? -1 : Math.ceil(bar.enrageIn),
     game.banner.text,
     game.banner.time > 0,
   ].join();
@@ -137,10 +150,15 @@ export function updateHud(): void {
   ultPips.innerHTML = pips(session ? session.profile.tiers.length : ULT_LEVELS.length, (i) => i < affordable);
   boss.hidden = !leader;
   if (leader) {
-    bossName.textContent = ENEMIES[leader.type].name.toUpperCase();
+    bossName.textContent = (leader.title ?? ENEMIES[leader.type].name).toUpperCase();
     bossFill.style.width = `${(Math.max(0, leader.hp) / leader.max) * 100}%`;
   }
   boss.classList.toggle("enraged", (bar?.phase ?? 1) > 1);
+  boss.classList.toggle("frenzied", (bar?.phase ?? 1) > 2 || bar?.enrageIn === 0);
+  bossPoise.hidden = !bar;
+  bossPoise.classList.toggle("broken", !!bar?.broken);
+  bossPoiseFill.style.width = `${(bar?.poise ?? 0) * 100}%`;
+  bossEnrage.textContent = enrageText(bar?.enrageIn ?? null);
   boss.classList.toggle("shielded", !!bar?.shielded);
   bossMarks.innerHTML = (bar?.marks ?? []).map((m) => `<i style="left:${m * 100}%"></i>`).join("");
   banner.textContent = game.banner.text;

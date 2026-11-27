@@ -1,3 +1,4 @@
+import { BOSS_PHASES } from "../../../constants/bossFight";
 import { GROUND } from "../../../constants/stage";
 import { sfx } from "../../../services/audio";
 import type { Enemy } from "../../../types/enemy";
@@ -31,7 +32,7 @@ export const SOVEREIGN_DID = { cleave: 1, call: 2, rend: 3 } as const;
 /** e.ax while it winds up or swings a cleave: 1 when this is the second of an enraged pair */
 export const AGAIN = 1;
 
-export const SOVEREIGN_ENRAGE = 0.5;
+export const SOVEREIGN_ENRAGE = BOSS_PHASES.second;
 const enragedNow = (e: Enemy): boolean => e.phase === 2;
 
 /** the blade comes round: everything in front of it, floor to crown, is cut once */

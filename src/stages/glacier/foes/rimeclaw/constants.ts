@@ -1,3 +1,4 @@
+import { BOSS_PHASES } from "../../../../constants/bossFight";
 export const CLAW_TIMES = {
   crouch: 0.75,
   recrouch: 0.38,
@@ -25,7 +26,7 @@ export const CLAW = {
   breathHeight: 14,
   slick: 6,
   landing: 34,
-  enrage: 0.5,
+  enrage: BOSS_PHASES.second,
   ringShards: 12,
 } as const;
 

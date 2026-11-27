@@ -1,30 +1,50 @@
-import { BOSS_ARENA, BOSS_ENTRANCE, BOSS_FINALE, BOSS_HASTE, BOSS_SHIFT } from "../../constants/bossFight";
+import {
+  BOSS_ARENA,
+  BOSS_ENTRANCE,
+  BOSS_FINALE,
+  BOSS_FRENZY,
+  BOSS_HASTE,
+  BOSS_PHASES,
+  BOSS_SHIFT,
+  ENRAGE_AFTER,
+} from "../../constants/bossFight";
+import { BIG_FOE_POWER } from "../../constants/stageArc";
+import { sfx } from "../../services/audio";
 import type { BossCard, BossMoment, BossProfile } from "../../types/bossFight";
-import type { Enemy, EnemyState, EnemyType } from "../../types/enemy";
+import type { Enemy, EnemyState } from "../../types/enemy";
 import { enemyCenter } from "../enemies/enemy";
-import { game, rng } from "../state";
-import { burst, callAdds, deflect, finaleFlash, roar, shiftBlast } from "./moments";
+import { game, rng, showBanner } from "../state";
+import { type ControlMemory, forgetControl, resistControl } from "./control";
+import { burst, callAdds, deflect, finaleFlash, roar, shiftBlast, telegraph } from "./moments";
+import { freshPoise, type Poise, updatePoise } from "./poise";
 
 const DEFLECT_EVERY = 0.12;
+const FIRST_SIGNATURE = 0.6;
 
-import { bossProfile } from "./profiles";
+export type FightKind = "mini" | "boss";
 
 export interface BossFight {
-  type: EnemyType;
   profile: BossProfile;
+  kind: FightKind;
   boss: Enemy | null;
   moment: BossMoment;
   t: number;
   dark: number;
   rage: number;
   phase: number;
+  clock: number;
+  enraged: boolean;
   last: EnemyState | null;
   at: readonly [number, number];
-  done: number;
   card: BossCard | null;
   cardLeft: number;
   finaleCard: BossCard;
   deflectedAt: number;
+  signatureIn: number;
+  charging: number;
+  signatures: number;
+  poise: Poise;
+  control: ControlMemory;
 }
 
 let fight: BossFight | null = null;
@@ -35,37 +55,43 @@ export function resetBossFight(): void {
   fight = null;
 }
 
-export function openBossFight(type: EnemyType, finaleCard: BossCard): boolean {
-  const profile = bossProfile(type);
+export function openBossFight(profile: BossProfile | null, kind: FightKind, finaleCard: BossCard): boolean {
   if (!profile) {
     fight = null;
     return false;
   }
   fight = {
-    type,
     profile,
+    kind,
     boss: null,
     moment: "gather",
     t: 0,
     dark: 0,
     rage: 0,
     phase: 1,
+    clock: 0,
+    enraged: false,
     last: null,
     at: [0, 0],
-    done: 0,
     card: null,
     cardLeft: 0,
     finaleCard,
     deflectedAt: 0,
+    signatureIn: (profile.signature?.every[0] ?? 0) * FIRST_SIGNATURE,
+    charging: 0,
+    signatures: 0,
+    poise: freshPoise(),
+    control: forgetControl(),
   };
   return true;
 }
 
-export function bossArrived(boss: Enemy, name: string): void {
+export function bossArrived(boss: Enemy, name: string, hp: number): void {
   if (!fight) return;
-  boss.max = Math.round(boss.max * fight.profile.hp);
-  boss.hp = boss.max;
-  boss.power *= fight.profile.power;
+  boss.max = hp;
+  boss.hp = hp;
+  boss.power *= fight.profile.power * BIG_FOE_POWER;
+  boss.title = name;
   Object.assign(fight, { boss, moment: "entrance", t: 0, last: boss.state, at: enemyCenter(boss) });
   showCard(fight, { label: "", name, sub: fight.profile.epithet, tone: "boss" }, BOSS_ENTRANCE.card);
 }
@@ -91,13 +117,53 @@ function crossed(f: BossFight, at: number, dt: number): boolean {
   return f.t >= at && f.t - dt < at;
 }
 
+function haste(f: BossFight): number {
+  if (f.enraged) return BOSS_FRENZY.enraged;
+  if (f.phase >= 3) return BOSS_FRENZY.haste;
+  return f.phase > 1 ? BOSS_HASTE.enraged : BOSS_HASTE.calm;
+}
+
 function press(f: BossFight, boss: Enemy, dt: number): void {
-  const haste = boss.phase > 1 ? BOSS_HASTE.enraged : BOSS_HASTE.calm;
-  boss.cd -= dt * (haste - 1);
+  boss.cd -= dt * (haste(f) - 1);
   const combo = f.profile.combo;
+  if (!combo) return;
   const entered = boss.state !== f.last && combo.states.includes(boss.state);
-  if (entered && boss.phase > 1 && boss.stun <= 0 && rng.chance(combo.chance)) combo.cast(boss);
+  const chance = f.phase > 1 ? combo.chance : combo.chance * BOSS_HASTE.calmCombo;
+  if (entered && boss.stun <= 0 && rng.chance(chance)) combo.cast(boss);
   f.last = boss.state;
+}
+
+function sign(f: BossFight, boss: Enemy, dt: number): void {
+  const signature = f.profile.signature;
+  if (!signature || boss.stun > 0) return;
+  if (f.charging > 0) {
+    f.charging -= dt;
+    if (f.charging > 0) return;
+    signature.cast(boss, f.signatures++);
+    const every = signature.every[f.phase > 1 ? 1 : 0];
+    f.signatureIn = f.phase >= 3 || f.enraged ? every / BOSS_FRENZY.haste : every;
+    return;
+  }
+  f.signatureIn -= dt;
+  if (f.signatureIn > 0) return;
+  f.charging = signature.telegraph;
+  telegraph(f, boss, signature.telegraph);
+}
+
+function phaseNow(f: BossFight, boss: Enemy): number {
+  const share = boss.hp / boss.max;
+  if (share <= BOSS_PHASES.third) return 3;
+  if (f.profile.drivesPhase && share <= BOSS_PHASES.second) boss.phase = Math.max(boss.phase, 2);
+  return Math.max(f.phase, boss.phase > 1 ? 2 : 1);
+}
+
+function enrage(f: BossFight, boss: Enemy): void {
+  const limit = ENRAGE_AFTER[f.kind];
+  if (f.enraged || limit === null || f.clock < limit) return;
+  f.enraged = true;
+  boss.power *= BOSS_FRENZY.enragedPower;
+  showBanner(`${boss.title ?? ""} is enraged`, 2);
+  sfx.bossRoar();
 }
 
 function follow(f: BossFight, boss: Enemy, dt: number): void {
@@ -106,13 +172,20 @@ function follow(f: BossFight, boss: Enemy, dt: number): void {
     return;
   }
   f.at = enemyCenter(boss);
-  if (boss.phase > f.phase) {
-    f.phase = boss.phase;
+  f.clock += dt;
+  enrage(f, boss);
+  resistControl(f.control, boss, dt);
+  updatePoise(f.poise, boss, dt);
+  const phase = phaseNow(f, boss);
+  if (phase > f.phase) {
+    f.phase = phase;
+    f.charging = 0;
     enter(f, "shift");
     shiftBlast(f, boss);
     return;
   }
   press(f, boss, dt);
+  sign(f, boss, dt);
 }
 
 function stepFinale(f: BossFight, dt: number): void {
@@ -154,6 +227,11 @@ export const bossHeld = (e: Enemy): boolean => fight?.boss === e && fight.moment
 export const bossUntouchable = (e: Enemy): boolean =>
   fight?.boss === e && (fight.moment === "entrance" || fight.moment === "shift");
 
+export const bossCharging = (e: Enemy): number =>
+  fight?.boss === e && fight.charging > 0 && fight.profile.signature
+    ? 1 - fight.charging / fight.profile.signature.telegraph
+    : 0;
+
 export function bossDeflects(e: Enemy): boolean {
   if (!fight || !bossUntouchable(e)) return false;
   if (game.t - fight.deflectedAt >= DEFLECT_EVERY) {
@@ -161,6 +239,11 @@ export function bossDeflects(e: Enemy): boolean {
     deflect(fight, e);
   }
   return true;
+}
+
+export function bossTook(e: Enemy, amount: number): void {
+  if (fight?.boss !== e || fight.moment !== "fight") return;
+  fight.poise.taken += amount;
 }
 
 export const bossFightSettled = (): boolean => !fight || fight.moment === "over";

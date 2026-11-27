@@ -5,7 +5,7 @@ import { PK } from "../../../types/particle";
 import { WHITE } from "../../../utils/color";
 import { approach } from "../../../utils/math";
 import { waveScale } from "../../../utils/progression";
-import { clampStageX, stageThreat } from "../../adventure";
+import { clampStageX, summonFoe } from "../../adventure";
 import { eachStanding } from "../../coopHooks";
 import { createFloorRing } from "../../effects/floorRing";
 import { createRift } from "../../effects/rift";
@@ -13,7 +13,6 @@ import { createSlash } from "../../effects/slash";
 import { hurtHero } from "../../hurtHero";
 import { fxRng, game, hero, lights, particles, rng } from "../../state";
 import { boxHit, dust, heroBox, shake } from "../../world";
-import { makeEnemy } from "../enemy";
 import { facesHero, turnToHero } from "../facing";
 import { kindOf } from "../kinds";
 import { INNER_FIRE } from "./colors";
@@ -110,7 +109,7 @@ function callFlock(e: Enemy): void {
     const y = rift.y();
     game.fx.push(
       createRift(x, rift.riftY(y), rift.height, i * 0.2, () =>
-        game.enemies.push(makeEnemy("husk", x, y, stageThreat(game.wave), FLOCK.xpShare)),
+        game.enemies.push(summonFoe("husk", x, y, FLOCK.xpShare)),
       ),
     );
   }

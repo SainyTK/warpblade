@@ -1,4 +1,4 @@
-import { BOSS_ENTRANCE, BOSS_FINALE, BOSS_SHIFT } from "../../constants/bossFight";
+import { BOSS_ENTRANCE, BOSS_FINALE, BOSS_SHIFT, BOSS_TELEGRAPH } from "../../constants/bossFight";
 import { GROUND } from "../../constants/stage";
 import { drillFighter } from "../../drill";
 import { sfx } from "../../services/audio";
@@ -7,11 +7,10 @@ import type { Enemy } from "../../types/enemy";
 import { PK } from "../../types/particle";
 import { mix, scale, WHITE } from "../../utils/color";
 import { TAU } from "../../utils/math";
-import { clampStageX, stageThreat } from "../adventure";
+import { clampStageX, summonFoe } from "../adventure";
 import { createFloorRing } from "../effects/floorRing";
 import { createImpact } from "../effects/impact";
 import { createRift } from "../effects/rift";
-import { makeEnemy } from "../enemies/enemy";
 import { kindOf } from "../enemies/kinds";
 import { fxRng, game, hero, lights, particles } from "../state";
 import { shake } from "../world";
@@ -81,9 +80,7 @@ export function callAdds(f: BossFight): void {
     const x = clampStageX(hero.x + side * BOSS_SHIFT.addSpread, 20);
     const y = rift.y();
     game.fx.push(
-      createRift(x, rift.riftY(y), rift.height, i * 0.2, () =>
-        game.enemies.push(makeEnemy(type, x, y, stageThreat(game.wave), ADD_XP_SHARE)),
-      ),
+      createRift(x, rift.riftY(y), rift.height, i * 0.2, () => game.enemies.push(summonFoe(type, x, y, ADD_XP_SHARE))),
     );
   });
 }
@@ -116,4 +113,12 @@ export function finaleFlash(f: BossFight): void {
   flare(f.at[0], f.at[1], light, 48, 280);
   shake(0.6, 5);
   sfx.thunder();
+}
+
+export function telegraph(f: BossFight, boss: Enemy, seconds: number): void {
+  const light = f.profile.light;
+  game.fx.push(createFloorRing(boss.x, GROUND, BOSS_TELEGRAPH.ring, lightRamp(light), seconds));
+  lights.add(f.at[0], f.at[1], BOSS_TELEGRAPH.light, light, 0.8, seconds);
+  flare(f.at[0], f.at[1], light, 10, 120);
+  sfx.chargeStep(1);
 }

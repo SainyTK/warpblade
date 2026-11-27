@@ -11,7 +11,7 @@ import type { DamageTag } from "../types/game";
 import type { HitLook } from "../types/hit";
 import { isHeroSource } from "../utils/sources";
 import { recordStageDamage } from "./adventure";
-import { bossDeflects } from "./bossFight";
+import { bossDeflects, bossTook } from "./bossFight";
 import { addFlow, flowDamage } from "./build/flow";
 import { currentBuildStats } from "./build/stats";
 import { recordDamage } from "./damageLedger";
@@ -178,6 +178,7 @@ export function dealDamage(e: Enemy, base: number, o: HitOptions = {}): HitResul
   dmg = kindOf(e.type).takes?.(e, dmg, !o.dot && isHeroSource(source)) ?? dmg;
   const value = Math.max(1, Math.round(dmg));
   recordStageDamage(e, value);
+  bossTook(e, value);
   e.hp -= value;
   recordDamage(source, value);
   const fromHero = isHeroSource(source);

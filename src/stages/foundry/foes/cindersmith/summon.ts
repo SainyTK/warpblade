@@ -1,6 +1,5 @@
 import { GROUND } from "../../../../constants/stage";
-import { clampStageX, stageThreat } from "../../../../game/adventure";
-import { makeEnemy } from "../../../../game/enemies/enemy";
+import { clampStageX, summonFoe } from "../../../../game/adventure";
 import { fxRng, game, particles } from "../../../../game/state";
 import type { Enemy } from "../../../../types/enemy";
 import { PK } from "../../../../types/particle";
@@ -14,13 +13,7 @@ export function spawnFromAnvil(x: number, dir: number): void {
   const room = Math.min(SPAWN.each, SPAWN.most - slaglingsAlive());
   for (let i = 0; i < room; i++) {
     const side = i % 2 ? dir : -dir;
-    const child: Enemy = makeEnemy(
-      "slagling",
-      clampStageX(x + side * 6, SPAWN.edge),
-      GROUND,
-      stageThreat(game.wave),
-      SPAWN.xp,
-    );
+    const child: Enemy = summonFoe("slagling", clampStageX(x + side * 6, SPAWN.edge), GROUND, SPAWN.xp);
     child.vx = side * SPAWN.fling;
     child.face = side;
     child.cd = 1.2;

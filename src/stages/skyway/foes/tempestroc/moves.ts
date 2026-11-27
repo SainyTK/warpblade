@@ -1,3 +1,4 @@
+import { BOSS_PHASES } from "../../../../constants/bossFight";
 import { GROUND } from "../../../../constants/stage";
 import type { Enemy } from "../../../../types/enemy";
 
@@ -16,7 +17,7 @@ export const ROC_TIMES = {
   roar: 1.4,
   recover: 0.75,
 } as const;
-export const ROC_ENRAGE = 0.5;
+export const ROC_ENRAGE = BOSS_PHASES.second;
 export const ROC_HOVER = { height: 62, keep: 96, speed: 85, low: GROUND - 58 } as const;
 export const GUST_PUSH = { ground: 64, groundStorm: 96, air: 560, airStorm: 820 } as const;
 export const SWOOP = { top: 44, low: GROUND - 13, speed: 280, edge: 26 } as const;

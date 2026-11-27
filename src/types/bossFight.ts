@@ -7,14 +7,20 @@ export interface BossCombo {
   cast(e: Enemy): void;
 }
 
+export interface BossSignature {
+  every: readonly [calm: number, enraged: number];
+  telegraph: number;
+  cast(e: Enemy, count: number): void;
+}
+
 export interface BossProfile {
   epithet: string;
-  hp: number;
   power: number;
-  phaseAt: number;
   light: Color;
   adds: readonly EnemyType[];
-  combo: BossCombo;
+  combo?: BossCombo;
+  signature?: BossSignature;
+  drivesPhase?: boolean;
 }
 
 export type BossMoment = "gather" | "entrance" | "fight" | "shift" | "finale" | "over";
@@ -32,4 +38,9 @@ export interface BossBar {
   marks: readonly number[];
   phase: number;
   shielded: boolean;
+  poise: number;
+  broken: boolean;
+  enrageIn: number | null;
 }
+
+export type BigFoeKind = "elite" | "mini" | "boss";

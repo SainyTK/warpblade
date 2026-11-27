@@ -1,3 +1,4 @@
+import { BOSS_PHASES } from "../../../constants/bossFight";
 import type { Enemy } from "../../../types/enemy";
 
 export const SHEPHERD_HITS = { reap: 20, toll: 22, shard: 18 } as const;
@@ -31,7 +32,7 @@ export const MOONFALL = {
   half: 5,
 } as const;
 export const FLOCK = { every: 12, first: 6, most: 2, side: 70, edge: 20, xpShare: 0.25 } as const;
-export const KNEEL = { at: 0.55, taken: 1.5 } as const;
+export const KNEEL = { at: BOSS_PHASES.second, taken: 1.5 } as const;
 export const SHEPHERD_DID = { reap: 1, toll: 2, call: 3, moonfall: 4 } as const;
 export const AGAIN = 1;
 

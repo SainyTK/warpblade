@@ -1,6 +1,5 @@
 import { GROUND } from "../../../../constants/stage";
-import { clampStageX, stageThreat } from "../../../../game/adventure";
-import { makeEnemy } from "../../../../game/enemies/enemy";
+import { clampStageX, summonFoe } from "../../../../game/adventure";
 import { fxRng, game, particles } from "../../../../game/state";
 import type { Effect } from "../../../../types/effect";
 import type { Enemy } from "../../../../types/enemy";
@@ -19,7 +18,7 @@ function createSplit(parent: Enemy): Effect {
     update() {
       for (const side of [-1, 1]) {
         const x = clampStageX(parent.x + side * SPLIT.apart, SPLIT.edge);
-        const child = makeEnemy("slagling", x, GROUND, stageThreat(game.wave), SPLIT.xp);
+        const child = summonFoe("slagling", x, GROUND, SPLIT.xp);
         child.max = Math.max(1, Math.round(parent.max * SPLIT.hp));
         child.hp = child.max;
         child.vx = side * SPLIT.fling;
