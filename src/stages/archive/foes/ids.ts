@@ -1,1 +1,12 @@
-export type ArchiveFoe = "inkling" | "pagewing" | "tomeguard" | "pagewyrm";
+export type ArchiveFoe =
+  | "bookmite"
+  | "blotmoth"
+  | "inkling"
+  | "pagewing"
+  | "tomeguard"
+  | "quillshrike"
+  | "scrivener"
+  | "foliant"
+  | "wardlamp"
+  | "hushwarden"
+  | "pagewyrm";

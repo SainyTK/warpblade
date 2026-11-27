@@ -1,6 +1,7 @@
 import { GROUND } from "../../../../constants/stage";
 import type { EnemyKind } from "../../../../game/enemies/kinds/kind";
 import { FOE } from "../colors";
+import { wardedTakes } from "../lampWard";
 import { updateTomeguard } from "./behavior";
 import { drawTomeguard } from "./draw";
 
@@ -13,6 +14,7 @@ export const tomeguard: EnemyKind = {
   rift: { height: 22, y: () => GROUND, riftY: () => GROUND - 18 },
   update: updateTomeguard,
   draw: drawTomeguard,
+  takes: wardedTakes,
   glow: { radius: 18, color: FOE.eye, eyeY: -13 },
   guardFrom: 1,
   guarding: (e) => e.state === "walk",

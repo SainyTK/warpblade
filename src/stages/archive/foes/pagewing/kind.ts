@@ -1,6 +1,7 @@
 import type { EnemyKind } from "../../../../game/enemies/kinds/kind";
 import { rng } from "../../../../game/state";
 import { FOE } from "../colors";
+import { wardedTakes } from "../lampWard";
 import { updatePagewing } from "./behavior";
 import { drawPagewing } from "./draw";
 
@@ -13,5 +14,6 @@ export const pagewing: EnemyKind = {
   rift: { height: 12, y: () => rng.range(96, 118), riftY: (y) => y },
   update: updatePagewing,
   draw: drawPagewing,
+  takes: wardedTakes,
   glow: { radius: 14, color: FOE.paper[3], eyeY: -2 },
 };
