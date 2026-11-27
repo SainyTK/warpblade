@@ -87,7 +87,7 @@ export interface DamageNumber {
 }
 /** play runs the simulation; pick pauses it while Kael chooses a skill when a wave is cleared with skill points waiting;
  *  chest pauses it while an opened chest shows what it gave; clear is the end of the stage */
-export type GameMode = "play" | "pick" | "chest" | "clear" | "map";
+export type GameMode = "play" | "pick" | "chest" | "clear";
 
 export interface GameState {
   mode: GameMode;

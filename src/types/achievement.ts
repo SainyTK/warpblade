@@ -1,4 +1,5 @@
 import type { SourceId } from "./build";
+import type { StageId } from "./campaign";
 import type { EnemyRank, EnemyType } from "./enemy";
 import type { RunOutcome } from "./run";
 
@@ -36,6 +37,7 @@ export interface TrackedStats {
   hero: Record<string, number>;
   /** foes slain, by foe type */
   foes: Partial<Record<EnemyType, number>>;
+  stages: Record<string, number>;
   /** the run in play; a save never brings it back */
   run: RunTally;
 }
@@ -57,7 +59,9 @@ export type Goal =
   /** one of a hero's own stats, counted through the `heroCount` and `heroBest` feats */
   | { kind: "hero"; stat: string; need: number }
   | { kind: "shopLevels"; need: number }
-  | { kind: "heroesBought"; need: number };
+  | { kind: "heroesBought"; need: number }
+  | { kind: "stageClears"; stage: StageId; hyper?: boolean; need: number }
+  | { kind: "goalsMet"; of: readonly Goal[]; need: number };
 
 export type AchievementGroup = "Waves" | "Heroes" | "Foes" | "Skill" | "Coins";
 
@@ -86,6 +90,7 @@ export type Feat =
   | { kind: "waveReached"; wave: number }
   | { kind: "waveCleared"; wave: number; hero: string }
   | { kind: "runEnd"; outcome: RunOutcome; wave: number; hero: string }
+  | { kind: "stageCleared"; stage: StageId; hyper: boolean; hero: string }
   | { kind: "comboHit"; moves: number }
   | { kind: "perfect" }
   | { kind: "ultimateLearned" }

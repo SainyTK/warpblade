@@ -142,3 +142,5 @@ export const RESONANCE_MILESTONES: readonly { element: ElementId; rank: number; 
   { element: "venom", rank: VENOM.plagueRank, name: "Plague" },
   { element: "void", rank: VOID.riftRank, name: "Rift Echo" },
 ];
+
+export const BIG_FOE_BURST_CAP = 0.02;

@@ -43,4 +43,22 @@ export const BOSS_ARENA = {
   glow: 110,
 } as const;
 
-export const BOSS_HASTE = { calm: 1.15, enraged: 1.35 } as const;
+export const BOSS_HASTE = { calm: 1.3, enraged: 1.6, calmCombo: 0.5 } as const;
+
+export const BOSS_TELEGRAPH = { ring: 34, light: 70 } as const;
+
+export const BOSS_PHASES = { second: 0.7, third: 0.35 } as const;
+
+export const BOSS_FRENZY = { haste: 1.9, enraged: 2.4, enragedPower: 1.5 } as const;
+
+export const ENRAGE_AFTER = { elite: null, mini: 90, boss: 240 } as const;
+
+export const BOSS_POISE = {
+  share: 0.08,
+  growth: 1.4,
+  idle: 2,
+  drain: 0.06,
+  broken: 2.6,
+} as const;
+
+export const CONTROL_RESIST = { keep: 0.6, forget: 8 } as const;

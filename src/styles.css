@@ -418,6 +418,35 @@ body {
   background: var(--text);
   animation: boss-shield 200ms steps(2) infinite;
 }
+.boss-head {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+.boss-enrage {
+  color: var(--hp);
+}
+.boss.frenzied .fill {
+  background: var(--hp);
+  box-shadow: 0 0 8px var(--hp);
+}
+.boss .poise {
+  justify-self: center;
+  width: 60%;
+  height: 3px;
+  background: var(--hud-bg);
+  border: 1px solid var(--line);
+  position: relative;
+}
+.boss .poise .fill {
+  background: var(--gold);
+  box-shadow: none;
+  transition: none;
+}
+.boss .poise.broken .fill {
+  background: var(--text);
+  animation: boss-shield 200ms steps(2) infinite;
+}
 @keyframes boss-shield {
   50% {
     opacity: 0.45;

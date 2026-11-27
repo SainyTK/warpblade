@@ -1,3 +1,4 @@
+import { BOSS_PHASES } from "../../constants/bossFight";
 import { ENEMY_HITS } from "../../constants/enemies";
 import { SPARKS } from "../../constants/palette";
 import { GROUND } from "../../constants/stage";
@@ -6,19 +7,19 @@ import type { Enemy } from "../../types/enemy";
 import { PK } from "../../types/particle";
 import { eraOf } from "../../utils/eras";
 import { approach, clamp, TAU } from "../../utils/math";
-import { clampStageX, stageThreat } from "../adventure";
+import { clampStageX, summonFoe } from "../adventure";
 import { eachStanding } from "../coopHooks";
 import { createRift } from "../effects/rift";
 import { createShadowOrb } from "../effects/shadowOrb";
 import { hurtHero } from "../hurtHero";
 import { fxRng, game, hero, lights, particles, rng } from "../state";
 import { boxHit, heroBox } from "../world";
-import { enemyBox, makeEnemy } from "./enemy";
+import { enemyBox } from "./enemy";
 import { turnToHero } from "./facing";
 
 const ORB_SPEED = 115;
 const MAX_SUMMONS = 4;
-export const WARDEN_ENRAGE = 0.5;
+export const WARDEN_ENRAGE = BOSS_PHASES.second;
 const RING = { orbs: 10, speed: 72, windup: 0.85, again: 0.4, hold: 0.6 } as const;
 
 export function fireVolley(e: Enemy): void {
@@ -66,9 +67,7 @@ function summon(): void {
   for (let i = 0; i < Math.min(2, MAX_SUMMONS - minions); i++) {
     const x = clampStageX(hero.x + (i ? 70 : -70), 20);
     const y = rng.range(50, 90);
-    game.fx.push(
-      createRift(x, y, 11, i * 0.2, () => game.enemies.push(makeEnemy(flyer, x, y, stageThreat(game.wave), 0.25))),
-    );
+    game.fx.push(createRift(x, y, 11, i * 0.2, () => game.enemies.push(summonFoe(flyer, x, y, 0.25))));
   }
 }
 

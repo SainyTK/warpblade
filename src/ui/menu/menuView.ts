@@ -11,6 +11,7 @@ import { menuContext, menuScreen } from "./menuState";
 import { optionsScreen } from "./optionsScreen";
 import { resultScreen } from "./resultScreen";
 import { shopScreen } from "./shopScreen";
+import { stageScreen } from "./stageScreen";
 
 const root = byId("menu");
 const title = byId("menuTitle");
@@ -24,6 +25,7 @@ const SCREENS: Record<MenuScreen, (context: MenuContext) => MenuView> = {
   shop: shopScreen,
   result: resultScreen,
   hero: heroScreen,
+  stage: stageScreen,
   coop: coopScreen,
   achievements: achievementsScreen,
   codex: codexScreen,
@@ -42,6 +44,7 @@ export function renderMenu(): void {
   const context = menuContext();
   const screen = menuScreen();
   document.body.dataset.menu = context ?? "none";
+  document.body.dataset.screen = context ? screen : "none";
   root.hidden = !context;
   if (!context) {
     body.replaceChildren();

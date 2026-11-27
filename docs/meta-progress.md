@@ -18,10 +18,13 @@ When a run ends, coins still in flight are banked too.
 
 ## Run end
 
-When the hero falls or the stage is cleared, the run's coins are banked and the start menu opens on a result screen with the wave reached, the coins earned and the bank.
-Continue goes to the start menu, Shop goes straight to the shop.
-Start always begins a fresh run with everything bought so far.
-Restart run from the pause menu still starts over at once, and it banks the coins of the run it ends.
+When the hero falls or the stage is cleared, the run's coins are banked and the start menu opens on the stage result screen: this run's grade, time, level, foes, damage and gold, what it unlocked, the best run for that stage, the damage of every source and the bank.
+A fallen run keeps its gold and its kill counts, and gives no stage-clear reward.
+Play again replays the same stage, Choose stage opens the stage screen, Main menu goes home and Shop goes straight to the shop.
+Start goes through the hero screen to the stage screen; a stage always begins a fresh run with everything bought so far.
+Restart run from the pause menu restarts the same stage at once, and it banks the coins of the run it ends.
+
+Gold also opens Hyper stages: once a stage is cleared, its Hyper version is for sale on the stage screen for 150 (tier 1), 300, 450, 600 or 900 (the Citadel) gold (`HYPER_PRICE` in `src/constants/unlocks.ts`).
 
 ## What the shop sells
 
@@ -109,9 +112,9 @@ The hero screen and what each price means in runs are in `docs/achievements.md`.
 
 ## Saving
 
-Meta progress is saved in local storage under `warpblade-meta-v1` (`src/services/metaStorage.ts`).
+Meta progress is saved in local storage under `warpblade-meta-v2` (`src/services/metaStorage.ts`).
+The stage loop of 27 November 2026 moved the key from `v1`, so every player starts fresh: Kael, Cerise and the Sunlit Ruins.
 The version is part of the key, so a future change of shape starts from a fresh save.
 `parseMeta` in `src/utils/metaSave.ts` keeps only known items within their level limits and a whole, positive coin count; anything missing, corrupt or not JSON starts fresh.
 `src/store/meta.ts` is the one owner of the bank and the bought levels, and saves on every change.
 The same save holds the heroes unlocked with coins, the achievements earned and the stats they track (see `docs/achievements.md`); a save from before those fields loads with none of them.
-A save that unlocked a hero no longer in the roster gets that hero's price back into the bank once.

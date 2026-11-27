@@ -1,3 +1,4 @@
+import { BOSS_PHASES } from "../../../constants/bossFight";
 import { GROUND } from "../../../constants/stage";
 import { sfx } from "../../../services/audio";
 import type { Enemy } from "../../../types/enemy";
@@ -27,7 +28,7 @@ const OAK_CALM_REST = 1.5;
 /** enraged it rests 0.8 of the base */
 const OAK_ENRAGED_REST = 0.8;
 /** below this share of its HP Oakheart is enraged: it attacks faster and drops its guard */
-export const OAK_ENRAGE = 0.5;
+export const OAK_ENRAGE = BOSS_PHASES.second;
 const REACH = 40;
 const ROOT_STEP = 17;
 /** the bright end of the leaf ramp, so the burst reads against the crown and the sky */

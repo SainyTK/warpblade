@@ -1,8 +1,8 @@
-import type { CampaignRecords } from "../types/records";
+import type { StageRecords } from "../types/records";
 
-const KEY = "warpblade-campaign-records-v1";
+const KEY = "warpblade-stage-records-v1";
 
-export function loadCampaignRecords(): unknown {
+export function loadStageRecords(): unknown {
   try {
     const text = localStorage.getItem(KEY);
     return text ? JSON.parse(text) : null;
@@ -11,7 +11,7 @@ export function loadCampaignRecords(): unknown {
   }
 }
 
-export function saveCampaignRecords(records: CampaignRecords): void {
+export function saveStageRecords(records: StageRecords): void {
   try {
     localStorage.setItem(KEY, JSON.stringify(records));
   } catch {

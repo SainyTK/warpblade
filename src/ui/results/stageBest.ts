@@ -1,8 +1,7 @@
-import type { CampaignRecordKey, CampaignRecords } from "../../types/records";
+import type { StageBest, StageRecordKey } from "../../types/records";
 import { minutesSeconds, shortNumber } from "../../utils/runReport";
 
-const ROWS: readonly { key: CampaignRecordKey; label: string; value(r: CampaignRecords, total: number): string }[] = [
-  { key: "mostSealed", label: "Most rifts sealed", value: (r, total) => `${r.mostSealed}/${total}` },
+const ROWS: readonly { key: StageRecordKey; label: string; value(r: StageBest): string }[] = [
   {
     key: "fastestClear",
     label: "Fastest clear",
@@ -13,15 +12,11 @@ const ROWS: readonly { key: CampaignRecordKey; label: string; value(r: CampaignR
   { key: "highestLevel", label: "Highest level", value: (r) => String(r.highestLevel) },
 ];
 
-export function campaignBest(
-  records: CampaignRecords,
-  beaten: readonly CampaignRecordKey[],
-  total: number,
-): HTMLElement {
+export function stageBestTable(title: string, best: StageBest, beaten: readonly StageRecordKey[]): HTMLElement {
   const box = document.createElement("table");
   box.className = "campaign-best";
   const caption = document.createElement("caption");
-  caption.textContent = "Best runs";
+  caption.textContent = title;
   box.append(caption);
   const body = document.createElement("tbody");
   for (const row of ROWS) {
@@ -30,7 +25,7 @@ export function campaignBest(
     name.scope = "row";
     name.textContent = row.label;
     const value = document.createElement("td");
-    value.textContent = row.value(records, total);
+    value.textContent = row.value(best);
     const mark = document.createElement("td");
     mark.className = "campaign-new";
     mark.textContent = beaten.includes(row.key) ? "New record" : "";

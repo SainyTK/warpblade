@@ -1,7 +1,8 @@
+import { BOSS_PHASES } from "../../../../constants/bossFight";
 export const WYRM_HITS = { erupt: 22, page: 11, wave: 16, bite: 20, touch: 8 } as const;
 
 export const WYRM = {
-  enrage: 0.5,
+  enrage: BOSS_PHASES.second,
   dive: 0.45,
   travel: 165,
   travelMost: 1.6,

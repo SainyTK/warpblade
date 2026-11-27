@@ -1,5 +1,5 @@
 import { GROUND } from "../constants/stage";
-import type { Patrol } from "../types/campaign";
+import type { Patrol, SurgeRoom } from "../types/campaign";
 import type { EnemyType } from "../types/enemy";
 import type { Platform, Point } from "../types/world";
 
@@ -14,10 +14,7 @@ export const walker = (x: number, elite = false, type?: EnemyType): Patrol => ({
   type,
 });
 export const flyer = (x: number, y: number, type?: EnemyType): Patrol => ({ x, y, kind: "flyer", type });
-export const boss = (foe: EnemyType) => ({ kind: "boss" as const, foe });
-export const surge = (count: number, cap: number, foes?: readonly EnemyType[]) => ({
-  kind: "surge" as const,
-  count,
+export const surge = (cap: number, foes?: readonly EnemyType[]): SurgeRoom => ({
   cap,
   foes,
 });

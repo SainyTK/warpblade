@@ -9,7 +9,7 @@ import type { Enemy } from "../types/enemy";
 import type { Coin } from "../types/game";
 import { PK } from "../types/particle";
 import { coinDrop, coinShare } from "../utils/coins";
-import { clampStageX } from "./adventure";
+import { clampStageX, stageCoinRate } from "./adventure";
 import { coop } from "./coopHooks";
 import { feat } from "./feat";
 import { game, hero, particles, rng } from "./state";
@@ -25,7 +25,7 @@ function coinBase(e: Enemy): number {
 /** a slain foe's coins burst out of it */
 export function dropCoins(e: Enemy, x: number, y: number): void {
   const bonus = COIN_BONUS + (ownsSkill("lodestone") ? LODESTONE_BONUS : 0);
-  const n = coinDrop(coinBase(e), bonus, rng.next());
+  const n = coinDrop(coinBase(e) * stageCoinRate(), bonus, rng.next());
   for (let i = 0; i < n; i++)
     game.coinDrops.push({ x, y, vx: rng.range(-60, 60), vy: rng.range(-170, -90), t: 0, rest: false });
 }

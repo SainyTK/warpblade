@@ -11,18 +11,20 @@ export interface WaveClear {
   seconds: number;
 }
 
-export interface CampaignRecords {
-  mostSealed: number;
+export interface StageBest {
+  clears: number;
   fastestClear: number | null;
   bestGrade: StageGrade | null;
   mostDamage: number;
   highestLevel: number;
 }
 
-export type CampaignRecordKey = keyof CampaignRecords;
+export type StageRecordKey = Exclude<keyof StageBest, "clears">;
 
-export interface CampaignRun {
-  sealed: number;
+export type StageRecords = Readonly<Record<string, StageBest>>;
+
+export interface StageRun {
+  key: string;
   cleared: boolean;
   seconds: number;
   grade: StageGrade;

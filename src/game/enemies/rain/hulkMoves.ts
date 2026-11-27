@@ -1,3 +1,4 @@
+import { BOSS_PHASES } from "../../../constants/bossFight";
 import type { Enemy } from "../../../types/enemy";
 
 export const HULK_HITS = { slam: 18, wave: 14, glob: 11, rush: 20 } as const;
@@ -8,7 +9,14 @@ export const HULK_COOLDOWN = { least: 1, most: 1.8, calm: 1.25, enraged: 0.7 } a
 export const HULK_REACH = { slam: 46, slamHeight: 40, near: 40, wave: 140, waveChance: 0.6 } as const;
 export const HULK_ENRAGED = { windup: 0.75, secondWave: 0.55 } as const;
 export const HULK_GLOBS = { calm: [-26, 0, 26], enraged: [-36, -12, 12, 36] } as const;
-export const SINKING = { at: 0.5, taken: 1.5, drop: 6, settle: 0.25, bubbleEvery: 0.12, warn: 0.5 } as const;
+export const SINKING = {
+  at: BOSS_PHASES.second,
+  taken: 1.5,
+  drop: 6,
+  settle: 0.25,
+  bubbleEvery: 0.12,
+  warn: 0.5,
+} as const;
 export const RISE = {
   pop: 0.1,
   overshoot: 2,

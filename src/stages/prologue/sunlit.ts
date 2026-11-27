@@ -1,9 +1,8 @@
 import type { Approach } from "../../types/campaign";
-import { boss, flyer, ledge, site, walker } from "../geometry";
+import { flyer, ledge, site, surge, walker } from "../geometry";
 
 export const sunlit: Approach = {
-  rise: 0,
-  room: boss("oakheart"),
+  room: surge(10),
   parSeconds: 54,
   length: 742,
   slabs: [

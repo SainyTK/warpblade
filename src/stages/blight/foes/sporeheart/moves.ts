@@ -1,3 +1,4 @@
+import { BOSS_PHASES } from "../../../../constants/bossFight";
 import type { Enemy, EnemyState } from "../../../../types/enemy";
 
 export const HEART_HITS = { lash: 16, bomb: 12, puddle: 5, root: 16, sweep: 18, pulse: 17 } as const;
@@ -17,7 +18,7 @@ export const HEART_TIMES = {
   wake: 1.8,
   rest: 0.6,
 } as const;
-export const HEART_ENRAGE = 0.5;
+export const HEART_ENRAGE = BOSS_PHASES.second;
 export const CORE = { x: 1, y: -34 } as const;
 export const SWEEP_REACH = 80;
 export const LASH_SPEED = 230;

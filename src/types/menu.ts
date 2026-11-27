@@ -7,6 +7,7 @@ export type MenuScreen =
   | "shop"
   | "result"
   | "hero"
+  | "stage"
   | "coop"
   | "achievements"
   | "codex";

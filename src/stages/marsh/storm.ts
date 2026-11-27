@@ -1,9 +1,8 @@
 import type { Approach } from "../../types/campaign";
-import { boss, flyer, ledge, pit, site, walker } from "../geometry";
+import { flyer, ledge, pit, site, surge, walker } from "../geometry";
 
 export const storm: Approach = {
-  rise: 2,
-  room: boss("boghulk"),
+  room: surge(10),
   parSeconds: 66,
   length: 880,
   slabs: [

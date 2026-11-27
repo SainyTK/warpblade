@@ -1,3 +1,4 @@
+import { BOSS_PHASES } from "../../../../constants/bossFight";
 import { GROUND } from "../../../../constants/stage";
 import { clampStageX, stageLeft, stageRight } from "../../../../game/adventure";
 import { eachStanding } from "../../../../game/coopHooks";
@@ -34,7 +35,7 @@ export const SMITH_TIMES = {
   recover: 0.95,
   hurried: 0.6,
 } as const;
-export const SMITH_ENRAGE = 0.5;
+export const SMITH_ENRAGE = BOSS_PHASES.second;
 export const SMITH_POINTS = { hammer: 30, mouthX: 16, mouthY: 60, anvil: 30, hand: 58 } as const;
 const SMITH_MOVE = { walk: 20, near: 58, keep: 46 } as const;
 const RAIN = { drops: 8, beat: 0.09, mark: 0.85, spread: 26 } as const;

@@ -1,5 +1,5 @@
 import type { Approach } from "../../types/campaign";
-import { boss, flyer, ledge, pit, site, surge, walker } from "../geometry";
+import { flyer, ledge, pit, site, surge, walker } from "../geometry";
 
 export interface DriftSite {
   x: number;
@@ -16,8 +16,7 @@ const pool = (x0: number, x1: number) => ({ x0, x1 });
 const drift = (x: number, y: number, span: number): DriftSite => ({ x, y, span });
 
 export const rootTunnel: Approach = {
-  rise: 0,
-  room: surge(30, 10),
+  room: surge(10),
   parSeconds: 60,
   length: 980,
   slabs: [
@@ -57,8 +56,7 @@ export const rootTunnel: Approach = {
 };
 
 export const fungalMarsh: Approach = {
-  rise: 1,
-  room: surge(26, 9, ["rotcrawler", "spitbloom", "rotcrawler"]),
+  room: surge(9, ["rotcrawler", "spitbloom", "rotcrawler"]),
   parSeconds: 70,
   length: 1050,
   slabs: [
@@ -100,8 +98,7 @@ export const fungalMarsh: Approach = {
 };
 
 export const heartChamber: Approach = {
-  rise: 2,
-  room: boss("sporeheart"),
+  room: surge(10),
   parSeconds: 90,
   length: 900,
   slabs: [

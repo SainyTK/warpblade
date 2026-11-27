@@ -8,7 +8,7 @@ import type { Enemy } from "../types/enemy";
 import { PK } from "../types/particle";
 import { WHITE } from "../utils/color";
 import { TAU } from "../utils/math";
-import { isAdventure, recordStageKill, stageBoss } from "./adventure";
+import { isAdventure, recordStageKill, stageBoss, stageHeartRate } from "./adventure";
 import { dropChest } from "./build/chests";
 import { dropCoins } from "./coins";
 import { createKillBurst } from "./effects/killBurst";
@@ -121,7 +121,7 @@ export function killEnemy(e: Enemy, source?: SourceId): void {
   const orbs = kind.orbs ?? ORBS[e.rank];
   for (let i = 0; i < orbs; i++)
     game.pickups.push({ x, y, vx: rng.range(-70, 70), vy: rng.range(-140, -60), t: 0, kind: "mp" });
-  const hearts = big ? HEARTS.big : rng.chance(kind.heartChance ?? HEARTS.other) ? 1 : 0;
+  const hearts = big ? HEARTS.big : rng.chance((kind.heartChance ?? HEARTS.other) * stageHeartRate()) ? 1 : 0;
   for (let i = 0; i < hearts; i++) game.pickups.push({ x, y, vx: rng.range(-50, 50), vy: -150, t: 0, kind: "hp" });
   if (!isTraining()) {
     dropCoins(e, x, y);

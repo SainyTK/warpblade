@@ -1,3 +1,4 @@
+import { BOSS_PHASES } from "../../../constants/bossFight";
 import { GROUND } from "../../../constants/stage";
 import { sfx } from "../../../services/audio";
 import type { Enemy } from "../../../types/enemy";
@@ -23,7 +24,7 @@ export const MAW_WINDUP = { bite: 0.65, spit: 0.75, rear: 0.85, well: 0.8 } as c
 const WELL = { calm: [0, -40, 40], enraged: [0, -30, 30, -60, 60], beat: 0.12, hold: 0.5 } as const;
 /** e.n through a recovery: what it just did, so the sprite holds the right pose */
 export const MAW_DID = { bite: 1, spit: 2, slam: 3 } as const;
-export const MAW_ENRAGE = 0.5;
+export const MAW_ENRAGE = BOSS_PHASES.second;
 
 function bite(e: Enemy): void {
   Object.assign(e, { state: "lunge", st: 0, vx: e.face * 150 });

@@ -2,8 +2,7 @@ import type { Approach } from "../../types/campaign";
 import { flyer, ledge, pit, site, surge, walker } from "../geometry";
 
 export const shardSteps: Approach = {
-  rise: 0,
-  room: surge(36, 10, ["golem", "golem", "sprite"]),
+  room: surge(10, ["golem", "golem", "sprite"]),
   parSeconds: 75,
   length: 1000,
   slabs: [

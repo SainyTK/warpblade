@@ -12,7 +12,7 @@ The game also sends:
 
 | Event | When | Parameters |
 | --- | --- | --- |
-| `run_start` | a solo run or a co-op room's run starts | `hero`, `coop`, `players` (co-op only) |
-| `run_end` | a run ends, solo or co-op | `hero`, `outcome` (`fallen`, `clear`, `left`), `wave`, `coins`, and unless a guest left mid-run: `level` reached, `kills` (foes defeated), `top` (the source that did the most damage: `attacks`, `abilities`, `ultimate`, a skill id, or `none`) |
+| `run_start` | a solo run or a co-op room's run starts | `hero`, `coop`, `players` (co-op only), `stage` and `hyper` (1 or 0) for a solo stage |
+| `run_end` | a run ends, solo or co-op | `hero`, `outcome` (`fallen`, `clear`, `left`), `coins`, `wave` in co-op or `stage`, `hyper`, `grade` and `damage` in a solo stage, and unless a guest left mid-run: `level` reached, `kills` (foes defeated), `top` (the source that did the most damage: `attacks`, `abilities`, `ultimate`, a skill id, or `none`) |
 
 New events go through `track()` in the same service, with a row added here.

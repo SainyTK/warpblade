@@ -1,6 +1,5 @@
 export interface PlaytestStart {
   stage: string | null;
-  cleared: number;
   section: number | null;
   wave: number | null;
   level: number;
@@ -21,7 +20,6 @@ export function readPlaytestStart(): PlaytestStart | null {
   if (!wave && !section && !stage) return null;
   return {
     stage,
-    cleared: positiveInt(params.get("cleared")) ?? 0,
     section,
     wave,
     level: positiveInt(params.get("level")) ?? 1,

@@ -1,11 +1,10 @@
 import type { Approach } from "../../types/campaign";
-import { boss, flyer, ledge, pit, site, surge, walker } from "../geometry";
+import { flyer, ledge, pit, site, surge, walker } from "../geometry";
 
 const guard = (x: number, elite = false) => walker(x, elite, "tomeguard");
 
 export const readingHalls: Approach = {
-  rise: 0,
-  room: surge(40, 10, ["inkling", "inkling", "pagewing", "tomeguard"]),
+  room: surge(10, ["inkling", "inkling", "pagewing", "tomeguard"]),
   parSeconds: 62,
   length: 960,
   slabs: [
@@ -46,8 +45,7 @@ export const readingHalls: Approach = {
 };
 
 export const theStacks: Approach = {
-  rise: 1,
-  room: surge(35, 9, ["tomeguard", "inkling", "inkling", "pagewing"]),
+  room: surge(9, ["tomeguard", "inkling", "inkling", "pagewing"]),
   parSeconds: 64,
   length: 1020,
   slabs: [
@@ -91,8 +89,7 @@ export const theStacks: Approach = {
 };
 
 export const sunkenRotunda: Approach = {
-  rise: 2,
-  room: boss("pagewyrm"),
+  room: surge(10),
   parSeconds: 96,
   length: 900,
   slabs: [

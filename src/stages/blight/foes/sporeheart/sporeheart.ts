@@ -1,7 +1,6 @@
 import { GROUND } from "../../../../constants/stage";
-import { stageLeft, stageRight } from "../../../../game/adventure";
+import { stageLeft, stageRight, summonFoe } from "../../../../game/adventure";
 import { createRift } from "../../../../game/effects/rift";
-import { makeEnemy } from "../../../../game/enemies/enemy";
 import { turnToHero } from "../../../../game/enemies/facing";
 import { kindOf } from "../../../../game/enemies/kinds";
 import { fxRng, game, hero, particles, rng } from "../../../../game/state";
@@ -129,7 +128,7 @@ function summonPuffs(e: Enemy): void {
     const y = 70 + i * 16;
     game.fx.push(
       createRift(x, rift.riftY(y), rift.height, i * 0.15, () => {
-        game.enemies.push(makeEnemy("sporepuff", x, y, game.wave));
+        game.enemies.push(summonFoe("sporepuff", x, y, 0.25));
       }),
     );
   }

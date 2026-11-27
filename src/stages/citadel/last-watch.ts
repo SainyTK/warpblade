@@ -1,9 +1,8 @@
 import type { Approach } from "../../types/campaign";
-import { boss, flyer, ledge, site, walker } from "../geometry";
+import { flyer, ledge, site, surge, walker } from "../geometry";
 
 export const lastWatch: Approach = {
-  rise: 4,
-  room: boss("unblinking"),
+  room: surge(10),
   parSeconds: 130,
   length: 997,
   slabs: [

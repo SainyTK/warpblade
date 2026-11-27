@@ -10,7 +10,7 @@ import { eachStanding, heroSlot } from "../../coopHooks";
 import { hurtHero } from "../../hurtHero";
 import { fxRng, particles } from "../../state";
 import { boxHit, heroBox } from "../../world";
-import { AC, VOID, VOID_SPARKS } from "./colors";
+import { type StrikeLook, VOID_LOOK } from "./strikeLook";
 
 /** each spike: a glowing crack first, then the spike bursts up, holds and sinks */
 const SPIKE = { warn: 0.42, up: 0.06, hold: 0.16, down: 0.14 } as const;
@@ -21,30 +21,30 @@ const HEIGHT = 17;
 const SPIKE_HALF = 4.5;
 
 /** the crack that warns of a spike: it splits wider and burns brighter as k runs from 0 to 1, shedding motes of light */
-function drawCrack(x: number, k: number, index: number): void {
+function drawCrack(x: number, k: number, index: number, look: StrikeLook): void {
   const half = Math.round(2 + k * 4);
-  const lit = k > 0.7 ? VOID[4] : VOID[3];
-  line(x - half, GROUND, x + half, GROUND, VOID[2], 0.5 + k * 0.5);
+  const lit = k > 0.7 ? look.ramp[4] : look.ramp[3];
+  line(x - half, GROUND, x + half, GROUND, look.ramp[2], 0.5 + k * 0.5);
   // the split itself is a fine jagged seam, white at its middle once it is about to burst
   for (let d = -half; d < half; d++) {
     const y0 = GROUND + (((d + index) & 1) === 0 ? 0.25 : 0.75);
     const y1 = GROUND + (((d + index) & 1) === 0 ? 0.75 : 0.25);
-    hairline(x + d, y0, x + d + 1, y1, Math.abs(d) < half * 0.5 && k > 0.5 ? VOID[5] : lit);
+    hairline(x + d, y0, x + d + 1, y1, Math.abs(d) < half * 0.5 && k > 0.5 ? look.ramp[5] : lit);
   }
-  px(x, GROUND - 1, VOID[5], k);
+  px(x, GROUND - 1, look.ramp[5], k);
   for (let m = 0; m < 3; m++) {
     const lift = (k * 2.2 + m * 0.37) % 1;
-    fleck(x + (m - 1) * 2.5 * k, GROUND - 1 - lift * (4 + k * 6), VOID[4], (1 - lift) * k);
+    fleck(x + (m - 1) * 2.5 * k, GROUND - 1 - lift * (4 + k * 6), look.ramp[4], (1 - lift) * k);
   }
-  glow(x, GROUND - 2, 8 + k * 6, VOID[3], 0.25 + k * 0.35);
+  glow(x, GROUND - 2, 8 + k * 6, look.ramp[3], 0.25 + k * 0.35);
 }
 
 /** one spike h art pixels high: a dark crystal with a lit face, a white ridge and a splinter at its foot */
-function drawSpike(x: number, h: number, lean: number): void {
+function drawSpike(x: number, h: number, lean: number, look: StrikeLook): void {
   const w = SPIKE_HALF;
   const tip = [x + lean, GROUND - h] as const;
   const ridge = x + lean * 0.5 + 0.5;
-  polygon([[x - w, GROUND + 1], tip, [x + w, GROUND + 1]], AC.outline);
+  polygon([[x - w, GROUND + 1], tip, [x + w, GROUND + 1]], look.outline);
   if (h > 5) {
     polygon(
       [
@@ -52,7 +52,7 @@ function drawSpike(x: number, h: number, lean: number): void {
         [x + w + 1.5, GROUND - h * 0.4],
         [x + w + 2.5, GROUND + 1],
       ],
-      AC.outline,
+      look.outline,
     );
     polygon(
       [
@@ -60,24 +60,30 @@ function drawSpike(x: number, h: number, lean: number): void {
         [x + w + 1.5, GROUND - h * 0.4 + 1.5],
         [x + w + 1.8, GROUND + 1],
       ],
-      VOID[2],
+      look.ramp[2],
     );
   }
   const inner = [tip[0], tip[1] + 1.2] as const;
-  polygon([[x - w + 1, GROUND + 1], inner, [ridge, GROUND + 1]], VOID[3]);
-  polygon([[ridge, GROUND + 1], inner, [x + w - 1, GROUND + 1]], VOID[1]);
-  hairline(x - w + 1.5, GROUND + 0.5, inner[0] - 0.4, inner[1] + 1.5, VOID[4]);
-  hairline(ridge, GROUND, inner[0], inner[1] + 0.5, VOID[5]);
+  polygon([[x - w + 1, GROUND + 1], inner, [ridge, GROUND + 1]], look.ramp[3]);
+  polygon([[ridge, GROUND + 1], inner, [x + w - 1, GROUND + 1]], look.ramp[1]);
+  hairline(x - w + 1.5, GROUND + 0.5, inner[0] - 0.4, inner[1] + 1.5, look.ramp[4]);
+  hairline(ridge, GROUND, inner[0], inner[1] + 0.5, look.ramp[5]);
   fleck(inner[0], inner[1], WHITE);
-  line(x - w + 1, GROUND, x + w - 1, GROUND, VOID[4], 0.6);
-  glow(x, GROUND - h * 0.5, 12, VOID[3], 0.45 * (h / HEIGHT));
+  line(x - w + 1, GROUND, x + w - 1, GROUND, look.ramp[4], 0.6);
+  glow(x, GROUND - h * 0.5, 12, look.ramp[3], 0.45 * (h / HEIGHT));
 }
 
 /**
  * The Abyss Maw's slam: a row of cracks races along the floor away from it and void spikes burst out of each one in
  * turn. Each crack glows before its spike comes, so Kael can jump the row or dash through it. The row hits once.
  */
-export function createVoidSpikes(x0: number, dir: number, count: number, damage: number): Effect {
+export function createVoidSpikes(
+  x0: number,
+  dir: number,
+  count: number,
+  damage: number,
+  look: StrikeLook = VOID_LOOK,
+): Effect {
   const xs = Array.from({ length: count }, (_, i) => x0 + dir * i * GAP).filter(
     (x) => x > stageLeft() + 4 && x < stageRight() - 4,
   );
@@ -109,7 +115,7 @@ export function createVoidSpikes(x0: number, dir: number, count: number, damage:
               fxRng.range(-160, -60),
               0.3,
               {
-                sparks: VOID_SPARKS,
+                sparks: look.sparks,
               },
             );
           if (i % 2 === 0) sfx.swing(0.3);
@@ -135,11 +141,11 @@ export function createVoidSpikes(x0: number, dir: number, count: number, damage:
         const u = t - i * DELAY;
         if (u < 0) return;
         if (u < SPIKE.warn) {
-          drawCrack(x, u / SPIKE.warn, i);
+          drawCrack(x, u / SPIKE.warn, i, look);
           return;
         }
         const h = rise(u) * HEIGHT;
-        if (h >= 1) drawSpike(x, h, ((i % 3) - 1) * 1.5);
+        if (h >= 1) drawSpike(x, h, ((i % 3) - 1) * 1.5, look);
       });
     },
   };

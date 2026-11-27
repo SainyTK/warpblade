@@ -1,4 +1,5 @@
 import type { EraId } from "../constants/eras";
+import type { Color } from "./color";
 import type { EnemyType } from "./enemy";
 import type { Platform, Point } from "./world";
 
@@ -34,13 +35,51 @@ export interface Patrol extends Point {
   elite?: boolean;
 }
 
-export type GateRoom =
-  | { kind: "boss"; foe: EnemyType }
-  | { kind: "surge"; count: number; cap: number; foes?: readonly EnemyType[] };
+export interface SurgeRoom {
+  cap: number;
+  foes?: readonly EnemyType[];
+}
+
+export type ArcBeat =
+  | { kind: "surge"; foes: number; to: number }
+  | { kind: "elite"; to: number }
+  | { kind: "mini"; to: number }
+  | { kind: "boss"; foe?: EnemyType; to: number };
+
+export interface AreaArc {
+  enter: number;
+  gate: number;
+  beats: readonly [ArcBeat, ...ArcBeat[]];
+}
+
+export type StageTier = 1 | 2 | 3 | 4 | 5;
+
+export interface StageTwist {
+  name: string;
+  text: string;
+  heartChance?: number;
+  crowd?: number;
+  foeHp?: number;
+  foeDamage?: number;
+  foePace?: number;
+  eliteEvery?: number;
+  coins?: number;
+}
+
+export type MiniMove = "pillars" | "spikes" | "call";
+
+export interface MiniBossDef {
+  name: string;
+  epithet: string;
+  base: EnemyType;
+  light: Color;
+  power: number;
+  moves: readonly [MiniMove, ...MiniMove[]];
+  adds: readonly EnemyType[];
+}
 
 export interface Approach {
-  rise: number;
-  room: GateRoom;
+  room: SurgeRoom;
   parSeconds: number;
   length: number;
   slabs: readonly Platform[];
@@ -68,9 +107,15 @@ export interface StageDef {
   ground: EnemyType;
   flyer: EnemyType;
   boss: EnemyType;
+  mini: MiniBossDef;
+  twist: StageTwist;
   grantsArt?: ArtId;
   weakTo?: ArtId;
   areas: readonly [Approach, ...Approach[]];
   hazard?: StageHazard;
-  foeDamage?: number;
+}
+
+export interface StageChoice {
+  stage: StageId;
+  hyper: boolean;
 }

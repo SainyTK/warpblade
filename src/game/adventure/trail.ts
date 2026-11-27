@@ -1,18 +1,20 @@
 import { HERO_START_X } from "../../constants/hero";
 import { PLATFORMS, W } from "../../constants/stage";
-import { RIFT_STAGES, STAGES } from "../../stages";
-import type { ArtId, StageId } from "../../types/campaign";
+import { STAGES } from "../../stages";
+import type { StageId } from "../../types/campaign";
 import type { Enemy, EnemyType } from "../../types/enemy";
 import type { Platform, Point } from "../../types/world";
-import { stageBaseThreat, stageHpScale } from "../../utils/campaign";
 import { clamp } from "../../utils/math";
 import type { Rng } from "../../utils/rng";
-import { buildRoute, type Route } from "./route";
+import { type StageMods, stageMods } from "../../utils/stageArc";
+import { buildRoute, type Route, type SurgeBeat } from "./route";
 
 export interface Surge {
+  beat: SurgeBeat;
   foes: EnemyType[];
+  levels: number[];
+  xp: number[];
   sent: number;
-  cap: number;
   refills: number[];
 }
 
@@ -20,20 +22,25 @@ interface Trail {
   id: number;
   random: Rng;
   route: Route;
-  cleared: StageId[];
+  hyper: boolean;
+  mods: StageMods;
+  finale: boolean;
+  finaleFoe: Enemy | null;
   mentors: readonly Point[];
   area: number;
   nextFoe: number;
-  bossesDefeated: number;
+  beat: number;
+  lull: number;
+  band: number;
+  bigFoe: Enemy | null;
+  bigFoesDefeated: number;
+  miniDefeated: boolean;
   foesDefeated: number;
-  foesTotal: number;
-  parTotal: number;
   damage: number;
   farthest: number;
   camera: number;
   left: number;
   gate: number | null;
-  boss: Enemy | null;
   surge: Surge | null;
   safeX: number;
   authored: WeakSet<Enemy>;
@@ -47,36 +54,32 @@ export function resetAdventure(): void {
   trail = null;
 }
 
-function riftsCleared(cleared: readonly StageId[]): number {
-  return cleared.filter((id) => STAGES[id].kind === "rift").length;
-}
-
-export function routeFor(id: StageId, cleared: readonly StageId[]): Route {
-  const stage = STAGES[id];
-  const rifts = riftsCleared(cleared);
-  return buildRoute(stage, stageBaseThreat(stage, rifts), stageHpScale(stage, rifts));
-}
-
-export function beginAdventure(random: Rng, first: StageId = "prologue", cleared: readonly StageId[] = []): void {
-  const route = routeFor(first, cleared);
+export function beginAdventure(random: Rng, stage: StageId, hyper: boolean): void {
+  const mods = stageMods(STAGES[stage], hyper);
+  const route = buildRoute(STAGES[stage], mods);
   trail = {
     id: ++lastRunId,
     random,
     route,
-    cleared: [...cleared],
+    hyper,
+    mods,
+    finale: false,
+    finaleFoe: null,
     mentors: route.areas.map((area) => random.pick(area.mentorSites)),
     area: 0,
     nextFoe: 0,
-    bossesDefeated: 0,
+    beat: 0,
+    lull: 0,
+    band: route.areas[0].enter,
+    bigFoe: null,
+    bigFoesDefeated: 0,
+    miniDefeated: false,
     foesDefeated: 0,
-    foesTotal: route.foesTotal,
-    parTotal: route.parSeconds,
     damage: 0,
     farthest: 0,
     camera: 0,
     left: 0,
     gate: null,
-    boss: null,
     surge: null,
     safeX: HERO_START_X,
     authored: new WeakSet(),
@@ -84,36 +87,12 @@ export function beginAdventure(random: Rng, first: StageId = "prologue", cleared
   };
 }
 
-export function loadStage(id: StageId): void {
-  if (!trail) return;
-  const route = routeFor(id, trail.cleared);
-  Object.assign(trail, {
-    route,
-    mentors: route.areas.map((area) => trail?.random.pick(area.mentorSites)),
-    area: 0,
-    nextFoe: 0,
-    foesTotal: trail.foesTotal + route.foesTotal,
-    parTotal: trail.parTotal + route.parSeconds,
-    farthest: 0,
-    camera: 0,
-    left: 0,
-    gate: null,
-    boss: null,
-    surge: null,
-    safeX: HERO_START_X,
-  });
-}
-
 export const stageRunId = (): number | null => trail?.id ?? null;
 export const isAdventure = (): boolean => trail !== null;
 export const currentStage = () => trail?.route.stage ?? null;
-export const stageBoss = (): Enemy | null => trail?.boss ?? null;
-export const clearedStages = (): readonly StageId[] => trail?.cleared ?? [];
-export const earnedArtsOrder = (): ArtId[] =>
-  (trail?.cleared ?? []).flatMap((id) => {
-    const art = STAGES[id].grantsArt;
-    return art ? [art] : [];
-  });
+export const stageBoss = (): Enemy | null => trail?.bigFoe ?? null;
+export const stageBand = (): number => trail?.band ?? 1;
+
 export function stageWhere(): string {
   if (!trail) return "";
   const areas = trail.route.areas.length;
@@ -123,7 +102,10 @@ export function stageWhere(): string {
 export function stageStatus(): string {
   if (!trail) return "";
   const areas = trail.route.areas.length;
-  return `${trail.route.stage.name} ${Math.min(trail.area + 1, areas)}/${areas}`;
+  const area = trail.route.areas[trail.area];
+  const surges = area?.beats.filter((beat) => beat.kind === "surge").length ?? 0;
+  const surge = trail.gate !== null && trail.surge ? `  SURGE ${Math.min(trail.beat + 1, surges)}/${surges}` : "";
+  return `${trail.route.stage.name} ${Math.min(trail.area + 1, areas)}/${areas}${surge}`;
 }
 export const stageCameraX = (): number => trail?.camera ?? 0;
 export function stageAreaShare(): number {
@@ -134,10 +116,6 @@ export const stagePlatforms = (): readonly Platform[] => (trail ? trail.route.pl
 export const stageWalls = (): readonly Platform[] => (trail ? trail.route.walls : []);
 export const stagePits = (): readonly Platform[] => trail?.route.pits ?? [];
 export const stageExitX = (): number => trail?.route.exitX ?? W;
-export const stageThreat = (wave: number): number => {
-  const area = trail?.route.areas[trail.area];
-  return area ? area.threat : wave;
-};
 export const stageGate = (): number | null => trail?.gate ?? null;
 export const stageLeft = (): number => trail?.left ?? 0;
 export const stageRight = (): number => (trail ? (trail.gate ?? trail.route.width) : W);
@@ -155,20 +133,29 @@ export function overPit(x: number): boolean {
   return false;
 }
 
-const stageCount = (): number => RIFT_STAGES.length + 2;
+function stageShare(): number {
+  if (!trail) return 0;
+  const areas = trail.route.areas;
+  const area = areas[trail.area];
+  if (!area) return 1;
+  const walked = clamp((trail.farthest - area.start) / Math.max(1, area.entrance - area.start));
+  const room = trail.gate === null ? 0 : trail.beat / area.beats.length;
+  const within = trail.gate === null ? walked * 0.3 : 0.3 + room * 0.7;
+  return clamp((trail.area + within) / areas.length);
+}
 
 export function stageProgress() {
   const route = trail?.route;
-  const through = route ? clamp(((trail?.farthest ?? HERO_START_X) - HERO_START_X) / (route.exitX - HERO_START_X)) : 0;
-  const done = trail?.cleared.length ?? 0;
   return {
-    bossesDefeated: trail?.bossesDefeated ?? 0,
-    bossesTotal: stageCount(),
+    stage: route?.stage.id ?? "prologue",
+    hyper: trail?.hyper ?? false,
+    bigFoesDefeated: trail?.bigFoesDefeated ?? 0,
+    miniDefeated: trail?.miniDefeated ?? false,
     foesDefeated: trail?.foesDefeated ?? 0,
-    foesTotal: trail?.foesTotal ?? 1,
-    damageCoverage: clamp((trail?.damage ?? 0) / (trail?.foesTotal ?? 1)),
-    distance: clamp((done + through) / stageCount()),
-    parSeconds: trail?.parTotal ?? 0,
+    foesTotal: route?.foesTotal ?? 1,
+    damageCoverage: clamp((trail?.damage ?? 0) / (route?.foesTotal ?? 1)),
+    distance: stageShare(),
+    parSeconds: route?.parSeconds ?? 0,
   };
 }
 
@@ -182,7 +169,10 @@ export function recordStageKill(enemy: Enemy): void {
   trail.foesDefeated++;
 }
 
-export function facingFinale(finale: string): boolean {
-  const area = trail?.route.areas[trail.area];
-  return trail?.gate !== null && area?.room.kind === "boss" && area.room.foe === finale;
-}
+export const stageWon = (): boolean => trail?.finale ?? false;
+export const finaleHolds = (e: Enemy): boolean => trail?.finaleFoe === e;
+
+const NO_MODS: Pick<StageMods, "pace" | "coins" | "heartChance"> = { pace: 1, coins: 1, heartChance: 1 };
+export const stageFoePace = (): number => (trail?.mods ?? NO_MODS).pace;
+export const stageCoinRate = (): number => (trail?.mods ?? NO_MODS).coins;
+export const stageHeartRate = (): number => (trail?.mods ?? NO_MODS).heartChance;

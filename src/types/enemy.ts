@@ -136,6 +136,13 @@ export interface Enemy {
   ax: number;
   ay: number;
   n: number;
+  title?: string;
+}
+
+export interface FoeScale {
+  hp: number;
+  damage: number;
+  xp: number;
 }
 
 /** one skill's stacks on a foe: each stack deals `damage` every `every` seconds until `left` runs out */

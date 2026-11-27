@@ -4,13 +4,13 @@
 
 <p align="center">
   <b>Throw the sword. Become the sword.</b><br>
-  A pixel art action platformer: seal eight rifts in any order, then break into the Citadel.
+  A pixel art action platformer: pick a hero, pick a stage, and grow from level 1 to 99 before its boss.
 </p>
 
 <p align="center">
   <a href="https://warpblade.sainytk.com"><img alt="Play in your browser" src="https://img.shields.io/badge/%E2%96%B6%20PLAY-warpblade.sainytk.com-7fe3ff?style=for-the-badge&labelColor=0c0a18"></a>
   <a href="LICENSE"><img alt="MIT License" src="https://img.shields.io/badge/LICENSE-MIT-e0ac48?style=for-the-badge&labelColor=0c0a18"></a>
-  <img alt="A 30 minute campaign" src="https://img.shields.io/badge/CAMPAIGN-about%2030%20minutes-b4a8ff?style=for-the-badge&labelColor=0c0a18">
+  <img alt="About 25 minutes a stage" src="https://img.shields.io/badge/STAGE-about%2025%20minutes-b4a8ff?style=for-the-badge&labelColor=0c0a18">
 </p>
 
 ---
@@ -29,32 +29,38 @@ Eight rifts have torn open across the land, each guarded by a lord that came thr
   <img src="docs/media/gameplay.gif" alt="Gameplay: Kael tears through a Rift Surge in the Abyss Citadel as Storm arcs and Void echoes chain from foe to foe" width="100%">
 </p>
 
-## The Rift campaign
+## Stages
 
-A solo run is one campaign of about 30 minutes.
-It starts in the Sunlit Ruins, where Oakheart guards the first rift.
-Then the Rift Map opens, and you choose which of the eight Rift stages to take next.
+A solo run is one stage of about 25 minutes.
+Choose a hero, then a stage: a new player has the Sunlit Ruins, and every stage you clear opens the next ones.
+Your level, skills and skill points start over with each stage, and you grow from level 1 to 99 before its boss.
 
-<p align="center">
-  <img src="docs/media/rift-map.png" alt="The Rift Map: eight Rift stages with their bosses, one already sealed" width="100%">
-</p>
+| Stage | Mini boss | Boss | Twist |
+| --- | --- | --- | --- |
+| Sunlit Ruins | Bramble Tusk | Oakheart | Kind Sun: foes hit softer |
+| Storm Marsh | The Mire King | Bog Hulk | Swarming Fen: bigger crowds |
+| Cinder Foundry | Forge Marshal | The Cinder Smith | Hot Forge: foes hit harder and break sooner |
+| Frostglass Caverns | Rime Oracle | Rimeclaw | Hard Ice: foes last longer and hit softer |
+| Thunderhead Skyway | Storm Captain | Tempest Roc | Storm Front: faster foes |
+| Drowned Archive | Grand Tomeguard | The Pagewyrm | Gilded Pages: twice the elites |
+| Moonlit Ruins | Gravewarden | Gloam Shepherd | Gloam Tithe: more gold, fewer hearts |
+| Veil Spires | Rift Marshal | Rift Warden | Torn Veil: three times the elites |
+| Blightroot Hollow | Rot Queen | Sporeheart | Rot Bloom: no hearts |
+| Abyss Citadel | Void Reaver | Abyss Sovereign | Black Sun: faster foes |
 
-| Stage | Boss | Its Rift Art |
-| --- | --- | --- |
-| Storm Marsh | Bog Hulk | Mire Spit (Venom) |
-| Cinder Foundry | The Cinder Smith | Forge Flare (Blaze) |
-| Frostglass Caverns | Rimeclaw | Rime Fang (Frost) |
-| Thunderhead Skyway | Tempest Roc | Gale Call (Storm) |
-| Drowned Archive | The Pagewyrm | Ink Tide (Void) |
-| Moonlit Ruins | Gloam Shepherd | Gloam Lantern (Blaze) |
-| Veil Spires | Rift Warden | Rift Lance (Storm) |
-| Blightroot Hollow | Sporeheart | Spore Burst (Venom) |
+The Sunlit Ruins open Storm Marsh and Cinder Foundry, the stages branch from there, and the Abyss Citadel opens once Veil Spires and Blightroot Hollow are both cleared.
+Later stages are tougher: foe HP and damage rise by tier, from x1 in the Sunlit Ruins to x3 HP and x1.6 damage in the Citadel.
 
-Each stage has its own place, three foes of its own, a hazard and a two-phase boss.
-A stage is three areas, and each area ends in a locked room: a Rift Surge, where rifts keep opening until a crowd of foes has come through, or the stage's boss.
-Every rift you seal makes the next stage harder, and your HP and MP fill when you enter one.
-Every boss leaves its Rift Art behind, and each boss is weak to another stage's Art, so the order you choose matters.
-When all eight rifts are sealed, the Abyss Citadel opens: the Abyss Maw, the biggest Surge of the run, the Abyss Sovereign, and what waits after it.
+A stage plays in three acts, each an area that ends in a locked room of Rift Surges, where rifts keep opening until a crowd has come through:
+
+- the opening, levels 1 to 15, ends with an elite;
+- the middle, up to level 50, ends with the stage's mini boss, a named, tougher take on one of its own foes with its own telegraphed moves;
+- the final act, up to level 99, ends with the stage's boss.
+
+Bosses and mini bosses have three phases, a stagger bar that breaks into a stun, crowd control that wears off faster each time, and an enrage timer.
+When the boss falls, The Unblinking opens its eye, and no one survives its gaze: the stage is cleared.
+
+A cleared stage can be bought in Hyper with gold: faster foes, twice the gold, and a reward of its own, such as the stage's Rift Art, which then starts every run.
 
 <table>
   <tr>
@@ -86,7 +92,7 @@ When all eight rifts are sealed, the Abyss Citadel opens: the Abyss Maw, the big
 ## Growth: Resonance and Fusions
 
 Every level up to 30 gives a skill point, then every second level, with an extra point at levels 50, 75 and 99.
-Spend points with a mentor in an area, or with Upgrade skills on the Rift Map, on one of three cards: a new skill, the next level of a held skill, or the next level of a Rift Art.
+Points open on one of three cards when each Surge or big foe falls, or with a mentor in an area: a new skill, the next level of a held skill, or the next level of a Rift Art.
 
 Every skill and every Rift Art belongs to one of five elements: Blaze, Frost, Storm, Venom and Void.
 An element's rank is the sum of the levels you hold in it, and every rank adds to every hit you land:
@@ -114,8 +120,9 @@ A card says what it adds to your Resonance and when it would complete a Fusion; 
   </tr>
 </table>
 
-When a run ends, cleared or fallen, the result screen shows your grade, rifts sealed, time, damage, foes defeated and level, the damage of every source, and your best runs: most rifts sealed, fastest clear, best grade, most damage and highest level.
-From there, play again, go back to the main menu or visit the Shop.
+When a stage ends, cleared or fallen, the result screen shows your grade, time, level, foes defeated, damage and gold, what the run unlocked, your best run on that stage, and the damage of every source.
+A fallen run keeps its gold.
+From there, play the stage again, choose another stage, go back to the main menu or visit the Shop.
 
 <p align="center">
   <img src="docs/media/result.png" alt="The result screen: run stats, best runs with new records marked, and Play again, Main menu and Shop" width="70%">
@@ -150,7 +157,7 @@ From there, play again, go back to the main menu or visit the Shop.
 - **Chests and evolutions.** Elites with a gold ring and bosses before The Unblinking drop chests in solo play.
   Touch a chest to open it.
   A chest raises held skills and Rift Arts, sometimes three or five at once, and a stage boss's chest always raises at least three.
-  Later in the campaign a chest can evolve a skill at level 8 whose partner skill is held at level 4 or more.
+  Later in a stage a chest can evolve a skill at level 8 whose partner skill is held at level 4 or more.
   Kael's Fire Flask evolves with Crystal Familiar into Sunflask.
   A card says "Evolves with ???" until the player has made that evolution once.
 - **Flow.** Every hit of the hero's own adds a stack of Flow, up to 25, each one +4% damage on every source, so a full bar doubles it; a perfect dodge adds five, and getting hurt halves it.
@@ -192,7 +199,6 @@ From there, play again, go back to the main menu or visit the Shop.
   His third blow becomes Prism Thrust, a long lunge that lodges a prism shard in the foe, and his finisher becomes Shatterfall, an overhead cut into the floor that shatters every shard nearby for extra damage.
   His warp, his parry's riposte and his Crystal Nova, which now also fires six prism beams, lodge shards too.
   The Warp Knight, Kael's own job, plays as before, and co-op rooms play every hero's own job.
-  The campaign plays every hero's own job.
 - **Stage hazards and pits.** Lava vents, falling icicles, wind gusts, poison pools, ink tides, mud vents, grave hands and rift tears, each warned before it strikes.
   Falling into a pit costs some HP and sets you back on firm ground, and foes knocked into one are gone.
   You can pass regular enemies, but defeating them earns experience and helps your grade.
@@ -212,14 +218,14 @@ From there, play again, go back to the main menu or visit the Shop.
 
 ## Controls
 
-Every hero plays on the same keys in the campaign.
+Every hero plays on the same keys in a stage.
 
 | Key | Action |
 | --- | --- |
 | `A` `D` or arrows | Run |
 | `W`, `Up` or `Space` | Jump; hold to jump higher. Press while sliding on a wall to kick away |
 | `S` or `Down` | Drop through a ledge |
-| `E` | Talk to a mentor to spend skill points; on the Rift Map, Upgrade skills |
+| `E` | Talk to a mentor to spend skill points |
 | `J` | Slash: up to three ground slashes, one in the air. Press again just after a blow lands for a Keen hit |
 | `J` held | Charge the hero's charged skill through four tiers, release to strike. Each tier costs more MP and has its own cooldown |
 | `L` or `Shift` | Dash on the ground or once in the air |
@@ -239,26 +245,28 @@ The stick on the left appears wherever your left thumb lands.
 Push it to walk, push it all the way to run, push up to jump and down for the down variants.
 The buttons on the right sit in an arc around a large Attack button: tap it to attack, and hold it to warp.
 Around it sit Jump, Dodge, Guard, an ability button that casts on a tap and casts the wide form on a hold, Switch, and Ultimate.
-In the campaign, holding Attack charges the charged skill, the ability button casts the next ready spell, and the Ultimate button becomes Warp.
+In a stage, holding Attack charges the charged skill, the ability button casts the next ready spell, and the Ultimate button becomes Warp.
 Each hero's buttons carry that hero's own names where they differ.
 Several fingers work at once, and a thumb can slide from one button to the next.
 Hold Ultimate to charge it: its ring fills one quarter per level, and you strike when you let go.
 Buttons dim while their action lacks MP or stamina or waits on a cooldown, and phones that support it give a short vibration on each press.
 The page holds still under your fingers: double taps, pinches and long presses never zoom, select text or open a menu.
 
-The game opens on a start menu with Start, Co-op, Shop, Achievements, Codex, Controls and Options, and your best campaign once you have one.
-Start opens the hero screen: pick a hero with `A` `D` or the arrows and begin with `J` or `Enter`.
-For a hero with jobs, `S` or Down moves to the job row, where `A` `D` or the arrows change the job and `J` or `Enter` begins; on touch, tap a job's chip, then the panel.
+The game opens on a start menu with Start, Co-op, Shop, Achievements, Codex, Controls and Options, and how many stages you have cleared.
+Start opens the hero screen: pick a hero with `A` `D` or the arrows and choose it with `J` or `Enter`.
+For a hero with jobs, `S` or Down moves to the job row, where `A` `D` or the arrows change the job and `J` or `Enter` chooses; on touch, tap a job's chip, then the panel.
+The stage screen follows: look through the stages with `A` `D` or the arrows and begin with `J` or `Enter`; a locked stage names the stages that open it.
+`S` or Down moves to the Mode row, where `A` `D` switch between Normal and Hyper, and a Hyper still for sale asks "Buy?" before it spends gold.
+`Esc` goes back to the hero screen.
 In the Shop, pick an item once to see "Buy?" and again to buy it; a locked hero on the hero screen asks the same way before it is unlocked.
-When a run ends, its result opens with Play again, Main menu and Shop.
+When a run ends, its result opens with Play again, Choose stage, Main menu and Shop.
 Pausing adds Resume, Restart run and Quit run, and freezes the game until you resume.
 Move through the menu with the arrow keys or `W` `S`, pick with `J` or `Enter`, and go back with `Esc`; the mouse and touch work too.
 The Controls screen lists every key from the game's key map, and on touch screens the stick and buttons as they look on screen.
 Options holds sound, volume, music volume, screen shake, damage numbers, vibration on devices that can vibrate, and fullscreen, saved in this browser.
 
 Level ups give skill points: every level up to 30, then every second level, and one more at 50, 75 and 99.
-In solo play, press `E` or tap Talk near a mentor, or press `E` on the Rift Map, to open skill choices.
-On the Rift Map, choose a stage with `A` `D` `W` `S` or the arrows and enter it with `J` or `Enter`.
+In solo play the skill choices open when a Surge or big foe falls; press `E` or tap Talk near a mentor to open them any time.
 Leave to keep any points you have not spent.
 In co-op it pauses for pending skill points after a wave.
 Choose with `A` `D` or the arrows and learn with `J` or `Enter`, press `1` to `3`, or click or tap a card.
@@ -330,9 +338,9 @@ src/
   engine/          the pixel renderer: frame buffers and painter, particles, lights, sprite canvas
   rig/             the rig every hero is drawn on: pure drawing from a pose and a hero's skin
   heroes/          the roster, and one folder per hero with its stats, look, clips, kit, moves, skills, ultimate, icons and touch art (see docs/hero-module.md)
-  stages/          one folder per campaign stage: its layout, scene, foes, boss, Rift Art and hazard, and the registries that read them
-  drill/           the campaign's movement and combat engine every hero plays on: slashes, dash and warp strike, guard and parry, spells and infusion, charged skills
-  services/        sound effects and music on Web Audio, saved options, run and campaign records and shop progress in local storage, the Fullscreen API, vibration, the clipboard
+  stages/          one folder per stage: its layout, scene, foes, boss, Rift Art and hazard, and the registries that read them
+  drill/           the stage movement and combat engine every hero plays on: slashes, dash and warp strike, guard and parry, spells and infusion, charged skills
+  services/        sound effects and music on Web Audio, saved options, run and stage records, the chosen stage and shop progress in local storage, the Fullscreen API, vibration, the clipboard
     coop/          the PeerJS links of a co-op room's host and guests, and the game stream
   store/           the player's options, the coin bank, shop purchases, unlocked heroes and achievements kept between runs, achievement tracking, and the co-op room as the menu sees it
   game/            the simulation
@@ -344,7 +352,7 @@ src/
     spells/        the explosion that spells share
     ultimates/     the cast every ultimate goes through
     skills/        the skill runtime: events, queries, targeting and precise payoffs
-    adventure/     the campaign: the route of a stage, locked rooms, Rift Surges, pits, hazards and the move between stages
+    adventure/     a stage run: its route and level arc, locked rooms and their beats, Rift Surges, pits, hazards and the last boss
     arts/          Rift Arts as spells in every hero's spellbook, their levels and the boss weaknesses
     resonance/     element procs on every hit, their effects and Fusions
   scene/           background, the backdrop around the stage, the order layers are drawn in, and the dissolve between eras
@@ -353,7 +361,6 @@ src/
   content/patches/ one JSON file per patch, read by the patch notes page
   ui/              HUD, level-up pick, menu, keyboard input, touch controller, stage sizing
     menu/          start and pause menu: main, Shop, Achievements, Co-op and its lobby, run result, Controls and Options screens
-    map/           the Rift Map between stages
     achievements/  an achievement row, its trophy, the earned banner and their styles
     coop/          the co-op line under the pause button
     shop/          one shop row and the shop's styles
