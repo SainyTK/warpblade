@@ -33,7 +33,7 @@ export const SPELLWARP: SkillDef = {
   kind: "movement",
   element: "void",
   risk: "timed",
-  button: "L",
+  button: "U",
   pact: PACT.focus,
   text: "Warp Strike pours the selected spell into the sword, and spell cooldowns are shorter.",
   levels: LEVELS,

@@ -156,15 +156,11 @@ The base kit is the drill with no skill: every spell of the set is known from th
 
 ## Slots and cards
 
-- 8 skill slots from the first run (`SKILL_SLOTS`). Charm slots unchanged (3, unlocking up to 5).
-- A pick deals 3 cards, 4 with luck, as before.
-- Cards for skills the hero does not hold yet come up much more often than the next level of a skill already held; charms sit between.
-  The weights are tuned with the growth model so that, over a full run:
-  - a player who takes the best card each time and uses no tools evolves 1 to 2 skills (median);
-  - a player who steers with skips, banishes and rerolls evolves 3 (median), and 4 or more in under 10% of runs.
-- Once all 8 slots are full, new skills are no longer dealt; the card pool is the owned skills and charms, and Second Wind fills any card the pool cannot.
+- Skill slots open with the hero level: 4 at the start, then one each at 15, 30, 45 and 60 (`SKILL_SLOT_LEVELS`).
+- A pick deals 3 cards, 4 with luck.
+- A skill at level 8 keeps growing through 4 mastery levels, and the cards also offer charge ranks, attunements and Honing stat cards that never run out.
+  The supply and weights are in `docs/growth-design.md`, "Pick budget".
 - Reroll, skip and banish work as before.
-- Tuned (`CARD_WEIGHT` in `src/constants/growth.ts`): a new skill 100, the next level of a held skill 9, a charm its own weight (50 to 90); starting tools unchanged at 2 rerolls, 2 skips, 1 banish. Method and results: `docs/growth-design.md`, "Skill cards and evolutions".
 
 ## Chests
 

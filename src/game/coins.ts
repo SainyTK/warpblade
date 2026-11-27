@@ -1,5 +1,6 @@
 import { COIN_BONUS, COIN_DROP, COIN_MOTION as M } from "../constants/coins";
 import { COIN_GOLD } from "../constants/palette";
+import { COIN_TURNS, LYING_PICKUP_LIFT } from "../constants/pickupPixels";
 import { LODESTONE_BONUS } from "../constants/shopSkills";
 import { ELITE } from "../constants/waves";
 import { sfx } from "../services/audio";
@@ -12,7 +13,7 @@ import { clampStageX, stageCoinRate } from "./adventure";
 import { coop } from "./coopHooks";
 import { feat } from "./feat";
 import { game, hero, particles, rng } from "./state";
-import { surfaceBelow } from "./world";
+import { spriteTouchesHero, surfaceBelow } from "./world";
 
 /** what a foe's coins come to before the bonus: a minion's share of the wave's coins, an elite's multiple, a boss's all */
 function coinBase(e: Enemy): number {
@@ -72,7 +73,8 @@ export function updateCoins(dt: number): void {
     const d = Math.hypot(dx, dy) || 1;
     if (c.t >= pull && hero.state !== "dead") home(c, dx, dy, d, dt);
     else fall(c, dt);
-    if (c.t < M.settle || d > M.reach || hero.state === "dead") continue;
+    const touched = spriteTouchesHero(c.x, c.y - LYING_PICKUP_LIFT, COIN_TURNS[0]);
+    if ((!touched && d > M.reach) || hero.state === "dead") continue;
     c.done = true;
     game.coins++;
     particles.spawn(PK.STAR, c.x, c.y, 0, -12, 0.3, { col: COIN_GOLD[3], size: 2 });

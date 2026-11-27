@@ -43,7 +43,7 @@ export const WAR_CRY: SkillDef = {
   evolution: {
     partner: "br_bellows",
     name: "Battle Roar",
-    text: "While the cry lasts every swing is Keen and she takes a third less.",
+    text: "Every warp arrival readies the selected spell at once.",
     row: evolvedRow(LEVELS[7], "Every arrival readies the selected spell.", {
       ...drillValues({ ready: 1 }),
       heavy: 1,

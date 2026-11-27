@@ -1,14 +1,14 @@
 import type { SkillDef } from "../../../../types/skill";
 import { evolvedRow, levelRows } from "../../../../utils/skillRows";
 
-/** values: `damage` attack damage a tick per stack, `max` stacks a foe can carry, `stacks` laid by one blast, `pass` a fallen foe's shrapnel passes to the nearest foe, `rip` attack damage per stack Breaker tears out, `burst` attack damage per stack of a detonation in 30 px once a foe carries `at` stacks */
+/** values: `damage` attack damage a tick per stack, `max` stacks a foe can carry, `stacks` laid by one blast, `pass` a fallen foe's shrapnel passes to the nearest foe, `rip` attack damage per stack the third cut tears out, `burst` attack damage per stack of a detonation in 30 px once a foe carries `at` stacks */
 const LEVELS = levelRows([
   { text: "Every round's blast leaves bleeding shrapnel.", values: { damage: 0.05, max: 5, stacks: 1 } },
   { text: "Bleed 0.05 to 0.06.", values: { damage: 0.06 } },
   { text: "New: each blast lays two stacks.", values: { stacks: 2 } },
   { text: "New: a fallen foe's shrapnel passes to the nearest foe.", values: { pass: 1 } },
   { text: "Bleed 0.08; up to 8 stacks.", values: { damage: 0.08, max: 8 } },
-  { text: "New: Breaker tears the shrapnel out at once.", values: { rip: 0.5 } },
+  { text: "New: the third cut tears the shrapnel out at once.", values: { rip: 0.5 } },
   { text: "New: up to 12 stacks.", values: { max: 12 } },
   { text: "Bleed 0.08 to 0.18.", values: { damage: 0.18 } },
 ]);

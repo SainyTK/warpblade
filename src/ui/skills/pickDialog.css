@@ -17,8 +17,29 @@
   background: rgba(6, 4, 14, 0.84);
 }
 .level-up-head {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
   text-align: center;
   animation: pick-drop 240ms steps(4) both;
+}
+/* The mentor's face beside the title when the picks come from the mentor. */
+.level-up-mentor {
+  flex: none;
+  width: 88px;
+  height: 88px;
+  background: var(--panel) no-repeat 95% 14% / 150%;
+  border: 2px solid var(--line);
+  box-shadow:
+    inset 0 0 0 2px var(--night),
+    3px 3px 0 rgba(0, 0, 0, 0.55);
+}
+.level-up-mentor[hidden] {
+  display: none;
+}
+.level-up-mentor:not([hidden]) + div {
+  text-align: left;
 }
 .level-up-head h2 {
   margin: 0;
@@ -204,6 +225,10 @@
   --accent: var(--heal);
   --accent-dark: #123a2a;
 }
+.pick[data-branch="honing"] {
+  --accent: var(--iron);
+  --accent-dark: #262c34;
+}
 /* Banishing: every card turns rust red, and Second Wind, which cannot be banished, steps back. */
 .level-up.banishing .pick {
   --accent: var(--rust);
@@ -374,8 +399,15 @@
   .level-up[open] {
     gap: 12px;
   }
+  .level-up-head {
+    gap: 12px;
+  }
   .level-up-head h2 {
     font-size: 26px;
+  }
+  .level-up-mentor {
+    width: 64px;
+    height: 64px;
   }
   .level-up-sub {
     font-size: 14px;

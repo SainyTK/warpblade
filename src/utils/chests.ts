@@ -1,4 +1,4 @@
-import { CHEST, SKILL_MAX_LEVEL } from "../constants/growth";
+import { CHEST, MASTERY, SKILL_MAX_LEVEL } from "../constants/growth";
 import type { Build, ChestReward } from "../types/build";
 import type { ArtId } from "../types/campaign";
 import type { CharacterDef } from "../types/character";
@@ -22,12 +22,16 @@ export function rollChest(c: CharacterDef, b: Build, wave: number, luck: number,
   if (wave >= CHEST.evolveFromWave && ready.length) return [{ type: "evolve", id: rng.pick(ready) }];
   const skills: Record<string, number> = { ...b.skills };
   const arts: Partial<Record<ArtId, number>> = { ...b.arts };
+  const mastery: Record<string, number> = { ...b.mastery };
   const rewards: ChestReward[] = [];
   for (let n = upgradeCount(luck, rng, least); n > 0; n--) {
     const open: ChestReward[] = [
       ...Object.entries(skills)
         .filter(([id, level]) => level < SKILL_MAX_LEVEL && !b.evolved.includes(id))
         .map(([id, level]): ChestReward => ({ type: "skill", id, level: level + 1 })),
+      ...Object.entries(skills)
+        .filter(([id, level]) => level >= SKILL_MAX_LEVEL && (mastery[id] ?? 0) < MASTERY.levels)
+        .map(([id]): ChestReward => ({ type: "mastery", id, level: (mastery[id] ?? 0) + 1 })),
       ...(Object.entries(arts) as [ArtId, number][])
         .filter(([, level]) => level < ART_MAX_LEVEL)
         .map(([id, level]): ChestReward => ({ type: "art", id, level: level + 1 })),
@@ -36,6 +40,7 @@ export function rollChest(c: CharacterDef, b: Build, wave: number, luck: number,
     const up = rng.pick(open);
     if (up.type === "skill") skills[up.id] = up.level;
     else if (up.type === "art") arts[up.id] = up.level;
+    else if (up.type === "mastery") mastery[up.id] = up.level;
     rewards.push(up);
   }
   return rewards.length ? rewards : [{ type: "heal" }];

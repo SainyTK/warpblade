@@ -1,4 +1,3 @@
-import { ULT_CHARGE } from "../../../../constants/ultimate";
 import type { SkillDef } from "../../../../types/skill";
 import { evolvedRow, levelRows } from "../../../../utils/skillRows";
 import { drillEvolved, onDrill } from "./drill";
@@ -32,8 +31,8 @@ export const HEAVENS_GROVE: SkillDef = {
   kind: "ultimate",
   element: "venom",
   risk: "easy",
-  button: "U",
-  text: `Jade Rain grows: more swords on more foes, a second rain, and your swords back. Grows with attack damage. ${ULT_CHARGE}`,
+  button: "J",
+  text: "Jade Rain on held J hits harder, charges faster and drops spirit swords on the foes near you.",
   levels: DRILL_LEVELS,
   evolution: {
     partner: "yu_heron",

@@ -1,10 +1,11 @@
 import "./buildSlots.css";
 import { ELEMENT_ORDER, ELEMENTS } from "../../constants/elements";
 import { SKILL_SLOTS } from "../../constants/growth";
-import { character } from "../../game/state";
+import { character, progress } from "../../game/state";
 import { ARTS } from "../../stages/arts";
 import type { Build } from "../../types/build";
 import type { ArtId } from "../../types/campaign";
+import { skillSlots } from "../../utils/cardSupply";
 import { resonanceRanks } from "../../utils/resonance";
 import { skillOf } from "../../utils/skills";
 import { el } from "../dom";
@@ -66,7 +67,7 @@ function held(build: Build): { skills: HTMLElement[]; arts: HTMLElement[]; eleme
 /** the skills and charms a build holds, in their slots, filled and free */
 export function buildSlots(build: Build): HTMLElement[] {
   const { skills, arts, elements } = held(build);
-  return [row("skill", skills, SKILL_SLOTS), row("element", elements, 0), row("art", arts, 0)].filter(
+  return [row("skill", skills, skillSlots(progress.level)), row("element", elements, 0), row("art", arts, 0)].filter(
     (line) => line.childElementCount,
   );
 }

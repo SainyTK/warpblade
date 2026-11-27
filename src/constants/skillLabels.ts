@@ -13,3 +13,7 @@ export const RISK_LABEL: Record<SkillRisk, string> = { easy: "Easy", timed: "Tim
 /** the kind line of a boon card */
 export const BOON_KIND = "Boon";
 export const ART_KIND = "Rift Art";
+export const MASTERY_KIND = "Mastery";
+export const CHARGE_KIND = "Charged skill";
+export const ATTUNEMENT_KIND = "Attunement";
+export const HONING_KIND = "Honing";

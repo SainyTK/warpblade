@@ -81,7 +81,7 @@ After the cyclone's launch, a jump and J lands the descent on the foes he threw 
 ### Timing reward
 
 Keen timing is shared: a J pressed just after a spin lands makes the next spin a sure critical hit.
-On top of that a Keen spin opens two wounds and adds 10 Whirl, and Sirocco Timing builds on it.
+On top of that a Keen spin opens two wounds and adds 10 Whirl, and Sirocco Descent's native rows build on it.
 
 ### Cancel rule
 

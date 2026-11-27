@@ -38,7 +38,7 @@ Charged tiers: Sandstorm I to IV, each striking both sides, with crescents, sand
 | `za_scour` | Scouring Sand | dot on the ring | as in the native kit | the twin turn grinds two grit | Glassing Wind (`za_unbroken`): every slash grinds grit |
 | `za_thirst` | Desert Thirst | dot on bleeding foes | as in the native kit | as in the native kit | Thirst of the Hawk (`za_hawk`) |
 | `za_wraith` | Sand Wraith | summon on landed slashes | a landed slash may call a wraith | as in the native kit | Wraith Caravan (`za_dune`) |
-| `za_mirage` | Mirage Dancer | summon on parries | as in the native kit | as in the native kit | Court of Mirages (`za_slip`) |
+| `za_mirage` | Mirage Dancer | summon on parries and perfect dodges | a parry may call a dancer | wounds, a perfect dodge calls one too, blind, a pair, up to 5 | Court of Mirages (`za_slip`) |
 | `za_hawk` | Desert Hawk | summon on kills | as in the native kit | as in the native kit | Sky of Hawks (`za_thirst`) |
 | `za_storm` | Sandstorm | the four charged tiers | tiers +30% | faster charge, a longer storm, blind, reach, wounds, up to +250% | Endless Sirocco (`za_whirling`): a second, wider storm, twice as long |
 
@@ -47,7 +47,8 @@ Kinds: attack 5, movement 5, spell 3, dot 3, summon 3, ultimate 1.
 Sirocco Timing is now Sirocco Descent, Sand Veil moved from passive to attack, and Unbroken Whirl moved from passive to movement.
 Effects that exist only in the drill (the `drill.` numbers) do nothing in the native kit.
 Some native numbers also act in the drill, and the drill card text names them: Two-Faced Cut's bonus on foes behind him, Sand Veil's block and mirage numbers, Dune Walk's trail, Unbroken Whirl's ring numbers, and the damage over time and summon skills.
-A perfect dodge does not exist in the drill, so Mirage Dancer's perfect dodge level fires only in the native kit.
+In the drill a perfect dodge is a dash that meets a blow (`src/drill/perfectDodge.ts`), and it fires the shared `perfectDodge` event, so Mirage Dancer's level 4 calls a dancer there too.
+Sand Slip's native perfect dodge Whirl (`perfectWhirl`) stays in the native kit; its drill card does not name it.
 
 ## Base kit (no skills)
 
@@ -72,7 +73,7 @@ A perfect dodge does not exist in the drill, so Mirage Dancer's perfect dodge le
 | Two-Faced Cut | `za_twofaced` | attack | timed | J | Dune Walk | Mirror Dance |
 | Falling Dune | `za_falling` | movement | timed | jump | Quicksand | Meteor Dune |
 | Dune Walk | `za_dune` | movement | easy | L | Two-Faced Cut | Shifting Sands |
-| Whirlwind Arrival | `za_arrival` | movement | timed | L | Sirocco Timing | Dust Devil Step |
+| Whirlwind Arrival | `za_arrival` | movement | timed | L | Sirocco Descent | Dust Devil Step |
 | Sand Slip | `za_slip` | movement | timed | L | Mirage Dancer | Mirage Slip |
 | Hot Gale | `za_gale` | spell | easy | I | Deep Wounds | Simoom |
 | Glass Rain | `za_glass` | spell | timed | I | Hot Gale | Glass Storm |
@@ -214,7 +215,7 @@ Values: `reach` reach multiple of the arrival spin, `whirl` Whirl it adds, `path
 | 6 | New: the arrival fills the Whirl to the first ring. | ring 1 |
 | 7 | Warps cost 10 to 7 MP. | cost 7 |
 | 8 | Path cut 0.8 to 1.6; the arrival 2.4 to 3; reach 20% to 40%. | path 1.6, strike 3, reach 1.4 |
-| Evolved: Dust Devil Step (with Sirocco Timing) | The arrival is always Keen and leaves every foe round you with three more wounds. | keen 1, wounds 3 |
+| Evolved: Dust Devil Step (with Sirocco Descent) | The arrival is always Keen and leaves every foe round you with three more wounds. | keen 1, wounds 3 |
 
 ### Sand Slip (`za_slip`)
 
@@ -363,6 +364,7 @@ Values: `chance` a landed spin calls a wraith, `power` attack damage of each cut
 ### Mirage Dancer (`za_mirage`)
 
 Summon, precise, on K. A parry may call a mirage dancer beside the attacker that spins through it and the foes round it.
+In the drill as in the native kit a parry and, from level 4, a perfect dodge call it; the drill's perfect dodge is a dash that meets a blow.
 Code: `game/skills/mirageDancer.ts`, `game/summons/dancer.ts`.
 Values: `chance` a parry calls a dancer, `power` attack damage of each spin on the attacker (the payoff), `plain` on every other foe, `life` seconds it dances, `wounds` wounds a spin opens, `dodge` a perfect dodge calls one too, `blind` it blinds minions round it, `pair` a dancer each side, `burst` evolved, attack damage of the sand blades its last spin bursts into.
 

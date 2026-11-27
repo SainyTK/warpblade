@@ -42,8 +42,6 @@ export const COIN_MOTION = {
   gravity: 520,
   /** part of the speed kept after a bounce */
   bounce: 0.45,
-  /** seconds before a coin can be picked up by touch */
-  settle: 0.25,
   /** seconds before a coin flies to Kael on its own, so none is left behind */
   pull: 1.6,
   /** the same with Lodestone */

@@ -6,8 +6,6 @@ declare module "../../../types/skillBehavior" {
     floorWave: { x0: number; x1: number; y: number; kind: WaveKind };
     /** the Counter Cleave struck `hits` foes after a parry */
     counterCleave: { hits: number };
-    /** a heavy swing (Keen timing) landed on `hits` foes */
-    heavy: { hits: number };
   }
 }
 

@@ -143,7 +143,7 @@ Each release plays his cut-in (`ui/cutIn.ts`): his generated portrait on a jade 
 
 ## Skills, achievement and controls
 
-His 20 skills are in `docs/skills/yun.md`: five that reshape the string, the echo and the air string, three for the jump, the warp and the dodge, three more abilities on I (Sword Fan, Sword Cage and Qi Crescent, which costs MP so he has an ability with no sword out), qi wounds, bleeding cuts and jade needles over time, guardian blades, jade herons and his own shade as summons, two passives on the swords themselves, and Heaven's Grove for Jade Rain.
+His 20 skills are in `docs/skills/yun.md`: five that reshape the string, the echo and the air string, three for the jump, the warp and the dodge, three more abilities on I (Sword Fan, Sword Cage and Qi Crescent, which costs MP so he has an ability with no sword out), qi wounds, bleeding cuts and jade needles over time, guardian blades, jade herons and his own shade as summons, two movement skills for the dash and the warp (Sage's Breath and Harmony), and Heaven's Grove for Jade Rain.
 His achievement, A Thousand Blades, asks for 300 spirit swords sent out by his abilities over every run (`yun.swordsSent`).
 His touch buttons show the jian, a screen of three swords for the guard, each ability's own face, a ring of dots for the switch and falling swords for Jade Rain.
 His Controls lines are in `src/heroes/yun/constants/controls.ts`.

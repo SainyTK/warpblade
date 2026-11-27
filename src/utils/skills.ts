@@ -1,8 +1,10 @@
-import { EVOLVE_PARTNER_LEVEL, SKILL_MAX_LEVEL } from "../constants/growth";
+import { EVOLVE_PARTNER_LEVEL, MASTERY, SKILL_MAX_LEVEL } from "../constants/growth";
+import { HONING, HONING_IDS } from "../constants/honing";
 import { CHARACTERS } from "../heroes/roster";
 import type { Build } from "../types/build";
 import type { CharacterDef } from "../types/character";
 import type { SkillDef, SkillLevel } from "../types/skill";
+import type { Stats } from "../types/stats";
 
 /** one of the hero's skills by id */
 export const skillOf = (c: CharacterDef, id: string): SkillDef | undefined => c.skills.find((s) => s.id === id);
@@ -22,6 +24,21 @@ export function skillRow(def: SkillDef, level: number, evolved: boolean): SkillL
 /** the rows of every skill the build holds */
 export function heldRows(c: CharacterDef, b: Build): SkillLevel[] {
   return c.skills.filter((s) => b.skills[s.id]).map((s) => skillRow(s, b.skills[s.id], b.evolved.includes(s.id)));
+}
+
+export function growthRows(b: Build): Pick<SkillLevel, "stats" | "scale">[] {
+  const mastered = Object.values(b.mastery).reduce((sum, level) => sum + level, 0);
+  const power = mastered * MASTERY.power;
+  const honed = HONING_IDS.map((id) => {
+    const ranks = b.honing[id] ?? 0;
+    const def = HONING[id];
+    return { stats: timesRanks(def.stats, ranks), scale: timesRanks(def.scale, ranks) };
+  });
+  return [{ scale: { ad: power, ap: power } }, ...honed];
+}
+
+function timesRanks(stats: Partial<Stats> | undefined, ranks: number): Partial<Stats> {
+  return Object.fromEntries(Object.entries(stats ?? {}).map(([key, value]) => [key, value * ranks]));
 }
 
 /** skills ready to evolve: at their top level, not evolved yet, with their partner held at `EVOLVE_PARTNER_LEVEL` */

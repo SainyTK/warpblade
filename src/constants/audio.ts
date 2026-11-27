@@ -31,7 +31,7 @@ export const SOUNDS: Record<SoundId, SoundSpec> = {
   hitSlime: spec(["hit-slime-1", "hit-slime-2"], 0.55, 0.12, 3),
   crit: spec(["crit"], 0.32, 0.05, 2),
   keen: spec(["keen"], 0.3, 0.04, 1),
-  warp: spec(["warp"], 0.36, 0.05, 2),
+  warp: spec(["warp"], 0.5, 0.05, 2),
   dash: spec(["dash"], 0.3, 0.08, 2),
   jump: spec(["jump"], 0.16, 0.06, 1),
   doubleJump: spec(["jump-double"], 0.14, 0.05, 1),

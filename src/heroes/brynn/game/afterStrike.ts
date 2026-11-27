@@ -26,7 +26,7 @@ export function afterStrike(id: string, hits: number): void {
   if (hero.hitIndex < moveDef(id).hits.length) return;
   heftForBlow(hits, hero.keen);
   if (brynn.afterParry > 0) brynn.afterParry--;
-  if (hero.keen && hits > 0) heavyLanded(hits);
+  if (hero.keen && hits > 0) heavyLanded();
   else brynn.heavyStreak = 0;
   if (id !== "sweep") return;
   feat({ kind: "heroBest", stat: BRYNN_STATS.crowd, value: hits });

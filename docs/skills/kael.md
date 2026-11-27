@@ -19,7 +19,7 @@ Drill code: `src/heroes/kael/game/drill/skills/` (one file per redesigned skill)
 | `k_phase` | Phase Cut | second slash | the second slash phases Kael behind the foe | a phase cut, untouchable through the phase, a bonus third slash after a phase | Phantom Passage (`k_blink`): the phase runs through every foe up to 160 px ahead |
 | `k_aegis` | Crystal Aegis | guard and parry | blocks set crystals, a parry shatters them | as in the native kit | Diamond Aegis (`k_mirror`) |
 | `k_warpcraft` | Warpcraft | warp strike | recharge -15%, damage +30% | an arrival blast, refreshed air dash and air slash, stagger, recharge -40%, damage +200% | Rift Walker (`k_passing`): every 4 s an arrival recharges the warp |
-| `k_blink` | Blink Step | dash and air dash | untouchable while dashing | more air dashes (up to 3), the air dash restores the air slash, an afterimage cut | Shadow Step (`k_echo`): afterimages cut twice, twice as wide |
+| `k_blink` | Blink Step | dash and air dash | untouchable 0.15 s after each dash | more air dashes (up to 3), the air dash restores the air slash, an afterimage cut, 0.3 s untouchable | Shadow Step (`k_echo`): afterimages cut twice, twice as wide |
 | `k_passing` | Passing Cut | dash | dashing through foes cuts them | stagger, a dash through a foe recharges the dash, sure crits, larger cuts | Phantom Rush (`k_skydance`): a phantom repeats each cut at 60% |
 | `k_spellwarp` | Spellwarp | warp and infusion | an arrival infuses the sword for 1 hit | faster preparation (up to 45%), an arrival shortens a preparation, longer infusions, an arrival burst | Arcane Arrival (`k_warpcraft`): every arrival readies the selected spell |
 | `k_skydance` | Sky Dance | jump, wall kick, air | one more air slash | a cutting wall kick, a stomp after air slashes, one more air dash, a third air slash | Comet Dance (`k_reap`): the stomp reaches 70 px and draws foes in |
@@ -29,9 +29,9 @@ Drill code: `src/heroes/kael/game/drill/skills/` (one file per redesigned skill)
 | `k_splinters` | Crystal Splinters | dot on slashes | as in the native kit | the chain's last hit lodges three | Shatterstorm (`k_keen`): the chain's last hit and every Keen blow shatter the splinters |
 | `k_rift` | Rift Wound | dot on the warp | as in the native kit | the chain's last hit adds a layer | Rift Collapse (`k_warpcraft`) |
 | `k_static` | Static Charge | dot on the dash | foes the dash passes are charged | as in the native kit | Overload (`k_passing`): every dash strikes the charged foes |
-| `k_echo` | Phantom Edge | summon on back hits | as in the native kit | as in the native kit | Phantom Host (`k_mirror`) |
+| `k_echo` | Phantom Edge | summon on back hits | as in the native kit, repeating the slash's own power | as in the native kit | Phantom Host (`k_mirror`) |
 | `k_familiar` | Crystal Familiar | summon on casts | as in the native kit | as in the native kit | Crystal Choir (`k_volt`) |
-| `k_mirror` | Mirror Knight | summon on parries and perfect dodges | as in the native kit | as in the native kit | as in the native kit |
+| `k_mirror` | Mirror Knight | summon on parries and perfect dodges | as in the native kit | as in the native kit; its copies repeat the slash's own power | Perfect Reflection (`k_keen`) |
 | `k_nova` | Crystal Nova | the four charged tiers | charged skills +30% | a pull, faster charge, an echo strike, more reach, up to +250% | Supernova (`k_keen`): every charged skill bursts twice more |
 
 Count by mechanic: 4 slash skills, 1 guard skill, 4 warp and dash skills, 1 jump skill, 3 spell skills, 3 damage over time, 3 summons, 1 charged-tier skill.
@@ -39,6 +39,13 @@ Effects that exist only in the drill (the `drill.` numbers) do nothing in the na
 The drill fires the shared perfect dodge once per dash that avoids a real hit, so Static Charge level 7 and Mirror Knight's perfect dodge trigger work there as in the native kit, and a perfect dodge primes Mirror Knight's Riposte like a parry does (`game/skills/mirrorKnight.ts` through `nativeOrDrill`).
 A drill Keen blow (J pressed within 0.1 s after a slash lands) is a sure crit with `keen` set on its `blow` event, so Shatterstorm shatters on it.
 Keen Edge's native Keen bonus (`bonus`, `streak`) stays in the native kit; the drill's Keen Edge upgrades the third slash instead.
+The drill dash is already untouchable, so Blink Step's `drill.inv` keeps Kael untouchable for a moment after the dash ends.
+No native move is set under the drill, so Phantom Edge and Mirror Knight copy the power of the drill slash in progress (`KAEL_STRIKES`, read in `game/skills/copyPower.ts`): 1 AD for the first, second and air slash, 1.6 AD for the third.
+Warpcraft and Spellwarp attach to U, the drill's warp button.
+Every "as in the native kit" row runs on events the drill fires.
+Crystal Aegis runs on the shared guard's `blocked` and `parried`.
+Crystal Splinters, Static Charge, Phantom Edge and Mirror Knight read `blow`, whose `finisher`, `keen`, `back` and `melee` drill slashes set.
+Rift Wound opens on `warp`, Static Charge charges on `dash` and `perfectDodge`, Crystal Familiar answers `cast` with the drill spell ids `fire`, `ice` and `volt`, and Mirror Knight comes on `parry` and `perfectDodge`.
 
 ## Identity
 
@@ -139,9 +146,9 @@ Spellblade works on the wide form: held during an open combo, the wide form leav
 | `k_reap` | Reaping Sweep | attack | easy | J | `k_splinters` | Crystal Harvest |
 | `k_phase` | Phase Cut | attack | timed | J | `k_blink` | Phantom Passage |
 | `k_aegis` | Crystal Aegis | attack | precise | K | `k_mirror` | Diamond Aegis |
-| `k_warpcraft` | Warpcraft | movement | timed | J held | `k_passing` | Rift Walker |
+| `k_warpcraft` | Warpcraft | movement | timed | U | `k_passing` | Rift Walker |
 | `k_blink` | Blink Step | movement | timed | J held | `k_echo` | Shadow Step |
-| `k_spellwarp` | Spellwarp | movement | timed | J held | `k_warpcraft` | Arcane Arrival |
+| `k_spellwarp` | Spellwarp | movement | timed | U | `k_warpcraft` | Arcane Arrival |
 | `k_passing` | Passing Cut | movement | timed | L | `k_skydance` | Phantom Rush |
 | `k_skydance` | Sky Dance | movement | timed | Up | `k_reap` | Comet Dance |
 | `k_flame` | Fire Flask | spell | easy | I | `k_familiar` | Sunflask |

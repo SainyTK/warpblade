@@ -1,6 +1,6 @@
 import { BOONS } from "../../constants/boons";
-import { SKILL_MAX_LEVEL } from "../../constants/growth";
-import { character } from "../../game/state";
+import { MASTERY, SKILL_MAX_LEVEL } from "../../constants/growth";
+import { character, progress } from "../../game/state";
 import { ARTS } from "../../stages/arts";
 import type { ChestReward } from "../../types/build";
 import { skillOf } from "../../utils/skills";
@@ -25,6 +25,16 @@ function rewardFace(r: ChestReward): { kind: string; icon: string; name: string;
       icon: skillIcon(r.id, false),
       name: def?.name ?? r.id,
       line: `Level ${r.level} of ${SKILL_MAX_LEVEL}. ${def?.levels[r.level - 1].text ?? ""}`,
+    };
+  }
+  if (r.type === "mastery") {
+    const def = skillOf(character, r.id);
+    const evolved = progress.build.evolved.includes(r.id);
+    return {
+      kind: "skill",
+      icon: skillIcon(r.id, evolved),
+      name: (evolved ? def?.evolution.name : def?.name) ?? r.id,
+      line: `Mastery ${r.level} of ${MASTERY.levels}.`,
     };
   }
   if (r.type === "art") {

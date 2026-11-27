@@ -7,8 +7,6 @@ export const XP_ORB = { share: 6, most: 12, crowd: 60 } as const;
 export const XP_ORB_MOTION = {
   gravity: 480,
   bounce: 0.4,
-  /** seconds before an orb can be picked up by touch */
-  settle: 0.3,
   /** seconds before an orb left on the floor flies to Kael, so none is lost */
   pull: 4,
   /** how close to Kael's chest an orb is picked up, in art pixels */

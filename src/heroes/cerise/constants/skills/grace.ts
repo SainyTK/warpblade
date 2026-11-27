@@ -39,7 +39,7 @@ export const GRACE: SkillDef = {
   kind: "movement",
   element: "frost",
   risk: "timed",
-  button: "L",
+  button: "U",
   text: "The warp's arrival pours the selected spell into the rapier and heals you.",
   levels: LEVELS,
   evolution: {

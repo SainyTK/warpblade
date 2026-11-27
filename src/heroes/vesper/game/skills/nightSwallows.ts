@@ -1,3 +1,4 @@
+import { drillFighter, usesDrill } from "../../../../drill";
 import { fleck, glow, hairline, place } from "../../../../engine/frame";
 import { dealDamage } from "../../../../game/damage";
 import { enemyCenter } from "../../../../game/enemies/enemy";
@@ -92,6 +93,11 @@ function fly(b: Swallow, dt: number): boolean {
   return b.struck.length < (v.pierce ?? 1) && b.life > 0;
 }
 
+function airBlowSends(): boolean {
+  const h = usesDrill() ? drillFighter() : undefined;
+  return h ? !h.grounded : tempoTop() && !hero.ground;
+}
+
 /** a swallow: a dark forked shape pointing where it flies, its wings beating, with a white throat */
 function drawSwallow(b: Swallow): void {
   const a = Math.atan2(b.vy, b.vx);
@@ -109,7 +115,7 @@ function drawSwallow(b: Swallow): void {
 
 /**
  * Night Swallows: a launch of hers may send dusk swallows that dive at foes in the air; levels add pierce, more birds, dives
- * at foes on the floor that throw them up and a swallow on air blows at the top of Tempo, and as Swallow Storm six circle
+ * at foes on the floor that throw them up and a swallow on air blows, and as Swallow Storm six circle
  * her and dive at every launch.
  */
 export const nightSwallows: SkillBehavior = {
@@ -137,7 +143,7 @@ export const nightSwallows: SkillBehavior = {
       send(m, withBuild("amount", skillEvolved(ID) ? v.storm : v.count));
     },
     blow(memory, ev) {
-      if (!skillValues(ID).airTop || !tempoTop() || hero.ground || ev.source !== "attacks") return;
+      if (!skillValues(ID).airTop || !airBlowSends() || ev.source !== "attacks") return;
       const m = memoryOf(memory);
       if (m.birds.length < withBuild("amount", skillValues(ID).count) * 2) send(m, 1);
     },

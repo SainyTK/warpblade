@@ -1,4 +1,3 @@
-import { stacksOf } from "../../../game/enemies/skillStatus";
 import { movePayoff, payoffLands } from "../../../game/skills/payoff";
 import { skillEvolved, skillValues } from "../../../game/skills/query";
 import type { Enemy } from "../../../types/enemy";
@@ -25,11 +24,9 @@ export function hitBonus(e: Enemy, hit: OwnHit): number {
   return bonus;
 }
 
-/** extra damage a foe takes from every source: thrown up (Skyward Heave), holding embers (Searing Edge) */
+/** extra damage a foe takes from every source: thrown up (Skyward Heave) */
 export function takenBonus(e: Enemy): number {
-  let bonus = e.air ? (skillValues("br_launch").airBonus ?? 0) : 0;
-  if (stacksOf(e, "br_embers")) bonus += skillValues("br_embers").taken ?? 0;
-  return bonus;
+  return e.air ? (skillValues("br_launch").airBonus ?? 0) : 0;
 }
 
 /** every hit she deals is multiplied by this: War Cry's buff while it lasts, Bellows at full Heft */

@@ -99,12 +99,12 @@ export const BRYNN_SKILL_BASE_ICONS: Record<string, (s: SpriteCanvas) => void> =
     fill(s, () => s.dot(8, 8, 2, SKIN));
     fill(s, () => s.set(9, 9, CRIMSON[1]));
   },
-  /** embers along the edge */
-  br_embers: (s) => {
-    greatsword(s, 3, 13, 12, 4, 1);
-    ember(s, 13, 9);
-    ember(s, 9, 11);
-    ember(s, 14, 13);
+  br_cinder: (s) => {
+    heavyArc(s, 7, 9, 6, -2.5, 0.7, 1);
+    foe(s, 11, 11, 2.8);
+    ember(s, 10, 10);
+    ember(s, 13, 12);
+    ember(s, 4, 14);
   },
   /** a burning crack in the floor */
   br_fault: (s) => {
@@ -150,26 +150,26 @@ export const BRYNN_SKILL_BASE_ICONS: Record<string, (s: SpriteCanvas) => void> =
     heavyArc(s, 10, 9, 5, -2.6, 0.6, 1);
     foe(s, 5, 11, 2.5);
   },
-  /** red shards darting from the crystal */
-  br_shard: (s) => {
+  br_splinter: (s) => {
+    greatsword(s, 2, 14, 8, 8, 1.2);
     for (const [x, y] of [
-      [4, 11],
-      [9, 6],
-      [13, 10],
+      [10.5, 3],
+      [14, 7.5],
+      [12.5, 13],
     ] as const)
       fill(s, () => {
         s.poly(
           [
-            [x, y - 2],
-            [x + 1.3, y],
-            [x, y + 2],
-            [x - 1.3, y],
+            [x, y - 2.5],
+            [x + 1.8, y],
+            [x, y + 2.5],
+            [x - 1.8, y],
           ],
           CRIMSON[3],
         );
         s.set(x, y - 1, WHITE);
       });
-    speedLines(s, 1, [6], 3, CRIMSON[4]);
+    speedLines(s, 11, [7], 2, CRIMSON[4]);
   },
   /** a heavy pauldron */
   br_ironskin: (s) => {

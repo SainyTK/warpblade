@@ -13,7 +13,7 @@ const ID = "ve_night";
 const EVERY = 0.5;
 
 /** lay `n` night on a foe at the skill's numbers */
-function layNight(e: Enemy, n: number): void {
+export function layNight(e: Enemy, n: number): void {
   const v = skillValues(ID);
   addStacks(e, ID, {
     stacks: n,

@@ -23,7 +23,7 @@ export const DAWN_FALCON: SkillDef = {
   element: "blaze",
   risk: "timed",
   button: "auto",
-  text: "Casting an ability may send a falcon of light swooping through the foes ahead.",
+  text: "Casting a spell may send a falcon of light swooping through the foes ahead.",
   levels: LEVELS,
   evolution: {
     partner: "al_dawn",

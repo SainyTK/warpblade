@@ -1,6 +1,6 @@
 import { COIN_BACK, COIN_FRONT } from "../constants/effectColors";
 import { COIN_GOLD as G } from "../constants/palette";
-import { COIN_SPIN, COIN_STEPS, COIN_TURNS } from "../constants/pickupPixels";
+import { COIN_SPIN, COIN_STEPS, COIN_TURNS, LYING_PICKUP_LIFT } from "../constants/pickupPixels";
 import { glow, place } from "../engine/frame";
 import { stampPixels } from "../game/effects/fine";
 import { game } from "../game/state";
@@ -9,7 +9,7 @@ import { game } from "../game/state";
 export function drawCoins(): void {
   place();
   for (const c of game.coinDrops) {
-    const y = c.y - 0.5;
+    const y = c.y - LYING_PICKUP_LIFT;
     const step = COIN_STEPS[Math.floor(game.t * COIN_SPIN + c.x * 0.37) % COIN_STEPS.length];
     stampPixels(COIN_TURNS[step.turn], c.x, y, step.front ? COIN_FRONT : COIN_BACK);
     glow(c.x, y, 5, G[3], 0.3);

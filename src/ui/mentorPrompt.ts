@@ -2,6 +2,7 @@ import "./mentorPrompt.css";
 import { KEYMAP } from "../constants/input";
 import { H, W } from "../constants/stage";
 import { nearbyMentor, stageCameraX } from "../game/adventure";
+import { mentorArtHeight } from "../mentorArt";
 import { keyName, keysByAction } from "../utils/keymap";
 import { clamp } from "../utils/math";
 import { byId } from "./dom";
@@ -9,7 +10,8 @@ import { isMenuOpen } from "./menu/menuState";
 import { tap } from "./touch/touchInput";
 
 const prompt = byId<HTMLButtonElement>("mentorPrompt");
-const HEADROOM = 34;
+const PROCEDURAL_HEIGHT = 32;
+const GAP = 2;
 const TOP_PADDING = 46;
 const EDGE = 13;
 
@@ -27,5 +29,5 @@ export function syncMentorPrompt(): void {
   if (!mentor) return;
   const x = clamp(((mentor.x - stageCameraX()) / W) * 100, EDGE, 100 - EDGE);
   prompt.style.left = `${x.toFixed(2)}%`;
-  prompt.style.top = `max(${TOP_PADDING}px, ${((mentor.y - HEADROOM) / H) * 100}%)`;
+  prompt.style.top = `max(${TOP_PADDING}px, ${((mentor.y - (mentorArtHeight() ?? PROCEDURAL_HEIGHT) - GAP) / H) * 100}%)`;
 }
