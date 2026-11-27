@@ -9,7 +9,7 @@ export const archive: StageDef = {
   mapBlurb: "Every book here was written in ink that moves.",
   kind: "rift",
   era: "archive",
-  ladder: [...rung(15, 12, "inkling"), ...rung(15, 6, "pagewing"), ...rung(26, 16, "tomeguard")],
+  ladder: [...rung(2, "inkling"), ...rung(2, "pagewing"), ...rung(3, "tomeguard")],
   boss: "pagewyrm",
   mini: {
     name: "Grand Tomeguard",

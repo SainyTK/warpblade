@@ -9,7 +9,7 @@ export const foundry: StageDef = {
   mapBlurb: "The forges never went cold.",
   kind: "rift",
   era: "foundry",
-  ladder: [...rung(15, 12, "slagling"), ...rung(15, 6, "emberbat"), ...rung(26, 16, "forgeguard")],
+  ladder: [...rung(2, "slagling"), ...rung(2, "emberbat"), ...rung(3, "forgeguard")],
   boss: "cindersmith",
   mini: {
     name: "Forge Marshal",

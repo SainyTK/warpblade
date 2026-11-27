@@ -9,7 +9,7 @@ export const prologue: StageDef = {
   mapBlurb: "Where the first rift opened.",
   kind: "prologue",
   era: "day",
-  ladder: [...rung(15, 12, "thornback"), ...rung(15, 6, "moth")],
+  ladder: [...rung(2, "thornback"), ...rung(2, "moth")],
   boss: "oakheart",
   mini: {
     name: "Bramble Tusk",

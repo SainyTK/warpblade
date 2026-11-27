@@ -9,7 +9,7 @@ export const glacier: StageDef = {
   mapBlurb: "Ice that remembers every footstep.",
   kind: "rift",
   era: "glacier",
-  ladder: [...rung(15, 12, "rimehound"), ...rung(15, 6, "shardling"), ...rung(26, 16, "cryomancer")],
+  ladder: [...rung(2, "rimehound"), ...rung(2, "shardling"), ...rung(3, "cryomancer")],
   boss: "rimeclaw",
   mini: {
     name: "Rime Oracle",

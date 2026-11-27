@@ -95,6 +95,19 @@ export const FOE_HIT = 10;
 
 export const OFF_LADDER_HITS = 4;
 
+export const LADDER_RUNGS = [
+  { level: 1, hits: 1 },
+  { level: 15, hits: 20 },
+  { level: 26, hits: 26 },
+  { level: 38, hits: 30 },
+  { level: 48, hits: 32 },
+  { level: 53, hits: 34 },
+  { level: 62, hits: 38 },
+  { level: 78, hits: 42 },
+] as const;
+
+export const FLYER_TOUGHNESS = 0.5;
+
 export const FOE_BAND = {
   damagePerLevel: 0.015,
   eliteWeight: 3,

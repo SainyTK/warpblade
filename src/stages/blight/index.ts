@@ -9,7 +9,7 @@ export const blight: StageDef = {
   mapBlurb: "The rot grows toward the light.",
   kind: "rift",
   era: "blight",
-  ladder: [...rung(15, 12, "rotcrawler"), ...rung(15, 6, "sporepuff"), ...rung(26, 16, "spitbloom")],
+  ladder: [...rung(2, "rotcrawler"), ...rung(2, "sporepuff"), ...rung(3, "spitbloom")],
   boss: "sporeheart",
   mini: {
     name: "Rot Queen",

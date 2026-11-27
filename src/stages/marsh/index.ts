@@ -13,7 +13,7 @@ export const marsh: StageDef = {
   mapBlurb: "Rain, mud and the thing that sleeps in it.",
   kind: "rift",
   era: "rain",
-  ladder: [...rung(15, 12, "mire"), ...rung(15, 6, "stormkite"), ...rung(26, 16, "bogleech")],
+  ladder: [...rung(2, "mire"), ...rung(2, "stormkite"), ...rung(3, "bogleech")],
   boss: "boghulk",
   mini: {
     name: "The Mire King",

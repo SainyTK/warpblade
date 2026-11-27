@@ -13,7 +13,7 @@ export const veil: StageDef = {
   mapBlurb: "The towers where the rifts are kept.",
   kind: "rift",
   era: "twilight",
-  ladder: [...rung(15, 12, "golem"), ...rung(15, 6, "sprite"), ...rung(26, 16, "riftknight")],
+  ladder: [...rung(2, "golem"), ...rung(2, "sprite"), ...rung(3, "riftknight")],
   boss: "warden",
   mini: {
     name: "Rift Marshal",

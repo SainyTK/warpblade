@@ -11,7 +11,7 @@ export const citadel: StageDef = {
   mapBlurb: "Every rift leads here.",
   kind: "citadel",
   era: "abyss",
-  ladder: [...rung(15, 12, "stalker"), ...rung(15, 6, "eye")],
+  ladder: [...rung(2, "stalker"), ...rung(2, "eye")],
   boss: "sovereign",
   mini: {
     name: "Void Reaver",
