@@ -44,6 +44,7 @@ export function renderMenu(): void {
   const context = menuContext();
   const screen = menuScreen();
   document.body.dataset.menu = context ?? "none";
+  document.body.dataset.screen = context ? screen : "none";
   root.hidden = !context;
   if (!context) {
     body.replaceChildren();

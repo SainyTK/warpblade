@@ -82,6 +82,9 @@
   pointer-events: none;
   animation: ach-toast var(--toast-ms, 3200ms) steps(1) both;
 }
+body[data-screen="result"] .ach-toast {
+  display: none;
+}
 .ach-toast .medal {
   width: 27px;
   height: 27px;
@@ -118,7 +121,10 @@
     gap: 6px;
     padding: 3px 8px 3px 5px;
   }
-  .ach-toast .medal {
+  body[data-screen="result"] .ach-toast {
+  display: none;
+}
+.ach-toast .medal {
     width: 18px;
     height: 18px;
   }
