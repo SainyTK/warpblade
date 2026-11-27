@@ -1,4 +1,3 @@
-import { HERO_START_X } from "../../constants/hero";
 import { PLATFORMS, W } from "../../constants/stage";
 import { STAGES } from "../../stages";
 import { runRates } from "../../store/meta";
@@ -15,8 +14,14 @@ export interface Surge {
   foes: EnemyType[];
   levels: number[];
   xp: number[];
+  cap: number;
   sent: number;
   refills: number[];
+}
+
+interface Leash {
+  left: number;
+  right: number;
 }
 
 interface Trail {
@@ -40,10 +45,10 @@ interface Trail {
   damage: number;
   farthest: number;
   camera: number;
+  leash: Leash | null;
   left: number;
   gate: number | null;
   surge: Surge | null;
-  safeX: number;
   authored: WeakSet<Enemy>;
   perched: WeakMap<Enemy, number>;
 }
@@ -79,10 +84,10 @@ export function beginAdventure(random: Rng, stage: StageId, hyper: boolean): voi
     damage: 0,
     farthest: 0,
     camera: 0,
+    leash: null,
     left: 0,
     gate: null,
     surge: null,
-    safeX: HERO_START_X,
     authored: new WeakSet(),
     perched: new WeakMap(),
   };
@@ -121,6 +126,7 @@ export const stageGate = (): number | null => trail?.gate ?? null;
 export const stageLeft = (): number => trail?.left ?? 0;
 export const stageRight = (): number => (trail ? (trail.gate ?? trail.route.width) : W);
 export const stageBounds = () => ({ left: stageLeft(), right: stageRight() });
+export const heroLeash = (): Leash | null => trail?.leash ?? null;
 export const clampStageX = (x: number, margin: number): number => clamp(x, stageLeft() + margin, stageRight() - margin);
 export const stageGates = (): readonly number[] => {
   if (!trail?.left) return [];

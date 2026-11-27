@@ -1,4 +1,5 @@
 import { drillFighter } from "../../../../../drill";
+import { hostMemory, rememberPerSeat } from "../../../../../game/seatMemory";
 import { game, progress } from "../../../../../game/state";
 import type { YunDrillSkill } from "../../../types/drillSkill";
 import { createQiRing } from "../../effects/qiRing";
@@ -8,6 +9,7 @@ import { foesNear, skillStrike } from "../strike";
 const ID = "yu_cloud";
 const KICK_RADIUS = 30;
 const step = { wallLock: 0, grounded: true, slashed: false };
+rememberPerSeat(hostMemory(step));
 
 export const CLOUD_STEP_DRILL: YunDrillSkill = {
   id: ID,

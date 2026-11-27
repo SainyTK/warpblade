@@ -1,4 +1,5 @@
 import { drillFighter } from "../../../../../drill";
+import { hostMemory, rememberPerSeat } from "../../../../../game/seatMemory";
 import { game, hero, progress } from "../../../../../game/state";
 import { SKILL } from "../../../constants/skills/ids";
 import type { SayaDrillSkill } from "../../../types/drillSkill";
@@ -9,6 +10,7 @@ import { later } from "../later";
 import { cutAngle, foesNear, skillStrike } from "../targets";
 
 const step = { dashing: false };
+rememberPerSeat(hostMemory(step));
 
 export const SHADOW_STEP_DRILL: SayaDrillSkill = {
   id: SKILL.step,

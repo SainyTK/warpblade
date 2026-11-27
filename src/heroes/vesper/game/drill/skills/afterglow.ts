@@ -2,6 +2,7 @@ import { drillFighter } from "../../../../../drill";
 import { createFloorRing } from "../../../../../game/effects/floorRing";
 import { enemyCenter } from "../../../../../game/enemies/enemy";
 import { addStacks, stacksOf } from "../../../../../game/enemies/skillStatus";
+import { rememberPerSeat } from "../../../../../game/seatMemory";
 import { game, hero, progress } from "../../../../../game/state";
 import type { Enemy } from "../../../../../types/enemy";
 import { DUSK_RAMP } from "../../../look/colors";
@@ -12,6 +13,15 @@ import { foesNear, skillStrike } from "../strike";
 const ID = "ve_glow";
 const GLOW = { every: 0.5, duration: 3, burst: 36, flareTicks: 3 } as const;
 const watched = new Set<Enemy>();
+rememberPerSeat({
+  hostOnly: true,
+  save: () => new Set(watched),
+  load(saved) {
+    watched.clear();
+    for (const foe of saved as Set<Enemy>) watched.add(foe);
+  },
+  fresh: () => new Set<Enemy>(),
+});
 
 function glow(foe: Enemy, n: number, values: SkillNumbers): void {
   const [x, y] = enemyCenter(foe);

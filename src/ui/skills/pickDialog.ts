@@ -4,7 +4,7 @@ import { BOONS } from "../../constants/boons";
 import { stageRunId } from "../../game/adventure";
 import { cardView } from "../../game/build/cardView";
 import { clearPresses, releaseAll } from "../../game/input";
-import { answerPick, leavePicks } from "../../game/progress";
+import { answerPick } from "../../game/progress";
 import { character, game, progress, rng } from "../../game/state";
 import { mentorPortraitUrl } from "../../mentorArt";
 import { sfx } from "../../services/audio";
@@ -54,8 +54,10 @@ export interface PickSource {
   /** this player has a card to choose now */
   waiting(): boolean;
   answer(answer: PickAnswer<Card>): void;
+  /** the stage run the cards belong to, so a mentor's cards stay dealt between visits; null outside a stage */
+  stageRun(): number | null;
 }
-const SOLO: PickSource = { waiting: () => game.mode === "pick", answer: answerPick };
+const SOLO: PickSource = { waiting: () => game.mode === "pick", answer: answerPick, stageRun: stageRunId };
 let source: PickSource = SOLO;
 
 /** a co-op room takes the cards over until called with null; cards dealt for the old source are put away */
@@ -75,7 +77,7 @@ let dealtFor = "";
 /** what the tools and slots last showed */
 let shownBuild = "";
 
-const mentorRunId = (): number | null => (source === SOLO ? stageRunId() : null);
+const mentorRunId = (): number | null => source.stageRun();
 
 function pickKey(): string {
   const id = mentorRunId();
@@ -136,7 +138,7 @@ function close(): void {
 
 function leaveMentor(): void {
   if (mentorRunId() === null || game.mode !== "pick") return;
-  leavePicks();
+  source.answer({ t: "leave" });
   if (banishing) {
     banishing = false;
     showBuild();

@@ -1,4 +1,5 @@
 import { drillFighter } from "../../../../../drill";
+import { hostMemory, rememberPerSeat } from "../../../../../game/seatMemory";
 import { hero, progress } from "../../../../../game/state";
 import type { CeriseDrillSkill } from "../../../types/drillSkill";
 import { atHero, ceriseFx } from "../../fx";
@@ -7,6 +8,7 @@ import { foesAhead, skillStrike } from "./strike";
 
 const ID = "ce_riposte";
 const riposte = { clock: 0, until: 0 };
+rememberPerSeat(hostMemory(riposte));
 
 export const RIPOSTE_CHAIN_DRILL: CeriseDrillSkill = {
   id: ID,

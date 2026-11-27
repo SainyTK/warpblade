@@ -11,6 +11,7 @@ export {
   clampStageX,
   currentStage,
   finaleHolds,
+  heroLeash,
   isAdventure,
   overPit,
   recordStageDamage,

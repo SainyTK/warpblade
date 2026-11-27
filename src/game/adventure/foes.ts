@@ -3,6 +3,7 @@ import { ELITE } from "../../constants/waves";
 import type { Enemy, EnemyType } from "../../types/enemy";
 import { xpToNext } from "../../utils/progression";
 import { bandScale } from "../../utils/stageArc";
+import { coop } from "../coopHooks";
 import { makeEnemy, makeScaledEnemy } from "../enemies/enemy";
 import { game } from "../state";
 import { trail } from "./trail";
@@ -15,6 +16,8 @@ export function stageFoe(type: EnemyType, x: number, y: number, level: number, x
     enemy.max = Math.round(enemy.max * ELITE.hp);
     enemy.hp = enemy.max;
   }
+  const room = coop();
+  if (room) enemy.hp = enemy.max = room.scaleFoeHp(enemy.rank, enemy.max);
   return enemy;
 }
 

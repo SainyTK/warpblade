@@ -1,5 +1,6 @@
 import { drillFighter } from "../../../../../drill";
 import { staggerFoe } from "../../../../../game/enemies/stagger";
+import { hostMemory, rememberPerSeat } from "../../../../../game/seatMemory";
 import { game, progress } from "../../../../../game/state";
 import type { ZafirDrillSkill } from "../../../types/drillSkill";
 import { createSpout, sandBurst } from "../../effects/spout";
@@ -9,6 +10,7 @@ import { foesAround, skillStrike } from "../strike";
 const ID = "za_falling";
 const RING = { reach: 30, height: 20, spout: 0.5 };
 const air = { slashed: false, grounded: true };
+rememberPerSeat(hostMemory(air));
 
 export const FALLING_DUNE_DRILL: ZafirDrillSkill = {
   id: ID,

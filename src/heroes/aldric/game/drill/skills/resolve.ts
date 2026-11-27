@@ -1,4 +1,5 @@
 import { drillFighter } from "../../../../../drill";
+import { hostMemory, rememberPerSeat } from "../../../../../game/seatMemory";
 import { game, hero, progress } from "../../../../../game/state";
 import { surfaceBelow } from "../../../../../game/world";
 import type { AldricDrillSkill } from "../../../types/drillSkill";
@@ -10,6 +11,7 @@ const ID = "al_resolve";
 const AFTER_DASH = 0.6;
 const GROUND = { width: 30, time: 2.5 } as const;
 const resolve = { since: Infinity, airDashing: false };
+rememberPerSeat(hostMemory(resolve));
 
 export const RESOLVE_DRILL: AldricDrillSkill = {
   id: ID,

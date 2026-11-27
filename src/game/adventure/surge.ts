@@ -1,6 +1,8 @@
 import { SURGE } from "../../constants/campaign";
+import { ALIVE_CAP } from "../../constants/waves";
 import type { EnemyType } from "../../types/enemy";
 import { levelBetween, xpBudget } from "../../utils/stageArc";
+import { coop } from "../coopHooks";
 import { createRift } from "../effects/rift";
 import { kindOf } from "../enemies/kinds";
 import { game, hero } from "../state";
@@ -12,15 +14,20 @@ const isElite = (index: number): boolean => index > 0 && index % (trail?.mods.el
 
 export function openSurge(beat: SurgeBeat): Surge {
   const random = trail?.random;
-  const foes = Array.from({ length: beat.count }, () => (random ? random.pick(beat.foes) : beat.foes[0]));
+  const solo = Array.from({ length: beat.count }, () => (random ? random.pick(beat.foes) : beat.foes[0]));
+  const room = coop();
+  const foes = room ? room.scaleFoes(solo) : solo;
+  const cap = room
+    ? Math.min(ALIVE_CAP.coopMost, Math.round((beat.cap * foes.length) / Math.max(1, solo.length)))
+    : beat.cap;
   const levels = foes.map((_, i) => levelBetween(beat.from, beat.to, i / Math.max(1, foes.length - 1)));
   const xp = xpBudget(
     beat.from,
     beat.to,
     foes.map((type, i) => ({ level: levels[i], weight: foeWeight(type, isElite(i)) })),
   );
-  const surge: Surge = { beat, foes, levels, xp, sent: 0, refills: [] };
-  for (let i = 0; i < Math.min(beat.cap, foes.length); i++) surge.refills.push(i * SURGE.opening);
+  const surge: Surge = { beat, foes, levels, xp, cap, sent: 0, refills: [] };
+  for (let i = 0; i < Math.min(cap, foes.length); i++) surge.refills.push(i * SURGE.opening);
   return surge;
 }
 
@@ -61,7 +68,7 @@ export function updateSurge(surge: Surge, area: RouteArea, dt: number): boolean 
   if (surge.sent >= surge.foes.length) drawStragglersDown(dt);
   const standing = game.enemies.filter((e) => e.hp > 0).length + game.fx.filter((f) => f.rift).length;
   const left = surge.foes.length - surge.sent;
-  const free = Math.min(surge.beat.cap - standing - surge.refills.length, left - surge.refills.length);
+  const free = Math.min(surge.cap - standing - surge.refills.length, left - surge.refills.length);
   for (let i = 0; i < free; i++) surge.refills.push(SURGE.refill);
   for (let i = 0; i < surge.refills.length; i++) surge.refills[i] -= dt;
   const due = surge.refills.filter((t) => t <= 0).length;

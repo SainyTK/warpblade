@@ -5,12 +5,6 @@ export interface RunRecords {
   splits: number[];
 }
 
-/** a number of waves cleared and the run time it took */
-export interface WaveClear {
-  waves: number;
-  seconds: number;
-}
-
 export interface StageBest {
   clears: number;
   fastestClear: number | null;

@@ -14,13 +14,15 @@ export interface Seat {
   rtt: number;
   /** the per-player memories while another seat is swapped in, in registration order */
   saved: unknown[];
-  /** fell and waits for the wave to be cleared */
+  /** fell and waits for the next stage beat to be cleared */
   down: boolean;
+  /** left the mentor with points kept, so the room stops waiting on their cards */
+  leftPicks: boolean;
   /** where the hero stood when last swapped out, and whether it was standing */
   at: { x: number; y: number; standing: boolean };
 }
 
 /** a copy of every per-player memory that shares nothing with the live state, for a seat that starts fresh */
 export function freshSaved(): unknown[] {
-  return seatMemories().map((m) => structuredClone(m.save()));
+  return seatMemories().map((m) => (m.fresh ? m.fresh() : structuredClone(m.save())));
 }

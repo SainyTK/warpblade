@@ -1,5 +1,6 @@
 import { drillFighter } from "../../../../../drill";
 import { enemyCenter } from "../../../../../game/enemies/enemy";
+import { hostMemory, rememberPerSeat } from "../../../../../game/seatMemory";
 import { game, hero, progress } from "../../../../../game/state";
 import type { BrynnDrillSkill } from "../../../types/drillSkill";
 import { createQuake } from "../../effects/quake";
@@ -9,6 +10,7 @@ import { foesNear, skillStrike } from "../strike";
 const ID = "br_heavy";
 const RING = 32;
 const landing = { slammed: false, grounded: true };
+rememberPerSeat(hostMemory(landing));
 
 export const HEAVY_HANDS_DRILL: BrynnDrillSkill = {
   id: ID,

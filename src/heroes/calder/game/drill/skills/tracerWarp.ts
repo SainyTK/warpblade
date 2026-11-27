@@ -1,5 +1,6 @@
 import { drillFighter } from "../../../../../drill";
 import { staggerFoe } from "../../../../../game/enemies/stagger";
+import { hostMemory, rememberPerSeat } from "../../../../../game/seatMemory";
 import { game, hero, progress } from "../../../../../game/state";
 import type { CalderDrillSkill } from "../../../types/drillSkill";
 import { createTracerLine } from "../../effects/tracerLine";
@@ -10,6 +11,7 @@ import { struckThisSwing } from "../trigger";
 
 const ID = "ca_tracer";
 const warpFrom = { x: 0, y: 0, armed: false };
+rememberPerSeat(hostMemory(warpFrom));
 
 export const TRACER_WARP_DRILL: CalderDrillSkill = {
   id: ID,

@@ -1,4 +1,5 @@
 import { drillFighter } from "../../../../../drill";
+import { hostMemory, rememberPerSeat } from "../../../../../game/seatMemory";
 import { game, progress } from "../../../../../game/state";
 import type { YunDrillSkill } from "../../../types/drillSkill";
 import { createStreamSword } from "../../effects/stream";
@@ -10,6 +11,7 @@ const ID = "yu_fan";
 const RISES = [-0.35, 0.3, -0.12, 0.18, -0.5, 0.45, 0.05, -0.25] as const;
 const PIERCE = 30;
 const fan = { release: null as object | null };
+rememberPerSeat(hostMemory(fan));
 
 export const SWORD_FAN_DRILL: YunDrillSkill = {
   id: ID,

@@ -1,5 +1,20 @@
-const queue: { at: number; run: () => void }[] = [];
+import { rememberPerSeat } from "../../../../game/seatMemory";
+
+type Queued = { at: number; run: () => void };
+
+const queue: Queued[] = [];
 let clock = 0;
+
+rememberPerSeat({
+  hostOnly: true,
+  save: () => ({ queue: [...queue], clock }),
+  load(saved) {
+    const from = saved as { queue: Queued[]; clock: number };
+    queue.splice(0, queue.length, ...from.queue);
+    clock = from.clock;
+  },
+  fresh: () => ({ queue: [], clock: 0 }),
+});
 
 export function later(seconds: number, run: () => void): void {
   queue.push({ at: clock + seconds, run });

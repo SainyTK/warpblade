@@ -1,8 +1,18 @@
 # Co-op rooms
 
-Up to four players fight the same 30-wave run together, each with their own hero.
+Up to four players play the same stage run together, each with their own hero.
+A room plays the same mode as solo play: the same stages, route, mentors, gated rooms, bosses and result screen.
 One player hosts a room from the start menu, and the room runs in that player's browser tab.
-The others join with the room's five-letter code or an invite link, pick a hero (the same hero more than once is fine) and wait in the lobby until the host starts the run.
+The others join with the room's five-letter code or an invite link, pick a hero (the same hero more than once is fine) and wait in the lobby.
+The host picks Choose stage, which opens the solo stage screen; the stages open to the host are the ones the room can play, and choosing one starts the run for everyone.
+
+## One screen for the room
+
+Every hero shares one camera, as the host's picture is the one every guest sees.
+While the room walks the route, no standing hero can get farther than one screen width (less a margin) from another, so a hero at the front waits for the one at the back (`heroLeash` in `src/game/adventure/trail.ts`).
+The camera keeps the front hero a third of the way in and never lets the last one leave the screen.
+The route moves on with the front hero: foes appear and a room's gate closes when the front hero reaches them, and the gate pulls every hero still outside into the room.
+Each hero keeps their own footing for pits, and spikes, hazards and boss shoves strike every standing hero.
 
 ## Where it comes from
 
@@ -56,32 +66,33 @@ The cost is video softness on a slow link and about one round trip plus a video 
 ## Players who fall
 
 A hero whose HP runs out lies down and is skipped by foes, coins and orbs.
-Their status line reads "Down until the wave is cleared".
-When the wave is cleared, every downed hero stands up with half their HP.
-The run ends only when every hero is down at once, or when wave 30 and what comes after its boss are cleared.
+Their status line reads "Down until the next fight is won".
+When a surge, elite, mini boss or boss in a gated room is beaten, every downed hero stands up with half their HP.
+The run ends only when every hero is down at once.
 A room that goes down to The Unblinking has still cleared the stage.
 Last Light still saves each player once per run for each level they bought.
 
-## Picks at the end of a wave
+## Skill cards at the mentor
 
 Experience is shared: an orb picked up by anyone gives its experience to every hero, so the room levels together.
 Each player still has their own skill points and cards, rolled from their own hero's tree.
-When a wave is cleared with points waiting, the game pauses for everyone while those players choose.
+Cards open for every player with points waiting when anyone talks to a mentor, and between the fights of a gated room, as in solo play.
+The game pauses for everyone while those players choose, and each player may Leave the mentor and keep their points.
 A player with nothing to choose reads "Waiting for P2 to pick".
 Anyone may still open the pause menu, for instance to leave the room; open cards step aside under the menu and come back the same.
 A guest's choice travels to the host as a skill id, and the host checks that the hero can still learn it before applying it.
 
 ## Coins, the Armory and unlocks
 
-Each player's hero plays with what that player bought in their own Armory and the skills they have unlocked, since the guest sends its loadout (Armory levels switched on and open skills) when it joins and again after each change, such as from the result screen between runs.
+Each player's hero plays with what that player bought in their own Armory and the skills they have unlocked, since the guest sends its loadout (Armory levels switched on, open skills, Rift Arts and pick tools) when it joins and again after each change, such as from the result screen between runs.
 The host's Curse applies to the whole room.
 Co-op runs count toward unlocks and achievements for every player: the host sends each guest the feats that count for them (`docs/unlocks.md`, Co-op).
 Coins a hero picks up are theirs, and coins left on the floor at the end are split evenly.
-When the run ends, every player banks their own coins in their own browser and sees the result screen, then goes back to the room for another run.
+When the run ends, every player banks their own coins in their own browser, records the stage result in their own stage records and sees the result screen, then goes back to the room for another run.
 
 ## More players, more foes
 
-Each player past the first adds 40% more minions to every wave's stream, and lets as many more stand at once (up to 30, `ALIVE_CAP.coopMost` in `src/constants/waves.ts`).
+Each player past the first adds 40% more minions to every rift surge, and lets as many more stand at once (up to 30, `ALIVE_CAP.coopMost` in `src/constants/waves.ts`).
 Each player past the first also adds a quarter to every minion's HP, half to a mini boss's and three fifths to a boss's.
 The numbers live in `COOP_SCALING` in `src/constants/coop.ts`.
 
@@ -128,9 +139,7 @@ The pause menu in a room has Resume, Controls, Options and Leave room, and the g
 - Hit-stop freezes the whole room, so a hit by any player pauses every hero for a moment.
   Mash bots spend 10% of play frozen alone and 25% with four Kaels; freezing only the striking hero and the foes it hit would need a step that runs heroes apart from the world.
 - Players are named P1 to P4; picking a name is left for later.
-- The foe scaling is a first guess that still needs tuning from real games with people.
-  Mash bots (walk to the nearest foe, press J, take the first card) in a room fall at wave 4 with one Kael, as in solo play.
-  Two Kaels reach waves 5 to 6 and four Kaels waves 5 to 7, three runs each.
-  A room of weak players is not overwhelmed by the day era: most four-player runs that end early fall to the wave 5 mini boss.
+- The foe scaling is a first guess that still needs tuning from real games with people on the stages.
+- A player who stands still at the back holds the room's walk back, since every hero stays on one screen.
 - The host's hero choice must be made in the lobby before Start; heroes cannot change during a run.
 - A host who switches to another tab or app stalls the room for everyone until they come back. A phone may stop the heartbeat of a background tab altogether, and then the guests are let go after six seconds.

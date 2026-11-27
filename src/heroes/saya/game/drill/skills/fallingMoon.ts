@@ -1,6 +1,7 @@
 import { drillFighter } from "../../../../../drill";
 import { createFloorRing } from "../../../../../game/effects/floorRing";
 import { skin } from "../../../../../game/hero/skin";
+import { hostMemory, rememberPerSeat } from "../../../../../game/seatMemory";
 import { game, hero, progress } from "../../../../../game/state";
 import { SKILL } from "../../../constants/skills/ids";
 import type { SayaDrillSkill } from "../../../types/drillSkill";
@@ -9,6 +10,7 @@ import { sheathe } from "../sheathe";
 import { foesNear, skillStrike } from "../targets";
 
 const fall = { slashed: false, grounded: true };
+rememberPerSeat(hostMemory(fall));
 const DRIVE = 260;
 
 export const FALLING_MOON_DRILL: SayaDrillSkill = {

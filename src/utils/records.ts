@@ -1,5 +1,4 @@
-import type { RunRecords, WaveClear } from "../types/records";
-import { minutesSeconds } from "./runReport";
+import type { RunRecords } from "../types/records";
 
 const isTime = (value: unknown): value is number => typeof value === "number" && Number.isFinite(value) && value > 0;
 
@@ -21,13 +20,3 @@ export function withClear(records: RunRecords, wave: number, seconds: number): R
   splits[i] = seconds;
   return { splits };
 }
-
-/** the most waves cleared and the fastest time to clear that many, or null before any wave is cleared */
-export function bestClear(records: RunRecords): WaveClear | null {
-  const waves = records.splits.length;
-  return waves ? { waves, seconds: records.splits[waves - 1] } : null;
-}
-
-/** a number of waves cleared and its time, as every record line reads it */
-export const clearText = (clear: WaveClear): string =>
-  `${clear.waves} ${clear.waves === 1 ? "wave" : "waves"} cleared in ${minutesSeconds(clear.seconds)}`;

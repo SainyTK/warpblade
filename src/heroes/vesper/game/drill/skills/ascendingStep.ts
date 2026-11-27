@@ -1,5 +1,6 @@
 import { drillFighter } from "../../../../../drill";
 import { createFloorRing } from "../../../../../game/effects/floorRing";
+import { hostMemory, rememberPerSeat } from "../../../../../game/seatMemory";
 import { game, progress } from "../../../../../game/state";
 import { DUSK_RAMP } from "../../../look/colors";
 import type { VesperDrillSkill } from "../../../types/drillSkill";
@@ -9,6 +10,7 @@ import { foesNear, skillStrike } from "../strike";
 
 const ID = "ve_ascend";
 const step = { kicking: false, grounded: true, floor: 0 };
+rememberPerSeat(hostMemory(step));
 
 export const ASCENDING_STEP_DRILL: VesperDrillSkill = {
   id: ID,

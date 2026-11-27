@@ -1,5 +1,6 @@
 import { drillFighter } from "../../../../../drill";
 import { enemyCenter } from "../../../../../game/enemies/enemy";
+import { hostMemory, rememberPerSeat } from "../../../../../game/seatMemory";
 import { nearestFoe } from "../../../../../game/skills/targets";
 import { game, hero, progress } from "../../../../../game/state";
 import type { YunDrillSkill } from "../../../types/drillSkill";
@@ -10,6 +11,7 @@ const ID = "yu_ride";
 const REACH = 60;
 const GAP = 0.05;
 const walker = { readyIn: 0 };
+rememberPerSeat(hostMemory(walker));
 
 export const SWORD_RIDING_DRILL: YunDrillSkill = {
   id: ID,

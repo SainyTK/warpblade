@@ -1,4 +1,5 @@
 import { drillFighter, drillSession } from "../../../../../drill";
+import { hostMemory, rememberPerSeat } from "../../../../../game/seatMemory";
 import { hero, progress } from "../../../../../game/state";
 import type { DefenseCue } from "../../../../../types/drill";
 import { SKILL } from "../../../constants/skills/ids";
@@ -9,6 +10,7 @@ import { sheathe } from "../sheathe";
 import { cutAngle, foesAlong, skillStrike } from "../targets";
 
 const calm = { cue: null as DefenseCue | null, focusUntil: 0, clock: 0 };
+rememberPerSeat(hostMemory(calm));
 const COUNTER_REACH = 48;
 
 export const CALM_MIND_DRILL: SayaDrillSkill = {

@@ -3,10 +3,12 @@ import { STAGE_ORDER } from "../../constants/stageGraph";
 import { stageChoice } from "../../game/startRun";
 import { sfx } from "../../services/audio";
 import { loadStageChoice, saveStageChoice } from "../../services/stageChoice";
+import { roomView } from "../../store/coop";
 import { stagesCleared } from "../../store/stageRecords";
 import { isStageOpen } from "../../store/unlocks";
 import type { MenuView } from "../../types/menu";
 import { el } from "../dom";
+import { startRoomRun } from "./coopActions";
 import { startStage } from "./menuActions";
 import { menuItem } from "./menuItem";
 import { focusEntry, onAdjust } from "./menuNav";
@@ -15,6 +17,11 @@ import { stageAccent } from "./stageAccent";
 import { stageModes } from "./stageModes";
 import { stagePage } from "./stagePage";
 import { stageTile } from "./stageTile";
+
+const hostsRoom = (): boolean => {
+  const room = roomView();
+  return room.role === "host" && room.phase === "lobby";
+};
 
 const firstShown = (): number => {
   const saved = STAGE_ORDER.indexOf(loadStageChoice() as (typeof STAGE_ORDER)[number]);
@@ -63,14 +70,16 @@ export function stageScreen(): MenuView {
     }
     saveStageChoice(id);
     sfx.mapSelect();
-    startStage({ stage: id, hyper: modes.isHyper() });
+    const choice = { stage: id, hyper: modes.isHyper() };
+    if (hostsRoom()) startRoomRun(choice);
+    else startStage(choice);
   };
   onAdjust(panel, (step) => show((at + step + STAGE_ORDER.length) % STAGE_ORDER.length));
   panel.addEventListener("click", act);
   const roster = el("div", "hero-roster stage-roster");
   roster.setAttribute("aria-label", "Stages");
   roster.append(...tiles);
-  const back = menuItem("Back", () => showScreen("hero"));
+  const back = menuItem("Back", () => showScreen(hostsRoom() ? "coop" : "hero"));
   back.classList.add("menu-back");
   content.append(roster, panel, modes.root, back);
   show(firstShown());

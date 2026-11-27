@@ -1,3 +1,4 @@
+import { hostMemory, rememberPerSeat } from "../../../../../game/seatMemory";
 import { skillValues } from "../../../../../game/skills/query";
 import { rng } from "../../../../../game/state";
 import type { ZafirDrillSkill } from "../../../types/drillSkill";
@@ -6,6 +7,7 @@ import { fighterAt } from "../strike";
 
 const ID = "za_wraith";
 const wraith = { readyIn: 0 };
+rememberPerSeat(hostMemory(wraith));
 
 export const SAND_WRAITH_DRILL: ZafirDrillSkill = {
   id: ID,

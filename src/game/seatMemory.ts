@@ -9,6 +9,8 @@ export interface SeatMemory {
   load(saved: unknown): void;
   /** kept to the host: a guest's HUD never reads it, and loading it would clobber the guest's own (input, ropes) */
   hostOnly?: boolean;
+  /** the state a seat starts with, for memories whose live state cannot be copied */
+  fresh?(): unknown;
 }
 
 const memories: SeatMemory[] = [];
@@ -31,4 +33,10 @@ export function objectMemory<T extends object>(live: T, hostOnly = false): SeatM
       Object.assign(into, from);
     },
   };
+}
+
+/** a plain object only the host's simulation reads, whose fresh copy is the object as the module declared it */
+export function hostMemory<T extends object>(live: T): SeatMemory {
+  const initial = { ...live };
+  return { ...objectMemory(live, true), fresh: () => ({ ...initial }) };
 }

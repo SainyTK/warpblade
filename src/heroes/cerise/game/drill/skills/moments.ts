@@ -1,7 +1,9 @@
 import { drillFighter } from "../../../../../drill";
+import { hostMemory, rememberPerSeat } from "../../../../../game/seatMemory";
 import type { DrillMoment } from "../../../types/drillSkill";
 
 const seen = { parry: false, arrival: false, grounded: true, kick: false, airDash: false };
+rememberPerSeat(hostMemory(seen));
 
 export function readMoments(): DrillMoment[] {
   const h = drillFighter();

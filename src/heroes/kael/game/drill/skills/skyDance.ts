@@ -1,4 +1,5 @@
 import { drillFighter } from "../../../../../drill";
+import { hostMemory, rememberPerSeat } from "../../../../../game/seatMemory";
 import { skillFx } from "../../../../../game/skillFx";
 import { progress } from "../../../../../game/state";
 import { dust } from "../../../../../game/world";
@@ -7,6 +8,7 @@ import { foesNear, skillStrike } from "../strike";
 
 const ID = "k_skydance";
 const dance = { wallLock: 0, grounded: true, slashed: false, swing: null as unknown };
+rememberPerSeat(hostMemory(dance));
 
 export const SKY_DANCE_DRILL: KaelDrillSkill = {
   id: ID,

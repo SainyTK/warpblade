@@ -10,7 +10,7 @@ import type { MenuView } from "../../types/menu";
 import { readRoomCode, typedRoomCode } from "../../utils/roomCode";
 import { el } from "../dom";
 import { backItem } from "./backItem";
-import { hostRoom, inviteLink, joinRoom, leaveRoom, roomHeroChanged, startRoomRun } from "./coopActions";
+import { hostRoom, inviteLink, joinRoom, leaveRoom, roomHeroChanged } from "./coopActions";
 import { menuItem } from "./menuItem";
 import { onAdjust } from "./menuNav";
 import { showScreen } from "./menuState";
@@ -128,11 +128,11 @@ function lobbyScreen(): MenuView {
   const actions = el("nav", "menu-list");
   actions.setAttribute("aria-label", "Room");
   actions.append(heroRow());
-  if (host) actions.append(menuItem("Start run", startRoomRun));
+  if (host) actions.append(menuItem("Choose stage", () => showScreen("stage")));
   actions.append(inviteItem(room.code), menuItem("Leave room", leaveRoom, "Leave? Press again"));
   const side = el("div", "menu-main");
   side.append(playerList());
-  if (!host) side.append(el("p", "coop-wait", "The host starts the run."));
+  if (!host) side.append(el("p", "coop-wait", "The host chooses the stage."));
   if (room.note) side.append(el("p", "coop-wait", room.note));
   content.append(side, actions);
   const players = room.seats.length;
@@ -141,7 +141,7 @@ function lobbyScreen(): MenuView {
     subtitle: `${players} of ${MAX_PLAYERS} players`,
     content,
     focus: host && players > 1 ? (actions.children[1] as HTMLElement) : undefined,
-    // a host joined by a first guest is ready to start: Start run takes focus then, and only then
+    // a host joined by a first guest is ready to start: Choose stage takes focus then, and only then
     state: host && players > 1 ? "ready" : "waiting",
   };
 }

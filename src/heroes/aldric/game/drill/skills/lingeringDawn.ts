@@ -1,9 +1,11 @@
 import { enemyCenter } from "../../../../../game/enemies/enemy";
+import { hostMemory, rememberPerSeat } from "../../../../../game/seatMemory";
 import { hero } from "../../../../../game/state";
 import type { AldricDrillSkill } from "../../../types/drillSkill";
 import { linger } from "../../abilities/pillars";
 
 const cast = { laid: false };
+rememberPerSeat(hostMemory(cast));
 
 export const LINGERING_DAWN_DRILL: AldricDrillSkill = {
   id: "al_dawn",

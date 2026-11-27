@@ -1,8 +1,10 @@
 import { drawThrownBlade } from "../../../../game/effects/thrownWeapon";
+import { hostMemory, rememberPerSeat } from "../../../../game/seatMemory";
 import { THROWN_SPIN } from "../../constants/warp";
 
 const MIDDLE = 15;
 const spin = { age: 0 };
+rememberPerSeat(hostMemory(spin));
 
 export function spinThrown(dt: number): void {
   spin.age += dt;

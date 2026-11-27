@@ -1,5 +1,6 @@
 import { STATE_CLIPS } from "../constants/clips";
 import { MP_REGEN } from "../constants/combat";
+import { coop } from "../game/coopHooks";
 import { setState } from "../game/hero/actions";
 import { animateRopes } from "../game/hero/animate";
 import { tickDenied } from "../game/hero/deny";
@@ -7,10 +8,11 @@ import { tickGuard } from "../game/hero/heroGuard";
 import { regenStamina } from "../game/hero/stamina";
 import { landingAt, moveHeroX } from "../game/hero/terrain";
 import { endRun } from "../game/runEnd";
+import { rememberPerSeat } from "../game/seatMemory";
 import { emitSkillEvent } from "../game/skills/events";
 import { hero, ponytail, progress, scarf } from "../game/state";
 import { dust } from "../game/world";
-import type { Fighter, Session } from "../types/drill";
+import type { Fighter, Recharge, Session } from "../types/drill";
 import type { HeroState } from "../types/hero";
 import { sampleKeys } from "../utils/sampleKeys";
 import { DEFENSE } from "./constants";
@@ -21,9 +23,75 @@ import { drillProfile, usesDrill } from "./selection";
 import { ageDrillCues, createSession, defend, stepSession } from "./simulation";
 import { createDrillView } from "./view";
 
+type DrillView = ReturnType<typeof createDrillView>;
+type DashEvents = ReturnType<typeof createDashEvents>;
+
 let session: Session | undefined;
-let view: ReturnType<typeof createDrillView> | undefined;
+let view: DrillView | undefined;
 let dashEvents = createDashEvents();
+
+rememberPerSeat({
+  hostOnly: true,
+  save: () => ({ session, view, dashEvents }),
+  load(saved) {
+    const from = saved as { session: Session | undefined; view: DrillView | undefined; dashEvents: DashEvents };
+    session = from.session;
+    view = from.view;
+    dashEvents = from.dashEvents;
+  },
+  fresh: () => ({ session: undefined, view: undefined, dashEvents: createDashEvents() }),
+});
+
+interface ShownFighter {
+  chargeHeldFor: number | null;
+  chargeRecharge: Recharge;
+  warpReadyIn: number;
+  dashReadyIn: number;
+  selected: string;
+  recharges: Record<string, Recharge>;
+  castTier: number | null;
+}
+
+const shownFighter = (h: Fighter): ShownFighter => ({
+  chargeHeldFor: h.chargeHeldFor,
+  chargeRecharge: { ...h.chargeRecharge },
+  warpReadyIn: h.warpReadyIn,
+  dashReadyIn: h.dashReadyIn,
+  selected: h.spellBook.selected.id,
+  recharges: Object.fromEntries(Object.entries(h.spellBook.recharges).map(([id, r]) => [id, { ...r }])),
+  castTier: h.skillCast?.tier.level ?? null,
+});
+
+function mirrorFighter(shown: ShownFighter): void {
+  const profile = drillProfile();
+  if (!profile) {
+    return;
+  }
+  if (session?.profile !== profile) {
+    session = createSession(profile, hero.x, hero.y);
+  }
+  const h = session.fighter;
+  const tier = profile.tiers.find((t) => t.level === shown.castTier);
+  Object.assign(h, {
+    chargeHeldFor: shown.chargeHeldFor,
+    chargeRecharge: shown.chargeRecharge,
+    warpReadyIn: shown.warpReadyIn,
+    dashReadyIn: shown.dashReadyIn,
+    skillCast: tier ? { tier, age: 0, x: h.x, y: h.y, face: h.face } : null,
+  });
+  h.spellBook.selected = profile.spells.find((s) => s.id === shown.selected) ?? h.spellBook.selected;
+  h.spellBook.recharges = shown.recharges;
+}
+
+rememberPerSeat({
+  save: () => (session ? shownFighter(session.fighter) : null),
+  load(saved) {
+    if (saved && !coop()) {
+      mirrorFighter(saved as ShownFighter);
+    }
+  },
+  fresh: () => null,
+});
 
 export function resetDrill(): void {
   session?.profile.hooks?.reset?.();
@@ -34,7 +102,7 @@ export function resetDrill(): void {
 
 export const drillFighter = (): Fighter | undefined => session?.fighter;
 export const drillSession = (): Session | undefined => session;
-export const drillView = (): ReturnType<typeof createDrillView> | undefined => view;
+export const drillView = (): DrillView | undefined => view;
 
 export function drawDrillOver(cameraX: number): void {
   if (usesDrill()) {

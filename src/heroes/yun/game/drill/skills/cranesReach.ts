@@ -1,4 +1,5 @@
 import { drillSession } from "../../../../../drill";
+import { hostMemory, rememberPerSeat } from "../../../../../game/seatMemory";
 import { progress } from "../../../../../game/state";
 import type { YunDrillSkill } from "../../../types/drillSkill";
 import { THRUST, yunFx } from "../../fx";
@@ -9,6 +10,7 @@ const ID = "yu_crane";
 const FAN_HEIGHTS = [-10, -18, -28] as const;
 const HALT_RADIUS = 60;
 const seen = { cue: null as object | null };
+rememberPerSeat(hostMemory(seen));
 
 export const CRANES_REACH_DRILL: YunDrillSkill = {
   id: ID,

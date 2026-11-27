@@ -1,6 +1,7 @@
 import { drillFighter } from "../../../../../drill";
 import { enemyCenter } from "../../../../../game/enemies/enemy";
 import { staggerFoe } from "../../../../../game/enemies/stagger";
+import { hostMemory, rememberPerSeat } from "../../../../../game/seatMemory";
 import { skillFx } from "../../../../../game/skillFx";
 import { game, hero, progress } from "../../../../../game/state";
 import type { KaelDrillSkill } from "../../../types/drillSkill";
@@ -10,6 +11,7 @@ import { skillStrike } from "../strike";
 
 const ID = "k_keen";
 const keen = { finishers: 0, freeUntil: 0, clock: 0 };
+rememberPerSeat(hostMemory(keen));
 
 export const KEEN_EDGE_DRILL: KaelDrillSkill = {
   id: ID,

@@ -7,7 +7,7 @@ import { coop } from "./coopHooks";
 import { feat } from "./feat";
 import { countedOutcome } from "./finale";
 import { resetRun } from "./run";
-import { runReport, stageResult } from "./runReport";
+import { recordStageResult, runReport, stageResult } from "./runReport";
 import { startRun } from "./startRun";
 import { character, game, hero } from "./state";
 import { isTraining } from "./training";
@@ -21,12 +21,14 @@ export function onRunEnd(listener: (result: RunResult) => void): void {
   listeners.add(listener);
 }
 
+export const stageOutcome = (fate: RunOutcome): RunOutcome => (fate === "fallen" && stageWon() ? "clear" : fate);
+
 export function endRun(fate: RunOutcome): void {
   const room = coop();
   if (room) return room.endRun(fate);
   if (isTraining()) return startRun("Rise again");
   const adventure = isAdventure();
-  const outcome = adventure ? (fate === "fallen" && stageWon() ? "clear" : fate) : countedOutcome(fate);
+  const outcome = adventure ? stageOutcome(fate) : countedOutcome(fate);
   feat({ kind: "runEnd", outcome, wave: game.wave, hero: character.id });
   const stage = currentStage();
   if (stage && outcome === "clear")
@@ -34,7 +36,7 @@ export function endRun(fate: RunOutcome): void {
   const report = runReport();
   const coins = bankCoins();
   const result: RunResult = adventure
-    ? { outcome, stage: stageResult(report, outcome), coins, report }
+    ? { outcome, stage: recordStageResult(stageResult(report, outcome), report), coins, report }
     : { outcome, wave: game.wave, coins, report };
   resetRun("");
   hero.inv = 0;

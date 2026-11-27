@@ -142,7 +142,7 @@ export function resultScreen(): MenuView {
   content.append(scroll, navigation(run.stage));
   return {
     title: run.stage && run.outcome === "beyond" ? RESULT_TITLES.clear : RESULT_TITLES[run.outcome],
-    subtitle: run.stage ? stageLine(run.stage) : `Wave ${run.wave} of ${STAGE_WAVES}`,
+    subtitle: run.stage ? stageLine(run.stage) : run.outcome === "left" ? "" : `Wave ${run.wave} of ${STAGE_WAVES}`,
     content,
   };
 }

@@ -1,5 +1,6 @@
 import { drillFighter } from "../../../../../drill";
 import { staggerFoe } from "../../../../../game/enemies/stagger";
+import { hostMemory, rememberPerSeat } from "../../../../../game/seatMemory";
 import { hero, progress } from "../../../../../game/state";
 import { surfaceBelow } from "../../../../../game/world";
 import type { AldricDrillSkill } from "../../../types/drillSkill";
@@ -9,6 +10,7 @@ import { attackStrike } from "../strike";
 
 const ID = "al_bulwark";
 const walker = { readyIn: 0 };
+rememberPerSeat(hostMemory(walker));
 
 export const BULWARK_ARRIVAL_DRILL: AldricDrillSkill = {
   id: ID,

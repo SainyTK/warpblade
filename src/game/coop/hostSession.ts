@@ -6,8 +6,9 @@ import { sfx } from "../../services/audio";
 import { captureGame, type GameStream, tuneVideoSender } from "../../services/coop/gameStream";
 import { type HostLink, openRoom, RoomTaken } from "../../services/coop/hostLink";
 import { postNote, resetRoom, roomView, updateRoom } from "../../store/coop";
+import type { StageChoice } from "../../types/campaign";
 import type { GuestMessage, Loadout, SeatInfo } from "../../types/coop";
-import type { RunOutcome, RunReport } from "../../types/run";
+import type { RunOutcome } from "../../types/run";
 import { setChestSource, syncChestDialog } from "../../ui/chest/chestDialog";
 import { syncCoopStatus } from "../../ui/coop/coopStatus";
 import { drawDangerGlow } from "../../ui/dangerGlow";
@@ -19,12 +20,13 @@ import { setPickSource, syncPickDialog } from "../../ui/skills/pickDialog";
 import { syncTouch } from "../../ui/touch/bindTouch";
 import { makeRoomCode } from "../../utils/roomCode";
 import { leftNote } from "../../utils/roomNotes";
+import { stageRunId } from "../adventure";
 import { setFrameDriver } from "../frameDriver";
 import { press, release } from "../input";
 import { reportRun } from "../runEnd";
 import { character, game, hero, progress } from "../state";
 import { stepGame } from "../step";
-import { HostRun, type SeatStart } from "./hostRun";
+import { HostRun, type SeatResult, type SeatStart } from "./hostRun";
 import { readAnswer } from "./readPick";
 import type { Seat } from "./seat";
 
@@ -186,16 +188,16 @@ export class HostSession {
     this.publishLobby();
   }
 
-  /** everyone in the lobby starts the run together */
-  start(): void {
+  /** everyone in the lobby starts the run together, on the stage the host chose */
+  start(choice: StageChoice): void {
     if (this.run || !this.link) return;
     const link = this.link;
     const starts: SeatStart[] = [{ slot: 0, peer: null, character, loadout: null, rtt: 0 }];
     for (const [peer, g] of this.guests)
       starts.push({ slot: g.slot, peer, character: heroById(g.hero), loadout: g.loadout, rtt: g.rtt });
     starts.sort((a, b) => a.slot - b.slot);
-    this.run = new HostRun(starts, {
-      ended: (outcome, wave, coins, reports) => this.ended(outcome, wave, coins, reports),
+    this.run = new HostRun(starts, choice, {
+      ended: (outcome, results) => this.ended(outcome, results),
       feat: (seat, feat) => {
         if (seat.peer) this.link?.send(seat.peer, { t: "feat", feat });
       },
@@ -208,8 +210,9 @@ export class HostSession {
     }
     setPickSource({
       // the cards step aside while the pause menu is open, since the room plays on under it
-      waiting: () => game.mode === "pick" && progress.picks > 0 && !isMenuOpen(),
+      waiting: () => game.mode === "pick" && progress.picks > 0 && !!this.run?.choosing().includes(0) && !isMenuOpen(),
       answer: (answer) => this.run?.answerHome(answer),
+      stageRun: stageRunId,
     });
     setChestSource({
       waiting: () => game.mode === "chest" && progress.build.chest.length > 0 && !isMenuOpen(),
@@ -262,16 +265,13 @@ export class HostSession {
   }
 
   /** the run is over: each guest banks their own coins, and everyone goes back to the lobby */
-  private ended(outcome: RunOutcome, wave: number, coins: Map<Seat, number>, reports: Map<Seat, RunReport>): void {
-    const run = this.run;
+  private ended(outcome: RunOutcome, results: Map<Seat, SeatResult>): void {
     this.run = null;
     this.stopRun();
-    for (const [seat, earned] of coins) {
-      const report = reports.get(seat);
-      if (seat.peer && report) this.link?.send(seat.peer, { t: "end", outcome, wave, coins: earned, report });
-    }
-    const home = run?.seats.find((s) => !s.peer);
-    reportRun({ outcome, wave, coins: (home && coins.get(home)) ?? 0, report: home && reports.get(home) });
+    for (const [seat, { coins, report, stage }] of results)
+      if (seat.peer) this.link?.send(seat.peer, { t: "end", outcome, stage, coins, report });
+    const own = [...results].find(([seat]) => !seat.peer)?.[1];
+    if (own) reportRun({ outcome, stage: own.stage, coins: own.coins, report: own.report });
     if (!this.closed) {
       updateRoom({ phase: "lobby" });
       this.publishLobby();
