@@ -21,6 +21,8 @@ const firstShown = (): number => {
   return saved >= 0 ? saved : 0;
 };
 
+let preferHyper = stageChoice().hyper;
+
 export function stageScreen(): MenuView {
   const pages = STAGE_ORDER.map(stagePage);
   const panel = el("div", "hero-panel stage-panel");
@@ -30,9 +32,9 @@ export function stageScreen(): MenuView {
   panel.append(...pages.map((p) => p.root));
   const content = el("div", "menu-main stage-screen");
   let at = 0;
-  let hyper = stageChoice().hyper;
+
   const modes = stageModes((next) => {
-    hyper = next;
+    preferHyper = next;
   });
   const show = (i: number): void => {
     tiles[at].removeAttribute("aria-current");
@@ -42,7 +44,7 @@ export function stageScreen(): MenuView {
     tiles[i].setAttribute("aria-current", "true");
     pages[i].root.dataset.shown = "";
     content.style.setProperty("--accent", stageAccent(id));
-    modes.show(id, hyper);
+    modes.show(id, preferHyper);
     modes.root.toggleAttribute("data-closed", !isStageOpen(id));
     modes.entry.toggleAttribute("data-nav", isStageOpen(id));
   };

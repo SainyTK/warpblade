@@ -91,8 +91,10 @@ export function stageModes(changed: (hyper: boolean) => void): StageModes {
       return;
     }
     armed = false;
-    if (buyUnlock(hyperUnlock(stage)?.id ?? "")) sfx.learn();
-    set(true);
+    changed(true);
+    if (!buyUnlock(hyperUnlock(stage)?.id ?? "")) return deny();
+    sfx.learn();
+    hyper = true;
     render();
   };
   normal.addEventListener("click", () => set(false));

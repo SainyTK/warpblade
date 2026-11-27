@@ -243,3 +243,19 @@ th.source {
   width: 100%;
   padding-top: 6px;
 }
+
+@media (max-height: 520px) {
+  .menu[data-screen="result"] .menu-panel {
+    width: min(720px, 100%);
+  }
+  .menu[data-screen="result"] .menu-list {
+    grid-auto-flow: column;
+    grid-auto-columns: minmax(0, 1fr);
+    width: 100%;
+  }
+  .menu[data-screen="result"] .menu-item {
+    padding: 0 18px;
+    font-size: 13px;
+    white-space: nowrap;
+  }
+}

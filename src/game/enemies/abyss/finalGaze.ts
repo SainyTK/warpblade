@@ -35,6 +35,8 @@ function drawAim(e: Enemy, k: number): void {
   hairline(e.x, e.y, x, y, k > 0.7 && flicker ? WHITE : VOID[4], (u) =>
     Math.sin(u * 50 - game.t * 30) > 0.3 - k ? 0.8 : 0,
   );
+  glowLine(e.x, e.y, x, y, 4 + 6 * k, VOID[3], 0.25 + 0.45 * k);
+  line(e.x, e.y, x, y, VOID[4], (u) => (Math.sin(u * 50 - game.t * 30) > 0.3 - k ? 0.35 + 0.5 * k : 0));
   glow(x, y, 10 + 14 * k, VOID[3], 0.3 + 0.5 * k);
   glow(e.x, e.y, 18 + 16 * k, VOID[4], 0.3 + 0.5 * k);
   sparkle(x, y, 3 + 4 * k, VOID[5], WHITE, 0.4 + 0.5 * k);

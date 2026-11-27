@@ -23,8 +23,8 @@ function bestText(best: StageBest | null): string {
   if (!best) return "No run yet";
   const parts = [`Grade ${best.bestGrade ?? "E"}`];
   if (best.fastestClear !== null) parts.push(minutesSeconds(best.fastestClear));
-  parts.push(`Level ${best.highestLevel}`);
-  return parts.join("   ");
+  parts.push(`level ${best.highestLevel}`);
+  return parts.join(", ");
 }
 
 function fact(label: string, value: string): HTMLElement {
