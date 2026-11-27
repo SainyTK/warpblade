@@ -12,6 +12,7 @@ import { clamp } from "../../../utils/math";
 import { TRAIL } from "../constants/skillLook";
 import { SKILL } from "../constants/skills/ids";
 import { STORE_ANGLE } from "./moves/slashes";
+import { sayaFx } from "./skillFx";
 import { storeCut } from "./store";
 
 /** one ink trail on the floor: its ends, its floor, the seconds it has left and how long it was laid for */
@@ -34,6 +35,13 @@ export function layTrail(x0: number, x1: number, y: number): void {
   if (!v.time) return;
   const life = withBuild("duration", v.time);
   const [a, b] = x0 < x1 ? [x0, x1] : [x1, x0];
+  const face = Math.sign(x1 - x0) || hero.face;
+  const ticks = life / Math.max(0.1, v.every ?? 0.5);
+  sayaFx(
+    SKILL.trail,
+    { x: x0, y, face, reach: Math.max(20, b - a) },
+    { damage: progress.stats.ap * (v.damage ?? 0) * ticks },
+  );
   trails.list = [...trails.list, { x0: a, x1: b, y, left: life, life, next: 0 }];
 }
 

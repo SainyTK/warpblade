@@ -2,12 +2,13 @@ import { dealDamage } from "../../../../game/damage";
 import { enemyCenter } from "../../../../game/enemies/enemy";
 import { addStacks, consumeStacks, stacksOf } from "../../../../game/enemies/skillStatus";
 import { skillValues, withBuild } from "../../../../game/skills/query";
-import { game, progress } from "../../../../game/state";
+import { game, hero, progress } from "../../../../game/state";
 import type { Enemy } from "../../../../types/enemy";
 import type { SkillBehavior } from "../../../../types/skillBehavior";
 import { WEEP_SPREAD } from "../../constants/skillLook";
 import { SKILL } from "../../constants/skills/ids";
 import { createInkBurst } from "../effects/inkBurst";
+import { sayaFx } from "../skillFx";
 
 /** lay this many bleeding stacks on a foe at the skill's numbers */
 function bleed(e: Enemy, stacks: number): void {
@@ -28,9 +29,22 @@ export const weepingCut: SkillBehavior = {
         if (v.burst && stacksOf(c.foe, SKILL.weep) >= v.burstAt) {
           const n = consumeStacks(c.foe, SKILL.weep);
           game.fx.push(createInkBurst(...enemyCenter(c.foe), [0.8, -0.8, 0], true));
+          sayaFx(
+            SKILL.weep,
+            { x: enemyCenter(c.foe)[0], y: enemyCenter(c.foe)[1], face: hero.face },
+            { damage: progress.stats.ad * v.burst * n },
+          );
           dealDamage(c.foe, progress.stats.ad * v.burst * n, { source: SKILL.weep });
         }
-        bleed(c.foe, v.perCut ? c.count : v.stacks);
+        const stacks = v.perCut ? c.count : v.stacks;
+        const [x, y] = enemyCenter(c.foe);
+        const ticks = withBuild("duration", v.time) / v.every;
+        sayaFx(
+          SKILL.weep,
+          { x, y: y - 12, face: hero.face },
+          { damage: progress.stats.ad * v.damage * stacks * ticks },
+        );
+        bleed(c.foe, stacks);
       }
     },
     kill(_m, event) {

@@ -1,6 +1,7 @@
 import { DAMAGE } from "../../../constants/combat";
 import { KEEN } from "../../../constants/combo";
-import { skillValues, withBuild } from "../../../game/skills/query";
+import { enemyCenter } from "../../../game/enemies/enemy";
+import { skillEvolved, skillLevel, skillValues, withBuild } from "../../../game/skills/query";
 import { game, hero, progress } from "../../../game/state";
 import type { Enemy } from "../../../types/enemy";
 import type { OwnHit } from "../../../types/kit";
@@ -14,6 +15,7 @@ import { createInkArc } from "./effects/inkArc";
 import { createInkCut } from "./effects/inkCut";
 import { drawReach, drawStore } from "./focus";
 import { STORE_ANGLE } from "./moves/slashes";
+import { sayaFx } from "./skillFx";
 import { saya } from "./state";
 import { releaseCuts, releasing, storeCut } from "./store";
 
@@ -60,7 +62,17 @@ export function landed(e: Enemy, hit: { crit: boolean; kill: boolean }): void {
   }
   if (hero.state !== "move" || !hero.move) return;
   const store = storeOf(hero.move);
+  skillLanded(e, hero.move, store);
   if (store) storeCut(e, ad * store, STORE_ANGLE[hero.move as keyof typeof STORE_ANGLE]);
+}
+
+/** Honed Draw shows on the draw cut and Reverse Edge on the return cut, each as large as the cut it stores */
+function skillLanded(e: Enemy, move: string, store: number): void {
+  const id = move === "drawCut" ? SKILL.edge : move === "returnCut" ? SKILL.reverse : null;
+  if (!id || !skillLevel(id)) return;
+  const [x, y] = enemyCenter(e);
+  const face = id === SKILL.reverse ? -hero.face : hero.face;
+  sayaFx(id, { x, y, face }, { damage: progress.stats.ad * (1 + store) * (skillEvolved(id) ? 2 : 1) });
 }
 
 /** extra damage on her own hits: Calm Mind, and Falling Moon's sure crit on foes in the air */

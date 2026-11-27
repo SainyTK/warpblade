@@ -1,8 +1,9 @@
 import { ACTION_CLIPS } from "../../../constants/clips";
 import { settle } from "../../../game/hero/actions";
 import { lowerWard, raiseWard, type ShotWard } from "../../../game/shotWards";
-import { skillValues, withBuild } from "../../../game/skills/query";
+import { skillEvolved, skillValues, withBuild } from "../../../game/skills/query";
 import { game, hero, progress } from "../../../game/state";
+import { surfaceBelow } from "../../../game/world";
 import { SKILL } from "../constants/skills/ids";
 import { CRESCENT, RAIN, STILL } from "../constants/spells";
 import { BEATS } from "../constants/timing";
@@ -11,6 +12,7 @@ import { createCrescent } from "./effects/crescent";
 import { createInkRain } from "./effects/inkRainCloud";
 import { sheatheFlash } from "./effects/sheatheFlash";
 import { gainBreath } from "./focus";
+import { sayaFx } from "./skillFx";
 import { sayaSound } from "./sound";
 import { saya } from "./state";
 import { releaseCuts } from "./store";
@@ -32,6 +34,12 @@ function sendCrescents(): void {
   };
   const heights = saya.wide ? CRESCENT.wide : v.pair ? [CRESCENT.wide[1], CRESCENT.low] : [CRESCENT.wide[1]];
   for (const up of heights) game.fx.push(createCrescent({ ...base, y: hero.y - up }));
+  const crescents = heights.length * (skillEvolved(SKILL.crescent) ? 2 : 1);
+  sayaFx(
+    SKILL.crescent,
+    { x: hero.x + hero.face * 8, y: hero.y, face: hero.face },
+    { damage: (base.now + base.store) * crescents },
+  );
 }
 
 /** Ink Rain's cloud forms ahead, two (one each side) as Monsoon; held, it rains twice as long */
@@ -49,7 +57,15 @@ function sendRain(): void {
     last: v.last ? ap * v.last : 0,
   };
   const sides = v.clouds > 1 ? [1, -1] : [1];
-  for (const side of sides) game.fx.push(createInkRain({ ...spec, x: hero.x + hero.face * side * RAIN.ahead }));
+  for (const side of sides) {
+    const x = hero.x + hero.face * side * RAIN.ahead;
+    game.fx.push(createInkRain({ ...spec, x }));
+    sayaFx(
+      SKILL.rain,
+      { x, y: surfaceBelow(x, hero.y - 4), face: hero.face },
+      { damage: (spec.drop + spec.store) * spec.time * 4 },
+    );
+  }
 }
 
 /** a spell cast in the shared cast state: it leaves the blade on the cast's hit and the blade clicks home at its end */
@@ -83,6 +99,7 @@ export function runStill(): void {
   const v = skillValues(SKILL.still);
   if (!saya.struck) {
     saya.struck = true;
+    sayaFx(SKILL.still, { x: hero.x, y: hero.y, face: hero.face }, { damage: progress.stats.ad * (v.power ?? 1) * 2 });
     if (v.breath) gainBreath();
     if (v.ward) raiseWard(ward);
   }

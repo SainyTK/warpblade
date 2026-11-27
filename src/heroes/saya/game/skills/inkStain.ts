@@ -1,9 +1,12 @@
 import { dealDamage } from "../../../../game/damage";
+import { enemyCenter } from "../../../../game/enemies/enemy";
 import { addStacks } from "../../../../game/enemies/skillStatus";
 import { skillValues } from "../../../../game/skills/query";
+import { hero } from "../../../../game/state";
 import type { SkillBehavior, SkillMemory } from "../../../../types/skillBehavior";
 import { STAIN_EVERY } from "../../constants/skillLook";
 import { SKILL } from "../../constants/skills/ids";
+import { sayaFx } from "../skillFx";
 import { growStored, storedCuts } from "../store";
 
 const memoryOf = (m: SkillMemory): { next: number } => m as unknown as { next: number };
@@ -27,6 +30,14 @@ export const inkStain: SkillBehavior = {
   on: {
     release(_m, event) {
       const v = skillValues(SKILL.stain);
+      for (const c of event.cuts) {
+        const [x, y] = enemyCenter(c.foe);
+        sayaFx(
+          SKILL.stain,
+          { x, y, face: hero.face },
+          { damage: c.amount * (1 + (v.consume ?? 0) + (v.share ?? 0) * 4) },
+        );
+      }
       if (!v.linger) return;
       for (const c of event.cuts) {
         if (c.foe.hp <= 0) continue;

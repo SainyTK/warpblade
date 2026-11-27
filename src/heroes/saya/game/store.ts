@@ -1,3 +1,4 @@
+import { usesDrill } from "../../../drill";
 import { place } from "../../../engine/frame";
 import { dealDamage } from "../../../game/damage";
 import { enemyCenter } from "../../../game/enemies/enemy";
@@ -5,9 +6,9 @@ import { stacksOf } from "../../../game/enemies/skillStatus";
 import { feat } from "../../../game/feat";
 import { objectMemory, rememberPerSeat } from "../../../game/seatMemory";
 import { emitSkillEvent } from "../../../game/skills/events";
-import { skillValues } from "../../../game/skills/query";
+import { skillLevel, skillValues } from "../../../game/skills/query";
 import { game, hero, progress } from "../../../game/state";
-import { hitStop, shake } from "../../../game/world";
+import { hitStop, shake, surfaceBelow } from "../../../game/world";
 import type { HeroSource } from "../../../types/build";
 import type { Enemy } from "../../../types/enemy";
 import { RELEASE_STAT } from "../constants/achievements";
@@ -18,6 +19,7 @@ import { bladeOut } from "./blade";
 import { calmRelease } from "./calm";
 import { createInkBurst } from "./effects/inkBurst";
 import { drawStoredLine } from "./effects/storedLines";
+import { sayaFx } from "./skillFx";
 import { sayaSound } from "./sound";
 
 /** the cuts stored in one foe for one of Saya's sources: their sum, how many, the angle of each line, their age */
@@ -132,6 +134,11 @@ export function releaseCuts(full: boolean, o: ReleaseOptions = {}): ReleasedCut[
     return { foe: c.foe, count: c.count, amount };
   });
   store.releasing = false;
+  if (full && skillLevel(SKILL.flow) && !usesDrill()) {
+    const [fx, fy] = enemyCenter(cuts[0].foe);
+    const total = released.reduce((sum, cut) => sum + cut.amount, 0);
+    sayaFx(SKILL.flow, { x: fx, y: surfaceBelow(fx, fy), face: hero.face }, { damage: total });
+  }
   const foes = new Set(cuts.map((c) => c.foe)).size;
   const flow = skillValues(SKILL.flow);
   if (full && flow.mp) hero.mp = Math.min(progress.stats.mp, hero.mp + flow.mp * foes);

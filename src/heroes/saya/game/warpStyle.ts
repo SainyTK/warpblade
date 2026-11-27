@@ -4,7 +4,7 @@ import { createImpact } from "../../../game/effects/impact";
 import { createSlash } from "../../../game/effects/slash";
 import { enemyBox, enemyCenter } from "../../../game/enemies/enemy";
 import { safeHeroDestination } from "../../../game/hero/terrain";
-import { skillValues } from "../../../game/skills/query";
+import { skillEvolved, skillLevel, skillValues } from "../../../game/skills/query";
 import { game, hero, ponytail, progress, scarf } from "../../../game/state";
 import { boxBehind, boxHit, hitStop, shake } from "../../../game/world";
 import type { Enemy } from "../../../types/enemy";
@@ -16,6 +16,7 @@ import { cleanSheathe } from "./clean";
 import { sheatheFlash } from "./effects/sheatheFlash";
 import { gainBreath } from "./focus";
 import { SLASHES, STORE_ANGLE } from "./moves/slashes";
+import { sayaFx } from "./skillFx";
 import { sayaSound } from "./sound";
 import { beginBeat, saya } from "./state";
 import { releaseCuts, storeCut } from "./store";
@@ -38,7 +39,15 @@ function passBeyond(foe: Enemy): void {
  */
 function strike(power: number, foe: Enemy | null, sureCrit: boolean): void {
   beginBeat();
+  const fromX = hero.x;
   if (foe) passBeyond(foe);
+  if (skillLevel(SKILL.pass)) {
+    const v = skillValues(SKILL.pass);
+    const at = { x: fromX, y: hero.y - 16, face: hero.face, toX: hero.x, toY: hero.y - 16 };
+    sayaFx(SKILL.pass, at, {
+      damage: progress.stats.ad * power * (v.arrival ?? 1) * (skillEvolved(SKILL.pass) ? 2 : 1),
+    });
+  }
   game.fx.push(createSlash(hero.x, hero.y, hero.face, SLASHES.pass));
   const ad = progress.stats.ad;
   const box = boxBehind(-8, -40, 30, 2);
@@ -58,6 +67,8 @@ function strike(power: number, foe: Enemy | null, sureCrit: boolean): void {
 /** a beat after the arrival the blade clicks home, releasing the arrival cut with every other */
 export function runWarpArrival(): void {
   if (saya.clicked || hero.st < BEATS.warp.click) return;
+  if (skillLevel(SKILL.flow))
+    sayaFx(SKILL.flow, { x: hero.x, y: hero.y, face: hero.face }, { damage: progress.stats.ap * 2 });
   saya.clicked = true;
   sayaSound.click();
   sheatheFlash();

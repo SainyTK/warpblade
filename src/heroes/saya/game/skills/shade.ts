@@ -15,6 +15,7 @@ import { SAYA_POSES } from "../../constants/clips/poses";
 import { SHADE_LOOK } from "../../constants/skillLook";
 import { SKILL } from "../../constants/skills/ids";
 import { SLASHES, STORE_ANGLE } from "../moves/slashes";
+import { sayaFx } from "../skillFx";
 import { storeCut } from "../store";
 
 /** a shade waiting to draw: the foe, which side of it, and the seconds until each of its draws */
@@ -74,6 +75,7 @@ function draw(s: Shade): void {
     max: SHADE_LOOK.life,
   });
   game.fx.push(createSlash(x, s.foe.y, face, SLASHES.draw));
+  sayaFx(SKILL.shade, { x: cx, y: enemyCenter(s.foe)[1], face }, { damage: ad * (v.power + (v.store ?? 0)) * v.count });
   dealDamage(s.foe, ad * v.power, { fromX: x, kx: face * 60, sureCrit: !!v.crit, heavy: true, source: SKILL.shade });
   if (v.store) storeCut(s.foe, ad * v.store, STORE_ANGLE.drawCut);
   if (v.mark) markFoe(s.foe, SKILL.shade, SHADE_LOOK.markTime, v.mark);

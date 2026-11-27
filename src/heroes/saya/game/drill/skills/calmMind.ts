@@ -1,8 +1,9 @@
-import { drillSession } from "../../../../../drill";
+import { drillFighter, drillSession } from "../../../../../drill";
 import { hero, progress } from "../../../../../game/state";
 import type { DefenseCue } from "../../../../../types/drill";
 import { SKILL } from "../../../constants/skills/ids";
 import type { SayaDrillSkill } from "../../../types/drillSkill";
+import { sayaFx } from "../../skillFx";
 import { storeCut } from "../../store";
 import { sheathe } from "../sheathe";
 import { cutAngle, foesAlong, skillStrike } from "../targets";
@@ -40,6 +41,12 @@ export const CALM_MIND_DRILL: SayaDrillSkill = {
     if (cue.kind === "hit") {
       return;
     }
+    const h = drillFighter() ?? hero;
+    sayaFx(
+      SKILL.calm,
+      { x: h.x + h.face * 12, y: h.y - 18, face: h.face },
+      { damage: progress.stats.ad * (1 + (values.counter ?? 0) + (evolved ? (values.focus ?? 0) : 0)) },
+    );
     if (values.counter) {
       for (const foe of foes.slice(0, 1)) {
         skillStrike(foe, values.counter, SKILL.calm, { sureCrit: true, heavy: true });

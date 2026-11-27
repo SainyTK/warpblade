@@ -3,10 +3,11 @@ import { createFloorRing } from "../../../game/effects/floorRing";
 import { launchEnemy } from "../../../game/enemies/airborne";
 import { walks } from "../../../game/enemies/enemy";
 import { skin } from "../../../game/hero/skin";
-import { skillValues, withBuild } from "../../../game/skills/query";
+import { skillLevel, skillValues, withBuild } from "../../../game/skills/query";
 import { game, hero, progress } from "../../../game/state";
 import { SKILL } from "../constants/skills/ids";
 import { sheatheFlash } from "./effects/sheatheFlash";
+import { sayaFx } from "./skillFx";
 import { sayaSound } from "./sound";
 import { releaseCuts } from "./store";
 
@@ -28,6 +29,14 @@ function landingRing(): void {
 export function landDraw(): void {
   sayaSound.click();
   sheatheFlash();
+  if (skillLevel(SKILL.falling)) {
+    const v = skillValues(SKILL.falling);
+    sayaFx(
+      SKILL.falling,
+      { x: hero.x, y: hero.y, face: hero.face },
+      { damage: progress.stats.ad * (1 + (v.ring ?? 0)) * (v.store ?? 1) },
+    );
+  }
   landingRing();
   releaseCuts(true);
 }

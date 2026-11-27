@@ -12,6 +12,7 @@ import { WHITE } from "../../../../utils/color";
 import { CRANE } from "../../constants/skillLook";
 import { SKILL } from "../../constants/skills/ids";
 import { STORE_ANGLE } from "../moves/slashes";
+import { sayaFx } from "../skillFx";
 import { storeCut } from "../store";
 
 /** one ink crane in flight: where it is, its heading, the foe it flies at, cuts left, the foes it has cut, its age */
@@ -65,6 +66,11 @@ function fly(c: Crane, dt: number): boolean {
   const v = skillValues(SKILL.crane);
   const ad = progress.stats.ad;
   game.fx.push(createImpact(c.x, c.y, Math.sign(Math.cos(c.a)) || 1, false));
+  sayaFx(
+    SKILL.crane,
+    { x: c.x, y: c.y, face: Math.sign(Math.cos(c.a)) || 1 },
+    { damage: ad * (v.power + (v.store ?? 0)) * c.cuts },
+  );
   dealDamage(c.target, ad * v.power, { fromX: c.x, kx: Math.cos(c.a) * 40, source: SKILL.crane });
   if (v.store) storeCut(c.target, ad * v.store, STORE_ANGLE.rise);
   c.cut = [...c.cut, c.target];
