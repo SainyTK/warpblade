@@ -5,12 +5,12 @@ from pathlib import Path
 from dotenv import load_dotenv
 
 from check import off_element
-from constants import ENV, HERE, MANIFEST, MODEL, ROOT
-from contact import contact_sheet
+from constants import ENV, HERE, MANIFEST, MODEL, ROOT, SPRITES
+from contact import contact_sheet, sprite_sheet
 from cut import recut
-from generate import generate, missing
+from generate import generate, make_sprite_sheet, missing
 from models import load_icons
-from pack import pack
+from pack import pack, pack_sprites
 from prompts import sheet_prompt
 
 
@@ -19,9 +19,10 @@ def refresh_manifest() -> None:
 
 
 def main() -> None:
-    parser = argparse.ArgumentParser(description="Generate, cut and pack the skill icon atlas")
+    parser = argparse.ArgumentParser(description="Generate, cut and pack the skill icon atlas and the pickup sprites")
     parser.add_argument(
-        "command", choices=["update", "manifest", "generate", "prompt", "recut", "pack", "contact", "check"]
+        "command",
+        choices=["update", "manifest", "generate", "sprites", "prompt", "recut", "pack", "contact", "check"],
     )
     parser.add_argument("--env", type=Path, default=ENV, help="dotenv file holding OPENAI_API_KEY")
     parser.add_argument("--set", action="append", default=[], help="only icons of this set (a hero, arts, elements)")
@@ -47,10 +48,15 @@ def main() -> None:
         off_element(chosen)
     if args.command == "recut":
         recut()
-    if args.command in ("update", "pack"):
+    if args.command == "sprites":
+        load_dotenv(args.env)
+        print(make_sprite_sheet(args.ids or list(SPRITES), args.model))
+    if args.command in ("update", "sprites", "pack"):
         pack(icons)
+        pack_sprites()
     if args.command == "contact":
         contact_sheet(chosen, args.out)
+        sprite_sheet(args.out)
 
 
 if __name__ == "__main__":

@@ -1,5 +1,33 @@
 [
   {
+    "id": "kael_attacks",
+    "set": "kael",
+    "element": "none",
+    "name": "Kael's attacks",
+    "text": "Damage from Kael's attacks on the run result."
+  },
+  {
+    "id": "kael_abilities",
+    "set": "kael",
+    "element": "none",
+    "name": "Kael's abilities",
+    "text": "Damage from Kael's abilities on the run result."
+  },
+  {
+    "id": "kael_ultimate",
+    "set": "kael",
+    "element": "none",
+    "name": "Kael's ultimate",
+    "text": "Damage from Kael's ultimate on the run result."
+  },
+  {
+    "id": "kael_prism",
+    "set": "kael",
+    "element": "none",
+    "name": "Prism Knight",
+    "text": "The warp knight who set his crystal into his own guard. His blade lodges prism shards in foes, and his finishers break them."
+  },
+  {
     "id": "k_keen",
     "set": "kael",
     "element": "storm",
@@ -278,6 +306,27 @@
     "element": "frost",
     "name": "Supernova",
     "text": "Evolved form of Crystal Nova. Every charged skill bursts two more times."
+  },
+  {
+    "id": "cerise_attacks",
+    "set": "cerise",
+    "element": "none",
+    "name": "Cerise's attacks",
+    "text": "Damage from Cerise's attacks on the run result."
+  },
+  {
+    "id": "cerise_abilities",
+    "set": "cerise",
+    "element": "none",
+    "name": "Cerise's abilities",
+    "text": "Damage from Cerise's abilities on the run result."
+  },
+  {
+    "id": "cerise_ultimate",
+    "set": "cerise",
+    "element": "none",
+    "name": "Cerise's ultimate",
+    "text": "Damage from Cerise's ultimate on the run result."
   },
   {
     "id": "ce_measure",
@@ -560,6 +609,27 @@
     "text": "Evolved form of Rose Tempest. Every charged skill sends four more streaks, two each way."
   },
   {
+    "id": "aldric_attacks",
+    "set": "aldric",
+    "element": "none",
+    "name": "Aldric's attacks",
+    "text": "Damage from Aldric's attacks on the run result."
+  },
+  {
+    "id": "aldric_abilities",
+    "set": "aldric",
+    "element": "none",
+    "name": "Aldric's abilities",
+    "text": "Damage from Aldric's abilities on the run result."
+  },
+  {
+    "id": "aldric_ultimate",
+    "set": "aldric",
+    "element": "none",
+    "name": "Aldric's ultimate",
+    "text": "Damage from Aldric's ultimate on the run result."
+  },
+  {
     "id": "al_oath",
     "set": "aldric",
     "element": "void",
@@ -838,6 +908,27 @@
     "element": "void",
     "name": "Dawn Citadel",
     "text": "Evolved form of Sanctuary. Every charged skill bursts twice more."
+  },
+  {
+    "id": "vesper_attacks",
+    "set": "vesper",
+    "element": "none",
+    "name": "Vesper's attacks",
+    "text": "Damage from Vesper's attacks on the run result."
+  },
+  {
+    "id": "vesper_abilities",
+    "set": "vesper",
+    "element": "none",
+    "name": "Vesper's abilities",
+    "text": "Damage from Vesper's abilities on the run result."
+  },
+  {
+    "id": "vesper_ultimate",
+    "set": "vesper",
+    "element": "none",
+    "name": "Vesper's ultimate",
+    "text": "Damage from Vesper's ultimate on the run result."
   },
   {
     "id": "ve_edge",
@@ -1120,6 +1211,27 @@
     "text": "Evolved form of Wanderer's Grace. The dusk shade cuts twice and twice as wide."
   },
   {
+    "id": "saya_attacks",
+    "set": "saya",
+    "element": "none",
+    "name": "Saya's attacks",
+    "text": "Damage from Saya's attacks on the run result."
+  },
+  {
+    "id": "saya_abilities",
+    "set": "saya",
+    "element": "none",
+    "name": "Saya's abilities",
+    "text": "Damage from Saya's abilities on the run result."
+  },
+  {
+    "id": "saya_ultimate",
+    "set": "saya",
+    "element": "none",
+    "name": "Saya's ultimate",
+    "text": "Damage from Saya's ultimate on the run result."
+  },
+  {
     "id": "sa_edge",
     "set": "saya",
     "element": "storm",
@@ -1398,6 +1510,27 @@
     "element": "void",
     "name": "New Moon",
     "text": "Evolved form of Silent Moon. Every charged skill releases twice in full."
+  },
+  {
+    "id": "yun_attacks",
+    "set": "yun",
+    "element": "none",
+    "name": "Yun's attacks",
+    "text": "Damage from Yun's attacks on the run result."
+  },
+  {
+    "id": "yun_abilities",
+    "set": "yun",
+    "element": "none",
+    "name": "Yun's abilities",
+    "text": "Damage from Yun's abilities on the run result."
+  },
+  {
+    "id": "yun_ultimate",
+    "set": "yun",
+    "element": "none",
+    "name": "Yun's ultimate",
+    "text": "Damage from Yun's ultimate on the run result."
   },
   {
     "id": "yu_echo",
@@ -1680,6 +1813,27 @@
     "text": "Evolved form of Heaven's Grove. After every Jade Rain the swords keep falling for 4 seconds."
   },
   {
+    "id": "brynn_attacks",
+    "set": "brynn",
+    "element": "none",
+    "name": "Brynn's attacks",
+    "text": "Damage from Brynn's attacks on the run result."
+  },
+  {
+    "id": "brynn_abilities",
+    "set": "brynn",
+    "element": "none",
+    "name": "Brynn's abilities",
+    "text": "Damage from Brynn's abilities on the run result."
+  },
+  {
+    "id": "brynn_ultimate",
+    "set": "brynn",
+    "element": "none",
+    "name": "Brynn's ultimate",
+    "text": "Damage from Brynn's ultimate on the run result."
+  },
+  {
     "id": "br_heavy",
     "set": "brynn",
     "element": "frost",
@@ -1960,6 +2114,27 @@
     "text": "Evolved form of Crimson Fall. Every charged skill shakes the floor twice more."
   },
   {
+    "id": "zafir_attacks",
+    "set": "zafir",
+    "element": "none",
+    "name": "Zafir's attacks",
+    "text": "Damage from Zafir's attacks on the run result."
+  },
+  {
+    "id": "zafir_abilities",
+    "set": "zafir",
+    "element": "none",
+    "name": "Zafir's abilities",
+    "text": "Damage from Zafir's abilities on the run result."
+  },
+  {
+    "id": "zafir_ultimate",
+    "set": "zafir",
+    "element": "none",
+    "name": "Zafir's ultimate",
+    "text": "Damage from Zafir's ultimate on the run result."
+  },
+  {
     "id": "za_whirling",
     "set": "zafir",
     "element": "storm",
@@ -2238,6 +2413,27 @@
     "element": "storm",
     "name": "Endless Sirocco",
     "text": "Evolved form of Sandstorm. Every tier from the third raises a second, wider storm, and every storm lasts twice as long."
+  },
+  {
+    "id": "calder_attacks",
+    "set": "calder",
+    "element": "none",
+    "name": "Calder's attacks",
+    "text": "Damage from Calder's attacks on the run result."
+  },
+  {
+    "id": "calder_abilities",
+    "set": "calder",
+    "element": "none",
+    "name": "Calder's abilities",
+    "text": "Damage from Calder's abilities on the run result."
+  },
+  {
+    "id": "calder_ultimate",
+    "set": "calder",
+    "element": "none",
+    "name": "Calder's ultimate",
+    "text": "Damage from Calder's ultimate on the run result."
   },
   {
     "id": "ca_trigger",
@@ -2637,5 +2833,124 @@
     "element": "none",
     "name": "Deeper Charge",
     "text": "Charged skills deal more damage and charge faster."
+  },
+  {
+    "id": "vitality",
+    "set": "armory",
+    "element": "none",
+    "name": "Vitality",
+    "text": "Max HP +10."
+  },
+  {
+    "id": "edge",
+    "set": "armory",
+    "element": "none",
+    "name": "Honed Edge",
+    "text": "Attack damage +1."
+  },
+  {
+    "id": "arcana",
+    "set": "armory",
+    "element": "none",
+    "name": "Arcana",
+    "text": "Ability power +1."
+  },
+  {
+    "id": "wellspring",
+    "set": "armory",
+    "element": "none",
+    "name": "Wellspring",
+    "text": "Max MP +10."
+  },
+  {
+    "id": "precision",
+    "set": "armory",
+    "element": "none",
+    "name": "Precision",
+    "text": "Crit chance +2%."
+  },
+  {
+    "id": "fleet",
+    "set": "armory",
+    "element": "none",
+    "name": "Light Boots",
+    "text": "Move speed +3%."
+  },
+  {
+    "id": "lungs",
+    "set": "armory",
+    "element": "none",
+    "name": "Endurance",
+    "text": "Max stamina +10."
+  },
+  {
+    "id": "rerolls",
+    "set": "armory",
+    "element": "none",
+    "name": "Reroll",
+    "text": "One more reroll every run."
+  },
+  {
+    "id": "skips",
+    "set": "armory",
+    "element": "none",
+    "name": "Skip",
+    "text": "One more skip every run."
+  },
+  {
+    "id": "banishes",
+    "set": "armory",
+    "element": "none",
+    "name": "Banish",
+    "text": "One more banish every run."
+  },
+  {
+    "id": "lodestone",
+    "set": "armory",
+    "element": "none",
+    "name": "Lodestone",
+    "text": "Gold flies to your hero at once, and foes drop a quarter more gold."
+  },
+  {
+    "id": "warpShock",
+    "set": "armory",
+    "element": "none",
+    "name": "Aftershock",
+    "text": "Each dash or leap your hero lands sends a shockwave that hits and briefly stuns foes close by."
+  },
+  {
+    "id": "lastLight",
+    "set": "armory",
+    "element": "none",
+    "name": "Last Light",
+    "text": "A fatal blow leaves your hero standing with half their HP, once per run for each level."
+  },
+  {
+    "id": "greed",
+    "set": "armory",
+    "element": "none",
+    "name": "Greed",
+    "text": "Foes drop 10% more gold."
+  },
+  {
+    "id": "growth",
+    "set": "armory",
+    "element": "none",
+    "name": "Growth",
+    "text": "Experience +5%."
+  },
+  {
+    "id": "curse",
+    "set": "armory",
+    "element": "none",
+    "name": "Curse",
+    "text": "Foes have 10% more HP and hit 10% harder, and drop 10% more gold and 5% more experience."
+  },
+  {
+    "id": "boon_wind",
+    "set": "cards",
+    "element": "none",
+    "name": "Second Wind",
+    "text": "Restore all HP and MP at once."
   }
 ]

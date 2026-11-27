@@ -10,10 +10,16 @@ from constants import CELLS, HEROES, PORTRAIT_OF, RAW, SHEETS
 from cut import cut_sheet
 from images import draw
 from models import Icon
-from prompts import sheet_prompt
+from prompts import sheet_prompt, sprite_prompt
 
 STYLE_SHEET = RAW / "style.png"
-LAYOUTS = [(1, 1, 1, "1024x1024"), (4, 2, 2, "1024x1024"), (16, 4, 4, "1024x1024"), (24, 4, 6, "1024x1536")]
+LAYOUTS = [
+    (1, 1, 1, "1024x1024"),
+    (4, 2, 2, "1024x1024"),
+    (9, 3, 3, "1024x1024"),
+    (16, 4, 4, "1024x1024"),
+    (24, 4, 6, "1024x1536"),
+]
 MAX_SHEET = LAYOUTS[-1][0]
 
 
@@ -42,19 +48,29 @@ def references(icons: list[Icon]) -> list[Path]:
     return refs
 
 
-def make_sheet(icons: list[Icon], every: dict[str, Icon], model: str) -> Path:
-    cols, rows, size = layout(len(icons))
-    refs = references(icons)
-    prompt = sheet_prompt(icons, every, cols, rows, STYLE_SHEET.exists())
-    png = draw(prompt, refs, size, model)
+def save_sheet(png: bytes, name: str, ids: list[str], cols: int, rows: int, model: str, prompt: str) -> Path:
     SHEETS.mkdir(parents=True, exist_ok=True)
-    stem = f"{time.strftime('%Y%m%d-%H%M%S')}-{icons[0].set}-{icons[0].id}"
+    stem = f"{time.strftime('%Y%m%d-%H%M%S')}-{name}-{ids[0]}"
     path = SHEETS / f"{stem}.png"
     path.write_bytes(png)
-    record = {"ids": [i.id for i in icons], "cols": cols, "rows": rows, "model": model, "prompt": prompt}
+    record = {"ids": ids, "cols": cols, "rows": rows, "model": model, "prompt": prompt}
     (SHEETS / f"{stem}.json").write_text(json.dumps(record, indent=2) + "\n")
-    cut_sheet(Image.open(BytesIO(png)), record["ids"], cols)
+    cut_sheet(Image.open(BytesIO(png)), ids, cols)
     return path
+
+
+def make_sheet(icons: list[Icon], every: dict[str, Icon], model: str) -> Path:
+    cols, rows, size = layout(len(icons))
+    prompt = sheet_prompt(icons, every, cols, rows, STYLE_SHEET.exists())
+    png = draw(prompt, references(icons), size, model)
+    return save_sheet(png, icons[0].set, [i.id for i in icons], cols, rows, model, prompt)
+
+
+def make_sprite_sheet(ids: list[str], model: str) -> Path:
+    cols, rows, size = layout(len(ids))
+    prompt = sprite_prompt(ids, cols, rows)
+    png = draw(prompt, [STYLE_SHEET], size, model)
+    return save_sheet(png, "sprites", ids, cols, rows, model, prompt)
 
 
 def generate(icons: list[Icon], every: dict[str, Icon], model: str, workers: int) -> None:
