@@ -25,7 +25,7 @@ export const RIPOSTE_CHAIN_DRILL: CeriseDrillSkill = {
     }
     const targets = foesAhead(values.pierce ? 64 : 44);
     const damage = progress.stats.ad * values.riposte * 2;
-    ceriseFx(ID, "slash", atHero(20, 18), { damage, sigil: "thrust" });
+    ceriseFx(ID, "slash", atHero(20, 18, 12), { damage, sigil: "thrust" });
     if (values.pierce)
       ceriseFx(
         ID,

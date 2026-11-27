@@ -30,6 +30,6 @@ export function atFloor(x: number, y: number, reach: number, face = hero.face): 
   return { x, y: surfaceBelow(x, y - 4), face, reach };
 }
 
-export function atHero(reach: number, lift = 16): FxAt {
-  return { x: hero.x, y: hero.y - lift, face: hero.face, reach };
+export function atHero(reach: number, lift = 16, ahead = 0): FxAt {
+  return { x: hero.x + hero.face * ahead, y: hero.y - lift, face: hero.face, reach };
 }

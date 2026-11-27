@@ -57,7 +57,7 @@ function lunge(): void {
   cerise.tempestLunged = true;
   const blow = levelDamage() * TEMPEST.lunge * (v.power ?? 1) * (v.lunge ?? 1);
   const ly = hero.y - 17;
-  ceriseFx("ce_tempest", "pillar", atFloor(hero.x, hero.y, 30 + cerise.tempestLevel * 4), {
+  ceriseFx("ce_tempest", "pillar", atFloor(hero.x + hero.face * 36, hero.y, 30 + cerise.tempestLevel * 4), {
     damage: blow,
     sigil: "rose",
     lift: 34,
@@ -75,7 +75,7 @@ function lunge(): void {
   game.fx.push(createRoseLine(hero.x, y, hero.face, damage, "ultimate", undefined, end));
   if (v.behind) game.fx.push(createRoseLine(hero.x, y, -hero.face, damage * v.behind, "ultimate", undefined));
   hero.vx = hero.face * TEMPEST.speed;
-  lights.add(hero.x, y, 50, ROSE_RAMP[4], 0.9, 0.35);
+  lights.add(hero.x + hero.face * 20, y, 40, ROSE_RAMP[3], 0.5, 0.35);
   shake(0.3, 3.2);
   sfx.ultimate(cerise.tempestLevel);
 }

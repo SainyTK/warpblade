@@ -29,7 +29,7 @@ export const ROSE_MARK_DRILL: CeriseDrillSkill = {
       return;
     }
     const damage = progress.stats.ad * (1 + values.warp + (values.pierce ?? 0)) * 2;
-    ceriseFx(ID, "mark", atHero(14, 18), { damage, sigil: "rose" });
+    ceriseFx(ID, "mark", atHero(14, 34), { damage, sigil: "rose" });
     ceriseFx(ID, "nova", atFloor(hero.x, hero.y, evolved ? values.garden : 22), { damage, quiet: true });
     if (values.pierce) {
       for (const foe of foesNear(hero.x + hero.face * 40, hero.y - 16, 30)) {

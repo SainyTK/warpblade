@@ -33,11 +33,9 @@ export const wiltingCurse: SkillBehavior = {
       if (!foe) return;
       curse(foe, skillValues(SOURCE).stacks);
       const v = skillValues(SOURCE);
-      ceriseFx(SOURCE, "mark", atFoe(foe, 12), {
-        damage: progress.stats.ad * v.damage * v.stacks * 6,
-        sigil: "rose",
-        lift: 6,
-      });
+      const damage = progress.stats.ad * v.damage * v.stacks * 6;
+      ceriseFx(SOURCE, "mark", atFoe(foe, 16), { damage, sigil: "rose", lift: 6 });
+      if (skillEvolved(SOURCE)) ceriseFx(SOURCE, "spikes", atFloor(foe.x, foe.y, 20), { damage, quiet: true });
     },
     riposteLink(_m, { foe }) {
       const v = skillValues(SOURCE);

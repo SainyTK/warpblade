@@ -17,5 +17,5 @@ export function releaseTempest({ tier, x, y, face }: SkillCast): void {
       createRoseLine(x, height, -face, damage, "ultimate", roseMark, clampStageX(x - face * tier.reach, -8)),
     );
   }
-  lights.add(x, height, 30 + tier.level * 8, ROSE_RAMP[4], 0.9, 0.35);
+  lights.add(x + face * 20, height, 24 + tier.level * 6, ROSE_RAMP[3], 0.5, 0.35);
 }

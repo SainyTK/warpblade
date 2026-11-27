@@ -5,7 +5,7 @@ import { nearestFoe } from "../../../../game/skills/targets";
 import { game, progress } from "../../../../game/state";
 import type { Enemy } from "../../../../types/enemy";
 import type { SkillBehavior, SkillMemory } from "../../../../types/skillBehavior";
-import { atFoe, ceriseFx } from "../fx";
+import { atFloor, atFoe, ceriseFx } from "../fx";
 import { isMarked, markedFoes, roseMark } from "../mark";
 
 /** seconds between the bleed's ticks, and the reach of Crimson Weep's spill */
@@ -15,7 +15,7 @@ const SPILL = 30;
 /** one tick of the bleed on a marked foe; evolved, it spills onto the foes close to it */
 function bleed(e: Enemy, damage: number, spread: number, fresh: boolean): void {
   dealDamage(e, damage, { fromX: e.x, kx: 0, dot: true, source: "ce_weep" });
-  ceriseFx("ce_weep", "mark", atFoe(e, 12), {
+  ceriseFx("ce_weep", "mark", atFoe(e, 16), {
     damage: damage * 8,
     sigil: fresh ? "rose" : undefined,
     lift: 6,
@@ -23,6 +23,7 @@ function bleed(e: Enemy, damage: number, spread: number, fresh: boolean): void {
   });
   if (!spread) return;
   const [x, y] = enemyCenter(e);
+  if (fresh) ceriseFx("ce_weep", "nova", atFloor(x, e.y, SPILL), { damage: damage * 8, quiet: true });
   for (const o of game.enemies) {
     if (o === e || o.hp <= 0 || isMarked(o)) continue;
     const [ox, oy] = enemyCenter(o);

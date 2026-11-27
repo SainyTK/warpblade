@@ -12,7 +12,7 @@ export const riposteChain: SkillBehavior = {
     riposteLink(_m, event) {
       const v = skillValues("ce_riposte");
       const damage = progress.stats.ad * (1 + event.link * 0.25) * (1 + (v.bonus ?? 0)) * 2;
-      ceriseFx("ce_riposte", "slash", atHero(20, 18), { damage, sigil: "thrust", quiet: event.link > 1 });
+      ceriseFx("ce_riposte", "slash", atHero(20, 18, 12), { damage, sigil: "thrust", quiet: event.link > 1 });
       if (event.link === 1 && skillEvolved("ce_riposte")) {
         ceriseFx("ce_riposte", "slash", { ...atHero(22, 18), face: -hero.face }, { damage, quiet: true, delay: 0.06 });
       }

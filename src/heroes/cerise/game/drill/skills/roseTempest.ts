@@ -17,7 +17,7 @@ export const ROSE_TEMPEST_DRILL: CeriseDrillSkill = {
   released(cast, { values, evolved }) {
     const reach = cast.tier.reach * (1 + (values.reach ?? 0));
     const blow = (cast.tier.damage / 10) * progress.stats.ad * (1 + values.tier);
-    ceriseFx(ID, "pillar", atFloor(cast.x + cast.face * 14, cast.y, 30 + cast.tier.level * 4, cast.face), {
+    ceriseFx(ID, "pillar", atFloor(cast.x + cast.face * 36, cast.y, 30 + cast.tier.level * 4, cast.face), {
       damage: blow,
       sigil: "rose",
       lift: 34,

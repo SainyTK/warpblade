@@ -24,7 +24,7 @@ function arrived(foe: Enemy | null): void {
   if (foe && foe.hp > 0) roseMark(foe);
   const v = skillValues("ce_markwarp");
   const damage = progress.stats.ad * (1 + (v.warp ?? 0) + (v.pierce ?? 0)) * 2;
-  ceriseFx("ce_markwarp", "mark", atHero(14, 18), { damage, sigil: "rose" });
+  ceriseFx("ce_markwarp", "mark", atHero(14, 34), { damage, sigil: "rose" });
   ceriseFx("ce_markwarp", "nova", atFloor(hero.x, hero.y, v.seal ?? 22), { damage, quiet: true });
   gainPoints(skillValues("ce_markwarp").points ?? 0);
 }
