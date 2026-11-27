@@ -8,11 +8,12 @@ import { ease, smooth, TAU } from "../../../utils/math";
 import { fineRing, ray } from "../../effects/fine";
 
 const SATELLITES = 4;
+const SIZE_MOST = 3.2;
 
 export const drawBurst: FxShapeDraw = (cast, at, kit, progress, fade) => {
   const rank = cast.feel.rank;
   const R = kit.look.ramp;
-  const size = cast.size * (at.reach ?? 10) * 0.1;
+  const size = Math.min(SIZE_MOST, cast.size * (at.reach ?? 10) * 0.1);
   const open = ease.outCubic(Math.min(1, progress * 2));
   const radius = 7 * size * open + 2;
   const coreLeft = 1 - smooth(0, 0.55, progress);

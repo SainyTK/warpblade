@@ -5,6 +5,7 @@ import { dealDamage } from "../../../../game/damage";
 import { createFloorRing } from "../../../../game/effects/floorRing";
 import { createSlash } from "../../../../game/effects/slash";
 import { enemyCenter } from "../../../../game/enemies/enemy";
+import { skillFx } from "../../../../game/skillFx";
 import { skillValues, withBuild } from "../../../../game/skills/query";
 import { foesOnScreen } from "../../../../game/skills/targets";
 import { fxRng, game, particles, progress } from "../../../../game/state";
@@ -37,6 +38,7 @@ function spike(e: Enemy): void {
   showPhantom(x, y - 6, Math.sign(e.vx) || 1, 0.35);
   game.fx.push(createSlash(x, y, 1, { ...UPPERCUT, rot: Math.PI, R: 22, W: 9, ramp: PAL.crystal }));
   dealDamage(e, progress.stats.ad * v.spike, { fromX: x, spike: true, heavy: true, source: ID });
+  skillFx(ID, "bolt", { x, y, reach: 40 }, { damage: progress.stats.ad * v.spike });
   e.vy = ENEMY_AIR.spike;
   sfx.hit(true, 0.8);
 }
@@ -47,6 +49,7 @@ function crash(e: Enemy, evolved: boolean): void {
   const x = e.x;
   const reach = withBuild("area", evolved ? Math.max(v.crashReach, v.shockReach) : v.crashReach);
   game.fx.push(createFloorRing(x, GROUND, reach, evolved ? PAL.crystal : PAL.shadow, 0.4));
+  skillFx(ID, "nova", { x, y: GROUND, reach: reach * 0.7 }, { damage: progress.stats.ad * v.crash, quiet: !evolved });
   dust(x - 6, GROUND, 5, -1);
   dust(x + 6, GROUND, 5, 1);
   for (let i = 0; i < 6; i++)
