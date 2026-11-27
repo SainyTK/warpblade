@@ -45,12 +45,12 @@ function coat(s: SpriteCanvas, p: DiggerPose, time: number): void {
       [-7.5, -4.2 + flap],
       [-6.5 + l * 0.3, -13],
     ],
-    C[2],
+    C[1],
   );
-  s.dot(-2.6 + l * 0.7, -19.2, 4.6, C[2]);
-  s.shadeEdges(C[2], C[3], C[1], 2);
-  s.hairline(-1 + l * 0.6, -16, -2, -6, C[1]);
-  s.hairline(2 + l * 0.8, -17, 2.6, -7, C[1]);
+  s.dot(-2.6 + l * 0.7, -19.2, 4.6, C[1]);
+  s.shadeEdges(C[1], C[2], C[0], 2);
+  s.hairline(-1 + l * 0.6, -16, -2, -6, C[0]);
+  s.hairline(2 + l * 0.8, -17, 2.6, -7, C[0]);
   s.hairline(-5.5 + l * 0.5, -14, -6.5, -6, C[0]);
   s.block(-4.6 + l * 0.6, -12, D[3], 8.5 + l * 0.2, 1);
   s.set(0 + l * 0.6, -12, HAFT[3]);

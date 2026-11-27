@@ -41,10 +41,10 @@ export interface LordPose {
   limp: boolean;
 }
 
-const REST = { grip: [7, -15], tip: [17, -3] } as const;
-const RAISED = { grip: [-1, -37], tip: [-13, -44] } as const;
-const SLAMMED = { grip: [11, -13], tip: [30, -1] } as const;
-const HELD_BACK = { grip: [-3, -16], tip: [-17, -8] } as const;
+const REST = { grip: [7, -15], tip: [21, 1] } as const;
+const RAISED = { grip: [-1, -37], tip: [-17, -50] } as const;
+const SLAMMED = { grip: [11, -13], tip: [33, -1] } as const;
+const HELD_BACK = { grip: [-3, -16], tip: [-21, -9] } as const;
 
 const mixPt = (a: Pt, b: Pt, u: number): Pt => [lerp(a[0], b[0], u), lerp(a[1], b[1], u)];
 
@@ -85,8 +85,8 @@ export function lordPose(e: Enemy, time: number): LordPose {
       heat: 1,
     };
   if (e.state === "recover") {
-    if (e.n === SLAM) return { ...base, grip: [10, -11], tip: [29, 1], lean: 3, crouch: 3, open: true };
-    return { ...base, grip: [6, -12], tip: [15, -1], lean: 1.5, crouch: 2.5, open: true };
+    if (e.n === SLAM) return { ...base, grip: [10, -11], tip: [32, 1], lean: 3, crouch: 3, open: true };
+    return { ...base, grip: [6, -12], tip: [24, 1], lean: 1.5, crouch: 2.5, open: true };
   }
   const step = Math.sin(time * 2.6);
   return { ...base, grip: [REST.grip[0], REST.grip[1] + Math.abs(step) * 0.5], tip: REST.tip, step };

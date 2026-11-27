@@ -28,6 +28,30 @@ function legs(s: SpriteCanvas, p: LordPose): void {
   }
 }
 
+function cloak(s: SpriteCanvas, p: LordPose, time: number): void {
+  const l = p.lean;
+  const c = p.crouch;
+  const flow = Math.sin(time * 1.8) * 1.2 + l * 0.8;
+  s.begin();
+  s.poly(
+    [
+      [-7 + l * 0.8, -31 + c],
+      [3 + l, -31 + c],
+      [-2 - flow, -6],
+      [-4.5 - flow, -3.5],
+      [-7 - flow, -6.5],
+      [-10 - flow * 1.4, -4],
+      [-12 - flow * 1.2, -12],
+      [-10 + l * 0.4, -24 + c],
+    ],
+    C[1],
+  );
+  s.shadeEdges(C[1], C[2], C[0], 2);
+  s.hairline(-6 + l * 0.6, -27 + c, -8 - flow, -6, C[0]);
+  s.hairline(-3 + l * 0.7, -28 + c, -4 - flow, -5, C[0]);
+  s.commit();
+}
+
 function tabard(s: SpriteCanvas, p: LordPose, time: number): void {
   const l = p.lean;
   const c = p.crouch;
@@ -46,8 +70,9 @@ function tabard(s: SpriteCanvas, p: LordPose, time: number): void {
     C[2],
   );
   s.shadeEdges(C[2], C[3], C[1]);
-  s.hairline(-1 + l * 0.5, -14 + c, -1.5, -5 + c * 0.5, F[0]);
-  s.hairline(1.5 + l * 0.5, -14 + c, 1.8, -5 + c * 0.5, F[0]);
+  s.set(0.4 + l * 0.5, -12 + c * 0.8, S[3]);
+  s.hairline(-0.6 + l * 0.5, -11 + c * 0.8, 1.4 + l * 0.5, -11 + c * 0.8, S[2]);
+  s.hairline(0.4 + l * 0.5, -11 + c * 0.8, 0.4, -8 + c * 0.5, S[2]);
   s.commit();
 }
 
@@ -57,10 +82,12 @@ function torso(s: SpriteCanvas, p: LordPose): void {
   s.begin();
   s.poly(
     [
-      [-7 + l * 0.8, -31 + c],
-      [7 + l, -31.5 + c],
-      [6.5 + l * 0.6, -16 + c],
-      [-6 + l * 0.5, -15.5 + c],
+      [-8 + l * 0.8, -31 + c],
+      [8 + l, -31.5 + c],
+      [7.5 + l * 0.8, -25 + c],
+      [5 + l * 0.6, -16 + c],
+      [-4.5 + l * 0.5, -15.5 + c],
+      [-7 + l * 0.7, -25 + c],
     ],
     I[2],
   );
@@ -153,7 +180,7 @@ function sword(s: SpriteCanvas, p: LordPose): void {
   s.shadeEdges(I[3], I[4], I[1]);
   s.commit();
   const base = guard + 1;
-  const w = 3.4;
+  const w = 1.7;
   s.begin();
   s.poly(
     [
@@ -164,9 +191,9 @@ function sword(s: SpriteCanvas, p: LordPose): void {
       [tx - ux * 2 - nx * w, ty - uy * 2 - ny * w],
       [gx + ux * base - nx * w, gy + uy * base - ny * w],
     ],
-    S[2],
+    I[3],
   );
-  s.shadeEdges(S[2], S[3], S[1], 2);
+  s.shadeEdges(I[3], I[4], I[1]);
   const mid = (len + base) / 2;
   const glyph = p.heat > 0.5 ? F[3] : p.open ? F[0] : F[1];
   for (let d = base + 3; d < len - 3; d += 3.4) {
@@ -204,6 +231,7 @@ export function drawBarrowlord(e: Enemy, t: number): SpriteCanvas {
   const time = t + e.seed;
   const p = lordPose(e, time);
   s.clear();
+  cloak(s, p, time);
   arm(s, p, -5, I[1]);
   legs(s, p);
   tabard(s, p, time);
