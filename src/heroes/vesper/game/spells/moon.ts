@@ -31,7 +31,11 @@ function createMoon(x: number, delay: number, damage: number, radius: number, gl
       o.y += FALL.speed * dt;
       if (o.y < floor - 6) return true;
       game.fx.push(createFloorRing(x, floor, radius, DUSK_RAMP, 0.45));
-      vesperFx(ID, { x, y: floor, face: hero.face, reach: 40 + radius }, { damage: damage * (pull ? 2 : 1) });
+      vesperFx(
+        ID,
+        { x, y: floor - 10, face: hero.face, reach: 8 + radius * 0.25 },
+        { damage: damage * (pull ? 2 : 1) },
+      );
       lights.add(x, floor - 8, radius, DUSK_RAMP[4], 0.7, 0.3);
       shake(0.12, 1.6);
       // Eclipse: foes near the burst are drawn in to its middle first

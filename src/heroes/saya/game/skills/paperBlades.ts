@@ -37,6 +37,8 @@ const memoryOf = (m: SkillMemory): PaperMemory => m as unknown as PaperMemory;
 function fold(mem: PaperMemory, chance: number): void {
   const v = skillValues(SKILL.paper);
   if (mem.blades.length >= v.most || !rng.chance(chance)) return;
+  const power = progress.stats.ad * (v.power + (v.store ?? 0)) * (mem.blades.length + 1);
+  sayaFx(SKILL.paper, { x: hero.x, y: hero.y - 18, face: hero.face }, { damage: power, quiet: mem.blades.length > 0 });
   mem.blades.push({
     phase: rng.range(0, TAU),
     left: withBuild("duration", v.time),

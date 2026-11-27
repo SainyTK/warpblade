@@ -5,7 +5,7 @@ import { enemyCenter } from "../../../../game/enemies/enemy";
 import { skin } from "../../../../game/hero/skin";
 import { skillValues } from "../../../../game/skills/query";
 import { nearestFoe, touches } from "../../../../game/skills/targets";
-import { fxRng, game, progress, rng } from "../../../../game/state";
+import { fxRng, game, hero, progress, rng } from "../../../../game/state";
 import type { Enemy } from "../../../../types/enemy";
 import type { SkillBehavior, SkillMemory } from "../../../../types/skillBehavior";
 import { WHITE } from "../../../../utils/color";
@@ -35,7 +35,16 @@ interface CraneMemory {
 const memoryOf = (m: SkillMemory): CraneMemory => m as unknown as CraneMemory;
 
 /** a crane folds itself from the ink of a release at (x, y) */
+const folded = { at: -1 };
+const struck = { at: -1 };
+
 function fold(mem: CraneMemory, x: number, y: number, turns: number): void {
+  if (folded.at !== game.t) {
+    folded.at = game.t;
+    const v = skillValues(SKILL.crane);
+    const damage = progress.stats.ad * (v.power + (v.store ?? 0)) * turns;
+    sayaFx(SKILL.crane, { x, y, face: hero.face, toX: x + hero.face * 6, toY: y - 26 }, { damage, quiet: true });
+  }
   mem.cranes.push({
     x,
     y,
@@ -66,11 +75,12 @@ function fly(c: Crane, dt: number): boolean {
   const v = skillValues(SKILL.crane);
   const ad = progress.stats.ad;
   game.fx.push(createImpact(c.x, c.y, Math.sign(Math.cos(c.a)) || 1, false));
-  sayaFx(
-    SKILL.crane,
-    { x: c.x, y: c.y, face: Math.sign(Math.cos(c.a)) || 1 },
-    { damage: ad * (v.power + (v.store ?? 0)) * c.cuts },
-  );
+  if (struck.at !== game.t) {
+    struck.at = game.t;
+    const face = Math.sign(Math.cos(c.a)) || 1;
+    const at = { x: c.x - Math.cos(c.a) * 34, y: c.y - Math.sin(c.a) * 34, face, toX: c.x, toY: c.y };
+    sayaFx(SKILL.crane, at, { damage: ad * (v.power + (v.store ?? 0)) * c.cuts });
+  }
   dealDamage(c.target, ad * v.power, { fromX: c.x, kx: Math.cos(c.a) * 40, source: SKILL.crane });
   if (v.store) storeCut(c.target, ad * v.store, STORE_ANGLE.rise);
   c.cut = [...c.cut, c.target];

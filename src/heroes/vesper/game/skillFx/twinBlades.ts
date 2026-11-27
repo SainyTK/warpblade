@@ -1,5 +1,5 @@
 import { FX_BUDGET } from "../../../../constants/skillFx";
-import { fleck, glow, hairline, line } from "../../../../engine/frame";
+import { circle, fleck, glow, hairline, line } from "../../../../engine/frame";
 import { progress as run } from "../../../../game/state";
 import type { Color, Ramp } from "../../../../types/color";
 import type { ElementKit, FxCast } from "../../../../types/skillFx";
@@ -46,14 +46,12 @@ function tempoPips(
   const pips = 4 + rank;
   const lit = Math.ceil(pips * smooth(0, 0.4, progress));
   for (let i = 0; i < pips; i++) {
-    const a = -Math.PI / 2 + (i - (pips - 1) / 2) * 0.36;
+    const a = -Math.PI / 2 + (i - (pips - 1) / 2) * 0.42;
     const px = x + Math.cos(a) * radius;
     const py = y + Math.sin(a) * radius;
-    fleck(px - 0.5, py, dark, alpha);
-    fleck(px + 0.5, py, dark, alpha);
-    fleck(px, py - 0.5, dark, alpha);
-    fleck(px, py + 0.5, dark, alpha);
-    fleck(px, py, i < lit ? WHITE : R[1], alpha);
+    circle(px, py, 1.6, dark, alpha);
+    circle(px, py, 1, i < lit ? R[5] : R[1], alpha);
+    if (i < lit) fleck(px, py, WHITE, alpha);
   }
 }
 
