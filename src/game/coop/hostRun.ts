@@ -1,22 +1,22 @@
 import { DOWN_DELAY, RISE_HP } from "../../constants/coop";
 import { ENEMIES } from "../../constants/enemies";
-import { HEAD_START_LEVEL } from "../../constants/shopSkills";
 import { GROUND } from "../../constants/stage";
 import { track } from "../../services/analytics";
-import { recordFeat } from "../../store/achievements";
-import { addCoins, ownsSkill, wearOwned } from "../../store/meta";
+import { recordFeat, startRunAchievements } from "../../store/achievements";
+import { addCoins, wearLevels } from "../../store/meta";
+import { startRunUnlocks, wearSkills } from "../../store/unlocks";
+import type { Feat } from "../../types/achievement";
 import type { Card } from "../../types/build";
 import type { CharacterDef } from "../../types/character";
-import type { GuestHud, PickWire } from "../../types/coop";
+import type { GuestHud, Loadout, PickWire } from "../../types/coop";
 import type { EnemyRank, EnemyType } from "../../types/enemy";
 import type { PickAnswer } from "../../types/pick";
 import type { RunOutcome, RunReport } from "../../types/run";
 import { scaleFoeHealth, scaleFoeList } from "../../utils/coopScaling";
-import { xpToReach } from "../../utils/progression";
 import { toWire } from "../../utils/wire";
 import { type CoopHooks, setCoopHooks } from "../coopHooks";
 import { countedOutcome } from "../finale";
-import { answerPick, earnXp, gainXp } from "../progress";
+import { answerPick, earnXp } from "../progress";
 import { resetRun } from "../run";
 import { runReport } from "../runReport";
 import { seatMemories } from "../seatMemory";
@@ -32,14 +32,25 @@ const START_XS = [70, 110, 50, 130];
 export interface RunEvents {
   /** the run is over: each seat's coins and report, and the wave reached */
   ended(outcome: RunOutcome, wave: number, coins: Map<Seat, number>, reports: Map<Seat, RunReport>): void;
+  feat(seat: Seat, feat: Feat): void;
 }
+
+const SHARED_FEATS: ReadonlySet<Feat["kind"]> = new Set([
+  "kill",
+  "waveReached",
+  "waveCleared",
+  "runEnd",
+  "stageCleared",
+]);
+
+const asHero = (feat: Feat, hero: string): Feat => ("hero" in feat ? { ...feat, hero } : feat);
 
 /** the player a co-op seat starts as */
 export interface SeatStart {
   slot: number;
   peer: string | null;
   character: CharacterDef;
-  owned: Record<string, number> | null;
+  loadout: Loadout | null;
   /** the guest's measured round trip in seconds, -1 until measured, 0 for the host */
   rtt: number;
 }
@@ -77,10 +88,12 @@ export class HostRun implements CoopHooks {
       this.startSeat(seat);
     }
     this.enter(this.home);
+    startRunAchievements();
+    startRunUnlocks();
     track("run_start", { hero: this.home.character.id, coop: true, players: this.seats.length });
   }
 
-  /** a fresh hero at their own spot, with Head Start if their shop has it */
+  /** a fresh hero at their own spot */
   private startSeat(seat: Seat): void {
     resetRun("");
     const x = START_XS[seat.slot] ?? START_XS[0];
@@ -88,7 +101,6 @@ export class HostRun implements CoopHooks {
     ponytail.shift(x - hero.x, GROUND - hero.y);
     hero.x = x;
     hero.face = x > 160 ? -1 : 1;
-    if (ownsSkill("headStart")) gainXp(xpToReach(HEAD_START_LEVEL));
   }
 
   /** swap this seat's hero in, saving the one in play */
@@ -102,7 +114,8 @@ export class HostRun implements CoopHooks {
       m.load(seat.saved[i]);
     });
     setCharacter(seat.character);
-    wearOwned(seat.owned);
+    wearLevels(seat.loadout?.items ?? null);
+    wearSkills(seat.loadout?.skills ?? null);
     this.current = seat;
   }
 
@@ -169,6 +182,15 @@ export class HostRun implements CoopHooks {
 
   inputLag(): number {
     return this.current.peer ? this.current.rtt : 0;
+  }
+
+  shareFeat(feat: Feat): void {
+    const seats = SHARED_FEATS.has(feat.kind) ? this.seats : [this.current];
+    for (const seat of seats) {
+      const own = asHero(feat, seat.character.id);
+      if (seat.peer) this.events.feat(seat, own);
+      else recordFeat(own);
+    }
   }
 
   shareXp(amount: number): void {
@@ -308,7 +330,8 @@ export class HostRun implements CoopHooks {
   /** stop acting on other heroes: the host's own is left in play */
   close(): void {
     this.enter(this.home);
-    wearOwned(null);
+    wearLevels(null);
+    wearSkills(null);
     setCoopHooks(null);
   }
 

@@ -13,7 +13,7 @@ export const PATCH_SECTIONS: readonly PatchSectionInfo[] = [
   { id: "foes", title: "Foes and bosses", accent: "--hp" },
   { id: "stages", title: "Stages", accent: "--volt" },
   { id: "systems", title: "Systems", accent: "--ice" },
-  { id: "items", title: "Shop and boons", accent: "--brass" },
+  { id: "items", title: "Armory and boons", accent: "--brass" },
   { id: "art", title: "Art and effects", accent: "--fire" },
   { id: "bugfixes", title: "Bug fixes", accent: "--heal" },
 ];

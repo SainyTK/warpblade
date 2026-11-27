@@ -27,7 +27,7 @@ export const CARD_WEIGHT = {
   resonancePull: 0.03,
 } as const;
 export const PICK_COUNT = 3;
-/** a run's rerolls, skips and banishes before the shop adds more */
+/** a run's rerolls, skips and banishes before the Armory adds more */
 export const PICK_TOOLS = { rerolls: 2, skips: 2, banishes: 1 } as const;
 /** Flow: stacks from the hero's own hits, each adding `perStack` damage on every source */
 export const FLOW = {

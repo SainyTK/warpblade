@@ -1,29 +1,27 @@
 import { ACHIEVEMENTS } from "../constants/achievements";
-import { SHOP_ITEMS } from "../constants/shop";
-import { UNLOCKS } from "../constants/unlocks";
+import { ARMORY_ITEMS } from "../constants/armory";
+import { FUSIONS } from "../constants/resonance";
+import { fusionRecipeId, heroUnlockId, UNLOCKS } from "../constants/unlocks";
 import { CHARACTERS } from "../heroes/roster";
 import { loadMeta, saveMeta } from "../services/metaStorage";
-import { isPlaytestSession } from "../services/playtestStart";
-import type { TrackedStats } from "../types/achievement";
+import type { GoalSource, TrackedStats } from "../types/achievement";
+import type { ArmoryItem, ArmoryRates, GearId, MetaSave } from "../types/armory";
 import type { PickToolKey } from "../types/build";
-import type { MetaSave, ShopItem, SkillId } from "../types/shop";
 import type { Stats } from "../types/stats";
+import type { UnlockReward } from "../types/unlock";
+import { armoryRates, armoryStats, armoryTools, type Levels, levelsBought, nextPrice } from "../utils/armory";
 import { jobUnlockIds } from "../utils/jobs";
 import { parseMeta } from "../utils/metaSave";
-import { metaStats, metaTools, nextPrice } from "../utils/shop";
 import { ALL_SKILLS } from "../utils/skills";
 
-/** The one owner of progress kept between runs: the coin bank and what the shop sold. Every change is saved here. */
-const meta: MetaSave = parseMeta(loadMeta(), SHOP_ITEMS, {
-  heroes: CHARACTERS.filter((c) => c.price > 0).map((c) => c.id),
+const meta: MetaSave = parseMeta(loadMeta(), ARMORY_ITEMS, {
   achievements: ACHIEVEMENTS.map((a) => a.id),
   unlocks: [...jobUnlockIds(CHARACTERS), ...UNLOCKS.map((u) => u.id)],
-  skills: ALL_SKILLS.map((s) => s.id),
+  recipes: [...ALL_SKILLS.map((s) => s.id), ...FUSIONS.map((f) => fusionRecipeId(f.id))],
+  heroUnlockId,
 });
-// a save from before achievements kept its best wave under its own key: count it toward the wave goals
 const listeners = new Set<() => void>();
-/** in a co-op room the host plays every hero, each with what its own player bought; null is this browser's own */
-let worn: Record<string, number> | null = null;
+let worn: Levels | null = null;
 
 function changed(): void {
   saveMeta(meta);
@@ -31,20 +29,35 @@ function changed(): void {
 }
 
 export const bank = (): number => meta.coins;
-export const ownedLevel = (id: string): number => (worn ?? meta.owned)[id] ?? 0;
-export const ownsSkill = (id: SkillId): boolean => ownedLevel(id) > 0;
-/** the stat bonus every run starts with */
-export const metaBonus = (): Partial<Stats> => metaStats(SHOP_ITEMS, worn ?? meta.owned);
-/** the extra pick tools every run starts with */
-export const metaToolBonus = (): Partial<Record<PickToolKey, number>> => metaTools(SHOP_ITEMS, worn ?? meta.owned);
-/** what this browser bought, for a co-op host to play its hero with */
-export const ownedItems = (): Record<string, number> => ({ ...meta.owned });
+export const ownedLevel = (id: string): number => meta.owned[id] ?? 0;
+export const isSwitchedOff = (id: string): boolean => meta.switchedOff.includes(id);
+export const armoryBought = (): number => levelsBought(meta.owned);
+export const priceOf = (item: ArmoryItem): number | null => nextPrice(item, ownedLevel(item.id), armoryBought());
 
-/** play with another player's purchases until called again with null */
-export function wearOwned(owned: Record<string, number> | null): void {
-  worn = owned;
+function ownActiveLevels(): Levels {
+  return Object.fromEntries(Object.entries(meta.owned).filter(([id]) => !isSwitchedOff(id)));
 }
-export const wornOwned = (): Record<string, number> | null => worn;
+
+const activeLevels = (): Levels => worn ?? ownActiveLevels();
+
+export const activeLevel = (id: string): number => activeLevels()[id] ?? 0;
+export const hasGear = (id: GearId): boolean => activeLevel(id) > 0;
+export const armoryBonus = (): Partial<Stats> => armoryStats(ARMORY_ITEMS, activeLevels());
+export const armoryToolBonus = (): Partial<Record<PickToolKey, number>> => armoryTools(ARMORY_ITEMS, activeLevels());
+export const runRates = (): ArmoryRates => armoryRates(ARMORY_ITEMS, activeLevels());
+export const loadout = (): Levels => ownActiveLevels();
+
+const ROOM_WIDE_ITEMS: readonly string[] = ["curse"];
+
+export function wearLevels(levels: Levels | null): void {
+  if (!levels) {
+    worn = null;
+    return;
+  }
+  const own = ownActiveLevels();
+  const shared = Object.fromEntries(ROOM_WIDE_ITEMS.map((id) => [id, own[id] ?? 0]));
+  worn = { ...levels, ...shared };
+}
 
 export function addCoins(amount: number): void {
   if (amount <= 0) return;
@@ -59,40 +72,52 @@ export function spendCoins(amount: number): boolean {
   return true;
 }
 
-/** buy the next level of an item; false when it is maxed or the bank is short */
-export function buy(item: ShopItem): boolean {
-  const price = nextPrice(item, ownedLevel(item.id));
+export function buyLevel(item: ArmoryItem): boolean {
+  const price = priceOf(item);
   if (price === null || price > meta.coins) return false;
   meta.coins -= price;
+  meta.spentOnOwned += price;
   meta.owned[item.id] = ownedLevel(item.id) + 1;
   changed();
   return true;
 }
 
-/** the coins to unlock a hero, or null when the hero is free */
-export const heroPrice = (id: string): number | null => CHARACTERS.find((c) => c.id === id)?.price || null;
-/** a free hero, one bought, or any hero in a playtest session */
-export const heroUnlocked = (id: string): boolean =>
-  heroPrice(id) === null || meta.heroes.includes(id) || isPlaytestSession();
-export const heroesBought = (): number => meta.heroes.length;
-/** levels and skills bought in the shop, all counted */
-export const shopLevels = (): number => Object.values(meta.owned).reduce((sum, level) => sum + level, 0);
-
-/** unlock a hero with coins; false when it is free, already unlocked or the bank is short */
-export function buyHero(id: string): boolean {
-  const price = heroPrice(id);
-  if (price === null || heroUnlocked(id) || price > meta.coins) return false;
-  meta.coins -= price;
-  meta.heroes.push(id);
+export function switchItem(id: string, on: boolean): void {
+  if (!ownedLevel(id) || isSwitchedOff(id) === !on) return;
+  meta.switchedOff = on ? meta.switchedOff.filter((off) => off !== id) : [...meta.switchedOff, id];
   changed();
-  return true;
 }
 
-/** the tracked stats and earned achievements as last saved */
+export const refundValue = (): number => meta.spentOnOwned;
+
+export function refundAll(): number {
+  const back = meta.spentOnOwned;
+  if (!back && !armoryBought()) return 0;
+  meta.coins += back;
+  meta.spentOnOwned = 0;
+  meta.owned = {};
+  meta.switchedOff = [];
+  changed();
+  return back;
+}
+
+const foundCount = (kind: UnlockReward["kind"]): number =>
+  UNLOCKS.filter((u) => u.reward.kind === kind && meta.unlocks.includes(u.id)).length;
+
+const unlockSpend = (): number =>
+  UNLOCKS.reduce((sum, u) => sum + (u.price !== undefined && meta.unlocks.includes(u.id) ? u.price : 0), 0);
+
+export const metaGoals = (): Omit<GoalSource, "stats"> => ({
+  armoryLevels: armoryBought(),
+  heroesBought: foundCount("hero"),
+  skillsFound: foundCount("skill"),
+  fusionsFound: FUSIONS.filter((f) => meta.recipes.includes(fusionRecipeId(f.id))).length,
+  goldSpent: meta.spentOnOwned + unlockSpend(),
+});
+
 export const savedTracked = (): TrackedStats => meta.tracked;
 export const savedAchievements = (): readonly string[] => meta.achievements;
 
-/** keep the tracked stats, and add newly earned achievements with their coins */
 export function saveAchievements(tracked: TrackedStats, earned: readonly string[] = [], reward = 0): void {
   meta.tracked = tracked;
   meta.achievements.push(...earned.filter((id) => !meta.achievements.includes(id)));
@@ -100,18 +125,15 @@ export function saveAchievements(tracked: TrackedStats, earned: readonly string[
   changed();
 }
 
-/** the charms and slots found, and the skills whose recipe is known, as last saved */
 export const savedUnlocks = (): readonly string[] => meta.unlocks;
 export const savedRecipes = (): readonly string[] => meta.recipes;
 
-/** keep newly found unlocks and newly learned recipes */
 export function saveUnlocks(found: readonly string[], recipes: readonly string[]): void {
   meta.unlocks.push(...found.filter((id) => !meta.unlocks.includes(id)));
   meta.recipes.push(...recipes.filter((id) => !meta.recipes.includes(id)));
   changed();
 }
 
-/** listen for coins and purchases; returns how to stop listening */
 export function onMetaChange(listener: () => void): () => void {
   listeners.add(listener);
   return () => listeners.delete(listener);

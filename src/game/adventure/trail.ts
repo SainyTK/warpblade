@@ -1,6 +1,7 @@
 import { HERO_START_X } from "../../constants/hero";
 import { PLATFORMS, W } from "../../constants/stage";
 import { STAGES } from "../../stages";
+import { runRates } from "../../store/meta";
 import type { StageId } from "../../types/campaign";
 import type { Enemy, EnemyType } from "../../types/enemy";
 import type { Platform, Point } from "../../types/world";
@@ -55,7 +56,7 @@ export function resetAdventure(): void {
 }
 
 export function beginAdventure(random: Rng, stage: StageId, hyper: boolean): void {
-  const mods = stageMods(STAGES[stage], hyper);
+  const mods = stageMods(STAGES[stage], hyper, runRates());
   const route = buildRoute(STAGES[stage], mods);
   trail = {
     id: ++lastRunId,

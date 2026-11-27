@@ -1,120 +1,107 @@
-# Meta progress: coins and the shop
+# Meta progress: gold and the Armory
 
-A run is still a roguelite run: level, picks and learned skills start over each time.
-Coins are the one thing a run leaves behind.
-They are banked when the run ends, cleared, lost, restarted or quit, and spent in the Shop on the start menu.
-Bought upgrades apply at the start of every run, on top of the level-up picks.
+A run is a roguelite run: level, picks and learned skills start over each time.
+Gold is what a run leaves behind, with its kill counts and goal progress (`docs/unlocks.md`).
+Gold is banked when the run ends, cleared, lost, restarted or quit, and spent in the Armory, on heroes and on Hyper stages.
+The code and the save still call gold coins.
 
-## Coins
+## Gold
 
-Every slain foe drops coins: a wisp 1, a husk 2, the Gloam Shepherd 10 and the Rift Warden 25 (`COIN_DROP` in `src/constants/coins.ts`).
-Since waves stream a growing quota of foes, a minion drops only its share: a normal wave pays the coins of as many minions as a wave brought before (3, one more every third wave, 9 at most, `COIN_PAID_FOES`), spread over its whole quota (`coinShare` in `src/utils/coins.ts`).
-Mini bosses and the Warden drop their full count, and an elite drops twice its base (`ELITE.coins`).
-Since 0.2.0 every foe drops a quarter more on top of that (`COIN_BONUS`), and a fraction left over is a chance at one more coin.
-Lodestone's quarter adds to it, so an owner of Lodestone gets half again the base drop.
-Coins pop out of the foe, fall and bounce on the floor or a ledge, and the hero picks them up by touch.
-After 1.6 seconds any coin still lying around flies to the hero, so none is lost to a far corner.
-When a run ends, coins still in flight are banked too.
+Every slain foe drops gold: a minion's base share of its wave (`COIN_DROP`, `coinShare`), an elite twice its base, a mini boss and a boss their full count.
+Every foe drops a quarter more on top (`COIN_BONUS`) and Lodestone another quarter; Greed and Curse then multiply the drop by 10% per level, and a fraction left over is a chance at one more coin.
+In a stage, gold per foe is x0.4 of the wave-mode drop (`FOE_BAND.goldShare`), times the stage twist and x2 on a Hyper stage.
+Gold pops out of the foe, bounces, and is picked up by touch; after 1.6 seconds, or 0.3 with Lodestone, it flies to the hero.
+
+A full clear earns 380 (Sunlit Ruins) to 670 (Moonlit Ruins) gold, and a run that falls in the opening act about 40 to 130.
 
 ## Run end
 
-When the hero falls or the stage is cleared, the run's coins are banked and the start menu opens on the stage result screen: this run's grade, time, level, foes, damage and gold, what it unlocked, the best run for that stage, the damage of every source and the bank.
-A fallen run keeps its gold and its kill counts, and gives no stage-clear reward.
-Play again replays the same stage, Choose stage opens the stage screen, Main menu goes home and Shop goes straight to the shop.
-Start goes through the hero screen to the stage screen; a stage always begins a fresh run with everything bought so far.
-Restart run from the pause menu restarts the same stage at once, and it banks the coins of the run it ends.
+When the hero falls or the stage is cleared, the run's gold is banked and the stage result screen opens: grade, time, level, foes, damage and gold, what the run unlocked, the next goals with this run's progress, the best run for the stage, the damage of every source and the bank.
+A fallen run keeps its gold, kill counts and goal progress, and gives no stage-clear reward.
+Play again replays the stage, Choose stage opens the stage screen, Main menu goes home and Armory opens the Armory.
 
-Gold also opens Hyper stages: once a stage is cleared, its Hyper version is for sale on the stage screen for 150 (tier 1), 300, 450, 600 or 900 (the Citadel) gold (`HYPER_PRICE` in `src/constants/unlocks.ts`).
+## The Armory
 
-## What the shop sells
+The Armory is on the start menu and the result screen.
+An item appears there once its unlock goal is met (`docs/unlocks.md`), then costs gold.
+Bought levels apply at the start of every run.
 
-Stats are bought in levels, each level adding the same flat amount, before the in-run percentage skills multiply the total:
+- Price: the first price times the level being bought, raised 5% for every Armory level already owned, rounded to 5 (`nextPrice` in `src/utils/armory.ts`, `PRICE_RISE_PER_PURCHASE`).
+  So every purchase raises every other price a little.
+- Refund all gives back every coin paid for the levels owned and empties the Armory, so the next purchases are cheap again.
+  Unlocks bought with gold (heroes, skills, Hyper stages) are kept.
+- An item bought can be switched off and on again at any time: its row's On or Off chip, or A and D on the row.
+  A switched-off item does nothing in runs and still counts as bought.
+- Skills for sale (`docs/unlocks.md`, skill ladder steps 6 and 13) are listed in the Armory under Skills and bought once.
 
-| Item | Per level | Levels | First price |
+| Item | Per level | Levels | Prices with nothing else owned |
 | --- | --- | --- | --- |
-| Vitality | Max HP +10 | 5 | 20 |
-| Honed Edge | Attack damage +1 | 5 | 30 |
-| Arcana | Ability power +1 | 5 | 30 |
-| Wellspring | Max MP +10 | 5 | 20 |
-| Precision | Crit chance +2% | 5 | 30 |
-| Light Boots | Move speed +3% | 4 | 25 |
-| Endurance | Max stamina +10 | 5 | 20 |
+| Vitality | Max HP +10 | 3 | 60, 120, 180 |
+| Honed Edge | Attack damage +1 | 3 | 90, 180, 270 |
+| Arcana | Ability power +1 | 3 | 90, 180, 270 |
+| Wellspring | Max MP +10 | 3 | 50, 100, 150 |
+| Precision | Crit chance +2% | 3 | 70, 140, 210 |
+| Light Boots | Move speed +3% | 3 | 50, 100, 150 |
+| Endurance | Max stamina +10 | 3 | 50, 100, 150 |
+| Reroll | One more reroll every run | 3 | 60, 120, 180 |
+| Skip | One more skip every run | 3 | 40, 80, 120 |
+| Banish | One more banish every run | 2 | 80, 160 |
+| Lodestone | Gold flies to the hero at once, foes drop a quarter more | 1 | 100 |
+| Aftershock | Every landed dash or leap sends a shockwave of 0.8x attack damage that briefly stuns foes | 1 | 250 |
+| Last Light | A fatal blow leaves the hero at half HP, once per run per level | 2 | 250, 500 |
+| Greed | Foes drop 10% more gold | 3 | 120, 240, 360 |
+| Growth | Experience +5% | 3 | 120, 240, 360 |
+| Curse | Foes +10% HP and damage, +10% gold, +5% experience | 5 | 50, 100, 150, 200, 250 |
 
-Each level costs 1.6 times the one before, rounded to 5 (`nextPrice` in `src/utils/shop.ts`), so a 20-coin stat goes 20, 30, 50, 80, 130.
+The data is `ARMORY_ITEMS` in `src/constants/armory.ts`; tuning for the gear is `src/constants/armoryTuning.ts`.
+Every run starts with 2 rerolls, 2 skips and 1 banish before the Armory (`PICK_TOOLS`).
+Head Start was removed: with a level 1 to 99 stage it only skipped the first picks.
 
-Pick tools are bought in levels too, three each, priced the same way: each level adds one to what every run starts with (2 rerolls, 2 skips and 1 banish before the shop, `PICK_TOOLS` in `src/constants/growth.ts`).
+### Power
 
-| Item | Per level | Levels | First price |
-| --- | --- | --- | --- |
-| Reroll | One more reroll | 3 | 30 |
-| Skip | One more skip | 3 | 25 |
-| Banish | One more banish | 3 | 35 |
+Stats are flat and added to the hero's base before the in-run percentages multiply them, so they keep their share all run.
+A full Armory gives a hero with 10 attack damage and ability power +30% damage from Honed Edge and Arcana, about +4% more from Precision's +6% crit (crits deal 1.75x), and +30% HP from Vitality.
+Curse takes some of that back by design.
+All 44 levels cost about 15,100 gold bought cheapest first, about 30 full clears; the pacing simulation buys the last level in run 51, about 13 hours in.
 
-Skills are bought once, except Last Light with its three levels, and none of them is offered on level up:
+### Curse, Greed and Growth
 
-- Lodestone (60): coins fly to the hero after 0.3 seconds, and foes drop another quarter of their base (a fraction left over is a chance at one more coin).
-- Aftershock (150, saved under the id `warpShock`): every travel move the hero ends sends a ring out from the hero that hits each foe within 40 art pixels for 0.8 times attack damage and stuns it briefly.
-  For Kael that is every dodge and every warp, the blinks of Blink Step and his counter included.
-- Head Start (200): runs start at level 3 with two skill points, spent when wave 1 is cleared.
-  A full run reaches about level 84, so level 3 is what wave 1 alone gives; the two picks are the whole head start.
-- Last Light (300, then 480 and 770): a fatal blow leaves the hero standing with half their HP, once per run for each of its three levels (`LAST_LIGHT_LEVELS`).
+The run reads one set of rates from the Armory (`runRates()` in `src/store/meta.ts`):
 
-## Every shop item helps every hero
+- Gold: `dropCoins` multiplies the drop by Greed's and Curse's shares.
+- Experience: `earnXp` multiplies by Growth's and Curse's shares.
+- Foes: Curse multiplies HP and damage, through `stageMods` in a stage and `makeEnemy` in wave mode.
 
-The shop is shared by every hero.
-One bank and one set of bought levels serve whichever hero starts the run, and no item names a hero or a hero's own move.
-The hero screen shows each hero's level 1 stats with what the shop adds as a lighter part of each bar.
+In a co-op room the host's Curse applies to everyone, and each player's Greed and Growth to that player.
+
+## Hero unlocks and Hyper stages
+
+Kael and Cerise are free.
+The other seven cost 300 (Aldric), 400 (Vesper), 550 (Saya), 750 (Yun), 1,000 (Brynn), 1,350 (Zafir) and 1,800 (Calder), 6,150 gold in all, once each hero's goal is met (`docs/unlocks.md`).
+Each price is the hero's `CharacterDef.price`.
+A cleared stage's Hyper version is for sale on the stage screen for 150, 300, 450, 600 or 900 gold by tier (`HYPER_PRICE`).
+
+## Every Armory item helps every hero
+
+The Armory is shared by every hero, and no item names a hero or a hero's own move.
+The hero screen shows each hero's level 1 stats with what the Armory adds as a lighter part of each bar.
 
 A new hero's kit keeps these promises, so every item works for it on day one:
 
 - Damage comes from `progress.stats.ad` (Honed Edge, Aftershock) and abilities scale with `progress.stats.ap` (Arcana).
   Every blow goes through `dealDamage`, which rolls `progress.stats.crit` (Precision).
 - The kit spends MP on the shared ultimate and may spend more of it on its own abilities (Wellspring).
-  A hero with a resource of its own (`HeroModule.meter`) still charges the ultimate from MP.
-- The kit spends stamina on its defence or travel, such as the dodge, a block or a travel move of its own (Endurance).
-- Walking uses `progress.stats.move` through the shared physics; a move the kit drives itself scales with it where it makes sense (Light Boots).
+- The kit spends stamina on its defence or travel (Endurance).
+- Walking uses `progress.stats.move` through the shared physics (Light Boots).
 - Blows on the hero go through `hurtHero`, so Vitality's HP and Last Light apply.
-- The kit calls `travelEnded()` from `src/game/hero/travelEnd.ts` when each of its travel moves ends: a dash, a warp, a leap, a landing out of the air (Aftershock).
-  Shop skills that answer a hero's movement hook in there, never into one kit's code.
-- Coins, levels, Head Start and the pick tools live in shared code and need nothing from the kit.
+- The kit calls `travelEnded()` from `src/game/hero/travelEnd.ts` when each of its travel moves ends (Aftershock).
+- Gold, experience, foes and the pick tools live in shared code and need nothing from the kit (Lodestone, Greed, Growth, Curse, Reroll, Skip, Banish).
 
-A new item follows the same rule: it changes a shared stat or hooks into a shared event, and its text says what it does without naming a hero.
 Item ids are saved, so a renamed item keeps its id.
-
-## Pricing basis
-
-The numbers come from the wave plan in `src/utils/waves.ts` and the drops above.
-Clearing waves 1 to N earns this many coins in total, before the 0.2.0 bonus and with it (the base times 1.25, which is what the bonus gives on average):
-
-| Waves cleared | 4 | 5 | 7 | 8 | 10 | 15 | 19 | 20 | 30 |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| Base coins | 18 | 28 | 44 | 52 | 72 | 126 | 178 | 203 | 354 |
-| With the bonus | 22 | 35 | 55 | 65 | 90 | 158 | 222 | 254 | 442 |
-| Streamed waves, base | 19 | 30 | 47 | 55 | 78 | 136 | 189 | 220 | 385 |
-| Streamed waves, with the bonus | 24 | 38 | 59 | 69 | 98 | 170 | 236 | 276 | 481 |
-
-The streamed rows count the Warden's base drop but not the flyers it calls.
-They run about 5 to 9% above the old ones, from the elites' doubled drop and the mini boss waves' longer flyer streams, so the prices below still hold.
-
-Before 0.2.0 the playtest bots banked 12 to 20 coins on runs that fell at waves 4 and 5, since they miss some kills.
-Such a run bought one first level at most, which was too slow.
-With the bonus, a run that reaches wave 8 to 10 earns about 60 to 80 coins, enough for two first levels or a first and a second level.
-The first skill, Lodestone, takes about one good run, and Last Light about a run that reaches wave 20.
-Every stat at its top level costs 2585 coins and the four skills with all three levels of Last Light 1960, about 4550 in all, roughly twelve full clears or a few dozen ordinary runs.
-
-## Hero unlocks
-
-Coins also unlock heroes on the hero screen.
-Kael and Cerise are free.
-The other seven cost 300 (Aldric), 400 (Vesper), 550 (Saya), 750 (Yun), 1000 (Brynn), 1350 (Zafir) and 1800 (Calder), 6,150 coins in all.
-Each price is the hero's `CharacterDef.price`, and each is about 1.35 times the one before, rounded to the nearest 50.
-The hero screen and what each price means in runs are in `docs/achievements.md`.
 
 ## Saving
 
 Meta progress is saved in local storage under `warpblade-meta-v2` (`src/services/metaStorage.ts`).
-The stage loop of 27 November 2026 moved the key from `v1`, so every player starts fresh: Kael, Cerise and the Sunlit Ruins.
-The version is part of the key, so a future change of shape starts from a fresh save.
-`parseMeta` in `src/utils/metaSave.ts` keeps only known items within their level limits and a whole, positive coin count; anything missing, corrupt or not JSON starts fresh.
-`src/store/meta.ts` is the one owner of the bank and the bought levels, and saves on every change.
-The same save holds the heroes unlocked with coins, the achievements earned and the stats they track (see `docs/achievements.md`); a save from before those fields loads with none of them.
+The save holds the bank, the Armory levels (`owned`), the gold paid for them (`spentOnOwned`), the items switched off (`switchedOff`), the achievements and tracked stats, the unlock ids found and the recipes.
+`parseMeta` in `src/utils/metaSave.ts` keeps only known items within their level limits; a save without `spentOnOwned` gets the price of its levels bought in Armory order.
+`src/store/meta.ts` is the one owner of the bank and the Armory, and saves on every change.

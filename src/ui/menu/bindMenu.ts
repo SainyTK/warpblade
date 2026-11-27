@@ -28,7 +28,8 @@ export function bindMenu(): void {
   onMenuChange(renderMenu);
   onSettingsChange(redrawOn("options"));
   onFullscreenChange(redrawOn("options"));
-  onMetaChange(redrawOn("shop"));
+  onMetaChange(redrawOn("armory"));
+  onMetaChange(redrawOn("codex"));
   onMetaChange(redrawOn("hero"));
   onMetaChange(redrawOn("stage"));
   onMetaChange(redrawOn("achievements"));

@@ -6,10 +6,12 @@ import { MAX_FRAME } from "../../constants/stage";
 import { CHARACTERS } from "../../heroes/roster";
 import { type GuestLink, joinRoom } from "../../services/coop/guestLink";
 import { loadHeroChoice } from "../../services/heroChoice";
-import { recordFeat } from "../../store/achievements";
+import { recordFeat, startRunAchievements } from "../../store/achievements";
 import { postNote, resetRoom, roomView, updateRoom } from "../../store/coop";
-import { addCoins, heroUnlocked, onMetaChange, ownedItems } from "../../store/meta";
+import { ownLoadout } from "../../store/loadout";
+import { addCoins, onMetaChange } from "../../store/meta";
 import { settings } from "../../store/settings";
+import { heroUnlocked, startRunUnlocks } from "../../store/unlocks";
 import type { GuestHud, HostMessage } from "../../types/coop";
 import type { Enemy } from "../../types/enemy";
 import { setChestSource, syncChestDialog } from "../../ui/chest/chestDialog";
@@ -54,8 +56,8 @@ export class GuestSession {
   private lastFrame = 0;
   private playing = false;
   private closed = false;
-  /** stops telling the host about purchases */
-  private unwatchShop: () => void = () => undefined;
+  /** stops telling the host about purchases and unlocks */
+  private unwatchLoadout: () => void = () => undefined;
 
   /** join the room with this code; rejects with a reason a player can read */
   async join(code: string): Promise<void> {
@@ -70,11 +72,11 @@ export class GuestSession {
       return;
     }
     this.lastHeard = performance.now();
-    this.link.send({ t: "hello", hero: character.id, owned: ownedItems(), version: GAME_VERSION });
+    this.link.send({ t: "hello", hero: character.id, loadout: ownLoadout(), version: GAME_VERSION });
     this.pinger = window.setInterval(() => this.ping(), PING_MS);
     addEventListener("pagehide", this.onPageHide);
-    // the shop is open between runs too, and the next run should wear what this player buys there
-    this.unwatchShop = onMetaChange(() => this.link?.send({ t: "shop", owned: ownedItems() }));
+    // the Armory is open between runs too, and the next run should wear what this player buys and unlocks
+    this.unwatchLoadout = onMetaChange(() => this.link?.send({ t: "loadout", loadout: ownLoadout() }));
   }
 
   private readonly onPageHide = (): void => this.close();
@@ -118,6 +120,9 @@ export class GuestSession {
         this.hud = msg.hud;
         this.hudAt = performance.now();
         break;
+      case "feat":
+        recordFeat(msg.feat);
+        break;
       case "end":
         this.endRun(msg.coins);
         // the host left mid-run: the room is gone, so there is no room to go back to
@@ -133,6 +138,8 @@ export class GuestSession {
 
   private startRun(): void {
     this.playing = true;
+    startRunAchievements();
+    startRunUnlocks();
     this.hud = null;
     this.hudAt = performance.now();
     this.sentPicks = -1;
@@ -264,7 +271,7 @@ export class GuestSession {
     this.endRun(result.coins);
     window.clearInterval(this.pinger);
     removeEventListener("pagehide", this.onPageHide);
-    this.unwatchShop();
+    this.unwatchLoadout();
     const link = this.link;
     // say goodbye so the host lets this place go at once, and give it a moment to leave before the link closes
     link?.send({ t: "bye" });

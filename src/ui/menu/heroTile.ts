@@ -1,5 +1,5 @@
 import { chosenJob } from "../../store/jobs";
-import { heroUnlocked } from "../../store/meta";
+import { heroUnlocked } from "../../store/unlocks";
 import type { CharacterDef } from "../../types/character";
 import { el } from "../dom";
 import { heroPortrait } from "./heroPortrait";

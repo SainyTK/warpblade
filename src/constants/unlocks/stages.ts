@@ -1,7 +1,7 @@
-import type { Goal } from "../types/achievement";
-import type { StageId, StageTier } from "../types/campaign";
-import type { UnlockDef, UnlockReward } from "../types/unlock";
-import { OPENS_WITH_ALL, STAGE_OPENS, STAGE_ORDER, STAGE_TIER } from "./stageGraph";
+import type { Goal } from "../../types/achievement";
+import type { StageId, StageTier } from "../../types/campaign";
+import type { UnlockDef, UnlockReward } from "../../types/unlock";
+import { OPENS_WITH_ALL, STAGE_OPENS, STAGE_ORDER, STAGE_TIER } from "../stageGraph";
 
 export const HYPER_PRICE: Readonly<Record<StageTier, number>> = { 1: 150, 2: 300, 3: 450, 4: 600, 5: 900 };
 
@@ -35,7 +35,7 @@ export const stageUnlockId = (stage: StageId): string => `stage:${stage}`;
 export const hyperUnlockId = (stage: StageId): string => `hyper:${stage}`;
 export const hyperRewardId = (stage: StageId): string => `hyperReward:${stage}`;
 
-export const UNLOCKS: readonly UnlockDef[] = STAGE_ORDER.flatMap((stage): UnlockDef[] => [
+export const STAGE_UNLOCKS: readonly UnlockDef[] = STAGE_ORDER.flatMap((stage): UnlockDef[] => [
   ...(stageOpeners(stage).length
     ? [{ id: stageUnlockId(stage), reward: { kind: "stage" as const, stage }, goal: openGoal(stage) }]
     : []),

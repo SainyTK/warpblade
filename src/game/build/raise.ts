@@ -27,7 +27,7 @@ export function evolveSkill(id: string): void {
   if (progress.build.evolved.includes(id)) return;
   progress.build.evolved = [...progress.build.evolved, id];
   learnRecipe(id);
-  feat({ kind: "evolved", skill: id });
+  feat({ kind: "evolved", skill: id, hero: character.id });
 }
 
 export function raiseMastery(id: string): void {

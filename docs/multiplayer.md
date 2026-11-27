@@ -71,9 +71,11 @@ A player with nothing to choose reads "Waiting for P2 to pick".
 Anyone may still open the pause menu, for instance to leave the room; open cards step aside under the menu and come back the same.
 A guest's choice travels to the host as a skill id, and the host checks that the hero can still learn it before applying it.
 
-## Coins and the shop
+## Coins, the Armory and unlocks
 
-Each player's hero plays with what that player bought in their own shop, since the guest sends its shop levels when it joins and again after each purchase, such as from the result screen between runs.
+Each player's hero plays with what that player bought in their own Armory and the skills they have unlocked, since the guest sends its loadout (Armory levels switched on and open skills) when it joins and again after each change, such as from the result screen between runs.
+The host's Curse applies to the whole room.
+Co-op runs count toward unlocks and achievements for every player: the host sends each guest the feats that count for them (`docs/unlocks.md`, Co-op).
 Coins a hero picks up are theirs, and coins left on the floor at the end are split evenly.
 When the run ends, every player banks their own coins in their own browser and sees the result screen, then goes back to the room for another run.
 

@@ -1,4 +1,4 @@
-import "../shop/shop.css";
+import "./listRows.css";
 import "../achievements/achievements.css";
 import { ACHIEVEMENT_GROUPS } from "../../constants/achievements";
 import { allAchievements, earnedIds, goalSource } from "../../store/achievements";
@@ -12,12 +12,12 @@ export function achievementsScreen(): MenuView {
   const earned = earnedIds();
   const src = goalSource();
   const scroll = document.createElement("div");
-  scroll.className = "menu-scroll shop";
+  scroll.className = "menu-scroll rows";
   for (const group of ACHIEVEMENT_GROUPS) {
     const items = list.filter((a) => a.group === group);
     if (!items.length) continue;
     const box = document.createElement("section");
-    box.className = "shop-section";
+    box.className = "list-section";
     const h = document.createElement("h3");
     h.textContent = group;
     box.append(h, ...items.map((a) => achievementRow(a, earned, src)));

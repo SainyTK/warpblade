@@ -1,42 +1,48 @@
-/* Codex: shop rows for every skill, evolution, charm and slot; found ones lit, the rest dark silhouettes or ???. */
 .menu[data-screen="codex"] .menu-panel {
   width: min(600px, 100%);
 }
-.shop-item.codex-item {
+.list-row.codex-item {
   cursor: default;
 }
-.shop-item.codex-item[data-state="locked"],
-.shop-item.codex-item[data-state="secret"] {
+.list-row.codex-item[data-state="locked"],
+.list-row.codex-item[data-state="secret"] {
   --accent: var(--key);
   --accent-dark: var(--line);
 }
-.codex-item[data-state="locked"] .shop-icon,
-.codex-item[data-state="secret"] .shop-icon {
+.codex-item[data-state="locked"] .row-icon,
+.codex-item[data-state="secret"] .row-icon {
   background: var(--raised);
 }
-.codex-item[data-state="locked"] .shop-icon img {
+.codex-item[data-state="locked"] .row-icon img {
   filter: brightness(0);
   opacity: 0.85;
 }
-.codex-item[data-state="locked"] .shop-name,
-.codex-item[data-state="secret"] .shop-name {
+.codex-item[data-state="locked"] .row-name,
+.codex-item[data-state="secret"] .row-name {
   color: var(--muted);
 }
-.codex-item[data-state="locked"]:focus .shop-name,
-.codex-item[data-state="secret"]:focus .shop-name {
+.codex-item[data-state="locked"]:focus .row-name,
+.codex-item[data-state="secret"]:focus .row-name {
   color: var(--mist);
 }
-.codex-item[data-state="locked"] .shop-text {
+.codex-item[data-state="locked"] .row-text {
   font-style: italic;
 }
+.list-row.codex-item[data-state="forSale"] {
+  --accent: var(--brass);
+  --accent-dark: var(--gold-dark);
+}
+.codex-item[data-state="forSale"] .row-text {
+  color: var(--brass);
+}
 /* an evolution sits under its skill, one step in and in the evolution's green */
-.shop-item.codex-item[data-evolution] {
+.list-row.codex-item[data-evolution] {
   --accent: var(--jade);
   --accent-dark: #123a2a;
   margin-left: 28px;
 }
-.shop-item.codex-item[data-evolution][data-state="locked"],
-.shop-item.codex-item[data-evolution][data-state="secret"] {
+.list-row.codex-item[data-evolution][data-state="locked"],
+.list-row.codex-item[data-evolution][data-state="secret"] {
   --accent: var(--key);
   --accent-dark: var(--line);
 }
@@ -48,7 +54,7 @@
   color: var(--jade);
 }
 @media (max-width: 480px) {
-  .shop-item.codex-item[data-evolution] {
+  .list-row.codex-item[data-evolution] {
     margin-left: 16px;
   }
 }
@@ -96,4 +102,74 @@
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--crystal);
+}
+
+.result-goals {
+  display: grid;
+  gap: 6px;
+  width: 100%;
+  margin: 0;
+  padding: 8px 0 0;
+  list-style: none;
+  border-top: 2px solid var(--line);
+}
+.result-goals li {
+  display: grid;
+  grid-template-columns: 16px minmax(0, 1fr) auto;
+  column-gap: 8px;
+  row-gap: 2px;
+  align-items: center;
+}
+.result-goals .result-goal-icon {
+  grid-row: span 2;
+  width: 16px;
+  height: 16px;
+  image-rendering: pixelated;
+  filter: brightness(0) invert(0.55);
+}
+.result-goal-name {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0 8px;
+  min-width: 0;
+  font-family: var(--ui);
+  font-weight: 600;
+  font-size: 14px;
+  color: var(--text);
+}
+.result-goal-name small {
+  font-family: var(--display);
+  font-weight: 400;
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--crystal);
+}
+.result-goal-count {
+  justify-self: end;
+  font-size: 11px;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+.result-goal-text {
+  min-width: 0;
+  font-size: 12px;
+  color: var(--mist);
+}
+.result-goal-bar {
+  justify-self: end;
+  width: 96px;
+  height: 6px;
+  background: var(--line);
+}
+.result-goal-bar span {
+  display: block;
+  height: 100%;
+  background: var(--brass);
+}
+.goal-gain {
+  font-weight: 600;
+  color: var(--heal);
 }

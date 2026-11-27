@@ -1,8 +1,9 @@
 import { FUSIONS } from "../../constants/resonance";
+import { CHARACTERS } from "../../heroes/roster";
 import { STAGES } from "../../stages";
 import { ARTS } from "../../stages/arts";
 import type { StageId } from "../../types/campaign";
-import type { Discovery, UnlockReward } from "../../types/unlock";
+import type { Discovery, UnlockDef, UnlockReward } from "../../types/unlock";
 import { artIcon, elementIcon } from "../skills/icons/elements";
 import { iconUrl, skillIcon } from "../skills/icons/iconImage";
 
@@ -12,10 +13,24 @@ function stageIcon(stage: StageId): string {
 }
 
 function rewardIcon(reward: UnlockReward): string {
-  if (reward.kind === "art") return artIcon(reward.art);
-  if (reward.kind === "pickTool") return reward.tool;
-  return stageIcon(reward.stage);
+  switch (reward.kind) {
+    case "art":
+      return artIcon(reward.art);
+    case "pickTool":
+      return reward.tool;
+    case "hero":
+      return CHARACTERS.find((c) => c.id === reward.hero)?.sourceIcons.attacks ?? "vitality";
+    case "skill":
+      return reward.skill;
+    case "item":
+      return reward.item;
+    case "stage":
+    case "hyper":
+      return stageIcon(reward.stage);
+  }
 }
+
+export const unlockIconUrl = (def: UnlockDef): string => iconUrl(rewardIcon(def.reward));
 
 export function discoveryIconUrl(d: Discovery): string {
   if (d.type === "fusion") {
@@ -23,7 +38,7 @@ export function discoveryIconUrl(d: Discovery): string {
     return iconUrl(elementIcon(fusion?.pair[0] ?? "void"));
   }
   if (d.type === "job") return iconUrl(d.job.icon);
-  if (d.type === "unlock") return iconUrl(rewardIcon(d.unlock.reward));
+  if (d.type === "unlock") return unlockIconUrl(d.unlock);
   return iconUrl(skillIcon(d.skill, true));
 }
 

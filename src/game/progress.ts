@@ -5,7 +5,7 @@ import { LEVEL_UP_RESTORE } from "../constants/progression";
 import { FUSIONS, type FusionId, RESONANCE_MILESTONES } from "../constants/resonance";
 import { sfx } from "../services/audio";
 import { ARTS } from "../stages/arts";
-import { metaBonus } from "../store/meta";
+import { armoryBonus, runRates } from "../store/meta";
 import { learnFusion } from "../store/unlocks";
 import type { Card } from "../types/build";
 import { PK } from "../types/particle";
@@ -22,6 +22,7 @@ import { raiseCard } from "./build/raise";
 import { currentBuildStats } from "./build/stats";
 import { createFloorRing } from "./effects/floorRing";
 import { forgetEvolutions } from "./evolve";
+import { feat } from "./feat";
 import { airLimit } from "./skills/airLimit";
 import { character, freshProgress, fxRng, game, hero, lights, particles, progress, showBanner } from "./state";
 
@@ -37,7 +38,7 @@ export function refreshProgress(): void {
   const stats = resonanceStats(progress.resonance);
   const pact = pactTotals(character, build);
   const rows = [...heldRows(character, build), ...growthRows(build), { scale: { ad: pact.power, ap: pact.power } }];
-  const bonus = withShards(metaBonus(), progress.heartShards, progress.manaShards);
+  const bonus = withShards(armoryBonus(), progress.heartShards, progress.manaShards);
   progress.stats = computeStats(character, progress.level, rows, bonus, stats);
   progress.hpPerSecond = pact.hp;
   progress.mpPerSecond = pact.mp;
@@ -91,6 +92,7 @@ export function gainXp(amount: number): void {
   }
   if (progress.level >= MAX_LEVEL) progress.xp = 0;
   if (progress.level === from) return;
+  feat({ kind: "levelReached", level: progress.level, hero: character.id });
   const restore = LEVEL_UP_RESTORE * (progress.level - from);
   refreshProgress();
   hero.hp = Math.min(progress.stats.hp, hero.hp + progress.stats.hp * restore);
@@ -102,7 +104,7 @@ export function gainXp(amount: number): void {
 
 /** experience from play: Insight adds to it */
 export function earnXp(amount: number): void {
-  gainXp(amount * currentBuildStats().growth);
+  gainXp(amount * currentBuildStats().growth * runRates().xp);
 }
 
 export function openPicks(): void {

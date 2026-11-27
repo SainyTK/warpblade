@@ -1,3 +1,4 @@
+import type { Feat } from "../types/achievement";
 import type { EnemyRank, EnemyType } from "../types/enemy";
 import type { RunOutcome } from "../types/run";
 
@@ -21,6 +22,9 @@ export interface CoopHooks {
   /** seconds the hero in play's presses take to come back round to the host as a round trip: 0 for the host, -1 for a
    *  guest not measured yet */
   inputLag(): number;
+  /** something that counts toward achievements and unlocks: room-wide feats count for every player, the rest for the
+   *  player whose hero is in play */
+  shareFeat(feat: Feat): void;
   /** experience picked up by anyone goes to everyone */
   shareXp(amount: number): void;
   /** a wave was cleared */

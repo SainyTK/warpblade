@@ -281,13 +281,13 @@ Shared helpers a kit uses:
 | the ultimate's skill | `ultimateValues()` (`src/game/hero/ultimate.ts`) |
 | the warp | `sharedWarpStrike`, `warpSlash`, `refundWarp`, `warpBeside` (`src/game/hero/warp.ts`) |
 | stamina, MP refusals | `refundStamina` (`src/game/hero/stamina.ts`), `deny` (`src/game/hero/deny.ts`) |
-| a travel move ended | `travelEnded()` (`src/game/hero/travelEnd.ts`), which the shop's Aftershock answers |
+| a travel move ended | `travelEnded()` (`src/game/hero/travelEnd.ts`), which the Armory's Aftershock answers |
 | foe statuses | `staggerFoe`, `addStacks`, `stacksOf`, `consumeStacks`, `markFoe`, `ignite`, and the fields on `Enemy`: `halt`, `pinned`, `blind`, `frozen`, `chill`, `shock` |
 | areas | `raiseWard` and `lowerWard` (`src/game/shotWards.ts`) break foe shots in a circle; `raiseField` and `lowerField` (`src/game/timeFields.ts`) slow foes and their shots |
 | sound | `sfx.swing`, `sfx.hit`, `sfx.cast`, and for the hero's own sounds `sfx.tone` and `sfx.noise` (`src/services/audio.ts`), wrapped in a function in the hero's folder |
 | per-seat memory | `rememberPerSeat(objectMemory(state))`, with `true` for host-only state |
 
-Every shop item helps every hero (`docs/meta-progress.md`): deal damage from `progress.stats.ad` and `progress.stats.ap`, spend stamina on defence or travel and MP on the ultimate, walk at `progress.stats.move`, call `travelEnded()` when a travel move lands, and let blows reach `hurtHero`.
+Every Armory item helps every hero (`docs/meta-progress.md`): deal damage from `progress.stats.ad` and `progress.stats.ap`, spend stamina on defence or travel and MP on the ultimate, walk at `progress.stats.move`, call `travelEnded()` when a travel move lands, and let blows reach `hurtHero`.
 
 ### Moves and the combo engine
 

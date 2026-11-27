@@ -1,48 +1,55 @@
+import { coinAmount } from "../coinIcon";
+import { el } from "../dom";
+import { goalBar } from "../menu/goalBar";
 import { iconImage } from "./unlockIcon";
 
-function span(cls: string, text = ""): HTMLSpanElement {
-  const el = document.createElement("span");
-  el.className = cls;
-  el.textContent = text;
-  return el;
-}
-
-/** what one Codex row shows: found, locked with a silhouette and a hint, or secret with only ??? */
 export type CodexEntry =
   | { state: "found"; icon: string; name: string; text: string; recipe?: string }
-  | { state: "locked"; icon: string; hint: string }
+  | { state: "locked"; icon: string; hint: string; name?: string; have?: number; need?: number }
+  | { state: "forSale"; icon: string; name: string; hint: string; price: number }
   | { state: "secret" };
 
-/**
- * One entry of the Codex, laid out like a shop row. An evolution sits under its skill, indented. Arrows and the gamepad
- * move through the rows.
- */
+const shownName = (entry: CodexEntry): string =>
+  entry.state === "found" || entry.state === "forSale"
+    ? entry.name
+    : entry.state === "locked"
+      ? (entry.name ?? "???")
+      : "???";
+
+function ariaLabel(entry: CodexEntry): string {
+  switch (entry.state) {
+    case "found":
+      return `${entry.name}. ${entry.text}${entry.recipe ? ` ${entry.recipe}` : ""}`;
+    case "forSale":
+      return `${entry.name}. ${entry.hint} ${entry.price} gold`;
+    case "locked":
+      return `${entry.name ?? "Not found yet"}. ${entry.hint}`;
+    case "secret":
+      return "Secret, not found yet";
+  }
+}
+
 export function codexRow(entry: CodexEntry, evolution = false): HTMLElement {
-  const row = document.createElement("div");
-  row.className = "shop-item codex-item";
+  const row = el("div", "list-row codex-item");
   row.tabIndex = -1;
   row.dataset.nav = "";
   row.dataset.state = entry.state;
   if (evolution) row.dataset.evolution = "";
-  const frame = span("shop-icon");
-  if (entry.state === "secret") frame.append(span("ach-unknown", "?"));
+  const frame = el("span", "row-icon");
+  if (entry.state === "secret") frame.append(el("span", "ach-unknown", "?"));
   else frame.append(iconImage(entry.icon));
-  const head = span("shop-head");
-  head.append(span("shop-name", entry.state === "found" ? entry.name : "???"));
-  const body = span("shop-body");
+  const head = el("span", "row-head");
+  head.append(el("span", "row-name", shownName(entry)));
+  const body = el("span", "row-body");
   body.append(head);
   if (entry.state === "found") {
-    body.append(span("shop-text", entry.text));
-    if (entry.recipe) body.append(span("codex-recipe", entry.recipe));
-  } else body.append(span("shop-text", entry.state === "locked" ? entry.hint : "???"));
+    body.append(el("span", "row-text", entry.text));
+    if (entry.recipe) body.append(el("span", "codex-recipe", entry.recipe));
+  } else if (entry.state === "secret") body.append(el("span", "row-text", "???"));
+  else body.append(el("span", "row-text", entry.hint));
+  if (entry.state === "locked" && entry.need && entry.need > 1) body.append(goalBar(entry.have ?? 0, entry.need));
   row.append(frame, body);
-  row.setAttribute(
-    "aria-label",
-    entry.state === "found"
-      ? `${entry.name}. ${entry.text}${entry.recipe ? ` ${entry.recipe}` : ""}`
-      : entry.state === "locked"
-        ? `Not found yet. ${entry.hint}`
-        : "Secret, not found yet",
-  );
+  if (entry.state === "forSale") row.append(coinAmount(entry.price, "row-price"));
+  row.setAttribute("aria-label", ariaLabel(entry));
   return row;
 }

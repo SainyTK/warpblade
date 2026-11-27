@@ -1,5 +1,11 @@
 import { usesDrill } from "../../drill";
+import { isSkillOpen } from "../../store/unlocks";
 import type { CardView } from "../../utils/cards";
 import { progress } from "../state";
 
-export const cardView = (): CardView => ({ build: progress.build, level: progress.level, charged: usesDrill() });
+export const cardView = (): CardView => ({
+  build: progress.build,
+  level: progress.level,
+  charged: usesDrill(),
+  isAvailable: isSkillOpen,
+});

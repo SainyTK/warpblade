@@ -1,5 +1,5 @@
-import type { MetaSave, ShopItem } from "../types/shop";
-import { maxLevel } from "./shop";
+import type { ArmoryItem, MetaSave } from "../types/armory";
+import { priceOfAll } from "./armory";
 import { emptyTracked, parseTracked } from "./trackedStats";
 
 const isRecord = (v: unknown): v is Record<string, unknown> => typeof v === "object" && v !== null && !Array.isArray(v);
@@ -8,45 +8,52 @@ const count = (v: unknown): number => (typeof v === "number" && Number.isFinite(
 const emptyMeta = (): MetaSave => ({
   coins: 0,
   owned: {},
-  heroes: [],
+  spentOnOwned: 0,
+  switchedOff: [],
   achievements: [],
   tracked: emptyTracked(),
   unlocks: [],
   recipes: [],
 });
 
-/** the known ids from a saved list, once each; a save from before the list existed has none */
 const knownIds = (raw: unknown, known: readonly string[]): string[] =>
   Array.isArray(raw) ? [...new Set(known)].filter((id) => raw.includes(id)) : [];
 
-/** the ids parseMeta keeps from a save: heroes that can be bought, and the achievements, unlocks and skills the game has */
 export interface KnownIds {
-  heroes: readonly string[];
   achievements: readonly string[];
   unlocks: readonly string[];
-  skills: readonly string[];
+  recipes: readonly string[];
+  heroUnlockId: (hero: string) => string;
 }
 
-/**
- * read saved meta progress, keeping only known items within their levels, known heroes, achievements, unlocks and recipes;
- * fields a save from an older version lacks start empty, and anything unreadable starts fresh. A hero bought and since
- * removed is dropped from the list and its price goes back into the bank, once, since the saved list no longer has it.
- */
-export function parseMeta(raw: unknown, items: readonly ShopItem[], known: KnownIds): MetaSave {
-  if (!isRecord(raw)) return emptyMeta();
-  const saved = isRecord(raw.owned) ? raw.owned : {};
+function ownedLevels(raw: unknown, items: readonly ArmoryItem[]): Record<string, number> {
+  const saved = isRecord(raw) ? raw : {};
   const owned: Record<string, number> = {};
   for (const item of items) {
-    const level = Math.min(maxLevel(item), count(saved[item.id]));
+    const level = Math.min(item.levels, count(saved[item.id]));
     if (level) owned[item.id] = level;
   }
+  return owned;
+}
+
+function unlockIds(raw: Record<string, unknown>, known: KnownIds): string[] {
+  const heroesBought = Array.isArray(raw.heroes) ? raw.heroes.map((hero) => known.heroUnlockId(String(hero))) : [];
+  const saved = Array.isArray(raw.unlocks) ? [...raw.unlocks, ...heroesBought] : heroesBought;
+  return knownIds(saved, known.unlocks);
+}
+
+export function parseMeta(raw: unknown, items: readonly ArmoryItem[], known: KnownIds): MetaSave {
+  if (!isRecord(raw)) return emptyMeta();
+  const owned = ownedLevels(raw.owned, items);
+  const spentOnOwned = "spentOnOwned" in raw ? count(raw.spentOnOwned) : priceOfAll(items, owned);
   return {
     coins: count(raw.coins),
     owned,
-    heroes: knownIds(raw.heroes, known.heroes),
+    spentOnOwned,
+    switchedOff: knownIds(raw.switchedOff, Object.keys(owned)),
     achievements: knownIds(raw.achievements, known.achievements),
     tracked: parseTracked(raw.tracked),
-    unlocks: knownIds(raw.unlocks, known.unlocks),
-    recipes: knownIds(raw.recipes, known.skills),
+    unlocks: unlockIds(raw, known),
+    recipes: knownIds(raw.recipes, known.recipes),
   };
 }

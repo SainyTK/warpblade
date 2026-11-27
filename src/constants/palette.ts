@@ -44,7 +44,7 @@ export const SMOKE_RAMP = ramp(["#6e6478", "#544c60", "#3d3648", "#2a2532", "#1a
 /**
  * The base hero palette: silver hair, teal coat with brass trim, steel plates, red scarf, crystal blade. Each material
  * runs deep to glint. A hero's look starts from it and changes the materials that differ (`HeroSkin.colors`), and the
- * figures in shared icons (shop, charms) are drawn in it.
+ * figures in shared icons (Armory, charms) are drawn in it.
  */
 export const BASE_HERO_COLORS = {
   outline: hex("#0d0a16"),

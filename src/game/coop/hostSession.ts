@@ -6,7 +6,7 @@ import { sfx } from "../../services/audio";
 import { captureGame, type GameStream, tuneVideoSender } from "../../services/coop/gameStream";
 import { type HostLink, openRoom, RoomTaken } from "../../services/coop/hostLink";
 import { postNote, resetRoom, roomView, updateRoom } from "../../store/coop";
-import type { GuestMessage, SeatInfo } from "../../types/coop";
+import type { GuestMessage, Loadout, SeatInfo } from "../../types/coop";
 import type { RunOutcome, RunReport } from "../../types/run";
 import { setChestSource, syncChestDialog } from "../../ui/chest/chestDialog";
 import { syncCoopStatus } from "../../ui/coop/coopStatus";
@@ -34,7 +34,7 @@ const CODE_TRIES = 4;
 interface Guest {
   slot: number;
   hero: string;
-  owned: Record<string, number>;
+  loadout: Loadout;
   lastSeen: number;
   /** the smoothed round trip of its link in seconds, -1 until the first probe comes back */
   rtt: number;
@@ -131,7 +131,7 @@ export class HostSession {
     if (this.closed) return;
     const guest = this.guests.get(peer);
     if (guest) guest.lastSeen = performance.now();
-    if (msg.t === "hello") return this.welcome(peer, msg.hero, msg.owned, msg.version);
+    if (msg.t === "hello") return this.welcome(peer, msg.hero, msg.loadout, msg.version);
     if (!guest) return;
     if (msg.t === "bye") return this.link?.drop(peer);
     if (msg.t === "probe") return this.timeRoundTrip(peer, guest, msg.at);
@@ -140,9 +140,9 @@ export class HostSession {
       this.publishLobby();
       return;
     }
-    // the next run wears what was bought; a run under way keeps what it started with
-    if (msg.t === "shop" && !this.run) {
-      guest.owned = msg.owned;
+    // the next run wears what was bought and unlocked; a run under way keeps what it started with
+    if (msg.t === "loadout" && !this.run) {
+      guest.loadout = msg.loadout;
       return;
     }
     const seat = this.run?.seatOf(peer);
@@ -160,14 +160,14 @@ export class HostSession {
     if (seat) seat.rtt = guest.rtt;
   }
 
-  private welcome(peer: string, hero: string, owned: Record<string, number>, version: string): void {
+  private welcome(peer: string, hero: string, loadout: Loadout, version: string): void {
     if (this.guests.has(peer)) return;
     if (version !== GAME_VERSION)
       return this.refuse(peer, "The host plays another version. Reload the page and try again.");
     if (this.run) return this.refuse(peer, "That room is already playing. Join when the run ends.");
     const slot = this.freeSlot();
     if (slot < 0) return this.refuse(peer, `That room is full: ${MAX_PLAYERS} players already.`);
-    this.guests.set(peer, { slot, hero: heroById(hero).id, owned, lastSeen: performance.now(), rtt: -1 });
+    this.guests.set(peer, { slot, hero: heroById(hero).id, loadout, lastSeen: performance.now(), rtt: -1 });
     this.link?.send(peer, { t: "welcome", slot });
     // someone joining makes a note about someone leaving old news
     updateRoom({ note: "" });
@@ -190,12 +190,15 @@ export class HostSession {
   start(): void {
     if (this.run || !this.link) return;
     const link = this.link;
-    const starts: SeatStart[] = [{ slot: 0, peer: null, character, owned: null, rtt: 0 }];
+    const starts: SeatStart[] = [{ slot: 0, peer: null, character, loadout: null, rtt: 0 }];
     for (const [peer, g] of this.guests)
-      starts.push({ slot: g.slot, peer, character: heroById(g.hero), owned: g.owned, rtt: g.rtt });
+      starts.push({ slot: g.slot, peer, character: heroById(g.hero), loadout: g.loadout, rtt: g.rtt });
     starts.sort((a, b) => a.slot - b.slot);
     this.run = new HostRun(starts, {
       ended: (outcome, wave, coins, reports) => this.ended(outcome, wave, coins, reports),
+      feat: (seat, feat) => {
+        if (seat.peer) this.link?.send(seat.peer, { t: "feat", feat });
+      },
     });
     this.stream = captureGame(sfx.outputStream());
     for (const peer of this.guests.keys()) {

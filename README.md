@@ -122,10 +122,10 @@ A card says what it adds to your Resonance and when it would complete a Fusion; 
 
 When a stage ends, cleared or fallen, the result screen shows your grade, time, level, foes defeated, damage and gold, what the run unlocked, your best run on that stage, and the damage of every source.
 A fallen run keeps its gold.
-From there, play the stage again, choose another stage, go back to the main menu or visit the Shop.
+From there, play the stage again, choose another stage, go back to the main menu or visit the Armory.
 
 <p align="center">
-  <img src="docs/media/result.png" alt="The result screen: run stats, best runs with new records marked, and Play again, Main menu and Shop" width="70%">
+  <img src="docs/media/result.png" alt="The result screen: run stats, best runs with new records marked, and Play again, Main menu and Armory" width="70%">
 </p>
 
 ## Features
@@ -170,10 +170,10 @@ From there, play the stage again, choose another stage, go back to the main menu
   A drain never takes the last point of HP.
 - **Damage by source.** The result screen lists every source of damage with its level, total damage and damage per second: the hero's attacks, abilities and ultimate, each skill that strikes on its own, and each element's Resonance.
 - **The Codex.** The Codex on the start menu lists the five elements, the Fusions, the Rift Arts and every hero's skills and evolutions, with Fusions and evolutions not yet made shown as silhouettes with their recipe or ???.
-- **Coins and a shop.** Foes drop pixel coins that the hero picks up by touch, and any left behind fly to them after a moment.
-  When a run ends, cleared or lost, its coins go to the bank.
-  The Shop on the start menu sells stats in levels (HP, attack, ability power, MP, crit, move speed, stamina), more rerolls, skips and banishes for the cards, and four skills: Lodestone, Aftershock and Head Start, bought once, and Last Light, bought in three levels, each saving the hero from one more fatal blow per run.
-  Everything bought applies to every run and every hero, on top of the level-up picks, and is saved in this browser.
+- **Gold and the Armory.** Foes drop pixel coins that the hero picks up by touch, and any left behind fly to them after a moment.
+  Runs unlock Armory items through goals; each then costs gold that rises a little with every purchase, refunds in full and can be switched off.
+  It sells stats in levels, more rerolls, skips and banishes, Lodestone, Aftershock and Last Light, and Curse, Greed and Growth, which trade harder foes or more gold and experience.
+- **Unlocks.** A new save has Kael, Cerise, five skills each and the Sunlit Ruins; goals such as kills, bosses, levels, gold, Fusions and evolutions open the other heroes, skills, stages and Armory items, and the result screen shows the next goals.
 - **Achievements and hero unlocks.** Achievements track goals across runs: bosses reached and beaten, foes slain, long combos, perfect dodges, evolutions, coins banked and The Unblinking.
   Most pay coins, a few stay hidden as ??? until an earlier one is earned, and a small banner slides down when one is earned without stopping play.
   The Achievements page on the start menu shows what each one asks, with a progress bar for those that count up, and the result screen names those a run earned.
@@ -252,14 +252,14 @@ Hold Ultimate to charge it: its ring fills one quarter per level, and you strike
 Buttons dim while their action lacks MP or stamina or waits on a cooldown, and phones that support it give a short vibration on each press.
 The page holds still under your fingers: double taps, pinches and long presses never zoom, select text or open a menu.
 
-The game opens on a start menu with Start, Co-op, Shop, Achievements, Codex, Controls and Options, and how many stages you have cleared.
+The game opens on a start menu with Start, Co-op, Armory, Achievements, Codex, Controls and Options, and how many stages you have cleared.
 Start opens the hero screen: pick a hero with `A` `D` or the arrows and choose it with `J` or `Enter`.
 For a hero with jobs, `S` or Down moves to the job row, where `A` `D` or the arrows change the job and `J` or `Enter` chooses; on touch, tap a job's chip, then the panel.
 The stage screen follows: look through the stages with `A` `D` or the arrows and begin with `J` or `Enter`; a locked stage names the stages that open it.
 `S` or Down moves to the Mode row, where `A` `D` switch between Normal and Hyper, and a Hyper still for sale asks "Buy?" before it spends gold.
 `Esc` goes back to the hero screen.
-In the Shop, pick an item once to see "Buy?" and again to buy it; a locked hero on the hero screen asks the same way before it is unlocked.
-When a run ends, its result opens with Play again, Choose stage, Main menu and Shop.
+In the Armory, pick an item once to see "Buy?" and again to buy it, and switch a bought item on or off with A and D or its On or Off chip; a locked hero on the hero screen asks the same way before it is unlocked.
+When a run ends, its result opens with Play again, Choose stage, Main menu and Armory.
 Pausing adds Resume, Restart run and Quit run, and freezes the game until you resume.
 Move through the menu with the arrow keys or `W` `S`, pick with `J` or `Enter`, and go back with `Esc`; the mouse and touch work too.
 The Controls screen lists every key from the game's key map, and on touch screens the stick and buttons as they look on screen.
@@ -333,16 +333,16 @@ The README images are captured from the game in a 1280 by 720 window, at four ti
 src/
   main.ts          wires everything and runs the 120 Hz loop
   types/           shared types
-  constants/       stage layout, palettes, the poses and clips every hero shares, tuning, key map, touch controller layout, waves, coin drops and the shop items
-  utils/           pure helpers: math, color, seeded random, stats, experience, level-up picks, wave plan, shop prices and save parsing
+  constants/       stage layout, palettes, the poses and clips every hero shares, tuning, key map, touch controller layout, waves, coin drops, the Armory items and the unlock table
+  utils/           pure helpers: math, color, seeded random, stats, experience, level-up picks, wave plan, Armory prices, goal text and save parsing
   engine/          the pixel renderer: frame buffers and painter, particles, lights, sprite canvas
   rig/             the rig every hero is drawn on: pure drawing from a pose and a hero's skin
   heroes/          the roster, and one folder per hero with its stats, look, clips, kit, moves, skills, ultimate, icons and touch art (see docs/hero-module.md)
   stages/          one folder per stage: its layout, scene, foes, boss, Rift Art and hazard, and the registries that read them
   drill/           the stage movement and combat engine every hero plays on: slashes, dash and warp strike, guard and parry, spells and infusion, charged skills
-  services/        sound effects and music on Web Audio, saved options, run and stage records, the chosen stage and shop progress in local storage, the Fullscreen API, vibration, the clipboard
+  services/        sound effects and music on Web Audio, saved options, run and stage records, the chosen stage and meta progress in local storage, the Fullscreen API, vibration, the clipboard
     coop/          the PeerJS links of a co-op room's host and guests, and the game stream
-  store/           the player's options, the coin bank, shop purchases, unlocked heroes and achievements kept between runs, achievement tracking, and the co-op room as the menu sees it
+  store/           the player's options, the gold bank, the Armory, unlocks and achievements kept between runs, achievement tracking, and the co-op room as the menu sees it
   game/            the simulation
     coop/          a co-op room: the host's run with every player's hero, the host and guest sessions, player tags
     hero/          the moveset every hero shares (warp, guard, dodge, ability bar, ultimate charge), the motion layer, rope physics, the combo engine and the per-step update
@@ -360,16 +360,16 @@ src/
   site/            the patch notes page and its shared header and shell
   content/patches/ one JSON file per patch, read by the patch notes page
   ui/              HUD, level-up pick, menu, keyboard input, touch controller, stage sizing
-    menu/          start and pause menu: main, Shop, Achievements, Co-op and its lobby, run result, Controls and Options screens
+    menu/          start and pause menu: main, Armory, Achievements, Co-op and its lobby, run result, Controls and Options screens
     achievements/  an achievement row, its trophy, the earned banner and their styles
     coop/          the co-op line under the pause button
-    shop/          one shop row and the shop's styles
+    armory/        the Armory's rows and styles
 studio/            a local tool to pose every frame of every hero's motion clips (see studio/README.md)
 docs/
   hero-module.md   how to add a hero: the files it owns, every hook and the checks it must pass
   moveset-design.md the layout every hero shares: the warp, guard and parry, dodge, abilities and ultimate
   combo-design.md  what the combo takes from Grand Chase and what it leaves out
-  meta-progress.md coins, the shop items and the basis for their prices
+  meta-progress.md gold, the Armory items and their prices
   achievements.md  the achievements, how they are tracked, hero unlock prices and how a hero adds its own
   motion-standard.md the rules every hero's animation follows
   pick-pacing.md   when picks come, how long the skill pool lasts and Second Wind after it

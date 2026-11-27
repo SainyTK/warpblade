@@ -1,10 +1,10 @@
+import { LODESTONE_BONUS } from "../constants/armoryTuning";
 import { COIN_BONUS, COIN_DROP, COIN_MOTION as M } from "../constants/coins";
 import { COIN_GOLD } from "../constants/palette";
 import { COIN_TURNS, LYING_PICKUP_LIFT } from "../constants/pickupPixels";
-import { LODESTONE_BONUS } from "../constants/shopSkills";
 import { ELITE } from "../constants/waves";
 import { sfx } from "../services/audio";
-import { addCoins, ownsSkill } from "../store/meta";
+import { addCoins, hasGear, runRates } from "../store/meta";
 import type { Enemy } from "../types/enemy";
 import type { Coin } from "../types/game";
 import { PK } from "../types/particle";
@@ -24,8 +24,8 @@ function coinBase(e: Enemy): number {
 
 /** a slain foe's coins burst out of it */
 export function dropCoins(e: Enemy, x: number, y: number): void {
-  const bonus = COIN_BONUS + (ownsSkill("lodestone") ? LODESTONE_BONUS : 0);
-  const n = coinDrop(coinBase(e) * stageCoinRate(), bonus, rng.next());
+  const bonus = COIN_BONUS + (hasGear("lodestone") ? LODESTONE_BONUS : 0);
+  const n = coinDrop(coinBase(e) * stageCoinRate() * runRates().gold, bonus, rng.next());
   for (let i = 0; i < n; i++)
     game.coinDrops.push({ x, y, vx: rng.range(-60, 60), vy: rng.range(-170, -90), t: 0, rest: false });
 }
@@ -66,7 +66,7 @@ export function updateCoins(dt: number): void {
   const room = coop();
   for (const c of game.coinDrops) {
     room?.nearest(c.x, c.y);
-    const pull = ownsSkill("lodestone") ? M.magnetPull : M.pull;
+    const pull = hasGear("lodestone") ? M.magnetPull : M.pull;
     c.t += dt;
     const dx = hero.x - c.x;
     const dy = hero.y - 18 - c.y;
