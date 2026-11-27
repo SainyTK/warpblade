@@ -1,13 +1,7 @@
 import { el } from "../dom";
 import type { CardFace } from "./cardFace";
 import { iconUrl } from "./icons/iconImage";
-
-/** level or rank pips: those held, the one this card adds, and the ones still to come */
-function levelPips(total: number, had: number): HTMLSpanElement {
-  const pips = el("span", "pick-pips");
-  for (let i = 0; i < total; i++) pips.append(el("i", i < had ? "had" : i === had ? "gain" : ""));
-  return pips;
-}
+import { levelPips } from "./levelPips";
 
 /** one card of a pick, as a button */
 export function pickCard(face: CardFace, index: number): HTMLButtonElement {
@@ -30,7 +24,7 @@ export function pickCard(face: CardFace, index: number): HTMLButtonElement {
   if (face.line || face.pips) {
     const meta = el("span", "pick-meta");
     if (face.line) meta.append(el("span", "pick-kind", face.line));
-    if (face.pips) meta.append(levelPips(face.pips.total, face.pips.had));
+    if (face.pips) meta.append(levelPips(face.pips.total, face.pips.had, true));
     body.append(meta);
   }
   body.append(el("span", "pick-text", face.text));

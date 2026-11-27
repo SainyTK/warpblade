@@ -276,6 +276,14 @@ body {
   line-height: 8px;
   text-shadow: none;
 }
+.build-strip .build-mastery {
+  right: -3px;
+  bottom: -3px;
+  padding: 1px;
+}
+.build-strip .build-mastery .level-pips {
+  --pip: 2px;
+}
 /* the chain row and the strip: two rows of the bars column, or one line in the compact HUD */
 .tray {
   display: contents;
@@ -835,7 +843,8 @@ body[data-hud="compact"] .build-strip {
   body[data-hud="compact"] .build-strip .build-row {
     gap: 0;
   }
-  body[data-hud="compact"] .build-strip .build-slot b {
+  body[data-hud="compact"] .build-strip .build-slot b,
+  body[data-hud="compact"] .build-strip .build-mastery {
     right: 0;
     bottom: 0;
   }
@@ -859,6 +868,10 @@ body[data-hud="compact"] .build-strip {
     text-align: right;
     font-size: 8px;
     line-height: 6px;
+  }
+  body[data-hud="compact"] .build-strip .build-mastery {
+    padding: 0;
+    border-width: 0;
   }
 }
 body[data-hud="compact"] .right {

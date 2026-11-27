@@ -1,0 +1,31 @@
+.level-pips {
+  --pip: 7px;
+  --pip-gap: 3px;
+  display: inline-flex;
+  gap: var(--pip-gap);
+}
+.level-pips i {
+  width: var(--pip);
+  height: var(--pip);
+  border: 1px solid var(--key);
+  background: var(--night);
+}
+.level-pips i.had {
+  background: var(--brass);
+  border-color: var(--brass);
+}
+.level-pips i.gain {
+  background: var(--heal);
+  border-color: var(--heal);
+  animation: level-pip-blink 800ms steps(2) infinite;
+}
+@keyframes level-pip-blink {
+  50% {
+    background: var(--night);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .level-pips i.gain {
+    animation: none;
+  }
+}
