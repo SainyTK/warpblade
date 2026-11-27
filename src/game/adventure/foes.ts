@@ -30,7 +30,7 @@ export function stageFoe(type: EnemyType, x: number, y: number, level: number, x
   enemy.elite = elite;
   enemy.armored ||= entry.level >= FLINCH.armoredFrom;
   const room = coop();
-  if (room) enemy.hp = enemy.max = room.scaleFoeHp(enemy.rank, enemy.max);
+  if (room && entry.hits > 1) enemy.hp = enemy.max = room.scaleFoeHp(enemy.rank, enemy.max);
   return enemy;
 }
 
