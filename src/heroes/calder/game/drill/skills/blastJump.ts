@@ -41,8 +41,13 @@ export const BLAST_JUMP_DRILL: CalderDrillSkill = {
     if (!h) {
       return;
     }
-    if (air.grounded && !h.grounded && h.vy < 0 && values.blast) {
-      blast(values.blast, 30, values.stagger ?? 0);
+    if (air.grounded && !h.grounded && h.vy < 0) {
+      if (values.blast) {
+        blast(values.blast, 30, values.stagger ?? 0);
+      } else {
+        const puff = { x: hero.x, y: surfaceBelow(hero.x, hero.y - 2), face: hero.face, reach: 14 };
+        calderFx(ID, "pillar", puff, { damage: progress.stats.ad * 0.4 });
+      }
     }
     if (!air.grounded && h.grounded && evolved && air.falling > 300) {
       blast(values.land, 70, 0.5);

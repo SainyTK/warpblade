@@ -6,7 +6,7 @@ export interface CalderFxOptions extends SkillFxOptions {
   round?: RoundPath;
 }
 
-const RING_GAP = 10;
+const RING_GAP = 16;
 
 function defaultPath(shape: FxShape, at: FxAt): RoundPath {
   if (at.toX !== undefined) return "along";

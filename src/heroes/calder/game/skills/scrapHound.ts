@@ -36,6 +36,13 @@ interface HoundMemory {
 }
 const memoryOf = (m: SkillMemory): HoundMemory => m as unknown as HoundMemory;
 
+function packHowl(m: HoundMemory): void {
+  const v = skillValues(ID);
+  const at = { x: hero.x, y: hero.y, face: hero.face, reach: 22 };
+  calderRing(ID, "wave", at, { damage: progress.stats.ad * v.power * 4 * Math.max(1, m.hounds.length) });
+  for (const h of m.hounds) calderFx(ID, "pillar", { x: h.x, y: h.y, face: h.face, reach: 16 }, { quiet: true });
+}
+
 function call(m: HoundMemory): void {
   const v = skillValues(ID);
   const at = { x: hero.x, y: hero.y, face: hero.face, reach: 16 };
@@ -130,7 +137,13 @@ export const scrapHound: SkillBehavior = {
     kill(memory) {
       const m = memoryOf(memory);
       const v = skillValues(ID);
-      if (skillEvolved(ID) || m.cd > 0 || !rng.chance(v.chance)) return;
+      if (skillEvolved(ID)) {
+        if (m.cd > 0) return;
+        m.cd = v.cooldown;
+        packHowl(m);
+        return;
+      }
+      if (m.cd > 0 || !rng.chance(v.chance)) return;
       m.cd = v.cooldown;
       call(m);
     },

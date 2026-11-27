@@ -21,8 +21,13 @@ export const SPEED_LOADER_DRILL: CalderDrillSkill = {
       return;
     }
     const book = h.spellBook;
-    const ring = { x: h.x, y: surfaceBelow(h.x, h.y - 2), face: h.face, reach: 12 + values.infuse };
-    calderRing(ID, "spikes", ring, { damage: progress.stats.ad * (values.burst ?? 0.6) * 2 });
+    const ring = {
+      x: h.x,
+      y: surfaceBelow(h.x, h.y - 2),
+      face: h.face,
+      reach: 12 + values.infuse,
+    };
+    calderRing(ID, "wave", ring, { damage: progress.stats.ad * (values.burst ?? 0.6) * 2 });
     if (!h.swordInfusion) {
       h.swordInfusion = { spell: book.selected, remainingHits: values.infuse, age: 0 };
     }

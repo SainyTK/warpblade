@@ -19,6 +19,7 @@ import { calderFx } from "../skillFx";
 const ID = "ca_double";
 /** the double stands this far from the foe on Calder's side of it, and fires its rounds this far apart */
 const DOUBLE = { gap: 14, first: 0.22, between: 0.16, life: 0.45 } as const;
+const SIGIL_HIGH = 34;
 
 interface DoubleMemory {
   cd: number;
@@ -26,7 +27,7 @@ interface DoubleMemory {
 const memoryOf = (m: SkillMemory): DoubleMemory => m as unknown as DoubleMemory;
 
 /** a double of gunsmoke beside the foe: it rises in smoke, cuts, fires its rounds into the foe and drifts away */
-function createDouble(foe: Enemy, side: number): Effect {
+function createDouble(foe: Enemy, side: number, lead: boolean): Effect {
   const v = skillValues(ID);
   const o = { t: 0, fired: 0 };
   const [fx] = enemyCenter(foe);
@@ -34,7 +35,7 @@ function createDouble(foe: Enemy, side: number): Effect {
   const y = foe.y;
   const shots = v.shots;
   const volley = progress.stats.ad * TRIGGER.blast * v.power * shots;
-  calderFx(ID, "mark", { x, y: y - 16, face: side, reach: 12 }, { damage: volley });
+  calderFx(ID, "mark", { x, y: y - SIGIL_HIGH, face: side, reach: 6 }, { damage: volley, quiet: !lead });
   calderFx(
     ID,
     "trail",
@@ -77,7 +78,7 @@ function createDouble(foe: Enemy, side: number): Effect {
         calderFx(
           ID,
           "burst",
-          { x: bx, y: by, face: side, reach: 9 },
+          { x: bx - side * 7, y: by, face: side, reach: 6 },
           { damage: progress.stats.ad * v.power, quiet: true },
         );
         blastFoe(foe, {
@@ -108,8 +109,8 @@ export const smokeDouble: SkillBehavior = {
       const v = skillValues(ID);
       if (!event.foe || event.foe.hp <= 0 || m.cd > 0 || !rng.chance(v.chance)) return;
       m.cd = v.cooldown;
-      game.fx.push(createDouble(event.foe, hero.face));
-      if (v.doubles > 1) game.fx.push(createDouble(event.foe, -hero.face));
+      game.fx.push(createDouble(event.foe, hero.face, true));
+      if (v.doubles > 1) game.fx.push(createDouble(event.foe, -hero.face, false));
     },
   },
 };

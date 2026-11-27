@@ -31,6 +31,8 @@ export const pointBlankDrill: SkillBehavior = {
     parry(_m, { fromX }) {
       const values = drillNumbers(ID);
       if (!values.counter) {
+        const spark = { x: hero.x + hero.face * 12, y: hero.y - 18, face: hero.face, reach: 6 };
+        calderFx(ID, "burst", spark, { damage: progress.stats.ad * 0.5 });
         return;
       }
       const foe = attacker(fromX);

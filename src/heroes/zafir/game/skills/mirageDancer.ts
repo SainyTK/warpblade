@@ -13,8 +13,8 @@ function dance(x: number): void {
   const foe = nearestFoe(x, hero.y - 16);
   if (!foe) return;
   const far = Math.sign(foe.x - hero.x) || hero.face;
-  callDancer(foe, far);
-  if (v.pair) callDancer(foe, -far);
+  callDancer(foe, far, true);
+  if (v.pair) callDancer(foe, -far, false);
 }
 
 /** Mirage Dancer: a parry, and from level 4 a perfect dodge, may call a mirage dancer beside the attacker */

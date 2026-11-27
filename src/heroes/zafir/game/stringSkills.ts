@@ -8,7 +8,6 @@ import { foesOnScreen } from "../../../game/skills/targets";
 import { game, hero, lights, progress } from "../../../game/state";
 import { hitStop, shake } from "../../../game/world";
 import type { MoveHit } from "../../../types/move";
-import { WHITE } from "../../../utils/color";
 import { SAND_RAMP } from "../constants/palette";
 import { WHIRL } from "../constants/whirl";
 import type { ZafirMoveId } from "../types/moves";
@@ -122,8 +121,7 @@ function noonRing(): void {
   game.fx.push(createSlash(x, y + 18, 1, { ...RING_CUT, R: 20, W: 10, ramp: SAND_RAMP }));
   const noon = { x, y: foe.y, face: hero.face, reach: 30 };
   zafirFx("za_sirocco", "nova", noon, { damage: progress.stats.ad * skillValues("za_sirocco").noon });
-  lights.add(x, y, 60, SAND_RAMP[5], 1, 0.35);
-  lights.add(x, y, 16, WHITE, 0.9, 0.12);
+  lights.add(x, y, 60, SAND_RAMP[4], 0.45, 0.35);
   dealDamage(foe, progress.stats.ad * skillValues("za_sirocco").noon, {
     fromX: hero.x,
     ky: -60,
