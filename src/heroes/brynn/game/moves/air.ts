@@ -53,13 +53,8 @@ function slamLanding(): void {
   shake(0.24, 3);
   if (v.pull) pullIn(v.pull);
   const damage = progress.stats.ad * (AIR_SLAM.ring + (v.ring ?? 0));
-  brynnFx("br_crater", "burst", { x: hero.x, y: hero.y - 3, face: hero.face, reach: 14 }, { damage });
-  brynnFx(
-    "br_crater",
-    "nova",
-    { x: hero.x, y: hero.y, reach: reach * 0.7 },
-    { damage, quiet: true, signature: PLANTED },
-  );
+  brynnFx("br_crater", "spikes", { x: hero.x, y: hero.y, face: hero.face, reach: 22 }, { damage, quiet: true });
+  brynnFx("br_crater", "nova", { x: hero.x, y: hero.y, reach: reach * 0.7 }, { damage, signature: PLANTED });
   const hits = meleeHit([boxAhead(-reach, -22, reach, 4)], {
     power: AIR_SLAM.ring + (v.ring ?? 0),
     kx: 80,

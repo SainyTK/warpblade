@@ -23,12 +23,10 @@ export const CRUSHING_WEIGHT_DRILL: BrynnDrillSkill = {
       every: v.every,
       duration: v.time,
     });
-    const at = { x: foe.x, y: surfaceBelow(foe.x, foe.y - 4), reach: 14 };
-    const third = strike === "third";
+    const at = { x: foe.x, y: surfaceBelow(foe.x, foe.y - 4), reach: 20 };
     brynnFx(ID, "spikes", at, {
-      damage: progress.stats.ad * v.damage * 6,
-      quiet: !third,
-      signature: third ? PLANTED : undefined,
+      damage: progress.stats.ad * v.damage * v.max * (v.time / v.every),
+      signature: PLANTED,
     });
     if (v.halt) {
       foe.halt = Math.max(foe.halt, v.every);

@@ -36,8 +36,8 @@ export const CRATER_LEAP_DRILL: BrynnDrillSkill = {
     if (h.grounded && !crater.grounded && crater.fall >= HARD_FALL) {
       game.fx.push(createFloorRing(h.x, h.y, values.radius, CRIMSON, 0.4));
       const damage = progress.stats.ad * values.ring;
-      brynnFx(ID, "burst", { x: h.x, y: h.y - 3, face: h.face, reach: 14 }, { damage });
-      brynnFx(ID, "nova", { x: h.x, y: h.y, reach: values.radius * 0.7 }, { damage, quiet: true, signature: PLANTED });
+      brynnFx(ID, "spikes", { x: h.x, y: h.y, face: h.face, reach: 22 }, { damage, quiet: true });
+      brynnFx(ID, "nova", { x: h.x, y: h.y, reach: values.radius * 0.7 }, { damage, signature: PLANTED });
       for (const foe of foesNear(h.x, h.y - 8, values.radius)) {
         if (evolved) {
           foe.vx += Math.sign(h.x - foe.x) * PULL;

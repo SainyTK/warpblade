@@ -20,7 +20,7 @@ export const SHOULDER_CHARGE_DRILL: BrynnDrillSkill = {
     if (!h || foes.length === 0) {
       return;
     }
-    const from = { x: h.x - h.face * 48, y: h.y - 14, face: h.face, toX: h.x, toY: h.y - 14 };
+    const from = { x: h.x - h.face * 48, y: h.y - 14, face: h.face, toX: h.x - h.face * 8, toY: h.y - 14 };
     brynnFx(ID, "trail", from, { damage: progress.stats.ad * values.power, signature: RAM });
     for (const foe of foes) {
       skillStrike(foe, values.power, ID);

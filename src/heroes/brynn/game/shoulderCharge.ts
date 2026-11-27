@@ -44,7 +44,7 @@ function passed(e: Enemy): void {
 /** the dodge ends: a shockwave ahead, and with Battering Ram a fissure back along the path */
 function ended(): void {
   const v = skillValues(ID);
-  const path = { x: charge.from, y: hero.y - 14, face: hero.face, toX: hero.x, toY: hero.y - 14 };
+  const path = { x: charge.from, y: hero.y - 14, face: hero.face, toX: hero.x - hero.face * 8, toY: hero.y - 14 };
   brynnFx(ID, "trail", path, { damage: progress.stats.ad * (v.power ?? 1), signature: RAM });
   if (!v.wave) return;
   const y = surfaceBelow(hero.x, hero.y);

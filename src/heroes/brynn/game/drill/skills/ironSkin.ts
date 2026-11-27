@@ -30,7 +30,7 @@ export const IRON_SKIN_DRILL: BrynnDrillSkill = {
       hero.inv = Math.max(hero.inv, values.inv);
     }
     if (!dashing && skin.dashing) {
-      const at = { x: skin.from, y: h.y - 16, face: h.face, toX: h.x, toY: h.y - 16 };
+      const at = { x: skin.from, y: h.y - 16, face: h.face, toX: h.x - h.face * 8, toY: h.y - 16 };
       brynnFx(ID, "trail", at, { damage: progress.stats.ad * 1.2 });
       brynnFx(ID, "mark", { x: h.x, y: h.y - 16, face: h.face }, { quiet: true, signature: ARMOUR });
     }
