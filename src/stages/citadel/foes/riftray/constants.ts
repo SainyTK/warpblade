@@ -1,8 +1,9 @@
 export const RAY = {
-  hover: 26,
+  hover: 34,
   height: 46,
   reach: 56,
-  under: 20,
+  under: 22,
+  track: 0.7,
   swoopWind: 0.68,
   swoopTime: 0.6,
   swoopRun: 92,
