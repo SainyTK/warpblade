@@ -23,7 +23,13 @@ export const brand = (e: Enemy | null): void => {
   addStacks(e, ID, spec);
   const [x, y] = enemyCenter(e);
   const stacks = stacksOf(e, ID);
-  aldricFx(ID, "burst", { x, y, reach: 8 + stacks * 2 }, { damage: spec.damage * 6 * stacks, sigil: "sun", lift: 2 });
+  const quiet = stacks > 1 && stacks < spec.max;
+  aldricFx(
+    ID,
+    "burst",
+    { x, y, reach: 8 + stacks * 2 },
+    { damage: spec.damage * 6 * stacks, quiet, sigil: "sun", lift: 2 },
+  );
 };
 
 /** Solar Brand: a branded foe that falls brands every foe near it to the full */

@@ -16,7 +16,7 @@ export function drawKite(x: number, y: number, s: number, tilt: number, fill: Co
   const c = Math.cos(tilt);
   const n = Math.sin(tilt);
   const pts = KITE.map(([px, py]) => [x + (px * c - py * n) * s, y + (px * n + py * c) * s] as const);
-  polygon(pts, fill, a * 0.55);
+  polygon(pts, fill, a * 0.8);
   for (let i = 0; i < pts.length; i++) {
     const [x0, y0] = pts[i];
     const [x1, y1] = pts[(i + 1) % pts.length];

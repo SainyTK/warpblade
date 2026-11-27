@@ -52,7 +52,8 @@ export function castSanctuary(level: number): void {
     { x, y, face: hero.face, reach: Math.min(r, 70) },
     { damage: blow * burns, sigil: "shield", lift: 26 },
   );
-  if (skillEvolved("al_sanctuary")) aldricFx("al_sanctuary", "pillar", { x, y, reach: 40 }, { quiet: true, delay: 0.1 });
+  if (skillEvolved("al_sanctuary"))
+    aldricFx("al_sanctuary", "pillar", { x, y, reach: 40 }, { quiet: true, delay: 0.1 });
   game.fx.push(createFloorRing(x, y, r, DAWN_RAMP, 0.5));
   lights.add(x, y - r * 0.5, r + 20, DAWN_RAMP[5], 0.6, 0.3);
   shake(0.25, 3);

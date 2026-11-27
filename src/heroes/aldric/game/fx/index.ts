@@ -13,6 +13,8 @@ export interface AldricFxOptions extends SkillFxOptions {
 export function aldricFx(id: string, shape: FxShape, at: FxAt, options: AldricFxOptions = {}): FxCast | null {
   if (skillLevel(id) <= 0) return null;
   const { sigil, lift = 0, ...rest } = options;
-  const signature = sigil && !rest.quiet ? sigilSignature(sigil, lift) : undefined;
+  const dx = at.toX === undefined ? 0 : (at.toX - at.x) * ((at.face ?? 1) < 0 ? -1 : 1);
+  const dy = at.toY === undefined ? 0 : at.toY - at.y;
+  const signature = sigil && !rest.quiet ? sigilSignature(sigil, lift, dx, dy) : undefined;
   return skillFx(id, shape, at, { ...rest, signature });
 }

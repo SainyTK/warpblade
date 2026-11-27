@@ -39,7 +39,7 @@ export function createSunPillar(p: PillarSpec): Effect {
         strikeEach(hit, p.damage, { fromX: p.x, kx: 10, ky: -40, stun: p.stun, heavy: true, source: p.source });
         p.struck?.(hit);
         game.fx.push(createFloorRing(p.x, GROUND, p.half + 10, DAWN_RAMP, 0.35));
-        lights.add(p.x, GROUND - 30, 40, DAWN_RAMP[5], 0.8, 0.3);
+        lights.add(p.x, GROUND - 30, 32, DAWN_RAMP[4], 0.5, 0.3);
         shake(0.12, 1.6);
       }
       return t < p.delay + PILLAR.life;
@@ -57,11 +57,11 @@ export function createSunPillar(p: PillarSpec): Effect {
       const w = p.half * (1 - u * u);
       for (let dx = -w; dx <= w; dx += 0.5) {
         const edge = Math.abs(dx) / Math.max(0.5, w);
-        const c = edge < 0.3 ? WHITE : edge < 0.6 ? DAWN_RAMP[5] : edge < 0.85 ? DAWN_RAMP[4] : DAWN_RAMP[3];
-        line(p.x + dx, -10, p.x + dx, GROUND, c, edge < 0.6 ? 1 - u * 0.6 : 0.8 - u * 0.6);
+        const c = edge < 0.12 ? WHITE : edge < 0.4 ? DAWN_RAMP[5] : edge < 0.75 ? DAWN_RAMP[4] : DAWN_RAMP[3];
+        line(p.x + dx, -10, p.x + dx, GROUND, c, edge < 0.4 ? 0.9 - u * 0.6 : 0.75 - u * 0.6);
       }
-      glow(p.x, GROUND - 40, p.half * 3, DAWN_RAMP[4], 0.5 * (1 - u));
-      glow(p.x, GROUND - 4, p.half * 2, DAWN_RAMP[5], 0.6 * (1 - u));
+      glow(p.x, GROUND - 40, p.half * 2.4, DAWN_RAMP[3], 0.3 * (1 - u));
+      glow(p.x, GROUND - 4, p.half * 1.6, DAWN_RAMP[4], 0.35 * (1 - u));
     },
   };
 }
