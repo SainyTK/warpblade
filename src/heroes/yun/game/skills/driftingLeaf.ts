@@ -10,6 +10,7 @@ import type { HeroKit } from "../../../../types/kit";
 import { SKILL } from "../../constants/skillIds";
 import { JADE_SPARKS } from "../../look";
 import { createQiWave } from "../effects/qiWave";
+import { isLead, LEAVES, yunFx } from "../fx";
 import { yun } from "../state";
 import { gainSwords } from "../swords";
 
@@ -23,6 +24,13 @@ function passed(e: Enemy): void {
   const cuts = skillEvolved(SKILL.drift) ? 2 : 1;
   for (let i = 0; i < cuts; i++) dealDamage(e, progress.stats.ad * v.cut, { fromX: hero.x, kx: 0, ky: -20 });
   game.fx.push(createImpact(...enemyCenter(e), hero.face, false, JADE_SPARKS));
+  const [ex, ey] = enemyCenter(e);
+  const at = { x: ex - hero.face * 40, y: ey, face: hero.face, toX: ex + hero.face * 10, toY: ey };
+  yunFx(SKILL.drift, "trail", at, {
+    damage: progress.stats.ad * v.cut * cuts,
+    quiet: !isLead(SKILL.drift),
+    signature: LEAVES,
+  });
   if (v.chill) e.chill = Math.max(e.chill, withBuild("duration", v.chill));
   if (v.sword && yun.dodgeSwordCd <= 0) {
     yun.dodgeSwordCd = v.sword;
@@ -37,7 +45,9 @@ function ended(): void {
   if (v.refund) refundStamina(STAMINA.dashCost * v.refund);
   if (!v.wave) return;
   const ways = skillEvolved(SKILL.drift) ? [hero.face, -hero.face] : [hero.face];
-  for (const face of ways)
+  for (const face of ways) {
+    const at = { x: hero.x + face * 8, y: hero.y, face, reach: END_WAVE.reach * 0.5 };
+    yunFx(SKILL.drift, "wave", at, { quiet: true, damage: progress.stats.ad * v.wave, signature: LEAVES });
     game.fx.push(
       createQiWave(hero.x + face * 8, hero.y - 16, face, {
         reach: withBuild("area", END_WAVE.reach),
@@ -46,6 +56,7 @@ function ended(): void {
         half: END_WAVE.half,
       }),
     );
+  }
 }
 
 /** Drifting Leaf on the shared front dodge */

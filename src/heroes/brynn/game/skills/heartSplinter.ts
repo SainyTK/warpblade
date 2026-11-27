@@ -11,6 +11,7 @@ import type { SkillBehavior, SkillMemory } from "../../../../types/skillBehavior
 import { WHITE } from "../../../../utils/color";
 import { TAU } from "../../../../utils/math";
 import { CRIMSON, CRIMSON_SPARKS } from "../../constants/colors";
+import { brynnFx, SHARDS } from "../fx";
 
 const ID = "br_splinter";
 const MARK_TIME = 2;
@@ -50,6 +51,8 @@ function call(m: SkillMemory, chance: number, count: number): void {
   if (!rng.chance(chance)) {
     return;
   }
+  const at = { x: hero.x, y: hero.y - 22, face: hero.face };
+  brynnFx(ID, "mark", at, { damage: progress.stats.ad * v.power * v.strikes * count, signature: SHARDS });
   for (let i = 0; i < count; i++) {
     if (splintersOf(m).filter((s) => !s.halo).length >= withBuild("amount", v.count)) {
       return;
@@ -63,6 +66,12 @@ function strike(s: Splinter, foe: Enemy): void {
   const dir = Math.sign(foe.x - s.x) || 1;
   dealDamage(foe, progress.stats.ad * v.power, { fromX: s.x, kx: dir * 30, source: ID });
   game.fx.push(createImpact(s.x, s.y, dir, false, CRIMSON_SPARKS));
+  brynnFx(
+    ID,
+    "burst",
+    { x: s.x, y: s.y, face: dir, reach: 7 },
+    { damage: progress.stats.ad * v.power, quiet: true, signature: SHARDS },
+  );
   if (v.mark) {
     markFoe(foe, ID, withBuild("duration", MARK_TIME), v.mark);
   }

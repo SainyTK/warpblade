@@ -1,9 +1,11 @@
 import { dealDamage } from "../../../../game/damage";
+import { enemyCenter } from "../../../../game/enemies/enemy";
 import { addStacks, consumeStacks } from "../../../../game/enemies/skillStatus";
 import { skillEvolved, skillLevel, skillValues, withBuild } from "../../../../game/skills/query";
 import { game, progress } from "../../../../game/state";
 import type { SkillBehavior } from "../../../../types/skillBehavior";
 import { SKILL } from "../../constants/skillIds";
+import { CUTS, isLead, layered, PETALS, yunFx } from "../fx";
 
 /** Thousand Cuts: ability cuts (and Jade Rain from level 5) leave bleeding wounds */
 export const thousandCuts: SkillBehavior = {
@@ -19,6 +21,9 @@ export const thousandCuts: SkillBehavior = {
         every: v.every,
         duration: withBuild("duration", v.duration),
       });
+      const [x, y] = enemyCenter(e.foe);
+      const total = (progress.stats.ap * v.damage * withBuild("duration", v.duration)) / v.every;
+      yunFx(SKILL.bleed, "mark", { x, y }, { damage: total, quiet: !isLead(SKILL.bleed), signature: CUTS });
     },
   },
 };
@@ -31,6 +36,14 @@ export function lotusEnded(): void {
   for (const e of game.enemies) {
     if (e.hp <= 0) continue;
     const n = consumeStacks(e, SKILL.bleed);
-    if (n) dealDamage(e, left * n * v.burst, { source: SKILL.bleed, kx: 0, ky: -30 });
+    if (!n) continue;
+    dealDamage(e, left * n * v.burst, { source: SKILL.bleed, kx: 0, ky: -30 });
+    const [x, y] = enemyCenter(e);
+    yunFx(
+      SKILL.bleed,
+      "burst",
+      { x, y, reach: 12 },
+      { damage: left * n * v.burst, quiet: !isLead(SKILL.bleed), signature: layered(CUTS, PETALS) },
+    );
   }
 }

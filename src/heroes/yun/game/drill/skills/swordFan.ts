@@ -2,6 +2,7 @@ import { drillFighter } from "../../../../../drill";
 import { game, progress } from "../../../../../game/state";
 import type { YunDrillSkill } from "../../../types/drillSkill";
 import { createStreamSword } from "../../effects/stream";
+import { FAN, yunFx } from "../../fx";
 import { hoverPlace } from "../../hover";
 import { foesNear, spellStrike } from "../strike";
 
@@ -20,6 +21,12 @@ export const SWORD_FAN_DRILL: YunDrillSkill = {
       return;
     }
     spellStrike(foe, values.bonus, ID);
+    yunFx(
+      ID,
+      "burst",
+      { x: foe.x, y: foe.y - 12, face: Math.sign(foe.x - (drillFighter()?.x ?? 0)) || 1, reach: 8 },
+      { quiet: true },
+    );
     if (values.knock) {
       foe.vx += Math.sign(foe.x - (drillFighter()?.x ?? foe.x)) * 90;
     }
@@ -41,6 +48,13 @@ export const SWORD_FAN_DRILL: YunDrillSkill = {
       return;
     }
     fan.release = release;
+    const swords = Math.max(1, evolved ? values.peacock : (values.fan ?? 0));
+    yunFx(
+      ID,
+      "burst",
+      { x: h.x + h.face * 22, y: h.y - 22, face: h.face, reach: 10 },
+      { damage: progress.stats.ap * (values.swordPower ?? values.bonus) * swords, signature: FAN },
+    );
     const count = evolved ? values.peacock : (values.fan ?? 0);
     for (let i = 0; i < count; i++) {
       game.fx.push(

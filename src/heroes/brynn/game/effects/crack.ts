@@ -6,6 +6,7 @@ import { game, progress } from "../../../../game/state";
 import type { Effect } from "../../../../types/effect";
 import { grain } from "../../../../utils/grain";
 import { CRIMSON } from "../../constants/colors";
+import { brynnFx, PLANTED } from "../fx";
 import { addHeft } from "../heft";
 
 const ID = "br_fault";
@@ -19,6 +20,10 @@ export function createCrack(x0: number, x1: number, y: number): Effect {
   const seed = Math.floor(a * 7 + y);
   let t = 0;
   let tick = 0;
+  const total = progress.stats.ad * v.damage * (life / v.every);
+  const face = Math.sign(x1 - x0) || 1;
+  brynnFx(ID, "spikes", { x: x0 + face * 6, y, face, reach: 14 }, { damage: total, signature: PLANTED });
+  brynnFx(ID, "wave", { x: x0, y, face, reach: (b - a) * 0.6 }, { damage: total, quiet: true, delay: 0.04 });
   const onIt = () => game.enemies.filter((e) => e.hp > 0 && e.x >= a && e.x <= b && Math.abs(e.y - y) < CRACK.feet);
   return {
     update(dt) {
@@ -36,8 +41,16 @@ export function createCrack(x0: number, x1: number, y: number): Effect {
       if (t < life) return true;
       if (skillEvolved(ID)) {
         for (const e of onIt()) dealDamage(e, progress.stats.ad * v.erupt, { fromX: e.x, launch: -200, source: ID });
-        for (let i = 0; i < CRACK.rings; i++)
-          game.fx.push(createFloorRing(a + ((b - a) * (i + 0.5)) / CRACK.rings, y, 16, CRIMSON, 0.35));
+        for (let i = 0; i < CRACK.rings; i++) {
+          const x = a + ((b - a) * (i + 0.5)) / CRACK.rings;
+          game.fx.push(createFloorRing(x, y, 16, CRIMSON, 0.35));
+          brynnFx(
+            ID,
+            "pillar",
+            { x, y, reach: 28 },
+            { damage: progress.stats.ad * v.erupt, quiet: i > 0, delay: i * 0.05 },
+          );
+        }
       }
       return false;
     },

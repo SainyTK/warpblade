@@ -7,6 +7,7 @@ import { CAGE } from "../../constants/abilities";
 import { RAIN } from "../../constants/rain";
 import { SKILL } from "../../constants/skillIds";
 import { createRainSword } from "../effects/rainSword";
+import { CAGE as CAGE_FX, yunFx } from "../fx";
 import type { SwordPlace } from "../hover";
 
 /** the foes ahead within reach, nearest first */
@@ -26,6 +27,16 @@ export function castCage(places: readonly SwordPlace[], _wide: boolean): void {
   const v = skillValues(SKILL.cage);
   const foes = foesAhead(v.foes);
   const damage = progress.stats.ap * v.power;
+  const marks = foes.length ? foes.map((foe) => foe.x) : [hero.x + hero.face * 40];
+  marks.forEach((x, i) => {
+    const at = { x, y: Math.min(hero.y, GROUND), reach: 16 };
+    yunFx(SKILL.cage, "nova", at, {
+      damage: damage * places.length,
+      quiet: i > 0,
+      delay: 0.1 + i * 0.05,
+      signature: CAGE_FX,
+    });
+  });
   if (!foes.length) {
     places.forEach((_p, i) => {
       const mark = { x: hero.x + hero.face * (30 + i * 8), y: Math.min(hero.y, GROUND) };

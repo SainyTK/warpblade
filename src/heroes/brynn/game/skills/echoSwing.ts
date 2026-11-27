@@ -11,6 +11,7 @@ import type { Effect } from "../../../../types/effect";
 import type { Enemy } from "../../../../types/enemy";
 import type { SkillBehavior, SkillMemory } from "../../../../types/skillBehavior";
 import { CRIMSON, CRIMSON_SPARKS } from "../../constants/colors";
+import { brynnFx, CRESCENT } from "../fx";
 import { showEcho } from "../phantom";
 
 const ID = "br_echo";
@@ -45,6 +46,8 @@ function createEcho(foe: Enemy, side: number, cuts: number, power: number): Effe
           }),
         );
         game.fx.push(createFloorRing(x + face * 20, foe.y, 20, CRIMSON, 0.3));
+        const at = { x: x + face * 4, y: foe.y - 20, face, reach: 22 };
+        brynnFx(ID, "slash", at, { damage: progress.stats.ad * power, quiet: done > 1, signature: CRESCENT });
         if (foe.hp > 0) {
           dealDamage(foe, progress.stats.ad * power, {
             fromX: x,

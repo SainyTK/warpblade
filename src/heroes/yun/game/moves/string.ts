@@ -11,6 +11,7 @@ import { STRING_CANCEL, STRING_FEEL, STRING_POWER, TIDE_WAVE } from "../../const
 import { SPIRIT } from "../../constants/swords";
 import { createDelayed } from "../effects/delayed";
 import { createQiWave } from "../effects/qiWave";
+import { TIDE as TIDE_FX, yunFx } from "../fx";
 import { gainSwords } from "../swords";
 import { CRANE, LEAF, TIDE, WILLOW } from "./slashes";
 
@@ -35,6 +36,8 @@ function tideImpact(hits: number): void {
   for (const face of ways) {
     const x = hero.x + face * 20;
     game.fx.push(createQiWave(x, hero.y + 1 - half, face, crescent));
+    const at = { x, y: hero.y, face, reach: crescent.reach * 0.5 };
+    yunFx(SKILL.tide, "wave", at, { damage: crescent.damage, quiet: face !== hero.face, signature: TIDE_FX });
     if (v.twin)
       game.fx.push(
         createDelayed(TIDE_WAVE.twinDelay, () => game.fx.push(createQiWave(x, hero.y + 1 - half, face, crescent))),

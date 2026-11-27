@@ -9,6 +9,7 @@ import type { Enemy } from "../../../../types/enemy";
 import type { SkillBehavior } from "../../../../types/skillBehavior";
 import { SKILL } from "../../constants/skillIds";
 import { JADE_SPARKS } from "../../look";
+import { NEEDLES, yunFx } from "../fx";
 
 /** needles tick this often and stay this long, and a mark lasts this long */
 const NEEDLE = { every: 0.5, duration: 5, mark: 3 } as const;
@@ -27,9 +28,20 @@ export function needleFoe(e: Enemy | null): void {
     duration: withBuild("duration", NEEDLE.duration),
   });
   if (v.mark) markFoe(e, SKILL.needle, withBuild("duration", NEEDLE.mark), v.mark);
+  const [cx, cy] = enemyCenter(e);
+  const face = Math.sign(cx - hero.x) || hero.face;
+  const lodged = progress.stats.ad * v.damage * stacksOf(e, SKILL.needle) * (NEEDLE.duration / NEEDLE.every);
+  yunFx(SKILL.needle, "trail", { x: hero.x + face * 6, y: hero.y - 18, face, toX: cx, toY: cy }, { quiet: true });
+  yunFx(SKILL.needle, "mark", { x: cx, y: cy, face }, { damage: lodged, delay: 0.04, signature: NEEDLES });
   if (!skillEvolved(SKILL.needle) || stacksOf(e, SKILL.needle) < v.max) return;
   const n = consumeStacks(e, SKILL.needle);
   dealDamage(e, progress.stats.ad * v.burst * n, { source: SKILL.needle, kx: 0, ky: -30 });
+  yunFx(
+    SKILL.needle,
+    "burst",
+    { x: cx, y: cy, face, reach: 12 },
+    { damage: progress.stats.ad * v.burst * n, delay: 0.08, signature: NEEDLES },
+  );
   game.fx.push(createImpact(...enemyCenter(e), hero.face, true, JADE_SPARKS));
 }
 

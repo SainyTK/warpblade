@@ -15,6 +15,7 @@ import { FALL } from "../../constants/fall";
 import { createFloorWave } from "../effects/floorWave";
 import { later } from "../effects/later";
 import { createQuake } from "../effects/quake";
+import { brynnFx, CRESCENT, CREST, layered, PLANTED } from "../fx";
 
 /** the crescent's look: an arc as tall as the reach allows, round the point the blade comes down on */
 const crescent = (reach: number) => ({
@@ -41,6 +42,14 @@ function fall(level: number, face: number, n: number): void {
   const reach = FALL.reach[level - 1] * (1 + (v.reach ?? 0)) * (1 + (v.widen ?? 0) * n);
   const damage = ULT_LEVELS[level - 1].power * progress.stats.ad * FALL.share * (v.power ?? 1);
   game.fx.push(createSlash(h.x, h.y, face, crescent(reach)));
+  const at = { x: h.x + face * 20, y: h.y, face, reach: 18 + level * 5 };
+  if (n === 0) {
+    brynnFx("br_fall", "pillar", at, { damage, signature: layered(CREST, PLANTED) });
+    brynnFx("br_fall", "nova", { ...at, reach: reach * 0.35 }, { damage, quiet: true, delay: 0.05 });
+  } else {
+    const swing = { x: h.x + face * 12, y: h.y - 24, face, reach: 26 };
+    brynnFx("br_fall", "slash", swing, { damage, quiet: true, signature: CRESCENT });
+  }
   game.fx.push(createFloorRing(h.x + face * 20, h.y, reach, CRIMSON, 0.55));
   game.fx.push(createFloorRing(h.x + face * 20, h.y, reach * 0.5, CRIMSON, 0.4));
   lights.add(h.x + face * 20, h.y - 20, 80, CRIMSON[4], 1, 0.4);

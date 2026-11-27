@@ -1,7 +1,8 @@
 import { drillFighter } from "../../../../../drill";
-import { game } from "../../../../../game/state";
+import { game, progress } from "../../../../../game/state";
 import type { YunDrillSkill } from "../../../types/drillSkill";
 import { createEchoThrust } from "../../effects/echoThrust";
+import { VOLLEY, yunFx } from "../../fx";
 import { hoverPlace } from "../../hover";
 
 const ID = "yu_echo";
@@ -12,9 +13,13 @@ export const TWIN_ECHO_DRILL: YunDrillSkill = {
   id: ID,
   slashed(strike, landed, { values, evolved }) {
     const echoes = strike === "second" || (values.first && strike === "first") || (values.all && strike !== "warp");
-    if (!landed || !echoes || !drillFighter()) {
+    const h = drillFighter();
+    if (!landed || !echoes || !h) {
       return;
     }
+    const reach = evolved ? values.myriad : values.reach;
+    const at = { x: h.x + h.face * 14, y: h.y - 22, face: h.face, toX: h.x + h.face * reach, toY: h.y - 22 };
+    yunFx(ID, "trail", at, { damage: progress.stats.ad * values.power * values.swords, signature: VOLLEY });
     for (let i = 0; i < values.swords; i++) {
       game.fx.push(
         createEchoThrust({

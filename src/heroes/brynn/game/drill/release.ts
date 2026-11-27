@@ -6,6 +6,7 @@ import { createFloorWave } from "../effects/floorWave";
 import { createCrescentWave } from "../effects/heavyWave";
 import { createPillars } from "../effects/pillars";
 import { createQuake } from "../effects/quake";
+import { brynnFx, CREST, layered, PLANTED } from "../fx";
 
 const SHARE = 0.35;
 const FISSURE_SPEED = 330;
@@ -26,6 +27,9 @@ export function releaseCrimsonFall({ tier, x, y, face }: SkillCast): void {
   const damage = (tier.damage / 10) * progress.stats.ad * SHARE;
   lights.add(x, y - 14, 34 + tier.level * 10, CRIMSON[4], 0.9, 0.4);
   shake(0.12 + tier.level * 0.05, 1 + tier.level);
+  const at = { x: x + face * 20, y, face, reach: 18 + tier.level * 5 };
+  brynnFx("br_fall", "pillar", at, { damage, signature: layered(CREST, PLANTED) });
+  brynnFx("br_fall", "nova", { ...at, reach: tier.reach * 0.35 }, { damage, quiet: true, delay: 0.05 });
   switch (tier.level) {
     case 1:
       game.fx.push(createCrescentWave({ x, y: y - 18, face, reach: tier.reach + 30, damage, source: "ultimate" }));

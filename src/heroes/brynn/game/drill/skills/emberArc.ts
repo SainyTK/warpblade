@@ -5,6 +5,7 @@ import { game, hero, progress } from "../../../../../game/state";
 import type { ElementProjectile } from "../../../../../types/drill";
 import type { BrynnDrillSkill } from "../../../types/drillSkill";
 import { createCrescentWave } from "../../effects/heavyWave";
+import { brynnFx, CRESCENT } from "../../fx";
 import { skillStrike } from "../strike";
 
 const ID = "br_arc";
@@ -28,8 +29,15 @@ export const EMBER_ARC_DRILL: BrynnDrillSkill = {
     }
     ignite(foe, values.burn);
     skillStrike(foe, values.blast ?? 0, ID);
+    const [x, y] = enemyCenter(foe);
+    brynnFx(
+      ID,
+      "burst",
+      { x, y, face: hero.face, reach: 12 },
+      { damage: progress.stats.ad * (values.blast ?? 0.5) * 3 },
+    );
     if (evolved) {
-      const [x, y] = enemyCenter(foe);
+      brynnFx(ID, "slash", { x, y, face: hero.face, reach: 18 }, { quiet: true, signature: CRESCENT });
       crescent(x, y, hero.face, values.chain);
     }
   },
@@ -48,6 +56,8 @@ export const EMBER_ARC_DRILL: BrynnDrillSkill = {
       if (bolt.spell.id === "arc" && !thrown.has(bolt)) {
         thrown.add(bolt);
         crescent(h.x, h.y - 18, bolt.face, values.crescent);
+        const at = { x: h.x + bolt.face * 8, y: h.y - 18, face: bolt.face, reach: 16 };
+        brynnFx(ID, "slash", at, { damage: progress.stats.ad * values.crescent, signature: CRESCENT });
       }
     }
   },

@@ -4,6 +4,7 @@ import { skillEvolved, skillValues } from "../../../game/skills/query";
 import { game, hero, lights, progress } from "../../../game/state";
 import { ARMOUR } from "../constants/armour";
 import { CRIMSON, CRIMSON_SPARKS } from "../constants/colors";
+import { brynnFx, isLead, ARMOUR as PLATES } from "./fx";
 import { addHeft, heftMost } from "./heft";
 import { brynn } from "./state";
 
@@ -45,6 +46,8 @@ export function steadfast(): boolean {
   const y = hero.y - 24;
   game.fx.push(createImpact(x, y, -hero.face, false, CRIMSON_SPARKS));
   lights.add(x, y, 16, CRIMSON[4], 0.6, 0.15);
+  if (isLead("br_ironskin"))
+    brynnFx("br_ironskin", "mark", { x: hero.x, y: hero.y - 18, face: hero.face }, { signature: PLATES });
   const v = skillValues("br_ironskin");
   addHeft(v.heft ?? 0);
   if (v.mp) hero.mp = Math.min(progress.stats.mp, hero.mp + v.mp);

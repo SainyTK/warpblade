@@ -10,6 +10,7 @@ import { CRIMSON_SPARKS } from "../constants/colors";
 import { FISSURE } from "../constants/heft";
 import { SHOCKWAVE } from "../constants/string";
 import { createFloorWave } from "./effects/floorWave";
+import { brynnFx, CREST, RAM } from "./fx";
 import { addHeft } from "./heft";
 
 const ID = "br_charge";
@@ -35,6 +36,7 @@ function passed(e: Enemy): void {
     melee: true,
   });
   game.fx.push(createImpact(e.x, e.y - 10, hero.face, true, CRIMSON_SPARKS));
+  brynnFx(ID, "burst", { x: e.x, y: e.y - 10, face: hero.face, reach: 8 }, { quiet: true });
   addHeft(v.heft ?? 0);
   if (v.stamina) refundStamina(v.stamina);
 }
@@ -42,6 +44,8 @@ function passed(e: Enemy): void {
 /** the dodge ends: a shockwave ahead, and with Battering Ram a fissure back along the path */
 function ended(): void {
   const v = skillValues(ID);
+  const path = { x: charge.from, y: hero.y - 14, face: hero.face, toX: hero.x - hero.face * 8, toY: hero.y - 14 };
+  brynnFx(ID, "trail", path, { damage: progress.stats.ad * (v.power ?? 1), signature: RAM });
   if (!v.wave) return;
   const y = surfaceBelow(hero.x, hero.y);
   game.fx.push(
@@ -58,6 +62,8 @@ function ended(): void {
   );
   if (!skillEvolved(ID)) return;
   const reach = Math.abs(hero.x - charge.from) + 10;
+  const back = { x: hero.x, y, face: -hero.face, reach };
+  brynnFx(ID, "wave", back, { damage: progress.stats.ad * v.trail, quiet: true, signature: CREST });
   game.fx.push(
     createFloorWave({
       x: hero.x,

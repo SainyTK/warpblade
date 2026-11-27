@@ -3,6 +3,7 @@ import { game, hero, progress } from "../../../../game/state";
 import { SKILL } from "../../constants/skillIds";
 import { AIR_LIMIT } from "../../constants/string";
 import { createQiWave } from "../effects/qiWave";
+import { PETALS, yunFx } from "../fx";
 import { yun } from "../state";
 import { gainSwords } from "../swords";
 
@@ -18,6 +19,8 @@ export const airEchoes = (): number => skillValues(SKILL.petal).airEcho ?? 1;
 export function airCut(id: string, hits: number): void {
   if (!skillLevel(SKILL.petal)) return;
   const v = skillValues(SKILL.petal);
+  const at = { x: hero.x + hero.face * 12, y: hero.y - 10, face: hero.face, reach: 16 };
+  yunFx(SKILL.petal, "slash", at, { damage: progress.stats.ad * (v.power ?? 1), quiet: hits === 0, signature: PETALS });
   if (v.sword && hits > 0 && !yun.airSword) {
     yun.airSword = true;
     gainSwords(1);

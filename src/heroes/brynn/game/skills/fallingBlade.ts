@@ -11,6 +11,7 @@ import type { Enemy } from "../../../../types/enemy";
 import type { SkillBehavior, SkillMemory } from "../../../../types/skillBehavior";
 import { WHITE } from "../../../../utils/color";
 import { CRIMSON, CRIMSON_SPARKS } from "../../constants/colors";
+import { brynnFx, isLead, PLANTED } from "../fx";
 
 const ID = "br_falling";
 /** how hard the blade throws foes up from its sixth level */
@@ -32,6 +33,14 @@ function createBlade(foe: Enemy): Effect {
         landed = true;
         const reach = withBuild("area", v.reach);
         game.fx.push(createFloorRing(x, y, reach, CRIMSON, 0.35));
+        const lead = isLead(ID);
+        brynnFx(
+          ID,
+          "pillar",
+          { x, y, reach: 34 },
+          { damage: progress.stats.ad * v.power, quiet: !lead, signature: PLANTED },
+        );
+        brynnFx(ID, "nova", { x, y, reach: reach * 0.7 }, { quiet: true, delay: 0.03 });
         shake(0.12, 1.6);
         for (const e of game.enemies) {
           if (e.hp <= 0 || Math.abs(e.x - x) > reach || Math.abs(e.y - y) > 40) continue;

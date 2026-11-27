@@ -1,7 +1,8 @@
 import { skillValues } from "../../../../game/skills/query";
-import { game } from "../../../../game/state";
+import { game, hero } from "../../../../game/state";
 import type { SkillBehavior, SkillMemory } from "../../../../types/skillBehavior";
 import { SKILL } from "../../constants/skillIds";
+import { BREATH, yunFx } from "../fx";
 import { fillSwords } from "../swords";
 
 interface Memory extends SkillMemory {
@@ -15,6 +16,8 @@ export const sagesBreath: SkillBehavior = {
     const m = memory as Memory;
     if (m.wave === game.wave) return;
     m.wave = game.wave;
-    if (skillValues(SKILL.breath).wave) fillSwords();
+    if (!skillValues(SKILL.breath).wave) return;
+    fillSwords();
+    yunFx(SKILL.breath, "nova", { x: hero.x, y: hero.y, face: hero.face, reach: 18 }, { signature: BREATH });
   },
 };

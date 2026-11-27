@@ -4,12 +4,13 @@ import { drawThrownBlade } from "../../../game/effects/thrownWeapon";
 import { warpSlash } from "../../../game/hero/warp";
 import { meleeHit } from "../../../game/meleeHit";
 import { skillValues, withBuild } from "../../../game/skills/query";
-import { game, hero } from "../../../game/state";
+import { game, hero, progress } from "../../../game/state";
 import { boxAhead, newSwing } from "../../../game/world";
 import type { WarpStyle } from "../../../types/moveset";
 import { CRIMSON } from "../constants/colors";
 import { SLASH } from "../constants/slashes";
 import { ARRIVAL_RING, THROWN_SPIN } from "../constants/warp";
+import { brynnFx, SPUN } from "./fx";
 
 /** half of Anvilheart's length from the point, the middle it spins round */
 const MIDDLE = 15;
@@ -35,6 +36,14 @@ function arrived(): void {
   const reach = withBuild("area", ARRIVAL_RING.reach + (v.ring ?? 0));
   newSwing();
   game.fx.push(createFloorRing(hero.x, hero.y, reach, CRIMSON, 0.35));
+  const power = progress.stats.ad * (ARRIVAL_RING.power + (v.ringPower ?? 0));
+  brynnFx(
+    "br_spin",
+    "slash",
+    { x: hero.x + hero.face * 12, y: hero.y - 18, face: hero.face, reach: 20 },
+    { damage: power * 2, signature: SPUN },
+  );
+  brynnFx("br_spin", "nova", { x: hero.x, y: hero.y, reach: reach * 0.7 }, { damage: power, quiet: true });
   meleeHit([boxAhead(-reach, -24, reach, 4)], {
     power: ARRIVAL_RING.power + (v.ringPower ?? 0),
     kx: 60,

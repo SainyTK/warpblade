@@ -6,6 +6,7 @@ import type { SkillBehavior, SkillMemory } from "../../../../types/skillBehavior
 import { SKILL } from "../../constants/skillIds";
 import { createQiRing } from "../effects/qiRing";
 import { createQiWave } from "../effects/qiWave";
+import { CLOUD, yunFx } from "../fx";
 import { gainSwords } from "../swords";
 
 interface Memory extends SkillMemory {
@@ -25,6 +26,12 @@ function ring(m: Memory): void {
   const radius = withBuild("area", v.radius);
   const cy = hero.y - 14;
   game.fx.push(createQiRing(hero.x, cy, radius));
+  yunFx(
+    SKILL.cloud,
+    "nova",
+    { x: hero.x, y: hero.y, face: hero.face, reach: radius * 0.6 },
+    { damage: progress.stats.ad * v.ring, signature: CLOUD },
+  );
   for (const e of game.enemies) {
     if (e.hp <= 0 || distance2(e, hero.x, cy) > radius * radius) continue;
     const dir = Math.sign(e.x - hero.x) || hero.face;
@@ -40,7 +47,9 @@ function ring(m: Memory): void {
 function land(): void {
   const v = skillValues(SKILL.cloud);
   if (!v.land) return;
-  for (const face of [-1, 1])
+  for (const face of [-1, 1]) {
+    const at = { x: hero.x + face * 6, y: hero.y, face, reach: LAND_WAVE.reach * 0.5 };
+    yunFx(SKILL.cloud, "wave", at, { damage: progress.stats.ad * v.land, quiet: face !== hero.face });
     game.fx.push(
       createQiWave(hero.x + face * 6, hero.y - 6, face, {
         reach: withBuild("area", LAND_WAVE.reach),
@@ -49,6 +58,7 @@ function land(): void {
         half: LAND_WAVE.half,
       }),
     );
+  }
 }
 
 /** Cloud Step: the second jump sends a ring of qi, and a landing from a jump sends waves both ways */

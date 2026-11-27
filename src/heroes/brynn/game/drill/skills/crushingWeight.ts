@@ -2,7 +2,9 @@ import { drillFighter } from "../../../../../drill";
 import { addStacks } from "../../../../../game/enemies/skillStatus";
 import { skillValues } from "../../../../../game/skills/query";
 import { progress } from "../../../../../game/state";
+import { surfaceBelow } from "../../../../../game/world";
 import type { BrynnDrillSkill } from "../../../types/drillSkill";
+import { brynnFx, PLANTED } from "../../fx";
 
 const ID = "br_crush";
 
@@ -20,6 +22,11 @@ export const CRUSHING_WEIGHT_DRILL: BrynnDrillSkill = {
       damage: progress.stats.ad * v.damage,
       every: v.every,
       duration: v.time,
+    });
+    const at = { x: foe.x, y: surfaceBelow(foe.x, foe.y - 4), reach: 20 };
+    brynnFx(ID, "spikes", at, {
+      damage: progress.stats.ad * v.damage * v.max * (v.time / v.every),
+      signature: PLANTED,
     });
     if (v.halt) {
       foe.halt = Math.max(foe.halt, v.every);

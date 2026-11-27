@@ -1,6 +1,7 @@
 import { game } from "../../../../../game/state";
 import { shake } from "../../../../../game/world";
 import type { BrynnDrillSkill } from "../../../types/drillSkill";
+import { brynnFx } from "../../fx";
 import { later } from "../later";
 import { skillStrike } from "../strike";
 
@@ -28,6 +29,7 @@ export const CRIMSON_FALL_DRILL: BrynnDrillSkill = {
     }
     const echo = (share: number) => () => {
       shake(0.12, 2);
+      brynnFx(ID, "nova", { x, y, face, reach: reach * 0.4 }, { quiet: true, damage: (tier.damage / 10) * share });
       for (const foe of caught()) {
         skillStrike(foe, (tier.damage / 10) * share, ID);
       }

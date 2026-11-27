@@ -5,6 +5,7 @@ import { game, progress } from "../../../../../game/state";
 import { CRIMSON } from "../../../constants/colors";
 import type { BrynnDrillSkill } from "../../../types/drillSkill";
 import { createFloorWave } from "../../effects/floorWave";
+import { brynnFx, PLANTED } from "../../fx";
 import { foesNear, skillStrike } from "../strike";
 
 const ID = "br_crater";
@@ -26,6 +27,7 @@ export const CRATER_LEAP_DRILL: BrynnDrillSkill = {
     }
     const kicked = h.wallLock > 0;
     if (kicked && !crater.kicked && values.kick) {
+      brynnFx(ID, "burst", { x: h.x, y: h.y - 12, face: h.face, reach: 8 }, { quiet: true });
       for (const foe of foesNear(h.x, h.y - 12, KICK_RADIUS)) {
         skillStrike(foe, values.kick, ID);
       }
@@ -33,6 +35,9 @@ export const CRATER_LEAP_DRILL: BrynnDrillSkill = {
     crater.kicked = kicked;
     if (h.grounded && !crater.grounded && crater.fall >= HARD_FALL) {
       game.fx.push(createFloorRing(h.x, h.y, values.radius, CRIMSON, 0.4));
+      const damage = progress.stats.ad * values.ring;
+      brynnFx(ID, "spikes", { x: h.x, y: h.y, face: h.face, reach: 22 }, { damage, quiet: true });
+      brynnFx(ID, "nova", { x: h.x, y: h.y, reach: values.radius * 0.7 }, { damage, signature: PLANTED });
       for (const foe of foesNear(h.x, h.y - 8, values.radius)) {
         if (evolved) {
           foe.vx += Math.sign(h.x - foe.x) * PULL;
@@ -44,6 +49,12 @@ export const CRATER_LEAP_DRILL: BrynnDrillSkill = {
       }
       if (evolved) {
         for (const face of [-1, 1]) {
+          brynnFx(
+            ID,
+            "wave",
+            { x: h.x, y: h.y, face, reach: 100 },
+            { quiet: true, damage: progress.stats.ad * values.fissure },
+          );
           game.fx.push(
             createFloorWave({
               x: h.x,
