@@ -1,13 +1,14 @@
 import { createFloorRing } from "../../../game/effects/floorRing";
 import { feat } from "../../../game/feat";
 import { skillValues, withBuild } from "../../../game/skills/query";
-import { game, hero, lights } from "../../../game/state";
+import { game, hero, lights, progress } from "../../../game/state";
 import { sfx } from "../../../services/audio";
 import { STAT } from "../constants/achievements";
 import { RADIANCE, VALOR } from "../constants/kit";
 import { DAWN_RAMP } from "../constants/light";
 import { RESOLVE_BARRIER, UNBROKEN_LEVEL } from "../constants/skillNumbers";
 import { raiseBarrier } from "./barrier";
+import { aldricFx } from "./fx";
 import { aldric } from "./state";
 import { castSanctuary } from "./ultimate/sanctuary";
 
@@ -26,6 +27,16 @@ function kindle(): void {
   sfx.chime(3);
   feat({ kind: "heroCount", stat: STAT.radiance, add: 1 });
   const v = skillValues("al_resolve");
+  aldricFx(
+    "al_resolve",
+    "nova",
+    { x: hero.x, y: hero.y, face: hero.face, reach: 30 },
+    {
+      damage: progress.stats.ad * (1 + (v.valor ?? 0)) * 2,
+      sigil: "shield",
+      lift: 20,
+    },
+  );
   if (v.barrier) raiseBarrier(RESOLVE_BARRIER, 1);
   if (v.dome) castSanctuary(UNBROKEN_LEVEL);
 }

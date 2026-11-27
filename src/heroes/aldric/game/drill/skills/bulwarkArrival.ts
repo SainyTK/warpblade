@@ -1,7 +1,9 @@
 import { drillFighter } from "../../../../../drill";
 import { staggerFoe } from "../../../../../game/enemies/stagger";
 import { hero, progress } from "../../../../../game/state";
+import { surfaceBelow } from "../../../../../game/world";
 import type { AldricDrillSkill } from "../../../types/drillSkill";
+import { aldricFx } from "../../fx";
 import { foesNear } from "../../strike";
 import { attackStrike } from "../strike";
 
@@ -21,6 +23,21 @@ export const BULWARK_ARRIVAL_DRILL: AldricDrillSkill = {
     const h = drillFighter();
     if (strike !== "warp" || !h) {
       return;
+    }
+    const floor = surfaceBelow(h.x, h.y - 2);
+    aldricFx(
+      ID,
+      "pillar",
+      { x: h.x + h.face * 6, y: floor, face: h.face, reach: 28 },
+      {
+        damage: progress.stats.ad * 2 * (1 + values.damage),
+        sigil: "sword",
+        lift: 12,
+      },
+    );
+    aldricFx(ID, "nova", { x: h.x, y: floor, reach: values.blast || 24 }, { quiet: true, delay: 0.04 });
+    if (evolved) {
+      aldricFx(ID, "pillar", { x: h.x - h.face * 14, y: floor, reach: 24 }, { quiet: true, delay: 0.1 });
     }
     if (values.blast) {
       for (const foe of foesNear(h.x, h.y - 16, values.blast)) {

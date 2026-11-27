@@ -4,6 +4,7 @@ import { game, hero, progress } from "../../../../../game/state";
 import type { Enemy } from "../../../../../types/enemy";
 import type { AldricDrillSkill } from "../../../types/drillSkill";
 import { createLightWave } from "../../effects/lightWave";
+import { aldricFx } from "../../fx";
 import { attackStrike } from "../strike";
 
 const ID = "al_retort";
@@ -35,6 +36,14 @@ export const IRON_RETORT_DRILL: AldricDrillSkill = {
   },
   parried(fromX, { values, evolved }) {
     const foe = attacker(fromX);
+    const guard = { x: hero.x + hero.face * 10, y: hero.y - 18, face: hero.face, reach: 12 };
+    aldricFx(ID, "burst", guard, { damage: progress.stats.ad * (1 + (values.strike ?? 0)), sigil: "shield" });
+    if (evolved) {
+      for (const side of [1, -1]) {
+        const crescent = { x: hero.x + side * 6, y: hero.y - 18, face: side, reach: 18 };
+        aldricFx(ID, "slash", crescent, { quiet: true, delay: 0.04 });
+      }
+    }
     if (foe) {
       attackStrike(foe, values.strike ?? 0, ID, { kx: hero.face * 80 });
       if (values.stagger) {

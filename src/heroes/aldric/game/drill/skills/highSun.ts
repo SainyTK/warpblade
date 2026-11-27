@@ -2,8 +2,10 @@ import { enemyCenter } from "../../../../../game/enemies/enemy";
 import { addStacks } from "../../../../../game/enemies/skillStatus";
 import { staggerFoe } from "../../../../../game/enemies/stagger";
 import { game, hero, progress } from "../../../../../game/state";
+import { surfaceBelow } from "../../../../../game/world";
 import type { AldricDrillSkill } from "../../../types/drillSkill";
 import { createSunPillar } from "../../abilities/pillar";
+import { aldricFx } from "../../fx";
 import { abilityStrike } from "../strike";
 
 const ID = "al_rally";
@@ -39,6 +41,22 @@ export const HIGH_SUN_DRILL: AldricDrillSkill = {
     }
     cast.called = true;
     const [x] = enemyCenter(foe);
+    aldricFx(
+      ID,
+      "pillar",
+      { x, y: surfaceBelow(x, foe.y - 2), face: hero.face, reach: 34 },
+      {
+        damage: progress.stats.ap * (spell.damage / 10 + (values.extra ?? 0)),
+        sigil: "sun",
+        lift: 34,
+      },
+    );
+    if (evolved) {
+      for (const side of [-1, 1]) {
+        const sx = x + side * GAP;
+        aldricFx(ID, "pillar", { x: sx, y: surfaceBelow(sx, foe.y - 2), reach: 26 }, { quiet: true, delay: ECHO });
+      }
+    }
     const power = (spell.damage / 10) * 0.6 + (values.extra ?? 0);
     if (values.second) {
       pillar(x + hero.face * GAP, 0.1, power, values.stun);

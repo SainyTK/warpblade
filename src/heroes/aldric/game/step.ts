@@ -1,3 +1,4 @@
+import { usesDrill } from "../../../drill";
 import { refundStamina } from "../../../game/hero/stamina";
 import { objectMemory, rememberPerSeat } from "../../../game/seatMemory";
 import { skillEvolved, skillValues, withBuild } from "../../../game/skills/query";
@@ -6,16 +7,18 @@ import type { Enemy } from "../../../types/enemy";
 import { STEP } from "../constants/skillNumbers";
 import { raiseBarrier } from "./barrier";
 import { createDelayedRing } from "./effects/delayedRing";
+import { aldricFx } from "./fx";
 import { strikeEach } from "./strike";
 import { gainValor } from "./valor";
 
 /** stamina this dodge has given back, so the refund has a ceiling */
-const step = { refunded: 0 };
+const step = { refunded: 0, fromX: 0 };
 rememberPerSeat(objectMemory(step, true));
 
 /** Shield Step: the dodge starts */
 function started(): void {
   step.refunded = 0;
+  step.fromX = hero.x;
 }
 
 /** a foe the dodge passes takes a shield blow; Valor and stamina for each */
@@ -40,6 +43,11 @@ function passed(e: Enemy): void {
 function ended(): void {
   const v = skillValues("al_step");
   const evolved = skillEvolved("al_step");
+  if (!usesDrill()) {
+    const streak = { x: step.fromX, y: hero.y - 15, face: hero.face, toX: hero.x, toY: hero.y - 15 };
+    aldricFx("al_step", "trail", streak, { damage: progress.stats.ad * (v.power ?? 1), sigil: "shield" });
+    if (evolved) aldricFx("al_step", "nova", { x: hero.x, y: hero.y, reach: STEP.ring }, { quiet: true, delay: 0.05 });
+  }
   if (v.barrier) raiseBarrier(STEP.barrier, evolved ? 2 : 1);
   if (evolved)
     game.fx.push(

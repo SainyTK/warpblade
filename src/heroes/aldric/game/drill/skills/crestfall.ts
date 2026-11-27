@@ -2,9 +2,10 @@ import { drillFighter } from "../../../../../drill";
 import { enemyCenter } from "../../../../../game/enemies/enemy";
 import { staggerFoe } from "../../../../../game/enemies/stagger";
 import { game, hero, progress } from "../../../../../game/state";
-import { shake } from "../../../../../game/world";
+import { shake, surfaceBelow } from "../../../../../game/world";
 import type { AldricDrillSkill } from "../../../types/drillSkill";
 import { createSunPillar } from "../../abilities/pillar";
+import { aldricFx } from "../../fx";
 import { foesNear } from "../../strike";
 import { attackStrike } from "../strike";
 
@@ -34,6 +35,24 @@ export const CRESTFALL_DRILL: AldricDrillSkill = {
   slashed(strike, _landed, { values, evolved }) {
     if (strike !== "third") {
       return;
+    }
+    const gx = hero.x + hero.face * 18;
+    const floor = surfaceBelow(gx, hero.y - 2);
+    aldricFx(
+      ID,
+      "pillar",
+      { x: gx, y: floor, face: hero.face, reach: 26 },
+      {
+        damage: progress.stats.ad * 2 * (1 + values.finisher),
+        sigil: "sword",
+        lift: 12,
+      },
+    );
+    if (evolved) {
+      for (let i = 1; i <= 2; i++) {
+        const px = gx + hero.face * STEP * i;
+        aldricFx(ID, "pillar", { x: px, y: surfaceBelow(px, hero.y - 2), reach: 22 }, { quiet: true, delay: i * 0.08 });
+      }
     }
     if (values.ring) {
       shake(0.12, 2.5);

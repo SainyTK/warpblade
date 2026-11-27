@@ -7,6 +7,7 @@ import type { GuardStyle } from "../../../types/moveset";
 import { STAT } from "../constants/achievements";
 import { GUARD, STUN_BASH, VALOR } from "../constants/kit";
 import { shieldBlow } from "./bash";
+import { aldricFx } from "./fx";
 import { aldric } from "./state";
 import { gainValor } from "./valor";
 import { fortressLance } from "./vow";
@@ -16,6 +17,16 @@ function blockGifts(foe: Enemy | null): void {
   const mp = skillValues("al_resolve").mp ?? 0;
   hero.mp = Math.min(progress.stats.mp, hero.mp + mp);
   const heal = skillValues("al_vow").heal ?? 0;
+  aldricFx(
+    "al_vow",
+    "pillar",
+    { x: hero.x, y: hero.y, face: hero.face, reach: 22 },
+    {
+      damage: progress.stats.ad * (1 + (skillValues("al_vow").lance ?? 0)),
+      sigil: "sword",
+      lift: 14,
+    },
+  );
   hero.hp = Math.min(progress.stats.hp, hero.hp + heal);
   if (foe && skillEvolved("al_vow")) fortressLance(foe);
 }

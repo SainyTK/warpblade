@@ -16,6 +16,7 @@ import { radiantWave } from "./radiance";
 import { aldric } from "./state";
 import { gainValor, radiant } from "./valor";
 import "../types/events";
+import { aldricFx } from "./fx";
 
 /** the guard walk's speed: a share of his walk, more with Iron Vow */
 export const guardWalkSpeed = (): number =>
@@ -37,6 +38,17 @@ export function pressGuardBash(): boolean {
 /** Iron Retort on a Counterbash that struck: stamina back, its wave of light, the knock-down and more Radiance */
 function retort(foe: Enemy | null): void {
   const v = skillValues("al_retort");
+  const guard = { x: hero.x + hero.face * 12, y: hero.y - 19, face: hero.face, reach: 12 };
+  aldricFx("al_retort", "burst", guard, {
+    damage: progress.stats.ad * GUARD_BASH.counterPower * (v.power ?? 1),
+    sigil: "shield",
+  });
+  if (skillEvolved("al_retort")) {
+    for (const side of [1, -1]) {
+      const crescent = { x: hero.x + side * 6, y: hero.y - 18, face: side, reach: 18 };
+      aldricFx("al_retort", "slash", crescent, { quiet: true, delay: 0.04 });
+    }
+  }
   if (v.refund) refundStamina(v.refund);
   if (foe && v.stun) foe.stun = Math.max(foe.stun, v.stun);
   if (v.extend) {

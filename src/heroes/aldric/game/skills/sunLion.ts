@@ -13,6 +13,7 @@ import { WHITE } from "../../../../utils/color";
 import { DAWN_RAMP, DAWN_SPARKS } from "../../constants/light";
 import { LION } from "../../constants/skillNumbers";
 import { createDelayedRing } from "../effects/delayedRing";
+import { aldricFx } from "../fx";
 
 const ID = "al_lion";
 /** Pride of Dawn's lions never leave */
@@ -42,6 +43,19 @@ function land(l: Lion, foe: Enemy): void {
     stun: v.stun ?? 0,
   });
   game.fx.push(createImpact(...enemyCenter(foe), l.face, false, DAWN_SPARKS));
+  const [fx, fy] = enemyCenter(foe);
+  aldricFx(
+    ID,
+    "burst",
+    { x: fx, y: fy, face: l.face, reach: 13 },
+    { damage: progress.stats.ad * v.power, sigil: "sun" },
+  );
+  aldricFx(
+    ID,
+    "wave",
+    { x: l.x, y: GROUND, face: l.face, reach: 26 },
+    { quiet: true, damage: progress.stats.ad * v.power },
+  );
   if (v.mark) markFoe(foe, ID, withBuild("duration", LION.mark), v.mark);
 }
 
@@ -81,6 +95,12 @@ function summon(m: SkillMemory, life: number): void {
   const v = skillValues(ID);
   const l: Lion = { x: hero.x - hero.face * 10, y: GROUND, face: hero.face, left: life, next: 0.3, leap: null };
   lionsOf(m).push(l);
+  aldricFx(
+    ID,
+    "nova",
+    { x: l.x, y: GROUND, face: l.face, reach: 20 },
+    { quiet: !v.roar, damage: progress.stats.ad * (v.roar ?? v.power) },
+  );
   if (v.roar)
     game.fx.push(
       createDelayedRing(l.x, GROUND, withBuild("area", LION.roar), 0, progress.stats.ad * v.roar, {

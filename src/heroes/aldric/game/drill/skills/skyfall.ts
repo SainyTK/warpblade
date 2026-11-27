@@ -1,8 +1,9 @@
 import { drillFighter } from "../../../../../drill";
 import { game, hero, progress } from "../../../../../game/state";
-import { shake } from "../../../../../game/world";
+import { shake, surfaceBelow } from "../../../../../game/world";
 import type { AldricDrillSkill } from "../../../types/drillSkill";
 import { createSunPillar } from "../../abilities/pillar";
+import { aldricFx } from "../../fx";
 import { foesNear } from "../../strike";
 import { attackStrike } from "../strike";
 
@@ -32,6 +33,22 @@ export const SKYFALL_DRILL: AldricDrillSkill = {
       }
     }
     sky.wallLock = h.wallLock;
+    if (h.grounded && !sky.grounded && sky.slashed) {
+      const floor = surfaceBelow(h.x, h.y - 2);
+      aldricFx(
+        ID,
+        "nova",
+        { x: h.x, y: floor, face: h.face, reach: values.radius || 26 },
+        {
+          damage: progress.stats.ad * (1 + (values.slam ?? 0)),
+          sigil: "shield",
+          lift: 18,
+        },
+      );
+      if (evolved) {
+        aldricFx(ID, "pillar", { x: h.x, y: floor, reach: 30 }, { quiet: true, delay: 0.05 });
+      }
+    }
     if (h.grounded && !sky.grounded && sky.slashed && values.slam) {
       shake(0.1, 2);
       for (const foe of foesNear(h.x, h.y - 6, values.radius)) {

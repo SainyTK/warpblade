@@ -11,6 +11,7 @@ import { DAWN_RAMP } from "../../constants/light";
 import { PENANCE } from "../../constants/skillNumbers";
 import { foesNear } from "../strike";
 import "../../types/events";
+import { aldricFx } from "../fx";
 
 const ID = "al_penance";
 
@@ -39,9 +40,17 @@ export function lay(e: Enemy, stacks: number): void {
     every: PENANCE.every,
     duration: withBuild("duration", PENANCE.time),
   });
-  if (!skillEvolved(ID) || stacksOf(e, ID) < v.max) return;
-  const n = consumeStacks(e, ID);
   const [x, y] = enemyCenter(e);
+  const held = stacksOf(e, ID);
+  aldricFx(
+    ID,
+    "mark",
+    { x, y },
+    { damage: progress.stats.ap * v.tick * 6 * held, quiet: stacks < held && held < v.max },
+  );
+  if (!skillEvolved(ID) || held < v.max) return;
+  const n = consumeStacks(e, ID);
+  aldricFx(ID, "burst", { x, y, reach: 16 }, { damage: progress.stats.ap * v.burst * n, sigil: "sun", delay: 0.05 });
   dealDamage(e, progress.stats.ap * v.burst * n, { source: ID, fromX: hero.x, ky: -30, heavy: true });
   game.fx.push(createGlint(x, y, DAWN_RAMP[5], 1));
 }
