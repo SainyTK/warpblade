@@ -72,17 +72,18 @@ export const TIER_SCALE: Readonly<Record<StageTier, { hp: number; damage: number
 export const EXPECTED_HERO_DAMAGE: readonly (readonly [level: number, times: number])[] = [
   [1, 1],
   [15, 3],
-  [30, 12],
-  [50, 50],
-  [80, 350],
-  [99, 700],
+  [30, 24],
+  [50, 125],
+  [80, 2500],
+  [99, 6000],
 ];
 
 export const CROWD_TOUGHNESS: readonly (readonly [level: number, times: number])[] = [
   [1, 1],
   [45, 1],
-  [55, 4],
-  [99, 6],
+  [55, 5.5],
+  [80, 2.9],
+  [99, 2.8],
 ];
 
 export const HERO_DPS_AT_LEVEL_1 = 30;
