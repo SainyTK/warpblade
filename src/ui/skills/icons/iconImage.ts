@@ -1,6 +1,7 @@
 import { SpriteCanvas } from "../../../engine/sprite";
 import { heroModule } from "../../../heroes/registry";
 import { CHARACTERS } from "../../../heroes/roster";
+import { hasSkillArt, skillArtUrl } from "../../../skillArt";
 import { hex } from "../../../utils/color";
 import { spriteUrl } from "../../spriteUrl";
 import { BOON_ICONS } from "./boon";
@@ -29,8 +30,10 @@ function iconDrawing(id: string): ((s: SpriteCanvas) => void) | undefined {
 const canvas = new SpriteCanvas(SIZE, SIZE, 0, 0);
 const cache = new Map<string, string>();
 
-/** a skill's or shop item's icon as a PNG data URL, drawn once and kept */
+/** a skill's or shop item's icon as a PNG data URL: its generated art, or its drawing made once and kept */
 export function iconUrl(id: string): string {
+  const art = skillArtUrl(id);
+  if (art) return art;
   const hit = cache.get(id);
   if (hit) return hit;
   const draw = iconDrawing(id);
@@ -45,4 +48,7 @@ export function iconUrl(id: string): string {
 
 /** a skill's icon id: its evolved form's own (`<id>_evo`) when evolved and drawn, otherwise the skill's */
 export const skillIcon = (id: string, evolved: boolean): string =>
-  evolved && iconDrawing(`${id}_evo`) ? `${id}_evo` : id;
+  evolved && (hasSkillArt(`${id}_evo`) || iconDrawing(`${id}_evo`)) ? `${id}_evo` : id;
+
+/** a card's own generated icon id when there is art for it, otherwise the icon it falls back to */
+export const artOr = (id: string, fallback: string): string => (hasSkillArt(id) ? id : fallback);

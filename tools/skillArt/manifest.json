@@ -1,0 +1,2641 @@
+[
+  {
+    "id": "k_keen",
+    "set": "kael",
+    "element": "storm",
+    "name": "Keen Edge",
+    "text": "The third slash of the chain is Keen: it hits far harder."
+  },
+  {
+    "id": "k_keen_evo",
+    "set": "kael",
+    "element": "storm",
+    "name": "Peerless Edge",
+    "text": "Evolved form of Keen Edge. Every third finisher that lands throws a gold cross wave, and for 3 seconds every slash hits like the third."
+  },
+  {
+    "id": "k_skyward",
+    "set": "kael",
+    "element": "storm",
+    "name": "Skybreaker",
+    "text": "The third slash launches foes, and air slashes hit harder and spike them down."
+  },
+  {
+    "id": "k_skyward_evo",
+    "set": "kael",
+    "element": "storm",
+    "name": "Heavenfall",
+    "text": "Evolved form of Skybreaker. A spike crashes into the foes below it and stuns them."
+  },
+  {
+    "id": "k_reap",
+    "set": "kael",
+    "element": "blaze",
+    "name": "Reaping Sweep",
+    "text": "The first slash sweeps and drags foes into the chain."
+  },
+  {
+    "id": "k_reap_evo",
+    "set": "kael",
+    "element": "blaze",
+    "name": "Crystal Harvest",
+    "text": "Evolved form of Reaping Sweep. The sweep reaps every foe up to 140 px ahead and drags them in."
+  },
+  {
+    "id": "k_phase",
+    "set": "kael",
+    "element": "void",
+    "name": "Phase Cut",
+    "text": "When the second slash lands, Kael phases through the foe, so the third slash strikes its back."
+  },
+  {
+    "id": "k_phase_evo",
+    "set": "kael",
+    "element": "void",
+    "name": "Phantom Passage",
+    "text": "Evolved form of Phase Cut. The phase runs through every foe up to 160 px ahead and cuts them all."
+  },
+  {
+    "id": "k_aegis",
+    "set": "kael",
+    "element": "frost",
+    "name": "Crystal Aegis",
+    "text": "Every blow Kael blocks sets a crystal in his guard, and his next parry shatters them all at the attacker."
+  },
+  {
+    "id": "k_aegis_evo",
+    "set": "kael",
+    "element": "frost",
+    "name": "Diamond Aegis",
+    "text": "Evolved form of Crystal Aegis. Every blocked blow also throws a crystal lance back at the attacker, and the shatter throws foes high."
+  },
+  {
+    "id": "k_warpcraft",
+    "set": "kael",
+    "element": "void",
+    "name": "Warpcraft",
+    "text": "Warp Strike recharges faster and hits harder, and its arrival blasts the foes around."
+  },
+  {
+    "id": "k_warpcraft_evo",
+    "set": "kael",
+    "element": "void",
+    "name": "Rift Walker",
+    "text": "Evolved form of Warpcraft. Once every 4 seconds an arrival recharges the warp at once."
+  },
+  {
+    "id": "k_blink",
+    "set": "kael",
+    "element": "void",
+    "name": "Blink Step",
+    "text": "Kael stays untouchable after each dash, leaves a cutting afterimage, and gains air dashes."
+  },
+  {
+    "id": "k_blink_evo",
+    "set": "kael",
+    "element": "void",
+    "name": "Shadow Step",
+    "text": "Evolved form of Blink Step. Each afterimage cuts twice and reaches twice as far."
+  },
+  {
+    "id": "k_spellwarp",
+    "set": "kael",
+    "element": "void",
+    "name": "Spellwarp",
+    "text": "Warp Strike pours the selected spell into the sword, and spell cooldowns are shorter."
+  },
+  {
+    "id": "k_spellwarp_evo",
+    "set": "kael",
+    "element": "void",
+    "name": "Arcane Arrival",
+    "text": "Evolved form of Spellwarp. Every arrival leaves the selected spell ready to cast."
+  },
+  {
+    "id": "k_passing",
+    "set": "kael",
+    "element": "void",
+    "name": "Passing Cut",
+    "text": "Dashing through foes cuts every foe passed."
+  },
+  {
+    "id": "k_passing_evo",
+    "set": "kael",
+    "element": "void",
+    "name": "Phantom Rush",
+    "text": "Evolved form of Passing Cut. A phantom cuts every passed foe again a moment later."
+  },
+  {
+    "id": "k_skydance",
+    "set": "kael",
+    "element": "storm",
+    "name": "Sky Dance",
+    "text": "One more air slash, wall kicks that cut, and a stomp after air slashes."
+  },
+  {
+    "id": "k_skydance_evo",
+    "set": "kael",
+    "element": "storm",
+    "name": "Comet Dance",
+    "text": "Evolved form of Sky Dance. The stomp lands as a comet that reaches 70 px and draws foes in."
+  },
+  {
+    "id": "k_flame",
+    "set": "kael",
+    "element": "blaze",
+    "name": "Fire Flask",
+    "text": "Fire sets foes burning, and the sword makes burning foes flare."
+  },
+  {
+    "id": "k_flame_evo",
+    "set": "kael",
+    "element": "blaze",
+    "name": "Sunflask",
+    "text": "Evolved form of Fire Flask. Each fire blast throws three smaller blasts at the foes near it."
+  },
+  {
+    "id": "k_frost",
+    "set": "kael",
+    "element": "frost",
+    "name": "Ice Spikes",
+    "text": "Ice freezes longer, and a slash shatters a frozen foe."
+  },
+  {
+    "id": "k_frost_evo",
+    "set": "kael",
+    "element": "frost",
+    "name": "Glacier Bloom",
+    "text": "Evolved form of Ice Spikes. A shatter freezes the foes it splashes."
+  },
+  {
+    "id": "k_volt",
+    "set": "kael",
+    "element": "storm",
+    "name": "Lightning",
+    "text": "Thunder arcs on to more foes, and thunder-infused slashes arc too."
+  },
+  {
+    "id": "k_volt_evo",
+    "set": "kael",
+    "element": "storm",
+    "name": "Thunderhead",
+    "text": "Evolved form of Lightning. Thunder strikes the same foe again 0.3 s later."
+  },
+  {
+    "id": "k_splinters",
+    "set": "kael",
+    "element": "frost",
+    "name": "Crystal Splinters",
+    "text": "Sword blows lodge crystal splinters that bleed. Weak at first, a crowd shredder late."
+  },
+  {
+    "id": "k_splinters_evo",
+    "set": "kael",
+    "element": "frost",
+    "name": "Shatterstorm",
+    "text": "Evolved form of Crystal Splinters. The last hit of the chain and every Keen blow shatter the splinters in the foes they hit, cutting every foe around."
+  },
+  {
+    "id": "k_rift",
+    "set": "kael",
+    "element": "venom",
+    "name": "Rift Wound",
+    "text": "Warp strikes open rift wounds that drain the foe; each warp deepens them."
+  },
+  {
+    "id": "k_rift_evo",
+    "set": "kael",
+    "element": "venom",
+    "name": "Rift Collapse",
+    "text": "Evolved form of Rift Wound. A foe at full layers collapses: the wound's damage at once, doubled, and the rift pulls foes in and wounds them."
+  },
+  {
+    "id": "k_static",
+    "set": "kael",
+    "element": "storm",
+    "name": "Static Charge",
+    "text": "Dash through foes to charge them; they crackle, and your sword sets them off."
+  },
+  {
+    "id": "k_static_evo",
+    "set": "kael",
+    "element": "storm",
+    "name": "Overload",
+    "text": "Evolved form of Static Charge. Charge never runs out, and each dash strikes up to 8 charged foes with lightning."
+  },
+  {
+    "id": "k_echo",
+    "set": "kael",
+    "element": "void",
+    "name": "Phantom Edge",
+    "text": "A sword blow from behind may call a phantom of Kael that repeats the blow."
+  },
+  {
+    "id": "k_echo_evo",
+    "set": "kael",
+    "element": "void",
+    "name": "Phantom Host",
+    "text": "Evolved form of Phantom Edge. Phantoms come to any sword blow, no back blow needed, and stay on their foe repeating every blow."
+  },
+  {
+    "id": "k_familiar",
+    "set": "kael",
+    "element": "frost",
+    "name": "Crystal Familiar",
+    "text": "Casting may call a crystal familiar that fires homing shards."
+  },
+  {
+    "id": "k_familiar_evo",
+    "set": "kael",
+    "element": "frost",
+    "name": "Crystal Choir",
+    "text": "Evolved form of Crystal Familiar. Three familiars, always out, and every shard arcs to another foe."
+  },
+  {
+    "id": "k_mirror",
+    "set": "kael",
+    "element": "void",
+    "name": "Mirror Knight",
+    "text": "A parry or a perfect dodge calls a mirror knight that warp-strikes the attacker first, then the nearest foes."
+  },
+  {
+    "id": "k_mirror_evo",
+    "set": "kael",
+    "element": "void",
+    "name": "Perfect Reflection",
+    "text": "Evolved form of Mirror Knight. A parry or a perfect dodge stops time while Kael and the knight strike the attacker and every foe near."
+  },
+  {
+    "id": "k_nova",
+    "set": "kael",
+    "element": "frost",
+    "name": "Crystal Nova",
+    "text": "The four charged skills on held J hit harder, reach further and charge faster."
+  },
+  {
+    "id": "k_nova_evo",
+    "set": "kael",
+    "element": "frost",
+    "name": "Supernova",
+    "text": "Evolved form of Crystal Nova. Every charged skill bursts two more times."
+  },
+  {
+    "id": "ce_measure",
+    "set": "cerise",
+    "element": "frost",
+    "name": "Measured Touch",
+    "text": "The first thrust of the chain is a measured touch that strikes again."
+  },
+  {
+    "id": "ce_measure_evo",
+    "set": "cerise",
+    "element": "frost",
+    "name": "Perfect Measure",
+    "text": "Evolved form of Measured Touch. Every first thrust that lands calls a glass rapier through the foe."
+  },
+  {
+    "id": "ce_riposte",
+    "set": "cerise",
+    "element": "storm",
+    "name": "Riposte Chain",
+    "text": "A parry answers at once with a riposte, and the parry window grows."
+  },
+  {
+    "id": "ce_riposte_evo",
+    "set": "cerise",
+    "element": "storm",
+    "name": "Endless Riposte",
+    "text": "Evolved form of Riposte Chain. For 2 s after a parry every thrust hits twice as hard."
+  },
+  {
+    "id": "ce_lunge",
+    "set": "cerise",
+    "element": "storm",
+    "name": "Long Lunge",
+    "text": "The lunge that ends the chain hits harder and pins."
+  },
+  {
+    "id": "ce_lunge_evo",
+    "set": "cerise",
+    "element": "storm",
+    "name": "Comet Lunge",
+    "text": "Evolved form of Long Lunge. A lunge that lands readies the warp strike and the dash."
+  },
+  {
+    "id": "ce_pin",
+    "set": "cerise",
+    "element": "frost",
+    "name": "Pinning Point",
+    "text": "The air thrust pins its foe and strikes again."
+  },
+  {
+    "id": "ce_pin_evo",
+    "set": "cerise",
+    "element": "frost",
+    "name": "Butterfly Pin",
+    "text": "Evolved form of Pinning Point. Each air thrust also skewers the foes below it."
+  },
+  {
+    "id": "ce_feint",
+    "set": "cerise",
+    "element": "void",
+    "name": "Feint",
+    "text": "The second thrust is a feint that opens the foe to your next blows."
+  },
+  {
+    "id": "ce_feint_evo",
+    "set": "cerise",
+    "element": "void",
+    "name": "Phantom Feint",
+    "text": "Evolved form of Feint. A glass rapier strikes every opened foe from behind."
+  },
+  {
+    "id": "ce_markwarp",
+    "set": "cerise",
+    "element": "void",
+    "name": "Rose Mark",
+    "text": "The warp strike hits harder, recharges sooner and sets the Rose mark."
+  },
+  {
+    "id": "ce_markwarp_evo",
+    "set": "cerise",
+    "element": "void",
+    "name": "Crimson Seal",
+    "text": "Evolved form of Rose Mark. The arrival marks every foe within 70 px."
+  },
+  {
+    "id": "ce_step",
+    "set": "cerise",
+    "element": "void",
+    "name": "Passing Touch",
+    "text": "Dashing through foes cuts them."
+  },
+  {
+    "id": "ce_step_evo",
+    "set": "cerise",
+    "element": "void",
+    "name": "Petal Step",
+    "text": "Evolved form of Passing Touch. Every cut strikes twice more at half power."
+  },
+  {
+    "id": "ce_dive",
+    "set": "cerise",
+    "element": "storm",
+    "name": "Swallow Dive",
+    "text": "More air thrusts, a cutting wall kick and a stomp after an air thrust."
+  },
+  {
+    "id": "ce_dive_evo",
+    "set": "cerise",
+    "element": "storm",
+    "name": "Swallow Storm",
+    "text": "Evolved form of Swallow Dive. The stomp reaches 70 px and draws foes in."
+  },
+  {
+    "id": "ce_bloom",
+    "set": "cerise",
+    "element": "venom",
+    "name": "Rose Bloom",
+    "text": "Rose Bloom strikes harder and leaves a ring of cutting petals."
+  },
+  {
+    "id": "ce_bloom_evo",
+    "set": "cerise",
+    "element": "venom",
+    "name": "Full Bloom",
+    "text": "Evolved form of Rose Bloom. The bloom bursts on every foe within 60 px and binds them."
+  },
+  {
+    "id": "ce_needle",
+    "set": "cerise",
+    "element": "storm",
+    "name": "Needle Rain",
+    "text": "Flurry calls needles of light down on its foe."
+  },
+  {
+    "id": "ce_needle_evo",
+    "set": "cerise",
+    "element": "storm",
+    "name": "Starneedle Rain",
+    "text": "Evolved form of Needle Rain. Flurry strikes its foe a second time."
+  },
+  {
+    "id": "ce_mirrorguard",
+    "set": "cerise",
+    "element": "frost",
+    "name": "Mirror Guard",
+    "text": "Rose Line strikes harder and its light mirrors back from the foe it hits."
+  },
+  {
+    "id": "ce_mirrorguard_evo",
+    "set": "cerise",
+    "element": "frost",
+    "name": "Perfect Mirror",
+    "text": "Evolved form of Mirror Guard. Rose Line marks every foe within 50 px of the one it hits."
+  },
+  {
+    "id": "ce_thorns",
+    "set": "cerise",
+    "element": "venom",
+    "name": "Thorn Wounds",
+    "text": "Thrusts leave bleeding thorns."
+  },
+  {
+    "id": "ce_thorns_evo",
+    "set": "cerise",
+    "element": "venom",
+    "name": "Thorn Burst",
+    "text": "Evolved form of Thorn Wounds. The lunge tears every thorn out at once for 1 AD each."
+  },
+  {
+    "id": "ce_weep",
+    "set": "cerise",
+    "element": "venom",
+    "name": "Weeping Mark",
+    "text": "Foes carrying your Rose mark bleed."
+  },
+  {
+    "id": "ce_weep_evo",
+    "set": "cerise",
+    "element": "venom",
+    "name": "Crimson Weep",
+    "text": "Evolved form of Weeping Mark. A marked foe's bleeding spills onto every foe close to it at half strength."
+  },
+  {
+    "id": "ce_curse",
+    "set": "cerise",
+    "element": "venom",
+    "name": "Wilting Curse",
+    "text": "A parry curses the attacker, and the curse eats at it."
+  },
+  {
+    "id": "ce_curse_evo",
+    "set": "cerise",
+    "element": "venom",
+    "name": "Last Petal",
+    "text": "Evolved form of Wilting Curse. The lunge tears the curse out at once for 3 AD a stack."
+  },
+  {
+    "id": "ce_mirror",
+    "set": "cerise",
+    "element": "void",
+    "name": "Mirror Blade",
+    "text": "A parry or a perfect dodge can call a glass rapier that lunges through the foe."
+  },
+  {
+    "id": "ce_mirror_evo",
+    "set": "cerise",
+    "element": "void",
+    "name": "Hall of Mirrors",
+    "text": "Evolved form of Mirror Blade. After the call, glass rapiers keep lunging at the foe for 2 s."
+  },
+  {
+    "id": "ce_petals",
+    "set": "cerise",
+    "element": "venom",
+    "name": "Petal Blades",
+    "text": "Casting a spell can call petal blades that dart at foes round you."
+  },
+  {
+    "id": "ce_petals_evo",
+    "set": "cerise",
+    "element": "venom",
+    "name": "Rose Guard",
+    "text": "Evolved form of Petal Blades. Five petal blades circle you for good and dart at every foe that comes close."
+  },
+  {
+    "id": "ce_sentinel",
+    "set": "cerise",
+    "element": "venom",
+    "name": "Thorn Sentinel",
+    "text": "The lunge can plant a rapier of light in the floor that keeps thrusting at foes."
+  },
+  {
+    "id": "ce_sentinel_evo",
+    "set": "cerise",
+    "element": "venom",
+    "name": "Thorn Garden",
+    "text": "Evolved form of Thorn Sentinel. A sentinel bursts into petal blades when it fades, 6 AD round it."
+  },
+  {
+    "id": "ce_poise",
+    "set": "cerise",
+    "element": "frost",
+    "name": "Poise",
+    "text": "More air dashes, an untouchable dash, and a stronger thrust after it."
+  },
+  {
+    "id": "ce_poise_evo",
+    "set": "cerise",
+    "element": "frost",
+    "name": "Perfect Poise",
+    "text": "Evolved form of Poise. Every dash readies the warp strike."
+  },
+  {
+    "id": "ce_grace",
+    "set": "cerise",
+    "element": "frost",
+    "name": "Grace",
+    "text": "The warp's arrival pours the selected spell into the rapier and heals you."
+  },
+  {
+    "id": "ce_grace_evo",
+    "set": "cerise",
+    "element": "frost",
+    "name": "Rose Grace",
+    "text": "Evolved form of Grace. Every arrival readies the selected spell at once."
+  },
+  {
+    "id": "ce_tempest",
+    "set": "cerise",
+    "element": "venom",
+    "name": "Rose Tempest",
+    "text": "The four Rose Tempest charged skills on held J hit harder."
+  },
+  {
+    "id": "ce_tempest_evo",
+    "set": "cerise",
+    "element": "venom",
+    "name": "Rose Storm",
+    "text": "Evolved form of Rose Tempest. Every charged skill sends four more streaks, two each way."
+  },
+  {
+    "id": "al_oath",
+    "set": "aldric",
+    "element": "void",
+    "name": "Oathblade",
+    "text": "Oath cut, the first blow of the chain, adds a cut of light and later throws waves."
+  },
+  {
+    "id": "al_oath_evo",
+    "set": "aldric",
+    "element": "void",
+    "name": "Sunblade",
+    "text": "Evolved form of Oathblade. Every blow of the chain throws a great wave of light that passes through every foe."
+  },
+  {
+    "id": "al_breaker",
+    "set": "aldric",
+    "element": "storm",
+    "name": "Breaking Bash",
+    "text": "The Shield bash, the second blow of the chain, staggers, shocks the foes behind and leaves them open."
+  },
+  {
+    "id": "al_breaker_evo",
+    "set": "aldric",
+    "element": "storm",
+    "name": "Shattering Bash",
+    "text": "Evolved form of Breaking Bash. The bash bursts the Sunbrand stacks of every foe it shocks."
+  },
+  {
+    "id": "al_retort",
+    "set": "aldric",
+    "element": "storm",
+    "name": "Iron Retort",
+    "text": "A longer parry window, and the parry strikes back with the shield."
+  },
+  {
+    "id": "al_retort_evo",
+    "set": "aldric",
+    "element": "storm",
+    "name": "Retribution",
+    "text": "Evolved form of Iron Retort. A parry throws a wave of light both ways."
+  },
+  {
+    "id": "al_verdict",
+    "set": "aldric",
+    "element": "storm",
+    "name": "Verdict",
+    "text": "More Sky cuts in the air, and each one that lands calls swords of light down on its foe."
+  },
+  {
+    "id": "al_verdict_evo",
+    "set": "aldric",
+    "element": "storm",
+    "name": "Final Verdict",
+    "text": "Evolved form of Verdict. Every blow of the ground chain also calls a sword of light on its foe."
+  },
+  {
+    "id": "al_crest",
+    "set": "aldric",
+    "element": "blaze",
+    "name": "Crestfall",
+    "text": "Crest breaker, the last blow of the chain, hits far harder, knocks down and shakes the floor."
+  },
+  {
+    "id": "al_crest_evo",
+    "set": "aldric",
+    "element": "blaze",
+    "name": "Dawnbreak",
+    "text": "Evolved form of Crestfall. Crest breaker calls three pillars of light in a row ahead."
+  },
+  {
+    "id": "al_step",
+    "set": "aldric",
+    "element": "frost",
+    "name": "Shield Step",
+    "text": "Dashing through foes bashes them with the shield."
+  },
+  {
+    "id": "al_step_evo",
+    "set": "aldric",
+    "element": "frost",
+    "name": "Phalanx Step",
+    "text": "Evolved form of Shield Step. Every dash ends in a ring of light."
+  },
+  {
+    "id": "al_bulwark",
+    "set": "aldric",
+    "element": "storm",
+    "name": "Bulwark Arrival",
+    "text": "The warp strike hits harder, recharges faster and lands in a ring of light."
+  },
+  {
+    "id": "al_bulwark_evo",
+    "set": "aldric",
+    "element": "storm",
+    "name": "Twin Bulwark",
+    "text": "Evolved form of Bulwark Arrival. Every 4 s an arrival recharges the warp at once."
+  },
+  {
+    "id": "al_skyfall",
+    "set": "aldric",
+    "element": "storm",
+    "name": "Skyfall",
+    "text": "More air slashes, a cutting wall kick, and a shield slam where you land."
+  },
+  {
+    "id": "al_skyfall_evo",
+    "set": "aldric",
+    "element": "storm",
+    "name": "Falling Sun",
+    "text": "Evolved form of Skyfall. The slam calls a pillar of light where you land."
+  },
+  {
+    "id": "al_lance",
+    "set": "aldric",
+    "element": "blaze",
+    "name": "Dawn Lance",
+    "text": "Dawn Lance strikes harder, burns, marks deeper and bursts."
+  },
+  {
+    "id": "al_lance_evo",
+    "set": "aldric",
+    "element": "blaze",
+    "name": "Spear of Morning",
+    "text": "Evolved form of Dawn Lance. Every lance that strikes calls a sword of light down on its foe."
+  },
+  {
+    "id": "al_mend",
+    "set": "aldric",
+    "element": "void",
+    "name": "Mending Light",
+    "text": "Mending Light heals more, pushes foes away and leaves burning light."
+  },
+  {
+    "id": "al_mend_evo",
+    "set": "aldric",
+    "element": "void",
+    "name": "Absolution",
+    "text": "Evolved form of Mending Light. Mending Light lays full Penance on every foe it strikes."
+  },
+  {
+    "id": "al_rally",
+    "set": "aldric",
+    "element": "blaze",
+    "name": "High Sun",
+    "text": "Sunpillar stuns longer, strikes harder, burns and falls in a row."
+  },
+  {
+    "id": "al_rally_evo",
+    "set": "aldric",
+    "element": "blaze",
+    "name": "Zenith",
+    "text": "Evolved form of High Sun. Every pillar strikes twice."
+  },
+  {
+    "id": "al_brand",
+    "set": "aldric",
+    "element": "blaze",
+    "name": "Sunbrand",
+    "text": "The Shield bash brands the foes it strikes with burning light that stacks."
+  },
+  {
+    "id": "al_brand_evo",
+    "set": "aldric",
+    "element": "blaze",
+    "name": "Solar Brand",
+    "text": "Evolved form of Sunbrand. A branded foe that falls bursts and brands every foe near it to the full."
+  },
+  {
+    "id": "al_penance",
+    "set": "aldric",
+    "element": "venom",
+    "name": "Penance",
+    "text": "A foe whose blow you block burns with Penance. Grows with ability power."
+  },
+  {
+    "id": "al_penance_evo",
+    "set": "aldric",
+    "element": "venom",
+    "name": "Atonement",
+    "text": "Evolved form of Penance. When a foe's Penance fills it bursts, each stack a heavy hit."
+  },
+  {
+    "id": "al_dawn",
+    "set": "aldric",
+    "element": "blaze",
+    "name": "Lingering Dawn",
+    "text": "Sunpillar leaves burning light on the floor where it falls. Grows with ability power."
+  },
+  {
+    "id": "al_dawn_evo",
+    "set": "aldric",
+    "element": "blaze",
+    "name": "High Noon",
+    "text": "Evolved form of Lingering Dawn. The burning light calls a small pillar on a foe in it every second."
+  },
+  {
+    "id": "al_oathsworn",
+    "set": "aldric",
+    "element": "void",
+    "name": "Oathsworn",
+    "text": "A parry may call a knight of light who cuts the attacker."
+  },
+  {
+    "id": "al_oathsworn_evo",
+    "set": "aldric",
+    "element": "void",
+    "name": "Honour Guard",
+    "text": "Evolved form of Oathsworn. Two knights answer, each cutting three times."
+  },
+  {
+    "id": "al_lion",
+    "set": "aldric",
+    "element": "blaze",
+    "name": "Sun Lion",
+    "text": "A foe falling may call a lion of light that pounces on foes."
+  },
+  {
+    "id": "al_lion_evo",
+    "set": "aldric",
+    "element": "blaze",
+    "name": "Pride of Dawn",
+    "text": "Evolved form of Sun Lion. Three lions walk with him always."
+  },
+  {
+    "id": "al_falcon",
+    "set": "aldric",
+    "element": "blaze",
+    "name": "Dawn Falcon",
+    "text": "Casting a spell may send a falcon of light swooping through the foes ahead."
+  },
+  {
+    "id": "al_falcon_evo",
+    "set": "aldric",
+    "element": "blaze",
+    "name": "Sunbird",
+    "text": "Evolved form of Dawn Falcon. Falcons swoop three times and set the foes they pass burning."
+  },
+  {
+    "id": "al_resolve",
+    "set": "aldric",
+    "element": "frost",
+    "name": "Resolve",
+    "text": "More air dashes, healing dashes and a harder blow after each dash."
+  },
+  {
+    "id": "al_resolve_evo",
+    "set": "aldric",
+    "element": "frost",
+    "name": "Unbroken",
+    "text": "Evolved form of Resolve. Every dash lays burning dawn light where it ends."
+  },
+  {
+    "id": "al_vow",
+    "set": "aldric",
+    "element": "frost",
+    "name": "Iron Vow",
+    "text": "Each warp arrival pours the selected spell into the sword, and spell cooldowns are shorter."
+  },
+  {
+    "id": "al_vow_evo",
+    "set": "aldric",
+    "element": "frost",
+    "name": "Iron Fortress",
+    "text": "Evolved form of Iron Vow. Every warp arrival readies the selected spell."
+  },
+  {
+    "id": "al_sanctuary",
+    "set": "aldric",
+    "element": "void",
+    "name": "Sanctuary",
+    "text": "The four charged skills hit harder, draw foes in, charge faster and echo."
+  },
+  {
+    "id": "al_sanctuary_evo",
+    "set": "aldric",
+    "element": "void",
+    "name": "Dawn Citadel",
+    "text": "Evolved form of Sanctuary. Every charged skill bursts twice more."
+  },
+  {
+    "id": "ve_edge",
+    "set": "vesper",
+    "element": "storm",
+    "name": "Rising Edge",
+    "text": "The dusk cross, your first cut, bites deeper and leaves night echoes."
+  },
+  {
+    "id": "ve_edge_evo",
+    "set": "vesper",
+    "element": "storm",
+    "name": "Crescendo",
+    "text": "Evolved form of Rising Edge. Every dusk cross also throws a pair of crossing dusk waves ahead for 1.5 AD each."
+  },
+  {
+    "id": "ve_keen",
+    "set": "vesper",
+    "element": "frost",
+    "name": "Twin Keen",
+    "text": "The rising pair, your second cut, is followed by a quick short-blade cut."
+  },
+  {
+    "id": "ve_keen_evo",
+    "set": "vesper",
+    "element": "frost",
+    "name": "Perfect Pair",
+    "text": "Evolved form of Twin Keen. A landed rising pair cuts every foe within 60 px twice with sure crits."
+  },
+  {
+    "id": "ve_sky",
+    "set": "vesper",
+    "element": "storm",
+    "name": "Sky Ribbon",
+    "text": "One more air cut per jump, and air cuts hit harder."
+  },
+  {
+    "id": "ve_sky_evo",
+    "set": "vesper",
+    "element": "storm",
+    "name": "Heaven's Ribbon",
+    "text": "Evolved form of Sky Ribbon. Each air cut also sends a dusk wave diving down ahead for 2 AD."
+  },
+  {
+    "id": "ve_storm",
+    "set": "vesper",
+    "element": "storm",
+    "name": "Crossing Storm",
+    "text": "The moonrise, your third cut, hits harder and sends crossing dusk waves."
+  },
+  {
+    "id": "ve_storm_evo",
+    "set": "vesper",
+    "element": "storm",
+    "name": "Thousand Crossings",
+    "text": "Evolved form of Crossing Storm. The moonrise sends four pairs of waves, two each way, and each foe it cuts takes a night echo."
+  },
+  {
+    "id": "ve_turn",
+    "set": "vesper",
+    "element": "frost",
+    "name": "Turning Blade",
+    "text": "A longer parry window, and a parry turns into a short-blade cut."
+  },
+  {
+    "id": "ve_turn_evo",
+    "set": "vesper",
+    "element": "frost",
+    "name": "Whirling Mirror",
+    "text": "Evolved form of Turning Blade. A parry also spins both blades in a ring of night cuts, 3 AD to every foe within 60 px."
+  },
+  {
+    "id": "ve_ascend",
+    "set": "vesper",
+    "element": "storm",
+    "name": "Ascending Step",
+    "text": "More air dashes, and the wall kick cuts what it passes."
+  },
+  {
+    "id": "ve_ascend_evo",
+    "set": "vesper",
+    "element": "storm",
+    "name": "Moonlit Steps",
+    "text": "Evolved form of Ascending Step. Kicks and jump cuts reach 56 px and leave a dusk ring."
+  },
+  {
+    "id": "ve_warp",
+    "set": "vesper",
+    "element": "void",
+    "name": "Thrown Dusk",
+    "text": "The warp strike recharges faster and hits harder, and the arrival cuts in a cross."
+  },
+  {
+    "id": "ve_warp_evo",
+    "set": "vesper",
+    "element": "void",
+    "name": "Twin Throw",
+    "text": "Evolved form of Thrown Dusk. The short blade follows the long one: the arrival cut strikes a second time a moment later."
+  },
+  {
+    "id": "ve_slip",
+    "set": "vesper",
+    "element": "frost",
+    "name": "Slipstream",
+    "text": "Dashing through foes cuts them."
+  },
+  {
+    "id": "ve_slip_evo",
+    "set": "vesper",
+    "element": "frost",
+    "name": "Dusk Current",
+    "text": "Evolved form of Slipstream. Every dash that passes a foe also throws a pair of crossing dusk waves ahead for 1.5 AD."
+  },
+  {
+    "id": "ve_moon",
+    "set": "vesper",
+    "element": "frost",
+    "name": "Falling Moon",
+    "text": "Falling Moon strikes harder and drops more moons."
+  },
+  {
+    "id": "ve_moon_evo",
+    "set": "vesper",
+    "element": "frost",
+    "name": "Eclipse",
+    "text": "Evolved form of Falling Moon. Each moon brings an eclipse: three more moons fall around it for 1.8 AD each."
+  },
+  {
+    "id": "ve_gale",
+    "set": "vesper",
+    "element": "storm",
+    "name": "Dusk Gale",
+    "text": "Dusk Gale hits harder and blows in more gusts."
+  },
+  {
+    "id": "ve_gale_evo",
+    "set": "vesper",
+    "element": "storm",
+    "name": "Twilight Cyclone",
+    "text": "Evolved form of Dusk Gale. A gale hit lifts the foe and every foe within 40 px into the air and cuts them."
+  },
+  {
+    "id": "ve_thread",
+    "set": "vesper",
+    "element": "void",
+    "name": "Dusk Thread",
+    "text": "Dusk Thread hits harder and runs on to more foes."
+  },
+  {
+    "id": "ve_thread_evo",
+    "set": "vesper",
+    "element": "void",
+    "name": "Fate Thread",
+    "text": "Evolved form of Dusk Thread. A thread hit recharges the warp at once."
+  },
+  {
+    "id": "ve_hex",
+    "set": "vesper",
+    "element": "venom",
+    "name": "Dusk Sigil",
+    "text": "Your cuts lay dusk sigils that cut the foe on each tick."
+  },
+  {
+    "id": "ve_hex_evo",
+    "set": "vesper",
+    "element": "venom",
+    "name": "Sigil Bloom",
+    "text": "Evolved form of Dusk Sigil. Falling Moon blooms every sigil on the foes it strikes."
+  },
+  {
+    "id": "ve_night",
+    "set": "vesper",
+    "element": "void",
+    "name": "Falling Night",
+    "text": "Foes you strike in the air carry night that keeps cutting them."
+  },
+  {
+    "id": "ve_night_evo",
+    "set": "vesper",
+    "element": "void",
+    "name": "Starless Night",
+    "text": "Evolved form of Falling Night. The moonrise takes all the night on each foe it cuts, each stack a blow of 0.8 times attack damage."
+  },
+  {
+    "id": "ve_glow",
+    "set": "vesper",
+    "element": "blaze",
+    "name": "Afterglow",
+    "text": "Foes your dash passes glow with dusk that burns each tick."
+  },
+  {
+    "id": "ve_glow_evo",
+    "set": "vesper",
+    "element": "blaze",
+    "name": "Dusk Fire",
+    "text": "Evolved form of Afterglow. Every dash flares all afterglow on the stage, three ticks at once."
+  },
+  {
+    "id": "ve_shade",
+    "set": "vesper",
+    "element": "void",
+    "name": "Dusk Shade",
+    "text": "Your blows may call a shade of you that dashes through the foe."
+  },
+  {
+    "id": "ve_shade_evo",
+    "set": "vesper",
+    "element": "void",
+    "name": "Shade Troupe",
+    "text": "Evolved form of Dusk Shade. Every blow calls a shade, as often as its wait allows."
+  },
+  {
+    "id": "ve_swallow",
+    "set": "vesper",
+    "element": "storm",
+    "name": "Night Swallows",
+    "text": "Throwing a foe up may send dusk swallows diving at foes in the air."
+  },
+  {
+    "id": "ve_swallow_evo",
+    "set": "vesper",
+    "element": "storm",
+    "name": "Swallow Storm",
+    "text": "Evolved form of Night Swallows. Six swallows circle you and dive at every launch."
+  },
+  {
+    "id": "ve_twin",
+    "set": "vesper",
+    "element": "void",
+    "name": "Twin Phantom",
+    "text": "A parry or perfect dodge calls a phantom of you to cut the nearest foe."
+  },
+  {
+    "id": "ve_twin_evo",
+    "set": "vesper",
+    "element": "void",
+    "name": "Mirror Dance",
+    "text": "Evolved form of Twin Phantom. Two phantoms come, and while one is out your blows deal 30% more."
+  },
+  {
+    "id": "ve_waltz",
+    "set": "vesper",
+    "element": "void",
+    "name": "Dusk Waltz",
+    "text": "Dusk Waltz, the four charged tiers, grows: harder, faster to charge, with more dancing cuts."
+  },
+  {
+    "id": "ve_waltz_evo",
+    "set": "vesper",
+    "element": "void",
+    "name": "Endless Waltz",
+    "text": "Evolved form of Dusk Waltz. Every charged tier dances a second time half a second later at 60%."
+  },
+  {
+    "id": "ve_rhythm",
+    "set": "vesper",
+    "element": "blaze",
+    "name": "Unbroken Rhythm",
+    "text": "Landed cuts shorten the warp's recharge, and arrivals speed up your spells."
+  },
+  {
+    "id": "ve_rhythm_evo",
+    "set": "vesper",
+    "element": "blaze",
+    "name": "Perpetual Tempo",
+    "text": "Evolved form of Unbroken Rhythm. Every warp arrival readies the selected spell at once."
+  },
+  {
+    "id": "ve_grace",
+    "set": "vesper",
+    "element": "frost",
+    "name": "Wanderer's Grace",
+    "text": "Untouchable while dashing, with more air dashes and a dusk shade left behind."
+  },
+  {
+    "id": "ve_grace_evo",
+    "set": "vesper",
+    "element": "frost",
+    "name": "Dusk Ward",
+    "text": "Evolved form of Wanderer's Grace. The dusk shade cuts twice and twice as wide."
+  },
+  {
+    "id": "sa_edge",
+    "set": "saya",
+    "element": "storm",
+    "name": "Honed Draw",
+    "text": "The draw cut, the first of the chain, hits harder and stores more in the foe."
+  },
+  {
+    "id": "sa_edge_evo",
+    "set": "saya",
+    "element": "storm",
+    "name": "Moonlit Draw",
+    "text": "Evolved form of Honed Draw. Every draw cut sends a second ink cut, higher, and the cuts it stores release at once."
+  },
+  {
+    "id": "sa_clean",
+    "set": "saya",
+    "element": "frost",
+    "name": "Clean Sheathe",
+    "text": "The sheathe, the last of the chain, hits harder and its release pays more."
+  },
+  {
+    "id": "sa_clean_evo",
+    "set": "saya",
+    "element": "frost",
+    "name": "Perfect Stillness",
+    "text": "Evolved form of Clean Sheathe. Every sheathe releases twice in full."
+  },
+  {
+    "id": "sa_reverse",
+    "set": "saya",
+    "element": "frost",
+    "name": "Reverse Edge",
+    "text": "The return cut, the second of the chain, also cuts the foes behind her."
+  },
+  {
+    "id": "sa_reverse_evo",
+    "set": "saya",
+    "element": "frost",
+    "name": "Full Circle",
+    "text": "Evolved form of Reverse Edge. The return cut becomes a full circle: it cuts all around her twice."
+  },
+  {
+    "id": "sa_flow",
+    "set": "saya",
+    "element": "void",
+    "name": "Ink Flow",
+    "text": "A warp arrival pours ink into the blade, and spell cooldowns are shorter."
+  },
+  {
+    "id": "sa_flow_evo",
+    "set": "saya",
+    "element": "void",
+    "name": "Spreading Ink",
+    "text": "Evolved form of Ink Flow. Every warp arrival readies the selected spell at once."
+  },
+  {
+    "id": "sa_falling",
+    "set": "saya",
+    "element": "void",
+    "name": "Falling Moon",
+    "text": "More air slashes, and landing after one releases her stored cuts."
+  },
+  {
+    "id": "sa_falling_evo",
+    "set": "saya",
+    "element": "void",
+    "name": "Moonfall",
+    "text": "Evolved form of Falling Moon. The landing after an air slash crashes down for 4x AD around her and knocks foes down."
+  },
+  {
+    "id": "sa_pass",
+    "set": "saya",
+    "element": "storm",
+    "name": "Passing Draw",
+    "text": "The warp strike recharges faster, hits harder and stores more."
+  },
+  {
+    "id": "sa_pass_evo",
+    "set": "saya",
+    "element": "storm",
+    "name": "Thousand Paces",
+    "text": "Evolved form of Passing Draw. Once every 3 seconds an arrival recharges the warp at once."
+  },
+  {
+    "id": "sa_step",
+    "set": "saya",
+    "element": "void",
+    "name": "Shadow Step",
+    "text": "She cannot be hit while dashing, and gains air dashes and an afterimage cut."
+  },
+  {
+    "id": "sa_step_evo",
+    "set": "saya",
+    "element": "void",
+    "name": "Ghost Passage",
+    "text": "Evolved form of Shadow Step. Afterimages cut twice, twice as wide."
+  },
+  {
+    "id": "sa_stroke",
+    "set": "saya",
+    "element": "storm",
+    "name": "Long Stroke",
+    "text": "Dashing through foes cuts them like a brush stroke."
+  },
+  {
+    "id": "sa_stroke_evo",
+    "set": "saya",
+    "element": "storm",
+    "name": "Ink Horizon",
+    "text": "Evolved form of Long Stroke. The dash cut also strikes every foe up to 60 px past where she stops."
+  },
+  {
+    "id": "sa_crescent",
+    "set": "saya",
+    "element": "void",
+    "name": "Crescent Wave",
+    "text": "Crescent Wave hits harder and stores a cut in every foe it strikes."
+  },
+  {
+    "id": "sa_crescent_evo",
+    "set": "saya",
+    "element": "void",
+    "name": "Tide Moon",
+    "text": "Evolved form of Crescent Wave. Each Crescent Wave hit calls a small shower of Ink Rain on the foe."
+  },
+  {
+    "id": "sa_rain",
+    "set": "saya",
+    "element": "void",
+    "name": "Ink Rain",
+    "text": "Ink Rain hits harder, holds foes longer and marks them."
+  },
+  {
+    "id": "sa_rain_evo",
+    "set": "saya",
+    "element": "void",
+    "name": "Monsoon",
+    "text": "Evolved form of Ink Rain. Ink Rain keeps falling: three more showers."
+  },
+  {
+    "id": "sa_still",
+    "set": "saya",
+    "element": "frost",
+    "name": "Still Water",
+    "text": "Still Water holds foes longer and hits harder."
+  },
+  {
+    "id": "sa_still_evo",
+    "set": "saya",
+    "element": "frost",
+    "name": "Mirror Lake",
+    "text": "Evolved form of Still Water. Still Water's release is in full and every cut is a sure critical hit."
+  },
+  {
+    "id": "sa_weep",
+    "set": "saya",
+    "element": "venom",
+    "name": "Weeping Cut",
+    "text": "Released cuts keep weeping: the foe bleeds for a while after each release."
+  },
+  {
+    "id": "sa_weep_evo",
+    "set": "saya",
+    "element": "venom",
+    "name": "Weeping Moon",
+    "text": "Evolved form of Weeping Cut. A release on a foe with 6 or more stacks bursts them all at once for 2 attack damage each."
+  },
+  {
+    "id": "sa_stain",
+    "set": "saya",
+    "element": "venom",
+    "name": "Ink Stain",
+    "text": "A cut waiting in a foe stains it: the foe takes a share of it every second until the sheathe."
+  },
+  {
+    "id": "sa_stain_evo",
+    "set": "saya",
+    "element": "venom",
+    "name": "Indelible",
+    "text": "Evolved form of Ink Stain. A release leaves half of each foe's cut stored in it for the next sheathe."
+  },
+  {
+    "id": "sa_trail",
+    "set": "saya",
+    "element": "venom",
+    "name": "Lingering Line",
+    "text": "Infused hits leave a bleeding ink line in the foe."
+  },
+  {
+    "id": "sa_trail_evo",
+    "set": "saya",
+    "element": "venom",
+    "name": "Ink Sea",
+    "text": "Evolved form of Lingering Line. Every slash leaves the bleeding ink line, infused or not."
+  },
+  {
+    "id": "sa_crane",
+    "set": "saya",
+    "element": "void",
+    "name": "Ink Crane",
+    "text": "When stored cuts release, an ink crane may fold itself from the splash and fly at a foe."
+  },
+  {
+    "id": "sa_crane_evo",
+    "set": "saya",
+    "element": "void",
+    "name": "Thousand Cranes",
+    "text": "Evolved form of Ink Crane. Every full release folds a crane for each foe it struck."
+  },
+  {
+    "id": "sa_shade",
+    "set": "saya",
+    "element": "void",
+    "name": "Ink Shade",
+    "text": "A parry or a perfect dodge may leave an ink shade of her that draws once on the nearest foe."
+  },
+  {
+    "id": "sa_shade_evo",
+    "set": "saya",
+    "element": "void",
+    "name": "Twin Moon",
+    "text": "Evolved form of Ink Shade. Two shades come each time, one each side of the foe, and each draws twice."
+  },
+  {
+    "id": "sa_paper",
+    "set": "saya",
+    "element": "storm",
+    "name": "Paper Blades",
+    "text": "A foe that falls may leave a paper blade that circles her and cuts."
+  },
+  {
+    "id": "sa_paper_evo",
+    "set": "saya",
+    "element": "storm",
+    "name": "Paper Storm",
+    "text": "Evolved form of Paper Blades. Every kill folds a blade, up to 8, and they circle wider."
+  },
+  {
+    "id": "sa_breath",
+    "set": "saya",
+    "element": "frost",
+    "name": "Feather Step",
+    "text": "Wall kicks and dash-jumps cut, and she gains air dashes and air slashes."
+  },
+  {
+    "id": "sa_breath_evo",
+    "set": "saya",
+    "element": "frost",
+    "name": "Boundless Breath",
+    "text": "Evolved form of Feather Step. Every jump sends an ink crescent ahead that stores in each foe."
+  },
+  {
+    "id": "sa_calm",
+    "set": "saya",
+    "element": "frost",
+    "name": "Calm Mind",
+    "text": "A wider parry, and a parry draws the blade at the attacker."
+  },
+  {
+    "id": "sa_calm_evo",
+    "set": "saya",
+    "element": "frost",
+    "name": "Empty Mind",
+    "text": "Evolved form of Calm Mind. For 3 seconds after a parry every slash is a sure critical hit."
+  },
+  {
+    "id": "sa_moon",
+    "set": "saya",
+    "element": "void",
+    "name": "Silent Moon",
+    "text": "The four charged skills on held J hit harder, charge faster, and store and release her cuts."
+  },
+  {
+    "id": "sa_moon_evo",
+    "set": "saya",
+    "element": "void",
+    "name": "New Moon",
+    "text": "Evolved form of Silent Moon. Every charged skill releases twice in full."
+  },
+  {
+    "id": "yu_echo",
+    "set": "yun",
+    "element": "void",
+    "name": "Twin Echo",
+    "text": "Crane Wheel, the second cut, sends your spirit swords thrusting ahead."
+  },
+  {
+    "id": "yu_echo_evo",
+    "set": "yun",
+    "element": "void",
+    "name": "Myriad Echo",
+    "text": "Evolved form of Twin Echo. Echo thrusts are sure critical hits and reach 110 px."
+  },
+  {
+    "id": "yu_flow",
+    "set": "yun",
+    "element": "frost",
+    "name": "Flowing Water",
+    "text": "Willow Cut, the first cut, sends a qi wave ahead."
+  },
+  {
+    "id": "yu_flow_evo",
+    "set": "yun",
+    "element": "frost",
+    "name": "Still Water",
+    "text": "Evolved form of Flowing Water. The waves run 160 px and hold the feet of each foe they cut."
+  },
+  {
+    "id": "yu_tide",
+    "set": "yun",
+    "element": "frost",
+    "name": "High Tide",
+    "text": "Returning Tide, the third cut, runs a qi crescent along the floor."
+  },
+  {
+    "id": "yu_tide_evo",
+    "set": "yun",
+    "element": "frost",
+    "name": "Spring Tide",
+    "text": "Evolved form of High Tide. The crescents run both ways at once."
+  },
+  {
+    "id": "yu_crane",
+    "set": "yun",
+    "element": "frost",
+    "name": "Crane's Reach",
+    "text": "A wider parry window, and parries send a qi wave at the attacker."
+  },
+  {
+    "id": "yu_crane_evo",
+    "set": "yun",
+    "element": "frost",
+    "name": "White Crane",
+    "text": "Evolved form of Crane's Reach. Every parry sends three waves at three heights."
+  },
+  {
+    "id": "yu_petal",
+    "set": "yun",
+    "element": "storm",
+    "name": "Petal Storm",
+    "text": "More air cuts, and each one that lands scatters cutting petals below."
+  },
+  {
+    "id": "yu_petal_evo",
+    "set": "yun",
+    "element": "storm",
+    "name": "Blossom Fall",
+    "text": "Evolved form of Petal Storm. Landing after an air cut sends crescents both ways."
+  },
+  {
+    "id": "yu_cloud",
+    "set": "yun",
+    "element": "storm",
+    "name": "Cloud Step",
+    "text": "More air cuts, cutting wall kicks and a qi ring where you land."
+  },
+  {
+    "id": "yu_cloud_evo",
+    "set": "yun",
+    "element": "storm",
+    "name": "Cloud Walker",
+    "text": "Evolved form of Cloud Step. The landing ring reaches 70 px and holds foes' feet."
+  },
+  {
+    "id": "yu_ride",
+    "set": "yun",
+    "element": "storm",
+    "name": "Sword Riding",
+    "text": "The warp strike recharges faster and hits harder, and spirit swords follow you in."
+  },
+  {
+    "id": "yu_ride_evo",
+    "set": "yun",
+    "element": "storm",
+    "name": "Riding the Wind",
+    "text": "Evolved form of Sword Riding. Once every 4 seconds an arrival recharges the warp at once."
+  },
+  {
+    "id": "yu_drift",
+    "set": "yun",
+    "element": "venom",
+    "name": "Drifting Leaf",
+    "text": "Dashing through foes cuts them."
+  },
+  {
+    "id": "yu_drift_evo",
+    "set": "yun",
+    "element": "venom",
+    "name": "Leaf on the Wind",
+    "text": "Evolved form of Drifting Leaf. Each dash cuts twice."
+  },
+  {
+    "id": "yu_fan",
+    "set": "yun",
+    "element": "storm",
+    "name": "Sword Fan",
+    "text": "Sword Stream cuts harder and fans out into more spirit swords."
+  },
+  {
+    "id": "yu_fan_evo",
+    "set": "yun",
+    "element": "storm",
+    "name": "Peacock Fan",
+    "text": "Evolved form of Sword Fan. Every Stream fans out into eight extra swords."
+  },
+  {
+    "id": "yu_cage",
+    "set": "yun",
+    "element": "storm",
+    "name": "Sword Cage",
+    "text": "Sword Lotus holds foes longer and cuts again."
+  },
+  {
+    "id": "yu_cage_evo",
+    "set": "yun",
+    "element": "storm",
+    "name": "Jade Prison",
+    "text": "Evolved form of Sword Cage. The lotus keeps spinning, cutting three more times."
+  },
+  {
+    "id": "yu_crescent",
+    "set": "yun",
+    "element": "void",
+    "name": "Qi Crescent",
+    "text": "Qi Crescent cuts harder and carries on past its target."
+  },
+  {
+    "id": "yu_crescent_evo",
+    "set": "yun",
+    "element": "void",
+    "name": "Moon Crescent",
+    "text": "Evolved form of Qi Crescent. Each crescent that lands splits into two more."
+  },
+  {
+    "id": "yu_wound",
+    "set": "yun",
+    "element": "void",
+    "name": "Lingering Qi",
+    "text": "Your cuts leave qi wounds that cut foes over time."
+  },
+  {
+    "id": "yu_wound_evo",
+    "set": "yun",
+    "element": "void",
+    "name": "Qi Burst",
+    "text": "Evolved form of Lingering Qi. Wounds burst when a foe carries the most it can, for 0.8 attack damage a stack."
+  },
+  {
+    "id": "yu_bleed",
+    "set": "yun",
+    "element": "venom",
+    "name": "Thousand Cuts",
+    "text": "Your sword arts' cuts leave bleeding wounds."
+  },
+  {
+    "id": "yu_bleed_evo",
+    "set": "yun",
+    "element": "venom",
+    "name": "Thousand Petals",
+    "text": "Evolved form of Thousand Cuts. When a Sword Lotus ends, every wounded foe takes all its wounds at once."
+  },
+  {
+    "id": "yu_needle",
+    "set": "yun",
+    "element": "venom",
+    "name": "Jade Needle",
+    "text": "A parry lodges jade needles in the attacker that bleed qi."
+  },
+  {
+    "id": "yu_needle_evo",
+    "set": "yun",
+    "element": "venom",
+    "name": "Acupuncture",
+    "text": "Evolved form of Jade Needle. At 12 needles they all burst at once for 6 attack damage each."
+  },
+  {
+    "id": "yu_guardian",
+    "set": "yun",
+    "element": "void",
+    "name": "Guardian Blade",
+    "text": "A landed blow may call a guardian blade that circles you and strikes foes near."
+  },
+  {
+    "id": "yu_guardian_evo",
+    "set": "yun",
+    "element": "void",
+    "name": "Heavenly Guard",
+    "text": "Evolved form of Guardian Blade. Three guardian blades circle you all the time."
+  },
+  {
+    "id": "yu_heron",
+    "set": "yun",
+    "element": "venom",
+    "name": "Jade Heron",
+    "text": "Casting may call a jade heron that flies through the line ahead."
+  },
+  {
+    "id": "yu_heron_evo",
+    "set": "yun",
+    "element": "venom",
+    "name": "Heron Flight",
+    "text": "Evolved form of Jade Heron. Every cast calls three herons."
+  },
+  {
+    "id": "yu_shade",
+    "set": "yun",
+    "element": "void",
+    "name": "Sage's Shade",
+    "text": "A parry calls your shade behind the attacker for a heavy cut."
+  },
+  {
+    "id": "yu_shade_evo",
+    "set": "yun",
+    "element": "void",
+    "name": "Many Shades",
+    "text": "Evolved form of Sage's Shade. The shade cuts three times at half again the power."
+  },
+  {
+    "id": "yu_breath",
+    "set": "yun",
+    "element": "frost",
+    "name": "Sage's Breath",
+    "text": "More air dashes, and each dash ends in a ring of qi."
+  },
+  {
+    "id": "yu_breath_evo",
+    "set": "yun",
+    "element": "frost",
+    "name": "Sword Sea",
+    "text": "Evolved form of Sage's Breath. Each air dash sends three spirit swords thrusting ahead."
+  },
+  {
+    "id": "yu_harmony",
+    "set": "yun",
+    "element": "void",
+    "name": "Harmony",
+    "text": "The warp and the sword arts move as one: arrivals fill the jian, and art cooldowns are shorter."
+  },
+  {
+    "id": "yu_harmony_evo",
+    "set": "yun",
+    "element": "void",
+    "name": "Perfect Harmony",
+    "text": "Evolved form of Harmony. Every arrival readies the selected sword art at once."
+  },
+  {
+    "id": "yu_rain",
+    "set": "yun",
+    "element": "venom",
+    "name": "Heaven's Grove",
+    "text": "Jade Rain on held J hits harder, charges faster and drops spirit swords on the foes near you."
+  },
+  {
+    "id": "yu_rain_evo",
+    "set": "yun",
+    "element": "venom",
+    "name": "Endless Rain",
+    "text": "Evolved form of Heaven's Grove. After every Jade Rain the swords keep falling for 4 seconds."
+  },
+  {
+    "id": "br_heavy",
+    "set": "brynn",
+    "element": "frost",
+    "name": "Heavy Hands",
+    "text": "The air slash, Falling Slam, hits harder and comes more often."
+  },
+  {
+    "id": "br_heavy_evo",
+    "set": "brynn",
+    "element": "frost",
+    "name": "Meteor Hands",
+    "text": "Evolved form of Heavy Hands. Every air slash quakes the floor below her and throws foes up."
+  },
+  {
+    "id": "br_cleave",
+    "set": "brynn",
+    "element": "blaze",
+    "name": "Wide Arc",
+    "text": "The first slash, Wide Sweep, cuts harder and drags the crowd into the chain."
+  },
+  {
+    "id": "br_cleave_evo",
+    "set": "brynn",
+    "element": "blaze",
+    "name": "Horizon Cleave",
+    "text": "Evolved form of Wide Arc. Every first slash throws a crimson crescent both ways."
+  },
+  {
+    "id": "br_launch",
+    "set": "brynn",
+    "element": "storm",
+    "name": "Skyward Heave",
+    "text": "The second slash, Rising Heave, throws foes up for the slam and the air slash."
+  },
+  {
+    "id": "br_launch_evo",
+    "set": "brynn",
+    "element": "storm",
+    "name": "Skyfall",
+    "text": "Evolved form of Skyward Heave. Foes the heave throws crash down after a moment for 2 AD."
+  },
+  {
+    "id": "br_slam",
+    "set": "brynn",
+    "element": "storm",
+    "name": "Anvil Weight",
+    "text": "The third slash, Anvil Slam, sends a shockwave along the floor."
+  },
+  {
+    "id": "br_slam_evo",
+    "set": "brynn",
+    "element": "storm",
+    "name": "Split Earth",
+    "text": "Evolved form of Anvil Weight. Every slam also raises a line of crimson pillars ahead."
+  },
+  {
+    "id": "br_counter",
+    "set": "brynn",
+    "element": "frost",
+    "name": "Counter Cleave",
+    "text": "A parry answers with a heavy cleave on every foe in front of her."
+  },
+  {
+    "id": "br_counter_evo",
+    "set": "brynn",
+    "element": "frost",
+    "name": "Iron Answer",
+    "text": "Evolved form of Counter Cleave. A block also answers with a half-power cleave."
+  },
+  {
+    "id": "br_spin",
+    "set": "brynn",
+    "element": "void",
+    "name": "Spinning Throw",
+    "text": "The warp strike recharges sooner, hits harder and lands with a shock ring."
+  },
+  {
+    "id": "br_spin_evo",
+    "set": "brynn",
+    "element": "void",
+    "name": "Anvil Drop",
+    "text": "Evolved form of Spinning Throw. Every arrival quakes the floor and throws foes up."
+  },
+  {
+    "id": "br_crater",
+    "set": "brynn",
+    "element": "storm",
+    "name": "Crater Leap",
+    "text": "A hard landing from a jump craters the floor round her."
+  },
+  {
+    "id": "br_crater_evo",
+    "set": "brynn",
+    "element": "storm",
+    "name": "Crater Pull",
+    "text": "Evolved form of Crater Leap. The landing drags foes in and splits fissures both ways."
+  },
+  {
+    "id": "br_charge",
+    "set": "brynn",
+    "element": "storm",
+    "name": "Shoulder Charge",
+    "text": "The dash shoulders every foe it passes through."
+  },
+  {
+    "id": "br_charge_evo",
+    "set": "brynn",
+    "element": "storm",
+    "name": "Battering Ram",
+    "text": "Evolved form of Shoulder Charge. Every dash that shoulders a foe ends in a floor wave ahead."
+  },
+  {
+    "id": "br_arc",
+    "set": "brynn",
+    "element": "blaze",
+    "name": "Ember Arc",
+    "text": "Ember Arc burns longer and blasts what it hits."
+  },
+  {
+    "id": "br_arc_evo",
+    "set": "brynn",
+    "element": "blaze",
+    "name": "Wildfire Arc",
+    "text": "Evolved form of Ember Arc. Each foe Ember Arc hits sends a crimson crescent on along the line."
+  },
+  {
+    "id": "br_pillars",
+    "set": "brynn",
+    "element": "blaze",
+    "name": "Brand Pillars",
+    "text": "Quake raises crimson pillars under the foe it shakes."
+  },
+  {
+    "id": "br_pillars_evo",
+    "set": "brynn",
+    "element": "blaze",
+    "name": "Aftershock",
+    "text": "Evolved form of Brand Pillars. Quake strikes again half a second later where it struck."
+  },
+  {
+    "id": "br_cry",
+    "set": "brynn",
+    "element": "blaze",
+    "name": "War Cry",
+    "text": "A warp arrival roars and pours the selected spell into the blade."
+  },
+  {
+    "id": "br_cry_evo",
+    "set": "brynn",
+    "element": "blaze",
+    "name": "Battle Roar",
+    "text": "Evolved form of War Cry. Every warp arrival readies the selected spell at once."
+  },
+  {
+    "id": "br_cinder",
+    "set": "brynn",
+    "element": "blaze",
+    "name": "Cinder Edge",
+    "text": "Her slashes lay searing embers, and the third slash lays the most."
+  },
+  {
+    "id": "br_cinder_evo",
+    "set": "brynn",
+    "element": "blaze",
+    "name": "Forge Heart",
+    "text": "Evolved form of Cinder Edge. A foe filled with embers bursts into a crimson blast that burns those round it."
+  },
+  {
+    "id": "br_fault",
+    "set": "brynn",
+    "element": "storm",
+    "name": "Fault Lines",
+    "text": "The third slash and her shockwaves leave burning cracks in the floor."
+  },
+  {
+    "id": "br_fault_evo",
+    "set": "brynn",
+    "element": "storm",
+    "name": "Rift Floor",
+    "text": "Evolved form of Fault Lines. When a crack burns out, it bursts up along its whole length."
+  },
+  {
+    "id": "br_crush",
+    "set": "brynn",
+    "element": "frost",
+    "name": "Crushing Weight",
+    "text": "Her second and third slashes crush foes, and crushed foes bleed."
+  },
+  {
+    "id": "br_crush_evo",
+    "set": "brynn",
+    "element": "frost",
+    "name": "Grindstone",
+    "text": "Evolved form of Crushing Weight. Her third slash on a crushed foe grinds all its stacks out at once."
+  },
+  {
+    "id": "br_falling",
+    "set": "brynn",
+    "element": "void",
+    "name": "Falling Blade",
+    "text": "Kills may call a phantom greatsword down from the sky onto the next foe."
+  },
+  {
+    "id": "br_falling_evo",
+    "set": "brynn",
+    "element": "void",
+    "name": "Blade Rain",
+    "text": "Evolved form of Falling Blade. Blades keep falling on foes near her for 1.5 s after a kill calls them."
+  },
+  {
+    "id": "br_echo",
+    "set": "brynn",
+    "element": "void",
+    "name": "Echo Swing",
+    "text": "A parry calls a crimson echo of her behind the attacker that brings down a heavy cleave."
+  },
+  {
+    "id": "br_echo_evo",
+    "set": "brynn",
+    "element": "void",
+    "name": "Twin Echo",
+    "text": "Evolved form of Echo Swing. Two echoes, one on each side, and each cleave hits half again as hard."
+  },
+  {
+    "id": "br_splinter",
+    "set": "brynn",
+    "element": "venom",
+    "name": "Heart Splinter",
+    "text": "A warp strike splinters the crystal in Anvilheart, and the red splinters dart at foes on their own."
+  },
+  {
+    "id": "br_splinter_evo",
+    "set": "brynn",
+    "element": "venom",
+    "name": "Crimson Halo",
+    "text": "Evolved form of Heart Splinter. Four splinters circle her for good and dart out at every foe near her."
+  },
+  {
+    "id": "br_ironskin",
+    "set": "brynn",
+    "element": "frost",
+    "name": "Iron Skin",
+    "text": "Her dash and air dash cannot be hurt, and she gets more air dashes."
+  },
+  {
+    "id": "br_ironskin_evo",
+    "set": "brynn",
+    "element": "frost",
+    "name": "Living Anvil",
+    "text": "Evolved form of Iron Skin. Every dash leaves a shock ring round her."
+  },
+  {
+    "id": "br_bellows",
+    "set": "brynn",
+    "element": "venom",
+    "name": "Bloodletter",
+    "text": "Rend cuts deeper bleeding wounds."
+  },
+  {
+    "id": "br_bellows_evo",
+    "set": "brynn",
+    "element": "venom",
+    "name": "Red Tide",
+    "text": "Evolved form of Bloodletter. Each Rend that strikes runs a floor wave on along its line."
+  },
+  {
+    "id": "br_fall",
+    "set": "brynn",
+    "element": "venom",
+    "name": "Crimson Fall",
+    "text": "The four tiers of Crimson Fall on held J hit harder, reach farther and charge faster."
+  },
+  {
+    "id": "br_fall_evo",
+    "set": "brynn",
+    "element": "venom",
+    "name": "Crimson Cataclysm",
+    "text": "Evolved form of Crimson Fall. Every charged skill shakes the floor twice more."
+  },
+  {
+    "id": "za_whirling",
+    "set": "zafir",
+    "element": "storm",
+    "name": "Whirling Edge",
+    "text": "The sweep turn, the first slash of the chain, hits harder and throws sand crescents out both sides."
+  },
+  {
+    "id": "za_whirling_evo",
+    "set": "zafir",
+    "element": "storm",
+    "name": "Endless Turn",
+    "text": "Evolved form of Whirling Edge. Every sweep turn throws two crescents each way, and every slash reaches 25% farther."
+  },
+  {
+    "id": "za_sirocco",
+    "set": "zafir",
+    "element": "blaze",
+    "name": "Sirocco Descent",
+    "text": "The spinning descent, the air slash, hits harder, comes more often and sends hot gusts along the floor."
+  },
+  {
+    "id": "za_sirocco_evo",
+    "set": "zafir",
+    "element": "blaze",
+    "name": "Desert Noon",
+    "text": "Evolved form of Sirocco Descent. Every air slash that lands calls a ring of noon light round you, 6 times attack damage to every foe within 40 px."
+  },
+  {
+    "id": "za_veins",
+    "set": "zafir",
+    "element": "venom",
+    "name": "Opened Veins",
+    "text": "The twin turn, the chain's finisher, hits harder for each wound on the foe, then tears the wounds open."
+  },
+  {
+    "id": "za_veins_evo",
+    "set": "zafir",
+    "element": "venom",
+    "name": "Red Wind",
+    "text": "Evolved form of Opened Veins. Every slash tears one wound open on each foe it cuts, for 1.2 times attack damage."
+  },
+  {
+    "id": "za_twofaced",
+    "set": "zafir",
+    "element": "void",
+    "name": "Two-Faced Cut",
+    "text": "The rising turn, the second slash, hits harder, and every cut behind you hits harder too."
+  },
+  {
+    "id": "za_twofaced_evo",
+    "set": "zafir",
+    "element": "void",
+    "name": "Mirror Dance",
+    "text": "Evolved form of Two-Faced Cut. Every rising turn throws a mirror ring behind you that cuts every foe there for twice attack damage, and cuts behind you deal 50% more."
+  },
+  {
+    "id": "za_falling",
+    "set": "zafir",
+    "element": "blaze",
+    "name": "Falling Dune",
+    "text": "More air slashes and air dashes, and landing after an air slash throws a ring of sand both ways."
+  },
+  {
+    "id": "za_falling_evo",
+    "set": "zafir",
+    "element": "blaze",
+    "name": "Meteor Dune",
+    "text": "Evolved form of Falling Dune. The landing ring also throws up a sandspout each way."
+  },
+  {
+    "id": "za_dune",
+    "set": "zafir",
+    "element": "blaze",
+    "name": "Dune Walk",
+    "text": "Dashing through foes cuts them, and stepping through your slashes leaves a trail of sand that cuts."
+  },
+  {
+    "id": "za_dune_evo",
+    "set": "zafir",
+    "element": "blaze",
+    "name": "Shifting Sands",
+    "text": "Evolved form of Dune Walk. Every dash throws a sand crescent out each side as it ends, and the trail opens two wounds."
+  },
+  {
+    "id": "za_arrival",
+    "set": "zafir",
+    "element": "storm",
+    "name": "Whirlwind Arrival",
+    "text": "The warp strike recharges sooner and hits harder, and the arrival spins a ring of sand round you."
+  },
+  {
+    "id": "za_arrival_evo",
+    "set": "zafir",
+    "element": "storm",
+    "name": "Dust Devil Step",
+    "text": "Evolved form of Whirlwind Arrival. Every arrival leaves a small sandstorm turning round you for 1.5 s."
+  },
+  {
+    "id": "za_slip",
+    "set": "zafir",
+    "element": "storm",
+    "name": "Sand Slip",
+    "text": "More air dashes, a dash nothing can touch, and a cloud of sand that blinds the foes you slip past."
+  },
+  {
+    "id": "za_slip_evo",
+    "set": "zafir",
+    "element": "storm",
+    "name": "Mirage Slip",
+    "text": "Evolved form of Sand Slip. A dash past foes leaves a mirage where it started, which minions strike at and which bursts into sand blades."
+  },
+  {
+    "id": "za_gale",
+    "set": "zafir",
+    "element": "blaze",
+    "name": "Hot Gale",
+    "text": "The crescent rides a hot gale: it hits harder, comes back for a second cut and bleeds what it touches."
+  },
+  {
+    "id": "za_gale_evo",
+    "set": "zafir",
+    "element": "blaze",
+    "name": "Simoom",
+    "text": "Evolved form of Hot Gale. Every crescent hit tears all the foe's wounds open at once, 1 attack damage each."
+  },
+  {
+    "id": "za_glass",
+    "set": "zafir",
+    "element": "frost",
+    "name": "Glass Rain",
+    "text": "Glass Rain scours harder: longer blindness, shards that rain on the foes round the target, and shorter spell cooldowns."
+  },
+  {
+    "id": "za_glass_evo",
+    "set": "zafir",
+    "element": "frost",
+    "name": "Glass Storm",
+    "text": "Evolved form of Glass Rain. Every glass blast also strikes the nearest foe behind you."
+  },
+  {
+    "id": "za_quicksand",
+    "set": "zafir",
+    "element": "venom",
+    "name": "Quicksand",
+    "text": "Sandspout sinks what it catches: it hits harder, holds foes in place and opens more wounds."
+  },
+  {
+    "id": "za_quicksand_evo",
+    "set": "zafir",
+    "element": "venom",
+    "name": "Sinking Sea",
+    "text": "Evolved form of Quicksand. Every Sandspout hit raises a whirl of sand that runs on through the foes behind."
+  },
+  {
+    "id": "za_deep",
+    "set": "zafir",
+    "element": "venom",
+    "name": "Deep Wounds",
+    "text": "Your wounds bleed harder, go deeper and stay open longer."
+  },
+  {
+    "id": "za_deep_evo",
+    "set": "zafir",
+    "element": "venom",
+    "name": "Crimson Tide",
+    "text": "Evolved form of Deep Wounds. Wounds bleed twice as often and never close while the sand ring turns."
+  },
+  {
+    "id": "za_scour",
+    "set": "zafir",
+    "element": "blaze",
+    "name": "Scouring Sand",
+    "text": "The sand ring grinds grit into foes that bleeds on its own; full of grit, they fuse to glass and shatter."
+  },
+  {
+    "id": "za_scour_evo",
+    "set": "zafir",
+    "element": "blaze",
+    "name": "Glassing Wind",
+    "text": "Evolved form of Scouring Sand. Every slash grinds grit in, and a shatter cuts every foe round it."
+  },
+  {
+    "id": "za_thirst",
+    "set": "zafir",
+    "element": "venom",
+    "name": "Desert Thirst",
+    "text": "Bleeding foes take more from everything, more for each wound; felling them gives back HP."
+  },
+  {
+    "id": "za_thirst_evo",
+    "set": "zafir",
+    "element": "venom",
+    "name": "Thirst of the Hawk",
+    "text": "Evolved form of Desert Thirst. Every bleeding foe you fell calls a desert hawk at once."
+  },
+  {
+    "id": "za_wraith",
+    "set": "zafir",
+    "element": "void",
+    "name": "Sand Wraith",
+    "text": "A slash that lands may call a sand wraith that whirls through the foes ahead."
+  },
+  {
+    "id": "za_wraith_evo",
+    "set": "zafir",
+    "element": "void",
+    "name": "Wraith Caravan",
+    "text": "Evolved form of Sand Wraith. A wraith walks round you all the time and cuts every foe it passes."
+  },
+  {
+    "id": "za_mirage",
+    "set": "zafir",
+    "element": "void",
+    "name": "Mirage Dancer",
+    "text": "A parry may call a mirage dancer beside the attacker that spins through it and the foes round it."
+  },
+  {
+    "id": "za_mirage_evo",
+    "set": "zafir",
+    "element": "void",
+    "name": "Court of Mirages",
+    "text": "Evolved form of Mirage Dancer. The dancers' last spin bursts into sand blades, 40 times attack damage on the attacker."
+  },
+  {
+    "id": "za_hawk",
+    "set": "zafir",
+    "element": "storm",
+    "name": "Desert Hawk",
+    "text": "A foe you fell may call a desert hawk that dives on the nearest foe and opens its wounds."
+  },
+  {
+    "id": "za_hawk_evo",
+    "set": "zafir",
+    "element": "storm",
+    "name": "Sky of Hawks",
+    "text": "Evolved form of Desert Hawk. Every kill calls a hawk, at most one every 0.6 s, and each dive opens three wounds."
+  },
+  {
+    "id": "za_unbroken",
+    "set": "zafir",
+    "element": "storm",
+    "name": "Unbroken Whirl",
+    "text": "The warp feeds the Whirl and the blade: an arrival fills the Whirl and pours the selected spell into the scimitar."
+  },
+  {
+    "id": "za_unbroken_evo",
+    "set": "zafir",
+    "element": "storm",
+    "name": "Eye of the Dune",
+    "text": "Evolved form of Unbroken Whirl. The Whirl never drains below the first ring, and every arrival readies the selected spell."
+  },
+  {
+    "id": "za_veil",
+    "set": "zafir",
+    "element": "void",
+    "name": "Sand Veil",
+    "text": "Your veil of sand parries more easily, blocks more for less, blinds attackers, and your mirage bursts wider and harder."
+  },
+  {
+    "id": "za_veil_evo",
+    "set": "zafir",
+    "element": "void",
+    "name": "Wall of Dunes",
+    "text": "Evolved form of Sand Veil. A parry leaves two mirages, one each side of you."
+  },
+  {
+    "id": "za_storm",
+    "set": "zafir",
+    "element": "storm",
+    "name": "Sandstorm",
+    "text": "The four Sandstorm tiers hit harder, charge faster, reach farther and leave the storm turning longer."
+  },
+  {
+    "id": "za_storm_evo",
+    "set": "zafir",
+    "element": "storm",
+    "name": "Endless Sirocco",
+    "text": "Evolved form of Sandstorm. Every tier from the third raises a second, wider storm, and every storm lasts twice as long."
+  },
+  {
+    "id": "ca_trigger",
+    "set": "calder",
+    "element": "storm",
+    "name": "Hair Trigger",
+    "text": "The first cut fires a round into the wound."
+  },
+  {
+    "id": "ca_trigger_evo",
+    "set": "calder",
+    "element": "storm",
+    "name": "Dead Center",
+    "text": "Evolved form of Hair Trigger. Every cut that fires a round fires two."
+  },
+  {
+    "id": "ca_breech",
+    "set": "calder",
+    "element": "storm",
+    "name": "Breech Slam",
+    "text": "The third cut slams down hard enough to shake the floor."
+  },
+  {
+    "id": "ca_breech_evo",
+    "set": "calder",
+    "element": "storm",
+    "name": "Faultline",
+    "text": "Evolved form of Breech Slam. The slam tears a fault line along the floor that bursts four times ahead."
+  },
+  {
+    "id": "ca_vent",
+    "set": "calder",
+    "element": "frost",
+    "name": "Vent Blast",
+    "text": "The second cut vents a blast from the chamber ahead."
+  },
+  {
+    "id": "ca_vent_evo",
+    "set": "calder",
+    "element": "frost",
+    "name": "Furnace Vent",
+    "text": "Evolved form of Vent Blast. Every cut of the chain vents."
+  },
+  {
+    "id": "ca_pointblank",
+    "set": "calder",
+    "element": "storm",
+    "name": "Point Blank",
+    "text": "A wider parry, and a parry answers with a heavy round."
+  },
+  {
+    "id": "ca_pointblank_evo",
+    "set": "calder",
+    "element": "storm",
+    "name": "Deadeye",
+    "text": "Evolved form of Point Blank. A parry's counter also fires into every foe in a line ahead."
+  },
+  {
+    "id": "ca_speedload",
+    "set": "calder",
+    "element": "frost",
+    "name": "Speed Loader",
+    "text": "A warp arrival loads the selected shell into the blade."
+  },
+  {
+    "id": "ca_speedload_evo",
+    "set": "calder",
+    "element": "frost",
+    "name": "Spin Cycle",
+    "text": "Evolved form of Speed Loader. Every warp arrival readies the selected shell at once."
+  },
+  {
+    "id": "ca_ricochet",
+    "set": "calder",
+    "element": "void",
+    "name": "Ricochet",
+    "text": "Air cuts fire a round that ricochets on to other foes."
+  },
+  {
+    "id": "ca_ricochet_evo",
+    "set": "calder",
+    "element": "void",
+    "name": "Pinball",
+    "text": "Evolved form of Ricochet. Air rounds ricochet six times."
+  },
+  {
+    "id": "ca_recoil",
+    "set": "calder",
+    "element": "storm",
+    "name": "Recoil Dash",
+    "text": "Dashing through foes fires a round into each."
+  },
+  {
+    "id": "ca_recoil_evo",
+    "set": "calder",
+    "element": "storm",
+    "name": "Backfire Rush",
+    "text": "Evolved form of Recoil Dash. Every dash ends with a backfire blast behind."
+  },
+  {
+    "id": "ca_tracer",
+    "set": "calder",
+    "element": "void",
+    "name": "Tracer Warp",
+    "text": "A faster, harder warp strike that leaves a cutting tracer."
+  },
+  {
+    "id": "ca_tracer_evo",
+    "set": "calder",
+    "element": "void",
+    "name": "Green Line",
+    "text": "Evolved form of Tracer Warp. The tracer fires a round into every foe along it."
+  },
+  {
+    "id": "ca_blastjump",
+    "set": "calder",
+    "element": "blaze",
+    "name": "Blast Jump",
+    "text": "One more air cut, and jumps blast off the floor."
+  },
+  {
+    "id": "ca_blastjump_evo",
+    "set": "calder",
+    "element": "blaze",
+    "name": "Skyshot",
+    "text": "Evolved form of Blast Jump. Landing from a long fall blasts everything within 70 px."
+  },
+  {
+    "id": "ca_flare",
+    "set": "calder",
+    "element": "blaze",
+    "name": "Phosphor Shell",
+    "text": "Phosphor Shell hits harder and its green fire spreads."
+  },
+  {
+    "id": "ca_flare_evo",
+    "set": "calder",
+    "element": "blaze",
+    "name": "Greenfire Barrage",
+    "text": "Evolved form of Phosphor Shell. Four shells a cast, and their fire burns twice as hot."
+  },
+  {
+    "id": "ca_chainshot",
+    "set": "calder",
+    "element": "storm",
+    "name": "Chain Shot",
+    "text": "Chain Shot hits harder and arcs on to more foes."
+  },
+  {
+    "id": "ca_chainshot_evo",
+    "set": "calder",
+    "element": "storm",
+    "name": "Reaper Chain",
+    "text": "Evolved form of Chain Shot. Chain Shot strikes twice."
+  },
+  {
+    "id": "ca_charge",
+    "set": "calder",
+    "element": "blaze",
+    "name": "Blast Charge",
+    "text": "Blast Charge hits harder and throws foes."
+  },
+  {
+    "id": "ca_charge_evo",
+    "set": "calder",
+    "element": "blaze",
+    "name": "Demolition",
+    "text": "Evolved form of Blast Charge. Every cast lays a row of charges, and each blast is far wider."
+  },
+  {
+    "id": "ca_shrapnel",
+    "set": "calder",
+    "element": "venom",
+    "name": "Shrapnel",
+    "text": "Every round's blast leaves shrapnel that bleeds the foes it struck."
+  },
+  {
+    "id": "ca_shrapnel_evo",
+    "set": "calder",
+    "element": "venom",
+    "name": "Shrapnel Storm",
+    "text": "Evolved form of Shrapnel. A blast on a foe carrying 6 stacks or more detonates them all round it."
+  },
+  {
+    "id": "ca_scorch",
+    "set": "calder",
+    "element": "blaze",
+    "name": "Scorch Rounds",
+    "text": "A round fired into the wound sets the foe burning green."
+  },
+  {
+    "id": "ca_scorch_evo",
+    "set": "calder",
+    "element": "blaze",
+    "name": "Phosphor Heart",
+    "text": "Evolved form of Scorch Rounds. A round into a foe burning with 4 stacks or more consumes the fire in one burst."
+  },
+  {
+    "id": "ca_brass",
+    "set": "calder",
+    "element": "blaze",
+    "name": "Hot Brass",
+    "text": "Every sixth round fired flings hot casings at foes nearby, burning them."
+  },
+  {
+    "id": "ca_brass_evo",
+    "set": "calder",
+    "element": "blaze",
+    "name": "Brass Rain",
+    "text": "Evolved form of Hot Brass. Casings rain on every foe on screen."
+  },
+  {
+    "id": "ca_turret",
+    "set": "calder",
+    "element": "frost",
+    "name": "Spare Barrel",
+    "text": "A parry may plant a spare barrel on legs that shoots the nearest foe."
+  },
+  {
+    "id": "ca_turret_evo",
+    "set": "calder",
+    "element": "frost",
+    "name": "Gun Nest",
+    "text": "Evolved form of Spare Barrel. Three barrels at once, firing faster and harder."
+  },
+  {
+    "id": "ca_double",
+    "set": "calder",
+    "element": "void",
+    "name": "Smoke Double",
+    "text": "A round fired into the wound may leave a double of gunsmoke that fires it again."
+  },
+  {
+    "id": "ca_double_evo",
+    "set": "calder",
+    "element": "void",
+    "name": "Gunsmoke Gallery",
+    "text": "Evolved form of Smoke Double. Two doubles at a time, each firing three rounds."
+  },
+  {
+    "id": "ca_hound",
+    "set": "calder",
+    "element": "venom",
+    "name": "Scrap Hound",
+    "text": "A foe falling may call a clockwork hound that runs down and bites the nearest foe."
+  },
+  {
+    "id": "ca_hound_evo",
+    "set": "calder",
+    "element": "venom",
+    "name": "Scrap Pack",
+    "text": "Evolved form of Scrap Hound. Three hounds, always at your side."
+  },
+  {
+    "id": "ca_drum",
+    "set": "calder",
+    "element": "storm",
+    "name": "Drum Cylinder",
+    "text": "More air dashes, and dashes that leave rounds behind."
+  },
+  {
+    "id": "ca_drum_evo",
+    "set": "calder",
+    "element": "storm",
+    "name": "Bottomless Drum",
+    "text": "Evolved form of Drum Cylinder. Every dash recharges the warp strike."
+  },
+  {
+    "id": "ca_break",
+    "set": "calder",
+    "element": "blaze",
+    "name": "Cylinder Break",
+    "text": "Breach Cut, Buckshot Wall, Green Line and Cylinder Break, the four charged skills on held J, hit harder."
+  },
+  {
+    "id": "ca_break_evo",
+    "set": "calder",
+    "element": "blaze",
+    "name": "Last Cylinder",
+    "text": "Evolved form of Cylinder Break. Every charged skill bursts twice more into every foe it reached."
+  },
+  {
+    "id": "art_mirespit",
+    "set": "arts",
+    "element": "venom",
+    "name": "Mire Spit",
+    "text": "Spit bog rot that poisons and slows."
+  },
+  {
+    "id": "art_gloamlantern",
+    "set": "arts",
+    "element": "blaze",
+    "name": "Gloam Lantern",
+    "text": "A ghost lantern drops and burns the foe ahead."
+  },
+  {
+    "id": "art_riftlance",
+    "set": "arts",
+    "element": "storm",
+    "name": "Rift Lance",
+    "text": "A lance of rift lightning that shocks."
+  },
+  {
+    "id": "art_forgeflare",
+    "set": "arts",
+    "element": "blaze",
+    "name": "Forge Flare",
+    "text": "Molten iron erupts from the floor ahead."
+  },
+  {
+    "id": "art_rimefang",
+    "set": "arts",
+    "element": "frost",
+    "name": "Rime Fang",
+    "text": "A fang of ice that freezes what it bites."
+  },
+  {
+    "id": "art_galecall",
+    "set": "arts",
+    "element": "storm",
+    "name": "Gale Call",
+    "text": "Thunder falls on the foe ahead and blows foes back."
+  },
+  {
+    "id": "art_sporeburst",
+    "set": "arts",
+    "element": "venom",
+    "name": "Spore Burst",
+    "text": "Spores burst on the foe ahead and linger, poisoning."
+  },
+  {
+    "id": "art_inkwave",
+    "set": "arts",
+    "element": "void",
+    "name": "Ink Tide",
+    "text": "Rolling ink hits and marks foes."
+  },
+  {
+    "id": "el_blaze",
+    "set": "elements",
+    "element": "blaze",
+    "name": "Blaze",
+    "text": ""
+  },
+  {
+    "id": "el_frost",
+    "set": "elements",
+    "element": "frost",
+    "name": "Frost",
+    "text": ""
+  },
+  {
+    "id": "el_storm",
+    "set": "elements",
+    "element": "storm",
+    "name": "Storm",
+    "text": ""
+  },
+  {
+    "id": "el_venom",
+    "set": "elements",
+    "element": "venom",
+    "name": "Venom",
+    "text": ""
+  },
+  {
+    "id": "el_void",
+    "set": "elements",
+    "element": "void",
+    "name": "Void",
+    "text": ""
+  },
+  {
+    "id": "honing_whetstone",
+    "set": "cards",
+    "element": "none",
+    "name": "Whetstone",
+    "text": "Attack damage +4%."
+  },
+  {
+    "id": "honing_focus",
+    "set": "cards",
+    "element": "none",
+    "name": "Focus",
+    "text": "Ability power +4%."
+  },
+  {
+    "id": "honing_keenEye",
+    "set": "cards",
+    "element": "none",
+    "name": "Keen Eye",
+    "text": "Critical chance +1.5%."
+  },
+  {
+    "id": "deeper_charge",
+    "set": "cards",
+    "element": "none",
+    "name": "Deeper Charge",
+    "text": "Charged skills deal more damage and charge faster."
+  }
+]
