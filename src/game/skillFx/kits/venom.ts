@@ -53,7 +53,7 @@ export const VENOM_KIT: ElementKit = {
       const a = (i / n) * TAU + 0.4;
       bubble(x + Math.cos(a) * radius * 1.3, y + Math.sin(a) * radius * 1.3, radius * 0.35, alpha);
     }
-    glow(x, y, radius * 3 + 4, R[3], 0.2 * alpha);
+    glow(x, y, radius * 3 + 4, R[3], 0.12 * alpha);
   },
   spray(x, y, count, speed, angle, spread) {
     for (let i = 0; i < count; i++) {
