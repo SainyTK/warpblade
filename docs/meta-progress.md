@@ -8,7 +8,7 @@ The code and the save still call gold coins.
 ## Gold
 
 Every slain foe drops gold: a minion's base share of its wave (`COIN_DROP`, `coinShare`), an elite twice its base, a mini boss and a boss their full count.
-Every foe drops a quarter more on top (`COIN_BONUS`), Lodestone another quarter, Greed and Curse a tenth per level, and a fraction left over is a chance at one more coin.
+Every foe drops a quarter more on top (`COIN_BONUS`) and Lodestone another quarter; Greed and Curse then multiply the drop by 10% per level, and a fraction left over is a chance at one more coin.
 In a stage, gold per foe is x0.4 of the wave-mode drop (`FOE_BAND.goldShare`), times the stage twist and x2 on a Hyper stage.
 Gold pops out of the foe, bounces, and is picked up by touch; after 1.6 seconds, or 0.3 with Lodestone, it flies to the hero.
 
@@ -47,7 +47,7 @@ Bought levels apply at the start of every run.
 | Skip | One more skip every run | 3 | 40, 80, 120 |
 | Banish | One more banish every run | 2 | 80, 160 |
 | Lodestone | Gold flies to the hero at once, foes drop a quarter more | 1 | 100 |
-| Aftershock | Every landed dash or leap sends a shockwave of 0.8x attack damage that stuns briefly | 1 | 250 |
+| Aftershock | Every landed dash or leap sends a shockwave of 0.8x attack damage that briefly stuns foes | 1 | 250 |
 | Last Light | A fatal blow leaves the hero at half HP, once per run per level | 2 | 250, 500 |
 | Greed | Foes drop 10% more gold | 3 | 120, 240, 360 |
 | Growth | Experience +5% | 3 | 120, 240, 360 |
@@ -68,7 +68,7 @@ All 44 levels cost about 15,100 gold bought cheapest first, about 30 full clears
 
 The run reads one set of rates from the Armory (`runRates()` in `src/store/meta.ts`):
 
-- Gold: `dropCoins` adds Greed's and Curse's shares to the drop bonus.
+- Gold: `dropCoins` multiplies the drop by Greed's and Curse's shares.
 - Experience: `earnXp` multiplies by Growth's and Curse's shares.
 - Foes: Curse multiplies HP and damage, through `stageMods` in a stage and `makeEnemy` in wave mode.
 

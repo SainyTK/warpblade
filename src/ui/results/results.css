@@ -4,6 +4,31 @@
 .result-body {
   justify-items: center;
   gap: 14px;
+  scroll-snap-type: y mandatory;
+}
+.result-body {
+  --fade-top: 0px;
+  --fade-bottom: 0px;
+  scroll-padding-top: 14px;
+  mask-image: linear-gradient(
+    to bottom,
+    transparent 0,
+    #000 var(--fade-top),
+    #000 calc(100% - var(--fade-bottom)),
+    transparent 100%
+  );
+}
+.result-body[data-scrolled] {
+  --fade-top: 14px;
+}
+.result-body[data-more] {
+  --fade-bottom: 14px;
+}
+.result-body > *,
+.result-body .run-facts > div,
+.result-body li,
+.result-body tr {
+  scroll-snap-align: start;
 }
 .run-facts {
   display: grid;

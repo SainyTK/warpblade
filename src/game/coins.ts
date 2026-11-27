@@ -24,8 +24,8 @@ function coinBase(e: Enemy): number {
 
 /** a slain foe's coins burst out of it */
 export function dropCoins(e: Enemy, x: number, y: number): void {
-  const bonus = COIN_BONUS + (hasGear("lodestone") ? LODESTONE_BONUS : 0) + runRates().gold - 1;
-  const n = coinDrop(coinBase(e) * stageCoinRate(), bonus, rng.next());
+  const bonus = COIN_BONUS + (hasGear("lodestone") ? LODESTONE_BONUS : 0);
+  const n = coinDrop(coinBase(e) * stageCoinRate() * runRates().gold, bonus, rng.next());
   for (let i = 0; i < n; i++)
     game.coinDrops.push({ x, y, vx: rng.range(-60, 60), vy: rng.range(-170, -90), t: 0, rest: false });
 }

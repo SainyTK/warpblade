@@ -118,6 +118,12 @@ export function resultScreen(): MenuView {
   summary.append(line("Gold earned", coinAmount(run.coins)), line("Bank", coinAmount(bank())));
   const scroll = document.createElement("div");
   scroll.className = "menu-scroll result-body";
+  const edges = (): void => {
+    scroll.toggleAttribute("data-scrolled", scroll.scrollTop > 0);
+    scroll.toggleAttribute("data-more", scroll.scrollTop + scroll.clientHeight < scroll.scrollHeight - 1);
+  };
+  scroll.addEventListener("scroll", edges, { passive: true });
+  requestAnimationFrame(edges);
   const earned = runAchievements();
   if (run.report) scroll.append(runFacts(run.report, run.coins, run.stage));
   const unlocked = unlockedSection();

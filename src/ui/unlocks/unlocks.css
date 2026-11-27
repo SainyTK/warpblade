@@ -106,7 +106,7 @@
 
 .result-goals {
   display: grid;
-  gap: 8px;
+  gap: 6px;
   width: 100%;
   margin: 0;
   padding: 8px 0 0;
@@ -115,17 +115,15 @@
 }
 .result-goals li {
   display: grid;
-  grid-template-columns: 16px minmax(0, 1fr);
+  grid-template-columns: 16px minmax(0, 1fr) auto;
   column-gap: 8px;
-  row-gap: 1px;
+  row-gap: 2px;
   align-items: center;
 }
 .result-goals .result-goal-icon {
-  grid-row: span 3;
-  align-self: start;
+  grid-row: span 2;
   width: 16px;
   height: 16px;
-  margin-top: 2px;
   image-rendering: pixelated;
   filter: brightness(0) invert(0.55);
 }
@@ -133,7 +131,8 @@
   display: flex;
   flex-wrap: wrap;
   align-items: baseline;
-  gap: 2px 8px;
+  gap: 0 8px;
+  min-width: 0;
   font-family: var(--ui);
   font-weight: 600;
   font-size: 14px;
@@ -147,12 +146,28 @@
   text-transform: uppercase;
   color: var(--crystal);
 }
+.result-goal-count {
+  justify-self: end;
+  font-size: 11px;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
 .result-goal-text {
+  min-width: 0;
   font-size: 12px;
   color: var(--mist);
 }
-.result-goals .ach-progress {
-  margin-top: 0;
+.result-goal-bar {
+  justify-self: end;
+  width: 96px;
+  height: 6px;
+  background: var(--line);
+}
+.result-goal-bar span {
+  display: block;
+  height: 100%;
+  background: var(--brass);
 }
 .goal-gain {
   font-weight: 600;
