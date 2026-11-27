@@ -1,8 +1,8 @@
 import type { Approach } from "../../types/campaign";
-import { flyer, ledge, pit, site, surge, walker } from "../geometry";
+import { flyer, ledge, pack, site, walker } from "../geometry";
 
 export const frozenCorridor: Approach = {
-  room: surge(10),
+  roomCap: 10,
   parSeconds: 70,
   length: 940,
   slabs: [
@@ -19,32 +19,19 @@ export const frozenCorridor: Approach = {
   ],
   walls: [ledge(258, 288, 118), ledge(618, 650, 88), ledge(896, 924, 120)],
   arenaSlabs: [ledge(48, 108, 112), ledge(132, 188, 80), ledge(212, 272, 112)],
-  patrol: [
-    walker(118),
-    flyer(150, 96),
-    walker(205),
-    flyer(236, 62),
-    walker(316, false, "cryomancer"),
-    flyer(370, 44),
-    walker(410),
-    flyer(462, 78),
-    walker(500, false, "cryomancer"),
-    walker(560),
-    flyer(588, 56),
-    walker(668),
-    flyer(700, 86),
-    walker(724, false, "cryomancer"),
-    flyer(770, 50),
-    walker(812, true),
-    flyer(850, 90),
-    walker(870),
+  packs: [
+    pack(276, walker(118), flyer(150, 96), walker(205), flyer(236, 62)),
+    pack(450, walker(316, false, "cryomancer"), flyer(370, 44), walker(410)),
+    pack(628, flyer(462, 78), walker(500, false, "cryomancer"), walker(560), flyer(588, 56)),
+    pack(810, walker(668), flyer(700, 86), walker(724, false, "cryomancer"), flyer(770, 50)),
+    pack(910, walker(812, true), flyer(850, 90), walker(870)),
   ],
   mentorSites: [site(210, 92), site(458, 104)],
   spikes: [],
 };
 
 export const icicleCavern: Approach = {
-  room: surge(9, ["rimehound", "cryomancer"]),
+  roomCap: 9,
   parSeconds: 75,
   length: 1010,
   slabs: [
@@ -64,35 +51,20 @@ export const icicleCavern: Approach = {
   ],
   walls: [ledge(352, 382, 120), ledge(596, 626, 86), ledge(808, 840, 122)],
   arenaSlabs: [ledge(52, 110, 114), ledge(138, 184, 78), ledge(210, 268, 114)],
-  patrol: [
-    walker(112),
-    flyer(140, 92),
-    walker(190, false, "cryomancer"),
-    flyer(216, 58),
-    walker(300),
-    flyer(330, 40),
-    walker(404, false, "cryomancer"),
-    flyer(426, 74),
-    walker(440),
-    flyer(500, 54),
-    walker(560, true),
-    flyer(612, 80),
-    walker(660, false, "cryomancer"),
-    flyer(676, 36),
-    walker(760),
-    flyer(796, 64),
-    walker(880, false, "cryomancer"),
-    flyer(904, 92),
-    walker(950),
-    walker(990, true, "cryomancer"),
+  packs: [
+    pack(256, walker(112), flyer(140, 92), walker(190, false, "cryomancer"), flyer(216, 58)),
+    pack(466, walker(300), flyer(330, 40), walker(404, false, "cryomancer"), flyer(426, 74)),
+    pack(600, walker(440), flyer(500, 54), walker(560, true)),
+    pack(716, flyer(612, 80), walker(660, false, "cryomancer"), flyer(676, 36)),
+    pack(920, walker(760), flyer(796, 64), walker(880, false, "cryomancer")),
+    pack(1000, flyer(904, 92), walker(950), walker(990, true, "cryomancer")),
   ],
   mentorSites: [site(196, 88), site(674, 66)],
   spikes: [],
-  pits: [pit(246, 282), pit(470, 524), pit(708, 744)],
 };
 
 export const lynxDen: Approach = {
-  room: surge(10),
+  roomCap: 10,
   parSeconds: 100,
   length: 900,
   slabs: [
@@ -109,26 +81,13 @@ export const lynxDen: Approach = {
   ],
   walls: [ledge(236, 262, 122), ledge(586, 612, 90), ledge(846, 876, 118)],
   arenaSlabs: [ledge(36, 92, 108), ledge(228, 284, 108)],
-  patrol: [
-    walker(118),
-    flyer(144, 90),
-    walker(200, false, "cryomancer"),
-    flyer(222, 56),
-    walker(290),
-    flyer(318, 84),
-    walker(372, false, "cryomancer"),
-    flyer(400, 46),
-    walker(452, true),
-    flyer(492, 88),
-    walker(534, false, "cryomancer"),
-    flyer(560, 50),
-    walker(640),
-    flyer(700, 40),
-    walker(750, false, "cryomancer"),
-    flyer(790, 80),
-    walker(820, true),
+  packs: [
+    pack(262, walker(118), flyer(144, 90), walker(200, false, "cryomancer"), flyer(222, 56)),
+    pack(440, walker(290), flyer(318, 84), walker(372, false, "cryomancer"), flyer(400, 46)),
+    pack(600, walker(452, true), flyer(492, 88), walker(534, false, "cryomancer"), flyer(560, 50)),
+    pack(790, walker(640), flyer(700, 40), walker(750, false, "cryomancer")),
+    pack(860, flyer(790, 80), walker(820, true)),
   ],
   mentorSites: [site(208, 86), site(712, 70)],
   spikes: [],
-  pits: [pit(448, 486)],
 };

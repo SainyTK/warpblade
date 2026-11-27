@@ -9,14 +9,20 @@ import type { Rng } from "../../utils/rng";
 import { type StageMods, stageMods } from "../../utils/stageArc";
 import { buildRoute, type Route, type SurgeBeat } from "./route";
 
-export interface Surge {
-  beat: SurgeBeat;
+export interface SurgeWave {
   foes: EnemyType[];
   levels: number[];
   xp: number[];
-  cap: number;
+  elites: boolean[];
+}
+
+export interface Surge {
+  beat: SurgeBeat;
+  waves: SurgeWave[];
+  wave: number;
   sent: number;
-  refills: number[];
+  delays: number[];
+  pause: number;
 }
 
 interface Leash {
@@ -34,7 +40,9 @@ interface Trail {
   finaleFoe: Enemy | null;
   mentors: readonly Point[];
   area: number;
-  nextFoe: number;
+  pack: number;
+  packFoes: Enemy[];
+  hold: number | null;
   beat: number;
   lull: number;
   band: number;
@@ -62,7 +70,7 @@ export function resetAdventure(): void {
 
 export function beginAdventure(random: Rng, stage: StageId, hyper: boolean): void {
   const mods = stageMods(STAGES[stage], hyper, runRates());
-  const route = buildRoute(STAGES[stage], mods);
+  const route = buildRoute(STAGES[stage], mods, random);
   trail = {
     id: ++lastRunId,
     random,
@@ -73,7 +81,9 @@ export function beginAdventure(random: Rng, stage: StageId, hyper: boolean): voi
     finaleFoe: null,
     mentors: route.areas.map((area) => random.pick(area.mentorSites)),
     area: 0,
-    nextFoe: 0,
+    pack: 0,
+    packFoes: [],
+    hold: null,
     beat: 0,
     lull: 0,
     band: route.areas[0].enter,
@@ -110,7 +120,9 @@ export function stageStatus(): string {
   const areas = trail.route.areas.length;
   const area = trail.route.areas[trail.area];
   const surges = area?.beats.filter((beat) => beat.kind === "surge").length ?? 0;
-  const surge = trail.gate !== null && trail.surge ? `  SURGE ${Math.min(trail.beat + 1, surges)}/${surges}` : "";
+  const wave = trail.surge ? `  WAVE ${trail.surge.wave + 1}/${trail.surge.waves.length}` : "";
+  const surge =
+    trail.gate !== null && trail.surge ? `  SURGE ${Math.min(trail.beat + 1, surges)}/${surges}${wave}` : "";
   return `${trail.route.stage.name} ${Math.min(trail.area + 1, areas)}/${areas}${surge}`;
 }
 export const stageCameraX = (): number => trail?.camera ?? 0;
@@ -120,25 +132,18 @@ export function stageAreaShare(): number {
 }
 export const stagePlatforms = (): readonly Platform[] => (trail ? trail.route.platforms : PLATFORMS);
 export const stageWalls = (): readonly Platform[] => (trail ? trail.route.walls : []);
-export const stagePits = (): readonly Platform[] => trail?.route.pits ?? [];
 export const stageExitX = (): number => trail?.route.exitX ?? W;
 export const stageGate = (): number | null => trail?.gate ?? null;
 export const stageLeft = (): number => trail?.left ?? 0;
-export const stageRight = (): number => (trail ? (trail.gate ?? trail.route.width) : W);
+export const stageRight = (): number => (trail ? (trail.gate ?? trail.hold ?? trail.route.width) : W);
 export const stageBounds = () => ({ left: stageLeft(), right: stageRight() });
 export const heroLeash = (): Leash | null => trail?.leash ?? null;
 export const clampStageX = (x: number, margin: number): number => clamp(x, stageLeft() + margin, stageRight() - margin);
 export const stageGates = (): readonly number[] => {
-  if (!trail?.left) return [];
-  return trail.gate === null ? [trail.left] : [trail.left, trail.gate];
+  if (!trail) return [];
+  const sides = [trail.left || null, trail.gate ?? trail.hold];
+  return sides.filter((x): x is number => x !== null);
 };
-
-export function overPit(x: number): boolean {
-  for (const gap of stagePits()) {
-    if (x > gap.x0 && x < gap.x1) return true;
-  }
-  return false;
-}
 
 function stageShare(): number {
   if (!trail) return 0;

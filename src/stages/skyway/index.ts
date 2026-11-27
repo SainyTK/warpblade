@@ -1,4 +1,5 @@
 import type { StageDef } from "../../types/campaign";
+import { rung } from "../geometry";
 import { skywayHazard } from "./hazard";
 import { brokenBridges, floatingIslands, roost } from "./layout";
 
@@ -8,8 +9,7 @@ export const skyway: StageDef = {
   mapBlurb: "Broken bridges above a sea of storm.",
   kind: "rift",
   era: "skyway",
-  ground: "skyguard",
-  flyer: "galehawk",
+  ladder: [...rung(15, 12, "skyguard"), ...rung(15, 6, "galehawk"), ...rung(26, 16, "sparkjelly")],
   boss: "tempestroc",
   mini: {
     name: "Storm Captain",

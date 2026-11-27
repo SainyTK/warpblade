@@ -1,8 +1,8 @@
 import type { Approach } from "../../types/campaign";
-import { flyer, ledge, pit, site, surge, walker } from "../geometry";
+import { flyer, ledge, pack, site, walker } from "../geometry";
 
 export const reedwade: Approach = {
-  room: surge(10, ["mire", "mire", "mire", "stormkite"]),
+  roomCap: 10,
   parSeconds: 75,
   length: 960,
   slabs: [
@@ -21,26 +21,13 @@ export const reedwade: Approach = {
   ],
   walls: [ledge(298, 330, 126), ledge(556, 594, 110), ledge(782, 812, 124)],
   arenaSlabs: [ledge(46, 106, 120), ledge(130, 190, 84), ledge(214, 274, 118)],
-  patrol: [
-    walker(112),
-    flyer(150, 100),
-    walker(206),
-    flyer(262, 40),
-    walker(352),
-    flyer(384, 70),
-    walker(466),
-    flyer(500, 92),
-    walker(530),
-    flyer(574, 32),
-    walker(622),
-    flyer(700, 100),
-    walker(720),
-    flyer(760, 60),
-    walker(848, true),
-    flyer(884, 46),
-    walker(930),
+  packs: [
+    pack(246, walker(112), flyer(150, 100), walker(206)),
+    pack(424, flyer(262, 40), walker(352), flyer(384, 70)),
+    pack(614, walker(466), flyer(500, 92), walker(530), flyer(574, 32)),
+    pack(800, walker(622), flyer(700, 100), walker(720), flyer(760, 60)),
+    pack(950, walker(848, true), flyer(884, 46), walker(930)),
   ],
   mentorSites: [site(196, 92), site(426, 80)],
   spikes: [ledge(414, 444), ledge(616, 642, 94)],
-  pits: [pit(664, 690)],
 };

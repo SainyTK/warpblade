@@ -1,8 +1,8 @@
 import type { Approach } from "../../types/campaign";
-import { flyer, ledge, pit, site, surge, walker } from "../geometry";
+import { flyer, ledge, pack, site, walker } from "../geometry";
 
 export const shardSteps: Approach = {
-  room: surge(10, ["golem", "golem", "sprite"]),
+  roomCap: 10,
   parSeconds: 75,
   length: 1000,
   slabs: [
@@ -21,26 +21,13 @@ export const shardSteps: Approach = {
   ],
   walls: [ledge(282, 312, 124), ledge(548, 584, 104), ledge(800, 834, 122)],
   arenaSlabs: [ledge(52, 115, 113), ledge(211, 274, 113)],
-  patrol: [
-    walker(116),
-    flyer(150, 98),
-    walker(214),
-    flyer(262, 36),
-    walker(340),
-    flyer(372, 80),
-    walker(420),
-    flyer(470, 54),
-    walker(512),
-    flyer(560, 28),
-    walker(630),
-    flyer(668, 70),
-    walker(710),
-    flyer(756, 44),
-    walker(860, true),
-    flyer(910, 50),
-    walker(966),
+  packs: [
+    pack(254, walker(116), flyer(150, 98), walker(214)),
+    pack(412, flyer(262, 36), walker(340), flyer(372, 80)),
+    pack(600, walker(420), flyer(470, 54), walker(512), flyer(560, 28)),
+    pack(796, walker(630), flyer(668, 70), walker(710), flyer(756, 44)),
+    pack(990, walker(860, true), flyer(910, 50), walker(966)),
   ],
   mentorSites: [site(204, 88), site(426, 72)],
   spikes: [ledge(380, 408), ledge(612, 640, 92)],
-  pits: [pit(746, 774)],
 };

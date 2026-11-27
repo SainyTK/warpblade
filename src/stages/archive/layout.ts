@@ -1,10 +1,10 @@
 import type { Approach } from "../../types/campaign";
-import { flyer, ledge, pit, site, surge, walker } from "../geometry";
+import { flyer, ledge, pack, site, walker } from "../geometry";
 
 const guard = (x: number, elite = false) => walker(x, elite, "tomeguard");
 
 export const readingHalls: Approach = {
-  room: surge(10, ["inkling", "inkling", "pagewing", "tomeguard"]),
+  roomCap: 10,
   parSeconds: 62,
   length: 960,
   slabs: [
@@ -21,31 +21,19 @@ export const readingHalls: Approach = {
   ],
   walls: [ledge(394, 428, 128), ledge(760, 790, 122)],
   arenaSlabs: [ledge(40, 100, 118), ledge(130, 190, 86), ledge(220, 280, 118)],
-  patrol: [
-    walker(120),
-    flyer(160, 96),
-    walker(212),
-    flyer(270, 60),
-    guard(300),
-    walker(352),
-    flyer(380, 82),
-    walker(470),
-    flyer(520, 70),
-    guard(560),
-    walker(620, true),
-    flyer(660, 48),
-    walker(710),
-    flyer(770, 90),
-    guard(830),
-    walker(880),
-    flyer(910, 100),
+  packs: [
+    pack(252, walker(120), flyer(160, 96), walker(212)),
+    pack(420, flyer(270, 60), guard(300), walker(352), flyer(380, 82)),
+    pack(600, walker(470), flyer(520, 70), guard(560)),
+    pack(750, walker(620, true), flyer(660, 48), walker(710)),
+    pack(950, flyer(770, 90), guard(830), walker(880), flyer(910, 100)),
   ],
   mentorSites: [site(198, 98), site(628, 64)],
   spikes: [],
 };
 
 export const theStacks: Approach = {
-  room: surge(9, ["tomeguard", "inkling", "inkling", "pagewing"]),
+  roomCap: 9,
   parSeconds: 64,
   length: 1020,
   slabs: [
@@ -63,33 +51,20 @@ export const theStacks: Approach = {
   ],
   walls: [ledge(510, 546, 124), ledge(756, 784, 118), ledge(970, 1000, 128)],
   arenaSlabs: [ledge(50, 108, 116), ledge(140, 196, 80), ledge(226, 286, 116)],
-  patrol: [
-    walker(110),
-    guard(176),
-    flyer(210, 72),
-    walker(250),
-    flyer(320, 50),
-    walker(360),
-    guard(430, true),
-    flyer(470, 80),
-    walker(572),
-    flyer(600, 96),
-    guard(650),
-    walker(690),
-    flyer(724, 44),
-    walker(800, true),
-    flyer(840, 86),
-    guard(880),
-    walker(930),
-    flyer(960, 96),
+  packs: [
+    pack(290, walker(110), guard(176), flyer(210, 72), walker(250)),
+    pack(470, flyer(320, 50), walker(360), guard(430, true)),
+    pack(640, flyer(470, 80), walker(572), flyer(600, 96)),
+    pack(764, guard(650), walker(690), flyer(724, 44)),
+    pack(970, walker(800, true), flyer(840, 86), guard(880), walker(930)),
+    pack(1000, flyer(960, 96)),
   ],
   mentorSites: [site(176, 90), site(722, 66)],
   spikes: [],
-  pits: [pit(320, 356), pit(590, 620), pit(856, 890)],
 };
 
 export const sunkenRotunda: Approach = {
-  room: surge(10),
+  roomCap: 10,
   parSeconds: 96,
   length: 900,
   slabs: [
@@ -105,27 +80,15 @@ export const sunkenRotunda: Approach = {
   ],
   walls: [ledge(392, 424, 126), ledge(650, 676, 120)],
   arenaSlabs: [ledge(36, 92, 114), ledge(228, 284, 114)],
-  patrol: [
-    walker(118),
-    flyer(150, 90),
-    guard(200),
-    walker(262),
-    flyer(300, 50),
-    walker(350, true),
-    flyer(410, 84),
-    guard(460),
-    walker(530),
-    flyer(560, 70),
-    walker(610),
-    guard(700),
-    flyer(730, 60),
-    walker(770),
-    flyer(820, 96),
-    guard(860, true),
+  packs: [
+    pack(240, walker(118), flyer(150, 90), guard(200)),
+    pack(390, walker(262), flyer(300, 50), walker(350, true)),
+    pack(570, flyer(410, 84), guard(460), walker(530)),
+    pack(740, flyer(560, 70), walker(610), guard(700)),
+    pack(890, flyer(730, 60), walker(770), flyer(820, 96), guard(860, true)),
   ],
   mentorSites: [site(194, 88), site(606, 68)],
   spikes: [],
-  pits: [pit(470, 500)],
 };
 
 export const ARCHIVE_AREAS = [readingHalls, theStacks, sunkenRotunda] as const;

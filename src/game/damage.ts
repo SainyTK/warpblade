@@ -22,6 +22,7 @@ import { enemyCenter } from "./enemies/enemy";
 import { kindOf } from "./enemies/kinds";
 import { markBonus } from "./enemies/skillStatus";
 import { staggerFoe } from "./enemies/stagger";
+import { noteHit } from "./heavyShake";
 import { kit } from "./hero/kits";
 import { countHit } from "./hitCount";
 import { landHit } from "./hitFeel";
@@ -181,6 +182,7 @@ export function dealDamage(e: Enemy, base: number, o: HitOptions = {}): HitResul
   bossTook(e, value);
   e.hp -= value;
   recordDamage(source, value);
+  if (!o.dot) noteHit(source, value);
   const fromHero = isHeroSource(source);
   if (!o.dot && fromHero && !o.noFlow) {
     addFlow(FLOW.perHit);

@@ -1,4 +1,5 @@
 import type { StageDef } from "../../types/campaign";
+import { rung } from "../geometry";
 import { breach } from "./breach";
 import { depths } from "./depths";
 import { lastWatch } from "./last-watch";
@@ -10,8 +11,7 @@ export const citadel: StageDef = {
   mapBlurb: "Every rift leads here.",
   kind: "citadel",
   era: "abyss",
-  ground: "stalker",
-  flyer: "eye",
+  ladder: [...rung(15, 12, "stalker"), ...rung(15, 6, "eye")],
   boss: "sovereign",
   mini: {
     name: "Void Reaver",

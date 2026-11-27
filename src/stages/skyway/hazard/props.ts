@@ -1,6 +1,6 @@
 import { GROUND, RES, W } from "../../../constants/stage";
 import { fleck, hairline, line, polygon, px, shade } from "../../../engine/frame";
-import { overPit, stageExitX, stagePlatforms, stageWalls } from "../../../game/adventure";
+import { stageExitX, stagePlatforms, stageWalls } from "../../../game/adventure";
 import type { Platform } from "../../../types/world";
 import { grain } from "../../../utils/grain";
 import { lerp } from "../../../utils/math";
@@ -31,7 +31,7 @@ function placeBanners(): Banner[] {
   const out: Banner[] = [];
   for (let x = BANNER.first; x < exit - 40; x += BANNER.every) {
     const bx = x + Math.round((grain(x, 5) - 0.5) * 40);
-    const blocked = overPit(bx - 8) || overPit(bx + 8) || walls.some((w) => bx > w.x0 - 6 && bx < w.x1 + 6);
+    const blocked = walls.some((w) => bx > w.x0 - 6 && bx < w.x1 + 6);
     if (!blocked) out.push({ x: bx, y: GROUND, pole: BANNER.pole });
   }
   for (const wall of walls) {

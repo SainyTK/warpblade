@@ -1,5 +1,5 @@
 import type { Approach } from "../../types/campaign";
-import { flyer, ledge, pit, site, surge, walker } from "../geometry";
+import { flyer, ledge, pack, site, walker } from "../geometry";
 
 export interface DriftSite {
   x: number;
@@ -16,7 +16,7 @@ const pool = (x0: number, x1: number) => ({ x0, x1 });
 const drift = (x: number, y: number, span: number): DriftSite => ({ x, y, span });
 
 export const rootTunnel: Approach = {
-  room: surge(10),
+  roomCap: 10,
   parSeconds: 60,
   length: 980,
   slabs: [
@@ -32,31 +32,19 @@ export const rootTunnel: Approach = {
   ],
   walls: [ledge(255, 283, 118), ledge(460, 486, 100), ledge(760, 788, 124)],
   arenaSlabs: [ledge(50, 110, 116), ledge(205, 265, 112)],
-  patrol: [
-    walker(150),
-    flyer(205, 80),
-    walker(235, false, "spitbloom"),
-    walker(320),
-    flyer(360, 70),
-    walker(400, true),
-    walker(440, false, "spitbloom"),
-    flyer(520, 90),
-    walker(545),
-    walker(650),
-    flyer(700, 50),
-    walker(725, false, "spitbloom"),
-    walker(800),
-    flyer(850, 80),
-    walker(925, true),
-    walker(955, false, "spitbloom"),
+  packs: [
+    pack(275, walker(150), flyer(205, 80), walker(235, false, "spitbloom")),
+    pack(480, walker(320), flyer(360, 70), walker(400, true), walker(440, false, "spitbloom")),
+    pack(690, flyer(520, 90), walker(545), walker(650)),
+    pack(840, flyer(700, 50), walker(725, false, "spitbloom"), walker(800)),
+    pack(970, flyer(850, 80), walker(925, true), walker(955, false, "spitbloom")),
   ],
   mentorSites: [site(200, 98), site(530)],
   spikes: [],
-  pits: [pit(588, 618), pit(878, 906)],
 };
 
 export const fungalMarsh: Approach = {
-  room: surge(9, ["rotcrawler", "spitbloom", "rotcrawler"]),
+  roomCap: 9,
   parSeconds: 70,
   length: 1050,
   slabs: [
@@ -72,33 +60,21 @@ export const fungalMarsh: Approach = {
   ],
   walls: [ledge(280, 306, 112), ledge(490, 514, 96), ledge(800, 826, 120)],
   arenaSlabs: [ledge(45, 105, 118), ledge(215, 275, 110)],
-  patrol: [
-    walker(175),
-    walker(210, false, "spitbloom"),
-    flyer(240, 70),
-    walker(320),
-    walker(400, false, "spitbloom"),
-    flyer(450, 60),
-    walker(470, true),
-    walker(530),
-    walker(612, false, "spitbloom"),
-    flyer(650, 70),
-    walker(690),
-    walker(760, false, "spitbloom"),
-    flyer(790, 50),
-    walker(905),
-    walker(915, false, "spitbloom"),
-    flyer(940, 60),
-    walker(975, true),
-    walker(1040),
+  packs: [
+    pack(280, walker(175), walker(210, false, "spitbloom"), flyer(240, 70)),
+    pack(490, walker(320), walker(400, false, "spitbloom"), flyer(450, 60)),
+    pack(570, walker(470, true), walker(530)),
+    pack(730, walker(612, false, "spitbloom"), flyer(650, 70), walker(690)),
+    pack(830, walker(760, false, "spitbloom"), flyer(790, 50)),
+    pack(1015, walker(905), walker(915, false, "spitbloom"), flyer(940, 60), walker(975, true)),
+    pack(1040, walker(1040)),
   ],
   mentorSites: [site(220, 94), site(455, 88)],
   spikes: [],
-  pits: [pit(700, 730), pit(1000, 1026)],
 };
 
 export const heartChamber: Approach = {
-  room: surge(10),
+  roomCap: 10,
   parSeconds: 90,
   length: 900,
   slabs: [
@@ -113,25 +89,15 @@ export const heartChamber: Approach = {
   ],
   walls: [ledge(260, 286, 114), ledge(520, 546, 98), ledge(740, 764, 122)],
   arenaSlabs: [ledge(28, 84, 116), ledge(110, 158, 96)],
-  patrol: [
-    walker(150),
-    flyer(210, 70),
-    walker(240, false, "spitbloom"),
-    walker(330),
-    flyer(370, 60),
-    walker(420, false, "spitbloom"),
-    walker(500, true),
-    flyer(560, 80),
-    walker(600),
-    walker(650, false, "spitbloom"),
-    flyer(700, 50),
-    walker(785),
-    walker(830, false, "spitbloom"),
-    flyer(880, 70),
+  packs: [
+    pack(280, walker(150), flyer(210, 70), walker(240, false, "spitbloom")),
+    pack(460, walker(330), flyer(370, 60), walker(420, false, "spitbloom")),
+    pack(640, walker(500, true), flyer(560, 80), walker(600)),
+    pack(825, walker(650, false, "spitbloom"), flyer(700, 50), walker(785)),
+    pack(890, walker(830, false, "spitbloom"), flyer(880, 70)),
   ],
   mentorSites: [site(210, 92), site(640)],
   spikes: [],
-  pits: [pit(445, 475), pit(860, 888)],
 };
 
 export const BLIGHT_AREAS = [rootTunnel, fungalMarsh, heartChamber] as const;

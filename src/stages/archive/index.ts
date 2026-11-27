@@ -1,4 +1,5 @@
 import type { StageDef } from "../../types/campaign";
+import { rung } from "../geometry";
 import { inkTides } from "./hazard";
 import { readingHalls, sunkenRotunda, theStacks } from "./layout";
 
@@ -8,8 +9,7 @@ export const archive: StageDef = {
   mapBlurb: "Every book here was written in ink that moves.",
   kind: "rift",
   era: "archive",
-  ground: "inkling",
-  flyer: "pagewing",
+  ladder: [...rung(15, 12, "inkling"), ...rung(15, 6, "pagewing"), ...rung(26, 16, "tomeguard")],
   boss: "pagewyrm",
   mini: {
     name: "Grand Tomeguard",

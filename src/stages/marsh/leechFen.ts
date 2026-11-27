@@ -1,8 +1,8 @@
 import type { Approach } from "../../types/campaign";
-import { flyer, ledge, pit, site, surge, walker } from "../geometry";
+import { flyer, ledge, pack, site, walker } from "../geometry";
 
 export const leechFen: Approach = {
-  room: surge(9, ["bogleech", "bogleech", "mire", "stormkite"]),
+  roomCap: 9,
   parSeconds: 72,
   length: 1020,
   slabs: [
@@ -21,27 +21,14 @@ export const leechFen: Approach = {
   ],
   walls: [ledge(300, 336, 118), ledge(560, 600, 102), ledge(800, 830, 128)],
   arenaSlabs: [ledge(46, 106, 118), ledge(132, 188, 80), ledge(214, 274, 118)],
-  patrol: [
-    walker(112, false, "bogleech"),
-    flyer(170, 70),
-    walker(250),
-    flyer(290, 40),
-    walker(372, false, "bogleech"),
-    flyer(420, 54),
-    walker(512),
-    walker(540, false, "bogleech"),
-    flyer(604, 60),
-    walker(660),
-    flyer(720, 96),
-    walker(770, false, "bogleech"),
-    flyer(790, 38),
-    walker(860, true),
-    flyer(900, 78),
-    walker(940, false, "bogleech"),
-    flyer(980, 58),
-    walker(1004),
+  packs: [
+    pack(290, walker(112, false, "bogleech"), flyer(170, 70), walker(250)),
+    pack(460, flyer(290, 40), walker(372, false, "bogleech"), flyer(420, 54)),
+    pack(644, walker(512), walker(540, false, "bogleech"), flyer(604, 60)),
+    pack(830, walker(660), flyer(720, 96), walker(770, false, "bogleech"), flyer(790, 38)),
+    pack(1010, walker(860, true), flyer(900, 78), walker(940, false, "bogleech"), flyer(980, 58)),
+    pack(1010, walker(1004)),
   ],
   mentorSites: [site(196, 88), site(640, 84)],
   spikes: [ledge(256, 280, 56), ledge(620, 652)],
-  pits: [pit(182, 214), pit(432, 470), pit(702, 736), pit(878, 906)],
 };

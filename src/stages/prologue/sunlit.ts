@@ -1,8 +1,8 @@
 import type { Approach } from "../../types/campaign";
-import { flyer, ledge, site, surge, walker } from "../geometry";
+import { flyer, ledge, pack, site, walker } from "../geometry";
 
 export const sunlit: Approach = {
-  room: surge(10),
+  roomCap: 10,
   parSeconds: 54,
   length: 742,
   slabs: [
@@ -18,22 +18,12 @@ export const sunlit: Approach = {
   ],
   walls: [ledge(207, 250, 116), ledge(479, 510, 123)],
   arenaSlabs: [ledge(55, 112, 111), ledge(215, 273, 116)],
-  patrol: [
-    walker(116),
-    flyer(151, 106),
-    walker(193),
-    flyer(266, 83),
-    walker(281),
-    flyer(342, 49),
-    walker(375),
-    flyer(405, 62),
-    walker(455),
-    flyer(518, 101),
-    walker(546),
-    flyer(593, 74),
-    walker(621),
-    flyer(662, 101),
-    walker(713),
+  packs: [
+    pack(233, walker(116), flyer(151, 106), walker(193)),
+    pack(415, flyer(266, 83), walker(281), flyer(342, 49), walker(375)),
+    pack(558, flyer(405, 62), walker(455), flyer(518, 101)),
+    pack(702, walker(546), flyer(593, 74), walker(621), flyer(662, 101)),
+    pack(732, walker(713)),
   ],
   mentorSites: [site(190, 83), site(335)],
   spikes: [ledge(566, 602)],

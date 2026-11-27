@@ -1,8 +1,8 @@
 import type { Approach } from "../../types/campaign";
-import { flyer, ledge, pit, site, surge, walker } from "../geometry";
+import { flyer, ledge, pack, site, walker } from "../geometry";
 
 export const brokenBridges: Approach = {
-  room: surge(10, ["skyguard", "galehawk", "sparkjelly"]),
+  roomCap: 10,
   parSeconds: 75,
   length: 1000,
   slabs: [
@@ -19,31 +19,19 @@ export const brokenBridges: Approach = {
   ],
   walls: [ledge(238, 260, 120), ledge(592, 614, 116), ledge(886, 906, 124)],
   arenaSlabs: [ledge(52, 108, 112), ledge(212, 268, 112)],
-  patrol: [
-    walker(128),
-    flyer(170, 72),
-    walker(280),
-    flyer(330, 64),
-    walker(400),
-    flyer(420, 92, "sparkjelly"),
-    walker(445, true),
-    flyer(510, 70),
-    walker(570),
-    walker(712),
-    flyer(735, 60),
-    walker(760),
-    flyer(810, 82, "sparkjelly"),
-    walker(865),
-    flyer(905, 66),
-    walker(992, true),
+  packs: [
+    pack(210, walker(128), flyer(170, 72)),
+    pack(460, walker(280), flyer(330, 64), walker(400), flyer(420, 92, "sparkjelly")),
+    pack(610, walker(445, true), flyer(510, 70), walker(570)),
+    pack(850, walker(712), flyer(735, 60), walker(760), flyer(810, 82, "sparkjelly")),
+    pack(990, walker(865), flyer(905, 66), walker(992, true)),
   ],
   mentorSites: [site(298, 100), site(720)],
   spikes: [],
-  pits: [pit(150, 186), pit(300, 352), pit(470, 548), pit(654, 690), pit(780, 846), pit(946, 976)],
 };
 
 export const floatingIslands: Approach = {
-  room: surge(9, ["galehawk", "sparkjelly"]),
+  roomCap: 9,
   parSeconds: 70,
   length: 960,
   slabs: [
@@ -61,32 +49,20 @@ export const floatingIslands: Approach = {
   ],
   walls: [ledge(214, 234, 118), ledge(488, 508, 120), ledge(780, 800, 116)],
   arenaSlabs: [ledge(40, 96, 110), ledge(132, 188, 84), ledge(224, 280, 110)],
-  patrol: [
-    flyer(150, 64),
-    flyer(190, 96, "sparkjelly"),
-    walker(248),
-    flyer(300, 70),
-    walker(360),
-    flyer(380, 60, "sparkjelly"),
-    walker(392, true),
-    flyer(450, 84),
-    walker(528),
-    flyer(580, 64, "sparkjelly"),
-    walker(640),
-    flyer(690, 56),
-    walker(755),
-    flyer(800, 70, "sparkjelly"),
-    walker(908),
-    flyer(920, 60),
-    walker(944, true),
+  packs: [
+    pack(288, flyer(150, 64), flyer(190, 96, "sparkjelly"), walker(248)),
+    pack(432, flyer(300, 70), walker(360), flyer(380, 60, "sparkjelly"), walker(392, true)),
+    pack(620, flyer(450, 84), walker(528), flyer(580, 64, "sparkjelly")),
+    pack(795, walker(640), flyer(690, 56), walker(755)),
+    pack(950, flyer(800, 70, "sparkjelly"), walker(908), flyer(920, 60)),
+    pack(950, walker(944, true)),
   ],
   mentorSites: [site(365, 86), site(650)],
   spikes: [],
-  pits: [pit(140, 182), pit(268, 330), pit(412, 448), pit(552, 620), pit(700, 740), pit(842, 892)],
 };
 
 export const roost: Approach = {
-  room: surge(10),
+  roomCap: 10,
   parSeconds: 95,
   length: 900,
   slabs: [
@@ -101,27 +77,15 @@ export const roost: Approach = {
   ],
   walls: [ledge(240, 262, 118), ledge(470, 494, 116), ledge(650, 672, 120)],
   arenaSlabs: [ledge(56, 110, 114), ledge(210, 264, 114)],
-  patrol: [
-    flyer(120, 72),
-    flyer(160, 70, "sparkjelly"),
-    walker(210),
-    flyer(260, 60, "sparkjelly"),
-    walker(300),
-    flyer(360, 66),
-    walker(430),
-    flyer(450, 84, "sparkjelly"),
-    walker(520, true),
-    flyer(580, 60),
-    walker(630),
-    flyer(700, 70, "sparkjelly"),
-    walker(800),
-    flyer(820, 64),
-    walker(860, true),
-    flyer(880, 90, "sparkjelly"),
+  packs: [
+    pack(300, flyer(120, 72), flyer(160, 70, "sparkjelly"), walker(210), flyer(260, 60, "sparkjelly")),
+    pack(470, walker(300), flyer(360, 66), walker(430)),
+    pack(620, flyer(450, 84, "sparkjelly"), walker(520, true), flyer(580, 60)),
+    pack(740, walker(630), flyer(700, 70, "sparkjelly")),
+    pack(890, walker(800), flyer(820, 64), walker(860, true), flyer(880, 90, "sparkjelly")),
   ],
   mentorSites: [site(300, 104), site(800)],
   spikes: [],
-  pits: [pit(140, 180), pit(330, 400), pit(560, 600), pit(720, 770)],
 };
 
 export const SKYWAY_AREAS = [brokenBridges, floatingIslands, roost] as const;

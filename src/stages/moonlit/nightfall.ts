@@ -1,8 +1,8 @@
 import type { Approach } from "../../types/campaign";
-import { flyer, ledge, site, surge, walker } from "../geometry";
+import { flyer, ledge, pack, site, walker } from "../geometry";
 
 export const nightfall: Approach = {
-  room: surge(10),
+  roomCap: 10,
   parSeconds: 73,
   length: 880,
   slabs: [
@@ -21,26 +21,12 @@ export const nightfall: Approach = {
   ],
   walls: [ledge(266, 310, 100), ledge(624, 673, 129)],
   arenaSlabs: [ledge(44, 101, 112), ledge(131, 186, 77), ledge(217, 268, 116)],
-  patrol: [
-    walker(105),
-    walker(151),
-    flyer(194, 77),
-    walker(235),
-    flyer(279, 43),
-    flyer(345, 63),
-    walker(384),
-    walker(465),
-    flyer(499, 107),
-    walker(524),
-    flyer(572, 70),
-    walker(597),
-    flyer(652, 34),
-    walker(704, true),
-    flyer(720, 60),
-    flyer(767, 98),
-    walker(799),
-    flyer(836, 56, "lanternshade"),
-    walker(866),
+  packs: [
+    pack(275, walker(105), walker(151), flyer(194, 77), walker(235)),
+    pack(424, flyer(279, 43), flyer(345, 63), walker(384)),
+    pack(612, walker(465), flyer(499, 107), walker(524), flyer(572, 70)),
+    pack(760, walker(597), flyer(652, 34), walker(704, true), flyer(720, 60)),
+    pack(870, flyer(767, 98), walker(799), flyer(836, 56, "lanternshade"), walker(866)),
   ],
   mentorSites: [site(204, 91), site(439, 112)],
   spikes: [ledge(333, 371), ledge(552, 577, 84)],

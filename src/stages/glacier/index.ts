@@ -1,4 +1,5 @@
 import type { StageDef } from "../../types/campaign";
+import { rung } from "../geometry";
 import { glacierHazard } from "./hazard";
 import { frozenCorridor, icicleCavern, lynxDen } from "./layout";
 
@@ -8,8 +9,7 @@ export const glacier: StageDef = {
   mapBlurb: "Ice that remembers every footstep.",
   kind: "rift",
   era: "glacier",
-  ground: "rimehound",
-  flyer: "shardling",
+  ladder: [...rung(15, 12, "rimehound"), ...rung(15, 6, "shardling"), ...rung(26, 16, "cryomancer")],
   boss: "rimeclaw",
   mini: {
     name: "Rime Oracle",

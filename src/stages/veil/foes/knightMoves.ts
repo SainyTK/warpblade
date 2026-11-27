@@ -1,5 +1,5 @@
 import { GROUND } from "../../../constants/stage";
-import { clampStageX, enemyOverPit, stageLeft, stageRight } from "../../../game/adventure";
+import { clampStageX, stageLeft, stageRight } from "../../../game/adventure";
 import { stageWalls } from "../../../game/adventure/trail";
 import { eachStanding } from "../../../game/coopHooks";
 import { foeSees } from "../../../game/enemies/awareness";
@@ -37,7 +37,7 @@ export const raiseTime = (): number => KNIGHT.raise * waveScale(game.wave).windu
 export const arriveTime = (): number => KNIGHT.arrive * waveScale(game.wave).windup;
 
 function standable(x: number): boolean {
-  if (x < stageLeft() + 12 || x > stageRight() - 12 || enemyOverPit(x)) return false;
+  if (x < stageLeft() + 12 || x > stageRight() - 12) return false;
   return !stageWalls().some((wall) => x > wall.x0 - 10 && x < wall.x1 + 10);
 }
 

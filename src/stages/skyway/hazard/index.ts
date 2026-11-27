@@ -1,6 +1,5 @@
 import { place } from "../../../engine/frame";
 import type { StageHazard } from "../../../types/campaign";
-import { drawAbyss } from "./abyss";
 import { drawGusts } from "./drawGusts";
 import { resetGusts, updateGusts } from "./gusts";
 import { drawProps } from "./props";
@@ -19,7 +18,6 @@ export const skywayHazard: StageHazard = {
   },
   drawBack(cameraX, t) {
     place();
-    drawAbyss(cameraX, t);
     drawProps(cameraX, t);
     drawRods();
   },

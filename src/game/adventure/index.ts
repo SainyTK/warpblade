@@ -3,7 +3,6 @@ export { summonFoe } from "./foes";
 export { drawStageHazardBack, drawStageHazardFront } from "./hazard";
 export { nearbyMentor, stageMentor } from "./mentor";
 export { containPatrol, waitsOnPerch } from "./patrol";
-export { enemyOverPit } from "./pits";
 export { stageSpikes } from "./spikes";
 export { surgeEnding } from "./surge";
 export {
@@ -13,7 +12,6 @@ export {
   finaleHolds,
   heroLeash,
   isAdventure,
-  overPit,
   recordStageDamage,
   recordStageKill,
   resetAdventure,
@@ -29,7 +27,6 @@ export {
   stageGates,
   stageHeartRate,
   stageLeft,
-  stagePits,
   stagePlatforms,
   stageProgress,
   stageRight,

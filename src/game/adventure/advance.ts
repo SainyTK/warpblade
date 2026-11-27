@@ -27,8 +27,7 @@ import { claimFoe, stageFoe } from "./foes";
 import { resetStageHazard, updateStageHazard } from "./hazard";
 import { updateMentor } from "./mentor";
 import { markPerch } from "./patrol";
-import { setFooting, updatePits } from "./pits";
-import { type BigFoeBeat, GATE_ENTRY, type RouteArea, type RouteFoe, SPAWN_LEAD } from "./route";
+import { type BigFoeBeat, GATE_ENTRY, type RouteArea, type RouteFoe, type RoutePack, SPAWN_LEAD } from "./route";
 import { updateSpikes } from "./spikes";
 import { openSurge, updateSurge } from "./surge";
 import { trail } from "./trail";
@@ -47,6 +46,7 @@ const waveFor = (level: number): number => clamp(Math.round(bandWave(level)), 1,
 function addFoe(run: Trail, foe: RouteFoe): void {
   const enemy = claimFoe(stageFoe(foe.type, foe.x, foe.y ?? GROUND, foe.level, foe.xp, foe.elite));
   markPerch(enemy);
+  run.packFoes.push(enemy);
   run.band = foe.level;
 }
 
@@ -64,7 +64,9 @@ export function startAdventureAt(section: number, offset = 0): void {
   trail.camera = area.start;
   trail.left = area.start;
   trail.farthest = hero.x;
-  setFooting(hero.x);
+  trail.pack = 0;
+  trail.packFoes = [];
+  trail.hold = null;
   trail.band = area.enter;
   game.wave = waveFor(area.enter);
   game.lull = "fight";
@@ -90,12 +92,11 @@ function openFight(run: Trail, beat: BigFoeBeat): boolean {
   return openBossFight(profile, beat.kind, finaleCard(run, beat));
 }
 
-function openBigFoe(run: Trail, area: RouteArea, beat: BigFoeBeat): void {
+function openBigFoe(run: Trail, x: number, beat: BigFoeBeat): void {
   const epic = openFight(run, beat);
   const name = bigFoeName(run, beat);
   if (!epic) showBanner(beat.kind === "elite" ? `Elite ${name}` : name, BANNER);
   const rift = kindOf(beat.foe).rift;
-  const x = area.exit - W * 0.26;
   const y = rift.y();
   game.fx.push(
     createRift(x, rift.riftY(y), rift.height, 0, () => {
@@ -119,13 +120,13 @@ function startBeat(run: Trail, area: RouteArea): void {
     run.band = beat.from;
     game.wave = waveFor(beat.from);
     run.surge = openSurge(beat);
-    showBanner("Rift surge", BANNER);
+    showBanner(`Rift surge  Wave 1/${beat.waves.length}`, BANNER);
     sfx.surge();
     return;
   }
   run.band = beat.level;
   game.wave = waveFor(beat.level);
-  openBigFoe(run, area, beat);
+  openBigFoe(run, area.exit - W * 0.26, beat);
 }
 
 function gatherInRoom(area: RouteArea): void {
@@ -133,7 +134,6 @@ function gatherInRoom(area: RouteArea): void {
   eachHero(() => {
     if (hero.x >= inside) return;
     placeHero(inside);
-    setFooting(inside);
   });
 }
 
@@ -159,7 +159,6 @@ function beatCleared(run: Trail, area: RouteArea, dt: number): boolean {
 function clearBeat(run: Trail, area: RouteArea): void {
   const beat = area.beats[run.beat];
   if (beat && beat.kind !== "surge") run.bigFoesDefeated++;
-  if (beat?.kind === "mini") run.miniDefeated = true;
   run.surge = null;
   run.bigFoe = null;
   run.beat++;
@@ -181,7 +180,9 @@ function clearBeat(run: Trail, area: RouteArea): void {
     return;
   }
   run.area++;
-  run.nextFoe = 0;
+  run.pack = 0;
+  run.packFoes = [];
+  run.hold = null;
   run.gate = null;
   run.lull = ROOM_BEATS.pause;
   showBanner("Gate open", BANNER);
@@ -210,13 +211,52 @@ function advanceRoute(run: Trail, lead: number, dt: number): void {
     return;
   }
   if (lead < area.start) return;
-  let next = area.foes[run.nextFoe];
-  while (next && next.x <= lead + SPAWN_LEAD) {
-    addFoe(run, next);
-    run.nextFoe++;
-    next = area.foes[run.nextFoe];
+  updateRoad(run, area, lead);
+  if (run.hold === null && run.pack >= area.packs.length && lead >= area.entrance + GATE_ENTRY) openRoom(run, area);
+}
+
+const packStart = (pack: RoutePack): number => Math.min(pack.mini?.x ?? pack.hold, ...pack.foes.map((foe) => foe.x));
+
+function engagePack(run: Trail, pack: RoutePack): void {
+  run.hold = pack.hold;
+  run.packFoes = [];
+  for (const foe of pack.foes) addFoe(run, foe);
+  if (!pack.mini) return;
+  run.band = pack.mini.level;
+  game.wave = waveFor(pack.mini.level);
+  openBigFoe(run, pack.mini.x, pack.mini);
+}
+
+function packCleared(run: Trail, pack: RoutePack): boolean {
+  if (run.packFoes.some((foe) => foe.hp > 0)) return false;
+  if (!pack.mini) return true;
+  return !!run.bigFoe && run.bigFoe.hp <= 0 && bossFightSettled();
+}
+
+function clearPack(run: Trail, pack: RoutePack): void {
+  run.hold = null;
+  run.packFoes = [];
+  run.pack++;
+  if (!pack.mini) return;
+  run.bigFoe = null;
+  run.bigFoesDefeated++;
+  run.miniDefeated = true;
+  game.cleared++;
+  game.clearedAt = game.clock;
+  feat({ kind: "waveCleared", wave: game.wave, hero: character.id });
+  coop()?.waveCleared();
+  openPicks();
+  sfx.gate();
+}
+
+function updateRoad(run: Trail, area: RouteArea, lead: number): void {
+  const pack = area.packs[run.pack];
+  if (!pack) return;
+  if (run.hold === null) {
+    if (lead + SPAWN_LEAD >= packStart(pack)) engagePack(run, pack);
+    return;
   }
-  if (lead >= area.entrance + GATE_ENTRY) openRoom(run, area);
+  if (packCleared(run, pack)) clearPack(run, pack);
 }
 
 function partyXs(): number[] {
@@ -247,9 +287,6 @@ export function updateAdventure(dt: number): void {
   if (!xs.length) return;
   const lead = Math.max(...xs);
   trail.farthest = Math.max(trail.farthest, lead);
-  eachStanding(() => {
-    updatePits();
-    updateMentor();
-  });
+  eachStanding(updateMentor);
   if (game.mode === "play") advanceRoute(trail, lead, dt);
 }

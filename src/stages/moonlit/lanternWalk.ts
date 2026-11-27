@@ -1,8 +1,8 @@
 import type { Approach } from "../../types/campaign";
-import { flyer, ledge, pit, site, surge, walker } from "../geometry";
+import { flyer, ledge, pack, site, walker } from "../geometry";
 
 export const lanternWalk: Approach = {
-  room: surge(9, ["lanternshade", "husk", "husk", "wisp"]),
+  roomCap: 9,
   parSeconds: 72,
   length: 1040,
   slabs: [
@@ -21,27 +21,14 @@ export const lanternWalk: Approach = {
   ],
   walls: [ledge(312, 342, 122), ledge(580, 616, 108), ledge(790, 824, 124)],
   arenaSlabs: [ledge(44, 101, 112), ledge(131, 186, 77), ledge(217, 268, 116)],
-  patrol: [
-    walker(116),
-    flyer(150, 76, "lanternshade"),
-    walker(260),
-    flyer(286, 34),
-    walker(370),
-    flyer(400, 70, "lanternshade"),
-    walker(520),
-    flyer(556, 96),
-    walker(650),
-    flyer(690, 40, "lanternshade"),
-    walker(752),
-    flyer(780, 84),
-    walker(850, true),
-    flyer(880, 62, "lanternshade"),
-    walker(922),
-    flyer(960, 40),
-    walker(1010),
-    flyer(1024, 90, "lanternshade"),
+  packs: [
+    pack(190, walker(116), flyer(150, 76, "lanternshade")),
+    pack(440, walker(260), flyer(286, 34), walker(370), flyer(400, 70, "lanternshade")),
+    pack(690, walker(520), flyer(556, 96), walker(650)),
+    pack(820, flyer(690, 40, "lanternshade"), walker(752), flyer(780, 84)),
+    pack(1000, walker(850, true), flyer(880, 62, "lanternshade"), walker(922), flyer(960, 40)),
+    pack(1030, walker(1010), flyer(1024, 90, "lanternshade")),
   ],
   mentorSites: [site(206, 84), site(628, 90)],
   spikes: [ledge(268, 292, 52), ledge(860, 884, 96)],
-  pits: [pit(190, 226), pit(452, 490), pit(712, 744), pit(890, 914)],
 };

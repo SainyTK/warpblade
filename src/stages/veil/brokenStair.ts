@@ -1,8 +1,8 @@
 import type { Approach } from "../../types/campaign";
-import { flyer, ledge, pit, site, surge, walker } from "../geometry";
+import { flyer, ledge, pack, site, walker } from "../geometry";
 
 export const brokenStair: Approach = {
-  room: surge(9, ["riftknight", "riftknight", "golem", "sprite"]),
+  roomCap: 9,
   parSeconds: 72,
   length: 1060,
   slabs: [
@@ -21,26 +21,14 @@ export const brokenStair: Approach = {
   ],
   walls: [ledge(306, 338, 122), ledge(566, 602, 106), ledge(780, 816, 124)],
   arenaSlabs: [ledge(52, 115, 113), ledge(211, 274, 113)],
-  patrol: [
-    walker(116),
-    flyer(150, 92),
-    walker(262, false, "riftknight"),
-    flyer(290, 34),
-    walker(364),
-    flyer(400, 64),
-    walker(520, false, "riftknight"),
-    flyer(552, 100),
-    walker(646),
-    flyer(690, 40),
-    walker(752, false, "riftknight"),
-    flyer(772, 84),
-    walker(846, true),
-    flyer(880, 60),
-    walker(930, false, "riftknight"),
-    flyer(960, 40),
-    walker(1030),
+  packs: [
+    pack(190, walker(116), flyer(150, 92)),
+    pack(440, walker(262, false, "riftknight"), flyer(290, 34), walker(364), flyer(400, 64)),
+    pack(686, walker(520, false, "riftknight"), flyer(552, 100), walker(646)),
+    pack(812, flyer(690, 40), walker(752, false, "riftknight"), flyer(772, 84)),
+    pack(1000, walker(846, true), flyer(880, 60), walker(930, false, "riftknight"), flyer(960, 40)),
+    pack(1050, walker(1030)),
   ],
   mentorSites: [site(202, 86), site(610, 90)],
   spikes: [ledge(266, 290, 54), ledge(850, 874, 100)],
-  pits: [pit(184, 222), pit(440, 480), pit(704, 738), pit(884, 910)],
 };

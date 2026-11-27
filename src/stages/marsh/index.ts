@@ -1,4 +1,5 @@
 import type { StageDef } from "../../types/campaign";
+import { rung } from "../geometry";
 import { createMarshHazard } from "./hazard";
 import { leechFen } from "./leechFen";
 import { reedwade } from "./reedwade";
@@ -12,8 +13,7 @@ export const marsh: StageDef = {
   mapBlurb: "Rain, mud and the thing that sleeps in it.",
   kind: "rift",
   era: "rain",
-  ground: "mire",
-  flyer: "stormkite",
+  ladder: [...rung(15, 12, "mire"), ...rung(15, 6, "stormkite"), ...rung(26, 16, "bogleech")],
   boss: "boghulk",
   mini: {
     name: "The Mire King",

@@ -1,5 +1,5 @@
 import { GROUND, W } from "../../../constants/stage";
-import { overPit, stageExitX } from "../../../game/adventure";
+import { stageExitX } from "../../../game/adventure";
 import { heroGuarded } from "../../../game/hero/guard";
 import { hurtHero } from "../../../game/hurtHero";
 import { fxRng, game, hero, particles } from "../../../game/state";
@@ -13,7 +13,6 @@ const TOP = 2;
 const NOTICE = 30;
 const REGROW = { wait: 3.5, grow: 2.5 } as const;
 const DAMAGE = { first: 14, extra: 10 } as const;
-const WATER = 9;
 
 type Phase = "hang" | "shake" | "fall" | "gone";
 
@@ -39,7 +38,7 @@ const icicles: Icicle[] = ICICLE_SPOTS.map((x) => ({
   landing: GROUND,
 }));
 
-const landingOf = (x: number): number => (overPit(x) ? GROUND + WATER : surfaceBelow(x, TOP + ICICLE.length));
+const landingOf = (x: number): number => surfaceBelow(x, TOP + ICICLE.length);
 
 export function resetIcicles(): void {
   for (const c of icicles) Object.assign(c, { phase: "hang", t: 0, y: TOP, vy: 0, grown: 1, struck: false });

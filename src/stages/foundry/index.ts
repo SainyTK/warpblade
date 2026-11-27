@@ -1,4 +1,5 @@
 import type { StageDef } from "../../types/campaign";
+import { rung } from "../geometry";
 import { foundryVents } from "./hazard";
 import { catwalks, furnaceHalls, smithy } from "./layout";
 
@@ -8,8 +9,7 @@ export const foundry: StageDef = {
   mapBlurb: "The forges never went cold.",
   kind: "rift",
   era: "foundry",
-  ground: "slagling",
-  flyer: "emberbat",
+  ladder: [...rung(15, 12, "slagling"), ...rung(15, 6, "emberbat"), ...rung(26, 16, "forgeguard")],
   boss: "cindersmith",
   mini: {
     name: "Forge Marshal",

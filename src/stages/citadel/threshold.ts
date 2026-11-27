@@ -1,8 +1,8 @@
 import type { Approach } from "../../types/campaign";
-import { flyer, ledge, site, surge, walker } from "../geometry";
+import { flyer, ledge, pack, site, walker } from "../geometry";
 
 export const threshold: Approach = {
-  room: surge(10),
+  roomCap: 10,
   parSeconds: 85,
   length: 908,
   slabs: [
@@ -24,25 +24,13 @@ export const threshold: Approach = {
   ],
   walls: [ledge(236, 270, 80), ledge(605, 643, 130), ledge(751, 791, 117)],
   arenaSlabs: [ledge(44, 99, 113), ledge(223, 275, 113)],
-  patrol: [
-    walker(109, false, "golem"),
-    flyer(151, 104, "sprite"),
-    walker(178),
-    flyer(207, 67),
-    flyer(288, 39),
-    walker(301),
-    walker(369),
-    flyer(433, 56),
-    walker(467),
-    flyer(519, 33),
-    flyer(550, 112),
-    walker(568),
-    flyer(616, 78),
-    walker(675),
-    flyer(741, 63),
-    flyer(821, 91),
-    walker(834, true),
-    walker(882),
+  packs: [
+    pack(247, walker(109, false, "golem"), flyer(151, 104, "sprite"), walker(178), flyer(207, 67)),
+    pack(409, flyer(288, 39), walker(301), walker(369)),
+    pack(590, flyer(433, 56), walker(467), flyer(519, 33), flyer(550, 112)),
+    pack(715, walker(568), flyer(616, 78), walker(675)),
+    pack(874, flyer(741, 63), flyer(821, 91), walker(834, true)),
+    pack(898, walker(882)),
   ],
   mentorSites: [site(248, 80), site(350, 99)],
   spikes: [ledge(397, 434), ledge(489, 523, 49), ledge(606, 638, 130)],

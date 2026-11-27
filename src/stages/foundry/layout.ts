@@ -1,8 +1,8 @@
 import type { Approach } from "../../types/campaign";
-import { flyer, ledge, pit, site, surge, walker } from "../geometry";
+import { flyer, ledge, pack, site, walker } from "../geometry";
 
 export const catwalks: Approach = {
-  room: surge(10),
+  roomCap: 10,
   parSeconds: 66,
   length: 980,
   slabs: [
@@ -19,31 +19,19 @@ export const catwalks: Approach = {
   ],
   walls: [ledge(395, 415, 112), ledge(745, 770, 104)],
   arenaSlabs: [ledge(40, 100, 114), ledge(220, 280, 114)],
-  patrol: [
-    walker(120),
-    flyer(170, 80),
-    walker(210, false, "forgeguard"),
-    walker(330),
-    flyer(360, 70),
-    walker(450, true),
-    flyer(500, 60),
-    walker(530, false, "forgeguard"),
-    walker(620),
-    flyer(650, 90),
-    walker(680),
-    walker(720, false, "forgeguard"),
-    flyer(800, 70),
-    walker(820, true, "forgeguard"),
-    walker(900),
-    flyer(930, 80),
+  packs: [
+    pack(250, walker(120), flyer(170, 80), walker(210, false, "forgeguard")),
+    pack(490, walker(330), flyer(360, 70), walker(450, true)),
+    pack(660, flyer(500, 60), walker(530, false, "forgeguard"), walker(620)),
+    pack(760, flyer(650, 90), walker(680), walker(720, false, "forgeguard")),
+    pack(970, flyer(800, 70), walker(820, true, "forgeguard"), walker(900), flyer(930, 80)),
   ],
   mentorSites: [site(185, 98), site(440)],
   spikes: [],
-  pits: [pit(268, 298), pit(565, 595)],
 };
 
 export const furnaceHalls: Approach = {
-  room: surge(8, ["forgeguard", "slagling"]),
+  roomCap: 8,
   parSeconds: 72,
   length: 1060,
   slabs: [
@@ -61,33 +49,20 @@ export const furnaceHalls: Approach = {
   ],
   walls: [ledge(220, 236, 110), ledge(545, 565, 100), ledge(895, 915, 108)],
   arenaSlabs: [ledge(50, 110, 112), ledge(210, 270, 112)],
-  patrol: [
-    walker(110),
-    flyer(160, 74),
-    walker(190, false, "forgeguard"),
-    walker(280),
-    flyer(350, 64),
-    walker(370, true, "forgeguard"),
-    walker(440),
-    flyer(470, 70),
-    walker(520),
-    walker(600, false, "forgeguard"),
-    flyer(630, 84),
-    walker(700),
-    walker(760, false, "forgeguard"),
-    flyer(800, 70),
-    walker(870),
-    walker(880, true),
-    flyer(940, 80),
-    walker(1000, false, "forgeguard"),
+  packs: [
+    pack(230, walker(110), flyer(160, 74), walker(190, false, "forgeguard")),
+    pack(410, walker(280), flyer(350, 64), walker(370, true, "forgeguard")),
+    pack(560, walker(440), flyer(470, 70), walker(520)),
+    pack(740, walker(600, false, "forgeguard"), flyer(630, 84), walker(700)),
+    pack(920, walker(760, false, "forgeguard"), flyer(800, 70), walker(870), walker(880, true)),
+    pack(1040, flyer(940, 80), walker(1000, false, "forgeguard")),
   ],
   mentorSites: [site(180, 94), site(610)],
   spikes: [],
-  pits: [pit(300, 330), pit(640, 670), pit(820, 848)],
 };
 
 export const smithy: Approach = {
-  room: surge(10),
+  roomCap: 10,
   parSeconds: 84,
   length: 900,
   slabs: [
@@ -103,27 +78,15 @@ export const smithy: Approach = {
   ],
   walls: [ledge(330, 345, 106), ledge(600, 615, 102)],
   arenaSlabs: [ledge(30, 90, 112), ledge(230, 290, 112)],
-  patrol: [
-    walker(120),
-    flyer(160, 80),
-    walker(200, false, "forgeguard"),
-    walker(290),
-    flyer(330, 66),
-    walker(380, true, "forgeguard"),
-    walker(430),
-    flyer(470, 70),
-    walker(560),
-    walker(590, false, "forgeguard"),
-    flyer(640, 86),
-    walker(660),
-    walker(720, false, "forgeguard"),
-    flyer(760, 70),
-    walker(820, true),
-    walker(870, false, "forgeguard"),
+  packs: [
+    pack(240, walker(120), flyer(160, 80), walker(200, false, "forgeguard")),
+    pack(470, walker(290), flyer(330, 66), walker(380, true, "forgeguard"), walker(430)),
+    pack(630, flyer(470, 70), walker(560), walker(590, false, "forgeguard")),
+    pack(800, flyer(640, 86), walker(660), walker(720, false, "forgeguard"), flyer(760, 70)),
+    pack(890, walker(820, true), walker(870, false, "forgeguard")),
   ],
   mentorSites: [site(200, 90), site(470)],
   spikes: [],
-  pits: [pit(235, 262), pit(505, 535), pit(770, 798)],
 };
 
 export const FOUNDRY_AREAS = [catwalks, furnaceHalls, smithy] as const;

@@ -63,3 +63,5 @@ export const BIG_KILL = {
   bossRing: 46,
   rays: 10,
 } as const;
+
+export const HEAVY_SHAKE = { topSources: 5, share: 0.6, window: 0.15, hurtShare: 0.2 } as const;

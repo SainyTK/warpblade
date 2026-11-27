@@ -1,21 +1,29 @@
-import { FOE_BAND } from "../../constants/stageArc";
+import { FOE_BAND, OFF_LADDER_HITS } from "../../constants/stageArc";
 import { ELITE } from "../../constants/waves";
+import type { LadderFoe } from "../../types/campaign";
 import type { Enemy, EnemyType } from "../../types/enemy";
+import { ladderEntry } from "../../utils/ladder";
 import { xpToNext } from "../../utils/progression";
-import { bandScale } from "../../utils/stageArc";
+import { bandDamage, ladderHp } from "../../utils/stageArc";
 import { coop } from "../coopHooks";
-import { makeEnemy, makeScaledEnemy } from "../enemies/enemy";
+import { makeEnemy, makeFoe } from "../enemies/enemy";
 import { game } from "../state";
 import { trail } from "./trail";
 
+function entryFor(type: EnemyType, level: number): LadderFoe {
+  const ladder = trail?.route.stage.ladder ?? [];
+  const known = ladderEntry(ladder, type);
+  if (known) return known;
+  const rung = Math.max(1, ...ladder.filter((entry) => entry.level <= level).map((entry) => entry.level));
+  return { foe: type, level: rung, hits: OFF_LADDER_HITS };
+}
+
 export function stageFoe(type: EnemyType, x: number, y: number, level: number, xp: number, elite = false): Enemy {
   const run = trail;
-  const enemy = run ? makeScaledEnemy(type, x, y, { ...bandScale(level, run.mods), xp }) : makeEnemy(type, x, y, 1);
-  if (elite) {
-    enemy.elite = true;
-    enemy.max = Math.round(enemy.max * ELITE.hp);
-    enemy.hp = enemy.max;
-  }
+  if (!run) return makeEnemy(type, x, y, 1);
+  const hp = Math.round(ladderHp(entryFor(type, level), run.mods) * (elite ? ELITE.hp : 1));
+  const enemy = makeFoe(type, x, y, { hp, damage: bandDamage(level, run.mods), xp });
+  enemy.elite = elite;
   const room = coop();
   if (room) enemy.hp = enemy.max = room.scaleFoeHp(enemy.rank, enemy.max);
   return enemy;

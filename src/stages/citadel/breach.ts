@@ -1,27 +1,8 @@
 import type { Approach } from "../../types/campaign";
-import type { EnemyType } from "../../types/enemy";
-import { flyer, ledge, pit, site, surge, walker } from "../geometry";
-
-const EVERY_ERA: readonly EnemyType[] = [
-  "thornback",
-  "moth",
-  "mire",
-  "stormkite",
-  "bogleech",
-  "husk",
-  "wisp",
-  "lanternshade",
-  "golem",
-  "sprite",
-  "riftknight",
-  "stalker",
-  "eye",
-  "stalker",
-  "eye",
-];
+import { flyer, ledge, pack, site, walker } from "../geometry";
 
 export const breach: Approach = {
-  room: surge(14, EVERY_ERA),
+  roomCap: 14,
   parSeconds: 110,
   length: 1040,
   slabs: [
@@ -41,29 +22,14 @@ export const breach: Approach = {
   ],
   walls: [ledge(222, 254, 126), ledge(566, 604, 104), ledge(812, 846, 120)],
   arenaSlabs: [ledge(44, 99, 113), ledge(223, 275, 113)],
-  patrol: [
-    walker(116, false, "thornback"),
-    flyer(150, 100, "moth"),
-    walker(206, false, "mire"),
-    flyer(270, 34, "stormkite"),
-    walker(346, false, "husk"),
-    flyer(384, 82, "wisp"),
-    walker(452, false, "golem"),
-    flyer(492, 56, "sprite"),
-    walker(530, true),
-    flyer(576, 30, "lanternshade"),
-    walker(640, false, "riftknight"),
-    flyer(676, 72),
-    walker(720, false, "bogleech"),
-    flyer(780, 50),
-    walker(800, true, "husk"),
-    flyer(860, 86, "eye"),
-    walker(880),
-    flyer(940, 44, "sprite"),
-    walker(990, true, "golem"),
-    flyer(1020, 96),
+  packs: [
+    pack(246, walker(116, false, "thornback"), flyer(150, 100, "moth"), walker(206, false, "mire")),
+    pack(424, flyer(270, 34, "stormkite"), walker(346, false, "husk"), flyer(384, 82, "wisp")),
+    pack(616, walker(452, false, "golem"), flyer(492, 56, "sprite"), walker(530, true), flyer(576, 30, "lanternshade")),
+    pack(820, walker(640, false, "riftknight"), flyer(676, 72), walker(720, false, "bogleech"), flyer(780, 50)),
+    pack(980, walker(800, true, "husk"), flyer(860, 86, "eye"), walker(880), flyer(940, 44, "sprite")),
+    pack(1030, walker(990, true, "golem"), flyer(1020, 96)),
   ],
   mentorSites: [site(210, 86), site(440, 76)],
   spikes: [ledge(258, 286, 52), ledge(636, 664, 94), ledge(904, 934)],
-  pits: [pit(300, 330), pit(660, 696)],
 };

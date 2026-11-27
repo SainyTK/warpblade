@@ -6,6 +6,7 @@ import { resetAdventure } from "./adventure";
 import { clearChests } from "./build/chests";
 import { bankCoins } from "./coins";
 import { resetLedger } from "./damageLedger";
+import { resetHeavyShake } from "./heavyShake";
 import { resetAbilityBar } from "./hero/abilityBar";
 import { resetGuard } from "./hero/heroGuard";
 import { kit } from "./hero/kits";
@@ -29,6 +30,7 @@ export function resetRun(banner = "Rise again"): void {
   resetDrill();
   resetProgress();
   resetLedger();
+  resetHeavyShake();
   resetResonance();
   forgetSkills();
   clearChests();

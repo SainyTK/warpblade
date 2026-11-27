@@ -35,19 +35,25 @@ export interface Patrol extends Point {
   elite?: boolean;
 }
 
-export interface SurgeRoom {
-  cap: number;
-  foes?: readonly EnemyType[];
+export interface Pack {
+  hold: number;
+  foes: readonly [Patrol, ...Patrol[]];
+}
+
+export interface LadderFoe {
+  foe: EnemyType;
+  level: number;
+  hits: number;
 }
 
 export type ArcBeat =
-  | { kind: "surge"; foes: number; to: number }
+  | { kind: "surge"; to: number }
   | { kind: "elite"; to: number }
-  | { kind: "mini"; to: number }
   | { kind: "boss"; foe?: EnemyType; to: number };
 
 export interface AreaArc {
   enter: number;
+  mini?: number;
   gate: number;
   beats: readonly [ArcBeat, ...ArcBeat[]];
 }
@@ -79,16 +85,15 @@ export interface MiniBossDef {
 }
 
 export interface Approach {
-  room: SurgeRoom;
+  roomCap: number;
   parSeconds: number;
   length: number;
   slabs: readonly Platform[];
   walls: readonly Platform[];
   arenaSlabs: readonly Platform[];
-  patrol: readonly Patrol[];
+  packs: readonly Pack[];
   mentorSites: readonly [Point, ...Point[]];
   spikes: readonly Platform[];
-  pits?: readonly Platform[];
 }
 
 export interface StageHazard {
@@ -104,8 +109,7 @@ export interface StageDef {
   mapBlurb: string;
   kind: StageKind;
   era: EraId;
-  ground: EnemyType;
-  flyer: EnemyType;
+  ladder: readonly LadderFoe[];
   boss: EnemyType;
   mini: MiniBossDef;
   twist: StageTwist;

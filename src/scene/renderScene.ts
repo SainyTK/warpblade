@@ -16,7 +16,6 @@ import { drawAmbientLight, drawMist, drawWeather, sceneFlash } from "./drawAmbie
 import { drawCoins } from "./drawCoins";
 import { drawMentor } from "./drawMentor";
 import { drawNumbers } from "./drawNumbers";
-import { drawPits } from "./drawPits";
 import { drawShadows } from "./drawShadows";
 import { drawShards } from "./drawShards";
 import { drawSpikes } from "./drawSpikes";
@@ -41,7 +40,6 @@ export function renderScene(out: Uint8ClampedArray): void {
   drawAmbientLight();
   setCameraX(cameraX);
   if (!arena) {
-    drawPits(cameraX, palette, game.t);
     drawAdventureTerrain(cameraX, game.t, palette);
     drawSpikes(cameraX, game.t);
     drawStageHazardBack(cameraX, game.t);

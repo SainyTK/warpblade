@@ -5,6 +5,7 @@ import { PK } from "../types/particle";
 import type { Box } from "../types/world";
 import { stagePlatforms, stageWalls } from "./adventure";
 import { heroSlot } from "./coopHooks";
+import { requestShake } from "./heavyShake";
 import { fxRng, game, hero, particles } from "./state";
 
 export const REDUCED_MOTION = matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -44,8 +45,7 @@ export function boxBehind(x0: number, y0: number, x1: number, y1: number): Box {
 }
 export function shake(time: number, amp: number): void {
   if (REDUCED_MOTION) return;
-  game.shake = Math.max(game.shake, time);
-  game.amp = Math.max(game.amp, amp);
+  requestShake(time, amp);
 }
 /** the hero starts a new swing: foes it already struck can be struck again */
 export function newSwing(): number {
