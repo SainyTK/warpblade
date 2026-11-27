@@ -74,6 +74,7 @@ export function makeFoe(type: EnemyType, x: number, y: number, stats: FoeScale):
     staggerHits: 0,
     staggerIdle: 0,
     brace: 0,
+    armored: def.rank !== "minion",
     halt: 0,
     pinned: 0,
     blind: 0,

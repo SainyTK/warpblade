@@ -1,3 +1,4 @@
+import { FLINCH } from "../../constants/combat";
 import { FLYER_TOUGHNESS, FOE_BAND, OFF_LADDER_HITS } from "../../constants/stageArc";
 import { ELITE } from "../../constants/waves";
 import type { LadderFoe } from "../../types/campaign";
@@ -23,9 +24,11 @@ export function stageFoe(type: EnemyType, x: number, y: number, level: number, x
   const run = trail;
   if (!run) return makeEnemy(type, x, y, 1);
   const toughness = (kindOf(type).flies ? FLYER_TOUGHNESS : 1) * (elite ? ELITE.hp : 1);
-  const hp = Math.max(1, Math.round(ladderHp(entryFor(type, level), run.mods) * toughness));
+  const entry = entryFor(type, level);
+  const hp = Math.max(1, Math.round(ladderHp(entry, run.mods) * toughness));
   const enemy = makeFoe(type, x, y, { hp, damage: bandDamage(level, run.mods), xp });
   enemy.elite = elite;
+  enemy.armored ||= entry.level >= FLINCH.armoredFrom;
   const room = coop();
   if (room) enemy.hp = enemy.max = room.scaleFoeHp(enemy.rank, enemy.max);
   return enemy;
