@@ -1,3 +1,4 @@
+import { usesDrill } from "../../../../drill";
 import { clampStageX } from "../../../../game/adventure";
 import { dealDamage } from "../../../../game/damage";
 import { createSlash } from "../../../../game/effects/slash";
@@ -78,8 +79,8 @@ function draw(s: Shade): void {
   if (v.mark) markFoe(s.foe, SKILL.shade, SHADE_LOOK.markTime, v.mark);
 }
 
-/** Ink Shade: a parry, a perfect dodge or (with its fifth level) a clean sheathe may call a shade that draws once on
- *  the nearest foe; Twin Moon calls two that each draw twice */
+/** Ink Shade: a parry, a perfect dodge or (with its fifth level) a clean sheathe, on the drill a Keen sheathe, may call
+ *  a shade that draws once on the nearest foe; Twin Moon calls two that each draw twice */
 export const shade: SkillBehavior = {
   create: () => ({ cd: 0, shades: [] }),
   update(m, _state, dt) {
@@ -96,7 +97,10 @@ export const shade: SkillBehavior = {
     parry: (m) => call(memoryOf(m)),
     perfectDodge: (m) => call(memoryOf(m)),
     release(m, event) {
-      if (event.clean && skillValues(SKILL.shade).clean) call(memoryOf(m));
+      if (!usesDrill() && event.clean && skillValues(SKILL.shade).clean) call(memoryOf(m));
+    },
+    blow(m, event) {
+      if (usesDrill() && event.keen && event.finisher && skillValues(SKILL.shade)["drill.keen"]) call(memoryOf(m));
     },
   },
 };

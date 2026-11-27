@@ -50,6 +50,11 @@ export function fireRound(foe: Enemy | null, round: DrillRound, at?: readonly [n
   return struck;
 }
 
+export function breakChamber(): void {
+  chamber.fired = 0;
+  emitSkillEvent({ type: "calderReload", quick: true, ultimate: true });
+}
+
 export function resetChamber(): void {
   chamber.fired = 0;
 }

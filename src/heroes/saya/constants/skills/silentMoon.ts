@@ -1,4 +1,3 @@
-import { ULT_CHARGE } from "../../../../constants/ultimate";
 import type { SkillDef } from "../../../../types/skill";
 import { evolvedRow, levelRows } from "../../../../utils/skillRows";
 import { drillRows, drillValues } from "./drillRows";
@@ -35,8 +34,8 @@ export const SILENT_MOON_SKILL: SkillDef = {
   kind: "ultimate",
   element: "void",
   risk: "easy",
-  button: "U",
-  text: `Silent Moon grows: more lines, harder bursts, and its click doubles stored cuts. Grows with attack damage. ${ULT_CHARGE}`,
+  button: "J",
+  text: "The four charged skills on held J hit harder, charge faster, and store and release her cuts.",
   levels: DRILL,
   evolution: {
     partner: SKILL.clean,

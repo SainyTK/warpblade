@@ -25,17 +25,18 @@ Drill code: `src/heroes/yun/game/drill/skills/`, folded into `YUN_DRILL` by `gam
 | `yu_fan` | Sword Fan | Sword Stream | Stream +0.5 AP | piercing, knockback, three more swords, preparation -25%, up to +4.5 AP | Peacock Fan (`yu_guardian`): eight more swords |
 | `yu_cage` | Sword Cage | Sword Lotus | longer hold, +0.4 AP | a pull, a damage mark, a second cut, a pin, up to +4 AP | Jade Prison (`yu_needle`): three more cuts |
 | `yu_crescent` | Qi Crescent | Qi Crescent | Crescent +0.5 AP | a wave on past the foe, stagger, waves from crescent-filled cuts, a launch, up to +4.5 AP | Moon Crescent (`yu_tide`): crescents split in two |
-| `yu_wound` | Lingering Qi | dot on cuts | cuts and infused hits lay qi wounds | as in the native kit; level 5 lets sword arts lay wounds | Qi Burst (`yu_fan`) |
-| `yu_bleed` | Thousand Cuts | dot on sword arts | as in the native kit (ability cuts are the arts) | as in the native kit | Thousand Petals (`yu_crescent`), native kit only |
-| `yu_needle` | Jade Needle | dot on parries | as in the native kit | as in the native kit | Acupuncture (`yu_flow`) |
-| `yu_guardian` | Guardian Blade | summon on landed blows | as in the native kit | as in the native kit | Heavenly Guard (`yu_breath`) |
-| `yu_heron` | Jade Heron | summon on casts | as in the native kit | as in the native kit; level 8 answers Jade Rain | Heron Flight (`yu_fan`) |
-| `yu_shade` | Sage's Shade | summon on parries | as in the native kit | as in the native kit | Many Shades (`yu_needle`) |
+| `yu_wound` | Lingering Qi | dot on cuts | cuts and infused hits lay qi wounds, 0.04 AD a tick | stacks to 6, sword arts lay wounds, a slow, a dying foe passes its wounds on, up to 0.24 AD | Qi Burst (`yu_fan`): full wounds burst for 0.8 AD a stack |
+| `yu_bleed` | Thousand Cuts | dot on sword arts | sword art cuts lay bleeding wounds, 0.05 AP a tick | stacks to 8, Jade Rain lays wounds, wounds last twice as long and bleed twice as fast, up to 0.24 AP | Thousand Petals (`yu_crescent`): a Sword Lotus ends by striking every wound at once |
+| `yu_needle` | Jade Needle | dot on parries | a parry lodges 2 needles in the nearest foe, 0.3 AD a tick | Keen blows lodge needles, stacks to 12, +15% damage taken, perfect dodges lodge needles, up to 1.5 AD | Acupuncture (`yu_flow`): 12 needles burst for 6 AD each |
+| `yu_guardian` | Guardian Blade | summon on landed blows | a landed blow may call a guardian blade, 0.4 AD a strike | two foes a strike, two guardians, longer and faster, a slow, three guardians, up to 1.2 AD | Heavenly Guard (`yu_breath`): three guardians always out |
+| `yu_heron` | Jade Heron | summon on casts | a cast may call a jade heron for 1 AD | it flies back, two herons, a knockdown, Jade Rain calls them, up to 2.6 AD | Heron Flight (`yu_fan`): every cast calls three |
+| `yu_shade` | Sage's Shade | summon on parries | a parry calls the shade for one 4 AD cut | perfect dodges call it, two cuts, the last cut recharges the warp, +25% damage taken, up to 20 AD | Many Shades (`yu_needle`): three cuts of 30 AD |
 | `yu_rain` | Heaven's Grove | the four Jade Rain tiers | Jade Rain +30% | swords on every foe, faster charge, +25% reach, a lingering rain, up to +250% | Endless Rain (`yu_heron`): the rain keeps falling 4 s |
 
 Count by mechanic: 4 cut skills, 1 guard skill, 4 warp and dash skills, 1 jump skill, 3 sword-art skills, 3 damage over time, 3 summons, 1 charged-tier skill.
 Harmony and Sage's Breath were passives on the spirit swords and are movement skills now; Crane's Reach moved from the string to the guard.
-The drill has no perfect dodge and no Keen blow, so Jade Needle's Keen and perfect dodge levels and Sage's Shade's perfect dodge level fire only in the native kit, as does Thousand Petals.
+Keen presses and perfect dodges (a blow met during a dash) fire in the drill, so Jade Needle and Sage's Shade work there in full, and Thousand Petals answers the drill's Sword Lotus.
+The summons and Jade Needle answer the shared `blow`, `cast`, `ultimate`, `parry` and `perfectDodge` events (`game/skills/`), so they need no drill file.
 
 ## Identity
 
@@ -87,7 +88,7 @@ Sword Fan and Sword Cage spend the swords like the base abilities; Qi Crescent c
 | `yu_echo` | Twin Echo | attack | easy | J | `yu_breath` | Myriad Echo |
 | `yu_flow` | Flowing Water | attack | precise | J | `yu_echo` | Still Water |
 | `yu_tide` | High Tide | attack | timed | J | `yu_bleed` | Spring Tide |
-| `yu_crane` | Crane's Reach | attack | easy | J | `yu_tide` | White Crane |
+| `yu_crane` | Crane's Reach | attack | easy | K | `yu_tide` | White Crane |
 | `yu_petal` | Petal Storm | attack | timed | J (air) | `yu_cloud` | Blossom Fall |
 | `yu_cloud` | Cloud Step | movement | timed | Up | `yu_drift` | Cloud Walker |
 | `yu_ride` | Sword Riding | movement | timed | J held | `yu_echo` | Riding the Wind |
@@ -96,16 +97,17 @@ Sword Fan and Sword Cage spend the swords like the base abilities; Qi Crescent c
 | `yu_cage` | Sword Cage | spell | timed | I | `yu_needle` | Jade Prison |
 | `yu_crescent` | Qi Crescent | spell | timed | I | `yu_tide` | Moon Crescent |
 | `yu_wound` | Lingering Qi | dot | easy | auto (echo thrusts) | `yu_fan` | Qi Burst |
-| `yu_bleed` | Thousand Cuts | dot | timed | auto (ability cuts) | `yu_crescent` | Thousand Petals |
+| `yu_bleed` | Thousand Cuts | dot | timed | auto (sword art cuts) | `yu_crescent` | Thousand Petals |
 | `yu_needle` | Jade Needle | dot | precise | K (parry) | `yu_flow` | Acupuncture |
 | `yu_guardian` | Guardian Blade | summon | easy | auto (blow landed) | `yu_breath` | Heavenly Guard |
 | `yu_heron` | Jade Heron | summon | timed | auto (cast) | `yu_fan` | Heron Flight |
 | `yu_shade` | Sage's Shade | summon | precise | K (parry) | `yu_needle` | Many Shades |
-| `yu_breath` | Sage's Breath | passive | easy | auto | `yu_guardian` | Sword Sea |
-| `yu_harmony` | Harmony | passive | timed | auto | `yu_breath` | Perfect Harmony |
-| `yu_rain` | Heaven's Grove | ultimate | easy | U | `yu_heron` | Endless Rain |
+| `yu_breath` | Sage's Breath | movement | easy | L | `yu_guardian` | Sword Sea |
+| `yu_harmony` | Harmony | movement | timed | L | `yu_breath` | Perfect Harmony |
+| `yu_rain` | Heaven's Grove | ultimate | easy | J | `yu_heron` | Endless Rain |
 
-Counts: attack 5, movement 3, spell 3, dot 3, summon 3, passive 2, ultimate 1. Risk: easy 8, timed 9, precise 3.
+Counts: attack 5, movement 5, spell 3, dot 3, summon 3, ultimate 1.
+Risk: easy 8, timed 9, precise 3.
 The Values column shows only the numbers a level changes; the data rows carry the whole state.
 In the Code lines, file names are under `src/heroes/yun/game/`.
 
@@ -366,11 +368,11 @@ Code: `skills/lingeringQi.ts`; echoes lay wounds through `echo.ts`.
 
 #### `yu_bleed` Thousand Cuts
 
-Dot, timed, auto (ability cuts). Your abilities' cuts leave bleeding wounds.
+Dot, timed, auto (sword art cuts). Your sword arts' cuts leave bleeding wounds.
 
 | Lv | Card line | Values |
 | --- | --- | --- |
-| 1 | Ability cuts leave bleeding wounds. | damage 0.05, max 4, duration 3, every 0.5 |
+| 1 | Sword art cuts leave bleeding wounds. | damage 0.05, max 4, duration 3, every 0.5 |
 | 2 | Wound damage 0.05 to 0.07. | damage 0.07 |
 | 3 | New: wounds stack to 8. | max 8 |
 | 4 | Wound damage 0.07 to 0.09. | damage 0.09 |
@@ -471,7 +473,7 @@ Code: `skills/sagesShade.ts` and `effects/shade.ts`.
 
 #### `yu_breath` Sage's Breath
 
-Passive, easy, auto. Spirit swords come back faster, and you hold more of them.
+Movement, easy, L. Spirit swords come back faster, and you hold more of them.
 
 | Lv | Card line | Values |
 | --- | --- | --- |
@@ -492,7 +494,7 @@ Code: `swords.ts` (`mostSwords`, the regen) and `skills/sagesBreath.ts`.
 
 #### `yu_harmony` Harmony
 
-Passive, timed, auto. With every spirit sword held you deal more damage, heal and take less.
+Movement, timed, L. With every spirit sword held you deal more damage, heal and take less.
 
 | Lv | Card line | Values |
 | --- | --- | --- |
@@ -513,7 +515,7 @@ Code: `skills/harmony.ts`, read by the kit's `damageScale` and `hurtScale`.
 
 #### `yu_rain` Heaven's Grove
 
-Ultimate, easy, U. Jade Rain grows: more swords on more foes, a second rain, and your swords back.
+Ultimate, easy, J. Jade Rain on held J hits harder, charges faster and drops spirit swords on the foes near you.
 
 | Lv | Card line | Values |
 | --- | --- | --- |

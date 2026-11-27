@@ -7,13 +7,13 @@ import { evolvedRow, levelRows } from "../../../../utils/skillRows";
  *  crushed foe consumes its stacks for this much AD each */
 const LEVELS = levelRows([
   {
-    text: "Foes she knocks down are crushed and bleed while they lie there.",
+    text: "Her second and third slashes crush foes, and crushed foes bleed.",
     values: { damage: 0.12, max: 3, every: 0.5, time: 2 },
   },
   { text: "Crush 0.12 to 0.2 AD a tick.", values: { damage: 0.2 } },
-  { text: "New: launched foes are crushed too.", values: { air: 1 } },
+  { text: "New: her blows crush foes in the air too.", values: { air: 1 } },
   { text: "A foe holds 6 stacks; they last 3 s and tick every 0.35 s.", values: { max: 6, time: 3, every: 0.35 } },
-  { text: "New: a foe driven into the floor takes 3 stacks at once.", values: { spike: 3 } },
+  { text: "New: the third slash on a foe in the air lays 3 stacks at once.", values: { spike: 3 } },
   {
     text: "New: a crushed foe that falls passes its stacks to the foes round it; crush 0.4 AD.",
     values: { damage: 0.4, spread: 1 },
@@ -34,7 +34,7 @@ export const CRUSHING_WEIGHT: SkillDef = {
   evolution: {
     partner: "br_launch",
     name: "Grindstone",
-    text: "Her next slam on a crushed foe grinds all its stacks out at once.",
-    row: evolvedRow(LEVELS[7], "The slam grinds out every stack.", { grind: 1.5 }),
+    text: "Her third slash on a crushed foe grinds all its stacks out at once.",
+    row: evolvedRow(LEVELS[7], "The third slash grinds out every stack.", { grind: 1.5 }),
   },
 };

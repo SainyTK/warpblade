@@ -12,6 +12,8 @@ Solo Adventure runs base Calder on the shared drill engine and all 20 skills upg
 Rows keep the native numbers and add the drill's under `drill.` (`constants/skills/drillLevels.ts`); drill code is in `src/heroes/calder/game/drill/skills/`.
 The native behaviours of the redesigned skills run only outside the drill (`game/skills/nativeOrDrill.ts`).
 The DoT and summon skills answer the rounds the drill fires, so they keep their native rows.
+In the drill, every sixth round fired and the Cylinder Break tier count as a reload (`calderReload`), and a round into the wound is the third cut's round or a Hair Trigger round.
+Their card lines name only what the drill does: the third cut, a round into the wound, every sixth round, a dash through a blow.
 
 | Id | Name | Mechanic | Level 1 | Levels 2 to 8 | Evolution (partner) |
 | --- | --- | --- | --- | --- | --- |
@@ -28,11 +30,11 @@ The DoT and summon skills answer the rounds the drill fires, so they keep their 
 | `ca_flare` | Phosphor Shell | Phosphor Shell | +50% and burns | spreading fire, flares on burning foes, a second shell, up to +500% | Greenfire Barrage (`ca_scorch`): each blast throws three more |
 | `ca_chainshot` | Chain Shot | Chain Shot | +50% and one more arc | longer shock, more arcs, arcing infused cuts, stagger, up to +500% | Reaper Chain (`ca_ricochet`): strikes twice |
 | `ca_charge` | Blast Charge | Blast Charge | +50% and throws foes | guard break, a second charge, stagger, charges planted by infused cuts, up to +500% | Demolition (`ca_tracer`): four hot rounds round the blast |
-| `ca_shrapnel` | Shrapnel | dot on every round | as in the native kit | as in the native kit | as in the native kit |
-| `ca_scorch` | Scorch Rounds | dot on the trigger round | as in the native kit | as in the native kit | as in the native kit |
-| `ca_brass` | Hot Brass | dot on every sixth round | as in the native kit | as in the native kit | as in the native kit |
-| `ca_turret` | Spare Barrel | summon on parries | as in the native kit | as in the native kit | as in the native kit |
-| `ca_double` | Smoke Double | summon on trigger rounds | as in the native kit | as in the native kit | as in the native kit |
+| `ca_shrapnel` | Shrapnel | dot on every round | as in the native kit | as in the native kit; the third cut tears the shrapnel out | as in the native kit |
+| `ca_scorch` | Scorch Rounds | dot on rounds into the wound | as in the native kit | as in the native kit; every other round burns too | as in the native kit |
+| `ca_brass` | Hot Brass | dot on every sixth round | as in the native kit | as in the native kit; twice the casings, and Cylinder Break throws them | as in the native kit |
+| `ca_turret` | Spare Barrel | summon on parries | as in the native kit | as in the native kit; a dash through a blow plants one | as in the native kit |
+| `ca_double` | Smoke Double | summon on rounds into the wound | as in the native kit | as in the native kit | as in the native kit |
 | `ca_hound` | Scrap Hound | summon on kills | as in the native kit | as in the native kit | as in the native kit |
 | `ca_break` | Cylinder Break | the four charged tiers | charged skills +30% | faster charge, extra hot rounds, reach, stagger, up to +250% | Last Cylinder (`ca_trigger`): two more bursts |
 
@@ -349,7 +351,7 @@ Code: `shells/blastCharge.ts`.
 
 Dot, easy, auto. Every round's blast leaves shrapnel that bleeds the foes it struck.
 
-Values: `damage` attack damage a tick per stack, `max` stacks a foe can carry, `stacks` laid by one blast, `pass` a fallen foe's shrapnel passes to the nearest foe, `rip` attack damage per stack Breaker tears out, `burst` attack damage per stack of a detonation in 30 px once a foe carries `at` stacks.
+Values: `damage` attack damage a tick per stack, `max` stacks a foe can carry, `stacks` laid by one blast, `pass` a fallen foe's shrapnel passes to the nearest foe, `rip` attack damage per stack the third cut tears out, `burst` attack damage per stack of a detonation in 30 px once a foe carries `at` stacks.
 
 | Lv | Card line | Values |
 | --- | --- | --- |
@@ -358,7 +360,7 @@ Values: `damage` attack damage a tick per stack, `max` stacks a foe can carry, `
 | 3 | New: each blast lays two stacks. | stacks 2 |
 | 4 | New: a fallen foe's shrapnel passes to the nearest foe. | pass 1 |
 | 5 | Bleed 0.08; up to 8 stacks. | damage 0.08, max 8 |
-| 6 | New: Breaker tears the shrapnel out at once. | rip 0.5 |
+| 6 | New: the third cut tears the shrapnel out at once. | rip 0.5 |
 | 7 | New: up to 12 stacks. | max 12 |
 | 8 | Bleed 0.08 to 0.18. | damage 0.18 |
 
@@ -368,40 +370,40 @@ Code: `skills/shrapnel.ts`.
 
 #### `ca_scorch` Scorch Rounds
 
-Dot, timed, auto. A Trigger's round sets the struck foe burning green.
+Dot, timed, auto. A round fired into the wound sets the foe burning green.
 
-Values: `damage` attack damage a tick per stack, `max` stacks, `splash` the blast's splash burns too, `shots` shots burn too, `spread` a burning foe that falls passes its fire on, `consume` attack damage per stack when a Trigger consumes `at` stacks or more.
+Values: `damage` attack damage a tick per stack, `max` stacks, `splash` the blast's splash burns too, `shots` every round's blast burns its foes, `spread` a burning foe that falls passes its fire on, `consume` attack damage per stack when a Trigger consumes `at` stacks or more.
 
 | Lv | Card line | Values |
 | --- | --- | --- |
-| 1 | Trigger rounds set the struck foe burning. | damage 0.15, max 4 |
+| 1 | Rounds fired into the wound set the foe burning. | damage 0.15, max 4 |
 | 2 | Burn 0.15 to 0.25. | damage 0.25 |
 | 3 | New: the blast's splash burns too. | splash 1 |
-| 4 | New: slugs and pellets burn too. | shots 1 |
+| 4 | New: every round's blast burns its foes. | shots 1 |
 | 5 | Burn 0.25 to 0.3. | damage 0.3 |
 | 6 | New: a burning foe that falls sets the nearest foe alight. | spread 1 |
 | 7 | New: up to 8 stacks. | max 8 |
 | 8 | Burn 0.3 to 0.7. | damage 0.7 |
 
-Evolution **Phosphor Heart** (partner `ca_flare`): A Trigger on a foe burning with 4 stacks or more consumes the fire in one burst.
+Evolution **Phosphor Heart** (partner `ca_flare`): A round into a foe burning with 4 stacks or more consumes the fire in one burst.
 Evolved values added: consume 2.5, at 4.
 Code: `skills/scorchRounds.ts`.
 
 #### `ca_brass` Hot Brass
 
-Dot, easy, auto. A reload flings hot casings at foes nearby, burning them.
+Dot, easy, auto. Every sixth round fired flings hot casings at foes nearby, burning them.
 
-Values: `casings` thrown a reload, `damage` attack damage a tick per stack, `range` pixels, `quick` a quick reload throws twice as many, `stagger` seconds a casing staggers, `ult` Cylinder Break's reload throws them too, `rain` casings fall on foes across the whole screen.
+Values: `casings` thrown a reload, `damage` attack damage a tick per stack, `range` pixels, `quick` a quick reload throws twice as many, `stagger` seconds a casing staggers, `ult` Cylinder Break throws them too, `rain` casings fall on foes across the whole screen.
 
 | Lv | Card line | Values |
 | --- | --- | --- |
-| 1 | A reload flings hot casings that burn foes nearby. | casings 3, damage 0.12, range 70 |
+| 1 | Every sixth round flings hot casings that burn foes nearby. | casings 3, damage 0.12, range 70 |
 | 2 | Burn 0.12 to 0.2; range 90 px. | damage 0.2, range 90 |
-| 3 | New: a quick reload throws twice as many. | quick 1 |
+| 3 | New: twice as many casings. | quick 1 |
 | 4 | New: casings stagger foes. | stagger 0.4 |
 | 5 | Burn 0.2 to 0.4. | damage 0.4 |
-| 6 | New: Cylinder Break's reload throws casings too. | ult 1 |
-| 7 | New: six casings a reload. | casings 6 |
+| 6 | New: Cylinder Break throws casings too. | ult 1 |
+| 7 | New: six casings a throw. | casings 6 |
 | 8 | Burn 0.4 to 1.5. | damage 1.5 |
 
 Evolution **Brass Rain** (partner `ca_speedload`): Casings rain on every foe on screen.
@@ -422,7 +424,7 @@ Values: `chance` a parry plants one, `life` seconds it stands, `every` seconds b
 | 4 | Shot 0.6 to 1.5; stands 6 s. | power 1.5, life 6 |
 | 5 | New: two barrels at once. | most 2 |
 | 6 | New: its shots stagger the foe. | stagger 0.2 |
-| 7 | New: a perfect dodge plants one too. | dodge 1 |
+| 7 | New: dashing through a blow plants one too. | dodge 1 |
 | 8 | Shot 1.5 to 4; always plants. | power 4, chance 1 |
 
 Evolution **Gun Nest** (partner `ca_pointblank`): Three barrels at once, firing faster and harder.
@@ -431,18 +433,18 @@ Code: `skills/spareBarrel.ts`.
 
 #### `ca_double` Smoke Double
 
-Summon, precise, auto. A Trigger may leave a double of gunsmoke that fires the same round again.
+Summon, precise, auto. A round fired into the wound may leave a double of gunsmoke that fires it again.
 
 Values: `chance` a Trigger calls one, `power` share of a Trigger's blast it fires, `shots` rounds it fires, `cut` attack damage of a cut before it fires, `splash` attack damage of each round's splash, `hot` its rounds are hot, `doubles` called at once, `cooldown` least seconds between calls.
 
 | Lv | Card line | Values |
 | --- | --- | --- |
-| 1 | A Trigger may call a smoke double that fires it again. | chance 0.35, power 1, shots 1, doubles 1, cooldown 0.6 |
+| 1 | A round into the wound may call a smoke double that fires it again. | chance 0.35, power 1, shots 1, doubles 1, cooldown 0.6 |
 | 2 | Chance 35% to 60%. | chance 0.6 |
 | 3 | New: the double cuts before it fires. | cut 1.5 |
 | 4 | Round power 1 to 4. | power 4 |
 | 5 | New: it fires twice. | shots 2 |
-| 6 | New: every Trigger calls one, and its rounds splash. | chance 1, splash 0.5 |
+| 6 | New: every round into the wound calls one, and its rounds splash. | chance 1, splash 0.5 |
 | 7 | New: its rounds are hot. | hot 1 |
 | 8 | Round power 4 to 24. | power 24 |
 

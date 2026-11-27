@@ -40,7 +40,7 @@ export const BRAND_PILLARS: SkillDef = {
   evolution: {
     partner: "br_fault",
     name: "Aftershock",
-    text: "The line erupts three times, and the last time twice as hard.",
+    text: "Quake strikes again half a second later where it struck.",
     row: evolvedRow(LEVELS[7], "Quake strikes again after 0.5 s.", {
       ...drillValues({ again: 1 }),
       again: 1,

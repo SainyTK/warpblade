@@ -14,13 +14,13 @@ const NATIVE: readonly NativeStep[] = [
 ];
 
 const LEVELS = drillLevels(NATIVE, [
-  { text: "Kael is untouchable while dashing.", drill: { inv: 0.05 } },
+  { text: "Kael stays untouchable for 0.15 s after each dash.", drill: { inv: 0.15 } },
   { text: "New: one more air dash.", drill: { airDashes: 1 } },
   { text: "New: an air dash restores the air slash.", drill: { refresh: 1 } },
   { text: "New: a cut flashes where each dash began, 0.6 AD.", drill: { after: 0.6 } },
   { text: "Afterimage cut 0.6 to 1.2 AD.", drill: { after: 1.2 } },
   { text: "New: a third air dash.", drill: { airDashes: 2 } },
-  { text: "Untouchable a moment longer after each dash.", drill: { inv: 0.12 } },
+  { text: "Untouchable 0.15 to 0.3 s after each dash.", drill: { inv: 0.3 } },
   { text: "Afterimage cut 1.2 to 3 AD.", drill: { after: 3 } },
 ]);
 
@@ -31,7 +31,7 @@ export const BLINK_STEP: SkillDef = {
   element: "void",
   risk: "timed",
   button: "L",
-  text: "Dashes make Kael untouchable and leave a cutting afterimage, and he gains air dashes.",
+  text: "Kael stays untouchable after each dash, leaves a cutting afterimage, and gains air dashes.",
   levels: LEVELS,
   evolution: {
     partner: "k_echo",

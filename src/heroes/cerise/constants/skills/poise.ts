@@ -19,12 +19,12 @@ const NATIVE = levelRows([
 const LEVELS = withDrill(NATIVE, [
   { text: "One more air dash; crit chance +4%.", drill: { airDashes: 1, empower: 0 } },
   { text: "New: untouchable while dashing.", drill: { untouchable: 1 } },
-  { text: "New: an air dash restores the air thrust.", drill: { airReset: 1 } },
+  { text: "New: an air dash restores the air thrust; crit chance +8%.", drill: { airReset: 1 } },
   { text: "Two more air dashes.", drill: { airDashes: 2 } },
-  { text: "New: the first thrust after a dash deals +50%.", drill: { empower: 0.5 } },
+  { text: "New: the first thrust after a dash deals +50%; crit chance +12%.", drill: { empower: 0.5 } },
   { text: "Thrust after a dash +50% to +100%.", drill: { empower: 1 } },
   { text: "Three more air dashes.", drill: { airDashes: 3 } },
-  { text: "Thrust after a dash +100% to +200%.", drill: { empower: 2 } },
+  { text: "Thrust after a dash +100% to +200%; crit chance +20%.", drill: { empower: 2 } },
 ]);
 
 export const POISE: SkillDef = {

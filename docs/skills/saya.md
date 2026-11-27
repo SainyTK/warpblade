@@ -30,12 +30,13 @@ Three skills change job on the drill: Ink Flow becomes the warp and infusion ski
 | `sa_stain` | Ink Stain | dot on stored cuts | as in the native kit | as in the native kit | as in the native kit |
 | `sa_trail` | Lingering Line | dot on infused hits | infused hits bleed 0.3x AP | longer, stacks up to 5, every slash stores more, up to 1.05x AP | Ink Sea (`sa_stroke`): every slash leaves the line |
 | `sa_crane` | Ink Crane | summon on releases | as in the native kit | as in the native kit | as in the native kit |
-| `sa_shade` | Ink Shade | summon on parries | as in the native kit | as in the native kit | as in the native kit |
+| `sa_shade` | Ink Shade | summon on parries and perfect dodges | a shade may draw on the nearest foe | chance up to 100%, it stores, a +25% mark, a Keen sheathe calls one, sure crit, up to 20x AD | Twin Moon (`sa_still`): two shades, each drawing twice |
 | `sa_paper` | Paper Blades | summon on kills and releases | as in the native kit | as in the native kit | as in the native kit |
-| `sa_moon` | Silent Moon | the four charged tiers | charged skills +30% | faster charge, tiers store cuts, +20% reach, tiers 1 and 2 also release, up to +250% | New Moon (`sa_clean`): every charged skill releases twice |
+| `sa_moon` | Silent Moon | the four charged tiers on held J | charged skills +30% | faster charge, tiers store cuts, +20% reach, tiers 1 and 2 also release, up to +250% | New Moon (`sa_clean`): every charged skill releases twice |
 
 Count by mechanic: 4 slash skills, 1 guard skill, 4 warp and dash skills, 1 jump skill, 3 spell skills, 3 damage over time, 3 summons, 1 charged-tier skill.
-The perfect dodge does not exist in the drill, so Ink Shade's perfect dodge trigger only fires in the native kit.
+A dash that meets a blow is the drill's perfect dodge, so Ink Shade answers it there too.
+The drill has no clean sheathe, so Ink Shade's fifth level answers a Keen sheathe there (the J press just after the return cut lands).
 
 ## Identity
 
@@ -88,11 +89,11 @@ Ticks, cranes, shades and paper blades use the skill id and build no Flow.
 | `sa_edge` | Honed Draw | attack | timed | J | `sa_clean` | Moonlit Draw |
 | `sa_clean` | Clean Sheathe | attack | precise | J | `sa_edge` | Perfect Stillness |
 | `sa_reverse` | Reverse Edge | attack | easy | J | `sa_flow` | Full Circle |
-| `sa_flow` | Ink Flow | attack | timed | auto (releases) | `sa_reverse` | Spreading Ink |
-| `sa_falling` | Falling Moon | attack | timed | Up then J | `sa_pass` | Moonfall |
-| `sa_pass` | Passing Draw | movement | timed | J | `sa_step` | Thousand Paces |
+| `sa_flow` | Ink Flow | movement | timed | L | `sa_reverse` | Spreading Ink |
+| `sa_falling` | Falling Moon | attack | timed | jump | `sa_pass` | Moonfall |
+| `sa_pass` | Passing Draw | movement | timed | L | `sa_step` | Thousand Paces |
 | `sa_step` | Shadow Step | movement | timed | L | `sa_pass` | Ghost Passage |
-| `sa_stroke` | Long Stroke | movement | easy | I | `sa_trail` | Ink Horizon |
+| `sa_stroke` | Long Stroke | movement | easy | L | `sa_trail` | Ink Horizon |
 | `sa_crescent` | Crescent Wave | spell | easy | I | `sa_rain` | Tide Moon |
 | `sa_rain` | Ink Rain | spell | easy | I | `sa_stain` | Monsoon |
 | `sa_still` | Still Water | spell | timed | I | `sa_shade` | Mirror Lake |
@@ -102,11 +103,12 @@ Ticks, cranes, shades and paper blades use the skill id and build no Flow.
 | `sa_crane` | Ink Crane | summon | easy | auto (releases) | `sa_crescent` | Thousand Cranes |
 | `sa_shade` | Ink Shade | summon | precise | K | `sa_still` | Twin Moon |
 | `sa_paper` | Paper Blades | summon | easy | auto (kills) | `sa_breath` | Paper Storm |
-| `sa_breath` | Deep Breath | passive | easy | auto | `sa_calm` | Boundless Breath |
-| `sa_calm` | Calm Mind | passive | timed | auto (full Focus) | `sa_breath` | Empty Mind |
-| `sa_moon` | Silent Moon | ultimate | easy | U | `sa_clean` | New Moon |
+| `sa_breath` | Feather Step | movement | easy | jump | `sa_calm` | Boundless Breath |
+| `sa_calm` | Calm Mind | attack | timed | K | `sa_breath` | Empty Mind |
+| `sa_moon` | Silent Moon | ultimate | easy | J | `sa_clean` | New Moon |
 
-Counts: attack 5, movement 3, spell 3, dot 3, summon 3, passive 2, ultimate 1. Risk: timed 9, precise 2, easy 9.
+Counts: attack 5, movement 5, spell 3, dot 3, summon 3, ultimate 1. Risk: timed 9, precise 2, easy 9.
+The cards show the drill text (the Drill set table); the sections below keep the native kit that co-op and the wave arena play.
 The Values column shows only the numbers a level changes; the data rows (`src/heroes/saya/constants/skills/`) carry the whole state.
 In the Code lines, a file name is a file under `src/heroes/saya/game/`.
 
@@ -413,6 +415,7 @@ Code: `skills/inkCrane.ts`.
 #### `sa_shade` Ink Shade
 
 Summon, precise, K. A parry or a perfect dodge may leave an ink shade of her that draws once on the nearest foe.
+On the drill a dash that meets a blow is the perfect dodge, and the fifth level answers a Keen sheathe.
 
 | Lv | Card line | Values |
 | --- | --- | --- |
@@ -420,7 +423,7 @@ Summon, precise, K. A parry or a perfect dodge may leave an ink shade of her tha
 | 2 | Chance 50% to 75%. | chance 0.75 |
 | 3 | New: the shade's draw stores a cut as well. | store 3 |
 | 4 | New: the foe the shade cuts takes +25% damage for 3 s. | mark 0.25 |
-| 5 | New: a clean sheathe calls a shade too. | clean 1 |
+| 5 | New: a clean sheathe calls a shade too; on the drill, a Keen sheathe. | clean 1, drill.keen 1 |
 | 6 | Chance 75% to 100%; shade +150%. | chance 1, power 10 |
 | 7 | New: the shade's draw is a sure critical hit. | crit 1 |
 | 8 | Shade +150% to +400%. | power 20, store 8 |
@@ -428,7 +431,7 @@ Summon, precise, K. A parry or a perfect dodge may leave an ink shade of her tha
 
 Evolution: Twin Moon, with `sa_still` at level 4 or more. Two shades come each time, one each side of the foe, and each draws twice.
 
-Code: `skills/shade.ts`.
+Code: `skills/shade.ts` (the Keen sheathe on the drill answers the shared `blow` event with `keen` and `finisher`).
 
 #### `sa_paper` Paper Blades
 
@@ -492,7 +495,8 @@ Code: `calm.ts`, `strike.ts` (`hitBonus`), `guardStyle.ts`, `store.ts`.
 
 #### `sa_moon` Silent Moon
 
-Ultimate, easy, U. Silent Moon grows: more lines, harder bursts, and its click doubles stored cuts. Grows with attack damage. Hold U to charge up to four levels, release to strike. Higher levels cost more MP; level 4 spends a full bar.
+Ultimate, easy, J. On the drill, the four charged skills on held J (Quickdraw, Crescent Edge, Thousand Lines and Silent Moon) hit harder, charge faster, store cuts and release them (the Drill set table).
+The native kit below keeps Silent Moon on U: more lines, harder bursts, and its click doubles stored cuts.
 
 | Lv | Card line | Values |
 | --- | --- | --- |

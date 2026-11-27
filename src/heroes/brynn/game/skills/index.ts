@@ -1,10 +1,10 @@
 import type { SkillBehavior } from "../../../../types/skillBehavior";
+import { cinderEdge } from "./cinderEdge";
 import { crushingWeight } from "./crushingWeight";
 import { echoSwing } from "./echoSwing";
 import { fallingBlade } from "./fallingBlade";
 import { faultLines } from "./faultLines";
-import { redShard } from "./redShard";
-import { searingEdge } from "./searingEdge";
+import { heartSplinter } from "./heartSplinter";
 import { skywardHeave } from "./skywardHeave";
 import { spinningThrow } from "./spinningThrow";
 import { wideArc } from "./wideArc";
@@ -13,11 +13,11 @@ import { wideArc } from "./wideArc";
 export const BRYNN_SKILLS: Readonly<Record<string, SkillBehavior>> = {
   br_cleave: wideArc,
   br_launch: skywardHeave,
-  br_embers: searingEdge,
+  br_cinder: cinderEdge,
   br_fault: faultLines,
   br_crush: crushingWeight,
   br_falling: fallingBlade,
   br_echo: echoSwing,
-  br_shard: redShard,
+  br_splinter: heartSplinter,
   br_spin: spinningThrow,
 };

@@ -40,7 +40,7 @@ export const HEAVY_HANDS: SkillDef = {
   evolution: {
     partner: "br_slam",
     name: "Meteor Hands",
-    text: "Every Keen blow also splits the floor with a fissure ahead of her.",
+    text: "Every air slash quakes the floor below her and throws foes up.",
     row: evolvedRow(LEVELS[7], "Every air slash quakes the floor below.", {
       ...drillValues({ quake: 1.5 }),
       heavyFissure: 0.8,

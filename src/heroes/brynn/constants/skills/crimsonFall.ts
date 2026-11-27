@@ -1,4 +1,3 @@
-import { ULT_CHARGE } from "../../../../constants/ultimate";
 import type { SkillDef } from "../../../../types/skill";
 import { evolvedRow } from "../../../../utils/skillRows";
 import { drillLevels, drillValues } from "./drillLevels";
@@ -36,7 +35,7 @@ export const CRIMSON_FALL: SkillDef = {
   element: "venom",
   risk: "timed",
   button: "J",
-  text: `Crimson Fall grows: fissures, aftershocks and a second crescent join it. Grows with attack damage. ${ULT_CHARGE}`,
+  text: "The four tiers of Crimson Fall on held J hit harder, reach farther and charge faster.",
   levels: LEVELS,
   evolution: {
     partner: "br_heavy",
