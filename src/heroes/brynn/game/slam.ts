@@ -8,6 +8,7 @@ import { CRIMSON } from "../constants/colors";
 import { FISSURE } from "../constants/heft";
 import { SHOCKWAVE } from "../constants/string";
 import { createFloorWave } from "./effects/floorWave";
+import { brynnFx, CRESCENT, CREST, layered, PLANTED } from "./fx";
 import { heftFull, heftMost, spendHeft } from "./heft";
 import { brynn } from "./state";
 
@@ -29,6 +30,18 @@ export function slamLanded(gx: number): void {
     if (!v.alwaysFissure) spendHeft();
     const reach = withBuild("area", FISSURE.reach * (1 + (v.fissureReach ?? 0)));
     const damage = progress.stats.ad * (FISSURE.power + (v.fissure ?? 0));
+    const fissure = { x: gx, y: hero.y, face: hero.face, reach: 30 };
+    brynnFx("br_slam", "spikes", fissure, { damage, signature: layered(CREST, PLANTED) });
+    brynnFx(
+      "br_bellows",
+      "slash",
+      { x: gx - hero.face * 8, y: hero.y - 16, face: hero.face, reach: 20 },
+      {
+        damage,
+        signature: CRESCENT,
+      },
+    );
+    brynnFx("br_bellows", "wave", { ...fissure, reach }, { damage, quiet: true, delay: 0.06 });
     for (const face of v.both ? [hero.face, -hero.face] : [hero.face])
       game.fx.push(
         createFloorWave({
@@ -54,6 +67,7 @@ export function slamLanded(gx: number): void {
   const reach = withBuild("area", SHOCKWAVE.reach * (1 + (v.reach ?? 0)));
   const damage = progress.stats.ad * (SHOCKWAVE.power + (v.wave ?? 0));
   const struck = slammed();
+  brynnFx("br_slam", "spikes", { x: gx, y: hero.y, face: hero.face, reach: 22 }, { damage, signature: CREST });
   for (const face of v.both ? [hero.face, -hero.face] : [hero.face])
     game.fx.push(
       createFloorWave({

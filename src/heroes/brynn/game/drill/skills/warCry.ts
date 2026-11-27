@@ -1,5 +1,7 @@
 import { drillFighter, hastenSpells, readySpell } from "../../../../../drill";
+import { progress } from "../../../../../game/state";
 import type { BrynnDrillSkill } from "../../../types/drillSkill";
+import { brynnFx, ROAR } from "../../fx";
 import { showEcho } from "../../phantom";
 
 const ID = "br_cry";
@@ -24,5 +26,6 @@ export const WAR_CRY_DRILL: BrynnDrillSkill = {
     }
     h.swordInfusion = { spell: book.selected, remainingHits: values.hits, age: 0 };
     showEcho(h.x, h.y, h.face, ECHO_LIFE);
+    brynnFx(ID, "nova", { x: h.x, y: h.y, reach: 26 }, { damage: progress.stats.ad * 1.5, signature: ROAR });
   },
 };

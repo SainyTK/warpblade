@@ -6,7 +6,7 @@ import { createFloorRing } from "../../../../game/effects/floorRing";
 import { travelEnded } from "../../../../game/hero/travelEnd";
 import { meleeHit } from "../../../../game/meleeHit";
 import { skillValues, withBuild } from "../../../../game/skills/query";
-import { fxRng, game, hero, particles } from "../../../../game/state";
+import { fxRng, game, hero, particles, progress } from "../../../../game/state";
 import { boxAhead, dust, newSwing, shake } from "../../../../game/world";
 import type { MoveDef } from "../../../../types/move";
 import { PK } from "../../../../types/particle";
@@ -14,6 +14,7 @@ import { CRIMSON } from "../../constants/colors";
 import { SLASH } from "../../constants/slashes";
 import { AIR_SLAM, STRING_FEEL, STRING_POWER } from "../../constants/string";
 import { craterLanding } from "../craterLanding";
+import { brynnFx, PLANTED } from "../fx";
 import { heftForBlow } from "../heft";
 
 /** the falling slam drops at its dive speed once the tuck is over */
@@ -51,6 +52,14 @@ function slamLanding(): void {
     );
   shake(0.24, 3);
   if (v.pull) pullIn(v.pull);
+  const damage = progress.stats.ad * (AIR_SLAM.ring + (v.ring ?? 0));
+  brynnFx("br_crater", "burst", { x: hero.x, y: hero.y - 3, face: hero.face, reach: 14 }, { damage });
+  brynnFx(
+    "br_crater",
+    "nova",
+    { x: hero.x, y: hero.y, reach: reach * 0.7 },
+    { damage, quiet: true, signature: PLANTED },
+  );
   const hits = meleeHit([boxAhead(-reach, -22, reach, 4)], {
     power: AIR_SLAM.ring + (v.ring ?? 0),
     kx: 80,

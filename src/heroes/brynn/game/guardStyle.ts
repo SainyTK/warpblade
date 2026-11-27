@@ -12,6 +12,7 @@ import { HEFT } from "../constants/heft";
 import "../types/events";
 import { SLASH } from "../constants/slashes";
 import { createCrescentWave } from "./effects/heavyWave";
+import { ARMOUR, brynnFx, CRESCENT } from "./fx";
 import { addHeft } from "./heft";
 import { brynn } from "./state";
 
@@ -30,6 +31,9 @@ function cleave(share: number): number {
   game.fx.push(createSlash(hero.x, hero.y, hero.face, { ...SLASH.cleave, R: SLASH.cleave.R + (v.reach ?? 0) * 0.6 }));
   game.fx.push(createSlash(hero.x, hero.y, -hero.face, { ...SLASH.cleave, W: 9, R: 24 }));
   const plain = COUNTER_CLEAVE.power * share;
+  const at = { x: hero.x + hero.face * 12, y: hero.y - 16, face: hero.face, reach: 24 };
+  const blow = progress.stats.ad * (COUNTER_CLEAVE.power + (v.power ?? 0)) * share;
+  brynnFx("br_counter", "slash", at, { damage: blow, signature: share < 1 ? ARMOUR : CRESCENT });
   const hits = meleeHit([boxAhead(x0, y0, reach, y1), boxBehind(x0, y0, reach * 0.7, y1)], {
     power: (COUNTER_CLEAVE.power + (v.power ?? 0)) * share,
     plain,
@@ -39,7 +43,9 @@ function cleave(share: number): number {
     big: true,
     sureCrit: !!v.crit,
   });
-  if (v.wave)
+  if (v.wave) {
+    const wave = { x: hero.x, y: hero.y, face: hero.face, reach: COUNTER_WAVE_REACH };
+    brynnFx("br_counter", "wave", wave, { damage: progress.stats.ad * v.wave * share, quiet: true });
     game.fx.push(
       createCrescentWave({
         x: hero.x + hero.face * 16,
@@ -51,6 +57,7 @@ function cleave(share: number): number {
         scale: 1.3,
       }),
     );
+  }
   return hits;
 }
 

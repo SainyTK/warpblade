@@ -5,6 +5,7 @@ import { game, progress } from "../../../../../game/state";
 import { CRIMSON } from "../../../constants/colors";
 import type { BrynnDrillSkill } from "../../../types/drillSkill";
 import { createQuake } from "../../effects/quake";
+import { brynnFx, PLANTED, SPUN } from "../../fx";
 import { foesNear, skillStrike } from "../strike";
 
 const ID = "br_spin";
@@ -20,7 +21,22 @@ export const SPINNING_THROW_DRILL: BrynnDrillSkill = {
     if (strike !== "warp" || !h) {
       return;
     }
+    brynnFx(
+      ID,
+      "slash",
+      { x: h.x + h.face * 12, y: h.y - 18, face: h.face, reach: 20 },
+      {
+        damage: progress.stats.ad * (1 + values.damage) * 2,
+        signature: SPUN,
+      },
+    );
     if (values.ring) {
+      brynnFx(
+        ID,
+        "nova",
+        { x: h.x, y: h.y, reach: values.radius * 0.7 },
+        { damage: progress.stats.ad * values.ring, quiet: true },
+      );
       game.fx.push(createFloorRing(h.x, h.y, values.radius, CRIMSON, 0.35));
       for (const foe of foesNear(h.x, h.y - 12, values.radius)) {
         skillStrike(foe, values.ring, ID);
@@ -34,6 +50,17 @@ export const SPINNING_THROW_DRILL: BrynnDrillSkill = {
       h.airSlashes = 0;
     }
     if (evolved) {
+      brynnFx(
+        ID,
+        "pillar",
+        { x: h.x, y: h.y, reach: 40 },
+        {
+          damage: progress.stats.ad * values.quake,
+          quiet: true,
+          delay: 0.05,
+          signature: PLANTED,
+        },
+      );
       game.fx.push(
         createQuake({
           x: h.x,

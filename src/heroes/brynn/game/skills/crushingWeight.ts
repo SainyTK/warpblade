@@ -3,9 +3,11 @@ import { createImpact } from "../../../../game/effects/impact";
 import { addStacks, consumeStacks, stacksOf } from "../../../../game/enemies/skillStatus";
 import { skillEvolved, skillValues, withBuild } from "../../../../game/skills/query";
 import { game, progress } from "../../../../game/state";
+import { surfaceBelow } from "../../../../game/world";
 import type { Enemy } from "../../../../types/enemy";
 import type { SkillBehavior } from "../../../../types/skillBehavior";
 import { CRIMSON_SPARKS } from "../../constants/colors";
+import { brynnFx, PLANTED } from "../fx";
 
 const ID = "br_crush";
 /** a crushed foe that falls passes its stacks to foes this close */
@@ -22,6 +24,8 @@ function crush(foe: Enemy, n: number): void {
     duration: withBuild("duration", v.time),
   });
   if (v.halt) foe.halt = Math.max(foe.halt, v.every);
+  const at = { x: foe.x, y: surfaceBelow(foe.x, foe.y - 4), reach: 12 + n * 2 };
+  brynnFx(ID, "spikes", at, { damage: progress.stats.ad * v.damage * n * 6, quiet: n < 2 });
 }
 
 /** Crushing Weight: a foe her blows leave lying down (or, from its third level, thrown up) is crushed and bleeds; a
@@ -43,6 +47,9 @@ export const crushingWeight: SkillBehavior = {
         const n = consumeStacks(foe, ID);
         dealDamage(foe, progress.stats.ad * v.grind * n, { fromX: foe.x, source: ID });
         game.fx.push(createImpact(foe.x, foe.y - 8, 1, true, CRIMSON_SPARKS));
+        const at = { x: foe.x, y: surfaceBelow(foe.x, foe.y - 4), reach: 20 + n * 2 };
+        brynnFx(ID, "spikes", at, { damage: progress.stats.ad * v.grind * n, signature: PLANTED });
+        brynnFx(ID, "burst", { x: foe.x, y: foe.y - 10, reach: 12 }, { quiet: true, delay: 0.06 });
         return;
       }
       if (e.finisher && e.airborne && v.spike) crush(foe, v.spike);

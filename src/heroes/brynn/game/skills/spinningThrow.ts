@@ -1,3 +1,4 @@
+import { usesDrill } from "../../../../drill";
 import { fleck, glow, place } from "../../../../engine/frame";
 import { dealDamage } from "../../../../game/damage";
 import { skillEvolved, skillValues, withBuild } from "../../../../game/skills/query";
@@ -8,6 +9,7 @@ import type { SkillBehavior } from "../../../../types/skillBehavior";
 import { WHITE } from "../../../../utils/color";
 import { TAU } from "../../../../utils/math";
 import { CRIMSON } from "../../constants/colors";
+import { brynnFx, PLANTED } from "../fx";
 
 const ID = "br_spin";
 /** Iron Wheel: its radius, how often it cuts each foe in it, how fast it turns */
@@ -54,7 +56,11 @@ export const spinningThrow: SkillBehavior = {
   create: () => ({}),
   on: {
     warp() {
-      if (skillEvolved(ID)) game.fx.push(createWheel(hero.x, hero.y));
+      if (!skillEvolved(ID)) return;
+      game.fx.push(createWheel(hero.x, hero.y));
+      const damage = progress.stats.ad * skillValues(ID).wheelPower * 4;
+      if (!usesDrill())
+        brynnFx(ID, "pillar", { x: hero.x, y: hero.y, reach: 40 }, { damage, quiet: true, signature: PLANTED });
     },
   },
 };

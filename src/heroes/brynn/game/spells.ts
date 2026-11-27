@@ -11,6 +11,7 @@ import { HEFT } from "../constants/heft";
 import { createCrescentWave } from "./effects/heavyWave";
 import { later } from "./effects/later";
 import { createPillars } from "./effects/pillars";
+import { brynnFx, CRESCENT, PLANTED, ROAR } from "./fx";
 import { addHeft } from "./heft";
 import { brynn } from "./state";
 
@@ -35,8 +36,17 @@ export function castArc(power: number, wide: boolean): void {
       }),
     );
   const heights = wide ? ARC.fan : [ARC.height];
+  const ember = (i: number) => () => {
+    const at = { x, y: floor - ARC.height, face, reach: 18 };
+    brynnFx("br_arc", "slash", at, { damage: progress.stats.ap * v.power * power, quiet: i > 0, signature: CRESCENT });
+  };
   for (let i = 0; i < withBuild("amount", v.count); i++)
-    game.fx.push(later(i * ARC.gap, () => heights.forEach(throwOne)));
+    game.fx.push(
+      later(i * ARC.gap, () => {
+        heights.forEach(throwOne);
+        ember(i)();
+      }),
+    );
 }
 
 /** Brand Pillars: a line of crimson pillars bursts from the floor ahead, again with its later levels; held, both ways */
@@ -44,6 +54,22 @@ export function castPillars(power: number, wide: boolean): void {
   const v = skillValues("br_pillars");
   const y = surfaceBelow(hero.x, hero.y);
   const shares = [1, v.again ?? 0, skillEvolved("br_pillars") ? v.third : 0].filter((k) => k > 0);
+  const count = Math.round(withBuild("amount", v.count));
+  const blow = progress.stats.ap * v.power * power;
+  for (const face of wide ? [hero.face, -hero.face] : [hero.face])
+    shares.forEach((_share, wave) => {
+      for (let i = 0; i < count; i++) {
+        const at = { x: hero.x + face * (6 + v.gap * (i + 0.5)), y, reach: 30 };
+        const lead = wave === 0 && i === 0 && face === hero.face;
+        const delay = wave * PILLARS.again + i * PILLARS.every;
+        brynnFx("br_pillars", "pillar", at, {
+          damage: blow,
+          quiet: !lead,
+          delay,
+          signature: lead ? PLANTED : undefined,
+        });
+      }
+    });
   for (const face of wide ? [hero.face, -hero.face] : [hero.face])
     shares.forEach((share, i) =>
       game.fx.push(
@@ -71,6 +97,8 @@ export function castCry(power: number, wide: boolean): void {
   const reach = withBuild("area", v.reach) * (wide ? 1.5 : 1);
   game.fx.push(createFloorRing(hero.x, hero.y, reach, CRIMSON, 0.5));
   game.fx.push(createFloorRing(hero.x, hero.y, reach * 0.6, CRIMSON, 0.35));
+  const roar = progress.stats.ap * (v.power ?? 1) * power;
+  brynnFx("br_cry", "nova", { x: hero.x, y: hero.y, reach: reach * 0.5 }, { damage: roar, signature: ROAR });
   lights.add(hero.x, hero.y - 20, reach, CRIMSON[4], 0.8, 0.35);
   shake(0.3, 3);
   for (const e of game.enemies) {

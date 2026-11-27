@@ -3,6 +3,7 @@ import { game, hero, progress } from "../../../game/state";
 import { FISSURE } from "../constants/heft";
 import { SHOCKWAVE } from "../constants/string";
 import { createFloorWave } from "./effects/floorWave";
+import { brynnFx } from "./fx";
 import { addHeft } from "./heft";
 
 const ID = "br_crater";
@@ -13,7 +14,9 @@ export function craterLanding(reach: number): void {
   addHeft(v.heft ?? 0);
   if (!v.waves) return;
   const fissure = skillEvolved(ID);
-  for (const face of [hero.face, -hero.face])
+  for (const face of [hero.face, -hero.face]) {
+    const wave = { x: hero.x + face * reach * 0.5, y: hero.y, face, reach: fissure ? FISSURE.reach : SHOCKWAVE.reach };
+    brynnFx(ID, "wave", wave, { damage: progress.stats.ad * v.waves, quiet: true });
     game.fx.push(
       createFloorWave({
         x: hero.x + face * reach * 0.5,
@@ -26,4 +29,5 @@ export function craterLanding(reach: number): void {
         kind: fissure ? "fissure" : "shock",
       }),
     );
+  }
 }
