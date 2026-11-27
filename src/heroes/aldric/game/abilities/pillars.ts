@@ -1,3 +1,4 @@
+import { GROUND } from "../../../../constants/stage";
 import { enemyCenter } from "../../../../game/enemies/enemy";
 import { addStacks } from "../../../../game/enemies/skillStatus";
 import { skillValues, withBuild } from "../../../../game/skills/query";
@@ -5,6 +6,7 @@ import { game, hero, progress } from "../../../../game/state";
 import type { Enemy } from "../../../../types/enemy";
 import { PILLAR } from "../../constants/abilities";
 import { createDawnGround } from "../effects/dawnGround";
+import { aldricFx } from "../fx";
 import { createSunPillar } from "./pillar";
 
 /** the nearest standing foe ahead within the pillar's reach */
@@ -26,6 +28,14 @@ function foeAhead(): Enemy | null {
 export function linger(x: number): void {
   const v = skillValues("al_dawn");
   if (!v.burn) return;
+  const width = withBuild("area", v.width);
+  aldricFx(
+    "al_dawn",
+    "spikes",
+    { x, y: GROUND, reach: width * 0.5 },
+    { damage: progress.stats.ap * v.burn * v.time, sigil: "sun", lift: 22 },
+  );
+  aldricFx("al_dawn", "nova", { x, y: GROUND, reach: width * 0.6 }, { quiet: true, delay: 0.05 });
   game.fx.push(
     createDawnGround(x, withBuild("area", v.width), withBuild("duration", v.time), progress.stats.ap * v.burn),
   );

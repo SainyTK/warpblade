@@ -6,6 +6,7 @@ import { hero, progress } from "../../../game/state";
 import type { Enemy } from "../../../types/enemy";
 import { DIVE, LUNGE } from "../constants/string";
 import { feint } from "./feint";
+import { atFloor, atFoe, ceriseFx } from "./fx";
 import { isMarked, roseMark } from "./mark";
 import { gainPoints } from "./points";
 
@@ -25,10 +26,15 @@ function thorns(e: Enemy): void {
   if (hero.move === "longLunge" && skillEvolved("ce_thorns")) {
     const n = consumeStacks(e, "ce_thorns");
     if (n) dealDamage(e, progress.stats.ad * v.burst * n, { fromX: hero.x, kx: 0, source: "ce_thorns" });
+    const blow = progress.stats.ad * v.burst * Math.max(1, n);
+    ceriseFx("ce_thorns", "burst", atFoe(e, 16), { damage: blow, sigil: "rose" });
+    ceriseFx("ce_thorns", "spikes", atFloor(e.x, e.y, 22), { damage: blow, quiet: true });
     return;
   }
+  const stacks = thornStacks();
+  ceriseFx("ce_thorns", "slash", atFoe(e, 12), { damage: progress.stats.ad * v.damage * stacks * 6, sigil: "thrust" });
   addStacks(e, "ce_thorns", {
-    stacks: thornStacks(),
+    stacks,
     max: v.max,
     damage: progress.stats.ad * v.damage,
     every: 0.5,
@@ -40,6 +46,11 @@ function thorns(e: Enemy): void {
 /** Pinning Point: thrusts hold a walker's feet; evolved, every thrust pins */
 function pinning(e: Enemy): void {
   const v = skillValues("ce_pin");
+  if (v.halt || v.pinAll) {
+    const damage = progress.stats.ad * (1 + (v.held ?? 0) * 4);
+    ceriseFx("ce_pin", "spikes", atFloor(e.x, e.y, 16), { damage, sigil: "needle", lift: 22 });
+    if (v.pinAll) ceriseFx("ce_pin", "pillar", atFloor(e.x, e.y, 30), { damage, quiet: true });
+  }
   if (v.halt) e.halt = Math.max(e.halt, v.halt);
   if (v.pinAll) e.pinned = Math.max(e.pinned, v.pinAll);
 }

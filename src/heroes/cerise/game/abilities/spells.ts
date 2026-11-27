@@ -15,6 +15,7 @@ import { ROSE_RAMP } from "../../look/rose";
 import type { CeriseAbility } from "../../types/ability";
 import { createNeedle } from "../effects/needle";
 import { createPetalRing } from "../effects/petals";
+import { atFloor, atHero, ceriseFx } from "../fx";
 import { markedFoes } from "../mark";
 import { gainPoints } from "../points";
 import { cerise } from "../state";
@@ -38,6 +39,16 @@ function bloom(power: number, wide: boolean, scale = 1): void {
   const reach = withBuild("area", v.reach) * (wide ? 1.6 : 1) * scale;
   const y = hero.y - 14;
   game.fx.push(createFloorRing(hero.x, hero.y, reach, ROSE_RAMP, 0.45));
+  const blow = progress.stats.ap * v.power * power * 2;
+  const echo = scale > 1;
+  ceriseFx("ce_bloom", "nova", atFloor(hero.x, hero.y, reach * 0.6), {
+    damage: blow,
+    sigil: echo ? undefined : "rose",
+    lift: 14,
+    quiet: echo,
+  });
+  if (!echo && skillEvolved(ABILITY_SKILL.bloom))
+    ceriseFx("ce_bloom", "burst", atHero(14, 14), { damage: blow, quiet: true });
   lights.add(hero.x, y, reach, ROSE_RAMP[4], 0.7, 0.3);
   shake(0.14, 1.6);
   let struck = 0;
@@ -90,7 +101,17 @@ function needles(power: number, wide: boolean): void {
   const rains = v.second ? 2 : 1;
   for (let r = 0; r < rains; r++)
     for (const dir of dirs)
-      rainPoints(dir).forEach((x, i) => game.fx.push(createNeedle(x, hero.y, r * 0.4 + i * 0.04, damage, needleHit)));
+      rainPoints(dir).forEach((x, i, all) => {
+        game.fx.push(createNeedle(x, hero.y, r * 0.4 + i * 0.04, damage, needleHit));
+        const main = r === 0 && i === 0 && dir === hero.face;
+        ceriseFx("ce_needle", "bolt", atFloor(x, hero.y, 70), {
+          damage: damage * (main ? all.length : 1),
+          sigil: main ? "needle" : undefined,
+          lift: 40,
+          quiet: !main,
+          delay: r * 0.4 + i * 0.04,
+        });
+      });
   if (skillEvolved(ABILITY_SKILL.needle))
     markedFoes().forEach((e, i) => game.fx.push(createNeedle(e.x, e.y, 0.1 + i * 0.05, damage * 2, needleHit)));
   sfx.chime(3);

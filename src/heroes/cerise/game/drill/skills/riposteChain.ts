@@ -1,5 +1,7 @@
 import { drillFighter } from "../../../../../drill";
+import { hero, progress } from "../../../../../game/state";
 import type { CeriseDrillSkill } from "../../../types/drillSkill";
+import { atHero, ceriseFx } from "../../fx";
 import { roseMark } from "../../mark";
 import { foesAhead, skillStrike } from "./strike";
 
@@ -22,6 +24,19 @@ export const RIPOSTE_CHAIN_DRILL: CeriseDrillSkill = {
       return;
     }
     const targets = foesAhead(values.pierce ? 64 : 44);
+    const damage = progress.stats.ad * values.riposte * 2;
+    ceriseFx(ID, "slash", atHero(20, 18, 12), { damage, sigil: "thrust" });
+    if (values.pierce)
+      ceriseFx(
+        ID,
+        "trail",
+        { ...atHero(20, 17), toX: hero.x + hero.face * 64, toY: hero.y - 17 },
+        {
+          damage,
+          quiet: true,
+        },
+      );
+    if (evolved) ceriseFx(ID, "slash", { ...atHero(22, 18), face: -hero.face }, { damage, quiet: true, delay: 0.06 });
     for (const foe of values.pierce ? targets : targets.slice(0, 1)) {
       skillStrike(foe, values.riposte, ID, { sureCrit: true });
       if (values.mark) {

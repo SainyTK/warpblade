@@ -6,6 +6,7 @@ import { game, hero, progress } from "../../../../game/state";
 import type { Enemy } from "../../../../types/enemy";
 import type { SkillBehavior } from "../../../../types/skillBehavior";
 import { foeAt } from "../abilities/spells";
+import { atFloor, atFoe, ceriseFx } from "../fx";
 
 const SOURCE = "ce_curse";
 
@@ -29,7 +30,12 @@ export const wiltingCurse: SkillBehavior = {
   on: {
     parry(_m, { fromX }) {
       const foe = foeAt(fromX);
-      if (foe) curse(foe, skillValues(SOURCE).stacks);
+      if (!foe) return;
+      curse(foe, skillValues(SOURCE).stacks);
+      const v = skillValues(SOURCE);
+      const damage = progress.stats.ad * v.damage * v.stacks * 6;
+      ceriseFx(SOURCE, "mark", atFoe(foe, 16), { damage, sigil: "rose", lift: 6 });
+      if (skillEvolved(SOURCE)) ceriseFx(SOURCE, "spikes", atFloor(foe.x, foe.y, 20), { damage, quiet: true });
     },
     riposteLink(_m, { foe }) {
       const v = skillValues(SOURCE);
@@ -38,13 +44,20 @@ export const wiltingCurse: SkillBehavior = {
     riposteEnd(_m, { foe }) {
       if (!skillEvolved(SOURCE) || !foe || foe.hp <= 0) return;
       const n = consumeStacks(foe, SOURCE);
-      if (n)
-        dealDamage(foe, progress.stats.ad * skillValues(SOURCE).tear * n, { fromX: hero.x, kx: 0, source: SOURCE });
+      if (!n) return;
+      const blow = progress.stats.ad * skillValues(SOURCE).tear * n;
+      dealDamage(foe, blow, { fromX: hero.x, kx: 0, source: SOURCE });
+      ceriseFx(SOURCE, "burst", atFoe(foe, 16), { damage: blow, sigil: "rose" });
+      ceriseFx(SOURCE, "spikes", atFloor(foe.x, foe.y, 24), { damage: blow, quiet: true });
     },
     kill(_m, { foe }) {
       const v = skillValues(SOURCE);
       if (!v.burst || !stacksOf(foe, SOURCE)) return;
       const [x, y] = enemyCenter(foe);
+      ceriseFx(SOURCE, "nova", atFloor(x, foe.y, v.burst), {
+        damage: progress.stats.ad * v.damage * v.stacks * 4,
+        quiet: true,
+      });
       for (const e of game.enemies) {
         if (e === foe || e.hp <= 0) continue;
         const [ex, ey] = enemyCenter(e);

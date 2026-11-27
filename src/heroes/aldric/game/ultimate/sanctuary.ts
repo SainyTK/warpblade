@@ -6,7 +6,7 @@ import { createImpact } from "../../../../game/effects/impact";
 import { enemyCenter } from "../../../../game/enemies/enemy";
 import { ultimateValues } from "../../../../game/hero/ultimate";
 import { lowerWard, raiseWard, type ShotWard } from "../../../../game/shotWards";
-import { withBuild } from "../../../../game/skills/query";
+import { skillEvolved, withBuild } from "../../../../game/skills/query";
 import { game, hero, lights, progress } from "../../../../game/state";
 import { shake } from "../../../../game/world";
 import { sfx } from "../../../../services/audio";
@@ -17,6 +17,7 @@ import { SANCTUARY } from "../../constants/abilities";
 import { DAWN_RAMP, DAWN_SPARKS } from "../../constants/light";
 import { DOME_PILLAR } from "../../constants/skillNumbers";
 import { createSunPillar } from "../abilities/pillar";
+import { aldricFx } from "../fx";
 import { aldric } from "../state";
 
 /** the dome's centre stands this high above the floor, as a share of its radius */
@@ -45,6 +46,14 @@ export function castSanctuary(level: number): void {
     broke: (bx, by) => game.fx.push(createImpact(bx, by, 1, false, DAWN_SPARKS)),
   };
   raiseWard(ward);
+  aldricFx(
+    "al_sanctuary",
+    "nova",
+    { x, y, face: hero.face, reach: Math.min(r, 70) },
+    { damage: blow * burns, sigil: "shield", lift: 26 },
+  );
+  if (skillEvolved("al_sanctuary"))
+    aldricFx("al_sanctuary", "pillar", { x, y, reach: 40 }, { quiet: true, delay: 0.1 });
   game.fx.push(createFloorRing(x, y, r, DAWN_RAMP, 0.5));
   lights.add(x, y - r * 0.5, r + 20, DAWN_RAMP[5], 0.6, 0.3);
   shake(0.25, 3);

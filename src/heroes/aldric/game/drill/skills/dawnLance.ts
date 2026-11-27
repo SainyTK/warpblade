@@ -1,9 +1,11 @@
 import { drillSession } from "../../../../../drill";
 import { enemyCenter } from "../../../../../game/enemies/enemy";
 import { addStacks, markFoe } from "../../../../../game/enemies/skillStatus";
-import { game, progress } from "../../../../../game/state";
+import { game, hero, progress } from "../../../../../game/state";
+import { surfaceBelow } from "../../../../../game/world";
 import type { ElementProjectile } from "../../../../../types/drill";
 import type { AldricDrillSkill } from "../../../types/drillSkill";
+import { aldricFx } from "../../fx";
 import { createVerdictSword } from "../../skills/verdict";
 import { foesNear } from "../../strike";
 import { abilityStrike } from "../strike";
@@ -19,6 +21,21 @@ export const DAWN_LANCE_DRILL: AldricDrillSkill = {
       return;
     }
     abilityStrike(foe, values.extra, ID);
+    const [lx, ly] = enemyCenter(foe);
+    aldricFx(
+      ID,
+      "burst",
+      { x: lx, y: ly, face: hero.face, reach: 12 },
+      {
+        damage: progress.stats.ap * (spell.damage / 10 + (values.extra ?? 0)),
+        sigil: "sword",
+      },
+    );
+    const flight = { x: lx - hero.face * 34, y: ly, face: hero.face, toX: lx, toY: ly };
+    aldricFx(ID, "trail", flight, { quiet: true });
+    if (evolved) {
+      aldricFx(ID, "pillar", { x: lx, y: surfaceBelow(lx, ly), reach: 30 }, { quiet: true, delay: 0.12 });
+    }
     if (values.burn) {
       addStacks(foe, ID, { stacks: 1, max: 5, damage: progress.stats.ap * values.burn, every: 0.5, duration: 3 });
     }

@@ -11,6 +11,36 @@ import { createLightWave } from "./effects/lightWave";
 import { foesIn, strikeEach } from "./strike";
 import { gainValor } from "./valor";
 import "../types/events";
+import { enemyCenter } from "../../../game/enemies/enemy";
+import { aldricFx } from "./fx";
+
+/** the tiered effect of each blow his string skills ride on */
+function stringFx(id: AldricMoveId, hits: number): void {
+  const face = hero.face;
+  if (id === "oathCut") {
+    const cut = { x: hero.x + face * 6, y: hero.y - 17, face, reach: 15 };
+    aldricFx("al_oath", "slash", cut, { damage: progress.stats.ad * 1.2, quiet: !hits, sigil: "sword" });
+  }
+  if (id === "shieldBash" && hits && hero.lastHit) {
+    const [x, y] = enemyCenter(hero.lastHit);
+    const damage = progress.stats.ad * (1 + (skillValues("al_breaker").shock ?? 0));
+    aldricFx("al_breaker", "burst", { x: x - face * 4, y, face, reach: 11 }, { damage, sigil: "shield" });
+    if (skillEvolved("al_breaker")) {
+      aldricFx("al_breaker", "nova", { x, y: hero.y, reach: 30 }, { quiet: true, delay: 0.08 });
+    }
+  }
+  if (id === "crestBreaker" && hero.ground) {
+    const gx = hero.x + face * 18;
+    const damage = progress.stats.ad * 2 * (skillValues("al_crest").crest ?? 1);
+    aldricFx("al_crest", "pillar", { x: gx, y: hero.y, face, reach: 26 }, { damage, sigil: "sword", lift: 12 });
+    if (skillEvolved("al_crest")) {
+      for (let i = 1; i <= 2; i++) {
+        const px = gx + face * 28 * i;
+        aldricFx("al_crest", "pillar", { x: px, y: hero.y, reach: 22 }, { quiet: true, delay: i * 0.08 });
+      }
+    }
+  }
+}
 
 /** Oathblade: a wave of light from the blow, from Crest breaker only until every blow throws one */
 function oathWave(id: AldricMoveId): void {
@@ -18,6 +48,8 @@ function oathWave(id: AldricMoveId): void {
   if (!v.wave || !hero.ground) return;
   if (id !== "crestBreaker" && !v.waveAll) return;
   const size = v.size ?? 1;
+  const crest = { x: hero.x + hero.face * 12, y: hero.y, face: hero.face, reach: 26 * size };
+  aldricFx("al_oath", "wave", crest, { quiet: true, damage: progress.stats.ad * v.wave });
   game.fx.push(
     createLightWave(hero.x + hero.face * 12, hero.y - 18, hero.face, {
       speed: OATH_WAVE.speed,
@@ -83,6 +115,7 @@ function crestRings(): void {
 
 /** a blow of the ground string is out: what his skills add to it */
 export function stringSkills(id: AldricMoveId, hits: number): void {
+  stringFx(id, hits);
   oathWave(id);
   if (id === "shieldBash" && hits) {
     breakingBash();

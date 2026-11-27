@@ -2,8 +2,10 @@ import { drillFighter } from "../../../../../drill";
 import { enemyCenter } from "../../../../../game/enemies/enemy";
 import { markFoe, stacksOf } from "../../../../../game/enemies/skillStatus";
 import { staggerFoe } from "../../../../../game/enemies/stagger";
-import { hero } from "../../../../../game/state";
+import { hero, progress } from "../../../../../game/state";
+import { surfaceBelow } from "../../../../../game/world";
 import type { AldricDrillSkill } from "../../../types/drillSkill";
+import { aldricFx } from "../../fx";
 import { foesNear } from "../../strike";
 import { attackStrike } from "../strike";
 
@@ -20,6 +22,19 @@ export const BREAKING_BASH_DRILL: AldricDrillSkill = {
       foe.vx += hero.face * values.knock;
     }
     attackStrike(foe, values.extra ?? 0, ID);
+    const [bx, by] = enemyCenter(foe);
+    aldricFx(
+      ID,
+      "burst",
+      { x: bx - hero.face * 4, y: by, face: hero.face, reach: 11 },
+      {
+        damage: progress.stats.ad * (1 + (values.extra ?? 0)),
+        sigil: "shield",
+      },
+    );
+    if (evolved) {
+      aldricFx(ID, "nova", { x: bx, y: surfaceBelow(bx, by), reach: values.reach ?? 30 }, { quiet: true, delay: 0.08 });
+    }
     if (values.mark) {
       markFoe(foe, ID, 3, values.mark);
     }

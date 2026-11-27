@@ -1,7 +1,9 @@
 import { drillFighter } from "../../../../../drill";
 import { game, hero, progress } from "../../../../../game/state";
+import { surfaceBelow } from "../../../../../game/world";
 import type { AldricDrillSkill } from "../../../types/drillSkill";
 import { createDawnGround } from "../../effects/dawnGround";
+import { aldricFx } from "../../fx";
 import { attackStrike } from "../strike";
 
 const ID = "al_resolve";
@@ -23,8 +25,18 @@ export const RESOLVE_DRILL: AldricDrillSkill = {
     }
     resolve.airDashing = airDashing;
   },
-  dashed(_foes, { values, evolved }) {
+  dashed(foes, { values, evolved }) {
     resolve.since = 0;
+    const streak = { x: hero.x - hero.face * 36, y: hero.y - 8, face: hero.face, toX: hero.x, toY: hero.y - 8 };
+    aldricFx(ID, "trail", streak, {
+      damage: progress.stats.ad * (1 + (values.after ?? 0)),
+      quiet: foes.length === 0 && !values.heal,
+      sigil: "shield",
+      lift: 8,
+    });
+    if (evolved) {
+      aldricFx(ID, "nova", { x: hero.x, y: surfaceBelow(hero.x, hero.y - 2), reach: GROUND.width }, { quiet: true });
+    }
     if (values.heal) {
       hero.hp = Math.min(progress.stats.hp, hero.hp + progress.stats.hp * values.heal);
     }

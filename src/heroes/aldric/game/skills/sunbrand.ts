@@ -11,12 +11,25 @@ import { BRAND_SPREAD } from "../../constants/skillNumbers";
 import { brandSpec } from "../abilities/pillars";
 import { foesNear } from "../strike";
 import "../../types/events";
+import { surfaceBelow } from "../../../../game/world";
+import { aldricFx } from "../fx";
 
 const ID = "al_brand";
 
 /** brand a foe: one stack more, up to the most */
 export const brand = (e: Enemy | null): void => {
-  if (e && e.hp > 0) addStacks(e, ID, brandSpec(skillValues(ID)));
+  if (!e || e.hp <= 0) return;
+  const spec = brandSpec(skillValues(ID));
+  addStacks(e, ID, spec);
+  const [x, y] = enemyCenter(e);
+  const stacks = stacksOf(e, ID);
+  const quiet = stacks > 1 && stacks < spec.max;
+  aldricFx(
+    ID,
+    "burst",
+    { x, y, reach: 8 + stacks * 2 },
+    { damage: spec.damage * 6 * stacks, quiet, sigil: "sun", lift: 2 },
+  );
 };
 
 /** Solar Brand: a branded foe that falls brands every foe near it to the full */
@@ -25,6 +38,12 @@ function spreadBrand(foe: Enemy): void {
   const [x, y] = enemyCenter(foe);
   const spec = brandSpec(skillValues(ID));
   for (const e of foesNear(x, y, BRAND_SPREAD)) addStacks(e, ID, { ...spec, stacks: spec.max });
+  aldricFx(
+    ID,
+    "nova",
+    { x, y: surfaceBelow(x, y), reach: BRAND_SPREAD },
+    { damage: spec.damage * 6 * spec.max, sigil: "sun", lift: 18 },
+  );
   game.fx.push(createGlint(x, y, DAWN_RAMP[5], 1));
 }
 

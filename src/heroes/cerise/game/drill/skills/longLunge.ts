@@ -3,6 +3,7 @@ import { staggerFoe } from "../../../../../game/enemies/stagger";
 import { game, hero, progress } from "../../../../../game/state";
 import type { CeriseDrillSkill } from "../../../types/drillSkill";
 import { createRoseLine } from "../../effects/roseLine";
+import { ceriseFx } from "../../fx";
 import { roseMark } from "../../mark";
 
 const ID = "ce_lunge";
@@ -27,6 +28,18 @@ export const LONG_LUNGE_DRILL: CeriseDrillSkill = {
     if (strike !== "third") {
       return;
     }
+    const damage = progress.stats.ad * (1 + values.power + (values.streak ?? 0)) * 2;
+    const y = hero.y - 17;
+    ceriseFx(
+      ID,
+      "trail",
+      { x: hero.x - hero.face * 40, y, face: hero.face, toX: hero.x + hero.face * 30, toY: y },
+      {
+        damage,
+        sigil: "thrust",
+      },
+    );
+    if (evolved) ceriseFx(ID, "bolt", { x: hero.x + hero.face * 30, y: hero.y, reach: 60 }, { damage, quiet: true });
     if (values.streak) {
       game.fx.push(createRoseLine(hero.x, hero.y - 17, hero.face, progress.stats.ad * values.streak, ID, roseMark));
     }

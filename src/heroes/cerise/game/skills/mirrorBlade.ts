@@ -6,6 +6,7 @@ import type { Enemy } from "../../../../types/enemy";
 import type { SkillBehavior, SkillMemory } from "../../../../types/skillBehavior";
 import { foeAt } from "../abilities/spells";
 import { createGlassRapier } from "../effects/glassRapier";
+import { atFoe, ceriseFx } from "../fx";
 import { roseMark } from "../mark";
 
 const SOURCE = "ce_mirror";
@@ -27,6 +28,17 @@ function call(m: SkillMemory, foe: Enemy | null): void {
   m.cd = COOLDOWN;
   const behind = Math.sign(foe.x - hero.x) || hero.face;
   const damage = progress.stats.ad * v.power;
+  ceriseFx(SOURCE, "slash", atFoe(foe, 16, -behind), {
+    damage: damage * v.blades * (v.twice ? 2 : 1),
+    sigil: "thrust",
+  });
+  if (skillEvolved(SOURCE))
+    ceriseFx(
+      SOURCE,
+      "trail",
+      { ...atFoe(foe, 16, behind), toX: foe.x - behind * 30, toY: foe.y - 14 },
+      { damage, quiet: true },
+    );
   for (let i = 0; i < v.blades; i++) {
     game.fx.push(createGlassRapier(foe, i % 2 ? -behind : behind, i * 0.1, damage, SOURCE, struck));
     if (v.twice) game.fx.push(createGlassRapier(foe, i % 2 ? behind : -behind, 0.2 + i * 0.1, damage, SOURCE, struck));
@@ -47,6 +59,7 @@ export const mirrorBlade: SkillBehavior = {
     if (!foe || foe.hp <= 0 || (m.next as number) > 0) return;
     const v = skillValues(SOURCE);
     m.next = v.every;
+    ceriseFx(SOURCE, "slash", atFoe(foe, 12), { damage: progress.stats.ad * v.power * 0.5, quiet: true });
     game.fx.push(
       createGlassRapier(foe, rng.chance(0.5) ? 1 : -1, 0, progress.stats.ad * v.power * 0.5, SOURCE, struck),
     );

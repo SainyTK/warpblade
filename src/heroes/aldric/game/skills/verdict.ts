@@ -15,6 +15,8 @@ import { DAWN_RAMP, DAWN_SPARKS } from "../../constants/light";
 import { VERDICT } from "../../constants/skillNumbers";
 import { createSunPillar } from "../abilities/pillar";
 import "../../types/events";
+import { surfaceBelow } from "../../../../game/world";
+import { aldricFx } from "../fx";
 
 const ID = "al_verdict";
 /** how far above the foe the sword appears */
@@ -32,6 +34,16 @@ export function createVerdictSword(foe: Enemy, delay: number): Effect {
       struck = true;
       const v = skillValues(ID);
       const [x, y] = enemyCenter(foe);
+      const damage = progress.stats.ad * v.power;
+      aldricFx(
+        ID,
+        "bolt",
+        { x, y, reach: Math.max(30, y - 20) },
+        { damage, quiet: delay > 0, sigil: "sword", lift: 14 },
+      );
+      if (skillEvolved(ID)) {
+        aldricFx(ID, "pillar", { x, y: surfaceBelow(x, y), reach: 30 }, { quiet: true, damage });
+      }
       if (foe.hp > 0) {
         dealDamage(foe, progress.stats.ad * v.power, { source: ID, fromX: hero.x, ky: -20, heavy: true });
         game.fx.push(createImpact(x, y, hero.face, true, DAWN_SPARKS));

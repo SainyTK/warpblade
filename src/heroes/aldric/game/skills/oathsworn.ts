@@ -17,6 +17,7 @@ import { OATHSWORN } from "../../constants/skillNumbers";
 import { raiseBarrier } from "../barrier";
 import { drawLightKnight } from "../effects/lightKnight";
 import "../../types/events";
+import { aldricFx } from "../fx";
 
 const ID = "al_oathsworn";
 const CUT = { cx: 4, cy: -18, R: 18, sy: 0.6, rot: -0.3, a0: -2.4, a1: 0.9, W: 6, ramp: DAWN_RAMP } as const;
@@ -39,8 +40,19 @@ function createKnight(foe: Enemy, side: number): Effect {
       while (done < cuts && t >= OATHSWORN.first + done * OATHSWORN.gap) {
         done++;
         game.fx.push(createSlash(x, y, face, CUT));
-        if (foe.hp <= 0 || !payoffLands(payoff, foe)) continue;
         const last = done === cuts;
+        aldricFx(
+          ID,
+          "slash",
+          { x: x + face * 4, y: y - 16, face, reach: last ? 9 : 8 },
+          {
+            damage: progress.stats.ad * v.power,
+            quiet: done > 1,
+            sigil: "sword",
+            lift: 10,
+          },
+        );
+        if (foe.hp <= 0 || !payoffLands(payoff, foe)) continue;
         dealDamage(foe, progress.stats.ad * v.power, {
           source: ID,
           fromX: x,

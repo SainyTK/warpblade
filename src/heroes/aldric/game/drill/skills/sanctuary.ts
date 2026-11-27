@@ -1,5 +1,7 @@
 import { game, hero, progress } from "../../../../../game/state";
+import { surfaceBelow } from "../../../../../game/world";
 import type { AldricDrillSkill } from "../../../types/drillSkill";
+import { aldricFx } from "../../fx";
 import { later } from "../later";
 import { abilityStrike } from "../strike";
 
@@ -28,7 +30,19 @@ export const SANCTUARY_DRILL: AldricDrillSkill = {
     if (values.heal) {
       hero.hp = Math.min(progress.stats.hp, hero.hp + progress.stats.hp * values.heal);
     }
+    const floor = surfaceBelow(x, y - 2);
+    const power = (tier.damage / 10) * progress.stats.ap;
+    aldricFx(
+      ID,
+      "nova",
+      { x, y: floor, face, reach: Math.min(reach, 70) },
+      { damage: power, sigil: "shield", lift: 26 },
+    );
+    if (evolved) {
+      aldricFx(ID, "pillar", { x, y: floor, reach: 40 }, { quiet: true, delay: 0.1 });
+    }
     const echo = (share: number) => () => {
+      aldricFx(ID, "nova", { x, y: floor, reach: Math.min(reach, 60) * 0.8 }, { quiet: true, damage: power * share });
       for (const foe of caught()) {
         abilityStrike(foe, (tier.damage / 10) * share, ID);
       }

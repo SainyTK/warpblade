@@ -4,12 +4,13 @@ import { cue } from "../../../game/cue";
 import { createImpact } from "../../../game/effects/impact";
 import { staggerFoe } from "../../../game/enemies/stagger";
 import { emitSkillEvent } from "../../../game/skills/events";
-import { skillValues } from "../../../game/skills/query";
-import { game, hero } from "../../../game/state";
+import { skillEvolved, skillValues } from "../../../game/skills/query";
+import { game, hero, progress } from "../../../game/state";
 import { sfx } from "../../../services/audio";
 import { ROSE_RAMP, ROSE_SPARKS } from "../look/rose";
 import { releaseRoseLine } from "./abilities/roseLine";
 import { foeAt, stanceTakes } from "./abilities/spells";
+import { atFloor, atHero, ceriseFx } from "./fx";
 import { gainPoints } from "./points";
 import { openRiposte } from "./riposte";
 import { cerise } from "./state";
@@ -29,6 +30,11 @@ export function absorbHurt(_dmg: number, fromX: number): boolean {
   game.fx.push(createImpact(hero.x + hero.face * 10, hero.y - 20, hero.face, true, ROSE_SPARKS));
   sfx.perfect();
   gainPoints(1 + (v.points ?? 0));
+  const damage = progress.stats.ad * (2 + (v.bonus ?? 0) * 4);
+  ceriseFx("ce_mirrorguard", "slash", { ...atHero(18, 18), face: -hero.face }, { damage, sigil: "thrust" });
+  if (skillEvolved("ce_mirrorguard")) {
+    ceriseFx("ce_mirrorguard", "spikes", atFloor(hero.x, hero.y, 22), { damage, quiet: true });
+  }
   emitSkillEvent({ type: "parry", fromX });
   if (v.line) releaseRoseLine(1, false);
   openRiposte();

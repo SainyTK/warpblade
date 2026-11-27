@@ -4,6 +4,7 @@ import { hero, progress } from "../../../game/state";
 import { POINTS } from "../constants/points";
 import { STRING_POWER } from "../constants/string";
 import type { CeriseMoveId } from "../types/moves";
+import { atFloor, atFoe, ceriseFx } from "./fx";
 import { keenLungeAgain, perfectMeasure } from "./measure";
 import { CERISE_MOVES } from "./moves";
 import { gainPoints } from "./points";
@@ -22,12 +23,23 @@ export function afterStrike(id: CeriseMoveId, hits: number): void {
   }
   const v = skillValues("ce_measure");
   gainPoints(POINTS.keen);
+  measuredFx(id);
   if (v.hold) holdPayoffFoe(v.hold);
   const mp = skillValues("ce_grace").mp ?? 0;
   if (mp) hero.mp = Math.min(progress.stats.mp, hero.mp + mp);
   cerise.keenStreak++;
   if (id === "longLunge" && v.twin) keenLungeAgain(STRING_POWER.longLunge * v.twin);
   if (skillEvolved("ce_measure")) perfectMeasure();
+}
+
+/** Measured Touch: a frost burst on the foe the Keen move paid off on, crystals under it when evolved */
+function measuredFx(id: CeriseMoveId): void {
+  const foe = [...movePayoff()].find((e) => e.hp > 0);
+  if (!foe) return;
+  const power = id in STRING_POWER ? STRING_POWER[id as keyof typeof STRING_POWER] : 1;
+  const damage = progress.stats.ad * power * (1 + cerise.keenStreak * 0.1);
+  ceriseFx("ce_measure", "burst", atFoe(foe, 10, hero.face), { damage, sigil: "thrust" });
+  if (skillEvolved("ce_measure")) ceriseFx("ce_measure", "spikes", atFloor(foe.x, foe.y, 18), { damage, quiet: true });
 }
 
 /** Measured Touch's third level: the foe the Keen move paid off on stands held, and only that foe */
