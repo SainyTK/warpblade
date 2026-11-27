@@ -123,8 +123,8 @@ sfx/keen.ogg
   Source: https://kenney.nl/assets/interface-sounds
   Licence: CC0 1.0
 sfx/warp.ogg
-  From: sfx_movement_portal5.wav in The Essential Retro Video Game Sound Effects Collection [512 sounds] by Juhani Junkala (subspaceaudio)
-  Source: https://opengameart.org/content/512-sound-effects-8-bit-style
+  From: misc_02.ogg in 80 CC0 RPG SFX by rubberduck
+  Source: https://opengameart.org/content/80-cc0-rpg-sfx
   Licence: CC0 1.0
 sfx/dash.ogg
   From: swish-9.wav in Swishes Sound Pack by artisticdude
