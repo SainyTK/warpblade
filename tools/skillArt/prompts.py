@@ -1,4 +1,4 @@
-from constants import ELEMENTS, HINTS, LOOKS, PORTRAIT_OF
+from constants import ELEMENTS, HINTS, LOOKS, PORTRAIT_OF, SPRITE_STYLE, SPRITES
 from models import Icon
 
 STYLE = (
@@ -48,6 +48,8 @@ def subject(icon: Icon) -> str:
 
 def cell_line(n: int, icon: Icon, icons: list[Icon], every: dict[str, Icon]) -> str:
     element = ELEMENTS.get(icon.element, "")
+    if icon.element not in ELEMENTS and icon.set in PORTRAIT_OF:
+        return f"{n}. {icon.name} (no element: drawn in the hero's own colours and gear):{subject(icon)}"
     if icon.element not in ELEMENTS:
         return f"{n}. {icon.name}: {icon.text}{subject(icon)}"
     if icon.set == "elements":
@@ -81,10 +83,25 @@ def sheet_prompt(icons: list[Icon], every: dict[str, Icon], cols: int, rows: int
         f"Fill only the first {len(icons)} cells and leave the remaining cells empty."
         if len(icons) < cols * rows
         else "",
-        ELEMENT_RULE.format(elements=elements),
+        ELEMENT_RULE.format(elements=elements) if any(icon.element in ELEMENTS for icon in icons) else "",
         EVOLVED_RULE if any(icon.evolved for icon in icons) else "",
         UNIQUE_RULE,
         "Cells, left to right, then top to bottom:",
         "\n".join(cell_line(n, icon, icons, every) for n, icon in enumerate(icons, 1)),
+    ]
+    return "\n\n".join(part for part in parts if part)
+
+
+def sprite_prompt(ids: list[str], cols: int, rows: int) -> str:
+    parts = [
+        f"A sheet of {len(ids)} pixel art pickups and props for Warpblade, a dark-fantasy pixel action game: the coins, "
+        "experience gems, healing and mana beads, heart and mana crystals and treasure chest the hero picks up.",
+        "The attached icon sheet is the approved style of the game's skill icons: match its outline weight, palette "
+        "and flat pixel shading exactly, but draw these new objects.",
+        SPRITE_STYLE,
+        LAYOUT.format(cols=cols, rows=rows),
+        f"Fill only the first {len(ids)} cells and leave the remaining cells empty." if len(ids) < cols * rows else "",
+        "Cells, left to right, then top to bottom:",
+        "\n".join(f"{n}. {SPRITES[i]}." for n, i in enumerate(ids, 1)),
     ]
     return "\n\n".join(part for part in parts if part)

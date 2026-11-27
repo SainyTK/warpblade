@@ -4,9 +4,12 @@ from PIL import Image, ImageDraw
 
 from constants import CELLS, ICON
 from models import Icon
+from pack import sprite_frames
 from pixelate import pixelate
 
 NIGHT = (12, 10, 24, 255)
+DAY = (214, 196, 158, 255)
+SPRITE_ZOOMS = (12, 3)
 LABEL = (200, 196, 220, 255)
 ZOOM = 4
 PER_ROW = 8
@@ -41,4 +44,23 @@ def contact_sheet(icons: list[Icon], folder: Path) -> None:
         art = Image.fromarray(pixelate(Image.open(CELLS / f"{icon.id}.png")))
         small.alpha_composite(art.resize((ICON * 2, ICON * 2), Image.NEAREST), (x * (ICON * 2 + 2), y * (ICON * 2 + 4)))
     small.save(folder / "all.png")
+    print(folder)
+
+
+def sprite_sheet(folder: Path) -> None:
+    folder.mkdir(parents=True, exist_ok=True)
+    frames = sprite_frames()
+    for zoom in SPRITE_ZOOMS:
+        width = sum(frame.shape[1] * zoom + 8 for frame in frames.values()) + 8
+        height = max(frame.shape[0] for frame in frames.values()) * zoom + 16
+        sheet = Image.new("RGBA", (width, height * 2), NIGHT)
+        sheet.paste(DAY, (0, 0, width, height))
+        for row in range(2):
+            x = 8
+            for frame in frames.values():
+                art = Image.fromarray(frame)
+                art = art.resize((art.width * zoom, art.height * zoom), Image.NEAREST)
+                sheet.alpha_composite(art, (x, row * height + 8))
+                x += art.width + 8
+        sheet.save(folder / f"sprites-x{zoom}.png")
     print(folder)

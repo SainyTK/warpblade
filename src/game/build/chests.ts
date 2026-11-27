@@ -11,7 +11,7 @@ import { rollChest } from "../../utils/chests";
 import { skillOf } from "../../utils/skills";
 import { clampStageX } from "../adventure";
 import { eachStanding } from "../coopHooks";
-import { stampPixels } from "../effects/fine";
+import { stampArt } from "../effects/fine";
 import { queueEvolution } from "../evolve";
 import { feat } from "../feat";
 import { refreshGrowing } from "../progress";
@@ -125,7 +125,7 @@ export function drawChests(): void {
     const x = Math.round(c.x);
     const top = Math.round(c.y) - CHEST_ROWS.length;
     glow(c.x, c.y - 4, 14, COIN_GOLD[3], 0.35);
-    stampPixels(CHEST_PIXELS, x + 0.5, top + CHEST_ROWS.length / 2, CHEST_PIXEL_COLORS);
+    stampArt("chest", CHEST_PIXELS, x + 0.5, top + CHEST_ROWS.length / 2, CHEST_PIXEL_COLORS);
     const phase = (c.t % M.glint) / M.glint;
     if (phase < 0.18) sparkle(x - HALF_W + 2 + Math.round(phase * 50), top + 3, 2, COIN_GOLD[4], COIN_GOLD[3], 0.8);
   }

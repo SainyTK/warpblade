@@ -10,7 +10,7 @@ import { ellipseRing, fleck, glow, glowLine, hairline, place, px } from "../engi
 import { blit, detailCanvas } from "../engine/sprite";
 import { stageCameraX } from "../game/adventure";
 import { bossCharging, miniLight } from "../game/bossFight";
-import { fineRing, stampPixels } from "../game/effects/fine";
+import { fineRing, stampArt } from "../game/effects/fine";
 import { enemyBox, enemyCenter } from "../game/enemies/enemy";
 import { kindOf } from "../game/enemies/kinds";
 import { shownKit } from "../game/hero/kits";
@@ -236,7 +236,7 @@ export function drawPickups(): void {
     const x = o.x + MOTE_DRAW_SHIFT;
     const y = o.y + MOTE_DRAW_SHIFT;
     hairline(x - o.vx * 0.05, y - o.vy * 0.05, x, y, rp[2], (u) => u);
-    stampPixels(MOTE_PIXELS, x, y, MOTE_COLORS[o.kind][twinkle ? 1 : 0]);
+    stampArt(`mote_${o.kind}${twinkle ? "_lit" : ""}`, MOTE_PIXELS, x, y, MOTE_COLORS[o.kind][twinkle ? 1 : 0]);
     glow(x, y, 8, rp[3], 0.45);
   }
 }

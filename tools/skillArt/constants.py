@@ -9,6 +9,7 @@ CELLS = RAW / "cells"
 OUT = ROOT / "src/skillArt/assets"
 HEROES = ROOT / "src/generatedHeroArt/assets"
 ENV = ROOT / ".env.local"
+SPRITE_SIZES = HERE / "sprites.json"
 
 MODEL = "gpt-image-2.5-sunburst"
 FALLBACK_MODEL = "gpt-image-2.5-flare"
@@ -83,11 +84,62 @@ LOOKS = {
         "Growth cards: plain stat upgrades with no element, drawn as a single object in neutral steel, gold and white "
         "with no hero or foe."
     ),
+    "armory": (
+        "Armory items: permanent upgrades the player buys with gold between runs. Each is a single item or symbol with "
+        "no element, no hero and no foe, drawn in the colours its line names."
+    ),
 }
 
-PORTRAIT_OF = {hero: hero for hero in LOOKS if hero not in ("arts", "elements", "cards")}
+PORTRAIT_OF = {hero: hero for hero in LOOKS if hero not in ("arts", "elements", "cards", "armory")}
 
 HINTS = {
+    "boon_wind": "a swirl of green healing wind wrapped round one red drop and one blue drop",
+    "vitality": "a big red heart with a white shine at its top left",
+    "edge": "a broad steel sword blade lying diagonally across the whole cell, point to the top right, its sharpened "
+    "edge a bright white line, a gold crossguard and a brown grip",
+    "arcana": "an open violet spellbook with a small violet four-point star rising from its pages",
+    "wellspring": "a round glass flask filled with glowing blue mana, a brown cork in its neck",
+    "precision": "a gold aiming ring with four short steel tick marks round it and a red dot in its centre",
+    "fleet": "a brown leather boot seen from the side, pale blue wind lines streaming behind its heel",
+    "lungs": "a green stamina gauge bar, two green chevrons pointing up above it",
+    "lodestone": "a red horseshoe magnet with steel tips pulling a gold coin toward it",
+    "warpShock": "a pale cyan crystal sword planted point-down, a flat cyan shockwave ring spreading round its point",
+    "lastLight": "a white candle with a small warm yellow flame on a gold candle holder",
+    "rerolls": "two curved cyan arrows chasing each other round a circle, a reroll symbol",
+    "skips": "a yellow double chevron fast-forward symbol pointing right",
+    "banishes": "a thick red circle with one diagonal slash through it, a forbidden symbol",
+    "greed": "a heap of five gold coins stacked into a small pile",
+    "growth": "three stacked lime green chevrons pointing up",
+    "curse": "a pale violet skull with glowing red eyes",
+    "kael_attacks": "his pale cyan crystal sword held diagonally, point up and to the right",
+    "kael_abilities": "a pale cyan crystal crescent flying to the right with three speed lines behind it",
+    "kael_ultimate": "a large faceted cyan crystal inside a bursting cyan ring",
+    "kael_prism": "a faceted lavender crystal shoulder pauldron made of three stacked prism plates",
+    "aldric_attacks": "his steel longsword crossed over his white kite shield with the gold sun emblem",
+    "aldric_abilities": "a pillar of warm gold light falling onto a stone floor",
+    "aldric_ultimate": "a dome of warm gold light over his white kite shield planted in the floor",
+    "brynn_attacks": "Anvilheart, her huge slab greatsword, raised point up",
+    "brynn_abilities": "a crimson shockwave running along a cracked floor line",
+    "brynn_ultimate": "one huge crimson crescent slash coming down into the floor",
+    "saya_attacks": "her katana drawn diagonally over one black ink brush stroke",
+    "saya_abilities": "her katana sheathed in its black lacquer scabbard over a rising ink brush stroke",
+    "saya_ultimate": "a pale crescent moon crossed by two black ink cut lines",
+    "calder_attacks": "his gunmetal gunblade with a brass muzzle blast at its point",
+    "calder_abilities": "a big brass bullet flying to the right, a thick orange and brass tracer flame trailing behind it",
+    "calder_ultimate": "a ring of six brass rounds round a central brass blast",
+    "vesper_attacks": "her two blades crossed: the pale long blade with a violet crystal and the dark broad short blade",
+    "vesper_abilities": "two violet dusk waves crossing in an X",
+    "vesper_ultimate": "a crescent moon inside a ring of violet cuts",
+    "zafir_attacks": "his curved scimitar inside a ring of sand-coloured cut",
+    "zafir_abilities": "a whirl of golden sand rising from the floor like a small cyclone",
+    "zafir_ultimate": "his scimitar held high, point up, inside a sandstorm",
+    "yun_attacks": "his straight jian with a jade guard and red tassel inside a round cut, a translucent spirit sword "
+    "thrusting past it",
+    "yun_abilities": "three translucent jade spirit swords flying to the right in a stream",
+    "yun_ultimate": "translucent jade spirit swords falling point first onto a round burst of qi",
+    "cerise_attacks": "her needle-thin rapier held diagonally, a curled silver guard and a rose crystal",
+    "cerise_abilities": "a rose-pink thrust streak flying to the right with two rose petals beside it",
+    "cerise_ultimate": "three parallel rose-pink thrust streaks with a white four-point star at their tips",
     "honing_whetstone": "a whetstone grinding a sword edge, a bright spark at the edge",
     "honing_focus": "a glowing arcane crystal orb held in an open hand, a ring of runes round it",
     "honing_keenEye": "a sharp eye inside a crosshair with a gold glint",
@@ -122,4 +174,47 @@ HINTS = {
     "br_crater": "a bright ring of yellow lightning bursting up out of a round crater in a stone floor, the greatsword above it",
     "ca_hound": "a snarling hound head in profile made of flat bright acid-green venom, a brass gear collar, jaws open",
     "ca_pointblank": "a gunblade raised in a parry, a big yellow lightning muzzle flash firing from its cylinder",
+}
+
+SPRITE_STYLE = (
+    "Style: chunky low-resolution pixel art game pickups, like the item drops of a SNES or GBA action game, the same "
+    "set as the attached skill icon sheet: hard square pixels, a solid near-black outline round every object, flat "
+    "colours with two or three hard tones each, one bright highlight at the top left. Each object is a single centred "
+    "item that reads at a glance at a tiny size on both a bright sunlit stone stage and a dark night stage, so use "
+    "strong saturated colours with a dark rim. No gradients, no glow, no haze, no light rays, no sparkles round the "
+    "object, no blur, no semi-transparent pixels, no shadow under the object, no anti-aliasing."
+)
+
+SPRITES = {
+    "coin": "a round gold coin seen face-on, a bright yellow rim, a simple raised star on its face, a white shine at "
+    "its top left",
+    "coin_back": "the back face of the same round gold coin seen face-on, plain darker gold with a raised inner ring "
+    "and no shine",
+    "coin_edge": "the same gold coin turned exactly edge-on, so it is only a thin upright gold bar as tall as the coin",
+    "xp_orb": "a small lime green cut gem of experience, diamond shaped with four facets, lit from the top left",
+    "mote_hp": "a small round green healing bead with a white shine",
+    "mote_mp": "a small round blue mana bead with a white shine",
+    "shard_heart": "a faceted red crystal heart, wider than tall, lit from the top left",
+    "shard_mana": "a faceted blue mana crystal pointed at the top and the bottom, lit from the top left",
+    "chest": "a closed wooden treasure chest seen from the front, wider than tall, brown planks, a curved lid, two gold "
+    "bands and a gold lock plate with a dark keyhole in the middle",
+}
+
+FRAMES = {
+    "coin": ("coin", "coin", "coin", False),
+    "coin_turn": ("coin", "coin", "coin_turn", False),
+    "coin_back": ("coin_back", "coin", "coin", False),
+    "coin_back_turn": ("coin_back", "coin", "coin_turn", False),
+    "coin_edge": ("coin_edge", "coin_edge", "coin_edge", False),
+    "xp_orb": ("xp_orb", "xp_orb", "xp_orb", False),
+    "xp_orb_lit": ("xp_orb", "xp_orb", "xp_orb", True),
+    "mote_hp": ("mote_hp", "mote", "mote", False),
+    "mote_hp_lit": ("mote_hp", "mote", "mote", True),
+    "mote_mp": ("mote_mp", "mote", "mote", False),
+    "mote_mp_lit": ("mote_mp", "mote", "mote", True),
+    "shard_heart": ("shard_heart", "shard_heart", "shard_heart", False),
+    "shard_heart_lit": ("shard_heart", "shard_heart", "shard_heart", True),
+    "shard_mana": ("shard_mana", "shard_mana", "shard_mana", False),
+    "shard_mana_lit": ("shard_mana", "shard_mana", "shard_mana", True),
+    "chest": ("chest", "chest", "chest", False),
 }
