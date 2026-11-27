@@ -29,7 +29,7 @@ async function quitRun(session: Session): Promise<void> {
   await session.tap(KEYS.select);
 }
 
-/** from wherever the game is, through the start menu and the hero screen, into a fresh run */
+/** from wherever the game is, through the start menu, the hero screen and the stage screen, into a fresh run */
 export async function startRunThroughMenu(session: Session, heroId: string): Promise<void> {
   const before = await session.state();
   if (before.mode === "pick") {
@@ -44,6 +44,8 @@ export async function startRunThroughMenu(session: Session, heroId: string): Pro
   await focusEntry(session, (focus) => focus.opens === "hero", KEYS.down);
   await session.tap(KEYS.select);
   await focusEntry(session, (focus) => focus.hero === heroId, KEYS.right);
+  await session.tap(KEYS.select);
+  await session.waitFor((state) => state.menu.screen === "stage", START_TIMEOUT_MS, "the stage screen");
   await session.tap(KEYS.select);
   await session.waitFor(
     // a run begun at a later wave opens its level-up picks at once

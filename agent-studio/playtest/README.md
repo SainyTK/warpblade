@@ -40,7 +40,7 @@ npm run -s playtest -- smoke [--hero <id>|all] [--root <dir>] [--out <file>]
 Loads the game and checks that the start menu opens and that heroes are found.
 Then, for each hero, in a fresh session:
 
-- starts a run through the real menu (Start, then the hero's card);
+- starts a run through the real menu (Start, the hero's card, then the stage panel);
 - waits for wave 1 and checks that the HUD shows the wave and the level;
 - walks right with D and left with A and checks that the hero moved;
 - presses W, J, K, L, I, U and O in turn, checks that none raises an error, that J starts an attack and that W leaves the ground;
