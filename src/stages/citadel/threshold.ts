@@ -1,9 +1,8 @@
 import type { Approach } from "../../types/campaign";
-import { boss, flyer, ledge, site, walker } from "../geometry";
+import { flyer, ledge, site, surge, walker } from "../geometry";
 
 export const threshold: Approach = {
-  rise: 0,
-  room: boss("maw"),
+  room: surge(10),
   parSeconds: 85,
   length: 908,
   slabs: [

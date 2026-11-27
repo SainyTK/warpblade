@@ -1,9 +1,8 @@
 import type { Approach } from "../../types/campaign";
-import { boss, flyer, ledge, pit, site, surge, walker } from "../geometry";
+import { flyer, ledge, pit, site, surge, walker } from "../geometry";
 
 export const frozenCorridor: Approach = {
-  rise: 0,
-  room: surge(40, 10),
+  room: surge(10),
   parSeconds: 70,
   length: 940,
   slabs: [
@@ -45,8 +44,7 @@ export const frozenCorridor: Approach = {
 };
 
 export const icicleCavern: Approach = {
-  rise: 1,
-  room: surge(35, 9, ["rimehound", "cryomancer"]),
+  room: surge(9, ["rimehound", "cryomancer"]),
   parSeconds: 75,
   length: 1010,
   slabs: [
@@ -94,8 +92,7 @@ export const icicleCavern: Approach = {
 };
 
 export const lynxDen: Approach = {
-  rise: 2,
-  room: boss("rimeclaw"),
+  room: surge(10),
   parSeconds: 100,
   length: 900,
   slabs: [

@@ -15,7 +15,7 @@ export function stepGame(): void {
     updateAmbience(STEP);
     return;
   }
-  if (game.mode === "pick" || game.mode === "chest" || game.mode === "map") {
+  if (game.mode === "pick" || game.mode === "chest") {
     settleShake(1);
     return;
   }

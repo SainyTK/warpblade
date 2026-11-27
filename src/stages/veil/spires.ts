@@ -1,9 +1,8 @@
 import type { Approach } from "../../types/campaign";
-import { boss, flyer, ledge, site, walker } from "../geometry";
+import { flyer, ledge, site, surge, walker } from "../geometry";
 
 export const spires: Approach = {
-  rise: 2,
-  room: boss("warden"),
+  room: surge(10),
   parSeconds: 95,
   length: 866,
   slabs: [

@@ -104,17 +104,13 @@ export function earnXp(amount: number): void {
   gainXp(amount * currentBuildStats().growth);
 }
 
-/** a cleared wave: the game pauses on a pick for every point waiting, if any */
-let afterPicks: "play" | "map" = "play";
-
-export function openPicks(from: "play" | "map" = "play"): void {
-  if (progress.picks <= 0 || game.mode !== from) return;
-  afterPicks = from;
+export function openPicks(): void {
+  if (progress.picks <= 0 || game.mode !== "play") return;
   game.mode = "pick";
 }
 
 export function leavePicks(): void {
-  if (game.mode === "pick") game.mode = afterPicks;
+  if (game.mode === "pick") game.mode = "play";
 }
 
 /** recompute after something grew: a higher maximum also fills by what it adds */

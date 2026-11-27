@@ -1,9 +1,8 @@
 import type { Approach } from "../../types/campaign";
-import { boss, flyer, ledge, site, walker } from "../geometry";
+import { flyer, ledge, site, surge, walker } from "../geometry";
 
 export const depths: Approach = {
-  rise: 2,
-  room: boss("sovereign"),
+  room: surge(10),
   parSeconds: 108,
   length: 947,
   slabs: [

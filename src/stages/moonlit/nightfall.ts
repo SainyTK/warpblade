@@ -1,9 +1,8 @@
 import type { Approach } from "../../types/campaign";
-import { boss, flyer, ledge, site, walker } from "../geometry";
+import { flyer, ledge, site, surge, walker } from "../geometry";
 
 export const nightfall: Approach = {
-  rise: 2,
-  room: boss("shepherd"),
+  room: surge(10),
   parSeconds: 73,
   length: 880,
   slabs: [

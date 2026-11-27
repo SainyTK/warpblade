@@ -1,66 +1,55 @@
 import { ENEMIES } from "../../constants/enemies";
 import { HERO_START_X } from "../../constants/hero";
 import { GROUND, W } from "../../constants/stage";
-import { ELITE } from "../../constants/waves";
+import { ROOM_BEATS } from "../../constants/stageArc";
 import { sfx } from "../../services/audio";
-import { RIFT_STAGES, STAGES } from "../../stages";
 import { ARTS } from "../../stages/arts";
 import type { BossCard } from "../../types/bossFight";
-import type { StageId } from "../../types/campaign";
-import type { EnemyType } from "../../types/enemy";
-import { openStages } from "../../utils/campaign";
 import { clamp } from "../../utils/math";
-import { earnArt } from "../arts";
-import { bossArrived, bossFightSettled, openBossFight, resetBossFight, updateBossFight } from "../bossFight";
+import { bandWave, bigFoeHp } from "../../utils/stageArc";
+import {
+  bossArrived,
+  bossFightSettled,
+  bossProfile,
+  openBossFight,
+  resetBossFight,
+  updateBossFight,
+} from "../bossFight";
 import { createRift } from "../effects/rift";
-import { makeEnemy } from "../enemies/enemy";
 import { kindOf } from "../enemies/kinds";
 import { feat } from "../feat";
-import { endRun } from "../runEnd";
-import { character, game, hero, ponytail, progress, scarf, showBanner } from "../state";
+import { miniProfile } from "../miniBoss";
+import { openPicks } from "../progress";
+import { character, game, hero, ponytail, scarf, showBanner } from "../state";
+import { summonFinale } from "./finale";
+import { claimFoe, stageFoe } from "./foes";
 import { resetStageHazard, updateStageHazard } from "./hazard";
 import { updateMentor } from "./mentor";
 import { markPerch } from "./patrol";
 import { updatePits } from "./pits";
-import { GATE_ENTRY, type RouteArea, SPAWN_LEAD, STAGE_XP } from "./route";
+import { type BigFoeBeat, GATE_ENTRY, type RouteArea, type RouteFoe, SPAWN_LEAD } from "./route";
 import { updateSpikes } from "./spikes";
 import { openSurge, updateSurge } from "./surge";
-import { loadStage, trail } from "./trail";
+import { trail } from "./trail";
 
 const CAMERA_LEAD = 0.35;
 const CAMERA_FOLLOW = 13;
-const BOSS_WARNING = 2.2;
-const CLEAR_DELAY = 1.1;
-const STAGE_CLEAR_DELAY = 2.4;
+const BANNER = 2.2;
 
 type Trail = NonNullable<typeof trail>;
 
-const waveFor = (threat: number): number => clamp(Math.round(threat), 1, 30);
+const waveFor = (level: number): number => clamp(Math.round(bandWave(level)), 1, 30);
 
-function addFoe(run: Trail, area: RouteArea, type: EnemyType, x: number, y: number, elite = false) {
-  const enemy = makeEnemy(type, x, y, area.threat, STAGE_XP);
-  enemy.power *= trail?.route.stage.foeDamage ?? 1;
-  enemy.max = Math.round(enemy.max * area.hpScale);
-  enemy.hp = enemy.max;
-  if (elite) {
-    Object.assign(enemy, { elite, max: Math.round(enemy.max * ELITE.hp), xp: Math.round(enemy.xp * ELITE.xp) });
-    enemy.hp = enemy.max;
-  }
-  run.authored.add(enemy);
+function addFoe(run: Trail, foe: RouteFoe): void {
+  const enemy = claimFoe(stageFoe(foe.type, foe.x, foe.y ?? GROUND, foe.level, foe.xp, foe.elite));
   markPerch(enemy);
-  game.enemies.push(enemy);
-  return enemy;
+  run.band = foe.level;
 }
 
 function placeHero(x: number): void {
   scarf.shift(x - hero.x, GROUND - hero.y);
   ponytail.shift(x - hero.x, GROUND - hero.y);
   Object.assign(hero, { x, y: GROUND, vx: 0, vy: 0, ground: true });
-}
-
-function announceStage(run: Trail): void {
-  const stage = run.route.stage;
-  showBanner(stage.name, BOSS_WARNING);
 }
 
 export function startAdventureAt(section: number): void {
@@ -72,133 +61,145 @@ export function startAdventureAt(section: number): void {
   trail.left = area.start;
   trail.farthest = hero.x;
   trail.safeX = hero.x;
-  game.wave = waveFor(area.threat);
+  trail.band = area.enter;
+  game.wave = waveFor(area.enter);
   game.lull = "fight";
   resetBossFight();
   resetStageHazard();
-  announceStage(trail);
+  const stage = trail.route.stage;
+  showBanner(trail.hyper ? `${stage.name}  Hyper` : stage.name, BANNER);
 }
 
-export function enterStage(id: StageId): void {
-  if (!trail) return;
-  loadStage(id);
-  game.enemies = [];
-  game.fx = [];
-  game.pickups = [];
-  game.blazes = [];
-  game.coins += game.coinDrops.filter((coin) => !coin.done).length;
-  game.coinDrops = [];
-  hero.hp = progress.stats.hp;
-  hero.mp = progress.stats.mp;
-  game.mode = "play";
-  startAdventureAt(1);
-}
-
-function finaleCard(run: Trail, foe: EnemyType): BossCard {
+function finaleCard(run: Trail, beat: BigFoeBeat): BossCard {
   const art = run.route.stage.grantsArt;
-  if (art) return { label: "Rift Art", name: ARTS[art].name, sub: "", tone: "art" };
-  return { label: "", name: ENEMIES[foe].name, sub: "Vanquished", tone: "fallen" };
+  if (beat.kind === "boss" && beat.foe === run.route.stage.boss && art)
+    return { label: "Rift Art", name: ARTS[art].name, sub: "", tone: "art" };
+  return { label: "", name: bigFoeName(run, beat), sub: "Vanquished", tone: "fallen" };
 }
 
-function openBossRoom(run: Trail, area: RouteArea, foe: EnemyType): void {
-  const epic = openBossFight(foe, finaleCard(run, foe));
-  if (!epic) showBanner(ENEMIES[foe].name, BOSS_WARNING);
-  const rift = kindOf(foe).rift;
+const bigFoeName = (run: Trail, beat: BigFoeBeat): string =>
+  beat.kind === "mini" ? run.route.stage.mini.name : ENEMIES[beat.foe].name;
+
+function openFight(run: Trail, beat: BigFoeBeat): boolean {
+  if (beat.kind === "elite") return false;
+  const profile = beat.kind === "mini" ? miniProfile(run.route.stage.mini) : bossProfile(beat.foe);
+  return openBossFight(profile, beat.kind, finaleCard(run, beat));
+}
+
+function openBigFoe(run: Trail, area: RouteArea, beat: BigFoeBeat): void {
+  const epic = openFight(run, beat);
+  const name = bigFoeName(run, beat);
+  if (!epic) showBanner(beat.kind === "elite" ? `Elite ${name}` : name, BANNER);
+  const rift = kindOf(beat.foe).rift;
   const x = area.exit - W * 0.26;
   const y = rift.y();
   game.fx.push(
     createRift(x, rift.riftY(y), rift.height, 0, () => {
-      const boss = addFoe(run, area, foe, x, y);
-      run.boss = boss;
+      const elite = beat.kind === "elite";
+      const foe = claimFoe(stageFoe(beat.foe, x, y, beat.level, beat.xp, elite));
+      const hp = bigFoeHp(beat.level, beat.kind, run.mods);
+      run.bigFoe = foe;
+      if (beat.kind === "mini") foe.rank = "mini";
+      if (epic) bossArrived(foe, name, hp);
+      else Object.assign(foe, { max: hp, hp, title: name });
       sfx.bossRoar();
-      if (epic) bossArrived(boss, ENEMIES[foe].name);
     }),
   );
+}
+
+function startBeat(run: Trail, area: RouteArea): void {
+  const beat = area.beats[run.beat];
+  if (!beat) return;
+  if (beat.kind === "surge") {
+    run.band = beat.from;
+    game.wave = waveFor(beat.from);
+    run.surge = openSurge(beat);
+    showBanner("Rift surge", BANNER);
+    sfx.surge();
+    return;
+  }
+  run.band = beat.level;
+  game.wave = waveFor(beat.level);
+  openBigFoe(run, area, beat);
 }
 
 function openRoom(run: Trail, area: RouteArea): void {
   run.left = area.entrance;
   run.gate = area.exit;
-  game.wave = waveFor(area.threat);
+  run.beat = 0;
+  run.lull = 0;
   game.enemies = game.enemies.filter((enemy) => enemy.x >= area.entrance && enemy.hp > 0);
   feat({ kind: "waveReached", wave: game.wave });
-  if (area.room.kind === "boss") {
-    openBossRoom(run, area, area.room.foe);
-    return;
-  }
-  run.surge = openSurge(area);
-  showBanner("Rift surge", BOSS_WARNING);
-  sfx.surge();
+  startBeat(run, area);
 }
 
-function finishStage(run: Trail): void {
-  const stage = run.route.stage;
-  if (!run.cleared.includes(stage.id)) run.cleared.push(stage.id);
-  if (stage.grantsArt) earnArt(stage.grantsArt);
+function beatCleared(run: Trail, area: RouteArea, dt: number): boolean {
+  const beat = area.beats[run.beat];
+  if (!beat) return false;
+  if (beat.kind === "surge") return !!run.surge && updateSurge(run.surge, area, dt);
+  return !!run.bigFoe && run.bigFoe.hp <= 0 && bossFightSettled();
 }
 
-function clearRoom(run: Trail, area: RouteArea): void {
-  const last = run.area === run.route.areas.length - 1;
-  if (area.room.kind === "boss") run.bossesDefeated++;
-  run.area++;
-  run.nextFoe = 0;
-  run.gate = null;
-  run.boss = null;
+function clearBeat(run: Trail, area: RouteArea): void {
+  const beat = area.beats[run.beat];
+  if (beat && beat.kind !== "surge") run.bigFoesDefeated++;
+  if (beat?.kind === "mini") run.miniDefeated = true;
   run.surge = null;
+  run.bigFoe = null;
+  run.beat++;
   game.cleared++;
   game.clearedAt = game.clock;
   feat({ kind: "waveCleared", wave: game.wave, hero: character.id });
-  if (last) {
-    finishStage(run);
-    sfx.levelUp();
+  const lastArea = run.area === run.route.areas.length - 1;
+  if (run.beat < area.beats.length) {
+    run.lull = ROOM_BEATS.pause;
+    const said = beat?.kind === "surge" ? "Surge clear" : beat?.kind === "elite" ? "Elite down" : "";
+    if (said) showBanner(said, ROOM_BEATS.pause);
+    sfx.gate();
     return;
   }
-  showBanner("Gate open", BOSS_WARNING);
+  if (lastArea) {
+    run.finale = true;
+    summonFinale(run, area);
+    return;
+  }
+  run.area++;
+  run.nextFoe = 0;
+  run.gate = null;
+  run.lull = ROOM_BEATS.pause;
+  showBanner("Gate open", BANNER);
   sfx.gate();
 }
 
-function roomCleared(run: Trail, area: RouteArea, dt: number): boolean {
-  if (area.room.kind === "boss") return !!run.boss && run.boss.hp <= 0 && bossFightSettled();
-  return !!run.surge && updateSurge(run.surge, area, dt);
-}
-
-function reachExit(run: Trail): void {
-  run.farthest = run.route.exitX;
-  game.mode = "clear";
-  const final = run.route.stage.kind === "citadel";
-  game.waveTimer = final ? CLEAR_DELAY : STAGE_CLEAR_DELAY;
-  showBanner(final ? "Campaign clear" : "Stage clear", game.waveTimer);
-  sfx.stageClear();
+function updateLull(run: Trail, area: RouteArea, dt: number): void {
+  const before = run.lull;
+  run.lull = Math.max(0, run.lull - dt);
+  const picksAt = ROOM_BEATS.pause - ROOM_BEATS.pickDelay;
+  if (before > picksAt && run.lull <= picksAt) openPicks();
+  if (run.lull > 0 || run.gate === null) return;
+  startBeat(run, area);
 }
 
 function advanceRoute(run: Trail, dt: number): void {
+  if (run.finale) return;
   const area = run.route.areas[run.area];
-  if (!area) {
-    if (hero.x >= run.route.exitX) reachExit(run);
+  if (!area) return;
+  if (run.lull > 0) {
+    updateLull(run, area, dt);
     return;
   }
   if (run.gate !== null) {
-    if (roomCleared(run, area, dt)) clearRoom(run, area);
+    if (beatCleared(run, area, dt)) clearBeat(run, area);
     return;
   }
   if (hero.x < area.start) return;
   let next = area.foes[run.nextFoe];
   while (next && next.x <= hero.x + SPAWN_LEAD) {
-    addFoe(run, area, next.type, next.x, next.y ?? GROUND, next.elite);
+    addFoe(run, next);
     run.nextFoe++;
     next = area.foes[run.nextFoe];
   }
   if (hero.x >= area.entrance + GATE_ENTRY) openRoom(run, area);
-}
-
-export const mapChoices = (): StageId[] => openStages(RIFT_STAGES, trail?.cleared ?? []);
-
-function leaveStage(run: Trail): void {
-  if (run.route.stage.kind === "citadel") {
-    endRun("clear");
-    return;
-  }
-  game.mode = "map";
 }
 
 export function updateAdventure(dt: number): void {
@@ -209,15 +210,8 @@ export function updateAdventure(dt: number): void {
   updateStageHazard(dt);
   updateBossFight(dt);
   if (hero.state === "dead") return;
-  if (game.mode === "clear") {
-    game.waveTimer -= dt;
-    if (game.waveTimer <= 0) leaveStage(trail);
-    return;
-  }
   trail.farthest = Math.max(trail.farthest, hero.x);
   updatePits();
   updateMentor();
   if (game.mode === "play") advanceRoute(trail, dt);
 }
-
-export const stageName = (id: StageId): string => STAGES[id].name;

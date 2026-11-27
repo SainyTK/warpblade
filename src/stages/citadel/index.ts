@@ -12,6 +12,16 @@ export const citadel: StageDef = {
   era: "abyss",
   ground: "stalker",
   flyer: "eye",
-  boss: "unblinking",
+  boss: "sovereign",
+  mini: {
+    name: "Void Reaver",
+    epithet: "First Hound of the Abyss",
+    base: "stalker",
+    light: 0xd060ff,
+    power: 1,
+    moves: ["pillars", "spikes"],
+    adds: ["stalker", "eye"],
+  },
+  twist: { name: "Black Sun", text: "Foes move and strike faster.", foePace: 1.2 },
   areas: [threshold, breach, depths, lastWatch],
 };

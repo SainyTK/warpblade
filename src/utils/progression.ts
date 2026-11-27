@@ -1,5 +1,6 @@
 import { MAX_LEVEL, XP_CURVE } from "../constants/growth";
 import { AGGRESSION, STAGE_WAVES, WAVE_SCALE } from "../constants/waves";
+import type { FoeScale } from "../types/enemy";
 
 /** experience needed to go from this level to the next; 0 at the cap */
 export const xpToNext = (level: number): number =>
@@ -16,7 +17,7 @@ export function xpToReach(level: number): number {
  * how much a wave scales foe HP and experience (compounding), foe damage (linear), and how much shorter foes' pauses and
  * wind-ups get
  */
-export function waveScale(wave: number): { hp: number; damage: number; xp: number; cooldown: number; windup: number } {
+export function waveScale(wave: number): FoeScale & { cooldown: number; windup: number } {
   const n = Math.max(0, Math.min(STAGE_WAVES, wave) - 1);
   return {
     hp: WAVE_SCALE.hp ** n,

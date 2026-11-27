@@ -1,28 +1,26 @@
 import { SURGE } from "../../constants/campaign";
-import { ELITE } from "../../constants/waves";
 import type { EnemyType } from "../../types/enemy";
+import { levelBetween, xpBudget } from "../../utils/stageArc";
 import { createRift } from "../effects/rift";
-import { makeEnemy } from "../enemies/enemy";
 import { kindOf } from "../enemies/kinds";
 import { game, hero } from "../state";
-import { type RouteArea, STAGE_XP } from "./route";
+import { claimFoe, stageFoe } from "./foes";
+import { foeWeight, type RouteArea, type SurgeBeat } from "./route";
 import { type Surge, trail } from "./trail";
 
-function surgeFoes(kinds: readonly EnemyType[], count: number): EnemyType[] {
-  const random = trail?.random;
-  return Array.from({ length: count }, () => (random ? random.pick(kinds) : kinds[0]));
-}
+const isElite = (index: number): boolean => index > 0 && index % (trail?.mods.eliteEvery ?? SURGE.eliteEvery) === 0;
 
-export function openSurge(area: RouteArea): Surge | null {
-  const run = trail;
-  if (!run || area.room.kind !== "surge") return null;
-  const stage = run.route.stage;
-  const kinds = area.room.foes ?? [stage.ground, stage.flyer];
-  const growth = Math.max(0, area.threat - SURGE.growsFromThreat);
-  const count = Math.round(area.room.count * (1 + SURGE.countPerThreat * growth));
-  const cap = Math.min(SURGE.mostCap, Math.round(area.room.cap * SURGE.baseCapShare + SURGE.capPerThreat * growth));
-  const surge: Surge = { foes: surgeFoes(kinds, count), sent: 0, cap, refills: [] };
-  for (let i = 0; i < Math.min(surge.cap, surge.foes.length); i++) surge.refills.push(i * SURGE.opening);
+export function openSurge(beat: SurgeBeat): Surge {
+  const random = trail?.random;
+  const foes = Array.from({ length: beat.count }, () => (random ? random.pick(beat.foes) : beat.foes[0]));
+  const levels = foes.map((_, i) => levelBetween(beat.from, beat.to, i / Math.max(1, foes.length - 1)));
+  const xp = xpBudget(
+    beat.from,
+    beat.to,
+    foes.map((type, i) => ({ level: levels[i], weight: foeWeight(type, isElite(i)) })),
+  );
+  const surge: Surge = { beat, foes, levels, xp, sent: 0, refills: [] };
+  for (let i = 0; i < Math.min(beat.cap, foes.length); i++) surge.refills.push(i * SURGE.opening);
   return surge;
 }
 
@@ -38,24 +36,16 @@ function spawnX(area: RouteArea): number {
 }
 
 function sendFoe(surge: Surge, area: RouteArea): void {
-  const type = surge.foes[surge.sent];
-  const elite = surge.sent > 0 && surge.sent % SURGE.eliteEvery === 0;
+  const index = surge.sent;
+  const type: EnemyType = surge.foes[index];
   surge.sent++;
   const rift = kindOf(type).rift;
   const x = spawnX(area);
   const y = rift.y();
+  if (trail) trail.band = surge.levels[index];
   game.fx.push(
     createRift(x, rift.riftY(y), rift.height, 0, () => {
-      const enemy = makeEnemy(type, x, y, area.threat, STAGE_XP);
-      enemy.power *= trail?.route.stage.foeDamage ?? 1;
-      enemy.max = Math.round(enemy.max * area.hpScale);
-      enemy.hp = enemy.max;
-      if (elite) {
-        Object.assign(enemy, { elite, max: Math.round(enemy.max * ELITE.hp), xp: Math.round(enemy.xp * ELITE.xp) });
-        enemy.hp = enemy.max;
-      }
-      trail?.authored.add(enemy);
-      game.enemies.push(enemy);
+      claimFoe(stageFoe(type, x, y, surge.levels[index], surge.xp[index], isElite(index)));
     }),
   );
 }
@@ -71,7 +61,7 @@ export function updateSurge(surge: Surge, area: RouteArea, dt: number): boolean 
   if (surge.sent >= surge.foes.length) drawStragglersDown(dt);
   const standing = game.enemies.filter((e) => e.hp > 0).length + game.fx.filter((f) => f.rift).length;
   const left = surge.foes.length - surge.sent;
-  const free = Math.min(surge.cap - standing - surge.refills.length, left - surge.refills.length);
+  const free = Math.min(surge.beat.cap - standing - surge.refills.length, left - surge.refills.length);
   for (let i = 0; i < free; i++) surge.refills.push(SURGE.refill);
   for (let i = 0; i < surge.refills.length; i++) surge.refills[i] -= dt;
   const due = surge.refills.filter((t) => t <= 0).length;
@@ -79,9 +69,6 @@ export function updateSurge(surge: Surge, area: RouteArea, dt: number): boolean 
   for (let i = 0; i < due && surge.sent < surge.foes.length; i++) sendFoe(surge, area);
   return surge.sent >= surge.foes.length && standing === 0 && surge.refills.length === 0;
 }
-
-export const surgeLeft = (surge: Surge): number =>
-  surge.foes.length - surge.sent + game.enemies.filter((e) => e.hp > 0).length;
 
 export function surgeEnding(): boolean {
   const surge = trail?.surge;

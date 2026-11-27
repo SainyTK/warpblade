@@ -11,6 +11,15 @@ export const prologue: StageDef = {
   ground: "thornback",
   flyer: "moth",
   boss: "oakheart",
-  foeDamage: 0.6,
+  mini: {
+    name: "Bramble Tusk",
+    epithet: "Eldest of the Thornbacks",
+    base: "thornback",
+    light: 0xff7a5a,
+    power: 1,
+    moves: ["spikes", "call"],
+    adds: ["thornback", "moth"],
+  },
+  twist: { name: "Kind Sun", text: "Foes hit softer.", foeDamage: 0.6 },
   areas: [firstSteps, sunlit],
 };

@@ -1,7 +1,7 @@
 import { ENEMIES } from "../../constants/enemies";
 import { GROUND } from "../../constants/stage";
 import { RANK_HP } from "../../constants/waves";
-import type { Enemy, EnemyType } from "../../types/enemy";
+import type { Enemy, EnemyType, FoeScale } from "../../types/enemy";
 import type { Box } from "../../types/world";
 import { waveScale } from "../../utils/progression";
 import { rng } from "../state";
@@ -14,9 +14,13 @@ export const walks = (e: Enemy): boolean => !kindOf(e.type).flies;
 
 /** a foe scaled to the wave it comes in, mini bosses and the Warden tougher still by their rank */
 export function makeEnemy(type: EnemyType, x: number, y: number, wave: number, xpShare = 1): Enemy {
+  const scale = waveScale(wave);
+  return makeScaledEnemy(type, x, y, { ...scale, xp: Math.round(ENEMIES[type].xp * scale.xp * xpShare) });
+}
+
+export function makeScaledEnemy(type: EnemyType, x: number, y: number, scale: FoeScale): Enemy {
   const def = ENEMIES[type];
   const kind = kindOf(type);
-  const scale = waveScale(wave);
   const hp = Math.round(def.hp * scale.hp * RANK_HP[def.rank]);
   return {
     type,
@@ -46,7 +50,7 @@ export function makeEnemy(type: EnemyType, x: number, y: number, wave: number, x
     swings: [],
     side: rng.chance(0.5) ? 1 : -1,
     power: scale.damage,
-    xp: Math.round(def.xp * scale.xp * xpShare),
+    xp: scale.xp,
     phase: 1,
     elite: false,
     chill: 0,

@@ -2,8 +2,7 @@ import type { Approach } from "../../types/campaign";
 import { flyer, ledge, pit, site, surge, walker } from "../geometry";
 
 export const reedwade: Approach = {
-  rise: 0,
-  room: surge(36, 10, ["mire", "mire", "mire", "stormkite"]),
+  room: surge(10, ["mire", "mire", "mire", "stormkite"]),
   parSeconds: 75,
   length: 960,
   slabs: [

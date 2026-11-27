@@ -1,9 +1,8 @@
 import type { Approach } from "../../types/campaign";
-import { boss, flyer, ledge, pit, site, surge, walker } from "../geometry";
+import { flyer, ledge, pit, site, surge, walker } from "../geometry";
 
 export const brokenBridges: Approach = {
-  rise: 0,
-  room: surge(40, 10, ["skyguard", "galehawk", "sparkjelly"]),
+  room: surge(10, ["skyguard", "galehawk", "sparkjelly"]),
   parSeconds: 75,
   length: 1000,
   slabs: [
@@ -44,8 +43,7 @@ export const brokenBridges: Approach = {
 };
 
 export const floatingIslands: Approach = {
-  rise: 1,
-  room: surge(35, 9, ["galehawk", "sparkjelly"]),
+  room: surge(9, ["galehawk", "sparkjelly"]),
   parSeconds: 70,
   length: 960,
   slabs: [
@@ -88,8 +86,7 @@ export const floatingIslands: Approach = {
 };
 
 export const roost: Approach = {
-  rise: 2,
-  room: boss("tempestroc"),
+  room: surge(10),
   parSeconds: 95,
   length: 900,
   slabs: [

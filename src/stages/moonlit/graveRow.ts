@@ -2,8 +2,7 @@ import type { Approach } from "../../types/campaign";
 import { flyer, ledge, pit, site, surge, walker } from "../geometry";
 
 export const graveRow: Approach = {
-  rise: 0,
-  room: surge(36, 10, ["husk", "husk", "wisp"]),
+  room: surge(10, ["husk", "husk", "wisp"]),
   parSeconds: 75,
   length: 980,
   slabs: [
