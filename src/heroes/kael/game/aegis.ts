@@ -4,6 +4,7 @@ import { dealDamage } from "../../../game/damage";
 import { createFloorRing } from "../../../game/effects/floorRing";
 import { createImpact } from "../../../game/effects/impact";
 import { enemyCenter } from "../../../game/enemies/enemy";
+import { skillFx } from "../../../game/skillFx";
 import { skillEvolved, skillLevel, skillValues, withBuild } from "../../../game/skills/query";
 import { fxRng, game, hero, lights, particles, progress } from "../../../game/state";
 import { hitStop, shake } from "../../../game/world";
@@ -31,6 +32,7 @@ export function aegisBlocked(foe: Enemy | null): void {
   const v = skillValues(SKILL);
   kael.plates = Math.min(v.plates, kael.plates + 1);
   sfx.chime(kael.plates);
+  skillFx(SKILL, "mark", { x: hero.x + hero.face * 9, y: hero.y - 19, face: hero.face }, { quiet: true });
   if (!skillEvolved(SKILL) || !foe) return;
   const dir = Math.sign(enemyCenter(foe)[0] - hero.x) || hero.face;
   game.fx.push(createCrystalWave(hero.x + dir * 8, hero.y - 20, dir, progress.stats.ad * v.reflect, SKILL));
@@ -42,6 +44,8 @@ function shatter(foe: Enemy, plates: number): void {
   const [x, y] = enemyCenter(foe);
   const reach = withBuild("area", v.reach);
   const blow = progress.stats.ad * v.shard * plates;
+  skillFx(SKILL, "burst", { x, y, face: hero.face, reach: 10 + plates * 2 }, { damage: blow });
+  skillFx(SKILL, "spikes", { x, y: foe.y, face: hero.face, reach: reach * 0.6 }, { damage: blow, quiet: true });
   game.fx.push(createFloorRing(x, foe.y, reach, C, 0.35));
   lights.add(x, y, reach + 10, C[4], 0.9, 0.3);
   for (let i = 0; i < plates * AEGIS_LOOK.shards; i++) {

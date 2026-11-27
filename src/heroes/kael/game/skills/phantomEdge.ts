@@ -1,6 +1,7 @@
 import { ECHO_DELAY } from "../../../../constants/combat";
 import { GROUND } from "../../../../constants/stage";
 import { enemyBox, enemyCenter, walks } from "../../../../game/enemies/enemy";
+import { skillFx } from "../../../../game/skillFx";
 import { skillValues, withBuild } from "../../../../game/skills/query";
 import { game, hero, progress, rng } from "../../../../game/state";
 import type { Enemy } from "../../../../types/enemy";
@@ -39,6 +40,13 @@ function repeat(foe: Enemy, power: number): void {
   const x = side > 0 ? box[0] - 8 : box[2] + 8;
   const y = walks(foe) ? foe.y : Math.min(GROUND, enemyCenter(foe)[1] + 18);
   showPhantom(x, y, side, ECHO_DELAY + 0.2);
+  const [cx, cy] = enemyCenter(foe);
+  skillFx(
+    ID,
+    "slash",
+    { x: cx - side * 8, y: cy, face: side, reach: 16 },
+    { damage: progress.stats.ad * power * v.repeat, delay: ECHO_DELAY },
+  );
   game.fx.push(createEcho(foe, progress.stats.ad * power * v.repeat, side, ID, !!v.heavy));
 }
 

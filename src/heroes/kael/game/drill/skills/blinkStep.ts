@@ -1,5 +1,6 @@
 import { drillFighter } from "../../../../../drill";
-import { hero } from "../../../../../game/state";
+import { skillFx } from "../../../../../game/skillFx";
+import { hero, progress } from "../../../../../game/state";
 import type { KaelDrillSkill } from "../../../types/drillSkill";
 import { later } from "../later";
 import { foesNear, skillStrike } from "../strike";
@@ -22,6 +23,8 @@ export const BLINK_STEP_DRILL: KaelDrillSkill = {
       hero.inv = Math.max(hero.inv, values.inv);
     }
     if (dashing && !blink.dashing) {
+      const at = { x: h.x, y: h.y - 15, face: h.face, toX: h.x + h.face * 46, toY: h.y - 15 };
+      skillFx(ID, "trail", at, { damage: progress.stats.ad * (values.after ?? 0.5), quiet: !values.after });
       if (h.airDashActive && values.refresh) {
         h.airSlashes = 0;
       }
@@ -30,6 +33,12 @@ export const BLINK_STEP_DRILL: KaelDrillSkill = {
         const y = h.y - 16;
         const radius = evolved ? values.shadow : 24;
         const cut = () => {
+          skillFx(
+            ID,
+            "slash",
+            { x, y, face: h.face, reach: radius * 0.7 },
+            { damage: progress.stats.ad * values.after },
+          );
           for (const foe of foesNear(x, y, radius)) {
             skillStrike(foe, values.after, ID);
           }

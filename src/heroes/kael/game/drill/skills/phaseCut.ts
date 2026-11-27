@@ -1,6 +1,7 @@
 import { drillFighter } from "../../../../../drill";
 import { clampHeroX } from "../../../../../game/hero/terrain";
-import { hero } from "../../../../../game/state";
+import { skillFx } from "../../../../../game/skillFx";
+import { hero, progress } from "../../../../../game/state";
 import type { Enemy } from "../../../../../types/enemy";
 import type { KaelDrillSkill } from "../../../types/drillSkill";
 import { foesAhead, skillStrike } from "../strike";
@@ -40,7 +41,12 @@ export const PHASE_CUT_DRILL: KaelDrillSkill = {
     for (const foe of evolved ? targets : [far]) {
       skillStrike(foe, values.cut ?? 0, ID);
     }
+    const fromX = h.x;
     h.x = clampHeroX(far.x + h.face * 12);
+    const damage = progress.stats.ad * (values.cut ?? 0) * (evolved ? targets.length : 1);
+    skillFx(ID, "trail", { x: fromX, y: h.y - 16, face: h.face, toX: h.x, toY: h.y - 16 }, { damage });
+    skillFx(ID, "mark", { x: fromX, y: h.y - 16 }, { quiet: true });
+    skillFx(ID, "mark", { x: h.x, y: h.y - 16 }, { quiet: true, delay: 0.06 });
     h.face = h.face === 1 ? -1 : 1;
     hero.inv = Math.max(hero.inv, values.inv ?? 0);
     phase.primed = true;

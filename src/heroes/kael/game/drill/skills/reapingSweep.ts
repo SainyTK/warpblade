@@ -1,6 +1,7 @@
 import { drillFighter } from "../../../../../drill";
 import { staggerFoe } from "../../../../../game/enemies/stagger";
-import { game, hero } from "../../../../../game/state";
+import { skillFx } from "../../../../../game/skillFx";
+import { game, hero, progress } from "../../../../../game/state";
 import type { KaelDrillSkill } from "../../../types/drillSkill";
 import { skillStrike } from "../strike";
 
@@ -24,7 +25,14 @@ export const REAPING_SWEEP_DRILL: KaelDrillSkill = {
       foe.chill = Math.max(foe.chill, values.chill);
     }
   },
-  slashed(strike, _landed, { values, evolved }) {
+  slashed(strike, landed, { values, evolved }) {
+    if (strike === "first") {
+      const at = { x: hero.x, y: hero.y - 16, face: hero.face, reach: 24 * (1 + (values.reach ?? 0)) };
+      skillFx(ID, "slash", at, { damage: progress.stats.ad * (1 + (values.sweep ?? 0)), quiet: !landed });
+      if (evolved) {
+        skillFx(ID, "wave", { x: hero.x, y: hero.y, face: hero.face, reach: values.harvest }, { quiet: true });
+      }
+    }
     if (strike !== "first" || !values.behind) {
       return;
     }

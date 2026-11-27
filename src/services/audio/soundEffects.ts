@@ -1,5 +1,5 @@
 import { MATERIAL_SOUND, RESONANCE_PITCH, SPELL_SOUND } from "../../constants/audio";
-import type { HitMaterial } from "../../types/audio";
+import type { HitMaterial, SoundId } from "../../types/audio";
 import type { ElementId } from "../../types/campaign";
 import { audioGraph, startAudioGraph } from "./graph";
 import { playSample as play } from "./samples";
@@ -171,5 +171,8 @@ export const sfx = {
   },
   menuConfirm(): void {
     play("menuConfirm");
+  },
+  layer(id: SoundId, pitch: number, volume: number): void {
+    play(id, { pitch, volume });
   },
 };

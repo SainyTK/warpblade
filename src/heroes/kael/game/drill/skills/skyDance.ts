@@ -1,4 +1,6 @@
 import { drillFighter } from "../../../../../drill";
+import { skillFx } from "../../../../../game/skillFx";
+import { progress } from "../../../../../game/state";
 import { dust } from "../../../../../game/world";
 import type { KaelDrillSkill } from "../../../types/drillSkill";
 import { foesNear, skillStrike } from "../strike";
@@ -18,6 +20,8 @@ export const SKY_DANCE_DRILL: KaelDrillSkill = {
       return;
     }
     if (h.wallLock > dance.wallLock && values.kick) {
+      const kick = { x: h.x - h.face * 8, y: h.y - 16, face: -h.face, reach: 10 };
+      skillFx(ID, "burst", kick, { damage: progress.stats.ad * values.kick });
       for (const foe of foesNear(h.x - h.face * 10, h.y - 16, 30)) {
         skillStrike(foe, values.kick, ID);
       }
@@ -27,6 +31,8 @@ export const SKY_DANCE_DRILL: KaelDrillSkill = {
     }
     if (h.grounded && !dance.grounded && dance.slashed && values.stomp) {
       const reach = evolved ? values.comet : 34;
+      skillFx(ID, "nova", { x: h.x, y: h.y, reach }, { damage: progress.stats.ad * values.stomp });
+      skillFx(ID, "pillar", { x: h.x, y: h.y, reach: 26 }, { quiet: true, damage: progress.stats.ad * values.stomp });
       for (const foe of foesNear(h.x, h.y - 10, reach)) {
         skillStrike(foe, values.stomp, ID, { stun: 0.5 });
         if (evolved) {

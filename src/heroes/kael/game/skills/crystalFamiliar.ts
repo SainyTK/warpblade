@@ -3,6 +3,7 @@ import { fleck, glow, hairline, place, polygon, px } from "../../../../engine/fr
 import { dealDamage } from "../../../../game/damage";
 import { ignite } from "../../../../game/enemies/burn";
 import { enemyCenter } from "../../../../game/enemies/enemy";
+import { skillFx } from "../../../../game/skillFx";
 import { skillValues, withBuild } from "../../../../game/skills/query";
 import { nearestFoe, touches } from "../../../../game/skills/targets";
 import { game, hero, progress, rng } from "../../../../game/state";
@@ -81,6 +82,8 @@ function strike(s: Shard, foe: Enemy, evolved: boolean): void {
   const v = skillValues(ID);
   const damage = progress.stats.ap * v.power;
   dealDamage(foe, damage, { source: ID, fromX: s.x, kx: Math.sign(s.vx) * SHARD.kick });
+  const [hx, hy] = enemyCenter(foe);
+  skillFx(ID, "burst", { x: hx, y: hy, face: Math.sign(s.vx) || 1, reach: 7 }, { damage, quiet: true });
   if (s.element === "fire") ignite(foe, ELEMENT_HIT.burn);
   if (s.element === "ice") foe.chill = Math.max(foe.chill, ELEMENT_HIT.chill);
   if (s.element !== "volt" && !evolved) return;

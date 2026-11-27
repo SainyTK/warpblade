@@ -1,4 +1,5 @@
 import { enemyCenter } from "../../../../../game/enemies/enemy";
+import { skillFx } from "../../../../../game/skillFx";
 import { game, progress } from "../../../../../game/state";
 import type { Enemy } from "../../../../../types/enemy";
 import type { KaelDrillSkill, SkillNumbers } from "../../../types/drillSkill";
@@ -8,6 +9,9 @@ const ID = "k_volt";
 
 function arc(foe: Enemy, values: SkillNumbers, delay: number): void {
   const ap = progress.stats.ap;
+  const [x, y] = enemyCenter(foe);
+  const damage = ap * ((values.bolt ?? 0) + values.arc * values.arcs);
+  skillFx(ID, "bolt", { x, y, reach: y - 6 }, { damage, delay });
   game.fx.push(
     createLightning(foe, enemyCenter(foe), {
       damage: ap * (values.bolt ?? 0),

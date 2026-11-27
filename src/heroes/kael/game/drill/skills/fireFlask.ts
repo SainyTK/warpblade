@@ -2,6 +2,8 @@ import { drillSession } from "../../../../../drill";
 import { ignite } from "../../../../../game/enemies/burn";
 import { enemyCenter } from "../../../../../game/enemies/enemy";
 import { staggerFoe } from "../../../../../game/enemies/stagger";
+import { skillFx } from "../../../../../game/skillFx";
+import { progress } from "../../../../../game/state";
 import type { ElementProjectile } from "../../../../../types/drill";
 import type { KaelDrillSkill } from "../../../types/drillSkill";
 import { foesNear, skillStrike } from "../strike";
@@ -20,6 +22,9 @@ export const FIRE_FLASK_DRILL: KaelDrillSkill = {
     }
     ignite(foe, values.burn);
     skillStrike(foe, values.blast ?? 0, ID);
+    const [bx, by] = enemyCenter(foe);
+    const blast = { x: bx, y: by, reach: 12 * (1 + (values.area ?? 0)) };
+    skillFx(ID, "burst", blast, { damage: progress.stats.ad * (values.blast ?? 0.4) * 3 });
     if (values.knock) {
       staggerFoe(foe, values.knock);
     }
@@ -32,6 +37,7 @@ export const FIRE_FLASK_DRILL: KaelDrillSkill = {
         }
         const [nx, ny] = enemyCenter(near);
         session.elementImpacts.push({ spell, x: nx, y: ny, face: 1, age: 0, fromSword: true });
+        skillFx(ID, "burst", { x: nx, y: ny, reach: 9 }, { quiet: true, damage: progress.stats.ad * values.blast * 3 });
         skillStrike(near, values.blast, ID);
         ignite(near, values.burn);
       }
@@ -42,6 +48,7 @@ export const FIRE_FLASK_DRILL: KaelDrillSkill = {
       return;
     }
     const [x, y] = enemyCenter(foe);
+    skillFx(ID, "burst", { x, y, reach: 8 }, { quiet: true, damage: progress.stats.ad * values.flare });
     for (const near of foesNear(x, y, 26)) {
       skillStrike(near, values.flare, ID);
     }
