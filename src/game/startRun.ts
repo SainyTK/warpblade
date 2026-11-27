@@ -1,11 +1,9 @@
-import { HEAD_START_LEVEL } from "../constants/shopSkills";
 import { STAGE_WAVES } from "../constants/waves";
 import { track } from "../services/analytics";
 import { isPlaytestSession, readPlaytestJob, readPlaytestStart, readTrainingHero } from "../services/playtestStart";
 import { STAGES } from "../stages";
 import { startRunAchievements } from "../store/achievements";
 import { chosenJob } from "../store/jobs";
-import { ownsSkill } from "../store/meta";
 import { foundArts, foundTools, startRunUnlocks } from "../store/unlocks";
 import type { StageChoice, StageId } from "../types/campaign";
 import { parseStartBuild } from "../utils/build";
@@ -50,7 +48,6 @@ export function startRun(banner: string, next: StageChoice = choice): void {
   startRunAchievements();
   startRunUnlocks();
   track("run_start", { hero: character.id, coop: false, stage: next.stage, hyper: next.hyper ? 1 : 0 });
-  if (ownsSkill("headStart")) gainXp(xpToReach(HEAD_START_LEVEL));
   const playtest = readPlaytestStart();
   if (playtest?.section || playtest?.stage || (!playtest?.wave && !isPlaytestSession())) {
     beginAdventure(rng, playtestStage(playtest?.stage ?? null, next.stage), next.hyper);

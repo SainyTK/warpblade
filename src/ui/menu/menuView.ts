@@ -1,6 +1,7 @@
 import type { MenuContext, MenuScreen, MenuView } from "../../types/menu";
 import { byId } from "../dom";
 import { achievementsScreen } from "./achievementsScreen";
+import { armoryScreen } from "./armoryScreen";
 import { codexScreen } from "./codexScreen";
 import { controlsScreen } from "./controlsScreen";
 import { coopScreen } from "./coopScreen";
@@ -10,7 +11,6 @@ import { focusEntry } from "./menuNav";
 import { menuContext, menuScreen } from "./menuState";
 import { optionsScreen } from "./optionsScreen";
 import { resultScreen } from "./resultScreen";
-import { shopScreen } from "./shopScreen";
 import { stageScreen } from "./stageScreen";
 
 const root = byId("menu");
@@ -22,7 +22,7 @@ const SCREENS: Record<MenuScreen, (context: MenuContext) => MenuView> = {
   main: mainScreen,
   controls: controlsScreen,
   options: optionsScreen,
-  shop: shopScreen,
+  armory: armoryScreen,
   result: resultScreen,
   hero: heroScreen,
   stage: stageScreen,

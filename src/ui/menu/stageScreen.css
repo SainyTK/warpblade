@@ -141,7 +141,7 @@
   image-rendering: pixelated;
 }
 .stage-lock.deny {
-  animation: shop-deny 240ms steps(1) both;
+  animation: row-deny 240ms steps(1) both;
 }
 .stage-modes {
   grid-area: auto;
@@ -157,7 +157,7 @@
   opacity: 0.6;
 }
 .stage-mode.deny {
-  animation: shop-deny 240ms steps(1) both;
+  animation: row-deny 240ms steps(1) both;
 }
 @media (max-width: 600px) and (min-height: 521px) {
   .stage-panel {

@@ -5,7 +5,7 @@ import { CHARACTERS } from "../../heroes/roster";
 import { copyText } from "../../services/clipboard";
 import { saveHeroChoice } from "../../services/heroChoice";
 import { roomView } from "../../store/coop";
-import { heroUnlocked } from "../../store/meta";
+import { heroUnlocked } from "../../store/unlocks";
 import type { MenuView } from "../../types/menu";
 import { readRoomCode, typedRoomCode } from "../../utils/roomCode";
 import { el } from "../dom";

@@ -1,3 +1,4 @@
+import type { Feat } from "./achievement";
 import type { Card } from "./build";
 import type { GameMode } from "./game";
 import type { InputAction } from "./input";
@@ -40,12 +41,16 @@ export interface GuestHud {
   down: boolean;
 }
 
+export interface Loadout {
+  items: Record<string, number>;
+  skills: string[];
+}
+
 /** guest to host */
 export type GuestMessage =
-  | { t: "hello"; hero: string; owned: Record<string, number>; version: string }
+  | { t: "hello"; hero: string; loadout: Loadout; version: string }
   | { t: "hero"; hero: string }
-  /** the guest bought something in its shop while in the room */
-  | { t: "shop"; owned: Record<string, number> }
+  | { t: "loadout"; loadout: Loadout }
   | { t: "key"; a: InputAction; d: boolean }
   | { t: "pick"; answer: PickAnswer<PickWire> }
   /** the guest has seen what their chest gave */
@@ -65,6 +70,7 @@ export type HostMessage =
   | { t: "probe"; at: number }
   | { t: "start" }
   | { t: "hud"; hud: GuestHud }
+  | { t: "feat"; feat: Feat }
   | { t: "end"; outcome: RunOutcome; wave: number; coins: number; report: RunReport }
   /** the player in this place left the room */
   | { t: "left"; slot: number }

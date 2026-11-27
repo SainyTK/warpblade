@@ -4,16 +4,16 @@ import { CHARACTERS } from "../../../heroes/roster";
 import { hasSkillArt, skillArtUrl } from "../../../skillArt";
 import { hex } from "../../../utils/color";
 import { spriteUrl } from "../../spriteUrl";
+import { ARMORY_ICONS } from "./armory";
 import { BOON_ICONS } from "./boon";
 import { ART_ICONS, ELEMENT_ICONS } from "./elements";
-import { SHOP_ICONS } from "./shop";
 
 const SIZE = 16;
 const OUTLINE = hex("#0a0612");
-/** the icons every hero shares, by boon, shop item or charm id */
+/** the icons every hero shares, by boon, Armory item or charm id */
 const SHARED_ICONS: Record<string, (s: SpriteCanvas) => void> = {
   ...BOON_ICONS,
-  ...SHOP_ICONS,
+  ...ARMORY_ICONS,
   ...ELEMENT_ICONS,
   ...ART_ICONS,
 };
@@ -30,7 +30,7 @@ function iconDrawing(id: string): ((s: SpriteCanvas) => void) | undefined {
 const canvas = new SpriteCanvas(SIZE, SIZE, 0, 0);
 const cache = new Map<string, string>();
 
-/** a skill's or shop item's icon as a PNG data URL: its generated art, or its drawing made once and kept */
+/** a skill's or Armory item's icon as a PNG data URL: its generated art, or its drawing made once and kept */
 export function iconUrl(id: string): string {
   const art = skillArtUrl(id);
   if (art) return art;

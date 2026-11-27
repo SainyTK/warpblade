@@ -183,9 +183,9 @@ export const ACHIEVEMENTS: readonly Achievement[] = [
   {
     id: "shop-10",
     name: "Outfitted",
-    text: "Buy 10 levels or skills in the Shop.",
+    text: "Buy 10 levels in the Armory.",
     group: "Coins",
-    goal: { kind: "shopLevels", need: 10 },
+    goal: { kind: "armoryLevels", need: 10 },
     reward: 30,
   },
   {

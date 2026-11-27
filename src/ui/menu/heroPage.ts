@@ -1,5 +1,6 @@
 import { chosenJob } from "../../store/jobs";
-import { heroPrice, heroUnlocked, metaBonus } from "../../store/meta";
+import { armoryBonus } from "../../store/meta";
+import { heroUnlock, heroUnlocked, isSkillOpen } from "../../store/unlocks";
 import type { CharacterDef } from "../../types/character";
 import type { Stats } from "../../types/stats";
 import { jobBlurb, jobTitle } from "../../utils/jobs";
@@ -9,7 +10,7 @@ import { type HeroLock, heroLock } from "./heroLock";
 import { heroPortrait } from "./heroPortrait";
 import { jobRow } from "./jobRow";
 
-/** each stat as a share of this, for the bars; full is about the strongest hero with every shop level bought */
+/** each stat as a share of this, for the bars; full is about the strongest hero with every Armory level bought */
 const STAT_BARS: readonly { label: string; value: (s: Stats) => number; full: number }[] = [
   { label: "HP", value: (s) => s.hp, full: 180 },
   { label: "Attack", value: (s) => s.ad, full: 18 },
@@ -20,11 +21,11 @@ const STAT_BARS: readonly { label: string; value: (s: Stats) => number; full: nu
 
 const share = (value: number, full: number): string => `${Math.round(Math.min(1, value / full) * 100)}%`;
 
-/** the hero's own stats at level 1, and in a lighter part what the shop adds, which every hero gets alike */
+/** the hero's own stats at level 1, and in a lighter part what the Armory adds, which every hero gets alike */
 function statBars(c: CharacterDef): HTMLElement {
   const list = el("dl", "hero-stats");
   const own = computeStats(c, 1);
-  const bought = computeStats(c, 1, [], metaBonus());
+  const bought = computeStats(c, 1, [], armoryBonus());
   for (const s of STAT_BARS) {
     const row = el("div", "");
     const bar = el("dd", "hero-bar");
@@ -39,16 +40,17 @@ function statBars(c: CharacterDef): HTMLElement {
   return list;
 }
 
-/** what the hero brings to a run besides stats: their special */
+/** what the hero brings to a run besides stats: their special, and how many of their skills the cards can deal */
 function traits(c: CharacterDef): HTMLElement {
   const box = el("p", "hero-traits");
-  box.append(`Ultimate: ${c.special.name}`);
+  const open = c.skills.filter((s) => isSkillOpen(s.id)).length;
+  box.append(el("span", "", `Ultimate: ${c.special.name}`), el("span", "", `Skills: ${open} of ${c.skills.length}`));
   return box;
 }
 
 export interface HeroPage {
   root: HTMLElement;
-  /** the padlock and price, for a hero still to unlock */
+  /** the padlock with the goal or the price, for a hero still to unlock */
   lock: HeroLock | null;
   /** the job row's entry, for a hero with jobs */
   jobs: HTMLElement | null;
@@ -56,7 +58,7 @@ export interface HeroPage {
 
 /**
  * everything the hero screen tells about one hero: portrait, name, title, stats, the job row for a hero with jobs,
- * traits, blurb, and the price while locked. The portrait, title and blurb follow the chosen job, and `changed` hears of
+ * traits, blurb, and the goal or the price while locked. The portrait, title and blurb follow the chosen job, and `changed` hears of
  * each new choice.
  */
 export function heroPage(c: CharacterDef, changed: (job: string | null) => void): HeroPage {
@@ -86,11 +88,11 @@ export function heroPage(c: CharacterDef, changed: (job: string | null) => void)
   }
   root.append(traits(c), blurb);
   const jobs = row?.entry ?? null;
-  const price = heroPrice(c.id);
-  if (price === null || heroUnlocked(c.id)) return { root, lock: null, jobs };
+  const def = heroUnlock(c.id);
+  if (!def || heroUnlocked(c.id)) return { root, lock: null, jobs };
   root.dataset.locked = "";
   img.alt = `${c.name}, locked`;
-  const lock = heroLock(price);
+  const lock = heroLock(def);
   root.append(lock.root);
   return { root, lock, jobs };
 }

@@ -1,5 +1,5 @@
 import type { Achievement, Goal, GoalProgress, GoalSource } from "../types/achievement";
-import { stageKey } from "./trackedStats";
+import { heroStatKey, stageKey } from "./trackedStats";
 
 /** what a goal has counted so far */
 function goalCount(g: Goal, src: GoalSource): number {
@@ -14,10 +14,18 @@ function goalCount(g: Goal, src: GoalSource): number {
       return src.stats.foes[g.foe] ?? 0;
     case "hero":
       return src.stats.hero[g.stat] ?? 0;
-    case "shopLevels":
-      return src.shopLevels;
+    case "heroStat":
+      return src.stats.hero[heroStatKey(g.hero, g.stat)] ?? 0;
+    case "armoryLevels":
+      return src.armoryLevels;
     case "heroesBought":
       return src.heroesBought;
+    case "skillsFound":
+      return src.skillsFound;
+    case "fusionsFound":
+      return src.fusionsFound;
+    case "goldSpent":
+      return src.goldSpent;
     case "stageClears":
       return src.stats.stages[stageKey(g.stage, g.hyper)] ?? 0;
     case "goalsMet":

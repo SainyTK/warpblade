@@ -5,7 +5,7 @@ import { ULT_COOLDOWN } from "../constants/ultimate";
 import { Lights } from "../engine/lights";
 import { Particles } from "../engine/particles";
 import { CHARACTERS } from "../heroes/roster";
-import { metaBonus, metaToolBonus } from "../store/meta";
+import { armoryBonus, armoryToolBonus } from "../store/meta";
 import type { CharacterDef } from "../types/character";
 import type { GameState } from "../types/game";
 import type { Hero } from "../types/hero";
@@ -96,11 +96,11 @@ export function freshProgress(): Progress {
     level: 1,
     xp: 0,
     picks: 0,
-    stats: computeStats(character, 1, [], metaBonus()),
+    stats: computeStats(character, 1, [], armoryBonus()),
     ultimate: character.special.id,
     comboLimit: character.comboHits,
     airLimit: AIR_STRING.hits,
-    build: freshBuild(metaToolBonus()),
+    build: freshBuild(armoryToolBonus()),
     resonance: emptyRanks(),
     fusions: [],
     heartShards: 0,

@@ -1,26 +1,25 @@
-/* Achievements: shop rows with a trophy, gold once earned; the goal and its progress until then. */
 .menu[data-screen="achievements"] .menu-panel {
   width: min(600px, 100%);
 }
-.shop-item.ach-item {
+.list-row.ach-item {
   --accent: var(--brass);
   --accent-dark: var(--gold-dark);
   cursor: default;
 }
-.shop-item.ach-item[data-state="open"],
-.shop-item.ach-item[data-state="hidden"] {
+.list-row.ach-item[data-state="open"],
+.list-row.ach-item[data-state="hidden"] {
   --accent: var(--key);
   --accent-dark: var(--line);
 }
-.ach-item[data-state="open"] .shop-name,
-.ach-item[data-state="hidden"] .shop-name {
+.ach-item[data-state="open"] .row-name,
+.ach-item[data-state="hidden"] .row-name {
   color: var(--mist);
 }
-.ach-item[data-state="open"]:focus .shop-name,
-.ach-item[data-state="hidden"]:focus .shop-name {
+.ach-item[data-state="open"]:focus .row-name,
+.ach-item[data-state="hidden"]:focus .row-name {
   color: var(--text);
 }
-.ach-item[data-state="earned"]:focus .shop-name {
+.ach-item[data-state="earned"]:focus .row-name {
   color: var(--gold);
 }
 .ach-item .medal {

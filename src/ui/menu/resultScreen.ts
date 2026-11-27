@@ -7,7 +7,7 @@ import { runAchievements } from "../../store/achievements";
 import { inRoom } from "../../store/coop";
 import { bank } from "../../store/meta";
 import { stageBest } from "../../store/stageRecords";
-import { unlockedThisRun } from "../../store/unlocks";
+import { closestGoals, unlockedThisRun } from "../../store/unlocks";
 import type { Achievement } from "../../types/achievement";
 import type { MenuView } from "../../types/menu";
 import type { RunOutcome, StageResult } from "../../types/run";
@@ -19,6 +19,7 @@ import { runFacts } from "../results/runFacts";
 import { sourceTable } from "../results/sourceTable";
 import { stageBestTable } from "../results/stageBest";
 import { foundList } from "../unlocks/foundList";
+import { goalList } from "../unlocks/goalList";
 import { startGame, startStage } from "./menuActions";
 import { menuItem } from "./menuItem";
 import { showScreen } from "./menuState";
@@ -42,6 +43,7 @@ function line(label: string, value: HTMLElement): HTMLElement {
 
 const SHOWN = 3;
 const UNLOCKED_SHOWN = 8;
+const GOALS_SHOWN = 3;
 
 function earnedList(list: readonly Achievement[]): HTMLElement {
   const box = document.createElement("ul");
@@ -69,10 +71,18 @@ const stageLine = (stage: StageResult): string =>
   stage.cleared ? stageName(stage) : stage.where ? `Fell in ${stage.where}` : stageName(stage);
 
 function unlockedSection(): HTMLElement | null {
-  const found = inRoom() ? [] : unlockedThisRun();
+  const found = unlockedThisRun();
   if (!found.length) return null;
   const box = el("section", "result-unlocked");
   box.append(el("h3", "result-heading", "Unlocked"), foundList(found, UNLOCKED_SHOWN));
+  return box;
+}
+
+function goalsSection(): HTMLElement | null {
+  const steps = closestGoals(GOALS_SHOWN);
+  if (!steps.length) return null;
+  const box = el("section", "result-unlocked");
+  box.append(el("h3", "result-heading", "Next goals"), goalList(steps));
   return box;
 }
 
@@ -80,12 +90,12 @@ function navigation(stage: StageResult | undefined): HTMLElement {
   const list = document.createElement("nav");
   list.className = "menu-list";
   list.setAttribute("aria-label", "After the run");
-  const shop = menuItem("Shop", () => showScreen("shop"));
-  shop.dataset.opens = "shop";
+  const armory = menuItem("Armory", () => showScreen("armory"));
+  armory.dataset.opens = "armory";
   if (inRoom()) {
     list.append(
       menuItem("Back to the room", () => showScreen("coop")),
-      shop,
+      armory,
     );
     return list;
   }
@@ -96,7 +106,7 @@ function navigation(stage: StageResult | undefined): HTMLElement {
     menuItem("Play again", again),
     choose,
     menuItem("Main menu", () => showScreen("main")),
-    shop,
+    armory,
   );
   return list;
 }
@@ -108,10 +118,12 @@ export function resultScreen(): MenuView {
   summary.append(line("Gold earned", coinAmount(run.coins)), line("Bank", coinAmount(bank())));
   const scroll = document.createElement("div");
   scroll.className = "menu-scroll result-body";
-  const earned = inRoom() ? [] : runAchievements();
+  const earned = runAchievements();
   if (run.report) scroll.append(runFacts(run.report, run.coins, run.stage));
   const unlocked = unlockedSection();
   if (unlocked) scroll.append(unlocked);
+  const goals = goalsSection();
+  if (goals) scroll.append(goals);
   if (run.stage) {
     const best = stageBest(run.stage.stage, run.stage.hyper) ?? EMPTY_STAGE_BEST;
     scroll.append(stageBestTable(`Best run, ${stageName(run.stage)}`, best, run.stage.beaten));

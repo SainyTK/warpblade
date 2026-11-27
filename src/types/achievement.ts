@@ -16,9 +16,12 @@ export type CountStat =
   | "ultimates"
   | "coinsBanked"
   | "chests"
-  | "flowFulls";
+  | "flowFulls"
+  | "falls";
 /** the best a player has ever done; the `run` ones are the most in one run */
-export type BestStat = "wave" | "combo" | "skillLevel" | "chestUpgrades" | "runPerfects" | "runSkillKills";
+export type BestStat = "wave" | "level" | "combo" | "skillLevel" | "chestUpgrades" | "runPerfects" | "runSkillKills";
+
+export type HeroStat = "kills" | "level" | "minis" | "bosses" | "evolutions" | "clears";
 
 /** what the run in play has counted so far, for the goals met within one run */
 export interface RunTally {
@@ -45,10 +48,11 @@ export interface TrackedStats {
 /** what a goal is read from: the tracked stats and what the meta save shows */
 export interface GoalSource {
   stats: TrackedStats;
-  /** levels and skills bought in the shop */
-  shopLevels: number;
-  /** heroes unlocked with coins */
+  armoryLevels: number;
   heroesBought: number;
+  skillsFound: number;
+  fusionsFound: number;
+  goldSpent: number;
 }
 
 export type Goal =
@@ -58,8 +62,12 @@ export type Goal =
   | { kind: "foeKills"; foe: EnemyType; need: number }
   /** one of a hero's own stats, counted through the `heroCount` and `heroBest` feats */
   | { kind: "hero"; stat: string; need: number }
-  | { kind: "shopLevels"; need: number }
+  | { kind: "heroStat"; hero: string; stat: HeroStat; need: number }
+  | { kind: "armoryLevels"; need: number }
   | { kind: "heroesBought"; need: number }
+  | { kind: "skillsFound"; need: number }
+  | { kind: "fusionsFound"; need: number }
+  | { kind: "goldSpent"; need: number }
   | { kind: "stageClears"; stage: StageId; hyper?: boolean; need: number }
   | { kind: "goalsMet"; of: readonly Goal[]; need: number };
 
@@ -86,7 +94,8 @@ export interface GoalProgress {
 
 /** something that happened in play that an achievement or an unlock may count */
 export type Feat =
-  | { kind: "kill"; rank: EnemyRank; foe: EnemyType; source?: SourceId }
+  | { kind: "kill"; rank: EnemyRank; foe: EnemyType; hero: string; source?: SourceId }
+  | { kind: "levelReached"; level: number; hero: string }
   | { kind: "waveReached"; wave: number }
   | { kind: "waveCleared"; wave: number; hero: string }
   | { kind: "runEnd"; outcome: RunOutcome; wave: number; hero: string }
@@ -96,7 +105,7 @@ export type Feat =
   | { kind: "ultimateLearned" }
   | { kind: "banked"; coins: number }
   | { kind: "skillLevel"; skill: string; level: number }
-  | { kind: "evolved"; skill: string }
+  | { kind: "evolved"; skill: string; hero: string }
   | { kind: "chestOpened"; upgrades: number }
   | { kind: "flowFull" }
   /** a hero's own stat grows by `add`: a lifetime count */

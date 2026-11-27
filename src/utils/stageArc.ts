@@ -11,6 +11,7 @@ import {
 } from "../constants/stageArc";
 import { STAGE_TIER } from "../constants/stageGraph";
 import { STAGE_WAVES } from "../constants/waves";
+import type { ArmoryRates } from "../types/armory";
 import type { StageDef } from "../types/campaign";
 import type { FoeScale } from "../types/enemy";
 import { clamp } from "./math";
@@ -26,12 +27,16 @@ export interface StageMods {
   eliteEvery: number;
 }
 
-export function stageMods(stage: StageDef, hyper: boolean): StageMods {
+export function stageMods(
+  stage: StageDef,
+  hyper: boolean,
+  armory: Pick<ArmoryRates, "foeHp" | "foeDamage"> = { foeHp: 1, foeDamage: 1 },
+): StageMods {
   const tier = TIER_SCALE[STAGE_TIER[stage.id]];
   const twist = stage.twist;
   return {
-    hp: tier.hp * (twist.foeHp ?? 1),
-    damage: tier.damage * (twist.foeDamage ?? 1),
+    hp: tier.hp * (twist.foeHp ?? 1) * armory.foeHp,
+    damage: tier.damage * (twist.foeDamage ?? 1) * armory.foeDamage,
     pace: (twist.foePace ?? 1) * (hyper ? HYPER.foePace : 1),
     coins: FOE_BAND.goldShare * (twist.coins ?? 1) * (hyper ? HYPER.coins : 1),
     heartChance: twist.heartChance ?? 1,

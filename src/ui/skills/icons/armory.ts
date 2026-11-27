@@ -13,8 +13,8 @@ function coin(s: SpriteCanvas, x: number, y: number): void {
   fill(s, () => s.pixels([".ooo.", "ohggo", "oggdo", "ogddo", ".ooo."], COIN, x, y));
 }
 
-/** Shop icons: one for every stat and skill sold between runs */
-export const SHOP_ICONS: Record<string, (s: SpriteCanvas) => void> = {
+/** Armory icons: one for every item sold between runs */
+export const ARMORY_ICONS: Record<string, (s: SpriteCanvas) => void> = {
   vitality: (s) => {
     fill(s, () =>
       s.pixels(
@@ -149,11 +149,6 @@ export const SHOP_ICONS: Record<string, (s: SpriteCanvas) => void> = {
     sparkle(s, 3, 5, 1.5, PAL.crystal[4]);
     sparkle(s, 13, 6, 1.5, PAL.crystal[4]);
   },
-  headStart: (s) => {
-    chevron(s, 8, 2, 0, -1, 4, G[4]);
-    chevron(s, 8, 6.5, 0, -1, 4, G[3]);
-    chevron(s, 8, 11, 0, -1, 4, G[2]);
-  },
   lastLight: (s) => {
     fill(s, () =>
       s.pixels(
@@ -236,5 +231,40 @@ export const SHOP_ICONS: Record<string, (s: SpriteCanvas) => void> = {
         1,
       ),
     );
+  },
+  greed: (s) => {
+    coin(s, 1, 10);
+    coin(s, 6, 10);
+    coin(s, 11, 10);
+    coin(s, 3, 6);
+    coin(s, 8, 6);
+    coin(s, 6, 2);
+  },
+  growth: (s) => {
+    chevron(s, 8, 2, 0, -1, 4, PAL.heal[4]);
+    chevron(s, 8, 6.5, 0, -1, 4, PAL.heal[3]);
+    chevron(s, 8, 11, 0, -1, 4, PAL.heal[2]);
+  },
+  curse: (s) => {
+    fill(s, () =>
+      s.pixels(
+        [
+          "...pppppp...",
+          "..pllllllp..",
+          ".plllllllldp",
+          ".pl.rr..rrdp",
+          ".pl.rr..rrdp",
+          ".plllllllldp",
+          "..pllldlldp.",
+          "...plllldp..",
+          "...pl.l.lp..",
+          "....ppppp...",
+        ],
+        { p: PURPLE, l: hex("#c9bfe8"), d: hex("#8a7cc0"), r: BLOOD.h },
+        2,
+        3,
+      ),
+    );
+    sparkle(s, 14, 2, 1.5, BLOOD.l);
   },
 };

@@ -3,7 +3,7 @@ import { isPlaytestSession } from "../services/playtestStart";
 import type { Achievement, Feat, GoalSource, TrackedStats } from "../types/achievement";
 import { newlyMet } from "../utils/achievements";
 import { applyFeat, emptyRun } from "../utils/trackedStats";
-import { heroesBought, onMetaChange, saveAchievements, savedAchievements, savedTracked, shopLevels } from "./meta";
+import { metaGoals, onMetaChange, saveAchievements, savedAchievements, savedTracked } from "./meta";
 
 /**
  * The one owner of achievement tracking: the stats counted in play, which achievements are earned, and those earned
@@ -19,7 +19,7 @@ const featListeners = new Set<() => void>();
 export const allAchievements = (): readonly Achievement[] => ACHIEVEMENTS;
 export const isEarned = (id: string): boolean => earned.has(id);
 export const earnedIds = (): ReadonlySet<string> => earned;
-export const goalSource = (): GoalSource => ({ stats, shopLevels: shopLevels(), heroesBought: heroesBought() });
+export const goalSource = (): GoalSource => ({ stats, ...metaGoals() });
 export const runAchievements = (): readonly Achievement[] => sinceRunStart;
 
 /** earn every achievement whose goal is met, adding its coins; true when one was earned */
@@ -64,7 +64,7 @@ export function onAchievement(listener: (a: Achievement) => void): () => void {
   return () => listeners.delete(listener);
 }
 
-// buying in the shop or unlocking a hero can meet a goal too
+// buying in the Armory or unlocking a hero can meet a goal too
 let checking = false;
 function checkOnce(): void {
   if (checking || isPlaytestSession()) return;

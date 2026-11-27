@@ -4,7 +4,7 @@ export type MenuScreen =
   | "main"
   | "controls"
   | "options"
-  | "shop"
+  | "armory"
   | "result"
   | "hero"
   | "stage"

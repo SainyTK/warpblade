@@ -1,4 +1,4 @@
-import type { MetaSave } from "../types/shop";
+import type { MetaSave } from "../types/armory";
 
 /** the version is in the key, so a future change of shape starts from a fresh save */
 const KEY = "warpblade-meta-v2";

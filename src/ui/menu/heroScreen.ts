@@ -4,7 +4,8 @@ import { CHARACTERS } from "../../heroes/roster";
 import { sfx } from "../../services/audio";
 import { saveHeroChoice } from "../../services/heroChoice";
 import { chosenJob } from "../../store/jobs";
-import { bank, buyHero, heroUnlocked } from "../../store/meta";
+import { bank } from "../../store/meta";
+import { buyUnlock, heroUnlocked, unlockState } from "../../store/unlocks";
 import type { CharacterDef } from "../../types/character";
 import type { MenuView } from "../../types/menu";
 import { coinAmount } from "../coinIcon";
@@ -23,7 +24,8 @@ function act(panel: HTMLElement, c: CharacterDef, page: HeroPage): void {
     showScreen("stage");
     return;
   }
-  if (page.lock.price > bank()) {
+  const def = page.lock.def;
+  if (unlockState(def) !== "forSale" || (def.price ?? 0) > bank()) {
     sfx.denied();
     page.lock.deny();
     return;
@@ -36,7 +38,7 @@ function act(panel: HTMLElement, c: CharacterDef, page: HeroPage): void {
   // the hero just bought becomes the choice, so the screen redraws on them, ready to start
   chooseCharacter(c, chosenJob(c.id));
   saveHeroChoice(c.id);
-  if (buyHero(c.id)) sfx.learn();
+  if (buyUnlock(def.id)) sfx.learn();
 }
 
 export function heroScreen(): MenuView {

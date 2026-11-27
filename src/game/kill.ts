@@ -20,7 +20,7 @@ import { kit } from "./hero/kits";
 import { resonateDeath } from "./resonance";
 import { dropShards } from "./shards";
 import { emitSkillEvent } from "./skills/events";
-import { fxRng, game, lights, particles, rng } from "./state";
+import { character, fxRng, game, lights, particles, rng } from "./state";
 import { isTraining } from "./training";
 import { hitStop, shake } from "./world";
 import { dropXp } from "./xpOrbs";
@@ -76,7 +76,7 @@ export function killEnemy(e: Enemy, source?: SourceId): void {
   const many = (n: number): number => Math.max(1, Math.round(n * share));
   game.kills++;
   recordStageKill(e);
-  feat({ kind: "kill", rank: e.rank, foe: e.type, source });
+  feat({ kind: "kill", rank: e.rank, foe: e.type, hero: character.id, source });
   if (source) emitSkillEvent({ type: "kill", foe: e, source });
   if (source) kit().onKill?.(e);
   const glow = big ? 0.9 : 0.5;

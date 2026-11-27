@@ -6,7 +6,7 @@ import type { StatKey, Stats } from "../types/stats";
 
 export const STAT_KEYS: readonly StatKey[] = ["ad", "ap", "hp", "mp", "stamina", "crit", "move", "aspd", "haste"];
 
-/** base plus flat skill, shop and shard bonuses, each total multiplied by the skill percentages; attack damage and
+/** base plus flat skill, Armory and shard bonuses, each total multiplied by the skill percentages; attack damage and
  *  ability power then compound with the level, and the build's charms fold into HP, crit and move speed */
 export function computeStats(
   c: CharacterDef,

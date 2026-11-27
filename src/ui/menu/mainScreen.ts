@@ -53,7 +53,7 @@ function titleFooter(): HTMLElement {
   return footer;
 }
 
-/** Start, Co-op, Shop, Achievements, Codex, Controls and Options before a run; on pause, Resume, Restart run, Controls, Options and Quit run */
+/** Start, Co-op, Armory, Achievements, Codex, Controls and Options before a run; on pause, Resume, Restart run, Controls, Options and Quit run */
 export function mainScreen(context: MenuContext): MenuView {
   const list = document.createElement("nav");
   list.className = "menu-list";
@@ -66,7 +66,7 @@ export function mainScreen(context: MenuContext): MenuView {
     if (inRoom()) list.append(screenItem(`Room ${roomView().code}`, "coop"));
     else list.append(screenItem("Start", "hero"), screenItem("Co-op", "coop"));
     list.append(
-      screenItem("Shop", "shop"),
+      screenItem("Armory", "armory"),
       screenItem("Achievements", "achievements"),
       screenItem("Codex", "codex"),
       screenItem("Controls", "controls"),

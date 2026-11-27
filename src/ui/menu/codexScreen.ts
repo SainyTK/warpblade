@@ -1,6 +1,7 @@
-import "../shop/shop.css";
+import "./listRows.css";
 import "../achievements/achievements.css";
 import "../unlocks/unlocks.css";
+import { ARMORY_ITEMS } from "../../constants/armory";
 import { ELEMENT_ORDER, ELEMENTS } from "../../constants/elements";
 import { EVOLVE_PARTNER_LEVEL, SKILL_MAX_LEVEL } from "../../constants/growth";
 import {
@@ -16,7 +17,8 @@ import {
 } from "../../constants/resonance";
 import { CHARACTERS } from "../../heroes/roster";
 import { ARTS } from "../../stages/arts";
-import { knowsFusion, knowsRecipe } from "../../store/unlocks";
+import { itemUnlock, knowsFusion, knowsRecipe, skillUnlock } from "../../store/unlocks";
+import type { ArmoryItem } from "../../types/armory";
 import type { ArtId } from "../../types/campaign";
 import type { CharacterDef } from "../../types/character";
 import type { MenuView } from "../../types/menu";
@@ -24,18 +26,23 @@ import type { SkillDef } from "../../types/skill";
 import { skillOf } from "../../utils/skills";
 import { iconUrl, skillIcon } from "../skills/icons/iconImage";
 import { type CodexEntry, codexRow } from "../unlocks/codexRow";
+import { unlockEntry } from "../unlocks/unlockEntry";
 import { backItem } from "./backItem";
 
 function section(heading: string, rows: readonly HTMLElement[]): HTMLElement {
   const box = document.createElement("section");
-  box.className = "shop-section";
+  box.className = "list-section";
   const h = document.createElement("h3");
   h.textContent = heading;
   box.append(h, ...rows);
   return box;
 }
 
-const skillEntry = (s: SkillDef): CodexEntry => ({ state: "found", icon: iconUrl(s.id), name: s.name, text: s.text });
+const skillEntry = (s: SkillDef): CodexEntry =>
+  unlockEntry(skillUnlock(s.id), { icon: iconUrl(s.id), name: s.name, text: s.text });
+
+const itemEntry = (item: ArmoryItem): CodexEntry =>
+  unlockEntry(itemUnlock(item.id), { icon: iconUrl(item.id), name: item.name, text: item.levelText });
 
 /** an evolution shows its name and partner once it has been made; until then a silhouette and "Evolves with ???" */
 function evolutionEntry(c: CharacterDef, s: SkillDef): CodexEntry {
@@ -76,36 +83,39 @@ const artEntry = (id: ArtId): CodexEntry => ({
 });
 
 /** each skill of a hero with its evolution under it */
-function heroRows(c: CharacterDef): { skills: HTMLElement[]; evolutions: HTMLElement[] } {
-  const skills: HTMLElement[] = [];
-  const evolutions: HTMLElement[] = [];
+function heroRows(c: CharacterDef): { rows: HTMLElement[]; counted: HTMLElement[] } {
+  const rows: HTMLElement[] = [];
+  const counted: HTMLElement[] = [];
   for (const s of c.skills) {
+    const skill = codexRow(skillEntry(s));
     const evolution = codexRow(evolutionEntry(c, s), true);
-    skills.push(codexRow(skillEntry(s)), evolution);
-    evolutions.push(evolution);
+    rows.push(skill, evolution);
+    counted.push(skill, evolution);
   }
-  return { skills, evolutions };
+  return { rows, counted };
 }
 
 /**
- * Everything to find across runs: each hero's skills with their evolutions under them, the charms and the extra charm
- * slots. Found ones show their icon and text, locked ones a dark silhouette and a hint, secret ones only ???. Under the
- * title, how many of the evolutions, charms and slots are found.
+ * Everything to find across runs: the Armory's items, the Fusions, and each hero's skills with their evolutions under
+ * them. Found ones show their icon and text, locked ones a dark silhouette with what opens them and how far it has
+ * come, secret ones only ???. Under the title, how many of the items, Fusions, skills and evolutions are found.
  */
 export function codexScreen(): MenuView {
   const heroes = CHARACTERS.map((c) => ({ c, rows: heroRows(c) }));
   const elements = ELEMENT_ORDER.map((id) => codexRow(elementEntry(id)));
   const fusions = FUSIONS.map((f) => codexRow(fusionEntry(f)));
   const arts = (Object.keys(ARTS) as ArtId[]).map((id) => codexRow(artEntry(id)));
+  const items = ARMORY_ITEMS.map((item) => codexRow(itemEntry(item)));
   const scroll = document.createElement("div");
-  scroll.className = "menu-scroll shop";
+  scroll.className = "menu-scroll rows";
   scroll.append(
+    section("Armory", items),
     section("Resonance", elements),
     section("Fusions", fusions),
     section("Rift Arts", arts),
-    ...heroes.map(({ c, rows }) => section(`${c.name}'s skills`, rows.skills)),
+    ...heroes.map(({ c, rows }) => section(`${c.name}'s skills`, rows.rows)),
   );
-  const counted = [...heroes.flatMap(({ rows }) => rows.evolutions), ...fusions];
+  const counted = [...items, ...fusions, ...heroes.flatMap(({ rows }) => rows.counted)];
   const count = counted.filter((row) => row.dataset.state === "found").length;
   const content = document.createElement("div");
   content.className = "menu-sub";

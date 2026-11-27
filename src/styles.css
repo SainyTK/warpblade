@@ -648,7 +648,7 @@ body[data-hud="inside"] .build-reserve {
 }
 .coins,
 .bank,
-.shop-price {
+.row-price {
   display: inline-flex;
   align-items: center;
   gap: 6px;
@@ -1085,7 +1085,7 @@ body[data-hud="compact"] .best-run {
   color: var(--crystal);
 }
 
-/* Result of a run: what it earned and the bank, above Continue and Shop. */
+/* Result of a run: what it earned and the bank, above Continue and Armory. */
 .result {
   display: grid;
   gap: 8px;

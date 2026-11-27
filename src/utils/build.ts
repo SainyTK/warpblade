@@ -5,7 +5,7 @@ import type { ArtId } from "../types/campaign";
 import type { CharacterDef } from "../types/character";
 import { resonanceRanks, resonanceStats } from "./resonance";
 
-/** a build with nothing in it, and the run's pick tools with what the shop adds */
+/** a build with nothing in it, and the run's pick tools with what the Armory adds */
 export function freshBuild(extra: Partial<Record<PickToolKey, number>> = {}): Build {
   return {
     skills: {},

@@ -1,4 +1,5 @@
 import type { CharacterDef } from "../../types/character";
+import type { Loadout } from "../../types/coop";
 import { seatMemories } from "../seatMemory";
 
 /** one player of a co-op room as the host's simulation holds them */
@@ -8,8 +9,7 @@ export interface Seat {
   /** the PeerJS id of a guest; null for the host's own seat */
   peer: string | null;
   character: CharacterDef;
-  /** what this player bought in their own shop; null for the host, who wears their own */
-  owned: Record<string, number> | null;
+  loadout: Loadout | null;
   /** the guest's measured round trip in seconds, -1 until measured, 0 for the host */
   rtt: number;
   /** the per-player memories while another seat is swapped in, in registration order */

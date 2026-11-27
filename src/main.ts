@@ -14,7 +14,7 @@ import { loadHeroChoice } from "./services/heroChoice";
 import { readTrainingHero } from "./services/playtestStart";
 import { preloadSkillArt } from "./skillArt";
 import { chosenJob } from "./store/jobs";
-import { heroUnlocked } from "./store/meta";
+import { heroUnlocked } from "./store/unlocks";
 import { bindAchievementToasts } from "./ui/achievements/achievementToast";
 import { bindKeyboard } from "./ui/bindKeyboard";
 import { bindPauseButton } from "./ui/bindPauseButton";
