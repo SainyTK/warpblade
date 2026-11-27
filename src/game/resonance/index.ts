@@ -1,5 +1,5 @@
 import { ELEMENTS } from "../../constants/elements";
-import { BLAZE, FROST, PROC_DEPTH, STORM, VENOM, VOID } from "../../constants/resonance";
+import { BIG_FOE_BURST_CAP, BLAZE, FROST, PROC_DEPTH, STORM, VENOM, VOID } from "../../constants/resonance";
 import { sfx } from "../../services/audio";
 import type { SourceId } from "../../types/build";
 import type { ElementId } from "../../types/campaign";
@@ -200,9 +200,10 @@ function burst(e: Enemy, share: number, radius: number, element: ElementId): voi
   game.fx.push(createImpact(cx, cy, 1, true, [COLOR[element], COLOR[element], WHITE_CORE]));
   sfx.resonance(element);
   for (const other of nearbyFoes(e, radius, 12)) {
-    dealDamage(other, e.max * share, { source: element, fromX: cx, proc: PROC_DEPTH });
-    if (element === "venom") venomHit(other, e.max * 0.05, Math.ceil(stacksOf(e, "venom") * VENOM.plagueShare));
-    if (element === "blaze") blazeStacks(other, e.max * 0.05, 2);
+    const pool = other.rank === "minion" ? e.max : Math.min(e.max, other.max * BIG_FOE_BURST_CAP);
+    dealDamage(other, pool * share, { source: element, fromX: cx, proc: PROC_DEPTH });
+    if (element === "venom") venomHit(other, pool * 0.05, Math.ceil(stacksOf(e, "venom") * VENOM.plagueShare));
+    if (element === "blaze") blazeStacks(other, pool * 0.05, 2);
   }
 }
 
