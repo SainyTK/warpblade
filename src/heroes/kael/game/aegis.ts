@@ -47,7 +47,7 @@ function shatter(foe: Enemy, plates: number): void {
   skillFx(SKILL, "burst", { x, y, face: hero.face, reach: 10 + plates * 2 }, { damage: blow });
   skillFx(SKILL, "spikes", { x, y: foe.y, face: hero.face, reach: reach * 0.6 }, { damage: blow, quiet: true });
   game.fx.push(createFloorRing(x, foe.y, reach, C, 0.35));
-  lights.add(x, y, reach + 10, C[4], 0.9, 0.3);
+  lights.add(x, y, reach + 10, C[4], 0.35, 0.3);
   for (let i = 0; i < plates * AEGIS_LOOK.shards; i++) {
     const a = fxRng.range(0, TAU);
     const sp = fxRng.range(90, 200);

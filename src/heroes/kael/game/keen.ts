@@ -3,6 +3,7 @@ import { dealDamage } from "../../../game/damage";
 import { createImpact } from "../../../game/effects/impact";
 import { createSlash } from "../../../game/effects/slash";
 import { enemyCenter } from "../../../game/enemies/enemy";
+import { skillFx } from "../../../game/skillFx";
 import { movePayoff } from "../../../game/skills/payoff";
 import { skillEvolved, skillValues, withBuild } from "../../../game/skills/query";
 import { game, hero, lights, progress } from "../../../game/state";
@@ -43,6 +44,12 @@ function crossCut(): void {
   const [x, y] = foe ? enemyCenter(foe) : [hero.x + hero.face * 20, hero.y - 20];
   game.fx.push(createSlash(x, y, hero.face, CROSS_A));
   game.fx.push(createSlash(x, y, -hero.face, CROSS_B));
+  skillFx(
+    SKILL,
+    "slash",
+    { x: x - hero.face * 10, y, face: hero.face, reach: 24 },
+    { damage: progress.stats.ad * v.cross },
+  );
   lights.add(x, y, 70, KEEN_RAMP[4], 1, 0.4);
   lights.add(x, y, 20, WHITE, 0.9, 0.12);
   if (foe) {

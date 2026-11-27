@@ -86,8 +86,8 @@ function reflect(): void {
   const attacker = foes.sort((a, b) => Math.abs(a.x - hero.x) - Math.abs(b.x - hero.x))[0];
   game.slow = Math.max(game.slow, REFLECT_SLOW);
   game.fx.push(createFloorRing(hero.x, hero.y, reach, KEEN_RAMP, 0.6));
-  lights.add(hero.x, hero.y - 18, reach, PAL.crystal[4], 1, 0.5);
-  lights.add(hero.x, hero.y - 18, 24, WHITE, 0.9, 0.15);
+  lights.add(hero.x, hero.y - 18, reach, PAL.crystal[4], 0.45, 0.5);
+  lights.add(hero.x, hero.y - 18, 24, WHITE, 0.4, 0.15);
   for (const e of foes) {
     const [ex, ey] = enemyCenter(e);
     const side = Math.sign(ex - hero.x) || 1;

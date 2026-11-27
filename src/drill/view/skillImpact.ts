@@ -28,7 +28,7 @@ export function drawSkillDarkness(cast: SkillCast | null, cameraX: number): void
 function crescent(reach: number, color: number, u: number, fade: number): void {
   const x = 10 + ease.outCubic(u) * reach * 0.75;
   const y = -15;
-  glow(x, y, 23, color, fade * 0.72);
+  glow(x, y, 23, color, fade * 0.4);
   polygon(
     [
       [x - 27, y - 19],
@@ -60,7 +60,7 @@ function spires(reach: number, color: number, u: number, fade: number): void {
     const x = 19 + (i / 3) * (reach - 19);
     const h = (40 + i * 6) * pulse;
     const lean = 4 + i * 2;
-    glow(x, -h * 0.35, 22, color, fade * pulse * 0.55);
+    glow(x, -h * 0.35, 22, color, fade * pulse * 0.3);
     ellipseRing(x, -2, 9 + pulse * 4, 3, color, fade * pulse);
     polygon(
       [
@@ -93,7 +93,7 @@ function rift(reach: number, color: number, u: number, fade: number): void {
   const x1 = ease.outExpo(u * 0.88) * reach;
   const y1 = -23 + u * 14;
   const width = 8 * fade + 1;
-  glowLine(x0, y0, x1, y1, 23, color, fade * 0.74);
+  glowLine(x0, y0, x1, y1, 23, color, fade * 0.4);
   polygon(
     [
       [x0, y0],
@@ -118,8 +118,8 @@ function rift(reach: number, color: number, u: number, fade: number): void {
 
 function nova(reach: number, color: number, u: number, fade: number): void {
   const radius = 9 + ease.outCubic(u) * reach;
-  glow(0, -21, 52, color, fade * 0.86);
-  glowLine(0, -3, 0, -H, 15 * fade + 2, color, fade * 0.56);
+  glow(0, -21, 52, color, fade * 0.45);
+  glowLine(0, -3, 0, -H, 15 * fade + 2, color, fade * 0.3);
   ellipseRing(0, -3, radius, radius * 0.23, color, fade);
   ellipseRing(0, -5, radius * 0.84, radius * 0.19, WHITE, fade * 0.88);
   ellipseRing(0, -22, radius * 0.63, radius * 0.41, color, fade * 0.57);
