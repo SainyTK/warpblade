@@ -1,8 +1,10 @@
 import { game, lights, progress } from "../../../../../game/state";
+import { surfaceBelow } from "../../../../../game/world";
 import { SAND_RAMP } from "../../../constants/palette";
 import type { ZafirDrillSkill } from "../../../types/drillSkill";
 import { createSandWave } from "../../effects/sandWave";
 import { sandBurst } from "../../effects/spout";
+import { zafirFx } from "../../skillFx";
 import { openWounds } from "../../wounds";
 import { fighterAt, foesNear, skillStrike, swingKind } from "../strike";
 
@@ -26,6 +28,9 @@ export const SIROCCO_DESCENT_DRILL: ZafirDrillSkill = {
       return;
     }
     const { x, y, face } = fighterAt();
+    const floor = surfaceBelow(x, y - 2);
+    const air = { x: x + face * 16, y: floor, face, reach: 26 };
+    zafirFx(ID, "pillar", air, { damage: progress.stats.ad * (1 + values.air), quiet: !landed });
     if (values.gust) {
       game.fx.push(
         createSandWave({
@@ -45,6 +50,7 @@ export const SIROCCO_DESCENT_DRILL: ZafirDrillSkill = {
         skillStrike(foe, values.noon, ID);
       }
       sandBurst(x, y - 14, 14);
+      zafirFx(ID, "nova", { x, y: floor, face, reach: NOON_REACH }, { damage: progress.stats.ad * values.noon });
       lights.add(x, y - 14, NOON_REACH, SAND_RAMP[5], 1, 0.3);
     }
   },

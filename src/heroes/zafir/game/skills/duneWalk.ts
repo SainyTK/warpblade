@@ -1,3 +1,4 @@
+import { usesDrill } from "../../../../drill";
 import { fleck, place } from "../../../../engine/frame";
 import { dealDamage } from "../../../../game/damage";
 import { walks } from "../../../../game/enemies/enemy";
@@ -7,12 +8,14 @@ import { hero, progress } from "../../../../game/state";
 import type { Enemy } from "../../../../types/enemy";
 import type { SkillBehavior, SkillMemory } from "../../../../types/skillBehavior";
 import { GRAIN } from "../../constants/palette";
+import { zafirFx } from "../skillFx";
 import { openWounds } from "../wounds";
 
 const ID = "za_dune";
 /** a patch of the trail: dropped this often while he walks through a spin, this wide, lasting this long, and cutting
  *  each foe on it this often */
 const TRAIL = { every: 0.08, half: 5, life: 1.2, cut: 0.3 } as const;
+const STREAK_EVERY = 0.45;
 
 interface Patch {
   x: number;
@@ -20,6 +23,7 @@ interface Patch {
   left: number;
 }
 interface TrailMemory {
+  streak: number;
   drop: number;
   patches: Patch[];
   next: Map<Enemy, number>;
@@ -34,16 +38,23 @@ const onPatch = (e: Enemy, p: Patch, half: number): boolean =>
 /** Dune Walk: walking through a spin leaves a trail of sand on the floor that cuts each foe on it, opens wounds and
  *  holds walkers' feet as it levels */
 export const duneWalk: SkillBehavior = {
-  create: () => ({ drop: 0, patches: [], next: new Map(), t: 0 }),
+  create: () => ({ streak: 0, drop: 0, patches: [], next: new Map(), t: 0 }),
   update(memory, _state, dt) {
     const m = memoryOf(memory);
     const v = skillValues(ID);
     m.t += dt;
+    m.streak = Math.max(0, m.streak - dt);
     for (const p of m.patches) p.left -= dt;
     m.patches = m.patches.filter((p) => p.left > 0);
+    const walking = hero.state === "move" && hero.ground && Math.abs(hero.vx) > 8;
+    if (walking && m.streak <= 0 && !usesDrill()) {
+      m.streak = STREAK_EVERY;
+      const dir = Math.sign(hero.vx);
+      const streak = { x: hero.x - dir * 22, y: hero.y - 12, face: dir, toX: hero.x - dir * 6, toY: hero.y - 12 };
+      zafirFx(ID, "trail", streak, { damage: progress.stats.ad * (v.trail ?? v.walk ?? 0.5), mark: "both" });
+    }
     if (!v.trail) return;
     m.drop -= dt;
-    const walking = hero.state === "move" && hero.ground && Math.abs(hero.vx) > 8;
     if (walking && m.drop <= 0) {
       m.drop = TRAIL.every;
       m.patches.push({ x: hero.x, y: hero.y, left: withBuild("duration", TRAIL.life * (v.trailLife ?? 1)) });

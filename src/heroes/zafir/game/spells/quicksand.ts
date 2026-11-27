@@ -12,6 +12,7 @@ import { TAU } from "../../../../utils/math";
 import { GRAIN } from "../../constants/palette";
 import { QUICKSAND } from "../../constants/spells";
 import { createSpout } from "../effects/spout";
+import { zafirFx } from "../skillFx";
 import { sandSound } from "../sound";
 import { openWounds } from "../wounds";
 
@@ -46,8 +47,10 @@ export function createPit(x: number, y: number, reach: number, life: number): Ef
         if (v.sink) e.stun = Math.max(e.stun, v.sink);
         openWounds(e, v.wounds ?? 0);
       }
-      if (cut && skillEvolved(ID))
+      if (cut && skillEvolved(ID)) {
         game.fx.push(createSpout(x, y, hero.face, { damage: progress.stats.ap * v.spout, range: 0.25, source: ID }));
+        zafirFx(ID, "pillar", { x, y, reach: 22 }, { damage: progress.stats.ap * v.spout, quiet: true });
+      }
       return t < life;
     },
     drawBack() {
@@ -71,5 +74,6 @@ export function castQuicksand(wide: boolean): void {
   const y = hero.ground ? hero.y : surfaceBelow(hero.x, hero.y);
   const reach = withBuild("area", QUICKSAND.reach * (v.reach ?? 1) * (wide ? 1.5 : 1));
   game.fx.push(createPit(x, y, reach, withBuild("duration", v.life)));
+  zafirFx(ID, "nova", { x, y, face: hero.face, reach: reach * 0.8 }, { damage: progress.stats.ap * v.power * 4 });
   sandSound.hiss(0.1);
 }

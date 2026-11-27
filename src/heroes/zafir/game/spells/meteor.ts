@@ -3,11 +3,13 @@ import { game, hero, progress } from "../../../../game/state";
 import { SPOUT } from "../../constants/abilities";
 import { QUICKSAND } from "../../constants/spells";
 import { createSpout } from "../effects/spout";
+import { zafirFx } from "../skillFx";
 import { createPit } from "./quicksand";
 
 /** Meteor Dune: the descent lands and throws a sandspout up each way, and opens a pit of quicksand under him */
 export function meteorDune(): void {
   const damage = progress.stats.ap * SPOUT.power;
+  zafirFx("za_falling", "pillar", { x: hero.x, y: hero.y, face: hero.face, reach: 34 }, { damage, delay: 0.04 });
   for (const dir of [1, -1])
     game.fx.push(createSpout(hero.x + dir * 10, hero.y, dir, { damage, range: 1, source: "za_falling" }));
   const pit = skillValues("za_quicksand");

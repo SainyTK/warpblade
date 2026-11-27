@@ -3,7 +3,7 @@ import { fleck, glow, hairline, haze, place, px } from "../../../../engine/frame
 import { dealDamage } from "../../../../game/damage";
 import { enemyCenter } from "../../../../game/enemies/enemy";
 import { ultimateValues } from "../../../../game/hero/ultimate";
-import { withBuild } from "../../../../game/skills/query";
+import { skillEvolved, skillLevel, withBuild } from "../../../../game/skills/query";
 import { foesOnScreen } from "../../../../game/skills/targets";
 import { fxRng, game, hero, particles, progress } from "../../../../game/state";
 import type { Effect } from "../../../../types/effect";
@@ -11,9 +11,12 @@ import { PK } from "../../../../types/particle";
 import { TAU } from "../../../../utils/math";
 import { GRAIN, SAND_RAMP } from "../../constants/palette";
 import { STORM_CUT, STORM_LOOK, STORM_REACH, STORM_TIME } from "../../constants/storm";
+import { zafirFx } from "../skillFx";
 import { sandSound } from "../sound";
 import { zafir } from "../state";
 import { openWounds } from "../wounds";
+
+const STORM_ID = "za_storm";
 
 /** the storm's grains: each turns round him at its own height, radius and speed; fixed per storm, so drawing reads no rng */
 type Grain = readonly [height: number, radius: number, phase: number, speed: number, shade: number];
@@ -131,4 +134,13 @@ export function castSandstorm(level: number): void {
   game.fx.push(createStorm(level, reach, life, cut, traits));
   if (v.twin) game.fx.push(createStorm(level, reach * 1.6, life, cut * v.twin, traits));
   sandSound.gust(0.18);
+  stormFx(hero.x, hero.y, level, reach, cut * cuts);
+}
+
+/** Sandstorm's skill: the storm rising as a column round him and a ring out along the floor; evolved, lightning in it */
+export function stormFx(x: number, y: number, level: number, reach: number, damage: number): void {
+  if (!skillLevel(STORM_ID)) return;
+  zafirFx(STORM_ID, "pillar", { x, y, reach: 30 + level * 8 }, { damage });
+  zafirFx(STORM_ID, "nova", { x, y, reach: reach * 0.5 }, { damage, quiet: true, delay: 0.06 });
+  if (skillEvolved(STORM_ID)) zafirFx(STORM_ID, "bolt", { x, y: y - 20, reach: 60 }, { damage, delay: 0.12 });
 }

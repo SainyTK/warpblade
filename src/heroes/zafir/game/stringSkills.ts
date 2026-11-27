@@ -3,7 +3,7 @@ import { dealDamage } from "../../../game/damage";
 import { createSlash } from "../../../game/effects/slash";
 import { enemyCenter } from "../../../game/enemies/enemy";
 import { movePayoff } from "../../../game/skills/payoff";
-import { skillEvolved, skillValues, withBuild } from "../../../game/skills/query";
+import { skillEvolved, skillLevel, skillValues, withBuild } from "../../../game/skills/query";
 import { foesOnScreen } from "../../../game/skills/targets";
 import { game, hero, lights, progress } from "../../../game/state";
 import { hitStop, shake } from "../../../game/world";
@@ -14,6 +14,7 @@ import { WHIRL } from "../constants/whirl";
 import type { ZafirMoveId } from "../types/moves";
 import { createSandWave } from "./effects/sandWave";
 import { RING_CUT } from "./moves/slashes";
+import { zafirFx } from "./skillFx";
 import { sandSound } from "./sound";
 import { zafir } from "./state";
 import { gainWhirl } from "./whirl";
@@ -51,6 +52,8 @@ function throwCrescents(): void {
   const v = skillValues("za_whirling");
   if (!v.crescent) return;
   const pairs = skillEvolved("za_whirling") && zafir.whirl >= WHIRL.most * 0.8 ? 2 : 1;
+  const back = { x: hero.x - hero.face * 10, y: hero.y - 15, face: -hero.face, reach: 16 };
+  zafirFx("za_whirling", "slash", back, { damage: progress.stats.ad * v.crescent, quiet: true, delay: 0.05 });
   for (let i = 0; i < pairs; i++)
     for (const dir of [1, -1])
       game.fx.push(
@@ -66,9 +69,34 @@ function throwCrescents(): void {
       );
 }
 
+/** Whirling Edge: the sweep turn, the spin it strengthens, throws its tiered sweep round him */
+function whirlingSweep(hits: number): void {
+  const v = skillValues("za_whirling");
+  if (!skillLevel("za_whirling")) return;
+  const at = { x: hero.x + hero.face * 10, y: hero.y - 17, face: hero.face, reach: 20 };
+  zafirFx("za_whirling", "slash", at, { damage: progress.stats.ad * (1 + (v.bonus ?? 0)), quiet: !hits });
+}
+
+/** Two-Faced Cut: a spin that cut behind him tears the air behind; one that cut both sides once evolved, both ways */
+function twoFacedTear(sides: number): void {
+  if (!skillLevel("za_twofaced") || !(sides & 2)) return;
+  const v = skillValues("za_twofaced");
+  const back = { x: hero.x - hero.face * 14, y: hero.y - 18, face: -hero.face, reach: 20 };
+  const damage = progress.stats.ad * (1 + (v.behind ?? 0) + (v.backAll ?? 0));
+  zafirFx("za_twofaced", "slash", back, { damage });
+  if (sides === 3 && skillEvolved("za_twofaced")) {
+    const mirror = { x: hero.x - hero.face * 26, y: hero.y - 18, face: -hero.face, reach: 12 };
+    zafirFx("za_twofaced", "burst", mirror, { damage, delay: 0.06 });
+  }
+}
+
 /** Sirocco Timing: a Keen spin sends a hot gust after the foe it paid off on, and evolved, a noon ring every few */
 function keenSpin(): void {
   const v = skillValues("za_sirocco");
+  if (skillLevel("za_sirocco")) {
+    const at = { x: hero.x + hero.face * 18, y: hero.y, face: hero.face, reach: 26 };
+    zafirFx("za_sirocco", "pillar", at, { damage: progress.stats.ad * (1 + (v.keen ?? 0)) });
+  }
   if (v.whirl) gainWhirl(v.whirl);
   if (v.wave)
     game.fx.push(
@@ -92,6 +120,8 @@ function noonRing(): void {
   if (!foe) return;
   const [x, y] = enemyCenter(foe);
   game.fx.push(createSlash(x, y + 18, 1, { ...RING_CUT, R: 20, W: 10, ramp: SAND_RAMP }));
+  const noon = { x, y: foe.y, face: hero.face, reach: 30 };
+  zafirFx("za_sirocco", "nova", noon, { damage: progress.stats.ad * skillValues("za_sirocco").noon });
   lights.add(x, y, 60, SAND_RAMP[5], 1, 0.35);
   lights.add(x, y, 16, WHITE, 0.9, 0.12);
   dealDamage(foe, progress.stats.ad * skillValues("za_sirocco").noon, {
@@ -123,11 +153,14 @@ export const keenWindow = (): number => skillValues("za_sirocco").window ?? KEEN
  */
 export function afterBlow(id: string, last: boolean, hits: number): void {
   if (zafir.sides === 3) bothSides();
+  const sides = zafir.sides;
   zafir.sides = 0;
+  if (STRING_SPINS.has(id)) twoFacedTear(sides);
   if (!last) return;
   const keen = hero.keen && hits > 0;
   zafir.keenStreak = keen ? zafir.keenStreak + 1 : 0;
   if (!STRING_SPINS.has(id)) return;
+  if (id === "sweepTurn") whirlingSweep(hits);
   throwCrescents();
   if (keen) keenSpin();
 }

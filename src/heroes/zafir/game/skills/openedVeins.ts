@@ -8,6 +8,7 @@ import type { Enemy } from "../../../../types/enemy";
 import type { SkillBehavior } from "../../../../types/skillBehavior";
 import { WOUND_SOURCE } from "../../constants/wounds";
 import { sandBurst } from "../effects/spout";
+import { zafirFx } from "../skillFx";
 import { STRING_SPINS } from "../stringSkills";
 import { openWounds } from "../wounds";
 
@@ -27,6 +28,7 @@ function tear(e: Enemy, n: number, power: number): void {
   if (v.splash) for (const f of beside(e)) dealDamage(f, damage * v.splash, { fromX: e.x, source: ID });
   const [x, y] = enemyCenter(e);
   sandBurst(x, y, 4 + n);
+  zafirFx(ID, "slash", { x, y, face: hero.face, reach: 10 + n * 1.5 }, { mark: "bleed", damage });
 }
 
 /** Opened Veins: the cyclone tears every wound open, a foe it fells passes its wounds on, and evolved as Red Wind every
@@ -40,6 +42,10 @@ export const openedVeins: SkillBehavior = {
       if (ev.move === "duneCyclone" && v.tear) {
         tear(ev.foe, consumeStacks(ev.foe, WOUND_SOURCE), v.tear);
         return;
+      }
+      if (ev.move === "duneCyclone" && stacksOf(ev.foe, WOUND_SOURCE)) {
+        const [x, y] = enemyCenter(ev.foe);
+        zafirFx(ID, "slash", { x, y, face: hero.face, reach: 12 }, { mark: "bleed", damage: ev.damage });
       }
       if (!state.evolved || !stacksOf(ev.foe, WOUND_SOURCE)) return;
       const n = consumeStacks(ev.foe, WOUND_SOURCE);

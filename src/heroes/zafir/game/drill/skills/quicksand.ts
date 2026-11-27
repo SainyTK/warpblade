@@ -1,9 +1,11 @@
 import { drillSession } from "../../../../../drill";
 import { enemyCenter } from "../../../../../game/enemies/enemy";
 import { game, progress } from "../../../../../game/state";
+import { surfaceBelow } from "../../../../../game/world";
 import type { ElementProjectile } from "../../../../../types/drill";
 import type { ZafirDrillSkill } from "../../../types/drillSkill";
 import { createSpout } from "../../effects/spout";
+import { zafirFx } from "../../skillFx";
 import { openWounds } from "../../wounds";
 import { fighterAt, foesNear, spellStrike } from "../strike";
 
@@ -22,6 +24,9 @@ export const QUICKSAND_DRILL: ZafirDrillSkill = {
     spellStrike(foe, values.power ?? 0, ID);
     openWounds(foe, values.wounds ?? 0);
     const [x, y] = enemyCenter(foe);
+    const floor = surfaceBelow(x, y);
+    const pit = { x, y: floor, face: fighterAt().face, reach: values.drag ? DRAG_REACH : 14 };
+    zafirFx(ID, "nova", pit, { damage: progress.stats.ap * (1 + (values.power ?? 0)), mark: "both" });
     if (values.drag) {
       for (const near of foesNear(x, y, DRAG_REACH)) {
         near.halt = Math.max(near.halt, values.halt);
@@ -29,6 +34,8 @@ export const QUICKSAND_DRILL: ZafirDrillSkill = {
       }
     }
     if (evolved) {
+      const sea = { x, y: floor, face: fighterAt().face, reach: 40 };
+      zafirFx(ID, "wave", sea, { damage: progress.stats.ap * values.sea, delay: 0.08 });
       game.fx.push(
         createSpout(foe.x, foe.y, fighterAt().face, { damage: progress.stats.ap * values.sea, range: 0.8, source: ID }),
       );

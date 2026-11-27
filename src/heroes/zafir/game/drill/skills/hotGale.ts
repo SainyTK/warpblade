@@ -3,6 +3,7 @@ import { staggerFoe } from "../../../../../game/enemies/stagger";
 import { game, progress } from "../../../../../game/state";
 import type { ZafirDrillSkill } from "../../../types/drillSkill";
 import { createSandWave } from "../../effects/sandWave";
+import { zafirFx } from "../../skillFx";
 import { woundsOf } from "../../wounds";
 import { fighterAt, skillStrike, spellStrike } from "../strike";
 
@@ -19,15 +20,31 @@ export const HOT_GALE_DRILL: ZafirDrillSkill = {
       return;
     }
     spellStrike(foe, values.power, ID);
+    const [cx, cy] = enemyCenter(foe);
+    const travel = Math.sign(cx - fighterAt().x) || 1;
+    zafirFx(
+      ID,
+      "slash",
+      { x: cx - travel * 6, y: cy, face: travel, reach: 16 },
+      { damage: progress.stats.ap * values.power },
+    );
     if (values.stagger) {
       staggerFoe(foe, values.stagger);
     }
     if (evolved) {
-      skillStrike(foe, woundsOf(foe) * values.simoom, ID);
+      const torn = woundsOf(foe) * values.simoom;
+      skillStrike(foe, torn, ID);
+      zafirFx(
+        ID,
+        "burst",
+        { x: cx, y: cy, reach: 14 },
+        { mark: "both", damage: progress.stats.ad * (torn + 1), delay: 0.05 },
+      );
     }
     if (values.back) {
-      const [x, y] = enemyCenter(foe);
+      const [x, y] = [cx, cy];
       const dir = Math.sign(fighterAt().x - x) || -1;
+      zafirFx(ID, "slash", { x, y, face: dir, reach: 12 }, { quiet: true, delay: 0.1 });
       game.fx.push(
         createSandWave({
           x,
@@ -47,6 +64,7 @@ export const HOT_GALE_DRILL: ZafirDrillSkill = {
       return;
     }
     const { x, y, face } = fighterAt();
+    zafirFx(ID, "wave", { x, y, face, reach: 30 }, { quiet: true, damage: progress.stats.ad * values.gust });
     game.fx.push(
       createSandWave({
         x,

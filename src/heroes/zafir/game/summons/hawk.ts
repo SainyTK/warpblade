@@ -10,6 +10,7 @@ import type { Enemy } from "../../../../types/enemy";
 import { hex, WHITE } from "../../../../utils/color";
 import { lerp } from "../../../../utils/math";
 import { SAND_SPARKS } from "../../constants/palette";
+import { zafirFx } from "../skillFx";
 import { openWounds } from "../wounds";
 
 const ID = "za_hawk";
@@ -61,6 +62,12 @@ export function callHawk(x0: number, y0: number): void {
       dealDamage(foe, progress.stats.ad * v.power, { fromX: x, ky: -20, source: ID, stun: v.stun });
       openWounds(foe, v.wounds ?? 0);
       game.fx.push(createImpact(tx, ty, 1, false, SAND_SPARKS));
+      zafirFx(
+        ID,
+        "bolt",
+        { x: tx, y: ty, reach: DIVE.height },
+        { damage: progress.stats.ad * v.power, quiet: dives < (v.dives ?? 1) },
+      );
       dives--;
       t = 0;
       from = [x, y];

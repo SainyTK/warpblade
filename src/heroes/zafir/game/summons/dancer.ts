@@ -12,6 +12,7 @@ import type { SpriteImage } from "../../../../types/sprite";
 import { STRING_CLIPS } from "../../constants/clips/string";
 import { SAND_RAMP } from "../../constants/palette";
 import { RING_CUT } from "../moves/slashes";
+import { zafirFx } from "../skillFx";
 import { openWounds } from "../wounds";
 
 const ID = "za_mirage";
@@ -35,6 +36,8 @@ function spin(x: number, y: number, target: Enemy, last: boolean): void {
   const v = skillValues(ID);
   const reach = withBuild("area", DANCE.reach);
   game.fx.push(createSlash(x, y, 1, { ...RING_CUT, R: reach, ramp: SAND_RAMP }));
+  if (last && skillEvolved(ID))
+    zafirFx(ID, "burst", { x: target.x, y: target.y - 16, reach: 16 }, { damage: progress.stats.ad * v.burst });
   for (const e of foesOnScreen()) {
     if (Math.abs(e.x - x) > reach || Math.abs(e.y - y) > 30) continue;
     const power = e === target ? v.power : v.plain;
@@ -53,6 +56,12 @@ export function callDancer(target: Enemy, side: number): void {
   const life = withBuild("duration", v.life);
   const x = target.x + side * 14;
   const y = target.y;
+  zafirFx(
+    ID,
+    "nova",
+    { x, y, face: -side, reach: DANCE.reach * 0.45 },
+    { damage: progress.stats.ad * v.power * (life / DANCE.every) },
+  );
   let t = 0;
   let next = 0;
   const fx: Effect = {
