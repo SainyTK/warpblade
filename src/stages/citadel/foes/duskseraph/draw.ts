@@ -119,52 +119,54 @@ function robe(s: SpriteCanvas, p: SeraphPose, time: number): void {
 }
 
 function head(s: SpriteCanvas, p: SeraphPose): void {
-  const hx = 1.5;
+  const hx = 1;
   const hy = -24 + p.bow;
   s.begin();
   s.poly(
     [
-      [hx - 3.5, hy + 4],
-      [hx - 4, hy - 1.5],
-      [hx - 1.5, hy - 4.5],
-      [hx + 2.5, hy - 4],
-      [hx + 4, hy],
-      [hx + 3, hy + 4],
+      [hx - 4, hy + 4],
+      [hx - 4.5, hy - 1],
+      [hx - 2, hy - 4.5],
+      [hx + 2, hy - 4.5],
+      [hx + 4, hy - 1.5],
+      [hx + 3.5, hy + 4],
     ],
-    B[1],
+    WING[1],
   );
-  s.shadeEdges(B[1], B[3], B[0], 2);
+  s.shadeEdges(WING[1], WING[3], WING[0], 2);
   s.commit();
   s.begin();
   s.poly(
     [
-      [hx - 4.5, hy + 4.5],
-      [hx - 5, hy - 2],
-      [hx - 2, hy - 5.5],
-      [hx - 2.5, hy - 1],
-      [hx - 2, hy + 5],
+      [hx - 0.5, hy - 1.5],
+      [hx + 3, hy - 1.5],
+      [hx + 3, hy + 1.5],
+      [hx + 1.5, hy + 3.5],
+      [hx - 0.5, hy + 2.5],
     ],
-    WING[1],
+    B[1],
   );
-  s.shadeEdges(WING[1], WING[2], WING[0]);
-  s.hairline(hx + 0.5, hy + 1.5, hx + 3.5, hy + 1.5, B[0]);
+  s.shadeEdges(B[1], B[2], B[0]);
+  s.set(hx + 1.5, hy + 2, VOID[3]);
   s.commit();
-  glowEye(s, hx + 2.6, hy - 0.8, p.hot ? AC.eyeHot : AC.eye, p.hot ? AC.eye : AC.eyeDim, AC.eyeHot);
-  s.begin();
-  s.hairline(hx + 2.5, hy + 0.3, hx + 2.2, hy + 4, VOID[3]);
-  s.commit(false);
+  glowEye(s, hx + 2.2, hy - 0.4, p.hot ? AC.eyeHot : AC.eye, p.hot ? AC.eye : AC.eyeDim, AC.eyeHot);
 }
 
 function arm(s: SpriteCanvas, p: SeraphPose): void {
   const shoulder: Pt = [3, -18 + p.bow];
   const [hx, hy] = p.hand;
+  const elbow: Pt = [(shoulder[0] + hx) / 2 - 0.5, (shoulder[1] + hy) / 2 + 1];
   s.begin();
-  s.taper(shoulder[0], shoulder[1], hx, hy, 1.4, 0.9, B[1]);
-  s.shadeEdges(B[1], B[2], B[0]);
+  s.taper(shoulder[0], shoulder[1], elbow[0], elbow[1], 1.5, 1.4, T[2]);
+  s.taper(elbow[0], elbow[1], hx - 0.8, hy, 1.4, 1.7, T[2]);
+  s.shadeEdges(T[2], T[3], T[0]);
   s.commit();
   s.begin();
-  s.dot(hx + 0.5, hy, 1.4 + p.halo * 0.8, p.hot ? VOID[4] : VOID[3]);
-  s.set(hx, hy - 0.5, VOID[5]);
+  s.dot(hx + 0.2, hy, 0.8, B[1]);
+  s.commit();
+  s.begin();
+  s.dot(hx + 1.2, hy - 0.4, 1.3 + p.halo * 0.9, p.hot ? VOID[4] : VOID[3]);
+  s.set(hx + 0.8, hy - 0.9, VOID[5]);
   s.commit(false);
 }
 

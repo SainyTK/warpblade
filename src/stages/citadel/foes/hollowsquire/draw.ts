@@ -36,7 +36,7 @@ function spear(s: SpriteCanvas, p: SquirePose): void {
   const ux = (tx - hx) / len;
   const uy = (ty - hy) / len;
   s.begin();
-  s.stroke(hx - ux * 12, hy - uy * 12, tx - ux * 3, ty - uy * 3, 0.55, CITADEL_FOE.bone[0]);
+  s.stroke(hx - ux * 6, hy - uy * 6, tx - ux * 3, ty - uy * 3, 0.55, CITADEL_FOE.bone[0]);
   s.shadeEdges(CITADEL_FOE.bone[0], CITADEL_FOE.bone[1], AC.outline);
   s.commit();
   s.begin();
@@ -137,24 +137,24 @@ function arm(s: SpriteCanvas, p: SquirePose): void {
 function shield(s: SpriteCanvas, p: SquirePose): void {
   const [cx, cy] = p.shield;
   const k = p.shieldTilt;
-  const w = 3.6 - k * 1.2;
+  const w = 3 - k * 1;
   const pts: Pt[] = [
-    [cx - w, cy - 8],
-    [cx + w, cy - 8 + k],
+    [cx - w, cy - 6.5],
+    [cx + w, cy - 6.5 + k],
     [cx + w + 0.3, cy + 1],
-    [cx + k, cy + 9],
+    [cx + k, cy + 7],
     [cx - w - 0.3, cy + 1],
   ];
   s.begin();
   s.poly(pts, I[2]);
   s.shadeEdges(I[2], I[4], I[0], 2);
-  s.hairline(cx - w + 0.5, cy - 7.5, cx + w - 0.5, cy - 7.5 + k, I[5]);
+  s.hairline(cx - w + 0.5, cy - 6, cx + w - 0.5, cy - 6 + k, I[5]);
   s.commit();
   s.begin();
-  s.dot(cx, cy - 1.5, 2, VOID[2]);
-  s.dot(cx, cy - 1.5, 1.1, AC.bodyDeep);
-  s.set(cx - 1.2, cy - 3, VOID[4]);
-  s.hairline(cx, cy + 1.5, cx + k * 0.5, cy + 6.5, VOID[1]);
+  s.dot(cx, cy - 1.5, 1.6, VOID[2]);
+  s.dot(cx, cy - 1.5, 0.9, AC.bodyDeep);
+  s.set(cx - 1, cy - 2.6, VOID[4]);
+  s.hairline(cx, cy + 1, cx + k * 0.5, cy + 5, VOID[1]);
   s.commit(false);
 }
 

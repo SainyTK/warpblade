@@ -10,6 +10,7 @@ const I = CITADEL_FOE.iron;
 const T = CITADEL_FOE.tabard;
 const HAFT = 30;
 type Hide = ReturnType<typeof hideOf>;
+const HIDE: Hide = hideOf(0);
 
 function leg(s: SpriteCanvas, hip: Pt, foot: Pt, near: boolean, H: Hide): void {
   const tone = near ? H.dark : H.deep;
@@ -89,34 +90,66 @@ function torso(s: SpriteCanvas, p: HeadsmanPose, H: Hide, time: number): void {
   s.hairline(l * 0.4, -25, 0, -10, T[0]);
   s.commit();
   s.begin();
-  s.dot(-3 + l, -38, 10, H.body);
-  s.dot(4 + l, -37, 9, H.body);
-  s.dot(l * 0.7, -29, 8.5, H.body);
+  s.poly(
+    [
+      [-12 + l, -47],
+      [11 + l, -47],
+      [14 + l, -41],
+      [10 + l * 0.8, -31],
+      [7 + l * 0.5, -24],
+      [-7 + l * 0.5, -24],
+      [-10 + l * 0.8, -31],
+      [-14 + l, -41],
+    ],
+    H.body,
+  );
   s.shadeEdges(H.body, H.sheen, H.dark, 3);
+  s.hairline(-8 + l, -37, -1 + l, -36, H.dark);
+  s.hairline(2 + l, -36, 9 + l, -37, H.dark);
+  s.hairline(l * 0.8, -36, l * 0.6, -26, H.dark);
+  s.hairline(-5 + l * 0.7, -30, 5 + l * 0.7, -30, H.dark);
   s.commit();
   s.begin();
   const pulse = Math.sin(time * 3) > 0 ? VOID[3] : VOID[2];
-  s.hairline(-1 + l, -42, 2 + l, -34, p.hot > 0.5 ? VOID[5] : pulse);
-  s.hairline(2 + l, -34, l, -28, p.hot > 0.5 ? VOID[4] : VOID[2]);
-  s.hairline(-6 + l, -36, -2 + l, -33, VOID[2]);
+  s.hairline(-3 + l, -44, 1 + l, -38, p.hot > 0.5 ? VOID[5] : pulse);
+  s.hairline(1 + l, -38, -1 + l, -31, p.hot > 0.5 ? VOID[4] : VOID[2]);
+  s.hairline(1 + l, -38, 6 + l, -34, VOID[2]);
   s.commit(false);
   s.begin();
-  for (let i = 0; i <= 8; i++) {
-    const u = i / 8;
-    s.dot(-10 + l + u * 20, -44 + u * 18, 0.9, i % 2 ? I[3] : I[4]);
+  for (let i = 0; i <= 10; i++) {
+    const u = i / 10;
+    s.dot(-12 + l + u * 22, -46 + u * 20, 0.9, i % 2 ? I[3] : I[4]);
   }
   s.commit();
   s.begin();
-  s.dot(-8 + l, -44, 5.5, I[2]);
+  s.poly(
+    [
+      [-7 + l, -48],
+      [8 + l, -48],
+      [9 + l, -45],
+      [-8 + l, -45],
+    ],
+    I[2],
+  );
+  s.shadeEdges(I[2], I[4], I[0]);
+  s.commit();
+}
+
+function pauldron(s: SpriteCanvas, p: HeadsmanPose): void {
+  const l = p.lean;
+  s.begin();
+  s.dot(9 + l, -44, 5.5, I[2]);
   s.shadeEdges(I[2], I[4], I[0], 2);
-  fang(s, [-9 + l, -48], [-12 + l, -55], 2.2, CITADEL_FOE.bone[1]);
-  fang(s, [-5 + l, -48.5], [-6 + l, -54], 1.8, CITADEL_FOE.bone[1]);
+  s.hairline(5 + l, -42, 13 + l, -42, I[1]);
+  fang(s, [8 + l, -48.5], [6 + l, -56], 2.2, CITADEL_FOE.bone[1]);
+  fang(s, [11.5 + l, -47.5], [13 + l, -54], 1.8, CITADEL_FOE.bone[1]);
+  s.shadeEdges(CITADEL_FOE.bone[1], CITADEL_FOE.bone[2], CITADEL_FOE.bone[0]);
   s.commit();
 }
 
 function head(s: SpriteCanvas, p: HeadsmanPose): void {
-  const hx = 4 + p.lean * 1.2;
-  const hy = -50;
+  const hx = 2 + p.lean * 1.2;
+  const hy = -52;
   s.begin();
   s.poly(
     [
@@ -190,18 +223,19 @@ export function drawVoidheadsman(e: Enemy, t: number): SpriteCanvas {
   const s = canvas;
   const time = t + e.seed;
   const p = headsmanPose(e, time);
-  const H = hideOf(e.seed);
+  const H = HIDE;
   const sink = Math.max(p.fade, p.rise) * 60;
   const stride = p.stride * 4;
   s.clear();
   s.shift(0, p.bob + sink);
   leg(s, [-4, -14], [-5 - stride, 0], false, H);
-  arm(s, [-8 + p.lean, -42], p.grip, H.deep, H.dark, H);
+  arm(s, [-10 + p.lean, -43], p.grip, H.deep, H.dark, H);
   axe(s, p, time);
   torso(s, p, H, time);
   leg(s, [4, -14], [6 + stride, 0], true, H);
   head(s, p);
-  arm(s, [6 + p.lean, -41], [p.grip[0] + 4, p.grip[1] + 2], H.dark, H.sheen, H);
+  arm(s, [9 + p.lean, -42], [p.grip[0] + 4, p.grip[1] + 3], H.dark, H.sheen, H);
+  pauldron(s, p);
   s.shift(0, sink);
   eclipse(s, p, time);
   s.shift(0, 0);

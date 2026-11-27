@@ -6,7 +6,7 @@ import { clamp } from "../../../../utils/math";
 import { CITADEL_FOE } from "../colors";
 import { RAY, RAY_MOVE } from "./constants";
 
-const canvas = detailCanvas(64, 44, 32, 22);
+const canvas = detailCanvas(64, 52, 32, 26);
 const WING = CITADEL_FOE.wing;
 
 interface RayPose {
@@ -30,17 +30,17 @@ function poseOf(e: Enemy, time: number): RayPose {
 }
 
 function wing(s: SpriteCanvas, flap: number, far: boolean, base: number, light: number): void {
-  const k = far ? 0.8 : 1;
-  const lift = -flap * 9 * k;
-  const root: Pt = [far ? 1 : -1, far ? -2 : -1];
-  const tip: Pt = [root[0] - 2 * k, root[1] + lift - 1];
-  const lead: Pt = [root[0] + 6 * k, root[1] + lift * 0.45 - 1.5];
-  const trail: Pt = [root[0] - 13 * k, root[1] + lift * 0.55 + 2];
-  const back: Pt = [root[0] - 8, root[1] + 3];
-  s.poly([root, lead, tip, trail, back], base);
+  const side = far ? -1 : 1;
+  const reach = (far ? 11 : 12) + flap * side * 4;
+  const front: Pt = [7, side * 1.5];
+  const tip: Pt = [-3, side * reach];
+  const trail: Pt = [-13, side * (reach * 0.45)];
+  const root: Pt = [-9, side * 2];
+  s.poly([front, [2, side * reach * 0.6], tip, [-6, side * reach * 0.75], trail, root], base);
   s.shadeEdges(base, light, WING[0], 2);
-  s.hairline(root[0] + 2, root[1], tip[0], tip[1], light);
-  s.hairline(root[0] - 3, root[1] + 1.5, trail[0] + 2, trail[1] - 0.5, WING[0]);
+  s.hairline(front[0], front[1], tip[0], tip[1], light);
+  s.hairline(0, side * 2.5, -6, side * reach * 0.7, WING[0]);
+  s.hairline(-4, side * 2.5, -10, side * reach * 0.5, WING[0]);
 }
 
 function tail(s: SpriteCanvas, time: number, hot: boolean, H: ReturnType<typeof hideOf>): void {
@@ -109,11 +109,11 @@ export function drawRiftray(e: Enemy, t: number): SpriteCanvas {
   body(s, p, H);
   s.commit();
   s.begin();
-  riftSlit(s, p, time);
-  s.commit(false);
-  s.begin();
   wing(s, p.flap, false, WING[2], WING[3]);
   s.commit();
+  s.begin();
+  riftSlit(s, p, time);
+  s.commit(false);
   s.shift(0, 0);
   sunRim(s, AC.rim, AC.rimSoft);
   glowEye(s, 9, -1.4 + p.pitch + bob, p.hot ? AC.eyeHot : AC.eye, p.hot ? AC.eye : AC.eyeDim, AC.eyeHot);
