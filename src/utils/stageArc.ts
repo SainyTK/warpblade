@@ -67,7 +67,7 @@ export const bandDamage = (level: number, mods: StageMods): number =>
   (1 + FOE_BAND.damagePerLevel * (clamp(level, 1, MAX_LEVEL) - 1)) * mods.damage;
 
 export const ladderHp = (entry: LadderFoe, mods: StageMods): number =>
-  Math.max(1, Math.round(entry.hits * FOE_HIT * crowdDamage(entry.level) * mods.hp));
+  entry.hits <= 1 ? FOE_HIT : Math.max(1, Math.round(entry.hits * FOE_HIT * crowdDamage(entry.level) * mods.hp));
 
 export const bigFoeHp = (level: number, kind: Exclude<keyof typeof TIME_TO_KILL, "minion">, mods: StageMods): number =>
   Math.round(HERO_DPS_AT_LEVEL_1 * expectedDamage(level) * TIME_TO_KILL[kind] * mods.hp);
