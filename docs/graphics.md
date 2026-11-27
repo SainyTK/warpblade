@@ -103,12 +103,14 @@ A quiet cast takes 0.5 off.
 
 | Tier | Intensity | What it adds |
 | --- | --- | --- |
-| early | under 0.35 | the bare shape, small, a little light, one quiet sound layer |
-| mid | 0.35 to 0.8 | element motifs along the shape, a ring or second row, one afterimage, embers, a light shake |
-| late | 0.8 and up | a crossing or flanking second shape, ground cracks, debris, bloom, hit stop, two sound layers |
-| evolved | evolved and 1.8 and up | several shapes at once (fans, side pillars, satellites), longer life, a short flash, three sound layers |
+| early | under 0.35 | the bare shape, thin and small, a little light, one quiet sound layer |
+| mid | 0.35 to 0.8 | element motifs along the shape, a ground ring or rays, an arrival core, a branch, one afterimage, embers, a light shake |
+| late | 0.8 and up | a crossing or flanking second shape (cross cut, side pillars, side bolts, flank streaks), ground cracks, debris, hit stop, two sound layers |
+| evolved | evolved and 1.8 and up | the shape at twice the size or more, a field or wall of it, satellites and arcs to nearby foes, a brief screen dim on bolts, a scorch on the floor, bloom, a short flash, three sound layers |
 
 An evolved cast of 2.4 and up also fills the screen: a column to the sky, a cut across the stage or a ring to the stage edge.
+Mastery moves a cast up inside its tier (`gradeInTier`), and each shape grows by up to a third with it, so mastery 4 reads larger than level 8.
+Each shape sizes itself from tables by tier rank (for example `RADIUS_BY_RANK` in `slash.ts`, `TALL_BY_RANK` in `spikes.ts` and `pillar.ts`), so the order is the same for every skill whatever its base `reach`.
 Numbers live in `src/constants/skillFx.ts` (`FX_TIERS`, `FX_INTENSITY`).
 
 ### Element kits
@@ -122,10 +124,11 @@ A hero-specific picture goes in `signature`; it may call `ELEMENT_KITS[element].
 - Screen shake goes through `shake()`, which the Options toggle and reduced motion already silence.
   With reduced motion (`src/services/reducedMotion.ts`) there is no flash and no afterimage, and hit stop is halved.
 - Skill effects draw no damage numbers, so the Options toggle for numbers is untouched.
-- After its first 0.05 s an effect over a foe that is winding up (any state but drift, walk or recover) fades to a quarter, with a wider margin around bosses, so wind-ups and telegraphs stay readable.
+- After its first 0.05 s an effect over a foe that is winding up (any state but drift, walk or recover) fades: to 0.6 over a minion, to 0.3 over a mini boss or boss, with a wider margin around bosses, so wind-ups and telegraphs stay readable.
+- Light is capped so silhouettes survive a bright stage: tier light strength 0.2 to 0.32, bloom only on evolved casts, core glows 0.12, and quiet casts add no light.
 - The budget (`FX_BUDGET`): each live effect costs 1, 2, 3 or 5 by tier; past 15 quiet casts are dropped and the rest shed particles, past 28 new casts are dropped.
   At most 180 particles a step, 8 live lights, glow radius 80, shake amplitude 5, one shake per 0.12 s and one hit stop per 0.3 s, and glows only on strokes drawn at half alpha or more.
-- Measured in Chromium on an M-series Mac with 20 foes on screen and four evolved casts spawned every frame (far past real play): 5.4 ms a frame without skill effects, 8.4 ms with them, the budget holding the screen at five evolved effects.
+- Measured in Chromium on an M-series Mac with 20 foes on screen and four evolved casts spawned every frame (far past real play): 4.8 ms a frame without skill effects, 7.7 ms with them, the budget holding the screen at five evolved effects.
   One evolved slash costs about 1.5 ms to draw, an evolved burst 0.8 ms, a late one 0.2 to 0.5 ms.
 
 ### Matching the icon

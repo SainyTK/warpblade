@@ -58,7 +58,7 @@ export const FROST_KIT: ElementKit = {
       shard(x, y, a, radius * (i % 2 ? 1.1 : 1.6), Math.max(1, radius * 0.3), alpha);
     }
     sparkle(x, y, radius * 0.6 + 1, R[5], R[3], 0.3 * alpha);
-    glow(x, y, radius * 3 + 4, R[3], 0.23 * alpha);
+    glow(x, y, radius * 3 + 4, R[3], 0.12 * alpha);
   },
   spray(x, y, count, speed, angle, spread) {
     for (let i = 0; i < count; i++) {

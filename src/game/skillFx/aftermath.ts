@@ -1,9 +1,10 @@
 import { WORLD_COLORS } from "../../constants/palette";
-import { glow, hairline, line, place } from "../../engine/frame";
+import { castShadow, glow, hairline, line, place } from "../../engine/frame";
 import { PK } from "../../types/particle";
 import type { ElementKit, FxAt, FxCast, FxShape } from "../../types/skillFx";
 import { scale } from "../../utils/color";
 import { smooth } from "../../utils/math";
+import { fineRing } from "../effects/fine";
 import { fxRng, particles } from "../state";
 import { surfaceBelow } from "../world";
 import { particleAllowance } from "./budget";
@@ -97,4 +98,27 @@ export function drawCracks(cracks: readonly Crack[], kit: ElementKit, age: numbe
     const [hx, hy] = points[1];
     glow(hx, hy, 6, R[3], 0.3 * glowing);
   }
+}
+
+export interface Scorch {
+  x: number;
+  floor: number;
+  radius: number;
+}
+
+export function makeScorch(cast: FxCast, at: FxAt): Scorch | null {
+  const floor = floorNear(at);
+  if (floor === null || cast.feel.rank < 3) return null;
+  return { x: at.x, floor, radius: 10 + cast.gradeInTier * 6 };
+}
+
+export function drawScorch(scorch: Scorch | null, kit: ElementKit, age: number, life: number): void {
+  if (!scorch) return;
+  const left = 1 - smooth(0.3, 1, age / life);
+  if (left <= 0) return;
+  const { x, floor, radius } = scorch;
+  castShadow(x, floor, radius, 3.5, 0.55 * left);
+  place();
+  fineRing(x, floor + 1, radius * 0.8, 1.6, kit.look.ramp[2], left * 1.2, 1);
+  glow(x, floor, radius, kit.look.ramp[2], 0.18 * left);
 }

@@ -6,7 +6,7 @@ import type { KaelDrillSkill } from "../../../types/drillSkill";
 import { foesNear, skillStrike } from "../strike";
 
 const ID = "k_skydance";
-const dance = { wallLock: 0, grounded: true, slashed: false };
+const dance = { wallLock: 0, grounded: true, slashed: false, swing: null as unknown };
 
 export const SKY_DANCE_DRILL: KaelDrillSkill = {
   id: ID,
@@ -28,7 +28,12 @@ export const SKY_DANCE_DRILL: KaelDrillSkill = {
     }
     if (h.swing?.kind === "air") {
       dance.slashed = true;
+      if (dance.swing !== h.swing) {
+        const at = { x: h.x, y: h.y - 16, face: h.face, reach: 16 };
+        skillFx(ID, "slash", at, { damage: progress.stats.ad * (1 + (values.airSlashes ?? 0) * 0.3) });
+      }
     }
+    dance.swing = h.swing;
     if (h.grounded && !dance.grounded && dance.slashed && values.stomp) {
       const reach = evolved ? values.comet : 34;
       skillFx(ID, "nova", { x: h.x, y: h.y, reach }, { damage: progress.stats.ad * values.stomp });

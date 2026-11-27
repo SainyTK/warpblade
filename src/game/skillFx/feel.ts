@@ -3,7 +3,6 @@ import { FX_BUDGET, FX_REDUCED_MOTION } from "../../constants/skillFx";
 import { sfx } from "../../services/audio";
 import { prefersReducedMotion } from "../../services/reducedMotion";
 import type { FxAt, FxCast } from "../../types/skillFx";
-import { WHITE } from "../../utils/color";
 import { game, lights } from "../state";
 import { hitStop, shake } from "../world";
 import { lightAllowed, shakeReady, soundReady, stopReady } from "./budget";
@@ -23,7 +22,6 @@ export function castLights(cast: FxCast, at: FxAt, budgetScale: number): void {
   if (!lightAllowed(life)) return;
   const radius = Math.min(FX_BUDGET.maxGlow, feel.light * Math.sqrt(cast.size / feel.size) * budgetScale);
   lights.add(at.x, at.y, radius, look.ramp[3], feel.lightStrength, life);
-  lights.add(at.x, at.y, radius * 0.2 + 3, WHITE, feel.lightStrength * 0.35, life * 0.3);
   if (feel.bloom > 0 && lightAllowed(life * 1.4)) {
     lights.add(at.x, at.y, Math.min(FX_BUDGET.maxGlow, radius * 2), look.ramp[2], feel.bloom * 0.35, life * 1.4);
   }

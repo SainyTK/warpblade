@@ -15,7 +15,7 @@ export const ICE_SPIKES_DRILL: KaelDrillSkill = {
     }
     foe.frozen += values.freeze;
     skillStrike(foe, values.spike ?? 0, ID);
-    const row = { x: foe.x - 10, y: surfaceBelow(foe.x, foe.y - 2), face: 1, reach: 20 };
+    const row = { x: foe.x, y: surfaceBelow(foe.x, foe.y - 2), face: 1, reach: 22 };
     skillFx(ID, "spikes", row, { damage: progress.stats.ad * ((values.spike ?? 0) + 1) * 2 });
     if (values.chill) {
       const [x, y] = enemyCenter(foe);

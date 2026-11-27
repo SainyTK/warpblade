@@ -57,7 +57,7 @@ export const VOID_KIT: ElementKit = {
       const a = (i / (4 + rank * 2)) * TAU;
       fleck(x + Math.cos(a) * radius * 0.5, y + Math.sin(a) * radius * 0.5, R[4], alpha);
     }
-    glow(x, y, radius * 3 + 4, R[2], 0.25 * alpha);
+    glow(x, y, radius * 3 + 4, R[2], 0.12 * alpha);
   },
   spray(x, y, count, speed, angle, spread) {
     for (let i = 0; i < count; i++) {

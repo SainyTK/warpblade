@@ -5,7 +5,7 @@ import { prefersReducedMotion } from "../../services/reducedMotion";
 import type { Effect } from "../../types/effect";
 import type { ElementKit, FxAt, FxCast, FxShape, SkillFxOptions } from "../../types/skillFx";
 import { smooth } from "../../utils/math";
-import { drawCracks, makeCracks, spawnAftermath } from "./aftermath";
+import { drawCracks, drawScorch, makeCracks, makeScorch, spawnAftermath } from "./aftermath";
 import { castFeel, castLights } from "./feel";
 import { MOVING_SHAPES, SHAPE_LIFE, SHAPES } from "./shapes";
 import { threatVeil } from "./veil";
@@ -36,10 +36,12 @@ export function createSkillEffect(
   let t = -(options.delay ?? 0);
   let started = false;
   let cracks: ReturnType<typeof makeCracks> = [];
-  const total = () => (cracks.length ? Math.max(life, life * CRACK_LIFE) : life);
+  let scorch: ReturnType<typeof makeScorch> = null;
+  const total = () => (cracks.length || scorch ? life * CRACK_LIFE : life);
   const start = () => {
     started = true;
     cracks = makeCracks(cast, at);
+    scorch = options.quiet ? null : makeScorch(cast, at);
     spawnAftermath(shape, cast, at, kit, options.quiet ? budgetScale * 0.5 : budgetScale);
     if (options.quiet) return;
     castLights(cast, at, budgetScale);
@@ -56,7 +58,9 @@ export function createSkillEffect(
       return t < total();
     },
     drawBack() {
-      if (t > 0) drawCracks(cracks, kit, t, life * CRACK_LIFE);
+      if (t <= 0) return;
+      drawScorch(scorch, kit, t, life * CRACK_LIFE);
+      drawCracks(cracks, kit, t, life * CRACK_LIFE);
     },
     draw() {
       if (t < 0 || t > life) return;
