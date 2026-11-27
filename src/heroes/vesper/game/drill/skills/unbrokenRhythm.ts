@@ -1,6 +1,7 @@
 import { drillFighter, drillSession, hastenSpells, readySpell } from "../../../../../drill";
-import { hero } from "../../../../../game/state";
+import { hero, progress } from "../../../../../game/state";
 import type { VesperDrillSkill } from "../../../types/drillSkill";
+import { vesperFx } from "../../skillFx";
 
 const ID = "ve_rhythm";
 
@@ -16,6 +17,7 @@ export const UNBROKEN_RHYTHM_DRILL: VesperDrillSkill = {
       return;
     }
     if (strike === "warp") {
+      vesperFx(ID, { x: h.x, y: h.y, face: h.face }, { damage: progress.stats.ad * (1 + (values.prepare ?? 0)) });
       const book = session.fighter.spellBook;
       if (evolved) {
         readySpell(book, book.selected);
@@ -31,6 +33,9 @@ export const UNBROKEN_RHYTHM_DRILL: VesperDrillSkill = {
       return;
     }
     const finisher = session.profile.strikes[strike].finisher;
+    if (finisher) {
+      vesperFx(ID, { x: h.x + h.face * 10, y: h.y, face: h.face }, { damage: progress.stats.ad * 1.6 });
+    }
     h.warpReadyIn = finisher && values.finisher ? 0 : Math.max(0, h.warpReadyIn - values.warp);
     hero.warpCd = h.warpReadyIn;
   },

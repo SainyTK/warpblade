@@ -4,6 +4,7 @@ import { game, hero, progress } from "../../../../../game/state";
 import { SKILL } from "../../../constants/skills/ids";
 import type { SayaDrillSkill } from "../../../types/drillSkill";
 import { createInkStroke } from "../../effects/inkStroke";
+import { sayaFx } from "../../skillFx";
 import { storeCut } from "../../store";
 import { cutAngle, foesAlong, skillStrike } from "../targets";
 
@@ -16,6 +17,12 @@ export const LONG_STROKE_DRILL: SayaDrillSkill = {
     if (!struck.length) {
       return;
     }
+    const at = drillFighter() ?? hero;
+    sayaFx(
+      SKILL.stroke,
+      { x: at.x - at.face * STROKE, y: at.y - 16, face: at.face, toX: at.x + at.face * 6, toY: at.y - 16 },
+      { damage: progress.stats.ad * ((values.cut ?? 0) + (values.store ?? 0)) * struck.length },
+    );
     for (const foe of struck) {
       skillStrike(foe, values.cut, SKILL.stroke);
       if (values.store) {

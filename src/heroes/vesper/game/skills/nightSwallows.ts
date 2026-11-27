@@ -9,6 +9,7 @@ import type { Enemy } from "../../../../types/enemy";
 import type { SkillBehavior, SkillMemory } from "../../../../types/skillBehavior";
 import { WHITE } from "../../../../utils/color";
 import { DUSK_RAMP } from "../../look/colors";
+import { vesperFx } from "../skillFx";
 import { tempoTop } from "../tempo";
 
 const ID = "ve_swallow";
@@ -82,6 +83,14 @@ function fly(b: Swallow, dt: number): boolean {
   b.y += b.vy * dt;
   if (!b.target || !touches(b.target, b.x, b.y, BIRD.reach)) return b.life > 0;
   const e = b.target;
+  const [ex, ey] = enemyCenter(e);
+  vesperFx(
+    ID,
+    { x: ex, y: ey, face: Math.sign(b.vx) || 1, toX: b.x - b.vx * 0.12, toY: b.y - b.vy * 0.12 },
+    {
+      damage: progress.stats.ad * v.power * (v.pierce ?? 1),
+    },
+  );
   dealDamage(e, progress.stats.ad * v.power, {
     fromX: b.x,
     kx: Math.sign(b.vx) * 20,

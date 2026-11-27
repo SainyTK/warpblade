@@ -1,6 +1,8 @@
 import { drillFighter } from "../../../../../drill";
 import { staggerFoe } from "../../../../../game/enemies/stagger";
+import { progress } from "../../../../../game/state";
 import type { VesperDrillSkill } from "../../../types/drillSkill";
+import { vesperFx } from "../../skillFx";
 import { later } from "../later";
 import { foesNear, skillStrike } from "../strike";
 
@@ -19,6 +21,12 @@ export const THROWN_DUSK_DRILL: VesperDrillSkill = {
     }
     const x = h.x;
     const y = h.y - 16;
+    const crosses = (values.crossPower ?? 0) * (evolved ? 2 : 1);
+    vesperFx(
+      ID,
+      { x: h.x, y: h.y, face: h.face },
+      { damage: progress.stats.ad * (1 + (values.damage ?? 0) + crosses) },
+    );
     const cross = () => {
       for (const foe of foesNear(x, y, values.cross ?? 0)) {
         skillStrike(foe, values.crossPower, ID);

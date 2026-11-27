@@ -9,6 +9,7 @@ import type { Enemy } from "../../../../types/enemy";
 import type { SkillBehavior, SkillMemory } from "../../../../types/skillBehavior";
 import { NIGHT_RAMP } from "../../look/colors";
 import { drawPhantom } from "../phantom";
+import { vesperFx } from "../skillFx";
 import { vesperSound } from "../sound";
 
 const ID = "ve_twin";
@@ -83,6 +84,11 @@ function strike(p: Phantom): void {
   p.face = Math.sign(x - p.x) || p.face;
   const finale = p.cuts === 1 && v.launch;
   game.fx.push(createSlash(p.x, p.y, p.face, { ...CUT, cy: y - p.y }));
+  vesperFx(
+    ID,
+    { x, y, face: p.face },
+    { damage: progress.stats.ad * v.power * (skillEvolved(ID) ? 2 + v.buff * 10 : 1) },
+  );
   // with the fifth level the phantom cuts from the foe's back
   const from = v.back ? x + p.face * 10 : p.x;
   dealDamage(p.foe, progress.stats.ad * v.power, {

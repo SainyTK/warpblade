@@ -1,7 +1,10 @@
 import { drillSession } from "../../../../../drill";
 import { enemyCenter } from "../../../../../game/enemies/enemy";
+import { hero, progress } from "../../../../../game/state";
+import { surfaceBelow } from "../../../../../game/world";
 import type { ElementProjectile } from "../../../../../types/drill";
 import type { VesperDrillSkill } from "../../../types/drillSkill";
+import { vesperFx } from "../../skillFx";
 import { liftFoe } from "../statuses";
 import { foesNear, skillStrike } from "../strike";
 
@@ -17,6 +20,13 @@ export const DUSK_GALE_DRILL: VesperDrillSkill = {
     if (spell.id !== "gale") {
       return;
     }
+    const [fx, fy] = enemyCenter(foe);
+    const gusts = 1 + (values.gusts ?? 0) + (evolved ? 2 : 0);
+    vesperFx(
+      ID,
+      { x: fx, y: surfaceBelow(fx, fy), face: hero.face },
+      { damage: progress.stats.ad * (1 + (values.bonus ?? 0)) * gusts },
+    );
     skillStrike(foe, values.bonus, ID);
     if (evolved) {
       liftFoe(foe, -values.lift);

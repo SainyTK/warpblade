@@ -1,8 +1,9 @@
-import { skillValues } from "../../../game/skills/query";
+import { skillLevel, skillValues } from "../../../game/skills/query";
 import { hero, progress, rng } from "../../../game/state";
 import { FOCUS } from "../constants/focus";
 import { SKILL } from "../constants/skills/ids";
 import { bladeOut } from "./blade";
+import { sayaFx } from "./skillFx";
 import { sayaSound } from "./sound";
 import { saya } from "./state";
 import { onOwnTrail } from "./trail";
@@ -15,6 +16,9 @@ export function gainBreath(): void {
   if (saya.breaths >= maxBreaths()) return;
   saya.breaths++;
   saya.rest = 0;
+  if (skillLevel(SKILL.breath)) {
+    sayaFx(SKILL.breath, { x: hero.x, y: hero.y, face: hero.face }, { damage: progress.stats.ad * 0.5 * saya.breaths });
+  }
   const heal = skillValues(SKILL.breath).heal;
   if (heal) hero.hp = Math.min(progress.stats.hp, hero.hp + heal);
   sayaSound.breath();

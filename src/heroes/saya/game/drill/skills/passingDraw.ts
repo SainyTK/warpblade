@@ -1,6 +1,8 @@
 import { drillFighter } from "../../../../../drill";
+import { progress } from "../../../../../game/state";
 import { SKILL } from "../../../constants/skills/ids";
 import type { SayaDrillSkill } from "../../../types/drillSkill";
+import { sayaFx } from "../../skillFx";
 import { later } from "../later";
 import { sheathe } from "../sheathe";
 import { foesNear, skillStrike } from "../targets";
@@ -23,6 +25,11 @@ export const PASSING_DRAW_DRILL: SayaDrillSkill = {
     if (blow !== "warp" || !h) {
       return;
     }
+    sayaFx(
+      SKILL.pass,
+      { x: h.x - h.face * 54, y: h.y - 16, face: h.face, toX: h.x, toY: h.y - 16 },
+      { damage: progress.stats.ad * (1 + (values.damage ?? 0) + (values.sweep ?? 0)) * (evolved ? 2 : 1) },
+    );
     if (values.refresh) {
       h.airDashes = Math.max(h.airDashes, 1);
       h.airSlashes = 0;

@@ -9,6 +9,7 @@ import type { Effect } from "../../../../types/effect";
 import type { Enemy } from "../../../../types/enemy";
 import { TAU } from "../../../../utils/math";
 import { DUSK_RAMP } from "../../look/colors";
+import { vesperFx } from "../skillFx";
 
 const ID = "ve_gale";
 /** the gale's speed along the floor, its half width and height, and how often it can cut the same foe again */
@@ -101,6 +102,8 @@ export function castGale(power: number, wide: boolean): void {
   const v = skillValues(ID);
   const x = hero.x + hero.face * 10;
   const y = hero.y;
+  const gusts = (v.both || wide ? 2 : 1) * (v.ticks ?? 1);
+  vesperFx(ID, { x, y, face: hero.face }, { damage: progress.stats.ap * v.power * power * gusts });
   game.fx.push(createGust(x, y, hero.face, power));
   if (v.both || wide) game.fx.push(createGust(hero.x - hero.face * 10, y, -hero.face, power));
   if (v.both && wide) {

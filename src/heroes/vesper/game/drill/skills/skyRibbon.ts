@@ -1,8 +1,10 @@
 import { drillFighter } from "../../../../../drill";
+import { enemyCenter } from "../../../../../game/enemies/enemy";
 import { game, hero, progress } from "../../../../../game/state";
 import type { Enemy } from "../../../../../types/enemy";
 import type { VesperDrillSkill } from "../../../types/drillSkill";
 import { createDuskWave } from "../../effects/duskWave";
+import { vesperFx } from "../../skillFx";
 import { echo } from "../effects";
 import { skillStrike } from "../strike";
 
@@ -18,6 +20,12 @@ export const SKY_RIBBON_DRILL: VesperDrillSkill = {
     if (strike !== "air") {
       return;
     }
+    const [x, y] = enemyCenter(foe);
+    vesperFx(
+      ID,
+      { x: hero.x, y: hero.y - 10, face: hero.face, toX: x + hero.face * 6, toY: y - 12 },
+      { damage: progress.stats.ad * (1 + (values.bonus ?? 0) + (values.echo ?? 0)) },
+    );
     skillStrike(foe, values.bonus ?? 0, ID);
     if (values.echo && foe.air) {
       echo(foe, values.echo, ID);

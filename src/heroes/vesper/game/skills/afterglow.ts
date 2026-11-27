@@ -9,6 +9,7 @@ import { game, hero, progress } from "../../../../game/state";
 import type { Enemy } from "../../../../types/enemy";
 import type { SkillBehavior } from "../../../../types/skillBehavior";
 import { DUSK_RAMP } from "../../look/colors";
+import { vesperFx } from "../skillFx";
 import { vesper } from "../state";
 import { tempoMost, tempoTop } from "../tempo";
 
@@ -20,6 +21,9 @@ const GLOW = { every: 0.5, duration: 3, burst: 36, flareEvery: 1, flareTicks: 3 
 /** lay afterglow on a foe */
 function layGlow(e: Enemy, n: number): void {
   const v = skillValues(ID);
+  const [x, y] = enemyCenter(e);
+  const ticks = withBuild("duration", GLOW.duration) / GLOW.every;
+  vesperFx(ID, { x, y, face: hero.face }, { damage: progress.stats.ad * v.damage * n * ticks });
   addStacks(e, ID, {
     stacks: n,
     max: withBuild("amount", v.max),
@@ -50,6 +54,12 @@ export const afterglow: SkillBehavior = {
       if (!n || e.hp <= 0) continue;
       dealDamage(e, progress.stats.ad * v.damage * n * GLOW.flareTicks, { fromX: e.x, source: ID });
       game.fx.push(createImpact(...enemyCenter(e), 1, false, SPARKS.shadow));
+      const [x, y] = enemyCenter(e);
+      vesperFx(
+        ID,
+        { x, y, face: hero.face, reach: 13 },
+        { damage: progress.stats.ad * v.damage * n * GLOW.flareTicks },
+      );
     }
   },
   on: {
@@ -61,6 +71,7 @@ export const afterglow: SkillBehavior = {
       if (!v.burst || !stacksOf(ev.foe, ID)) return;
       const [x, y] = enemyCenter(ev.foe);
       game.fx.push(createFloorRing(x, y + 8, GLOW.burst, DUSK_RAMP, 0.35, 0.5));
+      vesperFx(ID, { x, y, face: hero.face, reach: 15 }, { damage: progress.stats.ad * v.burst });
       for (const e of game.enemies) {
         if (e === ev.foe || e.hp <= 0) continue;
         const [ex, ey] = enemyCenter(e);

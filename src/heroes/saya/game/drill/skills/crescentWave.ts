@@ -1,8 +1,10 @@
 import { drillSession } from "../../../../../drill";
 import { staggerFoe } from "../../../../../game/enemies/stagger";
-import { progress } from "../../../../../game/state";
+import { hero, progress } from "../../../../../game/state";
+import { surfaceBelow } from "../../../../../game/world";
 import { SKILL } from "../../../constants/skills/ids";
 import type { SayaDrillSkill } from "../../../types/drillSkill";
+import { sayaFx } from "../../skillFx";
 import { storeCut } from "../../store";
 import { cutAngle } from "../targets";
 import { spellBonus } from "./spellPower";
@@ -13,6 +15,12 @@ export const CRESCENT_WAVE_DRILL: SayaDrillSkill = {
     if (spell.id !== "crescent") {
       return;
     }
+    const reach = (spell.damage / 10) * (1 + (values.power ?? 0)) + (values.store ?? 0);
+    sayaFx(
+      SKILL.crescent,
+      { x: foe.x - hero.face * 30, y: surfaceBelow(foe.x, foe.y - 4), face: hero.face },
+      { damage: progress.stats.ap * reach * (evolved ? 1.5 : 1) },
+    );
     spellBonus(foe, spell, values.power ?? 0, SKILL.crescent);
     storeCut(foe, progress.stats.ap * values.store, cutAngle(foe), "abilities");
     if (values.stagger) {

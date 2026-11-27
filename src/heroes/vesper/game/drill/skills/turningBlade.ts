@@ -2,9 +2,10 @@ import { drillFighter } from "../../../../../drill";
 import { createSlash } from "../../../../../game/effects/slash";
 import { staggerFoe } from "../../../../../game/enemies/stagger";
 import { nearestFoe } from "../../../../../game/skills/targets";
-import { game, hero } from "../../../../../game/state";
+import { game, hero, progress } from "../../../../../game/state";
 import { NIGHT_RAMP } from "../../../look/colors";
 import type { VesperDrillSkill } from "../../../types/drillSkill";
+import { vesperFx } from "../../skillFx";
 import { foesNear, skillStrike } from "../strike";
 
 const ID = "ve_turn";
@@ -23,6 +24,12 @@ export const TURNING_BLADE_DRILL: VesperDrillSkill = {
     const near = foesNear(h.x, h.y - 16, values.wide ? 50 : 40);
     const first = nearestFoe(h.x, h.y - 16);
     const struck = values.wide ? near : near.filter((foe) => foe === first);
+    const spin = evolved ? (values.spinPower ?? 0) : 0;
+    vesperFx(
+      ID,
+      { x: h.x + h.face * 8, y: h.y - 18, face: h.face },
+      { damage: progress.stats.ad * (1 + (values.cut ?? 0) * 2 + spin) },
+    );
     for (const foe of struck) {
       skillStrike(foe, values.cut ?? 0, ID, { sureCrit: true });
       if (values.stagger) {

@@ -1,5 +1,7 @@
 import { progress } from "../../../../../game/state";
+import { surfaceBelow } from "../../../../../game/world";
 import type { VesperDrillSkill } from "../../../types/drillSkill";
+import { vesperFx } from "../../skillFx";
 import { dance } from "../dance";
 import { later } from "../later";
 import { releaseWaltz } from "../release";
@@ -15,8 +17,10 @@ export const DUSK_WALTZ_DRILL: VesperDrillSkill = {
     m.tierReach *= values.reach ?? 1;
   },
   released(cast, { values, evolved }) {
-    const { tier, x, y } = cast;
+    const { tier, x, y, face } = cast;
     const foes = foesNear(x, y - 16, tier.reach);
+    const blow = (tier.damage / 10) * progress.stats.ap * values.damage;
+    vesperFx(ID, { x, y: surfaceBelow(x, y - 4), face, reach: 20 + tier.reach * 0.25 }, { damage: blow });
     if (values.pull) {
       for (const foe of foes) {
         foe.vx += (x - foe.x) * values.pull;

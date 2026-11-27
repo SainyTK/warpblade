@@ -3,11 +3,12 @@ import { dealDamage } from "../../../../game/damage";
 import { createSlash } from "../../../../game/effects/slash";
 import { enemyCenter } from "../../../../game/enemies/enemy";
 import { movePayoff } from "../../../../game/skills/payoff";
-import { skillEvolved, skillValues } from "../../../../game/skills/query";
+import { skillEvolved, skillLevel, skillValues } from "../../../../game/skills/query";
 import { game, hero, progress } from "../../../../game/state";
 import { hitStop } from "../../../../game/world";
 import type { Enemy } from "../../../../types/enemy";
 import { createEchoCut } from "../effects/echoCut";
+import { vesperFx } from "../skillFx";
 import { vesper } from "../state";
 import { gainTempo, tempoMost } from "../tempo";
 
@@ -48,6 +49,15 @@ export function keenAfterStrike(id: string, last: boolean): void {
   const v = skillValues(ID);
   const foe = payoffFoe();
   if (!foe) return;
+  if (skillLevel(ID)) {
+    const [fx, fy] = enemyCenter(foe);
+    const pair = skillEvolved(ID) ? (v.cross ?? 0) : 0;
+    vesperFx(
+      ID,
+      { x: fx, y: fy, face: hero.face },
+      { damage: progress.stats.ad * (1 + (v.bonus ?? 0) + (v.echoKeen ?? 0) + pair) },
+    );
+  }
   if (v.echoKeen) game.fx.push(createEchoCut(foe, progress.stats.ad * v.echoKeen, 0.05));
   if (v.keenTop && id === "moonrise") gainTempo(tempoMost());
   if (v.mp) hero.mp = Math.min(progress.stats.mp, hero.mp + v.mp);

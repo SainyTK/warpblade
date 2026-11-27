@@ -3,6 +3,7 @@ import { game, hero, progress } from "../../../../../game/state";
 import { SKILL } from "../../../constants/skills/ids";
 import type { SayaDrillSkill } from "../../../types/drillSkill";
 import { createInkBurst } from "../../effects/inkBurst";
+import { sayaFx } from "../../skillFx";
 import { storeCut } from "../../store";
 import { later } from "../later";
 import { cutAngle, foesNear, skillStrike } from "../targets";
@@ -24,6 +25,12 @@ export const SHADOW_STEP_DRILL: SayaDrillSkill = {
       hero.inv = Math.max(hero.inv, values.inv);
     }
     if (dashing && !step.dashing) {
+      const after = (values.after ?? 0) * (evolved ? 2 : 1);
+      sayaFx(
+        SKILL.step,
+        { x: h.x, y: h.y - 16, face: h.face, toX: h.x + h.face * 40, toY: h.y - 16 },
+        { damage: progress.stats.ad * (0.6 + after) },
+      );
       if (h.airDashActive && values.refresh) {
         h.airSlashes = 0;
       }

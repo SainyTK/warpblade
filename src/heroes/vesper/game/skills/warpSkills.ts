@@ -1,11 +1,12 @@
 import { dealDamage } from "../../../../game/damage";
 import { createFloorRing } from "../../../../game/effects/floorRing";
 import { enemyCenter } from "../../../../game/enemies/enemy";
-import { skillEvolved, skillValues } from "../../../../game/skills/query";
+import { skillEvolved, skillLevel, skillValues } from "../../../../game/skills/query";
 import { game, hero, progress } from "../../../../game/state";
 import type { Enemy } from "../../../../types/enemy";
 import { DUSK_RAMP, NIGHT_RAMP } from "../../look/colors";
 import { createDuskWave } from "../effects/duskWave";
+import { vesperFx } from "../skillFx";
 import { vesper } from "../state";
 import { gainTempo, tempoMost } from "../tempo";
 
@@ -19,6 +20,10 @@ const TWIN_REACH = 40;
  */
 export function warpArrived(_foe: Enemy | null): void {
   const v = skillValues(ID);
+  if (skillLevel(ID)) {
+    const twin = skillEvolved(ID) ? (v.twin ?? 0) : 0;
+    vesperFx(ID, { x: hero.x, y: hero.y, face: hero.face }, { damage: progress.stats.ad * (1 + (v.wave ?? 0) + twin) });
+  }
   if (v.tempo) gainTempo(v.tempo);
   if (v.open) vesper.opened = Math.max(vesper.opened, v.open);
   if (v.wave)

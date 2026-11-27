@@ -1,6 +1,8 @@
+import { drillFighter } from "../../../../../drill";
 import { hero, progress } from "../../../../../game/state";
 import { SKILL } from "../../../constants/skills/ids";
 import type { SayaDrillSkill } from "../../../types/drillSkill";
+import { sayaFx } from "../../skillFx";
 import { storeCut } from "../../store";
 import { later } from "../later";
 import { cutAngle, foesAlong, skillStrike } from "../targets";
@@ -38,6 +40,13 @@ export const REVERSE_EDGE_DRILL: SayaDrillSkill = {
     if (blow !== "second") {
       return;
     }
+    const h = drillFighter() ?? hero;
+    const power = (values.behind ?? 0) + (values.second ?? 0) + (values.behindStore ?? 0);
+    sayaFx(
+      SKILL.reverse,
+      { x: h.x - h.face * 12, y: h.y - 18, face: -h.face },
+      { damage: progress.stats.ad * (1 + power) * (evolved ? 2 : 1) },
+    );
     cutAround(values.behind, values.behindStore ?? 0, !!values.pull, false);
     if (evolved) {
       later(0.12, () => cutAround(values.behind, values.behindStore ?? 0, false, true));

@@ -1,6 +1,7 @@
 import { drillFighter } from "../../../../../drill";
-import { hero } from "../../../../../game/state";
+import { hero, progress } from "../../../../../game/state";
 import type { VesperDrillSkill } from "../../../types/drillSkill";
+import { vesperFx } from "../../skillFx";
 import { later } from "../later";
 import { foesNear, skillStrike } from "../strike";
 
@@ -22,6 +23,8 @@ export const WANDERERS_GRACE_DRILL: VesperDrillSkill = {
       hero.inv = Math.max(hero.inv, values.inv);
     }
     if (dashing && !grace.dashing) {
+      const shades = (values.shade ?? 0) * (evolved ? 2 : 1);
+      vesperFx(ID, { x: h.x, y: h.y - 16, face: h.face }, { damage: progress.stats.ad * (0.6 + shades) });
       if (h.airDashActive && values.refresh) {
         h.airSlashes = 0;
       }

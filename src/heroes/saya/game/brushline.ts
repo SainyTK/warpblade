@@ -6,7 +6,7 @@ import { settle } from "../../../game/hero/actions";
 import { refundStamina } from "../../../game/hero/stamina";
 import { travelEnded } from "../../../game/hero/travelEnd";
 import { objectMemory, rememberPerSeat } from "../../../game/seatMemory";
-import { skillValues } from "../../../game/skills/query";
+import { skillLevel, skillValues } from "../../../game/skills/query";
 import { game, hero, progress } from "../../../game/state";
 import { boxHit, heroBox, hitStop } from "../../../game/world";
 import type { Enemy } from "../../../types/enemy";
@@ -18,6 +18,7 @@ import { createInkCut } from "./effects/inkCut";
 import { createInkStroke } from "./effects/inkStroke";
 import { sheatheFlash } from "./effects/sheatheFlash";
 import { STORE_ANGLE } from "./moves/slashes";
+import { sayaFx } from "./skillFx";
 import { sayaSound } from "./sound";
 import { saya } from "./state";
 import { releaseCuts, storeCut } from "./store";
@@ -80,6 +81,11 @@ function startLeg(leg: number): void {
 function endLeg(): void {
   const from = pass.leg === 1 ? saya.lineFrom : saya.lineFrom + hero.face * length();
   game.fx.push(createInkStroke(from, hero.x, hero.y - 17));
+  if (skillLevel(SKILL.stroke)) {
+    const at = { x: from, y: hero.y - 16, face: hero.face, toX: hero.x, toY: hero.y - 16 };
+    const foes = Math.max(1, pass.cut.length);
+    sayaFx(SKILL.stroke, at, { damage: (progress.stats.ap * BRUSHLINE.now + storeEach()) * foes });
+  }
   layTrail(from, hero.x, hero.y);
   const v = skillValues(SKILL.stroke);
   if (v.stamina) refundStamina(v.stamina);

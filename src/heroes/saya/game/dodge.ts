@@ -1,5 +1,6 @@
+import { enemyCenter } from "../../../game/enemies/enemy";
 import { markFoe } from "../../../game/enemies/skillStatus";
-import { skillValues } from "../../../game/skills/query";
+import { skillEvolved, skillLevel, skillValues } from "../../../game/skills/query";
 import { hero, progress } from "../../../game/state";
 import type { Enemy } from "../../../types/enemy";
 import { STEP_MARK_TIME } from "../constants/skillLook";
@@ -7,12 +8,20 @@ import { SKILL } from "../constants/skills/ids";
 import { cleanSheathe } from "./clean";
 import { sheatheFlash } from "./effects/sheatheFlash";
 import { STORE_ANGLE } from "./moves/slashes";
+import { sayaFx } from "./skillFx";
 import { sayaSound } from "./sound";
 import { releaseCuts, storeCut } from "./store";
 
 /** Shadow Step: a foe the dodge passes through takes a stored cut (twice with Ghost Passage) and may be marked */
 function passed(e: Enemy): void {
   const v = skillValues(SKILL.step);
+  if (skillLevel(SKILL.step)) {
+    const [x, y] = enemyCenter(e);
+    const at = { x: x - hero.face * 30, y, face: hero.face, toX: x + hero.face * 14, toY: y };
+    sayaFx(SKILL.step, at, {
+      damage: progress.stats.ad * (v.store ?? 0.5) * (v.twice ? 2 : 1) * (skillEvolved(SKILL.step) ? 2 : 1),
+    });
+  }
   if (!v.store) return;
   const cut = progress.stats.ad * v.store;
   storeCut(e, cut, STORE_ANGLE.line);

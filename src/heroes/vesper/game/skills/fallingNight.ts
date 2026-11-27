@@ -7,6 +7,7 @@ import { game, hero, progress } from "../../../../game/state";
 import type { Enemy } from "../../../../types/enemy";
 import type { SkillBehavior } from "../../../../types/skillBehavior";
 import { DUSK_SPARKS } from "../../look/colors";
+import { vesperFx } from "../skillFx";
 
 const ID = "ve_night";
 /** seconds between night's ticks */
@@ -15,6 +16,9 @@ const EVERY = 0.5;
 /** lay `n` night on a foe at the skill's numbers */
 export function layNight(e: Enemy, n: number): void {
   const v = skillValues(ID);
+  const [x, y] = enemyCenter(e);
+  const ticks = withBuild("duration", v.duration) / EVERY;
+  vesperFx(ID, { x, y, face: hero.face }, { damage: progress.stats.ad * v.damage * n * ticks });
   addStacks(e, ID, {
     stacks: n,
     max: withBuild("amount", v.max),
@@ -34,6 +38,7 @@ export function nightLanding(foes: readonly Enemy[]): void {
       if (!n) continue;
       const [x, y] = enemyCenter(e);
       game.fx.push(createImpact(x, y, hero.face, true, DUSK_SPARKS));
+      vesperFx(ID, { x, y, face: hero.face }, { damage: progress.stats.ad * v.consume * n });
       dealDamage(e, progress.stats.ad * v.consume * n, { fromX: hero.x, source: ID });
     } else if (v.landStacks) layNight(e, v.landStacks);
   }

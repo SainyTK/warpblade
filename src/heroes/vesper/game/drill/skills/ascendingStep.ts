@@ -1,13 +1,14 @@
 import { drillFighter } from "../../../../../drill";
 import { createFloorRing } from "../../../../../game/effects/floorRing";
-import { game } from "../../../../../game/state";
+import { game, progress } from "../../../../../game/state";
 import { DUSK_RAMP } from "../../../look/colors";
 import type { VesperDrillSkill } from "../../../types/drillSkill";
+import { vesperFx } from "../../skillFx";
 import { liftFoe } from "../statuses";
 import { foesNear, skillStrike } from "../strike";
 
 const ID = "ve_ascend";
-const step = { kicking: false, grounded: true };
+const step = { kicking: false, grounded: true, floor: 0 };
 
 export const ASCENDING_STEP_DRILL: VesperDrillSkill = {
   id: ID,
@@ -22,6 +23,15 @@ export const ASCENDING_STEP_DRILL: VesperDrillSkill = {
     }
     const kicking = h.wallLock > 0;
     const took = step.grounded && !h.grounded && h.vy < 0 && !h.swing;
+    if (kicking && !step.kicking) {
+      vesperFx(ID, { x: h.x, y: h.y, face: h.face }, { damage: progress.stats.ad * (1 + (values.kick ?? 0)) });
+    } else if (took) {
+      vesperFx(
+        ID,
+        { x: h.x, y: step.floor, face: h.face },
+        { damage: progress.stats.ad * (1 + (values.jumpCut ?? 0)) },
+      );
+    }
     if ((kicking && !step.kicking) || (took && values.jumpCut)) {
       const reach = evolved ? values.reach : 26;
       for (const foe of foesNear(h.x, h.y - 14, reach)) {
@@ -36,5 +46,8 @@ export const ASCENDING_STEP_DRILL: VesperDrillSkill = {
     }
     step.kicking = kicking;
     step.grounded = h.grounded;
+    if (h.grounded) {
+      step.floor = h.y;
+    }
   },
 };

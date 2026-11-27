@@ -1,6 +1,7 @@
 import { game, progress } from "../../../../../game/state";
 import { SKILL } from "../../../constants/skills/ids";
 import type { SayaDrillSkill } from "../../../types/drillSkill";
+import { sayaFx } from "../../skillFx";
 import { storeCut } from "../../store";
 import { later } from "../later";
 import { sheathe } from "../sheathe";
@@ -14,6 +15,8 @@ export const SILENT_MOON_DRILL: SayaDrillSkill = {
     m.tierReach *= 1 + (values.reach ?? 0);
   },
   released({ tier, x, y, face }, { values, evolved }) {
+    const blow = (tier.damage / 10) * progress.stats.ap * (1 + (values.damage ?? 0)) * (evolved ? 2 : 1);
+    sayaFx(SKILL.moon, { x, y, face, reach: 24 + tier.reach * 0.3 }, { damage: blow });
     if (values.store) {
       for (const foe of game.enemies) {
         const ahead = tier.around ? Math.abs(foe.x - x) : (foe.x - x) * face;

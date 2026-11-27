@@ -1,9 +1,10 @@
 import { drillFighter } from "../../../../../drill";
 import { createFloorRing } from "../../../../../game/effects/floorRing";
 import { skin } from "../../../../../game/hero/skin";
-import { game, hero } from "../../../../../game/state";
+import { game, hero, progress } from "../../../../../game/state";
 import { SKILL } from "../../../constants/skills/ids";
 import type { SayaDrillSkill } from "../../../types/drillSkill";
+import { sayaFx } from "../../skillFx";
 import { sheathe } from "../sheathe";
 import { foesNear, skillStrike } from "../targets";
 
@@ -40,6 +41,12 @@ export const FALLING_MOON_DRILL: SayaDrillSkill = {
       return;
     }
     fall.slashed = false;
+    const crash = evolved ? (values.crash ?? 0) : (values.ring ?? 0);
+    sayaFx(
+      SKILL.falling,
+      { x: h.x, y: h.y, face: h.face },
+      { damage: progress.stats.ad * (1 + (values.power ?? 0) + crash) },
+    );
     if (values.ring || evolved) {
       game.fx.push(createFloorRing(hero.x, hero.y, evolved ? 48 : 34, skin.ramp, 0.3));
       for (const foe of foesNear(hero.x, hero.y - 12, evolved ? 48 : 34)) {

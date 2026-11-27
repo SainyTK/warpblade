@@ -13,6 +13,7 @@ import { TAU } from "../../../../utils/math";
 import { PAPER } from "../../constants/skillLook";
 import { SKILL } from "../../constants/skills/ids";
 import { STORE_ANGLE } from "../moves/slashes";
+import { sayaFx } from "../skillFx";
 import { storeCut } from "../store";
 
 /** a paper blade: its place on the orbit, its seconds left, when it last cut each foe, and its flight once let go */
@@ -36,6 +37,8 @@ const memoryOf = (m: SkillMemory): PaperMemory => m as unknown as PaperMemory;
 function fold(mem: PaperMemory, chance: number): void {
   const v = skillValues(SKILL.paper);
   if (mem.blades.length >= v.most || !rng.chance(chance)) return;
+  const power = progress.stats.ad * (v.power + (v.store ?? 0)) * (mem.blades.length + 1);
+  sayaFx(SKILL.paper, { x: hero.x, y: hero.y - 18, face: hero.face }, { damage: power, quiet: mem.blades.length > 0 });
   mem.blades.push({
     phase: rng.range(0, TAU),
     left: withBuild("duration", v.time),
@@ -52,6 +55,11 @@ function cut(mem: PaperMemory, b: Blade, e: Enemy, factor: number): void {
   const ad = progress.stats.ad;
   b.hit.set(e, mem.t);
   game.fx.push(createImpact(b.x, b.y, Math.sign(e.x - hero.x) || 1, false));
+  sayaFx(
+    SKILL.paper,
+    { x: b.x, y: b.y, face: Math.sign(e.x - hero.x) || 1 },
+    { damage: ad * (v.power + (v.store ?? 0)) * factor * mem.blades.length },
+  );
   dealDamage(e, ad * v.power * factor, { fromX: b.x, kx: Math.sign(e.x - b.x) * 30, source: SKILL.paper });
   if (v.store) storeCut(e, ad * v.store, STORE_ANGLE.line);
 }

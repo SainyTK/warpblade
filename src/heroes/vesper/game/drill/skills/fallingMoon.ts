@@ -1,9 +1,11 @@
 import { drillSession } from "../../../../../drill";
 import { enemyCenter } from "../../../../../game/enemies/enemy";
 import { staggerFoe } from "../../../../../game/enemies/stagger";
+import { hero, progress } from "../../../../../game/state";
 import type { DrillSpell } from "../../../../../types/drill";
 import type { Enemy } from "../../../../../types/enemy";
 import type { VesperDrillSkill } from "../../../types/drillSkill";
+import { vesperFx } from "../../skillFx";
 import { later } from "../later";
 import { moonLift } from "../statuses";
 import { foesNear, skillStrike } from "../strike";
@@ -35,8 +37,10 @@ export const FALLING_MOON_DRILL: VesperDrillSkill = {
     if (spell.id !== "moon") {
       return;
     }
-    skillStrike(foe, values.bonus, ID);
     const [x, y] = enemyCenter(foe);
+    const moons = (values.second ?? 0) + (evolved ? (values.eclipse ?? 0) * 3 : 0);
+    vesperFx(ID, { x, y, face: hero.face }, { damage: progress.stats.ad * (1 + (values.bonus ?? 0) + moons) });
+    skillStrike(foe, values.bonus, ID);
     if (values.stagger) {
       staggerFoe(foe, values.stagger);
     }

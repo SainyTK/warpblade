@@ -2,7 +2,7 @@ import { createSlash } from "../../../game/effects/slash";
 import { enemyBox } from "../../../game/enemies/enemy";
 import { setState, settle } from "../../../game/hero/actions";
 import { meleeHit } from "../../../game/meleeHit";
-import { skillValues } from "../../../game/skills/query";
+import { skillEvolved, skillLevel, skillValues } from "../../../game/skills/query";
 import { game, hero, progress } from "../../../game/state";
 import { boxAhead, boxHit, newSwing } from "../../../game/world";
 import type { Box } from "../../../types/world";
@@ -13,6 +13,7 @@ import { cleanSheathe } from "./clean";
 import { sheatheFlash } from "./effects/sheatheFlash";
 import { gainBreath } from "./focus";
 import { SLASHES, STORE_ANGLE } from "./moves/slashes";
+import { sayaFx } from "./skillFx";
 import { sayaSound } from "./sound";
 import { beginBeat, saya } from "./state";
 import { releaseCuts, storeCut } from "./store";
@@ -33,6 +34,10 @@ export function startCounter(): void {
 /** the parry's counter draw: Still Water's is stronger and may store */
 export function startParryCounter(): void {
   saya.stillCounter = false;
+  if (skillLevel(SKILL.calm)) {
+    const at = { x: hero.x + hero.face * 12, y: hero.y - 18, face: hero.face };
+    sayaFx(SKILL.calm, at, { damage: progress.stats.ad * COUNTER_DRAW.power * (skillEvolved(SKILL.calm) ? 2 : 1) });
+  }
   startCounter();
 }
 
