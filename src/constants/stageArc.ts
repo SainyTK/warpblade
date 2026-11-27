@@ -72,15 +72,22 @@ export const TIER_SCALE: Readonly<Record<StageTier, { hp: number; damage: number
 export const EXPECTED_HERO_DAMAGE: readonly (readonly [level: number, times: number])[] = [
   [1, 1],
   [15, 3],
-  [30, 7],
-  [50, 16],
-  [80, 45],
-  [99, 80],
+  [30, 12],
+  [50, 50],
+  [80, 350],
+  [99, 700],
+];
+
+export const CROWD_TOUGHNESS: readonly (readonly [level: number, times: number])[] = [
+  [1, 1],
+  [45, 1],
+  [55, 4],
+  [99, 6],
 ];
 
 export const HERO_DPS_AT_LEVEL_1 = 30;
 
-export const TIME_TO_KILL = { elite: 12, mini: 52, boss: 150 } as const;
+export const TIME_TO_KILL = { minion: 4.5, elite: 20, mini: 85, boss: 150 } as const;
 
 export const FOE_BAND = {
   damagePerLevel: 0.015,

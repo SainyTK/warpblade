@@ -1,6 +1,7 @@
 import { SURGE } from "../constants/campaign";
 import { MAX_LEVEL } from "../constants/growth";
 import {
+  CROWD_TOUGHNESS,
   EXPECTED_HERO_DAMAGE,
   FOE_BAND,
   HERO_DPS_AT_LEVEL_1,
@@ -42,25 +43,29 @@ export function stageMods(stage: StageDef, hyper: boolean): StageMods {
 export const bandWave = (level: number): number =>
   1 + ((STAGE_WAVES - 1) * (clamp(level, 1, MAX_LEVEL) - 1)) / (MAX_LEVEL - 1);
 
-export function expectedDamage(level: number): number {
+type Anchors = readonly (readonly [level: number, times: number])[];
+
+function along(anchors: Anchors, level: number): number {
   const at = clamp(level, 1, MAX_LEVEL);
-  const next = EXPECTED_HERO_DAMAGE.findIndex(([l]) => l >= at);
-  if (next <= 0) return EXPECTED_HERO_DAMAGE[0][1];
-  const [l0, d0] = EXPECTED_HERO_DAMAGE[next - 1];
-  const [l1, d1] = EXPECTED_HERO_DAMAGE[next];
+  const next = anchors.findIndex(([l]) => l >= at);
+  if (next <= 0) return anchors[0][1];
+  const [l0, d0] = anchors[next - 1];
+  const [l1, d1] = anchors[next];
   return d0 * (d1 / d0) ** ((at - l0) / (l1 - l0));
 }
+
+export const expectedDamage = (level: number): number => along(EXPECTED_HERO_DAMAGE, level);
 
 export function bandScale(level: number, mods: StageMods): FoeScale {
   const steps = clamp(level, 1, MAX_LEVEL) - 1;
   return {
-    hp: expectedDamage(level) * mods.hp,
+    hp: expectedDamage(level) * along(CROWD_TOUGHNESS, level) * TIME_TO_KILL.minion * mods.hp,
     damage: (1 + FOE_BAND.damagePerLevel * steps) * mods.damage,
     xp: 0,
   };
 }
 
-export const bigFoeHp = (level: number, kind: keyof typeof TIME_TO_KILL, mods: StageMods): number =>
+export const bigFoeHp = (level: number, kind: Exclude<keyof typeof TIME_TO_KILL, "minion">, mods: StageMods): number =>
   Math.round(HERO_DPS_AT_LEVEL_1 * expectedDamage(level) * TIME_TO_KILL[kind] * mods.hp);
 
 export const levelBetween = (from: number, to: number, share: number): number => from + (to - from) * clamp(share);
