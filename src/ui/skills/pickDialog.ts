@@ -6,6 +6,7 @@ import { cardView } from "../../game/build/cardView";
 import { clearPresses, releaseAll } from "../../game/input";
 import { answerPick, leavePicks } from "../../game/progress";
 import { character, game, progress, rng } from "../../game/state";
+import { mentorPortraitUrl } from "../../mentorArt";
 import { sfx } from "../../services/audio";
 import type { Card } from "../../types/build";
 import type { PickAnswer } from "../../types/pick";
@@ -24,8 +25,11 @@ const dialog = el("dialog", "level-up");
 dialog.setAttribute("aria-labelledby", "levelUpTitle");
 dialog.innerHTML = `
   <div class="level-up-head">
-    <h2 id="levelUpTitle"></h2>
-    <p class="level-up-sub"></p>
+    <div class="level-up-mentor" hidden></div>
+    <div>
+      <h2 id="levelUpTitle"></h2>
+      <p class="level-up-sub"></p>
+    </div>
   </div>
   <div class="level-up-build" aria-label="Your skills and charms"></div>
   <div class="level-up-cards" role="group" aria-label="Cards to choose from"></div>
@@ -34,6 +38,7 @@ dialog.innerHTML = `
   <p class="level-up-hint banish-hint">Choose a card to banish for this run. <kbd class="keys">B</kbd><span class="keys"> to cancel</span></p>`;
 const title = dialog.querySelector("h2") as HTMLElement;
 const sub = dialog.querySelector(".level-up-sub") as HTMLElement;
+const mentorFace = dialog.querySelector(".level-up-mentor") as HTMLElement;
 const build = dialog.querySelector(".level-up-build") as HTMLElement;
 const cards = dialog.querySelector(".level-up-cards") as HTMLElement;
 const tools = createPickTools(useTool);
@@ -83,6 +88,9 @@ function describePick(): void {
   const more = progress.picks - 1;
   sub.textContent = more > 0 ? `Choose one. ${more} more pick${more === 1 ? "" : "s"} after this.` : "Choose one.";
   leave.hidden = !mentor;
+  const face = mentor ? mentorPortraitUrl() : null;
+  mentorFace.hidden = !face;
+  if (face) mentorFace.style.backgroundImage = `url("${face}")`;
 }
 
 const locked = (): boolean => performance.now() - shownAt < INPUT_LOCK_MS;

@@ -7,6 +7,7 @@ import { chooseCharacter, game } from "./game/state";
 import { stepGame } from "./game/step";
 import { preloadGeneratedRoster } from "./generatedHeroArt";
 import { CHARACTERS } from "./heroes/roster";
+import { preloadMentorArt } from "./mentorArt";
 import { startAnalytics } from "./services/analytics";
 import { playMusic } from "./services/audio";
 import { loadHeroChoice } from "./services/heroChoice";
@@ -33,7 +34,7 @@ import { bindPickDialog, syncPickDialog } from "./ui/skills/pickDialog";
 import { bindTouch, syncTouch } from "./ui/touch/bindTouch";
 import { bindDiscoveryToasts } from "./ui/unlocks/discoveryToast";
 
-await Promise.all([preloadGeneratedRoster(CHARACTERS), preloadFoeArt()]);
+await Promise.all([preloadGeneratedRoster(CHARACTERS), preloadFoeArt(), preloadMentorArt()]);
 startAnalytics();
 const trainingHero = CHARACTERS.find((c) => c.id === readTrainingHero());
 const firstHero =
