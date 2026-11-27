@@ -36,7 +36,7 @@ They show on the hero screen, not in the Codex: a locked job's chip carries the 
 
 | Job | Goal | Hint the hero screen shows |
 | --- | --- | --- |
-| Kael's Prism Knight (`job-kael-prism`) | Defeat Oakheart with Kael (clear wave 5 with him) | Defeat Oakheart with Kael. |
+| Kael's Prism Knight (`job-kael-prism`) | Clear the Sunlit Ruins with Kael (the hero stat `kael.stage.prologue`) | Defeat Oakheart with Kael. |
 
 ## Pacing
 
@@ -52,10 +52,38 @@ A skill card shows its evolution's name and "Evolves with ???" until the player 
 Core calls `learnRecipe(id)` when a skill evolves; `knowsRecipe(id)` tells the cards and the Codex whether to show the partner.
 Recipes are kept by skill id, so skill ids are unique across heroes.
 
+## Stages, Hyper stages and the unlock table
+
+Every unlock that is not a hero job is one row of `UNLOCKS` in `src/constants/unlocks.ts`: an id kept in the save, a reward, a goal and, for some, a gold price.
+A row without a price is found the moment its goal is met; a row with a price goes on sale then, and is found when bought (`unlockState`, `buyUnlock` in `src/store/unlocks.ts`).
+A later unlock (a skill, an item, a hero) is a new reward kind and new rows; the store, the save, the toasts and the result screen take it as it is.
+
+The stage graph is `STAGE_OPENS` in `src/constants/stageGraph.ts`.
+A new save has the Sunlit Ruins only.
+Clearing a stage opens the stages it leads to; a stage with several stages before it opens when any one of them is cleared, except the Abyss Citadel, which needs both Veil Spires and Blightroot Hollow.
+
+| Clear | Opens |
+| --- | --- |
+| Sunlit Ruins | Storm Marsh, Cinder Foundry |
+| Storm Marsh | Frostglass Caverns, Thunderhead Skyway |
+| Cinder Foundry | Frostglass Caverns, Drowned Archive |
+| Frostglass Caverns | Moonlit Ruins |
+| Thunderhead Skyway | Moonlit Ruins, Veil Spires |
+| Drowned Archive | Moonlit Ruins, Blightroot Hollow |
+| Moonlit Ruins | Veil Spires, Blightroot Hollow |
+| Veil Spires and Blightroot Hollow | Abyss Citadel |
+
+A stage clear also puts that stage's Hyper version on sale (`hyper:<stage>`).
+Clearing a Hyper stage gives its own reward once (`hyperReward:<stage>`): a Rift Stage's Rift Art, which then starts every run at level 1; one more reroll every run for the Sunlit Ruins; one more banish every run for the Abyss Citadel.
+
+The goals read two new things: `stageClears` (a stage's clears, Hyper apart) and `goalsMet` (how many of a list of goals are met), counted from the `stageCleared` feat that a cleared run reports.
+The stage screen shows a locked stage's goal as "Clear Storm Marsh or Cinder Foundry" (`stageLockText`).
+
 ## Tracking
 
 Unlocks use the achievement machinery (`docs/achievements.md`): `feat()` reports the event, `applyFeat` turns it into tracked stats, and an unlock's goal is a `Goal` read from those stats, like an achievement's.
 `src/store/unlocks.ts` checks the goals of the unlocks and of every hero job after every feat, and once as the game loads, and owns what is found, the known recipes and what was found since the run began (`unlockedThisRun()`).
+The stage result screen's Unlocked list is `unlockedThisRun()` and nothing else.
 The pure checks are in `src/utils/unlocks.ts`.
 
 Feats the unlocks read:

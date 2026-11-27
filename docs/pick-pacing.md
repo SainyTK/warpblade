@@ -1,27 +1,24 @@
 # Pick pacing
 
-A run is 30 waves.
-Every level up gives the hero one skill point, and the points wait until the wave is cleared.
-When the wave's last foe falls with points waiting, the fight plays on for 0.9 seconds (`PICK_DELAY` in `src/constants/waves.ts`) so the fall is seen, then the game pauses on a pick of three cards for each point.
-The rest of the 2 second pause to the next wave follows the picks.
+A solo run is one stage, from level 1 to 99 (`docs/growth-design.md`, "Stage arc").
+Every level on the pick schedule gives the hero one skill point, and the points bank while the hero fights.
+In a stage, the cards open 0.9 seconds after a room beat ends (a Rift Surge cleared, the elite, mini boss or boss down; `ROOM_BEATS` in `src/constants/stageArc.ts`), then the room pauses 2 seconds before the next beat.
+Points can also be spent at any time with the area's mentor.
+In the co-op arena the points wait until the wave is cleared, then the game pauses on a pick for each point (`PICK_DELAY` in `src/constants/waves.ts`).
 The fight itself is never paused by a level up; only the Level banner shows.
-Points left when wave 30 falls are not spent, since no wave follows it.
 
-## How many picks a run gives
+## How many picks a stage gives
 
-The growth rework (`docs/growth-design.md`) moved the curve to `15 + 10 x (level - 1)` (`XP_CURVE` in `src/constants/growth.ts`).
-
-- Experience drops as orbs that Kael picks up; the numbers assume he collects all of it, which he does because left orbs fly to him.
-- A full run reaches about level 84: level 3 after wave 1, 13 after wave 9, 38 after wave 20 and 84 after wave 30.
-  The curve before the rework reached 1, 6, 13 and 19.
+- Experience in a stage is budgeted per beat so that a hero who kills everything ends each beat at its planned level: 15 at the end of the opening, 50 after the mini boss, 99 after the stage boss (`docs/growth-design.md`).
+- Experience drops as orbs; left orbs fly to the hero, so none is lost.
 - Not every level gives a pick: one per level up to 30, then one every second level, plus milestones at 50, 75 and 99, 66 picks from level 1 to 99 (`docs/growth-design.md`, "Pick budget").
+- About 8 to 9 kills make a level all stage long; a Rift Surge of 60 to 110 foes gives 6 to 11 levels and 4 to 10 picks when it ends.
 - A pick deals skills, masteries, charge ranks, attunements and Honing stat cards (`dealCards` in `src/utils/cards.ts`); new skills wait for a slot opened by the level, and picks have no prerequisites.
-- The ground string's length is fixed per hero (`CharacterDef.comboHits`).
+- In the co-op arena `XP_CURVE` (`15 + 10 x (level - 1)`) and the wave experience are unchanged: a full 30-wave run reaches about level 84.
 
 ## Evolutions
 
-A skill evolves in a chest, never on a card: from wave 8 a chest evolves one skill at level 8 whose partner is held at level 4 or more (`docs/skill-design.md`).
-The next level of a held skill is a rare card (weight 9 against 100 for a new skill), so most runs evolve their first skill late (wave 24 in the median simulated run) and few evolve more than three (`docs/growth-design.md`, "Skill cards and evolutions").
+A skill evolves in a chest, never on a card: from wave 8 (in a stage, from the band that wave matches, about level 25) a chest evolves one skill at level 8 whose partner is held at level 4 or more (`docs/skill-design.md`).
 Evolutions belong to the run and reset with it; only the recipe (which partner a skill evolves with) is kept across runs.
 
 ## When cards run short
