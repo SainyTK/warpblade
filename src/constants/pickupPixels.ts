@@ -6,6 +6,11 @@ export const COIN_TURNS = [
   [".GG.", "dLGd", "GLgG", "GLgG", "dGgd", ".gg."],
   ["LG", "LG", "Lg", "Gg", "Gg", "gd"],
 ] as const;
+export const COIN_TURN_ART = [
+  { front: "coin", back: "coin_back" },
+  { front: "coin_turn", back: "coin_back_turn" },
+  { front: "coin_edge", back: "coin_edge" },
+] as const;
 /** which picture each of the eight steps of a full turn shows, and whether it is the coin's front */
 export const COIN_STEPS = [
   { turn: 0, front: true },

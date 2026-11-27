@@ -1,5 +1,6 @@
 import { RES } from "../../constants/stage";
 import { fleck, hairline, line, putImage, toScreenX, toScreenY } from "../../engine/frame";
+import { type ArtSprite, spriteArt } from "../../skillArt";
 import type { Color } from "../../types/color";
 import { grain } from "../../utils/grain";
 import { TAU } from "../../utils/math";
@@ -79,4 +80,28 @@ export function stampPixels(
       if (c) putImage(left + i, top + j, c, a);
     }
   }
+}
+
+export function stampSprite(sprite: ArtSprite, x: number, y: number, a = 1): void {
+  const left = Math.round(toScreenX(x) * RES - sprite.w / 2);
+  const top = Math.round(toScreenY(y) * RES - sprite.h / 2);
+  for (let j = 0; j < sprite.h; j++) {
+    for (let i = 0; i < sprite.w; i++) {
+      const c = sprite.colors[j * sprite.w + i];
+      if (c) putImage(left + i, top + j, c, a);
+    }
+  }
+}
+
+export function stampArt(
+  art: string,
+  rows: readonly string[],
+  x: number,
+  y: number,
+  colors: Readonly<Record<string, number>>,
+  a = 1,
+): void {
+  const sprite = spriteArt(art, rows[0].length, rows.length);
+  if (sprite) stampSprite(sprite, x, y, a);
+  else stampPixels(rows, x, y, colors, a);
 }

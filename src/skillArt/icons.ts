@@ -5,10 +5,7 @@ import type { SkillArtSheet } from "./types";
 const sheet: SkillArtSheet = sheetJson;
 const urls = new Map<string, string>();
 
-const disabled = (): boolean => new URLSearchParams(location.search).get("skillart") === "off";
-
-export async function preloadSkillArt(): Promise<void> {
-  if (disabled()) return;
+export async function loadIcons(): Promise<void> {
   try {
     const image = new Image();
     image.src = atlasUrl;

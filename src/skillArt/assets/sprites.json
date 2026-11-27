@@ -1,0 +1,20 @@
+{
+  "sprites": {
+    "coin": [0, 0, 6, 6],
+    "coin_turn": [6, 0, 4, 6],
+    "coin_back": [10, 0, 6, 6],
+    "coin_back_turn": [16, 0, 4, 6],
+    "coin_edge": [20, 0, 2, 6],
+    "xp_orb": [22, 0, 7, 7],
+    "xp_orb_lit": [29, 0, 7, 7],
+    "mote_hp": [36, 0, 5, 5],
+    "mote_hp_lit": [41, 0, 5, 5],
+    "mote_mp": [46, 0, 5, 5],
+    "mote_mp_lit": [51, 0, 5, 5],
+    "shard_heart": [56, 0, 11, 10],
+    "shard_heart_lit": [67, 0, 11, 10],
+    "shard_mana": [78, 0, 9, 10],
+    "shard_mana_lit": [87, 0, 9, 10],
+    "chest": [96, 0, 26, 20]
+  }
+}
