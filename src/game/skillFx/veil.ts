@@ -5,9 +5,11 @@ import { game } from "../state";
 
 const CALM: ReadonlySet<EnemyState> = new Set(["drift", "walk", "recover"]);
 
-const cache = { at: -1, threats: [] as (readonly [number, number, number])[] };
+type Threat = readonly [x: number, y: number, reach: number, veil: number];
 
-function threats(): readonly (readonly [number, number, number])[] {
+const cache = { at: -1, threats: [] as Threat[] };
+
+function threats(): readonly Threat[] {
   if (cache.at === game.t) return cache.threats;
   cache.at = game.t;
   cache.threats = [];
@@ -15,16 +17,17 @@ function threats(): readonly (readonly [number, number, number])[] {
     if (e.hp <= 0 || e.stun > 0 || e.frozen > 0 || CALM.has(e.state)) continue;
     const [x, y] = enemyCenter(e);
     const reach = V.windupReach * (e.rank === "boss" ? 2 : e.rank === "mini" ? 1.5 : 1);
-    cache.threats.push([x, y, reach]);
+    cache.threats.push([x, y, reach, e.rank === "minion" ? V.minionVeil : V.threatVeil]);
   }
   return cache.threats;
 }
 
 export function threatVeil(x: number, y: number, extent: number, age: number): number {
   if (age < V.grace) return 1;
-  for (const [tx, ty, reach] of threats()) {
+  let veil = 1;
+  for (const [tx, ty, reach, threat] of threats()) {
     const room = extent + reach + V.threatMargin;
-    if (Math.abs(tx - x) < room && Math.abs(ty - y) < room) return V.threatVeil;
+    if (Math.abs(tx - x) < room && Math.abs(ty - y) < room) veil = Math.min(veil, threat);
   }
-  return 1;
+  return veil;
 }

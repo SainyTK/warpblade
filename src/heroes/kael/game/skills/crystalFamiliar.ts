@@ -83,7 +83,7 @@ function strike(s: Shard, foe: Enemy, evolved: boolean): void {
   const damage = progress.stats.ap * v.power;
   dealDamage(foe, damage, { source: ID, fromX: s.x, kx: Math.sign(s.vx) * SHARD.kick });
   const [hx, hy] = enemyCenter(foe);
-  skillFx(ID, "burst", { x: hx, y: hy, face: Math.sign(s.vx) || 1, reach: 7 }, { damage, quiet: true });
+  skillFx(ID, "burst", { x: hx, y: hy, face: Math.sign(s.vx) || 1, reach: 7 }, { damage });
   if (s.element === "fire") ignite(foe, ELEMENT_HIT.burn);
   if (s.element === "ice") foe.chill = Math.max(foe.chill, ELEMENT_HIT.chill);
   if (s.element !== "volt" && !evolved) return;

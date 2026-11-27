@@ -45,7 +45,7 @@ export const BLAZE_KIT: ElementKit = {
     circle(x, y, radius, R[3], alpha);
     circle(x - radius * 0.15, y - radius * 0.2, radius * 0.66, R[4], alpha);
     circle(x - radius * 0.2, y - radius * 0.3, radius * (0.24 + 0.04 * rank), R[5], alpha);
-    glow(x, y, radius * 3 + 4, R[3], 0.25 * alpha);
+    glow(x, y, radius * 3 + 4, R[3], 0.12 * alpha);
   },
   spray(x, y, count, speed, angle, spread) {
     for (let i = 0; i < count; i++) {
