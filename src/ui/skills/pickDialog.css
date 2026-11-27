@@ -320,25 +320,6 @@
   letter-spacing: 0.04em;
   color: var(--volt);
 }
-.pick-pips {
-  display: inline-flex;
-  gap: 3px;
-}
-.pick-pips i {
-  width: 7px;
-  height: 7px;
-  border: 1px solid var(--key);
-  background: var(--night);
-}
-.pick-pips i.had {
-  background: var(--brass);
-  border-color: var(--brass);
-}
-.pick-pips i.gain {
-  background: var(--heal);
-  border-color: var(--heal);
-  animation: pick-blink 800ms steps(2) infinite;
-}
 .pick-text {
   font-size: 13px;
   line-height: 1.5;
@@ -546,15 +527,9 @@
     transform: translateY(-10px);
   }
 }
-@keyframes pick-blink {
-  50% {
-    background: var(--night);
-  }
-}
 @media (prefers-reduced-motion: reduce) {
   .level-up-head,
-  .pick,
-  .pick-pips i.gain {
+  .pick {
     animation: none;
     transition: none;
   }

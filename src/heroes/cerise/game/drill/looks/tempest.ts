@@ -1,5 +1,6 @@
 import { H } from "../../../../../constants/stage";
-import { disc, ellipseRing, glow, glowLine, hairline, polygon, sparkle } from "../../../../../engine/frame";
+import { drawStrikeHeart } from "../../../../../drill";
+import { ellipseRing, glow, glowLine, hairline, polygon, sparkle } from "../../../../../engine/frame";
 import type { SkillCast } from "../../../../../types/drill";
 import { ease, smooth, TAU } from "../../../../../utils/math";
 import { ROSE_RAMP } from "../../../look/rose";
@@ -98,5 +99,5 @@ export function drawRoseTempest({ tier }: SkillCast, u: number, fade: number): v
       );
     }
   }
-  disc(0, -22, 10 * fade, WHITE, fade * 0.85);
+  drawStrikeHeart(ROSE_RAMP[4], fade);
 }

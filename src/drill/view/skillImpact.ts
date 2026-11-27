@@ -1,10 +1,11 @@
 import { H, W } from "../../constants/stage";
-import { disc, ellipseRing, fleck, glow, glowLine, hairline, place, polygon } from "../../engine/frame";
+import { ellipseRing, fleck, glow, glowLine, hairline, place, polygon } from "../../engine/frame";
 import type { DrillProfile, SkillCast } from "../../types/drill";
 import { clamp, ease, smooth, TAU } from "../../utils/math";
 import { drawTierArt } from "./effectArt";
 
 const WHITE = 0xfaffff;
+const HEART = { rx: 13, ry: 19, grow: 5 } as const;
 
 export function drawSkillDarkness(cast: SkillCast | null, cameraX: number): void {
   if (!cast) {
@@ -116,6 +117,10 @@ function rift(reach: number, color: number, u: number, fade: number): void {
   }
 }
 
+export function drawStrikeHeart(color: number, fade: number): void {
+  ellipseRing(0, -18, HEART.rx + HEART.grow * fade, HEART.ry + HEART.grow * fade, color, fade);
+}
+
 function nova(reach: number, color: number, u: number, fade: number): void {
   const radius = 9 + ease.outCubic(u) * reach;
   glow(0, -21, 52, color, fade * 0.45);
@@ -123,7 +128,7 @@ function nova(reach: number, color: number, u: number, fade: number): void {
   ellipseRing(0, -3, radius, radius * 0.23, color, fade);
   ellipseRing(0, -5, radius * 0.84, radius * 0.19, WHITE, fade * 0.88);
   ellipseRing(0, -22, radius * 0.63, radius * 0.41, color, fade * 0.57);
-  disc(0, -21, 12 * fade, WHITE, fade * 0.86);
+  drawStrikeHeart(color, fade);
   for (let i = 0; i < 18; i++) {
     const a = (i / 18) * TAU + u * 0.6;
     const d = radius * (0.35 + ((i * 13) % 7) * 0.1);
@@ -133,19 +138,30 @@ function nova(reach: number, color: number, u: number, fade: number): void {
   }
 }
 
+function strikeTime({ age, tier }: SkillCast): { u: number; fade: number } | null {
+  if (age < tier.intro) return null;
+  const u = clamp((age - tier.intro) / (tier.duration - tier.intro));
+  return { u, fade: 1 - smooth(0.16, 1, u) };
+}
+
+export function drawSkillArtBehind(profile: DrillProfile, cast: SkillCast | null): void {
+  const time = cast?.tier.around ? strikeTime(cast) : null;
+  if (cast && time) drawTierArt(profile, cast, time.u, time.fade);
+}
+
 export function drawSkillImpact(profile: DrillProfile, cast: SkillCast | null): void {
   if (!cast) return;
   const { x, y, face, age, tier } = cast;
   place(x, y, face < 0);
-  const { intro, duration, reach, color } = tier;
-  if (age < intro) {
+  const { intro, reach, color } = tier;
+  const time = strikeTime(cast);
+  if (!time) {
     const pulse = smooth(0, intro * 0.54, age);
     glow(0, -20, 20 + 10 * pulse, color, pulse * 0.58);
     ellipseRing(0, -4, 9 + 9 * pulse, 4, color, pulse * 0.86);
   } else {
-    const u = clamp((age - intro) / (duration - intro));
-    const fade = 1 - smooth(0.16, 1, u);
-    drawTierArt(profile, cast, u, fade);
+    const { u, fade } = time;
+    if (!tier.around) drawTierArt(profile, cast, u, fade);
     place(x, y, face < 0);
     if (tier.drawStrike) {
       tier.drawStrike(cast, u, fade);

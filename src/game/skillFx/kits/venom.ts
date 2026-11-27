@@ -2,7 +2,6 @@ import { ELEMENT_FX, FX_BUDGET } from "../../../constants/skillFx";
 import { circle, disc, fleck, glow, hairline, line } from "../../../engine/frame";
 import { PK } from "../../../types/particle";
 import type { ElementKit } from "../../../types/skillFx";
-import { WHITE } from "../../../utils/color";
 import { grain } from "../../../utils/grain";
 import { TAU } from "../../../utils/math";
 import { fxRng, particles } from "../../state";
@@ -14,7 +13,7 @@ function bubble(x: number, y: number, r: number, alpha: number): void {
   circle(x, y, r + 0.5, R[1], alpha);
   circle(x, y, r, R[3], alpha);
   circle(x - r * 0.25, y - r * 0.25, r * 0.5, R[4], alpha);
-  fleck(x - r * 0.45, y - r * 0.5, WHITE, alpha);
+  fleck(x - r * 0.45, y - r * 0.5, R[5], alpha);
 }
 
 function tendril(x: number, y: number, angle: number, length: number, alpha: number, seed: number): void {

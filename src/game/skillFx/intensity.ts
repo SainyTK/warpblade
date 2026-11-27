@@ -51,6 +51,7 @@ export function castFrom(id: string, element: ElementId, input: IntensityInput):
     tier,
     intensity,
     gradeInTier,
+    mastery: input.mastery,
     size: feel.size * (1 + K.gradeSpan * gradeInTier),
     feel,
     look: ELEMENT_FX[element],

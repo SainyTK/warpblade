@@ -7,6 +7,7 @@ import type { ElementKit, FxAt, FxCast, FxShape, SkillFxOptions } from "../../ty
 import { smooth } from "../../utils/math";
 import { drawCracks, drawScorch, makeCracks, makeScorch, spawnAftermath } from "./aftermath";
 import { castFeel, castLights } from "./feel";
+import { drawMasteryMarks } from "./mastery";
 import { MOVING_SHAPES, SHAPE_LIFE, SHAPES } from "./shapes";
 import { threatVeil } from "./veil";
 
@@ -72,6 +73,7 @@ export function createSkillEffect(
         if (back > 0) paint(back, fade * (0.32 / k));
       }
       paint(u, fade);
+      if (!options.quiet) drawMasteryMarks(cast, kit, extent, u, fade);
       place();
     },
   };

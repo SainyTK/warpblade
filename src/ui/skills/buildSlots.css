@@ -48,3 +48,16 @@
   color: var(--night);
   background: var(--slot-accent);
 }
+.build-mastery {
+  position: absolute;
+  right: -4px;
+  bottom: -4px;
+  display: flex;
+  padding: 2px;
+  background: var(--night);
+  border: 1px solid var(--slot-accent);
+}
+.build-mastery .level-pips {
+  --pip: 4px;
+  --pip-gap: 1px;
+}

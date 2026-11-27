@@ -5,7 +5,7 @@ import { PK } from "../../types/particle";
 import { WHITE } from "../../utils/color";
 import { ease, TAU } from "../../utils/math";
 import { skin } from "../hero/skin";
-import { fxRng, lights, particles } from "../state";
+import { fxRng, game, lights, particles } from "../state";
 import { fineRing, ray } from "./fine";
 
 /** seconds the star takes to open, and how long the whole hit shows, plain and big */
@@ -16,6 +16,19 @@ const BIG_LIFE = 0.18;
 const FORWARD_REACH = 0.7;
 /** the ring is gone this far through the hit, before the rays */
 const RING_UNTIL = 0.65;
+/** hits landing this close together while one's light still burns share that light, so a flurry on one foe never stacks it white */
+const SHARED_LIGHT_REACH = 14;
+
+const flares: { x: number; y: number; until: number }[] = [];
+
+function lightFree(x: number, y: number, life: number): boolean {
+  for (let i = flares.length - 1; i >= 0; i--)
+    if (flares[i].until <= game.t || flares[i].until - game.t > 1) flares.splice(i, 1);
+  if (flares.some((f) => Math.abs(f.x - x) < SHARED_LIGHT_REACH && Math.abs(f.y - y) < SHARED_LIGHT_REACH))
+    return false;
+  flares.push({ x, y, until: game.t + life });
+  return true;
+}
 
 /**
  * a hit: a small white core, a star of thin rays thrown along the blow that leave the core as they age, a ring that
@@ -28,8 +41,11 @@ export function createImpact(x: number, y: number, dir: number, big: boolean, sp
     a: (i / count) * TAU + R.range(-0.3, 0.3) + (dir < 0 ? Math.PI : 0),
     len: R.range(5, big ? 13 : 9),
   }));
-  lights.add(x, y, big ? 34 : 24, sparks[2], big ? 0.55 : 0.4, big ? 0.26 : 0.16);
-  lights.add(x, y, 9, WHITE, 0.5, 0.08);
+  const glowLife = big ? 0.26 : 0.16;
+  if (lightFree(x, y, glowLife)) {
+    lights.add(x, y, big ? 34 : 24, sparks[2], big ? 0.55 : 0.4, glowLife);
+    lights.add(x, y, 9, sparks[1], 0.5, 0.08);
+  }
   for (let i = 0; i < (big ? 14 : 8); i++) {
     const a = (dir > 0 ? 0 : Math.PI) + R.range(-1.1, 1.1);
     const sp = R.range(120, big ? 380 : 280);

@@ -276,6 +276,14 @@ body {
   line-height: 8px;
   text-shadow: none;
 }
+.build-strip .build-mastery {
+  right: -3px;
+  bottom: -3px;
+  padding: 1px;
+}
+.build-strip .build-mastery .level-pips {
+  --pip: 2px;
+}
 /* the chain row and the strip: two rows of the bars column, or one line in the compact HUD */
 .tray {
   display: contents;
@@ -835,7 +843,8 @@ body[data-hud="compact"] .build-strip {
   body[data-hud="compact"] .build-strip .build-row {
     gap: 0;
   }
-  body[data-hud="compact"] .build-strip .build-slot b {
+  body[data-hud="compact"] .build-strip .build-slot b,
+  body[data-hud="compact"] .build-strip .build-mastery {
     right: 0;
     bottom: 0;
   }
@@ -859,6 +868,10 @@ body[data-hud="compact"] .build-strip {
     text-align: right;
     font-size: 8px;
     line-height: 6px;
+  }
+  body[data-hud="compact"] .build-strip .build-mastery {
+    padding: 0;
+    border-width: 0;
   }
 }
 body[data-hud="compact"] .right {
@@ -913,6 +926,9 @@ body[data-hud="compact"] .best-run {
   grid-template-rows: auto minmax(0, 1fr);
   gap: 16px;
   padding: 22px 20px 18px;
+}
+.menu-panel,
+.menu[data-context="title"][data-screen="main"] .menu-list {
   background: var(--menu-bg);
   border: var(--u) solid var(--line);
   box-shadow: inset 0 0 0 var(--u) var(--night);
@@ -1044,6 +1060,11 @@ body[data-hud="compact"] .best-run {
 }
 .menu-item[data-armed] {
   color: var(--hp);
+}
+.menu[data-context="title"][data-screen="main"] .menu-list {
+  box-sizing: border-box;
+  width: min(320px, 100%);
+  padding: 10px;
 }
 .menu[data-context="title"][data-screen="main"] .menu-item {
   font-size: 24px;
@@ -1252,11 +1273,15 @@ body[data-hud="compact"] .best-run {
     font-size: 13px;
   }
   .menu[data-context="title"][data-screen="main"] .menu-head h1 {
-    font-size: 48px;
+    font-size: 40px;
   }
   .menu[data-context="title"][data-screen="main"] .menu-head p {
-    margin-top: 6px;
+    margin-top: 4px;
     font-size: 15px;
+  }
+  .menu[data-context="title"][data-screen="main"] .menu-list {
+    gap: 2px;
+    padding: 6px;
   }
   .menu-main {
     gap: 10px;
@@ -1268,7 +1293,7 @@ body[data-hud="compact"] .best-run {
   }
   /* six entries and the footer fit a phone on its side */
   .menu[data-context="title"][data-screen="main"] .menu-item {
-    min-height: 34px;
+    min-height: 30px;
     font-size: 20px;
   }
 }

@@ -116,6 +116,20 @@ export const FX_READABILITY = {
   grace: 0.05,
 } as const;
 
+export const FX_MASTERY = {
+  radiusMin: 18,
+  radiusMost: 40,
+  radiusShare: 0.6,
+  arcFrom: -Math.PI * 0.92,
+  arcTo: -Math.PI * 0.08,
+  turn: 0.9,
+  showFrom: 0.04,
+  showUntil: 0.9,
+  arm: 2.5,
+  armPerLevel: 0.5,
+  glow: 0.22,
+} as const;
+
 export const FX_REDUCED_MOTION = { stopScale: 0.5, afterimages: 0 } as const;
 
 const STORM_SPARKS = [hex("#fff6c0"), hex("#ffe066"), hex("#ffc21f"), hex("#e0901a")];
@@ -126,7 +140,6 @@ export const ELEMENT_FX: Readonly<Record<ElementId, ElementLook>> = {
   blaze: {
     ramp: ramp(["#4a1712", "#c9281f", "#f2561d", "#ff8a2a", "#ffe26b", "#fff8d8"]),
     sparks: SPARKS.hot,
-    core: hex("#fff3a6"),
     dark: hex("#3a1a0c"),
     particle: PK.FIRE,
     linger: PK.EMBER,
@@ -136,7 +149,6 @@ export const ELEMENT_FX: Readonly<Record<ElementId, ElementLook>> = {
   frost: {
     ramp: ramp(["#0e2a5c", "#1f5aa8", "#2f86d4", "#5ec0f2", "#a0e2ff", "#d4f4ff"]),
     sparks: SPARKS.ice,
-    core: hex("#f4fdff"),
     dark: hex("#102a48"),
     particle: PK.SHARD,
     linger: PK.FLAKE,
@@ -146,7 +158,6 @@ export const ELEMENT_FX: Readonly<Record<ElementId, ElementLook>> = {
   storm: {
     ramp: ramp(["#3a2408", "#8a5410", "#e0901a", "#ffc21f", "#ffe066", "#fff6c0"]),
     sparks: STORM_SPARKS,
-    core: hex("#fff6c0"),
     dark: hex("#3a3010"),
     particle: PK.SPARK,
     linger: PK.STAR,
@@ -154,9 +165,8 @@ export const ELEMENT_FX: Readonly<Record<ElementId, ElementLook>> = {
     rumble: "thunder",
   },
   venom: {
-    ramp: ramp(["#1c3410", "#2f6a1a", "#5aa82a", "#9fe05a", "#d4ff9a", "#f4ffe0"]),
+    ramp: ramp(["#1c3410", "#2f6a1a", "#5aa82a", "#9fe05a", "#d4ff9a", "#e4ffb8"]),
     sparks: VENOM_SPARKS,
-    core: hex("#f4ffe0"),
     dark: hex("#1c3410"),
     particle: PK.MOTE,
     linger: PK.VAPOUR,
@@ -166,7 +176,6 @@ export const ELEMENT_FX: Readonly<Record<ElementId, ElementLook>> = {
   void: {
     ramp: ramp(["#1a0f3d", "#3d1f8a", "#6a35d0", "#9a5cff", "#b98cff", "#dcc4ff"]),
     sparks: VOID_SPARKS,
-    core: hex("#efe0ff"),
     dark: hex("#120a1e"),
     particle: PK.STAR,
     linger: PK.MOTE,
