@@ -13,7 +13,7 @@ import { drawDefenseCue } from "./defenseCue";
 import { drawBoltArt, drawImpactArt } from "./effectArt";
 import { createFighterMotion } from "./fighterMotion";
 import { drawSkillCharge } from "./skillCharge";
-import { drawSkillDarkness, drawSkillImpact } from "./skillImpact";
+import { drawSkillArtBehind, drawSkillDarkness, drawSkillImpact } from "./skillImpact";
 import { createSlashView } from "./slash";
 import { drawElementImpact, drawElementProjectile } from "./spellEffects";
 import { drawSpellSelection } from "./spellSelection";
@@ -40,6 +40,7 @@ export function createDrillView(profile: DrillProfile) {
         return;
       }
       drawSkillDarkness(current.fighter.skillCast, cameraX);
+      drawSkillArtBehind(current.profile, current.fighter.skillCast);
       drawSkillCharge(current);
       current.profile.hooks?.drawBack?.();
       trail.draw();

@@ -36,3 +36,4 @@ export { drawCutIn } from "./view/cutIn";
 export { fitRunFeet, RUN_TOE_OFF } from "./view/runFoot";
 export { runPose as drillRunPose } from "./view/runPose";
 export { cyclePhase } from "./view/runTrace";
+export { drawStrikeHeart } from "./view/skillImpact";

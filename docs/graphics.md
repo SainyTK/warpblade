@@ -130,6 +130,7 @@ A hero-specific picture goes in `signature`; it may call `ELEMENT_KITS[element].
 - No light washes a body to white, whatever the tier or how much is stacked.
   The frame tones a pixel's summed light by its brightest channel, so stacked colour keeps its hue, and light may never lift a pixel's darkest channel past 180 (`BLEACH_FLOOR` in `src/engine/frame.ts`), so a glow tints a hero or a foe in its element colour and stops short of white.
   Shared shapes and kits draw no pure white: their hottest stroke is the element ramp's top colour, and hits landing close together share one impact light.
+  A charged skill's heart is a ring around the hero (`drawStrikeHeart` from `src/drill`), never a disc over the body, and tier art that surrounds the hero draws behind the hero.
 - The budget (`FX_BUDGET`): each live effect costs 1, 2, 3 or 5 by tier; past 15 quiet casts are dropped and the rest shed particles, past 28 new casts are dropped.
   At most 180 particles a step, 8 live lights, glow radius 80, shake amplitude 5, one shake per 0.12 s and one hit stop per 0.3 s, and glows only on strokes drawn at half alpha or more.
 - Measured in Chromium on an M-series Mac with 20 foes on screen and four evolved casts spawned every frame (far past real play): 4.8 ms a frame without skill effects, 7.7 ms with them, the budget holding the screen at five evolved effects.

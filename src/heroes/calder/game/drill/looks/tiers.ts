@@ -1,4 +1,5 @@
 import { H } from "../../../../../constants/stage";
+import { drawStrikeHeart } from "../../../../../drill";
 import { disc, ellipseRing, glow, glowLine, hairline, polygon } from "../../../../../engine/frame";
 import type { SkillCast } from "../../../../../types/drill";
 import { ease, smooth, TAU } from "../../../../../utils/math";
@@ -88,5 +89,5 @@ export function drawCylinderBreak({ tier }: SkillCast, u: number, fade: number):
     const pop = smooth(i * 0.08, i * 0.08 + 0.2, u);
     blast(bx, by, 10 * pop, i % 2 ? GOLD : 0x9ae05a, fade * pop);
   }
-  disc(0, -20, 10 * fade, WHITE, fade);
+  drawStrikeHeart(GOLD, fade);
 }
