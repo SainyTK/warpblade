@@ -121,10 +121,7 @@ body[data-screen="result"] .ach-toast {
     gap: 6px;
     padding: 3px 8px 3px 5px;
   }
-  body[data-screen="result"] .ach-toast {
-  display: none;
-}
-.ach-toast .medal {
+  .ach-toast .medal {
     width: 18px;
     height: 18px;
   }
