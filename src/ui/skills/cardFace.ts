@@ -22,7 +22,7 @@ import type { SkillDef } from "../../types/skill";
 import { pactAt, rateFigure } from "../../utils/pacts";
 import { type Ranks, resonanceRanks } from "../../utils/resonance";
 import { skillOf } from "../../utils/skills";
-import { skillIcon } from "./icons/iconImage";
+import { artOr, skillIcon } from "./icons/iconImage";
 
 /** a line under a card's text: an evolution whose partner the hero holds (gold), or one still to find */
 export interface CardNote {
@@ -166,7 +166,7 @@ function chargeFace(c: CharacterDef, level: number): CardFace {
   return {
     branch: ultimate?.element ?? "boon",
     path: CHARGE_KIND,
-    icon: ultimate ? skillIcon(ultimate.id, false) : BOONS[0].id,
+    icon: artOr("deeper_charge", ultimate ? skillIcon(ultimate.id, false) : BOONS[0].id),
     name: "Deeper Charge",
     line: stepLine("Rank", level),
     pips: { total: CHARGE_RANK.ranks, had: level - 1 },
@@ -196,7 +196,7 @@ function honingFace(id: HoningId, level: number): CardFace {
   return {
     branch: "honing",
     path: HONING_KIND,
-    icon: def.icon,
+    icon: artOr(`honing_${id}`, def.icon),
     name: def.name,
     line: stepLine("Rank", level),
     text: def.text,
