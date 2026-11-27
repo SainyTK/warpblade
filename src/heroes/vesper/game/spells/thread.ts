@@ -9,6 +9,7 @@ import type { Effect } from "../../../../types/effect";
 import type { Enemy } from "../../../../types/enemy";
 import { WHITE } from "../../../../utils/color";
 import { DUSK_RAMP, DUSK_SPARKS } from "../../look/colors";
+import { vesperFx } from "../skillFx";
 import { gainTempo } from "../tempo";
 
 const ID = "ve_thread";
@@ -33,6 +34,7 @@ function createThread(foe: Enemy, damage: number): Effect {
         foe.vx = ((hero.x + side * PULL.stop - foe.x) / PULL.back) * 0.9;
         dealDamage(foe, damage, { fromX: hero.x, launch: -(v.high ? PULL.high : PULL.launch), source: "abilities" });
         game.fx.push(createImpact(x, y, -side, false, DUSK_SPARKS));
+        vesperFx(ID, { x: hero.x + hero.face * 8, y: hero.y - 18, face: hero.face, toX: x, toY: y }, { damage });
         if (v.mark) markFoe(foe, ID, MARK_TIME, v.mark);
         if (v.tempo) gainTempo(v.tempo);
       }

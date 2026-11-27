@@ -9,6 +9,7 @@ import type { Enemy } from "../../../../types/enemy";
 import type { SkillBehavior, SkillMemory } from "../../../../types/skillBehavior";
 import { ARRIVE_A, ARRIVE_B } from "../moves/slashes";
 import { drawPhantom } from "../phantom";
+import { vesperFx } from "../skillFx";
 import { tempoTop } from "../tempo";
 
 const ID = "ve_shade";
@@ -52,6 +53,11 @@ function dash(s: Shade, dt: number): boolean {
     if (e.hp <= 0 || s.struck.has(e) || !boxHit([s.x - 4, s.y - 30, s.x + 4, s.y], enemyBox(e))) continue;
     s.struck.add(e);
     const [x, y] = enemyCenter(e);
+    vesperFx(
+      ID,
+      { x: x - s.face * 30, y, face: s.face, toX: x + s.face * 14, toY: y },
+      { damage: progress.stats.ad * v.power },
+    );
     game.fx.push(createSlash(x, y + 18, s.face, { ...ARRIVE_A, cy: -18 }));
     game.fx.push(createSlash(x, y + 18, s.face, { ...ARRIVE_B, cy: -18 }));
     dealDamage(e, progress.stats.ad * v.power, { fromX: s.x - s.face * 6, kx: s.face * 30, ky: -30, source: ID });

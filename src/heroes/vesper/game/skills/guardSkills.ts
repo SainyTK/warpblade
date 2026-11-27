@@ -2,12 +2,13 @@ import { dealDamage } from "../../../../game/damage";
 import { createSlash } from "../../../../game/effects/slash";
 import { enemyCenter } from "../../../../game/enemies/enemy";
 import { meleeHit } from "../../../../game/meleeHit";
-import { skillEvolved, skillValues, withBuild } from "../../../../game/skills/query";
+import { skillEvolved, skillLevel, skillValues, withBuild } from "../../../../game/skills/query";
 import { game, hero, progress } from "../../../../game/state";
 import { boxAhead, boxBehind, newSwing } from "../../../../game/world";
 import type { Effect } from "../../../../types/effect";
 import type { Enemy } from "../../../../types/enemy";
 import { NIGHT_RAMP } from "../../look/colors";
+import { vesperFx } from "../skillFx";
 import { vesperSound } from "../sound";
 import { vesper } from "../state";
 import { gainTempo, tempoMost } from "../tempo";
@@ -62,6 +63,14 @@ function createSpin(cuts: number, damage: number): Effect {
  */
 export function parrySkills(_foe: Enemy | null): void {
   const v = skillValues(ID);
+  if (skillLevel(ID)) {
+    const spin = skillEvolved(ID) ? (v.spin ?? 0) * (v.spinPower ?? 0) : 0;
+    vesperFx(
+      ID,
+      { x: hero.x + hero.face * 8, y: hero.y - 18, face: hero.face },
+      { damage: progress.stats.ad * (1 + (v.riposte ?? 0) + spin) },
+    );
+  }
   if (!v.riposte && !v.open) return;
   if (v.riposte) {
     newSwing();

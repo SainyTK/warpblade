@@ -1,8 +1,10 @@
-import { skillEvolved, skillValues } from "../../../../game/skills/query";
+import { enemyCenter } from "../../../../game/enemies/enemy";
+import { skillEvolved, skillLevel, skillValues } from "../../../../game/skills/query";
 import { game, hero, progress } from "../../../../game/state";
 import type { Enemy } from "../../../../types/enemy";
 import { NIGHT_RAMP } from "../../look/colors";
 import { createDuskWave } from "../effects/duskWave";
+import { vesperFx } from "../skillFx";
 import { nightLanding } from "./fallingNight";
 
 const ID = "ve_sky";
@@ -38,6 +40,15 @@ export function nightfallLanded(foes: readonly Enemy[]): void {
  */
 export function airBlowLanded(foes: readonly Enemy[], top: boolean): void {
   const v = skillValues(ID);
+  if (skillLevel(ID) && foes.length) {
+    const [x, y] = enemyCenter(foes[0]);
+    const ribbon = skillEvolved(ID) ? (v.ribbon ?? 0) * 2 : top ? (v.feather ?? 0) : 0;
+    vesperFx(
+      ID,
+      { x: hero.x, y: hero.y - 10, face: hero.face, toX: x + hero.face * 6, toY: y - 12 },
+      { damage: progress.stats.ad * (1 + (v.airBonus ?? 0) + ribbon) },
+    );
+  }
   if (v.lift) for (const e of foes) if (e.air) e.vy = Math.min(e.vy, -v.lift);
   if (!(v.feather && top) && !skillEvolved(ID)) return;
   const struck = new Set<Enemy>(foes);

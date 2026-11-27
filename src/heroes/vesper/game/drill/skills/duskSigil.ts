@@ -1,15 +1,19 @@
 import { enemyCenter } from "../../../../../game/enemies/enemy";
 import { addStacks, consumeStacks, stacksOf } from "../../../../../game/enemies/skillStatus";
 import { nearestFoe } from "../../../../../game/skills/targets";
-import { progress } from "../../../../../game/state";
+import { hero, progress } from "../../../../../game/state";
 import type { Enemy } from "../../../../../types/enemy";
 import type { SkillNumbers, VesperDrillSkill } from "../../../types/drillSkill";
+import { vesperFx } from "../../skillFx";
 import { skillStrike } from "../strike";
 
 const ID = "ve_hex";
 const SIGIL = { every: 0.5, duration: 4, jump: 70 } as const;
 
 function lay(foe: Enemy, n: number, values: SkillNumbers): void {
+  const [x, y] = enemyCenter(foe);
+  const ticks = SIGIL.duration / SIGIL.every;
+  vesperFx(ID, { x, y: y - 14, face: hero.face }, { damage: progress.stats.ad * (values.damage ?? 0) * n * ticks });
   addStacks(foe, ID, {
     stacks: n,
     max: values.max,
@@ -21,6 +25,10 @@ function lay(foe: Enemy, n: number, values: SkillNumbers): void {
 
 function bloom(foe: Enemy, power: number): void {
   const n = consumeStacks(foe, ID);
+  if (n) {
+    const [x, y] = enemyCenter(foe);
+    vesperFx(ID, { x, y, face: hero.face }, { damage: progress.stats.ad * power * n });
+  }
   skillStrike(foe, power * n, ID);
 }
 

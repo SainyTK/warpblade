@@ -14,6 +14,7 @@ import type { Effect } from "../../../../types/effect";
 import type { Enemy } from "../../../../types/enemy";
 import { DUSK_RAMP, DUSK_SPARKS } from "../../look/colors";
 import { ARRIVE_A, ARRIVE_B } from "../moves/slashes";
+import { vesperFx } from "../skillFx";
 import { vesper } from "../state";
 import { gainTempo } from "../tempo";
 
@@ -67,6 +68,12 @@ function passed(e: Enemy): void {
   if (!v.cut) return;
   vesper.slipCut++;
   const [x, y] = enemyCenter(e);
+  const current = skillEvolved(ID) ? (v.currentPower ?? 0) * 4 : 0;
+  vesperFx(
+    ID,
+    { x: x - hero.face * 40, y: hero.y - 16, face: hero.face, toX: x + hero.face * 8, toY: hero.y - 16 },
+    { damage: progress.stats.ad * (v.cut + (v.endCut ?? 0) + current) },
+  );
   game.fx.push(createImpact(x, y, hero.face, false, DUSK_SPARKS));
   dealDamage(e, progress.stats.ad * v.cut, {
     fromX: hero.x - hero.face * 4,

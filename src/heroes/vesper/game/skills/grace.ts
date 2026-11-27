@@ -4,6 +4,7 @@ import { skillEvolved, skillValues } from "../../../../game/skills/query";
 import { game, hero, progress } from "../../../../game/state";
 import type { SkillBehavior } from "../../../../types/skillBehavior";
 import { DUSK_SPARKS } from "../../look/colors";
+import { vesperFx } from "../skillFx";
 import { vesperSound } from "../sound";
 import { gainTempo, tempoShare, tempoTop } from "../tempo";
 
@@ -17,6 +18,11 @@ rememberPerSeat(objectMemory(ward, true));
 
 /** a parry or a perfect dodge heals her a little */
 function heal(): void {
+  vesperFx(
+    ID,
+    { x: hero.x, y: hero.y - 16, face: hero.face },
+    { damage: progress.stats.ad * (0.6 + (skillValues(ID).heal ?? 0) * 0.1) },
+  );
   const hp = skillValues(ID).heal;
   if (hp) hero.hp = Math.min(progress.stats.hp, hero.hp + hp);
 }
@@ -43,6 +49,7 @@ export function graceWard(): boolean {
   ward.cd = WARD_EVERY;
   hero.inv = Math.max(hero.inv, 0.4);
   game.fx.push(createImpact(hero.x + hero.face * 6, hero.y - 18, hero.face, true, DUSK_SPARKS));
+  vesperFx(ID, { x: hero.x, y: hero.y - 16, face: hero.face }, { damage: progress.stats.ad * 2 });
   vesperSound.turn();
   return true;
 }

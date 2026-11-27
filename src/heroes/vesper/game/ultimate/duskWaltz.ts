@@ -5,6 +5,7 @@ import { createSlash } from "../../../../game/effects/slash";
 import { enemyCenter } from "../../../../game/enemies/enemy";
 import { leaveAfterimages } from "../../../../game/hero/afterimages";
 import { ultimateValues } from "../../../../game/hero/ultimate";
+import { skillLevel } from "../../../../game/skills/query";
 import { foesOnScreen } from "../../../../game/skills/targets";
 import { game, hero, lights, progress } from "../../../../game/state";
 import { shake } from "../../../../game/world";
@@ -12,6 +13,7 @@ import type { Effect } from "../../../../types/effect";
 import type { Enemy } from "../../../../types/enemy";
 import { WALTZ_CUTS, WALTZ_FADE, WALTZ_REACH, WALTZ_SHARE, WALTZ_TEMPO } from "../../constants/waltz";
 import { DUSK_RAMP, DUSK_SPARKS, NIGHT_RAMP } from "../../look/colors";
+import { vesperFx } from "../skillFx";
 import { vesperSound } from "../sound";
 import { vesper } from "../state";
 import { gainTempo, tempoMost } from "../tempo";
@@ -91,6 +93,13 @@ export function castDuskWaltz(level: number): void {
   const cuts = WALTZ_CUTS.base + Math.floor(vesper.tempo / WALTZ_CUTS.perTempo) + (v.cuts ?? 0);
   const foes = near(reach);
   game.fx.push(createDance(foes, cuts, blow, WALTZ_CUTS.first, !v.twice));
+  if (skillLevel("ve_waltz")) {
+    vesperFx(
+      "ve_waltz",
+      { x: hero.x, y: hero.y, face: hero.face, reach: 20 + reach * 0.25 },
+      { damage: blow * (v.twice ? 2 : 1) },
+    );
+  }
   if (v.twice) {
     const again = near(WALTZ_REACH[WALTZ_REACH.length - 1]);
     const later = WALTZ_CUTS.first + foes.length * cuts * WALTZ_CUTS.gap + 0.1;

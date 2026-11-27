@@ -2,10 +2,11 @@ import { createFloorRing } from "../../../../game/effects/floorRing";
 import { createSlash } from "../../../../game/effects/slash";
 import { meleeHit } from "../../../../game/meleeHit";
 import { skillEvolved, skillValues } from "../../../../game/skills/query";
-import { game, hero } from "../../../../game/state";
+import { game, hero, progress } from "../../../../game/state";
 import { boxAhead, boxBehind, newSwing } from "../../../../game/world";
 import type { SkillBehavior } from "../../../../types/skillBehavior";
 import { DUSK_RAMP } from "../../look/colors";
+import { vesperFx } from "../skillFx";
 
 const ID = "ve_ascend";
 /** the jump's cut beside her, and the double jump's ring round her */
@@ -42,6 +43,8 @@ export const ascendingStep: SkillBehavior = {
   on: {
     jump(memory, ev) {
       const v = skillValues(ID);
+      const power = ev.air || skillEvolved(ID) ? (v.doubleCut ?? 0) : (v.jumpCut ?? 0);
+      vesperFx(ID, { x: hero.x, y: hero.y, face: hero.face }, { damage: progress.stats.ad * (1 + power) });
       if (!ev.air) {
         memory.refreshed = false;
         if (skillEvolved(ID)) airCut(v.doubleCut);

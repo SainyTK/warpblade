@@ -1,5 +1,8 @@
+import { enemyCenter } from "../../../../../game/enemies/enemy";
 import { staggerFoe } from "../../../../../game/enemies/stagger";
+import { hero, progress } from "../../../../../game/state";
 import type { VesperDrillSkill } from "../../../types/drillSkill";
+import { vesperFx } from "../../skillFx";
 import { echo, twinWaves } from "../effects";
 import { skillStrike } from "../strike";
 
@@ -14,6 +17,9 @@ export const RISING_EDGE_DRILL: VesperDrillSkill = {
     if (strike !== "first") {
       return;
     }
+    const [x, y] = enemyCenter(foe);
+    const echoes = (values.echo ?? 0) * (values.twice ? 2 : 1);
+    vesperFx(ID, { x, y, face: hero.face }, { damage: progress.stats.ad * (1 + (values.bonus ?? 0) + echoes) });
     skillStrike(foe, values.bonus, ID);
     echo(foe, values.echo ?? 0, ID);
     if (values.twice) {

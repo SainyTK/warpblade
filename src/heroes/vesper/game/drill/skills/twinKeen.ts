@@ -1,6 +1,9 @@
 import { drillFighter } from "../../../../../drill";
+import { enemyCenter } from "../../../../../game/enemies/enemy";
 import { markFoe } from "../../../../../game/enemies/skillStatus";
+import { hero, progress } from "../../../../../game/state";
 import type { VesperDrillSkill } from "../../../types/drillSkill";
+import { vesperFx } from "../../skillFx";
 import { later } from "../later";
 import { liftFoe } from "../statuses";
 import { foesNear, skillStrike } from "../strike";
@@ -9,11 +12,18 @@ const ID = "ve_keen";
 
 export const TWIN_KEEN_DRILL: VesperDrillSkill = {
   id: ID,
-  swordHit(foe, _infusion, strike, { values }) {
+  swordHit(foe, _infusion, strike, { values, evolved }) {
     if (strike !== "second") {
       return;
     }
     const sureCrit = !!values.crit;
+    const [x, y] = enemyCenter(foe);
+    const follows = (values.again ? 2 : 1) + (evolved ? 2 : 0);
+    vesperFx(
+      ID,
+      { x, y, face: hero.face },
+      { damage: progress.stats.ad * (1 + (values.follow ?? 0) * follows), delay: 0.06 },
+    );
     later(0.06, () => skillStrike(foe, values.follow, ID, { sureCrit }));
     if (values.again) {
       later(0.14, () => skillStrike(foe, values.follow, ID, { sureCrit }));

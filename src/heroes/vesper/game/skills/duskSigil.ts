@@ -10,6 +10,7 @@ import type { SkillBehavior } from "../../../../types/skillBehavior";
 import { DUSK_SPARKS } from "../../look/colors";
 import type { VesperMoveId } from "../../types/moves";
 import { shortBlowAt } from "../blades";
+import { vesperFx } from "../skillFx";
 
 const ID = "ve_hex";
 /** seconds between a sigil's ticks, and how far a fallen foe's sigils jump */
@@ -18,6 +19,9 @@ const SIGIL = { every: 0.5, jump: 70 } as const;
 /** lay `n` sigils on a foe at the skill's numbers */
 export function laySigils(e: Enemy, n: number): void {
   const v = skillValues(ID);
+  const [x, y] = enemyCenter(e);
+  const ticks = withBuild("duration", v.duration) / SIGIL.every;
+  vesperFx(ID, { x, y: y - 14, face: hero.face }, { damage: progress.stats.ad * v.damage * n * ticks });
   addStacks(e, ID, {
     stacks: n,
     max: withBuild("amount", v.max),
@@ -36,6 +40,7 @@ export function hexBloom(foes: readonly Enemy[]): void {
     if (!n) continue;
     const [x, y] = enemyCenter(e);
     game.fx.push(createImpact(x, y, hero.face, true, DUSK_SPARKS));
+    vesperFx(ID, { x, y, face: hero.face }, { damage: progress.stats.ad * v.bloom * n });
     dealDamage(e, progress.stats.ad * v.bloom * n, { fromX: hero.x, source: ID });
   }
 }
