@@ -54,7 +54,7 @@ export const GLASS_RAIN_DRILL: ZafirDrillSkill = {
         const [x, y] = enemyCenter(foe);
         session.elementImpacts.push({ ...blast, x, y, fromSword: true });
         spellStrike(foe, blast.spell.damage / 20, ID);
-        zafirFx(ID, "bolt", { x, y, reach: 50 }, { quiet: true, delay: 0.04 });
+        zafirFx(ID, "burst", { x, y, reach: 8 }, { quiet: true, delay: 0.04 });
       }
       if (evolved && values.behind) {
         const { x, face } = fighterAt();
@@ -63,12 +63,8 @@ export const GLASS_RAIN_DRILL: ZafirDrillSkill = {
           const [bx, by] = enemyCenter(back);
           session.elementImpacts.push({ ...blast, x: bx, y: by, fromSword: true });
           spellStrike(back, blast.spell.damage / 10, ID);
-          zafirFx(
-            ID,
-            "bolt",
-            { x: bx, y: by, reach: 70 },
-            { damage: progress.stats.ap * (blast.spell.damage / 10), delay: 0.06 },
-          );
+          const storm = { x: bx, y: back.y, face: -face, reach: 16 };
+          zafirFx(ID, "spikes", storm, { damage: progress.stats.ap * (blast.spell.damage / 10), delay: 0.06 });
           blindMinion(back, values.blind + 1.4);
         }
       }
