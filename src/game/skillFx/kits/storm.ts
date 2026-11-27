@@ -1,4 +1,4 @@
-import { ELEMENT_FX } from "../../../constants/skillFx";
+import { ELEMENT_FX, FX_BUDGET } from "../../../constants/skillFx";
 import { circle, glowLine, hairline, line, sparkle } from "../../../engine/frame";
 import { PK } from "../../../types/particle";
 import type { ElementKit } from "../../../types/skillFx";
@@ -29,7 +29,7 @@ export function fork(x0: number, y0: number, x1: number, y1: number, jag: number
     px = qx;
     py = qy;
   }
-  glowLine(x0, y0, x1, y1, Math.max(3, jag * 1.4), R[3], 0.15 * alpha);
+  if (alpha >= FX_BUDGET.glowFrom) glowLine(x0, y0, x1, y1, Math.max(3, jag * 1.4), R[3], 0.15 * alpha);
 }
 
 export const STORM_KIT: ElementKit = {

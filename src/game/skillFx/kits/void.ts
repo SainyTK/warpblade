@@ -1,4 +1,4 @@
-import { ELEMENT_FX } from "../../../constants/skillFx";
+import { ELEMENT_FX, FX_BUDGET } from "../../../constants/skillFx";
 import { circle, fleck, glow, hairline, polygon, sparkle } from "../../../engine/frame";
 import { PK } from "../../../types/particle";
 import type { ElementKit } from "../../../types/skillFx";
@@ -45,7 +45,7 @@ export const VOID_KIT: ElementKit = {
       const ty = y + Math.sin(angle) * (length + 2);
       sparkle(tx, ty, 2 + rank, WHITE, R[4], 0.35 * alpha);
     }
-    glow(x, y, length * 0.6 + 2, R[2], 0.11 * alpha);
+    if (alpha >= FX_BUDGET.glowFrom) glow(x, y, length * 0.6 + 2, R[2], 0.11 * alpha);
   },
   core(x, y, radius, alpha, rank) {
     circle(x, y, radius + 1.5, R[3], alpha);

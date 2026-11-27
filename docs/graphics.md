@@ -71,3 +71,87 @@ On an M-series Mac the busiest abyss fight (20 foes) takes about 2.5 ms a frame;
 - Light is per art pixel and costs a quarter of the same area in color.
 - Allocate nothing per frame in hot paths: reuse arrays, avoid closures per pixel.
 - Static detail belongs on the plate.
+
+## Skill effects
+
+Every skill's in-game effect goes through one module, `src/game/skillFx`, so an early skill reads clean and small and a late or evolved one reads extreme, the same way on every hero.
+Kael is the worked example: every one of his 20 skills calls it (`src/heroes/kael/game/drill/skills/` and `src/heroes/kael/game/skills/`).
+
+### The call
+
+```ts
+import { skillFx } from "../../../../../game/skillFx";
+
+skillFx("k_flame", "burst", { x, y, reach: 12 }, { damage });
+```
+
+- `id` is the skill id. Its level, mastery and evolution are read from the build, and its element from the skill's `element`.
+- `shape` is one of `burst`, `slash`, `pillar`, `wave`, `trail`, `bolt`, `nova`, `spikes`, `mark`.
+- `at` is where it draws, in world art pixels: `x`, `y`, `face`, `reach` (the shape's base size before the tier grows it), and `toX`, `toY` for a trail or a bolt that runs between two points.
+  Grounded shapes (`pillar`, `wave`, `nova`, `spikes`) take the floor as `y`: use `surfaceBelow(x, y)`.
+- `damage` is the hit the effect stands for. Pass the real number the skill deals.
+- `quiet: true` marks a secondary part (a tick, a repeat, a splash on the second foe). It draws one step smaller, with no shake, hit stop, flash, sound or light, and is the first thing the budget drops.
+- `delay` waits before it shows, for follow-up hits.
+- `element` overrides the skill's element for one cast, and `signature` draws a hero's own shape over the shared one with the same arguments as a shape (`FxShapeDraw`).
+
+`playSkillFx(shape, cast, at, options)` takes a cast you built with `castFrom(id, element, input)`, for previews and tests.
+
+### Tiers
+
+The intensity of a cast is the skill level (0 at level 1, 1 at level 8), plus 0.1 per mastery level, plus 1 when evolved, plus the damage punch: a third for each doubling of the hit over the hero's expected hit at this hero level (base attack damage times the level power), from -0.3 to +0.6.
+A quiet cast takes 0.5 off.
+
+| Tier | Intensity | What it adds |
+| --- | --- | --- |
+| early | under 0.35 | the bare shape, small, a little light, one quiet sound layer |
+| mid | 0.35 to 0.8 | element motifs along the shape, a ring or second row, one afterimage, embers, a light shake |
+| late | 0.8 and up | a crossing or flanking second shape, ground cracks, debris, bloom, hit stop, two sound layers |
+| evolved | evolved and 1.8 and up | several shapes at once (fans, side pillars, satellites), longer life, a short flash, three sound layers |
+
+An evolved cast of 2.4 and up also fills the screen: a column to the sky, a cut across the stage or a ring to the stage edge.
+Numbers live in `src/constants/skillFx.ts` (`FX_TIERS`, `FX_INTENSITY`).
+
+### Element kits
+
+Each element has a kit in `src/game/skillFx/kits/` with its ramp, particles and sounds and four building blocks every shape uses: `motif` (a flame tongue, an ice shard, a lightning fork, a venom tendril with a bubble, a void tear), `core`, `spray` and `linger`.
+Shapes never pick colours themselves, so the same shape is a fire scythe for Blaze and a crescent tear for Void.
+A hero-specific picture goes in `signature`; it may call `ELEMENT_KITS[element].motif` to stay in the element's style.
+
+### Settings, readability and budget
+
+- Screen shake goes through `shake()`, which the Options toggle and reduced motion already silence.
+  With reduced motion (`src/services/reducedMotion.ts`) there is no flash and no afterimage, and hit stop is halved.
+- Skill effects draw no damage numbers, so the Options toggle for numbers is untouched.
+- After its first 0.05 s an effect over a foe that is winding up (any state but drift, walk or recover) fades to a quarter, with a wider margin around bosses, so wind-ups and telegraphs stay readable.
+- The budget (`FX_BUDGET`): each live effect costs 1, 2, 3 or 5 by tier; past 15 quiet casts are dropped and the rest shed particles, past 28 new casts are dropped.
+  At most 180 particles a step, 8 live lights, glow radius 80, shake amplitude 5, one shake per 0.12 s and one hit stop per 0.3 s, and glows only on strokes drawn at half alpha or more.
+- Measured in Chromium on an M-series Mac with 20 foes on screen and four evolved casts spawned every frame (far past real play): 5.4 ms a frame without skill effects, 8.4 ms with them, the budget holding the screen at five evolved effects.
+  One evolved slash costs about 1.5 ms to draw, an evolved burst 0.8 ms, a late one 0.2 to 0.5 ms.
+
+### Matching the icon
+
+Open the hero's contact sheet of skill icons and, for each skill, name the icon's subject and colour, then pick the shape that draws that subject:
+
+| Icon subject | Shape |
+| --- | --- |
+| a crescent or blade sweep | `slash` |
+| an explosion, a shatter, a flask | `burst` |
+| a column, a launch, a plunged sword, a fountain | `pillar` |
+| crystals or spikes rising from the ground | `spikes` |
+| a ground-running crest | `wave` |
+| a dash, a streak, a phase | `trail` |
+| lightning from above | `bolt` |
+| a ring on the floor, a vortex, a stomp | `nova` |
+| a stack, a curse, a sigil on a foe | `mark` |
+
+The colour comes from the skill's `element`; if the icon's colour and the element disagree, fix the element in the skill data, never the kit.
+Kael's Rift Wound is Venom in its icon, so its wound and collapse now draw in the Venom ramp.
+
+### Per-skill checklist
+
+1. Find where the skill's hit happens (drill hook, skill behaviour or kit move) and call `skillFx` there with the real damage.
+2. One main cast per press; secondary hits, ticks and splashes are `quiet`.
+3. Place it on the hero for presses (`hero.x`, `hero.y - 16`, `face`) and on the foe for what lands on it (`enemyCenter(foe)`, or the floor under it for grounded shapes).
+4. Keep the skill's own existing effect; the tiered effect sits on top of it.
+5. Check it in the Training room (`?training=<hero>`) at level 1, level 8, mastery 4 and evolved, at game scale: no blur, no halo washing out the hero, aligned to the hero and the foe.
+6. Check a busy fight with a boss wind-up: the wind-up stays readable.

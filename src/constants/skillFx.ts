@@ -69,13 +69,15 @@ export const FX_TIERS: Readonly<Record<FxTier, TierFeel>> = {
     shake: [0.3, 4],
     stop: 0.08,
     flash: 0.3,
-    afterimages: 3,
+    afterimages: 2,
     debris: 16,
     cracks: 5,
     embers: 18,
     sounds: 3,
   },
 };
+
+export const FX_TIER_COST: Readonly<Record<FxTier, number>> = { early: 1, mid: 2, late: 3, evolved: 5 };
 
 export const FX_INTENSITY = {
   levelWeight: 1,
@@ -94,8 +96,9 @@ export const FX_INTENSITY = {
 } as const;
 
 export const FX_BUDGET = {
-  liveSoftCap: 18,
-  liveHardCap: 32,
+  costSoftCap: 15,
+  costHardCap: 28,
+  glowFrom: 0.5,
   particlesPerFrame: 180,
   lightsLive: 8,
   feelGap: 0.12,
@@ -106,10 +109,10 @@ export const FX_BUDGET = {
 } as const;
 
 export const FX_READABILITY = {
-  threatVeil: 0.35,
+  threatVeil: 0.25,
   threatMargin: 14,
   windupReach: 48,
-  grace: 0.08,
+  grace: 0.05,
 } as const;
 
 export const FX_REDUCED_MOTION = { stopScale: 0.5, afterimages: 0 } as const;

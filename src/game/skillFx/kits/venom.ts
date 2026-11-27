@@ -1,4 +1,4 @@
-import { ELEMENT_FX } from "../../../constants/skillFx";
+import { ELEMENT_FX, FX_BUDGET } from "../../../constants/skillFx";
 import { circle, disc, fleck, glow, hairline, line } from "../../../engine/frame";
 import { PK } from "../../../types/particle";
 import type { ElementKit } from "../../../types/skillFx";
@@ -43,7 +43,7 @@ export const VENOM_KIT: ElementKit = {
       tendril(x, y, angle + 0.6, length * 0.7, alpha * 0.8, seed + 2);
       hairline(x, y, x, y + length * 0.4, R[2], alpha * 0.7);
     }
-    glow(x, y, length * 0.7 + 2, R[3], 0.1 * alpha);
+    if (alpha >= FX_BUDGET.glowFrom) glow(x, y, length * 0.7 + 2, R[3], 0.1 * alpha);
   },
   core(x, y, radius, alpha, rank) {
     disc(x, y, radius * 1.6, R[0], 0.55 * alpha);

@@ -1,4 +1,4 @@
-import { ELEMENT_FX } from "../../../constants/skillFx";
+import { ELEMENT_FX, FX_BUDGET } from "../../../constants/skillFx";
 import { circle, glow, hairline, polygon } from "../../../engine/frame";
 import { PK } from "../../../types/particle";
 import type { ElementKit } from "../../../types/skillFx";
@@ -38,7 +38,7 @@ export const BLAZE_KIT: ElementKit = {
       const a = angle * 0.4 + UP * 0.6;
       hairline(x, y, x + Math.cos(a) * length * 1.1, y + Math.sin(a) * length * 1.1, R[5], alpha * 0.7);
     }
-    glow(x, y - length * 0.4, length + 2, R[3], 0.12 * alpha);
+    if (alpha >= FX_BUDGET.glowFrom) glow(x, y - length * 0.4, length + 2, R[3], 0.12 * alpha);
   },
   core(x, y, radius, alpha, rank) {
     circle(x, y, radius + 1, R[1], alpha);

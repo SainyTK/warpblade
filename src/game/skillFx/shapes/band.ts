@@ -1,3 +1,4 @@
+import { FX_BUDGET } from "../../../constants/skillFx";
 import { glow, hairline, polygon } from "../../../engine/frame";
 import type { Ramp } from "../../../types/color";
 import { WHITE } from "../../../utils/color";
@@ -36,5 +37,5 @@ export function drawBand(arc: Arc, ramp: Ramp, alpha: number, hot: boolean): voi
     hairline(outer[i][0], outer[i][1], outer[i + 1][0], outer[i + 1][1], hot ? WHITE : ramp[5], alpha);
   }
   const [gx, gy] = arcPoint(arc, (arc.from + arc.to) / 2, -arc.width * 0.5);
-  glow(gx, gy, arc.radius + arc.width, ramp[3], 0.21 * alpha);
+  if (alpha >= FX_BUDGET.glowFrom) glow(gx, gy, arc.radius + arc.width, ramp[3], 0.21 * alpha);
 }

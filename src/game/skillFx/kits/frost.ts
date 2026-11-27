@@ -1,4 +1,4 @@
-import { ELEMENT_FX } from "../../../constants/skillFx";
+import { ELEMENT_FX, FX_BUDGET } from "../../../constants/skillFx";
 import { glow, hairline, polygon, sparkle } from "../../../engine/frame";
 import { PK } from "../../../types/particle";
 import type { ElementKit } from "../../../types/skillFx";
@@ -48,7 +48,8 @@ export const FROST_KIT: ElementKit = {
       shard(x, y, angle - 0.5, length * 0.55, Math.max(0.8, length * 0.14), alpha * 0.9);
       shard(x, y, angle + 0.5, length * 0.55, Math.max(0.8, length * 0.14), alpha * 0.9);
     }
-    glow(x + Math.cos(angle) * length * 0.5, y + Math.sin(angle) * length * 0.5, length * 0.8 + 2, R[3], 0.1 * alpha);
+    if (alpha >= FX_BUDGET.glowFrom)
+      glow(x + Math.cos(angle) * length * 0.5, y + Math.sin(angle) * length * 0.5, length * 0.8 + 2, R[3], 0.1 * alpha);
   },
   core(x, y, radius, alpha, rank) {
     const arms = rank >= 2 ? 8 : 6;

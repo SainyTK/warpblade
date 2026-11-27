@@ -1,8 +1,9 @@
-import { FX_BUDGET as B } from "../../constants/skillFx";
+import { FX_BUDGET as B, FX_TIER_COST } from "../../constants/skillFx";
 import type { Effect } from "../../types/effect";
+import type { FxTier } from "../../types/skillFx";
 import { game } from "../state";
 
-const tracked = new Set<Effect>();
+const tracked = new Map<Effect, number>();
 
 const usage = {
   frameAt: -1,
@@ -15,24 +16,36 @@ const usage = {
 
 const elapsedSince = (at: number): number => (game.t < at ? Number.POSITIVE_INFINITY : game.t - at);
 
-export function liveSkillFx(): number {
-  if (tracked.size === 0) return 0;
+function prune(): void {
+  if (tracked.size === 0) return;
   const shown = new Set(game.fx);
-  for (const effect of tracked) {
+  for (const effect of tracked.keys()) {
     if (!shown.has(effect)) tracked.delete(effect);
   }
+}
+
+export function liveSkillFx(): number {
+  prune();
   return tracked.size;
 }
 
-export function admitScale(quiet: boolean): number | null {
-  const live = liveSkillFx();
-  if (live >= B.liveHardCap) return quiet ? null : 0.35;
-  if (live < B.liveSoftCap) return 1;
-  return 1 - (0.65 * (live - B.liveSoftCap)) / (B.liveHardCap - B.liveSoftCap);
+export function liveSkillFxCost(): number {
+  prune();
+  let cost = 0;
+  for (const each of tracked.values()) cost += each;
+  return cost;
 }
 
-export function trackSkillFx(effect: Effect): Effect {
-  tracked.add(effect);
+export function admitScale(tier: FxTier, quiet: boolean): number | null {
+  const cost = liveSkillFxCost() + FX_TIER_COST[tier];
+  if (cost > B.costHardCap) return null;
+  if (cost <= B.costSoftCap) return 1;
+  if (quiet) return null;
+  return 1 - (0.65 * (cost - B.costSoftCap)) / (B.costHardCap - B.costSoftCap);
+}
+
+export function trackSkillFx(effect: Effect, tier: FxTier): Effect {
+  tracked.set(effect, FX_TIER_COST[tier]);
   return effect;
 }
 
