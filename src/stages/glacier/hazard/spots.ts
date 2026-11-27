@@ -5,24 +5,24 @@ import { frozenCorridor, icicleCavern, lynxDen } from "../layout";
 const AREAS: readonly Approach[] = [frozenCorridor, icicleCavern, lynxDen];
 
 const AREA_ICICLES: readonly (readonly number[])[] = [
-  [158, 302, 456, 598, 764],
-  [138, 214, 332, 404, 558, 642, 784, 868],
-  [150, 330, 520, 640, 764],
+  [280, 540, 760, 1000, 1240, 1480],
+  [200, 420, 600, 790, 1000, 1200, 1380, 1560, 1720],
+  [360, 640, 900, 1180, 1420],
 ];
 
 const AREA_SLICK: readonly (readonly (readonly [number, number])[])[] = [
   [
-    [376, 428],
-    [688, 742],
+    [540, 596],
+    [1080, 1136],
   ],
   [
-    [296, 346],
-    [556, 604],
-    [876, 930],
+    [420, 470],
+    [760, 812],
+    [1290, 1346],
   ],
   [
-    [326, 398],
-    [636, 690],
+    [600, 672],
+    [1200, 1256],
   ],
 ];
 
