@@ -165,7 +165,7 @@ The roster asks each hero for its own version of four of Kael's qualities.
 
 The kit counts `brynn.fissures` with a `heroCount` feat on every fissure and keeps the best `brynn.sweepCrowd` with a `heroBest` feat after every sweep (`src/heroes/brynn/constants/achievements.ts`).
 
-## Every shop item
+## Every Armory item
 
 Honed Edge and Arcana feed her blows and abilities through `progress.stats.ad` and `ap`.
 Endurance pays for her dear block and the dodge, Wellspring for her abilities and Crimson Fall.

@@ -55,7 +55,7 @@ A Fusion's name stays ??? on cards and in the Codex until the player has made it
 - Levels no longer raise max HP or MP (owner rule, 26 November 2026). Max HP and MP grow only from shards, below.
 - A level up restores 8% of max HP and MP (`LEVEL_UP_RESTORE`), so a level heals a little.
 - The ground string's length is fixed per hero (`CharacterDef.comboHits`); it no longer grows with the level.
-- Shop stats stay flat and are the base the shards add to.
+- Armory stats stay flat and are the base the shards add to.
 
 ## Heart Shards and Mana Shards
 
@@ -281,7 +281,8 @@ With only 5 skills open (a new player), 40 levels, 20 masteries, 6 charge ranks 
 Rift Arts are not counted, since they no longer carry between stages.
 A chest can also raise a mastery level.
 
-The skill pool takes an availability filter: `CardView.isAvailable(skillId)` in `src/utils/cards.ts`, all skills when not given, so meta unlocks can lock skills without touching the deal.
+The skill pool takes an availability filter: `CardView.isAvailable(skillId)` in `src/utils/cards.ts`, all skills when not given.
+The game passes `isSkillOpen`, so a new save deals each hero's five starting skills only (`docs/unlocks.md`).
 
 Checked with `docs/growth-review/skill-sim.mts`: 500 stages per hero, a greedy player, chests at levels 15, 45, 70, 85 and 99.
 Load it through the dev server (`await import("/docs/growth-review/skill-sim.mts")` in the browser console) and read `PICK_BUDGET`.
@@ -312,7 +313,7 @@ The skill level weight was 6 until 11 November 2026, when the owner asked for he
 The first evolution comes at wave 24 (median): most skills reach level 8 late, since the next level of a held skill is a rare card.
 The skill level weight is the lever: at 20, steering players evolved 4 or more in 38% of runs; at 8 it was 10%.
 Rerolls matter little; knowing partners is what steering buys.
-With every pick tool bought in the shop (5, 5, 3) the simulated steering player evolves 2 to 3 (median), 4 or more in 4 to 6%, since its skips spend points; a sharper player would do better.
+With every pick tool bought in the Armory (5, 5, 3, before the Armory's levels changed) the simulated steering player evolves 2 to 3 (median), 4 or more in 4 to 6%, since its skips spend points; a sharper player would do better.
 
 ## Chests
 
@@ -350,7 +351,7 @@ The goals, their exact rules and the pacing are in `docs/unlocks.md`.
 
 ## Ownership while building
 
-- Core (build state, cards and pick screen, charms, hero growth, Flow, chests, shop, the skill framework): `src/game/build/`, `src/game/skills/`, `src/utils/build.ts`, `src/utils/cards.ts`, `src/ui/skills/`, `src/ui/chest/`, HUD.
+- Core (build state, cards and pick screen, charms, hero growth, Flow, chests, Armory, the skill framework): `src/game/build/`, `src/game/skills/`, `src/utils/build.ts`, `src/utils/cards.ts`, `src/ui/skills/`, `src/ui/chest/`, HUD.
 - Each hero's skills: `src/heroes/<id>/constants/skills/`, `src/heroes/<id>/game/skills/`, `src/heroes/<id>/ui/icons/` (`docs/skill-design.md`, `docs/hero-module.md`).
 - Waves: `src/utils/waves.ts`, `src/game/waves.ts`, `src/constants/waves.ts`, enemy spawning, elites, coins.
 - Results: `src/game/damageLedger.ts`, the `source` of every `dealDamage` call, damage numbers, the result screen.

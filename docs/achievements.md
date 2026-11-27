@@ -2,7 +2,7 @@
 
 Kael and Cerise are free.
 Every other hero starts locked and is bought with coins on the hero screen.
-Achievements give the player goals across runs, and most of them pay coins, which feed back into the shop and the hero unlocks.
+Achievements give the player goals across runs, and most of them pay coins, which feed back into the Armory and the hero unlocks.
 
 ## Hero unlocks
 
@@ -50,19 +50,19 @@ The game reports what happens through `feat()` in `src/game/feat.ts`, called whe
 
 The same feats, and a few more, also feed the unlocks (`docs/unlocks.md`).
 
-Shop levels and heroes bought are read from the meta save, so buying in the shop or unlocking a hero is checked as soon as it happens.
+Armory levels and heroes bought are read from the meta save, so buying in the Armory or unlocking a hero is checked as soon as it happens.
 
 `applyFeat` in `src/utils/trackedStats.ts` turns an event into new stats, and the goal checks in `src/utils/achievements.ts` read those stats.
 Kills are also counted per foe type in `TrackedStats.foes`, and a `foeKills` goal names one foe type and the kills it needs; Shepherd's End is the first.
 Stats are saved at the end of each wave and run, and an earned achievement saves at once with its coins.
-Only solo runs count toward play goals; a co-op run counts the coins it banks.
+Co-op runs count too: kills, waves and run ends count for every player in the room under their own hero, and the rest for the player who did it (`docs/unlocks.md`, Co-op).
 The studio's playtest bots set `warpblade-playtest` in local storage, and the dev build then unlocks every hero and tracks nothing.
 
 ## Saving
 
 Unlocked heroes, earned achievements and the tracked stats are optional fields of the `warpblade-meta-v1` save: `heroes`, `achievements` and `tracked`.
 The kills per foe type are the optional `tracked.foes` record; a save from before 0.12.0 has none and counts from zero, and a foe type the game no longer has is dropped on load.
-A save from before them loads with its coins and shop levels, no heroes bought and nothing earned.
+A save from before them loads with its coins and Armory levels, no heroes bought and nothing earned.
 `parseMeta` in `src/utils/metaSave.ts` keeps only the ids the game still has.
 A save that bought a hero no longer in the roster gets that hero's price back into the bank once (`REMOVED_HERO_PRICES` in `src/constants/removedHeroes.ts`), and the start menu shows the refund until the next run starts.
 
@@ -119,7 +119,7 @@ A save that bought a hero no longer in the roster gets that hero's price back in
 | Skill | Six for Six | As Calder, land 6 Triggers in a row | 80 | |
 | Coins | Coin Purse | Bank 500 coins from runs | 25 | |
 | Coins | Treasury | Bank 3,000 coins from runs | 100 | Coin Purse |
-| Coins | Outfitted | Buy 10 levels or skills in the Shop | 30 | |
+| Coins | Outfitted | Buy 10 levels in the Armory | 30 | |
 | Coins | New Blood | Unlock a hero with coins | 50 | |
 
 The trials are built from the roster: `src/constants/achievements.ts` adds one for every hero in `CHARACTERS`, with the id `trial-<id>` and the same reward.

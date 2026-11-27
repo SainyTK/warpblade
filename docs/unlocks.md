@@ -1,66 +1,120 @@
 # Unlocks and the Codex
 
-Charms, charm slots, evolution recipes and hero jobs are found over many runs.
-A new player starts with a small set of charms, and every other charm and the extra charm slots open when their goals are met.
-Every hero's 20 skills can be dealt from the first run (`docs/skill-design.md`); what stays hidden is how they evolve.
-The game keeps most of it a mystery: the Codex shows a cryptic hint for what is still locked, a few secret entries show only ???, and a skill's evolution partner stays hidden until the player has made that evolution once.
+A new player starts small and opens more with every run, won or lost.
+A new save has Kael and Cerise, five of their 20 skills each, the Sunlit Ruins and an empty Armory.
+Everything else (stages, Hyper stages, heroes, skills, Armory items and hero jobs) opens when its goal is met.
+Some unlocks then cost gold.
 
-## Starting set
+## One table
 
-- Charms: Might, Haste, Vigor and Insight.
-- 8 skill slots, always (`SKILL_SLOTS`).
-- 3 charm slots; the design maximum stays 5 (`STARTING_CHARM_SLOTS` in `src/constants/unlocks.ts`, `CHARM_SLOTS`).
+Every unlock except the hero jobs is one row of `UNLOCKS` (`src/constants/unlocks/`): an id kept in the save, a reward, a goal, and for some a gold price or `secret`.
+The folder has one file per kind (`stages.ts`, `heroes.ts`, `items.ts`, `skills.ts`) and `index.ts` joins them.
 
-The data is in `src/constants/unlocks.ts`.
+- A row without a price is found the moment its goal is met.
+- A row with a price goes on sale then and is found when bought: heroes on the hero screen, Hyper stages on the stage screen, skills in the Armory.
+- A secret row shows only ??? until found, and is left out of the next goals on the result screen.
+- A skill row of a hero still locked waits: it neither opens nor goes on sale until the hero is unlocked.
 
-## The unlock table
+Hero jobs keep their own goal on `CharacterDef.jobs` (`docs/hero-module.md`) and are checked with the same machinery.
 
-The exact goals below are what the game hides.
-"In one run" goals count from the run's start; the others count over every run.
+## Starting skills
 
-| Unlock | Goal | Hint the Codex shows | Secret |
-| --- | --- | --- | --- |
-| Persistence | Raise any skill to level 4 | A skill kept long enough wants to stay longer. | |
-| Resonance | Fill Flow to the top | Strike without pause until the current runs over. | |
-| Swiftness | Make 10 perfect dodges or parries in one run | Slip past enough blows in one night and your feet grow light. | |
-| Reach | Defeat 150 foes with skill sources in one run | Skills that reap enough on their own in one night want to reach further. | |
-| Fortune | Open a chest with five upgrades | Some chests hold far more than they should. | |
-| Multitude | Raise any skill to level 8 | A skill at its peak longs for company. | Yes |
-| Fourth charm slot | Open 5 chests | Open enough chests and one of them opens you. | |
-| Fifth charm slot | Clear all 30 waves | Only those who see the stage's end carry five. | Yes |
+Locked skills are never dealt: `cardView()` passes `isSkillOpen` as the card pool's `isAvailable` filter.
+With five skills open the pick budget is still covered by levels, masteries, Deeper Charge, Attunement and Honing (`docs/growth-design.md`).
+Each hero's five starters include a partner pair, so an evolution is possible from the first runs.
 
-A skill kill is a kill whose last hit came from a skill's own source (a summon, a projectile it launched, damage over time), not from the hero's own presses.
+| Hero | Starting skills |
+| --- | --- |
+| Kael | Keen Edge, Phase Cut, Reaping Sweep, Crystal Splinters, Lightning |
+| Cerise | Measured Touch, Riposte Chain, Pinning Point, Thorn Wounds, Rose Bloom |
+| Aldric | Oathblade, Breaking Bash, Sunbrand, Verdict, Dawn Lance |
+| Vesper | Rising Edge, Twin Keen, Turning Blade, Falling Moon, Dusk Sigil |
+| Saya | Honed Draw, Clean Sheathe, Reverse Edge, Ink Flow, Crescent Wave |
+| Yun | Twin Echo, Flowing Water, High Tide, Crane's Reach, Sword Fan |
+| Brynn | Heavy Hands, Anvil Weight, Wide Arc, Skyward Heave, Ember Arc |
+| Zafir | Whirling Edge, Unbroken Whirl, Opened Veins, Deep Wounds, Hot Gale |
+| Calder | Hair Trigger, Breech Slam, Blast Jump, Phosphor Shell, Scorch Rounds |
 
-Hero jobs (`docs/hero-module.md`, Jobs) are found the same way, from each job's own `unlock` on its hero's `CharacterDef.jobs`.
-They show on the hero screen, not in the Codex: a locked job's chip carries the padlock and its hint, which says plainly what to do.
+The data is `STARTER_SKILLS` in `src/constants/unlocks/skills.ts`.
 
-| Job | Goal | Hint the hero screen shows |
+## Skill ladder
+
+Every hero's other 15 skills follow the same ladder, in the hero's skill order with the ultimate skill last.
+"With the hero" counts only runs played as that hero.
+The two hunted foes give each hero a reason to visit other stages.
+
+| Step | Goal | Price |
 | --- | --- | --- |
-| Kael's Prism Knight (`job-kael-prism`) | Clear the Sunlit Ruins with Kael (the hero stat `kael.stage.prologue`) | Defeat Oakheart with Kael. |
+| 1 | Slay 40 foes with the hero | |
+| 2 | Slay 200 foes with the hero | |
+| 3 | Slay 500 foes with the hero | |
+| 4 | Defeat a mini boss with the hero | |
+| 5 | Slay 900 foes with the hero | |
+| 6 | Slay 1,400 foes with the hero | 150 |
+| 7 | Reach level 70 with the hero | |
+| 8 | Slay 2,000 foes with the hero | |
+| 9 | Evolve a skill with the hero | |
+| 10 | Slay 600 of the first hunted foe | |
+| 11 | Slay 2,800 foes with the hero | |
+| 12 | Defeat a stage boss with the hero | |
+| 13 | Slay 3,800 foes with the hero | 300 |
+| 14 | Slay 800 of the second hunted foe | |
+| 15 | Clear 3 stages with the hero (???) | |
 
-## Pacing
+| Hero | Unlock order | Hunted foes |
+| --- | --- | --- |
+| Kael | Skybreaker, Crystal Aegis, Warpcraft, Blink Step, Spellwarp, Passing Cut, Sky Dance, Fire Flask, Ice Spikes, Rift Wound, Static Charge, Phantom Edge, Crystal Familiar, Mirror Knight, Crystal Nova | Thornback, Mire Toad |
+| Cerise | Long Lunge, Feint, Rose Mark, Passing Touch, Swallow Dive, Needle Rain, Mirror Guard, Weeping Mark, Wilting Curse, Mirror Blade, Petal Blades, Thorn Sentinel, Poise, Grace, Rose Tempest | Glimmer Moth, Slagling |
+| Aldric | Iron Retort, Crestfall, Shield Step, Bulwark Arrival, Skyfall, Mending Light, High Sun, Penance, Lingering Dawn, Oathsworn, Sun Lion, Dawn Falcon, Resolve, Iron Vow, Sanctuary | Storm Kite, Ember Bat |
+| Vesper | Sky Ribbon, Crossing Storm, Ascending Step, Thrown Dusk, Slipstream, Dusk Gale, Dusk Thread, Falling Night, Afterglow, Dusk Shade, Night Swallows, Twin Phantom, Unbroken Rhythm, Wanderer's Grace, Dusk Waltz | Rime Hound, Sky Guard |
+| Saya | Falling Moon, Passing Draw, Shadow Step, Long Stroke, Ink Rain, Still Water, Weeping Cut, Ink Stain, Lingering Line, Ink Crane, Ink Shade, Paper Blades, Feather Step, Calm Mind, Silent Moon | Shardling, Inkling |
+| Yun | Petal Storm, Cloud Step, Sword Riding, Drifting Leaf, Sword Cage, Qi Crescent, Lingering Qi, Thousand Cuts, Jade Needle, Guardian Blade, Jade Heron, Sage's Shade, Sage's Breath, Harmony, Heaven's Grove | Gale Hawk, Pagewing |
+| Brynn | Counter Cleave, Spinning Throw, Crater Leap, Shoulder Charge, Brand Pillars, War Cry, Cinder Edge, Fault Lines, Crushing Weight, Falling Blade, Echo Swing, Heart Splinter, Iron Skin, Bloodletter, Crimson Fall | Husk, Rune Golem |
+| Zafir | Sirocco Descent, Two-Faced Cut, Falling Dune, Dune Walk, Whirlwind Arrival, Sand Slip, Glass Rain, Quicksand, Scouring Sand, Desert Thirst, Sand Wraith, Mirage Dancer, Desert Hawk, Sand Veil, Sandstorm | Wisp, Rot Crawler |
+| Calder | Vent Blast, Point Blank, Speed Loader, Ricochet, Recoil Dash, Tracer Warp, Chain Shot, Blast Charge, Shrapnel, Hot Brass, Spare Barrel, Smoke Double, Scrap Hound, Drum Cylinder, Cylinder Break | Prism Sprite, Void Stalker |
 
-Early runs that die around waves 4 to 8 should find Resonance and Persistence, and often Swiftness.
-Runs into the rain era bring Reach for a build with summons or damage over time.
-Chests from wave 3 on bring the fourth charm slot and, with luck, Fortune.
-A skill at level 8 opens Multitude.
-The fifth charm slot (a stage clear) takes many hours.
 
-## Recipes
+## Heroes
 
-A skill card shows its evolution's name and "Evolves with ???" until the player has made that evolution once; after that it names the partner, in gold when the hero holds it.
-Core calls `learnRecipe(id)` when a skill evolves; `knowsRecipe(id)` tells the cards and the Codex whether to show the partner.
-Recipes are kept by skill id, so skill ids are unique across heroes.
+| Hero | Goal | Price |
+| --- | --- | --- |
+| Aldric | Clear the Sunlit Ruins | 300 |
+| Vesper | Slay 2,500 foes | 400 |
+| Saya | Defeat 3 mini bosses | 550 |
+| Yun | Unlock 30 skills | 750 |
+| Brynn | Clear the Cinder Foundry | 1,000 |
+| Zafir | Defeat 6 stage bosses | 1,350 |
+| Calder | Clear a Hyper stage (???) | 1,800 |
 
-## Stages, Hyper stages and the unlock table
+The prices are each hero's `CharacterDef.price`.
 
-Every unlock that is not a hero job is one row of `UNLOCKS` in `src/constants/unlocks.ts`: an id kept in the save, a reward, a goal and, for some, a gold price.
-A row without a price is found the moment its goal is met; a row with a price goes on sale then, and is found when bought (`unlockState`, `buyUnlock` in `src/store/unlocks.ts`).
-A later unlock (a skill, an item, a hero) is a new reward kind and new rows; the store, the save, the toasts and the result screen take it as it is.
+## Armory items
+
+Each item appears in the Armory when its goal is met; the prices and effects are in `docs/meta-progress.md`.
+
+| Item | Goal |
+| --- | --- |
+| Vitality | Slay 25 foes |
+| Honed Edge | Reach level 12 |
+| Arcana | Bank 150 gold from runs |
+| Skip | Slay 400 foes |
+| Wellspring | Reach level 30 |
+| Last Light | Fall in 3 runs |
+| Reroll | Slay 1,000 foes |
+| Precision | Defeat a mini boss |
+| Light Boots | Slay 500 Glimmer Moths |
+| Endurance | Slay 800 Thornbacks |
+| Lodestone | Bank 1,000 gold from runs |
+| Aftershock | Defeat a stage boss |
+| Banish | Unlock 15 skills |
+| Growth | Make a Fusion |
+| Greed | Bank 2,500 gold from runs |
+| Curse | Clear 3 different stages (???) |
+
+## Stages and Hyper stages
 
 The stage graph is `STAGE_OPENS` in `src/constants/stageGraph.ts`.
-A new save has the Sunlit Ruins only.
-Clearing a stage opens the stages it leads to; a stage with several stages before it opens when any one of them is cleared, except the Abyss Citadel, which needs both Veil Spires and Blightroot Hollow.
+Clearing a stage opens the stages it leads to; the Abyss Citadel needs both Veil Spires and Blightroot Hollow.
 
 | Clear | Opens |
 | --- | --- |
@@ -73,49 +127,93 @@ Clearing a stage opens the stages it leads to; a stage with several stages befor
 | Moonlit Ruins | Veil Spires, Blightroot Hollow |
 | Veil Spires and Blightroot Hollow | Abyss Citadel |
 
-A stage clear also puts that stage's Hyper version on sale (`hyper:<stage>`).
-Clearing a Hyper stage gives its own reward once (`hyperReward:<stage>`): a Rift Stage's Rift Art, which then starts every run at level 1; one more reroll every run for the Sunlit Ruins; one more banish every run for the Abyss Citadel.
+A stage clear puts that stage's Hyper version on sale for 150, 300, 450, 600 or 900 gold by tier (`HYPER_PRICE`).
+Clearing a Hyper stage gives its reward once: a Rift Stage's Rift Art in every run, one more reroll for the Sunlit Ruins, one more banish for the Abyss Citadel.
 
-The goals read two new things: `stageClears` (a stage's clears, Hyper apart) and `goalsMet` (how many of a list of goals are met), counted from the `stageCleared` feat that a cleared run reports.
-The stage screen shows a locked stage's goal as "Clear Storm Marsh or Cinder Foundry" (`stageLockText`).
+## Pacing
 
-## Tracking
+`docs/growth-review/unlock-sim.mts` plays 400 runs of a modelled player through the real table, goals, Armory prices and stage foe lists.
+Load it through the dev server (`await import("/docs/growth-review/unlock-sim.mts")` in the browser console) and read `UNLOCK_PACING`.
 
-Unlocks use the achievement machinery (`docs/achievements.md`): `feat()` reports the event, `applyFeat` turns it into tracked stats, and an unlock's goal is a `Goal` read from those stats, like an achievement's.
-`src/store/unlocks.ts` checks the goals of the unlocks and of every hero job after every feat, and once as the game loads, and owns what is found, the known recipes and what was found since the run began (`unlockedThisRun()`).
-The stage result screen's Unlocked list is `unlockedThisRun()` and nothing else.
-The pure checks are in `src/utils/unlocks.ts`.
+The model, from the numbers in `docs/growth-design.md`:
 
-Feats the unlocks read:
+- Kills and gold come from the real stage route: every foe up to the level the run reaches, with the stage's gold share, twist and the Armory's Greed and Curse.
+- A run reaches level 14 on its first try at a stage, 16 more for each earlier try, 12 fewer for each tier above the first, 8 fewer in a hero's first two runs, and up to 30 more with the Armory's stats; 99 is a clear.
+- A run that reaches level 60 makes a Fusion; one that reaches 85 evolves a skill.
+- A run lasts 25 minutes times the share of the stage played, plus 1.5 minutes in menus.
+- The player rotates through the open heroes that still have locked skills, plays the first stage it has not cleared, and buys heroes, then skills, then Hyper stages, then the cheapest Armory level it can afford.
 
-| Feat | Where |
+Result on 27 November 2026:
+
+| Milestone | Run | Hours |
+| --- | --- | --- |
+| Every Armory item found | 20 | 5.2 |
+| Full Armory bought | 51 | 13.4 |
+| Every Kael and Cerise skill | 63 | 17.1 |
+| Every stage cleared | 71 | 19.0 |
+| Every hero | 77 | 20.9 |
+| Every skill and every unlock | 150 | 41.3 |
+
+26 of the first 30 runs unlock something.
+The four that do not are first tries at a new stage that fall before level 18; they still move the kill and fall counters.
+The first runs unlock one or two things each, and the first run that reaches the boss of a stage unlocks several at once.
+A full clear earns 380 to 670 gold by stage, and twice that on a Hyper stage.
+
+## The run and the result screen
+
+`src/store/unlocks.ts` checks every row after every feat, after every purchase and once as the game loads.
+It owns what is found, the known recipes, what was found since the run began (`unlockedThisRun()`) and each goal's count at the run's start.
+
+The stage result screen shows:
+
+- Unlocked: `unlockedThisRun()`, each with its kind (Armory, Kael's skill, Hero, Stage open).
+- Next goals: the three closest goals with a bar, the count and, in green, what this run added (`closestGoals()`); goals this run moved come first.
+
+A fallen run keeps its gold, kill counts and goal progress and counts one fall; only a cleared run counts a stage clear.
+
+## Goals
+
+A goal is a `Goal` read from the tracked stats and the meta save (`docs/achievements.md`); `goalText()` in `src/utils/goalText.ts` writes it for the screens.
+The unlocks add these goal kinds:
+
+| Goal | Counts |
 | --- | --- |
-| `kill` carries the `source` of the last hit | `killEnemy` in `src/game/kill.ts`, from `dealDamage` |
-| `skillLevel`, `evolved`, `ultimateLearned` | `raiseSkill` and `evolveSkill` in `src/game/build/raise.ts` |
-| `chestOpened`, `flowFull` | core's chest and Flow code |
+| `heroStat` | a hero's kills, best level, mini boss kills, stage boss kills, evolutions and stage clears |
+| `skillsFound` | skills unlocked, starters not counted |
+| `fusionsFound` | different Fusions made |
+| `goldSpent` | gold in Armory levels now owned plus gold paid for unlocks |
+| `armoryLevels` | Armory levels owned |
 
-"In one run" goals are kept as bests (`runPerfects`, `runSkillKills`) from a run tally that starts over with each run and is never saved.
-Unlocks are not achievements: they pay no coins and the Achievements page does not list them.
+They also read the `falls` count, the best `level`, `foeKills`, `coinsBanked`, `miniKills`, `bossKills` and `stageClears`.
+The `kill`, `evolved` and new `levelReached` feats carry the hero.
 
-Only solo runs count, like the achievements, since `feat()` ignores a co-op room.
-In a co-op room every hero is dealt from the host's unlocks, slots and recipes: the host runs the game and deals the cards, so it reads its own store, and nothing has to cross the wire.
-A guest's own finds only count in their solo runs.
+## Co-op
 
-A playtest session (`warpblade-playtest`) has everything found and every recipe known, and finds nothing.
-
-## Saving
-
-The `warpblade-meta-v1` save keeps `unlocks` (found unlock ids, job unlock ids included) and `recipes` (skill ids whose evolution was made).
-The job chosen for each hero is kept apart, under `warpblade-jobs` (`{ "kael": "prism" }`, `src/services/jobChoice.ts`); a saved job that is locked or unknown plays as the hero's own job.
-Loading keeps only ids the game still has, so a save from the relic version loads with its relic unlocks and relic recipes dropped and its charm unlocks kept.
-Tracked stats the game no longer counts are dropped the same way.
+Co-op runs count.
+On the host, `feat()` hands each feat to the room (`HostRun.shareFeat`).
+Kills, waves, run ends and stage clears count for every player, each under their own hero.
+Levels, evolutions, combos, perfects, chests and the rest count for the player whose hero did it.
+The host records its own share and sends each guest theirs (`{ t: "feat" }`), which the guest records in its own save.
+A guest sends its loadout (Armory levels switched on and open skills) when it joins and after each change, and the host deals that guest's cards from it.
 
 ## Where the player sees them
 
-- A banner in the achievement style, in crystal, with the found thing's icon, when something is found in play or a recipe is learned; a job's reads "New job" over its name.
-- The end of run screen lists what the run found, under the achievements it earned.
-- The Codex on the start menu, next to Achievements: each hero's skills with each skill's evolution under it, the charms and the extra charm slots.
-  A skill always shows its icon, name and text.
-  An evolution shows a dark silhouette and "Evolves with ???" until made once, then its name, text and recipe.
-  A locked charm or slot shows a dark silhouette and its hint; a secret one only ???.
-  The count under the title is of the evolutions, charms and slots found.
+- A banner in the achievement style, in crystal, when something is found or goes on sale.
+- The result screen, as above.
+- The Codex: the Armory's items, Resonance, Fusions, Rift Arts and each hero's skills with their evolutions.
+  A locked entry shows a dark silhouette, its name, what opens it and a bar; a skill for sale shows its price; a secret one only ???.
+- The hero screen: a locked hero shows the padlock with its goal and bar, or its price once for sale; every hero shows how many of their skills are open.
+- The Armory lists the items found, the skills for sale and how many items are still locked.
+
+A playtest session (`warpblade-playtest`) has everything found and finds nothing.
+
+## Recipes
+
+A skill card shows its evolution's name and "Evolves with ???" until the player has made that evolution once.
+Core calls `learnRecipe(id)` when a skill evolves and `learnFusion(id)` when a Fusion forms.
+Recipes and Fusions are kept in the save's `recipes`.
+
+## Saving
+
+The `warpblade-meta-v2` save keeps `unlocks` (found unlock ids, hero and job ids included) and `recipes`.
+A save from before this change has its bought heroes moved into `unlocks` as `hero:<id>`.
