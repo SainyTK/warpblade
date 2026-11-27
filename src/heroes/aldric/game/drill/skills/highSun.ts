@@ -1,6 +1,7 @@
 import { enemyCenter } from "../../../../../game/enemies/enemy";
 import { addStacks } from "../../../../../game/enemies/skillStatus";
 import { staggerFoe } from "../../../../../game/enemies/stagger";
+import { hostMemory, rememberPerSeat } from "../../../../../game/seatMemory";
 import { game, hero, progress } from "../../../../../game/state";
 import { surfaceBelow } from "../../../../../game/world";
 import type { AldricDrillSkill } from "../../../types/drillSkill";
@@ -12,6 +13,7 @@ const ID = "al_rally";
 const GAP = 24;
 const ECHO = 0.35;
 const cast = { called: false };
+rememberPerSeat(hostMemory(cast));
 
 function pillar(x: number, delay: number, power: number, stun: number): void {
   game.fx.push(

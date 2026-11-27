@@ -1,3 +1,4 @@
+import { hostMemory, rememberPerSeat } from "../../../../../game/seatMemory";
 import { hero, progress } from "../../../../../game/state";
 import { surfaceBelow } from "../../../../../game/world";
 import { SKILL } from "../../../constants/skills/ids";
@@ -10,6 +11,7 @@ import { cutAngle } from "../targets";
 import { spellBonus } from "./spellPower";
 
 const still = { pending: false };
+rememberPerSeat(hostMemory(still));
 
 export const STILL_WATER_DRILL: SayaDrillSkill = {
   id: SKILL.still,

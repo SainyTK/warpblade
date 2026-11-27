@@ -1,5 +1,6 @@
 import { drillFighter } from "../../../../../drill";
 import { staggerFoe } from "../../../../../game/enemies/stagger";
+import { hostMemory, rememberPerSeat } from "../../../../../game/seatMemory";
 import { hero, progress } from "../../../../../game/state";
 import { surfaceBelow } from "../../../../../game/world";
 import type { CalderDrillSkill } from "../../../types/drillSkill";
@@ -10,6 +11,7 @@ import { foesNear } from "../targets";
 
 const ID = "ca_blastjump";
 const air = { grounded: true, falling: 0 };
+rememberPerSeat(hostMemory(air));
 
 function blast(power: number, reach: number, stagger: number): void {
   roundBlast(hero.x, hero.y - 2, hero.face, false, reach > 40);

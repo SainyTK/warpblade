@@ -1,4 +1,5 @@
 import { drillFighter } from "../../../../../drill";
+import { hostMemory, rememberPerSeat } from "../../../../../game/seatMemory";
 import { hero, progress } from "../../../../../game/state";
 import { surfaceBelow } from "../../../../../game/world";
 import type { CalderDrillSkill } from "../../../types/drillSkill";
@@ -9,6 +10,7 @@ import { foesNear } from "../targets";
 
 const ID = "ca_drum";
 const dash = { was: 0 };
+rememberPerSeat(hostMemory(dash));
 
 export const DRUM_CYLINDER_DRILL: CalderDrillSkill = {
   id: ID,

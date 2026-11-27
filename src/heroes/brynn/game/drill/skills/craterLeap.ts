@@ -1,6 +1,7 @@
 import { drillFighter } from "../../../../../drill";
 import { createFloorRing } from "../../../../../game/effects/floorRing";
 import { launchEnemy } from "../../../../../game/enemies/airborne";
+import { hostMemory, rememberPerSeat } from "../../../../../game/seatMemory";
 import { game, progress } from "../../../../../game/state";
 import { CRIMSON } from "../../../constants/colors";
 import type { BrynnDrillSkill } from "../../../types/drillSkill";
@@ -13,6 +14,7 @@ const HARD_FALL = 300;
 const PULL = 110;
 const KICK_RADIUS = 28;
 const crater = { fall: 0, grounded: true, kicked: false };
+rememberPerSeat(hostMemory(crater));
 
 export const CRATER_LEAP_DRILL: BrynnDrillSkill = {
   id: ID,

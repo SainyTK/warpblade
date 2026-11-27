@@ -27,8 +27,12 @@ export interface CoopHooks {
   shareFeat(feat: Feat): void;
   /** experience picked up by anyone goes to everyone */
   shareXp(amount: number): void;
-  /** a wave was cleared */
+  /** a wave or a stage beat was cleared: downed heroes stand up */
   waveCleared(): void;
+  /** the x of every standing hero */
+  standingXs(): number[];
+  /** skill cards open for every player with points to spend */
+  openPicks(): void;
   /** a hero fell for good or the stage was cleared; the room decides when the run is over */
   endRun(outcome: RunOutcome): void;
   /** foes of a wave for this many players */

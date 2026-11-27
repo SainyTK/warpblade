@@ -1,5 +1,6 @@
 import { drillFighter } from "../../../../../drill";
 import { clampHeroX } from "../../../../../game/hero/terrain";
+import { hostMemory, rememberPerSeat } from "../../../../../game/seatMemory";
 import { skillFx } from "../../../../../game/skillFx";
 import { hero, progress } from "../../../../../game/state";
 import type { Enemy } from "../../../../../types/enemy";
@@ -8,6 +9,7 @@ import { foesAhead, skillStrike } from "../strike";
 
 const ID = "k_phase";
 const phase = { primed: false };
+rememberPerSeat(hostMemory(phase));
 
 export const PHASE_CUT_DRILL: KaelDrillSkill = {
   id: ID,

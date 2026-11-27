@@ -1,4 +1,5 @@
 import { drillFighter } from "../../../../../drill";
+import { hostMemory, rememberPerSeat } from "../../../../../game/seatMemory";
 import { hero, progress } from "../../../../../game/state";
 import type { ZafirDrillSkill } from "../../../types/drillSkill";
 import { leaveMirage } from "../../mirage";
@@ -8,6 +9,7 @@ import { blindMinion } from "../strike";
 
 const UNTOUCHABLE = 0.05;
 const start = { x: 0, y: 0, dashing: false };
+rememberPerSeat(hostMemory(start));
 
 const ID = "za_slip";
 

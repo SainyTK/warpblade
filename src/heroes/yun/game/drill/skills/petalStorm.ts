@@ -1,5 +1,6 @@
 import { drillFighter } from "../../../../../drill";
 import { staggerFoe } from "../../../../../game/enemies/stagger";
+import { hostMemory, rememberPerSeat } from "../../../../../game/seatMemory";
 import { progress } from "../../../../../game/state";
 import type { YunDrillSkill } from "../../../types/drillSkill";
 import { PETALS, yunFx } from "../../fx";
@@ -9,6 +10,7 @@ import { sendWave } from "./qiWave";
 const ID = "yu_petal";
 const PETAL_REACH = 40;
 const dance = { grounded: true, slashed: false };
+rememberPerSeat(hostMemory(dance));
 
 export const PETAL_STORM_DRILL: YunDrillSkill = {
   id: ID,

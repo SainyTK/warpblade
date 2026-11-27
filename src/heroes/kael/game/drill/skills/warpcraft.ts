@@ -1,5 +1,6 @@
 import { drillFighter } from "../../../../../drill";
 import { staggerFoe } from "../../../../../game/enemies/stagger";
+import { hostMemory, rememberPerSeat } from "../../../../../game/seatMemory";
 import { skillFx } from "../../../../../game/skillFx";
 import { hero, progress } from "../../../../../game/state";
 import { surfaceBelow } from "../../../../../game/world";
@@ -8,6 +9,7 @@ import { foesNear, skillStrike } from "../strike";
 
 const ID = "k_warpcraft";
 const walker = { readyIn: 0 };
+rememberPerSeat(hostMemory(walker));
 
 export const WARPCRAFT_DRILL: KaelDrillSkill = {
   id: ID,

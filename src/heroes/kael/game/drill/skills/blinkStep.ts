@@ -1,4 +1,5 @@
 import { drillFighter } from "../../../../../drill";
+import { hostMemory, rememberPerSeat } from "../../../../../game/seatMemory";
 import { skillFx } from "../../../../../game/skillFx";
 import { hero, progress } from "../../../../../game/state";
 import type { KaelDrillSkill } from "../../../types/drillSkill";
@@ -7,6 +8,7 @@ import { foesNear, skillStrike } from "../strike";
 
 const ID = "k_blink";
 const blink = { dashing: false };
+rememberPerSeat(hostMemory(blink));
 
 export const BLINK_STEP_DRILL: KaelDrillSkill = {
   id: ID,

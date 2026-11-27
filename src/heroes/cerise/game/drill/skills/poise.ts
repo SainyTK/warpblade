@@ -1,10 +1,12 @@
 import { drillFighter } from "../../../../../drill";
+import { hostMemory, rememberPerSeat } from "../../../../../game/seatMemory";
 import { hero, progress } from "../../../../../game/state";
 import type { CeriseDrillSkill } from "../../../types/drillSkill";
 import { atFloor, ceriseFx } from "../../fx";
 
 const ID = "ce_poise";
 const poise = { empowered: false, wasDashing: false };
+rememberPerSeat(hostMemory(poise));
 
 export const POISE_DRILL: CeriseDrillSkill = {
   id: ID,

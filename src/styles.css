@@ -894,9 +894,6 @@ body[data-hud="compact"] .el.warp {
 body[data-hud="compact"] #score {
   display: block;
 }
-body[data-hud="compact"] .best-run {
-  display: none;
-}
 
 /* Menu: a pixel panel over the frozen game, or the title over the living scene before a run. */
 .menu {

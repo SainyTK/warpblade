@@ -72,7 +72,7 @@ function keyboardRows(adventure: boolean): [HTMLElement, string][] {
 export function controlsScreen(context: MenuContext): MenuView {
   const coarse = matchMedia("(any-pointer: coarse)").matches;
   const keyboard = !coarse || matchMedia("(any-pointer: fine)").matches;
-  const adventure = !inRoom() && (context === "title" || isAdventure());
+  const adventure = context === "title" || isAdventure() || inRoom();
   const scroll = document.createElement("div");
   scroll.className = "menu-scroll";
   if (coarse) scroll.append(section("Touch", touchLegend(adventure)));

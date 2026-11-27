@@ -1,4 +1,5 @@
 import { enemyCenter } from "../../../../../game/enemies/enemy";
+import { hostMemory, rememberPerSeat } from "../../../../../game/seatMemory";
 import { game, hero, progress } from "../../../../../game/state";
 import { surfaceBelow } from "../../../../../game/world";
 import type { AldricDrillSkill } from "../../../types/drillSkill";
@@ -10,6 +11,7 @@ import { abilityStrike } from "../strike";
 const ID = "al_mend";
 const GROUND_WIDTH = 36;
 const cast = { laid: false };
+rememberPerSeat(hostMemory(cast));
 
 export const MENDING_LIGHT_DRILL: AldricDrillSkill = {
   id: ID,

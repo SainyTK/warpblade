@@ -1,37 +1,41 @@
 import { DOWN_DELAY, RISE_HP } from "../../constants/coop";
 import { ENEMIES } from "../../constants/enemies";
-import { GROUND } from "../../constants/stage";
 import { track } from "../../services/analytics";
 import { recordFeat, startRunAchievements } from "../../store/achievements";
+import { ownLoadout } from "../../store/loadout";
 import { addCoins, wearLevels } from "../../store/meta";
 import { startRunUnlocks, wearSkills } from "../../store/unlocks";
 import type { Feat } from "../../types/achievement";
 import type { Card } from "../../types/build";
+import type { StageChoice } from "../../types/campaign";
 import type { CharacterDef } from "../../types/character";
 import type { GuestHud, Loadout, PickWire } from "../../types/coop";
 import type { EnemyRank, EnemyType } from "../../types/enemy";
 import type { PickAnswer } from "../../types/pick";
-import type { RunOutcome, RunReport } from "../../types/run";
+import type { RunOutcome, RunReport, StageResult } from "../../types/run";
 import { scaleFoeHealth, scaleFoeList } from "../../utils/coopScaling";
 import { toWire } from "../../utils/wire";
+import { beginAdventure, currentStage, stageProgress, stageRunId, stageStatus, startAdventureAt } from "../adventure";
 import { type CoopHooks, setCoopHooks } from "../coopHooks";
-import { countedOutcome } from "../finale";
+import { feat } from "../feat";
 import { answerPick, earnXp } from "../progress";
 import { resetRun } from "../run";
-import { runReport } from "../runReport";
+import { stageOutcome } from "../runEnd";
+import { recordStageResult, runReport, stageResult } from "../runReport";
 import { seatMemories } from "../seatMemory";
-import { game, hero, ponytail, progress, scarf, setCharacter } from "../state";
+import { grantUnlocks } from "../startRun";
+import { character, game, hero, progress, rng, setCharacter } from "../state";
 import { drawMark } from "./drawMark";
 import { drawTag, stackTags, type TagSpot, tagSpot } from "./drawTag";
 import { freshSaved, type Seat } from "./seat";
 
-/** where each player starts, by place in the room */
-const START_XS = [70, 110, 50, 130];
+/** how far each player starts from the stage's start, by place in the room */
+const START_OFFSETS = [0, 40, -20, 60];
 
 /** what a co-op run tells the room it runs in */
 export interface RunEvents {
-  /** the run is over: each seat's coins and report, and the wave reached */
-  ended(outcome: RunOutcome, wave: number, coins: Map<Seat, number>, reports: Map<Seat, RunReport>): void;
+  /** the run is over: each seat's coins, report and stage result */
+  ended(outcome: RunOutcome, results: Map<Seat, SeatResult>): void;
   feat(seat: Seat, feat: Feat): void;
 }
 
@@ -44,6 +48,12 @@ const SHARED_FEATS: ReadonlySet<Feat["kind"]> = new Set([
 ]);
 
 const asHero = (feat: Feat, hero: string): Feat => ("hero" in feat ? { ...feat, hero } : feat);
+
+export interface SeatResult {
+  coins: number;
+  report: RunReport;
+  stage: StageResult;
+}
 
 /** the player a co-op seat starts as */
 export interface SeatStart {
@@ -66,15 +76,18 @@ export class HostRun implements CoopHooks {
   private readonly home: Seat;
   private readonly owners = new WeakMap<object, Seat>();
   private over = false;
+  private pickTime = false;
 
   constructor(
     starts: readonly SeatStart[],
+    choice: StageChoice,
     private readonly events: RunEvents,
   ) {
     this.seats = starts.map((s) => ({
       ...s,
       saved: [],
       down: false,
+      leftPicks: false,
       at: { x: 0, y: 0, standing: true },
     }));
     this.home = this.seats[0];
@@ -85,22 +98,26 @@ export class HostRun implements CoopHooks {
     setCoopHooks(this);
     for (const seat of this.seats) {
       this.enter(seat);
-      this.startSeat(seat);
+      resetRun("");
+    }
+    beginAdventure(rng, choice.stage, choice.hyper);
+    for (const seat of this.seats) {
+      this.enter(seat);
+      startAdventureAt(1, START_OFFSETS[seat.slot] ?? 0);
+      hero.face = 1;
+      const loadout = seat.loadout ?? ownLoadout();
+      grantUnlocks(loadout.arts, loadout.tools);
     }
     this.enter(this.home);
     startRunAchievements();
     startRunUnlocks();
-    track("run_start", { hero: this.home.character.id, coop: true, players: this.seats.length });
-  }
-
-  /** a fresh hero at their own spot */
-  private startSeat(seat: Seat): void {
-    resetRun("");
-    const x = START_XS[seat.slot] ?? START_XS[0];
-    scarf.shift(x - hero.x, GROUND - hero.y);
-    ponytail.shift(x - hero.x, GROUND - hero.y);
-    hero.x = x;
-    hero.face = x > 160 ? -1 : 1;
+    track("run_start", {
+      hero: this.home.character.id,
+      coop: true,
+      players: this.seats.length,
+      stage: choice.stage,
+      hyper: choice.hyper ? 1 : 0,
+    });
   }
 
   /** swap this seat's hero in, saving the one in play */
@@ -145,6 +162,10 @@ export class HostRun implements CoopHooks {
       }
     }
     if (best) this.enter(best);
+  }
+
+  standingXs(): number[] {
+    return this.seats.map((seat) => this.spot(seat)).flatMap((s) => (s.standing ? [s.x] : []));
   }
 
   anyStanding(): void {
@@ -219,9 +240,18 @@ export class HostRun implements CoopHooks {
     hero.state = "idle";
   }
 
+  /** skill cards open for every player with points, at a mentor or between a stage's beats */
+  openPicks(): void {
+    if (game.mode !== "play") return;
+    this.pickTime = true;
+    for (const seat of this.seats) seat.leftPicks = false;
+    this.refreshPicks();
+  }
+
   /** the game waits while anyone looks at an opened chest, then on the skill cards while anyone has points to spend */
   refreshPicks(): void {
     if (game.mode === "clear") return;
+    if (!this.choosing().length) this.pickTime = false;
     game.mode = this.anyChest() ? "chest" : this.choosing().length ? "pick" : "play";
   }
 
@@ -251,21 +281,23 @@ export class HostRun implements CoopHooks {
     this.refreshPicks();
   }
 
-  /** the slots of players with picks waiting, once a wave is cleared */
+  /** the slots of players still choosing while the cards are open */
   choosing(): number[] {
+    if (!this.pickTime) return [];
     const from = this.current;
     const slots: number[] = [];
     for (const seat of this.seats) {
       this.enter(seat);
-      if (progress.picks > 0) slots.push(seat.slot);
+      if (progress.picks > 0 && !seat.leftPicks) slots.push(seat.slot);
     }
     this.enter(from);
-    return game.lull === "toNext" ? slots : [];
+    return slots;
   }
 
   /** the host's own answer to the cards: the dialog already acts on the host's seat */
   answerHome(answer: PickAnswer<Card>): void {
-    answerPick(answer);
+    if (answer.t === "leave") this.home.leftPicks = true;
+    else answerPick(answer);
     this.refreshPicks();
   }
 
@@ -278,7 +310,8 @@ export class HostRun implements CoopHooks {
     if (game.mode !== "pick") return;
     this.enter(seat);
     const answer = progress.picks > 0 ? read(seat.character, wire) : null;
-    if (answer) answerPick(answer);
+    if (answer?.t === "leave") seat.leftPicks = true;
+    else if (answer) answerPick(answer);
     this.enter(this.home);
     this.refreshPicks();
   }
@@ -305,26 +338,30 @@ export class HostRun implements CoopHooks {
   finish(fate: RunOutcome): void {
     if (this.over) return;
     this.over = true;
-    const outcome = countedOutcome(fate);
-    const wave = game.wave;
+    const outcome = stageOutcome(fate);
     const loose = game.coinDrops.length;
-    const coins = new Map<Seat, number>();
-    const reports = new Map<Seat, RunReport>();
+    const results = new Map<Seat, SeatResult>();
+    const stage = currentStage();
+    feat({ kind: "runEnd", outcome, wave: game.wave, hero: character.id });
+    if (stage && outcome === "clear")
+      feat({ kind: "stageCleared", stage: stage.id, hyper: stageProgress().hyper, hero: character.id });
     this.seats.forEach((seat, i) => {
       this.enter(seat);
-      reports.set(seat, runReport());
+      const report = runReport();
       const share = Math.floor(loose / this.seats.length) + (i < loose % this.seats.length ? 1 : 0);
-      coins.set(seat, game.coins + share);
+      results.set(seat, { coins: game.coins + share, report, stage: stageResult(report, outcome) });
       game.coins = 0;
     });
     this.enter(this.home);
     game.coinDrops = [];
     this.close();
-    addCoins(coins.get(this.home) ?? 0);
-    recordFeat({ kind: "banked", coins: coins.get(this.home) ?? 0 });
+    const own = results.get(this.home);
+    addCoins(own?.coins ?? 0);
+    recordFeat({ kind: "banked", coins: own?.coins ?? 0 });
+    if (own) own.stage = recordStageResult(own.stage, own.report);
     resetRun("");
     hero.inv = 0;
-    this.events.ended(outcome, wave, coins, reports);
+    this.events.ended(outcome, results);
   }
 
   /** stop acting on other heroes: the host's own is left in play */
@@ -373,6 +410,8 @@ export class HostRun implements CoopHooks {
       leader: leader ? { type: leader.type, rank: leader.rank, hp: leader.hp, max: leader.max } : null,
       choosing: game.mode === "pick" ? this.choosing() : [],
       down,
+      status: stageStatus(),
+      runId: stageRunId(),
     };
   }
 

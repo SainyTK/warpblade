@@ -1,5 +1,6 @@
 import { drillFighter } from "../../../../../drill";
 import { staggerFoe } from "../../../../../game/enemies/stagger";
+import { hostMemory, rememberPerSeat } from "../../../../../game/seatMemory";
 import { game, progress } from "../../../../../game/state";
 import type { YunDrillSkill } from "../../../types/drillSkill";
 import { createEchoThrust } from "../../effects/echoThrust";
@@ -11,6 +12,7 @@ import { foesNear, skillStrike } from "../strike";
 const ID = "yu_breath";
 const RING = 30;
 const breath = { dashing: false, air: false };
+rememberPerSeat(hostMemory(breath));
 
 export const SAGES_BREATH_DRILL: YunDrillSkill = {
   id: ID,

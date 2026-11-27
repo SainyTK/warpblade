@@ -1,4 +1,5 @@
 import { drillFighter } from "../../../../../drill";
+import { hostMemory, rememberPerSeat } from "../../../../../game/seatMemory";
 import { hero, progress } from "../../../../../game/state";
 import type { VesperDrillSkill } from "../../../types/drillSkill";
 import { vesperFx } from "../../skillFx";
@@ -7,6 +8,7 @@ import { foesNear, skillStrike } from "../strike";
 
 const ID = "ve_grace";
 const grace = { dashing: false };
+rememberPerSeat(hostMemory(grace));
 
 export const WANDERERS_GRACE_DRILL: VesperDrillSkill = {
   id: ID,

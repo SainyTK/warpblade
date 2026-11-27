@@ -1,4 +1,5 @@
 import { drillFighter } from "../../../../../drill";
+import { hostMemory, rememberPerSeat } from "../../../../../game/seatMemory";
 import { game, hero, progress } from "../../../../../game/state";
 import { shake, surfaceBelow } from "../../../../../game/world";
 import type { AldricDrillSkill } from "../../../types/drillSkill";
@@ -10,6 +11,7 @@ import { attackStrike } from "../strike";
 const ID = "al_skyfall";
 const KICK_REACH = 30;
 const sky = { grounded: true, wallLock: 0, slashed: false };
+rememberPerSeat(hostMemory(sky));
 
 export const SKYFALL_DRILL: AldricDrillSkill = {
   id: ID,

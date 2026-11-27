@@ -5,7 +5,8 @@ import { STAGES } from "../stages";
 import { startRunAchievements } from "../store/achievements";
 import { chosenJob } from "../store/jobs";
 import { foundArts, foundTools, startRunUnlocks } from "../store/unlocks";
-import type { StageChoice, StageId } from "../types/campaign";
+import type { PickToolKey } from "../types/build";
+import type { ArtId, StageChoice, StageId } from "../types/campaign";
 import { parseStartBuild } from "../utils/build";
 import { findJob } from "../utils/jobs";
 import { xpToReach } from "../utils/progression";
@@ -29,9 +30,8 @@ function runJob(): string | null {
 const playtestStage = (asked: string | null, fallback: StageId): StageId =>
   asked && asked in STAGES ? (asked as StageId) : fallback;
 
-function grantUnlocks(): void {
-  for (const art of foundArts()) earnArt(art);
-  const tools = foundTools();
+export function grantUnlocks(arts: readonly ArtId[], tools: Partial<Record<PickToolKey, number>>): void {
+  for (const art of arts) earnArt(art);
   progress.build.rerolls += tools.rerolls ?? 0;
   progress.build.skips += tools.skips ?? 0;
   progress.build.banishes += tools.banishes ?? 0;
@@ -51,7 +51,7 @@ export function startRun(banner: string, next: StageChoice = choice): void {
   const playtest = readPlaytestStart();
   if (playtest?.section || playtest?.stage || (!playtest?.wave && !isPlaytestSession())) {
     beginAdventure(rng, playtestStage(playtest?.stage ?? null, next.stage), next.hyper);
-    grantUnlocks();
+    grantUnlocks(foundArts(), foundTools());
     startAdventureAt(playtest?.section ?? 1);
   } else if (playtest?.wave) {
     game.wave = Math.min(playtest.wave, STAGE_WAVES) - 1;

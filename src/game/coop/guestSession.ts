@@ -31,6 +31,7 @@ import { updateDanger } from "../lowHealth";
 import { answerPick } from "../progress";
 import { resetRun } from "../run";
 import { reportRun } from "../runEnd";
+import { recordStageResult } from "../runReport";
 import { seatMemories } from "../seatMemory";
 import { character, chooseCharacter, game, hero, progress } from "../state";
 import { writeAnswer } from "./readPick";
@@ -127,7 +128,12 @@ export class GuestSession {
         this.endRun(msg.coins);
         // the host left mid-run: the room is gone, so there is no room to go back to
         if (msg.outcome === "left") return this.close(HOST_LEFT, true);
-        reportRun({ outcome: msg.outcome, wave: msg.wave, coins: msg.coins, report: msg.report });
+        reportRun({
+          outcome: msg.outcome,
+          stage: recordStageResult(msg.stage, msg.report),
+          coins: msg.coins,
+          report: msg.report,
+        });
         updateRoom({ phase: "lobby" });
         break;
       case "closed":
@@ -147,14 +153,20 @@ export class GuestSession {
     watchInput((a, d) => this.link?.send({ t: "key", a, d }));
     setPickSource({
       // the cards step aside while the pause menu is open, since the room plays on under it
-      waiting: () => game.mode === "pick" && progress.picks > 0 && this.sentPicks < 0 && !isMenuOpen(),
+      waiting: () =>
+        game.mode === "pick" &&
+        progress.picks > 0 &&
+        this.sentPicks < 0 &&
+        roomView().choosing.includes(roomView().you) &&
+        !isMenuOpen(),
       answer: (answer) => {
-        // a take or a skip waits for the host to spend the point; a reroll or banish is spent here too, so the cards
-        // are dealt again at once with the right counts until the host's next HUD agrees
-        if (answer.t === "take" || answer.t === "skip") this.sentPicks = progress.picks;
+        // a take, skip or leave waits for the host; a reroll or banish is spent here too, so the cards are dealt again
+        // at once with the right counts until the host's next HUD agrees
+        if (answer.t === "take" || answer.t === "skip" || answer.t === "leave") this.sentPicks = progress.picks;
         else answerPick(answer);
         this.link?.send({ t: "pick", answer: writeAnswer(answer) });
       },
+      stageRun: () => this.hud?.runId ?? null,
     });
     setChestSource({
       waiting: () => game.mode === "chest" && progress.build.chest.length > 0 && !this.sentChest && !isMenuOpen(),
@@ -231,8 +243,8 @@ export class GuestSession {
     if (this.sentPicks >= 0 && (progress.picks !== this.sentPicks || game.mode !== "pick")) this.sentPicks = -1;
     if (this.sentChest && (!progress.build.chest.length || game.mode !== "chest")) this.sentChest = false;
     const room = roomView();
-    if (room.downed !== hud.down || room.choosing.join() !== hud.choosing.join())
-      updateRoom({ downed: hud.down, choosing: hud.choosing });
+    if (room.downed !== hud.down || room.choosing.join() !== hud.choosing.join() || room.status !== hud.status)
+      updateRoom({ downed: hud.down, choosing: hud.choosing, status: hud.status });
   }
 
   /** the run is over: bank what this player picked up and put the scene back as solo play has it */
@@ -243,7 +255,7 @@ export class GuestSession {
     recordFeat({ kind: "banked", coins });
     setFrameDriver(null);
     syncCoopStatus(false);
-    updateRoom({ downed: false, choosing: [], hostAway: false });
+    updateRoom({ downed: false, choosing: [], hostAway: false, status: "" });
     setPickSource(null);
     setChestSource(null);
     watchInput(null);

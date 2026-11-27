@@ -8,10 +8,8 @@ import { bossBarView, bossCardView } from "../game/bossFight";
 import { canAffordUlt, ultRecharge } from "../game/hero/ultimate";
 import { character, game, hero, progress } from "../game/state";
 import { isTraining } from "../game/training";
-import { inRoom } from "../store/coop";
-import { bestRun } from "../store/records";
+import { inRoom, roomView } from "../store/coop";
 import { xpToNext } from "../utils/progression";
-import { clearText } from "../utils/records";
 import { minutesSeconds } from "../utils/runReport";
 import { updateAbilityTabs } from "./abilityTabs";
 import { updateBossCard } from "./bossCard";
@@ -35,7 +33,6 @@ const level = byId("level");
 const chain = byId("chain");
 const stageStatus = byId("wave");
 const downCount = byId("downCount");
-const bestRecord = byId("bestRun");
 const ultRow = byId("ultName").parentElement as HTMLElement;
 const ultTab = createRechargeTab(ultRow);
 let ultDenied = 0;
@@ -82,14 +79,15 @@ export function updateHud(): void {
   ultDenied = hero.denied.ult;
   const leader = game.enemies.find((e) => e.rank !== "minion");
   const bar = leader ? bossBarView(leader) : null;
-  const room = inRoom();
-  const waveMode = room || (!isAdventure() && !isTraining() && game.wave > 0);
-  const best = room ? bestRun() : null;
   const status = isTraining()
     ? "TRAINING GROUND"
-    : waveMode
-      ? `STAGE ${game.stage}  WAVE ${game.wave}/${STAGE_WAVES}`
-      : stageLine().toUpperCase();
+    : isAdventure()
+      ? stageLine().toUpperCase()
+      : inRoom()
+        ? roomView().status.toUpperCase()
+        : game.wave > 0
+          ? `STAGE ${game.stage}  WAVE ${game.wave}/${STAGE_WAVES}`
+          : "";
   const time = minutesSeconds(game.clock);
   const affordable = session
     ? (tier?.level ??
@@ -118,8 +116,6 @@ export function updateHud(): void {
     status,
     game.kills,
     time,
-    best?.waves,
-    best?.seconds,
     leader?.type,
     leader ? Math.ceil(leader.hp) : -1,
     bar?.marks.join(":"),
@@ -145,7 +141,6 @@ export function updateHud(): void {
   chain.innerHTML = pips(comboLimit, (i) => i < hero.chain);
   stageStatus.textContent = `${status}  ${time}`;
   downCount.textContent = `${game.kills} DOWN`;
-  bestRecord.textContent = best ? `  BEST ${clearText(best).toUpperCase()}` : "";
   ultName.textContent = ultimateName.toUpperCase();
   ultPips.innerHTML = pips(session ? session.profile.tiers.length : ULT_LEVELS.length, (i) => i < affordable);
   boss.hidden = !leader;

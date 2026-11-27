@@ -1,9 +1,10 @@
 import type { Feat } from "./achievement";
-import type { Card } from "./build";
+import type { Card, PickToolKey } from "./build";
+import type { ArtId } from "./campaign";
 import type { GameMode } from "./game";
 import type { InputAction } from "./input";
 import type { PickAnswer } from "./pick";
-import type { RunOutcome, RunReport } from "./run";
+import type { RunOutcome, RunReport, StageResult } from "./run";
 
 export type CoopRole = "host" | "guest";
 
@@ -39,11 +40,17 @@ export interface GuestHud {
   /** players still choosing skills, by slot */
   choosing: number[];
   down: boolean;
+  /** the stage line the HUD shows, such as the stage name and area */
+  status: string;
+  /** the stage run, so a mentor's cards stay dealt between visits */
+  runId: number | null;
 }
 
 export interface Loadout {
   items: Record<string, number>;
   skills: string[];
+  arts: ArtId[];
+  tools: Partial<Record<PickToolKey, number>>;
 }
 
 /** guest to host */
@@ -71,7 +78,7 @@ export type HostMessage =
   | { t: "start" }
   | { t: "hud"; hud: GuestHud }
   | { t: "feat"; feat: Feat }
-  | { t: "end"; outcome: RunOutcome; wave: number; coins: number; report: RunReport }
+  | { t: "end"; outcome: RunOutcome; stage: StageResult; coins: number; report: RunReport }
   /** the player in this place left the room */
   | { t: "left"; slot: number }
   | { t: "closed" };

@@ -20,6 +20,8 @@ export interface RoomView {
   choosing: number[];
   /** a guest has no picture from the host yet, or no news from it for a while, as when the host's tab is hidden */
   hostAway: boolean;
+  /** the host's stage line, for a guest's HUD */
+  status: string;
 }
 
 const IDLE: RoomView = {
@@ -34,6 +36,7 @@ const IDLE: RoomView = {
   downed: false,
   choosing: [],
   hostAway: false,
+  status: "",
 };
 
 /** The one owner of the room's state as the interface sees it. The network session writes it, the menu reads it. */

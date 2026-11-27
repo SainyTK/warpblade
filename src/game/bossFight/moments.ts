@@ -8,6 +8,7 @@ import { PK } from "../../types/particle";
 import { mix, scale, WHITE } from "../../utils/color";
 import { TAU } from "../../utils/math";
 import { clampStageX, summonFoe } from "../adventure";
+import { eachStanding } from "../coopHooks";
 import { createFloorRing } from "../effects/floorRing";
 import { createImpact } from "../effects/impact";
 import { createRift } from "../effects/rift";
@@ -68,7 +69,7 @@ export function shiftBlast(f: BossFight, boss: Enemy): void {
   game.flash = Math.max(game.flash, BOSS_SHIFT.flash);
   slowWorld(BOSS_SHIFT.slow);
   shake(BOSS_SHIFT.shake.time, BOSS_SHIFT.shake.amp);
-  pushHeroAway(boss.x);
+  eachStanding(() => pushHeroAway(boss.x));
   sfx.boom();
   sfx.thunder();
 }

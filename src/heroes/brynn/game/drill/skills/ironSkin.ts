@@ -1,5 +1,6 @@
 import { drillFighter } from "../../../../../drill";
 import { createFloorRing } from "../../../../../game/effects/floorRing";
+import { hostMemory, rememberPerSeat } from "../../../../../game/seatMemory";
 import { game, hero, progress } from "../../../../../game/state";
 import { CRIMSON } from "../../../constants/colors";
 import type { BrynnDrillSkill } from "../../../types/drillSkill";
@@ -9,6 +10,7 @@ import { foesNear, skillStrike } from "../strike";
 const ID = "br_ironskin";
 const RING = 34;
 const skin = { dashing: false, from: 0 };
+rememberPerSeat(hostMemory(skin));
 
 export const IRON_SKIN_DRILL: BrynnDrillSkill = {
   id: ID,

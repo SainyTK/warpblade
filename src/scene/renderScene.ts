@@ -82,8 +82,8 @@ export function renderScene(out: Uint8ClampedArray): void {
   drawNumbers();
   drawDrillOver(cameraX);
   eachHero(() => shownKit().drawOver?.());
-  setCameraX(0);
   room?.drawOverlay();
+  setCameraX(0);
   const bolt = game.flash > 0 ? game.flash / SKY_FLASH : 0;
   composite(out, Math.min(1, bolt + sceneFlash()) * FLASH_STRENGTH);
 }

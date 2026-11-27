@@ -1,4 +1,5 @@
 import { resetRoom } from "../../store/coop";
+import type { StageChoice } from "../../types/campaign";
 import { GuestSession } from "./guestSession";
 import { HostSession } from "./hostSession";
 
@@ -39,8 +40,8 @@ export async function joinRoomByCode(code: string): Promise<void> {
   }
 }
 
-export function startRoomRun(): void {
-  host?.start();
+export function startRoomRun(choice: StageChoice): void {
+  host?.start(choice);
 }
 
 /** the hero this player takes into the room's next run */

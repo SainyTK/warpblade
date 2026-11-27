@@ -1,4 +1,5 @@
 import { createFloorRing } from "../../../../../game/effects/floorRing";
+import { hostMemory, rememberPerSeat } from "../../../../../game/seatMemory";
 import { game, hero, progress } from "../../../../../game/state";
 import { ROSE_RAMP } from "../../../look/rose";
 import type { CeriseDrillSkill } from "../../../types/drillSkill";
@@ -7,6 +8,7 @@ import { foesNear, skillStrike } from "./strike";
 
 const ID = "ce_dive";
 const dive = { thrusted: false };
+rememberPerSeat(hostMemory(dive));
 
 export const SWALLOW_DIVE_DRILL: CeriseDrillSkill = {
   id: ID,

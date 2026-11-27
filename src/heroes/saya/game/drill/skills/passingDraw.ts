@@ -1,4 +1,5 @@
 import { drillFighter } from "../../../../../drill";
+import { hostMemory, rememberPerSeat } from "../../../../../game/seatMemory";
 import { progress } from "../../../../../game/state";
 import { SKILL } from "../../../constants/skills/ids";
 import type { SayaDrillSkill } from "../../../types/drillSkill";
@@ -8,6 +9,7 @@ import { sheathe } from "../sheathe";
 import { foesNear, skillStrike } from "../targets";
 
 const pass = { clock: 0, resetAt: 0 };
+rememberPerSeat(hostMemory(pass));
 const SWEEP = 30;
 
 export const PASSING_DRAW_DRILL: SayaDrillSkill = {

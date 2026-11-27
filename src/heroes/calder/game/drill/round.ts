@@ -1,4 +1,5 @@
 import { enemyCenter } from "../../../../game/enemies/enemy";
+import { hostMemory, rememberPerSeat } from "../../../../game/seatMemory";
 import { emitSkillEvent } from "../../../../game/skills/events";
 import { game, hero, progress } from "../../../../game/state";
 import type { Enemy } from "../../../../types/enemy";
@@ -9,6 +10,7 @@ import { createTracerLine } from "../effects/tracerLine";
 
 const CHAMBER = 6;
 const chamber = { fired: 0 };
+rememberPerSeat(hostMemory(chamber));
 
 export interface DrillRound {
   power: number;

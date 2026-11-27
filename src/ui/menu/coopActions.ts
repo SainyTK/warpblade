@@ -1,5 +1,6 @@
 import { ROOM_PARAM } from "../../constants/coop";
 import { updateRoom } from "../../store/coop";
+import type { StageChoice } from "../../types/campaign";
 
 /** the room code is loaded on first use, so solo play never downloads the network code */
 const session = () => import("../../game/coop/session");
@@ -20,9 +21,9 @@ export function joinRoom(code: string): void {
     .catch(failed);
 }
 
-export function startRoomRun(): void {
+export function startRoomRun(choice: StageChoice): void {
   session()
-    .then((s) => s.startRoomRun())
+    .then((s) => s.startRoomRun(choice))
     .catch(failed);
 }
 

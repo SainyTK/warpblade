@@ -1,4 +1,5 @@
 import { drillFighter } from "../../../../../drill";
+import { hostMemory, rememberPerSeat } from "../../../../../game/seatMemory";
 import { game, hero, progress } from "../../../../../game/state";
 import { SKILL } from "../../../constants/skills/ids";
 import type { SayaDrillSkill } from "../../../types/drillSkill";
@@ -8,6 +9,7 @@ import { sayaFx } from "../../skillFx";
 import { foesNear, skillStrike } from "../targets";
 
 const feather = { kicking: false, boosted: false, rising: false };
+rememberPerSeat(hostMemory(feather));
 const KICK_REACH = 30;
 
 function cutAround(power: number): void {

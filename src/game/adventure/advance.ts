@@ -15,6 +15,7 @@ import {
   resetBossFight,
   updateBossFight,
 } from "../bossFight";
+import { coop, eachHero, eachStanding } from "../coopHooks";
 import { createRift } from "../effects/rift";
 import { kindOf } from "../enemies/kinds";
 import { feat } from "../feat";
@@ -26,7 +27,7 @@ import { claimFoe, stageFoe } from "./foes";
 import { resetStageHazard, updateStageHazard } from "./hazard";
 import { updateMentor } from "./mentor";
 import { markPerch } from "./patrol";
-import { updatePits } from "./pits";
+import { setFooting, updatePits } from "./pits";
 import { type BigFoeBeat, GATE_ENTRY, type RouteArea, type RouteFoe, SPAWN_LEAD } from "./route";
 import { updateSpikes } from "./spikes";
 import { openSurge, updateSurge } from "./surge";
@@ -35,6 +36,9 @@ import { trail } from "./trail";
 const CAMERA_LEAD = 0.35;
 const CAMERA_FOLLOW = 13;
 const BANNER = 2.2;
+const PARTY_EDGE = 16;
+const PARTY_SPAN = W - PARTY_EDGE * 2;
+const ROOM_GATHER = 24;
 
 type Trail = NonNullable<typeof trail>;
 
@@ -52,15 +56,15 @@ function placeHero(x: number): void {
   Object.assign(hero, { x, y: GROUND, vx: 0, vy: 0, ground: true });
 }
 
-export function startAdventureAt(section: number): void {
+export function startAdventureAt(section: number, offset = 0): void {
   if (!trail) return;
   trail.area = clamp(section - 1, 0, trail.route.areas.length - 1);
   const area = trail.route.areas[trail.area];
-  placeHero(area.start + HERO_START_X);
+  placeHero(area.start + HERO_START_X + offset);
   trail.camera = area.start;
   trail.left = area.start;
   trail.farthest = hero.x;
-  trail.safeX = hero.x;
+  setFooting(hero.x);
   trail.band = area.enter;
   game.wave = waveFor(area.enter);
   game.lull = "fight";
@@ -97,9 +101,10 @@ function openBigFoe(run: Trail, area: RouteArea, beat: BigFoeBeat): void {
     createRift(x, rift.riftY(y), rift.height, 0, () => {
       const elite = beat.kind === "elite";
       const foe = claimFoe(stageFoe(beat.foe, x, y, beat.level, beat.xp, elite));
-      const hp = bigFoeHp(beat.level, beat.kind, run.mods);
       run.bigFoe = foe;
       if (beat.kind === "mini") foe.rank = "mini";
+      const soloHp = bigFoeHp(beat.level, beat.kind, run.mods);
+      const hp = coop()?.scaleFoeHp(foe.rank, soloHp) ?? soloHp;
       if (epic) bossArrived(foe, name, hp);
       else Object.assign(foe, { max: hp, hp, title: name });
       sfx.bossRoar();
@@ -123,9 +128,20 @@ function startBeat(run: Trail, area: RouteArea): void {
   openBigFoe(run, area, beat);
 }
 
+function gatherInRoom(area: RouteArea): void {
+  const inside = area.entrance + ROOM_GATHER;
+  eachHero(() => {
+    if (hero.x >= inside) return;
+    placeHero(inside);
+    setFooting(inside);
+  });
+}
+
 function openRoom(run: Trail, area: RouteArea): void {
   run.left = area.entrance;
   run.gate = area.exit;
+  run.leash = null;
+  gatherInRoom(area);
   run.beat = 0;
   run.lull = 0;
   game.enemies = game.enemies.filter((enemy) => enemy.x >= area.entrance && enemy.hp > 0);
@@ -150,6 +166,7 @@ function clearBeat(run: Trail, area: RouteArea): void {
   game.cleared++;
   game.clearedAt = game.clock;
   feat({ kind: "waveCleared", wave: game.wave, hero: character.id });
+  coop()?.waveCleared();
   const lastArea = run.area === run.route.areas.length - 1;
   if (run.beat < area.beats.length) {
     run.lull = ROOM_BEATS.pause;
@@ -180,7 +197,7 @@ function updateLull(run: Trail, area: RouteArea, dt: number): void {
   startBeat(run, area);
 }
 
-function advanceRoute(run: Trail, dt: number): void {
+function advanceRoute(run: Trail, lead: number, dt: number): void {
   if (run.finale) return;
   const area = run.route.areas[run.area];
   if (!area) return;
@@ -192,26 +209,47 @@ function advanceRoute(run: Trail, dt: number): void {
     if (beatCleared(run, area, dt)) clearBeat(run, area);
     return;
   }
-  if (hero.x < area.start) return;
+  if (lead < area.start) return;
   let next = area.foes[run.nextFoe];
-  while (next && next.x <= hero.x + SPAWN_LEAD) {
+  while (next && next.x <= lead + SPAWN_LEAD) {
     addFoe(run, next);
     run.nextFoe++;
     next = area.foes[run.nextFoe];
   }
-  if (hero.x >= area.entrance + GATE_ENTRY) openRoom(run, area);
+  if (lead >= area.entrance + GATE_ENTRY) openRoom(run, area);
+}
+
+function partyXs(): number[] {
+  const room = coop();
+  if (room) return room.standingXs();
+  return hero.state === "dead" ? [] : [hero.x];
+}
+
+function followParty(run: Trail, xs: readonly number[], dt: number): void {
+  const walking = run.gate === null && xs.length > 0;
+  const lead = walking ? Math.max(...xs) : 0;
+  const rear = walking ? Math.min(...xs) : 0;
+  run.leash = walking && xs.length > 1 ? { left: lead - PARTY_SPAN, right: rear + PARTY_SPAN } : null;
+  if (run.gate === null && !xs.length) return;
+  const target = walking
+    ? clamp(Math.min(lead - W * CAMERA_LEAD, rear - PARTY_EDGE), 0, run.route.width - W)
+    : run.left;
+  run.camera += (target - run.camera) * (1 - Math.exp(-CAMERA_FOLLOW * dt));
 }
 
 export function updateAdventure(dt: number): void {
   if (!trail) return;
-  const target = trail.gate === null ? clamp(hero.x - W * CAMERA_LEAD, 0, trail.route.width - W) : trail.left;
-  trail.camera += (target - trail.camera) * (1 - Math.exp(-CAMERA_FOLLOW * dt));
-  updateSpikes();
+  const xs = partyXs();
+  followParty(trail, xs, dt);
+  eachStanding(updateSpikes);
   updateStageHazard(dt);
   updateBossFight(dt);
-  if (hero.state === "dead") return;
-  trail.farthest = Math.max(trail.farthest, hero.x);
-  updatePits();
-  updateMentor();
-  if (game.mode === "play") advanceRoute(trail, dt);
+  if (!xs.length) return;
+  const lead = Math.max(...xs);
+  trail.farthest = Math.max(trail.farthest, lead);
+  eachStanding(() => {
+    updatePits();
+    updateMentor();
+  });
+  if (game.mode === "play") advanceRoute(trail, lead, dt);
 }

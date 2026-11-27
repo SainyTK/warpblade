@@ -1,5 +1,10 @@
 import type { Loadout } from "../types/coop";
 import { loadout } from "./meta";
-import { openSkills } from "./unlocks";
+import { foundArts, foundTools, openSkills } from "./unlocks";
 
-export const ownLoadout = (): Loadout => ({ items: { ...loadout() }, skills: openSkills() });
+export const ownLoadout = (): Loadout => ({
+  items: { ...loadout() },
+  skills: openSkills(),
+  arts: foundArts(),
+  tools: foundTools(),
+});

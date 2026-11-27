@@ -20,6 +20,7 @@ import { growthRows, heldRows } from "../utils/skills";
 import { computeStats } from "../utils/stats";
 import { raiseCard } from "./build/raise";
 import { currentBuildStats } from "./build/stats";
+import { coop } from "./coopHooks";
 import { createFloorRing } from "./effects/floorRing";
 import { forgetEvolutions } from "./evolve";
 import { feat } from "./feat";
@@ -108,6 +109,8 @@ export function earnXp(amount: number): void {
 }
 
 export function openPicks(): void {
+  const room = coop();
+  if (room) return room.openPicks();
   if (progress.picks <= 0 || game.mode !== "play") return;
   game.mode = "pick";
 }
@@ -173,6 +176,7 @@ export function answerPick(answer: PickAnswer<Card>): void {
   if (answer.t === "take") choosePick(answer.card);
   else if (answer.t === "skip") skipPick();
   else if (answer.t === "banish") banishCard(answer.card);
+  else if (answer.t === "leave") leavePicks();
   else if (progress.build.rerolls > 0) progress.build.rerolls--;
 }
 
