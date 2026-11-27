@@ -2,7 +2,6 @@ import { ELEMENT_FX, FX_BUDGET } from "../../../constants/skillFx";
 import { circle, fleck, glow, hairline, polygon, sparkle } from "../../../engine/frame";
 import { PK } from "../../../types/particle";
 import type { ElementKit } from "../../../types/skillFx";
-import { WHITE } from "../../../utils/color";
 import { TAU } from "../../../utils/math";
 import { fineRing } from "../../effects/fine";
 import { fxRng, particles } from "../../state";
@@ -39,11 +38,11 @@ export const VOID_KIT: ElementKit = {
   look,
   motif(x, y, angle, length, alpha, rank) {
     tear(x, y, angle, length, Math.max(1, length * 0.18), alpha);
-    if (rank >= 1) fleck(x + Math.cos(angle) * length * 0.5, y + Math.sin(angle) * length * 0.5, WHITE, alpha);
+    if (rank >= 1) fleck(x + Math.cos(angle) * length * 0.5, y + Math.sin(angle) * length * 0.5, R[5], alpha);
     if (rank >= 2) {
       const tx = x + Math.cos(angle) * (length + 2);
       const ty = y + Math.sin(angle) * (length + 2);
-      sparkle(tx, ty, 2 + rank, WHITE, R[4], 0.35 * alpha);
+      sparkle(tx, ty, 2 + rank, R[5], R[4], 0.35 * alpha);
     }
     if (alpha >= FX_BUDGET.glowFrom) glow(x, y, length * 0.6 + 2, R[2], 0.11 * alpha);
   },

@@ -110,6 +110,7 @@ A quiet cast takes 0.5 off.
 
 An evolved cast of 2.4 and up also fills the screen: a column to the sky, a cut across the stage or a ring to the stage edge.
 Mastery moves a cast up inside its tier (`gradeInTier`), and each shape grows by up to a third with it, so mastery 4 reads larger than level 8.
+Every mastered cast also shows its mastery marks (`src/game/skillFx/mastery.ts`, numbers in `FX_MASTERY`): one element star per mastery level on an arc above the cast, clear of the hero, the same count as the Mastery pips on the skill card.
 Each shape sizes itself from tables by tier rank (for example `RADIUS_BY_RANK` in `slash.ts`, `TALL_BY_RANK` in `spikes.ts` and `pillar.ts`), so the order is the same for every skill whatever its base `reach`.
 Numbers live in `src/constants/skillFx.ts` (`FX_TIERS`, `FX_INTENSITY`).
 
@@ -126,6 +127,9 @@ A hero-specific picture goes in `signature`; it may call `ELEMENT_KITS[element].
 - Skill effects draw no damage numbers, so the Options toggle for numbers is untouched.
 - After its first 0.05 s an effect over a foe that is winding up (any state but drift, walk or recover) fades: to 0.6 over a minion, to 0.3 over a mini boss or boss, with a wider margin around bosses, so wind-ups and telegraphs stay readable.
 - Light is capped so silhouettes survive a bright stage: tier light strength 0.2 to 0.32, bloom only on evolved casts, core glows 0.12, and quiet casts add no light.
+- No light washes a body to white, whatever the tier or how much is stacked.
+  The frame tones a pixel's summed light by its brightest channel, so stacked colour keeps its hue, and light may never lift a pixel's darkest channel past 180 (`BLEACH_FLOOR` in `src/engine/frame.ts`), so a glow tints a hero or a foe in its element colour and stops short of white.
+  Shared shapes and kits draw no pure white: their hottest stroke is the element ramp's top colour, and hits landing close together share one impact light.
 - The budget (`FX_BUDGET`): each live effect costs 1, 2, 3 or 5 by tier; past 15 quiet casts are dropped and the rest shed particles, past 28 new casts are dropped.
   At most 180 particles a step, 8 live lights, glow radius 80, shake amplitude 5, one shake per 0.12 s and one hit stop per 0.3 s, and glows only on strokes drawn at half alpha or more.
 - Measured in Chromium on an M-series Mac with 20 foes on screen and four evolved casts spawned every frame (far past real play): 4.8 ms a frame without skill effects, 7.7 ms with them, the budget holding the screen at five evolved effects.

@@ -28,7 +28,6 @@ export interface TierFeel {
 export interface ElementLook {
   ramp: Ramp;
   sparks: Ramp;
-  core: Color;
   dark: Color;
   particle: ParticleKind;
   linger: ParticleKind;
@@ -42,6 +41,7 @@ export interface FxCast {
   tier: FxTier;
   intensity: number;
   gradeInTier: number;
+  mastery: number;
   size: number;
   feel: TierFeel;
   look: ElementLook;

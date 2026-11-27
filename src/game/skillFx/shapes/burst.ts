@@ -2,7 +2,6 @@ import { FX_BUDGET } from "../../../constants/skillFx";
 import { H } from "../../../constants/stage";
 import { glow, glowLine, hairline } from "../../../engine/frame";
 import type { FxShapeDraw } from "../../../types/skillFx";
-import { WHITE } from "../../../utils/color";
 import { grain } from "../../../utils/grain";
 import { ease, smooth, TAU } from "../../../utils/math";
 import { fineRing, ray } from "../../effects/fine";
@@ -34,7 +33,7 @@ export const drawBurst: FxShapeDraw = (cast, at, kit, progress, fade) => {
   if (rank >= 2) {
     for (let i = 0; i < 4; i++) {
       const a = (i / 4) * TAU + Math.PI / 4;
-      ray(0, 0, a, radius * 0.4, radius * 2.2, WHITE, R[4], fade * (1 - progress));
+      ray(0, 0, a, radius * 0.4, radius * 2.2, R[5], R[4], fade * (1 - progress));
     }
     const outer = radius * 1.7;
     for (let i = 0; i < spokes; i++) {
@@ -57,7 +56,7 @@ export const drawBurst: FxShapeDraw = (cast, at, kit, progress, fade) => {
   if (cast.fillsScreen) {
     const beam = 1 - smooth(0, 0.6, progress);
     glowLine(0, 0, 0, -H, 5 + 6 * beam, R[3], 0.18 * beam * fade);
-    hairline(0, 0, 0, -H, WHITE, beam * fade);
+    hairline(0, 0, 0, -H, R[5], beam * fade);
     glow(0, 0, Math.min(FX_BUDGET.maxGlow, 40 * size * open), R[2], 0.07 * fade);
   }
 };

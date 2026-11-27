@@ -1,10 +1,12 @@
 import { H, W } from "../../constants/stage";
 import { disc, ellipseRing, fleck, glow, glowLine, hairline, place, polygon } from "../../engine/frame";
 import type { DrillProfile, SkillCast } from "../../types/drill";
+import { mix } from "../../utils/color";
 import { clamp, ease, smooth, TAU } from "../../utils/math";
 import { drawTierArt } from "./effectArt";
 
 const WHITE = 0xfaffff;
+const HEART_TINT = 0.35;
 
 export function drawSkillDarkness(cast: SkillCast | null, cameraX: number): void {
   if (!cast) {
@@ -123,7 +125,7 @@ function nova(reach: number, color: number, u: number, fade: number): void {
   ellipseRing(0, -3, radius, radius * 0.23, color, fade);
   ellipseRing(0, -5, radius * 0.84, radius * 0.19, WHITE, fade * 0.88);
   ellipseRing(0, -22, radius * 0.63, radius * 0.41, color, fade * 0.57);
-  disc(0, -21, 12 * fade, WHITE, fade * 0.86);
+  disc(0, -21, 12 * fade, mix(color, WHITE, HEART_TINT), fade * 0.6);
   for (let i = 0; i < 18; i++) {
     const a = (i / 18) * TAU + u * 0.6;
     const d = radius * (0.35 + ((i * 13) % 7) * 0.1);

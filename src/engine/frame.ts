@@ -423,6 +423,26 @@ const TONE = Uint8Array.from({ length: TONE_SIZE }, (_, l) =>
     : Math.round(TONE_KNEE + (TONE_MOST - TONE_KNEE) * (1 - Math.exp(-(l - TONE_KNEE) / (TONE_MOST - TONE_KNEE)))),
 );
 const toned = (l: number): number => TONE[l >= TONE_SIZE ? TONE_SIZE - 1 : l | 0];
+/** light may tint a pixel as bright as it likes but never lift its darkest channel past this, so no glow bleaches a body to white */
+const BLEACH_FLOOR = 180;
+const toned3 = { r: 0, g: 0, b: 0 };
+/** a sum of light toned by its brightest channel, so stacked coloured light keeps its hue instead of clipping to white */
+function toneLight(r: number, g: number, b: number): void {
+  const most = r > g ? (r > b ? r : b) : g > b ? g : b;
+  const k = most > TONE_KNEE ? toned(most) / most : 1;
+  toned3.r = r * k;
+  toned3.g = g * k;
+  toned3.b = b * k;
+}
+/** the share of light (lr, lg, lb) a pixel (r, g, b) takes so at least one channel stays at or under the bleach floor */
+function unbleached(r: number, g: number, b: number, lr: number, lg: number, lb: number): number {
+  if (r + lr <= BLEACH_FLOOR || g + lg <= BLEACH_FLOOR || b + lb <= BLEACH_FLOOR) return 1;
+  const kr = lr > 0 ? (BLEACH_FLOOR - r) / lr : r <= BLEACH_FLOOR ? 1 : 0;
+  const kg = lg > 0 ? (BLEACH_FLOOR - g) / lg : g <= BLEACH_FLOOR ? 1 : 0;
+  const kb = lb > 0 ? (BLEACH_FLOOR - b) / lb : b <= BLEACH_FLOOR ? 1 : 0;
+  const k = kr > kg ? (kr > kb ? kr : kb) : kg > kb ? kg : kb;
+  return k > 0 ? k : 0;
+}
 const byte = (v: number): number => (v >= 255 ? 255 : v);
 /** color plus light into RGBA bytes, with an optional flat cold flash; rows and pixels without light skip the sums */
 export function composite(out: Uint8ClampedArray, flash: number): void {
@@ -450,14 +470,22 @@ export function composite(out: Uint8ClampedArray, flash: number): void {
         }
         continue;
       }
-      const lr = toned(lightR[li] + fr);
-      const lg = toned(lightG[li] + fg);
-      const lb = toned(lightB[li] + flash);
+      toneLight(lightR[li], lightG[li], lightB[li]);
+      const lr = toned3.r;
+      const lg = toned3.g;
+      const lb = toned3.b;
+      const flr = toned(fr);
+      const flg = toned(fg);
+      const flb = toned(flash);
       for (let u = 0; u < RES; u++, i++) {
         const c = color[i];
-        const r = byte(((c >> 16) & 0xff) + lr);
-        const g = byte(((c >> 8) & 0xff) + lg);
-        const b = byte((c & 0xff) + lb);
+        const cr0 = (c >> 16) & 0xff;
+        const cg0 = (c >> 8) & 0xff;
+        const cb0 = c & 0xff;
+        const k = unbleached(cr0, cg0, cb0, lr, lg, lb);
+        const r = byte((cr0 + lr * k + flr) | 0);
+        const g = byte((cg0 + lg * k + flg) | 0);
+        const b = byte((cb0 + lb * k + flb) | 0);
         out32[i] = 0xff000000 | (b << 16) | (g << 8) | r;
       }
     }

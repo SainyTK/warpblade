@@ -1,7 +1,6 @@
 import { W } from "../../../constants/stage";
 import { glowLine, hairline, line } from "../../../engine/frame";
 import type { FxShapeDraw } from "../../../types/skillFx";
-import { WHITE } from "../../../utils/color";
 import { ease, smooth } from "../../../utils/math";
 import { type Arc, arcPoint, drawBand } from "./band";
 
@@ -32,7 +31,7 @@ export const drawSlash: FxShapeDraw = (cast, at, kit, progress, fade) => {
     width: WIDTH_BY_RANK[rank] * grade,
   };
   const arc = sweep(base, progress);
-  drawBand(arc, kit.look.ramp, fade, rank >= 2);
+  drawBand(arc, kit.look.ramp, fade);
   if (rank >= 1) {
     const count = MOTIFS + rank * 3;
     for (let i = 0; i < count; i++) {
@@ -43,13 +42,13 @@ export const drawSlash: FxShapeDraw = (cast, at, kit, progress, fade) => {
   }
   if (rank >= 2) {
     const cross = sweep({ ...base, radius: reach * 0.85, squash: -0.9, width: base.width * 0.8 }, progress * 0.9);
-    drawBand(cross, kit.look.ramp, fade, true);
+    drawBand(cross, kit.look.ramp, fade);
   }
   if (cast.fillsScreen) {
     const open = ease.outExpo(Math.min(1, progress * 3));
     const far = W * open;
     line(-8, 0, far, 0, kit.look.ramp[4], fade);
-    hairline(-8, -0.5, far, -0.5, WHITE, fade);
+    hairline(-8, -0.5, far, -0.5, kit.look.ramp[5], fade);
     glowLine(0, 0, far, 0, 8, kit.look.ramp[3], 0.2 * fade);
   }
 };
