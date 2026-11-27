@@ -26,7 +26,7 @@ export const SWORD_RIDING_DRILL: YunDrillSkill = {
       return;
     }
     const foe = nearestFoe(h.x, h.y - 16);
-    const ride = { x: h.x - h.face * 50, y: h.y - 18, face: h.face, toX: h.x, toY: h.y - 18 };
+    const ride = { x: h.x - h.face * 50, y: h.y - 18, face: h.face, toX: h.x - h.face * 14, toY: h.y - 18 };
     yunFx(ID, "trail", ride, { damage: progress.stats.ad * (1 + values.damage), signature: VOLLEY });
     if (values.swords && foe && Math.abs(foe.x - h.x) < REACH) {
       const [, ey] = enemyCenter(foe);

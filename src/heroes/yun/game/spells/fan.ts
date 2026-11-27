@@ -19,7 +19,7 @@ export function castFan(places: readonly SwordPlace[], wide: boolean): void {
   const v = skillValues(SKILL.fan);
   const swords = [...places, ...Array.from({ length: withBuild("amount", v.extra ?? 0) }, conjured)];
   const around = skillEvolved(SKILL.fan);
-  const at = { x: hero.x + hero.face * 6, y: hero.y - 18, face: hero.face, reach: 10 };
+  const at = { x: hero.x + hero.face * 22, y: hero.y - 22, face: hero.face, reach: 10 };
   yunFx(SKILL.fan, "burst", at, { damage: progress.stats.ap * v.power * swords.length, signature: FAN_FX });
   swords.forEach((from, i) => {
     const rise = FAN.rises[i % FAN.rises.length] * (wide ? FAN.wide : 1);

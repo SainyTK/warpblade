@@ -20,7 +20,7 @@ export const DRIFTING_LEAF_DRILL: YunDrillSkill = {
   dashed(foes, { values, evolved }) {
     const d = drillFighter();
     if (d) {
-      const at = { x: d.x - d.face * DASH, y: d.y - 16, face: d.face, toX: d.x, toY: d.y - 16 };
+      const at = { x: d.x - d.face * DASH, y: d.y - 16, face: d.face, toX: d.x - d.face * 14, toY: d.y - 16 };
       const damage = progress.stats.ad * values.cut * (evolved ? 2 : 1) * Math.max(1, foes.length);
       yunFx(ID, "trail", at, { damage, quiet: !foes.length, signature: LEAVES });
     }

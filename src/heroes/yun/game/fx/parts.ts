@@ -1,4 +1,4 @@
-import { fleck, hairline, polygon } from "../../../../engine/frame";
+import { fleck, hairline, line, polygon } from "../../../../engine/frame";
 import type { Color } from "../../../../types/color";
 import type { ElementKit, FxAt, FxCast } from "../../../../types/skillFx";
 import { smooth } from "../../../../utils/math";
@@ -21,21 +21,20 @@ export function drawFxSword(kit: ElementKit, x: number, y: number, angle: number
   const ax = Math.cos(angle);
   const ay = Math.sin(angle);
   const at = (along: number, side: number): Point => [x + ax * along - ay * side, y + ay * along + ax * side];
-  const half = Math.max(0.8, length * 0.075);
-  const grip = length * 0.2;
-  polygon(
-    [at(grip, half), at(length - half * 2, half), at(length, 0), at(length - half * 2, -half), at(grip, -half)],
-    R[2],
-    alpha,
-  );
-  hairline(...at(grip, half), ...at(length - half * 2, half), R[4], alpha);
-  hairline(...at(length - half * 2, half), ...at(length, 0), R[5], alpha);
-  hairline(...at(grip, -half), ...at(length - half * 2, -half), R[3], alpha);
-  hairline(...at(grip + 1, 0), ...at(length - 1, 0), R[4], alpha);
-  hairline(...at(grip, half * 2.4), ...at(grip, -half * 2.4), JADE[4], alpha);
-  hairline(...at(0, 0), ...at(grip, 0), JADE[2], alpha);
-  fleck(...at(-1, 0.5), JADE[4], alpha);
-  fleck(...at(length, 0), R[5], alpha);
+  const half = Math.max(0.7, length * 0.06);
+  const grip = length * 0.22;
+  const shoulder = length - half * 2.5;
+  polygon([at(grip, half), at(shoulder, half), at(length, 0), at(shoulder, -half), at(grip, -half)], R[4], alpha);
+  hairline(...at(grip, half + 0.4), ...at(shoulder, half + 0.4), R[1], alpha);
+  hairline(...at(shoulder, half + 0.4), ...at(length + 0.4, 0), R[1], alpha);
+  hairline(...at(grip, -half - 0.4), ...at(shoulder, -half - 0.4), R[2], alpha);
+  hairline(...at(shoulder, -half - 0.4), ...at(length + 0.4, 0), R[2], alpha);
+  hairline(...at(grip + 1, 0), ...at(length - 1.5, 0), R[5], alpha);
+  line(...at(grip, half * 2.6 + 0.6), ...at(grip, -half * 2.6 - 0.6), JADE[2], alpha);
+  hairline(...at(grip, half * 2.6), ...at(grip, -half * 2.6), JADE[4], alpha);
+  line(...at(1, 0), ...at(grip - 1, 0), JADE[1], alpha);
+  fleck(...at(-0.5, 0), JADE[4], alpha);
+  hairline(...at(0, 0), ...at(-length * 0.18, length * 0.06), JADE[3], alpha * 0.8);
 }
 
 export function drawMoon(
@@ -74,7 +73,10 @@ export function drawPetal(kit: ElementKit, x: number, y: number, angle: number, 
   const ay = Math.sin(angle);
   const at = (u: number, v: number): Point => [x + ax * u - ay * v, y + ay * u + ax * v];
   polygon([at(-size, 0), at(0, size * 0.55), at(size, 0), at(0, -size * 0.55)], R[3], alpha);
-  hairline(...at(-size, 0), ...at(size, 0), R[1], alpha * 0.8);
+  hairline(...at(-size, 0), ...at(0, size * 0.6), R[1], alpha);
+  hairline(...at(0, size * 0.6), ...at(size, 0), R[1], alpha);
+  hairline(...at(-size * 0.6, 0), ...at(size * 0.8, 0), R[2], alpha * 0.8);
+  hairline(...at(-size, 0), ...at(0, -size * 0.55), R[4], alpha);
   hairline(...at(0, -size * 0.55), ...at(size, 0), R[5], alpha);
 }
 

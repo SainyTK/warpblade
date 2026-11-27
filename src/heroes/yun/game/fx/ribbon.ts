@@ -1,10 +1,10 @@
-import { line } from "../../../../engine/frame";
+import { hairline, line } from "../../../../engine/frame";
 import type { ElementKit, FxShapeDraw } from "../../../../types/skillFx";
 import { ease, smooth, TAU } from "../../../../utils/math";
 import { fadeOut, grade, rankOf } from "./parts";
 
-const TALL = [14, 18, 22, 26] as const;
-const WIDE = [6, 8, 10, 12] as const;
+const TALL = [16, 22, 28, 34] as const;
+const WIDE = [7, 9, 11, 14] as const;
 const STEPS = 20;
 
 function helix(kit: ElementKit, wide: number, tall: number, phase: number, flare: number, alpha: number): void {
@@ -17,7 +17,11 @@ function helix(kit: ElementKit, wide: number, tall: number, phase: number, flare
     const x = Math.cos(a) * r;
     const y = tall * 0.5 - u * tall - flare * u * tall * 0.5;
     const front = Math.sin(a) > 0;
-    if (prev) line(prev[0], prev[1], x, y, front ? R[3] : R[1], alpha * (front ? 1 : 0.6));
+    if (prev) {
+      line(prev[0], prev[1], x, y, front ? R[3] : R[1], alpha * (front ? 1 : 0.6));
+      line(prev[0], prev[1] + 1.5, x, y + 1.5, front ? R[2] : R[0], alpha * (front ? 1 : 0.6));
+      if (front) hairline(prev[0], prev[1] - 0.5, x, y - 0.5, R[5], alpha);
+    }
     prev = [x, y];
   }
 }

@@ -18,7 +18,7 @@ export const TWIN_ECHO_DRILL: YunDrillSkill = {
       return;
     }
     const reach = evolved ? values.myriad : values.reach;
-    const at = { x: h.x, y: h.y - 22, face: h.face, toX: h.x + h.face * reach, toY: h.y - 22 };
+    const at = { x: h.x + h.face * 14, y: h.y - 22, face: h.face, toX: h.x + h.face * reach, toY: h.y - 22 };
     yunFx(ID, "trail", at, { damage: progress.stats.ad * values.power * values.swords, signature: VOLLEY });
     for (let i = 0; i < values.swords; i++) {
       game.fx.push(

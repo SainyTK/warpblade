@@ -26,7 +26,12 @@ export function tickSwords(dt: number): void {
   if (yun.regen > 0) return;
   yun.regen = regenTime();
   yun.swords++;
-  yunFx(SKILL.breath, "burst", { x: hero.x, y: hero.y - 4, face: hero.face, reach: 8 }, { signature: BREATH });
+  yunFx(
+    SKILL.breath,
+    "burst",
+    { x: hero.x - hero.face * 12, y: hero.y - 32, face: hero.face, reach: 8 },
+    { signature: BREATH },
+  );
 }
 
 /** spirit swords join him, up to the most he can hold */

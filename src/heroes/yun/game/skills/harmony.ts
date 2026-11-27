@@ -29,7 +29,7 @@ export const harmony: SkillBehavior = {
     const m = memory as Memory;
     const holds = harmonyHolds();
     if (holds && !m.held)
-      yunFx(SKILL.harmony, "mark", { x: hero.x, y: hero.y - 34, face: hero.face }, { signature: YIN_YANG });
+      yunFx(SKILL.harmony, "mark", { x: hero.x, y: hero.y - 50, face: hero.face }, { signature: YIN_YANG });
     m.held = holds;
     const heal = skillValues(SKILL.harmony).heal;
     if (heal && harmonyHolds() && hero.hp > 0) hero.hp = Math.min(progress.stats.hp, hero.hp + heal * dt);

@@ -16,7 +16,7 @@ export const HARMONY_DRILL: YunDrillSkill = {
       return;
     }
     const h = session.fighter;
-    yunFx(ID, "mark", { x: h.x, y: h.y - 34, face: h.face }, { signature: YIN_YANG });
+    yunFx(ID, "mark", { x: h.x, y: h.y - 50, face: h.face }, { signature: YIN_YANG });
     const book = h.spellBook;
     if (!h.swordInfusion && values.infuse) {
       h.swordInfusion = { spell: book.selected, remainingHits: values.infuse, age: 0 };

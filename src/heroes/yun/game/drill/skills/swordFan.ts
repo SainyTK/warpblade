@@ -52,7 +52,7 @@ export const SWORD_FAN_DRILL: YunDrillSkill = {
     yunFx(
       ID,
       "burst",
-      { x: h.x + h.face * 6, y: h.y - 18, face: h.face, reach: 10 },
+      { x: h.x + h.face * 22, y: h.y - 22, face: h.face, reach: 10 },
       { damage: progress.stats.ap * (values.swordPower ?? values.bonus) * swords, signature: FAN },
     );
     const count = evolved ? values.peacock : (values.fan ?? 0);

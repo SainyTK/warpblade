@@ -4,7 +4,7 @@ import type { ElementKit, FxShapeDraw } from "../../../../types/skillFx";
 import { ease, smooth, TAU } from "../../../../utils/math";
 import { drawFxSword, fadeOut, grade, type Point, rankOf } from "./parts";
 
-const RADIUS = [7, 10, 13, 15] as const;
+const RADIUS = [5, 7, 9, 10] as const;
 const STEPS = 16;
 
 function emblem(kit: ElementKit, cx: number, cy: number, r: number, turn: number, alpha: number): void {

@@ -56,6 +56,6 @@ export function petals(look: PetalLook): FxShapeDraw {
   };
 }
 
-export const PETALS = petals({ count: [4, 8, 14, 22], size: 1.6, reach: 12 });
+export const PETALS = petals({ count: [5, 9, 14, 22], size: 2.6, reach: 14 });
 
-export const LEAVES = petals({ count: [2, 4, 7, 12], size: 2.6, reach: 10 });
+export const LEAVES = petals({ count: [2, 4, 7, 12], size: 3.8, reach: 12 });

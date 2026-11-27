@@ -4,7 +4,7 @@ import { ease, smooth } from "../../../../utils/math";
 import { drawFxSword, fadeOut, grade, headOf, rankOf } from "./parts";
 
 const COUNT = [1, 2, 4, 7] as const;
-const LENGTH = [10, 12, 14, 17] as const;
+const LENGTH = [14, 17, 20, 24] as const;
 const ROWS = [0, -5, 5, -9, 9, -13, 13] as const;
 const STAGGER = 0.07;
 

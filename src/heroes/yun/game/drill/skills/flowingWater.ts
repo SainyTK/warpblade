@@ -19,7 +19,7 @@ export const FLOWING_WATER_DRILL: YunDrillSkill = {
     const reach = evolved ? values.still : values.reach;
     const stun = evolved ? values.halt : (values.stagger ?? 0);
     sendWave({ x: h.x, y: h.y - 16, face: h.face, reach, power: values.wave, source: ID, stun });
-    const at = { x: h.x + h.face * 8, y: h.y - 16, face: h.face, reach: 18 };
+    const at = { x: h.x + h.face * 14, y: h.y - 16, face: h.face, reach: 18 };
     yunFx(ID, "slash", at, { damage: progress.stats.ad * values.wave, signature: CRESCENTS });
     if (values.behind) {
       sendWave({ x: h.x, y: h.y - 16, face: -h.face, reach: reach * 0.6, power: values.wave * 0.5, source: ID });

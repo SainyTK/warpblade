@@ -49,7 +49,7 @@ export const guardianBlade: SkillBehavior = {
       yunFx(
         SKILL.guardian,
         "mark",
-        { x: hero.x, y: hero.y + ORBIT_AT.height, face: hero.face },
+        { x: hero.x, y: hero.y - 46, face: hero.face },
         { damage: progress.stats.ad * v.power * v.most * 3, signature: ORBIT },
       );
     if (state.evolved)
@@ -83,7 +83,7 @@ export const guardianBlade: SkillBehavior = {
       yunFx(
         SKILL.guardian,
         "mark",
-        { x: hero.x, y: hero.y + ORBIT_AT.height, face: hero.face },
+        { x: hero.x, y: hero.y - 46, face: hero.face },
         { damage: progress.stats.ad * v.power * 3, signature: ORBIT },
       );
     },
