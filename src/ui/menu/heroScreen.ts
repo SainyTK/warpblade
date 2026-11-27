@@ -13,18 +13,14 @@ import { backItem } from "./backItem";
 import { type HeroPage, heroPage } from "./heroPage";
 import { heroPortrait } from "./heroPortrait";
 import { heroTile } from "./heroTile";
-import { startGame } from "./menuActions";
 import { focusEntry, onAdjust } from "./menuNav";
+import { showScreen } from "./menuState";
 
-/**
- * A press on the panel: an unlocked hero starts the run. For a locked one the first press asks again, the second one
- * unlocks with coins and makes the hero the choice, and a press the bank cannot pay for is refused with a shake. The run never starts with a locked hero.
- */
 function act(panel: HTMLElement, c: CharacterDef, page: HeroPage): void {
   if (!page.lock) {
     chooseCharacter(c, chosenJob(c.id));
     saveHeroChoice(c.id);
-    startGame();
+    showScreen("stage");
     return;
   }
   if (page.lock.price > bank()) {
@@ -43,11 +39,6 @@ function act(panel: HTMLElement, c: CharacterDef, page: HeroPage): void {
   if (buyHero(c.id)) sfx.learn();
 }
 
-/**
- * after Start: a roster of every hero over one panel for the hero in focus, starting at the one chosen last. A hero with
- * jobs has a job row in the panel, the entry after the panel itself: a new job shows on the portrait, the tile and the
- * hero behind the menu at once, and a press on the row starts the run as the panel does.
- */
 export function heroScreen(): MenuView {
   const pages = CHARACTERS.map((c, i) =>
     heroPage(c, (job) => {
@@ -101,8 +92,8 @@ export function heroScreen(): MenuView {
   // with a hero still to unlock, the bank takes the place of the keys
   const locked = CHARACTERS.some((c) => !heroUnlocked(c.id));
   const keys = matchMedia("(any-pointer: fine)").matches
-    ? "A D or arrows to look, J or Enter to begin"
-    : "Tap a hero to look, tap the panel to begin";
+    ? "A D or arrows to look, J or Enter to choose"
+    : "Tap a hero to look, tap the panel to choose";
   const subtitle = locked ? coinAmount(bank(), "bank") : keys;
   return { title: "Choose a hero", subtitle, content, focus: panel };
 }

@@ -2,26 +2,29 @@ import { STAGE_WAVES } from "../../constants/waves";
 import { lastRun } from "../../game/runEnd";
 import "../achievements/achievements.css";
 import "../results/results.css";
+import { STAGES } from "../../stages";
 import { runAchievements } from "../../store/achievements";
-import { campaignRecords } from "../../store/campaignRecords";
 import { inRoom } from "../../store/coop";
 import { bank } from "../../store/meta";
+import { stageBest } from "../../store/stageRecords";
 import { unlockedThisRun } from "../../store/unlocks";
 import type { Achievement } from "../../types/achievement";
 import type { MenuView } from "../../types/menu";
 import type { RunOutcome, StageResult } from "../../types/run";
+import { EMPTY_STAGE_BEST } from "../../utils/stageRecords";
 import { medalIcon } from "../achievements/medalIcon";
 import { coinAmount } from "../coinIcon";
-import { campaignBest } from "../results/campaignBest";
+import { el } from "../dom";
 import { runFacts } from "../results/runFacts";
 import { sourceTable } from "../results/sourceTable";
+import { stageBestTable } from "../results/stageBest";
 import { foundList } from "../unlocks/foundList";
-import { startGame } from "./menuActions";
+import { startGame, startStage } from "./menuActions";
 import { menuItem } from "./menuItem";
 import { showScreen } from "./menuState";
 
 const RESULT_TITLES: Record<RunOutcome, string> = {
-  clear: "Campaign clear",
+  clear: "Stage clear",
   beyond: "The eye is shut",
   fallen: "Fallen",
   left: "Left the room",
@@ -37,10 +40,9 @@ function line(label: string, value: HTMLElement): HTMLElement {
   return row;
 }
 
-/** at most this many earned achievements are named; the rest are counted */
 const SHOWN = 3;
+const UNLOCKED_SHOWN = 8;
 
-/** the achievements earned since the run began, each with its trophy and coins */
 function earnedList(list: readonly Achievement[]): HTMLElement {
   const box = document.createElement("ul");
   box.className = "result-ach";
@@ -61,43 +63,65 @@ function earnedList(list: readonly Achievement[]): HTMLElement {
   return box;
 }
 
-const stageLine = (stage: StageResult): string =>
-  stage.cleared ? "Every rift sealed" : stage.where ? `Fell in ${stage.where}` : "Fell on the way";
+const stageName = (stage: StageResult): string => `${STAGES[stage.stage].name}${stage.hyper ? " Hyper" : ""}`;
 
-export function resultScreen(): MenuView {
-  const run = lastRun();
-  const summary = document.createElement("dl");
-  summary.className = "result";
-  summary.append(line("Coins earned", coinAmount(run.coins)), line("Bank", coinAmount(bank())));
+const stageLine = (stage: StageResult): string =>
+  stage.cleared ? stageName(stage) : stage.where ? `Fell in ${stage.where}` : stageName(stage);
+
+function unlockedSection(): HTMLElement | null {
+  const found = inRoom() ? [] : unlockedThisRun();
+  if (!found.length) return null;
+  const box = el("section", "result-unlocked");
+  box.append(el("h3", "result-heading", "Unlocked"), foundList(found, UNLOCKED_SHOWN));
+  return box;
+}
+
+function navigation(stage: StageResult | undefined): HTMLElement {
   const list = document.createElement("nav");
   list.className = "menu-list";
   list.setAttribute("aria-label", "After the run");
   const shop = menuItem("Shop", () => showScreen("shop"));
   shop.dataset.opens = "shop";
-  if (inRoom())
+  if (inRoom()) {
     list.append(
       menuItem("Back to the room", () => showScreen("coop")),
       shop,
     );
-  else
-    list.append(
-      menuItem("Play again", startGame),
-      menuItem("Main menu", () => showScreen("main")),
-      shop,
-    );
+    return list;
+  }
+  const again = stage ? () => startStage({ stage: stage.stage, hyper: stage.hyper }) : startGame;
+  const choose = menuItem("Choose stage", () => showScreen("stage"));
+  choose.dataset.opens = "stage";
+  list.append(
+    menuItem("Play again", again),
+    choose,
+    menuItem("Main menu", () => showScreen("main")),
+    shop,
+  );
+  return list;
+}
+
+export function resultScreen(): MenuView {
+  const run = lastRun();
+  const summary = document.createElement("dl");
+  summary.className = "result";
+  summary.append(line("Gold earned", coinAmount(run.coins)), line("Bank", coinAmount(bank())));
   const scroll = document.createElement("div");
   scroll.className = "menu-scroll result-body";
   const earned = inRoom() ? [] : runAchievements();
-  if (run.report) scroll.append(runFacts(run.report, run.stage));
-  if (run.stage) scroll.append(campaignBest(campaignRecords(), run.stage.beaten, run.stage.sealedTotal));
+  if (run.report) scroll.append(runFacts(run.report, run.coins, run.stage));
+  const unlocked = unlockedSection();
+  if (unlocked) scroll.append(unlocked);
+  if (run.stage) {
+    const best = stageBest(run.stage.stage, run.stage.hyper) ?? EMPTY_STAGE_BEST;
+    scroll.append(stageBestTable(`Best run, ${stageName(run.stage)}`, best, run.stage.beaten));
+  }
   if (run.report?.sources.length) scroll.append(sourceTable(run.report));
   scroll.append(summary);
   if (earned.length) scroll.append(earnedList(earned));
-  const found = inRoom() ? [] : unlockedThisRun();
-  if (found.length) scroll.append(foundList(found));
   const content = document.createElement("div");
   content.className = "menu-sub";
-  content.append(scroll, list);
+  content.append(scroll, navigation(run.stage));
   return {
     title: run.stage && run.outcome === "beyond" ? RESULT_TITLES.clear : RESULT_TITLES[run.outcome],
     subtitle: run.stage ? stageLine(run.stage) : `Wave ${run.wave} of ${STAGE_WAVES}`,

@@ -10,9 +10,10 @@ import { runMenuCommand } from "./menuNav";
 import { isMenuOpen, menuContext, menuScreen, onMenuChange, openMenu, showScreen } from "./menuState";
 import { menuBody, renderMenu } from "./menuView";
 
-/** Esc leaves a screen for the main one, and the pause menu for the game; the start menu stays */
+const PARENT: Partial<Record<MenuScreen, MenuScreen>> = { stage: "hero" };
+
 function back(): void {
-  if (menuScreen() !== "main") showScreen("main");
+  if (menuScreen() !== "main") showScreen(PARENT[menuScreen()] ?? "main");
   else if (menuContext() === "pause") leaveMenu();
 }
 
@@ -29,6 +30,7 @@ export function bindMenu(): void {
   onFullscreenChange(redrawOn("options"));
   onMetaChange(redrawOn("shop"));
   onMetaChange(redrawOn("hero"));
+  onMetaChange(redrawOn("stage"));
   onMetaChange(redrawOn("achievements"));
   onRoomChange(redrawOn("coop"));
   // a run that ends, cleared or lost, comes back to the start menu with its result

@@ -19,7 +19,7 @@ export const KAEL_JOBS: readonly JobDef[] = [
     controls: PRISM_CONTROLS,
     unlock: {
       id: "job-kael-prism",
-      goal: { kind: "heroWave", hero: "kael", need: 5 },
+      goal: { kind: "hero", stat: "kael.stage.prologue", need: 1 },
       hint: "Defeat Oakheart with Kael.",
     },
     icon: "kael_prism",

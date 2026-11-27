@@ -1,4 +1,5 @@
 import type { Achievement, Goal, GoalProgress, GoalSource } from "../types/achievement";
+import { stageKey } from "./trackedStats";
 
 /** what a goal has counted so far */
 function goalCount(g: Goal, src: GoalSource): number {
@@ -17,6 +18,10 @@ function goalCount(g: Goal, src: GoalSource): number {
       return src.shopLevels;
     case "heroesBought":
       return src.heroesBought;
+    case "stageClears":
+      return src.stats.stages[stageKey(g.stage, g.hyper)] ?? 0;
+    case "goalsMet":
+      return g.of.filter((goal) => goalCount(goal, src) >= goal.need).length;
   }
 }
 

@@ -11,6 +11,7 @@ import { menuContext, menuScreen } from "./menuState";
 import { optionsScreen } from "./optionsScreen";
 import { resultScreen } from "./resultScreen";
 import { shopScreen } from "./shopScreen";
+import { stageScreen } from "./stageScreen";
 
 const root = byId("menu");
 const title = byId("menuTitle");
@@ -24,6 +25,7 @@ const SCREENS: Record<MenuScreen, (context: MenuContext) => MenuView> = {
   shop: shopScreen,
   result: resultScreen,
   hero: heroScreen,
+  stage: stageScreen,
   coop: coopScreen,
   achievements: achievementsScreen,
   codex: codexScreen,

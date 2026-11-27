@@ -3,6 +3,7 @@ import { resetRun } from "../../game/run";
 import { startRun } from "../../game/startRun";
 import { game, hero } from "../../game/state";
 import { inRoom } from "../../store/coop";
+import type { StageChoice } from "../../types/campaign";
 import { byId } from "../dom";
 import { closeMenu, isMenuOpen, openMenu } from "./menuState";
 
@@ -15,9 +16,13 @@ export function leaveMenu(): void {
   closeMenu();
   canvas.focus({ preventScroll: true });
 }
-/** a new run from the start menu, with everything bought in the shop */
 export function startGame(): void {
   startRun("");
+  leaveMenu();
+}
+
+export function startStage(choice: StageChoice): void {
+  startRun("", choice);
   leaveMenu();
 }
 export function restartRun(): void {
@@ -35,7 +40,7 @@ export function quitRun(): void {
  * A room plays on under the menu, and its players may still pause while anyone picks, to leave the room
  */
 export function pauseGame(): void {
-  if (isMenuOpen() || ((game.mode === "pick" || game.mode === "chest" || game.mode === "map") && !inRoom())) return;
+  if (isMenuOpen() || ((game.mode === "pick" || game.mode === "chest") && !inRoom())) return;
   releaseAll();
   openMenu("pause");
 }

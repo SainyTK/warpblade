@@ -1,6 +1,7 @@
 import { HERO_SOURCES } from "../constants/damageSources";
 import { ENEMIES } from "../constants/enemies";
 import type { BestStat, CountStat, Feat, RunTally, TrackedStats } from "../types/achievement";
+import type { StageId } from "../types/campaign";
 import type { EnemyType } from "../types/enemy";
 
 const COUNT_STATS: readonly CountStat[] = [
@@ -61,11 +62,14 @@ export function parseTracked(raw: unknown): TrackedStats {
     heroWave: wholeNumbers(saved.heroWave),
     hero: wholeNumbers(saved.hero),
     foes: foeKills(saved.foes),
+    stages: wholeNumbers(saved.stages),
     run: emptyRun(),
   };
 }
 
 const raise = (now: number, to: number): number => Math.max(now, to);
+
+export const stageKey = (stage: StageId, hyper = false): string => (hyper ? `${stage}.hyper` : stage);
 
 /** the stats after something happened in play */
 export function applyFeat(s: TrackedStats, feat: Feat): TrackedStats {
@@ -74,6 +78,7 @@ export function applyFeat(s: TrackedStats, feat: Feat): TrackedStats {
   const heroWave = { ...s.heroWave };
   const hero = { ...s.hero };
   const foes = { ...s.foes };
+  const stages = { ...s.stages };
   const run = { ...s.run };
   switch (feat.kind) {
     case "kill":
@@ -99,6 +104,12 @@ export function applyFeat(s: TrackedStats, feat: Feat): TrackedStats {
         heroWave[feat.hero] = raise(heroWave[feat.hero] ?? 0, feat.wave);
       }
       break;
+    case "stageCleared": {
+      const key = stageKey(feat.stage, feat.hyper);
+      stages[key] = (stages[key] ?? 0) + 1;
+      hero[`${feat.hero}.stage.${key}`] = (hero[`${feat.hero}.stage.${key}`] ?? 0) + 1;
+      break;
+    }
     case "comboHit":
       best.combo = raise(best.combo, feat.moves);
       break;
@@ -133,5 +144,5 @@ export function applyFeat(s: TrackedStats, feat: Feat): TrackedStats {
       hero[feat.stat] = raise(hero[feat.stat] ?? 0, feat.value);
       break;
   }
-  return { counts: c, best, heroWave, hero, foes, run };
+  return { counts: c, best, heroWave, hero, foes, stages, run };
 }

@@ -224,3 +224,22 @@ th.source {
   font-size: 12px;
   color: var(--gold);
 }
+
+.result-unlocked {
+  display: grid;
+  gap: 6px;
+  width: 100%;
+}
+.result-heading {
+  margin: 0;
+  font-family: var(--display);
+  font-weight: 400;
+  font-size: 14px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--brass);
+}
+.result-unlocked .result-found {
+  width: 100%;
+  padding-top: 6px;
+}

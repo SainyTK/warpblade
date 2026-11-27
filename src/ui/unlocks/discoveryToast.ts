@@ -2,7 +2,7 @@ import "../achievements/achievements.css";
 import "./unlocks.css";
 import { onDiscovery } from "../../store/unlocks";
 import type { Discovery } from "../../types/unlock";
-import { DISCOVERY_LABEL, discoveryName } from "../../utils/unlocks";
+import { discoveryLabel, discoveryName } from "../../utils/unlocks";
 import { showToast } from "../achievements/toastQueue";
 import { discoveryIconUrl, iconImage } from "./unlockIcon";
 
@@ -13,7 +13,7 @@ function toast(d: Discovery): HTMLElement {
   const text = document.createElement("span");
   text.className = "ach-toast-text";
   const label = document.createElement("small");
-  label.textContent = DISCOVERY_LABEL[d.type].toast;
+  label.textContent = discoveryLabel(d).toast;
   const name = document.createElement("b");
   name.textContent = discoveryName(d);
   box.setAttribute("aria-label", `${label.textContent}: ${name.textContent}`);

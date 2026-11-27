@@ -4,8 +4,8 @@ interface StageGradeInput {
   cleared: boolean;
   seconds: number;
   parSeconds: number;
-  bossesDefeated: number;
-  bossesTotal: number;
+  distance: number;
+  miniDefeated: boolean;
   foesDefeated: number;
   foesTotal: number;
   damageCoverage: number;
@@ -13,6 +13,11 @@ interface StageGradeInput {
 
 const MIN_S_DAMAGE_COVERAGE = 0.9;
 const MIN_S_FOE_SHARE = 0.85;
+const FALLEN_GRADES: readonly (readonly [distance: number, grade: StageGrade])[] = [
+  [0.75, "B"],
+  [0.5, "C"],
+  [0.25, "D"],
+];
 
 export function stageGrade(run: StageGradeInput): StageGrade {
   if (run.cleared) {
@@ -21,8 +26,6 @@ export function stageGrade(run: StageGradeInput): StageGrade {
     const enoughDamage = run.damageCoverage >= MIN_S_DAMAGE_COVERAGE;
     return onPace && enoughFoes && enoughDamage ? "S" : "A";
   }
-  if (run.bossesDefeated === 0) return "E";
-  if (run.bossesDefeated * 3 <= run.bossesTotal) return "D";
-  if (run.bossesDefeated * 3 <= run.bossesTotal * 2) return "C";
-  return "B";
+  const reach = run.miniDefeated ? Math.max(run.distance, 0.5) : run.distance;
+  return FALLEN_GRADES.find(([distance]) => reach >= distance)?.[1] ?? "E";
 }

@@ -1,19 +1,32 @@
 import { FUSIONS } from "../../constants/resonance";
-import type { Discovery } from "../../types/unlock";
-import { elementIcon } from "../skills/icons/elements";
+import { STAGES } from "../../stages";
+import { ARTS } from "../../stages/arts";
+import type { StageId } from "../../types/campaign";
+import type { Discovery, UnlockReward } from "../../types/unlock";
+import { artIcon, elementIcon } from "../skills/icons/elements";
 import { iconUrl, skillIcon } from "../skills/icons/iconImage";
 
-/** the icon of something found: the unlock's, the evolution's for a recipe, or the job's */
+function stageIcon(stage: StageId): string {
+  const art = STAGES[stage].grantsArt;
+  return elementIcon(art ? ARTS[art].element : "void");
+}
+
+function rewardIcon(reward: UnlockReward): string {
+  if (reward.kind === "art") return artIcon(reward.art);
+  if (reward.kind === "pickTool") return reward.tool;
+  return stageIcon(reward.stage);
+}
+
 export function discoveryIconUrl(d: Discovery): string {
   if (d.type === "fusion") {
     const fusion = FUSIONS.find((f) => f.id === d.id);
     return iconUrl(elementIcon(fusion?.pair[0] ?? "void"));
   }
   if (d.type === "job") return iconUrl(d.job.icon);
+  if (d.type === "unlock") return iconUrl(rewardIcon(d.unlock.reward));
   return iconUrl(skillIcon(d.skill, true));
 }
 
-/** a 16 by 16 icon image, scaled by its CSS */
 export function iconImage(url: string, cls = ""): HTMLImageElement {
   const img = document.createElement("img");
   img.className = cls;

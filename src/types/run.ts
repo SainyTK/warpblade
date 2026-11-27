@@ -1,5 +1,6 @@
 import type { SourceId } from "./build";
-import type { CampaignRecordKey } from "./records";
+import type { StageId } from "./campaign";
+import type { StageRecordKey } from "./records";
 
 /**
  * how a run ended: the hero fell, cleared the stage (also when they fell to what comes after its last wave), defeated
@@ -35,16 +36,14 @@ export interface RunReport {
 export type StageGrade = "E" | "D" | "C" | "B" | "A" | "S";
 
 export interface StageResult {
-  bossesDefeated: number;
-  bossesTotal: number;
-  distance: number;
-  damage: number;
-  grade: StageGrade;
-  sealed: number;
-  sealedTotal: number;
+  stage: StageId;
+  hyper: boolean;
   cleared: boolean;
+  grade: StageGrade;
+  damage: number;
   where: string;
-  beaten: readonly CampaignRecordKey[];
+  miniDefeated: boolean;
+  beaten: readonly StageRecordKey[];
 }
 
 export type RunResult = { outcome: RunOutcome; coins: number } & (

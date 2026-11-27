@@ -1,16 +1,13 @@
 import { REPO_URL } from "../../constants/feedback";
 import { GAME_VERSION, SITE_PAGES } from "../../constants/sitePages";
+import { STAGE_ORDER } from "../../constants/stageGraph";
 import { STAGE_WAVES } from "../../constants/waves";
 import { isAdventure, stageStatus } from "../../game/adventure";
 import { character, chooseCharacter, game, progress } from "../../game/state";
-import { RIFT_STAGES } from "../../stages";
-import { campaignRecords } from "../../store/campaignRecords";
 import { inRoom, roomView } from "../../store/coop";
 import { chosenJob } from "../../store/jobs";
-import { heroRefund } from "../../store/meta";
+import { stagesCleared } from "../../store/stageRecords";
 import type { MenuContext, MenuScreen, MenuView } from "../../types/menu";
-import { minutesSeconds } from "../../utils/runReport";
-import { coinAmount } from "../coinIcon";
 import { leaveRoom } from "./coopActions";
 import { leaveMenu, quitRun, restartRun } from "./menuActions";
 import { menuItem } from "./menuItem";
@@ -34,23 +31,12 @@ function footLink(href: string, label: string): HTMLAnchorElement {
   return link;
 }
 
-/** coins given back for heroes that left the roster, shown until the next run begins */
-function refundNote(): HTMLElement {
+function clearedNote(): HTMLElement | null {
+  const cleared = stagesCleared();
+  if (cleared === 0) return null;
   const note = document.createElement("p");
   note.className = "menu-note";
-  note.append("Refund for heroes that left the roster: ", coinAmount(heroRefund()));
-  return note;
-}
-
-function bestNote(): HTMLElement | null {
-  const best = campaignRecords();
-  if (best.mostSealed === 0 && best.fastestClear === null) return null;
-  const note = document.createElement("p");
-  note.className = "menu-note";
-  note.textContent =
-    best.fastestClear === null
-      ? `Best: ${best.mostSealed} of ${RIFT_STAGES.length} rifts sealed`
-      : `Best clear: ${minutesSeconds(best.fastestClear)}, grade ${best.bestGrade ?? "E"}`;
+  note.textContent = `Stages cleared ${cleared} of ${STAGE_ORDER.length}`;
   return note;
 }
 
@@ -89,11 +75,10 @@ export function mainScreen(context: MenuContext): MenuView {
     const content = document.createElement("div");
     content.className = "menu-main";
     content.append(list);
-    const best = bestNote();
-    if (best) content.append(best);
-    if (heroRefund() > 0) content.append(refundNote());
+    const cleared = clearedNote();
+    if (cleared) content.append(cleared);
     content.append(titleFooter());
-    return { title: "Warpblade", subtitle: "Seal the eight rifts, then break into the Citadel.", content };
+    return { title: "Warpblade", subtitle: "Clear a stage to open the next.", content };
   }
   if (inRoom()) {
     // a room plays on under this menu

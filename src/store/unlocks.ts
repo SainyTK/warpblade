@@ -1,26 +1,21 @@
 import type { FusionId } from "../constants/resonance";
+import { hyperUnlockId, stageUnlockId, UNLOCKS } from "../constants/unlocks";
 import { CHARACTERS } from "../heroes/roster";
 import { isPlaytestSession } from "../services/playtestStart";
-import type { Discovery } from "../types/unlock";
+import type { PickToolKey } from "../types/build";
+import type { ArtId, StageId } from "../types/campaign";
+import type { Discovery, UnlockDef, UnlockState } from "../types/unlock";
 import { isMet } from "../utils/achievements";
 import { allJobs } from "../utils/jobs";
 import { goalSource, onFeat } from "./achievements";
-import { savedRecipes, savedUnlocks, saveUnlocks } from "./meta";
+import { bank, savedRecipes, savedUnlocks, saveUnlocks, spendCoins } from "./meta";
 
-/**
- * The one owner of discovery across runs: which charms, charm slots and hero jobs are found, which skill evolutions are
- * known, and what was found since the last run began. Goals are checked after every feat the achievements count, so only solo
- * runs find things. A playtest session has everything and knows every recipe, and finds nothing.
- */
 let found = new Set(savedUnlocks());
 let recipes = new Set(savedRecipes());
-/** found since the last run began, for the end of run screen */
 let sinceRunStart: Discovery[] = [];
 const listeners = new Set<(d: Discovery) => void>();
 
-/** the player has made this skill's evolution once, so its partner shows */
 export const knowsRecipe = (id: string): boolean => isPlaytestSession() || recipes.has(id);
-/** an unlock found, by id; every one in a playtest session */
 export const isFound = (id: string): boolean => isPlaytestSession() || found.has(id);
 export const unlockedThisRun = (): readonly Discovery[] => sinceRunStart;
 
@@ -29,7 +24,6 @@ function discover(d: Discovery): void {
   for (const listener of listeners) listener(d);
 }
 
-/** the hero has made a skill's evolution: its partner shows from now on */
 export function learnRecipe(id: string): void {
   if (isPlaytestSession() || recipes.has(id)) return;
   recipes = new Set([...recipes, id]);
@@ -49,28 +43,67 @@ export function learnFusion(id: FusionId): void {
   discover({ type: "fusion", id });
 }
 
-/** a new run begins: the end of run screen lists only what this run finds */
 export function startRunUnlocks(): void {
   sinceRunStart = [];
 }
 
-/** listen for each charm, slot, recipe or job as it is found */
 export function onDiscovery(listener: (d: Discovery) => void): () => void {
   listeners.add(listener);
   return () => listeners.delete(listener);
 }
 
-/** find every unlock and every hero job whose goal is met */
+export function unlockState(def: UnlockDef): UnlockState {
+  if (isFound(def.id)) return "found";
+  return def.price !== undefined && isMet(def, goalSource()) ? "forSale" : "locked";
+}
+
+const unlockById = (id: string): UnlockDef | undefined => UNLOCKS.find((u) => u.id === id);
+
+export function buyUnlock(id: string): boolean {
+  const def = unlockById(id);
+  if (!def || def.price === undefined || unlockState(def) !== "forSale" || def.price > bank()) return false;
+  if (!spendCoins(def.price)) return false;
+  found = new Set([...found, def.id]);
+  saveUnlocks([def.id], []);
+  return true;
+}
+
+export function isStageOpen(stage: StageId): boolean {
+  const def = unlockById(stageUnlockId(stage));
+  return !def || isFound(def.id);
+}
+
+export const hyperUnlock = (stage: StageId): UnlockDef | undefined => unlockById(hyperUnlockId(stage));
+
+export function foundArts(): ArtId[] {
+  return UNLOCKS.flatMap((u) => (u.reward.kind === "art" && isFound(u.id) ? [u.reward.art] : []));
+}
+
+export function foundTools(): Partial<Record<PickToolKey, number>> {
+  const tools: Partial<Record<PickToolKey, number>> = {};
+  for (const u of UNLOCKS)
+    if (u.reward.kind === "pickTool" && isFound(u.id))
+      tools[u.reward.tool] = (tools[u.reward.tool] ?? 0) + u.reward.amount;
+  return tools;
+}
+
+let announced = new Set(UNLOCKS.filter((u) => u.price !== undefined && isMet(u, goalSource())).map((u) => u.id));
+
 function check(): void {
   if (isPlaytestSession()) return;
   const src = goalSource();
   const jobs = allJobs(CHARACTERS).filter((j) => !found.has(j.job.unlock.id) && isMet(j.job.unlock, src));
-  if (!jobs.length) return;
-  const ids = jobs.map((j) => j.job.unlock.id);
-  found = new Set([...found, ...ids]);
-  saveUnlocks(ids, []);
+  const free = UNLOCKS.filter((u) => u.price === undefined && !found.has(u.id) && isMet(u, src));
+  const sale = UNLOCKS.filter((u) => u.price !== undefined && !announced.has(u.id) && isMet(u, src));
+  const ids = [...jobs.map((j) => j.job.unlock.id), ...free.map((u) => u.id)];
+  if (ids.length) {
+    found = new Set([...found, ...ids]);
+    saveUnlocks(ids, []);
+  }
+  announced = new Set([...announced, ...sale.map((u) => u.id)]);
   for (const j of jobs) discover({ type: "job", ...j });
+  for (const unlock of free) discover({ type: "unlock", unlock, forSale: false });
+  for (const unlock of sale) discover({ type: "unlock", unlock, forSale: true });
 }
 onFeat(check);
-// a save from before unlocks can already meet goals, such as a wave long since reached
 check();

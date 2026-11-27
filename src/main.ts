@@ -21,7 +21,6 @@ import { drawDangerGlow } from "./ui/dangerGlow";
 import { fitStage } from "./ui/fitStage";
 import { paintScene } from "./ui/gameCanvas";
 import { updateHud } from "./ui/hud";
-import { bindStageMap, syncStageMap } from "./ui/map/stageMap";
 import { bindMentorPrompt, syncMentorPrompt } from "./ui/mentorPrompt";
 import { bindMenu } from "./ui/menu/bindMenu";
 import { bindRoomLook } from "./ui/menu/bindRoomLook";
@@ -47,7 +46,6 @@ bindPauseButton();
 bindMentorPrompt();
 bindPickDialog();
 bindChestDialog();
-bindStageMap();
 bindRoomLook();
 bindMenu();
 bindAchievementToasts();
@@ -73,7 +71,6 @@ function soloFrame(now: number): void {
   updateHud();
   syncPickDialog();
   syncChestDialog();
-  syncStageMap();
   syncTouch(!isMenuOpen() && game.mode === "play");
   playMusic(musicTrack(menuContext() === "title"));
 }

@@ -1,15 +1,23 @@
-import { loadCampaignRecords, saveCampaignRecords } from "../services/campaignRecordsStorage";
-import type { CampaignRecordKey, CampaignRecords, CampaignRun } from "../types/records";
-import { parseCampaignRecords, withCampaignRun } from "../utils/campaignRecords";
+import { STAGE_ORDER } from "../constants/stageGraph";
+import { isPlaytestSession } from "../services/playtestStart";
+import { loadStageRecords, saveStageRecords } from "../services/stageRecordsStorage";
+import type { StageId } from "../types/campaign";
+import type { StageBest, StageRecordKey, StageRecords, StageRun } from "../types/records";
+import { parseStageRecords, withStageRun } from "../utils/stageRecords";
+import { stageKey } from "../utils/trackedStats";
 
-let records: CampaignRecords = parseCampaignRecords(loadCampaignRecords());
+const KEYS = STAGE_ORDER.flatMap((stage) => [stageKey(stage), stageKey(stage, true)]);
 
-export const campaignRecords = (): CampaignRecords => records;
+let records: StageRecords = parseStageRecords(loadStageRecords(), KEYS);
 
-export function recordCampaignRun(run: CampaignRun): CampaignRecordKey[] {
-  const result = withCampaignRun(records, run);
-  if (!result.beaten.length) return [];
+export const stageBest = (stage: StageId, hyper = false): StageBest | null => records[stageKey(stage, hyper)] ?? null;
+
+export const stagesCleared = (): number => STAGE_ORDER.filter((stage) => (stageBest(stage)?.clears ?? 0) > 0).length;
+
+export function recordStageRun(run: StageRun): StageRecordKey[] {
+  if (isPlaytestSession()) return [];
+  const result = withStageRun(records, run);
   records = result.records;
-  saveCampaignRecords(records);
+  saveStageRecords(records);
   return result.beaten;
 }
