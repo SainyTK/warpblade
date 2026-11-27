@@ -46,6 +46,7 @@ function wool(s: SpriteCanvas, p: TuskPose): void {
   s.dot(-1, -21 + y, 11.5, Wl[2]);
   s.dot(9, -19 + y + p.head * 0.3, 9.5, Wl[2]);
   s.stroke(-16, -14 + y, 12, -13 + y, 6, Wl[2]);
+  s.stroke(-17, -11 + y, 12, -11 + y, 3, Wl[1]);
   for (let x = -21; x <= 14; x += 3) {
     const len = 4 + ((x * 7 + 40) % 3);
     s.taper(x, -11 + y, x - 1, -11 + y + len, 1.6, 0.6, Wl[2]);
@@ -76,51 +77,61 @@ function head(s: SpriteCanvas, p: TuskPose): void {
   const hy = -16 + p.lift + p.head;
   const hx = 19;
   s.begin();
-  s.dot(hx, hy, 6.5, Wl[2]);
-  s.dot(hx - 4, hy - 4, 4, Wl[2]);
+  s.dot(hx - 3, hy - 7, 5.5, Wl[2]);
+  s.dot(hx + 1, hy - 1, 5.5, Wl[2]);
   s.shadeEdges(Wl[2], Wl[4], Wl[1], 2);
+  s.hairline(hx - 6, hy - 11, hx - 1, hy - 12, Wl[4]);
   s.commit();
   s.begin();
   s.poly(
     [
-      [hx + 3, hy - 3],
-      [hx + 10, hy + 2],
-      [hx + 10, hy + 6],
-      [hx + 4, hy + 6],
+      [hx + 2, hy - 4],
+      [hx + 6.5, hy - 1],
+      [hx + 6, hy + 4],
+      [hx + 1, hy + 4],
     ],
     Hd[2],
   );
   s.shadeEdges(Hd[2], Wl[3], Hd[0]);
-  s.set(hx + 9.5, hy + 3.5, TUSK_COLORS.hoof);
   s.commit();
+  const curl = p.toss * 3;
   s.begin();
-  const eye = p.dazed ? Wl[1] : p.glare ? FOE.eyeHot : FOE.eye;
-  s.block(hx + 2.5, hy - 2.5, eye, 1.5, p.dazed ? 0.5 : 1);
-  s.commit(false);
+  s.taper(hx + 5, hy + 2, hx + 7 - curl, hy + 11 - curl, 2, 1.2, Hd[2], 1.5);
+  s.taper(hx + 7 - curl, hy + 11 - curl, hx + 9 - curl, hy + 13 - curl * 1.5, 1.2, 0.8, Hd[2], 1);
+  s.shadeEdges(Hd[2], Wl[3], Hd[0]);
+  for (let i = 0; i < 3; i++) s.set(hx + 5.5 - curl * (i / 3), hy + 5 + i * 2 - curl * (i / 3), Hd[0]);
+  s.commit();
   s.begin();
   s.poly(
     [
-      [hx - 3, hy - 5],
-      [hx - 7, hy - 9],
-      [hx - 1, hy - 7],
+      [hx - 4, hy - 4],
+      [hx - 8, hy - 1],
+      [hx - 6, hy + 4],
+      [hx - 2, hy + 1],
     ],
-    Wl[3],
+    Wl[1],
   );
-  s.shadeEdges(Wl[3], Wl[4], Wl[1]);
+  s.shadeEdges(Wl[1], Wl[2], Hd[1]);
   s.commit();
+  s.begin();
+  const eye = p.dazed ? Wl[1] : p.glare ? FOE.eyeHot : FOE.eye;
+  s.block(hx + 1.5, hy - 3, eye, 1.5, p.dazed ? 0.5 : 1);
+  s.set(hx + 0.5, hy - 4, Hd[0]);
+  s.set(hx + 2.5, hy - 4.5, Hd[0]);
+  s.commit(false);
 }
 
 function tusk(s: SpriteCanvas, p: TuskPose, near: boolean): void {
   const hy = -16 + p.lift + p.head;
-  const root: Pt = [near ? 24 : 22, hy + 5];
+  const root: Pt = [near ? 23 : 21, hy + 3];
   const swing = p.toss * 6;
-  const mid: Pt = [root[0] + 7, root[1] + 1 - swing * 0.4];
-  const tip: Pt = [root[0] + 9 + swing * 0.2, root[1] - 8 - swing];
+  const mid: Pt = [root[0] + 7, root[1] + 5 - swing * 0.5];
+  const tip: Pt = [root[0] + 12 + swing * 0.3, root[1] - 2 - swing];
   const scale = near ? 1 : 0.8;
   const tone = p.sheen > 0.6 || p.toss > 0.5 ? T[2] : T[1];
   s.begin();
-  s.taper(root[0], root[1], mid[0], mid[1], 1.6 * scale, 1.2 * scale, tone, -1);
-  s.taper(mid[0], mid[1], tip[0], tip[1], 1.2 * scale, 0.4, tone, -1);
+  s.taper(root[0], root[1], mid[0], mid[1], 1.8 * scale, 1.3 * scale, tone, -0.8);
+  s.taper(mid[0], mid[1], tip[0], tip[1], 1.3 * scale, 0.4, tone, -0.8);
   s.shadeEdges(tone, T[3], T[0]);
   s.commit();
   if (near) {

@@ -70,14 +70,28 @@ function body(s: SpriteCanvas, p: BellPose): void {
 }
 
 function face(s: SpriteCanvas, p: BellPose): void {
+  s.begin();
+  s.poly(
+    turned(
+      [
+        [-6, -6],
+        [6, -6],
+        [6.5, -2],
+        [-6.5, -2],
+      ],
+      p.tilt,
+    ),
+    BELL_COLORS.hollow,
+  );
+  s.commit();
   const eye = p.glow > 0.6 ? R[2] : R[1];
   s.begin();
-  for (const x of [-3.5, 2.5]) {
-    const a = turn([x, -3], p.tilt);
-    s.block(a[0], a[1], eye, 1.2, 0.6 + p.open * 0.6);
+  for (const x of [-4.5, 2]) {
+    const a = turn([x, -5], p.tilt);
+    s.block(a[0], a[1], eye, 2.5, 1 + p.open);
   }
-  const m = turn([-1.5, 2], p.tilt);
-  s.block(m[0], m[1], p.open > 0.5 ? R[2] : I[0], 2.5, 0.5 + p.open * 1.5);
+  const m = turn([-2, 1], p.tilt);
+  s.block(m[0], m[1], p.open > 0.5 ? R[2] : BELL_COLORS.hollow, 4, 0.75 + p.open * 1.5);
   s.commit(false);
 }
 

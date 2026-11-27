@@ -10,19 +10,38 @@ const D = FLIT_COLORS.down;
 const W = FLIT_COLORS.wing;
 
 function wing(s: SpriteCanvas, p: FlitPose, near: boolean): void {
-  const lift = p.wing * 6;
-  const sweep = p.tuck * 4;
-  const back = near ? 0 : 1.5;
-  const root: Pt = [-1 - back * 0.5, -1];
-  const tip: Pt = [-9 - sweep + back, -1 - lift];
-  const elbow: Pt = [-5 - sweep * 0.5, -2 - lift * 0.6];
+  const angle = (near ? -2.6 : -1.75) + p.wing * 0.7 + p.tuck * (near ? 0.5 : -0.4);
+  const len = 9 - p.tuck * 3;
+  const ux = Math.cos(angle);
+  const uy = Math.sin(angle);
+  const px = -uy;
+  const py = ux;
+  const side = near ? 1 : -1;
+  const root: Pt = [-0.5, -1.5];
+  const tip: Pt = [root[0] + ux * len, root[1] + uy * len];
   const tone = near ? W[2] : W[1];
   s.begin();
-  s.poly([root, elbow, tip, [tip[0] + 2.5, tip[1] + 3.2], [-5 - sweep * 0.4, 1.5 - lift * 0.2], [-2, 2]], tone);
+  s.poly(
+    [
+      root,
+      tip,
+      [tip[0] + px * 2 * side, tip[1] + py * 2 * side],
+      [root[0] + ux * len * 0.7 + px * 3 * side, root[1] + uy * len * 0.7 + py * 3 * side],
+      [root[0] + ux * len * 0.4 + px * 3.4 * side, root[1] + uy * len * 0.4 + py * 3.4 * side],
+      [root[0] + px * 2 * side, root[1] + py * 2 * side],
+    ],
+    tone,
+  );
   s.shadeEdges(tone, near ? W[3] : W[2], W[0]);
-  s.hairline(root[0], root[1], elbow[0], elbow[1], near ? W[3] : W[2]);
-  s.hairline(elbow[0], elbow[1], tip[0], tip[1], near ? FOE.crystal[4] : W[3]);
-  s.hairline(elbow[0], elbow[1], -4.5 - sweep * 0.3, 1.5 - lift * 0.2, W[0]);
+  s.hairline(root[0], root[1], tip[0], tip[1], near ? FOE.crystal[4] : W[3]);
+  for (const u of [0.45, 0.75])
+    s.hairline(
+      root[0] + ux * len * u,
+      root[1] + uy * len * u,
+      root[0] + ux * len * u + px * 2.6 * side,
+      root[1] + uy * len * u + py * 2.6 * side,
+      W[0],
+    );
   s.commit();
 }
 

@@ -56,8 +56,8 @@ export function colossusPose(e: Enemy, time: number): ColossusPose {
   return {
     ...base,
     lift: gait % 2 ? -0.5 : 0,
-    nearFist: [14 + sway, -9],
-    farFist: [-11 - sway, -9],
+    nearFist: [16 + sway, -6],
+    farFist: [-14 - sway, -6],
     nearFoot: sway * 2,
     farFoot: -sway * 2,
   };

@@ -1,7 +1,7 @@
 import { detailCanvas, type SpriteCanvas } from "../../../../engine/sprite";
 import type { Enemy } from "../../../../types/enemy";
 import { FOE } from "../colors";
-import { facet, type Pt } from "../shapes";
+import { facet, type Pt, shardPoints } from "../shapes";
 import { COLOSSUS_COLORS } from "./colors";
 import { type ColossusPose, colossusPose } from "./pose";
 
@@ -135,21 +135,48 @@ function head(s: SpriteCanvas, p: ColossusPose): void {
   s.begin();
   s.poly(
     [
-      [-3, -50 + y],
-      [6, -51 + y],
-      [9, -44 + y],
-      [6, -40 + y],
-      [-3, -41 + y],
+      [9, -47 + y],
+      [19, -47 + y],
+      [24, -41 + y],
+      [22, -34 + y],
+      [12, -33 + y],
+      [8, -39 + y],
     ],
     St[2],
   );
-  s.shadeEdges(St[2], St[4], St[0]);
+  s.shadeEdges(St[2], St[4], St[0], 2);
+  s.hairline(13, -35.5 + y, 21, -36 + y, St[1]);
   s.commit();
+  facet(
+    s,
+    [
+      [8, -45 + y],
+      [23, -46 + y],
+      [25.5, -41 + y],
+      [9, -40 + y],
+    ],
+    Ic[2],
+    Ic[5],
+    Ic[0],
+  );
   s.begin();
   const eye = p.glare ? FOE.eyeHot : Co[3];
-  s.block(3, -46.5 + y, eye, 2, 0.5);
-  s.block(6.5, -46 + y, eye, 1.5, 0.5);
+  s.block(15, -39.5 + y, eye, 2.5, 1);
+  s.block(20, -39.5 + y, eye, 2, 1);
   s.commit(false);
+}
+
+function crystals(s: SpriteCanvas, p: ColossusPose): void {
+  const y = p.lift + p.hunch;
+  const lit = p.core > 0.7;
+  for (const [x, top, len, angle] of [
+    [-18, -40, 9, -2.3],
+    [-14, -45, 12, -2],
+    [-8, -47, 8, -1.8],
+    [16, -49, 7, -1.3],
+    [11, -50, 9, -1.6],
+  ] as const)
+    facet(s, shardPoints(x, top + y, len, angle, 2.4), lit ? Ic[3] : Ic[2], Ic[5], Ic[0]);
 }
 
 function arm(s: SpriteCanvas, p: ColossusPose, from: Pt, fist: Pt, near: boolean): void {
@@ -187,14 +214,15 @@ export function drawFrostcolossus(e: Enemy, t: number): SpriteCanvas {
   const p = colossusPose(e, t + e.seed);
   s.clear();
   s.shift(p.jolt, 0);
+  crystals(s, p);
   const farShoulder = shoulder(s, p, false);
   arm(s, p, farShoulder, p.farFist, false);
   legs(s, p, false);
   legs(s, p, true);
   torso(s, p);
   core(s, p);
-  head(s, p);
   const nearShoulder = shoulder(s, p, true);
+  head(s, p);
   arm(s, p, nearShoulder, p.nearFist, true);
   s.shift(0, 0);
   s.outline(FOE.outline);
