@@ -36,6 +36,11 @@ export function drawSword(x: number, y: number, s: number, tilt: number, a: numb
   const c = Math.cos(tilt);
   const n = Math.sin(tilt);
   const at = (d: number, w = 0) => [x - n * d * s + c * w * s, y + c * d * s + n * w * s] as const;
+  const edge = 0.5 / Math.max(1, s);
+  for (const w of [-edge, edge]) {
+    line(...at(-1.15, w * 2), ...at(1.35, w * 2), DAWN_RAMP[1], a);
+  }
+  line(...at(-0.75, -0.55), ...at(-0.75, 0.55), DAWN_RAMP[1], a);
   line(...at(-1.1), ...at(1.3), DAWN_RAMP[4], a);
   hairline(...at(-1), ...at(1.25), DAWN_RAMP[6], a * 0.7);
   line(...at(-0.75, -0.45), ...at(-0.75, 0.45), DAWN_RAMP[3], a);

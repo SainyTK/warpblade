@@ -44,10 +44,10 @@ function createKnight(foe: Enemy, side: number): Effect {
         aldricFx(
           ID,
           "slash",
-          { x: x + face * 4, y: y - 18, face, reach: last ? 18 : 14 },
+          { x: x + face * 4, y: y - 16, face, reach: last ? 9 : 8 },
           {
-            damage: progress.stats.ad * v.power * (last ? cuts : 1),
-            quiet: done > 1 && !last,
+            damage: progress.stats.ad * v.power,
+            quiet: done > 1,
             sigil: "sword",
             lift: 10,
           },

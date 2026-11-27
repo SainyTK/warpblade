@@ -39,5 +39,5 @@ export function drawLightKnight(x: number, y: number, face: number, k: number, s
   const ty = hy + Math.sin(ang) * 16;
   line(hx, hy, tx, ty, DAWN_RAMP[5], k);
   hairline(hx, hy, tx, ty, WHITE, k);
-  glow(x, y - 14, 16, DAWN_RAMP[4], 0.35 * k);
+  glow(x, y - 14, 12, DAWN_RAMP[3], 0.18 * k);
 }
