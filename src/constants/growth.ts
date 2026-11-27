@@ -1,7 +1,12 @@
 /** In-run growth: slots, experience, hero level power, cards, Flow and chests. Design: docs/growth-design.md and
  *  docs/skill-design.md */
-export const SKILL_SLOTS = 8;
+export const SKILL_SLOT_LEVELS: readonly number[] = [1, 1, 1, 1, 15, 30, 45, 60];
+export const SKILL_SLOTS = SKILL_SLOT_LEVELS.length;
 export const SKILL_MAX_LEVEL = 8;
+export const PICK_SCHEDULE = { everyLevelTo: 30, thenEvery: 2, milestones: [50, 75, 99] } as const;
+export const MASTERY = { levels: 4, resonance: 2, power: 0.05 } as const;
+export const CHARGE_RANK = { ranks: 6, damage: 0.15, chargeRate: 0.06 } as const;
+export const ATTUNEMENT = { levels: 3, resonance: 3 } as const;
 /** a skill at its top level evolves once its partner is held at this level or higher */
 export const EVOLVE_PARTNER_LEVEL = 4;
 /** foes one pull-off of a precise skill pays off on: the foe the hard move was aimed at (docs/skill-design.md) */
@@ -11,7 +16,16 @@ export const XP_CURVE = { base: 15, step: 10 } as const;
 export const MAX_LEVEL = 99;
 /** attack damage and ability power multiply by this every level */
 export const HERO_LEVEL_POWER = 1.025;
-export const CARD_WEIGHT = { newSkill: 100, skillLevel: 14, artLevel: 45, resonancePull: 0.03 } as const;
+export const CARD_WEIGHT = {
+  newSkill: 100,
+  skillLevel: 14,
+  mastery: 10,
+  chargeRank: 10,
+  attunement: 8,
+  artLevel: 45,
+  honing: 2,
+  resonancePull: 0.03,
+} as const;
 export const PICK_COUNT = 3;
 /** a run's rerolls, skips and banishes before the shop adds more */
 export const PICK_TOOLS = { rerolls: 2, skips: 2, banishes: 1 } as const;

@@ -204,6 +204,10 @@
   --accent: var(--heal);
   --accent-dark: #123a2a;
 }
+.pick[data-branch="honing"] {
+  --accent: var(--iron);
+  --accent-dark: #262c34;
+}
 /* Banishing: every card turns rust red, and Second Wind, which cannot be banished, steps back. */
 .level-up.banishing .pick {
   --accent: var(--rust);

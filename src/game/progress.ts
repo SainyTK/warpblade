@@ -10,14 +10,15 @@ import { learnFusion } from "../store/unlocks";
 import type { Card } from "../types/build";
 import { PK } from "../types/particle";
 import type { PickAnswer } from "../types/pick";
+import { picksBetween } from "../utils/cardSupply";
 import { cardKey } from "../utils/cards";
 import { pactTotals } from "../utils/pacts";
 import { xpToNext } from "../utils/progression";
 import { activeFusions, type Ranks, resonanceRanks, resonanceStats } from "../utils/resonance";
 import { withShards } from "../utils/shards";
-import { heldRows } from "../utils/skills";
+import { growthRows, heldRows } from "../utils/skills";
 import { computeStats } from "../utils/stats";
-import { raiseArt, raiseSkill } from "./build/raise";
+import { raiseCard } from "./build/raise";
 import { currentBuildStats } from "./build/stats";
 import { createFloorRing } from "./effects/floorRing";
 import { forgetEvolutions } from "./evolve";
@@ -35,7 +36,7 @@ export function refreshProgress(): void {
   progress.fusions = fusions;
   const stats = resonanceStats(progress.resonance);
   const pact = pactTotals(character, build);
-  const rows = [...heldRows(character, build), { scale: { ad: pact.power, ap: pact.power } }];
+  const rows = [...heldRows(character, build), ...growthRows(build), { scale: { ad: pact.power, ap: pact.power } }];
   const bonus = withShards(metaBonus(), progress.heartShards, progress.manaShards);
   progress.stats = computeStats(character, progress.level, rows, bonus, stats);
   progress.hpPerSecond = pact.hp;
@@ -96,7 +97,7 @@ export function gainXp(amount: number): void {
   hero.mp = Math.min(progress.stats.mp, hero.mp + progress.stats.mp * restore);
   showBanner(`Level ${progress.level}`, 1.4);
   celebrateLevel();
-  progress.picks += progress.level - from;
+  progress.picks += picksBetween(from, progress.level);
 }
 
 /** experience from play: Insight adds to it */
@@ -142,8 +143,7 @@ function spendPick(): void {
 function choosePick(card: Card): void {
   if (card.type === "boon") takeBoon();
   else {
-    if (card.type === "skill") raiseSkill(card.id);
-    else raiseArt(card.id);
+    raiseCard(card);
     refreshGrowing();
   }
   spendPick();

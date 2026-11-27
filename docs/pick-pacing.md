@@ -14,8 +14,8 @@ The growth rework (`docs/growth-design.md`) moved the curve to `15 + 10 x (level
 - Experience drops as orbs that Kael picks up; the numbers assume he collects all of it, which he does because left orbs fly to him.
 - A full run reaches about level 84: level 3 after wave 1, 13 after wave 9, 38 after wave 20 and 84 after wave 30.
   The curve before the rework reached 1, 6, 13 and 19.
-- Level ups give about 80 picks in a full run, two more with the shop's Head Start.
-- A pick deals skills and charms (`dealCards` in `src/utils/cards.ts`); picks have no level gates and no prerequisites.
+- Not every level gives a pick: one per level up to 30, then one every second level, plus milestones at 50, 75 and 99, 66 picks from level 1 to 99 (`docs/growth-design.md`, "Pick budget").
+- A pick deals skills, masteries, charge ranks, attunements and Honing stat cards (`dealCards` in `src/utils/cards.ts`); new skills wait for a slot opened by the level, and picks have no prerequisites.
 - The ground string's length is fixed per hero (`CharacterDef.comboHits`).
 
 ## Evolutions
@@ -26,5 +26,5 @@ Evolutions belong to the run and reset with it; only the recipe (which partner a
 
 ## When cards run short
 
-If fewer cards than a pick deals are left, Second Wind (`src/constants/boons.ts`) fills the rest and restores all HP and MP.
-With about 75 picks against 64 skill levels and up to 25 charm levels, this can happen late in a long run with full slots.
+Honing cards never run out, so a pick always has at least three cards.
+If a fourth card is dealt with nothing left for it, Second Wind (`src/constants/boons.ts`) fills it and restores all HP and MP.

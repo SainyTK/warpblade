@@ -1,15 +1,19 @@
-import { CARD_WEIGHT, PICK_COUNT, SKILL_MAX_LEVEL, SKILL_SLOTS } from "../constants/growth";
+import { ATTUNEMENT, CARD_WEIGHT, CHARGE_RANK, MASTERY, PICK_COUNT, SKILL_MAX_LEVEL } from "../constants/growth";
+import { HONING_IDS } from "../constants/honing";
 import { ARTS } from "../stages/arts";
 import type { Build, Card } from "../types/build";
-import type { ArtId } from "../types/campaign";
+import type { ArtId, ElementId } from "../types/campaign";
 import type { CharacterDef } from "../types/character";
 import type { Boon } from "../types/skill";
-import { resonanceRanks } from "./resonance";
+import { skillSlots } from "./cardSupply";
+import { type Ranks, resonanceRanks } from "./resonance";
 import type { Rng } from "./rng";
 
-/** what a deal reads from the hero's build and the player's unlocks */
 export interface CardView {
   build: Build;
+  level: number;
+  charged: boolean;
+  isAvailable?: (skillId: string) => boolean;
 }
 
 /** a card offered with its weight in the draw */
@@ -20,7 +24,8 @@ interface Weighted {
 
 const ART_MAX_LEVEL = 5;
 
-/** what a card offers, the same for every level of it: `skill:<id>`, `charm:might`, `boon:<id>` */
+const allAvailable = (): boolean => true;
+
 export const cardKey = (card: Card): string => `${card.type}:${card.id}`;
 
 const skillCount = (b: Build): number => Object.keys(b.skills).length;
@@ -29,21 +34,26 @@ const skillCount = (b: Build): number => Object.keys(b.skills).length;
 const holdsUltimate = (c: CharacterDef, b: Build): boolean =>
   c.skills.some((s) => s.kind === "ultimate" && b.skills[s.id]);
 
-/**
- * Skills that can be dealt: a new one while a slot is free (no second ultimate), weighing `CARD_WEIGHT.newSkill`, and
- * the next level of a held one below the top, weighing `CARD_WEIGHT.skillLevel`. Evolved skills are done.
- */
-function skillCards(c: CharacterDef, b: Build): Weighted[] {
+const pullOf = (ranks: Ranks, element: ElementId): number => 1 + CARD_WEIGHT.resonancePull * ranks[element];
+
+function skillCards(c: CharacterDef, v: CardView, ranks: Ranks): Weighted[] {
+  const b = v.build;
   const out: Weighted[] = [];
-  const full = skillCount(b) >= SKILL_SLOTS;
+  const full = skillCount(b) >= skillSlots(v.level);
   const ultimate = holdsUltimate(c, b);
-  const ranks = resonanceRanks(b, c, ARTS);
+  const isAvailable = v.isAvailable ?? allAvailable;
   for (const s of c.skills) {
     const level = b.skills[s.id] ?? 0;
-    if (level >= SKILL_MAX_LEVEL || (!level && (full || (s.kind === "ultimate" && ultimate)))) continue;
-    const pull = 1 + CARD_WEIGHT.resonancePull * ranks[s.element];
-    const weight = (level ? CARD_WEIGHT.skillLevel : CARD_WEIGHT.newSkill) * pull;
-    out.push({ card: { type: "skill", id: s.id, level: level + 1 }, weight });
+    const pull = pullOf(ranks, s.element);
+    if (level >= SKILL_MAX_LEVEL) {
+      const mastery = b.mastery[s.id] ?? 0;
+      if (mastery < MASTERY.levels)
+        out.push({ card: { type: "mastery", id: s.id, level: mastery + 1 }, weight: CARD_WEIGHT.mastery * pull });
+    } else if (level) {
+      out.push({ card: { type: "skill", id: s.id, level: level + 1 }, weight: CARD_WEIGHT.skillLevel * pull });
+    } else if (!full && !(s.kind === "ultimate" && ultimate) && isAvailable(s.id)) {
+      out.push({ card: { type: "skill", id: s.id, level: 1 }, weight: CARD_WEIGHT.newSkill * pull });
+    }
   }
   return out;
 }
@@ -57,9 +67,41 @@ function artCards(b: Build): Weighted[] {
   return out;
 }
 
-/** every skill or charm card that may be dealt now, banished ones left out */
+function chargeCards(v: CardView): Weighted[] {
+  const rank = v.build.chargeRank;
+  if (!v.charged || rank >= CHARGE_RANK.ranks) return [];
+  return [{ card: { type: "charge", id: "rank", level: rank + 1 }, weight: CARD_WEIGHT.chargeRank }];
+}
+
+function attunementCards(b: Build, ranks: Ranks): Weighted[] {
+  const out: Weighted[] = [];
+  for (const element of Object.keys(ranks) as ElementId[]) {
+    const level = b.attunement[element] ?? 0;
+    if (ranks[element] - level * ATTUNEMENT.resonance <= 0 || level >= ATTUNEMENT.levels) continue;
+    out.push({ card: { type: "attunement", id: element, level: level + 1 }, weight: CARD_WEIGHT.attunement });
+  }
+  return out;
+}
+
+const honingCards = (b: Build): Weighted[] =>
+  HONING_IDS.map((id) => ({
+    card: { type: "honing", id, level: (b.honing[id] ?? 0) + 1 },
+    weight: CARD_WEIGHT.honing,
+  }));
+
+function weightedCards(c: CharacterDef, v: CardView): Weighted[] {
+  const ranks = resonanceRanks(v.build, c, ARTS);
+  return [
+    ...skillCards(c, v, ranks),
+    ...artCards(v.build),
+    ...chargeCards(v),
+    ...attunementCards(v.build, ranks),
+    ...honingCards(v.build),
+  ];
+}
+
 export function availableCards(c: CharacterDef, v: CardView): Card[] {
-  return [...skillCards(c, v.build), ...artCards(v.build)]
+  return weightedCards(c, v)
     .map((w) => w.card)
     .filter((card) => !v.build.banished.includes(cardKey(card)));
 }
@@ -85,10 +127,6 @@ function drawWeighted(pool: Weighted[], count: number, rng: Rng): Card[] {
 /** cards in a pick: three, and a fourth at `1 - 1/luck` */
 export const cardCount = (luck: number, rng: Rng): number => PICK_COUNT + (rng.chance(1 - 1 / luck) ? 1 : 0);
 
-/**
- * Deal `count` cards by weight from the hero's skills and the charms (see `skillCards` and `charmCards`). Cards whose
- * keys are banished or in `without` are left out (a reroll leaves out the cards shown); boons fill what is left.
- */
 export function dealCards(
   c: CharacterDef,
   v: CardView,
@@ -101,7 +139,6 @@ export function dealCards(
     const key = cardKey(w.card);
     return !v.build.banished.includes(key) && !without.includes(key);
   };
-  const pool = [...skillCards(c, v.build), ...artCards(v.build)].filter(open);
   const fill = boons.map((boon): Card => ({ type: "boon", id: boon.id }));
-  return [...drawWeighted(pool, count, rng), ...fill].slice(0, count);
+  return [...drawWeighted(weightedCards(c, v).filter(open), count, rng), ...fill].slice(0, count);
 }

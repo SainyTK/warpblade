@@ -85,7 +85,7 @@ When all eight rifts are sealed, the Abyss Citadel opens: the Abyss Maw, the big
 
 ## Growth: Resonance and Fusions
 
-Every level up gives a skill point.
+Every level up to 30 gives a skill point, then every second level, with an extra point at levels 50, 75 and 99.
 Spend points with a mentor in an area, or with Upgrade skills on the Rift Map, on one of three cards: a new skill, the next level of a held skill, or the next level of a Rift Art.
 
 Every skill and every Rift Art belongs to one of five elements: Blaze, Frost, Storm, Venom and Void.
@@ -145,8 +145,8 @@ From there, play again, go back to the main menu or visit the Shop.
   It comes back after a short pause, slower while the hero attacks, and a perfect dodge or a parry gives some back.
 - **Hero skills.** Every hero has 20 skills of their own, each with eight levels, an element and an evolution: attacks, movement, spells, damage over time, summons and one skill that upgrades the charged skill.
   In solo play, level-ups bank skill points without pausing the game.
-  A build holds up to 8 skills, and every run starts with 2 rerolls, 2 skips and 1 banish to steer the cards.
-  If too few cards are left, Second Wind fills the rest and restores all HP and MP.
+  A build holds 4 skills at first and up to 8 as levels 15, 30, 45 and 60 open more slots, and every run starts with 2 rerolls, 2 skips and 1 banish to steer the cards.
+  A skill at level 8 keeps growing through four mastery levels, and the cards also offer ranks for the charged skill, element attunements and stat cards, so every pick up to level 99 has something to take.
 - **Chests and evolutions.** Elites with a gold ring and bosses before The Unblinking drop chests in solo play.
   Touch a chest to open it.
   A chest raises held skills and Rift Arts, sometimes three or five at once, and a stage boss's chest always raises at least three.
@@ -256,7 +256,7 @@ Move through the menu with the arrow keys or `W` `S`, pick with `J` or `Enter`, 
 The Controls screen lists every key from the game's key map, and on touch screens the stick and buttons as they look on screen.
 Options holds sound, volume, music volume, screen shake, damage numbers, vibration on devices that can vibrate, and fullscreen, saved in this browser.
 
-Each level up gives a skill point.
+Level ups give skill points: every level up to 30, then every second level, and one more at 50, 75 and 99.
 In solo play, press `E` or tap Talk near a mentor, or press `E` on the Rift Map, to open skill choices.
 On the Rift Map, choose a stage with `A` `D` `W` `S` or the arrows and enter it with `J` or `Enter`.
 Leave to keep any points you have not spent.

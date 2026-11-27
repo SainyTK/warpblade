@@ -1,6 +1,7 @@
-import { SKILL_MAX_LEVEL } from "../../constants/growth";
+import { ATTUNEMENT, CHARGE_RANK, MASTERY, SKILL_MAX_LEVEL } from "../../constants/growth";
 import { learnRecipe } from "../../store/unlocks";
-import type { ArtId } from "../../types/campaign";
+import type { Card } from "../../types/build";
+import type { ArtId, ElementId } from "../../types/campaign";
 import { skillOf } from "../../utils/skills";
 import { feat } from "../feat";
 import { character, progress } from "../state";
@@ -27,4 +28,24 @@ export function evolveSkill(id: string): void {
   progress.build.evolved = [...progress.build.evolved, id];
   learnRecipe(id);
   feat({ kind: "evolved", skill: id });
+}
+
+export function raiseMastery(id: string): void {
+  const mastery = progress.build.mastery;
+  mastery[id] = Math.min(MASTERY.levels, (mastery[id] ?? 0) + 1);
+}
+
+function raiseAttunement(id: ElementId): void {
+  const attunement = progress.build.attunement;
+  attunement[id] = Math.min(ATTUNEMENT.levels, (attunement[id] ?? 0) + 1);
+}
+
+export function raiseCard(card: Exclude<Card, { type: "boon" }>): void {
+  const b = progress.build;
+  if (card.type === "skill") raiseSkill(card.id);
+  else if (card.type === "art") raiseArt(card.id);
+  else if (card.type === "mastery") raiseMastery(card.id);
+  else if (card.type === "charge") b.chargeRank = Math.min(CHARGE_RANK.ranks, b.chargeRank + 1);
+  else if (card.type === "attunement") raiseAttunement(card.id);
+  else b.honing[card.id] = (b.honing[card.id] ?? 0) + 1;
 }
