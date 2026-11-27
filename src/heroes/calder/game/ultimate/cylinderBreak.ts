@@ -57,7 +57,7 @@ function cut(i: number): void {
   roundBlast(x, y, hero.face, calder.hot, true);
   const last = i === calder.breakCuts - 1;
   if (i === 0 || last) {
-    const ring = { x: hero.x, y: hero.y, face: hero.face, reach: calder.breakReach * (last ? 0.7 : 0.45) };
+    const ring = { x: hero.x, y: hero.y, face: hero.face, reach: calder.breakReach * (last ? 0.4 : 0.25) };
     calderRing(BREAK_ID, "wave", ring, { damage: calder.breakBlow * (last ? calder.breakCuts : 1) });
   }
   calderFx(BREAK_ID, "burst", { x, y, face: hero.face, reach: 14 }, { damage: calder.breakBlow, quiet: !last });

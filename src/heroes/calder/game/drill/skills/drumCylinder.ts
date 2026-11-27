@@ -28,7 +28,7 @@ export const DRUM_CYLINDER_DRILL: CalderDrillSkill = {
     if (!started) {
       return;
     }
-    const spin = { x: hero.x, y: surfaceBelow(hero.x, hero.y - 2), face: hero.face, reach: 18 };
+    const spin = { x: hero.x, y: surfaceBelow(hero.x, hero.y - 2), face: hero.face, reach: 12 };
     calderRing(ID, "wave", spin, { damage: progress.stats.ad * (values.mine ?? 0.5) * (evolved ? 2 : 1) });
     if (h.airDashActive && values.airCut) {
       h.airSlashes = 0;

@@ -22,7 +22,7 @@ export const CYLINDER_BREAK_DRILL: CalderDrillSkill = {
     const power = progress.stats.ad * (tier.damage / 10) * (1 + values.tier);
     later(tier.intro, () => {
       const floor = surfaceBelow(x, y - 2);
-      calderRing(ID, "wave", { x, y: floor, face: hero.face, reach: tier.reach * 0.5 }, { damage: power });
+      calderRing(ID, "wave", { x, y: floor, face: hero.face, reach: tier.reach * 0.25 }, { damage: power });
       calderFx(
         ID,
         "burst",
