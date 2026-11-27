@@ -102,6 +102,7 @@ export interface Enemy {
   xp: number;
   /** an elite: more HP, a gold glint, and a chest when it falls */
   elite: boolean;
+  armored: boolean;
   /** seconds left slowed by a skill's cold */
   chill: number;
   /** stacking damage over time from skills (poison, bleed, burn, lodged bolts), one entry per skill id */

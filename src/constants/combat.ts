@@ -66,9 +66,17 @@ export const COMBO = {
 
 /** A minion struck by a hero's blow staggers: its wind-up or attack is cut and it cannot act until it steadies.
  *  Mini bosses and bosses never stagger. */
+export const FLINCH = {
+  cooldownPace: 0.6,
+  reach: 56,
+  lift: 84,
+  hitStagger: 0.3,
+  attackLock: 1.2,
+  armoredFrom: 48,
+} as const;
+
 export const STAGGER = {
-  /** blows in a row a minion staggers for before it braces, and an elite */
-  limit: 7,
+  /** blows in a row an elite staggers for before it braces */
   eliteLimit: 4,
   /** seconds a braced foe cannot be staggered */
   brace: 1.6,
