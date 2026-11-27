@@ -1,7 +1,8 @@
 import { drillFighter } from "../../../../../drill";
 import { staggerFoe } from "../../../../../game/enemies/stagger";
-import { hero } from "../../../../../game/state";
+import { hero, progress } from "../../../../../game/state";
 import type { CeriseDrillSkill } from "../../../types/drillSkill";
+import { atFloor, atHero, ceriseFx } from "../../fx";
 import { roseMark } from "../../mark";
 import { foesNear, skillStrike } from "./strike";
 
@@ -27,6 +28,9 @@ export const ROSE_MARK_DRILL: CeriseDrillSkill = {
     if (moment !== "arrival" || !h) {
       return;
     }
+    const damage = progress.stats.ad * (1 + values.warp + (values.pierce ?? 0)) * 2;
+    ceriseFx(ID, "mark", atHero(14, 18), { damage, sigil: "rose" });
+    ceriseFx(ID, "nova", atFloor(hero.x, hero.y, evolved ? values.garden : 22), { damage, quiet: true });
     if (values.pierce) {
       for (const foe of foesNear(hero.x + hero.face * 40, hero.y - 16, 30)) {
         skillStrike(foe, values.pierce, ID);

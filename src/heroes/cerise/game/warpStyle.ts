@@ -1,12 +1,13 @@
 import { createSlash } from "../../../game/effects/slash";
 import { meleeHit } from "../../../game/meleeHit";
 import { skillValues } from "../../../game/skills/query";
-import { game, hero } from "../../../game/state";
+import { game, hero, progress } from "../../../game/state";
 import { boxAhead } from "../../../game/world";
 import type { Enemy } from "../../../types/enemy";
 import type { WarpStyle } from "../../../types/moveset";
 import { RIPOSTE } from "../constants/guard";
 import { LUNGE_BOX } from "../constants/string";
+import { atFloor, atHero, ceriseFx } from "./fx";
 import { roseMark } from "./mark";
 import { LUNGE_STREAK, THRUST } from "./moves/slashes";
 import { gainPoints } from "./points";
@@ -21,6 +22,10 @@ function strike(power: number, _foe: Enemy | null, sureCrit: boolean): void {
 /** after the thrust: the Rose mark on the foe it was thrown at, and a Point with Rose Mark */
 function arrived(foe: Enemy | null): void {
   if (foe && foe.hp > 0) roseMark(foe);
+  const v = skillValues("ce_markwarp");
+  const damage = progress.stats.ad * (1 + (v.warp ?? 0) + (v.pierce ?? 0)) * 2;
+  ceriseFx("ce_markwarp", "mark", atHero(14, 18), { damage, sigil: "rose" });
+  ceriseFx("ce_markwarp", "nova", atFloor(hero.x, hero.y, v.seal ?? 22), { damage, quiet: true });
   gainPoints(skillValues("ce_markwarp").points ?? 0);
 }
 

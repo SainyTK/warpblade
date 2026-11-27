@@ -11,6 +11,7 @@ import { game, hero, progress, rng } from "../../../../game/state";
 import { surfaceBelow } from "../../../../game/world";
 import type { SkillBehavior, SkillMemory } from "../../../../types/skillBehavior";
 import { ROSE_RAMP, ROSE_SPARKS } from "../../look/rose";
+import { atFloor, ceriseFx } from "../fx";
 
 const SOURCE = "ce_sentinel";
 /** a sentinel is planted this far ahead of her, and its rapier stands this tall */
@@ -39,12 +40,20 @@ function thrust(s: Sentinel): void {
   dealDamage(foe, progress.stats.ad * v.power, { fromX: s.x, kx: s.face * 30, stagger: 0.3, source: SOURCE });
   if (v.pin) foe.pinned = Math.max(foe.pinned, v.pin);
   game.fx.push(createImpact(ex, ey, s.face, false, ROSE_SPARKS));
+  const top = s.y - PLANT.height + 4;
+  ceriseFx(
+    SOURCE,
+    "trail",
+    { x: s.x, y: top, face: s.face, toX: ex, toY: ey },
+    { damage: progress.stats.ad * v.power, quiet: true },
+  );
 }
 
 /** evolved: the sentinel bursts into petal blades as it fades */
 function fade(s: Sentinel): void {
   if (!skillEvolved(SOURCE)) return;
   game.fx.push(createFloorRing(s.x, s.y, 36, ROSE_RAMP, 0.4));
+  ceriseFx(SOURCE, "nova", atFloor(s.x, s.y, 36), { damage: progress.stats.ad * skillValues(SOURCE).bloom * 2 });
   for (const e of game.enemies)
     if (e.hp > 0 && touches(e, s.x, s.y - 12, 36))
       dealDamage(e, progress.stats.ad * skillValues(SOURCE).bloom, { fromX: s.x, kx: 0, source: SOURCE });
@@ -56,6 +65,19 @@ function plant(m: SkillMemory): void {
   const x = hero.x + hero.face * PLANT.ahead;
   const y = Math.min(GROUND, surfaceBelow(x, hero.y - 4));
   const kept = list(m).slice(Math.max(0, list(m).length - (v.most - 1)));
+  ceriseFx(
+    SOURCE,
+    "pillar",
+    { x, y, face: hero.face, reach: 24 },
+    { damage: progress.stats.ad * v.power * 3, sigil: "needle", lift: 24 },
+  );
+  if (skillEvolved(SOURCE))
+    ceriseFx(
+      SOURCE,
+      "spikes",
+      { x, y, face: hero.face, reach: 18 },
+      { damage: progress.stats.ad * v.power * 3, quiet: true },
+    );
   m.list = [...kept, { x, y, left: withBuild("duration", v.time), next: 0.15, flash: 0, face: hero.face }];
 }
 

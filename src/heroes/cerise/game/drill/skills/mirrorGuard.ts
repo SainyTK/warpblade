@@ -2,6 +2,7 @@ import { markFoe } from "../../../../../game/enemies/skillStatus";
 import { game, hero, progress } from "../../../../../game/state";
 import type { CeriseDrillSkill } from "../../../types/drillSkill";
 import { createRoseLine } from "../../effects/roseLine";
+import { atFloor, atFoe, ceriseFx } from "../../fx";
 import { roseMark } from "../../mark";
 import { foesNear, spellStrike } from "./strike";
 
@@ -14,6 +15,9 @@ export const MIRROR_GUARD_DRILL: CeriseDrillSkill = {
       return;
     }
     spellStrike(foe, values.line, ID);
+    const blow = progress.stats.ap * values.line * 2;
+    ceriseFx(ID, "slash", atFoe(foe, 16, -(Math.sign(foe.x - hero.x) || hero.face)), { damage: blow, sigil: "thrust" });
+    if (evolved) ceriseFx(ID, "spikes", atFloor(foe.x, foe.y, values.garden * 0.5), { damage: blow, quiet: true });
     if (values.taken) {
       markFoe(foe, ID, 3, values.taken);
     }

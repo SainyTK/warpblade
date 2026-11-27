@@ -8,6 +8,7 @@ import { nearestFoe } from "../../../../game/skills/targets";
 import { game, hero, progress, rng } from "../../../../game/state";
 import type { SkillBehavior, SkillMemory } from "../../../../types/skillBehavior";
 import { ROSE_RAMP, ROSE_SPARKS } from "../../look/rose";
+import { atFloor, atFoe, ceriseFx } from "../fx";
 
 const SOURCE = "ce_petals";
 /** the blades circle her this far out and dart at foes within this reach */
@@ -34,6 +35,7 @@ function dart(): void {
   if (Math.hypot(x - hero.x, y - hero.y + 18) > ORBIT.reach) return;
   dealDamage(foe, progress.stats.ad * v.power, { fromX: hero.x, kx: 0, stagger: 0.2, source: SOURCE });
   game.fx.push(createImpact(x, y, Math.sign(x - hero.x) || 1, false, ROSE_SPARKS));
+  ceriseFx(SOURCE, "burst", atFoe(foe, 7), { damage: progress.stats.ad * v.power, quiet: true });
   if (v.bleed)
     addStacks(foe, SOURCE, { stacks: 1, max: 5, damage: progress.stats.ad * v.bleed, every: 0.5, duration: 3 });
 }
@@ -71,8 +73,23 @@ export const petalBlades: SkillBehavior = {
     cast(m) {
       const b = blades(m);
       const v = skillValues(SOURCE);
-      if (skillEvolved(SOURCE) || b.cd > 0 || !rng.chance(v.chance)) return;
+      if (b.cd > 0) return;
+      if (skillEvolved(SOURCE)) {
+        b.cd = v.cd;
+        ceriseFx(SOURCE, "nova", atFloor(hero.x, hero.y, 22), {
+          damage: progress.stats.ad * v.power * count() * 2,
+          sigil: "rose",
+          lift: 18,
+        });
+        return;
+      }
+      if (!rng.chance(v.chance)) return;
       b.left = withBuild("duration", v.life);
+      ceriseFx(SOURCE, "nova", atFloor(hero.x, hero.y, 18), {
+        damage: progress.stats.ad * v.power * count() * 2,
+        sigil: "rose",
+        lift: 18,
+      });
       b.next = 0;
       b.cd = v.cd;
     },

@@ -1,7 +1,8 @@
 import { drillFighter } from "../../../../../drill";
 import { markFoe } from "../../../../../game/enemies/skillStatus";
-import { hero } from "../../../../../game/state";
+import { hero, progress } from "../../../../../game/state";
 import type { CeriseDrillSkill } from "../../../types/drillSkill";
+import { atFloor, ceriseFx } from "../../fx";
 import { foesNear, skillStrike } from "./strike";
 
 const ID = "ce_pin";
@@ -18,6 +19,9 @@ export const PINNING_POINT_DRILL: CeriseDrillSkill = {
     foe.pinned = Math.max(foe.pinned, values.pin);
     foe.halt = Math.max(foe.halt, values.pin);
     skillStrike(foe, values.air, ID);
+    const damage = progress.stats.ad * (values.air + (evolved ? values.skewer : 0)) * 2;
+    ceriseFx(ID, "spikes", atFloor(foe.x, foe.y, 16), { damage, sigil: "needle", lift: 22 });
+    if (evolved) ceriseFx(ID, "pillar", atFloor(foe.x, foe.y, 30), { damage, quiet: true });
     if (values.held) {
       markFoe(foe, ID, values.pin + 1, values.held);
     }

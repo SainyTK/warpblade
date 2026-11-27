@@ -3,6 +3,7 @@ import { skillValues, withBuild } from "../../../game/skills/query";
 import { game, hero, progress } from "../../../game/state";
 import type { Enemy } from "../../../types/enemy";
 import { createGlassRapier } from "./effects/glassRapier";
+import { atFoe, atHero, ceriseFx } from "./fx";
 import { gainPoints } from "./points";
 
 /** the foes Feint has opened and the seconds left on each; holds foes, so only the host keeps it */
@@ -15,6 +16,9 @@ export function feint(e: Enemy): void {
   const v = skillValues("ce_feint");
   if (!v.open) return;
   opened.list = [...opened.list.filter((o) => o.foe !== e), { foe: e, left: withBuild("duration", v.openTime) }];
+  const damage = progress.stats.ad * (1 + v.open + (v.phantom ?? 0));
+  ceriseFx("ce_feint", "slash", atHero(18), { damage, sigil: "thrust" });
+  if (v.phantom) ceriseFx("ce_feint", "slash", atFoe(e, 16, -hero.face), { damage, quiet: true, delay: 0.12 });
   if (v.turn && e.rank === "minion") e.face = Math.sign(e.x - hero.x) || e.face;
   if (v.points) gainPoints(v.points);
   if (v.phantom) {

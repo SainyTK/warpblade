@@ -7,6 +7,7 @@ import { game, hero, progress } from "../../../game/state";
 import { boxAhead, newSwing } from "../../../game/world";
 import { ROSE_LINE } from "../constants/abilities";
 import { createRoseLine } from "./effects/roseLine";
+import { atFloor, ceriseFx } from "./fx";
 
 /** Swallow Dive's landing cut reaches this far on each side */
 const LAND_REACH = 30;
@@ -17,6 +18,9 @@ export function diveLanded(): void {
   if (!v.land) return;
   const reach = withBuild("area", LAND_REACH + (v.ring ?? 0));
   newSwing();
+  const damage = progress.stats.ad * v.land * 2;
+  ceriseFx("ce_dive", "pillar", atFloor(hero.x, hero.y, 30), { damage, sigil: "needle", lift: 30 });
+  ceriseFx("ce_dive", "nova", atFloor(hero.x, hero.y, reach * 0.6), { damage, quiet: true });
   game.fx.push(createFloorRing(hero.x, hero.y, reach, skin.ramp, 0.35));
   meleeHit([boxAhead(-reach, -22, reach, 4)], {
     power: v.land,
@@ -27,6 +31,6 @@ export function diveLanded(): void {
     feel: FEEL.firm,
   });
   if (!v.lines) return;
-  const damage = progress.stats.ap * ROSE_LINE.power * v.linePower;
-  for (const dir of [1, -1]) game.fx.push(createRoseLine(hero.x, hero.y - 6, dir, damage, "attacks"));
+  const lineDamage = progress.stats.ap * ROSE_LINE.power * v.linePower;
+  for (const dir of [1, -1]) game.fx.push(createRoseLine(hero.x, hero.y - 6, dir, lineDamage, "attacks"));
 }

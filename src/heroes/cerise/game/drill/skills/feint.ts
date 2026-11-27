@@ -4,6 +4,7 @@ import { staggerFoe } from "../../../../../game/enemies/stagger";
 import { game, hero, progress } from "../../../../../game/state";
 import type { CeriseDrillSkill } from "../../../types/drillSkill";
 import { createGlassRapier } from "../../effects/glassRapier";
+import { atFoe, atHero, ceriseFx } from "../../fx";
 import { foesAhead, skillStrike } from "./strike";
 
 const ID = "ce_feint";
@@ -16,6 +17,9 @@ export const FEINT_DRILL: CeriseDrillSkill = {
       return;
     }
     markFoe(foe, ID, values.openTime, values.open);
+    const damage = progress.stats.ad * (1 + values.open + (evolved ? values.phantom : 0));
+    ceriseFx(ID, "slash", { ...atHero(18), face: hero.face }, { damage, sigil: "thrust" });
+    if (evolved) ceriseFx(ID, "slash", atFoe(foe, 16, -hero.face), { damage, quiet: true, delay: 0.08 });
     if (values.stagger) {
       staggerFoe(foe, values.stagger);
     }

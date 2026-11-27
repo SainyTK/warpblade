@@ -1,6 +1,7 @@
 import { game, progress } from "../../../../../game/state";
 import type { CeriseDrillSkill } from "../../../types/drillSkill";
 import { createRoseLine } from "../../effects/roseLine";
+import { atFloor, ceriseFx } from "../../fx";
 import { roseMark } from "../../mark";
 import { foesNear } from "./strike";
 
@@ -15,6 +16,20 @@ export const ROSE_TEMPEST_DRILL: CeriseDrillSkill = {
   },
   released(cast, { values, evolved }) {
     const reach = cast.tier.reach * (1 + (values.reach ?? 0));
+    const blow = (cast.tier.damage / 10) * progress.stats.ad * (1 + values.tier);
+    ceriseFx(ID, "pillar", atFloor(cast.x + cast.face * 14, cast.y, 30 + cast.tier.level * 4, cast.face), {
+      damage: blow,
+      sigil: "rose",
+      lift: 34,
+    });
+    ceriseFx(ID, "nova", atFloor(cast.x, cast.y, reach * 0.6, cast.face), { damage: blow, quiet: true });
+    for (const side of evolved ? [-1, 1] : []) {
+      ceriseFx(ID, "pillar", atFloor(cast.x + side * reach * 0.6, cast.y, 26, cast.face), {
+        damage: blow,
+        quiet: true,
+        delay: 0.08,
+      });
+    }
     const struck = foesNear(cast.x, cast.y - 20, reach);
     if (values.mark) {
       for (const foe of struck) {

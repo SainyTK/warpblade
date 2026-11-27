@@ -10,6 +10,7 @@ import { sfx } from "../../../../services/audio";
 import { TEMPEST } from "../../constants/tempest";
 import { ROSE_RAMP } from "../../look/rose";
 import { createRoseLine } from "../effects/roseLine";
+import { atFloor, ceriseFx } from "../fx";
 import { roseMark } from "../mark";
 import { THRUST } from "../moves/slashes";
 import { cerise } from "../state";
@@ -54,6 +55,19 @@ function stormThrust(i: number): void {
 function lunge(): void {
   const v = ultimateValues();
   cerise.tempestLunged = true;
+  const blow = levelDamage() * TEMPEST.lunge * (v.power ?? 1) * (v.lunge ?? 1);
+  const ly = hero.y - 17;
+  ceriseFx("ce_tempest", "pillar", atFloor(hero.x, hero.y, 30 + cerise.tempestLevel * 4), {
+    damage: blow,
+    sigil: "rose",
+    lift: 34,
+  });
+  ceriseFx(
+    "ce_tempest",
+    "trail",
+    { x: hero.x, y: ly, face: hero.face, toX: hero.x + hero.face * 80, toY: ly },
+    { damage: blow, quiet: true },
+  );
   const reach = TEMPEST.reach[cerise.tempestLevel - 1] * (v.reach ?? 1);
   const damage = levelDamage() * TEMPEST.lunge * (v.power ?? 1) * (v.lunge ?? 1);
   const y = hero.y - 17;
@@ -91,6 +105,14 @@ export function runTempest(): void {
 function finale(): void {
   newSwing();
   const v = ultimateValues();
+  const blow = levelDamage() * v.finale;
+  ceriseFx("ce_tempest", "nova", atFloor(hero.x, hero.y, 48), { damage: blow });
+  for (const side of [-1, 1])
+    ceriseFx("ce_tempest", "pillar", atFloor(hero.x + side * 30, hero.y, 26), {
+      damage: blow,
+      quiet: true,
+      delay: 0.08,
+    });
   pointStrike([boxAhead(-48, -40, 48, 2)], {
     damage: levelDamage() * v.finale,
     source: "ultimate",
