@@ -160,11 +160,13 @@ Points bank while the hero fights; the cards open 0.9 s after each beat ends (`R
 ### Foe power by level band
 
 A foe's level band is the level the arc places it at: by its place along the approach, its place in a surge's stream, or the level its big-foe beat starts at.
-The hero's expected damage at a level is a table of anchors interpolated geometrically (`EXPECTED_HERO_DAMAGE`): x1 at level 1, x3 at 15, x12 at 30, x50 at 50, x350 at 80 and x700 at 99.
+The hero's expected damage at a level is a table of anchors interpolated geometrically (`EXPECTED_HERO_DAMAGE`): x1 at level 1, x3 at 15, x40 at 30, x300 at 50, x24,000 at 80 and x150,000 at 99.
+The late anchors are that high because a full stage's build compounds: skills, masteries, chests, evolutions, Resonance procs and Flow multiply each other, and the scripted runs below killed a 21 million HP Oakheart in 6 to 7 s at level 93 before this table.
 
 - Minion HP = its base HP x expected damage x `TIME_TO_KILL.minion` (4.5) x crowd toughness x the stage's HP multiplier.
-  Crowd toughness (`CROWD_TOUGHNESS`) is x1 to level 45, x4 at 55 and x6 at 99: area hits, arcs and echoes clear crowds much faster late than single-target damage grows.
-- Elite, mini boss and boss HP = `HERO_DPS_AT_LEVEL_1` (30) x expected damage at the level they are fought at x `TIME_TO_KILL` (elite 20, mini boss 85, boss 150) x the stage's HP multiplier.
+  Crowd toughness (`CROWD_TOUGHNESS`) is x1 to level 45, x5.8 at 55, x0.97 at 80 and x0.36 at 99: crowd clearing jumps around level 50 as area skills and procs arrive, then grows more slowly than damage to one target, which the boss anchors follow.
+- Elite, mini boss and boss HP = `HERO_DPS_AT_LEVEL_1` (30) x expected damage at the level they are fought at x `TIME_TO_KILL` (elite 20, mini boss 170, boss 150) x the stage's HP multiplier.
+- Death bursts (Wildfire, Shatter, Plague) deal their share of the fallen foe's max HP, but at most 2% of a mini boss's or boss's own max HP (`BIG_FOE_BURST_CAP`), so a dying crowd does not melt the boss.
 - Damage = `1 + 0.015 x (level - 1)` (x2.47 at 99) x the stage's damage multiplier; bosses and mini bosses x1.25 more and their own profile power.
 - Attack pace follows the wave the band matches, `bandWave = 1 + 29 x (level - 1) / 98`, through the existing aggression scaling.
 
@@ -223,17 +225,22 @@ A mini boss is one of its stage's own foes, drawn with its art inside a ring in 
 
 ### Tuning record
 
-Measured on 27 November 2026 with a scripted Kael in headless Chromium that mashes attacks and spells, takes the first card of every pick and is kept above half HP, in Storm Marsh (tier 2), 25 to 40 s per sample, starting at the arc's level with `?stage=&section=&level=`:
+Measured on 27 November 2026 with a scripted Kael in headless Chromium (`/tmp` scripts, not in the repo) that walks right, mashes attacks and spells, jumps walls, takes the first card of every pick and the chests, and is healed back to half HP whenever it drops lower, so it never falls.
+Full runs of the Sunlit Ruins from the stage screen, game time:
 
-| Sample | Before tuning | After |
-| --- | --- | --- |
-| Opening surge, level 4 to 8 | 1.2 kills a second | 1.1 kills a second |
-| Middle surge, level 18 to 21 | 1.3 kills a second | 1.1 kills a second |
-| Final surge, level 54 to 65 | 4.3 kills a second | 2.5 kills a second, before the last crowd toughness step |
-| The Mire King at 44 | 24 s | 46 s |
-| Bog Hulk at 94 | | 132 s |
+| Run | Tuning | Opening (to level 15) | Middle (to the mini boss) | Mini boss fight | Final act | Boss fight | Whole stage |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| 1 | first curve | 3.6 min | 4.4 min | 18 s | 3.3 min | 10 s | 12.1 min |
+| 2 | x2 to x13 late | 4.0 min | 6.9 min | 14 s | 8.9 min | 6 s | 20.1 min |
+| 3 | same | 3.6 min | 4.2 min | 16 s | 2.7 min | 7 s | 11.1 min |
+| 4 | death bursts capped | 3.5 min | 5.1 min | 28 s | 2.8 min | 22 s | 12.3 min |
+| 5 | final curve | 3.5 min | 5.4 min | 25 s | 11.5 min | 95 s | 22.6 min |
 
-The bot never dodges and cannot die, so a player takes longer; the mini boss and boss targets of 45 to 60 s and 2 to 3 min are set against the bot at about 0.8 of the player's time.
+After run 5 the mini boss time to kill was doubled (85 to 170) for a 45 to 60 s fight.
+The bot never dodges and cannot die, so a player is slower in every column; the targets (about 25 minutes, a 45 to 60 s mini boss, a 2 to 3 min boss) are set against the bot at about 0.8 of a player's time.
+The runs vary a lot with the cards the bot is dealt (compare runs 2 and 3, same tuning): a build that stacks one element snowballs.
+A Storm Marsh run (tier 2) on the run 2 curve took 5.7 min to level 15 and 5.4 min more to the mini boss.
+One Frostglass Caverns run on the final curve reached level 73 at 23 min.
 
 ## Experience and picks
 
