@@ -1,6 +1,7 @@
 import { SPARKS } from "../../../../constants/palette";
 import { enemyCenter } from "../../../../game/enemies/enemy";
 import { addStacks, stacksOf } from "../../../../game/enemies/skillStatus";
+import { skillFx } from "../../../../game/skillFx";
 import { skillEvolved, skillValues, withBuild } from "../../../../game/skills/query";
 import { foesOnScreen } from "../../../../game/skills/targets";
 import { fxRng, game, hero, particles, progress } from "../../../../game/state";
@@ -36,11 +37,14 @@ function charge(e: Enemy): void {
     every: STATIC.every,
     duration: skillEvolved(ID) ? STATIC.forever : withBuild("duration", v.life),
   });
+  const [x, y] = enemyCenter(e);
+  skillFx(ID, "mark", { x, y }, { quiet: true, damage: progress.stats.ap * v.tick });
 }
 
 /** lightning on a charged foe, arcing on; `source` is the press it rides or the skill itself */
 function strike(e: Enemy, damage: number, arcDamage: number, arcs: number, source: string): void {
   const [x, y] = enemyCenter(e);
+  skillFx(ID, "bolt", { x, y, reach: y - 8 }, { damage, quiet: source !== ID });
   game.fx.push(createLightning(e, [x, y], { damage, arcDamage, arcs, shock: 0.5, glow: 0.5, skyFlash: false, source }));
 }
 
@@ -105,6 +109,10 @@ export const staticCharge: SkillBehavior = {
   on: {
     dash(memory, ev, state) {
       for (const e of ev.foes) if (e.hp > 0) charge(e);
+      if (ev.foes.length > 0) {
+        const from = hero.x - ev.dir * 48;
+        skillFx(ID, "trail", { x: from, y: hero.y - 14, face: ev.dir, toX: hero.x, toY: hero.y - 14 });
+      }
       if (state.evolved) overload(memoryOf(memory));
     },
     blow(memory, ev) {

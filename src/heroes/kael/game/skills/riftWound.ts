@@ -1,14 +1,14 @@
-import { PAL } from "../../../../constants/palette";
+import { ELEMENT_FX } from "../../../../constants/skillFx";
 import { fleck, glow, hairline, place, polygon } from "../../../../engine/frame";
 import { dealDamage } from "../../../../game/damage";
 import { createFloorRing } from "../../../../game/effects/floorRing";
 import { createImpact } from "../../../../game/effects/impact";
 import { enemyCenter } from "../../../../game/enemies/enemy";
 import { addStacks, consumeStacks, stacksOf } from "../../../../game/enemies/skillStatus";
+import { skillFx } from "../../../../game/skillFx";
 import { skillValues, withBuild } from "../../../../game/skills/query";
 import { foesOnScreen } from "../../../../game/skills/targets";
-import { fxRng, game, lights, particles, progress } from "../../../../game/state";
-import { shake } from "../../../../game/world";
+import { fxRng, game, particles, progress } from "../../../../game/state";
 import type { Enemy } from "../../../../types/enemy";
 import { PK } from "../../../../types/particle";
 import type { SkillBehavior, SkillMemory } from "../../../../types/skillBehavior";
@@ -17,6 +17,7 @@ import { TAU } from "../../../../utils/math";
 import { isLocked, lockFoe, pruneLock, type SpreadLock } from "./spreadLock";
 
 const ID = "k_rift";
+const VENOM = ELEMENT_FX.venom.ramp;
 /** seconds between the wound's ticks; how far a new layer reaches the nearest foe; how long a collapse's layers keep a
  *  foe from collapsing in turn */
 const RIFT = { every: 0.5, spreadReach: 40, collapseLock: 1, pull: 220 } as const;
@@ -46,6 +47,7 @@ function wound(m: RiftMemory, e: Enemy, n: number, spreads: boolean): void {
   });
   if (v.slow) e.chill = Math.max(e.chill, life);
   const [x, y] = enemyCenter(e);
+  skillFx(ID, "mark", { x, y }, { quiet: true, damage: progress.stats.ad * v.per * n * life });
   for (let i = 0; i < 6; i++)
     particles.spawn(
       PK.STREAK,
@@ -55,7 +57,7 @@ function wound(m: RiftMemory, e: Enemy, n: number, spreads: boolean): void {
       -fxRng.range(10, 30),
       fxRng.range(0.2, 0.4),
       {
-        col: fxRng.pick([PAL.shadow[4], PAL.shadow[5]]),
+        col: fxRng.pick([VENOM[4], VENOM[5]]),
       },
     );
   if (v.spread && spreads && !isLocked(m.lock, e)) {
@@ -77,10 +79,11 @@ function collapse(m: RiftMemory, e: Enemy): void {
   const layers = consumeStacks(e, ID);
   const [x, y] = enemyCenter(e);
   dealDamage(e, progress.stats.ad * v.per * layers * left * v.collapse, { fromX: x, heavy: true, source: ID });
-  game.fx.push(createFloorRing(x, y, v.pull, PAL.shadow, 0.5, 0.6));
-  game.fx.push(createImpact(x, y, 1, true, PAL.shadow));
-  lights.add(x, y, 70, PAL.shadow[4], 0.9, 0.5);
-  shake(0.22, 3);
+  const blow = progress.stats.ad * v.per * layers * left * v.collapse;
+  game.fx.push(createFloorRing(x, y, v.pull, VENOM, 0.5, 0.6));
+  game.fx.push(createImpact(x, y, 1, true, VENOM));
+  skillFx(ID, "burst", { x, y, reach: 12 }, { damage: blow });
+  skillFx(ID, "nova", { x, y: e.y, reach: v.pull * 0.5 }, { damage: blow, quiet: true });
   for (const f of foesOnScreen()) {
     if (f === e || Math.hypot(enemyCenter(f)[0] - x, enemyCenter(f)[1] - y) > v.pull) continue;
     f.vx += Math.sign(x - f.x) * RIFT.pull;
@@ -94,7 +97,7 @@ function drawWound(e: Enemy): void {
   const n = stacksOf(e, ID);
   if (!n) return;
   const [x, y] = enemyCenter(e);
-  const S = PAL.shadow;
+  const S = VENOM;
   const h = 3 + n * 2;
   const half = WOUND.width + n * WOUND.widen;
   const wob = Math.sin(game.t * 9 + e.seed * TAU) * 0.6;

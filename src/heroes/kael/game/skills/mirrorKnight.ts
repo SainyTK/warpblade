@@ -9,6 +9,7 @@ import { createImpact } from "../../../../game/effects/impact";
 import { createSlash } from "../../../../game/effects/slash";
 import { createWarpLine } from "../../../../game/effects/warpLine";
 import { enemyBox, enemyCenter, walks } from "../../../../game/enemies/enemy";
+import { skillFx } from "../../../../game/skillFx";
 import { skillValues, withBuild } from "../../../../game/skills/query";
 import { foesOnScreen } from "../../../../game/skills/targets";
 import { game, hero, lights, progress } from "../../../../game/state";
@@ -56,6 +57,13 @@ function warpStrike(m: KnightMemory, foe: Enemy): void {
   showPhantom(x, y, -side, KNIGHT.show);
   game.fx.push(createSlash(x, y, -side, KNIGHT_SLASH));
   const [ex, ey] = enemyCenter(foe);
+  skillFx(
+    ID,
+    "slash",
+    { x: x - side * 4, y: y - 18, face: -side, reach: 18 },
+    { damage: progress.stats.ad * v.strike },
+  );
+  skillFx(ID, "trail", { x: m.x, y: m.y - 18, face: side, toX: x, toY: y - 18 }, { quiet: true });
   game.fx.push(createImpact(ex, ey, -side, true));
   dealDamage(foe, progress.stats.ad * v.strike, {
     fromX: x,
@@ -78,13 +86,19 @@ function reflect(): void {
   const attacker = foes.sort((a, b) => Math.abs(a.x - hero.x) - Math.abs(b.x - hero.x))[0];
   game.slow = Math.max(game.slow, REFLECT_SLOW);
   game.fx.push(createFloorRing(hero.x, hero.y, reach, KEEN_RAMP, 0.6));
-  lights.add(hero.x, hero.y - 18, reach, PAL.crystal[4], 1, 0.5);
-  lights.add(hero.x, hero.y - 18, 24, WHITE, 0.9, 0.15);
+  lights.add(hero.x, hero.y - 18, reach, PAL.crystal[4], 0.45, 0.5);
+  lights.add(hero.x, hero.y - 18, 24, WHITE, 0.4, 0.15);
   for (const e of foes) {
     const [ex, ey] = enemyCenter(e);
     const side = Math.sign(ex - hero.x) || 1;
     showPhantom(ex + side * 12, walks(e) ? e.y : Math.min(GROUND, ey + 18), -side, 0.5);
     game.fx.push(createSlash(ex, ey + 20, -side, { ...KNIGHT_SLASH, ramp: KEEN_RAMP }));
+    skillFx(
+      ID,
+      "slash",
+      { x: ex + side * 8, y: ey, face: -side, reach: 20 },
+      { damage: progress.stats.ad * v.reflect, quiet: e !== attacker },
+    );
     dealDamage(e, progress.stats.ad * (e === attacker ? v.reflect : v.reflectArea), {
       fromX: ex + side * 12,
       kx: side * 60,
@@ -156,6 +170,8 @@ const knight: SkillBehavior = {
       const box = enemyBox(ev.foe);
       const x = side > 0 ? box[2] + 9 : box[0] - 9;
       showPhantom(x, walks(ev.foe) ? ev.foe.y : hero.y, -side, KNIGHT.show);
+      const [cx, cy] = enemyCenter(ev.foe);
+      skillFx(ID, "slash", { x: cx + side * 6, y: cy, face: -side, reach: 14 }, { quiet: true, delay: 0.08 });
       game.fx.push(createEcho(ev.foe, progress.stats.ad * copyPower(ev.move as KaelMoveId | null) * v.copy, -side, ID));
     },
   },

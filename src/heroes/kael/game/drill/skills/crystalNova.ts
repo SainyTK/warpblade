@@ -1,4 +1,5 @@
-import { game } from "../../../../../game/state";
+import { skillFx } from "../../../../../game/skillFx";
+import { game, progress } from "../../../../../game/state";
 import type { KaelDrillSkill } from "../../../types/drillSkill";
 import { later } from "../later";
 import { skillStrike } from "../strike";
@@ -14,6 +15,9 @@ export const CRYSTAL_NOVA_DRILL: KaelDrillSkill = {
   },
   released({ tier, x, y, face }, { values, evolved }) {
     const reach = tier.reach * (1 + (values.reach ?? 0));
+    const power = progress.stats.ad * (tier.damage / 10) * (1 + values.tier);
+    skillFx(ID, "nova", { x, y, face, reach: reach * 0.6 }, { damage: power });
+    skillFx(ID, "pillar", { x, y, face, reach: 36 }, { damage: power, quiet: true, delay: 0.05 });
     const caught = () =>
       game.enemies.filter((foe) => {
         const delta = foe.x - x;
@@ -26,6 +30,7 @@ export const CRYSTAL_NOVA_DRILL: KaelDrillSkill = {
       }
     }
     const echo = (share: number) => () => {
+      skillFx(ID, "nova", { x, y, face, reach: reach * 0.5 }, { damage: power * share, quiet: share < 1 });
       for (const foe of caught()) {
         skillStrike(foe, (tier.damage / 10) * share, ID);
       }

@@ -1,6 +1,8 @@
 import { drillFighter } from "../../../../../drill";
 import { staggerFoe } from "../../../../../game/enemies/stagger";
-import { hero } from "../../../../../game/state";
+import { skillFx } from "../../../../../game/skillFx";
+import { hero, progress } from "../../../../../game/state";
+import { surfaceBelow } from "../../../../../game/world";
 import type { KaelDrillSkill } from "../../../types/drillSkill";
 import { foesNear, skillStrike } from "../strike";
 
@@ -21,7 +23,12 @@ export const WARPCRAFT_DRILL: KaelDrillSkill = {
     if (strike !== "warp" || !h) {
       return;
     }
+    const floor = surfaceBelow(h.x, h.y - 2);
+    const power = progress.stats.ad * (1 + values.damage) * 1.8;
+    skillFx(ID, "pillar", { x: h.x + h.face * 6, y: floor, reach: 30 }, { damage: power });
     if (values.blast) {
+      const ring = { x: h.x, y: floor, reach: values.blast };
+      skillFx(ID, "nova", ring, { damage: progress.stats.ad * values.blastPower, quiet: true });
       for (const foe of foesNear(h.x, h.y - 16, values.blast)) {
         skillStrike(foe, values.blastPower, ID);
         if (values.stagger) {

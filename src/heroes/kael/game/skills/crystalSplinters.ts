@@ -4,6 +4,7 @@ import { dealDamage } from "../../../../game/damage";
 import { createImpact } from "../../../../game/effects/impact";
 import { enemyCenter } from "../../../../game/enemies/enemy";
 import { addStacks, consumeStacks, stacksOf } from "../../../../game/enemies/skillStatus";
+import { skillFx } from "../../../../game/skillFx";
 import { skillValues, withBuild } from "../../../../game/skills/query";
 import { foesOnScreen } from "../../../../game/skills/targets";
 import { fxRng, game, particles, progress } from "../../../../game/state";
@@ -45,6 +46,8 @@ export function lodge(e: Enemy, n: number): void {
     every: SPLINTER.every,
     duration: withBuild("duration", v.life),
   });
+  const [x, y] = enemyCenter(e);
+  skillFx(ID, "mark", { x, y }, { quiet: true, damage: progress.stats.ad * v.per * n });
 }
 
 /** a burst of crystal flecks from a foe */
@@ -69,6 +72,7 @@ function shatter(e: Enemy): void {
   flecks(x, y, 6 + n * 2);
   game.fx.push(createImpact(x, y, 1, true, SPARKS.crystal));
   const damage = progress.stats.ad * v.shatter * n;
+  skillFx(ID, "burst", { x, y, reach: reach * 0.4 }, { damage });
   for (const f of foesOnScreen()) {
     const [fx, fy] = enemyCenter(f);
     if (f === e || Math.hypot(fx - x, fy - y) <= reach)
@@ -101,6 +105,7 @@ function burst(m: SplinterMemory, e: Enemy): void {
     .sort((a, b) => Math.abs(a.x - x) - Math.abs(b.x - x));
   flecks(x, y, n * 2);
   if (!near.length) return;
+  skillFx(ID, "burst", { x, y, reach: 8 }, { damage: progress.stats.ad * v.burst * n, quiet: true });
   for (let i = 0; i < n; i++) {
     const f = near[i % near.length];
     dealDamage(f, progress.stats.ad * v.burst, { fromX: x, kx: Math.sign(f.x - x) * 30, source: ID });
