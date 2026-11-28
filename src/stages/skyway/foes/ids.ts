@@ -1,1 +1,12 @@
-export type SkywayFoe = "galehawk" | "sparkjelly" | "skyguard" | "tempestroc";
+export type SkywayFoe =
+  | "nimbit"
+  | "squallfinch"
+  | "galehawk"
+  | "sparkjelly"
+  | "skyguard"
+  | "galeram"
+  | "zephyray"
+  | "lanternwarden"
+  | "cloudwyrm"
+  | "stormcolossus"
+  | "tempestroc";

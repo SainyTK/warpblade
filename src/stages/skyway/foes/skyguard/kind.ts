@@ -1,6 +1,7 @@
 import { GROUND } from "../../../../constants/stage";
 import type { EnemyKind } from "../../../../game/enemies/kinds/kind";
 import { SKY_FOES } from "../colors";
+import { stormWardTakes } from "../stormWard";
 import { drawSkyguard } from "./draw";
 import { updateSkyguard } from "./update";
 
@@ -17,4 +18,5 @@ export const skyguard: EnemyKind = {
   guardFrom: 1,
   orbs: 2,
   heartChance: 0.2,
+  takes: (e, dmg) => stormWardTakes(e, dmg),
 };
