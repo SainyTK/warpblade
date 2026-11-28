@@ -104,3 +104,10 @@ Meta progress is saved in local storage under `warpblade-meta-v2` (`src/services
 The save holds the bank, the Armory levels (`owned`), the gold paid for them (`spentOnOwned`), the items switched off (`switchedOff`), the achievements and tracked stats, the unlock ids found and the recipes.
 `parseMeta` in `src/utils/metaSave.ts` keeps only known items within their level limits; a save without `spentOnOwned` gets the price of its levels bought in Armory order.
 `src/store/meta.ts` is the one owner of the bank and the Armory, and saves on every change.
+
+A 0.14.2 save under `warpblade-meta-v1` is carried over when no `warpblade-meta-v2` save exists yet (`upgradeLegacyMeta` in `src/utils/legacyMeta.ts`), and the old key is left untouched.
+Its coins, achievements, tracked stats, recipes and bought heroes (the old `heroes` field, read as hero unlocks) carry over.
+Shop levels of items the Armory still has are kept up to the Armory's level limit, and those items count as unlocked.
+Every other level, and every item the Armory no longer has (Head Start, Last Light), comes back as the coins it cost in 0.14.2 (`LEGACY_SHOP_PRICES` in `src/constants/legacyShop.ts`).
+The kept levels' `spentOnOwned` is what they cost in 0.14.2, so Refund All gives back what the player paid.
+A hero bought before 0.11.0 that left the roster also comes back as its price.

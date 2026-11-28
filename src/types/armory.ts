@@ -54,3 +54,8 @@ export interface MetaSave {
   unlocks: string[];
   recipes: string[];
 }
+
+export interface LegacyShopPrice {
+  firstPrice: number;
+  levels: number;
+}

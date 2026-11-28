@@ -1,9 +1,9 @@
 import { ACHIEVEMENTS } from "../constants/achievements";
 import { ARMORY_ITEMS } from "../constants/armory";
 import { FUSIONS } from "../constants/resonance";
-import { fusionRecipeId, heroUnlockId, UNLOCKS } from "../constants/unlocks";
+import { fusionRecipeId, heroUnlockId, itemUnlockId, UNLOCKS } from "../constants/unlocks";
 import { CHARACTERS } from "../heroes/roster";
-import { loadMeta, saveMeta } from "../services/metaStorage";
+import { loadLegacyMeta, loadMeta, saveMeta } from "../services/metaStorage";
 import type { GoalSource, TrackedStats } from "../types/achievement";
 import type { ArmoryItem, ArmoryRates, GearId, MetaSave } from "../types/armory";
 import type { PickToolKey } from "../types/build";
@@ -11,15 +11,19 @@ import type { Stats } from "../types/stats";
 import type { UnlockReward } from "../types/unlock";
 import { armoryRates, armoryStats, armoryTools, type Levels, levelsBought, nextPrice } from "../utils/armory";
 import { jobUnlockIds } from "../utils/jobs";
+import { upgradeLegacyMeta } from "../utils/legacyMeta";
 import { parseMeta } from "../utils/metaSave";
 import { ALL_SKILLS } from "../utils/skills";
 
-const meta: MetaSave = parseMeta(loadMeta(), ARMORY_ITEMS, {
+const saved = loadMeta();
+const legacy = saved === null ? upgradeLegacyMeta(loadLegacyMeta(), ARMORY_ITEMS, itemUnlockId) : null;
+const meta: MetaSave = parseMeta(saved ?? legacy, ARMORY_ITEMS, {
   achievements: ACHIEVEMENTS.map((a) => a.id),
   unlocks: [...jobUnlockIds(CHARACTERS), ...UNLOCKS.map((u) => u.id)],
   recipes: [...ALL_SKILLS.map((s) => s.id), ...FUSIONS.map((f) => fusionRecipeId(f.id))],
   heroUnlockId,
 });
+if (legacy) saveMeta(meta);
 const listeners = new Set<() => void>();
 let worn: Levels | null = null;
 

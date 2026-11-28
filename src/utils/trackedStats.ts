@@ -3,6 +3,7 @@ import { ENEMIES } from "../constants/enemies";
 import type { BestStat, CountStat, Feat, HeroStat, RunTally, TrackedStats } from "../types/achievement";
 import type { StageId } from "../types/campaign";
 import type { EnemyType } from "../types/enemy";
+import { count, isRecord } from "./saveFields";
 
 const COUNT_STATS: readonly CountStat[] = [
   "kills",
@@ -27,9 +28,6 @@ const BEST_STATS: readonly BestStat[] = [
   "runPerfects",
   "runSkillKills",
 ];
-
-const isRecord = (v: unknown): v is Record<string, unknown> => typeof v === "object" && v !== null && !Array.isArray(v);
-const count = (v: unknown): number => (typeof v === "number" && Number.isFinite(v) && v > 0 ? Math.floor(v) : 0);
 
 function counts<K extends string>(keys: readonly K[], raw: unknown): Record<K, number> {
   const saved = isRecord(raw) ? raw : {};
