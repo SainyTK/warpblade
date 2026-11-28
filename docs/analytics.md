@@ -7,6 +7,9 @@ The GA4 account is "Warpblade" on the owner's personal Google account, with the 
 The measurement ID and the one host that reports are in `src/constants/analytics.ts`.
 Only pages served from warpblade.sainytk.com load gtag.js, so dev servers, previews, playtest bots and forks send nothing.
 
+The same pages also load the Cloudflare Web Analytics beacon, which counts page views and Core Web Vitals without cookies.
+Its public site token is in `src/constants/analytics.ts`, and the counts are in the Cloudflare dashboard under Web Analytics for warpblade.sainytk.com.
+
 Both pages (the game and the patch notes) record a page view.
 The game also sends:
 
