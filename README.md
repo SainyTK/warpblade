@@ -275,7 +275,7 @@ Options holds sound, volume, music volume, screen shake, damage numbers, vibrati
 
 Level ups give skill points: every level up to 30, then every second level, and one more at 50, 75 and 99.
 The skill choices open when you level up.
-Leave to keep any points you have not spent; they open again at your next level.
+Leave, or `Esc`, puts the cards away with your points kept; they open again at the next level up that gives a point, or when a big foe falls.
 In co-op the cards open for every player with points.
 Choose with `A` `D` or the arrows and learn with `J` or `Enter`, press `1` to `3`, or click or tap a card.
 
