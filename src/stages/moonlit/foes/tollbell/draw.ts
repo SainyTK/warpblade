@@ -37,14 +37,25 @@ const turn =
     ];
   };
 
-function chains(s: SpriteCanvas, time: number): void {
+function chains(s: SpriteCanvas, p: BellPose): void {
+  const at = turn(p.swing);
+  const [cx, cy] = at([0, -16]);
+  s.begin();
+  s.dot(cx, cy, 1.6, GRAVE.iron[3]);
+  s.dot(cx, cy, 0.7, GRAVE.hollow);
+  s.commit(false);
   s.begin();
   for (const side of [-1, 1]) {
-    for (let k = 0; k < 5; k++) {
-      const y = -14 - k * 3.2;
-      const x = side * (2 + k * 0.9) + Math.sin(time * 1.5 + k) * 0.2;
-      if (k % 2 === 0) s.block(x - 0.5, y - 1.5, GRAVE.iron[3], 1, 2.5);
-      else s.block(x - 1, y - 1, GRAVE.iron[2], 2, 1.5);
+    const ax = side * 7;
+    const ay = -34;
+    const links = 6;
+    for (let k = 0; k < links; k++) {
+      const u = (k + 0.5) / links;
+      const x = cx + (ax - cx) * u;
+      const y = cy - 1 + (ay - cy + 1) * u;
+      if (k % 2 === 0) s.block(x - 0.5, y - 1.2, GRAVE.iron[3], 1, 2.4);
+      else s.block(x - 1, y - 0.7, GRAVE.iron[2], 2, 1.4);
+      s.set(x - 0.5, y - 1, GRAVE.iron[4]);
     }
   }
   s.commit(false);
@@ -56,6 +67,45 @@ function shell(s: SpriteCanvas, p: BellPose, time: number): void {
   s.poly(SHELL.map(at), Z[2]);
   s.shadeEdges(Z[2], Z[3], Z[1], 2);
   s.commit();
+  s.begin();
+  s.poly(
+    [
+      at([1.5, -11.5]),
+      at([3.5, -11.5]),
+      at([5.6, -9.5]),
+      at([6.2, -4]),
+      at([7.2, 2]),
+      at([9.6, 6.2]),
+      at([9.4, 7.6]),
+      at([4, 7.6]),
+      at([3.4, 2]),
+      at([2.6, -4]),
+    ],
+    Z[1],
+  );
+  s.commit(false);
+  s.begin();
+  s.poly(
+    [
+      at([-3.6, -11]),
+      at([-2.2, -11.2]),
+      at([-3.6, -4]),
+      at([-4.6, 2.5]),
+      at([-6.6, 6.6]),
+      at([-7.8, 6.6]),
+      at([-6.2, 2]),
+      at([-5.2, -4]),
+    ],
+    Z[3],
+  );
+  s.commit(false);
+  s.begin();
+  s.hairline(...at([-3.2, -10.5]), ...at([-4.6, -3]), Z[4]);
+  s.poly([at([-9.8, 6.8]), at([9.8, 6.8]), at([9, 9.4]), at([0, 11]), at([-9, 9.4])], Z[1]);
+  s.poly([at([-8.4, 7.6]), at([8.4, 7.6]), at([7.6, 9.2]), at([0, 10.4]), at([-7.6, 9.2])], Z[0]);
+  s.poly([at([-6.4, 8.2]), at([6.4, 8.2]), at([5.4, 9.4]), at([0, 10]), at([-5.4, 9.4])], GRAVE.hollow);
+  s.hairline(...at([-9.6, 6.8]), ...at([9.6, 6.8]), Z[4]);
+  s.commit(false);
   s.begin();
   const band = [at([-7.4, 3]), at([7.4, 3])];
   s.hairline(band[0][0], band[0][1], band[1][0], band[1][1], Z[3]);
@@ -85,7 +135,7 @@ function shell(s: SpriteCanvas, p: BellPose, time: number): void {
   s.shadeEdges(Z[2], Z[3], Z[1]);
   s.commit();
   const swing = Math.sin(time * 6) * p.swing * 4;
-  const [kx, ky] = at([-swing, 9.8]);
+  const [kx, ky] = at([-swing, 10.4]);
   s.begin();
   s.dot(kx, ky, 2.2, B[3]);
   s.shadeEdges(B[3], B[4], B[1]);
@@ -101,7 +151,7 @@ export function drawTollbell(e: Enemy, t: number): SpriteCanvas {
   const time = t + e.seed;
   const p = bellPose(e, time);
   s.clear();
-  chains(s, time);
+  chains(s, p);
   shell(s, p, time);
   moonlight(s, true);
   s.outline(GRAVE.outline);
