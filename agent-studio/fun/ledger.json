@@ -10,12 +10,12 @@
           "control": 88.3,
           "challenge": 47.1,
           "progress": 55.2,
-          "clarity": 50.0,
-          "audiovisual": 50.0,
-          "mastery": 51.0,
+          "clarity": 50,
+          "audiovisual": 50,
+          "mastery": 51,
           "autonomy": 68.5,
           "variety": 87.5,
-          "immersion": 50.0
+          "immersion": 50
         },
         "measures": {
           "control": {
@@ -128,15 +128,15 @@
       "studio": {
         "fun": 57.2,
         "dimensions": {
-          "control": 80.0,
-          "challenge": 34.0,
+          "control": 80,
+          "challenge": 34,
           "progress": 81.2,
-          "clarity": 50.0,
-          "audiovisual": 50.0,
+          "clarity": 50,
+          "audiovisual": 50,
           "mastery": 40.6,
           "autonomy": 77.8,
-          "variety": 75.0,
-          "immersion": 50.0
+          "variety": 75,
+          "immersion": 50
         },
         "measures": {
           "control": {
@@ -326,6 +326,90 @@
           4,
           4,
           4
+        ],
+        "R9": [
+          3,
+          3,
+          3
+        ]
+      },
+      "owner": null
+    },
+    {
+      "date": "2026-11-29",
+      "build": "0.15.0 (742ecece), base 49.3 at 4fc16c4a",
+      "definitionVersion": 3,
+      "studio": {
+        "fun": 49.3,
+        "dimensions": {
+          "control": 80,
+          "challenge": 46.4,
+          "progress": 90,
+          "clarity": 25,
+          "audiovisual": 50,
+          "mastery": 13,
+          "autonomy": 84.4,
+          "variety": 75,
+          "immersion": 50
+        }
+      },
+      "readings": {
+        "M1.1": 1,
+        "M1.2": 8,
+        "M2.1": 50,
+        "M2.2": 96.3,
+        "M2.3": 0.061,
+        "M2.4": 8.124,
+        "M6.1": -0.24,
+        "M3.2": 4.09,
+        "M3.1": 4.107108514960437,
+        "M3.3": 90,
+        "M3.4": 10,
+        "M7.1": 64,
+        "M7.2": 4,
+        "M7.3": 55.00000000000001,
+        "M8.1": 22.262756535403593
+      },
+      "rubric": {
+        "R1": [
+          3,
+          3,
+          3
+        ],
+        "R2": [
+          2,
+          2,
+          2
+        ],
+        "R3": [
+          3,
+          3,
+          3
+        ],
+        "R4": [
+          2,
+          2,
+          2
+        ],
+        "R5": [
+          3,
+          3,
+          3
+        ],
+        "R6": [
+          2,
+          2,
+          2
+        ],
+        "R7": [
+          4,
+          4,
+          4
+        ],
+        "R8": [
+          3,
+          3,
+          3
         ],
         "R9": [
           3,

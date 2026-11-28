@@ -69,3 +69,6 @@ export const KEPT_DURING_MOVE: readonly InputAction[] = ["up"];
 /** the shared actions whose presses a kit can keep waiting until its own state may be cut; the guard is left out, since
  *  a late tap would parry after the moment it was pressed for, and a held K raises the guard once the state allows */
 export const SHARED_CUT_PRESSES: readonly InputAction[] = ["dash", "warp", "cast", "castWide", "ultimate"];
+
+export const CARDS_AWAY_TEXT =
+  "Put the cards away. They open again at the next level up that gives a point, or when a big foe falls.";

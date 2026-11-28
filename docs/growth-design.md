@@ -62,15 +62,15 @@ A Fusion's name stays ??? on cards and in the Codex until the player has made it
 `SHARD_GAIN`, `SHARD_DROP` and `SHARD_MOTION` in `src/constants/vitals.ts`, the drops in `src/game/shards.ts`.
 
 - A Heart Shard adds 3 max HP for the run; a Mana Shard adds 2 max MP. The new room fills at once.
-- Every boss and mini boss drops one of each. The last foe of a Rift Surge, or of a wave in wave mode, drops a Heart Shard.
+- Every boss and mini boss drops one of each. In wave mode the last foe of a wave also drops a Heart Shard.
 - An elite drops each kind with a 10% chance; any other foe with a 0.15% chance. Training drops none.
 - Shards pop out, fall and bounce, and are picked up by touch. Any left lying fly to the nearest standing hero after 7 seconds, so none is lost.
 - Picking one up shows a banner ("Heart Shard +3 max HP", with the player's tag in a room), a ring and a burst in the shard's colour, and the bar flashes.
 - The HP and MP bars start at 60% of their width and grow to full as shards come in: full at 36 Heart Shards and 21 Mana Shards (`VITAL_BAR`).
 - The shard counts live in `progress`, so each player in a room keeps their own.
 
-Tuning: a Rift Stage has 9 Rift Surges, an elite at the end of the opening, a mini boss, a boss and about 45 surge elites.
-That comes to about 14 Heart Shards (+42 HP) and 7 Mana Shards (+14 MP) on average by level 99.
+Tuning: in a crystal defense the sure shards come from the mini boss and the boss on the clock.
+The rest come from elites: the elite called at 1:35, every third foe from the East (`SIDE_STYLE`), and every foe at the stage's own elite rate (`eliteEvery` in its modifiers), so stages with more elites give more shards.
 
 ## Pacts: drain and regeneration
 
@@ -156,7 +156,9 @@ Fronts (`FRONTS`):
 | 3:30 | West, East, Sky | two open at a time, swapping every 25 s |
 | 6:00 | all four | all open; every 20 s one side surges and takes 60% of the packs |
 
-Each side sends a different kind of pack (`SIDE_STYLE`): the West 1.5 times the pack size from one ladder step back, the East two thirds of the size from the newest steps with every 8th foe an elite, the Sky flyers through rifts 110 to 260 px from the crystal, and Below walkers through rifts 70 to 150 px from it.
+Every change of sides, when a new front opens or a front swaps, is announced 4 s ahead with a "Next from the ..." banner, and the West and East edge chevrons blink for a side about to open.
+
+Each side sends a different kind of pack (`SIDE_STYLE`): the West 1.5 times the pack size from one ladder step back, the East two thirds of the size from the newest steps with every third foe an elite, the Sky flyers through rifts 110 to 260 px from the crystal, and Below walkers through rifts 70 to 150 px from it.
 On top of that, every `eliteEvery` foe over the run is an elite (18, or the stage twist's own).
 
 Big foes come at fixed times (`BIG_FOE_CALLS`) at 240 to 280 px from the crystal: an elite at 1:35, the mini boss at 4:15 and the stage boss at 7:30.

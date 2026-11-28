@@ -60,11 +60,11 @@ The studio's playtest bots set `warpblade-playtest` in local storage, and the de
 
 ## Saving
 
-Unlocked heroes, earned achievements and the tracked stats are optional fields of the `warpblade-meta-v1` save: `heroes`, `achievements` and `tracked`.
+Earned achievements and the tracked stats are optional fields of the `warpblade-meta-v2` save: `achievements` and `tracked`.
 The kills per foe type are the optional `tracked.foes` record; a save from before 0.12.0 has none and counts from zero, and a foe type the game no longer has is dropped on load.
-A save from before them loads with its coins and Armory levels, no heroes bought and nothing earned.
+A save from before them loads with its coins and Armory levels and nothing earned.
 `parseMeta` in `src/utils/metaSave.ts` keeps only the ids the game still has.
-A save that bought a hero no longer in the roster gets that hero's price back into the bank once (`REMOVED_HERO_PRICES` in `src/constants/removedHeroes.ts`), and the start menu shows the refund until the next run starts.
+A 0.14.2 save under `warpblade-meta-v1` carries its achievements, tracked stats and bought heroes over (`docs/meta-progress.md`, Saving).
 
 ## Where the player sees them
 

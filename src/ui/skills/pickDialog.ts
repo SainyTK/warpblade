@@ -136,8 +136,10 @@ function close(): void {
   clearPresses();
 }
 
+const canLeave = (): boolean => mentorRunId() !== null && game.mode === "pick";
+
 function leaveMentor(): void {
-  if (mentorRunId() === null || game.mode !== "pick") return;
+  if (!canLeave()) return;
   source.answer({ t: "leave" });
   if (banishing) {
     banishing = false;
@@ -221,6 +223,7 @@ export function bindPickDialog(): void {
     const run = KEYS[ev.code];
     if (!run) return;
     ev.preventDefault();
+    if (ev.code === "Escape" && canLeave()) ev.stopPropagation();
     if (!ev.repeat) run();
   });
 }

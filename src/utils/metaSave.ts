@@ -1,9 +1,7 @@
 import type { ArmoryItem, MetaSave } from "../types/armory";
 import { priceOfAll } from "./armory";
+import { count, isRecord } from "./saveFields";
 import { emptyTracked, parseTracked } from "./trackedStats";
-
-const isRecord = (v: unknown): v is Record<string, unknown> => typeof v === "object" && v !== null && !Array.isArray(v);
-const count = (v: unknown): number => (typeof v === "number" && Number.isFinite(v) && v > 0 ? Math.floor(v) : 0);
 
 const emptyMeta = (): MetaSave => ({
   coins: 0,

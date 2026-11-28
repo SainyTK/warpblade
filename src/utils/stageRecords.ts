@@ -1,5 +1,6 @@
 import type { StageBest, StageRecordKey, StageRecords, StageRun } from "../types/records";
 import type { StageGrade } from "../types/run";
+import { isRecord } from "./saveFields";
 
 const GRADES: readonly StageGrade[] = ["E", "D", "C", "B", "A", "S"];
 
@@ -13,7 +14,6 @@ export const EMPTY_STAGE_BEST: StageBest = {
 
 const isGrade = (value: unknown): value is StageGrade => GRADES.includes(value as StageGrade);
 const count = (value: unknown): number => (typeof value === "number" && value >= 0 ? value : 0);
-const isRecord = (v: unknown): v is Record<string, unknown> => typeof v === "object" && v !== null && !Array.isArray(v);
 
 function parseBest(raw: unknown): StageBest {
   if (!isRecord(raw)) return EMPTY_STAGE_BEST;
