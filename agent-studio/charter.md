@@ -8,8 +8,8 @@ The studio never edits this file; the owner does.
 ## What Warpblade is
 
 A 2D side-view pixel action game in the browser, drawn entirely in code.
-A run is one stage of 30 waves across five eras, ending in death or a clear.
-Players pick a hero, fight with hand-built combos, grow during the run through level-up picks, and grow between runs through coins and the shop.
+A solo run is one stage of about 25 minutes: the player picks a hero and a stage, grows from level 1 to 99 through level-up picks and chests, and fights through three acts to the stage's mini boss and boss.
+Players fight with hand-built combos, grow during the run through picks, and grow between runs through coins, the Armory and unlocks.
 
 ## The two references
 
@@ -67,7 +67,7 @@ A big patch has one headline from this list, plus any small changes it needs:
 
 A small patch has no new content.
 It holds bug fixes, balance changes, hero buffs and nerfs, item (shop and boon) buffs and nerfs, and skill buffs and nerfs.
-A small patch has between two and eight changes, and at least one of them answers a real problem: a bug, a bot measurement, or player feedback.
+A small patch has between two and eight changes, and at least one of them answers a real problem: a bug, a Fun benchmark measurement, or player feedback.
 
 ## Roster
 
@@ -102,12 +102,25 @@ Play styles already taken:
 Some parts of the game are secrets the game never explains.
 Everything players can read or watch outside the game keeps them: patch notes, the journal, the roadmap, the README, the docs, media and replies to feedback.
 
-- The Unblinking, the foe that comes after the wave 30 boss falls, can be defeated.
+- The Unblinking, the foe that comes after a stage's final boss falls, can be defeated.
   How is a secret kept only in the code (`src/game/enemies/abyss/gaze.ts`).
   Patch notes may say that it exists, that every hit reaches it while its HP never seems to fall, that it hits harder than anything else, and that there is a way.
   The only hint allowed is this line: "It has never looked away from anything that moved."
   Never state or show the method: no text about it, and no clip, still or caption of the eye strained, shut, on the floor or defeated.
   QA checks the method from the code and writes only "the secret works" or "the secret is broken" in anything that is published.
+
+## The Fun score
+
+The studio's goal is to make Warpblade more fun every night, and the Fun score is how it measures that.
+The score runs from 0 to 100 and combines nine dimensions of player experience, each scored from automated measures and from judges who look at the game.
+Its definition is `agent-studio/fun/definition.json`; only the owner changes it.
+The studio does not run the whole benchmark every night. After the director plans, an analyst lists every measure with an impact level and picks at most five; each runs as one small sampled job on the base build and again on the patch after QA passes it, at most five jobs at a time and within a quarter of the machine's CPU. Every other measure keeps its latest reading from `agent-studio/fun/ledger.json`, where each night's readings are recorded.
+
+- Every patch aims to raise the score. The plan names the dimensions it targets and what it expects to move.
+- A patch that scores lower than its base goes back to the developer for one round to find and fix or remove the cause.
+- The score never justifies breaking the charter: secrets, the roster, the pillars and the quality bar hold whatever it says.
+- Never tune the game to the benchmark instead of the player: no special cases for the bots, the benchmark rooms, the playtest profile or the judges.
+- The owner plays and scores builds too. When the studio's score and the owner's disagree, the owner is right and the definition changes.
 
 ## How the studio decides
 
@@ -115,11 +128,12 @@ The director weighs each candidate with these questions, in order:
 
 1. Is something broken? A bug that blocks play, loses progress or crashes comes first, in any patch.
 2. What do players ask for? Feedback with several players behind it, or a clear bug report, outranks the studio's own ideas of the same size.
-3. Which pillar does it serve, and which reference does it bring closer?
-4. What did the last patches do? Rotate the big headline across the list above; do not repeat the same kind of headline in two consecutive big patches unless players ask for it.
-5. Can it ship tonight at full quality? Pick a scope the developer can finish, test and capture in one night. Split anything larger into a roadmap item for later.
+3. Which Fun dimension does it raise? Prefer the dimension where weight times room to grow is largest, and the changes the judges ranked highest.
+4. Which pillar does it serve, and which reference does it bring closer?
+5. What did the last patches do? Rotate the big headline across the list above; do not repeat the same kind of headline in two consecutive big patches unless players ask for it.
+6. Can it ship tonight at full quality? Pick a scope the developer can finish, test and capture in one night. Split anything larger into a roadmap item for later.
 
-Balance changes are based on numbers: bot runs before and after, damage per second, time to clear a wave, pick rates.
+Balance changes are based on numbers: the Fun benchmark's boss room and growth readings before and after, damage per second, time to kill, pick rates.
 A single stat moves by at most 25 percent in one small patch.
 The same thing is not nerfed twice within three patches.
 

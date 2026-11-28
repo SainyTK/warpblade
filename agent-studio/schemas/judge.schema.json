@@ -1,0 +1,104 @@
+{
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "levels": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "R1": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 5
+        },
+        "R2": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 5
+        },
+        "R3": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 5
+        },
+        "R4": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 5
+        },
+        "R5": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 5
+        },
+        "R6": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 5
+        },
+        "R7": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 5
+        },
+        "R8": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 5
+        },
+        "R9": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 5
+        }
+      },
+      "required": []
+    },
+    "evidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "R1": {
+          "type": "string"
+        },
+        "R2": {
+          "type": "string"
+        },
+        "R3": {
+          "type": "string"
+        },
+        "R4": {
+          "type": "string"
+        },
+        "R5": {
+          "type": "string"
+        },
+        "R6": {
+          "type": "string"
+        },
+        "R7": {
+          "type": "string"
+        },
+        "R8": {
+          "type": "string"
+        },
+        "R9": {
+          "type": "string"
+        }
+      },
+      "required": []
+    },
+    "gut": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 100
+    },
+    "changes": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  },
+  "required": ["levels", "evidence", "gut", "changes"]
+}

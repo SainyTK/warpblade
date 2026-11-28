@@ -11,7 +11,7 @@ import { preloadMentorArt } from "./mentorArt";
 import { startAnalytics } from "./services/analytics";
 import { playMusic } from "./services/audio";
 import { loadHeroChoice } from "./services/heroChoice";
-import { readTrainingHero } from "./services/playtestStart";
+import { paintsStage, readTrainingHero } from "./services/playtestStart";
 import { preloadSkillArt } from "./skillArt";
 import { chosenJob } from "./store/jobs";
 import { heroUnlocked } from "./store/unlocks";
@@ -56,6 +56,8 @@ if (trainingHero) startGame();
 else openMenu("title");
 joinFromInvite();
 
+const painting = paintsStage();
+
 // the pause menu stops time and the picture outright, so nothing piles up to catch up on when the game resumes
 let last = performance.now();
 let acc = 0;
@@ -66,7 +68,7 @@ function soloFrame(now: number): void {
     acc -= STEP;
     stepGame();
   }
-  if (menuContext() !== "pause") {
+  if (painting && menuContext() !== "pause") {
     paintScene();
     drawDangerGlow(menuContext() !== "title");
   }

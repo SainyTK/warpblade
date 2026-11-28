@@ -1,0 +1,8 @@
+{
+  "markdownAllow": [
+    "agent-studio/charter.md",
+    "agent-studio/roadmap.md",
+    "agent-studio/roles/*.md",
+    "agent-studio/journal/*.md"
+  ]
+}

@@ -1,5 +1,4 @@
 import { join } from "node:path";
-import { BASELINE_BOT_RUNS } from "../constants.ts";
 import { exec } from "../services/shell.ts";
 import type { Night } from "../types.ts";
 
@@ -39,29 +38,18 @@ export async function runChecks(night: Night): Promise<CheckResult[]> {
 
 export const failed = (checks: CheckResult[]) => checks.filter((c) => !c.ok).map((c) => c.name);
 
-/** bot runs on the base version, so the director and QA can compare difficulty */
 export async function baseline(night: Night): Promise<void> {
-  for (const policy of ["mash", "skilled"]) {
-    const out = join(night.files.baseline, `bot-${policy}.json`);
-    const args = [
-      "run",
-      "playtest",
-      "--",
-      "bot",
-      "--hero",
-      "all",
-      "--runs",
-      String(BASELINE_BOT_RUNS),
-      "--policy",
-      policy,
-      "--out",
-      out,
-    ];
-    await npm(night, studioDir(night), args, 40);
-  }
-  const late = join(night.files.baseline, "bot-skilled-wave20.json");
-  const lateArgs = ["run", "playtest", "--", "bot", "--hero", "all", "--policy", "skilled", "--out", late];
-  await npm(night, studioDir(night), [...lateArgs, "--start-wave", "20", "--start-level", "14"], 40);
   const smoke = join(night.files.baseline, "smoke.json");
   await npm(night, studioDir(night), ["run", "playtest", "--", "smoke", "--hero", "all", "--out", smoke], 15);
+}
+
+export async function measureFunBuild(
+  night: Night,
+  picks: string | null,
+  outDir: string,
+  minutes: number,
+): Promise<boolean> {
+  const chosen = picks ? ["--picks", picks] : ["--all"];
+  const args = ["run", "playtest", "--", "fun", "measure", ...chosen, "--out-dir", outDir];
+  return npm(night, studioDir(night), args, minutes);
 }

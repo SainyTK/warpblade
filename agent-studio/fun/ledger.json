@@ -1,0 +1,255 @@
+{
+  "entries": [
+    {
+      "date": "2026-11-27",
+      "build": "main 5f2c3746 (0.14.2 plus day work of 26 and 27 November)",
+      "definitionVersion": 1,
+      "studio": {
+        "fun": 59.1,
+        "dimensions": {
+          "control": 88.3,
+          "challenge": 47.1,
+          "progress": 55.2,
+          "clarity": 50.0,
+          "audiovisual": 50.0,
+          "mastery": 51.0,
+          "autonomy": 68.5,
+          "variety": 87.5,
+          "immersion": 50.0
+        },
+        "measures": {
+          "control": {
+            "M1.1": 90,
+            "M1.2": 100,
+            "R1": 75
+          },
+          "challenge": {
+            "M2.1": 62.5,
+            "M2.2": 100,
+            "M2.3": 1,
+            "R2": 25
+          },
+          "progress": {
+            "M3.1": 1,
+            "M3.2": 100,
+            "M3.3": 45,
+            "R3": 75
+          },
+          "clarity": {
+            "R4": 50
+          },
+          "audiovisual": {
+            "R5": 50
+          },
+          "mastery": {
+            "M6.1": 51.9,
+            "R6": 50
+          },
+          "autonomy": {
+            "M7.1": 94,
+            "M7.2": 100,
+            "M7.3": 30,
+            "R7": 50
+          },
+          "variety": {
+            "M8.1": 100,
+            "R8": 75
+          },
+          "immersion": {
+            "R9": 50
+          }
+        },
+        "rubricLevels": {
+          "R1": [
+            4,
+            4,
+            4
+          ],
+          "R2": [
+            2,
+            2,
+            2
+          ],
+          "R3": [
+            4,
+            3,
+            4
+          ],
+          "R4": [
+            3,
+            3,
+            3
+          ],
+          "R5": [
+            3,
+            3,
+            3
+          ],
+          "R6": [
+            3,
+            3,
+            3
+          ],
+          "R7": [
+            3,
+            3,
+            3
+          ],
+          "R8": [
+            4,
+            4,
+            4
+          ],
+          "R9": [
+            3,
+            3,
+            3
+          ]
+        },
+        "judgeGutScores": [
+          58,
+          60,
+          62
+        ],
+        "missing": [
+          "M4.1 blind route",
+          "M3.2 on a Rift stage (prologue only)"
+        ],
+        "lowConfidence": [
+          "M3.1 scored 0 from a Resonance model that assumes 4 foes in reach; without Resonance it scores 100 and Fun is 61.6"
+        ]
+      },
+      "owner": null
+    },
+    {
+      "date": "2026-11-28",
+      "build": "main 98ea386f",
+      "definitionVersion": 1,
+      "studio": {
+        "fun": 57.2,
+        "dimensions": {
+          "control": 80.0,
+          "challenge": 34.0,
+          "progress": 81.2,
+          "clarity": 50.0,
+          "audiovisual": 50.0,
+          "mastery": 40.6,
+          "autonomy": 77.8,
+          "variety": 75.0,
+          "immersion": 50.0
+        },
+        "measures": {
+          "control": {
+            "M1.1": 90,
+            "M1.2": 100,
+            "R1": 50
+          },
+          "challenge": {
+            "M2.1": 10.4,
+            "M2.2": 99.5,
+            "M2.3": 1,
+            "R2": 25
+          },
+          "progress": {
+            "M3.1": 100,
+            "M3.2": 100,
+            "M3.3": 100,
+            "R3": 25
+          },
+          "clarity": {
+            "R4": 50
+          },
+          "audiovisual": {
+            "R5": 50
+          },
+          "mastery": {
+            "M6.1": 56.2,
+            "R6": 25
+          },
+          "autonomy": {
+            "M7.1": 100,
+            "M7.2": 100,
+            "M7.3": 61,
+            "R7": 50
+          },
+          "variety": {
+            "M8.1": 100,
+            "R8": 50
+          },
+          "immersion": {
+            "R9": 50
+          }
+        },
+        "rubricLevels": {
+          "R1": [
+            3,
+            3,
+            4
+          ],
+          "R2": [
+            2,
+            2,
+            2
+          ],
+          "R3": [
+            2,
+            2,
+            3
+          ],
+          "R4": [
+            3,
+            3,
+            2
+          ],
+          "R5": [
+            3,
+            3,
+            3
+          ],
+          "R6": [
+            2,
+            2,
+            3
+          ],
+          "R7": [
+            3,
+            3,
+            3
+          ],
+          "R8": [
+            3,
+            3,
+            3
+          ],
+          "R9": [
+            3,
+            3,
+            3
+          ]
+        },
+        "judgeGutScores": [
+          42,
+          40,
+          42
+        ],
+        "profile": "every skill open, no Rift Arts (bots and growth model alike)",
+        "missing": [
+          "M4.1 blind route"
+        ],
+        "lowConfidence": [
+          "M6.1 uses boss HP removed because rooms cleared were 2 against 1",
+          "M3.2 from a bot kept alive at half HP",
+          "M3.1 measures growth against minion HP; bosses are walls the measure does not see"
+        ]
+      },
+      "owner": {
+        "date": "2026-11-28",
+        "fun": null,
+        "verdict": "agrees",
+        "reasons": [
+          "Agreed with the studio's round 2 scoring and asked to adopt it, with the proposed version 2 changes, as the studio's nightly objective"
+        ]
+      }
+    }
+  ]
+}

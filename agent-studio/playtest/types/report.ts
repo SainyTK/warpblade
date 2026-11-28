@@ -1,3 +1,4 @@
+import type { RunStart } from "./session";
 export interface Check {
   name: string;
   hero?: string;
@@ -48,7 +49,7 @@ export interface BotReport extends ReportBase {
   command: "bot";
   policy: string;
   /** the wave and level the runs began at, when not wave 1 */
-  start: { wave: number; level: number } | null;
+  start: RunStart | null;
   runs: BotRun[];
   means: BotMeans[];
   determinism: string;
@@ -59,4 +60,10 @@ export interface ScenarioReport extends ReportBase {
   result: unknown;
   error?: string;
 }
-export type Report = SmokeReport | BotReport | ScenarioReport;
+export interface FunReport extends ReportBase {
+  command: "fun";
+  action: string;
+  result: unknown;
+  failures: string[];
+}
+export type Report = SmokeReport | BotReport | ScenarioReport | FunReport;

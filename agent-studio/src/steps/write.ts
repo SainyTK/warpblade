@@ -72,6 +72,8 @@ export async function writeNotes(
     "Triaged feedback": files.triage,
     "Diff from the base commit": files.diff,
     "Commits since the last release": files.commits,
+    "Fun score of the base build": files.funScore("base"),
+    "Fun score of the patch build": files.funScore("final"),
   };
   let feedback = "";
   for (let attempt = 0; attempt < 2; attempt++) {

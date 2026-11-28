@@ -14,6 +14,8 @@ export interface BotMemory {
   ultUntil: number;
   /** J is held for the warp until then */
   warpUntil: number;
+  ultRestUntil: number;
+  warpRestUntil: number;
 }
 export interface Policy {
   name: PolicyName;

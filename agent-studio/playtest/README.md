@@ -79,6 +79,7 @@ Both policies close a chest screen with J once its input lock has passed.
 - it holds U to charge the ultimate when the HUD's ultimate pips show it is paid for and two foes or a boss are near;
 - it casts with I when the selected HUD spell tab is ready (recharged and paid for), and cycles with O to a ready one;
 - it holds J for the warp when the WARP tab is ready and a foe it faces is at a distance;
+- after an ultimate it waits 1.5 s, and after a warp 2.1 s, before the next one, so U or J goes up between two charges;
 - it jumps over a foe on the ground that faces the hero, to strike its back;
 - it raises a held skill already at level 5 or more, so it heads for an evolution; otherwise it takes a new skill by kind in this order: ultimate, attack, summon, spell, dot, movement, passive; then the highest skill level, then a charm, then a boon.
 
@@ -115,6 +116,29 @@ Report fields: `command`, `ok`, `root`, `startedAt`, `wallSeconds`, `pageErrors`
 Scripts can live anywhere, for example in a temp folder.
 Import the harness types with an absolute path; type-only imports are dropped at run time.
 
+### fun
+
+```sh
+npm run -s playtest -- fun measure --out-dir <folder> (--picks <picks.json> | --all) [--root <dir>]
+npm run -s playtest -- fun score --readings <readings.json> [--judge <judge.json>]... [--root <dir>]
+npm run -s playtest -- fun refit [--root <dir>]
+```
+
+The Fun benchmark behind the studio's nightly Fun score.
+Its definition, with every measure, its scoring band, the jobs that measure it and the budget, is `agent-studio/fun/definition.json`; scored builds go to `agent-studio/fun/ledger.json`.
+
+`measure` takes picks: a JSON list of `{ id, sample }`, where `id` is a measure or rubric id and `sample` names the heroes and stages (and for some jobs runs or minutes) to measure.
+An empty list in a sample means the job's default sample; samples are cut to the job's caps.
+`--all` picks every measure at its default sample.
+Picks that use the same job run as one job over the combined sample, cut to the caps.
+At most `budget.maxPicks` picks are taken, at most `budget.maxParallelJobs` jobs run at a time in one browser and one server, and a governor pauses the job processes whenever they use more than `budget.cpuShare` of the machine's cores.
+Only one `measure` runs on the machine at a time; a second one waits for the first.
+Measurement sessions start with drawing turned off (`?paint=off`), except the evidence job, which captures stills and clips.
+The folder gets `jobs.json`, `measurement.json` (jobs, readings, evidence list and CPU use), `readings.json`, `jobs.log` and one folder per job.
+
+`score` turns readings and judge levels into the Fun score, filling every measure it was not given with its latest reading from the ledger.
+`refit` sets the dimension weights from the owner's scores in the ledger (see the definition's `calibration`).
+
 ## Library
 
 ```ts
@@ -124,7 +148,8 @@ const session = await openGame({ hero: "kael" });
 ```
 
 `openGame({ root, hero, viewport, start })` starts a dev server and a browser, loads the game and, with `hero`, starts a run through the menu.
-`start: { wave, level, build }` opens the run at a later wave and level with skills, charms and evolutions already held (the game's dev-only `?wave=`, `?level=` and `?build=`, see `docs/skill-design.md`), for example `{ wave: 8, level: 30, build: "k_familiar:8,b_edge:4" }`.
+`start: { stage, section, wave, level, build, paint }` (every field optional) opens the run through the game's dev-only start options: `stage` and `section` begin a stage run at that stage and area, `wave` and `level` begin at a later wave and level, `build` holds skills, charms and evolutions from the start (`?build=`, see `docs/skill-design.md`), for example `{ wave: 8, level: 30, build: "k_familiar:8,b_edge:4" }`.
+`paint: "off"` (`?paint=off`) keeps the game stepping, the HUD and the dialogs, and draws no stage, which about halves the wall time of a bot run and plays out exactly as with painting on; stills and clips need painting on.
 The default viewport is 1280 x 720, where the stage is exactly 4 device pixels per art pixel.
 `close()` stops everything.
 `launchHarness(root)` gives one server and browser for many sessions, through `newSession({ hero, viewport })`.

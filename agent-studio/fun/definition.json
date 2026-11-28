@@ -1,0 +1,608 @@
+{
+  "version": 2,
+  "date": "2026-11-28",
+  "formula": {
+    "fun": "100 * product_i (d_i / 100) ^ w_i over the dimensions with at least one score",
+    "dimension": "d_i = mean of the dimension's measure and rubric scores that were taken, each 0 to 100, floored at 1",
+    "band": "a measure's raw value is scored by linear interpolation between the band's points (on log10 of the raw value when scale is log), clamped at the first and last point",
+    "rubric": "the median of the judges' levels, scored (L - 1) * 25",
+    "missing": "a measure not taken is left out of its dimension; a dimension with nothing taken is left out and the weights of the rest are renormalised"
+  },
+  "benchmark": {
+    "profile": "a playtest save with every skill open and no Rift Arts",
+    "heroes": [
+      "kael",
+      "brynn",
+      "cerise"
+    ],
+    "bossRooms": "each sampled stage's boss room, entered at the level and build a hero who clears the stage before it has, with picks spent, chests opened, shards collected and full HP",
+    "owner": "play one stage on a fresh solo run for about 20 to 30 minutes with any hero; give an overall score from 0 to 100, whether the build is more, as or less fun than the last one you scored, your reasons, and optionally a level from 1 to 5 for any dimension"
+  },
+  "sources": [
+    "Vanden Abeele, Spiel, Nacke, Johnson, Gerling. Development and validation of the Player Experience Inventory. International Journal of Human-Computer Studies 135, 2020.",
+    "Sweetser, Wyeth. GameFlow: a model for evaluating player enjoyment in games. Computers in Entertainment 3(3), 2005.",
+    "Nielsen, Barros, Togelius, Nelson. General video game evaluation using relative algorithm performance profiles. EvoApplications 2015.",
+    "Isaksen, Gopstein, Nealen. Exploring game space using survival analysis. FDG 2015.",
+    "Yannakakis, Hallam. Towards optimizing entertainment in computer games. Applied Artificial Intelligence 21(10), 2007.",
+    "Yannakakis, Martinez. Ratings are overrated! Frontiers in ICT 2, 2015.",
+    "Swink. Game Feel. 2008.",
+    "Hicks, Dickinson, Holopainen, Gerling. Good game feel: an empirically grounded framework for juicy design. DiGRA 2018."
+  ],
+  "dimensions": [
+    {
+      "id": "control",
+      "name": "Control and feel",
+      "basis": "PXI ease of control, GameFlow control, game feel",
+      "weight": 0.1111,
+      "measures": [
+        {
+          "id": "M1.1",
+          "name": "Presses honoured",
+          "method": "press pairs for every hero where the second press comes 100 ms into the first action and again right after it ends (J then J, K, L or I; I then U; jump then J; L then J); raw is the number of pair types that lose a press for any hero",
+          "unit": "pair types",
+          "band": {
+            "scale": "linear",
+            "points": [
+              [
+                0,
+                100
+              ],
+              [
+                10,
+                0
+              ]
+            ]
+          }
+        },
+        {
+          "id": "M1.2",
+          "name": "Response time",
+          "method": "game time from key-down to the first change in the hero's state or position, median over J, K, L, I, U and jump for every hero",
+          "unit": "ms",
+          "band": {
+            "scale": "linear",
+            "points": [
+              [
+                50,
+                100
+              ],
+              [
+                150,
+                0
+              ]
+            ]
+          },
+          "basis": "about 100 ms is where delay starts to be felt in direct manipulation"
+        }
+      ],
+      "rubric": {
+        "id": "R1",
+        "1": "presses get lost; moves feel floaty or stuck",
+        "3": "responsive, with some sluggish moves or hits without impact",
+        "5": "every press lands, moves cancel cleanly, every hit has weight (stop, shake, spark, sound), as good as Kael at his best"
+      }
+    },
+    {
+      "id": "challenge",
+      "name": "Challenge",
+      "basis": "PXI challenge, GameFlow challenge, survival analysis",
+      "weight": 0.1111,
+      "measures": [
+        {
+          "id": "M2.1",
+          "name": "Boss clear rate",
+          "method": "share of the sampled stages' boss rooms the skilled bot clears, over the sampled heroes",
+          "unit": "percent",
+          "band": {
+            "scale": "linear",
+            "points": [
+              [
+                0,
+                0
+              ],
+              [
+                40,
+                100
+              ],
+              [
+                80,
+                100
+              ],
+              [
+                100,
+                0
+              ]
+            ]
+          },
+          "basis": "v1 guess"
+        },
+        {
+          "id": "M2.2",
+          "name": "Fair hits",
+          "method": "share of hero HP lost in the sampled boss rooms by the skilled bot to foe attacks with at least 250 ms of wind-up",
+          "unit": "percent",
+          "band": {
+            "scale": "linear",
+            "points": [
+              [
+                50,
+                0
+              ],
+              [
+                90,
+                100
+              ]
+            ]
+          },
+          "basis": "human simple visual reaction time is about 200 to 250 ms"
+        },
+        {
+          "id": "M2.3",
+          "name": "Escalation",
+          "method": "Spearman correlation between the sampled stages' tier order and the skilled bot's hero HP lost per minute in their boss rooms (needs three or more stages)",
+          "unit": "rho",
+          "band": {
+            "scale": "linear",
+            "points": [
+              [
+                0,
+                0
+              ],
+              [
+                1,
+                100
+              ]
+            ]
+          }
+        },
+        {
+          "id": "M2.4",
+          "name": "Boss fight length",
+          "method": "median over the skilled bot's sampled boss rooms of its time to kill (the clear time, or the fight time divided by the share of boss HP removed on a fall) divided by the game's designed kill time for that boss",
+          "unit": "ratio",
+          "band": {
+            "scale": "log",
+            "points": [
+              [
+                0.33,
+                0
+              ],
+              [
+                0.7,
+                100
+              ],
+              [
+                1.5,
+                100
+              ],
+              [
+                3,
+                0
+              ]
+            ]
+          },
+          "basis": "the game's own boss kill time target; bosses that melt or wall both read as unfun in round 1 and round 2"
+        }
+      ],
+      "rubric": {
+        "id": "R2",
+        "1": "trivial, or a wall, or unfair: deaths from things the player could not see",
+        "3": "fair but flat, or spikes in a few places",
+        "5": "every fight asks for attention, deaths feel earned, difficulty climbs through the run"
+      }
+    },
+    {
+      "id": "progress",
+      "name": "Progress and reward",
+      "basis": "PXI progress feedback, the charter's Vampire Survivors growth loop",
+      "weight": 0.1111,
+      "measures": [
+        {
+          "id": "M3.1",
+          "name": "Power against the world",
+          "method": "median over simulated runs (benchmark profile, random card policy, sampled heroes) of hero damage per second at the boss over hero damage per second at the end of the opening act, divided by the growth of foe HP between the same two points; the opening act's one-hit fodder is left out because it makes the ratio meaningless",
+          "unit": "ratio",
+          "band": {
+            "scale": "log",
+            "points": [
+              [
+                1,
+                0
+              ],
+              [
+                3,
+                100
+              ],
+              [
+                30,
+                100
+              ],
+              [
+                1000,
+                0
+              ]
+            ]
+          },
+          "basis": "v1 guess: the hero should outgrow the foes for a power fantasy, but not by orders of magnitude"
+        },
+        {
+          "id": "M3.2",
+          "name": "Reward rhythm",
+          "method": "median game seconds between rewards (level up, pick, chest, evolution, shard) in the sampled stage, played by the skilled bot kept at half HP or more for the sampled game minutes",
+          "unit": "s",
+          "band": {
+            "scale": "linear",
+            "points": [
+              [
+                30,
+                100
+              ],
+              [
+                120,
+                0
+              ]
+            ]
+          },
+          "basis": "v1 guess"
+        },
+        {
+          "id": "M3.3",
+          "name": "Growth runway",
+          "method": "median share of a stage's par time before every held skill is at its maximum level, over simulated runs",
+          "unit": "percent",
+          "band": {
+            "scale": "linear",
+            "points": [
+              [
+                50,
+                0
+              ],
+              [
+                90,
+                100
+              ]
+            ]
+          },
+          "basis": "v1 guess"
+        },
+        {
+          "id": "M3.4",
+          "name": "Run length",
+          "method": "median par time of a stage from the game's stage data",
+          "unit": "min",
+          "band": {
+            "scale": "linear",
+            "points": [
+              [
+                30,
+                100
+              ],
+              [
+                45,
+                0
+              ]
+            ]
+          },
+          "basis": "the owner's benchmark session is 20 to 30 minutes; a run should end inside it"
+        }
+      ],
+      "rubric": {
+        "id": "R3",
+        "1": "the hero at the end feels like the hero at the start, or the run ends before the growth pays off",
+        "3": "growth is visible but slow or flat in places",
+        "5": "the player feels clearly stronger through the run, and its end is a power fantasy against foes and bosses alike"
+      }
+    },
+    {
+      "id": "clarity",
+      "name": "Goals and clarity",
+      "basis": "PXI goals and rules, GameFlow clear goals",
+      "weight": 0.1111,
+      "measures": [],
+      "rubric": {
+        "id": "R4",
+        "1": "the player does not know where to go, what a card does or why they died",
+        "3": "goals are clear; some rules (weaknesses, Arts, card text, names) are not",
+        "5": "the next goal, the threat and every card are clear at a glance, and every screen tells the truth"
+      }
+    },
+    {
+      "id": "audiovisual",
+      "name": "Audiovisual appeal",
+      "basis": "PXI audiovisual appeal, charter pillar 5",
+      "weight": 0.1111,
+      "measures": [],
+      "rubric": {
+        "id": "R5",
+        "1": "clashing or unreadable art, broken frames, silence",
+        "3": "good-looking, with some art that does not match or reads poorly on a phone",
+        "5": "every screen holds one finish, the hero and threats read at phone size, sound and music fit every moment"
+      }
+    },
+    {
+      "id": "mastery",
+      "name": "Mastery",
+      "basis": "PXI mastery, GameFlow player skills, relative algorithm performance profiles",
+      "weight": 0.1111,
+      "measures": [
+        {
+          "id": "M6.1",
+          "name": "Skill gap",
+          "method": "(skilled bot boss HP removed minus mash bot boss HP removed) divided by skilled, summed over the sampled boss rooms and heroes, a clear counting as 1",
+          "unit": "ratio",
+          "band": {
+            "scale": "linear",
+            "points": [
+              [
+                0,
+                0
+              ],
+              [
+                0.5,
+                100
+              ]
+            ]
+          },
+          "basis": "the owner asked for skill to decide about half of a run's outcome"
+        }
+      ],
+      "rubric": {
+        "id": "R6",
+        "1": "mashing one button is as good as playing well",
+        "3": "good play helps, with few techniques to learn",
+        "5": "a long way from new player to master (parries, cancels, warp routes, weaknesses), and each step pays off"
+      }
+    },
+    {
+      "id": "autonomy",
+      "name": "Autonomy",
+      "basis": "PXI autonomy, meaningful choice",
+      "weight": 0.1111,
+      "measures": [
+        {
+          "id": "M7.1",
+          "name": "Decisions per run",
+          "method": "picks made before the build is full plus the stage choice, median over simulated runs",
+          "unit": "choices",
+          "band": {
+            "scale": "linear",
+            "points": [
+              [
+                10,
+                0
+              ],
+              [
+                60,
+                100
+              ]
+            ]
+          },
+          "basis": "v1 guess; the owner's growth review counted about 97 for Vampire Survivors"
+        },
+        {
+          "id": "M7.2",
+          "name": "Build spread",
+          "method": "worst sampled hero's share of simulated runs (strongest-card policy) that end with that hero's most common core of four skills",
+          "unit": "percent",
+          "band": {
+            "scale": "linear",
+            "points": [
+              [
+                20,
+                100
+              ],
+              [
+                90,
+                0
+              ]
+            ]
+          }
+        },
+        {
+          "id": "M7.3",
+          "name": "Chosen growth",
+          "method": "share of build upgrades in a stage that come from picks, against chests",
+          "unit": "percent",
+          "band": {
+            "scale": "linear",
+            "points": [
+              [
+                30,
+                0
+              ],
+              [
+                70,
+                100
+              ]
+            ]
+          },
+          "basis": "v1 guess"
+        }
+      ],
+      "rubric": {
+        "id": "R7",
+        "1": "one obvious build and one obvious route",
+        "3": "some real choices, some always-take cards",
+        "5": "several strong builds, the stage and mode choice change the run, the player expresses a style"
+      }
+    },
+    {
+      "id": "variety",
+      "name": "Curiosity and variety",
+      "basis": "PXI curiosity, charter pillar 3",
+      "weight": 0.1111,
+      "measures": [
+        {
+          "id": "M8.1",
+          "name": "Novelty rate",
+          "method": "new things first seen per 10 minutes in the second half of a stage (foe kinds, boss attacks, hazards, places, skills, evolutions), mean over stages",
+          "unit": "per 10 min",
+          "band": {
+            "scale": "linear",
+            "points": [
+              [
+                0,
+                0
+              ],
+              [
+                6,
+                100
+              ]
+            ]
+          },
+          "basis": "v1 guess"
+        }
+      ],
+      "rubric": {
+        "id": "R8",
+        "1": "the second half of a run feels like the first",
+        "3": "new places and foes, similar fights",
+        "5": "every stage has its own rules, there is always something not yet seen or unlocked, the player wants another hero or stage"
+      }
+    },
+    {
+      "id": "immersion",
+      "name": "Immersion and meaning",
+      "basis": "PXI immersion and meaning",
+      "weight": 0.1112,
+      "measures": [],
+      "rubric": {
+        "id": "R9",
+        "1": "the world is a backdrop for menus",
+        "3": "a coherent world with a story that stays in the background",
+        "5": "the player cares about the place, the bosses and the reason to seal the rifts, and loses track of time"
+      }
+    }
+  ],
+  "calibration": {
+    "order": "the studio records its score before it reads the owner's",
+    "reasons": "each owner reason maps to a dimension; a reason nothing captures becomes a new measure or anchor; a reason that contradicts an anchor rewrites it",
+    "weights": "from two numeric owner scores on: least squares of log(owner / 100) on log(d_i / 100), ridge shrinkage toward equal weights, non-negative, summing to 1 (npm run playtest -- fun refit)",
+    "ridge": 1,
+    "agreement": "mean absolute gap between studio and owner Fun; share of owner more-or-less verdicts the studio's Fun change agrees with"
+  },
+  "revisions": [
+    "1, 27 November 2026: nine PXI-based dimensions, equal weights, weighted geometric mean; before the first score, M3.1 became power against foe growth with an upper limit, and Growth runway and Chosen growth were added.",
+    "2, 28 November 2026: after round 2 the judges' gut fell 18 points while the formula fell 2, because bosses became walls and runs outgrew a session without any measure seeing it. Added M2.4 Boss fight length and M3.4 Run length; M6.1 always uses boss HP removed; M4.1 Blind route dropped until it can be automated; the benchmark is one stage per run; bands became machine-readable. The owner agreed with the round 2 assessment.",
+    "2, 28 November 2026 (owner request, same day): no full runs. An analyst picks at most five measures a night by impact, each runs as one minimal sampled job, at most five jobs at a time within 25 percent of the CPU, and the rest carry over from the ledger. M3.1 counts from the end of the opening act, because the opening act's one-hit fodder made the ratio meaningless."
+  ],
+  "budget": {
+    "maxPicks": 5,
+    "maxParallelJobs": 5,
+    "cpuShare": 0.25,
+    "rule": "each night an analyst lists every measure and rubric item with an impact level and picks at most maxPicks; each pick runs as one minimal sampled job, at most maxParallelJobs at a time, and the whole measurement stays at or under cpuShare of the machine's CPU; measures not picked keep their latest reading from the ledger"
+  },
+  "jobs": {
+    "presses": {
+      "measures": [
+        "M1.1",
+        "M1.2"
+      ],
+      "default": {
+        "heroes": [
+          "kael",
+          "brynn",
+          "cerise"
+        ],
+        "stages": []
+      },
+      "max": {
+        "heroes": 9,
+        "stages": 0
+      }
+    },
+    "bossRooms": {
+      "measures": [
+        "M2.1",
+        "M2.2",
+        "M2.3",
+        "M2.4",
+        "M6.1"
+      ],
+      "default": {
+        "heroes": [
+          "kael"
+        ],
+        "stages": [
+          "prologue",
+          "foundry",
+          "veil"
+        ]
+      },
+      "max": {
+        "heroes": 3,
+        "stages": 5
+      }
+    },
+    "stageRun": {
+      "measures": [
+        "M3.2"
+      ],
+      "default": {
+        "heroes": [
+          "kael"
+        ],
+        "stages": [
+          "marsh"
+        ],
+        "minutes": 10
+      },
+      "max": {
+        "heroes": 1,
+        "stages": 1,
+        "minutes": 20
+      }
+    },
+    "growth": {
+      "measures": [
+        "M3.1",
+        "M3.3",
+        "M3.4",
+        "M7.1",
+        "M7.2",
+        "M7.3",
+        "M8.1"
+      ],
+      "default": {
+        "heroes": [
+          "kael",
+          "brynn",
+          "cerise"
+        ],
+        "stages": [],
+        "runs": 100
+      },
+      "max": {
+        "heroes": 9,
+        "stages": 0,
+        "runs": 300
+      }
+    },
+    "evidence": {
+      "measures": [
+        "R1",
+        "R2",
+        "R3",
+        "R4",
+        "R5",
+        "R6",
+        "R7",
+        "R8",
+        "R9"
+      ],
+      "default": {
+        "heroes": [
+          "kael"
+        ],
+        "stages": [
+          "prologue",
+          "foundry"
+        ]
+      },
+      "max": {
+        "heroes": 2,
+        "stages": 3
+      }
+    }
+  }
+}

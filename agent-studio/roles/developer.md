@@ -16,8 +16,9 @@ Rules:
 - Keep saves compatible. Never rename or clear a local storage key; migrate when a shape changes.
 - Every new input works on the keyboard and the touch controller and appears on the Controls screen.
 - Update the README feature list and any doc in `docs/` your change makes untrue.
-- Balance changes: measure before and after with the playtest bot and report the numbers. For late waves, start the bot there with `--start-wave N --start-level L`.
-- Keep the development-only playtest start (`src/services/playtestStart.ts`, `?wave=` and `?level=` on the dev server) working.
+- The patch is scored with the Fun benchmark after QA (`agent-studio/fun/definition.json`). The plan's `fun` field says which dimensions it should raise. Do not special-case the bots, the benchmark rooms, the playtest profile or the judges; build for players.
+- Balance changes: measure before and after and report the numbers. The base build's Fun raw data in the run folder has every boss room run; `cd agent-studio && npm run playtest -- fun measure --out-dir <run folder>/scratch/fun` measures the whole benchmark on your branch (it takes a long time, so prefer scenario scripts for one room).
+- Keep the development-only playtest start (`src/services/playtestStart.ts`: `?stage=`, `?section=`, `?level=` and `?build=` on the dev server) working.
 - Commit your work in small commits with plain messages describing the change. Do not push, tag or merge.
 
 Verify before you finish, and fix what fails:

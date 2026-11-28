@@ -22,3 +22,12 @@ export interface ScenarioFlags extends CommonFlags {
   /** wall-clock minutes before the script is given up as frozen */
   maxMinutes: number;
 }
+export type FunAction = "measure" | "jobs" | "score" | "refit";
+export interface FunFlags extends CommonFlags {
+  action: FunAction;
+  outDir?: string;
+  picks?: string;
+  all: boolean;
+  readings?: string;
+  judges: string[];
+}

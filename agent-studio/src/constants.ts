@@ -16,12 +16,15 @@ export const MODEL = process.env.STUDIO_MODEL ?? "claude-opus-5-5";
 /** QA's blocking issues get this many rounds of fixes; one still left gets the cut round. Minor issues never get a
     round (owner decisions: 9 November 2026, no human review and one patch a day; 18 November 2026, ship with minors) */
 export const MAX_FIX_ROUNDS = 3;
-/** bot runs per hero for the baseline difficulty report */
-export const BASELINE_BOT_RUNS = 1;
+export const FUN_JUDGES = 3;
+export const FUN_MEASURE_MINUTES = 180;
+export const FUN_DEFINITION = "agent-studio/fun/definition.json";
+export const FUN_LEDGER = "agent-studio/fun/ledger.json";
 
 /** paths only the owner changes; a patch that touches them is refused */
 export const PROTECTED_PATHS = [
   "agent-studio/charter.md",
+  "agent-studio/fun/definition.json",
   "agent-studio/src/",
   "agent-studio/roles/",
   "agent-studio/schemas/",
@@ -42,6 +45,8 @@ export const ROLES: Record<Role, RoleConfig> = {
   qa: { tools: "default", permission: "bypassPermissions", minutes: 75, schema: "qa" },
   media: { tools: "default", permission: "bypassPermissions", minutes: 75, schema: "media" },
   writer: { tools: ["Read", "Write", "Edit", "Grep", "Glob"], permission: "acceptEdits", minutes: 40, schema: "write" },
+  judge: { tools: ["Read", "Grep", "Glob"], permission: "dontAsk", minutes: 30, schema: "judge" },
+  analyst: { tools: ["Read", "Grep", "Glob"], permission: "dontAsk", minutes: 20, schema: "analyst" },
 };
 /** a small patch gives the developer less time */
 export const SMALL_PATCH_DEVELOPER_MINUTES = 120;

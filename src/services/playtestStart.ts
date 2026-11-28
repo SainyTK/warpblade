@@ -33,6 +33,12 @@ export function readPlaytestJob(): string | null {
   return new URLSearchParams(location.search).get("job");
 }
 
+/** a dev build started with `?paint=off` steps the game and keeps the HUD and dialogs, but draws no stage */
+export function paintsStage(): boolean {
+  if (!import.meta.env.DEV) return true;
+  return new URLSearchParams(location.search).get("paint") !== "off";
+}
+
 export function readTrainingHero(): string | null {
   if (!import.meta.env.DEV) return null;
   return new URLSearchParams(location.search).get("training");

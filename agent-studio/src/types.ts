@@ -1,8 +1,8 @@
 import type { PatchKind } from "../../src/types/patch.ts";
 
-export type Role = "triage" | "director" | "developer" | "qa" | "media" | "writer";
+export type Role = "triage" | "director" | "developer" | "qa" | "media" | "writer" | "judge" | "analyst";
 export type RunMode = "live" | "dry";
-export type SchemaName = "triage" | "plan" | "develop" | "qa" | "media" | "write" | "patch";
+export type SchemaName = "triage" | "plan" | "develop" | "qa" | "media" | "write" | "patch" | "judge" | "analyst";
 
 export interface RoleConfig {
   /** allowed built-in tools, or the default set */
@@ -100,9 +100,22 @@ export interface Plan {
   } | null;
   changes: { type: string; target: string; change: string; reason: string; evidence: string; feedback: number[] }[];
   considered: { idea: string; whyNot: string }[];
+  fun: { targets: string[]; expected: string };
   media: { subject: string; shot: string }[];
   roadmapNotes: string;
   memo: string;
+}
+
+export interface AnalystReport {
+  measures: { id: string; impact: "high" | "medium" | "low"; reason: string }[];
+  picks: { id: string; sample: { heroes: string[]; stages: string[]; runs?: number; minutes?: number } }[];
+}
+
+export interface JudgeReport {
+  levels: Record<string, number>;
+  evidence: Record<string, string>;
+  gut: number;
+  changes: string[];
 }
 
 export interface DevReport {

@@ -7,7 +7,7 @@ Read first, in this order:
 
 1. `agent-studio/charter.md`: the vision, the references, the patch types and the decision questions. Follow it exactly.
 2. `agent-studio/roadmap.md`: the studio's backlog.
-3. The run files named below: the run context, the triaged feedback, the baseline playtest report, recent patches, and the commits since the last release.
+3. The run files named below: the run context, the triaged feedback, the current Fun score with the latest reading of every measure, the Fun ledger with the judges' earlier levels, the baseline playtest report, recent patches, and the commits since the last release.
 4. The game itself: `README.md`, `docs/`, and the code under `src/` that your candidates touch. Read enough code to know the plan can be built on what exists.
 
 You have read-only tools. Do not edit files.
@@ -18,7 +18,9 @@ How to decide:
 - For a big patch, choose exactly one headline from the charter's list. Check the recent patches and do not repeat the last big patch's headline category unless players ask for it. Prefer roadmap items, but a better idea or strong feedback can replace them; say why.
 - Scope the headline so one developer agent can build it to the charter's quality bar in about three hours and test it. Cut extras into `roadmapNotes`.
 - Write the headline's `design` as a full spec the developer can build without asking: what the player sees and does, controls on keyboard and touch, numbers (damage, cooldowns, HP, MP, timings), the animation beats (anticipation, strike, follow-through) and effect colours from the existing palettes, how it fits a run and the meta progression, and what must stay unchanged. Give `acceptance` as checks a tester can verify in the browser.
-- The baseline includes bot runs that start at wave 20, so the Rift Warden and late waves have measured numbers too.
+- Aim the patch at the Fun score (the charter's Fun score section). Rank the dimensions by weight times room to grow, `w * (100 - d)`, read the measure readings and the judges' evidence behind the top ones, and choose changes that move them. The judges' suggested changes are strong candidates; weigh them like feedback.
+- Fill `fun`: `targets` names the dimension ids you aim at, and `expected` says which measures and rubric items should move, in which direction and why, by id. Tonight's patch is scored against the base after QA, and a lower score sends it back to the developer.
+- After you plan, the Fun analyst picks at most five measures to take tonight on the base and on the patch, led by your `fun` targets, so write targets and expected effects that a measure or a judge can see.
 - For a small patch, pick two to eight changes, each with evidence: a bug you can point to in code or a report, a bot number, or feedback IDs. Balance moves follow the charter's limits.
 - Every feedback item triaged `now` either goes into the plan with its ID or is listed in `considered` with why not.
 - Bugs in commits since the last release, or in the baseline playtest, come first.

@@ -28,6 +28,8 @@ export const ULT_RANGE = 110;
 export const ULT_HOLD_MS = 600;
 /** J held this long is the warp (the game's long press is 250 ms) */
 export const WARP_HOLD_MS = 320;
+export const ULT_REST_MS = 1500;
+export const WARP_REST_MS = 2100;
 /** the skilled bot raises a held skill that has reached this level, so it heads for an evolution */
 export const NEAR_EVOLUTION_LEVEL = 5;
 /** otherwise it takes a new skill by kind in this order, then the highest skill level, then a charm, then a boon */

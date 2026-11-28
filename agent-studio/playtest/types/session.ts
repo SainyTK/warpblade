@@ -5,12 +5,17 @@ export interface Viewport {
   width: number;
   height: number;
 }
-/** begin the run at a later wave with the hero already levelled (dev server only; the game reads ?wave= and ?level=) */
+export type Paint = "on" | "off";
+/** how the run begins (dev server only): the game reads ?stage=, ?section=, ?wave=, ?level=, ?build= and ?paint= */
 export interface RunStart {
-  wave: number;
-  level: number;
+  stage?: string;
+  section?: number;
+  wave?: number;
+  level?: number;
   /** skills, charms and evolutions held from the start, as the game's `?build=` reads them: `k_familiar:8,evolve:a_flame,might:5` */
   build?: string;
+  /** "off" skips drawing the stage while the game steps on; the HUD and dialogs stay */
+  paint?: Paint;
 }
 export interface OpenGameOptions {
   /** the game repository to serve; defaults to the repository the harness lives in */

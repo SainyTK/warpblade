@@ -12,6 +12,8 @@ export const SELECTORS = {
   menu: "#menu",
   pickDialog: "dialog.level-up",
   pickCard: "dialog.level-up .pick",
+  pickName: ".pick-name",
+  pickLevelPips: ".pick-pips i.had, .pick-pips i.gain",
   hudTab: ".hud .elements .el",
   ultRow: ".hud .ult",
   ultPip: "#ultPips i.on",

@@ -11,7 +11,7 @@ Check, and record evidence for each:
 2. `cd agent-studio && npm run playtest -- smoke --hero all` passes.
 3. Every acceptance check in the plan works in the browser. Write throwaway scenario scripts in the run folder (never in the repo), run them with `npm run playtest -- scenario <file>`, and look at the stills you capture.
 4. Every planned change is present, and the numbers in the code match the plan and the developer's report.
-5. Nothing else broke: start a run with each hero, fight through at least two waves with the bot, open the menu screens, and compare a bot run with the baseline report in the run folder for difficulty swings the plan did not intend.
+5. Nothing else broke: start a run with each hero, fight through the first Surge with the bot, open the menu screens, and compare with the base build's Fun raw data in the run folder for difficulty swings the plan did not intend.
 6. Saves: a save from the base version (local storage `warpblade-*` keys) still loads with coins and purchases intact.
 7. The art of new or changed visuals meets the charter's finish (outline, ramps, light, anticipation, follow-through) at the game's real scale.
 8. The README and docs match the change.
@@ -23,7 +23,8 @@ Play it the way a player would, in ordinary fights.
 A change that does not deliver its purpose there is a major issue even when it matches the plan: an attack that rarely hits what it aims at, an effect that is hard to see, a buff that changes nothing a player would notice, a fix that brings a new annoyance.
 Say what you saw and what would make it deliver.
 
-For anything that happens late in a run, start the bots or your scenarios there with `--start-wave N --start-level L` instead of judging from arithmetic.
+For anything that happens late in a run, start your scenarios there with the dev server's `?stage=`, `?section=` and `?level=` instead of judging from arithmetic.
+The pipeline scores the patch with the Fun benchmark after you pass it; you do not need to run the whole benchmark.
 
 Do not fix anything and do not edit repo files; you may only write inside the run folder.
 Fail the patch for any blocker or major issue: a crash or page error, a broken control, a missing planned item, a save that loses progress, a build or lint failure, or visuals clearly below the existing finish.

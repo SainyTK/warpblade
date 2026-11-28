@@ -152,7 +152,34 @@
     "memo": {
       "type": "string",
       "description": "the decision memo in Markdown"
+    },
+    "fun": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "targets": {
+          "type": "array",
+          "items": {
+            "enum": [
+              "control",
+              "challenge",
+              "progress",
+              "clarity",
+              "audiovisual",
+              "mastery",
+              "autonomy",
+              "variety",
+              "immersion"
+            ]
+          },
+          "minItems": 1
+        },
+        "expected": {
+          "type": "string"
+        }
+      },
+      "required": ["targets", "expected"]
     }
   },
-  "required": ["kind", "title", "theme", "headline", "changes", "considered", "media", "roadmapNotes", "memo"]
+  "required": ["kind", "title", "theme", "headline", "changes", "considered", "media", "roadmapNotes", "memo", "fun"]
 }

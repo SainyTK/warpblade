@@ -1,8 +1,9 @@
 import { BOT_TICK_MS, CHEST_WAIT_MS } from "../constants/bot";
 import { KEYS } from "../constants/keys";
-import type { BotMemory, Policy } from "../types/bot";
+import type { Policy } from "../types/bot";
 import type { Session } from "../types/session";
 import type { GameSnapshot } from "../types/snapshot";
+import { freshMemory } from "./freshMemory";
 import { createKeyDriver } from "./keyDriver";
 
 export type AutopilotEnd = "fallen" | "clear" | "timeout" | "reached";
@@ -22,8 +23,6 @@ export interface AutopilotOptions {
 
 /** run outcomes that count as a cleared stage: the stage alone, or the stage and what comes after its last boss */
 const CLEARED: ReadonlySet<string> = new Set(["clear", "beyond"]);
-
-const freshMemory = (): BotMemory => ({ now: 0, lastDodge: -1e9, lastVault: -1e9, ultUntil: 0, warpUntil: 0 });
 
 /** play the current run with a policy, a decision every tick of game time, until it ends or the goal is met */
 export async function autopilot(session: Session, policy: Policy, options: AutopilotOptions): Promise<AutopilotResult> {

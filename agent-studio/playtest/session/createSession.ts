@@ -7,6 +7,7 @@ import { readHeroes } from "../services/pageHeroes";
 import { readSnapshot } from "../services/pageSnapshot";
 import type { Session, SessionOptions } from "../types/session";
 import type { GameSnapshot } from "../types/snapshot";
+import { startQuery } from "../utils/startQuery";
 import { choosePickThroughDialog } from "./choosePick";
 import { startRunThroughMenu } from "./menuNav";
 import { type GrabberSlot, record } from "./record";
@@ -29,6 +30,8 @@ export async function createSession(browser: Browser, url: string, options: Sess
   const context = await browser.newContext({ viewport: options.viewport ?? DEFAULT_VIEWPORT, deviceScaleFactor: 1 });
   await context.addInitScript(NAME_SHIM);
   await context.addInitScript(({ key, value }) => localStorage.setItem(key, value), PLAYTEST_STORAGE);
+  await context.clock.install({ time: CLOCK_START_MS });
+  await context.clock.pauseAt(CLOCK_START_MS + 1000);
   const page = await context.newPage();
   const errors: string[] = [];
   page.on("pageerror", (error) => errors.push(`page error: ${error.message}`));
@@ -37,13 +40,9 @@ export async function createSession(browser: Browser, url: string, options: Sess
       errors.push(`console error: ${message.text()}`);
     }
   });
-  await page.clock.install({ time: CLOCK_START_MS });
-  await page.clock.pauseAt(CLOCK_START_MS + 1000);
   // after the clock is installed, so it rounds the fake performance.now()
   await page.addInitScript(FRAME_GRID_SHIM);
-  const build = options.start?.build ? `&build=${encodeURIComponent(options.start.build)}` : "";
-  const start = options.start ? `?wave=${options.start.wave}&level=${options.start.level}${build}` : "";
-  await page.goto(`${url}${start}`, { waitUntil: "load", timeout: LOAD_TIMEOUT_MS });
+  await page.goto(`${url}${startQuery(options.start)}`, { waitUntil: "load", timeout: LOAD_TIMEOUT_MS });
   await page.evaluate(() => document.fonts.ready.then(() => undefined));
   const slot: GrabberSlot = { current: null };
   let elapsed = 0;

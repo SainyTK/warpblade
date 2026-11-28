@@ -1,0 +1,1 @@
+export { prepareRoom } from "./prepareRoom";

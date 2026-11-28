@@ -7,9 +7,11 @@ import {
   STRIKE_REACH,
   ULT_HOLD_MS,
   ULT_RANGE,
+  ULT_REST_MS,
   VAULT_GAP_MS,
   WARP_HOLD_MS,
   WARP_RANGE,
+  WARP_REST_MS,
 } from "../constants/bot";
 import { KEYS } from "../constants/keys";
 import type { BotMemory, Intent, Policy } from "../types/bot";
@@ -48,8 +50,10 @@ function decide(state: GameSnapshot, memory: BotMemory): Intent {
     return { hold: [directionKey(-sideOf(hero, hazard))], tap: [] };
   }
   const near = foesWithin(hero, enemies, ULT_RANGE);
-  if (ultimateReady(hud) && (near.length >= 2 || near.some((f) => f.rank !== "minion"))) {
+  const ultRested = memory.now >= memory.ultRestUntil;
+  if (ultRested && ultimateReady(hud) && (near.length >= 2 || near.some((f) => f.rank !== "minion"))) {
     memory.ultUntil = memory.now + ULT_HOLD_MS;
+    memory.ultRestUntil = memory.ultUntil + ULT_REST_MS;
     return { hold: [KEYS.ultimate], tap: [] };
   }
   const spell = spellChoice(hud);
@@ -59,8 +63,10 @@ function decide(state: GameSnapshot, memory: BotMemory): Intent {
   if (spell === "cast" && dx < SPELL_RANGE && hero.mp >= hero.maxMp * SPELL_MP_SHARE) {
     return { hold: hero.face === side ? [] : [toward], tap: [KEYS.spell] };
   }
-  if (warpReady(hud) && hero.face === side && dx > WARP_RANGE.min && dx < WARP_RANGE.max) {
+  const warpRested = memory.now >= memory.warpRestUntil;
+  if (warpRested && warpReady(hud) && hero.face === side && dx > WARP_RANGE.min && dx < WARP_RANGE.max) {
     memory.warpUntil = memory.now + WARP_HOLD_MS;
+    memory.warpRestUntil = memory.warpUntil + WARP_REST_MS;
     return { hold: [KEYS.attack], tap: [] };
   }
   if (isHigh(hero, foe, HIGH_FOE) && dx < STRIKE_REACH && isOpen(foe)) {

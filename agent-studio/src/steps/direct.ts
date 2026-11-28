@@ -9,7 +9,10 @@ export async function direct(night: Night): Promise<Plan> {
   const prompt = await promptFor("director", ctx, {
     "Run context": files.context,
     "Triaged feedback (empty when none)": files.triage,
-    "Baseline playtest reports (smoke and bots on the base version)": files.baseline,
+    "Baseline playtest report (smoke on the base version)": files.baseline,
+    "The current Fun score (latest reading of every measure, from the ledger)": files.funScore("ledger"),
+    "The Fun definition": `${ctx.workdir}/agent-studio/fun/definition.json`,
+    "Fun ledger (every scored build and the owner's scores)": `${ctx.workdir}/agent-studio/fun/ledger.json`,
     "Commits since the last release": files.commits,
     "Shipped patches": `${ctx.workdir}/src/content/patches/`,
   });
