@@ -17,7 +17,7 @@ const WOOL = [
   [-10.5, -9, 2.6],
 ] as const;
 
-const woolTone = (p: RamPose): Ramp => R.wool.map((c, i) => mix(c, R.stormWool[i], p.storm * 0.7)) as Ramp;
+const woolTone = (p: RamPose): Ramp => R.wool.map((c, i) => mix(c, R.stormWool[i], 0.5 + p.storm * 0.4)) as Ramp;
 
 function leg(s: SpriteCanvas, x: number, swing: number, lift: number, near: boolean): void {
   const hide = near ? R.hide[2] : R.hide[1];
@@ -68,44 +68,48 @@ function fleece(s: SpriteCanvas, p: RamPose, wool: Ramp, time: number): void {
   }
 }
 
+const HEAD = { x: 6, y: -13, k: 1.3 } as const;
+
 function head(s: SpriteCanvas, p: RamPose): void {
-  const dy = p.head;
-  const dx = p.daze;
+  const at = (x: number, y: number): [number, number] => [
+    HEAD.x + p.daze + (x - HEAD.x) * HEAD.k,
+    HEAD.y + p.head * 0.8 + (y - HEAD.y) * HEAD.k,
+  ];
+  const dy = p.head * 0.25;
   s.begin();
   s.poly(
-    [
-      [7 + dx, -16 + dy * 0.5],
-      [12 + dx, -14 + dy],
-      [15 + dx, -9.5 + dy],
-      [13.5 + dx, -7.5 + dy],
-      [10 + dx, -9 + dy],
-      [7 + dx, -11 + dy * 0.5],
-    ],
+    [at(7, -16), at(12, -14 + dy), at(15, -9.5 + dy), at(13.5, -7.5 + dy), at(10, -9 + dy), at(7, -11)],
     R.hide[2],
   );
   s.shadeEdges(R.hide[2], R.hide[3], R.hide[1]);
-  s.set(14.6 + dx, -8.6 + dy, R.hide[0]);
+  const [nx, ny] = at(14.6, -8.6 + dy);
+  s.set(nx, ny, R.hide[0]);
   s.commit();
   s.begin();
-  const hx = 9.5 + dx;
-  const hy = -15 + dy * 0.7;
-  s.stroke(hx - 1, hy - 1.5, hx - 4, hy - 1, 1.6, R.horn[2]);
-  s.stroke(hx - 4, hy - 1, hx - 5, hy + 2.5, 1.5, R.horn[2]);
-  s.stroke(hx - 5, hy + 2.5, hx - 2.5, hy + 4.5, 1.3, R.horn[2]);
-  s.stroke(hx - 2.5, hy + 4.5, hx + 0.5, hy + 3.5, 1.1, R.horn[3]);
+  const [ax, ay] = at(8.5, -16.5);
+  const [bx, by] = at(5.5, -16);
+  const [cx, cy] = at(4.5, -12.5);
+  const [dx, dz] = at(7, -10.5);
+  const [ex, ey] = at(10, -11.5);
+  s.stroke(ax, ay, bx, by, 1.9, R.horn[2]);
+  s.stroke(bx, by, cx, cy, 1.8, R.horn[2]);
+  s.stroke(cx, cy, dx, dz, 1.6, R.horn[2]);
+  s.stroke(dx, dz, ex, ey, 1.3, R.horn[3]);
   s.shadeEdges(R.horn[2], R.horn[4], R.horn[1]);
   s.shadeEdges(R.horn[3], R.horn[4], R.horn[1]);
-  for (let k = 0; k < 3; k++) s.set(hx - 3.5 - k * 0.6, hy - 1.5 + k * 1.6, R.horn[1]);
+  for (let k = 0; k < 4; k++) {
+    const [rx, ry] = at(6.5 - k * 0.6, -16 + k * 1.4);
+    s.set(rx, ry, R.horn[1]);
+  }
   s.commit();
   s.begin();
-  s.dot(hx + 0.6, hy + 3.4, 1.2, R.horn[4]);
+  s.dot(ex, ey, 1.4, R.horn[4]);
   s.commit(false);
   s.begin();
-  const ex = 11.6 + dx;
-  const ey = -12.6 + dy * 0.85;
+  const [gx, gy] = at(11.6, -12.6 + dy);
   const hot = p.storm > 0.5;
-  s.block(ex - 0.5, ey - 0.5, hot ? R.eyeHot : R.eye, 1.5, 1);
-  s.set(ex + 1, ey, hot ? R.volt[3] : R.volt[2]);
+  s.block(gx - 0.5, gy - 0.5, hot ? R.eyeHot : R.eye, 1.5, 1);
+  s.set(gx + 1, gy, hot ? R.volt[3] : R.volt[2]);
   s.commit(false);
 }
 

@@ -13,13 +13,13 @@ const B = K.bronze;
 type Pt = readonly [number, number];
 
 function leg(s: SpriteCanvas, hip: Pt, foot: Pt, near: boolean): void {
-  const plate = near ? B[3] : B[2];
+  const plate = near ? B[2] : B[1];
   const kx = (hip[0] + foot[0]) / 2 + 1;
   const ky = (hip[1] + foot[1]) / 2;
   s.begin();
   s.stroke(hip[0], hip[1], kx, ky, 3.2, plate);
   s.stroke(kx, ky, foot[0], foot[1] - 2, 2.8, plate);
-  s.shadeEdges(plate, near ? B[4] : B[3], B[1], 2);
+  s.shadeEdges(plate, near ? B[3] : B[2], B[0], 2);
   s.commit();
   s.begin();
   s.dot(kx + 0.6, ky, 2.2, near ? K.patina[2] : K.patina[1]);
@@ -40,17 +40,24 @@ function leg(s: SpriteCanvas, hip: Pt, foot: Pt, near: boolean): void {
 }
 
 function arm(s: SpriteCanvas, shoulder: Pt, fist: Pt, near: boolean): void {
-  const plate = near ? B[3] : B[2];
+  const plate = near ? B[2] : B[1];
   const out = near ? 1 : -1;
   const ex = (shoulder[0] + fist[0]) / 2 + out * 2.5;
   const ey = (shoulder[1] + fist[1]) / 2 + 1;
   s.begin();
-  s.stroke(shoulder[0], shoulder[1], ex, ey, 2.4, plate);
-  s.stroke(ex, ey, fist[0], fist[1], 2.8, plate);
-  s.shadeEdges(plate, near ? B[4] : B[3], B[1], 2);
+  s.stroke(shoulder[0], shoulder[1], ex, ey, 3, plate);
+  s.shadeEdges(plate, near ? B[3] : B[2], B[0], 2);
   s.commit();
   s.begin();
-  s.dot(fist[0], fist[1], 4.4, near ? K.iron[2] : K.iron[1]);
+  s.stroke(ex, ey, fist[0], fist[1], 3.6, near ? K.iron[2] : K.iron[1]);
+  s.shadeEdges(near ? K.iron[2] : K.iron[1], K.iron[3], K.iron[0], 2);
+  s.commit();
+  s.begin();
+  s.dot(ex, ey, 2.4, near ? K.patina[2] : K.patina[1]);
+  s.shadeEdges(near ? K.patina[2] : K.patina[1], K.patina[3], K.patina[0]);
+  s.commit();
+  s.begin();
+  s.dot(fist[0], fist[1], 5, near ? K.iron[2] : K.iron[1]);
   s.shadeEdges(near ? K.iron[2] : K.iron[1], K.iron[3], K.iron[0], 2);
   s.commit();
   s.begin();
@@ -73,7 +80,7 @@ function torso(s: SpriteCanvas, p: ColossusPose): void {
     ],
     B[2],
   );
-  s.shadeEdges(B[2], B[3], B[1], 2);
+  s.shadeEdges(B[2], B[3], B[0], 2);
   s.hairline(1, -37, 1, -18, B[1]);
   s.hairline(-9, -25.5, 10, -25.5, B[1]);
   s.hairline(7, -36.5, 9.4, -26.5, B[4]);
@@ -142,10 +149,10 @@ function core(s: SpriteCanvas, p: ColossusPose): void {
 }
 
 function pauldron(s: SpriteCanvas, x: number, near: boolean): void {
-  const plate = near ? B[3] : B[2];
+  const plate = near ? B[2] : B[1];
   s.begin();
-  s.dot(x, -36, 5.6, plate);
-  s.shadeEdges(plate, B[4], B[1], 2);
+  s.dot(x, -36, 6, plate);
+  s.shadeEdges(plate, near ? B[4] : B[3], B[0], 2);
   for (let k = -1; k <= 1; k++) s.set(x + k * 2.4, -32, B[1]);
   s.commit();
   s.begin();
@@ -154,33 +161,36 @@ function pauldron(s: SpriteCanvas, x: number, near: boolean): void {
 }
 
 function head(s: SpriteCanvas, p: ColossusPose, time: number): void {
-  const hy = -42 + p.dip;
-  const w = Math.sin(time * 5) * 1;
+  const hy = -43 + p.dip;
+  const w = Math.sin(time * 4) * 0.8;
   s.begin();
-  s.taper(0, hy - 3, -11, hy - 2 + w, 2.6, 0.6, K.vapour[1], -0.6);
-  s.taper(-1, hy - 1, -9, hy + 1.5 + w * 0.6, 1.6, 0.5, K.vapour[0], -0.3);
-  s.shadeEdges(K.vapour[1], K.vapour[2], K.vapour[0]);
+  s.dot(-3, hy - 3.5 + w * 0.3, 3.2, K.vapour[1]);
+  s.dot(-7.5, hy - 2 + w, 2.6, K.vapour[1]);
+  s.dot(-11, hy - 0.5 + w * 1.4, 1.8, K.vapour[1]);
+  s.dot(0.5, hy - 5, 2.4, K.vapour[1]);
+  s.shadeEdges(K.vapour[1], K.vapour[2], K.vapour[0], 2);
   s.commit();
   s.begin();
-  s.dot(1.5, hy, 4, B[3]);
+  s.dot(1.5, hy, 4.6, B[2]);
   s.poly(
     [
-      [-2.5, hy + 1],
-      [6, hy + 0.6],
-      [5.4, hy + 3.6],
-      [-2, hy + 3.8],
+      [-3, hy + 1],
+      [6.6, hy + 0.4],
+      [6, hy + 4.4],
+      [-2.4, hy + 4.6],
     ],
-    B[2],
+    B[1],
   );
-  s.shadeEdges(B[3], B[4], B[1], 2);
-  s.shadeEdges(B[2], B[3], B[1]);
+  s.shadeEdges(B[2], B[3], B[0], 2);
+  s.shadeEdges(B[1], B[2], B[0]);
+  s.set(-0.5, hy - 3, B[4]);
   s.commit();
   s.begin();
-  s.block(1.5, hy - 0.5, C.outline, 4.5, 1.2);
+  s.block(1.5, hy - 0.6, C.outline, 5, 1.4);
   const lit = p.core > 0.6 ? WHITE : K.slit;
-  s.set(4, hy, lit);
-  s.set(4.6, hy, lit);
-  s.set(5.2, hy, p.core > 0.6 ? K.core[3] : K.slit);
+  s.set(4.5, hy, lit);
+  s.set(5, hy, lit);
+  s.set(5.6, hy, p.core > 0.6 ? K.core[3] : K.slit);
   s.commit(false);
 }
 
