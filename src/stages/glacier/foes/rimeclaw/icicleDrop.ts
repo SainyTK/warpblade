@@ -1,4 +1,3 @@
-import { overPit } from "../../../../game/adventure";
 import { eachStanding, heroSlot } from "../../../../game/coopHooks";
 import { hurtHero } from "../../../../game/hurtHero";
 import { boxHit, heroBox, surfaceBelow } from "../../../../game/world";
@@ -13,7 +12,7 @@ export function createIcicleDrop(x: number, warn: number, damage: number): Effec
   let t = 0;
   let y = TOP;
   let vy = 0;
-  const landing = overPit(x) ? 165 : surfaceBelow(x, TOP + ICICLE.length);
+  const landing = surfaceBelow(x, TOP + ICICLE.length);
   const struck = new Set<number>();
   return {
     update(dt) {

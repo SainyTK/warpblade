@@ -4,8 +4,8 @@ const OPENING: AreaArc = {
   enter: 1,
   gate: 4,
   beats: [
-    { kind: "surge", foes: 40, to: 9 },
-    { kind: "surge", foes: 50, to: 14 },
+    { kind: "surge", to: 9 },
+    { kind: "surge", to: 14 },
     { kind: "elite", to: 15 },
   ],
 };
@@ -14,22 +14,22 @@ const MIDDLE: AreaArc = {
   enter: 15,
   gate: 18,
   beats: [
-    { kind: "surge", foes: 60, to: 25 },
-    { kind: "surge", foes: 70, to: 32 },
-    { kind: "surge", foes: 80, to: 38 },
-    { kind: "surge", foes: 90, to: 44 },
-    { kind: "mini", to: 50 },
+    { kind: "surge", to: 25 },
+    { kind: "surge", to: 32 },
+    { kind: "surge", to: 38 },
+    { kind: "surge", to: 44 },
   ],
 };
 
 const FINAL: AreaArc = {
-  enter: 50,
+  enter: 44,
+  mini: 50,
   gate: 54,
   beats: [
-    { kind: "surge", foes: 80, to: 64 },
-    { kind: "surge", foes: 90, to: 74 },
-    { kind: "surge", foes: 100, to: 84 },
-    { kind: "surge", foes: 110, to: 94 },
+    { kind: "surge", to: 64 },
+    { kind: "surge", to: 74 },
+    { kind: "surge", to: 84 },
+    { kind: "surge", to: 94 },
     { kind: "boss", to: 99 },
   ],
 };
@@ -41,11 +41,12 @@ export const STAGE_ARCS: Readonly<Record<StageKind, readonly AreaArc[]>> = {
     OPENING,
     MIDDLE,
     {
-      enter: 50,
+      enter: 44,
+      mini: 50,
       gate: 54,
       beats: [
-        { kind: "surge", foes: 80, to: 63 },
-        { kind: "surge", foes: 90, to: 72 },
+        { kind: "surge", to: 63 },
+        { kind: "surge", to: 72 },
         { kind: "boss", foe: "maw", to: 78 },
       ],
     },
@@ -53,8 +54,8 @@ export const STAGE_ARCS: Readonly<Record<StageKind, readonly AreaArc[]>> = {
       enter: 78,
       gate: 80,
       beats: [
-        { kind: "surge", foes: 100, to: 88 },
-        { kind: "surge", foes: 110, to: 95 },
+        { kind: "surge", to: 88 },
+        { kind: "surge", to: 95 },
         { kind: "boss", to: 99 },
       ],
     },
@@ -88,7 +89,24 @@ export const CROWD_TOUGHNESS: readonly (readonly [level: number, times: number])
 
 export const HERO_DPS_AT_LEVEL_1 = 30;
 
-export const TIME_TO_KILL = { minion: 4.5, elite: 20, mini: 170, boss: 150 } as const;
+export const TIME_TO_KILL = { elite: 20, mini: 170, boss: 150 } as const;
+
+export const FOE_HIT = 10;
+
+export const OFF_LADDER_HITS = 4;
+
+export const LADDER_RUNGS = [
+  { level: 1, hits: 1 },
+  { level: 15, hits: 20 },
+  { level: 26, hits: 26 },
+  { level: 38, hits: 30 },
+  { level: 48, hits: 32 },
+  { level: 53, hits: 34 },
+  { level: 62, hits: 38 },
+  { level: 78, hits: 42 },
+] as const;
+
+export const FLYER_TOUGHNESS = 0.5;
 
 export const FOE_BAND = {
   damagePerLevel: 0.015,
@@ -104,9 +122,10 @@ export const HYPER = { foePace: 1.25, coins: 2 } as const;
 export const ROOM_BEATS = {
   pickDelay: 0.9,
   pause: 2,
-  defaultCap: 10,
   capPerLevel: 0.12,
   mostCap: 26,
   parPerSurgeFoe: 1.6,
   parPerBigFoe: 60,
 } as const;
+
+export const LADDER_PICK = [4, 2, 1] as const;

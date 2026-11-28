@@ -1,4 +1,5 @@
 import type { StageDef } from "../../types/campaign";
+import { rung } from "../geometry";
 import { blightHazard } from "./hazard";
 import { BLIGHT_AREAS } from "./layout";
 
@@ -8,8 +9,16 @@ export const blight: StageDef = {
   mapBlurb: "The rot grows toward the light.",
   kind: "rift",
   era: "blight",
-  ground: "rotcrawler",
-  flyer: "sporepuff",
+  ladder: [
+    ...rung(1, "moldmite", "sporegnat"),
+    ...rung(2, "rotcrawler", "sporepuff"),
+    ...rung(3, "spitbloom"),
+    ...rung(4, "rotboar"),
+    ...rung(5, "cordywasp"),
+    ...rung(6, "hyphamancer"),
+    ...rung(7, "bloatcap"),
+    ...rung(8, "rotbear"),
+  ],
   boss: "sporeheart",
   mini: {
     name: "Rot Queen",

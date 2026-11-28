@@ -123,6 +123,7 @@ A hero-specific picture goes in `signature`; it may call `ELEMENT_KITS[element].
 ### Settings, readability and budget
 
 - Screen shake goes through `shake()`, which the Options toggle and reduced motion already silence.
+  A shake only plays with a heavy hit: a hit from one of the hero's five biggest sources at 60% or more of that source's biggest hit, or a blow taking 20% of the hero's max HP (`src/game/heavyShake.ts`).
   With reduced motion (`src/services/reducedMotion.ts`) there is no flash and no afterimage, and hit stop is halved.
 - Skill effects draw no damage numbers, so the Options toggle for numbers is untouched.
 - After its first 0.05 s an effect over a foe that is winding up (any state but drift, walk or recover) fades: to 0.6 over a minion, to 0.3 over a mini boss or boss, with a wider margin around bosses, so wind-ups and telegraphs stay readable.

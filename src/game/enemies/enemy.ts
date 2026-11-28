@@ -26,8 +26,13 @@ export function makeEnemy(type: EnemyType, x: number, y: number, wave: number, x
 
 export function makeScaledEnemy(type: EnemyType, x: number, y: number, scale: FoeScale): Enemy {
   const def = ENEMIES[type];
+  return makeFoe(type, x, y, { ...scale, hp: Math.round(def.hp * scale.hp * RANK_HP[def.rank]) });
+}
+
+export function makeFoe(type: EnemyType, x: number, y: number, stats: FoeScale): Enemy {
+  const def = ENEMIES[type];
   const kind = kindOf(type);
-  const hp = Math.round(def.hp * scale.hp * RANK_HP[def.rank]);
+  const hp = stats.hp;
   return {
     type,
     rank: def.rank,
@@ -55,8 +60,8 @@ export function makeScaledEnemy(type: EnemyType, x: number, y: number, scale: Fo
     seed: rng.range(0, 9),
     swings: [],
     side: rng.chance(0.5) ? 1 : -1,
-    power: scale.damage,
-    xp: scale.xp,
+    power: stats.damage,
+    xp: stats.xp,
     phase: 1,
     elite: false,
     chill: 0,
@@ -69,6 +74,7 @@ export function makeScaledEnemy(type: EnemyType, x: number, y: number, scale: Fo
     staggerHits: 0,
     staggerIdle: 0,
     brace: 0,
+    armored: def.rank !== "minion",
     halt: 0,
     pinned: 0,
     blind: 0,

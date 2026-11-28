@@ -12,7 +12,7 @@ The fight itself is never paused by a level up; only the Level banner shows.
 - Experience in a stage is budgeted per beat so that a hero who kills everything ends each beat at its planned level: 15 at the end of the opening, 50 after the mini boss, 99 after the stage boss (`docs/growth-design.md`).
 - Experience drops as orbs; left orbs fly to the hero, so none is lost.
 - Not every level gives a pick: one per level up to 30, then one every second level, plus milestones at 50, 75 and 99, 66 picks from level 1 to 99 (`docs/growth-design.md`, "Pick budget").
-- About 8 to 9 kills make a level all stage long; a Rift Surge of 60 to 110 foes gives 6 to 11 levels and 4 to 10 picks when it ends.
+- A Rift Surge is three waves, about 30 to 78 foes in all; it gives 6 to 11 levels and 4 to 10 picks when it ends.
 - A pick deals skills, masteries, charge ranks, attunements and Honing stat cards (`dealCards` in `src/utils/cards.ts`); new skills wait for a slot opened by the level, and picks have no prerequisites.
 - In the co-op arena `XP_CURVE` (`15 + 10 x (level - 1)`) and the wave experience are unchanged: a full 30-wave run reaches about level 84.
 

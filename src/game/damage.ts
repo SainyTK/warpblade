@@ -21,7 +21,8 @@ import { foeSees } from "./enemies/awareness";
 import { enemyCenter } from "./enemies/enemy";
 import { kindOf } from "./enemies/kinds";
 import { markBonus } from "./enemies/skillStatus";
-import { staggerFoe } from "./enemies/stagger";
+import { flinch, staggerFoe } from "./enemies/stagger";
+import { noteHit } from "./heavyShake";
 import { kit } from "./hero/kits";
 import { countHit } from "./hitCount";
 import { landHit } from "./hitFeel";
@@ -181,6 +182,7 @@ export function dealDamage(e: Enemy, base: number, o: HitOptions = {}): HitResul
   bossTook(e, value);
   e.hp -= value;
   recordDamage(source, value);
+  if (!o.dot) noteHit(source, value);
   const fromHero = isHeroSource(source);
   if (!o.dot && fromHero && !o.noFlow) {
     addFlow(FLOW.perHit);
@@ -206,8 +208,8 @@ export function dealDamage(e: Enemy, base: number, o: HitOptions = {}): HitResul
     if (hold > 0) e.vy = Math.min(e.vy, ENEMY_AIR.juggle * hold);
   } else if (kindOf(e.type).flies && e.rank === "minion") e.vy += o.ky ?? 0;
   if (o.stun && def.launchable) e.stun = Math.max(e.stun, o.stun);
-  if (o.stagger) staggerFoe(e, o.stagger);
-  if (o.heavy && e.state === "wind" && def.rank === "minion") Object.assign(e, { state: "recover", st: 0 });
+  if (!o.dot) flinch(e, o.stagger);
+  if (o.heavy && e.state === "wind" && !e.armored) Object.assign(e, { state: "recover", st: 0 });
   if (!o.dot && isHeroSource(source)) {
     kit().landed?.(e, { crit, kill: e.hp <= 0 });
     emitSkillEvent({

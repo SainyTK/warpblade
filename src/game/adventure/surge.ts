@@ -1,34 +1,59 @@
 import { SURGE } from "../../constants/campaign";
-import { ALIVE_CAP } from "../../constants/waves";
 import type { EnemyType } from "../../types/enemy";
 import { levelBetween, xpBudget } from "../../utils/stageArc";
 import { coop } from "../coopHooks";
 import { createRift } from "../effects/rift";
 import { kindOf } from "../enemies/kinds";
-import { game, hero } from "../state";
+import { game, hero, showBanner } from "../state";
 import { claimFoe, stageFoe } from "./foes";
-import { foeWeight, type RouteArea, type SurgeBeat } from "./route";
-import { type Surge, trail } from "./trail";
+import { foeWeight, ladderFoe, type RouteArea, type SurgeBeat } from "./route";
+import { drawStragglersDown } from "./stragglers";
+import { type Surge, type SurgeWave, trail } from "./trail";
+
+const WAVE_BANNER = 1.1;
 
 const isElite = (index: number): boolean => index > 0 && index % (trail?.mods.eliteEvery ?? SURGE.eliteEvery) === 0;
 
+function waveFoes(size: number, from: number, to: number): { foes: EnemyType[]; levels: number[] } {
+  const run = trail;
+  const levels = Array.from({ length: size }, (_, i) => levelBetween(from, to, i / Math.max(1, size - 1)));
+  const solo = levels.map((level) => (run ? ladderFoe(run.route.stage, level, run.random) : "thornback"));
+  const foes = coop()?.scaleFoes(solo) ?? solo;
+  return { foes, levels: foes.map((_, i) => levels[Math.min(i, levels.length - 1)]) };
+}
+
 export function openSurge(beat: SurgeBeat): Surge {
-  const random = trail?.random;
-  const solo = Array.from({ length: beat.count }, () => (random ? random.pick(beat.foes) : beat.foes[0]));
-  const room = coop();
-  const foes = room ? room.scaleFoes(solo) : solo;
-  const cap = room
-    ? Math.min(ALIVE_CAP.coopMost, Math.round((beat.cap * foes.length) / Math.max(1, solo.length)))
-    : beat.cap;
-  const levels = foes.map((_, i) => levelBetween(beat.from, beat.to, i / Math.max(1, foes.length - 1)));
+  const span = beat.to - beat.from;
+  const total = beat.waves.reduce((n, size) => n + size, 0);
+  let done = 0;
+  const drafts = beat.waves.map((size) => {
+    const from = beat.from + (span * done) / total;
+    done += size;
+    return waveFoes(size, from, beat.from + (span * done) / total);
+  });
+  let index = 0;
+  const elites = drafts.map((draft) => draft.foes.map(() => isElite(index++)));
   const xp = xpBudget(
     beat.from,
     beat.to,
-    foes.map((type, i) => ({ level: levels[i], weight: foeWeight(type, isElite(i)) })),
+    drafts.flatMap((draft, w) =>
+      draft.foes.map((type, i) => ({ level: draft.levels[i], weight: foeWeight(type, elites[w][i]) })),
+    ),
   );
-  const surge: Surge = { beat, foes, levels, xp, cap, sent: 0, refills: [] };
-  for (let i = 0; i < Math.min(cap, foes.length); i++) surge.refills.push(i * SURGE.opening);
+  let next = 0;
+  const waves: SurgeWave[] = drafts.map((draft, w) => ({
+    ...draft,
+    xp: draft.foes.map(() => xp[next++]),
+    elites: elites[w],
+  }));
+  const surge: Surge = { beat, waves, wave: 0, sent: 0, delays: [], pause: 0 };
+  queueWave(surge);
   return surge;
+}
+
+function queueWave(surge: Surge): void {
+  surge.sent = 0;
+  surge.delays = surge.waves[surge.wave].foes.map((_, i) => i * SURGE.opening);
 }
 
 function spawnX(area: RouteArea): number {
@@ -42,43 +67,42 @@ function spawnX(area: RouteArea): number {
   return hero.x < (left + right) / 2 ? right : left;
 }
 
-function sendFoe(surge: Surge, area: RouteArea): void {
-  const index = surge.sent;
-  const type: EnemyType = surge.foes[index];
-  surge.sent++;
+function sendFoe(wave: SurgeWave, index: number, area: RouteArea): void {
+  const type = wave.foes[index];
   const rift = kindOf(type).rift;
   const x = spawnX(area);
   const y = rift.y();
-  if (trail) trail.band = surge.levels[index];
+  if (trail) trail.band = wave.levels[index];
   game.fx.push(
     createRift(x, rift.riftY(y), rift.height, 0, () => {
-      claimFoe(stageFoe(type, x, y, surge.levels[index], surge.xp[index], isElite(index)));
+      claimFoe(stageFoe(type, x, y, wave.levels[index], wave.xp[index], wave.elites[index]));
     }),
   );
 }
 
-function drawStragglersDown(dt: number): void {
-  for (const enemy of game.enemies) {
-    if (enemy.hp <= 0 || enemy.air || !kindOf(enemy.type).flies || enemy.y >= SURGE.reachableY) continue;
-    enemy.y = Math.min(SURGE.reachableY, enemy.y + SURGE.stragglerSink * dt);
-  }
-}
+const standing = (): number => game.enemies.filter((e) => e.hp > 0).length + game.fx.filter((f) => f.rift).length;
 
 export function updateSurge(surge: Surge, area: RouteArea, dt: number): boolean {
-  if (surge.sent >= surge.foes.length) drawStragglersDown(dt);
-  const standing = game.enemies.filter((e) => e.hp > 0).length + game.fx.filter((f) => f.rift).length;
-  const left = surge.foes.length - surge.sent;
-  const free = Math.min(surge.cap - standing - surge.refills.length, left - surge.refills.length);
-  for (let i = 0; i < free; i++) surge.refills.push(SURGE.refill);
-  for (let i = 0; i < surge.refills.length; i++) surge.refills[i] -= dt;
-  const due = surge.refills.filter((t) => t <= 0).length;
-  surge.refills = surge.refills.filter((t) => t > 0);
-  for (let i = 0; i < due && surge.sent < surge.foes.length; i++) sendFoe(surge, area);
-  return surge.sent >= surge.foes.length && standing === 0 && surge.refills.length === 0;
+  if (surge.pause > 0) {
+    surge.pause = Math.max(0, surge.pause - dt);
+    return false;
+  }
+  const wave = surge.waves[surge.wave];
+  surge.delays = surge.delays.map((t) => t - dt);
+  while (surge.sent < wave.foes.length && surge.delays[surge.sent] <= 0) sendFoe(wave, surge.sent++, area);
+  if (surge.sent < wave.foes.length) return false;
+  drawStragglersDown(game.enemies, dt);
+  if (standing() > 0) return false;
+  if (surge.wave + 1 >= surge.waves.length) return true;
+  surge.wave++;
+  surge.pause = SURGE.wavePause;
+  queueWave(surge);
+  showBanner(`Wave ${surge.wave + 1}/${surge.waves.length}`, WAVE_BANNER);
+  return false;
 }
 
 export function surgeEnding(): boolean {
   const surge = trail?.surge;
-  if (!surge || surge.sent < surge.foes.length || surge.refills.length > 0) return false;
+  if (!surge || surge.wave + 1 < surge.waves.length || surge.sent < surge.waves[surge.wave].foes.length) return false;
   return game.enemies.every((e) => e.hp <= 0) && !game.fx.some((f) => f.rift);
 }

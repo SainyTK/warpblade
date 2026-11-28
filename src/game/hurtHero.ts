@@ -5,6 +5,7 @@ import { sfx } from "../services/audio";
 import { hurtFlow } from "./build/flow";
 import { coop, heroSlot } from "./coopHooks";
 import { createImpact } from "./effects/impact";
+import { noteHurt } from "./heavyShake";
 import { heroGuarded } from "./hero/guard";
 import { guardTakes } from "./hero/heroGuard";
 import { kit } from "./hero/kits";
@@ -12,7 +13,7 @@ import { perfectDodge } from "./hero/perfectDodge";
 import { loseHitCount } from "./hitCount";
 import { lastLight } from "./lastLight";
 import { emitSkillEvent } from "./skills/events";
-import { character, game, hero, showBanner } from "./state";
+import { character, game, hero, progress, showBanner } from "./state";
 import { hitStop, shake } from "./world";
 
 export function hurtHero(dmg: number, fromX: number): void {
@@ -26,6 +27,7 @@ export function hurtHero(dmg: number, fromX: number): void {
   }
   const taken = Math.round(dmg * kit().hurtScale());
   hero.hp = Math.max(0, hero.hp - taken);
+  noteHurt(taken, progress.stats.hp);
   if (taken > 0) {
     hurtFlow();
     loseHitCount();

@@ -1,6 +1,7 @@
 import type { EnemyKind } from "../../../../game/enemies/kinds/kind";
 import { rng } from "../../../../game/state";
 import { SKY_FOES } from "../colors";
+import { stormWardTakes } from "../stormWard";
 import { drawGalehawk } from "./draw";
 import { updateGalehawk } from "./update";
 
@@ -14,4 +15,5 @@ export const galehawk: EnemyKind = {
   update: updateGalehawk,
   draw: drawGalehawk,
   glow: { radius: 16, color: SKY_FOES.volt[2], eyeY: -2 },
+  takes: (e, dmg) => stormWardTakes(e, dmg),
 };

@@ -1,7 +1,7 @@
 import { GROUND } from "../../constants/stage";
 import type { Platform, Point } from "../../types/world";
 import { clamp } from "../../utils/math";
-import { heroLeash, overPit, stageBounds, stagePlatforms, stageWalls } from "../adventure";
+import { heroLeash, stageBounds, stagePlatforms, stageWalls } from "../adventure";
 
 const EDGE = 8;
 const BODY_RADIUS = 5;
@@ -58,7 +58,7 @@ export function oneWayAt(x: number, y: number): Platform | undefined {
 }
 
 export function landingAt(x: number, y: number, ny: number, drop: number, ignored: Platform | null): number | null {
-  let floor = ny >= GROUND && !overPit(x) ? GROUND : Infinity;
+  let floor = ny >= GROUND ? GROUND : Infinity;
   for (const wall of stageWalls()) {
     if (x + BODY_RADIUS > wall.x0 && x - BODY_RADIUS < wall.x1 && y <= wall.y + FLOOR_TOLERANCE && ny >= wall.y) {
       floor = Math.min(floor, wall.y);

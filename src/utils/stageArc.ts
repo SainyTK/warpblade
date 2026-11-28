@@ -4,6 +4,7 @@ import {
   CROWD_TOUGHNESS,
   EXPECTED_HERO_DAMAGE,
   FOE_BAND,
+  FOE_HIT,
   HERO_DPS_AT_LEVEL_1,
   HYPER,
   TIER_SCALE,
@@ -12,8 +13,7 @@ import {
 import { STAGE_TIER } from "../constants/stageGraph";
 import { STAGE_WAVES } from "../constants/waves";
 import type { ArmoryRates } from "../types/armory";
-import type { StageDef } from "../types/campaign";
-import type { FoeScale } from "../types/enemy";
+import type { LadderFoe, StageDef } from "../types/campaign";
 import { clamp } from "./math";
 import { xpToNext, xpToReach } from "./progression";
 
@@ -61,14 +61,13 @@ function along(anchors: Anchors, level: number): number {
 
 export const expectedDamage = (level: number): number => along(EXPECTED_HERO_DAMAGE, level);
 
-export function bandScale(level: number, mods: StageMods): FoeScale {
-  const steps = clamp(level, 1, MAX_LEVEL) - 1;
-  return {
-    hp: expectedDamage(level) * along(CROWD_TOUGHNESS, level) * TIME_TO_KILL.minion * mods.hp,
-    damage: (1 + FOE_BAND.damagePerLevel * steps) * mods.damage,
-    xp: 0,
-  };
-}
+export const crowdDamage = (level: number): number => expectedDamage(level) * along(CROWD_TOUGHNESS, level);
+
+export const bandDamage = (level: number, mods: StageMods): number =>
+  (1 + FOE_BAND.damagePerLevel * (clamp(level, 1, MAX_LEVEL) - 1)) * mods.damage;
+
+export const ladderHp = (entry: LadderFoe, mods: StageMods): number =>
+  entry.hits <= 1 ? FOE_HIT : Math.max(1, Math.round(entry.hits * FOE_HIT * crowdDamage(entry.level) * mods.hp));
 
 export const bigFoeHp = (level: number, kind: Exclude<keyof typeof TIME_TO_KILL, "minion">, mods: StageMods): number =>
   Math.round(HERO_DPS_AT_LEVEL_1 * expectedDamage(level) * TIME_TO_KILL[kind] * mods.hp);

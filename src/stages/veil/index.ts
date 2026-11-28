@@ -1,4 +1,5 @@
 import type { StageDef } from "../../types/campaign";
+import { rung } from "../geometry";
 import { brokenStair } from "./brokenStair";
 import { createVeilHazard } from "./hazard";
 import { shardSteps } from "./shardSteps";
@@ -12,8 +13,16 @@ export const veil: StageDef = {
   mapBlurb: "The towers where the rifts are kept.",
   kind: "rift",
   era: "twilight",
-  ground: "golem",
-  flyer: "sprite",
+  ladder: [
+    ...rung(1, "glintmite", "glimmerwing"),
+    ...rung(2, "golem", "sprite"),
+    ...rung(3, "riftknight"),
+    ...rung(4, "shardram"),
+    ...rung(5, "auroraray"),
+    ...rung(6, "runebinder"),
+    ...rung(7, "facetseer"),
+    ...rung(8, "spirecolossus"),
+  ],
   boss: "warden",
   mini: {
     name: "Rift Marshal",

@@ -9,7 +9,6 @@ import { PK } from "../../types/particle";
 import { FORGE_SPARKS } from "./colors";
 import { ventCycle } from "./vents/cycle";
 import { drawVentGrate, drawVentJet, drawVentWarning } from "./vents/drawVent";
-import { drawLavaPits, updateLavaPits } from "./vents/lavaPits";
 import { VENT_XS } from "./vents/sites";
 
 const JET_HALF = 5;
@@ -47,7 +46,6 @@ export const foundryVents: StageHazard = {
   },
   update(dt) {
     const cameraX = stageCameraX();
-    updateLavaPits(dt, cameraX, cameraX + W);
     for (const x of VENT_XS) {
       if (!visible(x, cameraX)) continue;
       const v = ventCycle(game.t, x);
@@ -57,7 +55,6 @@ export const foundryVents: StageHazard = {
   },
   drawBack(cameraX, t) {
     place();
-    drawLavaPits(cameraX, cameraX + W + 12, t);
     for (const x of VENT_XS) {
       if (!visible(x, cameraX)) continue;
       const v = ventCycle(t, x);

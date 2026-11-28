@@ -1,4 +1,5 @@
 import type { StageDef } from "../../types/campaign";
+import { rung } from "../geometry";
 import { firstSteps } from "./firstSteps";
 import { sunlit } from "./sunlit";
 
@@ -8,8 +9,16 @@ export const prologue: StageDef = {
   mapBlurb: "Where the first rift opened.",
   kind: "prologue",
   era: "day",
-  ground: "thornback",
-  flyer: "moth",
+  ladder: [
+    ...rung(1, "slime", "bat"),
+    ...rung(2, "thornback", "moth"),
+    ...rung(3, "vinelash"),
+    ...rung(4, "amberwasp"),
+    ...rung(5, "ruinsentinel"),
+    ...rung(6, "ivygargoyle"),
+    ...rung(7, "rootcaller"),
+    ...rung(8, "sunbasilisk"),
+  ],
   boss: "oakheart",
   mini: {
     name: "Bramble Tusk",

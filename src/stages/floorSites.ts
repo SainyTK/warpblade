@@ -13,7 +13,7 @@ const near = (x: number, spans: readonly Platform[]): boolean =>
 function approachSites(approach: Approach, spacing: number, phase: number): number[] {
   const floorSpikes = approach.spikes.filter((strip) => strip.y >= GROUND);
   const mentors = approach.mentorSites.map(({ x }) => ({ x0: x, x1: x, y: GROUND }));
-  const blockers = [approach.pits ?? [], approach.walls, floorSpikes, mentors];
+  const blockers = [approach.walls, floorSpikes, mentors];
   const sites: number[] = [];
   const free = (x: number) => !blockers.some((spans) => near(x, spans));
   for (let x = ENTRY_CLEAR + phase; x < approach.length - ROOM_CLEAR; x += spacing) {

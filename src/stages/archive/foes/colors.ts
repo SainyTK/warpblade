@@ -21,6 +21,11 @@ export const FOE = {
   gilt: hex("#e6be64"),
   giltDim: hex("#9a7a3a"),
   glyph: ramp(["#6a3a10", "#b8701e", "#f0a838", "#ffd884", "#fff6d8"]),
+  flame: ramp(["#4a1a10", "#a8461c", "#ee9232", "#ffd470", "#fff8dc"]),
+  spectre: ramp(["#0c2426", "#17403f", "#286a64", "#4ea896", "#9ce8d2"]),
+  iron: ramp(["#0c0c12", "#1c1e26", "#323640", "#545a66", "#8a929e"]),
+  wax: ramp(["#3a0a12", "#6e1624", "#a82a38", "#d85a5a"]),
+  steel: ramp(["#20242e", "#4a5262", "#8a94a6", "#d0d8e6"]),
 } as const;
 
 export const FOE_SPARKS = {
@@ -28,4 +33,6 @@ export const FOE_SPARKS = {
   paper: [hex("#fffcf0"), hex("#e8dcbc"), hex("#a89a7a"), hex("#6e6450")],
   glyph: [hex("#fff6d8"), hex("#ffd884"), hex("#f0a838"), hex("#b8701e")],
   letter: [hex("#f0fffa"), hex("#8ff8de"), hex("#3ab89c"), hex("#1a5a4c")],
+  flame: [hex("#fff8dc"), hex("#ffd470"), hex("#ee9232"), hex("#a8461c")],
+  spectre: [hex("#e8fff6"), hex("#9ce8d2"), hex("#4ea896"), hex("#17403f")],
 };

@@ -1,4 +1,4 @@
-import { ENEMY_AIR, STAGGER } from "../../constants/combat";
+import { ENEMY_AIR, FLINCH, STAGGER } from "../../constants/combat";
 import { SPARKS } from "../../constants/palette";
 import { GROUND } from "../../constants/stage";
 import { sfx } from "../../services/audio";
@@ -22,11 +22,11 @@ function brace(e: Enemy): void {
  * air or knocked down is already out of the fight, so only the timer is kept. Mini bosses and bosses never stagger.
  */
 export function staggerFoe(e: Enemy, seconds: number): void {
-  if (seconds <= 0 || e.rank !== "minion" || e.brace > 0) return;
+  if (seconds <= 0 || e.armored || e.brace > 0) return;
   if (e.stagger <= 0 && e.staggerIdle > STAGGER.forget) e.staggerHits = 0;
   e.staggerHits++;
   e.staggerIdle = 0;
-  if (e.staggerHits > (e.elite ? STAGGER.eliteLimit : STAGGER.limit)) {
+  if (e.elite && e.staggerHits > STAGGER.eliteLimit) {
     brace(e);
     return;
   }
@@ -60,7 +60,13 @@ export function updateStagger(e: Enemy, dt: number): boolean {
   if (!kindOf(e.type).flies) e.y = Math.min(e.y, GROUND);
   if (e.stagger > 0) return true;
   // back on its feet: a moment before it may attack, walk on or hurt by touch
-  e.cd = Math.max(e.cd, STAGGER.rest);
+  e.cd = Math.max(e.cd, e.armored ? STAGGER.rest : FLINCH.attackLock);
   e.halt = Math.max(e.halt, STAGGER.rest);
   return true;
+}
+
+export function flinch(e: Enemy, seconds: number | undefined): void {
+  if (e.armored) return;
+  staggerFoe(e, Math.max(seconds ?? 0, FLINCH.hitStagger));
+  e.cd = Math.max(e.cd, FLINCH.attackLock);
 }

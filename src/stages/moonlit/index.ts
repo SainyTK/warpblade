@@ -1,4 +1,5 @@
 import type { StageDef } from "../../types/campaign";
+import { rung } from "../geometry";
 import { graveRow } from "./graveRow";
 import { createMoonlitHazard } from "./hazard";
 import { lanternWalk } from "./lanternWalk";
@@ -12,8 +13,16 @@ export const moonlit: StageDef = {
   mapBlurb: "A shepherd herds the husks of the old city.",
   kind: "rift",
   era: "night",
-  ground: "husk",
-  flyer: "wisp",
+  ladder: [
+    ...rung(1, "rattleskull", "wickling"),
+    ...rung(2, "husk", "wisp"),
+    ...rung(3, "lanternshade"),
+    ...rung(4, "gravedigger"),
+    ...rung(5, "keenwraith"),
+    ...rung(6, "barrowhound"),
+    ...rung(7, "tollbell"),
+    ...rung(8, "barrowlord"),
+  ],
   boss: "shepherd",
   mini: {
     name: "Gravewarden",

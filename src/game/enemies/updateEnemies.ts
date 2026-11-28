@@ -1,8 +1,9 @@
+import { FLINCH } from "../../constants/combat";
 import type { Enemy } from "../../types/enemy";
-import { containPatrol, finaleHolds, stageFoePace, waitsOnPerch } from "../adventure";
+import { containPatrol, finaleHolds, stageFoePace } from "../adventure";
 import { bossHeld } from "../bossFight";
 import { coop } from "../coopHooks";
-import { game } from "../state";
+import { game, hero } from "../state";
 import { fieldPace } from "../timeFields";
 import { updateAirborne } from "./airborne";
 import { enemyCenter, walks } from "./enemy";
@@ -10,6 +11,13 @@ import { kindOf } from "./kinds";
 import { separateFoes } from "./separate";
 import { updateStagger } from "./stagger";
 import { updateStatus } from "./status";
+
+function attackPace(e: Enemy): number {
+  if (e.armored) return 1;
+  const [cx, cy] = enemyCenter(e);
+  const near = Math.abs(hero.x - cx) <= FLINCH.reach && Math.abs(hero.y - cy) <= FLINCH.lift;
+  return near ? FLINCH.cooldownPace : 0;
+}
 
 /** a tripped or landed foe lies still and slides to a stop */
 function updateStunned(e: Enemy, dt: number): boolean {
@@ -29,7 +37,7 @@ function updateEnemy(e: Enemy, dt: number): void {
   const room = coop();
   room?.nearest(e.x, e.y);
   const status = updateStatus(e, dt);
-  if (e.hp <= 0 || waitsOnPerch(e) || bossHeld(e) || finaleHolds(e)) return;
+  if (e.hp <= 0 || bossHeld(e) || finaleHolds(e)) return;
   room?.nearest(e.x, e.y);
   const [cx, cy] = enemyCenter(e);
   const ts = status * fieldPace(cx, cy, e.rank) * stageFoePace();
@@ -37,7 +45,7 @@ function updateEnemy(e: Enemy, dt: number): void {
   const staggered = updateStagger(e, sdt);
   if (updateAirborne(e, sdt) || updateStunned(e, sdt) || staggered) return;
   e.st += sdt;
-  e.cd -= sdt;
+  e.cd -= sdt * attackPace(e);
   const heldAt = e.x;
   kindOf(e.type).update(e, sdt, ts);
   if (e.pinned > 0) {
