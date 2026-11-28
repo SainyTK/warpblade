@@ -17,6 +17,6 @@ export const storm: Approach = {
     pack(1426, walker(1270), flyer(1294, 70), walker(1318), flyer(1342, 94), walker(1366), walker(1386)),
     pack(1590, walker(1466), flyer(1486, 80), walker(1510, true), walker(1532), flyer(1550, 62)),
   ],
-  mentorSites: [site(236), site(486)],
+  mentorSites: [site(90), site(486)],
   spikes: [ledge(642, 664)],
 };

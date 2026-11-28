@@ -18,6 +18,6 @@ export const leechFen: Approach = {
     pack(1470, walker(1310), flyer(1336, 68), walker(1362), flyer(1388, 92), walker(1410), walker(1430)),
     pack(1700, walker(1520), flyer(1546, 76), walker(1572, true), walker(1600), flyer(1626, 58), walker(1660)),
   ],
-  mentorSites: [site(276), site(1128)],
+  mentorSites: [site(276), site(1084)],
   spikes: [ledge(882, 904)],
 };
