@@ -1,6 +1,6 @@
 export const MIDGE = {
-  hover: 26,
-  rise: 34,
+  hover: 20,
+  rise: 30,
   drift: 60,
   reach: 54,
   rear: 0.45,
