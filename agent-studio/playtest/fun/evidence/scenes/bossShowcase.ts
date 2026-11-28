@@ -1,9 +1,9 @@
 import { KEYS } from "../../../constants/keys";
 import type { Session } from "../../../types/session";
 import { BOSS_CALM_STATES, CLIPS, WAIT } from "../constants";
+import { never } from "../defenseMoments";
 import { faceNearestFoe } from "../faceNearestFoe";
 import { playOn } from "../playOn";
-import { never } from "../trailMoments";
 import type { Album, ShotPlan } from "../types";
 
 export async function bossShowcase(

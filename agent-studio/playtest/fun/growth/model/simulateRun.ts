@@ -73,7 +73,7 @@ function openChests(setup: RunSetup, state: RunState, step: StageStep): void {
   const { game, hero } = setup;
   const span = Math.max(1, step.to - step.from);
   for (const chest of step.chests) {
-    if (step.kind === "surge" || step.kind === "road") {
+    if (step.kind === "field") {
       bankLevels(state, game, chest.level);
     }
     state.chests++;
@@ -124,11 +124,10 @@ export function simulateRun(setup: RunSetup): RunRecord {
       heroDps(game, hero, state.level, state.build, { ...crowd, foesInReach });
     return { low: at(FOES_IN_REACH_LOW), assumed: at(crowd.foesInReach), high: at(FOES_IN_REACH_HIGH) };
   };
-  const finalBoss = plan.steps.length - 1;
   let openingDps: CrowdDps | null = null;
   let bossDps: CrowdDps | null = null;
   for (const [index, step] of plan.steps.entries()) {
-    if (index === finalBoss) {
+    if (index === plan.bossStep) {
       bossDps = crowdDps();
     }
     openChests(setup, state, step);
@@ -142,7 +141,7 @@ export function simulateRun(setup: RunSetup): RunRecord {
     }
   }
   if (!openingDps || !bossDps) {
-    throw new Error(`${plan.id} never reached the end of its opening act or its final boss`);
+    throw new Error(`${plan.id} never reached the end of its opening act or its boss`);
   }
   return {
     hero: hero.id,

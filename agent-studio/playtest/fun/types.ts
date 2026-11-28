@@ -12,7 +12,7 @@ export interface EvidenceItem {
   assisted: boolean;
 }
 
-export type JobKind = "presses" | "bossRooms" | "stageRun" | "growth" | "evidence";
+export type JobKind = "presses" | "bossFights" | "stageRun" | "growth" | "evidence";
 
 export interface MeasureSample {
   heroes: string[];

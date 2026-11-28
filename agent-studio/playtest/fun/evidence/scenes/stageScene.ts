@@ -1,9 +1,9 @@
 import { KEYS } from "../../../constants/keys";
+import { readDefense } from "../../defense";
 import { CLIPS, HIT_STRIKES, LIMITS, WAIT } from "../constants";
+import { foeEngaged, never } from "../defenseMoments";
 import { faceNearestFoe } from "../faceNearestFoe";
 import { playOn } from "../playOn";
-import { readStageNames } from "../readStageNames";
-import { foeEngaged, never } from "../trailMoments";
 import type { Scene, SceneSubject } from "../types";
 
 export function stageScene(subject: SceneSubject): Scene {
@@ -15,9 +15,13 @@ export function stageScene(subject: SceneSubject): Scene {
       const session = await harness.newSession({ hero, start: { stage } });
       try {
         await session.advance(WAIT.banner);
-        const names = await readStageNames(session);
+        const names = await readDefense(session);
         if (plan.has("start")) {
-          await album.still(session, name("start"), `${hero} arriving in the ${names.stage}, with the stage banner`);
+          await album.still(
+            session,
+            name("start"),
+            `${hero} at the ${names.stageName} crystal as the defense begins, with the stage banner`,
+          );
         }
         const wantsFight = plan.has("fight") || (lead && (plan.has("hitClip") || plan.has("combatClip")));
         if (!wantsFight) {
@@ -25,12 +29,16 @@ export function stageScene(subject: SceneSubject): Scene {
         }
         const engaged = await playOn(session, { until: foeEngaged, limitMs: LIMITS.firstFoe });
         if (engaged.end !== "reached") {
-          album.note(`no foe came near in the ${names.stage} (${engaged.end})`);
+          album.note(`no foe came near in the ${names.stageName} (${engaged.end})`);
           return;
         }
         await playOn(session, { until: never, limitMs: CLIPS.fightLeadMs });
         if (plan.has("fight")) {
-          await album.still(session, name("fight"), `${hero} fighting the first ${names.stage} foes, with the HUD`);
+          await album.still(
+            session,
+            name("fight"),
+            `${hero} fighting the first ${names.stageName} foes at the crystal, with the HUD`,
+          );
         }
         if (lead && plan.has("hitClip")) {
           await faceNearestFoe(session);
@@ -51,7 +59,7 @@ export function stageScene(subject: SceneSubject): Scene {
           await album.clip(
             session,
             name("combat"),
-            `${hero}'s first fight in the ${names.stage}, played by the skilled bot`,
+            `${hero}'s first fight in the ${names.stageName}, played by the skilled bot`,
             () => playOn(session, { until: never, limitMs: CLIPS.combatMs }).then(() => undefined),
           );
         }

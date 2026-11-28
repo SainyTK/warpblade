@@ -1,125 +1,131 @@
-import { BOSS_CHEST_LEAST, ELITE_CHEST_LEAST, HIGHEST_WAVE, PLAN_SEED } from "../constants";
-import type { BigFoeBeat, Game, Random, RouteArea, StageDef, StageMods, SurgeBeat } from "../types/game";
+import { BOSS_CHEST_LEAST, ELITE_CHEST_LEAST, FIELD_STEP_SECONDS, HIGHEST_WAVE } from "../constants";
+import type { BigFoeCall, Game, StageDef, StageMods } from "../types/game";
 import type { Chest, StagePlan, StageStep } from "../types/model";
-import { surgeFoeHp } from "./surgeFoeHp";
+import { fieldFoeHp } from "./fieldFoeHp";
 
 interface PlanContext {
   game: Game;
   stage: StageDef;
   mods: StageMods;
-  random: Random;
-  wave: number;
+  bonusXp: number;
+  elites: number;
+  elitesOpened: number;
 }
 
 const waveFor = (game: Game, level: number): number =>
   Math.min(HIGHEST_WAVE, Math.max(1, Math.round(game.bandWave(level))));
 
-function surgeStep(context: PlanContext, beat: SurgeBeat): StageStep {
-  const { game, stage, mods, random } = context;
-  context.wave = waveFor(game, beat.from);
-  const span = beat.to - beat.from;
-  const total = beat.waves.reduce((sum, size) => sum + size, 0);
-  const chests: Chest[] = [];
-  const foes: string[] = [];
-  let done = 0;
-  let index = 0;
-  for (const size of beat.waves) {
-    const from = beat.from + (span * done) / total;
-    done += size;
-    const to = beat.from + (span * done) / total;
-    for (let i = 0; i < size; i++) {
-      const level = game.levelBetween(from, to, i / Math.max(1, size - 1));
-      foes.push(game.ladderFoe(stage, level, random));
-      if (index > 0 && index % mods.eliteEvery === 0) {
-        chests.push({ level: Math.floor(level), wave: context.wave, least: ELITE_CHEST_LEAST });
+function levelAtXp(game: Game, xp: number): number {
+  let level = 1;
+  while (level < game.maxLevel && game.xpToReach(level + 1) <= xp + 1e-6) {
+    level++;
+  }
+  return level;
+}
+
+const levelAt = (context: PlanContext, seconds: number): number =>
+  levelAtXp(context.game, context.game.xpToReach(context.game.levelAtSecond(seconds)) + context.bonusXp);
+
+function fieldFoes(context: PlanContext, level: number): string[] {
+  const { game, stage } = context;
+  const walkers = game.ladderChoices(stage.ladder, level, (foe) => !game.flies(foe));
+  const flyers = game.ladderChoices(stage.ladder, level, (foe) => game.flies(foe));
+  return [...new Set([...walkers, ...flyers].map((choice) => choice.foe))];
+}
+
+function elitesIn(context: PlanContext, from: number, to: number): number {
+  const { game, mods } = context;
+  const eastEvery = game.defense.eliteEveryBySide.east ?? 0;
+  let elites = 0;
+  for (let second = from; second < to; second++) {
+    const foes = game.foesPerSecond(second) * mods.crowd;
+    const sides = game.frontAt(second).sides;
+    const east = sides.includes("east") && eastEvery > 0 ? foes / sides.length / eastEvery : 0;
+    elites += foes / mods.eliteEvery + east;
+  }
+  return elites;
+}
+
+function fieldStep(context: PlanContext, at: number, until: number): StageStep {
+  const from = levelAt(context, at);
+  const to = levelAt(context, until);
+  context.elites += elitesIn(context, at, until);
+  const opened = Math.floor(context.elites) - context.elitesOpened;
+  context.elitesOpened += opened;
+  const wave = waveFor(context.game, to);
+  const chests: Chest[] = Array.from({ length: opened }, () => ({ level: to, wave, least: ELITE_CHEST_LEAST }));
+  return { kind: "field", at, from, to, seconds: until - at, chests, foes: fieldFoes(context, to), bigFoe: null };
+}
+
+function bigFoeStep(context: PlanContext, call: BigFoeCall): StageStep {
+  const { game, stage } = context;
+  const from = levelAt(context, call.at);
+  context.bonusXp +=
+    game.xpToReach(game.levelAtSecond(call.at + game.defense.xpSeconds[call.kind])) -
+    game.xpToReach(game.levelAtSecond(call.at));
+  const to = levelAt(context, call.at);
+  const least = call.kind === "boss" ? BOSS_CHEST_LEAST : ELITE_CHEST_LEAST;
+  const foe = call.kind === "boss" ? stage.boss : call.kind === "mini" ? stage.mini.base : null;
+  const foes =
+    call.kind === "boss"
+      ? [stage.boss, ...game.bossAdds(stage.boss)]
+      : call.kind === "mini"
+        ? [stage.mini.base, ...stage.mini.adds]
+        : fieldFoes(context, from);
+  return {
+    kind: call.kind,
+    at: call.at,
+    from,
+    to,
+    seconds: 0,
+    chests: [{ level: to, wave: waveFor(game, to), least }],
+    foes,
+    bigFoe: foe,
+  };
+}
+
+function sideOpenings(game: Game): { id: string; seconds: number }[] {
+  const seen = new Map<string, number>();
+  for (let second = 0; second < game.defense.seconds; second++) {
+    for (const side of game.frontAt(second).sides) {
+      if (!seen.has(side)) {
+        seen.set(side, second);
       }
-      index++;
     }
   }
-  return {
-    kind: "surge",
-    from: beat.from,
-    to: beat.to,
-    seconds: total * game.parPerSurgeFoe,
-    chests,
-    foes,
-    bigFoe: null,
-  };
-}
-
-function bigFoeStep(context: PlanContext, beat: BigFoeBeat, to: number): StageStep {
-  const { game } = context;
-  context.wave = waveFor(game, beat.level);
-  const least = beat.kind === "boss" ? BOSS_CHEST_LEAST : ELITE_CHEST_LEAST;
-  const adds = beat.kind === "boss" ? game.bossAdds(beat.foe) : [];
-  return {
-    kind: beat.kind,
-    from: beat.level,
-    to,
-    seconds: game.parPerBigFoe,
-    chests: [{ level: beat.level, wave: context.wave, least }],
-    foes: [beat.foe, ...adds],
-    bigFoe: beat.foe,
-  };
-}
-
-function areaSteps(context: PlanContext, area: RouteArea, index: number, walkSeconds: number): StageStep[] {
-  const { game, stage } = context;
-  const arcs = game.stageArcs[stage.kind];
-  const arc = arcs[Math.min(index, arcs.length - 1)];
-  const steps: StageStep[] = [];
-  if (index === 0) {
-    context.wave = waveFor(game, area.enter);
-  }
-  const mini = area.packs.find((pack) => pack.mini)?.mini;
-  if (mini && arc.mini !== undefined) {
-    steps.push({ ...bigFoeStep(context, mini, arc.mini), foes: [mini.foe, ...stage.mini.adds] });
-  }
-  const roadFoes = area.packs.flatMap((pack) => pack.foes);
-  steps.push({
-    kind: "road",
-    from: arc.mini ?? arc.enter,
-    to: arc.gate,
-    seconds: stage.areas[index].parSeconds + walkSeconds,
-    chests: roadFoes
-      .filter((foe) => foe.elite)
-      .map((foe) => ({ level: Math.floor(foe.level), wave: context.wave, least: ELITE_CHEST_LEAST })),
-    foes: roadFoes.map((foe) => foe.type),
-    bigFoe: null,
-  });
-  area.beats.forEach((beat, beatIndex) => {
-    steps.push(beat.kind === "surge" ? surgeStep(context, beat) : bigFoeStep(context, beat, arc.beats[beatIndex].to));
-  });
-  return steps;
+  return [...seen].map(([id, seconds]) => ({ id, seconds }));
 }
 
 export function planStage(game: Game, stageId: string): StagePlan {
   const stage = game.stages[stageId];
   const mods = game.stageMods(stage);
-  const random = game.random(PLAN_SEED);
-  const route = game.buildRoute(stage, mods, random);
-  const areaPar = route.areas.reduce((sum, area) => sum + area.parSeconds, 0);
-  const approachPar = stage.areas.reduce((sum, approach) => sum + approach.parSeconds, 0);
-  const walkTotal = route.parSeconds - areaPar;
-  const context: PlanContext = { game, stage, mods, random, wave: 1 };
-  const played = route.areas.flatMap((area, index) =>
-    areaSteps(context, area, index, (walkTotal * stage.areas[index].parSeconds) / approachPar),
-  );
-  const finalBoss = played[played.length - 1];
-  const steps = [...played.slice(0, -1), { ...finalBoss, chests: [] }];
+  const context: PlanContext = { game, stage, mods, bonusXp: 0, elites: 0, elitesOpened: 0 };
+  const total = game.defense.seconds;
+  const steps: StageStep[] = [];
+  for (let at = 0; at < total; at += FIELD_STEP_SECONDS) {
+    const until = Math.min(total, at + FIELD_STEP_SECONDS);
+    steps.push(fieldStep(context, at, until));
+    for (const call of game.defense.calls.filter((entry) => entry.at >= at && entry.at < until)) {
+      steps.push(bigFoeStep(context, call));
+    }
+  }
   const openingActEnd = steps.findIndex((step) => step.kind === "elite");
-  if (openingActEnd < 0 || finalBoss.kind !== "boss") {
-    throw new Error(`${stageId} has no opening-act elite or no final boss in its arc`);
+  const bossStep = steps.findIndex((step) => step.kind === "boss");
+  if (openingActEnd < 0 || bossStep < 0) {
+    throw new Error(`${stageId} has no elite call or no boss call in its defense`);
   }
   const openingLevel = steps[openingActEnd].to;
+  const bossLevel = steps[bossStep].from;
   return {
     id: stageId,
-    parSeconds: route.parSeconds,
+    parSeconds: total,
     hazard: Boolean(stage.hazard),
     steps,
+    sides: sideOpenings(game),
     openingActEnd,
+    bossStep,
     openingLevel,
-    bossLevel: finalBoss.from,
-    foeHpGrowth: surgeFoeHp(game, stage, mods, finalBoss.from) / surgeFoeHp(game, stage, mods, openingLevel),
+    bossLevel,
+    foeHpGrowth: fieldFoeHp(game, stage, mods, bossLevel) / fieldFoeHp(game, stage, mods, openingLevel),
   };
 }

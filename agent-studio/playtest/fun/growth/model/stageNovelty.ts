@@ -2,7 +2,7 @@ import { BOSS_ATTACKS, NOVELTY_WINDOW_MINUTES, SECONDS_PER_MINUTE } from "../con
 import type { Game } from "../types/game";
 import type { RunRecord, StageNovelty, StagePlan } from "../types/model";
 
-type WorldKind = "place" | "hazard" | "foe" | "bossAttack";
+type WorldKind = "place" | "hazard" | "side" | "foe" | "bossAttack";
 
 interface WorldEvent {
   seconds: number;
@@ -16,35 +16,30 @@ function worldEvents(game: Game, plan: StagePlan): WorldEvent[] {
   if (plan.hazard) {
     events.push({ seconds: 0, kind: "hazard", id: plan.id });
   }
-  let clock = 0;
+  for (const side of plan.sides) {
+    events.push({ seconds: side.seconds, kind: "side", id: side.id });
+  }
   for (const step of plan.steps) {
     for (const foe of step.foes) {
-      events.push({ seconds: clock, kind: "foe", id: foe });
+      events.push({ seconds: step.at, kind: "foe", id: foe });
     }
     if (step.kind === "mini") {
-      events.push({ seconds: clock, kind: "foe", id: `mini:${stage.mini.name}` });
+      events.push({ seconds: step.at, kind: "foe", id: `mini:${stage.mini.name}` });
       for (const move of stage.mini.moves) {
-        events.push({ seconds: clock, kind: "bossAttack", id: `mini:${move}` });
+        events.push({ seconds: step.at, kind: "bossAttack", id: `mini:${move}` });
       }
     }
     if (step.kind === "boss" && step.bigFoe !== null) {
       for (const attack of BOSS_ATTACKS[step.bigFoe] ?? []) {
-        events.push({ seconds: clock, kind: "bossAttack", id: `${step.bigFoe}:${attack}` });
+        events.push({ seconds: step.at, kind: "bossAttack", id: `${step.bigFoe}:${attack}` });
       }
-    }
-    clock += step.seconds;
-  }
-  if (plan.steps[plan.steps.length - 1]?.kind === "boss") {
-    events.push({ seconds: clock, kind: "foe", id: game.finaleFoe });
-    for (const attack of BOSS_ATTACKS[game.finaleFoe] ?? []) {
-      events.push({ seconds: clock, kind: "bossAttack", id: `${game.finaleFoe}:${attack}` });
     }
   }
   return events;
 }
 
 function firstSeenAfter(events: readonly WorldEvent[], half: number): Record<WorldKind, number> {
-  const counts: Record<WorldKind, number> = { place: 0, hazard: 0, foe: 0, bossAttack: 0 };
+  const counts: Record<WorldKind, number> = { place: 0, hazard: 0, side: 0, foe: 0, bossAttack: 0 };
   const seen = new Set<string>();
   for (const event of [...events].sort((a, b) => a.seconds - b.seconds)) {
     const key = `${event.kind}:${event.id}`;

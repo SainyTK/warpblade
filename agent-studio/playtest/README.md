@@ -65,7 +65,8 @@ Each check has `name`, `ok`, and when they apply `hero`, `skipped` and `detail`.
 npm run -s playtest -- bot [--hero <id>|all] [--runs N] [--policy mash|skilled] [--max-minutes M] [--root <dir>] [--out <file>]
 ```
 
-An autopilot plays whole runs with real keys, one decision every 50 ms of game time, until the hero falls, the stage is cleared or the time limit is reached.
+An autopilot plays whole runs with real keys, one decision every 50 ms of game time, until the run ends or the time limit is reached.
+In a stage a fallen hero revives at the crystal, so a stage run ends `fallen` only when the crystal shatters and `clear` when the clock reaches 0:00.
 Each run starts from the start menu in a fresh session.
 
 `mash` walks to the nearest foe and mashes J, and takes the first card of every skill pick.
@@ -134,6 +135,15 @@ Picks that use the same job run as one job over the combined sample, cut to the 
 At most `budget.maxPicks` picks are taken, at most `budget.maxParallelJobs` jobs run at a time in one browser and one server, and a governor pauses the job processes whenever they use more than `budget.cpuShare` of the machine's cores.
 Only one `measure` runs on the machine at a time; a second one waits for the first.
 Measurement sessions start with drawing turned off (`?paint=off`), except the evidence job, which captures stills and clips.
+
+Every job plays the crystal defense:
+
+- `presses` starts each hero at 0:00 and stops the spawner and the big foe calls, so no foe disturbs the press trials.
+- `bossFights` plays each sampled stage's mini boss and boss fight with the skilled bot (and the mash bot for M6.1). Each fight starts at the minute before its call (`?section=5` for the mini boss, `?section=8` for the boss), raises the hero step by step to the level the clock and the skipped big foes give by then, spends the picks, opens the chests the elites would leave and grants the expected shards. The fight then plays out with foes still coming at the crystal; it is won when the big foe falls and lost when the clock clears the field or the crystal shatters.
+- `stageRun` plays a defense from 0:00 with the skilled bot kept at half HP or more and records every reward.
+- `growth` simulates defense runs outside the browser from the game's own clock, calls and card rules.
+- `evidence` films the start at the crystal, a fight, the level-up cards, the crystal under siege at 6:00, the boss arriving and fighting at 7:30, and the result screen after the defense ends.
+
 The folder gets `jobs.json`, `measurement.json` (jobs, readings, evidence list and CPU use), `readings.json`, `jobs.log` and one folder per job.
 
 `score` turns readings and judge levels into the Fun score, filling every measure it was not given with its latest reading from the ledger.
@@ -148,7 +158,7 @@ const session = await openGame({ hero: "kael" });
 ```
 
 `openGame({ root, hero, viewport, start })` starts a dev server and a browser, loads the game and, with `hero`, starts a run through the menu.
-`start: { stage, section, wave, level, build, paint }` (every field optional) opens the run through the game's dev-only start options: `stage` and `section` begin a stage run at that stage and area, `wave` and `level` begin at a later wave and level, `build` holds skills, charms and evolutions from the start (`?build=`, see `docs/skill-design.md`), for example `{ wave: 8, level: 30, build: "k_familiar:8,b_edge:4" }`.
+`start: { stage, section, wave, level, build, paint }` (every field optional) opens the run through the game's dev-only start options: `stage` and `section` begin a stage's crystal defense at that minute (section 1 is 0:00), `wave` and `level` begin at a later wave and level, `build` holds skills, charms and evolutions from the start (`?build=`, see `docs/skill-design.md`), for example `{ wave: 8, level: 30, build: "k_familiar:8,b_edge:4" }`.
 `paint: "off"` (`?paint=off`) keeps the game stepping, the HUD and the dialogs, and draws no stage, which about halves the wall time of a bot run and plays out exactly as with painting on; stills and clips need painting on.
 The default viewport is 1280 x 720, where the stage is exactly 4 device pixels per art pixel.
 `close()` stops everything.
@@ -214,9 +224,11 @@ npm run -s playtest -- scenario /tmp/patch-12/kael.ts --hero kael
 
 ## Reaching later content
 
-`jumpToWave(n)` reaches later waves through real play, which is slow for deep waves and can fail when the bot falls.
-The game has no debug path to skip waves, and the harness adds none.
-For content deep in the stage, a scenario can play with `jumpToWave` and retry with a different hero, or read state with `evaluate` to wait for the right moment.
+A stage is a 10-minute defense of the Warp crystal at the field's center.
+`start: { stage, section, level }` begins the defense at minute `section` (section 1 is 0:00, section 5 is 4:00) at that level; big foe calls before that minute are skipped, so section 5 reaches the mini boss call at 4:15 and section 8 the boss call at 7:30.
+The level is not raised to the clock's level band by itself, so pass a `level` that fits the minute.
+`jumpToWave(n)` reaches later waves of the wave mode through real play, which is slow for deep waves and can fail when the bot falls.
+For anything else, a scenario can read state with `evaluate` to wait for the right moment; `/src/game/adventure/defense.ts` holds the run (`defense.elapsed`, `defense.crystal`, `defense.bigFoes`).
 Each session starts with empty storage, so shop upgrades bought in a browser never help.
 
 ## Limits

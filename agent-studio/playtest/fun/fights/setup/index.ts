@@ -1,0 +1,1 @@
+export { prepareFight } from "./prepareFight";

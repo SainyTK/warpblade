@@ -13,6 +13,6 @@ export function noveltyRate(stages: readonly StageNovelty[]): MeasureReading {
   return {
     id: MEASURE_IDS.noveltyRate,
     raw: mean,
-    note: `stages range ${formatNumber(Math.min(...rates))} to ${formatNumber(Math.max(...rates))}; ${formatNumber(bossAttacks)} boss attacks a stage in the second half; areas not counted as places`,
+    note: `stages range ${formatNumber(Math.min(...rates))} to ${formatNumber(Math.max(...rates))}; ${formatNumber(bossAttacks)} boss attacks a stage in the second half; new sides count as places`,
   };
 }

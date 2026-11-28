@@ -11,7 +11,7 @@ Check, and record evidence for each:
 2. `cd agent-studio && npm run playtest -- smoke --hero all` passes.
 3. Every acceptance check in the plan works in the browser. Write throwaway scenario scripts in the run folder (never in the repo), run them with `npm run playtest -- scenario <file>`, and look at the stills you capture.
 4. Every planned change is present, and the numbers in the code match the plan and the developer's report.
-5. Nothing else broke: start a run with each hero, fight through the first Surge with the bot, open the menu screens, and compare with the base build's Fun raw data in the run folder for difficulty swings the plan did not intend.
+5. Nothing else broke: start a run with each hero, hold the crystal through the first minutes with the bot, open the menu screens, and compare with the base build's Fun raw data in the run folder for difficulty swings the plan did not intend.
 6. Saves: a save from the base version (local storage `warpblade-*` keys) still loads with coins and purchases intact.
 7. The art of new or changed visuals meets the charter's finish (outline, ramps, light, anticipation, follow-through) at the game's real scale.
 8. The README and docs match the change.

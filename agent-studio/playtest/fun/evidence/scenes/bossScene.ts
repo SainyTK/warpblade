@@ -1,9 +1,9 @@
-import { BOSS_LEVEL, BOSS_SECTION, BOSS_SHARDS, BUILDS, CLIPS, ENTRANCE_STEP, LIMITS, WAIT } from "../constants";
-import { placeInArea } from "../placeInArea";
+import { readDefense } from "../../defense";
+import { BOSS_LEVEL, BOSS_SECTION, BOSS_SHARDS, BUILDS, CLIPS, LIMITS, WAIT } from "../constants";
+import { bossUp, never } from "../defenseMoments";
+import { faceNearestFoe } from "../faceNearestFoe";
 import { playOn } from "../playOn";
-import { readStageNames } from "../readStageNames";
 import { spendBankedPicks } from "../spendBankedPicks";
-import { bossUp, never } from "../trailMoments";
 import type { Scene, SceneSubject } from "../types";
 import { bossShowcase } from "./bossShowcase";
 import { resultShot } from "./resultShot";
@@ -22,14 +22,13 @@ export function bossScene(subject: SceneSubject): Scene {
       try {
         await session.advance(WAIT.banner);
         const picks = await spendBankedPicks(session, BOSS_SHARDS);
-        const placed = await placeInArea(session, { offset: ENTRANCE_STEP, bossOnly: true });
         album.assisted(
-          `level ${BOSS_LEVEL} start in the last area with ${picks} banked picks spent at once, ${BOSS_SHARDS.hearts} heart and ${BOSS_SHARDS.manas} mana shards, the road packs skipped and their foes removed, the room trimmed to the boss${placed.trimmed ? "" : " (no boss beat found)"}, hero placed at the room entrance with full HP (max HP ${Math.round(placed.maxHp)})`,
+          `defense started at minute ${BOSS_SECTION} at level ${BOSS_LEVEL} with a set build, ${picks} banked picks spent at once and ${BOSS_SHARDS.hearts} heart and ${BOSS_SHARDS.manas} mana shards`,
         );
-        const names = await readStageNames(session);
-        const reached = await playOn(session, { until: (_, trail) => bossUp(trail), limitMs: LIMITS.reachBoss });
+        const view = await readDefense(session);
+        const reached = await playOn(session, { until: bossUp, limitMs: LIMITS.reachBoss });
         if (reached.end !== "reached") {
-          album.note(`${names.boss} was not reached (${reached.end})`);
+          album.note(`${view.bossName} did not arrive (${reached.end})`);
           return;
         }
         await session.advance(WAIT.bossArrive);
@@ -37,20 +36,21 @@ export function bossScene(subject: SceneSubject): Scene {
           await album.still(
             session,
             name("boss"),
-            `${names.boss} arrives in the ${names.stage} boss room, with its title`,
+            `${view.bossName} arrives at the ${view.stageName} crystal, with its title`,
           );
         }
-        await bossShowcase(session, album, showcase, name, names.boss);
+        await bossShowcase(session, album, showcase, name, view.bossName);
         if (showcase.has("bossFight")) {
           await playOn(session, { until: never, limitMs: CLIPS.midFightMs });
+          await faceNearestFoe(session, (foe) => foe.rank === "boss");
           await album.still(
             session,
             name("boss-fight"),
-            `a level ${BOSS_LEVEL} ${hero} build mid fight with ${names.boss}`,
+            `a level ${BOSS_LEVEL} ${hero} build mid fight with ${view.bossName} beside the crystal`,
           );
         }
         if (lead && plan.has("result")) {
-          await resultShot(session, album, "result", names);
+          await resultShot(session, album, "result", view.stageName);
         }
       } finally {
         await session.close();
