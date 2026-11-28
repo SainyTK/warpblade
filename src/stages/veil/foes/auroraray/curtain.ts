@@ -1,7 +1,6 @@
 import { GROUND } from "../../../../constants/stage";
 import { ellipseRing, glow, glowLine, hairline, place, polygon } from "../../../../engine/frame";
 import { eachStanding, heroSlot } from "../../../../game/coopHooks";
-import { heroGuarded } from "../../../../game/hero/guard";
 import { hurtHero } from "../../../../game/hurtHero";
 import { boxHit, heroBox } from "../../../../game/world";
 import { sfx } from "../../../../services/audio";
@@ -31,7 +30,7 @@ export function createAuroraCurtain(x: number, mark: number, damage: number): Ef
       if (t < mark + RAY.fall * 0.6)
         eachStanding(() => {
           if (struck.has(heroSlot())) return;
-          if (!boxHit([x - RAY.half, TOP, x + RAY.half, GROUND], heroBox()) || heroGuarded()) return;
+          if (!boxHit([x - RAY.half, TOP, x + RAY.half, GROUND], heroBox())) return;
           struck.add(heroSlot());
           hurtHero(damage, x);
         });
