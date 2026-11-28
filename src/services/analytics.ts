@@ -1,4 +1,9 @@
-import { ANALYTICS_HOST, GA_MEASUREMENT_ID } from "../constants/analytics";
+import {
+  ANALYTICS_HOST,
+  CLOUDFLARE_ANALYTICS_TOKEN,
+  CLOUDFLARE_BEACON_URL,
+  GA_MEASUREMENT_ID,
+} from "../constants/analytics";
 
 // Google Analytics 4, on the live site only
 
@@ -25,6 +30,15 @@ export function startAnalytics(): void {
   script.async = true;
   script.src = `https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`;
   document.head.append(script);
+  startCloudflareAnalytics();
+}
+
+function startCloudflareAnalytics(): void {
+  const beacon = document.createElement("script");
+  beacon.defer = true;
+  beacon.src = CLOUDFLARE_BEACON_URL;
+  beacon.dataset.cfBeacon = JSON.stringify({ token: CLOUDFLARE_ANALYTICS_TOKEN, spa: true });
+  document.head.append(beacon);
 }
 
 /** send a game event; does nothing when analytics is off */
