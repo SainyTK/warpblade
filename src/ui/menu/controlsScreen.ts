@@ -1,4 +1,4 @@
-import { HOLD_ACTIONS, KEYMAP } from "../../constants/input";
+import { CARDS_AWAY_TEXT, HOLD_ACTIONS, KEYMAP } from "../../constants/input";
 import { DRILL_KEYMAP, drillActionText, heroDrill } from "../../drill";
 import { isAdventure } from "../../game/adventure";
 import { heroJob } from "../../game/hero/job";
@@ -56,7 +56,7 @@ function keyboardRows(adventure: boolean): [HTMLElement, string][] {
     text.dash = `${text.dash}. Jump during the dodge to keep your speed.`;
   }
   if (profile) Object.assign(text, drillActionText(profile));
-  return [...keysByAction(drill ? DRILL_KEYMAP : KEYMAP)].flatMap(([action, codes]): [HTMLElement, string][] => {
+  const rows = [...keysByAction(drill ? DRILL_KEYMAP : KEYMAP)].flatMap(([action, codes]): [HTMLElement, string][] => {
     const row: [HTMLElement, string] = [capsOf(codes, false), text[action]];
     if (drill) {
       if (action === "ultimate") return [];
@@ -65,6 +65,8 @@ function keyboardRows(adventure: boolean): [HTMLElement, string][] {
     if (!isHeldAction(action)) return [row];
     return [row, [capsOf(codes, true), text[HOLD_ACTIONS[action]]]];
   });
+  if (!adventure) return rows;
+  return [...rows, [capsOf(["Escape"], false), CARDS_AWAY_TEXT]];
 }
 
 /** every action with its keys from the key map, and on touch screens the on-screen buttons, as the chosen hero plays them */

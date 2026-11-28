@@ -1,3 +1,4 @@
+import { CARDS_AWAY_TEXT } from "../../constants/input";
 import { DRILL_WARP_ACCENT, TOUCH_BUTTONS } from "../../constants/touch";
 import { DRILL_WARP_LABEL, drillActionText, heroDrill } from "../../drill";
 import { heroJob } from "../../game/hero/job";
@@ -74,8 +75,8 @@ export function touchLegend(adventure: boolean): [HTMLElement, string][] {
     ];
   });
   if (!adventure) return [...stick, ...buttons];
-  const talk = document.createElement("span");
-  talk.className = "cap";
-  talk.textContent = "Talk";
-  return [...stick, ...buttons, [talk, "Tap Talk by a mentor to spend skill points."]];
+  const leave = document.createElement("span");
+  leave.className = "cap cap-wide";
+  leave.textContent = "Leave";
+  return [...stick, ...buttons, [leave, CARDS_AWAY_TEXT]];
 }
