@@ -7,6 +7,7 @@ import { kindOf } from "../enemies/kinds";
 import { game, hero, showBanner } from "../state";
 import { claimFoe, stageFoe } from "./foes";
 import { foeWeight, ladderFoe, type RouteArea, type SurgeBeat } from "./route";
+import { drawStragglersDown } from "./stragglers";
 import { type Surge, type SurgeWave, trail } from "./trail";
 
 const WAVE_BANNER = 1.1;
@@ -79,13 +80,6 @@ function sendFoe(wave: SurgeWave, index: number, area: RouteArea): void {
   );
 }
 
-function drawStragglersDown(dt: number): void {
-  for (const enemy of game.enemies) {
-    if (enemy.hp <= 0 || enemy.air || !kindOf(enemy.type).flies || enemy.y >= SURGE.reachableY) continue;
-    enemy.y = Math.min(SURGE.reachableY, enemy.y + SURGE.stragglerSink * dt);
-  }
-}
-
 const standing = (): number => game.enemies.filter((e) => e.hp > 0).length + game.fx.filter((f) => f.rift).length;
 
 export function updateSurge(surge: Surge, area: RouteArea, dt: number): boolean {
@@ -97,7 +91,7 @@ export function updateSurge(surge: Surge, area: RouteArea, dt: number): boolean 
   surge.delays = surge.delays.map((t) => t - dt);
   while (surge.sent < wave.foes.length && surge.delays[surge.sent] <= 0) sendFoe(wave, surge.sent++, area);
   if (surge.sent < wave.foes.length) return false;
-  drawStragglersDown(dt);
+  drawStragglersDown(game.enemies, dt);
   if (standing() > 0) return false;
   if (surge.wave + 1 >= surge.waves.length) return true;
   surge.wave++;

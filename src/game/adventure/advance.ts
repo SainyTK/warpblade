@@ -26,9 +26,9 @@ import { summonFinale } from "./finale";
 import { claimFoe, stageFoe } from "./foes";
 import { resetStageHazard, updateStageHazard } from "./hazard";
 import { updateMentor } from "./mentor";
-import { markPerch } from "./patrol";
 import { type BigFoeBeat, GATE_ENTRY, type RouteArea, type RouteFoe, type RoutePack, SPAWN_LEAD } from "./route";
 import { updateSpikes } from "./spikes";
+import { drawStragglersDown } from "./stragglers";
 import { openSurge, updateSurge } from "./surge";
 import { trail } from "./trail";
 
@@ -45,7 +45,6 @@ const waveFor = (level: number): number => clamp(Math.round(bandWave(level)), 1,
 
 function addFoe(run: Trail, foe: RouteFoe): void {
   const enemy = claimFoe(stageFoe(foe.type, foe.x, foe.y ?? GROUND, foe.level, foe.xp, foe.elite));
-  markPerch(enemy);
   run.packFoes.push(enemy);
   run.band = foe.level;
 }
@@ -211,7 +210,7 @@ function advanceRoute(run: Trail, lead: number, dt: number): void {
     return;
   }
   if (lead < area.start) return;
-  updateRoad(run, area, lead);
+  updateRoad(run, area, lead, dt);
   if (run.hold === null && run.pack >= area.packs.length && lead >= area.entrance + GATE_ENTRY) openRoom(run, area);
 }
 
@@ -249,14 +248,19 @@ function clearPack(run: Trail, pack: RoutePack): void {
   sfx.gate();
 }
 
-function updateRoad(run: Trail, area: RouteArea, lead: number): void {
+function updateRoad(run: Trail, area: RouteArea, lead: number, dt: number): void {
   const pack = area.packs[run.pack];
   if (!pack) return;
   if (run.hold === null) {
     if (lead + SPAWN_LEAD >= packStart(pack)) engagePack(run, pack);
     return;
   }
-  if (packCleared(run, pack)) clearPack(run, pack);
+  if (packCleared(run, pack)) {
+    clearPack(run, pack);
+    return;
+  }
+  const left = run.packFoes.filter((foe) => foe.hp > 0);
+  if (left.every((foe) => kindOf(foe.type).flies)) drawStragglersDown(left, dt);
 }
 
 function partyXs(): number[] {

@@ -9,7 +9,16 @@ export const skyway: StageDef = {
   mapBlurb: "Broken bridges above a sea of storm.",
   kind: "rift",
   era: "skyway",
-  ladder: [...rung(2, "skyguard"), ...rung(2, "galehawk"), ...rung(3, "sparkjelly")],
+  ladder: [
+    ...rung(1, "nimbit", "squallfinch"),
+    ...rung(2, "skyguard", "galehawk"),
+    ...rung(3, "sparkjelly"),
+    ...rung(4, "galeram"),
+    ...rung(5, "zephyray"),
+    ...rung(6, "lanternwarden"),
+    ...rung(7, "cloudwyrm"),
+    ...rung(8, "stormcolossus"),
+  ],
   boss: "tempestroc",
   mini: {
     name: "Storm Captain",

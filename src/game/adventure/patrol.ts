@@ -1,25 +1,8 @@
-import { GROUND } from "../../constants/stage";
 import type { Enemy } from "../../types/enemy";
 import type { Platform } from "../../types/world";
-import { hero } from "../state";
-import { stageWalls, trail } from "./trail";
+import { stageWalls } from "./trail";
 
 const CLEARANCE = 8;
-const PERCH_HEIGHT = 64;
-const PERCH_NOTICE_HEIGHT = 54;
-const CHEST_HEIGHT = 18;
-
-export function markPerch(enemy: Enemy): void {
-  if (enemy.rank === "minion" && enemy.y < GROUND - PERCH_HEIGHT) trail?.perched.set(enemy, enemy.y);
-}
-
-export function waitsOnPerch(enemy: Enemy): boolean {
-  const altitude = trail?.perched.get(enemy);
-  if (altitude === undefined) return false;
-  if (enemy.hp >= enemy.max && hero.y - CHEST_HEIGHT - altitude > PERCH_NOTICE_HEIGHT) return true;
-  trail?.perched.delete(enemy);
-  return false;
-}
 
 function wallLimit(wall: Platform, previousX: number, x: number): number {
   const left = wall.x0 - CLEARANCE;
