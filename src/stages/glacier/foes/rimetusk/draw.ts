@@ -114,7 +114,7 @@ function head(s: SpriteCanvas, p: TuskPose): void {
   s.shadeEdges(Wl[1], Wl[2], Hd[1]);
   s.commit();
   s.begin();
-  const eye = p.dazed ? Wl[1] : p.glare ? FOE.eyeHot : FOE.eye;
+  const eye = p.dazed ? Wl[1] : p.glare ? FOE.amberHot : FOE.amber;
   s.block(hx + 1.5, hy - 3, eye, 1.5, p.dazed ? 0.5 : 1);
   s.set(hx + 0.5, hy - 4, Hd[0]);
   s.set(hx + 2.5, hy - 4.5, Hd[0]);

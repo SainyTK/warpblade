@@ -79,7 +79,7 @@ function head(s: SpriteCanvas, p: HoarbackPose): void {
   s.hairline(13, -4.6 + y, 16, -4.4 + y, H[0]);
   s.commit();
   s.begin();
-  s.block(14, -8 + y - r * 0.4, p.glare ? FOE.eyeHot : FOE.eye, 1.5, 0.5);
+  s.block(14, -8 + y - r * 0.4, p.glare ? FOE.amberHot : FOE.amber, 1.5, 0.5);
   s.commit();
 }
 

@@ -8,7 +8,7 @@ import { isExposed } from "./recovery";
 
 export const frostcolossus: EnemyKind = {
   flies: false,
-  box: (e) => (e.face > 0 ? [e.x - 17, e.y - 50, e.x + 22, e.y] : [e.x - 22, e.y - 50, e.x + 17, e.y]),
+  box: (e) => (e.face > 0 ? [e.x - 17, e.y - 50, e.x + 27, e.y] : [e.x - 27, e.y - 50, e.x + 17, e.y]),
   center: (e) => [e.x, e.y - 28],
   rest: "walk",
   firstCooldown: () => 1.6,
