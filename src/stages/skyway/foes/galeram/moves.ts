@@ -16,7 +16,7 @@ import { RAM } from "./colors";
 import { RAM_CHARGE, RAM_HITS, RAM_WALK } from "./constants";
 
 const hornBox = (e: Enemy) =>
-  e.face > 0 ? ([e.x + 2, e.y - 20, e.x + 17, e.y - 2] as const) : ([e.x - 17, e.y - 20, e.x - 2, e.y - 2] as const);
+  e.face > 0 ? ([e.x + 2, e.y - 20, e.x + 19, e.y - 2] as const) : ([e.x - 19, e.y - 20, e.x - 2, e.y - 2] as const);
 
 function walk(e: Enemy, dt: number): void {
   turnToHero(e, dt);
