@@ -2,16 +2,15 @@ import { detailCanvas, type SpriteCanvas } from "../../../../engine/sprite";
 import type { Enemy } from "../../../../types/enemy";
 import { WHITE } from "../../../../utils/color";
 import { FORGE } from "../../colors";
+import { drawArm } from "./drawArm";
+import { drawFurnace } from "./drawFurnace";
 import { type TitanPose, titanPose } from "./pose";
 
-type Pt = readonly [number, number];
 const canvas = detailCanvas(96, 88, 48, 78);
 const I = FORGE.iron;
 const C = FORGE.crust;
-const S = FORGE.steel;
 const B = FORGE.brass;
 const M = FORGE.molten;
-const BRICK_ROWS = 5;
 
 function legs(s: SpriteCanvas, p: TitanPose): void {
   const c = p.crouch;
@@ -46,47 +45,6 @@ function legs(s: SpriteCanvas, p: TitanPose): void {
     s.shadeEdges(near ? I[2] : I[1], I[3], I[0]);
     s.commit();
   }
-}
-
-function furnace(s: SpriteCanvas, p: TitanPose): void {
-  const c = p.crouch;
-  const top = -54 + c;
-  const bottom = -16 + c;
-  s.begin();
-  s.poly(
-    [
-      [-15, top + 3],
-      [-10, top],
-      [11, top],
-      [16, top + 4],
-      [17, bottom - 4],
-      [13, bottom],
-      [-13, bottom],
-      [-16, bottom - 5],
-    ],
-    C[2],
-  );
-  s.shadeEdges(C[2], C[3], C[1], 2);
-  s.commit();
-  s.begin();
-  const rowH = (bottom - top - 4) / BRICK_ROWS;
-  for (let r = 1; r < BRICK_ROWS; r++) {
-    const y = top + 2 + r * rowH;
-    s.hairline(-15, y, 16, y, C[1]);
-    for (let x = -12 + (r % 2) * 4; x < 15; x += 8) s.hairline(x, y - rowH + 0.6, x, y - 0.4, C[1]);
-  }
-  s.hairline(-14, top + 1, 10, top + 1, C[3]);
-  s.commit(false);
-  s.begin();
-  s.block(-16, top + 6, I[2], 33, 2);
-  s.block(-16, bottom - 6, I[2], 33, 2);
-  s.commit();
-  s.begin();
-  for (const x of [-13, -6, 1, 8, 14]) {
-    s.set(x, top + 6.5, B[3]);
-    s.set(x, bottom - 5.5, B[3]);
-  }
-  s.commit(false);
 }
 
 function maw(s: SpriteCanvas, p: TitanPose, time: number): void {
@@ -171,52 +129,18 @@ function stack(s: SpriteCanvas, p: TitanPose): void {
   s.commit(false);
 }
 
-function arm(s: SpriteCanvas, p: TitanPose, near: boolean): void {
-  const c = p.crouch;
-  const shoulder: Pt = near ? [12, -48 + c] : [-12, -48 + c];
-  const fist = near ? p.near : p.far;
-  const elbow: Pt = [(shoulder[0] + fist[0]) / 2 + (near ? 3 : -3), (shoulder[1] + fist[1]) / 2 + 3];
-  const tone = near ? I[2] : I[1];
-  s.begin();
-  s.stroke(shoulder[0], shoulder[1], elbow[0], elbow[1], 3.4, tone);
-  s.stroke(elbow[0], elbow[1], fist[0], fist[1], 3, tone);
-  s.shadeEdges(tone, near ? I[3] : I[2], I[0], 2);
-  s.commit();
-  s.begin();
-  s.dot(shoulder[0], shoulder[1], 5, near ? S[2] : S[1]);
-  s.shadeEdges(near ? S[2] : S[1], S[3], S[0], 2);
-  s.commit();
-  s.begin();
-  s.poly(
-    [
-      [fist[0] - 6, fist[1] - 5],
-      [fist[0] + 6, fist[1] - 5],
-      [fist[0] + 6.5, fist[1] + 4.5],
-      [fist[0] - 6.5, fist[1] + 4.5],
-    ],
-    near ? C[2] : C[1],
-  );
-  s.shadeEdges(near ? C[2] : C[1], C[3], C[0], 2);
-  s.commit();
-  s.begin();
-  s.hairline(fist[0] - 5.5, fist[1] - 1.5, fist[0] + 5.5, fist[1] - 1.5, p.heat > 0.4 ? M[4] : M[2]);
-  s.hairline(fist[0] - 5, fist[1] + 1.5, fist[0] + 2, fist[1] + 1, M[1]);
-  s.set(fist[0] - 5.5, fist[1] - 4.5, FORGE.ironGlint);
-  s.commit(false);
-}
-
 export function drawSlagtitan(e: Enemy, t: number): SpriteCanvas {
   const s = canvas;
   const time = t + e.seed;
   const p = titanPose(e, time);
   s.clear();
-  arm(s, p, false);
+  drawArm(s, p, false);
   stack(s, p);
   legs(s, p);
-  furnace(s, p);
+  drawFurnace(s, p, time);
   maw(s, p, time);
   head(s, p);
-  arm(s, p, true);
+  drawArm(s, p, true);
   s.outline(FORGE.outline);
   return s;
 }
