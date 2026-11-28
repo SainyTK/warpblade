@@ -1,6 +1,7 @@
 import type { EnemyKind } from "../../../../game/enemies/kinds/kind";
 import { rng } from "../../../../game/state";
 import { SKY_FOES } from "../colors";
+import { stormWardTakes } from "../stormWard";
 import { drawSparkjelly } from "./draw";
 import { updateSparkjelly } from "./update";
 
@@ -15,4 +16,5 @@ export const sparkjelly: EnemyKind = {
   draw: drawSparkjelly,
   glow: { radius: 20, color: SKY_FOES.bell[3], eyeY: -1 },
   glowRadius: (e) => (e.state === "wind" || e.state === "beam" ? 28 : 20),
+  takes: (e, dmg) => stormWardTakes(e, dmg),
 };

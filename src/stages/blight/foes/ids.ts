@@ -1,1 +1,12 @@
-export type BlightFoe = "rotcrawler" | "sporepuff" | "spitbloom" | "sporeheart";
+export type BlightFoe =
+  | "moldmite"
+  | "sporegnat"
+  | "rotcrawler"
+  | "sporepuff"
+  | "spitbloom"
+  | "rotboar"
+  | "cordywasp"
+  | "hyphamancer"
+  | "bloatcap"
+  | "rotbear"
+  | "sporeheart";

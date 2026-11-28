@@ -13,7 +13,16 @@ export const moonlit: StageDef = {
   mapBlurb: "A shepherd herds the husks of the old city.",
   kind: "rift",
   era: "night",
-  ladder: [...rung(2, "husk"), ...rung(2, "wisp"), ...rung(3, "lanternshade")],
+  ladder: [
+    ...rung(1, "rattleskull", "wickling"),
+    ...rung(2, "husk", "wisp"),
+    ...rung(3, "lanternshade"),
+    ...rung(4, "gravedigger"),
+    ...rung(5, "keenwraith"),
+    ...rung(6, "barrowhound"),
+    ...rung(7, "tollbell"),
+    ...rung(8, "barrowlord"),
+  ],
   boss: "shepherd",
   mini: {
     name: "Gravewarden",
