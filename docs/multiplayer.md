@@ -6,11 +6,12 @@ One player hosts a room from the start menu, and the room runs in that player's 
 The others join with the room's five-letter code or an invite link, pick a hero (the same hero more than once is fine) and wait in the lobby.
 The host picks Choose stage, which opens the solo stage screen; the stages open to the host are the ones the room can play, and choosing one starts the run for everyone.
 
-## One screen for the room
+## A camera for each player
 
-Every hero shares one camera, as the host's picture is the one every guest sees.
-No standing hero can get farther than one screen width (less a margin) from another (`heroLeash` in `src/game/adventure/defense.ts`), so the room defends one side of the crystal at a time.
-The camera centres on the middle of the standing heroes.
+Each player has their own camera, which follows their own hero as it does in solo play (`cameras` in `src/game/adventure/defense.ts`, keyed by place in the room).
+Heroes can go anywhere on the field, so the room can split up and hold the West and the East at once.
+The host's screen follows the host's hero, and each guest's stream follows that guest's hero.
+The simulation never depends on whose view is drawn: hazards and scenery effects that only run near a camera run near any player's camera.
 Hazards and boss shoves strike every standing hero.
 
 ## Where it comes from
@@ -50,7 +51,10 @@ Solo play sets no hooks, so every one of those call sites behaves as before, and
 ## Guests send keys and watch a stream
 
 A guest sends every key press and release to the host over a reliable WebRTC data channel, and the host feeds it into that player's input buffer.
-The host streams its game picture and sound to each guest as a WebRTC video call, drawn at 640 by 360 so each art pixel is a 2 by 2 block and the video's colour samples land on whole art pixels.
+The host streams each guest their own view of the game, plus the game's sound, as a WebRTC video call, drawn at 640 by 360 so each art pixel is a 2 by 2 block and the video's colour samples land on whole art pixels.
+The host draws its own view on every display frame and one guest view per display frame at most, taking the guest whose view is most overdue, each at no more than the stream's 30 frames a second (`paintGuestView` in `src/game/coop/hostSession.ts`).
+With one or two guests every guest view runs at 30 frames a second on a 60 Hz host, and with three guests each runs at about 20.
+A view costs about 2 ms to draw with one hero on screen and about 6 ms with four, so a host's frame stays under 16 ms with four players.
 The guest draws each video frame onto its own game canvas without smoothing.
 The video opens at 2 Mbit/s (`STREAM.startKbps` in `src/constants/coop.ts`), so the first seconds of a run are sharp.
 WebRTC would otherwise start near 300 kbit/s and ramp up.
@@ -138,6 +142,6 @@ The pause menu in a room has Resume, Controls, Options and Leave room, and the g
   Mash bots spend 10% of play frozen alone and 25% with four Kaels; freezing only the striking hero and the foes it hit would need a step that runs heroes apart from the world.
 - Players are named P1 to P4; picking a name is left for later.
 - The foe scaling is a first guess that still needs tuning from real games with people on the stages.
-- A player who stands still at the back holds the room's walk back, since every hero stays on one screen.
+- A screen shake from any player's fight shakes every player's view.
 - The host's hero choice must be made in the lobby before Start; heroes cannot change during a run.
 - A host who switches to another tab or app stalls the room for everyone until they come back. A phone may stop the heartbeat of a background tab altogether, and then the guests are let go after six seconds.

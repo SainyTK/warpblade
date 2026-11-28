@@ -1,6 +1,7 @@
 import "./heroes";
 import { MAX_FRAME, STEP } from "./constants/stage";
 import { preloadFoeArt } from "./foeArt";
+import { heroCameraX } from "./game/adventure";
 import { frameDriver } from "./game/frameDriver";
 import { musicTrack } from "./game/musicTrack";
 import { chooseCharacter, game } from "./game/state";
@@ -67,7 +68,7 @@ function soloFrame(now: number): void {
     stepGame();
   }
   if (painting && menuContext() !== "pause") {
-    paintScene();
+    paintScene(heroCameraX());
     drawDangerGlow(menuContext() !== "title");
   }
   updateHud();

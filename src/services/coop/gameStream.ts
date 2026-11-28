@@ -1,28 +1,27 @@
 import { STREAM } from "../../constants/coop";
+import { FH, FW } from "../../constants/stage";
 
-/** the host's game as a video and sound stream for guests */
 export interface GameStream {
   media: MediaStream;
-  /** copy the newest frame of the game canvas into the stream */
-  mirror(source: HTMLCanvasElement): void;
+  paint(draw: (out: Uint8ClampedArray) => void): void;
   stop(): void;
 }
 
-/** a stream of the game drawn at twice the art size with no smoothing, plus the game's sound when there is any */
 export function captureGame(sound: MediaStream | null): GameStream {
   const canvas = document.createElement("canvas");
-  canvas.width = STREAM.width;
-  canvas.height = STREAM.height;
+  canvas.width = FW;
+  canvas.height = FH;
   const ctx = canvas.getContext("2d");
   if (!ctx) throw new Error("This browser cannot stream the game.");
-  ctx.imageSmoothingEnabled = false;
+  const image = ctx.createImageData(FW, FH);
   const media = canvas.captureStream(STREAM.fps);
   for (const track of media.getVideoTracks()) track.contentHint = "detail";
   for (const track of sound?.getAudioTracks() ?? []) media.addTrack(track);
   return {
     media,
-    mirror(source) {
-      ctx.drawImage(source, 0, 0, STREAM.width, STREAM.height);
+    paint(draw) {
+      draw(image.data);
+      ctx.putImageData(image, 0, 0);
     },
     stop() {
       for (const track of media.getVideoTracks()) track.stop();

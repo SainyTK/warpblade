@@ -1,6 +1,5 @@
 import { GROUND } from "../../../constants/stage";
-import { fleck, glow, glowLine, place } from "../../../engine/frame";
-import { stageCameraX } from "../../../game/adventure";
+import { fleck, glow, glowLine, place, viewX } from "../../../engine/frame";
 import type { Point } from "../../../types/world";
 import { grain } from "../../../utils/grain";
 import { ceilingAt } from "./cavern";
@@ -52,5 +51,5 @@ export function drawForgeAmbient(t: number, k: number): void {
   falls(t, k);
   chimneys(t);
   flicker(t);
-  drawChains(stageCameraX(), t);
+  drawChains(viewX(), t);
 }

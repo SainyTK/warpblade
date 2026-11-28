@@ -26,6 +26,11 @@ export const shakeOffset = (): readonly [number, number] => [placement.shx, plac
 export function setCameraX(x: number): void {
   placement.cameraX = Math.round(x * RES) / RES;
 }
+let viewLeft = 0;
+export function setViewX(x: number): void {
+  viewLeft = x;
+}
+export const viewX = (): number => viewLeft;
 export const projectX = (x: number): number => x + placement.shx - placement.cameraX;
 export const projectY = (y: number): number => y + placement.shy;
 export function place(x = 0, y = 0, flip = false): void {

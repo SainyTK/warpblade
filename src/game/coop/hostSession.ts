@@ -1,7 +1,8 @@
-import { HUD_RATE, MAX_PLAYERS, PING_MS, QUIET_LIMIT_MS, RTT_SMOOTHING } from "../../constants/coop";
+import { HUD_RATE, MAX_PLAYERS, PING_MS, QUIET_LIMIT_MS, RTT_SMOOTHING, STREAM } from "../../constants/coop";
 import { GAME_VERSION } from "../../constants/sitePages";
 import { MAX_FRAME, STEP } from "../../constants/stage";
 import { CHARACTERS } from "../../heroes/roster";
+import { renderScene } from "../../scene/renderScene";
 import { sfx } from "../../services/audio";
 import { captureGame, type GameStream, tuneVideoSender } from "../../services/coop/gameStream";
 import { type HostLink, openRoom, RoomTaken } from "../../services/coop/hostLink";
@@ -12,7 +13,7 @@ import type { RunOutcome } from "../../types/run";
 import { setChestSource, syncChestDialog } from "../../ui/chest/chestDialog";
 import { syncCoopStatus } from "../../ui/coop/coopStatus";
 import { drawDangerGlow } from "../../ui/dangerGlow";
-import { gameCanvas, paintScene } from "../../ui/gameCanvas";
+import { paintScene } from "../../ui/gameCanvas";
 import { updateHud } from "../../ui/hud";
 import { leaveMenu } from "../../ui/menu/menuActions";
 import { isMenuOpen, openMenu } from "../../ui/menu/menuState";
@@ -20,7 +21,7 @@ import { setPickSource, syncPickDialog } from "../../ui/skills/pickDialog";
 import { syncTouch } from "../../ui/touch/bindTouch";
 import { makeRoomCode } from "../../utils/roomCode";
 import { leftNote } from "../../utils/roomNotes";
-import { stageRunId } from "../adventure";
+import { heroCameraX, stageCameraX, stageRunId } from "../adventure";
 import { setFrameDriver } from "../frameDriver";
 import { press, release } from "../input";
 import { reportRun } from "../runEnd";
@@ -32,6 +33,12 @@ import type { Seat } from "./seat";
 
 /** codes tried before giving up, should the broker say each one is taken */
 const CODE_TRIES = 4;
+const GUEST_FRAME_MS = 1000 / STREAM.fps;
+
+interface GuestView {
+  stream: GameStream;
+  dueAt: number;
+}
 
 interface Guest {
   slot: number;
@@ -49,7 +56,7 @@ export class HostSession {
   private link: HostLink | null = null;
   private readonly guests = new Map<string, Guest>();
   private run: HostRun | null = null;
-  private stream: GameStream | null = null;
+  private readonly views = new Map<string, GuestView>();
   private pinger = 0;
   private lastHud = 0;
   private last = 0;
@@ -181,6 +188,8 @@ export class HostSession {
     const guest = this.guests.get(peer);
     if (!guest || this.closed) return;
     this.guests.delete(peer);
+    this.views.get(peer)?.stream.stop();
+    this.views.delete(peer);
     postNote(leftNote(guest.slot));
     for (const other of this.guests.keys()) this.link?.send(other, { t: "left", slot: guest.slot });
     const seat = this.run?.seatOf(peer);
@@ -202,10 +211,11 @@ export class HostSession {
         if (seat.peer) this.link?.send(seat.peer, { t: "feat", feat });
       },
     });
-    this.stream = captureGame(sfx.outputStream());
     for (const peer of this.guests.keys()) {
       link.send(peer, { t: "start" });
-      const call = link.stream(peer, this.stream.media);
+      const stream = captureGame(sfx.outputStream());
+      this.views.set(peer, { stream, dueAt: 0 });
+      const call = link.stream(peer, stream.media);
       if (call) tuneVideoSender(call.peerConnection);
     }
     setPickSource({
@@ -237,8 +247,8 @@ export class HostSession {
       stepGame();
     }
     if (!this.run) return;
-    paintScene();
-    this.stream?.mirror(gameCanvas);
+    paintScene(heroCameraX());
+    this.paintGuestView(run, now);
     drawDangerGlow(true);
     updateHud();
     syncPickDialog();
@@ -258,6 +268,18 @@ export class HostSession {
     const choosing = game.mode === "pick" ? run.choosing() : [];
     const room = roomView();
     if (room.downed !== downed || room.choosing.join() !== choosing.join()) updateRoom({ downed, choosing });
+  }
+
+  private paintGuestView(run: HostRun, now: number): void {
+    let next: { seat: Seat; view: GuestView } | null = null;
+    for (const seat of run.seats) {
+      const view = seat.peer ? this.views.get(seat.peer) : undefined;
+      if (view && view.dueAt <= now && (!next || view.dueAt < next.view.dueAt)) next = { seat, view };
+    }
+    if (!next) return;
+    const { seat, view } = next;
+    view.dueAt = Math.max(view.dueAt + GUEST_FRAME_MS, now);
+    view.stream.paint((out) => renderScene(out, stageCameraX(seat.slot)));
   }
 
   private sendHud(run: HostRun, seat: Seat): void {
@@ -284,8 +306,8 @@ export class HostSession {
     updateRoom({ downed: false, choosing: [] });
     setPickSource(null);
     setChestSource(null);
-    this.stream?.stop();
-    this.stream = null;
+    for (const view of this.views.values()) view.stream.stop();
+    this.views.clear();
   }
 
   /** leave the room: a run in play ends with everyone's coins banked, and the guests are told it closed */

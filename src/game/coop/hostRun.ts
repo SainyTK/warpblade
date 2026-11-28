@@ -9,7 +9,7 @@ import type { Feat } from "../../types/achievement";
 import type { Card } from "../../types/build";
 import type { StageChoice } from "../../types/campaign";
 import type { CharacterDef } from "../../types/character";
-import type { GuestHud, Loadout, PickWire } from "../../types/coop";
+import type { GuestHud, HeroSpot, Loadout, PickWire } from "../../types/coop";
 import type { EnemyRank, EnemyType } from "../../types/enemy";
 import type { PickAnswer } from "../../types/pick";
 import type { RunOutcome, RunReport, StageResult } from "../../types/run";
@@ -173,8 +173,11 @@ export class HostRun implements CoopHooks {
     if (best) this.enter(best);
   }
 
-  standingXs(): number[] {
-    return this.seats.map((seat) => this.spot(seat)).flatMap((s) => (s.standing ? [s.x] : []));
+  heroSpots(): HeroSpot[] {
+    return this.seats.map((seat) => {
+      const { x, standing } = this.spot(seat);
+      return { slot: seat.slot, x, standing };
+    });
   }
 
   anyStanding(): void {

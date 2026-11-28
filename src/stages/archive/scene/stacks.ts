@@ -1,6 +1,5 @@
 import { FW, GROUND, RES } from "../../../constants/stage";
-import { color, fleck, glow, place, px, shakeOffset } from "../../../engine/frame";
-import { stageCameraX } from "../../../game/adventure";
+import { color, fleck, glow, place, px, shakeOffset, viewX } from "../../../engine/frame";
 import { sceneBackground } from "../../../scene/scenery";
 import { clamp } from "../../../utils/math";
 import { SCENE } from "./palette";
@@ -16,7 +15,7 @@ export function drawStacks(): void {
   const art = stackArt();
   const plate = sceneBackground();
   const [sx, sy] = shakeOffset();
-  const shift = shiftOf(stageCameraX()) - sx;
+  const shift = shiftOf(viewX()) - sx;
   const lead = Math.round(shift * RES);
   for (let iy = 0; iy < FLOOR_ROW; iy++) {
     const source = clamp(iy - sy * RES, 0, FLOOR_ROW - 1);
@@ -39,7 +38,7 @@ function screenX(x: number, cameraX: number): number {
 }
 
 export function drawCandles(t: number): void {
-  const cameraX = stageCameraX();
+  const cameraX = viewX();
   place();
   for (const candle of CANDLES) {
     const x = screenX(candle.x, cameraX);

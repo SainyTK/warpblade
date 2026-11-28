@@ -12,8 +12,8 @@ gameCanvas.height = FH;
 const image = ctx.createImageData(FW, FH);
 
 /** draw the scene as it stands now */
-export function paintScene(): void {
-  renderScene(image.data);
+export function paintScene(cameraX: number): void {
+  renderScene(image.data, cameraX);
   if (!ctx) return;
   ctx.putImageData(image, 0, 0);
   if (usesDrill()) {

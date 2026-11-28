@@ -3,12 +3,13 @@ import { HERO_START_X } from "../../constants/hero";
 import { PAL } from "../../constants/palette";
 import { W } from "../../constants/stage";
 import { sfx } from "../../services/audio";
+import type { HeroSpot } from "../../types/coop";
 import { PK } from "../../types/particle";
 import { levelAtSecond, secondsLeft } from "../../utils/defenseClock";
 import { clamp } from "../../utils/math";
 import { bandWave } from "../../utils/stageArc";
 import { resetBossFight, updateBossFight } from "../bossFight";
-import { coop } from "../coopHooks";
+import { coop, heroSlot } from "../coopHooks";
 import { feat } from "../feat";
 import { openPicks } from "../progress";
 import { endRun } from "../runEnd";
@@ -22,11 +23,10 @@ import { updateFronts, updateSpawns } from "./spawner";
 
 const CAMERA_FOLLOW = 9;
 const BANNER = 2.2;
-const PARTY_EDGE = 16;
-const PARTY_SPAN = W - PARTY_EDGE * 2;
 const CLEAR_BURST = 6;
 
 const waveFor = (level: number): number => clamp(Math.round(bandWave(level)), 1, 30);
+const cameraOn = (run: Defense, x: number): number => clamp(x - W / 2, 0, run.field.width - W);
 
 export function startAdventureAt(section: number, offset = 0): void {
   const run = defense;
@@ -35,7 +35,7 @@ export function startAdventureAt(section: number, offset = 0): void {
   run.xpPaidTo = run.elapsed;
   run.bigFoeCall = callsBefore(run.elapsed);
   placeHero(run.crystal.x - HERO_START_X / 2 + offset);
-  run.camera = clamp(hero.x - W / 2, 0, run.field.width - W);
+  run.cameras.set(heroSlot(), cameraOn(run, hero.x));
   run.band = levelAtSecond(run.elapsed);
   game.wave = waveFor(run.band);
   game.lull = "fight";
@@ -45,19 +45,17 @@ export function startAdventureAt(section: number, offset = 0): void {
   showBanner(run.hyper ? `${run.stage.name}  Hyper` : run.stage.name, BANNER);
 }
 
-function partyXs(): number[] {
-  const room = coop();
-  if (room) return room.standingXs();
-  return hero.state === "dead" ? [] : [hero.x];
+function heroSpots(): HeroSpot[] {
+  return coop()?.heroSpots() ?? [{ slot: 0, x: hero.x, standing: hero.state !== "dead" }];
 }
 
-function followParty(run: Defense, xs: readonly number[], dt: number): void {
-  if (!xs.length) return;
-  const lead = Math.max(...xs);
-  const rear = Math.min(...xs);
-  run.leash = xs.length > 1 ? { left: lead - PARTY_SPAN, right: rear + PARTY_SPAN } : null;
-  const target = clamp((lead + rear) / 2 - W / 2, 0, run.field.width - W);
-  run.camera += (target - run.camera) * (1 - Math.exp(-CAMERA_FOLLOW * dt));
+function followHeroes(run: Defense, spots: readonly HeroSpot[], dt: number): void {
+  const pull = 1 - Math.exp(-CAMERA_FOLLOW * dt);
+  for (const { slot, x, standing } of spots) {
+    if (!standing) continue;
+    const camera = run.cameras.get(slot) ?? cameraOn(run, x);
+    run.cameras.set(slot, camera + (cameraOn(run, x) - camera) * pull);
+  }
 }
 
 export function notePicksDue(): void {
@@ -112,7 +110,7 @@ function updateClock(run: Defense, dt: number): void {
 export function updateAdventure(dt: number): void {
   const run = defense;
   if (!run) return;
-  followParty(run, partyXs(), dt);
+  followHeroes(run, heroSpots(), dt);
   updateStageHazard(dt);
   updateBossFight(dt);
   updateSiege(dt);

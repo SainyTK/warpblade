@@ -16,7 +16,8 @@ export {
   crystalView,
   crystalWatch,
   currentStage,
-  heroLeash,
+  heroCameraX,
+  inStageView,
   isAdventure,
   recordStageDamage,
   recordStageKill,
@@ -33,6 +34,7 @@ export {
   stageRunId,
   stageSecondsLeft,
   stageStatus,
+  stageViews,
   stageWhere,
   stageWon,
 } from "./defense";

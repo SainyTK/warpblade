@@ -1,9 +1,10 @@
 import { GROUND, H, W } from "../../../constants/stage";
 import { fleck, glow, hairline, px } from "../../../engine/frame";
-import { stageCameraX } from "../../../game/adventure";
+import { stageViews } from "../../../game/adventure";
 import { fxRng, particles } from "../../../game/state";
 import { PK } from "../../../types/particle";
 import { grain } from "../../../utils/grain";
+import { inAnyView } from "../../../utils/views";
 import { FORGE_SPARKS } from "../colors";
 import { SCENE_COLORS as SC } from "./palette";
 
@@ -63,9 +64,11 @@ export function drawForgeWeather(t: number, k: number): void {
 }
 
 export function updateForge(dt: number): void {
-  const left = stageCameraX();
-  const first = Math.floor((left - GRATE.center) / GRATE.every) + 1;
-  for (let n = first; n * GRATE.every + GRATE.center < left + W; n++) {
+  const views = stageViews();
+  const first = Math.floor((Math.min(...views) - GRATE.center) / GRATE.every) + 1;
+  const last = Math.max(...views) + W;
+  for (let n = first; n * GRATE.every + GRATE.center < last; n++) {
+    if (!inAnyView(views, n * GRATE.every + GRATE.center, 0)) continue;
     if (!fxRng.chance(dt * GRATE_SPARKS)) continue;
     const x = n * GRATE.every + GRATE.center + fxRng.range(-6, 6);
     particles.spawn(PK.EMBER, x, GROUND + 4, fxRng.range(-8, 8), -fxRng.range(30, 60), fxRng.range(0.6, 1.2), {

@@ -1,6 +1,5 @@
 import { GROUND, W } from "../../../constants/stage";
-import { fleck, glow, line, place, px } from "../../../engine/frame";
-import { stageCameraX } from "../../../game/adventure";
+import { fleck, glow, line, place, px, viewX } from "../../../engine/frame";
 import { mix } from "../../../utils/color";
 import { grain } from "../../../utils/grain";
 import { BLIGHT } from "../colors";
@@ -16,7 +15,7 @@ const SPORE_SPAN = 360;
 const wrapIn = (v: number, span: number): number => ((v % span) + span) % span;
 
 function hangingRoots(t: number, T: SceneTones): void {
-  const shift = stageCameraX() * ROOT_PARALLAX;
+  const shift = viewX() * ROOT_PARALLAX;
   for (let i = 0; i < HANGING; i++) {
     const x = wrapIn(i * (ROOT_SPAN / HANGING) + grain(i, 41) * 20 - shift, ROOT_SPAN) - 40;
     if (x < -10 || x > W + 10) continue;
@@ -56,7 +55,7 @@ export function drawBlightAmbient(t: number, k: number, T: SceneTones): void {
 
 export function drawBlightWeather(t: number, T: SceneTones): void {
   place();
-  const shift = stageCameraX();
+  const shift = viewX();
   for (let i = 0; i < SPORES; i++) {
     const speed = 3 + grain(i, 61) * 6;
     const rise = i % 3 === 0;

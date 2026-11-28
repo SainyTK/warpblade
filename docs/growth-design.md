@@ -180,7 +180,7 @@ Cards open 0.35 s after a level up that gives a point (`PICK_DELAY_SECONDS`), an
 ### Co-op
 
 Each player past the first adds 40% more minions to every pack (`COOP_SCALING.count`) and their HP scaling, and the most foes alive is x1.5 in a room.
-The shared camera still keeps standing heroes within one screen of each other.
+Each player's camera follows their own hero, so players can split up and defend the West and the East at the same time.
 
 ### Foe power by level band
 

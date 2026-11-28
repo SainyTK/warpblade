@@ -20,6 +20,12 @@ export interface SeatInfo {
   hero: string;
 }
 
+export interface HeroSpot {
+  slot: number;
+  x: number;
+  standing: boolean;
+}
+
 /** a card a guest answered, by kind and id so it crosses the network */
 export interface PickWire {
   type: Card["type"];

@@ -1,6 +1,5 @@
 import { GROUND, W } from "../../../constants/stage";
-import { disc, fleck, glow, hairline, polygon, px } from "../../../engine/frame";
-import { stageCameraX } from "../../../game/adventure";
+import { disc, fleck, glow, hairline, polygon, px, viewX } from "../../../engine/frame";
 import { scale } from "../../../utils/color";
 import { grain } from "../../../utils/grain";
 import { SCENE } from "./palette";
@@ -62,7 +61,7 @@ function page(x: number, y: number, angle: number, depth: number): void {
 }
 
 export function drawPages(t: number): void {
-  const camera = stageCameraX();
+  const camera = viewX();
   for (const p of PAGES) {
     const x = wrap(p.x - t * p.speed - camera * p.depth * 1.1, SPAN) - 20;
     const y = wrap(p.y + t * p.sink + Math.sin(t * 0.9 + p.x) * 6, GROUND - 20) + 10;
@@ -71,7 +70,7 @@ export function drawPages(t: number): void {
 }
 
 export function drawBubbles(t: number): void {
-  const camera = stageCameraX();
+  const camera = viewX();
   for (const b of BUBBLES) {
     const climb = wrap(t * b.rise + b.phase * 7, 110);
     const x = wrap(b.x - camera * 0.9, SPAN) - 20 + Math.sin(t * 3 + b.phase) * 1.2;
@@ -85,7 +84,7 @@ export function drawBubbles(t: number): void {
 }
 
 export function drawTendrils(t: number): void {
-  const camera = stageCameraX();
+  const camera = viewX();
   for (const d of TENDRILS) {
     const baseX = wrap(d.x - camera * 0.2 + t * 1.5, SPAN) - 20;
     for (let i = 0; i < 14; i++) {
