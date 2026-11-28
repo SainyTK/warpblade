@@ -14,7 +14,7 @@ export const RAY = {
   swoop: 0.95,
   swoopSpan: [110, 210],
   swoopLow: 20,
-  recover: 0.8,
+  recover: 1.1,
   armour: 0.35,
   sense: 170,
 } as const;

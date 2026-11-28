@@ -21,7 +21,7 @@ export const GATOR_TIMES = {
   slam: 0.35,
   bellowWind: 0.9,
   bellow: 0.55,
-  rest: 0.9,
+  rest: 1.2,
 } as const;
 
 export const GATOR_HITS = { rush: 28, slam: 24, wave: 18, touch: 10 } as const;

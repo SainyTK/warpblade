@@ -10,7 +10,7 @@ export const SEER_MOVE = {
   gravity: 700,
 } as const;
 
-export const SEER_TIMES = { raise: 0.75, cast: 1, release: 0.35, recover: 0.8 } as const;
+export const SEER_TIMES = { raise: 0.75, cast: 1, release: 0.35, recover: 1 } as const;
 
 export const SEER_CAST = { spears: 0, ward: 1 } as const;
 

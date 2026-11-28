@@ -8,7 +8,7 @@ export const VOLTFLY = {
   overshoot: 46,
   dartMost: 0.7,
   brake: 900,
-  recover: 0.7,
+  recover: 1,
   hitHalf: 7,
   reach: 150,
 } as const;

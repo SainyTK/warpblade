@@ -47,7 +47,7 @@ function reset(): void {
 export function snapperPose(e: Enemy, t: number): SnapperPose {
   const time = t + e.seed;
   reset();
-  if (e.stun > 0 || e.air) {
+  if (e.stun > 0 || e.air || e.stagger > 0) {
     pose.hidden = true;
     pose.tuck = 1;
     return pose;
