@@ -14,7 +14,7 @@ import { mendAround } from "./mend";
 import { BELL, BELL_HITS, DROP, TOLL, windTime } from "./pose";
 import { createToll, createTollTell } from "./toll";
 
-const LIP = 9;
+const LIP = 11;
 
 function hang(e: Enemy, dt: number): void {
   const dx = hero.x - e.x;
