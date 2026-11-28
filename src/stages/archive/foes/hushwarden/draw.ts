@@ -43,12 +43,12 @@ function robe(s: SpriteCanvas, p: HushwardenPose, time: number): void {
     const sway = Math.sin(time * 2.6 + i * 1.3) * 0.8;
     s.poly(
       [
-        [x, -3],
-        [x + 2.5, -3],
-        [x + 2.2 + sway, 3],
-        [x + 0.3 + sway, 2.4],
+        [x, -4],
+        [x + 2, -4],
+        [x + 1.6 + sway, 1],
+        [x + 0.3 + sway, 0.4],
       ],
-      i % 2 ? P[2] : P[3],
+      i % 2 ? P[1] : P[2],
     );
   }
   s.commit();

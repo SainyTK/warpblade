@@ -89,7 +89,7 @@ export function updateQuillshrike(e: Enemy, dt: number, ts: number): void {
       sfx.swing(1.6);
     }
   } else {
-    e.vy = approach(e.vy, -30, 120 * dt);
+    e.vy = approach(e.vy, -80, 260 * dt);
     e.y = clamp(e.y + e.vy * dt, 20, GROUND - 14);
     if (e.st >= QUILLSHRIKE.rise)
       Object.assign(e, {

@@ -15,8 +15,8 @@ type Pt = readonly [number, number];
 function scroll(s: SpriteCanvas, p: ScrivenerPose, time: number): void {
   const sway = Math.sin(time * 2.2) * 1.2;
   const top: Pt = [-3 + p.lean * 0.3, -14 + p.hunch];
-  const mid: Pt = [-9 + sway * 0.5, -7];
-  const end: Pt = [-14 + sway, -1];
+  const mid: Pt = [-8 + sway * 0.5, -9];
+  const end: Pt = [-11 + sway, -4];
   s.begin();
   s.taper(top[0], top[1], mid[0], mid[1], 1.6, 1.8, P[3], 0.5);
   s.taper(mid[0], mid[1], end[0], end[1], 1.8, 1.4, P[3], -0.5);
