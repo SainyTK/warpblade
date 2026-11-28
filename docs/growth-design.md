@@ -124,20 +124,23 @@ The data is `STAGE_ARCS` in `src/constants/stageArc.ts`; the pure maths is `src/
 ### Acts
 
 A Rift stage has three areas, one per act.
-Each area is its approach (the authored patrol) and a locked room that plays its beats in turn: Rift Surges, then the elite, mini boss or boss that ends the act.
+Each area is its road and a locked room that plays its beats in turn: Rift Surges, then the elite or boss that ends the act.
+The road is a row of packs (`Approach.packs`): reaching a pack spawns it and holds the right edge at the pack's hold line until every foe of it is dead.
+There are no pits.
+The mini boss is the first road encounter of the final act's area, fought at 44, 44 to 50.
+A Rift Surge is three waves of 0.75, 1 and 1.25 times the room's standing cap (`SURGE.waves`); each wave must be cleared before the next.
 The numbers are the hero level each beat is built to end at.
 
-| Act | Area | Approach | Room beats (foes, level reached) | Ends with |
+| Act | Area | Road | Room beats (level reached) | Ends with |
 | --- | --- | --- | --- | --- |
-| Opening | 1 | 1 to 4 | 40 to 9, 50 to 14 | an elite of the stage's heavy foe, 14 to 15 |
-| Middle | 2 | 15 to 18 | 60 to 25, 70 to 32, 80 to 38, 90 to 44 | the mini boss, fought at 44, 44 to 50 |
-| Final | 3 | 50 to 54 | 80 to 64, 90 to 74, 100 to 84, 110 to 94 | the stage boss, fought at 94, 94 to 99 |
+| Opening | 1 | 1 to 4 | 9, 14 | an elite, 14 to 15 |
+| Middle | 2 | 15 to 18 | 25, 32, 38, 44 | the last surge |
+| Final | 3 | the mini boss 44 to 50, then 50 to 54 | 64, 74, 84, 94 | the stage boss, fought at 94, 94 to 99 |
 
 The Sunlit Ruins have two areas: the first plays the opening and middle rooms back to back, the second the final act.
 The Abyss Citadel has four: opening, middle, then the final act split over two rooms, with the Abyss Maw (72 to 78) and the Abyss Sovereign (95 to 99).
 After the stage boss falls, The Unblinking comes through a rift, aims its gaze and kills the hero with one beam that nothing blocks; the stage counts as cleared.
 
-A Rift Stage has about 51 approach foes, 770 surge foes, an elite, a mini boss and a boss.
 
 ### Experience
 
@@ -163,8 +166,14 @@ A foe's level band is the level the arc places it at: by its place along the app
 The hero's expected damage at a level is a table of anchors interpolated geometrically (`EXPECTED_HERO_DAMAGE`): x1 at level 1, x3 at 15, x40 at 30, x300 at 50, x24,000 at 80 and x150,000 at 99.
 The late anchors are that high because a full stage's build compounds: skills, masteries, chests, evolutions, Resonance procs and Flow multiply each other, and the scripted runs below killed a 21 million HP Oakheart in 6 to 7 s at level 93 before this table.
 
-- Minion HP = its base HP x expected damage x `TIME_TO_KILL.minion` (4.5) x crowd toughness x the stage's HP multiplier.
+- Minion HP is fixed per foe type for the whole run (owner rule, 28 November 2026): each stage has a ladder of foe types (`StageDef.ladder`) on 8 steps (`LADDER_RUNGS`: levels 1, 15, 26, 38, 48, 53, 62, 78).
+  A foe's HP = its step's hits x 10 (`FOE_HIT`) x expected damage x crowd toughness at the step's level x the stage's HP multiplier; flyers take half (`FLYER_TOUGHNESS`).
+  Step 1 foes always have 10 HP (5 for flyers), so one level-1 hit kills them on every stage and in co-op.
+  Steps sit where crowd damage grows about 3 to 5 times, so a type falls from its step's hits to a few hits by the next step, when a tougher type takes over.
+  Spawns pick from the newest three steps open at the current level, weighted 4, 2 and 1 (`src/utils/ladder.ts`).
   Crowd toughness (`CROWD_TOUGHNESS`) is x1 to level 45, x5.8 at 55, x0.97 at 80 and x0.36 at 99: crowd clearing jumps around level 50 as area skills and procs arrive, then grows more slowly than damage to one target, which the boss anchors follow.
+- Steps 1 to 4 flinch: they attack at 0.6 times the pace, only within 56 px across and 84 px up or down, and any hit staggers them and stops their attacks for 1.2 s (`FLINCH`).
+  Steps 5 to 8, mini bosses and bosses are armored: they never stagger and keep attacking, so each of their attacks has a clear telegraph and a recovery to punish.
 - Elite, mini boss and boss HP = `HERO_DPS_AT_LEVEL_1` (30) x expected damage at the level they are fought at x `TIME_TO_KILL` (elite 20, mini boss 170, boss 150) x the stage's HP multiplier.
 - Death bursts (Wildfire, Shatter, Plague) deal their share of the fallen foe's max HP, but at most 2% of a mini boss's or boss's own max HP (`BIG_FOE_BURST_CAP`), so a dying crowd does not melt the boss.
 - Damage = `1 + 0.015 x (level - 1)` (x2.47 at 99) x the stage's damage multiplier; bosses and mini bosses x1.25 more and their own profile power.

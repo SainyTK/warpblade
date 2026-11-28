@@ -12,7 +12,7 @@ Every hero shares one camera, as the host's picture is the one every guest sees.
 While the room walks the route, no standing hero can get farther than one screen width (less a margin) from another, so a hero at the front waits for the one at the back (`heroLeash` in `src/game/adventure/trail.ts`).
 The camera keeps the front hero a third of the way in and never lets the last one leave the screen.
 The route moves on with the front hero: foes appear and a room's gate closes when the front hero reaches them, and the gate pulls every hero still outside into the room.
-Each hero keeps their own footing for pits, and spikes, hazards and boss shoves strike every standing hero.
+Spikes, hazards and boss shoves strike every standing hero.
 
 ## Where it comes from
 
