@@ -3,7 +3,7 @@ import type { Enemy } from "../../../types/enemy";
 import { clamp } from "../../../utils/math";
 import { waveScale } from "../../../utils/progression";
 
-export const SHADE = { flare: 0.8, throwTime: 0.25, recover: 0.8, keepAway: 70, hover: 46, sense: 150 } as const;
+export const SHADE = { flare: 0.8, throwTime: 0.25, recover: 0.8, keepAway: 40, hover: 46, sense: 150 } as const;
 
 export const flareTime = (): number => SHADE.flare * waveScale(game.wave).windup;
 

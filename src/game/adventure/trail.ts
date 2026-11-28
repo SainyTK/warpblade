@@ -58,7 +58,6 @@ interface Trail {
   gate: number | null;
   surge: Surge | null;
   authored: WeakSet<Enemy>;
-  perched: WeakMap<Enemy, number>;
 }
 
 export let trail: Trail | null = null;
@@ -99,7 +98,6 @@ export function beginAdventure(random: Rng, stage: StageId, hyper: boolean): voi
     gate: null,
     surge: null,
     authored: new WeakSet(),
-    perched: new WeakMap(),
   };
 }
 

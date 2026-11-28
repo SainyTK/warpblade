@@ -1,6 +1,6 @@
 import { FLINCH } from "../../constants/combat";
 import type { Enemy } from "../../types/enemy";
-import { containPatrol, finaleHolds, stageFoePace, waitsOnPerch } from "../adventure";
+import { containPatrol, finaleHolds, stageFoePace } from "../adventure";
 import { bossHeld } from "../bossFight";
 import { coop } from "../coopHooks";
 import { game, hero } from "../state";
@@ -37,7 +37,7 @@ function updateEnemy(e: Enemy, dt: number): void {
   const room = coop();
   room?.nearest(e.x, e.y);
   const status = updateStatus(e, dt);
-  if (e.hp <= 0 || waitsOnPerch(e) || bossHeld(e) || finaleHolds(e)) return;
+  if (e.hp <= 0 || bossHeld(e) || finaleHolds(e)) return;
   room?.nearest(e.x, e.y);
   const [cx, cy] = enemyCenter(e);
   const ts = status * fieldPace(cx, cy, e.rank) * stageFoePace();
