@@ -6,7 +6,7 @@ import { updateCinderdrake } from "./moves";
 
 export const cinderdrakeKind: EnemyKind = {
   flies: true,
-  box: (e) => [e.x - 11, e.y - 10, e.x + 14, e.y + 6],
+  box: (e) => [e.x + e.face * 3 - 14, e.y - 12, e.x + e.face * 3 + 14, e.y + 7],
   center: (e) => [e.x + e.face * 2, e.y - 2],
   rest: "drift",
   firstCooldown: () => rng.range(1.4, 2.4),

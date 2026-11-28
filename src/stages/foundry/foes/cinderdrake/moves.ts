@@ -38,7 +38,7 @@ interface DivePath {
 
 const paths = new WeakMap<Enemy, DivePath>();
 
-export const mouthOf = (e: Enemy): [number, number] => [e.x + e.face * 13, e.y - 7];
+export const mouthOf = (e: Enemy): [number, number] => [e.x + e.face * 19, e.y - 8];
 
 function drift(e: Enemy, dt: number): void {
   const dx = hero.x - e.x;
