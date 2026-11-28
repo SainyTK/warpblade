@@ -4,26 +4,23 @@ import { skilledPolicy } from "../../bots/skilled";
 import { KEYS } from "../../constants/keys";
 import type { Intent } from "../../types/bot";
 import type { Session } from "../../types/session";
-import { BOT_TICK_MS, CHEST_WAIT_MS, MOVE_EPSILON, NEAR_FOE, STUCK_HOP_MS, STUCK_MS, STUCK_WALK_MS } from "./constants";
-import { readTrail } from "./readTrail";
+import { readDefense } from "../defense";
+import { BOT_TICK_MS, CHEST_WAIT_MS, CRYSTAL_REACH } from "./constants";
 import type { PlayEnd, PlayOptions, PlayResult } from "./types";
 
-const WALK_ON: Intent = { hold: [KEYS.right], tap: [] };
+const toward = (from: number, to: number): Intent => ({ hold: [to < from ? KEYS.left : KEYS.right], tap: [] });
 
 export async function playOn(session: Session, options: PlayOptions): Promise<PlayResult> {
   const driver = createKeyDriver(session);
   const memory = freshMemory();
   const start = session.elapsedMs();
-  let lastX = Number.NaN;
-  let stillSince = 0;
   for (;;) {
-    const state = await session.state();
-    const trail = await readTrail(session);
+    const [state, view] = await Promise.all([session.state(), readDefense(session)]);
     const finish = async (end: PlayEnd): Promise<PlayResult> => {
       await driver.releaseAll();
-      return { end, state, trail };
+      return { end, state, view };
     };
-    if (options.until(state, trail)) {
+    if (options.until(state, view)) {
       return finish("reached");
     }
     if (state.menu.context === "title") {
@@ -55,23 +52,9 @@ export async function playOn(session: Session, options: PlayOptions): Promise<Pl
     }
     memory.now = session.elapsedMs() - start;
     let intent = skilledPolicy.decide(state, memory);
-    const blocked = trail.gate !== null || trail.hold !== null;
-    if (Math.abs(state.hero.x - lastX) > MOVE_EPSILON || blocked) {
-      stillSince = memory.now;
-    }
-    lastX = state.hero.x;
-    const nearFoe = state.enemies.some(
-      (foe) => foe.hp > 0 && Math.abs(foe.x - state.hero.x) < NEAR_FOE && Math.abs(foe.y - state.hero.y) < NEAR_FOE,
-    );
-    if (!nearFoe && !blocked && memory.now - stillSince > STUCK_MS) {
-      await driver.releaseAll();
-      await session.hold([KEYS.right, KEYS.up], STUCK_HOP_MS);
-      await session.hold([KEYS.right], STUCK_WALK_MS);
-      stillSince = memory.now;
-      continue;
-    }
-    if (intent.hold.length === 0 && intent.tap.length === 0 && !blocked) {
-      intent = WALK_ON;
+    const idle = intent.hold.length === 0 && intent.tap.length === 0;
+    if (idle && view.stage !== null && Math.abs(state.hero.x - view.crystalX) > CRYSTAL_REACH) {
+      intent = toward(state.hero.x, view.crystalX);
     }
     await driver.apply(intent);
     await session.advance(BOT_TICK_MS);

@@ -1,5 +1,5 @@
 {
-  "version": 2,
+  "version": 3,
   "date": "2026-11-28",
   "formula": {
     "fun": "100 * product_i (d_i / 100) ^ w_i over the dimensions with at least one score",
@@ -15,8 +15,8 @@
       "brynn",
       "cerise"
     ],
-    "bossRooms": "each sampled stage's boss room, entered at the level and build a hero who clears the stage before it has, with picks spent, chests opened, shards collected and full HP",
-    "owner": "play one stage on a fresh solo run for about 20 to 30 minutes with any hero; give an overall score from 0 to 100, whether the build is more, as or less fun than the last one you scored, your reasons, and optionally a level from 1 to 5 for any dimension"
+    "bossFights": "each sampled stage's mini boss and boss fight as they come in a defense run: the run starts at the minute before the call, at the level, picks, chests and shards a hero who held the crystal until then has, with full HP",
+    "owner": "play one stage's 10-minute crystal defense on a fresh solo run with any hero, once or twice; give an overall score from 0 to 100, whether the build is more, as or less fun than the last one you scored, your reasons, and optionally a level from 1 to 5 for any dimension"
   },
   "sources": [
     "Vanden Abeele, Spiel, Nacke, Johnson, Gerling. Development and validation of the Player Experience Inventory. International Journal of Human-Computer Studies 135, 2020.",
@@ -91,7 +91,7 @@
         {
           "id": "M2.1",
           "name": "Boss clear rate",
-          "method": "share of the sampled stages' boss rooms the skilled bot clears, over the sampled heroes",
+          "method": "share of the sampled stages' mini boss and boss fights the skilled bot wins in a defense run (the big foe falls before the clock clears the field or the crystal shatters), over the sampled heroes",
           "unit": "percent",
           "band": {
             "scale": "linear",
@@ -119,7 +119,7 @@
         {
           "id": "M2.2",
           "name": "Fair hits",
-          "method": "share of hero HP lost in the sampled boss rooms by the skilled bot to foe attacks with at least 250 ms of wind-up",
+          "method": "share of hero HP lost by the skilled bot during the sampled mini boss and boss fights, to the big foe and the foes still coming at the crystal, from attacks with at least 250 ms of wind-up",
           "unit": "percent",
           "band": {
             "scale": "linear",
@@ -139,7 +139,7 @@
         {
           "id": "M2.3",
           "name": "Escalation",
-          "method": "Spearman correlation between the sampled stages' tier order and the skilled bot's hero HP lost per minute in their boss rooms (needs three or more stages)",
+          "method": "Spearman correlation between the sampled stages' tier order and the skilled bot's hero HP lost per minute in their mini boss and boss fights (needs three or more stages)",
           "unit": "rho",
           "band": {
             "scale": "linear",
@@ -158,7 +158,7 @@
         {
           "id": "M2.4",
           "name": "Boss fight length",
-          "method": "median over the skilled bot's sampled boss rooms of its time to kill (the clear time, or the fight time divided by the share of boss HP removed on a fall) divided by the game's designed kill time for that boss",
+          "method": "median over the skilled bot's sampled mini boss and boss fights of its time to kill (the fight time on a win, or the fight time divided by the share of big foe HP removed otherwise) divided by the game's designed kill time for that foe",
           "unit": "ratio",
           "band": {
             "scale": "log",
@@ -200,7 +200,7 @@
         {
           "id": "M3.1",
           "name": "Power against the world",
-          "method": "median over simulated runs (benchmark profile, random card policy, sampled heroes) of hero damage per second at the boss over hero damage per second at the end of the opening act, divided by the growth of foe HP between the same two points; the opening act's one-hit fodder is left out because it makes the ratio meaningless",
+          "method": "median over simulated defense runs (benchmark profile, random card policy, sampled heroes) of hero damage per second at the boss call over hero damage per second after the elite call, divided by the growth of field foe HP between the same two points; the one-hit foes before the elite call are left out because they make the ratio meaningless",
           "unit": "ratio",
           "band": {
             "scale": "log",
@@ -228,7 +228,7 @@
         {
           "id": "M3.2",
           "name": "Reward rhythm",
-          "method": "median game seconds between rewards (level up, pick, chest, evolution, shard) in the sampled stage, played by the skilled bot kept at half HP or more for the sampled game minutes",
+          "method": "median game seconds between rewards (level up, pick, chest, evolution, shard) in a defense run of the sampled stage, played by the skilled bot kept at half HP or more for the sampled game minutes",
           "unit": "s",
           "band": {
             "scale": "linear",
@@ -248,7 +248,7 @@
         {
           "id": "M3.3",
           "name": "Growth runway",
-          "method": "median share of a stage's par time before every held skill is at its maximum level, over simulated runs",
+          "method": "median share of a defense run's clock before every held skill is at its maximum level, over simulated runs",
           "unit": "percent",
           "band": {
             "scale": "linear",
@@ -268,7 +268,7 @@
         {
           "id": "M3.4",
           "name": "Run length",
-          "method": "median par time of a stage from the game's stage data",
+          "method": "median length of a stage's defense from the game's stage data",
           "unit": "min",
           "band": {
             "scale": "linear",
@@ -328,7 +328,7 @@
         {
           "id": "M6.1",
           "name": "Skill gap",
-          "method": "(skilled bot boss HP removed minus mash bot boss HP removed) divided by skilled, summed over the sampled boss rooms and heroes, a clear counting as 1",
+          "method": "(skilled bot big foe HP removed minus mash bot big foe HP removed) divided by skilled, summed over the sampled mini boss and boss fights and heroes, a win counting as 1",
           "unit": "ratio",
           "band": {
             "scale": "linear",
@@ -435,7 +435,7 @@
         {
           "id": "M8.1",
           "name": "Novelty rate",
-          "method": "new things first seen per 10 minutes in the second half of a stage (foe kinds, boss attacks, hazards, places, skills, evolutions), mean over stages",
+          "method": "new things first seen per 10 minutes in the second half of a stage's defense (foe kinds, boss attacks, hazards, places and new sides foes come from, skills, evolutions), mean over stages",
           "unit": "per 10 min",
           "band": {
             "scale": "linear",
@@ -484,7 +484,8 @@
   "revisions": [
     "1, 27 November 2026: nine PXI-based dimensions, equal weights, weighted geometric mean; before the first score, M3.1 became power against foe growth with an upper limit, and Growth runway and Chosen growth were added.",
     "2, 28 November 2026: after round 2 the judges' gut fell 18 points while the formula fell 2, because bosses became walls and runs outgrew a session without any measure seeing it. Added M2.4 Boss fight length and M3.4 Run length; M6.1 always uses boss HP removed; M4.1 Blind route dropped until it can be automated; the benchmark is one stage per run; bands became machine-readable. The owner agreed with the round 2 assessment.",
-    "2, 28 November 2026 (owner request, same day): no full runs. An analyst picks at most five measures a night by impact, each runs as one minimal sampled job, at most five jobs at a time within 25 percent of the CPU, and the rest carry over from the ledger. M3.1 counts from the end of the opening act, because the opening act's one-hit fodder made the ratio meaningless."
+    "2, 28 November 2026 (owner request, same day): no full runs. An analyst picks at most five measures a night by impact, each runs as one minimal sampled job, at most five jobs at a time within 25 percent of the CPU, and the rest carry over from the ledger. M3.1 counts from the end of the opening act, because the opening act's one-hit fodder made the ratio meaningless.",
+    "3, 28 November 2026: the stage became a 10-minute defense of the Warp crystal; boss rooms, Rift Surges, mentors and The Unblinking are gone. The bossRooms job became bossFights: M2.1 to M2.4 and M6.1 measure each sampled stage's mini boss and boss fight as they come in a defense run, started at the minute before the call with the level, picks, chests and shards the clock gives by then, with foes still coming at the crystal; a fight is lost when the clock clears the field or the crystal shatters, since fallen heroes revive. M3.2 measures a defense run, 11 game minutes by default so the whole run fits. M3.1 counts from the elite call at 1:35 to the boss call at 7:30. M3.3 and M3.4 use the defense clock, so M3.4 reads 10 minutes for every stage. M8.1 counts newly opened sides as places and no longer counts The Unblinking. The evidence job films the crystal under siege in place of a Rift Surge and the level-up cards in place of the mentor's pick, and its result screen follows a held defense. The owner protocol is one 10-minute defense."
   ],
   "budget": {
     "maxPicks": 5,
@@ -511,7 +512,7 @@
         "stages": 0
       }
     },
-    "bossRooms": {
+    "bossFights": {
       "measures": [
         "M2.1",
         "M2.2",
@@ -545,7 +546,7 @@
         "stages": [
           "marsh"
         ],
-        "minutes": 10
+        "minutes": 11
       },
       "max": {
         "heroes": 1,

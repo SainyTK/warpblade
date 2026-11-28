@@ -1,5 +1,6 @@
 import type { Harness } from "../../session/harness";
 import type { Session } from "../../types/session";
+import { quietField } from "../defense";
 import { PRESS_PAIRS, PRESS_TIMINGS, PRESSES_START, RESPONSE_ACTIONS, RESPONSE_PHASES, SETTLE_MS } from "./constants";
 import { pairTrial } from "./pairTrial";
 import { readFighter } from "./readFighter";
@@ -11,6 +12,7 @@ import type { HeroPresses, PairTrial, ResponseTrial } from "./types";
 export async function benchHero(harness: Harness, hero: string): Promise<HeroPresses> {
   const open = async (): Promise<Session> => {
     const opened = await harness.newSession({ hero, start: PRESSES_START });
+    await quietField(opened);
     await opened.advance(SETTLE_MS);
     return opened;
   };

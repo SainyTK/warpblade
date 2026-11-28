@@ -5,8 +5,8 @@ import { bossScene } from "./scenes/bossScene";
 import { menusScene } from "./scenes/menusScene";
 import { phoneScene } from "./scenes/phoneScene";
 import { pickScene } from "./scenes/pickScene";
+import { siegeScene } from "./scenes/siegeScene";
 import { stageScene } from "./scenes/stageScene";
-import { surgeScene } from "./scenes/surgeScene";
 import type { Scene, SceneSubject, ShotPlan } from "./types";
 
 export function buildScenes(plan: ShotPlan, sample: MeasureSample): Scene[] {
@@ -30,8 +30,8 @@ export function buildScenes(plan: ShotPlan, sample: MeasureSample): Scene[] {
     if (wantsAny(plan, ["start", "fight"]) || (subject.lead && wantsAny(plan, ["combatClip", "hitClip"]))) {
       scenes.push(stageScene(subject));
     }
-    if (plan.has("surge")) {
-      scenes.push(surgeScene(subject));
+    if (plan.has("siege")) {
+      scenes.push(siegeScene(subject));
     }
     const leadBoss = subject.lead && wantsAny(plan, ["bossAttackClip", "chargeClip", "result"]);
     if (wantsAny(plan, ["bossArrival", "bossFight"]) || leadBoss) {

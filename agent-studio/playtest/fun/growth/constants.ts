@@ -1,7 +1,5 @@
 export const FIRST_RUN_SEED = 10_000;
 
-export const PLAN_SEED = 7;
-
 export const STAGE_CHOICES_PER_RUN = 1;
 
 export const LUCK = 1;
@@ -29,6 +27,8 @@ export const NOVELTY_WINDOW_MINUTES = 10;
 export const PERCENT = 100;
 
 export const HIGHEST_WAVE = 30;
+
+export const FIELD_STEP_SECONDS = 15;
 
 export const EVOLVED_INVESTMENT = 3;
 
@@ -73,9 +73,7 @@ export const BOSS_ATTACKS: Readonly<Record<string, readonly string[]>> = {
   tempestroc: ["swoop", "bolt", "feather", "breath"],
   sporeheart: ["lash", "bomb", "puddle", "root", "sweep", "pulse"],
   pagewyrm: ["erupt", "page", "wave", "bite"],
-  maw: ["bite", "orb", "slam", "well"],
   sovereign: ["cleave", "pillar", "spikes"],
-  unblinking: ["gaze"],
 };
 
 export const MEASURE_IDS = {
@@ -107,17 +105,21 @@ export const GAME_MODULES = {
   stages: { path: "/src/stages/index.ts", names: ["STAGES"] },
   arts: { path: "/src/stages/arts.ts", names: ["ARTS"] },
   graph: { path: "/src/constants/stageGraph.ts", names: ["STAGE_ORDER"] },
-  arc: { path: "/src/constants/stageArc.ts", names: ["STAGE_ARCS", "ROOM_BEATS", "FLYER_TOUGHNESS"] },
-  waves: { path: "/src/constants/waves.ts", names: ["FINALE"] },
+  arc: { path: "/src/constants/stageArc.ts", names: ["FLYER_TOUGHNESS"] },
+  defense: {
+    path: "/src/constants/defense.ts",
+    names: ["DEFENSE_SECONDS", "BIG_FOE_CALLS", "BIG_FOE_XP_SECONDS", "SIDE_STYLE"],
+  },
+  clock: { path: "/src/utils/defenseClock.ts", names: ["levelAtSecond", "foesPerSecond", "frontAt"] },
+  progression: { path: "/src/utils/progression.ts", names: ["xpToReach"] },
   growth: {
     path: "/src/constants/growth.ts",
-    names: ["SKILL_MAX_LEVEL", "SKILL_SLOTS", "MASTERY", "CHARGE_RANK", "ATTUNEMENT"],
+    names: ["MAX_LEVEL", "SKILL_MAX_LEVEL", "SKILL_SLOTS", "MASTERY", "CHARGE_RANK", "ATTUNEMENT"],
   },
   resonance: { path: "/src/constants/resonance.ts", names: ["BLAZE", "FROST", "STORM", "VENOM", "VOID"] },
   boons: { path: "/src/constants/boons.ts", names: ["BOONS"] },
-  route: { path: "/src/game/adventure/route.ts", names: ["buildRoute", "ladderFoe"] },
   ladder: { path: "/src/utils/ladder.ts", names: ["ladderChoices"] },
-  stageArc: { path: "/src/utils/stageArc.ts", names: ["stageMods", "ladderHp", "levelBetween", "bandWave"] },
+  stageArc: { path: "/src/utils/stageArc.ts", names: ["stageMods", "ladderHp", "bandWave"] },
   kinds: { path: "/src/game/enemies/kinds/index.ts", names: ["kindOf"] },
   bossFight: { path: "/src/game/bossFight/profiles.ts", names: ["bossProfile"] },
   rng: { path: "/src/utils/rng.ts", names: ["Rng"] },

@@ -1,5 +1,5 @@
 import type { MeasureReading } from "../types";
-import { FIRST_RUN_SEED, FOES_IN_REACH, HITS_PER_FOE, MINION_SHARE, OUTPUT_FILES, PLAN_SEED } from "./constants";
+import { FIRST_RUN_SEED, FOES_IN_REACH, HITS_PER_FOE, MINION_SHARE, OUTPUT_FILES } from "./constants";
 import { planStage, simulateRuns, stageNovelty } from "./model";
 import { needsRandomRuns, needsStrongestRuns, readGrowth } from "./readings";
 import { installBrowserStubs } from "./services/browserStubs";
@@ -64,7 +64,6 @@ export async function measureSample(sample: GrowthSample): Promise<MeasureReadin
     heroes: sample.heroes,
     runsPerHeroAndPolicy: sample.runs,
     firstRunSeed: FIRST_RUN_SEED,
-    planSeed: PLAN_SEED,
     crowd: CROWD,
     loadedSeconds,
     wallSeconds: (performance.now() - startedAt) / 1000,

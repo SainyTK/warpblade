@@ -1,6 +1,6 @@
 import { pathToFileURL } from "node:url";
 import { GAME_MODULES } from "../constants";
-import type { Game, Random, ResonanceRules, StageDef, StageMods } from "../types/game";
+import type { BigFoeCall, BigFoeKind, Game, Random, ResonanceRules, StageDef, StageMods } from "../types/game";
 
 type Fn = (...args: never[]) => unknown;
 
@@ -33,7 +33,7 @@ export async function loadGame(bundleFile: string): Promise<Game> {
     loaded.ranks,
     "resonanceRanks",
   );
-  const roomBeats = value<{ parPerSurgeFoe: number; parPerBigFoe: number }>(loaded.arc, "ROOM_BEATS");
+  const sideStyle = value<Record<string, { eliteEvery: number }>>(loaded.defense, "SIDE_STYLE");
   const mastery = value<{ levels: number }>(loaded.growth, "MASTERY");
   const charge = value<{ ranks: number; damage: number }>(loaded.growth, "CHARGE_RANK");
   const attunement = value<{ levels: number }>(loaded.growth, "ATTUNEMENT");
@@ -42,11 +42,14 @@ export async function loadGame(bundleFile: string): Promise<Game> {
     heroes: value(loaded.roster, "CHARACTERS"),
     stageOrder: value(loaded.graph, "STAGE_ORDER"),
     stages: value(loaded.stages, "STAGES"),
-    stageArcs: value(loaded.arc, "STAGE_ARCS"),
-    parPerSurgeFoe: roomBeats.parPerSurgeFoe,
-    parPerBigFoe: roomBeats.parPerBigFoe,
+    defense: {
+      seconds: value(loaded.defense, "DEFENSE_SECONDS"),
+      calls: value<readonly BigFoeCall[]>(loaded.defense, "BIG_FOE_CALLS"),
+      xpSeconds: value<Record<BigFoeKind, number>>(loaded.defense, "BIG_FOE_XP_SECONDS"),
+      eliteEveryBySide: Object.fromEntries(Object.entries(sideStyle).map(([side, style]) => [side, style.eliteEvery])),
+    },
     flyerToughness: value(loaded.arc, "FLYER_TOUGHNESS"),
-    finaleFoe: value<{ foe: string }>(loaded.waves, "FINALE").foe,
+    maxLevel: value(loaded.growth, "MAX_LEVEL"),
     growth: {
       skillMaxLevel: value(loaded.growth, "SKILL_MAX_LEVEL"),
       skillSlots: value(loaded.growth, "SKILL_SLOTS"),
@@ -65,13 +68,14 @@ export async function loadGame(bundleFile: string): Promise<Game> {
     boons: value(loaded.boons, "BOONS"),
     random: (seed) => new Rng(seed),
     stageMods: (stage) => stageModsOf(stage, false),
-    buildRoute: fn(loaded.route, "buildRoute"),
+    levelAtSecond: fn(loaded.clock, "levelAtSecond"),
+    foesPerSecond: fn(loaded.clock, "foesPerSecond"),
+    frontAt: fn(loaded.clock, "frontAt"),
+    xpToReach: fn(loaded.progression, "xpToReach"),
     ladderChoices: fn(loaded.ladder, "ladderChoices"),
-    ladderFoe: fn(loaded.route, "ladderFoe"),
     ladderHp: fn(loaded.stageArc, "ladderHp"),
     flies: (foe) => kindOf(foe).flies === true,
     bossAdds: (foe) => bossProfile(foe)?.adds ?? [],
-    levelBetween: fn(loaded.stageArc, "levelBetween"),
     bandWave: fn(loaded.stageArc, "bandWave"),
     freshBuild: fn(loaded.build, "freshBuild"),
     cardCount: fn(loaded.cards, "cardCount"),

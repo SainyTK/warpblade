@@ -15,6 +15,6 @@ export function powerAgainstWorld(randomRuns: readonly RunRecord[]): MeasureRead
   return {
     id: MEASURE_IDS.powerAgainstWorld,
     raw,
-    note: `hero DPS grows ${formatNumber(heroGrowth)}x and surge foe HP ${formatNumber(foeGrowth)}x from the end of the opening act to the boss (medians); ${FOES_IN_REACH} foes in reach, ${formatNumber(low)} at ${FOES_IN_REACH_LOW} and ${formatNumber(high)} at ${FOES_IN_REACH_HIGH}`,
+    note: `hero DPS grows ${formatNumber(heroGrowth)}x and field foe HP ${formatNumber(foeGrowth)}x from the elite call to the boss call (medians); ${FOES_IN_REACH} foes in reach, ${formatNumber(low)} at ${FOES_IN_REACH_LOW} and ${formatNumber(high)} at ${FOES_IN_REACH_HIGH}`,
   };
 }

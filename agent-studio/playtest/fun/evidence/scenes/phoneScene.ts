@@ -1,9 +1,9 @@
 import type { Viewport } from "../../../types/session";
+import { readDefense } from "../../defense";
 import { CLIPS, LIMITS, WAIT } from "../constants";
+import { foeEngaged, never } from "../defenseMoments";
 import { playOn } from "../playOn";
-import { readStageNames } from "../readStageNames";
 import { spendPicksInDialog } from "../spendPicksInDialog";
-import { foeEngaged, never } from "../trailMoments";
 import type { Scene, SceneSubject } from "../types";
 
 export function phoneScene(subject: SceneSubject, viewport: Viewport): Scene {
@@ -16,7 +16,7 @@ export function phoneScene(subject: SceneSubject, viewport: Viewport): Scene {
       try {
         await spendPicksInDialog(session);
         await session.advance(WAIT.banner);
-        const names = await readStageNames(session);
+        const names = await readDefense(session);
         const engaged = await playOn(session, { until: foeEngaged, limitMs: LIMITS.firstFoe });
         if (engaged.end !== "reached") {
           album.note(`no foe came near at ${size} (${engaged.end})`);
@@ -26,7 +26,7 @@ export function phoneScene(subject: SceneSubject, viewport: Viewport): Scene {
         await album.window(
           session,
           `phone-${size}-fight`,
-          `${hero} fighting in the ${names.stage} at phone size ${size}, full window with the HUD`,
+          `${hero} fighting in the ${names.stageName} at phone size ${size}, full window with the HUD`,
         );
       } finally {
         await session.close();

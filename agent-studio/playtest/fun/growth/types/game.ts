@@ -65,72 +65,42 @@ export interface LadderFoe {
 
 export interface StageMods {
   hp: number;
+  crowd: number;
   eliteEvery: number;
 }
 
 export interface MiniBoss {
   name: string;
+  base: string;
   moves: readonly string[];
   adds: readonly string[];
 }
 
 export interface StageDef {
   id: string;
-  kind: string;
+  boss: string;
   hazard?: unknown;
   mini: MiniBoss;
   ladder: readonly LadderFoe[];
-  areas: readonly { parSeconds: number }[];
 }
 
-export interface ArcBeat {
-  kind: "surge" | "elite" | "mini" | "boss";
-  to: number;
+export type BigFoeKind = "elite" | "mini" | "boss";
+
+export interface BigFoeCall {
+  at: number;
+  kind: BigFoeKind;
 }
 
-export interface AreaArc {
-  enter: number;
-  mini?: number;
-  gate: number;
-  beats: readonly ArcBeat[];
-}
-
-export interface RouteFoe {
-  type: string;
-  elite?: boolean;
-  level: number;
-}
-
-export interface BigFoeBeat {
-  kind: "elite" | "mini" | "boss";
-  foe: string;
-  level: number;
-}
-
-export interface SurgeBeat {
-  kind: "surge";
-  waves: readonly number[];
+export interface Front {
   from: number;
-  to: number;
+  sides: readonly string[];
 }
 
-export type RoomBeat = SurgeBeat | BigFoeBeat;
-
-export interface RoutePack {
-  foes: readonly RouteFoe[];
-  mini?: BigFoeBeat;
-}
-
-export interface RouteArea {
-  enter: number;
-  beats: readonly RoomBeat[];
-  packs: readonly RoutePack[];
-  parSeconds: number;
-}
-
-export interface Route {
-  areas: readonly RouteArea[];
-  parSeconds: number;
+export interface DefenseRules {
+  seconds: number;
+  calls: readonly BigFoeCall[];
+  xpSeconds: Readonly<Record<BigFoeKind, number>>;
+  eliteEveryBySide: Readonly<Record<string, number>>;
 }
 
 export interface ResonanceRules {
@@ -189,23 +159,26 @@ export interface Game {
   heroes: readonly HeroDef[];
   stageOrder: readonly string[];
   stages: Readonly<Record<string, StageDef>>;
-  stageArcs: Readonly<Record<string, readonly AreaArc[]>>;
-  parPerSurgeFoe: number;
-  parPerBigFoe: number;
+  defense: DefenseRules;
   flyerToughness: number;
-  finaleFoe: string;
+  maxLevel: number;
   growth: GrowthRules;
   resonance: ResonanceRules;
   boons: readonly unknown[];
   random(seed: number): Random;
   stageMods(stage: StageDef): StageMods;
-  buildRoute(stage: StageDef, mods: StageMods, random: Random): Route;
-  ladderChoices(ladder: readonly LadderFoe[], level: number): readonly { foe: string; weight: number }[];
-  ladderFoe(stage: StageDef, level: number, random: Random): string;
+  levelAtSecond(seconds: number): number;
+  foesPerSecond(seconds: number): number;
+  frontAt(seconds: number): Front;
+  xpToReach(level: number): number;
+  ladderChoices(
+    ladder: readonly LadderFoe[],
+    level: number,
+    fits?: (foe: string) => boolean,
+  ): readonly { foe: string; weight: number }[];
   ladderHp(entry: LadderFoe, mods: StageMods): number;
   flies(foe: string): boolean;
   bossAdds(foe: string): readonly string[];
-  levelBetween(from: number, to: number, share: number): number;
   bandWave(level: number): number;
   freshBuild(): Build;
   cardCount(luck: number, random: Random): number;

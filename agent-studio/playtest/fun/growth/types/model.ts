@@ -12,10 +12,11 @@ export interface Chest {
   least: number;
 }
 
-export type StepKind = "road" | "mini" | "surge" | "elite" | "boss";
+export type StepKind = "field" | "elite" | "mini" | "boss";
 
 export interface StageStep {
   kind: StepKind;
+  at: number;
   from: number;
   to: number;
   seconds: number;
@@ -29,7 +30,9 @@ export interface StagePlan {
   parSeconds: number;
   hazard: boolean;
   steps: readonly StageStep[];
+  sides: readonly { id: string; seconds: number }[];
   openingActEnd: number;
+  bossStep: number;
   openingLevel: number;
   bossLevel: number;
   foeHpGrowth: number;
