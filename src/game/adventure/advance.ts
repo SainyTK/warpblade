@@ -26,7 +26,6 @@ import { summonFinale } from "./finale";
 import { claimFoe, stageFoe } from "./foes";
 import { resetStageHazard, updateStageHazard } from "./hazard";
 import { updateMentor } from "./mentor";
-import { markPerch } from "./patrol";
 import { type BigFoeBeat, GATE_ENTRY, type RouteArea, type RouteFoe, type RoutePack, SPAWN_LEAD } from "./route";
 import { updateSpikes } from "./spikes";
 import { openSurge, updateSurge } from "./surge";
@@ -45,7 +44,6 @@ const waveFor = (level: number): number => clamp(Math.round(bandWave(level)), 1,
 
 function addFoe(run: Trail, foe: RouteFoe): void {
   const enemy = claimFoe(stageFoe(foe.type, foe.x, foe.y ?? GROUND, foe.level, foe.xp, foe.elite));
-  markPerch(enemy);
   run.packFoes.push(enemy);
   run.band = foe.level;
 }

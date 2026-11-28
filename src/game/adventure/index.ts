@@ -2,7 +2,7 @@ export { startAdventureAt, updateAdventure } from "./advance";
 export { summonFoe } from "./foes";
 export { drawStageHazardBack, drawStageHazardFront } from "./hazard";
 export { nearbyMentor, stageMentor } from "./mentor";
-export { containPatrol, waitsOnPerch } from "./patrol";
+export { containPatrol } from "./patrol";
 export { stageSpikes } from "./spikes";
 export { surgeEnding } from "./surge";
 export {
