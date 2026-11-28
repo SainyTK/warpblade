@@ -1,4 +1,5 @@
 import type { Feat } from "../types/achievement";
+import type { HeroSpot } from "../types/coop";
 import type { EnemyRank, EnemyType } from "../types/enemy";
 import type { RunOutcome } from "../types/run";
 import { besiegingFoe } from "./foeTarget";
@@ -30,8 +31,7 @@ export interface CoopHooks {
   shareXp(amount: number): void;
   /** a wave or a stage beat was cleared: downed heroes stand up */
   waveCleared(): void;
-  /** the x of every standing hero */
-  standingXs(): number[];
+  heroSpots(): HeroSpot[];
   /** skill cards open for every player with points to spend */
   openPicks(): void;
   /** a hero fell for good or the stage was cleared; the room decides when the run is over */

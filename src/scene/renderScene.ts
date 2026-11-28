@@ -1,7 +1,7 @@
 import { SKY_FLASH } from "../constants/effectLook";
 import { drawDrillOver } from "../drill";
-import { beginFrame, composite, setCameraX, setShake } from "../engine/frame";
-import { drawStageHazardBack, drawStageHazardFront, stageCameraX } from "../game/adventure";
+import { beginFrame, composite, setCameraX, setShake, setViewX } from "../engine/frame";
+import { drawStageHazardBack, drawStageHazardFront } from "../game/adventure";
 import { drawBossArenaBack, drawBossArenaFront } from "../game/bossFight";
 import { drawChests } from "../game/build/chests";
 import { coop, eachHero } from "../game/coopHooks";
@@ -25,14 +25,14 @@ import { scene, sceneBackground } from "./scenery";
 const SHAKE_FULL = 0.25;
 const FLASH_STRENGTH = 70;
 
-/** draw one frame back to front into RGBA bytes */
-export function renderScene(out: Uint8ClampedArray): void {
+export function renderScene(out: Uint8ClampedArray, stageX: number): void {
   const s = game.shake > 0 && settings.shake ? game.shake / SHAKE_FULL : 0;
   setShake(Math.round(fxRng.range(-game.amp, game.amp) * s), Math.round(fxRng.range(-game.amp, game.amp) * s));
   if (game.shake <= 0) game.amp = 0;
   setCameraX(0);
   const { def, k, arena } = scene();
-  const cameraX = arena ? 0 : stageCameraX();
+  const cameraX = arena ? 0 : stageX;
+  setViewX(cameraX);
   const palette = paletteAt(def, k);
   const background = sceneBackground();
   beginFrame(arena ? background : adventureBackdrop(background, cameraX, palette));
@@ -80,7 +80,7 @@ export function renderScene(out: Uint8ClampedArray): void {
   eachHero(() => shownKit().drawOver?.());
   room?.drawOverlay();
   setCameraX(0);
-  if (!arena) drawDefenseMarks();
+  if (!arena) drawDefenseMarks(cameraX);
   const bolt = game.flash > 0 ? game.flash / SKY_FLASH : 0;
   composite(out, Math.min(1, bolt + sceneFlash()) * FLASH_STRENGTH);
 }

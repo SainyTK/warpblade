@@ -6,9 +6,8 @@ import { COIN_GOLD, ENEMY_COLORS, PAL } from "../constants/palette";
 import { MOTE_DRAW_SHIFT, MOTE_PIXELS } from "../constants/pickupPixels";
 import { ULT_LEVELS } from "../constants/ultimate";
 import { drillView, usesDrill } from "../drill";
-import { ellipseRing, fleck, glow, glowLine, hairline, place, px } from "../engine/frame";
+import { ellipseRing, fleck, glow, glowLine, hairline, place, px, viewX } from "../engine/frame";
 import { blit, detailCanvas } from "../engine/sprite";
-import { stageCameraX } from "../game/adventure";
 import { bossCharging, miniLight } from "../game/bossFight";
 import { fineRing, stampArt } from "../game/effects/fine";
 import { enemyBox, enemyCenter } from "../game/enemies/enemy";
@@ -190,7 +189,7 @@ export function drawHeroLayer(): void {
   if (h.state === "charge") drawChargeRing();
   const drill = usesDrill() ? drillView() : undefined;
   if (drill) {
-    drill.drawBack(stageCameraX());
+    drill.drawBack(viewX());
   } else {
     shownKit().drawBack?.();
   }
@@ -223,7 +222,7 @@ export function drawHeroLayer(): void {
     glowLine(hx + ca * 3, hy + sn * 3, hx + ca * (reach - 1), hy + sn * (reach - 1), 6, skin.glow, k);
   }
   if (drill) {
-    drill.drawFront(heroSprite, h.pose, h.hand, skin.blade.reach, stageCameraX());
+    drill.drawFront(heroSprite, h.pose, h.hand, skin.blade.reach, viewX());
   }
   shownKit().draw?.();
 }

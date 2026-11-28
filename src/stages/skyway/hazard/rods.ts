@@ -1,6 +1,5 @@
-import { W } from "../../../constants/stage";
-import { circle, ellipseRing, fleck, glow, glowLine, hairline, line, px } from "../../../engine/frame";
-import { stageCameraX, stageWalls } from "../../../game/adventure";
+import { circle, ellipseRing, fleck, glow, glowLine, hairline, line, px, viewX } from "../../../engine/frame";
+import { inStageView, stageWalls } from "../../../game/adventure";
 import { eachStanding, heroSlot } from "../../../game/coopHooks";
 import { heroGuarded } from "../../../game/hero/guard";
 import { hurtHero } from "../../../game/hurtHero";
@@ -12,6 +11,7 @@ import type { Platform } from "../../../types/world";
 import { WHITE } from "../../../utils/color";
 import { grain } from "../../../utils/grain";
 import { clamp } from "../../../utils/math";
+import { inView } from "../../../utils/views";
 import { SKYWAY_COLORS as S } from "../scene/palette";
 
 export const ROD = { every: 6.5, warn: 1.1, live: 0.1, show: 0.3, tall: 15, reach: 11, damage: 14 } as const;
@@ -33,10 +33,7 @@ function strikeBox(wall: Platform): readonly [number, number, number, number] {
   return [wall.x0 - 3, -20, wall.x1 + 3, wall.y + 1];
 }
 
-function onScreen(x: number): boolean {
-  const left = stageCameraX();
-  return x > left - 20 && x < left + W + 20;
-}
+const SCREEN_MARGIN = 20;
 
 export function updateRods(dt: number): void {
   if (game.mode !== "play") return;
@@ -46,7 +43,7 @@ export function updateRods(dt: number): void {
     const x = rodX(wall);
     const n = Math.floor(cycleOf(x));
     const wrapped = Math.floor((before + offsetOf(x)) / ROD.every) !== n;
-    if (wrapped && onScreen(x)) {
+    if (wrapped && inStageView(x, SCREEN_MARGIN)) {
       sfx.thunder();
       shake(0.1, 1.5);
       for (let i = 0; i < 10; i++)
@@ -80,7 +77,7 @@ function rodPost(x: number, y: number, heat: number): void {
 export function drawRods(): void {
   for (const wall of stageWalls()) {
     const x = rodX(wall);
-    if (!onScreen(x)) continue;
+    if (!inView(viewX(), x, SCREEN_MARGIN)) continue;
     const phase = cycleOf(x);
     const age = (phase - Math.floor(phase)) * ROD.every;
     const warn = clamp((age - (ROD.every - ROD.warn)) / ROD.warn);
@@ -101,7 +98,7 @@ export function drawRods(): void {
 export function drawRodBolts(): void {
   for (const wall of stageWalls()) {
     const x = rodX(wall);
-    if (!onScreen(x)) continue;
+    if (!inView(viewX(), x, SCREEN_MARGIN)) continue;
     const phase = cycleOf(x);
     const n = Math.floor(phase);
     const age = (phase - n) * ROD.every;

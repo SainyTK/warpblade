@@ -1,6 +1,5 @@
 import { H, W } from "../../../constants/stage";
-import { fleck, glow, place, px } from "../../../engine/frame";
-import { stageCameraX } from "../../../game/adventure";
+import { fleck, glow, place, px, viewX } from "../../../engine/frame";
 import { grain } from "../../../utils/grain";
 import { GLACIER as G } from "../colors";
 import { auroraColor } from "./tone";
@@ -23,7 +22,7 @@ const wrap = (v: number, span: number): number => ((v % span) + span) % span;
 
 export function drawSnow(t: number, k: number, arena: boolean): void {
   place();
-  const camera = arena ? 0 : stageCameraX();
+  const camera = arena ? 0 : viewX();
   for (const f of FLAKES) {
     const depth = f.near ? 1 : 0.55;
     const x = wrap(f.x - camera * depth + Math.sin(t * 0.8 + f.y) * f.sway + t * 3, W + 8) - 4;

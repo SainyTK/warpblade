@@ -1,6 +1,5 @@
 import { GROUND, W } from "../../../../constants/stage";
-import { glow, hairline, place } from "../../../../engine/frame";
-import { stageCameraX } from "../../../../game/adventure";
+import { glow, hairline, place, viewX } from "../../../../engine/frame";
 import { eachStanding } from "../../../../game/coopHooks";
 import { fxRng, particles } from "../../../../game/state";
 import type { Effect } from "../../../../types/effect";
@@ -62,7 +61,7 @@ export function createRocGust(e: Enemy): Effect {
     draw() {
       place();
       const dir = mindOf(e).gustDir;
-      const left = stageCameraX();
+      const left = viewX();
       if (e.state === "charge") {
         const u = clamp(t / (ROC_WINDUP.gust * stormWindup(e)));
         for (let i = 0; i < CHEVRONS; i++) {

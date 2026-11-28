@@ -6,9 +6,11 @@ import { runRates } from "../../store/meta";
 import type { StageDef, StageId } from "../../types/campaign";
 import type { CrystalWatch, DefenseSide } from "../../types/defense";
 import type { Enemy } from "../../types/enemy";
-import { secondsLeft } from "../../utils/defenseClock";
+import { lookShareAt, secondsLeft } from "../../utils/defenseClock";
 import type { Rng } from "../../utils/rng";
 import { type StageMods, stageMods } from "../../utils/stageArc";
+import { inAnyView } from "../../utils/views";
+import { heroSlot } from "../coopHooks";
 import { buildField, type Field } from "./field";
 
 export interface Crystal {
@@ -27,11 +29,6 @@ export interface Fronts {
   turnAt: number;
   surging: DefenseSide | null;
   surgeAt: number;
-}
-
-interface Leash {
-  left: number;
-  right: number;
 }
 
 export type DefenseEnd = "held" | "shattered";
@@ -65,8 +62,7 @@ export interface Defense {
   foesSpawned: number;
   foesDefeated: number;
   damage: number;
-  camera: number;
-  leash: Leash | null;
+  cameras: Map<number, number>;
   pickIn: number | null;
   authored: WeakSet<Enemy>;
 }
@@ -110,8 +106,7 @@ export function beginAdventure(random: Rng, stageId: StageId, hyper: boolean): v
     foesSpawned: 0,
     foesDefeated: 0,
     damage: 0,
-    camera: 0,
-    leash: null,
+    cameras: new Map(),
     pickIn: null,
     authored: new WeakSet(),
   };
@@ -122,11 +117,13 @@ export const isAdventure = (): boolean => defense !== null;
 export const currentStage = (): StageDef | null => defense?.stage ?? null;
 export const stageBoss = (): Enemy | null => defense?.bigFoes.at(-1)?.foe ?? null;
 export const stageBand = (): number => defense?.band ?? 1;
-export const stageCameraX = (): number => defense?.camera ?? 0;
+export const stageCameraX = (slot: number): number => defense?.cameras.get(slot) ?? 0;
+export const heroCameraX = (): number => stageCameraX(heroSlot());
+export const stageViews = (): number[] => (defense?.cameras.size ? [...defense.cameras.values()] : [0]);
+export const inStageView = (x: number, margin: number): boolean => inAnyView(stageViews(), x, margin);
 export const stageSecondsLeft = (): number => secondsLeft(defense?.elapsed ?? 0);
 export const stageWon = (): boolean => defense?.end === "held";
 export const crystalShattered = (): boolean => defense?.end === "shattered";
-export const heroLeash = (): Leash | null => defense?.leash ?? null;
 
 export function stageWhere(): string {
   if (!defense) return "";
@@ -135,6 +132,7 @@ export function stageWhere(): string {
 }
 
 export const stageStatus = (): string => defense?.stage.name ?? "";
+export const stageLookShare = (): number => lookShareAt(defense?.elapsed ?? 0);
 
 export interface CrystalView {
   x: number;

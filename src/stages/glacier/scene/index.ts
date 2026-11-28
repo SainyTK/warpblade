@@ -1,4 +1,4 @@
-import { stageCameraX } from "../../../game/adventure";
+import { viewX } from "../../../engine/frame";
 import type { SceneDef } from "../../../scene/eras/sceneDef";
 import { paintCave } from "./cave";
 import { paintFloor } from "./floor";
@@ -23,7 +23,7 @@ export const glacierScene: SceneDef = {
     buildStrata(P);
   },
   ambient(t, k, arena) {
-    if (!arena && plate) drawStrata(stageCameraX(), plate);
+    if (!arena && plate) drawStrata(viewX(), plate);
     drawCaveLight(t, k);
   },
   weather: drawSnow,

@@ -1,7 +1,7 @@
 import { GROUND } from "../../constants/stage";
 import type { Platform, Point } from "../../types/world";
 import { clamp } from "../../utils/math";
-import { heroLeash, stageBounds, stagePlatforms, stageWalls } from "../adventure";
+import { stageBounds, stagePlatforms, stageWalls } from "../adventure";
 
 const EDGE = 8;
 const BODY_RADIUS = 5;
@@ -11,10 +11,8 @@ const WALL_REACH = 0.5;
 
 export function clampHeroX(x: number, margin = EDGE): number {
   const { left, right } = stageBounds();
-  const leash = heroLeash();
-  const low = Math.max(left + margin, leash ? leash.left : left + margin);
-  const high = Math.min(right - margin, leash ? leash.right : right - margin);
-  return clamp(x, low, Math.max(low, high));
+  const low = left + margin;
+  return clamp(x, low, Math.max(low, right - margin));
 }
 
 export function safeHeroDestination(x: number, y: number): Point {

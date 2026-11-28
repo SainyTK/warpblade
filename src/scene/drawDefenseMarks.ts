@@ -3,7 +3,7 @@ import { PAL } from "../constants/palette";
 import { GROUND, W } from "../constants/stage";
 import { drawText } from "../engine/font";
 import { place, polygon } from "../engine/frame";
-import { crystalView, nextSides, openSides, reviveLeft, stageCameraX } from "../game/adventure";
+import { crystalView, nextSides, openSides, reviveLeft } from "../game/adventure";
 import { game, hero } from "../game/state";
 import type { Color } from "../types/color";
 import type { DefenseSide } from "../types/defense";
@@ -91,9 +91,9 @@ export function drawReviveCountdown(): void {
   drawText(`${Math.ceil(left)}`, hero.x, hero.y - REVIVE_LIFT, PAL.crystal[4], OUTLINE, 2);
 }
 
-export function drawDefenseMarks(): void {
+export function drawDefenseMarks(cameraX: number): void {
   if (!crystalView()) return;
   place();
   sideChevrons();
-  crystalPointer(stageCameraX());
+  crystalPointer(cameraX);
 }
