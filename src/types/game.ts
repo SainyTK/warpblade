@@ -120,8 +120,6 @@ export interface GameState {
   shards: Shard[];
   /** the stage's end: its last boss still to fall, the quiet after it fell, or the fight with what came after */
   finale: "none" | "quiet" | "beyond";
-  /** times Last Light has saved the hero this run */
-  revives: number;
   enemies: Enemy[];
   fx: Effect[];
   ghosts: Ghost[];

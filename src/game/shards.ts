@@ -5,7 +5,7 @@ import { sfx } from "../services/audio";
 import type { Enemy } from "../types/enemy";
 import type { Shard, ShardKind } from "../types/game";
 import { PK } from "../types/particle";
-import { isAdventure, surgeEnding } from "./adventure";
+import { isAdventure } from "./adventure";
 import { fall, home } from "./coins";
 import { coop } from "./coopHooks";
 import { createFloorRing } from "./effects/floorRing";
@@ -17,7 +17,7 @@ import { spriteTouchesHero } from "./world";
 const SHARD_RAMP = { heart: PAL.heart, mana: PAL.crystal } as const;
 
 function endsRoom(): boolean {
-  return isAdventure() ? surgeEnding() : fightOver();
+  return !isAdventure() && fightOver();
 }
 
 function shardsFor(e: Enemy): ShardKind[] {

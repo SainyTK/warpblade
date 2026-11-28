@@ -1,12 +1,12 @@
 import { FLINCH } from "../../constants/combat";
 import type { Enemy } from "../../types/enemy";
-import { containPatrol, finaleHolds, stageFoePace } from "../adventure";
+import { actOnFoe, stageFoePace } from "../adventure";
 import { bossHeld } from "../bossFight";
 import { coop } from "../coopHooks";
 import { game, hero } from "../state";
 import { fieldPace } from "../timeFields";
 import { updateAirborne } from "./airborne";
-import { enemyCenter, walks } from "./enemy";
+import { enemyCenter } from "./enemy";
 import { kindOf } from "./kinds";
 import { separateFoes } from "./separate";
 import { updateStagger } from "./stagger";
@@ -37,7 +37,7 @@ function updateEnemy(e: Enemy, dt: number): void {
   const room = coop();
   room?.nearest(e.x, e.y);
   const status = updateStatus(e, dt);
-  if (e.hp <= 0 || bossHeld(e) || finaleHolds(e)) return;
+  if (e.hp <= 0 || bossHeld(e)) return;
   room?.nearest(e.x, e.y);
   const [cx, cy] = enemyCenter(e);
   const ts = status * fieldPace(cx, cy, e.rank) * stageFoePace();
@@ -45,9 +45,11 @@ function updateEnemy(e: Enemy, dt: number): void {
   const staggered = updateStagger(e, sdt);
   if (updateAirborne(e, sdt) || updateStunned(e, sdt) || staggered) return;
   e.st += sdt;
-  e.cd -= sdt * attackPace(e);
   const heldAt = e.x;
-  kindOf(e.type).update(e, sdt, ts);
+  actOnFoe(e, () => {
+    e.cd -= sdt * attackPace(e);
+    kindOf(e.type).update(e, sdt, ts);
+  });
   if (e.pinned > 0) {
     e.x = heldAt;
     e.vx = 0;
@@ -55,13 +57,7 @@ function updateEnemy(e: Enemy, dt: number): void {
 }
 
 export function updateEnemies(dt: number): void {
-  for (const e of game.enemies) {
-    const previousX = e.x;
-    updateEnemy(e, dt);
-    if (e.hp > 0 && walks(e)) {
-      containPatrol(e, previousX);
-    }
-  }
+  for (const e of game.enemies) updateEnemy(e, dt);
   game.enemies = game.enemies.filter((e) => e.hp > 0);
   separateFoes(dt);
 }

@@ -15,7 +15,16 @@ import type { PickAnswer } from "../../types/pick";
 import type { RunOutcome, RunReport, StageResult } from "../../types/run";
 import { scaleFoeHealth, scaleFoeList } from "../../utils/coopScaling";
 import { toWire } from "../../utils/wire";
-import { beginAdventure, currentStage, stageProgress, stageRunId, stageStatus, startAdventureAt } from "../adventure";
+import {
+  beginAdventure,
+  crystalShattered,
+  crystalWatch,
+  currentStage,
+  stageProgress,
+  stageRunId,
+  stageStatus,
+  startAdventureAt,
+} from "../adventure";
 import { type CoopHooks, setCoopHooks } from "../coopHooks";
 import { feat } from "../feat";
 import { answerPick, earnXp } from "../progress";
@@ -318,7 +327,7 @@ export class HostRun implements CoopHooks {
 
   endRun(outcome: RunOutcome): void {
     if (this.over) return;
-    if (outcome === "fallen") {
+    if (outcome === "fallen" && !crystalShattered()) {
       if (hero.st >= DOWN_DELAY) this.current.down = true;
       if (!this.seats.every((s) => s.down)) return;
     }
@@ -412,6 +421,7 @@ export class HostRun implements CoopHooks {
       down,
       status: stageStatus(),
       runId: stageRunId(),
+      crystal: crystalWatch(game.t),
     };
   }
 

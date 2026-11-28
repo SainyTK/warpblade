@@ -14,11 +14,10 @@ import { drawAdventureTerrain } from "./adventureTerrain";
 import { drawEnemies, drawHeroLayer, drawPickups } from "./drawActors";
 import { drawAmbientLight, drawMist, drawWeather, sceneFlash } from "./drawAmbience";
 import { drawCoins } from "./drawCoins";
-import { drawMentor } from "./drawMentor";
+import { drawDefenseMarks, drawReviveCountdown } from "./drawDefenseMarks";
 import { drawNumbers } from "./drawNumbers";
 import { drawShadows } from "./drawShadows";
 import { drawShards } from "./drawShards";
-import { drawSpikes } from "./drawSpikes";
 import { drawXpOrbs } from "./drawXpOrbs";
 import { paletteAt } from "./eras/sceneDef";
 import { scene, sceneBackground } from "./scenery";
@@ -41,7 +40,6 @@ export function renderScene(out: Uint8ClampedArray): void {
   setCameraX(cameraX);
   if (!arena) {
     drawAdventureTerrain(cameraX, game.t, palette);
-    drawSpikes(cameraX, game.t);
     drawStageHazardBack(cameraX, game.t);
     drawBossArenaBack();
   }
@@ -54,7 +52,6 @@ export function renderScene(out: Uint8ClampedArray): void {
   drawSkillsBack();
   drawChests();
   drawShadows();
-  if (!arena) drawMentor(cameraX, game.t);
   eachHero(() => shownKit().drawFloor?.());
   drawEnemies();
   room?.drawUnderlay();
@@ -78,10 +75,12 @@ export function renderScene(out: Uint8ClampedArray): void {
   lights.draw();
   if (!arena) drawBossArenaFront();
   drawNumbers();
+  if (!arena) eachHero(drawReviveCountdown);
   drawDrillOver(cameraX);
   eachHero(() => shownKit().drawOver?.());
   room?.drawOverlay();
   setCameraX(0);
+  if (!arena) drawDefenseMarks();
   const bolt = game.flash > 0 ? game.flash / SKY_FLASH : 0;
   composite(out, Math.min(1, bolt + sceneFlash()) * FLASH_STRENGTH);
 }

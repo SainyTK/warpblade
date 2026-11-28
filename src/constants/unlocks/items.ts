@@ -18,7 +18,6 @@ const ITEM_GOALS: Readonly<Record<string, { goal: Goal; secret?: boolean }>> = {
   arcana: { goal: { kind: "count", stat: "coinsBanked", need: 150 } },
   skips: { goal: { kind: "count", stat: "kills", need: 400 } },
   wellspring: { goal: { kind: "best", stat: "level", need: 30 } },
-  lastLight: { goal: { kind: "count", stat: "falls", need: 3 } },
   rerolls: { goal: { kind: "count", stat: "kills", need: 1000 } },
   precision: { goal: { kind: "count", stat: "miniKills", need: 1 } },
   fleet: { goal: { kind: "foeKills", foe: "moth", need: 500 } },

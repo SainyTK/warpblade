@@ -10,6 +10,7 @@ export {
   drillView,
   hurtDrill,
   resetDrill,
+  steadyDrillFighter,
   updateDrill,
 } from "./adventure";
 export { DASH_LOCKOUT, drillMotion, SPELL_IMPACT_TIME } from "./constants";

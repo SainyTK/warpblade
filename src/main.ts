@@ -23,7 +23,6 @@ import { drawDangerGlow } from "./ui/dangerGlow";
 import { fitStage } from "./ui/fitStage";
 import { paintScene } from "./ui/gameCanvas";
 import { updateHud } from "./ui/hud";
-import { bindMentorPrompt, syncMentorPrompt } from "./ui/mentorPrompt";
 import { bindMenu } from "./ui/menu/bindMenu";
 import { bindRoomLook } from "./ui/menu/bindRoomLook";
 import { joinFromInvite } from "./ui/menu/joinFromInvite";
@@ -45,7 +44,6 @@ fitStage();
 bindKeyboard();
 bindTouch();
 bindPauseButton();
-bindMentorPrompt();
 bindPickDialog();
 bindChestDialog();
 bindRoomLook();
@@ -87,7 +85,6 @@ function frame(now: number): void {
     last = now;
     acc = 0;
   } else soloFrame(now);
-  syncMentorPrompt();
   requestAnimationFrame(frame);
 }
 requestAnimationFrame(frame);

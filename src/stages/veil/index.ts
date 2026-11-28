@@ -11,7 +11,6 @@ export const veil: StageDef = {
   id: "veil",
   name: "Veil Spires",
   mapBlurb: "The towers where the rifts are kept.",
-  kind: "rift",
   era: "twilight",
   ladder: [
     ...rung(1, "glintmite", "glimmerwing"),

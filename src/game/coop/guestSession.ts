@@ -34,6 +34,7 @@ import { reportRun } from "../runEnd";
 import { recordStageResult } from "../runReport";
 import { seatMemories } from "../seatMemory";
 import { character, chooseCharacter, game, hero, progress } from "../state";
+import { setGuestCrystal } from "./guestCrystal";
 import { writeAnswer } from "./readPick";
 
 const HOST_LEFT = "The host left, so the room has closed.";
@@ -240,6 +241,7 @@ export class GuestSession {
     game.clock = hud.clock;
     game.banner = hud.banner;
     game.enemies = hud.leader ? [hud.leader as Enemy] : [];
+    setGuestCrystal(hud.crystal);
     if (this.sentPicks >= 0 && (progress.picks !== this.sentPicks || game.mode !== "pick")) this.sentPicks = -1;
     if (this.sentChest && (!progress.build.chest.length || game.mode !== "chest")) this.sentChest = false;
     const room = roomView();
@@ -256,6 +258,7 @@ export class GuestSession {
     setFrameDriver(null);
     syncCoopStatus(false);
     updateRoom({ downed: false, choosing: [], hostAway: false, status: "" });
+    setGuestCrystal(null);
     setPickSource(null);
     setChestSource(null);
     watchInput(null);

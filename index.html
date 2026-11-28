@@ -24,7 +24,6 @@
 
     <main class="stage" id="stage">
       <canvas id="game" width="320" height="180" tabindex="0" aria-label="Warpblade game. Open the menu with Escape or P, or the pause button, to see the controls."></canvas>
-      <button class="mentor-prompt" id="mentorPrompt" type="button" aria-label="Talk to mentor" hidden>Talk <kbd></kbd></button>
       <canvas class="danger-glow" id="dangerGlow" aria-hidden="true" hidden></canvas>
       <div class="hud">
         <div class="bars">
@@ -56,6 +55,10 @@
           <div class="score" id="score"><span id="downCount">0 DOWN</span></div>
           <div class="ult"><span id="ultName"></span><span class="pips" id="ultPips"></span></div>
         </div>
+      </div>
+      <div class="crystal-watch" id="crystalWatch" hidden>
+        <b id="crystalClock"></b>
+        <div class="track"><div class="fill" id="crystalFill"></div></div>
       </div>
       <div class="boss" id="boss" hidden>
         <span class="boss-head"><span id="bossName"></span><span class="boss-enrage" id="bossEnrage"></span></span>

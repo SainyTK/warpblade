@@ -1,4 +1,4 @@
-import { stageAreaShare, stageGate } from "../../../game/adventure";
+import { stageAreaShare } from "../../../game/adventure";
 import { eachStanding } from "../../../game/coopHooks";
 import { game, rng } from "../../../game/state";
 import { sfx } from "../../../services/audio";
@@ -43,8 +43,6 @@ function next(phase: Phase): void {
 export function updateGusts(dt: number): void {
   gust.flaps += dt;
   if (game.mode !== "play") return;
-  const sheltered = stageGate() !== null;
-  if (sheltered && gust.phase === "calm") return;
   gust.age += dt;
   gust.left -= dt;
   if (gust.phase === "blow") {

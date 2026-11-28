@@ -7,7 +7,6 @@ export const blight: StageDef = {
   id: "blight",
   name: "Blightroot Hollow",
   mapBlurb: "The rot grows toward the light.",
-  kind: "rift",
   era: "blight",
   ladder: [
     ...rung(1, "moldmite", "sporegnat"),

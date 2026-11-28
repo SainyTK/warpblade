@@ -1,6 +1,7 @@
 import type { Feat } from "./achievement";
 import type { Card, PickToolKey } from "./build";
 import type { ArtId } from "./campaign";
+import type { CrystalWatch } from "./defense";
 import type { GameMode } from "./game";
 import type { InputAction } from "./input";
 import type { PickAnswer } from "./pick";
@@ -44,6 +45,7 @@ export interface GuestHud {
   status: string;
   /** the stage run, so a mentor's cards stay dealt between visits */
   runId: number | null;
+  crystal: CrystalWatch | null;
 }
 
 export interface Loadout {

@@ -79,7 +79,6 @@ export const game: GameState = {
   xpOrbs: [],
   shards: [],
   finale: "none",
-  revives: 0,
   enemies: [],
   fx: [],
   ghosts: [],
@@ -184,7 +183,7 @@ rememberPerSeat(objectMemory(progress));
 rememberPerSeat(objectMemory(scarf, true));
 rememberPerSeat(objectMemory(ponytail, true));
 rememberPerSeat({
-  save: () => ({ coins: game.coins, revives: game.revives }),
+  save: () => ({ coins: game.coins }),
   load(saved) {
     Object.assign(game, saved);
   },

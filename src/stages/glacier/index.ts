@@ -7,7 +7,6 @@ export const glacier: StageDef = {
   id: "glacier",
   name: "Frostglass Caverns",
   mapBlurb: "Ice that remembers every footstep.",
-  kind: "rift",
   era: "glacier",
   ladder: [
     ...rung(1, "frostmite", "snowflit"),

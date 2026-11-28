@@ -48,7 +48,6 @@ Bought levels apply at the start of every run.
 | Banish | One more banish every run | 2 | 80, 160 |
 | Lodestone | Gold flies to the hero at once, foes drop a quarter more | 1 | 100 |
 | Aftershock | Every landed dash or leap sends a shockwave of 0.8x attack damage that briefly stuns foes | 1 | 250 |
-| Last Light | A fatal blow leaves the hero at half HP, once per run per level | 2 | 250, 500 |
 | Greed | Foes drop 10% more gold | 3 | 120, 240, 360 |
 | Growth | Experience +5% | 3 | 120, 240, 360 |
 | Curse | Foes +10% HP and damage, +10% gold, +5% experience | 5 | 50, 100, 150, 200, 250 |
@@ -93,7 +92,7 @@ A new hero's kit keeps these promises, so every item works for it on day one:
 - The kit spends MP on the shared ultimate and may spend more of it on its own abilities (Wellspring).
 - The kit spends stamina on its defence or travel (Endurance).
 - Walking uses `progress.stats.move` through the shared physics (Light Boots).
-- Blows on the hero go through `hurtHero`, so Vitality's HP and Last Light apply.
+- Blows on the hero go through `hurtHero`, so Vitality's HP applies.
 - The kit calls `travelEnded()` from `src/game/hero/travelEnd.ts` when each of its travel moves ends (Aftershock).
 - Gold, experience, foes and the pick tools live in shared code and need nothing from the kit (Lodestone, Greed, Growth, Curse, Reroll, Skip, Banish).
 

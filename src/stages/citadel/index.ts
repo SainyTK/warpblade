@@ -9,7 +9,6 @@ export const citadel: StageDef = {
   id: "citadel",
   name: "Abyss Citadel",
   mapBlurb: "Every rift leads here.",
-  kind: "citadel",
   era: "abyss",
   ladder: [
     ...rung(1, "umbramite", "riftmote"),

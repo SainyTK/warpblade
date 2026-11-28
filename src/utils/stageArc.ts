@@ -1,4 +1,4 @@
-import { SURGE } from "../constants/campaign";
+import { ELITE_EVERY } from "../constants/campaign";
 import { MAX_LEVEL } from "../constants/growth";
 import {
   CROWD_TOUGHNESS,
@@ -41,7 +41,7 @@ export function stageMods(
     coins: FOE_BAND.goldShare * (twist.coins ?? 1) * (hyper ? HYPER.coins : 1),
     heartChance: twist.heartChance ?? 1,
     crowd: twist.crowd ?? 1,
-    eliteEvery: twist.eliteEvery ?? SURGE.eliteEvery,
+    eliteEvery: twist.eliteEvery ?? ELITE_EVERY,
   };
 }
 
@@ -71,8 +71,6 @@ export const ladderHp = (entry: LadderFoe, mods: StageMods): number =>
 
 export const bigFoeHp = (level: number, kind: Exclude<keyof typeof TIME_TO_KILL, "minion">, mods: StageMods): number =>
   Math.round(HERO_DPS_AT_LEVEL_1 * expectedDamage(level) * TIME_TO_KILL[kind] * mods.hp);
-
-export const levelBetween = (from: number, to: number, share: number): number => from + (to - from) * clamp(share);
 
 export interface XpClaim {
   level: number;

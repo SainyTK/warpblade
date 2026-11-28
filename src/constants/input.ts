@@ -19,7 +19,6 @@ export const KEYMAP: Record<string, InputAction> = {
   KeyM: "mute",
   Escape: "pause",
   KeyP: "pause",
-  KeyE: "interact",
   KeyF: "fullscreen",
 };
 /** what the moveset every hero shares does, as the Controls screen tells it; each hero's own lines go over it
@@ -39,7 +38,6 @@ export const SHARED_ACTION_TEXT: Record<InputAction, string> = {
   cycle: "Switch ability",
   ultimate: "Hold to charge the ultimate, release to strike",
   mute: "Sound on or off",
-  interact: "Talk to a mentor to spend skill points in solo play",
   pause: "Pause and open the menu",
   fullscreen: "Fullscreen on or off",
 };

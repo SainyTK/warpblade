@@ -15,8 +15,6 @@ export type StageId =
   | "archive"
   | "citadel";
 
-export type StageKind = "prologue" | "rift" | "citadel";
-
 export type ElementId = "blaze" | "frost" | "storm" | "venom" | "void";
 
 export type ArtId =
@@ -44,18 +42,6 @@ export interface LadderFoe {
   foe: EnemyType;
   level: number;
   hits: number;
-}
-
-export type ArcBeat =
-  | { kind: "surge"; to: number }
-  | { kind: "elite"; to: number }
-  | { kind: "boss"; foe?: EnemyType; to: number };
-
-export interface AreaArc {
-  enter: number;
-  mini?: number;
-  gate: number;
-  beats: readonly [ArcBeat, ...ArcBeat[]];
 }
 
 export type StageTier = 1 | 2 | 3 | 4 | 5;
@@ -107,7 +93,6 @@ export interface StageDef {
   id: StageId;
   name: string;
   mapBlurb: string;
-  kind: StageKind;
   era: EraId;
   ladder: readonly LadderFoe[];
   boss: EnemyType;

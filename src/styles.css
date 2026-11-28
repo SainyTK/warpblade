@@ -371,6 +371,58 @@ body {
   border-color: var(--pink);
   box-shadow: 0 0 4px var(--pink);
 }
+.crystal-watch {
+  position: absolute;
+  left: 50%;
+  top: 46px;
+  transform: translateX(-50%);
+  width: min(24%, 150px);
+  display: grid;
+  gap: 3px;
+  justify-items: center;
+  font-family: var(--display);
+  font-size: 16px;
+  letter-spacing: 0.08em;
+  color: var(--crystal);
+  text-shadow:
+    1px 0 0 var(--night),
+    -1px 0 0 var(--night),
+    0 1px 0 var(--night),
+    0 -1px 0 var(--night);
+  pointer-events: none;
+}
+.crystal-watch[hidden] {
+  display: none;
+}
+body[data-hud="outside"] .crystal-watch {
+  top: 6px;
+}
+.crystal-watch .track {
+  width: 100%;
+  height: 6px;
+  background: var(--hud-bg);
+  border: 1px solid var(--line);
+  position: relative;
+}
+.crystal-watch .fill {
+  position: absolute;
+  inset: 0 auto 0 0;
+  background: var(--crystal);
+  box-shadow: 0 0 6px var(--crystal);
+}
+.crystal-watch.low .fill {
+  background: var(--danger);
+  box-shadow: 0 0 6px var(--danger);
+  animation: crystal-low 600ms steps(2) infinite;
+}
+.crystal-watch.struck .track {
+  border-color: var(--text);
+}
+@keyframes crystal-low {
+  50% {
+    opacity: 0.45;
+  }
+}
 .boss {
   position: absolute;
   left: 50%;
@@ -777,6 +829,7 @@ body[data-hud="inside"] .build-reserve {
 }
 body:not([data-menu="none"]) .pause,
 body[data-menu="title"] .hud,
+body[data-menu="title"] .crystal-watch,
 body[data-menu="title"] .boss,
 body[data-menu="title"] .boss-card,
 body[data-menu="title"] .hit-count,

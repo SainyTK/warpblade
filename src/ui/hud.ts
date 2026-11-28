@@ -15,6 +15,7 @@ import { updateAbilityTabs } from "./abilityTabs";
 import { updateBossCard } from "./bossCard";
 import { updateBuildStrip } from "./buildStrip";
 import { updateCoinCount } from "./coinCount";
+import { updateCrystalWatch } from "./crystalWatch";
 import { byId } from "./dom";
 import { updateFlowBar } from "./flowBar";
 import { updateHeroMeter } from "./heroMeter";
@@ -69,6 +70,7 @@ export function updateHud(): void {
   updateCoinCount();
   updateVitalBars();
   updateBossCard();
+  updateCrystalWatch();
   const session = usesDrill() ? drillSession() : undefined;
   const drill = session !== undefined;
   const fighter = session?.fighter;
@@ -139,7 +141,7 @@ export function updateHud(): void {
   xp.style.width = need ? `${(progress.xp / need) * 100}%` : "100%";
   level.textContent = `LV ${progress.level}`;
   chain.innerHTML = pips(comboLimit, (i) => i < hero.chain);
-  stageStatus.textContent = `${status}  ${time}`;
+  stageStatus.textContent = isAdventure() ? status : `${status}  ${time}`;
   downCount.textContent = `${game.kills} DOWN`;
   ultName.textContent = ultimateName.toUpperCase();
   ultPips.innerHTML = pips(session ? session.profile.tiers.length : ULT_LEVELS.length, (i) => i < affordable);
