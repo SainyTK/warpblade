@@ -7,7 +7,7 @@ import { updateGaleram } from "./moves";
 
 export const galeram: EnemyKind = {
   flies: false,
-  box: (e) => (e.face > 0 ? [e.x - 12, e.y - 20, e.x + 16, e.y] : [e.x - 16, e.y - 20, e.x + 12, e.y]),
+  box: (e) => (e.face > 0 ? [e.x - 13, e.y - 21, e.x + 19, e.y] : [e.x - 19, e.y - 21, e.x + 13, e.y]),
   center: (e) => [e.x, e.y - 11],
   rest: "walk",
   firstCooldown: () => 1.2,
