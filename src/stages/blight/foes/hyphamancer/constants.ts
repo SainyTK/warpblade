@@ -7,7 +7,7 @@ export const HYPHA = {
   lift: 0.5,
   root: 0.8,
   plant: 0.5,
-  recover: 0.7,
+  recover: 1,
   wardReach: 120,
   wardEvery: 8,
   links: 3,
