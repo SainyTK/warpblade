@@ -37,7 +37,15 @@ const turn =
     ];
   };
 
-function chains(s: SpriteCanvas, p: BellPose): void {
+function tornLink(s: SpriteCanvas, x: number, y: number, sway: number): void {
+  const tip = x + sway;
+  s.hairline(x - 0.8, y, tip - 0.9, y - 2.4, GRAVE.iron[3]);
+  s.hairline(x + 0.8, y, tip + 1.1, y - 1.6, GRAVE.iron[2]);
+  s.set(tip - 0.9, y - 2.6, GRAVE.iron[4]);
+  s.set(tip + 1.3, y - 1.8, GRAVE.rust[2]);
+}
+
+function chains(s: SpriteCanvas, p: BellPose, time: number): void {
   const at = turn(p.swing);
   const [cx, cy] = at([0, -16]);
   s.begin();
@@ -46,9 +54,10 @@ function chains(s: SpriteCanvas, p: BellPose): void {
   s.commit(false);
   s.begin();
   for (const side of [-1, 1]) {
-    const ax = side * 7;
-    const ay = -34;
-    const links = 6;
+    const sway = Math.sin(time * 2.2 + side) * 0.8 - p.swing * 6;
+    const ax = side * 5 + sway;
+    const ay = -28;
+    const links = 4;
     for (let k = 0; k < links; k++) {
       const u = (k + 0.5) / links;
       const x = cx + (ax - cx) * u;
@@ -57,6 +66,7 @@ function chains(s: SpriteCanvas, p: BellPose): void {
       else s.block(x - 1, y - 0.7, GRAVE.iron[2], 2, 1.4);
       s.set(x - 0.5, y - 1, GRAVE.iron[4]);
     }
+    tornLink(s, ax, ay + 0.6, sway * 0.6 + side * 0.4);
   }
   s.commit(false);
 }
@@ -151,7 +161,7 @@ export function drawTollbell(e: Enemy, t: number): SpriteCanvas {
   const time = t + e.seed;
   const p = bellPose(e, time);
   s.clear();
-  chains(s, p);
+  chains(s, p, time);
   shell(s, p, time);
   moonlight(s, true);
   s.outline(GRAVE.outline);
