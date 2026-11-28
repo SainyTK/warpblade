@@ -24,7 +24,7 @@ export const catwalks: Approach = {
     pack(1435, walker(1260), flyer(1285, 80), walker(1310, true), walker(1340), flyer(1365, 70), walker(1395)),
     pack(1675, walker(1490), flyer(1515, 72), walker(1545), walker(1575, true), flyer(1600, 84), walker(1630)),
   ],
-  mentorSites: [site(270, 120), site(1120)],
+  mentorSites: [site(270, 120), site(1290)],
   spikes: [],
 };
 
@@ -71,7 +71,7 @@ export const smithy: Approach = {
     pack(1300, walker(1140), flyer(1165, 70), walker(1190), walker(1215, true), flyer(1240, 82), walker(1260)),
     pack(1510, walker(1345), flyer(1370, 76), walker(1400, true), walker(1425), flyer(1450, 68), walker(1470, true)),
   ],
-  mentorSites: [site(910, 118), site(1180)],
+  mentorSites: [site(910, 118), site(1120)],
   spikes: [],
 };
 
