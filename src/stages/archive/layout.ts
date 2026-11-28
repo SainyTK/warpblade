@@ -14,7 +14,7 @@ export const readingHalls: Approach = {
     ledge(1290, 1350, 92),
     ledge(1500, 1556, 110),
   ],
-  walls: [ledge(870, 896, 128)],
+  walls: [],
   arenaSlabs: [ledge(40, 100, 118), ledge(130, 190, 86), ledge(220, 280, 118)],
   packs: [
     pack(240, walker(150), flyer(175, 100), walker(200)),
@@ -43,7 +43,7 @@ export const theStacks: Approach = {
     ledge(1360, 1414, 88),
     ledge(1560, 1610, 116),
   ],
-  walls: [ledge(940, 968, 126)],
+  walls: [],
   arenaSlabs: [ledge(50, 108, 116), ledge(140, 196, 80), ledge(226, 286, 116)],
   packs: [
     pack(260, walker(150), flyer(170, 92), walker(195), walker(220)),
@@ -72,7 +72,7 @@ export const sunkenRotunda: Approach = {
     ledge(1330, 1386, 90),
     ledge(1540, 1596, 112),
   ],
-  walls: [ledge(700, 726, 126)],
+  walls: [],
   arenaSlabs: [ledge(36, 92, 114), ledge(228, 284, 114)],
   packs: [
     pack(450, walker(340), flyer(360, 90), walker(385), walker(410)),
