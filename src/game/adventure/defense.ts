@@ -170,8 +170,6 @@ export function crystalWatch(now: number): CrystalWatch | null {
   };
 }
 
-export const stageLookShare = (): number => lookShareAt(defense?.elapsed ?? 0);
-
 export const stageAreaShare = (): number => (defense ? Math.min(1, defense.elapsed / DEFENSE_SECONDS) : 0);
 
 export function stageProgress() {
