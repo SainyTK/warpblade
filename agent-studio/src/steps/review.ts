@@ -72,7 +72,7 @@ function cpuLine(build: string, run: FunRun | null): string[] {
   if (!run) return [];
   const { cpu } = run;
   return [
-    `- CPU on the ${build} build: average ${cpu.averageCores} cores, peak ${cpu.peakCores}, budget ${cpu.budgetCores}, paused ${cpu.pausedSeconds} s.`,
+    `- CPU on the ${build} build: average ${cpu.averageCores} cores, busiest 5 seconds ${cpu.peakCores}, budget ${cpu.budgetCores}, paused ${cpu.pausedSeconds} s.`,
   ];
 }
 

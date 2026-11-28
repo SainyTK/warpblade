@@ -250,6 +250,90 @@
           "Agreed with the studio's round 2 scoring and asked to adopt it, with the proposed version 2 changes, as the studio's nightly objective"
         ]
       }
+    },
+    {
+      "date": "2026-11-28",
+      "build": "seed: every measure at its default sample on main d812b0d0 (0.14.2 plus day work through the monster ladder)",
+      "definitionVersion": 2,
+      "studio": {
+        "fun": 60.7,
+        "dimensions": {
+          "control": 88.3,
+          "challenge": 19.4,
+          "progress": 76.1,
+          "clarity": 50,
+          "audiovisual": 50,
+          "mastery": 87.5,
+          "autonomy": 90.1,
+          "variety": 87.5,
+          "immersion": 50
+        }
+      },
+      "readings": {
+        "M1.1": 1,
+        "M1.2": 16,
+        "M2.1": 0,
+        "M2.2": 77.5,
+        "M2.3": -0.5,
+        "M2.4": 4.103,
+        "M6.1": 0.944,
+        "M3.2": 4.48,
+        "M3.1": 1.8355299258240039,
+        "M3.3": 100,
+        "M3.4": 23.515,
+        "M7.1": 67,
+        "M7.2": 4,
+        "M7.3": 64.07766990291263,
+        "M8.1": 14.79131759704317
+      },
+      "rubric": {
+        "R1": [
+          4,
+          4,
+          4
+        ],
+        "R2": [
+          2,
+          2,
+          2
+        ],
+        "R3": [
+          2,
+          3,
+          2
+        ],
+        "R4": [
+          3,
+          3,
+          3
+        ],
+        "R5": [
+          3,
+          3,
+          3
+        ],
+        "R6": [
+          4,
+          4,
+          3
+        ],
+        "R7": [
+          4,
+          4,
+          4
+        ],
+        "R8": [
+          4,
+          4,
+          4
+        ],
+        "R9": [
+          3,
+          3,
+          3
+        ]
+      },
+      "owner": null
     }
   ]
 }

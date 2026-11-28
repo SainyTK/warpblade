@@ -15,7 +15,8 @@ import type {
   MeasureReading,
 } from "../fun";
 import { allMeasurePicks, planJobs, refitWeights, runJobs, scoreFun, withCarryOver } from "../fun";
-import { governCpu } from "../services/cpuGovernor";
+import { onCleanup } from "../services/cleanup";
+import { endTree, governCpu } from "../services/cpuGovernor";
 import { readJson, writeJson } from "../services/files";
 import { acquireMeasureLock } from "../services/measureLock";
 import type { FunFlags } from "../types/cli";
@@ -81,9 +82,11 @@ async function measure(flags: FunFlags): Promise<ActionResult> {
   const release = await acquireMeasureLock();
   try {
     const child = await startChild(flags.root, outDir);
+    const forget = onCleanup(() => endTree(child.pid));
     const governor = governCpu(child.pid, availableParallelism() * definition.budget.cpuShare);
     const code = await child.exited;
     const cpu = await governor.stop();
+    forget();
     const outcome = await readJson<JobsOutcome>(join(outDir, FILES.outcome)).catch(
       (): JobsOutcome => ({
         readings: [],

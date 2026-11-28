@@ -1,9 +1,12 @@
 import { execFile } from "node:child_process";
 import { promisify } from "node:util";
+import { onExitKill } from "./cleanup";
 
 const run = promisify(execFile);
-const WINDOW_MS = 500;
-const MAX_PAUSE_MS = 4000;
+const WINDOW_MS = 250;
+const MAX_PAUSE_MS = 1000;
+const TARGET_SHARE_OF_BUDGET = 0.85;
+const PEAK_SPAN_SECONDS = 5;
 
 export interface CpuStats {
   budgetCores: number;
@@ -19,7 +22,20 @@ function cpuSeconds(time: string): number {
   return Number(days) * 86400 + seconds;
 }
 
-async function treeCpu(rootPid: number): Promise<{ pids: number[]; seconds: number }> {
+interface TreeCpu {
+  pids: number[];
+  byPid: Map<number, number>;
+}
+
+const EMPTY_TREE: TreeCpu = { pids: [], byPid: new Map() };
+
+function spentSince(previous: TreeCpu, now: TreeCpu): number {
+  let spent = 0;
+  for (const [pid, seconds] of now.byPid) spent += Math.max(0, seconds - (previous.byPid.get(pid) ?? 0));
+  return spent;
+}
+
+async function treeCpu(rootPid: number): Promise<TreeCpu> {
   const { stdout } = await run("ps", ["-A", "-o", "pid=,ppid=,time="]);
   const rows = stdout
     .trim()
@@ -38,7 +54,7 @@ async function treeCpu(rootPid: number): Promise<{ pids: number[]; seconds: numb
     }
   }
   const members = rows.filter((row) => tree.has(row.pid));
-  return { pids: members.map((row) => row.pid), seconds: members.reduce((sum, row) => sum + row.seconds, 0) };
+  return { pids: members.map((row) => row.pid), byPid: new Map(members.map((row) => [row.pid, row.seconds])) };
 }
 
 function signalAll(pids: number[], signal: NodeJS.Signals): void {
@@ -51,32 +67,57 @@ function signalAll(pids: number[], signal: NodeJS.Signals): void {
 
 const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
+export async function endTree(rootPid: number): Promise<void> {
+  const { pids } = await treeCpu(rootPid).catch(() => ({ pids: [rootPid], byPid: new Map<number, number>() }));
+  signalAll(pids, "SIGCONT");
+  signalAll(pids, "SIGTERM");
+}
+
 export function governCpu(rootPid: number, budgetCores: number): { stop: () => Promise<CpuStats> } {
   let running = true;
   let peak = 0;
   let paused = 0;
   const started = performance.now();
   let used = 0;
+  const target = budgetCores * TARGET_SHARE_OF_BUDGET;
+  const recent: { seconds: number; spent: number }[] = [];
+  const track = (seconds: number, spent: number) => {
+    recent.push({ seconds, spent });
+    while (recent.reduce((sum, entry) => sum + entry.seconds, 0) - recent[0].seconds >= PEAK_SPAN_SECONDS)
+      recent.shift();
+    const span = recent.reduce((sum, entry) => sum + entry.seconds, 0);
+    if (span >= PEAK_SPAN_SECONDS) peak = Math.max(peak, recent.reduce((sum, entry) => sum + entry.spent, 0) / span);
+  };
   const loop = (async () => {
-    let previous = await treeCpu(rootPid).catch(() => ({ pids: [], seconds: 0 }));
+    let previous = await treeCpu(rootPid).catch(() => EMPTY_TREE);
     let previousAt = performance.now();
+    let ownPrevious = process.cpuUsage();
+    let balance = 0;
     while (running) {
       await sleep(WINDOW_MS);
       const now = await treeCpu(rootPid).catch(() => previous);
+      const own = process.cpuUsage(ownPrevious);
+      ownPrevious = process.cpuUsage();
       const at = performance.now();
-      const spent = Math.max(0, now.seconds - previous.seconds);
-      const cores = spent / ((at - previousAt) / 1000);
-      peak = Math.max(peak, cores);
+      const seconds = (at - previousAt) / 1000;
+      const spent = spentSince(previous, now) + (own.user + own.system) / 1e6;
       used += spent;
-      if (cores > budgetCores && running) {
-        const pause = Math.min(MAX_PAUSE_MS, WINDOW_MS * (cores / budgetCores - 1));
+      track(seconds, spent);
+      balance = Math.min(0, balance + target * seconds - spent);
+      previous = now;
+      previousAt = at;
+      if (balance < 0 && running) {
+        const pause = Math.min(MAX_PAUSE_MS, (-balance / target) * 1000);
+        const resume = onExitKill(() => signalAll(now.pids, "SIGCONT"));
         signalAll(now.pids, "SIGSTOP");
         await sleep(pause);
         signalAll(now.pids, "SIGCONT");
+        resume();
         paused += pause;
+        track(pause / 1000, 0);
+        previousAt = performance.now();
+        balance = Math.min(0, balance + target * (pause / 1000));
       }
-      previous = now;
-      previousAt = performance.now();
     }
   })();
   return {
