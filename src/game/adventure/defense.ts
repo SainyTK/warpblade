@@ -6,7 +6,7 @@ import { runRates } from "../../store/meta";
 import type { StageDef, StageId } from "../../types/campaign";
 import type { CrystalWatch, DefenseSide } from "../../types/defense";
 import type { Enemy } from "../../types/enemy";
-import { secondsLeft } from "../../utils/defenseClock";
+import { lookShareAt, secondsLeft } from "../../utils/defenseClock";
 import type { Rng } from "../../utils/rng";
 import { type StageMods, stageMods } from "../../utils/stageArc";
 import { buildField, type Field } from "./field";
@@ -171,6 +171,8 @@ export function crystalWatch(now: number): CrystalWatch | null {
     secondsLeft: stageSecondsLeft(),
   };
 }
+
+export const stageLookShare = (): number => lookShareAt(defense?.elapsed ?? 0);
 
 export const stageAreaShare = (): number => (defense ? Math.min(1, defense.elapsed / DEFENSE_SECONDS) : 0);
 

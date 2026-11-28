@@ -25,6 +25,10 @@ export function alongAnchors(anchors: Anchors, at: number): number {
 export const levelAtSecond = (seconds: number): number =>
   clamp(alongAnchors(LEVEL_BY_SECOND, clamp(seconds, 0, DEFENSE_SECONDS)), 1, MAX_LEVEL);
 
+const DEFENSE_MINUTES = DEFENSE_SECONDS / 60;
+
+export const lookShareAt = (seconds: number): number => clamp(Math.floor(seconds / 60) / (DEFENSE_MINUTES - 1));
+
 export const foesPerSecond = (seconds: number): number => alongAnchors(FOES_PER_SECOND, seconds);
 
 export const aliveCap = (seconds: number): number => Math.round(alongAnchors(ALIVE_CAP_BY_SECOND, seconds));

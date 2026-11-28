@@ -28,6 +28,7 @@ export {
   stageCoinRate,
   stageFoePace,
   stageHeartRate,
+  stageLookShare,
   stageProgress,
   stageRunId,
   stageSecondsLeft,
