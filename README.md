@@ -26,7 +26,7 @@ Kael is the last of the knights, and eight other sword fighters now carry blades
 Eight rifts have torn open across the land, each guarded by a lord that came through it, and behind them all waits the Abyss Citadel.
 
 <p align="center">
-  <img src="docs/media/gameplay.gif" alt="Gameplay: Kael tears through a Rift Surge in the Abyss Citadel as Storm arcs and Void echoes chain from foe to foe" width="100%">
+  <img src="docs/media/gameplay.gif" alt="Gameplay: Kael holds the Warp crystal in the Sunlit Ruins after minute six, cutting down foes from both sides as they strike it" width="100%">
 </p>
 
 ## Stages
@@ -90,11 +90,11 @@ A cleared stage can be bought in Hyper with gold: faster foes, twice the gold, a
   </tr>
   <tr>
     <td><img src="docs/media/stage-blight.png" alt="Brynn in Blightroot Hollow among glowing spores and roots"></td>
-    <td><img src="docs/media/stage-veil.png" alt="Calder fights a Rift Surge of Rune Golems in Veil Spires"></td>
+    <td><img src="docs/media/stage-veil.png" alt="Aldric guards the crystal in Veil Spires as a Spire Colossus raises its fists to slam"></td>
   </tr>
   <tr>
     <td align="center">Blightroot Hollow</td>
-    <td align="center">A Rift Surge in Veil Spires</td>
+    <td align="center">Spire Colossus, Veil Spires</td>
   </tr>
 </table>
 
@@ -121,11 +121,11 @@ A card says what it adds to your Resonance and when it would complete a Fusion; 
 <table>
   <tr>
     <td><img src="docs/media/cards.png" alt="Skill cards coloured by element, each showing the Resonance it adds"></td>
-    <td><img src="docs/media/shot-surge.png" alt="A late build in the Abyss Citadel: arcs, echoes and five-figure hits across a Rift Surge"></td>
+    <td><img src="docs/media/shot-late-build.png" alt="A late Storm and Void build in the Abyss Citadel: arcs and echoes chain through a crowd"></td>
   </tr>
   <tr>
     <td align="center">Cards and Resonance</td>
-    <td align="center">A late build in a Citadel Surge</td>
+    <td align="center">A late build in the Abyss Citadel</td>
   </tr>
 </table>
 
