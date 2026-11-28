@@ -10,14 +10,14 @@ const D = FLIT_COLORS.down;
 const W = FLIT_COLORS.wing;
 
 function wing(s: SpriteCanvas, p: FlitPose, near: boolean): void {
-  const angle = (near ? -2.6 : -1.75) + p.wing * 0.7 + p.tuck * (near ? 0.5 : -0.4);
+  const angle = (near ? -2.6 : -1.35) + p.wing * 0.7 + p.tuck * (near ? 0.5 : -0.4);
   const len = 9 - p.tuck * 3;
   const ux = Math.cos(angle);
   const uy = Math.sin(angle);
   const px = -uy;
   const py = ux;
   const side = near ? 1 : -1;
-  const root: Pt = [-0.5, -1.5];
+  const root: Pt = near ? [-0.5, -1.5] : [1.5, -3];
   const tip: Pt = [root[0] + ux * len, root[1] + uy * len];
   const tone = near ? W[2] : W[1];
   s.begin();
@@ -33,7 +33,7 @@ function wing(s: SpriteCanvas, p: FlitPose, near: boolean): void {
     tone,
   );
   s.shadeEdges(tone, near ? W[3] : W[2], W[0]);
-  s.hairline(root[0], root[1], tip[0], tip[1], near ? FOE.crystal[4] : W[3]);
+  s.hairline(root[0], root[1], tip[0], tip[1], near ? FOE.crystal[4] : FOE.crystal[3]);
   for (const u of [0.45, 0.75])
     s.hairline(
       root[0] + ux * len * u,
@@ -73,7 +73,7 @@ function body(s: SpriteCanvas, p: FlitPose): void {
   s.shadeEdges(D[2], D[3], D[0]);
   s.commit();
   s.begin();
-  s.block(3, -2 + y, p.glare ? FOE.eyeHot : FOE.eye, 1, 1);
+  s.block(3, -2 + y, p.glare ? FOE.amberHot : FOE.amber, 1, 1);
   s.set(4.2, -0.6 + y, FOE.nose);
   s.set(4.6, 0 + y, FOE.crystal[3]);
   s.commit();

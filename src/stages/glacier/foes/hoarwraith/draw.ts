@@ -33,10 +33,21 @@ function shroud(s: SpriteCanvas, p: WraithPose): void {
     ],
     S[2],
   );
+  s.poly(
+    [
+      [1 + l * 0.5, -8 + y],
+      [5 + l * 0.5, -6 + y],
+      [6 - l * 0.4, 12 + y],
+      [0 - l, 15 + y],
+      [-3 - l, 12 + y],
+    ],
+    S[1],
+  );
   s.shadeEdges(S[2], S[3], S[1], 2);
-  s.hairline(1 + l * 0.4, -6 + y, -1 - l, 14 + y, S[1]);
-  s.hairline(5 + l * 0.4, -4 + y, 5 - l * 0.6, 12 + y, S[1]);
+  s.hairline(1 + l * 0.4, -6 + y, -1 - l, 14 + y, S[0]);
+  s.hairline(5 + l * 0.4, -4 + y, 5 - l * 0.6, 12 + y, S[0]);
   s.hairline(-4 + l * 0.2, -8 + y, -6 - l, 10 + y, S[3]);
+  s.hairline(-7 - l * 0.4, -1 + y, -8 - l, 11 + y, S[4]);
   s.commit();
 }
 
@@ -44,16 +55,16 @@ function hood(s: SpriteCanvas, p: WraithPose): void {
   const y = p.bob;
   const hx = 2 + p.lean;
   s.begin();
-  s.dot(hx, -14 + y, 6.2, S[3]);
+  s.dot(hx, -14 + y, 6.2, S[2]);
   s.poly(
     [
       [hx - 5, -17 + y],
       [hx - 9, -23 + y],
       [hx - 2, -19.5 + y],
     ],
-    S[3],
+    S[2],
   );
-  s.shadeEdges(S[3], S[4], S[2], 2);
+  s.shadeEdges(S[2], S[4], S[1], 2);
   s.commit();
   s.begin();
   s.dot(hx + 2.5, -13.5 + y, 3.8, WRAITH_COLORS.hollow);

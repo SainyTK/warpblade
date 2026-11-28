@@ -48,8 +48,8 @@ function spines(s: SpriteCanvas, p: MitePose, cy: number, ry: number): void {
 
 function face(s: SpriteCanvas, p: MitePose, cy: number): void {
   s.begin();
-  s.block(3.5, cy - 0.5 + p.tilt * 0.3, p.glare ? FOE.eyeHot : FOE.eye, 1, 1);
-  s.block(5, cy + p.tilt * 0.3, p.glare ? FOE.eyeHot : FOE.eye, 1, 1);
+  s.block(3.5, cy - 0.5 + p.tilt * 0.3, p.glare ? FOE.amberHot : FOE.amber, 1, 1);
+  s.block(5, cy + p.tilt * 0.3, p.glare ? FOE.amberHot : FOE.amber, 1, 1);
   s.hairline(5.5, cy + 2, 7, cy + 2.6 + p.tilt * 0.4, MITE_COLORS.leg);
   s.commit();
 }

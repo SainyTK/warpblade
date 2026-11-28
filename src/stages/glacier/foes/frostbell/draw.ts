@@ -45,13 +45,47 @@ function clapper(s: SpriteCanvas, p: BellPose): void {
 function body(s: SpriteCanvas, p: BellPose): void {
   s.begin();
   s.poly(turned(BODY, p.tilt), I[2]);
+  s.poly(
+    turned(
+      [
+        [3, -14],
+        [4, -14],
+        [7, -9],
+        [8, -1],
+        [10.5, 6],
+        [12, 9],
+        [5, 9],
+        [4, -1],
+      ],
+      p.tilt,
+    ),
+    I[1],
+  );
+  s.poly(
+    turned(
+      [
+        [-4, -14],
+        [-2, -14],
+        [-4, -1],
+        [-7, 9],
+        [-12, 9],
+        [-10.5, 6],
+        [-8, -1],
+        [-7, -9],
+      ],
+      p.tilt,
+    ),
+    I[3],
+  );
   s.shadeEdges(I[2], I[3], I[1], 2);
   const [l0, l1] = [turn([-11, 6.5], p.tilt), turn([11, 6.5], p.tilt)];
   s.hairline(l0[0], l0[1], l1[0], l1[1], I[4]);
   const [r0, r1] = [turn([-6, -6], p.tilt), turn([6, -6], p.tilt)];
   s.hairline(r0[0], r0[1], r1[0], r1[1], I[1]);
-  const [h0, h1] = [turn([-2.5, -12], p.tilt), turn([-6, 5], p.tilt)];
+  const [h0, h1] = [turn([-5.5, -10], p.tilt), turn([-9, 6], p.tilt)];
   s.hairline(h0[0], h0[1], h1[0], h1[1], I[4]);
+  const [d0, d1] = [turn([5, -10], p.tilt), turn([9, 7], p.tilt)];
+  s.hairline(d0[0], d0[1], d1[0], d1[1], I[0]);
   s.commit();
   s.begin();
   s.poly(
