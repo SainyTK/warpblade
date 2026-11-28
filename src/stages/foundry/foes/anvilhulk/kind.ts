@@ -15,7 +15,7 @@ export const anvilhulkKind: EnemyKind = {
   rift: { height: 22, y: () => GROUND, riftY: () => GROUND - 20 },
   update: updateAnvilhulk,
   draw: drawAnvilhulk,
-  glow: { radius: 24, color: FORGE.molten[2], eyeY: -12 },
+  glow: { radius: 24, color: FORGE.molten[2], eyeY: -18 },
   guardFrom: 1,
   guarding: (e) => e.state === "walk",
   takes: (e, dmg) => (venting(e) ? dmg * VENT_DAMAGE : dmg),

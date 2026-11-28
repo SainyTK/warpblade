@@ -13,7 +13,7 @@ export const cinderdrakeKind: EnemyKind = {
   rift: { height: 18, y: () => rng.range(44, 80), riftY: (y) => y },
   update: updateCinderdrake,
   draw: drawCinderdrake,
-  glow: { radius: 22, color: FORGE.molten[2], eyeY: -6 },
+  glow: { radius: 22, color: FORGE.molten[2], eyeY: -7 },
   orbs: 3,
   heartChance: 0.15,
 };

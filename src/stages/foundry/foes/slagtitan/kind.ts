@@ -16,7 +16,7 @@ export const slagtitanKind: EnemyKind = {
   rift: { height: 28, y: () => GROUND, riftY: () => GROUND - 26 },
   update: updateSlagtitan,
   draw: drawSlagtitan,
-  glow: { radius: 30, color: FORGE.molten[2], eyeY: -24 },
+  glow: { radius: 30, color: FORGE.molten[2], eyeY: -31 },
   glowRadius: (e) => (mawOpen(e) ? 38 : 30),
   takes: (e, dmg) => dmg * (mawOpen(e) ? EXPOSED : PLATED),
   steady: (e) => e.state === "wind" || e.state === "summon",
