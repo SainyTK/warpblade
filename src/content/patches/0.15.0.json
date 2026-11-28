@@ -1,0 +1,925 @@
+{
+  "version": "0.15.0",
+  "kind": "big",
+  "date": "2026-11-29",
+  "title": "Hold the Crystal",
+  "tagline": "Every run is now one stage of the Rift campaign: hold the Warp crystal at its center for 10 minutes while foes come from the West, the East, the Sky and Below. Ten stages, 72 new monsters, Resonance builds and a new Armory come with it.",
+  "intro": "This is the biggest change Warpblade has had. A run used to be the 30-wave arena or one long walk to the right through five eras; now you pick one of ten stages on the Rift Map and defend the Warp crystal at its center for 10 minutes, from level 1 to 99. Each stage has its own ladder of new monsters, a mini boss and a boss that arrive on the clock, and a twist that changes one rule. Charms are gone: your build now grows through the elements of your skills, which add effects to every hit and fuse in pairs. The Shop became the Armory, and your 0.14.2 save comes across with its bank, purchases, heroes and achievements, with anything the Armory no longer sells paid back at the price you paid.",
+  "highlights": [
+    {
+      "title": "Hold the Crystal",
+      "text": "You start beside the Warp crystal at the center of the field, with a clock at 10:00 and the crystal's HP bar at the top of the screen. Foes march on the crystal and strike it, and they turn on you when you come close, so you run from side to side to meet them. They come only from the West at first, then from the East, then from the Sky, and from minute six from every side at once. A banner and blinking chevrons warn you 4 s before a new side opens. Hold until 0:00 and the field clears with 'Crystal held'. If the crystal shatters, the stage is lost, but you keep the gold you picked up.",
+      "media": {
+        "kind": "video",
+        "file": "crystal-siege.mp4",
+        "poster": "crystal-siege.png",
+        "alt": "Kael stands beside the blue Warp crystal in the Sunlit Ruins and cuts down a pack of shielded Moss Sentinels pressing in from the east, while Rootcallers and slimes march in from the west. Red chevrons glow at both screen edges and the defense clock runs at the top.",
+        "width": 640,
+        "height": 360
+      }
+    },
+    {
+      "title": "The monster ladder",
+      "text": "Every stage has its own ladder of eight steps, and 72 new monsters fill them, from the Moss Slime and Belfry Bat of the Sunlit Ruins to the Cinder Drake and Slag Titan of the Cinder Foundry and the Spire Colossus of Veil Spires. The first step dies in one hit. Low and mid steps attack only up close and flinch out of their attack when you hit them. From step 5 up, foes are armored: they keep swinging, so you read their wind-up and punish the recovery.",
+      "media": {
+        "kind": "image",
+        "file": "cinder-drakes-slag-titan.png",
+        "alt": "In the Cinder Foundry a flock of Cinder Drakes swoops in from the left while a hulking Slag Titan, a walking furnace, stomps up on the right. Kael stands between them at the crystal.",
+        "width": 1280,
+        "height": 720
+      }
+    },
+    {
+      "title": "Clearer skill light and Mastery marks",
+      "text": "Big skills no longer wash heroes and foes out in white light. Skill cores take their element's colour and impact lights are shared, so a crowded screen stays readable. Every hero's skills now grow their look by level, mastery, evolution and damage, and a mastered skill shows Mastery pips in place of its level in your build slots and on the HUD.",
+      "media": {
+        "kind": "image",
+        "file": "mastery-cards.png",
+        "alt": "The Upgrade Skills cards with Storm Attunement, Crystal Choir Mastery 1 to 2 and Thunderhead Mastery 3 to 4. Mastery pips show under the held skills in the build slots above the cards.",
+        "width": 1280,
+        "height": 720
+      }
+    },
+    {
+      "title": "The Rift campaign and Resonance",
+      "text": "Ten stages sit on the Rift Map. A new save starts with the Sunlit Ruins, and each stage you clear opens the next ones, up to the Abyss Citadel. Every skill and Rift Art now belongs to one of five elements: Blaze, Frost, Storm, Venom and Void. The more levels you hold in an element, the more it adds to every hit, two elements at rank 12 fuse into one of ten Fusions, and rank 20 gives an element a finishing power.",
+      "media": {
+        "kind": "image",
+        "file": "stage-select.png",
+        "alt": "The Choose a stage screen after one clear: Sunlit Ruins cleared, Storm Marsh and Cinder Foundry open, and the rest locked. Frostglass Caverns is in focus as a silhouette with 'Clear Storm Marsh or Cinder Foundry'.",
+        "width": 1280,
+        "height": 720
+      }
+    }
+  ],
+  "sections": [
+    {
+      "id": "heroes",
+      "entries": [
+        {
+          "name": "Stage moveset",
+          "tag": "rework",
+          "summary": "In a stage every hero plays a new shared layout: a three-slash string, a charged skill on held J, a warp strike on U and spells that cast at once.",
+          "context": "The old layout put the warp on a long press of J and the ultimate on a charge of U, so two of the strongest moves fought over timing. Each button now does one thing, every spell has its own cooldown and MP, and the charged skill shows its tier on a bar over the hero. Co-op rooms keep the classic moveset for now.",
+          "changes": [
+            {
+              "kind": "stat",
+              "label": "J",
+              "before": "A string of the hero's length (four blows for Kael)",
+              "after": "Up to three ground slashes and a jump slash"
+            },
+            {
+              "kind": "stat",
+              "label": "J held",
+              "before": "Warp strike to the nearest foe ahead (10 MP)",
+              "after": "Charge the hero's charged skill through four tiers; each tier costs more MP and recharges longer"
+            },
+            {
+              "kind": "stat",
+              "label": "U",
+              "before": "Hold to charge the ultimate",
+              "after": "Throw the sword and warp strike the nearest foe ahead whenever it is ready"
+            },
+            {
+              "kind": "stat",
+              "label": "L",
+              "before": "Dodge forward",
+              "after": "Dash on the ground or once in the air; jump out of a ground dash to carry its speed"
+            },
+            {
+              "kind": "stat",
+              "label": "K",
+              "before": "Guard from the front, parry with a riposte cut",
+              "after": "Guard from the front, a tap just before a blow parries and reflects it, and K during a slash opens an enhanced parry"
+            },
+            {
+              "kind": "stat",
+              "label": "I",
+              "before": "Cast the selected ability; hold for its wide form",
+              "after": "Cast the selected spell or Rift Art at once, or the next ready one; during a slash, set it into the sword for the next three hits"
+            },
+            {
+              "kind": "note",
+              "text": "On touch, holding Attack charges the charged skill, the ability button casts the next ready spell, and the Ultimate button becomes Warp."
+            },
+            {
+              "kind": "note",
+              "text": "A sword swing now hits every foe its arc passes through, so flyers at chest and head height are struck."
+            }
+          ]
+        },
+        {
+          "name": "Skill effects for every hero",
+          "tag": "rework",
+          "summary": "Every skill of all nine heroes now has a level 1 effect that grows in layers with level, mastery, evolution and damage.",
+          "context": "A level 8 skill and a level 1 skill used to look much alike, and some effects covered the hero who cast them. Each hero now has a signature that grows by tier, and effects are kept off the hero's body so you can still see what you are doing.",
+          "changes": [
+            {
+              "kind": "note",
+              "text": "Kael: five element looks; the evolved slash becomes one large crescent, and Ice Spikes and Lightning grow into fields and storms."
+            },
+            {
+              "kind": "note",
+              "text": "Cerise: rapier, needle and rose sigils, with a mastery rose and an evolved ring of element motifs."
+            },
+            {
+              "kind": "note",
+              "text": "Aldric: shield, sword and sun sigils, with a dark outline on the sword sigil and a softer sun pillar."
+            },
+            {
+              "kind": "note",
+              "text": "Vesper: crossed twin blades and larger Tempo pips. Saya: her stored cuts open on the sheathe, with paper blades and cranes that fold."
+            },
+            {
+              "kind": "note",
+              "text": "Yun: spirit swords, crescents, petals, a heron and a yin-yang, sized for the game and lifted off his body."
+            },
+            {
+              "kind": "note",
+              "text": "Brynn: greatswords, crescents, a floor crest and her armour, with a ring of greatswords at mastery. Zafir: dervish spins and bleeding wounds. Calder: rounds, casings and his cylinder."
+            }
+          ]
+        },
+        {
+          "name": "Brynn",
+          "tag": "adjusted",
+          "summary": "Two of Brynn's skills are replaced so every skill works with the stage moveset.",
+          "context": "Searing Edge and Red Shard leaned on moves her stage kit no longer has.",
+          "changes": [
+            {
+              "kind": "stat",
+              "label": "Skills",
+              "before": "Searing Edge and Red Shard",
+              "after": "Cinder Edge and Heart Splinter"
+            }
+          ]
+        },
+        {
+          "name": "Every hero",
+          "tag": "adjusted",
+          "summary": "A fallen hero now drops to the floor and kneels on the planted sword.",
+          "context": "A fall should read at a glance, and it now does in the crystal defense, where you watch the countdown over your hero.",
+          "changes": [
+            {
+              "kind": "stat",
+              "label": "When the hero falls",
+              "before": "Hurt blink",
+              "after": "Drops to the floor and kneels on the planted sword"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "foes",
+      "entries": [
+        {
+          "name": "The monster ladder",
+          "tag": "new",
+          "summary": "Each stage has eight steps of foes, and 72 new monsters fill them.",
+          "context": "A 10-minute defense needs the crowd to change as you grow, so each stage climbs from one-hit fodder to brutes. You meet the newest three steps open at your level, mostly the newest.",
+          "changes": [
+            {
+              "kind": "stat",
+              "label": "Ladder steps (at level)",
+              "before": "None",
+              "after": "8 per stage, at levels 1, 15, 26, 38, 48, 53, 62 and 78"
+            },
+            {
+              "kind": "note",
+              "text": "Sunlit Ruins: Moss Slime, Belfry Bat, Vine Lasher, Amber Wasp, Moss Sentinel, Ivy Gargoyle, Rootcaller and Sunscale Basilisk."
+            },
+            {
+              "kind": "note",
+              "text": "Storm Marsh: Bogling, Fen Midge, Mossback Snapper, Volt Dragonfly, Reed Seer, Thunder Ray and Stormgator. Cinder Foundry: Cinder Drake, Slag Titan and Anvil Hulk among seven new forge monsters."
+            },
+            {
+              "kind": "note",
+              "text": "Frostglass Caverns: seven new monsters, up to the Permafrost Colossus. Thunderhead Skyway: Nimbit, Squall Finch, Gale Ram, Zephyr Ray, Lantern Warden, Cloud Wyrm and Storm Colossus."
+            },
+            {
+              "kind": "note",
+              "text": "Drowned Archive: Bookmite, Blot Moth, Quillshrike, Scrivener, Foliant, Warding Lamp and Hushwarden. Moonlit Ruins: seven new graveyard foes, among them the Gravedigger, Toll Bell and Barrow Lord."
+            },
+            {
+              "kind": "note",
+              "text": "Veil Spires: Glintmite, Glimmerwing, Shard Ram, Aurora Ray, Rune Binder, Facet Seer and Spire Colossus. Blightroot Hollow: Mold Mite, Spore Gnat, Rot Boar, Cordyceps Wasp, Hyphamancer, Bloatcap and Rotback Bear."
+            },
+            {
+              "kind": "note",
+              "text": "Abyss Citadel: Umbra Mite, Rift Mote, Hollow Squire, Rift Ray, Eclipse Knight, Dusk Seraph, Void Behemoth and Void Headsman."
+            }
+          ],
+          "media": {
+            "kind": "image",
+            "file": "spire-colossus-slam.png",
+            "alt": "In the Veil Spires a Spire Colossus raises its fist in its slam wind-up right next to Kael and the crystal, with robed rift casters at its side.",
+            "width": 1280,
+            "height": 720
+          }
+        },
+        {
+          "name": "Foe HP",
+          "tag": "rework",
+          "summary": "Each foe type now has one fixed HP for the whole run, set by its ladder step, so you feel yourself outgrow it.",
+          "context": "When every foe grew with the wave, a level 60 hero and a level 10 hero needed the same number of hits. Now a type falls from its step's hits to a few hits by the next step, when a tougher type takes over.",
+          "changes": [
+            {
+              "kind": "note",
+              "text": "A foe's HP comes from its ladder step and the stage tier and stays the same for the whole run."
+            },
+            {
+              "kind": "stat",
+              "label": "Step 1 foes",
+              "before": "None",
+              "after": "10 HP (5 for flyers): one hit on every stage and in co-op"
+            }
+          ]
+        },
+        {
+          "name": "Flinching and armored foes",
+          "tag": "rework",
+          "summary": "Low and mid steps flinch when hit and attack only up close; step 5 and up, mini bosses and bosses are armored.",
+          "context": "Crowds of small foes swinging from range made fights noisy and unfair. Small foes now reward pressure, and big ones reward reading their wind-up and punishing the recovery.",
+          "changes": [
+            {
+              "kind": "note",
+              "text": "Steps 1 to 4 attack at 0.6 times the pace, only within 56 px across and 84 px up or down, and any hit staggers them and stops their attacks for 1.2 s."
+            },
+            {
+              "kind": "note",
+              "text": "Steps 5 to 8, mini bosses and bosses never stagger, and armored foes have longer recoveries after an attack."
+            }
+          ]
+        },
+        {
+          "name": "Bosses and mini bosses",
+          "tag": "rework",
+          "summary": "Every boss and mini boss now has three phases, a stagger bar that breaks into a stun, and an enrage timer.",
+          "context": "Big foes needed fights with a shape: a turn at each phase, a reward for steady damage, and a reason to finish them. Each stage now has a named mini boss with two telegraphed moves of its own.",
+          "changes": [
+            {
+              "kind": "stat",
+              "label": "Phases",
+              "before": "One or two, by boss",
+              "after": "Three: phase 2 at 70 percent HP, phase 3 at 35 percent"
+            },
+            {
+              "kind": "stat",
+              "label": "Attack haste by phase",
+              "before": "None",
+              "after": "x1.3, x1.6 and x1.9"
+            },
+            {
+              "kind": "stat",
+              "label": "Stagger bar",
+              "before": "None",
+              "after": "Fills at 8 percent of max HP, x1.4 more after each break, and stuns for 2.6 s"
+            },
+            {
+              "kind": "stat",
+              "label": "Enrage",
+              "before": "None",
+              "after": "Mini boss after 90 s, boss after 240 s: x2.4 haste and x1.5 damage"
+            },
+            {
+              "kind": "note",
+              "text": "Stuns, freezes, holds and pins last x0.6 as long for each earlier one, and one is forgotten every 8 s."
+            },
+            {
+              "kind": "note",
+              "text": "Mini bosses: Bramble Tusk, The Mire King, Forge Marshal, Rime Oracle, Storm Captain, Grand Tomeguard, Gravewarden, Rift Marshal, Rot Queen and Void Reaver."
+            },
+            {
+              "kind": "note",
+              "text": "Death bursts from Wildfire and other finishing powers deal at most 2 percent of a mini boss's or boss's max HP."
+            }
+          ],
+          "media": {
+            "kind": "image",
+            "file": "cinder-smith-arrives.png",
+            "alt": "The Cinder Smith, a furnace-bellied giant with a hammer, arrives in the Cinder Foundry under the title card 'The Cinder Smith, Master of the Black Forge'. Its boss bar with phase marks runs along the bottom and Kael stands ready.",
+            "width": 1280,
+            "height": 720
+          }
+        }
+      ]
+    },
+    {
+      "id": "stages",
+      "entries": [
+        {
+          "name": "The Rift campaign",
+          "tag": "new",
+          "summary": "Ten stages on the Rift Map, each with its own place, monsters, mini boss, boss and twist.",
+          "context": "One stage per run gives every session a clear goal, and opening the map gives you a next stage to reach. Later stages are tougher, so the map is also your difficulty ladder.",
+          "changes": [
+            {
+              "kind": "stat",
+              "label": "Solo play",
+              "before": "One continuous stage through five eras, or the 30-wave arena",
+              "after": "One of ten stages per run, each a 10-minute crystal defense"
+            },
+            {
+              "kind": "note",
+              "text": "A new save has the Sunlit Ruins. It opens Storm Marsh and Cinder Foundry, the map branches from there, and the Abyss Citadel opens once Veil Spires and Blightroot Hollow are both cleared."
+            },
+            {
+              "kind": "stat",
+              "label": "Stage tiers, foe HP and damage",
+              "before": "None",
+              "after": "From x1 in the Sunlit Ruins to x3 HP and x1.6 damage in the Abyss Citadel"
+            },
+            {
+              "kind": "note",
+              "text": "Twists: Kind Sun (Sunlit Ruins, foes hit x0.6), Swarming Fen (Storm Marsh, x1.3 foes a second), Hot Forge (Cinder Foundry, foe HP x0.8 and damage x1.2), Hard Ice (Frostglass Caverns, foe HP x1.25 and damage x0.85), Storm Front (Thunderhead Skyway, foes act x1.15 faster), Gilded Pages (Drowned Archive, an elite every 9th foe), Gloam Tithe (Moonlit Ruins, gold x1.5 and hearts x0.5), Torn Veil (Veil Spires, an elite every 6th foe), Rot Bloom (Blightroot Hollow, no hearts) and Black Sun (Abyss Citadel, foes act x1.2 faster)."
+            }
+          ],
+          "media": {
+            "kind": "image",
+            "file": "stage-select.png",
+            "alt": "The Choose a stage screen after one clear: Sunlit Ruins cleared, Storm Marsh and Cinder Foundry open, and the rest locked.",
+            "width": 1280,
+            "height": 720
+          }
+        },
+        {
+          "name": "Hyper stages",
+          "tag": "new",
+          "summary": "A cleared stage can be bought in Hyper with gold for faster foes, more gold and a reward of its own.",
+          "context": "Hyper gives a cleared stage a reason to come back, such as the stage's Rift Art, which then starts every run.",
+          "changes": [
+            {
+              "kind": "stat",
+              "label": "Hyper foes",
+              "before": "None",
+              "after": "Act x1.25 faster"
+            },
+            {
+              "kind": "stat",
+              "label": "Hyper gold",
+              "before": "None",
+              "after": "x2"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "systems",
+      "entries": [
+        {
+          "name": "Crystal defense",
+          "tag": "new",
+          "summary": "Hold the Warp crystal at the stage's center for 10 minutes; the stage is lost if it shatters.",
+          "context": "We wanted a run with one clear goal and a reason to move: the crystal pulls foes in from every side, and you decide which side to meet. A foe that reaches the crystal hits it softer than it would hit you, so the crystal can take a few mistakes but not a lost side.",
+          "changes": [
+            {
+              "kind": "stat",
+              "label": "Crystal HP",
+              "before": "None",
+              "after": "1200 in the Sunlit Ruins, +15 percent per stage tier above the first"
+            },
+            {
+              "kind": "stat",
+              "label": "Blows on the crystal",
+              "before": "None",
+              "after": "35 percent of the damage they would deal to a hero, at most once a second per foe"
+            },
+            {
+              "kind": "stat",
+              "label": "Siege chip",
+              "before": "None",
+              "after": "Every besieging foe within 60 px chips 1.5 HP a second, times its damage"
+            },
+            {
+              "kind": "stat",
+              "label": "Foes turn on a hero within",
+              "before": "None",
+              "after": "70 px for foes, 150 px for mini bosses, 200 px for bosses"
+            },
+            {
+              "kind": "note",
+              "text": "The field is about four screens wide (1280 to 1870 px) with the crystal at its center. The crystal watch on the HUD shows its HP bar and the clock, turns to its low look at 30 percent, and flashes when the crystal is struck."
+            },
+            {
+              "kind": "note",
+              "text": "When the crystal is off screen, a gem and chevron at the screen edge point to it, red when it is low or was just struck."
+            },
+            {
+              "kind": "note",
+              "text": "At 0:00 with the crystal standing, the field clears in a burst of crystal embers and the banner reads 'Crystal held'. If it shatters, the banner reads 'The Warp crystal shattered'. A fallen run keeps its gold."
+            }
+          ],
+          "media": {
+            "kind": "image",
+            "file": "crystal-pointer.png",
+            "alt": "Kael is far east of the crystal with boars charging toward him. At the left screen edge a red gem and chevron point back to the crystal, which is being struck off screen.",
+            "width": 1280,
+            "height": 720
+          }
+        },
+        {
+          "name": "Fronts",
+          "tag": "new",
+          "summary": "The sides foes come from open up over the clock, and each change of sides is announced 4 s ahead.",
+          "context": "The first minutes teach you one side at a time, and the last minutes ask you to hold all four. The warning gives you time to start running before the new side opens.",
+          "changes": [
+            {
+              "kind": "stat",
+              "label": "0:00",
+              "before": "None",
+              "after": "West only"
+            },
+            {
+              "kind": "stat",
+              "label": "1:30",
+              "before": "None",
+              "after": "West or East, one at a time, swapping every 30 s"
+            },
+            {
+              "kind": "stat",
+              "label": "3:30",
+              "before": "None",
+              "after": "Two of West, East and Sky at a time, swapping every 25 s"
+            },
+            {
+              "kind": "stat",
+              "label": "6:00",
+              "before": "None",
+              "after": "All four sides; every 20 s one side surges and takes 60 percent of the packs"
+            },
+            {
+              "kind": "note",
+              "text": "The West sends 1.5 times the pack from one ladder step back. The East sends two thirds of the pack from the newest step, with every third foe an elite. The Sky sends flyers through rifts 110 to 260 px from the crystal, and Below sends walkers through rifts 70 to 150 px from it."
+            },
+            {
+              "kind": "note",
+              "text": "A 'Next from the ...' banner and blinking chevrons at the screen edge show 4 s before every change of sides, including when a new front opens at 1:30, 3:30 and 6:00."
+            }
+          ],
+          "media": {
+            "kind": "image",
+            "file": "next-front-warning.png",
+            "alt": "The banner 'Next from the East' shows over the Sunlit Ruins while Kael stands by the crystal. The left chevron glows red for the open west side and the right chevron blinks pink for the side about to open.",
+            "width": 1280,
+            "height": 720
+          }
+        },
+        {
+          "name": "Big foes on the clock",
+          "tag": "new",
+          "summary": "An elite, the stage's mini boss and its boss each arrive at a set time, 240 to 280 px from the crystal.",
+          "context": "Fixed times let you plan your build around the fights that matter. A mini boss or boss waits for an earlier boss fight to end, so two never stack.",
+          "changes": [
+            {
+              "kind": "stat",
+              "label": "Elite",
+              "before": "None",
+              "after": "1:35"
+            },
+            {
+              "kind": "stat",
+              "label": "Mini boss",
+              "before": "None",
+              "after": "4:15"
+            },
+            {
+              "kind": "stat",
+              "label": "Boss",
+              "before": "None",
+              "after": "7:30"
+            }
+          ]
+        },
+        {
+          "name": "Revives",
+          "tag": "new",
+          "summary": "A fallen hero stands up again at the crystal after a countdown that grows with each fall.",
+          "context": "Losing a whole 10-minute run to one mistake felt bad, but falls still need to cost something. Each fall leaves the crystal alone for longer.",
+          "changes": [
+            {
+              "kind": "stat",
+              "label": "Time to stand up",
+              "before": "None",
+              "after": "3 x 1.5 per earlier fall, at most 30 s: 3, 4.5, 6.8, 10.1, 15.2, 22.8, then 30"
+            },
+            {
+              "kind": "stat",
+              "label": "On rising",
+              "before": "None",
+              "after": "Full HP and 2 s of guard, at the crystal"
+            },
+            {
+              "kind": "note",
+              "text": "The countdown shows over the fallen hero, and a crystal-coloured ring marks the floor when they rise. In co-op, falls count per player."
+            }
+          ],
+          "media": {
+            "kind": "image",
+            "file": "revive.png",
+            "alt": "Kael kneels on his planted sword under the text 'Kael has fallen' with a revive countdown of 2 above him, between two packs of Moss Sentinels, with the crystal behind the pack on the right.",
+            "width": 1280,
+            "height": 720
+          }
+        },
+        {
+          "name": "Level-up cards",
+          "tag": "rework",
+          "summary": "Cards now open on their own a moment after a level up that gives a point, with no mentor to find.",
+          "context": "Walking to a mentor made sense on a long road but not while holding a crystal. Points come on a schedule now, so each one stays worth a choice from level 1 to 99.",
+          "changes": [
+            {
+              "kind": "stat",
+              "label": "How cards open",
+              "before": "Press E or tap Talk by a mentor",
+              "after": "0.35 s after a level up that gives a point, and after a big foe falls"
+            },
+            {
+              "kind": "stat",
+              "label": "Skill points",
+              "before": "Every level up",
+              "after": "Every level up to 30, then every second level, plus one at 50, 75 and 99"
+            },
+            {
+              "kind": "stat",
+              "label": "Skill slots",
+              "before": "Up to 8 skills and 3 charms",
+              "after": "4 skills, a 5th at level 15, 6th at 30, 7th at 45 and 8th at 60"
+            },
+            {
+              "kind": "note",
+              "text": "A skill at level 8 keeps growing through four Mastery levels, and the cards also offer Deeper Charge ranks for the charged skill, element Attunements and Honing stat cards."
+            },
+            {
+              "kind": "note",
+              "text": "Leave, or Esc, puts the cards away with your points kept. They open again at the next level up that gives a point, or when a big foe falls."
+            }
+          ],
+          "media": {
+            "kind": "image",
+            "file": "element-cards.png",
+            "alt": "Level-up cards coloured by element: a green Venom card for Rift Wound, a blue Frost card for Crystal Familiar and a purple Void card for Mirror Knight, each listing the resonance it adds.",
+            "width": 1280,
+            "height": 720
+          }
+        },
+        {
+          "name": "Resonance and Fusions",
+          "tag": "new",
+          "summary": "Charms are gone; your skills' elements now add effects to every hit, and two elements fuse.",
+          "context": "Charms multiplied one stat each, so most builds ended up the same. Elements give every pick a direction: lean into two or three and their effects chain into each other.",
+          "changes": [
+            {
+              "kind": "stat",
+              "label": "Build growth",
+              "before": "Charms: Might, Haste, Vigor, Insight and more",
+              "after": "Resonance in five elements: Blaze, Frost, Storm, Venom and Void"
+            },
+            {
+              "kind": "note",
+              "text": "An element's rank is the levels you hold in it, plus 3 for an evolved skill and 2 per Rift Art level. Blaze burns, Frost chills then freezes, Storm arcs to nearby foes, Venom poisons and makes foes take more, and Void echoes the hit."
+            },
+            {
+              "kind": "stat",
+              "label": "Fusion",
+              "before": "None",
+              "after": "Two elements at rank 12 make one of ten Fusions, such as Plasma (Blaze and Storm) or Thunder Echo (Storm and Void)"
+            },
+            {
+              "kind": "stat",
+              "label": "Finishing power",
+              "before": "None",
+              "after": "At rank 20, such as Wildfire, where burning foes explode when they fall"
+            },
+            {
+              "kind": "note",
+              "text": "A Fusion's name stays ??? on cards and in the Codex until you make it once."
+            }
+          ],
+          "media": {
+            "kind": "image",
+            "file": "abyss-citadel-build.png",
+            "alt": "Under the black sun of the Abyss Citadel, Kael's Storm and Void build sweeps a blue arc beside the crystal while Dusk Seraphs hover in from the left, firing bolts.",
+            "width": 1280,
+            "height": 720
+          }
+        },
+        {
+          "name": "Heart Shards, Mana Shards and pacts",
+          "tag": "new",
+          "summary": "Max HP and MP now grow from shards you pick up, and two skills of every hero trade HP or MP for power.",
+          "context": "Shards make every boss and elite drop something you feel for the rest of the run. Pacts give some picks a real cost.",
+          "changes": [
+            {
+              "kind": "stat",
+              "label": "Heart Shard",
+              "before": "None",
+              "after": "+3 max HP for the run"
+            },
+            {
+              "kind": "stat",
+              "label": "Mana Shard",
+              "before": "None",
+              "after": "+2 max MP for the run"
+            },
+            {
+              "kind": "note",
+              "text": "Every boss and mini boss drops one of each; an elite drops each kind with a 10 percent chance. Levels no longer raise max HP or MP."
+            },
+            {
+              "kind": "note",
+              "text": "Each hero has one Blood skill (drains HP for power) and one Mending or Focus skill (regains HP for MP, or MP for power). A drain never takes your last point of HP, and the HUD shows the net HP a second."
+            }
+          ]
+        },
+        {
+          "name": "Armory",
+          "tag": "rework",
+          "summary": "The Shop is now the Armory: items open through goals, cost gold that rises with each purchase, refund in full and can be switched off.",
+          "context": "The Armory gives you something to unlock as well as buy, and switching an item off lets you choose a harder run. Curse, Greed and Growth trade tougher foes for more gold and experience.",
+          "changes": [
+            {
+              "kind": "stat",
+              "label": "Stat items (Vitality, Honed Edge, Arcana, Wellspring, Precision, Endurance)",
+              "before": "5 levels",
+              "after": "3 levels"
+            },
+            {
+              "kind": "stat",
+              "label": "Light Boots",
+              "before": "4 levels",
+              "after": "3 levels"
+            },
+            {
+              "kind": "stat",
+              "label": "Banish",
+              "before": "3 levels",
+              "after": "2 levels"
+            },
+            {
+              "kind": "stat",
+              "label": "Head Start and Last Light",
+              "before": "Sold in the Shop",
+              "after": "Removed, with the gold you paid returned"
+            },
+            {
+              "kind": "stat",
+              "label": "New items",
+              "before": "None",
+              "after": "Greed (+10 percent gold, 3 levels), Growth (+5 percent experience, 3 levels) and Curse (foes +10 percent HP and damage for +10 percent gold and +5 percent experience, 5 levels)"
+            }
+          ]
+        },
+        {
+          "name": "Unlocks",
+          "tag": "new",
+          "summary": "Goals such as kills, bosses, levels, gold, Fusions and evolutions now open heroes, skills, stages and Armory items.",
+          "context": "There should always be a next goal. The result screen shows the next ones, so you know what a run can open.",
+          "changes": [
+            {
+              "kind": "note",
+              "text": "A new save has Kael, Cerise, five skills each and the Sunlit Ruins. Heroes you bought before stay unlocked."
+            }
+          ]
+        },
+        {
+          "name": "Result screen",
+          "tag": "rework",
+          "summary": "The result screen now shows your grade, time, level, foes, damage, gold, unlocks, best run on the stage and the damage of every source.",
+          "context": "A run should end with a clear picture of what went right and what to try next.",
+          "changes": [
+            {
+              "kind": "stat",
+              "label": "Buttons",
+              "before": "Continue and Shop",
+              "after": "Play again, Choose stage, Main menu and Armory"
+            },
+            {
+              "kind": "note",
+              "text": "Damage by source lists each element's Resonance too. Achievement toasts stay off the result screen, which already lists every unlock and achievement."
+            }
+          ],
+          "media": {
+            "kind": "image",
+            "file": "stage-clear.png",
+            "alt": "The Stage clear result screen for Sunlit Ruins with grade S, level, foes defeated, damage dealt and gold, a list of newly unlocked items and fusions, and Play again, Choose stage, Main menu and Armory.",
+            "width": 1280,
+            "height": 720
+          }
+        },
+        {
+          "name": "Sound and music",
+          "tag": "new",
+          "summary": "New sound effects and chiptune music, with a Music volume in Options.",
+          "context": "Every sound effect and music loop comes from free CC0 packs, with each pack and author listed in the credits.",
+          "changes": [
+            {
+              "kind": "stat",
+              "label": "Options",
+              "before": "Sound, volume, screen shake, damage numbers, vibration, fullscreen",
+              "after": "Adds Music volume"
+            },
+            {
+              "kind": "note",
+              "text": "The warp now lands with a low thump."
+            }
+          ]
+        },
+        {
+          "name": "Pickups",
+          "tag": "adjusted",
+          "summary": "HP, MP, shards, gold and experience are picked up the moment they touch your hero.",
+          "context": "In a fight around the crystal you should never have to stop to collect.",
+          "changes": [
+            {
+              "kind": "note",
+              "text": "Anything left lying still flies to your hero after a moment."
+            }
+          ]
+        },
+        {
+          "name": "Co-op",
+          "tag": "adjusted",
+          "summary": "Each player's camera follows their own hero, so players can split up.",
+          "context": "Two players often want to hold different sides at the same time, and a shared screen held them together.",
+          "changes": [
+            {
+              "kind": "stat",
+              "label": "Camera",
+              "before": "One shared screen with a leash",
+              "after": "One camera per player"
+            },
+            {
+              "kind": "note",
+              "text": "One-hit foes stay one hit in co-op."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "art",
+      "entries": [
+        {
+          "name": "Skill light",
+          "tag": "rework",
+          "summary": "Skill light no longer bleaches heroes and foes white.",
+          "context": "Late in a run the screen filled with white light and you lost your hero and the foes' wind-ups. Light now has a shared cap, so effects stay bright without hiding the fight.",
+          "changes": [
+            {
+              "kind": "note",
+              "text": "Skill cores are tinted in the skill's element colour, and impact lights are shared between hits."
+            },
+            {
+              "kind": "note",
+              "text": "The charged skill's heart rings the hero in place of a white disc on the body, and a cast at Mastery is marked."
+            },
+            {
+              "kind": "note",
+              "text": "Known issue: a large foe under constant hits late in a run can still look pale from its own hit flash."
+            }
+          ]
+        },
+        {
+          "name": "Mastery marks",
+          "tag": "new",
+          "summary": "A mastered skill shows Mastery pips in place of its level in your build slots and the HUD strip.",
+          "context": "A skill past level 8 keeps growing, and you should be able to see how far.",
+          "changes": [
+            {
+              "kind": "stat",
+              "label": "Mastered skill in the build slots",
+              "before": "Its level",
+              "after": "Up to four Mastery pips"
+            }
+          ]
+        },
+        {
+          "name": "Hit weight",
+          "tag": "rework",
+          "summary": "Hits on foes land harder: sparks in the blade or spell colour, hit-stop, a light pulse, foe squash and recoil, and a kill burst for elites and bosses.",
+          "context": "A hit should feel like a hit. Screen shake is now kept for heavy hits only, so a crowd fight does not shake the screen all the time.",
+          "changes": [
+            {
+              "kind": "note",
+              "text": "Hit-stop and light scale with the weight of the hit and are damped in crowds. Screen shake comes only from heavy hits."
+            }
+          ]
+        },
+        {
+          "name": "Foes, bosses and icons",
+          "tag": "new",
+          "summary": "Foes and bosses have new art and poses, and skill, evolution, Rift Art, element, Armory and pickup icons are redrawn.",
+          "context": "Seventy-two new monsters needed to read apart at a glance. Each foe still has its code drawing as a fallback.",
+          "changes": [
+            {
+              "kind": "note",
+              "text": "Bosses such as Oakheart, the Cinder Smith, the Rift Warden, the Abyss Sovereign and the Abyss Maw have new sprite sheets, and many foes gained hurt, stagger and attack poses."
+            },
+            {
+              "kind": "note",
+              "text": "The Cinder Drake, Slag Titan, Gale Ram, Barrow Lord and Toll Bell were redrawn with shading, and the Spire Colossus raises its fists high in its slam wind-up."
+            }
+          ]
+        },
+        {
+          "name": "Start menu",
+          "tag": "fix",
+          "summary": "The start menu items sit on a panel, so the moving backdrop never runs behind the text.",
+          "context": "The menu was hard to read when a bright part of the backdrop passed behind it.",
+          "changes": [
+            {
+              "kind": "stat",
+              "label": "Menu items",
+              "before": "Drawn over the backdrop",
+              "after": "On a menu panel"
+            },
+            {
+              "kind": "note",
+              "text": "The start menu also shows how many stages you have cleared, and Armory replaces Shop."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "bugfixes",
+      "entries": [
+        {
+          "name": "Saves from 0.14.2",
+          "tag": "fix",
+          "summary": "Your 0.14.2 bank, purchases, heroes, achievements and options carry over to 0.15.0.",
+          "context": "The Armory saves under a new key, and without this fix a 0.14.2 player would have started with an empty bank, an empty Armory and only the free heroes. We tested it by playing 0.14.2 and 0.15.0 in the same browser.",
+          "changes": [
+            {
+              "kind": "stat",
+              "label": "Loading a 0.14.2 save",
+              "before": "Bank 0, empty Armory, bought heroes locked",
+              "after": "Bank, achievements, tracked stats, recipes and bought heroes carried over"
+            },
+            {
+              "kind": "stat",
+              "label": "Shop levels the Armory still sells",
+              "before": "Lost",
+              "after": "Kept up to the Armory's level limit, and the item counts as unlocked"
+            },
+            {
+              "kind": "stat",
+              "label": "Levels over the Armory limit, Head Start and Last Light",
+              "before": "Lost",
+              "after": "Returned as the gold they cost in 0.14.2 (Head Start 200; Last Light 300, 480 and 770 for its three levels)"
+            },
+            {
+              "kind": "note",
+              "text": "Refund All in the Armory gives back what you paid for the kept levels in 0.14.2. Your 0.14.2 save is left in place, untouched."
+            },
+            {
+              "kind": "note",
+              "text": "The carry-over runs when this browser has no 0.15.0 save yet."
+            }
+          ]
+        },
+        {
+          "name": "Controls screen on touch",
+          "tag": "fix",
+          "summary": "The touch Controls screen no longer lists a Talk button that does not exist.",
+          "context": "Mentors are gone from stages, and the touch controller has no Talk button, so the line pointed phone players at nothing.",
+          "changes": [
+            {
+              "kind": "stat",
+              "label": "Last touch row",
+              "before": "Talk: Tap Talk by a mentor to spend skill points.",
+              "after": "Leave: Put the cards away. They open again at the next level up that gives a point, or when a big foe falls."
+            },
+            {
+              "kind": "stat",
+              "label": "Keyboard list",
+              "before": "No row for the cards",
+              "after": "Esc: the same line as Leave"
+            }
+          ]
+        },
+        {
+          "name": "Esc on the level-up cards",
+          "tag": "fix",
+          "summary": "Esc on the cards puts them away and lets play go on, without also opening the pause menu.",
+          "context": "One press did two things, so putting the cards away stopped the fight you wanted to get back to.",
+          "changes": [
+            {
+              "kind": "stat",
+              "label": "Esc on the cards",
+              "before": "Put the cards away and opened the pause menu",
+              "after": "Puts the cards away only"
+            },
+            {
+              "kind": "note",
+              "text": "Where the cards have no Leave, as after a wave in co-op, Esc still pauses as before."
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "feedback": []
+}
