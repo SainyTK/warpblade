@@ -7,7 +7,6 @@ export const archive: StageDef = {
   id: "archive",
   name: "Drowned Archive",
   mapBlurb: "Every book here was written in ink that moves.",
-  kind: "rift",
   era: "archive",
   ladder: [
     ...rung(1, "bookmite", "blotmoth"),

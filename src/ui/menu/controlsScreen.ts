@@ -57,7 +57,6 @@ function keyboardRows(adventure: boolean): [HTMLElement, string][] {
   }
   if (profile) Object.assign(text, drillActionText(profile));
   return [...keysByAction(drill ? DRILL_KEYMAP : KEYMAP)].flatMap(([action, codes]): [HTMLElement, string][] => {
-    if (!adventure && action === "interact") return [];
     const row: [HTMLElement, string] = [capsOf(codes, false), text[action]];
     if (drill) {
       if (action === "ultimate") return [];

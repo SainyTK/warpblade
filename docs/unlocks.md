@@ -99,7 +99,6 @@ Each item appears in the Armory when its goal is met; the prices and effects are
 | Arcana | Bank 150 gold from runs |
 | Skip | Slay 400 foes |
 | Wellspring | Reach level 30 |
-| Last Light | Fall in 3 runs |
 | Reroll | Slay 1,000 foes |
 | Precision | Defeat a mini boss |
 | Light Boots | Slay 500 Glimmer Moths |

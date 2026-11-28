@@ -31,6 +31,12 @@ const RESULT_TITLES: Record<RunOutcome, string> = {
   left: "Left the room",
 };
 
+const STAGE_RESULT_TITLES: Record<RunOutcome, string> = {
+  ...RESULT_TITLES,
+  beyond: RESULT_TITLES.clear,
+  fallen: "Crystal lost",
+};
+
 function line(label: string, value: HTMLElement): HTMLElement {
   const row = document.createElement("div");
   const dt = document.createElement("dt");
@@ -68,7 +74,7 @@ function earnedList(list: readonly Achievement[]): HTMLElement {
 const stageName = (stage: StageResult): string => `${STAGES[stage.stage].name}${stage.hyper ? " Hyper" : ""}`;
 
 const stageLine = (stage: StageResult): string =>
-  stage.cleared ? stageName(stage) : stage.where ? `Fell in ${stage.where}` : stageName(stage);
+  stage.cleared ? stageName(stage) : stage.where ? `Lost in ${stage.where}` : stageName(stage);
 
 function unlockedSection(): HTMLElement | null {
   const found = unlockedThisRun();
@@ -141,7 +147,7 @@ export function resultScreen(): MenuView {
   content.className = "menu-sub";
   content.append(scroll, navigation(run.stage));
   return {
-    title: run.stage && run.outcome === "beyond" ? RESULT_TITLES.clear : RESULT_TITLES[run.outcome],
+    title: run.stage ? STAGE_RESULT_TITLES[run.outcome] : RESULT_TITLES[run.outcome],
     subtitle: run.stage ? stageLine(run.stage) : run.outcome === "left" ? "" : `Wave ${run.wave} of ${STAGE_WAVES}`,
     content,
   };

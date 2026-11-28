@@ -7,7 +7,6 @@ export const prologue: StageDef = {
   id: "prologue",
   name: "Sunlit Ruins",
   mapBlurb: "Where the first rift opened.",
-  kind: "prologue",
   era: "day",
   ladder: [
     ...rung(1, "slime", "bat"),

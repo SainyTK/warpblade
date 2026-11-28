@@ -169,7 +169,7 @@ The kit counts `brynn.fissures` with a `heroCount` feat on every fissure and kee
 
 Honed Edge and Arcana feed her blows and abilities through `progress.stats.ad` and `ap`.
 Endurance pays for her dear block and the dodge, Wellspring for her abilities and Crimson Fall.
-Light Boots speed her walk through the shared physics, Vitality and Last Light act on every blow through `hurtHero`, and her armour only scales what reaches it.
+Light Boots speed her walk through the shared physics, Vitality acts on every blow through `hurtHero`, and her armour only scales what reaches it.
 Aftershock answers the shared warp and dodge, and the Falling Slam's landing calls `travelEnded()`.
 
 ## Co-op

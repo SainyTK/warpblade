@@ -115,54 +115,76 @@ Rules:
 - 2.5 seconds after the last hero hit, stacks drain at 4 per second. Getting hurt halves them.
 - The HUD shows the bar and the multiplier.
 
-## Stage arc: level 1 to 99 in one stage
+## Stage arc: crystal defense, level 1 to 99 in 10 minutes
 
-Owner decision of 27 November 2026: one stage is one run of about 25 minutes, in three acts by level band.
+Owner decision of 28 November 2026: a stage is a defense of the Warp crystal at its center for 10 minutes (`DEFENSE_SECONDS`), replacing the road of areas, packs, rooms and Rift Surges.
 The level, skill points, skills and run stats reset when a stage starts.
-The data is `STAGE_ARCS` in `src/constants/stageArc.ts`; the pure maths is `src/utils/stageArc.ts`; the route that turns it into foes is `src/game/adventure/route.ts`.
+The data is `src/constants/defense.ts`; the pure clock maths is `src/utils/defenseClock.ts`; the run is `src/game/adventure/`.
 
-### Acts
+### Field and crystal
 
-A Rift stage has three areas, one per act.
-Each area is its road and a locked room that plays its beats in turn: Rift Surges, then the elite or boss that ends the act.
-The road is a row of packs (`Approach.packs`): reaching a pack spawns it and holds the right edge at the pack's hold line until every foe of it is dead.
-There are no pits.
-The mini boss is the first road encounter of the final act's area, fought at 44, 44 to 50.
-A Rift Surge is three waves of 0.75, 1 and 1.25 times the room's standing cap (`SURGE.waves`); each wave must be cleared before the next.
-The numbers are the hero level each beat is built to end at.
+The field is the stage's first area (`StageDef.areas[0]`): its length is the field's width (1280 to 1870 px) and its ledges stay, apart from those near the crystal or the two edges (`FIELD`).
+Walls, spikes, gates, the exit and the mentor are gone.
+The crystal stands at the center with 1200 HP, plus 15% per stage tier above the first (`CRYSTAL`).
+The run is lost when it shatters and cleared when the clock reaches 0 with it standing.
 
-| Act | Area | Road | Room beats (level reached) | Ends with |
+Every foe goes for the crystal unless a standing hero is within its hunt range (70 px for minions, 150 for mini bosses, 200 for bosses, `HERO_HUNT_RANGE`).
+A foe that goes for the crystal runs its own behaviour with the hero's position swapped for the crystal's (`actOnFoe` in `crystal.ts`), so every foe kind besieges it without its own code.
+Its blows land on the crystal at 35% of their damage to a hero, at most once a second per foe, and every besieging foe within 60 px chips 1.5 HP a second times its damage multiplier, so ranged foes count too.
+
+### The clock
+
+The clock drives the level band, the spawn rate and the sides:
+
+| Seconds | Level band | Foes a second | Most foes alive | Pack size |
 | --- | --- | --- | --- | --- |
-| Opening | 1 | 1 to 4 | 9, 14 | an elite, 14 to 15 |
-| Middle | 2 | 15 to 18 | 25, 32, 38, 44 | the last surge |
-| Final | 3 | the mini boss 44 to 50, then 50 to 54 | 64, 74, 84, 94 | the stage boss, fought at 94, 94 to 99 |
+| 0 | 1 | 0.55 | 12 | 2 |
+| 90 | 15 | 0.75 to 0.3 | 14 | 2.5 |
+| 270 | 44 | 0.42 | 18 | 3.2 |
+| 480 | 80 | 0.55 | 22 | 4.1 |
+| 600 | 99 | 0.7 | 26 | 5 |
 
-The Sunlit Ruins have two areas: the first plays the opening and middle rooms back to back, the second the final act.
-The Abyss Citadel has four: opening, middle, then the final act split over two rooms, with the Abyss Maw (72 to 78) and the Abyss Sovereign (95 to 99).
-After the stage boss falls, The Unblinking comes through a rift, aims its gaze and kills the hero with one beam that nothing blocks; the stage counts as cleared.
+Values between the anchors are linear.
+The rate drops at 90 s because step-2 foes take 20 hits.
 
+Fronts (`FRONTS`):
 
-### Experience
+| From | Sides | Rule |
+| --- | --- | --- |
+| 0:00 | West | one side |
+| 1:30 | West, East | one open at a time, swapping every 30 s, announced 4 s ahead |
+| 3:30 | West, East, Sky | two open at a time, swapping every 25 s |
+| 6:00 | all four | all open; every 20 s one side surges and takes 60% of the packs |
 
-`xpToNext` keeps its linear shape, `15 + 10 x (level - 1)` (`XP_CURVE`): it decides how the bar fills inside a beat and is what co-op still uses.
-In a stage, experience is budgeted: each beat (an approach, a surge, a big foe) owns the experience from the level it starts at to the level it ends at, `xpToReach(to) - xpToReach(from)`.
-The budget is shared over the beat's foes by weight, `foe xp x (3 if elite) x xpToNext(level the foe is placed at)` (`xpBudget`), so a level takes about as many kills early in a beat as late in it.
-A hero who kills everything ends each beat on its level; a hero who runs past approach foes is a few levels short, and the foes ahead do not wait.
-Summoned adds give a tenth of a level each times their share (`FOE_BAND.summonXpOfLevel`), outside the budget.
+Each side sends a different kind of pack (`SIDE_STYLE`): the West 1.5 times the pack size from one ladder step back, the East two thirds of the size from the newest steps with every 8th foe an elite, the Sky flyers through rifts 110 to 260 px from the crystal, and Below walkers through rifts 70 to 150 px from it.
+On top of that, every `eliteEvery` foe over the run is an elite (18, or the stage twist's own).
 
-What that comes to in a Rift Stage, with the pick schedule from "Pick budget" below:
+Big foes come at fixed times (`BIG_FOE_CALLS`) at 240 to 280 px from the crystal: an elite at 1:35, the mini boss at 4:15 and the stage boss at 7:30.
+A mini boss or boss waits for an earlier boss fight to end; an elite never holds the next call.
+When the clock runs out the field clears and the stage counts as cleared; The Unblinking no longer appears.
 
-| Part of the stage | Levels | Kills | Kills a level | Picks |
-| --- | --- | --- | --- | --- |
-| Opening | 1 to 15 | about 108 | 8 | 14 |
-| Middle | 15 to 50 | about 318 | 9 | 26 |
-| Final | 50 to 99 | about 398 | 8 | 26 |
+### Revives
 
-Points bank while the hero fights; the cards open 0.9 s after each beat ends (`ROOM_BEATS`), or with the area's mentor.
+A fallen hero stands up at the crystal with full HP and 2 s of guard after 3 x 1.5^falls seconds, at most 30 (`REVIVE`): 3, 4.5, 6.8, 10.1, 15.2, 22.8, then 30.
+The countdown shows over the fallen hero.
+Falls count per player in co-op.
+
+### Experience and cards
+
+Each pack carries the experience from the level band at the end of the last pack to the band at the time the next pack is due, `xpToReach(to) - xpToReach(from)`, shared by `xpBudget` over its foes by weight.
+A hero who kills everything follows the level band; foes left alive leave the hero behind it.
+A big foe adds the experience of 12 (elite), 25 (mini boss) or 40 (boss) seconds of the clock.
+Summoned adds give a tenth of a level each times their share (`FOE_BAND.summonXpOfLevel`).
+Cards open 0.35 s after a level up that gives a point (`PICK_DELAY_SECONDS`), and after a big foe falls.
+
+### Co-op
+
+Each player past the first adds 40% more minions to every pack (`COOP_SCALING.count`) and their HP scaling, and the most foes alive is x1.5 in a room.
+The shared camera still keeps standing heroes within one screen of each other.
 
 ### Foe power by level band
 
-A foe's level band is the level the arc places it at: by its place along the approach, its place in a surge's stream, or the level its big-foe beat starts at.
+A foe's level band is the clock's level band when it comes through its rift.
 The hero's expected damage at a level is a table of anchors interpolated geometrically (`EXPECTED_HERO_DAMAGE`): x1 at level 1, x3 at 15, x40 at 30, x300 at 50, x24,000 at 80 and x150,000 at 99.
 The late anchors are that high because a full stage's build compounds: skills, masteries, chests, evolutions, Resonance procs and Flow multiply each other, and the scripted runs below killed a 21 million HP Oakheart in 6 to 7 s at level 93 before this table.
 
@@ -194,17 +216,17 @@ Each stage has one twist (`StageDef.twist`) that changes one rule for the whole 
 | Stage | Twist | Rule |
 | --- | --- | --- |
 | Sunlit Ruins | Kind Sun | foes hit x0.6 |
-| Storm Marsh | Swarming Fen | x1.3 foes standing in a surge |
+| Storm Marsh | Swarming Fen | x1.3 foes a second |
 | Cinder Foundry | Hot Forge | foes HP x0.8, damage x1.2 |
 | Frostglass Caverns | Hard Ice | foes HP x1.25, damage x0.85 |
 | Thunderhead Skyway | Storm Front | foes act x1.15 faster |
-| Drowned Archive | Gilded Pages | an elite every 9th surge foe |
+| Drowned Archive | Gilded Pages | an elite every 9th foe |
 | Moonlit Ruins | Gloam Tithe | gold x1.5, hearts x0.5 |
-| Veil Spires | Torn Veil | an elite every 6th surge foe |
+| Veil Spires | Torn Veil | an elite every 6th foe |
 | Blightroot Hollow | Rot Bloom | no hearts |
 | Abyss Citadel | Black Sun | foes act x1.2 faster |
 
-A Hyper stage plays the same arc with foes acting x1.25 faster and x2 gold (`HYPER`).
+A Hyper stage plays the same clock with foes acting x1.25 faster and x2 gold (`HYPER`).
 Gold per foe is x0.4 of the wave-mode drop in stages (`FOE_BAND.goldShare`), since a stage has about 800 foes.
 
 ### Bosses and mini bosses
@@ -232,7 +254,9 @@ A mini boss is one of its stage's own foes, drawn with its art inside a ring in 
 | Blightroot Hollow | Rot Queen | Rot Crawler | spikes, call |
 | Abyss Citadel | Void Reaver | Void Stalker | pillars, spikes |
 
-### Tuning record
+### Tuning record (road loop)
+
+These runs measured the road loop that the crystal defense replaced on 28 November 2026.
 
 Measured on 27 November 2026 with a scripted Kael in headless Chromium (`/tmp` scripts, not in the repo) that walks right, mashes attacks and spells, jumps walls, takes the first card of every pick and the chests, and is healed back to half HP whenever it drops lower, so it never falls.
 Full runs of the Sunlit Ruins from the stage screen, game time:
@@ -253,7 +277,7 @@ One Frostglass Caverns run on the final curve reached level 73 at 23 min.
 
 ## Experience and picks
 
-- Picks still wait for the end of the wave in co-op; in a stage they bank and open when each room beat ends, or with the area's mentor.
+- In a stage the cards open 0.35 s after a level up that gives a point, and when a big foe falls.
 - A pick deals 3 cards, 4 with luck, drawn without repeats by weight (`CARD_WEIGHT`).
 - Picks have no prerequisites; once an ultimate skill is held no other ultimate skill is dealt.
 - Every run starts with 2 rerolls, 2 skips and 1 banish. Reroll deals new cards without the ones shown. Skip spends the point for nothing. Banish removes one card from the run and deals again.

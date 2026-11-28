@@ -23,7 +23,7 @@ export interface ToolItem extends ItemBase {
   tool: PickToolKey;
 }
 
-export type GearId = "lodestone" | "warpShock" | "lastLight";
+export type GearId = "lodestone" | "warpShock";
 
 export interface GearItem extends ItemBase {
   kind: "gear";

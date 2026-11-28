@@ -7,7 +7,6 @@ export const skyway: StageDef = {
   id: "skyway",
   name: "Thunderhead Skyway",
   mapBlurb: "Broken bridges above a sea of storm.",
-  kind: "rift",
   era: "skyway",
   ladder: [
     ...rung(1, "nimbit", "squallfinch"),

@@ -52,7 +52,6 @@ export function resetRun(banner = "Rise again"): void {
     xpOrbs: [],
     shards: [],
     finale: "none",
-    revives: 0,
     numbers: [],
     blazes: [],
     fx: [],

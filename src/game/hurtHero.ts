@@ -2,6 +2,7 @@ import { HURT_INVULN } from "../constants/combat";
 import { SPARKS } from "../constants/palette";
 import { dodgeWithDrill, hurtDrill, usesDrill } from "../drill";
 import { sfx } from "../services/audio";
+import { strikeCrystal } from "./adventure";
 import { hurtFlow } from "./build/flow";
 import { coop, heroSlot } from "./coopHooks";
 import { createImpact } from "./effects/impact";
@@ -11,12 +12,12 @@ import { guardTakes } from "./hero/heroGuard";
 import { kit } from "./hero/kits";
 import { perfectDodge } from "./hero/perfectDodge";
 import { loseHitCount } from "./hitCount";
-import { lastLight } from "./lastLight";
 import { emitSkillEvent } from "./skills/events";
 import { character, game, hero, progress, showBanner } from "./state";
 import { hitStop, shake } from "./world";
 
 export function hurtHero(dmg: number, fromX: number): void {
+  if (strikeCrystal(dmg)) return;
   if (guardTakes(dmg, fromX)) return;
   if (kit().absorbHurt(dmg, fromX)) return;
   if (heroGuarded()) {
@@ -34,7 +35,6 @@ export function hurtHero(dmg: number, fromX: number): void {
     emitSkillEvent({ type: "hurt", damage: taken, fromX });
   }
   hero.inv = HURT_INVULN;
-  lastLight();
   // armour the kit wears takes the blow: the HP is gone, but no knockback, no hurt state and no lost combo
   if (hero.hp > 0 && kit().steadfast?.()) return;
   const dir = Math.sign(hero.x - fromX) || -hero.face;

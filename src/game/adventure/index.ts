@@ -1,15 +1,21 @@
-export { startAdventureAt, updateAdventure } from "./advance";
-export { summonFoe } from "./foes";
-export { drawStageHazardBack, drawStageHazardFront } from "./hazard";
-export { nearbyMentor, stageMentor } from "./mentor";
-export { containPatrol } from "./patrol";
-export { stageSpikes } from "./spikes";
-export { surgeEnding } from "./surge";
+export { notePicksDue, startAdventureAt, updateAdventure } from "./advance";
+export {
+  clampStageX,
+  stageBounds,
+  stageExitX,
+  stageLeft,
+  stagePlatforms,
+  stageRight,
+  stageWalls,
+} from "./bounds";
+export { actOnFoe, strikeCrystal } from "./crystal";
 export {
   beginAdventure,
-  clampStageX,
+  type CrystalView,
+  crystalShattered,
+  crystalView,
+  crystalWatch,
   currentStage,
-  finaleHolds,
   heroLeash,
   isAdventure,
   recordStageDamage,
@@ -18,21 +24,18 @@ export {
   stageAreaShare,
   stageBand,
   stageBoss,
-  stageBounds,
   stageCameraX,
   stageCoinRate,
-  stageExitX,
   stageFoePace,
-  stageGate,
-  stageGates,
   stageHeartRate,
-  stageLeft,
-  stagePlatforms,
   stageProgress,
-  stageRight,
   stageRunId,
+  stageSecondsLeft,
   stageStatus,
-  stageWalls,
   stageWhere,
   stageWon,
-} from "./trail";
+} from "./defense";
+export { summonFoe } from "./foes";
+export { drawStageHazardBack, drawStageHazardFront } from "./hazard";
+export { heroLiesFallen, reviveLeft } from "./revive";
+export { nextSides, openSides } from "./spawner";

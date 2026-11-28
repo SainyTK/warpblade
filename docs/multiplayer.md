@@ -1,7 +1,7 @@
 # Co-op rooms
 
 Up to four players play the same stage run together, each with their own hero.
-A room plays the same mode as solo play: the same stages, route, mentors, gated rooms, bosses and result screen.
+A room plays the same mode as solo play: the same stages, Warp crystal, clock, bosses and result screen.
 One player hosts a room from the start menu, and the room runs in that player's browser tab.
 The others join with the room's five-letter code or an invite link, pick a hero (the same hero more than once is fine) and wait in the lobby.
 The host picks Choose stage, which opens the solo stage screen; the stages open to the host are the ones the room can play, and choosing one starts the run for everyone.
@@ -9,10 +9,9 @@ The host picks Choose stage, which opens the solo stage screen; the stages open 
 ## One screen for the room
 
 Every hero shares one camera, as the host's picture is the one every guest sees.
-While the room walks the route, no standing hero can get farther than one screen width (less a margin) from another, so a hero at the front waits for the one at the back (`heroLeash` in `src/game/adventure/trail.ts`).
-The camera keeps the front hero a third of the way in and never lets the last one leave the screen.
-The route moves on with the front hero: foes appear and a room's gate closes when the front hero reaches them, and the gate pulls every hero still outside into the room.
-Spikes, hazards and boss shoves strike every standing hero.
+No standing hero can get farther than one screen width (less a margin) from another (`heroLeash` in `src/game/adventure/defense.ts`), so the room defends one side of the crystal at a time.
+The camera centres on the middle of the standing heroes.
+Hazards and boss shoves strike every standing hero.
 
 ## Where it comes from
 
@@ -66,18 +65,17 @@ The cost is video softness on a slow link and about one round trip plus a video 
 ## Players who fall
 
 A hero whose HP runs out lies down and is skipped by foes, coins and orbs.
-Their status line reads "Down until the next fight is won".
-When a surge, elite, mini boss or boss in a gated room is beaten, every downed hero stands up with half their HP.
-The run ends only when every hero is down at once.
-A room that goes down to The Unblinking has still cleared the stage.
-Last Light still saves each player once per run for each level they bought.
+Their status line reads "Standing up at the crystal".
+Each fallen hero stands up at the crystal on their own countdown, which grows with their own falls (see "Revives" in `growth-design.md`).
+The run ends when the crystal shatters or the clock runs out.
+Each player past the first adds 40% more minions to every pack and tougher foes.
 
-## Skill cards at the mentor
+## Skill cards
 
 Experience is shared: an orb picked up by anyone gives its experience to every hero, so the room levels together.
 Each player still has their own skill points and cards, rolled from their own hero's tree.
-Cards open for every player with points waiting when anyone talks to a mentor, and between the fights of a gated room, as in solo play.
-The game pauses for everyone while those players choose, and each player may Leave the mentor and keep their points.
+Cards open for every player with points waiting when anyone levels up and when a big foe falls, as in solo play.
+The game pauses for everyone while those players choose, and each player may Leave the cards and keep their points.
 A player with nothing to choose reads "Waiting for P2 to pick".
 Anyone may still open the pause menu, for instance to leave the room; open cards step aside under the menu and come back the same.
 A guest's choice travels to the host as a skill id, and the host checks that the hero can still learn it before applying it.

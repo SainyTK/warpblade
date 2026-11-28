@@ -10,7 +10,7 @@
 <p align="center">
   <a href="https://warpblade.sainytk.com"><img alt="Play in your browser" src="https://img.shields.io/badge/%E2%96%B6%20PLAY-warpblade.sainytk.com-7fe3ff?style=for-the-badge&labelColor=0c0a18"></a>
   <a href="LICENSE"><img alt="MIT License" src="https://img.shields.io/badge/LICENSE-MIT-e0ac48?style=for-the-badge&labelColor=0c0a18"></a>
-  <img alt="About 25 minutes a stage" src="https://img.shields.io/badge/STAGE-about%2025%20minutes-b4a8ff?style=for-the-badge&labelColor=0c0a18">
+  <img alt="10 minutes a stage" src="https://img.shields.io/badge/STAGE-10%20minutes-b4a8ff?style=for-the-badge&labelColor=0c0a18">
 </p>
 
 ---
@@ -31,9 +31,9 @@ Eight rifts have torn open across the land, each guarded by a lord that came thr
 
 ## Stages
 
-A solo run is one stage of about 25 minutes.
+A run is one stage: hold the Warp crystal at its center for 10 minutes.
 Choose a hero, then a stage: a new player has the Sunlit Ruins, and every stage you clear opens the next ones.
-Your level, skills and skill points start over with each stage, and you grow from level 1 to 99 before its boss.
+Your level, skills and skill points start over with each stage, and you grow from level 1 to 99 over its 10 minutes.
 
 | Stage | Mini boss | Boss | Twist |
 | --- | --- | --- | --- |
@@ -51,14 +51,23 @@ Your level, skills and skill points start over with each stage, and you grow fro
 The Sunlit Ruins open Storm Marsh and Cinder Foundry, the stages branch from there, and the Abyss Citadel opens once Veil Spires and Blightroot Hollow are both cleared.
 Later stages are tougher: foe HP and damage rise by tier, from x1 in the Sunlit Ruins to x3 HP and x1.6 damage in the Citadel.
 
-A stage plays in three acts, each an area that ends in a locked room of Rift Surges, where rifts keep opening until a crowd has come through:
+The hero starts beside the crystal, and the stage stretches several screens to the West and the East.
+Foes come through rifts and march on the crystal, and any foe that reaches it strikes it.
+They turn on a hero who comes close, so the hero runs from side to side to meet them.
+The stage is cleared when the clock runs out with the crystal standing, and lost when the crystal shatters.
 
-- the opening, levels 1 to 15, ends with an elite;
-- the middle, up to level 50, ends with the stage's mini boss, a named, tougher take on one of its own foes with its own telegraphed moves;
-- the final act, up to level 99, ends with the stage's boss.
+The clock sets how strong the foes are and how many come:
 
+- in the first minute and a half they come only from the West;
+- then from the West or the East, one side at a time, with a warning before the side changes;
+- from minute three and a half, from two sides at once, and flyers from the Sky;
+- from minute six, from every side, with foes rising from Below near the crystal and one side surging at a time.
+
+The West sends crowds of weaker foes, the East fewer and tougher ones with more elites, the Sky flyers, and Below foes that rise close to the crystal.
+An elite comes at about minute one and a half, the stage's mini boss at about minute four, and its boss at minute seven and a half.
 Bosses and mini bosses have three phases, a stagger bar that breaks into a stun, crowd control that wears off faster each time, and an enrage timer.
-When the boss falls, The Unblinking opens its eye, and no one survives its gaze: the stage is cleared.
+
+A fallen hero stands up again at the crystal: after 3 seconds the first time, and a little longer after each fall, up to 30 seconds.
 
 A cleared stage can be bought in Hyper with gold: faster foes, twice the gold, and a reward of its own, such as the stage's Rift Art, which then starts every run.
 
@@ -92,7 +101,7 @@ A cleared stage can be bought in Hyper with gold: faster foes, twice the gold, a
 ## Growth: Resonance and Fusions
 
 Every level up to 30 gives a skill point, then every second level, with an extra point at levels 50, 75 and 99.
-Points open on one of three cards when each Surge or big foe falls, or with a mentor in an area: a new skill, the next level of a held skill, or the next level of a Rift Art.
+Points open on one of three cards as soon as you level up: a new skill, the next level of a held skill, or the next level of a Rift Art.
 
 Every skill and every Rift Art belongs to one of five elements: Blaze, Frost, Storm, Venom and Void.
 An element's rank is the sum of the levels you hold in it, and every rank adds to every hit you land:
@@ -154,7 +163,7 @@ From there, play the stage again, choose another stage, go back to the main menu
   In solo play, level-ups bank skill points without pausing the game.
   A build holds 4 skills at first and up to 8 as levels 15, 30, 45 and 60 open more slots, and every run starts with 2 rerolls, 2 skips and 1 banish to steer the cards.
   A skill at level 8 keeps growing through four mastery levels, and the cards also offer ranks for the charged skill, element attunements and stat cards, so every pick up to level 99 has something to take.
-- **Chests and evolutions.** Elites with a gold ring and bosses before The Unblinking drop chests in solo play.
+- **Chests and evolutions.** Elites with a gold ring and bosses drop chests in solo play.
   Touch a chest to open it.
   A chest raises held skills and Rift Arts, sometimes three or five at once, and a stage boss's chest always raises at least three.
   Later in a stage a chest can evolve a skill at level 8 whose partner skill is held at level 4 or more.
@@ -163,7 +172,7 @@ From there, play the stage again, choose another stage, go back to the main menu
 - **Flow.** Every hit of the hero's own adds a stack of Flow, up to 25, each one +4% damage on every source, so a full bar doubles it; a perfect dodge adds five, and getting hurt halves it.
 - **Experience to pick up.** Slain foes drop lime orbs of experience that bounce on the floor. Walk over them to collect them; any left behind fly to the hero after 4 seconds, or in a room to the nearest standing hero.
   Attack and ability power grow 2.5% with every level, compounding; levels leave max HP and MP as they are.
-- **Heart Shards and Mana Shards.** Max HP and MP grow only from shards: every boss drops a Heart Shard (+3 max HP) and a Mana Shard (+2 max MP), the last foe of a Rift Surge drops a Heart Shard, and elites sometimes drop one.
+- **Heart Shards and Mana Shards.** Max HP and MP grow only from shards: every boss drops a Heart Shard (+3 max HP) and a Mana Shard (+2 max MP), and elites and other foes sometimes drop one.
   Walk over a shard to take it; the HP and MP bars grow longer as shards come in.
 - **Drain and regeneration.** Two skills of every hero carry a price: one adds power but drains HP every second, the other regains HP at the cost of MP, or MP at the cost of power.
   The card shows the drain in red and the regeneration in green, and the HUD shows the net HP a second next to the HP bar.
@@ -172,7 +181,7 @@ From there, play the stage again, choose another stage, go back to the main menu
 - **The Codex.** The Codex on the start menu lists the five elements, the Fusions, the Rift Arts and every hero's skills and evolutions, with Fusions and evolutions not yet made shown as silhouettes with their recipe or ???.
 - **Gold and the Armory.** Foes drop pixel coins that the hero picks up by touch, and any left behind fly to them after a moment.
   Runs unlock Armory items through goals; each then costs gold that rises a little with every purchase, refunds in full and can be switched off.
-  It sells stats in levels, more rerolls, skips and banishes, Lodestone, Aftershock and Last Light, and Curse, Greed and Growth, which trade harder foes or more gold and experience.
+  It sells stats in levels, more rerolls, skips and banishes, Lodestone and Aftershock, and Curse, Greed and Growth, which trade harder foes or more gold and experience.
 - **Unlocks.** A new save has Kael, Cerise, five skills each and the Sunlit Ruins; goals such as kills, bosses, levels, gold, Fusions and evolutions open the other heroes, skills, stages and Armory items, and the result screen shows the next goals.
 - **Achievements and hero unlocks.** Achievements track goals across runs: bosses reached and beaten, foes slain, long combos, perfect dodges, evolutions, coins banked and The Unblinking.
   Most pay coins, a few stay hidden as ??? until an earlier one is earned, and a small banner slides down when one is earned without stopping play.
@@ -225,7 +234,6 @@ Every hero plays on the same keys in a stage.
 | `A` `D` or arrows | Run |
 | `W`, `Up` or `Space` | Jump; hold to jump higher. Press while sliding on a wall to kick away |
 | `S` or `Down` | Drop through a ledge |
-| `E` | Talk to a mentor to spend skill points |
 | `J` | Slash: up to three ground slashes, one in the air. Press again just after a blow lands for a Keen hit |
 | `J` held | Charge the hero's charged skill through four tiers, release to strike. Each tier costs more MP and has its own cooldown |
 | `L` or `Shift` | Dash on the ground or once in the air |
@@ -266,9 +274,9 @@ The Controls screen lists every key from the game's key map, and on touch screen
 Options holds sound, volume, music volume, screen shake, damage numbers, vibration on devices that can vibrate, and fullscreen, saved in this browser.
 
 Level ups give skill points: every level up to 30, then every second level, and one more at 50, 75 and 99.
-In solo play the skill choices open when a Surge or big foe falls; press `E` or tap Talk near a mentor to open them any time.
-Leave to keep any points you have not spent.
-In co-op it pauses for pending skill points after a wave.
+The skill choices open when you level up.
+Leave to keep any points you have not spent; they open again at your next level.
+In co-op the cards open for every player with points.
 Choose with `A` `D` or the arrows and learn with `J` or `Enter`, press `1` to `3`, or click or tap a card.
 
 ## Patch notes and feedback
@@ -352,7 +360,7 @@ src/
     spells/        the explosion that spells share
     ultimates/     the cast every ultimate goes through
     skills/        the skill runtime: events, queries, targeting and precise payoffs
-    adventure/     a stage run: its route and level arc, locked rooms and their beats, Rift Surges, pits, hazards and the last boss
+    adventure/     a stage run: the Warp crystal, the clock, the sides foes come from, big foes, revives and hazards
     arts/          Rift Arts as spells in every hero's spellbook, their levels and the boss weaknesses
     resonance/     element procs on every hit, their effects and Fusions
   scene/           background, the backdrop around the stage, the order layers are drawn in, and the dissolve between eras

@@ -25,7 +25,7 @@ const names = (slots: number[]): string => {
 function message(now: number): string {
   const room = roomView();
   if (room.hostAway) return "Waiting for the host";
-  if (room.downed) return "Down until the next fight is won";
+  if (room.downed) return "Standing up at the crystal";
   const others = room.choosing.filter((s) => s !== room.you);
   if (others.length && !room.choosing.includes(room.you)) return `Waiting for ${names(others)} to pick`;
   return room.note && now - room.noteAt < NOTE_MS ? room.note : "";

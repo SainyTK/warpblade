@@ -1,6 +1,7 @@
 import type { Feat } from "../types/achievement";
 import type { EnemyRank, EnemyType } from "../types/enemy";
 import type { RunOutcome } from "../types/run";
+import { besiegingFoe } from "./foeTarget";
 
 /**
  * Where a co-op room's host steps into the shared game code. Solo play never sets these, so every call site keeps its
@@ -61,7 +62,7 @@ export function eachHero(run: () => void): void {
 
 /** a foe's blow or hazard: tested once in solo play, and against every standing hero in a co-op room */
 export function eachStanding(run: () => void): void {
-  if (hooks) hooks.eachStanding(run);
+  if (hooks && !besiegingFoe()) hooks.eachStanding(run);
   else run();
 }
 

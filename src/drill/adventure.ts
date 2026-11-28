@@ -1,5 +1,6 @@
 import { STATE_CLIPS } from "../constants/clips";
 import { MP_REGEN } from "../constants/combat";
+import { heroLiesFallen } from "../game/adventure";
 import { coop } from "../game/coopHooks";
 import { setState } from "../game/hero/actions";
 import { animateRopes } from "../game/hero/animate";
@@ -7,7 +8,6 @@ import { tickDenied } from "../game/hero/deny";
 import { tickGuard } from "../game/hero/heroGuard";
 import { regenStamina } from "../game/hero/stamina";
 import { landingAt, moveHeroX } from "../game/hero/terrain";
-import { endRun } from "../game/runEnd";
 import { rememberPerSeat } from "../game/seatMemory";
 import { emitSkillEvent } from "../game/skills/events";
 import { hero, ponytail, progress, scarf } from "../game/state";
@@ -147,6 +147,13 @@ export function hurtDrill(fromX: number): void {
   Object.assign(h, { vx: hero.vx, vy: hero.vy, grounded: false, guardAge: null, enhancedGuard: 0 });
 }
 
+export function steadyDrillFighter(): void {
+  if (!session) {
+    return;
+  }
+  Object.assign(session.fighter, { x: hero.x, y: hero.y, vx: 0, vy: 0, stun: 0, grounded: true, guardAge: null });
+}
+
 function stateOf(h: Fighter): HeroState {
   if (h.stun > 0) {
     return "hurt";
@@ -210,9 +217,7 @@ export function updateDrill(dt: number, worldDt: number): void {
   hero.st += dt;
   if (hero.state === "dead") {
     fallDead(dt);
-    if (hero.st >= FALLEN_FOR) {
-      endRun("fallen");
-    }
+    heroLiesFallen(FALLEN_FOR);
     return;
   }
   hero.inv = Math.max(0, hero.inv - worldDt);

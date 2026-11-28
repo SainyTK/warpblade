@@ -2,7 +2,7 @@ import { FIRE_RAMP, COIN_GOLD as G, BASE_HERO_COLORS as HC, PAL, WORLD_COLORS as
 import type { SpriteCanvas } from "../../../engine/sprite";
 import { hex, WHITE } from "../../../utils/color";
 import { TAU } from "../../../utils/math";
-import { chevron, fill, flame, ring, sparkle, sword } from "./parts";
+import { chevron, fill, ring, sparkle, sword } from "./parts";
 
 const BLOOD = { h: hex("#e0405a"), l: hex("#ffb0bc"), w: WHITE, d: hex("#7e1530") };
 const PURPLE = hex("#5a3aa0");
@@ -148,18 +148,6 @@ export const ARMORY_ICONS: Record<string, (s: SpriteCanvas) => void> = {
     sword(s, 8, 2, 8, 12);
     sparkle(s, 3, 5, 1.5, PAL.crystal[4]);
     sparkle(s, 13, 6, 1.5, PAL.crystal[4]);
-  },
-  lastLight: (s) => {
-    fill(s, () =>
-      s.pixels(
-        ["..wwww..", "..wwwc..", "..wwwc..", "..wwwc..", "..wwwc..", "..wwcc..", "bbbbbbbb", ".bbbbbb."],
-        { w: hex("#f0e6c8"), c: hex("#c9b88a"), b: HC.trim },
-        4,
-        8,
-      ),
-    );
-    flame(s, 8, 8, 6);
-    sparkle(s, 13, 4, 2, PAL.heal[4]);
   },
   rerolls: (s) => {
     fill(s, () =>

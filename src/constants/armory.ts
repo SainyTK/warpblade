@@ -1,5 +1,4 @@
 import type { ArmoryItem, ArmoryRates, ArmorySection } from "../types/armory";
-import { LAST_LIGHT_LEVELS } from "./armoryTuning";
 
 export const PRICE_RISE_PER_PURCHASE = 0.05;
 export const PRICE_ROUND = 5;
@@ -127,14 +126,6 @@ export const ARMORY_ITEMS: readonly ArmoryItem[] = [
     name: "Aftershock",
     levelText: "Each dash or leap your hero lands sends a shockwave that hits and briefly stuns foes close by.",
     levels: 1,
-    firstPrice: 250,
-  },
-  {
-    kind: "gear",
-    id: "lastLight",
-    name: "Last Light",
-    levelText: "A fatal blow leaves your hero standing with half their HP, once per run for each level.",
-    levels: LAST_LIGHT_LEVELS,
     firstPrice: 250,
   },
   {

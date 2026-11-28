@@ -18,6 +18,7 @@ import { activeFusions, type Ranks, resonanceRanks, resonanceStats } from "../ut
 import { withShards } from "../utils/shards";
 import { growthRows, heldRows } from "../utils/skills";
 import { computeStats } from "../utils/stats";
+import { notePicksDue } from "./adventure";
 import { raiseCard } from "./build/raise";
 import { currentBuildStats } from "./build/stats";
 import { coop } from "./coopHooks";
@@ -100,7 +101,9 @@ export function gainXp(amount: number): void {
   hero.mp = Math.min(progress.stats.mp, hero.mp + progress.stats.mp * restore);
   showBanner(`Level ${progress.level}`, 1.4);
   celebrateLevel();
-  progress.picks += picksBetween(from, progress.level);
+  const gained = picksBetween(from, progress.level);
+  progress.picks += gained;
+  if (gained > 0) notePicksDue();
 }
 
 /** experience from play: Insight adds to it */

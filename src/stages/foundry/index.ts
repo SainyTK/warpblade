@@ -7,7 +7,6 @@ export const foundry: StageDef = {
   id: "foundry",
   name: "Cinder Foundry",
   mapBlurb: "The forges never went cold.",
-  kind: "rift",
   era: "foundry",
   ladder: [
     ...rung(1, "coalmite", "sparkfly"),

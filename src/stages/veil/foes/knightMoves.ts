@@ -1,6 +1,5 @@
 import { GROUND } from "../../../constants/stage";
-import { clampStageX, stageLeft, stageRight } from "../../../game/adventure";
-import { stageWalls } from "../../../game/adventure/trail";
+import { clampStageX, stageLeft, stageRight, stageWalls } from "../../../game/adventure";
 import { eachStanding } from "../../../game/coopHooks";
 import { foeSees } from "../../../game/enemies/awareness";
 import { facesHero, turnToHero } from "../../../game/enemies/facing";

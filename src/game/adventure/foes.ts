@@ -10,10 +10,10 @@ import { coop } from "../coopHooks";
 import { makeEnemy, makeFoe } from "../enemies/enemy";
 import { kindOf } from "../enemies/kinds";
 import { game } from "../state";
-import { trail } from "./trail";
+import { defense } from "./defense";
 
 function entryFor(type: EnemyType, level: number): LadderFoe {
-  const ladder = trail?.route.stage.ladder ?? [];
+  const ladder = defense?.stage.ladder ?? [];
   const known = ladderEntry(ladder, type);
   if (known) return known;
   const rung = Math.max(1, ...ladder.filter((entry) => entry.level <= level).map((entry) => entry.level));
@@ -21,7 +21,7 @@ function entryFor(type: EnemyType, level: number): LadderFoe {
 }
 
 export function stageFoe(type: EnemyType, x: number, y: number, level: number, xp: number, elite = false): Enemy {
-  const run = trail;
+  const run = defense;
   if (!run) return makeEnemy(type, x, y, 1);
   const toughness = (kindOf(type).flies ? FLYER_TOUGHNESS : 1) * (elite ? ELITE.hp : 1);
   const entry = entryFor(type, level);
@@ -35,13 +35,13 @@ export function stageFoe(type: EnemyType, x: number, y: number, level: number, x
 }
 
 export function summonFoe(type: EnemyType, x: number, y: number, xpShare: number): Enemy {
-  if (!trail) return makeEnemy(type, x, y, game.wave, xpShare);
-  const xp = xpShare * FOE_BAND.summonXpOfLevel * xpToNext(Math.round(trail.band));
-  return stageFoe(type, x, y, trail.band, xp);
+  if (!defense) return makeEnemy(type, x, y, game.wave, xpShare);
+  const xp = xpShare * FOE_BAND.summonXpOfLevel * xpToNext(Math.round(defense.band));
+  return stageFoe(type, x, y, defense.band, xp);
 }
 
 export function claimFoe(enemy: Enemy): Enemy {
-  trail?.authored.add(enemy);
+  defense?.authored.add(enemy);
   game.enemies.push(enemy);
   return enemy;
 }

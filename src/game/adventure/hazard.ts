@@ -1,6 +1,6 @@
-import { trail } from "./trail";
+import { defense } from "./defense";
 
-const hazard = () => trail?.route.stage.hazard;
+const hazard = () => defense?.stage.hazard;
 
 export function resetStageHazard(): void {
   hazard()?.reset();

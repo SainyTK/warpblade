@@ -11,7 +11,6 @@ export const marsh: StageDef = {
   id: "marsh",
   name: "Storm Marsh",
   mapBlurb: "Rain, mud and the thing that sleeps in it.",
-  kind: "rift",
   era: "rain",
   ladder: [
     ...rung(1, "bogling", "fenmidge"),

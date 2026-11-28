@@ -3,9 +3,9 @@ import { MP_REGEN } from "../../constants/combat";
 import { PACE } from "../../constants/stage";
 import { updateDrill, usesDrill } from "../../drill";
 import { sfx } from "../../services/audio";
+import { heroLiesFallen } from "../adventure";
 import { rechargeStep } from "../build/recharge";
 import { horizontalDirection, take, use } from "../input";
-import { endRun } from "../runEnd";
 import { hero, progress } from "../state";
 import { cycleAbility, pressAbility } from "./abilityBar";
 import { settle } from "./actions";
@@ -22,6 +22,8 @@ import { readDoubleTap } from "./taps";
 import { readPlatformDrop } from "./traversal";
 import { runCharge, runUltimate, startCharge } from "./ultimate";
 import { doWarp, pressWarp, releaseWeapon, tickWarp } from "./warp";
+
+const FALLEN_FOR = 2.4;
 
 function runState(dt: number): void {
   const h = hero;
@@ -58,7 +60,7 @@ function runState(dt: number): void {
       if (h.st >= 0.32) settle();
       break;
     case "dead":
-      if (h.st >= 2.4) endRun("fallen");
+      heroLiesFallen(FALLEN_FOR);
       break;
     default:
   }
