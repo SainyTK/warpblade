@@ -56,7 +56,7 @@ function openFront(run: Defense, index: number): void {
   const front = FRONTS[index];
   const fronts = run.fronts;
   fronts.index = index;
-  fronts.open = chooseSides(run, front);
+  fronts.open = fronts.next ?? chooseSides(run, front);
   fronts.next = null;
   fronts.turnAt = front.turnEvery ? run.elapsed + front.turnEvery : Number.POSITIVE_INFINITY;
   fronts.surging = null;
@@ -88,6 +88,12 @@ function surgeFronts(run: Defense, front: Front): void {
   sfx.surge();
 }
 
+function warnNextFront(run: Defense, coming: Front): void {
+  const fronts = run.fronts;
+  fronts.next = chooseSides(run, coming);
+  showBanner(`Next from the ${sidesText(fronts.next)}`, SIDE_BANNER);
+}
+
 export function updateFronts(run: Defense): void {
   const front = frontAt(run.elapsed);
   const index = FRONTS.indexOf(front);
@@ -95,6 +101,8 @@ export function updateFronts(run: Defense): void {
     openFront(run, index);
     return;
   }
+  const coming = FRONTS[index + 1];
+  if (coming && !run.fronts.next && run.elapsed >= coming.from - SIDE_WARNING_SECONDS) warnNextFront(run, coming);
   if (front.turnEvery) turnFronts(run, front);
   if (front.surgeEvery) surgeFronts(run, front);
 }

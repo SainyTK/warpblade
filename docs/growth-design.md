@@ -156,7 +156,9 @@ Fronts (`FRONTS`):
 | 3:30 | West, East, Sky | two open at a time, swapping every 25 s |
 | 6:00 | all four | all open; every 20 s one side surges and takes 60% of the packs |
 
-Each side sends a different kind of pack (`SIDE_STYLE`): the West 1.5 times the pack size from one ladder step back, the East two thirds of the size from the newest steps with every 8th foe an elite, the Sky flyers through rifts 110 to 260 px from the crystal, and Below walkers through rifts 70 to 150 px from it.
+Every change of sides, when a new front opens or a front swaps, is announced 4 s ahead with a "Next from the ..." banner, and the West and East edge chevrons blink for a side about to open.
+
+Each side sends a different kind of pack (`SIDE_STYLE`): the West 1.5 times the pack size from one ladder step back, the East two thirds of the size from the newest steps with every third foe an elite, the Sky flyers through rifts 110 to 260 px from the crystal, and Below walkers through rifts 70 to 150 px from it.
 On top of that, every `eliteEvery` foe over the run is an elite (18, or the stage twist's own).
 
 Big foes come at fixed times (`BIG_FOE_CALLS`) at 240 to 280 px from the crystal: an elite at 1:35, the mini boss at 4:15 and the stage boss at 7:30.
